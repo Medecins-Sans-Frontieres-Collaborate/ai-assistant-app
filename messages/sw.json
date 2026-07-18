@@ -1182,7 +1182,8 @@
     "Connectors": "Viunganishi",
     "Backup": "Hifadhi rudufu",
     "Memories": "Kumbukumbu",
-    "Agent Access": "Ufikivu wa Wakala"
+    "Agent Access": "Ufikivu wa Wakala",
+    "LocalModels": "Miundo ya ndani"
   },
   "notFound": {
     "lostDog": "Mbwa aliyepotea"
@@ -3065,6 +3066,16 @@
       "untitled": "Mazungumzo Mapya",
       "toggleMenu": "Fungua/funga menyu",
       "model": "Mfano wa utiririshaji kazi huu"
+    },
+    "tabs": {
+      "label": "Hali ya mazungumzo",
+      "chat": "Mazungumzo",
+      "chatDescription": "Mazungumzo ya kawaida na msaidizi"
+    },
+    "discard": {
+      "title": "Ukatilie rasimu hii?",
+      "body": "Kuhama kwenda {target} kutafuta kazi uliyokuwa umeanza kwenye {current}.",
+      "confirm": "Katilia"
     }
   },
   "connectors": {
@@ -3458,5 +3469,24 @@
     "promptAgentSaveSuccess": "Wakala wa prompt ameokolewa.",
     "promptAgentDeleteSuccess": "Wakala wa prompt amefutwa.",
     "promptAgentsUnavailableWarning": "Mawakala wa prompt hawawezi kupakiwa kutoka kwenye hifadhi. Hawawezi kuhaririwa kwa sasa."
+  },
+  "localModels": {
+    "title": "Miundo ya ndani",
+    "description": "Zungumza na miundo inayoendeshwa kwenye kompyuta hii. Ujumbe huenda moja kwa moja kutoka kivinjari chako hadi kwenye programu ya ndani na hauendi kwa seva zetu kamwe — hivyo majibu, vichwa vya mazungumzo na muhtasari vinabaki kwenye mashine yako.",
+    "detect": "Tambua mazingira ya ndani",
+    "detecting": "Inatambua…",
+    "experimental": "Majaribio",
+    "portLabel": "Bandari",
+    "statusUnknown": "Bado haijakaguliwa.",
+    "statusChecking": "Inakagua…",
+    "statusReady": "{count, plural, =0 {Imeunganishwa, lakini hakuna muundo uliopakiwa.} one {Imeunganishwa — muundo 1 unapatikana.} other {Imeunganishwa — miundo # inapatikana.}}",
+    "statusNotRunning": "Haikuweza kufikia {label}. Hakikisha inaendeshwa kwenye bandari hii, na kivinjari chako kinaruhusiwa kufikia programu za ndani kutoka tovuti hii.",
+    "statusHttpError": "{label} imerudisha hitilafu. Angalia logi zake.",
+    "corsHelp": {
+      "ollama": "Ollama inaendeshwa lakini inakataa maombi kutoka tovuti hii. Weka OLLAMA_ORIGINS kwa anwani ya tovuti hii, anzisha upya Ollama, kisha jaribu tena kutambua.",
+      "lmstudio": "LM Studio inaendeshwa lakini inakataa maombi kutoka tovuti hii. Washa CORS kwenye mipangilio ya seva ya ndani, kisha jaribu tena kutambua.",
+      "llamacpp": "llama.cpp inaendeshwa lakini inakataa maombi kutoka tovuti hii. Anzisha llama-server ikiruhusu maombi kutoka vyanzo vingi, kisha jaribu tena kutambua."
+    },
+    "privacyNote": "Miundo ya ndani haiungi mkono viambatisho vya faili, picha, utafutaji mtandaoni au viunganishi — hivyo vinahitaji seva zetu. Utambuzi hufanya ukaguzi kwenye kompyuta hii tu."
   }
 }

@@ -1149,7 +1149,8 @@
     "Connectors": "Konektor",
     "Backup": "Backup",
     "Memories": "Memori",
-    "Agent Access": "Akses Agen"
+    "Agent Access": "Akses Agen",
+    "LocalModels": "Model lokal"
   },
   "notFound": {
     "lostDog": "Anjing hilang"
@@ -3065,6 +3066,16 @@
       "untitled": "Percakapan Baru",
       "toggleMenu": "Tampilkan/sembunyikan menu",
       "model": "Model untuk workflow ini"
+    },
+    "tabs": {
+      "label": "Mode percakapan",
+      "chat": "Chat",
+      "chatDescription": "Percakapan standar dengan asisten"
+    },
+    "discard": {
+      "title": "Buang draf ini?",
+      "body": "Beralih ke {target} akan menghapus pekerjaan yang telah Anda mulai di {current}.",
+      "confirm": "Buang"
     }
   },
   "connectors": {
@@ -3458,5 +3469,24 @@
     "promptAgentSaveSuccess": "Agen prompt berhasil disimpan.",
     "promptAgentDeleteSuccess": "Agen prompt berhasil dihapus.",
     "promptAgentsUnavailableWarning": "Agen prompt tidak dapat dimuat dari penyimpanan. Saat ini, agen tidak dapat diedit."
+  },
+  "localModels": {
+    "title": "Model lokal",
+    "description": "Chat dengan model yang dijalankan di komputer ini. Pesan dikirim langsung dari browser Anda ke aplikasi lokal dan tidak pernah mencapai server kami — sehingga balasan, judul percakapan, dan ringkasan tetap di perangkat Anda.",
+    "detect": "Deteksi runtime lokal",
+    "detecting": "Mendeteksi…",
+    "experimental": "Eksperimental",
+    "portLabel": "Port",
+    "statusUnknown": "Belum diperiksa.",
+    "statusChecking": "Memeriksa…",
+    "statusReady": "{count, plural, =0 {Tersambung, tapi tidak ada model yang dimuat.} one {Tersambung — # model tersedia.} other {Tersambung — # model tersedia.}}",
+    "statusNotRunning": "Tidak dapat menjangkau {label}. Pastikan aplikasi sedang berjalan di port ini, dan browser Anda diizinkan mengakses aplikasi lokal dari situs ini.",
+    "statusHttpError": "{label} merespons dengan error. Periksa log-nya.",
+    "corsHelp": {
+      "ollama": "Ollama berjalan tetapi menolak permintaan dari situs ini. Atur OLLAMA_ORIGINS ke alamat situs ini, mulai ulang Ollama, lalu deteksi kembali.",
+      "lmstudio": "LM Studio berjalan tetapi menolak permintaan dari situs ini. Aktifkan CORS di pengaturan server lokalnya, lalu deteksi kembali.",
+      "llamacpp": "llama.cpp berjalan tetapi menolak permintaan dari situs ini. Jalankan llama-server dengan izin permintaan cross-origin, lalu deteksi kembali."
+    },
+    "privacyNote": "Model lokal tidak mendukung lampiran file, gambar, pencarian web, atau konektor — fitur ini membutuhkan server kami. Deteksi hanya memeriksa komputer ini."
   }
 }

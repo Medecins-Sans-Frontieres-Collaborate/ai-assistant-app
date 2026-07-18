@@ -1335,7 +1335,8 @@
     "Connectors": "Konektori",
     "Backup": "Bekap",
     "Memories": "Memorije",
-    "Agent Access": "Pristup agentu"
+    "Agent Access": "Pristup agentu",
+    "LocalModels": "Lokalni modeli"
   },
   "emptyState": {
     "greeting": "Како могу да помогнем?",
@@ -3049,6 +3050,16 @@
       "untitled": "Nova konverzacija",
       "toggleMenu": "Prikaži/sakrij meni",
       "model": "Model za ovaj radni tok"
+    },
+    "tabs": {
+      "label": "Režim razgovora",
+      "chat": "Razgovor",
+      "chatDescription": "Standardni razgovor sa asistentom"
+    },
+    "discard": {
+      "title": "Odbaciti ovu radnu verziju?",
+      "body": "Prelazak na {target} briše rad koji ste započeli u {current}.",
+      "confirm": "Odbaci"
     }
   },
   "connectors": {
@@ -3442,5 +3453,24 @@
     "promptAgentSaveSuccess": "Prompt agent je sačuvan.",
     "promptAgentDeleteSuccess": "Prompt agent je obrisan.",
     "promptAgentsUnavailableWarning": "Prompt agenti nisu mogli da se učitaju iz skladišta. Trenutno ih nije moguće menjati."
+  },
+  "localModels": {
+    "title": "Lokalni modeli",
+    "description": "Razgovarajte sa modelima koji rade na ovom računaru. Poruke idu direktno iz vašeg pregledača u lokalnu aplikaciju i nikada ne dolaze do naših servera – odgovori, naslovi razgovora i sažeci ostaju na vašem uređaju.",
+    "detect": "Detektuj lokalna okruženja",
+    "detecting": "Detektovanje…",
+    "experimental": "Eksperimentalno",
+    "portLabel": "Port",
+    "statusUnknown": "Još uvek nije provereno.",
+    "statusChecking": "Proveravanje…",
+    "statusReady": "{count, plural, =0 {Povezano, ali nijedan model nije učitan.} one {Povezano — # model dostupan.} other {Povezano — # modela dostupno.}}",
+    "statusNotRunning": "Nije moguće uspostaviti vezu sa {label}. Proverite da li je pokrenut na ovom portu i da li je vašem pregledaču dozvoljen pristup lokalnim aplikacijama sa ovog sajta.",
+    "statusHttpError": "{label} je odgovorio greškom. Proverite njegove logove.",
+    "corsHelp": {
+      "ollama": "Ollama je pokrenuta ali odbija zahteve sa ovog sajta. Postavite OLLAMA_ORIGINS na adresu ovog sajta, restartujte Ollama, pa ponovo detektujte.",
+      "lmstudio": "LM Studio je pokrenut ali odbija zahteve sa ovog sajta. Uključite CORS u podešavanjima lokalnog servera, pa ponovo detektujte.",
+      "llamacpp": "llama.cpp je pokrenut ali odbija zahteve sa ovog sajta. Pokrenite llama-server sa omogućenom podrškom za cross-origin zahteve, pa ponovo detektujte."
+    },
+    "privacyNote": "Lokalni modeli ne podržavaju prilaganje fajlova, slike, pretragu interneta ili konektore — za to su potrebni naši serveri. Detekcija proverava samo ovaj računar."
   }
 }

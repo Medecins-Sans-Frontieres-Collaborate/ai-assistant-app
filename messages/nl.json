@@ -1147,7 +1147,8 @@
     "Connectors": "Connectors",
     "Backup": "Back-up",
     "Memories": "Herinneringen",
-    "Agent Access": "Agenttoegang"
+    "Agent Access": "Agenttoegang",
+    "LocalModels": "Lokale modellen"
   },
   "notFound": {
     "lostDog": "Verloren hond"
@@ -3065,6 +3066,16 @@
       "untitled": "Nieuw gesprek",
       "toggleMenu": "Menu tonen/verbergen",
       "model": "Model voor deze workflow"
+    },
+    "tabs": {
+      "label": "Gespreksmodus",
+      "chat": "Chat",
+      "chatDescription": "Een standaardgesprek met de assistent"
+    },
+    "discard": {
+      "title": "Concept weggooien?",
+      "body": "Overschakelen naar {target} wist het werk dat je gestart bent in {current}.",
+      "confirm": "Weggooien"
     }
   },
   "connectors": {
@@ -3458,5 +3469,24 @@
     "promptAgentSaveSuccess": "Promptagent opgeslagen.",
     "promptAgentDeleteSuccess": "Promptagent verwijderd.",
     "promptAgentsUnavailableWarning": "Promptagents konden niet uit de opslag worden geladen. Ze kunnen nu niet bewerkt worden."
+  },
+  "localModels": {
+    "title": "Lokale modellen",
+    "description": "Chat met modellen die op deze computer draaien. Berichten gaan direct van je browser naar de lokale app en bereiken onze servers nooit — dus antwoorden, gesprektitels en samenvattingen blijven allemaal op je apparaat.",
+    "detect": "Lokale omgevingen detecteren",
+    "detecting": "Detecteren...",
+    "experimental": "Experimenteel",
+    "portLabel": "Poort",
+    "statusUnknown": "Nog niet gecontroleerd.",
+    "statusChecking": "Bezig met controleren...",
+    "statusReady": "{count, plural, =0 {Verbonden, maar geen modellen geladen.} one {Verbonden — # model beschikbaar.} other {Verbonden — # modellen beschikbaar.}}",
+    "statusNotRunning": "Kon {label} niet bereiken. Controleer of deze actief is op deze poort en of je browser toegang heeft tot lokale apps vanaf deze site.",
+    "statusHttpError": "{label} gaf een foutmelding. Controleer de logs.",
+    "corsHelp": {
+      "ollama": "Ollama draait, maar weigert verzoeken van deze site. Stel OLLAMA_ORIGINS in op het adres van deze site, herstart Ollama en probeer opnieuw te detecteren.",
+      "lmstudio": "LM Studio draait, maar weigert verzoeken van deze site. Zet CORS aan in de lokale serverinstellingen en probeer opnieuw te detecteren.",
+      "llamacpp": "llama.cpp draait, maar weigert verzoeken van deze site. Start llama-server met cross-origin verzoeken toegestaan en probeer opnieuw te detecteren."
+    },
+    "privacyNote": "Lokale modellen ondersteunen geen bestandsbijlagen, afbeeldingen, webzoekopdrachten of connectors — daarvoor zijn onze servers nodig. Detectie controleert uitsluitend deze computer."
   }
 }

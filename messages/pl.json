@@ -1179,7 +1179,8 @@
     "Connectors": "Łączniki",
     "Backup": "Kopia zapasowa",
     "Memories": "Wspomnienia",
-    "Agent Access": "Dostęp agenta"
+    "Agent Access": "Dostęp agenta",
+    "LocalModels": "Modele lokalne"
   },
   "notFound": {
     "lostDog": "Zagubiony pies"
@@ -3065,6 +3066,16 @@
       "untitled": "Nowa rozmowa",
       "toggleMenu": "Przełącz menu",
       "model": "Model dla tego przepływu pracy"
+    },
+    "tabs": {
+      "label": "Tryb rozmowy",
+      "chat": "Czat",
+      "chatDescription": "Standardowa rozmowa z asystentem"
+    },
+    "discard": {
+      "title": "Odrzucić ten szkic?",
+      "body": "Przełączenie na {target} spowoduje usunięcie pracy rozpoczętej w {current}.",
+      "confirm": "Odrzuć"
     }
   },
   "connectors": {
@@ -3458,5 +3469,24 @@
     "promptAgentSaveSuccess": "Agent prompt zapisany.",
     "promptAgentDeleteSuccess": "Agent prompt usunięty.",
     "promptAgentsUnavailableWarning": "Nie udało się załadować agentów prompt z magazynu. Edycja jest obecnie niemożliwa."
+  },
+  "localModels": {
+    "title": "Modele lokalne",
+    "description": "Czat z modelami uruchomionymi na tym komputerze. Wiadomości trafiają bezpośrednio z Twojej przeglądarki do lokalnej aplikacji i nigdy nie opuszczają Twojego urządzenia — odpowiedzi, tytuły rozmów i podsumowania pozostają wyłącznie na Twoim komputerze.",
+    "detect": "Wykryj lokalne środowiska",
+    "detecting": "Wykrywanie…",
+    "experimental": "Eksperymentalne",
+    "portLabel": "Port",
+    "statusUnknown": "Jeszcze nie sprawdzono.",
+    "statusChecking": "Sprawdzanie…",
+    "statusReady": "{count, plural, =0 {Połączono, ale nie załadowano modeli.} one {Połączono — dostępny # model.} other {Połączono — dostępne # modele.}}",
+    "statusNotRunning": "Nie można połączyć się z {label}. Sprawdź, czy działa na tym porcie oraz czy przeglądarka ma dostęp do aplikacji lokalnych z tej strony.",
+    "statusHttpError": "{label} zwrócił błąd. Sprawdź logi.",
+    "corsHelp": {
+      "ollama": "Ollama działa, ale odrzuca żądania z tej strony. Ustaw OLLAMA_ORIGINS na adres tej strony, uruchom ponownie Ollama, a następnie wykryj ponownie.",
+      "lmstudio": "LM Studio działa, ale odrzuca żądania z tej strony. Włącz CORS w ustawieniach lokalnego serwera, a następnie wykryj ponownie.",
+      "llamacpp": "llama.cpp działa, ale odrzuca żądania z tej strony. Uruchom llama-server z włączoną obsługą żądań cross-origin, a następnie wykryj ponownie."
+    },
+    "privacyNote": "Modele lokalne nie obsługują załączników, obrazów, wyszukiwania w sieci ani konektorów — do tego wymagane są nasze serwery. Wykrywanie sprawdza wyłącznie ten komputer."
   }
 }

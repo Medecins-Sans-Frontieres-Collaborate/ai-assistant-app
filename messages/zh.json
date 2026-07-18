@@ -1213,7 +1213,8 @@
     "Connectors": "连接器",
     "Backup": "备份",
     "Memories": "记忆",
-    "Agent Access": "代理访问"
+    "Agent Access": "代理访问",
+    "LocalModels": "本地模型"
   },
   "notFound": {
     "lostDog": "迷路的狗"
@@ -3096,6 +3097,16 @@
       "untitled": "新会话",
       "toggleMenu": "切换菜单",
       "model": "此工作流使用的模型"
+    },
+    "tabs": {
+      "label": "对话模式",
+      "chat": "聊天",
+      "chatDescription": "与助手的标准对话"
+    },
+    "discard": {
+      "title": "要放弃此草稿吗？",
+      "body": "切换到{target}将清除你在{current}中已开始的工作。",
+      "confirm": "放弃"
     }
   },
   "connectors": {
@@ -3489,5 +3500,24 @@
     "promptAgentSaveSuccess": "提示代理已保存。",
     "promptAgentDeleteSuccess": "提示代理已删除。",
     "promptAgentsUnavailableWarning": "无法从存储中加载提示代理，暂时无法编辑。"
+  },
+  "localModels": {
+    "title": "本地模型",
+    "description": "与运行在此计算机上的模型聊天。消息将直接从浏览器发送到本地应用，不会经过我们的服务器——因此回复、对话标题和摘要都只保留在你的设备上。",
+    "detect": "检测本地运行环境",
+    "detecting": "正在检测…",
+    "experimental": "实验性",
+    "portLabel": "端口",
+    "statusUnknown": "尚未检查。",
+    "statusChecking": "正在检查…",
+    "statusReady": "{count, plural, =0 {已连接，但未加载模型。} one {已连接—#个模型可用。} other {已连接—#个模型可用。}}",
+    "statusNotRunning": "无法连接到{label}。请确认它正在此端口运行，并允许浏览器从本网站访问本地应用。",
+    "statusHttpError": "{label}响应错误。请检查其日志。",
+    "corsHelp": {
+      "ollama": "Ollama 已运行，但拒绝了来自本站点的请求。请将 OLLAMA_ORIGINS 设置为本站点地址，重启 Ollama 后重新检测。",
+      "lmstudio": "LM Studio 已运行，但拒绝了来自本站点的请求。请在其本地服务器设置中开启 CORS，然后重新检测。",
+      "llamacpp": "llama.cpp 已运行，但拒绝了来自本站点的请求。请以允许跨域请求方式启动 llama-server，然后重新检测。"
+    },
+    "privacyNote": "本地模型不支持文件附件、图片、网页搜索或连接器——这些功能需要我们的服务器。检测仅检查此计算机。"
   }
 }

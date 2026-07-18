@@ -1157,7 +1157,8 @@
     "Connectors": "Connettori",
     "Backup": "Backup",
     "Memories": "Memorie",
-    "Agent Access": "Accesso agente"
+    "Agent Access": "Accesso agente",
+    "LocalModels": "Modelli locali"
   },
   "notFound": {
     "lostDog": "Cane smarrito"
@@ -3065,6 +3066,16 @@
       "untitled": "Nuova conversazione",
       "toggleMenu": "Apri/chiudi menu",
       "model": "Modello per questo workflow"
+    },
+    "tabs": {
+      "label": "Modalità conversazione",
+      "chat": "Chat",
+      "chatDescription": "Una conversazione standard con l’assistente"
+    },
+    "discard": {
+      "title": "Scartare questa bozza?",
+      "body": "Passando a {target} verrà cancellato il lavoro iniziato in {current}.",
+      "confirm": "Scarta"
     }
   },
   "connectors": {
@@ -3458,5 +3469,24 @@
     "promptAgentSaveSuccess": "Agente prompt salvato.",
     "promptAgentDeleteSuccess": "Agente prompt eliminato.",
     "promptAgentsUnavailableWarning": "Impossibile caricare gli agenti prompt dalla memoria. Non possono essere modificati in questo momento."
+  },
+  "localModels": {
+    "title": "Modelli locali",
+    "description": "Chatta con modelli in esecuzione su questo computer. I messaggi vanno direttamente dal browser all’app locale e non raggiungono mai i nostri server — quindi risposte, titoli delle conversazioni e riepiloghi rimangono tutti sulla tua macchina.",
+    "detect": "Rileva runtime locali",
+    "detecting": "Rilevamento in corso…",
+    "experimental": "Sperimentale",
+    "portLabel": "Porta",
+    "statusUnknown": "Non ancora controllato.",
+    "statusChecking": "Verifica in corso…",
+    "statusReady": "{count, plural, =0 {Connesso, ma nessun modello caricato.} one {Connesso — # modello disponibile.} other {Connesso — # modelli disponibili.}}",
+    "statusNotRunning": "Impossibile raggiungere {label}. Controlla che sia in esecuzione su questa porta e che il browser sia autorizzato ad accedere alle app locali da questo sito.",
+    "statusHttpError": "{label} ha risposto con un errore. Verifica i suoi log.",
+    "corsHelp": {
+      "ollama": "Ollama è in esecuzione ma rifiuta le richieste da questo sito. Imposta OLLAMA_ORIGINS sull’indirizzo di questo sito, riavvia Ollama, poi riprova il rilevamento.",
+      "lmstudio": "LM Studio è in esecuzione ma rifiuta le richieste da questo sito. Attiva il CORS nelle impostazioni del suo server locale, poi riprova il rilevamento.",
+      "llamacpp": "llama.cpp è in esecuzione ma rifiuta le richieste da questo sito. Avvia llama-server consentendo le richieste cross-origin, poi riprova il rilevamento."
+    },
+    "privacyNote": "I modelli locali non supportano allegati, immagini, ricerca web o connettori: per queste funzioni sono necessari i nostri server. Il rilevamento verifica solo questo computer."
   }
 }

@@ -1180,7 +1180,8 @@
     "Connectors": "Conectori",
     "Backup": "Backup",
     "Memories": "Memorii",
-    "Agent Access": "Acces agent"
+    "Agent Access": "Acces agent",
+    "LocalModels": "Modele locale"
   },
   "notFound": {
     "lostDog": "Câine pierdut"
@@ -3065,6 +3066,16 @@
       "untitled": "Conversație nouă",
       "toggleMenu": "Comută meniul",
       "model": "Model pentru acest flux de lucru"
+    },
+    "tabs": {
+      "label": "Mod conversație",
+      "chat": "Chat",
+      "chatDescription": "O conversație standard cu asistentul"
+    },
+    "discard": {
+      "title": "Renunțați la această schiță?",
+      "body": "Comutarea la {target} va șterge munca începută în {current}.",
+      "confirm": "Renunță"
     }
   },
   "connectors": {
@@ -3458,5 +3469,24 @@
     "promptAgentSaveSuccess": "Agentul de prompt a fost salvat.",
     "promptAgentDeleteSuccess": "Agentul de prompt a fost șters.",
     "promptAgentsUnavailableWarning": "Agenții de prompt nu au putut fi încărcați din stocare. Nu pot fi editați în acest moment."
+  },
+  "localModels": {
+    "title": "Modele locale",
+    "description": "Conversați cu modele care rulează pe acest computer. Mesajele merg direct din browserul dvs. către aplicația locală și nu ajung niciodată pe serverele noastre — astfel, răspunsurile, titlurile și rezumatele conversațiilor rămân pe propriul dispozitiv.",
+    "detect": "Detectează runtime-urile locale",
+    "detecting": "Se detectează…",
+    "experimental": "Experimental",
+    "portLabel": "Port",
+    "statusUnknown": "Nu a fost verificat încă.",
+    "statusChecking": "Se verifică…",
+    "statusReady": "{count, plural, =0 {Conectat, dar niciun model încărcat.} one {Conectat — # model disponibil.} other {Conectat — # modele disponibile.}}",
+    "statusNotRunning": "Nu s-a putut accesa {label}. Verificați dacă rulează pe acest port și dacă browserul permite accesul către aplicațiile locale de pe acest site.",
+    "statusHttpError": "{label} a răspuns cu o eroare. Verificați log-urile sale.",
+    "corsHelp": {
+      "ollama": "Ollama rulează, dar refuză solicitările de pe acest site. Setați OLLAMA_ORIGINS la adresa acestui site, reporniți Ollama și apoi detectați din nou.",
+      "lmstudio": "LM Studio rulează, dar refuză solicitările de pe acest site. Activați CORS în setările serverului local, apoi detectați din nou.",
+      "llamacpp": "llama.cpp rulează, dar refuză solicitările de pe acest site. Porniți llama-server cu permisiunea pentru cereri cross-origin, apoi detectați din nou."
+    },
+    "privacyNote": "Modelele locale nu suportă atașamente de fișiere, imagini, căutare web sau conectori — acestea necesită serverele noastre. Detectarea verifică doar acest computer."
   }
 }

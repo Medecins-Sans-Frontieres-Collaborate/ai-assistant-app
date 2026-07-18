@@ -1335,7 +1335,8 @@
     "Connectors": "Konektè",
     "Backup": "Sovgad",
     "Memories": "Memwa",
-    "Agent Access": "Aksè Ajan"
+    "Agent Access": "Aksè Ajan",
+    "LocalModels": "Modèl lokal"
   },
   "emptyState": {
     "greeting": "Kijan mwen ka ede ou?",
@@ -3049,6 +3050,16 @@
       "untitled": "Nouvo Konvèsasyon",
       "toggleMenu": "Afiche/oswa kache meni an",
       "model": "Modèl pou workflow sa a"
+    },
+    "tabs": {
+      "label": "Mòd konvèsasyon",
+      "chat": "Chat",
+      "chatDescription": "Yon konvèsasyon estanda ak asistan an"
+    },
+    "discard": {
+      "title": "Efase bouyon sa a?",
+      "body": "Chanje pou {target} ap efase travay ou te kòmanse nan {current}.",
+      "confirm": "Efase"
     }
   },
   "connectors": {
@@ -3442,5 +3453,24 @@
     "promptAgentSaveSuccess": "Ajan avi sove.",
     "promptAgentDeleteSuccess": "Ajan avi efase.",
     "promptAgentsUnavailableWarning": "Ajan avi yo pa ka chaje soti nan depo a. Ou pa ka modifye yo kounye a."
+  },
+  "localModels": {
+    "title": "Modèl lokal",
+    "description": "Chate ak modèl k ap kouri sou òdinatè sa a. Mesaj yo soti dirèkteman nan navigatè ou a al nan aplikasyon lokal la epi yo pa janm rive sou sèvè nou yo — sa vle di repons yo, tit konvèsasyon yo ak rezime yo ap rete sou òdinatè ou.",
+    "detect": "Detekte ekzekisyon lokal",
+    "detecting": "Ap detekte…",
+    "experimental": "Egzperimantal",
+    "portLabel": "Pò",
+    "statusUnknown": "Ankò pa tcheke.",
+    "statusChecking": "Ap tcheke…",
+    "statusReady": "{count, plural, =0 {Konekte, men pa gen modèl ki chaje.} one {Konekte — # modèl disponib.} other {Konekte — # modèl disponib.}}",
+    "statusNotRunning": "Pa kapab jwenn {label}. Tcheke si l ap kouri sou pò sa a, epi asire navigatè ou a gen dwa pou l jwenn aksè ak aplikasyon lokal yo sou sit sa a.",
+    "statusHttpError": "{label} reponn ak yon erè. Tcheke loj la.",
+    "corsHelp": {
+      "ollama": "Ollama ap kouri men li refize demann ki soti sou sit sa a. Mete OLLAMA_ORIGINS ak adrès sit sa a, rekòmanse Ollama, epi detekte ankò.",
+      "lmstudio": "LM Studio ap kouri men li refize demann ki soti sou sit sa a. Limen CORS nan paramèt sèvè lokal li a, epi detekte ankò.",
+      "llamacpp": "llama.cpp ap kouri men li refize demann ki soti sou sit sa a. Kòmanse llama-server ak demann cross-origin pèmèt, epi detekte ankò."
+    },
+    "privacyNote": "Modèl lokal yo pa sipòte atachman fichye, imaj, rechèch sou entènèt oswa konektè — sa yo bezwen sèvè nou yo. Deteksyon ap tcheke sèlman òdinatè sa a."
   }
 }

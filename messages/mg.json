@@ -1335,7 +1335,8 @@
     "Connectors": "Mpifandray",
     "Backup": "Backup",
     "Memories": "Fitadidiana",
-    "Agent Access": "Fidirana Agent"
+    "Agent Access": "Fidirana Agent",
+    "LocalModels": "Model eo an-toerana"
   },
   "emptyState": {
     "greeting": "Afaka manampy inona aho?",
@@ -3049,6 +3050,16 @@
       "untitled": "Resaka vaovao",
       "toggleMenu": "Atsangano/ahenoy ny sakafo",
       "model": "Modely amin'ity workflow ity"
+    },
+    "tabs": {
+      "label": "Fomba fifanakalozan-dresaka",
+      "chat": "Chat",
+      "chatDescription": "Fifanakalozan-dresaka mahazatra amin’ny assistant"
+    },
+    "discard": {
+      "title": "Hovonoina ity draft ity?",
+      "body": "Ny fifindrana ho any amin’i {target} dia hanala ny asa natomboka tao amin’i {current}.",
+      "confirm": "Vonoy"
     }
   },
   "connectors": {
@@ -3442,5 +3453,24 @@
     "promptAgentSaveSuccess": "Agent prompt voatahiry.",
     "promptAgentDeleteSuccess": "Agent prompt voafafa.",
     "promptAgentsUnavailableWarning": "Tsy afaka nakarina avy amin'ny fitahirizana ireo agent prompt. Tsy afaka ovaina amin'izao fotoana izao."
+  },
+  "localModels": {
+    "title": "Model eo an-toerana",
+    "description": "Afaka miresaka amin’ny model mandeha amin’ity solosaina ity ianao. Avy hatrany ny hafatra dia mandeha avy any amin’ny navigateur mankany amin’ny application eo an-toerana ary tsy tonga amin’ny server-nay mihitsy — dia mijanona ao amin’ny milinao ihany ny valiny, lohatenin-dresaka, ary famintinana.",
+    "detect": "Fikarohana model eo an-toerana",
+    "detecting": "Mikaroka…",
+    "experimental": "Andrana",
+    "portLabel": "Port",
+    "statusUnknown": "Tsy mbola voamarina.",
+    "statusChecking": "Eo am-panamarinana…",
+    "statusReady": "{count, plural, =0 {Mifandray, fa tsy mbola misy model nampidirina.} one {Mifandray — model 1 misy.} other {Mifandray — model # misy.}}",
+    "statusNotRunning": "Tsy afaka nifandray tamin’i {label}. Hamarino fa mandeha amin’ity port ity izy, ary afaka miditra amin’ny app eo an-toerana avy amin’ity tranonkala ity ny navigateur-nao.",
+    "statusHttpError": "{label} namaly tamin’ny hadisoana. Jereo ny log-ny.",
+    "corsHelp": {
+      "ollama": "Mandeha i Ollama saingy mandà fangatahana avy amin’ity tranonkala ity. Apetraho amin’ny OLLAMA_ORIGINS ny adiresin’ity tranonkala ity, avereno indray i Ollama, dia ataovy indray ny fikarohana.",
+      "lmstudio": "Mandeha i LM Studio saingy mandà fangatahana avy amin’ity tranonkala ity. Alefaso ny CORS ao amin’ny settings an’ny server eo an-toerana, dia ataovy indray ny fikarohana.",
+      "llamacpp": "Mandeha i llama.cpp saingy mandà fangatahana avy amin’ity tranonkala ity. Atomboy miaraka amin’ny cross-origin requests avela ny llama-server, dia ataovy indray ny fikarohana."
+    },
+    "privacyNote": "Tsy manohana rakitra, sary, fikarohana web, na connecteurs ny model eo an-toerana — mila server-nay izany. Fotsiny amin’ity solosaina ity ihany no mijery ny fisiany."
   }
 }

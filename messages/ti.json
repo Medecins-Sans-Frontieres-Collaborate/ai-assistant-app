@@ -1335,7 +1335,8 @@
     "Connectors": "ተገናኝቲ",
     "Backup": "ቦታ ምዝጋብ",
     "Memories": "ዝኽረኛት",
-    "Agent Access": "Agent መግቢኡ"
+    "Agent Access": "Agent መግቢኡ",
+    "LocalModels": "ኣካባቢ ሞዴልታት"
   },
   "emptyState": {
     "greeting": "ብኸመይ ክሕግዝ?",
@@ -3049,6 +3050,16 @@
       "untitled": "ዓዲ ውይይት",
       "toggleMenu": "ምዝዋር መኑ",
       "model": "መደብ ዝተጠቐሙ ናይዚ ውልቀ ስራሕ"
+    },
+    "tabs": {
+      "label": "ምዝናና ሞዴ",
+      "chat": "ቆይታ",
+      "chatDescription": "ብመላእክቲ ዘለኻ ዋናዊ ቆይታ"
+    },
+    "discard": {
+      "title": "እዚ መፃፍቲ ንትጥል?",
+      "body": "ናብ {target} ምቕያር ዝጀመረካዮ ስራሕ ካብ {current} ይወጽእ።",
+      "confirm": "ኣጥፍእ"
     }
   },
   "connectors": {
@@ -3442,5 +3453,24 @@
     "promptAgentSaveSuccess": "ተጸባጻቢ ኣጄንት ተዓቢቡ።",
     "promptAgentDeleteSuccess": "ተጸባጻቢ ኣጄንት ተሰርዚ።",
     "promptAgentsUnavailableWarning": "ተጸባጻቢ ኣጄንትታት ካብ ኣከባቢ ክትጻዓኑ ኣይተተኽእሉን። ሕጂ ምስክራን አይክእሉን።"
+  },
+  "localModels": {
+    "title": "ኣካባቢ ሞዴልታት",
+    "description": "ብነቲ ኮምፒተረኻ ዝሰርሑ ሞዴልታት ቆይታ ፈጺም። መልእኽታታት ብቕድሚኡ ካብ ብራውዘርኻ ናብ ኣካባቢ መተግበሪ ይመጽኡ እንጂ ናብ ሰርቨርና ኣይስአሉን — ምላሽታት፣ ኣቓራቢ ቆይታን ንኡስ ዝጽኑ ብኣካባቢኻ እዮም ዝርከቡ።",
+    "detect": "ኣካባቢ ሰርቨር ምርካብ",
+    "detecting": "ተረኺቡን…",
+    "experimental": "ሙከራዊ",
+    "portLabel": "ፖርት",
+    "statusUnknown": "ንዚ ድማ ኣይተመርመርን።",
+    "statusChecking": "እዚ ኣረኺቡ…",
+    "statusReady": "{count, plural, =0 {ተገናኢ እዩ፣ ግና ሞዴል ኣይስዋሕን።} one {ተገናኢ እዩ — # ሞዴል ተዘጋጅኦ።} other {ተገናኢ እዩ — # ሞዴልታት ተዘጋጅኡ።}}",
+    "statusNotRunning": "{label} ምድላው ኣይተቐበለን። እንተ እዚ ፖርት ብሓባሩ ዝሰርሕ እንዶ ኣረጋግጽ፣ ብራውዘርኻውን ካብዚ ሳይት ናብ ኣካባቢ መተግበሪ ዝቕበለሉ ኣረጋግጽ።",
+    "statusHttpError": "{label} ብሓጺባ መልሶ ኣቐሪቡ። ኣርእዮ ሎግኡ።",
+    "corsHelp": {
+      "ollama": "Ollama ኣለና፣ ግና ካብዚ ሳይት ሕቶታት ምቕባል ይኣክልን። ሓንቲ OLLAMA_ORIGINS ናብ ኣድራሻ ዚሕዋት ኣድርኦ፣ ድሕሪኡ Ollama ደግመሉ፣ እንደገና ምርካብ።",
+      "lmstudio": "LM Studio ኣለና፣ ግና ካብዚ ሳይት ሕቶታት ምቕባል ይኣክልን። ብሰናይ CORS ናብ ኣካባቢ ሰርቨር ቅንጢጡ ቕፅል፣ እንደገና ምርካብ።",
+      "llamacpp": "llama.cpp ኣለና፣ ግና ካብዚ ሳይት ሕቶታት ምቕባል ይኣክልን። llama-server ብዝፍቀደ ዝሓፀበ ኣብ ኩዑሉ ሓገዝ ጀምር፣ እንደገና ምርካብ።"
+    },
+    "privacyNote": "ኣካባቢ ሞዴልታት ፋይል ምያዳድ፣ ስእሊ፣ ድሕሪ መርበብ ምድላው ወይ ንተዓይነታት ዘይደግፉን። እዚ ኣካባቢ ኮምፒተር መርመራ ብተሓዊሱ እዩ ዝፈጸመ።"
   }
 }

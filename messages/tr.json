@@ -1182,7 +1182,8 @@
     "Connectors": "Bağlayıcılar",
     "Backup": "Yedekleme",
     "Memories": "Geçmiş Sohbetler",
-    "Agent Access": "Agent Erişimi"
+    "Agent Access": "Agent Erişimi",
+    "LocalModels": "Yerel modeller"
   },
   "notFound": {
     "lostDog": "Kayıp köpek"
@@ -3065,6 +3066,16 @@
       "untitled": "Yeni Konuşma",
       "toggleMenu": "Menüyü aç/kapat",
       "model": "Bu iş akışı için model"
+    },
+    "tabs": {
+      "label": "Konuşma modu",
+      "chat": "Sohbet",
+      "chatDescription": "Asistan ile standart bir konuşma"
+    },
+    "discard": {
+      "title": "Bu taslak silinsin mi?",
+      "body": "{target} konumuna geçerseniz, {current} içinde başlattığınız çalışma silinir.",
+      "confirm": "Sil"
     }
   },
   "connectors": {
@@ -3458,5 +3469,24 @@
     "promptAgentSaveSuccess": "Komut aracı kaydedildi.",
     "promptAgentDeleteSuccess": "Komut aracı silindi.",
     "promptAgentsUnavailableWarning": "Komut araçları depodan yüklenemedi. Şu anda düzenlenemezler."
+  },
+  "localModels": {
+    "title": "Yerel modeller",
+    "description": "Bu bilgisayarda çalışan modellerle sohbet edin. Mesajlar doğrudan tarayıcınızdan yerel uygulamaya gider ve sunucularımıza asla ulaşmaz — dolayısıyla yanıtlar, konuşma başlıkları ve özetler tamamen cihazınızda kalır.",
+    "detect": "Yerel çalışma ortamlarını tespit et",
+    "detecting": "Tespit ediliyor…",
+    "experimental": "Deneysel",
+    "portLabel": "Port",
+    "statusUnknown": "Henüz kontrol edilmedi.",
+    "statusChecking": "Kontrol ediliyor…",
+    "statusReady": "{count, plural, =0 {Bağlandı, ancak model yüklenmedi.} one {Bağlandı — # model mevcut.} other {Bağlandı — # model mevcut.}}",
+    "statusNotRunning": "{label} uygulamasına ulaşılamıyor. Bu port üzerinde çalıştığından ve tarayıcınızın bu siteden yerel uygulamalara erişmesine izin verildiğinden emin olun.",
+    "statusHttpError": "{label} bir hata ile yanıt verdi. Kayıtlarını kontrol edin.",
+    "corsHelp": {
+      "ollama": "Ollama çalışıyor fakat bu siteden gelen istekleri reddediyor. OLLAMA_ORIGINS değişkenini bu sitenin adresine ayarlayın, Ollama’yı yeniden başlatın ve tekrar tespit edin.",
+      "lmstudio": "LM Studio çalışıyor fakat bu siteden gelen istekleri reddediyor. Yerel sunucu ayarlarından CORS'u etkinleştirin ve tekrar tespit edin.",
+      "llamacpp": "llama.cpp çalışıyor fakat bu siteden gelen istekleri reddediyor. llama-server’ı çapraz orijin isteklerine izin vererek başlatın ve tekrar tespit edin."
+    },
+    "privacyNote": "Yerel modeller dosya ekleri, resimler, web araması veya konektörleri desteklemez — bunlar için sunucularımız gerekir. Tespit işlemi yalnızca bu bilgisayarı kontrol eder."
   }
 }

@@ -1335,7 +1335,8 @@
     "Connectors": "Bâa ti kêtî",
     "Backup": "Kubê ti ngi",
     "Memories": "Zîkö mbênî",
-    "Agent Access": "Wako na agent"
+    "Agent Access": "Wako na agent",
+    "LocalModels": "Model ti gbë na mbongo"
   },
   "emptyState": {
     "greeting": "Mbi lingbi tî sâra yê?",
@@ -3049,6 +3050,16 @@
       "untitled": "Bêrê-bîanî mû",
       "toggleMenu": "Sûngbo menü",
       "model": "Modelo ti workflow ôko"
+    },
+    "tabs": {
+      "label": "Fason ya mbëtïrï",
+      "chat": "Mbëtïrï",
+      "chatDescription": "Mbëtïrï tî poto mo na assistant"
+    },
+    "discard": {
+      "title": "Wëngë drafti aï?",
+      "body": "Sô köta na {target}, a tîlî aköngö tî mo yeke sô {current}.",
+      "confirm": "Wëngë"
     }
   },
   "connectors": {
@@ -3442,5 +3453,24 @@
     "promptAgentSaveSuccess": "Prompt agent a séngo.",
     "promptAgentDeleteSuccess": "Prompt agent a küta.",
     "promptAgentsUnavailableWarning": "Prompt agent ayike lenge a yeke tena ava na storage. Ayeke tena küeté."
+  },
+  "localModels": {
+    "title": "Model ti gbë na mbongo",
+    "description": "Mbëtïrï na model sô gbë na mbongo ti or. Banzi yeke gï na browser ti mo kïri ngâ local app na cp ti mo, a yïne ti sô sîngï server tî nzönî — alo bïanë, sêngö tî mbëtïrï na resüme yeke sèngö na mbongo ti mo.",
+    "detect": "Fängä gbë tî mbongo",
+    "detecting": "Fängä...",
+    "experimental": "Gbèkè",
+    "portLabel": "Port",
+    "statusUnknown": "Abéngö nzönï.",
+    "statusChecking": "Ebïngö...",
+    "statusReady": "{count, plural, =0 {Akpö mbï, model ködörö akpö.} one {Akpö — # model té yeke.} other {Akpö — # model té yeke.}}",
+    "statusNotRunning": "Abeti akpö {label}. Gbalë sô yeke na port dë, na browser ti or ténï sî yeke sô a tî mbongo ngâ site ëa.",
+    "statusHttpError": "{label} api tî erörï. Gbalë logs ti model ëa.",
+    "corsHelp": {
+      "ollama": "Ollama yeke na mbongo mä a garë sô banzi längwa na site ëa. Sëtï OLLAMA_ORIGINS na adrès ti site ëa, sî na Ollama, ndö fängä gbë sï.",
+      "lmstudio": "LM Studio yeke na mbongo, mä a garë banzi na site ëa. Vënê CORS na settings tî server tî mbongo, ndö fängä gbë sï.",
+      "llamacpp": "llama.cpp yeke na mbongo mä a garë banzi na site ëa. Kanï llama-server ngâ cross-origin requests sô a teni, ndö fängä gbë sï."
+    },
+    "privacyNote": "Model tî gbë na mbongo a tönî sêngö attachment, image, web search tî connector — yënga yeke na server tî nzönî. Detection yeke gbëngö na mbongo ti mo dölï."
   }
 }

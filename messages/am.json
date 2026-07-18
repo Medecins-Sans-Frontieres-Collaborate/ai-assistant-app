@@ -1125,7 +1125,8 @@
     "Connectors": "አገናኞች",
     "Backup": "ኦፕድ በሚያደርጉበት",
     "Memories": "ትዕዛዞች",
-    "Agent Access": "የወኪል መዳረሻ"
+    "Agent Access": "የወኪል መዳረሻ",
+    "LocalModels": "የአካባቢ ሞዴሎች"
   },
   "notFound": {
     "lostDog": "የጠፋ ውሻ"
@@ -3065,6 +3066,16 @@
       "untitled": "አዲስ ውይይት",
       "toggleMenu": "ምናሌውን ቀይር",
       "model": "ለዚህ ስሪት አባል ሞዴል"
+    },
+    "tabs": {
+      "label": "የቆይታ ሁነታ",
+      "chat": "ውይይት",
+      "chatDescription": "ከአገልጋዩ ጋር የተለመደ ውይይት"
+    },
+    "discard": {
+      "title": "ይህን ረቂቅ እንደት ይቆም?",
+      "body": "ወደ {target} ማሻሻል በ {current} የጀመሩትን ስራ ያጠፋል።",
+      "confirm": "አስወግድ"
     }
   },
   "connectors": {
@@ -3458,5 +3469,24 @@
     "promptAgentSaveSuccess": "ፕሮምፕት ወኪል ተደምሯል።",
     "promptAgentDeleteSuccess": "ፕሮምፕት ወኪል ተሰርዟል።",
     "promptAgentsUnavailableWarning": "ፕሮምፕት ወኪሎችን ከማከማቻ ማግኘት አልተቻለም። አሁን ማርትዕ አይችሉም።"
+  },
+  "localModels": {
+    "title": "የአካባቢ ሞዴሎች",
+    "description": "በዚህ ኮምፒውተር ላይ ከሚሰሩ ሞዴሎች ጋር ውይይት ያድርጉ። መልዕክቶች ቀጥታ ከአሳሽዎ ወደ አካባቢ መተግበሪያው ይሄዳሉ፥ ወደ አገልጋያችን አይደሉም — ስለዚህ ምላሾች፣ የውይይት ርዕሶች እና ማጠቃለያዎች ሁሉ በኮምፒውተርዎ እየቀመጡ ይቀያሉ።",
+    "detect": "የአካባቢ ተኮሳዎች አግኝ",
+    "detecting": "በመፈለግ ላይ…",
+    "experimental": "ጥናታዊ",
+    "portLabel": "ፖርት",
+    "statusUnknown": "አልተፈተነበትም።",
+    "statusChecking": "በማረጋገጥ ላይ…",
+    "statusReady": "{count, plural, =0 {ተገናኝቷል፣ ሞዴሎች አልተጫኑም።} one {ተገናኝቷል — # ሞዴል ዝግጁ ነው።} other {ተገናኝቷል — # ሞዴሎች ዝግጁ ናቸው።}}",
+    "statusNotRunning": "{label} ሊደርስበት አልተቻለም። በዚህ ፖርት እንደሚሰራ እና አሳሽዎ ከዚህ ጣቢያ አካባቢ የአካባቢ መተግበሪያዎችን ማግኘት እንደተፈቀደለት ያረጋግጡ።",
+    "statusHttpError": "{label} ስህተት አስረከበ። ሎጎቹን ያረጋግጡ።",
+    "corsHelp": {
+      "ollama": "Ollama በሂደት ላይ ነው፣ ግን ከዚህ ጣቢያ ጥያቄዎችን ማቅረብ አይፈቅድም። OLLAMA_ORIGINS ወደዚህ ድህረገፅ አድራሻ ያዘጋጁ፣ Ollama እንደገና አስጀምሩ ከዚያም እንደገና ይፈትኑ።",
+      "lmstudio": "LM Studio በሂደት ላይ ነው፣ ግን ከዚህ ጣቢያ ጥያቄዎችን ማቅረብ አይፈቅድም። በአካባቢ አገልጋዩ ቅንብሮች CORS አስተካክሉ፣ ከዚያም እንደገና ይፈትኑ።",
+      "llamacpp": "llama.cpp በሂደት ላይ ነው፣ ግን ከዚህ ጣቢያ ጥያቄዎችን ማቅረብ አይፈቅድም። llama-server በcross-origin ጥያቄዎች እንዲፈቀዱ ያስጀምሩ፣ ከዚያም እንደገና ይፈትኑ።"
+    },
+    "privacyNote": "የአካባቢ ሞዴሎች ፋይል አቀራረብ፣ ምስሎች፣ የድህረ-ገፅ ፍለጋ ወይም አገናኞችን አይደግፉም — እነዚህ ለአገልጋያችን ይፈለጋሉ። መፈተን ሁልጊዜ በዚህ ኮምፒውተር ብቻ ይደርሳል።"
   }
 }

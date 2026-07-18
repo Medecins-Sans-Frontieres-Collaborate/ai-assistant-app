@@ -1335,7 +1335,8 @@
     "Connectors": "Asopọ",
     "Backup": "Afẹyinti",
     "Memories": "Ìrántí",
-    "Agent Access": "Ìwọlé aṣojú"
+    "Agent Access": "Ìwọlé aṣojú",
+    "LocalModels": "Àwòrán àgbéyẹ̀wò agbègbè"
   },
   "emptyState": {
     "greeting": "Báwo ni mo ṣe lè ràn ọ́ lọ́wọ́?",
@@ -3049,6 +3050,16 @@
       "untitled": "Ibànísọ̀rọ̀ Tuntun",
       "toggleMenu": "Yi àkójọ aṣayan padà",
       "model": "Àpẹẹrẹ fún iṣẹ́ yìí"
+    },
+    "tabs": {
+      "label": "Ipo ìbànísọ̀rọ̀",
+      "chat": "Ìbànísọ̀rọ̀",
+      "chatDescription": "Ìbànísọ̀rọ̀ àwòkọ́sùn pẹ̀lú iranwọ́"
+    },
+    "discard": {
+      "title": "Ṣe o fẹ́ kọ àtẹ̀jáde yìí sílẹ̀?",
+      "body": "Yípadà sí {target} máa yọ iṣẹ́ tí o ti bẹ̀rẹ̀ sí {current} kúrò.",
+      "confirm": "Kọ sílẹ̀"
     }
   },
   "connectors": {
@@ -3442,5 +3453,24 @@
     "promptAgentSaveSuccess": "A ti fipamọ́ aṣoju ìbéèrè.",
     "promptAgentDeleteSuccess": "A ti pa aṣoju ìbéèrè.",
     "promptAgentsUnavailableWarning": "A ko le gbe awọn aṣoju ìbéèrè wọ́lọ́ sí àkójọ data. Wọn kò le ṣatúnṣe nísinsin yìí."
+  },
+  "localModels": {
+    "title": "Àwòrán àgbéyẹ̀wò agbègbè",
+    "description": "Ìbànísọ̀rọ̀ pẹ̀lú àwòrán tó ń ṣiṣẹ́ lórí kọ̀m̀pútà yìí. Ìfiranṣẹ́ rẹ taara láti aṣàwákiri rẹ sí àpẹrẹ agbègbè, kò sì lọ sí àwọn sẹ́fà wa — gbogbo ìdáhùn, akọlé ìbànísọ̀rọ̀ àti àkótán yóò wà lórí ẹrọ rẹ.",
+    "detect": "Ṣàbẹ̀wò àkókò agbègbè",
+    "detecting": "Ṣíwádìí…",
+    "experimental": "Ìdánwò",
+    "portLabel": "Ibùdó",
+    "statusUnknown": "Kò tíì ṣiṣàyẹ̀wò.",
+    "statusChecking": "Ṣàyẹ̀wò…",
+    "statusReady": "{count, plural, =0 {Ti ṣopọ, àmọ́ kò sí àwòrán kankan.} one {Ti ṣopọ — àwòrán kan wà.} other {Ti ṣopọ — àwòrán # wà.}}",
+    "statusNotRunning": "A kó le ráyè wọle sí {label}. Ṣàyẹ̀wò pé ó ń ṣiṣẹ́ lórí ibùdó yìí, àti pé aṣàwákiri rẹ ní àṣẹ láti wọlé sáwọn app agbègbè láti ojúlé yìí.",
+    "statusHttpError": "{label} dáhùn pẹ̀lú aṣìṣe. Ṣàyẹ̀wò àkọọlẹ rẹ.",
+    "corsHelp": {
+      "ollama": "Ollama ń ṣiṣẹ́ ṣùgbọ́n kò gba ìbéèrè láti ojúlé yìí. Ṣètò OLLAMA_ORIGINS sí àdírẹ́sì ojúlé yìí, tún Ollama bẹ̀rẹ̀, lẹ́yìn náà ṣàyẹ̀wò tùn.",
+      "lmstudio": "LM Studio ń ṣiṣẹ́ ṣùgbọ́n kò gba ìbéèrè láti ojúlé yìí. Ṣí COR̀S nínú eto sẹ́bà app agbègbè rẹ, lẹ́yìn náà ṣàyẹ̀wò tùn.",
+      "llamacpp": "llama.cpp ń ṣiṣẹ́ ṣùgbọ́n kò gba ìbéèrè láti ojúlé yìí. Bẹrẹ llama-server pẹ̀lú àṣẹ fun ìbéèrè kúrò, lẹ́yìn náà ṣàyẹ̀wò tùn."
+    },
+    "privacyNote": "Àwòrán agbègbè kò gbàwọlé fifi mọ́ àtẹ̀jáde fáìlì, àwòrán, àwárí wẹẹ̀bù tàbí àwọn àmúṣiṣẹ́ — àwọn wọ̀nyí nílò sẹ́fà wa. Ṣíwádìí mà kàn kọ̀m̀pútà yìí nìkan ní."
   }
 }

@@ -1335,7 +1335,8 @@
     "Connectors": "Ibihuza",
     "Backup": "Kubika kopi y'inyuma",
     "Memories": "Ibikurubikuru",
-    "Agent Access": "Kwinjira kwa Agent"
+    "Agent Access": "Kwinjira kwa Agent",
+    "LocalModels": "Akarorero k'imbere mu muduga"
   },
   "emptyState": {
     "greeting": "Ndagufasha nte?",
@@ -3049,6 +3050,16 @@
       "untitled": "Ikiganiro gishasha",
       "toggleMenu": "Hindura urutonde",
       "model": "Model kuri workflow iyi"
+    },
+    "tabs": {
+      "label": "Uburyo bwo kuganira",
+      "chat": "Ikiganiro",
+      "chatDescription": "Ikiganiro gisanzwe n'umufasha"
+    },
+    "discard": {
+      "title": "Urashaka guheba iyi nteguro?",
+      "body": "Guhindura kuri {target} birakuraho ivyo watanguye gukora muri {current}.",
+      "confirm": "Hebera"
     }
   },
   "connectors": {
@@ -3442,5 +3453,24 @@
     "promptAgentSaveSuccess": "Prompt agent irazigamwe.",
     "promptAgentDeleteSuccess": "Prompt agent yasizwe.",
     "promptAgentsUnavailableWarning": "Prompt agents ntibashoboye kuronkerwa muri storage. Ntibashobora guhindurwa ubu."
+  },
+  "localModels": {
+    "title": "Akarorero k'imbere mu muduga",
+    "description": "Ganira n’akarorero gakora kuri uru rufunguruzo. Ubutumwa bushika buturutse muri mudasobwa yawe bugana kuri porogarama iri aho nyene, ntibushike ku mikoreshereze yacu — n’inyishu, insiguro z’ivyavuzwe na titire y’ibiganiro vyose bisigara kuri mudasobwa yawe.",
+    "detect": "Menya porogaramu z’imbere mu muduga",
+    "detecting": "Biriko biraronderwa…",
+    "experimental": "Biriko vyageragezwa",
+    "portLabel": "Port",
+    "statusUnknown": "Ntibiragenzwa.",
+    "statusChecking": "Biriko birageragezwa…",
+    "statusReady": "{count, plural, =0 {Vyahujwe, ariko nta karorero karimo.} one {Vyahujwe — akarorero # karaboneka.} other {Vyahujwe — udukarorero # turaboneka.}}",
+    "statusNotRunning": "Ntivyashoboye kumenya {label}. Raba ko biri gukora kuri iyi port, kandi umenye ko uwukoresha arashobora kwemera porogaramu z’imbere mu muduga zivuye kuri uru rubuga.",
+    "statusHttpError": "{label} yatanze ikosa. Raba mu makuru yayo.",
+    "corsHelp": {
+      "ollama": "Ollama iriko irakora ariko igasubira inyuma ivyavuye kuri uru rubuga. Shiraho OLLAMA_ORIGINS ku murongo wa hano, tangura Ollama bundi bushasha, hanyuma wongere urondera.",
+      "lmstudio": "LM Studio iriko irakora ariko igasubira inyuma ivyavuye kuri uru rubuga. Kura CORS mu kwishiriraho kwa server ya hano, hanyuma wongere urondere.",
+      "llamacpp": "llama.cpp iriko irakora ariko igasubira inyuma ivyavuye kuri uru rubuga. Tangura llama-server yemera cross-origin requests, hanyuma wongere urondera."
+    },
+    "privacyNote": "Akarorero k’imbere ntikashigikira kwungura amadosiye, amashusho, canke ubushakashatsi kuri webi canke connectors — ivyo bisaba imikoreshereze yacu. Kurondera bikorwa gusa kuri iyi mudasobwa."
   }
 }

@@ -1182,7 +1182,8 @@
     "Connectors": "Konektory",
     "Backup": "Záloha",
     "Memories": "Vzpomínky",
-    "Agent Access": "Přístup agenta"
+    "Agent Access": "Přístup agenta",
+    "LocalModels": "Lokální modely"
   },
   "notFound": {
     "lostDog": "Ztracený pes"
@@ -3065,6 +3066,16 @@
       "untitled": "Nová konverzace",
       "toggleMenu": "Přepnout menu",
       "model": "Model pro tento workflow"
+    },
+    "tabs": {
+      "label": "Režim konverzace",
+      "chat": "Chat",
+      "chatDescription": "Standardní konverzace s asistentem"
+    },
+    "discard": {
+      "title": "Zahodit tento návrh?",
+      "body": "Přepnutím na {target} se odstraní práce, kterou jste začali v {current}.",
+      "confirm": "Zahodit"
     }
   },
   "connectors": {
@@ -3458,5 +3469,24 @@
     "promptAgentSaveSuccess": "Prompt agent byl uložen.",
     "promptAgentDeleteSuccess": "Prompt agent byl smazán.",
     "promptAgentsUnavailableWarning": "Prompt agenty se nepodařilo načíst z úložiště. Momentálně je nelze upravovat."
+  },
+  "localModels": {
+    "title": "Lokální modely",
+    "description": "Chatování s modely běžícími na tomto počítači. Zprávy jdou přímo z vašeho prohlížeče do lokální aplikace a nikdy se nedostanou na naše servery — odpovědi, názvy konverzací a shrnutí tak zůstávají pouze na vašem zařízení.",
+    "detect": "Detekovat lokální runtime",
+    "detecting": "Detekuje se…",
+    "experimental": "Experimentální",
+    "portLabel": "Port",
+    "statusUnknown": "Zatím nebylo zkontrolováno.",
+    "statusChecking": "Kontroluje se…",
+    "statusReady": "{count, plural, =0 {Připojeno, ale žádné modely nejsou načteny.} one {Připojeno — # model k dispozici.} other {Připojeno — # modelů k dispozici.}}",
+    "statusNotRunning": "Nelze se spojit s {label}. Zkontrolujte, zda běží na tomto portu a zda má váš prohlížeč přístup k lokálním aplikacím z tohoto webu.",
+    "statusHttpError": "{label} odpověděl s chybou. Zkontrolujte jeho logy.",
+    "corsHelp": {
+      "ollama": "Ollama běží, ale odmítá požadavky z tohoto webu. Nastavte OLLAMA_ORIGINS na adresu tohoto webu, restartujte Ollama a detekujte znovu.",
+      "lmstudio": "LM Studio běží, ale odmítá požadavky z tohoto webu. Zapněte CORS v nastavení jeho lokálního serveru a poté detekujte znovu.",
+      "llamacpp": "llama.cpp běží, ale odmítá požadavky z tohoto webu. Spusťte llama-server s povolenými požadavky z jiných domén a poté detekujte znovu."
+    },
+    "privacyNote": "Lokální modely nepodporují přílohy souborů, obrázky, webové vyhledávání ani konektory — tyto funkce vyžadují naše servery. Detekce kontroluje pouze tento počítač."
   }
 }

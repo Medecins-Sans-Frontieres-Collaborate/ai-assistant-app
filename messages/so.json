@@ -1335,7 +1335,8 @@
     "Connectors": "Xiriiriyayaal",
     "Backup": "Kaydin",
     "Memories": "Xasuus",
-    "Agent Access": "Helitaanka Wakiilka"
+    "Agent Access": "Helitaanka Wakiilka",
+    "LocalModels": "Moodallo maxalli ah"
   },
   "emptyState": {
     "greeting": "Sideen kugu caawin karaa?",
@@ -3049,6 +3050,16 @@
       "untitled": "Wadahadal Cusub",
       "toggleMenu": "Soo rogo/ka qari menu-ga",
       "model": "Model-ka hab-socodkan"
+    },
+    "tabs": {
+      "label": "Hab wada hadal",
+      "chat": "Wada hadal",
+      "chatDescription": "Wadahadal caadi ah oo lala yeesho kaaliyaha"
+    },
+    "discard": {
+      "title": "Tirtir qoraalkan?",
+      "body": "Markaad u wareegto {target} waxa la tirtirayaa shaqada aad ka billowday {current}.",
+      "confirm": "Tirtir"
     }
   },
   "connectors": {
@@ -3442,5 +3453,24 @@
     "promptAgentSaveSuccess": "Wakiil prompt waa la keydiyey.",
     "promptAgentDeleteSuccess": "Wakiil prompt waa la tirtiray.",
     "promptAgentsUnavailableWarning": "Wakiillada prompt-ka lagama soo dejin karo keydka. Lama tafatiri karo hadda."
+  },
+  "localModels": {
+    "title": "Moodallo maxalli ah",
+    "description": "La hadal moodallada ku socda kombiyuutarkan. Fariimaha si toos ah ayay uga tagayaan biraawsarkaaga kuna socdaan app-ka maxalliga ah, weligoodna ma gaaraan server-yadayada — jawaabaha, cinwaannada wada hadalka iyo soo koobidduba waxay ku sugnaadaan kombiyuutarkaaga.",
+    "detect": "Aqoonso runtimes maxalli ah",
+    "detecting": "La ogaanayo…",
+    "experimental": "Tijaabo ah",
+    "portLabel": "Port",
+    "statusUnknown": "Lama hubin weli.",
+    "statusChecking": "La hubinayo…",
+    "statusReady": "{count, plural, =0 {La xidhay, balse moodel ma jiro.} one {La xidhay — # moodel baa diyaar ah.} other {La xidhay — # moodal oo diyaar ah.}}",
+    "statusNotRunning": "{label} lama gaadhi karo. Hubi in uu ku socdo port-kan, sidoo kale bixiso oggolaanshaha biraawsarkaaga si uu uga helo app-yada maxalliga ah boggan.",
+    "statusHttpError": "{label} waxa uu bixiyay khalad. Ka hubi log-yada.",
+    "corsHelp": {
+      "ollama": "Ollama wuu socdaa laakiin wuu diidayaa codsiyada boggan. Deeji OLLAMA_ORIGINS si uu u lahaado ciwaankan bogga, dib u bilaaw Ollama, ka dibna mar kale aqoonso.",
+      "lmstudio": "LM Studio wuu socdaa laakiin wuu diidayaa codsiyada boggan. Dhaq CORS xulashooyinka server-kiisa maxalliga ah, kadibna mar kale aqoonso.",
+      "llamacpp": "llama.cpp wuu socdaa laakiin wuu diidayaa codsiyada boggan. Bilow llama-server adiga oo u oggol cross-origin requests, kadibna mar kale aqoonso."
+    },
+    "privacyNote": "Moodallada maxalliga ah ma taageeraan lifaaqyada faylasha, sawirro, raadinta webka ama isku-xireyaasha — kuwaas waxa u baahan server-yadayada. Ogaanshuhu waxa uu ka hubiyaa kaliya kombiyuutarkan."
   }
 }

@@ -1182,7 +1182,8 @@
     "Connectors": "Conectores",
     "Backup": "Copia de seguridad",
     "Memories": "Memorias",
-    "Agent Access": "Acceso de agente"
+    "Agent Access": "Acceso de agente",
+    "LocalModels": "Modelos locales"
   },
   "notFound": {
     "lostDog": "Perro perdido"
@@ -3065,6 +3066,16 @@
       "untitled": "Nueva conversación",
       "toggleMenu": "Mostrar/ocultar menú",
       "model": "Modelo para este flujo de trabajo"
+    },
+    "tabs": {
+      "label": "Modo de conversación",
+      "chat": "Chat",
+      "chatDescription": "Una conversación estándar con el asistente"
+    },
+    "discard": {
+      "title": "¿Descartar este borrador?",
+      "body": "Al cambiar a {target} se elimina el trabajo iniciado en {current}.",
+      "confirm": "Descartar"
     }
   },
   "connectors": {
@@ -3458,5 +3469,24 @@
     "promptAgentSaveSuccess": "Agente de prompt guardado.",
     "promptAgentDeleteSuccess": "Agente de prompt eliminado.",
     "promptAgentsUnavailableWarning": "No se pudieron cargar los agentes de prompt desde el almacenamiento. No pueden editarse en este momento."
+  },
+  "localModels": {
+    "title": "Modelos locales",
+    "description": "Chatea con modelos que se ejecutan en este equipo. Los mensajes van directamente de tu navegador a la aplicación local y nunca llegan a nuestros servidores, por lo que las respuestas, los títulos de las conversaciones y los resúmenes permanecen siempre en tu equipo.",
+    "detect": "Detectar entornos locales",
+    "detecting": "Detectando…",
+    "experimental": "Experimental",
+    "portLabel": "Puerto",
+    "statusUnknown": "Aún no verificado.",
+    "statusChecking": "Verificando…",
+    "statusReady": "{count, plural, =0 {Conectado, pero sin modelos cargados.} one {Conectado — # modelo disponible.} other {Conectado — # modelos disponibles.}}",
+    "statusNotRunning": "No se pudo acceder a {label}. Verifica que esté ejecutándose en este puerto y que tu navegador tenga permiso para acceder a aplicaciones locales desde este sitio.",
+    "statusHttpError": "{label} respondió con un error. Revisa sus registros.",
+    "corsHelp": {
+      "ollama": "Ollama se está ejecutando pero rechaza solicitudes de este sitio. Define OLLAMA_ORIGINS con la dirección de este sitio, reinicia Ollama y vuelve a detectar.",
+      "lmstudio": "LM Studio se está ejecutando pero rechaza solicitudes de este sitio. Activa CORS en los ajustes del servidor local y vuelve a detectar.",
+      "llamacpp": "llama.cpp se está ejecutando pero rechaza solicitudes de este sitio. Inicia llama-server permitiendo solicitudes de origen cruzado y vuelve a detectar."
+    },
+    "privacyNote": "Los modelos locales no permiten adjuntar archivos, imágenes, búsquedas web ni conectores; para eso es necesario usar nuestros servidores. La detección solo revisa este equipo."
   }
 }

@@ -1182,7 +1182,8 @@
     "Connectors": "コネクタ",
     "Backup": "バックアップ",
     "Memories": "メモリー",
-    "Agent Access": "エージェントアクセス"
+    "Agent Access": "エージェントアクセス",
+    "LocalModels": "ローカルモデル"
   },
   "notFound": {
     "lostDog": "迷子の犬"
@@ -3065,6 +3066,16 @@
       "untitled": "新しい会話",
       "toggleMenu": "メニューの切り替え",
       "model": "このワークフローのモデル"
+    },
+    "tabs": {
+      "label": "会話モード",
+      "chat": "チャット",
+      "chatDescription": "アシスタントとの標準的な会話"
+    },
+    "discard": {
+      "title": "この下書きを破棄しますか？",
+      "body": "{target}に切り替えると、{current}で開始した作業が削除されます。",
+      "confirm": "破棄"
     }
   },
   "connectors": {
@@ -3458,5 +3469,24 @@
     "promptAgentSaveSuccess": "プロンプトエージェントを保存しました。",
     "promptAgentDeleteSuccess": "プロンプトエージェントを削除しました。",
     "promptAgentsUnavailableWarning": "プロンプトエージェントをストレージから読み込めません。現在は編集できません。"
+  },
+  "localModels": {
+    "title": "ローカルモデル",
+    "description": "このコンピューターで動作しているモデルとチャットします。メッセージはブラウザからローカルアプリに直送され、当社サーバーには送信されません。そのため、返信や会話タイトル、要約もすべてこの端末内に留まります。",
+    "detect": "ローカルランタイムの検出",
+    "detecting": "検出中…",
+    "experimental": "実験的",
+    "portLabel": "ポート",
+    "statusUnknown": "まだ確認されていません。",
+    "statusChecking": "確認中…",
+    "statusReady": "{count, plural, =0 {接続済みですが、モデルは読み込まれていません。} one {接続済み — # 件のモデルが利用可能です。} other {接続済み — # 件のモデルが利用可能です。}}",
+    "statusNotRunning": "{label}に接続できません。該当ポートで稼働しているか、またブラウザがこのサイトからローカルアプリにアクセスできる設定かご確認ください。",
+    "statusHttpError": "{label}がエラーを返しました。ログをご確認ください。",
+    "corsHelp": {
+      "ollama": "Ollamaは稼働中ですが、このサイトからのリクエストを拒否しています。OLLAMA_ORIGINSにこのサイトのアドレスを設定し、Ollamaを再起動後、再度検出してください。",
+      "lmstudio": "LM Studioは稼働中ですが、このサイトからのリクエストを拒否しています。ローカルサーバー設定でCORSを有効にしてから、再度検出してください。",
+      "llamacpp": "llama.cppは稼働中ですが、このサイトからのリクエストを拒否しています。llama-serverをクロスオリジンリクエスト許可で起動し、再度検出してください。"
+    },
+    "privacyNote": "ローカルモデルではファイル添付、画像、Web検索、コネクターの機能は利用できません。これらは当社サーバーが必要です。検出はこのコンピューターのみを確認します。"
   }
 }

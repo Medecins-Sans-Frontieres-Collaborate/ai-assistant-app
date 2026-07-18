@@ -1182,7 +1182,8 @@
     "Connectors": "Anslutningar",
     "Backup": "Säkerhetskopiering",
     "Memories": "Minnen",
-    "Agent Access": "Agentåtkomst"
+    "Agent Access": "Agentåtkomst",
+    "LocalModels": "Lokala modeller"
   },
   "notFound": {
     "lostDog": "Förlorad hund"
@@ -3065,6 +3066,16 @@
       "untitled": "Ny konversation",
       "toggleMenu": "Visa/dölj meny",
       "model": "Modell för detta arbetsflöde"
+    },
+    "tabs": {
+      "label": "Konversationsläge",
+      "chat": "Chatt",
+      "chatDescription": "En standardkonversation med assistenten"
+    },
+    "discard": {
+      "title": "Kasta utkastet?",
+      "body": "Om du växlar till {target} rensas arbetet du påbörjat i {current}.",
+      "confirm": "Kasta"
     }
   },
   "connectors": {
@@ -3458,5 +3469,24 @@
     "promptAgentSaveSuccess": "Promptagent sparad.",
     "promptAgentDeleteSuccess": "Promptagent borttagen.",
     "promptAgentsUnavailableWarning": "Promptagenter kunde inte laddas från lagring. De kan inte redigeras just nu."
+  },
+  "localModels": {
+    "title": "Lokala modeller",
+    "description": "Chatta med modeller som körs på den här datorn. Meddelanden går direkt från din webbläsare till den lokala appen och når aldrig våra servrar — så svar, konversationstitlar och sammanfattningar stannar på din dator.",
+    "detect": "Identifiera lokala miljöer",
+    "detecting": "Identifierar…",
+    "experimental": "Experimentell",
+    "portLabel": "Port",
+    "statusUnknown": "Ej kontrollerat än.",
+    "statusChecking": "Kontrollerar…",
+    "statusReady": "{count, plural, =0 {Ansluten, men inga modeller laddade.} one {Ansluten — # modell tillgänglig.} other {Ansluten — # modeller tillgängliga.}}",
+    "statusNotRunning": "Kunde inte nå {label}. Kontrollera att det körs på denna port och att din webbläsare har tillåtelse att komma åt lokala appar från den här sidan.",
+    "statusHttpError": "{label} svarade med ett felmeddelande. Kontrollera dess loggar.",
+    "corsHelp": {
+      "ollama": "Ollama körs men vägrar begäran från denna sida. Ställ in OLLAMA_ORIGINS till denna sidans adress, starta om Ollama och försök identifiera igen.",
+      "lmstudio": "LM Studio körs men vägrar begäran från denna sida. Slå på CORS i dess lokala serverinställningar och försök identifiera igen.",
+      "llamacpp": "llama.cpp körs men vägrar begäran från denna sida. Starta llama-server med stöd för cross-origin begäran och försök identifiera igen."
+    },
+    "privacyNote": "Lokala modeller stödjer inte filbilagor, bilder, webbsökning eller connectors — det kräver våra servrar. Detektering kontrollerar endast denna dator."
   }
 }

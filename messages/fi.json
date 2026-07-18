@@ -1157,7 +1157,8 @@
     "Connectors": "Liitännät",
     "Backup": "Varmuuskopiointi",
     "Memories": "Muistot",
-    "Agent Access": "Agentin käyttöoikeus"
+    "Agent Access": "Agentin käyttöoikeus",
+    "LocalModels": "Paikalliset mallit"
   },
   "notFound": {
     "lostDog": "Kadonnut koira"
@@ -3065,6 +3066,16 @@
       "untitled": "Uusi keskustelu",
       "toggleMenu": "Avaa/sulje valikko",
       "model": "Työnkulun malli"
+    },
+    "tabs": {
+      "label": "Keskustelutila",
+      "chat": "Chat",
+      "chatDescription": "Tavallinen keskustelu avustajan kanssa"
+    },
+    "discard": {
+      "title": "Hylätäänkö tämä luonnos?",
+      "body": "Siirtyminen kohteeseen {target} poistaa kaiken työn, jonka olet aloittanut kohteessa {current}.",
+      "confirm": "Hylkää"
     }
   },
   "connectors": {
@@ -3458,5 +3469,24 @@
     "promptAgentSaveSuccess": "Prompt-agentti tallennettu.",
     "promptAgentDeleteSuccess": "Prompt-agentti poistettu.",
     "promptAgentsUnavailableWarning": "Prompt-agenteja ei voitu ladata tallennustilasta. Niitä ei voi tällä hetkellä muokata."
+  },
+  "localModels": {
+    "title": "Paikalliset mallit",
+    "description": "Keskustele malleilla, jotka toimivat tällä tietokoneella. Viestit siirtyvät selaimestasi suoraan paikalliseen sovellukseen eivätkä koskaan päädy palvelimillemme – joten vastaukset, keskustelujen nimet ja yhteenvedot pysyvät vain laitteellasi.",
+    "detect": "Tunnista paikalliset ympäristöt",
+    "detecting": "Tunnistetaan…",
+    "experimental": "Kokeellinen",
+    "portLabel": "Portti",
+    "statusUnknown": "Ei vielä tarkistettu.",
+    "statusChecking": "Tarkistetaan…",
+    "statusReady": "{count, plural, =0 {Yhdistetty, mutta malleja ei ladattu.} one {Yhdistetty — # malli saatavilla.} other {Yhdistetty — # mallia saatavilla.}}",
+    "statusNotRunning": "{label} ei tavoitettu. Tarkista, että se on käynnissä tällä portilla ja että selaimesi saa käyttää paikallisia sovelluksia tältä sivustolta.",
+    "statusHttpError": "{label} palautti virheen. Tarkista sen lokit.",
+    "corsHelp": {
+      "ollama": "Ollama on käynnissä, mutta estää pyynnöt tältä sivustolta. Aseta OLLAMA_ORIGINS tämän sivuston osoitteeksi, käynnistä Ollama uudelleen ja tunnista uudelleen.",
+      "lmstudio": "LM Studio on käynnissä, mutta estää pyynnöt tältä sivustolta. Ota CORS käyttöön sen paikallisen palvelimen asetuksissa ja tunnista uudelleen.",
+      "llamacpp": "llama.cpp on käynnissä, mutta estää pyynnöt tältä sivustolta. Käynnistä llama-server sallien cross-origin-pyynnöt ja tunnista uudelleen."
+    },
+    "privacyNote": "Paikalliset mallit eivät tue liitetiedostoja, kuvia, verkkohakua tai liittimiä – nämä vaativat palvelimemme. Tunnistus tarkistaa vain tämän tietokoneen."
   }
 }

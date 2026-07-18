@@ -1335,7 +1335,8 @@
     "Connectors": "Haɗa-haɗa",
     "Backup": "Ajiyayyen bayanai",
     "Memories": "Tarihi",
-    "Agent Access": "Izinin wakili"
+    "Agent Access": "Izinin wakili",
+    "LocalModels": "Samfuran cikin gida"
   },
   "emptyState": {
     "greeting": "Ta yaya zan iya taimaka?",
@@ -3049,6 +3050,16 @@
       "untitled": "Sabuwar Tattaunawa",
       "toggleMenu": "Buɗe/ruffa menu",
       "model": "Samfuri don wannan workflow"
+    },
+    "tabs": {
+      "label": "Yanayin hira",
+      "chat": "Hira",
+      "chatDescription": "Tattaunawa ta yau da kullum tare da mataimaki"
+    },
+    "discard": {
+      "title": "A jefar da wannan rubutun?",
+      "body": "Sauyawa zuwa {target} zai goge aikinka da ka fara a {current}.",
+      "confirm": "Jefar"
     }
   },
   "connectors": {
@@ -3442,5 +3453,24 @@
     "promptAgentSaveSuccess": "An ajiye wakili na umarni.",
     "promptAgentDeleteSuccess": "An share wakili na umarni.",
     "promptAgentsUnavailableWarning": "Ba a iya ɗauko wakilan umarni daga ajiyar bayanai ba. Ba za a iya gyara su yanzu ba."
+  },
+  "localModels": {
+    "title": "Samfuran cikin gida",
+    "description": "Yi hira da samfuran da ke gudana a wannan kwamfuta. Saƙonni suna tafiya kai tsaye daga burauzarka zuwa manhajar cikin gida kuma ba su taba zuwa kan sabar mu ba — don haka amsoshi, taken tattaunawa da ƙasidu duk suna nan a na'urarka.",
+    "detect": "Gano tsarin cikin gida",
+    "detecting": "Ana ganowa…",
+    "experimental": "Jarrabawa",
+    "portLabel": "Tashar",
+    "statusUnknown": "Ba a duba ba tukuna.",
+    "statusChecking": "Ana dubawa…",
+    "statusReady": "{count, plural, =0 {An haɗa, amma babu samfuri da aka ɗora.} one {An haɗa — samfuri guda # akwai.} other {An haɗa — samfura # akwai.}}",
+    "statusNotRunning": "Ba a iya haɗawa da {label}. Tabbatar yana aiki a wannan tashar, kuma an bawa burauzarka damar amfani da manhajojin cikin gida daga wannan shafin.",
+    "statusHttpError": "{label} ya bada kuskure. Duba bayanan sa.",
+    "corsHelp": {
+      "ollama": "Ollama yana aiki amma yana ƙin karɓar buƙatu daga wannan shafi. Saita OLLAMA_ORIGINS zuwa adireshin wannan shafi, sake kunna Ollama, sannan ka sake ganowa.",
+      "lmstudio": "LM Studio yana aiki amma yana ƙin karɓar buƙatu daga wannan shafi. Kunna CORS a cikin saitunan sabar cike gida, sannan ka sake ganowa.",
+      "llamacpp": "llama.cpp yana aiki amma yana ƙin buƙatu daga wannan shafi. Fara llama-server tare da dama ga cross-origin requests, sannan ka sake ganowa."
+    },
+    "privacyNote": "Samfuran cikin gida ba su tallafa da daure fayil, hotuna, binciken intanet ko haɗa na'urori ba — waɗannan suna buƙatar sabar mu. Ganowa tana duba wannan kwamfuta kawai."
   }
 }

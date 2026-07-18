@@ -1182,7 +1182,8 @@
     "Connectors": "Connectoren",
     "Backup": "Backup",
     "Memories": "Erinnerungen",
-    "Agent Access": "Agentenzugriff"
+    "Agent Access": "Agentenzugriff",
+    "LocalModels": "Lokale Modelle"
   },
   "emptyState": {
     "greeting": "Wie kann ich helfen?",
@@ -3065,6 +3066,16 @@
       "untitled": "Neue Konversation",
       "toggleMenu": "Menü ein-/ausblenden",
       "model": "Modell für diesen Workflow"
+    },
+    "tabs": {
+      "label": "Konversationsmodus",
+      "chat": "Chat",
+      "chatDescription": "Ein Standardgespräch mit dem Assistenten"
+    },
+    "discard": {
+      "title": "Diesen Entwurf verwerfen?",
+      "body": "Beim Wechsel zu {target} wird die begonnene Arbeit in {current} gelöscht.",
+      "confirm": "Verwerfen"
     }
   },
   "connectors": {
@@ -3458,5 +3469,24 @@
     "promptAgentSaveSuccess": "Prompt-Agent gespeichert.",
     "promptAgentDeleteSuccess": "Prompt-Agent gelöscht.",
     "promptAgentsUnavailableWarning": "Prompt-Agents konnten nicht aus dem Speicher geladen werden. Sie können aktuell nicht bearbeitet werden."
+  },
+  "localModels": {
+    "title": "Lokale Modelle",
+    "description": "Unterhalten Sie sich mit Modellen, die auf diesem Computer laufen. Nachrichten werden direkt von Ihrem Browser an die lokale App gesendet und erreichen niemals unsere Server – so bleiben Antworten, Konversationstitel und Zusammenfassungen immer auf Ihrem Gerät.",
+    "detect": "Lokale Laufzeiten erkennen",
+    "detecting": "Erkennung läuft…",
+    "experimental": "Experimentell",
+    "portLabel": "Port",
+    "statusUnknown": "Noch nicht geprüft.",
+    "statusChecking": "Überprüfung läuft…",
+    "statusReady": "{count, plural, =0 {Verbunden, aber keine Modelle geladen.} one {Verbunden – # Modell verfügbar.} other {Verbunden – # Modelle verfügbar.}}",
+    "statusNotRunning": "{label} konnte nicht erreicht werden. Prüfen Sie, ob es auf diesem Port läuft und ob Ihr Browser lokalen Apps von dieser Seite aus den Zugriff erlaubt.",
+    "statusHttpError": "{label} hat mit einem Fehler geantwortet. Prüfen Sie die Logs.",
+    "corsHelp": {
+      "ollama": "Ollama läuft, verweigert jedoch Anfragen von dieser Seite. Setzen Sie OLLAMA_ORIGINS auf die Adresse dieser Seite, starten Sie Ollama neu und führen Sie die Erkennung erneut durch.",
+      "lmstudio": "LM Studio läuft, verweigert jedoch Anfragen von dieser Seite. Aktivieren Sie CORS in den lokalen Servereinstellungen und führen Sie die Erkennung erneut durch.",
+      "llamacpp": "llama.cpp läuft, verweigert jedoch Anfragen von dieser Seite. Starten Sie llama-server mit erlaubten Cross-Origin-Anfragen und führen Sie die Erkennung erneut durch."
+    },
+    "privacyNote": "Lokale Modelle unterstützen keine Dateianhänge, Bilder, Websuche oder Konnektoren – dafür werden unsere Server benötigt. Die Erkennung prüft ausschließlich diesen Computer."
   }
 }

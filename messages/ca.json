@@ -1157,7 +1157,8 @@
     "Connectors": "Connectors",
     "Backup": "Còpia de seguretat",
     "Memories": "Memòries",
-    "Agent Access": "Accés de l’agent"
+    "Agent Access": "Accés de l’agent",
+    "LocalModels": "Models locals"
   },
   "notFound": {
     "lostDog": "Gos perdut"
@@ -3065,6 +3066,16 @@
       "untitled": "Nova conversa",
       "toggleMenu": "Alterna el menú",
       "model": "Model per a aquest flux de treball"
+    },
+    "tabs": {
+      "label": "Mode conversa",
+      "chat": "Xat",
+      "chatDescription": "Una conversa estàndard amb l’assistent"
+    },
+    "discard": {
+      "title": "Voleu descartar aquest esborrany?",
+      "body": "Si canvieu a {target}, es perdrà la feina iniciada a {current}.",
+      "confirm": "Descarta"
     }
   },
   "connectors": {
@@ -3458,5 +3469,24 @@
     "promptAgentSaveSuccess": "Agent de prompt desat.",
     "promptAgentDeleteSuccess": "Agent de prompt suprimit.",
     "promptAgentsUnavailableWarning": "No s'han pogut carregar els agents de prompt de l'emmagatzematge. Ara mateix no es poden editar."
+  },
+  "localModels": {
+    "title": "Models locals",
+    "description": "Xategeu amb models que s’executen en aquest ordinador. Els missatges van directament del vostre navegador a l’aplicació local i no arriben mai als nostres servidors — així, les respostes, els títols de conversa i els resums es queden només a la vostra màquina.",
+    "detect": "Detecta entorns locals",
+    "detecting": "S’està detectant…",
+    "experimental": "Experimental",
+    "portLabel": "Port",
+    "statusUnknown": "Encara no s’ha comprovat.",
+    "statusChecking": "S’està comprovant…",
+    "statusReady": "{count, plural, =0 {Connectat, però no hi ha models carregats.} one {Connectat — # model disponible.} other {Connectat — # models disponibles.}}",
+    "statusNotRunning": "No s’ha pogut accedir a {label}. Comproveu que està funcionant en aquest port i que el navegador té permís per accedir a aplicacions locals des d’aquest lloc.",
+    "statusHttpError": "{label} ha respost amb un error. Comproveu els seus registres.",
+    "corsHelp": {
+      "ollama": "Ollama s’està executant però rebutja les peticions d’aquest lloc. Configureu OLLAMA_ORIGINS amb l’adreça d’aquest lloc, reinicieu Ollama i torneu a detectar.",
+      "lmstudio": "LM Studio s’està executant però rebutja les peticions d’aquest lloc. Activeu CORS a la configuració del servidor local i torneu a detectar.",
+      "llamacpp": "llama.cpp s’està executant però rebutja les peticions d’aquest lloc. Inicieu llama-server amb permisos per a sol·licituds d’origen creuat i torneu a detectar."
+    },
+    "privacyNote": "Els models locals no admeten fitxers adjunts, imatges, cerca web ni connectors; per això calen els nostres servidors. La detecció només comprova aquest ordinador."
   }
 }

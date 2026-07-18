@@ -1335,7 +1335,8 @@
     "Connectors": "Zolumikizira",
     "Backup": "Kubwerera (Backup)",
     "Memories": "Zokumbukira",
-    "Agent Access": "Kulowa kwa Agent"
+    "Agent Access": "Kulowa kwa Agent",
+    "LocalModels": "Mitundu yapafupi"
   },
   "emptyState": {
     "greeting": "Kodi ndingathandize bwanji?",
@@ -3049,6 +3050,16 @@
       "untitled": "Zokambirana zatsopano",
       "toggleMenu": "Tsegula kapena tsekani menyu",
       "model": "Mtundu wa ntchito iyi"
+    },
+    "tabs": {
+      "label": "Mtundu wa kucheza",
+      "chat": "Cheza",
+      "chatDescription": "Kulankhula mwachizolowezi ndi wothandizira"
+    },
+    "discard": {
+      "title": "Mukufuna kutaya zolemba izi?",
+      "body": "Kusintha kupita ku {target} kuchotsa ntchito yomwe munayambisa mu {current}.",
+      "confirm": "Taya"
     }
   },
   "connectors": {
@@ -3442,5 +3453,24 @@
     "promptAgentSaveSuccess": "Prompt agent wasungidwa.",
     "promptAgentDeleteSuccess": "Prompt agent wachotsedwa.",
     "promptAgentsUnavailableWarning": "Prompt agents alephera kutsegulidwa kuchokera ku storage. Sangasinthidwe pano."
+  },
+  "localModels": {
+    "title": "Mitundu yapafupi",
+    "description": "Lankhulani ndi mitundu yomwe ikuyenda pa kompyuta iyi. Mauthenga amangopita kuchokera mubrowser yanu kupita ku pulogalamu yapafupi ndipo samapita pa seva — kotero mayankho, mitu ya zokambirana ndi mwachidule zimakhala pa makina anu.",
+    "detect": "Peza ma runtime apafupi",
+    "detecting": "Akuwapeza…",
+    "experimental": "Zoyesera",
+    "portLabel": "Port",
+    "statusUnknown": "Sinayendetsebe.",
+    "statusChecking": "Akuwaunikirabe…",
+    "statusReady": "{count, plural, =0 {Yalumikizidwa, koma palibe mitundu yolozedwa.} one {Yalumikizidwa — # mtundu ulipo.} other {Yalumikizidwa — # mitundu ilipo.}}",
+    "statusNotRunning": "Simungaifanane ndi {label}. Onetsetsani kuti ikuenda pa port iyi, komanso browser yanu imaloledwa kulumikizana ndi mapulogalamu apafupi kuchokera patsamba ili.",
+    "statusHttpError": "{label} yatembenuka ndi cholakwika. Onani ma log ake.",
+    "corsHelp": {
+      "ollama": "Ollama ikuenda koma ikukanira ma pempho kuchokera patsamba ili. Ikani OLLAMA_ORIGINS ku adilesi ya tsambali, yambitsanso Ollama, kenako pezani yomwe.",
+      "lmstudio": "LM Studio ikuenda koma ikukanira ma pempho kuchokera patsamba ili. Yatsani CORS mu zoikamo za seva yapafupi, ndiye pezani zomwe.",
+      "llamacpp": "llama.cpp ikuenda koma ikukanira ma pempho kuchokera patsamba ili. Yambani llama-server ndi chilolezo cha cross-origin requests, ndiye pezani zomwe."
+    },
+    "privacyNote": "Mitundu yapafupi silithandiza zomata mafayilo, zithunzi, kufufuza pa webusayiti kapena masitepe olumikizana — zimenezi zimafunika ma seva athu. Kuyang'ana kumangoyendera pa kompyuta iyi yokha."
   }
 }

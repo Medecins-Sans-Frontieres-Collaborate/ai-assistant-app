@@ -1335,7 +1335,8 @@
     "Connectors": "Bakonɛktɛrɛ",
     "Backup": "Kopie ya bokotisi",
     "Memories": "Ebakisi",
-    "Agent Access": "Kopesa mopesi nzela"
+    "Agent Access": "Kopesa mopesi nzela",
+    "LocalModels": "Bamodelo ya esika"
   },
   "emptyState": {
     "greeting": "Ndenge nini nakoki kosalisa yo?",
@@ -3049,6 +3050,16 @@
       "untitled": "Dialogue ya sika",
       "toggleMenu": "Kokanga to kofungola menu",
       "model": "Model ya workflow oyo"
+    },
+    "tabs": {
+      "label": "Mode ya masolo",
+      "chat": "Kosolola",
+      "chatDescription": "Lisolo ya esika na mosungi"
+    },
+    "discard": {
+      "title": "Kolongwa draft oyo?",
+      "body": "Kokende na {target} ekosila mosala oyo ozalaki kobanda na {current}.",
+      "confirm": "Kolongwa"
     }
   },
   "connectors": {
@@ -3442,5 +3453,24 @@
     "promptAgentSaveSuccess": "Prompt agent ebombami.",
     "promptAgentDeleteSuccess": "Prompt agent elongami.",
     "promptAgentsUnavailableWarning": "Prompt agents bakokaki te kokotama uta na stockage. Ebongi te kobongisa sik’oyo."
+  },
+  "localModels": {
+    "title": "Bamodelo ya esika",
+    "description": "Kosolola na bamodelo oyo ezali kobima na ordinatɛrɛ oyo. Nsango ezwi kaka na browser na yo epai na application ya esika mpe ekokende te na serveurs na biso — boye biyano, mitángo ya masolo mpe bifundoyi nyonso ekotikala na ordinatɛrɛ na yo.",
+    "detect": "Kokanga runtimes ya esika",
+    "detecting": "Ezalaki kokanga…",
+    "experimental": "Ya eseye",
+    "portLabel": "Port",
+    "statusUnknown": "Pɛlɛlisi nanu te.",
+    "statusChecking": "Kozala kotalela…",
+    "statusReady": "{count, plural, =0 {Ezali konesana, kasi bamodelo ezali te.} one {Ekoyokana — # modelo ezali.} other {Ekoyokana — # bamodelo ezali.}}",
+    "statusNotRunning": "Tokoki kokutana na {label} te. Tala soki ezali kosala na port wana, mpe soki browser na yo eyebisami kozwa ba app ya esika uta na site oyo.",
+    "statusHttpError": "{label} epesi lisakoli ya erreur. Tala rapport na yango.",
+    "corsHelp": {
+      "ollama": "Ollama ezali kosala, kasi eboyi koyamba ba demandes uta na site oyo. Tia OLLAMA_ORIGINS na adresse ya site oyo, banda lisusu Ollama, bongo sala kokanga lisusu.",
+      "lmstudio": "LM Studio ezali kosala kasi eboyi koyamba ba demandes ya site oyo. Bouta CORS na ba paramètres ya serveur ya esika, bongo sala kokanga lisusu.",
+      "llamacpp": "llama.cpp ezali kosala kasi eboyi koyamba ba demandes ya site oyo. Banda llama-server na biso ndenge ekoki kozwa ba demandes ya cross-origin, bongo sala kokanga lisusu."
+    },
+    "privacyNote": "Bamodelo ya esika te nde ekoki kokota ba fichiers, bililingi, koluka na web to connectors — yango esengeli serveurs na biso. Kokanga ezali kaka kotalela ordinatɛrɛ oyo."
   }
 }

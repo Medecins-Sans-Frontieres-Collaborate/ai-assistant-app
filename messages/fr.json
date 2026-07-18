@@ -1182,7 +1182,8 @@
     "Connectors": "Connecteurs",
     "Backup": "Sauvegarde",
     "Memories": "Mémoires",
-    "Agent Access": "Accès agent"
+    "Agent Access": "Accès agent",
+    "LocalModels": "Modèles locaux"
   },
   "notFound": {
     "lostDog": "Chien perdu"
@@ -3065,6 +3066,16 @@
       "untitled": "Nouvelle conversation",
       "toggleMenu": "Afficher/masquer le menu",
       "model": "Modèle pour ce workflow"
+    },
+    "tabs": {
+      "label": "Mode conversation",
+      "chat": "Chat",
+      "chatDescription": "Une conversation standard avec l’assistant"
+    },
+    "discard": {
+      "title": "Abandonner ce brouillon ?",
+      "body": "Le passage à {target} efface le travail commencé dans {current}.",
+      "confirm": "Abandonner"
     }
   },
   "connectors": {
@@ -3458,5 +3469,24 @@
     "promptAgentSaveSuccess": "Agent de prompt enregistré.",
     "promptAgentDeleteSuccess": "Agent de prompt supprimé.",
     "promptAgentsUnavailableWarning": "Les agents de prompt n’ont pas pu être chargés depuis le stockage. Ils ne peuvent pas être modifiés pour le moment."
+  },
+  "localModels": {
+    "title": "Modèles locaux",
+    "description": "Discutez avec des modèles exécutés sur cet ordinateur. Les messages vont directement de votre navigateur à l’application locale et n’atteignent jamais nos serveurs : les réponses, titres de conversations et résumés restent donc sur votre machine.",
+    "detect": "Détecter les environnements locaux",
+    "detecting": "Détection…",
+    "experimental": "Expérimental",
+    "portLabel": "Port",
+    "statusUnknown": "Pas encore vérifié.",
+    "statusChecking": "Vérification…",
+    "statusReady": "{count, plural, =0 {Connecté, mais aucun modèle chargé.} one {Connecté — # modèle disponible.} other {Connecté — # modèles disponibles.}}",
+    "statusNotRunning": "Impossible d’atteindre {label}. Vérifiez qu’il fonctionne sur ce port et que votre navigateur est autorisé à accéder aux applications locales depuis ce site.",
+    "statusHttpError": "{label} a répondu avec une erreur. Consultez ses journaux.",
+    "corsHelp": {
+      "ollama": "Ollama fonctionne mais refuse les requêtes de ce site. Définissez OLLAMA_ORIGINS sur l’adresse de ce site, redémarrez Ollama puis relancez la détection.",
+      "lmstudio": "LM Studio fonctionne mais refuse les requêtes de ce site. Activez CORS dans les paramètres du serveur local, puis relancez la détection.",
+      "llamacpp": "llama.cpp fonctionne mais refuse les requêtes de ce site. Démarrez llama-server en permettant les requêtes inter-origines, puis relancez la détection."
+    },
+    "privacyNote": "Les modèles locaux ne prennent pas en charge les pièces jointes, images, recherches web ou connecteurs ; ceux-ci nécessitent nos serveurs. La détection ne vérifie que cet ordinateur."
   }
 }

@@ -1335,7 +1335,8 @@
     "Connectors": "Golleekuji",
     "Backup": "Doggu",
     "Memories": "Hakkilɗiiji",
-    "Agent Access": "Aade agent"
+    "Agent Access": "Aade agent",
+    "LocalModels": "Moodelji jowte ɗee"
   },
   "emptyState": {
     "greeting": "Hol no mbaaw-mi wallitde?",
@@ -3049,6 +3050,16 @@
       "untitled": "Ñaamtu hesere",
       "toggleMenu": "Luɓtu wadalkal",
       "model": "Moƴƴol laawol on"
+    },
+    "tabs": {
+      "label": "Haɓaare hiraande",
+      "chat": "Hiraa",
+      "chatDescription": "Hiraande caɗeele e joom am"
+    },
+    "discard": {
+      "title": "Aɗa yiɗi jogi draft ɗee?",
+      "body": "So a ndeer {target}, ngonka e {current} maa waawataa.",
+      "confirm": "Jogi"
     }
   },
   "connectors": {
@@ -3442,5 +3453,24 @@
     "promptAgentSaveSuccess": "Agent mumtindol suɓii.",
     "promptAgentDeleteSuccess": "Agent mumtindol mabboo.",
     "promptAgentsUnavailableWarning": "Agent mumtindol waawan waawaniima ñifɗit e juulde naatnoy. Waawan waawaniima tallit goɗɗum."
+  },
+  "localModels": {
+    "title": "Moodelji jowte ɗee",
+    "description": "Hiraa e moodelji waɗi e kañum-ɗaa. Iwolji fayda e ngolak-maa eɓa woppi ko e joomi kambeanol — e ɗuum, jawaabi, innde hiraande e cokali ɗee nmokkani e ɓernde-maa.",
+    "detect": "Ruuɗoo kaɓe jowte ɗee",
+    "detecting": "Nde ruuɗi...",
+    "experimental": "Woppitorde",
+    "portLabel": "Port",
+    "statusUnknown": "Ndee waawaa yetto.",
+    "statusChecking": "Nde yetti...",
+    "statusReady": "{count, plural, =0 {Yumii e caɗeele, moodel waawaa heɓtude.} one {Yumii — moodel # waawde.} other {Yumii — moodelji # waawde.}}",
+    "statusNotRunning": "A waawi wonaa teeŋtingol {label}. Yamiro mo tawi mo jogii e port-ndan, tawi e ngolak-maa waawaani heɓde joomi kaɓe jowte ɗee.",
+    "statusHttpError": "{label} windii caɗeele. Yamiro logs maa.",
+    "corsHelp": {
+      "ollama": "Ollama jogii kono naatataa yilatugol e site-ndan. Waɗ OLLAMA_ORIGINS e address site-ndan, doolettin Ollama, so tawii ruuɗ-ɗaa maa.",
+      "lmstudio": "LM Studio jogii kono naatataa yilatugol e site-ndan. Hurmit CORSell e settings server jowte, so tawii ruuɗ-ɗaa maa.",
+      "llamacpp": "llama.cpp jogii kono waawataa yilatugol e site-ndan. Hurmit llama-server e eslaade yilata cross-origin, so tawii ruuɗ-ɗaa maa."
+    },
+    "privacyNote": "Moodelji jowte ɗee waawataa fayde e suɓa fayli, naatude jogne, yitde web walla connectors — ɗee don ngiɗan joomi servere ɗe. Ruuɗagol, so ndon, heɓi ko kañum-ɗaa tan."
   }
 }

@@ -1183,7 +1183,8 @@
     "Connectors": "Kết nối",
     "Backup": "Sao lưu",
     "Memories": "Kỷ niệm",
-    "Agent Access": "Quyền truy cập Agent"
+    "Agent Access": "Quyền truy cập Agent",
+    "LocalModels": "Mô hình cục bộ"
   },
   "notFound": {
     "lostDog": "Chó bị lạc"
@@ -3096,6 +3097,16 @@
       "untitled": "Cuộc hội thoại mới",
       "toggleMenu": "Chuyển đổi menu",
       "model": "Mô hình cho quy trình làm việc này"
+    },
+    "tabs": {
+      "label": "Chế độ hội thoại",
+      "chat": "Trò chuyện",
+      "chatDescription": "Một cuộc trò chuyện tiêu chuẩn với trợ lý"
+    },
+    "discard": {
+      "title": "Hủy bản nháp này?",
+      "body": "Chuyển sang {target} sẽ xóa công việc bạn đã bắt đầu trong {current}.",
+      "confirm": "Hủy"
     }
   },
   "connectors": {
@@ -3489,5 +3500,24 @@
     "promptAgentSaveSuccess": "Đã lưu agent prompt.",
     "promptAgentDeleteSuccess": "Đã xóa agent prompt.",
     "promptAgentsUnavailableWarning": "Không thể tải agent prompt từ kho lưu trữ. Hiện tại không thể chỉnh sửa chúng."
+  },
+  "localModels": {
+    "title": "Mô hình cục bộ",
+    "description": "Trò chuyện với các mô hình chạy trên máy tính này. Tin nhắn đi thẳng từ trình duyệt của bạn đến ứng dụng cục bộ và không bao giờ đến máy chủ của chúng tôi — vì vậy các phản hồi, tiêu đề và tóm tắt hội thoại đều ở lại trên máy của bạn.",
+    "detect": "Phát hiện môi trường cục bộ",
+    "detecting": "Đang phát hiện…",
+    "experimental": "Thử nghiệm",
+    "portLabel": "Cổng",
+    "statusUnknown": "Chưa kiểm tra.",
+    "statusChecking": "Đang kiểm tra…",
+    "statusReady": "{count, plural, =0 {Đã kết nối, nhưng chưa tải mô hình nào.} one {Đã kết nối — có # mô hình.} other {Đã kết nối — có # mô hình.}}",
+    "statusNotRunning": "Không thể kết nối tới {label}. Hãy kiểm tra xem nó đã chạy ở cổng này chưa và trình duyệt của bạn có quyền truy cập ứng dụng cục bộ từ trang này không.",
+    "statusHttpError": "{label} phản hồi với lỗi. Hãy kiểm tra log của nó.",
+    "corsHelp": {
+      "ollama": "Ollama đang chạy nhưng từ chối yêu cầu từ trang này. Hãy đặt OLLAMA_ORIGINS thành địa chỉ của trang này, khởi động lại Ollama rồi phát hiện lại.",
+      "lmstudio": "LM Studio đang chạy nhưng từ chối yêu cầu từ trang này. Hãy bật CORS trong cài đặt máy chủ cục bộ, sau đó phát hiện lại.",
+      "llamacpp": "llama.cpp đang chạy nhưng từ chối yêu cầu từ trang này. Hãy khởi động llama-server với quyền cho phép truy cập chéo, rồi phát hiện lại."
+    },
+    "privacyNote": "Mô hình cục bộ không hỗ trợ đính kèm tệp, hình ảnh, tìm kiếm web hoặc kết nối — những chức năng này cần máy chủ của chúng tôi. Việc phát hiện chỉ kiểm tra trên máy tính này."
   }
 }

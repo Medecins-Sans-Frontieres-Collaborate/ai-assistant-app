@@ -1335,7 +1335,8 @@
     "Connectors": "Izixhumi",
     "Backup": "Ukusekelwa",
     "Memories": "Izinkumbulo",
-    "Agent Access": "Ukufinyelela Kummeli"
+    "Agent Access": "Ukufinyelela Kummeli",
+    "LocalModels": "Amamodeli endaweni"
   },
   "emptyState": {
     "greeting": "Ngingakusiza kanjani?",
@@ -3049,6 +3050,16 @@
       "untitled": "Ingxoxo Entsha",
       "toggleMenu": "Vula noma vula kabusha imenyu",
       "model": "Imodeli yomsebenzi lo"
+    },
+    "tabs": {
+      "label": "Imodi yengxoxo",
+      "chat": "Ingxoxo",
+      "chatDescription": "Ingxoxo evamile nomsizi"
+    },
+    "discard": {
+      "title": "Udinga ukulahla lo mqulu?",
+      "body": "Ukwenza ushintshe ku-{target} kuzosusa umsebenzi oqale ku-{current}.",
+      "confirm": "Lahla"
     }
   },
   "connectors": {
@@ -3442,5 +3453,24 @@
     "promptAgentSaveSuccess": "Umenzeli wemyalelo usulondoloziwe.",
     "promptAgentDeleteSuccess": "Umenzeli wemyalelo usususwe.",
     "promptAgentsUnavailableWarning": "Abamenzeli bemyalelo abakwazanga ukulayishwa kusuka kugcino. Abanakuhlelwa njengamanje."
+  },
+  "localModels": {
+    "title": "Amamodeli endaweni",
+    "description": "Xoxa namamodeli agijima kulomshini. Imilayezo iya ngqo kusuka ku-browser yakho iye kuhlelo lwendawo futhi ayifiki ku-seva yethu — okwenza izimpendulo, izihloko zengxoxo kanye nokufingqa kusale kudivayisi yakho.",
+    "detect": "Thola izinhlelo ezifakwe endaweni",
+    "detecting": "Kutholwa…",
+    "experimental": "Kuyazanywa",
+    "portLabel": "Iphothi",
+    "statusUnknown": "Akukakahlolisiswa.",
+    "statusChecking": "Kuyaqinisekiswa…",
+    "statusReady": "{count, plural, =0 {Kuxhunywe, kodwa awekho amamodeli alayishiwe.} one {Kuxhunywe — imodeli engu-# iyatholakala.} other {Kuxhunywe — amamodeli angu-# ayatholakala.}}",
+    "statusNotRunning": "Akukwazeki ukufinyelela {label}. Qinisekisa ukuthi kuyasebenza kule phothi, futhi ukuthi i-browser yakho ivunyelwe ukufinyelela uhlelo lwendawo kule sayithi.",
+    "statusHttpError": "{label} iphendule ngenkinga. Hlola imilayezo yephutha yohlelo.",
+    "corsHelp": {
+      "ollama": "I-Ollama iyasebenza kodwa iyenqaba izicelo ezivela kule sayithi. Setha i-OLLAMA_ORIGINS ekhelini lalesi sayithi, uqale kabusha i-Ollama, bese uthola futhi.",
+      "lmstudio": "I-LM Studio iyasebenza kodwa iyenqaba izicelo ezivela kule sayithi. Vula i-CORS kuzilungiselelo zeseva yendawo, bese uthola futhi.",
+      "llamacpp": "i-llama.cpp iyasebenza kodwa iyenqaba izicelo ezivela kule sayithi. Qalisa i-llama-server ivumele izicelo ze-cross-origin, bese uthola futhi."
+    },
+    "privacyNote": "Amamodeli endaweni awaxhasi okunamathiselwa amafayela, izithombe, usesho lwewebhu noma oxhasi — leyo misebenzi idinga amaseva ethu. Ukuhlola kusebenza kuphela kuleli khompyutha."
   }
 }
