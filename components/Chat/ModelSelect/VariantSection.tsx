@@ -1,3 +1,4 @@
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { FC, useMemo } from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -9,8 +10,19 @@ import {
   getSeriesVersions,
   pickVariantTarget,
 } from '@/lib/utils/app/modelSeries';
+import {
+  ASSUMPTIONS_VERSION,
+  getEmissionsTier,
+} from '@/lib/utils/shared/emissions';
 
-import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
+import {
+  OpenAIModel,
+  OpenAIModelID,
+  OpenAIModels,
+  getModelSizeClass,
+} from '@/types/openai';
+
+import { EmissionsTierIcon } from './EmissionsTierIcon';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 
@@ -39,6 +51,8 @@ export const VariantSection: FC<VariantSectionProps> = ({
   familyModels,
 }) => {
   const t = useTranslations('modelSelect');
+  const tEmissions = useTranslations('emissions');
+  const { showUsageImpact } = useFlags();
   // Same source the picker list renders from (the useSettings hook), so the
   // Variant section always matches what the list shows. byom families come in
   // via familyModels instead.
@@ -74,6 +88,24 @@ export const VariantSection: FC<VariantSectionProps> = ({
 
   const activeVariant = meta.variant ?? '';
 
+  // Emissions tier of each segment's click target. Icons render only when
+  // the choice actually differs in tier (fail-open flag gate, matching the
+  // Usage & Impact section) — a uniform row of leaves would be noise.
+  const variantTiers = variants.map((variant) => {
+    const target =
+      pickVariantTarget(variant.members, meta.versionLabel) ??
+      variant.members[0];
+    return getEmissionsTier(
+      getModelSizeClass(target),
+      target.modelType === 'reasoning',
+    );
+  });
+  const showTiers = showUsageImpact !== false && new Set(variantTiers).size > 1;
+  const tierTooltip = (tier: (typeof variantTiers)[number]) =>
+    `${tEmissions(`tier.${tier}`)} — ${tEmissions('tierTooltip', {
+      version: ASSUMPTIONS_VERSION,
+    })}`;
+
   return (
     <div>
       <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-1.5">
@@ -84,7 +116,7 @@ export const VariantSection: FC<VariantSectionProps> = ({
         aria-label={t('variant.label')}
         className="flex flex-wrap items-center gap-1"
       >
-        {variants.map((variant) => {
+        {variants.map((variant, index) => {
           const isActive = activeVariant === variant.key;
           return (
             <button
@@ -107,6 +139,13 @@ export const VariantSection: FC<VariantSectionProps> = ({
               }`}
             >
               {variant.label || variant.members[0]?.name}
+              {showTiers && (
+                <EmissionsTierIcon
+                  tier={variantTiers[index]}
+                  tooltip={tierTooltip(variantTiers[index])}
+                  muted={isActive}
+                />
+              )}
             </button>
           );
         })}
