@@ -57,7 +57,6 @@ export function EnrollProgress({
   const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
   if (isOpen !== prevIsOpen) {
     setPrevIsOpen(isOpen);
-    startedRef.current = false;
     if (isOpen) {
       setPhase('running');
       setPushedCount(0);
@@ -85,7 +84,11 @@ export function EnrollProgress({
   }, []);
 
   useEffect(() => {
-    if (!isOpen || startedRef.current) return;
+    if (!isOpen) {
+      startedRef.current = false;
+      return;
+    }
+    if (startedRef.current) return;
     startedRef.current = true;
     start(mode);
   }, [isOpen, mode, start]);
