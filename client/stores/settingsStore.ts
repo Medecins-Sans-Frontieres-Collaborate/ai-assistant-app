@@ -7,6 +7,10 @@ import {
   MapTimelapseSettings,
   clampTimelapseSettings,
 } from '@/lib/utils/shared/geo/timelapsePacing';
+import {
+  DEFAULT_PASTE_ATTACHMENT_CHARS,
+  clampPasteAttachmentChars,
+} from '@/lib/utils/shared/paste/pastedText';
 import { UserRegion } from '@/lib/utils/shared/region';
 
 import { ExtractionRecipe } from '@/types/extractionRecipe';
@@ -565,6 +569,18 @@ interface SettingsStore {
   setAutoFetchPastedLinks: (enabled: boolean) => void;
 
   /**
+   * Character count above which pasted text becomes an attachment instead of
+   * composer content. A wall of pasted text is a document, not a sentence:
+   * inlining it buries the actual question and makes the composer unusable.
+   *
+   * `0` disables the behavior entirely. Values in between are clamped to
+   * `PASTE_ATTACHMENT_MIN_CHARS` on read and write, so a hand-edited
+   * localStorage value can't make every two-word paste into a file.
+   */
+  pasteAsAttachmentChars: number;
+  setPasteAsAttachmentChars: (chars: number) => void;
+
+  /**
    * Pacing of the map workflow's time-lapse. Persisted rather than kept as
    * workspace view state: how fast is comfortable to read is a property of
    * the person watching, not of the map they happen to have open.
@@ -672,6 +688,9 @@ export const useSettingsStore = create<SettingsStore>()(
 
       // Fetch pasted links and attach their text by default
       autoFetchPastedLinks: true,
+
+      // Pasting more than this many characters attaches instead of inlining
+      pasteAsAttachmentChars: DEFAULT_PASTE_ATTACHMENT_CHARS,
 
       mapTimelapse: DEFAULT_MAP_TIMELAPSE,
 
@@ -1277,6 +1296,12 @@ export const useSettingsStore = create<SettingsStore>()(
       setAutoFetchPastedLinks: (enabled) =>
         set({ autoFetchPastedLinks: enabled }),
 
+      // Clamped on write as well as on read, for the same reason as the
+      // timelapse sliders below: the UI is bounded, but a hand-edited
+      // localStorage value must not make every paste an attachment.
+      setPasteAsAttachmentChars: (chars) =>
+        set({ pasteAsAttachmentChars: clampPasteAttachmentChars(chars) }),
+
       // Clamped on write as well as on read: the sliders are bounded, but a
       // hand-edited localStorage value must not produce a frozen sweep.
       setMapTimelapse: (settings) =>
@@ -1339,6 +1364,7 @@ export const useSettingsStore = create<SettingsStore>()(
           autoPinActiveFiles: true,
           autoInjectPinnedImages: true,
           autoFetchPastedLinks: true,
+          pasteAsAttachmentChars: DEFAULT_PASTE_ATTACHMENT_CHARS,
           mapTimelapse: DEFAULT_MAP_TIMELAPSE,
           confirmStopFromButton: true,
           confirmStopFromKeyboard: true,
@@ -1347,7 +1373,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 39, // Increment this when schema changes to trigger migrations
+      version: 40, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1427,6 +1453,7 @@ export const useSettingsStore = create<SettingsStore>()(
         autoPinActiveFiles: state.autoPinActiveFiles,
         autoInjectPinnedImages: state.autoInjectPinnedImages,
         autoFetchPastedLinks: state.autoFetchPastedLinks,
+        pasteAsAttachmentChars: state.pasteAsAttachmentChars,
         mapTimelapse: state.mapTimelapse,
         confirmStopFromButton: state.confirmStopFromButton,
         confirmStopFromKeyboard: state.confirmStopFromKeyboard,
@@ -1796,6 +1823,16 @@ export const useSettingsStore = create<SettingsStore>()(
           if (!Array.isArray(state.translationCriteria)) {
             state.translationCriteria = [];
           }
+        }
+
+        // Version 39 → 40: Add pasteAsAttachmentChars. Clamped rather than
+        // defaulted so an out-of-range hand-edited value keeps its intent
+        // (a very large threshold still means "rarely attach") instead of
+        // silently snapping back to the default.
+        if (version < 40) {
+          state.pasteAsAttachmentChars = clampPasteAttachmentChars(
+            state.pasteAsAttachmentChars,
+          );
         }
 
         return state;
