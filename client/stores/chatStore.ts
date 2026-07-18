@@ -914,8 +914,15 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // Get abort signal from store
     const { abortController } = get();
 
-    const orgAgentSearchAllowed =
-      isOrganizationAgent && conversation.model.id.startsWith('org-')
+    // Prompt-agent personas (admin-defined, server-generated 'prompt-' ids)
+    // execute on the standard path with normal web-search behavior — they are
+    // not in the static registry, so the allowWebSearch lookup below would
+    // otherwise strip searchMode for them.
+    const isPromptAgentPersona =
+      conversation.model.id.startsWith('org-prompt-');
+    const orgAgentSearchAllowed = isPromptAgentPersona
+      ? true
+      : isOrganizationAgent && conversation.model.id.startsWith('org-')
         ? getOrganizationAgentById(conversation.model.id.slice('org-'.length))
             ?.allowWebSearch === true
         : false;
