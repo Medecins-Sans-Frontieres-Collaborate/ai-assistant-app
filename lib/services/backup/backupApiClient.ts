@@ -28,6 +28,7 @@ const KNOWN_CODES: ReadonlySet<string> = new Set<BackupApiErrorCode>([
   'BACKUP_NOT_FOUND',
   'UNAUTHORIZED',
   'PAYLOAD_TOO_LARGE',
+  'RATE_LIMITED',
 ]);
 
 function codeFromStatus(status: number): BackupApiErrorCode {
@@ -40,10 +41,25 @@ function codeFromStatus(status: number): BackupApiErrorCode {
       return 'BACKUP_VERSION_CONFLICT';
     case 413:
       return 'PAYLOAD_TOO_LARGE';
+    case 429:
+      return 'RATE_LIMITED';
     default:
       return 'UNKNOWN';
   }
 }
+
+/**
+ * A full enroll/restore streams hundreds of sequential blob requests, which
+ * can outrun the per-user route limits mid-run. Honouring Retry-After here
+ * lets those runs pause and resume instead of failing wholesale (blobs are
+ * immutable and rev-named, so nothing uploaded so far is wasted).
+ */
+const RATE_LIMIT_MAX_RETRIES = 4;
+const RATE_LIMIT_DEFAULT_WAIT_MS = 5_000;
+const RATE_LIMIT_MAX_WAIT_MS = 65_000;
+
+const sleep = (ms: number): Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, ms));
 
 async function errorFromResponse(res: Response): Promise<BackupApiError> {
   let message = `Backup API request failed (${res.status})`;
@@ -65,12 +81,24 @@ type FetchLike = (input: string, init?: RequestInit) => Promise<Response>;
 export function createBackupApiClient(fetchImpl?: FetchLike): BackupApi {
   const doFetch: FetchLike = async (input, init) => {
     const f = fetchImpl ?? globalThis.fetch;
-    try {
-      return await f(input, init);
-    } catch (err) {
-      const message =
-        err instanceof Error ? err.message : 'Network request failed';
-      throw new BackupApiError(message, 'NETWORK', 0);
+    for (let attempt = 0; ; attempt++) {
+      let res: Response;
+      try {
+        res = await f(input, init);
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : 'Network request failed';
+        throw new BackupApiError(message, 'NETWORK', 0);
+      }
+      if (res.status !== 429 || attempt >= RATE_LIMIT_MAX_RETRIES) {
+        return res;
+      }
+      const retryAfterSeconds = Number(res.headers.get('retry-after'));
+      const waitMs =
+        Number.isFinite(retryAfterSeconds) && retryAfterSeconds > 0
+          ? Math.min(retryAfterSeconds * 1000, RATE_LIMIT_MAX_WAIT_MS)
+          : RATE_LIMIT_DEFAULT_WAIT_MS;
+      await sleep(waitMs);
     }
   };
 
