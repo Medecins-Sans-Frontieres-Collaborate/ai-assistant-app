@@ -518,6 +518,71 @@ export const createCredentialMiddleware = async (
   context: Partial<ChatContext>,
   req: NextRequest,
 ): Promise<Partial<ChatContext>> => {
+  const accessService = AgentAccessService.getInstance();
+
+  // Access guard for prompt-agent invocations (MANDATORY — botId is
+  // client-controlled and discovery filtering is UX only). Runs FIRST,
+  // before the byom early-return and the Foundry classification below, so
+  // NO model-classification path can carry a prompt-agent botId past the
+  // guard: a client pairing a restricted prompt botId with a byom- model id
+  // or a Foundry-shaped model object must still be evaluated here.
+  // Re-resolves from botId so the guard holds even for contexts that
+  // skipped model selection. Ids are server-generated `prompt-<hex>`
+  // (lib/services/agentAccess/types.ts), so the prefix check is reliable
+  // and keeps static RAG botIds (e.g. 'msf_communications') off the
+  // access-service path entirely.
+  // Mirrors the Foundry guard: deny AND 'unavailable' (no last-known-good
+  // ruleset) block in EVERY environment — POLICY, not credential plumbing.
+  if (
+    accessService.isEnabled() &&
+    (context.promptAgent || context.botId?.startsWith('prompt-'))
+  ) {
+    await accessService.ensureFresh();
+    const promptAgent =
+      context.promptAgent ??
+      (context.botId ? accessService.getPromptAgentById(context.botId) : null);
+    if (!promptAgent && accessService.getSnapshot().rulesUnavailable) {
+      // Fail closed while NO snapshot was ever loaded (cold start + storage
+      // outage): the botId claims a prompt agent but neither the record nor
+      // the rules can be verified, so block — same contract as the Foundry
+      // guard — instead of silently degrading to a vanilla chat rendered
+      // under the persona's name. When a snapshot IS present, an
+      // unknown/deleted `prompt-` botId falls through silently below — same
+      // silent-degrade as removed static agents.
+      emitAccessAudit({
+        userMail: context.user?.mail,
+        agentName: context.botId!,
+        source: PROMPT_AGENT_SOURCE,
+        decision: 'unavailable',
+        reason: 'rules-unavailable',
+      });
+      console.error(
+        '[CredentialMiddleware] Agent access unavailable (rules-unavailable) for prompt-agent invocation; blocking',
+      );
+      throw agentAccessDenied('unavailable', 'rules-unavailable');
+    }
+    if (promptAgent) {
+      const decision = accessService.evaluateAccess({
+        userMail: context.user?.mail,
+        source: PROMPT_AGENT_SOURCE,
+        agentName: promptAgent.id,
+      });
+      emitAccessAudit({
+        userMail: context.user?.mail,
+        agentName: promptAgent.id,
+        source: PROMPT_AGENT_SOURCE,
+        decision: decision.decision,
+        reason: decision.reason,
+      });
+      if (decision.decision !== 'allow') {
+        console.error(
+          `[CredentialMiddleware] Agent access ${decision.decision} (${decision.reason}) for prompt-agent invocation; blocking`,
+        );
+        throw agentAccessDenied(decision.decision, decision.reason);
+      }
+    }
+  }
+
   // Custom-source (byom) models: gate on the top-level validated
   // modelSourcePath + the byom- id prefix — never on flags inside the parsed
   // model object (InputValidator strips them from the client body).
@@ -539,8 +604,6 @@ export const createCredentialMiddleware = async (
     !!context.model?.agentId;
 
   if (!isFoundryAgent) {
-    const accessService = AgentAccessService.getInstance();
-
     // Access guard for agent-mode invocations that are NOT classified as
     // Foundry agents (docs/AGENT_ACCESS_CONTROL.md). A client can send an
     // `org-`/`custom-` model id with an `agentId` while omitting
@@ -579,43 +642,9 @@ export const createCredentialMiddleware = async (
       }
     }
 
-    // Access guard for prompt-agent invocations (MANDATORY — botId is
-    // client-controlled and discovery filtering is UX only). Re-resolves
-    // from botId so the guard holds even for contexts that skipped model
-    // selection. A `prompt-`-looking botId that resolves to NO record
-    // (deleted/unknown) falls through silently — same silent-degrade as
-    // removed static agents; the guard only fires for existing records.
-    // Mirrors the Foundry guard: deny AND 'unavailable' (no last-known-good
-    // ruleset) block in EVERY environment — POLICY, not credential plumbing.
-    if (accessService.isEnabled() && (context.promptAgent || context.botId)) {
-      await accessService.ensureFresh();
-      const promptAgent =
-        context.promptAgent ??
-        (context.botId
-          ? accessService.getPromptAgentById(context.botId)
-          : null);
-      if (promptAgent) {
-        const decision = accessService.evaluateAccess({
-          userMail: context.user?.mail,
-          source: PROMPT_AGENT_SOURCE,
-          agentName: promptAgent.id,
-        });
-        emitAccessAudit({
-          userMail: context.user?.mail,
-          agentName: promptAgent.id,
-          source: PROMPT_AGENT_SOURCE,
-          decision: decision.decision,
-          reason: decision.reason,
-        });
-        if (decision.decision !== 'allow') {
-          console.error(
-            `[CredentialMiddleware] Agent access ${decision.decision} (${decision.reason}) for prompt-agent invocation; blocking`,
-          );
-          throw agentAccessDenied(decision.decision, decision.reason);
-        }
-      }
-    }
-
+    // The prompt-agent access guard already ran at the top of this
+    // middleware (before any model classification), so nothing else to
+    // check for standard-model requests.
     return {};
   }
 
@@ -722,7 +751,6 @@ export const createCredentialMiddleware = async (
     // explicit access-denied PipelineError in EVERY environment (no
     // failClosedResult dev carve-out — that leniency is only for OBO/host
     // plumbing failures).
-    const accessService = AgentAccessService.getInstance();
     if (accessService.isEnabled() && agentName) {
       await accessService.ensureFresh();
       // Only trust the client-supplied source path when endpoint resolution
@@ -854,8 +882,22 @@ export const createModelSelectionMiddleware = async (
   // fallback chain). agentMode stays as computed above (false — prompt
   // agents never carry an agentId) and model.agentId is NEVER set: that
   // would misroute the request into the Foundry execution path.
+  //
+  // Scoped to requests whose MODEL actually selects the prompt agent
+  // (`org-<botId>`): conversation.bot is sent on every request and survives
+  // model switches that don't go through ModelSelect (WorkflowModelSelect /
+  // useModelSelection update the model without clearing bot), so a stale
+  // botId must never hijack an explicitly selected different model — in
+  // particular it must never swap a byom-/foundry- selection onto an
+  // app-hosted deployment. The `prompt-` prefix check (ids are
+  // server-generated `prompt-<hex>`) also keeps static RAG botIds off the
+  // access-service path entirely — no ensureFresh() on their hot path.
   const accessService = AgentAccessService.getInstance();
-  if (context.botId && accessService.isEnabled()) {
+  if (
+    context.botId?.startsWith('prompt-') &&
+    modelId === `org-${context.botId}` &&
+    accessService.isEnabled()
+  ) {
     await accessService.ensureFresh();
     const promptAgent = accessService.getPromptAgentById(context.botId);
     if (promptAgent) {
