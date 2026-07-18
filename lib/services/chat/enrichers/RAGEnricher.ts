@@ -52,8 +52,10 @@ export class RAGEnricher extends BasePipelineStage {
   }
 
   shouldRun(context: ChatContext): boolean {
-    // botId is used for organization agent ID (e.g., "msf_communications")
-    return !!context.botId;
+    // botId is used for organization agent ID (e.g., "msf_communications").
+    // Prompt agents also arrive via botId but are handled by
+    // PromptAgentEnricher — they must never trigger a knowledge-base search.
+    return !!context.botId && !context.promptAgent;
   }
 
   protected async executeStage(context: ChatContext): Promise<ChatContext> {
