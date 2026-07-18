@@ -17,6 +17,11 @@ vi.mock('@/client/hooks/chat/useUrlAttachment', () => ({
   useUrlAttachment: () => ({ attachUrl: mockAttachUrl }),
 }));
 
+const mockAttachPastedText = vi.hoisted(() => vi.fn());
+vi.mock('@/client/hooks/chat/usePastedTextAttachment', () => ({
+  usePastedTextAttachment: () => ({ attachPastedText: mockAttachPastedText }),
+}));
+
 function createPasteEvent(options: {
   imageFiles?: File[];
   text?: string;
@@ -85,7 +90,12 @@ describe('usePasteChatInput', () => {
 
     mockAttachUrl.mockReset();
     mockAttachUrl.mockResolvedValue(undefined);
-    useSettingsStore.setState({ autoFetchPastedLinks: true });
+    mockAttachPastedText.mockReset();
+    mockAttachPastedText.mockResolvedValue(undefined);
+    useSettingsStore.setState({
+      autoFetchPastedLinks: true,
+      pasteAsAttachmentChars: 2000,
+    });
   });
 
   function setup(enabled = true) {
@@ -290,7 +300,12 @@ describe('usePasteChatInput — pasted links', () => {
     });
     mockAttachUrl.mockReset();
     mockAttachUrl.mockResolvedValue(undefined);
-    useSettingsStore.setState({ autoFetchPastedLinks: true });
+    mockAttachPastedText.mockReset();
+    mockAttachPastedText.mockResolvedValue(undefined);
+    useSettingsStore.setState({
+      autoFetchPastedLinks: true,
+      pasteAsAttachmentChars: 2000,
+    });
   });
 
   function setup(enabled = true) {
@@ -364,5 +379,144 @@ describe('usePasteChatInput — pasted links', () => {
     expect(dispatchResult).toBe(true);
     expect(mockAttachUrl).not.toHaveBeenCalled();
     document.body.removeChild(otherInput);
+  });
+});
+
+/**
+ * A paste too large to read inside the composer is a document, not a
+ * sentence. It becomes an attachment even when the textarea is focused —
+ * a deliberate bulk paste is the common case, and the composer should stay
+ * free for the actual question.
+ */
+describe('usePasteChatInput — oversized pastes', () => {
+  beforeEach(() => {
+    useChatInputStore.setState({
+      textFieldValue: '',
+      filePreviews: [],
+      handleFileUpload: vi.fn().mockResolvedValue(undefined),
+    });
+    useUIStore.setState({
+      isSettingsOpen: false,
+      isBotModalOpen: false,
+      isTermsModalOpen: false,
+    });
+    mockAttachUrl.mockReset();
+    mockAttachUrl.mockResolvedValue(undefined);
+    mockAttachPastedText.mockReset();
+    mockAttachPastedText.mockResolvedValue(undefined);
+    useSettingsStore.setState({
+      autoFetchPastedLinks: true,
+      pasteAsAttachmentChars: 2000,
+    });
+  });
+
+  function setup(enabled = true) {
+    const textarea = document.createElement('textarea');
+    const textareaRef = { current: textarea };
+    renderHook(() => usePasteChatInput({ textareaRef, enabled }));
+    return { textarea };
+  }
+
+  const big = 'x'.repeat(2001);
+  const small = 'x'.repeat(1999);
+  const text = () => useChatInputStore.getState().textFieldValue;
+
+  it('attaches an oversized paste when the textarea is focused', () => {
+    const { textarea } = setup();
+
+    const dispatchResult = window.dispatchEvent(
+      createPasteEvent({ text: big, target: textarea }),
+    );
+
+    expect(dispatchResult).toBe(false);
+    expect(mockAttachPastedText).toHaveBeenCalledWith(big);
+    expect(text()).toBe('');
+  });
+
+  it('attaches an oversized paste when nothing is focused', () => {
+    setup();
+
+    const dispatchResult = window.dispatchEvent(
+      createPasteEvent({ text: big, target: document.body }),
+    );
+
+    expect(dispatchResult).toBe(false);
+    expect(mockAttachPastedText).toHaveBeenCalledWith(big);
+    expect(text()).toBe('');
+  });
+
+  it('leaves a paste at or below the threshold in the composer', () => {
+    setup();
+
+    window.dispatchEvent(
+      createPasteEvent({ text: small, target: document.body }),
+    );
+
+    expect(mockAttachPastedText).not.toHaveBeenCalled();
+    expect(text()).toBe(small);
+  });
+
+  it('measures the trimmed length, so trailing whitespace cannot tip it over', () => {
+    setup();
+    const padded = `${small}${' '.repeat(50)}`;
+
+    window.dispatchEvent(
+      createPasteEvent({ text: padded, target: document.body }),
+    );
+
+    expect(mockAttachPastedText).not.toHaveBeenCalled();
+  });
+
+  it('never attaches when the threshold is 0 (feature off)', () => {
+    useSettingsStore.setState({ pasteAsAttachmentChars: 0 });
+    setup();
+
+    window.dispatchEvent(
+      createPasteEvent({ text: big, target: document.body }),
+    );
+
+    expect(mockAttachPastedText).not.toHaveBeenCalled();
+    expect(text()).toBe(big);
+  });
+
+  it('honors a custom threshold', () => {
+    useSettingsStore.setState({ pasteAsAttachmentChars: 500 });
+    setup();
+    const medium = 'y'.repeat(600);
+
+    window.dispatchEvent(
+      createPasteEvent({ text: medium, target: document.body }),
+    );
+
+    expect(mockAttachPastedText).toHaveBeenCalledWith(medium);
+  });
+
+  it('does not hijack an oversized paste into another input', () => {
+    setup();
+    const otherInput = document.createElement('input');
+    document.body.appendChild(otherInput);
+
+    const dispatchResult = window.dispatchEvent(
+      createPasteEvent({ text: big, target: otherInput }),
+    );
+
+    expect(dispatchResult).toBe(true);
+    expect(mockAttachPastedText).not.toHaveBeenCalled();
+    document.body.removeChild(otherInput);
+  });
+
+  it('prefers the image branch when the clipboard holds both', () => {
+    setup();
+    const image = new File(['x'], 'image.png', { type: 'image/png' });
+
+    window.dispatchEvent(
+      createPasteEvent({
+        imageFiles: [image],
+        text: big,
+        target: document.body,
+      }),
+    );
+
+    expect(mockAttachPastedText).not.toHaveBeenCalled();
   });
 });
