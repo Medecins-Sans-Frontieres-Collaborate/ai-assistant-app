@@ -284,9 +284,13 @@ export const useConversationStore = create<ConversationStore>()(
           conversations: state.conversations.map((c) => {
             if (c.id !== id) return c;
             let patch = updates;
-            // conversationType is fixed once set; strip attempts to change it.
+            // conversationType is settled by the first message, not by the
+            // first selection: WorkflowTabs lets the user switch modes (and
+            // back to plain chat) freely while the conversation is empty.
+            // Once it has messages the type is fixed, so a stale render or
+            // a rogue caller can't re-type a live conversation.
             if (
-              c.conversationType &&
+              c.messages.length > 0 &&
               'conversationType' in updates &&
               updates.conversationType !== c.conversationType
             ) {
@@ -294,7 +298,13 @@ export const useConversationStore = create<ConversationStore>()(
                 '[ConversationStore] Ignoring attempt to change conversationType of',
                 id,
               );
-              const { conversationType: _ignored, ...rest } = updates;
+              // workflowState travels with conversationType — dropping only
+              // the type would leave a state whose `kind` disagrees with it.
+              const {
+                conversationType: _ignoredType,
+                workflowState: _ignoredState,
+                ...rest
+              } = updates;
               patch = rest;
             }
             return { ...c, ...patch, updatedAt: new Date().toISOString() };
