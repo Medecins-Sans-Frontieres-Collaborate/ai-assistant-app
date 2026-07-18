@@ -188,7 +188,15 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
       }
 
       const data = await response.json();
-      const agents: DiscoveredAgent[] = data.agents ?? [];
+      // /api/agents merges every discovery bucket (regional/office paths and
+      // admin prompt agents) into one array; only entries tagged with the
+      // validated path belong to THIS connection. In particular, prompt
+      // agents (type 'prompt', source 'prompt-agent') are app-defined
+      // personas, not connectable Foundry resources — without this filter
+      // they'd inflate agentCount and leak into the step-2 checkbox list.
+      const agents: DiscoveredAgent[] = (
+        (data.agents ?? []) as DiscoveredAgent[]
+      ).filter((a) => a.source === path);
       setValidationResult({ valid: true, agentCount: agents.length });
       return agents;
     } catch {
