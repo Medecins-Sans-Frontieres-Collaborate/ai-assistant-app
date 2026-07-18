@@ -1,0 +1,312 @@
+'use client';
+
+import { IconArrowLeft, IconUserShield } from '@tabler/icons-react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { FC, useMemo, useState } from 'react';
+
+import { useTranslations } from 'next-intl';
+
+import {
+  unwrapApiData,
+  useAgentAccessAdmin,
+} from '@/client/hooks/settings/useAgentAccessAdmin';
+
+import { LocalAdminsSection } from './LocalAdminsSection';
+import { RuleEditor } from './RuleEditor';
+import {
+  AdminRulesResponse,
+  AgentsApiResponse,
+  MergedAgentRow,
+  clientCanonicalAgentKey,
+} from './types';
+
+import { useSettingsStore } from '@/client/stores/settingsStore';
+import { Link } from '@/lib/navigation';
+
+type PanelTab = 'rules' | 'localAdmins';
+
+/**
+ * Admin panel for app-layer agent access rules
+ * (docs/AGENT_ACCESS_CONTROL.md "Admin UI"). Merges the admin's OWN
+ * /api/agents discovery with all stored rules: discovered agents without a
+ * rule are implicitly "Everyone"; rules whose agent is outside the admin's
+ * discovery get a "not discoverable by you" badge. Local admins only see
+ * their delegated canonical keys. The server component gates access — this
+ * client is presentation only.
+ */
+export const AgentAccessPanel: FC = () => {
+  const t = useTranslations('agentAccess');
+  const queryClient = useQueryClient();
+  const {
+    me,
+    isGlobalAdmin,
+    isLoading: isMeLoading,
+    error: meError,
+    refetch: refetchMe,
+  } = useAgentAccessAdmin();
+
+  // The admin's own discovery includes their configured custom sources,
+  // mirroring useFoundryAgents — but WITHOUT per-source selection filtering:
+  // hidden-from-picker agents are still manageable here.
+  const customAgentSources = useSettingsStore((s) => s.customAgentSources);
+  const sourcePaths = customAgentSources.map((s) => s.resourcePath);
+
+  const rulesQuery = useQuery<AdminRulesResponse>({
+    queryKey: ['agent-access-rules'],
+    queryFn: async () => {
+      const response = await fetch('/api/agent-access/rules');
+      if (!response.ok) {
+        throw new Error(`Failed to fetch rules: ${response.status}`);
+      }
+      return unwrapApiData<AdminRulesResponse>(await response.json());
+    },
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
+  const agentsQuery = useQuery<AgentsApiResponse>({
+    queryKey: ['agent-access-admin-agents', ...sourcePaths],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      if (sourcePaths.length > 0) {
+        params.set('sources', sourcePaths.join(','));
+      }
+      const url = `/api/agents${params.toString() ? '?' + params.toString() : ''}`;
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch agents: ${response.status}`);
+      }
+      return response.json();
+    },
+    staleTime: 60 * 60 * 1000,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
+  const [activeTab, setActiveTab] = useState<PanelTab>('rules');
+  const [editingKey, setEditingKey] = useState<string | null>(null);
+
+  const rows = useMemo<MergedAgentRow[]>(() => {
+    const editableAgentKeys = me?.editableAgentKeys ?? [];
+    const map = new Map<string, MergedAgentRow>();
+    for (const agent of agentsQuery.data?.agents ?? []) {
+      if (!agent.source || !agent.agentName) continue;
+      const key = clientCanonicalAgentKey(agent.source, agent.agentName);
+      if (!map.has(key)) {
+        map.set(key, {
+          canonicalKey: key,
+          source: agent.source,
+          agentName: agent.agentName,
+          displayName: agent.name || agent.agentName,
+          discoverable: true,
+          stored: null,
+        });
+      }
+    }
+    for (const stored of rulesQuery.data?.rules ?? []) {
+      const existing = map.get(stored.canonicalKey);
+      if (existing) {
+        existing.stored = stored;
+      } else {
+        map.set(stored.canonicalKey, {
+          canonicalKey: stored.canonicalKey,
+          source: stored.rule.source,
+          agentName: stored.rule.agentName,
+          displayName: stored.rule.agentName,
+          discoverable: false,
+          stored,
+        });
+      }
+    }
+    let list = [...map.values()];
+    if (editableAgentKeys !== '*') {
+      list = list.filter((row) => editableAgentKeys.includes(row.canonicalKey));
+    }
+    return list.sort((a, b) => a.displayName.localeCompare(b.displayName));
+  }, [agentsQuery.data, rulesQuery.data, me?.editableAgentKeys]);
+
+  const refetchRules = async () => {
+    await queryClient.invalidateQueries({ queryKey: ['agent-access-rules'] });
+  };
+
+  const handleSaved = async () => {
+    setEditingKey(null);
+    await refetchRules();
+  };
+
+  const handleConflictReload = async () => {
+    setEditingKey(null);
+    await refetchRules();
+  };
+
+  // /me shapes the list (delegated-key filtering), so it participates in the
+  // loading and error branches — otherwise a local admin briefly sees a
+  // wrong or empty list while /me loads or after it errors.
+  const isLoading =
+    rulesQuery.isLoading || agentsQuery.isLoading || isMeLoading;
+
+  // A rules-store outage answers 200 with rulesUnavailable:true and empty
+  // rules. Rendering the merged list then would show every agent as
+  // "Everyone" while invocation is actually failing closed — treat it
+  // exactly like a rules fetch error.
+  const rulesUnavailable = rulesQuery.data?.rulesUnavailable === true;
+  const loadFailed = Boolean(rulesQuery.error || meError || rulesUnavailable);
+
+  const handleRetry = () => {
+    void rulesQuery.refetch();
+    void refetchMe();
+  };
+
+  return (
+    <div className="flex-1 overflow-y-auto bg-white dark:bg-surface-dark-base">
+      <div className="mx-auto max-w-4xl p-6">
+        <Link
+          href="/"
+          className="mb-4 flex w-fit items-center gap-1.5 text-sm text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white"
+        >
+          <IconArrowLeft size={16} />
+          {t('backToChat')}
+        </Link>
+
+        <div className="mb-2 flex items-center gap-2">
+          <IconUserShield size={24} className="text-black dark:text-white" />
+          <h1 className="text-xl font-bold text-black dark:text-white">
+            {t('title')}
+          </h1>
+        </div>
+        <p className="mb-6 text-sm text-gray-600 dark:text-gray-400">
+          {t('description')}
+        </p>
+
+        {/* Tabs — the delegation map is global-admin only */}
+        {isGlobalAdmin && (
+          <div className="mb-6 flex gap-1 border-b border-gray-200 dark:border-gray-700">
+            {(['rules', 'localAdmins'] as const).map((tab) => (
+              <button
+                key={tab}
+                type="button"
+                className={`border-b-2 px-3 py-2 text-sm font-medium ${
+                  activeTab === tab
+                    ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
+                    : 'border-transparent text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white'
+                }`}
+                onClick={() => setActiveTab(tab)}
+              >
+                {tab === 'rules' ? t('rulesTab') : t('localAdminsTab')}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {activeTab === 'localAdmins' && isGlobalAdmin ? (
+          <LocalAdminsSection rows={rows} />
+        ) : isLoading ? (
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            {t('loading')}
+          </p>
+        ) : loadFailed ? (
+          <div className="text-sm text-red-600 dark:text-red-400">
+            <p>
+              {rulesUnavailable ? t('rulesUnavailableWarning') : t('loadError')}
+            </p>
+            <button
+              type="button"
+              className="mt-2 rounded-md border border-gray-300 dark:border-gray-600 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+              onClick={handleRetry}
+            >
+              {t('retry')}
+            </button>
+          </div>
+        ) : rows.length === 0 ? (
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            {t('noAgents')}
+          </p>
+        ) : (
+          <ul className="space-y-2">
+            {rows.map((row) => {
+              const isRestricted =
+                row.stored?.rule.access.type === 'restricted';
+              return (
+                <li
+                  key={row.canonicalKey}
+                  className="rounded-lg border border-gray-200 dark:border-gray-700 p-3"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="truncate text-sm font-medium text-black dark:text-white">
+                          {row.displayName}
+                        </span>
+                        {!row.discoverable && (
+                          <span
+                            className="shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-800 dark:bg-amber-900/30 dark:text-amber-300"
+                            title={t('notDiscoverableHint')}
+                          >
+                            {t('notDiscoverable')}
+                          </span>
+                        )}
+                      </div>
+                      <p
+                        className="truncate text-xs text-gray-500 dark:text-gray-400"
+                        title={row.source}
+                      >
+                        {t('sourceLabel')}: {row.source}
+                      </p>
+                    </div>
+                    <span
+                      className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
+                        isRestricted
+                          ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                          : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                      }`}
+                    >
+                      {isRestricted
+                        ? t('accessRestricted')
+                        : t('accessEveryone')}
+                    </span>
+                    <button
+                      type="button"
+                      className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                      onClick={() =>
+                        setEditingKey(
+                          editingKey === row.canonicalKey
+                            ? null
+                            : row.canonicalKey,
+                        )
+                      }
+                    >
+                      {editingKey === row.canonicalKey
+                        ? t('cancel')
+                        : t('edit')}
+                    </button>
+                  </div>
+
+                  {row.stored && (
+                    <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+                      {t('updatedByLine', {
+                        user: row.stored.rule.updatedBy,
+                        date: row.stored.rule.updatedAt,
+                      })}
+                    </p>
+                  )}
+
+                  {editingKey === row.canonicalKey && (
+                    <RuleEditor
+                      // Remount when the underlying rule/etag changes so the
+                      // editor state reseeds after a reload.
+                      key={`${row.canonicalKey}:${row.stored?.etag ?? 'none'}`}
+                      row={row}
+                      onSaved={handleSaved}
+                      onCancel={() => setEditingKey(null)}
+                      onConflictReload={handleConflictReload}
+                    />
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
+    </div>
+  );
+};
