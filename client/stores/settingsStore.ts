@@ -1,5 +1,6 @@
 'use client';
 
+import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
 import { UserRegion } from '@/lib/utils/shared/region';
 
@@ -224,6 +225,23 @@ interface SettingsStore {
    */
   mcpArbitraryFlagEnabled: boolean;
   /**
+   * Max messages sent per chat request (the "context window"). Defaults to
+   * the legacy hard cut (VALIDATION_LIMITS.CLIENT_MAX_MESSAGES); the dropped
+   * middle is summarized via conversation compaction instead of silently
+   * lost. The setter clamps to 20..200 (server zod rejects >MAX_API_MESSAGES).
+   */
+  contextWindowSize: number;
+  /** User opt-in for cross-conversation Memories (default off). */
+  memoriesEnabled: boolean;
+  /**
+   * Runtime-only mirror of the LaunchDarkly `enableMemories` flag, set by
+   * AppInitializer so vanilla stores (chatStore) can gate without hook
+   * access (same pattern as mcpArbitraryFlagEnabled). Fail-closed: defaults
+   * to false and only flips on an explicit `=== true` flag value. NOT
+   * persisted.
+   */
+  memoriesFlagEnabled: boolean;
+  /**
    * Model IDs the user has hidden from the picker. Covers base models and
    * agents alike (everything in the picker is keyed by a string model ID:
    * `gpt-5.2`, `org-{id}`, `foundry-{sourceHash}-{id}`). Hiding never deletes —
@@ -389,6 +407,11 @@ interface SettingsStore {
   setAllowArbitraryMcpServers: (enabled: boolean) => void;
   setMcpArbitraryFlagEnabled: (enabled: boolean) => void;
 
+  // Context Window / Memories Actions
+  setContextWindowSize: (size: number) => void;
+  setMemoriesEnabled: (enabled: boolean) => void;
+  setMemoriesFlagEnabled: (enabled: boolean) => void;
+
   // Extraction Recipe Actions
   setExtractionRecipes: (recipes: ExtractionRecipe[]) => void;
   addExtractionRecipe: (recipe: ExtractionRecipe) => void;
@@ -492,6 +515,11 @@ interface SettingsStore {
 }
 
 const DEFAULT_TEMPERATURE = 0.5;
+const DEFAULT_CONTEXT_WINDOW_SIZE = VALIDATION_LIMITS.CLIENT_MAX_MESSAGES; // 80
+// Clamp bounds: below ~20 messages chats lose too much context; the server's
+// ChatBodySchema rejects more than VALIDATION_LIMITS.MAX_API_MESSAGES (200).
+const CONTEXT_WINDOW_MIN = 20;
+const CONTEXT_WINDOW_MAX = VALIDATION_LIMITS.MAX_API_MESSAGES;
 const DEFAULT_SYSTEM_PROMPT = '';
 const DEFAULT_DISPLAY_NAME_PREFERENCE: DisplayNamePreference = 'firstName';
 const DEFAULT_CUSTOM_DISPLAY_NAME = '';
@@ -520,6 +548,9 @@ export const useSettingsStore = create<SettingsStore>()(
       mcpServers: [],
       allowArbitraryMcpServers: false,
       mcpArbitraryFlagEnabled: false,
+      contextWindowSize: DEFAULT_CONTEXT_WINDOW_SIZE,
+      memoriesEnabled: false,
+      memoriesFlagEnabled: false,
       hiddenModelIds: [],
       starredModelIds: [],
       tokenUsageStats: {},
@@ -786,6 +817,20 @@ export const useSettingsStore = create<SettingsStore>()(
 
       setMcpArbitraryFlagEnabled: (enabled) =>
         set({ mcpArbitraryFlagEnabled: enabled }),
+
+      // Context Window / Memories Actions
+      setContextWindowSize: (size) =>
+        set({
+          contextWindowSize: Math.min(
+            Math.max(size, CONTEXT_WINDOW_MIN),
+            CONTEXT_WINDOW_MAX,
+          ),
+        }),
+
+      setMemoriesEnabled: (enabled) => set({ memoriesEnabled: enabled }),
+
+      setMemoriesFlagEnabled: (enabled) =>
+        set({ memoriesFlagEnabled: enabled }),
 
       // Hidden Model/Agent Actions. Hiding unstars: a model can't be both
       // surfaced in "Your models" and hidden from the picker.
@@ -1119,6 +1164,8 @@ export const useSettingsStore = create<SettingsStore>()(
           // and lingering secrets after a "reset" would be worse.
           mcpServers: [],
           allowArbitraryMcpServers: false,
+          contextWindowSize: DEFAULT_CONTEXT_WINDOW_SIZE,
+          memoriesEnabled: false,
           hiddenModelIds: [],
           starredModelIds: [],
           tokenUsageStats: {},
@@ -1149,7 +1196,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 33, // Increment this when schema changes to trigger migrations
+      version: 34, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1168,8 +1215,10 @@ export const useSettingsStore = create<SettingsStore>()(
         customLanguages: state.customLanguages,
         documentSpecs: state.documentSpecs,
         documentCriteria: state.documentCriteria,
-        // NOTE: mcpArbitraryFlagEnabled is deliberately NOT persisted — it
-        // mirrors a LaunchDarkly flag and must re-derive each session.
+        // NOTE: mcpArbitraryFlagEnabled and memoriesFlagEnabled are
+        // deliberately NOT persisted — they mirror LaunchDarkly flags and
+        // must re-derive each session (a persisted true would survive a
+        // flag-off).
         //
         // SECRETS ARE REDACTED from the persisted blob: localStorage holds
         // NO MCP credentials (PATs, OAuth tokens, client secrets). They live
@@ -1193,6 +1242,8 @@ export const useSettingsStore = create<SettingsStore>()(
             : undefined,
         })),
         allowArbitraryMcpServers: state.allowArbitraryMcpServers,
+        contextWindowSize: state.contextWindowSize,
+        memoriesEnabled: state.memoriesEnabled,
         hiddenModelIds: state.hiddenModelIds,
         starredModelIds: state.starredModelIds,
         tokenUsageStats: state.tokenUsageStats,
@@ -1527,6 +1578,19 @@ export const useSettingsStore = create<SettingsStore>()(
         if (version < 33) {
           state.estimatedUsageStats = {};
           state.historicalUsageBackfilledAt = null;
+        }
+
+        // Version 33 → 34: Adjustable context window (conversation
+        // compaction) + Memories opt-in. Backfill to the previous hard-coded
+        // window size and feature-off so behavior is unchanged until the
+        // user opts in.
+        if (version < 34) {
+          if (state.contextWindowSize === undefined) {
+            state.contextWindowSize = DEFAULT_CONTEXT_WINDOW_SIZE;
+          }
+          if (state.memoriesEnabled === undefined) {
+            state.memoriesEnabled = false;
+          }
         }
 
         return state;
