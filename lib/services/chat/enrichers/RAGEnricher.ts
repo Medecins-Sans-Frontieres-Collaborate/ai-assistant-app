@@ -1,6 +1,8 @@
 import { getAzureMonitorLogger } from '@/lib/services/observability';
 import { RAGService } from '@/lib/services/ragService';
 
+import { buildConversationContextSections } from '@/lib/utils/app/systemPrompt';
+
 import { Message, MessageType } from '@/types/chat';
 
 import { ChatContext } from '../pipeline/ChatContext';
@@ -196,12 +198,23 @@ export class RAGEnricher extends BasePipelineStage {
             number: index + 1,
           }));
 
+          // Summary/memories sections already live in context.systemPrompt
+          // (buildSystemPrompt); re-append them when the org agent's own
+          // prompt replaces it so RAG requests keep the sections.
+          const conversationContext = buildConversationContextSections(
+            context.conversationSummary,
+            context.memories,
+          );
+
           // Store metadata for downstream processing (citations, etc.)
           const result = {
             ...context,
             enrichedMessages,
             // Override system prompt with organization agent's system prompt
-            systemPrompt: agent.systemPrompt || context.systemPrompt,
+            systemPrompt:
+              agent.systemPrompt && conversationContext
+                ? `${agent.systemPrompt}\n\n${conversationContext}`
+                : agent.systemPrompt || context.systemPrompt,
             processedContent: {
               ...context.processedContent,
               metadata: {
