@@ -227,6 +227,9 @@ const mockMessages: Record<string, unknown> = {
       'Instructions that define how this agent behaves',
     agentModelLabel: 'Model',
     agentModelPlaceholder: 'Select a model…',
+    agentModelUnavailable: '{modelId} (unavailable)',
+    agentModelUnknownError:
+      'The selected model is no longer available. Choose another model and save again.',
     promptAgentBadge: 'Prompt agent',
     editAgent: 'Edit agent',
     deleteAgent: 'Delete',
