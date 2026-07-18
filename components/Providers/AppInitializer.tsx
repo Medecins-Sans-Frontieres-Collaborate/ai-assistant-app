@@ -58,12 +58,20 @@ export function AppInitializer() {
   // chatStore (vanilla, no hook access) can gate what gets SENT, not just
   // what's shown. Fail-closed on purpose: only an explicit `true` enables —
   // an unserved flag or LD outage must degrade to "arbitrary servers off".
-  const { mcpArbitraryServers } = useFlags();
+  const { mcpArbitraryServers, enableMemories } = useFlags();
   useEffect(() => {
     useSettingsStore
       .getState()
       .setMcpArbitraryFlagEnabled(mcpArbitraryServers === true);
   }, [mcpArbitraryServers]);
+
+  // Mirror the LaunchDarkly memories flag the same way — chatStore gates the
+  // send-path `memories` field and the post-stream extraction on it.
+  // Fail-closed on purpose: only an explicit `true` enables — an unserved
+  // flag or LD outage must degrade to "memories off".
+  useEffect(() => {
+    useSettingsStore.getState().setMemoriesFlagEnabled(enableMemories === true);
+  }, [enableMemories]);
 
   // MCP credential vault: once authenticated, merge encrypted credentials
   // into the in-memory store and start the write-through sync (the persisted
