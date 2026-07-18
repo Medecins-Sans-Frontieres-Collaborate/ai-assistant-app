@@ -13,6 +13,7 @@ import { OpenAIModelID, OpenAIModels } from '@/types/openai';
  * (anthropic, mistral…) are out.
  */
 export function isWorkflowEligibleModel(model: {
+  id?: string;
   provider?: string;
   isCustomAgent?: boolean;
   isOrganizationAgent?: boolean;
@@ -21,6 +22,12 @@ export function isWorkflowEligibleModel(model: {
   if (model.provider && model.provider !== 'openai') return false;
   if (model.isCustomAgent || model.isOrganizationAgent) return false;
   if (model.isDisabled) return false;
+  // BYO-source models look eligible — buildCustomSourceModel keeps
+  // provider 'openai' and forces isDisabled false — but their ids never
+  // exist in the static catalog, so resolveWorkflowModelId below would
+  // silently fall back to the default. Excluded here so the picker can't
+  // offer one.
+  if (model.id?.startsWith('byom-')) return false;
   return true;
 }
 
