@@ -24,11 +24,51 @@ import { auth, getAccessTokenForOBO } from '@/auth';
  * Optional query param `sources` — comma-separated ARM resource paths to
  * additional Foundry projects to discover agents from (user-configured).
  *
- * Returns empty array (not an error) if:
+ * Returns an empty Foundry list (not an error) if:
  * - Multi-region is not configured (no ARM resource paths)
  * - OBO token acquisition fails (graceful degradation)
  * - User has no agent access
+ *
+ * App-defined prompt agents (access-filtered) are served on EVERY response
+ * path, including the two discovery skips above — they need neither ARM
+ * discovery paths nor an OBO token.
  */
+
+/**
+ * Prompt-agent entries from the AgentAccessService snapshot (hot path —
+ * never reads storage directly), access-filtered for the user. The wire
+ * shape deliberately omits systemPrompt and modelId: those are admin-only
+ * fields; the server resolves them from botId at invocation time.
+ * 'unavailable' passes through like the Foundry discovery filter (this is a
+ * visibility-only surface — in practice an unavailable snapshot carries no
+ * prompt agents anyway). Empty when the feature is disabled.
+ */
+async function getVisiblePromptAgentEntries(
+  userMail: string | undefined,
+): Promise<DiscoveredAgent[]> {
+  const accessService = AgentAccessService.getInstance();
+  if (!accessService.isEnabled()) return [];
+  await accessService.ensureFresh();
+  const entries: DiscoveredAgent[] = [];
+  for (const promptAgent of accessService.getPromptAgents()) {
+    const { decision } = accessService.evaluateAccess({
+      userMail,
+      source: PROMPT_AGENT_SOURCE,
+      agentName: promptAgent.id,
+    });
+    if (decision !== 'deny') {
+      entries.push({
+        id: promptAgent.id,
+        name: promptAgent.name,
+        description: promptAgent.description,
+        agentName: promptAgent.id,
+        source: PROMPT_AGENT_SOURCE,
+        type: 'prompt',
+      });
+    }
+  }
+  return entries;
+}
 export async function GET(request: NextRequest) {
   const session = await auth();
 
@@ -68,9 +108,15 @@ export async function GET(request: NextRequest) {
     ];
     const allPaths = Array.from(new Set(orderedPaths));
 
+    // Computed up front so every response path — including the discovery
+    // early-returns below — serves the (access-filtered) prompt agents.
+    const promptAgentEntries = await getVisiblePromptAgentEntries(
+      session.user.mail,
+    );
+
     if (allPaths.length === 0) {
       return NextResponse.json({
-        agents: [],
+        agents: promptAgentEntries,
         regionalPath: null,
         officePaths: [],
       });
@@ -114,7 +160,7 @@ export async function GET(request: NextRequest) {
           `[/api/agents] OBO failed for ${session.user.mail ?? 'unknown'}: ${errMsg}`,
         );
         return NextResponse.json({
-          agents: [],
+          agents: promptAgentEntries,
           regionalPath,
           officePaths,
         });
@@ -178,7 +224,6 @@ export async function GET(request: NextRequest) {
     // unfiltered: this is a visibility-only surface, and invocation fails
     // closed independently.
     let visibleAgents: DiscoveredAgent[] = allAgents;
-    const promptAgentEntries: DiscoveredAgent[] = [];
     const accessService = AgentAccessService.getInstance();
     if (accessService.isEnabled()) {
       await accessService.ensureFresh();
@@ -204,31 +249,6 @@ export async function GET(request: NextRequest) {
         );
       } else {
         visibleAgents = filtered;
-      }
-
-      // Append app-defined prompt agents from the service snapshot (hot
-      // path — never read storage directly here). They ride the same
-      // access filter; 'unavailable' passes through like the loop above
-      // (visibility-only surface — in practice an unavailable snapshot
-      // carries no prompt agents anyway). The wire shape deliberately
-      // omits systemPrompt and modelId: those are admin-only fields, the
-      // server resolves them from botId at invocation time.
-      for (const promptAgent of accessService.getPromptAgents()) {
-        const { decision } = accessService.evaluateAccess({
-          userMail: session.user.mail,
-          source: PROMPT_AGENT_SOURCE,
-          agentName: promptAgent.id,
-        });
-        if (decision !== 'deny') {
-          promptAgentEntries.push({
-            id: promptAgent.id,
-            name: promptAgent.name,
-            description: promptAgent.description,
-            agentName: promptAgent.id,
-            source: PROMPT_AGENT_SOURCE,
-            type: 'prompt',
-          });
-        }
       }
     }
 
