@@ -1,6 +1,7 @@
 import {
   IconBrain,
   IconDatabase,
+  IconDeviceDesktop,
   IconDeviceMobile,
   IconHelp,
   IconLeaf,
@@ -57,6 +58,7 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
     mcpConnectors,
     enableEncryptedBackups,
     enableMemories,
+    localModels,
   } = useFlags();
   const isUsageImpactEnabled = showUsageImpact !== false;
   const isConnectorsEnabled = mcpConnectors !== false;
@@ -67,6 +69,11 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
   // Fail-closed (`=== true`): memories stay hidden until LD explicitly
   // serves the flag as true (same rationale as encrypted backup).
   const isMemoriesEnabled = enableMemories === true;
+  // Fail-closed (`=== true`): local models depend on browser behavior we
+  // can't control (Chrome's Local Network Access permission, enterprise
+  // policy), so the flag is the feature's kill switch — it must never
+  // default on.
+  const isLocalModelsEnabled = localModels === true;
   // Visibility only — the admin page's server component is the real gate.
   const { isAdmin: isAgentAccessAdmin } = useAgentAccessAdmin();
   const [showResetConfirmation, setShowResetConfirmation] = useState(false);
@@ -153,6 +160,16 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
               activeSection={activeSection}
               label={t('settings.Memories')}
               icon={<IconBrain size={18} />}
+              onClick={setActiveSection}
+            />
+          )}
+
+          {isLocalModelsEnabled && (
+            <NavigationItem
+              section={SettingsSection.LOCAL_MODELS}
+              activeSection={activeSection}
+              label={t('settings.LocalModels')}
+              icon={<IconDeviceDesktop size={18} />}
               onClick={setActiveSection}
             />
           )}
