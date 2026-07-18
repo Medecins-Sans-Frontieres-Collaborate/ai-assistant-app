@@ -633,33 +633,38 @@ describe('AgentAccessService', () => {
       expect(mockListAllPromptAgents).not.toHaveBeenCalled();
     });
 
-    it('keeps the whole last-known-good snapshot when only the prompt-agents listing fails', async () => {
+    it('keeps last-known-good prompt agents while the RULES snapshot still refreshes when only the prompt-agents listing fails', async () => {
       const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const stored = storedPromptAgent('prompt-aaa111');
       mockListAllPromptAgents.mockResolvedValue([stored]);
-      const service = await freshServiceWith([
+      const service = await freshServiceWith([]);
+      expect(service.getPromptAgents()).toEqual([stored.agent]);
+
+      // A NEW restriction lands while the persona listing is broken: the
+      // rule must still propagate (revocation must never freeze on a broken
+      // persona blob), and the persona half keeps its last-known-good.
+      mockListAllRules.mockResolvedValue([
         storedRule(SOURCE_A, 'finance-bot', {
           type: 'restricted',
           allowUsers: ['user@example.com'],
         }),
       ]);
-
       mockListAllPromptAgents.mockRejectedValue(new Error('storage outage'));
       service.invalidate();
       await service.ensureFresh();
 
-      // Atomic refresh: BOTH halves keep serving last-known-good.
       expect(service.getPromptAgents()).toEqual([stored.agent]);
+      expect(service.getPromptAgentById('prompt-aaa111')).toEqual(stored.agent);
       expect(
         service.evaluateAccess({
-          userMail: 'user@example.com',
+          userMail: 'stranger@other.org',
           source: SOURCE_A,
           agentName: 'finance-bot',
         }),
-      ).toEqual({ decision: 'allow', reason: 'allow-user' });
+      ).toEqual({ decision: 'deny', reason: 'not-allowed' });
       expect(service.getSnapshot().rulesUnavailable).toBe(false);
       expect(errorSpy).toHaveBeenCalledWith(
-        expect.stringContaining('serving last-known-good'),
+        expect.stringContaining('keeping last-known-good personas'),
       );
     });
 
@@ -678,9 +683,55 @@ describe('AgentAccessService', () => {
       expect(service.getPromptAgents()).toEqual([stored.agent]);
     });
 
-    it('has no prompt agents after a cold-start refresh failure (fail closed with the rules)', async () => {
-      vi.spyOn(console, 'error').mockImplementation(() => {});
+    it('cold start with healthy rules but a failing prompt-agent listing still commits the rules snapshot (Foundry unaffected)', async () => {
+      // Regression (findings 6+7): a broken persona listing used to fail the
+      // whole refresh, leaving state null after a restart — every Foundry
+      // invocation then 409'd as 'unavailable' until an operator intervened.
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      mockListAllRules.mockResolvedValue([
+        storedRule(SOURCE_A, 'finance-bot', {
+          type: 'restricted',
+          allowUsers: ['user@example.com'],
+        }),
+      ]);
       mockListAllPromptAgents.mockRejectedValue(new Error('storage outage'));
+      const service = getService();
+      await service.ensureFresh();
+
+      // Rules are loaded and ENFORCED — never 'unavailable'.
+      expect(service.getSnapshot().rulesUnavailable).toBe(false);
+      expect(
+        service.evaluateAccess({
+          userMail: 'user@example.com',
+          source: SOURCE_A,
+          agentName: 'finance-bot',
+        }),
+      ).toEqual({ decision: 'allow', reason: 'allow-user' });
+      expect(
+        service.evaluateAccess({
+          userMail: 'stranger@other.org',
+          source: SOURCE_A,
+          agentName: 'finance-bot',
+        }),
+      ).toEqual({ decision: 'deny', reason: 'not-allowed' });
+      expect(
+        service.evaluateAccess({
+          userMail: 'user@example.com',
+          source: SOURCE_A,
+          agentName: 'unrelated-agent',
+        }),
+      ).toEqual({ decision: 'allow', reason: 'no-rule' });
+      // Only the persona half degrades (empty on cold start).
+      expect(service.getPromptAgents()).toEqual([]);
+      expect(service.getPromptAgentById('prompt-aaa111')).toBeNull();
+      expect(errorSpy).toHaveBeenCalledWith(
+        expect.stringContaining('no personas until a load succeeds'),
+      );
+    });
+
+    it('has no prompt agents when the RULES listing fails on cold start (fully unavailable)', async () => {
+      vi.spyOn(console, 'error').mockImplementation(() => {});
+      mockListAllRules.mockRejectedValue(new Error('storage outage'));
       const service = getService();
       await service.ensureFresh();
 
