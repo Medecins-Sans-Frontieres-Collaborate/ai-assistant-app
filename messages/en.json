@@ -1353,7 +1353,8 @@
     "Usage & Impact": "Usage & Impact",
     "Backup": "Backup",
     "Memories": "Memories",
-    "Agent Access": "Agent Access"
+    "Agent Access": "Agent Access",
+    "LocalModels": "Local models"
   },
   "workflows": {
     "types": {
@@ -3443,5 +3444,24 @@
     "materialFiles": "{count, plural, one {1 file} other {# files}}",
     "materialActiveFiles": "{count, plural, one {1 active file} other {# active files}}",
     "dismiss": "Turn off extraction"
+  },
+  "localModels": {
+    "title": "Local models",
+    "description": "Chat with models running on this computer. Messages go straight from your browser to the local app and never reach our servers — so replies, conversation titles and summaries all stay on your machine.",
+    "detect": "Detect local runtimes",
+    "detecting": "Detecting…",
+    "experimental": "Experimental",
+    "portLabel": "Port",
+    "statusUnknown": "Not checked yet.",
+    "statusChecking": "Checking…",
+    "statusReady": "{count, plural, =0 {Connected, but no models loaded.} one {Connected — # model available.} other {Connected — # models available.}}",
+    "statusNotRunning": "Couldn't reach {label}. Check that it's running on this port, and that your browser is allowed to access local apps from this site.",
+    "statusHttpError": "{label} responded with an error. Check its logs.",
+    "corsHelp": {
+      "ollama": "Ollama is running but is refusing requests from this site. Set OLLAMA_ORIGINS to this site’s address, restart Ollama, then detect again.",
+      "lmstudio": "LM Studio is running but is refusing requests from this site. Turn on CORS in its local server settings, then detect again.",
+      "llamacpp": "llama.cpp is running but is refusing requests from this site. Start llama-server with cross-origin requests allowed, then detect again."
+    },
+    "privacyNote": "Local models don’t support file attachments, images, web search or connectors — those need our servers. Detection only ever checks this computer."
   }
 }
