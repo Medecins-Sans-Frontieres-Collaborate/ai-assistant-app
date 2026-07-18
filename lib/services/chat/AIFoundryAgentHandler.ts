@@ -188,6 +188,8 @@ export class AIFoundryAgentHandler {
             const processedMessages = await getMessagesToSend(
               messages,
               encoding,
+              // Compaction summary/memories are intentionally NOT injected on
+              // this path either — Foundry threads keep full server-side history.
               0, // No system prompt for agents (they have built-in instructions)
               modelConfig.tokenLimit,
               user,
