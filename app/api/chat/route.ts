@@ -100,7 +100,6 @@ export async function POST(req: NextRequest): Promise<Response> {
       // `pipedThrough` tracks whether the handler's body is being piped
       // through the writer; if it's not, the catch path aborts the
       // writer so the transform doesn't leak.
-      /* global TransformStream */
       const { readable: streamReadable, writable: streamWritable } =
         new TransformStream<Uint8Array, Uint8Array>();
       const streamWriter = streamWritable.getWriter();
