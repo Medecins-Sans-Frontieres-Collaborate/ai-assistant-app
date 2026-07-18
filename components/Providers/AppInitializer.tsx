@@ -58,7 +58,7 @@ export function AppInitializer() {
   // chatStore (vanilla, no hook access) can gate what gets SENT, not just
   // what's shown. Fail-closed on purpose: only an explicit `true` enables —
   // an unserved flag or LD outage must degrade to "arbitrary servers off".
-  const { mcpArbitraryServers, enableMemories } = useFlags();
+  const { mcpArbitraryServers, enableMemories, localModels } = useFlags();
   useEffect(() => {
     useSettingsStore
       .getState()
@@ -72,6 +72,15 @@ export function AppInitializer() {
   useEffect(() => {
     useSettingsStore.getState().setMemoriesFlagEnabled(enableMemories === true);
   }, [enableMemories]);
+
+  // Mirror the LaunchDarkly local-models flag the same way. This one is the
+  // feature's only kill switch: browser-direct loopback access depends on
+  // browser behavior (Chrome's Local Network Access permission, enterprise
+  // policy) that we cannot control or detect from here, so being able to turn
+  // the whole thing off remotely matters. Fail-closed on purpose.
+  useEffect(() => {
+    useSettingsStore.getState().setLocalModelsFlagEnabled(localModels === true);
+  }, [localModels]);
 
   // MCP credential vault: once authenticated, merge encrypted credentials
   // into the in-memory store and start the write-through sync (the persisted
