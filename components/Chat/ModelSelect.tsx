@@ -312,11 +312,34 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
       };
     });
 
+    // Admin-defined prompt agents arrive through /api/agents with
+    // type: 'prompt'. They ride the org- id prefix so the existing
+    // conversation.bot wiring applies; the server resolves the persona and
+    // its real model from botId. The base-model spread is cosmetic only
+    // (sdk/deploymentName are stripped server-side). agentId/agentSource
+    // must stay unset — an agentId would promote the request into the
+    // Foundry agent execution path.
+    const promptAgentModels = visibleFoundryAgents
+      .filter((agent) => agent.type === 'prompt')
+      .map((agent) => ({
+        ...OpenAIModels[OpenAIModelID.GPT_4_1],
+        id: `org-${agent.id}`,
+        name: agent.name,
+        description: agent.description,
+        modelType: undefined,
+        agentId: undefined,
+        isOrganizationAgent: true,
+      }));
+
+    const discoveredFoundryAgents = visibleFoundryAgents.filter(
+      (agent) => agent.type !== 'prompt',
+    );
+
     // Dynamically discovered Foundry agents from ARM API (RBAC-filtered per user).
     // Model ID includes a short hash of the source path so the same-named agent
     // discovered from two different Foundry projects produces two distinct models
     // (otherwise React key collisions + ambiguous selection).
-    const dynamicModels = visibleFoundryAgents.map((agent) => {
+    const dynamicModels = discoveredFoundryAgents.map((agent) => {
       const baseModel = OpenAIModels[OpenAIModelID.GPT_4_1];
       const sourceHash = shortSourceHash(agent.source);
       return {
@@ -336,13 +359,13 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     // Deduplicate: if a Foundry agent exists in both static config and dynamic discovery,
     // prefer the dynamic version (it has RBAC validation)
     const dynamicAgentNames = new Set(
-      visibleFoundryAgents.map((a) => a.agentName),
+      discoveredFoundryAgents.map((a) => a.agentName),
     );
     const deduplicatedStatic = staticModels.filter(
       (m) => !m.agentId || !dynamicAgentNames.has(m.agentId),
     );
 
-    return [...deduplicatedStatic, ...dynamicModels];
+    return [...deduplicatedStatic, ...dynamicModels, ...promptAgentModels];
   }, [isBotsEnabled, foundryAgents, customAgentSources]);
 
   // Combine base models, organization/discovered agents, and custom-source models
