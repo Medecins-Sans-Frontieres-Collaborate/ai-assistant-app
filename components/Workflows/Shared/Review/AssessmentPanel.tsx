@@ -1,8 +1,10 @@
 'use client';
 
-import { IconX } from '@tabler/icons-react';
+import { IconTrash, IconX } from '@tabler/icons-react';
 
 import { useTranslations } from 'next-intl';
+
+import { hasResolvedEdits } from '@/lib/utils/shared/review/reviewQueue';
 
 import { ReviewCriterionRating, ReviewEdit } from '@/types/workflow';
 
@@ -23,10 +25,21 @@ interface AssessmentPanelProps {
   scopeLabel?: string;
   /** Per-edit location line (e.g. "row 3f · Amount") for non-text targets. */
   getEditLocationLabel?: (edit: ReviewEdit) => string | undefined;
+  /** The edit currently previewed in the text (null when none). */
+  previewEditId?: string | null;
+  /** Hover/focus on a card; omit in workflows with no text pane to mark up. */
+  onPreviewEdit?: (id: string | null) => void;
   onAccept: (id: string) => void;
   onReject: (id: string) => void;
   onAcceptAll: () => void;
   onRejectAll: () => void;
+  /** Puts a resolved edit back in the queue; omit to hide the undo button. */
+  onRevert?: (id: string) => void;
+  /** Drops the decision record; omit to hide the clear button. */
+  onClearResolved?: () => void;
+  /** Auto-clear preference; omit (with the setter) to hide the toggle. */
+  autoClearResolved?: boolean;
+  onToggleAutoClear?: (enabled: boolean) => void;
   onClose: () => void;
   disabled?: boolean;
 }
@@ -56,10 +69,16 @@ export function AssessmentPanel({
   i18nNamespace,
   scopeLabel,
   getEditLocationLabel,
+  previewEditId,
+  onPreviewEdit,
   onAccept,
   onReject,
   onAcceptAll,
   onRejectAll,
+  onRevert,
+  onClearResolved,
+  autoClearResolved,
+  onToggleAutoClear,
   onClose,
   disabled,
 }: AssessmentPanelProps) {
@@ -67,6 +86,8 @@ export function AssessmentPanel({
   const pendingCount = assessment.edits.filter(
     (e) => e.status === 'pending',
   ).length;
+  const showClear =
+    Boolean(onClearResolved) && hasResolvedEdits(assessment.edits);
 
   return (
     <div className="flex h-full min-h-0 flex-col">
@@ -150,7 +171,31 @@ export function AssessmentPanel({
                   </button>
                 </>
               )}
+              {showClear && (
+                <button
+                  type="button"
+                  onClick={onClearResolved}
+                  disabled={disabled}
+                  title={t('clearResolvedHint')}
+                  className="ms-auto inline-flex min-h-[28px] items-center gap-1 rounded-lg px-2 py-0.5 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-40 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
+                >
+                  <IconTrash size={13} aria-hidden />
+                  {t('clearResolved')}
+                </button>
+              )}
             </div>
+
+            {onToggleAutoClear && (
+              <label className="mb-2 flex items-center gap-1.5 text-[11px] text-gray-500 dark:text-gray-400">
+                <input
+                  type="checkbox"
+                  checked={Boolean(autoClearResolved)}
+                  onChange={(e) => onToggleAutoClear(e.target.checked)}
+                  className="h-3 w-3 rounded border-gray-300 dark:border-gray-600"
+                />
+                {t('autoClearResolved')}
+              </label>
+            )}
             <div className="space-y-2">
               {/* Pending first: the actionable queue leads, the record follows. */}
               {[...assessment.edits]
@@ -166,8 +211,11 @@ export function AssessmentPanel({
                     resolveCriterionLabel={resolveCriterionLabel}
                     i18nNamespace={i18nNamespace}
                     locationLabel={getEditLocationLabel?.(edit)}
+                    onPreview={onPreviewEdit}
+                    previewing={previewEditId === edit.id}
                     onAccept={onAccept}
                     onReject={onReject}
+                    onRevert={onRevert}
                     disabled={disabled}
                   />
                 ))}

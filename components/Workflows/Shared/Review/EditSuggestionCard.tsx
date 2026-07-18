@@ -1,6 +1,6 @@
 'use client';
 
-import { IconCheck, IconX } from '@tabler/icons-react';
+import { IconArrowBackUp, IconCheck, IconX } from '@tabler/icons-react';
 
 import { useTranslations } from 'next-intl';
 
@@ -18,6 +18,12 @@ interface EditSuggestionCardProps {
   locationLabel?: string;
   onAccept: (id: string) => void;
   onReject: (id: string) => void;
+  /** Pointer/focus entered or left this card; drives the in-text preview. */
+  onPreview?: (id: string | null) => void;
+  /** This card's span is currently previewed in the text. */
+  previewing?: boolean;
+  /** Puts a resolved edit back in the queue (undoing the text change). */
+  onRevert?: (id: string) => void;
   disabled?: boolean;
 }
 
@@ -34,15 +40,30 @@ export function EditSuggestionCard({
   locationLabel,
   onAccept,
   onReject,
+  onPreview,
+  previewing,
+  onRevert,
   disabled,
 }: EditSuggestionCardProps) {
   const t = useTranslations(i18nNamespace);
   const resolved = edit.status !== 'pending';
+  // Resolved edits are already in (or absent from) the text — nothing to preview.
+  const previewable = Boolean(onPreview) && !resolved;
 
   return (
     <div
-      className={`rounded-lg border border-gray-200 p-2.5 dark:border-gray-700 ${
+      // Focus events bubble here from the accept/reject buttons, so tabbing
+      // through the queue previews each edit the same way hovering does.
+      onMouseEnter={previewable ? () => onPreview?.(edit.id) : undefined}
+      onMouseLeave={previewable ? () => onPreview?.(null) : undefined}
+      onFocus={previewable ? () => onPreview?.(edit.id) : undefined}
+      onBlur={previewable ? () => onPreview?.(null) : undefined}
+      className={`rounded-lg border p-2.5 transition-colors ${
         resolved ? 'opacity-60' : ''
+      } ${
+        previewing
+          ? 'border-amber-400 bg-amber-50/60 dark:border-amber-500/60 dark:bg-amber-400/5'
+          : 'border-gray-200 dark:border-gray-700'
       }`}
     >
       <div className="flex flex-wrap items-center gap-1.5">
@@ -62,6 +83,18 @@ export function EditSuggestionCard({
                 ? t('editRejected')
                 : t('editUnapplicable')}
           </span>
+        )}
+        {resolved && onRevert && (
+          <button
+            type="button"
+            onClick={() => onRevert(edit.id)}
+            disabled={disabled}
+            title={t('undoEdit')}
+            className="ms-auto inline-flex min-h-[24px] items-center gap-1 rounded px-1.5 py-0.5 text-[11px] text-gray-600 hover:bg-gray-100 disabled:opacity-40 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
+          >
+            <IconArrowBackUp size={13} aria-hidden />
+            {t('undoEdit')}
+          </button>
         )}
       </div>
 

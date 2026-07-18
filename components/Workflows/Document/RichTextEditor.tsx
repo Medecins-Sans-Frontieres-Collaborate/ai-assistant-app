@@ -1,11 +1,25 @@
 'use client';
 
 import { EditorContent, useEditor } from '@tiptap/react';
-import { forwardRef, useEffect, useImperativeHandle } from 'react';
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 
 import { useTranslations } from 'next-intl';
 
 import '@/components/DocumentEditor/editor.css';
+
+import type { PinPoint } from '../Shared/Review/EditQuickActions';
+import {
+  EditPreview,
+  type PreviewEdit,
+  editPreviewKey,
+} from './EditPreviewExtension';
 
 import { CodeBlockLowlight } from '@tiptap/extension-code-block-lowlight';
 import { Table } from '@tiptap/extension-table';
@@ -17,6 +31,8 @@ import StarterKit from '@tiptap/starter-kit';
 import { common, createLowlight } from 'lowlight';
 
 const lowlight = createLowlight(common);
+
+const NO_EDITS: readonly PreviewEdit[] = [];
 
 /** An active (non-collapsed) selection in the editor. */
 export interface EditorSelection {
@@ -40,6 +56,19 @@ interface RichTextEditorProps {
   placeholderHtml?: string;
   /** Reports the active selection (null when collapsed/empty). */
   onSelectionUpdate?: (selection: EditorSelection | null) => void;
+  /** Pending review edits to mark in the text (decorations only). */
+  previewEdits?: readonly PreviewEdit[];
+  /** The edit being previewed — its span shows the full inline diff. */
+  activeEditId?: string | null;
+  /** The clicked edit; its span carries inline accept/reject. */
+  pinnedEditId?: string | null;
+  /** A marked span was clicked (null when dismissed). */
+  onPinEdit?: (id: string | null) => void;
+  /**
+   * Accept/reject UI for the pinned edit, floated at the click point. Takes
+   * the position so the workspace stays out of the editor's coordinate space.
+   */
+  renderQuickActions?: (position: PinPoint) => React.ReactNode;
 }
 
 /**
@@ -58,10 +87,49 @@ export const RichTextEditor = forwardRef<
     editable = true,
     placeholderHtml,
     onSelectionUpdate,
+    previewEdits = NO_EDITS,
+    activeEditId = null,
+    pinnedEditId = null,
+    onPinEdit,
+    renderQuickActions,
   },
   ref,
 ) {
   const t = useTranslations();
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [pinPoint, setPinPoint] = useState<PinPoint | null>(null);
+
+  // The point belongs to the pin; losing one must lose the other.
+  useEffect(() => {
+    if (!pinnedEditId) setPinPoint(null);
+  }, [pinnedEditId]);
+
+  /**
+   * Records where in the scrolled content the click landed, so the action
+   * bar can be laid out against it and scroll along with the text.
+   */
+  const handlePin = useCallback(
+    (id: string | null, event?: MouseEvent) => {
+      const container = scrollRef.current;
+      if (id && event && container) {
+        const rect = container.getBoundingClientRect();
+        // Clamp to the pane only once it has a real width, or an
+        // unlaid-out container would pin everything to x=0.
+        const width = container.clientWidth;
+        const maxX = width > 60 ? width - 56 : Infinity;
+        setPinPoint({
+          x: Math.min(
+            event.clientX - rect.left + container.scrollLeft + 4,
+            maxX,
+          ),
+          y: event.clientY - rect.top + container.scrollTop,
+        });
+      }
+      onPinEdit?.(id);
+    },
+    [onPinEdit],
+  );
 
   const editor = useEditor({
     immediatelyRender: false, // Disable SSR to avoid hydration mismatches
@@ -73,6 +141,7 @@ export const RichTextEditor = forwardRef<
       TableHeader,
       TableCell,
       Underline,
+      EditPreview,
     ],
     content: contentHtml || placeholderHtml || '',
     editable,
@@ -114,6 +183,29 @@ export const RichTextEditor = forwardRef<
     if (!editor) return;
     editor.setEditable(editable);
   }, [editor, editable]);
+
+  // Push the preview into the decoration plugin. A meta-only transaction
+  // leaves the document untouched, so this never enters the undo history
+  // and never fires onUpdate.
+  useEffect(() => {
+    if (!editor) return;
+    editor.view.dispatch(
+      editor.state.tr.setMeta(editPreviewKey, {
+        edits: previewEdits,
+        activeId: activeEditId,
+        pinnedId: pinnedEditId,
+        onPin: onPinEdit ? handlePin : null,
+      }),
+    );
+    // Decorations land synchronously with the dispatch, so the previewed
+    // span is already in the DOM — bring it into view, since the card can
+    // sit pages away from the text it refers to.
+    if (activeEditId) {
+      editor.view.dom
+        .querySelector('.edit-suggestion-active')
+        ?.scrollIntoView({ block: 'nearest' });
+    }
+  }, [editor, previewEdits, activeEditId, pinnedEditId, onPinEdit, handlePin]);
 
   // Apply external content changes (streaming revisions, state rehydration)
   // without clobbering the user's in-progress typing: only reset when the
@@ -247,8 +339,14 @@ export const RichTextEditor = forwardRef<
         </button>
       </div>
 
-      <div className="min-w-0 flex-1 overflow-y-auto overflow-x-hidden bg-white p-4 dark:bg-surface-dark">
+      {/* `relative` so the pinned action bar is positioned against the
+          scrolled content and travels with it. */}
+      <div
+        ref={scrollRef}
+        className="relative min-w-0 flex-1 overflow-y-auto overflow-x-hidden bg-white p-4 dark:bg-surface-dark"
+      >
         <EditorContent editor={editor} />
+        {pinnedEditId && pinPoint && renderQuickActions?.(pinPoint)}
       </div>
     </div>
   );

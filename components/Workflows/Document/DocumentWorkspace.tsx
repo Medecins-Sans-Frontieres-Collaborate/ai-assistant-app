@@ -13,6 +13,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import type { ExportFormat } from '@/client/hooks/document/exportFormats';
+import { useEditPreview } from '@/client/hooks/workflows/useEditPreview';
 import { useWorkflowStream } from '@/client/hooks/workflows/useWorkflowStream';
 
 import { assessDocument } from '@/client/services/workflows/documentAssessment';
@@ -40,6 +41,11 @@ import {
   applyEdit,
   applyEditsInOrder,
 } from '@/lib/utils/shared/review/editApplication';
+import {
+  hasResolvedEdits,
+  invertPatch,
+  withoutResolvedEdits,
+} from '@/lib/utils/shared/review/reviewQueue';
 import { stringHash } from '@/lib/utils/shared/stringHash';
 
 import { Message, MessageType } from '@/types/chat';
@@ -53,9 +59,10 @@ import { DropdownPortal } from '@/components/UI/DropdownPortal';
 import { ExportFormatMenu } from '@/components/UI/ExportFormatMenu';
 
 import { AssessmentPanel } from '../Shared/Review/AssessmentPanel';
+import { CriteriaManager } from '../Shared/Review/CriteriaManager';
 import { CriteriaPicker } from '../Shared/Review/CriteriaPicker';
+import { EditQuickActions } from '../Shared/Review/EditQuickActions';
 import { WorkflowWorkspaceProps } from '../registry';
-import { CriteriaManager } from './CriteriaManager';
 import { DocumentProfilePanel } from './DocumentProfilePanel';
 import { ReferencePanel } from './ReferencePanel';
 import {
@@ -100,6 +107,19 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const documentSpecs = useSettingsStore((s) => s.documentSpecs);
   const documentCriteria = useSettingsStore((s) => s.documentCriteria);
   const tones = useSettingsStore((s) => s.tones);
+  const addDocumentCriterion = useSettingsStore((s) => s.addDocumentCriterion);
+  const updateDocumentCriterion = useSettingsStore(
+    (s) => s.updateDocumentCriterion,
+  );
+  const deleteDocumentCriterion = useSettingsStore(
+    (s) => s.deleteDocumentCriterion,
+  );
+  const autoClearResolvedEdits = useSettingsStore(
+    (s) => s.autoClearResolvedEdits,
+  );
+  const setAutoClearResolvedEdits = useSettingsStore(
+    (s) => s.setAutoClearResolvedEdits,
+  );
 
   const [instruction, setInstruction] = useState('');
   const [streamHtml, setStreamHtml] = useState<string | null>(null);
@@ -134,6 +154,21 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const assessment = state?.assessment;
   const hasUnresolvedEdits =
     assessment?.edits.some((e) => e.status === 'pending') ?? false;
+
+  // In-text preview of the review queue: pending edits are decorated in the
+  // editor, the active one opens into a full word diff, and a clicked span
+  // pins itself with inline accept/reject. Edits are written against
+  // markdown while the editor shows rendered HTML, so the decoration plugin
+  // locates them by visible text and skips any it cannot place.
+  const previewEdits = useMemo(
+    () => assessment?.edits.filter((e) => e.status === 'pending') ?? [],
+    [assessment],
+  );
+  const pendingIds = useMemo(
+    () => previewEdits.map((e) => e.id),
+    [previewEdits],
+  );
+  const preview = useEditPreview(pendingIds);
   const attachedSpec = documentSpecs.find((s) => s.id === state?.specId);
   const attachedTone = tones.find((tone) => tone.id === state?.toneId);
   const isBusy = isRunning || assessing || uploadingBasis;
@@ -467,6 +502,58 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             status = 'unapplicable';
           }
         }
+        const edits = p.assessment.edits.map((e) =>
+          e.id === editId
+            ? { ...e, status, resolvedAt: new Date().toISOString() }
+            : e,
+        );
+        return {
+          ...p,
+          docHtml: html,
+          title,
+          assessment: {
+            ...p.assessment,
+            docMarkdown,
+            // Unapplicable edits survive auto-clear: a change that silently
+            // failed to land is the one the user most needs to still see.
+            edits: autoClearResolvedEdits
+              ? withoutResolvedEdits(edits, { keepUnapplicable: true })
+              : edits,
+          },
+          updatedAt: new Date().toISOString(),
+        };
+      });
+    },
+    [conversationId, updateWorkflowState, autoClearResolvedEdits],
+  );
+
+  /**
+   * Puts a resolved edit back in the queue. An accepted edit also has its
+   * text change undone by applying the inverse patch to the markdown
+   * snapshot; when that patch can no longer be located (a later edit
+   * overwrote it, or it was a pure deletion with nothing to search for) the
+   * decision stands rather than the document being corrupted on a guess.
+   */
+  const revertEdit = useCallback(
+    (editId: string) => {
+      updateWorkflowState(conversationId, (prev) => {
+        const p = prev as DocumentWorkflowState;
+        if (!p.assessment) return p;
+        const edit = p.assessment.edits.find((e) => e.id === editId);
+        if (!edit || edit.status === 'pending') return p;
+
+        let docMarkdown = p.assessment.docMarkdown;
+        let html = p.docHtml;
+        let title = p.title;
+        if (edit.status === 'accepted') {
+          const inverse = invertPatch(edit);
+          if (!inverse) return p;
+          const outcome = applyEdit(docMarkdown, inverse);
+          if (!outcome.applied) return p;
+          docMarkdown = outcome.text;
+          html = markdownToHtml(docMarkdown);
+          title = extractTitle(docMarkdown) || title;
+        }
         return {
           ...p,
           docHtml: html,
@@ -476,7 +563,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             docMarkdown,
             edits: p.assessment.edits.map((e) =>
               e.id === editId
-                ? { ...e, status, resolvedAt: new Date().toISOString() }
+                ? { ...e, status: 'pending' as const, resolvedAt: undefined }
                 : e,
             ),
           },
@@ -486,6 +573,22 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     },
     [conversationId, updateWorkflowState],
   );
+
+  /** Drops the decision record, leaving only edits still awaiting a call. */
+  const clearResolved = useCallback(() => {
+    updateWorkflowState(conversationId, (prev) => {
+      const p = prev as DocumentWorkflowState;
+      if (!p.assessment || !hasResolvedEdits(p.assessment.edits)) return p;
+      return {
+        ...p,
+        assessment: {
+          ...p.assessment,
+          edits: withoutResolvedEdits(p.assessment.edits),
+        },
+        updatedAt: new Date().toISOString(),
+      };
+    });
+  }, [conversationId, updateWorkflowState]);
 
   const resolveAll = useCallback(
     (decision: 'accepted' | 'rejected') => {
@@ -959,6 +1062,22 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
               onChange={handleEditorChange}
               editable={!isRunning && !assessing && !hasUnresolvedEdits}
               onSelectionUpdate={setSelection}
+              previewEdits={previewEdits}
+              activeEditId={preview.activeId}
+              pinnedEditId={preview.pinnedId}
+              onPinEdit={preview.setPinned}
+              renderQuickActions={(position) =>
+                preview.pinnedId && (
+                  <EditQuickActions
+                    editId={preview.pinnedId}
+                    i18nNamespace="workflows.document"
+                    position={position}
+                    onAccept={(id) => resolveEdit(id, 'accepted')}
+                    onReject={(id) => resolveEdit(id, 'rejected')}
+                    disabled={isBusy}
+                  />
+                )
+              }
             />
           </div>
 
@@ -1032,6 +1151,8 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
               assessment={assessment}
               resolveCriterionLabel={resolveCriterionLabel}
               i18nNamespace="workflows.document"
+              previewEditId={preview.activeId}
+              onPreviewEdit={preview.setHovered}
               scopeLabel={
                 assessment.scope === 'selection'
                   ? t('document.assessedSelection')
@@ -1041,6 +1162,10 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
               onReject={(id) => resolveEdit(id, 'rejected')}
               onAcceptAll={() => resolveAll('accepted')}
               onRejectAll={() => resolveAll('rejected')}
+              onRevert={revertEdit}
+              onClearResolved={clearResolved}
+              autoClearResolved={autoClearResolvedEdits}
+              onToggleAutoClear={setAutoClearResolvedEdits}
               onClose={() => setReviewOpen(false)}
               disabled={isBusy}
             />
@@ -1063,7 +1188,14 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       )}
       {criteriaOpen && (
         <div className="h-72 shrink-0">
-          <CriteriaManager onClose={() => setCriteriaOpen(false)} />
+          <CriteriaManager
+            criteria={documentCriteria}
+            i18nNamespace="workflows.document"
+            onCreate={addDocumentCriterion}
+            onUpdate={updateDocumentCriterion}
+            onDelete={deleteDocumentCriterion}
+            onClose={() => setCriteriaOpen(false)}
+          />
         </div>
       )}
 
