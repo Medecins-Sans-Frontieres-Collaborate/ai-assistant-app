@@ -1,3 +1,4 @@
+/* global HTMLAnchorElement -- jsdom global missing from the shared eslint globals list */
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import { loadMasterKey } from '@/client/services/backup/keystore';
