@@ -1,14 +1,19 @@
 import {
   AGENT_ACCESS_CONFIG_PATH,
   AGENT_ACCESS_HISTORY_PREFIX,
+  AGENT_ACCESS_PROMPT_AGENTS_PREFIX,
   AGENT_ACCESS_RULES_PREFIX,
   AgentAccessConfigSchema,
   AgentAccessHistoryEntrySchema,
   AgentAccessRuleSchema,
   AgentAccessTypeSchema,
   LocalAdminEntrySchema,
+  PROMPT_AGENT_SOURCE,
+  PromptAgentHistoryEntrySchema,
+  PromptAgentSchema,
   canonicalAgentKey,
   historyBlobPath,
+  promptAgentBlobPath,
   ruleBlobPath,
 } from '@/lib/services/agentAccess/types';
 
@@ -77,6 +82,28 @@ describe('agentAccess/types', () => {
       expect(AGENT_ACCESS_CONFIG_PATH).toBe('system/agent-access/config.json');
       expect(AGENT_ACCESS_RULES_PREFIX).toBe('system/agent-access/rules/');
       expect(AGENT_ACCESS_HISTORY_PREFIX).toBe('system/agent-access/history/');
+      // SIBLING of rules/ — never under it (listAllRules is fail-closed).
+      expect(AGENT_ACCESS_PROMPT_AGENTS_PREFIX).toBe(
+        'system/agent-access/prompt-agents/',
+      );
+    });
+
+    it('promptAgentBlobPath stores the id directly under the prompt-agents prefix', () => {
+      expect(promptAgentBlobPath('prompt-abc123def456')).toBe(
+        'system/agent-access/prompt-agents/prompt-abc123def456.json',
+      );
+    });
+  });
+
+  describe('PROMPT_AGENT_SOURCE', () => {
+    it('is lowercase-stable and cannot collide with ARM paths', () => {
+      expect(PROMPT_AGENT_SOURCE).toBe('prompt-agent');
+      // ARM sources always start with '/'; the pseudo-source never does.
+      expect(PROMPT_AGENT_SOURCE.startsWith('/')).toBe(false);
+      // Canonicalization is a no-op on the pseudo-source itself.
+      expect(canonicalAgentKey(PROMPT_AGENT_SOURCE, 'prompt-abc123')).toBe(
+        'prompt-agent::prompt-abc123',
+      );
     });
   });
 
@@ -166,6 +193,98 @@ describe('agentAccess/types', () => {
           updatedAt: '2026-07-17T00:00:00.000Z',
         }).success,
       ).toBe(false);
+    });
+  });
+
+  describe('PromptAgentSchema', () => {
+    const validPromptAgent = {
+      version: 1,
+      id: 'prompt-abc123def456',
+      name: 'Finance Helper',
+      description: 'Answers finance questions',
+      systemPrompt: 'You are a finance helper.',
+      modelId: 'gpt-5.2-chat',
+      createdBy: 'admin@example.com',
+      createdAt: '2026-07-17T00:00:00.000Z',
+      updatedBy: 'admin@example.com',
+      updatedAt: '2026-07-17T00:00:00.000Z',
+    };
+
+    it('accepts a fully-specified prompt agent', () => {
+      expect(PromptAgentSchema.parse(validPromptAgent)).toEqual(
+        validPromptAgent,
+      );
+    });
+
+    it('defaults an omitted description to an empty string', () => {
+      const { description: _omitted, ...withoutDescription } = validPromptAgent;
+      expect(PromptAgentSchema.parse(withoutDescription).description).toBe('');
+    });
+
+    it.each([
+      ['wrong version', { ...validPromptAgent, version: 2 }],
+      ['empty id', { ...validPromptAgent, id: '' }],
+      ['empty name', { ...validPromptAgent, name: '' }],
+      ['empty systemPrompt', { ...validPromptAgent, systemPrompt: '' }],
+      ['empty modelId', { ...validPromptAgent, modelId: '' }],
+      ['missing createdBy', { ...validPromptAgent, createdBy: undefined }],
+      ['missing createdAt', { ...validPromptAgent, createdAt: undefined }],
+      ['missing updatedBy', { ...validPromptAgent, updatedBy: undefined }],
+      ['missing updatedAt', { ...validPromptAgent, updatedAt: undefined }],
+    ])('rejects %s', (_label, input) => {
+      expect(PromptAgentSchema.safeParse(input).success).toBe(false);
+    });
+  });
+
+  describe('PromptAgentHistoryEntrySchema', () => {
+    const validPromptAgent = {
+      version: 1,
+      id: 'prompt-abc123def456',
+      name: 'Finance Helper',
+      description: '',
+      systemPrompt: 'You are a finance helper.',
+      modelId: 'gpt-5.2-chat',
+      createdBy: 'admin@example.com',
+      createdAt: '2026-07-17T00:00:00.000Z',
+      updatedBy: 'admin@example.com',
+      updatedAt: '2026-07-17T00:00:00.000Z',
+    };
+    const base = {
+      version: 1,
+      canonicalKey: canonicalAgentKey(PROMPT_AGENT_SOURCE, validPromptAgent.id),
+      updatedBy: 'admin@example.com',
+      updatedAt: '2026-07-17T00:00:00.000Z',
+    };
+
+    it('accepts an upsert entry carrying the full record', () => {
+      const parsed = PromptAgentHistoryEntrySchema.parse({
+        ...base,
+        action: 'upsert',
+        promptAgent: validPromptAgent,
+      });
+      expect(parsed.promptAgent).toEqual(validPromptAgent);
+    });
+
+    it('accepts a delete tombstone with a null record', () => {
+      const parsed = PromptAgentHistoryEntrySchema.parse({
+        ...base,
+        action: 'delete',
+        promptAgent: null,
+      });
+      expect(parsed.promptAgent).toBeNull();
+    });
+
+    it.each([
+      ['unknown action', { ...base, action: 'rename', promptAgent: null }],
+      [
+        'empty canonicalKey',
+        { ...base, canonicalKey: '', action: 'delete', promptAgent: null },
+      ],
+      ['missing promptAgent field', { ...base, action: 'upsert' }],
+    ])('rejects %s', (_label, input) => {
+      expect(PromptAgentHistoryEntrySchema.safeParse(input).success).toBe(
+        false,
+      );
     });
   });
 
