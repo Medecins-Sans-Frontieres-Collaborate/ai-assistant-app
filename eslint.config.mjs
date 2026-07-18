@@ -57,6 +57,7 @@ export default [
         URL: 'readonly',
         URLSearchParams: 'readonly',
         ReadableStream: 'readonly',
+        TransformStream: 'readonly',
         TextEncoder: 'readonly',
         TextDecoder: 'readonly',
         // DOM types
@@ -111,6 +112,7 @@ export default [
         Storage: 'readonly',
         ScrollBehavior: 'readonly',
         ReadableStreamDefaultController: 'readonly',
+        TransformStreamDefaultController: 'readonly',
         // Browser APIs
         setTimeout: 'readonly',
         clearTimeout: 'readonly',
