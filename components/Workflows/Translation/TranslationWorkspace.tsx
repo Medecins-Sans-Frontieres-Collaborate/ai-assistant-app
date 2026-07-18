@@ -19,6 +19,7 @@ import { useWorkflowStream } from '@/client/hooks/workflows/useWorkflowStream';
 import { uploadAndExtractText } from '@/client/services/workflows/fileTextExtraction';
 import { appendWorkflowRailMessages } from '@/client/services/workflows/railMessages';
 import { assessTranslation } from '@/client/services/workflows/translationAssessment';
+import { nameWorkflowConversation } from '@/client/services/workflows/workflowTitle';
 
 import {
   LanguageOption,
@@ -203,6 +204,11 @@ export function TranslationWorkspace({
         setUploadError(t('document.referenceEmpty', { name: file.name }));
       } else {
         patchState({ sourceText: extracted.text.slice(0, MAX_SOURCE_CHARS) });
+        nameWorkflowConversation(conversationId, {
+          label: file.name,
+          sample: extracted.text,
+          workflow: 'Translation',
+        });
       }
     } catch (err) {
       setUploadError(
@@ -279,6 +285,12 @@ export function TranslationWorkspace({
       if (finalText) {
         patchState({ finalText });
         setTargetDraft(null);
+        // No label: a pasted-text translation gets named from its own
+        // content, but one started from a file keeps the filename.
+        nameWorkflowConversation(conversationId, {
+          sample: state.sourceText,
+          workflow: `Translation into ${targetLanguage.label}`,
+        });
         appendWorkflowRailMessages(
           conversationId,
           t('translation.railRequest', { language: targetLanguage.label }),

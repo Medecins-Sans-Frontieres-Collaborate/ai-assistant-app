@@ -17,6 +17,7 @@ import { useWorkflowStream } from '@/client/hooks/workflows/useWorkflowStream';
 
 import { assessDocument } from '@/client/services/workflows/documentAssessment';
 import { uploadAndExtractText } from '@/client/services/workflows/fileTextExtraction';
+import { nameWorkflowConversation } from '@/client/services/workflows/workflowTitle';
 
 import {
   downloadFile,
@@ -299,8 +300,14 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           updatedAt: new Date().toISOString(),
         };
       });
-      if (title && conversation && !conversation.name) {
-        updateConversation(conversationId, { name: title });
+      // The document's own heading is authoritative once it exists, so it
+      // upgrades a name taken from a reference upload — but never one the
+      // user typed. No sample: there is nothing for a titler to improve on.
+      if (title) {
+        nameWorkflowConversation(conversationId, {
+          label: title,
+          workflow: 'Document',
+        });
       }
       appendRailMessages(
         trimmed,
@@ -328,7 +335,6 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     conversation,
     runWorkflowStream,
     updateWorkflowState,
-    updateConversation,
     appendRailMessages,
     buildWritingConstraints,
     clearError,
@@ -549,12 +555,19 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         }
         const html = await autoConvertToHtml(extracted.text, file.name);
         const docMarkdown = htmlToMarkdown(html);
+        const basisTitle =
+          extractTitle(docMarkdown) || file.name.replace(/\.[^.]+$/, '');
         updateWorkflowState(conversationId, (prev) => ({
           ...(prev as DocumentWorkflowState),
           docHtml: html,
-          title: extractTitle(docMarkdown) || file.name.replace(/\.[^.]+$/, ''),
+          title: basisTitle,
           updatedAt: new Date().toISOString(),
         }));
+        // The uploaded document's own heading is the name to use.
+        nameWorkflowConversation(conversationId, {
+          label: basisTitle,
+          workflow: 'Document',
+        });
         // Agentic pre-assessment of the basis (profile-only run).
         const result = await assessDocument({
           docMarkdown,
@@ -636,6 +649,14 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           references: [...p.references, reference],
           updatedAt: new Date().toISOString(),
         };
+      });
+      // Provisional name from the first reference. A later generate run
+      // upgrades it to the document's own heading, which is the better
+      // title once one exists.
+      nameWorkflowConversation(conversationId, {
+        label: reference.name,
+        sample: text,
+        workflow: 'Document',
       });
     },
     [conversationId, updateWorkflowState],

@@ -30,6 +30,7 @@ import {
 } from '@/client/services/workflows/data/photoExtraction';
 import { uploadAndExtractText } from '@/client/services/workflows/fileTextExtraction';
 import { appendWorkflowRailMessages } from '@/client/services/workflows/railMessages';
+import { nameWorkflowConversation } from '@/client/services/workflows/workflowTitle';
 import { profileTable } from '@/lib/services/workflows/data/columnStats';
 import {
   applyDerivedColumns,
@@ -97,6 +98,25 @@ import Papa from 'papaparse';
 import { v4 as uuidv4 } from 'uuid';
 
 type Rows = Record<string, unknown>[];
+
+/** Rows sampled into the title seed — enough to characterize the table. */
+const TITLE_SAMPLE_ROWS = 3;
+
+/**
+ * Compact header + first-rows rendering of a table, used only as context
+ * for auto-titling. Not user-facing, so it stays untranslated.
+ */
+function describeTable(columns: DataColumn[], rows: Rows): string {
+  if (columns.length === 0) return '';
+  const names = columns.map((column) => column.name);
+  const lines = [names.join(', ')];
+  for (const row of rows.slice(0, TITLE_SAMPLE_ROWS)) {
+    lines.push(
+      columns.map((column) => String(row[column.id] ?? '')).join(', '),
+    );
+  }
+  return lines.join('\n');
+}
 
 export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const t = useTranslations('workflows');
@@ -303,8 +323,20 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           updatedAt: new Date().toISOString(),
         };
       });
+
+      // Name from the first table imported; later imports and transforms
+      // leave the established name alone.
+      if ('source' in record && record.source && !sources?.length) {
+        nameWorkflowConversation(conversationId, {
+          label: record.source.name,
+          // Headers plus a couple of rows say far more about what this
+          // table is than its filename does.
+          sample: describeTable(next.columns, next.rows),
+          workflow: 'Data analysis',
+        });
+      }
     },
-    [columns, rawRows, conversationId, updateWorkflowState],
+    [columns, rawRows, sources, conversationId, updateWorkflowState],
   );
 
   const handleUndo = useCallback(() => {

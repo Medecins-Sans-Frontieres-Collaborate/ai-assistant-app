@@ -14,6 +14,7 @@ import dynamic from 'next/dynamic';
 
 import { uploadAndExtractText } from '@/client/services/workflows/fileTextExtraction';
 import { appendWorkflowRailMessages } from '@/client/services/workflows/railMessages';
+import { nameWorkflowConversation } from '@/client/services/workflows/workflowTitle';
 
 import { downloadFile } from '@/lib/utils/shared/document/exportUtils';
 import {
@@ -341,6 +342,15 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           updatedAt: new Date().toISOString(),
         };
       });
+      // Name from the first material put on the map; later additions leave
+      // the established name alone.
+      if (features.length === 0) {
+        nameWorkflowConversation(conversationId, {
+          label: kind === 'file' ? sourceName : undefined,
+          sample: 'sourceText' in input ? input.sourceText : input.searchQuery,
+          workflow: 'Map',
+        });
+      }
       if (unresolved > 0) {
         setNotice(
           t('map.connections.unresolved', { count: String(unresolved) }),
