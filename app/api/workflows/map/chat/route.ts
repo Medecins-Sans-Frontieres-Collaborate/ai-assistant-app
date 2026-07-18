@@ -23,7 +23,7 @@ import {
   badRequestResponse,
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
-import { normalizeEventFields } from '@/lib/utils/shared/date/partialDate';
+import { normalizeEventRange } from '@/lib/utils/shared/date/eventRange';
 import { NamedConnection } from '@/lib/utils/shared/geo/connections';
 import { isValidCoordinate } from '@/lib/utils/shared/geo/geojson';
 
@@ -133,9 +133,12 @@ export async function POST(req: NextRequest) {
             Record<string, unknown> & {
               lat: number;
               lon: number;
-              eventStart?: string;
-              eventEnd?: string;
-              eventOngoing?: boolean;
+              event?: {
+                start?: string;
+                end?: string;
+                precision?: string;
+                ongoing?: boolean;
+              };
             }
           >;
           addConnections: NamedConnection[];
@@ -157,10 +160,10 @@ export async function POST(req: NextRequest) {
 
         const features = mutations.addFeatures
           .filter((f) => isValidCoordinate(f.lat, f.lon))
-          .map((f) => ({
-            ...f,
-            ...normalizeEventFields(f),
-          }));
+          .map((f) => {
+            const event = normalizeEventRange(f.event);
+            return { ...f, ...(event ? { event } : { event: undefined }) };
+          });
         const addConnections = mutations.addConnections.filter(
           (c) =>
             !!c &&
