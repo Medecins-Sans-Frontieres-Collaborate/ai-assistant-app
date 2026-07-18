@@ -72,6 +72,15 @@ export interface BlobStorage {
    */
   deleteIfExists(blobName: string): Promise<boolean>;
   /**
+   * Lists the names of all blobs under the given prefix. Used to wipe a
+   * user-scoped prefix (e.g. encrypted backup data) without tracking
+   * individual blob names.
+   *
+   * @param prefix - Blob name prefix to enumerate (e.g. `${userId}/backup/`)
+   * @returns Promise resolving to the full blob names, unordered
+   */
+  listBlobs(prefix: string): Promise<string[]>;
+  /**
    * Generates a SAS URL for accessing the blob with read permissions.
    * Used for batch transcription API which requires a publicly accessible URL.
    *
@@ -331,6 +340,22 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       { label: 'blob.deleteIfExists' },
     );
     return result.succeeded;
+  }
+
+  async listBlobs(prefix: string): Promise<string[]> {
+    const containerClient = this.blobServiceClient.getContainerClient(
+      this.containerName as string,
+    );
+    return withAzureRetry(
+      async () => {
+        const names: string[] = [];
+        for await (const blob of containerClient.listBlobsFlat({ prefix })) {
+          names.push(blob.name);
+        }
+        return names;
+      },
+      { label: 'blob.listBlobs' },
+    );
   }
 
   async getBlobSize(blobName: string): Promise<number> {
