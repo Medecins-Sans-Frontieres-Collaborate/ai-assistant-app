@@ -107,3 +107,36 @@ describe('SettingsSidebar — backup nav item gating', () => {
     expect(setActiveSection).toHaveBeenCalledWith(SettingsSection.BACKUP);
   });
 });
+
+describe('SettingsSidebar — memories nav item gating', () => {
+  beforeEach(() => {
+    for (const key of Object.keys(mockFlags)) delete mockFlags[key];
+    mockAgentAccess.isAdmin = false;
+  });
+
+  it('hides Memories when the flag is absent (fail-closed)', () => {
+    renderSidebar();
+    expect(screen.queryByText('settings.Memories')).not.toBeInTheDocument();
+  });
+
+  it('hides Memories when the flag is explicitly false or truthy-but-not-true', () => {
+    mockFlags.enableMemories = false;
+    renderSidebar();
+    expect(screen.queryByText('settings.Memories')).not.toBeInTheDocument();
+
+    mockFlags.enableMemories = 'yes';
+    renderSidebar();
+    expect(screen.queryByText('settings.Memories')).not.toBeInTheDocument();
+  });
+
+  it('shows Memories only when the flag is exactly true, and navigates on click', () => {
+    mockFlags.enableMemories = true;
+    const setActiveSection = renderSidebar();
+
+    const item = screen.getByText('settings.Memories');
+    expect(item).toBeInTheDocument();
+
+    fireEvent.click(item);
+    expect(setActiveSection).toHaveBeenCalledWith(SettingsSection.MEMORIES);
+  });
+});
