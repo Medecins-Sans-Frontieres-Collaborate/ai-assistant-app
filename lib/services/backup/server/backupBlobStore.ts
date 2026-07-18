@@ -39,8 +39,14 @@ export const KEY_ID_REGEX = /^[0-9a-f]{16}$/;
  */
 const USER_ID_REGEX = /^[A-Za-z0-9._@-]{1,128}$/;
 
+/**
+ * These match CONV_ID_REGEX but poison plain-object maps on the devices that
+ * later merge the manifest (`conversations[id]` / `tombstones[id]` lookups).
+ */
+const FORBIDDEN_CONV_IDS = new Set(['__proto__', 'constructor', 'prototype']);
+
 export function isValidConversationId(id: string): boolean {
-  return CONV_ID_REGEX.test(id);
+  return CONV_ID_REGEX.test(id) && !FORBIDDEN_CONV_IDS.has(id);
 }
 
 export function isValidRev(rev: string): boolean {
