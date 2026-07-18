@@ -83,9 +83,9 @@ function BackupModalsInner() {
   const [ceremonyMode, setCeremonyMode] = useState<'create' | 'rotate'>(
     'create',
   );
-  // The master key in flight between ceremony steps. A ref (not state): the
-  // raw bytes must never trigger re-renders or land in devtools state dumps.
-  const pendingKeyRef = useRef<Uint8Array | null>(null);
+  // The master key in flight between ceremony steps (create: intro →
+  // ceremony → progress; rotate: progress → forced re-save ceremony).
+  const [pendingKey, setPendingKey] = useState<Uint8Array | null>(null);
   const promptedRef = useRef(false);
 
   // Auto-prompt matrix, once per mount, after session + store rehydrate +
@@ -124,14 +124,14 @@ function BackupModalsInner() {
   }, [sessionStatus, isLoaded, isTermsModalOpen, view, enrollmentStatus]);
 
   const declineEnrollment = useCallback(() => {
-    pendingKeyRef.current = null;
+    setPendingKey(null);
     useBackupStore.getState().setDeclined();
     setView(null);
     toast(t('toast.enrollLater'));
   }, [setView, t]);
 
   const handleIntroCreate = useCallback(() => {
-    pendingKeyRef.current = generateMasterKey();
+    setPendingKey(generateMasterKey());
     setCeremonyMode('create');
     setView('enroll-ceremony');
   }, [setView]);
@@ -139,7 +139,7 @@ function BackupModalsInner() {
   // Create ceremony passed the save gate: persist the key, mark enrolled
   // (epoch = remote tombstone epoch + 1, or 1), and run the first backup.
   const handleCreateContinue = useCallback(async () => {
-    const master = pendingKeyRef.current;
+    const master = pendingKey;
     if (!master) return;
     try {
       await saveMasterKey(master);
@@ -147,12 +147,12 @@ function BackupModalsInner() {
       const keyId = await computeKeyId(master);
       const remoteEpoch = useBackupStore.getState().remoteKeyEpoch;
       useBackupStore.getState().setEnrolled(keyId, (remoteEpoch ?? 0) + 1);
-      pendingKeyRef.current = null;
+      setPendingKey(null);
       setView('enroll-progress');
     } catch {
       toast.error(t('toast.opFailed'));
     }
-  }, [setView, t]);
+  }, [pendingKey, setView, t]);
 
   // Initial full backup. runSync creates the manifest on a plain 404; a
   // disabled tombstone manifest reads as 'remote-missing', where the
@@ -182,7 +182,7 @@ function BackupModalsInner() {
     resetBackupKeyCache();
     useBackupStore.getState().setEnrolled(keys.keyId, result.epoch);
     useBackupStore.getState().setSyncStatus('ok');
-    pendingKeyRef.current = master;
+    setPendingKey(master);
     return result.pushed;
   }, []);
 
@@ -200,14 +200,14 @@ function BackupModalsInner() {
         <RecoveryKeyCeremony
           isOpen
           mode={ceremonyMode}
-          masterKey={pendingKeyRef.current}
+          masterKey={pendingKey}
           onContinue={
             ceremonyMode === 'create'
               ? () => void handleCreateContinue()
               : () => {
                   // Rotation is already committed — this just ends the
                   // forced re-save.
-                  pendingKeyRef.current = null;
+                  setPendingKey(null);
                   setView(null);
                 }
           }
@@ -215,7 +215,7 @@ function BackupModalsInner() {
             ceremonyMode === 'create'
               ? declineEnrollment
               : () => {
-                  pendingKeyRef.current = null;
+                  setPendingKey(null);
                   setView(null);
                 }
           }
