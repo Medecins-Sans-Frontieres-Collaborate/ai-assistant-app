@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessService';
 import {
   AgentDiscoveryService,
   DiscoveredAgent,
@@ -169,14 +170,50 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // App-layer access filter (docs/AGENT_ACCESS_CONTROL.md). Drops agents
+    // the user fails evaluateAccess for — UX-level only; the invocation
+    // guard in the chat pipeline is the security control. On 'unavailable'
+    // (enabled + no last-known-good ruleset) discovery passes through
+    // unfiltered: this is a visibility-only surface, and invocation fails
+    // closed independently.
+    let visibleAgents: DiscoveredAgent[] = allAgents;
+    const accessService = AgentAccessService.getInstance();
+    if (accessService.isEnabled()) {
+      await accessService.ensureFresh();
+      const filtered: DiscoveredAgent[] = [];
+      let rulesUnavailable = false;
+      for (const agent of allAgents) {
+        const { decision } = accessService.evaluateAccess({
+          userMail: session.user.mail,
+          source: agent.source,
+          agentName: agent.agentName,
+        });
+        if (decision === 'unavailable') {
+          rulesUnavailable = true;
+          break;
+        }
+        if (decision === 'allow') {
+          filtered.push(agent);
+        }
+      }
+      if (rulesUnavailable) {
+        console.error(
+          '[/api/agents] Agent access rules unavailable; returning unfiltered discovery (invocation still fails closed)',
+        );
+      } else {
+        visibleAgents = filtered;
+      }
+    }
+
     // Cache each discovered agent's endpoint for this specific user AND
     // source path. This is the trust anchor for the chat pipeline — the
     // user has just passed RBAC against ARM, so we know they're authorized
     // for these endpoints. The chat middleware reads from this cache
     // instead of trusting the request body's `foundryEndpoint` field.
+    // Denied agents are excluded so their endpoints are never anchored.
     const userMail = session.user.mail;
     if (userMail) {
-      for (const agent of allAgents) {
+      for (const agent of visibleAgents) {
         discoveryService.cacheUserAgentEndpoint(
           userMail,
           agent.agentName,
@@ -187,7 +224,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({
-      agents: allAgents,
+      agents: visibleAgents,
       regionalPath,
       officePaths,
     });
