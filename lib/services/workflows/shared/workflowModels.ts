@@ -28,6 +28,10 @@ export function isWorkflowEligibleModel(model: {
   // silently fall back to the default. Excluded here so the picker can't
   // offer one.
   if (model.id?.startsWith('byom-')) return false;
+  // Local-runtime models are excluded for the same reason, plus a stronger
+  // one: workflow routes run SERVER-side, and a local runtime is only
+  // reachable from the user's own browser. The server could never call one.
+  if (model.id?.startsWith('local-')) return false;
   return true;
 }
 
