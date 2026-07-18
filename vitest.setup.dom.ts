@@ -170,6 +170,52 @@ const mockMessages: Record<string, unknown> = {
       description: 'Connect a Foundry project below to discover its agents.',
     },
   },
+  agentAccess: {
+    title: 'Agent Access',
+    description:
+      "Control which users can use shared Foundry agents. Rules only further restrict what a user's own Azure access already allows — they can never grant access Azure denies.",
+    backToChat: 'Back to chat',
+    loading: 'Loading agents and rules…',
+    loadError: "Couldn't load agent access data.",
+    rulesUnavailableWarning:
+      'Access rules could not be loaded from storage. Agent invocation is currently blocked and rules cannot be edited.',
+    retry: 'Retry',
+    rulesTab: 'Agent rules',
+    localAdminsTab: 'Local admins',
+    noAgents: 'No agents to manage.',
+    sourceLabel: 'Source',
+    notDiscoverable: 'Not discoverable by you',
+    notDiscoverableHint:
+      "A rule exists for this agent, but it isn't in your own discovery — it may have been renamed, your Azure access doesn't reach it, or its access rule doesn't include you.",
+    accessEveryone: 'Everyone',
+    accessRestricted: 'Restricted',
+    edit: 'Edit',
+    updatedByLine: 'Last updated by {user} on {date}',
+    accessTypeLabel: 'Who can use this agent',
+    everyoneDescription:
+      'Anyone who can already reach this agent through their Azure access.',
+    restrictedDescription: 'Only the users and domains listed below.',
+    allowDomainsLabel: 'Allowed domains',
+    allowDomainsPlaceholder: 'example.org',
+    allowUsersLabel: 'Allowed users',
+    allowUsersPlaceholder: 'person@example.org',
+    chipAddHint: 'Press Enter to add',
+    removeChip: 'Remove',
+    groupsLabel: 'Allowed groups',
+    groupsPendingConsent:
+      "Group-based access is pending tenant admin consent and can't be edited yet.",
+    restrictedEmptyWarning:
+      'No users or domains are listed — nobody will be able to use this agent.',
+    save: 'Save',
+    saving: 'Saving…',
+    cancel: 'Cancel',
+    saveSuccess: 'Access rule saved.',
+    deleteSuccess: 'Access rule removed — everyone can use this agent again.',
+    saveError: "Couldn't save. Please try again.",
+    conflictError:
+      'Someone else changed this while you were editing. Reload to load the latest version, then make your change again.',
+    reload: 'Reload',
+  },
   modelSources: {
     connectButtonShort: 'Connect a model source',
     addAnother: 'Add another model source',
