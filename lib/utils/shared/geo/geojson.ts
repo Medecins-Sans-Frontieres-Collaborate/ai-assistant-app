@@ -1,4 +1,10 @@
-import { MapConnection, MapFeature } from '@/types/workflow';
+import { featureEventRange } from '@/lib/utils/shared/geo/eventTime';
+import {
+  buildSourceIndex,
+  featureSource,
+} from '@/lib/utils/shared/geo/featureSources';
+
+import { MapConnection, MapFeature, MapSourceRecord } from '@/types/workflow';
 
 /**
  * GeoJSON helpers for the map workflow: Point features plus LineString
@@ -37,33 +43,45 @@ export function isValidCoordinate(lat: unknown, lon: unknown): boolean {
 export function featuresToGeoJson(
   features: MapFeature[],
   connections: MapConnection[] = [],
+  sources: MapSourceRecord[] = [],
 ): GeoJsonFeatureCollection {
   const valid = features.filter((f) => isValidCoordinate(f.lat, f.lon));
   const byId = new Map(valid.map((f) => [f.id, f]));
+  const sourceIndex = buildSourceIndex(sources);
 
-  const points: GeoJsonFeature[] = valid.map((f) => ({
-    type: 'Feature' as const,
-    geometry: {
-      type: 'Point' as const,
-      // GeoJSON is [longitude, latitude]
-      coordinates: [f.lon, f.lat] as [number, number],
-    },
-    properties: {
-      name: f.name,
-      description: f.description,
-      confidence: f.confidence,
-      confidenceReason: f.confidenceReason,
-      category: f.category,
-      prominence: f.prominence ?? 'primary',
-      granularity: f.granularity ?? 'city',
-      countryCode: f.countryCode ?? '',
-      parentName: f.parentName ?? '',
-      approxRadiusKm: f.approxRadiusKm ?? 0,
-      eventStart: f.eventStart ?? '',
-      eventEnd: f.eventEnd ?? '',
-      eventOngoing: f.eventOngoing ?? false,
-    },
-  }));
+  const points: GeoJsonFeature[] = valid.map((f) => {
+    const range = featureEventRange(f);
+    const source = featureSource(f, sourceIndex);
+    return {
+      type: 'Feature' as const,
+      geometry: {
+        type: 'Point' as const,
+        // GeoJSON is [longitude, latitude]
+        coordinates: [f.lon, f.lat] as [number, number],
+      },
+      properties: {
+        name: f.name,
+        description: f.description,
+        confidence: f.confidence,
+        confidenceReason: f.confidenceReason,
+        category: f.category,
+        prominence: f.prominence ?? 'primary',
+        granularity: f.granularity ?? 'city',
+        countryCode: f.countryCode ?? '',
+        parentName: f.parentName ?? '',
+        approxRadiusKm: f.approxRadiusKm ?? 0,
+        eventStart: range?.start ?? '',
+        eventEnd: range?.end ?? '',
+        eventPrecision: range?.precision ?? '',
+        eventOngoing: range?.ongoing ?? false,
+        // Provenance travels with the export: a point nobody can trace back
+        // to its material is not evidence.
+        source: source?.name ?? '',
+        sourceKind: source?.kind ?? '',
+        sourceUrl: source?.url ?? '',
+      },
+    };
+  });
 
   const lines: GeoJsonFeature[] = connections.flatMap((c) => {
     const from = byId.get(c.fromId);
