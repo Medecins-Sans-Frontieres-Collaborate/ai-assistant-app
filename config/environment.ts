@@ -130,6 +130,14 @@ const serverEnvSchema = z.object({
   MCP_OAUTH_ASANA_CLIENT_ID: z.string().optional(),
   MCP_OAUTH_ASANA_CLIENT_SECRET: z.string().optional(),
 
+  // App-layer agent access control (docs/AGENT_ACCESS_CONTROL.md)
+  // Master gate for enforcement + admin API + UI. Break-glass for a
+  // rules-blob outage: set to "false" and redeploy.
+  AGENT_ACCESS_CONTROL_ENABLED: booleanString(false),
+  // Comma-separated global-admin emails (Graph `mail` values, matched
+  // lowercased + trimmed). Bootstrap mechanism — changing it needs a redeploy.
+  AGENT_ACCESS_ADMINS: z.string().optional(),
+
   // Application Configuration
   // Optional explicit override; when unset the default model resolves
   // dynamically to the latest ring-enabled standard GPT (config/models.ts).
