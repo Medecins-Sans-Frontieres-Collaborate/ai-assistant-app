@@ -7,7 +7,11 @@ import {
 } from './mcpUrlGuard';
 
 import { env } from '@/config/environment';
-import { ResolvedMcpServer, resolveMcpServers } from '@/config/mcpCatalog';
+import {
+  MCP_CATALOG,
+  ResolvedMcpServer,
+  resolveMcpServers,
+} from '@/config/mcpCatalog';
 
 /**
  * Server-side OAuth discovery for MCP connectors — the security chokepoint
@@ -190,6 +194,29 @@ export function getStaticOauthClient(
     };
   }
   return null;
+}
+
+/**
+ * Which curated connectors have an OAuth app to tie into on THIS deployment.
+ *
+ * For catalog entries this is exactly "is a static app configured": per
+ * getStaticOauthClient above, neither provider offers usable web-app DCR, so
+ * without MCP_OAUTH_*_CLIENT_ID a "Connect with {name}" click can only end in
+ * OAUTH_DCR_UNSUPPORTED. Surfacing it (booleans only — no ids, no secrets)
+ * lets the settings UI hide an affordance that cannot work instead of
+ * failing the user after a popup round-trip. Users bringing their OWN app
+ * are unaffected; that path doesn't need a deployment app.
+ *
+ * Arbitrary (non-catalog) servers are deliberately absent: their DCR support
+ * is unknown until discovery runs, so their UI keeps offering the attempt.
+ */
+export function getCatalogOauthAppAvailability(): Record<string, boolean> {
+  const availability: Record<string, boolean> = {};
+  for (const entry of Object.values(MCP_CATALOG)) {
+    if (entry.auth.style !== 'oauth' && !entry.alsoSupportsOauth) continue;
+    availability[entry.key] = getStaticOauthClient(entry.key) !== null;
+  }
+  return availability;
 }
 
 /**
