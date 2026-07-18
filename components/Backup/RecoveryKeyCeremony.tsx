@@ -59,15 +59,25 @@ export function RecoveryKeyCeremony({
   const [showQr, setShowQr] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
+  // Reset ceremony progress whenever the modal (re)opens — state-adjust
+  // during render (not an effect) per the React docs pattern.
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
+  if (isOpen !== prevIsOpen) {
+    setPrevIsOpen(isOpen);
+    if (isOpen) {
+      setCode(null);
+      setLoadError(false);
+      setHasCopiedOrDownloaded(false);
+      setSavedChecked(false);
+      setShowQr(false);
+      setShowCancelConfirm(false);
+    }
+  }
+
   // Resolve the code: encode the supplied key, or load it from the keystore
-  // in view mode. Reset ceremony progress whenever the modal (re)opens.
+  // in view mode.
   useEffect(() => {
     if (!isOpen) return;
-    setCode(null);
-    setLoadError(false);
-    setHasCopiedOrDownloaded(false);
-    setSavedChecked(false);
-    setShowQr(false);
     let cancelled = false;
     void (async () => {
       try {
