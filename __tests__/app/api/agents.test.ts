@@ -231,6 +231,89 @@ describe('GET /api/agents — access-control discovery filter', () => {
       ).toEqual(['agent-a', 'agent-b']);
     });
 
+    it('serves prompt agents even when NO discovery paths are configured (early return)', async () => {
+      // Regression (finding 14): the no-paths early return used to answer
+      // agents: [] before the prompt-agent append ever ran, hiding personas
+      // in deployments without Foundry ARM paths.
+      accessIsEnabled.mockReturnValue(true);
+      accessGetPromptAgents.mockReturnValue([PROMPT_AGENT]);
+      getDiscoveryPathsForUser.mockReturnValue({
+        regionalPath: null,
+        officePaths: [],
+      });
+
+      const response = await GET(request());
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(200);
+      expect(data).toEqual({
+        agents: [
+          {
+            id: 'prompt-abc123def456',
+            name: 'Legal Advisor',
+            description: 'Reviews contracts',
+            agentName: 'prompt-abc123def456',
+            source: PROMPT_AGENT_SOURCE,
+            type: 'prompt',
+          },
+        ],
+        regionalPath: null,
+        officePaths: [],
+      });
+      // No ARM discovery ran — personas need neither paths nor tokens.
+      expect(listUserAgents).not.toHaveBeenCalled();
+      expect(getAccessTokenForOBO).not.toHaveBeenCalled();
+    });
+
+    it('still filters denied prompt agents on the no-paths early return', async () => {
+      accessIsEnabled.mockReturnValue(true);
+      accessGetPromptAgents.mockReturnValue([PROMPT_AGENT]);
+      accessEvaluate.mockReturnValue({
+        decision: 'deny',
+        reason: 'not-allowed',
+      });
+      getDiscoveryPathsForUser.mockReturnValue({
+        regionalPath: null,
+        officePaths: [],
+      });
+
+      const response = await GET(request());
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(200);
+      expect(data.agents).toEqual([]);
+    });
+
+    it('serves prompt agents when OBO acquisition fails in production (early return)', async () => {
+      // Regression (finding 14): a transient AAD failure used to blank
+      // prompt agents from the picker — and the empty 200 is cached
+      // client-side for up to 24h.
+      vi.stubEnv('NODE_ENV', 'production');
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      try {
+        accessIsEnabled.mockReturnValue(true);
+        accessGetPromptAgents.mockReturnValue([PROMPT_AGENT]);
+        getAccessTokenForOBO.mockRejectedValue(new Error('AAD flake'));
+
+        const response = await GET(request());
+        const data = await parseJsonResponse(response);
+
+        expect(response.status).toBe(200);
+        expect(
+          data.agents.map((a: { agentName: string }) => a.agentName),
+        ).toEqual(['prompt-abc123def456']);
+        expect(data.regionalPath).toBe(REGIONAL_PATH);
+        // No Foundry discovery and no trust-anchoring happened.
+        expect(listUserAgents).not.toHaveBeenCalled();
+        expect(cacheUserAgentEndpoint).not.toHaveBeenCalled();
+        expect(errorSpy).toHaveBeenCalledWith(
+          expect.stringContaining('OBO failed'),
+        );
+      } finally {
+        vi.unstubAllEnvs();
+      }
+    });
+
     it('serves no prompt agents when the feature is disabled', async () => {
       accessIsEnabled.mockReturnValue(false);
       accessGetPromptAgents.mockReturnValue([PROMPT_AGENT]);
