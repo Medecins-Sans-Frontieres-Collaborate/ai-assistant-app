@@ -1,5 +1,6 @@
 import {
   IconBrain,
+  IconDeviceDesktop,
   IconPlug,
   IconPlugConnectedX,
   IconX,
@@ -16,6 +17,9 @@ import { useModelOrder } from '@/client/hooks/settings/useModelOrder';
 import { useModelSelectState } from '@/client/hooks/settings/useModelSelectState';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useCustomSourceModels } from '@/client/hooks/useCustomSourceModels';
+import { useLocalRuntimeModels } from '@/client/hooks/useLocalRuntimeModels';
+
+import { isLocalModel } from '@/lib/services/models/localModels';
 
 import { shortSourceHash } from '@/lib/utils/app/agentId';
 import { modelIdToLocaleKey } from '@/lib/utils/app/locales';
@@ -26,6 +30,7 @@ import {
 } from '@/lib/utils/app/modelSeries';
 
 import { Conversation } from '@/types/chat';
+import { LOCAL_RUNTIMES, LOCAL_RUNTIME_DEFAULTS } from '@/types/localRuntime';
 import {
   OpenAIModel,
   OpenAIModelID,
@@ -204,6 +209,15 @@ export const ModelSelect: FC<ModelSelectProps> = ({
     const flat = [...visibleSourceModels.values()].flat();
     return modelFilter ? flat.filter(modelFilter) : flat;
   }, [visibleSourceModels, modelFilter]);
+
+  // Locally-detected runtimes (Ollama / LM Studio / llama.cpp). Read-only
+  // here: detection is triggered from Settings, never from the picker, so
+  // opening the model list can't raise a browser permission prompt.
+  const { modelsByRuntime: localModelsByRuntime } = useLocalRuntimeModels();
+  const localModels = useMemo(() => {
+    const flat = Object.values(localModelsByRuntime).flat();
+    return modelFilter ? flat.filter(modelFilter) : flat;
+  }, [localModelsByRuntime, modelFilter]);
 
   // Hidden models/agents — one list keyed by model ID covers both.
   const hiddenModelIds = useSettingsStore((s) => s.hiddenModelIds);
@@ -406,8 +420,15 @@ export const ModelSelect: FC<ModelSelectProps> = ({
       ...baseModels,
       ...(hideAgentsTab ? [] : organizationAgentModels),
       ...customSourceModels,
+      ...localModels,
     ],
-    [baseModels, organizationAgentModels, customSourceModels, hideAgentsTab],
+    [
+      baseModels,
+      organizationAgentModels,
+      customSourceModels,
+      localModels,
+      hideAgentsTab,
+    ],
   );
 
   const selectedModel =
@@ -485,8 +506,11 @@ export const ModelSelect: FC<ModelSelectProps> = ({
       setMobileView('details');
 
       // Set as default model for future conversations — skipped when the
-      // picker is scoped to one conversation (see scopedToConversation).
-      if (!scopedToConversation) {
+      // picker is scoped to one conversation (see scopedToConversation), and
+      // for local models: they exist only while their runtime is detected, so
+      // a persisted local default would leave a fresh session pointing at a
+      // model that isn't in any list until the user re-runs detection.
+      if (!scopedToConversation && !isLocalModel(model)) {
         console.log(
           `[ModelSelect] Setting default model to: ${model.id} (${model.name})`,
         );
@@ -1255,6 +1279,56 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                           </section>
                         );
                       })}
+                      {/* Local runtimes. Rendered only when a runtime was
+                          detected AND is serving models: detection failures
+                          are silent here by design — the picker shows fewer
+                          options rather than errors the user didn't ask for.
+                          Diagnostics live in Settings › Local models, where
+                          they explicitly went looking. Plain rows only; local
+                          models carry no series and never join the tree. */}
+                      {LOCAL_RUNTIMES.filter(
+                        (runtime) =>
+                          (localModelsByRuntime[runtime]?.length ?? 0) > 0,
+                      ).map((runtime) => (
+                        <section
+                          key={runtime}
+                          className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700"
+                        >
+                          <div className="flex items-center gap-1.5 min-w-0 mb-1.5">
+                            <IconDeviceDesktop
+                              size={12}
+                              className="shrink-0 text-gray-400 dark:text-gray-500"
+                              aria-hidden="true"
+                            />
+                            <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase truncate">
+                              {LOCAL_RUNTIME_DEFAULTS[runtime].label}
+                            </span>
+                            <span className="text-xs font-semibold tabular-nums text-gray-400 dark:text-gray-500">
+                              ({localModelsByRuntime[runtime]?.length ?? 0})
+                            </span>
+                          </div>
+                          <div className="space-y-1">
+                            {(localModelsByRuntime[runtime] ?? []).map(
+                              (model) => (
+                                <ModelCard
+                                  key={model.id}
+                                  id={model.id}
+                                  name={model.name}
+                                  isSelected={selectedModelId === model.id}
+                                  onClick={() => handleModelSelect(model)}
+                                  icon={
+                                    <IconDeviceDesktop
+                                      size={16}
+                                      className="text-gray-500 dark:text-gray-400"
+                                    />
+                                  }
+                                />
+                              ),
+                            )}
+                          </div>
+                        </section>
+                      ))}
+
                       {/* Connect a model source */}
                       {enableBYOModels && (
                         <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
