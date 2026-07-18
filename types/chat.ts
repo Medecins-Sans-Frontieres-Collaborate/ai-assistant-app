@@ -507,6 +507,20 @@ export interface FilePreview {
     originalSize: number;
     extractedSize: number;
   };
+  /**
+   * Set when this attachment came from a pasted or entered link rather than a
+   * picked file. Drives the link badge on the tile.
+   */
+  sourceUrl?: string;
+  /**
+   * Localized reason the page behind `sourceUrl` could not be retrieved.
+   *
+   * The attachment is still valid and still sent — its content is a document
+   * explaining this failure — so `status` stays `completed` and submission is
+   * never blocked. This field exists purely to mark the tile, and must not be
+   * conflated with `status: 'failed'`, which means the *upload* itself broke.
+   */
+  sourceError?: string;
 }
 
 // Tool Router Types

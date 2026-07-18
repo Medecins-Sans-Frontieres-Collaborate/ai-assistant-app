@@ -75,7 +75,7 @@ export interface TranslationReviewRound {
 /* Translation quality assessment (MQM-derived)                        */
 /* ------------------------------------------------------------------ */
 
-export type TranslationCriterionId =
+export type TranslationBuiltinCriterionId =
   | 'accuracy'
   | 'fluency'
   | 'terminology'
@@ -84,7 +84,8 @@ export type TranslationCriterionId =
   | 'audience';
 
 export interface TranslationCriterionRating {
-  criterionId: TranslationCriterionId;
+  /** Built-in criterion id or 'custom:<uuid>'. */
+  criterionId: string;
   /** 1 (unusable) … 5 (publication-ready). */
   rating: number;
   summary: string;
@@ -92,7 +93,8 @@ export interface TranslationCriterionRating {
 
 /** One granular proposed change to the working translation. */
 export interface TranslationEdit {
-  criterion: TranslationCriterionId;
+  /** Built-in criterion id or 'custom:<uuid>'. */
+  criterion: string;
   /** Exact substring of the translation at assessment time. */
   before: string;
   after: string;
@@ -123,6 +125,11 @@ export interface TranslationAssessment {
   overallSummary: string;
   edits: TranslationPendingEdit[];
   createdAt: string;
+  /**
+   * Label snapshots for custom criterion ids, so a past assessment still
+   * reads correctly after the criterion is renamed or deleted.
+   */
+  labels?: Record<string, string>;
 }
 
 export interface GlossaryEntry {
@@ -246,9 +253,11 @@ export interface DocumentSpec {
 
 /**
  * A user-defined quality criterion (e.g. "brand considerations"),
- * usable in assessments and revision rounds alongside the built-ins.
+ * usable in assessments alongside the built-ins. Shared shape: the
+ * document and translation workflows keep separate lists (their rubrics
+ * are domain-specific) but the record itself is identical.
  */
-export interface DocumentCustomCriterion {
+export interface CustomCriterion {
   /** Always 'custom:<uuid>' — collision-proof vs built-in ids. */
   id: string;
   name: string;
@@ -257,6 +266,9 @@ export interface DocumentCustomCriterion {
   createdAt: string;
   updatedAt: string;
 }
+
+export type DocumentCustomCriterion = CustomCriterion;
+export type TranslationCustomCriterion = CustomCriterion;
 
 export type DocumentBuiltinCriterionId =
   | 'grammarSpelling'
@@ -324,6 +336,14 @@ export interface DocumentReference {
   url: string;
   /** Size of the extracted text; the text itself is re-fetched, not persisted. */
   chars: number;
+  /** How it was added. Absent on records saved before this field. */
+  kind?: 'file' | 'url';
+  /**
+   * Localized reason a `kind: 'url'` page could not be retrieved. The
+   * reference is still added and still cited — its text explains the
+   * failure — so this only marks the chip.
+   */
+  error?: string;
 }
 
 export interface DocumentRevisionRecord {
@@ -528,6 +548,37 @@ export type MapFeatureGranularity =
 /** Variable-precision ISO date: 'YYYY' | 'YYYY-MM' | 'YYYY-MM-DD'. */
 export type PartialIsoDate = string;
 
+/**
+ * How finely the material stated an event's timing. Display concern only:
+ * the range below already says exactly which instants are covered, so
+ * precision never enters interval math — it decides how a date is WRITTEN
+ * ("1812" vs "12 Mar 1812, 14:30") and how wide an open-ended event is
+ * taken to be.
+ */
+export type EventPrecision = 'minute' | 'hour' | 'day' | 'month' | 'year';
+
+/** UTC instant at minute resolution: 'YYYY-MM-DDTHH:mm'. */
+export type EventInstant = string;
+
+/**
+ * When an event happened: always a half-open range `[start, end)`, always
+ * expressible to the minute, with the material's own precision alongside.
+ *
+ * Interpret only via lib/utils/shared/date/eventRange.ts.
+ */
+export interface EventRange {
+  start: EventInstant;
+  /**
+   * First instant NOT covered, or null when the material stated no end —
+   * which is not the same as ending: an event with no stated end persists
+   * on the map after it appears.
+   */
+  end: EventInstant | null;
+  precision: EventPrecision;
+  /** Explicitly still continuing ("since March…", "remains closed"). */
+  ongoing?: boolean;
+}
+
 export interface MapFeature {
   id: string;
   name: string;
@@ -538,13 +589,23 @@ export interface MapFeature {
   confidenceReason: string;
   category: string;
   /**
-   * Event dates from the material, precision encoded in the string shape.
-   * All optional: features saved before dates existed are simply undated.
-   * Interpret only via lib/utils/shared/date/partialDate.ts.
+   * When the event at this place happened. Absent = undated (the material
+   * gave no timing, or the feature predates event timing entirely).
+   *
+   * Never read this field directly — call `featureEventRange()`, which also
+   * understands the legacy fields below.
+   */
+  event?: EventRange;
+  /**
+   * @deprecated Superseded by `event`. Partial ISO dates with precision
+   * encoded in the string shape, unable to express a time of day. Still
+   * present on every feature extracted before `event` existed, so
+   * `featureEventRange()` converts them on read; nothing writes them.
    */
   eventStart?: PartialIsoDate;
+  /** @deprecated See `eventStart`. */
   eventEnd?: PartialIsoDate;
-  /** The situation began and is still continuing ("since March…"). */
+  /** @deprecated See `eventStart`. */
   eventOngoing?: boolean;
   /** Optional for features created before prominence existed (= primary). */
   prominence?: MapFeatureProminence;
@@ -566,9 +627,11 @@ export interface MapSourceRecord {
   addedAt: string;
   featureCount: number;
   /** How the material arrived. Absent on records saved before this field. */
-  kind?: 'text' | 'file' | 'search' | 'chat';
+  kind?: 'text' | 'file' | 'search' | 'chat' | 'url';
   /** The web search query, for kind 'search'. */
   query?: string;
+  /** Final page URL after redirects, for kind 'url'. */
+  url?: string;
 }
 
 /**
