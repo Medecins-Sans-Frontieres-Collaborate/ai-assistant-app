@@ -134,7 +134,9 @@ export function useBackupSync(): UseBackupSyncResult {
   // Timers re-check the CURRENT gate when they fire, not the one captured
   // when they were scheduled.
   const readyRef = useRef(ready);
-  readyRef.current = ready;
+  useEffect(() => {
+    readyRef.current = ready;
+  }, [ready]);
 
   const keysRef = useRef<BackupKeys | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -151,15 +153,18 @@ export function useBackupSync(): UseBackupSyncResult {
   }, []);
 
   const fireScheduled = useCallback(() => {
-    debounceRef.current = null;
-    if (!readyRef.current) return;
-    if (useChatStore.getState().isStreaming) {
-      // Never race a streaming response for the conversations array —
-      // re-check shortly instead of syncing a half-written message.
-      debounceRef.current = setTimeout(fireScheduled, STREAMING_RETRY_MS);
-      return;
-    }
-    void sync();
+    const attempt = (): void => {
+      debounceRef.current = null;
+      if (!readyRef.current) return;
+      if (useChatStore.getState().isStreaming) {
+        // Never race a streaming response for the conversations array —
+        // re-check shortly instead of syncing a half-written message.
+        debounceRef.current = setTimeout(attempt, STREAMING_RETRY_MS);
+        return;
+      }
+      void sync();
+    };
+    attempt();
   }, [sync]);
 
   // On-load pull-merge-push, once per mount when everything is ready.
