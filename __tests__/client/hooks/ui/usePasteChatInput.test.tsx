@@ -8,8 +8,14 @@ import { usePasteChatInput } from '@/client/hooks/ui/usePasteChatInput';
 import { SearchMode } from '@/types/searchMode';
 
 import { useChatInputStore } from '@/client/stores/chatInputStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import { useUIStore } from '@/client/stores/uiStore';
 import { Mock, beforeEach, describe, expect, it, vi } from 'vitest';
+
+const mockAttachUrl = vi.hoisted(() => vi.fn());
+vi.mock('@/client/hooks/chat/useUrlAttachment', () => ({
+  useUrlAttachment: () => ({ attachUrl: mockAttachUrl }),
+}));
 
 function createPasteEvent(options: {
   imageFiles?: File[];
@@ -76,6 +82,10 @@ describe('usePasteChatInput', () => {
       isTermsModalOpen: false,
       loading: false,
     });
+
+    mockAttachUrl.mockReset();
+    mockAttachUrl.mockResolvedValue(undefined);
+    useSettingsStore.setState({ autoFetchPastedLinks: true });
   });
 
   function setup(enabled = true) {
@@ -255,5 +265,104 @@ describe('usePasteChatInput', () => {
     expect(dispatchResult).toBe(true);
     expect(handleFileUpload).not.toHaveBeenCalled();
     expect(focusSpy).not.toHaveBeenCalled();
+  });
+});
+
+/**
+ * Pasting a bare link attaches the page instead of inserting the URL. Once
+ * the content is attached the raw URL is noise the user would have to delete,
+ * so the paste is swallowed in both the focused and unfocused cases.
+ */
+describe('usePasteChatInput — pasted links', () => {
+  let handleFileUpload: Mock;
+
+  beforeEach(() => {
+    handleFileUpload = vi.fn().mockResolvedValue(undefined);
+    useChatInputStore.setState({
+      textFieldValue: '',
+      filePreviews: [],
+      handleFileUpload,
+    });
+    useUIStore.setState({
+      isSettingsOpen: false,
+      isBotModalOpen: false,
+      isTermsModalOpen: false,
+    });
+    mockAttachUrl.mockReset();
+    mockAttachUrl.mockResolvedValue(undefined);
+    useSettingsStore.setState({ autoFetchPastedLinks: true });
+  });
+
+  function setup(enabled = true) {
+    const textarea = document.createElement('textarea');
+    const textareaRef = { current: textarea };
+    renderHook(() => usePasteChatInput({ textareaRef, enabled }));
+    return { textarea };
+  }
+
+  const url = 'https://news.example.com/floods';
+  const text = () => useChatInputStore.getState().textFieldValue;
+
+  it('attaches the page and keeps the URL out of the composer (textarea focused)', () => {
+    const { textarea } = setup();
+
+    const dispatchResult = window.dispatchEvent(
+      createPasteEvent({ text: url, target: textarea }),
+    );
+
+    // preventDefault stops the browser inserting the URL.
+    expect(dispatchResult).toBe(false);
+    expect(mockAttachUrl).toHaveBeenCalledWith(url);
+    expect(text()).toBe('');
+  });
+
+  it('attaches the page without appending the URL (textarea not focused)', () => {
+    setup();
+
+    const dispatchResult = window.dispatchEvent(
+      createPasteEvent({ text: url, target: document.body }),
+    );
+
+    expect(dispatchResult).toBe(false);
+    expect(mockAttachUrl).toHaveBeenCalledWith(url);
+    expect(text()).toBe('');
+  });
+
+  it('pastes the link normally when auto-fetch is switched off', () => {
+    useSettingsStore.setState({ autoFetchPastedLinks: false });
+    setup();
+
+    window.dispatchEvent(
+      createPasteEvent({ text: url, target: document.body }),
+    );
+
+    expect(mockAttachUrl).not.toHaveBeenCalled();
+    expect(text()).toBe(url);
+  });
+
+  it('leaves prose containing a link completely alone', () => {
+    setup();
+    const prose = `see ${url} for details`;
+
+    window.dispatchEvent(
+      createPasteEvent({ text: prose, target: document.body }),
+    );
+
+    expect(mockAttachUrl).not.toHaveBeenCalled();
+    expect(text()).toBe(prose);
+  });
+
+  it('does not hijack a link pasted into another input', () => {
+    setup();
+    const otherInput = document.createElement('input');
+    document.body.appendChild(otherInput);
+
+    const dispatchResult = window.dispatchEvent(
+      createPasteEvent({ text: url, target: otherInput }),
+    );
+
+    expect(dispatchResult).toBe(true);
+    expect(mockAttachUrl).not.toHaveBeenCalled();
+    document.body.removeChild(otherInput);
   });
 });
