@@ -120,6 +120,11 @@ async function runSyncOnce(deps: SyncDeps): Promise<SyncResult> {
           await deps.crypto.decryptConversation(id, epoch, bytes),
         );
       }
+      const deletedAtById: Record<string, string> = {};
+      for (const id of plan.applyDeletes) {
+        const deletedAt = remote!.conversations[id]?.deletedAt;
+        if (deletedAt !== undefined) deletedAtById[id] = deletedAt;
+      }
       let pulledFolders: FolderInterface[] | null = null;
       if (plan.foldersAction === 'pull' && remote?.folders) {
         const bytes = await deps.api.getFoldersBlob(remote.folders.rev);
@@ -137,6 +142,7 @@ async function runSyncOnce(deps: SyncDeps): Promise<SyncResult> {
           conversations: pulledConversations,
           folders: pulledFolders,
           deleteIds: plan.applyDeletes,
+          deletedAtById,
         });
         deps.persistSyncPoint({
           version: remote!.version,
@@ -202,6 +208,7 @@ async function runSyncOnce(deps: SyncDeps): Promise<SyncResult> {
           conversations: pulledConversations,
           folders: pulledFolders,
           deleteIds: plan.applyDeletes,
+          deletedAtById,
         });
         // Every local tombstone is resolved by a successful sync: either
         // published to the manifest or beaten by a newer remote copy.
