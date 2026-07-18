@@ -5,6 +5,7 @@ import {
   AgentAccessService,
   emitAccessAudit,
 } from '@/lib/services/agentAccess/AgentAccessService';
+import { PROMPT_AGENT_SOURCE } from '@/lib/services/agentAccess/types';
 import { AgentDiscoveryService } from '@/lib/services/agents/AgentDiscoveryService';
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
 import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
@@ -29,6 +30,7 @@ import { isAllowedFoundryHost } from '@/lib/utils/shared/foundryHostAllowlist';
 
 import { ChatBody } from '@/types/chat';
 import { ErrorCode, PipelineError } from '@/types/errors';
+import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 
 import { ChatContext } from './ChatContext';
@@ -537,6 +539,8 @@ export const createCredentialMiddleware = async (
     !!context.model?.agentId;
 
   if (!isFoundryAgent) {
+    const accessService = AgentAccessService.getInstance();
+
     // Access guard for agent-mode invocations that are NOT classified as
     // Foundry agents (docs/AGENT_ACCESS_CONTROL.md). A client can send an
     // `org-`/`custom-` model id with an `agentId` while omitting
@@ -552,7 +556,6 @@ export const createCredentialMiddleware = async (
     // isEnabled() is false and none of this runs.
     const nonFoundryAgentName = context.model?.agentId;
     if (context.agentMode && nonFoundryAgentName) {
-      const accessService = AgentAccessService.getInstance();
       if (accessService.isEnabled()) {
         await accessService.ensureFresh();
         const decision = accessService.evaluateAccess({
@@ -575,6 +578,44 @@ export const createCredentialMiddleware = async (
         }
       }
     }
+
+    // Access guard for prompt-agent invocations (MANDATORY — botId is
+    // client-controlled and discovery filtering is UX only). Re-resolves
+    // from botId so the guard holds even for contexts that skipped model
+    // selection. A `prompt-`-looking botId that resolves to NO record
+    // (deleted/unknown) falls through silently — same silent-degrade as
+    // removed static agents; the guard only fires for existing records.
+    // Mirrors the Foundry guard: deny AND 'unavailable' (no last-known-good
+    // ruleset) block in EVERY environment — POLICY, not credential plumbing.
+    if (accessService.isEnabled() && (context.promptAgent || context.botId)) {
+      await accessService.ensureFresh();
+      const promptAgent =
+        context.promptAgent ??
+        (context.botId
+          ? accessService.getPromptAgentById(context.botId)
+          : null);
+      if (promptAgent) {
+        const decision = accessService.evaluateAccess({
+          userMail: context.user?.mail,
+          source: PROMPT_AGENT_SOURCE,
+          agentName: promptAgent.id,
+        });
+        emitAccessAudit({
+          userMail: context.user?.mail,
+          agentName: promptAgent.id,
+          source: PROMPT_AGENT_SOURCE,
+          decision: decision.decision,
+          reason: decision.reason,
+        });
+        if (decision.decision !== 'allow') {
+          console.error(
+            `[CredentialMiddleware] Agent access ${decision.decision} (${decision.reason}) for prompt-agent invocation; blocking`,
+          );
+          throw agentAccessDenied(decision.decision, decision.reason);
+        }
+      }
+    }
+
     return {};
   }
 
@@ -768,9 +809,9 @@ export const createCredentialMiddleware = async (
 /**
  * Factory for model selection middleware that needs access to model and messages.
  */
-export const createModelSelectionMiddleware = (
+export const createModelSelectionMiddleware = async (
   context: Partial<ChatContext>,
-): Partial<ChatContext> => {
+): Promise<Partial<ChatContext>> => {
   if (!context.model || !context.messages) {
     throw new Error('Model and messages must be parsed before model selection');
   }
@@ -797,12 +838,53 @@ export const createModelSelectionMiddleware = (
     modelId.startsWith('custom-') ||
     (isOrgAgent && !!modelConfig.agentId);
 
-  return {
+  const selection: Partial<ChatContext> = {
     modelSelector,
     modelId,
     model: modelConfig,
     agentMode,
   };
+
+  // Prompt-agent resolution (docs/AGENT_ACCESS_CONTROL.md): when the
+  // agent-access feature is enabled and botId names a stored prompt agent,
+  // record the persona on the context and SWAP the model to the admin-chosen
+  // OpenAIModels config, so sdk/deploymentName/tokenLimit are real and the
+  // configured model actually executes (unlike static org agents, whose
+  // baseModelId is client-side cosmetics riding the DeploymentNotFound
+  // fallback chain). agentMode stays as computed above (false — prompt
+  // agents never carry an agentId) and model.agentId is NEVER set: that
+  // would misroute the request into the Foundry execution path.
+  const accessService = AgentAccessService.getInstance();
+  if (context.botId && accessService.isEnabled()) {
+    await accessService.ensureFresh();
+    const promptAgent = accessService.getPromptAgentById(context.botId);
+    if (promptAgent) {
+      selection.promptAgent = promptAgent;
+      // Force agentMode off: standard model configs legitimately carry an
+      // `agentId` (intelligent-search agent name), and agentMode + agentId
+      // would promote the request to executionStrategy='agent' — the exact
+      // Foundry misroute a prompt agent must never take.
+      selection.agentMode = false;
+      const configured = OpenAIModels[promptAgent.modelId as OpenAIModelID] as
+        | OpenAIModel
+        | undefined;
+      if (configured) {
+        selection.modelId = configured.id;
+        selection.model = configured;
+      } else {
+        // Admin-pinned model vanished from the config at runtime — keep the
+        // existing default-model behavior but make the mismatch loud.
+        console.error(
+          `[ModelSelectionMiddleware] Prompt agent ${sanitizeForLog(promptAgent.id)} references unknown model '${sanitizeForLog(promptAgent.modelId)}'; keeping default model behavior`,
+        );
+      }
+      console.log(
+        `[ModelSelectionMiddleware] Resolved prompt agent ${sanitizeForLog(promptAgent.id)} → model ${sanitizeForLog(selection.modelId ?? modelId)}`,
+      );
+    }
+  }
+
+  return selection;
 };
 
 /**
@@ -835,7 +917,7 @@ export async function buildChatContext(req: NextRequest): Promise<ChatContext> {
 
   context = {
     ...context,
-    ...createModelSelectionMiddleware(context),
+    ...(await createModelSelectionMiddleware(context)),
   };
 
   // Acquire per-user OBO credentials for Foundry agent calls (after model selection)
