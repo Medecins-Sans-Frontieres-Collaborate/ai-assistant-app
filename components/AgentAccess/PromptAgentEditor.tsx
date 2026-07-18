@@ -174,10 +174,14 @@ export const PromptAgentEditor: FC<PromptAgentEditorProps> = ({
 
       <div className="space-y-4">
         <div>
-          <label className="mb-1 block text-sm font-medium text-black dark:text-white">
+          <label
+            htmlFor={`${baseId}-name`}
+            className="mb-1 block text-sm font-medium text-black dark:text-white"
+          >
             {t('agentNameLabel')}
           </label>
           <input
+            id={`${baseId}-name`}
             type="text"
             className={inputClass}
             value={name}
@@ -188,10 +192,14 @@ export const PromptAgentEditor: FC<PromptAgentEditorProps> = ({
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-black dark:text-white">
+          <label
+            htmlFor={`${baseId}-description`}
+            className="mb-1 block text-sm font-medium text-black dark:text-white"
+          >
             {t('agentDescriptionLabel')}
           </label>
           <input
+            id={`${baseId}-description`}
             type="text"
             className={inputClass}
             value={description}
@@ -202,10 +210,14 @@ export const PromptAgentEditor: FC<PromptAgentEditorProps> = ({
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-black dark:text-white">
+          <label
+            htmlFor={`${baseId}-system-prompt`}
+            className="mb-1 block text-sm font-medium text-black dark:text-white"
+          >
             {t('agentSystemPromptLabel')}
           </label>
           <textarea
+            id={`${baseId}-system-prompt`}
             className={inputClass}
             rows={6}
             value={systemPrompt}
@@ -216,10 +228,14 @@ export const PromptAgentEditor: FC<PromptAgentEditorProps> = ({
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-black dark:text-white">
+          <label
+            htmlFor={`${baseId}-model`}
+            className="mb-1 block text-sm font-medium text-black dark:text-white"
+          >
             {t('agentModelLabel')}
           </label>
           <select
+            id={`${baseId}-model`}
             className={inputClass}
             value={modelId}
             onChange={(e) => setModelId(e.target.value)}
@@ -227,7 +243,13 @@ export const PromptAgentEditor: FC<PromptAgentEditorProps> = ({
             <option value="" disabled>
               {t('agentModelPlaceholder')}
             </option>
-            {storedModelMissing && <option value={modelId}>{modelId}</option>}
+            {storedModelMissing && (
+              <option value={modelId}>
+                {storedModelUnknown
+                  ? t('agentModelUnavailable', { modelId })
+                  : modelId}
+              </option>
+            )}
             {selectableModels.map((model) => (
               <option key={model.id} value={model.id}>
                 {model.name}
@@ -238,7 +260,10 @@ export const PromptAgentEditor: FC<PromptAgentEditorProps> = ({
       </div>
 
       {isConflict && (
-        <div className="mt-4 rounded-md border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-3 text-sm text-amber-800 dark:text-amber-300">
+        <div
+          role="alert"
+          className="mt-4 rounded-md border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-3 text-sm text-amber-800 dark:text-amber-300"
+        >
           <p>{t('conflictError')}</p>
           <button
             type="button"
@@ -251,8 +276,12 @@ export const PromptAgentEditor: FC<PromptAgentEditorProps> = ({
       )}
 
       {saveError && !isConflict && (
-        <p className="mt-4 text-sm text-red-600 dark:text-red-400">
-          {t('saveError')}
+        <p role="alert" className="mt-4 text-sm text-red-600 dark:text-red-400">
+          {t(
+            saveError === 'unknownModel'
+              ? 'agentModelUnknownError'
+              : 'saveError',
+          )}
         </p>
       )}
 
