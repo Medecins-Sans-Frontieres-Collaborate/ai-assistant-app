@@ -51,6 +51,29 @@ function deleteAzureThreads(threadIds: (string | undefined)[]): void {
   });
 }
 
+/**
+ * Backup tombstones are capped so the persisted blob stays bounded; beyond
+ * the cap the OLDEST deletions are evicted (their remote copies then win any
+ * later merge, which is the safe failure mode).
+ */
+const MAX_CONVERSATION_TOMBSTONES = 500;
+
+function withTombstones(
+  existing: Record<string, string>,
+  ids: string[],
+  deletedAt: string,
+): Record<string, string> {
+  if (ids.length === 0) return existing;
+  const next = { ...existing };
+  for (const id of ids) next[id] = deletedAt;
+  const entries = Object.entries(next);
+  if (entries.length <= MAX_CONVERSATION_TOMBSTONES) return next;
+  entries.sort((a, b) => a[1].localeCompare(b[1]));
+  return Object.fromEntries(
+    entries.slice(entries.length - MAX_CONVERSATION_TOMBSTONES),
+  );
+}
+
 interface ConversationStore {
   // State
   conversations: Conversation[];
@@ -58,6 +81,17 @@ interface ConversationStore {
   folders: FolderInterface[];
   searchTerm: string;
   isLoaded: boolean;
+  /**
+   * Deletion tombstones for the encrypted-backup sync: conversation id →
+   * ISO deletedAt. Stamped by deleteConversation/clearAll, cleared per-id
+   * after a sync confirms the deletion reached the remote manifest.
+   */
+  deletedConversations: Record<string, string>;
+  /**
+   * ISO timestamp of the last local folder mutation. Null = no local folder
+   * state to back up (the backup folders blob is then pull-only).
+   */
+  foldersUpdatedAt: string | null;
 
   // Conversation actions
   setConversations: (conversations: Conversation[]) => void;
@@ -78,7 +112,13 @@ interface ConversationStore {
   setIsLoaded: (isLoaded: boolean) => void;
 
   // Folder actions
-  setFolders: (folders: FolderInterface[]) => void;
+  /**
+   * Replaces the folders array. `updatedAt` overrides the folders
+   * last-modified stamp — the backup sync passes the REMOTE timestamp when
+   * applying pulled folders so the whole-LWW comparison converges instead
+   * of ping-ponging pushes. Defaults to "now" (a local mutation).
+   */
+  setFolders: (folders: FolderInterface[], updatedAt?: string) => void;
   addFolder: (folder: FolderInterface) => void;
   updateFolder: (id: string, name: string) => void;
   deleteFolder: (id: string) => void;
@@ -88,6 +128,9 @@ interface ConversationStore {
 
   // Bulk operations
   clearAll: () => void;
+
+  /** Drops backup tombstones a successful sync has resolved. */
+  clearSyncedTombstones: (ids: string[]) => void;
 
   // Version navigation actions
   setActiveVersion: (
@@ -223,6 +266,8 @@ export const useConversationStore = create<ConversationStore>()(
       folders: [],
       searchTerm: '',
       isLoaded: false,
+      deletedConversations: {},
+      foldersUpdatedAt: null,
 
       // Conversation actions
       setConversations: (conversations) => set({ conversations }),
@@ -310,6 +355,11 @@ export const useConversationStore = create<ConversationStore>()(
             state.selectedConversationId === id
               ? null
               : state.selectedConversationId,
+          deletedConversations: withTombstones(
+            state.deletedConversations,
+            [id],
+            new Date().toISOString(),
+          ),
         }));
       },
 
@@ -318,21 +368,28 @@ export const useConversationStore = create<ConversationStore>()(
       setIsLoaded: (isLoaded) => set({ isLoaded }),
 
       // Folder actions
-      setFolders: (folders) => set({ folders }),
+      setFolders: (folders, updatedAt) =>
+        set({
+          folders,
+          foldersUpdatedAt: updatedAt ?? new Date().toISOString(),
+        }),
 
       addFolder: (folder) =>
         set((state) => ({
           folders: [...state.folders, folder],
+          foldersUpdatedAt: new Date().toISOString(),
         })),
 
       updateFolder: (id, name) =>
         set((state) => ({
           folders: state.folders.map((f) => (f.id === id ? { ...f, name } : f)),
+          foldersUpdatedAt: new Date().toISOString(),
         })),
 
       deleteFolder: (id) =>
         set((state) => ({
           folders: state.folders.filter((f) => f.id !== id),
+          foldersUpdatedAt: new Date().toISOString(),
           // Remove folder from conversations (with updatedAt so the change persists)
           conversations: state.conversations.map((c) =>
             c.folderId === id
@@ -346,15 +403,36 @@ export const useConversationStore = create<ConversationStore>()(
 
       // Bulk operations
       clearAll: () => {
-        const threadIds = get().conversations.map((c) => c.threadId);
-        deleteAzureThreads(threadIds);
-        set({
+        const cleared = get().conversations;
+        deleteAzureThreads(cleared.map((c) => c.threadId));
+        const now = new Date().toISOString();
+        set((state) => ({
           conversations: [],
           selectedConversationId: null,
           folders: [],
           searchTerm: '',
-        });
+          deletedConversations: withTombstones(
+            state.deletedConversations,
+            cleared.map((c) => c.id),
+            now,
+          ),
+          foldersUpdatedAt: now,
+        }));
       },
+
+      clearSyncedTombstones: (ids) =>
+        set((state) => {
+          const next = { ...state.deletedConversations };
+          let changed = false;
+          for (const id of ids) {
+            if (id in next) {
+              delete next[id];
+              changed = true;
+            }
+          }
+          // Same state object = zustand skips notify entirely.
+          return changed ? { deletedConversations: next } : state;
+        }),
 
       // Version navigation actions
       setActiveVersion: (conversationId, messageIndex, versionIndex) =>
@@ -763,18 +841,22 @@ export const useConversationStore = create<ConversationStore>()(
     }),
     {
       name: 'conversation-storage',
-      version: 6, // v6: conversation workflows (conversationType + workflowState)
+      version: 7, // v7: backup tombstones (deletedConversations) + foldersUpdatedAt
       storage: createJSONStorage(() => perConversationStorage),
       partialize: (state) => ({
         conversations: state.conversations,
         selectedConversationId: state.selectedConversationId,
         folders: state.folders,
+        deletedConversations: state.deletedConversations,
+        foldersUpdatedAt: state.foldersUpdatedAt,
       }),
       migrate: (persistedState: unknown, version: number) => {
         const state = persistedState as {
           conversations: Conversation[];
           selectedConversationId: string | null;
           folders: FolderInterface[];
+          deletedConversations?: Record<string, string>;
+          foldersUpdatedAt?: string | null;
         };
 
         // Guard against completely invalid state from corrupted storage
@@ -783,6 +865,8 @@ export const useConversationStore = create<ConversationStore>()(
             conversations: [],
             selectedConversationId: null,
             folders: [],
+            deletedConversations: {},
+            foldersUpdatedAt: null,
           };
         }
 
@@ -849,6 +933,17 @@ export const useConversationStore = create<ConversationStore>()(
             }
             return conv;
           });
+        }
+
+        if (version < 7) {
+          // Encrypted backup: start with no tombstones; pre-existing folders
+          // get a fresh last-modified stamp so the first sync pushes them
+          // (null would leave them pull-only and never backed up).
+          state.deletedConversations = {};
+          state.foldersUpdatedAt =
+            Array.isArray(state.folders) && state.folders.length > 0
+              ? new Date().toISOString()
+              : null;
         }
 
         return state;
