@@ -84,6 +84,125 @@ describe('useChatActions', () => {
       expect(mockUpdateConversation).toHaveBeenCalledWith('conv-1', {
         messages: [editedMessage, messages[1]],
       });
+      // No compaction stored → nothing to invalidate
+      expect('compaction' in mockUpdateConversation.mock.calls[0][1]).toBe(
+        false,
+      );
+    });
+
+    it('invalidates compaction when the edited message lies inside the summarized region', () => {
+      const messages: Message[] = [
+        { role: 'user', content: 'Q1', messageType: MessageType.TEXT },
+        { role: 'assistant', content: 'A1', messageType: MessageType.TEXT },
+        {
+          role: 'user',
+          content: 'Q2',
+          messageType: MessageType.TEXT,
+          promptId: 'p2',
+        },
+        { role: 'assistant', content: 'A2', messageType: MessageType.TEXT },
+      ];
+
+      const conversation: Conversation = {
+        id: 'conv-1',
+        name: 'Test',
+        messages,
+        model: { id: 'gpt-4', name: 'GPT-4' } as any,
+        prompt: '',
+        temperature: 0.7,
+        folderId: null,
+        compaction: {
+          summary: 'covers entries 1..1',
+          upToEntryIndex: 2,
+          updatedAt: '2026-07-01T00:00:00.000Z',
+        },
+      };
+
+      mockState.conversations = [conversation];
+      mockState.selectedConversationId = 'conv-1';
+
+      const { result } = renderHook(() =>
+        useChatActions({
+          updateConversation: mockUpdateConversation,
+          sendMessage: mockSendMessage,
+        }),
+      );
+
+      // Edit the first user message (flat index 0 < upToEntryIndex 2): the
+      // old fact is baked into the summary, so the watermark must be cleared
+      // for the next post-stream refresh to rebuild it.
+      act(() => {
+        result.current.handleEditMessage({
+          ...messages[0],
+          content: 'Q1 corrected',
+        });
+      });
+
+      expect(mockUpdateConversation).toHaveBeenCalledWith('conv-1', {
+        messages: [
+          { ...messages[0], content: 'Q1 corrected' },
+          messages[1],
+          messages[2],
+          messages[3],
+        ],
+        compaction: undefined,
+      });
+      expect('compaction' in mockUpdateConversation.mock.calls[0][1]).toBe(
+        true,
+      );
+    });
+
+    it('keeps compaction when the edited message lies beyond the summarized region', () => {
+      const messages: Message[] = [
+        { role: 'user', content: 'Q1', messageType: MessageType.TEXT },
+        { role: 'assistant', content: 'A1', messageType: MessageType.TEXT },
+        {
+          role: 'user',
+          content: 'Q2',
+          messageType: MessageType.TEXT,
+          promptId: 'p2',
+        },
+        { role: 'assistant', content: 'A2', messageType: MessageType.TEXT },
+      ];
+
+      const conversation: Conversation = {
+        id: 'conv-1',
+        name: 'Test',
+        messages,
+        model: { id: 'gpt-4', name: 'GPT-4' } as any,
+        prompt: '',
+        temperature: 0.7,
+        folderId: null,
+        compaction: {
+          summary: 'covers entries 1..1',
+          upToEntryIndex: 2,
+          updatedAt: '2026-07-01T00:00:00.000Z',
+        },
+      };
+
+      mockState.conversations = [conversation];
+      mockState.selectedConversationId = 'conv-1';
+
+      const { result } = renderHook(() =>
+        useChatActions({
+          updateConversation: mockUpdateConversation,
+          sendMessage: mockSendMessage,
+        }),
+      );
+
+      // Edit the second user message (flat index 2, not < upToEntryIndex 2):
+      // the summary doesn't cover it, so it stays valid.
+      act(() => {
+        result.current.handleEditMessage({
+          ...messages[2],
+          content: 'Q2 corrected',
+        });
+      });
+
+      expect(mockUpdateConversation).toHaveBeenCalledTimes(1);
+      expect('compaction' in mockUpdateConversation.mock.calls[0][1]).toBe(
+        false,
+      );
     });
   });
 
