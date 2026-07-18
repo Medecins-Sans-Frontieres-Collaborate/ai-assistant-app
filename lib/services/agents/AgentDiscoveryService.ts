@@ -69,8 +69,8 @@ interface DiscoveredAgent {
   agentName: string;
   /** Agent version pinned by the Application's deployment */
   agentVersion?: string;
-  /** Source type */
-  type: 'foundry';
+  /** Source type — 'foundry' for ARM-discovered agents, 'prompt' for app-defined prompt agents */
+  type: 'foundry' | 'prompt';
   /** ARM resource path this agent was discovered from */
   source?: string;
   /** Foundry project endpoint for invoking this agent */
