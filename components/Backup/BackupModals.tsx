@@ -21,10 +21,7 @@ import {
   buildBackupSyncDeps,
   pushFullBackup,
 } from '@/lib/utils/app/backup/backupOps';
-import {
-  computeKeyId,
-  deriveBackupKeys,
-} from '@/lib/utils/shared/backupCrypto/keyDerivation';
+import { deriveBackupKeys } from '@/lib/utils/shared/backupCrypto/keyDerivation';
 import { generateMasterKey } from '@/lib/utils/shared/backupCrypto/recoveryCode';
 
 import ConfirmDialog from '@/components/UI/ConfirmDialog';
@@ -136,17 +133,17 @@ function BackupModalsInner() {
     setView('enroll-ceremony');
   }, [setView]);
 
-  // Create ceremony passed the save gate: persist the key, mark enrolled
-  // (epoch = remote tombstone epoch + 1, or 1), and run the first backup.
+  // Create ceremony passed the save gate: persist the key and move to the
+  // first backup. Enrollment is committed only AFTER that backup succeeds —
+  // committing here would (a) persist an enrolled state a failed/blocked
+  // push can't honour, and (b) flip localKeyId, remounting the sync host
+  // whose on-load sync would race the ceremony's own run.
   const handleCreateContinue = useCallback(async () => {
     const master = pendingKey;
     if (!master) return;
     try {
       await saveMasterKey(master);
       resetBackupKeyCache();
-      const keyId = await computeKeyId(master);
-      const remoteEpoch = useBackupStore.getState().remoteKeyEpoch;
-      useBackupStore.getState().setEnrolled(keyId, (remoteEpoch ?? 0) + 1);
       setPendingKey(null);
       setView('enroll-progress');
     } catch {
@@ -156,25 +153,46 @@ function BackupModalsInner() {
 
   // Initial full backup. runSync creates the manifest on a plain 404; a
   // disabled tombstone manifest reads as 'remote-missing', where the
-  // from-scratch push (epoch+1 over the tombstone) takes over.
+  // from-scratch push (epoch+1 over the tombstone) takes over. A LIVE
+  // manifest under a different key is never overwritten from here — that is
+  // the restore/reset flows' job.
   const runCreateBackup = useCallback(async (): Promise<number> => {
     const keys = await getBackupKeys();
     if (!keys) throw new Error('backup key missing after enrollment');
+    const store = useBackupStore.getState();
     const result = await runSync(buildBackupSyncDeps(keys));
     if (result.status === 'remote-missing') {
       const pushed = await pushFullBackup(keys);
-      useBackupStore.getState().setSyncStatus('ok');
+      store.setEnrolled(keys.keyId, pushed.epoch);
+      store.setSyncStatus('ok');
       return pushed.pushed;
     }
     if (result.status !== 'ok') {
       throw new Error(result.error ?? `backup failed (${result.status})`);
     }
-    return result.pushed;
+    // recordSyncPoint already adopted the manifest epoch during the sync.
+    store.setEnrolled(keys.keyId, useBackupStore.getState().localKeyEpoch);
+    store.setSyncStatus('ok');
+    // Report the protected corpus size, not the engine's pushed count — a
+    // coalesced rerun can legitimately report 0 pushes for a full backup.
+    return useConversationStore.getState().conversations.length;
   }, []);
 
-  // Rotation (plan ordering): re-encrypt + upload + CAS under the NEW key
-  // first, then overwrite the keystore — the forced re-save ceremony follows.
+  // Rotation (plan ordering): pull-merge under the CURRENT key first (the
+  // new manifest is rebuilt from the local corpus only, so anything another
+  // device pushed since our last pull must be merged in before the old key
+  // stops working), then re-encrypt + upload + CAS under the NEW key, then
+  // overwrite the keystore — the forced re-save ceremony follows.
   const runRotateBackup = useCallback(async (): Promise<number> => {
+    const currentKeys = await getBackupKeys();
+    if (currentKeys) {
+      const pre = await runSync(buildBackupSyncDeps(currentKeys));
+      if (pre.status !== 'ok' && pre.status !== 'remote-missing') {
+        throw new Error(
+          pre.error ?? `backup not in sync before rotation (${pre.status})`,
+        );
+      }
+    }
     const master = generateMasterKey();
     const keys = await deriveBackupKeys(master);
     const result = await pushFullBackup(keys, { overwriteLive: true });
