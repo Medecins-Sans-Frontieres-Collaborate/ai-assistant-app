@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useId, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import {
+  type DecodeRecoveryCodeResult,
   decodeRecoveryCode,
   normalizeRecoveryCode,
 } from '@/lib/utils/shared/backupCrypto/recoveryCode';
@@ -58,8 +59,12 @@ export function RecoveryCodeInput({
   const t = useTranslations('backup');
   const feedbackId = useId();
   const [value, setValue] = useState('');
-  const [feedback, setFeedback] = useState<Feedback>('empty');
-  const [validKey, setValidKey] = useState<Uint8Array | null>(null);
+  // Result of the latest async checksum decode, tagged with the code it was
+  // computed for so stale results are ignored by derivation below.
+  const [decoded, setDecoded] = useState<{
+    code: string;
+    result: DecodeRecoveryCodeResult;
+  } | null>(null);
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,40 +80,42 @@ export function RecoveryCodeInput({
     [onEdit],
   );
 
-  // Live validation: decodeRecoveryCode is async (SHA-256 checksum), so run
-  // it in an effect with a cancellation guard against out-of-order results.
+  const normalized = normalizeRecoveryCode(value);
+  const needsChecksum =
+    normalized.length === CODE_CHARS && VALID_CHARS.test(normalized);
+
+  // The checksum requires an async SHA-256; everything else derives inline.
   useEffect(() => {
-    const normalized = normalizeRecoveryCode(value);
-    if (normalized.length === 0) {
-      setFeedback('empty');
-      setValidKey(null);
-      return;
-    }
-    if (!VALID_CHARS.test(normalized)) {
-      setFeedback('format');
-      setValidKey(null);
-      return;
-    }
-    if (normalized.length < CODE_CHARS) {
-      setFeedback('incomplete');
-      setValidKey(null);
-      return;
-    }
+    if (!needsChecksum) return;
     let cancelled = false;
     void decodeRecoveryCode(normalized).then((result) => {
-      if (cancelled) return;
-      if (result.ok) {
-        setFeedback('valid');
-        setValidKey(result.key);
-      } else {
-        setFeedback(result.error === 'format' ? 'format' : 'checksum');
-        setValidKey(null);
-      }
+      if (!cancelled) setDecoded({ code: normalized, result });
     });
     return () => {
       cancelled = true;
     };
-  }, [value]);
+  }, [normalized, needsChecksum]);
+
+  const checksumResult =
+    needsChecksum && decoded?.code === normalized ? decoded.result : null;
+
+  const feedback: Feedback =
+    normalized.length === 0
+      ? 'empty'
+      : !VALID_CHARS.test(normalized)
+        ? 'format'
+        : normalized.length < CODE_CHARS
+          ? 'incomplete'
+          : checksumResult === null
+            ? 'incomplete' // decode in flight — keep feedback neutral
+            : checksumResult.ok
+              ? 'valid'
+              : checksumResult.error === 'format'
+                ? 'format'
+                : 'checksum';
+
+  const validKey =
+    checksumResult !== null && checksumResult.ok ? checksumResult.key : null;
 
   const isError =
     externalError !== null || feedback === 'checksum' || feedback === 'format';
