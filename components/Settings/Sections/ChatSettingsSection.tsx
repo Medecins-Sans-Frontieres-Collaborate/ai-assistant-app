@@ -19,6 +19,7 @@ import { Settings } from '@/types/settings';
 
 import { AutoFetchLinksToggle } from '../AutoFetchLinksToggle';
 import { ContextWindowSlider } from '../ContextWindowSlider';
+import { PasteAttachmentSetting } from '../PasteAttachmentSetting';
 import { SystemPrompt } from '../SystemPrompt';
 import { TTSSettingsPanel } from '../TTS/TTSSettingsPanel';
 import { TemperatureSlider } from '../Temperature';
@@ -300,6 +301,11 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
               {/* Pasted-link auto-fetch — store-driven, applies immediately. */}
               <div className="mt-4">
                 <AutoFetchLinksToggle />
+              </div>
+
+              {/* Large-paste attachment threshold — same store-driven pattern. */}
+              <div className="mt-4">
+                <PasteAttachmentSetting />
               </div>
             </div>
           )}
