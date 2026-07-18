@@ -115,6 +115,9 @@ export function estimateUntrackedRequests(
   const systemAllowance =
     SYSTEM_PROMPT_TOKEN_ALLOWANCE +
     estimateTokensFromText(conversation.prompt ?? '');
+  // NOTE: estimates assume the DEFAULT window size. Users who adjust
+  // settingsStore.contextWindowSize will drift from actual request sizes —
+  // accepted, since backfill is a historical estimate at best anyway.
   const windowSize = VALIDATION_LIMITS.CLIENT_MAX_MESSAGES;
   const modelContextCap =
     typeof conversation.model?.maxLength === 'number' &&
