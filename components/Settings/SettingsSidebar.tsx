@@ -1,4 +1,5 @@
 import {
+  IconBrain,
   IconDatabase,
   IconDeviceMobile,
   IconHelp,
@@ -51,13 +52,21 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
   const t = useTranslations();
   // Fail-open: undefined (LD unconfigured/unserved) → shown. Flip to false in
   // LaunchDarkly to hide the section.
-  const { showUsageImpact, mcpConnectors, enableEncryptedBackups } = useFlags();
+  const {
+    showUsageImpact,
+    mcpConnectors,
+    enableEncryptedBackups,
+    enableMemories,
+  } = useFlags();
   const isUsageImpactEnabled = showUsageImpact !== false;
   const isConnectorsEnabled = mcpConnectors !== false;
   // Fail-closed (`=== true`) — deliberately the opposite polarity of the
   // flags above: encrypted backup must stay hidden until LD explicitly
   // serves the flag as true (like mcpArbitraryServers).
   const isBackupEnabled = enableEncryptedBackups === true;
+  // Fail-closed (`=== true`): memories stay hidden until LD explicitly
+  // serves the flag as true (same rationale as encrypted backup).
+  const isMemoriesEnabled = enableMemories === true;
   // Visibility only — the admin page's server component is the real gate.
   const { isAdmin: isAgentAccessAdmin } = useAgentAccessAdmin();
   const [showResetConfirmation, setShowResetConfirmation] = useState(false);
@@ -134,6 +143,16 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
               activeSection={activeSection}
               label={t('settings.Backup')}
               icon={<IconShieldLock size={18} />}
+              onClick={setActiveSection}
+            />
+          )}
+
+          {isMemoriesEnabled && (
+            <NavigationItem
+              section={SettingsSection.MEMORIES}
+              activeSection={activeSection}
+              label={t('settings.Memories')}
+              icon={<IconBrain size={18} />}
               onClick={setActiveSection}
             />
           )}
