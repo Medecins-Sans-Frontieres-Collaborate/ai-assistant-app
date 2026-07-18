@@ -352,6 +352,18 @@ export interface ChatBody {
    * call (`StandardChatHandler` honours `context.responseFormat`).
    */
   extraction?: ExtractionRequest;
+  /**
+   * Best-effort summary of earlier messages dropped by client-side context
+   * windowing (conversation compaction). Rendered into the system prompt
+   * server-side. Cap 8,000 chars (enforced in InputValidator).
+   */
+  conversationSummary?: string;
+  /**
+   * Long-term user memory snippets (Memories feature, LD-gated client-side).
+   * Rendered into the system prompt server-side. Caps: 60 items x 600 chars
+   * (enforced in InputValidator).
+   */
+  memories?: string[];
 }
 
 /**
@@ -413,6 +425,16 @@ export interface Conversation {
    * `conversationType`. Write via conversationStore.updateWorkflowState only.
    */
   workflowState?: import('./workflow').WorkflowState;
+  /**
+   * Conversation compaction state. `summary` covers entries
+   * `1..upToEntryIndex-1` (exclusive index; entry 0 is always sent verbatim).
+   * Entry indices map 1:1 to flattened message indices.
+   */
+  compaction?: {
+    summary: string;
+    upToEntryIndex: number;
+    updatedAt: string;
+  };
 }
 
 export type FileFieldValue =
