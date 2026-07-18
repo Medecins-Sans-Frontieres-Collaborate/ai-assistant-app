@@ -127,6 +127,69 @@ describe('ToolRouter Enricher', () => {
         expect(enricher.shouldRun(context)).toBe(false);
       });
     });
+
+    describe('with prompt agents (botId + context.promptAgent)', () => {
+      // Prompt agents arrive via botId but ride the standard execution
+      // path: web search must behave exactly as for a plain model, not be
+      // silently disabled by the static org-agent gate (which can never
+      // resolve a `prompt-<hex>` id).
+      const promptAgentRecord = {
+        version: 1 as const,
+        id: 'prompt-abc123def456',
+        name: 'Persona',
+        description: '',
+        systemPrompt: 'You are a persona.',
+        modelId: 'gpt-5.2',
+        createdBy: 'admin@msf.org',
+        createdAt: '2026-07-18T00:00:00.000Z',
+        updatedBy: 'admin@msf.org',
+        updatedAt: '2026-07-18T00:00:00.000Z',
+      };
+
+      function makePromptAgentContext(searchMode: SearchMode | undefined) {
+        const context = createTestChatContext({
+          searchMode,
+          botId: promptAgentRecord.id,
+        });
+        context.promptAgent = promptAgentRecord;
+        return context;
+      }
+
+      it('should return true for ALWAYS mode', () => {
+        expect(
+          enricher.shouldRun(makePromptAgentContext(SearchMode.ALWAYS)),
+        ).toBe(true);
+      });
+
+      it('should return true for INTELLIGENT mode', () => {
+        expect(
+          enricher.shouldRun(makePromptAgentContext(SearchMode.INTELLIGENT)),
+        ).toBe(true);
+      });
+
+      it('should return false for OFF mode', () => {
+        expect(enricher.shouldRun(makePromptAgentContext(SearchMode.OFF))).toBe(
+          false,
+        );
+      });
+
+      it('should return false when searchMode is undefined', () => {
+        expect(enricher.shouldRun(makePromptAgentContext(undefined))).toBe(
+          false,
+        );
+      });
+
+      it('an unresolved prompt- botId WITHOUT a persona keeps the org-agent gate (false)', () => {
+        // No context.promptAgent (record deleted/unknown): the botId branch
+        // applies and the unresolvable id disables search as before.
+        const context = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          botId: 'prompt-abc123def456',
+        });
+
+        expect(enricher.shouldRun(context)).toBe(false);
+      });
+    });
   });
 
   describe('executeStage', () => {
