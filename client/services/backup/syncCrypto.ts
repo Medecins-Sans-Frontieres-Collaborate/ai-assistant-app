@@ -41,6 +41,7 @@ export function createSyncCrypto(keys: BackupKeys, epoch: number): SyncCrypto {
 
   const decrypt = async (
     ciphertext: Uint8Array,
+    slotEpoch: number,
     slotId: string,
   ): Promise<string> => {
     const envelope = JSON.parse(
@@ -50,6 +51,7 @@ export function createSyncCrypto(keys: BackupKeys, epoch: number): SyncCrypto {
       envelope,
       encKey: keys.encKey,
       keyId: keys.keyId,
+      expectedEpoch: slotEpoch,
       conversationId: slotId,
     });
   };
@@ -59,13 +61,15 @@ export function createSyncCrypto(keys: BackupKeys, epoch: number): SyncCrypto {
     epoch,
     encryptConversation: (conversation, slotEpoch) =>
       encrypt(JSON.stringify(conversation), slotEpoch, conversation.id),
-    decryptConversation: async (conversationId, _slotEpoch, ciphertext) =>
-      JSON.parse(await decrypt(ciphertext, conversationId)) as Conversation,
+    decryptConversation: async (conversationId, slotEpoch, ciphertext) =>
+      JSON.parse(
+        await decrypt(ciphertext, slotEpoch, conversationId),
+      ) as Conversation,
     encryptFolders: (folders, slotEpoch) =>
       encrypt(JSON.stringify(folders), slotEpoch, FOLDERS_SLOT_ID),
-    decryptFolders: async (_slotEpoch, ciphertext) =>
+    decryptFolders: async (slotEpoch, ciphertext) =>
       JSON.parse(
-        await decrypt(ciphertext, FOLDERS_SLOT_ID),
+        await decrypt(ciphertext, slotEpoch, FOLDERS_SLOT_ID),
       ) as FolderInterface[],
   };
 }
