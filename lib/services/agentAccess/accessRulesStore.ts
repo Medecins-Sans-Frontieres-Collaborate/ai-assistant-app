@@ -377,12 +377,17 @@ export async function writeHistoryEntry(
 /**
  * Lists and parses every prompt-agent blob under the prompt-agents prefix.
  *
- * Same fail-closed posture as {@link listAllRules}: a malformed blob (bad
- * JSON, schema failure, or a blob whose name does not match its content's
- * id-derived path — i.e. hand-placed) makes the whole listing THROW after
- * logging, so refresh() keeps the last-known-good snapshot instead of
- * silently dropping a persona. The ONLY silent skip is a 404 (deleted
- * between list and get).
+ * DELIBERATELY SOFTER than {@link listAllRules}: a malformed blob (bad JSON,
+ * schema failure, or a blob whose name does not match its content's
+ * id-derived path — i.e. hand-placed) is SKIPPED with a loud console.error
+ * instead of failing the whole listing. A dropped persona fails SAFE — it
+ * disappears from discovery and its botId falls through to vanilla chat —
+ * whereas a dropped rule would fail OPEN, which is why listAllRules throws.
+ * Throwing here would couple one corrupt persona blob to the entire rules
+ * snapshot (refresh() loads both) and, on cold start, brick every Foundry
+ * invocation — exactly the blast radius the sibling `prompt-agents/` prefix
+ * exists to contain. Storage-level errors (list/download failures) still
+ * throw; a 404 (deleted between list and get) stays a silent skip.
  */
 export async function listAllPromptAgents(
   storage: BlobStorage,
@@ -399,27 +404,23 @@ export async function listAllPromptAgents(
         json = JSON.parse(downloaded.buffer.toString('utf8'));
       } catch {
         console.error(
-          `[agent-access] prompt-agent blob with invalid JSON fails the listing (fail closed): ${sanitizeForLog(name)}`,
+          `[agent-access] SKIPPING prompt-agent blob with invalid JSON (broken persona degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
         );
-        throw new Error(`Prompt agent blob has invalid JSON: ${name}`);
+        return null;
       }
       const parsed = PromptAgentSchema.safeParse(json);
       if (!parsed.success) {
         console.error(
-          `[agent-access] malformed prompt-agent blob fails the listing (fail closed) ${sanitizeForLog(name)}: ${sanitizeForLog(parsed.error.message)}`,
+          `[agent-access] SKIPPING malformed prompt-agent blob (broken persona degrades alone; rules snapshot unaffected) ${sanitizeForLog(name)}: ${sanitizeForLog(parsed.error.message)}`,
         );
-        throw new Error(
-          `Malformed prompt agent blob ${name}: ${parsed.error.message}`,
-        );
+        return null;
       }
       if (promptAgentBlobPath(parsed.data.id) !== name) {
         // A stray blob must not shadow (or masquerade as) another id's agent.
         console.error(
-          `[agent-access] prompt-agent blob whose name does not match its content's id fails the listing (fail closed): ${sanitizeForLog(name)}`,
+          `[agent-access] SKIPPING prompt-agent blob whose name does not match its content's id (broken persona degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
         );
-        throw new Error(
-          `Prompt agent blob name does not match its content's id: ${name}`,
-        );
+        return null;
       }
       return {
         canonicalKey: canonicalAgentKey(PROMPT_AGENT_SOURCE, parsed.data.id),

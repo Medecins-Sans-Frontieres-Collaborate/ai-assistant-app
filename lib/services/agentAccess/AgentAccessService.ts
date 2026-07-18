@@ -302,12 +302,15 @@ export class AgentAccessService {
     const epochAtEntry = this.epoch;
     try {
       const storage = this.getStorage();
-      // Rules, config, and prompt agents load in one transaction: the whole
-      // snapshot is kept/replaced atomically, so a failure in any half keeps
-      // last-known-good for everything (never a mixed-age snapshot).
+      // Rules and config load in one transaction: that pair is kept/replaced
+      // atomically, so a failure in either keeps last-known-good for both
+      // (never a mixed-age rules/config pair). Prompt agents load in a
+      // separate, independently-degradable step below — a persona-listing
+      // failure must never freeze rule propagation or mark rules
+      // unavailable (a broken persona degrades only itself; access
+      // enforcement depends on rules/config alone).
       const rules = await listAllRules(storage);
       const configResult = await readConfig(storage);
-      const storedPromptAgents = await listAllPromptAgents(storage);
 
       const rulesByKey = new Map<string, StoredAgentAccessRule>();
       const rulesByAgentName = new Map<string, StoredAgentAccessRule[]>();
@@ -322,18 +325,36 @@ export class AgentAccessService {
         }
       }
 
+      // Prompt agents: isolated failure handling. On failure the persona
+      // half keeps its own last-known-good (empty on cold start) and the
+      // rules snapshot still commits — the failure is logged loudly but is
+      // never reported as 'unavailable'.
+      let promptAgents: PromptAgent[] = this.state?.promptAgents ?? [];
+      let promptAgentsById: Map<string, PromptAgent> =
+        this.state?.promptAgentsById ?? new Map();
+      try {
+        const storedPromptAgents = await listAllPromptAgents(storage);
+        promptAgents = storedPromptAgents.map(
+          (stored: StoredPromptAgent) => stored.agent,
+        );
+        promptAgentsById = new Map<string, PromptAgent>(
+          promptAgents.map((agent) => [agent.id, agent]),
+        );
+      } catch (error) {
+        console.error(
+          `[agent-access] prompt-agent listing failed (${
+            this.state
+              ? 'keeping last-known-good personas'
+              : 'no personas until a load succeeds'
+          }; rules snapshot unaffected): ${sanitizeForLog(error)}`,
+        );
+      }
+
       // Keeping the fetched state is always safe — it is never older than
       // what it replaces — but freshness is only stamped when no
       // invalidate() landed while this refresh was in flight. Otherwise
       // fetchedAt stays 0 and the next ensureFresh() refetches, so the
       // replica that just wrote never serves pre-write rules for a full TTL.
-      const promptAgents = storedPromptAgents.map(
-        (stored: StoredPromptAgent) => stored.agent,
-      );
-      const promptAgentsById = new Map<string, PromptAgent>(
-        promptAgents.map((agent) => [agent.id, agent]),
-      );
-
       this.state = {
         rules,
         rulesByKey,
