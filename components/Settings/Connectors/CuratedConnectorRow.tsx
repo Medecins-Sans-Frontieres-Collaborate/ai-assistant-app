@@ -38,6 +38,12 @@ interface CuratedConnectorRowProps {
   entry: McpCatalogEntry;
   /** The saved config for this catalog entry, if connected. */
   config?: McpServerConfig;
+  /**
+   * Whether this deployment has an OAuth app for this connector. False hides
+   * "Connect with {name}" — there is nothing to tie into, so the click could
+   * only end in oauth_unavailable. Bringing your own app still works.
+   */
+  oauthAppAvailable?: boolean;
 }
 
 /**
@@ -51,10 +57,17 @@ interface CuratedConnectorRowProps {
  *   button, "Use an access token instead" reveals the PAT fallback. The
  *   connected state renders from the SAVED config's authMode, whichever
  *   path was used.
+ *
+ * All OAuth affordances are additionally gated on `oauthAppAvailable`: a
+ * deployment with no MCP_OAUTH_*_CLIENT_ID has no app for the user to tie
+ * into, and the providers offer no usable web-app DCR, so the button is
+ * hidden rather than left to fail after a popup round-trip. Bringing your
+ * own app stays available and re-enables it.
  */
 export const CuratedConnectorRow: FC<CuratedConnectorRowProps> = ({
   entry,
   config,
+  oauthAppAvailable = true,
 }) => {
   const t = useTranslations('connectors');
   const tCommon = useTranslations('common');
@@ -76,10 +89,16 @@ export const CuratedConnectorRow: FC<CuratedConnectorRowProps> = ({
   const { tools, isLoadingTools } = useMcpTools(config);
 
   const Icon = CATALOG_ICONS[entry.key] ?? IconPlugConnected;
-  const oauthAvailable =
+  const oauthSupported =
     entry.auth.style === 'oauth' || !!entry.alsoSupportsOauth;
   const patAvailable =
     entry.auth.style === 'bearer' || entry.auth.style === 'header';
+  // An own-app client id — saved from a previous connect, or being typed
+  // right now — is itself something to tie into, so it re-enables the button
+  // on deployments with no app of their own.
+  const ownAppReady = !!config?.oauthApp || !!ownClientId.trim();
+  /** Can a "Connect with {name}" click actually reach a provider app? */
+  const canStartOauth = oauthSupported && (oauthAppAvailable || ownAppReady);
   // Connected state renders from the SAVED config's auth mode — for dual-
   // auth entries (GitHub) that's whichever path the user actually used.
   const connectedViaOauth = config?.authMode === 'oauth';
@@ -187,6 +206,12 @@ export const CuratedConnectorRow: FC<CuratedConnectorRowProps> = ({
 
   const isConnected =
     !!config && (!connectedViaOauth || !!config.oauth?.accessToken);
+  // With no deployment app and no token fallback (an oauth-only connector on
+  // an unconfigured deployment), bringing your own app is the ONLY way in —
+  // so reveal those fields instead of leaving an empty row behind a toggle.
+  const ownAppForced =
+    !config && oauthSupported && !oauthAppAvailable && !patAvailable;
+  const showOwnAppFields = showOwnApp || ownAppForced;
 
   return (
     <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
@@ -232,7 +257,7 @@ export const CuratedConnectorRow: FC<CuratedConnectorRowProps> = ({
                     {t('toolCount', { count: tools.length })}
                   </span>
                 )}
-                {needsReauth && (
+                {needsReauth && canStartOauth && (
                   <button
                     type="button"
                     onClick={handleConnectOauth}
@@ -263,6 +288,11 @@ export const CuratedConnectorRow: FC<CuratedConnectorRowProps> = ({
                   {t('disconnect')}
                 </button>
               </div>
+              {needsReauth && !canStartOauth && (
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {t('oauthNoAppConfigured', { name: entry.label })}
+                </p>
+              )}
               {connectedViaOauth && (
                 // No token revocation in v1 (RFC 7009 via the proxy is a
                 // clean follow-up) — deleting only removes local access.
@@ -272,19 +302,23 @@ export const CuratedConnectorRow: FC<CuratedConnectorRowProps> = ({
                 </p>
               )}
             </div>
-          ) : oauthAvailable && !expanded ? (
+          ) : oauthSupported && !expanded ? (
             <div className="mt-3 space-y-3">
               <div className="flex flex-wrap items-center gap-3">
-                <button
-                  type="button"
-                  onClick={handleConnectOauth}
-                  disabled={isBusy}
-                  className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-                >
-                  {isBusy
-                    ? t('oauthWaiting')
-                    : t('connectWithProvider', { name: entry.label })}
-                </button>
+                {/* Hidden when there is no app to tie into: the click would
+                    only round-trip to an oauth_unavailable error. */}
+                {canStartOauth && (
+                  <button
+                    type="button"
+                    onClick={handleConnectOauth}
+                    disabled={isBusy}
+                    className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+                  >
+                    {isBusy
+                      ? t('oauthWaiting')
+                      : t('connectWithProvider', { name: entry.label })}
+                  </button>
+                )}
                 {patAvailable && (
                   <button
                     type="button"
@@ -294,15 +328,22 @@ export const CuratedConnectorRow: FC<CuratedConnectorRowProps> = ({
                     {t('useTokenInstead')}
                   </button>
                 )}
-                <button
-                  type="button"
-                  onClick={() => setShowOwnApp((v) => !v)}
-                  className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
-                >
-                  {t('ownAppToggle')}
-                </button>
+                {!ownAppForced && (
+                  <button
+                    type="button"
+                    onClick={() => setShowOwnApp((v) => !v)}
+                    className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                  >
+                    {t('ownAppToggle')}
+                  </button>
+                )}
               </div>
-              {showOwnApp && (
+              {!oauthAppAvailable && (
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {t('oauthNoAppConfigured', { name: entry.label })}
+                </p>
+              )}
+              {showOwnAppFields && (
                 <OwnOauthAppFields
                   providerName={entry.label}
                   clientId={ownClientId}
