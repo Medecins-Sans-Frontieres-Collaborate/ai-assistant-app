@@ -18,6 +18,7 @@ import { DEFAULT_STREAMING_SPEED, Settings } from '@/types/settings';
 import packageJson from '../../package.json';
 import { MigrationDialog } from '../Migration/MigrationDialog';
 import { MobileSettingsHeader } from './MobileSettingsHeader';
+import { BackupSection } from './Sections/BackupSection';
 import { ChatSettingsSection } from './Sections/ChatSettingsSection';
 import { ConnectorsSection } from './Sections/ConnectorsSection';
 import { DataManagementSection } from './Sections/DataManagementSection';
@@ -325,6 +326,8 @@ export function SettingDialog() {
                 {activeSection === SettingsSection.USAGE_IMPACT && (
                   <UsageImpactSection />
                 )}
+
+                {activeSection === SettingsSection.BACKUP && <BackupSection />}
 
                 {activeSection === SettingsSection.DATA_MANAGEMENT && (
                   <DataManagementSection
