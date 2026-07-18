@@ -178,6 +178,10 @@ export class ChatService {
       mcpLoopRound?: number;
       /** Structured-data extraction payload (see types/extractionRecipe.ts). */
       extraction?: ExtractionRequest;
+      /** Summary of earlier windowed-out messages (see ChatBody). */
+      conversationSummary?: string;
+      /** Long-term user memory snippets (see ChatBody). */
+      memories?: string[];
     },
   ): Promise<ReadableStream<Uint8Array>> {
     const messagesWithPlaceholders = await prepareMessagesForAPI(messages);
@@ -213,6 +217,8 @@ export class ChatService {
       mcpPendingToolCalls: options?.mcpPendingToolCalls,
       mcpLoopRound: options?.mcpLoopRound,
       extraction: options?.extraction,
+      conversationSummary: options?.conversationSummary,
+      memories: options?.memories,
     };
 
     const { body, report } = trimBodyToByteBudget(rawBody);
