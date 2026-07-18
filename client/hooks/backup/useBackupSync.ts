@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { getBackupKeys } from '@/client/services/backup/keystore';
 import { createSyncCrypto } from '@/client/services/backup/syncCrypto';
 import { createBackupApiClient } from '@/lib/services/backup/backupApiClient';
+import { conversationUpdatedAt, toMillis } from '@/lib/services/backup/merge';
 import { runSync } from '@/lib/services/backup/syncEngine';
 import type {
   BackupApi,
@@ -84,18 +85,39 @@ function buildSyncDeps(keys: BackupKeys): SyncDeps {
       conversations,
       folders,
       deleteIds,
+      deletedAtById,
     }: RemoteApplyPayload) => {
       const store = useConversationStore.getState();
       if (conversations.length > 0 || deleteIds.length > 0) {
-        const deletes = new Set(deleteIds);
+        const localById = new Map(store.conversations.map((c) => [c.id, c]));
+        // Re-check LWW against the CURRENT store: the plan was computed from
+        // a pre-download snapshot, and an edit made during the network window
+        // must win over the older pulled copy / stale tombstone. The kept
+        // local copy re-pushes on the next debounce (its updatedAt no longer
+        // matches the manifest entry).
+        const deletes = new Set(
+          deleteIds.filter((id) => {
+            const local = localById.get(id);
+            if (!local) return true;
+            const deletedAt = deletedAtById?.[id];
+            return (
+              deletedAt === undefined ||
+              toMillis(deletedAt) >= toMillis(conversationUpdatedAt(local))
+            );
+          }),
+        );
         const pulledById = new Map(conversations.map((c) => [c.id, c]));
         // Replace in place, drop remote-won deletions, prepend remote-new.
         const merged = store.conversations
           .filter((c) => !deletes.has(c.id))
           .map((c) => {
             const pulled = pulledById.get(c.id);
-            if (pulled) pulledById.delete(c.id);
-            return pulled ?? c;
+            if (!pulled) return c;
+            pulledById.delete(c.id);
+            return toMillis(conversationUpdatedAt(c)) >
+              toMillis(conversationUpdatedAt(pulled))
+              ? c
+              : pulled;
           });
         store.setConversations([...pulledById.values(), ...merged]);
         if (
@@ -138,13 +160,14 @@ export function useBackupSync(): UseBackupSyncResult {
     readyRef.current = ready;
   }, [ready]);
 
-  const keysRef = useRef<BackupKeys | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const sync = useCallback(async (): Promise<SyncResult | null> => {
-    const keys = keysRef.current ?? (await getBackupKeys());
+    // Always re-read from the keystore — its memo is single-flight and is
+    // correctly invalidated on rotation/restore, unlike an instance-local
+    // cache (a second hook instance survives key changes unremounted).
+    const keys = await getBackupKeys();
     if (!keys) return null; // enrolled but keystore empty — banner flow owns it
-    keysRef.current = keys;
     const result = await runSync(buildSyncDeps(keys));
     if (result.status === 'error') {
       useBackupStore.getState().setSyncStatus('error', result.error);
