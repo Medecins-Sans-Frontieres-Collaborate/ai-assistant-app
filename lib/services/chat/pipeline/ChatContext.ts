@@ -119,6 +119,18 @@ export interface ChatContext {
   /** Additional user context for the AI */
   userContext?: string;
 
+  /**
+   * Best-effort summary of earlier messages dropped by client-side context
+   * windowing (conversation compaction). Rendered into the system prompt.
+   */
+  conversationSummary?: string;
+
+  /**
+   * Long-term user memory snippets (Memories feature). Rendered into the
+   * system prompt.
+   */
+  memories?: string[];
+
   /** Display name preference from General Settings (for deriving name fallback) */
   displayNamePreference?: DisplayNamePreference;
 
