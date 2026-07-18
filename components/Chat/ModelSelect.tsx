@@ -68,9 +68,35 @@ import {
 
 interface ModelSelectProps {
   onClose?: () => void;
+  /**
+   * Restricts which models may be listed or selected. Workflow
+   * conversations pass `isWorkflowEligibleModel`, because the workflow
+   * routes silently fall back to a default rather than erroring on an
+   * ineligible model — offering one would swap the user's choice without
+   * telling them. Applies to base models, BYO-source models, and the
+   * selection validity check alike.
+   */
+  modelFilter?: (model: OpenAIModel) => boolean;
+  /**
+   * Hides the Agents tab. Workflow routes call Azure OpenAI chat
+   * completions directly and can't run an agent at all.
+   */
+  hideAgentsTab?: boolean;
+  /**
+   * Apply the pick to this conversation only, leaving the user's global
+   * default model for new chats alone. Set for workflows, where the list
+   * is restricted and quietly re-defaulting every future chat off a
+   * narrowed set would be a surprise.
+   */
+  scopedToConversation?: boolean;
 }
 
-export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
+export const ModelSelect: FC<ModelSelectProps> = ({
+  onClose,
+  modelFilter,
+  hideAgentsTab = false,
+  scopedToConversation = false,
+}) => {
   const t = useTranslations();
   const { exploreBots, enableClaudeModels, enableBYOModels } = useFlags();
   const { selectedConversation, updateConversation, conversations } =
@@ -112,7 +138,9 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     setMobileView,
     showAgentWarning,
     setShowAgentWarning,
-  } = useModelSelectState(isSelectedModelAgent);
+    // Never open onto the Agents tab when it isn't rendered: a workflow
+    // conversation carrying a stale agent model would land on a blank pane.
+  } = useModelSelectState(isSelectedModelAgent && !hideAgentsTab);
 
   // Agent source management
   const customAgentSources = useSettingsStore((s) => s.customAgentSources);
@@ -172,10 +200,10 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
   // Flat list for selection/details lookup. Deliberately NOT merged into
   // baseModels: byom models render in their own per-source sections, never in
   // the family tree, and bypass app-level curation (isDisabled, Claude flag).
-  const customSourceModels = useMemo(
-    () => [...visibleSourceModels.values()].flat(),
-    [visibleSourceModels],
-  );
+  const customSourceModels = useMemo(() => {
+    const flat = [...visibleSourceModels.values()].flat();
+    return modelFilter ? flat.filter(modelFilter) : flat;
+  }, [visibleSourceModels, modelFilter]);
 
   // Hidden models/agents — one list keyed by model ID covers both.
   const hiddenModelIds = useSettingsStore((s) => s.hiddenModelIds);
@@ -246,9 +274,10 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
           !m.id.startsWith('custom-') &&
           !m.isCustomAgent &&
           (OpenAIModels[m.id as OpenAIModelID]?.provider !== 'anthropic' ||
-            isClaudeEnabled),
+            isClaudeEnabled) &&
+          (!modelFilter || modelFilter(m)),
       ),
-    [models, isClaudeEnabled],
+    [models, isClaudeEnabled, modelFilter],
   );
 
   // Use the model ordering hook for sorting and reordering
@@ -369,9 +398,16 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
   }, [isBotsEnabled, foundryAgents, customAgentSources]);
 
   // Combine base models, organization/discovered agents, and custom-source models
+  // baseModels and customSourceModels are already filtered; agents are
+  // dropped wholesale when the Agents tab is hidden, so a stale agent on
+  // the conversation can't be re-selected from the details panel.
   const availableModels = useMemo(
-    () => [...baseModels, ...organizationAgentModels, ...customSourceModels],
-    [baseModels, organizationAgentModels, customSourceModels],
+    () => [
+      ...baseModels,
+      ...(hideAgentsTab ? [] : organizationAgentModels),
+      ...customSourceModels,
+    ],
+    [baseModels, organizationAgentModels, customSourceModels, hideAgentsTab],
   );
 
   const selectedModel =
@@ -448,11 +484,14 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
       // Switch to details view on mobile when a model is selected
       setMobileView('details');
 
-      // Set as default model for future conversations
-      console.log(
-        `[ModelSelect] Setting default model to: ${model.id} (${model.name})`,
-      );
-      setDefaultModelId(model.id as OpenAIModelID);
+      // Set as default model for future conversations — skipped when the
+      // picker is scoped to one conversation (see scopedToConversation).
+      if (!scopedToConversation) {
+        console.log(
+          `[ModelSelect] Setting default model to: ${model.id} (${model.name})`,
+        );
+        setDefaultModelId(model.id as OpenAIModelID);
+      }
 
       // Update conversation with selected model
       // Initialize defaultSearchMode to INTELLIGENT (privacy-focused) if not already set
@@ -518,6 +557,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
       setMobileView,
       setDefaultModelId,
       updateConversation,
+      scopedToConversation,
     ],
   );
 
@@ -697,12 +737,16 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
             icon: <AzureOpenAIIcon className="w-5 h-5" />,
             width: '115px',
           },
-          {
-            id: 'agents',
-            label: t('modelSelect.tabs.agents'),
-            icon: <AzureAIIcon className="w-5 h-5" />,
-            width: '115px',
-          },
+          ...(hideAgentsTab
+            ? []
+            : [
+                {
+                  id: 'agents',
+                  label: t('modelSelect.tabs.agents'),
+                  icon: <AzureAIIcon className="w-5 h-5" />,
+                  width: '115px',
+                },
+              ]),
         ]}
         activeTab={activeTab}
         onTabChange={(tab) => setActiveTab(tab as 'models' | 'agents')}
