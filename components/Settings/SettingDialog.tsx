@@ -24,6 +24,7 @@ import { ConnectorsSection } from './Sections/ConnectorsSection';
 import { DataManagementSection } from './Sections/DataManagementSection';
 import { GeneralSection } from './Sections/GeneralSection';
 import { HelpSupportSection } from './Sections/HelpSupportSection';
+import { MemoriesSection } from './Sections/MemoriesSection';
 import { MobileAppSection } from './Sections/MobileAppSection';
 import { UsageImpactSection } from './Sections/UsageImpactSection';
 import { SettingsSidebar } from './SettingsSidebar';
@@ -328,6 +329,10 @@ export function SettingDialog() {
                 )}
 
                 {activeSection === SettingsSection.BACKUP && <BackupSection />}
+
+                {activeSection === SettingsSection.MEMORIES && (
+                  <MemoriesSection />
+                )}
 
                 {activeSection === SettingsSection.DATA_MANAGEMENT && (
                   <DataManagementSection
