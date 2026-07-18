@@ -6,6 +6,7 @@ import { useChat } from '@/client/hooks/chat/useChat';
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 
 import { MessageContentAnalyzer } from '@/lib/utils/shared/chat/messageContentAnalyzer';
+import { flattenEntriesForAPI } from '@/lib/utils/shared/chat/messageVersioning';
 
 import {
   FileMessageContent,
@@ -110,9 +111,20 @@ export const ChatMessage: FC<Props> = ({
       messages.splice(findIndex, 1);
     }
 
+    // Deleting inside the summarized region shifts later flat indices left,
+    // desyncing compaction.upToEntryIndex (messages would be skipped forever
+    // and deleted facts would stay baked into the summary). Invalidate the
+    // watermark so the next post-stream refresh rebuilds from scratch.
+    const deletedFlatIndex = flattenEntriesForAPI(
+      selectedConversation.messages.slice(0, findIndex),
+    ).length;
+    const invalidateCompaction =
+      deletedFlatIndex < (selectedConversation.compaction?.upToEntryIndex ?? 0);
+
     updateConversation(selectedConversation.id, {
       ...selectedConversation,
       messages,
+      ...(invalidateCompaction ? { compaction: undefined } : {}),
     });
   };
 
