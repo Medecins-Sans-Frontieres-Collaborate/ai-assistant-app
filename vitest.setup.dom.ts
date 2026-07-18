@@ -381,6 +381,8 @@ const mockMessages: Record<string, unknown> = {
     oauthCancelled: 'Sign-in was cancelled.',
     oauthUnavailable:
       "Sign-in isn't available for this connector on this deployment. Use an access token instead, or ask your administrator to configure the OAuth app.",
+    oauthNoAppConfigured:
+      "Signing in with {name} isn't set up on this deployment. Connect by registering your own OAuth app.",
     ownAppToggle: 'Use your own OAuth app',
     ownAppHint:
       'Register an OAuth app in your {name} account (your organization, workspace, or enterprise instance) with the callback URL below, then paste its credentials here. Leave this closed to use the built-in app.',
