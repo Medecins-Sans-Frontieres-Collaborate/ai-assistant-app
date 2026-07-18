@@ -382,6 +382,30 @@ const mockMessages: Record<string, unknown> = {
       closeButton: 'Close window',
     },
   },
+  memories: {
+    title: 'Memories',
+    description:
+      'Let the assistant remember durable facts you share — like your role, preferences, and ongoing projects — and use them across conversations.',
+    enableToggle: 'Enable memories',
+    privacyNote:
+      'Facts are stored only in this browser and included in your chats to personalize replies.',
+    empty:
+      'No memories yet. Facts worth remembering are saved automatically from your conversations.',
+    savedOn: 'Saved {date}',
+    deleteMemory: 'Delete memory',
+    clearAll: 'Clear all memories',
+    clearAllConfirmQuestion: 'Delete all memories? This cannot be undone.',
+    clearAllConfirm: 'Delete all',
+    cancel: 'Cancel',
+  },
+  contextWindow: {
+    label: 'Context window',
+    value: '{count} messages',
+    fewer: 'Fewer messages',
+    more: 'More messages',
+    description:
+      'Older messages beyond this limit are summarized and sent as context.',
+  },
   usageImpact: {
     empty: 'No usage tracked yet.',
     co2Value: '{grams} g CO2e',
@@ -671,7 +695,9 @@ vi.mock('next-intl', () => ({
   useNow: () => new Date(),
   useTimeZone: () => 'UTC',
   useFormatter: () => ({
-    dateTime: () => '',
+    // Deterministic (timezone-independent) date output so tests can assert it.
+    dateTime: (date: Date | number) =>
+      new Date(date).toISOString().slice(0, 10),
     number: () => '',
     relativeTime: () => '',
   }),
