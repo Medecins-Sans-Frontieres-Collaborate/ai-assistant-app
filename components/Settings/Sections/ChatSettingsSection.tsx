@@ -17,6 +17,7 @@ import { getUserDisplayName } from '@/lib/utils/app/user/displayName';
 
 import { Settings } from '@/types/settings';
 
+import { ContextWindowSlider } from '../ContextWindowSlider';
 import { SystemPrompt } from '../SystemPrompt';
 import { TTSSettingsPanel } from '../TTS/TTSSettingsPanel';
 import { TemperatureSlider } from '../Temperature';
@@ -287,6 +288,12 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
                     'settings.Controls how smoothly text appears during AI responses',
                   )}
                 </p>
+              </div>
+
+              {/* Context Window Setting — store-driven, applies immediately
+                  (not part of the legacy save/dispatch flow above). */}
+              <div className="mt-4">
+                <ContextWindowSlider />
               </div>
             </div>
           )}
