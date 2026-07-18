@@ -8,6 +8,10 @@ import {
   readBlob,
   writeImmutableBlob,
 } from '@/lib/services/backup/server/backupBlobStore';
+import {
+  rateLimitedResponse,
+  readBoundedBody,
+} from '@/lib/services/backup/server/routeHelpers';
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { RateLimiter } from '@/lib/services/shared/RateLimiter';
 
@@ -57,8 +61,9 @@ async function resolveContext(
   const userId = getUserIdFromSession(session);
   if (userId === 'anonymous') return unauthorizedResponse();
 
-  if (!limiter.checkLimit(userId).allowed) {
-    return errorResponse('Too many requests', 429, undefined, 'RATE_LIMITED');
+  const limit = limiter.checkLimit(userId);
+  if (!limit.allowed) {
+    return rateLimitedResponse(limit);
   }
 
   const { id } = await params;
@@ -89,8 +94,8 @@ export async function PUT(
   const ctx = await resolveContext(request, params);
   if (ctx instanceof NextResponse) return ctx;
 
-  const body = await request.arrayBuffer();
-  if (body.byteLength > MAX_BLOB_BYTES) {
+  const body = await readBoundedBody(request, MAX_BLOB_BYTES);
+  if (body === null) {
     return payloadTooLargeResponse('10MB');
   }
   if (body.byteLength === 0) {
@@ -99,7 +104,7 @@ export async function PUT(
 
   try {
     const storage = createBlobStorageClient(ctx.session);
-    await writeImmutableBlob(storage, ctx.blobPath, Buffer.from(body));
+    await writeImmutableBlob(storage, ctx.blobPath, body);
     return successResponse({ size: body.byteLength });
   } catch (error) {
     return storageErrorResponse('PUT', error);
