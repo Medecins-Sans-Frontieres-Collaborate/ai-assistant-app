@@ -1,5 +1,7 @@
 import { NextRequest } from 'next/server';
 
+import { PROMPT_AGENT_SOURCE } from '@/lib/services/agentAccess/types';
+
 import { parseJsonResponse } from './helpers';
 
 import { GET } from '@/app/api/agents/route';
@@ -16,6 +18,7 @@ const clearCache = vi.hoisted(() => vi.fn());
 const accessIsEnabled = vi.hoisted(() => vi.fn());
 const accessEnsureFresh = vi.hoisted(() => vi.fn());
 const accessEvaluate = vi.hoisted(() => vi.fn());
+const accessGetPromptAgents = vi.hoisted(() => vi.fn());
 
 vi.mock('@/auth', () => ({ auth: mockAuth, getAccessTokenForOBO }));
 vi.mock('@/lib/services/auth/OfficeResolver', () => ({
@@ -44,6 +47,7 @@ vi.mock('@/lib/services/agentAccess/AgentAccessService', () => ({
       isEnabled: accessIsEnabled,
       ensureFresh: accessEnsureFresh,
       evaluateAccess: accessEvaluate,
+      getPromptAgents: accessGetPromptAgents,
     }),
   },
 }));
@@ -77,6 +81,7 @@ describe('GET /api/agents — access-control discovery filter', () => {
     accessIsEnabled.mockReturnValue(false);
     accessEnsureFresh.mockResolvedValue(undefined);
     accessEvaluate.mockReturnValue({ decision: 'allow', reason: 'no-rule' });
+    accessGetPromptAgents.mockReturnValue([]);
   });
 
   it('returns 401 when unauthenticated', async () => {
@@ -161,5 +166,83 @@ describe('GET /api/agents — access-control discovery filter', () => {
       'agent-b',
     ]);
     expect(cacheUserAgentEndpoint).toHaveBeenCalledTimes(2);
+  });
+
+  describe('prompt agents', () => {
+    const PROMPT_AGENT = {
+      version: 1,
+      id: 'prompt-abc123def456',
+      name: 'Legal Advisor',
+      description: 'Reviews contracts',
+      systemPrompt: 'You are a meticulous legal advisor.',
+      modelId: 'gpt-5.2-chat',
+      createdBy: 'admin@example.com',
+      createdAt: '2026-07-17T00:00:00.000Z',
+      updatedBy: 'admin@example.com',
+      updatedAt: '2026-07-17T00:00:00.000Z',
+    };
+
+    it('appends allowed prompt agents WITHOUT leaking systemPrompt/modelId and never trust-anchors them', async () => {
+      accessIsEnabled.mockReturnValue(true);
+      accessGetPromptAgents.mockReturnValue([PROMPT_AGENT]);
+
+      const response = await GET(request());
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(200);
+      expect(
+        data.agents.map((a: { agentName: string }) => a.agentName),
+      ).toEqual(['agent-a', 'agent-b', 'prompt-abc123def456']);
+      // Public wire shape only — the persona's prompt and engine are
+      // admin-route fields, resolved server-side from botId at invocation.
+      expect(data.agents[2]).toEqual({
+        id: 'prompt-abc123def456',
+        name: 'Legal Advisor',
+        description: 'Reviews contracts',
+        agentName: 'prompt-abc123def456',
+        source: PROMPT_AGENT_SOURCE,
+        type: 'prompt',
+      });
+      // Access-evaluated under the prompt-agent pseudo-source.
+      expect(accessEvaluate).toHaveBeenCalledWith({
+        userMail: USER_MAIL,
+        source: PROMPT_AGENT_SOURCE,
+        agentName: 'prompt-abc123def456',
+      });
+      // Only the two Foundry agents are trust-anchored.
+      expect(cacheUserAgentEndpoint).toHaveBeenCalledTimes(2);
+    });
+
+    it('drops prompt agents the user is denied access to', async () => {
+      accessIsEnabled.mockReturnValue(true);
+      accessGetPromptAgents.mockReturnValue([PROMPT_AGENT]);
+      accessEvaluate.mockImplementation(({ source }: { source?: string }) =>
+        source === PROMPT_AGENT_SOURCE
+          ? { decision: 'deny', reason: 'not-allowed' }
+          : { decision: 'allow', reason: 'no-rule' },
+      );
+
+      const response = await GET(request());
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(200);
+      expect(
+        data.agents.map((a: { agentName: string }) => a.agentName),
+      ).toEqual(['agent-a', 'agent-b']);
+    });
+
+    it('serves no prompt agents when the feature is disabled', async () => {
+      accessIsEnabled.mockReturnValue(false);
+      accessGetPromptAgents.mockReturnValue([PROMPT_AGENT]);
+
+      const response = await GET(request());
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(200);
+      expect(
+        data.agents.map((a: { agentName: string }) => a.agentName),
+      ).toEqual(['agent-a', 'agent-b']);
+      expect(accessGetPromptAgents).not.toHaveBeenCalled();
+    });
   });
 });
