@@ -11,6 +11,11 @@ const nextConfig = {
   // should be handled by the upstream reverse proxy / CDN instead.
   compress: false,
 
+  // jsdom (used by the workflow page-fetcher to run Readability) resolves
+  // optional native deps like `canvas` at require time, which the bundler
+  // cannot follow. Leave it and Readability as real Node requires.
+  serverExternalPackages: ['jsdom', '@mozilla/readability'],
+
   // Experimental settings for large file uploads
   // Supports up to 1.5GB video files + buffer for form data overhead
   experimental: {
