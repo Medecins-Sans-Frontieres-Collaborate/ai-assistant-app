@@ -17,7 +17,9 @@ import { modelIdToLocaleKey } from '@/lib/utils/app/locales';
 import { isAgentModel } from '@/lib/utils/shared/chat/usageBackfill';
 import {
   ASSUMPTIONS_VERSION,
+  EmissionsTier,
   estimateTypicalRequestCO2,
+  getEmissionsTier,
 } from '@/lib/utils/shared/emissions';
 import { formatKnowledgeCutoff } from '@/lib/utils/shared/formatKnowledgeCutoff';
 
@@ -30,6 +32,7 @@ import { OrganizationAgent } from '@/types/organizationAgent';
 
 import { Tooltip } from '@/components/UI/Tooltip';
 
+import { TIER_TEXT_CLASSES } from './EmissionsTierIcon';
 import { ModelProviderIcon } from './ModelProviderIcon';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
@@ -120,13 +123,14 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
   const emissionsModel = modelConfig ?? liveModel ?? selectedModel;
   const isAgent = !!organizationAgent || isAgentModel(emissionsModel);
   let typicalRequestGrams: string | null = null;
+  let typicalRequestTier: EmissionsTier | null = null;
   if (showUsageImpact !== false && !isAgent) {
-    const { gCO2e } = estimateTypicalRequestCO2(
-      getModelSizeClass(emissionsModel),
-      emissionsModel.modelType === 'reasoning',
-    );
+    const sizeClass = getModelSizeClass(emissionsModel);
+    const isReasoning = emissionsModel.modelType === 'reasoning';
+    const { gCO2e } = estimateTypicalRequestCO2(sizeClass, isReasoning);
     // Typical values are well under 1 g — never round to an integer.
     typicalRequestGrams = gCO2e < 1 ? gCO2e.toFixed(2) : gCO2e.toFixed(1);
+    typicalRequestTier = getEmissionsTier(sizeClass, isReasoning);
   }
 
   return (
@@ -314,7 +318,16 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
                 })}
               >
                 <span className="inline-flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400 cursor-help">
-                  <IconLeaf size={14} />
+                  {/* Leaf colored by tier: the qualitative read of the gram
+                      figure, matching the variant/version picker icons. */}
+                  <IconLeaf
+                    size={14}
+                    className={
+                      typicalRequestTier
+                        ? TIER_TEXT_CLASSES[typicalRequestTier]
+                        : undefined
+                    }
+                  />
                   {t('emissions.typicalRequest', {
                     grams: typicalRequestGrams,
                   })}
