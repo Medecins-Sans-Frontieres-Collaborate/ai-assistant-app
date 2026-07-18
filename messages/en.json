@@ -2585,6 +2585,16 @@
   "codeBlock": {
     "openInEditor": "Open in editor"
   },
+  "table": {
+    "copyTable": "Copy table",
+    "downloadTable": "Download table",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Exported as CSV",
+    "copyFailed": "Failed to copy table"
+  },
   "artifact": {
     "noContentToExport": "No content to export",
     "exportedAsHtml": "Exported as HTML",
