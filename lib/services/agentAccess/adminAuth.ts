@@ -54,8 +54,13 @@ export function resolveAdminStatus(
     return { isGlobalAdmin: false, isLocalAdmin: false, editableAgentKeys: [] };
   }
   const keys = new Set<string>();
+  let isLocalAdmin = false;
   for (const admin of config.localAdmins) {
     if (admin.email.trim().toLowerCase() === normalized) {
+      // Membership alone confers local-admin status: a zero-key entry may
+      // still create prompt agents (which auto-delegate on create) even
+      // though canEditKey over [] denies every existing key.
+      isLocalAdmin = true;
       for (const key of admin.agentKeys) {
         // Canonicalize: case/whitespace variants in config.json must match
         // the canonical keys clients filter against (server-side canEditKey
@@ -66,7 +71,7 @@ export function resolveAdminStatus(
   }
   return {
     isGlobalAdmin: false,
-    isLocalAdmin: keys.size > 0,
+    isLocalAdmin,
     editableAgentKeys: [...keys],
   };
 }
