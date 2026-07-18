@@ -5,6 +5,7 @@ import {
   IconFileMusic,
   IconFileText,
   IconLanguage,
+  IconLink,
   IconPaperclip,
   IconVolume,
   IconWorld,
@@ -55,6 +56,7 @@ import Modal from '@/components/UI/Modal';
 import { DropdownCategoryGroup } from './DropdownCategoryGroup';
 import { DropdownMenuItem, MenuItem } from './DropdownMenuItem';
 import { DropdownMoreSection } from './DropdownMoreSection';
+import UrlAttachModal from './UrlAttachModal';
 
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
@@ -141,6 +143,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [query, setQuery] = useState('');
   const [showMore, setShowMore] = useState(false);
+  const [urlModalOpen, setUrlModalOpen] = useState(false);
   const [hasCameraSupport, setHasCameraSupport] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -178,6 +181,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   }, []);
 
   const t = useTranslations();
+  const tUrl = useTranslations('urlFetch');
 
   const chatInputImageRef = useRef<{ openFilePicker: () => void }>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -456,6 +460,20 @@ const Dropdown: React.FC<DropdownProps> = ({
         category: 'media',
       },
       {
+        id: 'attach-link',
+        icon: (
+          <IconLink
+            size={18}
+            className="flex-shrink-0 text-gray-700 dark:text-gray-300"
+          />
+        ),
+        label: tUrl('attachLink'),
+        infoTooltip: tUrl('attachLinkDescription'),
+        onClick: () => setUrlModalOpen(true),
+        category: 'media',
+        opensDialog: true,
+      },
+      {
         id: 'transcribe',
         icon: (
           <IconFileMusic size={18} className="text-orange-500 flex-shrink-0" />
@@ -530,6 +548,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     ],
     [
       t,
+      tUrl,
       searchMode,
       selectedToneId,
       tones,
@@ -983,6 +1002,11 @@ const Dropdown: React.FC<DropdownProps> = ({
         setParentModalIsOpen={setIsImageOpen}
         simulateClick={false}
         labelText=""
+      />
+
+      <UrlAttachModal
+        isOpen={urlModalOpen}
+        onClose={() => setUrlModalOpen(false)}
       />
 
       {/* Hidden file input for all file types: images, documents, data, code, audio, and video */}
