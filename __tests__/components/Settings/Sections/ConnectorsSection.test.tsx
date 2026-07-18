@@ -17,6 +17,15 @@ vi.mock('@/client/hooks/settings/useMcpTools', () => ({
   useMcpTools: () => ({ tools: [], isLoadingTools: false, toolsError: false }),
 }));
 
+// Deployment OAuth-app availability (also React Query + fetch). Defaults to
+// "configured" — the unavailable cases set entries explicitly.
+const mockOauthAvailability: Record<string, boolean> = {};
+vi.mock('@/client/hooks/settings/useMcpOauthAvailability', () => ({
+  useMcpOauthAvailability: () => ({
+    isOauthAppAvailable: (key: string) => mockOauthAvailability[key] !== false,
+  }),
+}));
+
 const githubConfig = {
   id: 'github',
   catalogKey: 'github',
@@ -30,6 +39,8 @@ const githubConfig = {
 describe('ConnectorsSection', () => {
   beforeEach(() => {
     for (const key of Object.keys(mockFlags)) delete mockFlags[key];
+    for (const key of Object.keys(mockOauthAvailability))
+      delete mockOauthAvailability[key];
     useSettingsStore.setState({
       mcpServers: [],
       allowArbitraryMcpServers: false,
@@ -141,5 +152,59 @@ describe('ConnectorsSection', () => {
     expect(
       screen.getByDisplayValue(/\/mcp-oauth-callback$/),
     ).toBeInTheDocument();
+  });
+
+  it('hides "Connect with {name}" when the deployment has no OAuth app for it', () => {
+    mockOauthAvailability.github = false;
+    render(<ConnectorsSection />);
+
+    // GitHub loses the OAuth button but keeps its PAT path...
+    expect(screen.queryByText('Connect with GitHub')).not.toBeInTheDocument();
+    expect(screen.getByText('Use an access token instead')).toBeInTheDocument();
+    // ...while Asana, still configured, is untouched.
+    expect(screen.getByText('Connect with Asana')).toBeInTheDocument();
+  });
+
+  it('an OAuth-only connector with no deployment app falls back to bring-your-own-app', () => {
+    mockOauthAvailability.asana = false;
+    render(<ConnectorsSection />);
+
+    expect(screen.queryByText('Connect with Asana')).not.toBeInTheDocument();
+    expect(
+      screen.getByText(/Signing in with Asana isn't set up/),
+    ).toBeInTheDocument();
+    // The only remaining path is revealed rather than hidden behind a toggle.
+    expect(screen.getByText('Client ID')).toBeInTheDocument();
+  });
+
+  it('a typed own-app client id brings the connect button back', () => {
+    mockOauthAvailability.asana = false;
+    render(<ConnectorsSection />);
+
+    fireEvent.change(screen.getByLabelText('Client ID'), {
+      target: { value: 'my-own-client-id' },
+    });
+
+    expect(screen.getByText('Connect with Asana')).toBeInTheDocument();
+  });
+
+  it('hides "Reconnect" on a needs-reauth connector with no app to reconnect through', () => {
+    mockOauthAvailability.github = false;
+    useSettingsStore.setState({
+      mcpServers: [
+        {
+          ...githubConfig,
+          authToken: undefined,
+          authMode: 'oauth',
+          oauth: { clientId: 'gone', needsReauth: true },
+        },
+      ],
+    });
+    render(<ConnectorsSection />);
+
+    expect(screen.getByText('Needs reconnect')).toBeInTheDocument();
+    expect(screen.queryByText('Reconnect')).not.toBeInTheDocument();
+    // Disconnecting is still offered — the row never becomes a dead end.
+    expect(screen.getByText('Disconnect')).toBeInTheDocument();
   });
 });
