@@ -51,6 +51,7 @@ export type BackupApiErrorCode =
   | 'BACKUP_NOT_FOUND'
   | 'UNAUTHORIZED'
   | 'PAYLOAD_TOO_LARGE'
+  | 'RATE_LIMITED'
   | 'NETWORK'
   | 'UNKNOWN';
 
