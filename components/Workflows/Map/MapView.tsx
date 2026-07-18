@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, memo, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Circle,
   CircleMarker,
@@ -20,6 +20,7 @@ import {
 } from '@/lib/utils/shared/geo/granularity';
 
 import {
+  EventPrecision,
   MapConnection,
   MapFeature,
   MapFeatureProminence,
@@ -27,6 +28,7 @@ import {
 
 import { ConnectionsLayer } from './ConnectionsLayer';
 
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 /**
@@ -69,6 +71,20 @@ export function featureProminence(feature: MapFeature): MapFeatureProminence {
   return feature.prominence ?? 'primary';
 }
 
+/**
+ * Timing precision → uncertainty halo radius, in pixels beyond the marker.
+ *
+ * During a sweep the map asserts "this is where things stand on this date",
+ * but a feature dated only to a year could belong anywhere in that year. The
+ * halo makes that visible: a marker that pops in exactly on cue is drawn
+ * cleanly, one smeared across a year wears a wide soft ring. Day-and-finer
+ * precision gets no halo — at time-lapse resolution that IS exact.
+ */
+const HALO_RADIUS: Partial<Record<EventPrecision, number>> = {
+  month: 7,
+  year: 14,
+};
+
 export interface MapFocus {
   id: string;
   /** Bumped per click so re-clicking the same feature re-centers. */
@@ -82,6 +98,13 @@ interface MapViewProps {
   demotedIds: Set<string>;
   /** Ids rendered faint (undated features during a time-lapse sweep). */
   faintIds?: Set<string>;
+  /** Ids whose popup is auto-opened right now by the time-lapse. */
+  spotlightIds?: string[];
+  /**
+   * Timing precision per feature, supplied only during a time-lapse sweep.
+   * Vaguely-dated features get an uncertainty halo (see `HALO_RADIUS`).
+   */
+  precisionById?: Map<string, EventPrecision>;
   view?: { lat: number; lon: number; zoom: number };
   focus?: MapFocus | null;
   onViewChange?: (view: { lat: number; lon: number; zoom: number }) => void;
@@ -91,6 +114,10 @@ interface MapViewProps {
   granularityLabel: (granularity: string) => string;
   /** Preformatted date line for the popup, or null when undated. */
   dateLabel: (feature: MapFeature) => string | null;
+  /** Where the feature came from, with a link when the source has one. */
+  sourceLabel: (
+    feature: MapFeature,
+  ) => { name: string; href: string | null } | null;
 }
 
 function FocusController({
@@ -202,6 +229,10 @@ interface FeatureLabels {
   prominenceLabel: (prominence: MapFeatureProminence) => string;
   granularityLabel: (granularity: string) => string;
   dateLabel: (feature: MapFeature) => string | null;
+  /** Where this feature came from, and a link when the source has one. */
+  sourceLabel: (
+    feature: MapFeature,
+  ) => { name: string; href: string | null } | null;
 }
 
 function FeaturePopup({
@@ -211,6 +242,7 @@ function FeaturePopup({
   feature: MapFeature;
   labels: FeatureLabels;
 }) {
+  const source = labels.sourceLabel(feature);
   return (
     <Popup>
       <strong>{feature.name}</strong>
@@ -235,8 +267,141 @@ function FeaturePopup({
         {labels.confidenceLabel(feature.confidence)}
         {feature.confidenceReason ? ` — ${feature.confidenceReason}` : ''}
       </em>
+      {source && (
+        <>
+          <br />
+          {source.href ? (
+            <a href={source.href} target="_blank" rel="noopener noreferrer">
+              {source.name}
+            </a>
+          ) : (
+            source.name
+          )}
+        </>
+      )}
     </Popup>
   );
+}
+
+/** Long descriptions would blanket the map during a sweep. */
+const SPOTLIGHT_DESCRIPTION_MAX = 160;
+
+/**
+ * Popup content for the time-lapse spotlight, built as DOM rather than
+ * React: Leaflet owns these popups imperatively (see `SpotlightPopups`), and
+ * mounting a React root per card for a 1.7s lifetime costs more than the
+ * three text nodes it would render. `textContent` throughout — model-supplied
+ * strings are never parsed as HTML.
+ */
+function buildSpotlightContent(
+  feature: MapFeature,
+  labels: FeatureLabels,
+): HTMLElement {
+  const root = document.createElement('div');
+
+  const name = document.createElement('strong');
+  name.textContent = feature.name;
+  root.appendChild(name);
+
+  if (feature.description) {
+    const description = document.createElement('div');
+    description.style.margin = '2px 0 0';
+    description.textContent =
+      feature.description.length > SPOTLIGHT_DESCRIPTION_MAX
+        ? `${feature.description.slice(0, SPOTLIGHT_DESCRIPTION_MAX).trimEnd()}…`
+        : feature.description;
+    root.appendChild(description);
+  }
+
+  const date = labels.dateLabel(feature);
+  if (date) {
+    const dates = document.createElement('em');
+    dates.style.display = 'block';
+    dates.style.margin = '2px 0 0';
+    dates.textContent = date;
+    root.appendChild(dates);
+  }
+
+  const source = labels.sourceLabel(feature);
+  if (source) {
+    // `sourceHref` has already rejected anything that is not http(s), so an
+    // anchor here can never carry a script URL.
+    const node = document.createElement(source.href ? 'a' : 'div');
+    node.style.display = 'block';
+    node.style.margin = '2px 0 0';
+    node.style.fontSize = '11px';
+    node.textContent = source.name;
+    if (source.href) {
+      node.setAttribute('href', source.href);
+      node.setAttribute('target', '_blank');
+      node.setAttribute('rel', 'noopener noreferrer');
+    }
+    root.appendChild(node);
+  }
+  return root;
+}
+
+/**
+ * Auto-opened popups for the features arriving at the current time-lapse
+ * keyframe — the map narrating itself, as if someone were clicking the new
+ * markers as they appear.
+ *
+ * Imperative because react-leaflet's `<Popup>` has no controlled-open prop.
+ * These are added as plain layers (`addTo`) rather than via `map.openPopup`,
+ * so they never close the popup a user opened by hand, and several can be
+ * open at once. `autoPan` is off: three popups taking turns panning the map
+ * would yank the view out from under the sweep.
+ */
+function SpotlightPopups({
+  features,
+  spotlightIds,
+  labels,
+}: {
+  features: MapFeature[];
+  spotlightIds?: string[];
+  labels: FeatureLabels;
+}) {
+  const map = useMap();
+  const openRef = useRef(new Map<string, L.Popup>());
+
+  useEffect(() => {
+    const open = openRef.current;
+    const wanted = new Set(spotlightIds ?? []);
+
+    for (const [id, popup] of [...open]) {
+      if (wanted.has(id)) continue;
+      popup.remove();
+      open.delete(id);
+    }
+    for (const id of spotlightIds ?? []) {
+      if (open.has(id)) continue;
+      const feature = features.find((f) => f.id === id);
+      // Filters can drop a spotlit feature mid-dwell; skip rather than
+      // stranding a popup over empty map.
+      if (!feature) continue;
+      const popup = L.popup({
+        autoClose: false,
+        closeOnClick: false,
+        closeButton: false,
+        autoPan: false,
+        className: 'map-spotlight-popup',
+      })
+        .setLatLng([feature.lat, feature.lon])
+        .setContent(buildSpotlightContent(feature, labels));
+      popup.addTo(map);
+      open.set(id, popup);
+    }
+  }, [map, features, spotlightIds, labels]);
+
+  useEffect(() => {
+    const open = openRef.current;
+    return () => {
+      for (const popup of open.values()) popup.remove();
+      open.clear();
+    };
+  }, []);
+
+  return null;
 }
 
 /**
@@ -247,10 +412,12 @@ function FeaturePopup({
 const PointMarkers = memo(function PointMarkers({
   features,
   faintIds,
+  precisionById,
   labels,
 }: {
   features: MapFeature[];
   faintIds?: Set<string>;
+  precisionById?: Map<string, EventPrecision>;
   labels: FeatureLabels;
 }) {
   return (
@@ -261,22 +428,42 @@ const PointMarkers = memo(function PointMarkers({
         const prominence = PROMINENCE_STYLE[featureProminence(feature)];
         // Faint = undated features during a time-lapse sweep.
         const faintFactor = faintIds?.has(feature.id) ? 0.3 : 1;
+        const precision = precisionById?.get(feature.id);
+        const halo = precision ? HALO_RADIUS[precision] : undefined;
         return (
-          <CircleMarker
-            key={feature.id}
-            center={[feature.lat, feature.lon]}
-            radius={prominence.radius}
-            pathOptions={{
-              color: confidence.color,
-              fillColor: confidence.fillColor,
-              fillOpacity: prominence.fillOpacity * faintFactor,
-              opacity: faintFactor,
-              weight: prominence.weight,
-              dashArray: confidence.dashArray,
-            }}
-          >
-            <FeaturePopup feature={feature} labels={labels} />
-          </CircleMarker>
+          <Fragment key={feature.id}>
+            {halo !== undefined && (
+              // Non-interactive and drawn first: the halo is a backdrop and
+              // must never intercept a click meant for its marker.
+              <CircleMarker
+                center={[feature.lat, feature.lon]}
+                radius={prominence.radius + halo}
+                interactive={false}
+                pathOptions={{
+                  color: confidence.color,
+                  fillColor: confidence.fillColor,
+                  fillOpacity: 0.06 * faintFactor,
+                  opacity: 0.4 * faintFactor,
+                  weight: 1,
+                  dashArray: '2 4',
+                }}
+              />
+            )}
+            <CircleMarker
+              center={[feature.lat, feature.lon]}
+              radius={prominence.radius}
+              pathOptions={{
+                color: confidence.color,
+                fillColor: confidence.fillColor,
+                fillOpacity: prominence.fillOpacity * faintFactor,
+                opacity: faintFactor,
+                weight: prominence.weight,
+                dashArray: confidence.dashArray,
+              }}
+            >
+              <FeaturePopup feature={feature} labels={labels} />
+            </CircleMarker>
+          </Fragment>
         );
       })}
     </>
@@ -356,6 +543,8 @@ export default function MapView({
   connections,
   demotedIds,
   faintIds,
+  spotlightIds,
+  precisionById,
   view,
   focus,
   onViewChange,
@@ -364,6 +553,7 @@ export default function MapView({
   prominenceLabel,
   granularityLabel,
   dateLabel,
+  sourceLabel,
 }: MapViewProps) {
   const center: [number, number] = view
     ? [view.lat, view.lon]
@@ -374,8 +564,20 @@ export default function MapView({
   const [zoom, setZoom] = useState(initialZoom);
 
   const labels = useMemo<FeatureLabels>(
-    () => ({ confidenceLabel, prominenceLabel, granularityLabel, dateLabel }),
-    [confidenceLabel, prominenceLabel, granularityLabel, dateLabel],
+    () => ({
+      confidenceLabel,
+      prominenceLabel,
+      granularityLabel,
+      dateLabel,
+      sourceLabel,
+    }),
+    [
+      confidenceLabel,
+      prominenceLabel,
+      granularityLabel,
+      dateLabel,
+      sourceLabel,
+    ],
   );
 
   // Passing mentions first so primary markers paint on top of them;
@@ -427,7 +629,17 @@ export default function MapView({
           faintIds={faintIds}
         />
       </Pane>
-      <PointMarkers features={points} faintIds={faintIds} labels={labels} />
+      <PointMarkers
+        features={points}
+        faintIds={faintIds}
+        precisionById={precisionById}
+        labels={labels}
+      />
+      <SpotlightPopups
+        features={features}
+        spotlightIds={spotlightIds}
+        labels={labels}
+      />
     </MapContainer>
   );
 }

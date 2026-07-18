@@ -7,6 +7,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import {
   DateRange,
   TimelineSegment,
+  segmentLastInstant as eraLastInstant,
   isDateRangeActive,
   segmentLabel,
 } from '@/lib/utils/shared/geo/timelineScale';
@@ -64,7 +65,9 @@ export function DateRangeFilter({
   const active = isDateRangeActive(range);
 
   const eraActive = (era: TimelineSegment) =>
-    !!range && range.fromMs === era.startMs && range.toMs === era.endMs;
+    !!range &&
+    range.fromMs === era.startMs &&
+    range.toMs === eraLastInstant(era);
 
   return (
     <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 border-t border-gray-200 px-3 py-1.5 dark:border-gray-700">
@@ -83,7 +86,9 @@ export function DateRangeFilter({
               type="button"
               onClick={() =>
                 onChange(
-                  isActive ? null : { fromMs: era.startMs, toMs: era.endMs },
+                  isActive
+                    ? null
+                    : { fromMs: era.startMs, toMs: eraLastInstant(era) },
                 )
               }
               aria-pressed={isActive}

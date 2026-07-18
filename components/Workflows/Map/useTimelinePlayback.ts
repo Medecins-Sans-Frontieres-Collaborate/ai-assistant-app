@@ -3,41 +3,81 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
-  TimelineScale,
-  msToStep,
-  stepToMs,
-} from '@/lib/utils/shared/geo/timelineScale';
-
-/** Normal playback tick; the scale caps at ~240 steps ≈ ≤36s per sweep. */
-const TICK_MS = 150;
-/**
- * Reduced-motion tick: slower, so appearance/disappearance reads as
- * discrete state changes rather than animation.
- */
-const REDUCED_MOTION_TICK_MS = 600;
+  MapTimelapseSettings,
+  keyframeDwellMs,
+  sampleSpotlight,
+} from '@/lib/utils/shared/geo/timelapsePacing';
+import { TimelineKeyframe } from '@/lib/utils/shared/geo/timelineKeyframes';
+import { TimelineScale } from '@/lib/utils/shared/geo/timelineScale';
 
 /**
- * Time-lapse playback state. `timeMs === null` means timeline mode is off
- * (live view). Scrubbing pauses playback; playing from the end restarts.
- * Ticks advance one STEP of the piecewise scale — the gap between eras
- * costs exactly one tick.
+ * What the map is showing while playback dwells on one keyframe: the date
+ * it jumped to, how far it jumped, and which features to auto-open.
  */
-export function useTimelinePlayback(scale: TimelineScale | null): {
+export interface TimelineCue {
+  index: number;
+  total: number;
+  keyframe: TimelineKeyframe;
+  /** Features to spotlight during this dwell (already sampled). */
+  spotlightIds: string[];
+  /** How long this keyframe is held. */
+  dwellMs: number;
+  /** Card lifetime in force for this dwell (see `useTimelineSpotlight`). */
+  cardDurationMs: number;
+}
+
+function prefersReducedMotion(): boolean {
+  return (
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
+}
+
+/**
+ * Time-lapse playback. `timeMs === null` means timeline mode is off (live
+ * view). Scrubbing pauses; playing from the end restarts.
+ *
+ * Playback is KEYFRAME-driven, not step-driven: it visits only the instants
+ * where the active set actually changes (see `timelineKeyframes.ts`) and
+ * holds each one while its cards play out. Empty stretches — which a linear
+ * sweep spends most of its runtime on — collapse into a single announced
+ * jump. Busy dates are held longer than quiet ones. The slider still runs on
+ * the scale's step indices, so the thumb tracks the sweep and manual
+ * scrubbing stays smooth.
+ *
+ * `pacing` is read at the moment each keyframe starts, so dragging the
+ * duration slider mid-sweep takes effect on the next date rather than
+ * restarting playback.
+ */
+export function useTimelinePlayback(
+  scale: TimelineScale | null,
+  keyframes: TimelineKeyframe[],
+  pacing: MapTimelapseSettings,
+): {
   timeMs: number | null;
   setTimeMs: (ms: number | null) => void;
   playing: boolean;
   togglePlay: () => void;
+  cue: TimelineCue | null;
 } {
   const [timeMs, setTimeMsState] = useState<number | null>(null);
   const [playing, setPlaying] = useState(false);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [cue, setCue] = useState<TimelineCue | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Held in a ref so a pacing change doesn't rebuild the running chain.
+  const pacingRef = useRef(pacing);
+  useEffect(() => {
+    pacingRef.current = pacing;
+  }, [pacing]);
 
   const stop = useCallback(() => {
-    if (intervalRef.current !== null) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
+    if (timerRef.current !== null) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
     }
     setPlaying(false);
+    setCue(null);
   }, []);
 
   // Manual scrub (or timeline off) pauses playback.
@@ -50,36 +90,61 @@ export function useTimelinePlayback(scale: TimelineScale | null): {
   );
 
   const togglePlay = useCallback(() => {
-    if (!scale) return;
+    if (!scale || keyframes.length === 0) return;
     if (playing) {
       stop();
       return;
     }
-    const reducedMotion =
-      typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const tick = reducedMotion ? REDUCED_MOTION_TICK_MS : TICK_MS;
+    const reducedMotion = prefersReducedMotion();
+    const last = keyframes[keyframes.length - 1];
+    // Resume at the next keyframe ahead of the current time; start over when
+    // the timeline is off or the sweep already finished.
+    const next =
+      timeMs === null || timeMs >= last.ms
+        ? 0
+        : keyframes.findIndex((frame) => frame.ms > timeMs);
 
-    setTimeMsState((current) => {
-      // Play from the start when off or already at the end.
-      if (current === null || current >= scale.maxMs) return scale.minMs;
-      return current;
-    });
     setPlaying(true);
-    intervalRef.current = setInterval(() => {
-      setTimeMsState((current) => {
-        const index = msToStep(scale, current ?? scale.minMs);
-        if (index + 1 >= scale.totalSteps) {
-          stop();
-          return scale.maxMs;
-        }
-        return stepToMs(scale, index + 1);
+    // Recursive rather than an interval: each keyframe earns its own dwell
+    // from how much it has to show.
+    const step = (index: number) => {
+      const keyframe = keyframes[index];
+      const { cardDurationMs, maxCardsPerDate } = pacingRef.current;
+      const spotlightIds = sampleSpotlight(
+        keyframe.enteringIds,
+        maxCardsPerDate,
+      );
+      const dwellMs = keyframeDwellMs({
+        cardCount: spotlightIds.length,
+        arrivalCount: keyframe.enteringIds.length,
+        cardDurationMs,
+        reducedMotion,
       });
-    }, tick);
-  }, [scale, playing, stop]);
+      setTimeMsState(keyframe.ms);
+      setCue({
+        index,
+        total: keyframes.length,
+        keyframe,
+        spotlightIds,
+        dwellMs,
+        cardDurationMs,
+      });
+      timerRef.current = setTimeout(() => {
+        timerRef.current = null;
+        if (index + 1 >= keyframes.length) {
+          setPlaying(false);
+          setCue(null);
+          return;
+        }
+        step(index + 1);
+      }, dwellMs);
+    };
+    step(next === -1 ? 0 : next);
+  }, [scale, keyframes, playing, timeMs, stop]);
 
-  // Scale changed (filters altered the dated set) or unmount: stop cleanly.
-  useEffect(() => stop, [scale, stop]);
+  // Scale or keyframes changed (filters altered the dated set), or unmount:
+  // stop cleanly rather than stepping through a stale list.
+  useEffect(() => stop, [scale, keyframes, stop]);
 
-  return { timeMs, setTimeMs, playing, togglePlay };
+  return { timeMs, setTimeMs, playing, togglePlay, cue };
 }
