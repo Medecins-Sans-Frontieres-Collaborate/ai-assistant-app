@@ -22,7 +22,10 @@
   flagged "not discoverable by you" yet can still edit its rule.
 - **BYO agents are out of scope.** `byom-` custom-source models bypass this system entirely (they
   live outside app curation by design). The `/api/agents/browse` endpoint (BYO source browsing) is
-  likewise not filtered in v1.
+  likewise not filtered in v1. In the other direction, prompt agents never appear in the BYO
+  connect flow: `AgentSourceForm` filters `/api/agents` responses to entries whose `source` equals
+  the validated resource path, so app-defined personas (source `prompt-agent`) and other discovery
+  buckets are excluded from the connection's agent list and count.
 
 ## Storage layout
 
@@ -35,7 +38,18 @@ collide with user upload paths (`<userId-guid>/uploads/...`):
 system/agent-access/config.json                          # delegation map (global-admin writable only)
 system/agent-access/rules/<sha256(canonicalKey)>.json    # one rule file per agent
 system/agent-access/history/<sha256(canonicalKey)>/<iso-ts>.json  # immutable audit copies
+system/agent-access/prompt-agents/<id>.json              # app-defined prompt agents (see below)
 ```
+
+`prompt-agents/` is deliberately a **sibling** of `rules/`, never nested under it: the rules listing
+is fail-closed (any schema-invalid blob under `rules/` fails the whole ruleset load and denies all
+Foundry invocations), so an alien blob type must never live there. The prompt-agents listing has the
+**opposite** posture: a malformed/hand-placed persona blob is **skipped with a loud
+`console.error`** (a dropped persona fails safe — it vanishes from discovery and its botId falls
+through to vanilla chat), and the persona listing as a whole loads in an **independently-degradable
+step** of the snapshot refresh — a persona-side storage failure keeps the previous personas
+(last-known-good) while rules/config still refresh and enforce. A broken persona can therefore never
+brick Foundry invocations or freeze rule propagation.
 
 - **Canonical key** = `${source.trim().toLowerCase()}::${agentName.trim().toLowerCase()}`.
   ARM resource paths are case-insensitive to Azure but were compared as raw strings elsewhere in the
@@ -153,18 +167,147 @@ global admins are env-derived and unaffected.
   the UI — no redeploy needed. A local admin may create/edit/delete rules **only** for the canonical
   keys delegated to them (a simple per-file authorization check — this is why rules are one file per
   agent).
+- **Agent-less local admins:** `isLocalAdmin` is **membership** in `localAdmins` — an entry with an
+  empty `agentKeys` list still confers adminship (sidebar link, admin page, `GET` routes answer 200
+  with empty lists). A zero-key local admin can **create prompt agents** (the create auto-delegates
+  the new key to them — see below) but can edit nothing else until keys are delegated. This is the
+  intended onboarding path: add someone as a local admin with no keys, and they can start authoring
+  their own prompt agents immediately.
 - Known caveat: email-keyed identity inherits Graph `mail` weaknesses (can be undefined; IT-side
   mail changes move adminship). Acceptable for v1; oid-keying is the upgrade path if it bites.
 
 ## API surface (`/api/agent-access/*`, all `auth()`-gated + admin-gated, 404 when feature disabled)
 
-| Route                      | Method  | Who                    | Notes                                                                                                                          |
-| -------------------------- | ------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `/api/agent-access/me`     | GET     | any signed-in          | `{ isGlobalAdmin, isLocalAdmin, editableAgentKeys }` — drives UI visibility                                                    |
-| `/api/agent-access/rules`  | GET     | admins                 | global: all rules (+ etags); local: only delegated keys                                                                        |
-| `/api/agent-access/rules`  | PUT     | admins (per-key authz) | body `{source, agentName, access}`, header `If-Match` (update) or `If-None-Match: *` (create); 409 on conflict; writes history |
-| `/api/agent-access/rules`  | DELETE  | admins (per-key authz) | query `source`+`agentName`, header `If-Match`; writes tombstone history                                                        |
-| `/api/agent-access/config` | GET/PUT | global only            | delegation map, same CAS pattern                                                                                               |
+| Route                             | Method  | Who                                  | Notes                                                                                                                                                                                                                                                                                                                                                                                                 |
+| --------------------------------- | ------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/api/agent-access/me`            | GET     | any signed-in                        | `{ isGlobalAdmin, isLocalAdmin, editableAgentKeys }` — drives UI visibility                                                                                                                                                                                                                                                                                                                           |
+| `/api/agent-access/rules`         | GET     | admins                               | global: all rules (+ etags); local: only delegated keys                                                                                                                                                                                                                                                                                                                                               |
+| `/api/agent-access/rules`         | PUT     | admins (per-key authz)               | body `{source, agentName, access}`, header `If-Match` (update) or `If-None-Match: *` (create); 409 on conflict; writes history                                                                                                                                                                                                                                                                        |
+| `/api/agent-access/rules`         | DELETE  | admins (per-key authz)               | query `source`+`agentName`, header `If-Match`; writes tombstone history                                                                                                                                                                                                                                                                                                                               |
+| `/api/agent-access/config`        | GET/PUT | global only                          | delegation map, same CAS pattern                                                                                                                                                                                                                                                                                                                                                                      |
+| `/api/agent-access/prompt-agents` | GET     | admins                               | global: all agents; local: only delegated keys. `{ promptAgents: [{canonicalKey, agent, etag}], promptAgentsUnavailable, fetchedAt }`. On a direct-read failure, admin status (incl. local admins) is resolved from the service snapshot's LKG config so the degraded `promptAgentsUnavailable: true` 200 is served instead of a false 403; a cold replica with no snapshot still fails closed (403). |
+| `/api/agent-access/prompt-agents` | POST    | **any** admin (incl. zero-key local) | body `{name, description?, systemPrompt, modelId}`; server generates the id; non-global creators are auto-delegated (503 + rollback on failure; a _failed_ rollback answers a distinct 503 naming the orphaned agent id — see below); writes history                                                                                                                                                  |
+| `/api/agent-access/prompt-agents` | PUT     | admins (per-key authz)               | body = POST fields + `id`, header `If-Match` (strong ETag required); 409 on conflict; writes history                                                                                                                                                                                                                                                                                                  |
+| `/api/agent-access/prompt-agents` | DELETE  | admins (per-key authz)               | query `id`, header `If-Match`; writes tombstone history; delegation keys are left dangling (see below)                                                                                                                                                                                                                                                                                                |
+
+## Prompt agents
+
+App-defined personas — display name + description + **system prompt** + **model id** — created and
+managed by admins through the same panel, served to users through `/api/agents`, and invoked on the
+**standard** chat path (never the Foundry agent path). They ride the same feature gate:
+`AGENT_ACCESS_CONTROL_ENABLED=false` means no admin routes (404), no discovery entries, no
+invocation resolution.
+
+### Identity & storage
+
+- Id: server-generated at create, `prompt-<12 lowercase hex>`, **immutable** — renames never orphan
+  rules or delegations. Canonical key: `prompt-agent::<id>` (`PROMPT_AGENT_SOURCE = 'prompt-agent'`
+  is a pseudo-source; it cannot collide with ARM paths, which start with `/`). These keys flow
+  through `config.json` delegation and access rules as plain strings.
+- Blob: `system/agent-access/prompt-agents/<id>.json`, zod-validated (read-side permissive per the
+  schema-evolution rule):
+
+```jsonc
+{
+  "version": 1,
+  "id": "prompt-ab12cd34ef56",
+  "name": "Travel Advisor",
+  "description": "Helps plan travel",
+  "systemPrompt": "You are ...",
+  "modelId": "gpt-5.2", // must exist in OpenAIModels; never foundry-/org-/custom-/byom-
+  "createdBy": "lead@example.com",
+  "createdAt": "2026-07-18T00:00:00Z",
+  "updatedBy": "lead@example.com",
+  "updatedAt": "2026-07-18T00:00:00Z",
+}
+```
+
+- Same CAS discipline as rules (writes bypass `AzureBlobStorage.upload()`, `If-Match` /
+  `If-None-Match: *`, 412 → 409) and the same best-effort history blobs at
+  `history/<sha256(canonicalKey)>/<iso-ts>.json` (upserts + delete tombstones).
+
+### Auto-delegation on create (local admins)
+
+Any admin may create — including zero-key local admins. After a **non-global** admin's create, the
+server appends the new canonical key to every `localAdmins` entry matching the creator (CAS
+read-modify-write, up to 3 attempts on 412). If delegation persistently fails, the just-created
+agent blob is **deleted again** and the create answers 503
+(`Could not record delegation; agent creation rolled back`) — a local admin must never own an agent
+they cannot edit. Global-admin creates skip delegation.
+
+If the **rollback delete itself fails** (compound storage failure), the route never claims a
+rollback happened: it answers a distinct 503 naming the agent id
+(`Could not record delegation AND rollback failed: agent <id> still exists without delegation and
+needs global-admin cleanup`), logs `ROLLBACK DELETE FAILED` with the id, and appends a best-effort
+history `upsert` entry so the orphan is on the durable audit trail. The orphan has **no rule**
+(visible to every user under deny-list semantics) and **no delegation** (only a global admin can
+edit/delete it from the admin panel) — global admins should clean it up promptly.
+
+**Deletes leave delegation keys dangling** in `config.json` — they render as "Unknown agent key" in
+the Local admins UI and can be unchecked there. Accepted for v1.
+
+### Enforcement
+
+1. **Discovery:** `/api/agents` appends prompt agents from the AgentAccessService snapshot (same
+   60s TTL/LKG cycle as rules — no direct storage read on this hot path), filtered per-user via
+   `evaluateAccess(userMail, 'prompt-agent', id)`. The wire shape is
+   `{ id, name, description, agentName: id, source: 'prompt-agent', type: 'prompt' }` —
+   **systemPrompt and modelId are never sent to users** (admin surfaces read the admin route). The
+   Foundry endpoint trust-anchor caching does not run for them. Prompt agents are served on
+   **every** `/api/agents` response path — including when Foundry discovery is skipped entirely (no
+   ARM paths configured) or degrades (production OBO token failure): personas need neither ARM
+   discovery nor an OBO token. During a snapshot outage the LKG snapshot serves; a cold-start
+   outage snapshot simply carries no prompt agents (a persona-listing failure alone degrades only
+   the persona half — see the storage section).
+2. **Invocation guard:** the client selects a prompt agent through the existing `org-` model-id
+   wiring, which sets `conversation.bot` (`botId`) — a client-controlled value, so discovery
+   filtering is UX only. `createCredentialMiddleware` re-resolves the botId against the snapshot on
+   every request and re-runs `evaluateAccess`; deny/unavailable → `AGENT_UNAVAILABLE` in **every**
+   environment, with the same `agent-access-audit` log line as the Foundry guard. The guard runs
+   **first**, before the byom early-return and the Foundry model classification, so a prompt botId
+   paired with a `byom-`/Foundry-shaped model cannot skip it on any classification path. Fail-closed
+   'unavailable': when the botId is `prompt-`-shaped and **no snapshot was ever loaded** (cold start
+   during a storage outage), the invocation blocks with `AGENT_UNAVAILABLE` — same contract as the
+   Foundry guard. With a snapshot present, a `prompt-` botId that resolves to no record (deleted)
+   silently degrades to vanilla chat, like removed static agents. Non-`prompt-` botIds (static RAG
+   agents) never touch the access service on this path.
+
+### Invocation semantics (model swap)
+
+`createModelSelectionMiddleware` resolves the botId to the record and **swaps the executing model**
+to `OpenAIModels[record.modelId]` — unlike static org agents (whose base model is cosmetic), the
+admin-chosen model actually executes. The resolution (and swap) is **scoped to requests whose model
+id is `org-<botId>`** — `conversation.bot` is sent on every request and survives model switches that
+bypass ModelSelect (workflow model select, `useModelSelection`), so a stale botId never hijacks an
+explicitly selected base/`byom-`/Foundry model. `agentMode` is forced false and `model.agentId` is
+never set, so the request can never misroute into the Foundry execution path. A `PromptAgentEnricher`
+(registered before RAGEnricher, which skips prompt agents) overrides the system prompt with the
+record's, then appends the usual conversation-context sections. If the stored `modelId` vanishes
+from `OpenAIModels`, the swap is skipped with a loud log and default model behavior applies (the
+access guard still runs regardless — it is independent of the swap).
+
+Prompt agents otherwise ride the standard execution path: web search follows the normal
+searchMode behavior (`ToolRouterEnricher` exempts them from the static org-agent gate), and
+large-file summarization runs **without** the org knowledge-base grounding (`FileProcessor` drops
+`botId` from the summarization call when a prompt agent is resolved — a prompt-agent chat must
+never trigger a knowledge-base search).
+
+### Caching & picker staleness
+
+Admin mutations invalidate the server snapshot (this replica) and, client-side, the
+`['agent-access-prompt-agents']`, `['agent-access-rules']`, `['agent-access-admin-agents']`,
+`['foundry-agents']`, `['agent-access-config']` and `['agent-access-me']` queries — so the admin's
+own model picker updates without a reload. **Other users** converge on the picker's normal 24h
+staleTime/refresh, exactly like Foundry agent discovery today. Cross-replica server convergence is
+the usual ≤60s TTL.
+
+### Known limitations (prompt agents)
+
+- Picker visibility inherits the `exploreBots` flag gating (prompt agents render in the same
+  section as org/discovered agents).
+- 24h picker staleness for non-admin users (above).
+- Static `rag`/organization agents remain unguarded by access rules — pre-existing accepted gap;
+  prompt agents are guarded from day one.
 
 ## Admin UI
 
@@ -178,6 +321,19 @@ global admins are env-derived and unaffected.
 - Editor: access type (Everyone / Restricted), chip inputs for domains and user emails, and a
   **disabled Groups section** labeled as pending tenant consent.
 - Saves send the ETag; a 409 prompts a reload-and-retry.
+- **Prompt agents:** an "Add agent" button (visible to every admin, including zero-key local
+  admins) opens an inline create card (name, description, system prompt, model — the model list
+  excludes agent-backed ids, region-unavailable models, and any id missing from the static
+  `OpenAIModels` registry, mirroring the server's `validateModelId`; a stored id that has left the
+  registry stays selected but is labeled "(unavailable)", and the resulting 400 surfaces as a
+  model-specific error). Prompt-agent rows carry a "Prompt agent" badge and, alongside the normal
+  access-rule editor, an "Edit agent" inline editor (PUT with `If-Match`) and a Delete action with
+  inline confirm (`DELETE` with `If-Match`); 409s — and a 404 on edit, meaning the agent was
+  deleted elsewhere — surface the same reload-and-retry banner. Prompt agents appear in the Local
+  admins delegation checkboxes like any other row. For local admins the merged list trusts the
+  admin prompt-agents GET (already filtered per delegated key against fresh config) rather than
+  re-filtering those rows through `/me`'s ≤60s-stale `editableAgentKeys`, so a fresh create by a
+  zero-key local admin never vanishes behind a stale snapshot on another replica.
 
 ## Group grants — scaffold status & completion checklist
 
