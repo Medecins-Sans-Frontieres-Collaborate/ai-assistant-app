@@ -122,21 +122,25 @@ export async function clearMasterKey(): Promise<void> {
  */
 export function getBackupKeys(): Promise<BackupKeys | null> {
   if (!keysPromise) {
-    const attempt: Promise<BackupKeys | null> = (async () => {
+    // Assigned after creation; the comparisons below only run after an await,
+    // by which point it holds this attempt's promise.
+    let self: Promise<BackupKeys | null> | null = null;
+    const attempt = (async (): Promise<BackupKeys | null> => {
       try {
         const master = await loadMasterKey();
         if (master === null) {
           // Do not cache absence — enrollment may save a key next tick.
-          if (keysPromise === attempt) keysPromise = null;
+          if (keysPromise === self) keysPromise = null;
           return null;
         }
         return await deriveBackupKeys(master);
       } catch (error) {
         // Allow a later retry instead of caching the failure.
-        if (keysPromise === attempt) keysPromise = null;
+        if (keysPromise === self) keysPromise = null;
         throw error;
       }
     })();
+    self = attempt;
     keysPromise = attempt;
   }
   return keysPromise;
