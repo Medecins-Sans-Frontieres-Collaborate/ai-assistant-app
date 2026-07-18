@@ -1,6 +1,7 @@
 import type {
   AgentAccessConfig,
   AgentAccessRule,
+  PromptAgent,
 } from '@/lib/services/agentAccess/types';
 
 /**
@@ -34,16 +35,48 @@ export interface AdminConfigResponse {
   etag: string | null;
 }
 
+/**
+ * Client mirror of PROMPT_AGENT_SOURCE from lib/services/agentAccess/types.ts
+ * (value import forbidden here — see the module comment above). The
+ * pseudo-source half of every prompt agent's canonical key.
+ */
+export const CLIENT_PROMPT_AGENT_SOURCE = 'prompt-agent';
+
 /** Subset of /api/agents' DiscoveredAgent the admin panel consumes. */
 export interface DiscoveredAgentSummary {
   id: string;
   name: string;
   agentName: string;
   source?: string;
+  description?: string;
+  /** 'prompt' = app-defined prompt agent; absent/'foundry' = Foundry agent. */
+  type?: 'foundry' | 'prompt';
 }
 
 export interface AgentsApiResponse {
   agents: DiscoveredAgentSummary[];
+}
+
+/**
+ * One prompt agent as served by GET /api/agent-access/prompt-agents (the
+ * etag feeds the If-Match CAS on PUT/DELETE).
+ */
+export interface AdminStoredPromptAgent {
+  canonicalKey: string;
+  agent: PromptAgent;
+  etag: string;
+}
+
+export interface AdminPromptAgentsResponse {
+  promptAgents: AdminStoredPromptAgent[];
+  /**
+   * True while the prompt-agents store is unreachable: same outage contract
+   * as rulesUnavailable — the list is empty and MUST NOT be rendered as
+   * "no prompt agents exist".
+   */
+  promptAgentsUnavailable?: boolean;
+  /** Epoch ms of the served snapshot; null while promptAgentsUnavailable. */
+  fetchedAt?: number | null;
 }
 
 /**
@@ -58,6 +91,12 @@ export interface MergedAgentRow {
   displayName: string;
   discoverable: boolean;
   stored: AdminStoredRule | null;
+  /**
+   * Present when this row is an app-defined prompt agent the admin may edit
+   * (from the admin route, which supplies the record + CAS etag). Prompt
+   * agents outside the admin's editable keys never reach the merged list.
+   */
+  promptAgent: AdminStoredPromptAgent | null;
 }
 
 /**
