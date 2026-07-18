@@ -59,27 +59,40 @@ describe('WorkflowShell', () => {
       render(<WorkflowShell />);
 
       expect(screen.getByText('My workflow')).toBeInTheDocument();
-      // The desktop rail is open by default with its composer present.
+      // The desktop rail starts collapsed, so the toggle offers to show it.
       expect(
-        screen.getByRole('button', { name: /hideConversation|shell\.hide/ }),
+        screen.getByRole('button', { name: /showConversation|shell\.show/ }),
       ).toBeInTheDocument();
     },
   );
+
+  /**
+   * The workspace is the point of a workflow screen, so it keeps the full
+   * width until the user asks for the chat rail.
+   */
+  it('starts with the conversation rail collapsed', () => {
+    setWorkflowConversation('translation');
+    render(<WorkflowShell />);
+
+    expect(
+      screen.getByRole('button', { name: /showConversation|shell\.show/ }),
+    ).toHaveAttribute('aria-pressed', 'false');
+  });
 
   it('toggles the conversation rail with aria-pressed', () => {
     setWorkflowConversation('translation');
     render(<WorkflowShell />);
 
     const toggle = screen.getByRole('button', {
-      name: /hideConversation|shell\.hide/,
-    });
-    expect(toggle).toHaveAttribute('aria-pressed', 'true');
-
-    fireEvent.click(toggle);
-    const collapsed = screen.getByRole('button', {
       name: /showConversation|shell\.show/,
     });
-    expect(collapsed).toHaveAttribute('aria-pressed', 'false');
+    expect(toggle).toHaveAttribute('aria-pressed', 'false');
+
+    fireEvent.click(toggle);
+    const expanded = screen.getByRole('button', {
+      name: /hideConversation|shell\.hide/,
+    });
+    expect(expanded).toHaveAttribute('aria-pressed', 'true');
   });
 
   it('renders even though the LaunchDarkly flag is absent (existing conversations must open)', () => {
