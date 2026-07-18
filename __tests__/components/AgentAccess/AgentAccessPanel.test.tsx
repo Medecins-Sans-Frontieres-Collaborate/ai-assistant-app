@@ -14,8 +14,15 @@ import {
   type AgentAccessMe,
 } from '@/client/hooks/settings/useAgentAccessAdmin';
 
+import type { OpenAIModel } from '@/types/openai';
+
 import { AgentAccessPanel } from '@/components/AgentAccess/AgentAccessPanel';
-import type { AdminStoredRule } from '@/components/AgentAccess/types';
+import type {
+  AdminConfigResponse,
+  AdminStoredPromptAgent,
+  AdminStoredRule,
+  DiscoveredAgentSummary,
+} from '@/components/AgentAccess/types';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -86,6 +93,49 @@ const discoveredAgents = [
   { id: 'a2', name: 'Sales Agent', agentName: 'sales', source: 'proj-a' },
 ];
 
+const storedPromptAgent: AdminStoredPromptAgent = {
+  canonicalKey: 'prompt-agent::prompt-abc123def456',
+  etag: '"etag-pa-1"',
+  agent: {
+    version: 1,
+    id: 'prompt-abc123def456',
+    name: 'Travel Advisor',
+    description: 'Helps plan travel',
+    systemPrompt: 'You are a travel advisor.',
+    modelId: 'gpt-5.2',
+    createdBy: 'admin@example.org',
+    createdAt: '2026-07-18T10:00:00.000Z',
+    updatedBy: 'admin@example.org',
+    updatedAt: '2026-07-18T10:00:00.000Z',
+  },
+};
+
+/** The same prompt agent as /api/agents emits it (no systemPrompt/modelId). */
+const promptAgentDiscoveryEntry: DiscoveredAgentSummary = {
+  id: 'prompt-abc123def456',
+  name: 'Travel Advisor',
+  description: 'Helps plan travel',
+  agentName: 'prompt-abc123def456',
+  source: 'prompt-agent',
+  type: 'prompt',
+};
+
+// Base chat model + an agent-backed id the model picker must filter out.
+const settingsModels = [
+  { id: 'gpt-5.2', name: 'GPT-5.2', maxLength: 128000, tokenLimit: 16000 },
+  { id: 'org-comms', name: 'Comms Bot', maxLength: 128000, tokenLimit: 16000 },
+] as OpenAIModel[];
+
+const configResponse: AdminConfigResponse = {
+  config: {
+    version: 1,
+    localAdmins: [{ email: 'lead@example.org', agentKeys: [] }],
+    updatedBy: 'admin@example.org',
+    updatedAt: '2026-07-17T10:00:00.000Z',
+  },
+  etag: '"cfg-1"',
+};
+
 // Per-test fixtures the fetch mock serves; mutated in beforeEach/tests.
 let meResponse: AgentAccessMe;
 let meStatus: number;
@@ -95,6 +145,14 @@ let putStatus: number;
 let putCalls: { headers: Record<string, string>; body: unknown }[];
 let deleteStatus: number;
 let deleteCalls: { url: string; headers: Record<string, string> }[];
+let agentsResponse: DiscoveredAgentSummary[];
+let promptAgentsResponse: AdminStoredPromptAgent[];
+let agentPostStatus: number;
+let agentPostCalls: { headers: Record<string, string>; body: unknown }[];
+let agentPutStatus: number;
+let agentPutCalls: { headers: Record<string, string>; body: unknown }[];
+let agentDeleteStatus: number;
+let agentDeleteCalls: { url: string; headers: Record<string, string> }[];
 
 function jsonResponse(status: number, body: unknown) {
   return {
@@ -141,9 +199,78 @@ const fetchMock = vi.fn(async (input: string | URL, init?: RequestInit) => {
       },
     });
   }
+  if (url.startsWith('/api/agent-access/prompt-agents')) {
+    if (method === 'POST') {
+      agentPostCalls.push({
+        headers: (init?.headers ?? {}) as Record<string, string>,
+        body: JSON.parse(String(init?.body)),
+      });
+      return jsonResponse(
+        agentPostStatus,
+        agentPostStatus >= 400
+          ? {}
+          : {
+              success: true,
+              data: {
+                promptAgent: storedPromptAgent.agent,
+                etag: '"etag-pa-created"',
+                canonicalKey: storedPromptAgent.canonicalKey,
+              },
+            },
+      );
+    }
+    if (method === 'PUT') {
+      agentPutCalls.push({
+        headers: (init?.headers ?? {}) as Record<string, string>,
+        body: JSON.parse(String(init?.body)),
+      });
+      return jsonResponse(
+        agentPutStatus,
+        agentPutStatus >= 400
+          ? {}
+          : {
+              success: true,
+              data: {
+                promptAgent: storedPromptAgent.agent,
+                etag: '"etag-pa-2"',
+                canonicalKey: storedPromptAgent.canonicalKey,
+              },
+            },
+      );
+    }
+    if (method === 'DELETE') {
+      agentDeleteCalls.push({
+        url,
+        headers: (init?.headers ?? {}) as Record<string, string>,
+      });
+      return jsonResponse(
+        agentDeleteStatus,
+        agentDeleteStatus >= 400
+          ? {}
+          : {
+              success: true,
+              data: {
+                canonicalKey: storedPromptAgent.canonicalKey,
+                deleted: true,
+              },
+            },
+      );
+    }
+    return jsonResponse(200, {
+      success: true,
+      data: {
+        promptAgents: promptAgentsResponse,
+        promptAgentsUnavailable: false,
+        fetchedAt: 1752700000000,
+      },
+    });
+  }
+  if (url.startsWith('/api/agent-access/config')) {
+    return jsonResponse(200, { success: true, data: configResponse });
+  }
   if (url.startsWith('/api/agents')) {
     // /api/agents responds without the {success, data} envelope.
-    return jsonResponse(200, { agents: discoveredAgents });
+    return jsonResponse(200, { agents: agentsResponse });
   }
   throw new Error(`Unexpected fetch: ${method} ${url}`);
 });
@@ -178,10 +305,23 @@ describe('AgentAccessPanel', () => {
     putCalls = [];
     deleteStatus = 200;
     deleteCalls = [];
+    agentsResponse = discoveredAgents;
+    promptAgentsResponse = [];
+    agentPostStatus = 200;
+    agentPostCalls = [];
+    agentPutStatus = 200;
+    agentPutCalls = [];
+    agentDeleteStatus = 200;
+    agentDeleteCalls = [];
     fetchMock.mockClear();
     vi.mocked(toast.success).mockClear();
+    vi.mocked(toast.error).mockClear();
     vi.stubGlobal('fetch', fetchMock);
-    useSettingsStore.setState({ customAgentSources: [] });
+    useSettingsStore.setState({
+      customAgentSources: [],
+      models: settingsModels,
+      userRegion: null,
+    });
   });
 
   afterEach(() => {
@@ -388,5 +528,185 @@ describe('AgentAccessPanel', () => {
       (putCalls[0].body as { access: { allowDomains: string[] } }).access
         .allowDomains,
     ).toEqual(['msf.org', 'new-domain.org', 'second.org']);
+  });
+
+  it('renders a prompt-agent row with badge and Edit agent / Delete actions', async () => {
+    agentsResponse = [...discoveredAgents, promptAgentDiscoveryEntry];
+    promptAgentsResponse = [storedPromptAgent];
+    renderPanel();
+
+    const row = (await screen.findByText('Travel Advisor')).closest('li');
+    expect(row).not.toBeNull();
+    expect(
+      within(row as HTMLElement).getByText('Prompt agent'),
+    ).toBeInTheDocument();
+    expect(
+      within(row as HTMLElement).getByText('Edit agent'),
+    ).toBeInTheDocument();
+    expect(within(row as HTMLElement).getByText('Delete')).toBeInTheDocument();
+    // Discovered through /api/agents too, so no amber badge.
+    expect(
+      within(row as HTMLElement).queryByText('Not discoverable by you'),
+    ).not.toBeInTheDocument();
+    // Foundry rows carry neither the badge nor the prompt-agent actions.
+    const foundryRow = screen.getByText('Helpdesk Agent').closest('li');
+    expect(
+      within(foundryRow as HTMLElement).queryByText('Prompt agent'),
+    ).not.toBeInTheDocument();
+    expect(
+      within(foundryRow as HTMLElement).queryByText('Edit agent'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('creates a prompt agent: POST body from the form, agent-backed models filtered out of the picker', async () => {
+    renderPanel();
+
+    fireEvent.click(await screen.findByText('Add agent'));
+    expect(screen.getByText('New prompt agent')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByPlaceholderText('e.g. Travel Advisor'), {
+      target: { value: '  Concierge  ' },
+    });
+    fireEvent.change(
+      screen.getByPlaceholderText(
+        'Instructions that define how this agent behaves',
+      ),
+      { target: { value: 'You are a concierge.' } },
+    );
+
+    const modelSelect = screen.getByRole('combobox');
+    // org-comms is agent-backed and must not be offered as an engine.
+    expect(within(modelSelect).getByText('GPT-5.2')).toBeInTheDocument();
+    expect(
+      within(modelSelect).queryByText('Comms Bot'),
+    ).not.toBeInTheDocument();
+    fireEvent.change(modelSelect, { target: { value: 'gpt-5.2' } });
+
+    fireEvent.click(screen.getByText('Save'));
+
+    await waitFor(() => expect(agentPostCalls).toHaveLength(1));
+    expect(agentPostCalls[0].body).toEqual({
+      name: 'Concierge',
+      description: '',
+      systemPrompt: 'You are a concierge.',
+      modelId: 'gpt-5.2',
+    });
+    // Create-only: no If-Match rides along.
+    expect(agentPostCalls[0].headers['If-Match']).toBeUndefined();
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('Prompt agent created.');
+    });
+  });
+
+  it('local admin with zero delegated keys still sees the Add agent button', async () => {
+    meResponse = {
+      isGlobalAdmin: false,
+      isLocalAdmin: true,
+      editableAgentKeys: [],
+    };
+    rulesResponse = [];
+    renderPanel();
+
+    expect(await screen.findByText('Add agent')).toBeInTheDocument();
+    // Nothing is delegated to them yet, so the list itself is empty.
+    expect(screen.getByText('No agents to manage.')).toBeInTheDocument();
+  });
+
+  it('Edit agent PUT carries If-Match and body id; a 409 shows the conflict banner', async () => {
+    agentsResponse = [...discoveredAgents, promptAgentDiscoveryEntry];
+    promptAgentsResponse = [storedPromptAgent];
+    agentPutStatus = 409;
+    renderPanel();
+
+    const row = (await screen.findByText('Travel Advisor')).closest('li');
+    fireEvent.click(within(row as HTMLElement).getByText('Edit agent'));
+
+    // Seeded from the stored record.
+    expect(
+      within(row as HTMLElement).getByDisplayValue('You are a travel advisor.'),
+    ).toBeInTheDocument();
+    fireEvent.change(
+      within(row as HTMLElement).getByDisplayValue('Travel Advisor'),
+      { target: { value: 'Travel Advisor v2' } },
+    );
+    fireEvent.click(within(row as HTMLElement).getByText('Save'));
+
+    expect(
+      await within(row as HTMLElement).findByText(
+        'Someone else changed this while you were editing. Reload to load the latest version, then make your change again.',
+      ),
+    ).toBeInTheDocument();
+    expect(within(row as HTMLElement).getByText('Reload')).toBeInTheDocument();
+
+    expect(agentPutCalls).toHaveLength(1);
+    expect(agentPutCalls[0].headers['If-Match']).toBe('"etag-pa-1"');
+    expect(agentPutCalls[0].body).toEqual({
+      id: 'prompt-abc123def456',
+      name: 'Travel Advisor v2',
+      description: 'Helps plan travel',
+      systemPrompt: 'You are a travel advisor.',
+      modelId: 'gpt-5.2',
+    });
+  });
+
+  it('deletes a prompt agent after inline confirm, sending DELETE with If-Match', async () => {
+    agentsResponse = [...discoveredAgents, promptAgentDiscoveryEntry];
+    promptAgentsResponse = [storedPromptAgent];
+    renderPanel();
+
+    const row = (await screen.findByText('Travel Advisor')).closest('li');
+    fireEvent.click(within(row as HTMLElement).getByText('Delete'));
+    // Nothing sent until the inline confirm.
+    expect(agentDeleteCalls).toHaveLength(0);
+    fireEvent.click(within(row as HTMLElement).getByText('Yes, delete'));
+
+    await waitFor(() => expect(agentDeleteCalls).toHaveLength(1));
+    expect(agentDeleteCalls[0].url).toBe(
+      '/api/agent-access/prompt-agents?id=prompt-abc123def456',
+    );
+    expect(agentDeleteCalls[0].headers['If-Match']).toBe('"etag-pa-1"');
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('Prompt agent deleted.');
+    });
+  });
+
+  it('shows the conflict banner when the delete hits a 409', async () => {
+    agentsResponse = [...discoveredAgents, promptAgentDiscoveryEntry];
+    promptAgentsResponse = [storedPromptAgent];
+    agentDeleteStatus = 409;
+    renderPanel();
+
+    const row = (await screen.findByText('Travel Advisor')).closest('li');
+    fireEvent.click(within(row as HTMLElement).getByText('Delete'));
+    fireEvent.click(within(row as HTMLElement).getByText('Yes, delete'));
+
+    expect(
+      await within(row as HTMLElement).findByText(
+        'Someone else changed this while you were editing. Reload to load the latest version, then make your change again.',
+      ),
+    ).toBeInTheDocument();
+    expect(within(row as HTMLElement).getByText('Reload')).toBeInTheDocument();
+    expect(agentDeleteCalls).toHaveLength(1);
+  });
+
+  it('lists the prompt agent in the local-admin delegation checkboxes', async () => {
+    agentsResponse = [...discoveredAgents, promptAgentDiscoveryEntry];
+    promptAgentsResponse = [storedPromptAgent];
+    renderPanel();
+
+    fireEvent.click(await screen.findByText('Local admins'));
+
+    // The section renders one card per configured local admin; the merged
+    // rows — including the prompt agent — feed its delegation checkboxes.
+    const promptLabel = (await screen.findByText('Travel Advisor')).closest(
+      'label',
+    );
+    expect(promptLabel).not.toBeNull();
+    expect(
+      within(promptLabel as HTMLElement).getByRole('checkbox'),
+    ).toBeInTheDocument();
+    expect(
+      within(promptLabel as HTMLElement).getByRole('checkbox'),
+    ).not.toBeChecked();
   });
 });
