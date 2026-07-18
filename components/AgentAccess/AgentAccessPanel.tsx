@@ -167,7 +167,18 @@ export const AgentAccessPanel: FC = () => {
     }
     let list = [...map.values()];
     if (editableAgentKeys !== '*') {
-      list = list.filter((row) => editableAgentKeys.includes(row.canonicalKey));
+      // Rows with a promptAgent record came from the admin prompt-agents
+      // GET, which the server already filtered to this admin's delegated
+      // keys against FRESH config. /me answers from a ≤60s-stale snapshot
+      // that may not know about a just-created agent's auto-delegation yet
+      // (another replica), so re-filtering those rows through
+      // editableAgentKeys would make a fresh create vanish from a zero-key
+      // local admin's list. Trust the server-filtered listing instead.
+      list = list.filter(
+        (row) =>
+          row.promptAgent !== null ||
+          editableAgentKeys.includes(row.canonicalKey),
+      );
     }
     return list.sort((a, b) => a.displayName.localeCompare(b.displayName));
   }, [
@@ -367,6 +378,7 @@ export const AgentAccessPanel: FC = () => {
                 with zero delegated keys (the create auto-delegates to them). */}
             <button
               type="button"
+              aria-expanded={isCreatingAgent}
               className="mb-4 flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-gray-700 px-3 py-1.5 text-sm font-medium text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
               onClick={() => setIsCreatingAgent((creating) => !creating)}
             >
