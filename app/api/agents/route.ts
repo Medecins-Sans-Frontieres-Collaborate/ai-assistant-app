@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessService';
+import { PROMPT_AGENT_SOURCE } from '@/lib/services/agentAccess/types';
 import {
   AgentDiscoveryService,
   DiscoveredAgent,
@@ -177,6 +178,7 @@ export async function GET(request: NextRequest) {
     // unfiltered: this is a visibility-only surface, and invocation fails
     // closed independently.
     let visibleAgents: DiscoveredAgent[] = allAgents;
+    const promptAgentEntries: DiscoveredAgent[] = [];
     const accessService = AgentAccessService.getInstance();
     if (accessService.isEnabled()) {
       await accessService.ensureFresh();
@@ -203,6 +205,31 @@ export async function GET(request: NextRequest) {
       } else {
         visibleAgents = filtered;
       }
+
+      // Append app-defined prompt agents from the service snapshot (hot
+      // path — never read storage directly here). They ride the same
+      // access filter; 'unavailable' passes through like the loop above
+      // (visibility-only surface — in practice an unavailable snapshot
+      // carries no prompt agents anyway). The wire shape deliberately
+      // omits systemPrompt and modelId: those are admin-only fields, the
+      // server resolves them from botId at invocation time.
+      for (const promptAgent of accessService.getPromptAgents()) {
+        const { decision } = accessService.evaluateAccess({
+          userMail: session.user.mail,
+          source: PROMPT_AGENT_SOURCE,
+          agentName: promptAgent.id,
+        });
+        if (decision !== 'deny') {
+          promptAgentEntries.push({
+            id: promptAgent.id,
+            name: promptAgent.name,
+            description: promptAgent.description,
+            agentName: promptAgent.id,
+            source: PROMPT_AGENT_SOURCE,
+            type: 'prompt',
+          });
+        }
+      }
     }
 
     // Cache each discovered agent's endpoint for this specific user AND
@@ -211,6 +238,8 @@ export async function GET(request: NextRequest) {
     // for these endpoints. The chat middleware reads from this cache
     // instead of trusting the request body's `foundryEndpoint` field.
     // Denied agents are excluded so their endpoints are never anchored.
+    // Prompt agents are kept out of this loop entirely — they have no
+    // Foundry endpoint and must never enter the trust-anchor cache.
     const userMail = session.user.mail;
     if (userMail) {
       for (const agent of visibleAgents) {
@@ -224,7 +253,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({
-      agents: visibleAgents,
+      agents: [...visibleAgents, ...promptAgentEntries],
       regionalPath,
       officePaths,
     });
