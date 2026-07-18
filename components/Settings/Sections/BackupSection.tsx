@@ -154,14 +154,19 @@ export const BackupSection: FC = () => {
 
         {!enrolled && (
           <div className="space-y-4">
-            <button
-              type="button"
-              onClick={() => setBackupModalView('enroll-intro')}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-blue-500 hover:bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors"
-            >
-              <IconShieldLock size={16} />
-              {t('backup.settings.turnOn')}
-            </button>
+            {/* A live remote backup means the right entry point is restoring
+                it with its key — a fresh enroll here could never push over a
+                foreign-key manifest and would dead-end. */}
+            {remoteExists !== true && (
+              <button
+                type="button"
+                onClick={() => setBackupModalView('enroll-intro')}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-blue-500 hover:bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors"
+              >
+                <IconShieldLock size={16} />
+                {t('backup.settings.turnOn')}
+              </button>
+            )}
 
             {remoteExists === true && (
               <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-3">
