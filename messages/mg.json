@@ -907,7 +907,8 @@
     "processingAudio": "Mikarakara feo...",
     "ttsError": "Nisy hadisoana tamin'ny famoronana feo. Azafady avereno.",
     "unsupportedMessageType": "Hadisoana tamin'ny fandefasana hafatra: Tsy tohanana ity karazana hafatra ity",
-    "addLanguageOption": "Ampio \"{name}\"…"
+    "addLanguageOption": "Ampio \"{name}\"…",
+    "sources": "Loharano"
   },
   "transcript": {
     "originalTranscript": "Dikan-teny Tany Am-boalohany",
@@ -1331,7 +1332,10 @@
     "customInstructionsLabel": "Toromarika manokana*",
     "defaultTemperatureLabel": "Mari-pana mahazatra*",
     "Usage & Impact": "Fampiasana sy Fiantraikany",
-    "Connectors": "Mpifandray"
+    "Connectors": "Mpifandray",
+    "Backup": "Backup",
+    "Memories": "Fitadidiana",
+    "Agent Access": "Fidirana Agent"
   },
   "emptyState": {
     "greeting": "Afaka manampy inona aho?",
@@ -3208,5 +3212,213 @@
       "lastRequest": "Fangatahana farany",
       "disclaimer": "Fanombanana isaky ny fangatahana avy amin'ny isan'ny token navoaka tatitra na vinavinaina, amin'ny fampiasana salan'isa sy hevi-dalina navoaka ho an'ny vahoaka v{version}. Ny hafatra taloha dia hajaina avy amin'ny lahatsoratra voatahiry sy ny modely amin'izao resaka izao. Tsy fandrefesana marina."
     }
+  },
+  "table": {
+    "copyTable": "Kopia latabatra",
+    "downloadTable": "Ampidino ny latabatra",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Nalefa ho CSV",
+    "copyFailed": "Tsy nahomby ny kopia ny latabatra"
+  },
+  "backup": {
+    "intro": {
+      "title": "Ataovy azo antoka ny resakao — voaaro",
+      "body": "Voaaro amin'ity fitaovana ity ny resakao alohan'ny fampakarana rehetra. Tsy afaka mahita ny resakao mihitsy izahay.",
+      "keyWarning": "Amin'ity fitaovana ity no mamoronana ny fanalahidinao famerenana. Tsy mahita izany izahay ary tsy afaka mamerenana izany ho anao — very ny fanalahidy dia very ny tahiry.",
+      "create": "Mamoròna fanalahidy & manao backup",
+      "decline": "Tsia aloha — avelao eto amin'ity fitaovana ity ihany ny resaka"
+    },
+    "ceremony": {
+      "titleCreate": "Tehirizo ny fanalahidinao famerenana",
+      "titleRotate": "Tehirizo ny fanalahidinao famerenana vaovao",
+      "titleView": "Ny fanalahidinao famerenana",
+      "description": "Ity fanalahidy ity irery ihany no ahafahanao mamerina ny backup amin'ny fitaovana hafa. Tehirizo amin'ny toerana azo antoka — tsy afaka mamerina izany izahay.",
+      "copy": "Kopia",
+      "copied": "Voakopy!",
+      "download": "Ampidino .txt",
+      "showQr": "Asehoy ny QR code",
+      "hideQr": "Afeno ny QR code",
+      "savedCheckbox": "Tehiriziko amin'ny toerana azo antoka ny fanalahidinao famerenana",
+      "saveFirstHint": "Kopia na ampidino alohan'ny hanohizana ny fanalahidy.",
+      "continue": "Tohizo",
+      "done": "Vita",
+      "cancel": "Foano",
+      "cancelConfirmTitle": "Foano ny fanaovana backup?",
+      "cancelConfirmBody": "Tsy hotahirizina ny resakao. Afaka alefa amin'ny fotoana rehetra ao amin'ny Settings ny backup voaaro.",
+      "cancelConfirmRotateBody": "Efa nohavaozina ny fanalahidy famerenanao. Afaka jerenao amin'ny fotoana rehetra ao amin'ny Settings izany.",
+      "cancelConfirmConfirm": "Eny, foano",
+      "cancelConfirmDismiss": "Miverina",
+      "loadError": "Tsy afaka nampiditra ny fanalahidinao famerenana amin'ity fitaovana ity."
+    },
+    "file": {
+      "heading": "Fanalahidin'ny backup chat",
+      "warning": "Tehirizo amin'ny toerana azo antoka io fanalahidy io. Rehefa mahazo io ny olona iray dia afaka mamaky ny backup-nao; tsy misy fanalahidy dia tsy azo averina ny backup."
+    },
+    "progress": {
+      "titleCreate": "Manomana ny backup-nao",
+      "titleRotate": "Manova ny fanalahidinao famerenana",
+      "encrypting": "{count, plural, one {Manakodia sy mitahiry # resaka…} other {Manakodia sy mitahiry # resaka…}}",
+      "success": "{count, plural, one {Vita ny backup. # resaka voaaro.} other {Vita ny backup. # resaka voaaro.}}",
+      "error": "Tsy nahomby ny backup. Mbola eto amin'ity fitaovana ity ny resakao.",
+      "retry": "Avereno indray",
+      "close": "Akatona",
+      "done": "Vita"
+    },
+    "input": {
+      "label": "Fanalahidy famerenana",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Tsy misy O, I na L amin'ny fanalahidy.",
+      "checksumError": "Tsy toa marina io lakile io — tadiavo sao misy diso tsipelina.",
+      "formatError": "Tsy toa lakile fanarenana io.",
+      "incomplete": "Tohizo ny famenoana — 56 litera ny lakile fanarenana.",
+      "valid": "Mahazo ekena io lakile io."
+    },
+    "restore": {
+      "title": "Avereno ny resakao",
+      "successTitle": "Afaka naverina ny backup",
+      "promptBody": "Nahita backup voaaron-tsoratra ho an’ny kaontinao izahay. Ampidiro ny lakile fanarenanao mba hamerina azy amin’ity fitaovana ity.",
+      "submit": "Avereno ny backup",
+      "skip": "Mandrosoa — manomboka vaovao amin’ity fitaovana ity",
+      "restoring": "Manaisotra ny fiarovana sy mamerina ny resakao…",
+      "successBody": "{count, plural, one {# resaka naverina.} other {# resaka naverina.}}",
+      "wrongKey": "Lakile manan-kery io, saingy tsy manokatra io backup io. Raha nanova lakile ianao, ampiasao ny vaovao farany.",
+      "corrupt": "Tsy afaka novakiana io backup io — mety simba ilay izy. Azonao atao ny manomboka vaovao amin’ity fitaovana ity na manandrana indray amin’ny manaraka.",
+      "networkError": "Tsy tafahaona tamin’ny tolotra backup. Zahao ny fifandraisanao ary andramo indray.",
+      "tryAgain": "Andramo lakile hafa",
+      "close": "Vita"
+    },
+    "enterKey": {
+      "title": "Ampidiro ny lakile fanarenana vaovao",
+      "body": "Nisy fiovana ny lakile fanarenanao tamin’ny fitaovana iray hafa. Ampidiro ny lakile vaovao mba hanohizana ny backup amin’ity fitaovana ity.",
+      "submit": "Ampiasao io lakile io"
+    },
+    "banner": {
+      "keyMismatchTitle": "Naatonina ny backup — niova ny lakile fanarenanao tamin’ny fitaovana hafa.",
+      "enterNewKey": "Ampidiro ny lakile vaovao",
+      "resetBackup": "Avereno ny backup",
+      "resetConfirmTitle": "Avereno amin’ny lakile an’ity fitaovana ity ve ny backup?",
+      "resetConfirmBody": "Soloina amin’ny resaka ao amin’ity fitaovana ity ny backup efa misy, harovan’ny lakile-n’ity fitaovana ity. Mila ny lakile fanarenan’ity fitaovana ity ny fitaovana hafa.",
+      "resetConfirmAction": "Avereno ny backup",
+      "remoteMissingTitle": "Tsy eo intsony ny backup-nao ao amin’ny server. Naatonina ny backup.",
+      "backUpAgain": "Ataovy backup indray",
+      "dismiss": "Afohy"
+    },
+    "rotate": {
+      "confirmTitle": "Hanova lakile fanarenana ve?",
+      "confirmBody": "Havaozina amin’ny lakile vaovao ny backup-nao ary tsy mety amin’izay ny lakile taloha. Mila mitahiry sy mampiditra ny lakile vaovao amin'ireo fitaovana hafa ianao.",
+      "confirmAction": "Ovao ny lakile"
+    },
+    "toast": {
+      "enrollLater": "Afaka manokatra backup voaaron-tsoratra amin’ny Settings ianao amin’izay fotoana tianao.",
+      "keyUpdated": "Voahavaozina ny lakile fanarenana. Tafaverina ny backup.",
+      "resetDone": "Voafafa sy naverina amin’ny lakile an’ity fitaovana ity ny backup.",
+      "backupRestarted": "Namorona backup vaovao indray.",
+      "opFailed": "Nisy tsy nety. Azafady andramo indray."
+    },
+    "settings": {
+      "statusOn": "Misy ny backup",
+      "statusOff": "Tsy misy ny backup",
+      "offDescription": "Ao amin’ity navigateur ity ihany ny resakao. Alefaso ny backup voaaron-tsoratra mba hiarovana sy hamerina azy ireo amin’ny fitaovana hafa. Voaara-miafina ny resakao amin’ny fitaovanao — tsy ho azonay vakina izany.",
+      "turnOn": "Alefaso ny backup",
+      "restoreTitle": "Misy backup efa misy ho an’ny kaontinao",
+      "restoreDescription": "Ampidiro ny lakile fanarenanao mba hamerina izany amin’ity fitaovana ity.",
+      "restore": "Avereno ny backup",
+      "lastBackup": "Backup farany: {time}",
+      "lastBackupNever": "Tsy mbola vita ny backup",
+      "keyFingerprint": "Lakile ····-{tail}",
+      "syncState": {
+        "idle": "Miandry hifanaraka",
+        "syncing": "Manao backup…",
+        "ok": "Vaovao foana",
+        "keyOutOfDate": "Naatonina — niova ny lakile fanarenana tamin’ny fitaovana hafa",
+        "remoteMissing": "Naato — voafafa tao amin'ny server ny backup",
+        "error": "Tsy nahomby ny andrana backup farany"
+      },
+      "backUpNow": "Ataovy backup izao",
+      "backUpNowSuccess": "Vita ny backup",
+      "backUpNowFailure": "Tsy nahomby ny backup — tsy nisy niova ny resakao ato amin'ity fitaovana ity",
+      "viewKey": "Jereo ny lakilen'ny recovery",
+      "changeKey": "Ovao ny lakilen'ny recovery",
+      "dangerTitle": "Faritra mampidi-doza",
+      "turnOffDelete": "Vonoy & fafao ny backup",
+      "turnOffConfirmTitle": "Vonoy ve ny backup?",
+      "turnOffConfirmMessage": "Hafafa amin'ny server anay tanteraka amin'ny fitaovana rehetra ny backup-nao. Hitoetra eto amin'ity fitaovana ity ihany ny resakao. Afaka manetsika backup indray ianao amin'ny lakilen'ny recovery vaovao.",
+      "turnOffConfirmAction": "Fafao ny backup",
+      "turnOffSuccess": "Voavono sy voafafa ny backup",
+      "turnOffFailure": "Tsy afaka namafa ny backup. Azafady andramo indray."
+    }
+  },
+  "memories": {
+    "title": "Fahatsiarovana",
+    "description": "Avelao ho tadidin'ny assistant ireo zava-misy maharitra zarainao — toy ny andraikitrao, safidinao, sy tetikasa mandeha — ary ampiasao amin'ny resaka rehetra.",
+    "enableToggle": "Alefaso ny fahatsiarovana",
+    "privacyNote": "Tehirizina ao amin'ity navigateur ity ihany ireo zava-misy ary ampidirina amin'ny resakao hanokana valiny.",
+    "empty": "Tsy mbola misy fahatsiarovana. Tehirizina ho azy avy amin'ny resakao ireo zava-misy tsara tadidina.",
+    "savedOn": "Voatahiry tamin'ny {date}",
+    "deleteMemory": "Fafao ny fahatsiarovana",
+    "clearAll": "Fafao daholo ny fahatsiarovana",
+    "clearAllConfirmQuestion": "Fafao avokoa ny fahatsiarovana? Tsy afaka averina intsony izany.",
+    "clearAllConfirm": "Fafao daholo",
+    "cancel": "Foano"
+  },
+  "contextWindow": {
+    "label": "Varavarankely fitantarana",
+    "value": "{count} hafatra",
+    "fewer": "Hafatra vitsy kokoa",
+    "more": "Hafatra maro kokoa",
+    "description": "Haverenana sy halefa ho famintinana ireo hafatra taloha mihoatra ity fetra ity."
+  },
+  "agentAccess": {
+    "title": "Fidirana amin'ny agent",
+    "description": "Fehezo ireo mpampiasa afaka mampiasa agent Foundry iraisana. Manampy famerana fotsiny ireto fitsipika ireto amin'izay efa azo idiran'ny Azure-n'ny mpampiasa — tsy afaka manome fahazoan-dalana izay lavin'ny Azure izy ireo.",
+    "backToChat": "Miverena amin'ny resaka",
+    "loading": "Eo ampidirana agents sy fitsipika...",
+    "loadError": "Tsy azo ampidirina ny angon-drakitra fidirana amin'ny agent.",
+    "rulesUnavailableWarning": "Tsy voaangona avy amin'ny fitahirizana ireo fitsipika fidirana. Voasakana vonjimaika ny fampiasana agents ary tsy azo ovaina ny fitsipika.",
+    "retry": "Avereno andramana",
+    "rulesTab": "Fitsipika agent",
+    "localAdminsTab": "Administratera eo an-toerana",
+    "noAgents": "Tsy misy agent hotantanana.",
+    "sourceLabel": "Loharano",
+    "notDiscoverable": "Tsy hita ho anao",
+    "notDiscoverableHint": "Misy fitsipika amin'ity agent ity, saingy tsy hita eo amin'ny fahitanao azy — mety hoe novaina anarana, tsy mahatratra azy ny Azure fidirana aminao, na tsy voarakitra ao amin'ny fitsipika fidirana ianao.",
+    "accessEveryone": "Rehetra",
+    "accessRestricted": "Voafetra",
+    "edit": "Ovao",
+    "updatedByLine": "Nohavaozina farany nataon'i {user} tamin'ny {date}",
+    "accessTypeLabel": "Iza no afaka mampiasa ity agent ity",
+    "everyoneDescription": "Izay rehetra efa mahatratra ity agent ity amin'ny alalan'ny Azure fidirany.",
+    "restrictedDescription": "Ireo mpampiasa sy domain voatanisa eto ambany ihany.",
+    "allowDomainsLabel": "Domains azo ampiasaina",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Mpampiasa voatokana",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Tsindrio Enter hanampy",
+    "removeChip": "Esory",
+    "groupsLabel": "Vondrona azo ampiasaina",
+    "groupsPendingConsent": "Miandry faneken'ny admin tenant ny fidirana amin'ny alalan'ny vondrona, ary tsy mbola azo ovaina.",
+    "restrictedEmptyWarning": "Tsy misy mpampiasa na domain voatanisa — tsy hisy afaka hampiasa ity agent ity.",
+    "save": "Tehirizo",
+    "saving": "Eo am-pitehirizana…",
+    "cancel": "Foano",
+    "saveSuccess": "Voatahiry ny fitsipika fidirana.",
+    "deleteSuccess": "Voafafa ny fitsipika fidirana — afaka mampiasa an’ity agent ity indray ny rehetra.",
+    "saveError": "Tsy afaka nitahiry. Azafady avereno andramana.",
+    "conflictError": "Nisy olona hafa nanova raha toa ka nanova ianao. Avereno asiana reload hamaky ny kinova farany, dia avereno ny fanovànao.",
+    "reload": "Avereno",
+    "localAdminsDescription": "Asaivo tantanin'ny admin eo an-toerana ny fitsipika ho an'ny agent manokana tsy mila manamboatra indray. Ny admin eo an-toerana dia afaka manova fitsipika ho an'ireo agent natokana ho azy irery ihany.",
+    "noLocalAdmins": "Tsy misy admin eo an-toerana voafaritra.",
+    "addLocalAdmin": "Ampio admin eo an-toerana",
+    "emailLabel": "Email",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Esory ny admin eo an-toerana",
+    "delegatedAgentsLabel": "Agent natokana",
+    "noDelegatedAgents": "Tsy misy agent azo natokana.",
+    "unknownAgentKey": "Agent key tsy fantatra",
+    "configSaveSuccess": "Voatahiry ny admin eo an-toerana.",
+    "configConflictError": "Nisy olona hafa nanova ny lisitry ny admin eo an-toerana raha handika ianao. Avereno asiana reload ary andramo indray."
   }
 }

@@ -849,7 +849,8 @@
     "processingAudio": "Inachakata sauti...",
     "ttsError": "Hitilafu kutengeneza sauti. Tafadhali jaribu tena.",
     "unsupportedMessageType": "Hitilafu kuonesha ujumbe: Aina ya ujumbe haitambuliwi",
-    "addLanguageOption": "Ongeza \"{name}\"…"
+    "addLanguageOption": "Ongeza \"{name}\"…",
+    "sources": "Vyanzo"
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",
@@ -1178,7 +1179,10 @@
     "customInstructionsLabel": "Maelekezo Maalum*",
     "defaultTemperatureLabel": "Joto Chaguo-msingi*",
     "Usage & Impact": "Matumizi na Athari",
-    "Connectors": "Viunganishi"
+    "Connectors": "Viunganishi",
+    "Backup": "Hifadhi rudufu",
+    "Memories": "Kumbukumbu",
+    "Agent Access": "Ufikivu wa Wakala"
   },
   "notFound": {
     "lostDog": "Mbwa aliyepotea"
@@ -3224,5 +3228,213 @@
       "lastRequest": "Ombi la mwisho",
       "disclaimer": "Makadirio kwa kila ombi yanatokana na idadi ya tokeni zilivyoripotiwa au kukadiriwa, yakitumia wastani na dhana zilizochapishwa toleo v{version}. Ujumbe wa zamani umekadiriwa kutoka kwa maandishi yaliyohifadhiwa na muundo wa sasa wa mazungumzo. Hii si kipimo halisi."
     }
+  },
+  "table": {
+    "copyTable": "Nakili jedwali",
+    "downloadTable": "Pakua jedwali",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Imetolewa kama CSV",
+    "copyFailed": "Imeshindwa kunakili jedwali"
+  },
+  "backup": {
+    "intro": {
+      "title": "Hifadhi gumzo zako — salama",
+      "body": "Mazungumzo yako yameenkriptishwa kwenye kifaa hiki kabla ya kupakiwa. Hatuwezi kusoma gumzo zako kamwe.",
+      "keyWarning": "Ufunguo wako wa kurejesha umeundwa kwenye kifaa hiki. Hatuuoni na hatuwezi kuurejesha kwako — kupoteza ufunguo kunamaanisha kupoteza hifadhi rudufu.",
+      "create": "Unda ufunguo wangu & hifadhi rudufu",
+      "decline": "Si sasa — weka gumzo kwenye kifaa hiki pekee"
+    },
+    "ceremony": {
+      "titleCreate": "Hifadhi ufunguo wako wa kurejesha",
+      "titleRotate": "Hifadhi ufunguo wako mpya wa kurejesha",
+      "titleView": "Ufunguo wako wa kurejesha",
+      "description": "Ufunguo huu ndio njia pekee ya kurejesha hifadhi yako rudufu kwenye kifaa kingine. Uweke mahali salama — hatuwezi kuurejesha kwako.",
+      "copy": "Nakili",
+      "copied": "Imenakiliwa!",
+      "download": "Pakua .txt",
+      "showQr": "Onyesha msimbo wa QR",
+      "hideQr": "Ficha msimbo wa QR",
+      "savedCheckbox": "Nimehifadhi ufunguo wangu wa kurejesha mahali salama",
+      "saveFirstHint": "Nakili au pakua ufunguo wako kabla ya kuendelea.",
+      "continue": "Endelea",
+      "done": "Imekamilika",
+      "cancel": "Ghairi",
+      "cancelConfirmTitle": "Ughairi usanidi wa hifadhi rudufu?",
+      "cancelConfirmBody": "Gumzo zako hazitahifadhiwa. Unaweza kuwasha hifadhi rudufu iliyosimbwa wakati wowote kwenye Mipangilio.",
+      "cancelConfirmRotateBody": "Ufunguo wako wa kurejesha tayari umebadilishwa. Unaweza kuuona wakati wowote kwenye Mipangilio.",
+      "cancelConfirmConfirm": "Ndiyo, ghairi",
+      "cancelConfirmDismiss": "Rudi nyuma",
+      "loadError": "Imeshindwa kupakia ufunguo wako wa kurejesha kwenye kifaa hiki."
+    },
+    "file": {
+      "heading": "Ufunguo wa kurejesha hifadhi ya gumzo",
+      "warning": "Hifadhi ufunguo huu mahali salama. Yeyote aliye nao anaweza kusoma hifadhi yako; bila huo hifadhi haiwezi kurejeshwa."
+    },
+    "progress": {
+      "titleCreate": "Inaandaa hifadhi yako rudufu",
+      "titleRotate": "Inabadilisha ufunguo wako wa kurejesha",
+      "encrypting": "{count, plural, one {Inasimba na kuhifadhi gumzo #...} other {Inasimba na kuhifadhi gumzo #...}}",
+      "success": "{count, plural, one {Usalama wa hifadhi umekamilika. Gumzo # imelindwa.} other {Usalama wa hifadhi umekamilika. Gumzo # zinalindwa.}}",
+      "error": "Hifadhi imeshindikana. Gumzo zako bado zipo kwenye kifaa hiki.",
+      "retry": "Jaribu tena",
+      "close": "Funga",
+      "done": "Imekamilika"
+    },
+    "input": {
+      "label": "Ufunguo wa kurejesha",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Vifunguo havina herufi O, I au L.",
+      "checksumError": "Ufunguo huo hauonekani kuwa sahihi — angalia kama kuna makosa ya herufi.",
+      "formatError": "Hauonekani kama ufunguo wa kurejesha.",
+      "incomplete": "Endelea kuandika — ufunguo wa kurejesha una herufi 56.",
+      "valid": "Ufunguo unaonekana kuwa sahihi."
+    },
+    "restore": {
+      "title": "Rejesha mazungumzo yako",
+      "successTitle": "Hifadhi imerejeshwa",
+      "promptBody": "Tumepata hifadhi iliyosimbwa kwa akaunti yako. Weka ufunguo wako wa kurejesha ili uirejeshe kwenye kifaa hiki.",
+      "submit": "Rejesha hifadhi",
+      "skip": "Ruka — anza upya kwenye kifaa hiki",
+      "restoring": "Inasimbua na kurejesha mazungumzo yako…",
+      "successBody": "{count, plural, one {Mazungumzo # yamerejeshwa.} other {Mazungumzo # yamerejeshwa.}}",
+      "wrongKey": "Ufunguo huu ni sahihi, lakini haufungui hifadhi hii. Ikiwa ulibadilisha ufunguo wako, tumia ule mpya zaidi.",
+      "corrupt": "Hifadhi hii haikuweza kusomwa — huenda imeharibika. Unaweza kuanza upya kwenye kifaa hiki au ujaribu tena baadaye.",
+      "networkError": "Huduma ya hifadhi haijapatikana. Hakikisha muunganisho wako na ujaribu tena.",
+      "tryAgain": "Jaribu ufunguo mwingine",
+      "close": "Imekamilika"
+    },
+    "enterKey": {
+      "title": "Weka ufunguo wako mpya wa kurejesha",
+      "body": "Ufunguo wako wa kurejesha umebadilishwa kwenye kifaa kingine. Weka ufunguo mpya ili kuendelea na hifadhi kwenye kifaa hiki.",
+      "submit": "Tumia ufunguo huu"
+    },
+    "banner": {
+      "keyMismatchTitle": "Hifadhi imesitishwa — ufunguo wako wa kurejesha umebadilika kwenye kifaa kingine.",
+      "enterNewKey": "Weka ufunguo mpya",
+      "resetBackup": "Weka upya hifadhi",
+      "resetConfirmTitle": "Uweke upya hifadhi kwa kutumia ufunguo wa kifaa hiki?",
+      "resetConfirmBody": "Hifadhi iliyopo itabadilishwa na mazungumzo ya kifaa hiki, yakiwa yamesimbwa kwa ufunguo wa kifaa hiki. Vifaa vingine vitahitaji ufunguo wa kurejesha wa kifaa hiki.",
+      "resetConfirmAction": "Weka upya hifadhi",
+      "remoteMissingTitle": "Hifadhi yako haipo tena kwenye seva. Hifadhi imesitishwa.",
+      "backUpAgain": "Hifadhi tena",
+      "dismiss": "Funga"
+    },
+    "rotate": {
+      "confirmTitle": "Badilisha ufunguo wako wa kurejesha?",
+      "confirmBody": "Hifadhi yako itasimbwa upya kwa kutumia ufunguo mpya, na ule wa zamani hautafanya kazi tena. Utahitaji kuhifadhi ufunguo mpya na kuuandika kwenye vifaa vingine.",
+      "confirmAction": "Badilisha ufunguo"
+    },
+    "toast": {
+      "enrollLater": "Unaweza kuwasha hifadhi iliyosimbwa wakati wowote kwenye Mipangilio.",
+      "keyUpdated": "Ufunguo wa kurejesha umesasishwa. Hifadhi imerejeshwa.",
+      "resetDone": "Hifadhi imewekwa upya kwa ufunguo wa kifaa hiki.",
+      "backupRestarted": "Hifadhi imeundwa tena.",
+      "opFailed": "Kuna tatizo limetokea. Tafadhali jaribu tena."
+    },
+    "settings": {
+      "statusOn": "Hifadhi imewashwa",
+      "statusOff": "Hifadhi imezimwa",
+      "offDescription": "Mazungumzo yako yapo kwenye kivinjari hiki pekee. Washa hifadhi iliyo salama ili kuyaweka salama na kuyarejesha kwenye vifaa vingine. Mazungumzo yanasimbwa kwenye kifaa chako — hatuwezi kuyaona kamwe.",
+      "turnOn": "Washa hifadhi",
+      "restoreTitle": "Hifadhi tayari ipo kwa akaunti yako",
+      "restoreDescription": "Weka ufunguo wako wa kurejesha ili uirejeshe kwenye kifaa hiki.",
+      "restore": "Rejesha hifadhi",
+      "lastBackup": "Hifadhi ya mwisho: {time}",
+      "lastBackupNever": "Hakuna hifadhi iliyokamilika bado",
+      "keyFingerprint": "Ufunguo ····-{tail}",
+      "syncState": {
+        "idle": "Inasubiri kusawazisha",
+        "syncing": "Inafanya hifadhi…",
+        "ok": "Imesasishwa hadi sasa",
+        "keyOutOfDate": "Imesitishwa — ufunguo wa kurejesha umebadilika kwenye kifaa kingine",
+        "remoteMissing": "Imesitishwa — nakala rudufu imeondolewa kwenye seva",
+        "error": "Jaribio la mwisho la kuhifadhi nakala lilishindwa"
+      },
+      "backUpNow": "Hifadhi nakala sasa",
+      "backUpNowSuccess": "Nakala rudufu imekamilika",
+      "backUpNowFailure": "Nakala rudufu imeshindwa — gumzo zako hazijabadilika kwenye kifaa hiki",
+      "viewKey": "Angalia ufunguo wa urejeshaji",
+      "changeKey": "Badilisha ufunguo wa urejeshaji",
+      "dangerTitle": "Eneo la hatari",
+      "turnOffDelete": "Zima na futa nakala rudufu",
+      "turnOffConfirmTitle": "Uzime nakala rudufu?",
+      "turnOffConfirmMessage": "Hii itafuta nakala rudufu kutoka kwenye seva zetu kwa vifaa vyote. Gumzo kwenye kifaa hiki zitabaki. Unaweza kuwasha nakala rudufu tena baadaye kwa kutumia ufunguo mpya wa urejeshaji.",
+      "turnOffConfirmAction": "Futa nakala rudufu",
+      "turnOffSuccess": "Nakala rudufu imezimwa na kufutwa",
+      "turnOffFailure": "Imeshindwa kufuta nakala rudufu. Tafadhali jaribu tena."
+    }
+  },
+  "memories": {
+    "title": "Kumbukumbu",
+    "description": "Msaidizi akumbuke taarifa muhimu unazoshiriki — kama jukumu lako, mapendeleo, na miradi inayoendelea — na azitumie katika mazungumzo yote.",
+    "enableToggle": "Washa kumbukumbu",
+    "privacyNote": "Taarifa zitawekwa kwenye kivinjari hiki pekee na kutumika kuboresha majibu kwenye gumzo zako.",
+    "empty": "Hakuna kumbukumbu bado. Taarifa muhimu zitahifadhiwa moja kwa moja kutoka kwenye mazungumzo yako.",
+    "savedOn": "Imehifadhiwa {date}",
+    "deleteMemory": "Futa kumbukumbu",
+    "clearAll": "Futa kumbukumbu zote",
+    "clearAllConfirmQuestion": "Ufute kumbukumbu zote? Hii haiwezi kutenduliwa.",
+    "clearAllConfirm": "Futa zote",
+    "cancel": "Ghairi"
+  },
+  "contextWindow": {
+    "label": "Dirisha la muktadha",
+    "value": "Jumla ya ujumbe {count}",
+    "fewer": "Ujumbe wachache",
+    "more": "Ujumbe zaidi",
+    "description": "Ujumbe wa zamani zaidi ya kikomo hiki utahimizwa na kutumwa kama muktadha."
+  },
+  "agentAccess": {
+    "title": "Upatikanaji wa Wakala",
+    "description": "Dhibiti ni watumiaji gani wanaoweza kutumia wakala wa Foundry walioshirikiwa. Sheria huzuia zaidi kile ambacho upatikanaji wa Azure wa mtumiaji tayari unaruhusu — haiwezi kutoa upatikanaji ambao Azure inakataza.",
+    "backToChat": "Rudi kwenye gumzo",
+    "loading": "Inapakia wakala na sheria…",
+    "loadError": "Imeshindwa kupakia taarifa za upatikanaji wa wakala.",
+    "rulesUnavailableWarning": "Sheria za upatikanaji hazikuweza kupakiwa kutoka kwenye hifadhi. Utekelezaji wa wakala umesitishwa kwa sasa na sheria haziwezi kuhaririwa.",
+    "retry": "Jaribu tena",
+    "rulesTab": "Sheria za wakala",
+    "localAdminsTab": "Wasimamizi wa ndani",
+    "noAgents": "Hakuna wakala wa kusimamia.",
+    "sourceLabel": "Chanzo",
+    "notDiscoverable": "Hauwezi kugundua",
+    "notDiscoverableHint": "Kuna sheria kwa wakala huyu, lakini hauko kwenye orodha yako ya kugundua — huenda jina limebadilishwa, upatikanaji wako wa Azure haufikii, au sheria ya upatikanaji haikujumuishi.",
+    "accessEveryone": "Kila mtu",
+    "accessRestricted": "Imewekewa kikomo",
+    "edit": "Hariri",
+    "updatedByLine": "Imesasishwa mwisho na {user} tarehe {date}",
+    "accessTypeLabel": "Nani anaweza kutumia wakala huyu",
+    "everyoneDescription": "Yeyote anayeweza kufikia wakala huyu kupitia upatikanaji wao wa Azure.",
+    "restrictedDescription": "Ni watumiaji na vikoa vilivyoorodheshwa hapa chini pekee.",
+    "allowDomainsLabel": "Tovuti zilizoidhinishwa",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Watumiaji walioruhusiwa",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Bonyeza Enter kuongeza",
+    "removeChip": "Ondoa",
+    "groupsLabel": "Makundi yaliyoruhusiwa",
+    "groupsPendingConsent": "Upatikanaji wa msingi wa kundi unasubiri idhini ya msimamizi wa mpangaji na hauwezi kubadilishwa bado.",
+    "restrictedEmptyWarning": "Hakuna watumiaji au tovuti zilizoorodheshwa — hakuna atakayeweza kutumia wakala huyu.",
+    "save": "Hifadhi",
+    "saving": "Inaifadhi...",
+    "cancel": "Ghairi",
+    "saveSuccess": "Sheria ya upatikanaji imehifadhiwa.",
+    "deleteSuccess": "Sheria ya upatikanaji imeondolewa — kila mtu anaweza kutumia wakala huyu tena.",
+    "saveError": "Imeshindikana kuhifadhi. Tafadhali jaribu tena.",
+    "conflictError": "Mtu mwingine amebadilisha huu wakati ulikuwa unahariri. Pakia upya ili kupata toleo la karibuni, kisha fanya mabadiliko tena.",
+    "reload": "Pakia upya",
+    "localAdminsDescription": "Peana usimamizi wa sheria kwa mawakala maalum bila kuredeploy. Wasimamizi wa eneo wanaweza kuhariri sheria za mawakala waliopangiwa pekee.",
+    "noLocalAdmins": "Hakuna wasimamizi wa eneo waliowekwa.",
+    "addLocalAdmin": "Ongeza msimamizi wa eneo",
+    "emailLabel": "Barua pepe",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Ondoa msimamizi wa eneo",
+    "delegatedAgentsLabel": "Mawakala waliokabidhiwa",
+    "noDelegatedAgents": "Hakuna mawakala wa kukabidhiwa.",
+    "unknownAgentKey": "Funguo ya wakala isiyojulikana",
+    "configSaveSuccess": "Wasimamizi wa eneo wamehifadhiwa.",
+    "configConflictError": "Mtu mwingine amebadilisha orodha ya wasimamizi wa eneo wakati ulikuwa unahariri. Pakia upya na ujaribu tena."
   }
 }

@@ -907,7 +907,8 @@
     "processingAudio": "Turiko dukora kuri amajwi...",
     "ttsError": "Ikosa mu gukora amajwi. Gerageza gusubira.",
     "unsupportedMessageType": "Ikosa mu kwerekana ubutumwa: Ubwoko bw'ubutumwa ntibushigikiwe",
-    "addLanguageOption": "Ongeramwo \"{name}\"…"
+    "addLanguageOption": "Ongeramwo \"{name}\"…",
+    "sources": "Inkomoko"
   },
   "transcript": {
     "originalTranscript": "Inyandiko y'intango",
@@ -1331,7 +1332,10 @@
     "customInstructionsLabel": "Amabwirizwa wihariye*",
     "defaultTemperatureLabel": "Temperature y'ikibazo isanzwe*",
     "Usage & Impact": "Ukoresha & Ingaruka",
-    "Connectors": "Ibihuza"
+    "Connectors": "Ibihuza",
+    "Backup": "Kubika kopi y'inyuma",
+    "Memories": "Ibikurubikuru",
+    "Agent Access": "Kwinjira kwa Agent"
   },
   "emptyState": {
     "greeting": "Ndagufasha nte?",
@@ -3208,5 +3212,213 @@
       "lastRequest": "Ibisabwe biheruka",
       "disclaimer": "Ibipimwa ku gisabwa kimwe cose bivuye ku mubare wa token watanzwe canke wiyumvirijwe, ukoresheje impuzandengo zishirwa ahabona n’ivyiyumviro v{version}. Ubutumwa bwa kera busubirwamwo bivuye ku butumwa bwabitswe hamwe n’igihe (model) iriho ubu mu kiganiro. Si igipimo nyakuri."
     }
+  },
+  "table": {
+    "copyTable": "Koporora urutonde",
+    "downloadTable": "Kurungika urutonde",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Bishizwe hanze nka CSV",
+    "copyFailed": "Koporora urutonde vyarananiranye"
+  },
+  "backup": {
+    "intro": {
+      "title": "Bika ibiganiro vyawe neza",
+      "body": "Ibiyago vyawe birakwirikijwe kuri iyi mashini imbere y'uko vyoherezwa. Nta na rimwe dushobora gusoma ibiganiro vyawe.",
+      "keyWarning": "Inyuguti yawe yo kugarura irakorwa kuri iyi mashini. Ntituyibona kandi ntitushobora kuyigarurira — kuyitakaza ni uguta kopi y'inyuma.",
+      "create": "Kora inyuguti yanje & bika kopi y'inyuma",
+      "decline": "Oya ubu — bigume kuri iyi mashini gusa"
+    },
+    "ceremony": {
+      "titleCreate": "Bika inyuguti yawe yo kugarura",
+      "titleRotate": "Bika inyuguti yawe nshasha yo kugarura",
+      "titleView": "Inyuguti yawe yo kugarura",
+      "description": "Iyi nyuguti ni yo yonyene ushobora gukoresha kugira ngo usubize kopi yawe y'inyuma ku yindi mashini. Uyibike ahari umutekano — ntituyigarurira.",
+      "copy": "Koporora",
+      "copied": "Vyakoporowe!",
+      "download": "Kurungika .txt",
+      "showQr": "Erekana QR code",
+      "hideQr": "Hisha QR code",
+      "savedCheckbox": "Namaze kubika inyuguti yanje yo kugarura ahari umutekano",
+      "saveFirstHint": "Banze koporora canke urungike inyuguti yawe imbere yo kubandanya.",
+      "continue": "Bandanya",
+      "done": "Birarangiye",
+      "cancel": "Sivya",
+      "cancelConfirmTitle": "Ushaka gusivya ishingwa rya kopi y'inyuma?",
+      "cancelConfirmBody": "Ibiyago vyawe ntibizobikwa. Urashobora guca utegura gukoresha backup y'umutekano ukoresheje Igenamiterere (Settings).",
+      "cancelConfirmRotateBody": "Inyuguti yawe yo kugarura yarahindutse. Urashobora kuyibona igihe cose muri Igenamiterere (Settings).",
+      "cancelConfirmConfirm": "Ego, sivya",
+      "cancelConfirmDismiss": "Subira inyuma",
+      "loadError": "Ntivyashobotse kwinjiza inyuguti yawe yo kugarura kuri iyi mashini."
+    },
+    "file": {
+      "heading": "Inyuguti yo kugarura kopi y'inyuma y'ibiganiro",
+      "warning": "Bika iyi nyuguti neza. Uwuyifise wese ashobora gusoma kopi yawe y'inyuma; ariko utayifise, ntushobora gusubizaho kopi y'inyuma."
+    },
+    "progress": {
+      "titleCreate": "Uri gutegura kopi y'inyuma",
+      "titleRotate": "Uri guhindura inyuguti yawe yo kugarura",
+      "encrypting": "{count, plural, one {Uri gukinga no kubika ibiganiro #…} other {Uri gukinga no kubika ibiganiro #…}}",
+      "success": "{count, plural, one {Kubika vyarangiye. Ikiganiro # kirakingiwe.} other {Kubika vyarangiye. Ibiganiro # birakingiwe.}}",
+      "error": "Kubika vyarananiranye. Ibiyago vyawe bikiri kuri iyi mashini.",
+      "retry": "Subira",
+      "close": "Funga",
+      "done": "Birarangiye"
+    },
+    "input": {
+      "label": "Inyuguti yo kugarura",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Inyuguti ntizigira inyuguti O, I canke L.",
+      "checksumError": "Ifunguro ntiryasa neza — raba ko ata makosa yanditswe.",
+      "formatError": "Iri si ifunguro ryo gusubiza.",
+      "incomplete": "Bandanya wandika — ifunguro ryo gusubiza rigira inyuguti 56.",
+      "valid": "Ifunguro risa n'iriko rikoreshwa."
+    },
+    "restore": {
+      "title": "Subiza ubutumwa bwawe",
+      "successTitle": "Kopi imaze gusubizwa",
+      "promptBody": "Twabonye kopi yabitswe itekanye kuri konti yawe. Injiza ifunguro ryo gusubiza kugira ngo uyisubize kuri iyi mashine.",
+      "submit": "Subiza kopi",
+      "skip": "Simbira imbere — tangura bushasha kuri iyi mashine",
+      "restoring": "Turiko dusoma no gusubiza ubutumwa bwawe…",
+      "successBody": "{count, plural, one {# ibiganiro vyasubijwe.} other {# ibiganiro vyasubijwe.}}",
+      "wrongKey": "Irifunguro rirakwiriye, ariko ntirifungura iyi kopi. Nimba wahinduye ifunguro, koresha irishasha.",
+      "corrupt": "Iyi kopi ntiyashoboye gusomwa — ishobora kuba yangiritse. Ushobora gutangura bushasha kuri iyi mashine canke wigerageze hanyuma.",
+      "networkError": "Ntivyashobotse gushikira serivisi ya kopi. Raba umuyagankuru wawe maze wigerageze gushasha.",
+      "tryAgain": "Gerageza irindi funguro",
+      "close": "Birenze"
+    },
+    "enterKey": {
+      "title": "Injiza ifunguro ryawe rishasha ryo gusubiza",
+      "body": "Ifunguro ryawe ryo gusubiza ryahindutse kuri iyindi mashine. Injiza irishasha kugira ubandanye kubika kandi usubize kuri iyi mashine.",
+      "submit": "Koresha iri funguro"
+    },
+    "banner": {
+      "keyMismatchTitle": "Kubika vyarahagaritswe — ifunguro ryawe ryo gusubiza ryahinduwe kuri iyindi mashine.",
+      "enterNewKey": "Injiza ifunguro rishasha",
+      "resetBackup": "Sasira kopi bushasha",
+      "resetConfirmTitle": "Sasira kopi bushasha ukoresheje ifunguro ry’iyi mashine?",
+      "resetConfirmBody": "Kopi iriho izosubirwamwo n’ibiganiro vy’iyi mashine, bikazoba bikingiwe n’ifunguro ry’iyi mashine. Izindi mashine zizokenera ifunguro ryo gusubiza ryar’iyi mashine.",
+      "resetConfirmAction": "Sasira kopi bushasha",
+      "remoteMissingTitle": "Kopi yawe ntikiboneka kuri seriveri. Kubika vyarahagaritswe.",
+      "backUpAgain": "Bika kandi",
+      "dismiss": "Kura"
+    },
+    "rotate": {
+      "confirmTitle": "Uhinduye ifunguro ryawe ryo gusubiza?",
+      "confirmBody": "Kopi yawe izokingirwa bushasha n’ifunguro rishasha, kandi iryakera ntirizokora ukundi. Uzokenera kubika irishasha no kurinjiza ku zindi mashine zawe.",
+      "confirmAction": "Hindura ifunguro"
+    },
+    "toast": {
+      "enrollLater": "Ushobora kwiyunguruza ku kubika bigizwe ibanga igihe cose muri Ivyo Gushiraho.",
+      "keyUpdated": "Ifunguro ryo gusubiza ryaravuguruwe. Kubika vyasubiye gutangura.",
+      "resetDone": "Kopi yasubiwemwo n’ifunguro ry’iyi mashine.",
+      "backupRestarted": "Kopi yarasubiwemwo.",
+      "opFailed": "Hari ikitagenda neza. Gerageza gusubira."
+    },
+    "settings": {
+      "statusOn": "Kubika birimwo",
+      "statusOff": "Kubika ntibirimwo",
+      "offDescription": "Ubutumwa bwawe buba gusa muri busitase. Tanguza kubika bigizwe ibanga kugira bugume butekanye kandi bushobore gusubizwa ku zindi mashine. Ubutumwa bushirwa mu mbuga kuri mashine yawe — ntituzobushobora gusoma.",
+      "turnOn": "Tanguza kubika",
+      "restoreTitle": "Kopi iramaze kubikwa kuri konti yawe",
+      "restoreDescription": "Injiza ifunguro ryawe ryo gusubiza kugira uyisubize kuri iyi mashine.",
+      "restore": "Subiza kopi",
+      "lastBackup": "Kopi ya nyuma: {time}",
+      "lastBackupNever": "Nta kopi irarangira kubikwa",
+      "keyFingerprint": "Ifunguro ····-{tail}",
+      "syncState": {
+        "idle": "Turindiriye gusanisha",
+        "syncing": "Turiko turabika…",
+        "ok": "Ibiganiro birakwiranye n’ivy’ubu",
+        "keyOutOfDate": "Vyahagaritswe — ifunguro ryo gusubiza ryahinduwe kuri iyindi mashine",
+        "remoteMissing": "Irahagaze — ugukurikirana vyakuwe kuri server",
+        "error": "Igerageza rya nyuma ryo kubika vyaratsitaye"
+      },
+      "backUpNow": "Bika ubu nyene",
+      "backUpNowSuccess": "Kubika birarangiye",
+      "backUpNowFailure": "Kubika vyaratsitaye — ibiganiro vyawe ntivyahindutse kuri uru rupfasoni",
+      "viewKey": "Raba urufunguruzo rwo gusubirana",
+      "changeKey": "Hindura urufunguruzo rwo gusubirana",
+      "dangerTitle": "Ahantu h'ibibazo",
+      "turnOffDelete": "Zimya & gusiba ububiko",
+      "turnOffConfirmTitle": "Ushaka kuzimya ububiko?",
+      "turnOffConfirmMessage": "Ibi bisiba ububiko bwawe kuri server yacu ku bikoresho vyose. Ibiganiro kuri uru rupfasoni biraguma. Ushobora gusubira gutangura kubika hakoreshwa urufunguruzo rushasha.",
+      "turnOffConfirmAction": "Siba ububiko",
+      "turnOffSuccess": "Kubika vyarazimijwe kandi vyasibwe",
+      "turnOffFailure": "Ntivyashobotse gusiba ububiko. Gerageza gusubira."
+    }
+  },
+  "memories": {
+    "title": "Imyibukiro",
+    "description": "Reka umufasha yibuke ivy'ingenzi wasangije — nk’uruhara rwawe, ivyo ukunda, n’imirimo uriko urakora — akabikoresha mu biganiro vyose.",
+    "enableToggle": "Koresha imyibukiro",
+    "privacyNote": "Amakuru abikwa muri iyi browser gusa, kandi ashirwa mu biganiro kugira bisubirwe ku giti cawe.",
+    "empty": "Nta myibukiro irabikwa. Inkuru zikwiye kwibukwa zibikwa zitekanijwe mu biganiro.",
+    "savedOn": "Vyabitswe {date}",
+    "deleteMemory": "Siba inyibutsa",
+    "clearAll": "Siba imyibukiro yose",
+    "clearAllConfirmQuestion": "Siba imyibukiro yose? Ntushobora gusubira inyuma.",
+    "clearAllConfirm": "Siba vyose",
+    "cancel": "Sanza"
+  },
+  "contextWindow": {
+    "label": "Idirisha ry'ivyiyumviro",
+    "value": "Ubutumwa {count}",
+    "fewer": "Ubutumwa buke",
+    "more": "Ubutumwa bwinshi",
+    "description": "Ubutumwa busumba iyi ndome burasumamizwa bukarungikwa nk’inyunganizi."
+  },
+  "agentAccess": {
+    "title": "Inyungu y'umufasha",
+    "description": "Genzura abユーcan bakoresha abifashijwe ba Foundry. Amategeko agira ico ashikiriza gusa ku vyemewe na Azure y'uwo mugwi — ntibishobora kwemerera Azure gushimangira.",
+    "backToChat": "Subira mu kiganiro",
+    "loading": "Hariko harashirwa mu myaka abifasha n’amategeko…",
+    "loadError": "Ntivyashobotse kuronka ivya agent access.",
+    "rulesUnavailableWarning": "Amategeko y’ugukoresha ntiyashoboye kuronka muri storage. Gukoresha agents vyarahagaritswe kandi ntushobora guhindura amategeko.",
+    "retry": "Subira kugerageza",
+    "rulesTab": "Amategeko y'umufasha",
+    "localAdminsTab": "Abagenga b’aha ngaha",
+    "noAgents": "Nta bofasha bwo kugenzura.",
+    "sourceLabel": "Aho vyavuye",
+    "notDiscoverable": "Ntushobora kubironka",
+    "notDiscoverableHint": "Hari itegeko rishirwa kuri uyu mufasha, ariko ntiriboneka mu gushakisha kwawe — rishobora kuba ryahinduye izina, access za Azure zawe ntizishika kuri uwo mufasha, canke amategeko yo kuwukoresha ntakubarimwo.",
+    "accessEveryone": "Bose",
+    "accessRestricted": "Vyagabanyirijwe",
+    "edit": "Hindura",
+    "updatedByLine": "Vyahinduwe ubwa nyuma na {user} igenekerezo rya {date}",
+    "accessTypeLabel": "Abemerewe gukoresha uyu mufasha",
+    "everyoneDescription": "Uwushoboye gushika kuri uyu mufasha biciye kuri Azure yabo arawemerewe.",
+    "restrictedDescription": "Abari ku rutonde hasi gusa hamwe n’ama domaine yemewe.",
+    "allowDomainsLabel": "Amadomeni yemerewe",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Abakoresha bemerewe",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Kanda Enter kugira wongereho",
+    "removeChip": "Kuraho",
+    "groupsLabel": "Amatsinda yemerewe",
+    "groupsPendingConsent": "Ugushobora kwinjira ata matsinda birindiriye kwemera kwa admin wa tenant kandi ntibirashobora guhindurwa.",
+    "restrictedEmptyWarning": "Nta bakoresha canke amadomeni vyashizweho — nta n'umwe azoshobora gukoresha uyu agent.",
+    "save": "Bika",
+    "saving": "Biriko birabikwa…",
+    "cancel": "Hagarika",
+    "saveSuccess": "Ingingo y'ukwemerera ibitswe.",
+    "deleteSuccess": "Ingingo y'ukwemerera yakuweho — bose boshobora kongera gukoresha uyu agent.",
+    "saveError": "Ntivyashobotse kubika. Gerageza gusubira.",
+    "conflictError": "Hari uwundi yahinduye ibi uri hagati yo kubihindura. Subira usome version nshasha, hanyuma uce uhindura.",
+    "reload": "Subira usome",
+    "localAdminsDescription": "Emeza abandi gutunganya amategeko kuri agents bamwe bamwe utagumije isubira ryose. Local admins bashobora guhindura amategeko y'abo agents bahawe gusa.",
+    "noLocalAdmins": "Nta local admins bashizweho.",
+    "addLocalAdmin": "Shirako local admin",
+    "emailLabel": "Imele",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Kuraho local admin",
+    "delegatedAgentsLabel": "Agents bahawe abandi",
+    "noDelegatedAgents": "Nta agents yo guha abandi iboneka.",
+    "unknownAgentKey": "Ifunguro rya agent ritazwi",
+    "configSaveSuccess": "Local admins babitswe.",
+    "configConflictError": "Hari uwundi yahinduye urutonde rwa local admin uri hagati yo kubihindura. Subira usome hanyuma ugerageze gusubira."
   }
 }

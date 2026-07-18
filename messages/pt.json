@@ -795,7 +795,8 @@
     "processingAudio": "Processando áudio...",
     "ttsError": "Erro ao gerar áudio. Por favor, tente novamente.",
     "unsupportedMessageType": "Erro ao exibir mensagem: Tipo de mensagem não suportado",
-    "addLanguageOption": "Adicionar \"{name}\"…"
+    "addLanguageOption": "Adicionar \"{name}\"…",
+    "sources": "Fontes"
   },
   "sidebar": {
     "collapseSidebar": "Recolher barra lateral",
@@ -1178,7 +1179,10 @@
     "customInstructionsLabel": "Instruções Personalizadas*",
     "defaultTemperatureLabel": "Temperatura Padrão*",
     "Usage & Impact": "Uso e Impacto",
-    "Connectors": "Conectores"
+    "Connectors": "Conectores",
+    "Backup": "Backup",
+    "Memories": "Memórias",
+    "Agent Access": "Acesso do agente"
   },
   "notFound": {
     "lostDog": "Cão perdido"
@@ -3224,5 +3228,213 @@
       "lastRequest": "Última solicitação",
       "disclaimer": "Estimativas por solicitação com base em contagens de tokens reportadas ou aproximadas, utilizando médias e premissas publicadas v{version}. Mensagens antigas são recalculadas a partir do texto armazenado e do modelo atual da conversa. Não é uma medição."
     }
+  },
+  "table": {
+    "copyTable": "Copiar tabela",
+    "downloadTable": "Baixar tabela",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Exportado como CSV",
+    "copyFailed": "Falha ao copiar tabela"
+  },
+  "backup": {
+    "intro": {
+      "title": "Faça backup de seus chats — com segurança",
+      "body": "Suas conversas são criptografadas neste dispositivo antes de qualquer upload. Nunca podemos ler seus chats.",
+      "keyWarning": "Sua chave de recuperação é criada neste dispositivo. Nunca a vemos e não podemos recuperá-la para você — se perder a chave, perderá o backup.",
+      "create": "Criar minha chave e fazer backup",
+      "decline": "Agora não — manter chats apenas neste dispositivo"
+    },
+    "ceremony": {
+      "titleCreate": "Salve sua chave de recuperação",
+      "titleRotate": "Salve sua nova chave de recuperação",
+      "titleView": "Sua chave de recuperação",
+      "description": "Esta chave é a única forma de restaurar seu backup em outro dispositivo. Guarde-a em um local seguro — não podemos recuperá-la para você.",
+      "copy": "Copiar",
+      "copied": "Copiado!",
+      "download": "Baixar .txt",
+      "showQr": "Mostrar código QR",
+      "hideQr": "Ocultar código QR",
+      "savedCheckbox": "Salvei minha chave de recuperação em um local seguro",
+      "saveFirstHint": "Copie ou baixe sua chave antes de continuar.",
+      "continue": "Continuar",
+      "done": "Concluído",
+      "cancel": "Cancelar",
+      "cancelConfirmTitle": "Cancelar configuração do backup?",
+      "cancelConfirmBody": "Seus chats não serão salvos em backup. Você pode ativar o backup criptografado a qualquer momento em Configurações.",
+      "cancelConfirmRotateBody": "Sua chave de recuperação já foi alterada. Você pode visualizá-la a qualquer momento em Configurações.",
+      "cancelConfirmConfirm": "Sim, cancelar",
+      "cancelConfirmDismiss": "Voltar",
+      "loadError": "Não foi possível carregar sua chave de recuperação neste dispositivo."
+    },
+    "file": {
+      "heading": "Chave de recuperação do backup do chat",
+      "warning": "Mantenha esta chave segura. Qualquer pessoa com ela pode ler seu backup; sem ela, o backup não pode ser restaurado."
+    },
+    "progress": {
+      "titleCreate": "Configurando seu backup",
+      "titleRotate": "Alterando sua chave de recuperação",
+      "encrypting": "{count, plural, one {Criptografando e fazendo backup de # conversa…} other {Criptografando e fazendo backup de # conversas…}}",
+      "success": "{count, plural, one {Backup concluído. # conversa protegida.} other {Backup concluído. # conversas protegidas.}}",
+      "error": "Falha no backup. Seus chats continuam neste dispositivo.",
+      "retry": "Tentar novamente",
+      "close": "Fechar",
+      "done": "Concluído"
+    },
+    "input": {
+      "label": "Chave de recuperação",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "As chaves nunca contêm as letras O, I ou L.",
+      "checksumError": "Essa chave não parece correta — verifique se há erros de digitação.",
+      "formatError": "Isso não parece uma chave de recuperação.",
+      "incomplete": "Continue digitando — uma chave de recuperação tem 56 caracteres.",
+      "valid": "Chave válida."
+    },
+    "restore": {
+      "title": "Restaurar suas conversas",
+      "successTitle": "Backup restaurado",
+      "promptBody": "Encontramos um backup criptografado para sua conta. Insira sua chave de recuperação para restaurá-lo neste dispositivo.",
+      "submit": "Restaurar backup",
+      "skip": "Pular — começar do zero neste dispositivo",
+      "restoring": "Descriptografando e restaurando suas conversas…",
+      "successBody": "{count, plural, one {# conversa restaurada.} other {# conversas restauradas.}}",
+      "wrongKey": "Essa chave é válida, mas não desbloqueia este backup. Se você alterou sua chave, use a mais recente.",
+      "corrupt": "Não foi possível ler este backup — ele pode estar danificado. Você pode começar do zero neste dispositivo ou tentar novamente mais tarde.",
+      "networkError": "Não foi possível acessar o serviço de backup. Verifique sua conexão e tente novamente.",
+      "tryAgain": "Tentar outra chave",
+      "close": "Concluir"
+    },
+    "enterKey": {
+      "title": "Digite sua nova chave de recuperação",
+      "body": "Sua chave de recuperação foi alterada em outro dispositivo. Digite a nova chave para retomar os backups neste dispositivo.",
+      "submit": "Usar esta chave"
+    },
+    "banner": {
+      "keyMismatchTitle": "Backups pausados — sua chave de recuperação foi alterada em outro dispositivo.",
+      "enterNewKey": "Inserir nova chave",
+      "resetBackup": "Redefinir backup",
+      "resetConfirmTitle": "Redefinir backup com a chave deste dispositivo?",
+      "resetConfirmBody": "O backup existente será substituído pelas conversas deste dispositivo, criptografadas com a chave deste dispositivo. Outros dispositivos precisarão da chave de recuperação deste dispositivo.",
+      "resetConfirmAction": "Redefinir backup",
+      "remoteMissingTitle": "Seu backup não existe mais no servidor. Backups pausados.",
+      "backUpAgain": "Fazer backup novamente",
+      "dismiss": "Descartar"
+    },
+    "rotate": {
+      "confirmTitle": "Alterar sua chave de recuperação?",
+      "confirmBody": "Seu backup será recriptografado com uma nova chave, e a chave antiga deixará de funcionar. Você precisará salvar a nova chave e inseri-la em seus outros dispositivos.",
+      "confirmAction": "Alterar chave"
+    },
+    "toast": {
+      "enrollLater": "Você pode ativar o backup criptografado a qualquer momento em Configurações.",
+      "keyUpdated": "Chave de recuperação atualizada. Backups retomados.",
+      "resetDone": "Backup redefinido com a chave deste dispositivo.",
+      "backupRestarted": "Backup criado novamente.",
+      "opFailed": "Algo deu errado. Por favor, tente novamente."
+    },
+    "settings": {
+      "statusOn": "Backup ativado",
+      "statusOff": "Backup desativado",
+      "offDescription": "Suas conversas estão apenas neste navegador. Ative o backup criptografado para protegê-las e restaurá-las em outros dispositivos. As conversas são criptografadas no seu dispositivo — nunca poderemos lê-las.",
+      "turnOn": "Ativar backup",
+      "restoreTitle": "Já existe um backup para sua conta",
+      "restoreDescription": "Insira sua chave de recuperação para restaurá-lo neste dispositivo.",
+      "restore": "Restaurar backup",
+      "lastBackup": "Último backup: {time}",
+      "lastBackupNever": "Nenhum backup concluído ainda",
+      "keyFingerprint": "Chave ····-{tail}",
+      "syncState": {
+        "idle": "Aguardando sincronização",
+        "syncing": "Fazendo backup…",
+        "ok": "Atualizado",
+        "keyOutOfDate": "Pausado — a chave de recuperação foi alterada em outro dispositivo",
+        "remoteMissing": "Pausado — o backup foi removido do servidor",
+        "error": "A última tentativa de backup falhou"
+      },
+      "backUpNow": "Fazer backup agora",
+      "backUpNowSuccess": "Backup concluído",
+      "backUpNowFailure": "Falha no backup — seus chats permanecem inalterados neste dispositivo",
+      "viewKey": "Ver chave de recuperação",
+      "changeKey": "Alterar chave de recuperação",
+      "dangerTitle": "Zona de risco",
+      "turnOffDelete": "Desativar e excluir backup",
+      "turnOffConfirmTitle": "Desativar backup?",
+      "turnOffConfirmMessage": "Isso exclui seu backup dos nossos servidores para todos os dispositivos. Os chats neste dispositivo permanecem. Você pode ativar o backup novamente depois com uma nova chave de recuperação.",
+      "turnOffConfirmAction": "Excluir backup",
+      "turnOffSuccess": "Backup desativado e excluído",
+      "turnOffFailure": "Não foi possível excluir o backup. Por favor, tente novamente."
+    }
+  },
+  "memories": {
+    "title": "Memórias",
+    "description": "Permita que o assistente lembre fatos duradouros que você compartilhar — como seu cargo, preferências e projetos em andamento — e utilize essas informações em diferentes conversas.",
+    "enableToggle": "Ativar memórias",
+    "privacyNote": "Os fatos são armazenados apenas neste navegador e incluídos nos seus chats para personalizar as respostas.",
+    "empty": "Nenhuma memória ainda. Fatos relevantes são salvos automaticamente das suas conversas.",
+    "savedOn": "Salvo em {date}",
+    "deleteMemory": "Excluir memória",
+    "clearAll": "Limpar todas as memórias",
+    "clearAllConfirmQuestion": "Excluir todas as memórias? Esta ação não pode ser desfeita.",
+    "clearAllConfirm": "Excluir tudo",
+    "cancel": "Cancelar"
+  },
+  "contextWindow": {
+    "label": "Janela de contexto",
+    "value": "{count} mensagens",
+    "fewer": "Menos mensagens",
+    "more": "Mais mensagens",
+    "description": "Mensagens mais antigas além desse limite são resumidas e enviadas como contexto."
+  },
+  "agentAccess": {
+    "title": "Acesso de agente",
+    "description": "Controle quais usuários podem usar agentes Foundry compartilhados. As regras apenas restringem ainda mais o que o acesso próprio do usuário no Azure já permite — nunca podem conceder acesso que o Azure nega.",
+    "backToChat": "Voltar ao chat",
+    "loading": "Carregando agentes e regras…",
+    "loadError": "Não foi possível carregar os dados de acesso dos agentes.",
+    "rulesUnavailableWarning": "Não foi possível carregar as regras de acesso do armazenamento. A invocação do agente está bloqueada neste momento e as regras não podem ser editadas.",
+    "retry": "Tentar novamente",
+    "rulesTab": "Regras do agente",
+    "localAdminsTab": "Admins locais",
+    "noAgents": "Nenhum agente para gerenciar.",
+    "sourceLabel": "Origem",
+    "notDiscoverable": "Não descoberto por você",
+    "notDiscoverableHint": "Existe uma regra para este agente, mas ele não aparece na sua descoberta — pode ter sido renomeado, seu acesso Azure não alcança este agente, ou a regra de acesso não inclui você.",
+    "accessEveryone": "Todos",
+    "accessRestricted": "Restrito",
+    "edit": "Editar",
+    "updatedByLine": "Última atualização por {user} em {date}",
+    "accessTypeLabel": "Quem pode usar este agente",
+    "everyoneDescription": "Qualquer pessoa que já tenha acesso a este agente pelo Azure.",
+    "restrictedDescription": "Apenas os usuários e domínios listados abaixo.",
+    "allowDomainsLabel": "Domínios permitidos",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Usuários permitidos",
+    "allowUsersPlaceholder": "pessoa@example.org",
+    "chipAddHint": "Pressione Enter para adicionar",
+    "removeChip": "Remover",
+    "groupsLabel": "Grupos permitidos",
+    "groupsPendingConsent": "O acesso baseado em grupos está pendente de consentimento do administrador do locatário e ainda não pode ser editado.",
+    "restrictedEmptyWarning": "Nenhum usuário ou domínio listado — ninguém poderá usar este agente.",
+    "save": "Salvar",
+    "saving": "Salvando…",
+    "cancel": "Cancelar",
+    "saveSuccess": "Regra de acesso salva.",
+    "deleteSuccess": "Regra de acesso removida — todos podem usar este agente novamente.",
+    "saveError": "Não foi possível salvar. Por favor, tente novamente.",
+    "conflictError": "Outra pessoa fez alterações enquanto você editava. Recarregue para obter a versão mais recente e faça sua alteração novamente.",
+    "reload": "Recarregar",
+    "localAdminsDescription": "Delegue a gestão de regras de agentes específicos sem necessidade de nova implantação. Os administradores locais só podem editar regras dos agentes atribuídos a eles.",
+    "noLocalAdmins": "Nenhum administrador local configurado.",
+    "addLocalAdmin": "Adicionar administrador local",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "pessoa@example.org",
+    "removeAdmin": "Remover administrador local",
+    "delegatedAgentsLabel": "Agentes delegados",
+    "noDelegatedAgents": "Nenhum agente disponível para delegação.",
+    "unknownAgentKey": "Chave de agente desconhecida",
+    "configSaveSuccess": "Administradores locais salvos.",
+    "configConflictError": "Outra pessoa alterou a lista de administradores locais enquanto você editava. Recarregue e tente novamente."
   }
 }

@@ -816,7 +816,8 @@
     "processingAudio": "Memproses audio...",
     "ttsError": "Terjadi kesalahan saat membuat audio. Silakan coba lagi.",
     "unsupportedMessageType": "Galat saat menampilkan pesan: Jenis pesan tidak didukung",
-    "addLanguageOption": "Tambahkan \"{name}\"…"
+    "addLanguageOption": "Tambahkan \"{name}\"…",
+    "sources": "Sumber"
   },
   "sidebar": {
     "collapseSidebar": "Ciutkan sidebar",
@@ -1145,7 +1146,10 @@
     "customInstructionsLabel": "Instruksi Khusus*",
     "defaultTemperatureLabel": "Suhu Default*",
     "Usage & Impact": "Penggunaan & Dampak",
-    "Connectors": "Konektor"
+    "Connectors": "Konektor",
+    "Backup": "Backup",
+    "Memories": "Memori",
+    "Agent Access": "Akses Agen"
   },
   "notFound": {
     "lostDog": "Anjing hilang"
@@ -3224,5 +3228,213 @@
       "lastRequest": "Permintaan terakhir",
       "disclaimer": "Perkiraan per permintaan dari jumlah token yang dilaporkan atau diperkirakan, menggunakan rata-rata dan asumsi terpublikasi v{version}. Pesan lama dihitung ulang dari teks yang disimpan dan model percakapan saat ini. Bukan pengukuran."
     }
+  },
+  "table": {
+    "copyTable": "Salin tabel",
+    "downloadTable": "Unduh tabel",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Diekspor sebagai CSV",
+    "copyFailed": "Gagal menyalin tabel"
+  },
+  "backup": {
+    "intro": {
+      "title": "Backup percakapan Anda — dengan aman",
+      "body": "Percakapan Anda dienkripsi di perangkat ini sebelum diunggah. Kami tidak pernah dapat membaca chat Anda.",
+      "keyWarning": "Kunci pemulihan Anda dibuat di perangkat ini. Kami tidak pernah melihatnya dan tidak dapat memulihkannya untuk Anda — kehilangan kunci berarti kehilangan backup.",
+      "create": "Buat kunci saya & lakukan backup",
+      "decline": "Tidak sekarang — simpan chat hanya di perangkat ini"
+    },
+    "ceremony": {
+      "titleCreate": "Simpan kunci pemulihan Anda",
+      "titleRotate": "Simpan kunci pemulihan baru Anda",
+      "titleView": "Kunci pemulihan Anda",
+      "description": "Kunci ini adalah satu-satunya cara untuk memulihkan backup Anda di perangkat lain. Simpan di tempat yang aman — kami tidak dapat memulihkannya untuk Anda.",
+      "copy": "Salin",
+      "copied": "Tersalin!",
+      "download": "Unduh .txt",
+      "showQr": "Tampilkan kode QR",
+      "hideQr": "Sembunyikan kode QR",
+      "savedCheckbox": "Saya telah menyimpan kunci pemulihan saya di tempat yang aman",
+      "saveFirstHint": "Salin atau unduh kunci Anda sebelum melanjutkan.",
+      "continue": "Lanjutkan",
+      "done": "Selesai",
+      "cancel": "Batal",
+      "cancelConfirmTitle": "Batalkan pengaturan backup?",
+      "cancelConfirmBody": "Chat Anda tidak akan di-backup. Anda dapat mengaktifkan backup terenkripsi kapan saja di Pengaturan.",
+      "cancelConfirmRotateBody": "Kunci pemulihan Anda sudah diubah. Anda dapat melihatnya kapan saja di Pengaturan.",
+      "cancelConfirmConfirm": "Ya, batalkan",
+      "cancelConfirmDismiss": "Kembali",
+      "loadError": "Tidak dapat memuat kunci pemulihan Anda di perangkat ini."
+    },
+    "file": {
+      "heading": "Kunci pemulihan backup chat",
+      "warning": "Simpan kunci ini dengan aman. Siapa pun yang memilikinya dapat membaca backup Anda; tanpa kunci ini backup tidak dapat dipulihkan."
+    },
+    "progress": {
+      "titleCreate": "Menyiapkan backup Anda",
+      "titleRotate": "Mengganti kunci pemulihan Anda",
+      "encrypting": "{count, plural, one {Mengenkripsi dan membackup # percakapan…} other {Mengenkripsi dan membackup # percakapan…}}",
+      "success": "{count, plural, one {Backup selesai. # percakapan telah terlindungi.} other {Backup selesai. # percakapan telah terlindungi.}}",
+      "error": "Backup gagal. Chat Anda tetap ada di perangkat ini.",
+      "retry": "Coba lagi",
+      "close": "Tutup",
+      "done": "Selesai"
+    },
+    "input": {
+      "label": "Kunci pemulihan",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Kunci tidak pernah mengandung huruf O, I, atau L.",
+      "checksumError": "Kunci tersebut tampak salah — periksa kembali penulisannya.",
+      "formatError": "Itu bukan kunci pemulihan.",
+      "incomplete": "Lanjutkan mengetik — kunci pemulihan terdiri dari 56 karakter.",
+      "valid": "Kunci valid."
+    },
+    "restore": {
+      "title": "Pulihkan chat Anda",
+      "successTitle": "Cadangan berhasil dipulihkan",
+      "promptBody": "Kami menemukan cadangan terenkripsi untuk akun Anda. Masukkan kunci pemulihan untuk memulihkannya di perangkat ini.",
+      "submit": "Pulihkan cadangan",
+      "skip": "Lewati — mulai baru di perangkat ini",
+      "restoring": "Mendekripsi dan memulihkan chat Anda…",
+      "successBody": "{count, plural, one {# percakapan dipulihkan.} other {# percakapan dipulihkan.}}",
+      "wrongKey": "Kunci ini valid, tetapi tidak bisa membuka cadangan ini. Jika Anda telah mengubah kunci, gunakan kunci terbaru.",
+      "corrupt": "Cadangan ini tidak dapat dibaca — mungkin rusak. Anda dapat mulai baru di perangkat ini atau coba lagi nanti.",
+      "networkError": "Tidak dapat mengakses layanan cadangan. Periksa koneksi Anda dan coba lagi.",
+      "tryAgain": "Coba kunci lain",
+      "close": "Selesai"
+    },
+    "enterKey": {
+      "title": "Masukkan kunci pemulihan baru Anda",
+      "body": "Kunci pemulihan Anda telah diubah di perangkat lain. Masukkan kunci baru untuk melanjutkan cadangan di perangkat ini.",
+      "submit": "Gunakan kunci ini"
+    },
+    "banner": {
+      "keyMismatchTitle": "Cadangan dijeda — kunci pemulihan Anda berubah di perangkat lain.",
+      "enterNewKey": "Masukkan kunci baru",
+      "resetBackup": "Reset cadangan",
+      "resetConfirmTitle": "Reset cadangan dengan kunci perangkat ini?",
+      "resetConfirmBody": "Cadangan yang ada akan diganti dengan chat dari perangkat ini, dienkripsi dengan kunci perangkat ini. Perangkat lain akan membutuhkan kunci pemulihan perangkat ini.",
+      "resetConfirmAction": "Reset cadangan",
+      "remoteMissingTitle": "Cadangan Anda tidak lagi ada di server. Cadangan dijeda.",
+      "backUpAgain": "Cadangkan lagi",
+      "dismiss": "Tutup"
+    },
+    "rotate": {
+      "confirmTitle": "Ubah kunci pemulihan Anda?",
+      "confirmBody": "Cadangan Anda akan dienkripsi ulang dengan kunci baru, dan kunci lama tidak akan berfungsi lagi. Anda harus menyimpan kunci baru dan memasukkannya di perangkat lain.",
+      "confirmAction": "Ubah kunci"
+    },
+    "toast": {
+      "enrollLater": "Anda dapat mengaktifkan cadangan terenkripsi kapan saja di Pengaturan.",
+      "keyUpdated": "Kunci pemulihan diperbarui. Cadangan dilanjutkan.",
+      "resetDone": "Cadangan direset dengan kunci perangkat ini.",
+      "backupRestarted": "Cadangan dibuat kembali.",
+      "opFailed": "Terjadi kesalahan. Silakan coba lagi."
+    },
+    "settings": {
+      "statusOn": "Cadangan aktif",
+      "statusOff": "Cadangan tidak aktif",
+      "offDescription": "Chat Anda hanya tersimpan di browser ini. Aktifkan cadangan terenkripsi untuk mengamankan dan memulihkannya di perangkat lain. Chat dienkripsi di perangkat Anda — kami tidak bisa membacanya.",
+      "turnOn": "Aktifkan cadangan",
+      "restoreTitle": "Cadangan sudah ada untuk akun Anda",
+      "restoreDescription": "Masukkan kunci pemulihan untuk memulihkan di perangkat ini.",
+      "restore": "Pulihkan cadangan",
+      "lastBackup": "Cadangan terakhir: {time}",
+      "lastBackupNever": "Belum ada cadangan yang selesai",
+      "keyFingerprint": "Kunci ····-{tail}",
+      "syncState": {
+        "idle": "Menunggu sinkronisasi",
+        "syncing": "Sedang mencadangkan…",
+        "ok": "Terbaru",
+        "keyOutOfDate": "Dijeda — kunci pemulihan diubah di perangkat lain",
+        "remoteMissing": "Jeda — cadangan telah dihapus dari server",
+        "error": "Percobaan cadangan terakhir gagal"
+      },
+      "backUpNow": "Cadangkan sekarang",
+      "backUpNowSuccess": "Cadangan selesai",
+      "backUpNowFailure": "Cadangan gagal — percakapan Anda di perangkat ini tidak berubah",
+      "viewKey": "Lihat kunci pemulihan",
+      "changeKey": "Ubah kunci pemulihan",
+      "dangerTitle": "Zona berbahaya",
+      "turnOffDelete": "Matikan & hapus cadangan",
+      "turnOffConfirmTitle": "Matikan cadangan?",
+      "turnOffConfirmMessage": "Ini akan menghapus cadangan Anda dari server kami untuk semua perangkat. Percakapan di perangkat ini tetap ada. Anda dapat mengaktifkan cadangan lagi nanti dengan kunci pemulihan baru.",
+      "turnOffConfirmAction": "Hapus cadangan",
+      "turnOffSuccess": "Cadangan dimatikan dan dihapus",
+      "turnOffFailure": "Tidak dapat menghapus cadangan. Silakan coba lagi."
+    }
+  },
+  "memories": {
+    "title": "Memori",
+    "description": "Biar asisten mengingat fakta penting yang Anda bagikan — seperti peran, preferensi, dan proyek yang sedang berjalan — dan menggunakannya di seluruh percakapan.",
+    "enableToggle": "Aktifkan memori",
+    "privacyNote": "Fakta hanya disimpan di browser ini dan dimasukkan dalam percakapan Anda untuk mempersonalisasi balasan.",
+    "empty": "Belum ada memori. Fakta yang perlu diingat akan disimpan otomatis dari percakapan Anda.",
+    "savedOn": "Disimpan {date}",
+    "deleteMemory": "Hapus memori",
+    "clearAll": "Hapus semua memori",
+    "clearAllConfirmQuestion": "Hapus semua memori? Tindakan ini tidak dapat dibatalkan.",
+    "clearAllConfirm": "Hapus semua",
+    "cancel": "Batal"
+  },
+  "contextWindow": {
+    "label": "Jendela konteks",
+    "value": "{count} pesan",
+    "fewer": "Lebih sedikit pesan",
+    "more": "Lebih banyak pesan",
+    "description": "Pesan lama di luar batas ini dirangkum dan dikirim sebagai konteks."
+  },
+  "agentAccess": {
+    "title": "Akses Agen",
+    "description": "Atur pengguna mana yang dapat menggunakan agen Foundry bersama. Aturan hanya membatasi lebih lanjut dari akses Azure yang sudah diizinkan pengguna — mereka tidak dapat memberi akses jika Azure menolaknya.",
+    "backToChat": "Kembali ke chat",
+    "loading": "Memuat agen dan aturan…",
+    "loadError": "Tidak dapat memuat data akses agen.",
+    "rulesUnavailableWarning": "Aturan akses tidak dapat dimuat dari penyimpanan. Pemanggilan agen saat ini diblokir dan aturan tidak dapat diedit.",
+    "retry": "Coba lagi",
+    "rulesTab": "Aturan agen",
+    "localAdminsTab": "Admin lokal",
+    "noAgents": "Tidak ada agen untuk dikelola.",
+    "sourceLabel": "Sumber",
+    "notDiscoverable": "Tidak dapat ditemukan oleh Anda",
+    "notDiscoverableHint": "Aturan ada untuk agen ini, tetapi tidak ada di daftar penemuan Anda — mungkin telah diganti nama, akses Azure Anda tidak mencakupnya, atau aturannya tidak menyertakan Anda.",
+    "accessEveryone": "Semua orang",
+    "accessRestricted": "Terbatas",
+    "edit": "Edit",
+    "updatedByLine": "Terakhir diperbarui oleh {user} pada {date}",
+    "accessTypeLabel": "Siapa yang dapat menggunakan agen ini",
+    "everyoneDescription": "Siapa pun yang sudah dapat mengakses agen ini melalui akses Azure mereka.",
+    "restrictedDescription": "Hanya pengguna dan domain yang tercantum di bawah ini.",
+    "allowDomainsLabel": "Domain yang diizinkan",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Pengguna yang diizinkan",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Tekan Enter untuk menambah",
+    "removeChip": "Hapus",
+    "groupsLabel": "Grup yang diizinkan",
+    "groupsPendingConsent": "Akses berbasis grup sedang menunggu persetujuan admin tenant dan belum dapat diedit.",
+    "restrictedEmptyWarning": "Tidak ada pengguna atau domain yang terdaftar — tidak ada yang dapat menggunakan agen ini.",
+    "save": "Simpan",
+    "saving": "Menyimpan…",
+    "cancel": "Batal",
+    "saveSuccess": "Aturan akses berhasil disimpan.",
+    "deleteSuccess": "Aturan akses dihapus — semua orang dapat menggunakan agen ini kembali.",
+    "saveError": "Tidak dapat menyimpan. Silakan coba lagi.",
+    "conflictError": "Seseorang telah mengubah ini saat Anda sedang mengedit. Muat ulang untuk mendapatkan versi terbaru, lalu lakukan perubahan Anda kembali.",
+    "reload": "Muat ulang",
+    "localAdminsDescription": "Delegasikan pengelolaan aturan untuk agen tertentu tanpa perlu redeploy. Admin lokal hanya dapat mengedit aturan untuk agen yang ditugaskan kepada mereka.",
+    "noLocalAdmins": "Belum ada admin lokal yang dikonfigurasi.",
+    "addLocalAdmin": "Tambah admin lokal",
+    "emailLabel": "Email",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Hapus admin lokal",
+    "delegatedAgentsLabel": "Agen terdelegasi",
+    "noDelegatedAgents": "Tidak ada agen yang dapat didelegasikan.",
+    "unknownAgentKey": "Kunci agen tidak dikenal",
+    "configSaveSuccess": "Admin lokal berhasil disimpan.",
+    "configConflictError": "Seseorang telah mengubah daftar admin lokal saat Anda sedang mengedit. Muat ulang dan coba lagi."
   }
 }

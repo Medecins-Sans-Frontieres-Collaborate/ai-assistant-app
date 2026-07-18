@@ -770,7 +770,8 @@
     "processingAudio": "Elaborazione audio...",
     "ttsError": "Errore nella generazione dell'audio. Riprova.",
     "unsupportedMessageType": "Errore nella visualizzazione del messaggio: tipo non supportato",
-    "addLanguageOption": "Aggiungi \"{name}\"…"
+    "addLanguageOption": "Aggiungi \"{name}\"…",
+    "sources": "Fonti"
   },
   "sidebar": {
     "collapseSidebar": "Comprimi barra laterale",
@@ -1153,7 +1154,10 @@
     "customInstructionsLabel": "Istruzioni personalizzate*",
     "defaultTemperatureLabel": "Temperatura predefinita*",
     "Usage & Impact": "Utilizzo e Impatto",
-    "Connectors": "Connettori"
+    "Connectors": "Connettori",
+    "Backup": "Backup",
+    "Memories": "Memorie",
+    "Agent Access": "Accesso agente"
   },
   "notFound": {
     "lostDog": "Cane smarrito"
@@ -3224,5 +3228,213 @@
       "lastRequest": "Ultima richiesta",
       "disclaimer": "Stime per richiesta da conteggi di token segnalati o approssimati, utilizzando medie pubblicate e assunzioni v{version}. I messaggi meno recenti sono ricalcolati dal testo memorizzato e dal modello attuale della conversazione. Non è una misurazione."
     }
+  },
+  "table": {
+    "copyTable": "Copia tabella",
+    "downloadTable": "Scarica tabella",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Esportato come CSV",
+    "copyFailed": "Impossibile copiare la tabella"
+  },
+  "backup": {
+    "intro": {
+      "title": "Esegui il backup delle tue chat — in modo sicuro",
+      "body": "Le tue conversazioni vengono crittografate su questo dispositivo prima di qualsiasi caricamento. Non potremo mai leggere le tue chat.",
+      "keyWarning": "La tua chiave di recupero viene creata su questo dispositivo. Non la vedremo mai e non possiamo recuperarla per te — perdere la chiave significa perdere il backup.",
+      "create": "Crea la mia chiave e fai il backup",
+      "decline": "Non ora — mantieni le chat solo su questo dispositivo"
+    },
+    "ceremony": {
+      "titleCreate": "Salva la tua chiave di recupero",
+      "titleRotate": "Salva la tua nuova chiave di recupero",
+      "titleView": "La tua chiave di recupero",
+      "description": "Questa chiave è l'unico modo per ripristinare il backup su un altro dispositivo. Conservala in un luogo sicuro — non possiamo recuperarla per te.",
+      "copy": "Copia",
+      "copied": "Copiato!",
+      "download": "Scarica .txt",
+      "showQr": "Mostra codice QR",
+      "hideQr": "Nascondi codice QR",
+      "savedCheckbox": "Ho salvato la mia chiave di recupero in un luogo sicuro",
+      "saveFirstHint": "Copia o scarica la tua chiave prima di continuare.",
+      "continue": "Continua",
+      "done": "Fatto",
+      "cancel": "Annulla",
+      "cancelConfirmTitle": "Annullare la configurazione del backup?",
+      "cancelConfirmBody": "Le tue chat non verranno salvate. Puoi attivare il backup crittografato in qualsiasi momento nelle Impostazioni.",
+      "cancelConfirmRotateBody": "La tua chiave di recupero è già stata cambiata. Puoi visualizzarla in qualsiasi momento nelle Impostazioni.",
+      "cancelConfirmConfirm": "Sì, annulla",
+      "cancelConfirmDismiss": "Torna indietro",
+      "loadError": "Impossibile caricare la tua chiave di recupero su questo dispositivo."
+    },
+    "file": {
+      "heading": "Chiave di recupero backup chat",
+      "warning": "Tieni questa chiave al sicuro. Chiunque la possieda può leggere il tuo backup; senza di essa il backup non può essere ripristinato."
+    },
+    "progress": {
+      "titleCreate": "Configurazione del backup",
+      "titleRotate": "Cambio della chiave di recupero",
+      "encrypting": "{count, plural, one {Crittografia e backup di # conversazione…} other {Crittografia e backup di # conversazioni…}}",
+      "success": "{count, plural, one {Backup completato. # conversazione protetta.} other {Backup completato. # conversazioni protette.}}",
+      "error": "Backup non riuscito. Le tue chat sono ancora su questo dispositivo.",
+      "retry": "Riprova",
+      "close": "Chiudi",
+      "done": "Fatto"
+    },
+    "input": {
+      "label": "Chiave di recupero",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Le chiavi non contengono mai le lettere O, I o L.",
+      "checksumError": "Questa chiave non sembra corretta — controlla che non ci siano errori di battitura.",
+      "formatError": "Questa non sembra una chiave di recupero.",
+      "incomplete": "Continua a digitare — una chiave di recupero è composta da 56 caratteri.",
+      "valid": "La chiave sembra valida."
+    },
+    "restore": {
+      "title": "Ripristina le tue chat",
+      "successTitle": "Backup ripristinato",
+      "promptBody": "Abbiamo trovato un backup criptato per il tuo account. Inserisci la chiave di recupero per ripristinarlo su questo dispositivo.",
+      "submit": "Ripristina backup",
+      "skip": "Salta — inizia da zero su questo dispositivo",
+      "restoring": "Decrittazione e ripristino delle chat…",
+      "successBody": "{count, plural, one {# conversazione ripristinata.} other {# conversazioni ripristinate.}}",
+      "wrongKey": "Questa chiave è valida, ma non sblocca questo backup. Se hai cambiato chiave, usa quella più recente.",
+      "corrupt": "Non è stato possibile leggere questo backup — potrebbe essere danneggiato. Puoi iniziare da zero su questo dispositivo o riprovare più tardi.",
+      "networkError": "Impossibile raggiungere il servizio di backup. Controlla la connessione e riprova.",
+      "tryAgain": "Prova un'altra chiave",
+      "close": "Fatto"
+    },
+    "enterKey": {
+      "title": "Inserisci la nuova chiave di recupero",
+      "body": "La chiave di recupero è stata cambiata su un altro dispositivo. Inserisci la nuova chiave per riprendere i backup su questo dispositivo.",
+      "submit": "Usa questa chiave"
+    },
+    "banner": {
+      "keyMismatchTitle": "Backup in pausa — la tua chiave di recupero è stata cambiata su un altro dispositivo.",
+      "enterNewKey": "Inserisci nuova chiave",
+      "resetBackup": "Reimposta backup",
+      "resetConfirmTitle": "Reimpostare il backup con la chiave di questo dispositivo?",
+      "resetConfirmBody": "Il backup esistente sarà sostituito con le chat di questo dispositivo, criptate con la chiave di questo dispositivo. Gli altri dispositivi avranno bisogno della chiave di recupero di questo dispositivo.",
+      "resetConfirmAction": "Reimposta backup",
+      "remoteMissingTitle": "Il tuo backup non esiste più sul server. Backup in pausa.",
+      "backUpAgain": "Esegui di nuovo il backup",
+      "dismiss": "Ignora"
+    },
+    "rotate": {
+      "confirmTitle": "Cambiare la chiave di recupero?",
+      "confirmBody": "Il backup sarà nuovamente criptato con una nuova chiave e la chiave precedente non funzionerà più. Dovrai salvare la nuova chiave e inserirla sugli altri dispositivi.",
+      "confirmAction": "Cambia chiave"
+    },
+    "toast": {
+      "enrollLater": "Puoi attivare il backup criptato in qualsiasi momento dalle Impostazioni.",
+      "keyUpdated": "Chiave di recupero aggiornata. Backup ripreso.",
+      "resetDone": "Backup reimpostato con la chiave di questo dispositivo.",
+      "backupRestarted": "Backup creato nuovamente.",
+      "opFailed": "Qualcosa è andato storto. Riprova."
+    },
+    "settings": {
+      "statusOn": "Backup attivo",
+      "statusOff": "Backup disattivato",
+      "offDescription": "Le tue chat sono salvate solo in questo browser. Attiva il backup criptato per proteggerle e ripristinarle su altri dispositivi. Le chat sono criptate sul tuo dispositivo: non potremo mai leggerle.",
+      "turnOn": "Attiva backup",
+      "restoreTitle": "Esiste già un backup per il tuo account",
+      "restoreDescription": "Inserisci la chiave di recupero per ripristinarlo su questo dispositivo.",
+      "restore": "Ripristina backup",
+      "lastBackup": "Ultimo backup: {time}",
+      "lastBackupNever": "Nessun backup effettuato finora",
+      "keyFingerprint": "Chiave ····-{tail}",
+      "syncState": {
+        "idle": "In attesa di sincronizzazione",
+        "syncing": "Backup in corso…",
+        "ok": "Aggiornato",
+        "keyOutOfDate": "In pausa — la chiave di recupero è stata cambiata su un altro dispositivo",
+        "remoteMissing": "In pausa — il backup è stato rimosso dal server",
+        "error": "L'ultimo tentativo di backup non è riuscito"
+      },
+      "backUpNow": "Esegui backup ora",
+      "backUpNowSuccess": "Backup completato",
+      "backUpNowFailure": "Backup non riuscito — le tue chat su questo dispositivo non sono cambiate",
+      "viewKey": "Visualizza chiave di recupero",
+      "changeKey": "Cambia chiave di recupero",
+      "dangerTitle": "Zona pericolosa",
+      "turnOffDelete": "Disattiva ed elimina backup",
+      "turnOffConfirmTitle": "Disattivare il backup?",
+      "turnOffConfirmMessage": "Questo elimina il backup dai nostri server per tutti i dispositivi. Le chat su questo dispositivo rimangono. Puoi riattivare il backup più tardi con una nuova chiave di recupero.",
+      "turnOffConfirmAction": "Elimina backup",
+      "turnOffSuccess": "Backup disattivato ed eliminato",
+      "turnOffFailure": "Impossibile eliminare il backup. Riprova."
+    }
+  },
+  "memories": {
+    "title": "Memorie",
+    "description": "Consenti all'assistente di ricordare fatti importanti che condividi — come il tuo ruolo, preferenze e progetti in corso — e di utilizzarli nelle conversazioni successive.",
+    "enableToggle": "Abilita memorie",
+    "privacyNote": "I fatti vengono memorizzati solo in questo browser e inclusi nelle tue chat per personalizzare le risposte.",
+    "empty": "Nessuna memoria ancora. I fatti importanti vengono salvati automaticamente dalle tue conversazioni.",
+    "savedOn": "Salvato il {date}",
+    "deleteMemory": "Elimina memoria",
+    "clearAll": "Elimina tutte le memorie",
+    "clearAllConfirmQuestion": "Eliminare tutte le memorie? Questa operazione non può essere annullata.",
+    "clearAllConfirm": "Elimina tutto",
+    "cancel": "Annulla"
+  },
+  "contextWindow": {
+    "label": "Finestra di contesto",
+    "value": "{count} messaggi",
+    "fewer": "Meno messaggi",
+    "more": "Più messaggi",
+    "description": "I messaggi più vecchi oltre questo limite vengono riassunti e inviati come contesto."
+  },
+  "agentAccess": {
+    "title": "Accesso agenti",
+    "description": "Controlla quali utenti possono utilizzare gli agenti Foundry condivisi. Le regole limitano ulteriormente ciò che l'accesso Azure dell'utente già consente — non possono mai concedere accesso che Azure nega.",
+    "backToChat": "Torna alla chat",
+    "loading": "Caricamento agenti e regole…",
+    "loadError": "Impossibile caricare i dati di accesso agli agenti.",
+    "rulesUnavailableWarning": "Impossibile caricare le regole di accesso dalla memoria. L'invocazione degli agenti è attualmente bloccata e le regole non possono essere modificate.",
+    "retry": "Riprova",
+    "rulesTab": "Regole agenti",
+    "localAdminsTab": "Amministratori locali",
+    "noAgents": "Nessun agente da gestire.",
+    "sourceLabel": "Fonte",
+    "notDiscoverable": "Non individuabile da te",
+    "notDiscoverableHint": "Esiste una regola per questo agente, ma non è tra quelli che puoi individuare — potrebbe essere stato rinominato, il tuo accesso Azure non lo raggiunge oppure la regola di accesso non ti include.",
+    "accessEveryone": "Tutti",
+    "accessRestricted": "Limitato",
+    "edit": "Modifica",
+    "updatedByLine": "Ultima modifica di {user} il {date}",
+    "accessTypeLabel": "Chi può usare questo agente",
+    "everyoneDescription": "Chiunque già può raggiungere questo agente tramite il proprio accesso Azure.",
+    "restrictedDescription": "Solo gli utenti e i domini elencati di seguito.",
+    "allowDomainsLabel": "Domini consentiti",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Utenti consentiti",
+    "allowUsersPlaceholder": "persona@example.org",
+    "chipAddHint": "Premi Invio per aggiungere",
+    "removeChip": "Rimuovi",
+    "groupsLabel": "Gruppi consentiti",
+    "groupsPendingConsent": "L'accesso basato su gruppi è in attesa di approvazione da parte dell'amministratore del tenant e non può ancora essere modificato.",
+    "restrictedEmptyWarning": "Nessun utente o dominio elencato: nessuno potrà utilizzare questo agente.",
+    "save": "Salva",
+    "saving": "Salvataggio in corso…",
+    "cancel": "Annulla",
+    "saveSuccess": "Regola di accesso salvata.",
+    "deleteSuccess": "Regola di accesso rimossa — tutti possono nuovamente utilizzare questo agente.",
+    "saveError": "Impossibile salvare. Riprova.",
+    "conflictError": "Qualcun altro ha modificato questo elemento mentre stavi modificando. Ricarica per ottenere la versione più recente, poi ripeti la modifica.",
+    "reload": "Ricarica",
+    "localAdminsDescription": "Delegare la gestione delle regole per agenti specifici senza nuova distribuzione. Gli admin locali possono modificare solo le regole degli agenti loro assegnati.",
+    "noLocalAdmins": "Nessun admin locale configurato.",
+    "addLocalAdmin": "Aggiungi admin locale",
+    "emailLabel": "Email",
+    "emailPlaceholder": "persona@example.org",
+    "removeAdmin": "Rimuovi admin locale",
+    "delegatedAgentsLabel": "Agenti delegati",
+    "noDelegatedAgents": "Nessun agente disponibile per la delega.",
+    "unknownAgentKey": "Chiave agente sconosciuta",
+    "configSaveSuccess": "Admin locali salvati.",
+    "configConflictError": "Qualcun altro ha modificato l'elenco degli admin locali mentre stavi modificando. Ricarica e riprova."
   }
 }

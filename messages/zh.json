@@ -880,7 +880,8 @@
     "processingAudio": "正在处理音频...",
     "ttsError": "生成音频时出错。请重试。",
     "unsupportedMessageType": "消息渲染错误：不支持的消息类型",
-    "addLanguageOption": "添加“{name}”…"
+    "addLanguageOption": "添加“{name}”…",
+    "sources": "来源"
   },
   "sidebar": {
     "collapseSidebar": "折叠侧边栏",
@@ -1209,7 +1210,10 @@
     "customInstructionsLabel": "自定义指令*",
     "defaultTemperatureLabel": "默认 Temperature*",
     "Usage & Impact": "使用情况与影响",
-    "Connectors": "连接器"
+    "Connectors": "连接器",
+    "Backup": "备份",
+    "Memories": "记忆",
+    "Agent Access": "代理访问"
   },
   "notFound": {
     "lostDog": "迷路的狗"
@@ -3255,5 +3259,213 @@
       "lastRequest": "上一次请求",
       "disclaimer": "每次请求的估算基于报告或近似的 token 数量，并使用已发布的平均值和假设 v{version}。较早的消息由存储的文本和当前对话模型回算得出。此数据仅供参考，不代表实际测量。"
     }
+  },
+  "table": {
+    "copyTable": "复制表格",
+    "downloadTable": "下载表格",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV（.csv）",
+    "exportedAsCsv": "已导出为 CSV",
+    "copyFailed": "复制表格失败"
+  },
+  "backup": {
+    "intro": {
+      "title": "安全备份您的聊天记录",
+      "body": "您的对话会先在本设备上加密，然后再上传。我们无法读取您的聊天内容。",
+      "keyWarning": "恢复密钥在本设备上生成。我们无法看到，也无法为您找回——丢失密钥即丢失备份。",
+      "create": "创建我的密钥并备份",
+      "decline": "暂不备份，仅在本设备保存聊天记录"
+    },
+    "ceremony": {
+      "titleCreate": "请保存您的恢复密钥",
+      "titleRotate": "请保存您的新恢复密钥",
+      "titleView": "您的恢复密钥",
+      "description": "此密钥是唯一能在其他设备上恢复备份的方式。请安全保存——我们无法为您恢复它。",
+      "copy": "复制",
+      "copied": "已复制！",
+      "download": "下载 .txt",
+      "showQr": "显示二维码",
+      "hideQr": "隐藏二维码",
+      "savedCheckbox": "我已安全保存恢复密钥",
+      "saveFirstHint": "请先复制或下载您的密钥，再继续。",
+      "continue": "继续",
+      "done": "完成",
+      "cancel": "取消",
+      "cancelConfirmTitle": "取消备份设置？",
+      "cancelConfirmBody": "您的聊天记录不会被备份。您可随时在设置中启用加密备份。",
+      "cancelConfirmRotateBody": "您的恢复密钥已更改。您可随时在设置中查看。",
+      "cancelConfirmConfirm": "是的，取消",
+      "cancelConfirmDismiss": "返回",
+      "loadError": "无法在本设备上加载您的恢复密钥。"
+    },
+    "file": {
+      "heading": "聊天备份恢复密钥",
+      "warning": "请妥善保管此密钥。拥有密钥的人可以读取您的备份；没有密钥则无法恢复备份。"
+    },
+    "progress": {
+      "titleCreate": "正在设置备份",
+      "titleRotate": "正在更换恢复密钥",
+      "encrypting": "{count, plural, one {正在加密并备份 # 个会话…} other {正在加密并备份 # 个会话…}}",
+      "success": "{count, plural, one {备份完成。# 个会话已受保护。} other {备份完成。# 个会话已受保护。}}",
+      "error": "备份失败。您的聊天记录仍保存在本设备上。",
+      "retry": "重试",
+      "close": "关闭",
+      "done": "完成"
+    },
+    "input": {
+      "label": "恢复密钥",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "密钥不包含字母 O、I 或 L。",
+      "checksumError": "该密钥看起来不正确，请检查是否有拼写错误。",
+      "formatError": "这似乎不是恢复密钥。",
+      "incomplete": "请继续输入 — 恢复密钥共有56位字符。",
+      "valid": "密钥有效。"
+    },
+    "restore": {
+      "title": "恢复您的聊天记录",
+      "successTitle": "备份已恢复",
+      "promptBody": "我们为您的账户找到了加密备份。请输入您的恢复密钥以在此设备上进行恢复。",
+      "submit": "恢复备份",
+      "skip": "跳过 — 在此设备重新开始",
+      "restoring": "正在解密并恢复聊天记录…",
+      "successBody": "{count, plural, one {已恢复 # 个会话。} other {已恢复 # 个会话。}}",
+      "wrongKey": "该密钥有效，但无法解锁此备份。如果您更改了密钥，请使用最新的密钥。",
+      "corrupt": "无法读取该备份，可能已损坏。您可以在此设备重新开始，或稍后重试。",
+      "networkError": "无法连接到备份服务。请检查网络连接并重试。",
+      "tryAgain": "尝试其他密钥",
+      "close": "完成"
+    },
+    "enterKey": {
+      "title": "请输入您的新恢复密钥",
+      "body": "您的恢复密钥已在其他设备更改。在此设备上输入新密钥以继续备份。",
+      "submit": "使用该密钥"
+    },
+    "banner": {
+      "keyMismatchTitle": "备份已暂停 — 恢复密钥已在其他设备更改。",
+      "enterNewKey": "输入新密钥",
+      "resetBackup": "重置备份",
+      "resetConfirmTitle": "要用此设备的密钥重置备份吗？",
+      "resetConfirmBody": "现有备份将被此设备的聊天记录替换，并用此设备的密钥加密。其他设备需要此设备的恢复密钥。",
+      "resetConfirmAction": "重置备份",
+      "remoteMissingTitle": "您的备份已不再存在于服务器上，备份已暂停。",
+      "backUpAgain": "重新备份",
+      "dismiss": "忽略"
+    },
+    "rotate": {
+      "confirmTitle": "要更改恢复密钥吗？",
+      "confirmBody": "您的备份将用新密钥重新加密，旧密钥将失效。请保存新密钥，并在其他设备上输入。",
+      "confirmAction": "更改密钥"
+    },
+    "toast": {
+      "enrollLater": "您可以随时在设置中开启加密备份。",
+      "keyUpdated": "恢复密钥已更新，备份已恢复。",
+      "resetDone": "备份已用此设备的密钥重置。",
+      "backupRestarted": "备份已重新创建。",
+      "opFailed": "出现问题，请重试。"
+    },
+    "settings": {
+      "statusOn": "备份已开启",
+      "statusOff": "备份已关闭",
+      "offDescription": "您的聊天记录仅保存在此浏览器中。开启加密备份可保障安全，并在其他设备上恢复。聊天记录仅在您的设备上加密——我们无法读取内容。",
+      "turnOn": "开启备份",
+      "restoreTitle": "您的账户已存在备份",
+      "restoreDescription": "请输入您的恢复密钥以在此设备上恢复。",
+      "restore": "恢复备份",
+      "lastBackup": "上次备份：{time}",
+      "lastBackupNever": "尚未完成任何备份",
+      "keyFingerprint": "密钥 ····-{tail}",
+      "syncState": {
+        "idle": "等待同步",
+        "syncing": "正在备份…",
+        "ok": "已是最新状态",
+        "keyOutOfDate": "已暂停 — 恢复密钥已在其他设备更改",
+        "remoteMissing": "已暂停 — 备份已从服务器移除",
+        "error": "上次备份尝试失败"
+      },
+      "backUpNow": "立即备份",
+      "backUpNowSuccess": "备份完成",
+      "backUpNowFailure": "备份失败 — 此设备上的对话未更改",
+      "viewKey": "查看恢复密钥",
+      "changeKey": "更改恢复密钥",
+      "dangerTitle": "危险区域",
+      "turnOffDelete": "关闭并删除备份",
+      "turnOffConfirmTitle": "关闭备份？",
+      "turnOffConfirmMessage": "这将从我们服务器上删除所有设备的备份。此设备上的对话不受影响。您可以稍后用新的恢复密钥重新打开备份功能。",
+      "turnOffConfirmAction": "删除备份",
+      "turnOffSuccess": "已关闭并删除备份",
+      "turnOffFailure": "无法删除备份。请重试。"
+    }
+  },
+  "memories": {
+    "title": "记忆",
+    "description": "让助手记住您分享的重要信息——如您的角色、偏好和正在进行的项目，并在对话中加以应用。",
+    "enableToggle": "启用记忆",
+    "privacyNote": "信息仅存储在此浏览器中，并将包含在您的聊天中以个性化回复。",
+    "empty": "暂无记忆。有价值的信息会自动从您的对话中保存。",
+    "savedOn": "已保存 {date}",
+    "deleteMemory": "删除记忆",
+    "clearAll": "清除所有记忆",
+    "clearAllConfirmQuestion": "删除所有记忆？此操作无法撤销。",
+    "clearAllConfirm": "全部删除",
+    "cancel": "取消"
+  },
+  "contextWindow": {
+    "label": "上下文窗口",
+    "value": "{count} 条消息",
+    "fewer": "减少消息",
+    "more": "增加消息",
+    "description": "超出此限制的较早消息将被摘要并作为上下文发送。"
+  },
+  "agentAccess": {
+    "title": "代理访问",
+    "description": "控制哪些用户可以使用共享的 Foundry 代理。规则只会进一步限制用户现有的 Azure 访问权限——不能赋予 Azure 已拒绝的访问权限。",
+    "backToChat": "返回聊天",
+    "loading": "正在加载代理和规则…",
+    "loadError": "无法加载代理访问数据。",
+    "rulesUnavailableWarning": "无法从存储加载访问规则。代理调用当前被阻止，规则无法编辑。",
+    "retry": "重试",
+    "rulesTab": "代理规则",
+    "localAdminsTab": "本地管理员",
+    "noAgents": "无可管理的代理。",
+    "sourceLabel": "来源",
+    "notDiscoverable": "您无法发现",
+    "notDiscoverableHint": "此代理有规则，但未出现在您的发现列表中——可能已被重命名，您的 Azure 访问权限无法访问，或其访问规则未将您包含在内。",
+    "accessEveryone": "所有人",
+    "accessRestricted": "受限",
+    "edit": "编辑",
+    "updatedByLine": "最后由 {user} 于 {date} 更新",
+    "accessTypeLabel": "谁可以使用此代理",
+    "everyoneDescription": "任何已通过其 Azure 访问权限能够访问此代理的人。",
+    "restrictedDescription": "仅限下方列出的用户和域。",
+    "allowDomainsLabel": "允许的域名",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "允许的用户",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "按 Enter 添加",
+    "removeChip": "移除",
+    "groupsLabel": "允许的群组",
+    "groupsPendingConsent": "基于群组的访问正在等待租户管理员同意，目前无法编辑。",
+    "restrictedEmptyWarning": "未列出任何用户或域名——无人可使用该 Agent。",
+    "save": "保存",
+    "saving": "正在保存…",
+    "cancel": "取消",
+    "saveSuccess": "访问规则已保存。",
+    "deleteSuccess": "访问规则已删除——所有人可再次使用该 Agent。",
+    "saveError": "无法保存。请重试。",
+    "conflictError": "编辑期间其他人已做更改。请重新加载以获取最新版本，然后再次修改。",
+    "reload": "重新加载",
+    "localAdminsDescription": "可为特定 Agent 授权规则管理，无需重新部署。本地管理员只能编辑分配给他们的 Agent 规则。",
+    "noLocalAdmins": "尚未配置本地管理员。",
+    "addLocalAdmin": "添加本地管理员",
+    "emailLabel": "邮箱",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "移除本地管理员",
+    "delegatedAgentsLabel": "被授权的 Agent",
+    "noDelegatedAgents": "暂无可授权的 Agent。",
+    "unknownAgentKey": "未知的 Agent 密钥",
+    "configSaveSuccess": "本地管理员已保存。",
+    "configConflictError": "您编辑期间其他人已更改本地管理员列表。请重新加载并重试。"
   }
 }

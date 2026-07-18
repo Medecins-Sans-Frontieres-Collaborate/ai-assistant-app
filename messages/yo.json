@@ -907,7 +907,8 @@
     "processingAudio": "Nṣiṣẹ ohun...",
     "ttsError": "Asise lakoko iṣejade ohun. Jọwọ gbiyanju lẹẹkansi.",
     "unsupportedMessageType": "Aṣiṣe ṣiṣi ifiranṣẹ: Iru ifiranṣẹ ti a ko ṣe atilẹyin",
-    "addLanguageOption": "Ṣàfikún \"{name}\"…"
+    "addLanguageOption": "Ṣàfikún \"{name}\"…",
+    "sources": "Àwọn orísun"
   },
   "transcript": {
     "originalTranscript": "Ìkọsílẹ̀ Àkọ́kọ́",
@@ -1331,7 +1332,10 @@
     "customInstructionsLabel": "Ìtọsọna àdáṣe*",
     "defaultTemperatureLabel": "Ìtẹ̀tẹ ayára aiyipada*",
     "Usage & Impact": "Lilo & Ipa",
-    "Connectors": "Asopọ"
+    "Connectors": "Asopọ",
+    "Backup": "Afẹyinti",
+    "Memories": "Ìrántí",
+    "Agent Access": "Ìwọlé aṣojú"
   },
   "emptyState": {
     "greeting": "Báwo ni mo ṣe lè ràn ọ́ lọ́wọ́?",
@@ -3208,5 +3212,213 @@
       "lastRequest": "Ìbéèrè tó kẹ́yìn",
       "disclaimer": "Ìṣírò kọọkan da lórí iye àmi tí a gbéjọro tàbí àfojúsùn, pẹ̀lú àdàkọ àti àfojúsùn tí a tẹ̀jáde v{version}. Àwọn ìfiránṣẹ́ àtijọ́ ni a tún ṣe àfìmọ̀ padà láti inu ọrọ tí a fipamọ́ àti àwǹn àpẹrẹ rẹ̀ yìí. Kì í ṣe ìwádìí gangan."
     }
+  },
+  "table": {
+    "copyTable": "Da tábìlì ká",
+    "downloadTable": "GB tábìlì sílẹ̀",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "A ti ẹkspọ́ọ̀tì gẹ́gẹ́ bí CSV",
+    "copyFailed": "Akùnàkò da tábìlì ká"
+  },
+  "backup": {
+    "intro": {
+      "title": "Ṣe afẹyinti ìjíròrò rẹ — ní ààbò",
+      "body": "Àwọn àjíròrò rẹ ni a ṣìfipamọ́nà lórí ẹrọ yìí kí kíkan tó bójú wò. A kìí lè ka àjíròrò rẹ.",
+      "keyWarning": "Bọtìnì ìmúlòlùú rẹ ni a dá lórí ẹrọ yìí. A kò rí i kó ṣeé rí gba fún ọ — lílọ bọtìnì naa túmọ̀ sí lílọ afẹyinti.",
+      "create": "Ṣẹda bọtìnì mi & ṣe afẹyinti",
+      "decline": "Kì í ṣe báyìí — jẹ kí àjíròrò wà lórí ẹrọ yìí nìkan"
+    },
+    "ceremony": {
+      "titleCreate": "Fipamọ́ bọtìnì ìmúlòlùú rẹ",
+      "titleRotate": "Fipamọ́ bọtìnì ìmúlòlùú tuntun rẹ",
+      "titleView": "Bọtìnì ìmúlòlùú rẹ",
+      "description": "Bọtìnì yìí nikan ni ọ̀nà láti tún afẹyinti rẹ ṣe lórí ẹrọ míràn. Fipamọ́ sí ààbò — a kò le rí gba fún ọ.",
+      "copy": "Da ká",
+      "copied": "A ti da ká!",
+      "download": "Gba .txt sílẹ̀",
+      "showQr": "Fi QR kọ́òdù hàn",
+      "hideQr": "Pa QR kọ́òdù mọ́",
+      "savedCheckbox": "Mo ti fipamọ́ bọtìnì ìmúlòlùú mi sí ààbò",
+      "saveFirstHint": "Da bọtìnì rẹ ká tàbí gba á sílẹ̀ kí o tó tẹ̀síwájú.",
+      "continue": "Tẹ̀síwájú",
+      "done": "Tán",
+      "cancel": "Fagile",
+      "cancelConfirmTitle": "Fagile ìtòlẹ́sẹẹsẹ afẹyinti?",
+      "cancelConfirmBody": "A ò ní ṣe afẹyinti àjíròrò rẹ. O lè tan afẹyinti ìfọkànsìn sílẹ̀ nígbàkúgbà nínú Ìtọ́sọ́nà.",
+      "cancelConfirmRotateBody": "A ti yí bọtìnì ìmúlòlùú rẹ padà. O lè wo ó nígbàkúgbà nínú Ìtọ́sọ́nà.",
+      "cancelConfirmConfirm": "Bẹ́ẹ̀ni, fagile",
+      "cancelConfirmDismiss": "Padà",
+      "loadError": "A kọ́ lè gbé bọtìnì ìmúlòlùú rẹ kalẹ̀ lórí ẹrọ yìí."
+    },
+    "file": {
+      "heading": "Bọtìnì ìmúlòlùú afẹyinti àjíròrò",
+      "warning": "Dá bọtìnì yìí sí ààbò. Ẹnikẹ́ni tí ó bá ní i lè ka afẹyinti rẹ; láì ní i, afẹyinti kì yóò tún bọ sẹ́yìn."
+    },
+    "progress": {
+      "titleCreate": "Ṣíṣe ìtòlẹ́sẹẹsẹ afẹyinti rẹ",
+      "titleRotate": "Yí bọtìnì ìmúlòlùú rẹ padà",
+      "encrypting": "{count, plural, one {Ṣíṣìfipamọ́nà àti ṣi afẹyinti àjíròrò #…} other {Ṣíṣìfipamọ́nà àti ṣi afẹyinti awọn àjíròrò #…}}",
+      "success": "{count, plural, one {Afẹyinti pari. Àjíròrò # ti dáàbò bo.} other {Afẹyinti pari. Àwọn àjíròrò # ti dáàbò bo.}}",
+      "error": "Afẹyinti kùnà. Àjíròrò rẹ ṣi wà lórí ẹrọ yìí.",
+      "retry": "Tun gbìyànjú",
+      "close": "Pa mọ́",
+      "done": "Tán"
+    },
+    "input": {
+      "label": "Bọtìnì ìmúlòlùú",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Kò sí lẹ́tà O, I tàbí L nínú bọtìnì.",
+      "checksumError": "Bọtini naa kò dájú — ṣàyèwò pé ko si aṣiṣe.",
+      "formatError": "Iwọnyi kò dàbí bọtini imupadà.",
+      "incomplete": "Tesiwaju kikọ — bọtini imupadà ní àwọn lẹ́tà 56.",
+      "valid": "Bọtini naa dájú."
+    },
+    "restore": {
+      "title": "Mu àjùmòṣe rẹ pada",
+      "successTitle": "A ti mu àjùmòṣe pada",
+      "promptBody": "A rí àyàfi àjùmòṣe tó wa nínú akọọlẹ rẹ. Tẹ bọtini imupadà rẹ sílẹ̀ láti mú un pada sí ẹrọ yìí.",
+      "submit": "Mú àjùmòṣe pada",
+      "skip": "Fo o kọja — bẹ̀rẹ̀ tuntun lori ẹrọ yìí",
+      "restoring": "Nṣiṣẹ ìtúpalẹ àti mimu àjùmòṣe rẹ pada…",
+      "successBody": "{count, plural, one {# ijiroro ti pada.} other {# awọn ijiroro ti pada.}}",
+      "wrongKey": "Bọtini yii dájú, ṣùgbọ́n ko ṣi àjùmòṣe yìí. Bí o bá ti yí bọtini rẹ pa dà, lo titun.",
+      "corrupt": "A kò le ka àjùmòṣe yii — ó le ti bajẹ. O le bẹ̀rẹ̀ tuntun lori ẹrọ yìí tabi gbìyànjú lẹ́yìnna.",
+      "networkError": "A kò le gba àjùmòṣe. Ṣàyẹ̀wò asopọ rẹ ki o gbìyànjú lẹ́ẹ̀kàn síi.",
+      "tryAgain": "Gbìyànjú bọtini mìíràn",
+      "close": "Pari"
+    },
+    "enterKey": {
+      "title": "Tẹ bọtini imupadà tuntun rẹ",
+      "body": "Bọtini imupadà rẹ ti yí pa dà lori ẹrọ mìíràn. Tẹ tuntun naa ki àjùmòṣe le tẹ̀síwájú lori ẹrọ yìí.",
+      "submit": "Lo bọtini yìí"
+    },
+    "banner": {
+      "keyMismatchTitle": "A ti dá àjùmòṣe dúró — bọtini imupadà rẹ yí pa dà lori ẹrọ mìíràn.",
+      "enterNewKey": "Tẹ bọtini tuntun",
+      "resetBackup": "Tun àjùmòṣe ṣe",
+      "resetConfirmTitle": "Tún àjùmòṣe ṣe pẹ̀lú bọtini ẹrọ yìí?",
+      "resetConfirmBody": "Àjùmòṣe to wà yoo jẹ́ kí a rọpò rẹ pẹ̀lú ìjíròrò ẹrọ yìí, tí a fi bọtini ẹrọ yìí pamọ́. Ẹrọ mìíràn yoo nílò bọtini imupadà ẹrọ yìí.",
+      "resetConfirmAction": "Tun àjùmòṣe ṣe",
+      "remoteMissingTitle": "Àjùmòṣe rẹ kò sí mọ́ lori sẹ́ǹfà. Àjùmòṣe ti dá dúró.",
+      "backUpAgain": "Ṣe àjùmòṣe lẹ́ẹ̀kan síi",
+      "dismiss": "Pa náà nù"
+    },
+    "rotate": {
+      "confirmTitle": "Ṣe o fẹ yí bọtini imupadà rẹ pa dà?",
+      "confirmBody": "A ó tún ṣe àjùmòṣe kí a sì fi bọtini tuntun pá mọ́, bọtini àtijọ́ yóó dá ṣiṣẹ́. O gbọdọ fi bọtini tuntun pamọ́, kí o sì tẹ sí àwọn ẹrọ mìíràn rẹ.",
+      "confirmAction": "Yí bọtini pa dà"
+    },
+    "toast": {
+      "enrollLater": "O le tan àjùmòṣe tí a fi aṣírí pamọ́ sílẹ̀ nigbakugba lábẹ́ Eto.",
+      "keyUpdated": "A ti ṣe àtúnṣe bọtini imupadà. Àjùmòṣe ti tẹ̀síwájú.",
+      "resetDone": "A ti tun àjùmòṣe ṣe pẹ̀lú bọtini ẹrọ yìí.",
+      "backupRestarted": "A ti tún ṣe àjùmòṣe lẹ́ẹ̀kan síi.",
+      "opFailed": "Ohun kan ṣẹlẹ. Jọ̀wọ́ gbìyànjú lẹ́ẹ̀kan síi."
+    },
+    "settings": {
+      "statusOn": "Àjùmòṣe wa lórí",
+      "statusOff": "Àjùmòṣe wa nípò pipa",
+      "offDescription": "Ìjíròrò rẹ wà nìkan lórí aṣàwákiri yìí. Tan àjùmòṣe tí a fi aṣírí pamọ́ sílẹ̀ láti dáàbò bò wón, kí o sì le mú wọn pada lori ẹrọ mìíràn. Ìjíròrò rẹ ni a fi aṣírí pamọ́ lori ẹrọ rẹ — a kò lè ka wọn.",
+      "turnOn": "Tan àjùmòṣe sílẹ̀",
+      "restoreTitle": "Àjùmòṣe kan ti wà tẹlẹ fún akọọlẹ rẹ",
+      "restoreDescription": "Tẹ bọtini imupadà rẹ sílẹ̀ láti mú un pada sí ẹrọ yìí.",
+      "restore": "Mú àjùmòṣe pada",
+      "lastBackup": "Àjùmòṣe to kẹhin: {time}",
+      "lastBackupNever": "Kò tí í sí àjùmòṣe to parí",
+      "keyFingerprint": "Bọtini ····-{tail}",
+      "syncState": {
+        "idle": "N dúró de amuṣiṣẹpọ",
+        "syncing": "N ṣe àjùmòṣe…",
+        "ok": "Tí di imudojuiwọn",
+        "keyOutOfDate": "Ti dá dúró — bọtini imupadà yí pada lori ẹrọ mìíràn",
+        "remoteMissing": "Dákẹ́ — a ti yọ ikópa pẹ̀lú pámẹ́pọ̀ kúrò lórí sẹ́ńfà",
+        "error": "Ìgbìyànjú ikọsẹ àkọ́kọ́ kọ́ ṣẹ́ṣeyọrí"
+      },
+      "backUpNow": "Ṣẹ̀dáàpọ̀ báyìí",
+      "backUpNowSuccess": "Ikọsẹ parí",
+      "backUpNowFailure": "Ikọsẹ kọ́ ṣẹ́ṣeyọrí — àwọn ifọrọwanilẹnuwo rẹ kò yípadà lórí ẹrọ yìí",
+      "viewKey": "Wò bọtìnà ìmúpadàbọ̀",
+      "changeKey": "Ṣàtúnṣe bọtìnà ìmúpadàbọ̀",
+      "dangerTitle": "Agbègbè ewu",
+      "turnOffDelete": "Pa ikọsẹ rẹ̀ & yọ ikọsẹ rẹ̀ kúrò",
+      "turnOffConfirmTitle": "Pa ikọsẹ rẹ̀ nìkan?",
+      "turnOffConfirmMessage": "Èyí yóò yọ ikọsẹ rẹ̀ kúrò lórí sẹ́ńfà wa fún gbogbo ẹrọ. Ifọrọwanilẹnuwo lórí ẹrọ yìí máa wà. O lè tún bẹrẹ ikọsẹ pẹ̀lú bọtìnà ìmúpadàbọ̀ tuntun lẹ́yìn náà.",
+      "turnOffConfirmAction": "Yọ ikọsẹ rẹ̀ kúrò",
+      "turnOffSuccess": "A ti pa ikọsẹ rẹ̀ àti yọ ọ kúrò",
+      "turnOffFailure": "A kò le yọ ikọsẹ rẹ̀ kúrò. Jọ̀wọ́ gbìyànjú lẹ́ẹ̀kansi."
+    }
+  },
+  "memories": {
+    "title": "Ìrántí",
+    "description": "Jẹ́ kí iranwọ́ náà rántí àwọn òtítọ́ pẹ̀lú tí o pín — bí ipa rẹ, àwọn tìfẹ́ rẹ, àti iṣẹ́ tó ń lọ — kí o sì lò wọn kọjá sí àwọn ìjíròrò.",
+    "enableToggle": "Mú ìrántí ṣiṣẹ́",
+    "privacyNote": "A tọju àwọn òtítọ́ nìkan nínú búràúsà yìí, a sì fi kún àwọn ifọrọwanilẹnuwo rẹ láti jẹ́ kí idáhùn dáa ju.",
+    "empty": "Kò tí í sí ìrántí. A ṣàpapọ̀ àwọn òtítọ́ to ṣe páta laifọwọyi látinú ìjíròrò rẹ.",
+    "savedOn": "Fipamọ́ {date}",
+    "deleteMemory": "Pa ìrántí náà",
+    "clearAll": "Nu gbogbo ìrántí kúrò",
+    "clearAllConfirmQuestion": "Pa gbogbo ìrántí rẹ kúrò? Kò le tún bọ padà lẹ́yìn.",
+    "clearAllConfirm": "Pa gbogbo rẹ kúrò",
+    "cancel": "Fagilé"
+  },
+  "contextWindow": {
+    "label": "Ferese àkọsílẹ̀",
+    "value": "Ìfọrọwanilẹnuwo {count}",
+    "fewer": "Ìfọrọwanilẹnuwo díẹ̀",
+    "more": "Ìfọrọwanilẹnuwo púpọ̀",
+    "description": "A dàkó gbogbo ìfọrọwanilẹnuwo tó kọja ààlà yìí, a sì fi wọn ránṣẹ́ gẹ́gẹ́ bí àkọsílẹ̀."
+  },
+  "agentAccess": {
+    "title": "Ìbáṣepọ̀ Aṣẹ́júwe",
+    "description": "Ṣàkóso àwọn tó lè lo àwọn aṣojú Foundry tí a pín. Àwọn òfin yìí kàn dá ààlà síi lori ohun tí iwọle Azure olumulo náà ti gba — wọn ki í fi le iṣẹ Azure tókùnrinà fàṣẹ.",
+    "backToChat": "Padà sí ìjíròrò",
+    "loading": "N gbìyànjú láti kó àwọn aṣojú àti òfin wọlé…",
+    "loadError": "A kọ́ le kó ìbáṣepọ̀ aṣojú wọlé.",
+    "rulesUnavailableWarning": "A kò le kó àwọn òfin wọlé láti ibi ìfipamọ́. Aṣojú kò le ṣiṣẹ́ báyìí àti àwọn òfin kò le yípadà.",
+    "retry": "Tun gbìyànjú",
+    "rulesTab": "Àwọn òfin aṣojú",
+    "localAdminsTab": "Àwọn alákóso abẹ́lẹ̀",
+    "noAgents": "Kò sí aṣojú láti ṣàtọwọdá.",
+    "sourceLabel": "Orísun",
+    "notDiscoverable": "Ko ṣó le wà fún ọ",
+    "notDiscoverableHint": "Òfin wa fún aṣojú yìí, ṣùgbọ́n kò wà nínú àwárí rẹ — ó ṣèéṣe kó jẹ́ wípé a ti tún orúkọ rẹ ṣàtúnṣe, iwọle Azure rẹ kò bọ́ síbẹ̀, tàbí kò kà ọ síi nínú òfin ìbáṣepọ̀.",
+    "accessEveryone": "Gbogbo ènìyàn",
+    "accessRestricted": "Ìfiṣókànilẹ́tọ́",
+    "edit": "Ṣàtúnṣe",
+    "updatedByLine": "A gbélẹ̀ tuntun nipasẹ {user} ní {date}",
+    "accessTypeLabel": "Ta ni le lo aṣojú yìí",
+    "everyoneDescription": "Eyin to ti ní iwọle si aṣojú yìí nínú Azure wọn le wọlé.",
+    "restrictedDescription": "Àwọn olumulo àti àwọn àgbègbè to wà lókè yìí nìkan.",
+    "allowDomainsLabel": "Àwọn àgbègbè tó fara mù",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Àwọn oníṣe tó fara mù",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Tẹ Enter láti fi kún",
+    "removeChip": "Yọkúrò",
+    "groupsLabel": "Àwọn ẹgbẹ́ tó fara mù",
+    "groupsPendingConsent": "Ìwọlé pẹ̀lú ẹgbẹ́ ń dúró de ìfọwọ́sowọ́pọ̀ olùṣàkóso tenant, kò sì ṣètò yí padà títí di wí pé a fọwọ́sowọ́pọ̀.",
+    "restrictedEmptyWarning": "Kò sí àwọn oníṣe tàbí àgbègbè kankan — kò sí ẹni tí yóò lè lò olùrànlọwọ yìí.",
+    "save": "Fipamọ́",
+    "saving": "Náà fipamọ́…",
+    "cancel": "Fagilé",
+    "saveSuccess": "Ilàna àwọlé ti fipamọ́.",
+    "deleteSuccess": "Ilàna àwọlé ti yọ kúrò — gbogbo ènìyàn lè lo olùrànlọwọ yìí lẹ́ẹ̀kàn síi.",
+    "saveError": "Kò le fipamọ́. Jọ̀wọ́ gbìyànjú lẹ́ẹkansi.",
+    "conflictError": "Ẹlomíì ti yíi padà nígbà tí o ń ṣàtúnṣe. Tún kó ròyìn láti rí àtúnṣe tuntun, lẹhin náà ṣe àtúnṣe rẹ.",
+    "reload": "Tún kó ròyìn",
+    "localAdminsDescription": "Fi ìṣàkóso ilana sílẹ̀ fún àwọn olùrànlọwọ kan pẹ̀lú láìṣe padà sẹ́yìn. Àwọn admin agbègbè le ṣàtúnṣe ilana fún àwọn olùrànlọwọ tí wọ́n yan fún wọn nìkan.",
+    "noLocalAdmins": "Kò sí admin agbègbè tó ṣètò.",
+    "addLocalAdmin": "Fi admin agbègbè kún",
+    "emailLabel": "Ìmélì",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Yọ admin agbègbè kúrò",
+    "delegatedAgentsLabel": "Àwọn olùrànlọwọ tí a yàn",
+    "noDelegatedAgents": "Kò sí olùrànlọwọ tó wà láti yàn.",
+    "unknownAgentKey": "Bọtìnì olùrànlọwọ tí a kò mọ̀",
+    "configSaveSuccess": "Àwọn admin agbègbè ti fipamọ́.",
+    "configConflictError": "Ẹlomíì ti yí àkójọ admin agbègbè padà nígbà tí o ń ṣàtúnṣe. Jọ̀wọ́ tún kó ròyìn kí o gbìyànjú lẹ́ẹkansi."
   }
 }

@@ -907,7 +907,8 @@
     "processingAudio": "Obrađujem zvuk...",
     "ttsError": "Greška pri generisanju zvuka. Pokušajte ponovo.",
     "unsupportedMessageType": "Greška pri prikazu poruke: Nepodržan tip poruke",
-    "addLanguageOption": "Dodaj \"{name}\"…"
+    "addLanguageOption": "Dodaj \"{name}\"…",
+    "sources": "Izvori"
   },
   "transcript": {
     "originalTranscript": "Оригинални транскрипт",
@@ -1331,7 +1332,10 @@
     "customInstructionsLabel": "Prilagođena uputstva*",
     "defaultTemperatureLabel": "Podrazumevana temperatura*",
     "Usage & Impact": "Upotreba i uticaj",
-    "Connectors": "Konektori"
+    "Connectors": "Konektori",
+    "Backup": "Bekap",
+    "Memories": "Memorije",
+    "Agent Access": "Pristup agentu"
   },
   "emptyState": {
     "greeting": "Како могу да помогнем?",
@@ -3208,5 +3212,213 @@
       "lastRequest": "Poslednji zahtev",
       "disclaimer": "Procene po zahtevu na osnovu prijavljenog ili aproksimiranog broja tokena, koristeći objavljene proseke i pretpostavke v{version}. Starije poruke su povratno izračunate iz sačuvanog teksta i trenutnog modela razgovora. Nije merenje."
     }
+  },
+  "table": {
+    "copyTable": "Kopiraj tabelu",
+    "downloadTable": "Preuzmi tabelu",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Izvezeno kao CSV",
+    "copyFailed": "Neuspešno kopiranje tabele"
+  },
+  "backup": {
+    "intro": {
+      "title": "Sačuvajte vaše četove — bezbedno",
+      "body": "Vaši razgovori su šifrovani na ovom uređaju pre nego što bilo šta bude otpremljeno. Nikada ne možemo da pročitamo vaše četove.",
+      "keyWarning": "Vaš ključ za oporavak se kreira na ovom uređaju. Mi ga nikada ne vidimo i ne možemo da ga povratimo za vas — gubitak ključa znači gubitak bekapa.",
+      "create": "Kreiraj moj ključ i sačuvaj bekap",
+      "decline": "Ne sada — čuvaj četove samo na ovom uređaju"
+    },
+    "ceremony": {
+      "titleCreate": "Sačuvajte vaš ključ za oporavak",
+      "titleRotate": "Sačuvajte vaš novi ključ za oporavak",
+      "titleView": "Vaš ključ za oporavak",
+      "description": "Ovaj ključ je jedini način za povraćaj vašeg bekapa na drugom uređaju. Sačuvajte ga na sigurnom — mi ne možemo da ga povratimo za vas.",
+      "copy": "Kopiraj",
+      "copied": "Kopirano!",
+      "download": "Preuzmi .txt",
+      "showQr": "Prikaži QR kod",
+      "hideQr": "Sakrij QR kod",
+      "savedCheckbox": "Sačuvao/la sam ključ za oporavak na sigurnom mestu",
+      "saveFirstHint": "Kopirajte ili preuzmite svoj ključ pre nastavka.",
+      "continue": "Nastavi",
+      "done": "Gotovo",
+      "cancel": "Otkaži",
+      "cancelConfirmTitle": "Otkažete postavljanje bekapa?",
+      "cancelConfirmBody": "Vaši četovi neće biti bekapovani. Možete uključiti šifrovani bekap bilo kada u Podešavanjima.",
+      "cancelConfirmRotateBody": "Vaš ključ za oporavak je već promenjen. Možete ga videti bilo kada u Podešavanjima.",
+      "cancelConfirmConfirm": "Da, otkaži",
+      "cancelConfirmDismiss": "Vrati se nazad",
+      "loadError": "Nije moguće učitati vaš ključ za oporavak na ovom uređaju."
+    },
+    "file": {
+      "heading": "Ključ za oporavak bekapa četa",
+      "warning": "Čuvajte ovaj ključ na sigurnom. Ko ga ima može da vidi vaš bekap; bez njega bekap ne može biti vraćen."
+    },
+    "progress": {
+      "titleCreate": "Postavljanje bekapa",
+      "titleRotate": "Promena ključa za oporavak",
+      "encrypting": "{count, plural, one {Šifrovanje i bekapovanje # razgovora…} other {Šifrovanje i bekapovanje # razgovora…}}",
+      "success": "{count, plural, one {Bekap je završen. # razgovor je zaštićen.} other {Bekap je završen. # razgovora su zaštićena.}}",
+      "error": "Bekap nije uspeo. Vaši četovi su i dalje na ovom uređaju.",
+      "retry": "Pokušaj ponovo",
+      "close": "Zatvori",
+      "done": "Gotovo"
+    },
+    "input": {
+      "label": "Ključ za oporavak",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Ključevi nikada ne sadrže slova O, I ili L.",
+      "checksumError": "Taj ključ nije ispravan — proverite da li ima grešaka prilikom unosa.",
+      "formatError": "Ovo ne deluje kao oporavak ključ.",
+      "incomplete": "Nastavite sa unosom — ključ za oporavak ima 56 karaktera.",
+      "valid": "Ključ izgleda ispravno."
+    },
+    "restore": {
+      "title": "Vratite vaše četove",
+      "successTitle": "Bekap je vraćen",
+      "promptBody": "Pronađen je enkriptovani bekap vašeg naloga. Unesite vaš ključ za oporavak da biste ga vratili na ovom uređaju.",
+      "submit": "Vrati bekap",
+      "skip": "Preskoči — počnite iznova na ovom uređaju",
+      "restoring": "Dešifrovanje i vraćanje vaših četova…",
+      "successBody": "{count, plural, one {# razgovor je vraćen.} other {# razgovora je vraćeno.}}",
+      "wrongKey": "Ovaj ključ je ispravan, ali ne otključava ovaj bekap. Ako ste promenili ključ, upotrebite najnoviji.",
+      "corrupt": "Bekap ne može da se pročita — možda je oštećen. Možete početi iznova na ovom uređaju ili pokušajte ponovo kasnije.",
+      "networkError": "Nije moguće uspostaviti vezu sa servisom za bekap. Proverite vašu konekciju i pokušajte ponovo.",
+      "tryAgain": "Pokušajte sa drugim ključem",
+      "close": "Završeno"
+    },
+    "enterKey": {
+      "title": "Unesite vaš novi ključ za oporavak",
+      "body": "Vaš ključ za oporavak je promenjen na drugom uređaju. Unesite novi ključ da biste nastavili sa bekapom na ovom uređaju.",
+      "submit": "Koristite ovaj ključ"
+    },
+    "banner": {
+      "keyMismatchTitle": "Bekap pauziran — vaš ključ za oporavak je promenjen na drugom uređaju.",
+      "enterNewKey": "Unesite novi ključ",
+      "resetBackup": "Resetuj bekap",
+      "resetConfirmTitle": "Resetovati bekap sa ključem ovog uređaja?",
+      "resetConfirmBody": "Postojeći bekap će biti zamenjen četovima sa ovog uređaja, enkriptovanim ključem ovog uređaja. Ostali uređaji će morati da koriste ključ za oporavak ovog uređaja.",
+      "resetConfirmAction": "Resetuj bekap",
+      "remoteMissingTitle": "Vaš bekap više ne postoji na serveru. Bekap je pauziran.",
+      "backUpAgain": "Ponovo sačuvaj bekap",
+      "dismiss": "Zatvori"
+    },
+    "rotate": {
+      "confirmTitle": "Da li želite da promenite ključ za oporavak?",
+      "confirmBody": "Vaš bekap će biti ponovo enkriptovan novim ključem, a stari ključ više neće raditi. Morate sačuvati novi ključ i uneti ga na ostalim uređajima.",
+      "confirmAction": "Promeni ključ"
+    },
+    "toast": {
+      "enrollLater": "Možete uključiti enkriptovani bekap bilo kada u Podešavanjima.",
+      "keyUpdated": "Ključ za oporavak je ažuriran. Bekap je nastavljen.",
+      "resetDone": "Bekap je resetovan sa ključem ovog uređaja.",
+      "backupRestarted": "Bekap je ponovo kreiran.",
+      "opFailed": "Nešto nije u redu. Pokušajte ponovo."
+    },
+    "settings": {
+      "statusOn": "Bekap je uključen",
+      "statusOff": "Bekap je isključen",
+      "offDescription": "Vaši četovi postoje samo u ovom pregledaču. Uključite enkriptovani bekap da biste ih zaštitili i vratili na druge uređaje. Četovi su enkriptovani na vašem uređaju — mi ih nikada ne možemo pročitati.",
+      "turnOn": "Uključi bekap",
+      "restoreTitle": "Bekap već postoji za vaš nalog",
+      "restoreDescription": "Unesite vaš ključ za oporavak da biste ga vratili na ovom uređaju.",
+      "restore": "Vrati bekap",
+      "lastBackup": "Poslednji bekap: {time}",
+      "lastBackupNever": "Bekap još nije završen",
+      "keyFingerprint": "Ključ ····-{tail}",
+      "syncState": {
+        "idle": "Čeka se sinhronizacija",
+        "syncing": "Bekap se pravi…",
+        "ok": "Ažurirano",
+        "keyOutOfDate": "Pauzirano — ključ za oporavak je promenjen na drugom uređaju",
+        "remoteMissing": "Pauzirano — rezervna kopija je uklonjena sa servera",
+        "error": "Poslednji pokušaj pravljenja rezervne kopije nije uspeo"
+      },
+      "backUpNow": "Napravite rezervnu kopiju sada",
+      "backUpNowSuccess": "Rezervna kopija je završena",
+      "backUpNowFailure": "Rezervna kopija nije uspela — vaši četovi su nepromenjeni na ovom uređaju",
+      "viewKey": "Prikaži ključ za oporavak",
+      "changeKey": "Promeni ključ za oporavak",
+      "dangerTitle": "Zona rizika",
+      "turnOffDelete": "Isključite i obrišite rezervnu kopiju",
+      "turnOffConfirmTitle": "Isključiti rezervnu kopiju?",
+      "turnOffConfirmMessage": "Ovim brišete vašu rezervnu kopiju sa naših servera za sve uređaje. Četovi na ovom uređaju ostaju. Možete ponovo uključiti bekap kasnije sa novim ključem za oporavak.",
+      "turnOffConfirmAction": "Obriši rezervnu kopiju",
+      "turnOffSuccess": "Rezervna kopija je isključena i obrisana",
+      "turnOffFailure": "Ne mogu da obrišem rezervnu kopiju. Pokušajte ponovo."
+    }
+  },
+  "memories": {
+    "title": "Sećanja",
+    "description": "Dozvolite asistentu da pamti trajne činjenice koje delite — kao što su vaša uloga, preferencije i tekući projekti — i koristi ih u svim razgovorima.",
+    "enableToggle": "Omogući sećanja",
+    "privacyNote": "Činjenice se čuvaju samo u ovom pregledaču i uključuju u vaše četove radi personalizacije odgovora.",
+    "empty": "Još nema sećanja. Činjenice vredne pamćenja automatski se čuvaju iz vaših razgovora.",
+    "savedOn": "Sačuvano {date}",
+    "deleteMemory": "Obriši sećanje",
+    "clearAll": "Obriši sva sećanja",
+    "clearAllConfirmQuestion": "Obrisati sva sećanja? Ovo se ne može poništiti.",
+    "clearAllConfirm": "Obriši sve",
+    "cancel": "Otkaži"
+  },
+  "contextWindow": {
+    "label": "Prozor konteksta",
+    "value": "{count} poruka",
+    "fewer": "Manje poruka",
+    "more": "Više poruka",
+    "description": "Starije poruke preko ovog ograničenja se sažimaju i šalju kao kontekst."
+  },
+  "agentAccess": {
+    "title": "Pristup agentu",
+    "description": "Kontrolišite koji korisnici mogu koristiti deljene Foundry agente. Pravila dodatno ograničavaju ono što je već dozvoljeno Azure pristupom korisnika — pristup koji Azure odbije ne može biti omogućen.",
+    "backToChat": "Nazad na čet",
+    "loading": "Učitavanje agenata i pravila…",
+    "loadError": "Ne mogu da učitam podatke o pristupu agentu.",
+    "rulesUnavailableWarning": "Pravila pristupa ne mogu biti učitana iz skladišta. Pozivanje agenata je trenutno onemogućeno i pravila se ne mogu menjati.",
+    "retry": "Pokušaj ponovo",
+    "rulesTab": "Pravila agenta",
+    "localAdminsTab": "Lokalni administratori",
+    "noAgents": "Nema agenata za upravljanje.",
+    "sourceLabel": "Izvor",
+    "notDiscoverable": "Nije dostupno za vas",
+    "notDiscoverableHint": "Pravilo za ovog agenta postoji, ali se ne pojavljuje u vašem pregledu — možda je agent preimenovan, nemate Azure pristup do njega, ili vas pravilo ne obuhvata.",
+    "accessEveryone": "Svi",
+    "accessRestricted": "Ograničeno",
+    "edit": "Izmeni",
+    "updatedByLine": "Poslednja izmena: {user} dana {date}",
+    "accessTypeLabel": "Ko može koristiti ovog agenta",
+    "everyoneDescription": "Svako ko već ima pristup ovom agentu putem svog Azure naloga.",
+    "restrictedDescription": "Samo korisnici i domeni iz liste ispod.",
+    "allowDomainsLabel": "Dozvoljene domene",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Dozvoljeni korisnici",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Pritisnite Enter za dodavanje",
+    "removeChip": "Ukloni",
+    "groupsLabel": "Dozvoljene grupe",
+    "groupsPendingConsent": "Pristup zasnovan na grupama čeka odobrenje administratora zakupca i još ne može biti izmenjen.",
+    "restrictedEmptyWarning": "Nema navedenih korisnika ili domena — niko neće moći da koristi ovog agenta.",
+    "save": "Sačuvaj",
+    "saving": "Čuvanje…",
+    "cancel": "Otkaži",
+    "saveSuccess": "Pravilo pristupa sačuvano.",
+    "deleteSuccess": "Pravilo pristupa uklonjeno — svi sada mogu ponovo koristiti ovog agenta.",
+    "saveError": "Nije moguće sačuvati. Pokušajte ponovo.",
+    "conflictError": "Neko je izmenio ovo dok ste Vi uređivali. Osvežite da biste učitali najnoviju verziju i ponovite izmenu.",
+    "reload": "Osveži",
+    "localAdminsDescription": "Delegirajte upravljanje pravilima za određene agente bez ponovnog raspoređivanja. Lokalni administratori mogu uređivati pravila samo za njima dodeljene agente.",
+    "noLocalAdmins": "Nema podešenih lokalnih administratora.",
+    "addLocalAdmin": "Dodaj lokalnog administratora",
+    "emailLabel": "Email",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Ukloni lokalnog administratora",
+    "delegatedAgentsLabel": "Delegirani agenti",
+    "noDelegatedAgents": "Nema dostupnih agenata za delegiranje.",
+    "unknownAgentKey": "Nepoznat ključ agenta",
+    "configSaveSuccess": "Lokalni administratori su sačuvani.",
+    "configConflictError": "Neko je izmenio listu lokalnih administratora dok ste Vi uređivali. Osvežite i pokušajte ponovo."
   }
 }

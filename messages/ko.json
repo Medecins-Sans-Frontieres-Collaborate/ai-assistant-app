@@ -849,7 +849,8 @@
     "processingAudio": "오디오 처리 중...",
     "ttsError": "오디오 생성 오류가 발생했습니다. 다시 시도해 주세요.",
     "unsupportedMessageType": "메시지 렌더링 오류: 지원되지 않는 메시지 유형",
-    "addLanguageOption": "\"{name}\" 추가…"
+    "addLanguageOption": "\"{name}\" 추가…",
+    "sources": "출처"
   },
   "sidebar": {
     "collapseSidebar": "사이드바 축소",
@@ -1178,7 +1179,10 @@
     "customInstructionsLabel": "맞춤 지침*",
     "defaultTemperatureLabel": "기본 Temperature*",
     "Usage & Impact": "사용 현황 및 영향",
-    "Connectors": "커넥터"
+    "Connectors": "커넥터",
+    "Backup": "백업",
+    "Memories": "기억",
+    "Agent Access": "에이전트 접근"
   },
   "notFound": {
     "lostDog": "잃어버린 개"
@@ -3224,5 +3228,213 @@
       "lastRequest": "마지막 요청",
       "disclaimer": "보고된 또는 추정된 토큰 수를 기준으로 요청별로 산출된 추정치이며, 공개된 평균값과 가정(v{version})이 사용되었습니다. 이전 메시지는 저장된 텍스트와 대화의 현재 모델을 바탕으로 역산되었습니다. 실제 측정치가 아닙니다."
     }
+  },
+  "table": {
+    "copyTable": "표 복사",
+    "downloadTable": "표 다운로드",
+    "copyMarkdown": "마크다운",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "CSV로 내보냈습니다",
+    "copyFailed": "표 복사에 실패했습니다"
+  },
+  "backup": {
+    "intro": {
+      "title": "대화 백업 — 안전하게",
+      "body": "대화 내용은 업로드 전에 이 기기에서 암호화됩니다. 저희는 대화를 볼 수 없습니다.",
+      "keyWarning": "복구 키는 이 기기에서 생성됩니다. 저희가 볼 수 없으며 복구해드릴 수 없습니다 — 키를 잃으면 백업도 잃게 됩니다.",
+      "create": "키 생성 및 백업 시작",
+      "decline": "지금은 안 함 — 대화 내용을 이 기기에만 저장"
+    },
+    "ceremony": {
+      "titleCreate": "복구 키 저장",
+      "titleRotate": "새 복구 키 저장",
+      "titleView": "복구 키",
+      "description": "이 키만이 다른 기기에서 백업을 복구할 수 있는 방법입니다. 안전한 곳에 보관하세요 — 저희가 복구해드릴 수 없습니다.",
+      "copy": "복사",
+      "copied": "복사됨!",
+      "download": ".txt 다운로드",
+      "showQr": "QR 코드 보기",
+      "hideQr": "QR 코드 숨기기",
+      "savedCheckbox": "복구 키를 안전한 곳에 저장했습니다",
+      "saveFirstHint": "계속하기 전에 키를 복사하거나 다운로드하세요.",
+      "continue": "계속",
+      "done": "완료",
+      "cancel": "취소",
+      "cancelConfirmTitle": "백업 설정을 취소하시겠습니까?",
+      "cancelConfirmBody": "대화가 백업되지 않습니다. 설정에서 암호화 백업을 언제든 켤 수 있습니다.",
+      "cancelConfirmRotateBody": "복구 키가 이미 변경되었습니다. 설정에서 언제든지 확인할 수 있습니다.",
+      "cancelConfirmConfirm": "네, 취소합니다",
+      "cancelConfirmDismiss": "돌아가기",
+      "loadError": "이 기기에서 복구 키를 불러올 수 없습니다."
+    },
+    "file": {
+      "heading": "대화 백업 복구 키",
+      "warning": "이 키를 안전하게 보관하세요. 가진 사람이 백업을 열람할 수 있으며, 키가 없으면 복구할 수 없습니다."
+    },
+    "progress": {
+      "titleCreate": "백업 설정 중",
+      "titleRotate": "복구 키 변경 중",
+      "encrypting": "{count, plural, one {#개의 대화를 암호화하고 백업 중…} other {#개의 대화를 암호화하고 백업 중…}}",
+      "success": "{count, plural, one {백업 완료. #개의 대화가 보호됩니다.} other {백업 완료. #개의 대화가 보호됩니다.}}",
+      "error": "백업에 실패했습니다. 대화는 여전히 이 기기에 있습니다.",
+      "retry": "다시 시도",
+      "close": "닫기",
+      "done": "완료"
+    },
+    "input": {
+      "label": "복구 키",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "키에는 O, I, L 문자가 포함되지 않습니다.",
+      "checksumError": "해당 키가 올바르지 않습니다. 오타를 확인해 주세요.",
+      "formatError": "복구 키 형식이 올바르지 않습니다.",
+      "incomplete": "계속 입력해 주세요. 복구 키는 56자입니다.",
+      "valid": "키가 유효합니다."
+    },
+    "restore": {
+      "title": "채팅 복원하기",
+      "successTitle": "백업이 복원되었습니다",
+      "promptBody": "귀하의 계정에 대해 암호화된 백업을 찾았습니다. 이 기기에서 복원하려면 복구 키를 입력해 주세요.",
+      "submit": "백업 복원",
+      "skip": "건너뛰기 — 이 기기에서 새로 시작",
+      "restoring": "채팅을 복호화하고 복원 중입니다…",
+      "successBody": "{count, plural, one {#개의 대화가 복원되었습니다.} other {#개의 대화가 복원되었습니다.}}",
+      "wrongKey": "키는 유효하지만 이 백업을 해제할 수 없습니다. 키를 변경한 경우 최신 키를 사용하세요.",
+      "corrupt": "이 백업을 읽을 수 없습니다. 손상되었을 수 있습니다. 이 기기에서 새로 시작하거나 나중에 다시 시도하세요.",
+      "networkError": "백업 서비스에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요.",
+      "tryAgain": "다른 키로 시도",
+      "close": "완료"
+    },
+    "enterKey": {
+      "title": "새 복구 키 입력",
+      "body": "다른 기기에서 복구 키가 변경되었습니다. 백업을 계속하려면 새 키를 입력하세요.",
+      "submit": "이 키 사용"
+    },
+    "banner": {
+      "keyMismatchTitle": "백업이 일시중지되었습니다 — 다른 기기에서 복구 키가 변경되었습니다.",
+      "enterNewKey": "새 키 입력",
+      "resetBackup": "백업 초기화",
+      "resetConfirmTitle": "이 기기의 키로 백업을 초기화하시겠습니까?",
+      "resetConfirmBody": "기존 백업이 이 기기의 채팅으로 대체되고, 이 기기의 키로 암호화됩니다. 다른 기기에서는 이 기기의 복구 키가 필요합니다.",
+      "resetConfirmAction": "백업 초기화",
+      "remoteMissingTitle": "서버에 백업이 더 이상 존재하지 않습니다. 백업이 일시중지되었습니다.",
+      "backUpAgain": "다시 백업하기",
+      "dismiss": "닫기"
+    },
+    "rotate": {
+      "confirmTitle": "복구 키를 변경하시겠습니까?",
+      "confirmBody": "새 키로 백업이 다시 암호화되며, 기존 키는 더 이상 사용할 수 없습니다. 새 키를 저장하고 다른 기기에도 입력해야 합니다.",
+      "confirmAction": "키 변경"
+    },
+    "toast": {
+      "enrollLater": "언제든지 설정에서 암호화 백업을 활성화할 수 있습니다.",
+      "keyUpdated": "복구 키가 업데이트되었습니다. 백업이 재개되었습니다.",
+      "resetDone": "이 기기의 키로 백업이 초기화되었습니다.",
+      "backupRestarted": "백업이 다시 생성되었습니다.",
+      "opFailed": "문제가 발생했습니다. 다시 시도해 주세요."
+    },
+    "settings": {
+      "statusOn": "백업이 켜져 있습니다",
+      "statusOff": "백업이 꺼져 있습니다",
+      "offDescription": "채팅은 이 브라우저에만 저장됩니다. 암호화 백업을 활성화하면 안전하게 보관하고 다른 기기에서 복원할 수 있습니다. 채팅은 기기에서 암호화되므로 저희가 읽을 수 없습니다.",
+      "turnOn": "백업 켜기",
+      "restoreTitle": "귀하의 계정에 이미 백업이 있습니다",
+      "restoreDescription": "이 기기에서 복원하려면 복구 키를 입력하세요.",
+      "restore": "백업 복원",
+      "lastBackup": "마지막 백업: {time}",
+      "lastBackupNever": "아직 백업이 완료되지 않았습니다",
+      "keyFingerprint": "키 ····-{tail}",
+      "syncState": {
+        "idle": "동기화 대기 중",
+        "syncing": "백업 중…",
+        "ok": "최신 상태",
+        "keyOutOfDate": "일시중지됨 — 복구 키가 다른 기기에서 변경되었습니다",
+        "remoteMissing": "일시 중지됨 — 백업이 서버에서 제거되었습니다",
+        "error": "마지막 백업 시도가 실패했습니다"
+      },
+      "backUpNow": "지금 백업",
+      "backUpNowSuccess": "백업 완료",
+      "backUpNowFailure": "백업 실패 — 이 기기의 대화 내용은 변경되지 않았습니다",
+      "viewKey": "복구 키 보기",
+      "changeKey": "복구 키 변경",
+      "dangerTitle": "위험 구역",
+      "turnOffDelete": "백업 끄기 및 삭제",
+      "turnOffConfirmTitle": "백업을 끄시겠습니까?",
+      "turnOffConfirmMessage": "이 작업은 모든 기기의 서버에서 백업을 삭제합니다. 이 기기의 대화 내용은 유지됩니다. 나중에 새 복구 키로 백업을 다시 켤 수 있습니다.",
+      "turnOffConfirmAction": "백업 삭제",
+      "turnOffSuccess": "백업이 꺼지고 삭제되었습니다",
+      "turnOffFailure": "백업을 삭제할 수 없습니다. 다시 시도해 주세요."
+    }
+  },
+  "memories": {
+    "title": "메모리",
+    "description": "어시스턴트가 귀하의 역할, 선호도, 진행 중인 프로젝트 등과 같은 중요한 사실을 기억하고 대화 전반에 활용할 수 있도록 허용합니다.",
+    "enableToggle": "메모리 활성화",
+    "privacyNote": "사실은 이 브라우저에만 저장되며, 대답을 맞춤화하기 위해 대화에 포함됩니다.",
+    "empty": "아직 메모리가 없습니다. 기억할 만한 사실은 대화에서 자동으로 저장됩니다.",
+    "savedOn": "{date}에 저장됨",
+    "deleteMemory": "메모리 삭제",
+    "clearAll": "모든 메모리 지우기",
+    "clearAllConfirmQuestion": "모든 메모리를 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.",
+    "clearAllConfirm": "모두 삭제",
+    "cancel": "취소"
+  },
+  "contextWindow": {
+    "label": "컨텍스트 창",
+    "value": "{count}개의 메시지",
+    "fewer": "메시지 줄이기",
+    "more": "메시지 늘리기",
+    "description": "이 한도를 초과하는 이전 메시지는 요약되어 컨텍스트로 전송됩니다."
+  },
+  "agentAccess": {
+    "title": "에이전트 액세스",
+    "description": "공유 Foundry 에이전트를 사용할 수 있는 사용자를 관리합니다. 이 규칙들은 사용자의 Azure 접근 권한 내에서만 추가적인 제한을 설정하며, Azure에서 거부된 접근은 허용할 수 없습니다.",
+    "backToChat": "채팅으로 돌아가기",
+    "loading": "에이전트와 규칙 불러오는 중…",
+    "loadError": "에이전트 액세스 데이터를 불러올 수 없습니다.",
+    "rulesUnavailableWarning": "스토리지에서 액세스 규칙을 불러올 수 없습니다. 현재 에이전트 호출이 차단되었으며 규칙을 수정할 수 없습니다.",
+    "retry": "다시 시도",
+    "rulesTab": "에이전트 규칙",
+    "localAdminsTab": "로컬 관리자",
+    "noAgents": "관리할 에이전트가 없습니다.",
+    "sourceLabel": "소스",
+    "notDiscoverable": "검색 불가",
+    "notDiscoverableHint": "이 에이전트에 대한 규칙은 존재하지만, 본인의 검색 목록에 없습니다. 이름이 변경되었거나, Azure 접근이 제한되어 있거나, 해당 규칙에 본인이 포함되지 않았을 수 있습니다.",
+    "accessEveryone": "모두",
+    "accessRestricted": "제한됨",
+    "edit": "수정",
+    "updatedByLine": "마지막 수정: {user} ({date})",
+    "accessTypeLabel": "이 에이전트를 사용할 수 있는 사람",
+    "everyoneDescription": "Azure 접근 권한을 통해 이미 이 에이전트에 접근할 수 있는 모든 사용자.",
+    "restrictedDescription": "아래에 나열된 사용자 및 도메인만.",
+    "allowDomainsLabel": "허용된 도메인",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "허용된 사용자",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Enter 키를 눌러 추가",
+    "removeChip": "제거",
+    "groupsLabel": "허용된 그룹",
+    "groupsPendingConsent": "그룹 기반 접근은 테넌트 관리자 승인 대기 중이며, 아직 수정할 수 없습니다.",
+    "restrictedEmptyWarning": "사용자 또는 도메인이 등록되지 않았습니다 — 누구도 이 에이전트를 사용할 수 없습니다.",
+    "save": "저장",
+    "saving": "저장 중…",
+    "cancel": "취소",
+    "saveSuccess": "접근 규칙이 저장되었습니다.",
+    "deleteSuccess": "접근 규칙이 삭제되었습니다 — 모두가 이 에이전트를 다시 사용할 수 있습니다.",
+    "saveError": "저장할 수 없습니다. 다시 시도해 주세요.",
+    "conflictError": "편집 중 다른 사용자가 변경했습니다. 최신 버전으로 다시 불러온 후 변경해 주세요.",
+    "reload": "다시 불러오기",
+    "localAdminsDescription": "특정 에이전트의 규칙 관리를 위임할 수 있습니다. 로컬 관리자는 지정된 에이전트에 대한 규칙만 수정할 수 있습니다.",
+    "noLocalAdmins": "등록된 로컬 관리자가 없습니다.",
+    "addLocalAdmin": "로컬 관리자 추가",
+    "emailLabel": "이메일",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "로컬 관리자 제거",
+    "delegatedAgentsLabel": "위임된 에이전트",
+    "noDelegatedAgents": "위임 가능한 에이전트가 없습니다.",
+    "unknownAgentKey": "알 수 없는 에이전트 키",
+    "configSaveSuccess": "로컬 관리자가 저장되었습니다.",
+    "configConflictError": "편집 중 다른 사용자가 로컬 관리자 목록을 변경했습니다. 다시 불러오고 재시도하세요."
   }
 }

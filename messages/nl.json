@@ -814,7 +814,8 @@
     "processingAudio": "Audio verwerken...",
     "ttsError": "Fout bij het genereren van audio. Probeer het opnieuw.",
     "unsupportedMessageType": "Fout bij weergeven bericht: Niet-ondersteund berichttype",
-    "addLanguageOption": "\"{name}\" toevoegen…"
+    "addLanguageOption": "\"{name}\" toevoegen…",
+    "sources": "Bronnen"
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",
@@ -1143,7 +1144,10 @@
     "customInstructionsLabel": "Aangepaste instructies*",
     "defaultTemperatureLabel": "Standaard temperatuur*",
     "Usage & Impact": "Gebruik & Impact",
-    "Connectors": "Connectors"
+    "Connectors": "Connectors",
+    "Backup": "Back-up",
+    "Memories": "Herinneringen",
+    "Agent Access": "Agenttoegang"
   },
   "notFound": {
     "lostDog": "Verloren hond"
@@ -3224,5 +3228,213 @@
       "lastRequest": "Laatste verzoek",
       "disclaimer": "Raming per verzoek op basis van gerapporteerde of benaderde tokenaantallen, met gebruik van gepubliceerde gemiddelden en aannames v{version}. Oudere berichten zijn terugberekend vanuit opgeslagen tekst en het huidige model van het gesprek. Geen meting."
     }
+  },
+  "table": {
+    "copyTable": "Tabel kopiëren",
+    "downloadTable": "Tabel downloaden",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Geëxporteerd als CSV",
+    "copyFailed": "Tabel kopiëren mislukt"
+  },
+  "backup": {
+    "intro": {
+      "title": "Maak een back-up van je chats — veilig",
+      "body": "Je gesprekken worden op dit apparaat versleuteld voordat er iets wordt geüpload. Wij kunnen je chats nooit lezen.",
+      "keyWarning": "Je herstelcode wordt op dit apparaat aangemaakt. Wij zien deze nooit en kunnen deze niet voor je herstellen — verlies van de code betekent verlies van de back-up.",
+      "create": "Mijn sleutel aanmaken & back-up maken",
+      "decline": "Niet nu — alleen chats op dit apparaat bewaren"
+    },
+    "ceremony": {
+      "titleCreate": "Sla je herstelcode op",
+      "titleRotate": "Sla je nieuwe herstelcode op",
+      "titleView": "Je herstelcode",
+      "description": "Deze code is de enige manier om je back-up op een ander apparaat te herstellen. Bewaar hem veilig — wij kunnen hem niet voor je terughalen.",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd!",
+      "download": "Download .txt",
+      "showQr": "Toon QR-code",
+      "hideQr": "Verberg QR-code",
+      "savedCheckbox": "Ik heb mijn herstelcode veilig opgeslagen",
+      "saveFirstHint": "Kopieer of download je code voordat je doorgaat.",
+      "continue": "Doorgaan",
+      "done": "Gereed",
+      "cancel": "Annuleren",
+      "cancelConfirmTitle": "Back-up instellen annuleren?",
+      "cancelConfirmBody": "Je chats worden niet geback-upt. Je kunt versleutelde back-up altijd inschakelen in Instellingen.",
+      "cancelConfirmRotateBody": "Je herstelcode is al gewijzigd. Je kunt deze altijd bekijken in Instellingen.",
+      "cancelConfirmConfirm": "Ja, annuleren",
+      "cancelConfirmDismiss": "Teruggaan",
+      "loadError": "Je herstelcode kon niet op dit apparaat worden geladen."
+    },
+    "file": {
+      "heading": "Herstelcode chatback-up",
+      "warning": "Bewaar deze code veilig. Iedereen met deze code kan je back-up lezen; zonder deze code kan de back-up niet worden hersteld."
+    },
+    "progress": {
+      "titleCreate": "Bezig met instellen van je back-up",
+      "titleRotate": "Bezig met wijzigen van je herstelcode",
+      "encrypting": "{count, plural, one {Versleutelen en back-uppen van # gesprek…} other {Versleutelen en back-uppen van # gesprekken…}}",
+      "success": "{count, plural, one {Back-up voltooid. # gesprek is beschermd.} other {Back-up voltooid. # gesprekken zijn beschermd.}}",
+      "error": "Back-up mislukt. Je chats staan nog op dit apparaat.",
+      "retry": "Opnieuw proberen",
+      "close": "Sluiten",
+      "done": "Gereed"
+    },
+    "input": {
+      "label": "Herstelcode",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Codes bevatten nooit de letters O, I of L.",
+      "checksumError": "Die sleutel klopt niet — controleer op typefouten.",
+      "formatError": "Dit lijkt geen herstelcode te zijn.",
+      "incomplete": "Blijf typen — een herstelcode heeft 56 tekens.",
+      "valid": "Sleutel lijkt geldig."
+    },
+    "restore": {
+      "title": "Herstel je chats",
+      "successTitle": "Back-up hersteld",
+      "promptBody": "We hebben een versleutelde back-up gevonden voor je account. Voer je herstelcode in om deze op dit apparaat te herstellen.",
+      "submit": "Back-up herstellen",
+      "skip": "Overslaan — begin opnieuw op dit apparaat",
+      "restoring": "Je chats worden ontsleuteld en hersteld…",
+      "successBody": "{count, plural, one {# gesprek hersteld.} other {# gesprekken hersteld.}}",
+      "wrongKey": "Deze sleutel is geldig, maar ontgrendelt deze back-up niet. Gebruik de nieuwste sleutel als je deze hebt gewijzigd.",
+      "corrupt": "Deze back-up kon niet worden gelezen — deze is mogelijk beschadigd. Je kunt opnieuw beginnen op dit apparaat of het later opnieuw proberen.",
+      "networkError": "Kan de back-upservice niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+      "tryAgain": "Probeer een andere sleutel",
+      "close": "Gereed"
+    },
+    "enterKey": {
+      "title": "Voer je nieuwe herstelcode in",
+      "body": "Je herstelcode is op een ander apparaat gewijzigd. Voer de nieuwe code in om back-ups op dit apparaat te hervatten.",
+      "submit": "Deze sleutel gebruiken"
+    },
+    "banner": {
+      "keyMismatchTitle": "Back-ups gepauzeerd — je herstelcode is op een ander apparaat gewijzigd.",
+      "enterNewKey": "Voer nieuwe sleutel in",
+      "resetBackup": "Back-up resetten",
+      "resetConfirmTitle": "Back-up resetten met de sleutel van dit apparaat?",
+      "resetConfirmBody": "De bestaande back-up wordt vervangen door de chats van dit apparaat, versleuteld met de sleutel van dit apparaat. Andere apparaten hebben de herstelcode van dit apparaat nodig.",
+      "resetConfirmAction": "Back-up resetten",
+      "remoteMissingTitle": "Je back-up bestaat niet meer op de server. Back-ups zijn gepauzeerd.",
+      "backUpAgain": "Opnieuw back-up maken",
+      "dismiss": "Sluiten"
+    },
+    "rotate": {
+      "confirmTitle": "Herstelcode wijzigen?",
+      "confirmBody": "Je back-up wordt opnieuw versleuteld met een nieuwe sleutel en de oude zal niet meer werken. Je moet de nieuwe sleutel opslaan en invoeren op je andere apparaten.",
+      "confirmAction": "Sleutel wijzigen"
+    },
+    "toast": {
+      "enrollLater": "Je kunt op elk moment versleutelde back-up inschakelen via Instellingen.",
+      "keyUpdated": "Herstelcode bijgewerkt. Back-ups hervat.",
+      "resetDone": "Back-up gereset met de sleutel van dit apparaat.",
+      "backupRestarted": "Back-up opnieuw aangemaakt.",
+      "opFailed": "Er is iets misgegaan. Probeer het alstublieft opnieuw."
+    },
+    "settings": {
+      "statusOn": "Back-up is ingeschakeld",
+      "statusOff": "Back-up is uitgeschakeld",
+      "offDescription": "Je chats zijn alleen beschikbaar in deze browser. Zet versleutelde back-up aan om ze veilig te bewaren en te kunnen herstellen op andere apparaten. Chats zijn versleuteld op je apparaat — wij kunnen ze nooit lezen.",
+      "turnOn": "Back-up inschakelen",
+      "restoreTitle": "Er bestaat al een back-up voor je account",
+      "restoreDescription": "Voer je herstelcode in om de back-up op dit apparaat te herstellen.",
+      "restore": "Back-up herstellen",
+      "lastBackup": "Laatste back-up: {time}",
+      "lastBackupNever": "Nog geen back-up voltooid",
+      "keyFingerprint": "Sleutel ····-{tail}",
+      "syncState": {
+        "idle": "Wachtend op synchronisatie",
+        "syncing": "Back-up maken…",
+        "ok": "Up-to-date",
+        "keyOutOfDate": "Gepauzeerd — de herstelcode is op een ander apparaat gewijzigd",
+        "remoteMissing": "Gepauzeerd — de back-up is van de server verwijderd",
+        "error": "Laatste back-uppoging mislukt"
+      },
+      "backUpNow": "Nu back-uppen",
+      "backUpNowSuccess": "Back-up voltooid",
+      "backUpNowFailure": "Back-up mislukt — uw chats zijn ongewijzigd op dit apparaat",
+      "viewKey": "Herstelcode bekijken",
+      "changeKey": "Herstelcode wijzigen",
+      "dangerTitle": "Gevaarzone",
+      "turnOffDelete": "Back-up uitschakelen en verwijderen",
+      "turnOffConfirmTitle": "Back-up uitschakelen?",
+      "turnOffConfirmMessage": "Dit verwijdert uw back-up van onze servers voor alle apparaten. Chats op dit apparaat blijven behouden. U kunt later opnieuw een back-up inschakelen met een nieuwe herstelcode.",
+      "turnOffConfirmAction": "Back-up verwijderen",
+      "turnOffSuccess": "Back-up uitgeschakeld en verwijderd",
+      "turnOffFailure": "Back-up kon niet worden verwijderd. Probeer het opnieuw."
+    }
+  },
+  "memories": {
+    "title": "Herinneringen",
+    "description": "Laat de assistent duurzame feiten onthouden die u deelt — zoals uw rol, voorkeuren en lopende projecten — en deze gebruiken in uw gesprekken.",
+    "enableToggle": "Herinneringen inschakelen",
+    "privacyNote": "Feiten worden alleen in deze browser opgeslagen en aan uw chats toegevoegd om antwoorden te personaliseren.",
+    "empty": "Nog geen herinneringen. Belangrijke feiten worden automatisch opgeslagen uit uw gesprekken.",
+    "savedOn": "Opgeslagen op {date}",
+    "deleteMemory": "Herinnering verwijderen",
+    "clearAll": "Alle herinneringen wissen",
+    "clearAllConfirmQuestion": "Alle herinneringen verwijderen? Dit kan niet ongedaan worden gemaakt.",
+    "clearAllConfirm": "Alles verwijderen",
+    "cancel": "Annuleren"
+  },
+  "contextWindow": {
+    "label": "Contextvenster",
+    "value": "{count} berichten",
+    "fewer": "Minder berichten",
+    "more": "Meer berichten",
+    "description": "Oudere berichten buiten deze limiet worden samengevat en als context verzonden."
+  },
+  "agentAccess": {
+    "title": "Agenttoegang",
+    "description": "Beheer welke gebruikers gedeelde Foundry-agents kunnen gebruiken. De regels beperken alleen verder wat de Azure-toegang van een gebruiker al toestaat — ze kunnen nooit toegang geven die Azure weigert.",
+    "backToChat": "Terug naar chat",
+    "loading": "Agents en regels laden…",
+    "loadError": "Kon agenttoegangsgegevens niet laden.",
+    "rulesUnavailableWarning": "Toegangsregels konden niet uit opslag worden geladen. Agentuitvoering is momenteel geblokkeerd en regels kunnen niet worden bewerkt.",
+    "retry": "Opnieuw proberen",
+    "rulesTab": "Agentregels",
+    "localAdminsTab": "Lokale beheerders",
+    "noAgents": "Geen agents om te beheren.",
+    "sourceLabel": "Bron",
+    "notDiscoverable": "Niet zichtbaar voor u",
+    "notDiscoverableHint": "Er bestaat een regel voor deze agent, maar deze is niet zichtbaar in uw ontdekking — mogelijk is de naam gewijzigd, heeft u geen Azure-toegang, of bent u niet inbegrepen in de toegangsregel.",
+    "accessEveryone": "Iedereen",
+    "accessRestricted": "Beperkt",
+    "edit": "Bewerken",
+    "updatedByLine": "Laatst bijgewerkt door {user} op {date}",
+    "accessTypeLabel": "Wie mag deze agent gebruiken",
+    "everyoneDescription": "Iedereen die via Azure-toegang deze agent al kan bereiken.",
+    "restrictedDescription": "Alleen de onderstaande gebruikers en domeinen.",
+    "allowDomainsLabel": "Toegestane domeinen",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Toegestane gebruikers",
+    "allowUsersPlaceholder": "persoon@example.org",
+    "chipAddHint": "Druk op Enter om toe te voegen",
+    "removeChip": "Verwijderen",
+    "groupsLabel": "Toegestane groepen",
+    "groupsPendingConsent": "Groepsgebaseerde toegang wacht op toestemming van de tenantbeheerder en kan nog niet worden bewerkt.",
+    "restrictedEmptyWarning": "Geen gebruikers of domeinen vermeld — niemand kan deze agent gebruiken.",
+    "save": "Opslaan",
+    "saving": "Bezig met opslaan…",
+    "cancel": "Annuleren",
+    "saveSuccess": "Toegangsregel opgeslagen.",
+    "deleteSuccess": "Toegangsregel verwijderd — iedereen kan deze agent weer gebruiken.",
+    "saveError": "Kan niet opslaan. Probeer het opnieuw.",
+    "conflictError": "Iemand anders heeft dit aangepast terwijl u aan het bewerken was. Herlaad om de nieuwste versie te laden en breng vervolgens uw wijziging opnieuw aan.",
+    "reload": "Herladen",
+    "localAdminsDescription": "Delegeer het beheer van regels voor specifieke agents zonder een herplaatsing. Lokale beheerders kunnen alleen regels bewerken voor de aan hen toegewezen agents.",
+    "noLocalAdmins": "Geen lokale beheerders geconfigureerd.",
+    "addLocalAdmin": "Lokale beheerder toevoegen",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "persoon@example.org",
+    "removeAdmin": "Lokale beheerder verwijderen",
+    "delegatedAgentsLabel": "Gedelegeerde agents",
+    "noDelegatedAgents": "Geen agents beschikbaar om te delegeren.",
+    "unknownAgentKey": "Onbekende agent-sleutel",
+    "configSaveSuccess": "Lokale beheerders opgeslagen.",
+    "configConflictError": "Iemand anders heeft de lijst met lokale beheerders aangepast terwijl u aan het bewerken was. Herlaad en probeer opnieuw."
   }
 }

@@ -824,7 +824,8 @@
     "processingAudio": "Processant àudio...",
     "ttsError": "Error en generar l'àudio. Torni-ho a provar.",
     "unsupportedMessageType": "Error en mostrar el missatge: tipus de missatge no compatible",
-    "addLanguageOption": "Afegeix \"{name}\"…"
+    "addLanguageOption": "Afegeix \"{name}\"…",
+    "sources": "Fonts"
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",
@@ -1153,7 +1154,10 @@
     "customInstructionsLabel": "Instruccions personalitzades*",
     "defaultTemperatureLabel": "Temperatura predeterminada*",
     "Usage & Impact": "Ús i impacte",
-    "Connectors": "Connectors"
+    "Connectors": "Connectors",
+    "Backup": "Còpia de seguretat",
+    "Memories": "Memòries",
+    "Agent Access": "Accés de l’agent"
   },
   "notFound": {
     "lostDog": "Gos perdut"
@@ -3224,5 +3228,213 @@
       "lastRequest": "Darrera sol·licitud",
       "disclaimer": "Estimacions per sol·licitud a partir de recompte de tokens informat o aproximat, utilitzant mitjanes i suposicions publicades v{version}. Els missatges antics es recalculen a partir del text emmagatzemat i el model actual de la conversa. No és una mesura."
     }
+  },
+  "table": {
+    "copyTable": "Copia la taula",
+    "downloadTable": "Descarrega la taula",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Exportat com a CSV",
+    "copyFailed": "No s’ha pogut copiar la taula"
+  },
+  "backup": {
+    "intro": {
+      "title": "Fes una còpia de seguretat dels teus xats — de manera segura",
+      "body": "Les teves converses s’encripten en aquest dispositiu abans de pujar-les. No podrem llegir mai els teus xats.",
+      "keyWarning": "La clau de recuperació es crea en aquest dispositiu. Nosaltres no la veiem ni la podem recuperar per a tu — si la perds, perds la còpia de seguretat.",
+      "create": "Crea la meva clau i fes la còpia",
+      "decline": "Ara no — només guarda els xats en aquest dispositiu"
+    },
+    "ceremony": {
+      "titleCreate": "Desa la teva clau de recuperació",
+      "titleRotate": "Desa la teva nova clau de recuperació",
+      "titleView": "La teva clau de recuperació",
+      "description": "Aquesta clau és l’única manera de restaurar la còpia en un altre dispositiu. Desa-la en un lloc segur — no la podem recuperar per a tu.",
+      "copy": "Copia",
+      "copied": "Copiat!",
+      "download": "Descarrega .txt",
+      "showQr": "Mostra el codi QR",
+      "hideQr": "Amaga el codi QR",
+      "savedCheckbox": "He desat la meva clau de recuperació en un lloc segur",
+      "saveFirstHint": "Copia o descarrega la teva clau abans de continuar.",
+      "continue": "Continua",
+      "done": "Fet",
+      "cancel": "Cancel·la",
+      "cancelConfirmTitle": "Cancel·lar la configuració de la còpia de seguretat?",
+      "cancelConfirmBody": "No es farà cap còpia de seguretat dels teus xats. Pots activar la còpia encriptada en qualsevol moment a la configuració.",
+      "cancelConfirmRotateBody": "La teva clau de recuperació ja ha estat modificada. Pots consultar-la sempre que vulguis a la configuració.",
+      "cancelConfirmConfirm": "Sí, cancel·la",
+      "cancelConfirmDismiss": "Torna enrere",
+      "loadError": "No s’ha pogut carregar la teva clau de recuperació en aquest dispositiu."
+    },
+    "file": {
+      "heading": "Clau de recuperació de la còpia de seguretat del xat",
+      "warning": "Guarda aquesta clau de manera segura. Qualsevol persona amb la clau podrà llegir la teva còpia; sense ella, la còpia no es podrà restaurar."
+    },
+    "progress": {
+      "titleCreate": "Configurant la teva còpia de seguretat",
+      "titleRotate": "Canviant la teva clau de recuperació",
+      "encrypting": "{count, plural, one {Encriptant i guardant la còpia d’# conversa…} other {Encriptant i guardant la còpia de # converses…}}",
+      "success": "{count, plural, one {Còpia finalitzada. # conversa protegida.} other {Còpia finalitzada. # converses protegides.}}",
+      "error": "Error en fer la còpia de seguretat. Els teus xats continuen en aquest dispositiu.",
+      "retry": "Torna-ho a provar",
+      "close": "Tanca",
+      "done": "Fet"
+    },
+    "input": {
+      "label": "Clau de recuperació",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Les claus no contenen mai les lletres O, I ni L.",
+      "checksumError": "Aquesta clau no sembla correcta — comprova si hi ha errors de tecleig.",
+      "formatError": "Això no sembla una clau de recuperació.",
+      "incomplete": "Segueix escrivint — una clau de recuperació té 56 caràcters.",
+      "valid": "La clau sembla vàlida."
+    },
+    "restore": {
+      "title": "Restaura les teves converses",
+      "successTitle": "Còpia de seguretat restaurada",
+      "promptBody": "Hem trobat una còpia de seguretat encriptada per al teu compte. Introdueix la teva clau de recuperació per restaurar-la en aquest dispositiu.",
+      "submit": "Restaura la còpia de seguretat",
+      "skip": "Omet — comença de nou en aquest dispositiu",
+      "restoring": "Desxifrant i restaurant les teves converses…",
+      "successBody": "{count, plural, one {# conversa restaurada.} other {# converses restaurades.}}",
+      "wrongKey": "Aquesta clau és vàlida, però no desbloqueja aquesta còpia de seguretat. Si has canviat la teva clau, fes servir la més recent.",
+      "corrupt": "No s'ha pogut llegir aquesta còpia de seguretat — pot estar danyada. Pots començar de nou en aquest dispositiu o provar-ho més tard.",
+      "networkError": "No s'ha pogut accedir al servei de còpia de seguretat. Comprova la teva connexió i torna-ho a intentar.",
+      "tryAgain": "Prova amb una altra clau",
+      "close": "Fet"
+    },
+    "enterKey": {
+      "title": "Introdueix la nova clau de recuperació",
+      "body": "La teva clau de recuperació s'ha canviat en un altre dispositiu. Introdueix la nova clau per reprendre les còpies de seguretat en aquest dispositiu.",
+      "submit": "Fes servir aquesta clau"
+    },
+    "banner": {
+      "keyMismatchTitle": "Còpies de seguretat en pausa — la teva clau de recuperació ha canviat en un altre dispositiu.",
+      "enterNewKey": "Introdueix la nova clau",
+      "resetBackup": "Reinicia la còpia de seguretat",
+      "resetConfirmTitle": "Vols reiniciar la còpia de seguretat amb la clau d'aquest dispositiu?",
+      "resetConfirmBody": "La còpia de seguretat existent es reemplaçarà amb les converses d'aquest dispositiu, encriptades amb la seva clau. Els altres dispositius hauran de fer servir la clau de recuperació d'aquest dispositiu.",
+      "resetConfirmAction": "Reinicia la còpia de seguretat",
+      "remoteMissingTitle": "La teva còpia de seguretat ja no existeix al servidor. Còpies de seguretat en pausa.",
+      "backUpAgain": "Torna a fer una còpia de seguretat",
+      "dismiss": "Descarta"
+    },
+    "rotate": {
+      "confirmTitle": "Vols canviar la teva clau de recuperació?",
+      "confirmBody": "La teva còpia de seguretat es tornarà a encriptar amb una nova clau, i la clau antiga deixarà de funcionar. Hauràs de desar la nova clau i introduir-la en la resta de dispositius.",
+      "confirmAction": "Canvia la clau"
+    },
+    "toast": {
+      "enrollLater": "Pots activar la còpia de seguretat encriptada en qualsevol moment des de Configuració.",
+      "keyUpdated": "Clau de recuperació actualitzada. Còpies de seguretat activades.",
+      "resetDone": "Còpia de seguretat reiniciada amb la clau d'aquest dispositiu.",
+      "backupRestarted": "Còpia de seguretat creada de nou.",
+      "opFailed": "Alguna cosa ha fallat. Torna-ho a intentar."
+    },
+    "settings": {
+      "statusOn": "La còpia de seguretat està activada",
+      "statusOff": "La còpia de seguretat està desactivada",
+      "offDescription": "Les teves converses només es troben en aquest navegador. Activa la còpia de seguretat encriptada per mantenir-les segures i poder-les restaurar en altres dispositius. Les converses estan xifrades al teu dispositiu — nosaltres no les podrem llegir mai.",
+      "turnOn": "Activa la còpia de seguretat",
+      "restoreTitle": "Ja existeix una còpia de seguretat pel teu compte",
+      "restoreDescription": "Introdueix la teva clau de recuperació per restaurar-la en aquest dispositiu.",
+      "restore": "Restaura la còpia de seguretat",
+      "lastBackup": "Darrera còpia de seguretat: {time}",
+      "lastBackupNever": "Encara no s'ha completat cap còpia de seguretat",
+      "keyFingerprint": "Clau ····-{tail}",
+      "syncState": {
+        "idle": "Esperant per sincronitzar",
+        "syncing": "Fent còpia de seguretat…",
+        "ok": "Actualitzat",
+        "keyOutOfDate": "En pausa — la clau de recuperació s'ha canviat en un altre dispositiu",
+        "remoteMissing": "En pausa — la còpia de seguretat s'ha eliminat del servidor",
+        "error": "L'últim intent de còpia de seguretat ha fallat"
+      },
+      "backUpNow": "Fer una còpia ara",
+      "backUpNowSuccess": "Còpia de seguretat completada",
+      "backUpNowFailure": "La còpia de seguretat ha fallat — les converses d'aquest dispositiu no han canviat",
+      "viewKey": "Veure clau de recuperació",
+      "changeKey": "Canviar clau de recuperació",
+      "dangerTitle": "Zona perillosa",
+      "turnOffDelete": "Desactivar i eliminar còpia de seguretat",
+      "turnOffConfirmTitle": "Vols desactivar la còpia de seguretat?",
+      "turnOffConfirmMessage": "Això eliminarà la còpia de seguretat dels nostres servidors per a tots els dispositius. Les converses d'aquest dispositiu quedaran. Pots tornar a activar la còpia de seguretat més endavant amb una clau de recuperació nova.",
+      "turnOffConfirmAction": "Eliminar còpia de seguretat",
+      "turnOffSuccess": "Còpia de seguretat desactivada i eliminada",
+      "turnOffFailure": "No s'ha pogut eliminar la còpia de seguretat. Torna-ho a provar."
+    }
+  },
+  "memories": {
+    "title": "Records",
+    "description": "Permet que l'assistent recordi fets importants que comparteixis — com el teu rol, preferències i projectes en curs — i els utilitzi en diferents converses.",
+    "enableToggle": "Activar records",
+    "privacyNote": "Els fets només es desen en aquest navegador i s'inclouen a les converses per personalitzar les respostes.",
+    "empty": "Encara no hi ha records. Els fets rellevants es guarden automàticament a partir de les teves converses.",
+    "savedOn": "Desat el {date}",
+    "deleteMemory": "Eliminar record",
+    "clearAll": "Esborrar tots els records",
+    "clearAllConfirmQuestion": "Vols eliminar tots els records? Aquesta acció no es pot desfer.",
+    "clearAllConfirm": "Eliminar-ho tot",
+    "cancel": "Cancel·la"
+  },
+  "contextWindow": {
+    "label": "Finestra de context",
+    "value": "{count} missatges",
+    "fewer": "Menys missatges",
+    "more": "Més missatges",
+    "description": "Els missatges més antics que superen aquest límit es resumeixen i s'envien com a context."
+  },
+  "agentAccess": {
+    "title": "Accés d'agent",
+    "description": "Controla quins usuaris poden utilitzar agents compartits de Foundry. Les regles només restringeixen més l'accés que ja permet Azure — mai no podran concedir accés que Azure denega.",
+    "backToChat": "Tornar al xat",
+    "loading": "S'estan carregant agents i regles…",
+    "loadError": "No s'han pogut carregar les dades d'accés dels agents.",
+    "rulesUnavailableWarning": "Les regles d'accés no s'han pogut carregar de l'emmagatzematge. Ara mateix la invocació de l'agent està bloquejada i les regles no es poden editar.",
+    "retry": "Torna-ho a provar",
+    "rulesTab": "Regles d'agent",
+    "localAdminsTab": "Administradors locals",
+    "noAgents": "No hi ha agents per gestionar.",
+    "sourceLabel": "Origen",
+    "notDiscoverable": "No descobrible per tu",
+    "notDiscoverableHint": "Hi ha una regla per a aquest agent, però no forma part del teu entorn de descoberta — pot ser que s'hagi canviat de nom, que el teu accés Azure no arribi o que la seva regla d'accés no t'inclogui.",
+    "accessEveryone": "Tothom",
+    "accessRestricted": "Restringit",
+    "edit": "Edita",
+    "updatedByLine": "Darrera actualització per {user} el {date}",
+    "accessTypeLabel": "Qui pot utilitzar aquest agent",
+    "everyoneDescription": "Qualsevol persona que ja pugui accedir a aquest agent a través del seu accés Azure.",
+    "restrictedDescription": "Només els usuaris i dominis indicats a continuació.",
+    "allowDomainsLabel": "Dominis permesos",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Usuaris permesos",
+    "allowUsersPlaceholder": "persona@example.org",
+    "chipAddHint": "Premeu Enter per afegir",
+    "removeChip": "Elimina",
+    "groupsLabel": "Grups permesos",
+    "groupsPendingConsent": "L'accés per grup espera el consentiment de l'administrador del llogater i encara no es pot editar.",
+    "restrictedEmptyWarning": "No hi ha usuaris ni dominis — ningú podrà utilitzar aquest agent.",
+    "save": "Desa",
+    "saving": "Desant…",
+    "cancel": "Cancel·la",
+    "saveSuccess": "Regla d’accés desada.",
+    "deleteSuccess": "Regla d’accés eliminada — tothom pot tornar a utilitzar aquest agent.",
+    "saveError": "No s’ha pogut desar. Torneu-ho a provar.",
+    "conflictError": "Algú altre ha fet canvis mentre editàveu. Recarregueu per carregar l’última versió i torneu a fer els canvis.",
+    "reload": "Recarrega",
+    "localAdminsDescription": "Delegueu la gestió de regles per a agents concrets sense haver de tornar a desplegar. Els administradors locals només poden editar regles dels agents assignats.",
+    "noLocalAdmins": "No hi ha administradors locals configurats.",
+    "addLocalAdmin": "Afegeix administrador local",
+    "emailLabel": "Correu electrònic",
+    "emailPlaceholder": "persona@example.org",
+    "removeAdmin": "Elimina administrador local",
+    "delegatedAgentsLabel": "Agents delegats",
+    "noDelegatedAgents": "No hi ha agents disponibles per delegar.",
+    "unknownAgentKey": "Clau d’agent desconeguda",
+    "configSaveSuccess": "Administradors locals desats.",
+    "configConflictError": "Algú altre ha canviat la llista d’administradors locals mentre editàveu. Recarregueu i torneu-ho a provar."
   }
 }

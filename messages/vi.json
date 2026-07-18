@@ -850,7 +850,8 @@
     "processingAudio": "Đang xử lý âm thanh...",
     "ttsError": "Lỗi tạo âm thanh. Vui lòng thử lại.",
     "unsupportedMessageType": "Lỗi hiển thị tin nhắn: Loại tin nhắn không được hỗ trợ",
-    "addLanguageOption": "Thêm \"{name}\"…"
+    "addLanguageOption": "Thêm \"{name}\"…",
+    "sources": "Nguồn"
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",
@@ -1179,7 +1180,10 @@
     "customInstructionsLabel": "Hướng dẫn tùy chỉnh*",
     "defaultTemperatureLabel": "Nhiệt độ mặc định*",
     "Usage & Impact": "Sử dụng & Tác động",
-    "Connectors": "Kết nối"
+    "Connectors": "Kết nối",
+    "Backup": "Sao lưu",
+    "Memories": "Kỷ niệm",
+    "Agent Access": "Quyền truy cập Agent"
   },
   "notFound": {
     "lostDog": "Chó bị lạc"
@@ -3255,5 +3259,213 @@
       "lastRequest": "Yêu cầu gần nhất",
       "disclaimer": "Ước tính cho từng yêu cầu dựa trên số lượng token đã báo cáo hoặc ước lượng, sử dụng các giá trị trung bình và giả định được công bố v{version}. Các tin nhắn cũ được tính toán lại từ văn bản lưu trữ và mô hình hiện tại của cuộc trò chuyện. Không phải số liệu đo lường."
     }
+  },
+  "table": {
+    "copyTable": "Sao chép bảng",
+    "downloadTable": "Tải bảng xuống",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Đã xuất dưới dạng CSV",
+    "copyFailed": "Không thể sao chép bảng"
+  },
+  "backup": {
+    "intro": {
+      "title": "Sao lưu trò chuyện của bạn — an toàn",
+      "body": "Cuộc trò chuyện của bạn được mã hóa trên thiết bị này trước khi tải lên. Chúng tôi không thể đọc nội dung trò chuyện của bạn.",
+      "keyWarning": "Khóa khôi phục của bạn được tạo trên thiết bị này. Chúng tôi không bao giờ thấy và không thể khôi phục lại cho bạn — mất khóa đồng nghĩa với mất sao lưu.",
+      "create": "Tạo khóa & sao lưu",
+      "decline": "Để sau — chỉ lưu trò chuyện trên thiết bị này"
+    },
+    "ceremony": {
+      "titleCreate": "Lưu khóa khôi phục của bạn",
+      "titleRotate": "Lưu khóa khôi phục mới của bạn",
+      "titleView": "Khóa khôi phục của bạn",
+      "description": "Đây là cách duy nhất để khôi phục sao lưu của bạn trên thiết bị khác. Hãy lưu giữ ở nơi an toàn — chúng tôi không thể khôi phục lại cho bạn.",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép!",
+      "download": "Tải về .txt",
+      "showQr": "Hiện mã QR",
+      "hideQr": "Ẩn mã QR",
+      "savedCheckbox": "Tôi đã lưu khóa khôi phục ở nơi an toàn",
+      "saveFirstHint": "Hãy sao chép hoặc tải khóa xuống trước khi tiếp tục.",
+      "continue": "Tiếp tục",
+      "done": "Hoàn tất",
+      "cancel": "Hủy",
+      "cancelConfirmTitle": "Hủy thiết lập sao lưu?",
+      "cancelConfirmBody": "Trò chuyện của bạn sẽ không được sao lưu. Bạn có thể bật sao lưu mã hóa bất cứ lúc nào trong Cài đặt.",
+      "cancelConfirmRotateBody": "Khóa khôi phục đã được thay đổi. Bạn có thể xem lại bất cứ lúc nào trong Cài đặt.",
+      "cancelConfirmConfirm": "Đúng, hãy hủy",
+      "cancelConfirmDismiss": "Quay lại",
+      "loadError": "Không thể tải khóa khôi phục trên thiết bị này."
+    },
+    "file": {
+      "heading": "Khóa khôi phục sao lưu trò chuyện",
+      "warning": "Giữ gìn khóa này cẩn thận. Ai có khóa sẽ đọc được bản sao lưu; không có khóa thì không thể khôi phục."
+    },
+    "progress": {
+      "titleCreate": "Đang thiết lập sao lưu",
+      "titleRotate": "Đang thay đổi khóa khôi phục",
+      "encrypting": "{count, plural, one {Đang mã hóa và sao lưu # cuộc trò chuyện…} other {Đang mã hóa và sao lưu # cuộc trò chuyện…}}",
+      "success": "{count, plural, one {Sao lưu hoàn tất. # cuộc trò chuyện đã được bảo vệ.} other {Sao lưu hoàn tất. # cuộc trò chuyện đã được bảo vệ.}}",
+      "error": "Sao lưu thất bại. Trò chuyện của bạn vẫn còn trên thiết bị này.",
+      "retry": "Thử lại",
+      "close": "Đóng",
+      "done": "Hoàn tất"
+    },
+    "input": {
+      "label": "Khóa khôi phục",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Khóa không bao giờ chứa chữ O, I hoặc L.",
+      "checksumError": "Khóa này có vẻ không đúng — vui lòng kiểm tra lại lỗi đánh máy.",
+      "formatError": "Đây không phải là khóa khôi phục hợp lệ.",
+      "incomplete": "Tiếp tục nhập — khóa khôi phục có 56 ký tự.",
+      "valid": "Khóa hợp lệ."
+    },
+    "restore": {
+      "title": "Khôi phục trò chuyện của bạn",
+      "successTitle": "Đã khôi phục sao lưu",
+      "promptBody": "Chúng tôi đã tìm thấy một bản sao lưu mã hóa cho tài khoản của bạn. Hãy nhập khóa khôi phục để lấy lại trên thiết bị này.",
+      "submit": "Khôi phục sao lưu",
+      "skip": "Bỏ qua — bắt đầu mới trên thiết bị này",
+      "restoring": "Đang giải mã và khôi phục trò chuyện…",
+      "successBody": "{count, plural, one {# cuộc trò chuyện đã khôi phục.} other {# cuộc trò chuyện đã khôi phục.}}",
+      "wrongKey": "Khóa này hợp lệ nhưng không mở được bản sao lưu này. Nếu bạn đã thay đổi khóa, hãy dùng khóa mới nhất.",
+      "corrupt": "Không thể đọc được bản sao lưu này — có thể đã bị hỏng. Bạn có thể bắt đầu mới trên thiết bị này hoặc thử lại sau.",
+      "networkError": "Không thể kết nối với dịch vụ sao lưu. Vui lòng kiểm tra kết nối và thử lại.",
+      "tryAgain": "Thử khóa khác",
+      "close": "Hoàn tất"
+    },
+    "enterKey": {
+      "title": "Nhập khóa khôi phục mới của bạn",
+      "body": "Khóa khôi phục của bạn đã được thay đổi trên thiết bị khác. Nhập khóa mới để tiếp tục sao lưu trên thiết bị này.",
+      "submit": "Sử dụng khóa này"
+    },
+    "banner": {
+      "keyMismatchTitle": "Đã tạm dừng sao lưu — khóa khôi phục của bạn đã thay đổi trên thiết bị khác.",
+      "enterNewKey": "Nhập khóa mới",
+      "resetBackup": "Đặt lại sao lưu",
+      "resetConfirmTitle": "Đặt lại sao lưu với khóa của thiết bị này?",
+      "resetConfirmBody": "Bản sao lưu hiện tại sẽ được thay thế bằng trò chuyện của thiết bị này và mã hóa với khóa của thiết bị này. Thiết bị khác sẽ cần có khóa khôi phục của thiết bị này.",
+      "resetConfirmAction": "Đặt lại sao lưu",
+      "remoteMissingTitle": "Sao lưu của bạn không còn tồn tại trên máy chủ. Đã tạm dừng sao lưu.",
+      "backUpAgain": "Sao lưu lại",
+      "dismiss": "Bỏ qua"
+    },
+    "rotate": {
+      "confirmTitle": "Thay đổi khóa khôi phục?",
+      "confirmBody": "Sao lưu của bạn sẽ được mã hóa lại với khóa mới và khóa cũ sẽ không còn sử dụng được. Bạn cần lưu khóa mới và nhập khóa trên các thiết bị khác.",
+      "confirmAction": "Thay đổi khóa"
+    },
+    "toast": {
+      "enrollLater": "Bạn có thể bật sao lưu mã hóa bất cứ lúc nào trong Cài đặt.",
+      "keyUpdated": "Đã cập nhật khóa khôi phục. Đã tiếp tục sao lưu.",
+      "resetDone": "Đã đặt lại sao lưu bằng khóa của thiết bị này.",
+      "backupRestarted": "Đã tạo lại bản sao lưu.",
+      "opFailed": "Đã xảy ra lỗi. Vui lòng thử lại."
+    },
+    "settings": {
+      "statusOn": "Đang bật sao lưu",
+      "statusOff": "Đang tắt sao lưu",
+      "offDescription": "Trò chuyện của bạn chỉ có trên trình duyệt này. Bật sao lưu mã hóa để bảo vệ và khôi phục dữ liệu trên thiết bị khác. Các đoạn trò chuyện được mã hóa ngay trên thiết bị của bạn — chúng tôi không thể đọc được nội dung.",
+      "turnOn": "Bật sao lưu",
+      "restoreTitle": "Đã có bản sao lưu cho tài khoản của bạn",
+      "restoreDescription": "Nhập khóa khôi phục để khôi phục trên thiết bị này.",
+      "restore": "Khôi phục sao lưu",
+      "lastBackup": "Sao lưu cuối: {time}",
+      "lastBackupNever": "Chưa có bản sao lưu nào",
+      "keyFingerprint": "Khóa ····-{tail}",
+      "syncState": {
+        "idle": "Đang chờ đồng bộ",
+        "syncing": "Đang sao lưu…",
+        "ok": "Đã cập nhật",
+        "keyOutOfDate": "Tạm dừng — khóa khôi phục đã được thay đổi trên thiết bị khác",
+        "remoteMissing": "Tạm dừng — bản sao lưu đã bị xóa khỏi máy chủ",
+        "error": "Lần sao lưu gần nhất không thành công"
+      },
+      "backUpNow": "Sao lưu ngay",
+      "backUpNowSuccess": "Sao lưu hoàn tất",
+      "backUpNowFailure": "Sao lưu không thành công — các cuộc trò chuyện trên thiết bị này không thay đổi",
+      "viewKey": "Xem khóa khôi phục",
+      "changeKey": "Thay đổi khóa khôi phục",
+      "dangerTitle": "Khu vực nguy hiểm",
+      "turnOffDelete": "Tắt & xóa sao lưu",
+      "turnOffConfirmTitle": "Tắt sao lưu?",
+      "turnOffConfirmMessage": "Việc này sẽ xóa bản sao lưu của bạn khỏi máy chủ cho tất cả thiết bị. Các cuộc trò chuyện trên thiết bị này vẫn giữ nguyên. Bạn có thể bật lại sao lưu sau với khóa khôi phục mới.",
+      "turnOffConfirmAction": "Xóa sao lưu",
+      "turnOffSuccess": "Đã tắt và xóa sao lưu",
+      "turnOffFailure": "Không thể xóa bản sao lưu. Vui lòng thử lại."
+    }
+  },
+  "memories": {
+    "title": "Ký ức",
+    "description": "Giúp trợ lý ghi nhớ các thông tin quan trọng bạn cung cấp — như vai trò, sở thích, và dự án đang thực hiện — để sử dụng trong các cuộc trò chuyện tiếp theo.",
+    "enableToggle": "Bật ký ức",
+    "privacyNote": "Thông tin chỉ được lưu trên trình duyệt này và sẽ được bao gồm trong các cuộc trò chuyện để cá nhân hóa phản hồi.",
+    "empty": "Chưa có ký ức nào. Các thông tin quan trọng sẽ được tự động lưu lại từ cuộc trò chuyện của bạn.",
+    "savedOn": "Đã lưu {date}",
+    "deleteMemory": "Xóa ký ức",
+    "clearAll": "Xóa tất cả ký ức",
+    "clearAllConfirmQuestion": "Xóa tất cả ký ức? Hành động này không thể hoàn tác.",
+    "clearAllConfirm": "Xóa tất cả",
+    "cancel": "Hủy"
+  },
+  "contextWindow": {
+    "label": "Cửa sổ ngữ cảnh",
+    "value": "{count} tin nhắn",
+    "fewer": "Ít tin nhắn hơn",
+    "more": "Nhiều tin nhắn hơn",
+    "description": "Các tin nhắn cũ vượt quá giới hạn này sẽ được tóm tắt và gửi làm ngữ cảnh."
+  },
+  "agentAccess": {
+    "title": "Quyền truy cập tác nhân",
+    "description": "Kiểm soát người dùng nào có thể sử dụng tác nhân Foundry chia sẻ. Các quy tắc chỉ giới hạn thêm quyền mà Azure của người dùng đã cấp — bạn không thể cấp quyền truy cập nếu Azure không cho phép.",
+    "backToChat": "Quay lại trò chuyện",
+    "loading": "Đang tải tác nhân và quy tắc…",
+    "loadError": "Không thể tải dữ liệu quyền truy cập tác nhân.",
+    "rulesUnavailableWarning": "Không thể tải quy tắc truy cập từ bộ nhớ. Hiện tại không thể gọi tác nhân và không thể chỉnh sửa quy tắc.",
+    "retry": "Thử lại",
+    "rulesTab": "Quy tắc tác nhân",
+    "localAdminsTab": "Quản trị viên cục bộ",
+    "noAgents": "Không có tác nhân nào để quản lý.",
+    "sourceLabel": "Nguồn",
+    "notDiscoverable": "Bạn không thể tìm thấy",
+    "notDiscoverableHint": "Đã có quy tắc cho tác nhân này, nhưng không có trong mục khám phá của bạn — có thể tác nhân đã được đổi tên, quyền Azure của bạn không đủ truy cập hoặc quy tắc truy cập không bao gồm bạn.",
+    "accessEveryone": "Tất cả mọi người",
+    "accessRestricted": "Bị giới hạn",
+    "edit": "Chỉnh sửa",
+    "updatedByLine": "Cập nhật lần cuối bởi {user} vào {date}",
+    "accessTypeLabel": "Ai có thể sử dụng tác nhân này",
+    "everyoneDescription": "Bất kỳ ai đã có quyền truy cập tác nhân này qua Azure của họ.",
+    "restrictedDescription": "Chỉ những người dùng và tên miền liệt kê bên dưới.",
+    "allowDomainsLabel": "Tên miền được phép",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Người dùng được phép",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Nhấn Enter để thêm",
+    "removeChip": "Xóa",
+    "groupsLabel": "Nhóm được phép",
+    "groupsPendingConsent": "Truy cập theo nhóm đang chờ quản trị viên phê duyệt và chưa thể chỉnh sửa.",
+    "restrictedEmptyWarning": "Không có người dùng hoặc tên miền nào được liệt kê — không ai có thể sử dụng agent này.",
+    "save": "Lưu",
+    "saving": "Đang lưu…",
+    "cancel": "Hủy",
+    "saveSuccess": "Quy tắc truy cập đã được lưu.",
+    "deleteSuccess": "Quy tắc truy cập đã được xóa — mọi người đều có thể sử dụng agent này trở lại.",
+    "saveError": "Không thể lưu. Vui lòng thử lại.",
+    "conflictError": "Có người khác đã thay đổi trong lúc bạn chỉnh sửa. Tải lại để lấy phiên bản mới nhất, sau đó chỉnh sửa lại.",
+    "reload": "Tải lại",
+    "localAdminsDescription": "Phân quyền quản lý quy tắc cho từng agent mà không cần triển khai lại. Quản trị viên cục bộ chỉ có thể chỉnh sửa quy tắc của các agent được giao.",
+    "noLocalAdmins": "Chưa cấu hình quản trị viên cục bộ nào.",
+    "addLocalAdmin": "Thêm quản trị viên cục bộ",
+    "emailLabel": "Email",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Xóa quản trị viên cục bộ",
+    "delegatedAgentsLabel": "Agent được phân quyền",
+    "noDelegatedAgents": "Không có agent nào để phân quyền.",
+    "unknownAgentKey": "Khóa agent không xác định",
+    "configSaveSuccess": "Đã lưu quản trị viên cục bộ.",
+    "configConflictError": "Danh sách quản trị viên cục bộ đã bị thay đổi trong lúc bạn chỉnh sửa. Tải lại và thử lại."
   }
 }

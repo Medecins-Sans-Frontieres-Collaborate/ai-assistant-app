@@ -907,7 +907,8 @@
     "processingAudio": "Fayda awdiyo...",
     "ttsError": "Jaɓɓorgo winndito awdiyo. Huumtu e gite.",
     "unsupportedMessageType": "Jaɓɓorgo njettude ndemgol: No waawani ndemgol ngol",
-    "addLanguageOption": "Naatnu \"{name}\"…"
+    "addLanguageOption": "Naatnu \"{name}\"…",
+    "sources": "Janngiiji"
   },
   "transcript": {
     "originalTranscript": "Winnditagol Goongɗinɗo",
@@ -1331,7 +1332,10 @@
     "customInstructionsLabel": "Jaŋtol cuɓal",
     "defaultTemperatureLabel": "Heewtorgo ndiyam",
     "Usage & Impact": "Jumɗe e Naatal",
-    "Connectors": "Golleekuji"
+    "Connectors": "Golleekuji",
+    "Backup": "Doggu",
+    "Memories": "Hakkilɗiiji",
+    "Agent Access": "Aade agent"
   },
   "emptyState": {
     "greeting": "Hol no mbaaw-mi wallitde?",
@@ -3208,5 +3212,213 @@
       "lastRequest": "Njiytorde ɗiɗal",
       "disclaimer": "Hesɗinɗe kala njiytorde ena POOF njoɓdi token ɓe teeŋtinira walla ƴeewtora, jogi e cakkitiiwol ɓuri jeyɗaal e juumre v{version}. Yimɓe baɗte hesɗinira e binndi ndiyam e model jokkol e jawdi. Teeŋtinirde wonani."
     }
+  },
+  "table": {
+    "copyTable": "Nattii tabol",
+    "downloadTable": "Aaw tabol",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Aawii ko CSV",
+    "copyFailed": "Tabol nattude woorii"
+  },
+  "backup": {
+    "intro": {
+      "title": "Doggur konngol maa — e jam",
+      "body": "Konnere maa woni e keɓe nappaani e janngol tuuba nden, sahii, e hoore ma tan. Min mballa waawaatin jangdir konngol maa.",
+      "keyWarning": "Ngenndi jingirtaade nde heddii e janngol tuuba nden. Min mballa waawaatin seydaama, tuma nde a mungi mari, konngol maa mbarataa doggol.",
+      "create": "Sos ngendii am & doggu",
+      "decline": "Hay so — konngol e janngol tuuba nden tan"
+    },
+    "ceremony": {
+      "titleCreate": "Arda ngendii ngirtaade maa",
+      "titleRotate": "Arda ngendii ngirtaade maa hesere",
+      "titleView": "Ngendii ngirtaade maa",
+      "description": "Ngenndi nde tan tan ko firti tergit doggol maa e kañum lanndu. Arda mo ko feewi — min mballa waawaatin sos ama.",
+      "copy": "Nattii",
+      "copied": "Nattude!",
+      "download": "Aaw .txt",
+      "showQr": "Hollu QR code",
+      "hideQr": "Suddii QR code",
+      "savedCheckbox": "Mi arɗii ngendii am e feere jawdi",
+      "saveFirstHint": "Nattii walla aaw ngendi maa ka seŋngo tuugol.",
+      "continue": "Gollu dongol",
+      "done": "Nasta",
+      "cancel": "Haaytu",
+      "cancelConfirmTitle": "Haaytu doggol doggu?",
+      "cancelConfirmBody": "Konnere maa mbarataa doggol. A waawi hurmitir doggu e waawan Settings.",
+      "cancelConfirmRotateBody": "Ngendii ngirtaade maa heseree. A waawi yenoyo e Settings.",
+      "cancelConfirmConfirm": "Eyo, haaytu",
+      "cancelConfirmDismiss": "Golli baylo",
+      "loadError": "Ngendii ngirtaade maa waawaatini jinndude e janngol tuuba nden."
+    },
+    "file": {
+      "heading": "Ngendii ngirtaade doggol konngol",
+      "warning": "Arda ngendii nde e jawdi. Neɗɗo woni e mo waawi jangde doggu maa; booyde mo doggu mbarataa tergit."
+    },
+    "progress": {
+      "titleCreate": "Doggol doggu maa e hoore mabbe",
+      "titleRotate": "Njiɗgol ngendii ngirtaade maa",
+      "encrypting": "{count, plural, one {Nagii & doggol konngol # konngol…} other {Nagii & doggol konngol # hakkilɗe…}}",
+      "success": "{count, plural, one {Doggu gasii. # konngol wanndi e jam.} other {Doggu gasii. # hakkilɗe wanndi e jam.}}",
+      "error": "Doggu woorii. Konnere maa ngey e janngol tuuba nden.",
+      "retry": "Fuɗɗi tuugol",
+      "close": "Uddu",
+      "done": "Nasta"
+    },
+    "input": {
+      "label": "Ngendii ngirtaade",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Ngendiiji waawaani mari ɗereeji O, I, walla L.",
+      "checksumError": "Kila mun neɗɗa moƴƴi—yaɗti e to jamɗe.",
+      "formatError": "Kila mbele moƴƴi naange key nde sakkitii.",
+      "incomplete": "Hawru ndillude—key nde sakkitii tawi 56 carɗi.",
+      "valid": "Key ɗen moƴƴi."
+    },
+    "restore": {
+      "title": "Artu hainoyɗe maa",
+      "successTitle": "Backup artanɗo",
+      "promptBody": "Min aranii backup jokkondirɗo e account maa. Naatnu key nde sakkitii kono artude e binndol ɗee.",
+      "submit": "Artu backup",
+      "skip": "Heddu—fuɗɗi hesere e binndol ɗee",
+      "restoring": "Naatnde e artude hainoyɗe maa…",
+      "successBody": "{count, plural, one {# hainoyɗo artanɗo.} other {# hainoyɗe artanɗe.}}",
+      "wrongKey": "Key ɗen moƴƴi, kono waawi artude backup ɗee. So to key maa wayli, huutor key juulirde.",
+      "corrupt": "Backup ɗen waawi anndude—ina potndi. Aɗa waawi fuɗɗude hesere e binndol ɗee walla waawi jokkude caɗee.",
+      "networkError": "Waawi jokkude e backup service. Yiɗii seŋa jokkol e waawi jokkude caɗee.",
+      "tryAgain": "Huuto key goɗɗo",
+      "close": "Naatnde"
+    },
+    "enterKey": {
+      "title": "Naatnu key nde sakkitii juulirde maa",
+      "body": "Key nde sakkitii maa wayli ɗon e binndol goɗɗo. Naatnu key juulirde kono jokkude backup e binndol ɗee.",
+      "submit": "Huutor key ɗen"
+    },
+    "banner": {
+      "keyMismatchTitle": "Backup paasi—key nde sakkitii wayli e binndol goɗɗo.",
+      "enterNewKey": "Naatnu key juulirde",
+      "resetBackup": "Firtor backup",
+      "resetConfirmTitle": "Firtor backup e key binndol ɗee?",
+      "resetConfirmBody": "Backup jeɗɗi ɗon moƴƴi artude e hainoyɗe binndol ɗee, jokkondirɗe e key binndol ɗee. Binndeeji goɗɗi ɗon yiɗi key nde sakkitii binndol ɗee.",
+      "resetConfirmAction": "Firtor backup",
+      "remoteMissingTitle": "Backup maa waawi anndude e server. Backup paasi.",
+      "backUpAgain": "Backup caɗee",
+      "dismiss": "Sanngita"
+    },
+    "rotate": {
+      "confirmTitle": "Waylu key nde sakkitii maa?",
+      "confirmBody": "Backup maa maa rewondirɗa e key juulirde, key jawdi woppoda. Aɗa yiɗi anndude key juulirde wa naatnu e binndeeji maa goɗɗi.",
+      "confirmAction": "Waylu key"
+    },
+    "toast": {
+      "enrollLater": "Aɗa waawi hurmude backup jokkondirɗo e Settings ko waawa.",
+      "keyUpdated": "Key nde sakkitii juulirde. Backup fuɗɗi.",
+      "resetDone": "Backup firtanɗo e key binndol ɗee.",
+      "backupRestarted": "Backup artanɗo caɗee.",
+      "opFailed": "Ko gollal feeƴi. Huuto caɗee."
+    },
+    "settings": {
+      "statusOn": "Backup to moƴƴi",
+      "statusOff": "Backup to paasi",
+      "offDescription": "Hainoyɗe maa onon e browser ɗee tan. Hurmo backup jokkondirɗo banndu moƴƴi e artu hoore binndol goɗɗi. Hainoyɗe nde jokkondirɗe e binndol maa—min waawi waawde loowe heɓa.",
+      "turnOn": "Hurmo backup",
+      "restoreTitle": "Backup jogii e account maa",
+      "restoreDescription": "Naatnu key nde sakkitii kono artude e binndol ɗee.",
+      "restore": "Artu backup",
+      "lastBackup": "Backup hande: {time}",
+      "lastBackupNever": "Backup goɗɗo jokkaade",
+      "keyFingerprint": "Key ····-{tail}",
+      "syncState": {
+        "idle": "Ngam nanndinundle a waawi sync",
+        "syncing": "Jokkondirde backup…",
+        "ok": "To jamɗo",
+        "keyOutOfDate": "Backup paasi—key nde sakkitii maa wayli e binndol goɗɗo",
+        "remoteMissing": "Dagginii — backup ɗee yewtii e server ngal",
+        "error": "Juumɗo backup jokkaaji majjii"
+      },
+      "backUpNow": "Hakkil backup jooni",
+      "backUpNowSuccess": "Backup tambitii",
+      "backUpNowFailure": "Backup majjii — jaɓɓorgo maa e ndee ordinatir ngal anndanii canɗum",
+      "viewKey": "Hollu kelal resgii",
+      "changeKey": "Waylu kelal resgii",
+      "dangerTitle": "Dogirnde juuti",
+      "turnOffDelete": "Mballa & momtu backup",
+      "turnOffConfirmTitle": "Mballa backup?",
+      "turnOffConfirmMessage": "Kono waɗa momtude backup maa e server am, e alla ordinatirji. Jaɓɓorgo maa e ordinatir ngal jokkii. Ina waawi mbaldude backup baɗi kelal resgii hesere.",
+      "turnOffConfirmAction": "Momtu backup",
+      "turnOffSuccess": "Backup mballitii tee momtii",
+      "turnOffFailure": "Backup majjii momtude. Jaramma, fuɗɗito golla."
+    }
+  },
+  "memories": {
+    "title": "Pat-ɗeeji",
+    "description": "Noddu jamaaɗo yo waɗa suɓa goɗɗe juuti — ballal maa, anndugol maa, e feddejo maa — tee j'altu e hokkunde cakkitiiɗi.",
+    "enableToggle": "Hurmiti pat-ɗeeji",
+    "privacyNote": "Goɗɗe juuti waɗi mbaytii tan e browser ndee, tee ko e caklaaɗe maa beere gollal.",
+    "empty": "Pat-ɗeeji alaa. Goɗɗe juuti teddinii e hokkunde gollal maa.",
+    "savedOn": "Teddinii {date}",
+    "deleteMemory": "Momtu pat-ɗee",
+    "clearAll": "Sudet pat-ɗeeji fofu",
+    "clearAllConfirmQuestion": "Momtu pat-ɗeeji fofu? So wonaa waawde woppude.",
+    "clearAllConfirm": "Momtu fofu",
+    "cancel": "Haaytu"
+  },
+  "contextWindow": {
+    "label": "Window kontekt",
+    "value": "{count} binndi",
+    "fewer": "Danndu binndi",
+    "more": "Binndi ɓurɗo",
+    "description": "Binndi mawnude awa he mbaydi, ngona summora tee naatna kontekst."
+  },
+  "agentAccess": {
+    "title": "Hakkil agent",
+    "description": "Doole keɗɗitir aafgol e jammaaji Foundry. Dooleeji ngol jokkude anndugol humane jammaaji Azure ndeno waɗi — waawaa aafgol so Azure wi'i alaa.",
+    "backToChat": "Ruttu e binndi",
+    "loading": "Nenndi agentji e dooleeji...",
+    "loadError": "Njama waawi nenndude hakkil agentji.",
+    "rulesUnavailableWarning": "Dooleeji hakkil waawaa nenndude e mbaydi. Waawi waawde gollude agent ngal tee waawi waawde wayludaa dooleeji.",
+    "retry": "Fuɗɗito",
+    "rulesTab": "Dooleeji agent",
+    "localAdminsTab": "Adminji heen",
+    "noAgents": "Agent alaa juulugol.",
+    "sourceLabel": "Timmito",
+    "notDiscoverable": "Alaa e ceewde maa",
+    "notDiscoverableHint": "Doole daalti agent ngal, kono ko anndaa e ceewde maa — waawi nenndude ko innde ummora, ko Azure maa alaa, walla doole ngal anndaa maa.",
+    "accessEveryone": "Fof",
+    "accessRestricted": "Miijii",
+    "edit": "Waylu",
+    "updatedByLine": "Jokkuuji majjii {user} e {date}",
+    "accessTypeLabel": "Hol ko waawi gollude agent ngal",
+    "everyoneDescription": "Ko hande inna waawaa juulugol agent ngal e Azure maa.",
+    "restrictedDescription": "Fayde ko jammaaji e domaynji teɗɗi harɗi e hoore mum.",
+    "allowDomainsLabel": "Domaaji waɗi waawi",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Ndeweni waɗi waawi",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Naat Enter balla jokkondir",
+    "removeChip": "Momtu",
+    "groupsLabel": "Gruupu waɗi waawi",
+    "groupsPendingConsent": "Jokkondir e grupe am yowtiima jaɓɓorgo ngal tenant admin, tee umma waawi nattude.",
+    "restrictedEmptyWarning": "Ndee waawaniima ena nooki koɗɗe e domaji — hay sendi waawi jogii agent nde.",
+    "save": "Danndu",
+    "saving": "Dannduɗaa…",
+    "cancel": "Haayti",
+    "saveSuccess": "Kaɗol jokkuɗe dannditaama.",
+    "deleteSuccess": "Kaɗol jokkuɗe momtaama — fow waawi jogii agent nde seɗɗa.",
+    "saveError": "Danndude waawi. Tanndu kadi.",
+    "conflictError": "Golle mawɗo feewnani e po tuma nde yimɓe waawaniima nattude. Fittoy e cuɓii kesɗit nde, saggit mo tarte.",
+    "reload": "Fittoy",
+    "localAdminsDescription": "Jokkondir danndude kaɗol agent jokki ɗii ba bala addagol hoo. Local admins waawi nattude kaɗol agent ɓe sonnii.",
+    "noLocalAdmins": "Advansoor ɗi jokki umma waawi.",
+    "addLocalAdmin": "Nattir local admin",
+    "emailLabel": "Email",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Momtu local admin",
+    "delegatedAgentsLabel": "Agent jokki",
+    "noDelegatedAgents": "Agent jokki umma waawi.",
+    "unknownAgentKey": "Key agent annduɗaa",
+    "configSaveSuccess": "Advansoor jokki dannditaama.",
+    "configConflictError": "Golle mawɗo feewnani e cuɓi advansoor jokki tuma nde umi yaha. Fittoy kadi cuɓ."
   }
 }

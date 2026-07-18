@@ -849,7 +849,8 @@
     "processingAudio": "音声を処理中...",
     "ttsError": "音声の生成中にエラーが発生しました。再試行してください。",
     "unsupportedMessageType": "メッセージの表示エラー：サポートされていないメッセージタイプ",
-    "addLanguageOption": "「{name}」を追加…"
+    "addLanguageOption": "「{name}」を追加…",
+    "sources": "出典"
   },
   "sidebar": {
     "collapseSidebar": "サイドバーを折りたたむ",
@@ -1178,7 +1179,10 @@
     "customInstructionsLabel": "カスタム指示*",
     "defaultTemperatureLabel": "デフォルト温度*",
     "Usage & Impact": "使用状況と影響",
-    "Connectors": "コネクタ"
+    "Connectors": "コネクタ",
+    "Backup": "バックアップ",
+    "Memories": "メモリー",
+    "Agent Access": "エージェントアクセス"
   },
   "notFound": {
     "lostDog": "迷子の犬"
@@ -3224,5 +3228,213 @@
       "lastRequest": "直近のリクエスト",
       "disclaimer": "公開されている平均値と仮定（v{version}）を用いて、報告されたまたは推定されたトークン数からリクエストごとの推定値を算出しています。古いメッセージは保存されたテキストと現在の会話モデルから逆算しています。実測値ではありません。"
     }
+  },
+  "table": {
+    "copyTable": "テーブルをコピー",
+    "downloadTable": "テーブルをダウンロード",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV（.csv）",
+    "exportedAsCsv": "CSVとしてエクスポート",
+    "copyFailed": "テーブルのコピーに失敗しました"
+  },
+  "backup": {
+    "intro": {
+      "title": "チャットを安全にバックアップ",
+      "body": "会話はアップロード前にこの端末で暗号化されます。当社がチャットを読むことはありません。",
+      "keyWarning": "復元キーはこの端末で作成されます。当社が見ることも回復することもできません—キーを失うとバックアップも失われます。",
+      "create": "キーを作成してバックアップ",
+      "decline": "今はしない — この端末にのみチャットを保存"
+    },
+    "ceremony": {
+      "titleCreate": "復元キーを保存",
+      "titleRotate": "新しい復元キーを保存",
+      "titleView": "あなたの復元キー",
+      "description": "このキーは他の端末でバックアップを復元する唯一の方法です。安全な場所に保管してください—当社では回復できません。",
+      "copy": "コピー",
+      "copied": "コピーしました！",
+      "download": ".txtをダウンロード",
+      "showQr": "QRコードを表示",
+      "hideQr": "QRコードを非表示",
+      "savedCheckbox": "復元キーを安全な場所に保存しました",
+      "saveFirstHint": "続行する前にキーをコピーまたはダウンロードしてください。",
+      "continue": "続行",
+      "done": "完了",
+      "cancel": "キャンセル",
+      "cancelConfirmTitle": "バックアップ設定をキャンセルしますか？",
+      "cancelConfirmBody": "チャットはバックアップされません。設定からいつでも暗号化バックアップを有効にできます。",
+      "cancelConfirmRotateBody": "復元キーはすでに変更されています。設定からいつでも表示できます。",
+      "cancelConfirmConfirm": "はい、キャンセルします",
+      "cancelConfirmDismiss": "戻る",
+      "loadError": "この端末で復元キーを読み込めませんでした。"
+    },
+    "file": {
+      "heading": "チャットバックアップ復元キー",
+      "warning": "このキーを安全に保管してください。持っている人なら誰でもバックアップを閲覧できます。キーがないとバックアップを復元できません。"
+    },
+    "progress": {
+      "titleCreate": "バックアップを設定中",
+      "titleRotate": "復元キーを変更中",
+      "encrypting": "{count, plural, one {#件の会話を暗号化してバックアップ中…} other {#件の会話を暗号化してバックアップ中…}}",
+      "success": "{count, plural, one {バックアップ完了。#件の会話が保護されました。} other {バックアップ完了。#件の会話が保護されました。}}",
+      "error": "バックアップに失敗しました。チャットは引き続きこの端末に保存されています。",
+      "retry": "再試行",
+      "close": "閉じる",
+      "done": "完了"
+    },
+    "input": {
+      "label": "復元キー",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "キーにO、I、Lの文字は含まれません。",
+      "checksumError": "このキーは正しくないようです。入力ミスがないかご確認ください。",
+      "formatError": "これはリカバリーキーではありません。",
+      "incomplete": "続けて入力してください。リカバリーキーは56文字です。",
+      "valid": "キーは有効です。"
+    },
+    "restore": {
+      "title": "チャットを復元する",
+      "successTitle": "バックアップが復元されました",
+      "promptBody": "お客様のアカウント用の暗号化されたバックアップが見つかりました。この端末で復元するにはリカバリーキーを入力してください。",
+      "submit": "バックアップを復元",
+      "skip": "スキップして新しく始める",
+      "restoring": "チャットを復号して復元しています…",
+      "successBody": "{count, plural, one {#件の会話を復元しました。} other {#件の会話を復元しました。}}",
+      "wrongKey": "このキーは有効ですが、このバックアップを復元できません。キーを変更した場合は、最新のものをご利用ください。",
+      "corrupt": "このバックアップは読み取れません。破損している可能性があります。この端末で新規開始するか、後で再度お試しください。",
+      "networkError": "バックアップサービスに接続できません。接続を確認して再度お試しください。",
+      "tryAgain": "別のキーを試す",
+      "close": "完了"
+    },
+    "enterKey": {
+      "title": "新しいリカバリーキーを入力",
+      "body": "他の端末でリカバリーキーが変更されました。新しいキーを入力してバックアップを再開してください。",
+      "submit": "このキーを使用する"
+    },
+    "banner": {
+      "keyMismatchTitle": "バックアップが一時停止されています—リカバリーキーが他の端末で変更されました。",
+      "enterNewKey": "新しいキーを入力",
+      "resetBackup": "バックアップをリセット",
+      "resetConfirmTitle": "この端末のキーでバックアップをリセットしますか？",
+      "resetConfirmBody": "既存のバックアップはこの端末のチャットに置き換えられ、この端末のキーで暗号化されます。他の端末はこの端末のリカバリーキーが必要になります。",
+      "resetConfirmAction": "バックアップをリセット",
+      "remoteMissingTitle": "サーバー上のバックアップが存在しません。バックアップが一時停止されています。",
+      "backUpAgain": "再度バックアップ",
+      "dismiss": "閉じる"
+    },
+    "rotate": {
+      "confirmTitle": "リカバリーキーを変更しますか？",
+      "confirmBody": "バックアップは新しいキーで再暗号化され、古いキーは無効になります。新しいキーを保存し、他の端末でも入力する必要があります。",
+      "confirmAction": "キーを変更"
+    },
+    "toast": {
+      "enrollLater": "暗号化バックアップは、設定からいつでも有効にできます。",
+      "keyUpdated": "リカバリーキーが更新されました。バックアップが再開されました。",
+      "resetDone": "この端末のキーでバックアップがリセットされました。",
+      "backupRestarted": "バックアップが再作成されました。",
+      "opFailed": "問題が発生しました。再度お試しください。"
+    },
+    "settings": {
+      "statusOn": "バックアップが有効です",
+      "statusOff": "バックアップが無効です",
+      "offDescription": "チャットはこのブラウザ内のみで保存されています。安全のため暗号化バックアップを有効にすると、他の端末でも復元できます。チャットは端末で暗号化されており、当方が閲覧することはありません。",
+      "turnOn": "バックアップを有効にする",
+      "restoreTitle": "お客様のアカウントには既にバックアップがあります",
+      "restoreDescription": "この端末で復元するにはリカバリーキーを入力してください。",
+      "restore": "バックアップを復元",
+      "lastBackup": "最終バックアップ：{time}",
+      "lastBackupNever": "まだバックアップは作成されていません",
+      "keyFingerprint": "キー ····-{tail}",
+      "syncState": {
+        "idle": "同期待機中",
+        "syncing": "バックアップ中…",
+        "ok": "最新の状態です",
+        "keyOutOfDate": "一時停止中—リカバリーキーが他の端末で変更されました",
+        "remoteMissing": "一時停止中 — バックアップがサーバーから削除されました",
+        "error": "最後のバックアップ試行が失敗しました"
+      },
+      "backUpNow": "今すぐバックアップ",
+      "backUpNowSuccess": "バックアップ完了",
+      "backUpNowFailure": "バックアップに失敗しました — このデバイスのチャットは変更されていません",
+      "viewKey": "リカバリーキーを表示",
+      "changeKey": "リカバリーキーを変更",
+      "dangerTitle": "危険ゾーン",
+      "turnOffDelete": "バックアップをオフにして削除",
+      "turnOffConfirmTitle": "バックアップをオフにしますか？",
+      "turnOffConfirmMessage": "バックアップはすべてのデバイスで当社サーバーから削除されます。このデバイスのチャットは残ります。後で新しいリカバリーキーでバックアップを再オンにできます。",
+      "turnOffConfirmAction": "バックアップを削除",
+      "turnOffSuccess": "バックアップをオフにして削除しました",
+      "turnOffFailure": "バックアップを削除できませんでした。もう一度お試しください。"
+    }
+  },
+  "memories": {
+    "title": "メモリー",
+    "description": "あなたが共有した役職や好み、進行中のプロジェクトなどの持続的な情報をアシスタントが記憶し、会話全体で活用します。",
+    "enableToggle": "メモリーを有効にする",
+    "privacyNote": "情報はこのブラウザのみに保存され、パーソナライズのためチャット内で使用されます。",
+    "empty": "まだメモリーがありません。記憶する価値のある情報は会話から自動的に保存されます。",
+    "savedOn": "{date} に保存",
+    "deleteMemory": "メモリーを削除",
+    "clearAll": "すべてのメモリーを削除",
+    "clearAllConfirmQuestion": "すべてのメモリーを削除しますか？この操作は元に戻せません。",
+    "clearAllConfirm": "すべて削除",
+    "cancel": "キャンセル"
+  },
+  "contextWindow": {
+    "label": "コンテキストウィンドウ",
+    "value": "{count} 件のメッセージ",
+    "fewer": "メッセージを減らす",
+    "more": "メッセージを増やす",
+    "description": "この件数を超える古いメッセージは要約し、コンテキストとして送信されます。"
+  },
+  "agentAccess": {
+    "title": "エージェントアクセス",
+    "description": "どのユーザーが共有Foundryエージェントを利用できるかを管理します。これらのルールは既にユーザー自身のAzureアクセスで許可されている範囲内でのみさらに制限がかかります — Azureが拒否しているアクセスを許可することはできません。",
+    "backToChat": "チャットに戻る",
+    "loading": "エージェントとルールを読み込み中…",
+    "loadError": "エージェントアクセスデータを読み込めませんでした。",
+    "rulesUnavailableWarning": "ストレージからアクセスルールを読み込めませんでした。現在、エージェントの呼び出しはブロックされ、ルールの編集もできません。",
+    "retry": "再試行",
+    "rulesTab": "エージェントルール",
+    "localAdminsTab": "ローカル管理者",
+    "noAgents": "管理するエージェントがありません。",
+    "sourceLabel": "ソース",
+    "notDiscoverable": "あなたからは検出不可",
+    "notDiscoverableHint": "このエージェントにはルールがありますが、あなた自身の検出範囲にはありません。名前が変更されたか、あなたのAzureアクセス範囲外、またはアクセスルールに含まれていない可能性があります。",
+    "accessEveryone": "全員",
+    "accessRestricted": "制限あり",
+    "edit": "編集",
+    "updatedByLine": "最終更新者：{user}（{date}）",
+    "accessTypeLabel": "このエージェントを使用できる人",
+    "everyoneDescription": "既にAzureアクセスでこのエージェントに到達できるすべての人。",
+    "restrictedDescription": "下記のユーザーおよびドメインのみ。",
+    "allowDomainsLabel": "許可されたドメイン",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "許可されたユーザー",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Enterキーで追加",
+    "removeChip": "削除",
+    "groupsLabel": "許可されたグループ",
+    "groupsPendingConsent": "グループによるアクセスはテナント管理者の承認待ちのため、まだ編集できません。",
+    "restrictedEmptyWarning": "ユーザーまたはドメインが指定されていません—このエージェントは誰も利用できません。",
+    "save": "保存",
+    "saving": "保存中…",
+    "cancel": "キャンセル",
+    "saveSuccess": "アクセスルールを保存しました。",
+    "deleteSuccess": "アクセスルールを削除しました — すべてのユーザーがこのエージェントを再び利用できます。",
+    "saveError": "保存できませんでした。もう一度お試しください。",
+    "conflictError": "編集中に他の人が内容を変更しました。最新バージョンを読み込んで、再度変更してください。",
+    "reload": "再読み込み",
+    "localAdminsDescription": "特定のエージェントに対するルール管理を再デプロイなしで委任できます。ローカル管理者は担当エージェントのルールのみ編集できます。",
+    "noLocalAdmins": "ローカル管理者は設定されていません。",
+    "addLocalAdmin": "ローカル管理者を追加",
+    "emailLabel": "メールアドレス",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "ローカル管理者を削除",
+    "delegatedAgentsLabel": "委任されたエージェント",
+    "noDelegatedAgents": "委任できるエージェントがありません。",
+    "unknownAgentKey": "不明なエージェントキー",
+    "configSaveSuccess": "ローカル管理者を保存しました。",
+    "configConflictError": "編集中に他の人がローカル管理者リストを変更しました。再読み込み後、もう一度お試しください。"
   }
 }

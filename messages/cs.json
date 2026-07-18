@@ -849,7 +849,8 @@
     "processingAudio": "Zpracovávám zvuk...",
     "ttsError": "Chyba při generování zvuku. Zkuste to prosím znovu.",
     "unsupportedMessageType": "Chyba při zobrazení zprávy: Nepodporovaný typ zprávy",
-    "addLanguageOption": "Přidat „{name}“…"
+    "addLanguageOption": "Přidat „{name}“…",
+    "sources": "Zdroje"
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",
@@ -1178,7 +1179,10 @@
     "customInstructionsLabel": "Vlastní pokyny*",
     "defaultTemperatureLabel": "Výchozí teplota*",
     "Usage & Impact": "Využití a dopad",
-    "Connectors": "Konektory"
+    "Connectors": "Konektory",
+    "Backup": "Záloha",
+    "Memories": "Vzpomínky",
+    "Agent Access": "Přístup agenta"
   },
   "notFound": {
     "lostDog": "Ztracený pes"
@@ -3224,5 +3228,213 @@
       "lastRequest": "Poslední požadavek",
       "disclaimer": "Odhady na požadavek z hlášených nebo přibližných počtů tokenů, s využitím zveřejněných průměrů a předpokladů v{version}. Starší zprávy jsou zpětně dopočítány z uloženého textu a aktuálního modelu konverzace. Nejde o měření."
     }
+  },
+  "table": {
+    "copyTable": "Kopírovat tabulku",
+    "downloadTable": "Stáhnout tabulku",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Exportováno jako CSV",
+    "copyFailed": "Nepodařilo se zkopírovat tabulku"
+  },
+  "backup": {
+    "intro": {
+      "title": "Zálohujte své konverzace — bezpečně",
+      "body": "Vaše konverzace jsou šifrovány na tomto zařízení před nahráním. Nikdy nemůžeme číst vaše chaty.",
+      "keyWarning": "Obnovovací klíč je vytvořen na tomto zařízení. Nikdy ho nevidíme a nemůžeme ho obnovit — pokud klíč ztratíte, ztratíte i zálohu.",
+      "create": "Vytvořit klíč & zálohovat",
+      "decline": "Teď ne — ponechat chaty pouze v tomto zařízení"
+    },
+    "ceremony": {
+      "titleCreate": "Uložte si svůj obnovovací klíč",
+      "titleRotate": "Uložte si nový obnovovací klíč",
+      "titleView": "Váš obnovovací klíč",
+      "description": "Tento klíč je jedinou možností, jak obnovit zálohu na jiném zařízení. Uložte si ho na bezpečné místo — nemůžeme ho pro vás obnovit.",
+      "copy": "Kopírovat",
+      "copied": "Zkopírováno!",
+      "download": "Stáhnout .txt",
+      "showQr": "Zobrazit QR kód",
+      "hideQr": "Skrýt QR kód",
+      "savedCheckbox": "Uložil/a jsem svůj obnovovací klíč na bezpečné místo",
+      "saveFirstHint": "Nejprve klíč zkopírujte nebo stáhněte.",
+      "continue": "Pokračovat",
+      "done": "Hotovo",
+      "cancel": "Zrušit",
+      "cancelConfirmTitle": "Zrušit nastavení zálohy?",
+      "cancelConfirmBody": "Vaše chaty nebudou zálohovány. Šifrovanou zálohu lze kdykoliv zapnout v Nastavení.",
+      "cancelConfirmRotateBody": "Váš obnovovací klíč již byl změněn. Zobrazit si ho můžete kdykoli v Nastavení.",
+      "cancelConfirmConfirm": "Ano, zrušit",
+      "cancelConfirmDismiss": "Zpět",
+      "loadError": "Nepodařilo se načíst obnovovací klíč na tomto zařízení."
+    },
+    "file": {
+      "heading": "Obnovovací klíč zálohy chatu",
+      "warning": "Uchovejte tento klíč v bezpečí. Kdokoliv s tímto klíčem může číst vaši zálohu; bez něj nelze zálohu obnovit."
+    },
+    "progress": {
+      "titleCreate": "Nastavuje se záloha",
+      "titleRotate": "Mění se obnovovací klíč",
+      "encrypting": "{count, plural, one {Šifruje a zálohuje se # konverzace…} few {Šifrují a zálohují se # konverzace…} many {Šifruje a zálohuje se # konverzací…} other {Šifruje a zálohuje se # konverzací…}}",
+      "success": "{count, plural, one {Záloha dokončena. # konverzace je chráněna.} few {Záloha dokončena. # konverzace jsou chráněny.} many {Záloha dokončena. # konverzací je chráněno.} other {Záloha dokončena. # konverzací je chráněno.}}",
+      "error": "Zálohování selhalo. Vaše chaty zůstávají v tomto zařízení.",
+      "retry": "Zkusit znovu",
+      "close": "Zavřít",
+      "done": "Hotovo"
+    },
+    "input": {
+      "label": "Obnovovací klíč",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Klíče nikdy neobsahují písmena O, I ani L.",
+      "checksumError": "Tento klíč nevypadá správně — zkontrolujte překlepy.",
+      "formatError": "Toto nevypadá jako obnovovací klíč.",
+      "incomplete": "Pokračujte v zadávání — obnovovací klíč má 56 znaků.",
+      "valid": "Klíč vypadá platně."
+    },
+    "restore": {
+      "title": "Obnovte své chaty",
+      "successTitle": "Záloha obnovena",
+      "promptBody": "Našli jsme šifrovanou zálohu vašeho účtu. Zadejte svůj obnovovací klíč pro obnovení na tomto zařízení.",
+      "submit": "Obnovit zálohu",
+      "skip": "Přeskočit — začít na tomto zařízení znovu",
+      "restoring": "Probíhá dešifrování a obnovení chatů…",
+      "successBody": "{count, plural, one {# konverzace obnovena.} few {# konverzace obnoveny.} other {# konverzací obnoveno.}}",
+      "wrongKey": "Tento klíč je platný, ale tuto zálohu neodemkne. Pokud jste klíč změnili, použijte ten nejnovější.",
+      "corrupt": "Tuto zálohu nelze přečíst — může být poškozená. Můžete začít znovu na tomto zařízení nebo to zkusit později.",
+      "networkError": "Nepodařilo se připojit ke službě záloh. Zkontrolujte připojení a zkuste to znovu.",
+      "tryAgain": "Zkusit jiný klíč",
+      "close": "Hotovo"
+    },
+    "enterKey": {
+      "title": "Zadejte svůj nový obnovovací klíč",
+      "body": "Obnovovací klíč byl změněn na jiném zařízení. Zadejte nový klíč pro obnovení záloh na tomto zařízení.",
+      "submit": "Použít tento klíč"
+    },
+    "banner": {
+      "keyMismatchTitle": "Zálohování pozastaveno — obnovovací klíč byl změněn na jiném zařízení.",
+      "enterNewKey": "Zadat nový klíč",
+      "resetBackup": "Resetovat zálohu",
+      "resetConfirmTitle": "Resetovat zálohu pomocí klíče tohoto zařízení?",
+      "resetConfirmBody": "Stávající záloha bude nahrazena chaty z tohoto zařízení, zašifrovanými klíčem tohoto zařízení. Ostatní zařízení budou potřebovat obnovovací klíč tohoto zařízení.",
+      "resetConfirmAction": "Resetovat zálohu",
+      "remoteMissingTitle": "Vaše záloha již na serveru neexistuje. Zálohování je pozastaveno.",
+      "backUpAgain": "Zálohovat znovu",
+      "dismiss": "Zavřít"
+    },
+    "rotate": {
+      "confirmTitle": "Změnit svůj obnovovací klíč?",
+      "confirmBody": "Záloha bude znovu zašifrována novým klíčem a starý klíč přestane fungovat. Nový klíč si uložte a zadejte ho na ostatních zařízeních.",
+      "confirmAction": "Změnit klíč"
+    },
+    "toast": {
+      "enrollLater": "Šifrovanou zálohu můžete kdykoli zapnout v Nastavení.",
+      "keyUpdated": "Obnovovací klíč aktualizován. Zálohování pokračuje.",
+      "resetDone": "Záloha resetována klíčem tohoto zařízení.",
+      "backupRestarted": "Záloha znovu vytvořena.",
+      "opFailed": "Něco se pokazilo. Zkuste to prosím znovu."
+    },
+    "settings": {
+      "statusOn": "Zálohování je zapnuto",
+      "statusOff": "Zálohování je vypnuto",
+      "offDescription": "Vaše chaty jsou pouze v tomto prohlížeči. Zapněte šifrovanou zálohu, abyste je zabezpečili a mohli obnovit na jiných zařízeních. Chaty jsou šifrovány přímo ve vašem zařízení — nikdy je nemůžeme číst.",
+      "turnOn": "Zapnout zálohování",
+      "restoreTitle": "Pro váš účet již existuje záloha",
+      "restoreDescription": "Zadejte svůj obnovovací klíč pro obnovení na tomto zařízení.",
+      "restore": "Obnovit zálohu",
+      "lastBackup": "Poslední záloha: {time}",
+      "lastBackupNever": "Žádná záloha dosud neproběhla",
+      "keyFingerprint": "Klíč ····-{tail}",
+      "syncState": {
+        "idle": "Čeká na synchronizaci",
+        "syncing": "Probíhá zálohování…",
+        "ok": "Aktuální stav",
+        "keyOutOfDate": "Pozastaveno — obnovovací klíč byl změněn na jiném zařízení",
+        "remoteMissing": "Pozastaveno — záloha byla odstraněna ze serveru",
+        "error": "Poslední pokus o zálohu selhal"
+      },
+      "backUpNow": "Zálohovat nyní",
+      "backUpNowSuccess": "Zálohování dokončeno",
+      "backUpNowFailure": "Zálohování selhalo — vaše konverzace na tomto zařízení zůstaly beze změny",
+      "viewKey": "Zobrazit obnovovací klíč",
+      "changeKey": "Změnit obnovovací klíč",
+      "dangerTitle": "Nebezpečná zóna",
+      "turnOffDelete": "Vypnout a odstranit zálohu",
+      "turnOffConfirmTitle": "Vypnout zálohování?",
+      "turnOffConfirmMessage": "Tím odstraníte zálohu z našich serverů pro všechna zařízení. Konverzace na tomto zařízení zůstanou. Zálohování můžete později opět zapnout s novým obnovovacím klíčem.",
+      "turnOffConfirmAction": "Odstranit zálohu",
+      "turnOffSuccess": "Zálohování bylo vypnuto a odstraněno",
+      "turnOffFailure": "Zálohu se nepodařilo odstranit. Zkuste to prosím znovu."
+    }
+  },
+  "memories": {
+    "title": "Vzpomínky",
+    "description": "Nechte asistenta pamatovat si trvalé informace, které mu sdělíte — například vaši roli, preference nebo probíhající projekty — a využívat je v dalších konverzacích.",
+    "enableToggle": "Povolit vzpomínky",
+    "privacyNote": "Informace jsou uloženy pouze v tomto prohlížeči a použity v chatech pro personalizaci odpovědí.",
+    "empty": "Zatím žádné vzpomínky. Informace vhodné k zapamatování jsou ukládány automaticky z vašich konverzací.",
+    "savedOn": "Uloženo {date}",
+    "deleteMemory": "Odstranit vzpomínku",
+    "clearAll": "Vymazat všechny vzpomínky",
+    "clearAllConfirmQuestion": "Odstranit všechny vzpomínky? Tuto akci nelze vrátit zpět.",
+    "clearAllConfirm": "Odstranit vše",
+    "cancel": "Zrušit"
+  },
+  "contextWindow": {
+    "label": "Okno kontextu",
+    "value": "{count} zpráv",
+    "fewer": "Méně zpráv",
+    "more": "Více zpráv",
+    "description": "Starší zprávy nad tímto limitem jsou shrnuty a odeslány jako kontext."
+  },
+  "agentAccess": {
+    "title": "Přístup k agentovi",
+    "description": "Nastavte, kteří uživatelé mohou používat sdílené Foundry agenty. Pravidla pouze dále omezují to, co Azure přístup uživatele již umožňuje – nikdy nemohou poskytnout větší přístup, než povoluje Azure.",
+    "backToChat": "Zpět do chatu",
+    "loading": "Načítání agentů a pravidel…",
+    "loadError": "Nepodařilo se načíst data o přístupu k agentům.",
+    "rulesUnavailableWarning": "Pravidla přístupu se nepodařilo načíst z úložiště. Spuštění agenta je nyní blokováno a pravidla nelze upravovat.",
+    "retry": "Zkusit znovu",
+    "rulesTab": "Pravidla agenta",
+    "localAdminsTab": "Lokální administrátoři",
+    "noAgents": "Není co spravovat.",
+    "sourceLabel": "Zdroj",
+    "notDiscoverable": "Není pro vás dostupný",
+    "notDiscoverableHint": "Existuje pravidlo pro tohoto agenta, ale není ve vašem vlastním vyhledávání — mohl být přejmenován, váš Azure přístup jej neobsahuje, nebo jeho pravidlo přístupu vás nezahrnuje.",
+    "accessEveryone": "Všichni",
+    "accessRestricted": "Omezeno",
+    "edit": "Upravit",
+    "updatedByLine": "Naposledy upravil {user} dne {date}",
+    "accessTypeLabel": "Kdo může tohoto agenta použít",
+    "everyoneDescription": "Kdokoli, kdo má již přístup k tomuto agentovi skrze svůj Azure přístup.",
+    "restrictedDescription": "Pouze níže uvedení uživatelé a domény.",
+    "allowDomainsLabel": "Povolené domény",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Povolení uživatelé",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Stiskněte Enter pro přidání",
+    "removeChip": "Odebrat",
+    "groupsLabel": "Povolené skupiny",
+    "groupsPendingConsent": "Přístup na základě skupin čeká na schválení správcem a zatím jej nelze upravovat.",
+    "restrictedEmptyWarning": "Nejsou uvedeni žádní uživatelé ani domény – nikdo nebude mít k agentovi přístup.",
+    "save": "Uložit",
+    "saving": "Ukládání...",
+    "cancel": "Zrušit",
+    "saveSuccess": "Pravidlo přístupu bylo uloženo.",
+    "deleteSuccess": "Pravidlo přístupu bylo odstraněno – tento agent je opět přístupný pro všechny.",
+    "saveError": "Nelze uložit. Zkuste to prosím znovu.",
+    "conflictError": "Mezitím došlo ke změně. Obnovte stránku a proveďte změnu znovu.",
+    "reload": "Obnovit",
+    "localAdminsDescription": "Delegujte správu pravidel konkrétním agentům bez nutnosti nového nasazení. Místní administrátoři mohou upravovat pouze pravidla u svěřených agentů.",
+    "noLocalAdmins": "Nebyli nastaveni žádní místní administrátoři.",
+    "addLocalAdmin": "Přidat místního administrátora",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Odebrat místního administrátora",
+    "delegatedAgentsLabel": "Delegovaní agenti",
+    "noDelegatedAgents": "Nejsou k dispozici žádní agenti k delegování.",
+    "unknownAgentKey": "Neznámý klíč agenta",
+    "configSaveSuccess": "Místní administrátoři uloženi.",
+    "configConflictError": "Seznam místních administrátorů byl mezitím změněn. Obnovte stránku a zkuste to znovu."
   }
 }

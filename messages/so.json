@@ -907,7 +907,8 @@
     "processingAudio": "Codka waa la socodsiinayaa...",
     "ttsError": "Khalad abuurista codka. Fadlan isku day mar kale.",
     "unsupportedMessageType": "Khalad soo bandhigista fariinta: Nooca fariinta lama taageero",
-    "addLanguageOption": "Ku dar \"{name}\"…"
+    "addLanguageOption": "Ku dar \"{name}\"…",
+    "sources": "Xigashooyin"
   },
   "transcript": {
     "originalTranscript": "Qoraalka Aslka ah",
@@ -1331,7 +1332,10 @@
     "customInstructionsLabel": "Tilmaamo Gaar ah*",
     "defaultTemperatureLabel": "Heerkulka Asal ah*",
     "Usage & Impact": "Isticmaalka & Saameynta",
-    "Connectors": "Xiriiriyayaal"
+    "Connectors": "Xiriiriyayaal",
+    "Backup": "Kaydin",
+    "Memories": "Xasuus",
+    "Agent Access": "Helitaanka Wakiilka"
   },
   "emptyState": {
     "greeting": "Sideen kugu caawin karaa?",
@@ -3208,5 +3212,213 @@
       "lastRequest": "Codsigii ugu dambeeyay",
       "disclaimer": "Qiyaasaha codsi kasta waxaa lagu salaynayaa tirada token-ka ee la soo sheegay ama lagu qiyaasay, iyadoo la adeegsanayo celcelisyo la daabacay iyo mala'awaal v{version}. Fariimaha hore waxaa lagu xisaabiyay qoraalka la keydiyay iyo moodeelka hadda socda ee wadahadalka. Kani maaha qiyaas toos ah."
     }
+  },
+  "table": {
+    "copyTable": "Koobi jadwalka",
+    "downloadTable": "Soo dejiso jadwalka",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Loo dhoofiyay sidii CSV",
+    "copyFailed": "Jadwalka lama koobi karin"
+  },
+  "backup": {
+    "intro": {
+      "title": "Kaydi wada sheekaysigaaga — si ammaan ah",
+      "body": "Wada sheekaysigaaga waxa lagu sirgaxaa (encrypt) qalabkan ka hor inta wax kasta la xareyn. Anagu waligeen ma akhrisan karno sheekaysigaaga.",
+      "keyWarning": "Furaha soo celinta waxa lagu abuuraa qalabkan. Anagu ma aragno mana kuu soo celin karno — haddii aad lumineyso, waad waayi doontaa kaydka.",
+      "create": "Abuur fureeyga & kaydi",
+      "decline": "Hada ma ahan — wad sheekaysiga qalabkan oo kaliya ha ahaado"
+    },
+    "ceremony": {
+      "titleCreate": "Kaydi furahaaga soo celinta",
+      "titleRotate": "Kaydi furahaaga cusub ee soo celinta",
+      "titleView": "Furahaaga soo celinta",
+      "description": "Furahan waa dariiqa kaliya ee aad ugu soo celin karto kaydka la’eg qalab kale. Ku kaydi meel ammaan ah — kumanaan kuu soo celin karno.",
+      "copy": "Koobi",
+      "copied": "La koobiyay!",
+      "download": "Soo dejiso .txt",
+      "showQr": "Tuso QR code-ka",
+      "hideQr": "Qari QR code-ka",
+      "savedCheckbox": "Waxaan furaha soocelinta meel ammaan ah ku keydsaday",
+      "saveFirstHint": "Koobi ama soo dejiso furahaaga ka hor intaadan sii wadin.",
+      "continue": "Sii wad",
+      "done": "Dhameystiran",
+      "cancel": "Jooji",
+      "cancelConfirmTitle": "Jooji dejinta kaydka?",
+      "cancelConfirmBody": "Sheekooyinkaaga lama kaydin doono. Mar kasta waxaad ka shaqeyn kartaa kayd sirgaxan ah Dejinta gudaheeda.",
+      "cancelConfirmRotateBody": "Furahaaga soo celinta horay ayaa loo bedelay. Mar kasta waxaad ku arki kartaa Dejinta gudaheeda.",
+      "cancelConfirmConfirm": "Haa, jooji",
+      "cancelConfirmDismiss": "Dib u noqo",
+      "loadError": "Furaha soo celinta lama soo dejin karo qalabkan."
+    },
+    "file": {
+      "heading": "Furaha soo celinta kaydka sheekada",
+      "warning": "Furahan si ammaan ah u hay. Qof kasta oo haysta wuu akhrisan karaa kaydkaaga; la’aantiis lama soo celin karo kaydka."
+    },
+    "progress": {
+      "titleCreate": "Kaydkaaga waa la dejinayaa",
+      "titleRotate": "Furahaaga soo celinta waa la bedelayaa",
+      "encrypting": "{count, plural, one {Sheekada # waa la sirgaxayaa oo la keydinayaa…} other {Sheekooyinka # waa la sirgaxayaa oo la keydinayaa…}}",
+      "success": "{count, plural, one {Kaydku waa dhammaatay. Sheekada # waa la ilaaliyay.} other {Kaydku waa dhammaatay. Sheekooyinka # waa la ilaaliyay.}}",
+      "error": "Kaydka wuu fashilmay. Sheekooyinkaaga wali waxa ay ku jiraan qalabkan.",
+      "retry": "Dib isku day",
+      "close": "Xidh",
+      "done": "Dhameystiran"
+    },
+    "input": {
+      "label": "Furaha soo celinta",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Furayaasha marna ma lihi xarfaha O, I ama L.",
+      "checksumError": "Furahan ma saxna — fadlan eeg in aad qalad gelisay.",
+      "formatError": "Tani ma aha furaha soo-kabashada.",
+      "incomplete": "Sii qorista — furaha soo-kabashada wuxuu leeyahay 56 xaraf.",
+      "valid": "Furaha wuu saxan yahay."
+    },
+    "restore": {
+      "title": "Soo celi wada sheekaysigaaga",
+      "successTitle": "Kaydkii waa la soo celiyey",
+      "promptBody": "Waxaan helnay kayd siraysan oo ku saabsan akoonkaaga. Geli furahaaga soo-kabashada si aad ugu soo celiso qalabkan.",
+      "submit": "Soo celi kaydka",
+      "skip": "Ka bood — ku billaaw cusub qalabkan",
+      "restoring": "Waa la furayaa oo la soo celinayaa wada sheekaysigaaga…",
+      "successBody": "{count, plural, one {# wada sheekaysi waa la soo celiyey.} other {# wada sheekaysi ayaa la soo celiyey.}}",
+      "wrongKey": "Furahan wuu saxan yahay, laakiin ma furo kaydkani. Haddii aad furaha bedeshay, adeegsada furaha ugu dambeeyay.",
+      "corrupt": "Kaydkan lama akhriyi karo — waxaa laga yaabaa inuu dhaawacmay. Waxaad ka bilaabi kartaa qalabkan ama mar kale isku dayi kartaa.",
+      "networkError": "Lama gaarin adeegga kaydka. Fadlan hubi isku xirkaaga oo mar kale isku day.",
+      "tryAgain": "Tijaabi furaha kale",
+      "close": "Dhameystiran"
+    },
+    "enterKey": {
+      "title": "Geli furahaaga cusub ee soo-kabashada",
+      "body": "Furahaaga soo-kabashada ayaa laga bedelay qalab kale. Geli furaha cusub si kaydinta dib loogu bilaabo qalabkan.",
+      "submit": "Isticmaal furahan"
+    },
+    "banner": {
+      "keyMismatchTitle": "Kaydinta way istaagtay — furahaaga soo-kabashada ayaa laga bedelay qalab kale.",
+      "enterNewKey": "Geli furaha cusub",
+      "resetBackup": "Dib u deji kaydka",
+      "resetConfirmTitle": "Ma dib u dejisaa kaydka adigoo isticmaalaya furaha qalabkan?",
+      "resetConfirmBody": "Kaydka jira waxaa lagu bedeli doonaa wada sheekaysiga qalabkan, waxaana lagu xiri doonaa furaha qalabkan. Qalabka kale waxay u baahnaan doonaan furaha soo-kabashada qalabkan.",
+      "resetConfirmAction": "Dib u deji kaydka",
+      "remoteMissingTitle": "Kaydkaaga mar dambe server-kii kuma jiro. Kaydinta way istaagtay.",
+      "backUpAgain": "Markale kaydi",
+      "dismiss": "Xidh"
+    },
+    "rotate": {
+      "confirmTitle": "Ma rabtaa inaad beddesho furahaaga soo-kabashada?",
+      "confirmBody": "Kaydkaaga waxaa dib loogu xiri doonaa fure cusub, furehii hore-na wuu joojin doonaa shaqadiisa. Waa inaad keydiso furaha cusub oo aad gelisaa qalabkaaga kale.",
+      "confirmAction": "Beddel furaha"
+    },
+    "toast": {
+      "enrollLater": "Waad kartid inaad dhaqaajiso kayd siraysan mar kasta oo aad ku jirto Settings.",
+      "keyUpdated": "Furaha soo-kabashada waa la cusboonaysiiyay. Kaydinta waa la sii waday.",
+      "resetDone": "Kaydka waxaa dib loogu dejiyey furaha qalabkan.",
+      "backupRestarted": "Kayd cusub ayaa la sameeyay mar kale.",
+      "opFailed": "Wax qalad ah ayaa dhacay. Fadlan mar kale isku day."
+    },
+    "settings": {
+      "statusOn": "Kaydku wuu shaqaynayaa",
+      "statusOff": "Kaydku waa dansan yahay",
+      "offDescription": "Wada sheekaysiyadaadu waxay ku jiraan browser-kan kaliya. Dhallac kayd siraysan si aad u sugto una soo ceshato qalabka kale. Wada sheekaysiyadaada waa la xiriyaa qalabkaaga — annagu waligeen ma akhrin karno.",
+      "turnOn": "Dhallac kaydinta",
+      "restoreTitle": "Kayd hore ayaa u jira akoonkaaga",
+      "restoreDescription": "Geli furahaaga soo-kabashada si aad ugu soo celiso qalabkan.",
+      "restore": "Soo celi kaydka",
+      "lastBackup": "Kaydkii ugu dambeeyay: {time}",
+      "lastBackupNever": "Wali lama samayn kayd",
+      "keyFingerprint": "Fure ····-{tail}",
+      "syncState": {
+        "idle": "Waxaa la sugayaa in la isu waafajiyo",
+        "syncing": "Waxaa la kaydinayaa…",
+        "ok": "Waa mid la cusbooneysiiyay",
+        "keyOutOfDate": "La hakiyey — furaha soo-kabashada ayaa laga bedelay qalab kale",
+        "remoteMissing": "La hakiyay — kaydka waxaa laga saaray server-ka",
+        "error": "Isku daygii ugu dambeeyay ee kaydka wuu fashilmay"
+      },
+      "backUpNow": "Hadda kaydi",
+      "backUpNowSuccess": "Kaydku wuu dhammaaday",
+      "backUpNowFailure": "Kaydku wuu fashilmay — fariimahaaga qalabkan isma bedelin",
+      "viewKey": "Eeg furaha soo celinta",
+      "changeKey": "Beddel furaha soo celinta",
+      "dangerTitle": "Aagga khatarta",
+      "turnOffDelete": "Dami oo tirtir kaydka",
+      "turnOffConfirmTitle": "Ma damisaa kaydka?",
+      "turnOffConfirmMessage": "Tani waxay tirtiraysaa kaydka qalab kasta oo server-kayaga ah. Fariimaha qalabkan way sii jiri doonaan. Waad dib u hawlgelin kartaa kaydka adigoo isticmaalaya fure cusub oo soo celin ah.",
+      "turnOffConfirmAction": "Tirtir kaydka",
+      "turnOffSuccess": "Kaydka waa la damiyay lana tirtiray",
+      "turnOffFailure": "Lama tirtiri karin kaydka. Fadlan isku day mar kale."
+    }
+  },
+  "memories": {
+    "title": "Xasuuso",
+    "description": "U oggolow kaaliyaha inuu xasuusto xaqiiqooyin lagama maarmaan ah sida doorkaaga, doorbidyada, iyo mashruucyada socda — oo u adeegsado wada sheekaysigaaga.",
+    "enableToggle": "Hawl geli xasuuso",
+    "privacyNote": "Xaqiiqooyinka waxaa lagu kaydiyaa browser-kan oo kaliya, waxaana loola socdaa sheekaysigaaga si jawaabaha loogu shakhsiyeeyo.",
+    "empty": "Wax xasuuso ah ma jiraan weli. Xaqiiqooyin mudan in la xasuusto si toos ah ayaa looga kaydiyaa sheekaysigaaga.",
+    "savedOn": "Lagu kaydiyay {date}",
+    "deleteMemory": "Tirtir xasuusta",
+    "clearAll": "Tirtir xasuusoo dhan",
+    "clearAllConfirmQuestion": "Ma tirtirtaa xasuusoo dhan? Tan dib looma saari karo.",
+    "clearAllConfirm": "Tirtir dhammaan",
+    "cancel": "Ka bax"
+  },
+  "contextWindow": {
+    "label": "Daahfuran macnaha guud",
+    "value": "{count} fariimood",
+    "fewer": "Fariimo yar",
+    "more": "Fariimo badan",
+    "description": "Fariimaha duugga ah ee ka baxsan xadkan waa la soo koobay waxaana loo diraa sidii macnaha guud."
+  },
+  "agentAccess": {
+    "title": "Helitaanka wakiilka",
+    "description": "Maamul cidda isticmaali karta wakiillada wadajirka ah ee Foundry. Xeerarka waxay keliya xadidayaan waxa ay oggol yihiin helitaankaaga Azure — waligood ma furi karaan helitaan Azure diidayo.",
+    "backToChat": "Ku noqo sheekada",
+    "loading": "Wakiillo iyo xeerar waa la soo dhigayaa…",
+    "loadError": "Lama soo rogi karin xogta helitaanka wakiilka.",
+    "rulesUnavailableWarning": "Xeerarka helitaanka lama soo rogi karo keydka. Wacitaanka wakiilka hadda waa la xanibay xeerarna lama beddeli karo.",
+    "retry": "Mar kale isku day",
+    "rulesTab": "Xeerarka wakiilka",
+    "localAdminsTab": "Maamulayaasha maxalliga ah",
+    "noAgents": "Wakiillo ma jiraan oo la maamulo.",
+    "sourceLabel": "Isha",
+    "notDiscoverable": "Adigu ma heli kartid",
+    "notDiscoverableHint": "Xeer ayaa u yaalla wakiilkan, balse ma aha mid aad adigu ka heli karto — waxaa laga yaabaa in la magac beddelay, helitaankaaga Azure kuma fidin, ama xeerka helitaankiisu kuma jiro adiga.",
+    "accessEveryone": "Dhammaan",
+    "accessRestricted": "Xadidan",
+    "edit": "Wax ka beddel",
+    "updatedByLine": "Waxa ugu dambeysay ee cusboonaysiiyay {user} {date}",
+    "accessTypeLabel": "Yaa isticmaali kara wakiilkan",
+    "everyoneDescription": "Qof kastoo horey ugu leh helitaan wakiilkan iyada oo la marsiinayo Azure.",
+    "restrictedDescription": "Kaliya isticmaalayaasha iyo domainnada hoos ku taxan.",
+    "allowDomainsLabel": "Bogagga la oggol yahay",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Isticmaalayaasha la oggol yahay",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Riix Enter si aad u darto",
+    "removeChip": "Ka saar",
+    "groupsLabel": "Kooxo la oggol yahay",
+    "groupsPendingConsent": "Helitaanka kooxda waxa uu sugayaa oggolaanshaha admin-ka tenant-ka; weli lama beddeli karo.",
+    "restrictedEmptyWarning": "Lama diiwaan gelin isticmaalayaal ama bogag — qofna ma isticmaali karo wakiilkan.",
+    "save": "Kaydi",
+    "saving": "Waa la kaydinayaa…",
+    "cancel": "Jooji",
+    "saveSuccess": "Xeerka helitaanka waa la keydiyay.",
+    "deleteSuccess": "Xeerkii helitaanka waa la saaray — qof walba wuu adeegsan karaa wakiilkan mar kale.",
+    "saveError": "Lama kaydin karin. Fadlan isku day mar kale.",
+    "conflictError": "Qof kale ayaa wax ka beddelay inta aad wax ka beddelaysay. Dib u cusboonaysii si aad u hesho nooca ugu dambeya, markaas dib u beddel.",
+    "reload": "Dib u cusboonaysii",
+    "localAdminsDescription": "U xilsaari maamulka xeerarka wakiilo gaar ah adigoon dib u gelin. Maamulayaasha maxalliga ah waxay wax ka beddeli karaan kaliya wakiilada loo xilsaaray.",
+    "noLocalAdmins": "Ma jiro maamule maxalli ah oo la dejiyay.",
+    "addLocalAdmin": "Ku dar maamule maxalli ah",
+    "emailLabel": "Email",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Ka saar maamule maxalli ah",
+    "delegatedAgentsLabel": "Wakiilo loo xilsaaray",
+    "noDelegatedAgents": "Ma jiraan wakiillo la heli karo oo la xilsaaro.",
+    "unknownAgentKey": "Furaha wakiilka lama yaqaan",
+    "configSaveSuccess": "Maamulayaasha maxalliga ah waa la kaydiyay.",
+    "configConflictError": "Qof kale ayaa wax ka beddelay liiska maamulayaasha maxalliga ah inta aad sixaysay. Dib u cusboonaysii oo isku day mar kale."
   }
 }

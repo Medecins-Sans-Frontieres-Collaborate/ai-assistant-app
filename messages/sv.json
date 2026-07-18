@@ -849,7 +849,8 @@
     "processingAudio": "Bearbetar ljud...",
     "ttsError": "Fel vid generering av ljud. Försök igen.",
     "unsupportedMessageType": "Fel vid visning av meddelande: Ej stödd meddelandetyp",
-    "addLanguageOption": "Lägg till \"{name}\"…"
+    "addLanguageOption": "Lägg till \"{name}\"…",
+    "sources": "Källor"
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",
@@ -1178,7 +1179,10 @@
     "customInstructionsLabel": "Anpassade instruktioner*",
     "defaultTemperatureLabel": "Standardtemperatur*",
     "Usage & Impact": "Användning & påverkan",
-    "Connectors": "Anslutningar"
+    "Connectors": "Anslutningar",
+    "Backup": "Säkerhetskopiering",
+    "Memories": "Minnen",
+    "Agent Access": "Agentåtkomst"
   },
   "notFound": {
     "lostDog": "Förlorad hund"
@@ -3224,5 +3228,213 @@
       "lastRequest": "Senaste förfrågan",
       "disclaimer": "Uppskattningar per förfrågan baserade på rapporterade eller uppskattade tokenantal, med hjälp av publicerade genomsnitt och antaganden v{version}. Äldre meddelanden bakåträknares från lagrad text och konversationens nuvarande modell. Ingen mätning."
     }
+  },
+  "table": {
+    "copyTable": "Kopiera tabell",
+    "downloadTable": "Ladda ned tabell",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Exporterad som CSV",
+    "copyFailed": "Misslyckades att kopiera tabell"
+  },
+  "backup": {
+    "intro": {
+      "title": "Säkerhetskopiera dina chattar — säkert",
+      "body": "Dina konversationer krypteras på den här enheten innan något laddas upp. Vi kan aldrig läsa dina chattar.",
+      "keyWarning": "Din återställningsnyckel skapas på den här enheten. Vi ser den aldrig och kan inte återställa den åt dig — om du förlorar nyckeln förlorar du säkerhetskopian.",
+      "create": "Skapa min nyckel och säkerhetskopiera",
+      "decline": "Inte nu — behåll chattarna endast på den här enheten"
+    },
+    "ceremony": {
+      "titleCreate": "Spara din återställningsnyckel",
+      "titleRotate": "Spara din nya återställningsnyckel",
+      "titleView": "Din återställningsnyckel",
+      "description": "Den här nyckeln är det enda sättet att återställa din säkerhetskopia på en annan enhet. Förvara den säkert — vi kan inte återställa den åt dig.",
+      "copy": "Kopiera",
+      "copied": "Kopierat!",
+      "download": "Ladda ned .txt",
+      "showQr": "Visa QR-kod",
+      "hideQr": "Dölj QR-kod",
+      "savedCheckbox": "Jag har sparat min återställningsnyckel på en säker plats",
+      "saveFirstHint": "Kopiera eller ladda ned din nyckel innan du fortsätter.",
+      "continue": "Fortsätt",
+      "done": "Klart",
+      "cancel": "Avbryt",
+      "cancelConfirmTitle": "Avbryt säkerhetskopieringsinställning?",
+      "cancelConfirmBody": "Dina chattar kommer inte att säkerhetskopieras. Du kan aktivera krypterad säkerhetskopiering när som helst i Inställningar.",
+      "cancelConfirmRotateBody": "Din återställningsnyckel har redan ändrats. Du kan se den när som helst i Inställningar.",
+      "cancelConfirmConfirm": "Ja, avbryt",
+      "cancelConfirmDismiss": "Gå tillbaka",
+      "loadError": "Det gick inte att ladda din återställningsnyckel på den här enheten."
+    },
+    "file": {
+      "heading": "Återställningsnyckel för chattsäkerhetskopia",
+      "warning": "Förvara denna nyckel säkert. Alla som har den kan läsa din säkerhetskopia; utan den kan säkerhetskopian inte återställas."
+    },
+    "progress": {
+      "titleCreate": "Ställer in din säkerhetskopia",
+      "titleRotate": "Byter din återställningsnyckel",
+      "encrypting": "{count, plural, one {Krypterar och säkerhetskopierar # konversation…} other {Krypterar och säkerhetskopierar # konversationer…}}",
+      "success": "{count, plural, one {Säkerhetskopiering klar. # konversation är skyddad.} other {Säkerhetskopiering klar. # konversationer är skyddade.}}",
+      "error": "Säkerhetskopieringen misslyckades. Dina chattar finns kvar på den här enheten.",
+      "retry": "Försök igen",
+      "close": "Stäng",
+      "done": "Klart"
+    },
+    "input": {
+      "label": "Återställningsnyckel",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Nycklarna innehåller aldrig bokstäverna O, I eller L.",
+      "checksumError": "Den nyckeln verkar inte stämma — kontrollera om det finns stavfel.",
+      "formatError": "Det här ser inte ut som en återställningsnyckel.",
+      "incomplete": "Fortsätt skriva — en återställningsnyckel har 56 tecken.",
+      "valid": "Nyckeln verkar giltig."
+    },
+    "restore": {
+      "title": "Återställ dina chattar",
+      "successTitle": "Backup återställd",
+      "promptBody": "Vi hittade en krypterad backup för ditt konto. Ange din återställningsnyckel för att återställa den på den här enheten.",
+      "submit": "Återställ backup",
+      "skip": "Hoppa över — börja om på denna enhet",
+      "restoring": "Dekrypterar och återställer dina chattar…",
+      "successBody": "{count, plural, one {# konversation återställd.} other {# konversationer återställda.}}",
+      "wrongKey": "Den nyckeln är giltig, men den låser inte upp denna backup. Om du har ändrat nyckel, använd den senaste.",
+      "corrupt": "Backuppen kunde inte läsas — den kan vara skadad. Du kan börja om på denna enhet eller försöka igen senare.",
+      "networkError": "Det gick inte att nå backup-tjänsten. Kontrollera din anslutning och försök igen.",
+      "tryAgain": "Prova en annan nyckel",
+      "close": "Klar"
+    },
+    "enterKey": {
+      "title": "Ange din nya återställningsnyckel",
+      "body": "Din återställningsnyckel har ändrats på en annan enhet. Ange den nya nyckeln för att återuppta backup på denna enhet.",
+      "submit": "Använd denna nyckel"
+    },
+    "banner": {
+      "keyMismatchTitle": "Backup pausad — din återställningsnyckel ändrades på en annan enhet.",
+      "enterNewKey": "Ange ny nyckel",
+      "resetBackup": "Återställ backup",
+      "resetConfirmTitle": "Återställ backup med denna enhets nyckel?",
+      "resetConfirmBody": "Den befintliga backupen ersätts med denna enhets chattar, krypterade med denna enhets nyckel. Andra enheter kommer att behöva denna enhets återställningsnyckel.",
+      "resetConfirmAction": "Återställ backup",
+      "remoteMissingTitle": "Din backup finns inte längre på servern. Backup är pausad.",
+      "backUpAgain": "Säkerhetskopiera igen",
+      "dismiss": "Stäng"
+    },
+    "rotate": {
+      "confirmTitle": "Byt återställningsnyckel?",
+      "confirmBody": "Din backup kommer att krypteras om med en ny nyckel, och den gamla slutar fungera. Du måste spara den nya nyckeln och ange den på dina andra enheter.",
+      "confirmAction": "Byt nyckel"
+    },
+    "toast": {
+      "enrollLater": "Du kan när som helst slå på krypterad backup i Inställningar.",
+      "keyUpdated": "Återställningsnyckel uppdaterad. Backup återupptagen.",
+      "resetDone": "Backup återställd med denna enhets nyckel.",
+      "backupRestarted": "Backup skapad igen.",
+      "opFailed": "Något gick fel. Försök igen."
+    },
+    "settings": {
+      "statusOn": "Backup är påslagen",
+      "statusOff": "Backup är avstängd",
+      "offDescription": "Dina chattar finns endast i denna webbläsare. Aktivera krypterad backup för att skydda dem och återställa på andra enheter. Chattar är krypterade på din enhet — vi kan aldrig läsa dem.",
+      "turnOn": "Aktivera backup",
+      "restoreTitle": "En backup finns redan för ditt konto",
+      "restoreDescription": "Ange din återställningsnyckel för att återställa den på denna enhet.",
+      "restore": "Återställ backup",
+      "lastBackup": "Senaste backup: {time}",
+      "lastBackupNever": "Ingen backup har genomförts än",
+      "keyFingerprint": "Nyckel ····-{tail}",
+      "syncState": {
+        "idle": "Väntar på synkronisering",
+        "syncing": "Säkerhetskopierar…",
+        "ok": "Uppdaterad",
+        "keyOutOfDate": "Pausad — återställningsnyckeln ändrades på en annan enhet",
+        "remoteMissing": "Pausad — säkerhetskopian har tagits bort från servern",
+        "error": "Senaste försök till säkerhetskopiering misslyckades"
+      },
+      "backUpNow": "Säkerhetskopiera nu",
+      "backUpNowSuccess": "Säkerhetskopiering klar",
+      "backUpNowFailure": "Säkerhetskopiering misslyckades — dina chattar är oförändrade på den här enheten",
+      "viewKey": "Visa återställningsnyckel",
+      "changeKey": "Byt återställningsnyckel",
+      "dangerTitle": "Farligt område",
+      "turnOffDelete": "Stäng av och ta bort säkerhetskopian",
+      "turnOffConfirmTitle": "Stäng av säkerhetskopiering?",
+      "turnOffConfirmMessage": "Detta tar bort din säkerhetskopia från våra servrar för alla enheter. Chattar på denna enhet finns kvar. Du kan aktivera säkerhetskopiering igen senare med en ny återställningsnyckel.",
+      "turnOffConfirmAction": "Ta bort säkerhetskopia",
+      "turnOffSuccess": "Säkerhetskopiering avstängd och borttagen",
+      "turnOffFailure": "Det gick inte att ta bort säkerhetskopian. Försök igen."
+    }
+  },
+  "memories": {
+    "title": "Minnen",
+    "description": "Låt assistenten komma ihåg varaktiga fakta du delar — som din roll, dina preferenser och pågående projekt — och använda dem i olika konversationer.",
+    "enableToggle": "Aktivera minnen",
+    "privacyNote": "Fakta lagras endast i denna webbläsare och inkluderas i dina chattar för att anpassa svaren.",
+    "empty": "Inga minnen ännu. Fakta värda att minnas sparas automatiskt från dina konversationer.",
+    "savedOn": "Sparad {date}",
+    "deleteMemory": "Ta bort minne",
+    "clearAll": "Rensa alla minnen",
+    "clearAllConfirmQuestion": "Ta bort alla minnen? Detta kan inte ångras.",
+    "clearAllConfirm": "Ta bort alla",
+    "cancel": "Avbryt"
+  },
+  "contextWindow": {
+    "label": "Kontextfönster",
+    "value": "{count} meddelanden",
+    "fewer": "Färre meddelanden",
+    "more": "Fler meddelanden",
+    "description": "Äldre meddelanden utöver denna gräns sammanfattas och skickas som kontext."
+  },
+  "agentAccess": {
+    "title": "Agenttillgång",
+    "description": "Kontrollera vilka användare som kan använda delade Foundry-agenter. Regler kan endast ytterligare begränsa vad en användares egna Azure-tillgång redan tillåter — de kan aldrig ge åtkomst som Azure nekar.",
+    "backToChat": "Tillbaka till chatt",
+    "loading": "Laddar agenter och regler…",
+    "loadError": "Det gick inte att ladda information om agenttillgång.",
+    "rulesUnavailableWarning": "Åtkomstregler kunde inte hämtas från lagring. Agentanrop är för närvarande blockerade och regler kan inte redigeras.",
+    "retry": "Försök igen",
+    "rulesTab": "Agentregler",
+    "localAdminsTab": "Lokala administratörer",
+    "noAgents": "Inga agenter att hantera.",
+    "sourceLabel": "Källa",
+    "notDiscoverable": "Inte upptäckbar för dig",
+    "notDiscoverableHint": "En regel finns för denna agent, men den är inte synlig för dig — den kan ha bytt namn, din Azure-åtkomst når inte den, eller dess åtkomstregel inkluderar inte dig.",
+    "accessEveryone": "Alla",
+    "accessRestricted": "Begränsad",
+    "edit": "Redigera",
+    "updatedByLine": "Senast uppdaterad av {user} den {date}",
+    "accessTypeLabel": "Vem kan använda denna agent",
+    "everyoneDescription": "Alla som redan kan nå denna agent via sin Azure-åtkomst.",
+    "restrictedDescription": "Endast användare och domäner som listas nedan.",
+    "allowDomainsLabel": "Tillåtna domäner",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Tillåtna användare",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Tryck på Enter för att lägga till",
+    "removeChip": "Ta bort",
+    "groupsLabel": "Tillåtna grupper",
+    "groupsPendingConsent": "Grupptillgång väntar på samtycke från hyresadministratör och kan inte redigeras än.",
+    "restrictedEmptyWarning": "Inga användare eller domäner är listade — ingen kommer att kunna använda denna agent.",
+    "save": "Spara",
+    "saving": "Sparar…",
+    "cancel": "Avbryt",
+    "saveSuccess": "Åtkomstregel sparad.",
+    "deleteSuccess": "Åtkomstregeln borttagen — alla kan nu använda denna agent igen.",
+    "saveError": "Kunde inte spara. Försök igen.",
+    "conflictError": "Någon annan ändrade detta medan du redigerade. Ladda om för att få den senaste versionen och försök igen.",
+    "reload": "Ladda om",
+    "localAdminsDescription": "Delegera regelhantering för specifika agenter utan ominstallation. Lokala administratörer kan endast redigera regler för sina tilldelade agenter.",
+    "noLocalAdmins": "Inga lokala administratörer konfigurerade.",
+    "addLocalAdmin": "Lägg till lokal administratör",
+    "emailLabel": "E-post",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Ta bort lokal administratör",
+    "delegatedAgentsLabel": "Delegerade agenter",
+    "noDelegatedAgents": "Inga agenter tillgängliga för delegering.",
+    "unknownAgentKey": "Okänd agentnyckel",
+    "configSaveSuccess": "Lokala administratörer sparade.",
+    "configConflictError": "Någon annan ändrade listan över lokala administratörer medan du redigerade. Ladda om och försök igen."
   }
 }

@@ -907,7 +907,8 @@
     "processingAudio": "Ana sarrafa sauti...",
     "ttsError": "Kuskure wurin ƙirƙirar sauti. Da fatan za a sake gwadawa.",
     "unsupportedMessageType": "Kuskure wurin nuna saƙo: Nau'in saƙo baya dacewa",
-    "addLanguageOption": "Ƙara \"{name}\"…"
+    "addLanguageOption": "Ƙara \"{name}\"…",
+    "sources": "Tushen bayanai"
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",
@@ -1331,7 +1332,10 @@
     "customInstructionsLabel": "Umarni na musamman*",
     "defaultTemperatureLabel": "Yanayin Zafi na Asali*",
     "Usage & Impact": "Amfani & Tasiri",
-    "Connectors": "Haɗa-haɗa"
+    "Connectors": "Haɗa-haɗa",
+    "Backup": "Ajiyayyen bayanai",
+    "Memories": "Tarihi",
+    "Agent Access": "Izinin wakili"
   },
   "emptyState": {
     "greeting": "Ta yaya zan iya taimaka?",
@@ -3208,5 +3212,213 @@
       "lastRequest": "Bukata ta ƙarshe",
       "disclaimer": "Kimantawa na kowane bukata daga adadin token da aka ruwaito ko kimanta, ana amfani da matsakaici da ƙa’idoji da aka wallafa v{version}. Tsoffin saƙonni an sake lissafawa su daga rubutun da aka adana da kuma nau'in samfurin tattaunawar yanzu. Ba auna ko gwadawa ba ne."
     }
+  },
+  "table": {
+    "copyTable": "Kwafi tebur",
+    "downloadTable": "Zazzage tebur",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "An fitar da shi azaman CSV",
+    "copyFailed": "An kasa kwafin tebur"
+  },
+  "backup": {
+    "intro": {
+      "title": "Yi ajiyar hirarka — cikin tsaro",
+      "body": "An keɓe hirarka a kan wannan na'urar kafin a loda wani abu. Ba zamu taɓa karanta hirarka ba.",
+      "keyWarning": "Ana ƙirƙira maɓallin farfadowa a wannan na'urar. Ba mu taɓa ganinsa ba kuma ba za mu iya dawo muku da shi ba — rasa maɓallin na nufin rasa ajiyar.",
+      "create": "Ƙirƙiri maɓallina & yi ajiyar baya",
+      "decline": "Ba yanzu ba — ajiye hira a wannan na'urar kawai"
+    },
+    "ceremony": {
+      "titleCreate": "Ajiye maɓallin farfadowarka",
+      "titleRotate": "Ajiye sabon maɓallin farfadowarka",
+      "titleView": "Maɓallin farfadowarka",
+      "description": "Wannan maɓallin shi ne kaɗai hanyar dawo da ajiyarka a wata na'ura. Ajiye shi a wuri mai aminci — ba za mu iya dawo maka da shi ba.",
+      "copy": "Kwafi",
+      "copied": "An kwafi!",
+      "download": "Zazzage .txt",
+      "showQr": "Nuna QR code",
+      "hideQr": "Boye QR code",
+      "savedCheckbox": "Na ajiye maɓallin farfadowata a wuri mai aminci",
+      "saveFirstHint": "Kwafa ko zazzage maɓallinka kafin ci gaba.",
+      "continue": "Ci gaba",
+      "done": "An gama",
+      "cancel": "Soke",
+      "cancelConfirmTitle": "A soke saitin ajiyar baya?",
+      "cancelConfirmBody": "Ba za a ajiye hirarka ba. Za ka iya kunna ajiyar baya mai kariya a kowane lokaci a Saituna.",
+      "cancelConfirmRotateBody": "An riga an canja maɓallin farfadowarka. Za ka iya duba shi a kowane lokaci a Saituna.",
+      "cancelConfirmConfirm": "Eh, soke",
+      "cancelConfirmDismiss": "Komawa baya",
+      "loadError": "An kasa ɗora maɓallin farfadowarka a wannan na'urar."
+    },
+    "file": {
+      "heading": "Maɓallin dawo da ajiyar hirarka",
+      "warning": "Ajiye wannan maɓalli yadda ya kamata. Duk wanda ke da shi na iya ganin ajiyarka; babu shi ba za a iya dawo da ajiyar ba."
+    },
+    "progress": {
+      "titleCreate": "Ana saita ajiyar bayananka",
+      "titleRotate": "Ana canza maɓallin farfadowarka",
+      "encrypting": "{count, plural, one {Ana ƙunsar bayanai da ajiyar hira guda #…} other {Ana ƙunsar bayanai da ajiyar hira #…}}",
+      "success": "{count, plural, one {Ajiyar bayanai ta kammala. Hira guda # ta samu kariya.} other {Ajiyar bayanai ta kammala. Hira # sun samu kariya.}}",
+      "error": "Ajiyar baya ta ƙi yiwuwa. Hirarka har yanzu tana wannan na'urar.",
+      "retry": "Sake gwadawa",
+      "close": "Rufe",
+      "done": "An gama"
+    },
+    "input": {
+      "label": "Maɓallin farfadowa",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Maɓallan baya ƙunsar haruffan O, I ko L.",
+      "checksumError": "Mabudin bai dace ba — duba idan akwai kuskure wajen rubutu.",
+      "formatError": "Wannan ba kamar mabudin dawo da bayanai ba ne.",
+      "incomplete": "Ci gaba da rubutu — mabuɗin dawo da bayanai yana da haruffa 56.",
+      "valid": "Mabudin yana daidai."
+    },
+    "restore": {
+      "title": "Mayar da hirarka",
+      "successTitle": "An dawo da ajiyar bayanai",
+      "promptBody": "Mun sami ajiyar bayanai mai ƙarewa da mabuɗin dawo da bayanai na asusunka. Shigar da mabuɗin don dawo da shi a wannan na’urar.",
+      "submit": "Dawo da ajiyar bayanai",
+      "skip": "Tsallake — fara sabo a wannan na’urar",
+      "restoring": "Ana fassara da dawo da hirarka…",
+      "successBody": "{count, plural, one {# hira an dawo da ita.} other {# hirori an dawo da su.}}",
+      "wrongKey": "Mabudin ya dace, amma ba zai buɗe wannan ajiyar ba. Idan ka sauya mabuɗi, ka yi amfani da sabon mabuɗin.",
+      "corrupt": "Ba za a iya karanta wannan ajiyar ba — wata kila ta lalace. Zaka iya fara sabo ko ka gwada daga baya.",
+      "networkError": "An kasa haɗawa da sabar ajiyar bayanai. Duba haɗin ka ka kuma sake gwadawa.",
+      "tryAgain": "Gwada wani mabuɗi",
+      "close": "An gama"
+    },
+    "enterKey": {
+      "title": "Shigar da sabon mabuɗin dawo da bayanai",
+      "body": "An sauya mabuɗin dawo da bayanai a wata na’ura. Shigar da sabon mabuɗin don ci gaba da ajiyar bayanai a wannan na’urar.",
+      "submit": "Yi amfani da wannan mabuɗin"
+    },
+    "banner": {
+      "keyMismatchTitle": "An dakatar da ajiyar bayanai — an sauya mabuɗin dawo da bayanai a wata na’ura.",
+      "enterNewKey": "Shigar da sabon mabuɗi",
+      "resetBackup": "Sake saita ajiyar bayanai",
+      "resetConfirmTitle": "Sake saita ajiyar bayanai da mabuɗin wannan na’ura?",
+      "resetConfirmBody": "Ajiyar bayanai na yanzu zai canza zuwa hirar wannan na’ura, za a ƙare shi da mabuɗin wannan na’ura. Sauran na’urori za su buƙaci mabuɗin dawo da bayanan wannan na’ura.",
+      "resetConfirmAction": "Sake saita ajiyar bayanai",
+      "remoteMissingTitle": "Ajiyar bayananka ba ya nan a sabar. An dakatar da ajiyar bayanai.",
+      "backUpAgain": "Yi ajiyar bayanai a karo na gaba",
+      "dismiss": "Rufe"
+    },
+    "rotate": {
+      "confirmTitle": "Sauya mabuɗin dawo da bayanai?",
+      "confirmBody": "Za a ƙara ƙarƙare ajiyar bayananka da sabon mabuɗi, tsohon mabuɗin zai daina aiki. Dole ne ka ajiye sabon mabuɗin sannan ka shigad da shi a sauran na’urorinka.",
+      "confirmAction": "Sauya mabuɗi"
+    },
+    "toast": {
+      "enrollLater": "Zaka iya kunna ajiyar bayanai mai ƙarewa duk lokacin da kake so a Saituna.",
+      "keyUpdated": "An sabunta mabuɗin dawo da bayanai. An ci gaba da ajiyar bayanai.",
+      "resetDone": "An sake saita ajiyar bayanai da mabuɗin wannan na’ura.",
+      "backupRestarted": "An ƙirƙiri ajiyar bayanai a karo na gaba.",
+      "opFailed": "Wani abu ya faru. Da fatan za a sake gwadawa."
+    },
+    "settings": {
+      "statusOn": "Ajiyar bayanai tana kunne",
+      "statusOff": "Ajiyar bayanai a kashe take",
+      "offDescription": "Hirarka na nan kawai a cikin wannan burauza. Kunna ajiyar bayanai mai ƙarewa don kare su tare da dawo da su a sauran na’urori. Hira tana ɗauke da kariya a na'urarka — ba za mu taɓa karanta su ba.",
+      "turnOn": "Kunna ajiyar bayanai",
+      "restoreTitle": "An riga an yi ajiyar bayanai ga asusunka",
+      "restoreDescription": "Shigar da mabuɗin dawo da bayanai don dawo da shi a wannan na’ura.",
+      "restore": "Dawo da ajiyar bayanai",
+      "lastBackup": "Ajiyar karshe: {time}",
+      "lastBackupNever": "Ba a taba gama ajiyar bayanai ba",
+      "keyFingerprint": "Mabuɗi ····-{tail}",
+      "syncState": {
+        "idle": "Ana jiran daidaita bayanai",
+        "syncing": "Ana yin ajiyar bayanai…",
+        "ok": "Na zamani",
+        "keyOutOfDate": "An dakatar — an sauya mabuɗin dawo da bayanai a wata na’ura",
+        "remoteMissing": "An dakatar — an cire ajiyar bayanan daga uwar garke",
+        "error": "Yunkurin ajiyar baya na ƙarshe ya gaza"
+      },
+      "backUpNow": "Yi ajiyar yanzu",
+      "backUpNowSuccess": "An kammala ajiyar bayanai",
+      "backUpNowFailure": "Ajiyar bayanai ta gaza — saƙonninka sun kasance kamar yadda suke a wannan na'ura",
+      "viewKey": "Duba maɓallin dawo da bayanai",
+      "changeKey": "Canza maɓallin dawo da bayanai",
+      "dangerTitle": "Yanki mai haɗari",
+      "turnOffDelete": "Kashe & goge ajiyar bayanai",
+      "turnOffConfirmTitle": "Kashe ajiyar bayanai?",
+      "turnOffConfirmMessage": "Wannan zai goge ajiyar bayanan daga uwar garkenmu a kan tüm na’urori. Saƙonni a wannan na’ura za su zauna. Za ka iya kunna ajiyar bayanai daga baya da sabon maɓallin dawo da bayanai.",
+      "turnOffConfirmAction": "Goge ajiyar bayanai",
+      "turnOffSuccess": "An kashe kuma an goge ajiyar bayanai",
+      "turnOffFailure": "An kasa goge ajiyar bayanai. Da fatan za a sake gwadawa."
+    }
+  },
+  "memories": {
+    "title": "Tunanoni",
+    "description": "Bari mataimaki ya tuna da muhimman bayanai da ka raba — kamar matsayin ka, abubuwan da ka fi so, da ayyukan da kake yi — kuma ya amfanar da su a tattaunawa daban-daban.",
+    "enableToggle": "Kunna tunanoni",
+    "privacyNote": "Ana adana bayanai ne kawai a cikin wannan burauza kuma za a haɗa su cikin saƙonninka don tsara amsoshi.",
+    "empty": "Babu tunanoni tukuna. Ana ajiye abin da ya kamata a tuna daga tattaunawarka kai tsaye.",
+    "savedOn": "An ajiye {date}",
+    "deleteMemory": "Goge tunani",
+    "clearAll": "Share duka tunanoni",
+    "clearAllConfirmQuestion": "A goge dukkan tunanoni? Ba za a iya dawowa da wannan ba.",
+    "clearAllConfirm": "Goge duka",
+    "cancel": "Soke"
+  },
+  "contextWindow": {
+    "label": "Tagar mahallin",
+    "value": "Saƙonni {count}",
+    "fewer": "Ƙarancin saƙonni",
+    "more": "Ƙarin saƙonni",
+    "description": "Ana taƙaita tsoffin saƙonni da suka wuce wannan iyaka kuma ana tura su azaman mahallin."
+  },
+  "agentAccess": {
+    "title": "Samun wakili",
+    "description": "Sarrafa waɗanda za su iya amfani da wakilan Foundry da aka raba. Dokoki suna ƙarin ƙuntata abinda damar Azure ɗin mai amfani ta riga ta bada — ba za su iya bada damar da Azure ta ƙi ba.",
+    "backToChat": "Komawa zuwa hira",
+    "loading": "Ana loda wakilai da dokoki...",
+    "loadError": "An kasa loda bayanan samun wakili.",
+    "rulesUnavailableWarning": "Ba a iya ɗauko dokokin samun dama daga ajiyar bayanai ba. Samun dama ga wakili yana ƙuntatacce yanzu kuma ba za a iya gyara dokokin ba.",
+    "retry": "Sake gwadawa",
+    "rulesTab": "Dokokin wakili",
+    "localAdminsTab": "Ma'aikatan waje",
+    "noAgents": "Babu wakilan da za a sarrafa.",
+    "sourceLabel": "Asali",
+    "notDiscoverable": "Ba za ka iya ganowa ba",
+    "notDiscoverableHint": "Exist dokar ga wannan wakili, amma ba shi a cikin bincikenka — wataƙila an sauya masa suna, damar Azure ɗinka ba ta kai gare shi ba, ko dokar damar ba ta haɗa da kai ba.",
+    "accessEveryone": "Kowa",
+    "accessRestricted": "Ƙuntatacce",
+    "edit": "Gyara",
+    "updatedByLine": "An sabunta ƙarshe daga {user} a {date}",
+    "accessTypeLabel": "Wa zai iya amfani da wannan wakili",
+    "everyoneDescription": "Duk wanda ya riga ya iya kaiwa ga wannan wakilin ta hanyar damar Azure ɗinsu.",
+    "restrictedDescription": "Sai waɗanda ke cikin jerin masu amfani da yankuna da ke ƙasa kawai.",
+    "allowDomainsLabel": "Yankunan da aka yarda dasu",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Masu amfani da aka yarda dasu",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Latsa Enter don ƙara",
+    "removeChip": "Cire",
+    "groupsLabel": "Rukunin da aka yarda dasu",
+    "groupsPendingConsent": "Ba a gama amincewar mai kula da haya kan damar rukunin ba, kuma ba za a iya gyarawa yanzu ba.",
+    "restrictedEmptyWarning": "Babu masu amfani ko yankuna da aka jera — babu wanda zai iya amfani da wannan wakili.",
+    "save": "Ajiye",
+    "saving": "Ana ajiyewa…",
+    "cancel": "Soke",
+    "saveSuccess": "An ajiye dokar izini.",
+    "deleteSuccess": "An cire dokar izini — kowa zai iya amfani da wannan wakili yanzu.",
+    "saveError": "An kasa ajiye. Da fatan za a sake gwadawa.",
+    "conflictError": "Wani ya canza wannan yayin da kake gyarawa. Sabunta don samun sigar baya-bayan nan, sannan ka sake gwadawa.",
+    "reload": "Sabunta",
+    "localAdminsDescription": "Bada damar sarrafa dokokin wasu wakilai ba tare da sake nasaba da su ba. Local admins za su iya gyara dokokin wakilan da aka ba su kawai.",
+    "noLocalAdmins": "Ba a kafa local admins ba.",
+    "addLocalAdmin": "Ƙara local admin",
+    "emailLabel": "Imel",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Cire local admin",
+    "delegatedAgentsLabel": "Wakilan da aka danƙa",
+    "noDelegatedAgents": "Babu wakilan da za a danƙa.",
+    "unknownAgentKey": "Maballin wakili ba a sani ba",
+    "configSaveSuccess": "An ajiye local admins.",
+    "configConflictError": "Wani ya canza jerin local admin yayin da kake gyarawa. Sabunta kuma sake gwadawa."
   }
 }

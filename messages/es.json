@@ -795,7 +795,8 @@
     "processingAudio": "Procesando audio...",
     "ttsError": "Error al generar el audio. Intente nuevamente.",
     "unsupportedMessageType": "Error al mostrar el mensaje: Tipo de mensaje no compatible",
-    "addLanguageOption": "Agregar \"{name}\"…"
+    "addLanguageOption": "Agregar \"{name}\"…",
+    "sources": "Fuentes"
   },
   "sidebar": {
     "collapseSidebar": "Contraer barra lateral",
@@ -1178,7 +1179,10 @@
     "customInstructionsLabel": "Instrucciones personalizadas*",
     "defaultTemperatureLabel": "Temperatura predeterminada*",
     "Usage & Impact": "Uso e impacto",
-    "Connectors": "Conectores"
+    "Connectors": "Conectores",
+    "Backup": "Copia de seguridad",
+    "Memories": "Memorias",
+    "Agent Access": "Acceso de agente"
   },
   "notFound": {
     "lostDog": "Perro perdido"
@@ -3224,5 +3228,213 @@
       "lastRequest": "Última solicitud",
       "disclaimer": "Estimaciones por solicitud basadas en recuentos de tokens informados o aproximados, utilizando promedios y supuestos publicados v{version}. Los mensajes antiguos se recalculan a partir del texto almacenado y el modelo actual de la conversación. No es una medición."
     }
+  },
+  "table": {
+    "copyTable": "Copiar tabla",
+    "downloadTable": "Descargar tabla",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Exportado como CSV",
+    "copyFailed": "No se pudo copiar la tabla"
+  },
+  "backup": {
+    "intro": {
+      "title": "Haz una copia segura de tus chats",
+      "body": "Tus conversaciones se cifran en este dispositivo antes de subirlas. Nunca podremos leer tus chats.",
+      "keyWarning": "Tu clave de recuperación se crea en este dispositivo. Nunca la vemos ni podemos recuperarla por ti; perder la clave implica perder la copia.",
+      "create": "Crear mi clave y hacer copia",
+      "decline": "Ahora no — mantener chats solo en este dispositivo"
+    },
+    "ceremony": {
+      "titleCreate": "Guarda tu clave de recuperación",
+      "titleRotate": "Guarda tu nueva clave de recuperación",
+      "titleView": "Tu clave de recuperación",
+      "description": "Esta clave es la única forma de restaurar tu copia de seguridad en otro dispositivo. Guárdala en un lugar seguro — no podemos recuperarla por ti.",
+      "copy": "Copiar",
+      "copied": "¡Copiada!",
+      "download": "Descargar .txt",
+      "showQr": "Mostrar código QR",
+      "hideQr": "Ocultar código QR",
+      "savedCheckbox": "He guardado mi clave de recuperación en un lugar seguro",
+      "saveFirstHint": "Copia o descarga tu clave antes de continuar.",
+      "continue": "Continuar",
+      "done": "Listo",
+      "cancel": "Cancelar",
+      "cancelConfirmTitle": "¿Cancelar configuración de copia de seguridad?",
+      "cancelConfirmBody": "Tus chats no se respaldarán. Puedes activar la copia de seguridad cifrada en cualquier momento en Configuración.",
+      "cancelConfirmRotateBody": "Tu clave de recuperación ya ha sido cambiada. Puedes verla en cualquier momento en Configuración.",
+      "cancelConfirmConfirm": "Sí, cancelar",
+      "cancelConfirmDismiss": "Volver",
+      "loadError": "No se pudo cargar tu clave de recuperación en este dispositivo."
+    },
+    "file": {
+      "heading": "Clave de recuperación de la copia de seguridad de chat",
+      "warning": "Guarda esta clave de forma segura. Cualquiera que la tenga puede leer tu copia; sin ella no se puede restaurar la copia."
+    },
+    "progress": {
+      "titleCreate": "Configurando tu copia de seguridad",
+      "titleRotate": "Cambiando tu clave de recuperación",
+      "encrypting": "{count, plural, one {Cifrando y respaldando # conversación…} other {Cifrando y respaldando # conversaciones…}}",
+      "success": "{count, plural, one {Copia de seguridad completa. # conversación protegida.} other {Copia de seguridad completa. # conversaciones protegidas.}}",
+      "error": "Fallo en la copia de seguridad. Tus chats permanecen en este dispositivo.",
+      "retry": "Intentar de nuevo",
+      "close": "Cerrar",
+      "done": "Listo"
+    },
+    "input": {
+      "label": "Clave de recuperación",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Las claves nunca contienen las letras O, I o L.",
+      "checksumError": "Esa clave no parece correcta. Revise si hay errores de tipeo.",
+      "formatError": "Eso no parece una clave de recuperación.",
+      "incomplete": "Siga escribiendo — una clave de recuperación tiene 56 caracteres.",
+      "valid": "La clave parece válida."
+    },
+    "restore": {
+      "title": "Restaurar tus chats",
+      "successTitle": "Copia de seguridad restaurada",
+      "promptBody": "Hemos encontrado una copia de seguridad cifrada para tu cuenta. Ingresa tu clave de recuperación para restaurarla en este dispositivo.",
+      "submit": "Restaurar copia de seguridad",
+      "skip": "Omitir — empezar desde cero en este dispositivo",
+      "restoring": "Descifrando y restaurando tus chats…",
+      "successBody": "{count, plural, one {# conversación restaurada.} other {# conversaciones restauradas.}}",
+      "wrongKey": "Esa clave es válida, pero no desbloquea esta copia de seguridad. Si cambió su clave, use la más reciente.",
+      "corrupt": "No se pudo leer esta copia de seguridad — puede estar dañada. Puede empezar desde cero en este dispositivo o intentarlo más tarde.",
+      "networkError": "No se pudo contactar el servicio de copia de seguridad. Revise su conexión e intente nuevamente.",
+      "tryAgain": "Probar otra clave",
+      "close": "Listo"
+    },
+    "enterKey": {
+      "title": "Ingrese su nueva clave de recuperación",
+      "body": "Su clave de recuperación se cambió en otro dispositivo. Ingrese la nueva clave para reanudar las copias de seguridad en este dispositivo.",
+      "submit": "Usar esta clave"
+    },
+    "banner": {
+      "keyMismatchTitle": "Copias de seguridad en pausa — su clave de recuperación cambió en otro dispositivo.",
+      "enterNewKey": "Ingresar nueva clave",
+      "resetBackup": "Restablecer copia de seguridad",
+      "resetConfirmTitle": "¿Restablecer la copia de seguridad con la clave de este dispositivo?",
+      "resetConfirmBody": "La copia de seguridad existente será reemplazada por los chats de este dispositivo, cifrados con la clave de este dispositivo. Otros dispositivos necesitarán la clave de recuperación de este dispositivo.",
+      "resetConfirmAction": "Restablecer copia de seguridad",
+      "remoteMissingTitle": "Su copia de seguridad ya no existe en el servidor. Las copias de seguridad están en pausa.",
+      "backUpAgain": "Hacer copia de seguridad nuevamente",
+      "dismiss": "Descartar"
+    },
+    "rotate": {
+      "confirmTitle": "¿Cambiar su clave de recuperación?",
+      "confirmBody": "Su copia de seguridad será cifrada nuevamente con una nueva clave y la clave anterior dejará de funcionar. Deberá guardar la nueva clave e ingresarla en sus otros dispositivos.",
+      "confirmAction": "Cambiar clave"
+    },
+    "toast": {
+      "enrollLater": "Puede activar la copia de seguridad cifrada en cualquier momento desde Configuración.",
+      "keyUpdated": "Clave de recuperación actualizada. Copias de seguridad reanudadas.",
+      "resetDone": "Copia de seguridad restablecida con la clave de este dispositivo.",
+      "backupRestarted": "Copia de seguridad creada nuevamente.",
+      "opFailed": "Ocurrió un error. Intente nuevamente."
+    },
+    "settings": {
+      "statusOn": "La copia de seguridad está activada",
+      "statusOff": "La copia de seguridad está desactivada",
+      "offDescription": "Tus chats sólo existen en este navegador. Activa la copia de seguridad cifrada para mantenerlos seguros y restaurarlos en otros dispositivos. Los chats se cifran en tu dispositivo — nunca podemos leerlos.",
+      "turnOn": "Activar copia de seguridad",
+      "restoreTitle": "Ya existe una copia de seguridad para tu cuenta",
+      "restoreDescription": "Ingrese su clave de recuperación para restaurarla en este dispositivo.",
+      "restore": "Restaurar copia de seguridad",
+      "lastBackup": "Última copia de seguridad: {time}",
+      "lastBackupNever": "No se ha realizado ninguna copia de seguridad aún",
+      "keyFingerprint": "Clave ····-{tail}",
+      "syncState": {
+        "idle": "Esperando para sincronizar",
+        "syncing": "Realizando copia de seguridad…",
+        "ok": "Actualizado",
+        "keyOutOfDate": "En pausa — la clave de recuperación fue cambiada en otro dispositivo",
+        "remoteMissing": "Pausado: la copia de seguridad fue eliminada del servidor",
+        "error": "El último intento de copia de seguridad falló"
+      },
+      "backUpNow": "Respaldar ahora",
+      "backUpNowSuccess": "Copia de seguridad completa",
+      "backUpNowFailure": "La copia de seguridad falló; tus chats no han cambiado en este dispositivo",
+      "viewKey": "Ver clave de recuperación",
+      "changeKey": "Cambiar clave de recuperación",
+      "dangerTitle": "Zona de peligro",
+      "turnOffDelete": "Desactivar y eliminar copia de seguridad",
+      "turnOffConfirmTitle": "¿Desactivar la copia de seguridad?",
+      "turnOffConfirmMessage": "Esto eliminará tu copia de seguridad de nuestros servidores para todos los dispositivos. Los chats en este dispositivo permanecerán. Puedes volver a activar la copia de seguridad más adelante con una nueva clave de recuperación.",
+      "turnOffConfirmAction": "Eliminar copia de seguridad",
+      "turnOffSuccess": "Copia de seguridad desactivada y eliminada",
+      "turnOffFailure": "No se pudo eliminar la copia de seguridad. Por favor, inténtalo de nuevo."
+    }
+  },
+  "memories": {
+    "title": "Memorias",
+    "description": "Permite que el asistente recuerde datos importantes que compartas, como tu rol, preferencias y proyectos en curso, y los use en tus conversaciones.",
+    "enableToggle": "Activar memorias",
+    "privacyNote": "Los datos solo se almacenan en este navegador y se incluyen en tus chats para personalizar las respuestas.",
+    "empty": "Aún no hay memorias. Los datos importantes se guardan automáticamente de tus conversaciones.",
+    "savedOn": "Guardado el {date}",
+    "deleteMemory": "Eliminar memoria",
+    "clearAll": "Borrar todas las memorias",
+    "clearAllConfirmQuestion": "¿Borrar todas las memorias? Esto no se puede deshacer.",
+    "clearAllConfirm": "Eliminar todo",
+    "cancel": "Cancelar"
+  },
+  "contextWindow": {
+    "label": "Ventana de contexto",
+    "value": "{count} mensajes",
+    "fewer": "Menos mensajes",
+    "more": "Más mensajes",
+    "description": "Los mensajes antiguos que superan este límite se resumen y se envían como contexto."
+  },
+  "agentAccess": {
+    "title": "Acceso de agentes",
+    "description": "Controla qué usuarios pueden utilizar los agentes compartidos de Foundry. Las reglas solo restringen aún más lo que el acceso propio de Azure de un usuario permite; nunca pueden otorgar acceso si Azure lo deniega.",
+    "backToChat": "Volver al chat",
+    "loading": "Cargando agentes y reglas…",
+    "loadError": "No se pudo cargar la información de acceso de agentes.",
+    "rulesUnavailableWarning": "No se pudo cargar las reglas de acceso desde el almacenamiento. La invocación de agentes está bloqueada y no se pueden editar las reglas.",
+    "retry": "Reintentar",
+    "rulesTab": "Reglas de agentes",
+    "localAdminsTab": "Administradores locales",
+    "noAgents": "No hay agentes para administrar.",
+    "sourceLabel": "Origen",
+    "notDiscoverable": "No es accesible para ti",
+    "notDiscoverableHint": "Existe una regla para este agente, pero no está en tu propio descubrimiento: puede haberse renombrado, tu acceso Azure no lo alcanza, o su regla de acceso no te incluye.",
+    "accessEveryone": "Todos",
+    "accessRestricted": "Restringido",
+    "edit": "Editar",
+    "updatedByLine": "Última actualización por {user} el {date}",
+    "accessTypeLabel": "Quién puede usar este agente",
+    "everyoneDescription": "Cualquier usuario que ya pueda acceder a este agente mediante Azure.",
+    "restrictedDescription": "Solo los usuarios y dominios listados a continuación.",
+    "allowDomainsLabel": "Dominios permitidos",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Usuarios permitidos",
+    "allowUsersPlaceholder": "persona@example.org",
+    "chipAddHint": "Presione Enter para agregar",
+    "removeChip": "Eliminar",
+    "groupsLabel": "Grupos permitidos",
+    "groupsPendingConsent": "El acceso basado en grupos está pendiente de consentimiento del administrador del inquilino y no se puede editar aún.",
+    "restrictedEmptyWarning": "No se han listado usuarios ni dominios; nadie podrá usar este agente.",
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "cancel": "Cancelar",
+    "saveSuccess": "Regla de acceso guardada.",
+    "deleteSuccess": "Regla de acceso eliminada; todos pueden usar este agente nuevamente.",
+    "saveError": "No se pudo guardar. Inténtelo de nuevo.",
+    "conflictError": "Alguien más realizó cambios mientras usted editaba. Recargue para ver la versión más reciente y vuelva a intentarlo.",
+    "reload": "Recargar",
+    "localAdminsDescription": "Delegue la gestión de reglas para agentes específicos sin volver a desplegar. Los administradores locales solo pueden editar reglas de los agentes que se les han asignado.",
+    "noLocalAdmins": "No se han configurado administradores locales.",
+    "addLocalAdmin": "Agregar administrador local",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "persona@example.org",
+    "removeAdmin": "Eliminar administrador local",
+    "delegatedAgentsLabel": "Agentes delegados",
+    "noDelegatedAgents": "No hay agentes disponibles para delegar.",
+    "unknownAgentKey": "Clave de agente desconocida",
+    "configSaveSuccess": "Administradores locales guardados.",
+    "configConflictError": "Alguien más cambió la lista de administradores locales mientras usted editaba. Recargue e intente de nuevo."
   }
 }

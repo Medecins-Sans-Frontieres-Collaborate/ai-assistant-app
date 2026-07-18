@@ -907,7 +907,8 @@
     "processingAudio": "Kucubungulwa umsindo...",
     "ttsError": "Iphutha ekukhiqizeni umsindo. Zama futhi.",
     "unsupportedMessageType": "Iphutha ekuboniseni umlayezo: Uhlobo lomlayezo alusekelwa",
-    "addLanguageOption": "Engeza \"{name}\"..."
+    "addLanguageOption": "Engeza \"{name}\"...",
+    "sources": "Imithombo"
   },
   "transcript": {
     "originalTranscript": "Okubhaliwe Kokuqala",
@@ -1331,7 +1332,10 @@
     "customInstructionsLabel": "Imiyalelo Yangokwezifiso*",
     "defaultTemperatureLabel": "Izinga Lokushisa Okuzenzakalelayo*",
     "Usage & Impact": "Ukusetshenziswa & Umthelela",
-    "Connectors": "Izixhumi"
+    "Connectors": "Izixhumi",
+    "Backup": "Ukusekelwa",
+    "Memories": "Izinkumbulo",
+    "Agent Access": "Ukufinyelela Kummeli"
   },
   "emptyState": {
     "greeting": "Ngingakusiza kanjani?",
@@ -3208,5 +3212,213 @@
       "lastRequest": "Isicelo sokugcina",
       "disclaimer": "Izilinganiso zesicelo ngasinye zisuselwa kwizinombolo zama-tokens ezibikiwe noma ezilinganisiwe, kusetshenziswa izilinganiso nezibalo ezishicilelwe v{version}. Imilayezo endala ibuyekezwa kusukela embhalweni olondoloziwe kanye nemodeli yengxoxo yamanje. Akusona isilinganiso esiqondile."
     }
+  },
+  "table": {
+    "copyTable": "Kopisha ithebula",
+    "downloadTable": "Landa ithebula",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Kuthunyelwe njenge-CSV",
+    "copyFailed": "Ithebula alikwazanga ukukopishwa"
+  },
+  "backup": {
+    "intro": {
+      "title": "Sekela izingxoxo zakho ngokuphepha",
+      "body": "Izingxoxo zakho zifihlwa kudivayisi ngaphambi kokuthi kuthunyelwe noma yini. Asisoze sabona izingxoxo zakho.",
+      "keyWarning": "Ukhiye wakho wokubuyisela wenziwa kudivayisi. Asiwuboni futhi asikwazi ukuwubuyisela — uma ulahleka, ulahlekelwa usekelo.",
+      "create": "Dala ukhiye wami & sekelisa",
+      "decline": "Hhayi manje — gcina izingxoxo kudivayisi kuphela"
+    },
+    "ceremony": {
+      "titleCreate": "Londoloza ukhiye wakho wokubuyisela",
+      "titleRotate": "Londoloza ukhiye wakho omusha wokubuyisela",
+      "titleView": "Ukhiye wakho wokubuyisela",
+      "description": "Lo ukhiye ukuphela kwendlela yokubuyisela usekelo kwenye idivayisi. Ugcine endaweni ephephile — asikwazi ukuwubuyisela kuwena.",
+      "copy": "Kopisha",
+      "copied": "Kukopishiwe!",
+      "download": "Landa .txt",
+      "showQr": "Bonisa ikhodi ye-QR",
+      "hideQr": "Fihla ikhodi ye-QR",
+      "savedCheckbox": "Ngilondoloze ukhiye wokubuyisela endaweni ephephile",
+      "saveFirstHint": "Kopisha noma ulande ukhiye wakho ngaphambi kokuqhubeka.",
+      "continue": "Qhubeka",
+      "done": "Kuqediwe",
+      "cancel": "Khansela",
+      "cancelConfirmTitle": "Ufuna ukukhanisela ukusetha usekelo?",
+      "cancelConfirmBody": "Izingxoxo zakho ngeke zisesekelwe. Ungavula ukusekela okufihliwe noma kunini kuzilungiselelo.",
+      "cancelConfirmRotateBody": "Ukhiye wakho wokubuyisela usushintshiwe. Ungawubuka noma kunini kuzilungiselelo.",
+      "cancelConfirmConfirm": "Yebo, khansela",
+      "cancelConfirmDismiss": "Buyela emuva",
+      "loadError": "Ukhiye wakho wokubuyisela awukwazi ukulayishwa kudivayisi."
+    },
+    "file": {
+      "heading": "Ukhiye wokubuyisela usekelo lwezingxoxo",
+      "warning": "Londoloza lo ukhiye ngokuphepha. Noma ubani onawo angafunda usekelo lwakho; ngaphandle kwawo awukwazi ukubuyiselwa."
+    },
+    "progress": {
+      "titleCreate": "Kusethwa usekelo lwakho",
+      "titleRotate": "Kushintshwa ukhiye wakho wokubuyisela",
+      "encrypting": "{count, plural, one {Kuvalwa futhi kusekelwa ingxoxo engu-# …} other {Kuvalwa futhi kusekelwa izingxoxo ezingu-# …}}",
+      "success": "{count, plural, one {Usekelo luqediwe. Ingxoxo engu-# ivikelekile.} other {Usekelo luqediwe. Izingxoxo ezingu-# zivikelekile.}}",
+      "error": "Usekelo aluphumelelanga. Izingxoxo zakho zisekudivayisini.",
+      "retry": "Zama futhi",
+      "close": "Vala",
+      "done": "Kuqediwe"
+    },
+    "input": {
+      "label": "Ukhiye wokubuyisela",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Amakhodi awafaki izinhlamvu O, I noma L.",
+      "checksumError": "Le khodi ayilungile — hlola amaphutha wokuthayipha.",
+      "formatError": "Lokhu akubukeki njengokhiye wokubuyisela.",
+      "incomplete": "Qhubeka uthayiphe — ukhiye wokubuyisela unezinhlamvu ezingu-56.",
+      "valid": "Ukhiye ubukeka ulungile."
+    },
+    "restore": {
+      "title": "Buyisela izingxoxo zakho",
+      "successTitle": "I-backup ibuyiselwe",
+      "promptBody": "Sithole i-backup evisiwe ye-akhawunti yakho. Faka ukhiye wokubuyisela ukuze uyibuyisele kule divayisi.",
+      "submit": "Buyisela i-backup",
+      "skip": "Yeqa — qala kabusha kule divayisi",
+      "restoring": "Kuvulwa futhi kubuyiselwa izingxoxo zakho…",
+      "successBody": "{count, plural, one {# ingxoxo ibuyiselwe.} other {# izingxoxo zibuyiselwe.}}",
+      "wrongKey": "Lo ukhiye ulungile, kodwa awuvuli le backup. Uma ushintshe ukhiye, sebenzisa omusha.",
+      "corrupt": "Le backup ayikwazi ukufundwa — ingase yonakele. Ungaqala kabusha kule divayisi noma uzame futhi kamuva.",
+      "networkError": "Ayikwazanga ukufinyelela insiza ye-backup. Hlola uxhumano lwakho uzame futhi.",
+      "tryAgain": "Zama omunye ukhiye",
+      "close": "Kuqedile"
+    },
+    "enterKey": {
+      "title": "Faka ukhiye wakho omusha wokubuyisela",
+      "body": "Ukhiye wakho wokubuyisela ushintshwe kwenye idivayisi. Faka omusha ukuze uqhubeke nama-backup kule divayisi.",
+      "submit": "Sebenzisa lo ukhiye"
+    },
+    "banner": {
+      "keyMismatchTitle": "Ama-backup ame — ukhiye wakho wokubuyisela ushintshe kwenye idivayisi.",
+      "enterNewKey": "Faka ukhiye omusha",
+      "resetBackup": "Setha kabusha i-backup",
+      "resetConfirmTitle": "Setha kabusha i-backup usebenzisa ukhiye wale divayisi?",
+      "resetConfirmBody": "I-backup yamanje izoshintshwa ngezinkulumo zale divayisi, ezivikelwe ngokhiye wale divayisi. Amanye amadivayisi azodinga ukhiye wokubuyisela wale divayisi.",
+      "resetConfirmAction": "Setha kabusha i-backup",
+      "remoteMissingTitle": "I-backup yakho ayisekho kuseva. Ama-backup ame.",
+      "backUpAgain": "Yenza i-backup futhi",
+      "dismiss": "Vala"
+    },
+    "rotate": {
+      "confirmTitle": "Ushintshe ukhiye wakho wokubuyisela?",
+      "confirmBody": "I-backup yakho izovikelwa kabusha ngokhiye omusha, bese okudala kunqamuka ukusebenza. Kufanele ugcine ukhiye omusha futhi uwufake kwamanye amadivayisi akho.",
+      "confirmAction": "Shintsha ukhiye"
+    },
+    "toast": {
+      "enrollLater": "Ungayivula i-backup evisiwe noma nini kuzilungiselelo.",
+      "keyUpdated": "Ukhiye wokubuyisela ubuyekeziwe. Ama-backup aqhubekile.",
+      "resetDone": "I-backup isethwe kabusha ngokhiye wale divayisi.",
+      "backupRestarted": "I-backup yenziwe futhi.",
+      "opFailed": "Kukhona okungahambanga kahle. Sicela uzame futhi."
+    },
+    "settings": {
+      "statusOn": "I-backup ivuliwe",
+      "statusOff": "I-backup ivaliwe",
+      "offDescription": "Izingxoxo zakho zisesipheqululini kuphela. Vula i-backup evisiwe ukuze ukwazi ukuzivuselela kumadivayisi ahlukene. Izingxoxo zivikelwe kudivayisi yakho — asikwazi ukufunda okuqukethwe kuzo.",
+      "turnOn": "Vula i-backup",
+      "restoreTitle": "I-backup isivele ikhona kwi-akhawunti yakho",
+      "restoreDescription": "Faka ukhiye wakho wokubuyisela ukuze uyibuyisele kule divayisi.",
+      "restore": "Buyisela i-backup",
+      "lastBackup": "I-backup yokugcina: {time}",
+      "lastBackupNever": "Awukakaze uqede i-backup",
+      "keyFingerprint": "Ukhiye ····-{tail}",
+      "syncState": {
+        "idle": "Kulindelwe ukuvumelanisa",
+        "syncing": "Kuyabekwa i-backup…",
+        "ok": "Kuvuselelwe",
+        "keyOutOfDate": "Kumisiwe — ukhiye wokubuyisela ushintshwe kwenye idivayisi",
+        "remoteMissing": "Kuyamiswa — isipele sisusiwe kuseva",
+        "error": "Umzamo wokugcina isipele nokugcina uhlulekile"
+      },
+      "backUpNow": "Yenza isipele manje",
+      "backUpNowSuccess": "Isipele siqediwe",
+      "backUpNowFailure": "Isipele sehlulekile — izingxoxo zakho aziguqukile kudivayisi le",
+      "viewKey": "Buka okhiye wokutakula",
+      "changeKey": "Shintsha okhiye wokutakula",
+      "dangerTitle": "Indawo eyingozi",
+      "turnOffDelete": "Cima & susa isipele",
+      "turnOffConfirmTitle": "Ucima isipele?",
+      "turnOffConfirmMessage": "Lokhu kususa isipele sakho kusuka kuma-server ethu kuwo wonke amadivayisi. Izingxoxo ezikudivayisi le zihlala zikhona. Ungakwazi ukuvula isipele futhi kamuva usebenzisa okhiye omusha wokutakula.",
+      "turnOffConfirmAction": "Susa isipele",
+      "turnOffSuccess": "Isipele sicishiwe futhi sisusiwe",
+      "turnOffFailure": "Akukwazanga ukususa isipele. Sicela uzame futhi."
+    }
+  },
+  "memories": {
+    "title": "Izinkumbulo",
+    "description": "Vumela umsizi akhumbule amaqiniso abalulekile owabelana ngawo — njengendima yakho, okuthandayo, neziphrojekthi eziqhubekayo — bese ewasebenzisa ezingxoxweni ezahlukene.",
+    "enableToggle": "Vula izinkumbulo",
+    "privacyNote": "Amaqiniso agcinwa kuphela kulesi siphequluli futhi afakwe ezingxoxweni zakho ukuze kuphendulwe okuqondene nawe.",
+    "empty": "Azikabikho izinkumbulo. Amaqiniso abalulekile ayagcinwa ngokuzenzakalelayo ezingxoxweni zakho.",
+    "savedOn": "Kugcinwe ngo-{date}",
+    "deleteMemory": "Susa inkumbulo",
+    "clearAll": "Sula zonke izinkumbulo",
+    "clearAllConfirmQuestion": "Uyasifuna ukususa zonke izinkumbulo? Lokhu ngeke kulungiswe.",
+    "clearAllConfirm": "Susa konke",
+    "cancel": "Khansela"
+  },
+  "contextWindow": {
+    "label": "Iwindi lombhalo",
+    "value": "Imilayezo engu-{count}",
+    "fewer": "Imilayezo embalwa",
+    "more": "Imilayezo eningi",
+    "description": "Imilayezo endala edlula lo mkhawulo iyafingqwa bese ithunyelwa njengomongo."
+  },
+  "agentAccess": {
+    "title": "Ukufinyelela kwama-ejenti",
+    "description": "Lawula ukuthi yimaphi abasebenzisi abangasebenzisa ama-agent e-Foundry abelwe. Imithetho inqamula okusele sekugunyazwe ukufinyelela kwe-Azure yomuntu — ayikwazi ukunikeza ukufinyelela i-Azure enqabile.",
+    "backToChat": "Buyela ezingxoxweni",
+    "loading": "Kulayishwa ama-agent nemithetho…",
+    "loadError": "Akukwazanga ukulayisha imininingwane yokufinyelela kuma-agent.",
+    "rulesUnavailableWarning": "Imithetho yokufinyelela ayikwazanga ukulayishwa kusuka kokugcinelwe. Ukusebenzisa ama-agent kumiswe okwamanje futhi imithetho ayikwazi ukuhlelwa.",
+    "retry": "Phinda uzame",
+    "rulesTab": "Imithetho yama-agent",
+    "localAdminsTab": "Abaphathi bendawo",
+    "noAgents": "Ayikho ama-agent ongawalawula.",
+    "sourceLabel": "Umsuka",
+    "notDiscoverable": "Awutholakali kuwe",
+    "notDiscoverableHint": "Kukhona umthetho walo agent, kodwa awukho ekutholakaleni kwakho — kungenzeka uhluziwe kabusha, ukufinyelela kwakho kwe-Azure akukufinyeleli, noma umthetho wokufinyelela awukufaki.",
+    "accessEveryone": "Wonke umuntu",
+    "accessRestricted": "Kunomkhawulo",
+    "edit": "Hlela",
+    "updatedByLine": "Kugcine ukuhlaziywa ngu-{user} ngo-{date}",
+    "accessTypeLabel": "Ubani ongasebenzisa lo agent",
+    "everyoneDescription": "Noma ubani osevele ekwazi ukufinyelela lo agent nge-Azure yakhe.",
+    "restrictedDescription": "Abasebenzisi nama-domain akuleli kuphela.",
+    "allowDomainsLabel": "Ama-domain avumelekile",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Abasebenzisi abavumelekile",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Cindezela u-Enter ukuze ungeze",
+    "removeChip": "Susa",
+    "groupsLabel": "Amaqembu avumelekile",
+    "groupsPendingConsent": "Ukufinyelela ngokuya ngamaqembu kulindele imvume yomlawuli womqashi futhi akukwazi ukuhlelwa okwamanje.",
+    "restrictedEmptyWarning": "Azikho abasebenzisi noma ama-domain abhalwe — akekho onga sebenzisa lo mjengeli.",
+    "save": "Londoloza",
+    "saving": "Kuyalondolozwa...",
+    "cancel": "Khansela",
+    "saveSuccess": "Umthetho wokufinyelela ugciniwe.",
+    "deleteSuccess": "Umthetho wokufinyelela ususiwe — wonke umuntu angasebenzisa lo mjengeli futhi.",
+    "saveError": "Akuphumelelanga ukulondoloza. Sicela uzame futhi.",
+    "conflictError": "Omunye ushintshe lokhu ngesikhathi uwuhlela. Layisha kabusha ukuze uthole uhlobo lwakamuva, bese uphinda ushintshe.",
+    "reload": "Layisha kabusha",
+    "localAdminsDescription": "Nika omunye amandla okulawula imithetho yamajensi athile ngaphandle kokuwabuyekeza ngokuphelele. Abaphathi bendawo bangahlela kuphela imithetho yama-agent abaphoqelelwe kubo.",
+    "noLocalAdmins": "Azikho iziphathi zendawo ezisethwe.",
+    "addLocalAdmin": "Engeza umphathi wendawo",
+    "emailLabel": "I-imeyili",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Susa umphathi wendawo",
+    "delegatedAgentsLabel": "Ama-agent adalelwe",
+    "noDelegatedAgents": "Awukho ama-agent atholakalayo okudalelwa.",
+    "unknownAgentKey": "Ukhiye womjengeli ongaziwa",
+    "configSaveSuccess": "Abaphathi bendawo bagciniwe.",
+    "configConflictError": "Omunye ushintshe uhlu lwabaphathi bendawo ngesikhathi uwuhlela. Layisha kabusha bese uzama futhi."
   }
 }

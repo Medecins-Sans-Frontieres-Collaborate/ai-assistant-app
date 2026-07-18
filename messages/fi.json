@@ -824,7 +824,8 @@
     "processingAudio": "Käsitellään ääntä...",
     "ttsError": "Virhe ääntä luodessa. Yritä uudelleen.",
     "unsupportedMessageType": "Virhe viestin näyttämisessä: Ei-tuettu viestityyppi",
-    "addLanguageOption": "Lisää \"{name}\"..."
+    "addLanguageOption": "Lisää \"{name}\"...",
+    "sources": "Lähteet"
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",
@@ -1153,7 +1154,10 @@
     "customInstructionsLabel": "Mukautetut ohjeet*",
     "defaultTemperatureLabel": "Oletuslämpötila*",
     "Usage & Impact": "Käyttö ja vaikutus",
-    "Connectors": "Liitännät"
+    "Connectors": "Liitännät",
+    "Backup": "Varmuuskopiointi",
+    "Memories": "Muistot",
+    "Agent Access": "Agentin käyttöoikeus"
   },
   "notFound": {
     "lostDog": "Kadonnut koira"
@@ -3224,5 +3228,213 @@
       "lastRequest": "Viimeisin pyyntö",
       "disclaimer": "Kohtaiset arviot raportoituista tai arvioiduista tokenmääristä, käyttäen julkaistuja keskiarvoja ja oletuksia v{version}. Vanhemmat viestit on takaisinlaskettu tallennetusta tekstistä ja keskustelun nykyisestä mallista. Ei ole mittaus."
     }
+  },
+  "table": {
+    "copyTable": "Kopioi taulukko",
+    "downloadTable": "Lataa taulukko",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Viety CSV-muodossa",
+    "copyFailed": "Taulukon kopiointi epäonnistui"
+  },
+  "backup": {
+    "intro": {
+      "title": "Varmuuskopioi keskustelusi — turvallisesti",
+      "body": "Keskustelusi salataan tällä laitteella ennen lataamista. Emme koskaan näe keskustelujasi.",
+      "keyWarning": "Palautusavain luodaan tällä laitteella. Emme näe sitä emmekä voi palauttaa sitä puolestasi — jos avain katoaa, myös varmuuskopio menetetään.",
+      "create": "Luo avaimeni ja varmuuskopioi",
+      "decline": "Ei nyt — pidä keskustelut vain tällä laitteella"
+    },
+    "ceremony": {
+      "titleCreate": "Tallenna palautusavaimesi",
+      "titleRotate": "Tallenna uusi palautusavaimesi",
+      "titleView": "Palautusavaimesi",
+      "description": "Tämä avain on ainoa tapa palauttaa varmuuskopio toiselle laitteelle. Säilytä se turvallisesti — emme voi palauttaa sitä puolestasi.",
+      "copy": "Kopioi",
+      "copied": "Kopioitu!",
+      "download": "Lataa .txt",
+      "showQr": "Näytä QR-koodi",
+      "hideQr": "Piilota QR-koodi",
+      "savedCheckbox": "Olen tallentanut palautusavaimeni turvalliseen paikkaan",
+      "saveFirstHint": "Kopioi tai lataa avaimesi ennen jatkamista.",
+      "continue": "Jatka",
+      "done": "Valmis",
+      "cancel": "Peruuta",
+      "cancelConfirmTitle": "Peruutetaanko varmuuskopion määritys?",
+      "cancelConfirmBody": "Keskusteluja ei varmuuskopioida. Voit ottaa salatun varmuuskopion käyttöön milloin tahansa Asetuksista.",
+      "cancelConfirmRotateBody": "Palautusavaimesi on jo vaihdettu. Voit tarkastella sitä milloin tahansa Asetuksissa.",
+      "cancelConfirmConfirm": "Kyllä, peruuta",
+      "cancelConfirmDismiss": "Palaa takaisin",
+      "loadError": "Palautusavaintasi ei voitu ladata tällä laitteella."
+    },
+    "file": {
+      "heading": "Keskustelujen varmuuskopion palautusavain",
+      "warning": "Säilytä tämä avain turvallisesti. Jokainen, jolla on avain, voi lukea varmuuskopiosi. Ilman avainta varmuuskopiota ei voi palauttaa."
+    },
+    "progress": {
+      "titleCreate": "Varmuuskopiointia valmistellaan",
+      "titleRotate": "Palautusavaimen vaihtaminen",
+      "encrypting": "{count, plural, one {Salaus ja varmuuskopiointi # keskustelu…} other {Salaus ja varmuuskopiointi # keskustelua…}}",
+      "success": "{count, plural, one {Varmuuskopiointi valmis. # keskustelu suojattu.} other {Varmuuskopiointi valmis. # keskustelua suojattu.}}",
+      "error": "Varmuuskopiointi epäonnistui. Keskustelusi ovat yhä tällä laitteella.",
+      "retry": "Yritä uudelleen",
+      "close": "Sulje",
+      "done": "Valmis"
+    },
+    "input": {
+      "label": "Palautusavain",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Avaimissa ei koskaan ole kirjaimia O, I tai L.",
+      "checksumError": "Tämä avain ei vaikuta oikealta — tarkista mahdolliset kirjoitusvirheet.",
+      "formatError": "Tämä ei vaikuta palautusavaimelta.",
+      "incomplete": "Jatka kirjoittamista — palautusavain sisältää 56 merkkiä.",
+      "valid": "Avain vaikuttaa kelvolliselta."
+    },
+    "restore": {
+      "title": "Palauta keskustelusi",
+      "successTitle": "Varmuuskopio palautettu",
+      "promptBody": "Löysimme tilillesi salatun varmuuskopion. Syötä palautusavain palauttaaksesi sen tähän laitteeseen.",
+      "submit": "Palauta varmuuskopio",
+      "skip": "Ohita — aloita alusta tällä laitteella",
+      "restoring": "Puretaan salausta ja palautetaan keskustelut…",
+      "successBody": "{count, plural, one {# keskustelu palautettu.} other {# keskustelua palautettu.}}",
+      "wrongKey": "Avain on kelvollinen, mutta ei avaa tätä varmuuskopiota. Jos olet vaihtanut avainta, käytä uusinta.",
+      "corrupt": "Varmuuskopioita ei voitu lukea — se voi olla vahingoittunut. Voit aloittaa alusta tällä laitteella tai yrittää myöhemmin uudelleen.",
+      "networkError": "Varmuuskopalveluun ei saatu yhteyttä. Tarkista yhteys ja yritä uudelleen.",
+      "tryAgain": "Kokeile toista avainta",
+      "close": "Valmis"
+    },
+    "enterKey": {
+      "title": "Anna uusi palautusavaimesi",
+      "body": "Palautusavaimesi on vaihdettu toisella laitteella. Anna uusi avain jatkaaksesi varmuuskopiointia tällä laitteella.",
+      "submit": "Käytä tätä avainta"
+    },
+    "banner": {
+      "keyMismatchTitle": "Varmuuskopiointi keskeytetty — palautusavain on vaihdettu toisella laitteella.",
+      "enterNewKey": "Anna uusi avain",
+      "resetBackup": "Nollaa varmuuskopio",
+      "resetConfirmTitle": "Nollataanko varmuuskopio tämän laitteen avaimella?",
+      "resetConfirmBody": "Nykyinen varmuuskopio korvataan tämän laitteen keskusteluilla ja salataan tämän laitteen avaimella. Muut laitteet tarvitsevat tämän laitteen palautusavaimen.",
+      "resetConfirmAction": "Nollaa varmuuskopio",
+      "remoteMissingTitle": "Varmuuskopiota ei enää löydy palvelimelta. Varmuuskopiointi on keskeytetty.",
+      "backUpAgain": "Varmuuskopioi uudelleen",
+      "dismiss": "Sulje"
+    },
+    "rotate": {
+      "confirmTitle": "Vaihda palautusavaimesi?",
+      "confirmBody": "Varmuuskopiosi salataan uudelleen uudella avaimella ja vanha avain lakkaa toimimasta. Sinun täytyy tallentaa uusi avain ja syöttää se muilla laitteilla.",
+      "confirmAction": "Vaihda avain"
+    },
+    "toast": {
+      "enrollLater": "Voit ottaa salatun varmuuskopion käyttöön milloin tahansa Asetuksista.",
+      "keyUpdated": "Palautusavain päivitetty. Varmuuskopiointi jatkuu.",
+      "resetDone": "Varmuuskopio nollattu tämän laitteen avaimella.",
+      "backupRestarted": "Varmuuskopio luotu uudelleen.",
+      "opFailed": "Jokin meni pieleen. Yritä uudelleen."
+    },
+    "settings": {
+      "statusOn": "Varmuuskopiointi on käytössä",
+      "statusOff": "Varmuuskopiointi ei ole käytössä",
+      "offDescription": "Keskustelusi sijaitsevat vain tässä selaimessa. Ota salattu varmuuskopio käyttöön säilyttääksesi ne turvassa ja palauttaaksesi ne muilla laitteilla. Keskustelut salataan laitteellasi — emme koskaan voi lukea niitä.",
+      "turnOn": "Ota varmuuskopio käyttöön",
+      "restoreTitle": "Tilillesi on jo olemassa varmuuskopio",
+      "restoreDescription": "Syötä palautusavaimesi palauttaaksesi sen tälle laitteelle.",
+      "restore": "Palauta varmuuskopio",
+      "lastBackup": "Edellinen varmuuskopio: {time}",
+      "lastBackupNever": "Yhtään varmuuskopiota ei vielä tehty",
+      "keyFingerprint": "Avain ····-{tail}",
+      "syncState": {
+        "idle": "Odotetaan synkronointia",
+        "syncing": "Varmuuskopioidaan…",
+        "ok": "Ajantasalla",
+        "keyOutOfDate": "Keskeytetty — palautusavain vaihdettu toisella laitteella",
+        "remoteMissing": "Keskeytetty — varmuuskopio poistettu palvelimelta",
+        "error": "Viimeisin varmuuskopiointi epäonnistui"
+      },
+      "backUpNow": "Varmuuskopioi nyt",
+      "backUpNowSuccess": "Varmuuskopiointi valmis",
+      "backUpNowFailure": "Varmuuskopiointi epäonnistui — keskustelusi pysyvät muuttumattomina tällä laitteella",
+      "viewKey": "Näytä palautusavain",
+      "changeKey": "Vaihda palautusavain",
+      "dangerTitle": "Vaaravyöhyke",
+      "turnOffDelete": "Poista käytöstä & poista varmuuskopio",
+      "turnOffConfirmTitle": "Poistetaanko varmuuskopio käytöstä?",
+      "turnOffConfirmMessage": "Tämä poistaa varmuuskopiosi palvelimiltamme kaikilta laitteilta. Keskustelut säilyvät tällä laitteella. Voit ottaa varmuuskopion käyttöön myöhemmin uudella palautusavaimella.",
+      "turnOffConfirmAction": "Poista varmuuskopio",
+      "turnOffSuccess": "Varmuuskopio poistettu käytöstä ja poistettu",
+      "turnOffFailure": "Varmuuskopion poistaminen epäonnistui. Yritä uudelleen."
+    }
+  },
+  "memories": {
+    "title": "Muistot",
+    "description": "Anna avustajan muistaa tärkeitä faktoja, kuten roolisi, mieltymyksesi ja meneillään olevat projektit, ja käyttää niitä keskusteluissa.",
+    "enableToggle": "Ota muistot käyttöön",
+    "privacyNote": "Tiedot tallennetaan vain tähän selaimeen ja lisätään keskusteluihin vastausten personoimiseksi.",
+    "empty": "Ei muistoja vielä. Tärkeitä faktoja tallennetaan automaattisesti keskusteluistasi.",
+    "savedOn": "Tallennettu {date}",
+    "deleteMemory": "Poista muisto",
+    "clearAll": "Tyhjennä kaikki muistot",
+    "clearAllConfirmQuestion": "Poistetaanko kaikki muistot? Tätä ei voi perua.",
+    "clearAllConfirm": "Poista kaikki",
+    "cancel": "Peruuta"
+  },
+  "contextWindow": {
+    "label": "Kontekstiruutu",
+    "value": "{count} viestiä",
+    "fewer": "Vähemmän viestejä",
+    "more": "Enemmän viestejä",
+    "description": "Tätä rajaa vanhemmat viestit tiivistetään ja lähetetään kontekstina."
+  },
+  "agentAccess": {
+    "title": "Agenttipääsy",
+    "description": "Määritä, mitkä käyttäjät voivat käyttää jaettuja Foundry-agentteja. Säännöt rajoittavat vain lisää sitä, mihin käyttäjän oma Azure-pääsy jo sallii — niiden kautta ei voi antaa oikeuksia, joita Azure evää.",
+    "backToChat": "Takaisin keskusteluun",
+    "loading": "Ladataan agentteja ja sääntöjä…",
+    "loadError": "Agenttipääsytietoja ei voitu ladata.",
+    "rulesUnavailableWarning": "Sääntöjä ei voitu ladata tallennustilasta. Agentin käyttö on tällä hetkellä estetty, eikä sääntöjä voi muokata.",
+    "retry": "Yritä uudelleen",
+    "rulesTab": "Agentin säännöt",
+    "localAdminsTab": "Paikalliset ylläpitäjät",
+    "noAgents": "Ei hallittavia agentteja.",
+    "sourceLabel": "Lähde",
+    "notDiscoverable": "Ei löydettävissä sinulle",
+    "notDiscoverableHint": "Agentille on olemassa sääntö, mutta sitä ei löydy omasta näkymästäsi — sitä on ehkä nimetty uudelleen, Azure-pääsysi ei kata sitä, tai pääsysääntö ei sisällä sinua.",
+    "accessEveryone": "Kaikki",
+    "accessRestricted": "Rajoitettu",
+    "edit": "Muokkaa",
+    "updatedByLine": "Viimeksi päivittänyt {user} {date}",
+    "accessTypeLabel": "Kuka voi käyttää tätä agenttia",
+    "everyoneDescription": "Kaikki, joilla on jo pääsy tähän agenttiin Azure-pääsynsä kautta.",
+    "restrictedDescription": "Vain alla luetellut käyttäjät ja verkkoalueet.",
+    "allowDomainsLabel": "Sallitut verkkoalueet",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Sallitut käyttäjät",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Paina Enter lisätäksesi",
+    "removeChip": "Poista",
+    "groupsLabel": "Sallitut ryhmät",
+    "groupsPendingConsent": "Ryhmäperusteinen käyttö vaatii vielä pääkäyttäjän suostumuksen, eikä sitä voi vielä muokata.",
+    "restrictedEmptyWarning": "Käyttäjiä tai verkkoalueita ei ole listattu — kukaan ei voi käyttää tätä agenttia.",
+    "save": "Tallenna",
+    "saving": "Tallennetaan…",
+    "cancel": "Peruuta",
+    "saveSuccess": "Käyttösääntö tallennettu.",
+    "deleteSuccess": "Käyttösääntö poistettu — kaikki voivat taas käyttää tätä agenttia.",
+    "saveError": "Tallentaminen epäonnistui. Yritä uudelleen.",
+    "conflictError": "Joku muu muutti tätä samaan aikaan. Päivitä sivu saadaksesi uusin versio ja tee muutokset uudelleen.",
+    "reload": "Päivitä",
+    "localAdminsDescription": "Delegoi sääntöjen hallinta yksittäisille agenteille ilman uudelleen käyttöönottoa. Paikalliset ylläpitäjät voivat muokata vain heille osoitettujen agenttien sääntöjä.",
+    "noLocalAdmins": "Paikallisia ylläpitäjiä ei ole määritetty.",
+    "addLocalAdmin": "Lisää paikallinen ylläpitäjä",
+    "emailLabel": "Sähköposti",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Poista paikallinen ylläpitäjä",
+    "delegatedAgentsLabel": "Delegoidut agentit",
+    "noDelegatedAgents": "Ei delegoitavia agentteja.",
+    "unknownAgentKey": "Tuntematon agenttiavain",
+    "configSaveSuccess": "Paikalliset ylläpitäjät tallennettu.",
+    "configConflictError": "Joku muu muutti paikallisten ylläpitäjien listaa samaan aikaan. Päivitä sivu ja yritä uudelleen."
   }
 }

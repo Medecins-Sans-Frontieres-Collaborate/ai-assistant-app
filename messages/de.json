@@ -795,7 +795,8 @@
     "processingAudio": "Audio wird verarbeitet...",
     "ttsError": "Fehler beim Generieren des Audios. Bitte erneut versuchen.",
     "unsupportedMessageType": "Fehler beim Anzeigen der Nachricht: Nicht unterstützter Nachrichtentyp",
-    "addLanguageOption": "„{name}“ hinzufügen…"
+    "addLanguageOption": "„{name}“ hinzufügen…",
+    "sources": "Quellen"
   },
   "sidebar": {
     "collapseSidebar": "Seitenleiste einklappen",
@@ -1178,7 +1179,10 @@
     "customInstructionsLabel": "Individuelle Anweisungen*",
     "defaultTemperatureLabel": "Standard-Temperatur*",
     "Usage & Impact": "Nutzung & Auswirkungen",
-    "Connectors": "Connectoren"
+    "Connectors": "Connectoren",
+    "Backup": "Backup",
+    "Memories": "Erinnerungen",
+    "Agent Access": "Agentenzugriff"
   },
   "emptyState": {
     "greeting": "Wie kann ich helfen?",
@@ -3224,5 +3228,213 @@
       "lastRequest": "Letzte Anfrage",
       "disclaimer": "Schätzungen pro Anfrage auf Basis gemeldeter oder angenäherter Token-Zahlen, unter Verwendung veröffentlichter Durchschnittswerte und Annahmen v{version}. Ältere Nachrichten werden rückwirkend aus gespeichertem Text und dem aktuellen Modell der Unterhaltung berechnet. Keine Messung."
     }
+  },
+  "table": {
+    "copyTable": "Tabelle kopieren",
+    "downloadTable": "Tabelle herunterladen",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Als CSV exportiert",
+    "copyFailed": "Tabelle konnte nicht kopiert werden"
+  },
+  "backup": {
+    "intro": {
+      "title": "Chats sicher sichern",
+      "body": "Ihre Unterhaltungen werden auf diesem Gerät verschlüsselt, bevor etwas hochgeladen wird. Wir können Ihre Chats niemals lesen.",
+      "keyWarning": "Ihr Wiederherstellungsschlüssel wird auf diesem Gerät erstellt. Wir sehen ihn nie und können ihn nicht für Sie wiederherstellen — wenn Sie den Schlüssel verlieren, verlieren Sie das Backup.",
+      "create": "Schlüssel erstellen & Backup starten",
+      "decline": "Nicht jetzt — Chats nur auf diesem Gerät behalten"
+    },
+    "ceremony": {
+      "titleCreate": "Wiederherstellungsschlüssel speichern",
+      "titleRotate": "Neuen Wiederherstellungsschlüssel speichern",
+      "titleView": "Ihr Wiederherstellungsschlüssel",
+      "description": "Dieser Schlüssel ist der einzige Weg, Ihr Backup auf einem anderen Gerät wiederherzustellen. Bewahren Sie ihn sicher auf — wir können ihn nicht wiederherstellen.",
+      "copy": "Kopieren",
+      "copied": "Kopiert!",
+      "download": ".txt herunterladen",
+      "showQr": "QR-Code anzeigen",
+      "hideQr": "QR-Code ausblenden",
+      "savedCheckbox": "Ich habe meinen Wiederherstellungsschlüssel sicher gespeichert",
+      "saveFirstHint": "Kopieren oder laden Sie Ihren Schlüssel herunter, bevor Sie fortfahren.",
+      "continue": "Weiter",
+      "done": "Fertig",
+      "cancel": "Abbrechen",
+      "cancelConfirmTitle": "Backup-Einrichtung abbrechen?",
+      "cancelConfirmBody": "Ihre Chats werden nicht gesichert. Sie können das verschlüsselte Backup jederzeit in den Einstellungen aktivieren.",
+      "cancelConfirmRotateBody": "Ihr Wiederherstellungsschlüssel wurde bereits geändert. Sie können ihn jederzeit in den Einstellungen einsehen.",
+      "cancelConfirmConfirm": "Ja, abbrechen",
+      "cancelConfirmDismiss": "Zurück",
+      "loadError": "Ihr Wiederherstellungsschlüssel konnte auf diesem Gerät nicht geladen werden."
+    },
+    "file": {
+      "heading": "Wiederherstellungsschlüssel des Chat-Backups",
+      "warning": "Bewahren Sie diesen Schlüssel sicher auf. Jeder, der ihn besitzt, kann Ihr Backup lesen; ohne ihn kann das Backup nicht wiederhergestellt werden."
+    },
+    "progress": {
+      "titleCreate": "Backup wird eingerichtet",
+      "titleRotate": "Wiederherstellungsschlüssel wird geändert",
+      "encrypting": "{count, plural, one {# Unterhaltung wird verschlüsselt und gesichert …} other {# Unterhaltungen werden verschlüsselt und gesichert …}}",
+      "success": "{count, plural, one {Backup abgeschlossen. # Unterhaltung ist geschützt.} other {Backup abgeschlossen. # Unterhaltungen sind geschützt.}}",
+      "error": "Backup fehlgeschlagen. Ihre Chats sind weiterhin auf diesem Gerät.",
+      "retry": "Erneut versuchen",
+      "close": "Schließen",
+      "done": "Fertig"
+    },
+    "input": {
+      "label": "Wiederherstellungsschlüssel",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Schlüssel enthalten niemals die Buchstaben O, I oder L.",
+      "checksumError": "Dieser Schlüssel sieht nicht korrekt aus – bitte auf Tippfehler prüfen.",
+      "formatError": "Das sieht nicht wie ein Wiederherstellungsschlüssel aus.",
+      "incomplete": "Bitte weiterschreiben – ein Wiederherstellungsschlüssel hat 56 Zeichen.",
+      "valid": "Schlüssel sieht gültig aus."
+    },
+    "restore": {
+      "title": "Chats wiederherstellen",
+      "successTitle": "Backup wiederhergestellt",
+      "promptBody": "Für Ihr Konto wurde ein verschlüsseltes Backup gefunden. Geben Sie Ihren Wiederherstellungsschlüssel ein, um es auf diesem Gerät wiederherzustellen.",
+      "submit": "Backup wiederherstellen",
+      "skip": "Überspringen – auf diesem Gerät neu starten",
+      "restoring": "Chats werden entschlüsselt und wiederhergestellt…",
+      "successBody": "{count, plural, one {# Unterhaltung wiederhergestellt.} other {# Unterhaltungen wiederhergestellt.}}",
+      "wrongKey": "Dieser Schlüssel ist gültig, schließt dieses Backup jedoch nicht auf. Wenn Sie Ihren Schlüssel geändert haben, verwenden Sie den neuesten.",
+      "corrupt": "Dieses Backup konnte nicht gelesen werden – es ist möglicherweise beschädigt. Sie können auf diesem Gerät neu starten oder es später erneut versuchen.",
+      "networkError": "Der Backup-Dienst konnte nicht erreicht werden. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "tryAgain": "Anderen Schlüssel versuchen",
+      "close": "Fertig"
+    },
+    "enterKey": {
+      "title": "Neuen Wiederherstellungsschlüssel eingeben",
+      "body": "Ihr Wiederherstellungsschlüssel wurde auf einem anderen Gerät geändert. Geben Sie den neuen Schlüssel ein, um Backups auf diesem Gerät fortzusetzen.",
+      "submit": "Diesen Schlüssel verwenden"
+    },
+    "banner": {
+      "keyMismatchTitle": "Backups pausiert – Ihr Wiederherstellungsschlüssel wurde auf einem anderen Gerät geändert.",
+      "enterNewKey": "Neuen Schlüssel eingeben",
+      "resetBackup": "Backup zurücksetzen",
+      "resetConfirmTitle": "Backup mit dem Schlüssel dieses Geräts zurücksetzen?",
+      "resetConfirmBody": "Das bestehende Backup wird durch die Chats dieses Geräts ersetzt und mit dessen Schlüssel verschlüsselt. Andere Geräte benötigen dann den Wiederherstellungsschlüssel dieses Geräts.",
+      "resetConfirmAction": "Backup zurücksetzen",
+      "remoteMissingTitle": "Ihr Backup existiert nicht mehr auf dem Server. Backups sind pausiert.",
+      "backUpAgain": "Erneut sichern",
+      "dismiss": "Schließen"
+    },
+    "rotate": {
+      "confirmTitle": "Wiederherstellungsschlüssel ändern?",
+      "confirmBody": "Ihr Backup wird mit einem neuen Schlüssel neu verschlüsselt. Der alte Schlüssel wird ungültig. Sie müssen den neuen Schlüssel speichern und auf Ihren anderen Geräten eingeben.",
+      "confirmAction": "Schlüssel ändern"
+    },
+    "toast": {
+      "enrollLater": "Sie können verschlüsselte Backups jederzeit in den Einstellungen aktivieren.",
+      "keyUpdated": "Wiederherstellungsschlüssel aktualisiert. Backups wurden fortgesetzt.",
+      "resetDone": "Backup wurde mit dem Schlüssel dieses Geräts zurückgesetzt.",
+      "backupRestarted": "Backup erneut erstellt.",
+      "opFailed": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+    },
+    "settings": {
+      "statusOn": "Backup ist aktiviert",
+      "statusOff": "Backup ist deaktiviert",
+      "offDescription": "Ihre Chats befinden sich nur in diesem Browser. Schalten Sie verschlüsselte Backups ein, um sie zu sichern und auf anderen Geräten wiederherzustellen. Chats werden auf Ihrem Gerät verschlüsselt – wir können sie niemals lesen.",
+      "turnOn": "Backup aktivieren",
+      "restoreTitle": "Für Ihr Konto existiert bereits ein Backup",
+      "restoreDescription": "Geben Sie Ihren Wiederherstellungsschlüssel ein, um es auf diesem Gerät wiederherzustellen.",
+      "restore": "Backup wiederherstellen",
+      "lastBackup": "Letztes Backup: {time}",
+      "lastBackupNever": "Noch kein Backup abgeschlossen",
+      "keyFingerprint": "Schlüssel ····-{tail}",
+      "syncState": {
+        "idle": "Warten auf Synchronisierung",
+        "syncing": "Wird gesichert…",
+        "ok": "Auf dem neuesten Stand",
+        "keyOutOfDate": "Pausiert – der Wiederherstellungsschlüssel wurde auf einem anderen Gerät geändert",
+        "remoteMissing": "Pausiert — das Backup wurde vom Server entfernt",
+        "error": "Letzter Backup-Versuch fehlgeschlagen"
+      },
+      "backUpNow": "Jetzt sichern",
+      "backUpNowSuccess": "Backup abgeschlossen",
+      "backUpNowFailure": "Backup fehlgeschlagen — Ihre Chats wurden auf diesem Gerät nicht verändert",
+      "viewKey": "Wiederherstellungsschlüssel anzeigen",
+      "changeKey": "Wiederherstellungsschlüssel ändern",
+      "dangerTitle": "Gefahrenzone",
+      "turnOffDelete": "Backup deaktivieren & löschen",
+      "turnOffConfirmTitle": "Backup deaktivieren?",
+      "turnOffConfirmMessage": "Dadurch wird Ihr Backup von unseren Servern für alle Geräte gelöscht. Die Chats auf diesem Gerät bleiben erhalten. Sie können das Backup später mit einem neuen Wiederherstellungsschlüssel erneut aktivieren.",
+      "turnOffConfirmAction": "Backup löschen",
+      "turnOffSuccess": "Backup deaktiviert und gelöscht",
+      "turnOffFailure": "Das Backup konnte nicht gelöscht werden. Bitte versuchen Sie es erneut."
+    }
+  },
+  "memories": {
+    "title": "Erinnerungen",
+    "description": "Lassen Sie den Assistenten dauerhafte Fakten speichern, die Sie teilen – wie Ihre Rolle, Präferenzen und laufende Projekte – und diese in verschiedenen Unterhaltungen verwenden.",
+    "enableToggle": "Erinnerungen aktivieren",
+    "privacyNote": "Fakten werden nur in diesem Browser gespeichert und in Ihren Chats genutzt, um Antworten zu personalisieren.",
+    "empty": "Noch keine Erinnerungen. Merkenswerte Fakten werden automatisch aus Ihren Unterhaltungen gespeichert.",
+    "savedOn": "Gespeichert am {date}",
+    "deleteMemory": "Erinnerung löschen",
+    "clearAll": "Alle Erinnerungen löschen",
+    "clearAllConfirmQuestion": "Alle Erinnerungen löschen? Dies kann nicht rückgängig gemacht werden.",
+    "clearAllConfirm": "Alle löschen",
+    "cancel": "Abbrechen"
+  },
+  "contextWindow": {
+    "label": "Kontextfenster",
+    "value": "{count} Nachrichten",
+    "fewer": "Weniger Nachrichten",
+    "more": "Mehr Nachrichten",
+    "description": "Ältere Nachrichten über dieses Limit hinaus werden zusammengefasst und als Kontext gesendet."
+  },
+  "agentAccess": {
+    "title": "Agentenzugriff",
+    "description": "Steuern Sie, welche Nutzer gemeinsam genutzte Foundry-Agenten verwenden können. Die Regeln schränken nur weiter ein, was bereits durch den eigenen Azure-Zugriff erlaubt ist — Zugriffsrechte, die Azure verweigert, können nie gewährt werden.",
+    "backToChat": "Zurück zum Chat",
+    "loading": "Lade Agenten und Regeln…",
+    "loadError": "Agentenzugriffs-Daten konnten nicht geladen werden.",
+    "rulesUnavailableWarning": "Zugriffsregeln konnten nicht aus dem Speicher geladen werden. Das Ausführen von Agenten ist momentan blockiert und Regeln können nicht bearbeitet werden.",
+    "retry": "Erneut versuchen",
+    "rulesTab": "Agentenregeln",
+    "localAdminsTab": "Lokale Administratoren",
+    "noAgents": "Keine Agenten zu verwalten.",
+    "sourceLabel": "Quelle",
+    "notDiscoverable": "Für Sie nicht auffindbar",
+    "notDiscoverableHint": "Für diesen Agenten existiert eine Regel, aber er ist für Sie nicht auffindbar – er wurde möglicherweise umbenannt, Ihr Azure-Zugriff reicht nicht aus oder seine Zugriffsregel schließt Sie aus.",
+    "accessEveryone": "Jeder",
+    "accessRestricted": "Eingeschränkt",
+    "edit": "Bearbeiten",
+    "updatedByLine": "Zuletzt aktualisiert von {user} am {date}",
+    "accessTypeLabel": "Wer kann diesen Agenten nutzen",
+    "everyoneDescription": "Jeder, der über seinen Azure-Zugang bereits auf diesen Agenten zugreifen kann.",
+    "restrictedDescription": "Nur die unten aufgelisteten Nutzer und Domains.",
+    "allowDomainsLabel": "Zugelassene Domains",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Zugelassene Benutzer",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Drücken Sie Enter, um hinzuzufügen",
+    "removeChip": "Entfernen",
+    "groupsLabel": "Zugelassene Gruppen",
+    "groupsPendingConsent": "Der Gruppenbasierte Zugriff wartet auf die Zustimmung des Tenant-Administrators und kann noch nicht bearbeitet werden.",
+    "restrictedEmptyWarning": "Es sind keine Benutzer oder Domains eingetragen — niemand kann diesen Agenten verwenden.",
+    "save": "Speichern",
+    "saving": "Wird gespeichert…",
+    "cancel": "Abbrechen",
+    "saveSuccess": "Zugriffsregel gespeichert.",
+    "deleteSuccess": "Zugriffsregel entfernt — jeder kann diesen Agenten wieder verwenden.",
+    "saveError": "Konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.",
+    "conflictError": "Jemand anderes hat während Ihrer Bearbeitung Änderungen vorgenommen. Laden Sie die aktuelle Version neu und versuchen Sie es erneut.",
+    "reload": "Neu laden",
+    "localAdminsDescription": "Regelverwaltung für bestimmte Agenten delegieren, ohne eine erneute Bereitstellung. Lokale Admins können nur Regeln für zugewiesene Agenten bearbeiten.",
+    "noLocalAdmins": "Keine lokalen Admins konfiguriert.",
+    "addLocalAdmin": "Lokalen Admin hinzufügen",
+    "emailLabel": "E-Mail",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Lokalen Admin entfernen",
+    "delegatedAgentsLabel": "Delegierte Agenten",
+    "noDelegatedAgents": "Keine Agenten zum Delegieren verfügbar.",
+    "unknownAgentKey": "Unbekannter Agenten-Schlüssel",
+    "configSaveSuccess": "Lokale Admins gespeichert.",
+    "configConflictError": "Jemand anderes hat die Liste der lokalen Admins während Ihrer Bearbeitung geändert. Bitte neu laden und erneut versuchen."
   }
 }

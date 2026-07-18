@@ -907,7 +907,8 @@
     "processingAudio": "Nap trete odyo...",
     "ttsError": "Erè pandan kreyasyon odyo. Tanpri eseye ankò.",
     "unsupportedMessageType": "Erè pandan afichaj mesaj la: Tip mesaj sa a pa sipòte",
-    "addLanguageOption": "Ajoute \"{name}\"…"
+    "addLanguageOption": "Ajoute \"{name}\"…",
+    "sources": "Sous"
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",
@@ -1331,7 +1332,10 @@
     "customInstructionsLabel": "Enstriksyon Pèsonalize*",
     "defaultTemperatureLabel": "Tanperati pa defo*",
     "Usage & Impact": "Itilizasyon & Enpak",
-    "Connectors": "Konektè"
+    "Connectors": "Konektè",
+    "Backup": "Sovgad",
+    "Memories": "Memwa",
+    "Agent Access": "Aksè Ajan"
   },
   "emptyState": {
     "greeting": "Kijan mwen ka ede ou?",
@@ -3208,5 +3212,213 @@
       "lastRequest": "Dènye demann lan",
       "disclaimer": "Estimasyon pa demann yo baze sou kantite jèton rapòte oswa apwoksime, ak mwayèn ak sipozisyon pibliye v{version}. Mesaj ki pi ansyen yo rekalkile soti nan tèks sove ak modèl aktyèl konvèsasyon an. Sa pa yon mezi."
     }
+  },
+  "table": {
+    "copyTable": "Kopi tab la",
+    "downloadTable": "Telechaje tab la",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Ekspòte kòm CSV",
+    "copyFailed": "Kopi tab la echwe"
+  },
+  "backup": {
+    "intro": {
+      "title": "Sovgad konvèsasyon ou yo — an sekirite",
+      "body": "Konvèsasyon ou yo ankripte sou aparèy sa a anvan nenpòt bagay telechaje. Nou pap janm ka li chat ou yo.",
+      "keyWarning": "Kle rekiperasyon ou kreye sou aparèy sa a. Nou pa janm wè l epi nou pa ka rekipere l pou ou — si ou pèdi kle a, ou pèdi sovgad la.",
+      "create": "Kreye kle mwen & fè sovgad",
+      "decline": "Pa kounye a — kenbe chat yo sou aparèy sa sèlman"
+    },
+    "ceremony": {
+      "titleCreate": "Sove kle rekiperasyon ou",
+      "titleRotate": "Sove nouvo kle rekiperasyon ou",
+      "titleView": "Kle rekiperasyon ou",
+      "description": "Kle sa a se sèl fason pou retabli sovgad ou sou yon lòt aparèy. Kenbe li an sekirite — nou pa ka rekipere l pou ou.",
+      "copy": "Kopi",
+      "copied": "Kopiye!",
+      "download": "Telechaje .txt",
+      "showQr": "Montre kòd QR",
+      "hideQr": "Kache kòd QR",
+      "savedCheckbox": "Mwen sove kle rekiperasyon mwen yon kote ki an sekirite",
+      "saveFirstHint": "Kopi oswa telechaje kle ou anvan ou kontinye.",
+      "continue": "Kontinye",
+      "done": "Fini",
+      "cancel": "Anile",
+      "cancelConfirmTitle": "Anile konfigirasyon sovgad la?",
+      "cancelConfirmBody": "Chat ou yo pap sove an sovgad. Ou ka aktive sovgad ankripte nenpòt kilè nan Paramèt.",
+      "cancelConfirmRotateBody": "Kle rekiperasyon ou deja chanje. Ou ka wè li nenpòt kilè nan Paramèt.",
+      "cancelConfirmConfirm": "Wi, anile",
+      "cancelConfirmDismiss": "Retounen",
+      "loadError": "Pa ka chaje kle rekiperasyon ou sou aparèy sa a."
+    },
+    "file": {
+      "heading": "Kle rekiperasyon sovgad chat",
+      "warning": "Kenbe kle sa a an sekirite. Nenpòt moun ki gen li ka li sovgad ou; san li sovgad la pap ka retabli."
+    },
+    "progress": {
+      "titleCreate": "Ap mete sovgad ou an plas",
+      "titleRotate": "Ap chanje kle rekiperasyon ou",
+      "encrypting": "{count, plural, one {Ap ankripte ak sovgad # konvèsasyon…} other {Ap ankripte ak sovgad # konvèsasyon…}}",
+      "success": "{count, plural, one {Sovgad fini. # konvèsasyon pwoteje.} other {Sovgad fini. # konvèsasyon pwoteje.}}",
+      "error": "Sovgad echwe. Chat ou toujou sou aparèy sa a.",
+      "retry": "Eseye ankò",
+      "close": "Fèmen",
+      "done": "Fini"
+    },
+    "input": {
+      "label": "Kle rekiperasyon",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Kle yo pa janm gen lèt O, I oswa L.",
+      "checksumError": "Kle sa a pa sanble kòrèk — tcheke si gen erè.",
+      "formatError": "Sa pa sanble ak yon kle rekiperasyon.",
+      "incomplete": "Kontinye tape — yon kle rekiperasyon gen 56 karaktè.",
+      "valid": "Kle a sanble valab."
+    },
+    "restore": {
+      "title": "Restaure chat ou yo",
+      "successTitle": "Sovgade retabli",
+      "promptBody": "Nou jwenn yon sovgade ankripte pou kont ou. Mete kle rekiperasyon ou pou retabli li sou aparèy sa a.",
+      "submit": "Retabli sovgade a",
+      "skip": "Sote — kòmanse soti a zewo sou aparèy sa a",
+      "restoring": "Ap dekripte epi retabli chat ou yo...",
+      "successBody": "{count, plural, one {# konvèsasyon retabli.} other {# konvèsasyon retabli.}}",
+      "wrongKey": "Kle sa a valab, men li pa ouvri sovgade sa a. Si ou chanje kle ou, itilize dènye a.",
+      "corrupt": "Sovgade sa a pa kapab li — li ka domaje. Ou ka kòmanse nan papòt sou aparèy sa a oswa eseye ankò pita.",
+      "networkError": "Pa kapab konekte ak sèvis sovgade a. Tcheke koneksyon ou epi eseye ankò.",
+      "tryAgain": "Eseye yon lòt kle",
+      "close": "Fini"
+    },
+    "enterKey": {
+      "title": "Antre nouvo kle rekiperasyon ou",
+      "body": "Yo te chanje kle rekiperasyon ou sou yon lòt aparèy. Mete nouvo kle a pou kontinye sovgade sou aparèy sa a.",
+      "submit": "Sèvi ak kle sa a"
+    },
+    "banner": {
+      "keyMismatchTitle": "Sovgade yo pran poz — kle rekiperasyon ou te chanje sou yon lòt aparèy.",
+      "enterNewKey": "Antre nouvo kle a",
+      "resetBackup": "Reyajiste sovgade",
+      "resetConfirmTitle": "Reyajiste sovgade ak kle aparèy sa a?",
+      "resetConfirmBody": "Sovgade ki egziste la ap ranplase ak chat aparèy sa a, ankripte ak kle aparèy sa a. Lòt aparèy yo ap bezwen kle rekiperasyon aparèy sa a.",
+      "resetConfirmAction": "Reyajiste sovgade",
+      "remoteMissingTitle": "Sovgade ou a pa egziste ankò sou sèvè a. Sovgade yo sou poz.",
+      "backUpAgain": "Sovgade ankò",
+      "dismiss": "Fèmen"
+    },
+    "rotate": {
+      "confirmTitle": "Chanje kle rekiperasyon ou?",
+      "confirmBody": "Sovgade ou ap re-ankripte ak yon nouvo kle, epi ansyen kle a pap mache ankò. Ou dwe sove nouvo kle a epi mete li sou lòt aparèy yo.",
+      "confirmAction": "Chanje kle a"
+    },
+    "toast": {
+      "enrollLater": "Ou ka aktive sovgade ankripte nenpòt ki lè nan Anviwònman.",
+      "keyUpdated": "Kle rekiperasyon mete ajou. Sovgade yo reprann.",
+      "resetDone": "Sovgade reyajiste ak kle aparèy sa a.",
+      "backupRestarted": "Sovgade kreye ankò.",
+      "opFailed": "Yon erè rive. Tanpri eseye ankò."
+    },
+    "settings": {
+      "statusOn": "Sovgade aktive",
+      "statusOff": "Sovgade dezaktive",
+      "offDescription": "Chat ou yo sèlman disponib nan navigatè sa a. Limen sovgade ankripte pou pwoteje yo epi retabli yo sou lòt aparèy. Chat yo ankripte sou aparèy ou — nou pa janm ka li yo.",
+      "turnOn": "Limèn sovgade",
+      "restoreTitle": "Yon sovgade deja egziste pou kont ou",
+      "restoreDescription": "Mete kle rekiperasyon ou pou retabli li sou aparèy sa a.",
+      "restore": "Retabli sovgade a",
+      "lastBackup": "Dènye sovgade: {time}",
+      "lastBackupNever": "Pa gen sovgade ki fèt ankò",
+      "keyFingerprint": "Kle ····-{tail}",
+      "syncState": {
+        "idle": "Ap tann pou senkronize",
+        "syncing": "Ap sovgade...",
+        "ok": "An dènye",
+        "keyOutOfDate": "Pran poz — kle rekiperasyon an te chanje sou yon lòt aparèy",
+        "remoteMissing": "Pòz — sovgad la te retire sou sèvè a",
+        "error": "Dènye tantativ sovgad la echwe"
+      },
+      "backUpNow": "Sove kounye a",
+      "backUpNowSuccess": "Sovgad fini",
+      "backUpNowFailure": "Sovgad la echwe — konvèsasyon ou yo pa chanje sou aparèy sa a",
+      "viewKey": "Gade kle rekiperasyon",
+      "changeKey": "Chanje kle rekiperasyon",
+      "dangerTitle": "Zòn danje",
+      "turnOffDelete": "Dekonekte & efase sovgad la",
+      "turnOffConfirmTitle": "Vle dekonekte sovgad la?",
+      "turnOffConfirmMessage": "Sa ap efase sovgad ou sou sèvè nou yo pou tout aparèy yo. Konvèsasyon ki sou aparèy sa a ap rete. Ou ka aktive sovgad ankò pita ak yon nouvo kle rekiperasyon.",
+      "turnOffConfirmAction": "Efase sovgad la",
+      "turnOffSuccess": "Sovgad la dekonekte epi efase",
+      "turnOffFailure": "Sovgad la pa t ka efase. Tanpri eseye ankò."
+    }
+  },
+  "memories": {
+    "title": "Memwa",
+    "description": "Kite asistan an sonje enfòmasyon ki dire sou ou — tankou wòl ou, preferans ou, ak pwojè w ap travay sou yo — epi itilize yo atravè diferan konvèsasyon.",
+    "enableToggle": "Aktive memwa",
+    "privacyNote": "Enfòmasyon yo estoke sèlman nan navigatè sa a epi enkli nan konvèsasyon ou yo pou pèsonalize repons yo.",
+    "empty": "Pa gen memwa ankò. Enfòmasyon ki vo sonje yo sove otomatikman depi konvèsasyon ou yo.",
+    "savedOn": "Sove {date}",
+    "deleteMemory": "Efase memwa",
+    "clearAll": "Efase tout memwa",
+    "clearAllConfirmQuestion": "Efase tout memwa? Aksyon sa a pap ka anile.",
+    "clearAllConfirm": "Efase tout",
+    "cancel": "Anile"
+  },
+  "contextWindow": {
+    "label": "Fenèt kontèks",
+    "value": "{count} mesaj",
+    "fewer": "Mwens mesaj",
+    "more": "Plis mesaj",
+    "description": "Mesaj ki pi ansyen pase limit sa a ap rezime epi voye kòm kontèks."
+  },
+  "agentAccess": {
+    "title": "Aksè ajan",
+    "description": "Kontwole ki itilizatè ki ka itilize ajan Foundry yo an komen. Règ sa yo limite sa aksè Azure itilizatè a deja pèmèt — yo p ap janm ka bay aksè Azure refize.",
+    "backToChat": "Retounen nan chat",
+    "loading": "Y ap chaje ajan ak règ yo…",
+    "loadError": "Pa kapab chaje done aksè ajan yo.",
+    "rulesUnavailableWarning": "Règ aksè yo pa t ka chaje depi depo a. Itilizasyon ajan an bloke pou kounye a epi ou pa ka modifye règ yo.",
+    "retry": "Repran",
+    "rulesTab": "Règ ajan",
+    "localAdminsTab": "Administratè lokal",
+    "noAgents": "Pa gen ajan pou jere.",
+    "sourceLabel": "Sous",
+    "notDiscoverable": "Ou pa ka jwenn li",
+    "notDiscoverableHint": "Gen yon règ pou ajan sa a, men li pa parèt nan lis ou — li ka chanje non, aksè Azure ou pa rive jwenn li, oswa règ aksè li pa enkli ou.",
+    "accessEveryone": "Tout moun",
+    "accessRestricted": "Restrenn",
+    "edit": "Modifye",
+    "updatedByLine": "Dènye mizajou pa {user} le {date}",
+    "accessTypeLabel": "Ki moun ki kapab itilize ajan sa a",
+    "everyoneDescription": "Nenpòt moun ki deja ka jwenn aksè ak ajan sa a atravè aksè Azure yo.",
+    "restrictedDescription": "Sèlman itilizatè ak domèn ki anba a.",
+    "allowDomainsLabel": "Domèn otorize",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Itilizatè otorize",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Peze Antre pou ajoute",
+    "removeChip": "Retire",
+    "groupsLabel": "Gwoup otorize",
+    "groupsPendingConsent": "Aksè selon gwoup ap tann konsantman administratè lokatè epi li pa ka modifye ankò.",
+    "restrictedEmptyWarning": "Pa gen itilizatè oswa domèn ki make — pèsonn p ap kapab itilize ajan sa a.",
+    "save": "Sove",
+    "saving": "Ap sove…",
+    "cancel": "Anile",
+    "saveSuccess": "Règ aksè a anrejistre.",
+    "deleteSuccess": "Règ aksè a retire — tout moun ka itilize ajan sa a ankò.",
+    "saveError": "Pa t kapab sove. Tanpri rekòmanse.",
+    "conflictError": "Yon lòt moun modifye sa pandan w ap edite. Chaje ankò pou jwenn dènye vèsyon an epi eseye ankò.",
+    "reload": "Chaje ankò",
+    "localAdminsDescription": "Delegasyon jesyon règ pou ajan espesifik san rekòmanse deplwaman. Administratè lokal yo ka modifye règ sèlman pou ajan ki asiyen yo.",
+    "noLocalAdmins": "Pa gen administratè lokal ki konfigire.",
+    "addLocalAdmin": "Ajoute administratè lokal",
+    "emailLabel": "Imèl",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Retire administratè lokal",
+    "delegatedAgentsLabel": "Ajan delege",
+    "noDelegatedAgents": "Pa gen ajan pou delege.",
+    "unknownAgentKey": "Kle ajan enkoni",
+    "configSaveSuccess": "Administratè lokal yo anrejistre.",
+    "configConflictError": "Yon lòt moun modifye lis administratè lokal yo pandan w ap edite. Chaje ankò epi eseye ankò."
   }
 }

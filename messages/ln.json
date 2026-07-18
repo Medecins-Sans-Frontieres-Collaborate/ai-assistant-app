@@ -907,7 +907,8 @@
     "processingAudio": "Kobongisa molangi ya mino...",
     "ttsError": "Kasaleli molangi ya mino esalami malamu te. Meká lisusu.",
     "unsupportedMessageType": "Mbeba kobimisa nsango: Motindo ya nsango oyo esengeli te",
-    "addLanguageOption": "Bakisa \"{name}\"…"
+    "addLanguageOption": "Bakisa \"{name}\"…",
+    "sources": "Bisika ya nsuka"
   },
   "transcript": {
     "originalTranscript": "Transkripsheni ya ebandeli",
@@ -1331,7 +1332,10 @@
     "customInstructionsLabel": "Biyetoli na moto moko*",
     "defaultTemperatureLabel": "Temperature ya kobanda*",
     "Usage & Impact": "Kosalela & Mfumo",
-    "Connectors": "Bakonɛktɛrɛ"
+    "Connectors": "Bakonɛktɛrɛ",
+    "Backup": "Kopie ya bokotisi",
+    "Memories": "Ebakisi",
+    "Agent Access": "Kopesa mopesi nzela"
   },
   "emptyState": {
     "greeting": "Ndenge nini nakoki kosalisa yo?",
@@ -3208,5 +3212,213 @@
       "lastRequest": "Senga ya suka",
       "disclaimer": "Bokeseni na senga moko likoló ya mituya ya token oyo emonisami to esakwami, kosalela pɔsɔndɔ esamaki na makambo basangisi v{version}. Sango ya kala ezali kolongolama lisusu na maloba babombaki mpe modèle ya likita lelo. Ezali te mindele."
     }
+  },
+  "table": {
+    "copyTable": "Kopiya table",
+    "downloadTable": "Telecharger table",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Ekotami lokola CSV",
+    "copyFailed": "Ekanisi te na kopiya table"
+  },
+  "backup": {
+    "intro": {
+      "title": "Kosalela bakopi ya maloba na yo — na bobateli",
+      "body": "Makulutu na yo ezali kokangama (crypter) na appareil oyo liboso ete ezali kotinda epai na biso. Tokoki naino kotanga makulutu na yo te.",
+      "keyWarning": "Motuya ya kobikisa ezali kosalema na appareil oyo. Tokomona yango te mpe tokoki kozongisela yo yango te — kobunga motuya elingi koloba kobunga bakopi.",
+      "create": "Salela motuya & sala bakopi",
+      "decline": "Te sik’oyo — tindu makulutu ekala kaka na appareil oyo"
+    },
+    "ceremony": {
+      "titleCreate": "Bomba motuya ya kobikisa na yo",
+      "titleRotate": "Bomba motuya ya sika ya kobikisa na yo",
+      "titleView": "Mutuya ya kobikisa na yo",
+      "description": "Mutuya oyo nde nzela moko ya kozongisa bakopi na appareil mosusu. Bomba yango na esika ezali ya boboto — tokoki kozongisela yo yango te.",
+      "copy": "Kopiya",
+      "copied": "Ekopiami!",
+      "download": "Telecharger .txt",
+      "showQr": "Lakisa QR code",
+      "hideQr": "Komba QR code",
+      "savedCheckbox": "Nabombi motuya ya kobikisa na esika ya boboto",
+      "saveFirstHint": "Kopiya to telecharger motuya na yo liboso okoba.",
+      "continue": "Koba",
+      "done": "Esili",
+      "cancel": "Kokanga",
+      "cancelConfirmTitle": "Kolongola misala ya bakopi?",
+      "cancelConfirmBody": "Mateya na yo ekosalema bakopi te. Okoki kotia bakopi na bobateli tango nyonso na paramètre.",
+      "cancelConfirmRotateBody": "Mutuya ya kobikisa ebosanami. Okoki kotala yango tango nyonso na ba paramètre.",
+      "cancelConfirmConfirm": "Ee, kangela",
+      "cancelConfirmDismiss": "Zonga",
+      "loadError": "Ekoki te kokota motuya ya kobikisa na appareil oyo."
+    },
+    "file": {
+      "heading": "Mutuya ya kobikisa backup ya makulutu",
+      "warning": "Bomba motuya oyo. Moto nyonso azali na yango akoki kotanga bakopi na yo; soki ozangi yango bakopi ekoki kozongisama te."
+    },
+    "progress": {
+      "titleCreate": "Kosalela bakopi na yo",
+      "titleRotate": "Kobongola motuya ya kobikisa na yo",
+      "encrypting": "{count, plural, one {Kokanga mpe kosalela bakopi ya likambo moko ya lisolo…} other {Kokanga mpe kosalela bakopi ya masolo #…}}",
+      "success": "{count, plural, one {Bakopi etondi. Likanisi moko ya makambo ebatelami.} other {Bakopi etondi. Masolo # ebatelami.}}",
+      "error": "Bakopi esalemi te. Makulutu na yo ezali kaka na appareil oyo.",
+      "retry": "Mekola lisusu",
+      "close": "Kokanga",
+      "done": "Esili"
+    },
+    "input": {
+      "label": "Mutuya ya kobikisa",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Bamotuya ezangaka ba minzoto O, I to L.",
+      "checksumError": "Fungola yango ezali malamu te — tuná epai ya kofuta nkombo ya solo.",
+      "formatError": "Yango ezali na ndakisa ya fungola ya lisungisi te.",
+      "incomplete": "Koba kokoma — fungola ya lisungisi ezali na bakarakte 56.",
+      "valid": "Fungola ezali malamu."
+    },
+    "restore": {
+      "title": "Zongisa nsango na yo",
+      "successTitle": "Backup ezongi",
+      "promptBody": "Tozwi backup ebombami mpo na compte na yo. Koma fungola na yo ya lisungisi mpo ozongisa yango na appareil oyo.",
+      "submit": "Zongisa backup",
+      "skip": "Longwa — banda suká sika na appareil oyo",
+      "restoring": "Cosaka mpe kozongisa nsango na yo…",
+      "successBody": "{count, plural, one {# likambi ezongi.} other {# makambi ezongi.}}",
+      "wrongKey": "Fungola yango ezali malamu, kasi ekoki kofungola backup oyo te. Soki obongoli fungola, salela esika ya sika.",
+      "corrupt": "Backup oyo ekoki kotangama te — ekoki kozala ezali ya kobeba. Okoki kobanda sika na appareil oyo to kozwa lisusu sima.",
+      "networkError": "Tokoki kozwa service ya backup te. Tala Internet na yo mpe meka lisusu.",
+      "tryAgain": "Meka fungola mosusu",
+      "close": "Sili"
+    },
+    "enterKey": {
+      "title": "Koma fungola ya lisungisi ya sika",
+      "body": "Fungola ya lisungisi na yo ebonguami na appareil mosusu. Koma fungola ya sika mpo okoba backup na appareil oyo.",
+      "submit": "Salela fungola oyo"
+    },
+    "banner": {
+      "keyMismatchTitle": "Backup ekangami — fungola ya lisungisi ebonguami na appareil mosusu.",
+      "enterNewKey": "Koma fungola ya sika",
+      "resetBackup": "Zongisa backup na bokila",
+      "resetConfirmTitle": "Zongisa backup na fungola ya appareil oyo?",
+      "resetConfirmBody": "Backup ezalaki ekosila mpe bakambi ya appareil oyo nde ekokóma backup, ebombami na fungola ya appareil oyo. Bapolongele bimposa ko kende basengeli ko salela fungola ya lisungisi ya appareil oyo.",
+      "resetConfirmAction": "Zongisa backup",
+      "remoteMissingTitle": "Backup na yo ezali lisusu na server te. Backup ekangami.",
+      "backUpAgain": "Sala backup lisusu",
+      "dismiss": "Kabola"
+    },
+    "rotate": {
+      "confirmTitle": "Obongola fungola ya lisungisi?",
+      "confirmBody": "Backup na yo ekobombama lisusu na fungola ya sika, mpe fungola ya kala ekotika kosala. Okosenga kobomba fungola ya sika mpe kokota yango na ba appareil mosusu.",
+      "confirmAction": "Bongola fungola"
+    },
+    "toast": {
+      "enrollLater": "Okoki kotya backup ebombami tango nyonso na Paramètres.",
+      "keyUpdated": "Fungola ya lisungisi ebonguami. Backup ekobandi lisusu.",
+      "resetDone": "Backup ezozongisama na fungola ya appareil oyo.",
+      "backupRestarted": "Backup esalemi lisusu.",
+      "opFailed": "Likanisi moko esalemi malamu te. Meka lisusu."
+    },
+    "settings": {
+      "statusOn": "Backup ezali",
+      "statusOff": "Backup ezali te",
+      "offDescription": "Nsango na yo ezalaki kaka na browser oyo. Tyá backup ebombami mpo ekoka kobika mpe kozongisama na ba appareil mosusu. Nsango ebombami na appareil na yo — biso tokoki kotanga yango te.",
+      "turnOn": "Tyá backup ebombami",
+      "restoreTitle": "Backup ezali déjà mpo na compte na yo",
+      "restoreDescription": "Kota fungola ya lisungisi na yo mpo ozongisa yango na appareil oyo.",
+      "restore": "Zongisa backup",
+      "lastBackup": "Backup ya suka: {time}",
+      "lastBackupNever": "Backup esalemi naino te",
+      "keyFingerprint": "Fungola ····-{tail}",
+      "syncState": {
+        "idle": "Ezeli kozela kosangisa",
+        "syncing": "Ezozala backup…",
+        "ok": "Mikolo nyonso",
+        "keyOutOfDate": "Ekangami — fungola ya lisungisi ebonguami na appareil mosusu",
+        "remoteMissing": "Epesami — backup elongwe na serveur",
+        "error": "Esilaki malamu te kokesa backup na nsima"
+      },
+      "backUpNow": "Kokesa backup sik’oyo",
+      "backUpNowSuccess": "Backup esili malamu",
+      "backUpNowFailure": "Backup ekokaki te — masolo na yo ebongwani te na appareil oyo",
+      "viewKey": "Lakisa clé ya récupération",
+      "changeKey": "Bongola clé ya récupération",
+      "dangerTitle": "Eteni ya likama",
+      "turnOffDelete": "Cacher & kopanza backup",
+      "turnOffConfirmTitle": "Okoya ko cacher backup?",
+      "turnOffConfirmMessage": "Oko supprimer backup na ba serveurs na biso mpo na ba appareils nyonso. Masolo na appareil oyo ekotikala. Okoki lisusu ko activer backup na clé ya récupération ya sika.",
+      "turnOffConfirmAction": "Supprimer backup",
+      "turnOffSuccess": "Backup esili ko cacher mpe kopanza",
+      "turnOffFailure": "Ekokaki te ko supprimer backup. S'il vous plaît, meka lisusu."
+    }
+  },
+  "memories": {
+    "title": "Bamemwá",
+    "description": "Pesa assistant nzela akanga makambo ya ntina oyebisi — lokola mosala na yo, esengo na yo, mpe project oyo ezali koleka — mpe asalela yango na masolo nyonso.",
+    "enableToggle": "Activer bamemwá",
+    "privacyNote": "Makambo ezwaka kaka na browser oyo mpe ekotaka na masolo na yo mpo na kosala eyano oyo etali yo.",
+    "empty": "Bamemwá ezali te. Makambo ya ntina ekangamaka kaka na masolo na yo.",
+    "savedOn": "Ebakisami {date}",
+    "deleteMemory": "Koboma mémoire",
+    "clearAll": "Kolongola bamemwá nyonso",
+    "clearAllConfirmQuestion": "Koboma bamemwá nyonso? Okoki te kozongisa.",
+    "clearAllConfirm": "Supprimer nyonso",
+    "cancel": "Kokata"
+  },
+  "contextWindow": {
+    "label": "Fenêtre ya contexte",
+    "value": "{count} mesaje",
+    "fewer": "Mesaje moke",
+    "more": "Mesaje mingi",
+    "description": "Mesaje ya kala na koleka boye, ekomisama résumé mpe etindamela lokola contexte."
+  },
+  "agentAccess": {
+    "title": "Kokota ya agent",
+    "description": "Pesa bokonzi na ba utilisateurs bakoki kosalela ba agents partagés ya Foundry. Règlement ekoki kaka ko limiter kolanda ba droits oyo utilisateur azali na yango déjà na Azure — bakoki te kopesa accès soki Azure epesi te.",
+    "backToChat": "Zonga na masolo",
+    "loading": "Kozwa ba agents mpe ba règlements…",
+    "loadError": "Ekokaki te kozwa ba données ya accès ya agent.",
+    "rulesUnavailableWarning": "Ba règles ya accès ekokaki te kozwa na stockage. Ko utiliser agent ezali ko boma sik’oyo mpe ba règles ekoki te kobongisama.",
+    "retry": "Meka lisusu",
+    "rulesTab": "Ba règle ya agent",
+    "localAdminsTab": "Ba admins ya esika",
+    "noAgents": "Agents ezali te ya kotinda.",
+    "sourceLabel": "Esika ewutaki",
+    "notDiscoverable": "Okokoki te kokuta na yango",
+    "notDiscoverableHint": "Règle ezali mpo na agent oyo, kasi ezali te na recherche na yo — ekoki kozala baye babongoli nkombo, accès na yo na Azure ekoki kokoma te, to règle na yango ekoki kozala na yo te.",
+    "accessEveryone": "Moto nyonso",
+    "accessRestricted": "Ebongwani",
+    "edit": "Bongola",
+    "updatedByLine": "Ebongisami sima na {user} na {date}",
+    "accessTypeLabel": "Nani akoki kosalela agent oyo",
+    "everyoneDescription": "Moto nyonso azwaka déjà accès na agent oyo na bobele accès na Azure.",
+    "restrictedDescription": "Kaka ba utilisateurs mpe ba domaines oyo balekani awa.",
+    "allowDomainsLabel": "Ba-domaine oyo bandimami",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Ba-utilisateur oyo bandimami",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Pesa Enter mpo na kobakisa",
+    "removeChip": "Kolongola",
+    "groupsLabel": "Ba-groupe oyo bandimami",
+    "groupsPendingConsent": "Kotika entrée na groupe ezali kozela kondima ya admin ya tenant mpe ekoki nanu kobongisama te.",
+    "restrictedEmptyWarning": "Moto to domaine moko te elandi — moto moko akoki kosalela agent oyo te.",
+    "save": "Kokanga",
+    "saving": "Kozali kobomba…",
+    "cancel": "Kolongola",
+    "saveSuccess": "Règle ya accès ebombami.",
+    "deleteSuccess": "Règle ya accès elongwi — bato nyonso bakoki lisusu kosalela agent oyo.",
+    "saveError": "Ekokaki te kobomba. S'il vous plaît, meka lisusu.",
+    "conflictError": "Moto mosusu abongolaki yango tango ozalaki na kobongisa. Telemelisa mpo ozwaka version ya sika, sima bota mbongwana na yo lisusu.",
+    "reload": "Telemelisa",
+    "localAdminsDescription": "Fanda to kotinda gestion ya règle mpo na ba agent certains sans kotala lisusu. Ba local admins bakoki kobongisa kaka ba règle na ba agents oyo batindami epai na bango.",
+    "noLocalAdmins": "Local admins moko te ebongisami.",
+    "addLocalAdmin": "Kobakisa local admin",
+    "emailLabel": "Imeli",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Kolongola local admin",
+    "delegatedAgentsLabel": "Ba agent oyo batindami",
+    "noDelegatedAgents": "Agent moko te ezopesa posibilite ya kotinda.",
+    "unknownAgentKey": "Cle ya agent eyebani te",
+    "configSaveSuccess": "Ba local admins ebombami.",
+    "configConflictError": "Moto mosusu abongolaki liste ya local admins tango ozalaki kokoma. Telemelisa pe meka lisusu."
   }
 }

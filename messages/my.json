@@ -824,7 +824,8 @@
     "processingAudio": "အသံကို ပြုလုပ်နေသည်...",
     "ttsError": "အသံထုတ်ယူရာတွင် အမှားရှိခဲ့သည်။ ထပ်မံကြိုးစားပါ။",
     "unsupportedMessageType": "စာတိုက် ဖော်ပြရာတွင် အမှား: မပံ့ပိုးသည့်စာတိုက်အမျိုးအစား",
-    "addLanguageOption": "\"{name}\" ကို ထည့်ပါ…"
+    "addLanguageOption": "\"{name}\" ကို ထည့်ပါ…",
+    "sources": "မူရင်းအရင်းအမြစ်များ"
   },
   "sidebar": {
     "collapseSidebar": "ဘေးဘားကို ကျုံ့ပါ",
@@ -1153,7 +1154,10 @@
     "customInstructionsLabel": "စိတ်ကြိုက်ညွှန်ကြားချက်များ*",
     "defaultTemperatureLabel": "မူရင်း Temperature*",
     "Usage & Impact": "အသုံးပြုမှုနှင့် သက်ရောက်မှု",
-    "Connectors": "ချိတ်ဆက်ကိရိယာများ"
+    "Connectors": "ချိတ်ဆက်ကိရိယာများ",
+    "Backup": "မိတ္တူထုတ်သိမ်းခြင်း",
+    "Memories": "မှတ်ဥာဏ်များ",
+    "Agent Access": "Agent ဝင်ခွင့်"
   },
   "notFound": {
     "lostDog": "ပျောက်ဆုံးနေသော ခွေး"
@@ -3224,5 +3228,213 @@
       "lastRequest": "နောက်ဆုံးတောင်းဆိုမှု",
       "disclaimer": "တစ်ကြိမ်လျှင်တွက်ချက်မည့်အနည်းငယ်စာရင်းများမှာ reported သို့မဟုတ် ခန့်မှန်းထားသော token count များ အသုံးပြု၍ နိုင်ငံခြားမှ ထုတ်ဝေထားသော ပျမ်းမျှနှုန်းများနှင့် သေချာချက်များကို အသုံးပြုသည်။ အဟောင်းစာများသည် သိမ်းဆည်းထားသောစာသားနှင့် မိန့်ခွန်းပေါင်းစုံ၏ လက်ရှိမော်ဒယ်ကို အသုံးပြု၍ နောက်ပြန်တွက်ချက်ထားသည်။ ထုတ်တိုင်းတာမှုမဟုတ်ပါ။"
     }
+  },
+  "table": {
+    "copyTable": "အတန်းများမိတ္တူပြုလုပ်မည်",
+    "downloadTable": "အတန်းများဒေါင်းလုပ်လုပ်မည်",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "CSV အဖြစ် တင်ပို့ပြီး",
+    "copyFailed": "အတန်းများ မိတ္တူမရပါ"
+  },
+  "backup": {
+    "intro": {
+      "title": "သင့်အကြားဖြေရေးများကို — လုံခြုံစွာ မိတ္တူထုတ်သိမ်းပါ",
+      "body": "သင့်အကြားဖြေရေးများသည် သုံးစွဲသည့်စက်တွင် စကားဝှက်ဖြင့်ကာကွယ်ထားပြီးမှပဲ တင်ပို့မည်ဖြစ်သည်။ ကျွန်ုပ်တို့သည် သင့်အကြားဖြေရေးများကို မဖတ်နိုင်ပါ။",
+      "keyWarning": "သင့်ပြန်လည်ရယူနိုင်သော key သည် ဤစက်အတွင်းတွင်သာ ဖန်တီးပါတယ်။ ကျွန်ုပ်တို့ကြည့်နိုင်ခြင်း မရှိသကဲ့သို့ အစားထိုးလည်း မဖြစ်နိုင်ပါ — key ဆုံးရှုံးလျှင် backup ကိုလည်း ဆုံးရှုံးမည်ဖြစ်သည်။",
+      "create": "Key တစ်ခုဖန်တီးပြီး မိတ္တူထုတ်သိမ်းပါ",
+      "decline": "အခုတော့မလုပ်ပါ—ဤစက်မှာပဲ chats များကိုထားမယ်"
+    },
+    "ceremony": {
+      "titleCreate": "သင့်ပြန်လည်ရယူရန် key ကို သိမ်းဆည်းပါ",
+      "titleRotate": "သင့်အသစ်ပြန်လည်ရယူရန် key ကို သိမ်းဆည်းပါ",
+      "titleView": "သင့်ပြန်လည်ရယူရန် key",
+      "description": "ဤ key သည် အခြားစက်တစ်ခုတွင် သင့် backup ကို ပြန်လည်ရယူရန် တစ်ခုတည်းသော နည်းလမ်းဖြစ်သည်။ လုံခြုံစွာ သိမ်းဆည်းပါ — ကျွန်ုပ်တို့သည် ပြန်လည်ရယူပေး၍ မရပါ။",
+      "copy": "မိတ္တူယူမည်",
+      "copied": "မိတ္တူယူပြီး!",
+      "download": ".txt ဒေါင်းလုပ်လုပ်မည်",
+      "showQr": "QR code ပြမည်",
+      "hideQr": "QR code ဖျောက်မည်",
+      "savedCheckbox": "ပြန်လည်ရယူရန် key ကို လုံခြုံစွာ သိမ်းဆည်းထားပြီ",
+      "saveFirstHint": "ဆက်မလုပ်မီ key ကို မိတ္တူယူပါ သို့မဟုတ် ဒေါင်းလုပ်လုပ်ပါ။",
+      "continue": "ဆက်လက်လုပ်ဆောင်မည်",
+      "done": "ပြီးပြီ",
+      "cancel": "ပယ်ဖျက်မည်",
+      "cancelConfirmTitle": "Backup စနစ်ချိန်ညှိခြင်း ပယ်ဖျက်မည်လား?",
+      "cancelConfirmBody": "သင့် chats များသည် မိတ္တူမထုတ်သိမ်းရသေးပါ။ Settings ထဲတွင် encrypted backup ကို အချိန်မရွေး ဖွင့်နိုင်ပါသည်။",
+      "cancelConfirmRotateBody": "သင့်ပြန်လည်ရယူရန် key ကို ပြောင်းလဲပြီးဖြစ်သည်။ Settings တွင် မည်သည့်အချိန်မဆိုကြည့်နိုင်သည်။",
+      "cancelConfirmConfirm": "ဟုတ်ကဲ့၊ ပယ်ဖျက်ပါ",
+      "cancelConfirmDismiss": "နောက်သို့",
+      "loadError": "ဤစက်တွင် သင့်ပြန်လည်ရယူရန် key ကို မဖွင့်နိုင်ပါ။"
+    },
+    "file": {
+      "heading": "Chat backup ပြန်လည်ရယူရန် key",
+      "warning": "ဤ key ကို လုံခြုံစွာ သိမ်းဆည်းပါ။ သို့မဟုတ် key ကိုရရှိသူသည် သင့် backup ကို ဖတ်နိုင်မည်။ key မရှိပါက backup ကို ပြန်မရနိုင်ပါ။"
+    },
+    "progress": {
+      "titleCreate": "သင့် backup ကို ပြင်ဆင်နေသည်",
+      "titleRotate": "သင့်ပြန်လည်ရယူရန် key ကို ပြောင်းလဲနေသည်",
+      "encrypting": "{count, plural, one {# စကားဝိုင်းကို စကားဝှက်ထားပြီး မိတ္တူထုတ်သိမ်းနေသည်…} other {# စကားဝိုင်းများကို စကားဝှက်ထားပြီး မိတ္တူထုတ်သိမ်းနေသည်…}}",
+      "success": "{count, plural, one {မိတ္တူထုတ်သိမ်းပြီး။ # စကားဝိုင်းကို ကာကွယ်ထားပြီ။} other {မိတ္တူထုတ်သိမ်းပြီး။ # စကားဝိုင်းများကို ကာကွယ်ထားပြီ။}}",
+      "error": "Backup မအောင်မြင်ပါ။ သင့် chats များသည် ယင်းစက်တွင်သာရှိနေပါသေးသည်။",
+      "retry": "ထပ်ကြိုးစားပါ",
+      "close": "ပိတ်မည်",
+      "done": "ပြီးပြီ"
+    },
+    "input": {
+      "label": "ပြန်လည်ရယူရန် key",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Keys မည်သည့်အချိန်တွင်မဆို O, I, L ကို မပါဝင်ပါ။",
+      "checksumError": "အဲဒီ key မှားနေပါသလား — အသုံးလွှတ်မှုတွေရှိမရှိစစ်ဆေးပါ။",
+      "formatError": "အဲဒါ recovery key မဟုတ်သလိုပါ။",
+      "incomplete": "ဆက်ရေးပါ — recovery key မှာ ဗျည်း ၅၆ လုံး ရှိပါတယ်။",
+      "valid": "Key မှန်ကန်ပါသည်။"
+    },
+    "restore": {
+      "title": "မိမိ၏ စကားဝိုင်းများကို ပြန်ယူရန်",
+      "successTitle": "Backup ကိုပြန်ယူပြီးပါပြီ",
+      "promptBody": "မိမိအကောင့်အတွက် စာဝှက်ထားသော backup ကိုတွေ့ရှိပါသည်။ နောက်ထပ် ဒီ device တွင် ပြန်ယူရန် recovery key ကိုထည့်ပါ။",
+      "submit": "Backup ပြန်ယူပါ",
+      "skip": "ကျော်သွားမည် — ဒီ device တွင် အသစ်စမည်",
+      "restoring": "မိမိ၏ စကားဝိုင်းများကို စာဝှက်ဖျော်ပြီး ပြန်ယူနေပါသည်...",
+      "successBody": "{count, plural, one {# စကားဝိုင်း ပြန်ယူပြီး။} other {# စကားဝိုင်းများ ပြန်ယူပြီး။}}",
+      "wrongKey": "ပြီးပြည့်စုံသော key တစ်ခုဖြစ်ပေမယ့် ဒီ backup ကိုမဖွင့်နိုင်ပါ။ key ကိုပြောင်းလဲထားလျှင် အသစ်ဆုံး key ကို အသုံးပြုပါ။",
+      "corrupt": "ဒီ backup မဖတ်နိုင်တော့ပါ — ပျက်စီးနေမှုရှိနိုင်သည်။ ဒီ device တွင် အသစ်စမည် သို့မဟုတ် နောက်မှ ထပ်စမ်းနိုင်သည်။",
+      "networkError": "Backup service သို့ ချိတ်ဆက်လို့မရပါ။ ချိတ်ဆက်မှု စစ်ဆေးပြီး နောက်တစ်ကြိမ် ထပ်မံကြိုးစားပါ။",
+      "tryAgain": "Key တစ်ခု ထပ်စမ်းကြည့်ပါ",
+      "close": "ပြီးပါပြီ"
+    },
+    "enterKey": {
+      "title": "မိမိ၏ recovery key အသစ်ကို ထည့်ပါ",
+      "body": "မိမိ၏ recovery key ကို အခြား device တစ်ခုတွင် ပြောင်းလဲထားပါသည်။ ဒီ device တွင် backup ဆက်လက်အသုံးပြုရန် key အသစ် ထည့်ပါ။",
+      "submit": "ဒီ key ကို အသုံးပြုမည်"
+    },
+    "banner": {
+      "keyMismatchTitle": "Backup မြန့်ထားသည် — အခြား device တစ်ခုတွင် recovery key ကို ပြောင်းလဲထားသည်။",
+      "enterNewKey": "Key အသစ်ထည့်ပါ",
+      "resetBackup": "Backup ကိုမူလအတိုင်းပြန်ထားပါ",
+      "resetConfirmTitle": "ဒီ device ၏ key နဲ့ backup ကို ပြန်စမည်လား?",
+      "resetConfirmBody": "လက်ရှိ backup ကို ဒီ device ၏ စကားဝိုင်းများဖြင့် အစားထိုးပြီး၊ ဒီ device ၏ key ဖြင့် စာဝှက်ပါမည်။ အခြား device များသည် ဒီ device ၏ recovery key လိုအပ်ပါသည်။",
+      "resetConfirmAction": "Backup ကိုမူလအတိုင်းပြန်ထားပါ",
+      "remoteMissingTitle": "မိမိ၏ backup သည် server ပေါ်တွင် မရှိတော့ပါ။ Backup များ ရပ်နားထားသည်။",
+      "backUpAgain": "ထပ်မံ Backup ပြုလုပ်ပါ",
+      "dismiss": "ပယ်ဖျက်ပါ"
+    },
+    "rotate": {
+      "confirmTitle": "Recovery key ကို ပြောင်းလဲမလား?",
+      "confirmBody": "Backup သည် key အသစ်ဖြင့် ပြန်စုပြီး စာဝှက်ပါမည်။ အဟောင်း key သည် မသုံးနိုင်တော့ပါ။ Key အသစ်ကို သိမ်းထားပြီး အခြား device များတွင် ထည့်ရန် လိုအပ်ပါသည်။",
+      "confirmAction": "Key ကို ပြောင်းလဲပါ"
+    },
+    "toast": {
+      "enrollLater": "Settings တွင် encrypted backup ကို မည်သည့်အချိန်မဆို ဖွင့်နိုင်ပါသည်။",
+      "keyUpdated": "Recovery key ကို အပ်ဒိတ်လုပ်ပြီး backup ပြန်စတင်ပါသည်။",
+      "resetDone": "Backup ကို ဒီ device ၏ key ဖြင့် ပြန်စတင်ပြီးပါပြီ။",
+      "backupRestarted": "Backup ထပ်မံဖန်တီးပြီးပါပြီ။",
+      "opFailed": "တစ်စုံတစ်ရာမှားသွားပါသည်။ ထပ်မံကြိုးစားပါ။"
+    },
+    "settings": {
+      "statusOn": "Backup ဖွင့်ထားသည်",
+      "statusOff": "Backup ပိတ်ထားသည်",
+      "offDescription": "မိမိ၏ စကားဝိုင်းများသည် ဒီ browser အတွင်းသာ သက်တမ်းရှိသည်။ ခိုင်ခံ့စွာထားရှိပြီး အခြား device များတွင် ပြန်ယူနိုင်စေရန် encrypted backup ကို ဖွင့်ပါ။ စကားဝိုင်းများကို မိမိ device တွင်သာ စာဝှက်ထားပြီး — ကျွန်ုပ်တို့က မဖတ်နိုင်ပါ။",
+      "turnOn": "Backup ဖွင့်ရန်",
+      "restoreTitle": "မိမိအကောင့်အတွက် backup မူလတည်းက ရှိနေပြီးပါပြီ",
+      "restoreDescription": "ဒီ device တွင် ပြန်ယူရန် recovery key ထည့်ပါ။",
+      "restore": "Backup ပြန်ယူပါ",
+      "lastBackup": "နောက်ဆုံး backup: {time}",
+      "lastBackupNever": "Backup ပြီးဆုံးမှု မရှိသေးပါ",
+      "keyFingerprint": "Key ····-{tail}",
+      "syncState": {
+        "idle": "Sync ပြုလုပ်ရန် စောင့်ဆိုင်းနေသည်",
+        "syncing": "Backup ပြုလုပ်နေသည်...",
+        "ok": "နောက်ဆုံးအဆင့်အတန်းရှိသည်",
+        "keyOutOfDate": "Pause — recovery key ကို အခြား device တွင် ပြောင်းလဲထားသည်",
+        "remoteMissing": "ရပ်နားထားသည် — backup ကို server မှ ဖယ်ရှားလိုက်ပါသည်",
+        "error": "နောက်ဆုံး backup ကြိုးစားမှု မအောင်မြင်ပါ"
+      },
+      "backUpNow": "ယနေ့ backup လုပ်ရန်",
+      "backUpNowSuccess": "Backup ပြီးစီးပါแล้ว",
+      "backUpNowFailure": "Backup မအောင်မြင်ပါ — သင့် chats မပြောင်းလဲပါ",
+      "viewKey": "Recovery key ကြည့်မည်",
+      "changeKey": "Recovery key ပြောင်းရန်",
+      "dangerTitle": "အန္တရာယ်ရှိသောဧရိယာ",
+      "turnOffDelete": "Backup ပိတ်ပြီး ဖျက်ရန်",
+      "turnOffConfirmTitle": "Backup ပိတ်ရန်လား?",
+      "turnOffConfirmMessage": "ဤသည်သည် သင်၏ backup ကို ကျွန်ုပ်တို့၏ server များမှ ကိရိယာအားလုံးအတွက် ဖျက်သိမ်းပါသည်။ ဤကိရိယာမှာ chats သက်တမ်းတည်ရှိနေပါမည်။ နောက်ပိုင်းတွင် new recovery key ဖြင့် backup ပြန်ဖွင့်နိုင်ပါသည်။",
+      "turnOffConfirmAction": "Backup ဖျက်မည်",
+      "turnOffSuccess": "Backup ပိတ်ပြီး ဖျက်ပြီးပါပြီ",
+      "turnOffFailure": "Backup ဖျက်၍မရပါ။ ထပ်မံကြိုးစားပါ။"
+    }
+  },
+  "memories": {
+    "title": "မှတ်ဉာဏ်များ",
+    "description": "သင်မျှဝေသော ပြောင်မြောက်သောအချက်အလက်များ (သဘောထား၊ စိတ်ကြိုက်၊ လုပ်ငန်းစဉ်များ စသည်) ကို ဗဟုသုတအရှိဆုံး အရာအဖြစ် Assistant မှ သတိမှတ်ထားပြီး စကားပြောမှုအများစွာတွင် အသုံးပြုနိုင်ပါသည်။",
+    "enableToggle": "မှတ်ဉာဏ်များ ဖွင့်ရန်",
+    "privacyNote": "အချက်အလက်များသည် ဤ browser တွင်သာ သိမ်းဆည်းထားပြီး သင့် chats များတွင်သာ ဖြေကြားမှုကို ကိုယ်ပိုင်သူပုန်ဖို့ ပါဝင်ပါသည်။",
+    "empty": "တခုပြီးမှ မရှိသေးပါ။ မှတ်ထားသင့်သော အချက်အလက်များကို သင်၏ ပြောဆိုမှုများမှ အလိုအလျောက် သိမ်းပေးပါသည်။",
+    "savedOn": "{{date}} တွင် သိမ်းဆည်းထားသည်",
+    "deleteMemory": "မှတ်ဉာဏ် ဖျက်မည်",
+    "clearAll": "မှတ်ဉာဏ်အားလုံး ဖယ်ရှားမည်",
+    "clearAllConfirmQuestion": "မှတ်ဉာဏ်အားလုံး ဖျက်မည်လား? ဒါကို ပြန်မရနိုင်တော့ပါ။",
+    "clearAllConfirm": "အားလုံးဖျက်မည်",
+    "cancel": "ပယ်ဖျက်မည်"
+  },
+  "contextWindow": {
+    "label": "Context window",
+    "value": "{{count}} မက်ဆေ့ချ်များ",
+    "fewer": "မက်ဆေ့ချ်နည်းသွား",
+    "more": "မက်ဆေ့ချ်များထပ်မံ",
+    "description": "ဤကန့်သတ်ချက်ထက် အဟောင်းဆုံး မက်ဆေ့ချ်များကို အကျဉ်းချုပ်ကာ context အဖြစ် ပို့မည်။"
+  },
+  "agentAccess": {
+    "title": "Agent Access",
+    "description": "Shared Foundry agents များကို အသုံးပြုခွင့်ရှိသော အသုံးပြုသူများကို ထိန်းချုပ်နိုင်ပါသည်။ ဤစည်းကမ်းများသည် အသုံးပြုသူ၏ ကိုယ်ပိုင် Azure access တွင်ရှိသည့် ခွင့်များထက်ပိုမပိုနိုင် သာမက ပိုမပြေလည်နိုင်ပါ — Azure အားဖြင့် တားမြစ်ထားပါက လူအပေါင်းတို့ကို ခွင့်မပြုနိုင်ပါ။",
+    "backToChat": "ပြန်သွားရန် chat",
+    "loading": "Agents နှင့် စည်းကမ်းများ loading ဖြစ်နေသည်...",
+    "loadError": "Agent access အတွက် ဒေတာ တင်၍မရပါ။",
+    "rulesUnavailableWarning": "Access rules များကို storage မှ load မရပါ။ Agent အသုံးပြုခြင်း အတားအဆီးရှိနေပြီး စည်းမျဉ်းပြင်ဆင်၍မရပါ။",
+    "retry": "ထပ်မံကြိုးစားရန်",
+    "rulesTab": "Agent စည်းမျဉ်းများ",
+    "localAdminsTab": "Local admin များ",
+    "noAgents": "စီမံရန် agent မရှိပါ။",
+    "sourceLabel": "Source",
+    "notDiscoverable": "သင့်အတွက် ရှာဖွေနိုင်မှု မရှိပါ",
+    "notDiscoverableHint": "ဤ agent အတွက် စည်းမျဉ်းတစ်ခု ရှိသော်လည်း သင့် discovery များတွင် မပါဝင်ပါ — နာမည်ပြောင်းဖူးနိုင်၊ Azure access သင့်အတွက် မလက်မခံသော်လည်း၊ access rule သည် သင့်အတွက် မပါရှိနိုင်ပါ။",
+    "accessEveryone": "လူအားလုံး",
+    "accessRestricted": "အကန့်အသတ်ရှိ",
+    "edit": "ပြင်ဆင်ရန်",
+    "updatedByLine": "နောက်ဆုံးပြင်ဆင်ခဲ့သူ - {{user}}, {{date}} မှ",
+    "accessTypeLabel": "ဤ agent ကို ဘယ်သူသုံးနိုင်သလဲ",
+    "everyoneDescription": "သူငယ်ချင်း၏ ကိုယ်ပိုင် Azure access ဖြင့် ဤ agent ကို already ရောက်နိုင်သူ တစ်ဦးမဆို။",
+    "restrictedDescription": "အောက်ဖော်ပြပါ အသုံးပြုသူနှင့် domain များသာ။",
+    "allowDomainsLabel": "ခွင့်ပြုထားသော domains",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "ခွင့်ပြုထားသော အသုံးပြုသူများ",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "ထည့်ရန် Enter ကိုနှိပ်ပါ",
+    "removeChip": "ဖယ်ရှားပါ",
+    "groupsLabel": "ခွင့်ပြုထားသောအဖွဲ့များ",
+    "groupsPendingConsent": "အဖွဲ့အခြေပြု ဝင်ခွင့်သည် tenant admin သဘောတူခံခြင်းကို စောင့်ဆိုင်းနေပြီး တည်းဖြတ်နိုင်သေးပါ။",
+    "restrictedEmptyWarning": "အသုံးပြုသူ သို့မဟုတ် domain မည်သည့်ခုမှ မရှိပါ — မည်သူမျှဤ agent ကို အသုံးမပြုနိုင်ပါ။",
+    "save": "သိမ်းဆည်းပါ",
+    "saving": "သိမ်းဆည်းနေသည်…",
+    "cancel": "ပယ်ဖျက်ပါ",
+    "saveSuccess": "ဝင်ခွင့်စည်းမျဉ်းကို သိမ်းဆည်းပြီးပါပြီ။",
+    "deleteSuccess": "ဝင်ခွင့်စည်းမျဉ်းကို ဖယ်ရှားပြီး — မည်သူမဆို ဤ agent ကို အသုံးပြုနိုင်ပါပြီ။",
+    "saveError": "မသိမ်းဆည်းနိုင်ပါ။ ပြန်လည်ကြိုးစားပါ။",
+    "conflictError": "တည်းဖြတ်နေစဉ် အခြားသူက ပြင်ခဲ့သည်။ နောက်ဆုံးထွက်ဗားရှင်း အသစ်တင်ပြီး ပြန်လုပ်ပါ။",
+    "reload": "ပြန်လည်တင်ပါ",
+    "localAdminsDescription": "တစ်ခုချင်း agent များအတွက် စည်းမျဉ်းအုပ်ချုပ်ခွင့်ကို redeploy မလုပ်ဘဲ delegate လုပ်နိုင်သည်။ Local admin များသည် အပ်နှံထားသည့် agent များ၏ စည်းမျဉ်းများသာ တည်းဖြတ်နိုင်သည်။",
+    "noLocalAdmins": "Local admin မရှိသေးပါ။",
+    "addLocalAdmin": "Local admin ထည့်ပါ",
+    "emailLabel": "အီးမေးလ်",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Local admin ဖယ်ရှားပါ",
+    "delegatedAgentsLabel": "အပ်နှံထားသော agents",
+    "noDelegatedAgents": "အပ်နှံနိုင်မည့် agent မရှိပါ။",
+    "unknownAgentKey": "မသိသော agent key",
+    "configSaveSuccess": "Local admin များကို သိမ်းဆည်းပြီးပါပြီ။",
+    "configConflictError": "တည်းဖြတ်နေစဉ် အခြားသူက local admin စာရင်း ကိုပြင်ခဲ့သည်။ ပြန်တင်ပြီး ထပ်ကြိုးစားပါ။"
   }
 }

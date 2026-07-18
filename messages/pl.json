@@ -846,7 +846,8 @@
     "processingAudio": "Przetwarzanie dźwięku...",
     "ttsError": "Błąd podczas generowania dźwięku. Spróbuj ponownie.",
     "unsupportedMessageType": "Błąd podczas wyświetlania wiadomości: Nieobsługiwany typ wiadomości",
-    "addLanguageOption": "Dodaj \"{name}\"…"
+    "addLanguageOption": "Dodaj \"{name}\"…",
+    "sources": "Źródła"
   },
   "sidebar": {
     "collapseSidebar": "Zwiń pasek boczny",
@@ -1175,7 +1176,10 @@
     "customInstructionsLabel": "Niestandardowe instrukcje*",
     "defaultTemperatureLabel": "Domyślna temperatura*",
     "Usage & Impact": "Użycie i wpływ",
-    "Connectors": "Łączniki"
+    "Connectors": "Łączniki",
+    "Backup": "Kopia zapasowa",
+    "Memories": "Wspomnienia",
+    "Agent Access": "Dostęp agenta"
   },
   "notFound": {
     "lostDog": "Zagubiony pies"
@@ -3224,5 +3228,213 @@
       "lastRequest": "Ostatnie żądanie",
       "disclaimer": "Szacunkowe wartości na żądanie na podstawie zgłoszonych lub przybliżonych liczby tokenów, z wykorzystaniem opublikowanych średnich i założeń v{version}. Starsze wiadomości są wyliczane wstecznie na podstawie przechowywanego tekstu i aktualnego modelu konwersacji. Nie jest to pomiar."
     }
+  },
+  "table": {
+    "copyTable": "Kopiuj tabelę",
+    "downloadTable": "Pobierz tabelę",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Wyeksportowano jako CSV",
+    "copyFailed": "Nie udało się skopiować tabeli"
+  },
+  "backup": {
+    "intro": {
+      "title": "Twórz kopie rozmów — bezpiecznie",
+      "body": "Twoje rozmowy są szyfrowane na tym urządzeniu przed przesłaniem. Nigdy nie mamy dostępu do ich treści.",
+      "keyWarning": "Twój klucz odzyskiwania jest generowany na tym urządzeniu. Nigdy go nie widzimy i nie możemy go odzyskać — utrata klucza oznacza utratę kopii zapasowej.",
+      "create": "Utwórz mój klucz i wykonaj kopię",
+      "decline": "Nie teraz — zachowaj rozmowy tylko na tym urządzeniu"
+    },
+    "ceremony": {
+      "titleCreate": "Zapisz swój klucz odzyskiwania",
+      "titleRotate": "Zapisz nowy klucz odzyskiwania",
+      "titleView": "Twój klucz odzyskiwania",
+      "description": "Ten klucz to jedyny sposób na przywrócenie kopii na innym urządzeniu. Przechowuj go w bezpiecznym miejscu — nie możemy go odzyskać.",
+      "copy": "Kopiuj",
+      "copied": "Skopiowano!",
+      "download": "Pobierz .txt",
+      "showQr": "Pokaż kod QR",
+      "hideQr": "Ukryj kod QR",
+      "savedCheckbox": "Zapisałem(-am) swój klucz odzyskiwania w bezpiecznym miejscu",
+      "saveFirstHint": "Skopiuj lub pobierz klucz przed kontynuacją.",
+      "continue": "Kontynuuj",
+      "done": "Gotowe",
+      "cancel": "Anuluj",
+      "cancelConfirmTitle": "Anulować konfigurację kopii zapasowej?",
+      "cancelConfirmBody": "Twoje rozmowy nie zostaną zapisane w kopii zapasowej. W każdej chwili możesz włączyć szyfrowaną kopię w ustawieniach.",
+      "cancelConfirmRotateBody": "Twój klucz odzyskiwania został już zmieniony. Możesz go zobaczyć w Ustawieniach.",
+      "cancelConfirmConfirm": "Tak, anuluj",
+      "cancelConfirmDismiss": "Wróć",
+      "loadError": "Nie można załadować klucza odzyskiwania na tym urządzeniu."
+    },
+    "file": {
+      "heading": "Klucz odzyskiwania kopii rozmów",
+      "warning": "Zabezpiecz ten klucz. Każdy, kto go posiada, może odczytać Twoją kopię; bez niego nie da się jej przywrócić."
+    },
+    "progress": {
+      "titleCreate": "Konfigurowanie kopii zapasowej",
+      "titleRotate": "Zmiana klucza odzyskiwania",
+      "encrypting": "{count, plural, one {Szyfrowanie i zapisywanie # rozmowy…} other {Szyfrowanie i zapisywanie # rozmów…}}",
+      "success": "{count, plural, one {Kopia ukończona. # rozmowa jest chroniona.} other {Kopia ukończona. # rozmów jest chronionych.}}",
+      "error": "Nie udało się wykonać kopii zapasowej. Rozmowy pozostały na tym urządzeniu.",
+      "retry": "Spróbuj ponownie",
+      "close": "Zamknij",
+      "done": "Gotowe"
+    },
+    "input": {
+      "label": "Klucz odzyskiwania",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Klucze nigdy nie zawierają liter O, I ani L.",
+      "checksumError": "Ten klucz wydaje się nieprawidłowy — sprawdź literówki.",
+      "formatError": "To nie wygląda jak klucz odzyskiwania.",
+      "incomplete": "Kontynuuj wpisywanie — klucz odzyskiwania ma 56 znaków.",
+      "valid": "Klucz wygląda poprawnie."
+    },
+    "restore": {
+      "title": "Przywróć swoje czaty",
+      "successTitle": "Kopia zapasowa przywrócona",
+      "promptBody": "Znaleźliśmy zaszyfrowaną kopię zapasową Twojego konta. Wprowadź klucz odzyskiwania, aby przywrócić ją na tym urządzeniu.",
+      "submit": "Przywróć kopię zapasową",
+      "skip": "Pomiń — rozpocznij od nowa na tym urządzeniu",
+      "restoring": "Odszyfrowywanie i przywracanie czatów…",
+      "successBody": "{count, plural, one {Przywrócono # rozmowę.} other {Przywrócono # rozmów.}}",
+      "wrongKey": "Ten klucz jest poprawny, ale nie pasuje do tej kopii zapasowej. Jeśli zmieniono klucz, użyj najnowszego.",
+      "corrupt": "Nie udało się odczytać tej kopii zapasowej — może być uszkodzona. Możesz rozpocząć od nowa na tym urządzeniu lub spróbować ponownie później.",
+      "networkError": "Nie można połączyć się z usługą kopii zapasowej. Sprawdź swoje połączenie i spróbuj ponownie.",
+      "tryAgain": "Spróbuj innego klucza",
+      "close": "Gotowe"
+    },
+    "enterKey": {
+      "title": "Wprowadź nowy klucz odzyskiwania",
+      "body": "Twój klucz odzyskiwania został zmieniony na innym urządzeniu. Wprowadź nowy klucz, aby wznowić kopie zapasowe na tym urządzeniu.",
+      "submit": "Użyj tego klucza"
+    },
+    "banner": {
+      "keyMismatchTitle": "Kopie zapasowe wstrzymane — Twój klucz odzyskiwania został zmieniony na innym urządzeniu.",
+      "enterNewKey": "Wprowadź nowy klucz",
+      "resetBackup": "Resetuj kopię zapasową",
+      "resetConfirmTitle": "Zresetować kopię zapasową za pomocą klucza tego urządzenia?",
+      "resetConfirmBody": "Istniejąca kopia zapasowa zostanie zastąpiona czatami z tego urządzenia, zaszyfrowanymi jego kluczem. Pozostałe urządzenia będą potrzebowały tego klucza odzyskiwania.",
+      "resetConfirmAction": "Resetuj kopię zapasową",
+      "remoteMissingTitle": "Twoja kopia zapasowa nie istnieje już na serwerze. Kopie zapasowe są wstrzymane.",
+      "backUpAgain": "Wykonaj kopię ponownie",
+      "dismiss": "Odrzuć"
+    },
+    "rotate": {
+      "confirmTitle": "Zmień klucz odzyskiwania?",
+      "confirmBody": "Twoja kopia zapasowa zostanie ponownie zaszyfrowana nowym kluczem, a stary przestanie działać. Zapisz nowy klucz i wprowadź go na innych urządzeniach.",
+      "confirmAction": "Zmień klucz"
+    },
+    "toast": {
+      "enrollLater": "Możesz włączyć szyfrowaną kopię zapasową w Ustawieniach w dowolnym momencie.",
+      "keyUpdated": "Klucz odzyskiwania zaktualizowany. Kopie zapasowe wznowione.",
+      "resetDone": "Kopia zapasowa zresetowana z użyciem klucza tego urządzenia.",
+      "backupRestarted": "Kopia zapasowa ponownie utworzona.",
+      "opFailed": "Coś poszło nie tak. Spróbuj ponownie."
+    },
+    "settings": {
+      "statusOn": "Kopia zapasowa jest włączona",
+      "statusOff": "Kopia zapasowa jest wyłączona",
+      "offDescription": "Twoje czaty są przechowywane tylko w tej przeglądarce. Włącz szyfrowaną kopię zapasową, aby je zabezpieczyć i móc przywrócić na innych urządzeniach. Czaty są szyfrowane na Twoim urządzeniu — nigdy nie mamy do nich dostępu.",
+      "turnOn": "Włącz kopię zapasową",
+      "restoreTitle": "Dla Twojego konta istnieje już kopia zapasowa",
+      "restoreDescription": "Wprowadź klucz odzyskiwania, aby przywrócić ją na tym urządzeniu.",
+      "restore": "Przywróć kopię zapasową",
+      "lastBackup": "Ostatnia kopia zapasowa: {time}",
+      "lastBackupNever": "Jeszcze nie wykonano żadnej kopii zapasowej",
+      "keyFingerprint": "Klucz ····-{tail}",
+      "syncState": {
+        "idle": "Oczekiwanie na synchronizację",
+        "syncing": "Tworzenie kopii zapasowej…",
+        "ok": "Aktualne",
+        "keyOutOfDate": "Wstrzymane — klucz odzyskiwania został zmieniony na innym urządzeniu",
+        "remoteMissing": "Wstrzymano — kopia zapasowa została usunięta z serwera",
+        "error": "Ostatnia próba wykonania kopii nie powiodła się"
+      },
+      "backUpNow": "Wykonaj kopię zapasową teraz",
+      "backUpNowSuccess": "Kopia zapasowa ukończona",
+      "backUpNowFailure": "Utworzenie kopii zapasowej nie powiodło się — Twoje czaty na tym urządzeniu pozostają bez zmian",
+      "viewKey": "Pokaż klucz odzyskiwania",
+      "changeKey": "Zmień klucz odzyskiwania",
+      "dangerTitle": "Strefa zagrożenia",
+      "turnOffDelete": "Wyłącz i usuń kopię zapasową",
+      "turnOffConfirmTitle": "Wyłączyć kopię zapasową?",
+      "turnOffConfirmMessage": "To usunie Twoją kopię zapasową z naszych serwerów na wszystkich urządzeniach. Czaty na tym urządzeniu pozostaną. Kopię zapasową można włączyć ponownie, korzystając z nowego klucza odzyskiwania.",
+      "turnOffConfirmAction": "Usuń kopię zapasową",
+      "turnOffSuccess": "Kopia zapasowa została wyłączona i usunięta",
+      "turnOffFailure": "Nie udało się usunąć kopii zapasowej. Spróbuj ponownie."
+    }
+  },
+  "memories": {
+    "title": "Wspomnienia",
+    "description": "Pozwól asystentowi zapamiętywać trwałe fakty, które udostępniasz — np. swoją rolę, preferencje i aktualne projekty — i wykorzystywać je w rozmowach.",
+    "enableToggle": "Włącz wspomnienia",
+    "privacyNote": "Fakty są przechowywane tylko w tej przeglądarce i dołączane do czatów w celu personalizacji odpowiedzi.",
+    "empty": "Brak wspomnień. Fakty warte zapamiętania są zapisywane automatycznie podczas rozmów.",
+    "savedOn": "Zapisano {date}",
+    "deleteMemory": "Usuń wspomnienie",
+    "clearAll": "Wyczyść wszystkie wspomnienia",
+    "clearAllConfirmQuestion": "Usunąć wszystkie wspomnienia? Tej operacji nie można cofnąć.",
+    "clearAllConfirm": "Usuń wszystko",
+    "cancel": "Anuluj"
+  },
+  "contextWindow": {
+    "label": "Okno kontekstu",
+    "value": "{count} wiadomości",
+    "fewer": "Mniej wiadomości",
+    "more": "Więcej wiadomości",
+    "description": "Starsze wiadomości poza tym limitem są podsumowywane i przekazywane jako kontekst."
+  },
+  "agentAccess": {
+    "title": "Dostęp agenta",
+    "description": "Kontroluj, którzy użytkownicy mogą korzystać ze współdzielonych agentów Foundry. Zasady jedynie dodatkowo ograniczają dostęp w ramach Twoich uprawnień Azure — nie można przyznać dostępu, jeśli Azure go odmawia.",
+    "backToChat": "Powrót do czatu",
+    "loading": "Ładowanie agentów i zasad…",
+    "loadError": "Nie udało się załadować danych dostępu do agentów.",
+    "rulesUnavailableWarning": "Nie udało się załadować zasad dostępu z magazynu. Wywoływanie agenta jest obecnie zablokowane i nie można edytować zasad.",
+    "retry": "Ponów próbę",
+    "rulesTab": "Zasady agenta",
+    "localAdminsTab": "Lokalni administratorzy",
+    "noAgents": "Brak agentów do zarządzania.",
+    "sourceLabel": "Źródło",
+    "notDiscoverable": "Niedostępne dla Ciebie",
+    "notDiscoverableHint": "Istnieje zasada dla tego agenta, ale nie jest on widoczny w Twojej liście — mógł zostać przemianowany, nie masz do niego dostępu w Azure lub zasada dostępu Cię nie obejmuje.",
+    "accessEveryone": "Wszyscy",
+    "accessRestricted": "Ograniczony",
+    "edit": "Edytuj",
+    "updatedByLine": "Ostatnia aktualizacja: {user}, {date}",
+    "accessTypeLabel": "Kto może korzystać z tego agenta",
+    "everyoneDescription": "Każdy, kto już ma dostęp do tego agenta przez swoje uprawnienia Azure.",
+    "restrictedDescription": "Tylko wymienieni poniżej użytkownicy i domeny.",
+    "allowDomainsLabel": "Dozwolone domeny",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Dozwoleni użytkownicy",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Naciśnij Enter, aby dodać",
+    "removeChip": "Usuń",
+    "groupsLabel": "Dozwolone grupy",
+    "groupsPendingConsent": "Dostęp na podstawie grupy oczekuje na zgodę administratora najemcy i nie może jeszcze zostać edytowany.",
+    "restrictedEmptyWarning": "Brak użytkowników lub domen — nikt nie będzie mógł korzystać z tego agenta.",
+    "save": "Zapisz",
+    "saving": "Zapisywanie…",
+    "cancel": "Anuluj",
+    "saveSuccess": "Zasada dostępu została zapisana.",
+    "deleteSuccess": "Zasada dostępu została usunięta — każdy może ponownie korzystać z tego agenta.",
+    "saveError": "Nie udało się zapisać. Spróbuj ponownie.",
+    "conflictError": "Ktoś inny wprowadził zmiany podczas Twojej edycji. Załaduj ponownie najnowszą wersję, a następnie wprowadź zmianę jeszcze raz.",
+    "reload": "Załaduj ponownie",
+    "localAdminsDescription": "Przekaż zarządzanie zasadami dla wybranych agentów bez ponownego wdrażania. Lokalni administratorzy mogą edytować zasady tylko dla przypisanych im agentów.",
+    "noLocalAdmins": "Brak skonfigurowanych lokalnych administratorów.",
+    "addLocalAdmin": "Dodaj lokalnego administratora",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Usuń lokalnego administratora",
+    "delegatedAgentsLabel": "Przypisani agenci",
+    "noDelegatedAgents": "Brak agentów do przypisania.",
+    "unknownAgentKey": "Nieznany klucz agenta",
+    "configSaveSuccess": "Lokalni administratorzy zapisani.",
+    "configConflictError": "Ktoś inny zmienił listę lokalnych administratorów podczas Twojej edycji. Załaduj ponownie i spróbuj jeszcze raz."
   }
 }

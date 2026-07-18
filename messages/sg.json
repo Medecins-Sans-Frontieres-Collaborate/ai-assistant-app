@@ -907,7 +907,8 @@
     "processingAudio": "A rûngbi audio...",
     "ttsError": "Faut ti kûê audio. Bï nga tîngbïngö.",
     "unsupportedMessageType": "Faut ti vë mesajï: Tîpi mesajï so a sô ndöka",
-    "addLanguageOption": "Gbêtî \"{name}\"…"
+    "addLanguageOption": "Gbêtî \"{name}\"…",
+    "sources": "Ngu nzönî"
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",
@@ -1331,7 +1332,10 @@
     "customInstructionsLabel": "Mbêtï ti tôgbo*",
     "defaultTemperatureLabel": "Températûrë ti yéké*",
     "Usage & Impact": "Sêlêni na mbeni",
-    "Connectors": "Bâa ti kêtî"
+    "Connectors": "Bâa ti kêtî",
+    "Backup": "Kubê ti ngi",
+    "Memories": "Zîkö mbênî",
+    "Agent Access": "Wako na agent"
   },
   "emptyState": {
     "greeting": "Mbi lingbi tî sâra yê?",
@@ -3208,5 +3212,213 @@
       "lastRequest": "Sa ti yi tî sô",
       "disclaimer": "Kötörö ti na sara so na maburu token, to mbi yeke tî token sô pe tî mingi, na mopé tî averages na assumptions v{version} sô a zéré. Barafunu kidî tî sô a yeke na bala mbi yeke na kidipé ti mbênî yi na model tî conversation. Kôdoro ape."
     }
+  },
+  "table": {
+    "copyTable": "Kopi tablô",
+    "downloadTable": "Bêtï tablô",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Azongbi oko na CSV",
+    "copyFailed": "Kopi tablô ayeke"
+  },
+  "backup": {
+    "intro": {
+      "title": "Kubê aka yângâ mo — na sirî",
+      "body": "Zîa yângâ mo li tongbi balê na ndatï ayeke sô ayeke bê. Ala mo ayeke kêtê zîa yângâ mo.",
+      "keyWarning": "Ködörö ti ködro na sirî a hîngbi balê ngbangâ. Ala mo ayeke yâ na mbi na ayeke sirë, nî sô mo köte ködro mo, köte backup mo.",
+      "create": "Ngambi ködro mo & kubê",
+      "decline": "Lesse — tî mbi zîa yângâ na balê lâke"
+    },
+    "ceremony": {
+      "titleCreate": "Sèn ködro tî zuru backup mo",
+      "titleRotate": "Sèn ködro tî zuru backup mo mbïkö",
+      "titleView": "Ködro tî zuru backup mo",
+      "description": "Ködro a zingo ti kubê mo na fetï ndatï ayeke tî da ngbangâ. Sèn bala na ndatï sirï — ala mo ayeke sô.",
+      "copy": "Kopi",
+      "copied": "Akopié !",
+      "download": "Bêtï .txt",
+      "showQr": "Hûna QR code",
+      "hideQr": "Küwisa QR code",
+      "savedCheckbox": "Nabê sèngö ködro tî zuru backup mo na ndatï sirï",
+      "saveFirstHint": "Kopi ô bêtï ködro mo lôko ayeke yâ.",
+      "continue": "Tîmbè",
+      "done": "Asilî",
+      "cancel": "Gbesë",
+      "cancelConfirmTitle": "Gbësë tî kubê ?",
+      "cancelConfirmBody": "Zîa yângâ mo alingo kubê. Mo agbegë kubê ti sirï tûnyè na Settings.",
+      "cancelConfirmRotateBody": "Ködro tî zuru backup mo ambingbi sono. Mo hûna a tûnyè na Settings.",
+      "cancelConfirmConfirm": "Wê, gbësë",
+      "cancelConfirmDismiss": "Zongbi",
+      "loadError": "Ayeke hûna ködro tî zuru backup mo na balê aïsi."
+    },
+    "file": {
+      "heading": "Ködro tî zuru backup ti zîa yângâ",
+      "warning": "Bë sèngö ködro a na sirï. Sèkè sô a yeke a sâlo mo ayeke hûna kubê mo; sô mo köte a, alingo kubê."
+    },
+    "progress": {
+      "titleCreate": "Kubê ti zîa yângâ mo",
+      "titleRotate": "Kubê ködro tî zuru backup mo mbïkö",
+      "encrypting": "{count, plural, one {Kubê ti zîa yângâ #...} other {Kubê ti zîa yângâ #...}}",
+      "success": "{count, plural, one {Kubê asôsô. Zîa yângâ # ayeke sôsô.} other {Kubê asôsô. Zîa yângâ # ayeke sôsô.}}",
+      "error": "Kubê ayeke. Zîa yângâ mo alingo balê aïsi.",
+      "retry": "Kû mû na ndï",
+      "close": "Küi",
+      "done": "Asilî"
+    },
+    "input": {
+      "label": "Ködro tî zuru backup",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Ködro a alingo na lettr O, I, ô L.",
+      "checksumError": "Ndolo ayeke — key ayeke se ti yeke.",
+      "formatError": "Ndolo ayeke se ti key ti tî kobîngö.",
+      "incomplete": "Ganza mo sô — key ti kobîngö a sô 56 kodoro.",
+      "valid": "Key ayeke mbi agu."
+    },
+    "restore": {
+      "title": "Sîngî na mo na diskuta",
+      "successTitle": "Backup a sîngi",
+      "promptBody": "Mî gbenî backup ti akunzi mo ti kôdörö. Ganza key ti kobîngö mo na sîngî mo na apparaat âne yâ.",
+      "submit": "Sîngî backup",
+      "skip": "Sôkou — kangä dzî na apparaat âne yâ",
+      "restoring": "Yî tî kîrî na sîngî diskuta mo...",
+      "successBody": "{count, plural, one {# diskuta a sîngi.} other {# diskuta a sîngi.}}",
+      "wrongKey": "Key âlï ayeke mbi agu, nzönî ayete tî gbâ ti backup âli. Sô mo a sâra key, sâra mbi kokonda key mo.",
+      "corrupt": "Backup âli ayeke se te tî lä yângâ — a kêtê yâ na yâ. Mo kîrî kangä dzî na apparaat âne yâ, mbi sôkou awalï.",
+      "networkError": "Apamuke tî ké backup service. Gbenî connexion mo mbi sôkou.",
+      "tryAgain": "Sôkou ti key",
+      "close": "Kété"
+    },
+    "enterKey": {
+      "title": "Ganza mbi key ti kobîngö",
+      "body": "Key ti kobîngö mo a sâra na apparaat ozo. Ganza mbi key ti sîngî backup na apparaat âne yâ.",
+      "submit": "Yeke key âli"
+    },
+    "banner": {
+      "keyMismatchTitle": "Backup a sûka — key ti kobîngö mo a sâra na apparaat ozo.",
+      "enterNewKey": "Ganza mbi key",
+      "resetBackup": "Reset backup",
+      "resetConfirmTitle": "Reset backup na key ti apparaat âli?",
+      "resetConfirmBody": "Backup ti yâ a sâra na diskuta ti apparaat âli, pèpé na key ti apparaat âli. Apparaat ozo na sé key ti apparaat âli.",
+      "resetConfirmAction": "Reset backup",
+      "remoteMissingTitle": "Backup mo ayeke se na server. Backup a sûka.",
+      "backUpAgain": "Backup ti yâ sôkou",
+      "dismiss": "Kété"
+    },
+    "rotate": {
+      "confirmTitle": "Sâra key ti kobîngö mo?",
+      "confirmBody": "Backup mo a kîrî na mbi key, na key ti yâ ayeke se yâ. Mo na gû sû mbi key, mbi ganza na apparaat ozo mo.",
+      "confirmAction": "Sâra key"
+    },
+    "toast": {
+      "enrollLater": "Mo na hûlî backup kîrî na settings kapan na kapan.",
+      "keyUpdated": "Key ti kobîngö a sâra. Backup a sôkou.",
+      "resetDone": "Backup a reset na key ti apparaat âli.",
+      "backupRestarted": "Backup a sînga sôkou.",
+      "opFailed": "Mo sôkô ayeke tî yângâ. Sôkou awalï."
+    },
+    "settings": {
+      "statusOn": "Backup ayeke",
+      "statusOff": "Backup ayeke se",
+      "offDescription": "Diskuta ti mo ayeke fa na browser âli sôkô. Hûlî backup kîrî sô na sûni mbi diskuta mo, na sîngî na apparaat ozo mo. Diskuta yî ti encrypté na apparaat mo — mî ayeke se tî yèkê lä.",
+      "turnOn": "Hûlî backup",
+      "restoreTitle": "Backup yâ ayeke na akunzi mo",
+      "restoreDescription": "Ganza key ti kobîngö mo na sîngî backup na apparaat âne yâ.",
+      "restore": "Sîngî backup",
+      "lastBackup": "Backup ti sô na yângâ: {time}",
+      "lastBackupNever": "Backup ayeke sô",
+      "keyFingerprint": "Key ····-{tail}",
+      "syncState": {
+        "idle": "Yeke hûtî tî sync",
+        "syncing": "Backup tî yâ...",
+        "ok": "Ayeke tî yângâ",
+        "keyOutOfDate": "A sûka — key ti kobîngö ayeke sâra na apparaat ozo",
+        "remoteMissing": "Kóto — backup ayeke na server",
+        "error": "Backup na mbi na maboko asala mbënî"
+      },
+      "backUpNow": "Sala backup tî nzönî",
+      "backUpNowSuccess": "Backup asili",
+      "backUpNowFailure": "Backup ayeke — palaver na maboko ayeke dagbêtî na aparêyi sêso",
+      "viewKey": "Vata clé tî récupération",
+      "changeKey": "Balêka clé tî récupération",
+      "dangerTitle": "Zône tî mayou",
+      "turnOffDelete": "Kúè na kûlî backup",
+      "turnOffConfirmTitle": "Kúè backup?",
+      "turnOffConfirmMessage": "Lo kûlî backup tî mo na server so ape appe aparêyi ngubê. Palaver na aparêyi sêso ayeke. A sô mbi yeke lo backup agô tî clé tî récupération yéké sôkô.",
+      "turnOffConfirmAction": "Kûlî backup",
+      "turnOffSuccess": "Backup akûè na akûlî",
+      "turnOffFailure": "Mbi pê anzu kûlî backup. Sôkô bîan."
+    }
+  },
+  "memories": {
+    "title": "Meme",
+    "description": "Wanda assistant yeke hapa bale ti mbi sô lo mara — mû o tî baka, mbi yângâ, na miwo tî mbi yeke sala — na hû ô fa memê ye fetingo na palavers.",
+    "enableToggle": "Hû meme",
+    "privacyNote": "Mara ayeke-ndoye na browser só sôkô na ayeke hû na palaver mo na gî ma nî kodro na réponde.",
+    "empty": "Meme ayeke. Mara sô ayeke ya so hû na memê ayeke-ndoye so lo na palavers na mo.",
+    "savedOn": "Ayeke-ndoye {date}",
+    "deleteMemory": "Kûlî meme",
+    "clearAll": "Kûlî meme nyoso",
+    "clearAllConfirmQuestion": "Kûlî meme nyoso? Lo pê apida mo.",
+    "clearAllConfirm": "Kûlî nyoso",
+    "cancel": "Kangû"
+  },
+  "contextWindow": {
+    "label": "Fenêtre tî contexte",
+    "value": "{count} mesaj",
+    "fewer": "Mesaj ponta",
+    "more": "Mesaj mingi",
+    "description": "Mesaj mobutu so ayeke na lo tapéro ayeke hû na résumé na yeke yâ tî contexte."
+  },
+  "agentAccess": {
+    "title": "Accès tî agent",
+    "description": "Sûnga nde aningâ wâ sô ayeke zanza agents tî Foundry. Règlements ayeke hângâ mbênî tî ndoyenge mo na accès Azure mo — mo pê apê yângâ accès Azure ayeke yèkè.",
+    "backToChat": "Zamba na palaver",
+    "loading": "Yeke gôzo agents na règlements…",
+    "loadError": "Mbi pê agôkê data tî accès agent.",
+    "rulesUnavailableWarning": "Règlements tî accès apê agôkê na stockage. Agent ayeke yabî na nzönî wa règlements apê abêti.",
+    "retry": "Sôkô",
+    "rulesTab": "Règlements tî agent",
+    "localAdminsTab": "Admins tî gbaga",
+    "noAgents": "Agent keti na kôna.",
+    "sourceLabel": "Sûrse",
+    "notDiscoverable": "Mo pê abê ti hû",
+    "notDiscoverableHint": "Règlement ayeke ti agent so, mbênî apê na découverte tî mo — a pê ayeke balêka ngâ, accès Azure tî mo apê ayeke ni, ou règlements ayeke ni mo.",
+    "accessEveryone": "Bê africa nyoso",
+    "accessRestricted": "Yéké",
+    "edit": "Sûngui",
+    "updatedByLine": "Yeke bâlêka na {user} na {date}",
+    "accessTypeLabel": "Bê tî hû ti agent lê",
+    "everyoneDescription": "Kõ na bê na yeke sô ayeke hû agent lê adé tî accès Azure ti mo.",
+    "restrictedDescription": "Pô na bê na domaine so ayeke na lî gbata mbênî.",
+    "allowDomainsLabel": "Domain ti sô ayeke na",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Mo sô ayeke na",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Pesa Enter tene ayeke",
+    "removeChip": "Gbagara",
+    "groupsLabel": "Groupe ti sô ayeke na",
+    "groupsPendingConsent": "Zia groupe ti accéder ayeke kûê, fo ti tenant admin ape okü na, na a kodro ape sêsê.",
+    "restrictedEmptyWarning": "Mo wala domains ape nî—pëteni mo eke ɓe ti yeke agent so.",
+    "save": "Sêda",
+    "saving": "Sêda...",
+    "cancel": "Kûê",
+    "saveSuccess": "Loi ti accéder asi sêda.",
+    "deleteSuccess": "Loi ti accéder asi gbagara—mo susu ti yeke agent so na ndongò.",
+    "saveError": "Sêda ape kûê. Nga yeke pû na mbî.",
+    "conflictError": "Mö ndra abiani akpa azende lo so a yeke kode. Nga yeke recharger tene yeke ti mbârï-mbârï, kôngô yeke bale mo zo yè.",
+    "reload": "Recharger",
+    "localAdminsDescription": "Pêdere na mo ti gouverner loi ti agent so wala redeploy. Local admins ayeke kode loi ti agent so ti biani aban na yeke.",
+    "noLocalAdmins": "Local admins ape kodro.",
+    "addLocalAdmin": "Yeke local admin",
+    "emailLabel": "Imêl",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Gbagara local admin",
+    "delegatedAgentsLabel": "Agent ti na pê werê",
+    "noDelegatedAgents": "Agent ti na pê werê ape kodro.",
+    "unknownAgentKey": "Cle ti agent tîngï ape sô",
+    "configSaveSuccess": "Local admins asi sêda.",
+    "configConflictError": "Mbênî kodro mo zo ayeke na local admin ko a yeke bale. Nga yeke recharger na kufa bale."
   }
 }

@@ -849,7 +849,8 @@
     "processingAudio": "Ses işleniyor...",
     "ttsError": "Ses oluşturulurken hata oluştu. Lütfen tekrar deneyin.",
     "unsupportedMessageType": "Mesaj görüntülenemedi: Desteklenmeyen mesaj türü",
-    "addLanguageOption": "\"{name}\" ekle…"
+    "addLanguageOption": "\"{name}\" ekle…",
+    "sources": "Kaynaklar"
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",
@@ -1178,7 +1179,10 @@
     "customInstructionsLabel": "Özel Talimatlar*",
     "defaultTemperatureLabel": "Varsayılan Temperature*",
     "Usage & Impact": "Kullanım ve Etki",
-    "Connectors": "Bağlayıcılar"
+    "Connectors": "Bağlayıcılar",
+    "Backup": "Yedekleme",
+    "Memories": "Geçmiş Sohbetler",
+    "Agent Access": "Agent Erişimi"
   },
   "notFound": {
     "lostDog": "Kayıp köpek"
@@ -3224,5 +3228,213 @@
       "lastRequest": "Son istek",
       "disclaimer": "İstek başına tahminler, bildirilen veya tahmini token sayılarından, yayınlanmış ortalamalar ve varsayımlar v{version} kullanılarak yapılmıştır. Eski mesajlar, saklanan metin ve konuşmanın mevcut modeli kullanılarak geriye dönük hesaplanır. Bu bir ölçüm değildir."
     }
+  },
+  "table": {
+    "copyTable": "Tabloyu kopyala",
+    "downloadTable": "Tabloyu indir",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "CSV olarak dışa aktarıldı",
+    "copyFailed": "Tablo kopyalanamadı"
+  },
+  "backup": {
+    "intro": {
+      "title": "Sohbetlerinizi güvenli bir şekilde yedekleyin",
+      "body": "Sohbetleriniz yüklenmeden önce bu cihazda şifrelenir. Sohbetlerinizi asla okuyamayız.",
+      "keyWarning": "Kurtarma anahtarınız bu cihazda oluşturulur. Biz asla göremeyiz ve sizin için kurtaramayız — anahtarı kaybetmek yedeği kaybetmek demektir.",
+      "create": "Anahtarımı oluştur ve yedekle",
+      "decline": "Şimdi değil — sohbetler sadece bu cihazda kalsın"
+    },
+    "ceremony": {
+      "titleCreate": "Kurtarma anahtarınızı kaydedin",
+      "titleRotate": "Yeni kurtarma anahtarınızı kaydedin",
+      "titleView": "Kurtarma anahtarınız",
+      "description": "Bu anahtar, yedeğinizi başka bir cihazda geri yüklemenin tek yoludur. Güvenli bir yerde saklayın — sizin için kurtaramayız.",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı!",
+      "download": ".txt olarak indir",
+      "showQr": "QR kodunu göster",
+      "hideQr": "QR kodunu gizle",
+      "savedCheckbox": "Kurtarma anahtarımı güvenli bir yere kaydettim",
+      "saveFirstHint": "Devam etmeden önce anahtarınızı kopyalayın veya indirin.",
+      "continue": "Devam et",
+      "done": "Tamamlandı",
+      "cancel": "İptal",
+      "cancelConfirmTitle": "Yedekleme kurulumu iptal edilsin mi?",
+      "cancelConfirmBody": "Sohbetleriniz yedeklenmeyecek. Ayarlardan istediğiniz zaman şifreli yedeklemeyi açabilirsiniz.",
+      "cancelConfirmRotateBody": "Kurtarma anahtarınız zaten değiştirildi. Ayarlardan istediğiniz zaman görebilirsiniz.",
+      "cancelConfirmConfirm": "Evet, iptal et",
+      "cancelConfirmDismiss": "Geri dön",
+      "loadError": "Kurtarma anahtarınız bu cihazda yüklenemedi."
+    },
+    "file": {
+      "heading": "Sohbet yedekleme kurtarma anahtarı",
+      "warning": "Bu anahtarı güvenli bir yerde saklayın. Anahtar elinde olan herkes yedeğinizi okuyabilir; anahtar olmadan yedek geri yüklenemez."
+    },
+    "progress": {
+      "titleCreate": "Yedeğiniz hazırlanıyor",
+      "titleRotate": "Kurtarma anahtarınız değiştiriliyor",
+      "encrypting": "{count, plural, one {# sohbet şifreleniyor ve yedekleniyor…} other {# sohbet şifreleniyor ve yedekleniyor…}}",
+      "success": "{count, plural, one {Yedekleme tamamlandı. # sohbet koruma altında.} other {Yedekleme tamamlandı. # sohbet koruma altında.}}",
+      "error": "Yedekleme başarısız oldu. Sohbetleriniz hâlâ bu cihazda.",
+      "retry": "Tekrar dene",
+      "close": "Kapat",
+      "done": "Tamamlandı"
+    },
+    "input": {
+      "label": "Kurtarma anahtarı",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Anahtarlarda asla O, I veya L harfleri bulunmaz.",
+      "checksumError": "Bu anahtar doğru görünmüyor — yazım hatası olup olmadığını kontrol edin.",
+      "formatError": "Bu bir kurtarma anahtarına benzemiyor.",
+      "incomplete": "Yazmaya devam edin — bir kurtarma anahtarı 56 karakterden oluşur.",
+      "valid": "Anahtar geçerli görünüyor."
+    },
+    "restore": {
+      "title": "Sohbetlerinizi geri yükleyin",
+      "successTitle": "Yedek geri yüklendi",
+      "promptBody": "Hesabınız için şifreli bir yedek bulduk. Bu cihaza geri yüklemek için kurtarma anahtarınızı girin.",
+      "submit": "Yedeği geri yükle",
+      "skip": "Atla — bu cihazda sıfırdan başla",
+      "restoring": "Sohbetleriniz çözümleniyor ve geri yükleniyor…",
+      "successBody": "{count, plural, one {# sohbet geri yüklendi.} other {# sohbet geri yüklendi.}}",
+      "wrongKey": "Bu anahtar geçerli, ancak bu yedeği açmıyor. Anahtarınızı değiştirdiyseniz, en yenisini kullanın.",
+      "corrupt": "Bu yedek okunamıyor — hasar görmüş olabilir. Bu cihazda sıfırdan başlayabilir veya daha sonra tekrar deneyebilirsiniz.",
+      "networkError": "Yedekleme servisine ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "tryAgain": "Başka bir anahtar deneyin",
+      "close": "Bitti"
+    },
+    "enterKey": {
+      "title": "Yeni kurtarma anahtarınızı girin",
+      "body": "Kurtarma anahtarınız başka bir cihazda değiştirildi. Bu cihazda yedeklemeye devam etmek için yeni anahtarı girin.",
+      "submit": "Bu anahtarı kullan"
+    },
+    "banner": {
+      "keyMismatchTitle": "Yedeklemeler duraklatıldı — kurtarma anahtarınız başka bir cihazda değiştirildi.",
+      "enterNewKey": "Yeni anahtar gir",
+      "resetBackup": "Yedeği sıfırla",
+      "resetConfirmTitle": "Yedeği bu cihazın anahtarıyla sıfırlansın mı?",
+      "resetConfirmBody": "Mevcut yedek, bu cihazın sohbetleri ile ve bu cihazın anahtarı ile şifrelenerek değiştirilecek. Diğer cihazlar bu cihazın kurtarma anahtarına ihtiyaç duyacak.",
+      "resetConfirmAction": "Yedeği sıfırla",
+      "remoteMissingTitle": "Yedeğiniz artık sunucuda mevcut değil. Yedeklemeler duraklatıldı.",
+      "backUpAgain": "Tekrar yedekle",
+      "dismiss": "Kapat"
+    },
+    "rotate": {
+      "confirmTitle": "Kurtarma anahtarınız değiştirilsin mi?",
+      "confirmBody": "Yedeğiniz yeni bir anahtarla yeniden şifrelenecek ve eski anahtar çalışmayacak. Yeni anahtarı kaydedip diğer cihazlarınızda girmeniz gerekecek.",
+      "confirmAction": "Anahtarı değiştir"
+    },
+    "toast": {
+      "enrollLater": "Şifreli yedeklemeyi dilediğiniz zaman Ayarlar'dan açabilirsiniz.",
+      "keyUpdated": "Kurtarma anahtarı güncellendi. Yedeklemeler devam ediyor.",
+      "resetDone": "Yedek, bu cihazın anahtarıyla sıfırlandı.",
+      "backupRestarted": "Yedek tekrar oluşturuldu.",
+      "opFailed": "Bir şeyler yanlış gitti. Lütfen tekrar deneyin."
+    },
+    "settings": {
+      "statusOn": "Yedekleme açık",
+      "statusOff": "Yedekleme kapalı",
+      "offDescription": "Sohbetleriniz yalnızca bu tarayıcıda bulunuyor. Şifreli yedeklemeyi açarak onları güvende tutabilir ve diğer cihazlarda geri yükleyebilirsiniz. Sohbetleriniz cihazınızda şifrelenir — asla okuyamayız.",
+      "turnOn": "Yedeklemeyi aç",
+      "restoreTitle": "Hesabınız için halihazırda bir yedek bulunuyor",
+      "restoreDescription": "Bu cihaza geri yüklemek için kurtarma anahtarınızı girin.",
+      "restore": "Yedeği geri yükle",
+      "lastBackup": "Son yedekleme: {time}",
+      "lastBackupNever": "Henüz yedekleme yapılmadı",
+      "keyFingerprint": "Anahtar ····-{tail}",
+      "syncState": {
+        "idle": "Senkronizasyon bekleniyor",
+        "syncing": "Yedekleniyor…",
+        "ok": "Güncel",
+        "keyOutOfDate": "Duraklatıldı — kurtarma anahtarı başka bir cihazda değiştirildi",
+        "remoteMissing": "Duraklatıldı — yedekleme sunucudan kaldırıldı",
+        "error": "Son yedekleme denemesi başarısız oldu"
+      },
+      "backUpNow": "Şimdi yedekle",
+      "backUpNowSuccess": "Yedekleme tamamlandı",
+      "backUpNowFailure": "Yedekleme başarısız oldu — sohbetleriniz bu cihazda değişmedi",
+      "viewKey": "Kurtarma anahtarını görüntüle",
+      "changeKey": "Kurtarma anahtarını değiştir",
+      "dangerTitle": "Tehlikeli alan",
+      "turnOffDelete": "Yedeklemeyi kapat ve sil",
+      "turnOffConfirmTitle": "Yedekleme kapatılsın mı?",
+      "turnOffConfirmMessage": "Bu işlem yedeklemenizi tüm cihazlar için sunucularımızdan siler. Bu cihazdaki sohbetleriniz kalır. Daha sonra yeni bir kurtarma anahtarıyla yedeklemeyi tekrar açabilirsiniz.",
+      "turnOffConfirmAction": "Yedeklemeyi sil",
+      "turnOffSuccess": "Yedekleme kapatıldı ve silindi",
+      "turnOffFailure": "Yedekleme silinemedi. Lütfen tekrar deneyin."
+    }
+  },
+  "memories": {
+    "title": "Anılar",
+    "description": "Asistanın sizinle paylaştığınız kalıcı bilgileri — rolünüz, tercihleriniz ve devam eden projeleriniz gibi — hatırlamasına ve bu bilgileri konuşmalar arasında kullanmasına izin verin.",
+    "enableToggle": "Anıları etkinleştir",
+    "privacyNote": "Bilgiler yalnızca bu tarayıcıda saklanır ve sohbetlerde kişisel yanıtlar için kullanılır.",
+    "empty": "Henüz anı yok. Hatırlanması gereken bilgiler, sohbetlerinizden otomatik olarak kaydedilir.",
+    "savedOn": "Kaydedildi {date}",
+    "deleteMemory": "Anıyı sil",
+    "clearAll": "Tüm anıları temizle",
+    "clearAllConfirmQuestion": "Tüm anılar silinsin mi? Bu işlem geri alınamaz.",
+    "clearAllConfirm": "Hepsini sil",
+    "cancel": "İptal"
+  },
+  "contextWindow": {
+    "label": "Bağlam penceresi",
+    "value": "{count} mesaj",
+    "fewer": "Daha az mesaj",
+    "more": "Daha fazla mesaj",
+    "description": "Bu sınırın dışındaki eski mesajlar özetlenerek bağlam olarak eklenir."
+  },
+  "agentAccess": {
+    "title": "Aracıya Erişim",
+    "description": "Hangi kullanıcıların paylaşılan Foundry ajanlarını kullanabileceğini yönetin. Kurallar yalnızca bir kullanıcının mevcut Azure erişimini daha fazla kısıtlar — Azure tarafından reddedilen erişimler hiçbir zaman verilemez.",
+    "backToChat": "Sohbete dön",
+    "loading": "Ajanlar ve kurallar yükleniyor…",
+    "loadError": "Aracı erişim verileri yüklenemedi.",
+    "rulesUnavailableWarning": "Erişim kuralları depodan yüklenemedi. Şu an ajan çağrısı engellendi ve kurallar düzenlenemiyor.",
+    "retry": "Tekrar dene",
+    "rulesTab": "Aracı kuralları",
+    "localAdminsTab": "Yerel yöneticiler",
+    "noAgents": "Yönetilecek ajan yok.",
+    "sourceLabel": "Kaynak",
+    "notDiscoverable": "Sizin tarafınızdan keşfedilemiyor",
+    "notDiscoverableHint": "Bu ajan için bir kural mevcut, ancak kendi keşfinizde yer almıyor — adı değiştirilmiş olabilir, Azure erişiminiz kapsamıyor olabilir veya erişim kuralı sizi içermiyor olabilir.",
+    "accessEveryone": "Herkes",
+    "accessRestricted": "Kısıtlı",
+    "edit": "Düzenle",
+    "updatedByLine": "Son güncelleyen: {user} — {date}",
+    "accessTypeLabel": "Bu ajanı kimler kullanabilir",
+    "everyoneDescription": "Zaten Azure erişimiyle bu ajanı kullanabilen herkes.",
+    "restrictedDescription": "Yalnızca aşağıda listelenen kullanıcılar ve alanlar.",
+    "allowDomainsLabel": "İzin verilen alan adları",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "İzin verilen kullanıcılar",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Eklemek için Enter'a basın",
+    "removeChip": "Kaldır",
+    "groupsLabel": "İzin verilen gruplar",
+    "groupsPendingConsent": "Grup tabanlı erişim, kiracı yöneticisinin onayı bekleniyor ve henüz düzenlenemez.",
+    "restrictedEmptyWarning": "Hiçbir kullanıcı veya alan adı listelenmemiş — bu ajanı kimse kullanamaz.",
+    "save": "Kaydet",
+    "saving": "Kaydediliyor…",
+    "cancel": "İptal",
+    "saveSuccess": "Erişim kuralı kaydedildi.",
+    "deleteSuccess": "Erişim kuralı kaldırıldı — herkes bu ajanı tekrar kullanabilir.",
+    "saveError": "Kaydedilemedi. Lütfen tekrar deneyin.",
+    "conflictError": "Siz düzenlerken başka biri değişiklik yaptı. Son sürümü yükleyip tekrar deneyin.",
+    "reload": "Yeniden Yükle",
+    "localAdminsDescription": "Belirli ajanlar için kural yönetimini yeniden dağıtıma gerek olmadan devredin. Yerel yöneticiler, yalnızca kendilerine atanan ajanların kurallarını düzenleyebilir.",
+    "noLocalAdmins": "Tanımlı yerel yönetici yok.",
+    "addLocalAdmin": "Yerel yönetici ekle",
+    "emailLabel": "E-posta",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Yerel yöneticiyi kaldır",
+    "delegatedAgentsLabel": "Devredilen ajanlar",
+    "noDelegatedAgents": "Devredilebilecek ajan yok.",
+    "unknownAgentKey": "Bilinmeyen ajan anahtarı",
+    "configSaveSuccess": "Yerel yöneticiler kaydedildi.",
+    "configConflictError": "Düzenlerken başka biri yerel yönetici listesini değiştirdi. Yeniden yükleyip tekrar deneyin."
   }
 }

@@ -792,7 +792,8 @@
     "processingAudio": "ድምጹን በመስራት ላይ...",
     "ttsError": "ድምጽ ለመፍጠር ስህተት አጋጥሟል። እባክዎ ደግመው ይሞክሩ።",
     "unsupportedMessageType": "መልእክቱን ማሳየት ላይ ስህተት፡ የማይደገፍ ዓይነት",
-    "addLanguageOption": "\"{name}\" ያክሉ…"
+    "addLanguageOption": "\"{name}\" ያክሉ…",
+    "sources": "ምንጮች"
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",
@@ -1121,7 +1122,10 @@
     "customInstructionsLabel": "ብቻውን መመሪያዎች*",
     "defaultTemperatureLabel": "ነባሪ ቤር*",
     "Usage & Impact": "አጠቃቀም እና ተፅዕኖ",
-    "Connectors": "አገናኞች"
+    "Connectors": "አገናኞች",
+    "Backup": "ኦፕድ በሚያደርጉበት",
+    "Memories": "ትዕዛዞች",
+    "Agent Access": "የወኪል መዳረሻ"
   },
   "notFound": {
     "lostDog": "የጠፋ ውሻ"
@@ -3224,5 +3228,213 @@
       "lastRequest": "ቅርብ ጥያቄ",
       "disclaimer": "ለእያንዳንዱ ጥያቄ ግምት ከተዘገቡ ወይም ከግምት ቶክን ብዛቶች በመጠቀም፣ በታተመ አማካይ ዋጋና ጥምረቶች v{version} የተደረገ፡፡ አሮጌ መልዕክቶች ከተያዙት ጽሑፍ እና የውይይቱ የአሁኑ ሞዴል በመጠቀም ተቆጥረዋል።  measurement አይደለም።"
     }
+  },
+  "table": {
+    "copyTable": "ሰንጠረዡን ቅዳ",
+    "downloadTable": "ሰንጠረዡን አውርድ",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "በ CSV ተላክ",
+    "copyFailed": "ሰንጠረዡን መቅዳት አልተቻለም"
+  },
+  "backup": {
+    "intro": {
+      "title": "ውይዮቶችዎን ደህና ያስቀምጡ",
+      "body": "ውይዮቶችዎ ከመፍጠር በፊት በዚህ መሳሪያ ላይ የተመሰጠኑ ናቸው። ውይዮቶችዎን ማንም ማንበብ አንችልም።",
+      "keyWarning": "የእነዚህ መድረሻ ቁልፍዎ በዚህ መሳሪያ ላይ ተፈጥሯል። እኛ አንያውቅም አልናችሁም፤ ቁልፉን መጥፎ ማሳመጥ ማህደሩን መጥፎ ማለት ነው።",
+      "create": "ቁልፌን ፍጠርና ዝግጁ ውይይት አቅርብ",
+      "decline": "አሁን አይደለም — ውይዮች በዚህ መሳሪያ ላይ ብቻ ይቆዩ"
+    },
+    "ceremony": {
+      "titleCreate": "የመድረሻ ቁልፍዎን ያቅፉ",
+      "titleRotate": "አዲሱን የመድረሻ ቁልፍዎን ያቅፉ",
+      "titleView": "የመድረሻ ቁልፍዎ",
+      "description": "ይህ ቁልፍ የማህደሩን ትክክል በሌላ መሳሪያ ላይ ለመመለስ አንደኛው መንገድ ነው፤ ደህና ያኑረው — እኛ ሊያመልጥ አንችልም።",
+      "copy": "ቅዳ",
+      "copied": "ተቀድቷል!",
+      "download": "Download .txt",
+      "showQr": "QR code አሳይ",
+      "hideQr": "QR code አሰው",
+      "savedCheckbox": "የመድረሻ ቁልፍዬን በደህና አሰቀምጫለሁ",
+      "saveFirstHint": "ከመቀጠልዎ በፊት ቁልፉን ይቅዱ ወይም ያውርዱ።",
+      "continue": "ቀጥል",
+      "done": "ተጠናቋል",
+      "cancel": "አቋርጥ",
+      "cancelConfirmTitle": "የምስክር ኦፕድ አቋርጥ?",
+      "cancelConfirmBody": "ውይዮቶችዎ አይጠበቁም። የተመሰጠነ ባኪ በማቅረብ አማካይ በቅንብር ማዕከል መክፈቱ ይችላሉ።",
+      "cancelConfirmRotateBody": "የመድረሻ ቁልፍዎ ቀይሯል። በቅንብር መተግበሪያ ሁሉ ማየት ይችላሉ።",
+      "cancelConfirmConfirm": "አዎ, አቋርጥ",
+      "cancelConfirmDismiss": "ተመለስ",
+      "loadError": "የመድረሻ ቁልፍዎን በዚህ መሳሪያ ላይ ማከናወን አልተቻለም።"
+    },
+    "file": {
+      "heading": "የውይይት የቦክ መድረሻ ቁልፍ",
+      "warning": "ይህን ቁልፍ ደህና ያኑሩ። በዚህ ቁልፍ ያሉአቸው ማህደሩን ማንበብ ይችላሉ፣ በቁልፉ ሳይኖር ማህደሩ አይመለስም።"
+    },
+    "progress": {
+      "titleCreate": "ማህደሯን በመዘጋጀት ላይ",
+      "titleRotate": "የመድረሻ ቁልፍዎን በመቀየር ላይ",
+      "encrypting": "{count, plural, one {አንዱን ውይይት በመመሰጠንና በማፍቀር ላይ…} other {# ውይዮች በመመሰጠንና በማፍቀር ላይ…}}",
+      "success": "{count, plural, one {መቅፈል ተጠናቋል። አንድ ውይይት ጠበቀ።} other {መቅፈል ተጠናቋል። # ውይዮች ተጠብቀዋል።}}",
+      "error": "ባኪ አልተሳካም። ውይዮቶችዎ በዚህ መሳሪያ ላይ አሉ።",
+      "retry": "እንደገና ይሞክሩ",
+      "close": "ዝጋ",
+      "done": "ተጠናቋል"
+    },
+    "input": {
+      "label": "የመድረሻ ቁልፍ",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "ቁልፎች ኦ፣ አይ፣ ኤል የሚለውን ፊደላት አይያካትቱም።",
+      "checksumError": "ይህ ቁልፍ ትክክል አይመስለኝም — ትዕዛዞትን ተመልከቱ።",
+      "formatError": "ይህ እንደ የመድጋኛ ቁልፍ አይመስልም።",
+      "incomplete": "ቀጥሉ ይተይቡ — መድጋኛ ቁልፍ 56 ፊደላት አሏት።",
+      "valid": "ቁልፉ ትክክል ይመስላል።"
+    },
+    "restore": {
+      "title": "ውይይቶችዎን አንስተው ይመልሱ",
+      "successTitle": "ቦኬን ማልሻ ተመልሷል",
+      "promptBody": "ለመለያዎ የደረሰነው በሚሰናከል ቦኬ ተገኝቷል። እንደገና ለመመለስ መድጋኛ ቁልፎን ያስገቡ።",
+      "submit": "ቦኬውን መልስ",
+      "skip": "ዝለል — በዚህ መአስከት አዲስ ጀምር",
+      "restoring": "ውይይቶችዎን በመክፈትና በመመለስ ላይ…",
+      "successBody": "{count, plural, one {# ውይይት ተመልሷል።} other {# ውይይቶች ተመልሰዋል።}}",
+      "wrongKey": "ቁልፉ ትክክል ነው፣ ግን ይህን ቦኬ ሊክይው አይችልም። ቁልፎን ቀይረውም ከሆነ አዲሱን ያጠቀሙ።",
+      "corrupt": "ይህ ቦኬ ሊነበብ አልተቻለም — ምናልባት ጎድቷል። በዚህ መአስከት አዲስ ጀምሩ ወይም ሌላ ጊዜ ይሞክሩ።",
+      "networkError": "ወደ ቦኬ አገልግሎቱ ማድረስ አልተቻለም። ኮኔክስኑን ያረጋግጡ እና ዳግመኛ ይሞክሩ።",
+      "tryAgain": "ሌላ ቁልፍ ይሞክሩ",
+      "close": "ተጠናቋል"
+    },
+    "enterKey": {
+      "title": "አዲሱን መድጋኛ ቁልፍዎ ያስገቡ",
+      "body": "የመድጋኛ ቁልፎ በሌላ መአስከት ተቀይሯል። ቦኬዎን በዚህ መአስከት ለማቀናበል አዲሱን ቁልፍ ያስገቡ።",
+      "submit": "ይህን ቁልፍ አጠቀም"
+    },
+    "banner": {
+      "keyMismatchTitle": "ቦኬ ቆሟል — መድጋኛ ቁልፎ በሌላ መአስከት ተቀይሯል።",
+      "enterNewKey": "አዲስ ቁልፍ ያስገቡ",
+      "resetBackup": "ቦኬ ዳግመኛ ያቆሙ",
+      "resetConfirmTitle": "ቦኬውን በዚህ መአስከት ቁልፍ ዳግመኛ ይቆሙ?",
+      "resetConfirmBody": "ያለው ቦኬ በዚህ መአስከት ውይይቶች ተቀይሯል፣ በዚህ መአስከት ቁልፍ ተሰናክሏል። ሌሎች መአስከቶች የዚህ መአስከት መድጋኛ ቁልፍዎን ይፈልጋሉ።",
+      "resetConfirmAction": "ቦኬ ዳግመኛ ያቆሙ",
+      "remoteMissingTitle": "ቦኬዎ በአካውንቱ በሰርቨሩ አልቀረም። ቦኬ ቆሟል።",
+      "backUpAgain": "ዳግመኛ ቦኬ ያድርጉ",
+      "dismiss": "አጥፋ"
+    },
+    "rotate": {
+      "confirmTitle": "የመድጋኛ ቁልፎን ቀይር?",
+      "confirmBody": "ቦኬዎት በአዲስ ቁልፍ ዳግመኛ ይተቀመጣል፣ አሮጌው ቁልፍ ማስራት ይቆማል። አዲሱን ቁልፍ ማስቀመጥ እና በሌሎች መአስከቶች ላይ ማስገባት ይኖርቦታል።",
+      "confirmAction": "ቁልፍ ቀይር"
+    },
+    "toast": {
+      "enrollLater": "በማህደር ውስጥ የቦኬ መቆያ ሁሉ ጊዜ ማብራት ይችላሉ።",
+      "keyUpdated": "መድጋኛ ቁልፍ ተዘመነ። ቦኬ ቀጥሏል።",
+      "resetDone": "ቦኬ በዚህ መአስከት ቁልፍ ተመልሷል።",
+      "backupRestarted": "ቦኬ ዳግመኛ ተፈጠረ።",
+      "opFailed": "ያንሳበት አልተሳካም። እባክዎ ደግመው ይሞክሩ።"
+    },
+    "settings": {
+      "statusOn": "ቦኬ ተነስቷል",
+      "statusOff": "ቦኬ ዝግ ነው",
+      "offDescription": "ውይይቶችዎ በዚህ ባልሳን ብቻ ይኖራሉ። ቦኬ እንዲያስቀምጡና በሌሎች መአስከቶች ላይ እንዲያመላለሱ እርስዎን በጥልቅ ቦኬ አንዳት ያድርጉ። ሁሉም ውይይቶች በመአስከትዎ ላይ በአስገዳጅ ጥበብ ይተቀመጣሉ፤ እኛ ማንም ማንበብ አንችልም።",
+      "turnOn": "ቦኬ አብራ",
+      "restoreTitle": "ለመለያዎ ቦኬ አስቀድሞ አለ",
+      "restoreDescription": "እርሱን በዚህ መአስከት ለመመለስ መድጋኛ ቁልፎን ያስገቡ።",
+      "restore": "ቦኬውን መልስ",
+      "lastBackup": "የመጨረሻ ቦኬ፡ {time}",
+      "lastBackupNever": "እስካሁን ምንም ቦኬ አልተጠናቀቀም",
+      "keyFingerprint": "ቁልፍ ····-{tail}",
+      "syncState": {
+        "idle": "ለመማረክ በመጠበቅ ላይ",
+        "syncing": "ቦኬ በማድረግ ላይ…",
+        "ok": "ወቅታዊ ነው",
+        "keyOutOfDate": "ቆሟል — መድጋኛ ቁልፎ በሌላ መአስከት ተቀይሯል",
+        "remoteMissing": "ተወቅሷል — የተቀመጠው በተለያዩ ሰርቨሮች ላይ ተሰርዟል",
+        "error": "የመጨረሻው የተቀመጠው ሙከራ አልተሳካም"
+      },
+      "backUpNow": "አሁን ይቀምጡ",
+      "backUpNowSuccess": "በትክክል ተቀምጧል",
+      "backUpNowFailure": "መቀመጥ አልተሳካም — ውይይቶችዎ በዚህ መሣሪያ ላይ አልተቀየሩም",
+      "viewKey": "የእርስዎን የእርዳታ ቁልፍ ይመልከቱ",
+      "changeKey": "የእርዳታ ቁልፍ ይቀይሩ",
+      "dangerTitle": "አደገኛ ክፍል",
+      "turnOffDelete": "የተቀመጠውን ይጥፉና ያጥቁ",
+      "turnOffConfirmTitle": "መቀመጡን እንዲቆም ይፈልጋሉ?",
+      "turnOffConfirmMessage": "ይህ በሁሉም መሣሪያዎች ላይ የተቀመጠውን ከሰርቨሮቻችን ይሰርዛል፡፡ ውይይቶችዎ በዚህ መሣሪያ ላይ ይቆያሉ። በኋላ በአዲስ የእርዳታ ቁልፍ መቀመጥን መነሳት ይችላሉ።",
+      "turnOffConfirmAction": "ተቀመጡን ይሰርዙ",
+      "turnOffSuccess": "መቀመጡ ተዘግቷ ተሰርዟል",
+      "turnOffFailure": "መቀመጡን ማጥፋት አልተቻለም። እባክዎ እንደገና ይሞክሩ።"
+    }
+  },
+  "memories": {
+    "title": "ማህደራት",
+    "description": "አጠባበቅ የሚጠቀምበትን ጠቋሚ እውነታዎች እንዲያስታውስ እንዲሁም በውይይቶች ላይ እንዲጠቀም ይፍቀዱ — ምሳሌ፣ ሚናዎ, ምርጫዎች, ያለማቋረጥ ፕሮጀክቶች እና ተወላጅ ነገሮች.",
+    "enableToggle": "ማህደራትን አንቃ",
+    "privacyNote": "እውነታዎች በዚህ ብራውዘር ብቻ ይቀመጣሉ፣ በውይይቶችዎም ብቻ ያካተቱ።",
+    "empty": "ማህደራት አልተቀመጡም። የሚታሰበው እውነታ ራሱ ከውይይቶችዎ በቀጥታ ይቀመጣል።",
+    "savedOn": "ተቀመጠበት፡ {date}",
+    "deleteMemory": "ማህደር ይሰርዙ",
+    "clearAll": "ሁሉንም ማህደራት ይነጹ",
+    "clearAllConfirmQuestion": "ሁሉንም ማህደራት ይሰርዙ? ይህ አይታወስም።",
+    "clearAllConfirm": "ሁሉንም ይሰርዙ",
+    "cancel": "ይቅር"
+  },
+  "contextWindow": {
+    "label": "አያያዝ መስክ",
+    "value": "{count} መልእክቶች",
+    "fewer": "ቁጥሩ የተቀናበረ መልእክቶች",
+    "more": "ተጨማሪ መልእክቶች",
+    "description": "ከዚህ ክልል በላይ ያሉት አሮጌ መልእክቶች ይዘረጋሉ እና እንደ አያያዝ ይላካሉ።"
+  },
+  "agentAccess": {
+    "title": "የወኪል መዳረሻ",
+    "description": "የተጠቃሚዎች ማን የተጋራ ፋውንድሪ ወኪሎችን ማጠቀም እንደሚችሉ ይቆጣጠሩ። ህጎች የተጠቃሚዎች የራሳቸውን Azure መድረሻ ፈቃድ ብቻ ይጨምራሉ — ያሎትን Azure መድረሻ ማድረስ ከተከሉት ከቶ ማቅረብ አይችልም።",
+    "backToChat": "ወደ ውይይት",
+    "loading": "ወኪሎችና ህጎች በመጫን ላይ…",
+    "loadError": "የወኪል መዳረሻ መረጃ መጫን አልተቻለም።",
+    "rulesUnavailableWarning": "የመዳረሻ ህጎችን ከማከማቻ መጫን አልተቻለም። የወኪል መጥራት በአሁኑ ጊዜ ታግዷል፣ ህጎቹም ማስተካከል አይቻልም።",
+    "retry": "ደግመው ይሞክሩ",
+    "rulesTab": "የወኪል ህጎች",
+    "localAdminsTab": "አካባቢ አስተዳዳሪዎች",
+    "noAgents": "የሚነገሩ ወኪሎች የሉም።",
+    "sourceLabel": "ምንጭ",
+    "notDiscoverable": "በእርስዎ ሊታወቅ አይችልም",
+    "notDiscoverableHint": "የዚህ ወኪል ቅደም ተከተል አለው፣ ነገር ግን በእርስዎ መፍለጊያ ውስጥ አይደለም — ስሙ ሊቀየረው ይችላል፣ የAzure መዳረሻዎ አይሰካችም፣ የመዳረሻ ህጉም አካባቢዎ ውስጥ አይደለም።",
+    "accessEveryone": "ሁሉም",
+    "accessRestricted": "የተገደበ",
+    "edit": "አስተካክል",
+    "updatedByLine": "መጨረሻ የተቀየረው በ{name} በ{date}",
+    "accessTypeLabel": "ይህን ወኪል ማን ማጠቀም ይችላል",
+    "everyoneDescription": "በAzure መዳረሻቸው ወደዚህ ወኪል ማድረስ የሚችል ሁሉ።",
+    "restrictedDescription": "በታች የተዘረዘሩት ተጠቃሚዎችና ዶሜኖች ብቻ።",
+    "allowDomainsLabel": "ተፈቀዱ ያላቸው ዶሜኖች",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "ተፈቀዱ ያላቸው ተጠቃሚዎች",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "ለመጨመር Enter ይጫኑ",
+    "removeChip": "አስወግድ",
+    "groupsLabel": "ተፈቀዱ ያላቸው ቡድኖች",
+    "groupsPendingConsent": "በቡድን ላይ መግባት የተከለከለ ነው፤ የነጥብ አስተዳዳሪ ስምምነት እየጠበቀ ነው፣ እስካሁን ማስተካከል አይችልም።",
+    "restrictedEmptyWarning": "ተጠቃሚዎች ወይም ዶሜኖች አልተዘረዙም — ማንም ይህንን agent መጠቀም አይችልም።",
+    "save": "አስቀምጥ",
+    "saving": "በማስቀመጥ ላይ…",
+    "cancel": "ደኅንነቱን ያቋርጡ",
+    "saveSuccess": "የመዳረሻ መመሪያ ተቀምጧል።",
+    "deleteSuccess": "የመዳረሻ መመሪያ ተወግዷል — ሁሉም ይህን agent ዳግም መጠቀም ይችላሉ።",
+    "saveError": "ማስቀመጥ አልተቻለም። እባክዎን ደግመው ይሞክሩ።",
+    "conflictError": "ከእርስዎ በማስተካከል ላይ ሳሉ ሌላ ሰው ለውጥ አደረገ። የቅርብ ስሪትን ለመጫን ይመልሱ ከዚያም ዳግመው ይቀይሩ።",
+    "reload": "ይመልሱ",
+    "localAdminsDescription": "የውስጥ አስተዳዳሪዎችን ያመልክቱ፤ ያሉበት agent አያቀማጡ በማድረግ። የውስጥ አስተዳዳሪዎች መዋቅሩ በተመደበባቸው የ agent መመሪያዎች ብቻ ማስተካከል ይችላሉ።",
+    "noLocalAdmins": "የውስጥ አስተዳዳሪዎች አልተዘጋጁም።",
+    "addLocalAdmin": "የውስጥ አስተዳዳሪ ያክሉ",
+    "emailLabel": "ኢሜይል",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "የውስጥ አስተዳዳሪን አስወግድ",
+    "delegatedAgentsLabel": "የተመደቡ agents",
+    "noDelegatedAgents": "ሊመደቡ የሚችሉ agents የሉም።",
+    "unknownAgentKey": "ያልታወቀ agent key",
+    "configSaveSuccess": "የውስጥ አስተዳዳሪዎች ተቀምጠዋል።",
+    "configConflictError": "የውስጥ አስተዳዳሪዎች ዝርዝር ሲቀየር እርስዎ በማስተካከል ላይ ነበሩ። ይመልሱና ደግመው ይሞክሩ።"
   }
 }
