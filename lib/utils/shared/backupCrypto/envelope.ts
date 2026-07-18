@@ -146,19 +146,27 @@ export interface DecryptEnvelopeParams {
   encKey: CryptoKey;
   /** keyId of the key this device holds; mismatch fails before any decrypt. */
   keyId: string;
+  /**
+   * Epoch the manifest declares for this blob. The AAD only binds an
+   * envelope to its OWN epoch, so without this check the untrusted store
+   * could replay an intact pre-reset envelope (same key, older epoch).
+   */
+  expectedEpoch: number;
   /** Manifest slot this blob was fetched for — part of the AAD binding. */
   conversationId: string;
 }
 
 /**
- * Verification order: version → algorithm → keyId (cheap, pre-crypto) →
- * GCM decrypt with AAD → gunzip. The envelope's own `epoch` feeds the AAD,
- * so a tampered epoch fails authentication rather than needing a check here.
+ * Verification order: version → algorithm → keyId → epoch (cheap,
+ * pre-crypto) → GCM decrypt with AAD → gunzip. The envelope's own `epoch`
+ * feeds the AAD (tampering with the field fails authentication); the
+ * expectedEpoch comparison is what rejects replayed whole envelopes from
+ * an earlier epoch.
  */
 export async function decryptEnvelope(
   params: DecryptEnvelopeParams,
 ): Promise<string> {
-  const { envelope, encKey, keyId, conversationId } = params;
+  const { envelope, encKey, keyId, expectedEpoch, conversationId } = params;
   if (envelope.v !== 1) {
     throw new EnvelopeVersionError(
       `unsupported envelope version ${envelope.v}`,
@@ -171,6 +179,11 @@ export async function decryptEnvelope(
   }
   if (envelope.keyId !== keyId) {
     throw new EnvelopeKeyMismatchError(envelope.keyId, keyId);
+  }
+  if (envelope.epoch !== expectedEpoch) {
+    throw new EnvelopeIntegrityError(
+      `envelope epoch ${envelope.epoch}, expected ${expectedEpoch}`,
+    );
   }
 
   let plainBytes: Uint8Array;
