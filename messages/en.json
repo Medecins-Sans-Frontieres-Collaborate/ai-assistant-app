@@ -1374,8 +1374,15 @@
         "description": "Turn any data into locations on a map"
       }
     },
-    "chooser": {
-      "prompt": "Or start a focused workspace"
+    "tabs": {
+      "label": "Conversation mode",
+      "chat": "Chat",
+      "chatDescription": "A standard conversation with the assistant"
+    },
+    "discard": {
+      "title": "Discard this draft?",
+      "body": "Switching to {target} clears the work you have started in {current}.",
+      "confirm": "Discard"
     },
     "sidebar": {
       "newTranslation": "New translation",
