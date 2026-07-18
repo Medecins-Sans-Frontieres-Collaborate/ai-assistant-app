@@ -2408,7 +2408,8 @@
     "regionDefault": "Podrazumevani",
     "modelRow": "{requests} zahteva · {grams} g",
     "disclosure": "Procene se zasnivaju na pretpostavkama v{version} · od {since} · samo standardni čet (agenti i odgovori iz baze znanja nisu uračunati).",
-    "reset": "Resetuj statistiku upotrebe"
+    "reset": "Resetuj statistiku upotrebe",
+    "estimatedPortion": "Uključuje ~{grams} g CO₂e ({requests} zahteva) procenjenih iz razgovora pre početka praćenja — povratno izračunato iz sačuvanog teksta poruka, a ne izmerenog broja tokena."
   },
   "extraction": {
     "toggleLabel": "Ekstrahuj strukturirane podatke",
@@ -2904,7 +2905,37 @@
       "autoCheckHint": "Nakon izdvajanja podataka sa fotografija ili dokumenata, automatski pokreni proveru kvaliteta za nove redove",
       "checkingNewRows": "Proveravaju se tek dodati redovi na probleme sa kvalitetom…",
       "ingestCheckFailed": "Automatska provera kvaliteta nije uspela ({message}) — možete je pokrenuti ručno pomoću opcije Proceni kvalitet.",
-      "assessedIngest": "Tek dodati redovi"
+      "assessedIngest": "Tek dodati redovi",
+      "transpose": "Transponuj",
+      "transposeAxisColumn": "Naziv",
+      "transposeSuggestion": "Izgleda da je ova tabela transponovana: redovi su atributi, a kolone su stavke. Da li da je okrenemo tako da svaka stavka bude red, a svaki atribut posebna kolona sa tipom?",
+      "transposedTable": "Transponovani redovi i kolone",
+      "columns": "Kolone",
+      "columnsHidden": "Kolone ({count} skriveno)",
+      "showAllColumns": "Prikaži sve",
+      "chartScatter": "Raspršeni (x naspram y)",
+      "chartPivot": "Pivot tabela",
+      "xColumn": "X kolona",
+      "yColumn": "Y kolona",
+      "splitByColumn": "Podeli po",
+      "splitNone": "Bez podele",
+      "pivotValueColumns": "Kolone sa vrednostima",
+      "aggMin": "Min",
+      "aggMax": "Maks",
+      "aggMedian": "Medijana",
+      "chartSeriesTruncated": "Prikazano je prvih {max} serija",
+      "chartPointsTruncated": "Prikazano {max} uzorkovanih tačaka",
+      "chartScatterAria": "Raspršeni grafikon: {x} prema {y}",
+      "pivotTableAria": "Pivot tabela grupisana po {column}",
+      "schemaFormula": "Formula",
+      "schemaFormulaPlaceholder": "npr. [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Izračunato polje: referencirajte druga polja kao [Naziv]; podržava + - * / %, zagrade, kao i round, abs, min, max. Vrednosti se automatski ažuriraju i ne mogu se direktno menjati.",
+      "schemaFormulaSyntaxError": "Nevažeća formula",
+      "schemaFormulaUnknownRef": "Nepoznato polje: {ref}",
+      "schemaFormulaArityError": "Pogrešan broj argumenata za {fn}",
+      "schemaFormulaCycleError": "Kružna referenca između formula",
+      "derivedColumnTitle": "Izračunato: {formula}",
+      "derivedFrom": "Izračunato prema {formula}"
     },
     "map": {
       "emptyTitle": "Postavite svoje podatke na mapu",
@@ -3139,5 +3170,43 @@
     "deselectAll": "Poništi izbor svih",
     "autoAddLabel": "Automatski dodaj nove modele",
     "autoAddDescription": "Kasnije dodate implementacije modela na ovaj nalog će se pojaviti automatski. Modeli koji nisu označeni ostaju isključeni."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Niži uticaj",
+      "moderate": "Umereni uticaj",
+      "high": "Veći uticaj"
+    },
+    "tierTooltip": "Relativni energetski uticaj po zahtevu, procenjen na osnovu veličine modela. Ovo su procene bazirane na objavljenim prosečnim vrednostima i pretpostavkama v{version} — nisu merenja.",
+    "typicalRequest": "~{grams} g CO₂e po tipičnom zahtevu",
+    "typicalRequestTooltip": "Prilazna procena po zahtevu za tipičan zahtev (oko 1.000 prompt i 500 completion tokena), izvedena iz objavljenih proseka i pretpostavki v{version}. Stvarni uticaj zavisi od dužine razgovora, podešavanja i regiona hostinga.",
+    "activities": {
+      "netflixHd": "Netflix HD strimovanje",
+      "zoomCall": "Zoom poziv (kamera uključena)",
+      "webBrowsing": "Pregledanje veba",
+      "spotifyAudio": "Spotify audio"
+    },
+    "equivalents": {
+      "title": "≈ isto ugljenika kao",
+      "note": "Poređenje na bazi ugljenika sa objavljenim satnim otiskom ovih servisa — približne, reda veličine vrednosti, kao i sve procene ovde."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Procena ugljeničnog otiska ovog razgovora: {grams} grama ekvivalenta CO₂. Prikaži detalje.",
+      "ariaLabelToday": "Procena ugljeničnog otiska ovog razgovora danas: {grams} grama ekvivalenta CO₂. Prikaži detalje.",
+      "title": "Ovaj razgovor (procena)",
+      "today": "Danas",
+      "total": "Ukupno",
+      "measured": "Na osnovu prijavljenog broja tokena",
+      "estimated": "Povratno izračunato iz starijih poruka",
+      "lastRequest": "Poslednji zahtev",
+      "disclaimer": "Procene po zahtevu na osnovu prijavljenog ili aproksimiranog broja tokena, koristeći objavljene proseke i pretpostavke v{version}. Starije poruke su povratno izračunate iz sačuvanog teksta i trenutnog modela razgovora. Nije merenje."
+    }
   }
 }

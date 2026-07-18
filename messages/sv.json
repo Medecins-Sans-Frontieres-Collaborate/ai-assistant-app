@@ -2424,7 +2424,8 @@
     "regionDefault": "Standard",
     "modelRow": "{requests} frq · {grams} g",
     "disclosure": "Uppskattningar baseras på antaganden v{version} · sedan {since} · endast standardchatt (agenter och kunskapsbaserade svar räknas inte).",
-    "reset": "Återställ användningsstatistik"
+    "reset": "Återställ användningsstatistik",
+    "estimatedPortion": "Inkluderar cirka {grams} g CO₂e ({requests} förfrågningar) uppskattat från chattar som föregår spårning — bakåträkning från lagrad meddelandetext, inte uppmätta token."
   },
   "extraction": {
     "toggleLabel": "Extrahera strukturerad data",
@@ -2920,7 +2921,37 @@
       "autoCheckHint": "När data extraherats från foton eller dokument, kör automatiskt en kvalitetskontroll på de nya raderna",
       "checkingNewRows": "Kontrollerar de nyligen tillagda raderna för kvalitetsproblem…",
       "ingestCheckFailed": "Den automatiska kvalitetskontrollen misslyckades ({message}) — du kan köra den manuellt med Bedöm kvalitet.",
-      "assessedIngest": "Nyligen tillagda rader"
+      "assessedIngest": "Nyligen tillagda rader",
+      "transpose": "Transponera",
+      "transposeAxisColumn": "Namn",
+      "transposeSuggestion": "Den här tabellen verkar vara transponerad: rader är attribut och kolumner är objekt. Vill du vända på den så att varje objekt blir en rad och varje attribut blir en typad kolumn?",
+      "transposedTable": "Transponerade rader och kolumner",
+      "columns": "Kolumner",
+      "columnsHidden": "Kolumner ({count} dolda)",
+      "showAllColumns": "Visa alla",
+      "chartScatter": "Punktdiagram (x mot y)",
+      "chartPivot": "Pivottabell",
+      "xColumn": "X-kolumn",
+      "yColumn": "Y-kolumn",
+      "splitByColumn": "Dela upp efter",
+      "splitNone": "Ingen uppdelning",
+      "pivotValueColumns": "Värdekolumner",
+      "aggMin": "Min",
+      "aggMax": "Max",
+      "aggMedian": "Median",
+      "chartSeriesTruncated": "Visar de {max} största serierna",
+      "chartPointsTruncated": "Visar {max} utvalda punkter",
+      "chartScatterAria": "Punktdiagram av {x} mot {y}",
+      "pivotTableAria": "Pivottabell grupperad efter {column}",
+      "schemaFormula": "Formel",
+      "schemaFormulaPlaceholder": "t.ex. [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Beräknat fält: referera till andra fält som [Namn]; stöder + - * / %, parenteser och round, abs, min, max. Värden uppdateras automatiskt och kan inte redigeras direkt.",
+      "schemaFormulaSyntaxError": "Ogiltig formel",
+      "schemaFormulaUnknownRef": "Okänt fält: {ref}",
+      "schemaFormulaArityError": "Fel antal argument till {fn}",
+      "schemaFormulaCycleError": "Cirkulär referens mellan formler",
+      "derivedColumnTitle": "Beräknad: {formula}",
+      "derivedFrom": "Beräknad från {formula}"
     },
     "map": {
       "emptyTitle": "Visa din data på en karta",
@@ -3155,5 +3186,43 @@
     "deselectAll": "Avmarkera alla",
     "autoAddLabel": "Lägg till nya modeller automatiskt",
     "autoAddDescription": "Modellutplaceringar som läggs till på detta konto senare visas automatiskt. Avmarkerade modeller förblir undantagna."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Lägre påverkan",
+      "moderate": "Måttlig påverkan",
+      "high": "Högre påverkan"
+    },
+    "tierTooltip": "Relativ energipåverkan per förfrågan, uppskattad utifrån modellstorlek. Detta är uppskattningar baserade på publicerade genomsnittsvärden och antaganden v{version} — inte mätningar.",
+    "typicalRequest": "~{grams} g CO₂e per typisk förfrågan",
+    "typicalRequestTooltip": "Ungefärlig uppskattning per förfrågan (cirka 1 000 prompt- och 500 completion-token), baserat på publicerade genomsnitt och antaganden v{version}. Den faktiska påverkan varierar beroende på konversationslängd, inställningar och värdregion.",
+    "activities": {
+      "netflixHd": "Netflix HD-strömning",
+      "zoomCall": "Zoom-samtal (kamera på)",
+      "webBrowsing": "Surfa på webben",
+      "spotifyAudio": "Spotify-ljud"
+    },
+    "equivalents": {
+      "title": "≈ samma koldioxid som",
+      "note": "Jämförelse av koldioxid mot publicerade utsläpp per timme för dessa tjänster — ungefärliga, storleksordningsmässiga siffror, precis som alla uppskattningar här."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Uppskattat koldioxidavtryck för denna konversation: {grams} gram CO₂-ekvivalent. Visa fördelning.",
+      "ariaLabelToday": "Uppskattat koldioxidavtryck för denna konversation idag: {grams} gram CO₂-ekvivalent. Visa fördelning.",
+      "title": "Denna konversation (uppskattning)",
+      "today": "Idag",
+      "total": "Alla tider",
+      "measured": "Från rapporterade tokenantal",
+      "estimated": "Bakåträkning från äldre meddelanden",
+      "lastRequest": "Senaste förfrågan",
+      "disclaimer": "Uppskattningar per förfrågan baserade på rapporterade eller uppskattade tokenantal, med hjälp av publicerade genomsnitt och antaganden v{version}. Äldre meddelanden bakåträknares från lagrad text och konversationens nuvarande modell. Ingen mätning."
+    }
   }
 }

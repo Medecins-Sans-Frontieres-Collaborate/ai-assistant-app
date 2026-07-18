@@ -2424,7 +2424,8 @@
     "regionDefault": "Oletus",
     "modelRow": "{requests} pyyntöä · {grams} g",
     "disclosure": "Arviot perustuvat oletuksiin v{version} · alkaen {since} · vain tavallinen chat (agenttien ja tietopankkivastausten käyttöä ei lasketa).",
-    "reset": "Nollaa käyttötilastot"
+    "reset": "Nollaa käyttötilastot",
+    "estimatedPortion": "Sisältää noin {grams} g CO₂e ({requests} pyyntöä), jotka on arvioitu keskusteluista ennen seurannan aloittamista — takaisinlaskettu tallennetusta viestitekstistä, ei mitatuista tokenmääristä."
   },
   "extraction": {
     "toggleLabel": "Luo jäsenneltyä dataa",
@@ -2920,7 +2921,37 @@
       "autoCheckHint": "Kun tiedot on purettu valokuvista tai asiakirjoista, suorita automaattinen laaduntarkastus uusille riveille",
       "checkingNewRows": "Tarkistetaan lisättyjä rivejä laadun varalta…",
       "ingestCheckFailed": "Automaattinen laaduntarkastus epäonnistui ({message}) — voit suorittaa sen manuaalisesti valitsemalla Arvioi laatu.",
-      "assessedIngest": "Uudet lisätyt rivit"
+      "assessedIngest": "Uudet lisätyt rivit",
+      "transpose": "Transponoi",
+      "transposeAxisColumn": "Nimi",
+      "transposeSuggestion": "Tämä taulukko näyttää transponoidulta: rivit ovat ominaisuuksia ja sarakkeet kohteita. Käännetäänkö se niin, että jokaisesta kohteesta tulee rivi ja jokaisesta ominaisuudesta oma sarake?",
+      "transposedTable": "Transponoidut rivit ja sarakkeet",
+      "columns": "Sarakkeet",
+      "columnsHidden": "Sarakkeet ({count} piilotettu)",
+      "showAllColumns": "Näytä kaikki",
+      "chartScatter": "Hajontakaavio (x vs y)",
+      "chartPivot": "Pivot-taulukko",
+      "xColumn": "X-sarake",
+      "yColumn": "Y-sarake",
+      "splitByColumn": "Jaa sarakkeen mukaan",
+      "splitNone": "Ei jakoa",
+      "pivotValueColumns": "Arvosarakkeet",
+      "aggMin": "Minimi",
+      "aggMax": "Maksimi",
+      "aggMedian": "Mediaani",
+      "chartSeriesTruncated": "Näytetään {max} ensimmäistä sarjaa",
+      "chartPointsTruncated": "Näytetään {max} näytettäytyä pistettä",
+      "chartScatterAria": "Hajontakaavio: {x} verrattuna {y}",
+      "pivotTableAria": "Pivot-taulukko ryhmiteltynä sarakkeella {column}",
+      "schemaFormula": "Kaava",
+      "schemaFormulaPlaceholder": "esim. [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Lasketaan kenttä: viittaa muihin kenttiin muodossa [Nimi]; tukee + - * / %, sulkuja sekä round, abs, min, max. Arvot päivittyvät automaattisesti eikä niitä voi muokata suoraan.",
+      "schemaFormulaSyntaxError": "Virheellinen kaava",
+      "schemaFormulaUnknownRef": "Tuntematon kenttä: {ref}",
+      "schemaFormulaArityError": "Väärä määrä argumentteja funktiolle {fn}",
+      "schemaFormulaCycleError": "Kaavojen välinen syklinen viittaus",
+      "derivedColumnTitle": "Laskettu: {formula}",
+      "derivedFrom": "Laskettu kaavasta {formula}"
     },
     "map": {
       "emptyTitle": "Näytä tiedot kartalla",
@@ -3155,5 +3186,43 @@
     "deselectAll": "Poista kaikki valinnat",
     "autoAddLabel": "Lisää uudet mallit automaattisesti",
     "autoAddDescription": "Tähän tiliin myöhemmin lisätyt mallijakelut näkyvät automaattisesti. Valitsemattomat mallit pysyvät poissuljettuina."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Pienempi vaikutus",
+      "moderate": "Kohtalainen vaikutus",
+      "high": "Suurempi vaikutus"
+    },
+    "tierTooltip": "Suhteellinen energiavaikutus pyyntöä kohti, arvioitu mallin koon perusteella. Arviot perustuvat julkaistuihin keskiarvoihin ja oletuksiin v{version} — eivät mittauksiin.",
+    "typicalRequest": "~{grams} g CO₂e per tavanomainen pyyntö",
+    "typicalRequestTooltip": "Suunnilleen arvio per pyyntö (noin 1 000 kehotetta ja 500 vastaustokenia), johdettu julkaistuista keskiarvoista ja oletuksista v{version}. Todellinen vaikutus vaihtelee keskustelun pituuden, asetusten ja isännöintialueen mukaan.",
+    "activities": {
+      "netflixHd": "Netflix HD -suoratoisto",
+      "zoomCall": "Zoom-puhelu (kamera päällä)",
+      "webBrowsing": "Verkkoselaus",
+      "spotifyAudio": "Spotify-audio"
+    },
+    "equivalents": {
+      "title": "≈ sama hiilidioksidimäärä kuin",
+      "note": "Sama-hiilivertailu näiden palveluiden julkaistuja tuntikohtaisia jalanjälkiä vastaan — karkea suuruusluokkien arvio kuten muutkin arviot tässä."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Tämän keskustelun arvioitu hiilijalanjälki: {grams} grammaa CO₂-ekvivalenttia. Näytä erittely.",
+      "ariaLabelToday": "Tämän keskustelun arvioitu hiilijalanjälki tänään: {grams} grammaa CO₂-ekvivalenttia. Näytä erittely.",
+      "title": "Tämä keskustelu (arvio)",
+      "today": "Tänään",
+      "total": "Kaikki ajat",
+      "measured": "Ilmoitettujen tokenimäärien perusteella",
+      "estimated": "Takaisinlaskettu vanhoista viesteistä",
+      "lastRequest": "Viimeisin pyyntö",
+      "disclaimer": "Kohtaiset arviot raportoituista tai arvioiduista tokenmääristä, käyttäen julkaistuja keskiarvoja ja oletuksia v{version}. Vanhemmat viestit on takaisinlaskettu tallennetusta tekstistä ja keskustelun nykyisestä mallista. Ei ole mittaus."
+    }
   }
 }

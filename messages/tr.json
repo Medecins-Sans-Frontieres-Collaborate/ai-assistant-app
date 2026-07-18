@@ -2424,7 +2424,8 @@
     "regionDefault": "Varsayılan",
     "modelRow": "{requests} istek · {grams} g",
     "disclosure": "Tahminler varsayımlara dayalıdır v{version} · {since} tarihinden itibaren · yalnızca standart sohbet (ajanlar ve bilgi tabanı cevapları dahil değildir).",
-    "reset": "Kullanım istatistiklerini sıfırla"
+    "reset": "Kullanım istatistiklerini sıfırla",
+    "estimatedPortion": "~{grams} g CO₂e ({requests} istek) içermektedir; izleme öncesindeki sohbetlerden tahmin edilmiştir — saklanan mesaj metninden geriye dönük hesaplanmış, ölçülen token sayılarından değil."
   },
   "extraction": {
     "toggleLabel": "Yapılandırılmış veriyi çıkar",
@@ -2920,7 +2921,37 @@
       "autoCheckHint": "Fotoğraf veya belgelerden veri çıkarıldıktan sonra, yeni satırlarda otomatik kalite kontrolü çalıştırılır",
       "checkingNewRows": "Yeni eklenen satırlar kalite sorunları için kontrol ediliyor…",
       "ingestCheckFailed": "Otomatik kalite kontrolü başarısız oldu ({message}) — Manuel olarak ‘Kaliteyi değerlendir’ ile çalıştırabilirsiniz.",
-      "assessedIngest": "Yeni eklenen satırlar"
+      "assessedIngest": "Yeni eklenen satırlar",
+      "transpose": "Transpoze Et",
+      "transposeAxisColumn": "Ad",
+      "transposeSuggestion": "Bu tablo transpoze görünüyor: satırlar özellikler, sütunlar ise öğeler. Her öğe bir satır ve her özellik bir tür sütunu olacak şekilde tabloyu çevirmek ister misiniz?",
+      "transposedTable": "Transpoze satırlar ve sütunlar",
+      "columns": "Sütunlar",
+      "columnsHidden": "Sütunlar ({count} gizli)",
+      "showAllColumns": "Tümünü göster",
+      "chartScatter": "Serpme (x ve y)",
+      "chartPivot": "Pivot tablo",
+      "xColumn": "X sütunu",
+      "yColumn": "Y sütunu",
+      "splitByColumn": "Ayıran sütun",
+      "splitNone": "Ayrım yok",
+      "pivotValueColumns": "Değer sütunları",
+      "aggMin": "En düşük",
+      "aggMax": "En yüksek",
+      "aggMedian": "Medyan",
+      "chartSeriesTruncated": "En fazla {max} seriyi gösteriyor",
+      "chartPointsTruncated": "{max} örnek veri noktası gösteriliyor",
+      "chartScatterAria": "{x} ile {y} arasındaki serpme grafiği",
+      "pivotTableAria": "{column} sütununa göre gruplanmış pivot tablo",
+      "schemaFormula": "Formül",
+      "schemaFormulaPlaceholder": "örn. [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Hesaplanan alan: Diğer alanlara [Ad] olarak referans verin; + - * / %, parantezler ve round, abs, min, max desteklenir. Değerler otomatik güncellenir ve doğrudan düzenlenemez.",
+      "schemaFormulaSyntaxError": "Geçersiz formül",
+      "schemaFormulaUnknownRef": "Bilinmeyen alan: {ref}",
+      "schemaFormulaArityError": "{fn} için yanlış sayıda argüman",
+      "schemaFormulaCycleError": "Formüller arasında döngüsel referans",
+      "derivedColumnTitle": "Hesaplandı: {formula}",
+      "derivedFrom": "{formula} formülünden hesaplandı"
     },
     "map": {
       "emptyTitle": "Verinizi haritada gösterin",
@@ -3155,5 +3186,43 @@
     "deselectAll": "Tümünün seçimini kaldır",
     "autoAddLabel": "Yeni modelleri otomatik ekle",
     "autoAddDescription": "Bu hesaba daha sonra eklenen model dağıtımları otomatik olarak görünür. Seçili olmayan modeller hariç tutulur."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Düşük etki",
+      "moderate": "Orta düzeyde etki",
+      "high": "Yüksek etki"
+    },
+    "tierTooltip": "Model boyutuna göre tahmini, isteğe göre göreli enerji etkisi. Bunlar v{version} sürümüne dayalı varsayım ve ortalamalara göre yapılan yaklaşık tahminlerdir — ölçüm değildir.",
+    "typicalRequest": "Ortalama bir istekte ~{grams} g CO₂e",
+    "typicalRequestTooltip": "Tipik bir istek (yaklaşık 1.000 prompt ve 500 tamamlanma tokenı) için yaklaşık bir tahmin; yayımlanan ortalama ve v{version} varsayımlarından türetilmiştir. Gerçek etki, konuşma uzunluğuna, ayarlara ve barındırma bölgesine bağlı olarak değişir.",
+    "activities": {
+      "netflixHd": "Netflix HD yayını",
+      "zoomCall": "Zoom araması (kamera açık)",
+      "webBrowsing": "Web taraması",
+      "spotifyAudio": "Spotify sesli yayın"
+    },
+    "equivalents": {
+      "title": "≈ aynı miktarda karbon",
+      "note": "Bu hizmetlerin açıklanan saatlik karbon ayak izine göre karbon karşılaştırması — burada olduğu gibi yaklaşık, kestirme değerlerdir."
+    },
+    "duration": {
+      "lessThanSecond": "<1 sn",
+      "seconds": "{value} sn",
+      "minutes": "{value} dk",
+      "hours": "{value} sa"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Bu konuşmanın tahmini karbon ayak izi: {grams} gram CO₂ eşdeğeri. Dağılımı göster.",
+      "ariaLabelToday": "Bu konuşmanın bugünkü tahmini karbon ayak izi: {grams} gram CO₂ eşdeğeri. Dağılımı göster.",
+      "title": "Bu konuşma (tahmini)",
+      "today": "Bugün",
+      "total": "Tüm zamanlar",
+      "measured": "Bildirilen token sayılarından",
+      "estimated": "Eski mesajlardan geriye dönük hesaplanan",
+      "lastRequest": "Son istek",
+      "disclaimer": "İstek başına tahminler, bildirilen veya tahmini token sayılarından, yayınlanmış ortalamalar ve varsayımlar v{version} kullanılarak yapılmıştır. Eski mesajlar, saklanan metin ve konuşmanın mevcut modeli kullanılarak geriye dönük hesaplanır. Bu bir ölçüm değildir."
+    }
   }
 }

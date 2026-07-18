@@ -2408,7 +2408,8 @@
     "regionDefault": "Yoyambirira",
     "modelRow": "{requests} zopempha · {grams} g",
     "disclosure": "Zowerengera izi ndi zochokera pa malingaliro v{version} · kuyambira {since} · kulankhula wamba kokha (ma agents ndi mayankho ochokera mu knowledge-base sizikuphatikizidwa).",
-    "reset": "Bwezerani ziwerengero za kagwiritsidwe"
+    "reset": "Bwezerani ziwerengero za kagwiritsidwe",
+    "estimatedPortion": "Zimaphatikizapo ~{grams} g CO₂e ({requests} mapempho) owerengedwa kuchokera pa macheza amene anachitika asanayambe kutsata — zowerengedwa kuchokera mauthenga osungidwa, osati chiwerengero cha ma tokeni omwe anayeza."
   },
   "extraction": {
     "toggleLabel": "Tengani deta yamakonzedwe",
@@ -2904,7 +2905,37 @@
       "autoCheckHint": "Mukatha kuchotsa data kuchokera pa zithunzi kapena zikalata, yang'anirani zokha khalidwe la mizere yatsopano",
       "checkingNewRows": "Kuyang'anira khalidwe la mizere yatsopano...",
       "ingestCheckFailed": "Kuyang'anira khalidwe la data yatsopano kwalephera ({message}) — mutha kuchita pamanja pogwiritsa ntchito Assess quality.",
-      "assessedIngest": "Mizere yatsopano"
+      "assessedIngest": "Mizere yatsopano",
+      "transpose": "Sinthani malo",
+      "transposeAxisColumn": "Dzina",
+      "transposeSuggestion": "Tebulo ili likuwoneka ngati lasinthidwa: mizere ndi zinthu, ndimitundu ndi zinthu. Mukufuna kusintha kuti chinthu chilichonse chikhale mzere ndipo chizindikiro chilichonse chikhale kolamu?",
+      "transposedTable": "Mizere ndi mitundu zosinthidwa",
+      "columns": "Mitundu",
+      "columnsHidden": "Mitundu ({count} zobisika)",
+      "showAllColumns": "Onetsani zonse",
+      "chartScatter": "Falatira (x motsutsana ndi y)",
+      "chartPivot": "Tebulo la pivot",
+      "xColumn": "Kolamu ya X",
+      "yColumn": "Kolamu ya Y",
+      "splitByColumn": "Gawanani ndi",
+      "splitNone": "Palibe gawo",
+      "pivotValueColumns": "Mitundu ya mtengo",
+      "aggMin": "Zochepa",
+      "aggMax": "Zochuluka",
+      "aggMedian": "Chapakati",
+      "chartSeriesTruncated": "Kuwonetsa {max} zapamwamba",
+      "chartPointsTruncated": "Kuwonetsa {max} mfundo zolimbikitsidwa",
+      "chartScatterAria": "Chithunzi cha x motsutsana ndi y",
+      "pivotTableAria": "Tebulo la pivot lagawidwa ndi {column}",
+      "schemaFormula": "Zomwe zapezeka",
+      "schemaFormulaPlaceholder": "mwa chitsanzo [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Munda wowerengeka: tsindikirani minda ina monga [Dzina]; amathandiza + - * / %, ma parentesi, komanso round, abs, min, max. Zomwe zimasinthidwa zokha ndipo sizingasinthidwe mwachindunji.",
+      "schemaFormulaSyntaxError": "Chinsinsi cholakwika",
+      "schemaFormulaUnknownRef": "Munda wosadziwika: {ref}",
+      "schemaFormulaArityError": "Nambala yolakwika ya parameters ku {fn}",
+      "schemaFormulaCycleError": "Kumangidwa pakati pa ma formula",
+      "derivedColumnTitle": "Yowerengeka: {formula}",
+      "derivedFrom": "Yowerengeka kuchokera ku {formula}"
     },
     "map": {
       "emptyTitle": "Ikani deta yanu pa mapu",
@@ -3139,5 +3170,43 @@
     "deselectAll": "Chotsani zisankho zonse",
     "autoAddLabel": "Onjezerani ma models atsopano zokha",
     "autoAddDescription": "Model deployments omwe adzawonjezedwa ku akaunti iyi pambuyo pake adzawoneka okha. Ma model osankhidwa ayi adzakhalabe kunja."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Zotsatira zochepa",
+      "moderate": "Zotsatira zapakati",
+      "high": "Zotsatira zambiri"
+    },
+    "tierTooltip": "Zotsatira za mphamvu pa pempho lirilonse, malinga ndi kukula kwa model. Izi ndi zowerengera kutengera zowerengedwa za pamagulu ndi malingaliro v{version} — si zojambulidwa mwatsatanetsatane.",
+    "typicalRequest": "~{grams} g CO₂e pa pempho wamba",
+    "typicalRequestTooltip": "Kuwereka kwa pempho limodzi pa pempho wamba (pafupifupi ma token 1,000 a prompt ndi 500 a completion), kutengera zowerengedwa za mgulu ndi malingaliro v{version}. Zotsatira zenizeni zimadalira kutalika kwa zokambirana, makonda, ndi dera la hosting.",
+    "activities": {
+      "netflixHd": "Kuwonera Netflix mu HD",
+      "zoomCall": "Kuyitana pa Zoom (kamera yatsa)",
+      "webBrowsing": "Kusakatula pa intaneti",
+      "spotifyAudio": "Kumvetsera Spotify"
+    },
+    "equivalents": {
+      "title": "≈ carbon yomweyo ndi",
+      "note": "Kuyerekeza kwa carbon yofanana pa ma footprint a ola la ntchitozi — manambala oyerekeza basi ngati zonse zomwe tatchula pano."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Kuyerekeza za carbon footprint ya zokambiranazi: {grams} magalamu a CO₂ equivalent. Onetsani zotsatira mwatsatanetsatane.",
+      "ariaLabelToday": "Kuyerekeza za carbon footprint ya zokambiranazi lero: {grams} magalamu a CO₂ equivalent. Onetsani zotsatira mwatsatanetsatane.",
+      "title": "Zokambirana izi (kuyerekeza)",
+      "today": "Lero",
+      "total": "Nthawi zonse",
+      "measured": "Kuchokera kwa chiwerengero cha ma tokeni omwe ananenedwa",
+      "estimated": "Kuwerengedwa mobwezeretsedwanso kuchokera mauthenga akale",
+      "lastRequest": "Pempho lomaliza",
+      "disclaimer": "Zowerengedwa pa pempho lililonse kuchokera pa ma tokeni omwe ananenedwa kapena zowerengedwa moyerekeza, pogwiritsa ntchito ma averedzi ofalitsidwa ndi malingaliro a v{version}. Mauthenga akale awerengedwa mwanzeru kuchokera pa mauthenga osungidwa ndi model yapano ya kukambirana. Izi siye kuyeza."
+    }
   }
 }

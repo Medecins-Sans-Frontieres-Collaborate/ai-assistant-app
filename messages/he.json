@@ -2424,7 +2424,8 @@
     "regionDefault": "ברירת מחדל",
     "modelRow": "{requests} בק׳ · {grams} גר'",
     "disclosure": "ההערכות מבוססות על הנחות v{version} · מאז {since} · רק צ'אט רגיל (תשובות סוכנים ומסד ידע לא נספרות).",
-    "reset": "איפוס סטטיסטיקת שימוש"
+    "reset": "איפוס סטטיסטיקת שימוש",
+    "estimatedPortion": "כולל כ־{grams} גרם CO₂e ({requests} בקשות) שמוערכים מצ'אטים שנעשו לפני תחילת המעקב — מחושב מחדש מתוך טקסט ההודעות השמורות, לא מספירות טוקנים מדויקות."
   },
   "extraction": {
     "toggleLabel": "חלץ נתונים מובְנָים",
@@ -2920,7 +2921,37 @@
       "autoCheckHint": "לאחר חילוץ נתונים מתמונות או מסמכים, תתבצע בדיקת איכות אוטומטית לשורות שנוספו",
       "checkingNewRows": "בודק את השורות החדשות לאיתור בעיות איכות…",
       "ingestCheckFailed": "בדיקת האיכות האוטומטית נכשלה ({message}) — ניתן להפעילה ידנית באמצעות 'הערכת איכות'.",
-      "assessedIngest": "שורות שנוספו"
+      "assessedIngest": "שורות שנוספו",
+      "transpose": "הפוך שורות ועמודות",
+      "transposeAxisColumn": "שם",
+      "transposeSuggestion": "נראה כי הטבלה הזו הפוכה: השורות הן מאפיינים והעמודות הן פריטים. האם להפוך כך שכל פריט יהיה שורה וכל מאפיין יהפוך לעמודה עם טיפוס?",
+      "transposedTable": "שורות ועמודות הפוכות",
+      "columns": "עמודות",
+      "columnsHidden": "עמודות ({count} מוסתרות)",
+      "showAllColumns": "הצג הכל",
+      "chartScatter": "פיזור (x מול y)",
+      "chartPivot": "טבלת ציר",
+      "xColumn": "עמודת X",
+      "yColumn": "עמודת Y",
+      "splitByColumn": "פיצול לפי",
+      "splitNone": "ללא פיצול",
+      "pivotValueColumns": "עמודות ערך",
+      "aggMin": "מינימום",
+      "aggMax": "מקסימום",
+      "aggMedian": "חציון",
+      "chartSeriesTruncated": "מציג עד {max} סדרות",
+      "chartPointsTruncated": "מציג {max} נקודות דגימה",
+      "chartScatterAria": "גרף פיזור של {x} מול {y}",
+      "pivotTableAria": "טבלת ציר מקובצת לפי {column}",
+      "schemaFormula": "נוסחה",
+      "schemaFormulaPlaceholder": "לדוג׳ [מקרים] / [אוכלוסייה] * 1000",
+      "schemaFormulaHint": "שדה מחושב: יש להתייחס לשדות אחרים כ-[שם]; נתמך: + - * / %, סוגריים, ופונקציות round, abs, min, max. הערכים מתעדכנים אוטומטית ואינם ניתנים לעריכה ישירה.",
+      "schemaFormulaSyntaxError": "נוסחה לא תקינה",
+      "schemaFormulaUnknownRef": "שדה לא ידוע: {ref}",
+      "schemaFormulaArityError": "מספר ארגומנטים שגוי עבור ‎{fn}",
+      "schemaFormulaCycleError": "ייחוס מעגלי בין נוסחאות",
+      "derivedColumnTitle": "מחושב: {formula}",
+      "derivedFrom": "מחושב על פי {formula}"
     },
     "map": {
       "emptyTitle": "הצג את הנתונים שלך על גבי מפה",
@@ -3155,5 +3186,43 @@
     "deselectAll": "בטל בחירה מהכל",
     "autoAddLabel": "הוסף מודלים חדשים אוטומטית",
     "autoAddDescription": "הפצות מודלים שיתווספו לחשבון זה מאוחר יותר יוצגו אוטומטית. מודלים שלא מסומנים יישארו מוחרגים."
+  },
+  "emissions": {
+    "tier": {
+      "low": "השפעה נמוכה",
+      "moderate": "השפעה מתונה",
+      "high": "השפעה גבוהה"
+    },
+    "tierTooltip": "השפעת אנרגיה יחסית לכל בקשה, לפי הערכה מגודל המודל. אלו הערכות בלבד ומבוססות על ממוצעים ונתונים פומביים, גרסה v{version} — לא מדידות בפועל.",
+    "typicalRequest": "~{grams} גרם CO₂e לבקשה טיפוסית",
+    "typicalRequestTooltip": "הערכה גסה לבקשה טיפוסית (כ-1,000 טוקנים בהנחיה ו-500 בהשלמה), לפי ממוצעים פומביים וגרסה v{version}. השפעה בפועל משתנה לפי אורך השיחה, הגדרות ומיקום השרתים.",
+    "activities": {
+      "netflixHd": "סטרימינג Netflix HD",
+      "zoomCall": "שיחת Zoom (מצלמה פועלת)",
+      "webBrowsing": "גלישה באינטרנט",
+      "spotifyAudio": "סטרימינג Spotify אודיו"
+    },
+    "equivalents": {
+      "title": "≈ שווה ערך לפליטה הזו",
+      "note": "השוואת פליטות פחמן לפי טביעת רגל שפורסמה לשעה עבור שירותים אלו — נתונים משוערים בלבד, כמו שאר ההערכות."
+    },
+    "duration": {
+      "lessThanSecond": "<1 שנ׳",
+      "seconds": "{value} שנ׳",
+      "minutes": "{value} דק׳",
+      "hours": "{value} שע׳"
+    },
+    "chip": {
+      "label": "{grams} גרם CO₂e",
+      "ariaLabel": "הערכת פליטת פחמן של שיחה זו: {grams} גרם CO₂ שווה ערך. הצגת פירוט.",
+      "ariaLabelToday": "הערכת פליטת פחמן של שיחה זו היום: {grams} גרם CO₂ שווה ערך. הצגת פירוט.",
+      "title": "שיחה זו (הערכה)",
+      "today": "היום",
+      "total": "כל הזמנים",
+      "measured": "לפי ספירת טוקנים מדווחת",
+      "estimated": "חושב מחדש מהודעות ישנות",
+      "lastRequest": "הבקשה האחרונה",
+      "disclaimer": "הערכות לכל בקשה מבוססות על ספירת טוקנים מדווחת או מקורבת, תוך שימוש בממוצעים וסטיות פורסמו בגרסה v{version}. הודעות ישנות מחושבות מחדש מתוך הטקסט השמור ומן המודל הנוכחי של השיחה. לא מדידה בפועל."
+    }
   }
 }

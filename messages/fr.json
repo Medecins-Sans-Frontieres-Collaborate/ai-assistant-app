@@ -2424,7 +2424,8 @@
     "regionDefault": "Par défaut",
     "modelRow": "{requests} req · {grams} g",
     "disclosure": "Estimations basées sur les hypothèses v{version} · depuis {since} · discussions standard uniquement (agents et réponses de la base de connaissances non prises en compte).",
-    "reset": "Réinitialiser les statistiques d’utilisation"
+    "reset": "Réinitialiser les statistiques d’utilisation",
+    "estimatedPortion": "Inclut environ {grams} g CO₂e ({requests} requêtes) estimés à partir des conversations antérieures au suivi — rétrocalculé à partir du texte des messages stockés, et non du nombre de jetons mesuré."
   },
   "extraction": {
     "toggleLabel": "Extraire des données structurées",
@@ -2920,7 +2921,37 @@
       "autoCheckHint": "Après extraction des données de photos ou documents, une vérification qualité est automatiquement lancée sur les nouvelles lignes",
       "checkingNewRows": "Vérification des nouvelles lignes pour les problèmes de qualité…",
       "ingestCheckFailed": "La vérification qualité automatique a échoué ({message}) — vous pouvez la lancer manuellement avec Évaluer la qualité.",
-      "assessedIngest": "Nouvelles lignes ajoutées"
+      "assessedIngest": "Nouvelles lignes ajoutées",
+      "transpose": "Transposer",
+      "transposeAxisColumn": "Nom",
+      "transposeSuggestion": "Ce tableau semble transposé : les lignes sont des attributs et les colonnes des éléments. Voulez-vous inverser pour que chaque élément soit une ligne et chaque attribut une colonne typée ?",
+      "transposedTable": "Lignes et colonnes transposées",
+      "columns": "Colonnes",
+      "columnsHidden": "Colonnes ({count} masquées)",
+      "showAllColumns": "Tout afficher",
+      "chartScatter": "Nuage de points (x vs y)",
+      "chartPivot": "Tableau croisé",
+      "xColumn": "Colonne X",
+      "yColumn": "Colonne Y",
+      "splitByColumn": "Séparer par",
+      "splitNone": "Aucune séparation",
+      "pivotValueColumns": "Colonnes de valeurs",
+      "aggMin": "Min",
+      "aggMax": "Max",
+      "aggMedian": "Médiane",
+      "chartSeriesTruncated": "Affichage des {max} premières séries",
+      "chartPointsTruncated": "Affichage de {max} points échantillonnés",
+      "chartScatterAria": "Nuage de points de {x} par rapport à {y}",
+      "pivotTableAria": "Tableau croisé groupé par {column}",
+      "schemaFormula": "Formule",
+      "schemaFormulaPlaceholder": "ex. [Casiers] / [Population] * 1000",
+      "schemaFormulaHint": "Champ calculé : référencez d'autres champs comme [Nom] ; prend en charge + - * / %, parenthèses, ainsi que round, abs, min, max. Les valeurs se mettent à jour automatiquement et ne peuvent pas être modifiées directement.",
+      "schemaFormulaSyntaxError": "Formule invalide",
+      "schemaFormulaUnknownRef": "Champ inconnu : {ref}",
+      "schemaFormulaArityError": "Nombre d'arguments incorrect pour {fn}",
+      "schemaFormulaCycleError": "Référence circulaire entre formules",
+      "derivedColumnTitle": "Calculé : {formula}",
+      "derivedFrom": "Calculé à partir de {formula}"
     },
     "map": {
       "emptyTitle": "Ajoutez vos données sur une carte",
@@ -3155,5 +3186,43 @@
     "deselectAll": "Tout désélectionner",
     "autoAddLabel": "Ajouter automatiquement les nouveaux modèles",
     "autoAddDescription": "Les déploiements de modèles ajoutés ultérieurement à ce compte apparaîtront automatiquement. Les modèles non cochés resteront exclus."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Impact faible",
+      "moderate": "Impact modéré",
+      "high": "Impact élevé"
+    },
+    "tierTooltip": "Impact énergétique relatif par requête, estimé à partir de la taille du modèle. Il s'agit d'estimations fondées sur des moyennes publiées et des hypothèses v{version} — pas de mesures.",
+    "typicalRequest": "~{grams} g CO₂e par requête type",
+    "typicalRequestTooltip": "Estimation approximative par requête type (environ 1 000 jetons de prompt et 500 de complétion), calculée à partir des moyennes publiées et des hypothèses v{version}. L'impact réel varie selon la longueur de la conversation, les paramètres et la région d'hébergement.",
+    "activities": {
+      "netflixHd": "Streaming Netflix HD",
+      "zoomCall": "Appel Zoom (caméra activée)",
+      "webBrowsing": "Navigation web",
+      "spotifyAudio": "Audio Spotify"
+    },
+    "equivalents": {
+      "title": "≈ le même carbone que",
+      "note": "Comparaison de carbone avec l'empreinte par heure publiée de ces services — données indicatives, comme toutes les estimations ici."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Empreinte carbone estimée de cette conversation : {grams} grammes d'équivalent CO₂. Afficher le détail.",
+      "ariaLabelToday": "Empreinte carbone estimée de cette conversation aujourd'hui : {grams} grammes d'équivalent CO₂. Afficher le détail.",
+      "title": "Cette conversation (estimation)",
+      "today": "Aujourd'hui",
+      "total": "Depuis le début",
+      "measured": "À partir du nombre de jetons signalé",
+      "estimated": "Rétrocalculé à partir des anciens messages",
+      "lastRequest": "Dernière requête",
+      "disclaimer": "Estimations par requête à partir des nombres de jetons signalés ou approximés, en utilisant des moyennes et hypothèses publiées v{version}. Les anciens messages sont rétrocalculés à partir du texte stocké et du modèle actuel de la conversation. Il ne s'agit pas d'une mesure."
+    }
   }
 }

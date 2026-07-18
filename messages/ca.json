@@ -2424,7 +2424,8 @@
     "regionDefault": "Per defecte",
     "modelRow": "{requests} sol·lic. · {grams} g",
     "disclosure": "Estimacions basades en suposicions v{version} · des de {since} · només xat estàndard (no es compten respostes d'agents ni de base de coneixement).",
-    "reset": "Reinicia les estadístiques d’ús"
+    "reset": "Reinicia les estadístiques d’ús",
+    "estimatedPortion": "Inclou aproximadament {grams} g CO₂e ({requests} sol·licituds) estimats de xats anteriors al seguiment — recalculat a partir del text dels missatges emmagatzemats, no de recompte de tokens mesurat."
   },
   "extraction": {
     "toggleLabel": "Extreu dades estructurades",
@@ -2920,7 +2921,37 @@
       "autoCheckHint": "Després d'extreure dades de fotos o documents, executa automàticament una comprovació de qualitat a les noves files",
       "checkingNewRows": "S'estan comprovant les files afegides per si tenen problemes de qualitat…",
       "ingestCheckFailed": "La comprovació automàtica de qualitat ha fallat ({message}) — la podeu executar manualment amb Avalua la qualitat.",
-      "assessedIngest": "Files recent afegides"
+      "assessedIngest": "Files recent afegides",
+      "transpose": "Transposa",
+      "transposeAxisColumn": "Nom",
+      "transposeSuggestion": "Aquesta taula sembla transposada: les files són atributs i les columnes són elements. Vols invertir-la perquè cada element sigui una fila i cada atribut esdevingui una columna tipada?",
+      "transposedTable": "Files i columnes transposades",
+      "columns": "Columnes",
+      "columnsHidden": "Columnes ({count} ocultes)",
+      "showAllColumns": "Mostra-ho tot",
+      "chartScatter": "Dispersió (x vs y)",
+      "chartPivot": "Taula dinàmica",
+      "xColumn": "Columna X",
+      "yColumn": "Columna Y",
+      "splitByColumn": "Divideix per",
+      "splitNone": "Sense divisió",
+      "pivotValueColumns": "Columnes de valor",
+      "aggMin": "Mínim",
+      "aggMax": "Màxim",
+      "aggMedian": "Mediana",
+      "chartSeriesTruncated": "S'estan mostrant les {max} sèries principals",
+      "chartPointsTruncated": "S'estan mostrant {max} punts mostrejats",
+      "chartScatterAria": "Diagrama de dispersió de {x} enfront de {y}",
+      "pivotTableAria": "Taula dinàmica agrupada per {column}",
+      "schemaFormula": "Fórmula",
+      "schemaFormulaPlaceholder": "p. ex. [Casos] / [Població] * 1000",
+      "schemaFormulaHint": "Camp calculat: referencia altres camps com [Nom]; admet + - * / %, parèntesis i round, abs, min, max. Els valors s'actualitzen automàticament i no es poden editar directament.",
+      "schemaFormulaSyntaxError": "Fórmula no vàlida",
+      "schemaFormulaUnknownRef": "Camp desconegut: {ref}",
+      "schemaFormulaArityError": "Nombre d'arguments incorrecte per a {fn}",
+      "schemaFormulaCycleError": "Referència circular entre fórmules",
+      "derivedColumnTitle": "Calculat: {formula}",
+      "derivedFrom": "Calculat a partir de {formula}"
     },
     "map": {
       "emptyTitle": "Situeu les vostres dades en un mapa",
@@ -3155,5 +3186,43 @@
     "deselectAll": "Desselecciona-ho tot",
     "autoAddLabel": "Afegeix automàticament nous models",
     "autoAddDescription": "Els desplegaments de models afegits més endavant a aquest compte apareixeran automàticament. Els models desmarcats seguiran exclosos."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Impacte baix",
+      "moderate": "Impacte moderat",
+      "high": "Impacte alt"
+    },
+    "tierTooltip": "Impacte energètic relatiu per sol·licitud, estimat segons la mida del model. Aquestes són estimacions basades en mitjanes publicades i supòsits v{version} — no mesures.",
+    "typicalRequest": "~{grams} g CO₂e per sol·licitud típica",
+    "typicalRequestTooltip": "Estimació aproximada per a una sol·licitud típica (unes 1.000 paraules d'entrada i 500 de sortida), basada en mitjanes publicades i supòsits v{version}. L'impacte real varia segons la llargada de la conversa, configuracions i regió d'allotjament.",
+    "activities": {
+      "netflixHd": "Reproducció de Netflix en HD",
+      "zoomCall": "Trucada de Zoom (càmera activada)",
+      "webBrowsing": "Navegació web",
+      "spotifyAudio": "Àudio de Spotify"
+    },
+    "equivalents": {
+      "title": "≈ el mateix carboni que",
+      "note": "Comparació de carboni equivalent segons empremtes estimades per hora publicades d'aquests serveis — xifres orientatives, com totes les estimacions d'aquí."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Empremta de carboni estimada d'aquesta conversa: {grams} grams de CO₂ equivalent. Mostra el detall.",
+      "ariaLabelToday": "Empremta de carboni estimada d'aquesta conversa avui: {grams} grams de CO₂ equivalent. Mostra el detall.",
+      "title": "Aquesta conversa (estimació)",
+      "today": "Avui",
+      "total": "Des de sempre",
+      "measured": "A partir del recompte de tokens informat",
+      "estimated": "Recalculat a partir de missatges antics",
+      "lastRequest": "Darrera sol·licitud",
+      "disclaimer": "Estimacions per sol·licitud a partir de recompte de tokens informat o aproximat, utilitzant mitjanes i suposicions publicades v{version}. Els missatges antics es recalculen a partir del text emmagatzemat i el model actual de la conversa. No és una mesura."
+    }
   }
 }

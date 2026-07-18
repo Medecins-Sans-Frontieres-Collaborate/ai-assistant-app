@@ -2424,7 +2424,8 @@
     "regionDefault": "Standard",
     "modelRow": "{requests} Anfragen · {grams} g",
     "disclosure": "Schätzungen basieren auf Annahmen v{version} · seit {since} · nur Standard-Chat (Agenten und Knowledge-Base-Antworten nicht berücksichtigt).",
-    "reset": "Nutzungsstatistik zurücksetzen"
+    "reset": "Nutzungsstatistik zurücksetzen",
+    "estimatedPortion": "Beinhaltet ca. {grams} g CO₂e ({requests} Anfragen), geschätzt aus Chats vor Beginn der Nachverfolgung – rückwirkend aus gespeichertem Nachrichtentext berechnet, nicht aus gemessenen Token-Zahlen."
   },
   "extraction": {
     "toggleLabel": "Strukturierte Daten extrahieren",
@@ -2920,7 +2921,37 @@
       "autoCheckHint": "Nach dem Extrahieren von Daten aus Fotos oder Dokumenten automatisch eine Qualitätsprüfung für die neuen Zeilen durchführen",
       "checkingNewRows": "Überprüfe die neu hinzugefügten Zeilen auf Qualitätsprobleme…",
       "ingestCheckFailed": "Die automatische Qualitätsprüfung ist fehlgeschlagen ({message}) – Sie können sie manuell mit \"Qualität prüfen\" ausführen.",
-      "assessedIngest": "Neu hinzugefügte Zeilen"
+      "assessedIngest": "Neu hinzugefügte Zeilen",
+      "transpose": "Transponieren",
+      "transposeAxisColumn": "Name",
+      "transposeSuggestion": "Diese Tabelle scheint transponiert zu sein: Zeilen sind Attribute und Spalten sind Einträge. Möchten Sie sie umdrehen, sodass jeder Eintrag eine Zeile ist und jedes Attribut eine typisierte Spalte wird?",
+      "transposedTable": "Transponierte Zeilen und Spalten",
+      "columns": "Spalten",
+      "columnsHidden": "Spalten ({count} ausgeblendet)",
+      "showAllColumns": "Alle anzeigen",
+      "chartScatter": "Streudiagramm (x vs. y)",
+      "chartPivot": "Pivot-Tabelle",
+      "xColumn": "X-Spalte",
+      "yColumn": "Y-Spalte",
+      "splitByColumn": "Aufteilen nach",
+      "splitNone": "Keine Aufteilung",
+      "pivotValueColumns": "Wertespalten",
+      "aggMin": "Min",
+      "aggMax": "Max",
+      "aggMedian": "Median",
+      "chartSeriesTruncated": "Top {max} Datenreihen werden angezeigt",
+      "chartPointsTruncated": "{max} Stichprobenpunkte werden angezeigt",
+      "chartScatterAria": "Streudiagramm von {x} gegen {y}",
+      "pivotTableAria": "Pivot-Tabelle gruppiert nach {column}",
+      "schemaFormula": "Formel",
+      "schemaFormulaPlaceholder": "z. B. [Fälle] / [Bevölkerung] * 1000",
+      "schemaFormulaHint": "Berechnetes Feld: Verweisen Sie auf andere Felder als [Name]; unterstützt + - * / %, Klammern sowie round, abs, min, max. Werte werden automatisch aktualisiert und können nicht direkt bearbeitet werden.",
+      "schemaFormulaSyntaxError": "Ungültige Formel",
+      "schemaFormulaUnknownRef": "Unbekanntes Feld: {ref}",
+      "schemaFormulaArityError": "Falsche Anzahl von Argumenten für {fn}",
+      "schemaFormulaCycleError": "Zirkulärer Bezug zwischen Formeln",
+      "derivedColumnTitle": "Berechnet: {formula}",
+      "derivedFrom": "Berechnet aus {formula}"
     },
     "map": {
       "emptyTitle": "Stellen Sie Ihre Daten auf einer Karte dar",
@@ -3155,5 +3186,43 @@
     "deselectAll": "Alle abwählen",
     "autoAddLabel": "Neue Modelle automatisch hinzufügen",
     "autoAddDescription": "Später zu diesem Konto hinzugefügte Modelldepployments erscheinen automatisch. Nicht ausgewählte Modelle bleiben ausgeschlossen."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Geringere Auswirkung",
+      "moderate": "Mittlere Auswirkung",
+      "high": "Höhere Auswirkung"
+    },
+    "tierTooltip": "Relativer Energieaufwand pro Anfrage, geschätzt anhand der Modellgröße. Diese Werte sind Schätzungen basierend auf veröffentlichten Durchschnittswerten und Annahmen v{version} — keine Messungen.",
+    "typicalRequest": "~{grams} g CO₂e pro typischer Anfrage",
+    "typicalRequestTooltip": "Grobe Schätzung pro Anfrage für eine typische Nutzung (etwa 1.000 Prompt- und 500 Completion-Tokens), basierend auf veröffentlichten Durchschnittswerten und Annahmen v{version}. Der tatsächliche Einfluss variiert je nach Gesprächslänge, Einstellungen und Hosting-Region.",
+    "activities": {
+      "netflixHd": "Netflix HD-Streaming",
+      "zoomCall": "Zoom-Anruf (Kamera an)",
+      "webBrowsing": "Web-Browsing",
+      "spotifyAudio": "Spotify-Audio"
+    },
+    "equivalents": {
+      "title": "≈ entspricht dem CO₂-Ausstoß von",
+      "note": "CO₂-Vergleich mit veröffentlichten stündlichen Durchschnittswerten dieser Dienste — wie alle Schätzungen hier grobe Näherungswerte."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Geschätzter CO₂-Fußabdruck dieses Gesprächs: {grams} Gramm CO₂-Äquivalent. Aufschlüsselung anzeigen.",
+      "ariaLabelToday": "Geschätzter CO₂-Fußabdruck dieses Gesprächs heute: {grams} Gramm CO₂-Äquivalent. Aufschlüsselung anzeigen.",
+      "title": "Dieses Gespräch (geschätzt)",
+      "today": "Heute",
+      "total": "Gesamte Zeit",
+      "measured": "Basierend auf gemeldeten Token-Zahlen",
+      "estimated": "Rückwirkend aus älteren Nachrichten berechnet",
+      "lastRequest": "Letzte Anfrage",
+      "disclaimer": "Schätzungen pro Anfrage auf Basis gemeldeter oder angenäherter Token-Zahlen, unter Verwendung veröffentlichter Durchschnittswerte und Annahmen v{version}. Ältere Nachrichten werden rückwirkend aus gespeichertem Text und dem aktuellen Modell der Unterhaltung berechnet. Keine Messung."
+    }
   }
 }

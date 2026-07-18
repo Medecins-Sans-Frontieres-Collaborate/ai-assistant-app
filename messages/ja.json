@@ -2424,7 +2424,8 @@
     "regionDefault": "デフォルト",
     "modelRow": "{requests} 回 · {grams} g",
     "disclosure": "推定値は仮定 v{version} に基づく · {since} 以降 · 標準チャットのみ（エージェントやナレッジベースの回答は含まれていません）。",
-    "reset": "使用統計のリセット"
+    "reset": "使用統計のリセット",
+    "estimatedPortion": "トラッキング開始前のチャットから推定された約{grams}g CO₂e（{requests}件）を含みます。これは保存されたメッセージテキストから逆算したもので、トークン数を実測したものではありません。"
   },
   "extraction": {
     "toggleLabel": "構造化データを抽出",
@@ -2920,7 +2921,37 @@
       "autoCheckHint": "写真や文書からデータ抽出後、新しい行に自動で品質チェックを実行します",
       "checkingNewRows": "新規追加行の品質チェック中…",
       "ingestCheckFailed": "自動品質チェックが失敗しました（{message}）—Assess qualityで手動実行できます。",
-      "assessedIngest": "新規追加行"
+      "assessedIngest": "新規追加行",
+      "transpose": "転置",
+      "transposeAxisColumn": "名称",
+      "transposeSuggestion": "この表は転置されているようです：行が属性、列が項目になっています。各項目を行、各属性を型付き列にして入れ替えますか？",
+      "transposedTable": "行と列を転置",
+      "columns": "列",
+      "columnsHidden": "列（{count} 件非表示）",
+      "showAllColumns": "すべて表示",
+      "chartScatter": "散布図（x 対 y）",
+      "chartPivot": "ピボットテーブル",
+      "xColumn": "X 列",
+      "yColumn": "Y 列",
+      "splitByColumn": "分割",
+      "splitNone": "分割しない",
+      "pivotValueColumns": "値の列",
+      "aggMin": "最小",
+      "aggMax": "最大",
+      "aggMedian": "中央値",
+      "chartSeriesTruncated": "上位 {max} 件の系列を表示しています",
+      "chartPointsTruncated": "{max} 件のサンプル点を表示中",
+      "chartScatterAria": "{x} と {y} の散布図",
+      "pivotTableAria": "{column} でグループ化されたピボットテーブル",
+      "schemaFormula": "数式",
+      "schemaFormulaPlaceholder": "例：[Cases] / [Population] * 1000",
+      "schemaFormulaHint": "計算フィールド：[名称] で他のフィールドを参照できます。+ - * / %、括弧、round, abs, min, max が利用可能です。値は自動更新され、直接編集できません。",
+      "schemaFormulaSyntaxError": "無効な数式",
+      "schemaFormulaUnknownRef": "不明なフィールド：{ref}",
+      "schemaFormulaArityError": "{fn} の引数の数が正しくありません",
+      "schemaFormulaCycleError": "数式間で循環参照が発生しています",
+      "derivedColumnTitle": "計算式：{formula}",
+      "derivedFrom": "{formula} から計算"
     },
     "map": {
       "emptyTitle": "データを地図に表示",
@@ -3155,5 +3186,43 @@
     "deselectAll": "すべて選択解除",
     "autoAddLabel": "新しいモデルを自動で追加",
     "autoAddDescription": "後からこのアカウントに追加されたモデルのデプロイが自動的に表示されます。未選択のモデルは除外されたままになります。"
+  },
+  "emissions": {
+    "tier": {
+      "low": "影響が小さい",
+      "moderate": "影響が中程度",
+      "high": "影響が大きい"
+    },
+    "tierTooltip": "リクエストごとの相対的なエネルギー影響（モデルサイズからの推定値）。公開された平均値と仮定（バージョン {version}）に基づく推定であり、実測値ではありません。",
+    "typicalRequest": "1 回の標準リクエストあたり約 {grams} g CO₂e",
+    "typicalRequestTooltip": "標準的なリクエスト（約 1,000 プロンプト＋500 完了トークン）あたりの概算値です。公開された平均値と仮定（バージョン {version}）に基づきます。実際の影響は会話の長さ・設定・ホスティング地域等により異なります。",
+    "activities": {
+      "netflixHd": "Netflix HD ストリーミング",
+      "zoomCall": "Zoom 通話（カメラオン）",
+      "webBrowsing": "ウェブ閲覧",
+      "spotifyAudio": "Spotify オーディオ"
+    },
+    "equivalents": {
+      "title": "≈ 同等の炭素排出量",
+      "note": "これらサービスの公表されている 1 時間あたりのカーボンフットプリントと大まかに比較しています。ここで示される推定値はいずれも概算・オーダー単位のものです。"
+    },
+    "duration": {
+      "lessThanSecond": "<1 秒",
+      "seconds": "{value} 秒",
+      "minutes": "{value} 分",
+      "hours": "{value} 時間"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "この会話の推定カーボンフットプリント：{grams} グラムのCO₂相当。詳細を表示。",
+      "ariaLabelToday": "本日のこの会話の推定カーボンフットプリント：{grams} グラムのCO₂相当。詳細を表示。",
+      "title": "この会話（推定値）",
+      "today": "本日",
+      "total": "累計",
+      "measured": "報告されたトークン数に基づく",
+      "estimated": "過去のメッセージから逆算",
+      "lastRequest": "直近のリクエスト",
+      "disclaimer": "公開されている平均値と仮定（v{version}）を用いて、報告されたまたは推定されたトークン数からリクエストごとの推定値を算出しています。古いメッセージは保存されたテキストと現在の会話モデルから逆算しています。実測値ではありません。"
+    }
   }
 }

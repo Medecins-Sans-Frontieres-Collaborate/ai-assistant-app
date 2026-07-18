@@ -2424,7 +2424,8 @@
     "regionDefault": "ነባሪ",
     "modelRow": "{requests} ጥያቄ · {grams} ግራም",
     "disclosure": "ግምቶች በሰሜን v{version} ላይ የተመሰረቱ · ከ{since} ጀምሮ · መደበኛ ቻት ብቻ (የagent እና knowledge-base መልስ አይተከተሉም።)",
-    "reset": "የአጠቃቀም ስታቲስቲክስን ቀይር"
+    "reset": "የአጠቃቀም ስታቲስቲክስን ቀይር",
+    "estimatedPortion": "ይህ ወደ tracking ከመጀመር በፊት በተደረጉ ውይይቶች ላይ ከተያዙት መልዕክት ጽሑፍ በተመሠረት ለ~{grams} ግራም CO₂e ({requests} ጥያቄዎች) የተገመተ መጠን አካትቷል፤ የተዘገቡ ቶክን ቁጥሮች አይደለም።"
   },
   "extraction": {
     "toggleLabel": "የዋቅ መረጃ ያውጡ",
@@ -2920,7 +2921,37 @@
       "autoCheckHint": "ከፎቶዎች ወይም ሰነዶች ዳታ ከተወሰደ በኋላ፣ በራሱ ላይ በአዲስ ረድፎች ላይ የጥራት ምርመራ ይሰጣል",
       "checkingNewRows": "አዲስ የተጨመሩ ረድፎችን ለዝርዝር ጥራት በመመርመር ላይ…",
       "ingestCheckFailed": "በራሱ ላይ የደረገው የጥራት ምርመራ አልተሳካም ({message}) — በ Assessment quality በእጅ ሊደረግ ይችላል።",
-      "assessedIngest": "አዲስ የተጨመሩ ረድፎች"
+      "assessedIngest": "አዲስ የተጨመሩ ረድፎች",
+      "transpose": "ግዛት መቀየሪያ",
+      "transposeAxisColumn": "ስም",
+      "transposeSuggestion": "ይህ ሰንጠረዥ ማዕከሉን ይዞ ተለዋዋጭ ይመስላል፡ ረዳት ባሉበት ረዳቶች ናቸው፣ አምድዎች ግን እቃዎች። ያቀዙትን እቃ እያንዳንዱ ተለዋዋጭ ረዳት እንዲሆንና ያንዳንዱ እቃ ተለዋዋጭ አምድ እንዲሆን ትይዩ?",
+      "transposedTable": "የተቀየሩ ረዳቶች እና አምዶች",
+      "columns": "አምዶች",
+      "columnsHidden": "አምዶች ({count} የተደበቁ)",
+      "showAllColumns": "ሁሉንም አሳይ",
+      "chartScatter": "እቃ መቀመጫ (x ከ y ጋር)",
+      "chartPivot": "የመሽጫ ሰንጠረዥ",
+      "xColumn": "X አምድ",
+      "yColumn": "Y አምድ",
+      "splitByColumn": "በ... ክፈል",
+      "splitNone": "የተከፈለ የለም",
+      "pivotValueColumns": "የዋጋ አምዶች",
+      "aggMin": "ዝቅተኛ",
+      "aggMax": "ከፍተኛ",
+      "aggMedian": "መካከለኛ",
+      "chartSeriesTruncated": "ላይኛው {max} ተከታታይ ብቻ ታሳያለች",
+      "chartPointsTruncated": "{max} መጠራረት ያላቸው ነጥቦች ብቻ ታሳያለች",
+      "chartScatterAria": "በ {x} ከ {y} ጋር የተሰራ የእቃ መቀመጫ ግምት",
+      "pivotTableAria": "በ {column} የተቀመጡት የመሽጫ ሰንጠረዥ",
+      "schemaFormula": "ፎርሙላ",
+      "schemaFormulaPlaceholder": "ለምሳሌ [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "የታዘዘ መስክ፡ ሌሎች መስኮችን እንደ [Name] ይጠቀሙ፤ + - * / %, ቅርጸ ቃላት እና round, abs, min, max ይቀበላሉ። እሴት በራሱ ተቀይሯል፣ በቀጥታ ማስተካከል አይቻልም።",
+      "schemaFormulaSyntaxError": "ልክ ያልሆነ ፎርሙላ",
+      "schemaFormulaUnknownRef": "ያልታወቀ መስክ፡ {ref}",
+      "schemaFormulaArityError": "ልክ ያልሆነ አርጉመንት በ {fn}",
+      "schemaFormulaCycleError": "እስክስክ በፎርሙላዎች",
+      "derivedColumnTitle": "ተመሳሳይ፡ {formula}",
+      "derivedFrom": "ከ{formula} ተመሳሳይ"
     },
     "map": {
       "emptyTitle": "ዳታዎን በካርታ ላይ ያሳዩ",
@@ -3155,5 +3186,43 @@
     "deselectAll": "ሁሉንም ምረጥ ይቆዩ",
     "autoAddLabel": "አዲስ ሞዴሎችን በራስ-ሰር ያክሉ",
     "autoAddDescription": "ለዚህ መለያ በኋላ የታከሉ የሞዴል ስትንተኞች በራስ ሰር ይታያሉ። ዘርግተኛ የቆዩት ሞዴሎች አይጨመሩም።"
+  },
+  "emissions": {
+    "tier": {
+      "low": "ዝቅተኛ ተጽዕኖ",
+      "moderate": "መካከለኛ ተጽዕኖ",
+      "high": "ከፍተኛ ተጽዕኖ"
+    },
+    "tierTooltip": "የእያንዳንዱ መጠየቂያ የኃይል ተጽዕኖ በሞዴል መጠኑ እንደመጠነ ይገመታል። እነዚህ ግምገማዎች በታተመ አማካይነቶችና ግምቶች v{version} ላይ ያተኩራሉ — ልክ መሆኑን አይደለም።",
+    "typicalRequest": "~{grams} g CO₂e በመካከለኛ ጥያቄ",
+    "typicalRequestTooltip": "በመካከለኛ ጥያቄ (ስለ 1,000 ፕሮምፕት እና 500 ተጨማሪ ቶክኖች) የእያንዳንዱ ጥያቄ መጠነ ግምገማ፣ ከታተመ አማካይነቶችና ግምቶች v{version} ውስጥ የተገኘ። እውነተኛው ተጽዕኖ ከውይይቱ ርዝመት፣ ቅንብሮችና የኣስተናጋጅ አካባቢ ጋር ይለዋጫል።",
+    "activities": {
+      "netflixHd": "የNetflix HD ድርድር",
+      "zoomCall": "የZoom ጥሪ (ካሜራ በቀላሉ)",
+      "webBrowsing": "የድህረገፅ አሳሽ",
+      "spotifyAudio": "የSpotify ድምጽ"
+    },
+    "equivalents": {
+      "title": "≈ ተመሳሳይ ካርቦን",
+      "note": "ከዚህ አገልግሎቶች ባይደርሱ በሰዓት የታተመው አውሬ ካርቦን ይመስላል፤ እነዚህ በግምት ቁጥር ናቸው።"
+    },
+    "duration": {
+      "lessThanSecond": "<1 ሰከንድ",
+      "seconds": "{value} ሰከንድ",
+      "minutes": "{value} ደቂቃ",
+      "hours": "{value} ሰዓት"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "የዚህ ውይይት የተመነ ካርቦን ተጽዕኖ፡ {grams} ግራም CO₂ እኩል። ዝርዝሩን አሳይ።",
+      "ariaLabelToday": "የዚህ ውይይት የተመነ ካርቦን ተጽዕኖ (ዛሬ)፡ {grams} ግራም CO₂ እኩል። ዝርዝሩን አሳይ።",
+      "title": "ይህ ውይይት (ግምት)",
+      "today": "ዛሬ",
+      "total": "አጠቃላይ ጊዜ",
+      "measured": "ከተዘገቡ ቶክን ብዛት የተገነባ",
+      "estimated": "ከአሮጌ መልዕክቶች በኋላ የተቆጠረ",
+      "lastRequest": "ቅርብ ጥያቄ",
+      "disclaimer": "ለእያንዳንዱ ጥያቄ ግምት ከተዘገቡ ወይም ከግምት ቶክን ብዛቶች በመጠቀም፣ በታተመ አማካይ ዋጋና ጥምረቶች v{version} የተደረገ፡፡ አሮጌ መልዕክቶች ከተያዙት ጽሑፍ እና የውይይቱ የአሁኑ ሞዴል በመጠቀም ተቆጥረዋል።  measurement አይደለም።"
+    }
   }
 }

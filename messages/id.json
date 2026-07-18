@@ -2424,7 +2424,8 @@
     "regionDefault": "Default",
     "modelRow": "{requests} permintaan · {grams} g",
     "disclosure": "Estimasi berdasarkan asumsi v{version} · sejak {since} · hanya chat standar (jawaban agen dan basis pengetahuan tidak dihitung).",
-    "reset": "Atur ulang statistik penggunaan"
+    "reset": "Atur ulang statistik penggunaan",
+    "estimatedPortion": "Mencakup ~{grams} g CO₂e ({requests} permintaan) yang diestimasi dari percakapan sebelum pelacakan — dihitung ulang dari teks pesan yang disimpan, bukan dari jumlah token yang diukur."
   },
   "extraction": {
     "toggleLabel": "Ekstrak data terstruktur",
@@ -2920,7 +2921,37 @@
       "autoCheckHint": "Setelah mengambil data dari foto atau dokumen, cek kualitas baris baru secara otomatis",
       "checkingNewRows": "Memeriksa baris baru untuk masalah kualitas…",
       "ingestCheckFailed": "Pemeriksaan kualitas otomatis gagal ({message}) — Anda dapat menjalankannya manual dengan Penilaian kualitas.",
-      "assessedIngest": "Baris yang baru ditambahkan"
+      "assessedIngest": "Baris yang baru ditambahkan",
+      "transpose": "Transposisikan",
+      "transposeAxisColumn": "Nama",
+      "transposeSuggestion": "Tabel ini tampak ditransposisikan: baris adalah atribut dan kolom adalah item. Balikkan agar setiap item menjadi baris dan setiap atribut menjadi kolom bertipe?",
+      "transposedTable": "Baris dan kolom ditransposisikan",
+      "columns": "Kolom",
+      "columnsHidden": "Kolom ({count} tersembunyi)",
+      "showAllColumns": "Tampilkan semua",
+      "chartScatter": "Scatter (x vs y)",
+      "chartPivot": "Tabel pivot",
+      "xColumn": "Kolom X",
+      "yColumn": "Kolom Y",
+      "splitByColumn": "Pisahkan berdasarkan",
+      "splitNone": "Tidak dipisahkan",
+      "pivotValueColumns": "Kolom nilai",
+      "aggMin": "Min",
+      "aggMax": "Maks",
+      "aggMedian": "Median",
+      "chartSeriesTruncated": "Menampilkan {max} seri teratas",
+      "chartPointsTruncated": "Menampilkan {max} titik sampel",
+      "chartScatterAria": "Plot scatter dari {x} versus {y}",
+      "pivotTableAria": "Tabel pivot dikelompokkan berdasarkan {column}",
+      "schemaFormula": "Rumus",
+      "schemaFormulaPlaceholder": "misal: [Kasus] / [Populasi] * 1000",
+      "schemaFormulaHint": "Kolom terhitung: referensikan kolom lain sebagai [Nama]; mendukung + - * / %, tanda kurung, serta fungsi round, abs, min, max. Nilai diperbarui otomatis dan tidak dapat diedit langsung.",
+      "schemaFormulaSyntaxError": "Rumus tidak valid",
+      "schemaFormulaUnknownRef": "Kolom tidak dikenal: {ref}",
+      "schemaFormulaArityError": "Jumlah argumen untuk {fn} tidak sesuai",
+      "schemaFormulaCycleError": "Referensi sirkular antar rumus",
+      "derivedColumnTitle": "Terhitung: {formula}",
+      "derivedFrom": "Dihitung dari {formula}"
     },
     "map": {
       "emptyTitle": "Letakkan data Anda pada peta",
@@ -3155,5 +3186,43 @@
     "deselectAll": "Batalkan semua pilihan",
     "autoAddLabel": "Tambahkan model baru secara otomatis",
     "autoAddDescription": "Deployment model yang ditambahkan ke akun ini nantinya akan muncul secara otomatis. Model yang tidak dicentang tetap dikecualikan."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Dampak rendah",
+      "moderate": "Dampak sedang",
+      "high": "Dampak tinggi"
+    },
+    "tierTooltip": "Dampak energi relatif per permintaan, diperkirakan dari ukuran model. Ini hanya perkiraan berdasarkan rata-rata terpublikasi dan asumsi v{version} — bukan hasil pengukuran.",
+    "typicalRequest": "~{grams} g CO₂e per permintaan biasa",
+    "typicalRequestTooltip": "Perkiraan kasar per permintaan untuk permintaan tipikal (sekitar 1.000 token prompt dan 500 token completion), berdasarkan rata-rata terpublikasi dan asumsi v{version}. Dampak aktual bervariasi sesuai panjang percakapan, pengaturan, dan wilayah hosting.",
+    "activities": {
+      "netflixHd": "Streaming Netflix HD",
+      "zoomCall": "Panggilan Zoom (kamera aktif)",
+      "webBrowsing": "Menjelajah web",
+      "spotifyAudio": "Audio Spotify"
+    },
+    "equivalents": {
+      "title": "≈ setara karbon dengan",
+      "note": "Perbandingan karbon setara dengan jejak per jam layanan ini yang telah dipublikasikan — angka kasar pada orde besaran, seperti semua estimasi di sini."
+    },
+    "duration": {
+      "lessThanSecond": "<1 d",
+      "seconds": "{value} d",
+      "minutes": "{value} mnt",
+      "hours": "{value} jam"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Perkiraan jejak karbon untuk percakapan ini: {grams} gram CO₂ ekuivalen. Tampilkan rincian.",
+      "ariaLabelToday": "Perkiraan jejak karbon percakapan ini hari ini: {grams} gram CO₂ ekuivalen. Tampilkan rincian.",
+      "title": "Percakapan ini (perkiraan)",
+      "today": "Hari ini",
+      "total": "Sepanjang waktu",
+      "measured": "Dari jumlah token yang dilaporkan",
+      "estimated": "Dihitung ulang dari pesan lama",
+      "lastRequest": "Permintaan terakhir",
+      "disclaimer": "Perkiraan per permintaan dari jumlah token yang dilaporkan atau diperkirakan, menggunakan rata-rata dan asumsi terpublikasi v{version}. Pesan lama dihitung ulang dari teks yang disimpan dan model percakapan saat ini. Bukan pengukuran."
+    }
   }
 }

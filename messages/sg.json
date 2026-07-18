@@ -2408,7 +2408,8 @@
     "regionDefault": "Défa",
     "modelRow": "{requests} demande · {grams} g",
     "disclosure": "Estimation ti dî ti assumption v{version} · depi {since} · chat standard mbî (agent na réponse ti base de données ape na séne).",
-    "reset": "Rétablir statistique ti usage"
+    "reset": "Rétablir statistique ti usage",
+    "estimatedPortion": "Kodô tî ~{grams} g CO₂e ({requests} na sara) sô mbi bala na chats sô kô sô tracking ape — bala mbi yeke na kidipé ti maburu ti message, ape na maburu token."
   },
   "extraction": {
     "toggleLabel": "Hâ lâ tî data ti yângâ",
@@ -2904,7 +2905,37 @@
       "autoCheckHint": "Kangbi ti yeke pere données na foto ôko na document, système ape yeke sô ifa kôdö vérification ti qualité na ndö na yângâ.",
       "checkingNewRows": "Ape yeke vérifié ndö na yângâ kôdö problémé ti qualité…",
       "ingestCheckFailed": "Vérification automatique ti qualité a mousso ({message}) — oko yeke sô uwe ti zûnga na Vérifier qualité.",
-      "assessedIngest": "Ndö na yângâ"
+      "assessedIngest": "Ndö na yângâ",
+      "transpose": "Sôkô ti ti mbi",
+      "transposeAxisColumn": "Nzönï",
+      "transposeSuggestion": "Tabelê a ne sôkô: mbi ɓeti matché nzönï ti tabelê ti mbi. Ŵa kufãli ti bảngo na, kôi na mbi kê tabelê na kêtî, na mbi kê nzönï na nzönï ti ambeni?",
+      "transposedTable": "Tabelê sôkô mbi na nzönï",
+      "columns": "Nzönï",
+      "columnsHidden": "Nzönï ({count} zo hangu ti mo",
+      "showAllColumns": "Hûndo na",
+      "chartScatter": "Sôki (x na y)",
+      "chartPivot": "Tabelê ti pivot",
+      "xColumn": "Nzönï X",
+      "yColumn": "Nzönï Y",
+      "splitByColumn": "Bê ti",
+      "splitNone": "Bê ti hangu",
+      "pivotValueColumns": "Nzönï ti modû na",
+      "aggMin": "Bêndê",
+      "aggMax": "Kêtê",
+      "aggMedian": "Median",
+      "chartSeriesTruncated": "Ti hûnda {max} seri",
+      "chartPointsTruncated": "Ti hûnda {max} pi yi zolo",
+      "chartScatterAria": "Schema ti sôki ti {x} na {y}",
+      "pivotTableAria": "Tabelê ti pivot ti akê na {column}",
+      "schemaFormula": "Formula",
+      "schemaFormulaPlaceholder": "tînzî. [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Zolo ti hûnda: a ti kûê nzönï na [Name]; a sâra + - * / %, parenthesis, na round, abs, min, max. Dönî a ti sô na mbênî na a lôndöngö. Ngu wala a bendi ti hûnda zo sô-a-yê na mo.",
+      "schemaFormulaSyntaxError": "Formula ti hângu",
+      "schemaFormulaUnknownRef": "Nzönï ti mo yéké: {ref}",
+      "schemaFormulaArityError": "Mbênî ti mbousu ti {fn} ti hângu",
+      "schemaFormulaCycleError": "Rapport ti formula ti yângbi ti mbênî",
+      "derivedColumnTitle": "Hûndê: {formula}",
+      "derivedFrom": "Hûndê kutû ti {formula}"
     },
     "map": {
       "emptyTitle": "Sûndô données mo na carte",
@@ -3139,5 +3170,43 @@
     "deselectAll": "Gbênga bängö",
     "autoAddLabel": "Kömbëtï modeli tî mo wala kidö",
     "autoAddDescription": "Modeli sô a kötä na ngangu-ködörö oko ayeke tî mo wala kidö. Modeli sô a ayeke yângâ ayeke dë."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Lêngbi ti mbi",
+      "moderate": "Mediocre ti mbi",
+      "high": "Gâgô ti mbi"
+    },
+    "tierTooltip": "Lêngbi ti énerziê na demande kêtê-kêtê, a ti bé ti modelê. A yeke doni na mô tî kêtê kêtê sôa tî wön. v{version} — mbi wala ti damuşa.",
+    "typicalRequest": "~{grams} g CO₂e na demande ti mbi",
+    "typicalRequestTooltip": "Mbênî sô yeke sâra na demande ti mbi (yôko 1,000 prompt na 500 token ti banga), a yeke kêtê na mbênî ti wön v{version}. Gâgô ti mbi a ti fängö na dë aka, paramétèrè, na rézion ti ôko.",
+    "activities": {
+      "netflixHd": "Gazarâ Netflix HD",
+      "zoomCall": "Zoom call (kamera ti hûndo na)",
+      "webBrowsing": "Lukündö Internet",
+      "spotifyAudio": "Spotify na yângâ"
+    },
+    "equivalents": {
+      "title": "≈ lika ti carbon",
+      "note": "Likô tî carbon ti lingbi ti servisî na mbênî ti ôko — mbênî a yeke kêtê wön, lêngbi ti mbênî, dùkö mbi bîrî ti sô yeke sâra na mo."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Gâgô ti carbon na damuşa a mbi: {grams} gram CO₂ e. Sôkô mô na mbi.",
+      "ariaLabelToday": "Gâgô ti carbon na damuşa a mbi lo: {grams} gram CO₂ e. Sôkô mô na mbi.",
+      "title": "Damuzi a mbi (gâgô)",
+      "today": "Leniyo",
+      "total": "Dzoni kɛ̈",
+      "measured": "Ngu bê ti yeke na maburu ti token",
+      "estimated": "Ngu bê ti yeke na bala mbi yeke na barafunu kidî tî sô",
+      "lastRequest": "Sa ti yi tî sô",
+      "disclaimer": "Kötörö ti na sara so na maburu token, to mbi yeke tî token sô pe tî mingi, na mopé tî averages na assumptions v{version} sô a zéré. Barafunu kidî tî sô a yeke na bala mbi yeke na kidipé ti mbênî yi na model tî conversation. Kôdoro ape."
+    }
   }
 }

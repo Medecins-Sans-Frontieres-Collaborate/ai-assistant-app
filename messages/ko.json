@@ -2424,7 +2424,8 @@
     "regionDefault": "기본값",
     "modelRow": "{requests}회 요청 · {grams} g",
     "disclosure": "추정치는 가정에 기반합니다(v{version}) · {since}부터 · 표준 채팅만 포함됨(에이전트 및 지식 기반 답변 제외).",
-    "reset": "사용 통계 초기화"
+    "reset": "사용 통계 초기화",
+    "estimatedPortion": "추적 이전 대화에서 저장된 메시지 텍스트로 역산(실제 토큰 수 미측정)하여 산출된 약 {grams}g CO₂e({requests}개 요청) 포함."
   },
   "extraction": {
     "toggleLabel": "구조화 데이터 추출",
@@ -2920,7 +2921,37 @@
       "autoCheckHint": "사진이나 문서에서 데이터를 추출한 후, 새 행에 대해 자동으로 품질 검사를 실행합니다.",
       "checkingNewRows": "새로 추가된 행의 품질 문제를 확인 중…",
       "ingestCheckFailed": "자동 품질 검사 실패({message}) — 품질 평가를 통해 수동으로 검사할 수 있습니다.",
-      "assessedIngest": "새로 추가된 행"
+      "assessedIngest": "새로 추가된 행",
+      "transpose": "전치하기",
+      "transposeAxisColumn": "이름",
+      "transposeSuggestion": "이 표는 행이 속성이고 열이 항목인 전치된 표로 보입니다. 각 항목을 행으로, 각 속성을 타입이 지정된 열로 뒤집으시겠습니까?",
+      "transposedTable": "전치된 행과 열",
+      "columns": "열",
+      "columnsHidden": "열 ({count}개 숨김)",
+      "showAllColumns": "모두 보기",
+      "chartScatter": "산점도 (x 대 y)",
+      "chartPivot": "피벗 테이블",
+      "xColumn": "X 열",
+      "yColumn": "Y 열",
+      "splitByColumn": "열 기준 분할",
+      "splitNone": "분할 없음",
+      "pivotValueColumns": "값 열",
+      "aggMin": "최솟값",
+      "aggMax": "최댓값",
+      "aggMedian": "중앙값",
+      "chartSeriesTruncated": "상위 {max}개 시리즈만 표시됩니다",
+      "chartPointsTruncated": "샘플링된 {max} 지점 표시",
+      "chartScatterAria": "{x} 대 {y} 산점도",
+      "pivotTableAria": "{column} 기준으로 그룹화된 피벗 테이블",
+      "schemaFormula": "수식",
+      "schemaFormulaPlaceholder": "예: [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "계산 필드: 다른 필드는 [이름] 형식으로 참조하세요. + - * / %, 괄호, round, abs, min, max 지원. 값은 자동으로 업데이트되며 직접 편집할 수 없습니다.",
+      "schemaFormulaSyntaxError": "잘못된 수식",
+      "schemaFormulaUnknownRef": "알 수 없는 필드: {ref}",
+      "schemaFormulaArityError": "{fn} 함수에 인수가 잘못되었습니다",
+      "schemaFormulaCycleError": "수식 간 순환 참조",
+      "derivedColumnTitle": "계산됨: {formula}",
+      "derivedFrom": "{formula} 기준 계산"
     },
     "map": {
       "emptyTitle": "데이터를 지도에 표시하기",
@@ -3155,5 +3186,43 @@
     "deselectAll": "모두 선택 취소",
     "autoAddLabel": "새 모델 자동 추가",
     "autoAddDescription": "이 계정에 나중에 추가된 모델 배포는 자동으로 표시됩니다. 선택하지 않은 모델은 제외된 상태로 유지됩니다."
+  },
+  "emissions": {
+    "tier": {
+      "low": "영향 낮음",
+      "moderate": "영향 보통",
+      "high": "영향 높음"
+    },
+    "tierTooltip": "모델 크기를 기준으로 추정한 요청별 상대 에너지 영향입니다. v{version} 기준 공개된 평균 및 가정에 기반한 추정치이며, 실제 측정이 아닙니다.",
+    "typicalRequest": "일반 요청당 약 {grams} g CO₂e",
+    "typicalRequestTooltip": "일반 요청(약 1,000 프롬프트 및 500 컴플리션 토큰)을 기준으로 공개 평균 및 가정 v{version}을 이용해 산출한 대략적 요청별 추정치입니다. 실제 영향은 대화 길이, 설정, 호스팅 지역에 따라 달라집니다.",
+    "activities": {
+      "netflixHd": "Netflix HD 스트리밍",
+      "zoomCall": "Zoom 통화(카메라 켬)",
+      "webBrowsing": "웹 브라우징",
+      "spotifyAudio": "Spotify 오디오"
+    },
+    "equivalents": {
+      "title": "≈ 동일 탄소량 활동",
+      "note": "각 서비스의 시간당 공개 탄소배출량을 기준으로 한 동등 탄소 비교입니다. 여기의 모든 수치와 마찬가지로 대략적인 추정치입니다."
+    },
+    "duration": {
+      "lessThanSecond": "<1초",
+      "seconds": "{value}초",
+      "minutes": "{value}분",
+      "hours": "{value}시간"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "이 대화의 추정 탄소발자국: CO₂e {grams}그램. 세부내역 보기.",
+      "ariaLabelToday": "오늘 이 대화의 추정 탄소발자국: CO₂e {grams}그램. 세부내역 보기.",
+      "title": "이 대화(추정치)",
+      "today": "오늘",
+      "total": "전체 기간",
+      "measured": "보고된 토큰 수 기준",
+      "estimated": "이전 메시지에서 역산됨",
+      "lastRequest": "마지막 요청",
+      "disclaimer": "보고된 또는 추정된 토큰 수를 기준으로 요청별로 산출된 추정치이며, 공개된 평균값과 가정(v{version})이 사용되었습니다. 이전 메시지는 저장된 텍스트와 대화의 현재 모델을 바탕으로 역산되었습니다. 실제 측정치가 아닙니다."
+    }
   }
 }

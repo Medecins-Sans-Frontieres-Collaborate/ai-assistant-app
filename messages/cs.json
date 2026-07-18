@@ -2424,7 +2424,8 @@
     "regionDefault": "Výchozí",
     "modelRow": "{requests} pož. · {grams} g",
     "disclosure": "Odhady založené na předpokladech v{version} · od {since} · pouze standardní chat (odpovědi agentů a znalostní báze nejsou započítány).",
-    "reset": "Resetovat statistiky využití"
+    "reset": "Resetovat statistiky využití",
+    "estimatedPortion": "Zahrnuje přibližně {grams} g CO₂e ({requests} požadavků) odhadnutých z chatů před zavedením sledování — zpětně vypočítáno z uložených zpráv, nikoli z měřených počtů tokenů."
   },
   "extraction": {
     "toggleLabel": "Extrahovat strukturovaná data",
@@ -2920,7 +2921,37 @@
       "autoCheckHint": "Po extrakci dat z fotografií nebo dokumentů automaticky spustí kontrolu kvality na nových řádcích",
       "checkingNewRows": "Kontrola nově přidaných řádků na problémy s kvalitou…",
       "ingestCheckFailed": "Automatická kontrola kvality selhala ({message}) — můžete ji spustit ručně pomocí 'Posoudit kvalitu'.",
-      "assessedIngest": "Nově přidané řádky"
+      "assessedIngest": "Nově přidané řádky",
+      "transpose": "Transponovat",
+      "transposeAxisColumn": "Název",
+      "transposeSuggestion": "Tato tabulka vypadá, že je transponovaná: řádky jsou atributy a sloupce položky. Chcete ji převrátit, aby každá položka byla řádek a každý atribut typovaný sloupec?",
+      "transposedTable": "Transponované řádky a sloupce",
+      "columns": "Sloupce",
+      "columnsHidden": "Sloupce (skryto: {count})",
+      "showAllColumns": "Zobrazit vše",
+      "chartScatter": "Bodový graf (x vs y)",
+      "chartPivot": "Kontingenční tabulka",
+      "xColumn": "Sloupec X",
+      "yColumn": "Sloupec Y",
+      "splitByColumn": "Rozdělit podle",
+      "splitNone": "Bez rozdělení",
+      "pivotValueColumns": "Sloupce hodnot",
+      "aggMin": "Minimum",
+      "aggMax": "Maximum",
+      "aggMedian": "Medián",
+      "chartSeriesTruncated": "Zobrazuje se top {max} sérií",
+      "chartPointsTruncated": "Zobrazuje se {max} náhodně vybraných bodů",
+      "chartScatterAria": "Bodový graf {x} versus {y}",
+      "pivotTableAria": "Kontingenční tabulka seskupená podle {column}",
+      "schemaFormula": "Vzorec",
+      "schemaFormulaPlaceholder": "např. [Případy] / [Populace] * 1000",
+      "schemaFormulaHint": "Vypočítané pole: odkazujte na jiná pole jako [Název]; podporuje + - * / %, závorky a round, abs, min, max. Hodnoty se aktualizují automaticky a nelze je upravovat přímo.",
+      "schemaFormulaSyntaxError": "Neplatný vzorec",
+      "schemaFormulaUnknownRef": "Neznámé pole: {ref}",
+      "schemaFormulaArityError": "Nesprávný počet argumentů pro {fn}",
+      "schemaFormulaCycleError": "Cyklický odkaz mezi vzorci",
+      "derivedColumnTitle": "Vypočteno: {formula}",
+      "derivedFrom": "Vypočteno ze vzorce {formula}"
     },
     "map": {
       "emptyTitle": "Zobrazte svá data na mapě",
@@ -3155,5 +3186,43 @@
     "deselectAll": "Zrušit výběr všech",
     "autoAddLabel": "Automaticky přidávat nové modely",
     "autoAddDescription": "Nasazení modelů přidaná do tohoto účtu se zobrazí automaticky. Nezaškrtnuté modely zůstávají vyloučeny."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Nižší dopad",
+      "moderate": "Střední dopad",
+      "high": "Vyšší dopad"
+    },
+    "tierTooltip": "Relativní energetický dopad na požadavek, odhadnutý podle velikosti modelu. Jedná se o odhady na základě publikovaných průměrů a předpokladů v{version} — nikoliv měření.",
+    "typicalRequest": "~{grams} g CO₂e na typický požadavek",
+    "typicalRequestTooltip": "Hrubý odhad dopadu na jeden typický požadavek (cca 1 000 vstupních a 500 výstupních tokenů), vypočtený z publikovaných průměrů a předpokladů v{version}. Skutečný dopad se liší podle délky konverzace, nastavení a oblasti hostování.",
+    "activities": {
+      "netflixHd": "Netflix streamování v HD",
+      "zoomCall": "Zoom hovor (kamera zapnuta)",
+      "webBrowsing": "Prohlížení webu",
+      "spotifyAudio": "Spotify audio"
+    },
+    "equivalents": {
+      "title": "≈ stejné množství uhlíku jako",
+      "note": "Porovnání se stejným množstvím uhlíku podle publikovaných hodinových stop těchto služeb — hrubé, orientační hodnoty, stejně jako všechny zde uvedené odhady."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Odhadovaná uhlíková stopa této konverzace: {grams} gramů CO₂ ekvivalentu. Zobrazit rozpis.",
+      "ariaLabelToday": "Odhadovaná uhlíková stopa této konverzace dnes: {grams} gramů CO₂ ekvivalentu. Zobrazit rozpis.",
+      "title": "Tato konverzace (odhad)",
+      "today": "Dnes",
+      "total": "Celkem",
+      "measured": "Z hlášených počtů tokenů",
+      "estimated": "Zpětně vypočítáno ze starších zpráv",
+      "lastRequest": "Poslední požadavek",
+      "disclaimer": "Odhady na požadavek z hlášených nebo přibližných počtů tokenů, s využitím zveřejněných průměrů a předpokladů v{version}. Starší zprávy jsou zpětně dopočítány z uloženého textu a aktuálního modelu konverzace. Nejde o měření."
+    }
   }
 }

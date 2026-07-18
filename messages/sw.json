@@ -2424,7 +2424,8 @@
     "regionDefault": "Chaguo-msingi",
     "modelRow": "{requests} ombi · {grams} g",
     "disclosure": "Makadirio msingi wa dhana v{version} · tangu {since} · mazungumzo ya kawaida pekee (mawakala na majibu ya msingi wa maarifa hayajahesabiwa).",
-    "reset": "Weka upya takwimu za matumizi"
+    "reset": "Weka upya takwimu za matumizi",
+    "estimatedPortion": "Inajumuisha takriban ~{grams} g CO₂e ({requests} maombi) iliyokadiriwa kutoka kwenye gumzo zilizotokea kabla ya ufuatiliaji — imekadiriwa kutoka kwa maandishi ya ujumbe yaliyohifadhiwa, si toka kwa idadi ya tokeni zilizopimwa."
   },
   "extraction": {
     "toggleLabel": "Dondoa data iliyo na muundo",
@@ -2920,7 +2921,37 @@
       "autoCheckHint": "Baada ya kuchakata data kutoka picha au hati, fanya ukaguzi wa ubora moja kwa moja kwenye safu mpya",
       "checkingNewRows": "Inakagua safu mpya zilizoongezwa kwa masuala ya ubora…",
       "ingestCheckFailed": "Ukaguzi wa ubora wa moja kwa moja umeshindikana ({message}) — unaweza kuufanya mwenyewe kwa Kuangalia ubora.",
-      "assessedIngest": "Safu mpya zilizoongezwa"
+      "assessedIngest": "Safu mpya zilizoongezwa",
+      "transpose": "Geuza mpangilio",
+      "transposeAxisColumn": "Jina",
+      "transposeSuggestion": "Jedwali hili linaonekana limegeuzwa: safu ni sifa na nguzo ni vitu. Geuza ili kila kipengee kiwe safu na kila sifa iwe nguzo yenye aina?",
+      "transposedTable": "Safu na nguzo zimegeuzwa",
+      "columns": "Nguzo",
+      "columnsHidden": "Nguzo ({count} zimefichwa)",
+      "showAllColumns": "Onyesha zote",
+      "chartScatter": "Mchoro wa mtawanyiko (x dhidi ya y)",
+      "chartPivot": "Jedwali la pivot",
+      "xColumn": "Nguzo ya X",
+      "yColumn": "Nguzo ya Y",
+      "splitByColumn": "Gawa kwa",
+      "splitNone": "Hakuna mgawanyiko",
+      "pivotValueColumns": "Nguzo za Thamani",
+      "aggMin": "Chini",
+      "aggMax": "Juu",
+      "aggMedian": "Wastani wa kati",
+      "chartSeriesTruncated": "Inaonyesha mfuatano {max} ya juu zaidi",
+      "chartPointsTruncated": "Inaonyesha nukta zilizochaguliwa {max}",
+      "chartScatterAria": "Mchoro wa mtawanyiko wa {x} dhidi ya {y}",
+      "pivotTableAria": "Jedwali la pivot lililopangwa kwa {column}",
+      "schemaFormula": "Fomula",
+      "schemaFormulaPlaceholder": "mf. [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Sehemu iliyohesabiwa: taja sehemu zingine kama [Name]; inasaidia + - * / %, mabano, na round, abs, min, max. Thamani husasishwa moja kwa moja na haziwezi kuhaririwa moja kwa moja.",
+      "schemaFormulaSyntaxError": "Fomula sio sahihi",
+      "schemaFormulaUnknownRef": "Sehemu haijulikani: {ref}",
+      "schemaFormulaArityError": "Idadi isiyo sahihi ya hoja kwa {fn}",
+      "schemaFormulaCycleError": "Urejeleo wa mzunguko kati ya fomula",
+      "derivedColumnTitle": "Imehesabiwa: {formula}",
+      "derivedFrom": "Imehesabiwa kutumia {formula}"
     },
     "map": {
       "emptyTitle": "Weka data zako kwenye ramani",
@@ -3155,5 +3186,43 @@
     "deselectAll": "Ondoa chaguzi zote",
     "autoAddLabel": "Ongeza mifano mpya moja kwa moja",
     "autoAddDescription": "Mipangilio mpya ya modeli itakayoongezwa kwenye akaunti hii itaonekana moja kwa moja. Mifano isiyochaguliwa itaendelea kutengwa."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Athari ndogo",
+      "moderate": "Athari ya kati",
+      "high": "Athari kubwa"
+    },
+    "tierTooltip": "Athari ya nishati kulingana na maombi, imekadiria kutokana na ukubwa wa modeli. Hizi ni makadirio kutoka kwa wastani uliochapishwa na makadirio v{version} — siyo vipimo halisi.",
+    "typicalRequest": "~{grams} g CO₂e kwa ombi la kawaida",
+    "typicalRequestTooltip": "Makadirio ya haraka kwa ombi la kawaida (takriban tokeni 1,000 za dodoso na 500 za jibu), imetokana na wastani uliyochapishwa na makadirio v{version}. Athari halisi hubadilika kulingana na urefu wa mazungumzo, mipangilio, na eneo la mwenyeji.",
+    "activities": {
+      "netflixHd": "Kutiririsha Netflix HD",
+      "zoomCall": "Simu ya Zoom (kamera imewashwa)",
+      "webBrowsing": "Kuvinjari wavuti",
+      "spotifyAudio": "Sauti ya Spotify"
+    },
+    "equivalents": {
+      "title": "≈ sawa na kaboni kama",
+      "note": "Ulinganisho wa kaboni sawa dhidi ya alama zilizochapishwa kwa saa ya huduma hizi — makadirio ya kiwango kikubwa, kama makadirio mengine yote hapa."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} dk",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Makadirio ya kaboni ya mazungumzo haya: gramu {grams} za CO₂ sawa. Onyesha mgawanyo.",
+      "ariaLabelToday": "Makadirio ya kaboni ya mazungumzo haya leo: gramu {grams} za CO₂ sawa. Onyesha mgawanyo.",
+      "title": "Mazungumzo haya (makadirio)",
+      "today": "Leo",
+      "total": "Wakati wote",
+      "measured": "Kutoka kwa idadi ya tokeni zilivyoripotiwa",
+      "estimated": "Imekadiriwa kutoka kwa ujumbe wa zamani",
+      "lastRequest": "Ombi la mwisho",
+      "disclaimer": "Makadirio kwa kila ombi yanatokana na idadi ya tokeni zilivyoripotiwa au kukadiriwa, yakitumia wastani na dhana zilizochapishwa toleo v{version}. Ujumbe wa zamani umekadiriwa kutoka kwa maandishi yaliyohifadhiwa na muundo wa sasa wa mazungumzo. Hii si kipimo halisi."
+    }
   }
 }

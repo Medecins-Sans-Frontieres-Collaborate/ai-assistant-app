@@ -2424,7 +2424,8 @@
     "regionDefault": "Implicit",
     "modelRow": "{requests} cereri · {grams} g",
     "disclosure": "Estimări bazate pe ipoteze v{version} · din {since} · doar conversație standard (agenții și răspunsurile din baza de cunoștințe nu sunt incluse).",
-    "reset": "Resetează statisticile de utilizare"
+    "reset": "Resetează statisticile de utilizare",
+    "estimatedPortion": "Include aproximativ {grams} g CO₂e ({requests} cereri) estimate pentru conversațiile anterioare urmăririi — recalculate pe baza textului stocat al mesajelor, nu a numărului măsurat de tokeni."
   },
   "extraction": {
     "toggleLabel": "Extrage date structurate",
@@ -2920,7 +2921,37 @@
       "autoCheckHint": "După extragerea datelor din fotografii sau documente, rulează automat o verificare a calității pentru rândurile noi",
       "checkingNewRows": "Se verifică rândurile nou adăugate pentru probleme de calitate…",
       "ingestCheckFailed": "Verificarea automată a calității a eșuat ({message}) — o puteți rula manual cu Evaluează calitatea.",
-      "assessedIngest": "Rânduri nou adăugate"
+      "assessedIngest": "Rânduri nou adăugate",
+      "transpose": "Transpune",
+      "transposeAxisColumn": "Nume",
+      "transposeSuggestion": "Această tabelă pare transpusă: rândurile sunt atribute, iar coloanele sunt elemente. Să inversăm astfel încât fiecare element să fie pe un rând, iar fiecare atribut să devină o coloană tipizată?",
+      "transposedTable": "Rânduri și coloane transpuse",
+      "columns": "Coloane",
+      "columnsHidden": "Coloane ({count} ascunse)",
+      "showAllColumns": "Afișează tot",
+      "chartScatter": "Puncte dispersate (x vs y)",
+      "chartPivot": "Tabel pivot",
+      "xColumn": "Coloana X",
+      "yColumn": "Coloana Y",
+      "splitByColumn": "Împarte după",
+      "splitNone": "Fără împărțire",
+      "pivotValueColumns": "Coloane de valori",
+      "aggMin": "Minim",
+      "aggMax": "Maxim",
+      "aggMedian": "Mediană",
+      "chartSeriesTruncated": "Se afișează primele {max} serii",
+      "chartPointsTruncated": "Se afișează {max} puncte eșantionate",
+      "chartScatterAria": "Grafic de dispersie {x} versus {y}",
+      "pivotTableAria": "Tabel pivot grupat după {column}",
+      "schemaFormula": "Formulă",
+      "schemaFormulaPlaceholder": "ex: [Cazuri] / [Populație] * 1000",
+      "schemaFormulaHint": "Câmp calculat: referiți la alte câmpuri ca [Nume]; suportă + - * / %, paranteze și round, abs, min, max. Valorile se actualizează automat și nu pot fi editate direct.",
+      "schemaFormulaSyntaxError": "Formulă invalidă",
+      "schemaFormulaUnknownRef": "Câmp necunoscut: {ref}",
+      "schemaFormulaArityError": "Număr incorect de argumente pentru {fn}",
+      "schemaFormulaCycleError": "Referință circulară între formule",
+      "derivedColumnTitle": "Calculat: {formula}",
+      "derivedFrom": "Calculat din {formula}"
     },
     "map": {
       "emptyTitle": "Afișați datele pe o hartă",
@@ -3155,5 +3186,43 @@
     "deselectAll": "Deselectează tot",
     "autoAddLabel": "Adaugă automat modele noi",
     "autoAddDescription": "Implementările de modele adăugate ulterior în acest cont vor apărea automat. Modelele debifate rămân excluse."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Impact scăzut",
+      "moderate": "Impact moderat",
+      "high": "Impact ridicat"
+    },
+    "tierTooltip": "Impactul energetic relativ per cerere, estimat pe baza dimensiunii modelului. Acestea sunt estimări bazate pe medii publicate și presupuneri v{version} — nu măsurători.",
+    "typicalRequest": "~{grams} g CO₂e per cerere tipică",
+    "typicalRequestTooltip": "Estimare brută per cerere pentru o cerere tipică (aproximativ 1.000 de tokenuri prompt și 500 de tokenuri completare), derivată din medii și presupuneri publicate v{version}. Impactul real variază în funcție de lungimea conversației, setări și regiunea de găzduire.",
+    "activities": {
+      "netflixHd": "Vizionare Netflix HD",
+      "zoomCall": "Apel Zoom (cu cameră pornită)",
+      "webBrowsing": "Navigare web",
+      "spotifyAudio": "Audio Spotify"
+    },
+    "equivalents": {
+      "title": "≈ același carbon ca",
+      "note": "Comparare a emisiilor de carbon cu amprentele publicate pe oră ale acestor servicii — valori aproximative, orientative, ca toate estimările de aici."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Amprenta estimată de carbon a acestei conversații: {grams} grame echivalent CO₂. Afișează detalii.",
+      "ariaLabelToday": "Amprenta estimată de carbon a acestei conversații astăzi: {grams} grame echivalent CO₂. Afișează detalii.",
+      "title": "Această conversație (estimat)",
+      "today": "Astăzi",
+      "total": "Tot timpul",
+      "measured": "Pe baza numărului raportat de tokeni",
+      "estimated": "Recalculat pentru mesajele vechi",
+      "lastRequest": "Ultima cerere",
+      "disclaimer": "Estimări la nivel de cerere pe baza numărului de tokeni raportați sau aproximați, folosind medii și ipoteze publicate v{version}. Mesajele mai vechi sunt recalculate pe baza textului stocat și a modelului de conversație curent. Nu reprezintă o măsurare."
+    }
   }
 }

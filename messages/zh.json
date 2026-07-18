@@ -2455,7 +2455,8 @@
     "regionDefault": "默认",
     "modelRow": "{requests} 次请求 · {grams} 克",
     "disclosure": "估算基于假设 v{version} · 自 {since} 起 · 仅限标准聊天（不计代理和知识库答案）。",
-    "reset": "重置使用统计"
+    "reset": "重置使用统计",
+    "estimatedPortion": "包含约 {grams} 克 CO₂e（{requests} 次请求），为在跟踪前的聊天估算值——根据存储的消息文本回算，并非基于实际 token 计数。"
   },
   "extraction": {
     "toggleLabel": "提取结构化数据",
@@ -2951,7 +2952,37 @@
       "autoCheckHint": "从照片或文件提取数据后，自动对新行进行质量检查",
       "checkingNewRows": "正在检测新添加的行的质量问题…",
       "ingestCheckFailed": "自动质量检查失败（{message}）— 可使用“评估质量”手动运行。",
-      "assessedIngest": "新添加的行"
+      "assessedIngest": "新添加的行",
+      "transpose": "转置",
+      "transposeAxisColumn": "名称",
+      "transposeSuggestion": "此表格看起来已被转置：行是属性，列是项目。是否翻转为每个项目一行，每个属性为一个类型列？",
+      "transposedTable": "行列转置",
+      "columns": "列",
+      "columnsHidden": "列（已隐藏 {count} 项）",
+      "showAllColumns": "显示全部",
+      "chartScatter": "散点图（x 对 y）",
+      "chartPivot": "数据透视表",
+      "xColumn": "X 列",
+      "yColumn": "Y 列",
+      "splitByColumn": "按列拆分",
+      "splitNone": "不拆分",
+      "pivotValueColumns": "数值列",
+      "aggMin": "最小值",
+      "aggMax": "最大值",
+      "aggMedian": "中位数",
+      "chartSeriesTruncated": "显示前 {max} 个序列",
+      "chartPointsTruncated": "显示 {max} 个采样点",
+      "chartScatterAria": "{x} 与 {y} 的散点图",
+      "pivotTableAria": "按 {column} 分组的数据透视表",
+      "schemaFormula": "公式",
+      "schemaFormulaPlaceholder": "例如 [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "计算字段：以 [名称] 方式引用其他字段；支持 + - * / %、括号，以及 round、abs、min、max。数值会自动更新，无法直接编辑。",
+      "schemaFormulaSyntaxError": "无效公式",
+      "schemaFormulaUnknownRef": "未知字段：{ref}",
+      "schemaFormulaArityError": "{fn} 的参数数量错误",
+      "schemaFormulaCycleError": "公式间存在循环引用",
+      "derivedColumnTitle": "计算列：{formula}",
+      "derivedFrom": "来源于公式 {formula}"
     },
     "map": {
       "emptyTitle": "在地图上展示您的数据",
@@ -3186,5 +3217,43 @@
     "deselectAll": "取消全选",
     "autoAddLabel": "自动添加新模型",
     "autoAddDescription": "之后添加到该帐户的模型部署将自动显示。未勾选的模型将继续排除。"
+  },
+  "emissions": {
+    "tier": {
+      "low": "较低影响",
+      "moderate": "中等影响",
+      "high": "较高影响"
+    },
+    "tierTooltip": "每个请求的相对能耗影响，依据模型大小估算。数据基于已发布的平均值和假设 v{version}，非实际测量值。",
+    "typicalRequest": "每次典型请求约 ~{grams} g CO₂e",
+    "typicalRequestTooltip": "单次典型请求（约 1,000 个 prompt 和 500 个 completion tokens）的粗略碳排放估算，基于公开平均值和假设 v{version}。实际影响取决于会话长度、设置及托管地区。",
+    "activities": {
+      "netflixHd": "Netflix 高清视频流",
+      "zoomCall": "Zoom 通话（摄像头开）",
+      "webBrowsing": "网页浏览",
+      "spotifyAudio": "Spotify 音频"
+    },
+    "equivalents": {
+      "title": "≈ 相当于同等碳排放",
+      "note": "基于这些服务每小时碳足迹的对比，仅为大致数量级估算，所有数据仅供参考。"
+    },
+    "duration": {
+      "lessThanSecond": "<1 秒",
+      "seconds": "{value} 秒",
+      "minutes": "{value} 分",
+      "hours": "{value} 小时"
+    },
+    "chip": {
+      "label": "{grams} 克 CO₂e",
+      "ariaLabel": "本次对话的估算碳足迹：{grams} 克 CO₂e。显示明细。",
+      "ariaLabelToday": "本日对话的估算碳足迹：{grams} 克 CO₂e。显示明细。",
+      "title": "本次对话（估算值）",
+      "today": "今日",
+      "total": "全部时间",
+      "measured": "来自报告的 token 数量",
+      "estimated": "根据较早消息回算得出",
+      "lastRequest": "上一次请求",
+      "disclaimer": "每次请求的估算基于报告或近似的 token 数量，并使用已发布的平均值和假设 v{version}。较早的消息由存储的文本和当前对话模型回算得出。此数据仅供参考，不代表实际测量。"
+    }
   }
 }

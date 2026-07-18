@@ -2408,7 +2408,8 @@
     "regionDefault": "Midka caadiga ah",
     "modelRow": "{requests} codsi · {grams} g",
     "disclosure": "Qiyaasaha waxa lagu salaynayaa maldahan v{version} · wixii ka bilaabmay {since} · kaliya sheekada caadiga ah (awoodaha agent-yada iyo jawaabaha knowledge-base laguma darin).",
-    "reset": "Tirtir tirakoobka isticmaalka"
+    "reset": "Tirtir tirakoobka isticmaalka",
+    "estimatedPortion": "Waxay ka mid yihiin ku dhawaad ~{grams} g CO₂e ({requests} codsi) oo laga qiyaasay doodaha ka horreeyay raad-raaca — lagu xisaabiyay qoraalka fariimaha la keydiyay, balse aan lagu tirin token."
   },
   "extraction": {
     "toggleLabel": "Ka saar xog habaysan",
@@ -2904,7 +2905,37 @@
       "autoCheckHint": "Marka lagu soo saaro xogta sawirro ama dukumiintiyo, si toos ah u diri hubinta tayada sadarka cusub",
       "checkingNewRows": "Waxaa la hubinayaa sadarrada cusub ee la geliyay tayadooda…",
       "ingestCheckFailed": "Hubinta tayada tooska ah wey guuldareysatay ({message}) — waxaad si gacanta ah ku furi kartaa adigoo isticmaalaya \"Assess quality\".",
-      "assessedIngest": "Sadaro cusub oo la geliyay"
+      "assessedIngest": "Sadaro cusub oo la geliyay",
+      "transpose": "Beddel safafka iyo tiirarka",
+      "transposeAxisColumn": "Magaca",
+      "transposeSuggestion": "Jadwalkani wuxuu u muuqdaa mid la beddelay: safafku waa sifooyin, tiirarkuna waa walxo. Ma rabtaa in la rogo si walxah kastaa uu saf u noqdo, sifo kastana tiir ahaan loo qoro?",
+      "transposedTable": "Safaf iyo tiirar la beddelay",
+      "columns": "Tiirarka",
+      "columnsHidden": "Tiirarka ({count} waa la qariyey)",
+      "showAllColumns": "Dhamaan muuji",
+      "chartScatter": "Qaybin (x vs y)",
+      "chartPivot": "Jadwal la rogay",
+      "xColumn": "Tiirka X",
+      "yColumn": "Tiirka Y",
+      "splitByColumn": "Kala saar by",
+      "splitNone": "Ma kala sarayn",
+      "pivotValueColumns": "Tiirarka qiimaha",
+      "aggMin": "Ugu yar",
+      "aggMax": "Ugu badan",
+      "aggMedian": "Dhexdhexaad",
+      "chartSeriesTruncated": "Waxa la soo bandhigay {max} taxanaha ugu sarreeya",
+      "chartPointsTruncated": "Waxa la soo bandhigay {max} dhibcood oo la soo xulay",
+      "chartScatterAria": "Shaxda qaybin ee {x} iyo {y}",
+      "pivotTableAria": "Jadwal la rogay oo lagu qaybiyey {column}",
+      "schemaFormula": "Xisaab",
+      "schemaFormulaPlaceholder": "tusaale [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Goob la xisaabiyay: tixraac goobaha kale sida [Magaca]; waxa uu taageeraa + - * / %, qawaaniinta, iyo round, abs, min, max. Qiimayaasha si toos ah ayay isu cusbooneysiinayaan mana laga beddeli karo si toos ah.",
+      "schemaFormulaSyntaxError": "Xisaab aan sax ahayn",
+      "schemaFormulaUnknownRef": "Goob aan la aqoon: {ref}",
+      "schemaFormulaArityError": "Tirada dookhyada ee loo diray {fn} waa khaldan tahay",
+      "schemaFormulaCycleError": "Tixraac isdaba joog ah oo xisaabaha ah",
+      "derivedColumnTitle": "La xisaabiyey: {formula}",
+      "derivedFrom": "Laga xisaabiyey {formula}"
     },
     "map": {
       "emptyTitle": "Ku muuji xogtaada khariidadda",
@@ -3139,5 +3170,43 @@
     "deselectAll": "Ka saar dhammaan xulista",
     "autoAddLabel": "Si toos ah ugu dar moodelada cusub",
     "autoAddDescription": "Moodelada dambe ee account-kan lagu daro si toos ah baa loo soo bandhigayaa. Moodelada aan la hubin ma muuqan doonaan."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Saameyn hoose",
+      "moderate": "Saameyn dhexdhexaad ah",
+      "high": "Saameyn sare"
+    },
+    "tierTooltip": "Saameynta tamarta ee codsi kasta, iyadoo lagu qiyaasay cabirka model-ka. Kani waa qiyaas lagu salaynayo celcelisyo la daabacay iyo mala-awaalo v{version} — ma aha cabbir rasmi ah.",
+    "typicalRequest": "~{grams} g CO₂e halkii codsi caadi ah",
+    "typicalRequestTooltip": "Qiyaasta guud ee halkii codsi caadi ah (qiyaastii 1,000 prompt iyo 500 completion tokens), laga soo qaatay celcelisyo la daabacay iyo mala-awaalo v{version}. Saameynta dhabta ah waxay ku kala duwanaan kartaa dhererka wada sheekaysiga, goobaha, iyo aagga martigelinta.",
+    "activities": {
+      "netflixHd": "Daawashada Netflix HD",
+      "zoomCall": "Wicitaanka Zoom (kameradu furan tahay)",
+      "webBrowsing": "Daalacashada webka",
+      "spotifyAudio": "Spotify maqalka"
+    },
+    "equivalents": {
+      "title": "≈ isla qadar kaarboon ah sida",
+      "note": "Isbarbardhig isla-kaarboon ah iyadoo la adeegsanayo xogta la daabacay ee raadadka saacaddeed ee adeegyadaan — dhammaan waa qiyaas guud oo la mid ah inta halkan lagu sheegay."
+    },
+    "duration": {
+      "lessThanSecond": "<1 ilbiriqsi",
+      "seconds": "{value} ilbiriqsi",
+      "minutes": "{value} daqiiqo",
+      "hours": "{value} saacadood"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Qiyaasta raad carbon ee wada sheekaysanadan: {grams} garaam oo u dhigma CO₂. Kala saar muuji.",
+      "ariaLabelToday": "Qiyaasta raad carbon ee wada sheekaysanadan maanta: {grams} garaam oo u dhigma CO₂. Kala saar muuji.",
+      "title": "Wada sheekaysanadan (qiyaasta)",
+      "today": "Maanta",
+      "total": "Waqti kasta",
+      "measured": "Laga soo xigtay tirinta token-ka la soo sheegay",
+      "estimated": "Laga xisaabiyay fariimaha hore",
+      "lastRequest": "Codsigii ugu dambeeyay",
+      "disclaimer": "Qiyaasaha codsi kasta waxaa lagu salaynayaa tirada token-ka ee la soo sheegay ama lagu qiyaasay, iyadoo la adeegsanayo celcelisyo la daabacay iyo mala'awaal v{version}. Fariimaha hore waxaa lagu xisaabiyay qoraalka la keydiyay iyo moodeelka hadda socda ee wadahadalka. Kani maaha qiyaas toos ah."
+    }
   }
 }

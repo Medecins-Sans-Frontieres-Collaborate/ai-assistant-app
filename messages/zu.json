@@ -2408,7 +2408,8 @@
     "regionDefault": "Okuzenzakalelayo",
     "modelRow": "{requests} izicelo · {grams} g",
     "disclosure": "Ukulinganiselwa kusekelwe ezicabangweni v{version} · kusukela {since} · izingxoxo ezijwayelekile kuphela (ama-agent kanye nezimpendulo ezisekwe olwazi azibaliwe).",
-    "reset": "Setha kabusha izibalo zokusetshenziswa"
+    "reset": "Setha kabusha izibalo zokusetshenziswa",
+    "estimatedPortion": "Faka cishe u-{grams} g we-CO₂e ({requests} izicelo) okucatshangwa ukuthi kuvela ezingxoxweni ezandulela ukuqapha — kuhlanganiswe kusukela embhalweni olondoloziwe wemilayezo, hhayi ezibalweni zama-tokens ezifakwe esikalini."
   },
   "extraction": {
     "toggleLabel": "Khipha idatha ehlelekile",
@@ -2904,7 +2905,37 @@
       "autoCheckHint": "Ngemuva kokuthola idatha ezithombeni noma emibhalweni, qala ngokuzenzakalelayo ukuhlola ikhwalithi kwemigqa emisha",
       "checkingNewRows": "Kuhlolwa imigqa emisha yezinkinga zekhwalithi…",
       "ingestCheckFailed": "Ukuhlolwa kwekhwalithi okuzenzakalelayo kwehlulekile ({message}) — ungakwazi ukukwenza mathupha nge-Assess quality.",
-      "assessedIngest": "Imigqa emisha engenisiwe"
+      "assessedIngest": "Imigqa emisha engenisiwe",
+      "transpose": "Guqula okuqondile",
+      "transposeAxisColumn": "Igama",
+      "transposeSuggestion": "Leli tafula libonakala lishintshiwe: imiqolo ingamapharamitha bese amakholomu yizinto. Liguqule ukuze into ngayinye ibe ngumqolo futhi iphuzu ngalinye libe yikholomu enohlobo?",
+      "transposedTable": "Imiqolo namakholomu asuke endaweni yawo",
+      "columns": "Amakholomu",
+      "columnsHidden": "Amakholomu ({count} afihliwe)",
+      "showAllColumns": "Bonisa konke",
+      "chartScatter": "Scatter (x vs y)",
+      "chartPivot": "Iphivothethi yethebhulethi",
+      "xColumn": "Ikholomu X",
+      "yColumn": "Ikholomu Y",
+      "splitByColumn": "Hlukanisa ngo",
+      "splitNone": "Akukho ukuhlukanisa",
+      "pivotValueColumns": "Amakholomu evelu",
+      "aggMin": "Okuncane",
+      "aggMax": "Okukhulu",
+      "aggMedian": "Inqununu",
+      "chartSeriesTruncated": "Kuboniswa uchungechunge oluphezulu olungu-{max}",
+      "chartPointsTruncated": "Kuboniswa amaphoyinti angu-{max} aqokwe",
+      "chartScatterAria": "Iscather plot ye-{x} uma kuqhathaniswa no-{y}",
+      "pivotTableAria": "Iphivothethi yethebula ehlukaniswe ngo-{column}",
+      "schemaFormula": "Ifomula",
+      "schemaFormulaPlaceholder": "isb. [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Inkambu ebaliwe: bheka ezinye izinkambu njenge [Name]; isekela + - * / %, izibiyela, kanye ne-round, abs, min, max. Amanani abuyekezwa ngokuzenzakalelayo futhi ngeke aguqulwe ngokuqondile.",
+      "schemaFormulaSyntaxError": "Ifomula ayivumelekile",
+      "schemaFormulaUnknownRef": "Inkambu engaziwa: {ref}",
+      "schemaFormulaArityError": "Inani elingalungile labaphikisi ku-{fn}",
+      "schemaFormulaCycleError": "Ireferensi eziphindayo phakathi kwamafomula",
+      "derivedColumnTitle": "Kubaliwe: {formula}",
+      "derivedFrom": "Kubonwe kusuka ku-{formula}"
     },
     "map": {
       "emptyTitle": "Beka idatha yakho emephini",
@@ -3139,5 +3170,43 @@
     "deselectAll": "Susa konke okukhethiwe",
     "autoAddLabel": "Faka imodeli ngokuzenzakalela",
     "autoAddDescription": "Ama-model deployments azongezwa kule akhawunti esikhathini esizayo azovezwa ngokuzenzakalelayo. Ama-models angakhethiwe azoqhubeka engafakiwe."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Umthelela ophansi",
+      "moderate": "Umthelela ophakathi",
+      "high": "Umthelela ophezulu"
+    },
+    "tierTooltip": "Umthelela wamandla ohlotshwe ngesicelo, kuqikelelwa ngosayizi wemodeli. Lokhu kuyingqikithi esekelwe ku-avareji eshicilelwe kanye nemibono v{version} — akusiyona imiphumela eqondile.",
+    "typicalRequest": "~{grams} g CO₂e ngesicelo esivamile",
+    "typicalRequestTooltip": "Isilinganiso esijwayelekile ngesicelo ngasinye (cishe ama-1,000 prompt nama-500 completion tokens), sithathwe kuma-averages ashicilelwe nemibono v{version}. Umthelela wangempela uyahlukahluka ngokuya ngobude bengxoxo, izilungiselelo, kanye nesifunda sokubamba.",
+    "activities": {
+      "netflixHd": "Ukusakaza kwe-Netflix HD",
+      "zoomCall": "Ikholi ye-Zoom (ikhamera ivuliwe)",
+      "webBrowsing": "Ukubhekabheka kwewebhu",
+      "spotifyAudio": "Spotify umsindo"
+    },
+    "equivalents": {
+      "title": "≈ okufanayo nekhabhoni njenge",
+      "note": "Ukuqhathanisa okulinganayo kwekhabhoni ngokumelene nombhalo owodwa wehora walezi zinsizakalo — isilinganiso esivamile, okuqikelela njenganakho konke okuhlolwayo lapha."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Kulindeleke ukuthi le ngxoxo ikhiqize ikhabhoni elinganiselwa ku-{grams} amagremu e-CO₂e. Bonisa ukuhlukaniswa.",
+      "ariaLabelToday": "Kulindeleke ukuthi le ngxoxo namuhla ikhiqize ikhabhoni elinganiselwa ku-{grams} amagremu e-CO₂e. Bonisa ukuhlukaniswa.",
+      "title": "Lengxoxo (okulinganisiwe)",
+      "today": "Namuhla",
+      "total": "Konke isikhathi",
+      "measured": "Kusuka kokubalwa kwama-tokens okubikiwe",
+      "estimated": "Kubuyekezwe kusetshenziswa imilayezo endala",
+      "lastRequest": "Isicelo sokugcina",
+      "disclaimer": "Izilinganiso zesicelo ngasinye zisuselwa kwizinombolo zama-tokens ezibikiwe noma ezilinganisiwe, kusetshenziswa izilinganiso nezibalo ezishicilelwe v{version}. Imilayezo endala ibuyekezwa kusukela embhalweni olondoloziwe kanye nemodeli yengxoxo yamanje. Akusona isilinganiso esiqondile."
+    }
   }
 }

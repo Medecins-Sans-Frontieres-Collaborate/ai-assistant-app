@@ -2408,7 +2408,8 @@
     "regionDefault": "Ya liboso",
     "modelRow": "{requests} basɛngami · {grams} g",
     "disclosure": "Bakonzi ezali kolanda makoki v{version} · banda {since} · kaka na masolo ya pamba (agents mpe biyano na banque ya boyebi ekotaki te).",
-    "reset": "Bozongisela stati ya kosalela"
+    "reset": "Bozongisela stati ya kosalela",
+    "estimatedPortion": "Ekoki na ~{grams} g CO₂e ({requests} basenga) na mikano ya ba chats esalemaki liboso tracking—kolongola lisusu na maloba ebombami, te na mituya ya token emonisami."
   },
   "extraction": {
     "toggleLabel": "Kolongola donnee na forme ya mobongisi",
@@ -2904,7 +2905,37 @@
       "autoCheckHint": "Sima ya kokotisa balɔteli utá na foto to mindokument, kosala vérification ya qualité automatique na milɔkɔli ya sika",
       "checkingNewRows": "Ezali kotála ndenge balɔkɔli ya sika ebongi…",
       "ingestCheckFailed": "Kozwa automatique ya kalite ezali te ({message}) — okoki kosala yango na maboko na \"Kotalela kalite\".",
-      "assessedIngest": "Milɔkɔli ya sika"
+      "assessedIngest": "Milɔkɔli ya sika",
+      "transpose": "Kokoma ya likoló na se",
+      "transposeAxisColumn": "Nkombo",
+      "transposeSuggestion": "Tabele oyo ekoki kozala ya kokoma ya likoló na se: retard ezali biloko, bitando ezali ba attribut. Okobongola ete biloko ekoma retard, attribut ekoma kolone?",
+      "transposedTable": "Bitando na ba kolone babongwani",
+      "columns": "Bikolone",
+      "columnsHidden": "Bikolone ({count} ekoki kobombama)",
+      "showAllColumns": "Lakisa nyonso",
+      "chartScatter": "Disanga (x vs y)",
+      "chartPivot": "Tabele ya pivot",
+      "xColumn": "Kolone X",
+      "yColumn": "Kolone Y",
+      "splitByColumn": "Kokabola na kolone",
+      "splitNone": "Te kokabola",
+      "pivotValueColumns": "Bikolone ya motuya",
+      "aggMin": "Mokuse",
+      "aggMax": "Molai",
+      "aggMedian": "Median",
+      "chartSeriesTruncated": "Ezalaka kolakisa mituka {max} ya likolo",
+      "chartPointsTruncated": "Ezalaka kolakisa ba point {max} oyo epesami",
+      "chartScatterAria": "Disanga ya {x} na {y}",
+      "pivotTableAria": "Tabele ya pivot ekabwani na {column}",
+      "schemaFormula": "Formula",
+      "schemaFormulaPlaceholder": "nd. [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Champ esalemi: yebisa ba champ mosusu lokola [Name]; esalami na + - * / %, ba parenthèses, na round, abs, min, max. Bilioko ekotika kosilisa kaka, okoki te kobongisa yango se",
+      "schemaFormulaSyntaxError": "Formula ezali malamu te",
+      "schemaFormulaUnknownRef": "Champ eyebani te: {ref}",
+      "schemaFormulaArityError": "Motango ya ba argument ya {fn} ezali mabe",
+      "schemaFormulaCycleError": "Motindo ya formule ezali na referansi ya motambo",
+      "derivedColumnTitle": "Ekalkilemi: {formula}",
+      "derivedFrom": "Ekalkilemi na {formula}"
     },
     "map": {
       "emptyTitle": "Bakisa balɔkɔli na kati ya carte",
@@ -3139,5 +3170,43 @@
     "deselectAll": "Kolongola ponyama nyonso",
     "autoAddLabel": "Kobakisa ba modèle ya sika otomatik",
     "autoAddDescription": "Ba déploiement ya modèle oyo ekobakisama sima, ekomonana otomatik. Ba modèle oyo bapanami te bakovanda libanda."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Impacts eza mike",
+      "moderate": "Impacts ya ndambu",
+      "high": "Impacts eleki"
+    },
+    "tierTooltip": "Impacts ya mosolo ya motuya na ndimbola moko na lichika ya taille ya model. Ba estimations oyo ebongi na ba moyene epesami na ba assumptions v{version} — te ba mesure",
+    "typicalRequest": "~{grams} g CO₂e na demande ya ndenge nyonso",
+    "typicalRequestTooltip": "Esalemi kaka na demande moko ya kimya (na ba token 1,000 ya prompt na 500 ya completion), epesami na ba moyene na assumptions v{version}. Impacts ya solo ekobongwana na molai ya conversation, maloba, mpe esika ya serveur.",
+    "activities": {
+      "netflixHd": "Kotalela Netflix HD",
+      "zoomCall": "Appel Zoom (kamera efungwami)",
+      "webBrowsing": "Kotalela Internet",
+      "spotifyAudio": "Koyoka Spotify"
+    },
+    "equivalents": {
+      "title": "≈ oyo ezali kongala na carbone",
+      "note": "Kokomisa comparé na carbone ya ndenge moko na été ya ba services oyo — motindo ya estimation moko, lokola oyo nyonso awa."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Estimation ya carbone ya conversation oyo: {grams} grammes ya CO₂ equivalent. Laka ba detail.",
+      "ariaLabelToday": "Estimation ya carbone ya conversation oyo lelo: {grams} grammes ya CO₂ equivalent. Laka ba detail.",
+      "title": "Conversation oyo (ekestimami)",
+      "today": "Lelo",
+      "total": "Ntango nyonso",
+      "measured": "Kolongola na mituya ya token oyo emonisami",
+      "estimated": "Kolongola lisusu na nsima ya sango ya kala",
+      "lastRequest": "Senga ya suka",
+      "disclaimer": "Bokeseni na senga moko likoló ya mituya ya token oyo emonisami to esakwami, kosalela pɔsɔndɔ esamaki na makambo basangisi v{version}. Sango ya kala ezali kolongolama lisusu na maloba babombaki mpe modèle ya likita lelo. Ezali te mindele."
+    }
   }
 }

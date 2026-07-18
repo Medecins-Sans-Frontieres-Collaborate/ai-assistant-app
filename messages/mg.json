@@ -2408,7 +2408,8 @@
     "regionDefault": "Default",
     "modelRow": "{requests} fangatahana · {grams} g",
     "disclosure": "Tombana mifototra amin’ny angon-drakitra sy kajy v{version} · hatramin’ny {since} · chat mahazatra ihany (tsy asiana ny agents sy valin’ny knowledge-base).",
-    "reset": "Averina ny antontan’isa fampiasana"
+    "reset": "Averina ny antontan’isa fampiasana",
+    "estimatedPortion": "Ahitana ~{grams} g CO₂e ({requests} fangatahana) tombanana avy amin'ny chat talohan'ny fandraisana an-tsoratra — hajaina amin'ny lahatsoratra voatahiry amin'ny hafatra, fa tsy amin'ny isan'ny token voarefy."
   },
   "extraction": {
     "toggleLabel": "Alaivo ny angona voaendrika",
@@ -2904,7 +2905,37 @@
       "autoCheckHint": "Aorian'ny fangalana angona amin'ny sary na antontan-taratasy, dia atao ho azy ny fanamarinana kalitao amin'ireo andalana vaovao",
       "checkingNewRows": "Tarihina ny fanamarinana amin'ny andalana vao nampiana...",
       "ingestCheckFailed": "Nisy tsy nety ny fanamarinana kalitao mandeha ho azy ({message}) — azonao atao amin'ny tanana amin'ny Assess quality.",
-      "assessedIngest": "Andalana vao nampiana"
+      "assessedIngest": "Andalana vao nampiana",
+      "transpose": "Manova laharana sy andalana",
+      "transposeAxisColumn": "Anarana",
+      "transposeSuggestion": "Toa navadika ity tabilao ity: andalana no toetra, tsanganana no zavatra. Hafanao ve izy ka ho zavatra isaky ny andalana, ary ho tsanganana soratana isaky ny toetra?",
+      "transposedTable": "Nafana laharana sy andalana",
+      "columns": "Tsanganana",
+      "columnsHidden": "Tsanganana ({count} afenina)",
+      "showAllColumns": "Asehoy rehetra",
+      "chartScatter": "Fizarana (x vs y)",
+      "chartPivot": "Tabilao Pivot",
+      "xColumn": "Tsanganana X",
+      "yColumn": "Tsanganana Y",
+      "splitByColumn": "Zaraina amin'ny",
+      "splitNone": "Tsy misy fizarana",
+      "pivotValueColumns": "Tsanganana soatoavina",
+      "aggMin": "Faratampony ambany",
+      "aggMax": "Faratampony ambony",
+      "aggMedian": "Elanelam-potoana",
+      "chartSeriesTruncated": "Aseho ny andiana {max} voalohany",
+      "chartPointsTruncated": "Aseho {max} teboka santionany",
+      "chartScatterAria": "Sarintabelan'ny {x} amin'ny {y}",
+      "pivotTableAria": "Tabilao Pivot voalamina amin'ny {column}",
+      "schemaFormula": "Rafitra kajy",
+      "schemaFormulaPlaceholder": "oh: [Tranga] / [Isan'ny mponina] * 1000",
+      "schemaFormulaHint": "Sahan-kajy: ampio taranja amin'ny endrika [Anarana]; ekena ny + - * / %, fononteny, sy round, abs, min, max. Mivoatra ho azy ny soatoavina, tsy azo ovaina mivantana.",
+      "schemaFormulaSyntaxError": "Rafitra tsy manankery",
+      "schemaFormulaUnknownRef": "Saha tsy fantatra: {ref}",
+      "schemaFormulaArityError": "Diso ny isan'ny masontsivana ho an'ny {fn}",
+      "schemaFormulaCycleError": "Fifamerenana manodidina eo amin'ny rafitra kajy",
+      "derivedColumnTitle": "Voakajy: {formula}",
+      "derivedFrom": "Voakajy avy amin'ny {formula}"
     },
     "map": {
       "emptyTitle": "Apetrakao anaty sarintany ny angon-drakitrao",
@@ -3139,5 +3170,43 @@
     "deselectAll": "Esory ny safidy rehetra",
     "autoAddLabel": "Ampidirina ho azy ireo modely vaovao",
     "autoAddDescription": "Ny model deployments ampiditra amin'ity kaonty ity aty aoriana dia hiseho ho azy. Ny modely tsy voamarika dia hijanona tsy tafiditra."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Fiantraikany ambany",
+      "moderate": "Fiantraikany antonony",
+      "high": "Fiantraikany avo"
+    },
+    "tierTooltip": "Fiantraikany ho an'ny angovo tsirairay, kajy miankina amin'ny haben'ny modely. Tohina avy amin'ny tombana ara-tsalantsalany sy fiheverana v{version} — tsy fandrefesana mivantana.",
+    "typicalRequest": "~{grams} g CO₂e isaky ny fangatahana mahazatra",
+    "typicalRequestTooltip": "Tombana ho an'ny fangatahana iray (eo amin'ny 1,000 prompt sy 500 completion tokens), nalaina avy amin'ny salan'isa sy fiheverana ampahibemaso v{version}. Miovaova arakaraka ny halavan'ny resaka, toe-javatra, sy ny faritra fitantanana ny tena fiantraikany.",
+    "activities": {
+      "netflixHd": "Fijery Netflix HD",
+      "zoomCall": "Antso Zoom (miasa ny fakantsary)",
+      "webBrowsing": "Fikarohana amin'ny tranonkala",
+      "spotifyAudio": "Mozika Spotify"
+    },
+    "equivalents": {
+      "title": "≈ mitovy amin'ny entona karbônina avy amin'ny",
+      "note": "Fampitahana amin'ny dikan-karbônina isaky ny ora avy amin'ireto tolotra ireto — isa ampitovina toy ny tombana rehetra eto."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} ora"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Vinavina amin'ny dian-karbônina amin'ity resaka ity: {grams} grama CO₂ mitovy. Asehoy ny antsipiriany.",
+      "ariaLabelToday": "Vinavina amin'ny dian-karbônina amin'ity resaka androany: {grams} grama CO₂ mitovy. Asehoy ny antsipiriany.",
+      "title": "Ity resaka ity (vinavinaina)",
+      "today": "Anio",
+      "total": "Hatramin'izay",
+      "measured": "Avy amin'ny isan'ny token navoaka tatitra",
+      "estimated": "Hajaina amin'ny hafatra taloha",
+      "lastRequest": "Fangatahana farany",
+      "disclaimer": "Fanombanana isaky ny fangatahana avy amin'ny isan'ny token navoaka tatitra na vinavinaina, amin'ny fampiasana salan'isa sy hevi-dalina navoaka ho an'ny vahoaka v{version}. Ny hafatra taloha dia hajaina avy amin'ny lahatsoratra voatahiry sy ny modely amin'izao resaka izao. Tsy fandrefesana marina."
+    }
   }
 }

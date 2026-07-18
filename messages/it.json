@@ -2424,7 +2424,8 @@
     "regionDefault": "Predefinito",
     "modelRow": "{requests} richieste · {grams} g",
     "disclosure": "Stime basate su assunzioni v{version} · dal {since} · solo chat standard (agenti e risposte da knowledge base escluse).",
-    "reset": "Reimposta statistiche utilizzo"
+    "reset": "Reimposta statistiche utilizzo",
+    "estimatedPortion": "Include circa {grams} g di CO₂e ({requests} richieste) stimati da chat precedenti al tracciamento — ricalcolati dal testo dei messaggi memorizzati, non da conteggi di token misurati."
   },
   "extraction": {
     "toggleLabel": "Estrai dati strutturati",
@@ -2920,7 +2921,37 @@
       "autoCheckHint": "Dopo l’estrazione, esegui automaticamente il controllo qualità sulle nuove righe",
       "checkingNewRows": "Controllo delle nuove righe per qualità…",
       "ingestCheckFailed": "Controllo qualità automatico non riuscito ({message}) — puoi eseguirlo manualmente con Valuta qualità.",
-      "assessedIngest": "Nuove righe aggiunte"
+      "assessedIngest": "Nuove righe aggiunte",
+      "transpose": "Trasponi",
+      "transposeAxisColumn": "Nome",
+      "transposeSuggestion": "Questa tabella sembra trasposta: le righe sono attributi e le colonne sono elementi. Invertire così che ogni elemento sia una riga e ogni attributo diventi una colonna tipizzata?",
+      "transposedTable": "Righe e colonne trasposte",
+      "columns": "Colonne",
+      "columnsHidden": "Colonne ({count} nascoste)",
+      "showAllColumns": "Mostra tutte",
+      "chartScatter": "Dispersione (x vs y)",
+      "chartPivot": "Tabella pivot",
+      "xColumn": "Colonna X",
+      "yColumn": "Colonna Y",
+      "splitByColumn": "Dividi per",
+      "splitNone": "Nessuna divisione",
+      "pivotValueColumns": "Colonne di valore",
+      "aggMin": "Min",
+      "aggMax": "Max",
+      "aggMedian": "Mediana",
+      "chartSeriesTruncated": "Mostrando le prime {max} serie",
+      "chartPointsTruncated": "Mostrando {max} punti campionati",
+      "chartScatterAria": "Grafico a dispersione di {x} rispetto a {y}",
+      "pivotTableAria": "Tabella pivot raggruppata per {column}",
+      "schemaFormula": "Formula",
+      "schemaFormulaPlaceholder": "es. [Casi] / [Popolazione] * 1000",
+      "schemaFormulaHint": "Campo calcolato: riferimento ad altri campi come [Nome]; supporta + - * / %, parentesi e round, abs, min, max. I valori si aggiornano automaticamente e non possono essere modificati direttamente.",
+      "schemaFormulaSyntaxError": "Formula non valida",
+      "schemaFormulaUnknownRef": "Campo sconosciuto: {ref}",
+      "schemaFormulaArityError": "Numero errato di argomenti per {fn}",
+      "schemaFormulaCycleError": "Riferimento circolare tra formule",
+      "derivedColumnTitle": "Calcolato: {formula}",
+      "derivedFrom": "Calcolato da {formula}"
     },
     "map": {
       "emptyTitle": "Colloca i tuoi dati su una mappa",
@@ -3155,5 +3186,43 @@
     "deselectAll": "Deseleziona tutto",
     "autoAddLabel": "Aggiungi nuovi modelli automaticamente",
     "autoAddDescription": "I deployment dei modelli aggiunti successivamente a questo account verranno visualizzati automaticamente. I modelli deselezionati rimarranno esclusi."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Impatto minore",
+      "moderate": "Impatto moderato",
+      "high": "Impatto maggiore"
+    },
+    "tierTooltip": "Impatto energetico relativo per richiesta, stimato dalla dimensione del modello. Sono stime basate su medie pubblicate e supposizioni v{version} — non misurazioni.",
+    "typicalRequest": "~{grams} g CO₂e per richiesta tipica",
+    "typicalRequestTooltip": "Stima approssimativa per una richiesta tipica (circa 1000 prompt e 500 token di completamento), derivata da medie pubblicate e supposizioni v{version}. L'impatto effettivo varia in base alla lunghezza della conversazione, alle impostazioni e alla regione di hosting.",
+    "activities": {
+      "netflixHd": "Streaming Netflix HD",
+      "zoomCall": "Chiamata Zoom (camera accesa)",
+      "webBrowsing": "Navigazione web",
+      "spotifyAudio": "Spotify audio"
+    },
+    "equivalents": {
+      "title": "≈ stesso carbonio di",
+      "note": "Confronto di emissioni con le impronte pubblicate per ora di questi servizi — valori indicativi e approssimativi, come tutte le stime qui riportate."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Impronta di carbonio stimata di questa conversazione: {grams} grammi di CO₂ equivalente. Mostra dettaglio.",
+      "ariaLabelToday": "Impronta di carbonio stimata di questa conversazione oggi: {grams} grammi di CO₂ equivalente. Mostra dettaglio.",
+      "title": "Questa conversazione (stimato)",
+      "today": "Oggi",
+      "total": "Tutto il periodo",
+      "measured": "Da conteggi di token segnalati",
+      "estimated": "Ricalcolato da messaggi meno recenti",
+      "lastRequest": "Ultima richiesta",
+      "disclaimer": "Stime per richiesta da conteggi di token segnalati o approssimati, utilizzando medie pubblicate e assunzioni v{version}. I messaggi meno recenti sono ricalcolati dal testo memorizzato e dal modello attuale della conversazione. Non è una misurazione."
+    }
   }
 }

@@ -2408,7 +2408,8 @@
     "regionDefault": "Defo",
     "modelRow": "{requests} demann · {grams} g",
     "disclosure": "Estimasyon sou baz sipozisyon v{version} · depi {since} · sèlman pou chat estanda (pa konte ajan ak repons baz konesans).",
-    "reset": "Reyajiste estatistik itilizasyon"
+    "reset": "Reyajiste estatistik itilizasyon",
+    "estimatedPortion": "Gen ladan apeprè {grams} g CO₂e ({requests} demann) ki estime soti nan konvèsasyon avan siveyans — rekalkile sou tèks mesaj sove, pa sou kantite jèton mezire."
   },
   "extraction": {
     "toggleLabel": "Extra done estriktire",
@@ -2904,7 +2905,37 @@
       "autoCheckHint": "Apre ou fin ekstrè done soti nan foto oswa dokiman, verifye otomatikman kalite nouvo ranje yo",
       "checkingNewRows": "Ap verifye nouvo ranje yo pou pwoblèm kalite…",
       "ingestCheckFailed": "Vérifikasyon kalite otomatik echwe ({message}) — ou ka lanse li manyèlman ak Evalye kalite.",
-      "assessedIngest": "Nouvo ranje ki ajoute"
+      "assessedIngest": "Nouvo ranje ki ajoute",
+      "transpose": "Transpoze",
+      "transposeAxisColumn": "Non",
+      "transposeSuggestion": "Tab sa a sanble li transpoze: liy yo se atribi epi kolòn yo se atik yo. Vle chanje l pou chak atik vin tounen yon liy epi chak atribi vin yon kolòn ak tip?",
+      "transposedTable": "Liy ak kolòn transpoze",
+      "columns": "Kolòn",
+      "columnsHidden": "Kolòn ({count} kache)",
+      "showAllColumns": "Montre tout",
+      "chartScatter": "Dispèsyon (x kont y)",
+      "chartPivot": "Tab pivote",
+      "xColumn": "Kolòn X",
+      "yColumn": "Kolòn Y",
+      "splitByColumn": "Separe pa",
+      "splitNone": "Pa gen separasyon",
+      "pivotValueColumns": "Kolòn valè",
+      "aggMin": "Pi piti",
+      "aggMax": "Pi gwo",
+      "aggMedian": "Medyàn",
+      "chartSeriesTruncated": "Ap montre {max} seri ki pi wo yo",
+      "chartPointsTruncated": "Ap montre {max} pwen echantiyone",
+      "chartScatterAria": "Graf dispèsyon {x} kont {y}",
+      "pivotTableAria": "Tab pivote gwoupe pa {column}",
+      "schemaFormula": "Fòmil",
+      "schemaFormulaPlaceholder": "egzanp: [Ka] / [Popilasyon] * 1000",
+      "schemaFormulaHint": "Chan kalkile: refere lòt chan kòm [Non]; sipòte + - * / %, parantèz, epi round, abs, min, max. Valè yo ap mete ajou otomatikman e ou pa ka modifye dirèkteman.",
+      "schemaFormulaSyntaxError": "Fòmil pa valab",
+      "schemaFormulaUnknownRef": "Chan enkoni: {ref}",
+      "schemaFormulaArityError": "Move kantite agiman pou {fn}",
+      "schemaFormulaCycleError": "Referans sikilè ant fòmil yo",
+      "derivedColumnTitle": "Kalkile: {formula}",
+      "derivedFrom": "Kalkile soti nan {formula}"
     },
     "map": {
       "emptyTitle": "Mete done ou sou yon kat",
@@ -3139,5 +3170,43 @@
     "deselectAll": "Deklike tout",
     "autoAddLabel": "Ajoute nouvo modèl otomatikman",
     "autoAddDescription": "Depwaman modèl yo ajoute pita nan kont sa a ap parèt otomatikman. Modèl ki pa chwazi yo ap rete eskli."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Ti enpak",
+      "moderate": "Enpak modere",
+      "high": "Gwo enpak"
+    },
+    "tierTooltip": "Enpak anèji relatif pa demann, estime dapre gwosè modèl la. Se estimasyon ki baze sou mwayèn pibliye ak sipozisyon v{version} — pa mezi reyèl.",
+    "typicalRequest": "~{grams} g CO₂e pa demann tipik",
+    "typicalRequestTooltip": "Estimasyon apwoksimatif pou chak demann tipik (apre 1,000 siy + 500 siy repons), sòti nan mwayèn pibliye ak sipozisyon v{version}. Reyèl enpak depann de longè konvèsasyon, paramèt, ak rejyon kote l ap òspite.",
+    "activities": {
+      "netflixHd": "Netflix HD an difizyon",
+      "zoomCall": "Apèl Zoom (kamera limen)",
+      "webBrowsing": "Navige sou entènèt",
+      "spotifyAudio": "Spotify odyo"
+    },
+    "equivalents": {
+      "title": "≈ menm kabòn ak",
+      "note": "Konparezon menm nivo kabòn ak anprint pou chak èdtan sèvis sa yo — se chif apwoksimatif, menm jan ak tout estimasyon isi a."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Enpak kabòn estime pou konvèsasyon sa a: {grams} gram CO₂ ekivalan. Montre detay yo.",
+      "ariaLabelToday": "Enpak kabòn estime pou konvèsasyon sa a jodi a: {grams} gram CO₂ ekivalan. Montre detay yo.",
+      "title": "Konvèsasyon sa a (estimasyon)",
+      "today": "Jodi a",
+      "total": "Tout tan",
+      "measured": "Soti nan kantite jèton rapòte",
+      "estimated": "Rekalkile soti nan ansyen mesaj yo",
+      "lastRequest": "Dènye demann lan",
+      "disclaimer": "Estimasyon pa demann yo baze sou kantite jèton rapòte oswa apwoksime, ak mwayèn ak sipozisyon pibliye v{version}. Mesaj ki pi ansyen yo rekalkile soti nan tèks sove ak modèl aktyèl konvèsasyon an. Sa pa yon mezi."
+    }
   }
 }

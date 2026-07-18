@@ -2408,7 +2408,8 @@
     "regionDefault": "پرمختښتی",
     "modelRow": "{requests} ځله · {grams} ګرامه",
     "disclosure": "اټکلونه د فرضیو پر بنسټ v{version} · له {since} راهیسې · یوازې معیاري چټ (ایجنټونه او د پوهې-بنسټ ځوابونه نه شمېرل کېږي).",
-    "reset": "د کارونې احصائیې بیا تنظیم کړئ"
+    "reset": "د کارونې احصائیې بیا تنظیم کړئ",
+    "estimatedPortion": "شاوخوا ~{grams} g CO₂e ({requests} غوښتنې) پکې شامل دي چې له خبرو اترو نه اټکل شوي چې د ثبت له پیل مخکې دي—له ذخیره شوي پیغامونو نه شاته حساب شوي، د ټوکن شمېرې نه دي اندازه شوي."
   },
   "extraction": {
     "toggleLabel": "جوړښت لرونکي معلومات راوباسئ",
@@ -2904,7 +2905,37 @@
       "autoCheckHint": "له عکسونو یا اسنادو څخه د معلوماتو کډولو وروسته، نوي قطارونه اتومات کیفیت چیک ته وسپارئ",
       "checkingNewRows": "نوي اضافه شوي قطارونه د کیفیت لپاره ارزول کېږي…",
       "ingestCheckFailed": "اتومات کیفیت چیک ناکام شو ({message}) — تاسې کولای شئ دا یي د Assess quality سره دستی ترسره کړئ.",
-      "assessedIngest": "نوي اضافه شوي قطارونه"
+      "assessedIngest": "نوي اضافه شوي قطارونه",
+      "transpose": "بدلونول",
+      "transposeAxisColumn": "نوم",
+      "transposeSuggestion": "دا جدول ښايي بدل شوی وي: قطارونه ځانګړتیاوې او ستنې توکي دي. غواړئ دا واړوئ چې هر توکی یو قطار شي او هره ځانګړتیا ټایپ شوې ستنه وګرځي؟",
+      "transposedTable": "قطارونه او ستنې بدل شوې",
+      "columns": "ستنې",
+      "columnsHidden": "ستنې ({count} پټې شوې)",
+      "showAllColumns": "ټولې وښایئ",
+      "chartScatter": "سکېټر (x vs y)",
+      "chartPivot": "Pivot جدول",
+      "xColumn": "X ستنه",
+      "yColumn": "Y ستنه",
+      "splitByColumn": "تقسیم په",
+      "splitNone": "تقسیم نشته",
+      "pivotValueColumns": "د ارزښت ستنې",
+      "aggMin": "تر ټولو لږ",
+      "aggMax": "تر ټولو زیات",
+      "aggMedian": "منځنی",
+      "chartSeriesTruncated": "یوازې تر ټولو لوړ {max} لړۍ ښودل شوې",
+      "chartPointsTruncated": "یوازې {max} نمونې ټکي ښودل شوي",
+      "chartScatterAria": "د {x} او {y} ترمنځ سکېټر پلټ",
+      "pivotTableAria": "Pivot جدول د {column} پراساس ګروپ شوی دی",
+      "schemaFormula": "فورمول",
+      "schemaFormulaPlaceholder": "لکه [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "محاسبه شوې برخه: نورې برخې د [Name] په بڼه حواله کړئ؛ د + - * / %، ګردونه، قوسونه، round، abs، min، max ملاتړ لري. ارزښتونه په اوتومات ډول تازه کېږي او نشي ایډیټ کېدای.",
+      "schemaFormulaSyntaxError": "ناسم فورمول",
+      "schemaFormulaUnknownRef": "نامعلومه برخه: {ref}",
+      "schemaFormulaArityError": "د {fn} لپاره ناسم شمېر ارګومېنټونه",
+      "schemaFormulaCycleError": "د فورمولونو ترمنځ حلقوي حواله",
+      "derivedColumnTitle": "محاسبه شوی: {formula}",
+      "derivedFrom": "د {formula} نه حساب شوی"
     },
     "map": {
       "emptyTitle": "خپل معلومات نقشې ته واچوئ",
@@ -3139,5 +3170,43 @@
     "deselectAll": "ټول غیرفعال کړئ",
     "autoAddLabel": "نوي ماډلونه په اوتومات ډول اضافه کړئ",
     "autoAddDescription": "دې حساب ته وروسته زیات شوي ماډلونه به په اوتومات ډول ښکاره شي. نه ټاکل شوي ماډلونه به نه ښکاري."
+  },
+  "emissions": {
+    "tier": {
+      "low": "ټيټ اغېز",
+      "moderate": "منځنی اغېز",
+      "high": "لوړ اغېز"
+    },
+    "tierTooltip": "د هر غوښتنې نسبي انرژی اغېز، د ماډل د حجم له مخې اټکل شوی. دا اټکلونه پر منځنیو ارزښتونو او فرضیو ولاړ دي v{version} — دا حقیقي اندازه نه ده.",
+    "typicalRequest": "شاوخوا ~{grams} g CO₂e د هر عادي غوښتنې لپاره",
+    "typicalRequestTooltip": "د هر عادي غوښتنې تقریبي ارزونه (نږدې ۱,۰۰۰ پرامپټ او ۵۰۰ تکمیل ټوکنونه)، له خپاره شویو ارقامو او فرضیو څخه اخیستل شوې v{version}. حقیقي اغېز د خبرو اترو اوږدوالي، امستنو، او د کوربه سیمې سره تغیر کوي.",
+    "activities": {
+      "netflixHd": "Netflix HD سټریم",
+      "zoomCall": "Zoom زنګ (کامره روښانه)",
+      "webBrowsing": "ویب ګټه اخیستنه",
+      "spotifyAudio": "Spotify آډیو"
+    },
+    "equivalents": {
+      "title": "≈ د همدې کاربن سره برابره",
+      "note": "د همدې کاربن مقایسه د دغو سرویسونو د هر ساعت خپاره شويو ارزښتونو سره — دا هم تخمینې، حدودي شمېرې دي لکه نور اټکلونه."
+    },
+    "duration": {
+      "lessThanSecond": "<۱ ث",
+      "seconds": "{value} ث",
+      "minutes": "{value} دقیقې",
+      "hours": "{value} ساعته"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "د دې خبرې اترو د کاربن اټکلي خپرېدنه: {grams} ګرام CO₂ سره معادل. جزییات وښایئ.",
+      "ariaLabelToday": "نن د دې خبرې اترو د کاربن اټکلي خپرېدنه: {grams} ګرام CO₂ سره معادل. جزییات وښایئ.",
+      "title": "دا خبرې اترې (اټکلی)",
+      "today": "نن",
+      "total": "ټول وخت",
+      "measured": "د راپور شویو ټوکن شمېرې پراساس",
+      "estimated": "له زړو پیغامونو نه شاته حساب شوی",
+      "lastRequest": "وروستی غوښتنه",
+      "disclaimer": "د هرې غوښتنې اټکلي شمېرې د راپور شویو یا نږدې شویو ټوکن شمېرې پراساس، د خپرو شویو اوسطونو او فرضیاتو v{version} مطابق. زاړه پیغامونه له ذخیره شوي متن څخه د اوسني ماډل پراساس شاته حساب شوي. دا اندازه نه ده."
+    }
   }
 }

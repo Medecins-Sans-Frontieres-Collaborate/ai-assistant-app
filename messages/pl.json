@@ -2424,7 +2424,8 @@
     "regionDefault": "Domyślny",
     "modelRow": "{requests} żąd. · {grams} g",
     "disclosure": "Szacunki oparte na założeniach v{version} · od {since} · tylko standardowy chat (odpowiedzi agentów i bazy wiedzy nie są liczone).",
-    "reset": "Resetuj statystyki użycia"
+    "reset": "Resetuj statystyki użycia",
+    "estimatedPortion": "Obejmuje około {grams} g CO₂e ({requests} żądań) oszacowane z czatów sprzed uruchomienia śledzenia — wyliczone wstecznie z przechowywanego tekstu wiadomości, a nie zmierzonych liczby tokenów."
   },
   "extraction": {
     "toggleLabel": "Wyodrębnij dane strukturalne",
@@ -2920,7 +2921,37 @@
       "autoCheckHint": "Po wyodrębnieniu danych ze zdjęć lub dokumentów automatycznie sprawdzaj jakość nowych wierszy",
       "checkingNewRows": "Sprawdzanie nowo dodanych wierszy pod kątem problemów z jakością…",
       "ingestCheckFailed": "Automatyczna kontrola jakości nie powiodła się ({message}) — możesz uruchomić ją ręcznie przez \"Oceń jakość\".",
-      "assessedIngest": "Nowo dodane wiersze"
+      "assessedIngest": "Nowo dodane wiersze",
+      "transpose": "Transponuj",
+      "transposeAxisColumn": "Nazwa",
+      "transposeSuggestion": "Ta tabela wygląda na transponowaną: wiersze to atrybuty, a kolumny to elementy. Odwrócić ją, aby każdy element był wierszem, a każdy atrybut stał się kolumną z określonym typem?",
+      "transposedTable": "Transponowane wiersze i kolumny",
+      "columns": "Kolumny",
+      "columnsHidden": "Kolumny (ukrytych: {count})",
+      "showAllColumns": "Pokaż wszystkie",
+      "chartScatter": "Wykres punktowy (x vs y)",
+      "chartPivot": "Tabela przestawna",
+      "xColumn": "Kolumna X",
+      "yColumn": "Kolumna Y",
+      "splitByColumn": "Podziel według",
+      "splitNone": "Bez podziału",
+      "pivotValueColumns": "Kolumny wartości",
+      "aggMin": "Min",
+      "aggMax": "Maks",
+      "aggMedian": "Mediana",
+      "chartSeriesTruncated": "Wyświetlanie {max} najlepszych serii",
+      "chartPointsTruncated": "Wyświetlanie {max} losowych punktów",
+      "chartScatterAria": "Wykres punktowy {x} względem {y}",
+      "pivotTableAria": "Tabela przestawna pogrupowana według {column}",
+      "schemaFormula": "Formuła",
+      "schemaFormulaPlaceholder": "np. [Przypadki] / [Populacja] * 1000",
+      "schemaFormulaHint": "Pole obliczeniowe: odwołuj się do innych pól jako [Nazwa]; obsługuje + - * / %, nawiasy oraz round, abs, min, max. Wartości aktualizują się automatycznie i nie można ich edytować bezpośrednio.",
+      "schemaFormulaSyntaxError": "Nieprawidłowa formuła",
+      "schemaFormulaUnknownRef": "Nieznane pole: {ref}",
+      "schemaFormulaArityError": "Błędna liczba argumentów dla {fn}",
+      "schemaFormulaCycleError": "Cykliczne odniesienie pomiędzy formułami",
+      "derivedColumnTitle": "Wyliczane: {formula}",
+      "derivedFrom": "Wyliczane z {formula}"
     },
     "map": {
       "emptyTitle": "Umieść swoje dane na mapie",
@@ -3155,5 +3186,43 @@
     "deselectAll": "Odznacz wszystko",
     "autoAddLabel": "Automatycznie dodawaj nowe modele",
     "autoAddDescription": "Wdrażane później modele będą pojawiać się automatycznie na tym koncie. Niezaznaczone modele pozostaną wykluczone."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Niższy wpływ",
+      "moderate": "Umiarkowany wpływ",
+      "high": "Wyższy wpływ"
+    },
+    "tierTooltip": "Względny wpływ energetyczny na żądanie, szacowany na podstawie rozmiaru modelu. To są oszacowania oparte na opublikowanych średnich i założeniach v{version} — nie pomiary.",
+    "typicalRequest": "~{grams} g CO₂e na typowe żądanie",
+    "typicalRequestTooltip": "Przybliżone zużycie na jedno typowe żądanie (około 1 000 tokenów promptu i 500 tokenów odpowiedzi), wyliczone na podstawie opublikowanych średnich i założeń v{version}. Faktyczny wpływ zależy od długości rozmowy, ustawień i regionu hostingu.",
+    "activities": {
+      "netflixHd": "Streaming Netflix HD",
+      "zoomCall": "Rozmowa Zoom (kamera włączona)",
+      "webBrowsing": "Przeglądanie stron WWW",
+      "spotifyAudio": "Spotify – audio"
+    },
+    "equivalents": {
+      "title": "≈ tyle samo CO₂ co",
+      "note": "Porównanie emisji węglowej z opublikowanym śladem godzinowym tych usług — to szacunkowe, przybliżone wartości, podobnie jak wszystkie tutaj oszacowania."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Szacowany ślad węglowy tej rozmowy: {grams} gramów CO₂e. Pokaż szczegóły.",
+      "ariaLabelToday": "Szacowany ślad węglowy tej rozmowy dzisiaj: {grams} gramów CO₂e. Pokaż szczegóły.",
+      "title": "Ta rozmowa (szacunek)",
+      "today": "Dzisiaj",
+      "total": "Cały okres",
+      "measured": "Na podstawie zgłoszonych liczby tokenów",
+      "estimated": "Wyliczone wstecznie ze starszych wiadomości",
+      "lastRequest": "Ostatnie żądanie",
+      "disclaimer": "Szacunkowe wartości na żądanie na podstawie zgłoszonych lub przybliżonych liczby tokenów, z wykorzystaniem opublikowanych średnich i założeń v{version}. Starsze wiadomości są wyliczane wstecznie na podstawie przechowywanego tekstu i aktualnego modelu konwersacji. Nie jest to pomiar."
+    }
   }
 }

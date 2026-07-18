@@ -2408,7 +2408,8 @@
     "regionDefault": "Cuusa",
     "modelRow": "{requests} ñaɗɗo · {grams} g",
     "disclosure": "Naatal ɗi accii luungal version {version} · jokkondir {since} · chat tenor (agent e annditorde knowledge-base waawaaniima).",
-    "reset": "Fannu jumɗe jokkol"
+    "reset": "Fannu jumɗe jokkol",
+    "estimatedPortion": "Nana veŋtani ~{grams} g CO₂e ({requests} njiytorde) hesɗinira e konngol chaten ɓen jokkude ɓuri taggi — hesɗinira e binndi ndiyam, teeŋtinde njoɓdi token ɓe wonani."
   },
   "extraction": {
     "toggleLabel": "Fowndo ɗiɗi e jamfa",
@@ -2904,7 +2905,37 @@
       "autoCheckHint": "Nde joddi ndiyam e photo walla dokkitaŋe, ceertu ɗaɗndu mumtorde bonannde baɗi ladde mumtuɗe",
       "checkingNewRows": "Ɗaɗndu wonande ladde mumtuɗe e mumtorde bonannde...",
       "ingestCheckFailed": "Ɗaɗndu mumtorde bonannde waɗi fofndi ({message}) — aɗa waawi lannda ka hande e Assess quality.",
-      "assessedIngest": "Ladde mumtuɗe"
+      "assessedIngest": "Ladde mumtuɗe",
+      "transpose": "Waytu",
+      "transposeAxisColumn": "Innde",
+      "transposeSuggestion": "Tabbere nde waytu: laylayji ɗiɗi e laataa, e soowdi laa nda ko laylayji, tagi bernde si laataa ko laylayji ɗiɗi, e feere ɓe tagi laa.",
+      "transposedTable": "Waytude laataa e laylayji",
+      "columns": "Laa",
+      "columnsHidden": "Laa ({{count}} ɓe dowɗi)",
+      "showAllColumns": "Hollu fow",
+      "chartScatter": "Diagrama scatter (x e y)",
+      "chartPivot": "Tabbere Pivot",
+      "xColumn": "Laa X",
+      "yColumn": "Laa Y",
+      "splitByColumn": "Faggita e",
+      "splitNone": "Faggita alaa",
+      "pivotValueColumns": "Laa jiite",
+      "aggMin": "Min",
+      "aggMax": "Max",
+      "aggMedian": "Median",
+      "chartSeriesTruncated": "Naɗɗo e cuɓi {max} series",
+      "chartPointsTruncated": "Naɗɗo {max} pointi suɓtu",
+      "chartScatterAria": "Scatter plot e {x} e {y}",
+      "pivotTableAria": "Pivot tabbere dow leydi {column}",
+      "schemaFormula": "Formula",
+      "schemaFormulaPlaceholder": "misal: [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Dogiral hesere: sosde laa goɗɗe e [Innde]; naatnude + - * / %, parenthèse, e round, abs, min, max. Keewal majju e keɓe waawan sakkude waɗi.",
+      "schemaFormulaSyntaxError": "Formula wowli",
+      "schemaFormulaUnknownRef": "Laa anndaaka: {ref}",
+      "schemaFormulaArityError": "Lakka argumente kala e {fn}",
+      "schemaFormulaCycleError": "Waylu dogiral majji",
+      "derivedColumnTitle": "Hesere: {formula}",
+      "derivedFrom": "Hesere e {formula}"
     },
     "map": {
       "emptyTitle": "Waɗtu ndiyam maa e kartal",
@@ -3139,5 +3170,43 @@
     "deselectAll": "Momtu fofu",
     "autoAddLabel": "Moodelji kesol aawtu-ɗam",
     "autoAddDescription": "Moodelji jayngol woni accaunt ngol ɗo mbaɗi so tawii ɗaawaani. Moodelji moomtii moƴƴaani."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Fiɗɗirde ndiyam",
+      "moderate": "Fiɗɗirde middel",
+      "high": "Fiɗɗirde balɗe"
+    },
+    "tierTooltip": "Fiɗɗirde kornoore leydi goɗɗe ndiyam, sakketee e gese model. Wadde ko sabu nalmaare makko e laawol ndokkude, version {version}, noon laawde.",
+    "typicalRequest": "~{grams} g CO₂e e waawde goɗɗe",
+    "typicalRequestTooltip": "Toppere keewal waawde e request goɗɗe (ka 1.000 tasriinu e 500 taggi), sabu nalmaare tawii version {version}. Fiɗɗirde makko naatnu e dawirde yillere, settings, e laamu hosting.",
+    "activities": {
+      "netflixHd": "Nana Netflix HD",
+      "zoomCall": "Zoom call (kamira fiɗɗi)",
+      "webBrowsing": "Seŋto web",
+      "spotifyAudio": "Spotify audio"
+    },
+    "equivalents": {
+      "title": "≈ Ɲande karbo fayi",
+      "note": "Teeŋtere karbo fayi e talli jamdi-jamnde iri waawde, toosani e jamdi-jamnde gese sabu noon laawde."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Sakkatol karbo fayi e ngir kokkorde nde: {grams} gram CO₂ yiitinde. Hollu ciftital.",
+      "ariaLabelToday": "Sakkatol karbo fayi e ngir kokkorde nde hannde: {grams} gram CO₂ yiitinde. Hollu ciftital.",
+      "title": "Kokkorde nde (sakkita)",
+      "today": "Hannde",
+      "total": "Keewal fow",
+      "measured": "Teeŋtinirɗe e njoɓdi token ɓe",
+      "estimated": "Hesɗinira e ƴeewte yimɓe baɗte",
+      "lastRequest": "Njiytorde ɗiɗal",
+      "disclaimer": "Hesɗinɗe kala njiytorde ena POOF njoɓdi token ɓe teeŋtinira walla ƴeewtora, jogi e cakkitiiwol ɓuri jeyɗaal e juumre v{version}. Yimɓe baɗte hesɗinira e binndi ndiyam e model jokkol e jawdi. Teeŋtinirde wonani."
+    }
   }
 }

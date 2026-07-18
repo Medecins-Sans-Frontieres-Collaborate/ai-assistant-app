@@ -2408,7 +2408,8 @@
     "regionDefault": "Default",
     "modelRow": "{requests} bisabwe · {grams} g",
     "disclosure": "Imibare ishingiye ku byibazwa v{version} · kuva {since} · gusa ku biganiro bisanzwe (ibisubizo by'abakozi n'ibiri muri knowledge-base ntibyabarwamo).",
-    "reset": "Subiza imibare ya stats ku ntangiriro"
+    "reset": "Subiza imibare ya stats ku ntangiriro",
+    "estimatedPortion": "Birimo hafi {grams} g za CO₂e ({requests} ibisabwa) byagereranijwe kuva mu biganiro byabaye mbere y’itangira gukurikirana — byabaruwe kongera gusubiramo inyandiko ibitse, si ku mubare w’inyuguti wapimwe."
   },
   "extraction": {
     "toggleLabel": "Sohora amakuru ateguye",
@@ -2904,7 +2905,37 @@
       "autoCheckHint": "Nyuma yo gukura amakuru kuri foto cyangwa inyandiko, ubugenzuzi bw’ubuziranenge bukorwa ku mirongo mishya mu buryo bwikora",
       "checkingNewRows": "Kugenzura imirongo mishya yongereweho ibibazo by’ubuziranenge…",
       "ingestCheckFailed": "Ubugenzuzi bw’ubuziranenge bwikora ntibwakozwe ({message}) — ushobora kubikora ubikunze ukoresheje Assess quality.",
-      "assessedIngest": "Imirongo mishya yongeweho"
+      "assessedIngest": "Imirongo mishya yongeweho",
+      "transpose": "Guhinduranya",
+      "transposeAxisColumn": "Izina",
+      "transposeSuggestion": "Iyi mbonerahamwe isa n’iyahinduranyije: imirongo ni ibiranga, inkingi ni ibintu. Ushaka kubihinduranya kugira ngo buri kintu kibe umurongo n'ikimenyetso cyose kibe inkingi ifite ubwoko?",
+      "transposedTable": "Imirongo n’inkingi byahinduranyijwe",
+      "columns": "Inkingi",
+      "columnsHidden": "Inkingi ({count} zihishe)",
+      "showAllColumns": "Erekana zose",
+      "chartScatter": "Scatter (x vs y)",
+      "chartPivot": "Pivot table",
+      "xColumn": "Inkingi ya X",
+      "yColumn": "Inkingi ya Y",
+      "splitByColumn": "Tandukanya hakurikijwe",
+      "splitNone": "Nta gutandukanya",
+      "pivotValueColumns": "Inkingi z'agaciro",
+      "aggMin": "Ntoya",
+      "aggMax": "Nini",
+      "aggMedian": "Median",
+      "chartSeriesTruncated": "Berekanwe seriye {max} za mbere",
+      "chartPointsTruncated": "Berekanwe amanota {max} yatoranyijwe",
+      "chartScatterAria": "Scatter plot ya {x} ugereranyije na {y}",
+      "pivotTableAria": "Pivot table yagiye mu matsinda hakurikijwe {column}",
+      "schemaFormula": "Formula",
+      "schemaFormulaPlaceholder": "urugero: [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Ikibuga cyabazwe: vuga ibindi bisobanuro nka [Name]; byemera + - * / %, amakarita ya parantèse, n'imikorere round, abs, min, max. Agaciro gahita kavugururwa kandi ntikagomba guhindurwa intoki.",
+      "schemaFormulaSyntaxError": "Formula itariyo",
+      "schemaFormulaUnknownRef": "Ikibuga kitazwi: {ref}",
+      "schemaFormulaArityError": "Umubare utariwo w'ingingo kuri {fn}",
+      "schemaFormulaCycleError": "Hari kuzunguruka hagati ya za formula",
+      "derivedColumnTitle": "Cyabazwe: {formula}",
+      "derivedFrom": "Byavuye muri {formula}"
     },
     "map": {
       "emptyTitle": "Shyira amakuru yawe kuri karita",
@@ -3139,5 +3170,43 @@
     "deselectAll": "Hagarika guhitamo byose",
     "autoAddLabel": "Ongeramo imiterere nshya mu buryo bwikora",
     "autoAddDescription": "Imiterere izongerwa muri iyi konti nyuma izahita igaragara. Imiterere itanditswe izaguma ivanwemo."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Ingaruka ntoya",
+      "moderate": "Ingaruka iri hagati",
+      "high": "Ingaruka nini"
+    },
+    "tierTooltip": "Ingaruka ku ngufu ishingiye kuri buri busabe, ikenarwa hashingiwe ku bunini bwa model. Ibi ni igipimo gishingiye ku bipimo rusange byatangajwe n'ibitekerezo v{version} — si ibipimo byafashwe.",
+    "typicalRequest": "~{grams} g CO₂e kuri buri busabe busanzwe",
+    "typicalRequestTooltip": "Igipimo cy'ingaruka kuri buri busabe busanzwe (hafi 1,000 prompt na 500 completion tokens), gishingiye ku bipimo rusange byatangajwe n'ibitekerezo v{version}. Ingaruka nyirizina iratandukana bitewe n'uburebure bw'ikiganiro, imiterere, n'akarere bibarizwamo.",
+    "activities": {
+      "netflixHd": "Kureba Netflix HD",
+      "zoomCall": "Guhamagara kuri Zoom (kamera iri kuri)",
+      "webBrowsing": "Gusura imbuga",
+      "spotifyAudio": "Spotify audio"
+    },
+    "equivalents": {
+      "title": "≈ ihwanye n'umwuka wa karubone nk'",
+      "note": "Igereranya rihwanye n'umwuka wa karubone hashingiwe ku bipimo by'amasaha ku masaha ya serivisi, ni imibare y'inyongera, nk'ibindi bipimo byose biri hano."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Igipimo cy'ingaruka za karubone y'iki kiganiro: garama {grams} za CO₂ ekivalenti. Erekana ibisobanuro.",
+      "ariaLabelToday": "Igipimo cy'ingaruka za karubone y'iki kiganiro uyu munsi: garama {grams} za CO₂ ekivalenti. Erekana ibisobanuro.",
+      "title": "Iki kiganiro (gipimwe approximately)",
+      "today": "Uyu munsi",
+      "total": "Igihe cyose",
+      "measured": "Bishingiye ku mubare w’inyuguti watanzwe",
+      "estimated": "Byabaruwe kongera gusubiramo ubutumwa bwa kera",
+      "lastRequest": "Gusaba guheruka",
+      "disclaimer": "Iyi mibare ni ukugerageza gukoresheje imibare y’inyuguti zatanzwe cyangwa zagereranijwe, hakoreshejwe impuzandengo n’ibyemejwe byasohotse v{version}. Ubutumwa bwa kera bwabaruwe kongera gusubiramo inyandiko ibitse na model ikoreshwa ubu mu kiganiro. Sio igipimo nyacyo."
+    }
   }
 }

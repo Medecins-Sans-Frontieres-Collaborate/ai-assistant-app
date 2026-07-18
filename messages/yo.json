@@ -2408,7 +2408,8 @@
     "regionDefault": "Aiyipada",
     "modelRow": "{requests} ìbéèrè · {grams} g",
     "disclosure": "Ìṣirò dá lórí àfọ̀mọ́sùn v{version} · látìgbà {since} · ìbáṣepọ̀ àkọ́tún ṣoṣo (àwọn agent àti ìdáhùn knowledge-base kì í ṣe kó).",
-    "reset": "Tún àkọsílẹ̀ lilo ṣe"
+    "reset": "Tún àkọsílẹ̀ lilo ṣe",
+    "estimatedPortion": "Ó ní àfọ̀mọ̀ ~{grams} g CO₂e ({requests} ìbéèrè) tí a ṣe àfìmọ̀ látinú ìjíròrò tó ṣẹ̀ṣẹ̀ ṣáájú ìtọ́pa — a tún ṣe àfìmọ̀ padà láti ọrọ ìfiránṣẹ́ tí a fipamọ́, kì í ṣe iye àmi tí a gbéjọro."
   },
   "extraction": {
     "toggleLabel": "Yọ data eto jade",
@@ -2904,7 +2905,37 @@
       "autoCheckHint": "Lẹ́yìn tí a bá jáde data láti fọ́tò tàbí àkọsílẹ̀, dajudaju máa ṣiṣẹ́ ṣàyẹ̀wò didara lórí àwọn ìlà tuntun",
       "checkingNewRows": "N ṣàyẹ̀wò ìlà tuntun fún ìṣòro didara...",
       "ingestCheckFailed": "Ṣàyẹ̀wò didara laifọwọyi kuna ({message}) — o lè ṣiṣẹ́ rẹ́ ní ọwọ́ pẹ̀lú Ṣàyẹ̀wò didara.",
-      "assessedIngest": "Ìlà tuntun to kún"
+      "assessedIngest": "Ìlà tuntun to kún",
+      "transpose": "Ṣe iyipo",
+      "transposeAxisColumn": "Orukọ",
+      "transposeSuggestion": "Ìtòsí yìí dà bí ẹni pé wọ́n ti yi i padà: àwọn ìlà ni àkọsílẹ̀, àwọn kòlàmù ni àwọn ohun. Ṣe fẹ́ yí i padà ki ọkọọkan ohun di ìlà, kò gbogbo àkọsílẹ̀ di kòlàmù pẹ̀lú irú wọn?",
+      "transposedTable": "Ìyípo àwọn ìlà àti kòlàmù",
+      "columns": "Àwọn kòlàmù",
+      "columnsHidden": "Àwọn kòlàmù ({count} tìpa mọ́)",
+      "showAllColumns": "Fi gbogbo han",
+      "chartScatter": "Ìtànkálẹ̀ (x sí y)",
+      "chartPivot": "Tábìlì pivot",
+      "xColumn": "Kòlàmù X",
+      "yColumn": "Kòlàmù Y",
+      "splitByColumn": "Pín gẹ́gẹ́ bí",
+      "splitNone": "Kò sí ipin",
+      "pivotValueColumns": "Àwọn kòlàmù iye",
+      "aggMin": "Kékèké",
+      "aggMax": "Tó pọ̀ jù",
+      "aggMedian": "Àrìn",
+      "chartSeriesTruncated": "Fífi àwọn àfihàn {max} tó ga jù lọ hàn",
+      "chartPointsTruncated": "Fífi {max} àyọkà àṣàyàn hàn",
+      "chartScatterAria": "Gbólóhùn ìtànkálẹ̀ {x} sí {y}",
+      "pivotTableAria": "Tábìlì pivot tó dá lórí {column}",
+      "schemaFormula": "Fọ́ọ́mùlà",
+      "schemaFormulaPlaceholder": "àpẹẹrẹ: [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Akọ́ àyẹ̀wò: tọ́kasí àwọn apá míì bí [Orukọ]; gba + - * / %, parentheses, ati round, abs, min, max. Àwọn iye yìí máa yí padà laifọwọyi, kì kò le ṣàtúnṣe taara.",
+      "schemaFormulaSyntaxError": "Fọ́ọ́mùlà búburú",
+      "schemaFormulaUnknownRef": "Apá aimọ̀: {ref}",
+      "schemaFormulaArityError": "Ìpè aṣiṣe opolopo si {fn}",
+      "schemaFormulaCycleError": "Ìtọ́kasí àyíká láàrín àwọn fọ́ọ́mùlà",
+      "derivedColumnTitle": "Sísàgbéyẹ̀wò: {formula}",
+      "derivedFrom": "Àbájáde láti {formula}"
     },
     "map": {
       "emptyTitle": "Fi data rẹ́ sí maapu",
@@ -3139,5 +3170,43 @@
     "deselectAll": "Yọ gbogbo yàn",
     "autoAddLabel": "Ṣafikun àwòrán tuntun laifọwọyi",
     "autoAddDescription": "Awọn imupese awoṣe tí a ṣafikun sí àkọọlẹ yìí lẹ́yìn náà máa farahàn laifọwọyi. Awọn awoṣe tí kò ní àmí akanṣe máa wa níta."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Ìká tí kò pọ̀",
+      "moderate": "Ìká àárín",
+      "high": "Ìká tó pọ̀"
+    },
+    "tierTooltip": "Ìká agbára fún gbogbo ìlò kọọkan, sísàtúnwò láti ipò àwọ̀n àkópọ̀ àyèje. Ìyí jẹ́ àfihàn gẹ́gẹ́ bí apapọ àti ìròyìn, v{version} — kì í ṣe ìmúlòlùfẹ̀.",
+    "typicalRequest": "~{grams} g CO₂e fún ìbéèrè àfojúsùn kan",
+    "typicalRequestTooltip": "Ìṣirò apapọ fún ìbéèrè àfojúsùn kan (àwọn tóókùnù prompt ~1,000 àti completion 500), tí a kà láti apapọ àfojúsùn àti ìròyìn, v{version}. Ìká gidi le yàtọ̀ gẹ́gẹ́ bí pípẹ̀ ijiroro, ìtòsi, àti agbègbè tó n gbà.",
+    "activities": {
+      "netflixHd": "Sàmúlò Netflix HD",
+      "zoomCall": "Pè nípa Zoom (kámẹ́rà wà lórí)",
+      "webBrowsing": "Ìbòmíṣìn lórí Ayelujara",
+      "spotifyAudio": "Gbọ orin Spotify"
+    },
+    "equivalents": {
+      "title": "≈ iye amúnibajẹ carbon tó dọgba",
+      "note": "Ìfíwéwe carbon pẹ̀lú àpẹẹrẹ ìṣirò ti iṣẹ́ àkọsílẹ̀ wákàtí kan—ẹ̀sìn gbígbóná, fífi iye àfojúsùn yìí ṣe àfọwọ̀ṣà."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} wákàtí"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Àfihàn carbon tó wulẹ̀ jẹ́ fún ìjíròrò yìí: {grams} giramu ti CO₂ tó dọ́gba. Fi àyẹ̀wò han.",
+      "ariaLabelToday": "Àfihàn carbon tó wulẹ̀ jẹ́ lónìí fún ìjíròrò yìí: {grams} giramu ti CO₂ tó dọ́gba. Fi àyẹ̀wò han.",
+      "title": "Ìjíròrò yìí (àfihàn àfojúsùn)",
+      "today": "Lónìí",
+      "total": "Ní gbogbo àkókò",
+      "measured": "Láti iye àmi tí a gbéjọro",
+      "estimated": "A tún ṣe àfìmọ̀ padà láti àwọn ìfiránṣẹ́ àtijọ́",
+      "lastRequest": "Ìbéèrè tó kẹ́yìn",
+      "disclaimer": "Ìṣírò kọọkan da lórí iye àmi tí a gbéjọro tàbí àfojúsùn, pẹ̀lú àdàkọ àti àfojúsùn tí a tẹ̀jáde v{version}. Àwọn ìfiránṣẹ́ àtijọ́ ni a tún ṣe àfìmọ̀ padà láti inu ọrọ tí a fipamọ́ àti àwǹn àpẹrẹ rẹ̀ yìí. Kì í ṣe ìwádìí gangan."
+    }
   }
 }

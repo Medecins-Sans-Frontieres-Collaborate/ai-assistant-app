@@ -2424,7 +2424,8 @@
     "regionDefault": "Standaard",
     "modelRow": "{requests} ver. · {grams} g",
     "disclosure": "Schattingen gebaseerd op aannames v{version} · sinds {since} · alleen standaardchat (agents en kennisbankantwoorden niet meegeteld).",
-    "reset": "Gebruikstatistieken resetten"
+    "reset": "Gebruikstatistieken resetten",
+    "estimatedPortion": "Inclusief ~{grams} g CO₂e ({requests} verzoeken) geraamd uit chats van vóór tracking — terugberekend uit opgeslagen berichttekst, niet uit gemeten tokenaantallen."
   },
   "extraction": {
     "toggleLabel": "Gestructureerde gegevens extraheren",
@@ -2920,7 +2921,37 @@
       "autoCheckHint": "Na het extraheren van gegevens uit foto's of documenten automatisch een kwaliteitscontrole uitvoeren op de nieuwe rijen",
       "checkingNewRows": "Nieuwe rijen worden gecontroleerd op kwaliteitsproblemen…",
       "ingestCheckFailed": "De automatische kwaliteitscontrole is mislukt ({message}) — u kunt deze handmatig uitvoeren met 'Kwaliteit beoordelen'.",
-      "assessedIngest": "Nieuw toegevoegde rijen"
+      "assessedIngest": "Nieuw toegevoegde rijen",
+      "transpose": "Transponeren",
+      "transposeAxisColumn": "Naam",
+      "transposeSuggestion": "Deze tabel lijkt getransponeerd: rijen zijn attributen en kolommen zijn items. Wilt u het omdraaien, zodat elk item een rij wordt en elk attribuut een getypeerde kolom?",
+      "transposedTable": "Getransponeerde rijen en kolommen",
+      "columns": "Kolommen",
+      "columnsHidden": "Kolommen ({count} verborgen)",
+      "showAllColumns": "Alles weergeven",
+      "chartScatter": "Spreiding (x vs y)",
+      "chartPivot": "Draaitabel",
+      "xColumn": "X-kolom",
+      "yColumn": "Y-kolom",
+      "splitByColumn": "Splitsen op",
+      "splitNone": "Niet splitsen",
+      "pivotValueColumns": "Waarde kolommen",
+      "aggMin": "Min",
+      "aggMax": "Max",
+      "aggMedian": "Mediaan",
+      "chartSeriesTruncated": "Top {max} reeksen weergegeven",
+      "chartPointsTruncated": "{max} gesamplede punten weergegeven",
+      "chartScatterAria": "Spreidingsdiagram van {x} tegenover {y}",
+      "pivotTableAria": "Draaitabel gegroepeerd op {column}",
+      "schemaFormula": "Formule",
+      "schemaFormulaPlaceholder": "bijv. [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Berekend veld: verwijs naar andere velden als [Naam]; ondersteunt + - * / %, haakjes, en round, abs, min, max. Waarden worden automatisch bijgewerkt en kunnen niet direct worden bewerkt.",
+      "schemaFormulaSyntaxError": "Ongeldige formule",
+      "schemaFormulaUnknownRef": "Onbekend veld: {ref}",
+      "schemaFormulaArityError": "Onjuist aantal argumenten voor {fn}",
+      "schemaFormulaCycleError": "Circulaire verwijzing tussen formules",
+      "derivedColumnTitle": "Berekend: {formula}",
+      "derivedFrom": "Berekend uit {formula}"
     },
     "map": {
       "emptyTitle": "Plaats uw gegevens op een kaart",
@@ -3155,5 +3186,43 @@
     "deselectAll": "Alles deselecteren",
     "autoAddLabel": "Nieuwe modellen automatisch toevoegen",
     "autoAddDescription": "Modellen die later aan dit account worden toegevoegd, verschijnen automatisch. Niet-geselecteerde modellen blijven uitgesloten."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Lage impact",
+      "moderate": "Gemiddelde impact",
+      "high": "Hoge impact"
+    },
+    "tierTooltip": "Relatieve energie-impact per verzoek, geschat op basis van modelgrootte. Dit zijn schattingen op basis van gepubliceerde gemiddelden en aannames v{version} — geen metingen.",
+    "typicalRequest": "~{grams} g CO₂e per standaardverzoek",
+    "typicalRequestTooltip": "Ruime schatting per verzoek voor een typisch verzoek (ongeveer 1.000 prompt- en 500 completion-tokens), gebaseerd op gepubliceerde gemiddelden en aannames v{version}. De werkelijke impact varieert met de lengte van het gesprek, instellingen en hostingregio.",
+    "activities": {
+      "netflixHd": "Netflix HD streaming",
+      "zoomCall": "Zoom-gesprek (camera aan)",
+      "webBrowsing": "Webbrowsen",
+      "spotifyAudio": "Spotify-audio"
+    },
+    "equivalents": {
+      "title": "≈ hetzelfde koolstofverbruik als",
+      "note": "Vergelijking op basis van hetzelfde koolstofverbruik met gepubliceerde voetafdrukken per uur van deze diensten — grove schattingen, net zoals alle ramingen hier."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} u"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Geschatte koolstofvoetafdruk van dit gesprek: {grams} gram CO₂-equivalent. Toon uitsplitsing.",
+      "ariaLabelToday": "Geschatte koolstofvoetafdruk van dit gesprek vandaag: {grams} gram CO₂-equivalent. Toon uitsplitsing.",
+      "title": "Dit gesprek (geschat)",
+      "today": "Vandaag",
+      "total": "Altijd",
+      "measured": "Op basis van gerapporteerde tokenaantallen",
+      "estimated": "Terugberekend uit oudere berichten",
+      "lastRequest": "Laatste verzoek",
+      "disclaimer": "Raming per verzoek op basis van gerapporteerde of benaderde tokenaantallen, met gebruik van gepubliceerde gemiddelden en aannames v{version}. Oudere berichten zijn terugberekend vanuit opgeslagen tekst en het huidige model van het gesprek. Geen meting."
+    }
   }
 }

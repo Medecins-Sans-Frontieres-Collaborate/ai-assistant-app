@@ -2408,7 +2408,8 @@
     "regionDefault": "Na asali",
     "modelRow": "{requests} buk. · {grams} g",
     "disclosure": "Kiyasin ya dogara ne da hasashe v{version} · tun daga {since} · hira ta al'ada kawai (ba a lissafa amsoshin ‘agents’ da kundin sani ba).",
-    "reset": "Sake saiti kididdigar amfani"
+    "reset": "Sake saiti kididdigar amfani",
+    "estimatedPortion": "Ya haɗa da ~{grams} g CO₂e ({requests} buƙatu) da aka kimanta daga tattaunawa kafin fara bin diddigi — an sake lissafawa daga rubutun saƙonni da aka adana, ba daga adadin token da aka auna ba."
   },
   "extraction": {
     "toggleLabel": "Ciro bayani tsari",
@@ -2904,7 +2905,37 @@
       "autoCheckHint": "Bayan an cire bayanai daga hotuna ko takardu, aiwatar da duba inganci ta atomatik a kan sabbin satar",
       "checkingNewRows": "Ana dubawa ko sabbin satar sun dace da inganci…",
       "ingestCheckFailed": "An kasa aiwatar da duba inganci ta atomatik ({message}) — za ka iya aiwatar da shi da hannu ta amfani da Assess quality.",
-      "assessedIngest": "Sabbin satar da aka ƙara"
+      "assessedIngest": "Sabbin satar da aka ƙara",
+      "transpose": "Canja jeri da ginshiƙai",
+      "transposeAxisColumn": "Suna",
+      "transposeSuggestion": "Wannan tebur ɗin yana da alama an juya shi: jerin suna wakiltar siffofi, ginshiƙai kuwa abubuwa ne. A juya shi don kowanne abu ya zama jeri, kowanne siffa kuma ya zama ginshiƙi mai nau'i?",
+      "transposedTable": "An juya jerin da ginshiƙai",
+      "columns": "Ginshiƙai",
+      "columnsHidden": "Ginshiƙai ({count} an ɓoye)",
+      "showAllColumns": "Nuna duka",
+      "chartScatter": "Tabarmar warwatse (x da y)",
+      "chartPivot": "Teburin Pivot",
+      "xColumn": "Ginshiƙin X",
+      "yColumn": "Ginshiƙin Y",
+      "splitByColumn": "Raba bisa",
+      "splitNone": "Ba a raba ba",
+      "pivotValueColumns": "Ginshiƙan ƙima",
+      "aggMin": "Ƙarami",
+      "aggMax": "Mafi yawa",
+      "aggMedian": "Tsaka-tsaki",
+      "chartSeriesTruncated": "Ana nuna manyan jerin {max}",
+      "chartPointsTruncated": "Ana nuna misalan maki {max}",
+      "chartScatterAria": "Zane warwatse na {x} da {y}",
+      "pivotTableAria": "Teburin Pivot an taru bisa {column}",
+      "schemaFormula": "Lissafi",
+      "schemaFormulaPlaceholder": "misali: [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Fannin lissafi: duba wasu fannoni kamar [Name]; yana goyon bayan + - * / %, kowane, da round, abs, min, max. Ƙimar za su sabunta kai tsaye kuma ba za a iya gyarawa kai tsaye ba.",
+      "schemaFormulaSyntaxError": "Lissafi mara kyau",
+      "schemaFormulaUnknownRef": "Fannin da ba a sani ba: {ref}",
+      "schemaFormulaArityError": "Muguwar adadin hujjoji ga {fn}",
+      "schemaFormulaCycleError": "Maimaicin komawa tsakanin lissafi",
+      "derivedColumnTitle": "An lissafa: {formula}",
+      "derivedFrom": "An lissafa daga {formula}"
     },
     "map": {
       "emptyTitle": "Sanya bayananka a taswira",
@@ -3139,5 +3170,43 @@
     "deselectAll": "Cire zaɓi duka",
     "autoAddLabel": "Ƙara sababbin samfura ta atomatik",
     "autoAddDescription": "Samfuran da za a ƙara zuwa wannan asusun daga baya za su bayyana ta atomatik. Samfuran da ba a duba ba za su ci gaba da kasancewa a waje."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Ƙananan tasiri",
+      "moderate": "Matsakaicin tasiri",
+      "high": "Babban tasiri"
+    },
+    "tierTooltip": "Kimanta tasirin makamashi a kowanne buƙata, daga girman samfurin. Wannan ƙiyasta ne da aka dogara da matsakaicin sananne da zato v{version} — ba a'auna kai tsaye ba.",
+    "typicalRequest": "~{grams} g CO₂e a kowane irin buƙata",
+    "typicalRequestTooltip": "Ƙimanta buƙata na yau da kullum (kimanin token 1,000 na prompt da 500 na amsa), daga matsakaicin sananne da zato v{version}. Ainihin tasiri na bambanta da tsawon tattaunawa, saituna, da yankin masauki.",
+    "activities": {
+      "netflixHd": "Kallo Netflix HD",
+      "zoomCall": "Kiran Zoom (kamara a kunne)",
+      "webBrowsing": "Binciken intanet",
+      "spotifyAudio": "Sauraron Spotify"
+    },
+    "equivalents": {
+      "title": "≈ fari daidai da iskar carbon",
+      "note": "Kwatancen carbon daidai da amfani na awa ɗaya na sabis-sabis ɗin nan — ƙiyasta ne kawai, ba daidai ba, kamar sauran abubuwan da ke nan."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "An ƙiyasta sawun carbon na wannan tattaunawa: {grams} gram na CO₂ daidai. Nuna bayanin dalla-dalla.",
+      "ariaLabelToday": "An ƙiyasta sawun carbon na wannan tattaunawa yau: {grams} gram na CO₂ daidai. Nuna bayanin dalla-dalla.",
+      "title": "Wannan tattaunawa (ƙiyasta)",
+      "today": "Yau",
+      "total": "Duk lokaci",
+      "measured": "Daga adadin token da aka ruwaito",
+      "estimated": "An sake lissafawa daga tsoffin saƙonni",
+      "lastRequest": "Bukata ta ƙarshe",
+      "disclaimer": "Kimantawa na kowane bukata daga adadin token da aka ruwaito ko kimanta, ana amfani da matsakaici da ƙa’idoji da aka wallafa v{version}. Tsoffin saƙonni an sake lissafawa su daga rubutun da aka adana da kuma nau'in samfurin tattaunawar yanzu. Ba auna ko gwadawa ba ne."
+    }
   }
 }

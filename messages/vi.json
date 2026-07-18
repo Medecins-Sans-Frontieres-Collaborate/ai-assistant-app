@@ -2455,7 +2455,8 @@
     "regionDefault": "Mặc định",
     "modelRow": "{requests} yc · {grams} g",
     "disclosure": "Ước tính dựa trên các giả định v{version} · từ {since} · chỉ tính chat tiêu chuẩn (không tính câu trả lời của agent và knowledge-base).",
-    "reset": "Đặt lại thống kê sử dụng"
+    "reset": "Đặt lại thống kê sử dụng",
+    "estimatedPortion": "Bao gồm khoảng ~{grams} g CO₂e ({requests} yêu cầu) được ước tính từ các cuộc trò chuyện trước khi có theo dõi — tính toán lại từ văn bản tin nhắn lưu trữ, không phải số lượng token đã đo."
   },
   "extraction": {
     "toggleLabel": "Trích xuất dữ liệu có cấu trúc",
@@ -2951,7 +2952,37 @@
       "autoCheckHint": "Sau khi trích xuất dữ liệu từ ảnh hoặc tài liệu, tự động thực hiện kiểm tra chất lượng với các dòng mới",
       "checkingNewRows": "Đang kiểm tra các dòng vừa thêm cho vấn đề chất lượng…",
       "ingestCheckFailed": "Kiểm tra chất lượng tự động thất bại ({message}) — bạn có thể kiểm tra thủ công bằng chức năng Đánh giá chất lượng.",
-      "assessedIngest": "Các dòng vừa thêm"
+      "assessedIngest": "Các dòng vừa thêm",
+      "transpose": "Hoán vị",
+      "transposeAxisColumn": "Tên",
+      "transposeSuggestion": "Bảng này có vẻ đã bị hoán vị: các hàng là thuộc tính, cột là mục. Đảo lại để mỗi mục là một hàng và mỗi thuộc tính thành một cột có kiểu?",
+      "transposedTable": "Đã hoán vị hàng và cột",
+      "columns": "Các cột",
+      "columnsHidden": "Cột ({count} bị ẩn)",
+      "showAllColumns": "Hiện tất cả",
+      "chartScatter": "Biểu đồ phân tán (x so với y)",
+      "chartPivot": "Bảng tổng hợp",
+      "xColumn": "Cột X",
+      "yColumn": "Cột Y",
+      "splitByColumn": "Tách theo",
+      "splitNone": "Không tách",
+      "pivotValueColumns": "Cột giá trị",
+      "aggMin": "Nhỏ nhất",
+      "aggMax": "Lớn nhất",
+      "aggMedian": "Trung vị",
+      "chartSeriesTruncated": "Chỉ hiển thị {max} chuỗi dữ liệu đầu",
+      "chartPointsTruncated": "Chỉ hiển thị {max} điểm mẫu",
+      "chartScatterAria": "Biểu đồ phân tán của {x} so với {y}",
+      "pivotTableAria": "Bảng tổng hợp được nhóm theo {column}",
+      "schemaFormula": "Công thức",
+      "schemaFormulaPlaceholder": "vd: [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Trường tính toán: tham chiếu các trường khác dạng [Tên]; hỗ trợ + - * / %, dấu ngoặc, và round, abs, min, max. Giá trị sẽ cập nhật tự động và không thể chỉnh sửa trực tiếp.",
+      "schemaFormulaSyntaxError": "Công thức không hợp lệ",
+      "schemaFormulaUnknownRef": "Trường không xác định: {ref}",
+      "schemaFormulaArityError": "Số lượng tham số không đúng cho {fn}",
+      "schemaFormulaCycleError": "Tham chiếu vòng lặp giữa các công thức",
+      "derivedColumnTitle": "Tính toán: {formula}",
+      "derivedFrom": "Được tính từ {formula}"
     },
     "map": {
       "emptyTitle": "Đặt dữ liệu của bạn lên bản đồ",
@@ -3186,5 +3217,43 @@
     "deselectAll": "Bỏ chọn tất cả",
     "autoAddLabel": "Tự động thêm mô hình mới",
     "autoAddDescription": "Các mô hình được triển khai thêm vào tài khoản này sau này sẽ tự động hiển thị. Các mô hình chưa chọn sẽ tiếp tục bị loại trừ."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Tác động thấp hơn",
+      "moderate": "Tác động trung bình",
+      "high": "Tác động cao hơn"
+    },
+    "tierTooltip": "Tác động năng lượng tương đối cho mỗi yêu cầu, ước tính dựa trên kích thước mô hình. Các số liệu này là ước tính dựa trên trung bình công bố và giả định bản v{version} — không phải đo lường thực tế.",
+    "typicalRequest": "~{grams} g CO₂e cho mỗi yêu cầu điển hình",
+    "typicalRequestTooltip": "Ước tính sơ bộ cho mỗi yêu cầu thông thường (khoảng 1.000 prompt và 500 completion tokens), dựa trên trung bình công bố và giả định bản v{version}. Tác động thực tế thay đổi theo độ dài hội thoại, thiết lập và khu vực lưu trữ.",
+    "activities": {
+      "netflixHd": "Xem Netflix HD",
+      "zoomCall": "Gọi Zoom (mở camera)",
+      "webBrowsing": "Duyệt web",
+      "spotifyAudio": "Nghe nhạc Spotify"
+    },
+    "equivalents": {
+      "title": "≈ lượng carbon tương đương",
+      "note": "So sánh lượng carbon dựa trên dấu chân phát thải mỗi giờ được công bố của các dịch vụ này — là số liệu mang tính ước tính, chỉ để tham khảo sơ bộ."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} phút",
+      "hours": "{value} giờ"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Ước tính lượng phát thải carbon của cuộc hội thoại này: {grams} gam CO₂ tương đương. Xem chi tiết.",
+      "ariaLabelToday": "Ước tính lượng phát thải carbon hôm nay cho cuộc hội thoại này: {grams} gam CO₂ tương đương. Xem chi tiết.",
+      "title": "Cuộc hội thoại này (ước tính)",
+      "today": "Hôm nay",
+      "total": "Tổng cộng",
+      "measured": "Dựa trên số lượng token đã báo cáo",
+      "estimated": "Tính toán lại từ các tin nhắn cũ",
+      "lastRequest": "Yêu cầu gần nhất",
+      "disclaimer": "Ước tính cho từng yêu cầu dựa trên số lượng token đã báo cáo hoặc ước lượng, sử dụng các giá trị trung bình và giả định được công bố v{version}. Các tin nhắn cũ được tính toán lại từ văn bản lưu trữ và mô hình hiện tại của cuộc trò chuyện. Không phải số liệu đo lường."
+    }
   }
 }
