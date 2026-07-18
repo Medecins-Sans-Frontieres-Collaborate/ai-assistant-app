@@ -48,15 +48,30 @@ async function submitPinnedCode() {
   fireEvent.click(submit);
 }
 
+/**
+ * The modal always refreshes the remote status on submit (a cached
+ * fingerprint may predate a rotation on another device), so tests mock the
+ * store's refreshRemoteStatus rather than seeding cached fields.
+ */
+function mockRemote(keyId: string | null, epoch = 3) {
+  useBackupStore.setState({
+    remoteKeyId: keyId,
+    remoteKeyEpoch: epoch,
+    remoteExists: true,
+    refreshRemoteStatus: vi.fn(() =>
+      Promise.resolve({ exists: true, keyId, epoch, disabled: false }),
+    ),
+  } as Parameters<typeof useBackupStore.setState>[0]);
+}
+
 describe('RestoreModal', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     useBackupStore.setState({
-      remoteKeyId: PINNED_KEY_ID,
-      remoteKeyEpoch: 3,
-      remoteExists: true,
       enrollmentStatus: 'unset',
-    });
+      localKeyId: null,
+    } as Parameters<typeof useBackupStore.setState>[0]);
+    mockRemote(PINNED_KEY_ID);
   });
 
   it('prompt branch: shows body, input, and Skip wired to onSkip', () => {
@@ -96,7 +111,7 @@ describe('RestoreModal', () => {
   });
 
   it('decrypt-fail branch: checksum-valid code with wrong fingerprint never enrolls', async () => {
-    useBackupStore.setState({ remoteKeyId: 'ffffffffffffffff' });
+    mockRemote('ffffffffffffffff');
     render(<RestoreModal isOpen onSkip={vi.fn()} onDone={vi.fn()} />);
     await submitPinnedCode();
 
