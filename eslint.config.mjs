@@ -70,6 +70,7 @@ export default [
         HTMLOptionElement: 'readonly',
         HTMLSpanElement: 'readonly',
         HTMLUListElement: 'readonly',
+        HTMLTableElement: 'readonly',
         HTMLVideoElement: 'readonly',
         HTMLCanvasElement: 'readonly',
         HTMLAudioElement: 'readonly',
