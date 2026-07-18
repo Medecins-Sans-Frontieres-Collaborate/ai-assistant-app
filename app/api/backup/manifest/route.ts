@@ -8,6 +8,10 @@ import {
   readManifest,
   writeManifest,
 } from '@/lib/services/backup/server/backupBlobStore';
+import {
+  rateLimitedResponse,
+  readBoundedBody,
+} from '@/lib/services/backup/server/routeHelpers';
 import { BackupManifest } from '@/lib/services/backup/types';
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { RateLimiter } from '@/lib/services/shared/RateLimiter';
@@ -33,7 +37,9 @@ import { auth } from '@/auth';
  * PUT is a compare-and-swap: `If-Match: <etag>` against the current blob
  * (absent on first create). Guard order is contract, not style:
  *   shape → keyId change requires epoch+1 (409 BACKUP_KEY_MISMATCH)
- *         → version must be exactly current+1 (400)
+ *         → version must be exactly current+1 (409 BACKUP_VERSION_CONFLICT —
+ *           a wrong next-version under CAS is a concurrency loss the client
+ *           must resolve by pull-merge-repush, not a malformed request)
  *         → CAS write (Azure 412 → 409 BACKUP_VERSION_CONFLICT)
  * The keyId guard is what makes a stale device unable to clobber a rotated
  * backup even with a fresh etag.
@@ -125,7 +131,25 @@ function validateManifestShape(
       return { ok: false, error: 'Invalid conversation entry' };
     }
     const entry = rawEntry as Record<string, unknown>;
-    if (typeof entry.rev !== 'string' || !isValidRev(entry.rev)) {
+    if (entry.deleted !== undefined && entry.deleted !== true) {
+      return { ok: false, error: 'Invalid conversation tombstone' };
+    }
+    const isTombstone = entry.deleted === true;
+    // Tombstones have no blob and their rev is never dereferenced, and a
+    // conversation deleted before its first push has no rev at all — so
+    // tombstone entries may carry an empty or absent rev.
+    if (isTombstone) {
+      if (
+        entry.rev !== undefined &&
+        entry.rev !== '' &&
+        (typeof entry.rev !== 'string' || !isValidRev(entry.rev))
+      ) {
+        return { ok: false, error: 'Invalid conversation rev' };
+      }
+      if (!isIsoTimestamp(entry.deletedAt)) {
+        return { ok: false, error: 'Invalid conversation deletedAt' };
+      }
+    } else if (typeof entry.rev !== 'string' || !isValidRev(entry.rev)) {
       return { ok: false, error: 'Invalid conversation rev' };
     }
     if (!isIsoTimestamp(entry.updatedAt)) {
@@ -138,12 +162,6 @@ function validateManifestShape(
     ) {
       return { ok: false, error: 'Invalid conversation size' };
     }
-    if (entry.deleted !== undefined && entry.deleted !== true) {
-      return { ok: false, error: 'Invalid conversation tombstone' };
-    }
-    if (entry.deleted === true && !isIsoTimestamp(entry.deletedAt)) {
-      return { ok: false, error: 'Invalid conversation deletedAt' };
-    }
   }
 
   return { ok: true, manifest: body as BackupManifest };
@@ -155,8 +173,9 @@ export async function GET() {
   const userId = getUserIdFromSession(session);
   if (userId === 'anonymous') return unauthorizedResponse();
 
-  if (!limiter.checkLimit(userId).allowed) {
-    return errorResponse('Too many requests', 429, undefined, 'RATE_LIMITED');
+  const limit = limiter.checkLimit(userId);
+  if (!limit.allowed) {
+    return rateLimitedResponse(limit);
   }
 
   try {
@@ -187,18 +206,19 @@ export async function PUT(request: NextRequest) {
   const userId = getUserIdFromSession(session);
   if (userId === 'anonymous') return unauthorizedResponse();
 
-  if (!limiter.checkLimit(userId).allowed) {
-    return errorResponse('Too many requests', 429, undefined, 'RATE_LIMITED');
+  const limit = limiter.checkLimit(userId);
+  if (!limit.allowed) {
+    return rateLimitedResponse(limit);
   }
 
-  const body = await request.arrayBuffer();
-  if (body.byteLength > MAX_MANIFEST_BYTES) {
+  const body = await readBoundedBody(request, MAX_MANIFEST_BYTES);
+  if (body === null) {
     return payloadTooLargeResponse('1MB');
   }
 
   let parsed: unknown;
   try {
-    parsed = JSON.parse(Buffer.from(body).toString('utf8'));
+    parsed = JSON.parse(body.toString('utf8'));
   } catch {
     return badRequestResponse('Manifest must be valid JSON');
   }
@@ -209,6 +229,12 @@ export async function PUT(request: NextRequest) {
   }
   const incoming = validation.manifest;
   const ifMatchEtag = request.headers.get('if-match');
+  // Only an exact quoted strong ETag may reach the storage CAS condition —
+  // `If-Match: *` matches any blob and would reduce the CAS to a blind write,
+  // and a weak validator (W/…) can never strong-match.
+  if (ifMatchEtag !== null && !/^"[^"]*"$/.test(ifMatchEtag)) {
+    return badRequestResponse('If-Match must be a quoted strong ETag');
+  }
 
   try {
     const storage = createBlobStorageClient(session);
@@ -239,8 +265,14 @@ export async function PUT(request: NextRequest) {
         );
       }
       if (incoming.version !== existing.manifest.version + 1) {
-        return badRequestResponse(
+        // The CAS loser lands here after another device advanced the
+        // manifest: this is a concurrency loss, and the client's recovery
+        // loop (pull → merge → re-push) triggers on this code — not on 400.
+        return errorResponse(
           `Manifest version must be exactly ${existing.manifest.version + 1}`,
+          409,
+          undefined,
+          'BACKUP_VERSION_CONFLICT',
         );
       }
     } else if (incoming.version !== 1) {
