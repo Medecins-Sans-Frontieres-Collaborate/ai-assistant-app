@@ -1,8 +1,11 @@
 import { RefObject, useEffect, useRef } from 'react';
 
+import { usePastedTextAttachment } from '@/client/hooks/chat/usePastedTextAttachment';
 import { useUrlAttachment } from '@/client/hooks/chat/useUrlAttachment';
 
 import { isLikelyUrl } from '@/client/services/url/urlFetchClient';
+
+import { shouldAttachPastedText } from '@/lib/utils/shared/paste/pastedText';
 
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
@@ -48,12 +51,17 @@ export function usePasteChatInput({
   enabled,
 }: UsePasteChatInputOptions) {
   const { attachUrl } = useUrlAttachment();
-  // Held in a ref so the listener never needs re-binding when the callback
-  // identity changes. Written in an effect, never during render.
+  const { attachPastedText } = usePastedTextAttachment();
+  // Held in refs so the listener never needs re-binding when the callback
+  // identities change. Written in an effect, never during render.
   const attachUrlRef = useRef(attachUrl);
+  const attachPastedTextRef = useRef(attachPastedText);
   useEffect(() => {
     attachUrlRef.current = attachUrl;
   }, [attachUrl]);
+  useEffect(() => {
+    attachPastedTextRef.current = attachPastedText;
+  }, [attachPastedText]);
 
   useEffect(() => {
     if (!enabled) return;
@@ -118,6 +126,24 @@ export function usePasteChatInput({
       ) {
         event.preventDefault();
         void attachUrlRef.current(text.trim());
+        textarea.focus();
+        return;
+      }
+
+      // A paste far too large to read in the composer is a document, not a
+      // sentence. Attaching it keeps the composer free for the actual
+      // question — and unlike the branches below, this applies even when the
+      // textarea is already focused, since that is the common case for a
+      // deliberate bulk paste.
+      if (
+        text &&
+        shouldAttachPastedText(
+          text,
+          useSettingsStore.getState().pasteAsAttachmentChars,
+        )
+      ) {
+        event.preventDefault();
+        void attachPastedTextRef.current(text);
         textarea.focus();
         return;
       }
