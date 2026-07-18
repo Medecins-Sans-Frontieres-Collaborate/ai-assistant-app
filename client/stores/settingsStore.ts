@@ -2,6 +2,11 @@
 
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
+import {
+  DEFAULT_MAP_TIMELAPSE,
+  MapTimelapseSettings,
+  clampTimelapseSettings,
+} from '@/lib/utils/shared/geo/timelapsePacing';
 import { UserRegion } from '@/lib/utils/shared/region';
 
 import { ExtractionRecipe } from '@/types/extractionRecipe';
@@ -34,6 +39,7 @@ import {
   CustomTranslationLanguage,
   DocumentCustomCriterion,
   DocumentSpec,
+  TranslationCustomCriterion,
   TranslationGlossary,
 } from '@/types/workflow';
 
@@ -236,6 +242,8 @@ interface SettingsStore {
   documentSpecs: DocumentSpec[];
   /** User-defined document quality criteria (document workflow). */
   documentCriteria: DocumentCustomCriterion[];
+  /** User-defined MQM-style criteria for the translation workflow. */
+  translationCriteria: TranslationCustomCriterion[];
   /** MCP servers the user connected (Connectors settings section). */
   mcpServers: McpServerConfig[];
   /** User opt-in for adding/sending arbitrary (non-catalog) MCP servers. */
@@ -398,6 +406,12 @@ interface SettingsStore {
     updates: Partial<Omit<DocumentCustomCriterion, 'id'>>,
   ) => void;
   deleteDocumentCriterion: (id: string) => void;
+  addTranslationCriterion: (criterion: TranslationCustomCriterion) => void;
+  updateTranslationCriterion: (
+    id: string,
+    updates: Partial<Omit<TranslationCustomCriterion, 'id'>>,
+  ) => void;
+  deleteTranslationCriterion: (id: string) => void;
 
   // Glossary Actions (translation workflow)
   addGlossary: (glossary: TranslationGlossary) => void;
@@ -539,11 +553,33 @@ interface SettingsStore {
   autoInjectPinnedImages: boolean;
   setAutoInjectPinnedImages: (enabled: boolean) => void;
 
+  /**
+   * When ON (default): pasting a bare link into the chat composer fetches
+   * that page server-side and attaches its readable text, so the model can
+   * actually read what was linked instead of only seeing the URL.
+   *
+   * When OFF: a pasted link stays plain text. The explicit "Attach a link"
+   * action still works — this gates only the automatic behavior.
+   */
+  autoFetchPastedLinks: boolean;
+  setAutoFetchPastedLinks: (enabled: boolean) => void;
+
+  /**
+   * Pacing of the map workflow's time-lapse. Persisted rather than kept as
+   * workspace view state: how fast is comfortable to read is a property of
+   * the person watching, not of the map they happen to have open.
+   */
+  mapTimelapse: MapTimelapseSettings;
+  setMapTimelapse: (settings: Partial<MapTimelapseSettings>) => void;
+
   // Stop-generation confirmation preferences
   confirmStopFromButton: boolean;
   confirmStopFromKeyboard: boolean;
+  /** Drop accepted/rejected review edits from the queue automatically. */
+  autoClearResolvedEdits: boolean;
   setConfirmStopFromButton: (enabled: boolean) => void;
   setConfirmStopFromKeyboard: (enabled: boolean) => void;
+  setAutoClearResolvedEdits: (enabled: boolean) => void;
 
   // Reset
   resetSettings: () => void;
@@ -583,6 +619,7 @@ export const useSettingsStore = create<SettingsStore>()(
       customLanguages: [],
       documentSpecs: [],
       documentCriteria: [],
+      translationCriteria: [],
       mcpServers: [],
       allowArbitraryMcpServers: false,
       mcpArbitraryFlagEnabled: false,
@@ -633,9 +670,15 @@ export const useSettingsStore = create<SettingsStore>()(
       autoPinActiveFiles: true, // Auto-pin uploaded files by default
       autoInjectPinnedImages: true, // Re-inject pinned images each turn by default
 
+      // Fetch pasted links and attach their text by default
+      autoFetchPastedLinks: true,
+
+      mapTimelapse: DEFAULT_MAP_TIMELAPSE,
+
       // Stop-generation confirmation preferences (both default ON)
       confirmStopFromButton: true,
       confirmStopFromKeyboard: true,
+      autoClearResolvedEdits: false,
 
       // Actions
       setTemperature: (temperature) => set({ temperature }),
@@ -741,6 +784,31 @@ export const useSettingsStore = create<SettingsStore>()(
       deleteDocumentCriterion: (id) =>
         set((state) => ({
           documentCriteria: state.documentCriteria.filter((c) => c.id !== id),
+        })),
+
+      // Custom criteria actions (translation workflow). Kept separate from
+      // documentCriteria: the rubrics are domain-specific (MQM dimensions
+      // vs document quality), so one shared list would put irrelevant
+      // criteria in both pickers.
+      addTranslationCriterion: (criterion) =>
+        set((state) => ({
+          translationCriteria: [...state.translationCriteria, criterion],
+        })),
+
+      updateTranslationCriterion: (id, updates) =>
+        set((state) => ({
+          translationCriteria: state.translationCriteria.map((c) =>
+            c.id === id
+              ? { ...c, ...updates, updatedAt: new Date().toISOString() }
+              : c,
+          ),
+        })),
+
+      deleteTranslationCriterion: (id) =>
+        set((state) => ({
+          translationCriteria: state.translationCriteria.filter(
+            (c) => c.id !== id,
+          ),
         })),
 
       // Custom language actions (translation workflow)
@@ -1206,11 +1274,27 @@ export const useSettingsStore = create<SettingsStore>()(
       setAutoInjectPinnedImages: (enabled) =>
         set({ autoInjectPinnedImages: enabled }),
 
+      setAutoFetchPastedLinks: (enabled) =>
+        set({ autoFetchPastedLinks: enabled }),
+
+      // Clamped on write as well as on read: the sliders are bounded, but a
+      // hand-edited localStorage value must not produce a frozen sweep.
+      setMapTimelapse: (settings) =>
+        set((state) => ({
+          mapTimelapse: clampTimelapseSettings({
+            ...state.mapTimelapse,
+            ...settings,
+          }),
+        })),
+
       // Stop-generation confirmation actions
       setConfirmStopFromButton: (enabled) =>
         set({ confirmStopFromButton: enabled }),
       setConfirmStopFromKeyboard: (enabled) =>
         set({ confirmStopFromKeyboard: enabled }),
+
+      setAutoClearResolvedEdits: (enabled) =>
+        set({ autoClearResolvedEdits: enabled }),
 
       resetSettings: () =>
         set({
@@ -1223,6 +1307,7 @@ export const useSettingsStore = create<SettingsStore>()(
           tones: [],
           customAgents: [],
           glossaries: [],
+          translationCriteria: [],
           // Wipes connector tokens too — Reset Settings clears everything,
           // and lingering secrets after a "reset" would be worse.
           mcpServers: [],
@@ -1253,13 +1338,16 @@ export const useSettingsStore = create<SettingsStore>()(
           toolUsageCounts: {},
           autoPinActiveFiles: true,
           autoInjectPinnedImages: true,
+          autoFetchPastedLinks: true,
+          mapTimelapse: DEFAULT_MAP_TIMELAPSE,
           confirmStopFromButton: true,
           confirmStopFromKeyboard: true,
+          autoClearResolvedEdits: false,
         }),
     }),
     {
       name: 'settings-storage',
-      version: 35, // Increment this when schema changes to trigger migrations
+      version: 39, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1281,6 +1369,7 @@ export const useSettingsStore = create<SettingsStore>()(
         customLanguages: state.customLanguages,
         documentSpecs: state.documentSpecs,
         documentCriteria: state.documentCriteria,
+        translationCriteria: state.translationCriteria,
         // NOTE: mcpArbitraryFlagEnabled and memoriesFlagEnabled are
         // deliberately NOT persisted — they mirror LaunchDarkly flags and
         // must re-derive each session (a persisted true would survive a
@@ -1337,8 +1426,11 @@ export const useSettingsStore = create<SettingsStore>()(
         consecutiveToolUsage: state.consecutiveToolUsage,
         autoPinActiveFiles: state.autoPinActiveFiles,
         autoInjectPinnedImages: state.autoInjectPinnedImages,
+        autoFetchPastedLinks: state.autoFetchPastedLinks,
+        mapTimelapse: state.mapTimelapse,
         confirmStopFromButton: state.confirmStopFromButton,
         confirmStopFromKeyboard: state.confirmStopFromKeyboard,
+        autoClearResolvedEdits: state.autoClearResolvedEdits,
       }),
       migrate: (persistedState, version) => {
         const state = persistedState as Record<string, unknown>;
@@ -1668,6 +1760,41 @@ export const useSettingsStore = create<SettingsStore>()(
             typeof state.localRuntimePorts !== 'object'
           ) {
             state.localRuntimePorts = {};
+          }
+        }
+
+        // Version 35 → 36: Add autoFetchPastedLinks (default ON — pasting a
+        // link and having its content read is the useful behavior; the
+        // toggle exists for users who would rather links stay inert).
+        if (version < 36) {
+          if (state.autoFetchPastedLinks === undefined) {
+            state.autoFetchPastedLinks = true;
+          }
+        }
+
+        // Version 36 → 37: Add mapTimelapse pacing. Clamped rather than
+        // replaced, so a partially-written value keeps whatever half of it
+        // was valid.
+        if (version < 37) {
+          state.mapTimelapse = clampTimelapseSettings(
+            state.mapTimelapse as Partial<MapTimelapseSettings> | undefined,
+          );
+        }
+
+        // Version 37 → 38: Add the auto-clear-resolved-edits preference.
+        // Defaults off so the decision record stays visible until asked
+        // otherwise.
+        if (version < 38) {
+          if (state.autoClearResolvedEdits === undefined) {
+            state.autoClearResolvedEdits = false;
+          }
+        }
+
+        // Version 38 → 39: custom quality criteria for the translation
+        // workflow, mirroring documentCriteria (v28).
+        if (version < 39) {
+          if (!Array.isArray(state.translationCriteria)) {
+            state.translationCriteria = [];
           }
         }
 
