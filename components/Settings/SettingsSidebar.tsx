@@ -8,6 +8,7 @@ import {
   IconRefresh,
   IconRobot,
   IconSettings,
+  IconShieldLock,
 } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { FC, useState } from 'react';
@@ -45,9 +46,13 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
   const t = useTranslations();
   // Fail-open: undefined (LD unconfigured/unserved) → shown. Flip to false in
   // LaunchDarkly to hide the section.
-  const { showUsageImpact, mcpConnectors } = useFlags();
+  const { showUsageImpact, mcpConnectors, enableEncryptedBackups } = useFlags();
   const isUsageImpactEnabled = showUsageImpact !== false;
   const isConnectorsEnabled = mcpConnectors !== false;
+  // Fail-closed (`=== true`) — deliberately the opposite polarity of the
+  // flags above: encrypted backup must stay hidden until LD explicitly
+  // serves the flag as true (like mcpArbitraryServers).
+  const isBackupEnabled = enableEncryptedBackups === true;
   const [showResetConfirmation, setShowResetConfirmation] = useState(false);
 
   const confirmReset = () => {
@@ -112,6 +117,16 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
               activeSection={activeSection}
               label={t('settings.Usage & Impact')}
               icon={<IconLeaf size={18} />}
+              onClick={setActiveSection}
+            />
+          )}
+
+          {isBackupEnabled && (
+            <NavigationItem
+              section={SettingsSection.BACKUP}
+              activeSection={activeSection}
+              label={t('settings.Backup')}
+              icon={<IconShieldLock size={18} />}
               onClick={setActiveSection}
             />
           )}
