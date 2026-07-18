@@ -171,7 +171,10 @@ describe('agentAccess/adminAuth', () => {
       });
     });
 
-    it('a matching entry with no delegated keys does not confer admin status', () => {
+    it('a matching entry with no delegated keys still confers local-admin status', () => {
+      // Agent-less local admins: membership alone makes isLocalAdmin true
+      // (they can create prompt agents); the empty key list still edits
+      // nothing (canEditKey over [] denies every existing key).
       expect(
         resolveAdminStatus(
           'lead@example.com',
@@ -179,7 +182,20 @@ describe('agentAccess/adminAuth', () => {
         ),
       ).toEqual({
         isGlobalAdmin: false,
-        isLocalAdmin: false,
+        isLocalAdmin: true,
+        editableAgentKeys: [],
+      });
+    });
+
+    it('matches zero-key entries canonicalized (trim + lowercase)', () => {
+      const status = resolveAdminStatus(
+        ' LEAD@Example.COM ',
+        configWith([{ email: ' Lead@example.com ', agentKeys: [] }]),
+      );
+
+      expect(status).toEqual({
+        isGlobalAdmin: false,
+        isLocalAdmin: true,
         editableAgentKeys: [],
       });
     });
