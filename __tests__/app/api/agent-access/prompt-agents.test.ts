@@ -302,10 +302,33 @@ describe('/api/agent-access/prompt-agents', () => {
       expect(data.data.fetchedAt).toBeNull();
     });
 
-    it('returns 403 for a local admin when the config could not be read', async () => {
-      // Without config there is no proof of delegation — fail closed.
+    it('serves the degraded response (200, not 403) to a local admin via the snapshot LKG config when the direct read fails', async () => {
+      // Regression (finding 8): the failed direct read used to null the
+      // config, so resolveAdminStatus denied local admins and the UI
+      // misreported their adminship instead of the outage. Authorization
+      // falls back to the service's last-known-good config.
+      vi.spyOn(console, 'error').mockImplementation(() => {});
       mockAuth.mockResolvedValue(LOCAL_SESSION);
       vi.mocked(readConfig).mockRejectedValue(new Error('blob down'));
+
+      const response = await GET();
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(200);
+      expect(data.data.promptAgents).toEqual([]);
+      expect(data.data.promptAgentsUnavailable).toBe(true);
+      expect(data.data.fetchedAt).toBeNull();
+      expect(serviceGetSnapshot).toHaveBeenCalled();
+    });
+
+    it('still fails closed (403) for a local admin when the direct read fails AND no snapshot config exists', async () => {
+      // Cold replica during an outage: no proof of delegation anywhere.
+      vi.spyOn(console, 'error').mockImplementation(() => {});
+      mockAuth.mockResolvedValue(LOCAL_SESSION);
+      vi.mocked(readConfig).mockRejectedValue(new Error('blob down'));
+      serviceGetSnapshot.mockReturnValue(
+        makeSnapshot({ config: null, rulesUnavailable: true, fetchedAt: null }),
+      );
 
       const response = await GET();
 
@@ -501,6 +524,61 @@ describe('/api/agent-access/prompt-agents', () => {
         expect.stringMatching(/^prompt-[0-9a-f]{12}$/),
         '"e-new"',
       );
+      expect(writePromptAgentHistoryEntry).not.toHaveBeenCalled();
+    });
+
+    it('reports the ORPHANED agent (never "rolled back") when delegation AND the rollback delete both fail', async () => {
+      // Regression (finding 9): the route used to claim "rolled back" even
+      // when the rollback delete failed, leaving a public, un-delegated
+      // orphan only discoverable by grepping logs.
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      mockAuth.mockResolvedValue(ZERO_KEY_SESSION);
+      vi.mocked(writeConfig).mockRejectedValue(new AgentAccessConflictError());
+      vi.mocked(deletePromptAgent).mockRejectedValue({ statusCode: 500 });
+
+      const response = await POST(postRequest(postBody));
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(503);
+      // The message must state the agent still exists (with its id, so a
+      // global admin can find it) and must NOT claim a successful rollback.
+      expect(data.error).toMatch(/prompt-[0-9a-f]{12}/);
+      expect(data.error).toContain('still exists without delegation');
+      expect(data.error).toContain('global-admin cleanup');
+      expect(data.error).not.toContain('rolled back');
+      // Loud log carries the agent id for cleanup.
+      expect(errorSpy).toHaveBeenCalledWith(
+        expect.stringContaining('ROLLBACK DELETE FAILED'),
+      );
+      expect(errorSpy).toHaveBeenCalledWith(
+        expect.stringMatching(/id=prompt-[0-9a-f]{12}/),
+      );
+      // The orphan is recorded in the durable audit trail.
+      expect(writePromptAgentHistoryEntry).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          action: 'upsert',
+          canonicalKey: expect.stringMatching(
+            /^prompt-agent::prompt-[0-9a-f]{12}$/,
+          ),
+          updatedBy: 'zerokey@example.com',
+        }),
+      );
+    });
+
+    it('keeps the "rolled back" message when the rollback delete finds the blob already absent (404)', async () => {
+      vi.spyOn(console, 'error').mockImplementation(() => {});
+      mockAuth.mockResolvedValue(ZERO_KEY_SESSION);
+      vi.mocked(writeConfig).mockRejectedValue(new AgentAccessConflictError());
+      // deletePromptAgent resolves false on 404 — the agent is gone either
+      // way, so the rollback's goal is met.
+      vi.mocked(deletePromptAgent).mockResolvedValue(false);
+
+      const response = await POST(postRequest(postBody));
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(503);
+      expect(data.error).toContain('rolled back');
       expect(writePromptAgentHistoryEntry).not.toHaveBeenCalled();
     });
 
