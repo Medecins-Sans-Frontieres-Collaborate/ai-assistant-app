@@ -6,6 +6,12 @@ import { UserRegion } from '@/lib/utils/shared/region';
 
 import { ExtractionRecipe } from '@/types/extractionRecipe';
 import {
+  LOCAL_RUNTIMES,
+  LocalRuntime,
+  LocalRuntimeStatus,
+  isValidPort,
+} from '@/types/localRuntime';
+import {
   DEFAULT_MODEL_ORDER,
   ModelListSource,
   OpenAIModel,
@@ -205,6 +211,23 @@ interface SettingsStore {
   customAgentSources: AgentSource[];
   /** BYO Foundry accounts the user connected for model discovery. */
   customModelSources: ModelSource[];
+  /**
+   * User port overrides for local model runtimes. Only overrides are stored —
+   * defaults live in LOCAL_RUNTIME_DEFAULTS. The HOST is never user-editable
+   * (always 127.0.0.1), so this is the only persisted value that influences
+   * where a local request goes; it is re-validated on rehydrate.
+   */
+  localRuntimePorts: Partial<Record<LocalRuntime, number>>;
+  /**
+   * Session-scoped detection results, keyed by runtime. Deliberately NOT
+   * persisted: a runtime that was running yesterday tells us nothing about
+   * today, and a stale "ready" would offer models that can't answer.
+   * Lives in the store rather than the hook because the picker and the
+   * settings pane both read it, and the picker unmounts on close.
+   */
+  localRuntimeStatus: Partial<Record<LocalRuntime, LocalRuntimeStatus>>;
+  /** LaunchDarkly `localModels` mirror. Fail-closed; never persisted. */
+  localModelsFlagEnabled: boolean;
   /** Reusable terminology glossaries for the translation workflow. */
   glossaries: TranslationGlossary[];
   /** User-added translation target languages (flagged in the picker). */
@@ -400,6 +423,18 @@ interface SettingsStore {
   updateCustomModelSource: (source: ModelSource) => void;
   deleteCustomModelSource: (id: string) => void;
 
+  // Local Runtime Actions (Ollama / LM Studio / llama.cpp)
+  /** Sets a port override, or clears it when given undefined. */
+  setLocalRuntimePort: (
+    runtime: LocalRuntime,
+    port: number | undefined,
+  ) => void;
+  setLocalRuntimeStatus: (
+    runtime: LocalRuntime,
+    status: LocalRuntimeStatus,
+  ) => void;
+  setLocalModelsFlagEnabled: (enabled: boolean) => void;
+
   // MCP Server Actions (Connectors)
   addMcpServer: (server: McpServerConfig) => void;
   updateMcpServer: (id: string, updates: Partial<McpServerConfig>) => void;
@@ -541,6 +576,9 @@ export const useSettingsStore = create<SettingsStore>()(
       customAgents: [],
       customAgentSources: [],
       customModelSources: [],
+      localRuntimePorts: {},
+      localRuntimeStatus: {},
+      localModelsFlagEnabled: false,
       glossaries: [],
       customLanguages: [],
       documentSpecs: [],
@@ -795,6 +833,31 @@ export const useSettingsStore = create<SettingsStore>()(
             (s) => s.id !== id,
           ),
         })),
+
+      // Local Runtime Actions (Ollama / LM Studio / llama.cpp)
+      setLocalRuntimePort: (runtime, port) =>
+        set((state) => {
+          const next = { ...state.localRuntimePorts };
+          // Reject anything undialable at the write boundary too, not just on
+          // rehydrate — this value decides where a request is sent.
+          if (port === undefined || !isValidPort(port)) {
+            delete next[runtime];
+          } else {
+            next[runtime] = port;
+          }
+          return { localRuntimePorts: next };
+        }),
+
+      setLocalRuntimeStatus: (runtime, status) =>
+        set((state) => ({
+          localRuntimeStatus: {
+            ...state.localRuntimeStatus,
+            [runtime]: status,
+          },
+        })),
+
+      setLocalModelsFlagEnabled: (enabled) =>
+        set({ localModelsFlagEnabled: enabled }),
 
       // MCP Server Actions (Connectors)
       addMcpServer: (server) =>
@@ -1196,7 +1259,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 34, // Increment this when schema changes to trigger migrations
+      version: 35, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1211,6 +1274,9 @@ export const useSettingsStore = create<SettingsStore>()(
         customAgents: state.customAgents,
         customAgentSources: state.customAgentSources,
         customModelSources: state.customModelSources,
+        // Port overrides persist; localRuntimeStatus and localModelsFlagEnabled
+        // deliberately do NOT — see their declarations for why.
+        localRuntimePorts: state.localRuntimePorts,
         glossaries: state.glossaries,
         customLanguages: state.customLanguages,
         documentSpecs: state.documentSpecs,
@@ -1593,6 +1659,18 @@ export const useSettingsStore = create<SettingsStore>()(
           }
         }
 
+        // Version 34 → 35: Local model runtime port overrides. Backfill to {}
+        // so downstream lookups never index undefined; every runtime falls
+        // back to its default port until the user changes one.
+        if (version < 35) {
+          if (
+            state.localRuntimePorts === null ||
+            typeof state.localRuntimePorts !== 'object'
+          ) {
+            state.localRuntimePorts = {};
+          }
+        }
+
         return state;
       },
       onRehydrateStorage: () => (state) => {
@@ -1676,6 +1754,33 @@ export const useSettingsStore = create<SettingsStore>()(
           if (!Array.isArray(state.mcpServers)) {
             state.mcpServers = [];
           }
+
+          // SECURITY: localRuntimePorts is the only persisted value that
+          // steers where a local chat request is sent, so a tampered or
+          // corrupt localStorage blob must not survive rehydration. Anything
+          // that isn't an integer port in 1–65535 is dropped, falling the
+          // runtime back to its built-in default. (The host is never
+          // persisted — it is hard-coded to 127.0.0.1 — so this is the whole
+          // attack surface.)
+          if (
+            state.localRuntimePorts === null ||
+            typeof state.localRuntimePorts !== 'object' ||
+            Array.isArray(state.localRuntimePorts)
+          ) {
+            state.localRuntimePorts = {};
+          } else {
+            const sanitized: Partial<Record<LocalRuntime, number>> = {};
+            for (const runtime of LOCAL_RUNTIMES) {
+              const port = state.localRuntimePorts[runtime];
+              if (isValidPort(port)) sanitized[runtime] = port;
+            }
+            state.localRuntimePorts = sanitized;
+          }
+
+          // Detection results are session-scoped; never trust a rehydrated
+          // one even if a future partialize change starts writing them.
+          state.localRuntimeStatus = {};
+          state.localModelsFlagEnabled = false;
 
           // Defensive: hiddenModelIds must always be an array. NOTE: do not
           // prune entries against OpenAIModels here — agent IDs (`org-*`,
