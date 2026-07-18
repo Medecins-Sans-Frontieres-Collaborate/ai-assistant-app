@@ -22,6 +22,11 @@ interface TreeFixture {
 /**
  * Routes the tree-discovery /api/agents/browse?level=tree call (and the
  * connection-check /api/agents call) to canned responses by URL.
+ *
+ * Mirrors the real /api/agents route: agents discovered from the requested
+ * `sources` path are tagged with that path via `source` (the form filters on
+ * it). Fixtures may carry an explicit `source` to simulate entries from other
+ * buckets (regional paths, prompt agents).
  */
 function stubTreeFetch(routes: { tree?: TreeFixture; agents?: unknown[] }) {
   const fn = vi.fn((url: string) => {
@@ -34,7 +39,15 @@ function stubTreeFetch(routes: { tree?: TreeFixture; agents?: unknown[] }) {
         ...routes.tree,
       };
     } else if (url.includes('/api/agents?')) {
-      body = { agents: routes.agents ?? [] };
+      const requestedSource =
+        new URL(url, 'http://localhost').searchParams.get('sources') ?? '';
+      body = {
+        agents: (routes.agents ?? []).map((a) =>
+          a && typeof a === 'object' && !('source' in a)
+            ? { ...a, source: requestedSource }
+            : a,
+        ),
+      };
     }
     return Promise.resolve({
       ok: true,
@@ -209,6 +222,61 @@ describe('AgentSourceForm', () => {
           '/subscriptions/sub-1/resourceGroups/rg-1/providers/Microsoft.CognitiveServices/accounts/acct-1/projects/proj-1',
         autoAddNewAgents: true,
         excludedAgentNames: ['agent-a'],
+        selectedAgentNames: [],
+      }),
+    );
+  });
+
+  it('excludes prompt agents and foreign-source entries from validation and step 2', async () => {
+    // /api/agents merges every bucket: the validated connection's agents,
+    // regional-path discoveries, and admin prompt agents. Only entries tagged
+    // with the validated path may appear in the BYO picker.
+    stubTreeFetch({
+      tree: TWO_PROJECT_TREE,
+      agents: [
+        ...AGENTS,
+        {
+          id: 'prompt-abc123',
+          name: 'Legal Advisor',
+          description: 'admin persona',
+          agentName: 'prompt-abc123',
+          type: 'prompt',
+          source: 'prompt-agent',
+        },
+        {
+          id: 'regional-1',
+          name: 'Regional Agent',
+          description: 'from the regional path',
+          agentName: 'regional-1',
+          type: 'foundry',
+          source:
+            '/subscriptions/other/resourceGroups/rg-x/providers/Microsoft.CognitiveServices/accounts/other-acct/projects/other-proj',
+        },
+      ],
+    });
+    const onSave = vi.fn();
+
+    render(<AgentSourceForm onSave={onSave} onClose={vi.fn()} />);
+    await advanceToStep2();
+
+    // agentCount reflects only this connection's two agents.
+    expect(
+      screen.getByText('connectionSuccessAgents', { exact: false }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('checkbox', { name: /Agent A/ })).toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /Agent B/ })).toBeChecked();
+    expect(
+      screen.queryByRole('checkbox', { name: /Legal Advisor/ }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('checkbox', { name: /Regional Agent/ }),
+    ).not.toBeInTheDocument();
+
+    // Unchecking nothing and saving must not persist foreign agentNames.
+    fireEvent.click(screen.getByRole('button', { name: /connect/i }));
+    expect(onSave).toHaveBeenCalledWith(
+      expect.objectContaining({
+        excludedAgentNames: [],
         selectedAgentNames: [],
       }),
     );
