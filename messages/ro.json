@@ -2637,7 +2637,24 @@
       "pendingCount": "{count} în așteptare",
       "closeReview": "Închide revizuirea calității",
       "showReview": "Arată revizuirea",
-      "showReviewPending": "Arată revizuirea ({count} în așteptare)"
+      "showReviewPending": "Arată revizuirea ({count} în așteptare)",
+      "undoEdit": "Anulează",
+      "clearResolved": "Curăță rezolvate",
+      "clearResolvedHint": "Eliminați modificările acceptate, respinse și neaplicabile din această listă",
+      "autoClearResolved": "Curăță automat modificările rezolvate",
+      "customCriteria": "Criterii personalizate",
+      "closeCriteria": "Închide criteriile personalizate",
+      "newCriterion": "Criteriu nou",
+      "newCriterionName": "Criteriu fără titlu",
+      "criterionName": "Numele criteriului",
+      "criterionRubric": "Indicații",
+      "criterionRubricPlaceholder": "Descrieți ce trebuie să facă traducerea pentru a îndeplini acest criteriu, ex.: „Redați toate instrucțiunile de dozaj clinic la imperativ, niciodată la infinitiv…”",
+      "criterionRubricHint": "Aceste indicații sunt oferite AI-ului ca atare, împreună cu dimensiunile MQM implicite, la evaluarea unei traduceri.",
+      "criteriaEmpty": "Creați criterii personalizate – de ex. stil intern, preferințe terminologice ale clientului sau convenții regionale – pentru a evalua traducerile dincolo de dimensiunile MQM prestabilite. Salvate pe acest dispozitiv și reutilizabile.",
+      "deleteCriterion": "Ștergeți criteriul",
+      "manageCriteria": "Criterii personalizate",
+      "addCriteria": "Adăugați criterii",
+      "noUsableCriteria": "Selectați cel puțin un criteriu implicit sau adăugați indicații criteriilor personalizate."
     },
     "document": {
       "emptyTitle": "Descrieți documentul dorit",
@@ -2757,7 +2774,11 @@
       "clearSelection": "Eliminați selecția (lucrează cu întregul document)",
       "reviseSelectionPlaceholder": "Descrieți modificările aduse selecției…",
       "revisedSelectionSummary": "Am revizuit pasajul selectat în spațiul de lucru.",
-      "assessedSelection": "Selecție"
+      "assessedSelection": "Selecție",
+      "undoEdit": "Anulează",
+      "clearResolved": "Curăță rezolvate",
+      "clearResolvedHint": "Eliminați modificările acceptate, respinse și neaplicabile din această listă",
+      "autoClearResolved": "Curăță automat modificările rezolvate"
     },
     "data": {
       "emptyTitle": "Importați date pentru analiză",
@@ -3030,7 +3051,31 @@
         "jumpTo": "Sari la {label}",
         "slider": "Poziție pe axa timpului",
         "showUndated": "Afișează locațiile fără dată",
-        "activeCount": "{count} active"
+        "activeCount": "{count} active",
+        "jump": {
+          "start": "Început",
+          "yearsLater": "{count, plural, one {1 an mai târziu} other {# ani mai târziu}}",
+          "monthsLater": "{count, plural, one {1 lună mai târziu} other {# luni mai târziu}}",
+          "daysLater": "{count, plural, one {1 zi mai târziu} other {# zile mai târziu}}",
+          "appears": "{count, plural, one {1 apariție} other {# apariții}}",
+          "ends": "{count, plural, one {1 sfârșit} other {# sfârșituri}}",
+          "progress": "Data {index} din {total}"
+        },
+        "precision": {
+          "minute": "La minut",
+          "hour": "La oră",
+          "day": "La zi",
+          "month": "Datare la nivel de lună",
+          "year": "Datare la nivel de an",
+          "mixed": "(mixt)"
+        },
+        "pacing": {
+          "toggle": "Ritm redare",
+          "cardDuration": "Afișează fiecare locație timp de",
+          "seconds": "{seconds}s",
+          "maxCards": "Locații afișate pe dată",
+          "hint": "Datele mai aglomerate sunt menținute mai mult automat."
+        }
       },
       "granularity": {
         "site": "Locație",
@@ -3047,8 +3092,13 @@
         "color": "Culoare: încredere coordonate (albastru ridicat, portocaliu mediu, roșu scăzut)",
         "size": "Dimensiune punct: cât de centrală este locația pentru material",
         "area": "Cerc întrerupt: extindere aproximativă a unui district, regiuni sau țări",
-        "container": "Contur estompat: o zonă ale cărei conținuturi sunt cartografiate individual"
-      }
+        "container": "Contur estompat: o zonă ale cărei conținuturi sunt cartografiate individual",
+        "precisionHalo": "Contur punctat subtire (în timpul unui timelapse): evenimentul este datat doar la lună sau an, deci momentul exact nu este sigur"
+      },
+      "sourceLabel": "Sursă: {name}",
+      "fetchAndMap": "Preia și asociază",
+      "fetchingPage": "Se preia pagina…",
+      "railUrlRequest": "Preluați și asociați locațiile din: {title} ({url})"
     },
     "shell": {
       "showConversation": "Afișează conversația",
@@ -3488,5 +3538,44 @@
       "llamacpp": "llama.cpp rulează, dar refuză solicitările de pe acest site. Porniți llama-server cu permisiunea pentru cereri cross-origin, apoi detectați din nou."
     },
     "privacyNote": "Modelele locale nu suportă atașamente de fișiere, imagini, căutare web sau conectori — acestea necesită serverele noastre. Detectarea verifică doar acest computer."
+  },
+  "urlFetch": {
+    "sourceFallback": "Pagină web",
+    "fallbackHint": "Puteți deschide pagina, copia textul și lipi aici în schimb.",
+    "shortExtract": "Doar un scurt extras a putut fi citit — este posibil ca pagina să fie restricționată sau să necesite autentificare.",
+    "errors": {
+      "invalidUrl": "Aceasta nu pare a fi o adresă web validă.",
+      "ssrfBlocked": "Această adresă nu poate fi preluată din motive de securitate.",
+      "tooManyRedirects": "Acest link a redirecționat de prea multe ori.",
+      "timeout": "Pagina a răspuns prea târziu.",
+      "unreachable": "Pagina nu a putut fi accesată.",
+      "blocked": "Site-ul a refuzat cererea — poate necesita autentificare sau blochează cititorii automați.",
+      "notFound": "Pagina nu a fost găsită.",
+      "upstream": "Site-ul a returnat o eroare.",
+      "pdf": "Acest link duce la un PDF. Descarcă fișierul și folosește butonul de atașare pentru a-l adăuga.",
+      "nonHtml": "Acest link nu duce la o pagină web care poate fi citită.",
+      "tooLarge": "Pagina este prea mare pentru a fi preluată.",
+      "empty": "Nu a fost găsit text citibil pe acea pagină.",
+      "generic": "Pagina nu a putut fi preluată."
+    },
+    "fetchingFile": "Se preia {host}…",
+    "attachLink": "Atașează un link",
+    "attachLinkTitle": "Atașează o pagină web",
+    "attachLinkDescription": "Pagina este preluată, iar textul citibil este atașat la mesajul dvs.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Preia & atașează",
+    "attachLinkInvalid": "Acesta nu pare a fi un link web valid.",
+    "linkBadge": "Dintr-un link",
+    "couldNotRetrieve": "Nu a putut fi preluat",
+    "doc": {
+      "sourceLabel": "Sursă",
+      "retrievedLabel": "Preluat",
+      "attemptedLabel": "Încercat",
+      "failureHeading": "Pagina web nu a putut fi preluată"
+    },
+    "settingsTitle": "Linkuri în mesaje",
+    "settingsToggle": "Preia automat linkurile lipite",
+    "settingsDescription": "Când lipești un link separat, pagina este preluată, iar textul ei este atașat pentru ca asistentul să îl poată citi. Dezactivează această opțiune pentru a păstra linkurile doar ca text simplu — poți totuși atașa manual o pagină din meniul +.",
+    "addLink": "Adaugă un link"
   }
 }

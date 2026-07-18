@@ -2637,7 +2637,24 @@
       "pendingCount": "{count} in sospeso",
       "closeReview": "Chiudi revisione qualitativa",
       "showReview": "Mostra revisione",
-      "showReviewPending": "Mostra revisione ({count} in sospeso)"
+      "showReviewPending": "Mostra revisione ({count} in sospeso)",
+      "undoEdit": "Annulla",
+      "clearResolved": "Rimuovi risolti",
+      "clearResolvedHint": "Rimuovi le modifiche accettate, rifiutate e non applicabili da questo elenco",
+      "autoClearResolved": "Rimuovi automaticamente le modifiche risolte",
+      "customCriteria": "Criteri personalizzati",
+      "closeCriteria": "Chiudi criteri personalizzati",
+      "newCriterion": "Nuovo criterio",
+      "newCriterionName": "Criterio senza titolo",
+      "criterionName": "Nome del criterio",
+      "criterionRubric": "Rubrica",
+      "criterionRubricPlaceholder": "Descrivi cosa deve soddisfare la traduzione per rispettare questo criterio, es.: \"Rendere tutte le istruzioni di dosaggio clinico all’imperativo, mai all’infinito…\"",
+      "criterionRubricHint": "Questa rubrica viene fornita all'AI testualmente insieme alle dimensioni MQM integrate quando si valuta una traduzione.",
+      "criteriaEmpty": "Crea criteri personalizzati (es. stile della casa, preferenze terminologiche del cliente o convenzioni regionali) per valutare le traduzioni oltre alle dimensioni MQM integrate. Salvati su questo dispositivo e riutilizzabili.",
+      "deleteCriterion": "Elimina criterio",
+      "manageCriteria": "Criteri personalizzati",
+      "addCriteria": "Aggiungi criteri",
+      "noUsableCriteria": "Seleziona almeno un criterio integrato o aggiungi una rubrica ai tuoi criteri personalizzati."
     },
     "document": {
       "emptyTitle": "Descrivi il documento desiderato",
@@ -2757,7 +2774,11 @@
       "clearSelection": "Cancella selezione (lavora sul documento completo)",
       "reviseSelectionPlaceholder": "Descrivi le modifiche alla selezione…",
       "revisedSelectionSummary": "Ho revisionato il passaggio selezionato nell’area di lavoro.",
-      "assessedSelection": "Selezione"
+      "assessedSelection": "Selezione",
+      "undoEdit": "Annulla",
+      "clearResolved": "Rimuovi risolti",
+      "clearResolvedHint": "Rimuovi le modifiche accettate, rifiutate e non applicabili da questo elenco",
+      "autoClearResolved": "Rimuovi automaticamente le modifiche risolte"
     },
     "data": {
       "emptyTitle": "Importa dati da analizzare",
@@ -3030,7 +3051,31 @@
         "jumpTo": "Vai a {label}",
         "slider": "Posizione sulla timeline",
         "showUndated": "Mostra località senza data",
-        "activeCount": "{count} attive"
+        "activeCount": "{count} attive",
+        "jump": {
+          "start": "Inizio",
+          "yearsLater": "{count, plural, one {1 anno dopo} other {# anni dopo}}",
+          "monthsLater": "{count, plural, one {1 mese dopo} other {# mesi dopo}}",
+          "daysLater": "{count, plural, one {1 giorno dopo} other {# giorni dopo}}",
+          "appears": "{count, plural, one {1 comparsa} other {# comparse}}",
+          "ends": "{count, plural, one {1 termine} other {# termini}}",
+          "progress": "Data {index} di {total}"
+        },
+        "precision": {
+          "minute": "Al minuto",
+          "hour": "All’ora",
+          "day": "Al giorno",
+          "month": "Datazione a livello di mese",
+          "year": "Datazione a livello di anno",
+          "mixed": "(misto)"
+        },
+        "pacing": {
+          "toggle": "Velocità riproduzione",
+          "cardDuration": "Mostra ogni località per",
+          "seconds": "{seconds}s",
+          "maxCards": "Località mostrate per data",
+          "hint": "Le date più dense vengono mostrate più a lungo automaticamente."
+        }
       },
       "granularity": {
         "site": "Sito",
@@ -3047,8 +3092,13 @@
         "color": "Colore: affidabilità della coordinata (blu alta, ambra media, rosso bassa)",
         "size": "Dimensione punto: quanto è centrale il luogo nel materiale",
         "area": "Cerchio tratteggiato: estensione approssimativa di un distretto, regione o paese",
-        "container": "Contorno tenue: un'area i cui contenuti sono mappati singolarmente"
-      }
+        "container": "Contorno tenue: un'area i cui contenuti sono mappati singolarmente",
+        "precisionHalo": "Anello tratteggiato morbido (durante una time lapse): l’evento è datato solo al mese o all’anno, quindi la tempistica esatta è incerta"
+      },
+      "sourceLabel": "Fonte: {name}",
+      "fetchAndMap": "Recupera e mappa",
+      "fetchingPage": "Recupero pagina…",
+      "railUrlRequest": "Recupera e mappa le località da: {title} ({url})"
     },
     "shell": {
       "showConversation": "Mostra conversazione",
@@ -3488,5 +3538,44 @@
       "llamacpp": "llama.cpp è in esecuzione ma rifiuta le richieste da questo sito. Avvia llama-server consentendo le richieste cross-origin, poi riprova il rilevamento."
     },
     "privacyNote": "I modelli locali non supportano allegati, immagini, ricerca web o connettori: per queste funzioni sono necessari i nostri server. Il rilevamento verifica solo questo computer."
+  },
+  "urlFetch": {
+    "sourceFallback": "Pagina web",
+    "fallbackHint": "Puoi anche aprire la pagina, copiare il testo e incollarlo qui.",
+    "shortExtract": "È stato possibile leggere solo un breve estratto: la pagina potrebbe essere a pagamento o richiedere l’accesso.",
+    "errors": {
+      "invalidUrl": "Questo non sembra un indirizzo web valido.",
+      "ssrfBlocked": "Per motivi di sicurezza, non è possibile recuperare questo indirizzo.",
+      "tooManyRedirects": "Questo link ha effettuato troppe reindirizzazioni.",
+      "timeout": "La pagina ha impiegato troppo tempo a rispondere.",
+      "unreachable": "La pagina non è raggiungibile.",
+      "blocked": "Il sito ha rifiutato la richiesta: potrebbe essere necessario accedere o bloccare i lettori automatici.",
+      "notFound": "Quella pagina non è stata trovata.",
+      "upstream": "Il sito ha restituito un errore.",
+      "pdf": "Questo link è un PDF. Scaricalo e utilizza il pulsante allega per aggiungerlo.",
+      "nonHtml": "Questo link non è una pagina web leggibile.",
+      "tooLarge": "Quella pagina è troppo grande da recuperare.",
+      "empty": "Non è stato trovato alcun testo leggibile su quella pagina.",
+      "generic": "La pagina non può essere recuperata."
+    },
+    "fetchingFile": "Recupero da {host}…",
+    "attachLink": "Allega un link",
+    "attachLinkTitle": "Allega una pagina web",
+    "attachLinkDescription": "La pagina viene recuperata e il suo testo leggibile viene allegato al tuo messaggio.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Recupera & allega",
+    "attachLinkInvalid": "Questo non sembra un indirizzo web.",
+    "linkBadge": "Da un link",
+    "couldNotRetrieve": "Impossibile recuperare",
+    "doc": {
+      "sourceLabel": "Fonte",
+      "retrievedLabel": "Recuperato",
+      "attemptedLabel": "Tentato",
+      "failureHeading": "Impossibile recuperare la pagina web"
+    },
+    "settingsTitle": "Link nei messaggi",
+    "settingsToggle": "Recupera automaticamente i link incollati",
+    "settingsDescription": "Quando incolli un link da solo, la pagina viene recuperata e il suo testo allegato così l'assistente può leggerlo. Disattiva questa opzione per mantenere i link incollati come testo semplice: puoi comunque allegare una pagina manualmente dal menu +.",
+    "addLink": "Aggiungi un link"
   }
 }

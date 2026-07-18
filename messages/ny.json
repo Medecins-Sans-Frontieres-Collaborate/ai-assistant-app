@@ -2621,7 +2621,24 @@
       "pendingCount": "{count} zikudikira",
       "closeReview": "Tsekani kuwunika kwa ubwino",
       "showReview": "Onetsani kuwunika",
-      "showReviewPending": "Onetsani kuwunika ({count} zikudikira)"
+      "showReviewPending": "Onetsani kuwunika ({count} zikudikira)",
+      "undoEdit": "Chotsani zimene zachitika",
+      "clearResolved": "Chotsani zomwe zathetsedwa",
+      "clearResolvedHint": "Chotsani kusintha komwe kuvomerezedwa, kukanidwa, kapena kosagwiritsa ntchito m'nkhaniyi",
+      "autoClearResolved": "Chotsani zokhazikitsidwa zokha zomwe zathetsedwa",
+      "customCriteria": "Mfundo zomwe mwakhazikitsa nokha",
+      "closeCriteria": "Tsekani mfundo zomwe mwakhazikitsa",
+      "newCriterion": "Mfundo yatsopano",
+      "newCriterionName": "Mfundo yopanda dzina",
+      "criterionName": "Dzina la mfundo",
+      "criterionRubric": "Malangizo",
+      "criterionRubricPlaceholder": "Fotokozani zomwe kumasulira kuyenera kuchita kuti kukwaniritse mfundo iyi, mwachitsanzo: \"Lembani malangizo onse a mlingo wa mankhwala m'kamkati, osagwiritsa ntchito infinitive...\"",
+      "criterionRubricHint": "Malangizo awa amaperekedwa ku AI monga momwe alili limodzi ndi muyezo wa MQM pobvala masu ku kumasulira.",
+      "criteriaEmpty": "Pangani mfundo zanu za kuwonera - mwachitsanzo, kalembedwe ka bungwe, mawu apadera a kasitomala, kapena malamulo a dera - kuti muwunike kumasulira kupitilira mfundo za MQM zomwe zili mkati. Zimasungidwa pa chipangizochi ndipo zimatha kugwiritsidwanso ntchito.",
+      "deleteCriterion": "Chotsani mfundo",
+      "manageCriteria": "Mfundo zomwe mwakhazikitsa nokha",
+      "addCriteria": "Onjezerani mfundo",
+      "noUsableCriteria": "Sankhani imodzi mwa mfundo zomwe zilipo kapena perekani malangizo a mfundo zanu."
     },
     "document": {
       "emptyTitle": "Fotokozani chikalata chomwe mukufuna",
@@ -2741,7 +2758,11 @@
       "clearSelection": "Chotsani zosankhidwa (gwirani ntchito ndi chikalata chonse)",
       "reviseSelectionPlaceholder": "Fotokozerani zosintha pa zosankhidwazo…",
       "revisedSelectionSummary": "Ndasintha gawo losankhidwa mu malo ogwirira ntchito.",
-      "assessedSelection": "Zosankhidwa"
+      "assessedSelection": "Zosankhidwa",
+      "undoEdit": "Chotsani zimene zachitika",
+      "clearResolved": "Chotsani zomwe zathetsedwa",
+      "clearResolvedHint": "Chotsani kusintha komwe kuvomerezedwa, kukanidwa, kapena kosagwiritsidwa ntchito m'nkhaniyi",
+      "autoClearResolved": "Chotsani zokhazikitsidwa zokha zomwe zathetsedwa"
     },
     "data": {
       "emptyTitle": "Tengani deta kuti muyese",
@@ -3014,7 +3035,31 @@
         "jumpTo": "Pitani ku {label}",
         "slider": "Malo a nthawi pa timeline",
         "showUndated": "Onetsani malo osatchulidwa nthawi",
-        "activeCount": "{count} akugwira ntchito"
+        "activeCount": "{count} akugwira ntchito",
+        "jump": {
+          "start": "Yambani",
+          "yearsLater": "{count, plural, one {Patapita chaka chimodzi} other {Patapita zaka #}}",
+          "monthsLater": "{count, plural, one {Patapita mwezi umodzi} other {Patapita miyezi #}}",
+          "daysLater": "{count, plural, one {Patapita tsiku limodzi} other {Patapita masiku #}}",
+          "appears": "{count, plural, one {Zikuoneka 1} other {Zikuoneka #}}",
+          "ends": "{count, plural, one {Zimatha 1} other {Zimatha #}}",
+          "progress": "Tsiku {index} mwa {total}"
+        },
+        "precision": {
+          "minute": "Mpaka miniti",
+          "hour": "Mpaka ola",
+          "day": "Mpaka tsiku",
+          "month": "Tsiku la mwezi",
+          "year": "Tsiku la chaka",
+          "mixed": "(zosakaniza)"
+        },
+        "pacing": {
+          "toggle": "Limbikitsa kuthamanga kwa kusewera",
+          "cardDuration": "Onetsani malo aliwonse kwa",
+          "seconds": "{seconds} masekondi",
+          "maxCards": "Malo owonetsedwa pa tsiku lililonse",
+          "hint": "Masiku okhala ndi zochitika zambiri amasungidwa nthawi yaitali basi."
+        }
       },
       "granularity": {
         "site": "Malo",
@@ -3031,8 +3076,13 @@
         "color": "Mtundu: chikhulupiliro cha malo (buluu yokwera, amber yapakati, yofiira yochepa)",
         "size": "Kukula kwa dontho: mmene malo akukhalira ofunikira ku zolembazo",
         "area": "Mzere wozungulira wodulidwa: dera lofananirako la district, chigawo, kapena dziko",
-        "container": "Mzere wopepuka: dera lomwe zili zake zimakonzedwa payekha"
-      }
+        "container": "Mzere wopepuka: dera lomwe zili zake zimakonzedwa payekha",
+        "precisionHalo": "Mzere wopepuka wopanda kusabala bwino (nthawi ya kusintha): chochitika ichi chili ndi nthawi ya mwezi kapena chaka chabe, kotero nthawi yake yeniyeni si yotsimikizika"
+      },
+      "sourceLabel": "Gwero: {name}",
+      "fetchAndMap": "Tengani & sinthani pa mapu",
+      "fetchingPage": "Mukukopera tsamba...",
+      "railUrlRequest": "Tengani ndi kuyika malo kuchokera ku: {title} ({url})"
     },
     "shell": {
       "showConversation": "Onetsa zokambirana",
@@ -3472,5 +3522,44 @@
       "llamacpp": "llama.cpp ikuenda koma ikukanira ma pempho kuchokera patsamba ili. Yambani llama-server ndi chilolezo cha cross-origin requests, ndiye pezani zomwe."
     },
     "privacyNote": "Mitundu yapafupi silithandiza zomata mafayilo, zithunzi, kufufuza pa webusayiti kapena masitepe olumikizana — zimenezi zimafunika ma seva athu. Kuyang'ana kumangoyendera pa kompyuta iyi yokha."
+  },
+  "urlFetch": {
+    "sourceFallback": "Tsamba lawebusayiti",
+    "fallbackHint": "Mutha kutsegulanso tsamba, kutengera zolemba, ndikuziyika apa m'malo mwake.",
+    "shortExtract": "Tangowerenga gawo laling'ono - tsambalo likhoza kuyendetsedwa ndalamazo kapena kufuna kudya kupeza.",
+    "errors": {
+      "invalidUrl": "Izi sizikuwoneka ngati adilesi yolondola ya webusayiti.",
+      "ssrfBlocked": "Adilesi imeneyo sangatengedwe chifukwa chotetezeka.",
+      "tooManyRedirects": "Ulalowu wakoka nthawi zambiri.",
+      "timeout": "Tsamba lawononga nthawi yaitali kuti liyankhe.",
+      "unreachable": "Tsamba silinathe kufikika.",
+      "blocked": "Tsamba laikana pempho — mwina lifuna kulowa kapena likuteteza ozikonda magalimoto.",
+      "notFound": "Tsambalo silinapezeke.",
+      "upstream": "Tsamba labweretsa cholakwika.",
+      "pdf": "Ulalo umenewo ndi PDF. Tsitsani ndikuigwiritsa ntchito batani loti muzilumikiza.",
+      "nonHtml": "Ulalo umenewo si tsamba la webu limene tingawerenge.",
+      "tooLarge": "Tsamba limenelo ndi lalikulu kwambiri kuti litengedwe.",
+      "empty": "Palibe zolemba zowerengeka zomwe zapezeka patsambalo.",
+      "generic": "Tsamba silinathe kutengedwa."
+    },
+    "fetchingFile": "Zikutenga {host}…",
+    "attachLink": "Lumikizani ulalo",
+    "attachLinkTitle": "Lumikizani tsamba la webu",
+    "attachLinkDescription": "Tsamba limatengedwa ndipo zolemba zake zowerengeka zimawonjezedwa pa uthenga wanu.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Tenga & lumikiza",
+    "attachLinkInvalid": "Siulula webusaiti.",
+    "linkBadge": "Kuchokera ku ulalo",
+    "couldNotRetrieve": "Sizinathe kutengedwa",
+    "doc": {
+      "sourceLabel": "Gwero",
+      "retrievedLabel": "Yatengedwa",
+      "attemptedLabel": "Zoyesedwa",
+      "failureHeading": "Tsamba la webu silinathe kutengedwa"
+    },
+    "settingsTitle": "Maulalo mu mauthenga",
+    "settingsToggle": "Tengani maulalo ophatikizidwa basi",
+    "settingsDescription": "Mukayika ulalo payekha, tsamba limatengedwa kenako zolemba zake zimawonjezedwa kuti wothandizira athe kuwerenga. Zimitsani izi kuti maulalo akhale monga zolemba zokha — mukhoza kulumikiza tsamba pamanja kuchokera pa menyu ya +.",
+    "addLink": "Onjezerani ulalo"
   }
 }

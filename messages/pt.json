@@ -2637,7 +2637,24 @@
       "pendingCount": "{count} pendente(s)",
       "closeReview": "Fechar avaliação de qualidade",
       "showReview": "Mostrar avaliação",
-      "showReviewPending": "Mostrar avaliação ({count} pendente(s))"
+      "showReviewPending": "Mostrar avaliação ({count} pendente(s))",
+      "undoEdit": "Desfazer",
+      "clearResolved": "Limpar resolvidos",
+      "clearResolvedHint": "Remover edições aceitas, rejeitadas e não aplicáveis desta lista",
+      "autoClearResolved": "Limpar edições resolvidas automaticamente",
+      "customCriteria": "Critérios personalizados",
+      "closeCriteria": "Fechar critérios personalizados",
+      "newCriterion": "Novo critério",
+      "newCriterionName": "Critério sem título",
+      "criterionName": "Nome do critério",
+      "criterionRubric": "Rubrica",
+      "criterionRubricPlaceholder": "Descreva o que a tradução deve fazer para atender este critério, por exemplo: \"Todas as instruções clínicas de dosagem devem estar no imperativo, nunca no infinitivo…\"",
+      "criterionRubricHint": "Esta rubrica é fornecida à IA literalmente junto com as dimensões MQM padrão ao avaliar uma tradução.",
+      "criteriaEmpty": "Crie critérios personalizados — por exemplo, estilo da instituição, preferências de terminologia ou convenções regionais — para avaliar traduções além das dimensões MQM padrão. Salvos neste dispositivo e reutilizáveis.",
+      "deleteCriterion": "Excluir critério",
+      "manageCriteria": "Critérios personalizados",
+      "addCriteria": "Adicionar critérios",
+      "noUsableCriteria": "Selecione ao menos um critério padrão ou insira uma rubrica em seus critérios personalizados."
     },
     "document": {
       "emptyTitle": "Descreva o documento desejado",
@@ -2757,7 +2774,11 @@
       "clearSelection": "Limpar seleção (trabalhar com o documento completo)",
       "reviseSelectionPlaceholder": "Descreva as mudanças na seleção…",
       "revisedSelectionSummary": "Revisei o trecho selecionado no espaço de trabalho.",
-      "assessedSelection": "Seleção"
+      "assessedSelection": "Seleção",
+      "undoEdit": "Desfazer",
+      "clearResolved": "Limpar resolvidos",
+      "clearResolvedHint": "Remover edições aceitas, rejeitadas e não aplicáveis desta lista",
+      "autoClearResolved": "Limpar edições resolvidas automaticamente"
     },
     "data": {
       "emptyTitle": "Importe dados para analisar",
@@ -3030,7 +3051,31 @@
         "jumpTo": "Ir para {label}",
         "slider": "Posição na linha do tempo",
         "showUndated": "Mostrar localizações sem data",
-        "activeCount": "{count} ativas"
+        "activeCount": "{count} ativas",
+        "jump": {
+          "start": "Início",
+          "yearsLater": "{count, plural, one {1 ano depois} other {# anos depois}}",
+          "monthsLater": "{count, plural, one {1 mês depois} other {# meses depois}}",
+          "daysLater": "{count, plural, one {1 dia depois} other {# dias depois}}",
+          "appears": "{count, plural, one {1 aparece} other {# aparecem}}",
+          "ends": "{count, plural, one {1 termina} other {# terminam}}",
+          "progress": "Data {index} de {total}"
+        },
+        "precision": {
+          "minute": "Ao minuto",
+          "hour": "À hora",
+          "day": "Ao dia",
+          "month": "Data ao nível do mês",
+          "year": "Data ao nível do ano",
+          "mixed": "(misto)"
+        },
+        "pacing": {
+          "toggle": "Ritmo da reprodução",
+          "cardDuration": "Exibir cada local por",
+          "seconds": "{seconds}s",
+          "maxCards": "Locais exibidos por data",
+          "hint": "Datas com mais eventos são exibidas por mais tempo automaticamente."
+        }
       },
       "granularity": {
         "site": "Sítio",
@@ -3047,8 +3092,13 @@
         "color": "Cor: confiança das coordenadas (azul alta, âmbar média, vermelho baixa)",
         "size": "Tamanho do ponto: quão central é o local para o material",
         "area": "Círculo tracejado: extensão aproximada de um distrito, região ou país",
-        "container": "Contorno suave: uma área cujos conteúdos são mapeados individualmente"
-      }
+        "container": "Contorno suave: uma área cujos conteúdos são mapeados individualmente",
+        "precisionHalo": "Anel tracejado (durante lapso de tempo): o evento é datado apenas por mês ou ano, portanto seu momento exato é incerto"
+      },
+      "sourceLabel": "Fonte: {name}",
+      "fetchAndMap": "Buscar e mapear",
+      "fetchingPage": "Buscando página…",
+      "railUrlRequest": "Buscar e mapear os locais de: {title} ({url})"
     },
     "shell": {
       "showConversation": "Mostrar conversa",
@@ -3488,5 +3538,44 @@
       "llamacpp": "O llama.cpp está em execução, mas está recusando solicitações deste site. Inicie o llama-server permitindo solicitações de outras origens e tente detectar novamente."
     },
     "privacyNote": "Modelos locais não suportam anexos, imagens, pesquisa na web ou conectores — isso exige nossos servidores. A detecção verifica apenas este computador."
+  },
+  "urlFetch": {
+    "sourceFallback": "Página web",
+    "fallbackHint": "Você também pode abrir a página, copiar o texto e colá-lo aqui.",
+    "shortExtract": "Apenas um curto trecho foi legível — a página pode ser paga ou exigir login.",
+    "errors": {
+      "invalidUrl": "Este endereço não parece ser válido.",
+      "ssrfBlocked": "Esse endereço não pode ser acessado por razões de segurança.",
+      "tooManyRedirects": "Esse link redirecionou vezes demais.",
+      "timeout": "A página demorou muito para responder.",
+      "unreachable": "Não foi possível acessar a página.",
+      "blocked": "O site recusou a solicitação — pode ser necessário fazer login ou ele bloqueia acessos automáticos.",
+      "notFound": "Essa página não foi encontrada.",
+      "upstream": "O site retornou um erro.",
+      "pdf": "Esse link é um PDF. Baixe o arquivo e utilize o botão de anexar para adicioná-lo.",
+      "nonHtml": "Esse link não é uma página web compatível para leitura.",
+      "tooLarge": "Essa página é grande demais para ser buscada.",
+      "empty": "Nenhum texto de artigo legível foi encontrado nessa página.",
+      "generic": "Não foi possível buscar a página."
+    },
+    "fetchingFile": "Buscando {host}…",
+    "attachLink": "Anexar um link",
+    "attachLinkTitle": "Anexar uma página web",
+    "attachLinkDescription": "A página será buscada e seu texto legível será anexado à sua mensagem.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Buscar e anexar",
+    "attachLinkInvalid": "Isso não parece um endereço web válido.",
+    "linkBadge": "De um link",
+    "couldNotRetrieve": "Não foi possível recuperar",
+    "doc": {
+      "sourceLabel": "Fonte",
+      "retrievedLabel": "Recuperado",
+      "attemptedLabel": "Tentativa",
+      "failureHeading": "Não foi possível recuperar a página web"
+    },
+    "settingsTitle": "Links nas mensagens",
+    "settingsToggle": "Buscar links colados automaticamente",
+    "settingsDescription": "Quando você cola um link sozinho, a página é buscada e seu texto é anexado para que o assistente possa ler. Desative para manter links colados como texto simples — ainda é possível anexar uma página manualmente pelo menu +.",
+    "addLink": "Adicionar um link"
   }
 }

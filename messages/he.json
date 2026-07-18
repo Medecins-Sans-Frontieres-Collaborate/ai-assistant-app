@@ -2637,7 +2637,24 @@
       "pendingCount": "{count} ממתינים",
       "closeReview": "סגור סקירת איכות",
       "showReview": "הצג סקירה",
-      "showReviewPending": "הצג סקירה ({count} ממתינים)"
+      "showReviewPending": "הצג סקירה ({count} ממתינים)",
+      "undoEdit": "בטל פעולה",
+      "clearResolved": "נקה הערות שטופלו",
+      "clearResolvedHint": "הסר עריכות שאושרו, נדחו או אינן רלוונטיות מהרשימה",
+      "autoClearResolved": "נקה אוטומטית עריכות שטופלו",
+      "customCriteria": "קריטריונים מותאמים",
+      "closeCriteria": "סגור קריטריונים מותאמים",
+      "newCriterion": "קריטריון חדש",
+      "newCriterionName": "קריטריון ללא שם",
+      "criterionName": "שם קריטריון",
+      "criterionRubric": "רובריקה",
+      "criterionRubricPlaceholder": "תאר מה נדרש בתרגום כדי לעמוד בקריטריון זה, לדוג' \"הצג את כל הוראות המינון הקליניות בציווי בלבד, לעולם לא באינפיניטיב…\"",
+      "criterionRubricHint": "רובריקה זו מוצגת ל-AI ככתבה לצד ממדי MQM המובנים בעת הערכת תרגום.",
+      "criteriaEmpty": "צרו קריטריונים מותאמים—כגון סגנון בית, העדפות מינוחים של הלקוח או מוסכמות אזוריות—כדי להעריך תרגומים מעבר לממדי MQM המובנים. נשמר במכשיר זה וניתן לשימוש חוזר.",
+      "deleteCriterion": "מחק קריטריון",
+      "manageCriteria": "קריטריונים מותאמים",
+      "addCriteria": "הוסף קריטריונים",
+      "noUsableCriteria": "בחרו לפחות קריטריון מובנה אחד, או הגדירו רובריקה לקריטריונים שלכם."
     },
     "document": {
       "emptyTitle": "תאר את המסמך הרצוי",
@@ -2757,7 +2774,11 @@
       "clearSelection": "נקה בחירה (עבודה עם כל המסמך)",
       "reviseSelectionPlaceholder": "תארו שינויים לבחירה…",
       "revisedSelectionSummary": "ערכתי את הקטע הנבחר באזור העבודה.",
-      "assessedSelection": "בחירה"
+      "assessedSelection": "בחירה",
+      "undoEdit": "בטל פעולה",
+      "clearResolved": "נקה הערות שטופלו",
+      "clearResolvedHint": "הסר עריכות שאושרו, נדחו או אינן רלוונטיות מהרשימה",
+      "autoClearResolved": "נקה אוטומטית עריכות שטופלו"
     },
     "data": {
       "emptyTitle": "ייבאו נתונים לניתוח",
@@ -3030,7 +3051,31 @@
         "jumpTo": "דלג ל{label}",
         "slider": "מיקום בציר הזמן",
         "showUndated": "הצג מיקומים ללא תאריך",
-        "activeCount": "{count} פעילים"
+        "activeCount": "{count} פעילים",
+        "jump": {
+          "start": "התחלה",
+          "yearsLater": "{count, plural, one {שנה לאחר מכן} other {# שנים לאחר מכן}}",
+          "monthsLater": "{count, plural, one {חודש לאחר מכן} other {# חודשים לאחר מכן}}",
+          "daysLater": "{count, plural, one {יום לאחר מכן} other {# ימים לאחר מכן}}",
+          "appears": "{count, plural, one {1 מופיע} other {# מופיעים}}",
+          "ends": "{count, plural, one {1 מסתיים} other {# מסתיימים}}",
+          "progress": "תאריך {index} מתוך {total}"
+        },
+        "precision": {
+          "minute": "דיוק לדקה",
+          "hour": "דיוק לשעה",
+          "day": "דיוק ליום",
+          "month": "דיוק לפי חודש",
+          "year": "דיוק לפי שנה",
+          "mixed": "(מעורב)"
+        },
+        "pacing": {
+          "toggle": "מהירות הצגה",
+          "cardDuration": "הציגו כל מיקום למשך",
+          "seconds": "{seconds} שנ'",
+          "maxCards": "מספר מיקומים לכל תאריך",
+          "hint": "תאריכים עמוסים מוצגים למשך זמן ארוך יותר אוטומטית."
+        }
       },
       "granularity": {
         "site": "אתר",
@@ -3047,8 +3092,13 @@
         "color": "צבע: רמת ביטחון של הקואורדינטות (כחול גבוה, כתום בינוני, אדום נמוך)",
         "size": "גודל הנקודה: מרכזיות המקום בחומר",
         "area": "עיגול מקווקו: הערכה משוערת של גבולות מחוז, אזור או מדינה",
-        "container": "מתאר דהוי: אזור שתוכנו ממופה בנפרד"
-      }
+        "container": "מתאר דהוי: אזור שתוכנו ממופה בנפרד",
+        "precisionHalo": "טבעת מקווקוות רכה (במהלך הילוך זמן): האירוע מתוארך רק לחודש או לשנה, ולכן זמנו המדויק אינו ידוע"
+      },
+      "sourceLabel": "מקור: {name}",
+      "fetchAndMap": "משוך ומפה",
+      "fetchingPage": "טוען עמוד…",
+      "railUrlRequest": "משוך ומפה את המיקומים מ: {title} ({url})"
     },
     "shell": {
       "showConversation": "הצג שיחה",
@@ -3488,5 +3538,44 @@
       "llamacpp": "llama.cpp רץ אך מסרב לבקשות מאתר זה. הפעל את llama-server עם הרשאה לבקשות cross-origin, ואז נסה לאתר שוב."
     },
     "privacyNote": "מודלים מקומיים אינם תומכים בקבצים מצורפים, תמונות, חיפוש באינטרנט או מחברים — אלה דורשים את השרתים שלנו. בדיקה מתבצעת רק במחשב זה."
+  },
+  "urlFetch": {
+    "sourceFallback": "דף אינטרנט",
+    "fallbackHint": "ניתן גם לפתוח את הדף, להעתיק את הטקסט ולהדביקו כאן במקום.",
+    "shortExtract": "ניתן היה לקרוא רק קטע קצר—העמוד עשוי להיות מאחורי חומת תשלום או לדרוש כניסה.",
+    "errors": {
+      "invalidUrl": "זה לא נראה כמו כתובת אתר תקינה.",
+      "ssrfBlocked": "לא ניתן לשלוף כתובת זו מסיבות אבטחה.",
+      "tooManyRedirects": "הקישור הופנה מחדש מספר פעמים רב מדי.",
+      "timeout": "העמוד לקח יותר מדי זמן להגיב.",
+      "unreachable": "לא ניתן לגשת לעמוד זה.",
+      "blocked": "האתר סירב לבקשה — ייתכן שנדרש להתחבר או שהוא חוסם קוראים אוטומטיים.",
+      "notFound": "העמוד לא נמצא.",
+      "upstream": "האתר החזיר שגיאה.",
+      "pdf": "הקישור הוא לקובץ PDF. יש להוריד אותו ולהשתמש בכפתור ההוספה לצירוף הקובץ.",
+      "nonHtml": "הקישור אינו לעמוד אינטרנט קריא.",
+      "tooLarge": "העמוד גדול מדי להבאה.",
+      "empty": "לא נמצא טקסט קריא במאמר בעמוד זה.",
+      "generic": "לא ניתן היה להביא את העמוד."
+    },
+    "fetchingFile": "מביא את {host}…",
+    "attachLink": "צרף קישור",
+    "attachLinkTitle": "צרף עמוד אינטרנט",
+    "attachLinkDescription": "העמוד יובא והטקסט הקריא ממנו יצורף להודעה שלך.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "הבא וצורף",
+    "attachLinkInvalid": "זה לא נראה כמו כתובת אינטרנט תקינה.",
+    "linkBadge": "מקישור",
+    "couldNotRetrieve": "לא ניתן היה לאחזר",
+    "doc": {
+      "sourceLabel": "מקור",
+      "retrievedLabel": "אוחזר",
+      "attemptedLabel": "ניסיון",
+      "failureHeading": "לא ניתן היה לאחזר את עמוד האינטרנט"
+    },
+    "settingsTitle": "קישורים בהודעות",
+    "settingsToggle": "הבא אוטומטית קישורים שהודבקו",
+    "settingsDescription": "כאשר אתה מדביק קישור בפני עצמו, העמוד יובא והטקסט ממנו יצורף להודעה כדי שהעוזר יוכל לקרוא אותו. כבה אפשרות זו כדי להשאיר קישורים מודבקים כטקסט רגיל — ניתן עדיין לצרף עמוד ידנית מתפריט ה-+.",
+    "addLink": "הוסף קישור"
   }
 }

@@ -2637,7 +2637,24 @@
       "pendingCount": "{count} pendent(s)",
       "closeReview": "Tancar revisió de qualitat",
       "showReview": "Mostra la revisió",
-      "showReviewPending": "Mostra la revisió ({count} pendents)"
+      "showReviewPending": "Mostra la revisió ({count} pendents)",
+      "undoEdit": "Desfés",
+      "clearResolved": "Neteja resolts",
+      "clearResolvedHint": "Elimina les edicions acceptades, rebutjades i no aplicables d'aquesta llista",
+      "autoClearResolved": "Neteja automàticament les edicions resoltes",
+      "customCriteria": "Criteris personalitzats",
+      "closeCriteria": "Tanca criteris personalitzats",
+      "newCriterion": "Nou criteri",
+      "newCriterionName": "Criteri sense títol",
+      "criterionName": "Nom del criteri",
+      "criterionRubric": "Rúbrica",
+      "criterionRubricPlaceholder": "Descriu què ha de complir la traducció per satisfer aquest criteri, p. ex.: «Inclou totes les instruccions de dosi clínica a l’imperatiu, mai a l’infinitiu…»",
+      "criterionRubricHint": "Aquesta rúbrica es proporciona a la IA textualment junt amb les dimensions MQM integrades per valorar una traducció.",
+      "criteriaEmpty": "Crea criteris personalitzats — p. ex. estil corporatiu, preferències terminològiques del client o convencions regionals — per avaluar les traduccions més enllà de les dimensions MQM integrades. S’emmagatzemen en aquest dispositiu i són reutilitzables.",
+      "deleteCriterion": "Suprimeix criteri",
+      "manageCriteria": "Criteris personalitzats",
+      "addCriteria": "Afegeix criteris",
+      "noUsableCriteria": "Selecciona almenys un criteri integrat o afegeix una rúbrica als teus criteris personalitzats."
     },
     "document": {
       "emptyTitle": "Descriu el document que vols",
@@ -2757,7 +2774,11 @@
       "clearSelection": "Neteja selecció (treballa amb el document complet)",
       "reviseSelectionPlaceholder": "Descriviu els canvis a la selecció…",
       "revisedSelectionSummary": "He revisat el fragment seleccionat a l'espai de treball.",
-      "assessedSelection": "Selecció"
+      "assessedSelection": "Selecció",
+      "undoEdit": "Desfés",
+      "clearResolved": "Neteja resolts",
+      "clearResolvedHint": "Elimina les edicions acceptades, rebutjades i no aplicables d'aquesta llista",
+      "autoClearResolved": "Neteja automàticament les edicions resoltes"
     },
     "data": {
       "emptyTitle": "Importa dades per analitzar",
@@ -3030,7 +3051,31 @@
         "jumpTo": "Vés a {label}",
         "slider": "Posició a la línia temporal",
         "showUndated": "Mostra ubicacions sense data",
-        "activeCount": "{count} actives"
+        "activeCount": "{count} actives",
+        "jump": {
+          "start": "Inici",
+          "yearsLater": "{count, plural, one {1 any després} other {# anys després}}",
+          "monthsLater": "{count, plural, one {1 mes després} other {# mesos després}}",
+          "daysLater": "{count, plural, one {1 dia després} other {# dies després}}",
+          "appears": "{count, plural, one {1 apareix} other {# apareixen}}",
+          "ends": "{count, plural, one {1 finalitza} other {# finalitzen}}",
+          "progress": "Data {index} de {total}"
+        },
+        "precision": {
+          "minute": "Al minut",
+          "hour": "A l’hora",
+          "day": "Al dia",
+          "month": "Data a nivell de mes",
+          "year": "Data a nivell d’any",
+          "mixed": "(mixt)"
+        },
+        "pacing": {
+          "toggle": "Ritme de reproducció",
+          "cardDuration": "Mostra cada ubicació durant",
+          "seconds": "{seconds}s",
+          "maxCards": "Ubicacions mostrades per data",
+          "hint": "Les dates més atapeïdes duren més temps automàticament."
+        }
       },
       "granularity": {
         "site": "Emplaçament",
@@ -3047,8 +3092,13 @@
         "color": "Color: confiança en la coordenada (blau alta, ambre mitjana, vermell baixa)",
         "size": "Mida del punt: centralitat del lloc en el material",
         "area": "Cercle discontínu: extensió aproximada d’un districte, regió o país",
-        "container": "Contorn tènue: àrea amb continguts cartografiats individualment"
-      }
+        "container": "Contorn tènue: àrea amb continguts cartografiats individualment",
+        "precisionHalo": "Anell discontinu suau (durant una seqüència accelerada): l’esdeveniment només està datat a mes o any, així que el moment exacte és incert"
+      },
+      "sourceLabel": "Font: {name}",
+      "fetchAndMap": "Obté i mapeja",
+      "fetchingPage": "S’està obtenint la pàgina…",
+      "railUrlRequest": "Obté i mapeja les ubicacions de: {title} ({url})"
     },
     "shell": {
       "showConversation": "Mostra la conversa",
@@ -3488,5 +3538,44 @@
       "llamacpp": "llama.cpp s’està executant però rebutja les peticions d’aquest lloc. Inicieu llama-server amb permisos per a sol·licituds d’origen creuat i torneu a detectar."
     },
     "privacyNote": "Els models locals no admeten fitxers adjunts, imatges, cerca web ni connectors; per això calen els nostres servidors. La detecció només comprova aquest ordinador."
+  },
+  "urlFetch": {
+    "sourceFallback": "Pàgina web",
+    "fallbackHint": "També pots obrir la pàgina, copiar el text i enganxar-lo aquí.",
+    "shortExtract": "Només es va poder llegir un fragment — potser la pàgina està restringida o requereix inici de sessió.",
+    "errors": {
+      "invalidUrl": "Aquesta adreça no sembla vàlida.",
+      "ssrfBlocked": "Per motius de seguretat, no es pot obtenir aquesta adreça.",
+      "tooManyRedirects": "Aquest enllaç s’ha redirigit massa vegades.",
+      "timeout": "La pàgina ha trigat massa a respondre.",
+      "unreachable": "No s'ha pogut accedir a la pàgina.",
+      "blocked": "El lloc ha rebutjat la sol·licitud; pot ser que calgui iniciar sessió o que bloquegi lectors automatitzats.",
+      "notFound": "No s'ha trobat aquesta pàgina.",
+      "upstream": "El lloc ha retornat un error.",
+      "pdf": "Aquest enllaç és un PDF. Descarregueu-lo i utilitzeu el botó d'adjuntar per afegir-lo.",
+      "nonHtml": "Aquest enllaç no és una pàgina web que puguem llegir.",
+      "tooLarge": "Aquesta pàgina és massa gran per recuperar-la.",
+      "empty": "No s'ha trobat cap text llegible a la pàgina.",
+      "generic": "No s'ha pogut recuperar la pàgina."
+    },
+    "fetchingFile": "S'està obtenint {host}…",
+    "attachLink": "Adjunta un enllaç",
+    "attachLinkTitle": "Adjunta una pàgina web",
+    "attachLinkDescription": "La pàgina es recuperarà i el seu text llegible s'adjuntarà al teu missatge.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Recupera i adjunta",
+    "attachLinkInvalid": "Això no sembla una adreça web.",
+    "linkBadge": "Des d’un enllaç",
+    "couldNotRetrieve": "No s'ha pogut recuperar",
+    "doc": {
+      "sourceLabel": "Font",
+      "retrievedLabel": "Recuperat",
+      "attemptedLabel": "Intentat",
+      "failureHeading": "No s'ha pogut recuperar la pàgina web"
+    },
+    "settingsTitle": "Enllaços als missatges",
+    "settingsToggle": "Recupera automàticament els enllaços enganxats",
+    "settingsDescription": "Quan enganxis un enllaç sol, la pàgina es recupera i el seu text s'adjunta perquè l'assistent la pugui llegir. Pots desactivar-ho per mantenir els enllaços enganxats com a text pla. Encara pots adjuntar una pàgina manualment des del menú +.",
+    "addLink": "Afegeix un enllaç"
   }
 }

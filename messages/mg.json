@@ -2621,7 +2621,24 @@
       "pendingCount": "{count} mbola miandry",
       "closeReview": "Akatona ny fanombanana kalitao",
       "showReview": "Asehoy ny fanombanana",
-      "showReviewPending": "Asehoy ny fanombanana ({count} miandry)"
+      "showReviewPending": "Asehoy ny fanombanana ({count} miandry)",
+      "undoEdit": "Avereno",
+      "clearResolved": "Fafao ny voavaha",
+      "clearResolvedHint": "Esory amin'ny lisitra ireto fanitsiana nekena, nolavina, na tsy mihatra ireto",
+      "autoClearResolved": "Fafao ho azy ny fanitsiana voavaha",
+      "customCriteria": "Fenitra manokana",
+      "closeCriteria": "Akatona ny fenitra manokana",
+      "newCriterion": "Fenitra vaovao",
+      "newCriterionName": "Fenitra tsy misy anarana",
+      "criterionName": "Anaran'ny fenitra",
+      "criterionRubric": "Torolalana",
+      "criterionRubricPlaceholder": "Lazalazao izay tokony hataon'ny fandikana mba hahafenoana ity fenitra ity, ohatra: \"Asongadino amin’ny endrika baiko avokoa ny toro-marika rehetra momba ny fatra ara-pahasalamana, fa tsy amin’ny endrika infinitive mihitsy…\"",
+      "criterionRubricHint": "Ity torolalana ity dia omena mivantana amin'ny AI miaraka amin'ny lafiny MQM nentim-paharazana rehefa manombana fandikana.",
+      "criteriaEmpty": "Mamoròna fenitra manokana — ohatra, fomba fanaon'ny fikambanana, safidy tenin'ny mpanjifa, na fitsipika isam-paritra — mba handrefesana ny fandikana mihoatra ny lafiny MQM efa misy. Tehirizina ao amin'ity fitaovana ity ary azo averina ampiasaina.",
+      "deleteCriterion": "Fafao ny fenitra",
+      "manageCriteria": "Fenitra manokana",
+      "addCriteria": "Ampio fenitra",
+      "noUsableCriteria": "Fidio farafahakeliny fenitra iray efa misy, na omeo torolalana ny fenitrao manokana."
     },
     "document": {
       "emptyTitle": "Lazao ny antontan-taratasy ilainao",
@@ -2741,7 +2758,11 @@
       "clearSelection": "Esory ny safidy (miasa amin'ny antontan-taratasy manontolo)",
       "reviseSelectionPlaceholder": "Farito izay tiana ovaina amin'ilay safidy...",
       "revisedSelectionSummary": "Nanafatra ilay faritra voafantina tao amin'ny sehatra fiasana aho.",
-      "assessedSelection": "Safidy"
+      "assessedSelection": "Safidy",
+      "undoEdit": "Avereno",
+      "clearResolved": "Fafao ny voavaha",
+      "clearResolvedHint": "Esory amin'ny lisitra ireto fanitsiana nekena, nolavina, na tsy mihatra ireto",
+      "autoClearResolved": "Fafao ho azy ny fanitsiana voavaha"
     },
     "data": {
       "emptyTitle": "Ampidiro angon-drakitra hojerena",
@@ -3014,7 +3035,31 @@
         "jumpTo": "Mandehana any amin’ny {label}",
         "slider": "Toerana amin’ny kisary fotoana",
         "showUndated": "Asehoy ireo toerana tsy misy daty",
-        "activeCount": "{count} mavitrika"
+        "activeCount": "{count} mavitrika",
+        "jump": {
+          "start": "Fanombohana",
+          "yearsLater": "{count, plural, one {Taona 1 taty aoriana} other {{count} taona taty aoriana}}",
+          "monthsLater": "{count, plural, one {Volana 1 taty aoriana} other {{count} volana taty aoriana}}",
+          "daysLater": "{count, plural, one {Andro 1 taty aoriana} other {{count} andro taty aoriana}}",
+          "appears": "{count, plural, one {1 miseho} other {{count} miseho}}",
+          "ends": "{count, plural, one {1 mifarana} other {{count} mifarana}}",
+          "progress": "Daty faha-{index} amin'ny {total}"
+        },
+        "precision": {
+          "minute": "Hatramin'ny minitra",
+          "hour": "Hatramin'ny ora",
+          "day": "Hatramin'ny andro",
+          "month": "Daty ambara amin'ny volana",
+          "year": "Daty ambara amin'ny taona",
+          "mixed": "(mitambatra)"
+        },
+        "pacing": {
+          "toggle": "Fandehan'ny famerenana",
+          "cardDuration": "Aseho isaky ny toerana",
+          "seconds": "{seconds}s",
+          "maxCards": "Toerana aseho isaky ny daty",
+          "hint": "Raha maro ny hetsika amin'ny daty iray dia alefa ela kokoa ho azy."
+        }
       },
       "granularity": {
         "site": "Toerana",
@@ -3031,8 +3076,13 @@
         "color": "Loko: fahatokisana ny fandrindrana (manga avo, volomboasary antonony, mena ambany)",
         "size": "Haben’ny teboka: maha-zavadehibe ilay toerana ao amin’ny lahatsoratra",
         "area": "Faribolana misy tsipika: manondro ny faritry ny distrika, faritra, na firenena iray",
-        "container": "Sisa ivelany malefaka: faritra izay asiana sarintany tsirairay ny atiny"
-      }
+        "container": "Sisa ivelany malefaka: faritra izay asiana sarintany tsirairay ny atiny",
+        "precisionHalo": "Boribory mana-batana mipetaka (amin’ny time lapse): daty tsy mazava fa amin’ny volana na taona ihany, ka tsy fantatra tsara ny fotoana"
+      },
+      "sourceLabel": "Loharano: {name}",
+      "fetchAndMap": "Alaina & ametrahana sarintany",
+      "fetchingPage": "Manangona pejy…",
+      "railUrlRequest": "Alaina sy ametrahana sarintany ny toerana avy amin'ny: {title} ({url})"
     },
     "shell": {
       "showConversation": "Asehoy ny resaka",
@@ -3472,5 +3522,44 @@
       "llamacpp": "Mandeha i llama.cpp saingy mandà fangatahana avy amin’ity tranonkala ity. Atomboy miaraka amin’ny cross-origin requests avela ny llama-server, dia ataovy indray ny fikarohana."
     },
     "privacyNote": "Tsy manohana rakitra, sary, fikarohana web, na connecteurs ny model eo an-toerana — mila server-nay izany. Fotsiny amin’ity solosaina ity ihany no mijery ny fisiany."
+  },
+  "urlFetch": {
+    "sourceFallback": "Pejy web",
+    "fallbackHint": "Azonao atao ihany koa ny manokatra ilay pejy, mandika ny lahatsoratra, ary mametaka eto.",
+    "shortExtract": "Fintina fohy ihany no azo vakiana — mety voaloa vola ilay pejy na mitaky fidirana.",
+    "errors": {
+      "invalidUrl": "Tsy toa adiresy web manankery izany.",
+      "ssrfBlocked": "Tsy azo alaina io adiresy io noho ny antony fiarovana.",
+      "tooManyRedirects": "Nanao redirect imbetsaka loatra io rohy io.",
+      "timeout": "Ela loatra ny famaliana ilay pejy.",
+      "unreachable": "Tsy azo idirana ilay pejy.",
+      "blocked": "Nolavin'ilay tranonkala ny fangatahana — mety mila fidirana na manakana mpamaky mandeha ho azy.",
+      "notFound": "Tsy hita ilay pejy.",
+      "upstream": "Nivoaka ny hadisoana avy amin'ilay tranonkala.",
+      "pdf": "PDF io rohy io. Sintomy ary ampiasao ny bokotra attach hanampiana azy.",
+      "nonHtml": "Tsy pejy web azonay vakiana io rohy io.",
+      "tooLarge": "Lehibe loatra ilay pejy ka tsy afaka alaina.",
+      "empty": "Tsy nisy lahatsoratra azo vakiana hita tamin'io pejy io.",
+      "generic": "Tsy azony nalaina ilay pejy."
+    },
+    "fetchingFile": "Alaiko {host}…",
+    "attachLink": "Manampia rohy",
+    "attachLinkTitle": "Manampia pejy web",
+    "attachLinkDescription": "Alaina ilay pejy ary ampiarahina amin'ny hafatrao ny lahatsoratra azo vakiana.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Alao & ampiaro",
+    "attachLinkInvalid": "Tsy toa adiresy web io.",
+    "linkBadge": "Avy amin'ny rohy",
+    "couldNotRetrieve": "Tsy azo nalaina",
+    "doc": {
+      "sourceLabel": "Loharano",
+      "retrievedLabel": "Voaray",
+      "attemptedLabel": "Niezahana nalaina",
+      "failureHeading": "Tsy azo nalaina ilay pejy web"
+    },
+    "settingsTitle": "Rohy ao anaty hafatra",
+    "settingsToggle": "Alao ho azy ny rohy apetraka",
+    "settingsDescription": "Rehefa mametraka rohy misaraka ianao dia alaina ilay pejy ary ny lahatsorany dia ampiarahina amin'ny hafatrao mba ho azon'ny assistant vakiana. Vonoy raha tianao hijanona ho soratra tsotra fotsiny ny rohy. Azonao atao hatrany ny manampy pejy amin'ny tanana amin'ny alalan'ny menu +.",
+    "addLink": "Ampio rohy"
   }
 }

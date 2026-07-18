@@ -2637,7 +2637,24 @@
       "pendingCount": "{count} čeká",
       "closeReview": "Zavřít kontrolu kvality",
       "showReview": "Zobrazit kontrolu",
-      "showReviewPending": "Zobrazit kontrolu ({count} čeká)"
+      "showReviewPending": "Zobrazit kontrolu ({count} čeká)",
+      "undoEdit": "Zpět",
+      "clearResolved": "Vymazat vyřešené",
+      "clearResolvedHint": "Odstranit přijaté, zamítnuté a neaplikovatelné úpravy z tohoto seznamu",
+      "autoClearResolved": "Automaticky mazat vyřešené úpravy",
+      "customCriteria": "Vlastní kritéria",
+      "closeCriteria": "Zavřít vlastní kritéria",
+      "newCriterion": "Nové kritérium",
+      "newCriterionName": "Nepojmenované kritérium",
+      "criterionName": "Název kritéria",
+      "criterionRubric": "Rubrika",
+      "criterionRubricPlaceholder": "Popište, co musí překlad splnit, aby vyhověl tomuto kritériu, např. \"Převádějte všechny klinické dávkovací instrukce v rozkazovacím způsobu, nikdy v infinitivu...\"",
+      "criterionRubricHint": "Tato rubrika je AI předávána doslovně spolu s vestavěnými dimenzemi MQM při hodnocení překladu.",
+      "criteriaEmpty": "Vytvořte vlastní kritéria — např. firemní styl, preferovanou terminologii klienta nebo regionální zvyklosti — pro hodnocení překladů nad rámec vestavěných MQM dimenzí. Ukládá se na tomto zařízení a lze znovu použít.",
+      "deleteCriterion": "Smazat kritérium",
+      "manageCriteria": "Vlastní kritéria",
+      "addCriteria": "Přidat kritéria",
+      "noUsableCriteria": "Vyberte alespoň jedno vestavěné kritérium, nebo zadejte vlastní rubriku ke svým kritériím."
     },
     "document": {
       "emptyTitle": "Popište požadovaný dokument",
@@ -2757,7 +2774,11 @@
       "clearSelection": "Zrušit výběr (práce s celým dokumentem)",
       "reviseSelectionPlaceholder": "Popište úpravy tohoto výběru…",
       "revisedSelectionSummary": "Upravil(a) jsem vybranou pasáž v pracovním prostoru.",
-      "assessedSelection": "Výběr"
+      "assessedSelection": "Výběr",
+      "undoEdit": "Zpět",
+      "clearResolved": "Vymazat vyřešené",
+      "clearResolvedHint": "Odstranit přijaté, zamítnuté a neaplikovatelné úpravy z tohoto seznamu",
+      "autoClearResolved": "Automaticky mazat vyřešené úpravy"
     },
     "data": {
       "emptyTitle": "Importujte data k analýze",
@@ -3030,7 +3051,31 @@
         "jumpTo": "Přejít na {label}",
         "slider": "Pozice na časové ose",
         "showUndated": "Zobrazit nedatované lokality",
-        "activeCount": "{count} aktivních"
+        "activeCount": "{count} aktivních",
+        "jump": {
+          "start": "Začátek",
+          "yearsLater": "{count, plural, one {za 1 rok} other {za # let}}",
+          "monthsLater": "{count, plural, one {za 1 měsíc} other {za # měsíců}}",
+          "daysLater": "{count, plural, one {za 1 den} other {za # dnů}}",
+          "appears": "{count, plural, one {1 výskyt} other {# výskytů}}",
+          "ends": "{count, plural, one {1 konec} other {# konců}}",
+          "progress": "Datum {index} z {total}"
+        },
+        "precision": {
+          "minute": "Přesně na minutu",
+          "hour": "Přesně na hodinu",
+          "day": "Přesně na den",
+          "month": "Datace na úrovni měsíce",
+          "year": "Datace na úrovni roku",
+          "mixed": "(smíšené)"
+        },
+        "pacing": {
+          "toggle": "Rychlost přehrávání",
+          "cardDuration": "Zobrazit každou lokaci po",
+          "seconds": "{seconds}s",
+          "maxCards": "Lokace zobrazené na datum",
+          "hint": "Rušnější data jsou automaticky zobrazena déle."
+        }
       },
       "granularity": {
         "site": "Místo",
@@ -3047,8 +3092,13 @@
         "color": "Barva: spolehlivost souřadnic (modrá – vysoká, žlutá – střední, červená – nízká)",
         "size": "Velikost bodu: jak je místo důležité pro materiál",
         "area": "Přerušovaný kruh: přibližný rozsah okresu, regionu nebo země",
-        "container": "Slabý obrys: oblast, jejíž obsah je zmapován jednotlivě"
-      }
+        "container": "Slabý obrys: oblast, jejíž obsah je zmapován jednotlivě",
+        "precisionHalo": "Měkký čárkovaný kruh (během časosběru): událost je datována pouze na měsíc nebo rok, takže přesné načasování není jisté"
+      },
+      "sourceLabel": "Zdroj: {name}",
+      "fetchAndMap": "Načíst a mapovat",
+      "fetchingPage": "Načítání stránky…",
+      "railUrlRequest": "Načíst a mapovat lokace ze zdroje: {title} ({url})"
     },
     "shell": {
       "showConversation": "Zobrazit konverzaci",
@@ -3488,5 +3538,44 @@
       "llamacpp": "llama.cpp běží, ale odmítá požadavky z tohoto webu. Spusťte llama-server s povolenými požadavky z jiných domén a poté detekujte znovu."
     },
     "privacyNote": "Lokální modely nepodporují přílohy souborů, obrázky, webové vyhledávání ani konektory — tyto funkce vyžadují naše servery. Detekce kontroluje pouze tento počítač."
+  },
+  "urlFetch": {
+    "sourceFallback": "Webová stránka",
+    "fallbackHint": "Můžete také otevřít stránku, zkopírovat text a vložit ho sem.",
+    "shortExtract": "Přečístelný byl pouze krátký úryvek — stránka může být blokována nebo vyžadovat přihlášení.",
+    "errors": {
+      "invalidUrl": "To nevypadá jako platná webová adresa.",
+      "ssrfBlocked": "Tuto adresu nelze načíst z bezpečnostních důvodů.",
+      "tooManyRedirects": "Tento odkaz byl přesměrován příliš mnohokrát.",
+      "timeout": "Stránka reagovala příliš dlouho.",
+      "unreachable": "Stránku se nepodařilo načíst.",
+      "blocked": "Stránka odmítla požadavek — může být vyžadováno přihlášení nebo blokuje automatické čtečky.",
+      "notFound": "Stránka nebyla nalezena.",
+      "upstream": "Stránka vrátila chybu.",
+      "pdf": "Tento odkaz je PDF. Stáhněte jej a přidejte pomocí tlačítka pro přiložení.",
+      "nonHtml": "Tento odkaz není webová stránka, kterou lze přečíst.",
+      "tooLarge": "Tato stránka je příliš velká na stažení.",
+      "empty": "Na této stránce nebyl nalezen žádný čitelný text článku.",
+      "generic": "Stránku se nepodařilo načíst."
+    },
+    "fetchingFile": "Načítání {host}…",
+    "attachLink": "Přiložit odkaz",
+    "attachLinkTitle": "Přiložit webovou stránku",
+    "attachLinkDescription": "Stránka bude stažena a její text přiložen k vaší zprávě.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Načíst a přiložit",
+    "attachLinkInvalid": "To nevypadá jako webová adresa.",
+    "linkBadge": "Z odkazu",
+    "couldNotRetrieve": "Nepodařilo se načíst",
+    "doc": {
+      "sourceLabel": "Zdroj",
+      "retrievedLabel": "Načteno",
+      "attemptedLabel": "Pokus o načtení",
+      "failureHeading": "Webovou stránku se nepodařilo načíst"
+    },
+    "settingsTitle": "Odkazy ve zprávách",
+    "settingsToggle": "Automaticky načítat vložené odkazy",
+    "settingsDescription": "Když vložíte odkaz samostatně, stránka se stáhne a text přiloží, aby jej asistent mohl číst. Vypněte pro ponechání odkazů jako prostý text — stránku lze stále přiložit ručně z nabídky +.",
+    "addLink": "Přidat odkaz"
   }
 }

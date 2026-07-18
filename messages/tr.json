@@ -2637,7 +2637,24 @@
       "pendingCount": "{count} bekliyor",
       "closeReview": "Kalite değerlendirmesini kapat",
       "showReview": "Değerlendirmeyi göster",
-      "showReviewPending": "Değerlendirmeyi göster ({count} bekliyor)"
+      "showReviewPending": "Değerlendirmeyi göster ({count} bekliyor)",
+      "undoEdit": "Geri al",
+      "clearResolved": "Çözülenleri temizle",
+      "clearResolvedHint": "Kabul edilen, reddedilen ve uygulanamayan düzenlemeleri bu listeden kaldır",
+      "autoClearResolved": "Çözülen düzenlemeleri otomatik olarak temizle",
+      "customCriteria": "Özel kriterler",
+      "closeCriteria": "Özel kriterleri kapat",
+      "newCriterion": "Yeni kriter",
+      "newCriterionName": "Başlıksız kriter",
+      "criterionName": "Kriter adı",
+      "criterionRubric": "Değerlendirme ölçütü",
+      "criterionRubricPlaceholder": "Bu kriteri karşılamak için çevirinin ne yapması gerektiğini açıklayın, örn. \"Tüm klinik dozaj talimatlarını emir kipinde çevirin, hiçbir zaman mastar kullanmayın…\"",
+      "criterionRubricHint": "Bu ölçüt, bir çeviri değerlendirilirken yerleşik MQM boyutlarıyla birlikte AI'ya olduğu gibi verilir.",
+      "criteriaEmpty": "Yerleşik MQM boyutlarının ötesinde çevirileri değerlendirmek için özel kriterler oluşturun — örn. kurum tarzı, müşteri terminolojisi tercihleri veya bölgesel gelenekler. Bu cihazda kaydedilir ve tekrar kullanılabilir.",
+      "deleteCriterion": "Kriteri sil",
+      "manageCriteria": "Özel kriterler",
+      "addCriteria": "Kriter ekle",
+      "noUsableCriteria": "En az bir yerleşik kriter seçin veya özel kriterlerinize bir değerlendirme ölçütü ekleyin."
     },
     "document": {
       "emptyTitle": "İstediğiniz belgeyi tanımlayın",
@@ -2757,7 +2774,11 @@
       "clearSelection": "Seçimi temizle (tüm belgeyle çalış)",
       "reviseSelectionPlaceholder": "Seçili bölümde yapılacak değişiklikleri açıklayın…",
       "revisedSelectionSummary": "Çalışma alanında seçili bölümü revize ettim.",
-      "assessedSelection": "Seçim"
+      "assessedSelection": "Seçim",
+      "undoEdit": "Geri al",
+      "clearResolved": "Çözülenleri temizle",
+      "clearResolvedHint": "Kabul edilen, reddedilen ve uygulanamayan düzenlemeleri bu listeden kaldır",
+      "autoClearResolved": "Çözülen düzenlemeleri otomatik olarak temizle"
     },
     "data": {
       "emptyTitle": "Analiz için veri içe aktar",
@@ -3030,7 +3051,31 @@
         "jumpTo": "{label}'a atla",
         "slider": "Zaman çizgisi konumu",
         "showUndated": "Tarihsiz konumları göster",
-        "activeCount": "{count} aktif"
+        "activeCount": "{count} aktif",
+        "jump": {
+          "start": "Başlangıç",
+          "yearsLater": "{count, plural, one {1 yıl sonra} other {# yıl sonra}}",
+          "monthsLater": "{count, plural, one {1 ay sonra} other {# ay sonra}}",
+          "daysLater": "{count, plural, one {1 gün sonra} other {# gün sonra}}",
+          "appears": "{count, plural, one {1 kere göründü} other {# kez göründü}}",
+          "ends": "{count, plural, one {1 kez sona erdi} other {# kez sona erdi}}",
+          "progress": "Tarih {index} / {total}"
+        },
+        "precision": {
+          "minute": "Dakika hassasiyetinde",
+          "hour": "Saat hassasiyetinde",
+          "day": "Gün hassasiyetinde",
+          "month": "Ay seviyesinde tarih",
+          "year": "Yıl seviyesinde tarih",
+          "mixed": "(karışık)"
+        },
+        "pacing": {
+          "toggle": "Oynatma hızı",
+          "cardDuration": "Her konumu gösterme süresi",
+          "seconds": "{seconds} sn",
+          "maxCards": "Tarih başına gösterilen konumlar",
+          "hint": "Yoğun günlerde otomatik olarak daha uzun süre gösterilir."
+        }
       },
       "granularity": {
         "site": "Saha",
@@ -3047,8 +3092,13 @@
         "color": "Renk: koordinat güveni (mavi yüksek, kehribar orta, kırmızı düşük)",
         "size": "Nokta boyutu: yerin materyaldeki önemi",
         "area": "Kesik daire: bir ilçe, bölge veya ülkenin yaklaşık sınırı",
-        "container": "Soluk çizgi: içeriği tek tek haritalanan bir alan"
-      }
+        "container": "Soluk çizgi: içeriği tek tek haritalanan bir alan",
+        "precisionHalo": "Yumuşak kesikli halka (zaman atlamasında): Olay sadece bir ay veya yıl olarak tarihlendirildi, bu nedenle tam zamanı belirsiz"
+      },
+      "sourceLabel": "Kaynak: {name}",
+      "fetchAndMap": "Getir ve eşleştir",
+      "fetchingPage": "Sayfa getiriliyor…",
+      "railUrlRequest": "Konumları getir ve eşleştir: {title} ({url})"
     },
     "shell": {
       "showConversation": "Konuşmayı göster",
@@ -3488,5 +3538,44 @@
       "llamacpp": "llama.cpp çalışıyor fakat bu siteden gelen istekleri reddediyor. llama-server’ı çapraz orijin isteklerine izin vererek başlatın ve tekrar tespit edin."
     },
     "privacyNote": "Yerel modeller dosya ekleri, resimler, web araması veya konektörleri desteklemez — bunlar için sunucularımız gerekir. Tespit işlemi yalnızca bu bilgisayarı kontrol eder."
+  },
+  "urlFetch": {
+    "sourceFallback": "Web sayfası",
+    "fallbackHint": "İsterseniz sayfayı açıp metni kopyalayıp buraya yapıştırabilirsiniz.",
+    "shortExtract": "Sadece kısa bir alıntı okunabildi — sayfa ücretli veya oturum açma gerektirebilir.",
+    "errors": {
+      "invalidUrl": "Bu geçerli bir web adresi gibi görünmüyor.",
+      "ssrfBlocked": "Güvenlik nedeniyle bu adrese erişilemiyor.",
+      "tooManyRedirects": "Bu bağlantı çok fazla yönlendirme yaptı.",
+      "timeout": "Sayfanın yanıt vermesi çok uzun sürdü.",
+      "unreachable": "Sayfaya erişilemedi.",
+      "blocked": "Site isteği reddetti — giriş yapmanız gerekebilir veya otomatik okuyucular engellenmiş olabilir.",
+      "notFound": "Bu sayfa bulunamadı.",
+      "upstream": "Site bir hata döndürdü.",
+      "pdf": "Bu bağlantı bir PDF dosyası. Lütfen indirip ekle butonunu kullanarak ekleyin.",
+      "nonHtml": "Bu bağlantı okunabilir bir web sayfası değil.",
+      "tooLarge": "Bu sayfa getirilemeyecek kadar büyük.",
+      "empty": "Bu sayfada okunabilir bir makale metni bulunamadı.",
+      "generic": "Sayfa getirilemedi."
+    },
+    "fetchingFile": "{host} getiriliyor…",
+    "attachLink": "Bağlantı ekle",
+    "attachLinkTitle": "Web sayfası ekle",
+    "attachLinkDescription": "Sayfa getirilir ve okunabilir metni mesajınıza eklenir.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Getir ve ekle",
+    "attachLinkInvalid": "Bu bir web adresi gibi görünmüyor.",
+    "linkBadge": "Bağlantıdan",
+    "couldNotRetrieve": "Getirilemedi",
+    "doc": {
+      "sourceLabel": "Kaynak",
+      "retrievedLabel": "Getirildi",
+      "attemptedLabel": "Denendi",
+      "failureHeading": "Web sayfası getirilemedi"
+    },
+    "settingsTitle": "Mesajlardaki bağlantılar",
+    "settingsToggle": "Yapıştırılan bağlantıları otomatik olarak getir",
+    "settingsDescription": "Bir bağlantı tek başına yapıştırıldığında, sayfa getirilir ve metni eklenir, böylece asistan okuyabilir. Bunu kapatırsanız bağlantılar düz metin olarak kalır — yine de + menüsünden bir sayfa ekleyebilirsiniz.",
+    "addLink": "Bağlantı ekle"
   }
 }

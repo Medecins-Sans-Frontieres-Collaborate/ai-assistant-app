@@ -2637,7 +2637,24 @@
       "pendingCount": "{count} in behandeling",
       "closeReview": "Kwaliteitscontrole sluiten",
       "showReview": "Beoordeling tonen",
-      "showReviewPending": "Beoordeling tonen ({count} in behandeling)"
+      "showReviewPending": "Beoordeling tonen ({count} in behandeling)",
+      "undoEdit": "Ongedaan maken",
+      "clearResolved": "Verwijder opgelost",
+      "clearResolvedHint": "Verwijder geaccepteerde, afgewezen en niet-relevante bewerkingen uit deze lijst",
+      "autoClearResolved": "Opgeloste bewerkingen automatisch verwijderen",
+      "customCriteria": "Aangepaste criteria",
+      "closeCriteria": "Aangepaste criteria sluiten",
+      "newCriterion": "Nieuw criterium",
+      "newCriterionName": "Naamloos criterium",
+      "criterionName": "Naam criterium",
+      "criterionRubric": "Rubriek",
+      "criterionRubricPlaceholder": "Beschrijf waaraan de vertaling moet voldoen voor dit criterium, bijv. \"Geef alle klinische dosis-instructies in de gebiedende wijs weer, nooit in de infinitief…\"",
+      "criterionRubricHint": "Deze rubriek wordt letterlijk aan de AI meegegeven, samen met de standaard MQM-dimensies, bij het beoordelen van een vertaling.",
+      "criteriaEmpty": "Maak aangepaste criteria aan — bijvoorbeeld huisstijl, voorkeursterminologie van de klant of regionale conventies — om vertalingen te beoordelen naast de ingebouwde MQM-dimensies. Wordt op dit apparaat opgeslagen en is herbruikbaar.",
+      "deleteCriterion": "Criterium verwijderen",
+      "manageCriteria": "Aangepaste criteria",
+      "addCriteria": "Criteria toevoegen",
+      "noUsableCriteria": "Selecteer ten minste één ingebouwd criterium of geef uw aangepaste criteria een rubriek."
     },
     "document": {
       "emptyTitle": "Beschrijf het gewenste document",
@@ -2757,7 +2774,11 @@
       "clearSelection": "Selectie wissen (werk met het volledige document)",
       "reviseSelectionPlaceholder": "Beschrijf de wijziging van de selectie…",
       "revisedSelectionSummary": "Ik heb het geselecteerde fragment herzien in de werkruimte.",
-      "assessedSelection": "Selectie"
+      "assessedSelection": "Selectie",
+      "undoEdit": "Ongedaan maken",
+      "clearResolved": "Verwijder opgelost",
+      "clearResolvedHint": "Verwijder geaccepteerde, afgewezen en niet-relevante bewerkingen uit deze lijst",
+      "autoClearResolved": "Opgeloste bewerkingen automatisch verwijderen"
     },
     "data": {
       "emptyTitle": "Importeer data om te analyseren",
@@ -3030,7 +3051,31 @@
         "jumpTo": "Ga naar {label}",
         "slider": "Tijdlijnpositie",
         "showUndated": "Toon locaties zonder datum",
-        "activeCount": "{count} actief"
+        "activeCount": "{count} actief",
+        "jump": {
+          "start": "Start",
+          "yearsLater": "{count, plural, one {1 jaar later} other {# jaar later}}",
+          "monthsLater": "{count, plural, one {1 maand later} other {# maanden later}}",
+          "daysLater": "{count, plural, one {1 dag later} other {# dagen later}}",
+          "appears": "{count, plural, one {1 keer verschenen} other {# keer verschenen}}",
+          "ends": "{count, plural, one {1 keer beëindigd} other {# keer beëindigd}}",
+          "progress": "Datum {index} van {total}"
+        },
+        "precision": {
+          "minute": "Op de minuut precies",
+          "hour": "Op het uur precies",
+          "day": "Op de dag precies",
+          "month": "Datering op maandniveau",
+          "year": "Datering op jaarniveau",
+          "mixed": "(gemengd)"
+        },
+        "pacing": {
+          "toggle": "Afspelsnelheid",
+          "cardDuration": "Toon elke locatie gedurende",
+          "seconds": "{seconds}s",
+          "maxCards": "Locaties per datum",
+          "hint": "Drukkere datums worden automatisch langer getoond."
+        }
       },
       "granularity": {
         "site": "Locatie",
@@ -3047,8 +3092,13 @@
         "color": "Kleur: coördinatenzekerheid (blauw hoog, oranje middel, rood laag)",
         "size": "Puntgrootte: hoe centraal de locatie is voor het materiaal",
         "area": "Gestreepte cirkel: geschatte omvang van een district, regio of land",
-        "container": "Lichte omlijning: een gebied waarvan de inhoud afzonderlijk wordt weergegeven"
-      }
+        "container": "Lichte omlijning: een gebied waarvan de inhoud afzonderlijk wordt weergegeven",
+        "precisionHalo": "Zachte gestreepte ring (tijdens een time-lapse): het evenement is alleen op maand- of jaarniveau gedateerd, dus de exacte timing is onzeker"
+      },
+      "sourceLabel": "Bron: {name}",
+      "fetchAndMap": "Ophalen & koppelen",
+      "fetchingPage": "Pagina ophalen…",
+      "railUrlRequest": "Haal de locaties op en koppel ze uit: {title} ({url})"
     },
     "shell": {
       "showConversation": "Toon gesprek",
@@ -3488,5 +3538,44 @@
       "llamacpp": "llama.cpp draait, maar weigert verzoeken van deze site. Start llama-server met cross-origin verzoeken toegestaan en probeer opnieuw te detecteren."
     },
     "privacyNote": "Lokale modellen ondersteunen geen bestandsbijlagen, afbeeldingen, webzoekopdrachten of connectors — daarvoor zijn onze servers nodig. Detectie controleert uitsluitend deze computer."
+  },
+  "urlFetch": {
+    "sourceFallback": "Webpagina",
+    "fallbackHint": "U kunt de pagina ook openen, de tekst kopiëren en hier plakken.",
+    "shortExtract": "Slechts een kort fragment was leesbaar — de pagina kan achter een betaalmuur staan of een login vereisen.",
+    "errors": {
+      "invalidUrl": "Dat lijkt geen geldig webadres te zijn.",
+      "ssrfBlocked": "Dat adres kan om veiligheidsredenen niet worden opgehaald.",
+      "tooManyRedirects": "Die link heeft te vaak doorgestuurd.",
+      "timeout": "De pagina reageerde te langzaam.",
+      "unreachable": "De pagina kon niet worden bereikt.",
+      "blocked": "De site weigerde het verzoek — mogelijk is inloggen vereist of worden automatische lezers geblokkeerd.",
+      "notFound": "Die pagina is niet gevonden.",
+      "upstream": "De site gaf een foutmelding terug.",
+      "pdf": "Die link verwijst naar een PDF. Download het bestand en voeg het toe met de bijlageknop.",
+      "nonHtml": "Die link verwijst niet naar een webpagina die we kunnen lezen.",
+      "tooLarge": "Die pagina is te groot om op te halen.",
+      "empty": "Er is geen leesbare artikeltekst gevonden op die pagina.",
+      "generic": "De pagina kon niet worden opgehaald."
+    },
+    "fetchingFile": "Bezig met ophalen van {host}…",
+    "attachLink": "Een link toevoegen",
+    "attachLinkTitle": "Voeg een webpagina toe",
+    "attachLinkDescription": "De pagina wordt opgehaald en de leesbare tekst wordt bij je bericht gevoegd.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Ophalen & toevoegen",
+    "attachLinkInvalid": "Dat lijkt geen webadres te zijn.",
+    "linkBadge": "Van een link",
+    "couldNotRetrieve": "Kon niet worden opgehaald",
+    "doc": {
+      "sourceLabel": "Bron",
+      "retrievedLabel": "Opgehaald",
+      "attemptedLabel": "Geprobeerd",
+      "failureHeading": "Webpagina kon niet worden opgehaald"
+    },
+    "settingsTitle": "Links in berichten",
+    "settingsToggle": "Links automatisch ophalen",
+    "settingsDescription": "Wanneer je een losse link plakt, wordt de pagina opgehaald en de tekst toegevoegd zodat de assistent deze kan lezen. Zet dit uit om geplakte links als platte tekst te houden — je kunt een pagina nog steeds handmatig toevoegen via het +-menu.",
+    "addLink": "Link toevoegen"
   }
 }

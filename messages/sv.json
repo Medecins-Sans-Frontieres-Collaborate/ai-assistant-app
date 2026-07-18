@@ -2637,7 +2637,24 @@
       "pendingCount": "{count} väntande",
       "closeReview": "Stäng kvalitetsgranskning",
       "showReview": "Visa granskning",
-      "showReviewPending": "Visa granskning ({count} väntande)"
+      "showReviewPending": "Visa granskning ({count} väntande)",
+      "undoEdit": "Ångra",
+      "clearResolved": "Rensa åtgärdade",
+      "clearResolvedHint": "Ta bort godkända, avvisade och irrelevanta ändringar från listan",
+      "autoClearResolved": "Rensa åtgärdade ändringar automatiskt",
+      "customCriteria": "Egna kriterier",
+      "closeCriteria": "Stäng egna kriterier",
+      "newCriterion": "Nytt kriterium",
+      "newCriterionName": "Namnlöst kriterium",
+      "criterionName": "Kriterienamn",
+      "criterionRubric": "Bedömningsmall",
+      "criterionRubricPlaceholder": "Beskriv vad översättningen måste uppfylla för detta kriterium, t.ex. \"Alla kliniska doseringsinstruktioner ska anges i imperativ, aldrig infinitiv…\"",
+      "criterionRubricHint": "Den här bedömningsmallen ges ordagrant till AI:t tillsammans med de inbyggda MQM-dimensionerna vid bedömning av översättningen.",
+      "criteriaEmpty": "Skapa egna kriterier — t.ex. husstil, kundens termpreferenser eller regionala konventioner — för att bedöma översättningar utöver de inbyggda MQM-dimensionerna. Sparas på denna enhet och kan återanvändas.",
+      "deleteCriterion": "Ta bort kriterium",
+      "manageCriteria": "Egna kriterier",
+      "addCriteria": "Lägg till kriterier",
+      "noUsableCriteria": "Välj minst ett inbyggt kriterium, eller ge dina egna kriterier en bedömningsmall."
     },
     "document": {
       "emptyTitle": "Beskriv dokumentet du vill ha",
@@ -2757,7 +2774,11 @@
       "clearSelection": "Rensa markering (arbeta med hela dokumentet)",
       "reviseSelectionPlaceholder": "Beskriv ändringar för markeringen…",
       "revisedSelectionSummary": "Jag reviderade det markerade avsnittet i arbetsytan.",
-      "assessedSelection": "Markering"
+      "assessedSelection": "Markering",
+      "undoEdit": "Ångra",
+      "clearResolved": "Rensa åtgärdade",
+      "clearResolvedHint": "Ta bort godkända, avvisade och irrelevanta ändringar från listan",
+      "autoClearResolved": "Rensa åtgärdade ändringar automatiskt"
     },
     "data": {
       "emptyTitle": "Importera data för analys",
@@ -3030,7 +3051,31 @@
         "jumpTo": "Hoppa till {label}",
         "slider": "Tidslinjeposition",
         "showUndated": "Visa odaterade platser",
-        "activeCount": "{count} aktiva"
+        "activeCount": "{count} aktiva",
+        "jump": {
+          "start": "Start",
+          "yearsLater": "{count, plural, one {1 år senare} other {# år senare}}",
+          "monthsLater": "{count, plural, one {1 månad senare} other {# månader senare}}",
+          "daysLater": "{count, plural, one {1 dag senare} other {# dagar senare}}",
+          "appears": "{count, plural, one {1 visas} other {# visas}}",
+          "ends": "{count, plural, one {1 avslutas} other {# avslutas}}",
+          "progress": "Datum {index} av {total}"
+        },
+        "precision": {
+          "minute": "Till minuten",
+          "hour": "Till timmen",
+          "day": "Till dagen",
+          "month": "Datum på månadsnivå",
+          "year": "Datum på årsnivå",
+          "mixed": "(blandat)"
+        },
+        "pacing": {
+          "toggle": "Uppspelningstempo",
+          "cardDuration": "Visa varje plats i",
+          "seconds": "{seconds}s",
+          "maxCards": "Platser per datum",
+          "hint": "Tätare datum visas automatiskt längre."
+        }
       },
       "granularity": {
         "site": "Plats",
@@ -3047,8 +3092,13 @@
         "color": "Färg: koordinatens tillförlitlighet (blå hög, bärnsten medel, röd låg)",
         "size": "Prickstorlek: hur central platsen är i materialet",
         "area": "Streckad cirkel: ungefärlig omfattning av ett distrikt, en region eller ett land",
-        "container": "Tunn kontur: ett område vars innehåll har kartlagts individuellt"
-      }
+        "container": "Tunn kontur: ett område vars innehåll har kartlagts individuellt",
+        "precisionHalo": "Prickad mjuk ring (under tidsförlopp): händelsen är endast daterad till en månad eller ett år, så exakt tidpunkt är osäker"
+      },
+      "sourceLabel": "Källa: {name}",
+      "fetchAndMap": "Hämta & kartlägg",
+      "fetchingPage": "Hämtar sida…",
+      "railUrlRequest": "Hämta och kartlägg platser från: {title} ({url})"
     },
     "shell": {
       "showConversation": "Visa konversation",
@@ -3488,5 +3538,44 @@
       "llamacpp": "llama.cpp körs men vägrar begäran från denna sida. Starta llama-server med stöd för cross-origin begäran och försök identifiera igen."
     },
     "privacyNote": "Lokala modeller stödjer inte filbilagor, bilder, webbsökning eller connectors — det kräver våra servrar. Detektering kontrollerar endast denna dator."
+  },
+  "urlFetch": {
+    "sourceFallback": "Webbsida",
+    "fallbackHint": "Du kan också öppna sidan, kopiera texten och klistra in den här.",
+    "shortExtract": "Endast ett kort utdrag var läsbart — sidan kan ha betalvägg eller kräver inloggning.",
+    "errors": {
+      "invalidUrl": "Det ser inte ut som en giltig webbadress.",
+      "ssrfBlocked": "Den adressen kan inte hämtas av säkerhetsskäl.",
+      "tooManyRedirects": "Länken omdirigerade för många gånger.",
+      "timeout": "Sidan tog för lång tid att svara.",
+      "unreachable": "Sidan kunde inte nås.",
+      "blocked": "Webbplatsen vägrade begäran — den kan kräva inloggning eller blockera automatiska läsare.",
+      "notFound": "Sidan hittades inte.",
+      "upstream": "Webbplatsen returnerade ett fel.",
+      "pdf": "Den länken är en PDF. Ladda ner den och använd bifogaknappen istället.",
+      "nonHtml": "Den länken är inte en webbsida vi kan läsa.",
+      "tooLarge": "Sidan är för stor för att hämtas.",
+      "empty": "Ingen läsbar artikeldel hittades på sidan.",
+      "generic": "Sidan kunde inte hämtas."
+    },
+    "fetchingFile": "Hämtar {host}…",
+    "attachLink": "Bifoga en länk",
+    "attachLinkTitle": "Bifoga en webbsida",
+    "attachLinkDescription": "Sidan hämtas och den läsbara texten bifogas till ditt meddelande.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Hämta & bifoga",
+    "attachLinkInvalid": "Det där ser inte ut som en webbadress.",
+    "linkBadge": "Från en länk",
+    "couldNotRetrieve": "Kunde inte hämtas",
+    "doc": {
+      "sourceLabel": "Källa",
+      "retrievedLabel": "Hämtad",
+      "attemptedLabel": "Försök gjordes",
+      "failureHeading": "Webbsidan kunde inte hämtas"
+    },
+    "settingsTitle": "Länkar i meddelanden",
+    "settingsToggle": "Hämta inklistrade länkar automatiskt",
+    "settingsDescription": "När du klistrar in en länk själv hämtas sidan och dess text bifogas så att assistenten kan läsa den. Stäng av detta för att behålla inklistrade länkar som vanlig text — du kan fortfarande bifoga en sida manuellt via + menyn.",
+    "addLink": "Lägg till en länk"
   }
 }

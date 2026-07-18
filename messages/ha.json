@@ -2621,7 +2621,24 @@
       "pendingCount": "{count} ana jira",
       "closeReview": "Rufe duba inganci",
       "showReview": "Nuna duba",
-      "showReviewPending": "Nuna duba ({count} ana jira)"
+      "showReviewPending": "Nuna duba ({count} ana jira)",
+      "undoEdit": "Soke",
+      "clearResolved": "Share da aka warware",
+      "clearResolvedHint": "Cire gyaran da aka yarda da su, da aka ƙi, ko da ba su da amfani daga wannan jerin",
+      "autoClearResolved": "A share gyaran da aka warware ta atomatik",
+      "customCriteria": "Kundin ƙa'ida na musamman",
+      "closeCriteria": "Rufe ƙa'ida na musamman",
+      "newCriterion": "Sabon ƙa'ida",
+      "newCriterionName": "Ƙa'ida ba tare da suna ba",
+      "criterionName": "Sunan ƙa'ida",
+      "criterionRubric": "Dangantaka",
+      "criterionRubricPlaceholder": "Bayyana abin da fassarar dole ta yi don ta cika wannan ƙa'ida, misali \"A bayyana duk umurnin magani cikin sigar umarni, ba sigar tushe ba…\"",
+      "criterionRubricHint": "Za a ba AI wannan dangantakar kai tsaye tare da tsarukan MQM lokacin tantance fassara.",
+      "criteriaEmpty": "Ƙirƙiri ƙa'idoji na musamman — misali, salon gida, kalmomin abokan ciniki, ko tsarin yankin — don auna fassara fiye da ƙa'idojin MQM. Ana ajiye su a wannan na'ura kuma za a iya sake amfani da su.",
+      "deleteCriterion": "Goge ƙa'ida",
+      "manageCriteria": "Kundin ƙa'ida na musamman",
+      "addCriteria": "Ƙara ƙa'idoji",
+      "noUsableCriteria": "Zaɓi akalla ƙa'ida ɗaya daga cikin da ke ciki, ko ka ƙayyade dangantaka ga ƙa'idojin ka na musamman."
     },
     "document": {
       "emptyTitle": "Bayyana takardar da kake so",
@@ -2741,7 +2758,11 @@
       "clearSelection": "Share zaɓi (aiki da dukkan takarda)",
       "reviseSelectionPlaceholder": "Bayyana canje-canje ga zaɓin…",
       "revisedSelectionSummary": "Na gyara ɓangaren da aka zaɓa a dandalin aiki.",
-      "assessedSelection": "Zaɓi"
+      "assessedSelection": "Zaɓi",
+      "undoEdit": "Soke",
+      "clearResolved": "Share da aka warware",
+      "clearResolvedHint": "Cire gyaran da aka yarda, aka ƙi, da marasa amfani daga wannan jerin",
+      "autoClearResolved": "A share gyaran da aka warware ta atomatik"
     },
     "data": {
       "emptyTitle": "Shigo da bayanai don nazari",
@@ -3014,7 +3035,31 @@
         "jumpTo": "Tsallaka zuwa {label}",
         "slider": "Matsayin lokaci",
         "showUndated": "Nuna wuraren da ba a saka kwanan wata ba",
-        "activeCount": "{count} masu aiki"
+        "activeCount": "{count} masu aiki",
+        "jump": {
+          "start": "Fara",
+          "yearsLater": "{count, plural, one {Shekara 1 baya} other {Shekaru # baya}}",
+          "monthsLater": "{count, plural, one {Wata 1 baya} other {Watanni # baya}}",
+          "daysLater": "{count, plural, one {Rana 1 baya} other {Kwanaki # baya}}",
+          "appears": "{count, plural, one {1 ya bayyana} other {# sun bayyana}}",
+          "ends": "{count, plural, one {1 ya ƙare} other {# sun ƙare}}",
+          "progress": "Kwanan wata {index} daga {total}"
+        },
+        "precision": {
+          "minute": "Har zuwa minti",
+          "hour": "Har zuwa awa",
+          "day": "Har zuwa rana",
+          "month": "Tarin watanni",
+          "year": "Tarin shekaru",
+          "mixed": "(hade)"
+        },
+        "pacing": {
+          "toggle": "Gudun sake kunnawa",
+          "cardDuration": "Nuna kowanne wuri na",
+          "seconds": "{seconds}s",
+          "maxCards": "Wurare da aka nuna a kowane kwanaki",
+          "hint": "Ranar da tafi aiki ana tsawaita shi ta atomatik."
+        }
       },
       "granularity": {
         "site": "Wuri",
@@ -3031,8 +3076,13 @@
         "color": "Launi: tabbacin ƙoodinati (shuɗi mafi tabbaci, rawaya matsakaici, ja ƙasa)",
         "size": "Girman dodo: muhimmancin wurin ga bayanin",
         "area": "Zagaye da dige-dige: kimanin fadin yankin karamar hukuma, yanki ko ƙasa",
-        "container": "Layis mai laushi: yanki da aka tsara abinda ke cikinsa daban-daban"
-      }
+        "container": "Layis mai laushi: yanki da aka tsara abinda ke cikinsa daban-daban",
+        "precisionHalo": "Zobe mai laushi da zare-zare (a lokacin motsa lokaci): abin da ya faru an saka rana ne zuwa wata ko shekara, don haka ba a san takamaiman lokacin ba"
+      },
+      "sourceLabel": "Tushen: {name}",
+      "fetchAndMap": "Samu & taswira",
+      "fetchingPage": "Ana samun shafi…",
+      "railUrlRequest": "Samu da taswira wuraren daga: {title} ({url})"
     },
     "shell": {
       "showConversation": "Nuna tattaunawa",
@@ -3472,5 +3522,44 @@
       "llamacpp": "llama.cpp yana aiki amma yana ƙin buƙatu daga wannan shafi. Fara llama-server tare da dama ga cross-origin requests, sannan ka sake ganowa."
     },
     "privacyNote": "Samfuran cikin gida ba su tallafa da daure fayil, hotuna, binciken intanet ko haɗa na'urori ba — waɗannan suna buƙatar sabar mu. Ganowa tana duba wannan kwamfuta kawai."
+  },
+  "urlFetch": {
+    "sourceFallback": "Shafin yanar gizo",
+    "fallbackHint": "Hakanan za ka iya buɗe shafin, kwafe rubutun, ka liƙa a nan maimakon haka.",
+    "shortExtract": "Sai kaɗan daga shafin aka karanta — watakila an toshe shafin ko ana buƙatar shiga.",
+    "errors": {
+      "invalidUrl": "Wannan ba kamar ingantaccen adireshin yanar gizo bane.",
+      "ssrfBlocked": "Ba za a iya samun wannan adireshin saboda tsaro ba.",
+      "tooManyRedirects": "Wannan hanyar ta tura sau da yawa fiye da kima.",
+      "timeout": "Shafin ya dauki lokaci mai tsawo kafin ya mayar da martani.",
+      "unreachable": "Ba a iya samun shafin.",
+      "blocked": "Shafin ya ƙi buƙatar — wataƙila yana buƙatar shiga ko kuma yana toshe masu karanta kai tsaye.",
+      "notFound": "Ba a samu wannan shafin ba.",
+      "upstream": "Shafin ya mayar da kuskure.",
+      "pdf": "Wannan mahaɗin PDF ne. Sauke shi sannan a yi amfani da maɓallin ɗora don ƙara shi.",
+      "nonHtml": "Wannan mahaɗin ba shafinta bane da za a iya karantawa.",
+      "tooLarge": "Shafin yana da girma sosai don a sauke shi.",
+      "empty": "Ba a sami rubutun labari mai karantawa a wannan shafin ba.",
+      "generic": "Ba a iya samo shafin ba."
+    },
+    "fetchingFile": "Ana samun {host}…",
+    "attachLink": "Dora mahaɗi",
+    "attachLinkTitle": "Dora shafin yanar gizo",
+    "attachLinkDescription": "An samo shafin kuma an ɗora rubutunsa zuwa sakonka.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Samo & ɗora",
+    "attachLinkInvalid": "Wannan ba ya kama da adireshin yanar gizo.",
+    "linkBadge": "Daga mahaɗi",
+    "couldNotRetrieve": "Ba a iya samu ba",
+    "doc": {
+      "sourceLabel": "Tushen",
+      "retrievedLabel": "An samo",
+      "attemptedLabel": "An gwada",
+      "failureHeading": "Ba a iya samun shafin yanar gizo ba"
+    },
+    "settingsTitle": "Mahaɗi a cikin saƙonni",
+    "settingsToggle": "Samo mahaɗin da aka liƙa ta atomatik",
+    "settingsDescription": "Idan ka liƙa mahaɗi shi kaɗai, ana samun shafin kuma an ɗora rubutunsa don mataimaki ya karanta. Kashe wannan don barin mahaɗin da aka liƙa azaman rubutu kaɗai — har yanzu za ka iya ɗora shafi da hannu daga zaɓin +.",
+    "addLink": "Ƙara mahaɗi"
   }
 }

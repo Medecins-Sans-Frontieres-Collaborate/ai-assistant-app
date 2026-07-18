@@ -2621,7 +2621,24 @@
       "pendingCount": "{count} honndu",
       "closeReview": "Uddu cippol nyaɗɗi",
       "showReview": "Hollu nyaɗɗugol",
-      "showReviewPending": "Hollu nyaɗɗugol ({count} honndu)"
+      "showReviewPending": "Hollu nyaɗɗugol ({count} honndu)",
+      "undoEdit": "Firtu",
+      "clearResolved": "Momtu jokkoraaɗi",
+      "clearResolvedHint": "Momtu cuɓoraaɗi waɗii/eta, faalaaɗi, e waɗaani seeda e leydi ɗi kadi.",
+      "autoClearResolved": "Momtu cuɓoraaɗi jokkoraade bawgal",
+      "customCriteria": "Tiɗɗe jaŋtorde",
+      "closeCriteria": "Uddu tiɗɗe jaŋtorde",
+      "newCriterion": "Tiɗɗo hesere",
+      "newCriterionName": "Tiɗɗo andaa",
+      "criterionName": "Innde tiɗɗo",
+      "criterionRubric": "Rubrik",
+      "criterionRubricPlaceholder": "Binndi hol ko jaɓi tuubannde waɗde tiɗɗo on, misal \"Yiytuɗe fiirugol holli klinikal e feewi waɗugol, si tawii ko ceertu...\"",
+      "criterionRubricHint": "Rubrik on ndon no ɲaamii AI rewti e MQM ɗin e goongon, so ko yaaɓii cuɓoraaɗe.",
+      "criteriaEmpty": "Sos tiɗɗe jaŋtorde — misal: ceede suudu, tere mum, walla tohonirɗe ɗi laawol — ngam foti e juuɗitinde cuɓoraaɗe marfee. Ko fayda e jom mbirnde on, tee tawi fayi.",
+      "deleteCriterion": "Momtu tiɗɗo",
+      "manageCriteria": "Tiɗɗe jaŋtorde",
+      "addCriteria": "Ɓeydu tiɗɗe",
+      "noUsableCriteria": "Seyda ɗum: suɓo goɗɗo tiɗɗo mokkoyaa, walla jokka rubrik ngal tiɗɗe maa."
     },
     "document": {
       "emptyTitle": "Winndu lan binndi dannde maa",
@@ -2741,7 +2758,11 @@
       "clearSelection": "Momtu suɓorgo (liggui dokment fow)",
       "reviseSelectionPlaceholder": "Siffoy juulɗi suɓorgol…",
       "revisedSelectionSummary": "Mi juuldi suɓorgol nden nder tefere.",
-      "assessedSelection": "Suɓorgo"
+      "assessedSelection": "Suɓorgo",
+      "undoEdit": "Firtu",
+      "clearResolved": "Momtu jokkoraaɗi",
+      "clearResolvedHint": "Momtu cuɓoraaɗi waɗii/eta, faalaaɗi, e waɗaani seeda e leydi ɗi kadi.",
+      "autoClearResolved": "Momtu cuɓoraaɗi jokkoraade bawgal"
     },
     "data": {
       "emptyTitle": "Kilot data ngol analiseede",
@@ -3014,7 +3035,31 @@
         "jumpTo": "Sollu to {label}",
         "slider": "Sikko ñalɗe juulde",
         "showUndated": "Naatnu nokkuureji walaa ñalɗo",
-        "activeCount": "{count} goongɗinteejo"
+        "activeCount": "{count} goongɗinteejo",
+        "jump": {
+          "start": "Fuuna",
+          "yearsLater": "{count, plural, one {1 hoore heen} other {# hoore heen}}",
+          "monthsLater": "{count, plural, one {1 lewru heen} other {# lewru heen}}",
+          "daysLater": "{count, plural, one {1 ñalnde heen} other {# ñalnde heen}}",
+          "appears": "{count, plural, one {1 ngoodi} other {# ngoodi}}",
+          "ends": "{count, plural, one {1 haani} other {# haani}}",
+          "progress": "Ñalngu {index} e {total}"
+        },
+        "precision": {
+          "minute": "Daggol goɗɗo",
+          "hour": "Daggol awa",
+          "day": "Daggol ñalnde",
+          "month": "Lewru njaarorde",
+          "year": "Hoore njaarorde",
+          "mixed": "(naatioo)"
+        },
+        "pacing": {
+          "toggle": "Daggol hunyugo",
+          "cardDuration": "Hollu leydi kala",
+          "seconds": "{seconds}s",
+          "maxCards": "Leydi hollitii kala ñalngu",
+          "hint": "Ñalnde fuɗii heɓa maddu to tammba."
+        }
       },
       "granularity": {
         "site": "Site",
@@ -3031,8 +3076,13 @@
         "color": "Cuura: goɗɗunde confidaance (bulo – buɓɓe, ember – leemun, mbirnde – nettin)",
         "size": "Hoore dot: ko woni nokkuure ɗuum e ceertu",
         "area": "Suutorgal ndotti: sojondiral ɗiɗal e njoɓdi, leydi walla gese.",
-        "container": "Lintiyol fayde: gese gooto ɗiɗi men mbaɗi suudu-ɗon e njoɓdi."
-      }
+        "container": "Lintiyol fayde: gese gooto ɗiɗi men mbaɗi suudu-ɗon e njoɓdi.",
+        "precisionHalo": "Tiɗdi kurki ceertu (e hunyugo laabi): doggol ndon tawi e lewru walla hoore tan, kono saɗaankon fayde ngoodi."
+      },
+      "sourceLabel": "Ɗawgal: {name}",
+      "fetchAndMap": "Dartini & piondir",
+      "fetchingPage": "Dartinaade hello…",
+      "railUrlRequest": "Dartini e piondir leydi e: {title} ({url})"
     },
     "shell": {
       "showConversation": "Hollu ñaamtu",
@@ -3472,5 +3522,44 @@
       "llamacpp": "llama.cpp jogii kono waawataa yilatugol e site-ndan. Hurmit llama-server e eslaade yilata cross-origin, so tawii ruuɗ-ɗaa maa."
     },
     "privacyNote": "Moodelji jowte ɗee waawataa fayde e suɓa fayli, naatude jogne, yitde web walla connectors — ɗee don ngiɗan joomi servere ɗe. Ruuɗagol, so ndon, heɓi ko kañum-ɗaa tan."
+  },
+  "urlFetch": {
+    "sourceFallback": "Hello Web",
+    "fallbackHint": "Mbiydouda maa hello on, natta mbaydi, tee nuyta nde wuuɗa he.",
+    "shortExtract": "Handi kaɗa mbaare waawaani jangi — hello on ko feewi seeram kono walla soodi geeɗu.",
+    "errors": {
+      "invalidUrl": "Aloo, ɗum waawani ko web adresse moƴƴi.",
+      "ssrfBlocked": "Adresen on waawani dartinaade sabu moƴƴude juulnde.",
+      "tooManyRedirects": "Link on ngaddi be pilte jokkoraaɗe.",
+      "timeout": "Hello e sotti, wondude jam.",
+      "unreachable": "Hello o waawi umɓude.",
+      "blocked": "Hello o yaltini ñaamde — goonga o waawi yuɓɗe walla o welti ndon bots.",
+      "notFound": "Hello ɓe heɓaani.",
+      "upstream": "Hello o artini jabiraa.",
+      "pdf": "Doon link ɗo PDF. Daalee e naat button attach ngol to haɗtude.",
+      "nonHtml": "Doon link o woodani web page amen waawani jangude.",
+      "tooLarge": "Hello o bari kadi e heftude.",
+      "empty": "Teeŋtineejo jango umɓaani e hello ɗon.",
+      "generic": "Hello o waawi umɓude."
+    },
+    "fetchingFile": "Nana heftingol {host}…",
+    "attachLink": "Haɗto link",
+    "attachLinkTitle": "Haɗto web page",
+    "attachLinkDescription": "Hello e heftii, e teeŋtinaajo ndiyam gaa e jawdiima.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Heftu e haɗtu",
+    "attachLinkInvalid": "Doon waawi web address.",
+    "linkBadge": "E link",
+    "couldNotRetrieve": "Umɓaani heftude",
+    "doc": {
+      "sourceLabel": "Ndogal",
+      "retrievedLabel": "Heftii",
+      "attemptedLabel": "Hawruɗo",
+      "failureHeading": "Web page umɓaani heftude"
+    },
+    "settingsTitle": "Linkji e jaaɓnirgal",
+    "settingsToggle": "Heftu linkji waɗi paste baawdi",
+    "settingsDescription": "So a paste link tan, hello e heftii teeŋtinaajo giddo e jawdiima kadi. A waawi teppude e ndiyam so a ballu, walla a haɗto hello jooni e menu +.",
+    "addLink": "Ɓeydu link"
   }
 }

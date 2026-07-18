@@ -2621,7 +2621,24 @@
       "pendingCount": "{count} ezali na kozela",
       "closeReview": "Kokanga talandeli ya kalite",
       "showReview": "Lakisa talandeli",
-      "showReviewPending": "Lakisa talandeli ({count} ezali na kozela)"
+      "showReviewPending": "Lakisa talandeli ({count} ezali na kozela)",
+      "undoEdit": "Kokóma lisusu",
+      "clearResolved": "Kolongola oyo esilaki",
+      "clearResolvedHint": "Longola mabongisi oyo bondimaki, boboyaki, to oyo etali te na liste oyo",
+      "autoClearResolved": "Kolongola na ndenge moko mabongisi oyo esilaki",
+      "customCriteria": "Mitindo ya yo moko",
+      "closeCriteria": "Kokanga mitindo na yo moko",
+      "newCriterion": "Motindo ya sika",
+      "newCriterionName": "Motindo na kombo te",
+      "criterionName": "Kombo ya motindo",
+      "criterionRubric": "Malako",
+      "criterionRubricPlaceholder": "Sango nini bosaleli mpo ete botyela motindo oyo motuya, ndakisa: \"Salela mitindo nyonso ya dose ya klinik na imperative, kaka te infinitive…\"",
+      "criterionRubricHint": "Malako oyo ekopesama na AI motindo moko na MQM dimensions na tango ya kotala moketelo.",
+      "criteriaEmpty": "Bongisa mitindo ya yo moko — ndakisa mobeko ya mayangani, maloba ya mosuni ya mokili, to mayangani ya mboka — mpo otala baketelomeli koleka MQM. Ebombami awa na appareil mpe ekoki kosalelama lisusu.",
+      "deleteCriterion": "Kolongola motindo",
+      "manageCriteria": "Mitindo ya yo moko",
+      "addCriteria": "Kobakisa mitindo",
+      "noUsableCriteria": "Pona ata motindo moko ya liboso, to pesa mitindo na yo moko malako."
     },
     "document": {
       "emptyTitle": "Sosola mokanda olingi",
@@ -2741,7 +2758,11 @@
       "clearSelection": "Kolongola oyo waponi (sala na ndánda mobimba)",
       "reviseSelectionPlaceholder": "Lakisa mbongwana na boyano…",
       "revisedSelectionSummary": "Nabongisi eteni waponi na esika ya mosala.",
-      "assessedSelection": "Eteni waponi"
+      "assessedSelection": "Eteni waponi",
+      "undoEdit": "Kokóma lisusu",
+      "clearResolved": "Kolongola oyo esilaki",
+      "clearResolvedHint": "Longola mabongisi oyo bondimaki, boboyaki, to oyo etali te na liste oyo",
+      "autoClearResolved": "Kolongola na ndenge moko mabongisi oyo esilaki"
     },
     "data": {
       "emptyTitle": "Bokota ba data mpo epesa anàlizé",
@@ -3014,7 +3035,31 @@
         "jumpTo": "Kokende na {label}",
         "slider": "Esika na ligne du temps",
         "showUndated": "Komonisa bisika oyo ezali na daté te",
-        "activeCount": "{count} ezali"
+        "activeCount": "{count} ezali",
+        "jump": {
+          "start": "Ebandeli",
+          "yearsLater": "{count, plural, one {Mbula 1 sima} other {{count} mbula sima}}",
+          "monthsLater": "{count, plural, one {Sanzi 1 sima} other {{count} sanzi sima}}",
+          "daysLater": "{count, plural, one {Mokolo 1 sima} other {{count} mikolo sima}}",
+          "appears": "{count, plural, one {1 emonani} other {{count} emonani}}",
+          "ends": "{count, plural, one {1 esili} other {{count} esili}}",
+          "progress": "Daté {index} ya {total}"
+        },
+        "precision": {
+          "minute": "Kino na miniti",
+          "hour": "Kino na ngonga",
+          "day": "Kino na mokolo",
+          "month": "Daté ya sanzi",
+          "year": "Daté ya mbula",
+          "mixed": "(kombinɛ)"
+        },
+        "pacing": {
+          "toggle": "Mopimeli ya kosambisa",
+          "cardDuration": "Lakisa esika moko",
+          "seconds": "{seconds}s",
+          "maxCards": "Esika elakisami na daté",
+          "hint": "Ba-daté oyo ezali na makambo mingi ezali koleka seko."
+        }
       },
       "granularity": {
         "site": "Esika",
@@ -3031,8 +3076,13 @@
         "color": "Elilisi: elikia ya ndenge ya position (bleu – likolo, jaune – katikati, moto – moke)",
         "size": "Bozindo ya point: bonene ya ntina ya esika na makambo",
         "area": "Ligne ekateli na bilili: etúká oyo ekokani na ndembi ya teritware, region to ekolo",
-        "container": "Mabaku pembeni polele: esika oyo biloko na yango ezali kokotama moko na moko"
-      }
+        "container": "Mabaku pembeni polele: esika oyo biloko na yango ezali kokotama moko na moko",
+        "precisionHalo": "Rond ya ba-tireti malamu (na tango ya time lapse): likambo oyo esalemi kaka na sanzi to mbula, ntango ya solo emonanaka te"
+      },
+      "sourceLabel": "Euti: {name}",
+      "fetchAndMap": "Kokanga & kolakisa",
+      "fetchingPage": "Kokanga page…",
+      "railUrlRequest": "Kanga mpe bonisa bisika uta: {title} ({url})"
     },
     "shell": {
       "showConversation": "Lakisa dialogue",
@@ -3472,5 +3522,44 @@
       "llamacpp": "llama.cpp ezali kosala kasi eboyi koyamba ba demandes ya site oyo. Banda llama-server na biso ndenge ekoki kozwa ba demandes ya cross-origin, bongo sala kokanga lisusu."
     },
     "privacyNote": "Bamodelo ya esika te nde ekoki kokota ba fichiers, bililingi, koluka na web to connectors — yango esengeli serveurs na biso. Kokanga ezali kaka kotalela ordinatɛrɛ oyo."
+  },
+  "urlFetch": {
+    "sourceFallback": "Page ya internet",
+    "fallbackHint": "Okoki pe kofungola page, kopia mokuwa, mpe kopesa yango awa esika wana.",
+    "shortExtract": "Tango mokuse nde emonanaki — page ekoki kozala na paywall to esengi koteya.",
+    "errors": {
+      "invalidUrl": "Ekoki kozalaka adresse ya internet te.",
+      "ssrfBlocked": "Adresse yango ekoki kokangana te mpo na sécurité.",
+      "tooManyRedirects": "Lien yango ebongwanaki mingi koleka.",
+      "timeout": "Lokasa ezwaki ntango molai mpo eyana eyanolaka.",
+      "unreachable": "Lokasa yango ekoki kokotama te.",
+      "blocked": "Site eboyi bosengi — ekoki kosenga kota na compte to eboyi bateyimaka masolo na machine.",
+      "notFound": "Lokasa yango emonani te.",
+      "upstream": "Site ezongisi liposo ya libunga.",
+      "pdf": "Lien yango ezali PDF. Telecharge yango mpe salela bouton attach mpo komibakisa yango.",
+      "nonHtml": "Lien yango ezali te lokasa ya Internet oyo tokoki kotanga.",
+      "tooLarge": "Lokasa yango eleki monene mpo kotinda yango awa.",
+      "empty": "Maloba ya article oyo ekoki kotangama emonani te na lokasa yango.",
+      "generic": "Lokasa yango ekoki kozwa te."
+    },
+    "fetchingFile": "Kozwa {host}…",
+    "attachLink": "Kobakisa lien",
+    "attachLinkTitle": "Kobakisa lokasa ya Internet",
+    "attachLinkDescription": "Lokasa ezozwa mpe maloba na yango ezalaki kokotama na nsango na yo.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Zwa & bakisa",
+    "attachLinkInvalid": "Yango emonani te lokola adresse ya Internet.",
+    "linkBadge": "Kolongwa na lien",
+    "couldNotRetrieve": "Ekokaki kozwa te",
+    "doc": {
+      "sourceLabel": "Ebandeli",
+      "retrievedLabel": "Ezwi",
+      "attemptedLabel": "Basalaki milende",
+      "failureHeading": "Lokasa ya Internet ekokaki kozwa te"
+    },
+    "settingsTitle": "Baliens na nsango",
+    "settingsToggle": "Zwama baliens oyo esalemi coller automatik",
+    "settingsDescription": "Soki ocolle lien se moko, lokasa yango ezwaka mpe maloba na yango ekopakana mpo assistant akoka kotanga. Kokanga makambo oyo kukotelisa te ezali kaka texte — okoki kaka kobakisa lokasa na mosala+.",
+    "addLink": "Kobakisa lien"
   }
 }

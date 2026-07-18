@@ -2637,7 +2637,24 @@
       "pendingCount": "{count} odottaa",
       "closeReview": "Sulje laatuarviointi",
       "showReview": "Näytä arviointi",
-      "showReviewPending": "Näytä arviointi ({count} odottaa)"
+      "showReviewPending": "Näytä arviointi ({count} odottaa)",
+      "undoEdit": "Kumoa",
+      "clearResolved": "Tyhjennä ratkaistut",
+      "clearResolvedHint": "Poista hyväksytyt, hylätyt ja soveltumattomat muokkaukset tältä listalta",
+      "autoClearResolved": "Tyhjennä ratkaistut muokkaukset automaattisesti",
+      "customCriteria": "Omat kriteerit",
+      "closeCriteria": "Sulje omat kriteerit",
+      "newCriterion": "Uusi kriteeri",
+      "newCriterionName": "Nimetön kriteeri",
+      "criterionName": "Kriteerin nimi",
+      "criterionRubric": "Ohjeistus",
+      "criterionRubricPlaceholder": "Kuvaile, mitä kriteerin täyttäminen vaatii; esim. \"Kaikki kliiniset annosohjeet imperatiivissa, ei koskaan infinitiivissä…\"",
+      "criterionRubricHint": "Tämä ohjeistus annetaan AI:lle sellaisenaan yhdessä sisäänrakennettujen MQM-ulottuvuuksien kanssa käännöstä arvioitaessa.",
+      "criteriaEmpty": "Luo omia kriteereitä — esimerkiksi organisaation tyyli, asiakkaan termitoiveet tai alueelliset käytännöt — arvioidaksesi käännöksiä laajemmin kuin sisäänrakennetut MQM-ulottuvuudet. Tallennetaan tälle laitteelle ja käytettävissä uudelleen.",
+      "deleteCriterion": "Poista kriteeri",
+      "manageCriteria": "Omat kriteerit",
+      "addCriteria": "Lisää kriteereitä",
+      "noUsableCriteria": "Valitse vähintään yksi sisäänrakennettu kriteeri tai anna omille kriteereillesi ohjeistus."
     },
     "document": {
       "emptyTitle": "Kuvaile haluamaasi asiakirjaa",
@@ -2757,7 +2774,11 @@
       "clearSelection": "Tyhjennä valinta (käsittele koko asiakirjaa)",
       "reviseSelectionPlaceholder": "Kuvaile muutokset valittuun osaan…",
       "revisedSelectionSummary": "Muokkasin valitun tekstikohdan työtilassa.",
-      "assessedSelection": "Valinta"
+      "assessedSelection": "Valinta",
+      "undoEdit": "Kumoa",
+      "clearResolved": "Tyhjennä ratkaistut",
+      "clearResolvedHint": "Poista hyväksytyt, hylätyt ja soveltumattomat muokkaukset tältä listalta",
+      "autoClearResolved": "Tyhjennä ratkaistut muokkaukset automaattisesti"
     },
     "data": {
       "emptyTitle": "Tuo analysoitavaa dataa",
@@ -3030,7 +3051,31 @@
         "jumpTo": "Siirry ajanjaksolle {label}",
         "slider": "Aikajanan sijainti",
         "showUndated": "Näytä ajoittamattomat sijainnit",
-        "activeCount": "{count} aktiivinen"
+        "activeCount": "{count} aktiivinen",
+        "jump": {
+          "start": "Alku",
+          "yearsLater": "{count, plural, one {1 vuosi myöhemmin} other {# vuotta myöhemmin}}",
+          "monthsLater": "{count, plural, one {1 kuukausi myöhemmin} other {# kuukautta myöhemmin}}",
+          "daysLater": "{count, plural, one {1 päivä myöhemmin} other {# päivää myöhemmin}}",
+          "appears": "{count, plural, one {1 ilmestyy} other {# ilmestyy}}",
+          "ends": "{count, plural, one {1 päättyy} other {# päättyy}}",
+          "progress": "Päivä {index} / {total}"
+        },
+        "precision": {
+          "minute": "Tarkkuus minuuttiin",
+          "hour": "Tarkkuus tuntiin",
+          "day": "Tarkkuus päivään",
+          "month": "Kuukausitaso",
+          "year": "Vuositaso",
+          "mixed": "(sekoitettu)"
+        },
+        "pacing": {
+          "toggle": "Toistonopeus",
+          "cardDuration": "Näytä jokainen sijainti",
+          "seconds": "{seconds} s",
+          "maxCards": "Sijainteja per pvm",
+          "hint": "Vilkkaammat päivät näkyvät automaattisesti kauemmin."
+        }
       },
       "granularity": {
         "site": "Kohde",
@@ -3047,8 +3092,13 @@
         "color": "Väri: koordinaattien varmuus (sininen korkea, keltainen keskitaso, punainen matala)",
         "size": "Pisteen koko: kuinka keskeinen paikka on materiaalissa",
         "area": "Katkoviivainen ympyrä: alueen, piirin tai maan arvioitu laajuus",
-        "container": "Häivytetty reunaviiva: alue, jonka sisältö kartoitetaan erikseen"
-      }
+        "container": "Häivytetty reunaviiva: alue, jonka sisältö kartoitetaan erikseen",
+        "precisionHalo": "Pehmeä katkoviivakehä (aikajatkumossa): tapahtuma on ajoitettu vain kuukaudelle tai vuodelle, joten tarkka ajankohta on epävarma"
+      },
+      "sourceLabel": "Lähde: {name}",
+      "fetchAndMap": "Nouda & kartoita",
+      "fetchingPage": "Noudetaan sivua…",
+      "railUrlRequest": "Nouda ja kartoita sijainnit lähteestä: {title} ({url})"
     },
     "shell": {
       "showConversation": "Näytä keskustelu",
@@ -3488,5 +3538,44 @@
       "llamacpp": "llama.cpp on käynnissä, mutta estää pyynnöt tältä sivustolta. Käynnistä llama-server sallien cross-origin-pyynnöt ja tunnista uudelleen."
     },
     "privacyNote": "Paikalliset mallit eivät tue liitetiedostoja, kuvia, verkkohakua tai liittimiä – nämä vaativat palvelimemme. Tunnistus tarkistaa vain tämän tietokoneen."
+  },
+  "urlFetch": {
+    "sourceFallback": "Verkkosivu",
+    "fallbackHint": "Voit myös avata sivun, kopioida tekstin ja liittää sen tähän.",
+    "shortExtract": "Vain lyhyt ote oli luettavissa — sivu voi olla maksumuurin takana tai vaatia kirjautumisen.",
+    "errors": {
+      "invalidUrl": "Tämä ei vaikuta kelvolliselta verkkosivun osoitteelta.",
+      "ssrfBlocked": "Tätä osoitetta ei voi noutaa tietoturvasyistä.",
+      "tooManyRedirects": "Tämä linkki ohjautui liian monta kertaa.",
+      "timeout": "Sivu vastasi liian hitaasti.",
+      "unreachable": "Sivua ei saatu tavoitettua.",
+      "blocked": "Sivusto esti pyynnön — se saattaa vaatia kirjautumisen tai estää automaattiset lukijat.",
+      "notFound": "Sivua ei löytynyt.",
+      "upstream": "Sivusto palautti virheen.",
+      "pdf": "Tämä linkki johtaa PDF-tiedostoon. Lataa tiedosto ja liitä se käyttämällä liitä-painiketta.",
+      "nonHtml": "Linkki ei johda luettavaan verkkosivuun.",
+      "tooLarge": "Sivu on liian suuri noudettavaksi.",
+      "empty": "Sivulta ei löytynyt luettavaa artikkelitekstiä.",
+      "generic": "Sivua ei voitu noutaa."
+    },
+    "fetchingFile": "Noudetaan kohteesta {host}…",
+    "attachLink": "Liitä linkki",
+    "attachLinkTitle": "Liitä verkkosivu",
+    "attachLinkDescription": "Sivu noudetaan ja sen luettava teksti liitetään viestiisi.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Nouda & liitä",
+    "attachLinkInvalid": "Tämä ei näytä verkkosivun osoitteelta.",
+    "linkBadge": "Linkistä",
+    "couldNotRetrieve": "Ei voitu noutaa",
+    "doc": {
+      "sourceLabel": "Lähde",
+      "retrievedLabel": "Noudettu",
+      "attemptedLabel": "Yritys",
+      "failureHeading": "Verkkosivua ei voitu noutaa"
+    },
+    "settingsTitle": "Linkit viesteissä",
+    "settingsToggle": "Nouda liitetyt linkit automaattisesti",
+    "settingsDescription": "Kun liität linkin yksinään, sivu noudetaan ja sen teksti liitetään viestiin, jotta avustaja voi lukea sen. Voit ottaa tämän pois päältä, jolloin liitetyt linkit jäävät pelkiksi tekstilinkeiksi — voit silti liittää sivun käsin + -valikosta.",
+    "addLink": "Lisää linkki"
   }
 }

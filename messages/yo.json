@@ -2621,7 +2621,24 @@
       "pendingCount": "{count} dúró de",
       "closeReview": "Pa àyẹ̀wò didara",
       "showReview": "Fihan àyẹ̀wò",
-      "showReviewPending": "Fihan àyẹ̀wò ({count} dúró de)"
+      "showReviewPending": "Fihan àyẹ̀wò ({count} dúró de)",
+      "undoEdit": "Dà pada",
+      "clearResolved": "Nu àwọn tí a ti dá sílẹ̀",
+      "clearResolvedHint": "Yọ àwọn ìtọ́ka tí a fọwọ́ sí, tí a kọ́, àti tí kò yẹ kúrò nínú àtòjọ yìí",
+      "autoClearResolved": "Nu àwọn ìtọ́ka tí a ti dá sílẹ̀ laifọwọ́yi",
+      "customCriteria": "Àwọn ìpinnu àdáyébá",
+      "closeCriteria": "Pa àwọn ìpinnu àdáyébá",
+      "newCriterion": "Ìpinnu tuntun",
+      "newCriterionName": "Ìpinnu tí kò ní orúkọ",
+      "criterionName": "Orúkọ ìpinnu",
+      "criterionRubric": "Àwòrán ìdámọ̀",
+      "criterionRubricPlaceholder": "Ṣàlàyé ohun tí ìtumọ̀ náà gbọ́dọ̀ ṣe láti péye ìpinnu yìí, àpẹẹrẹ: \"Jẹ́ kí gbogbo ìlànà dósè cliníkà jẹ́ nínú àṣẹ, kì í ṣe infinitive…\"",
+      "criterionRubricHint": "Àwòrán ìdámọ̀ yìí ni a fi fún AI gẹ́gẹ́ bíi tí a tí kọ́ títí nínú MQM nigba àyẹ̀wò ìtumọ̀.",
+      "criteriaEmpty": "Ṣẹda àwọn ìpinnu àdáyébá — bíi irú-kíkọ ilé-iṣẹ́, ayanfẹ ọrọ́ oníbára, tàbí ìlànà agbègbè — láti fọwọ́yẹ àwọn ìtumọ̀ yàtọ̀ sí àwọn àmúyẹ MQM. A fipamọ́ sí ẹrọ yìí kò sì le tú tún lo.",
+      "deleteCriterion": "Pa ìpinnu náà rẹ́",
+      "manageCriteria": "Àwọn ìpinnu àdáyébá",
+      "addCriteria": "Ṣàfikún ìpinnu",
+      "noUsableCriteria": "Yan ó kere tán ìpinnu kan tí ó wà fúnra rẹ̀ tàbí fi àwòrán ìdámọ̀ sí àwọn ìpinnu rẹ."
     },
     "document": {
       "emptyTitle": "Ṣàpèjúwe iwe ti o fẹ",
@@ -2741,7 +2758,11 @@
       "clearSelection": "Pa yíyan rẹ kúrò (ṣe pẹ̀lú gbogbo ìwé)",
       "reviseSelectionPlaceholder": "Ṣàpèjúwe àwọn àtúnṣe tí ẹ́ fẹ́ ṣe sí eyi tí a yàn…",
       "revisedSelectionSummary": "Mo tọ́na apá tí mo yàn nínú àyè iṣẹ́.",
-      "assessedSelection": "Yíyan"
+      "assessedSelection": "Yíyan",
+      "undoEdit": "Dà pada",
+      "clearResolved": "Nu àwọn tí a ti dá sílẹ̀",
+      "clearResolvedHint": "Yọ àwọn ìtọ́ka tí a fọwọ́ sí, tí a kọ́, àti tí kò yẹ kúrò nínú àtòjọ yìí",
+      "autoClearResolved": "Nu àwọn ìtọ́ka tí a ti dá sílẹ̀ laifọwọ́yi"
     },
     "data": {
       "emptyTitle": "Fọwọ́ ìwòye wá",
@@ -3014,7 +3035,31 @@
         "jumpTo": "Lelé sí {label}",
         "slider": "Ipò timeline",
         "showUndated": "Fi àwọn ipo tí kò ní ọjọ́ hàn",
-        "activeCount": "{count} lẹsẹkẹsẹ"
+        "activeCount": "{count} lẹsẹkẹsẹ",
+        "jump": {
+          "start": "Bẹrẹ",
+          "yearsLater": "{count, plural, one {Lẹ́yìn ọdún 1} other {Lẹ́yìn ọdún #}}",
+          "monthsLater": "{count, plural, one {Lẹ́yìn oṣù 1} other {Lẹ́yìn oṣù #}}",
+          "daysLater": "{count, plural, one {Lẹ́yìn ọjọ́ 1} other {Lẹ́yìn ọjọ́ #}}",
+          "appears": "{count, plural, one {1 hàn} other {# hàn}}",
+          "ends": "{count, plural, one {1 parí} other {# parí}}",
+          "progress": "Ọjọ́ {index} nínú {total}"
+        },
+        "precision": {
+          "minute": "Díẹ̀ sí ìṣẹ́jú",
+          "hour": "Díẹ̀ sí wákàtí",
+          "day": "Díẹ̀ sí ọjọ́",
+          "month": "Ìbọ́ ọjọ́ oṣù",
+          "year": "Ìbọ́ ọjọ́ ọdún",
+          "mixed": "(àpapọ̀)"
+        },
+        "pacing": {
+          "toggle": "Iṣakoso ìfọ́hùnṣọ̀rọ̀",
+          "cardDuration": "Fihàn ibi kọọkan fún",
+          "seconds": "{seconds}s",
+          "maxCards": "Awọn ibi tí a fi hàn ní ọjọ́ kan",
+          "hint": "Àwọn ọjọ́ tí kún ju ni a máa gbé soke pẹ ju laifọwọ́yi."
+        }
       },
       "granularity": {
         "site": "Ojúlé",
@@ -3031,8 +3076,13 @@
         "color": "Awọ̀: ìdánilójú ìpò (bulu gíga, àmùbẹ́ arin, pupa kere)",
         "size": "Ìwọn dòtì: bó ṣe jẹ́ pátákì ibi náà sí ohun tó wà lórí maapu",
         "area": "Ilẹ-àyipada onigun yika: iwọn àgbègbè, agbègbè, tàbí orílẹ̀-èdè pẹ̀lú àfikún.",
-        "container": "Ilẹ̀ pẹlẹbẹ: àgbègbè tí akoonu rẹ̀ yàtọ̀ síra ni àtẹ̀jáde."
-      }
+        "container": "Ilẹ̀ pẹlẹbẹ: àgbègbè tí akoonu rẹ̀ yàtọ̀ síra ni àtẹ̀jáde.",
+        "precisionHalo": "Oruka kékèké tí ó nílò kúkúrú (nígbà ìtẹ̀síwájú àkókò): ìṣẹlẹ̀ náà kì í ní ọjọ́ gangan, o jẹ́ pé oṣù tàbí ọdún ni a mọ̀, ọjọ́ gbangba rẹ kò dájú"
+      },
+      "sourceLabel": "Orísun: {name}",
+      "fetchAndMap": "Gbé wá & ṣàtúnṣà",
+      "fetchingPage": "N gbé ìwé wá…",
+      "railUrlRequest": "Gbé wá àti ṣàtúnṣà àwọn ibi látinú: {title} ({url})"
     },
     "shell": {
       "showConversation": "Ṣàfihàn ibànísọ̀rọ̀",
@@ -3472,5 +3522,44 @@
       "llamacpp": "llama.cpp ń ṣiṣẹ́ ṣùgbọ́n kò gba ìbéèrè láti ojúlé yìí. Bẹrẹ llama-server pẹ̀lú àṣẹ fun ìbéèrè kúrò, lẹ́yìn náà ṣàyẹ̀wò tùn."
     },
     "privacyNote": "Àwòrán agbègbè kò gbàwọlé fifi mọ́ àtẹ̀jáde fáìlì, àwòrán, àwárí wẹẹ̀bù tàbí àwọn àmúṣiṣẹ́ — àwọn wọ̀nyí nílò sẹ́fà wa. Ṣíwádìí mà kàn kọ̀m̀pútà yìí nìkan ní."
+  },
+  "urlFetch": {
+    "sourceFallback": "Ojú-ìwé ayelujara",
+    "fallbackHint": "O tún lè ṣí oju-iwe náà, da lẹ́ta rẹ kọ́, kí o sì lẹ́ẹ̀ mọ́ síbí dípò rẹ.",
+    "shortExtract": "Ìyàtọ̀ kékeré ló ṣeé kà — ó ṣeéṣe pé oju-iwe náà gba owó tàbí ó fẹ́ kí wọlé.",
+    "errors": {
+      "invalidUrl": "Àwọn àdírẹ́sì wẹẹ́bù yìí kò dájú.",
+      "ssrfBlocked": "Àdírẹ́sì yìí kò le gbé wá nítorí ìdí ààbò.",
+      "tooManyRedirects": "Àsopọ̀ yìí títún-ṣàkóso pó ju.",
+      "timeout": "Ojú-ìwé náà péjù lọ láti dáhùn.",
+      "unreachable": "A kò le dé oju-ìwé náà.",
+      "blocked": "Aaye naa kọ ìbéèrè náà — ó le nilo wíwọlé tàbí ń dí àwọn oluka aifọwọyi.",
+      "notFound": "A kò rí ojú-ìwé náà.",
+      "upstream": "Aaye naa fi aṣiṣe pada.",
+      "pdf": "Asopọ yìí jẹ́ PDF. Ṣe igbasilẹ rẹ̀ ki o lo bọtini ìfikún láti fi kún un dípò.",
+      "nonHtml": "Asopọ yìí kì í ṣe ojú-ìwé àwùjọ tó le ka.",
+      "tooLarge": "Ojú-ìwé náà tóbi ju kí a tó le fà á.",
+      "empty": "A kò rí ìtàn tó wúlò tó le ka lórí ojú-ìwé náà.",
+      "generic": "A kò le fà ojú-ìwé náà."
+    },
+    "fetchingFile": "Nfá {host}…",
+    "attachLink": "Fọwọsowọpọ asopọ",
+    "attachLinkTitle": "Fọwọsowọpọ ojú-ìwé àwùjọ",
+    "attachLinkDescription": "A máa fá ojú-ìwé náà, a sì máa so ìtàn tó rọrùn tó le ka mọ́ ifiranṣẹ rẹ.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Fá & fi kún",
+    "attachLinkInvalid": "Èyí kò dà bí adirẹsi oju-ìwé àwùjọ.",
+    "linkBadge": "Láti asopọ kan",
+    "couldNotRetrieve": "A kò le gba",
+    "doc": {
+      "sourceLabel": "Orísun",
+      "retrievedLabel": "A ti gba",
+      "attemptedLabel": "Àyíyẹnṣe",
+      "failureHeading": "A kò le gba ojú-ìwé àwùjọ náà"
+    },
+    "settingsTitle": "Àsopọ nínú ifiranṣẹ",
+    "settingsToggle": "Fà àwọn àsopọ tó tẹ ara wọn laifọwọyi",
+    "settingsDescription": "Nigba tí o bá tẹ asopọ, oju-ìwé náà a máa fà a, a si máa so ìtàn rẹ mọ́ ifiranṣẹ rẹ kí olùrànlọ́wọ́ lè ka a. Pa a ni pátápátá kí àwọn asopọ tí o tẹ kù di ọrọ àtẹ̀jáde lasan — o tún le fi ojú-ìwé kún un lọ́wọ́ ara rẹ láti akojọ +.",
+    "addLink": "Ṣàfikún asopọ"
   }
 }

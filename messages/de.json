@@ -2637,7 +2637,24 @@
       "pendingCount": "{count} ausstehend",
       "closeReview": "Qualitätsüberprüfung schließen",
       "showReview": "Überprüfung anzeigen",
-      "showReviewPending": "Überprüfung anzeigen ({count} ausstehend)"
+      "showReviewPending": "Überprüfung anzeigen ({count} ausstehend)",
+      "undoEdit": "Rückgängig",
+      "clearResolved": "Erledigte entfernen",
+      "clearResolvedHint": "Akzeptierte, abgelehnte und nicht zutreffende Änderungen aus dieser Liste entfernen",
+      "autoClearResolved": "Erledigte Änderungen automatisch entfernen",
+      "customCriteria": "Eigene Kriterien",
+      "closeCriteria": "Eigene Kriterien schließen",
+      "newCriterion": "Neues Kriterium",
+      "newCriterionName": "Unbenanntes Kriterium",
+      "criterionName": "Kriteriumsname",
+      "criterionRubric": "Bewertungskriterium",
+      "criterionRubricPlaceholder": "Beschreiben Sie, was die Übersetzung erfüllen muss, um dieses Kriterium zu erfüllen, z.B. \"Alle Dosierungsanweisungen im Imperativ, nie im Infinitiv wiedergeben…\"",
+      "criterionRubricHint": "Diese Bewertungsanweisung wird der KI zusammen mit den integrierten MQM-Dimensionen wortgetreu vorgelegt, um die Übersetzung zu bewerten.",
+      "criteriaEmpty": "Erstellen Sie eigene Kriterien – z.B. Hausschreibweise, Kundenterminologie oder regionale Konventionen –, um Übersetzungen über die integrierten MQM-Dimensionen hinaus zu bewerten. Lokal gespeichert und wiederverwendbar.",
+      "deleteCriterion": "Kriterium löschen",
+      "manageCriteria": "Eigene Kriterien",
+      "addCriteria": "Kriterien hinzufügen",
+      "noUsableCriteria": "Wählen Sie mindestens ein integriertes Kriterium oder ergänzen Sie Ihre eigenen Kriterien um eine Bewertungsanweisung."
     },
     "document": {
       "emptyTitle": "Beschreiben Sie das gewünschte Dokument",
@@ -2757,7 +2774,11 @@
       "clearSelection": "Auswahl aufheben (mit dem gesamten Dokument arbeiten)",
       "reviseSelectionPlaceholder": "Beschreiben Sie die Änderungen an der Auswahl…",
       "revisedSelectionSummary": "Ich habe den ausgewählten Abschnitt im Arbeitsbereich überarbeitet.",
-      "assessedSelection": "Auswahl"
+      "assessedSelection": "Auswahl",
+      "undoEdit": "Rückgängig",
+      "clearResolved": "Erledigte entfernen",
+      "clearResolvedHint": "Akzeptierte, abgelehnte und nicht zutreffende Änderungen aus dieser Liste entfernen",
+      "autoClearResolved": "Erledigte Änderungen automatisch entfernen"
     },
     "data": {
       "emptyTitle": "Daten zum Analysieren importieren",
@@ -3030,7 +3051,31 @@
         "jumpTo": "Springe zu {label}",
         "slider": "Position auf der Zeitleiste",
         "showUndated": "Orte ohne Datum anzeigen",
-        "activeCount": "{count} aktiv"
+        "activeCount": "{count} aktiv",
+        "jump": {
+          "start": "Start",
+          "yearsLater": "{count, plural, one {1 Jahr später} other {# Jahre später}}",
+          "monthsLater": "{count, plural, one {1 Monat später} other {# Monate später}}",
+          "daysLater": "{count, plural, one {1 Tag später} other {# Tage später}}",
+          "appears": "{count, plural, one {1 erscheint} other {# erscheinen}}",
+          "ends": "{count, plural, one {1 endet} other {# enden}}",
+          "progress": "Datum {index} von {total}"
+        },
+        "precision": {
+          "minute": "Auf die Minute genau",
+          "hour": "Auf die Stunde genau",
+          "day": "Auf den Tag genau",
+          "month": "Monatgenaue Datierung",
+          "year": "Jahrgenaue Datierung",
+          "mixed": "(gemischt)"
+        },
+        "pacing": {
+          "toggle": "Wiedergabegeschwindigkeit",
+          "cardDuration": "Jede Position anzeigen für",
+          "seconds": "{seconds}s",
+          "maxCards": "Positionen pro Datum",
+          "hint": "Für besonders volle Tage wird automatisch mehr Zeit eingeplant."
+        }
       },
       "granularity": {
         "site": "Standort",
@@ -3047,8 +3092,13 @@
         "color": "Farbe: Koordinaten-Zuverlässigkeit (Blau hoch, Gelb mittel, Rot niedrig)",
         "size": "Punktgröße: wie zentral der Ort im Material ist",
         "area": "Gestrichelter Kreis: ungefährer Umfang eines Bezirks, einer Region oder eines Landes",
-        "container": "Schwache Umrandung: ein Bereich, dessen Inhalte einzeln abgebildet werden"
-      }
+        "container": "Schwache Umrandung: ein Bereich, dessen Inhalte einzeln abgebildet werden",
+        "precisionHalo": "Weicher gestrichelter Ring (bei Zeitraffern): Das Ereignis ist nur auf Monat oder Jahr datiert, das exakte Datum ist unsicher."
+      },
+      "sourceLabel": "Quelle: {name}",
+      "fetchAndMap": "Abrufen & zuordnen",
+      "fetchingPage": "Seite wird geladen…",
+      "railUrlRequest": "Standorte abrufen und zuordnen von: {title} ({url})"
     },
     "shell": {
       "showConversation": "Konversation anzeigen",
@@ -3488,5 +3538,44 @@
       "llamacpp": "llama.cpp läuft, verweigert jedoch Anfragen von dieser Seite. Starten Sie llama-server mit erlaubten Cross-Origin-Anfragen und führen Sie die Erkennung erneut durch."
     },
     "privacyNote": "Lokale Modelle unterstützen keine Dateianhänge, Bilder, Websuche oder Konnektoren – dafür werden unsere Server benötigt. Die Erkennung prüft ausschließlich diesen Computer."
+  },
+  "urlFetch": {
+    "sourceFallback": "Webseite",
+    "fallbackHint": "Sie können die Seite auch öffnen, den Text kopieren und hier einfügen.",
+    "shortExtract": "Nur ein kurzer Auszug war lesbar – die Seite ist möglicherweise hinter einer Bezahlschranke oder erfordert eine Anmeldung.",
+    "errors": {
+      "invalidUrl": "Das scheint keine gültige Webadresse zu sein.",
+      "ssrfBlocked": "Diese Adresse kann aus Sicherheitsgründen nicht abgerufen werden.",
+      "tooManyRedirects": "Dieser Link wurde zu oft weitergeleitet.",
+      "timeout": "Die Seite hat zu lange zum Antworten gebraucht.",
+      "unreachable": "Die Seite konnte nicht erreicht werden.",
+      "blocked": "Die Seite hat die Anfrage abgelehnt – möglicherweise ist eine Anmeldung erforderlich oder automatische Zugriffe werden blockiert.",
+      "notFound": "Diese Seite wurde nicht gefunden.",
+      "upstream": "Die Seite hat einen Fehler zurückgegeben.",
+      "pdf": "Dieser Link verweist auf eine PDF-Datei. Bitte laden Sie sie herunter und fügen Sie sie stattdessen über den Anhang-Button hinzu.",
+      "nonHtml": "Dieser Link verweist nicht auf eine lesbare Webseite.",
+      "tooLarge": "Diese Seite ist zu groß zum Herunterladen.",
+      "empty": "Auf dieser Seite wurde kein lesbarer Artikeltext gefunden.",
+      "generic": "Die Seite konnte nicht abgerufen werden."
+    },
+    "fetchingFile": "{host} wird abgerufen…",
+    "attachLink": "Link anhängen",
+    "attachLinkTitle": "Webseite anhängen",
+    "attachLinkDescription": "Die Seite wird abgerufen und ihr lesbarer Text wird Ihrer Nachricht angehängt.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Abrufen & anhängen",
+    "attachLinkInvalid": "Das sieht nicht nach einer Webadresse aus.",
+    "linkBadge": "Über einen Link",
+    "couldNotRetrieve": "Konnte nicht abgerufen werden",
+    "doc": {
+      "sourceLabel": "Quelle",
+      "retrievedLabel": "Abgerufen",
+      "attemptedLabel": "Versucht",
+      "failureHeading": "Webseite konnte nicht abgerufen werden"
+    },
+    "settingsTitle": "Links in Nachrichten",
+    "settingsToggle": "Eingefügte Links automatisch abrufen",
+    "settingsDescription": "Wenn Sie einen Link einzeln einfügen, wird die Seite abgerufen und ihr Text angehängt, damit der Assistent sie lesen kann. Deaktivieren Sie diese Funktion, um eingefügte Links als reinen Text zu behalten – Sie können Seiten weiterhin manuell über das + Menü anhängen.",
+    "addLink": "Link hinzufügen"
   }
 }

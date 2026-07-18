@@ -2668,7 +2668,24 @@
       "pendingCount": "{count} đang chờ",
       "closeReview": "Đóng đánh giá chất lượng",
       "showReview": "Xem đánh giá",
-      "showReviewPending": "Xem đánh giá ({count} đang chờ)"
+      "showReviewPending": "Xem đánh giá ({count} đang chờ)",
+      "undoEdit": "Hoàn tác",
+      "clearResolved": "Xóa mục đã giải quyết",
+      "clearResolvedHint": "Loại bỏ các chỉnh sửa đã chấp nhận, bị từ chối hoặc không áp dụng khỏi danh sách này",
+      "autoClearResolved": "Tự động xóa các chỉnh sửa đã giải quyết",
+      "customCriteria": "Tiêu chí tùy chỉnh",
+      "closeCriteria": "Đóng tiêu chí tùy chỉnh",
+      "newCriterion": "Tiêu chí mới",
+      "newCriterionName": "Tiêu chí chưa có tên",
+      "criterionName": "Tên tiêu chí",
+      "criterionRubric": "Chuẩn đánh giá",
+      "criterionRubricPlaceholder": "Mô tả những yêu cầu bản dịch phải đáp ứng cho tiêu chí này, ví dụ: \"Diễn đạt tất cả hướng dẫn liều lượng lâm sàng ở thể mệnh lệnh, không dùng động từ nguyên thể…\"",
+      "criterionRubricHint": "Chuẩn đánh giá này sẽ được AI sử dụng nguyên văn cùng với các tiêu chí MQM tích hợp sẵn khi đánh giá bản dịch.",
+      "criteriaEmpty": "Tạo tiêu chí tùy chỉnh — ví dụ: phong cách nội bộ, thuật ngữ theo yêu cầu khách hàng, hoặc quy ước vùng miền — để đánh giá bản dịch ngoài các tiêu chí MQM tích hợp. Lưu trên thiết bị này và có thể sử dụng lại.",
+      "deleteCriterion": "Xóa tiêu chí",
+      "manageCriteria": "Tiêu chí tùy chỉnh",
+      "addCriteria": "Thêm tiêu chí",
+      "noUsableCriteria": "Chọn ít nhất một tiêu chí tích hợp sẵn hoặc đặt chuẩn đánh giá cho tiêu chí tùy chỉnh của bạn."
     },
     "document": {
       "emptyTitle": "Mô tả tài liệu bạn muốn",
@@ -2788,7 +2805,11 @@
       "clearSelection": "Xóa vùng chọn (làm việc với toàn bộ tài liệu)",
       "reviseSelectionPlaceholder": "Mô tả các thay đổi cho vùng đã chọn…",
       "revisedSelectionSummary": "Tôi đã chỉnh sửa đoạn được chọn trong không gian làm việc.",
-      "assessedSelection": "Vùng chọn"
+      "assessedSelection": "Vùng chọn",
+      "undoEdit": "Hoàn tác",
+      "clearResolved": "Xóa mục đã giải quyết",
+      "clearResolvedHint": "Loại bỏ các chỉnh sửa đã chấp nhận, bị từ chối hoặc không áp dụng khỏi danh sách này",
+      "autoClearResolved": "Tự động xóa các chỉnh sửa đã giải quyết"
     },
     "data": {
       "emptyTitle": "Nhập dữ liệu để phân tích",
@@ -3061,7 +3082,31 @@
         "jumpTo": "Chuyển đến {label}",
         "slider": "Vị trí trên dải thời gian",
         "showUndated": "Hiển thị địa điểm chưa xác định ngày",
-        "activeCount": "{count} đang hoạt động"
+        "activeCount": "{count} đang hoạt động",
+        "jump": {
+          "start": "Bắt đầu",
+          "yearsLater": "{count, plural, one {1 năm sau} other {# năm sau}}",
+          "monthsLater": "{count, plural, one {1 tháng sau} other {# tháng sau}}",
+          "daysLater": "{count, plural, one {1 ngày sau} other {# ngày sau}}",
+          "appears": "{count, plural, one {1 xuất hiện} other {# xuất hiện}}",
+          "ends": "{count, plural, one {1 kết thúc} other {# kết thúc}}",
+          "progress": "Ngày {index} trong {total}"
+        },
+        "precision": {
+          "minute": "Chính xác đến phút",
+          "hour": "Chính xác đến giờ",
+          "day": "Chính xác đến ngày",
+          "month": "Ngày ở cấp tháng",
+          "year": "Ngày ở cấp năm",
+          "mixed": "(kết hợp)"
+        },
+        "pacing": {
+          "toggle": "Tốc độ phát lại",
+          "cardDuration": "Hiển thị mỗi địa điểm trong",
+          "seconds": "{seconds} giây",
+          "maxCards": "Số địa điểm hiển thị mỗi ngày",
+          "hint": "Những ngày bận rộn sẽ tự động được giữ lâu hơn."
+        }
       },
       "granularity": {
         "site": "Điểm",
@@ -3078,8 +3123,13 @@
         "color": "Màu: độ tin cậy định vị (xanh đậm là cao, vàng là trung bình, đỏ là thấp)",
         "size": "Kích thước chấm: mức độ trung tâm của địa điểm so với nội dung",
         "area": "Vòng tròn nét đứt: phạm vi ước lượng của một quận, vùng hoặc quốc gia",
-        "container": "Viền mờ: khu vực có nội dung được ánh xạ riêng lẻ"
-      }
+        "container": "Viền mờ: khu vực có nội dung được ánh xạ riêng lẻ",
+        "precisionHalo": "Vòng đứt nét mềm (trong tua nhanh thời gian): sự kiện chỉ được ghi nhận đến cấp tháng hoặc năm, nên thời gian chính xác không xác định"
+      },
+      "sourceLabel": "Nguồn: {name}",
+      "fetchAndMap": "Lấy dữ liệu & ánh xạ",
+      "fetchingPage": "Đang lấy trang…",
+      "railUrlRequest": "Lấy và ánh xạ vị trí từ: {title} ({url})"
     },
     "shell": {
       "showConversation": "Hiển thị hội thoại",
@@ -3519,5 +3569,44 @@
       "llamacpp": "llama.cpp đang chạy nhưng từ chối yêu cầu từ trang này. Hãy khởi động llama-server với quyền cho phép truy cập chéo, rồi phát hiện lại."
     },
     "privacyNote": "Mô hình cục bộ không hỗ trợ đính kèm tệp, hình ảnh, tìm kiếm web hoặc kết nối — những chức năng này cần máy chủ của chúng tôi. Việc phát hiện chỉ kiểm tra trên máy tính này."
+  },
+  "urlFetch": {
+    "sourceFallback": "Trang web",
+    "fallbackHint": "Bạn cũng có thể mở trang web, sao chép văn bản và dán vào đây.",
+    "shortExtract": "Chỉ có thể đọc được một đoạn trích ngắn — trang có thể bị khóa hoặc yêu cầu đăng nhập.",
+    "errors": {
+      "invalidUrl": "Đây không có vẻ là địa chỉ web hợp lệ.",
+      "ssrfBlocked": "Địa chỉ này không thể lấy về vì lý do bảo mật.",
+      "tooManyRedirects": "Liên kết này chuyển hướng quá nhiều lần.",
+      "timeout": "Trang mất quá nhiều thời gian để phản hồi.",
+      "unreachable": "Không thể truy cập trang này.",
+      "blocked": "Trang web từ chối yêu cầu — có thể cần đăng nhập hoặc chặn trình đọc tự động.",
+      "notFound": "Không tìm thấy trang này.",
+      "upstream": "Trang web trả về lỗi.",
+      "pdf": "Liên kết này là tệp PDF. Vui lòng tải xuống và sử dụng nút đính kèm để thêm tệp này.",
+      "nonHtml": "Liên kết này không phải trang web mà chúng tôi có thể đọc.",
+      "tooLarge": "Trang này quá lớn để tải.",
+      "empty": "Không tìm thấy nội dung bài viết có thể đọc được trên trang này.",
+      "generic": "Không thể tải trang này."
+    },
+    "fetchingFile": "Đang tải {host}…",
+    "attachLink": "Đính kèm liên kết",
+    "attachLinkTitle": "Đính kèm trang web",
+    "attachLinkDescription": "Trang web sẽ được tải và nội dung dễ đọc sẽ được đính kèm vào tin nhắn của bạn.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Tải & đính kèm",
+    "attachLinkInvalid": "Đây không có vẻ là địa chỉ web hợp lệ.",
+    "linkBadge": "Từ liên kết",
+    "couldNotRetrieve": "Không thể truy xuất",
+    "doc": {
+      "sourceLabel": "Nguồn",
+      "retrievedLabel": "Đã truy xuất",
+      "attemptedLabel": "Đã thử truy xuất",
+      "failureHeading": "Không thể truy xuất trang web"
+    },
+    "settingsTitle": "Liên kết trong tin nhắn",
+    "settingsToggle": "Tự động tải liên kết dán vào",
+    "settingsDescription": "Khi bạn dán một liên kết riêng lẻ, trang sẽ được tải và phần văn bản sẽ được đính kèm để trợ lý có thể đọc. Tắt tính năng này để giữ liên kết ở dạng văn bản thuần — bạn vẫn có thể đính kèm trang thủ công từ menu +.",
+    "addLink": "Thêm liên kết"
   }
 }

@@ -2637,7 +2637,24 @@
       "pendingCount": "{count}건 대기 중",
       "closeReview": "품질 검토 닫기",
       "showReview": "검토 보기",
-      "showReviewPending": "검토 보기 ({count}건 대기 중)"
+      "showReviewPending": "검토 보기 ({count}건 대기 중)",
+      "undoEdit": "실행 취소",
+      "clearResolved": "해결됨 삭제",
+      "clearResolvedHint": "수락됨, 거절됨, 적용 불가한 편집을 목록에서 제거합니다",
+      "autoClearResolved": "해결된 편집 자동 삭제",
+      "customCriteria": "맞춤 기준",
+      "closeCriteria": "맞춤 기준 닫기",
+      "newCriterion": "새 기준",
+      "newCriterionName": "무제 기준",
+      "criterionName": "기준 이름",
+      "criterionRubric": "평가기준",
+      "criterionRubricPlaceholder": "이 기준을 만족하기 위해 번역에서 충족해야 할 내용을 설명하세요. 예: \"모든 임상 복용량 지시를 명령문으로만 표현, 부정사 사용 금지…\"",
+      "criterionRubricHint": "이 평가기준은 내장된 MQM 기준과 함께 AI에게 그대로 제공되어 번역 평가에 사용됩니다.",
+      "criteriaEmpty": "내장된 MQM 기준 외에도 번역 평가를 위해 하우스 스타일, 용어 선호나 지역 관습 등 맞춤 기준을 만드세요. 이 장치에 저장되며 재사용 가능합니다.",
+      "deleteCriterion": "기준 삭제",
+      "manageCriteria": "맞춤 기준",
+      "addCriteria": "기준 추가",
+      "noUsableCriteria": "최소 한 가지 내장 기준을 선택하거나 맞춤 기준에 평가기준을 입력하세요."
     },
     "document": {
       "emptyTitle": "원하는 문서를 설명하세요",
@@ -2757,7 +2774,11 @@
       "clearSelection": "선택 해제 (전체 문서로 작업)",
       "reviseSelectionPlaceholder": "선택된 부분의 변경 내용을 설명하세요…",
       "revisedSelectionSummary": "작업 공간에서 선택된 부분을 수정했습니다.",
-      "assessedSelection": "선택 부분"
+      "assessedSelection": "선택 부분",
+      "undoEdit": "실행 취소",
+      "clearResolved": "해결됨 삭제",
+      "clearResolvedHint": "수락됨, 거절됨, 적용 불가한 편집을 목록에서 제거합니다",
+      "autoClearResolved": "해결된 편집 자동 삭제"
     },
     "data": {
       "emptyTitle": "분석할 데이터 가져오기",
@@ -3030,7 +3051,31 @@
         "jumpTo": "{label}(으)로 이동",
         "slider": "타임라인 위치",
         "showUndated": "날짜 없는 위치 표시",
-        "activeCount": "{count}개 활성화됨"
+        "activeCount": "{count}개 활성화됨",
+        "jump": {
+          "start": "시작",
+          "yearsLater": "{count, plural, one {1년 후} other {#년 후}}",
+          "monthsLater": "{count, plural, one {1개월 후} other {#개월 후}}",
+          "daysLater": "{count, plural, one {1일 후} other {#일 후}}",
+          "appears": "{count, plural, one {1개 발생} other {#개 발생}}",
+          "ends": "{count, plural, one {1개 종료} other {#개 종료}}",
+          "progress": "날짜 {index} / {total}"
+        },
+        "precision": {
+          "minute": "분 단위",
+          "hour": "시간 단위",
+          "day": "일 단위",
+          "month": "월 단위 날짜",
+          "year": "연 단위 날짜",
+          "mixed": "(혼합)"
+        },
+        "pacing": {
+          "toggle": "재생 속도",
+          "cardDuration": "각 위치 표시 시간",
+          "seconds": "{seconds}초",
+          "maxCards": "날짜별 표시 위치 수",
+          "hint": "더 많은 위치가 있는 날짜는 자동으로 더 오래 표시됩니다."
+        }
       },
       "granularity": {
         "site": "현장",
@@ -3047,8 +3092,13 @@
         "color": "색상: 좌표 신뢰도 (파랑 높음, 노랑 중간, 빨강 낮음)",
         "size": "점 크기: 이 장소가 자료에서 얼마나 중심적인가",
         "area": "점선 원: 구역, 지역 또는 국가의 대략적인 범위",
-        "container": "옅은 외곽선: 개별적으로 내용이 매핑되는 영역"
-      }
+        "container": "옅은 외곽선: 개별적으로 내용이 매핑되는 영역",
+        "precisionHalo": "점선 테두리(타임랩스 중): 이벤트가 월 또는 년 단위로만 기록되어 정확한 시점이 확실하지 않음"
+      },
+      "sourceLabel": "원본: {name}",
+      "fetchAndMap": "가져오기 및 매핑",
+      "fetchingPage": "페이지 가져오는 중…",
+      "railUrlRequest": "다음에서 위치 정보 가져오기 및 매핑: {title} ({url})"
     },
     "shell": {
       "showConversation": "대화 보기",
@@ -3488,5 +3538,44 @@
       "llamacpp": "llama.cpp는 실행 중이지만 이 사이트의 요청을 거부하고 있습니다. cross-origin 요청 허용으로 llama-server를 시작한 후 다시 감지해 주세요."
     },
     "privacyNote": "로컬 모델은 파일 첨부, 이미지, 웹 검색 또는 커넥터를 지원하지 않습니다. 이러한 기능에는 서버가 필요합니다. 감지는 이 컴퓨터만 확인합니다."
+  },
+  "urlFetch": {
+    "sourceFallback": "웹페이지",
+    "fallbackHint": "페이지를 열어서 텍스트를 복사 후 여기에 붙여넣을 수도 있습니다.",
+    "shortExtract": "짧은 일부만 읽을 수 있습니다 — 페이지가 유료이거나 로그인 필요할 수 있습니다.",
+    "errors": {
+      "invalidUrl": "유효한 웹 주소가 아닌 것 같습니다.",
+      "ssrfBlocked": "보안상의 이유로 해당 주소를 가져올 수 없습니다.",
+      "tooManyRedirects": "해당 링크가 너무 많이 리디렉션되었습니다.",
+      "timeout": "페이지의 응답이 너무 오래 걸립니다.",
+      "unreachable": "페이지에 연결할 수 없습니다.",
+      "blocked": "사이트에서 요청을 거부했습니다 — 로그인 또는 자동 읽기 차단이 필요할 수 있습니다.",
+      "notFound": "페이지를 찾을 수 없습니다.",
+      "upstream": "사이트에서 오류를 반환했습니다.",
+      "pdf": "해당 링크는 PDF입니다. 파일을 다운로드한 후 첨부 버튼을 사용해 추가해 주세요.",
+      "nonHtml": "해당 링크는 읽을 수 있는 웹페이지가 아닙니다.",
+      "tooLarge": "페이지가 너무 커서 가져올 수 없습니다.",
+      "empty": "해당 페이지에서 읽을 수 있는 기사 텍스트를 찾을 수 없습니다.",
+      "generic": "페이지를 가져올 수 없습니다."
+    },
+    "fetchingFile": "{host} 가져오는 중…",
+    "attachLink": "링크 첨부",
+    "attachLinkTitle": "웹페이지 첨부",
+    "attachLinkDescription": "페이지를 가져와서 읽을 수 있는 텍스트를 메시지에 첨부합니다.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "가져오기 및 첨부",
+    "attachLinkInvalid": "웹 주소 형식이 올바르지 않습니다.",
+    "linkBadge": "링크에서 가져옴",
+    "couldNotRetrieve": "가져올 수 없음",
+    "doc": {
+      "sourceLabel": "출처",
+      "retrievedLabel": "가져옴",
+      "attemptedLabel": "시도함",
+      "failureHeading": "웹페이지를 가져올 수 없습니다"
+    },
+    "settingsTitle": "메시지 내 링크",
+    "settingsToggle": "붙여넣은 링크 자동 가져오기",
+    "settingsDescription": "링크만 따로 붙여넣으면, 페이지를 자동으로 가져와 텍스트를 첨부하여 어시스턴트가 읽을 수 있습니다. 이 옵션을 끄면 붙여넣은 링크는 일반 텍스트로 남습니다 — + 메뉴에서 수동으로 페이지를 첨부할 수도 있습니다.",
+    "addLink": "링크 추가"
   }
 }

@@ -2637,7 +2637,24 @@
       "pendingCount": "{count} 件保留中",
       "closeReview": "品質レビューを閉じる",
       "showReview": "レビューを表示",
-      "showReviewPending": "レビューを表示（{count} 件保留中）"
+      "showReviewPending": "レビューを表示（{count} 件保留中）",
+      "undoEdit": "元に戻す",
+      "clearResolved": "解決済みをクリア",
+      "clearResolvedHint": "承認済み、却下済み、および該当しない編集をこのリストから削除します",
+      "autoClearResolved": "解決済み編集を自動でクリア",
+      "customCriteria": "カスタム基準",
+      "closeCriteria": "カスタム基準を閉じる",
+      "newCriterion": "新しい基準",
+      "newCriterionName": "無題の基準",
+      "criterionName": "基準名",
+      "criterionRubric": "評価基準",
+      "criterionRubricPlaceholder": "この基準を満たすために翻訳が何をすべきか説明してください。例：「全ての臨床用投与指示を命令形で書き、不定詞は使わない…」",
+      "criterionRubricHint": "この評価基準は、組み込みのMQM指標と共にAIにそのまま渡され、翻訳評価に利用されます。",
+      "criteriaEmpty": "組み込みのMQM指標以外にも、ハウススタイル・用語選択・地域規則などのカスタム基準を作成して翻訳を評価できます。端末上に保存され、再利用可能です。",
+      "deleteCriterion": "基準を削除",
+      "manageCriteria": "カスタム基準",
+      "addCriteria": "基準を追加",
+      "noUsableCriteria": "少なくとも1つの組み込み基準を選択するか、カスタム基準に評価基準を設定してください。"
     },
     "document": {
       "emptyTitle": "作成したい文書の説明",
@@ -2757,7 +2774,11 @@
       "clearSelection": "選択を解除（全文書で作業）",
       "reviseSelectionPlaceholder": "選択部分の変更内容を記述してください…",
       "revisedSelectionSummary": "ワークスペース内の選択箇所を修正しました。",
-      "assessedSelection": "選択部分"
+      "assessedSelection": "選択部分",
+      "undoEdit": "元に戻す",
+      "clearResolved": "解決済みをクリア",
+      "clearResolvedHint": "承認済み、却下済み、および該当しない編集をこのリストから削除します",
+      "autoClearResolved": "解決済み編集を自動でクリア"
     },
     "data": {
       "emptyTitle": "分析するデータをインポート",
@@ -3030,7 +3051,31 @@
         "jumpTo": "{label}にジャンプ",
         "slider": "タイムライン位置",
         "showUndated": "日付なしの場所を表示",
-        "activeCount": "{count}件がアクティブ"
+        "activeCount": "{count}件がアクティブ",
+        "jump": {
+          "start": "開始",
+          "yearsLater": "{count, plural, one {1年後} other {#年後}}",
+          "monthsLater": "{count, plural, one {1か月後} other {#か月後}}",
+          "daysLater": "{count, plural, one {1日後} other {#日後}}",
+          "appears": "{count, plural, one {1件出現} other {#件出現}}",
+          "ends": "{count, plural, one {1件終了} other {#件終了}}",
+          "progress": "{total} のうち {index} 日付"
+        },
+        "precision": {
+          "minute": "分単位まで",
+          "hour": "時間単位まで",
+          "day": "日単位まで",
+          "month": "月単位での日付",
+          "year": "年単位での日付",
+          "mixed": "（混合）"
+        },
+        "pacing": {
+          "toggle": "再生速度調整",
+          "cardDuration": "各ロケーションの表示時間",
+          "seconds": "{seconds}秒",
+          "maxCards": "1日あたりのロケーション表示数",
+          "hint": "混雑している日は自動的に長く表示されます。"
+        }
       },
       "granularity": {
         "site": "施設",
@@ -3047,8 +3092,13 @@
         "color": "色：座標の信頼度（青：高　黄：中　赤：低）",
         "size": "点の大きさ：資料内での重要度",
         "area": "破線の円：地区、地域、または国のおおよその範囲",
-        "container": "薄い輪郭：中身が個別にマッピングされている領域"
-      }
+        "container": "薄い輪郭：中身が個別にマッピングされている領域",
+        "precisionHalo": "点線リング（タイムラプス中）：月または年までしか日付が分からず、正確な日時が不明なイベント"
+      },
+      "sourceLabel": "出典：{name}",
+      "fetchAndMap": "取得＆マッピング",
+      "fetchingPage": "ページ取得中…",
+      "railUrlRequest": "以下からロケーションを取得してマッピング：{title}（{url}）"
     },
     "shell": {
       "showConversation": "会話を表示",
@@ -3488,5 +3538,44 @@
       "llamacpp": "llama.cppは稼働中ですが、このサイトからのリクエストを拒否しています。llama-serverをクロスオリジンリクエスト許可で起動し、再度検出してください。"
     },
     "privacyNote": "ローカルモデルではファイル添付、画像、Web検索、コネクターの機能は利用できません。これらは当社サーバーが必要です。検出はこのコンピューターのみを確認します。"
+  },
+  "urlFetch": {
+    "sourceFallback": "ウェブページ",
+    "fallbackHint": "ページを開いてテキストをコピーし、ここに貼り付けることもできます。",
+    "shortExtract": "読めたのは短い抜粋のみです。ページが有料・認証制かもしれません。",
+    "errors": {
+      "invalidUrl": "正しいウェブアドレスではないようです。",
+      "ssrfBlocked": "セキュリティ上の理由でこのアドレスは取得できません。",
+      "tooManyRedirects": "このリンクはリダイレクトが多すぎます。",
+      "timeout": "ページの応答に時間がかかりすぎています。",
+      "unreachable": "ページにアクセスできませんでした。",
+      "blocked": "サイトからリクエストが拒否されました。サインインが必要、または自動リーダーがブロックされている可能性があります。",
+      "notFound": "そのページは見つかりませんでした。",
+      "upstream": "サイトからエラーが返されました。",
+      "pdf": "そのリンクはPDFです。ダウンロードして、「添付」ボタンで追加してください。",
+      "nonHtml": "そのリンクは読み取れるウェブページではありません。",
+      "tooLarge": "そのページは大きすぎて取得できません。",
+      "empty": "そのページに読み取れる記事テキストが見つかりませんでした。",
+      "generic": "ページを取得できませんでした。"
+    },
+    "fetchingFile": "{host} を取得中…",
+    "attachLink": "リンクを添付",
+    "attachLinkTitle": "ウェブページを添付",
+    "attachLinkDescription": "ページが取得され、読み取れるテキストがメッセージに添付されます。",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "取得して添付",
+    "attachLinkInvalid": "正しいウェブアドレスではありません。",
+    "linkBadge": "リンクより",
+    "couldNotRetrieve": "取得できませんでした",
+    "doc": {
+      "sourceLabel": "出典",
+      "retrievedLabel": "取得日時",
+      "attemptedLabel": "試行日時",
+      "failureHeading": "ウェブページを取得できませんでした"
+    },
+    "settingsTitle": "メッセージ内のリンク",
+    "settingsToggle": "貼り付けたリンクを自動で取得",
+    "settingsDescription": "単独でリンクを貼り付けた場合、そのページが取得され、テキストが添付されてアシスタントが読めるようになります。これをオフにすると、貼り付けたリンクはテキストのままになりますが、「＋」メニューから手動でページを添付することもできます。",
+    "addLink": "リンクを追加"
   }
 }

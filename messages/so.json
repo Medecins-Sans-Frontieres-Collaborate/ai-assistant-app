@@ -2621,7 +2621,24 @@
       "pendingCount": "{count} sugayaal",
       "closeReview": "Xir qiimeynta tayada",
       "showReview": "Muuji qiimeynta",
-      "showReviewPending": "Muuji qiimeynta ({count} sugayaal)"
+      "showReviewPending": "Muuji qiimeynta ({count} sugayaal)",
+      "undoEdit": "Ka noqosho",
+      "clearResolved": "Tirtir kuwa la xaliyay",
+      "clearResolvedHint": "Ka saar tifaftiradii la aqbalay, la diiday, ama aan khuseyn liiskan",
+      "autoClearResolved": "Si toos ah u tirtir kuwa la xaliyay",
+      "customCriteria": "Shuruudo gaar ah",
+      "closeCriteria": "Xidho shuruuda gaar ah",
+      "newCriterion": "Shuruud cusub",
+      "newCriterionName": "Shuruud aan cinwaan lahayn",
+      "criterionName": "Magaca shuruudda",
+      "criterionRubric": "Habbeed",
+      "criterionRubricPlaceholder": "Sharax waxa turjumaadda ay tahay inay sameyso si ay shuruuddan u buuxiso, tusaale: \"Tuso dhammaan tilmaamaha qiyaasta daawada si amar ah, waligeedna ma adeegsan isbadal...\"",
+      "criterionRubricHint": "Habbeedkan waxaa si toos ah loogu gudbiyaa AI-ga iyada oo lala socodsiinayo cabbirrada MQM marka la qiimaynayo turjumaadda.",
+      "criteriaEmpty": "Abuur shuruudo gaar ah — sida habka qoraalka, erayada macaamiisha, ama xeerarka gobolada — si aad u qiimeyso turjumaadaha wax ka badan cabbirrada MQM ee dhisan. Waxa lagu kaydiyaa qalabkan waana la isticmaali karaa marar badan.",
+      "deleteCriterion": "Tirtir shuruuda",
+      "manageCriteria": "Shuruudo gaar ah",
+      "addCriteria": "Kudar shuruudo",
+      "noUsableCriteria": "Dooro ugu yaraan hal shuruud oo dhisan ama dhig habbeed shuruudahaaga gaarka ah."
     },
     "document": {
       "emptyTitle": "Sharax dukumintiga aad rabto",
@@ -2741,7 +2758,11 @@
       "clearSelection": "Tirtir xulashada (la shaqee dukumiintiga oo dhan)",
       "reviseSelectionPlaceholder": "Sharax isbeddellada lagu sameeyay xulashada…",
       "revisedSelectionSummary": "Waxaan dib u eegay qaybta la xulay ee goobta shaqada.",
-      "assessedSelection": "Xulasho"
+      "assessedSelection": "Xulasho",
+      "undoEdit": "Ka noqosho",
+      "clearResolved": "Tirtir kuwa la xaliyay",
+      "clearResolvedHint": "Ka saar tifaftiradii la aqbalay, la diiday, ama aan khuseyn liiskan",
+      "autoClearResolved": "Si toos ah u tirtir kuwa la xaliyay"
     },
     "data": {
       "emptyTitle": "Keenso xog si loo falanqeeyo",
@@ -3014,7 +3035,31 @@
         "jumpTo": "U bood {label}",
         "slider": "Meesha waqtiga ee taariikhda",
         "showUndated": "Tus goobaha aan la cayimin taariikhda",
-        "activeCount": "{count} firfircoon"
+        "activeCount": "{count} firfircoon",
+        "jump": {
+          "start": "Bilow",
+          "yearsLater": "{count, plural, one {1 sano kadib} other {# sano kadib}}",
+          "monthsLater": "{count, plural, one {1 bil kadib} other {# bilood kadib}}",
+          "daysLater": "{count, plural, one {1 maalin kadib} other {# maalmood kadib}}",
+          "appears": "{count, plural, one {1 muuqaal} other {# muuqaal}}",
+          "ends": "{count, plural, one {1 dhamaad} other {# dhamaad}}",
+          "progress": "Taariikhda {index} ee {total}"
+        },
+        "precision": {
+          "minute": "Ilaa daqiiqadda",
+          "hour": "Ilaa saacadda",
+          "day": "Ilaa maalinta",
+          "month": "Taariikh heer-bil",
+          "year": "Taariikh heer-sano",
+          "mixed": "(isku jira)"
+        },
+        "pacing": {
+          "toggle": "Xawaaraha muqaalka",
+          "cardDuration": "Goob kasta muuji muddo ah",
+          "seconds": "{seconds} ilbiriqsi",
+          "maxCards": "Goobo la muujiyay taariikh kasta",
+          "hint": "Taariikho mashquul badan waa la hayaa wakhti dheer si toos ah."
+        }
       },
       "granularity": {
         "site": "Goob",
@@ -3031,8 +3076,13 @@
         "color": "Midabka: kalsoonida isku-duwidda (buluug sare, huruud dhexe, cas hoose)",
         "size": "Cabbirka dhibicda: waxa ay meesha ugu muhiimsan ugu tahay xogta",
         "area": "Goobo xariijin leh: xadka qiyaas ahaan ee degmo, gobol, ama waddan",
-        "container": "Xariiq khafiif ah: meel ay waxyaabaheeda si gooni ah loo sawiray"
-      }
+        "container": "Xariiq khafiif ah: meel ay waxyaabaheeda si gooni ah loo sawiray",
+        "precisionHalo": "Goob guduudan oo fidsan (inta lagu jiro muuqaal waqtiyeed): dhacdada waxaa lagu xusay bil ama sano oo kali ah, sidaas darteed wakhtiga saxda ah lama hubin karo"
+      },
+      "sourceLabel": "Xigasho: {name}",
+      "fetchAndMap": "Soo qaado & sawir",
+      "fetchingPage": "Bogga la soo helayo…",
+      "railUrlRequest": "Soo qaado oo sawir goobaha ka socda: {title} ({url})"
     },
     "shell": {
       "showConversation": "Muuji wadahadalka",
@@ -3472,5 +3522,44 @@
       "llamacpp": "llama.cpp wuu socdaa laakiin wuu diidayaa codsiyada boggan. Bilow llama-server adiga oo u oggol cross-origin requests, kadibna mar kale aqoonso."
     },
     "privacyNote": "Moodallada maxalliga ah ma taageeraan lifaaqyada faylasha, sawirro, raadinta webka ama isku-xireyaasha — kuwaas waxa u baahan server-yadayada. Ogaanshuhu waxa uu ka hubiyaa kaliya kombiyuutarkan."
+  },
+  "urlFetch": {
+    "sourceFallback": "Bogga webka",
+    "fallbackHint": "Waxaad kaloo furi kartaa bogga, nuqulan kartaa qoraalka, oo halkan ku dhajisaa halkii aad ka isticmaali lahayd.",
+    "shortExtract": "Keliya qeyb yar ayay ahaan kartay in la akhriyo — boggu waxaa laga yaabaa inuu xanniban yahay ama uu galo-gel u baahan yahay.",
+    "errors": {
+      "invalidUrl": "Taasi ma ahan cinwaan web sax ah.",
+      "ssrfBlocked": "Cinwaankan ma la soo qaadi karo sababo amni darteed.",
+      "tooManyRedirects": "Isku xirkaas aad buu ugu leex-leexday.",
+      "timeout": "Boggu wuxuu ku dheeraaday inuu ka jawaabo.",
+      "unreachable": "Bogga lama gaari karo.",
+      "blocked": "Goobtu way diiday codsiga — waxaa laga yaabaa in loo baahdo gelitaan ama way xannibaysaa akhristayaasha otomaatiga ah.",
+      "notFound": "Boggaas lama helin.",
+      "upstream": "Goobtu waxay soo celisay qalad.",
+      "pdf": "Xirirkaan waa PDF. Soo dejiso ka dibna ku dar adoo isticmaalaya batoonka lifaaq.",
+      "nonHtml": "Xariirkan ma aha bog web ah oo la akhrin karo.",
+      "tooLarge": "Boggaan waa weyn yahay in la soo qaado.",
+      "empty": "Qoraal la akhrin karo lagama helin boggaan.",
+      "generic": "Bogga lama soo qaadin karo."
+    },
+    "fetchingFile": "Waxaa la soo qaadayaa {host}…",
+    "attachLink": "Ku lifaaq xariir",
+    "attachLinkTitle": "Ku lifaaq bog web ah",
+    "attachLinkDescription": "Bogga waa la soo qaadayaa, qoraalkiisuna wuxuu la imanayaa fariintaada.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Soo qaado & lifaaq",
+    "attachLinkInvalid": "Tani uma eka inay tahay cinwaan web ah.",
+    "linkBadge": "Link laga keenay",
+    "couldNotRetrieve": "Lama soo heli karin",
+    "doc": {
+      "sourceLabel": "Isha",
+      "retrievedLabel": "La helay",
+      "attemptedLabel": "La isku dayay",
+      "failureHeading": "Bogga webka lama soo heli karin"
+    },
+    "settingsTitle": "Xariirada ku jira farriimaha",
+    "settingsToggle": "Si otomaatig ah u soo qaado xariirada lasoo dhajiyo",
+    "settingsDescription": "Markaad keligaaga dhajiso xariir, bogga waa la soo qaadayaa qoraalkiisuna wuu la imaanayaa si kaaliyuhu u akhristo. Ka dami tan si xariirada loogu muujiyo farriimaha sida qoraal caadi ah — weli waxaad si toos ah uga lifaaqi kartaa bog adigoo isticmaalaya menu-ga +.",
+    "addLink": "Ku dar xariir"
   }
 }

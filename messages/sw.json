@@ -2637,7 +2637,24 @@
       "pendingCount": "{count} inasubiri",
       "closeReview": "Funga ukaguzi wa ubora",
       "showReview": "Onesha ukaguzi",
-      "showReviewPending": "Onesha ukaguzi ({count} inasubiri)"
+      "showReviewPending": "Onesha ukaguzi ({count} inasubiri)",
+      "undoEdit": "Tengua",
+      "clearResolved": "Futa zilizotatuliwa",
+      "clearResolvedHint": "Ondoa marekebisho yaliyokubaliwa, kukataliwa, na yasiyohusika kwenye orodha hii",
+      "autoClearResolved": "Futa marekebisho yaliyotatuliwa kiotomatiki",
+      "customCriteria": "Vigezo maalum",
+      "closeCriteria": "Funga vigezo maalum",
+      "newCriterion": "Kigezo kipya",
+      "newCriterionName": "Kigezo bila jina",
+      "criterionName": "Jina la kigezo",
+      "criterionRubric": "Mwongozo",
+      "criterionRubricPlaceholder": "Eleza kile ambacho tafsiri inapaswa kufanya ili kutimiza kigezo hiki, mfano \"Toa maagizo yote ya dozi ya kitabibu kwa amri, siyo katika hali ya infinitive...\"",
+      "criterionRubricHint": "Mwongozo huu hutolewa kwa AI kama ulivyo pamoja na vipengele vya MQM vilivyojengwa wakati wa kutathmini tafsiri.",
+      "criteriaEmpty": "Unda vigezo maalum — mfano, mtindo wa shirika, mapendeleo ya istilahi za mteja, au mila za kikanda — kutathmini tafsiri zaidi ya vipengele vilivyojengwa vya MQM. Vinaifadhiwa kwenye kifaa hiki na vinaweza kutumika tena.",
+      "deleteCriterion": "Futa kigezo",
+      "manageCriteria": "Vigezo maalum",
+      "addCriteria": "Ongeza vigezo",
+      "noUsableCriteria": "Chagua angalau kigezo kimoja kilichojengwa, au weka mwongozo kwa vigezo vyako maalum."
     },
     "document": {
       "emptyTitle": "Eleza unachohitaji kwenye hati",
@@ -2757,7 +2774,11 @@
       "clearSelection": "Ondoa uteuzi (tumia hati nzima)",
       "reviseSelectionPlaceholder": "Eleza mabadiliko kwenye sehemu uliochagua...",
       "revisedSelectionSummary": "Nimehariri kifungu kilichochaguliwa katika eneo la kazi.",
-      "assessedSelection": "Uteuzi"
+      "assessedSelection": "Uteuzi",
+      "undoEdit": "Tengua",
+      "clearResolved": "Futa zilizotatuliwa",
+      "clearResolvedHint": "Ondoa marekebisho yaliyokubaliwa, kukataliwa, na yasiyohusika kwenye orodha hii",
+      "autoClearResolved": "Futa marekebisho yaliyotatuliwa kiotomatiki"
     },
     "data": {
       "emptyTitle": "Ingiza data ili kuchanganua",
@@ -3030,7 +3051,31 @@
         "jumpTo": "Nenda kwa {label}",
         "slider": "Nafasi kwenye muendelezo wa wakati",
         "showUndated": "Onyesha maeneo yasiyo na tarehe",
-        "activeCount": "{count} imewezeshwa"
+        "activeCount": "{count} imewezeshwa",
+        "jump": {
+          "start": "Anza",
+          "yearsLater": "{count, plural, one {Baada ya mwaka 1} other {Baada ya miaka #}}",
+          "monthsLater": "{count, plural, one {Baada ya mwezi 1} other {Baada ya miezi #}}",
+          "daysLater": "{count, plural, one {Baada ya siku 1} other {Baada ya siku #}}",
+          "appears": "{count, plural, one {1 inaonekana} other {# zinaonekana}}",
+          "ends": "{count, plural, one {1 inakamilika} other {# zinakamilika}}",
+          "progress": "Tarehe {index} kati ya {total}"
+        },
+        "precision": {
+          "minute": "Hadi dakika",
+          "hour": "Hadi saa",
+          "day": "Hadi siku",
+          "month": "Tarehe ya kiwango cha mwezi",
+          "year": "Tarehe ya kiwango cha mwaka",
+          "mixed": "(mchanganyiko)"
+        },
+        "pacing": {
+          "toggle": "Udhibiti wa mwendo wa uchezaji",
+          "cardDuration": "Onyesha kila eneo kwa",
+          "seconds": "{seconds}s",
+          "maxCards": "Maeneo yanayoonekana kwa tarehe",
+          "hint": "Tarehe zilizo na shughuli nyingi zinacheleweshwa zaidi kiotomatiki."
+        }
       },
       "granularity": {
         "site": "Kituo",
@@ -3047,8 +3092,13 @@
         "color": "Rangi: uhakika wa uratibu (bluu juu, chungwa wastani, nyekundu chini)",
         "size": "Ukubwa wa doa: umuhimu wa eneo kwenye nyenzo",
         "area": "Mduara uliokatwa: makadirio ya eneo la wilaya, mkoa, au nchi",
-        "container": "Mstari hafifu: eneo ambalo maudhui yake yanachorwa mmoja mmoja"
-      }
+        "container": "Mstari hafifu: eneo ambalo maudhui yake yanachorwa mmoja mmoja",
+        "precisionHalo": "Pete laini ya mstari iliyovunjika (wakati wa upitishaji wakati): tukio limedatishwa tu hadi mwezi au mwaka, kwa hivyo muda wake halisi haujulikani"
+      },
+      "sourceLabel": "Chanzo: {name}",
+      "fetchAndMap": "Pata & ramisha",
+      "fetchingPage": "Inaleta ukurasa…",
+      "railUrlRequest": "Pata na ramisha maeneo kutoka: {title} ({url})"
     },
     "shell": {
       "showConversation": "Onyesha mazungumzo",
@@ -3488,5 +3538,44 @@
       "llamacpp": "llama.cpp inaendeshwa lakini inakataa maombi kutoka tovuti hii. Anzisha llama-server ikiruhusu maombi kutoka vyanzo vingi, kisha jaribu tena kutambua."
     },
     "privacyNote": "Miundo ya ndani haiungi mkono viambatisho vya faili, picha, utafutaji mtandaoni au viunganishi — hivyo vinahitaji seva zetu. Utambuzi hufanya ukaguzi kwenye kompyuta hii tu."
+  },
+  "urlFetch": {
+    "sourceFallback": "Ukurasa wa wavuti",
+    "fallbackHint": "Pia unaweza kufungua ukurasa, kunakili maandishi, na kuyaweka hapa badala yake.",
+    "shortExtract": "Sehemu ndogo tu ya ukurasa ilisomeka — ukurasa huenda unahitaji malipo au kuingia.",
+    "errors": {
+      "invalidUrl": "Hiyo haionekani kama anwani sahihi ya wavuti.",
+      "ssrfBlocked": "Anwani hiyo haiwezi kupatikana kwa sababu za kiusalama.",
+      "tooManyRedirects": "Kiungo hicho kimeelekezwa mara nyingi sana.",
+      "timeout": "Ukurasa umechukua muda mrefu kujibu.",
+      "unreachable": "Ukurasa haukupatikana.",
+      "blocked": "Tovuti imekataa ombi — huenda ina hitaji kuingia au inazuia wasomaji otomatiki.",
+      "notFound": "Ukurasa huo haukupatikana.",
+      "upstream": "Tovuti imerudisha kosa.",
+      "pdf": "Kiungo hicho ni PDF. Pakua na utumie kitufe cha ambatisha ili kuongeza.",
+      "nonHtml": "Kiungo hicho si ukurasa wa wavuti tunaoweza kusoma.",
+      "tooLarge": "Ukurasa huo ni mkubwa mno kuvutwa.",
+      "empty": "Hakuna maandishi yanayoweza kusomwa yaliyopatikana kwenye ukurasa huo.",
+      "generic": "Ukurasa haukuweza kupatikana."
+    },
+    "fetchingFile": "Inavuta kutoka {host}…",
+    "attachLink": "Ambatisha kiungo",
+    "attachLinkTitle": "Ambatisha ukurasa wa wavuti",
+    "attachLinkDescription": "Ukurasa utavutwa na maandishi yake yanayoweza kusomwa yataambatishwa kwenye ujumbe wako.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Vuta & ambatisha",
+    "attachLinkInvalid": "Hilo halionekani kama anwani ya wavuti.",
+    "linkBadge": "Kutoka kwa kiungo",
+    "couldNotRetrieve": "Haikuweza kupatikana",
+    "doc": {
+      "sourceLabel": "Chanzo",
+      "retrievedLabel": "Imepatikana",
+      "attemptedLabel": "Imejaribiwa",
+      "failureHeading": "Ukurasa wa wavuti haukuweza kupatikana"
+    },
+    "settingsTitle": "Viungo kwenye ujumbe",
+    "settingsToggle": "Vuta viungo vilivyopakuliwa moja kwa moja",
+    "settingsDescription": "Unapobandika kiungo pekee, ukurasa utavutwa na maandishi yake yataambatishwa ili msaidizi asome. Zima hiki ili viungo vifutwe kama maandishi ya kawaida — bado unaweza ambatisha ukurasa mwenyewe kupitia menyu ya +.",
+    "addLink": "Ongeza kiungo"
   }
 }

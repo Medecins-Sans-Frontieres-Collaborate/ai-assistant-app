@@ -2621,7 +2621,24 @@
       "pendingCount": "{count} ቀጺሉ",
       "closeReview": "ጥራይ ርኣዩ ዝዕጽፍ",
       "showReview": "ርኣይ ርኣዩ",
-      "showReviewPending": "ርኣይ ርኣዩ ({count} ቀጺሉ)"
+      "showReviewPending": "ርኣይ ርኣዩ ({count} ቀጺሉ)",
+      "undoEdit": "ምልሳሕ መዘንኸር",
+      "clearResolved": "ተፈታእኩሞ ኣጽዳእ",
+      "clearResolvedHint": "ተቐባልየን፣ ተረጋገጹን፣ ዝሓለፉን ምልሳሓት ካብዚ ዝርዝር ኣውጹ",
+      "autoClearResolved": "ተፈታእኩሞ ምልሳሓት ብናብርቲ ኣጽዳእ",
+      "customCriteria": "ብኣገልግሎት ዝተሰርሑ መሰረታት",
+      "closeCriteria": "ብኣገልግሎት ዝተሰርሑ መሰረታት ዝጽው",
+      "newCriterion": "መሰረት ሓድሽ",
+      "newCriterionName": "ቃል መሰረት የተሰነየን",
+      "criterionName": "ሽም መሰረት",
+      "criterionRubric": "ሩብሪክ",
+      "criterionRubricPlaceholder": "ዝሓለፉ መሰረት ምስክትው ፣ ትርጉም ክብጽሖ ዘለዎ ምውሳን መግለጺ – ኣብ ንምሳሌ፣ “ኩሉ ሕክምናዊ ናይ መውጽእታ መመዝገቢ ትእዛዝ'ው ኣብ መፍትሒ ፣ ኣይኮነን ናብ ዘይምትባል…”",
+      "criterionRubricHint": "እዚ ሩብሪክ ኣብርሳሕ ኣርብ ከም'ዝኾነ ከም መደባት MQM ሓበሬታታት ምእካብ ገብሮላ AI ይኸውን ይገብር።",
+      "criteriaEmpty": "ስምዓት መሰረታት ክፍል፡ ኣብ ምሳሌ – ዘይምስል ስደታዊ ባይታ፣ ቃላት ሕጂኡ ወይ ኩባንያ መደብ፣ ወይ ክልቲ ቦታ ምምልከት – ብምግባር ከም MQM ምምዕባለ መሰረታት ተሰብስቡ። ኣብኡ እዚ ገምገም ይሰበስባፈ እናውን ክትሰንበት ትኽእል።",
+      "deleteCriterion": "መሰረት ኣጽዳእ",
+      "manageCriteria": "ብኣገልግሎት ዝተሰርሑ መሰረታት",
+      "addCriteria": "መሰረታት ኣእትው",
+      "noUsableCriteria": "ብዙሕ ከም ምስክትው መሰረት ወይ ሩብሪክ ዘለዋ መሰረታት ስርጉ።"
     },
     "document": {
       "emptyTitle": "ዝብዝሕ ደብዳበ ኣንባብ",
@@ -2741,7 +2758,11 @@
       "clearSelection": "ምርጫ ሰርዝ (ብኩሉ ሰነድ ሰርሕ)",
       "reviseSelectionPlaceholder": "ብምርጫ ዘምግባር ንምቑያም መግለጺ ብርሃን ኣመልከት…",
       "revisedSelectionSummary": "ነቲ ተመርጺ ክፋል ኣብ workspace ኣርአዩ ኣረከብኩ።",
-      "assessedSelection": "ምርጫ"
+      "assessedSelection": "ምርጫ",
+      "undoEdit": "ምልሳሕ መዘንኸር",
+      "clearResolved": "ተፈታእኩሞ ኣጽዳእ",
+      "clearResolvedHint": "ተቐባልየን፣ ተረጋገጹን፣ ዝሓለፉን ምልሳሓት ካብዚ ዝርዝር ኣውጹ",
+      "autoClearResolved": "ተፈታእኩሞ ምልሳሓት ብናብርቲ ኣጽዳእ"
     },
     "data": {
       "emptyTitle": "ዳታ ኣስገብር ንምርመራ",
@@ -3014,7 +3035,31 @@
         "jumpTo": "ወደ {label} ቅልጡፍ",
         "slider": "ቦታ ኣብ እዋናዊ ቅዲ-ምልክት",
         "showUndated": "ዕለት ዘይሕብ ኣካባቢታት ርኣዩ",
-        "activeCount": "{count} ንጡፍ ኣሎ"
+        "activeCount": "{count} ንጡፍ ኣሎ",
+        "jump": {
+          "start": "መጀመርታ",
+          "yearsLater": "{count, plural, one {1 ዓመት ቀጺሉ} other {# ዓመት ቀጺሉ}}",
+          "monthsLater": "{count, plural, one {1 ወርሒ ቀጺሉ} other {# ወርሒ ቀጺሉ}}",
+          "daysLater": "{count, plural, one {1 መዓልቲ ቀጺሉ} other {# መዓልቲ ቀጺሉ}}",
+          "appears": "{count, plural, one {1 ንግግር ተሓቢሩ} other {# ንግግራት ተሓቢሩ}}",
+          "ends": "{count, plural, one {1 ምውዳእ ተሓቢሩ} other {# ምውዳኣት ተሓቢሩ}}",
+          "progress": "ቀንዲ {index} ካብ {total}"
+        },
+        "precision": {
+          "minute": "ናብ ደቒቕ",
+          "hour": "ናብ ሰዓት",
+          "day": "ናብ መዓልቲ",
+          "month": "ወርሒ-መደበ ቀንዲ",
+          "year": "ዓመት-መደበ ቀንዲ",
+          "mixed": "(ተቓላበለ)"
+        },
+        "pacing": {
+          "toggle": "ግዜ መቆጣጠሪ",
+          "cardDuration": "ካብ መድረኽ እያ ቦታ ርኣየ",
+          "seconds": "{seconds} ሰከንድ",
+          "maxCards": "ቦታታት ናይ እያ ቀንዲ ዝተረከቡ",
+          "hint": "ፍርጥራጣ ቀንዳት ሓቢርኦም ብሓሳብ ይወስዱ።"
+        }
       },
       "granularity": {
         "site": "ሰብሳብ",
@@ -3031,8 +3076,13 @@
         "color": "ሕብሪ፡ መርገጺ ምምእና (ሰማያዊ ብርቱዕ፣ ወርቃዊ መካነ፣ ቀይሕ ዝተንእሰይ)",
         "size": "መጠን ናብዚ ቦታ ዝያዳ ብምኽንያት",
         "area": "ተቀዳሚ ክብደቲ ዞባ፣ ክልል ወይ ዝርዝር ከባቢ ምግልጋል",
-        "container": "ጽቡቕ ግርጌ፡ ዝሓዘ እተወሃበ ክሳብ እያ ዝተዕርፈ ከባቢ"
-      }
+        "container": "ጽቡቕ ግርጌ፡ ዝሓዘ እተወሃበ ክሳብ እያ ዝተዕርፈ ከባቢ",
+        "precisionHalo": "ደቂቕ ምክትል (ኣብ ግልግሎት ግዝያዊ ንደጋ): ሓደ ክስራ ኽፉል'ዩ ከምዚ ወርሒ ወይ ዓመት ብምውጽእ፡ ቅድሚ ግዜ ኣይትታሰሩን።"
+      },
+      "sourceLabel": "መንገዲ፡ {name}",
+      "fetchAndMap": "ኣምጻእ & ካብ መድረኽ",
+      "fetchingPage": "መጽሓፍ ኣምጻእ...",
+      "railUrlRequest": "ናይ ቦታታት ኣብ {title} ({url}) ምንዳብ ኣወሓትን ካብ መድረኽ"
     },
     "shell": {
       "showConversation": "ውይይት ርኣዩ",
@@ -3472,5 +3522,44 @@
       "llamacpp": "llama.cpp ኣለና፣ ግና ካብዚ ሳይት ሕቶታት ምቕባል ይኣክልን። llama-server ብዝፍቀደ ዝሓፀበ ኣብ ኩዑሉ ሓገዝ ጀምር፣ እንደገና ምርካብ።"
     },
     "privacyNote": "ኣካባቢ ሞዴልታት ፋይል ምያዳድ፣ ስእሊ፣ ድሕሪ መርበብ ምድላው ወይ ንተዓይነታት ዘይደግፉን። እዚ ኣካባቢ ኮምፒተር መርመራ ብተሓዊሱ እዩ ዝፈጸመ።"
+  },
+  "urlFetch": {
+    "sourceFallback": "መድረኽ መሰኻኽ",
+    "fallbackHint": "ገጽ ምክትል ክትከፍቱ፡ ጽሑፍ ክትቅፃሉ እተዘይክእል ኣብዚ ዋና ድሕሪኡ ኣእትዉ ትኽእሉ።",
+    "shortExtract": "ብሓጺር አጭር ገፅ ተንብቦ ድኾነ፡ መድረኹ እቲ ክትከፍቱ ድሓን ከምትፈልጥ ክኸውን ኣሎ ወይ መእተዊ ኣለና።",
+    "errors": {
+      "invalidUrl": "እዚ ንእሽቶ ዝግበር መርካቶ መድረኽ አይትመስልን።",
+      "ssrfBlocked": "ዚ ናብቲ ኣድራሻ ንምንዳብ ኣይክእልን ምስ ጥንካሬ እምስላ።",
+      "tooManyRedirects": "እዚ ሊንክ ብዙሕ ግዘት ተለውዉጡ።",
+      "timeout": "ገጽኡ ዝንብል ጊዜ ተወሲዱ ኣለዎ።",
+      "unreachable": "ገጽኡ ምስራዕ ኣይተቻለን።",
+      "blocked": "መሳይቲ ጥዕና ምልእቲ ዘይተቐበለ ኣሎ። ብቕድሚ ምእታው ግባ ወይ ኣብ ብኣውቶማቲክ ንቕዓት ዝረኣዩ ተዓጠበ።",
+      "notFound": "እዚ ገጽ ኣልተረኽበን።",
+      "upstream": "መሳይቲ ስንኡ ሓገዝ መውጽኦ ኣመጸ።",
+      "pdf": "ዝተርአየ መገናኛ PDF እዩ። ኣውርዱካ እናተኣኸብልካ በጃኻ ዝኾነ ኣጽድቂ መደብ ተጠቀም።",
+      "nonHtml": "ዝተርአየ መገናኛ ንንብብ ዝኽእል ዝኾነ ዋዛ ኣይኰነን።",
+      "tooLarge": "ዝተቓነበሉ ገጽ ብዙሕ እዩ፣ ምምውሳድ ኣይተኻእለን።",
+      "empty": "ኣብ ዚ ገጽ ዝኽእል ምንባብ ሓበሬታ ኣልተረኽበን።",
+      "generic": "ገጽኡ ምምውሳድ ኣይተቻለን።"
+    },
+    "fetchingFile": "ኣብሓል {host} እዩ ዝርከብ…",
+    "attachLink": "መገናኛ ተጠቒም",
+    "attachLinkTitle": "ዋዛ ፔጅ ተጠቒም",
+    "attachLinkDescription": "ገጽኡ ይውሰድ፡ ናይኡ ዝኽእል ጽሑፍ ኣብ መልእኽቲኻ ይጨብጨብ።",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "ምውሳድ & ምትጣብ",
+    "attachLinkInvalid": "እዚ ከም ዞባ መገናኛ ኣይተመሓየሸን።",
+    "linkBadge": "ካብ መገናኛ",
+    "couldNotRetrieve": "ምምውሳድ ኣይተኻእለን",
+    "doc": {
+      "sourceLabel": "መንገዲ",
+      "retrievedLabel": "ተውሲዱ",
+      "attemptedLabel": "ተፈቲኑ",
+      "failureHeading": "ዋዛ ፔጅ ምምውሳድ ኣይተቻለን"
+    },
+    "settingsTitle": "መገናኛታት ኣብ መልእኽቲታት",
+    "settingsToggle": "ኣተማሚ ምውሳድ ኣብ መገናኛታት ቀይር",
+    "settingsDescription": "ንእሽቶ መገናኛ ኣብዚ ኣብ ቕፅል ከይምልኣካ፡ ገጻቹ ይውሰድ፡ ናይ ጽሑፉ ዝኽእል ኣብ መልእኽቲኻ ይጨብጨብ፡ ኣስተናግደካ ክንብብ ይከኣል። እዚን ኣብ ድሑር ምሕደር ትኽእል፡ ንእተዘልእሉ መገናኛ ብ-+ ዝብሉ መደብ ቁጽሪ ትጠቀም።",
+    "addLink": "መገናኛ ደኣ ይጨምር"
   }
 }

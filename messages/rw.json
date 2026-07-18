@@ -2621,7 +2621,24 @@
       "pendingCount": "{count} bitararangira",
       "closeReview": "Funga isuzuma ry’ubuziranenge",
       "showReview": "Erekana isuzuma",
-      "showReviewPending": "Erekana isuzuma ({count} bitararangira)"
+      "showReviewPending": "Erekana isuzuma ({count} bitararangira)",
+      "undoEdit": "Subira inyuma",
+      "clearResolved": "Siba ibyashojwe",
+      "clearResolvedHint": "Kuraho impinduka zemerewe, zanzewe cyangwa zidakoreshwa kuri uru rutonde",
+      "autoClearResolved": "Siba byikora impinduka zamaze gufatwaho umwanzuro",
+      "customCriteria": "Ibipimo byihariye",
+      "closeCriteria": "Funga ibipimo byihariye",
+      "newCriterion": "Igipimo gishya",
+      "newCriterionName": "Igipimo kitagira izina",
+      "criterionName": "Izina ry’Igipimo",
+      "criterionRubric": "Igipimo ngenderwaho",
+      "criterionRubricPlaceholder": "Sobanura ibyo ubusobanuro bugomba kuzuza kugira ngo buhuze n’iki gipimo, urugero: \"Shyira amabwiriza yose y'ingano y'ibinini mu buryo bw'itegeko, ntugakoreshwe infinitive…\"",
+      "criterionRubricHint": "Iyi ngengamikorere itangwa kuri AI nk'uko iteye hamwe n'ibipimo bisanzwe bya MQM mu gusuzuma ubusobanuro.",
+      "criteriaEmpty": "Shyiramo ibipimo byihariye — nko: imikoreshereze y'ururimi y'ikigo, amagambo umukiliya akeneye, cyangwa umuco w’akarere — kugira ngo usuzume ubusobanuro birenze ibiri muri MQM. Bibikwa kuri iki gikoresho kandi bishobora kongera gukoreshwa.",
+      "deleteCriterion": "Siba igipimo",
+      "manageCriteria": "Ibipimo byihariye",
+      "addCriteria": "Ongeramo ibipimo",
+      "noUsableCriteria": "Hitamo nibura igipimo kimwe muri bisanzwe, cyangwa uhe ibyawe ibisobanuro."
     },
     "document": {
       "emptyTitle": "Sobanura inyandiko ushaka",
@@ -2741,7 +2758,11 @@
       "clearSelection": "Siba icyo wahisemo (kora kuri byose)",
       "reviseSelectionPlaceholder": "Sobanura impinduka ku byatoranijwe…",
       "revisedSelectionSummary": "Nabonye umwanya wahiswemo munkorera.",
-      "assessedSelection": "Igice cyatoranijwe"
+      "assessedSelection": "Igice cyatoranijwe",
+      "undoEdit": "Subira inyuma",
+      "clearResolved": "Siba ibyashojwe",
+      "clearResolvedHint": "Kuraho impinduka zemerewe, zanzewe cyangwa zidakoreshwa kuri uru rutonde",
+      "autoClearResolved": "Siba byikora impinduka zamaze gufatwaho umwanzuro"
     },
     "data": {
       "emptyTitle": "Injiza amakuru kugirango asuzumwe",
@@ -3014,7 +3035,31 @@
         "jumpTo": "Jya kuri {label}",
         "slider": "Umwanya kuri timeline",
         "showUndated": "Erekana aho hatagize itariki",
-        "activeCount": "{count} bikiri gukora"
+        "activeCount": "{count} bikiri gukora",
+        "jump": {
+          "start": "Itangiriro",
+          "yearsLater": "{count, plural, one {Umwaka 1 nyuma} other {Imyaka # nyuma}}",
+          "monthsLater": "{count, plural, one {Ukwezi 1 nyuma} other {Amezi # nyuma}}",
+          "daysLater": "{count, plural, one {Umunsi 1 nyuma} other {Iminsi # nyuma}}",
+          "appears": "{count, plural, one {1 igaragara} other {# zigaragara}}",
+          "ends": "{count, plural, one {1 irangiye} other {# zarangiye}}",
+          "progress": "Itariki ya {index} muri {total}"
+        },
+        "precision": {
+          "minute": "Kugeza ku munota",
+          "hour": "Kugeza ku isaha",
+          "day": "Kugeza ku munsi",
+          "month": "Itariki ku rwego rw’ukwezi",
+          "year": "Itariki ku rwego rw’umwaka",
+          "mixed": "(bivanzwe)"
+        },
+        "pacing": {
+          "toggle": "Umuvuduko wo gukina",
+          "cardDuration": "Erekana aho hantu buri gihe kingana",
+          "seconds": "{seconds}seg",
+          "maxCards": "Aho hantu higaragaza kuri buri tari",
+          "hint": "Amatariki arimo byinshi azahagarikwa igihe kirekire."
+        }
       },
       "granularity": {
         "site": "Urubuga",
@@ -3031,8 +3076,13 @@
         "color": "Ibara: icyizere cyo ku coordinates (ubururu ni hejuru, umuhondo hagati, umutuku hasi)",
         "size": "Ingano y’akadomo: Uburyo ahantu h’ingenzi ku gikorwa kigizwe",
         "area": "Uruziga rukoranye utudomo: aho akarere, intara, cyangwa igihugu kigeze uko biboneka.",
-        "container": "Umurongo woroshye: ahantu ibyirimo byanditse umwe ku wundi."
-      }
+        "container": "Umurongo woroshye: ahantu ibyirimo byanditse umwe ku wundi.",
+        "precisionHalo": "Impande zitarangwamo ikomeye (igihe film irimo kugenda): icyo gikorwa kimenyekanye gusa ukwezi cyangwa umwaka, igihe nyacyo ntikizwi neza"
+      },
+      "sourceLabel": "Inkomoko: {name}",
+      "fetchAndMap": "Fata & gereranya",
+      "fetchingPage": "Fata urupapuro...",
+      "railUrlRequest": "Fata kandi ugereranye aho hantu haturutse: {title} ({url})"
     },
     "shell": {
       "showConversation": "Erekana ibiganiro",
@@ -3472,5 +3522,44 @@
       "llamacpp": "llama.cpp irimo gukora ariko yanze ibisabwa biturutse kuri uru rubuga. Tangira llama-server wemereye cross-origin requests, hanyuma wongere ugenzure."
     },
     "privacyNote": "Imiterere ziri kuri mudasobwa ntizishyigikira kohereza inyandiko, amafoto, gushaka kuri web cyangwa connectors — ibyo bikenera seriveri zacu. Kugenzura bibera kuri iyi mudasobwa gusa."
+  },
+  "urlFetch": {
+    "sourceFallback": "Urupapuro rwa web",
+    "fallbackHint": "Ushobora no gufungura urupapuro, ugakopa amagambo, hanyuma ukayasubiza hano.",
+    "shortExtract": "Habonetse igice gito gusa — urupapuro rushobora kuba rusaba kwishyura cyangwa kwiyandikisha.",
+    "errors": {
+      "invalidUrl": "Iri si isura y’aderesi nyayo ya web.",
+      "ssrfBlocked": "Iyo aderesi ntishobora gufatwa ku mpamvu z’umutekano.",
+      "tooManyRedirects": "Iyo linki yoherejwe henshi cyane.",
+      "timeout": "Ipaji yafashe igihe kirekire kugira ngo isubize.",
+      "unreachable": "Iyi paji ntiyabashije kugerwaho.",
+      "blocked": "Uru rubuga rwanzwe ubusabe — rishobora gusaba kwinjiraho cyangwa rikabuza abasomyi b’ikoranabuhanga.",
+      "notFound": "Iyo paji ntiyabonetse.",
+      "upstream": "Urubuga rwasubije ikosa.",
+      "pdf": "Uwo murongo ni PDF. Uyimanure ukoreshe buto yo kongeraho dosiye.",
+      "nonHtml": "Uwo murongo si ipaji ya internet dushobora gusoma.",
+      "tooLarge": "Iyo paji irarenze ingano dushobora kwakira.",
+      "empty": "Nta nkuru isomwa yabonetse kuri iyo paji.",
+      "generic": "Iyo paji ntiyabashije gufatwa."
+    },
+    "fetchingFile": "Birimo gufata {host}…",
+    "attachLink": "Ongeraho umurongo",
+    "attachLinkTitle": "Ongeraho ipaji ya internet",
+    "attachLinkDescription": "Ipaji irafatwa, inyandiko isomwa ikomekwa ku butumwa bwawe.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Fata & ongeraho",
+    "attachLinkInvalid": "Ibi ntibisa n’aho ari aderesi ya internet.",
+    "linkBadge": "Bivuye ku murongo",
+    "couldNotRetrieve": "Ntibyabashije gufatwa",
+    "doc": {
+      "sourceLabel": "Inkomoko",
+      "retrievedLabel": "Byafashwe",
+      "attemptedLabel": "Byageragejwe",
+      "failureHeading": "Ipaji ya internet ntiyabashije gufatwa"
+    },
+    "settingsTitle": "Imirongo mu butumwa",
+    "settingsToggle": "Fata imirongo ushyizemo mu buryo bwikora",
+    "settingsDescription": "Iyo ushyizemo umurongo ukwawo, ipaji irafatwa hanyuma inyandiko yayo ikomekwa kugira ngo umufasha abashe kubisoma. Bimureho niba ushaka ko imirongo ishyirwa gusa nk'inyandiko isanzwe — ushobora kugikora intoki ukoresheje menu ya +.",
+    "addLink": "Ongeraho umurongo"
   }
 }

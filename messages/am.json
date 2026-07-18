@@ -2637,7 +2637,24 @@
       "pendingCount": "{count} በመጠባበቅ ላይ",
       "closeReview": "የጥራት አየትን ዝጋ",
       "showReview": "አየት አሳይ",
-      "showReviewPending": "አየት አሳይ ({count} በመጠባበቅ ላይ)"
+      "showReviewPending": "አየት አሳይ ({count} በመጠባበቅ ላይ)",
+      "undoEdit": "ይቅር",
+      "clearResolved": "ተደርሷ የተፈቱትን ያጥፉ",
+      "clearResolvedHint": "ተቀባይነት ያገኙትን፣ የተቀበሉትን፣ የተቀበሉትን እና የተረፈውን ማሻሻያዎች ከዚህ ዝርዝር ያጥፉ",
+      "autoClearResolved": "ተደርሷ የተፈቱትን ማሻሻያዎች በራስ-ሰር ያጥፉ",
+      "customCriteria": "ብጁ መስፈርቶች",
+      "closeCriteria": "ብጁ መስፈርቶችን ዝጋ",
+      "newCriterion": "አዲስ መስፈርት",
+      "newCriterionName": "ያልተሰየመ መስፈርት",
+      "criterionName": "የመስፈርት ስም",
+      "criterionRubric": "መመሪያ",
+      "criterionRubricPlaceholder": "ይህን መስፈርት ለማሟሟት ትርጉሙ ምን ማድረግ እንደሚገባ በአጭር ይግለጹ፣ ለምሳሌ፦ «ሁሉንም የክሊኒክ የመድሃኒት መመሪያዎች በትእዛዝ ቃል ማቅረብ፣ ፈጽሞ በፍጹም መልኩ አይሆንም…»",
+      "criterionRubricHint": "ይህ መመሪያ AI እና built-in MQM መስፈርቶችን በመከታተል ስለመተርጎም በቀጥታ ይሰጣል።",
+      "criteriaEmpty": "ከ built-in MQM መስፈርቶች በላይ ትርጉሞችን ለማወገድ እንደ የጉልበት ቅጂ፣ የደንበኛ ቃላት ምርጫ፣ ወይም ክልላዊ ተግባር ብጁ መስፈርቶችን ይፍጠሩ። በዚህ መሣሪያ ላይ ይቀመጣሉ እና ለድጋፍ ይጠቀማሉ።",
+      "deleteCriterion": "መስፈርት ያጥፉ",
+      "manageCriteria": "ብጁ መስፈርቶች",
+      "addCriteria": "መስፈርቶችን ያክሉ",
+      "noUsableCriteria": "ቢያንስ አንድ built-in መስፈርት ይምረጡ፣ ወይም ለብጁ መስፈርቶችዎ መመሪያ ያቅርቡ።"
     },
     "document": {
       "emptyTitle": "የሚፈልጉትን ሰነድ ይግለጹ",
@@ -2757,7 +2774,11 @@
       "clearSelection": "ምረጡትን አጥፋ (ከሙሉ ሰነድ ይስሩ)",
       "reviseSelectionPlaceholder": "በተመረጠው ላይ ምን ማሻሻል እንደተፈጸመ ይግለጹ...",
       "revisedSelectionSummary": "በስራ ቦታው ውስጥ የተመረጠውን ክፍል ማሻሻል አደረግሁ።",
-      "assessedSelection": "ተመርጧል"
+      "assessedSelection": "ተመርጧል",
+      "undoEdit": "ይቅር",
+      "clearResolved": "ተደርሷ የተፈቱትን ያጥፉ",
+      "clearResolvedHint": "ተቀባይነት ያገኙትን፣ የተቀበሉትን፣ የተረፈውንም ማሻሻያዎች ከዚህ ዝርዝር ያጥፉ",
+      "autoClearResolved": "ተደርሷ የተፈቱትን ማሻሻያዎች በራስ-ሰር ያጥፉ"
     },
     "data": {
       "emptyTitle": "ለትንተና ውሂብ አስገባ",
@@ -3030,7 +3051,31 @@
         "jumpTo": "ወደ {label} ይሂዱ",
         "slider": "የጊዜ መስመር አቀማመጥ",
         "showUndated": "ቀን የሌላቸውን ቦታዎች አሳይ",
-        "activeCount": "{count} ንቁ"
+        "activeCount": "{count} ንቁ",
+        "jump": {
+          "start": "መጀመሪያ",
+          "yearsLater": "{count, plural, one {ከ1 ዓመት በኋላ} other {ከ# ዓመታት በኋላ}}",
+          "monthsLater": "{count, plural, one {ከ1 ወር በኋላ} other {ከ# ወራት በኋላ}}",
+          "daysLater": "{count, plural, one {ከ1 ቀን በኋላ} other {ከ# ቀናት በኋላ}}",
+          "appears": "{count, plural, one {1 ታይቷል} other {# ታይቷል}}",
+          "ends": "{count, plural, one {1 ጨርሷል} other {# ጨርሷል}}",
+          "progress": "ቀን {index} ከ{total}"
+        },
+        "precision": {
+          "minute": "ደቂቃ ድረስ",
+          "hour": "ሰዓት ድረስ",
+          "day": "ቀን ድረስ",
+          "month": "ወር ደረጃ ቀን መያዣ",
+          "year": "ዓመት ደረጃ ቀን መያዣ",
+          "mixed": "(የተቀላቀለ)"
+        },
+        "pacing": {
+          "toggle": "እንቅስቃሴ ፍጥነት",
+          "cardDuration": "እያንዳንዱ ቦታ የሚታየው ጊዜ",
+          "seconds": "{seconds}በ",
+          "maxCards": "በአንድ ቀን የሚታዩ ቦታዎች",
+          "hint": "የተሰበሰቡ ቀናት በራስ-ሰር የበጎ ጊዜ ይይዣሉ።"
+        }
       },
       "granularity": {
         "site": "ጣቢያ",
@@ -3047,8 +3092,13 @@
         "color": "ቀለም፡ የማቀነበሪያ እምነት (ሰማያዊ ከፍተኛ፣ አምበር መካከለኛ፣ ቀይ ዝቅተኛ)",
         "size": "የነጠላ መጠን፡ ቦታው ለዚያ ጉዳይ ምን ያህል ዋና ነው",
         "area": "የዳሽድ ክበብ፡ የዞን፣ የክልል፣ ወይም የአገር ቅርጸ አካባቢ (በግምት)",
-        "container": "የጭነት ጥልፍ ፡ ይህ ካርድ የውስጡ ንብረት በብቻ የታተመ አካባቢ ነው"
-      }
+        "container": "የጭነት ጥልፍ ፡ ይህ ካርድ የውስጡ ንብረት በብቻ የታተመ አካባቢ ነው",
+        "precisionHalo": "ሞራሞራ ያለ ድሩ ክብረ ቅድሚያ (በጊዜ ዴይድ ላይ): ክስተቱ ለወር ወይም ለዓመት ብቻ ታውቋል፤ ትክክለኛው ጊዜ አይታወቅም"
+      },
+      "sourceLabel": "ምንጭ፦ {name}",
+      "fetchAndMap": "አምጣ እና አሟላ",
+      "fetchingPage": "ገጹን በመፈለግ…",
+      "railUrlRequest": "ቦታዎቹን ከዚህ አምጥና አሟላ፦ {title} ({url})"
     },
     "shell": {
       "showConversation": "ውይይቱን አሳይ",
@@ -3488,5 +3538,44 @@
       "llamacpp": "llama.cpp በሂደት ላይ ነው፣ ግን ከዚህ ጣቢያ ጥያቄዎችን ማቅረብ አይፈቅድም። llama-server በcross-origin ጥያቄዎች እንዲፈቀዱ ያስጀምሩ፣ ከዚያም እንደገና ይፈትኑ።"
     },
     "privacyNote": "የአካባቢ ሞዴሎች ፋይል አቀራረብ፣ ምስሎች፣ የድህረ-ገፅ ፍለጋ ወይም አገናኞችን አይደግፉም — እነዚህ ለአገልጋያችን ይፈለጋሉ። መፈተን ሁልጊዜ በዚህ ኮምፒውተር ብቻ ይደርሳል።"
+  },
+  "urlFetch": {
+    "sourceFallback": "የድህረ ገጽ",
+    "fallbackHint": "ደግሞ ገጹን በመክፈት፣ ጽሑፉን ቅዳብ በማድረግ፣ እዚህ በመስቀመጥም ማስገባት ይችላሉ።",
+    "shortExtract": "አጭር ትንሽ እትም ብቻ ተነትቷል — ገጹ ምናልባት በክፍያ ማደሪያ ላይ ነው ወይም መግቢያ ይፈልጋል።",
+    "errors": {
+      "invalidUrl": "ይህ ትክክለኛ የድህረ ገጽ አድራሻ አይመስለኝም።",
+      "ssrfBlocked": "አድራሹ ለደህንነት ምክንያት ማመጣት አይቻልም።",
+      "tooManyRedirects": "ትእዛዝ በብዙ ጊዜ ተልኳል።",
+      "timeout": "መገፃት ረዘመ ጊዜ ወስዷል።",
+      "unreachable": "ወደዚያ ገጽ መድረስ አልተቻለም።",
+      "blocked": "ድህረ ገጹ መጠየቂያውን አልተቀበለም — ግባ መያዝ ወይም ለማድረግ የተከለከለ ሊሆን ይችላል።",
+      "notFound": "ያ ገጽ አልተገኘም።",
+      "upstream": "ድህረ ገጹ ስህተት ተመልሷል።",
+      "pdf": "ያ አገናኝ መረጃ PDF ነው። አውርደው በ attach ቁልፍ ማከል ይችላሉ።",
+      "nonHtml": "ያ አገናኝ እንችለን ማንበብ የምንችለው የድህረ ገጽ አይደለም።",
+      "tooLarge": "ያ ገጽ ለመግመት በጣም ከፍተኛ ነው።",
+      "empty": "በዚያ ገጽ ማንበብ የሚችል የመጽሐፍ ጽሑፍ አልተገኘም።",
+      "generic": "ገጹ ማግኘት አልተቻለም።"
+    },
+    "fetchingFile": "በመቅረብ ላይ {host}…",
+    "attachLink": "አገናኝ አቀርብ",
+    "attachLinkTitle": "የድህረ ገጽ አቀርብ",
+    "attachLinkDescription": "ገጹ ተመድቦ የሚነበብ ጽሑፉ በመልኩ ይቀጠራል።",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Fetch & attach",
+    "attachLinkInvalid": "ይሄ የትክክል የድህረ ገጽ አድራሻ አይመስልም።",
+    "linkBadge": "ከአገናኝ የተዋረደ",
+    "couldNotRetrieve": "ማግኘት አልተቻለም",
+    "doc": {
+      "sourceLabel": "ምንጭ",
+      "retrievedLabel": "የተገኘ",
+      "attemptedLabel": "የተሞከረ",
+      "failureHeading": "የድህረ ገጹ ማግኘት አልተቻለም"
+    },
+    "settingsTitle": "አገናኞች በመልእክቶች ውስጥ",
+    "settingsToggle": "የተጠረጠሩ አገናኞችን ራሱን ያመጣ",
+    "settingsDescription": "ብቻውን አገናኝ በመስቀመጥ ገጹ ተመድቦ ጽሑፉ ይቀጠራል እና አጋዥ ማንበብ ይችላል። ይህን ለመሰናከል አገናኞቹ እንደ ግልጽ ጽሑፍ ይቀሩ — ከ + ሜኑ በመጠቀም ገጽ በእጅ መስቀመጥ ይችላሉ።",
+    "addLink": "አገናኝ አክል"
   }
 }

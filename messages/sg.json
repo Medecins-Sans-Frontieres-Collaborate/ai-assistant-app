@@ -2621,7 +2621,24 @@
       "pendingCount": "{count} ti hila sô",
       "closeReview": "Küpe ketekete ti mbi",
       "showReview": "Hombere ketekete",
-      "showReviewPending": "Hombere ketekete ({count} ti hila sô)"
+      "showReviewPending": "Hombere ketekete ({count} ti hila sô)",
+      "undoEdit": "Kɔta",
+      "clearResolved": "Kpengbi na mo kɛ",
+      "clearResolvedHint": "Kwêlê na likundu ôkoé, wa zia, na wa yeke ya ûse sô azui lo na lisolo ti awa",
+      "autoClearResolved": "Kpengbi na mo kɛ na yeke",
+      "customCriteria": "Likôlo na mo kɛ",
+      "closeCriteria": "Zâ lâ likôlo na mo kɛ",
+      "newCriterion": "Likôlo mbârâ",
+      "newCriterionName": "Likôlo na mo tî nzönî",
+      "criterionName": "Tî likôlo",
+      "criterionRubric": "Rubrik",
+      "criterionRubricPlaceholder": "Zo kê yângâ ndôro tî likondö sô a yeke kûê na likôlo âwa, ti y'ê kôdörö \"Yângâ na façon na zo yeke sô mbi tî sangɔ, na mininga a kêtê...\"",
+      "criterionRubricHint": "Rubrik âwa na kêtê wi na AI tî hêhê ti MQM likôlo bâ zia na ndâti likondö.",
+      "criteriaEmpty": "Suluşionga likôlo na mo — dî na façon tî mbi tî sangɔ, dôkita na sôngô, wala façon na dörö — tî kundakunda likondö na likôlo bâ MQM. Bê re ndâ ti mâ gôlo na aparèy sô ê na mo na ga yeke yângâ tu.",
+      "deleteCriterion": "Kuei likôlo",
+      "manageCriteria": "Likôlo na mo kɛ",
+      "addCriteria": "Zóngâ likôlo",
+      "noUsableCriteria": "Sâra likôlo mo kɛ aké tî singa, wala dî mo rubrik tî likôlo na mo."
     },
     "document": {
       "emptyTitle": "Kue ini ti dokumente mbi ti mo yeke",
@@ -2741,7 +2758,11 @@
       "clearSelection": "Fë seleksyon (lakü na dokument mbi yeke)",
       "reviseSelectionPlaceholder": "Gbêla atene na seleksyon…",
       "revisedSelectionSummary": "Mbi a seleksionî pasaji a na workspace.",
-      "assessedSelection": "Seleksyon"
+      "assessedSelection": "Seleksyon",
+      "undoEdit": "Kɔta",
+      "clearResolved": "Kpengbi na mo kɛ",
+      "clearResolvedHint": "Kwêlê na likundu ôkoé, wa zia, na wa yeke ya ûse sô azui lo na lisolo ti awa",
+      "autoClearResolved": "Kpengbi na mo kɛ na yeke"
     },
     "data": {
       "emptyTitle": "Mandra data tî anali",
@@ -3014,7 +3035,31 @@
         "jumpTo": "Sô nîngê na {label}",
         "slider": "Mbôtî tî période",
         "showUndated": "Hîngbi kêtê sô yèkè datê",
-        "activeCount": "{count} ke na hîngbi"
+        "activeCount": "{count} ke na hîngbi",
+        "jump": {
+          "start": "Bêrê",
+          "yearsLater": "{count, plural, one {1 ngbanga ngû wânga} other {# ngbanga ngû}}",
+          "monthsLater": "{count, plural, one {mwa wânga na mbênî} other {# mwa na mbênî}}",
+          "daysLater": "{count, plural, one {lâ wânga na mbênî} other {# lâ na mbênî}}",
+          "appears": "{count, plural, one {yeke ngbâ} other {# yeke ngbâ}}",
+          "ends": "{count, plural, one {yeke kété} other {# yeke kété}}",
+          "progress": "Banga {index} na {total}"
+        },
+        "precision": {
+          "minute": "Na miniti",
+          "hour": "Na kânda",
+          "day": "Na lâ",
+          "month": "Tî daté mwa",
+          "year": "Tî daté ngbanga ngû",
+          "mixed": "(tî bangî bangî)"
+        },
+        "pacing": {
+          "toggle": "Temp tî kêtê na ngbanga",
+          "cardDuration": "Yângâ zîngö na ngbanga",
+          "seconds": "{seconds}s",
+          "maxCards": "Ngbanga gbanga ti yângâ na daté",
+          "hint": "Daté sô itênî na ndô sô apêke yângâ li mbongo."
+        }
       },
       "granularity": {
         "site": "Kêtê",
@@ -3031,8 +3076,13 @@
         "color": "Kôlon : confiance ti coordonnées (blue mingui, amber kôda, red kere)",
         "size": "Kaba ti dot : ndé ti kêtê a na matière",
         "area": "Ködörö na ndö: Gbûgû ayeke ndö na distriki, rézön, sökè mboka.",
-        "container": "Kötö-kötö yângâ: Ndö ayeke mbi mbeni yângâ ländä yângâ."
-      }
+        "container": "Kötö-kötö yângâ: Ndö ayeke mbi mbeni yângâ ländä yângâ.",
+        "precisionHalo": "Ring sô tî bâbângô ti makôngo (na temp lapse): événement a yeke nangâ mwa wala ngbanga, anguè tî temp tî lo tîâ wala fâa"
+      },
+      "sourceLabel": "Ngû: {name}",
+      "fetchAndMap": "Sôhênî & dörö gbanga",
+      "fetchingPage": "Sôhênî page…",
+      "railUrlRequest": "Sôhênî na dörö gbanga ndâ la: {title} ({url})"
     },
     "shell": {
       "showConversation": "Wüsa bêrê-bîanî",
@@ -3472,5 +3522,44 @@
       "llamacpp": "llama.cpp yeke na mbongo mä a garë banzi na site ëa. Kanï llama-server ngâ cross-origin requests sô a teni, ndö fängä gbë sï."
     },
     "privacyNote": "Model tî gbë na mbongo a tönî sêngö attachment, image, web search tî connector — yënga yeke na server tî nzönî. Detection yeke gbëngö na mbongo ti mo dölï."
+  },
+  "urlFetch": {
+    "sourceFallback": "Page web",
+    "fallbackHint": "O sângi ti yângâ page bâ gunga, kopi nginza, tî mbari ti rê na awa.",
+    "shortExtract": "Kêtê na ndöro nginza sô apepe — page a yeke na mbeti-payi wala a sô sâ mbênî.",
+    "errors": {
+      "invalidUrl": "Adresse web sô apepe walî.",
+      "ssrfBlocked": "Adresse âwa a sô ayeke tî sôhênî tî mbênî sécurité.",
+      "tooManyRedirects": "Lien âwa a yeke tî zongu ti mininga mingi.",
+      "timeout": "Döko a yeke na tîngö nî ngu nzönî.",
+      "unreachable": "Ala ti fâ inge sô lo yeke kpë.",
+      "blocked": "Sîte ayeke gaba sô ngânde — lo yeke mû sô mo si siriri na lo wa mo atasâ na zîa programasi.",
+      "notFound": "Döko a ala inge sô lo yeke hînga.",
+      "upstream": "Sîte ayeke tîngö na e yeke gâdämärë.",
+      "pdf": "Lîngû a yeke PDF. Téléchargé lo, na kända botón attach na sêr na yângâ.",
+      "nonHtml": "Lîngû a ala web döko sô tî lâ nî a yeke lugbä hîngâ.",
+      "tooLarge": "Döko a yeke zûngö mingi, tî pâsi tî gbè.",
+      "empty": "Ala landi sô lê ti lugbä hîngâ na döko a.",
+      "generic": "Ala fâ inge pâsi tî gbè döko a."
+    },
+    "fetchingFile": "Gbë {host}…",
+    "attachLink": "Kûè lîngû",
+    "attachLinkTitle": "Kûè web döko",
+    "attachLinkDescription": "Döko a yeke gbè na tî tî lugbä mbênî na bi lo sêr na yângâ mo.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Gbè na kûè",
+    "attachLinkInvalid": "Ala yeke adrèsê ti web.",
+    "linkBadge": "Tî lîngû",
+    "couldNotRetrieve": "Ala tî kûê",
+    "doc": {
+      "sourceLabel": "Mbîlä",
+      "retrievedLabel": "Kûê",
+      "attemptedLabel": "Gbalû",
+      "failureHeading": "Ala gbè tî kûê web döko"
+    },
+    "settingsTitle": "Lîngû sô yeke na nzu",
+    "settingsToggle": "Gbè lîngû sô yeke klâ na nga te tî yângâ",
+    "settingsDescription": "Sô mo klâ lîngû sô yêkö tî yângâ, döko a yeke gbè na tî lugbä mbênî na sêr ti yângâ mo, mbï MSF AI ayeke yeke lugbä wa. Sêkî sungbâ sô mo yeke fadï tî klâ lîngû la nga na te sô lo yeke hîngä na programasi — mo ligi na kûè döko nhùnî hûnda na menú +.",
+    "addLink": "Duguë lîngû"
   }
 }

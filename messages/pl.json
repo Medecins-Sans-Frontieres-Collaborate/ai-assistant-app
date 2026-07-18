@@ -2637,7 +2637,24 @@
       "pendingCount": "{count} oczekujących",
       "closeReview": "Zamknij ocenę jakości",
       "showReview": "Pokaż ocenę",
-      "showReviewPending": "Pokaż ocenę ({count} oczekujących)"
+      "showReviewPending": "Pokaż ocenę ({count} oczekujących)",
+      "undoEdit": "Cofnij",
+      "clearResolved": "Wyczyść rozwiązane",
+      "clearResolvedHint": "Usuń zaakceptowane, odrzucone i nieistotne poprawki z tej listy",
+      "autoClearResolved": "Automatycznie czyść rozwiązane poprawki",
+      "customCriteria": "Własne kryteria",
+      "closeCriteria": "Zamknij własne kryteria",
+      "newCriterion": "Nowe kryterium",
+      "newCriterionName": "Bez nazwy",
+      "criterionName": "Nazwa kryterium",
+      "criterionRubric": "Rubryka",
+      "criterionRubricPlaceholder": "Opisz, co tłumaczenie musi spełnić, by odpowiadało temu kryterium, np. \"Podawaj wszystkie instrukcje dawkowania w trybie rozkazującym, nigdy w bezokoliczniku...\"",
+      "criterionRubricHint": "Ta rubryka zostanie przekazana AI dosłownie, razem z domyślnymi wymiarami MQM, do oceny tłumaczenia.",
+      "criteriaEmpty": "Stwórz własne kryteria — np. styl redakcyjny, preferowaną terminologię klienta lub konwencje regionalne — by oceniać tłumaczenia poza domyślnymi wymiarami MQM. Zapisane na tym urządzeniu i wielokrotnego użytku.",
+      "deleteCriterion": "Usuń kryterium",
+      "manageCriteria": "Własne kryteria",
+      "addCriteria": "Dodaj kryteria",
+      "noUsableCriteria": "Wybierz przynajmniej jedno domyślne kryterium lub nadaj własnym kryteriom rubrykę."
     },
     "document": {
       "emptyTitle": "Opisz dokument, który chcesz uzyskać",
@@ -2757,7 +2774,11 @@
       "clearSelection": "Wyczyść zaznaczenie (pracuj na całym dokumencie)",
       "reviseSelectionPlaceholder": "Opisz zmiany w zaznaczeniu…",
       "revisedSelectionSummary": "Poprawiłem zaznaczony fragment w przestrzeni roboczej.",
-      "assessedSelection": "Zaznaczenie"
+      "assessedSelection": "Zaznaczenie",
+      "undoEdit": "Cofnij",
+      "clearResolved": "Wyczyść rozwiązane",
+      "clearResolvedHint": "Usuń zaakceptowane, odrzucone i nieistotne poprawki z tej listy",
+      "autoClearResolved": "Automatycznie czyść rozwiązane poprawki"
     },
     "data": {
       "emptyTitle": "Zaimportuj dane do analizy",
@@ -3030,7 +3051,31 @@
         "jumpTo": "Przejdź do {label}",
         "slider": "Pozycja na osi czasu",
         "showUndated": "Pokaż lokalizacje bez daty",
-        "activeCount": "{count} aktywnych"
+        "activeCount": "{count} aktywnych",
+        "jump": {
+          "start": "Początek",
+          "yearsLater": "{count, plural, one {1 rok później} few {# lata później} many {# lat później} other {# lat później}}",
+          "monthsLater": "{count, plural, one {1 miesiąc później} few {# miesiące później} many {# miesięcy później} other {# miesięcy później}}",
+          "daysLater": "{count, plural, one {1 dzień później} few {# dni później} many {# dni później} other {# dni później}}",
+          "appears": "{count, plural, one {1 wystąpienie} few {# wystąpienia} many {# wystąpień} other {# wystąpień}}",
+          "ends": "{count, plural, one {1 zakończenie} few {# zakończenia} many {# zakończeń} other {# zakończeń}}",
+          "progress": "Data {index} z {total}"
+        },
+        "precision": {
+          "minute": "Co do minuty",
+          "hour": "Co do godziny",
+          "day": "Co do dnia",
+          "month": "Datowanie na poziomie miesiąca",
+          "year": "Datowanie na poziomie roku",
+          "mixed": "(mieszane)"
+        },
+        "pacing": {
+          "toggle": "Tempo odtwarzania",
+          "cardDuration": "Pokazuj każdą lokalizację przez",
+          "seconds": "{seconds}s",
+          "maxCards": "Lokalizacji na datę",
+          "hint": "W przypadku bardziej intensywnych dat pokaz są automatycznie wydłużane."
+        }
       },
       "granularity": {
         "site": "Miejsce",
@@ -3047,8 +3092,13 @@
         "color": "Kolor: pewność współrzędnych (niebieski – wysoka, bursztynowy – średnia, czerwony – niska)",
         "size": "Wielkość kropki: jak centralna jest lokalizacja dla materiału",
         "area": "Przerywana linia: przybliżony zasięg dystryktu, regionu lub kraju",
-        "container": "Blady kontur: obszar, którego zawartość jest mapowana oddzielnie"
-      }
+        "container": "Blady kontur: obszar, którego zawartość jest mapowana oddzielnie",
+        "precisionHalo": "Delikatny przerywany okrąg (podczas pokazu upływu czasu): wydarzenie jest datowane tylko na miesiąc lub rok — dokładny moment jest niepewny"
+      },
+      "sourceLabel": "Źródło: {name}",
+      "fetchAndMap": "Pobierz i odwzoruj",
+      "fetchingPage": "Pobieranie strony…",
+      "railUrlRequest": "Pobierz i odwzoruj lokalizacje z: {title} ({url})"
     },
     "shell": {
       "showConversation": "Pokaż rozmowę",
@@ -3488,5 +3538,44 @@
       "llamacpp": "llama.cpp działa, ale odrzuca żądania z tej strony. Uruchom llama-server z włączoną obsługą żądań cross-origin, a następnie wykryj ponownie."
     },
     "privacyNote": "Modele lokalne nie obsługują załączników, obrazów, wyszukiwania w sieci ani konektorów — do tego wymagane są nasze serwery. Wykrywanie sprawdza wyłącznie ten komputer."
+  },
+  "urlFetch": {
+    "sourceFallback": "Strona internetowa",
+    "fallbackHint": "Możesz też otworzyć stronę, skopiować tekst i wkleić go tutaj.",
+    "shortExtract": "Dało się odczytać jedynie krótki fragment — strona może być za paywallem lub wymagać zalogowania.",
+    "errors": {
+      "invalidUrl": "To nie wygląda na poprawny adres internetowy.",
+      "ssrfBlocked": "Tego adresu nie można pobrać ze względów bezpieczeństwa.",
+      "tooManyRedirects": "Ten link przekierował zbyt wiele razy.",
+      "timeout": "Strona zbyt długo odpowiadała.",
+      "unreachable": "Nie można nawiązać połączenia ze stroną.",
+      "blocked": "Strona odrzuciła żądanie — może wymagać logowania lub blokuje automatycznych czytników.",
+      "notFound": "Nie znaleziono tej strony.",
+      "upstream": "Strona zwróciła błąd.",
+      "pdf": "Ten link prowadzi do pliku PDF. Pobierz go i użyj przycisku załączania, aby dodać plik.",
+      "nonHtml": "Ten link nie prowadzi do strony internetowej, którą możemy odczytać.",
+      "tooLarge": "Strona jest zbyt duża do pobrania.",
+      "empty": "Na tej stronie nie znaleziono czytelnego tekstu artykułu.",
+      "generic": "Nie można pobrać tej strony."
+    },
+    "fetchingFile": "Pobieranie z {host}…",
+    "attachLink": "Dołącz link",
+    "attachLinkTitle": "Dołącz stronę internetową",
+    "attachLinkDescription": "Strona jest pobierana, a jej czytelny tekst zostanie dołączony do Twojej wiadomości.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Pobierz i dołącz",
+    "attachLinkInvalid": "To nie wygląda na adres internetowy.",
+    "linkBadge": "Z linku",
+    "couldNotRetrieve": "Nie udało się pobrać",
+    "doc": {
+      "sourceLabel": "Źródło",
+      "retrievedLabel": "Pobrano",
+      "attemptedLabel": "Próbowano",
+      "failureHeading": "Nie udało się pobrać strony internetowej"
+    },
+    "settingsTitle": "Linki w wiadomościach",
+    "settingsToggle": "Automatycznie pobieraj wklejone linki",
+    "settingsDescription": "Gdy wklejasz samodzielny link, strona jest pobierana, a jej tekst dołączany, aby asystent mógł ją przeczytać. Wyłącz tę opcję, aby zachować linki jako zwykły tekst — nadal możesz ręcznie dołączyć stronę z menu +.",
+    "addLink": "Dodaj link"
   }
 }

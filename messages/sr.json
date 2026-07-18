@@ -2621,7 +2621,24 @@
       "pendingCount": "{count} na čekanju",
       "closeReview": "Zatvori pregled kvaliteta",
       "showReview": "Prikaži pregled",
-      "showReviewPending": "Prikaži pregled ({count} na čekanju)"
+      "showReviewPending": "Prikaži pregled ({count} na čekanju)",
+      "undoEdit": "Poništi",
+      "clearResolved": "Obriši rešene",
+      "clearResolvedHint": "Uklonite prihvaćene, odbijene i neprimenljive izmene sa ove liste",
+      "autoClearResolved": "Automatski briši rešene izmene",
+      "customCriteria": "Prilagođeni kriterijumi",
+      "closeCriteria": "Zatvori prilagođene kriterijume",
+      "newCriterion": "Novi kriterijum",
+      "newCriterionName": "Bez naziva kriterijuma",
+      "criterionName": "Naziv kriterijuma",
+      "criterionRubric": "Uputstvo",
+      "criterionRubricPlaceholder": "Opišite šta prevod mora da ispunjava po ovom kriterijumu, npr. \"Sve uputstva za doziranje lekova treba biti u imperativu, nikada u infinitivu…\"",
+      "criterionRubricHint": "AI dobija ovo uputstvo doslovno zajedno sa ugrađenim MQM dimenzijama prilikom procene prevoda.",
+      "criteriaEmpty": "Kreirajte prilagođene kriterijume — npr. interne stilove, klijentske termine ili regionalne konvencije — za procenu prevoda izvan ugrađenih MQM dimenzija. Čuvaju se na ovom uređaju i mogu se ponovo koristiti.",
+      "deleteCriterion": "Obriši kriterijum",
+      "manageCriteria": "Prilagođeni kriterijumi",
+      "addCriteria": "Dodaj kriterijume",
+      "noUsableCriteria": "Izaberite bar jedan ugrađeni kriterijum ili dodajte uputstvo svojim kriterijumima."
     },
     "document": {
       "emptyTitle": "Opišite dokument koji želite",
@@ -2741,7 +2758,11 @@
       "clearSelection": "Poništi selekciju (rad sa celim dokumentom)",
       "reviseSelectionPlaceholder": "Opišite izmene selektovanog dela…",
       "revisedSelectionSummary": "Izmenio/la sam izabrani deo teksta u radnom prostoru.",
-      "assessedSelection": "Selekcija"
+      "assessedSelection": "Selekcija",
+      "undoEdit": "Poništi",
+      "clearResolved": "Obriši rešene",
+      "clearResolvedHint": "Uklonite prihvaćene, odbijene i neprimenljive izmene sa ove liste",
+      "autoClearResolved": "Automatski briši rešene izmene"
     },
     "data": {
       "emptyTitle": "Uvezite podatke za analizu",
@@ -3014,7 +3035,31 @@
         "jumpTo": "Idi na {label}",
         "slider": "Pozicija na vremenskoj liniji",
         "showUndated": "Prikaži lokacije bez datuma",
-        "activeCount": "{count} aktivno"
+        "activeCount": "{count} aktivno",
+        "jump": {
+          "start": "Početak",
+          "yearsLater": "{count, plural, one {posle 1 godine} other {posle # godina}}",
+          "monthsLater": "{count, plural, one {posle 1 meseca} other {posle # meseci}}",
+          "daysLater": "{count, plural, one {posle 1 dana} other {posle # dana}}",
+          "appears": "{count, plural, one {1 prikaz} other {# prikaza}}",
+          "ends": "{count, plural, one {1 završava} other {# završavaju}}",
+          "progress": "Datum {index} od {total}"
+        },
+        "precision": {
+          "minute": "Do minuta",
+          "hour": "Do sata",
+          "day": "Do dana",
+          "month": "Datiranje po mesecu",
+          "year": "Datiranje po godini",
+          "mixed": "(mešano)"
+        },
+        "pacing": {
+          "toggle": "Tempo reprodukcije",
+          "cardDuration": "Prikaz lokacije tokom",
+          "seconds": "{seconds}s",
+          "maxCards": "Lokacija po datumu",
+          "hint": "Gušći datumi se automatski duže prikazuju."
+        }
       },
       "granularity": {
         "site": "Lokacija",
@@ -3031,8 +3076,13 @@
         "color": "Boja: pouzdanost koordinata (plava visoka, narandžasta srednja, crvena niska)",
         "size": "Veličina tačke: koliko je mesto centralno materijalu",
         "area": "Isprekidani krug: približna oblast okruga, regiona ili zemlje",
-        "container": "Blaga kontura: oblast čiji je sadržaj pojedinačno mapiran"
-      }
+        "container": "Blaga kontura: oblast čiji je sadržaj pojedinačno mapiran",
+        "precisionHalo": "Meki isprekidani prsten (tokom vremenskog prolaza): događaj je datiran samo u mesec ili godinu, pa je tačno vreme neizvesno"
+      },
+      "sourceLabel": "Izvor: {name}",
+      "fetchAndMap": "Preuzmi i mapiraj",
+      "fetchingPage": "Preuzimanje stranice…",
+      "railUrlRequest": "Preuzmi i mapiraj lokacije iz: {title} ({url})"
     },
     "shell": {
       "showConversation": "Prikaži konverzaciju",
@@ -3472,5 +3522,44 @@
       "llamacpp": "llama.cpp je pokrenut ali odbija zahteve sa ovog sajta. Pokrenite llama-server sa omogućenom podrškom za cross-origin zahteve, pa ponovo detektujte."
     },
     "privacyNote": "Lokalni modeli ne podržavaju prilaganje fajlova, slike, pretragu interneta ili konektore — za to su potrebni naši serveri. Detekcija proverava samo ovaj računar."
+  },
+  "urlFetch": {
+    "sourceFallback": "Veb stranica",
+    "fallbackHint": "Takođe možete otvoriti stranicu, kopirati tekst i nalepiti ga ovde.",
+    "shortExtract": "Pročitan je samo kratak izvod — stranica je možda zaključana ili zahteva prijavu.",
+    "errors": {
+      "invalidUrl": "Ovo ne izgleda kao ispravna veb adresa.",
+      "ssrfBlocked": "Ta adresa ne može biti preuzeta iz bezbednosnih razloga.",
+      "tooManyRedirects": "Taj link je preusmeren previše puta.",
+      "timeout": "Stranici je trebalo previše vremena da odgovori.",
+      "unreachable": "Stranica nije dostupna.",
+      "blocked": "Sajt je odbio zahtev — možda je potrebna prijava ili blokira automatske čitače.",
+      "notFound": "Ta stranica nije pronađena.",
+      "upstream": "Sajt je vratio grešku.",
+      "pdf": "Taj link vodi do PDF-a. Preuzmite ga i koristite dugme za dodavanje kako biste ga priložili.",
+      "nonHtml": "Taj link nije web stranica koju možemo da pročitamo.",
+      "tooLarge": "Ta stranica je prevelika za preuzimanje.",
+      "empty": "Na toj stranici nije pronađen čitljiv tekst članka.",
+      "generic": "Stranica nije mogla biti preuzeta."
+    },
+    "fetchingFile": "Preuzimam sa {host}…",
+    "attachLink": "Priloži link",
+    "attachLinkTitle": "Priloži web stranicu",
+    "attachLinkDescription": "Stranica će biti preuzeta, a njen čitljiv tekst priložen vašoj poruci.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Preuzmi i priloži",
+    "attachLinkInvalid": "Ovo ne izgleda kao web adresa.",
+    "linkBadge": "Sa linka",
+    "couldNotRetrieve": "Nije moglo biti preuzeto",
+    "doc": {
+      "sourceLabel": "Izvor",
+      "retrievedLabel": "Preuzeto",
+      "attemptedLabel": "Pokušano",
+      "failureHeading": "Web stranica nije mogla biti preuzeta"
+    },
+    "settingsTitle": "Linkovi u porukama",
+    "settingsToggle": "Automatski preuzmi nalepene linkove",
+    "settingsDescription": "Kada nalepite link samostalno, stranica se preuzima i njen tekst se prilaže, kako bi asistent mogao da ga pročita. Isključite ovu opciju da bi linkovi ostali kao običan tekst — i dalje možete ručno da priložite stranicu iz + menija.",
+    "addLink": "Dodaj link"
   }
 }

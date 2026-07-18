@@ -2637,7 +2637,24 @@
       "pendingCount": "{count} tertunda",
       "closeReview": "Tutup penilaian kualitas",
       "showReview": "Tampilkan penilaian",
-      "showReviewPending": "Tampilkan penilaian ({count} tertunda)"
+      "showReviewPending": "Tampilkan penilaian ({count} tertunda)",
+      "undoEdit": "Batal",
+      "clearResolved": "Bersihkan yang telah diselesaikan",
+      "clearResolvedHint": "Hapus suntingan yang diterima, ditolak, dan tidak berlaku dari daftar ini",
+      "autoClearResolved": "Otomatis bersihkan suntingan yang telah diselesaikan",
+      "customCriteria": "Kriteria khusus",
+      "closeCriteria": "Tutup kriteria khusus",
+      "newCriterion": "Kriteria baru",
+      "newCriterionName": "Kriteria tanpa judul",
+      "criterionName": "Nama kriteria",
+      "criterionRubric": "Rubrik",
+      "criterionRubricPlaceholder": "Jelaskan apa yang harus dilakukan terjemahan untuk memenuhi kriteria ini, misal: \"Gunakan kata perintah untuk semua instruksi dosis klinis, jangan infinitif…\"",
+      "criterionRubricHint": "Rubrik ini akan diberikan ke AI secara persis bersama dimensi MQM bawaan saat menilai terjemahan.",
+      "criteriaEmpty": "Buat kriteria khusus — misalnya gaya internal, preferensi istilah klien, atau konvensi daerah — untuk menilai terjemahan di luar dimensi MQM bawaan. Disimpan di perangkat ini dan dapat digunakan kembali.",
+      "deleteCriterion": "Hapus kriteria",
+      "manageCriteria": "Kriteria khusus",
+      "addCriteria": "Tambah kriteria",
+      "noUsableCriteria": "Pilih minimal satu kriteria bawaan, atau tambahkan rubrik untuk kriteria khusus Anda."
     },
     "document": {
       "emptyTitle": "Deskripsikan dokumen yang Anda inginkan",
@@ -2757,7 +2774,11 @@
       "clearSelection": "Bersihkan pilihan (kerja dengan seluruh dokumen)",
       "reviseSelectionPlaceholder": "Jelaskan perubahan pada bagian yang dipilih…",
       "revisedSelectionSummary": "Saya telah merevisi bagian yang dipilih di workspace.",
-      "assessedSelection": "Pilihan"
+      "assessedSelection": "Pilihan",
+      "undoEdit": "Batal",
+      "clearResolved": "Bersihkan yang telah diselesaikan",
+      "clearResolvedHint": "Hapus suntingan yang diterima, ditolak, dan tidak berlaku dari daftar ini",
+      "autoClearResolved": "Otomatis bersihkan suntingan yang telah diselesaikan"
     },
     "data": {
       "emptyTitle": "Impor data untuk dianalisis",
@@ -3030,7 +3051,31 @@
         "jumpTo": "Lompat ke {label}",
         "slider": "Posisi linimasa",
         "showUndated": "Tampilkan lokasi tanpa tanggal",
-        "activeCount": "{count} aktif"
+        "activeCount": "{count} aktif",
+        "jump": {
+          "start": "Mulai",
+          "yearsLater": "{count, plural, one {1 tahun kemudian} other {# tahun kemudian}}",
+          "monthsLater": "{count, plural, one {1 bulan kemudian} other {# bulan kemudian}}",
+          "daysLater": "{count, plural, one {1 hari kemudian} other {# hari kemudian}}",
+          "appears": "{count, plural, one {1 muncul} other {# muncul}}",
+          "ends": "{count, plural, one {1 berakhir} other {# berakhir}}",
+          "progress": "Tanggal {index} dari {total}"
+        },
+        "precision": {
+          "minute": "Akurasi menit",
+          "hour": "Akurasi jam",
+          "day": "Akurasi hari",
+          "month": "Akurasi bulan",
+          "year": "Akurasi tahun",
+          "mixed": "(campuran)"
+        },
+        "pacing": {
+          "toggle": "Kecepatan pemutaran",
+          "cardDuration": "Tampilkan setiap lokasi selama",
+          "seconds": "{seconds}d",
+          "maxCards": "Lokasi per tanggal",
+          "hint": "Tanggal yang lebih ramai otomatis ditampilkan lebih lama."
+        }
       },
       "granularity": {
         "site": "Situs",
@@ -3047,8 +3092,13 @@
         "color": "Warna: tingkat kepercayaan koordinat (biru tinggi, kuning sedang, merah rendah)",
         "size": "Ukuran titik: sejauh mana tempat tersebut sentral dalam materi",
         "area": "Lingkaran putus-putus: perkiraan wilayah distrik, region, atau negara",
-        "container": "Garis samar: area yang isinya dipetakan secara individual"
-      }
+        "container": "Garis samar: area yang isinya dipetakan secara individual",
+        "precisionHalo": "Lingkaran putus-putus halus (selama time lapse): peristiwa hanya bertanggal bulan atau tahun, jadi waktu pastinya tidak pasti"
+      },
+      "sourceLabel": "Sumber: {name}",
+      "fetchAndMap": "Ambil & petakan",
+      "fetchingPage": "Mengambil halaman…",
+      "railUrlRequest": "Ambil dan petakan lokasi dari: {title} ({url})"
     },
     "shell": {
       "showConversation": "Tampilkan percakapan",
@@ -3488,5 +3538,44 @@
       "llamacpp": "llama.cpp berjalan tetapi menolak permintaan dari situs ini. Jalankan llama-server dengan izin permintaan cross-origin, lalu deteksi kembali."
     },
     "privacyNote": "Model lokal tidak mendukung lampiran file, gambar, pencarian web, atau konektor — fitur ini membutuhkan server kami. Deteksi hanya memeriksa komputer ini."
+  },
+  "urlFetch": {
+    "sourceFallback": "Halaman web",
+    "fallbackHint": "Anda juga dapat membuka halaman, menyalin teksnya, lalu menempelkannya di sini.",
+    "shortExtract": "Hanya kutipan singkat yang dapat dibaca — halaman mungkin berbayar atau butuh login.",
+    "errors": {
+      "invalidUrl": "Alamat web tersebut tampaknya tidak valid.",
+      "ssrfBlocked": "Alamat tersebut tidak dapat diambil demi alasan keamanan.",
+      "tooManyRedirects": "Tautan tersebut terlalu banyak melakukan pengalihan.",
+      "timeout": "Halaman membutuhkan waktu terlalu lama untuk merespons.",
+      "unreachable": "Halaman tidak dapat dijangkau.",
+      "blocked": "Situs menolak permintaan — mungkin perlu masuk atau memblokir pembaca otomatis.",
+      "notFound": "Halaman tersebut tidak ditemukan.",
+      "upstream": "Situs mengembalikan kesalahan.",
+      "pdf": "Tautan tersebut adalah PDF. Unduh file tersebut dan gunakan tombol lampirkan untuk menambahkannya.",
+      "nonHtml": "Tautan tersebut bukan halaman web yang dapat kami baca.",
+      "tooLarge": "Halaman tersebut terlalu besar untuk diambil.",
+      "empty": "Tidak ditemukan teks artikel yang dapat dibaca pada halaman tersebut.",
+      "generic": "Halaman tidak dapat diambil."
+    },
+    "fetchingFile": "Mengambil {host}…",
+    "attachLink": "Lampirkan tautan",
+    "attachLinkTitle": "Lampirkan halaman web",
+    "attachLinkDescription": "Halaman akan diambil dan teks yang dapat dibaca akan dilampirkan ke pesan Anda.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Ambil & lampirkan",
+    "attachLinkInvalid": "Itu bukan alamat web yang valid.",
+    "linkBadge": "Dari tautan",
+    "couldNotRetrieve": "Tidak dapat diambil",
+    "doc": {
+      "sourceLabel": "Sumber",
+      "retrievedLabel": "Diambil",
+      "attemptedLabel": "Dicoba",
+      "failureHeading": "Halaman web tidak dapat diambil"
+    },
+    "settingsTitle": "Tautan dalam pesan",
+    "settingsToggle": "Ambil tautan yang ditempel secara otomatis",
+    "settingsDescription": "Saat Anda menempelkan tautan secara terpisah, halaman akan diambil dan teksnya dilampirkan agar asisten dapat membacanya. Matikan fitur ini untuk menyimpan tautan yang ditempel sebagai teks biasa — Anda tetap dapat melampirkan halaman secara manual dari menu +.",
+    "addLink": "Tambah tautan"
   }
 }

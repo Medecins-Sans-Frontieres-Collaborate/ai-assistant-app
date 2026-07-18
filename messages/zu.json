@@ -2621,7 +2621,24 @@
       "pendingCount": "{count} kusalindile",
       "closeReview": "Vala ukuhlolwa kwekhwalithi",
       "showReview": "Bonisa ukuhlolwa",
-      "showReviewPending": "Bonisa ukuhlolwa ({count} kusalindile)"
+      "showReviewPending": "Bonisa ukuhlolwa ({count} kusalindile)",
+      "undoEdit": "Buyisa emuva",
+      "clearResolved": "Sula ezixazululiwe",
+      "clearResolvedHint": "Susa okwamukelwe, okwenqatshiwe, nokungasebenzi kulolu hlu",
+      "autoClearResolved": "Sula ngokuzenzakalelayo okuxazululiwe",
+      "customCriteria": "Izindinganiso ezenziwe ngokwezifiso",
+      "closeCriteria": "Vala izindinganiso ezenziwe ngokwezifiso",
+      "newCriterion": "Indinganiso entsha",
+      "newCriterionName": "Indinganiso engenamagama",
+      "criterionName": "Igama lendinganiso",
+      "criterionRubric": "Umhlahlandlela",
+      "criterionRubricPlaceholder": "Chaza ukuthi ukuhunyushwa kufanele kwenzenjani ukuze kuhlangabezane nalesi sidingo, isb. \"Bonisa yonke imiyalelo yokuthatha imithi ngendlela eyala, hhayi eyi-infinitive…\"",
+      "criterionRubricHint": "Lo mhlahlandlela unikezwa i-AI ngendlela efanayo nezinga le-MQM lapho kuhlolwa ukuhunyushwa.",
+      "criteriaEmpty": "Yakha izindinganiso ezenziwe ngokwezifiso — isb. isitayela senkampani, amagama akhethwa iklayenti, noma imithetho yesifunda — ukuhlola ukuhumusha okungaphezu kwezilinganiso ze-MQM. Kulondolozwe kudivayisi le, kuyaphindwa kusetshenziswe.",
+      "deleteCriterion": "Susa indinganiso",
+      "manageCriteria": "Izindinganiso ezenziwe ngokwezifiso",
+      "addCriteria": "Engeza izindinganiso",
+      "noUsableCriteria": "Khetha okungenani indinganiso eyakhelwe ngaphakathi, noma unikeze izindinganiso zakho umhlahlandlela."
     },
     "document": {
       "emptyTitle": "Chaza umbhalo ofunayo",
@@ -2741,7 +2758,11 @@
       "clearSelection": "Sula okukhethiwe (sebenza nombhalo ophelele)",
       "reviseSelectionPlaceholder": "Chaza izinguquko ezizokwenziwa kokukhethiwe…",
       "revisedSelectionSummary": "Ngishintshe ingxenye ekhethiwe endaweni yokusebenza.",
-      "assessedSelection": "Okukhethiwe"
+      "assessedSelection": "Okukhethiwe",
+      "undoEdit": "Buyisa emuva",
+      "clearResolved": "Sula ezixazululiwe",
+      "clearResolvedHint": "Susa okwamukelwe, okwenqatshiwe, nokungasebenzi kulolu hlu",
+      "autoClearResolved": "Sula ngokuzenzakalelayo okuxazululiwe"
     },
     "data": {
       "emptyTitle": "Faka idatha ukuze ihlaziywe",
@@ -3014,7 +3035,31 @@
         "jumpTo": "Yiya ku-{label}",
         "slider": "Isikhundla kumugqa wesikhathi",
         "showUndated": "Bonisa izindawo ezinganalo usuku",
-        "activeCount": "Ezisebenzayo: {count}"
+        "activeCount": "Ezisebenzayo: {count}",
+        "jump": {
+          "start": "Qala",
+          "yearsLater": "{count, plural, one {1 unyaka kamuva} other {# iminyaka kamuva}}",
+          "monthsLater": "{count, plural, one {1 inyanga kamuva} other {# izinyanga kamuva}}",
+          "daysLater": "{count, plural, one {1 usuku kamuva} other {# izinsuku kamuva}}",
+          "appears": "{count, plural, one {1 ivela} other {# zivele}}",
+          "ends": "{count, plural, one {1 iyaphela} other {# ziphela}}",
+          "progress": "Usuku {index} ku-{total}"
+        },
+        "precision": {
+          "minute": "Kuqondiswe kumzuzu",
+          "hour": "Kuqondiswe kwehora",
+          "day": "Kuqondiswe usuku",
+          "month": "Usuku lwenyanga",
+          "year": "Usuku lonyaka",
+          "mixed": "(kuhlanganisile)"
+        },
+        "pacing": {
+          "toggle": "Ijubane lokudlala",
+          "cardDuration": "Bonisa indawo ngayinye",
+          "seconds": "{seconds}s",
+          "maxCards": "Izindawo ezikhonjiswe ngosuku",
+          "hint": "Izinsuku ezinomsebenzi omningi zigcinwa isikhathi eside ngokuzenzakalelayo."
+        }
       },
       "granularity": {
         "site": "Isayithi",
@@ -3031,8 +3076,13 @@
         "color": "Umbala: ukuzethemba kwezixhumanisi (okuluhlaza okwesibhakabhaka kuphezulu, onsomi maphakathi, okubomvu kuphansi)",
         "size": "Usayizi wedoti: ukuthi indawo ibaluleke kangakanani kulolwazi",
         "area": "Umugqa wamehlo: indawo ecishe ifane nesifunda, isifundazwe, noma izwe",
-        "container": "Uhlaka olucacile: indawo okuhlelwe ukuthi okuqukethwe kwayo kubhalwe wethulwe ngokwehlukana"
-      }
+        "container": "Uhlaka olucacile: indawo okuhlelwe ukuthi okuqukethwe kwayo kubhalwe wethulwe ngokwehlukana",
+        "precisionHalo": "Umucu omncane onamachashazi (ngesikhathi kuvulwa isikhathi): umcimbi ubhalwe kuphela ngenyanga noma unyaka, isikhathi sawo esiqondile asiqinisekile"
+      },
+      "sourceLabel": "Umthombo: {name}",
+      "fetchAndMap": "Thola & meba",
+      "fetchingPage": "Kutholakala ikhasi…",
+      "railUrlRequest": "Thola bese umebula izindawo ezivela: {title} ({url})"
     },
     "shell": {
       "showConversation": "Bonisa ingxoxo",
@@ -3472,5 +3522,44 @@
       "llamacpp": "i-llama.cpp iyasebenza kodwa iyenqaba izicelo ezivela kule sayithi. Qalisa i-llama-server ivumele izicelo ze-cross-origin, bese uthola futhi."
     },
     "privacyNote": "Amamodeli endaweni awaxhasi okunamathiselwa amafayela, izithombe, usesho lwewebhu noma oxhasi — leyo misebenzi idinga amaseva ethu. Ukuhlola kusebenza kuphela kuleli khompyutha."
+  },
+  "urlFetch": {
+    "sourceFallback": "Ikhasi lewebhu",
+    "fallbackHint": "Ungavula ikhasi, ukopishe umbhalo, bese uwuthayipha lapha esikhundleni salokho.",
+    "shortExtract": "Kutholakale nje ingxenye encane — ikhasi lingase likhokhelwe noma lidige ukungena.",
+    "errors": {
+      "invalidUrl": "Leyonkulumo ayibukeki njengekheli lewebhu elivumelekile.",
+      "ssrfBlocked": "Lelikheli alikwazi ukutholwa ngezizathu zokuphepha.",
+      "tooManyRedirects": "Lelixhumanisi lisebenzise iziqondiso eziningi kakhulu.",
+      "timeout": "Ikhasi lithathe isikhathi eside ukuphendula.",
+      "unreachable": "Ikhasi alikwazanga ukufinyelelwa.",
+      "blocked": "Isayithi inqabile isicelo — kungase kudingeke ungene ngemvume noma ivimbele ukufunda okuzenzakalelayo.",
+      "notFound": "Ikhasi lelo alitholakali.",
+      "upstream": "Isayithi libuyise iphutha.",
+      "pdf": "Leya xhumanisi iyi-PDF. Landa yona bese usebenzisa inkinobho yokunamathisela ukuze uyifake esikhundleni salokho.",
+      "nonHtml": "Leyo xhumanisi akuyona ikhasi lewebhu esingakwazi ukulifunda.",
+      "tooLarge": "Ikhasi lelo likhulu kakhulu ukufakwa.",
+      "empty": "Alukho umbhalo otholakalayo kulokho ikhasi.",
+      "generic": "Ikhasi alikwazanga ukufakwa."
+    },
+    "fetchingFile": "Kuthathwa {host}…",
+    "attachLink": "Namathisela isixhumanisi",
+    "attachLinkTitle": "Namathisela ikhasi lewebhu",
+    "attachLinkDescription": "Ikhasi lizothathwa, bese umbhalo ofundekayo uhanjiswa kumlayezo wakho.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Thatha & namathisela",
+    "attachLinkInvalid": "Lokho akubukeki njengekheli lewebhu.",
+    "linkBadge": "Okuvela kusixhumanisi",
+    "couldNotRetrieve": "Akwazanga ukutholwa",
+    "doc": {
+      "sourceLabel": "Umthombo",
+      "retrievedLabel": "Kutholwe",
+      "attemptedLabel": "Kuzanywe",
+      "failureHeading": "Ikhasi lewebhu alikwazanga ukutholwa"
+    },
+    "settingsTitle": "Izixhumanisi kwimiyalezo",
+    "settingsToggle": "Thatha izixhumanisi ezinamathiselwe ngokuzenzakalela",
+    "settingsDescription": "Uma okunamathiselwe isixhumanisi sodwa, ikhasi likhishwa bese umbhalo ofundekayo unamathiselwa ukuze umsizi akwazi ukufunda. Cisha lokhu ukuze izixhumanisi zihlale zingumbhalo ojwayelekile — ungakwazi futhi ukufaka ikhasi mathupha kusuka ku-+ imenyu.",
+    "addLink": "Faka isixhumanisi"
   }
 }

@@ -2621,7 +2621,24 @@
       "pendingCount": "{count} ann atant",
       "closeReview": "Fèmen revizyon kalite",
       "showReview": "Montre revizyon",
-      "showReviewPending": "Montre revizyon ({count} ann atant)"
+      "showReviewPending": "Montre revizyon ({count} ann atant)",
+      "undoEdit": "Anile",
+      "clearResolved": "Netwaye sa ki rezoud",
+      "clearResolvedHint": "Retire modifikasyon ki aksepte, rejte, oswa ki pa aplikab sou lis sa a",
+      "autoClearResolved": "Netwaye otomatikman sa ki rezoud yo",
+      "customCriteria": "Kritè pèsonalize",
+      "closeCriteria": "Fèmen kritè pèsonalize",
+      "newCriterion": "Nouvo kritè",
+      "newCriterionName": "Kritè san non",
+      "criterionName": "Non kritè",
+      "criterionRubric": "Ribrik",
+      "criterionRubricPlaceholder": "Dekri sa tradiksyon an dwe fè pou satisfè kritè sa a, egzanp: \"Tradui tout enstriksyon dòz medikal yo nan fòm enperatif, pa janm nan fòm enfinitif...\"",
+      "criterionRubricHint": "Ribrik sa a ap bay AI a egzakteman konsa ansanm ak dimansyon MQM ki deja enkli lè yap evalye yon tradiksyon.",
+      "criteriaEmpty": "Kreye kritè pèsonalize — egzanp stil òganizasyon, preferans tèm kliyan, oswa konvansyon rejyonal — pou evalye tradiksyon pi lwen pase dimansyon MQM yo. Sove sou aparèy sa a e reutilizab.",
+      "deleteCriterion": "Efase kritè",
+      "manageCriteria": "Kritè pèsonalize",
+      "addCriteria": "Ajoute kritè",
+      "noUsableCriteria": "Chwazi omwen yon kritè ki deja egziste oswa bay kritik pèsonalize ou yo yon ribrik."
     },
     "document": {
       "emptyTitle": "Dekri dokiman ou vle a",
@@ -2741,7 +2758,11 @@
       "clearSelection": "Retire seleksyon (travay ak tout dokiman an)",
       "reviseSelectionPlaceholder": "Dekri chanjman pou seleksyon an...",
       "revisedSelectionSummary": "Mwen modifye pasaj seleksyone a nan atelye travay la.",
-      "assessedSelection": "Seleksyon"
+      "assessedSelection": "Seleksyon",
+      "undoEdit": "Anile",
+      "clearResolved": "Netwaye sa ki rezoud",
+      "clearResolvedHint": "Retire modifikasyon ki aksepte, rejte, oswa ki pa aplikab sou lis sa a",
+      "autoClearResolved": "Netwaye otomatikman sa ki rezoud yo"
     },
     "data": {
       "emptyTitle": "Enpòte done pou analize",
@@ -3014,7 +3035,31 @@
         "jumpTo": "Ale dirèkteman nan {label}",
         "slider": "Pozisyon sou liy tan",
         "showUndated": "Montre kote san dat",
-        "activeCount": "{count} aktif"
+        "activeCount": "{count} aktif",
+        "jump": {
+          "start": "Kòmanse",
+          "yearsLater": "{count, plural, one {1 ane apre} other {# ane apre}}",
+          "monthsLater": "{count, plural, one {1 mwa apre} other {# mwa apre}}",
+          "daysLater": "{count, plural, one {1 jou apre} other {# jou apre}}",
+          "appears": "{count, plural, one {1 aparisyon} other {# aparisyon}}",
+          "ends": "{count, plural, one {1 fen} other {# fen}}",
+          "progress": "Dat {index} sou {total}"
+        },
+        "precision": {
+          "minute": "Jiskout minit la",
+          "hour": "Jiskout lè a",
+          "day": "Jiskout jou a",
+          "month": "Datasyon nan nivo mwa",
+          "year": "Datasyon nan nivo ane",
+          "mixed": "(melanje)"
+        },
+        "pacing": {
+          "toggle": "Vitès lekti kat la",
+          "cardDuration": "Montre chak kote pandan",
+          "seconds": "{seconds}s",
+          "maxCards": "Kote montre pa dat",
+          "hint": "Dat ki gen plis evènman ap rete pi lontan otomatikman."
+        }
       },
       "granularity": {
         "site": "Sitou",
@@ -3031,8 +3076,13 @@
         "color": "Koulè: konfyans sou kowòdone (ble wo, zoranj mwayen, wouj ba)",
         "size": "Gwosè pwen: kijan kote a enpòtan pou materyèl la",
         "area": "Sèk ak liy kout: zòn apwoksimatif yon distri, rejyon oswa peyi",
-        "container": "Kontou pal: yon zòn kote chak bagay andedan li make separeman"
-      }
+        "container": "Kontou pal: yon zòn kote chak bagay andedan li make separeman",
+        "precisionHalo": "Bagon tire mou (lè gen mouvman tan): evènman an dat li sèlman pou yon mwa oswa yon ane, donk lè egzak la pa sèten"
+      },
+      "sourceLabel": "Sous : {name}",
+      "fetchAndMap": "Chache & tabli kat la",
+      "fetchingPage": "Y ap chache paj la...",
+      "railUrlRequest": "Chache epi tabli kote yo soti nan : {title} ({url})"
     },
     "shell": {
       "showConversation": "Montre konvèsasyon",
@@ -3472,5 +3522,44 @@
       "llamacpp": "llama.cpp ap kouri men li refize demann ki soti sou sit sa a. Kòmanse llama-server ak demann cross-origin pèmèt, epi detekte ankò."
     },
     "privacyNote": "Modèl lokal yo pa sipòte atachman fichye, imaj, rechèch sou entènèt oswa konektè — sa yo bezwen sèvè nou yo. Deteksyon ap tcheke sèlman òdinatè sa a."
+  },
+  "urlFetch": {
+    "sourceFallback": "Paj entènèt",
+    "fallbackHint": "Ou ka ouvri paj la, kopye tèks la, epi kole li isit la tou.",
+    "shortExtract": "Sèlman yon ti ekstrè te kapab li — ka gen pawa oswa bezwen konekte.",
+    "errors": {
+      "invalidUrl": "Sa pa sanble ak yon adrès entènèt ki valab.",
+      "ssrfBlocked": "Adrès sa a pa ka chache pou rezon sekirite.",
+      "tooManyRedirects": "Lyen sa a te redirije twòp fwa.",
+      "timeout": "Paj la pran twòp tan pou reponn.",
+      "unreachable": "Paj la pa t ka jwenn.",
+      "blocked": "Sitou a rejte demann nan — li ka mande pou w konekte oswa bloke lekti otomatik.",
+      "notFound": "Paj sa a pa jwenn.",
+      "upstream": "Sitou a voye yon erè.",
+      "pdf": "Lyen sa a se yon PDF. Telechaje l epi itilize bouton atache a pou ajoute li pito.",
+      "nonHtml": "Lyen sa a pa yon paj entènèt nou ka li.",
+      "tooLarge": "Paj sa a twò gwo pou nou rale l.",
+      "empty": "Pa gen okenn tèks atik ki ka li sou paj sa a.",
+      "generic": "Paj la pa t ka rale."
+    },
+    "fetchingFile": "Ap rale {host}…",
+    "attachLink": "Atache yon lyen",
+    "attachLinkTitle": "Atache yon paj entènèt",
+    "attachLinkDescription": "Nou pral rale paj la epi atache tèks li nou ka li a ak mesaj ou.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Rale & atache",
+    "attachLinkInvalid": "Sa pa sanble ak yon adrès entènèt.",
+    "linkBadge": "Soti nan yon lyen",
+    "couldNotRetrieve": "Pa t ka rale",
+    "doc": {
+      "sourceLabel": "Sous",
+      "retrievedLabel": "Rale",
+      "attemptedLabel": "Tante",
+      "failureHeading": "Paj entènèt la pa t ka rale"
+    },
+    "settingsTitle": "Lyen nan mesaj yo",
+    "settingsToggle": "Rale lyen kole otomatikman",
+    "settingsDescription": "Lè ou kole yon lyen sèl, paj la ap rale epi atache tèks li pou asistan an ka li li. Retire opsyon sa a pou kenbe lyen yo kòm tèks senp — ou ka toujou atache yon paj manyèlman depi meni + a.",
+    "addLink": "Ajoute yon lyen"
   }
 }
