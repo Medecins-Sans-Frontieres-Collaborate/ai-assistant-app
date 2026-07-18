@@ -689,10 +689,13 @@ describe('accessRulesStore', () => {
       });
     });
 
-    // Fail closed like listAllRules: a silently-skipped persona would let a
-    // stale/corrupt record vanish without any operator signal, and refresh()
-    // relies on the throw to keep the last-known-good snapshot.
-    it('throws (after logging) on a blob with invalid JSON', async () => {
+    // DELIBERATELY SOFTER than listAllRules: a malformed persona blob is
+    // skipped with a loud console.error instead of failing the listing. A
+    // dropped persona fails safe (vanishes from discovery, its botId falls
+    // through to vanilla chat), while a throw here would couple one corrupt
+    // blob to the whole rules snapshot and brick Foundry invocations after a
+    // restart — the blast radius the sibling prefix exists to contain.
+    it('skips (after logging loudly) a blob with invalid JSON and keeps the rest', async () => {
       const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const listStorage = storageWithBlobs({
         [`${AGENT_ACCESS_PROMPT_AGENTS_PREFIX}garbage.json`]: {
@@ -701,15 +704,16 @@ describe('accessRulesStore', () => {
         [samplePromptAgentPath]: { content: JSON.stringify(samplePromptAgent) },
       });
 
-      await expect(listAllPromptAgents(listStorage)).rejects.toThrow(
-        /invalid JSON/,
-      );
+      const agents = await listAllPromptAgents(listStorage);
+
+      expect(agents).toHaveLength(1);
+      expect(agents[0].canonicalKey).toBe(samplePromptAgentKey);
       expect(errorSpy).toHaveBeenCalledWith(
         expect.stringContaining('invalid JSON'),
       );
     });
 
-    it('throws (after logging) on a schema-invalid blob', async () => {
+    it('skips (after logging loudly) a schema-invalid blob and keeps the rest', async () => {
       const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const listStorage = storageWithBlobs({
         [`${AGENT_ACCESS_PROMPT_AGENTS_PREFIX}bad.json`]: {
@@ -718,28 +722,43 @@ describe('accessRulesStore', () => {
         [samplePromptAgentPath]: { content: JSON.stringify(samplePromptAgent) },
       });
 
-      await expect(listAllPromptAgents(listStorage)).rejects.toThrow(
-        /Malformed prompt agent blob/,
-      );
+      const agents = await listAllPromptAgents(listStorage);
+
+      expect(agents).toHaveLength(1);
+      expect(agents[0].canonicalKey).toBe(samplePromptAgentKey);
       expect(errorSpy).toHaveBeenCalledWith(
         expect.stringContaining('malformed prompt-agent blob'),
       );
     });
 
-    it("throws (after logging) when the blob name does not match its content's id", async () => {
+    it("skips (after logging loudly) a blob whose name does not match its content's id", async () => {
       const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-      // Valid record content, but hand-placed at another id's path.
+      // Valid record content, but hand-placed at another id's path — it must
+      // not shadow another id, and must not brick the listing either.
       const listStorage = storageWithBlobs({
         [promptAgentBlobPath('prompt-other000000')]: {
           content: JSON.stringify(samplePromptAgent),
         },
+        [samplePromptAgentPath]: { content: JSON.stringify(samplePromptAgent) },
       });
 
-      await expect(listAllPromptAgents(listStorage)).rejects.toThrow(
-        /does not match its content's id/,
-      );
+      const agents = await listAllPromptAgents(listStorage);
+
+      expect(agents).toHaveLength(1);
+      expect(agents[0].blobPath).toBe(samplePromptAgentPath);
       expect(errorSpy).toHaveBeenCalledWith(
         expect.stringContaining('does not match'),
+      );
+    });
+
+    it('still throws on storage-level listing failures (outage, not corruption)', async () => {
+      const listStorage = storageWithBlobs({});
+      vi.mocked(listStorage.listBlobs).mockRejectedValue(
+        new Error('storage outage'),
+      );
+
+      await expect(listAllPromptAgents(listStorage)).rejects.toThrow(
+        /storage outage/,
       );
     });
 
