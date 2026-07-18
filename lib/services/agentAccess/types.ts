@@ -14,6 +14,14 @@ export const AGENT_ACCESS_PREFIX = 'system/agent-access/';
 export const AGENT_ACCESS_RULES_PREFIX = `${AGENT_ACCESS_PREFIX}rules/`;
 export const AGENT_ACCESS_HISTORY_PREFIX = `${AGENT_ACCESS_PREFIX}history/`;
 export const AGENT_ACCESS_CONFIG_PATH = `${AGENT_ACCESS_PREFIX}config.json`;
+export const AGENT_ACCESS_PROMPT_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}prompt-agents/`;
+
+/**
+ * Pseudo-source for app-defined prompt agents in canonical keys
+ * (`prompt-agent::<id>`). Lowercase-stable, and cannot collide with real ARM
+ * resource paths (those always start with '/').
+ */
+export const PROMPT_AGENT_SOURCE = 'prompt-agent';
 
 export const AgentAccessTypeSchema = z.enum(['public', 'restricted']);
 export type AgentAccessType = z.infer<typeof AgentAccessTypeSchema>;
@@ -71,6 +79,44 @@ export type AgentAccessHistoryEntry = z.infer<
 >;
 
 /**
+ * App-defined persona (display name + system prompt + model id) served
+ * through /api/agents and invoked on the standard chat path. Read-side
+ * permissive per the schema-evolution rule: new fields must be
+ * optional/defaulted so previously-stored blobs keep parsing.
+ */
+export const PromptAgentSchema = z.object({
+  version: z.literal(1),
+  /** Server-generated `prompt-<hex>`; immutable — canonical keys hang off it. */
+  id: z.string().min(1),
+  name: z.string().min(1),
+  description: z.string().default(''),
+  systemPrompt: z.string().min(1),
+  modelId: z.string().min(1),
+  createdBy: z.string(),
+  createdAt: z.string(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type PromptAgent = z.infer<typeof PromptAgentSchema>;
+
+/**
+ * Immutable audit copy written alongside every successful prompt-agent write
+ * (including deletes, which record a null-promptAgent tombstone).
+ */
+export const PromptAgentHistoryEntrySchema = z.object({
+  version: z.literal(1),
+  canonicalKey: z.string().min(1),
+  action: z.enum(['upsert', 'delete']),
+  /** The full record as written, or null for a delete tombstone. */
+  promptAgent: PromptAgentSchema.nullable(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type PromptAgentHistoryEntry = z.infer<
+  typeof PromptAgentHistoryEntrySchema
+>;
+
+/**
  * ARM resource paths are case-insensitive to Azure but compared as raw
  * strings elsewhere in the app — rule matching MUST canonicalize both halves
  * (lowercase + trim) to prevent case-variant bypass.
@@ -90,4 +136,13 @@ export function historyBlobPath(
   isoTimestamp: string,
 ): string {
   return `${AGENT_ACCESS_HISTORY_PREFIX}${Hasher.sha256(canonicalKey)}/${isoTimestamp}.json`;
+}
+
+/**
+ * `system/agent-access/prompt-agents/<id>.json` — a SIBLING of rules/, never
+ * under it: listAllRules is fail-closed and an alien blob there would brick
+ * every Foundry invocation.
+ */
+export function promptAgentBlobPath(id: string): string {
+  return `${AGENT_ACCESS_PROMPT_AGENTS_PREFIX}${id}.json`;
 }
