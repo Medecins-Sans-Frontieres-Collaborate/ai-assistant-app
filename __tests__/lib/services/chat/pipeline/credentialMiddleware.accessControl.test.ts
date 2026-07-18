@@ -28,6 +28,7 @@ const accessIsEnabled = vi.hoisted(() => vi.fn());
 const accessEnsureFresh = vi.hoisted(() => vi.fn());
 const accessEvaluate = vi.hoisted(() => vi.fn());
 const accessGetPromptAgentById = vi.hoisted(() => vi.fn());
+const accessGetSnapshot = vi.hoisted(() => vi.fn());
 const emitAccessAudit = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/services/agents/AgentDiscoveryService', () => ({
@@ -68,6 +69,7 @@ vi.mock('@/lib/services/agentAccess/AgentAccessService', () => ({
       ensureFresh: accessEnsureFresh,
       evaluateAccess: accessEvaluate,
       getPromptAgentById: accessGetPromptAgentById,
+      getSnapshot: accessGetSnapshot,
     }),
   },
   emitAccessAudit,
@@ -107,6 +109,7 @@ beforeEach(() => {
   accessEnsureFresh.mockResolvedValue(undefined);
   accessEvaluate.mockReturnValue({ decision: 'allow', reason: 'no-rule' });
   accessGetPromptAgentById.mockReturnValue(null);
+  accessGetSnapshot.mockReturnValue({ rulesUnavailable: false });
 });
 
 afterEach(() => {
@@ -614,9 +617,10 @@ describe('createCredentialMiddleware — agent access invocation guard', () => {
       expect(emitAccessAudit).not.toHaveBeenCalled();
     });
 
-    it('static rag botId (non-prompt-agent) never triggers the guard', async () => {
-      accessGetPromptAgentById.mockReturnValue(null);
-
+    it('static rag botId (non-prompt-agent) never touches the access service at all', async () => {
+      // Ids are server-generated `prompt-<hex>`, so a non-prefixed botId
+      // (static RAG chat) must not even pay the ensureFresh() refresh —
+      // keeps storage retries off the static-RAG hot path during outages.
       const result = await createCredentialMiddleware(
         makePromptAgentContext({
           promptAgent: undefined,
@@ -626,10 +630,56 @@ describe('createCredentialMiddleware — agent access invocation guard', () => {
       );
 
       expect(result).toEqual({});
-      expect(accessGetPromptAgentById).toHaveBeenCalledWith(
-        'msf_communications',
-      );
+      expect(accessEnsureFresh).not.toHaveBeenCalled();
+      expect(accessGetPromptAgentById).not.toHaveBeenCalled();
       expect(accessEvaluate).not.toHaveBeenCalled();
+    });
+
+    it("no last-known-good snapshot: an unresolved prompt- botId fails closed with 'unavailable'", async () => {
+      // Cold start + storage outage: the record cannot resolve AND the
+      // snapshot was never loaded. The guard must block (mirroring the
+      // Foundry guard's 'unavailable' contract) instead of silently
+      // degrading to a vanilla chat rendered under the persona's name.
+      accessGetPromptAgentById.mockReturnValue(null);
+      accessGetSnapshot.mockReturnValue({ rulesUnavailable: true });
+
+      await expect(
+        createCredentialMiddleware(
+          makePromptAgentContext({ promptAgent: undefined }),
+          mockReq,
+        ),
+      ).rejects.toMatchObject({
+        code: ErrorCode.AGENT_UNAVAILABLE,
+        metadata: {
+          accessDecision: 'unavailable',
+          accessReason: 'rules-unavailable',
+        },
+      });
+
+      expect(emitAccessAudit).toHaveBeenCalledWith({
+        userMail: 'u@msf.org',
+        agentName: 'prompt-abc123def456',
+        source: 'prompt-agent',
+        decision: 'unavailable',
+        reason: 'rules-unavailable',
+      });
+      expect(accessEvaluate).not.toHaveBeenCalled();
+    });
+
+    it('unknown prompt- botId with a healthy snapshot still falls through silently', async () => {
+      // Deleted/unknown record + snapshot present (rulesUnavailable false):
+      // silent-degrade stays intact — only the no-snapshot case fails closed.
+      accessGetPromptAgentById.mockReturnValue(null);
+      accessGetSnapshot.mockReturnValue({ rulesUnavailable: false });
+
+      const result = await createCredentialMiddleware(
+        makePromptAgentContext({ promptAgent: undefined }),
+        mockReq,
+      );
+
+      expect(result).toEqual({});
+      expect(accessEvaluate).not.toHaveBeenCalled();
+      expect(emitAccessAudit).not.toHaveBeenCalled();
     });
 
     it('flag DISABLED: untouched behavior — no service calls at all', async () => {
@@ -645,6 +695,101 @@ describe('createCredentialMiddleware — agent access invocation guard', () => {
       expect(accessGetPromptAgentById).not.toHaveBeenCalled();
       expect(accessEvaluate).not.toHaveBeenCalled();
       expect(emitAccessAudit).not.toHaveBeenCalled();
+    });
+
+    // ─────────────────────────────────────────────────────────────────
+    // Regression: the guard must run BEFORE the byom early-return and the
+    // Foundry classification. A client pairing a restricted prompt botId
+    // with a byom- model id (or a Foundry-shaped model object) used to skip
+    // the guard entirely while context.promptAgent still drove the
+    // PromptAgentEnricher — an authz bypass on the restricted persona.
+    // ─────────────────────────────────────────────────────────────────
+    describe('guard ordering — precedes byom/Foundry classification', () => {
+      it('blocks a denied prompt agent carried on a byom- model id (no byom resolution attempted)', async () => {
+        accessGetPromptAgentById.mockReturnValue(promptAgentRecord);
+        accessEvaluate.mockReturnValue({
+          decision: 'deny',
+          reason: 'not-allowed',
+        });
+
+        await expect(
+          createCredentialMiddleware(
+            makePromptAgentContext({
+              promptAgent: undefined,
+              model: { id: 'byom-abc123' },
+              modelId: 'byom-abc123',
+              modelSourcePath: VALID_PATH,
+            }),
+            mockReq,
+          ),
+        ).rejects.toMatchObject({
+          code: ErrorCode.AGENT_UNAVAILABLE,
+          metadata: { accessDecision: 'deny', accessReason: 'not-allowed' },
+        });
+
+        expect(accessEvaluate).toHaveBeenCalledWith({
+          userMail: 'u@msf.org',
+          source: 'prompt-agent',
+          agentName: 'prompt-abc123def456',
+        });
+        // The byom credential machinery was never entered.
+        expect(getAccessTokenForOBO).not.toHaveBeenCalled();
+        expect(getArmToken).not.toHaveBeenCalled();
+      });
+
+      it('blocks a denied prompt agent carried on a Foundry-classified model (before the Foundry guard)', async () => {
+        accessEvaluate.mockReturnValue({
+          decision: 'deny',
+          reason: 'not-allowed',
+        });
+
+        await expect(
+          createCredentialMiddleware(
+            makePromptAgentContext({
+              model: { isOrganizationAgent: true, agentId: 'my-agent' },
+              modelId: 'foundry-deadbeef-my-agent',
+              agentSourcePath: VALID_PATH,
+            }),
+            mockReq,
+          ),
+        ).rejects.toMatchObject({
+          code: ErrorCode.AGENT_UNAVAILABLE,
+          metadata: { accessDecision: 'deny' },
+        });
+
+        // Evaluated under the prompt-agent source, once — the Foundry
+        // guard was never reached and no credential was bound.
+        expect(accessEvaluate).toHaveBeenCalledTimes(1);
+        expect(accessEvaluate).toHaveBeenCalledWith({
+          userMail: 'u@msf.org',
+          source: 'prompt-agent',
+          agentName: 'prompt-abc123def456',
+        });
+        expect(getFoundryToken).not.toHaveBeenCalled();
+      });
+
+      it('allowed prompt guard on a Foundry-classified model: both guards evaluate in order', async () => {
+        const ctx = makePromptAgentContext({
+          model: { isOrganizationAgent: true, agentId: 'my-agent' },
+          modelId: 'foundry-deadbeef-my-agent',
+          agentSourcePath: VALID_PATH,
+        });
+
+        const result = await createCredentialMiddleware(ctx, mockReq);
+
+        expect(accessEvaluate).toHaveBeenCalledTimes(2);
+        expect(accessEvaluate).toHaveBeenNthCalledWith(1, {
+          userMail: 'u@msf.org',
+          source: 'prompt-agent',
+          agentName: 'prompt-abc123def456',
+        });
+        expect(accessEvaluate).toHaveBeenNthCalledWith(2, {
+          userMail: 'u@msf.org',
+          source: VALID_PATH,
+          agentName: 'my-agent',
+        });
+        expect(result.foundryEndpoint).toBe(ALLOWED_ENDPOINT);
+      });
     });
   });
 });

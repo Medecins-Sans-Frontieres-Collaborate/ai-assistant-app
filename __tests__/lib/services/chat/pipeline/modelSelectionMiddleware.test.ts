@@ -177,4 +177,73 @@ describe('createModelSelectionMiddleware — prompt-agent resolution', () => {
     expect(result.model).toBe(OpenAIModels[OpenAIModelID.GPT_5_2]);
     expect(result.agentMode).toBe(false);
   });
+
+  // ─────────────────────────────────────────────────────────────────
+  // Regression: the swap is scoped to requests whose MODEL actually
+  // selects the prompt agent (`org-<botId>`). conversation.bot survives
+  // model switches that bypass ModelSelect (WorkflowModelSelect /
+  // useModelSelection), so a stale botId must never hijack an explicitly
+  // selected different model.
+  // ─────────────────────────────────────────────────────────────────
+  describe('stale botId scoping', () => {
+    it('explicitly selected base model wins: no swap, no persona, no service lookup', async () => {
+      const result = await createModelSelectionMiddleware(
+        makeContext({ model: { id: 'gpt-5.2', name: 'GPT-5.2' } }),
+      );
+
+      expect(accessEnsureFresh).not.toHaveBeenCalled();
+      expect(accessGetPromptAgentById).not.toHaveBeenCalled();
+      expect(result.promptAgent).toBeUndefined();
+      expect(result.modelId).toBe('gpt-5.2');
+      expect(result.model).toBe(OpenAIModels[OpenAIModelID.GPT_5_2]);
+    });
+
+    it('byom- selection is never overridden by a stale prompt botId', async () => {
+      const result = await createModelSelectionMiddleware(
+        makeContext({
+          model: { id: 'byom-abc123', name: 'My Own Model' },
+        }),
+      );
+
+      expect(accessGetPromptAgentById).not.toHaveBeenCalled();
+      expect(result.promptAgent).toBeUndefined();
+      expect(result.modelId).toBe('byom-abc123');
+    });
+
+    it("a different org- agent's model id does not resolve the stale prompt botId", async () => {
+      const result = await createModelSelectionMiddleware(
+        makeContext({
+          model: {
+            id: 'org-msf_communications',
+            name: 'MSF Communications',
+            isOrganizationAgent: true,
+          },
+        }),
+      );
+
+      expect(accessGetPromptAgentById).not.toHaveBeenCalled();
+      expect(result.promptAgent).toBeUndefined();
+      expect(result.modelId).toBe('org-msf_communications');
+    });
+  });
+
+  it('static RAG botId (no prompt- prefix) never touches the access service', async () => {
+    // Cheap prefix check keeps static RAG chats off the AgentAccessService
+    // hot path entirely (no ensureFresh — matters during storage outages).
+    const result = await createModelSelectionMiddleware(
+      makeContext({
+        model: {
+          id: 'org-msf_communications',
+          name: 'MSF Communications',
+          isOrganizationAgent: true,
+        },
+        botId: 'msf_communications',
+      }),
+    );
+
+    expect(accessEnsureFresh).not.toHaveBeenCalled();
+    expect(accessGetPromptAgentById).not.toHaveBeenCalled();
+    expect(result.promptAgent).toBeUndefined();
+    expect(result.modelId).toBe('org-msf_communications');
+  });
 });
