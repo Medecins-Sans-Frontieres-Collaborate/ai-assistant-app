@@ -1,6 +1,11 @@
-import { RefObject, useEffect } from 'react';
+import { RefObject, useEffect, useRef } from 'react';
+
+import { useUrlAttachment } from '@/client/hooks/chat/useUrlAttachment';
+
+import { isLikelyUrl } from '@/client/services/url/urlFetchClient';
 
 import { useChatInputStore } from '@/client/stores/chatInputStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import { useUIStore } from '@/client/stores/uiStore';
 
 interface UsePasteChatInputOptions {
@@ -42,6 +47,14 @@ export function usePasteChatInput({
   textareaRef,
   enabled,
 }: UsePasteChatInputOptions) {
+  const { attachUrl } = useUrlAttachment();
+  // Held in a ref so the listener never needs re-binding when the callback
+  // identity changes. Written in an effect, never during render.
+  const attachUrlRef = useRef(attachUrl);
+  useEffect(() => {
+    attachUrlRef.current = attachUrl;
+  }, [attachUrl]);
+
   useEffect(() => {
     if (!enabled) return;
 
@@ -91,10 +104,27 @@ export function usePasteChatInput({
         return;
       }
 
+      const text = clipboardData.getData('text/plain');
+
+      // A pasted link becomes an attachment instead of composer text. The
+      // paste is swallowed: once the page content is attached, the raw URL
+      // adds nothing and would just have to be deleted by hand.
+      // Only a clipboard holding nothing but a single link qualifies; pasting
+      // prose that happens to contain links must not trigger a fetch.
+      if (
+        text &&
+        isLikelyUrl(text) &&
+        useSettingsStore.getState().autoFetchPastedLinks
+      ) {
+        event.preventDefault();
+        void attachUrlRef.current(text.trim());
+        textarea.focus();
+        return;
+      }
+
       // Native paste already works when the textarea itself is focused
       if (target === textarea) return;
 
-      const text = clipboardData.getData('text/plain');
       if (!text) return;
 
       event.preventDefault();
