@@ -352,3 +352,36 @@ describe('settingsStore migration (v28 → v29)', () => {
     expect(result.customAgentSources).toEqual(sources);
   });
 });
+
+/**
+ * v34 adds the adjustable context window (conversation compaction) and the
+ * Memories opt-in. Backfill must reproduce prior behavior exactly: the old
+ * hard-coded 80-message window, memories off.
+ */
+describe('settingsStore migration (v33 → v34)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills contextWindowSize=80 and memoriesEnabled=false when migrating from v33', () => {
+    const persisted = {
+      customAgents: [],
+      // contextWindowSize / memoriesEnabled intentionally absent (pre-v34)
+    } as Record<string, unknown>;
+
+    const result = migrate(persisted, 33) as Record<string, unknown>;
+
+    expect(result.contextWindowSize).toBe(80);
+    expect(result.memoriesEnabled).toBe(false);
+  });
+
+  it('preserves existing values on a current-version store', () => {
+    const persisted = {
+      contextWindowSize: 120,
+      memoriesEnabled: true,
+    } as Record<string, unknown>;
+
+    const result = migrate(persisted, 34) as Record<string, unknown>;
+
+    expect(result.contextWindowSize).toBe(120);
+    expect(result.memoriesEnabled).toBe(true);
+  });
+});
