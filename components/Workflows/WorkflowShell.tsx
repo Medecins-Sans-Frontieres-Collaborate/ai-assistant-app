@@ -33,7 +33,11 @@ export function WorkflowShell() {
   const { selectedConversation } = useConversations();
   const { toggleChatbar } = useUI();
   const tabsEnabled = useWorkflowTabsEnabled();
-  const [railOpen, setRailOpen] = useState(true);
+  // Collapsed by default: the workspace is the point of a workflow screen,
+  // so it gets the width until the user asks for the chat rail. Mobile is
+  // unaffected — the two panes are tabs there, already defaulting to the
+  // workspace.
+  const [railOpen, setRailOpen] = useState(false);
   const [mobileTab, setMobileTab] = useState<'workspace' | 'conversation'>(
     'workspace',
   );
