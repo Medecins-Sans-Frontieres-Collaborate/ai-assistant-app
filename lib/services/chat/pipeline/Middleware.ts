@@ -1,6 +1,10 @@
 import { Session } from 'next-auth';
 import { NextRequest } from 'next/server';
 
+import {
+  AgentAccessService,
+  emitAccessAudit,
+} from '@/lib/services/agentAccess/AgentAccessService';
 import { AgentDiscoveryService } from '@/lib/services/agents/AgentDiscoveryService';
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
 import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
@@ -332,6 +336,26 @@ const failClosedResult = (foundryEndpoint?: string): Partial<ChatContext> =>
     : {};
 
 /**
+ * Access-control denial for an agent invocation
+ * (docs/AGENT_ACCESS_CONTROL.md). This is POLICY, not credential plumbing:
+ * unlike `failClosedResult` it blocks in EVERY environment (no dev
+ * app-identity leniency) and surfaces an accurate message instead of an
+ * opaque credential failure. AGENT_UNAVAILABLE maps to a clean 409 in the
+ * chat route's PipelineError handling.
+ */
+const agentAccessDenied = (
+  decision: 'deny' | 'unavailable',
+  reason: string,
+): PipelineError =>
+  PipelineError.critical(
+    ErrorCode.AGENT_UNAVAILABLE,
+    decision === 'unavailable'
+      ? 'Agent access rules are currently unavailable, so this agent cannot be invoked right now. Please try again shortly.'
+      : 'Access to this agent is restricted. Contact your administrator if you believe you should have access.',
+    { accessDecision: decision, accessReason: reason },
+  );
+
+/**
  * 409-style conflict for a custom-source (byom) model that cannot be invoked.
  * Unlike agents, byom has NO app-identity fallback in any environment: falling
  * back would silently reroute the request to an app-hosted deployment, which
@@ -507,6 +531,44 @@ export const createCredentialMiddleware = async (
     !!context.model?.agentId;
 
   if (!isFoundryAgent) {
+    // Access guard for agent-mode invocations that are NOT classified as
+    // Foundry agents (docs/AGENT_ACCESS_CONTROL.md). A client can send an
+    // `org-`/`custom-` model id with an `agentId` while omitting
+    // `isOrganizationAgent`: that skips the Foundry branch below, yet
+    // createModelSelectionMiddleware still sets agentMode, AgentEnricher
+    // promotes it to executionStrategy='agent', and AIFoundryAgentHandler
+    // falls back to the app's default endpoint + DefaultAzureCredential. So
+    // every agentMode + agentId invocation must be evaluated here too. These
+    // paths never resolve a verified source path, so the unresolved-source
+    // semantics apply (source: null — the user must satisfy every rule
+    // matching this agentName under any source). byom- models returned
+    // earlier and stay out of scope by design. When the feature is disabled,
+    // isEnabled() is false and none of this runs.
+    const nonFoundryAgentName = context.model?.agentId;
+    if (context.agentMode && nonFoundryAgentName) {
+      const accessService = AgentAccessService.getInstance();
+      if (accessService.isEnabled()) {
+        await accessService.ensureFresh();
+        const decision = accessService.evaluateAccess({
+          userMail: context.user?.mail,
+          source: null,
+          agentName: nonFoundryAgentName,
+        });
+        emitAccessAudit({
+          userMail: context.user?.mail,
+          agentName: nonFoundryAgentName,
+          source: null,
+          decision: decision.decision,
+          reason: decision.reason,
+        });
+        if (decision.decision !== 'allow') {
+          console.error(
+            `[CredentialMiddleware] Agent access ${decision.decision} (${decision.reason}) for non-Foundry-classified agent invocation; blocking`,
+          );
+          throw agentAccessDenied(decision.decision, decision.reason);
+        }
+      }
+    }
     return {};
   }
 
@@ -603,6 +665,44 @@ export const createCredentialMiddleware = async (
       return failClosedResult();
     }
 
+    // App-layer agent access guard (docs/AGENT_ACCESS_CONTROL.md). Runs
+    // after agentName/sourcePath/endpoint resolution and before ANY
+    // credential selection, so the dev app-identity fallback path is also
+    // guarded. This re-checks on every invocation — neither the 24h
+    // endpoint trust-anchor cache nor lazy discovery can keep a revoked
+    // user invoking. 'unavailable' (enabled + no last-known-good ruleset)
+    // blocks too. A denial is POLICY, not credential plumbing: it throws an
+    // explicit access-denied PipelineError in EVERY environment (no
+    // failClosedResult dev carve-out — that leniency is only for OBO/host
+    // plumbing failures).
+    const accessService = AgentAccessService.getInstance();
+    if (accessService.isEnabled() && agentName) {
+      await accessService.ensureFresh();
+      // Only trust the client-supplied source path when endpoint resolution
+      // verified the agent exists there under the user's own ARM RBAC;
+      // otherwise apply the unresolved-source semantics (must satisfy every
+      // rule for this agentName under any source).
+      const accessSource = resolvedEndpoint ? sourcePath : null;
+      const decision = accessService.evaluateAccess({
+        userMail,
+        source: accessSource,
+        agentName,
+      });
+      emitAccessAudit({
+        userMail,
+        agentName,
+        source: accessSource,
+        decision: decision.decision,
+        reason: decision.reason,
+      });
+      if (decision.decision !== 'allow') {
+        console.error(
+          `[CredentialMiddleware] Agent access ${decision.decision} (${decision.reason}); blocking agent invocation`,
+        );
+        throw agentAccessDenied(decision.decision, decision.reason);
+      }
+    }
+
     // Try OBO first for per-user Foundry access, fall back to DefaultAzureCredential
     let userCredential: TokenCredential | undefined;
 
@@ -642,6 +742,12 @@ export const createCredentialMiddleware = async (
       foundryEndpoint,
     };
   } catch (error) {
+    // Deliberate policy errors (the access-denied throw above) must propagate
+    // untouched — downgrading them to failClosedResult would reopen the dev
+    // app-identity execution path an access denial is meant to block.
+    if (error instanceof PipelineError) {
+      throw error;
+    }
     console.error(
       '[CredentialMiddleware] Failed to acquire credential:',
       error,
