@@ -16,6 +16,16 @@ export type ExtractionDownloadFormat = 'json' | 'csv' | 'tsv';
 /** Tabs available inside the Quick Actions / Customizations modal. */
 export type CustomizationsTabKey = 'prompts' | 'tones' | 'recipes';
 
+/** Which encrypted-backup modal (if any) is showing. Null = none. */
+export type BackupModalView =
+  | 'enroll-intro'
+  | 'enroll-ceremony'
+  | 'enroll-progress'
+  | 'view-key'
+  | 'rotate-confirm'
+  | 'restore'
+  | 'enter-key';
+
 interface UIStore {
   // Ephemeral modal states
   isSettingsOpen: boolean;
@@ -42,6 +52,9 @@ interface UIStore {
    */
   customizationsInitialTab: CustomizationsTabKey | null;
 
+  /** Active encrypted-backup modal, hosted by BackupModals in ChatShell. */
+  backupModalView: BackupModalView | null;
+
   // Actions
   setIsSettingsOpen: (isOpen: boolean) => void;
   setIsBotModalOpen: (isOpen: boolean) => void;
@@ -51,6 +64,7 @@ interface UIStore {
   setExtractionDefaultFormat: (format: ExtractionDownloadFormat) => void;
   setIsCustomizationsOpen: (isOpen: boolean) => void;
   setCustomizationsInitialTab: (tab: CustomizationsTabKey | null) => void;
+  setBackupModalView: (view: BackupModalView | null) => void;
 }
 
 export const useUIStore = create<UIStore>((set) => ({
@@ -63,6 +77,7 @@ export const useUIStore = create<UIStore>((set) => ({
   extractionDefaultFormat: 'csv',
   isCustomizationsOpen: false,
   customizationsInitialTab: null,
+  backupModalView: null,
 
   // Actions
   setIsSettingsOpen: (isOpen) => set({ isSettingsOpen: isOpen }),
@@ -75,4 +90,5 @@ export const useUIStore = create<UIStore>((set) => ({
     set({ extractionDefaultFormat: format }),
   setIsCustomizationsOpen: (isOpen) => set({ isCustomizationsOpen: isOpen }),
   setCustomizationsInitialTab: (tab) => set({ customizationsInitialTab: tab }),
+  setBackupModalView: (view) => set({ backupModalView: view }),
 }));
