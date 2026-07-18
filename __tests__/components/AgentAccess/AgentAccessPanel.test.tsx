@@ -120,10 +120,18 @@ const promptAgentDiscoveryEntry: DiscoveredAgentSummary = {
   type: 'prompt',
 };
 
-// Base chat model + an agent-backed id the model picker must filter out.
+// Base chat model + two ids the model picker must filter out: an
+// agent-backed id and a discovered deployment that is NOT in the static
+// OpenAIModels registry (the server would 400 it).
 const settingsModels = [
   { id: 'gpt-5.2', name: 'GPT-5.2', maxLength: 128000, tokenLimit: 16000 },
   { id: 'org-comms', name: 'Comms Bot', maxLength: 128000, tokenLimit: 16000 },
+  {
+    id: 'my-discovered-deployment',
+    name: 'Mystery Deployment',
+    maxLength: 128000,
+    tokenLimit: 16000,
+  },
 ] as OpenAIModel[];
 
 const configResponse: AdminConfigResponse = {
@@ -153,6 +161,8 @@ let agentPutStatus: number;
 let agentPutCalls: { headers: Record<string, string>; body: unknown }[];
 let agentDeleteStatus: number;
 let agentDeleteCalls: { url: string; headers: Record<string, string> }[];
+/** Body served for failed (>=400) prompt-agent POST/PUT responses. */
+let agentSaveErrorBody: unknown;
 
 function jsonResponse(status: number, body: unknown) {
   return {
@@ -208,7 +218,7 @@ const fetchMock = vi.fn(async (input: string | URL, init?: RequestInit) => {
       return jsonResponse(
         agentPostStatus,
         agentPostStatus >= 400
-          ? {}
+          ? agentSaveErrorBody
           : {
               success: true,
               data: {
@@ -227,7 +237,7 @@ const fetchMock = vi.fn(async (input: string | URL, init?: RequestInit) => {
       return jsonResponse(
         agentPutStatus,
         agentPutStatus >= 400
-          ? {}
+          ? agentSaveErrorBody
           : {
               success: true,
               data: {
@@ -313,6 +323,7 @@ describe('AgentAccessPanel', () => {
     agentPutCalls = [];
     agentDeleteStatus = 200;
     agentDeleteCalls = [];
+    agentSaveErrorBody = {};
     fetchMock.mockClear();
     vi.mocked(toast.success).mockClear();
     vi.mocked(toast.error).mockClear();
@@ -574,11 +585,16 @@ describe('AgentAccessPanel', () => {
       { target: { value: 'You are a concierge.' } },
     );
 
-    const modelSelect = screen.getByRole('combobox');
+    const modelSelect = screen.getByRole('combobox', { name: 'Model' });
     // org-comms is agent-backed and must not be offered as an engine.
     expect(within(modelSelect).getByText('GPT-5.2')).toBeInTheDocument();
     expect(
       within(modelSelect).queryByText('Comms Bot'),
+    ).not.toBeInTheDocument();
+    // Discovered deployments outside the static OpenAIModels registry would
+    // 400 server-side, so they must not be offered either.
+    expect(
+      within(modelSelect).queryByText('Mystery Deployment'),
     ).not.toBeInTheDocument();
     fireEvent.change(modelSelect, { target: { value: 'gpt-5.2' } });
 
@@ -687,6 +703,108 @@ describe('AgentAccessPanel', () => {
     ).toBeInTheDocument();
     expect(within(row as HTMLElement).getByText('Reload')).toBeInTheDocument();
     expect(agentDeleteCalls).toHaveLength(1);
+  });
+
+  it('labels the stored model unavailable when gone from the registry and surfaces the 400 as a model-specific error', async () => {
+    const retiredModelAgent: AdminStoredPromptAgent = {
+      ...storedPromptAgent,
+      agent: { ...storedPromptAgent.agent, modelId: 'retired-model' },
+    };
+    agentsResponse = [...discoveredAgents, promptAgentDiscoveryEntry];
+    promptAgentsResponse = [retiredModelAgent];
+    agentPutStatus = 400;
+    agentSaveErrorBody = { error: 'modelId is not a known model' };
+    renderPanel();
+
+    const row = (await screen.findByText('Travel Advisor')).closest('li');
+    fireEvent.click(within(row as HTMLElement).getByText('Edit agent'));
+
+    // The stored id stays selected (so other fields remain editable) but is
+    // flagged: it is no longer in the OpenAIModels registry.
+    const modelSelect = within(row as HTMLElement).getByRole('combobox', {
+      name: 'Model',
+    });
+    expect((modelSelect as HTMLSelectElement).value).toBe('retired-model');
+    expect(
+      within(modelSelect).getByText('retired-model (unavailable)'),
+    ).toBeInTheDocument();
+
+    fireEvent.click(within(row as HTMLElement).getByText('Save'));
+
+    // The 400 is surfaced as a model-specific, announced error — not the
+    // generic "try again", which would suggest retrying could work.
+    const alert = await within(row as HTMLElement).findByRole('alert');
+    expect(alert).toHaveTextContent(
+      'The selected model is no longer available. Choose another model and save again.',
+    );
+    expect(
+      screen.queryByText("Couldn't save. Please try again."),
+    ).not.toBeInTheDocument();
+  });
+
+  it('treats a PUT 404 (agent deleted elsewhere) as a conflict with Reload, not a retryable generic error', async () => {
+    agentsResponse = [...discoveredAgents, promptAgentDiscoveryEntry];
+    promptAgentsResponse = [storedPromptAgent];
+    agentPutStatus = 404;
+    renderPanel();
+
+    const row = (await screen.findByText('Travel Advisor')).closest('li');
+    fireEvent.click(within(row as HTMLElement).getByText('Edit agent'));
+    fireEvent.click(within(row as HTMLElement).getByText('Save'));
+
+    // The conflict banner (announced to AT) with its Reload affordance —
+    // retrying a PUT against a deleted agent can never succeed.
+    const banner = await within(row as HTMLElement).findByRole('alert');
+    expect(banner).toHaveTextContent(
+      'Someone else changed this while you were editing. Reload to load the latest version, then make your change again.',
+    );
+    expect(within(row as HTMLElement).getByText('Reload')).toBeInTheDocument();
+    expect(
+      screen.queryByText("Couldn't save. Please try again."),
+    ).not.toBeInTheDocument();
+    expect(within(row as HTMLElement).getByText('Save')).toBeDisabled();
+  });
+
+  it('zero-key local admin still sees a prompt agent served by the server-filtered admin listing', async () => {
+    // The admin listing is filtered per delegated key server-side with FRESH
+    // config; /me may be a ≤60s-stale snapshot from another replica that
+    // does not know about a fresh create's auto-delegation yet. The listing
+    // wins: the row must not vanish behind stale editableAgentKeys.
+    meResponse = {
+      isGlobalAdmin: false,
+      isLocalAdmin: true,
+      editableAgentKeys: [],
+    };
+    agentsResponse = [...discoveredAgents, promptAgentDiscoveryEntry];
+    promptAgentsResponse = [storedPromptAgent];
+    renderPanel();
+
+    const row = (await screen.findByText('Travel Advisor')).closest('li');
+    expect(
+      within(row as HTMLElement).getByText('Edit agent'),
+    ).toBeInTheDocument();
+    // Foundry rows still honor the delegated-key filter.
+    expect(screen.queryByText('Helpdesk Agent')).not.toBeInTheDocument();
+    expect(screen.queryByText('Sales Agent')).not.toBeInTheDocument();
+  });
+
+  it('associates a label with every editor control and exposes the Add agent expanded state', async () => {
+    renderPanel();
+
+    const addButton = await screen.findByRole('button', { name: 'Add agent' });
+    expect(addButton).toHaveAttribute('aria-expanded', 'false');
+    fireEvent.click(addButton);
+    expect(addButton).toHaveAttribute('aria-expanded', 'true');
+
+    // Each control is reachable by its accessible name (htmlFor/id pairs).
+    expect(screen.getByLabelText('Name')).toBeInstanceOf(HTMLInputElement);
+    expect(screen.getByLabelText('Description')).toBeInstanceOf(
+      HTMLInputElement,
+    );
+    expect(screen.getByLabelText('System prompt')).toBeInstanceOf(
+      HTMLTextAreaElement,
+    );
+    expect(screen.getByLabelText('Model')).toBeInstanceOf(HTMLSelectElement);
   });
 
   it('lists the prompt agent in the local-admin delegation checkboxes', async () => {
