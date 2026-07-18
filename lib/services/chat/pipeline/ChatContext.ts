@@ -1,5 +1,6 @@
 import { Session } from 'next-auth';
 
+import { PromptAgent } from '@/lib/services/agentAccess/types';
 import { ModelSelector } from '@/lib/services/shared';
 
 import { ActiveFile, ApprovalResponse, Message } from '@/types/chat';
@@ -189,6 +190,15 @@ export interface ChatContext {
 
   /** Whether agent mode is enabled */
   agentMode?: boolean;
+
+  /**
+   * App-defined prompt-agent persona resolved server-side from `botId`
+   * (docs/AGENT_ACCESS_CONTROL.md). Set by createModelSelectionMiddleware
+   * when the agent-access feature is enabled; drives PromptAgentEnricher's
+   * system-prompt override and the credential middleware's access guard.
+   * Never routes into the Foundry execution path (no agentId is ever set).
+   */
+  promptAgent?: PromptAgent;
 
   /** Thread ID for continuing conversations */
   threadId?: string;
