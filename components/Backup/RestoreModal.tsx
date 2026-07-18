@@ -52,32 +52,29 @@ export function RestoreModal({ isOpen, onSkip, onDone }: RestoreModalProps) {
 
   const handleSubmit = useCallback(async (key: Uint8Array) => {
     setPhase('restoring');
-    const backupStore = useBackupStore.getState();
     try {
-      let remoteKeyId = backupStore.remoteKeyId;
-      let remoteEpoch = backupStore.remoteKeyEpoch;
-      if (remoteKeyId === null) {
-        const remote = await backupStore.refreshRemoteStatus();
-        if (remote === null) {
-          setPhase('network-error');
-          return;
-        }
-        remoteKeyId = remote.keyId;
-        remoteEpoch = remote.epoch;
+      // Always refresh — a cached fingerprint may predate a rotation on
+      // another device, which would reject the correct (newest) code on
+      // every retry until a reload.
+      const remote = await useBackupStore.getState().refreshRemoteStatus();
+      if (remote === null) {
+        setPhase('network-error');
+        return;
       }
       const keyId = await computeKeyId(key);
-      if (remoteKeyId === null || keyId !== remoteKeyId) {
+      if (remote.keyId === null || keyId !== remote.keyId) {
         setPhase('wrong-key');
         return;
       }
 
-      await saveMasterKey(key);
-      resetBackupKeyCache();
-      useBackupStore.getState().setEnrolled(keyId, remoteEpoch ?? 1);
-
       const keys = await deriveBackupKeys(key);
       const result = await restoreFromRemote(buildBackupSyncDeps(keys));
       if (result.status === 'ok') {
+        // Commit the key and enrollment only after the restore verified
+        // end-to-end — never persist an enrolled state under an unproven key.
+        await saveMasterKey(key);
+        resetBackupKeyCache();
+        useBackupStore.getState().setEnrolled(keyId, remote.epoch ?? 1);
         setRestoredCount(result.pulled);
         setPhase('success');
       } else if (result.status === 'key-out-of-date') {
