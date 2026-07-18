@@ -12,6 +12,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 
+import { useAutoFocusComposer } from '@/client/hooks/ui/useAutoFocusComposer';
+import { usePasteComposer } from '@/client/hooks/ui/usePasteComposer';
+
 import {
   fetchUrlContent,
   hostnameOf,
@@ -113,6 +116,25 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     'idle',
   );
   const busy = phase !== 'idle';
+
+  // Stray typing and pasting land in the source box. No `onAttach`: this
+  // field is meant to receive pasted prose that gets mined for locations,
+  // and it already routes a pasted link through its own URL path.
+  const sourceRef = useRef<HTMLTextAreaElement>(null);
+  const appendSource = useCallback(
+    (text: string) => setSourceText((prev) => prev + text),
+    [],
+  );
+  useAutoFocusComposer({
+    textareaRef: sourceRef,
+    enabled: !busy,
+    append: appendSource,
+  });
+  usePasteComposer({
+    textareaRef: sourceRef,
+    enabled: !busy,
+    append: appendSource,
+  });
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [tileError, setTileError] = useState(false);
@@ -637,6 +659,7 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       )}
       <div className="flex items-end gap-2">
         <textarea
+          ref={sourceRef}
           value={sourceText}
           onChange={(e) => setSourceText(e.target.value)}
           rows={searchMode ? 1 : 2}

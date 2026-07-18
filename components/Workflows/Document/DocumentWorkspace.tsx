@@ -13,7 +13,10 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import type { ExportFormat } from '@/client/hooks/document/exportFormats';
+import { useAutoFocusComposer } from '@/client/hooks/ui/useAutoFocusComposer';
+import { usePasteComposer } from '@/client/hooks/ui/usePasteComposer';
 import { useEditPreview } from '@/client/hooks/workflows/useEditPreview';
+import { usePastedTextChips } from '@/client/hooks/workflows/usePastedTextChips';
 import { useWorkflowStream } from '@/client/hooks/workflows/useWorkflowStream';
 
 import { assessDocument } from '@/client/services/workflows/documentAssessment';
@@ -58,6 +61,7 @@ import {
 import { DropdownPortal } from '@/components/UI/DropdownPortal';
 import { ExportFormatMenu } from '@/components/UI/ExportFormatMenu';
 
+import { PastedTextChips } from '../Shared/PastedTextChips';
 import { AssessmentPanel } from '../Shared/Review/AssessmentPanel';
 import { CriteriaManager } from '../Shared/Review/CriteriaManager';
 import { CriteriaPicker } from '../Shared/Review/CriteriaPicker';
@@ -173,6 +177,36 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const attachedTone = tones.find((tone) => tone.id === state?.toneId);
   const isBusy = isRunning || assessing || uploadingBasis;
 
+  // Stray typing and pasting land in the instruction composer. Unlike the
+  // bulk-paste fields, a wall of text here is almost always material the
+  // instruction refers to rather than the instruction itself, so it is held
+  // beside the composer and folded back in at run time.
+  const instructionRef = useRef<HTMLTextAreaElement>(null);
+  const composerBlocked = isBusy || hasUnresolvedEdits;
+  const {
+    chips,
+    hasChips,
+    attachPastedText,
+    removeChip,
+    clearChips,
+    composeWithChips,
+  } = usePastedTextChips();
+  const appendInstruction = useCallback(
+    (text: string) => setInstruction((prev) => prev + text),
+    [],
+  );
+  useAutoFocusComposer({
+    textareaRef: instructionRef,
+    enabled: !composerBlocked,
+    append: appendInstruction,
+  });
+  usePasteComposer({
+    textareaRef: instructionRef,
+    enabled: !composerBlocked,
+    append: appendInstruction,
+    onAttach: attachPastedText,
+  });
+
   const criteriaItems = useMemo(() => {
     const builtins = availableDocumentCriteria({
       hasSpec: !!attachedSpec,
@@ -255,8 +289,17 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   }, [selectedCriteria, documentCriteria, attachedSpec, attachedTone]);
 
   const handleRun = useCallback(async () => {
-    const trimmed = instruction.trim();
-    if (!trimmed || isBusy || hasUnresolvedEdits || !state) return;
+    // Held pastes are part of the instruction, so a chip alone is enough to
+    // run — "rewrite this" with the material attached is a complete request.
+    if (
+      (!instruction.trim() && !hasChips) ||
+      isBusy ||
+      hasUnresolvedEdits ||
+      !state
+    ) {
+      return;
+    }
+    const trimmed = composeWithChips(instruction);
     clearError(conversationId);
 
     const mode: 'generate' | 'revise' = hasDocument ? 'revise' : 'generate';
@@ -353,6 +396,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             : t('document.revisedSummary'),
       );
       setInstruction('');
+      clearChips();
       setStreamHtml(null);
     } catch {
       // Run store carries the error; restore the pre-run document view.
@@ -360,6 +404,9 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     }
   }, [
     instruction,
+    hasChips,
+    composeWithChips,
+    clearChips,
     isBusy,
     hasUnresolvedEdits,
     state,
@@ -935,8 +982,10 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         </p>
       )}
       {hasDocument && <div className="mb-1.5">{scopeChip}</div>}
+      <PastedTextChips chips={chips} onRemove={removeChip} />
       <div className="flex items-end gap-2">
         <textarea
+          ref={instructionRef}
           value={instruction}
           onChange={(e) => setInstruction(e.target.value)}
           onKeyDown={(e) => {
@@ -974,7 +1023,9 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           <button
             type="button"
             onClick={() => void handleRun()}
-            disabled={!instruction.trim() || isBusy || hasUnresolvedEdits}
+            disabled={
+              (!instruction.trim() && !hasChips) || isBusy || hasUnresolvedEdits
+            }
             className="flex min-h-[36px] shrink-0 items-center gap-1.5 rounded-lg bg-gray-300 px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-400 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated"
           >
             <IconSparkles size={15} aria-hidden />

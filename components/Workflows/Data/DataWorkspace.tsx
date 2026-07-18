@@ -20,6 +20,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useAutoFocusComposer } from '@/client/hooks/ui/useAutoFocusComposer';
+import { usePasteComposer } from '@/client/hooks/ui/usePasteComposer';
+import { usePastedTextChips } from '@/client/hooks/workflows/usePastedTextChips';
 import { useTableImport } from '@/client/hooks/workflows/useTableImport';
 
 import { assessData } from '@/client/services/workflows/data/dataAssessment';
@@ -82,6 +85,7 @@ import {
   ReviewEditStatus,
 } from '@/types/workflow';
 
+import { PastedTextChips } from '../Shared/PastedTextChips';
 import { AssessmentPanel } from '../Shared/Review/AssessmentPanel';
 import { CriteriaPicker } from '../Shared/Review/CriteriaPicker';
 import { WorkflowWorkspaceProps } from '../registry';
@@ -179,6 +183,54 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     [columns, rawRows],
   );
   const hasTable = columns.length > 0;
+
+  // Two composers compete for stray input here, so the open paste box wins:
+  // opening it is an explicit "I am about to paste a table". It takes no
+  // `onAttach` — a pasted CSV must reach the import parser, not become an
+  // attachment. The transform bar gets the attaching behavior instead, since
+  // a wall of text there is material, not an instruction.
+  const pasteRef = useRef<HTMLTextAreaElement>(null);
+  const instructionRef = useRef<HTMLTextAreaElement>(null);
+  const idle = busy === null;
+  const {
+    chips,
+    hasChips,
+    attachPastedText,
+    removeChip,
+    clearChips,
+    composeWithChips,
+  } = usePastedTextChips();
+
+  const appendPaste = useCallback(
+    (text: string) => setPasteText((prev) => prev + text),
+    [],
+  );
+  useAutoFocusComposer({
+    textareaRef: pasteRef,
+    enabled: pasteOpen && idle,
+    append: appendPaste,
+  });
+  usePasteComposer({
+    textareaRef: pasteRef,
+    enabled: pasteOpen && idle,
+    append: appendPaste,
+  });
+
+  const appendInstruction = useCallback(
+    (text: string) => setInstruction((prev) => prev + text),
+    [],
+  );
+  useAutoFocusComposer({
+    textareaRef: instructionRef,
+    enabled: !pasteOpen && hasTable && idle,
+    append: appendInstruction,
+  });
+  usePasteComposer({
+    textareaRef: instructionRef,
+    enabled: !pasteOpen && hasTable && idle,
+    append: appendInstruction,
+    onAttach: attachPastedText,
+  });
   /** Exact stats over the FULL table (prompt ground truth + header popovers). */
   const profiles = useMemo(() => profileTable(columns, rows), [columns, rows]);
   const policy: MissingFieldPolicy =
@@ -646,8 +698,9 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   };
 
   const handleTransform = async () => {
-    const trimmed = instruction.trim();
-    if (!trimmed || !hasTable) return;
+    // Held pastes are part of the instruction, so a chip alone is enough.
+    if ((!instruction.trim() && !hasChips) || !hasTable) return;
+    const trimmed = composeWithChips(instruction);
     const scoped = scope !== 'table';
     setError(null);
     setBusy('transform');
@@ -733,6 +786,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         parsed.data.explanation || t('data.railTransformDone'),
       );
       setInstruction('');
+      clearChips();
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
@@ -1216,6 +1270,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           {pasteOpen && (
             <div className="mt-3">
               <textarea
+                ref={pasteRef}
                 value={pasteText}
                 onChange={(e) => setPasteText(e.target.value)}
                 rows={6}
@@ -1374,6 +1429,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         {pasteOpen && (
           <div className="border-b border-gray-200 p-3 dark:border-gray-700">
             <textarea
+              ref={pasteRef}
               value={pasteText}
               onChange={(e) => setPasteText(e.target.value)}
               rows={4}
@@ -1612,8 +1668,10 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
               </button>
             </div>
           </div>
+          <PastedTextChips chips={chips} onRemove={removeChip} />
           <div className="flex items-end gap-2">
             <textarea
+              ref={instructionRef}
               value={instruction}
               onChange={(e) => setInstruction(e.target.value)}
               onKeyDown={(e) => {
@@ -1630,7 +1688,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             <button
               type="button"
               onClick={() => void handleTransform()}
-              disabled={!instruction.trim() || busy !== null}
+              disabled={(!instruction.trim() && !hasChips) || busy !== null}
               className="flex min-h-[36px] shrink-0 items-center gap-1.5 rounded-lg bg-gray-300 px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-400 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated"
             >
               <IconSparkles size={15} aria-hidden />
