@@ -17,6 +17,7 @@ import { getUserDisplayName } from '@/lib/utils/app/user/displayName';
 
 import { Settings } from '@/types/settings';
 
+import { AutoFetchLinksToggle } from '../AutoFetchLinksToggle';
 import { ContextWindowSlider } from '../ContextWindowSlider';
 import { SystemPrompt } from '../SystemPrompt';
 import { TTSSettingsPanel } from '../TTS/TTSSettingsPanel';
@@ -294,6 +295,11 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
                   (not part of the legacy save/dispatch flow above). */}
               <div className="mt-4">
                 <ContextWindowSlider />
+              </div>
+
+              {/* Pasted-link auto-fetch — store-driven, applies immediately. */}
+              <div className="mt-4">
+                <AutoFetchLinksToggle />
               </div>
             </div>
           )}
