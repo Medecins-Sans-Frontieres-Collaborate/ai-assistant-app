@@ -21,6 +21,7 @@ import toast from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
 
 import { generateConversationTitle } from '@/client/services/titleService';
+import { isLocalModel } from '@/lib/services/models/localModels';
 
 import { ActiveFile } from '@/types/chat';
 import {
@@ -519,9 +520,15 @@ export function useTranscriptionPolling(): void {
           duration: TOAST_DURATION_MS.success,
         });
 
-        // Generate AI title now that transcription is complete
+        // Generate AI title now that transcription is complete. Skipped for
+        // local-runtime conversations, which must never POST their transcript
+        // to a cloud titler — same rule as chatStore.finalizeMessage.
         const conversation = conversations.find((c) => c.id === conversationId);
-        if (conversation && conversation.messages.length > 0) {
+        if (
+          conversation &&
+          conversation.messages.length > 0 &&
+          !isLocalModel(conversation.model)
+        ) {
           generateConversationTitle(
             conversation.messages,
             conversation.model.id,
