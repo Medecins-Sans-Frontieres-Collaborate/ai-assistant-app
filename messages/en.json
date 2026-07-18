@@ -1482,6 +1482,23 @@
       "editAccepted": "Accepted",
       "editRejected": "Rejected",
       "editUnapplicable": "Couldn't locate this passage in the current text — not applied",
+      "undoEdit": "Undo",
+      "clearResolved": "Clear resolved",
+      "clearResolvedHint": "Remove accepted, rejected, and unapplicable edits from this list",
+      "autoClearResolved": "Automatically clear resolved edits",
+      "customCriteria": "Custom criteria",
+      "closeCriteria": "Close custom criteria",
+      "newCriterion": "New criterion",
+      "newCriterionName": "Untitled criterion",
+      "criterionName": "Criterion name",
+      "criterionRubric": "Rubric",
+      "criterionRubricPlaceholder": "Describe what the translation must do to satisfy this criterion, e.g. \"Render all clinical dosage instructions in the imperative, never the infinitive…\"",
+      "criterionRubricHint": "This rubric is given to the AI verbatim alongside the built-in MQM dimensions when assessing a translation.",
+      "criteriaEmpty": "Create custom criteria — e.g. house style, client terminology preferences, or regional conventions — to assess translations beyond the built-in MQM dimensions. Saved on this device and reusable.",
+      "deleteCriterion": "Delete criterion",
+      "manageCriteria": "Custom criteria",
+      "addCriteria": "Add criteria",
+      "noUsableCriteria": "Select at least one built-in criterion, or give your custom criteria a rubric.",
       "editTranslation": "Edit",
       "doneEditing": "Done",
       "pasteTranslationPlaceholder": "Type or paste a translation to work on…",
@@ -1556,6 +1573,10 @@
       "editAccepted": "Accepted",
       "editRejected": "Rejected",
       "editUnapplicable": "Couldn't locate this passage in the current text — not applied",
+      "undoEdit": "Undo",
+      "clearResolved": "Clear resolved",
+      "clearResolvedHint": "Remove accepted, rejected, and unapplicable edits from this list",
+      "autoClearResolved": "Automatically clear resolved edits",
       "editingBlockedPendingEdits": "Resolve or reject the pending suggested edits first",
       "pendingCount": "{count} pending",
       "closeReview": "Close quality review",
@@ -1812,11 +1833,14 @@
     },
     "map": {
       "emptyTitle": "Put your data on a map",
-      "emptyBody": "Paste a sitrep, line list, meeting notes, or any text naming places — or upload a document. Locations are identified and mapped with a confidence rating; you can then export them for ArcGIS or other GIS tools.",
-      "inputPlaceholder": "Paste text naming locations…",
-      "uploadFile": "Upload a file",
+      "emptyBody": "Paste a sitrep, line list, meeting notes, or any text naming places — or paste a link, or attach a document. Locations are identified and mapped with a confidence rating; you can then export them for ArcGIS or other GIS tools.",
+      "inputPlaceholder": "Paste text naming locations, or a link to a web page…",
+      "uploadFile": "Attach a file",
+      "sourceLabel": "Source: {name}",
       "pastedSource": "Pasted text",
       "mapIt": "Map it",
+      "fetchAndMap": "Fetch & map",
+      "fetchingPage": "Fetching page…",
       "finding": "Finding locations…",
       "featureCount": "{count} locations",
       "featureCapExceeded": "The map is limited to {max} locations.",
@@ -1831,6 +1855,7 @@
       "detailsParent": "Part of {parent}",
       "railRequest": "Map the locations in: {source}",
       "railSearchRequest": "Search the web and map the locations for: {query}",
+      "railUrlRequest": "Fetch and map the locations from: {title} ({url})",
       "railDone": "Mapped {count} location(s). Review the low-confidence ones in the list.",
       "searchToggle": "Web search mode",
       "searchToggleHint": "Search the web instead of pasting text; the grounded results are mapped.",
@@ -1882,7 +1907,31 @@
         "jumpTo": "Jump to {label}",
         "slider": "Timeline position",
         "showUndated": "Show undated locations",
-        "activeCount": "{count} active"
+        "activeCount": "{count} active",
+        "jump": {
+          "start": "Start",
+          "yearsLater": "{count, plural, one {1 year later} other {# years later}}",
+          "monthsLater": "{count, plural, one {1 month later} other {# months later}}",
+          "daysLater": "{count, plural, one {1 day later} other {# days later}}",
+          "appears": "{count, plural, one {1 appears} other {# appear}}",
+          "ends": "{count, plural, one {1 ends} other {# end}}",
+          "progress": "Date {index} of {total}"
+        },
+        "precision": {
+          "minute": "To the minute",
+          "hour": "To the hour",
+          "day": "To the day",
+          "month": "Month-level dating",
+          "year": "Year-level dating",
+          "mixed": "(mixed)"
+        },
+        "pacing": {
+          "toggle": "Playback pacing",
+          "cardDuration": "Show each location for",
+          "seconds": "{seconds}s",
+          "maxCards": "Locations shown per date",
+          "hint": "Busier dates are held longer automatically."
+        }
       },
       "granularity": {
         "site": "Site",
@@ -1899,7 +1948,8 @@
         "color": "Color: coordinate confidence (blue high, amber medium, red low)",
         "size": "Dot size: how central the place is to the material",
         "area": "Dashed circle: approximate extent of a district, region, or country",
-        "container": "Faint outline: an area whose contents are mapped individually"
+        "container": "Faint outline: an area whose contents are mapped individually",
+        "precisionHalo": "Soft dashed ring (during a time lapse): the event is only dated to a month or a year, so its exact timing is uncertain"
       }
     },
     "shell": {
@@ -3463,5 +3513,44 @@
       "llamacpp": "llama.cpp is running but is refusing requests from this site. Start llama-server with cross-origin requests allowed, then detect again."
     },
     "privacyNote": "Local models don’t support file attachments, images, web search or connectors — those need our servers. Detection only ever checks this computer."
+  },
+  "urlFetch": {
+    "sourceFallback": "Web page",
+    "fallbackHint": "You can also open the page, copy the text, and paste it here instead.",
+    "shortExtract": "Only a short excerpt was readable — the page may be paywalled or need a sign-in.",
+    "errors": {
+      "invalidUrl": "That doesn't look like a valid web address.",
+      "ssrfBlocked": "That address can't be fetched for security reasons.",
+      "tooManyRedirects": "That link redirected too many times.",
+      "timeout": "The page took too long to respond.",
+      "unreachable": "The page couldn't be reached.",
+      "blocked": "The site refused the request — it may need a sign-in or block automated readers.",
+      "notFound": "That page wasn't found.",
+      "upstream": "The site returned an error.",
+      "pdf": "That link is a PDF. Download it and use the attach button to add it instead.",
+      "nonHtml": "That link isn't a web page we can read.",
+      "tooLarge": "That page is too large to fetch.",
+      "empty": "No readable article text was found on that page.",
+      "generic": "The page couldn't be fetched."
+    },
+    "fetchingFile": "Fetching {host}…",
+    "attachLink": "Attach a link",
+    "attachLinkTitle": "Attach a web page",
+    "attachLinkDescription": "The page is fetched and its readable text is attached to your message.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Fetch & attach",
+    "attachLinkInvalid": "That doesn't look like a web address.",
+    "linkBadge": "From a link",
+    "couldNotRetrieve": "Could not be retrieved",
+    "doc": {
+      "sourceLabel": "Source",
+      "retrievedLabel": "Retrieved",
+      "attemptedLabel": "Attempted",
+      "failureHeading": "Web page could not be retrieved"
+    },
+    "settingsTitle": "Links in messages",
+    "settingsToggle": "Fetch pasted links automatically",
+    "settingsDescription": "When you paste a link on its own, the page is fetched and its text is attached so the assistant can read it. Turn this off to keep pasted links as plain text — you can still attach a page manually from the + menu.",
+    "addLink": "Add a link"
   }
 }
