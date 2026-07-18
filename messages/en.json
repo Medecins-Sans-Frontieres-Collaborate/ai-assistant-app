@@ -782,6 +782,7 @@
     "imageAlt": "Image {number}",
     "download": "Download",
     "downloadResponse": "Download response",
+    "sources": "Sources",
     "openAsDocument": "Open as Document",
     "openInCodeEditor": "Open in Code Editor",
     "failedToOpenCodeEditor": "Failed to open file in code editor. Please try again.",
