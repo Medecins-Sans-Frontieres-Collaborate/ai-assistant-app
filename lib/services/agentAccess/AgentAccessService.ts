@@ -15,11 +15,16 @@
  */
 import {
   StoredAgentAccessRule,
+  StoredPromptAgent,
   createAgentAccessBlobStorage,
+  listAllPromptAgents,
   listAllRules,
   readConfig,
 } from '@/lib/services/agentAccess/accessRulesStore';
-import { AgentAccessConfig } from '@/lib/services/agentAccess/types';
+import {
+  AgentAccessConfig,
+  PromptAgent,
+} from '@/lib/services/agentAccess/types';
 import { canonicalAgentKey } from '@/lib/services/agentAccess/types';
 
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
@@ -65,6 +70,8 @@ export interface AgentAccessSnapshot {
   rules: StoredAgentAccessRule[];
   config: AgentAccessConfig | null;
   configEtag: string | null;
+  /** Prompt-agent personas; empty when the feature is off or never loaded. */
+  promptAgents: PromptAgent[];
   /** Enabled + no last-known-good ruleset (cold start + storage outage). */
   rulesUnavailable: boolean;
   /** Epoch ms of the last successful refresh; null when never loaded. */
@@ -99,6 +106,8 @@ interface LoadedState {
   rulesByAgentName: Map<string, StoredAgentAccessRule[]>;
   config: AgentAccessConfig | null;
   configEtag: string | null;
+  promptAgents: PromptAgent[];
+  promptAgentsById: Map<string, PromptAgent>;
 }
 
 export class AgentAccessService {
@@ -179,9 +188,22 @@ export class AgentAccessService {
       rules: this.state?.rules ?? [],
       config: this.state?.config ?? null,
       configEtag: this.state?.configEtag ?? null,
+      promptAgents: this.state?.promptAgents ?? [],
       rulesUnavailable: this.isEnabled() && this.state === null,
       fetchedAt: this.state ? this.fetchedAt : null,
     };
+  }
+
+  /** Prompt agents from the cached snapshot — callers ensureFresh() first. */
+  getPromptAgents(): PromptAgent[] {
+    if (!this.isEnabled()) return [];
+    return this.state?.promptAgents ?? [];
+  }
+
+  /** Single prompt agent by immutable id; null when unknown (or feature off). */
+  getPromptAgentById(id: string): PromptAgent | null {
+    if (!this.isEnabled()) return null;
+    return this.state?.promptAgentsById.get(id) ?? null;
   }
 
   /**
@@ -280,8 +302,12 @@ export class AgentAccessService {
     const epochAtEntry = this.epoch;
     try {
       const storage = this.getStorage();
+      // Rules, config, and prompt agents load in one transaction: the whole
+      // snapshot is kept/replaced atomically, so a failure in any half keeps
+      // last-known-good for everything (never a mixed-age snapshot).
       const rules = await listAllRules(storage);
       const configResult = await readConfig(storage);
+      const storedPromptAgents = await listAllPromptAgents(storage);
 
       const rulesByKey = new Map<string, StoredAgentAccessRule>();
       const rulesByAgentName = new Map<string, StoredAgentAccessRule[]>();
@@ -301,12 +327,21 @@ export class AgentAccessService {
       // invalidate() landed while this refresh was in flight. Otherwise
       // fetchedAt stays 0 and the next ensureFresh() refetches, so the
       // replica that just wrote never serves pre-write rules for a full TTL.
+      const promptAgents = storedPromptAgents.map(
+        (stored: StoredPromptAgent) => stored.agent,
+      );
+      const promptAgentsById = new Map<string, PromptAgent>(
+        promptAgents.map((agent) => [agent.id, agent]),
+      );
+
       this.state = {
         rules,
         rulesByKey,
         rulesByAgentName,
         config: configResult?.config ?? null,
         configEtag: configResult?.etag ?? null,
+        promptAgents,
+        promptAgentsById,
       };
       this.lastRefreshFailureAt = 0;
       this.fetchedAt = this.epoch === epochAtEntry ? Date.now() : 0;
