@@ -24,11 +24,6 @@ import {
   seriesRepresentative,
   versionRank,
 } from '@/lib/utils/app/modelSeries';
-import { isAgentModel } from '@/lib/utils/shared/chat/usageBackfill';
-import {
-  ASSUMPTIONS_VERSION,
-  getEmissionsTier,
-} from '@/lib/utils/shared/emissions';
 
 import { Conversation } from '@/types/chat';
 import {
@@ -36,7 +31,6 @@ import {
   OpenAIModelID,
   OpenAIModels,
   getModelHosting,
-  getModelSizeClass,
   getModelTier,
 } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
@@ -47,7 +41,6 @@ import { TabNavigation } from '../UI/TabNavigation';
 import { AgentSourceForm } from './AgentSources/AgentSourceForm';
 import { ModelCard } from './ModelCard';
 import { AgentsTab } from './ModelSelect/AgentsTab';
-import { EmissionsTierBadge } from './ModelSelect/EmissionsTierBadge';
 import { HiddenItemsSection } from './ModelSelect/HiddenItemsSection';
 import { ModelDetailsPanel } from './ModelSelect/ModelDetailsPanel';
 import {
@@ -79,10 +72,7 @@ interface ModelSelectProps {
 
 export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
   const t = useTranslations();
-  const { exploreBots, enableClaudeModels, enableBYOModels, showUsageImpact } =
-    useFlags();
-  // Same fail-open gate as the Usage & Impact settings section.
-  const isEmissionsUIEnabled = showUsageImpact !== false;
+  const { exploreBots, enableClaudeModels, enableBYOModels } = useFlags();
   const { selectedConversation, updateConversation, conversations } =
     useConversations();
   const { models, defaultModelId, setDefaultModelId, setDefaultSearchMode } =
@@ -748,7 +738,11 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
 
                   // Informational badges: hosting region (US users, models
                   // with no US instance — still selectable, chat routes to
-                  // the hosting region) and external hosting.
+                  // the hosting region) and external hosting. Emissions tier
+                  // deliberately does NOT appear here: a consolidated series
+                  // row spans variants/versions with different tiers, so one
+                  // badge would be wrong; tiers live on the variant/version
+                  // pickers and the details-panel estimate instead.
                   const badgeFor = (model: OpenAIModel) => {
                     const isExternal =
                       getModelHosting(metaOf(model)) === 'external';
@@ -757,21 +751,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                       !!model.hostedIn?.length &&
                       !model.hostedIn.includes('US');
                     const isReasoning = metaOf(model).modelType === 'reasoning';
-                    // Emissions tier: estimates from size class. Skipped for
-                    // agents (the emissions pipeline doesn't track them).
-                    const emissionsTier =
-                      isEmissionsUIEnabled && !isAgentModel(metaOf(model))
-                        ? getEmissionsTier(
-                            getModelSizeClass(metaOf(model)),
-                            isReasoning,
-                          )
-                        : undefined;
-                    if (
-                      !isExternal &&
-                      !foreignOnly &&
-                      !isReasoning &&
-                      !emissionsTier
-                    ) {
+                    if (!isExternal && !foreignOnly && !isReasoning) {
                       return undefined;
                     }
                     return (
@@ -799,15 +779,6 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                           <ModelStatusBadge
                             label={t('modelSelect.badges.external')}
                             tooltip={t('modelSelect.badges.externalTooltip')}
-                          />
-                        )}
-                        {emissionsTier && (
-                          <EmissionsTierBadge
-                            tier={emissionsTier}
-                            label={t(`emissions.tier.${emissionsTier}`)}
-                            tooltip={t('emissions.tierTooltip', {
-                              version: ASSUMPTIONS_VERSION,
-                            })}
                           />
                         )}
                       </>
