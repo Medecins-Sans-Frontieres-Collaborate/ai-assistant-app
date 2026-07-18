@@ -16,6 +16,7 @@ import { Tooltip } from '@/components/UI/Tooltip';
 
 import { WorkflowModelSelect } from './WorkflowModelSelect';
 import { WorkflowRail } from './WorkflowRail';
+import { WorkflowTabs, useWorkflowTabsEnabled } from './WorkflowTabs';
 import { WORKFLOW_REGISTRY } from './registry';
 
 /**
@@ -31,6 +32,7 @@ export function WorkflowShell() {
   const t = useTranslations('workflows');
   const { selectedConversation } = useConversations();
   const { toggleChatbar } = useUI();
+  const tabsEnabled = useWorkflowTabsEnabled();
   const [railOpen, setRailOpen] = useState(true);
   const [mobileTab, setMobileTab] = useState<'workspace' | 'conversation'>(
     'workspace',
@@ -39,15 +41,22 @@ export function WorkflowShell() {
   const type = selectedConversation?.conversationType;
   if (!selectedConversation || !type) return null;
 
+  const showTabs = tabsEnabled && selectedConversation.messages.length === 0;
+
   const definition = WORKFLOW_REGISTRY[type];
   if (!definition) {
     // Unknown type (e.g. data from a newer version): fail safe with the rail
     // only, so the conversation content stays reachable.
     return (
       <div className="flex h-full w-full flex-col bg-white dark:bg-surface-dark">
-        <p className="border-b border-gray-200 p-4 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-300">
-          {t('shell.unknownType')}
-        </p>
+        <div className="flex items-center gap-3 border-b border-gray-200 p-4 dark:border-gray-700">
+          <p className="min-w-0 flex-1 text-sm text-gray-600 dark:text-gray-300">
+            {t('shell.unknownType')}
+          </p>
+          {/* The workspace can't render, so the tabs are the way out —
+              no tab reads as active, and Chat gets the user unstuck. */}
+          {showTabs && <WorkflowTabs />}
+        </div>
         <WorkflowRail conversation={selectedConversation} />
       </div>
     );
@@ -91,20 +100,32 @@ export function WorkflowShell() {
         >
           <IconMenu2 size={20} aria-hidden />
         </button>
-        <span
-          className="inline-flex items-center gap-1.5 rounded-sm bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-700 dark:bg-surface-dark-elevated dark:text-gray-300"
-          title={t(`types.${definition.meta.i18nKey}.description`)}
-        >
-          <Icon size={14} aria-hidden />
-          {typeLabel}
-        </span>
+        {/* Header order mirrors the chat topbar — model on the leading
+            edge, mode tabs on the trailing edge — so the two surfaces
+            don't read as mirror images of each other. */}
+        <div className="hidden sm:block">
+          <WorkflowModelSelect conversation={selectedConversation} />
+        </div>
+
         <h1 className="min-w-0 flex-1 truncate text-sm font-semibold text-gray-900 dark:text-gray-100">
           {selectedConversation.name || t('shell.untitled')}
         </h1>
 
-        <div className="hidden sm:block">
-          <WorkflowModelSelect conversation={selectedConversation} />
-        </div>
+        {/* While the conversation is still empty its type is changeable, so
+            the tabs stand in for the badge — the active tab already names
+            the workflow, and showing both would say it twice. Once there
+            are messages the type is settled and the static badge returns. */}
+        {showTabs ? (
+          <WorkflowTabs />
+        ) : (
+          <span
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-sm bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-700 dark:bg-surface-dark-elevated dark:text-gray-300"
+            title={t(`types.${definition.meta.i18nKey}.description`)}
+          >
+            <Icon size={14} aria-hidden />
+            {typeLabel}
+          </span>
+        )}
 
         {/* Mobile: pane tabs */}
         <div
