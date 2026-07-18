@@ -1,6 +1,5 @@
 import type {
   BackupManifest,
-  BackupManifestEntry,
   LocalBackupState,
   MergePlan,
 } from '@/lib/services/backup/types';
@@ -15,10 +14,26 @@ import type { Conversation } from '@/types/chat';
  */
 
 /** Parse an ISO timestamp for comparison; missing/invalid sorts oldest. */
-function toMillis(iso: string | undefined): number {
+export function toMillis(iso: string | undefined): number {
   if (!iso) return 0;
   const t = Date.parse(iso);
   return Number.isNaN(t) ? 0 : t;
+}
+
+/**
+ * Keys that poison plain-object records (`record[id]` would surface
+ * Object.prototype members or hit the __proto__ setter). The server rejects
+ * these ids too, but the store is untrusted in this threat model.
+ */
+const FORBIDDEN_IDS = new Set(['__proto__', 'constructor', 'prototype']);
+
+/** Plain record → Map with hostile keys dropped; all lookups go through Maps. */
+function toSafeMap<T>(record: Record<string, T>): Map<string, T> {
+  const map = new Map<string, T>();
+  for (const [key, value] of Object.entries(record)) {
+    if (!FORBIDDEN_IDS.has(key)) map.set(key, value);
+  }
+  return map;
 }
 
 /** Best-known local modification time of a conversation. */
@@ -67,8 +82,11 @@ export function computeLocalChanges(
     return plan;
   }
 
+  const remoteEntries = toSafeMap(remote.conversations);
+  const tombstones = toSafeMap(local.tombstones);
+
   for (const [id, conversation] of byId) {
-    const entry = remote.conversations[id];
+    const entry = remoteEntries.get(id);
     if (!entry) {
       plan.pushIds.push(id);
     } else if (entry.deleted) {
@@ -80,9 +98,9 @@ export function computeLocalChanges(
     }
   }
 
-  for (const id of Object.keys(local.tombstones)) {
+  for (const id of tombstones.keys()) {
     if (byId.has(id)) continue; // live copy overrides a stale tombstone
-    const entry = remote.conversations[id];
+    const entry = remoteEntries.get(id);
     if (entry && !entry.deleted) {
       plan.pushTombstoneIds.push(id);
     }
@@ -110,20 +128,20 @@ export function mergeManifest(
 ): MergePlan {
   const plan = emptyPlan();
   const byId = localConversationsById(local);
+  const remoteEntries = toSafeMap(remote.conversations);
+  const tombstones = toSafeMap(local.tombstones);
 
   const ids = new Set<string>([
     ...byId.keys(),
-    ...Object.keys(local.tombstones),
-    ...Object.keys(remote.conversations),
+    ...tombstones.keys(),
+    ...remoteEntries.keys(),
   ]);
 
   for (const id of ids) {
     const localConversation = byId.get(id);
     // A live local copy overrides a stale local tombstone for the same id.
-    const localTombstoneAt = localConversation
-      ? undefined
-      : local.tombstones[id];
-    const entry = remote.conversations[id] as BackupManifestEntry | undefined;
+    const localTombstoneAt = localConversation ? undefined : tombstones.get(id);
+    const entry = remoteEntries.get(id);
 
     if (!entry) {
       if (localConversation) {
@@ -222,31 +240,32 @@ export function buildNextManifest(args: BuildNextManifestArgs): BackupManifest {
   const { base, plan, uploads, foldersUpload, tombstones, keyId, epoch, now } =
     args;
 
-  const conversations: Record<string, BackupManifestEntry> = {
-    ...(base?.conversations ?? {}),
-  };
+  const entries = toSafeMap(base?.conversations ?? {});
+  const safeTombstones = toSafeMap(tombstones);
 
   for (const id of plan.pushIds) {
     const upload = uploads[id];
     if (!upload) {
       throw new Error(`buildNextManifest: missing upload for pushed id ${id}`);
     }
-    conversations[id] = {
+    entries.set(id, {
       rev: upload.rev,
       updatedAt: upload.updatedAt,
       size: upload.size,
-    };
+    });
   }
 
   for (const id of plan.pushTombstoneIds) {
-    const deletedAt = tombstones[id] ?? now;
-    conversations[id] = {
-      rev: conversations[id]?.rev ?? '',
+    const deletedAt = safeTombstones.get(id) ?? now;
+    // A conversation deleted before its first push has no rev; the server
+    // accepts an empty rev on tombstone entries (never dereferenced).
+    entries.set(id, {
+      rev: entries.get(id)?.rev ?? '',
       updatedAt: deletedAt,
       size: 0,
       deleted: true,
       deletedAt,
-    };
+    });
   }
 
   return {
@@ -257,6 +276,6 @@ export function buildNextManifest(args: BuildNextManifestArgs): BackupManifest {
     updatedAt: now,
     folders:
       plan.foldersAction === 'push' ? foldersUpload : (base?.folders ?? null),
-    conversations,
+    conversations: Object.fromEntries(entries),
   };
 }
