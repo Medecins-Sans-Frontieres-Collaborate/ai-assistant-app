@@ -117,6 +117,12 @@ export interface RemoteApplyPayload {
   folders: import('@/types/folder').FolderInterface[] | null;
   /** Conversations to delete locally because a remote tombstone won. */
   deleteIds: string[];
+  /**
+   * deletedAt per deleteIds entry so appliers can re-check LWW at apply
+   * time — an edit made while the sync was downloading must survive a
+   * tombstone computed from the pre-download snapshot.
+   */
+  deletedAtById?: Record<string, string>;
 }
 
 export interface ManifestFetchResult {
