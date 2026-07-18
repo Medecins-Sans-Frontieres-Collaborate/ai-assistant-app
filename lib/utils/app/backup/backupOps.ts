@@ -13,8 +13,8 @@ import {
   BackupApiError,
   createBackupApiClient,
 } from '@/lib/services/backup/backupApiClient';
-import { conversationUpdatedAt } from '@/lib/services/backup/merge';
-import { newRev } from '@/lib/services/backup/syncEngine';
+import { conversationUpdatedAt, toMillis } from '@/lib/services/backup/merge';
+import { newRev, waitForSyncIdle } from '@/lib/services/backup/syncEngine';
 import type {
   BackupApi,
   BackupManifest,
@@ -68,18 +68,37 @@ export function buildBackupSyncDeps(keys: BackupKeys): SyncDeps {
       conversations,
       folders,
       deleteIds,
+      deletedAtById,
     }: RemoteApplyPayload) => {
       const store = useConversationStore.getState();
       if (conversations.length > 0 || deleteIds.length > 0) {
-        const deletes = new Set(deleteIds);
+        const localById = new Map(store.conversations.map((c) => [c.id, c]));
+        // Re-check LWW against the CURRENT store — an edit made while the
+        // sync was downloading must survive the pre-download snapshot's
+        // plan; the kept copy re-pushes on the next debounce.
+        const deletes = new Set(
+          deleteIds.filter((id) => {
+            const local = localById.get(id);
+            if (!local) return true;
+            const deletedAt = deletedAtById?.[id];
+            return (
+              deletedAt === undefined ||
+              toMillis(deletedAt) >= toMillis(conversationUpdatedAt(local))
+            );
+          }),
+        );
         const pulledById = new Map(conversations.map((c) => [c.id, c]));
         // Replace in place, drop remote-won deletions, prepend remote-new.
         const merged = store.conversations
           .filter((c) => !deletes.has(c.id))
           .map((c) => {
             const pulled = pulledById.get(c.id);
-            if (pulled) pulledById.delete(c.id);
-            return pulled ?? c;
+            if (!pulled) return c;
+            pulledById.delete(c.id);
+            return toMillis(conversationUpdatedAt(c)) >
+              toMillis(conversationUpdatedAt(pulled))
+              ? c
+              : pulled;
           });
         store.setConversations([...pulledById.values(), ...merged]);
         if (
@@ -134,6 +153,9 @@ export async function pushFullBackup(
   keys: BackupKeys,
   options: PushFullBackupOptions = {},
 ): Promise<PushFullBackupResult> {
+  // Never interleave a full-corpus rewrite with a debounced incremental sync
+  // from this device — wait for the engine to go idle first.
+  await waitForSyncIdle();
   const api = createBackupApiClient();
   let fetched = await api.getManifest();
 
