@@ -3553,5 +3553,21 @@
     "settingsToggle": "Fetch pasted links automatically",
     "settingsDescription": "When you paste a link on its own, the page is fetched and its text is attached so the assistant can read it. Turn this off to keep pasted links as plain text — you can still attach a page manually from the + menu.",
     "addLink": "Add a link"
+  },
+  "pastedText": {
+    "fallbackName": "Pasted text",
+    "charCount": "{count, number} chars",
+    "removeChip": "Remove pasted text “{name}”",
+    "blockLabel": "Pasted text: {name}",
+    "doc": {
+      "heading": "Pasted text",
+      "pastedLabel": "Pasted"
+    },
+    "settingsTitle": "Large pastes",
+    "settingsToggle": "Turn a large paste into an attachment",
+    "settingsDescription": "Pasting more text than the limit below attaches it as a file instead of filling the message box. The text is used exactly as pasted — nothing is fetched or changed.",
+    "settingsThresholdLabel": "Attach pastes longer than",
+    "settingsThresholdUnit": "characters",
+    "settingsThresholdHint": "Between {min, number} and {max, number} characters."
   }
 }
