@@ -169,6 +169,8 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       mcpPendingToolCalls,
       mcpLoopRound,
       extraction,
+      conversationSummary,
+      memories,
     } = body;
 
     if (mcpServers?.length) {
@@ -225,6 +227,8 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       // Structured extraction payload (optional). Up to 3 recipes; the
       // ExtractionEnricher composes the JSON-schema response format.
       extraction,
+      conversationSummary,
+      memories,
     };
   } catch (error) {
     if (error instanceof PipelineError) {
@@ -277,6 +281,8 @@ export const createSystemPromptMiddleware = (
 ): Partial<ChatContext> => {
   const options: SystemPromptOptions = {
     userPrompt: context.rawUserPrompt,
+    conversationSummary: context.conversationSummary,
+    memories: context.memories,
   };
 
   // Add user info if enabled and user is available
