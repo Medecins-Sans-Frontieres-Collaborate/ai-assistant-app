@@ -7,6 +7,8 @@ import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
+import { useMcpOauthAvailability } from '@/client/hooks/settings/useMcpOauthAvailability';
+
 import { CuratedConnectorRow } from '../Connectors/CuratedConnectorRow';
 import { McpServerForm } from '../Connectors/McpServerForm';
 import { McpServerRow } from '../Connectors/McpServerRow';
@@ -40,6 +42,9 @@ export const ConnectorsSection: FC = () => {
   // codebase's usual `!== false` convention.
   const { mcpArbitraryServers } = useFlags();
   const arbitraryFlagOn = mcpArbitraryServers === true;
+
+  // Fetched once here rather than per row, so N connectors share one request.
+  const { isOauthAppAvailable } = useMcpOauthAvailability();
 
   const [showForm, setShowForm] = useState(false);
   const [editingServer, setEditingServer] = useState<
@@ -111,6 +116,7 @@ export const ConnectorsSection: FC = () => {
             key={entry.key}
             entry={entry}
             config={mcpServers.find((s) => s.catalogKey === entry.key)}
+            oauthAppAvailable={isOauthAppAvailable(entry.key)}
           />
         ))}
       </div>
