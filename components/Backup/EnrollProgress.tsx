@@ -53,35 +53,46 @@ export function EnrollProgress({
     onSuccessRef.current = onSuccess;
   });
 
-  const start = React.useCallback(async (mode_: EnrollProgressMode) => {
-    setPhase('running');
-    try {
-      const pushed = await runRef.current();
-      setPushedCount(pushed);
-      if (mode_ === 'rotate') {
-        // Rotation continues straight into the re-save ceremony — no
-        // intermediate success screen.
-        onSuccessRef.current(pushed);
-      } else {
-        setPhase('success');
-      }
-    } catch {
-      setPhase('error');
+  // Reset for the next open — state-adjust during render, not an effect.
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
+  if (isOpen !== prevIsOpen) {
+    setPrevIsOpen(isOpen);
+    startedRef.current = false;
+    if (isOpen) {
+      setPhase('running');
+      setPushedCount(0);
     }
+  }
+
+  // No synchronous setState here: the run's outcome lands via promise
+  // callbacks only (react-hooks/set-state-in-effect).
+  const start = React.useCallback((mode_: EnrollProgressMode) => {
+    Promise.resolve()
+      .then(() => runRef.current())
+      .then(
+        (pushed) => {
+          setPushedCount(pushed);
+          if (mode_ === 'rotate') {
+            // Rotation continues straight into the re-save ceremony — no
+            // intermediate success screen.
+            onSuccessRef.current(pushed);
+          } else {
+            setPhase('success');
+          }
+        },
+        () => setPhase('error'),
+      );
   }, []);
 
   useEffect(() => {
-    if (!isOpen) {
-      startedRef.current = false;
-      return;
-    }
-    if (startedRef.current) return;
+    if (!isOpen || startedRef.current) return;
     startedRef.current = true;
-    void start(mode);
+    start(mode);
   }, [isOpen, mode, start]);
 
   const retry = () => {
-    void start(mode);
+    setPhase('running');
+    start(mode);
   };
 
   return (
