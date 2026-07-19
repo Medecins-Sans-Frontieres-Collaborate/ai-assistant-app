@@ -2091,7 +2091,9 @@
     "pin": "Καρφίτσωμα στην κορυφή",
     "unpin": "Αφαίρεση από τα καρφιτσωμένα",
     "moveToMore": "Μετακίνηση στα Περισσότερα",
-    "moveOutOfMore": "Εμφάνιση στο μενού"
+    "moveOutOfMore": "Εμφάνιση στο μενού",
+    "showSources": "Εμφάνιση άλλων πηγών",
+    "hideSources": "Απόκρυψη άλλων πηγών"
   },
   "transcription": {
     "transcribesOnSend": "Μεταγράφεται κατά την αποστολή",
@@ -2762,7 +2764,16 @@
       "undoEdit": "Αναίρεση",
       "clearResolved": "Εκκαθάριση επιλυμένων",
       "clearResolvedHint": "Αφαίρεση αποδεκτών, απορριφθέντων και μη εφαρμόσιμων διορθώσεων από αυτή τη λίστα",
-      "autoClearResolved": "Αυτόματη εκκαθάριση επιλυμένων διορθώσεων"
+      "autoClearResolved": "Αυτόματη εκκαθάριση επιλυμένων διορθώσεων",
+      "import": "Εισαγωγή",
+      "importReplaceTitle": "Αντικατάσταση εγγράφου;",
+      "importReplaceBody": "Η εισαγωγή του {name} θα αντικαταστήσει το τρέχον έγγραφο. Οι αναφορές, η προδιαγραφή και ο τόνος σας διατηρούνται.",
+      "importReplaceConfirm": "Αντικατάσταση",
+      "editorMode": "Λειτουργία επεξεργαστή",
+      "editorModeRich": "Εμπλουτισμένο κείμενο",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Επιλύστε τις προτεινόμενες αλλαγές πριν αλλάξετε λειτουργία επεξεργαστή."
     },
     "data": {
       "emptyTitle": "Εισαγωγή δεδομένων για ανάλυση",
@@ -2961,7 +2972,9 @@
       "schemaFormulaArityError": "Λανθασμένος αριθμός ορισμάτων για τη {fn}",
       "schemaFormulaCycleError": "Κυκλική αναφορά μεταξύ τύπων",
       "derivedColumnTitle": "Υπολογισμένο: {formula}",
-      "derivedFrom": "Υπολογισμένο από {formula}"
+      "derivedFrom": "Υπολογισμένο από {formula}",
+      "takePhoto": "Λήψη φωτογραφίας",
+      "takePhotoHint": "Χρησιμοποιήστε την κάμερά σας για να φωτογραφίσετε μια φόρμα ή έναν πίνακα — τα περιεχόμενά του μετατρέπονται σε δομημένα δεδομένα που μπορείτε να ελέγξετε με τη φωτογραφία"
     },
     "map": {
       "emptyTitle": "Τοποθετήστε τα δεδομένα σας σε έναν χάρτη",
@@ -3124,6 +3137,22 @@
       "asana": {
         "name": "Asana",
         "description": "Εύρεση, δημιουργία και ενημέρωση εργασιών και έργων."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Αναζητήστε δημοσιευμένες πηγές δεδομένων, workbook και Pulse metrics."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Βρείτε και ενημερώστε εγγραφές στα αντικείμενα του Salesforce σας."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Συντάξτε, προγραμματίστε και δημοσιεύστε αναρτήσεις στα social media."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Ελέγξτε και απαντήστε σε συνομιλίες από το social inbox."
       }
     },
     "connect": "Σύνδεση",
@@ -3184,7 +3213,19 @@
       "missingState": "Δεν υπάρχει κάτι για εξουσιοδότηση",
       "close": "Μπορείτε να κλείσετε αυτό το παράθυρο και να επιστρέψετε στην εφαρμογή.",
       "closeButton": "Κλείσιμο παραθύρου"
-    }
+    },
+    "oauthNoAppConfigured": "Η σύνδεση με το {name} δεν έχει ρυθμιστεί σε αυτή την εγκατάσταση. Συνδεθείτε καταχωρώντας τη δική σας OAuth εφαρμογή.",
+    "adminConnectorsTitle": "Από τον οργανισμό σας",
+    "adminConnectorsDescription": "Συνδέσεις που έχουν ρυθμίσει οι διαχειριστές σας. Αυτές που βλέπετε εξαρτώνται από τα δικαιώματά σας.",
+    "managedByOrg": "Διαχειρίζεται ο οργανισμός σας",
+    "connectorOauthNotConfigured": "Η ρύθμιση σύνδεσης δεν έχει ολοκληρωθεί για αυτόν τον connector. Επικοινωνήστε με τον διαχειριστή σας.",
+    "yourConnectorsTitle": "Οι συνδέσεις σας",
+    "addTitle": "Προσθήκη connector",
+    "addDescription": "Επιλέξτε ένα εργαλείο για σύνδεση. Θα ρυθμίσετε την πρόσβαση μετά την επιλογή.",
+    "add": "Προσθήκη",
+    "filterLabel": "Φίλτρο connectors",
+    "filterPlaceholder": "Αναζήτηση connectors",
+    "noMatches": "Κανένας connector δεν ταιριάζει με το “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Σύνδεση πηγής μοντέλων",
@@ -3502,7 +3543,39 @@
     "promptAgentCreateSuccess": "Ο prompt agent δημιουργήθηκε.",
     "promptAgentSaveSuccess": "Ο prompt agent αποθηκεύτηκε.",
     "promptAgentDeleteSuccess": "Ο prompt agent διαγράφηκε.",
-    "promptAgentsUnavailableWarning": "Οι prompt agents δεν ήταν δυνατή η φόρτωσή τους από την αποθήκευση. Δεν μπορούν να επεξεργαστούν αυτήν τη στιγμή."
+    "promptAgentsUnavailableWarning": "Οι prompt agents δεν ήταν δυνατή η φόρτωσή τους από την αποθήκευση. Δεν μπορούν να επεξεργαστούν αυτήν τη στιγμή.",
+    "agentsTab": "Αντιπρόσωποι",
+    "connectorsTab": "Connectors",
+    "addConnector": "Προσθήκη connector",
+    "noConnectors": "Δεν υπάρχουν connectors ακόμα.",
+    "connectorsUnavailableWarning": "Δεν ήταν δυνατή η πρόσβαση στο κατάστημα connectors, επομένως η λίστα μπορεί να είναι ελλιπής. Μη δημιουργήσετε αντικατάσταση μέχρι να φορτώσει.",
+    "editAccess": "Επεξεργασία πρόσβασης",
+    "deleteConnector": "Διαγραφή",
+    "deleteConnectorConfirm": "Διαγραφή αυτού του connector; Όσοι το χρησιμοποιούν θα χάσουν άμεσα την πρόσβαση.",
+    "confirmDeleteConnector": "Διαγραφή connector",
+    "connectorSaveSuccess": "Ο connector αποθηκεύτηκε.",
+    "connectorCreateSuccess": "Ο connector δημιουργήθηκε.",
+    "connectorDeleteSuccess": "Ο connector διαγράφηκε.",
+    "editConnectorTitle": "Επεξεργασία connector",
+    "newConnectorTitle": "Νέος connector",
+    "connectorPresetLabel": "Ξεκινήστε από ένα πρότυπο",
+    "connectorPresetNone": "Ξεκινήστε από την αρχή",
+    "connectorNameLabel": "Όνομα",
+    "connectorDescriptionLabel": "Περιγραφή",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "Αντικαταστήστε το {placeholder} στο URL με τη δική σας τιμή πριν την αποθήκευση.",
+    "connectorTransportLabel": "Μεταφορά",
+    "connectorAuthLabel": "Ταυτοποίηση",
+    "connectorAuthNone": "Καμία",
+    "connectorAuthBearer": "Token (κάθε χρήστης παρέχει το δικό του)",
+    "connectorAuthOauth": "Σύνδεση με OAuth",
+    "connectorSealingUnavailable": "Το OAuth δεν είναι διαθέσιμο: η παρούσα εγκατάσταση δεν έχει ορισμένο AUTH_SECRET για την κρυπτογράφηση των client secrets.",
+    "connectorTokenHelpLabel": "Σύνδεσμος με οδηγίες για token (προαιρετικό)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Ένα secret έχει αποθηκευτεί. Αφήστε κενό για να το διατηρήσετε ή εισαγάγετε νέο για να το αντικαταστήσετε.",
+    "connectorClientSecretHint": "Κρυπτογραφείται πριν την αποθήκευση και δεν εμφανίζεται ξανά.",
+    "connectorScopesLabel": "Scopes (διαχωρισμένα με κενό, προαιρετικά)"
   },
   "localModels": {
     "title": "Τοπικά μοντέλα",
@@ -3561,5 +3634,41 @@
     "settingsToggle": "Αυτόματη ανάκτηση επικολλημένων συνδέσμων",
     "settingsDescription": "Όταν επικολλάτε μόνο έναν σύνδεσμο, η σελίδα αντλείται και το κείμενό της επισυνάπτεται ώστε ο βοηθός να το διαβάσει. Απενεργοποιήστε το για να παραμένουν οι σύνδεσμοι ως απλό κείμενο — μπορείτε πάντα να επισυνάψετε σελίδα χειροκίνητα από το μενού +.",
     "addLink": "Προσθήκη συνδέσμου"
+  },
+  "cameraAccessError": "Δεν ήταν δυνατή η πρόσβαση στην κάμερα. Ελέγξτε τα δικαιώματα της κάμερας και δοκιμάστε ξανά.",
+  "cameraUnnamedDevice": "Κάμερα",
+  "pastedText": {
+    "fallbackName": "Επικολλημένο κείμενο",
+    "charCount": "{count, number} χαρακτήρες",
+    "removeChip": "Αφαίρεση επικολλημένου κειμένου «{name}»",
+    "blockLabel": "Επικολλημένο κείμενο: {name}",
+    "doc": {
+      "heading": "Επικολλημένο κείμενο",
+      "pastedLabel": "Επικολλημένο"
+    },
+    "settingsTitle": "Μεγάλες επικολλήσεις",
+    "settingsToggle": "Μετατρέψτε μια μεγάλη επικόλληση σε συνημμένο",
+    "settingsDescription": "Εάν επικολλήσετε περισσότερο κείμενο από το παρακάτω όριο, επισυνάπτεται ως αρχείο αντί να συμπληρώνει το πλαίσιο μηνύματος. Το κείμενο χρησιμοποιείται ακριβώς όπως επικολλήθηκε — δεν αναζητείται ή αλλάζει τίποτα.",
+    "settingsThresholdLabel": "Επισύναψη επικολλήσεων μεγαλύτερων από",
+    "settingsThresholdUnit": "χαρακτήρες",
+    "settingsThresholdHint": "Μεταξύ {min, number} και {max, number} χαρακτήρων."
+  },
+  "structures": {
+    "section": "Δομές",
+    "sectionSubtitle": "Αποθηκευμένοι ορισμοί πεδίων. Χρησιμοποιήστε έναν ως συνταγή εξαγωγής ή ως αρχικό σχήμα για έναν πίνακα ροής δεδομένων.",
+    "loadFromStructure": "Φόρτωση δομής",
+    "loadFromStructureTitle": "Αντικαταστήστε αυτές τις στήλες με μια αποθηκευμένη δομή",
+    "pickerEmpty": "Δεν υπάρχουν αποθηκευμένες δομές ακόμη.",
+    "pickerTitle": "Φόρτωση αποθηκευμένης δομής",
+    "saveAsStructure": "Αποθήκευση ως δομή",
+    "saveAsStructureTitle": "Αποθήκευση αυτών των στηλών στη βιβλιοθήκη δομών σας",
+    "savedToast": "Η δομή «{name}» αποθηκεύτηκε",
+    "namePlaceholder": "Όνομα δομής",
+    "fieldCount": "{count} πεδία",
+    "fieldCountOne": "1 πεδίο",
+    "downgradedNotice": "{count} πεδίο(α) απλοποιήθηκαν σε κείμενο — οι πίνακες κρατούν μία τιμή ανά κελί: {names}",
+    "truncatedNotice": "{count} πεδίο(α) απορρίφθηκαν — το όριο στηλών για τον πίνακα είναι {max}: {names}",
+    "skippedDerivedNotice": "{count} υπολογιζόμενη(ες) στήλη(ες) δεν αποθηκεύτηκαν — οι τύποι αναφέρονται σε στήλες αυτού του πίνακα: {names}",
+    "loadReplacesColumns": "Αυτό αντικαθιστά τις τρέχουσες στήλες. Οι υπάρχουσες γραμμές διατηρούν τιμές των στηλών με το ίδιο όνομα."
   }
 }

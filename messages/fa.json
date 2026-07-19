@@ -2116,7 +2116,9 @@
     "pin": "پین به بالا",
     "unpin": "برداشتن پین",
     "moveToMore": "انتقال به سایر",
-    "moveOutOfMore": "نمایش در منو"
+    "moveOutOfMore": "نمایش در منو",
+    "showSources": "نمایش منابع دیگر",
+    "hideSources": "مخفی کردن منابع دیگر"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "دستورالعمل‌های شخصی خود را برای سفارشی‌سازی نحوه پاسخ‌دهی هوش مصنوعی اضافه کنید. این دستورالعمل‌ها همراه با راهنماهای اصلی رفتاری برای تضمین پاسخ‌های مفید، دقیق و ایمن ترکیب می‌شوند.",
   "Tip: Type \"/\" to select from saved prompt templates_": "نکته: با وارد کردن \"/\" می‌توانید از قالب‌های ذخیره‌شده راهنما انتخاب کنید.",
@@ -2778,7 +2780,16 @@
       "undoEdit": "بازگرداندن",
       "clearResolved": "پاک‌سازی موارد حل‌شده",
       "clearResolvedHint": "ویرایش‌های پذیرفته‌شده، رد شده یا غیرقابل اعمال را از این لیست حذف کنید",
-      "autoClearResolved": "پاک‌سازی خودکار ویرایش‌های حل‌شده"
+      "autoClearResolved": "پاک‌سازی خودکار ویرایش‌های حل‌شده",
+      "import": "وارد کردن",
+      "importReplaceTitle": "جایگزینی سند؟",
+      "importReplaceBody": "وارد کردن {name} سند فعلی را جایگزین می‌کند. مراجع، مشخصات و لحن شما حفظ می‌شود.",
+      "importReplaceConfirm": "جایگزین کن",
+      "editorMode": "حالت ویرایشگر",
+      "editorModeRich": "متن غنی",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "پیشنهادهای ویرایش را قبل از تغییر حالت ویرایشگر برطرف کنید."
     },
     "data": {
       "emptyTitle": "وارد کردن داده برای تحلیل",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "تعداد نادرست آرگومان‌ها برای {fn}",
       "schemaFormulaCycleError": "ارجاع حلقوی بین فرمول‌ها",
       "derivedColumnTitle": "محاسبه‌شده: {formula}",
-      "derivedFrom": "محاسبه‌شده از {formula}"
+      "derivedFrom": "محاسبه‌شده از {formula}",
+      "takePhoto": "عکس گرفتن",
+      "takePhotoHint": "برای عکس گرفتن از فرم یا جدول از دوربین خود استفاده کنید — محتوای آن به داده ساخت‌یافته تبدیل شده و می‌توانید آن را با عکس مقایسه کنید"
     },
     "map": {
       "emptyTitle": "داده‌های خود را روی نقشه قرار دهید",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "یافتن، ایجاد و به‌روزرسانی وظایف و پروژه‌ها."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "داده‌های منتشر شده، ورک‌بوک‌ها و معیارهای Pulse را جستجو کنید."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "سوابق موجود در اشیا Salesforce خود را جستجو و به‌روزرسانی کنید."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "پست‌های شبکه‌های اجتماعی را پیش‌نویس، زمان‌بندی و منتشر کنید."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "مکالمات صندوق ورودی اجتماعی را بررسی و به آن‌ها پاسخ دهید."
       }
     },
     "connect": "اتصال",
@@ -3200,7 +3229,19 @@
       "missingState": "موردی برای تأیید وجود ندارد",
       "close": "می‌توانید این پنجره را ببندید و به اپلیکیشن بازگردید.",
       "closeButton": "بستن پنجره"
-    }
+    },
+    "oauthNoAppConfigured": "ورود با {name} در این استقرار فعال نشده است. با ثبت برنامه OAuth خود متصل شوید.",
+    "adminConnectorsTitle": "از طرف سازمان شما",
+    "adminConnectorsDescription": "اتصالاتی که مدیران شما تنظیم کرده‌اند. اتصالات قابل مشاهده براساس سطح دسترسی شما متفاوت است.",
+    "managedByOrg": "مدیریت شده توسط سازمان شما",
+    "connectorOauthNotConfigured": "فرایند ورود برای این اتصال کامل نشده است. با مدیر خود تماس بگیرید.",
+    "yourConnectorsTitle": "اتصالات شما",
+    "addTitle": "افزودن اتصال‌دهنده",
+    "addDescription": "یک ابزار برای اتصال انتخاب کنید. پس از انتخاب، دسترسی را تنظیم خواهید کرد.",
+    "add": "افزودن",
+    "filterLabel": "فیلتر کردن اتصالات",
+    "filterPlaceholder": "جستجو در اتصالات",
+    "noMatches": "هیچ اتصال‌دهنده‌ای با «{query}» یافت نشد."
   },
   "modelSources": {
     "connectButtonShort": "اتصال به منبع مدل",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "عامل پرامپت ایجاد شد.",
     "promptAgentSaveSuccess": "عامل پرامپت ذخیره شد.",
     "promptAgentDeleteSuccess": "عامل پرامپت حذف شد.",
-    "promptAgentsUnavailableWarning": "امکان بارگذاری عامل‌های پرامپت از حافظه وجود ندارد. در حال حاضر نمی‌توان آن‌ها را ویرایش کرد."
+    "promptAgentsUnavailableWarning": "امکان بارگذاری عامل‌های پرامپت از حافظه وجود ندارد. در حال حاضر نمی‌توان آن‌ها را ویرایش کرد.",
+    "agentsTab": "نماینده‌ها",
+    "connectorsTab": "اتصالات",
+    "addConnector": "افزودن اتصال‌دهنده",
+    "noConnectors": "هنوز هیچ اتصال‌دهنده‌ای وجود ندارد.",
+    "connectorsUnavailableWarning": "امکان دسترسی به فروشگاه اتصال‌دهنده وجود نداشت؛ پس این فهرست ممکن است کامل نباشد. تا بارگذاری کامل، اتصال جدید ایجاد نکنید.",
+    "editAccess": "ویرایش دسترسی",
+    "deleteConnector": "حذف",
+    "deleteConnectorConfirm": "این اتصال‌دهنده حذف شود؟ با حذف، تمام کاربران دسترسی خود را فوراً از دست می‌دهند.",
+    "confirmDeleteConnector": "حذف اتصال‌دهنده",
+    "connectorSaveSuccess": "اتصال‌دهنده ذخیره شد.",
+    "connectorCreateSuccess": "اتصال‌دهنده ایجاد شد.",
+    "connectorDeleteSuccess": "اتصال‌دهنده حذف شد.",
+    "editConnectorTitle": "ویرایش اتصال‌دهنده",
+    "newConnectorTitle": "اتصال‌دهنده جدید",
+    "connectorPresetLabel": "شروع از یک قالب",
+    "connectorPresetNone": "شروع از ابتدا",
+    "connectorNameLabel": "نام",
+    "connectorDescriptionLabel": "توضیحات",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "قبل از ذخیره، مقدار {placeholder} را در URL با مقدار خود جایگزین کنید.",
+    "connectorTransportLabel": "انتقال",
+    "connectorAuthLabel": "احراز هویت",
+    "connectorAuthNone": "هیچ‌کدام",
+    "connectorAuthBearer": "توکن (هر کاربر توکن خود را ارائه می‌دهد)",
+    "connectorAuthOauth": "ورود با OAuth",
+    "connectorSealingUnavailable": "OAuth در دسترس نیست: این استقرار AUTH_SECRET برای رمزنگاری client secrets تنظیم نشده است.",
+    "connectorTokenHelpLabel": "لینک راهنمای توکن (اختیاری)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "یک secret ذخیره شده است. برای حفظ آن خالی بگذارید یا یک مورد جدید وارد کنید تا جایگزین شود.",
+    "connectorClientSecretHint": "قبل از ذخیره رمزنگاری می‌شود و دیگر نمایش داده نخواهد شد.",
+    "connectorScopesLabel": "Scopeها (با فاصله، اختیاری)"
   },
   "localModels": {
     "title": "مدل‌های محلی",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "بارگیری خودکار لینک‌های جای‌گذاری شده",
     "settingsDescription": "وقتی لینکی را به‌تنهایی جای‌گذاری می‌کنید، صفحه بارگیری شده و متن آن پیوست می‌شود تا دستیار بتواند آن را بخواند. برای نگه داشتن لینک‌ها به صورت متنی ساده این گزینه را خاموش کنید — همچنان می‌توانید صفحه را به صورت دستی از منوی + پیوست کنید.",
     "addLink": "افزودن لینک"
+  },
+  "cameraAccessError": "امکان دسترسی به دوربین وجود ندارد. مجوزهای دوربین خود را بررسی کرده و دوباره تلاش کنید.",
+  "cameraUnnamedDevice": "دوربین",
+  "pastedText": {
+    "fallbackName": "متن چسبانده‌شده",
+    "charCount": "{count, number} کاراکتر",
+    "removeChip": "حذف متن چسبانده‌شده «{name}»",
+    "blockLabel": "متن چسبانده‌شده: {name}",
+    "doc": {
+      "heading": "متن چسبانده‌شده",
+      "pastedLabel": "چسبانده‌شده"
+    },
+    "settingsTitle": "چسباندن‌های بزرگ",
+    "settingsToggle": "تبدیل یک متن چسبانده‌شده بزرگ به پیوست",
+    "settingsDescription": "اگر متنی بیشتر از حد زیر چسبانده شود، به‌جای قرارگیری درون پیام به‌صورت فایل پیوست می‌شود. متن دقیقاً مطابق چسباندن استفاده می‌شود — چیزی دریافت یا تغییر داده نمی‌شود.",
+    "settingsThresholdLabel": "پیوست کردن چسبانده‌ها بیش از",
+    "settingsThresholdUnit": "کاراکتر",
+    "settingsThresholdHint": "بین {min, number} تا {max, number} کاراکتر."
+  },
+  "structures": {
+    "section": "ساختارها",
+    "sectionSubtitle": "تعریف‌های فیلد ذخیره‌شده. یکی را به‌عنوان دستور استخراج یا نقطه شروع طرح جدول انتخاب داده‌ها استفاده کنید.",
+    "loadFromStructure": "بارگذاری ساختار",
+    "loadFromStructureTitle": "جایگزینی این ستون‌ها با یک ساختار ذخیره‌شده",
+    "pickerEmpty": "هنوز ساختاری ذخیره نشده است.",
+    "pickerTitle": "بارگذاری یک ساختار ذخیره‌شده",
+    "saveAsStructure": "ذخیره به‌عنوان ساختار",
+    "saveAsStructureTitle": "ذخیره این ستون‌ها در کتابخانه ساختارهایتان",
+    "savedToast": "ساختار «{name}» ذخیره شد",
+    "namePlaceholder": "نام ساختار",
+    "fieldCount": "{count} فیلد",
+    "fieldCountOne": "۱ فیلد",
+    "downgradedNotice": "{count} فیلد ساده‌سازی شد به متن — جدول‌ها فقط یک مقدار در هر سلول دارند: {names}",
+    "truncatedNotice": "{count} فیلد حذف شد — محدودیت جدول {max} ستون است: {names}",
+    "skippedDerivedNotice": "{count} ستون محاسباتی ذخیره نشد — فرمول‌ها به ستون‌های این جدول ارجاع می‌کنند: {names}",
+    "loadReplacesColumns": "این ستون‌های فعلی را جایگزین می‌کند. ردیف‌های موجود، فقط مقادیری را که با نام ستون مطابقت دارند حفظ می‌کنند."
   }
 }

@@ -2116,7 +2116,9 @@
     "pin": "Fäst längst upp",
     "unpin": "Ta bort fästning",
     "moveToMore": "Flytta till Fler",
-    "moveOutOfMore": "Visa i menyn"
+    "moveOutOfMore": "Visa i menyn",
+    "showSources": "Visa andra källor",
+    "hideSources": "Dölj andra källor"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Lägg till dina egna instruktioner för att anpassa hur AI:n svarar. Dessa kombineras med grundläggande riktlinjer som säkerställer hjälpsamma, korrekta och säkra svar.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tips: Skriv \"/\" för att välja bland sparade promptmallar.",
@@ -2778,7 +2780,16 @@
       "undoEdit": "Ångra",
       "clearResolved": "Rensa åtgärdade",
       "clearResolvedHint": "Ta bort godkända, avvisade och irrelevanta ändringar från listan",
-      "autoClearResolved": "Rensa åtgärdade ändringar automatiskt"
+      "autoClearResolved": "Rensa åtgärdade ändringar automatiskt",
+      "import": "Importera",
+      "importReplaceTitle": "Byt ut dokument?",
+      "importReplaceBody": "Att importera {name} kommer att ersätta det aktuella dokumentet. Dina referenser, specifikation och ton behålls.",
+      "importReplaceConfirm": "Byt ut",
+      "editorMode": "Redigeringsläge",
+      "editorModeRich": "Rich text",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Lös de föreslagna ändringarna innan du byter redigeringsläge."
     },
     "data": {
       "emptyTitle": "Importera data för analys",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "Fel antal argument till {fn}",
       "schemaFormulaCycleError": "Cirkulär referens mellan formler",
       "derivedColumnTitle": "Beräknad: {formula}",
-      "derivedFrom": "Beräknad från {formula}"
+      "derivedFrom": "Beräknad från {formula}",
+      "takePhoto": "Ta foto",
+      "takePhotoHint": "Använd din kamera för att fotografera ett formulär eller en tabell – innehållet blir strukturerad data som du kan kontrollera mot fotot"
     },
     "map": {
       "emptyTitle": "Visa din data på en karta",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "Hitta, skapa och uppdatera uppgifter och projekt."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Sök i publicerade datakällor, arbetsböcker och Pulse-mått."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Slå upp och uppdatera poster i dina Salesforce-objekt."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Skapa, schemalägg och publicera inlägg på sociala medier."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Granska och svara på konversationer i sociala inkorgen."
       }
     },
     "connect": "Anslut",
@@ -3200,7 +3229,19 @@
       "missingState": "Inget att auktorisera",
       "close": "Du kan stänga detta fönster och återgå till appen.",
       "closeButton": "Stäng fönster"
-    }
+    },
+    "oauthNoAppConfigured": "Inloggning med {name} är inte konfigurerat för denna installation. Anslut genom att registrera din egen OAuth-app.",
+    "adminConnectorsTitle": "Från din organisation",
+    "adminConnectorsDescription": "Connectorer som dina administratörer har ställt in. Vilka du ser beror på din åtkomst.",
+    "managedByOrg": "Hanteras av din organisation",
+    "connectorOauthNotConfigured": "Inloggningen är inte helt konfigurerad för denna connector. Kontakta din administratör.",
+    "yourConnectorsTitle": "Dina connectorer",
+    "addTitle": "Lägg till en connector",
+    "addDescription": "Välj ett verktyg att ansluta. Du ställer in åtkomst efter valet.",
+    "add": "Lägg till",
+    "filterLabel": "Filtrera connectorer",
+    "filterPlaceholder": "Sök connectorer",
+    "noMatches": "Inga connectorer matchar “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Anslut en modellkälla",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "Promptagent skapad.",
     "promptAgentSaveSuccess": "Promptagent sparad.",
     "promptAgentDeleteSuccess": "Promptagent borttagen.",
-    "promptAgentsUnavailableWarning": "Promptagenter kunde inte laddas från lagring. De kan inte redigeras just nu."
+    "promptAgentsUnavailableWarning": "Promptagenter kunde inte laddas från lagring. De kan inte redigeras just nu.",
+    "agentsTab": "Agenter",
+    "connectorsTab": "Connectorer",
+    "addConnector": "Lägg till connector",
+    "noConnectors": "Inga connectorer ännu.",
+    "connectorsUnavailableWarning": "Kunde inte nå connector-butiken, så listan kan vara ofullständig. Skapa ingen ersättning förrän den har laddats.",
+    "editAccess": "Redigera åtkomst",
+    "deleteConnector": "Ta bort",
+    "deleteConnectorConfirm": "Ta bort denna connector? Alla som använder den tappar omedelbart åtkomst.",
+    "confirmDeleteConnector": "Ta bort connector",
+    "connectorSaveSuccess": "Connector sparad.",
+    "connectorCreateSuccess": "Connector skapad.",
+    "connectorDeleteSuccess": "Connector borttagen.",
+    "editConnectorTitle": "Redigera connector",
+    "newConnectorTitle": "Ny connector",
+    "connectorPresetLabel": "Börja från en mall",
+    "connectorPresetNone": "Börja från början",
+    "connectorNameLabel": "Namn",
+    "connectorDescriptionLabel": "Beskrivning",
+    "connectorUrlLabel": "Server-URL",
+    "connectorUrlPlaceholderWarning": "Byt ut {placeholder} i URL:en mot ditt eget värde innan du sparar.",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Autentisering",
+    "connectorAuthNone": "Ingen",
+    "connectorAuthBearer": "Token (varje användare anger sin egen)",
+    "connectorAuthOauth": "OAuth-inloggning",
+    "connectorSealingUnavailable": "OAuth är inte tillgängligt: den här miljön har ingen AUTH_SECRET konfigurerad för att kryptera klienthemligheter.",
+    "connectorTokenHelpLabel": "Länk till token-instruktioner (valfritt)",
+    "connectorClientIdLabel": "OAuth Client ID",
+    "connectorClientSecretLabel": "OAuth Client Secret",
+    "connectorClientSecretStored": "En hemlighet är sparad. Lämna tomt för att behålla den, eller ange en ny för att ersätta.",
+    "connectorClientSecretHint": "Krypteras innan den sparas och visas aldrig igen.",
+    "connectorScopesLabel": "Scopes (mellanslag-separerade, valfritt)"
   },
   "localModels": {
     "title": "Lokala modeller",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "Hämta inklistrade länkar automatiskt",
     "settingsDescription": "När du klistrar in en länk själv hämtas sidan och dess text bifogas så att assistenten kan läsa den. Stäng av detta för att behålla inklistrade länkar som vanlig text — du kan fortfarande bifoga en sida manuellt via + menyn.",
     "addLink": "Lägg till en länk"
+  },
+  "cameraAccessError": "Kunde inte komma åt kameran. Kontrollera dina kamerabehörigheter och försök igen.",
+  "cameraUnnamedDevice": "Kamera",
+  "pastedText": {
+    "fallbackName": "Inklistrad text",
+    "charCount": "{count, number} tecken",
+    "removeChip": "Ta bort inklistrad text “{name}”",
+    "blockLabel": "Inklistrad text: {name}",
+    "doc": {
+      "heading": "Inklistrad text",
+      "pastedLabel": "Inklistrad"
+    },
+    "settingsTitle": "Stora inklistringar",
+    "settingsToggle": "Gör en stor inklistring till en bilaga",
+    "settingsDescription": "Om du klistrar in mer text än gränsen nedan, bifogas den som en fil istället för att fylla meddelanderutan. Texten används exakt som inklistrad — inget hämtas eller ändras.",
+    "settingsThresholdLabel": "Bifoga inklistringar längre än",
+    "settingsThresholdUnit": "tecken",
+    "settingsThresholdHint": "Mellan {min, number} och {max, number} tecken."
+  },
+  "structures": {
+    "section": "Strukturer",
+    "sectionSubtitle": "Sparade fältdefinitioner. Använd en som ett extraktionsrecept eller som startschema för en dataflödestabell.",
+    "loadFromStructure": "Hämta struktur",
+    "loadFromStructureTitle": "Byt ut dessa kolumner mot en sparad struktur",
+    "pickerEmpty": "Inga sparade strukturer ännu.",
+    "pickerTitle": "Ladda en sparad struktur",
+    "saveAsStructure": "Spara som struktur",
+    "saveAsStructureTitle": "Spara dessa kolumner till din strukturbibliotek",
+    "savedToast": "Struktur “{name}” har sparats",
+    "namePlaceholder": "Strukturnamn",
+    "fieldCount": "{count} fält",
+    "fieldCountOne": "1 fält",
+    "downgradedNotice": "{count} fält har förenklats till text — tabeller har ett värde per cell: {names}",
+    "truncatedNotice": "{count} fält borttagna — tabellgränsen är {max} kolumner: {names}",
+    "skippedDerivedNotice": "{count} beräknade kolumner sparades inte — formler refererar till denna tabells kolumner: {names}",
+    "loadReplacesColumns": "Detta ersätter nuvarande kolumner. Befintliga rader behåller värden vars kolumnnamn matchar."
   }
 }

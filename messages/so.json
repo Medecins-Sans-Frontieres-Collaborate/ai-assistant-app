@@ -2091,7 +2091,9 @@
     "pin": "Ku xarri gali sare",
     "unpin": "Ka saar xarriga",
     "moveToMore": "U raaricinta 'Inta kale'",
-    "moveOutOfMore": "Ku soo bandhig menu-ga"
+    "moveOutOfMore": "Ku soo bandhig menu-ga",
+    "showSources": "Tus ilo kale",
+    "hideSources": "Qari ilo kale"
   },
   "transcription": {
     "transcribesOnSend": "Wuxuu qoraa marka la diro",
@@ -2762,7 +2764,16 @@
       "undoEdit": "Ka noqosho",
       "clearResolved": "Tirtir kuwa la xaliyay",
       "clearResolvedHint": "Ka saar tifaftiradii la aqbalay, la diiday, ama aan khuseyn liiskan",
-      "autoClearResolved": "Si toos ah u tirtir kuwa la xaliyay"
+      "autoClearResolved": "Si toos ah u tirtir kuwa la xaliyay",
+      "import": "Soo dejin",
+      "importReplaceTitle": "Ma beddeshaa dukumeentiga?",
+      "importReplaceBody": "Soo dejinta {name} waxay beddeli doontaa dukumeentiga hadda jira. Tixraacyadaada, spec iyo codka waa la haynayaa.",
+      "importReplaceConfirm": "Beddel",
+      "editorMode": "Habka tifaftiraha",
+      "editorModeRich": "Qoraal muuqaal leh",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Hagaaji is-beddelka la soo jeediyay ka hor intaadan beddelin habka tifaftiraha."
     },
     "data": {
       "emptyTitle": "Keenso xog si loo falanqeeyo",
@@ -2961,7 +2972,9 @@
       "schemaFormulaArityError": "Tirada dookhyada ee loo diray {fn} waa khaldan tahay",
       "schemaFormulaCycleError": "Tixraac isdaba joog ah oo xisaabaha ah",
       "derivedColumnTitle": "La xisaabiyey: {formula}",
-      "derivedFrom": "Laga xisaabiyey {formula}"
+      "derivedFrom": "Laga xisaabiyey {formula}",
+      "takePhoto": "Sawir qaad",
+      "takePhotoHint": "Isticmaal kamaradaada si aad u sawirto foom ama jadwal — waxa ku jira waxa loo beddeli doonaa xog la kala soocay oo aad la hubin karto sawirka"
     },
     "map": {
       "emptyTitle": "Ku muuji xogtaada khariidadda",
@@ -3124,6 +3137,22 @@
       "asana": {
         "name": "Asana",
         "description": "Soo hel, samee, oo cusboonaysii hawlaha iyo mashruucyada."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Weydii xogaha la daabacay, buugaagta shaqada, iyo cabbiraadaha Pulse."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Ka raadi oo cusboonaysii diiwaannada walxahaaga Salesforce."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Ku qoro, jadwale, oo daabac qoraalada warbaahinta bulshada."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Dib u eeg oo ka jawaab wada sheekaysiga sanduuqa bulshada."
       }
     },
     "connect": "Isku xidh",
@@ -3184,7 +3213,19 @@
       "missingState": "Ma jiro wax la oggolaansho u baahan",
       "close": "Waxaad xidhikartaa daaqadan oo ku laaban kartaa app-ka.",
       "closeButton": "Daaqad xidh"
-    }
+    },
+    "oauthNoAppConfigured": "Gelitaanka {name} looma dejin xidhiidhkan. Isku xidh adigoo diiwaangelinaya barnaamijkaaga OAuth.",
+    "adminConnectorsTitle": "Daladda ururkaaga",
+    "adminConnectorsDescription": "Isku xireyaal ay maamulkaagu dejiyeen. Waxa aad aragto waxay ku xiran tahay ogolaanshahaaga.",
+    "managedByOrg": "Waxa maamula ururkaaga",
+    "connectorOauthNotConfigured": "Gelitaanka isku xireyahan weli lama dhamaystirin. Kala xidhiidh maamulkaaga.",
+    "yourConnectorsTitle": "Isku xireyaashaaga",
+    "addTitle": "Ku dar isku xire",
+    "addDescription": "Dooro qalab aad isku xirto. Waxaad dejin doontaa ogolaanshaha kadib doorashada.",
+    "add": "Ku dar",
+    "filterLabel": "Shaandhee isku xireyaasha",
+    "filterPlaceholder": "Raadi isku xireyaasha",
+    "noMatches": "Isku xire lama helin: “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Ku xidh il model",
@@ -3502,7 +3543,39 @@
     "promptAgentCreateSuccess": "Wakiil prompt waa la abuuray.",
     "promptAgentSaveSuccess": "Wakiil prompt waa la keydiyey.",
     "promptAgentDeleteSuccess": "Wakiil prompt waa la tirtiray.",
-    "promptAgentsUnavailableWarning": "Wakiillada prompt-ka lagama soo dejin karo keydka. Lama tafatiri karo hadda."
+    "promptAgentsUnavailableWarning": "Wakiillada prompt-ka lagama soo dejin karo keydka. Lama tafatiri karo hadda.",
+    "agentsTab": "Wakiillo",
+    "connectorsTab": "Isku xireyaal",
+    "addConnector": "Ku dar isku xire",
+    "noConnectors": "Weli isku xire ma jiro.",
+    "connectorsUnavailableWarning": "Store-ka isku xireyaasha lama gaari karo, sidaas darteed liiskani wuu dhammaystirnaan karaa. Ha abuuran mid beddel ah ilaa liisku dhamaystirmo.",
+    "editAccess": "Beddel ogolaanshaha",
+    "deleteConnector": "Tirtir",
+    "deleteConnectorConfirm": "Tirtir isku xiregan? Qof kasta oo isticmaalaya isla markiiba wuu waayi doonaa ogolaanshaha.",
+    "confirmDeleteConnector": "Tirtir isku xire",
+    "connectorSaveSuccess": "Isku xire waa la keydiyay.",
+    "connectorCreateSuccess": "Isku xire waa la abuuray.",
+    "connectorDeleteSuccess": "Isku xire waa la tirtiray.",
+    "editConnectorTitle": "Beddel isku xire",
+    "newConnectorTitle": "Isku xire cusub",
+    "connectorPresetLabel": "Ka bilaaw template",
+    "connectorPresetNone": "Ka bilow eber",
+    "connectorNameLabel": "Magaca",
+    "connectorDescriptionLabel": "Sharaxaad",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "Ka beddel {placeholder} ee URL-ka qiimahaaga ka hor intaadan kaydin.",
+    "connectorTransportLabel": "Gaadiid",
+    "connectorAuthLabel": "Aqoonsi",
+    "connectorAuthNone": "Midna",
+    "connectorAuthBearer": "Token (isticmaalaha walba mid gaar ah wuu bixiya)",
+    "connectorAuthOauth": "OAuth galid",
+    "connectorSealingUnavailable": "OAuth lama heli karo: qeybtaan laguma darin AUTH_SECRET oo lagu sirgaxayo sirta macmiilka.",
+    "connectorTokenHelpLabel": "Xidhiidhka tilmaamaha token-ka (ikhtiyaari)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Sir ayaa la keydiyay. Haddii aad rabto inaad sii hayso, uga tag madhan; mid cusub gal si aad u bedesho.",
+    "connectorClientSecretHint": "Waa la sirgaxaa ka hor inta aan la keydin, mar dambe laguma tuso.",
+    "connectorScopesLabel": "Xuduudaha (far kala soocan, ikhtiyaari)"
   },
   "localModels": {
     "title": "Moodallo maxalli ah",
@@ -3561,5 +3634,41 @@
     "settingsToggle": "Si otomaatig ah u soo qaado xariirada lasoo dhajiyo",
     "settingsDescription": "Markaad keligaaga dhajiso xariir, bogga waa la soo qaadayaa qoraalkiisuna wuu la imaanayaa si kaaliyuhu u akhristo. Ka dami tan si xariirada loogu muujiyo farriimaha sida qoraal caadi ah — weli waxaad si toos ah uga lifaaqi kartaa bog adigoo isticmaalaya menu-ga +.",
     "addLink": "Ku dar xariir"
+  },
+  "cameraAccessError": "Kama heli karo kamarada. Hubi ogolaanshahaaga kamarada oo isku day mar kale.",
+  "cameraUnnamedDevice": "Kamarad",
+  "pastedText": {
+    "fallbackName": "Qoraal la dhajiyay",
+    "charCount": "{count, number} xaraf",
+    "removeChip": "Ka saar qoraalka la dhajiyay “{name}”",
+    "blockLabel": "Qoraal la dhajiyay: {name}",
+    "doc": {
+      "heading": "Qoraal la dhajiyay",
+      "pastedLabel": "La dhajiyay"
+    },
+    "settingsTitle": "Qoraallo waaweyn oo la dhajiyay",
+    "settingsToggle": "Qoraal weyn u beddel lifaaq",
+    "settingsDescription": "Haddii aad dhajiso qoraal ka badan xaddiga hoose, wuxuu noqon doonaa lifaaq halkii uu buuxin lahaa sanduuqa fariinta. Qoraalka waa sida la dhajiyay—lagama beddelin lagamana soo qaadin meel kale.",
+    "settingsThresholdLabel": "Lifaaq qoraal ka dheer",
+    "settingsThresholdUnit": "xaraf",
+    "settingsThresholdHint": "U dhaxeeya {min, number} iyo {max, number} xaraf."
+  },
+  "structures": {
+    "section": "Qaab-dhismeedyo",
+    "sectionSubtitle": "Qeexitaano kaydsan oo beero ah. U isticmaal mid si aad xog uga soo saarto, ama u isticmaal sida qaabka bilowga miiska xog ururinta.",
+    "loadFromStructure": "Qaab-dhismeed soo celi",
+    "loadFromStructureTitle": "Ku beddel tiirarkan qaab-dhismeed kaydsan",
+    "pickerEmpty": "Wali lama kaydin qaab-dhismeed.",
+    "pickerTitle": "Soo celi qaab-dhismeed kaydsan",
+    "saveAsStructure": "Kaydi sida qaab-dhismeed",
+    "saveAsStructureTitle": "Kaydi tiirarkan maktabadda qaab-dhismeedyadaada",
+    "savedToast": "Qaab-dhismeed la keydiyay “{name}”",
+    "namePlaceholder": "Magaca qaab-dhismeedka",
+    "fieldCount": "{count} beero",
+    "fieldCountOne": "1 beer",
+    "downgradedNotice": "{count} beer(ood) ayaa loo fududeeyay qoraal—miisasku mid kasta hal qiime ayuu u dhawraa: {names}",
+    "truncatedNotice": "{count} beer(ood) ayaa la saaray—xadka miiska waa {max} tiir: {names}",
+    "skippedDerivedNotice": "{count} tiir xisaabeed lama keydin—xisaabaha waxay tixraacayaan tiirarkan miiska: {names}",
+    "loadReplacesColumns": "Tani waxay beddelaysaa tiirarka hadda jira. Safafka hore wey sii hayaan qiimaha tiirarka magacyadoodu is le'eg yihiin."
   }
 }

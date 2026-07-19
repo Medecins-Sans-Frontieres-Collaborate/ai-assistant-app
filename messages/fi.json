@@ -2116,7 +2116,9 @@
     "pin": "Kiinnitä ylös",
     "unpin": "Poista kiinnitys",
     "moveToMore": "Siirrä kohtaan Lisää",
-    "moveOutOfMore": "Näytä valikossa"
+    "moveOutOfMore": "Näytä valikossa",
+    "showSources": "Näytä muut lähteet",
+    "hideSources": "Piilota muut lähteet"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Lisää omat ohjeesi räätälöidäksesi, miten tekoäly vastaa. Nämä yhdistetään ydinkäyttäytymissääntöihin, jotka takaavat hyödylliset, tarkat ja turvalliset vastaukset.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Vinkki: Kirjoita \"/\" valitaksesi tallennetuista kehotepohjista.",
@@ -2778,7 +2780,16 @@
       "undoEdit": "Kumoa",
       "clearResolved": "Tyhjennä ratkaistut",
       "clearResolvedHint": "Poista hyväksytyt, hylätyt ja soveltumattomat muokkaukset tältä listalta",
-      "autoClearResolved": "Tyhjennä ratkaistut muokkaukset automaattisesti"
+      "autoClearResolved": "Tyhjennä ratkaistut muokkaukset automaattisesti",
+      "import": "Tuo",
+      "importReplaceTitle": "Korvataanko asiakirja?",
+      "importReplaceBody": "Tiedoston {name} tuominen korvaa nykyisen asiakirjan. Viitteesi, määritykset ja sävy säilyvät.",
+      "importReplaceConfirm": "Korvaa",
+      "editorMode": "Muokkaustila",
+      "editorModeRich": "Muotoiltu teksti",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Ratkaise ehdotetut muutokset ennen muokkaustilan vaihtamista."
     },
     "data": {
       "emptyTitle": "Tuo analysoitavaa dataa",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "Väärä määrä argumentteja funktiolle {fn}",
       "schemaFormulaCycleError": "Kaavojen välinen syklinen viittaus",
       "derivedColumnTitle": "Laskettu: {formula}",
-      "derivedFrom": "Laskettu kaavasta {formula}"
+      "derivedFrom": "Laskettu kaavasta {formula}",
+      "takePhoto": "Ota kuva",
+      "takePhotoHint": "Kuvaa lomake tai taulukko kameralla — sen sisältö muutetaan rakenteiseksi tiedoksi, jota voit verrata kuvaan."
     },
     "map": {
       "emptyTitle": "Näytä tiedot kartalla",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "Etsi, luo ja päivitä tehtäviä ja projekteja."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Tee kyselyjä julkaistuihin tietolähteisiin, työkirjoihin ja Pulse-mittareihin."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Etsi ja päivitä tietueita Salesforce-objekteissasi."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Laadi, ajasta ja julkaise sosiaalisen median julkaisuja."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Arvioi ja vastaa sosiaalisen median viestikeskusteluihin."
       }
     },
     "connect": "Yhdistä",
@@ -3200,7 +3229,19 @@
       "missingState": "Ei valtuutettavaa",
       "close": "Voit sulkea tämän ikkunan ja palata sovellukseen.",
       "closeButton": "Sulje ikkuna"
-    }
+    },
+    "oauthNoAppConfigured": "Kirjautuminen palvelulla {name} ei ole käytettävissä tässä käyttöönotossa. Yhdistä rekisteröimällä oma OAuth-sovellus.",
+    "adminConnectorsTitle": "Organisaatioltasi",
+    "adminConnectorsDescription": "Ylläpitäjiesi määrittämät liitännäiset. Näkyvät liitännäiset riippuvat käyttöoikeuksistasi.",
+    "managedByOrg": "Organisaatiosi hallinnoima",
+    "connectorOauthNotConfigured": "Tämän liitännäisen kirjautumista ei ole viimeistelty. Ota yhteyttä ylläpitäjään.",
+    "yourConnectorsTitle": "Omat liitännäiset",
+    "addTitle": "Lisää liitännäinen",
+    "addDescription": "Valitse yhdistettävä työkalu. Määrität käyttöoikeuden valinnan jälkeen.",
+    "add": "Lisää",
+    "filterLabel": "Suodata liitännäisiä",
+    "filterPlaceholder": "Etsi liitännäisiä",
+    "noMatches": "Yhtään liitännäistä ei vastaa hakua “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Yhdistä mallilähde",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "Prompt-agentti luotu.",
     "promptAgentSaveSuccess": "Prompt-agentti tallennettu.",
     "promptAgentDeleteSuccess": "Prompt-agentti poistettu.",
-    "promptAgentsUnavailableWarning": "Prompt-agenteja ei voitu ladata tallennustilasta. Niitä ei voi tällä hetkellä muokata."
+    "promptAgentsUnavailableWarning": "Prompt-agenteja ei voitu ladata tallennustilasta. Niitä ei voi tällä hetkellä muokata.",
+    "agentsTab": "Agentit",
+    "connectorsTab": "Liitännäiset",
+    "addConnector": "Lisää liitännäinen",
+    "noConnectors": "Ei liitännäisiä vielä.",
+    "connectorsUnavailableWarning": "Liitännäiskauppaan ei saatu yhteyttä, joten lista voi olla puutteellinen. Älä luo korvaavaa ennen kuin lataus on valmis.",
+    "editAccess": "Muokkaa käyttöoikeuksia",
+    "deleteConnector": "Poista",
+    "deleteConnectorConfirm": "Poistetaanko tämä liitännäinen? Kaikki käyttäjät menettävät käyttöoikeuden välittömästi.",
+    "confirmDeleteConnector": "Poista liitännäinen",
+    "connectorSaveSuccess": "Liitännäinen tallennettu.",
+    "connectorCreateSuccess": "Liitännäinen luotu.",
+    "connectorDeleteSuccess": "Liitännäinen poistettu.",
+    "editConnectorTitle": "Muokkaa liitännäistä",
+    "newConnectorTitle": "Uusi liitännäinen",
+    "connectorPresetLabel": "Aloita mallipohjasta",
+    "connectorPresetNone": "Aloita tyhjästä",
+    "connectorNameLabel": "Nimi",
+    "connectorDescriptionLabel": "Kuvaus",
+    "connectorUrlLabel": "Palvelimen URL",
+    "connectorUrlPlaceholderWarning": "Korvaa URL-osoitteen {placeholder} omalla arvollasi ennen tallentamista.",
+    "connectorTransportLabel": "Siirtotapa",
+    "connectorAuthLabel": "Tunnistautuminen",
+    "connectorAuthNone": "Ei mitään",
+    "connectorAuthBearer": "Token (jokainen käyttäjä syöttää oman)",
+    "connectorAuthOauth": "OAuth-kirjautuminen",
+    "connectorSealingUnavailable": "OAuth ei ole käytettävissä: tähän asennukseen ei ole määritetty AUTH_SECRET-arvoa, jolla asiakassalaisuudet salataan.",
+    "connectorTokenHelpLabel": "Linkki token-ohjeisiin (valinnainen)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Salaisuus tallennettu. Jätä tyhjäksi säilyttääksesi nykyisen, tai syötä uusi korvataksesi sen.",
+    "connectorClientSecretHint": "Salataan ennen tallennusta, eikä näytetä uudestaan.",
+    "connectorScopesLabel": "Scope-arvot (välilyönnillä eroteltuna, vapaaehtoinen)"
   },
   "localModels": {
     "title": "Paikalliset mallit",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "Nouda liitetyt linkit automaattisesti",
     "settingsDescription": "Kun liität linkin yksinään, sivu noudetaan ja sen teksti liitetään viestiin, jotta avustaja voi lukea sen. Voit ottaa tämän pois päältä, jolloin liitetyt linkit jäävät pelkiksi tekstilinkeiksi — voit silti liittää sivun käsin + -valikosta.",
     "addLink": "Lisää linkki"
+  },
+  "cameraAccessError": "Kameraan ei saatu yhteyttä. Tarkista kameran käyttöoikeudet ja yritä uudelleen.",
+  "cameraUnnamedDevice": "Kamera",
+  "pastedText": {
+    "fallbackName": "Liitetty teksti",
+    "charCount": "{count, number} merkkiä",
+    "removeChip": "Poista liitetty teksti ”{name}”",
+    "blockLabel": "Liitetty teksti: {name}",
+    "doc": {
+      "heading": "Liitetty teksti",
+      "pastedLabel": "Liitetty"
+    },
+    "settingsTitle": "Isot liitetyt tekstit",
+    "settingsToggle": "Muuta suuri liite liitteeksi",
+    "settingsDescription": "Jos liität enemmän tekstiä kuin alla oleva raja, se liitetään tiedostona viestikentän täyttämisen sijaan. Tekstiä käytetään sellaisenaan — mitään ei haeta tai muuteta.",
+    "settingsThresholdLabel": "Liitä liitteeksi, jos pituus ylittää",
+    "settingsThresholdUnit": "merkkiä",
+    "settingsThresholdHint": "Välillä {min, number}–{max, number} merkkiä."
+  },
+  "structures": {
+    "section": "Rakennekuvaukset",
+    "sectionSubtitle": "Tallennetut kenttämäärittelyt. Käytä yhtä poimintamallina tai lähtökaaviona tietotyön taulukkoon.",
+    "loadFromStructure": "Lataa rakenne",
+    "loadFromStructureTitle": "Korvaa nämä sarakkeet tallennetulla rakenteella",
+    "pickerEmpty": "Tallennettuja rakenteita ei ole vielä.",
+    "pickerTitle": "Lataa tallennettu rakenne",
+    "saveAsStructure": "Tallenna rakenteena",
+    "saveAsStructureTitle": "Tallenna nämä sarakkeet omaan rakennekirjastoon",
+    "savedToast": "Tallennettu rakenne ”{name}”",
+    "namePlaceholder": "Rakenteen nimi",
+    "fieldCount": "{count} kenttää",
+    "fieldCountOne": "1 kenttä",
+    "downgradedNotice": "{count} kenttä(ä) yksinkertaistettu tekstiksi — taulukossa vain yksi arvo per solu: {names}",
+    "truncatedNotice": "{count} kenttä(ä) jätetty pois — taulukon maksimi on {max} saraketta: {names}",
+    "skippedDerivedNotice": "{count} laskettua saraketta ei tallennettu — kaavat viittaavat tämän taulukon sarakkeisiin: {names}",
+    "loadReplacesColumns": "Tämä korvaa nykyiset sarakkeet. Olemassa olevat rivit säilyttävät niiden arvot, joiden sarake nimet täsmäävät."
   }
 }

@@ -2116,7 +2116,9 @@
     "pin": "Üste sabitle",
     "unpin": "Sabitlemeyi kaldır",
     "moveToMore": "Daha Fazlaya taşı",
-    "moveOutOfMore": "Menüde göster"
+    "moveOutOfMore": "Menüde göster",
+    "showSources": "Diğer kaynakları göster",
+    "hideSources": "Diğer kaynakları gizle"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Yapay zekanın nasıl yanıt vereceğini özelleştirmek için kişisel talimatlarınızı ekleyin. Bunlar, yardımcı, doğru ve güvenli yanıtları garanti altına alan temel davranış yönergeleriyle birleştirilir.",
   "Tip: Type \"/\" to select from saved prompt templates_": "İpucu: Kayıtlı istem şablonlarından seçmek için \"/\" yazın.",
@@ -2778,7 +2780,16 @@
       "undoEdit": "Geri al",
       "clearResolved": "Çözülenleri temizle",
       "clearResolvedHint": "Kabul edilen, reddedilen ve uygulanamayan düzenlemeleri bu listeden kaldır",
-      "autoClearResolved": "Çözülen düzenlemeleri otomatik olarak temizle"
+      "autoClearResolved": "Çözülen düzenlemeleri otomatik olarak temizle",
+      "import": "İçe aktar",
+      "importReplaceTitle": "Belge değiştirilsin mi?",
+      "importReplaceBody": "{name} içe aktarıldığında mevcut belge değiştirilecek. Referanslarınız, spesifikasyonunuz ve tonunuz korunur.",
+      "importReplaceConfirm": "Değiştir",
+      "editorMode": "Editör modu",
+      "editorModeRich": "Zengin metin",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Editör modunu değiştirmeden önce önerilen düzenlemeleri çözün."
     },
     "data": {
       "emptyTitle": "Analiz için veri içe aktar",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "{fn} için yanlış sayıda argüman",
       "schemaFormulaCycleError": "Formüller arasında döngüsel referans",
       "derivedColumnTitle": "Hesaplandı: {formula}",
-      "derivedFrom": "{formula} formülünden hesaplandı"
+      "derivedFrom": "{formula} formülünden hesaplandı",
+      "takePhoto": "Fotoğraf çek",
+      "takePhotoHint": "Form veya tabloyu kameranızla çekin — içeriği yapılandırılmış verilere dönüştürülerek fotoğraf ile karşılaştırabilirsiniz"
     },
     "map": {
       "emptyTitle": "Verinizi haritada gösterin",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "Görev ve projeleri bulun, oluşturun ve güncelleyin."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Yayınlanmış veri kaynaklarını, çalışma kitaplarını ve Pulse metriklerini sorgulayın."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Salesforce nesnelerinizde kayıtları arayın ve güncelleyin."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Sosyal medya gönderileri taslağını oluşturun, planlayın ve yayınlayın."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Sosyal gelen kutusu görüşmelerini inceleyin ve yanıtlayın."
       }
     },
     "connect": "Bağla",
@@ -3200,7 +3229,19 @@
       "missingState": "Yetkilendirilecek bir şey yok",
       "close": "Bu pencereyi kapatabilir ve uygulamaya dönebilirsiniz.",
       "closeButton": "Pencereyi kapat"
-    }
+    },
+    "oauthNoAppConfigured": "{name} ile oturum açma bu dağıtımda ayarlanmadı. Kendi OAuth uygulamanızı kaydederek bağlanın.",
+    "adminConnectorsTitle": "Kuruluşunuzdan",
+    "adminConnectorsDescription": "Yöneticilerinizin ayarladığı konektörler. Hangi konektörleri görebileceğiniz erişiminize bağlıdır.",
+    "managedByOrg": "Kuruluşunuz tarafından yönetiliyor",
+    "connectorOauthNotConfigured": "Bu konektör için oturum açma kurulumu tamamlanmadı. Yöneticinizle iletişime geçin.",
+    "yourConnectorsTitle": "Konektörleriniz",
+    "addTitle": "Konektör ekle",
+    "addDescription": "Bağlanacak bir araç seçin. Seçim yaptıktan sonra erişimi ayarlayacaksınız.",
+    "add": "Ekle",
+    "filterLabel": "Konektörleri filtrele",
+    "filterPlaceholder": "Konektörlerde ara",
+    "noMatches": "Hiçbir konektör “{query}” ile eşleşmiyor."
   },
   "modelSources": {
     "connectButtonShort": "Bir model kaynağı bağlayın",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "Komut aracı oluşturuldu.",
     "promptAgentSaveSuccess": "Komut aracı kaydedildi.",
     "promptAgentDeleteSuccess": "Komut aracı silindi.",
-    "promptAgentsUnavailableWarning": "Komut araçları depodan yüklenemedi. Şu anda düzenlenemezler."
+    "promptAgentsUnavailableWarning": "Komut araçları depodan yüklenemedi. Şu anda düzenlenemezler.",
+    "agentsTab": "Ajanlar",
+    "connectorsTab": "Konektörler",
+    "addConnector": "Konektör ekle",
+    "noConnectors": "Henüz konektör yok.",
+    "connectorsUnavailableWarning": "Konektör mağazasına ulaşılamadı, bu yüzden liste eksik olabilir. Yüklenene kadar yedek oluşturmayın.",
+    "editAccess": "Erişimi düzenle",
+    "deleteConnector": "Sil",
+    "deleteConnectorConfirm": "Bu konektör silinsin mi? Kullanan herkesin erişimi anında kesilir.",
+    "confirmDeleteConnector": "Konektörü sil",
+    "connectorSaveSuccess": "Konektör kaydedildi.",
+    "connectorCreateSuccess": "Konektör oluşturuldu.",
+    "connectorDeleteSuccess": "Konektör silindi.",
+    "editConnectorTitle": "Konektörü düzenle",
+    "newConnectorTitle": "Yeni konektör",
+    "connectorPresetLabel": "Bir şablondan başla",
+    "connectorPresetNone": "Sıfırdan başla",
+    "connectorNameLabel": "Ad",
+    "connectorDescriptionLabel": "Açıklama",
+    "connectorUrlLabel": "Sunucu URL'si",
+    "connectorUrlPlaceholderWarning": "Kaydetmeden önce URL'deki {placeholder} alanını kendi değerinizle değiştirin.",
+    "connectorTransportLabel": "İletim",
+    "connectorAuthLabel": "Kimlik Doğrulama",
+    "connectorAuthNone": "Yok",
+    "connectorAuthBearer": "Token (her kullanıcı kendi bilgisini girer)",
+    "connectorAuthOauth": "OAuth ile giriş",
+    "connectorSealingUnavailable": "OAuth kullanılamıyor: Bu dağıtımda istemci sırlarını şifrelemek için AUTH_SECRET yapılandırılmamış.",
+    "connectorTokenHelpLabel": "Token talimatlarına bağlantı (isteğe bağlı)",
+    "connectorClientIdLabel": "OAuth istemci ID'si",
+    "connectorClientSecretLabel": "OAuth istemci gizli anahtarı",
+    "connectorClientSecretStored": "Bir gizli anahtar kaydedildi. Korumak için boş bırakın veya değiştirmek için yeni bir anahtar girin.",
+    "connectorClientSecretHint": "Kaydedilmeden önce şifrelenir ve bir daha gösterilmez.",
+    "connectorScopesLabel": "Kapsamlar (boşlukla ayrılmış, isteğe bağlı)"
   },
   "localModels": {
     "title": "Yerel modeller",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "Yapıştırılan bağlantıları otomatik olarak getir",
     "settingsDescription": "Bir bağlantı tek başına yapıştırıldığında, sayfa getirilir ve metni eklenir, böylece asistan okuyabilir. Bunu kapatırsanız bağlantılar düz metin olarak kalır — yine de + menüsünden bir sayfa ekleyebilirsiniz.",
     "addLink": "Bağlantı ekle"
+  },
+  "cameraAccessError": "Kameraya erişilemiyor. Kamera izinlerinizi kontrol edin ve tekrar deneyin.",
+  "cameraUnnamedDevice": "Kamera",
+  "pastedText": {
+    "fallbackName": "Yapıştırılan metin",
+    "charCount": "{count, number} karakter",
+    "removeChip": "Yapıştırılan metni kaldır: “{name}”",
+    "blockLabel": "Yapıştırılan metin: {name}",
+    "doc": {
+      "heading": "Yapıştırılan metin",
+      "pastedLabel": "Yapıştırıldı"
+    },
+    "settingsTitle": "Büyük yapıştırmalar",
+    "settingsToggle": "Büyük bir yapıştırmayı ek dosyaya dönüştür",
+    "settingsDescription": "Aşağıdaki sınırı aşan metin ek dosya olarak eklenir, mesaj kutusunu doldurmaz. Metin tam olarak yapıştırıldığı gibi kullanılır — hiçbir şey indirilmez veya değiştirilmez.",
+    "settingsThresholdLabel": "Şundan daha uzun yapıştırmaları ekle:",
+    "settingsThresholdUnit": "karakter",
+    "settingsThresholdHint": "{min, number} ile {max, number} karakter arasında olmalı."
+  },
+  "structures": {
+    "section": "Yapılar",
+    "sectionSubtitle": "Kaydedilmiş alan tanımları. Birini çıkarım tarifi olarak veya veri iş akışı tablosu için başlangıç şeması olarak kullanabilirsiniz.",
+    "loadFromStructure": "Yapı yükle",
+    "loadFromStructureTitle": "Bu sütunları kaydedilmiş bir yapıyla değiştir",
+    "pickerEmpty": "Henüz kaydedilmiş yapı yok.",
+    "pickerTitle": "Kaydedilmiş bir yapı yükle",
+    "saveAsStructure": "Yapı olarak kaydet",
+    "saveAsStructureTitle": "Bu sütunları yapı kütüphanenize kaydedin",
+    "savedToast": "Yapı kaydedildi: “{name}”",
+    "namePlaceholder": "Yapı adı",
+    "fieldCount": "{count} alan",
+    "fieldCountOne": "1 alan",
+    "downgradedNotice": "{count} alan metin olarak sadeleştirildi — tablolar hücre başına bir değer tutar: {names}",
+    "truncatedNotice": "{count} alan çıkarıldı — tablo sınırı {max} sütundur: {names}",
+    "skippedDerivedNotice": "{count} hesaplanmış sütun kaydedilmedi — formüller bu tablonun sütunlarına referans veriyor: {names}",
+    "loadReplacesColumns": "Bu işlem mevcut sütunları değiştirir. Mevcut satırlar, sütun adları eşleşen değerleri korur."
   }
 }

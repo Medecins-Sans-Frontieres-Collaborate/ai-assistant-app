@@ -2116,7 +2116,9 @@
     "pin": "Закріпити вгорі",
     "unpin": "Відкріпити",
     "moveToMore": "Перемістити в \"Більше\"",
-    "moveOutOfMore": "Показати в меню"
+    "moveOutOfMore": "Показати в меню",
+    "showSources": "Показати інші джерела",
+    "hideSources": "Сховати інші джерела"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Додайте особисті інструкції, щоб налаштувати відповіді ШІ. Вони поєднуються з основними правилами, які забезпечують корисні, точні та безпечні відповіді.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Порада: введіть \"/\", щоб вибрати із збережених шаблонів підказок.",
@@ -2778,7 +2780,16 @@
       "undoEdit": "Скасувати",
       "clearResolved": "Очистити вирішене",
       "clearResolvedHint": "Видалити прийняті, відхилені та непридатні редагування зі списку",
-      "autoClearResolved": "Автоматично очищати вирішені редагування"
+      "autoClearResolved": "Автоматично очищати вирішені редагування",
+      "import": "Імпортувати",
+      "importReplaceTitle": "Замінити документ?",
+      "importReplaceBody": "Імпорт {name} замінить поточний документ. Ваші посилання, специфікації та тон залишаться збереженими.",
+      "importReplaceConfirm": "Замінити",
+      "editorMode": "Режим редактора",
+      "editorModeRich": "Форматований текст",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Завершіть редагування зі змінами перед перемиканням режиму редактора."
     },
     "data": {
       "emptyTitle": "Імпортуйте дані для аналізу",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "Неправильна кількість аргументів для {fn}",
       "schemaFormulaCycleError": "Циклічне посилання між формулами",
       "derivedColumnTitle": "Обчислено: {formula}",
-      "derivedFrom": "Обчислено за формулою {formula}"
+      "derivedFrom": "Обчислено за формулою {formula}",
+      "takePhoto": "Зробити фото",
+      "takePhotoHint": "Скористайтеся камерою, щоб сфотографувати форму чи таблицю — вміст стане структурованими даними, які можна перевірити за фото"
     },
     "map": {
       "emptyTitle": "Відобразьте свої дані на карті",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "Знаходьте, створюйте й оновлюйте завдання та проєкти."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Запитуйте опубліковані джерела даних, робочі книги та метрики Pulse."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Переглядайте та оновлюйте записи у ваших обʼєктах Salesforce."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Створюйте, плануйте та публікуйте дописи в соцмережах."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Переглядайте та відповідайте на повідомлення у соціальних інбоксах."
       }
     },
     "connect": "Підключити",
@@ -3200,7 +3229,19 @@
       "missingState": "Нічого авторизувати",
       "close": "Можна закрити це вікно й повернутися до застосунку.",
       "closeButton": "Закрити вікно"
-    }
+    },
+    "oauthNoAppConfigured": "Вхід через {name} не налаштовано в цьому розгортанні. Підключіться, зареєструвавши власний OAuth-додаток.",
+    "adminConnectorsTitle": "Від вашої організації",
+    "adminConnectorsDescription": "Коннектори, налаштовані адміністраторами. Доступні коннектори залежать від ваших прав доступу.",
+    "managedByOrg": "Керується вашою організацією",
+    "connectorOauthNotConfigured": "Налаштування входу для цього коннектора ще не завершено. Зверніться до адміністратора.",
+    "yourConnectorsTitle": "Ваші коннектори",
+    "addTitle": "Додати коннектор",
+    "addDescription": "Виберіть інструмент для підключення. Доступ налаштовується після вибору.",
+    "add": "Додати",
+    "filterLabel": "Фільтрувати коннектори",
+    "filterPlaceholder": "Пошук коннекторів",
+    "noMatches": "Немає коннекторів за запитом “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Підключити джерело моделі",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "Агента підказок створено.",
     "promptAgentSaveSuccess": "Агента підказок збережено.",
     "promptAgentDeleteSuccess": "Агента підказок видалено.",
-    "promptAgentsUnavailableWarning": "Не вдалося завантажити агентів підказок із сховища. Зараз їх не можна редагувати."
+    "promptAgentsUnavailableWarning": "Не вдалося завантажити агентів підказок із сховища. Зараз їх не можна редагувати.",
+    "agentsTab": "Агенти",
+    "connectorsTab": "Коннектори",
+    "addConnector": "Додати коннектор",
+    "noConnectors": "Поки що немає коннекторів.",
+    "connectorsUnavailableWarning": "Не вдалося підключитися до магазину коннекторів, тому цей список може бути неповним. Не створюйте заміну, поки сторінка повністю не завантажиться.",
+    "editAccess": "Редагувати доступ",
+    "deleteConnector": "Видалити",
+    "deleteConnectorConfirm": "Видалити цей коннектор? Усі користувачі одразу втратять до нього доступ.",
+    "confirmDeleteConnector": "Видалити коннектор",
+    "connectorSaveSuccess": "Коннектор збережено.",
+    "connectorCreateSuccess": "Коннектор створено.",
+    "connectorDeleteSuccess": "Коннектор видалено.",
+    "editConnectorTitle": "Редагувати коннектор",
+    "newConnectorTitle": "Новий коннектор",
+    "connectorPresetLabel": "Почати з шаблону",
+    "connectorPresetNone": "Почати з нуля",
+    "connectorNameLabel": "Назва",
+    "connectorDescriptionLabel": "Опис",
+    "connectorUrlLabel": "URL сервера",
+    "connectorUrlPlaceholderWarning": "Замініть {placeholder} у URL на своє значення перед збереженням.",
+    "connectorTransportLabel": "Транспорт",
+    "connectorAuthLabel": "Автентифікація",
+    "connectorAuthNone": "Немає",
+    "connectorAuthBearer": "Токен (кожен користувач надає свій власний)",
+    "connectorAuthOauth": "Вхід через OAuth",
+    "connectorSealingUnavailable": "OAuth недоступний: у цій інсталяції не налаштовано AUTH_SECRET для шифрування секретів клієнта.",
+    "connectorTokenHelpLabel": "Посилання на інструкції по токену (необовʼязково)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Секрет збережено. Залиште порожнім, щоб залишити його, або введіть новий для заміни.",
+    "connectorClientSecretHint": "Зашифровано перед зберіганням і більше не відображається.",
+    "connectorScopesLabel": "Scopes (через пробіл, необовʼязково)"
   },
   "localModels": {
     "title": "Локальні моделі",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "Автоматично отримувати вставлені посилання",
     "settingsDescription": "Коли ви вставляєте лише посилання, сторінка отримується й її текст додається, щоб асистент міг його прочитати. Вимкніть цю опцію, щоб зберігати вставлені посилання як простий текст — ви все одно зможете додати сторінку вручну через меню +.",
     "addLink": "Додати посилання"
+  },
+  "cameraAccessError": "Не вдалося отримати доступ до камери. Перевірте дозволи для камери та спробуйте ще раз.",
+  "cameraUnnamedDevice": "Камера",
+  "pastedText": {
+    "fallbackName": "Вставлений текст",
+    "charCount": "{count, number} символів",
+    "removeChip": "Видалити вставлений текст «{name}»",
+    "blockLabel": "Вставлений текст: {name}",
+    "doc": {
+      "heading": "Вставлений текст",
+      "pastedLabel": "Вставлено"
+    },
+    "settingsTitle": "Великі вставки",
+    "settingsToggle": "Перетворювати велику вставку на вкладення",
+    "settingsDescription": "Якщо вставити більше тексту, ніж вказано нижче, він додається як файл, а не у поле повідомлення. Текст використовується саме як вставлено — нічого не завантажується і не змінюється.",
+    "settingsThresholdLabel": "Додавати як файл вставки довші за",
+    "settingsThresholdUnit": "символів",
+    "settingsThresholdHint": "Від {min, number} до {max, number} символів."
+  },
+  "structures": {
+    "section": "Структури",
+    "sectionSubtitle": "Збережені визначення полів. Використовуйте як рецепт для вилучення або як початкову схему для таблиці даних.",
+    "loadFromStructure": "Завантажити структуру",
+    "loadFromStructureTitle": "Замінити ці стовпці збереженою структурою",
+    "pickerEmpty": "Ще немає збережених структур.",
+    "pickerTitle": "Завантажити збережену структуру",
+    "saveAsStructure": "Зберегти як структуру",
+    "saveAsStructureTitle": "Зберегти ці стовпці у бібліотеці структур",
+    "savedToast": "Структуру «{name}» збережено",
+    "namePlaceholder": "Назва структури",
+    "fieldCount": "{count} полів",
+    "fieldCountOne": "1 поле",
+    "downgradedNotice": "{count} поле(-ів) спрощено до тексту — таблиці містять одне значення в комірці: {names}",
+    "truncatedNotice": "{count} поле(-ів) видалено — ліміт таблиці {max} стовпців: {names}",
+    "skippedDerivedNotice": "{count} обчислюване(-их) поле(-ів) не збережено — формули посилаються на стовпці цієї таблиці: {names}",
+    "loadReplacesColumns": "Ця дія замінить поточні стовпці. Існуючі рядки збережуть значення у стовпцях з однаковими назвами."
   }
 }

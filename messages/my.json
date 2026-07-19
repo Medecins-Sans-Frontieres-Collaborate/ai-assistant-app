@@ -2116,7 +2116,9 @@
     "pin": "ထိပ်ပိုင်းတွင်တပ်ဆင်ရန်",
     "unpin": "ထိပ်မှဖြုတ်ရန်",
     "moveToMore": "နောက်ထပ်သို့ရွှေ့ရန်",
-    "moveOutOfMore": "မီနူးထဲတွင် ပြရန်"
+    "moveOutOfMore": "မီနူးထဲတွင် ပြရန်",
+    "showSources": "အခြား ရင်းမြစ်များ ပြပါ",
+    "hideSources": "အခြား ရင်းမြစ်များ 숨기기"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI ရဲ့ တုန့်ပြန်မှုကို ပြင်ဆင်နိုင်ရန် ကိုယ်ပိုင်ညွှန်ကြားချက်များ ထည့်ပါ။ ဤညွှန်ကြားချက်များကို အထောက်အကူပြု၊ တိကျမှန်ကန်ပြီး လုံခြုံစိတ်ချသော တုန့်ပြန်မှုများ ရရှိစေရန် မူဝါဒအညွှန်းနှင့် တွဲဖက်အသုံးပြုပါသည်။",
   "Tip: Type \"/\" to select from saved prompt templates_": "အကြံပြုချက် - သိမ်းထားသော prompt template များကို ရွေးချယ်ရန် \"/\" ကို ရိုက်ထည့်ပါ။",
@@ -2778,7 +2780,16 @@
       "undoEdit": "ပြန်မလုပ်မည်",
       "clearResolved": "ဖြေရှင်းပြီးသောအချက်များရှင်းလင်းပါ",
       "clearResolvedHint": "အတည်ပြုပြီး၊ ငြင်းပယ်ပြီး နှင့် သက်ဆိုင်မည့်တည်းဖြတ်ချက်များကို ဤစာရင်းမှ ဖယ်ရှားပါ",
-      "autoClearResolved": "ဖြေရှင်းပြီးတည်းဖြတ်ချက်များကိုအလိုအလျောက်ရှင်းလင်းပါ"
+      "autoClearResolved": "ဖြေရှင်းပြီးတည်းဖြတ်ချက်များကိုအလိုအလျောက်ရှင်းလင်းပါ",
+      "import": "တင်သွင်းရန်",
+      "importReplaceTitle": "စာရွက်ကို ဖျောက်ပြီးအသစ်ထည့်မည်လား?",
+      "importReplaceBody": "{name} ကိုတင်သွင်းခြင်းသည် လက်ရှိစာရွက်အစားထိုးသွားပါမည်။ သင်၏ ရင်းမြစ်များ၊ သတ်မှတ်ချက်နှင့် အသံသွေးများကိုထားရှိထားမည်။",
+      "importReplaceConfirm": "အစားထိုးမည်",
+      "editorMode": "တည်းဖြတ်မှုအမျိုးအစား",
+      "editorModeRich": "တည်းဖြတ်မှု ပိုမိုလှပ",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "တည်းဖြတ်မှုအကြံပြုချက်များကို ဖြေရှင်းမြောက်ပြီးမှ တည်းဖြတ်မှုအမျိုးအစား ပြောင်းနိုင်ပါသည်။"
     },
     "data": {
       "emptyTitle": "ခန့်မှန်းရန်ဒေတာတင်သွင်းပါ",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "{fn} တွင် အချက်အလက်အရေအတွက်မှားနေသည်",
       "schemaFormulaCycleError": "ဖော်မြူလာများ အပြန်အလှန်ရူပါတ်ပါဝင်နေသည်",
       "derivedColumnTitle": "တွက်ချက်ချက်: {formula}",
-      "derivedFrom": "{formula} မှတွက်ချက်ထားသည်"
+      "derivedFrom": "{formula} မှတွက်ချက်ထားသည်",
+      "takePhoto": "ဓာတ်ပုံ ရိုက်ယူပါ",
+      "takePhotoHint": "ပုံစံ သို့မဟုတ် ဇယားတစ်ခုကို ဓာတ်ပုံရိုက်ရန် ကင်မရာကို သုံးပါ — ၎င်း၏ အကြောင်းအရာများသည် စစ်ဆေးနိုင်သော အချက်အလက်များဖြစ်သွားပါမည်။"
     },
     "map": {
       "emptyTitle": "သင်၏အချက်အလက်ကို မြေပုံတွင်ထားပါ",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "တာဝန်နှင့် ပရောဂျက်များ ရှာဖွေရန်၊ ဖန်တီးရန်နှင့် ပြင်ဆင်ရန်။"
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "ထုတ်ဝေထားသော ဒေတာရင်းမြစ်များ၊ စာအုပ်များနှင့် Pulse metrics များကို မေးမြန်းနိုင်သည်။"
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "သင့် Salesforce objects များအတွင်း မှတ်တမ်းများကို ရှာဖွေ၊ ပြင်ဆင်နိုင်သည်။"
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "လူမှုမီဒီယာပို့စ်များ ပရိတ်, အချိန်ဇယားချ, ထုတ်ဝေနိုင်သည်။"
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "ဆိုရှယ် မီဒီယာအဖွဲ့ဝင်စကားပြောဆိုမှုများကို ပြန်သုံးသပ်နှင့် တုံ့ပြန်ရန်။"
       }
     },
     "connect": "ချိတ်ဆက်ရန်",
@@ -3200,7 +3229,19 @@
       "missingState": "ခွင့်ပြုရန် မရှိပါ",
       "close": "ဤဝင်းဒိုးကိုပိတ်ပြီး app သို့ ပြန်သွားနိုင်ပါသည်။",
       "closeButton": "ဝင်းဒိုးပိတ်ပါ"
-    }
+    },
+    "oauthNoAppConfigured": "{name} ဖြင့် ဝင်ရောက်ခြင်းကို ဒီ deployment မှာ မပြင်ဆင်ရသေးပါ။ သင့်ကိုယ်ပိုင် OAuth app ဖြင့် ချိတ်ဆက်ပါ။",
+    "adminConnectorsTitle": "သင့်အဖွဲ့အစည်းမှ",
+    "adminConnectorsDescription": "သင့်အဖွဲ့အစည်း၏ အုပ်ချုပ်သူများ စီစဉ်ထားသည့် ချိတ်ဆက်မှုများ။ မည်သည်ကို မြင်ရမည်သည်မှာ သင့်ခွင့်ပြုချက်ပေါ်မူတည်သည်။",
+    "managedByOrg": "သင့်အဖွဲ့အစည်းမှ စီမံထားသည်",
+    "connectorOauthNotConfigured": "ဤ connector အတွက် ဝင်ရောက်ခြင်း ပြင်ဆင်ဆဲဖြစ်သည်။ အုပ်ချုပ်သူထံ ဆက်သွယ်ပါ။",
+    "yourConnectorsTitle": "သင့် ချိတ်ဆက်မှုများ",
+    "addTitle": "ချိတ်ဆက်မှု အသစ်ထည့်ရန်",
+    "addDescription": "ချိတ်ဆက်လိုသော ကိရိယာရွေးချယ်ပါ။ ရွေးချယ်ပြီးနောက် ဝင်ခွင့်ပြင်ဆင်ပါမည်။",
+    "add": "ထည့်ပါ",
+    "filterLabel": "ချိတ်ဆက်မှုများ စစ်ထုတ်ရန်",
+    "filterPlaceholder": "ချိတ်ဆက်မှုများ ရှာရန်",
+    "noMatches": "“{query}” နှင့် ကိုက်ညီသော ချိတ်ဆက်မှု မရှိပါ။"
   },
   "modelSources": {
     "connectButtonShort": "မော်ဒယ်ရင်းမြစ် ချိတ်ဆက်ရန်",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "prompt အေးဂျင့် ဖန်တီးပြီးပါပြီ။",
     "promptAgentSaveSuccess": "prompt အေးဂျင့် သိမ်းဆည်းပြီးပါပြီ။",
     "promptAgentDeleteSuccess": "prompt အေးဂျင့် ဖျက်ပြီးပါပြီ။",
-    "promptAgentsUnavailableWarning": "prompt အေးဂျင့်များကို သိမ်းဆည်းရာမှ မထည့်သွင်းနိုင်ပါ။ လတ်တလော တည်းဖြတ်လို့မရနိုင်ပါ။"
+    "promptAgentsUnavailableWarning": "prompt အေးဂျင့်များကို သိမ်းဆည်းရာမှ မထည့်သွင်းနိုင်ပါ။ လတ်တလော တည်းဖြတ်လို့မရနိုင်ပါ။",
+    "agentsTab": "ကိုယ်စားလှယ်များ",
+    "connectorsTab": "ချိတ်ဆက်မှုများ",
+    "addConnector": "ချိတ်ဆက်မှု ထည့်ရန်",
+    "noConnectors": "ချိတ်ဆက်မှု မရှိသေးပါ။",
+    "connectorsUnavailableWarning": "ချိတ်ဆက်မှုဆိုင်ရာ store ကို မရောက်နိုင်သဖြင့် စာရင်းပြည့်စုံမှုမရနိုင်ပါ။ မတင်ရသေးခင်ထပ်မံမဖန်တီးပါနှင့်။",
+    "editAccess": "ဝင်ခွင့် ပြင်ဆင်ရန်",
+    "deleteConnector": "ဖျက်ပါ",
+    "deleteConnectorConfirm": "ဤချိတ်ဆက်မှုကို ဖျက်ဖို့ သေချာပါသလား? အသုံးပြုနေသူများသည် ချက်ချင်း ဝင်ခွင့်ဆုံးရှုံးသွားပါမည်။",
+    "confirmDeleteConnector": "ချိတ်ဆက်မှုဖျက်ရန်",
+    "connectorSaveSuccess": "ချိတ်ဆက်မှု ကို သိမ်းပြီးပါပြီ။",
+    "connectorCreateSuccess": "ချိတ်ဆက်မှု အသစ်ဖန်တီးပြီးပါပြီ။",
+    "connectorDeleteSuccess": "ချိတ်ဆက်မှု ဖျက်ပြီးပါပြီ။",
+    "editConnectorTitle": "ချိတ်ဆက်မှု ပြင်ဆင်ရန်",
+    "newConnectorTitle": "ချိတ်ဆက်မှု အသစ်",
+    "connectorPresetLabel": "နမူနာဖြင့် စတင်ရန်",
+    "connectorPresetNone": "အစမှစတည်ဆောက်ပါ",
+    "connectorNameLabel": "အမည်",
+    "connectorDescriptionLabel": "ဖော်ပြချက်",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "URL ထဲမှ {placeholder} ကိုသင့်တန်ဖိုးဖြင့်အစားထိုးပြီးမှသိမ်းပါ။",
+    "connectorTransportLabel": "တင်ပို့မှု",
+    "connectorAuthLabel": "အထောက်အထားစစ်ဆေးခြင်း",
+    "connectorAuthNone": "မရှိပါ",
+    "connectorAuthBearer": "Token (အသုံးပြုသူအသီးသီးပေးအပ်ရမည်)",
+    "connectorAuthOauth": "OAuth ဝင်ရောက်အသုံးပြုမှု",
+    "connectorSealingUnavailable": "OAuth မရနိုင်ပါ: ဤ deployment တွင် client secrets များကို encrypt ပြုလုပ်ရန် AUTH_SECRET မရှိပါ။",
+    "connectorTokenHelpLabel": "Token အသုံးပြုနည်းလမ်းညွှန်လင့်ခ် (ရွေးချယ်နိုင်သည်)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Secret တစ်ခုသိမ်းဆည်းထားသည်။ ထပ်နေထိုင်မယ်ဆိုလျှင်လွတ်ထားပြီး၊ အသစ်ထပ်ထည့်ပါက အစားထိုးမည်။",
+    "connectorClientSecretHint": "သိမ်းဆည်းခါနီး encrypted ပြုလုပ်ပြီး အခါတစ်ခေါက်သာ ပြသမည်။",
+    "connectorScopesLabel": "Scopes (space ဖြင့်ခွဲပါ၊ ရွေးချယ်နိုင်သည်)"
   },
   "localModels": {
     "title": "ဒေသတွင်း မော်ဒယ်များ",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "Paste လုပ်သော လင့်ခ်များကို အလိုအလျောက် ရယူမည်",
     "settingsDescription": "တစ်လင့်ခ်တည်းကို paste လုပ်လိုက်သောအခါ စာမျက်နှာကို ရယူပြီး ၎င်းစာသားကို မက်ဆေ့ချ်တွင် တပ်ဆွဲပေးပါသည်၊ အင်းအားဖြင့် ဝန်ဆောင်မှုပေးသူသည် ဖတ်နိုင်ပါသည်။ဤခလုတ်ကို ပိတ်ထားလျှင် paste လုပ်သော လင့်ခ်က သာ မူရင်းစာသားအဖြစ် ကျန်ရှိမည် — သို့သော် + မီနူးမှ ဝဘ်စာမျက်နှာအား လက်ဖြင့် တပ်ဆွဲနိုင်ပါသေးသည်။",
     "addLink": "လင့်ခ် တစ်ခု ထပ်ထည့်ပါ"
+  },
+  "cameraAccessError": "ကင်မရာကို ဝင်ရောက်လို့မရပါ။ ကင်မရာ ခွင့်ပြုချက်များကို စစ်ဆေးပြီး ထပ်မံကြိုးစားပါ။",
+  "cameraUnnamedDevice": "ကင်မရာ",
+  "pastedText": {
+    "fallbackName": "ကော်ပီကူးထားသောစာသား",
+    "charCount": "{count, number} စာလုံး",
+    "removeChip": "ကော်ပီကူးထားသော “{name}” ကိုဖယ်ရှားပါ",
+    "blockLabel": "ကော်ပီကူးထားသောစာသား: {name}",
+    "doc": {
+      "heading": "ကော်ပီကူးထားသောစာသား",
+      "pastedLabel": "ကော်ပီကူးထားသည်"
+    },
+    "settingsTitle": "ကြီးမားသောကော်ပီကူးမှုများ",
+    "settingsToggle": "ကြီးမားသောကော်ပီကူးမှုကို attachment အဖြစ်သို့ပြောင်းပါ",
+    "settingsDescription": "အောက်ပါကန့်သတ်ချက်ထက်ပိုသောစာသားကူးထည့်ပါက၊ အကြောင်းအရာကို attachment အဖြစ်ထည့်သွင်းပေးမည်၊ message box တွင်အကြောင်းအရာပြစ်မထားတော့ပါ။ စာသားကိုတစ်ခြန်းတည်းအသုံးပြုသည်—တခြားဒေတာများ fetch လုပ်ခြင်း မရှိပါ။",
+    "settingsThresholdLabel": "ဤအလျောက်စာလုံးအထက်ရှိ paste များကိုပူးတွဲပါ",
+    "settingsThresholdUnit": "စာလုံးများ",
+    "settingsThresholdHint": "{min, number} မှ {max, number} စာလုံးအတွင်းဖြစ်ရမည်။"
+  },
+  "structures": {
+    "section": "ဖွဲ့စည်းပုံများ",
+    "sectionSubtitle": "သိမ်းဆည်းထားသော field အသံညွှန်ချက်များ။ အထုတ်ယူမှုအတွက် recipe အနေဖြင့် သို့မဟုတ် data workflow table တစ်ခုအတွက် initial schema အနေဖြင့် အသုံးပြုနိုင်သည်။",
+    "loadFromStructure": "ဖွဲ့စည်းပုံတင်ပါ",
+    "loadFromStructureTitle": "ဤ column များကိုသိမ်းဆည်းထားသောဖွဲ့စည်းပုံဖြင့်အစားထိုးမည်",
+    "pickerEmpty": "သိမ်းဆည်းထားသောဖွဲ့စည်းပုံမရှိပါ။",
+    "pickerTitle": "သိမ်းဆည်းထားသောဖွဲ့စည်းပုံတစ်ခုတင်ပါ",
+    "saveAsStructure": "ဖွဲ့စည်းပုံအဖြစ်သိမ်းဆည်းပါ",
+    "saveAsStructureTitle": "ဤ column များကိုသင့်ဖွဲ့စည်းပုံများစာကြည့်တိုက်တွင်သိမ်းဆည်းပါ",
+    "savedToast": "ဖွဲ့စည်းပုံ “{name}” ကိုသိမ်းဆည်းခြင်းပြီးပါပြီ",
+    "namePlaceholder": "ဖွဲ့စည်းပုံအမည်",
+    "fieldCount": "{count} field များ",
+    "fieldCountOne": "field တစ်ခု",
+    "downgradedNotice": "{count} field(များ) ကိုစာသားအဖြစ်ရိုးပြောင်ပြုလုပ်ထားသည်—ဇယားတစ်ချပ်လျှင်တည်းကျသောတန်ဖိုးတစ်ခုသာရှိနိုင်သည်: {names}",
+    "truncatedNotice": "{count} field(များ) ကိုဖယ်သွားသည်—ဇယား၏ကန့်သတ်ချက်မှာ column {max} ခုဖြစ်သည်: {names}",
+    "skippedDerivedNotice": "{count} တွက်ချက်ထားသော column(များ) မသိမ်းဆည်းပါ—formula များသည် ဤဇယား၏ column များကိုရည်ညွှန်းပါသည်: {names}",
+    "loadReplacesColumns": "ယခု column များကိုအစားထိုးပါမည်။ Column အမည်တိုက်ဆိုင်နေသည့် row များအတွက်တန်ဖိုးများကယ်ထားပါမည်။"
   }
 }

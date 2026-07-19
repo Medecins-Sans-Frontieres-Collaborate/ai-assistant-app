@@ -2091,7 +2091,9 @@
     "pin": "Adana a sama",
     "unpin": "Cire daga sama",
     "moveToMore": "Matsa zuwa Ƙari",
-    "moveOutOfMore": "Nuna a menu"
+    "moveOutOfMore": "Nuna a menu",
+    "showSources": "Nuna sauran tushe",
+    "hideSources": "Boye sauran tushe"
   },
   "transcription": {
     "transcribesOnSend": "Zai fassara zuwa rubutu lokacin aikawa",
@@ -2762,7 +2764,16 @@
       "undoEdit": "Soke",
       "clearResolved": "Share da aka warware",
       "clearResolvedHint": "Cire gyaran da aka yarda, aka ƙi, da marasa amfani daga wannan jerin",
-      "autoClearResolved": "A share gyaran da aka warware ta atomatik"
+      "autoClearResolved": "A share gyaran da aka warware ta atomatik",
+      "import": "Shigo da",
+      "importReplaceTitle": "A maye gurbin takarda?",
+      "importReplaceBody": "Shigo da {name} zai maye gurbin takarda mai ci gaba. Za a ci gaba da adana bayanan da kuka danganta, takamaiman bayanai da yanayin magana.",
+      "importReplaceConfirm": "Maye gurbi",
+      "editorMode": "Yanayin edita",
+      "editorModeRich": "Rubutu mai inganci",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Warware gyare-gyaren da aka bayar kafin canza yanayin edita."
     },
     "data": {
       "emptyTitle": "Shigo da bayanai don nazari",
@@ -2961,7 +2972,9 @@
       "schemaFormulaArityError": "Muguwar adadin hujjoji ga {fn}",
       "schemaFormulaCycleError": "Maimaicin komawa tsakanin lissafi",
       "derivedColumnTitle": "An lissafa: {formula}",
-      "derivedFrom": "An lissafa daga {formula}"
+      "derivedFrom": "An lissafa daga {formula}",
+      "takePhoto": "Dauki hoto",
+      "takePhotoHint": "Yi amfani da kyamara ka dauki hoto na fom ko tebur — abinda ke ciki zai zama bayanai da aka tsara kana iya kwatanta da hoton."
     },
     "map": {
       "emptyTitle": "Sanya bayananka a taswira",
@@ -3124,6 +3137,22 @@
       "asana": {
         "name": "Asana",
         "description": "Nemo, ƙirƙira, da sabunta ayyuka da ayyukan haɗin gwiwa."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Nema da duba bayanai da aka wallafa, litattafai, da alamomi na Pulse."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Duba da sabunta bayanai a cikin abubuwan Salesforce ɗinku."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Kirkira, tsara lokaci, da wallafa sakonnin kafafen sada zumunta."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Duba da amsa hira a akwatin saƙon zamantakewa."
       }
     },
     "connect": "Haɗa",
@@ -3184,7 +3213,19 @@
       "missingState": "Babu abin da za a ba wa izini",
       "close": "Za ka iya rufe wannan taga kuma ka koma cikin app.",
       "closeButton": "Rufe taga"
-    }
+    },
+    "oauthNoAppConfigured": "Ba a saita shiga tare da {name} a wannan tsarin ba. Haɗa ta hanyar yin rijista da aikacen OAuth naka.",
+    "adminConnectorsTitle": "Daga kungiyarku",
+    "adminConnectorsDescription": "Haɗin kai da masu gudanarwa suka saita. Wadanda za ku gani ya dogara da damar ku.",
+    "managedByOrg": "Ana sarrafawa daga kungiyarku",
+    "connectorOauthNotConfigured": "Bai gama saita shiga wannan haɗin ba. Tuntubi mai gudanarwa.",
+    "yourConnectorsTitle": "Haɗayen ka",
+    "addTitle": "Ƙara haɗa",
+    "addDescription": "Zaɓi kayan aiki don haɗa. Za ku saita damar shiga bayan zaben.",
+    "add": "Ƙara",
+    "filterLabel": "Tace haɗayen",
+    "filterPlaceholder": "Bincika haɗayen",
+    "noMatches": "Babu haɗa da ya dace da “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Haɗa tushe na samfurin",
@@ -3502,7 +3543,39 @@
     "promptAgentCreateSuccess": "An ƙirƙiri wakili na umarni.",
     "promptAgentSaveSuccess": "An ajiye wakili na umarni.",
     "promptAgentDeleteSuccess": "An share wakili na umarni.",
-    "promptAgentsUnavailableWarning": "Ba a iya ɗauko wakilan umarni daga ajiyar bayanai ba. Ba za a iya gyara su yanzu ba."
+    "promptAgentsUnavailableWarning": "Ba a iya ɗauko wakilan umarni daga ajiyar bayanai ba. Ba za a iya gyara su yanzu ba.",
+    "agentsTab": "Agen-agen",
+    "connectorsTab": "Haɗayen",
+    "addConnector": "Ƙara haɗa",
+    "noConnectors": "Babu haɗa tukuna.",
+    "connectorsUnavailableWarning": "An kasa samun shagon haɗa, don haka jerin kan iya zama ba cikakke ba. Kada a ƙirƙiri maye gurbi sai ya loda.",
+    "editAccess": "Gyara damar shiga",
+    "deleteConnector": "Goge",
+    "deleteConnectorConfirm": "A goge wannan haɗin? Duk wanda ke amfani da shi zai rasa dama nan take.",
+    "confirmDeleteConnector": "Goge haɗa",
+    "connectorSaveSuccess": "An adana haɗa.",
+    "connectorCreateSuccess": "An ƙirƙiri haɗa.",
+    "connectorDeleteSuccess": "An goge haɗa.",
+    "editConnectorTitle": "Gyara haɗa",
+    "newConnectorTitle": "Sabon haɗa",
+    "connectorPresetLabel": "Fara daga samfuri",
+    "connectorPresetNone": "Fara daga tushe",
+    "connectorNameLabel": "Suna",
+    "connectorDescriptionLabel": "Bayanin",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "Canja {placeholder} a URL zuwa naka kafin ajiye.",
+    "connectorTransportLabel": "Jigilawa",
+    "connectorAuthLabel": "Tabbatarwa",
+    "connectorAuthNone": "Babu",
+    "connectorAuthBearer": "Token (kowa yana da nasa)",
+    "connectorAuthOauth": "Shiga ta OAuth",
+    "connectorSealingUnavailable": "OAuth baya samuwa: wannan kafa bata da AUTH_SECRET da za a yi amfani da shi wajen ɓoye client secrets.",
+    "connectorTokenHelpLabel": "Hanya zuwa umarnin token (zaɓi)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "An adana wani sirri. Bar fili don ka barshi, ko shigar da sabon sirri don maye gurbinsa.",
+    "connectorClientSecretHint": "Ana ƙare shi kafin a adana, kuma ba za a sake nuna shi ba.",
+    "connectorScopesLabel": "Scopes (a raba da tazara, zaɓi)"
   },
   "localModels": {
     "title": "Samfuran cikin gida",
@@ -3561,5 +3634,41 @@
     "settingsToggle": "Samo mahaɗin da aka liƙa ta atomatik",
     "settingsDescription": "Idan ka liƙa mahaɗi shi kaɗai, ana samun shafin kuma an ɗora rubutunsa don mataimaki ya karanta. Kashe wannan don barin mahaɗin da aka liƙa azaman rubutu kaɗai — har yanzu za ka iya ɗora shafi da hannu daga zaɓin +.",
     "addLink": "Ƙara mahaɗi"
+  },
+  "cameraAccessError": "An kasa samun damar amfani da kyamara. Duba izinin amfani da kyamara ka kuma gwada sake kunnawa.",
+  "cameraUnnamedDevice": "Kyamara",
+  "pastedText": {
+    "fallbackName": "Nadadden rubutu",
+    "charCount": "{count, number} haruffa",
+    "removeChip": "Cire nadadden rubutu “{name}”",
+    "blockLabel": "Nadadden rubutu: {name}",
+    "doc": {
+      "heading": "Nadadden rubutu",
+      "pastedLabel": "An nade"
+    },
+    "settingsTitle": "Nadewa masu yawa",
+    "settingsToggle": "Mayar da nadewa mai yawa zuwa ɗora fayil",
+    "settingsDescription": "Nadewa rubutu sama da iyaka da ke ƙasa yana ɗora shi a matsayin fayil maimakon cike akwatin saƙo. Rubutun ana amfani da shi daidai yadda aka nade shi — ba a samo komai ko canzawa.",
+    "settingsThresholdLabel": "Ɗora nadewa fiye da",
+    "settingsThresholdUnit": "haruffa",
+    "settingsThresholdHint": "Tsakanin {min, number} da {max, number} haruffa."
+  },
+  "structures": {
+    "section": "Tsaruka",
+    "sectionSubtitle": "Ajiye ma'anar filayen. Yi amfani da ɗaya a matsayin tsarin cirewa, ko a matsayin asalin tsarin teburin bayanai.",
+    "loadFromStructure": "Loda tsari",
+    "loadFromStructureTitle": "Maye gurbin waɗannan ginshikai da ajiyyen tsari",
+    "pickerEmpty": "Babu tsaruka da aka ajiye tukuna.",
+    "pickerTitle": "Loda tsari da aka ajiye",
+    "saveAsStructure": "Ajiye a matsayin tsari",
+    "saveAsStructureTitle": "Ajiye waɗannan ginshikai a cikin ɗakin ajiyar tsaruka",
+    "savedToast": "An ajiye tsari \"{name}\"",
+    "namePlaceholder": "Sunan tsari",
+    "fieldCount": "{count} filaye",
+    "fieldCountOne": "filo 1",
+    "downgradedNotice": "An saukaka {count} filaye zuwa rubutu — tebura na rike ƙima ɗaya a kowanne cell: {names}",
+    "truncatedNotice": "An watsar da {count} filaye — iyakar tebur {max} ginshikai: {names}",
+    "skippedDerivedNotice": "An kasa adana {count} ginshikan lissafi — ana amfani da ma’adanin ginshikan wannan tebur: {names}",
+    "loadReplacesColumns": "Wannan zai maye gurbin ginshikai na yanzu. Rukunin da ke akwai za su ci gaba da riƙe ƙimar da sunayen ginshikan su suka dace."
   }
 }

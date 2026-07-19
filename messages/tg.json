@@ -2091,7 +2091,9 @@
     "pin": "Ба боло маҳкам кардан",
     "unpin": "Маҳкамкуниро хориҷ кардан",
     "moveToMore": "Ба \"Бештар\" кӯчондан",
-    "moveOutOfMore": "Дар меню нишон додан"
+    "moveOutOfMore": "Дар меню нишон додан",
+    "showSources": "Манбаъҳои дигарро нишон диҳед",
+    "hideSources": "Манбаъҳои дигарро пинҳон кунед"
   },
   "transcription": {
     "transcribesOnSend": "Ҳангоми фиристодан транскрипсия мешавад",
@@ -2762,7 +2764,16 @@
       "undoEdit": "Бозгардондан",
       "clearResolved": "Тоза кардани ҳалшудаҳо",
       "clearResolvedHint": "Иқдомҳои қабулшуда, радшуда ва номарбутро аз рӯйхат тоза кунед",
-      "autoClearResolved": "Тоза кардани худкори ҳалшудаҳо"
+      "autoClearResolved": "Тоза кардани худкори ҳалшудаҳо",
+      "import": "Ворид кардан",
+      "importReplaceTitle": "Ҳуҷҷатро иваз мекунед?",
+      "importReplaceBody": "Ворид кардани {name} ҳуҷҷати ҷориро иваз мекунад. Истинодҳо, тавсиф ва лаҳзаи шумо нигоҳ дошта мешаванд.",
+      "importReplaceConfirm": "Иваз кардан",
+      "editorMode": "Реҷаи таҳриргар",
+      "editorModeRich": "Матни ғанӣ",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Пеш аз иваз кардани реҷаи таҳрир, тағйироти пешниҳодшударо ҳал кунед."
     },
     "data": {
       "emptyTitle": "Ворид кардани маълумот барои таҳлил",
@@ -2961,7 +2972,9 @@
       "schemaFormulaArityError": "Шумораи нодурусти аргументҳо барои {fn}",
       "schemaFormulaCycleError": "Пайванди доиравӣ байни формулаҳо",
       "derivedColumnTitle": "Ҳисобшуда: {formula}",
-      "derivedFrom": "Ҳисобшуда аз {formula}"
+      "derivedFrom": "Ҳисобшуда аз {formula}",
+      "takePhoto": "Акси гирифтан",
+      "takePhotoHint": "Аз камера истифода баред барои аксбардории шакл ё ҷадвал — мундариҷа ба маълумоти сохтордор табдил меёбад, ки метавонед бо акс муқоиса кунед"
     },
     "map": {
       "emptyTitle": "Маълумоти худро ба харита гузоред",
@@ -3124,6 +3137,22 @@
       "asana": {
         "name": "Asana",
         "description": "Ёфтан, эҷод ва нав кардани вазифаҳо ва лоиҳаҳо."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Сарчашмаҳои маълумоти нашршударо, workbook ва метрикаҳои Pulse-ро дархост намоед."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Сабтҳоро дар ҳамаи объектҳои Salesforce ҷустуҷӯ ва навсозӣ кунед."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Постҳои шабакаи иҷтимоиро лоиҳа кашед, замонбандӣ ва нашр намоед."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Муколамаҳои паёмдони иҷтимоиро баррасӣ ва ҷавоб диҳед."
       }
     },
     "connect": "Пайваст кардан",
@@ -3184,7 +3213,19 @@
       "missingState": "Иҷозате нест",
       "close": "Шумо метавонед ин равзанаро бандед ва ба барнома баргардед.",
       "closeButton": "Равзанаро бастан"
-    }
+    },
+    "oauthNoAppConfigured": "Воридшавӣ бо {name} дар ин насбшавӣ танзим нашудааст. Барои пайваст шудан, барномаи OAuth-и худро сабт намоед.",
+    "adminConnectorsTitle": "Аз ташкилоти шумо",
+    "adminConnectorsDescription": "Пайвасткунакҳоеро, ки маъмурон танзим кардаанд. Он чизеро, ки мебинед, аз сатҳи дастрасии шумо вобаста аст.",
+    "managedByOrg": "Аз ҷониби ташкилоти шумо идора мешавад",
+    "connectorOauthNotConfigured": "Танзими воридшавӣ барои ин пайвасткунак анҷом нашудааст. Лутфан бо маъмури худ тамос гиред.",
+    "yourConnectorsTitle": "Пайвасткунакҳои шумо",
+    "addTitle": "Пайвасткунак илова кунед",
+    "addDescription": "Асбоберо барои пайвастшавӣ интихоб кунед. Пас аз интихоб дастрасиро танзим мекунед.",
+    "add": "Илова кардан",
+    "filterLabel": "Филтри пайвасткунакҳо",
+    "filterPlaceholder": "Ҷустуҷӯи пайвасткунакҳо",
+    "noMatches": "Ҳеҷ пайвасткунанда бо “{query}” мувофиқат намекунад."
   },
   "modelSources": {
     "connectButtonShort": "Пайваст кардани манбаи модел",
@@ -3502,7 +3543,39 @@
     "promptAgentCreateSuccess": "Агенти истироҳат эҷод шуд.",
     "promptAgentSaveSuccess": "Агенти истироҳат захира карда шуд.",
     "promptAgentDeleteSuccess": "Агенти истироҳат нест карда шуд.",
-    "promptAgentsUnavailableWarning": "Агентҳои истироҳат аз захира бор карда нашуданд. Ҳоло таҳрир кардан имконнопазир аст."
+    "promptAgentsUnavailableWarning": "Агентҳои истироҳат аз захира бор карда нашуданд. Ҳоло таҳрир кардан имконнопазир аст.",
+    "agentsTab": "Агентҳо",
+    "connectorsTab": "Пайвасткунакҳо",
+    "addConnector": "Пайвасткунандаро илова кунед",
+    "noConnectors": "Ҳоло ягон пайвасткунак вуҷуд надорад.",
+    "connectorsUnavailableWarning": "Мағозаи пайвасткунак дастнорас аст, эҳтимол рӯйхат нопурра аст. Лутфан то пурра боршавӣ иваз накунед.",
+    "editAccess": "Дастрасиро таҳрир кунед",
+    "deleteConnector": "Ҳузф кардан",
+    "deleteConnectorConfirm": "Ин пайвасткунандаро ҳузф мекунед? Ҳамаи истифодабарандагони он фавран дастрасиро аз даст медиҳанд.",
+    "confirmDeleteConnector": "Пайвасткунандаро ҳузф кунед",
+    "connectorSaveSuccess": "Пайвасткунанда нигоҳ дошта шуд.",
+    "connectorCreateSuccess": "Пайвасткунанда сохта шуд.",
+    "connectorDeleteSuccess": "Пайвасткунанда ҳузф шуд.",
+    "editConnectorTitle": "Пайвасткунандаро таҳрир кунед",
+    "newConnectorTitle": "Пайвасткунандаи нав",
+    "connectorPresetLabel": "Аз қолаб оғоз кунед",
+    "connectorPresetNone": "Аз нав оғоз кардан",
+    "connectorNameLabel": "Ном",
+    "connectorDescriptionLabel": "Тавсиф",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "Пеш аз нигоҳдорӣ, {placeholder}-ро дар URL бо арзиши худ иваз намоед.",
+    "connectorTransportLabel": "Интиқол",
+    "connectorAuthLabel": "Аутентификатсия",
+    "connectorAuthNone": "Ҳеҷ",
+    "connectorAuthBearer": "Token (ҳар корбар худ медиҳад)",
+    "connectorAuthOauth": "Воридшавӣ бо OAuth",
+    "connectorSealingUnavailable": "OAuth дастрас нест: AUTH_SECRET барои рамзгузории сирҳои муштарӣ дар ин ҷойгиршавӣ муайян нашудааст.",
+    "connectorTokenHelpLabel": "Пайванд ба дастурҳои token (ихтиёрӣ)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Сир нигоҳ дошта мешавад. Барои нигоҳ доштани он холӣ монед, ё барои иваз кардан нави онро ворид намоед.",
+    "connectorClientSecretHint": "Пеш аз нигоҳдорӣ рамзгузорӣ мешавад, ва дигар намоиш дода намешавад.",
+    "connectorScopesLabel": "Scope-ҳо (бо фосила ҷудо, ихтиёрӣ)"
   },
   "localModels": {
     "title": "Моделҳои маҳаллӣ",
@@ -3561,5 +3634,41 @@
     "settingsToggle": "Пайвандҳои нусхагузошташударо худкор боргирӣ кунед",
     "settingsDescription": "Агар шумо пайвандро ҷудогона гузоред, саҳифа бориш мешавад ва матни он замима мешавад, то ёвари шумо онро бихонад. Агар хомӯш кунед, пайвандҳо танҳо ҳамчун матн мемонанд — шумо метавонед саҳифаро дастӣ аз менюи + замима кунед.",
     "addLink": "Пайванд илова кунед"
+  },
+  "cameraAccessError": "Ба камера дастрасӣ пайдо карда нашуд. Ҳуқуқҳои камераро санҷед ва дубора кӯшиш кунед.",
+  "cameraUnnamedDevice": "Камера",
+  "pastedText": {
+    "fallbackName": "Матни часпонидашуда",
+    "charCount": "{count, number} аломат",
+    "removeChip": "Матни часпонидашудаи «{name}»-ро хориҷ кунед",
+    "blockLabel": "Матни часпонидашуда: {name}",
+    "doc": {
+      "heading": "Матни часпонидашуда",
+      "pastedLabel": "Часпонидашуда"
+    },
+    "settingsTitle": "Часпониҳои бузург",
+    "settingsToggle": "Часпонии калонро ҳамчун файл замима кунед",
+    "settingsDescription": "Вақте ки шумо текстро аз лимити поён зиёдтар часпонед, он ҳамчун файл замима мешавад, на баъди пур кардани қуттии паём. Матн аниқан ҳамон тавре ки часпонида шуд, истифода мешавад — чизе гирифта ё тағйир дода намешавад.",
+    "settingsThresholdLabel": "Часпониҳоро бо дарозии бештар аз",
+    "settingsThresholdUnit": "аломат",
+    "settingsThresholdHint": "Аз {min, number} то {max, number} аломат."
+  },
+  "structures": {
+    "section": "Структураҳо",
+    "sectionSubtitle": "Таърифҳои захирашудаи заминаҳо. Якеро ҳамчун дастури истихроҷ истифода баред, ё ҳамчун схемаи ибтидоӣ барои ҷадвали коркард.",
+    "loadFromStructure": "Структураро бор кунед",
+    "loadFromStructureTitle": "Ин сутунҳоро бо структураи захирашуда иваз кунед",
+    "pickerEmpty": "Ҳанӯз структура захира нашудааст.",
+    "pickerTitle": "Структураи захирашударо бор кунед",
+    "saveAsStructure": "Ҳамчун структура захира кунед",
+    "saveAsStructureTitle": "Ин сутунҳоро ба китобхонаи структураҳои худ захира кунед",
+    "savedToast": "Структураи захирашуда «{name}»",
+    "namePlaceholder": "Номи структура",
+    "fieldCount": "{count} замина",
+    "fieldCountOne": "1 замина",
+    "downgradedNotice": "{count} замина мустақиман ба матн табдил ёфт — ҷадвал барои як ячейка як арзиш: {names}",
+    "truncatedNotice": "{count} замина партофта шуд — маҳдудияти ҷадвал {max} сутун: {names}",
+    "skippedDerivedNotice": "{count} сутуни ҳисобшуда захира нашуд — формулаҳо ба сутунҳои ин ҷадвал ишора мекунанд: {names}",
+    "loadReplacesColumns": "Ин сутунҳои ҷорӣ иваз мешаванд. Сатрҳои мавҷуда арзишҳои ҳамномро нигоҳ медоранд."
   }
 }

@@ -2048,7 +2048,9 @@
     "pin": "置顶",
     "unpin": "取消置顶",
     "moveToMore": "移至更多",
-    "moveOutOfMore": "在菜单中显示"
+    "moveOutOfMore": "在菜单中显示",
+    "showSources": "显示其他来源",
+    "hideSources": "隐藏其他来源"
   },
   "transcription": {
     "addInstructions": "添加说明",
@@ -2809,7 +2811,16 @@
       "undoEdit": "撤销",
       "clearResolved": "清除已解决",
       "clearResolvedHint": "从此列表中移除已接受、已拒绝和不适用的修改",
-      "autoClearResolved": "自动清除已解决的修改"
+      "autoClearResolved": "自动清除已解决的修改",
+      "import": "导入",
+      "importReplaceTitle": "替换文档？",
+      "importReplaceBody": "导入{name}将替换当前文档。您的参考资料、规范和语气将被保留。",
+      "importReplaceConfirm": "替换",
+      "editorMode": "编辑器模式",
+      "editorModeRich": "富文本",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "在切换编辑器模式前，请先解决建议的修改。"
     },
     "data": {
       "emptyTitle": "导入数据进行分析",
@@ -3008,7 +3019,9 @@
       "schemaFormulaArityError": "{fn} 的参数数量错误",
       "schemaFormulaCycleError": "公式间存在循环引用",
       "derivedColumnTitle": "计算列：{formula}",
-      "derivedFrom": "来源于公式 {formula}"
+      "derivedFrom": "来源于公式 {formula}",
+      "takePhoto": "拍照",
+      "takePhotoHint": "使用摄像头拍摄表格或表单内容—内容会转化为结构化数据以便核对照片。"
     },
     "map": {
       "emptyTitle": "在地图上展示您的数据",
@@ -3171,6 +3184,22 @@
       "asana": {
         "name": "Asana",
         "description": "查找、创建和更新任务及项目。"
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "查询已发布的数据源、工作簿和Pulse指标。"
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "查找和更新您的Salesforce对象中的记录。"
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "草拟、安排和发布社交媒体帖子。"
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "查看并回复社交收件箱对话。"
       }
     },
     "connect": "连接",
@@ -3231,7 +3260,19 @@
       "missingState": "无授权事项",
       "close": "您可关闭此窗口并返回应用。",
       "closeButton": "关闭窗口"
-    }
+    },
+    "oauthNoAppConfigured": "当前部署未设置用{name}登录。请通过注册自己的OAuth应用进行连接。",
+    "adminConnectorsTitle": "来自您的组织",
+    "adminConnectorsDescription": "由您的管理员设置的连接器。可见项取决于您的访问权限。",
+    "managedByOrg": "由您的组织管理",
+    "connectorOauthNotConfigured": "此连接器的登录设置尚未完成。请联系管理员。",
+    "yourConnectorsTitle": "您的连接器",
+    "addTitle": "添加连接器",
+    "addDescription": "选择要连接的工具。选择后将进行访问设置。",
+    "add": "添加",
+    "filterLabel": "筛选连接器",
+    "filterPlaceholder": "搜索连接器",
+    "noMatches": "没有与“{query}”匹配的连接器。"
   },
   "modelSources": {
     "connectButtonShort": "连接模型来源",
@@ -3549,7 +3590,39 @@
     "promptAgentCreateSuccess": "提示代理已创建。",
     "promptAgentSaveSuccess": "提示代理已保存。",
     "promptAgentDeleteSuccess": "提示代理已删除。",
-    "promptAgentsUnavailableWarning": "无法从存储中加载提示代理，暂时无法编辑。"
+    "promptAgentsUnavailableWarning": "无法从存储中加载提示代理，暂时无法编辑。",
+    "agentsTab": "代理",
+    "connectorsTab": "连接器",
+    "addConnector": "添加连接器",
+    "noConnectors": "尚无连接器。",
+    "connectorsUnavailableWarning": "无法连接到连接器商店，此列表可能不完整。加载完成前请勿创建替代项。",
+    "editAccess": "编辑访问权限",
+    "deleteConnector": "删除",
+    "deleteConnectorConfirm": "确定删除此连接器？使用此连接器的用户将立即失去访问权限。",
+    "confirmDeleteConnector": "删除连接器",
+    "connectorSaveSuccess": "连接器已保存。",
+    "connectorCreateSuccess": "连接器已创建。",
+    "connectorDeleteSuccess": "连接器已删除。",
+    "editConnectorTitle": "编辑连接器",
+    "newConnectorTitle": "新建连接器",
+    "connectorPresetLabel": "从模板开始",
+    "connectorPresetNone": "从头开始",
+    "connectorNameLabel": "名称",
+    "connectorDescriptionLabel": "描述",
+    "connectorUrlLabel": "服务器 URL",
+    "connectorUrlPlaceholderWarning": "在保存前将 URL 中的 {placeholder} 替换为您自己的值。",
+    "connectorTransportLabel": "传输方式",
+    "connectorAuthLabel": "认证",
+    "connectorAuthNone": "无",
+    "connectorAuthBearer": "令牌（每位用户自行提供）",
+    "connectorAuthOauth": "OAuth 登录",
+    "connectorSealingUnavailable": "OAuth 不可用：此部署未配置 AUTH_SECRET，无法用于加密客户端密钥。",
+    "connectorTokenHelpLabel": "令牌指南链接（可选）",
+    "connectorClientIdLabel": "OAuth 客户端 ID",
+    "connectorClientSecretLabel": "OAuth 客户端密钥",
+    "connectorClientSecretStored": "密钥已存储。保留为空继续使用现有密钥，或输入新密钥以替换。",
+    "connectorClientSecretHint": "存储前会加密，且不会再次显示。",
+    "connectorScopesLabel": "Scopes（以空格分隔，可选）"
   },
   "localModels": {
     "title": "本地模型",
@@ -3608,5 +3681,41 @@
     "settingsToggle": "自动获取粘贴的链接内容",
     "settingsDescription": "当您单独粘贴一个链接时，页面内容会被获取，其文本将附加，以便助手读取。关闭此功能可将粘贴的链接保留为纯文本，您仍可通过 + 菜单手动附加页面。",
     "addLink": "添加链接"
+  },
+  "cameraAccessError": "无法访问摄像头。请检查您的摄像头权限并重试。",
+  "cameraUnnamedDevice": "摄像头",
+  "pastedText": {
+    "fallbackName": "粘贴文本",
+    "charCount": "{count, number} 个字符",
+    "removeChip": "移除粘贴文本“{name}”",
+    "blockLabel": "粘贴文本：{name}",
+    "doc": {
+      "heading": "粘贴文本",
+      "pastedLabel": "已粘贴"
+    },
+    "settingsTitle": "大段粘贴",
+    "settingsToggle": "将大段粘贴内容转为附件",
+    "settingsDescription": "如果粘贴的文本超过下方限制，将作为文件附件，而不是填充到消息框。文本内容将完全按原样使用——不会被抓取或更改。",
+    "settingsThresholdLabel": "当粘贴内容超过",
+    "settingsThresholdUnit": "字符时附加",
+    "settingsThresholdHint": "在 {min, number} 至 {max, number} 个字符之间。"
+  },
+  "structures": {
+    "section": "结构",
+    "sectionSubtitle": "已保存的字段定义。可用作提取模板，或作为数据工作流表的起始结构。",
+    "loadFromStructure": "加载结构",
+    "loadFromStructureTitle": "用已保存的结构替换这些列",
+    "pickerEmpty": "尚未保存结构。",
+    "pickerTitle": "加载已保存的结构",
+    "saveAsStructure": "另存为结构",
+    "saveAsStructureTitle": "将这些列保存到您的结构库中",
+    "savedToast": "结构“{name}”已保存",
+    "namePlaceholder": "结构名称",
+    "fieldCount": "{count} 个字段",
+    "fieldCountOne": "1 个字段",
+    "downgradedNotice": "{count} 个字段已简化为文本——表格每格仅存一个值：{names}",
+    "truncatedNotice": "{count} 个字段已移除——表格列数上限为 {max}：{names}",
+    "skippedDerivedNotice": "{count} 个计算列未保存——公式使用了本表的列：{names}",
+    "loadReplacesColumns": "这将替换当前列。已有行会保留列名相同的值。"
   }
 }

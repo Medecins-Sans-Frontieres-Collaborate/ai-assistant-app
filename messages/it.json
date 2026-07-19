@@ -2116,7 +2116,9 @@
     "pin": "Metti in alto",
     "unpin": "Rimuovi dalla cima",
     "moveToMore": "Sposta in Altro",
-    "moveOutOfMore": "Mostra nel menu"
+    "moveOutOfMore": "Mostra nel menu",
+    "showSources": "Mostra altre fonti",
+    "hideSources": "Nascondi altre fonti"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Aggiungi le tue istruzioni personali per personalizzare le risposte dell’IA. Queste si uniscono alle linee guida principali per garantire risposte utili, accurate e sicure.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Suggerimento: digita \"/\" per selezionare tra i modelli di prompt salvati.",
@@ -2778,7 +2780,16 @@
       "undoEdit": "Annulla",
       "clearResolved": "Rimuovi risolti",
       "clearResolvedHint": "Rimuovi le modifiche accettate, rifiutate e non applicabili da questo elenco",
-      "autoClearResolved": "Rimuovi automaticamente le modifiche risolte"
+      "autoClearResolved": "Rimuovi automaticamente le modifiche risolte",
+      "import": "Importa",
+      "importReplaceTitle": "Sostituire il documento?",
+      "importReplaceBody": "L'importazione di {name} sostituirà il documento corrente. I tuoi riferimenti, specifiche e tono verranno mantenuti.",
+      "importReplaceConfirm": "Sostituisci",
+      "editorMode": "Modalità editor",
+      "editorModeRich": "Testo formattato",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Risolvi le modifiche suggerite prima di cambiare modalità editor."
     },
     "data": {
       "emptyTitle": "Importa dati da analizzare",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "Numero errato di argomenti per {fn}",
       "schemaFormulaCycleError": "Riferimento circolare tra formule",
       "derivedColumnTitle": "Calcolato: {formula}",
-      "derivedFrom": "Calcolato da {formula}"
+      "derivedFrom": "Calcolato da {formula}",
+      "takePhoto": "Scatta foto",
+      "takePhotoHint": "Usa la fotocamera per fotografare un modulo o una tabella: i contenuti verranno trasformati in dati strutturati che potrai controllare confrontandoli con la foto."
     },
     "map": {
       "emptyTitle": "Colloca i tuoi dati su una mappa",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "Trova, crea e aggiorna task e progetti."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Interroga fonti dati pubblicate, workbooks e metriche Pulse."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Cerca e aggiorna i record nei tuoi oggetti Salesforce."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Crea, programma e pubblica post sui social media."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Rivedi e rispondi alle conversazioni nella social inbox."
       }
     },
     "connect": "Connetti",
@@ -3200,7 +3229,19 @@
       "missingState": "Niente da autorizzare",
       "close": "Puoi chiudere questa finestra e tornare all’app.",
       "closeButton": "Chiudi finestra"
-    }
+    },
+    "oauthNoAppConfigured": "L'accesso con {name} non è configurato su questa installazione. Connettiti registrando la tua app OAuth personale.",
+    "adminConnectorsTitle": "Dalla tua organizzazione",
+    "adminConnectorsDescription": "Connettori configurati dagli amministratori della tua organizzazione. Quelli visibili dipendono dal tuo livello di accesso.",
+    "managedByOrg": "Gestito dalla tua organizzazione",
+    "connectorOauthNotConfigured": "La configurazione dell'accesso non è completata per questo connettore. Contatta il tuo amministratore.",
+    "yourConnectorsTitle": "I tuoi connettori",
+    "addTitle": "Aggiungi un connettore",
+    "addDescription": "Scegli uno strumento da collegare. Imposterai l’accesso dopo la selezione.",
+    "add": "Aggiungi",
+    "filterLabel": "Filtra connettori",
+    "filterPlaceholder": "Cerca connettori",
+    "noMatches": "Nessun connettore corrisponde a “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Collega un'origine modelli",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "Agente prompt creato.",
     "promptAgentSaveSuccess": "Agente prompt salvato.",
     "promptAgentDeleteSuccess": "Agente prompt eliminato.",
-    "promptAgentsUnavailableWarning": "Impossibile caricare gli agenti prompt dalla memoria. Non possono essere modificati in questo momento."
+    "promptAgentsUnavailableWarning": "Impossibile caricare gli agenti prompt dalla memoria. Non possono essere modificati in questo momento.",
+    "agentsTab": "Agenti",
+    "connectorsTab": "Connettori",
+    "addConnector": "Aggiungi connettore",
+    "noConnectors": "Nessun connettore disponibile.",
+    "connectorsUnavailableWarning": "Impossibile raggiungere lo store dei connettori, quindi l'elenco potrebbe essere incompleto. Non creare un sostituto finché non viene caricato.",
+    "editAccess": "Modifica accesso",
+    "deleteConnector": "Elimina",
+    "deleteConnectorConfirm": "Eliminare questo connettore? Chiunque lo stia utilizzando perderà immediatamente l’accesso.",
+    "confirmDeleteConnector": "Elimina connettore",
+    "connectorSaveSuccess": "Connettore salvato.",
+    "connectorCreateSuccess": "Connettore creato.",
+    "connectorDeleteSuccess": "Connettore eliminato.",
+    "editConnectorTitle": "Modifica connettore",
+    "newConnectorTitle": "Nuovo connettore",
+    "connectorPresetLabel": "Inizia da un modello",
+    "connectorPresetNone": "Parti da zero",
+    "connectorNameLabel": "Nome",
+    "connectorDescriptionLabel": "Descrizione",
+    "connectorUrlLabel": "URL server",
+    "connectorUrlPlaceholderWarning": "Sostituisci il {placeholder} nell'URL con il tuo valore prima di salvare.",
+    "connectorTransportLabel": "Trasporto",
+    "connectorAuthLabel": "Autenticazione",
+    "connectorAuthNone": "Nessuna",
+    "connectorAuthBearer": "Token (ogni utente fornisce il proprio)",
+    "connectorAuthOauth": "Accesso OAuth",
+    "connectorSealingUnavailable": "OAuth non disponibile: in questa installazione non è stato configurato un AUTH_SECRET per criptare i client secret.",
+    "connectorTokenHelpLabel": "Link alle istruzioni per il token (opzionale)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Un secret è memorizzato. Lascia vuoto per mantenerlo o inserisci uno nuovo per sostituirlo.",
+    "connectorClientSecretHint": "Criptato prima della memorizzazione e non viene più mostrato.",
+    "connectorScopesLabel": "Scope (separati da spazio, opzionale)"
   },
   "localModels": {
     "title": "Modelli locali",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "Recupera automaticamente i link incollati",
     "settingsDescription": "Quando incolli un link da solo, la pagina viene recuperata e il suo testo allegato così l'assistente può leggerlo. Disattiva questa opzione per mantenere i link incollati come testo semplice: puoi comunque allegare una pagina manualmente dal menu +.",
     "addLink": "Aggiungi un link"
+  },
+  "cameraAccessError": "Impossibile accedere alla fotocamera. Controlla i permessi della fotocamera e riprova.",
+  "cameraUnnamedDevice": "Fotocamera",
+  "pastedText": {
+    "fallbackName": "Testo incollato",
+    "charCount": "{count, number} caratteri",
+    "removeChip": "Rimuovi testo incollato “{name}”",
+    "blockLabel": "Testo incollato: {name}",
+    "doc": {
+      "heading": "Testo incollato",
+      "pastedLabel": "Incollato"
+    },
+    "settingsTitle": "Incolla di grandi dimensioni",
+    "settingsToggle": "Trasforma un incolla grande in allegato",
+    "settingsDescription": "Se incolli più testo del limite sotto, sarà allegato come file invece di riempire la casella del messaggio. Il testo viene utilizzato esattamente come incollato: non viene recuperato o modificato nulla.",
+    "settingsThresholdLabel": "Allega incolla superiore a",
+    "settingsThresholdUnit": "caratteri",
+    "settingsThresholdHint": "Tra {min, number} e {max, number} caratteri."
+  },
+  "structures": {
+    "section": "Strutture",
+    "sectionSubtitle": "Definizioni di campo salvate. Usane una come ricetta di estrazione o come schema iniziale per una tabella di workflow dati.",
+    "loadFromStructure": "Carica struttura",
+    "loadFromStructureTitle": "Sostituisci queste colonne con una struttura salvata",
+    "pickerEmpty": "Nessuna struttura salvata.",
+    "pickerTitle": "Carica una struttura salvata",
+    "saveAsStructure": "Salva come struttura",
+    "saveAsStructureTitle": "Salva queste colonne nella tua libreria di strutture",
+    "savedToast": "Struttura salvata “{name}”",
+    "namePlaceholder": "Nome struttura",
+    "fieldCount": "{count} campi",
+    "fieldCountOne": "1 campo",
+    "downgradedNotice": "{count} campo/campi semplificati a testo — le tabelle contengono un solo valore per cella: {names}",
+    "truncatedNotice": "{count} campo/campi rimossi — il limite della tabella è di {max} colonne: {names}",
+    "skippedDerivedNotice": "{count} colonna/e calcolata/e non salvate — le formule fanno riferimento alle colonne di questa tabella: {names}",
+    "loadReplacesColumns": "Questa operazione sostituisce le colonne attuali. Le righe esistenti mantengono i valori i cui nomi di colonna corrispondono."
   }
 }

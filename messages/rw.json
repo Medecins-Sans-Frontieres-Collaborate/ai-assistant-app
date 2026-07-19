@@ -2091,7 +2091,9 @@
     "pin": "Shyira hejuru",
     "unpin": "Kura hejuru",
     "moveToMore": "Jyana mu Bindi",
-    "moveOutOfMore": "Erekana muri menu"
+    "moveOutOfMore": "Erekana muri menu",
+    "showSources": "Erekana andi masoko",
+    "hideSources": "Hisha andi masoko"
   },
   "transcription": {
     "transcribesOnSend": "Kwandika iyo byoherejwe",
@@ -2762,7 +2764,16 @@
       "undoEdit": "Subira inyuma",
       "clearResolved": "Siba ibyashojwe",
       "clearResolvedHint": "Kuraho impinduka zemerewe, zanzewe cyangwa zidakoreshwa kuri uru rutonde",
-      "autoClearResolved": "Siba byikora impinduka zamaze gufatwaho umwanzuro"
+      "autoClearResolved": "Siba byikora impinduka zamaze gufatwaho umwanzuro",
+      "import": "Kwinjiza",
+      "importReplaceTitle": "Gusimbuza inyandiko?",
+      "importReplaceBody": "Kwinjiza {name} bizasimbuza inyandiko iriho ubu. Referasiyo, ibisobanuro n’imikoreshereze bigumaho.",
+      "importReplaceConfirm": "Simbuza",
+      "editorMode": "Uburyo bwo guhindura",
+      "editorModeRich": "Inyandiko isobanutse",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Banza ukemure impinduka zasabwe mbere yo guhindura uburyo."
     },
     "data": {
       "emptyTitle": "Injiza amakuru kugirango asuzumwe",
@@ -2961,7 +2972,9 @@
       "schemaFormulaArityError": "Umubare utariwo w'ingingo kuri {fn}",
       "schemaFormulaCycleError": "Hari kuzunguruka hagati ya za formula",
       "derivedColumnTitle": "Cyabazwe: {formula}",
-      "derivedFrom": "Byavuye muri {formula}"
+      "derivedFrom": "Byavuye muri {formula}",
+      "takePhoto": "Fata ifoto",
+      "takePhotoHint": "Koresha kamera yawe gufotora ifishi cyangwa imeza — ibirimo bihinduka amakuru wabisuzuma ugereranyije n’iyo foto"
     },
     "map": {
       "emptyTitle": "Shyira amakuru yawe kuri karita",
@@ -3124,6 +3137,22 @@
       "asana": {
         "name": "Asana",
         "description": "Shakisha, utangire, uvugurure imirimo n’imishinga."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Saka amasoko y’amakuru yasohowe, ibyo wakoze (workbooks), na Pulse metrics."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Shaka no kuvugurura inyandiko ziri kuri Salesforce objects yawe."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Tegura, tegeka igihe, no gusohora ubutumwa kuri social media."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Reba kandi usubize ibiganiro byo kuri social inbox."
       }
     },
     "connect": "Huzanya",
@@ -3184,7 +3213,19 @@
       "missingState": "Nta kintu cyo guha uburenganzira",
       "close": "Urashobora gufunga iri dirishya ukagaruka kuri app.",
       "closeButton": "Funga idirishya"
-    }
+    },
+    "oauthNoAppConfigured": "Kwifashisha {name} kwiyandikisha ntibirashyirwaho muri iyi porogaramu. Ushobora kwihuza wandika OAuth app yawe.",
+    "adminConnectorsTitle": "Byaturutse mu kigo cyanyu",
+    "adminConnectorsDescription": "Connectors bashinzwe mu muryango wawe bashyizeho. Ubyemerewe cyangwa ntubimenya uko ubushobozi bwawe bungana.",
+    "managedByOrg": "Bigenzurwa n’ikigo cyanyu",
+    "connectorOauthNotConfigured": "Kwiyandikisha ntibirarangira kuri uyu mwanya. Vugana n’umuyobozi wanyu.",
+    "yourConnectorsTitle": "Connectors zawe",
+    "addTitle": "Ongeramo connector",
+    "addDescription": "Hitamo igikoresho ushaka guhuza. Uzashyiraho uburyo bwo kubigeraho nyuma yo guhitamo.",
+    "add": "Ongeraho",
+    "filterLabel": "Soma connectors",
+    "filterPlaceholder": "Shakisha connectors",
+    "noMatches": "Nta connector ijyanye na “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Huhuza inkomoko ya model",
@@ -3502,7 +3543,39 @@
     "promptAgentCreateSuccess": "Prompt agent yashyizweho.",
     "promptAgentSaveSuccess": "Prompt agent yabitswe.",
     "promptAgentDeleteSuccess": "Prompt agent yasibwe.",
-    "promptAgentsUnavailableWarning": "Prompt agents ntibashoboye kuboneka muri storage. Ubu ntibashobora guhindurwa."
+    "promptAgentsUnavailableWarning": "Prompt agents ntibashoboye kuboneka muri storage. Ubu ntibashobora guhindurwa.",
+    "agentsTab": "Abahuza (Agents)",
+    "connectorsTab": "Connectors",
+    "addConnector": "Ongeramo connector",
+    "noConnectors": "Nta connectors ziraboneka.",
+    "connectorsUnavailableWarning": "Ntibishobotse kugera kuri store ya connectors, urutonde rushobora kutuzura. Ntukore indi connector nshya utarabona urutonde.",
+    "editAccess": "Hindura uburenganzira",
+    "deleteConnector": "Siba",
+    "deleteConnectorConfirm": "Wemeza gusiba iyi connector? Uwakoresheje yose ahita ayibura.",
+    "confirmDeleteConnector": "Siba connector",
+    "connectorSaveSuccess": "Connector ibitswe neza.",
+    "connectorCreateSuccess": "Connector yakozwe.",
+    "connectorDeleteSuccess": "Connector yasibwe.",
+    "editConnectorTitle": "Hindura connector",
+    "newConnectorTitle": "Connector nshya",
+    "connectorPresetLabel": "Tangirira kuri template",
+    "connectorPresetNone": "Tangira bundi bushya",
+    "connectorNameLabel": "Izina",
+    "connectorDescriptionLabel": "Ibisobanuro",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "Subiza {placeholder} muri URL n'agaciro kawe mbere yo kubika.",
+    "connectorTransportLabel": "Itumanaho",
+    "connectorAuthLabel": "Kwinjira",
+    "connectorAuthNone": "Nta na kimwe",
+    "connectorAuthBearer": "Token (buri mukoresha atanga iye)",
+    "connectorAuthOauth": "Injira ukoresheje OAuth",
+    "connectorSealingUnavailable": "OAuth ntiboneka: Iyi deployment nta AUTH_SECRET yashyizweho ngo ibe yakingira amabanga ya client.",
+    "connectorTokenHelpLabel": "Ihuza n'amabwiriza ya token (si ngombwa)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "Ibanga rya OAuth client",
+    "connectorClientSecretStored": "Ibanga ryabitswe. Birekere ubusa niba ushaka kurigumisha, cyangwa andikemo irishya usimbure irihari.",
+    "connectorClientSecretHint": "Rirakinzwe mbere yo kubikwa, kandi ntirizongera kugaragara.",
+    "connectorScopesLabel": "Scopes (zatandukanyijwe n'utudomo, si ngombwa)"
   },
   "localModels": {
     "title": "Imiterere ziri kuri mudasobwa",
@@ -3561,5 +3634,41 @@
     "settingsToggle": "Fata imirongo ushyizemo mu buryo bwikora",
     "settingsDescription": "Iyo ushyizemo umurongo ukwawo, ipaji irafatwa hanyuma inyandiko yayo ikomekwa kugira ngo umufasha abashe kubisoma. Bimureho niba ushaka ko imirongo ishyirwa gusa nk'inyandiko isanzwe — ushobora kugikora intoki ukoresheje menu ya +.",
     "addLink": "Ongeraho umurongo"
+  },
+  "cameraAccessError": "Ntibishobotse kubona kamera. Reba uburenganzira bwo gukoresha kamera yawe maze ugerageze kongera.",
+  "cameraUnnamedDevice": "Kamera",
+  "pastedText": {
+    "fallbackName": "Ibyanditswe byakoporowe",
+    "charCount": "{count, number} inyuguti",
+    "removeChip": "Kuramo ibyanditswe byakoporowe “{name}”",
+    "blockLabel": "Ibyanditswe byakoporowe: {name}",
+    "doc": {
+      "heading": "Ibyanditswe byakoporowe",
+      "pastedLabel": "Byakoporowe"
+    },
+    "settingsTitle": "Gukoporora binini",
+    "settingsToggle": "Hinduramo guhuza ibikoporowe binini n'inyongera",
+    "settingsDescription": "Iyo ukoporoye inyandiko irenze igipimo kiri hasi, ihuzwa nk'ifishi aho kuba yuzuye mu butumwa. Ibyanditswe bikoreshwa uko biri — ntacyongerwaho cyangwa ngo gihindurwe.",
+    "settingsThresholdLabel": "Huzwa iyo bikoporowe birenze",
+    "settingsThresholdUnit": "inyuguti",
+    "settingsThresholdHint": "Hagati ya {min, number} na {max, number} inyuguti."
+  },
+  "structures": {
+    "section": "Imiterere",
+    "sectionSubtitle": "Ibisobanuro by’imirima byabitswe. Kubikoresha nk’uburyo bwo gukuramo amakuru, cyangwa nk’ishingiro rya schema y’imbonerahamwe y’akazi k’amakuru.",
+    "loadFromStructure": "Fungura imiterere",
+    "loadFromStructureTitle": "Simbuza ibi bisate ukoresheje imiterere wabitse",
+    "pickerEmpty": "Nta miterere irabikwa.",
+    "pickerTitle": "Fungura imiterere wabitse",
+    "saveAsStructure": "Bika nk’imiterere",
+    "saveAsStructureTitle": "Bika ibi bisate muri library y’imiterere yawe",
+    "savedToast": "Imiterere “{name}” yabitswe",
+    "namePlaceholder": "Izina ry’imiterere",
+    "fieldCount": "Imirima {count}",
+    "fieldCountOne": "Umurima 1",
+    "downgradedNotice": "Imirima {count} yagizwe inyandiko isanzwe — imbonerahamwe ibika agaciro kamwe muri buri gasate: {names}",
+    "truncatedNotice": "Imirima {count} yasizwe — umubare ntarengwa w’imbonerahamwe ni ibisate {max}: {names}",
+    "skippedDerivedNotice": "Kolone {count} zibazwe ntizabitswe — formula zireba ibisate by’iyi mbonerahamwe: {names}",
+    "loadReplacesColumns": "Ibi bisimbuza ibisate biriho ubu. Imirongo irabika ibintu aho amazina y’ibisate ahuye."
   }
 }

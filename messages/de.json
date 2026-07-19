@@ -2116,7 +2116,9 @@
     "pin": "Oben anheften",
     "unpin": "Lösen",
     "moveToMore": "Zu 'Mehr' verschieben",
-    "moveOutOfMore": "Im Menü anzeigen"
+    "moveOutOfMore": "Im Menü anzeigen",
+    "showSources": "Weitere Quellen anzeigen",
+    "hideSources": "Weitere Quellen ausblenden"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Fügen Sie persönliche Anweisungen hinzu, um die Antworten der KI anzupassen. Diese werden mit den zentralen Verhaltensrichtlinien kombiniert, um hilfreiche, genaue und sichere Antworten zu gewährleisten.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tipp: Geben Sie \"/\" ein, um gespeicherte Vorlagen auszuwählen.",
@@ -2778,7 +2780,16 @@
       "undoEdit": "Rückgängig",
       "clearResolved": "Erledigte entfernen",
       "clearResolvedHint": "Akzeptierte, abgelehnte und nicht zutreffende Änderungen aus dieser Liste entfernen",
-      "autoClearResolved": "Erledigte Änderungen automatisch entfernen"
+      "autoClearResolved": "Erledigte Änderungen automatisch entfernen",
+      "import": "Importieren",
+      "importReplaceTitle": "Dokument ersetzen?",
+      "importReplaceBody": "Das Importieren von {name} ersetzt das aktuelle Dokument. Ihre Referenzen, Spezifikation und Tonfall bleiben erhalten.",
+      "importReplaceConfirm": "Ersetzen",
+      "editorMode": "Editor-Modus",
+      "editorModeRich": "Rich-Text",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Lösen Sie die vorgeschlagenen Änderungen, bevor Sie den Editor-Modus wechseln."
     },
     "data": {
       "emptyTitle": "Daten zum Analysieren importieren",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "Falsche Anzahl von Argumenten für {fn}",
       "schemaFormulaCycleError": "Zirkulärer Bezug zwischen Formeln",
       "derivedColumnTitle": "Berechnet: {formula}",
-      "derivedFrom": "Berechnet aus {formula}"
+      "derivedFrom": "Berechnet aus {formula}",
+      "takePhoto": "Foto aufnehmen",
+      "takePhotoHint": "Nutzen Sie Ihre Kamera, um ein Formular oder eine Tabelle zu fotografieren — der Inhalt wird zu strukturierten Daten, die Sie mit dem Foto abgleichen können."
     },
     "map": {
       "emptyTitle": "Stellen Sie Ihre Daten auf einer Karte dar",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "Aufgaben und Projekte suchen, erstellen und aktualisieren."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Abfragen von veröffentlichten Datenquellen, Arbeitsmappen und Pulse-Kennzahlen."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Suchen und aktualisieren Sie Datensätze in Ihren Salesforce-Objekten."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Verfassen, planen und veröffentlichen Sie Social-Media-Beiträge."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Überprüfen und beantworten Sie Nachrichten im Social Inbox."
       }
     },
     "connect": "Verbinden",
@@ -3200,7 +3229,19 @@
       "missingState": "Nichts zu autorisieren",
       "close": "Sie können dieses Fenster schließen und zur App zurückkehren.",
       "closeButton": "Fenster schließen"
-    }
+    },
+    "oauthNoAppConfigured": "Die Anmeldung mit {name} ist in dieser Bereitstellung nicht eingerichtet. Verbinden Sie sich, indem Sie eine eigene OAuth-App registrieren.",
+    "adminConnectorsTitle": "Von Ihrer Organisation",
+    "adminConnectorsDescription": "Von Ihren Administratoren eingerichtete Connectoren. Ihre Zugriffsberechtigungen bestimmen, welche angezeigt werden.",
+    "managedByOrg": "Verwaltet von Ihrer Organisation",
+    "connectorOauthNotConfigured": "Die Anmeldung für diesen Connector ist noch nicht abgeschlossen. Bitte wenden Sie sich an Ihren Administrator.",
+    "yourConnectorsTitle": "Ihre Connectoren",
+    "addTitle": "Connector hinzufügen",
+    "addDescription": "Wählen Sie ein Tool zum Verbinden aus. Nach der Auswahl richten Sie den Zugriff ein.",
+    "add": "Hinzufügen",
+    "filterLabel": "Connectoren filtern",
+    "filterPlaceholder": "Connectoren durchsuchen",
+    "noMatches": "Keine passenden Connectoren für „{query}“."
   },
   "modelSources": {
     "connectButtonShort": "Modellquelle verbinden",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "Prompt-Agent erstellt.",
     "promptAgentSaveSuccess": "Prompt-Agent gespeichert.",
     "promptAgentDeleteSuccess": "Prompt-Agent gelöscht.",
-    "promptAgentsUnavailableWarning": "Prompt-Agents konnten nicht aus dem Speicher geladen werden. Sie können aktuell nicht bearbeitet werden."
+    "promptAgentsUnavailableWarning": "Prompt-Agents konnten nicht aus dem Speicher geladen werden. Sie können aktuell nicht bearbeitet werden.",
+    "agentsTab": "Agenten",
+    "connectorsTab": "Connectoren",
+    "addConnector": "Connector hinzufügen",
+    "noConnectors": "Noch keine Connectoren.",
+    "connectorsUnavailableWarning": "Der Connector-Store ist momentan nicht erreichbar, daher könnte diese Liste unvollständig sein. Erstellen Sie keinen Ersatz, bis die Liste geladen ist.",
+    "editAccess": "Zugriff bearbeiten",
+    "deleteConnector": "Löschen",
+    "deleteConnectorConfirm": "Diesen Connector löschen? Wer ihn nutzt, verliert sofort den Zugriff.",
+    "confirmDeleteConnector": "Connector löschen",
+    "connectorSaveSuccess": "Connector gespeichert.",
+    "connectorCreateSuccess": "Connector erstellt.",
+    "connectorDeleteSuccess": "Connector gelöscht.",
+    "editConnectorTitle": "Connector bearbeiten",
+    "newConnectorTitle": "Neuer Connector",
+    "connectorPresetLabel": "Mit einer Vorlage beginnen",
+    "connectorPresetNone": "Neu beginnen",
+    "connectorNameLabel": "Name",
+    "connectorDescriptionLabel": "Beschreibung",
+    "connectorUrlLabel": "Server-URL",
+    "connectorUrlPlaceholderWarning": "Ersetzen Sie das {placeholder} in der URL vor dem Speichern durch Ihren eigenen Wert.",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Authentifizierung",
+    "connectorAuthNone": "Keine",
+    "connectorAuthBearer": "Token (jeder Benutzer gibt sein eigenes an)",
+    "connectorAuthOauth": "OAuth-Anmeldung",
+    "connectorSealingUnavailable": "OAuth ist nicht verfügbar: Für diese Bereitstellung wurde kein AUTH_SECRET konfiguriert, um Client-Secrets zu verschlüsseln.",
+    "connectorTokenHelpLabel": "Link zu Token-Anweisungen (optional)",
+    "connectorClientIdLabel": "OAuth-Client-ID",
+    "connectorClientSecretLabel": "OAuth-Client-Secret",
+    "connectorClientSecretStored": "Ein Secret ist gespeichert. Lassen Sie das Feld leer, um es zu behalten, oder geben Sie ein neues ein, um es zu ersetzen.",
+    "connectorClientSecretHint": "Wird vor der Speicherung verschlüsselt und nie wieder angezeigt.",
+    "connectorScopesLabel": "Scopes (mit Leerzeichen getrennt, optional)"
   },
   "localModels": {
     "title": "Lokale Modelle",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "Eingefügte Links automatisch abrufen",
     "settingsDescription": "Wenn Sie einen Link einzeln einfügen, wird die Seite abgerufen und ihr Text angehängt, damit der Assistent sie lesen kann. Deaktivieren Sie diese Funktion, um eingefügte Links als reinen Text zu behalten – Sie können Seiten weiterhin manuell über das + Menü anhängen.",
     "addLink": "Link hinzufügen"
+  },
+  "cameraAccessError": "Zugriff auf die Kamera nicht möglich. Prüfen Sie die Kameraberechtigungen und versuchen Sie es erneut.",
+  "cameraUnnamedDevice": "Kamera",
+  "pastedText": {
+    "fallbackName": "Eingefügter Text",
+    "charCount": "{count, number} Zeichen",
+    "removeChip": "Eingefügten Text „{name}“ entfernen",
+    "blockLabel": "Eingefügter Text: {name}",
+    "doc": {
+      "heading": "Eingefügter Text",
+      "pastedLabel": "Eingefügt"
+    },
+    "settingsTitle": "Große Einfügungen",
+    "settingsToggle": "Große Einfügung als Anhang speichern",
+    "settingsDescription": "Wenn Sie mehr Text als das untenstehende Limit einfügen, wird dieser als Datei angehängt, anstatt das Nachrichtenfeld auszufüllen. Der Text wird exakt wie eingefügt verwendet – es wird nichts abgerufen oder verändert.",
+    "settingsThresholdLabel": "Einfügungen anhängen ab",
+    "settingsThresholdUnit": "Zeichen",
+    "settingsThresholdHint": "Zwischen {min, number} und {max, number} Zeichen."
+  },
+  "structures": {
+    "section": "Strukturen",
+    "sectionSubtitle": "Gespeicherte Felddefinitionen. Nutzen Sie eine davon als Extraktionsvorlage oder als Ausgangsschema für eine Daten-Workflow-Tabelle.",
+    "loadFromStructure": "Struktur laden",
+    "loadFromStructureTitle": "Diese Spalten durch eine gespeicherte Struktur ersetzen",
+    "pickerEmpty": "Noch keine gespeicherten Strukturen.",
+    "pickerTitle": "Gespeicherte Struktur laden",
+    "saveAsStructure": "Als Struktur speichern",
+    "saveAsStructureTitle": "Diese Spalten in Ihrer Struktursammlung speichern",
+    "savedToast": "Struktur „{name}“ gespeichert",
+    "namePlaceholder": "Strukturname",
+    "fieldCount": "{count} Felder",
+    "fieldCountOne": "1 Feld",
+    "downgradedNotice": "{count} Feld(er) in Text vereinfacht — Tabellen enthalten einen Wert pro Zelle: {names}",
+    "truncatedNotice": "{count} Feld(er) ausgelassen — Tabellenlimit sind {max} Spalten: {names}",
+    "skippedDerivedNotice": "{count} berechnete Spalte(n) nicht gespeichert — Formeln verweisen auf Spalten dieser Tabelle: {names}",
+    "loadReplacesColumns": "Dies ersetzt die aktuellen Spalten. Vorhandene Zeilen behalten Werte, deren Spaltennamen übereinstimmen."
   }
 }

@@ -2091,7 +2091,9 @@
     "pin": "Apetraka an-tampony",
     "unpin": "Esorina amin'ny tampony",
     "moveToMore": "Alefa any amin'ny \"Bebe kokoa\"",
-    "moveOutOfMore": "Asehoy amin'ny sakafo"
+    "moveOutOfMore": "Asehoy amin'ny sakafo",
+    "showSources": "Asehoy ireo loharano hafa",
+    "hideSources": "Afeno ireo loharano hafa"
   },
   "transcription": {
     "transcribesOnSend": "Mandika rehefa alefa",
@@ -2762,7 +2764,16 @@
       "undoEdit": "Avereno",
       "clearResolved": "Fafao ny voavaha",
       "clearResolvedHint": "Esory amin'ny lisitra ireto fanitsiana nekena, nolavina, na tsy mihatra ireto",
-      "autoClearResolved": "Fafao ho azy ny fanitsiana voavaha"
+      "autoClearResolved": "Fafao ho azy ny fanitsiana voavaha",
+      "import": "Manafatra",
+      "importReplaceTitle": "Hanoloina ve ny antontan-taratasy?",
+      "importReplaceBody": "Ny fanafarana an'i {name} dia hanolo ny antontan-taratasy ankehitriny. Hitoetra ireo referansa, spec ary feo.",
+      "importReplaceConfirm": "Soloina",
+      "editorMode": "Fomba fanovana",
+      "editorModeRich": "Lahatsoratra manankarena",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Vahao aloha ny fanovàna naroso talohan'ny hanovana fomba fanovàna."
     },
     "data": {
       "emptyTitle": "Ampidiro angon-drakitra hojerena",
@@ -2961,7 +2972,9 @@
       "schemaFormulaArityError": "Diso ny isan'ny masontsivana ho an'ny {fn}",
       "schemaFormulaCycleError": "Fifamerenana manodidina eo amin'ny rafitra kajy",
       "derivedColumnTitle": "Voakajy: {formula}",
-      "derivedFrom": "Voakajy avy amin'ny {formula}"
+      "derivedFrom": "Voakajy avy amin'ny {formula}",
+      "takePhoto": "Makà sary",
+      "takePhotoHint": "Ampiasao ny fakantsarinao haka sary taratasy na tabilao — lasa angona voarafitra izay azonao ampitaha amin'ny sary ilay izy."
     },
     "map": {
       "emptyTitle": "Apetrakao anaty sarintany ny angon-drakitrao",
@@ -3124,6 +3137,22 @@
       "asana": {
         "name": "Asana",
         "description": "Mitady, mamorona, sy manavao tasks sy projets."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Manao fangatahana amin'ny loharanom-baovao sy boky asa navoaka, ary Pulse metrics."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Mitady sy manavao ireo rakitra amin'ny Salesforce anao."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Manaova dika, fandaharam-potoana, ary mamoaka lahatsoratra amin'ny tambazotra sosialy."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Jereo sy valio ny resaka ao amin'ny social inbox."
       }
     },
     "connect": "Ampifandraiso",
@@ -3184,7 +3213,19 @@
       "missingState": "Tsy misy azo ankatoavina",
       "close": "Afaka manakatona ity varavarankely ity sy miverina amin'ny app ianao.",
       "closeButton": "Akatona ny varavarankely"
-    }
+    },
+    "oauthNoAppConfigured": "Tsy voalamina amin'ity fametrahana ity ny fidirana amin'ny alalan'ny {name}. Mifandray amin'ny alalan'ny fisoratana anarana amin'ny OAuth app-nao manokana.",
+    "adminConnectorsTitle": "Avy amin'ny fikambananao",
+    "adminConnectorsDescription": "Ireo connector napetrak'ireo mpitantana. Miankina amin'ny fahazoanao miditra no ahitanao azy.",
+    "managedByOrg": "Tantanin'ny fikambananao",
+    "connectorOauthNotConfigured": "Tsy mbola vita ny fanomanana fidirana amin'ity connector ity. Mifandraisa amin'ny mpitantana anao.",
+    "yourConnectorsTitle": "Ireo connector anao",
+    "addTitle": "Ampio connector",
+    "addDescription": "Misafidiana fitaovana ampifandraisina. Rahefa avy nisafidy ianao vao manamboatra fahazoana miditra.",
+    "add": "Ampio",
+    "filterLabel": "Sivano connector",
+    "filterPlaceholder": "Karohy connector",
+    "noMatches": "Tsy misy connector mifanaraka amin'ny “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Ampifandraiso ny loharano modely",
@@ -3502,7 +3543,39 @@
     "promptAgentCreateSuccess": "Agent prompt voaforona.",
     "promptAgentSaveSuccess": "Agent prompt voatahiry.",
     "promptAgentDeleteSuccess": "Agent prompt voafafa.",
-    "promptAgentsUnavailableWarning": "Tsy afaka nakarina avy amin'ny fitahirizana ireo agent prompt. Tsy afaka ovaina amin'izao fotoana izao."
+    "promptAgentsUnavailableWarning": "Tsy afaka nakarina avy amin'ny fitahirizana ireo agent prompt. Tsy afaka ovaina amin'izao fotoana izao.",
+    "agentsTab": "Mpanampy",
+    "connectorsTab": "Connector",
+    "addConnector": "Ampio connector",
+    "noConnectors": "Tsy mbola misy connector.",
+    "connectorsUnavailableWarning": "Tsy afaka nidirana amin'ny fivarotana connector, mety tsy feno ity lisitra ity. Aza mamerina mamorona raha tsy efa niakatra ilay izy.",
+    "editAccess": "Ovay ny fahazoana miditra",
+    "deleteConnector": "Fafao",
+    "deleteConnectorConfirm": "Fafana ve ity connector ity? Izay mampiasa azy dia tsy ho afaka hiditra avy hatrany.",
+    "confirmDeleteConnector": "Fafao ny connector",
+    "connectorSaveSuccess": "Voavonjy ny connector.",
+    "connectorCreateSuccess": "Vita ny famoronana connector.",
+    "connectorDeleteSuccess": "Voafafa ny connector.",
+    "editConnectorTitle": "Ovay connector",
+    "newConnectorTitle": "Connector vaovao",
+    "connectorPresetLabel": "Atombohy amin'ny kalitao efa misy",
+    "connectorPresetNone": "Atombohy amin'ny rangotra",
+    "connectorNameLabel": "Anarana",
+    "connectorDescriptionLabel": "Famaritana",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "Soloy amin'ny sandanao manokana ny {placeholder} ao amin'ny URL alohan'ny hitahirizana.",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Fanamarinana",
+    "connectorAuthNone": "Tsy misy",
+    "connectorAuthBearer": "Token (tsirairay avy no mametraka azy)",
+    "connectorAuthOauth": "Fidirana amin’ny OAuth",
+    "connectorSealingUnavailable": "Tsy azo ampiasaina ny OAuth: tsy misy AUTH_SECRET namboarina amin'ity deployment ity hiarovana ny tsiambaratelo client.",
+    "connectorTokenHelpLabel": "Rohy mankany amin'ny toromarika token (tsy voatery)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Efa voatahiry ny tsiambaratelo. Avelao foana raha tianao hotehirizina, na fenoy vaovao raha tianao hosoloina.",
+    "connectorClientSecretHint": "Alohan'ny hitehirizana dia angonina, sady tsy haseho intsony.",
+    "connectorScopesLabel": "Scopes (avahana amin'ny habaka, tsy voatery)"
   },
   "localModels": {
     "title": "Model eo an-toerana",
@@ -3561,5 +3634,41 @@
     "settingsToggle": "Alao ho azy ny rohy apetraka",
     "settingsDescription": "Rehefa mametraka rohy misaraka ianao dia alaina ilay pejy ary ny lahatsorany dia ampiarahina amin'ny hafatrao mba ho azon'ny assistant vakiana. Vonoy raha tianao hijanona ho soratra tsotra fotsiny ny rohy. Azonao atao hatrany ny manampy pejy amin'ny tanana amin'ny alalan'ny menu +.",
     "addLink": "Ampio rohy"
+  },
+  "cameraAccessError": "Tsy afaka miditra amin'ny fakantsary. Hamarino ny fahazoan-dàlana amin'ny fakantsary ary avereno andramana.",
+  "cameraUnnamedDevice": "Fakantsary",
+  "pastedText": {
+    "fallbackName": "Lahatsoratra nampidirina",
+    "charCount": "{count, number} tarehintsoratra",
+    "removeChip": "Esory ny lahatsoratra nampidirina “{name}”",
+    "blockLabel": "Lahatsoratra nampidirina: {name}",
+    "doc": {
+      "heading": "Lahatsoratra nampidirina",
+      "pastedLabel": "Nampidirina"
+    },
+    "settingsTitle": "Lahatsoratra nampidirina be",
+    "settingsToggle": "Ataovy soratra manampy amin'ny fisie ny lahatsoratra be",
+    "settingsDescription": "Raha mihoatra ny fetra eto ambany ny habetsahan'ny lahatsoratra dia ampidirina toy ny fisie izany fa tsy mameno ny boaty hafatra. Mampiasaina araka izay nampidirina ihany ny lahatsoratra — tsy misy azo na ovaina.",
+    "settingsThresholdLabel": "Ampidiro toy ny fisie raha lava noho ny",
+    "settingsThresholdUnit": "tarehintsoratra",
+    "settingsThresholdHint": "Manomboka amin'ny {min, number} ka hatramin'ny {max, number} tarehintsoratra."
+  },
+  "structures": {
+    "section": "Rafitra",
+    "sectionSubtitle": "Famaritana saha voatahiry. Ampiasao ho fitrandrahana, na ho fihodinan-kevitra ho an’ny latabatra workflows data.",
+    "loadFromStructure": "Ampidiro rafitra",
+    "loadFromStructureTitle": "Soloy amin'ny rafitra voatahiry ireto andalana ireto",
+    "pickerEmpty": "Tsy mbola misy rafitra voatahiry.",
+    "pickerTitle": "Ampidiro rafitra voatahiry",
+    "saveAsStructure": "Tehirizo ho rafitra",
+    "saveAsStructureTitle": "Tehirizo ao amin'ny tranombokin'ny rafitrao ireo andalana ireo",
+    "savedToast": "Rafitra voatahiry “{name}”",
+    "namePlaceholder": "Anaran'ny rafitra",
+    "fieldCount": "{count} saha",
+    "fieldCountOne": "1 saha",
+    "downgradedNotice": "{count} saha navadika ho soratra — latabatra dia iray isaky ny sela: {names}",
+    "truncatedNotice": "{count} saha nesorina — ny fetra ambony amin’ny latabatra dia {max} andalana: {names}",
+    "skippedDerivedNotice": "{count} andalana voahevitra tsy voatahiry — ireo formula mifandray amin’ity latabatra ity: {names}",
+    "loadReplacesColumns": "Hisolo ireo andalan-tsarimihetsika amin’izao. Ny laharana efa misy dia mitahiry sanda raha mitovy ny anarany."
   }
 }

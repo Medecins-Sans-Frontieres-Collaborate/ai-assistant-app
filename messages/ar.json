@@ -2017,7 +2017,9 @@
     "pin": "تثبيت في الأعلى",
     "unpin": "إلغاء التثبيت",
     "moveToMore": "نقل إلى المزيد",
-    "moveOutOfMore": "إظهار في القائمة"
+    "moveOutOfMore": "إظهار في القائمة",
+    "showSources": "عرض مصادر أخرى",
+    "hideSources": "إخفاء مصادر أخرى"
   },
   "transcription": {
     "addInstructions": "إضافة تعليمات",
@@ -2778,7 +2780,16 @@
       "undoEdit": "تراجع",
       "clearResolved": "مسح المحلولة",
       "clearResolvedHint": "إزالة التعديلات المقبولة أو المرفوضة أو غير القابلة للتطبيق من هذه القائمة",
-      "autoClearResolved": "مسح التعديلات المحلولة تلقائيًا"
+      "autoClearResolved": "مسح التعديلات المحلولة تلقائيًا",
+      "import": "استيراد",
+      "importReplaceTitle": "استبدال المستند؟",
+      "importReplaceBody": "استيراد {name} سيستبدل المستند الحالي. ستبقى المراجع والمواصفات والنبرة محفوظة.",
+      "importReplaceConfirm": "استبدال",
+      "editorMode": "وضع المحرر",
+      "editorModeRich": "نص منسق",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "يرجى حل التعديلات المقترحة قبل تغيير وضع المحرر."
     },
     "data": {
       "emptyTitle": "استيراد بيانات للتحليل",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "عدد غير صحيح من المعاملات إلى {fn}",
       "schemaFormulaCycleError": "مرجع دائري بين الصيغ",
       "derivedColumnTitle": "محسوب: {formula}",
-      "derivedFrom": "محسوب من {formula}"
+      "derivedFrom": "محسوب من {formula}",
+      "takePhoto": "التقاط صورة",
+      "takePhotoHint": "استخدم الكاميرا لتصوير نموذج أو جدول — سيتم تحويل المحتوى إلى بيانات منظمة يمكنك مراجعتها مع الصورة"
     },
     "map": {
       "emptyTitle": "ضع بياناتك على الخريطة",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "ابحث، وأنشئ، وقم بتحديث المهام والمشاريع."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "استعلام مصادر البيانات والمنشورات وPulse metrics المنشورة."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "البحث وتحديث السجلات ضمن كائنات Salesforce الخاصة بك."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "إنشاء وجدولة ونشر منشورات وسائل التواصل الاجتماعي."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "مراجعة والرد على محادثات صندوق الوارد الاجتماعي."
       }
     },
     "connect": "اتصال",
@@ -3200,7 +3229,19 @@
       "missingState": "لا يوجد شيء لتفويضه",
       "close": "يمكنك إغلاق هذه النافذة والعودة إلى التطبيق.",
       "closeButton": "إغلاق النافذة"
-    }
+    },
+    "oauthNoAppConfigured": "تسجيل الدخول باستخدام {name} غير مُعد في هذا النشر. يمكنك الربط عن طريق تسجيل تطبيق OAuth الخاص بك.",
+    "adminConnectorsTitle": "من مؤسستك",
+    "adminConnectorsDescription": "الروابط التي أعدها المسؤولون لديك. ما تراه يعتمد على صلاحياتك.",
+    "managedByOrg": "تدار من قبل مؤسستك",
+    "connectorOauthNotConfigured": "إعداد تسجيل الدخول لهذا الرابط غير مكتمل. يرجى التواصل مع المسؤول.",
+    "yourConnectorsTitle": "روابطك",
+    "addTitle": "إضافة رابط",
+    "addDescription": "اختر أداة للربط. سيتم إعداد الوصول بعد الاختيار.",
+    "add": "إضافة",
+    "filterLabel": "تصفية الروابط",
+    "filterPlaceholder": "بحث في الروابط",
+    "noMatches": "لا يوجد روابط مطابقة لـ \"{query}\"."
   },
   "modelSources": {
     "connectButtonShort": "ربط مصدر نموذج",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "تم إنشاء وكيل موجه.",
     "promptAgentSaveSuccess": "تم حفظ وكيل موجه.",
     "promptAgentDeleteSuccess": "تم حذف وكيل موجه.",
-    "promptAgentsUnavailableWarning": "تعذر تحميل الوكلاء الموجهين من التخزين. لا يمكن تعديلهم حاليًا."
+    "promptAgentsUnavailableWarning": "تعذر تحميل الوكلاء الموجهين من التخزين. لا يمكن تعديلهم حاليًا.",
+    "agentsTab": "الوكلاء",
+    "connectorsTab": "الروابط",
+    "addConnector": "إضافة رابط",
+    "noConnectors": "لا يوجد روابط حتى الآن.",
+    "connectorsUnavailableWarning": "تعذّر الوصول إلى متجر الروابط، قد تكون هذه القائمة غير مكتملة. لا تنشئ بديلاً حتى تكتمل التحميل.",
+    "editAccess": "تعديل الصلاحيات",
+    "deleteConnector": "حذف",
+    "deleteConnectorConfirm": "هل تريد حذف هذا الرابط؟ سيخسر كل من يستخدمه صلاحية الوصول فوراً.",
+    "confirmDeleteConnector": "حذف الرابط",
+    "connectorSaveSuccess": "تم حفظ الرابط.",
+    "connectorCreateSuccess": "تم إنشاء الرابط.",
+    "connectorDeleteSuccess": "تم حذف الرابط.",
+    "editConnectorTitle": "تعديل الرابط",
+    "newConnectorTitle": "رابط جديد",
+    "connectorPresetLabel": "ابدأ من قالب",
+    "connectorPresetNone": "ابدأ من الصفر",
+    "connectorNameLabel": "الاسم",
+    "connectorDescriptionLabel": "الوصف",
+    "connectorUrlLabel": "عنوان الخادم (Server URL)",
+    "connectorUrlPlaceholderWarning": "استبدل {placeholder} في عنوان URL بقيمتك قبل الحفظ.",
+    "connectorTransportLabel": "وسيلة النقل",
+    "connectorAuthLabel": "المصادقة",
+    "connectorAuthNone": "بدون",
+    "connectorAuthBearer": "رمز (كل مستخدم يوفر رمزه الخاص)",
+    "connectorAuthOauth": "تسجيل الدخول عبر OAuth",
+    "connectorSealingUnavailable": "OAuth غير متوفر: لا يحتوي هذا النشر على AUTH_SECRET اللازم لتشفير أسرار العملاء.",
+    "connectorTokenHelpLabel": "رابط إلى تعليمات الرمز (اختياري)",
+    "connectorClientIdLabel": "معرف عميل OAuth",
+    "connectorClientSecretLabel": "سر عميل OAuth",
+    "connectorClientSecretStored": "يوجد سر محفوظ. اتركه فارغاً للإبقاء عليه، أو أدخل جديداً لاستبداله.",
+    "connectorClientSecretHint": "يتم تشفيره قبل التخزين، ولا يظهر مرة أخرى.",
+    "connectorScopesLabel": "نطاقات (مفصولة بمسافة، اختياري)"
   },
   "localModels": {
     "title": "النماذج المحلية",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "جلب الروابط الملصقة تلقائياً",
     "settingsDescription": "عند لصق رابط بمفرده، يتم جلب الصفحة وإرفاق نصها حتى يتمكن المساعد من قراءتها. يمكنك إيقاف هذا الخيار لجعل الروابط الملصقة نصاً عادياً — وما زال بإمكانك إرفاق صفحة يدوياً من قائمة +.",
     "addLink": "إضافة رابط"
+  },
+  "cameraAccessError": "تعذّر الوصول إلى الكاميرا. يرجى التحقق من أذونات الكاميرا والمحاولة مرة أخرى.",
+  "cameraUnnamedDevice": "الكاميرا",
+  "pastedText": {
+    "fallbackName": "نص ملصق",
+    "charCount": "{count, number} حرف",
+    "removeChip": "إزالة النص الملصق \"{name}\"",
+    "blockLabel": "نص ملصق: {name}",
+    "doc": {
+      "heading": "نص ملصق",
+      "pastedLabel": "ملصق"
+    },
+    "settingsTitle": "اللصق الكبير",
+    "settingsToggle": "تحويل اللصق الكبير إلى مرفق",
+    "settingsDescription": "عند لصق نص يتجاوز الحد أدناه، يُرفق كنص في ملف بدلاً من ملء صندوق الرسالة. يُستخدم النص كما هو ملصق — لا يتم جلب أو تغيير أي شيء.",
+    "settingsThresholdLabel": "إرفاق اللصقات التي تتجاوز",
+    "settingsThresholdUnit": "حرفاً",
+    "settingsThresholdHint": "بين {min, number} و{max, number} حرف."
+  },
+  "structures": {
+    "section": "الهياكل",
+    "sectionSubtitle": "تعريفات الحقول المحفوظة. استخدم أحدها كإجراء استخراج أو كنموذج أولي لجدول سير عمل البيانات.",
+    "loadFromStructure": "تحميل هيكل",
+    "loadFromStructureTitle": "استبدال هذه الأعمدة بهيكل محفوظ",
+    "pickerEmpty": "لا توجد هياكل محفوظة بعد.",
+    "pickerTitle": "تحميل هيكل محفوظ",
+    "saveAsStructure": "حفظ كهيكل",
+    "saveAsStructureTitle": "حفظ هذه الأعمدة في مكتبة الهياكل الخاصة بك",
+    "savedToast": "تم حفظ الهيكل \"{name}\"",
+    "namePlaceholder": "اسم الهيكل",
+    "fieldCount": "{count} حقل",
+    "fieldCountOne": "حقل واحد",
+    "downgradedNotice": "تم تبسيط {count} حقل إلى نص — الجداول تحتوي قيمة واحدة لكل خلية: {names}",
+    "truncatedNotice": "تم حذف {count} حقل — الحد الأقصى للأعمدة هو {max}: {names}",
+    "skippedDerivedNotice": "لم يتم حفظ {count} عمود محسوب — الصيغ تشير إلى أعمدة هذا الجدول: {names}",
+    "loadReplacesColumns": "سيتم استبدال الأعمدة الحالية. تبقى القيم للصفوف التي تتطابق أسماؤها مع الأعمدة."
   }
 }

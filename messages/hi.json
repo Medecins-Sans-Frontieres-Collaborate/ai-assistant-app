@@ -2017,7 +2017,9 @@
     "pin": "ऊपर पिन करें",
     "unpin": "पिन हटाएँ",
     "moveToMore": "'और भी' में भेजें",
-    "moveOutOfMore": "मेन्यू में दिखाएँ"
+    "moveOutOfMore": "मेन्यू में दिखाएँ",
+    "showSources": "अन्य स्रोत दिखाएं",
+    "hideSources": "अन्य स्रोत छिपाएं"
   },
   "transcription": {
     "addInstructions": "निर्देश जोड़ें",
@@ -2778,7 +2780,16 @@
       "undoEdit": "पूर्ववत करें",
       "clearResolved": "हल किए गए हटाएँ",
       "clearResolvedHint": "स्वीकृत, अस्वीकृत और अनुपयुक्त संपादन इस सूची से हटाएँ",
-      "autoClearResolved": "हल किए गए संपादन स्वचालित रूप से हटाएँ"
+      "autoClearResolved": "हल किए गए संपादन स्वचालित रूप से हटाएँ",
+      "import": "आयात करें",
+      "importReplaceTitle": "दस्तावेज़ बदलें?",
+      "importReplaceBody": "{name} को आयात करने से वर्तमान दस्तावेज़ बदल जाएगा। आपकी संदर्भ, स्पेसिफिकेशन और टोन सुरक्षित रहेंगे।",
+      "importReplaceConfirm": "बदलें",
+      "editorMode": "संपादक मोड",
+      "editorModeRich": "रिच टेक्स्ट",
+      "editorModeMarkdown": "मार्कडाउन",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "संपादक मोड बदलने से पहले सुझाए गए संपादन हल करें।"
     },
     "data": {
       "emptyTitle": "विश्लेषण के लिए डेटा आयात करें",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "{fn} के लिए गलत तर्कों की संख्या",
       "schemaFormulaCycleError": "सूत्रों के बीच चक्रीय संदर्भ",
       "derivedColumnTitle": "गणना: {formula}",
-      "derivedFrom": "{formula} से गणना की गई"
+      "derivedFrom": "{formula} से गणना की गई",
+      "takePhoto": "फोटो लें",
+      "takePhotoHint": "फॉर्म या टेबल की तस्वीर लेने के लिए कैमरा का इस्तेमाल करें — इसकी सामग्री संरचित डेटा में बदल जाएगी जिसे आप फोटो से मिला सकते हैं"
     },
     "map": {
       "emptyTitle": "अपने डेटा को मानचित्र पर दिखाएँ",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "टास्क और प्रोजेक्ट खोजें, बनाएँ और अपडेट करें।"
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "प्रकाशित डेटा स्रोतों, वर्कबुक और Pulse मेट्रिक्स पर क्वेरी करें।"
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "अपने Salesforce ऑब्जेक्ट्स में रिकॉर्ड ढूंढें और अपडेट करें।"
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "सोशल मीडिया पोस्ट ड्राफ्ट करें, शेड्यूल करें और प्रकाशित करें।"
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "सोशल इनबॉक्स वार्तालापों की समीक्षा करें और उत्तर दें।"
       }
     },
     "connect": "कनेक्ट करें",
@@ -3200,7 +3229,19 @@
       "missingState": "कोई प्राधिकरण नहीं",
       "close": "आप इस विंडो को बंद करके ऐप पर लौट सकते हैं।",
       "closeButton": "विंडो बंद करें"
-    }
+    },
+    "oauthNoAppConfigured": "{name} के साथ साइन इन इस डिप्लॉयमेंट पर सेट नहीं है। अपना OAuth ऐप रजिस्टर करके कनेक्ट करें।",
+    "adminConnectorsTitle": "आपके संगठन से",
+    "adminConnectorsDescription": "वे कनेक्टर्स जिन्हें आपके प्रशासकों ने सेट किया है। कौन-से दिखेंगे, यह आपकी पहुँच पर निर्भर करता है।",
+    "managedByOrg": "आपके संगठन द्वारा प्रबंधित",
+    "connectorOauthNotConfigured": "इस कनेक्टर के लिए साइन-इन पूरी तरह से सेट नहीं हुआ है। कृपया अपने प्रशासक से संपर्क करें।",
+    "yourConnectorsTitle": "आपके कनेक्टर्स",
+    "addTitle": "कनेक्टर जोड़ें",
+    "addDescription": "कनेक्ट करने के लिए एक टूल चुनें। चयन के बाद पहुंच सेट करेंगे।",
+    "add": "जोड़ें",
+    "filterLabel": "कनेक्टर्स फ़िल्टर करें",
+    "filterPlaceholder": "कनेक्टर्स खोजें",
+    "noMatches": "कोई कनेक्टर \"{query}\" से मेल नहीं खाते।"
   },
   "modelSources": {
     "connectButtonShort": "मॉडल स्रोत जोड़ें",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "प्रॉम्प्ट एजेंट बनाया गया।",
     "promptAgentSaveSuccess": "प्रॉम्प्ट एजेंट सहेजा गया।",
     "promptAgentDeleteSuccess": "प्रॉम्प्ट एजेंट हटाया गया।",
-    "promptAgentsUnavailableWarning": "स्टोरेज से प्रॉम्प्ट एजेंट लोड नहीं हो सके। अभी उन्हें संपादित नहीं किया जा सकता।"
+    "promptAgentsUnavailableWarning": "स्टोरेज से प्रॉम्प्ट एजेंट लोड नहीं हो सके। अभी उन्हें संपादित नहीं किया जा सकता।",
+    "agentsTab": "एजेंट्स",
+    "connectorsTab": "कनेक्टर्स",
+    "addConnector": "कनेक्टर जोड़ें",
+    "noConnectors": "अभी तक कोई कनेक्टर नहीं है।",
+    "connectorsUnavailableWarning": "कनेक्टर स्टोर उपलब्ध नहीं हो पाया, इसलिए यह सूची अधूरी हो सकती है। लोड होने तक प्रतिस्थापन न बनाएं।",
+    "editAccess": "पहुंच संपादित करें",
+    "deleteConnector": "हटाएं",
+    "deleteConnectorConfirm": "क्या इस कनेक्टर को हटाएँ? इसका उपयोग करने वालों की पहुँच तुरंत समाप्त हो जाएगी।",
+    "confirmDeleteConnector": "कनेक्टर हटाएँ",
+    "connectorSaveSuccess": "कनेक्टर सेव किया गया।",
+    "connectorCreateSuccess": "कनेक्टर बनाया गया।",
+    "connectorDeleteSuccess": "कनेक्टर हटाया गया।",
+    "editConnectorTitle": "कनेक्टर संपादित करें",
+    "newConnectorTitle": "नया कनेक्टर",
+    "connectorPresetLabel": "टेम्पलेट से शुरू करें",
+    "connectorPresetNone": "शुरुआत से शुरू करें",
+    "connectorNameLabel": "नाम",
+    "connectorDescriptionLabel": "विवरण",
+    "connectorUrlLabel": "सर्वर URL",
+    "connectorUrlPlaceholderWarning": "सहेजने से पहले URL में {placeholder} को अपनी मान से बदलें।",
+    "connectorTransportLabel": "ट्रांसपोर्ट",
+    "connectorAuthLabel": "प्रमाणीकरण",
+    "connectorAuthNone": "कुछ नहीं",
+    "connectorAuthBearer": "टोकन (हर उपयोगकर्ता अपना देगा)",
+    "connectorAuthOauth": "OAuth साइन-इन",
+    "connectorSealingUnavailable": "OAuth उपलब्ध नहीं है: इस डिप्लॉयमेंट में क्लाइंट सीक्रेट को एन्क्रिप्ट करने के लिए कोई AUTH_SECRET कॉन्फ़िगर नहीं है।",
+    "connectorTokenHelpLabel": "टोकन निर्देशों की लिंक (वैकल्पिक)",
+    "connectorClientIdLabel": "OAuth क्लाइंट ID",
+    "connectorClientSecretLabel": "OAuth क्लाइंट सीक्रेट",
+    "connectorClientSecretStored": "सीक्रेट संग्रहीत है। उसे रखने के लिए खाली छोड़ दें, या बदलने के लिए नया दर्ज करें।",
+    "connectorClientSecretHint": "सहेजने से पहले एन्क्रिप्ट किया जाएगा और फिर कभी नहीं दिखेगा।",
+    "connectorScopesLabel": "स्कोप्स (स्पेस-सेपरेटेड, वैकल्पिक)"
   },
   "localModels": {
     "title": "स्थानीय मॉडल्स",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "चिपकाए गए लिंक स्वतः प्राप्त करें",
     "settingsDescription": "जब आप किसी लिंक को अकेले चिपकाते हैं, तो पृष्ठ प्राप्त कर उसका पाठ संलग्न किया जाता है ताकि सहायक उसे पढ़ सके। इसे बंद करने पर लिंक केवल साधारण पाठ के रूप में रहेगा — आप फिर भी + मेनू से मैन्युअली पेज जोड़ सकते हैं।",
     "addLink": "लिंक जोड़ें"
+  },
+  "cameraAccessError": "कैमरा एक्सेस नहीं कर सके। कृपया अपने कैमरा अनुमतियाँ जांचें और पुनः प्रयास करें।",
+  "cameraUnnamedDevice": "कैमरा",
+  "pastedText": {
+    "fallbackName": "चिपकाया गया पाठ",
+    "charCount": "{count, number} अक्षर",
+    "removeChip": "चिपकाए गए पाठ “{name}” को हटाएँ",
+    "blockLabel": "चिपकाया गया पाठ: {name}",
+    "doc": {
+      "heading": "चिपकाया गया पाठ",
+      "pastedLabel": "चिपकाया गया"
+    },
+    "settingsTitle": "बड़ी पेस्ट",
+    "settingsToggle": "बड़ी पेस्ट को अटैचमेंट में बदलें",
+    "settingsDescription": "नीचे दिए गए सीमा से अधिक पाठ चिपकाने पर यह फ़ाइल के रूप में संलग्न हो जाएगा, न कि संदेश बॉक्स में। पाठ जैसा चिपकाया गया है, वैसा ही प्रयोग किया जाएगा — कुछ भी प्राप्त या बदला नहीं जाएगा।",
+    "settingsThresholdLabel": "इससे लम्बे पेस्ट को जोड़ें",
+    "settingsThresholdUnit": "अक्षर",
+    "settingsThresholdHint": "{min, number} से {max, number} अक्षरों के बीच।"
+  },
+  "structures": {
+    "section": "संरचनाएँ",
+    "sectionSubtitle": "सहेजे गए फ़ील्ड परिभाषाएँ। किसी को निकासी विधि के रूप में या डेटा वर्कफ़्लो तालिका के लिए स्कीमा शुरू करने के रूप में प्रयोग करें।",
+    "loadFromStructure": "संरचना लोड करें",
+    "loadFromStructureTitle": "इन कॉलमों को सहेजे गए संरचना से बदलें",
+    "pickerEmpty": "अभी तक कोई सहेजी गई संरचना नहीं है।",
+    "pickerTitle": "सहेजी गई संरचना लोड करें",
+    "saveAsStructure": "संरचना के रूप में सहेजें",
+    "saveAsStructureTitle": "इन कॉलमों को अपनी संरचना लाइब्रेरी में सहेजें",
+    "savedToast": "सहेजी गई संरचना “{name}”",
+    "namePlaceholder": "संरचना का नाम",
+    "fieldCount": "{count} फ़ील्ड",
+    "fieldCountOne": "1 फ़ील्ड",
+    "downgradedNotice": "{count} फ़ील्ड को पाठ में सरल किया गया — तालिका में प्रत्येक सेल में एक मान होगा: {names}",
+    "truncatedNotice": "{count} फ़ील्ड हटा दिए गए — तालिका की सीमा {max} कॉलम है: {names}",
+    "skippedDerivedNotice": "{count} गणना कॉलम सहेजे नहीं गए — सूत्र इस तालिका के कॉलम पर आधारित हैं: {names}",
+    "loadReplacesColumns": "यह वर्तमान कॉलमों को बदल देगा। जिन पंक्तियों के कॉलम नाम मेल खाते हैं, उनके मान बने रहेंगे।"
   }
 }

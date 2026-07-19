@@ -2017,7 +2017,9 @@
     "pin": "Připnout nahoru",
     "unpin": "Odepnout",
     "moveToMore": "Přesunout do Více",
-    "moveOutOfMore": "Zobrazit v menu"
+    "moveOutOfMore": "Zobrazit v menu",
+    "showSources": "Zobrazit další zdroje",
+    "hideSources": "Skrýt další zdroje"
   },
   "transcription": {
     "addInstructions": "Přidat pokyny",
@@ -2778,7 +2780,16 @@
       "undoEdit": "Zpět",
       "clearResolved": "Vymazat vyřešené",
       "clearResolvedHint": "Odstranit přijaté, zamítnuté a neaplikovatelné úpravy z tohoto seznamu",
-      "autoClearResolved": "Automaticky mazat vyřešené úpravy"
+      "autoClearResolved": "Automaticky mazat vyřešené úpravy",
+      "import": "Importovat",
+      "importReplaceTitle": "Nahradit dokument?",
+      "importReplaceBody": "Import dokumentu {name} nahradí aktuální dokument. Vaše reference, specifikace a tón budou zachovány.",
+      "importReplaceConfirm": "Nahradit",
+      "editorMode": "Režim editoru",
+      "editorModeRich": "Rich text",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Před změnou režimu editoru vyřešte navržené úpravy."
     },
     "data": {
       "emptyTitle": "Importujte data k analýze",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "Nesprávný počet argumentů pro {fn}",
       "schemaFormulaCycleError": "Cyklický odkaz mezi vzorci",
       "derivedColumnTitle": "Vypočteno: {formula}",
-      "derivedFrom": "Vypočteno ze vzorce {formula}"
+      "derivedFrom": "Vypočteno ze vzorce {formula}",
+      "takePhoto": "Pořídit fotografii",
+      "takePhotoHint": "Použijte kameru k nafocení formuláře nebo tabulky — jejich obsah se převede na strukturovaná data, která můžete ověřit podle fotografie"
     },
     "map": {
       "emptyTitle": "Zobrazte svá data na mapě",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "Najděte, vytvořte a aktualizujte úkoly a projekty."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Dotazujte publikované datové zdroje, workbooks a Pulse metriky."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Vyhledávejte a aktualizujte záznamy ve vašich Salesforce objektech."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Připravujte, plánujte a publikujte příspěvky na sociální sítě."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Kontrolujte a odpovídejte na konverzace v sociální schránce."
       }
     },
     "connect": "Připojit",
@@ -3200,7 +3229,19 @@
       "missingState": "Není co autorizovat",
       "close": "Toto okno můžete zavřít a vrátit se do aplikace.",
       "closeButton": "Zavřít okno"
-    }
+    },
+    "oauthNoAppConfigured": "Přihlášení přes {name} není v této instalaci nastavené. Připojte se registrací vlastního OAuth app.",
+    "adminConnectorsTitle": "Z vaší organizace",
+    "adminConnectorsDescription": "Konektory nastavené vašimi administrátory. Zobrazení závisí na vašem přístupu.",
+    "managedByOrg": "Spravuje vaše organizace",
+    "connectorOauthNotConfigured": "Přihlášení pro tento konektor ještě není nastavené. Kontaktujte svého administrátora.",
+    "yourConnectorsTitle": "Vaše konektory",
+    "addTitle": "Přidat konektor",
+    "addDescription": "Vyberte nástroj pro připojení. Přístup nastavíte po výběru.",
+    "add": "Přidat",
+    "filterLabel": "Filtrovat konektory",
+    "filterPlaceholder": "Hledat konektory",
+    "noMatches": "Žádné konektory neodpovídají „{query}“."
   },
   "modelSources": {
     "connectButtonShort": "Připojit zdroj modelu",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "Prompt agent byl vytvořen.",
     "promptAgentSaveSuccess": "Prompt agent byl uložen.",
     "promptAgentDeleteSuccess": "Prompt agent byl smazán.",
-    "promptAgentsUnavailableWarning": "Prompt agenty se nepodařilo načíst z úložiště. Momentálně je nelze upravovat."
+    "promptAgentsUnavailableWarning": "Prompt agenty se nepodařilo načíst z úložiště. Momentálně je nelze upravovat.",
+    "agentsTab": "Agenti",
+    "connectorsTab": "Konektory",
+    "addConnector": "Přidat konektor",
+    "noConnectors": "Zatím žádné konektory.",
+    "connectorsUnavailableWarning": "Nepodařilo se načíst seznam konektorů, proto může být neúplný. Nevytvářejte náhradu, dokud se seznam nenačte.",
+    "editAccess": "Upravit přístup",
+    "deleteConnector": "Smazat",
+    "deleteConnectorConfirm": "Smazat tento konektor? Každý, kdo ho používá, okamžitě ztratí přístup.",
+    "confirmDeleteConnector": "Smazat konektor",
+    "connectorSaveSuccess": "Konektor uložen.",
+    "connectorCreateSuccess": "Konektor vytvořen.",
+    "connectorDeleteSuccess": "Konektor smazán.",
+    "editConnectorTitle": "Upravit konektor",
+    "newConnectorTitle": "Nový konektor",
+    "connectorPresetLabel": "Začít ze šablony",
+    "connectorPresetNone": "Začít od začátku",
+    "connectorNameLabel": "Název",
+    "connectorDescriptionLabel": "Popis",
+    "connectorUrlLabel": "URL serveru",
+    "connectorUrlPlaceholderWarning": "Před uložením nahraďte {placeholder} v URL svou hodnotou.",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Ověření",
+    "connectorAuthNone": "Žádné",
+    "connectorAuthBearer": "Token (každý uživatel zadává svůj vlastní)",
+    "connectorAuthOauth": "OAuth přihlášení",
+    "connectorSealingUnavailable": "OAuth není dostupný: v tomto nasazení není nastaven AUTH_SECRET pro šifrování klientských tajemství.",
+    "connectorTokenHelpLabel": "Odkaz na pokyny k tokenu (volitelné)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Tajemství je uloženo. Nechte prázdné pro zachování, nebo zadejte nové pro nahrazení.",
+    "connectorClientSecretHint": "Před uložením je zašifrováno a již nebude zobrazeno.",
+    "connectorScopesLabel": "Scopes (oddělené mezerou, volitelné)"
   },
   "localModels": {
     "title": "Lokální modely",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "Automaticky načítat vložené odkazy",
     "settingsDescription": "Když vložíte odkaz samostatně, stránka se stáhne a text přiloží, aby jej asistent mohl číst. Vypněte pro ponechání odkazů jako prostý text — stránku lze stále přiložit ručně z nabídky +.",
     "addLink": "Přidat odkaz"
+  },
+  "cameraAccessError": "Nelze získat přístup ke kameře. Zkontrolujte oprávnění ke kameře a zkuste to znovu.",
+  "cameraUnnamedDevice": "Kamera",
+  "pastedText": {
+    "fallbackName": "Vložený text",
+    "charCount": "{count, number} znaků",
+    "removeChip": "Odebrat vložený text “{name}”",
+    "blockLabel": "Vložený text: {name}",
+    "doc": {
+      "heading": "Vložený text",
+      "pastedLabel": "Vloženo"
+    },
+    "settingsTitle": "Velké vložené texty",
+    "settingsToggle": "Proměnit velký vložený text v přílohu",
+    "settingsDescription": "Při vložení textu přesahujícího níže uvedený limit bude text připojen jako soubor místo vyplnění zprávy. Text se použije přesně tak, jak byl vložen — nic se nestahuje ani nemění.",
+    "settingsThresholdLabel": "Připojit vložené texty delší než",
+    "settingsThresholdUnit": "znaků",
+    "settingsThresholdHint": "Mezi {min, number} a {max, number} znaky."
+  },
+  "structures": {
+    "section": "Struktury",
+    "sectionSubtitle": "Uložené definice polí. Použijte jako recept pro extrakci nebo jako výchozí schéma pro tabulku datového workflow.",
+    "loadFromStructure": "Načíst strukturu",
+    "loadFromStructureTitle": "Nahradit tyto sloupce uloženou strukturou",
+    "pickerEmpty": "Zatím zde nejsou žádné uložené struktury.",
+    "pickerTitle": "Načíst uloženou strukturu",
+    "saveAsStructure": "Uložit jako strukturu",
+    "saveAsStructureTitle": "Uložit tyto sloupce do knihovny struktur",
+    "savedToast": "Struktura „{name}“ byla uložena",
+    "namePlaceholder": "Název struktury",
+    "fieldCount": "{count} polí",
+    "fieldCountOne": "1 pole",
+    "downgradedNotice": "{count} pole/polí zjednodušeno na text — tabulky obsahují jednu hodnotu na buňku: {names}",
+    "truncatedNotice": "{count} pole/polí vynecháno — limit tabulky je {max} sloupců: {names}",
+    "skippedDerivedNotice": "{count} odvozených sloupců nebylo uloženo — vzorce odkazují na sloupce této tabulky: {names}",
+    "loadReplacesColumns": "Tímto nahradíte aktuální sloupce. Stávající řádky si ponechají hodnoty se stejným názvem sloupce."
   }
 }

@@ -2147,7 +2147,9 @@
     "pin": "Ghim lên trên",
     "unpin": "Bỏ ghim",
     "moveToMore": "Chuyển vào mục Thêm",
-    "moveOutOfMore": "Hiển thị trong menu"
+    "moveOutOfMore": "Hiển thị trong menu",
+    "showSources": "Hiển thị các nguồn khác",
+    "hideSources": "Ẩn các nguồn khác"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Thêm hướng dẫn cá nhân của bạn để tùy chỉnh cách AI phản hồi. Các hướng dẫn này sẽ được kết hợp với các quy tắc hành vi cốt lõi nhằm đảm bảo phản hồi hữu ích, chính xác và an toàn.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Mẹo: Gõ \"/\" để chọn từ các mẫu gợi ý đã lưu.",
@@ -2809,7 +2811,16 @@
       "undoEdit": "Hoàn tác",
       "clearResolved": "Xóa mục đã giải quyết",
       "clearResolvedHint": "Loại bỏ các chỉnh sửa đã chấp nhận, bị từ chối hoặc không áp dụng khỏi danh sách này",
-      "autoClearResolved": "Tự động xóa các chỉnh sửa đã giải quyết"
+      "autoClearResolved": "Tự động xóa các chỉnh sửa đã giải quyết",
+      "import": "Nhập khẩu",
+      "importReplaceTitle": "Thay thế tài liệu?",
+      "importReplaceBody": "Việc nhập khẩu {name} sẽ thay thế tài liệu hiện tại. Tham chiếu, thông số và giọng điệu của bạn sẽ được giữ nguyên.",
+      "importReplaceConfirm": "Thay thế",
+      "editorMode": "Chế độ chỉnh sửa",
+      "editorModeRich": "Văn bản phong phú",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Hãy giải quyết các chỉnh sửa được đề xuất trước khi chuyển chế độ chỉnh sửa."
     },
     "data": {
       "emptyTitle": "Nhập dữ liệu để phân tích",
@@ -3008,7 +3019,9 @@
       "schemaFormulaArityError": "Số lượng tham số không đúng cho {fn}",
       "schemaFormulaCycleError": "Tham chiếu vòng lặp giữa các công thức",
       "derivedColumnTitle": "Tính toán: {formula}",
-      "derivedFrom": "Được tính từ {formula}"
+      "derivedFrom": "Được tính từ {formula}",
+      "takePhoto": "Chụp ảnh",
+      "takePhotoHint": "Dùng camera để chụp mẫu đơn hoặc bảng — nội dung sẽ được chuyển thành dữ liệu có cấu trúc để bạn kiểm tra so với ảnh."
     },
     "map": {
       "emptyTitle": "Đặt dữ liệu của bạn lên bản đồ",
@@ -3171,6 +3184,22 @@
       "asana": {
         "name": "Asana",
         "description": "Tìm, tạo và cập nhật nhiệm vụ, dự án."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Truy vấn các nguồn dữ liệu, workbook và chỉ số Pulse đã xuất bản."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Tra cứu và cập nhật các bản ghi trên các đối tượng Salesforce của bạn."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Soạn thảo, lên lịch và đăng bài trên mạng xã hội."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Xem lại và phản hồi các cuộc trò chuyện hộp thư xã hội."
       }
     },
     "connect": "Kết nối",
@@ -3231,7 +3260,19 @@
       "missingState": "Không có gì để xác thực",
       "close": "Bạn có thể đóng cửa sổ này và quay lại ứng dụng.",
       "closeButton": "Đóng cửa sổ"
-    }
+    },
+    "oauthNoAppConfigured": "Việc đăng nhập bằng {name} chưa được cấu hình trên hệ thống này. Hãy kết nối bằng cách đăng ký ứng dụng OAuth của riêng bạn.",
+    "adminConnectorsTitle": "Từ tổ chức của bạn",
+    "adminConnectorsDescription": "Các kết nối do quản trị viên thiết lập. Quyền truy cập của bạn sẽ xác định những gì có thể xem.",
+    "managedByOrg": "Được quản lý bởi tổ chức của bạn",
+    "connectorOauthNotConfigured": "Thiết lập đăng nhập cho kết nối này chưa hoàn tất. Vui lòng liên hệ với quản trị viên.",
+    "yourConnectorsTitle": "Kết nối của bạn",
+    "addTitle": "Thêm kết nối",
+    "addDescription": "Chọn một công cụ để kết nối. Bạn sẽ thiết lập quyền truy cập sau khi chọn.",
+    "add": "Thêm",
+    "filterLabel": "Bộ lọc kết nối",
+    "filterPlaceholder": "Tìm kiếm kết nối",
+    "noMatches": "Không có kết nối nào phù hợp với \"{query}\"."
   },
   "modelSources": {
     "connectButtonShort": "Kết nối nguồn mô hình",
@@ -3549,7 +3590,39 @@
     "promptAgentCreateSuccess": "Đã tạo agent prompt.",
     "promptAgentSaveSuccess": "Đã lưu agent prompt.",
     "promptAgentDeleteSuccess": "Đã xóa agent prompt.",
-    "promptAgentsUnavailableWarning": "Không thể tải agent prompt từ kho lưu trữ. Hiện tại không thể chỉnh sửa chúng."
+    "promptAgentsUnavailableWarning": "Không thể tải agent prompt từ kho lưu trữ. Hiện tại không thể chỉnh sửa chúng.",
+    "agentsTab": "Tác nhân",
+    "connectorsTab": "Kết nối",
+    "addConnector": "Thêm kết nối",
+    "noConnectors": "Chưa có kết nối nào.",
+    "connectorsUnavailableWarning": "Không thể truy cập kho kết nối, danh sách này có thể chưa đầy đủ. Không tạo kết nối thay thế cho đến khi tải xong.",
+    "editAccess": "Chỉnh sửa quyền truy cập",
+    "deleteConnector": "Xóa",
+    "deleteConnectorConfirm": "Xóa kết nối này? Tất cả những ai đang sử dụng sẽ mất quyền truy cập ngay lập tức.",
+    "confirmDeleteConnector": "Xóa kết nối",
+    "connectorSaveSuccess": "Đã lưu kết nối.",
+    "connectorCreateSuccess": "Đã tạo kết nối.",
+    "connectorDeleteSuccess": "Đã xóa kết nối.",
+    "editConnectorTitle": "Chỉnh sửa kết nối",
+    "newConnectorTitle": "Kết nối mới",
+    "connectorPresetLabel": "Bắt đầu từ mẫu",
+    "connectorPresetNone": "Bắt đầu từ đầu",
+    "connectorNameLabel": "Tên",
+    "connectorDescriptionLabel": "Mô tả",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "Thay {placeholder} trong URL bằng giá trị của bạn trước khi lưu.",
+    "connectorTransportLabel": "Phương thức truyền",
+    "connectorAuthLabel": "Xác thực",
+    "connectorAuthNone": "Không có",
+    "connectorAuthBearer": "Token (mỗi người dùng cung cấp riêng)",
+    "connectorAuthOauth": "Đăng nhập bằng OAuth",
+    "connectorSealingUnavailable": "OAuth không khả dụng: triển khai này chưa cấu hình AUTH_SECRET để mã hóa client secrets.",
+    "connectorTokenHelpLabel": "Liên kết hướng dẫn về token (tuỳ chọn)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Đã lưu một secret. Để trống nếu muốn giữ lại, hoặc nhập mới để thay thế.",
+    "connectorClientSecretHint": "Được mã hoá trước khi lưu, và sẽ không hiển thị lại.",
+    "connectorScopesLabel": "Scopes (phân cách bằng dấu cách, tuỳ chọn)"
   },
   "localModels": {
     "title": "Mô hình cục bộ",
@@ -3608,5 +3681,41 @@
     "settingsToggle": "Tự động tải liên kết dán vào",
     "settingsDescription": "Khi bạn dán một liên kết riêng lẻ, trang sẽ được tải và phần văn bản sẽ được đính kèm để trợ lý có thể đọc. Tắt tính năng này để giữ liên kết ở dạng văn bản thuần — bạn vẫn có thể đính kèm trang thủ công từ menu +.",
     "addLink": "Thêm liên kết"
+  },
+  "cameraAccessError": "Không thể truy cập vào camera. Vui lòng kiểm tra quyền truy cập camera và thử lại.",
+  "cameraUnnamedDevice": "Camera",
+  "pastedText": {
+    "fallbackName": "Văn bản đã dán",
+    "charCount": "{count, number} ký tự",
+    "removeChip": "Xóa văn bản đã dán “{name}”",
+    "blockLabel": "Văn bản đã dán: {name}",
+    "doc": {
+      "heading": "Văn bản đã dán",
+      "pastedLabel": "Đã dán"
+    },
+    "settingsTitle": "Dán văn bản lớn",
+    "settingsToggle": "Chuyển dán lớn thành tệp đính kèm",
+    "settingsDescription": "Khi dán văn bản vượt giới hạn dưới đây, nội dung sẽ được đính kèm dưới dạng tệp thay vì điền vào ô tin nhắn. Văn bản được sử dụng nguyên trạng như khi dán — không truy xuất hoặc thay đổi gì.",
+    "settingsThresholdLabel": "Đính kèm các lần dán dài hơn",
+    "settingsThresholdUnit": "ký tự",
+    "settingsThresholdHint": "Trong khoảng từ {min, number} đến {max, number} ký tự."
+  },
+  "structures": {
+    "section": "Cấu trúc",
+    "sectionSubtitle": "Định nghĩa trường đã lưu. Sử dụng như công thức trích xuất, hoặc làm mẫu dữ liệu khởi đầu cho bảng quy trình.",
+    "loadFromStructure": "Tải cấu trúc",
+    "loadFromStructureTitle": "Thay các cột này bằng một cấu trúc đã lưu",
+    "pickerEmpty": "Chưa có cấu trúc nào được lưu.",
+    "pickerTitle": "Tải cấu trúc đã lưu",
+    "saveAsStructure": "Lưu thành cấu trúc",
+    "saveAsStructureTitle": "Lưu các cột này vào thư viện cấu trúc của bạn",
+    "savedToast": "Đã lưu cấu trúc “{name}”",
+    "namePlaceholder": "Tên cấu trúc",
+    "fieldCount": "{count} trường",
+    "fieldCountOne": "1 trường",
+    "downgradedNotice": "{count} trường đã chuyển thành dạng văn bản — bảng chỉ chứa một giá trị cho mỗi ô: {names}",
+    "truncatedNotice": "{count} trường bị loại bỏ — số cột tối đa của bảng là {max}: {names}",
+    "skippedDerivedNotice": "{count} cột tính toán không được lưu — công thức tham chiếu đến các cột trong bảng này: {names}",
+    "loadReplacesColumns": "Hành động này sẽ thay thế các cột hiện tại. Các dòng đã có sẽ giữ lại giá trị nếu tên cột trùng khớp."
   }
 }

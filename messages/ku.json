@@ -2091,7 +2091,9 @@
     "pin": "سەربە سەرەوە بکەرەوە",
     "unpin": "لە سەرەوە دوربکە",
     "moveToMore": "گواستنەوە بۆ \"زیاتر\"",
-    "moveOutOfMore": "له‌مێنیو ده‌رکه‌وه‌ پیشان بده"
+    "moveOutOfMore": "له‌مێنیو ده‌رکه‌وه‌ پیشان بده",
+    "showSources": "سەرچاوەی تر پێشان بدە",
+    "hideSources": "سەرچاوەی تر بشارەوە"
   },
   "transcription": {
     "transcribesOnSend": "Dema bişîne tê nivîsandin",
@@ -2762,7 +2764,16 @@
       "undoEdit": "پاشگەزبوونەوە",
       "clearResolved": "سڕینەوەی چارەسەرکراو",
       "clearResolvedHint": "دەستکاریکراوی وەرگیراو، ڕەتکراو، و نەگونجاو لە لیستەکە بسڕەوە",
-      "autoClearResolved": "سڕینەوەی خۆکارانەی چارەسەرکراوەکان"
+      "autoClearResolved": "سڕینەوەی خۆکارانەی چارەسەرکراوەکان",
+      "import": "هێنان",
+      "importReplaceTitle": "بەڵگەنامە جێگیر بکە؟",
+      "importReplaceBody": "هێنانی {name} بەڵگەنامەی ئێستا جێگیر دەکات. سەرچاوەکان، تایبەتمەندی و ڕەوش بەجێدەهێندرێن.",
+      "importReplaceConfirm": "جێگیر بکە",
+      "editorMode": "شوێنی دەسکاریکەر",
+      "editorModeRich": "دەقێ جێواز",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "دەستکاری پێشنیارکراوەکان چارەسەر بکە پێش گۆڕینی شوێنی دەسکاریکەر."
     },
     "data": {
       "emptyTitle": "داتا دابنێ بۆ تحلیل",
@@ -2961,7 +2972,9 @@
       "schemaFormulaArityError": "ژمارەی هەڵەی بەرھەمەکان بۆ {fn}",
       "schemaFormulaCycleError": "پەیوەندی دۆرگە دەربارەی فۆرمولاکان",
       "derivedColumnTitle": "هەسابکراو: {formula}",
-      "derivedFrom": "هەسابکراو لە {formula}"
+      "derivedFrom": "هەسابکراو لە {formula}",
+      "takePhoto": "وێنە وەرگرە",
+      "takePhotoHint": "کامێراکەت بەکاربێنە بۆ وێنەگرتنی فۆرم یان خشتە — ناوەڕۆکی دەبێتە داتا بە شێوەی ڕێکخراو کە دەتوانیت پێشاندانی وێنەکەی بکەیت."
     },
     "map": {
       "emptyTitle": "داتاکەت بنێرەسەر نەخشەیەک",
@@ -3124,6 +3137,22 @@
       "asana": {
         "name": "Asana",
         "description": "دۆزینەوە، دروستکردن و نوێکردنەوەی ئەرکەکان و پرۆژەکان."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "سەرچاوە داتاکانی بڵاوکراوە، workbook و Pulse metrics پڕس بکە."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "تۆمار بەدواداگەڕە و نوێ بکەرەوە لەسەر Salesforce-ەکەت."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "پۆستە کۆمەڵایەتییەکان ڕست بکە، خشتە بنووسە و بڵاو بکەوە."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "وتووێژی inbox-ی کۆمەڵایەتی پێداچوونەوە بکە و وەلام بدە."
       }
     },
     "connect": "پەیوەندیکردن",
@@ -3184,7 +3213,19 @@
       "missingState": "هیچ شتێک بۆ دەستەرکەوتن نییە",
       "close": "دەتوانیت ئەم پەنجەرەیە ببە و بگەڕێوە بۆ ئەپەکە.",
       "closeButton": "پەنجەرە ببە"
-    }
+    },
+    "oauthNoAppConfigured": "چوونە ژوورەوە بە {name} لەم بڵاوکراوەدا دانراو نییە. بە OAuth app-ە تایبەت بخەیتەوە.",
+    "adminConnectorsTitle": "لە رێکخراوی خۆت",
+    "adminConnectorsDescription": "هەوڵگرەکان کە بەڕێوەبەران دامەزراندوون. ئەوەی دێتە پیشانت پەیوەستە بە دەستڕاسی خۆت.",
+    "managedByOrg": "بەڕێوەبردن لەلایەن رێکخراوی خۆت",
+    "connectorOauthNotConfigured": "ڕێکخستن بۆ چوونەژوورەوە بۆ ئەم هەوڵگرە تەواو نەبووە. پەیوەندی بکە بە بەڕێوەبەرەکەت.",
+    "yourConnectorsTitle": "هەوڵگرەکانت",
+    "addTitle": "هەوڵگرێک زیاد بکە",
+    "addDescription": "ئامرازێک هەلبژێرە بۆ پەیوەندیکردن. دواتر ڕێگە پێدانەکان ڕێکدەخەیت.",
+    "add": "زیادکە",
+    "filterLabel": "هەوڵگرەکان پارێزە",
+    "filterPlaceholder": "هەوڵگرەکان بکەوە",
+    "noMatches": "هیچ هەوڵگری \"{query}\" وەک نییە."
   },
   "modelSources": {
     "connectButtonShort": "گرێبەستکردنی سەرچاوەی مۆدێل",
@@ -3502,7 +3543,39 @@
     "promptAgentCreateSuccess": "کارگێری ڕاهێنان دروستکرا.",
     "promptAgentSaveSuccess": "کارگێری ڕاهێنان پاشەکەوتکرا.",
     "promptAgentDeleteSuccess": "کارگێری ڕاهێنان سابردرا.",
-    "promptAgentsUnavailableWarning": "کارگێرانی ڕاهێنان نەتوانرا لە پاشەکەوتدا بار بکرێن. ئێستا ناتوانرێت دەستکاری بکرێن."
+    "promptAgentsUnavailableWarning": "کارگێرانی ڕاهێنان نەتوانرا لە پاشەکەوتدا بار بکرێن. ئێستا ناتوانرێت دەستکاری بکرێن.",
+    "agentsTab": "ئێجێنتەکان",
+    "connectorsTab": "هەوڵگرەکان",
+    "addConnector": "هەوڵگر زیاد بکە",
+    "noConnectors": "هێشتا هیچ هەوڵگرێک نییە.",
+    "connectorsUnavailableWarning": "ناتوانرێت فرۆشگای هەوڵگرەکان بگات، لەبەر ئەمە لیستەکە شایدم تەواو نەبێت. جێگیرێک میادەخە تا گەیاندنەکە تەواو نەبێت.",
+    "editAccess": "دەستڕاسی دەسکاریکەر",
+    "deleteConnector": "سڕینەوە",
+    "deleteConnectorConfirm": "ئەم هەوڵگرە بسڕێتەوە؟ هەموو بەکارهێنەرەکان ئێستا دەستڕاسیان لەدەست دەدات.",
+    "confirmDeleteConnector": "هەوڵگر بسڕەوە",
+    "connectorSaveSuccess": "هەوڵگر خەزنکرا.",
+    "connectorCreateSuccess": "هەوڵگر دروستکرا.",
+    "connectorDeleteSuccess": "هەوڵگر سڕدرایەوە.",
+    "editConnectorTitle": "دەسکاریکردنی هەوڵگر",
+    "newConnectorTitle": "هەوڵگری نوێ",
+    "connectorPresetLabel": "دەستپێکردن لە ڕووکاری پیشانراو",
+    "connectorPresetNone": "لە سەرەتا دەست پێبکە",
+    "connectorNameLabel": "ناو",
+    "connectorDescriptionLabel": "وەسف",
+    "connectorUrlLabel": "URLی بەڕێوەبەر",
+    "connectorUrlPlaceholderWarning": "{placeholder} لە ناو URL دا پێویستە بە نرخێکی تایبەتی خۆت بگۆڕیت پێش هەر پاشەکەوتکردنێک.",
+    "connectorTransportLabel": "گەیاندن",
+    "connectorAuthLabel": "بەسنوورکردن",
+    "connectorAuthNone": "هیچیان",
+    "connectorAuthBearer": "Token (هەر بەکارهێنەرەکە تایبەتی خۆی دابنێت)",
+    "connectorAuthOauth": "چوونەژووری OAuth",
+    "connectorSealingUnavailable": "OAuth بەردەست نییە: لە ئامادەکردنی ئەم بڵاوکردنەدا AUTH_SECRET دانەنراوە بۆ نهێنی‌کردنی client secrets.",
+    "connectorTokenHelpLabel": "بەستەر بۆ ڕێنمایی token (هەڵبژاردەیی)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": " OAuth client secret",
+    "connectorClientSecretStored": "نهێنیەکە پاشەکەوتکراوە. بە بەتاڵ جێبەجێکردنەوە وەکوو خۆی دابمەزرێنە، یان نوێیەک دابنێ بۆ گۆڕینی.",
+    "connectorClientSecretHint": "پێش پاشەکەوتکردن نهێنیکراوە و هەرگیز دووبارە پیشان دەدرێت.",
+    "connectorScopesLabel": "مەزنایەکان (بە بەش جیاکراوی بە بۆشایی، هەڵبژاردەیی)"
   },
   "localModels": {
     "title": "مۆدێلە سەرەکییەکان",
@@ -3561,5 +3634,41 @@
     "settingsToggle": "بەستەرە دایکراوەکان خۆکارانە وەرگرە",
     "settingsDescription": "کاتێک بەستەرێک تاک بڵاوی دەکەیتەوە، پەڕەکە وەرگیراو دەبێت و دەقی پێوەکراوی پێوەدەکرێت بۆ ئەوەی یاردمەدەر بتوانێت بخوێنێت. ئەمە لە کار بخرە بۆ ئەوەی بەستەرە پەیستکراوەکان تەنیا وەک دەق بخرێنرێن — هێشتا دەتوانیت پەڕە یەک بەدەست خووت پێوەبکەیت لە + مینووە.",
     "addLink": "بەستەرێک زیاد بکە"
+  },
+  "cameraAccessError": "ناتوانرا بە کامێرا دەستگەیشتن. مۆڵەتی کامێراکەت سەیری بکە و دووبارە هەوڵ بده.",
+  "cameraUnnamedDevice": "کامێرا",
+  "pastedText": {
+    "fallbackName": "دەقە چەسپکراوە",
+    "charCount": "{count, number} پیت",
+    "removeChip": "سڕینەوەی دەقە چەسپکراوە “{name}”",
+    "blockLabel": "دەقە چەسپکراوە: {name}",
+    "doc": {
+      "heading": "دەقە چەسپکراوە",
+      "pastedLabel": "چەسپکراو"
+    },
+    "settingsTitle": "چەسپاندنە گەورەکان",
+    "settingsToggle": "گۆڕینی چەسپاندنی گەورە بۆ پەیوەستکەر",
+    "settingsDescription": "ئەگەر دەقی چەسپکراوت لە سنووردی خوارەوە زۆرتر بێت، وەک پەڕگە دادەبەسترێت. دەقەکە وەک کە چەسپکراوە بەکاردەهێنرێت — هیچت گرتن یان گۆڕانکاری بۆ ئەنجام نادەدرێت.",
+    "settingsThresholdLabel": "پەیوەستنەوەی چەسپاندنەکان لە سەر",
+    "settingsThresholdUnit": "پیت",
+    "settingsThresholdHint": "لە نێوان {min, number} و {max, number} پیت."
+  },
+  "structures": {
+    "section": "ڕووکارییەکان",
+    "sectionSubtitle": "ڕووکارییەکان یاساییە پاشەکەوتکراوەکان. یەکێک بەکارهێنە بۆ بیرکردنەوە یان وەک سکیمای پەیوەندیدا بۆ خشتەی کاری داتاکان.",
+    "loadFromStructure": "بارکردنی ڕووكار",
+    "loadFromStructureTitle": "ئەم ستوونانە بە ڕووکاری پاشەکەوتکراو جێگیر بکە",
+    "pickerEmpty": "هێشتا هیچ ڕووکاری پاشەکەوت نەکراوە.",
+    "pickerTitle": "بارکردنی ڕووکاری پاشەکەوتکراو",
+    "saveAsStructure": "پاشەکەوتکردن وەک ڕووكار",
+    "saveAsStructureTitle": "ئەم ستوونانە بۆ کتێبخانەی ڕووکارییەکانت پاشەکەوت بکە",
+    "savedToast": "ڕووكاری پاشەکەوتکراو “{name}”",
+    "namePlaceholder": "ناوی ڕووكار",
+    "fieldCount": "{count} خانە",
+    "fieldCountOne": "١ خانە",
+    "downgradedNotice": "{count} خانە بۆ دەق سادە کراونەوە — هەر خانەیەک لە ناو خشتەدا تەنها نرخێک. {names}",
+    "truncatedNotice": "{count} خانە سڕدرا — سنووردی خشتە {max} ستوونە: {names}",
+    "skippedDerivedNotice": "{count} ستوونی هەسابکراو پاشەکەوت نەکراوە — فۆرمێلهاکان ئاماژە بە ستوونەکانی ئەم خشتەیە دەکەن: {names}",
+    "loadReplacesColumns": "ئەم کارە ستوونەکانی ئێستا جێگیر دەکات. ئەو ڕیزانەی پێشتر نرخەکانیشان پاشدەگێڕن کە ناوی ستوونەكە یەکسان بێت."
   }
 }

@@ -2116,7 +2116,9 @@
     "pin": "ปักหมุดไว้ด้านบน",
     "unpin": "เลิกปักหมุด",
     "moveToMore": "ย้ายไปที่เพิ่มเติม",
-    "moveOutOfMore": "แสดงในเมนู"
+    "moveOutOfMore": "แสดงในเมนู",
+    "showSources": "แสดงแหล่งข้อมูลอื่น",
+    "hideSources": "ซ่อนแหล่งข้อมูลอื่น"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "เพิ่มคำแนะนำส่วนตัวเพื่อปรับแต่งการตอบสนองของ AI โดยข้อมูลเหล่านี้จะถูกรวมกับแนวทางหลักเพื่อให้มั่นใจว่าการตอบสนองมีประโยชน์ ถูกต้อง และปลอดภัย",
   "Tip: Type \"/\" to select from saved prompt templates_": "เคล็ดลับ: พิมพ์ \"/\" เพื่อเลือกจากเทมเพลตพรอมต์ที่บันทึกไว้",
@@ -2778,7 +2780,16 @@
       "undoEdit": "เลิกทำ",
       "clearResolved": "ล้างรายการที่จัดการแล้ว",
       "clearResolvedHint": "ลบการแก้ไขที่ยอมรับ ปฏิเสธ และไม่เกี่ยวข้องออกจากรายการนี้",
-      "autoClearResolved": "ล้างรายการที่จัดการแล้วโดยอัตโนมัติ"
+      "autoClearResolved": "ล้างรายการที่จัดการแล้วโดยอัตโนมัติ",
+      "import": "นำเข้า",
+      "importReplaceTitle": "ต้องการแทนที่เอกสารหรือไม่?",
+      "importReplaceBody": "การนำเข้า {name} จะเป็นการแทนที่เอกสารปัจจุบัน โดยจะเก็บข้อมูลอ้างอิง ข้อกำหนด และโทนไว้เหมือนเดิม",
+      "importReplaceConfirm": "แทนที่",
+      "editorMode": "โหมดแก้ไข",
+      "editorModeRich": "ข้อความแบบสมบูรณ์",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "กรุณาแก้ไขข้อเสนอที่ค้างอยู่ก่อนเปลี่ยนโหมดแก้ไข"
     },
     "data": {
       "emptyTitle": "นำเข้าข้อมูลเพื่อวิเคราะห์",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "จำนวนอาร์กิวเมนต์ไม่ถูกต้องใน {fn}",
       "schemaFormulaCycleError": "เกิดการอ้างอิงแบบวนซ้ำระหว่างสูตร",
       "derivedColumnTitle": "คำนวณจากสูตร: {formula}",
-      "derivedFrom": "คำนวณจาก {formula}"
+      "derivedFrom": "คำนวณจาก {formula}",
+      "takePhoto": "ถ่ายรูป",
+      "takePhotoHint": "ใช้กล้องของคุณถ่ายเอกสารหรือแบบฟอร์ม ข้อมูลจะถูกแปลงเป็นแบบมีโครงสร้างและสามารถตรวจสอบกับภาพถ่ายได้"
     },
     "map": {
       "emptyTitle": "แสดงข้อมูลของคุณบนแผนที่",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "ค้นหา สร้าง และอัปเดตงานและโปรเจกต์"
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "สอบถามข้อมูลจากแหล่งข้อมูลที่เผยแพร่แล้ว เวิร์กบุ๊ก และ Pulse metric"
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "ค้นหาและอัปเดตรายการข้อมูลในวัตถุ Salesforce ของคุณ"
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "ร่าง กำหนดเวลา และเผยแพร่โพสต์โซเชียลมีเดีย"
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "ตรวจสอบและตอบกลับการสนทนาในกล่องข้อความโซเชียลมีเดีย"
       }
     },
     "connect": "เชื่อมต่อ",
@@ -3200,7 +3229,19 @@
       "missingState": "ไม่มีสิ่งใดให้อนุญาต",
       "close": "คุณสามารถปิดหน้าต่างนี้และกลับไปที่แอปได้",
       "closeButton": "ปิดหน้าต่าง"
-    }
+    },
+    "oauthNoAppConfigured": "ยังไม่มีการตั้งค่าการเข้าสู่ระบบด้วย {name} ในระบบนี้ กรุณาเชื่อมต่อโดยการลงทะเบียน OAuth app ของคุณเอง",
+    "adminConnectorsTitle": "จากองค์กรของคุณ",
+    "adminConnectorsDescription": "คอนเนคเตอร์ที่ผู้ดูแลระบบของคุณตั้งค่าไว้ รายการที่คุณเห็นขึ้นอยู่กับสิทธิ์ในการเข้าใช้งานของคุณ",
+    "managedByOrg": "จัดการโดยองค์กรของคุณ",
+    "connectorOauthNotConfigured": "การตั้งค่าการลงชื่อเข้าใช้สำหรับคอนเนคเตอร์นี้ยังไม่สมบูรณ์ กรุณาติดต่อผู้ดูแลระบบ",
+    "yourConnectorsTitle": "คอนเนคเตอร์ของคุณ",
+    "addTitle": "เพิ่มคอนเนคเตอร์",
+    "addDescription": "เลือกเครื่องมือที่ต้องการเชื่อมต่อ คุณจะตั้งค่าสิทธิ์การเข้าถึงหลังจากเลือกแล้ว",
+    "add": "เพิ่ม",
+    "filterLabel": "กรองคอนเนคเตอร์",
+    "filterPlaceholder": "ค้นหาคอนเนคเตอร์",
+    "noMatches": "ไม่พบคอนเนคเตอร์ที่ตรงกับ “{query}”"
   },
   "modelSources": {
     "connectButtonShort": "เชื่อมต่อแหล่งโมเดล",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "สร้างตัวช่วยข้อความแล้ว",
     "promptAgentSaveSuccess": "บันทึกตัวช่วยข้อความแล้ว",
     "promptAgentDeleteSuccess": "ลบตัวช่วยข้อความแล้ว",
-    "promptAgentsUnavailableWarning": "ไม่สามารถโหลดตัวช่วยข้อความจากที่เก็บข้อมูลได้ ขณะนี้ไม่สามารถแก้ไขได้"
+    "promptAgentsUnavailableWarning": "ไม่สามารถโหลดตัวช่วยข้อความจากที่เก็บข้อมูลได้ ขณะนี้ไม่สามารถแก้ไขได้",
+    "agentsTab": "ตัวแทน",
+    "connectorsTab": "คอนเนคเตอร์",
+    "addConnector": "เพิ่มคอนเนคเตอร์",
+    "noConnectors": "ยังไม่มีคอนเนคเตอร์",
+    "connectorsUnavailableWarning": "ไม่สามารถเข้าถึงร้านคอนเนคเตอร์ อาจแสดงรายการไม่ครบ กรุณาอย่าสร้างคอนเนคเตอร์ใหม่จนกว่ารายการจะโหลดเสร็จ",
+    "editAccess": "แก้ไขสิทธิ์การเข้าถึง",
+    "deleteConnector": "ลบ",
+    "deleteConnectorConfirm": "ต้องการลบคอนเนคเตอร์นี้หรือไม่? ผู้ที่ใช้งานจะไม่สามารถเข้าถึงได้ทันที",
+    "confirmDeleteConnector": "ลบคอนเนคเตอร์",
+    "connectorSaveSuccess": "บันทึกคอนเนคเตอร์แล้ว",
+    "connectorCreateSuccess": "สร้างคอนเนคเตอร์แล้ว",
+    "connectorDeleteSuccess": "ลบคอนเนคเตอร์แล้ว",
+    "editConnectorTitle": "แก้ไขคอนเนคเตอร์",
+    "newConnectorTitle": "คอนเนคเตอร์ใหม่",
+    "connectorPresetLabel": "เริ่มจากเทมเพลต",
+    "connectorPresetNone": "เริ่มต้นใหม่ทั้งหมด",
+    "connectorNameLabel": "ชื่อ",
+    "connectorDescriptionLabel": "คำอธิบาย",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "โปรดแทนที่ {placeholder} ใน URL ด้วยค่าของคุณเองก่อนบันทึก",
+    "connectorTransportLabel": "การถ่ายโอนข้อมูล",
+    "connectorAuthLabel": "การยืนยันตัวตน",
+    "connectorAuthNone": "ไม่มี",
+    "connectorAuthBearer": "โทเคน (ผู้ใช้แต่ละรายต้องให้เอง)",
+    "connectorAuthOauth": "ลงชื่อเข้าใช้ด้วย OAuth",
+    "connectorSealingUnavailable": "ไม่สามารถใช้ OAuth ได้: การติดตั้งนี้ไม่ได้ตั้งค่า AUTH_SECRET เพื่อเข้ารหัส client secrets",
+    "connectorTokenHelpLabel": "ลิงก์ไปยังวิธีรับโทเคน (ไม่บังคับ)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "มี secret จัดเก็บอยู่แล้ว ปล่อยว่างไว้หากต้องการใช้ secret เดิม หรือกรอกใหม่เพื่อแทนที่",
+    "connectorClientSecretHint": "เข้ารหัสก่อนจัดเก็บ และจะไม่แสดงอีก",
+    "connectorScopesLabel": "Scopes (คั่นด้วยช่องว่าง, ไม่บังคับ)"
   },
   "localModels": {
     "title": "โมเดลภายในเครื่อง",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "ดึงข้อมูลลิงก์ที่แปะโดยอัตโนมัติ",
     "settingsDescription": "เมื่อคุณวางลิงก์เพียงอย่างเดียว ระบบจะดึงข้อมูลจากหน้าเว็บและแนบข้อความที่อ่านได้ เพื่อให้ผู้ช่วยอ่านได้ หากปิดฟังก์ชันนี้ ลิงก์ที่วางจะเป็นข้อความธรรมดา — คุณยังสามารถแนบหน้าเว็บเองจากเมนู + ได้",
     "addLink": "เพิ่มลิงก์"
+  },
+  "cameraAccessError": "ไม่สามารถเข้าถึงกล้องได้ กรุณาตรวจสอบสิทธิ์การใช้กล้องและลองใหม่อีกครั้ง",
+  "cameraUnnamedDevice": "กล้อง",
+  "pastedText": {
+    "fallbackName": "ข้อความที่วาง",
+    "charCount": "{count, number} อักขระ",
+    "removeChip": "ลบข้อความที่วาง “{name}”",
+    "blockLabel": "ข้อความที่วาง: {name}",
+    "doc": {
+      "heading": "ข้อความที่วาง",
+      "pastedLabel": "วางแล้ว"
+    },
+    "settingsTitle": "การวางข้อความขนาดใหญ่",
+    "settingsToggle": "เปลี่ยนการวางข้อความขนาดใหญ่ให้เป็นไฟล์แนบ",
+    "settingsDescription": "หากวางข้อความเกินจำนวนด้านล่าง ระบบจะจัดเก็บเป็นไฟล์แนบแทนที่จะแสดงในกล่องข้อความ ข้อความจะถูกนำมาใช้ตามที่วางไว้ — ไม่ดึงหรือเปลี่ยนแปลงใด ๆ",
+    "settingsThresholdLabel": "แนบไฟล์เมื่อวางข้อความยาวกว่า",
+    "settingsThresholdUnit": "อักขระ",
+    "settingsThresholdHint": "ระหว่าง {min, number} ถึง {max, number} อักขระ"
+  },
+  "structures": {
+    "section": "โครงสร้าง",
+    "sectionSubtitle": "นิยามฟิลด์ที่บันทึกไว้ ใช้สำหรับการดึงข้อมูล หรือเป็นโครงสำหรับตารางเวิร์กโฟลว์ข้อมูล",
+    "loadFromStructure": "โหลดโครงสร้าง",
+    "loadFromStructureTitle": "แทนที่คอลัมน์เหล่านี้ด้วยโครงสร้างที่บันทึกไว้",
+    "pickerEmpty": "ยังไม่มีโครงสร้างที่บันทึกไว้",
+    "pickerTitle": "โหลดโครงสร้างที่บันทึกไว้",
+    "saveAsStructure": "บันทึกเป็นโครงสร้าง",
+    "saveAsStructureTitle": "บันทึกคอลัมน์เหล่านี้ลงในคลังโครงสร้างของคุณ",
+    "savedToast": "บันทึกโครงสร้าง “{name}” แล้ว",
+    "namePlaceholder": "ชื่อโครงสร้าง",
+    "fieldCount": "{count} ฟิลด์",
+    "fieldCountOne": "1 ฟิลด์",
+    "downgradedNotice": "{count} ฟิลด์ถูกรวมเป็นข้อความ — ตารางเก็บค่าสำหรับแต่ละเซลล์เท่านั้น: {names}",
+    "truncatedNotice": "{count} ฟิลด์ถูกตัดออก — ข้อจำกัดคอลัมน์ในตารางคือ {max} คอลัมน์: {names}",
+    "skippedDerivedNotice": "{count} คอลัมน์ที่คำนวณไม่ได้รับการบันทึก — สูตรอ้างอิงคอลัมน์ของตารางนี้: {names}",
+    "loadReplacesColumns": "ระบบจะแทนที่คอลัมน์ปัจจุบัน แถวเดิมจะเก็บค่าในคอลัมน์ที่ชื่อซ้ำกันไว้"
   }
 }

@@ -2116,7 +2116,9 @@
     "pin": "Przypnij na górze",
     "unpin": "Odepnij",
     "moveToMore": "Przenieś do „Więcej”",
-    "moveOutOfMore": "Pokaż w menu"
+    "moveOutOfMore": "Pokaż w menu",
+    "showSources": "Pokaż inne źródła",
+    "hideSources": "Ukryj inne źródła"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Dodaj własne instrukcje, aby dostosować sposób, w jaki AI odpowiada. Zostaną one połączone z głównymi wytycznymi, które zapewniają pomocne, dokładne i bezpieczne odpowiedzi.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Porada: wpisz „/”, aby wybrać z zapisanych szablonów podpowiedzi.",
@@ -2778,7 +2780,16 @@
       "undoEdit": "Cofnij",
       "clearResolved": "Wyczyść rozwiązane",
       "clearResolvedHint": "Usuń zaakceptowane, odrzucone i nieistotne poprawki z tej listy",
-      "autoClearResolved": "Automatycznie czyść rozwiązane poprawki"
+      "autoClearResolved": "Automatycznie czyść rozwiązane poprawki",
+      "import": "Importuj",
+      "importReplaceTitle": "Zastąpić dokument?",
+      "importReplaceBody": "Importowanie {name} zastąpi bieżący dokument. Twoje odwołania, specyfikacja i ton będą zachowane.",
+      "importReplaceConfirm": "Zastąp",
+      "editorMode": "Tryb edytora",
+      "editorModeRich": "Tekst sformatowany",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Rozwiąż sugerowane zmiany przed zmianą trybu edytora."
     },
     "data": {
       "emptyTitle": "Zaimportuj dane do analizy",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "Błędna liczba argumentów dla {fn}",
       "schemaFormulaCycleError": "Cykliczne odniesienie pomiędzy formułami",
       "derivedColumnTitle": "Wyliczane: {formula}",
-      "derivedFrom": "Wyliczane z {formula}"
+      "derivedFrom": "Wyliczane z {formula}",
+      "takePhoto": "Zrób zdjęcie",
+      "takePhotoHint": "Użyj aparatu, aby sfotografować formularz lub tabelę — ich zawartość zamieni się w dane strukturalne, które możesz porównać ze zdjęciem"
     },
     "map": {
       "emptyTitle": "Umieść swoje dane na mapie",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "Wyszukuj, twórz i aktualizuj zadania oraz projekty."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Wyszukuj opublikowane źródła danych, skoroszyty i metryki Pulse."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Wyszukuj i aktualizuj rekordy w swoich obiektach Salesforce."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Twórz szkice, planuj i publikuj posty w mediach społecznościowych."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Przeglądaj i odpowiadaj na rozmowy w skrzynce odbiorczej social media."
       }
     },
     "connect": "Połącz",
@@ -3200,7 +3229,19 @@
       "missingState": "Brak nic do autoryzacji",
       "close": "Możesz zamknąć to okno i wrócić do aplikacji.",
       "closeButton": "Zamknij okno"
-    }
+    },
+    "oauthNoAppConfigured": "Logowanie przez {name} nie jest skonfigurowane dla tej instalacji. Połącz się, rejestrując własną aplikację OAuth.",
+    "adminConnectorsTitle": "Od Twojej organizacji",
+    "adminConnectorsDescription": "Konektory skonfigurowane przez administratorów organizacji. Wyświetlane zależą od Twoich uprawnień.",
+    "managedByOrg": "Zarządzane przez Twoją organizację",
+    "connectorOauthNotConfigured": "Logowanie do tego konektora nie zostało jeszcze ukończone. Skontaktuj się z administratorem.",
+    "yourConnectorsTitle": "Twoje konektory",
+    "addTitle": "Dodaj konektor",
+    "addDescription": "Wybierz narzędzie do połączenia. Dostęp skonfigurujesz po wyborze.",
+    "add": "Dodaj",
+    "filterLabel": "Filtruj konektory",
+    "filterPlaceholder": "Wyszukaj konektory",
+    "noMatches": "Brak konektorów pasujących do „{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Połącz źródło modelu",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "Agent prompt utworzony.",
     "promptAgentSaveSuccess": "Agent prompt zapisany.",
     "promptAgentDeleteSuccess": "Agent prompt usunięty.",
-    "promptAgentsUnavailableWarning": "Nie udało się załadować agentów prompt z magazynu. Edycja jest obecnie niemożliwa."
+    "promptAgentsUnavailableWarning": "Nie udało się załadować agentów prompt z magazynu. Edycja jest obecnie niemożliwa.",
+    "agentsTab": "Agenci",
+    "connectorsTab": "Konektory",
+    "addConnector": "Dodaj konektor",
+    "noConnectors": "Brak konektorów.",
+    "connectorsUnavailableWarning": "Nie można połączyć się ze sklepem konektorów, więc lista może być niepełna. Nie twórz zamiennika, dopóki się nie załaduje.",
+    "editAccess": "Edytuj dostęp",
+    "deleteConnector": "Usuń",
+    "deleteConnectorConfirm": "Usunąć ten konektor? Wszyscy korzystający z niego stracą natychmiastowy dostęp.",
+    "confirmDeleteConnector": "Usuń konektor",
+    "connectorSaveSuccess": "Konektor zapisany.",
+    "connectorCreateSuccess": "Konektor utworzony.",
+    "connectorDeleteSuccess": "Konektor usunięty.",
+    "editConnectorTitle": "Edytuj konektor",
+    "newConnectorTitle": "Nowy konektor",
+    "connectorPresetLabel": "Rozpocznij od szablonu",
+    "connectorPresetNone": "Zacznij od zera",
+    "connectorNameLabel": "Nazwa",
+    "connectorDescriptionLabel": "Opis",
+    "connectorUrlLabel": "URL serwera",
+    "connectorUrlPlaceholderWarning": "Zamień {placeholder} w URL na własną wartość przed zapisaniem.",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Uwierzytelnianie",
+    "connectorAuthNone": "Brak",
+    "connectorAuthBearer": "Token (każdy użytkownik podaje własny)",
+    "connectorAuthOauth": "Logowanie OAuth",
+    "connectorSealingUnavailable": "OAuth jest niedostępny: ta instalacja nie ma skonfigurowanego AUTH_SECRET do szyfrowania secretów klienta.",
+    "connectorTokenHelpLabel": "Link do instrukcji uzyskania tokenu (opcjonalnie)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Secret jest zapisany. Pozostaw puste, aby go zachować, lub wprowadź nowy, aby zastąpić.",
+    "connectorClientSecretHint": "Szyfrowany przed zapisaniem, nigdy więcej nie będzie pokazany.",
+    "connectorScopesLabel": "Scope'y (oddzielone spacją, opcjonalnie)"
   },
   "localModels": {
     "title": "Modele lokalne",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "Automatycznie pobieraj wklejone linki",
     "settingsDescription": "Gdy wklejasz samodzielny link, strona jest pobierana, a jej tekst dołączany, aby asystent mógł ją przeczytać. Wyłącz tę opcję, aby zachować linki jako zwykły tekst — nadal możesz ręcznie dołączyć stronę z menu +.",
     "addLink": "Dodaj link"
+  },
+  "cameraAccessError": "Nie można uzyskać dostępu do kamery. Sprawdź uprawnienia do kamery i spróbuj ponownie.",
+  "cameraUnnamedDevice": "Kamera",
+  "pastedText": {
+    "fallbackName": "Wklejony tekst",
+    "charCount": "{count, number} znaków",
+    "removeChip": "Usuń wklejony tekst „{name}”",
+    "blockLabel": "Wklejony tekst: {name}",
+    "doc": {
+      "heading": "Wklejony tekst",
+      "pastedLabel": "Wklejono"
+    },
+    "settingsTitle": "Duże wklejki",
+    "settingsToggle": "Zmień dużą wklejkę na załącznik",
+    "settingsDescription": "Wklejenie większej liczby znaków niż poniżej powoduje dodanie ich jako plik zamiast wypełnienia pola wiadomości. Tekst jest używany dokładnie tak, jak został wklejony — nic nie jest pobierane ani zmieniane.",
+    "settingsThresholdLabel": "Załącz wklejki dłuższe niż",
+    "settingsThresholdUnit": "znaków",
+    "settingsThresholdHint": "Od {min, number} do {max, number} znaków."
+  },
+  "structures": {
+    "section": "Struktury",
+    "sectionSubtitle": "Zapisane definicje pól. Użyj jednej jako przepisu ekstrakcji lub jako wzorca schematu dla tabeli przepływu danych.",
+    "loadFromStructure": "Załaduj strukturę",
+    "loadFromStructureTitle": "Zastąp te kolumny zapisaną strukturą",
+    "pickerEmpty": "Brak zapisanych struktur.",
+    "pickerTitle": "Załaduj zapisaną strukturę",
+    "saveAsStructure": "Zapisz jako strukturę",
+    "saveAsStructureTitle": "Zapisz te kolumny do biblioteki struktur",
+    "savedToast": "Zapisano strukturę „{name}”",
+    "namePlaceholder": "Nazwa struktury",
+    "fieldCount": "{count} pól",
+    "fieldCountOne": "1 pole",
+    "downgradedNotice": "{count} pole(ń) uproszczono do tekstu — tabele przechowują jedną wartość w komórce: {names}",
+    "truncatedNotice": "{count} pole(ń) usunięto — limit kolumn to {max}: {names}",
+    "skippedDerivedNotice": "{count} kolumna(y) obliczana(e) nie zapisano — formuły odnoszą się do kolumn tej tabeli: {names}",
+    "loadReplacesColumns": "To zastąpi obecne kolumny. Istniejące wiersze zachowają wartości, jeśli nazwy kolumn się zgadzają."
   }
 }

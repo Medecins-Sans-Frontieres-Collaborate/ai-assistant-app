@@ -2017,7 +2017,9 @@
     "pin": "ከፍ ላይ አስረግፍ",
     "unpin": "ከዚህ አልቀም",
     "moveToMore": "ወደ 'ተጨማሪ' አንቀሳቅስ",
-    "moveOutOfMore": "በምናሌ አሳይ"
+    "moveOutOfMore": "በምናሌ አሳይ",
+    "showSources": "ሌሎች ምንጮችን አሳይ",
+    "hideSources": "ሌሎች ምንጮችን ደብቅ"
   },
   "transcription": {
     "transcribesOnSend": "በመላክ ጊዜ ይቀዳል",
@@ -2778,7 +2780,16 @@
       "undoEdit": "ይቅር",
       "clearResolved": "ተደርሷ የተፈቱትን ያጥፉ",
       "clearResolvedHint": "ተቀባይነት ያገኙትን፣ የተቀበሉትን፣ የተረፈውንም ማሻሻያዎች ከዚህ ዝርዝር ያጥፉ",
-      "autoClearResolved": "ተደርሷ የተፈቱትን ማሻሻያዎች በራስ-ሰር ያጥፉ"
+      "autoClearResolved": "ተደርሷ የተፈቱትን ማሻሻያዎች በራስ-ሰር ያጥፉ",
+      "import": "አስመጣ",
+      "importReplaceTitle": "ሰነዱን ይቀይሩ?",
+      "importReplaceBody": "{name} ሲያመጡ የአሁኑን ሰነድ ይቀየራል። የዝርዝሮችዎ፣ ስፔክ እና ቶን ይቀጥላሉ።",
+      "importReplaceConfirm": "ቀይር",
+      "editorMode": "የአርታዒ ዘዴ",
+      "editorModeRich": "የተደራሽ ጽሑፍ",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "የተጠቀሱትን ማሻሻያዎች ከመቀየር በፊት ይፍታቹ።"
     },
     "data": {
       "emptyTitle": "ለትንተና ውሂብ አስገባ",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "ልክ ያልሆነ አርጉመንት በ {fn}",
       "schemaFormulaCycleError": "እስክስክ በፎርሙላዎች",
       "derivedColumnTitle": "ተመሳሳይ፡ {formula}",
-      "derivedFrom": "ከ{formula} ተመሳሳይ"
+      "derivedFrom": "ከ{formula} ተመሳሳይ",
+      "takePhoto": "ፎቶ ይነጥቡ",
+      "takePhotoHint": "ቅጽ ወይም ሰንጠረዥ ለመነታት ካሜራዎን ይጠቀሙ — ይዘቱ የተዋቀረ ዳታ ሆኖ ከፎቶ ጋር ማረጋገጫ ይችላሉ"
     },
     "map": {
       "emptyTitle": "ዳታዎን በካርታ ላይ ያሳዩ",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "ተግባሮችና ፕሮጀክቶችን ፈልጉ፣ ፍጠሩና ያዘምኑ።"
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "አስተላባች የሆኑ የዳታ ምንጮች፣ workbooks እና Pulse metrics ይጠይቁ።"
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "በSalesforce ኦቤጅክቶችዎ ላይ ውሂብ ይፈልጉ እና ያዘምኑ።"
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "የሚዲያ ልማዶችን ደምዝ፣ ቅድመ ሳምንት ይዞታ እና አስተላልፉ።"
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "የማህበራዊ ግንኙነት መያዣዎችን ይይዙ እና ይመልሱ።"
       }
     },
     "connect": "ያገናኙ",
@@ -3200,7 +3229,19 @@
       "missingState": "ለማፈቃቀም የቀረው ነገር የለም",
       "close": "ይህንን መስኮት ዝግ ወደ መተግበሪያው ተመለሱ።",
       "closeButton": "መስኮት ዝጋ"
-    }
+    },
+    "oauthNoAppConfigured": "በ{name} የመዝገብ መግቢያ በዚህ አውጭ አልተዘጋጀም። በራስዎ OAuth app ማስመዝገብ በመገናኘት ያገኙ።",
+    "adminConnectorsTitle": "ከድርጅትዎ",
+    "adminConnectorsDescription": "አስተዳዳሪዎቻችሁ ያስቀመጡት የተገናኙ መሳሪያዎች። ምን ታየዎት በየደረጃዎ ይሰማዋል።",
+    "managedByOrg": "በድርጅትዎ የተቆጣጠሩ",
+    "connectorOauthNotConfigured": "የዚህ አገናኚ የመስጠት ሂደት አልተጨረሰም። ከአስተዳዳሪዎ ያነጋግሩ።",
+    "yourConnectorsTitle": "የእርስዎ አገናኞች",
+    "addTitle": "አገናኝ ያክሉ",
+    "addDescription": "ለማገናኘት መሳሪያ ይምረጡ። ከመምረጥዎ በኋላ መዳረሻ ትዕዛዞችን ያስወግዱ።",
+    "add": "አክል",
+    "filterLabel": "አገናኞችን ማጣሪያ",
+    "filterPlaceholder": "አገናኞችን ፈልግ",
+    "noMatches": "“{query}” የሚስማማ አገናኞች የሉም።"
   },
   "modelSources": {
     "connectButtonShort": "የሞዴል ምንጭ ያገናኙ",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "ፕሮምፕት ወኪል ተፈጠረ።",
     "promptAgentSaveSuccess": "ፕሮምፕት ወኪል ተደምሯል።",
     "promptAgentDeleteSuccess": "ፕሮምፕት ወኪል ተሰርዟል።",
-    "promptAgentsUnavailableWarning": "ፕሮምፕት ወኪሎችን ከማከማቻ ማግኘት አልተቻለም። አሁን ማርትዕ አይችሉም።"
+    "promptAgentsUnavailableWarning": "ፕሮምፕት ወኪሎችን ከማከማቻ ማግኘት አልተቻለም። አሁን ማርትዕ አይችሉም።",
+    "agentsTab": "ወኪሎች",
+    "connectorsTab": "አገናኞች",
+    "addConnector": "አገናኝ ያክሉ",
+    "noConnectors": "አገናኞች አልተጨመሩም።",
+    "connectorsUnavailableWarning": "የአገናኞች መዝገብን ማግኘት አልተቻለም፣ ስለዚህ ዝርዝሩ ሙሉ ሊሆን አይችልም። ሙሉ ሳይጫን አዲስ አይፈጠሩ።",
+    "editAccess": "መዳረሻ ያርትዑ",
+    "deleteConnector": "አጥፋ",
+    "deleteConnectorConfirm": "ይህን አገናኝ ይሰርዙ? ማንኛውም ሲጠቀመው ወዲያውኑ መዳረሻውን ይከልክላል።",
+    "confirmDeleteConnector": "አገናኝ አጥፋ",
+    "connectorSaveSuccess": "አገናኝ ተቀመጠ።",
+    "connectorCreateSuccess": "አገናኝ ተፈጠረ።",
+    "connectorDeleteSuccess": "አገናኝ ተሰርዟል።",
+    "editConnectorTitle": "አገናኝ ያርትዑ",
+    "newConnectorTitle": "አዲስ አገናኝ",
+    "connectorPresetLabel": "ከአባል አብስት ይጀምሩ",
+    "connectorPresetNone": "ከድንበር መጀመር",
+    "connectorNameLabel": "ስም",
+    "connectorDescriptionLabel": "መግለጫ",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "በURL ውስጥ ያለውን {placeholder} በየትኛውም እሴትዎ ከማስቀመጥዎ በፊት ይቀይሩ።",
+    "connectorTransportLabel": "መጓጓዣ",
+    "connectorAuthLabel": "ማረጋገጫ",
+    "connectorAuthNone": "የለም",
+    "connectorAuthBearer": "ቶክን (እያንዳንዱ ተጠቃሚ የራሱን ይሰጣል)",
+    "connectorAuthOauth": "OAuth መግቢያ",
+    "connectorSealingUnavailable": "OAuth አይገኝም፡ AUTH_SECRET ይህን ማውጣት የለም፣ ከሁሉም አባላት መሰየም የሚለውን የደኅንነት ቁልፍ በመካከል ላይ ማድረግ የለበትም።",
+    "connectorTokenHelpLabel": "ወደ ቶክን መመሪያ መስመር (አማራጭ)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "አንድ ምሥጢር ተቀምጧል። ለመጠቀም ባዶ ይተዉ፣ አዲስ ለመቀየር ያስገቡ።",
+    "connectorClientSecretHint": "ከማከማቻ በፊት ይዝጋል፣ እና በድጋሚ አይታይም።",
+    "connectorScopesLabel": "Scopes (በቦታ የተለየ፣ አማራጭ)"
   },
   "localModels": {
     "title": "የአካባቢ ሞዴሎች",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "የተጠረጠሩ አገናኞችን ራሱን ያመጣ",
     "settingsDescription": "ብቻውን አገናኝ በመስቀመጥ ገጹ ተመድቦ ጽሑፉ ይቀጠራል እና አጋዥ ማንበብ ይችላል። ይህን ለመሰናከል አገናኞቹ እንደ ግልጽ ጽሑፍ ይቀሩ — ከ + ሜኑ በመጠቀም ገጽ በእጅ መስቀመጥ ይችላሉ።",
     "addLink": "አገናኝ አክል"
+  },
+  "cameraAccessError": "ካሜራውን ማግኘት አልተቻለም። የካሜራ ፍቃዶችዎን ያረጋግጡ እና ደግመው ይሞክሩ።",
+  "cameraUnnamedDevice": "ካሜራ",
+  "pastedText": {
+    "fallbackName": "የታተመ ጽሑፍ",
+    "charCount": "{count, number} ቁምፊዎች",
+    "removeChip": "የታተመውን ጽሑፍ “{name}” ያስወግዱ",
+    "blockLabel": "የታተመ ጽሑፍ: {name}",
+    "doc": {
+      "heading": "የታተመ ጽሑፍ",
+      "pastedLabel": "የታተመ"
+    },
+    "settingsTitle": "የትልቁ ማስቀመጥ",
+    "settingsToggle": "ትልቅ ማስቀመጥን አባሪ ያድርጉ",
+    "settingsDescription": "ከታች የቀጠለው ዉስጥ በላይ ጽሑፍ ሲሚቀመጥ፣ እንደ file ያስቀመጣል እንጂ ወደ መልእክት ሳጥን አይክፈልም። ጽሑፉ እንደታተመበት በትክክል ይጠቀማል — ምንም አይቀየም፣ አይመጣም።",
+    "settingsThresholdLabel": "የተሰቀመው በዚህ በላይ ከሆነ አስቀመጥ",
+    "settingsThresholdUnit": "ቁምፊዎች",
+    "settingsThresholdHint": "በ{min, number} እና {max, number} ቁምፊዎች መካከል።"
+  },
+  "structures": {
+    "section": "አዋቂ መዋቅሮች",
+    "sectionSubtitle": "የተቀመጡ የመስኮች መግለጫዎች። እንደ መውጫ መስክ ይጠቀሙበት ወይም እንደ ቀደም የሚቀመጠው ማወዳደር ገበታ።",
+    "loadFromStructure": "መዋቅሩን ጫን",
+    "loadFromStructureTitle": "እነዚህን አምድዎች በተቀመጠ መዋቅር ቀይር",
+    "pickerEmpty": "ምንም የተቀመጠ መዋቅር የለም።",
+    "pickerTitle": "የተቀመጠ መዋቅር ጫን",
+    "saveAsStructure": "እንደ መዋቅር አስቀምጥ",
+    "saveAsStructureTitle": "እነዚህን አምድዎች ወደ መዋቅር ቤት ማከማቻዎ አስቀምጥ",
+    "savedToast": "የተቀመጠ መዋቅር “{name}”",
+    "namePlaceholder": "የመዋቅር ስም",
+    "fieldCount": "{count} መስኮች",
+    "fieldCountOne": "1 መስክ",
+    "downgradedNotice": "{count} መስኮች ወደ ጽሑፍ ቀስተዋል — ገበታዎች በአንድ አንቀሳቃሽ እንዲኖሩ ይፈቅድ፡ {names}",
+    "truncatedNotice": "{count} መስኮች ጠፍተዋል — የገበታው ገደብ {max} አምድ ነው: {names}",
+    "skippedDerivedNotice": "{count} የተከናወነ የአምድ መስክ(ዎች) አልተቀመጡም — ፎርሙላዎች ወደዚህ የገበታ አምድ ይጠቀማሉ፡ {names}",
+    "loadReplacesColumns": "ይህ አሁንዎት ያሉትን አምድዎች በሙሉ ይቀይራል። ያሉ ተሰንጠረዦች በስም የሚመዱ ነገሮች ይቆያሉ።"
   }
 }

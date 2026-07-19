@@ -2091,7 +2091,9 @@
     "pin": "پورته يې ټومبل",
     "unpin": "ناټومبل",
     "moveToMore": "نور ته ولیږدول",
-    "moveOutOfMore": "په مینو کې ښکاره کړئ"
+    "moveOutOfMore": "په مینو کې ښکاره کړئ",
+    "showSources": "نورې سرچینې وښایاست",
+    "hideSources": "نورې سرچینې پټې کړئ"
   },
   "transcription": {
     "transcribesOnSend": "په استولو سره ټرانسکرېپشن کېږي",
@@ -2762,7 +2764,16 @@
       "undoEdit": "واپس واخلئ",
       "clearResolved": "تصفيه شوي پاک کړئ",
       "clearResolvedHint": "له دې لیست څخه منل شوي، رد شوي او نامناسب سمونونه لرې کړئ",
-      "autoClearResolved": "تصفيه شوي سمونونه په اوتومات ډول پاک کړئ"
+      "autoClearResolved": "تصفيه شوي سمونونه په اوتومات ډول پاک کړئ",
+      "import": "واردول",
+      "importReplaceTitle": "اسناد ځای ناستی کړئ؟",
+      "importReplaceBody": "د {name} واردول به اوسنی سند ځای ناستی کړي. ستاسو حوالې، مشخصات او طرز پاتېږي.",
+      "importReplaceConfirm": "ځای ناستی کړئ",
+      "editorMode": "د ایډیټر حالت",
+      "editorModeRich": "بډایه متن",
+      "editorModeMarkdown": "مارکډاون",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "د ایډیټر حالت بدلولو مخکې وړاندیز شوي سمونې حل کړئ."
     },
     "data": {
       "emptyTitle": "د تحلیل لپاره معلومات وارد کړئ",
@@ -2961,7 +2972,9 @@
       "schemaFormulaArityError": "د {fn} لپاره ناسم شمېر ارګومېنټونه",
       "schemaFormulaCycleError": "د فورمولونو ترمنځ حلقوي حواله",
       "derivedColumnTitle": "محاسبه شوی: {formula}",
-      "derivedFrom": "د {formula} نه حساب شوی"
+      "derivedFrom": "د {formula} نه حساب شوی",
+      "takePhoto": "انځور واخلئ",
+      "takePhotoHint": "د فورمې یا جدول تصویر اخیستلو لپاره خپله کمره وکاروئ — منځپانګه به ستروکچر شویو معلوماتو ته واوړي چې له عکس سره یې پرتله کولی شئ"
     },
     "map": {
       "emptyTitle": "خپل معلومات نقشې ته واچوئ",
@@ -3124,6 +3137,22 @@
       "asana": {
         "name": "Asana",
         "description": "دندې او پروژې پیدا کړئ، جوړ کړئ او تازه یې کړئ."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "خپرې شوې ډاټا سرچینو، ورک‌بوکونو او Pulse میټریکس پوښتنه وکړئ."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "ستاسو د Salesforce شیانو کې ریکارډونه وګورئ او نوي کړئ."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "ټولنیزو رسنیو پوسټونه مسوده کړئ، مهالویش کړئ او خپاره کړئ."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "د ټولنیزو پیغامونو خبرې وګورئ او ځواب ورکړئ."
       }
     },
     "connect": "وصل کړئ",
@@ -3184,7 +3213,19 @@
       "missingState": "هیڅ د تصدیق لپاره نشته",
       "close": "تاسو کولی شئ دا کړکۍ وتړئ او اپ ته راوګرځئ.",
       "closeButton": "کړکۍ وتړئ"
-    }
+    },
+    "oauthNoAppConfigured": "د {name} سره ننوتل په دې نصب کې تنظیم نه دي شوي. د خپل OAuth اپ ثبتونې سره وصل شئ.",
+    "adminConnectorsTitle": "ستاسو د سازمان له خوا",
+    "adminConnectorsDescription": "دا هغه نښلوونکي دي چې ستاسې ادارو تنظیم کړي. کوم چې تاسو ته ښکاري، ستاسو تر لاسرسي پورې اړه لري.",
+    "managedByOrg": "ستاسو د سازمان لخوا اداره کېږي",
+    "connectorOauthNotConfigured": "د دې نښلوونکي لپاره ننوتل لا بشپړ نه دي ترتیب شوي. له خپل ادمین سره اړیکه ونیسئ.",
+    "yourConnectorsTitle": "ستاسې نښلوونکي",
+    "addTitle": "نوی نښلوونکی اضافه کړئ",
+    "addDescription": "د وصلولو لپاره یو وسیله وټاکئ. تر ټاکلو وروسته لاسرسی تنظیمئ.",
+    "add": "اضافه کړئ",
+    "filterLabel": "نښلوونکي فلټر کړئ",
+    "filterPlaceholder": "نښلوونکي ولټوئ",
+    "noMatches": "هیڅ نښلوونکی د “{query}” سره نه سمون خوري."
   },
   "modelSources": {
     "connectButtonShort": "ماډل سرچینه ونښلوئ",
@@ -3502,7 +3543,39 @@
     "promptAgentCreateSuccess": "پرامپټ ایجنټ جوړ شو.",
     "promptAgentSaveSuccess": "پرامپټ ایجنټ ذخیره شو.",
     "promptAgentDeleteSuccess": "پرامپټ ایجنټ حذف شو.",
-    "promptAgentsUnavailableWarning": "پرامپټ ایجنټونه له ذخیرې څخه نشي لوستل کېدای. اوس یې نشئ سمولای."
+    "promptAgentsUnavailableWarning": "پرامپټ ایجنټونه له ذخیرې څخه نشي لوستل کېدای. اوس یې نشئ سمولای.",
+    "agentsTab": "اجنټان",
+    "connectorsTab": "نښلوونکي",
+    "addConnector": "نوی نښلوونکی اضافه کړئ",
+    "noConnectors": "تر اوسه نښلوونکی نشته.",
+    "connectorsUnavailableWarning": "د نښلوونکو زیرمتون ته لاسرسی نشو کولی، نو دا لست کېدای شي بشپړ نه وي. تر بار شي پورې بدیل مه جوړوئ.",
+    "editAccess": "لاسرسی سمول",
+    "deleteConnector": "ړنګول",
+    "deleteConnectorConfirm": "دا نښلوونکی ړنګ کړئ؟ هر څوک چې یې کاروي، سملاسي به لاسرسی له لاسه ورکړي.",
+    "confirmDeleteConnector": "نښلوونکی ړنګ کړئ",
+    "connectorSaveSuccess": "نښلوونکی خوندي شو.",
+    "connectorCreateSuccess": "نښلوونکی جوړ شو.",
+    "connectorDeleteSuccess": "نښلوونکی ړنګ شو.",
+    "editConnectorTitle": "نښلوونکی سمول",
+    "newConnectorTitle": "نوی نښلوونکی",
+    "connectorPresetLabel": "د قالب څخه پیل وکړئ",
+    "connectorPresetNone": "له پيله پیل کړئ",
+    "connectorNameLabel": "نوم",
+    "connectorDescriptionLabel": "توضیحات",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "له ذخیره کولو مخکې، د URL کې {placeholder} د خپل ارزښت سره بدل کړئ.",
+    "connectorTransportLabel": "ټرانسپورټ",
+    "connectorAuthLabel": "تصدیق",
+    "connectorAuthNone": "هیڅ",
+    "connectorAuthBearer": "ټوکین (هر کاروونکی خپل ټوکین ورکوي)",
+    "connectorAuthOauth": "OAuth ننوتل",
+    "connectorSealingUnavailable": "OAuth نشته: په دې نصب کې د AUTH_SECRET تنظیم ندی شوی چې د پټنومونو د کوډ کولو لپاره ترې ګټه واخیستل شي.",
+    "connectorTokenHelpLabel": "د ټوکین لارښوونو لینک (اختیاري)",
+    "connectorClientIdLabel": "د OAuth پیرودونکي ID",
+    "connectorClientSecretLabel": "د OAuth پیرودونکي پټنوم",
+    "connectorClientSecretStored": "پټنوم خوندي شوی دی. که وغواړئ همدا وساتئ، تش پرېږدئ؛ که نوي غواړئ، نوی ولیکئ.",
+    "connectorClientSecretHint": "د ذخیره کولو مخکې کوډ (Encrypted) کیږي، او بیا به نه ښکاري.",
+    "connectorScopesLabel": "Scopes (جلا جلا له ځای سره، اختیاري)"
   },
   "localModels": {
     "title": "محلي ماډلونه",
@@ -3561,5 +3634,41 @@
     "settingsToggle": "خپلې پیسټ شوې لینکونه اتومات راوړه",
     "settingsDescription": "کله چې یوازې یو لینک پیسټ کړئ، پاڼه راوړل کېږي او متن یې نښلول کېږي څو اسسټنټ یې ولولي. که دا بنده کړئ، پیسټ شوې لینکونه به ساده متن پاتې شي — تاسې لا هم د + مېنو نه یو لینک لاسوند کولی شئ.",
     "addLink": "لینک اضافه کړئ"
+  },
+  "cameraAccessError": "کمرې ته لاسرسی نشو کولی. د خپلې کمرې اجازې وګورئ او بیا هڅه وکړئ.",
+  "cameraUnnamedDevice": "کمره",
+  "pastedText": {
+    "fallbackName": "پیچل شوی متن",
+    "charCount": "{count, number} توري",
+    "removeChip": "پیچل شوی متن “{name}” لرې کړئ",
+    "blockLabel": "پیچل شوی متن: {name}",
+    "doc": {
+      "heading": "پیچل شوی متن",
+      "pastedLabel": "پیچل شوی"
+    },
+    "settingsTitle": "لوی پیچونه",
+    "settingsToggle": "لوی پیچ د فایل ضمیمه کړئ",
+    "settingsDescription": "که له لاندې محدودیت څخه زیات متن پیس کړئ، دا د فایل په ډول ضمیمه کیږي نه چې پیغام بکس ته ځای شي. متن هماغسې کارول کېږي، بدلون یا تر لاسه کېدل نه پکې کیږي.",
+    "settingsThresholdLabel": "پیچونه چې له دې څخه اوږده وي، ضمیمه کړئ",
+    "settingsThresholdUnit": "توري",
+    "settingsThresholdHint": "د {min, number} او {max, number} تورو ترمنځ."
+  },
+  "structures": {
+    "section": "جوړښتونه",
+    "sectionSubtitle": "خوندي شوي د ساحو تعریفونه. له دې څخه یو د استخراج لپاره وکاروئ یا د معلوماتو جدول لپاره د پیل سکیمه ګڼه.",
+    "loadFromStructure": "جوړښت راوړل",
+    "loadFromStructureTitle": "دا ستوني د خوندي شوي جوړښت سره بدل کړئ",
+    "pickerEmpty": "تر اوسه هېڅ جوړښت ندی خوندي شوی.",
+    "pickerTitle": "یو خوندي شوی جوړښت راوړئ",
+    "saveAsStructure": "د جوړښت په توګه خوندي کړئ",
+    "saveAsStructureTitle": "دا ستوني خپل د جوړښتونو کتابتون ته خوندي کړئ",
+    "savedToast": "جوړښت خوندي شو “{name}”",
+    "namePlaceholder": "د جوړښت نوم",
+    "fieldCount": "{count} ساحې",
+    "fieldCountOne": "۱ ساحه",
+    "downgradedNotice": "{count} ساحې یوازې ټکي ته ساده شوې ـ جدول هر حجره کې یواځې یو ارزښت لري: {names}",
+    "truncatedNotice": "{count} ساحې لیرې شوې ـ د جدول حد {max} ستنه دی: {names}",
+    "skippedDerivedNotice": "{count} محاسبه شوي ستنې خوندي نشوې ـ فارمولاوې د جدول ستنو ته راجع دي: {names}",
+    "loadReplacesColumns": "اوسني ستنې به بدل شي. پخوانۍ قطارونه یوازې هغه ارزښتونه ساتي چې د ستنې نومونه یې برابر وي."
   }
 }

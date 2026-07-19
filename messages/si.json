@@ -2116,7 +2116,9 @@
     "pin": "ඉහළට ඉවින්න",
     "unpin": "ඉවිත ඉවත් කරන්න",
     "moveToMore": "\"තවත්\" වෙත ගෙන යන්න",
-    "moveOutOfMore": "මෙනුවේ පෙන්වන්න"
+    "moveOutOfMore": "මෙනුවේ පෙන්වන්න",
+    "showSources": "වෙනත් මූලාශ්‍ර පෙන්වන්න",
+    "hideSources": "වෙනත් මූලාශ්‍ර සඟවන්න"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI එකේ ප්‍රතිචාර ගැලපෙන්න ඔබගේ පුද්ගලික උපදෙස් එක් කරන්න. මෙවා උදව්कारी, නිවැරදි සහ නිසි ආරක්ෂාවක් ඇති ප්‍රතිචාර ගෙදීමට වන මූලික හැසිරීම් මාර්ගෝපදේශ සමඟ ඒකාබද්ධ වේ.",
   "Tip: Type \"/\" to select from saved prompt templates_": "ඉඟිය: සුරක්ෂිත උත්ප්‍රේරණ සැදීම් තෝරා ගැනීමට \"/\" ටයිප් කරන්න.",
@@ -2778,7 +2780,16 @@
       "undoEdit": "පිටුපසට යන්න",
       "clearResolved": "විසඳූ දේ ඉවත් කරන්න",
       "clearResolvedHint": "පිළිගත්, ප්‍රතික්ෂේප කළ සහ අදාල නොවන සංශෝධන මෙම ලැයිස්තුවෙන් ඉවත් කරන්න",
-      "autoClearResolved": "විසඳූ සංශෝධන ස්වයංක්‍රියව ඉවත් කරන්න"
+      "autoClearResolved": "විසඳූ සංශෝධන ස්වයංක්‍රියව ඉවත් කරන්න",
+      "import": "ආයාත කරන්න",
+      "importReplaceTitle": "ලියවිල්ල ප්‍රතිස්ථාපනය කරන්නද?",
+      "importReplaceBody": "{name} ආයාත කිරීමෙන් වත්මන් ලියවිල්ල ප්‍රතිස්ථාපනය වේ. ඔබගේ යම් යොමු, විශේෂාංග සහ රටාව සුරුක්ෂිත වේ.",
+      "importReplaceConfirm": "ප්‍රතිස්ථාපනය කරන්න",
+      "editorMode": "සංස්කරණ ප්‍රකාරය",
+      "editorModeRich": "ධන විභාග අක්ෂරය",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "සංස්කරණ ප්‍රකාරය මාරු කිරීමට පෙර යෝජිත සංස්කරණ විසඳන්න."
     },
     "data": {
       "emptyTitle": "විශ්ලේෂණය සඳහා දත්ත ආයාත කරන්න",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "{fn} සඳහා වැරදි පාර්ශව ගණනකි",
       "schemaFormulaCycleError": "සූත්‍ර අතර වෘත්තීය යොමු",
       "derivedColumnTitle": "ගණනය කළ: {formula}",
-      "derivedFrom": "{formula} අනුව ගණනය කළා"
+      "derivedFrom": "{formula} අනුව ගණනය කළා",
+      "takePhoto": "ඡායාරූපයක් ගන්න",
+      "takePhotoHint": "ආකෘතියක් හෝ වගුවක් ඡායාරූපගත කිරීමට ඔබේ කැමරාව භාවිතා කරන්න — එහි අන්තර්ගතය ව්‍යුහගත දත්ත බවට පරිවර්තනය කර ඔබට ඡායාරූපය සමඟ සසඳිය හැක"
     },
     "map": {
       "emptyTitle": "ඔබගේ දත්ත සිතියමක පෙන්වන්න",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "ක්‍රියා සහ ව්‍යාපෘති සෙවීම, නිර්මාණය සහ යාවත්කාලීන කිරීම."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "ප්‍රකාශයට පත් දත්ත මූලාශ්‍ර, රාමුපොත් සහ Pulse මාන පරීක්ෂා කරන්න."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "ඔබේ Salesforce වස්තූන් හරහා වාර්තා බැලීම් හා යාවත්කාලීන කරන්න."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "සමාජ මාධ්‍ය පළ කිරීම් සැකසුම්, කාලසටහන්ගත කිරීම සහ ප්‍රකාශය."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "සමාජ මාධ්‍ය සම්බන්ධ සංවාද සමාලෝචනය සහ ප්‍රතිචාර දෙන්න."
       }
     },
     "connect": "සම්බන්ධ කරන්න",
@@ -3200,7 +3229,19 @@
       "missingState": "අනුමත කරන කිසිවක් නැත",
       "close": "මෙම කවුළුව වසා, යෙදුමට ආපසු යා හැකිය.",
       "closeButton": "කවුළුව වසන්න"
-    }
+    },
+    "oauthNoAppConfigured": "මෙම නිශ්පාදනයේ {name} සමඟ පුරනය වීම පිහිටුවා නැත. ඔබගේම OAuth යෙදුම ලියාපදිංචි කර සම්බන්ධ වන්න.",
+    "adminConnectorsTitle": "ඔබගේ සංවිධානයෙන්",
+    "adminConnectorsDescription": "ඔබගේ පරිපාලකයන් පිහිටුවූ සම්බන්ධක. ඔබට පෙනෙන ඒවා ඔබගේ ප්‍රවේශය මත උදාවෙනවා.",
+    "managedByOrg": "ඔබගේ සංවිධානය විසින් කළමනාකරණය කෙරේ",
+    "connectorOauthNotConfigured": "මෙම සම්බන්ධකය සඳහා පුරනය සම්පූර්ණයෙන් පිහිටුවා නැත. කරුණාකර ඔබේ පරිපාලකයා අමතන්න.",
+    "yourConnectorsTitle": "ඔබගේ සම්බන්ධක",
+    "addTitle": "සම්බන්ධකය එක් කරන්න",
+    "addDescription": "සම්බන්ධ වීමට මෙවලමක් තෝරන්න. තෝරා ගැනීමෙන් පසු ප්‍රවේශය පිහිටුවන්න.",
+    "add": "එක් කරන්න",
+    "filterLabel": "සම්බන්ධක පෙරහන් කරන්න",
+    "filterPlaceholder": "සම්බන්ධක සොයන්න",
+    "noMatches": "“{query}” සඳහා ගැලපෙන සම්බන්ධක නොමැත."
   },
   "modelSources": {
     "connectButtonShort": "මාදිලි මූලාශ්‍රයක් සම්බන්ධ කරන්න",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "ප්‍රොම්ප්ට් නියෝජිතයා නිර්මාණය විය.",
     "promptAgentSaveSuccess": "ප්‍රොම්ප්ට් නියෝජිතයා සුරැකින ලදි.",
     "promptAgentDeleteSuccess": "ප්‍රොම්ප්ට් නියෝජිතයා මකා දමන ලදි.",
-    "promptAgentsUnavailableWarning": "ප්‍රොම්ප්ට් නියෝජිතයන් ගබඩායකින් පූරණය කළ නොහැකි විය. මේ මොහොතේ සංස්කරණය කළ නොහැක."
+    "promptAgentsUnavailableWarning": "ප්‍රොම්ප්ට් නියෝජිතයන් ගබඩායකින් පූරණය කළ නොහැකි විය. මේ මොහොතේ සංස්කරණය කළ නොහැක.",
+    "agentsTab": "නියෝජිතයින්",
+    "connectorsTab": "සම්බන්ධක",
+    "addConnector": "සම්බන්ධකය එක් කරන්න",
+    "noConnectors": "තවමත් සම්බන්ධක නොමැත.",
+    "connectorsUnavailableWarning": "සම්බන්ධක අලෙවිසල වෙත ළඟා විය නොහැකි නිසා මෙම ලැයිස්තුව සම්පූර්ණ නොවනවා විය හැක. එය පූරණය වනතුරු ප්‍රතිස්ථාපකයක් හදිසි ලෙස නිර්මාණය නොකරන්න.",
+    "editAccess": "ප්‍රවේශය සංස්කරණය කරන්න",
+    "deleteConnector": "මකන්න",
+    "deleteConnectorConfirm": "මෙම සම්බන්ධකය මකන්නද? එය භාවිතා කරන ඕනෑම අයෙකුට වහා ප්‍රවේශය අහිමි වේ.",
+    "confirmDeleteConnector": "සම්බන්ධකය මකන්න",
+    "connectorSaveSuccess": "සම්බන්ධකය සුරැකුණා.",
+    "connectorCreateSuccess": "සම්බන්ධකය නිර්මාණය විය.",
+    "connectorDeleteSuccess": "සම්බන්ධකය මකා ඇත.",
+    "editConnectorTitle": "සම්බන්ධකය සංස්කරණය කරන්න",
+    "newConnectorTitle": "නව සම්බන්ධකය",
+    "connectorPresetLabel": "ආකෘතියක් ආරම්භ කරන්න",
+    "connectorPresetNone": "නවයෙන් ආරම්භ කරන්න",
+    "connectorNameLabel": "නම",
+    "connectorDescriptionLabel": "විස්තරය",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "URL හි {placeholder} ඔබේ අගයට වෙනස් කර සුරැකිමට පෙර යාවත්කාලීන කරන්න.",
+    "connectorTransportLabel": "ප්‍රවාහනය",
+    "connectorAuthLabel": "Authentication",
+    "connectorAuthNone": "නැත",
+    "connectorAuthBearer": "Token (ප්‍රතිඵලයක් ලෙස එක් එක් පරිශීලකයා විසින් සපයයි)",
+    "connectorAuthOauth": "OAuth පුරනය වීම",
+    "connectorSealingUnavailable": "OAuth ලබාගත නොහැක: මෙම දියත් කිරීමේදී client secret සඳහා සංකේතනය කළ AUTH_SECRET ක් නෑ.",
+    "connectorTokenHelpLabel": "Token උපදෙස් වෙත සබැඳිය (විකල්ප)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "රහසක් සුරැකී ඇත. එය තබා ගැනීමට හිස්ව තබන්න, නැතහොත් නව එකක් ඇතුළත් කර පැරණිය ප්‍රතිස්ථාපනය කරන්න.",
+    "connectorClientSecretHint": "සුරැකුමට පෙර සංකේතනය කරයි, සහ නැවත කඩිනමින් පෙන්නවන්නේ නෑ.",
+    "connectorScopesLabel": "Scopes (බිම්තරින් වෙන් කර ඇත, විකල්ප)"
   },
   "localModels": {
     "title": "ප්‍රාදේශීය ආදර්ශ",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "පේස්ට් කළ සබැඳි ස්වයංක්‍රීයව ලබා ගන්න",
     "settingsDescription": "ඔබ සබැඳියක් ව separado පේස්ට් කළ විට, එය ලබාගෙන එහි පාඨය පණිවිඩයට එක්කරයි, එවිට සහායකයා කියවිය හැක. මෙය අක්‍රිය කළහොත් සබැඳි සාමාන්‍ය පාඨය විදියට පවතී — තවදුරටත් + මෙනුවෙන් පිටුවක් සිදුවම එකතු කළ හැක.",
     "addLink": "සබැඳියක් එක් කරන්න"
+  },
+  "cameraAccessError": "කැමරාව වෙත ප්‍රව්ේශ විය නොහැකි විය. ඔබගේ කැමරා අවසර පරීක්ෂා කර නැවත උත්සාහ කරන්න.",
+  "cameraUnnamedDevice": "කැමරාව",
+  "pastedText": {
+    "fallbackName": "ඇලවූ පෙළ",
+    "charCount": "අක්ෂර {count, number}ක්",
+    "removeChip": "ඇලවූ පෙළ \"{name}\" ඉවත් කරන්න",
+    "blockLabel": "ඇලවූ පෙළ: {name}",
+    "doc": {
+      "heading": "ඇලවූ පෙළ",
+      "pastedLabel": "ඇලවී ඇත"
+    },
+    "settingsTitle": "විශාල ඇලවීම්",
+    "settingsToggle": "විශාල ඇලවීමක් ඇමුණුමක් කිරීම",
+    "settingsDescription": "පහත සීමාවට වඩා වැඩි පෙළ ඇලවීමකදී එය ආයාචනාවක් ලෙස ඇමුණුම් කරයි, පණිවුඩ බොක්ස් හරහා පිරවීම වෙනුවට. ඇලවූ පෙළක් පමණක් භාවිතා වේ — කිසිවක් ලබාගනියි හෝ වෙනස් කරන්නේ නැත.",
+    "settingsThresholdLabel": "මෙයට වඩා දිගු ඇලවීම් ඇමුණුම් කරන්න",
+    "settingsThresholdUnit": "අක්ෂර",
+    "settingsThresholdHint": "අක්ෂර {min, number} න් {max, number} දක්වා අතර."
+  },
+  "structures": {
+    "section": "ව්‍යුහ",
+    "sectionSubtitle": "සුරැකූ ක්ෂේත්‍ර නිර්වචන. පරිණාමනය කිරීමේ රෙසිපියක් ලෙස හෝ දත්ත වැඩපොළක් සඳහා ආරම්භක සටහන් ලෙස භාවිතා කරන්න.",
+    "loadFromStructure": "ව්‍යුහය පූරණය කරන්න",
+    "loadFromStructureTitle": "මෙම තීරු සුරැකූ ව්‍යුහයක් භාවිතයෙන් ප්‍රතිස්ථාපනය කරන්න",
+    "pickerEmpty": "තවමත් සුරැකූ ව්‍යුහ නැත.",
+    "pickerTitle": "සුරැකූ ව්‍යුහයක් ලෝඩ් කරන්න",
+    "saveAsStructure": "ව්‍යුහයක් ලෙස සුරකින්න",
+    "saveAsStructureTitle": "මේ තීරු ඔබේ ව්‍යුහ පුස්තකාලයට සුරකින්න",
+    "savedToast": "\"{name}\" ව්‍යුහය සුරැකුණි",
+    "namePlaceholder": "ව්‍යුහයේ නම",
+    "fieldCount": "ක්ෂේත්‍ර {count}ක්",
+    "fieldCountOne": "ක්ෂේත්‍ර 1ක්",
+    "downgradedNotice": "ක්ෂේත්‍ර {count}ක් පෙළ බවට සරල කරයි — වගු මූලික වශයෙන් සෙල් එකකට අගය එකක් පමණක් තබයි: {names}",
+    "truncatedNotice": "ක්ෂේත්‍ර {count}ක් ඉවත් කරන ලදි — වගුවේ සීමාව තීරු {max}කි: {names}",
+    "skippedDerivedNotice": "ගණනය කරන ලද තීරු {count}ක් සුරක්ෂිත කර නැත — නිර්වචන සූත්‍රයන් මෙම වගුවේ තීරු වලට යොමු වේ: {names}",
+    "loadReplacesColumns": "මෙය වත්මන් තීරු ප්‍රතිස්ථාපනය කරයි. පවතින පේළි සංසදන තීරු නම් වල අගයන් රඳවා ගනී."
   }
 }

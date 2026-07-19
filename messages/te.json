@@ -2116,7 +2116,9 @@
     "pin": "పైకి పిన్ చేయండి",
     "unpin": "పిన్ తీసేయండి",
     "moveToMore": "మరిన్ని విభాగానికి మార్చండి",
-    "moveOutOfMore": "మెనూలో చూపించు"
+    "moveOutOfMore": "మెనూలో చూపించు",
+    "showSources": "ఇతర स्तోత్రాలు చూపించు",
+    "hideSources": "ఇతర स्रोतాలు దాచు"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI ఎలా స్పందించాలో అనుకూలీకరించడానికి మీ వ్యక్తిగత సూచనలను జత చేయండి. ఇవి సహాయకరమైన, ఖచ్చితమైన మరియు సురక్షితమైన స్పందనలను నిర్ధారించే ప్రాథమిక ప్రవర్తనా మార్గదర్శకాలతో కలిపి ఉపయోగించబడతాయి.",
   "Tip: Type \"/\" to select from saved prompt templates_": "సూచన: సేవ్ చేయబడిన ప్రాంప్ట్ టెంప్లేట్లను ఎంచుకోవడానికి \"/\" టైప్ చేయండి.",
@@ -2778,7 +2780,16 @@
       "undoEdit": "రద్దు చేయండి",
       "clearResolved": "పరిష్కరించబడిన వాటిని తీసివేయండి",
       "clearResolvedHint": "ఈ జాబితాలోని ఆమోదించినవి, నిరాకరించబడినవి, వర్తించని ఎడిట్‌లను తొలగించండి",
-      "autoClearResolved": "పరిష్కరించబడిన ఎడిట్‌లను ఆటోమేటిక్‌గా తీసివేయండి"
+      "autoClearResolved": "పరిష్కరించబడిన ఎడిట్‌లను ఆటోమేటిక్‌గా తీసివేయండి",
+      "import": "ఆమదు చేయు",
+      "importReplaceTitle": "పత్రాన్ని మార్చాలా?",
+      "importReplaceBody": "{name} ను ఆమదు చేయడం వలన ప్రస్తుత పత్రము మారుతుంది. మీ సూచనలు, స్పెసిఫికేషన్ మరియు ధ్వని అలాగే ఉంటాయి.",
+      "importReplaceConfirm": "మార్చు",
+      "editorMode": "ఎడిటర్ మోడ్",
+      "editorModeRich": "రిచ్ టెక్స్ట్",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "ఎడిటర్ మోడ్ మార్చే ముందు సూచించిన మార్పులను పరిష్కరించండి."
     },
     "data": {
       "emptyTitle": "విశ్లేషణ కోసం డేటాను దిగుమతి చేయండి",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "{fn}కు తప్పు ఆర్గుమెంట్ల సంఖ్య",
       "schemaFormulaCycleError": "సూత్రాలలో పరస్పర సూచన",
       "derivedColumnTitle": "గణించబడింది: {formula}",
-      "derivedFrom": "{formula} నుండి గణించబడింది"
+      "derivedFrom": "{formula} నుండి గణించబడింది",
+      "takePhoto": "ఫోటో తీయు",
+      "takePhotoHint": "ఫారం లేదా పట్టికను ఫోటో తీయడానికి మీ కెమెరాను ఉపయోగించండి—దాని వివరాలు స్ట్రక్చర్డ్ డేటాగా మారతాయి, మీరు ఫోటోతో పోల్చి చూడవచ్చు"
     },
     "map": {
       "emptyTitle": "మీ డేటాను మ్యాప్‌లో ఉంచండి",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "టాస్క్‌లు మరియు ప్రాజెక్ట్‌లను కనుగొనండి, సృష్టించండి, నవీకరించండి."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "ప్రచురించబడిన డేటా स्तోత్రాలు, వర్క్‌బుక్స్ మరియు Pulse మీట్రిక్స్‌ను ప్రశ్నించండి."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "మీ Salesforce ఆబ్జెక్ట్స్ లో నమోదులు చూడండి మరియు నవీకరించండి."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "సోషల్ మీడియా పోస్టులను తయారు చేయండి, షెడ్యూల్ చేయండి మరియు ప్రచురించండి."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "సోషల్ ఇన్బాక్స్ సంభాషణలను సమీక్షించి, స్పందించండి."
       }
     },
     "connect": "కనెక్ట్ చేయండి",
@@ -3200,7 +3229,19 @@
       "missingState": "అధికారీకరించేందుకేమీ లేదు",
       "close": "ఈ విండోను మూసి యాప్‌కు తిరిగి వెళ్లవచ్చు.",
       "closeButton": "విండో మూసి వేయండి"
-    }
+    },
+    "oauthNoAppConfigured": "ఈ డిప్లాయ్‌మెంట్‌లో {name}తో సైనిన్ అవసరం కోసం సెటప్ చేయలేదు. OAuth యాప్ రిజిస్టర్ చేసి కనెక్ట్ చేయండి.",
+    "adminConnectorsTitle": "మీ సంస్థ నుండి",
+    "adminConnectorsDescription": "మీ మనేజర్లు ఏర్పాటు చేసిన కనెక్టర్లు. మీరు ఏవి చూస్తారో మీ యాక్సెస్‌పై ఆధారపడుతుంది.",
+    "managedByOrg": "మీ సంస్థ ద్వారా నిర్వహించబడుతుంది",
+    "connectorOauthNotConfigured": "ఈ కనెక్టర్ కోసం సైన్-ఇన్ సెటప్ పూర్తికాలేదు. మీ అడ్మినిస్ట్రేటర్‌ను సంప్రదించండి.",
+    "yourConnectorsTitle": "మీ కనెక్టర్లు",
+    "addTitle": "కనెక్టర్‌ను జోడించండి",
+    "addDescription": "కనెక్ట్ చేసేందుకు ఒక టూల్ ఎంచుకోండి. డివైజ్ ఎంచుకున్న తర్వాత యాక్సెస్ సెటప్ చేయగలరు.",
+    "add": "జోడించు",
+    "filterLabel": "కనెక్టర్లను ఫిల్టర్ చేయండి",
+    "filterPlaceholder": "కనెక్టర్లను వెతకండి",
+    "noMatches": "“{query}”కి సరిపడిన కనెక్టర్లు లేవు."
   },
   "modelSources": {
     "connectButtonShort": "మోడల్ సోర్స్ కనెక్ట్ చేయండి",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "ప్రాంప్ట్ ఏజెంట్ సృష్టించబడింది.",
     "promptAgentSaveSuccess": "ప్రాంప్ట్ ఏజెంట్ సేవ్ చేయబడింది.",
     "promptAgentDeleteSuccess": "ప్రాంప్ట్ ఏజెంట్ తొలగించబడింది.",
-    "promptAgentsUnavailableWarning": "ప్రాంప్ట్ ఏజెంట్లను నిల్వ నుండి లోడ్ చేయలేకపోయాం. ఈ సమయంలో వాటిని సవరించలేరు."
+    "promptAgentsUnavailableWarning": "ప్రాంప్ట్ ఏజెంట్లను నిల్వ నుండి లోడ్ చేయలేకపోయాం. ఈ సమయంలో వాటిని సవరించలేరు.",
+    "agentsTab": "ఏజెంట్లు",
+    "connectorsTab": "కనెక్టర్లు",
+    "addConnector": "కనెక్టర్ జోడించు",
+    "noConnectors": "ఇంకా కనెక్టర్లు లేవు.",
+    "connectorsUnavailableWarning": "కనెక్టర్ స్టోర్‌ను యాక్సెస్ చేయలేకపోయాము, కనుక ఈ లిస్ట్ పూర్తిగా ఉండకపోవచ్చు. లోడ్ అయ్యే వరకు రీప్లేస్‌మెంట్ సృష్టించవద్దు.",
+    "editAccess": "యాక్సెస్ సవరించు",
+    "deleteConnector": "తొలగించు",
+    "deleteConnectorConfirm": "ఈ కనెక్టర్‌ను తొలగించాలా? ఇది ఉపయోగిస్తున్నవారు వెంటనే యాక్సెస్ కోల్పోతారు.",
+    "confirmDeleteConnector": "కనెక్టర్ తొలగించు",
+    "connectorSaveSuccess": "కనెక్టర్ సేవ్ చేయబడింది.",
+    "connectorCreateSuccess": "కనెక్టర్ సృష్టించబడింది.",
+    "connectorDeleteSuccess": "కనెక్టర్ తొలగించబడింది.",
+    "editConnectorTitle": "కనెక్టర్ సవరించు",
+    "newConnectorTitle": "కొత్త కనెక్టర్",
+    "connectorPresetLabel": "టెంప్లేట్ నుండి ప్రారంభించండి",
+    "connectorPresetNone": "పునాదినుంచి ప్రారంభించండి",
+    "connectorNameLabel": "పేరు",
+    "connectorDescriptionLabel": "వివరణ",
+    "connectorUrlLabel": "సర్వర్ URL",
+    "connectorUrlPlaceholderWarning": "సేవ్ చేసే ముందు URL లోని {placeholder} ను మీ విలువతో మార్చండి.",
+    "connectorTransportLabel": "ట్రాన్స్‌పోర్ట్",
+    "connectorAuthLabel": "ప్రామాణీకరణ",
+    "connectorAuthNone": "ఏదీ లేదు",
+    "connectorAuthBearer": "టోకెన్ (ప్రతి యూజర్ స్వయంగా ఇస్తారు)",
+    "connectorAuthOauth": "OAuth సైన్-ఇన్",
+    "connectorSealingUnavailable": "OAuth లభ్యం కాదు: ఈ డిప్లాయ్‌మెంట్‌కు AUTH_SECRET కాన్ఫిగర్ చేయలేదు కాబట్టి క్లయింట్ సీక్రెట్లను ఎన్‌క్రిప్ట్ చేయలేరు.",
+    "connectorTokenHelpLabel": "టోకెన్ సూచనలకు లింక్ (ఐచ్ఛికం)",
+    "connectorClientIdLabel": "OAuth క్లయింట్ ID",
+    "connectorClientSecretLabel": "OAuth క్లయింట్ సీక్రెట్",
+    "connectorClientSecretStored": "ఒక సీక్రెట్ నిల్వ ఉంది. దానిని ఉంచాలంటే ఖాళీగా వదిలేయండి, లేదా కొత్తదాన్ని ఇవ్వాలనుకుంటే ఇన్పుట్ చేయండి.",
+    "connectorClientSecretHint": "నిల్వ చేయకముందు ఎన్‌క్రిప్ట్ చేయబడుతుంది, తర్వాత మళ్లీ చూపించబడదు.",
+    "connectorScopesLabel": "స్కోపులు (స్పేస్‌తో వేరు చేయండి, ఐచ్ఛికం)"
   },
   "localModels": {
     "title": "లోకల్ మోడల్స్",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "పేస్ట్ చేసిన లింకులను యంత్రంగా తెచ్చుకోండి",
     "settingsDescription": "మీరు ఒక లింక్‌ను వేర్వేరుగా ఉంచితే, పేజీని తెచ్చి దాని టెక్స్ట్‌ను జతచేస్తాము; తద్వారా అసిస్టెంట్ చదవగలుగుతాడు. దీన్ని ఆఫ్ చేస్తే లింకులు సాధారణ టెక్స్ట్‌గా ఉంటాయి — అయినా మీరు + మెను నుండి మానవీయంగా పేజీని జత చేయొచ్చు.",
     "addLink": "లింక్‌ జోడించండి"
+  },
+  "cameraAccessError": "కెమెరాను యాక్సెస్ చేయడం సాధ్యపడలేదు. మీరు కెమెరాకు అనుమతులు ఇచ్చారా చూసి, మళ్లీ ప్రయత్నించండి.",
+  "cameraUnnamedDevice": "కెమెరా",
+  "pastedText": {
+    "fallbackName": "అల్లించిన పాఠ్యం",
+    "charCount": "{count, number} అక్షరాలు",
+    "removeChip": "“{name}” అల్లించిన పాఠ్యాన్ని తొలగించండి",
+    "blockLabel": "అల్లించిన పాఠ్యం: {name}",
+    "doc": {
+      "heading": "అల్లించిన పాఠ్యం",
+      "pastedLabel": "అల్లించబడింది"
+    },
+    "settingsTitle": "పెద్ద అల్లింపులు",
+    "settingsToggle": "భారీ పాఠ్యాన్ని అటాచ్‌మెంట్‌గా మార్చండి",
+    "settingsDescription": "క్రింద ఇచ్చిన పరిమితిని మించే టెక్స్ట్‌ను మీరు పేస్ట్ చేస్తే, అది సందేశం బాక్స్‌లో కాదు, ఫైల్‌గా జోడించబడుతుంది. పాఠ్యం మీరు అల్లించిందిది 그대로 ఉపయోగించబడుతుంది — ఏదీ పొందబడదు లేదా మారదు.",
+    "settingsThresholdLabel": "ఇంతకంటే ఎక్కువ ఉన్న పేస్ట్లను జత చేయండి",
+    "settingsThresholdUnit": "అక్షరాలు",
+    "settingsThresholdHint": "{min, number} నుండి {max, number} అక్షరాల మధ్య."
+  },
+  "structures": {
+    "section": "స్ట్రక్చర్లు",
+    "sectionSubtitle": "నిల్వ చేసిన ఫీల్డ్ నిర్వచనాలు. వాటిని ఎగ్జ్ట్రాక్షన్ రెసిపీగా లేదా డేటా వర్క్‌ఫ్లో టేబుల్‌కు ప్రారంభ స్కీమాగా వాడండి.",
+    "loadFromStructure": "స్ట్రక్చర్‌లోంచి లోడ్ చేయండి",
+    "loadFromStructureTitle": "ఈ కాలములను ఒక నిల్వ చేసిన స్ట్రక్చర్‌తో మార్చండి",
+    "pickerEmpty": "ఇంకా ఎలాంటి నిల్వ చేసిన స్ట్రక్చర్లు లేవు.",
+    "pickerTitle": "నిల్వ చేసిన స్ట్రక్చర్‌ను లోడ్ చేయండి",
+    "saveAsStructure": "స్ట్రక్చర్‌గా సేవ్ చేయండి",
+    "saveAsStructureTitle": "ఈ కాలములను మీ స్ట్రక్చర్లు లైబ్రరీలో సేవ్ చేయండి",
+    "savedToast": "“{name}” స్ట్రక్చర్ సేవ్ చేయబడింది",
+    "namePlaceholder": "స్ట్రక్చర్ పేరు",
+    "fieldCount": "{count} ఫీల్డులు",
+    "fieldCountOne": "1 ఫీల్డ్",
+    "downgradedNotice": "{count} ఫీల్డ్(లు) ను పాఠ్యంగా సరళీకరించడం జరిగింది — టేబుళ్లు ఒక సెల్‌కు ఒక విలువ మాత్రమే ఉంచుతాయి: {names}",
+    "truncatedNotice": "{count} ఫీల్డ్(లు) తొలగించబడ్డాయి — టేబుల్ పరిమితి {max} కాలములు: {names}",
+    "skippedDerivedNotice": "{count} లెక్కించిన కాలమ్(లు) సేవ్ కాలేదు — ఫార్ములాలు ఈ టేబుల్ కాలములను సూచిస్తాయి: {names}",
+    "loadReplacesColumns": "ఇది ప్రస్తుత కాలములను భర్తీ చేస్తుంది. ఇంతకూరు పొదుపుగా తీసున్న వరుసలు కాలమ్ పేర్లు సరిపోతే విలువలు ఉంచబడుతాయి."
   }
 }

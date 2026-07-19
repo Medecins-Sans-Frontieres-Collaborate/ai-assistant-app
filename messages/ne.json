@@ -2091,7 +2091,9 @@
     "pin": "माथि पिन गर्नुहोस्",
     "unpin": "अनपिन गर्नुहोस्",
     "moveToMore": "थपमा सार्नुहोस्",
-    "moveOutOfMore": "मेनुमा देखाउनुहोस्"
+    "moveOutOfMore": "मेनुमा देखाउनुहोस्",
+    "showSources": "अन्य श्रोतहरू देखाउनुहोस्",
+    "hideSources": "अन्य श्रोतहरू लुकाउनुहोस्"
   },
   "transcription": {
     "transcribesOnSend": "पठाउँदा ट्रान्सक्राइब हुन्छ",
@@ -2762,7 +2764,16 @@
       "undoEdit": "पूर्वावस्थामा फर्काउनुहोस्",
       "clearResolved": "समाधान गरिएका हटाउनुहोस्",
       "clearResolvedHint": "स्वीकृत, अस्वीकार गरिएका, र लागू नहुने संशोधनहरू सूचीबाट हटाउनुहोस्",
-      "autoClearResolved": "समाधान गरिएका संशोधनहरू स्वतः हटाउनुहोस्"
+      "autoClearResolved": "समाधान गरिएका संशोधनहरू स्वतः हटाउनुहोस्",
+      "import": "आयात गर्नुहोस्",
+      "importReplaceTitle": "कागजात प्रतिस्थापन गर्नुहोस्?",
+      "importReplaceBody": "{name} आयात गर्दा हालको कागजात प्रतिस्थापन हुनेछ। तपाईंका सन्दर्भहरू, स्पेसिफिकेसन र टोन सुरक्षित रहनेछन्।",
+      "importReplaceConfirm": "प्रतिस्थापन गर्नुहोस्",
+      "editorMode": "सम्पादक मोड",
+      "editorModeRich": "रिच टेक्स्ट",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "सम्पादक मोड परिवर्तन गर्नुअघि प्रस्तावित सम्पादनहरू समाधान गर्नुहोस्।"
     },
     "data": {
       "emptyTitle": "विश्लेषणका लागि डेटा आयात गर्नुहोस्",
@@ -2961,7 +2972,9 @@
       "schemaFormulaArityError": "{fn} मा गलत तर्कको संख्या",
       "schemaFormulaCycleError": "सूत्रहरू बीच परिपत्र सन्दर्भ",
       "derivedColumnTitle": "गणना गरिएको: {formula}",
-      "derivedFrom": "{formula} बाट गणना गरिएको"
+      "derivedFrom": "{formula} बाट गणना गरिएको",
+      "takePhoto": "फोटो खिच्नुहोस्",
+      "takePhotoHint": "क्यामेरा प्रयोग गरेर फारम वा तालिकाको फोटो खिच्नुहोस् — यसको सामग्री संरचित डाटामा रूपान्तरण हुन्छ जुन फोटो सँग मिलाएर हेर्न सकिन्छ।"
     },
     "map": {
       "emptyTitle": "आफ्नो जानकारी नक्शामा राख्नुहोस्",
@@ -3124,6 +3137,22 @@
       "asana": {
         "name": "Asana",
         "description": "कार्यहरू र परियोजनाहरू फेला पार्नुहोस्, सिर्जना गर्नुहोस् र अद्यावधिक गर्नुहोस्।"
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "प्रकाशित डेटास्रोतहरू, वर्कबुकहरू, र Pulse मेट्रिक्स क्वेरी गर्नुहोस्।"
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "आफ्ना Salesforce वस्तुहरूमा अभिलेख खोज्नुहोस् र अपडेट गर्नुहोस्।"
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "सोसल मिडिया पोस्टहरूको मस्यौदा, तालिका बनाउने, र प्रकाशन गर्नुहोस्।"
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "सामाजिक इन्बक्स कुराकानी समीक्षा गर्नुहोस् र प्रतिक्रिया दिनुहोस्।"
       }
     },
     "connect": "जडान गर्नुहोस्",
@@ -3184,7 +3213,19 @@
       "missingState": "अधिकार दिन केही छैन",
       "close": "अब तपाईं यो विन्डो बन्द गरेर एपमा फर्कन सक्नुहुन्छ।",
       "closeButton": "विन्डो बन्द गर्नुहोस्"
-    }
+    },
+    "oauthNoAppConfigured": "यो {name} मा साइन इन गर्न यो डिप्लोयमेन्टमा सेट गरिएको छैन। आफैंको OAuth एप दर्ता गरेर जडान गर्नुहोस्।",
+    "adminConnectorsTitle": "तपाईंको संस्थाबाट",
+    "adminConnectorsDescription": "एड्मिनिस्ट्रेटरहरूले सेट गरेका जडानहरू। कुन देख्नुहुन्छ भने तपाईंको पहुँचमा भर पर्छ।",
+    "managedByOrg": "तपाईंको संस्थाद्वारा व्यवस्थापित",
+    "connectorOauthNotConfigured": "यो कनेक्टरका लागि साइन-इन सेटअप पूरा भएको छैन। कृपया आफ्नो प्रशासकलाई सम्पर्क गर्नुहोस्।",
+    "yourConnectorsTitle": "तपाईंका कनेक्टरहरू",
+    "addTitle": "कनेक्टर थप्नुहोस्",
+    "addDescription": "जडान गर्न उपकरण चयन गर्नुहोस्। रोजेपछि पहुँच सेटअप गर्नुहुनेछ।",
+    "add": "थप्नुहोस्",
+    "filterLabel": "कनेक्टरहरू फिल्टर गर्नुहोस्",
+    "filterPlaceholder": "कनेक्टर खोज्नुहोस्",
+    "noMatches": "“{query}” सँग मेल खाने कनेक्टर भेटिएन।"
   },
   "modelSources": {
     "connectButtonShort": "मोडेल स्रोत जडान गर्नुहोस्",
@@ -3502,7 +3543,39 @@
     "promptAgentCreateSuccess": "प्रम्प्ट एजेन्ट सिर्जना गरियो।",
     "promptAgentSaveSuccess": "प्रम्प्ट एजेन्ट सुरक्षित गरियो।",
     "promptAgentDeleteSuccess": "प्रम्प्ट एजेन्ट हटाइयो।",
-    "promptAgentsUnavailableWarning": "प्रम्प्ट एजेन्टहरू स्टोरेजबाट लोड गर्न सकिएन। अहिले सम्पादन गर्न सकिँदैन।"
+    "promptAgentsUnavailableWarning": "प्रम्प्ट एजेन्टहरू स्टोरेजबाट लोड गर्न सकिएन। अहिले सम्पादन गर्न सकिँदैन।",
+    "agentsTab": "एजेन्टहरू",
+    "connectorsTab": "कनेक्टरहरू",
+    "addConnector": "कनेक्टर थप्नुहोस्",
+    "noConnectors": "अहिलेसम्म कुनै कनेक्टर छैन।",
+    "connectorsUnavailableWarning": "कनेक्टर स्टोरमा पुग्न सकिएन, त्यसैले यो सूची अपूर्ण हुन सक्छ। लोड नभएसम्म नयाँ कनेक्टर नबनाउनुहोस्।",
+    "editAccess": "पहुंच सम्पादन गर्नुहोस्",
+    "deleteConnector": "हटाउनुहोस्",
+    "deleteConnectorConfirm": "यो कनेक्टर हटाउने हो? यसलाई प्रयोग गरिरहेकाले तुरुन्तै पहुँच गुमाउनेछन्।",
+    "confirmDeleteConnector": "कनेक्टर हटाउनुहोस्",
+    "connectorSaveSuccess": "कनेक्टर सुरक्षित गरियो।",
+    "connectorCreateSuccess": "कनेक्टर सिर्जना गरियो।",
+    "connectorDeleteSuccess": "कनेक्टर हटाइयो।",
+    "editConnectorTitle": "कनेक्टर सम्पादन गर्नुहोस्",
+    "newConnectorTitle": "नयाँ कनेक्टर",
+    "connectorPresetLabel": "टेम्प्लेटबाट सुरु गर्नुहोस्",
+    "connectorPresetNone": "सुरु देखिनै सुरु गर्नुहोस्",
+    "connectorNameLabel": "नाम",
+    "connectorDescriptionLabel": "विवरण",
+    "connectorUrlLabel": "सर्भर URL",
+    "connectorUrlPlaceholderWarning": "URL मा रहेको {placeholder} आफ्नो मानले बदल्नुहोस् र मात्र सेभ गर्नुहोस्।",
+    "connectorTransportLabel": "ट्रान्सपोर्ट",
+    "connectorAuthLabel": "प्रमाणीकरण",
+    "connectorAuthNone": "केही छैन",
+    "connectorAuthBearer": "टोकन (प्रत्येक प्रयोगकर्ताले आफ्नो छुट्टै दिन्छन्)",
+    "connectorAuthOauth": "OAuth साइन-इन",
+    "connectorSealingUnavailable": "OAuth उपलब्ध छैन: यस डिप्लोयमेन्टमा क्लाइन्ट सिक्रेटहरू इन्क्रिप्ट गर्न AUTH_SECRET कन्फिगर गरिएको छैन।",
+    "connectorTokenHelpLabel": "टोकन निर्देशनको लिङ्क (वैकल्पिक)",
+    "connectorClientIdLabel": "OAuth क्लाइन्ट ID",
+    "connectorClientSecretLabel": "OAuth क्लाइन्ट सिक्रेट",
+    "connectorClientSecretStored": "सिक्रेट सुरक्षित गरिएको छ। पहिलेको राख्न खाली छोड्नुहोस्, नयाँ राख्न चाहनुहुन्छ भने नयाँ प्रविष्ट गर्नुहोस्।",
+    "connectorClientSecretHint": "सुरक्षित रूपमा इन्क्रिप्ट गरिनेछ, फेरि देखाइने छैन।",
+    "connectorScopesLabel": "स्कोपहरू (स्पेसद्वारा छुट्याइएको, वैकल्पिक)"
   },
   "localModels": {
     "title": "स्थानीय मोडेलहरू",
@@ -3561,5 +3634,41 @@
     "settingsToggle": "पेस्ट गरिएका लिंकहरू स्वचालित रूपमा ल्याउनुहोस्",
     "settingsDescription": "जब तपाईंले लिंक मात्र पेस्ट गर्नुहुन्छ, पृष्ठ ल्याएर यसको पाठ संलग्न गरिन्छ ताकि सहायकले पढ्न सकोस्। यो बन्द गर्दा लिंक केवल सामान्य पाठको रूपमा रहन्छ — तपाईं अझै + मेनुबाट पृष्ठ म्यानुअली संलग्न गर्न सक्नुहुन्छ।",
     "addLink": "लिंक थप्नुहोस्"
+  },
+  "cameraAccessError": "क्यामेरामा पहुँच हुन सकेन। आफ्नो क्यामेरा अनुमति जाँच गर्नुहोस् र फेरि प्रयास गर्नुहोस्।",
+  "cameraUnnamedDevice": "क्यामेरा",
+  "pastedText": {
+    "fallbackName": "पेस्ट गरिएको पाठ",
+    "charCount": "{count, number} क्यारेक्टरहरू",
+    "removeChip": "पेस्ट गरिएको पाठ “{name}” हटाउनुहोस्",
+    "blockLabel": "पेस्ट गरिएको पाठ: {name}",
+    "doc": {
+      "heading": "पेस्ट गरिएको पाठ",
+      "pastedLabel": "पेस्ट गरिएको"
+    },
+    "settingsTitle": "ठूला पेस्टहरू",
+    "settingsToggle": "ठुलो पेस्टलाई एटेचमेन्टमा रूपान्तरण गर्नुहोस्",
+    "settingsDescription": "तलको सीमाभन्दा बढी पाठ पेस्ट गर्दा उक्त पाठ फाइलका रूपमा संलग्न हुनेछ, म्यासेज बक्समा भरिने छैन। पाठ जस्ताको तस्तै प्रयोग गरिन्छ — केही ल्याइँदैन वा परिवर्तन गरिँदैन।",
+    "settingsThresholdLabel": "यसभन्दा लामो पेस्ट संलग्न गर्नुहोस्",
+    "settingsThresholdUnit": "क्यारेक्टरहरू",
+    "settingsThresholdHint": "{min, number} देखि {max, number} क्यारेक्टरहरू बीच।"
+  },
+  "structures": {
+    "section": "संरचनाहरू",
+    "sectionSubtitle": "सेभ गरिएका फिल्ड परिभाषाहरू। एउटा एक्स्ट्र्याक्सन रेसीपीका रूपमा वा डेटा वर्कफ्लो तालिकाको सुरुवाती रूपरेखा रूपमा प्रयोग गर्नुहोस्।",
+    "loadFromStructure": "संरचना लोड गर्नुहोस्",
+    "loadFromStructureTitle": "यी स्तम्भहरू सेभ गरिएको संरचनाबाट बदल्नुहोस्",
+    "pickerEmpty": "अहिलेसम्म कुनै सेभ गरिएको संरचना छैन।",
+    "pickerTitle": "सेभ गरिएको संरचना लोड गर्नुहोस्",
+    "saveAsStructure": "संरचना रूपमा सेभ गर्नुहोस्",
+    "saveAsStructureTitle": "यी स्तम्भहरूलाई तपाईंको संरचना लाइब्रेरीमा सेभ गर्नुहोस्",
+    "savedToast": "संरचना “{name}” सेभ गरियो",
+    "namePlaceholder": "संरचनाको नाम",
+    "fieldCount": "{count} फिल्डहरू",
+    "fieldCountOne": "१ फिल्ड",
+    "downgradedNotice": "{count} फिल्ड(हरू)लाई साधारण पाठमा रूपान्तरण गरियो — तालिकामा प्रत्येक सेलमा एउटा मान मात्र हुन्छ: {names}",
+    "truncatedNotice": "{count} फिल्ड(हरू) हटाइयो — तालिकाको सीमा {max} स्तम्भ हो: {names}",
+    "skippedDerivedNotice": "{count} गणना गरिएका स्तम्भ(हरू) सेभ गरिएन — सूत्रहरू यस तालिकाका स्तम्भमा निर्भर छन्: {names}",
+    "loadReplacesColumns": "यसले हालका स्तम्भहरू बदल्दछ। मिल्दोजुल्दो नाम भएका पंक्तिहरूको मान यथावत रहन्छ।"
   }
 }

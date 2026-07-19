@@ -2116,7 +2116,9 @@
     "pin": "상단에 고정",
     "unpin": "고정 해제",
     "moveToMore": "더 보기로 이동",
-    "moveOutOfMore": "메뉴에 표시"
+    "moveOutOfMore": "메뉴에 표시",
+    "showSources": "다른 소스 보기",
+    "hideSources": "다른 소스 숨기기"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI의 응답 방식을 맞춤화하려면 개인 지침을 추가하세요. 이는 유용하고 정확하며 안전한 응답을 보장하는 기본 행동 지침과 함께 적용됩니다.",
   "Tip: Type \"/\" to select from saved prompt templates_": "팁: \"/\"를 입력하면 저장된 프롬프트 템플릿을 선택할 수 있습니다.",
@@ -2778,7 +2780,16 @@
       "undoEdit": "실행 취소",
       "clearResolved": "해결됨 삭제",
       "clearResolvedHint": "수락됨, 거절됨, 적용 불가한 편집을 목록에서 제거합니다",
-      "autoClearResolved": "해결된 편집 자동 삭제"
+      "autoClearResolved": "해결된 편집 자동 삭제",
+      "import": "가져오기",
+      "importReplaceTitle": "문서를 교체하시겠습니까?",
+      "importReplaceBody": "{name}을(를) 가져오면 현재 문서가 교체됩니다. 참조, 사양 및 톤은 유지됩니다.",
+      "importReplaceConfirm": "교체",
+      "editorMode": "편집기 모드",
+      "editorModeRich": "리치 텍스트",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "편집기 모드를 전환하기 전에 제안된 수정을 먼저 처리하세요."
     },
     "data": {
       "emptyTitle": "분석할 데이터 가져오기",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "{fn} 함수에 인수가 잘못되었습니다",
       "schemaFormulaCycleError": "수식 간 순환 참조",
       "derivedColumnTitle": "계산됨: {formula}",
-      "derivedFrom": "{formula} 기준 계산"
+      "derivedFrom": "{formula} 기준 계산",
+      "takePhoto": "사진 촬영",
+      "takePhotoHint": "카메라로 양식 또는 표를 촬영하면, 내용이 구조화된 데이터로 변환되어 사진과 함께 확인할 수 있습니다."
     },
     "map": {
       "emptyTitle": "데이터를 지도에 표시하기",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "작업 및 프로젝트 찾기, 생성, 업데이트."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "게시된 데이터 소스, 워크북, Pulse 지표를 조회합니다."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Salesforce 오브젝트의 레코드를 조회하고 업데이트합니다."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "소셜 미디어 게시물을 작성, 예약, 게시합니다."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "소셜 인박스 대화를 검토하고 답변합니다."
       }
     },
     "connect": "연결",
@@ -3200,7 +3229,19 @@
       "missingState": "승인할 항목이 없습니다",
       "close": "이 창을 닫고 앱으로 돌아가셔도 됩니다.",
       "closeButton": "창 닫기"
-    }
+    },
+    "oauthNoAppConfigured": "이 배포에서는 {name} 로그인 설정이 완료되지 않았습니다. 직접 OAuth 앱을 등록해 연결하세요.",
+    "adminConnectorsTitle": "조직에서 제공",
+    "adminConnectorsDescription": "관리자가 설정한 커넥터입니다. 접근 권한에 따라 보이는 항목이 달라집니다.",
+    "managedByOrg": "조직에서 관리",
+    "connectorOauthNotConfigured": "이 커넥터의 로그인 설정이 완료되지 않았습니다. 관리자에게 문의하세요.",
+    "yourConnectorsTitle": "내 커넥터",
+    "addTitle": "커넥터 추가",
+    "addDescription": "연결할 도구를 선택하세요. 선택 후 접근 권한을 설정할 수 있습니다.",
+    "add": "추가",
+    "filterLabel": "커넥터 필터",
+    "filterPlaceholder": "커넥터 검색",
+    "noMatches": "“{query}”와(과) 일치하는 커넥터가 없습니다."
   },
   "modelSources": {
     "connectButtonShort": "모델 소스 연결",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "프롬프트 에이전트가 생성되었습니다.",
     "promptAgentSaveSuccess": "프롬프트 에이전트가 저장되었습니다.",
     "promptAgentDeleteSuccess": "프롬프트 에이전트가 삭제되었습니다.",
-    "promptAgentsUnavailableWarning": "프롬프트 에이전트를 스토리지에서 불러올 수 없습니다. 현재 편집이 불가능합니다."
+    "promptAgentsUnavailableWarning": "프롬프트 에이전트를 스토리지에서 불러올 수 없습니다. 현재 편집이 불가능합니다.",
+    "agentsTab": "에이전트",
+    "connectorsTab": "커넥터",
+    "addConnector": "커넥터 추가",
+    "noConnectors": "아직 커넥터가 없습니다.",
+    "connectorsUnavailableWarning": "커넥터 스토어에 연결할 수 없어 목록이 완전하지 않을 수 있습니다. 로드될 때까지 대체 커넥터를 생성하지 마세요.",
+    "editAccess": "접근 권한 수정",
+    "deleteConnector": "삭제",
+    "deleteConnectorConfirm": "이 커넥터를 삭제할까요? 사용자는 즉시 접근 권한을 잃게 됩니다.",
+    "confirmDeleteConnector": "커넥터 삭제",
+    "connectorSaveSuccess": "커넥터가 저장되었습니다.",
+    "connectorCreateSuccess": "커넥터가 생성되었습니다.",
+    "connectorDeleteSuccess": "커넥터가 삭제되었습니다.",
+    "editConnectorTitle": "커넥터 수정",
+    "newConnectorTitle": "새 커넥터",
+    "connectorPresetLabel": "템플릿에서 시작하기",
+    "connectorPresetNone": "처음부터 시작",
+    "connectorNameLabel": "이름",
+    "connectorDescriptionLabel": "설명",
+    "connectorUrlLabel": "서버 URL",
+    "connectorUrlPlaceholderWarning": "저장하기 전에 URL의 {placeholder}를 본인 값으로 바꿔주세요.",
+    "connectorTransportLabel": "전송 방식",
+    "connectorAuthLabel": "인증",
+    "connectorAuthNone": "없음",
+    "connectorAuthBearer": "토큰(각 사용자가 직접 입력)",
+    "connectorAuthOauth": "OAuth 로그인",
+    "connectorSealingUnavailable": "OAuth를 사용할 수 없습니다: 이 배포 환경에는 클라이언트 비밀을 암호화할 AUTH_SECRET가 설정되어 있지 않습니다.",
+    "connectorTokenHelpLabel": "토큰 안내 링크(선택 사항)",
+    "connectorClientIdLabel": "OAuth 클라이언트 ID",
+    "connectorClientSecretLabel": "OAuth 클라이언트 시크릿",
+    "connectorClientSecretStored": "시크릿이 저장되어 있습니다. 유지하려면 비워두고, 변경하려면 새 값을 입력하세요.",
+    "connectorClientSecretHint": "저장 전에 암호화되며, 다시 표시되지 않습니다.",
+    "connectorScopesLabel": "스코프(공백으로 구분, 선택 사항)"
   },
   "localModels": {
     "title": "로컬 모델",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "붙여넣은 링크 자동 가져오기",
     "settingsDescription": "링크만 따로 붙여넣으면, 페이지를 자동으로 가져와 텍스트를 첨부하여 어시스턴트가 읽을 수 있습니다. 이 옵션을 끄면 붙여넣은 링크는 일반 텍스트로 남습니다 — + 메뉴에서 수동으로 페이지를 첨부할 수도 있습니다.",
     "addLink": "링크 추가"
+  },
+  "cameraAccessError": "카메라에 접근할 수 없습니다. 카메라 권한을 확인하고 다시 시도해 주세요.",
+  "cameraUnnamedDevice": "카메라",
+  "pastedText": {
+    "fallbackName": "붙여넣은 텍스트",
+    "charCount": "{count, number}자",
+    "removeChip": "붙여넣은 텍스트 “{name}” 제거",
+    "blockLabel": "붙여넣은 텍스트: {name}",
+    "doc": {
+      "heading": "붙여넣은 텍스트",
+      "pastedLabel": "붙여넣음"
+    },
+    "settingsTitle": "대용량 붙여넣기",
+    "settingsToggle": "대용량 텍스트를 첨부파일로 전환",
+    "settingsDescription": "아래 제한보다 더 많은 텍스트를 붙여넣으면 메시지 입력란이 아닌 파일로 첨부됩니다. 텍스트는 붙여넣은 그대로 사용되며, 별도로 변경되거나 불러오지 않습니다.",
+    "settingsThresholdLabel": "다음을 초과하는 붙여넣기 첨부",
+    "settingsThresholdUnit": "자",
+    "settingsThresholdHint": "{min, number}자 이상 {max, number}자 이내로 입력하세요."
+  },
+  "structures": {
+    "section": "구조",
+    "sectionSubtitle": "저장된 필드 정의입니다. 추출 방식 또는 데이터 워크플로우 테이블의 기본 스키마로 사용할 수 있습니다.",
+    "loadFromStructure": "구조 불러오기",
+    "loadFromStructureTitle": "이 컬럼을 저장된 구조로 교체",
+    "pickerEmpty": "저장된 구조가 없습니다.",
+    "pickerTitle": "저장된 구조 불러오기",
+    "saveAsStructure": "구조로 저장",
+    "saveAsStructureTitle": "이 컬럼을 구조 라이브러리에 저장",
+    "savedToast": "구조 “{name}” 저장됨",
+    "namePlaceholder": "구조 이름",
+    "fieldCount": "{count}개 필드",
+    "fieldCountOne": "1개 필드",
+    "downgradedNotice": "{count}개 필드가 텍스트로 단순화됨 — 테이블은 셀당 하나의 값만 가질 수 있습니다: {names}",
+    "truncatedNotice": "{count}개 필드가 제외됨 — 테이블 한도는 {max}개 컬럼입니다: {names}",
+    "skippedDerivedNotice": "{count}개 계산 컬럼이 저장되지 않았습니다 — 수식이 이 테이블의 컬럼을 참조합니다: {names}",
+    "loadReplacesColumns": "현재 컬럼을 대체합니다. 기존 행은 컬럼명이 일치하는 값만 유지됩니다."
   }
 }

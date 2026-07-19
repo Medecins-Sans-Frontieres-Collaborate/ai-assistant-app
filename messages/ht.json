@@ -2091,7 +2091,9 @@
     "pin": "Mete anwo",
     "unpin": "Retire soti anwo",
     "moveToMore": "Mete nan Plis",
-    "moveOutOfMore": "Montre nan meni an"
+    "moveOutOfMore": "Montre nan meni an",
+    "showSources": "Montre lòt sous",
+    "hideSources": "Kache lòt sous"
   },
   "transcription": {
     "transcribesOnSend": "Transkri lè voye",
@@ -2762,7 +2764,16 @@
       "undoEdit": "Anile",
       "clearResolved": "Netwaye sa ki rezoud",
       "clearResolvedHint": "Retire modifikasyon ki aksepte, rejte, oswa ki pa aplikab sou lis sa a",
-      "autoClearResolved": "Netwaye otomatikman sa ki rezoud yo"
+      "autoClearResolved": "Netwaye otomatikman sa ki rezoud yo",
+      "import": "Enpòte",
+      "importReplaceTitle": "Ranplase dokiman an?",
+      "importReplaceBody": "Lè w enpòte {name}, w ap ranplase dokiman aktyèl la. Referans ou yo, espesifikasyon ak ton ap konsève.",
+      "importReplaceConfirm": "Ranplase",
+      "editorMode": "Mòd editè",
+      "editorModeRich": "Tekst rich",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Rezoud modifikasyon yo sijere avan w chanje mòd editè a."
     },
     "data": {
       "emptyTitle": "Enpòte done pou analize",
@@ -2961,7 +2972,9 @@
       "schemaFormulaArityError": "Move kantite agiman pou {fn}",
       "schemaFormulaCycleError": "Referans sikilè ant fòmil yo",
       "derivedColumnTitle": "Kalkile: {formula}",
-      "derivedFrom": "Kalkile soti nan {formula}"
+      "derivedFrom": "Kalkile soti nan {formula}",
+      "takePhoto": "Pran foto",
+      "takePhotoHint": "Sèvi ak kamera ou pou w pran foto yon fòm oswa tab — sa l genyen ap vin done estriktire ou ka verifye ak foto a."
     },
     "map": {
       "emptyTitle": "Mete done ou sou yon kat",
@@ -3124,6 +3137,22 @@
       "asana": {
         "name": "Asana",
         "description": "Chèche, kreye, epi mete ajou travay ak pwojè yo."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Fè rechèch sou sous done, kaye travay ak metrik Pulse ki pibliye."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Chèche epi mete ajou dosye atravè objè Salesforce ou yo."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Ekri, planifye, epi pibliye pòs sou rezo sosyal yo."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Revize epi reponn konvèsasyon bwat resepsyon sou rezo sosyal yo."
       }
     },
     "connect": "Konekte",
@@ -3184,7 +3213,19 @@
       "missingState": "Pa gen anyen pou otorize",
       "close": "Ou ka fèmen fenèt sa a epi tounen sou aplikasyon an.",
       "closeButton": "Fèmen fenèt la"
-    }
+    },
+    "oauthNoAppConfigured": "Koneksyon ak {name} pa configuré sou deplwaman sa a. Konekte pa enskri pwòp aplikasyon OAuth ou.",
+    "adminConnectorsTitle": "Soti nan òganizasyon ou",
+    "adminConnectorsDescription": "Konektè administratè òganizasyon ou mete. Kisa ou wè depann de aksè ou.",
+    "managedByOrg": "Jere pa òganizasyon ou",
+    "connectorOauthNotConfigured": "Koneksyon pa fini configuré pou konektè sa a. Kontakte administratè ou.",
+    "yourConnectorsTitle": "Konektè ou yo",
+    "addTitle": "Ajoute yon konektè",
+    "addDescription": "Chwazi yon zouti pou konekte. W ap konfigire aksè apre ou fin chwazi.",
+    "add": "Ajoute",
+    "filterLabel": "Filtre konektè yo",
+    "filterPlaceholder": "Chèche konektè",
+    "noMatches": "Pa gen konektè ki koresponn ak “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Konekte yon sous modèl",
@@ -3502,7 +3543,39 @@
     "promptAgentCreateSuccess": "Ajan avi kreye.",
     "promptAgentSaveSuccess": "Ajan avi sove.",
     "promptAgentDeleteSuccess": "Ajan avi efase.",
-    "promptAgentsUnavailableWarning": "Ajan avi yo pa ka chaje soti nan depo a. Ou pa ka modifye yo kounye a."
+    "promptAgentsUnavailableWarning": "Ajan avi yo pa ka chaje soti nan depo a. Ou pa ka modifye yo kounye a.",
+    "agentsTab": "Ajan yo",
+    "connectorsTab": "Konektè yo",
+    "addConnector": "Ajoute konektè",
+    "noConnectors": "Pa gen konektè pou kounya.",
+    "connectorsUnavailableWarning": "Pa t ka jwenn magazen konektè a, lis la ka pa konplè. Pa kreye ranplasman jiskaske li fini chaje.",
+    "editAccess": "Modifye aksè",
+    "deleteConnector": "Efase",
+    "deleteConnectorConfirm": "Efase konektè sa a? Nenpòt moun k ap itilize li ap pèdi aksè imedyatman.",
+    "confirmDeleteConnector": "Efase konektè",
+    "connectorSaveSuccess": "Konektè anrejistre.",
+    "connectorCreateSuccess": "Konektè kreye.",
+    "connectorDeleteSuccess": "Konektè efase.",
+    "editConnectorTitle": "Modifye konektè",
+    "newConnectorTitle": "Nouvo konektè",
+    "connectorPresetLabel": "Kòmanse ak yon modèl",
+    "connectorPresetNone": "Kòmanse depi nan kòmansman",
+    "connectorNameLabel": "Non",
+    "connectorDescriptionLabel": "Deskripsyon",
+    "connectorUrlLabel": "URL Sèvè",
+    "connectorUrlPlaceholderWarning": "Ranplase {placeholder} ki nan URL la ak pwòp valè pa w anvan ou sove.",
+    "connectorTransportLabel": "Transpò",
+    "connectorAuthLabel": "Otentifikasyon",
+    "connectorAuthNone": "Okenn",
+    "connectorAuthBearer": "Token (chak itilizatè bay pa yo)",
+    "connectorAuthOauth": "OAuth konekte",
+    "connectorSealingUnavailable": "OAuth pa disponib: deplwaman sa a pa gen AUTH_SECRET ki configure pou ankripte sekrè kliyan yo.",
+    "connectorTokenHelpLabel": "Lyen pou enstriksyon sou token (opsyonèl)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Yon sekrè deja anrejistre. Kite vid pou kontinye itilize li, oswa mete yon nouvo pou ranplase li.",
+    "connectorClientSecretHint": "Ankripte anvan li estoke, epi li pap janm parèt ankò.",
+    "connectorScopesLabel": "Scopes (separe ak espas, opsyonèl)"
   },
   "localModels": {
     "title": "Modèl lokal",
@@ -3561,5 +3634,41 @@
     "settingsToggle": "Rale lyen kole otomatikman",
     "settingsDescription": "Lè ou kole yon lyen sèl, paj la ap rale epi atache tèks li pou asistan an ka li li. Retire opsyon sa a pou kenbe lyen yo kòm tèks senp — ou ka toujou atache yon paj manyèlman depi meni + a.",
     "addLink": "Ajoute yon lyen"
+  },
+  "cameraAccessError": "Pa t kapab jwenn aksè ak kamera a. Tcheke pèmisyon kamera ou epi eseye ankò.",
+  "cameraUnnamedDevice": "Kamera",
+  "pastedText": {
+    "fallbackName": "Tèks kole",
+    "charCount": "{count, number} karaktè",
+    "removeChip": "Retire tèks kole “{name}”",
+    "blockLabel": "Tèks kole: {name}",
+    "doc": {
+      "heading": "Tèks kole",
+      "pastedLabel": "Kole"
+    },
+    "settingsTitle": "Gwo kole",
+    "settingsToggle": "Vire yon gwo kole an atachman",
+    "settingsDescription": "Si w kole plis tèks pase limit ki anba a, sa pral atache li kòm fichye olye li plen bwat mesaj la. Tèks la itilize egzakteman jan li kole — anyen pa chaje oubyen chanje.",
+    "settingsThresholdLabel": "Atache kole ki depase",
+    "settingsThresholdUnit": "karaktè",
+    "settingsThresholdHint": "Ant {min, number} ak {max, number} karaktè."
+  },
+  "structures": {
+    "section": "Estrikti",
+    "sectionSubtitle": "Definisyon jaden anrejistre. Sèvi ak youn kòm resèt ekstraksyon, oswa kòm baz pou yon tab workflow done.",
+    "loadFromStructure": "Chaje estrikti",
+    "loadFromStructureTitle": "Ranplase kolòn sa yo ak yon estrikti anrejistre",
+    "pickerEmpty": "Pa gen estrikti anrejistre ankò.",
+    "pickerTitle": "Chaje yon estrikti anrejistre",
+    "saveAsStructure": "Sove kòm estrikti",
+    "saveAsStructureTitle": "Sove kolòn sa yo nan bibliyotèk estrikti ou",
+    "savedToast": "Estrikti “{name}” sove",
+    "namePlaceholder": "Non estrikti",
+    "fieldCount": "{count} jaden",
+    "fieldCountOne": "1 jaden",
+    "downgradedNotice": "{count} jaden senplifye an tèks — tab yo kenbe yon sèl valè pa selil: {names}",
+    "truncatedNotice": "{count} jaden retire — limit tab la se {max} kolòn: {names}",
+    "skippedDerivedNotice": "{count} kolòn kalkile pa sove — fòmil yo depann de kolòn tab sa a: {names}",
+    "loadReplacesColumns": "Sa ap ranplase kolòn aktyèl yo. Liy ki egziste ap kenbe valè yo si non kolòn yo koresponn."
   }
 }

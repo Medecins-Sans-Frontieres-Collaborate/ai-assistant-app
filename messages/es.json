@@ -2017,7 +2017,9 @@
     "pin": "Fijar arriba",
     "unpin": "Quitar de arriba",
     "moveToMore": "Mover a Más",
-    "moveOutOfMore": "Mostrar en el menú"
+    "moveOutOfMore": "Mostrar en el menú",
+    "showSources": "Mostrar otras fuentes",
+    "hideSources": "Ocultar otras fuentes"
   },
   "transcription": {
     "transcribesOnSend": "Transcribe al enviar",
@@ -2778,7 +2780,16 @@
       "undoEdit": "Deshacer",
       "clearResolved": "Limpiar resueltos",
       "clearResolvedHint": "Eliminar las ediciones aceptadas, rechazadas y no aplicables de esta lista",
-      "autoClearResolved": "Limpiar ediciones resueltas automáticamente"
+      "autoClearResolved": "Limpiar ediciones resueltas automáticamente",
+      "import": "Importar",
+      "importReplaceTitle": "¿Reemplazar documento?",
+      "importReplaceBody": "Importar {name} reemplazará el documento actual. Se mantendrán sus referencias, especificaciones y tono.",
+      "importReplaceConfirm": "Reemplazar",
+      "editorMode": "Modo de editor",
+      "editorModeRich": "Texto enriquecido",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Resuelva las ediciones sugeridas antes de cambiar el modo de editor."
     },
     "data": {
       "emptyTitle": "Importar datos para analizar",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "Número incorrecto de argumentos para {fn}",
       "schemaFormulaCycleError": "Referencia circular entre fórmulas",
       "derivedColumnTitle": "Calculado: {formula}",
-      "derivedFrom": "Calculado a partir de {formula}"
+      "derivedFrom": "Calculado a partir de {formula}",
+      "takePhoto": "Tomar foto",
+      "takePhotoHint": "Use su cámara para fotografiar un formulario o tabla: su contenido se convierte en datos estructurados que podrá verificar con la foto"
     },
     "map": {
       "emptyTitle": "Sitúe sus datos en un mapa",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "Buscar, crear y actualizar tareas y proyectos."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Consulte fuentes de datos publicadas, libros de trabajo y métricas Pulse."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Consulte y actualice registros en sus objetos de Salesforce."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Redacte, programe y publique publicaciones en redes sociales."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Revise y responda conversaciones del buzón social."
       }
     },
     "connect": "Conectar",
@@ -3200,7 +3229,19 @@
       "missingState": "Nada que autorizar",
       "close": "Puede cerrar esta ventana y volver a la aplicación.",
       "closeButton": "Cerrar ventana"
-    }
+    },
+    "oauthNoAppConfigured": "El inicio de sesión con {name} no está configurado en este entorno. Conéctese registrando su propia app OAuth.",
+    "adminConnectorsTitle": "De su organización",
+    "adminConnectorsDescription": "Conectores configurados por sus administradores. Lo que vea depende de sus permisos.",
+    "managedByOrg": "Gestionado por su organización",
+    "connectorOauthNotConfigured": "El inicio de sesión no está completamente configurado para este conector. Contacte a su administrador.",
+    "yourConnectorsTitle": "Sus conectores",
+    "addTitle": "Agregar un conector",
+    "addDescription": "Elija una herramienta para conectar. Configurará el acceso después de elegir.",
+    "add": "Agregar",
+    "filterLabel": "Filtrar conectores",
+    "filterPlaceholder": "Buscar conectores",
+    "noMatches": "Ningún conector coincide con “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Conectar un origen de modelo",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "Agente de prompt creado.",
     "promptAgentSaveSuccess": "Agente de prompt guardado.",
     "promptAgentDeleteSuccess": "Agente de prompt eliminado.",
-    "promptAgentsUnavailableWarning": "No se pudieron cargar los agentes de prompt desde el almacenamiento. No pueden editarse en este momento."
+    "promptAgentsUnavailableWarning": "No se pudieron cargar los agentes de prompt desde el almacenamiento. No pueden editarse en este momento.",
+    "agentsTab": "Agentes",
+    "connectorsTab": "Conectores",
+    "addConnector": "Agregar conector",
+    "noConnectors": "Aún no hay conectores.",
+    "connectorsUnavailableWarning": "No se pudo acceder a la tienda de conectores, por lo que esta lista puede estar incompleta. No cree un reemplazo hasta que cargue.",
+    "editAccess": "Editar acceso",
+    "deleteConnector": "Eliminar",
+    "deleteConnectorConfirm": "¿Eliminar este conector? Cualquier persona que lo use perderá acceso de inmediato.",
+    "confirmDeleteConnector": "Eliminar conector",
+    "connectorSaveSuccess": "Conector guardado.",
+    "connectorCreateSuccess": "Conector creado.",
+    "connectorDeleteSuccess": "Conector eliminado.",
+    "editConnectorTitle": "Editar conector",
+    "newConnectorTitle": "Nuevo conector",
+    "connectorPresetLabel": "Comenzar desde una plantilla",
+    "connectorPresetNone": "Empezar desde cero",
+    "connectorNameLabel": "Nombre",
+    "connectorDescriptionLabel": "Descripción",
+    "connectorUrlLabel": "URL del servidor",
+    "connectorUrlPlaceholderWarning": "Reemplace {placeholder} en la URL con su propio valor antes de guardar.",
+    "connectorTransportLabel": "Transporte",
+    "connectorAuthLabel": "Autenticación",
+    "connectorAuthNone": "Ninguna",
+    "connectorAuthBearer": "Token (cada usuario proporciona el suyo)",
+    "connectorAuthOauth": "Inicio de sesión con OAuth",
+    "connectorSealingUnavailable": "OAuth no está disponible: este despliegue no tiene AUTH_SECRET configurado para cifrar los secretos de cliente.",
+    "connectorTokenHelpLabel": "Enlace a las instrucciones del token (opcional)",
+    "connectorClientIdLabel": "ID de cliente OAuth",
+    "connectorClientSecretLabel": "Secreto de cliente OAuth",
+    "connectorClientSecretStored": "Ya hay un secreto almacenado. Déjelo en blanco para mantenerlo o introduzca uno nuevo para reemplazarlo.",
+    "connectorClientSecretHint": "Se cifra antes de almacenarse y no se mostrará de nuevo.",
+    "connectorScopesLabel": "Scopes (separados por espacios, opcional)"
   },
   "localModels": {
     "title": "Modelos locales",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "Obtener enlaces pegados automáticamente",
     "settingsDescription": "Cuando pegue un enlace solo, la página se obtiene y su texto se adjunta para que el asistente pueda leerlo. Desactive esta opción para mantener los enlaces pegados como texto simple; aún puede adjuntar una página manualmente desde el menú +.",
     "addLink": "Agregar un enlace"
+  },
+  "cameraAccessError": "No se pudo acceder a la cámara. Verifique los permisos de la cámara e intente de nuevo.",
+  "cameraUnnamedDevice": "Cámara",
+  "pastedText": {
+    "fallbackName": "Texto pegado",
+    "charCount": "{count, number} caracteres",
+    "removeChip": "Eliminar texto pegado “{name}”",
+    "blockLabel": "Texto pegado: {name}",
+    "doc": {
+      "heading": "Texto pegado",
+      "pastedLabel": "Pegado"
+    },
+    "settingsTitle": "Pegados grandes",
+    "settingsToggle": "Convertir un pegado grande en un archivo adjunto",
+    "settingsDescription": "Si se pega más texto que el límite indicado abajo, se adjunta como archivo en lugar de llenar la caja de mensaje. El texto se usa exactamente como se pegó: no se recupera ni se modifica.",
+    "settingsThresholdLabel": "Adjuntar pegados mayores que",
+    "settingsThresholdUnit": "caracteres",
+    "settingsThresholdHint": "Entre {min, number} y {max, number} caracteres."
+  },
+  "structures": {
+    "section": "Estructuras",
+    "sectionSubtitle": "Definiciones de campos guardadas. Úselas como receta de extracción o como esquema inicial para una tabla de flujo de trabajo de datos.",
+    "loadFromStructure": "Cargar estructura",
+    "loadFromStructureTitle": "Reemplazar estas columnas por una estructura guardada",
+    "pickerEmpty": "Aún no hay estructuras guardadas.",
+    "pickerTitle": "Cargar una estructura guardada",
+    "saveAsStructure": "Guardar como estructura",
+    "saveAsStructureTitle": "Guarde estas columnas en su biblioteca de estructuras",
+    "savedToast": "Estructura guardada “{name}”",
+    "namePlaceholder": "Nombre de la estructura",
+    "fieldCount": "{count} campos",
+    "fieldCountOne": "1 campo",
+    "downgradedNotice": "{count} campo(s) simplificado(s) a texto: las tablas solo contienen un valor por celda: {names}",
+    "truncatedNotice": "{count} campo(s) eliminado(s): el límite de la tabla es de {max} columnas: {names}",
+    "skippedDerivedNotice": "{count} columna(s) calculada(s) no guardada(s): las fórmulas se refieren a columnas de esta tabla: {names}",
+    "loadReplacesColumns": "Esto reemplaza las columnas actuales. Las filas existentes mantienen los valores de las columnas cuyos nombres coincidan."
   }
 }

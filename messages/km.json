@@ -2091,7 +2091,9 @@
     "pin": "បិទទៅកំពូល",
     "unpin": "ដោះចេញពីកំពូល",
     "moveToMore": "បិទទៅបន្ថែម",
-    "moveOutOfMore": "បង្ហាញក្នុងមេនុយ"
+    "moveOutOfMore": "បង្ហាញក្នុងមេនុយ",
+    "showSources": "បង្ហាញប្រភពផ្សេងទៀត",
+    "hideSources": "បិទបាំងប្រភពផ្សេងទៀត"
   },
   "transcription": {
     "transcribesOnSend": "បម្លែងអក្សរចេញត្រូវបានអនុវត្តពេលបញ្ជូន",
@@ -2762,7 +2764,16 @@
       "undoEdit": "មិនធ្វើ​វិញ",
       "clearResolved": "លុបអ្វីដែលបានដោះស្រាយ",
       "clearResolvedHint": "លុបកែសម្រួលដែលបានព្រមទទួល, បដិសេធ, និងមិនអាចអនុវត្តបានចេញពីបញ្ជីនេះ",
-      "autoClearResolved": "លុបកែសម្រួលដែលបានដោះស្រាយដោយស្វ័យប្រវត្តិ"
+      "autoClearResolved": "លុបកែសម្រួលដែលបានដោះស្រាយដោយស្វ័យប្រវត្តិ",
+      "import": "នាំចូល",
+      "importReplaceTitle": "ជំនួសឯកសារ?",
+      "importReplaceBody": "ការនាំចូល {name} នឹងជំនួសឯកសារបច្ចុប្បន្ន។ ឯកសារអំពីសេចក្ដីយោង សភាព និងសំឡេងនឹងត្រូវរក្សាទុក។",
+      "importReplaceConfirm": "ជំនួស",
+      "editorMode": "របៀបកែសម្រួល",
+      "editorModeRich": "អត្ថបទច្រើនទ្រង់ទ្រាយ",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "សូមដោះស្រាយការកែសម្រួលដែលផ្ដល់អនុសាសន៍មុនពេលប្តូររបៀបកែសម្រួល។"
     },
     "data": {
       "emptyTitle": "នាំចូលទិន្នន័យសម្រាប់វិភាគ",
@@ -2961,7 +2972,9 @@
       "schemaFormulaArityError": "ចំនួនអាគុយម៉ង់មិនត្រឹមត្រូវសម្រាប់ {fn}",
       "schemaFormulaCycleError": "យោងរូបមន្តច្រឡឹង",
       "derivedColumnTitle": "គណនា: {formula}",
-      "derivedFrom": "គណនាពី {formula}"
+      "derivedFrom": "គណនាពី {formula}",
+      "takePhoto": "ថតរូប",
+      "takePhotoHint": "ប្រើកាមេរ៉ារបស់អ្នកដើម្បីថតពាក្យសំណុំ ឬតារាង — ទិន្នន័យទាំងនេះនឹងក្លាយជាទ្រង់ទ្រាយដែលអាចពិនិត្យប្រឆាំងនឹងរូបថត។"
     },
     "map": {
       "emptyTitle": "ដាក់ទិន្នន័យរបស់អ្នកលើផែនទី",
@@ -3124,6 +3137,22 @@
       "asana": {
         "name": "Asana",
         "description": "ស្វែងរក បង្កើត និងបន្ថែមការងារ និងគម្រោង។"
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "ស្វែងរកទិន្នន័យដែលបានបោះពុម្ពផ្សាយ ឯកសារងារ និងមេត្រិក Pulse។"
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "ស្វែងរក និងធ្វើបច្ចុប្បន្នភាពកំណត់ត្រានៅលើវត្ថុ Salesforce របស់អ្នក។"
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "សរសេរ មានកាលវិភាគ និងបោះពុម្ពផ្សាយសារ បណ្ដាញសង្គម។"
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "ពិនិត្យ និងឆ្លើយតបទៅនឹងកិច្ចសន្ទនាសារបណ្ដាញសង្គម។"
       }
     },
     "connect": "ភ្ជាប់",
@@ -3184,7 +3213,19 @@
       "missingState": "គ្មានអ្វីជាសំណើអនុញ្ញាត",
       "close": "អ្នកអាចបិទបង្អួចនេះ ហើយត្រលប់ទៅ app។",
       "closeButton": "បិទបង្អួច"
-    }
+    },
+    "oauthNoAppConfigured": "ការចូលជាមួយ {name} មិនទាន់បានកំណត់រួចហើយនៅលើប្រព័ន្ធនេះទេ។ សូមចាប់ភ្ជាប់ដោយចុះឈ្មោះកម្មវិធី OAuth ផ្ទាល់ខ្លួនរបស់អ្នក។",
+    "adminConnectorsTitle": "ពីអង្គភាពរបស់អ្នក",
+    "adminConnectorsDescription": "Connectors ដែលអ្នកគ្រប់គ្រងបានកំណត់។ អ្វីដែលអ្នកឃើញអាស្រ័យលើសិទ្ធិចូលប្រើរបស់អ្នក។",
+    "managedByOrg": "គ្រប់គ្រងដោយអង្គភាពរបស់អ្នក",
+    "connectorOauthNotConfigured": "ការចូលប្រើមិនទាន់ត្រូវបានកំណត់សម្រាប់ connector នេះទេ។ សូមទាក់ទងអ្នកគ្រប់គ្រងរបស់អ្នក។",
+    "yourConnectorsTitle": "Connectors របស់អ្នក",
+    "addTitle": "បន្ថែម connector",
+    "addDescription": "ជ្រើសឧបករណ៍ដើម្បីភ្ជាប់។ អ្នកអាចកំណត់សិទ្ធិចូលបន្ទាប់ពីជ្រើសរើស។",
+    "add": "បន្ថែម",
+    "filterLabel": "ត្រង connectors",
+    "filterPlaceholder": "ស្វែងរក connectors",
+    "noMatches": "គ្មាន connectors ដែលត្រូវនឹង “{query}”។"
   },
   "modelSources": {
     "connectButtonShort": "ភ្ជាប់ប្រភពម៉ូឌែល",
@@ -3502,7 +3543,39 @@
     "promptAgentCreateSuccess": "បង្កើតភ្នាក់ងារបញ្ចប់រួចរាល់។",
     "promptAgentSaveSuccess": "រក្សាទុកភ្នាក់ងារបញ្ចប់រួចរាល់។",
     "promptAgentDeleteSuccess": "លុបភ្នាក់ងារបញ្ចប់រួចរាល់។",
-    "promptAgentsUnavailableWarning": "មិនអាចទាញយកភ្នាក់ងារបញ្ចប់ពីstorageបានទេ។ ថ្ងៃនេះមិនអាចកែប្រែបានទេ។"
+    "promptAgentsUnavailableWarning": "មិនអាចទាញយកភ្នាក់ងារបញ្ចប់ពីstorageបានទេ។ ថ្ងៃនេះមិនអាចកែប្រែបានទេ។",
+    "agentsTab": "ភ្នាក់ងារ",
+    "connectorsTab": "Connectors",
+    "addConnector": "បន្ថែម connector",
+    "noConnectors": "មិនទាន់មាន connectors ទេ។",
+    "connectorsUnavailableWarning": "មិនអាចទាក់ទងទៅហាង connector បានទេ ដូច្នេះបញ្ជីនេះអាចមិនពេញលេញ។ សូមកុំបង្កើតជំនួសរហូតវាផ្ទុករួច។",
+    "editAccess": "កែសម្រួលសិទ្ធិចូលប្រើ",
+    "deleteConnector": "លុប",
+    "deleteConnectorConfirm": "លុប connector នេះមែនទេ? អ្នកណាដែលប្រើវានឹងបាត់បង់សិទ្ធិភ្លាមៗ។",
+    "confirmDeleteConnector": "លុប connector",
+    "connectorSaveSuccess": "បានរក្សាទុក connector។",
+    "connectorCreateSuccess": "បានបង្កើត connector។",
+    "connectorDeleteSuccess": "បានលុប connector។",
+    "editConnectorTitle": "កែសម្រួល connector",
+    "newConnectorTitle": "connector ថ្មី",
+    "connectorPresetLabel": "ចាប់ផ្តើមពីពុម្ព",
+    "connectorPresetNone": "ចាប់ផ្តើមពីដើម",
+    "connectorNameLabel": "ឈ្មោះ",
+    "connectorDescriptionLabel": "ការពិពណ៌នា",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "ជំនួស {placeholder} នៅក្នុង URL ដោយតម្លៃរបស់អ្នក មុនពេលរក្សាទុក។",
+    "connectorTransportLabel": "ប្រព័ន្ធបញ្ជូន",
+    "connectorAuthLabel": "ការផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវ",
+    "connectorAuthNone": "គ្មាន",
+    "connectorAuthBearer": "Token (អ្នកប្រើនីមួយៗផ្ដល់ដោយខ្លួនឯង)",
+    "connectorAuthOauth": "OAuth sign-in",
+    "connectorSealingUnavailable": "OAuth មិនអាចប្រើបានទេ៖ ការតំឡើងនេះមិនមាន AUTH_SECRET សំរាប់អ៊ិនគ្រីប client secrets ឡើយ។",
+    "connectorTokenHelpLabel": "តំណទៅការណែនាំអំពី token (ជាជម្រើស)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "សម្ងាត់ត្រូវបានរក្សាទុក។ ទុកឲ្យទទេដើម្បីរក្សាទុកវា ឬបញ្ចូលថ្មីដើម្បីជំនួស។",
+    "connectorClientSecretHint": "បានអ៊ិនគ្រីបមុនពេលរក្សាទុក ហើយមិនមានការបង្ហាញវិញ។",
+    "connectorScopesLabel": "Scopes (បំបែកដោយសញ្ញាខណ្ឌ ច្រើនជាជម្រើស)"
   },
   "localModels": {
     "title": "ម៉ូឌែលក្នុងតំបន់",
@@ -3561,5 +3634,41 @@
     "settingsToggle": "ប្រមូលតំណដែលបានបិទភ្ជាប់ដោយស្វ័យប្រវត្តិ",
     "settingsDescription": "នៅពេលអ្នកបិទភ្ជាប់តំណដោយឡែក ទំព័រនឹងត្រូវបានប្រមូល និងអត្ថបទរបស់វាភ្ជាប់ខាងមកក្នុងសាររបស់អ្នក ដើម្បីឲ្យជំនួយការអានបាន។ បើត្រូវការបិទឲ្យតំណនៅសភាពអក្សរធម្មតា — អ្នកថែមទំព័របណ្តាញដោយដៃ តាមម៉ឺនុយ + បាន។",
     "addLink": "បន្ថែមតំណ"
+  },
+  "cameraAccessError": "មិនអាចចូលប្រើកាមេរ៉ាបានទេ។ សូមពិនិត្យសិទ្ធិកាមេរ៉ារបស់អ្នក ហើយព្យាយាមម្តងទៀត។",
+  "cameraUnnamedDevice": "កាមេរ៉ា",
+  "pastedText": {
+    "fallbackName": "អត្ថបទដែលបានបិទភ្ជាប់",
+    "charCount": "{count, number} តួអក្សរ",
+    "removeChip": "លុបអត្ថបទដែលបានបិទភ្ជាប់ “{name}”",
+    "blockLabel": "អត្ថបទបិទភ្ជាប់៖ {name}",
+    "doc": {
+      "heading": "អត្ថបទដែលបានបិទភ្ជាប់",
+      "pastedLabel": "បានបិទភ្ជាប់"
+    },
+    "settingsTitle": "ការបិទភ្ជាប់ធំៗ",
+    "settingsToggle": "បម្លែងការបិទភ្ជាប់ធំបំផុតជាឯកសារ",
+    "settingsDescription": "បើបិទភ្ជាប់អត្ថបទលើសកំនត់ខាងក្រោម វានឹងភ្ជាប់ជាឯកសារ ផ្ទេរពីព្រិលមកប្រអប់សារ។ អត្ថបទត្រូវបានប្រើដូចដែលបានបិទភ្ជាប់—មិនមានអ្វីត្រូវបានយក ឬផ្លាស់ប្តូរឡើយ។",
+    "settingsThresholdLabel": "ភ្ជាប់បិទភ្ជាប់លើសពី",
+    "settingsThresholdUnit": "តួអក្សរ",
+    "settingsThresholdHint": "ចន្លោះពី {min, number} ដល់ {max, number} តួអក្សរ។"
+  },
+  "structures": {
+    "section": "រចនាសម្ព័ន្ធ",
+    "sectionSubtitle": "ការបញ្ជាក់ទំនិញវាលដែលបានរក្សាទុក។ ប្រើមួយសម្រាប់សំណុំបទបង្ហាញ ឬជាស្កីមាដើមសំរាប់តារាងដំណើរការទិន្នន័យ។",
+    "loadFromStructure": "ផ្ទុករចនាសម្ព័ន្ធ",
+    "loadFromStructureTitle": "ជំនួសជួរឈរទាំងនេះដោយរចនាសម្ព័ន្ធដែលបានរក្សាទុក",
+    "pickerEmpty": "មិនមានរចនាសម្ព័ន្ធដែលបានរក្សាទុក។",
+    "pickerTitle": "ផ្ទុករចនាសម្ព័ន្ធដែលបានរក្សាទុក",
+    "saveAsStructure": "រក្សាទុកជា​រចនាសម្ព័ន្ធ",
+    "saveAsStructureTitle": "រក្សាទុកជួរឈរទាំងនេះទៅកាន់បណ្ណាល័យរចនាសម្ព័ន្ធរបស់អ្នក",
+    "savedToast": "បានរក្សាទុករចនាសម្ព័ន្ធ “{name}”",
+    "namePlaceholder": "ឈ្មោះ​រចនាសម្ព័ន្ធ",
+    "fieldCount": "{count} វាល",
+    "fieldCountOne": "១ វាល",
+    "downgradedNotice": "{count} វាលត្រូវបានសម្រួលទៅជាអក្សរ — តារាងកាន់តែតែតម្លៃមួយក្នុងមួយក្រឡា៖ {names}",
+    "truncatedNotice": "{count} វាលត្រូវបានដកចេញ — កំហិតតារាងគឺ {max} ជួរឈរ៖ {names}",
+    "skippedDerivedNotice": "{count} ជួរឈរកដែលគណនា មិនបានរក្សាទុក — រូបមន្តយោងទៅកាន់ជួរឈរតារាងនេះ៖ {names}",
+    "loadReplacesColumns": "វានឹងជំនួសជួរឈរបច្ចុប្បន្ន។ ជួរដេកដែលមានឈ្មោះជួរឈរត្រូវនឹងរក្សាតម្លៃ។"
   }
 }

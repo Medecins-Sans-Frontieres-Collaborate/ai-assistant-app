@@ -2091,7 +2091,9 @@
     "pin": "Prikači na vrh",
     "unpin": "Otkači",
     "moveToMore": "Premesti u Više",
-    "moveOutOfMore": "Prikaži u meniju"
+    "moveOutOfMore": "Prikaži u meniju",
+    "showSources": "Prikaži druge izvore",
+    "hideSources": "Sakrij druge izvore"
   },
   "transcription": {
     "transcribesOnSend": "Транскрибује при слању",
@@ -2762,7 +2764,16 @@
       "undoEdit": "Poništi",
       "clearResolved": "Obriši rešene",
       "clearResolvedHint": "Uklonite prihvaćene, odbijene i neprimenljive izmene sa ove liste",
-      "autoClearResolved": "Automatski briši rešene izmene"
+      "autoClearResolved": "Automatski briši rešene izmene",
+      "import": "Uvoz",
+      "importReplaceTitle": "Zameniti dokument?",
+      "importReplaceBody": "Uvoz {name} će zameniti trenutni dokument. Vaše reference, specifikacija i ton ostaju sačuvani.",
+      "importReplaceConfirm": "Zameni",
+      "editorMode": "Režim uređivača",
+      "editorModeRich": "Obogaćen tekst",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Razrešite predložene izmene pre promene režima uređivača."
     },
     "data": {
       "emptyTitle": "Uvezite podatke za analizu",
@@ -2961,7 +2972,9 @@
       "schemaFormulaArityError": "Pogrešan broj argumenata za {fn}",
       "schemaFormulaCycleError": "Kružna referenca između formula",
       "derivedColumnTitle": "Izračunato: {formula}",
-      "derivedFrom": "Izračunato prema {formula}"
+      "derivedFrom": "Izračunato prema {formula}",
+      "takePhoto": "Fotografišite",
+      "takePhotoHint": "Koristite kameru da fotografišete obrazac ili tabelu — sadržaj će biti pretvoren u strukturirane podatke koje možete proveriti uz fotografiju"
     },
     "map": {
       "emptyTitle": "Postavite svoje podatke na mapu",
@@ -3124,6 +3137,22 @@
       "asana": {
         "name": "Asana",
         "description": "Pronađite, kreirajte i izmenite zadatke i projekte."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Pretražujte objavljene izvore podataka, radne sveske i Pulse metrike."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Pronađite i ažurirajte zapise u vašim Salesforce objektima."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Pripremite, zakažite i objavite objave na društvenim mrežama."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Pregledajte i odgovarajte na konverzacije u društvenim inbox-ovima."
       }
     },
     "connect": "Poveži",
@@ -3184,7 +3213,19 @@
       "missingState": "Nema ničega za autorizaciju",
       "close": "Možete zatvoriti ovaj prozor i vratiti se u aplikaciju.",
       "closeButton": "Zatvori prozor"
-    }
+    },
+    "oauthNoAppConfigured": "Prijavljivanje sa {name} nije podešeno na ovoj instalaciji. Povežite se registracijom sopstvene OAuth aplikacije.",
+    "adminConnectorsTitle": "Iz vaše organizacije",
+    "adminConnectorsDescription": "Konektori koje su podesili vaši administratori. Prikaz zavisi od vaših pristupnih prava.",
+    "managedByOrg": "Upravlja vaša organizacija",
+    "connectorOauthNotConfigured": "Prijava za ovaj konektor još nije završena. Kontaktirajte administratora.",
+    "yourConnectorsTitle": "Vaši konektori",
+    "addTitle": "Dodaj konektor",
+    "addDescription": "Izaberite alat za povezivanje. Pristup ćete podesiti nakon odabira.",
+    "add": "Dodaj",
+    "filterLabel": "Filtriraj konektore",
+    "filterPlaceholder": "Pretraži konektore",
+    "noMatches": "Nema konektora za „{query}“."
   },
   "modelSources": {
     "connectButtonShort": "Poveži izvor modela",
@@ -3502,7 +3543,39 @@
     "promptAgentCreateSuccess": "Prompt agent je kreiran.",
     "promptAgentSaveSuccess": "Prompt agent je sačuvan.",
     "promptAgentDeleteSuccess": "Prompt agent je obrisan.",
-    "promptAgentsUnavailableWarning": "Prompt agenti nisu mogli da se učitaju iz skladišta. Trenutno ih nije moguće menjati."
+    "promptAgentsUnavailableWarning": "Prompt agenti nisu mogli da se učitaju iz skladišta. Trenutno ih nije moguće menjati.",
+    "agentsTab": "Agenti",
+    "connectorsTab": "Konektori",
+    "addConnector": "Dodaj konektor",
+    "noConnectors": "Još nema konektora.",
+    "connectorsUnavailableWarning": "Prodavnica konektora nije dostupna, pa lista možda nije kompletna. Ne kreirajte zamenu dok se ne učita.",
+    "editAccess": "Izmeni pristup",
+    "deleteConnector": "Obriši",
+    "deleteConnectorConfirm": "Obrisati ovaj konektor? Svi korisnici će odmah izgubiti pristup.",
+    "confirmDeleteConnector": "Obriši konektor",
+    "connectorSaveSuccess": "Konektor je sačuvan.",
+    "connectorCreateSuccess": "Konektor je kreiran.",
+    "connectorDeleteSuccess": "Konektor je obrisan.",
+    "editConnectorTitle": "Izmeni konektor",
+    "newConnectorTitle": "Novi konektor",
+    "connectorPresetLabel": "Počnite od šablona",
+    "connectorPresetNone": "Započni od početka",
+    "connectorNameLabel": "Naziv",
+    "connectorDescriptionLabel": "Opis",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "Zamenite {placeholder} u URL-u sopstvenom vrednošću pre čuvanja.",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Autentifikacija",
+    "connectorAuthNone": "Bez",
+    "connectorAuthBearer": "Token (svaki korisnik unosi svoj)",
+    "connectorAuthOauth": "OAuth prijavljivanje",
+    "connectorSealingUnavailable": "OAuth nije dostupan: ova implementacija nema podešen AUTH_SECRET za enkripciju klijentskih tajni.",
+    "connectorTokenHelpLabel": "Link za uputstvo o tokenu (opciono)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Tajna je sačuvana. Ostavite prazno za zadržavanje, ili unesite novu za zamenu.",
+    "connectorClientSecretHint": "Enkriptovano pre čuvanja i nikad više prikazano.",
+    "connectorScopesLabel": "Opseg (razdvojeno razmakom, opcionalno)"
   },
   "localModels": {
     "title": "Lokalni modeli",
@@ -3561,5 +3634,41 @@
     "settingsToggle": "Automatski preuzmi nalepene linkove",
     "settingsDescription": "Kada nalepite link samostalno, stranica se preuzima i njen tekst se prilaže, kako bi asistent mogao da ga pročita. Isključite ovu opciju da bi linkovi ostali kao običan tekst — i dalje možete ručno da priložite stranicu iz + menija.",
     "addLink": "Dodaj link"
+  },
+  "cameraAccessError": "Nije moguće pristupiti kameri. Proverite dozvole za kameru i pokušajte ponovo.",
+  "cameraUnnamedDevice": "Kamera",
+  "pastedText": {
+    "fallbackName": "Nalep­ljeni tekst",
+    "charCount": "{count, number} karaktera",
+    "removeChip": "Ukloni nalepljeni tekst \"{name}\"",
+    "blockLabel": "Nalep­ljeni tekst: {name}",
+    "doc": {
+      "heading": "Nalep­ljeni tekst",
+      "pastedLabel": "Nalep­ljeno"
+    },
+    "settingsTitle": "Velika nalepljivanja",
+    "settingsToggle": "Pretvori veliko nalepljivanje u prilog",
+    "settingsDescription": "Ako nalepite više teksta od ograničenja ispod, tekst će biti dodat kao fajl, umesto da popuni polje za poruku. Tekst se koristi tačno kako je nalepljen — ništa se ne preuzima niti menja.",
+    "settingsThresholdLabel": "Dodaj u prilog nalepljeno duže od",
+    "settingsThresholdUnit": "karaktera",
+    "settingsThresholdHint": "Između {min, number} i {max, number} karaktera."
+  },
+  "structures": {
+    "section": "Strukture",
+    "sectionSubtitle": "Sačuvane definicije polja. Upotrebite ih za ekstrakciju ili kao početnu šemu za tabelu podataka.",
+    "loadFromStructure": "Učitaj strukturu",
+    "loadFromStructureTitle": "Zameni ove kolone sa sačuvanom strukturom",
+    "pickerEmpty": "Nema sačuvanih struktura.",
+    "pickerTitle": "Učitaj sačuvanu strukturu",
+    "saveAsStructure": "Sačuvaj kao strukturu",
+    "saveAsStructureTitle": "Sačuvaj ove kolone u svoju biblioteku struktura",
+    "savedToast": "Struktura \"{name}\" je sačuvana",
+    "namePlaceholder": "Naziv strukture",
+    "fieldCount": "{count} polja",
+    "fieldCountOne": "1 polje",
+    "downgradedNotice": "{count} polje(a) pojednostavljeno u tekst — tabele sadrže samo jednu vrednost po ćeliji: {names}",
+    "truncatedNotice": "{count} polje(a) izostavljeno — ograničenje tabele je {max} kolona: {names}",
+    "skippedDerivedNotice": "{count} izračunata kolona nije sačuvana — formule upućuju na kolone ove tabele: {names}",
+    "loadReplacesColumns": "Ovo zamenjuje trenutne kolone. Postojeći redovi zadržavaju vrednosti čija se imena kolona poklapaju."
   }
 }

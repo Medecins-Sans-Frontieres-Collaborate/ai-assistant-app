@@ -2091,7 +2091,9 @@
     "pin": "மேலே இடு",
     "unpin": "முடிநிலை நீக்கு",
     "moveToMore": "மேலுமிற்கு நகர்த்து",
-    "moveOutOfMore": "மெனுவில் காண்பி"
+    "moveOutOfMore": "மெனுவில் காண்பி",
+    "showSources": "மற்ற மூலங்களை காட்டவும்",
+    "hideSources": "மற்ற மூலங்களை மறைக்கவும்"
   },
   "transcription": {
     "transcribesOnSend": "அனுப்பும்போது எழுத்தாக்கம் செய்யும்",
@@ -2762,7 +2764,16 @@
       "undoEdit": "வெளியற்றப்பட்டது",
       "clearResolved": "தீர்க்கப்பட்டவற்றை அகற்று",
       "clearResolvedHint": "ஏற்கப்பட்ட, நிராகரிக்கப்பட்ட மற்றும் பொருந்தாத திருத்தங்களை இந்த பட்டியிலிருந்து அகற்றவும்",
-      "autoClearResolved": "தீர்க்கப்பட்ட திருத்தங்களை தானாகவே அகற்று"
+      "autoClearResolved": "தீர்க்கப்பட்ட திருத்தங்களை தானாகவே அகற்று",
+      "import": "இறக்குமதி",
+      "importReplaceTitle": "ஆவணத்தை மாற்றவா?",
+      "importReplaceBody": "{name} ஐ இறக்குமதி செய்தால் தற்போதைய ஆவணம் மாற்றப்படும். உங்கள் குறிப்பு, வரையறை மற்றும் உருவம் பாதுகாக்கப்படும்.",
+      "importReplaceConfirm": "மாற்று",
+      "editorMode": "திருத்தி பயன்முறை",
+      "editorModeRich": "ரிச் டெக்ஸ்",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "திருத்தி பயன்முறையை மாற்றும் முன் பரிந்துரைக்கப்பட்ட திருத்தங்களை தீர்க்கவும்."
     },
     "data": {
       "emptyTitle": "அனாலிசுக்கு தரவு இறக்குமதி செய்யவும்",
@@ -2961,7 +2972,9 @@
       "schemaFormulaArityError": "{fn} க்கு பிழையான காரணிகள் எண்ணிக்கை",
       "schemaFormulaCycleError": "சூத்திரங்களைச் சுற்றி குறுக்கு குறிப்பு உள்ளது",
       "derivedColumnTitle": "கணிக்கப்பட்டது: {formula}",
-      "derivedFrom": "{formula} மூலம் கணிக்கப்பட்டது"
+      "derivedFrom": "{formula} மூலம் கணிக்கப்பட்டது",
+      "takePhoto": "புகைப்படம் எடுக்கவும்",
+      "takePhotoHint": "ஒரு படிவம் அல்லது அட்டவணையை புகைப்படமாக எடுக்க உங்கள் கேமராவைப் பயன்படுத்தவும் — அதன் உள்ளடக்கங்கள் கட்டமைக்கப்பட்ட தரவாக மாறும் மேலும் நீங்கள் புகைப்படத்தை ஒப்பிட்டு சரி பார்க்கலாம்."
     },
     "map": {
       "emptyTitle": "உங்கள் தரவை வரைபடத்தில் காண்பிக்கவும்",
@@ -3124,6 +3137,22 @@
       "asana": {
         "name": "Asana",
         "description": "பணிகள் மற்றும் திட்டங்களை அறி, உருவாக்கு மற்றும் புதுப்பி."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "வெளியிடப்பட்ட தரவு மூலங்கள், workbooks மற்றும் Pulse கணக்கீடுகளை வினவவும்."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "உங்கள் Salesforce பொருட்களில் பதிவுகளைப் பார்க்கவும் புதுப்பிக்கவும்."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "சமூக ஊடக பதிவுகளை உருவாக்கவும், திட்டமிடவும், வெளியிடவும்."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "சமூக அஞ்சல் உரையாடல்களை மதிப்பாய்வு செய்து பதிலளிக்கவும்."
       }
     },
     "connect": "இணை",
@@ -3184,7 +3213,19 @@
       "missingState": "அங்கீகாரம் செய்ய ஏதுமில்லை",
       "close": "இந்த சாளரத்தை மூடி செயலிக்கு திரும்பலாம்.",
       "closeButton": "சாளரத்தை மூடு"
-    }
+    },
+    "oauthNoAppConfigured": "இந்த வெளியீட்டில் {name} மூலம் உள்நுழைவது செயலாக்கப்படவில்லை. உங்கள் சொந்த OAuth செயலியை பதிவு செய்து இணைக்கவும்.",
+    "adminConnectorsTitle": "உங்கள் நிறுவனத்தின் மூலம்",
+    "adminConnectorsDescription": "உங்கள் நிர்வாகிகள் அமைத்த இணைப்பிகள். நீங்கள் பார்க்கும்வை உங்கள் அணுகல்களின்மீது சார்ந்துள்ளது.",
+    "managedByOrg": "உங்கள் நிறுவனத்தால் மேலாண்மை செய்யப்படுகிறது",
+    "connectorOauthNotConfigured": "இந்த இணைப்புக்கு உள்நுழைவு அமைப்புகள் முழுமையடையவில்லை. உங்கள் நிர்வாகியை தொடர்பு கொள்ளவும்.",
+    "yourConnectorsTitle": "உங்கள் இணைப்பிகள்",
+    "addTitle": "இணைப்பியைச் சேர்க்கவும்",
+    "addDescription": "இணைக்க கருவியைத் தேர்ந்தெடுக்கவும். தேர்வு செய்த பிறகு அணுகலை அமைக்கலாம்.",
+    "add": "சேர்",
+    "filterLabel": "இணைப்பிகளை வடிகட்டு",
+    "filterPlaceholder": "இணைப்பிகளைத் தேடு",
+    "noMatches": "“{query}”க்கு ஏற்ப எந்த இணைப்பியும் இல்லை."
   },
   "modelSources": {
     "connectButtonShort": "மாடல் மூலத்தை இணை",
@@ -3502,7 +3543,39 @@
     "promptAgentCreateSuccess": "புரொம்ப்ட் ஏஜெண்ட் உருவாக்கப்பட்டது.",
     "promptAgentSaveSuccess": "புரொம்ப்ட் ஏஜெண்ட் சேமிக்கப்பட்டது.",
     "promptAgentDeleteSuccess": "புரொம்ப்ட் ஏஜெண்ட் அழிக்கப்பட்டது.",
-    "promptAgentsUnavailableWarning": "புரொம்ப்ட் ஏஜென்ட்கள் சேமிப்பிலிருந்து ஏற்ற முடியவில்லை. இப்போது அவற்றைத் திருத்த முடியாது."
+    "promptAgentsUnavailableWarning": "புரொம்ப்ட் ஏஜென்ட்கள் சேமிப்பிலிருந்து ஏற்ற முடியவில்லை. இப்போது அவற்றைத் திருத்த முடியாது.",
+    "agentsTab": "ஏஜென்ட்கள்",
+    "connectorsTab": "இணைப்பிகள்",
+    "addConnector": "இணைப்பியைச் சேர்",
+    "noConnectors": "இதுவரை இணைப்பிகள் இல்லை.",
+    "connectorsUnavailableWarning": "இணைப்பி கடையை அணுக முடியவில்லை, ஆகையால் இந்த பட்டியல் முழுமையில்லாமல் இருக்கலாம். அது ஏற்றப்படும் வரை மாற்று ஒன்றை உருவாக்க வேண்டாம்.",
+    "editAccess": "அணுகலை திருத்து",
+    "deleteConnector": "அழி",
+    "deleteConnectorConfirm": "இந்த இணைப்பியை அழிக்கவா? அதை பயன்படுத்தும் யாருக்கும் உடனடியாக அணுகல் இழக்கப்படும்.",
+    "confirmDeleteConnector": "இணைப்பியை அழி",
+    "connectorSaveSuccess": "இணைப்பி சேமிக்கப்பட்டது.",
+    "connectorCreateSuccess": "இணைப்பி உருவாக்கப்பட்டது.",
+    "connectorDeleteSuccess": "இணைப்பி அழிக்கப்பட்டது.",
+    "editConnectorTitle": "இணைப்பியை திருத்து",
+    "newConnectorTitle": "புதிய இணைப்பி",
+    "connectorPresetLabel": "மாதிரியில் இருந்து துவங்",
+    "connectorPresetNone": "புதியதாக துவங்கு",
+    "connectorNameLabel": "பெயர்",
+    "connectorDescriptionLabel": "விளக்கம்",
+    "connectorUrlLabel": "சர்வர் URL",
+    "connectorUrlPlaceholderWarning": "URL-ல் உள்ள {placeholder} ஐ உங்கள் மதிப்புடன் மாற்றி சேமிக்கவும்.",
+    "connectorTransportLabel": "டிரான்ஸ்போர்ட்",
+    "connectorAuthLabel": "உறுதிப்படுத்தல்",
+    "connectorAuthNone": "எதுவும் இல்லை",
+    "connectorAuthBearer": "டோக்கன் (ஒவ்வொரு பயனாளரும் தங்களது சொந்ததை வழங்க வேண்டும்)",
+    "connectorAuthOauth": "OAuth உள்நுழைவு",
+    "connectorSealingUnavailable": "OAuth கிடைக்கவில்லை: இந்த அமைப்பில் client secrets-ஐ encrypt செய்ய AUTH_SECRET அமைக்கப்படவில்லை.",
+    "connectorTokenHelpLabel": "டோக்கன் வழிமுறைகளுக்கான இணைப்பு (விருப்பமானது)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "ஒரு ரகசியம் சேமிக்கப்பட்டுள்ளது. அதை வைத்திருக்க வெறுமையாக விடவும், மாற்ற புதியதை உள்ளிடவும்.",
+    "connectorClientSecretHint": "சேமிக்கப்படும் முன் குறியாக்கம் செய்யப்படும், மீண்டும் காட்டப்படாது.",
+    "connectorScopesLabel": "Scopes (விண்ணப்ப இடைவேளை, விருப்பம்)"
   },
   "localModels": {
     "title": "உள்ளூர் மாதிரிகள்",
@@ -3561,5 +3634,41 @@
     "settingsToggle": "ஒட்டப்பட்ட இணைப்புகளை தானாக பெறவும்",
     "settingsDescription": "நீங்கள் ஒரு இணைப்பை தனியாக ஒட்டும் போது, பக்கம் பெறப்பட்டு அதன் உரை இணைக்கப்படும், எனவே உதவியாளர் அதைப் படிக்க முடியும். இதை அணைப்பதால் ஒட்டப்பட்ட இணைப்புகள் சாதாரண உரை ஆக இருக்கும் — அதே நேரத்தில் + மெனுவிலிருந்து கைமுறையாக பக்கம் இணைக்கலாம்.",
     "addLink": "இணைப்பைச் சேர்க்கவும்"
+  },
+  "cameraAccessError": "கேமராவை அணுக முடியவில்லை. உங்கள் கேமரா அனுமதிகளைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.",
+  "cameraUnnamedDevice": "கேமரா",
+  "pastedText": {
+    "fallbackName": "ஒட்டிய உரை",
+    "charCount": "{count, number} எழுத்துகள்",
+    "removeChip": "“{name}” என்ற ஒட்டிய உரையை அகற்று",
+    "blockLabel": "ஒட்டிய உரை: {name}",
+    "doc": {
+      "heading": "ஒட்டிய உரை",
+      "pastedLabel": "ஒட்டப்பட்டது"
+    },
+    "settingsTitle": "பெரிய ஒட்டல்கள்",
+    "settingsToggle": "பெரிய உரையை இணைப்பாக மாற்றவும்",
+    "settingsDescription": "கீழே குறிப்பிடப்பட்ட வரம்பை விட அதிகமாக உரை ஒட்டப்பட்டால், அது கோப்பாக இணைக்கப்படும், உரை பெட்டியில் நேரடியாக சேர்க்கப்படாது. உரை அப்படியே பயன்படுத்தப்படும் — எதுவும் பெறப்படவோ மாற்றப்படவோ மாட்டாது.",
+    "settingsThresholdLabel": "இதற்கு மேல் நீளமான உரைகளை இணைக்கவும்",
+    "settingsThresholdUnit": "எழுத்துகள்",
+    "settingsThresholdHint": "{min, number} முதல் {max, number} எழுத்துகள் வரை."
+  },
+  "structures": {
+    "section": "வடிவமைப்புகள்",
+    "sectionSubtitle": "சேமிக்கப்பட்ட புல விவரங்கள். ஒன்றை பிரித்தெடுக்க உதவும் முறையாக, அல்லது தரவு பணிப்பாயின் ஆரம்ப வார்ப்புரு அட்டவணையாக பயன்படுத்தவும்.",
+    "loadFromStructure": "வடிவமைப்பை ஏற்று",
+    "loadFromStructureTitle": "இந்த நெடுவரிசைகளை சேமிக்கப்பட்ட வடிவமைப்பால் மாற்றவும்",
+    "pickerEmpty": "இதுவரை எந்த வடிவமைப்பும் சேர்க்கப்படவில்லை.",
+    "pickerTitle": "சேமிக்கப்பட்ட வடிவமைப்பை ஏற்று",
+    "saveAsStructure": "வடிவமைப்பாக சேமி",
+    "saveAsStructureTitle": "இந்த நெடுவரிசைகளை உங்கள் வடிவமைப்புகள் நூலகத்தில் சேமிக்கவும்",
+    "savedToast": "“{name}” வடிவமைப்பு சேமிக்கப்பட்டது",
+    "namePlaceholder": "வடிவமைப்பு பெயர்",
+    "fieldCount": "{count} புலங்கள்",
+    "fieldCountOne": "1 புலம்",
+    "downgradedNotice": "{count} புல(ங்கள்) உரை வடிவத்திற்கு எளிமைப்படுத்தப்பட்டது — அட்டவணையில் ஒவ்வொரு செல்லுக்கும் ஒரு மதிப்பே இருக்கும்: {names}",
+    "truncatedNotice": "{count} புல(ங்கள்) நீக்கப்பட்டது — அட்டவணை வரம்பு {max} நெடுவரிசைகள்: {names}",
+    "skippedDerivedNotice": "{count} கணக்கிடப்பட்ட நெடுவரிசை(கள்) சேமிக்கவில்லை — சூத்திரங்கள் இந்த அட்டவணையின் நெடுவரிசைகளை மேற்கோள் செய்கின்றன: {names}",
+    "loadReplacesColumns": "இது தற்போது உள்ள நெடுவரிசைகளை மாற்றும். ஏற்கனவே உள்ள வரிசைகள் பெயர் பொருந்தும் நெடுவரிசை மதிப்புகளை வைத்திருக்கும்."
   }
 }

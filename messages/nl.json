@@ -2116,7 +2116,9 @@
     "pin": "Bovenaan vastmaken",
     "unpin": "Losmaken",
     "moveToMore": "Verplaatsen naar 'Meer'",
-    "moveOutOfMore": "Tonen in menu"
+    "moveOutOfMore": "Tonen in menu",
+    "showSources": "Andere bronnen weergeven",
+    "hideSources": "Andere bronnen verbergen"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Voeg uw persoonlijke instructies toe om aan te passen hoe de AI reageert. Deze worden gecombineerd met de basisrichtlijnen om behulpzame, nauwkeurige en veilige antwoorden te garanderen.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tip: Typ \"/\" om te kiezen uit opgeslagen promptsjablonen.",
@@ -2778,7 +2780,16 @@
       "undoEdit": "Ongedaan maken",
       "clearResolved": "Verwijder opgelost",
       "clearResolvedHint": "Verwijder geaccepteerde, afgewezen en niet-relevante bewerkingen uit deze lijst",
-      "autoClearResolved": "Opgeloste bewerkingen automatisch verwijderen"
+      "autoClearResolved": "Opgeloste bewerkingen automatisch verwijderen",
+      "import": "Importeren",
+      "importReplaceTitle": "Document vervangen?",
+      "importReplaceBody": "Door {name} te importeren wordt het huidige document vervangen. Uw referenties, specificatie en toon blijven behouden.",
+      "importReplaceConfirm": "Vervangen",
+      "editorMode": "Editormodus",
+      "editorModeRich": "Opgemaakte tekst",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Los de voorgestelde wijzigingen op voordat u de editormodus wijzigt."
     },
     "data": {
       "emptyTitle": "Importeer data om te analyseren",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "Onjuist aantal argumenten voor {fn}",
       "schemaFormulaCycleError": "Circulaire verwijzing tussen formules",
       "derivedColumnTitle": "Berekend: {formula}",
-      "derivedFrom": "Berekend uit {formula}"
+      "derivedFrom": "Berekend uit {formula}",
+      "takePhoto": "Foto maken",
+      "takePhotoHint": "Gebruik uw camera om een formulier of tabel te fotograferen — de inhoud wordt gestructureerde data die u kunt vergelijken met de foto"
     },
     "map": {
       "emptyTitle": "Plaats uw gegevens op een kaart",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "Zoek, maak en bewerk taken en projecten."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Doorzoek gepubliceerde databronnen, werkboeken en Pulse-metrics."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Zoek en werk records bij binnen uw Salesforce-objecten."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Maak, plan en publiceer socialmediaberichten."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Bekijk en beantwoord gesprekken in de social inbox."
       }
     },
     "connect": "Verbinden",
@@ -3200,7 +3229,19 @@
       "missingState": "Niets om te autoriseren",
       "close": "U kunt dit venster sluiten en terugkeren naar de app.",
       "closeButton": "Venster sluiten"
-    }
+    },
+    "oauthNoAppConfigured": "Aanmelden met {name} is niet ingesteld voor deze omgeving. Koppel door uw eigen OAuth-app te registreren.",
+    "adminConnectorsTitle": "Van uw organisatie",
+    "adminConnectorsDescription": "Connectoren die uw beheerders hebben ingesteld. Welke u ziet hangt af van uw toegangsrechten.",
+    "managedByOrg": "Beheerd door uw organisatie",
+    "connectorOauthNotConfigured": "Aanmelden is nog niet volledig ingesteld voor deze connector. Neem contact op met uw beheerder.",
+    "yourConnectorsTitle": "Uw connectoren",
+    "addTitle": "Connector toevoegen",
+    "addDescription": "Kies een tool om te koppelen. U stelt toegang in na het kiezen.",
+    "add": "Toevoegen",
+    "filterLabel": "Filter connectoren",
+    "filterPlaceholder": "Connectoren zoeken",
+    "noMatches": "Geen connectoren gevonden voor “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Verbind een modelbron",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "Promptagent aangemaakt.",
     "promptAgentSaveSuccess": "Promptagent opgeslagen.",
     "promptAgentDeleteSuccess": "Promptagent verwijderd.",
-    "promptAgentsUnavailableWarning": "Promptagents konden niet uit de opslag worden geladen. Ze kunnen nu niet bewerkt worden."
+    "promptAgentsUnavailableWarning": "Promptagents konden niet uit de opslag worden geladen. Ze kunnen nu niet bewerkt worden.",
+    "agentsTab": "Agenten",
+    "connectorsTab": "Connectoren",
+    "addConnector": "Connector toevoegen",
+    "noConnectors": "Nog geen connectoren.",
+    "connectorsUnavailableWarning": "De connectorwinkel kon niet worden bereikt, deze lijst is mogelijk onvolledig. Maak geen vervanging aan totdat deze geladen is.",
+    "editAccess": "Toegang bewerken",
+    "deleteConnector": "Verwijderen",
+    "deleteConnectorConfirm": "Deze connector verwijderen? Iedereen die hem gebruikt verliest direct toegang.",
+    "confirmDeleteConnector": "Connector verwijderen",
+    "connectorSaveSuccess": "Connector opgeslagen.",
+    "connectorCreateSuccess": "Connector aangemaakt.",
+    "connectorDeleteSuccess": "Connector verwijderd.",
+    "editConnectorTitle": "Connector bewerken",
+    "newConnectorTitle": "Nieuwe connector",
+    "connectorPresetLabel": "Begin met een sjabloon",
+    "connectorPresetNone": "Begin vanaf nul",
+    "connectorNameLabel": "Naam",
+    "connectorDescriptionLabel": "Beschrijving",
+    "connectorUrlLabel": "Server-URL",
+    "connectorUrlPlaceholderWarning": "Vervang de {placeholder} in de URL door uw eigen waarde voor het opslaan.",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Authenticatie",
+    "connectorAuthNone": "Geen",
+    "connectorAuthBearer": "Token (iedere gebruiker levert zijn eigen token aan)",
+    "connectorAuthOauth": "OAuth-aanmelding",
+    "connectorSealingUnavailable": "OAuth is niet beschikbaar: deze installatie heeft geen AUTH_SECRET geconfigureerd voor het versleutelen van clientgeheimen.",
+    "connectorTokenHelpLabel": "Link naar tokeninstructies (optioneel)",
+    "connectorClientIdLabel": "OAuth client-ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Een geheim is opgeslagen. Laat leeg om het te behouden, of voer een nieuwe in om te vervangen.",
+    "connectorClientSecretHint": "Versleuteld opgeslagen en nooit opnieuw weergegeven.",
+    "connectorScopesLabel": "Scopes (gescheiden door spaties, optioneel)"
   },
   "localModels": {
     "title": "Lokale modellen",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "Links automatisch ophalen",
     "settingsDescription": "Wanneer je een losse link plakt, wordt de pagina opgehaald en de tekst toegevoegd zodat de assistent deze kan lezen. Zet dit uit om geplakte links als platte tekst te houden — je kunt een pagina nog steeds handmatig toevoegen via het +-menu.",
     "addLink": "Link toevoegen"
+  },
+  "cameraAccessError": "Kan geen toegang krijgen tot de camera. Controleer uw cameramachtigingen en probeer het opnieuw.",
+  "cameraUnnamedDevice": "Camera",
+  "pastedText": {
+    "fallbackName": "Plaktekst",
+    "charCount": "{count, number} tekens",
+    "removeChip": "Plaktekst \"{name}\" verwijderen",
+    "blockLabel": "Plaktekst: {name}",
+    "doc": {
+      "heading": "Plaktekst",
+      "pastedLabel": "Geplakt"
+    },
+    "settingsTitle": "Grote plakacties",
+    "settingsToggle": "Maak van een grote plakactie een bijlage",
+    "settingsDescription": "Als u meer tekst plakt dan de onderstaande limiet, wordt deze als bestand bijgevoegd in plaats van het berichtvak te vullen. De tekst wordt exact zoals geplakt gebruikt — er wordt niets opgehaald of gewijzigd.",
+    "settingsThresholdLabel": "Plakacties als bijlage toevoegen bij meer dan",
+    "settingsThresholdUnit": "tekens",
+    "settingsThresholdHint": "Tussen {min, number} en {max, number} tekens."
+  },
+  "structures": {
+    "section": "Structuren",
+    "sectionSubtitle": "Opgeslagen velddefinities. Gebruik er één als extractie-recept of als beginschema voor een datatabel.",
+    "loadFromStructure": "Structuur laden",
+    "loadFromStructureTitle": "Vervang deze kolommen door een opgeslagen structuur",
+    "pickerEmpty": "Nog geen opgeslagen structuren.",
+    "pickerTitle": "Laad een opgeslagen structuur",
+    "saveAsStructure": "Opslaan als structuur",
+    "saveAsStructureTitle": "Sla deze kolommen op in uw structuur-bibliotheek",
+    "savedToast": "Structuur \"{name}\" opgeslagen",
+    "namePlaceholder": "Structuurnaam",
+    "fieldCount": "{count} velden",
+    "fieldCountOne": "1 veld",
+    "downgradedNotice": "{count} veld(en) vereenvoudigd tot tekst — tabellen bevatten één waarde per cel: {names}",
+    "truncatedNotice": "{count} veld(en) verwijderd — de tabel heeft maximaal {max} kolommen: {names}",
+    "skippedDerivedNotice": "{count} berekende kolom(men) niet opgeslagen — formules verwijzen naar kolommen van deze tabel: {names}",
+    "loadReplacesColumns": "Dit vervangt de huidige kolommen. Bestaande rijen behouden waarden met overeenkomstige kolomnamen."
   }
 }

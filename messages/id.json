@@ -2116,7 +2116,9 @@
     "pin": "Sematkan ke atas",
     "unpin": "Lepaskan sematan",
     "moveToMore": "Pindahkan ke Lainnya",
-    "moveOutOfMore": "Tampilkan di menu"
+    "moveOutOfMore": "Tampilkan di menu",
+    "showSources": "Tampilkan sumber lain",
+    "hideSources": "Sembunyikan sumber lain"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Tambahkan instruksi pribadi Anda untuk menyesuaikan respons AI. Instruksi ini akan digabungkan dengan pedoman utama untuk memastikan respons yang bermanfaat, akurat, dan aman.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tip: Ketik \"/\" untuk memilih dari template prompt yang tersimpan.",
@@ -2778,7 +2780,16 @@
       "undoEdit": "Batal",
       "clearResolved": "Bersihkan yang telah diselesaikan",
       "clearResolvedHint": "Hapus suntingan yang diterima, ditolak, dan tidak berlaku dari daftar ini",
-      "autoClearResolved": "Otomatis bersihkan suntingan yang telah diselesaikan"
+      "autoClearResolved": "Otomatis bersihkan suntingan yang telah diselesaikan",
+      "import": "Impor",
+      "importReplaceTitle": "Ganti dokumen?",
+      "importReplaceBody": "Mengimpor {name} akan menggantikan dokumen saat ini. Referensi, spesifikasi, dan nada Anda tetap dipertahankan.",
+      "importReplaceConfirm": "Ganti",
+      "editorMode": "Mode editor",
+      "editorModeRich": "Teks kaya",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Selesaikan saran pengeditan sebelum mengganti mode editor."
     },
     "data": {
       "emptyTitle": "Impor data untuk dianalisis",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "Jumlah argumen untuk {fn} tidak sesuai",
       "schemaFormulaCycleError": "Referensi sirkular antar rumus",
       "derivedColumnTitle": "Terhitung: {formula}",
-      "derivedFrom": "Dihitung dari {formula}"
+      "derivedFrom": "Dihitung dari {formula}",
+      "takePhoto": "Ambil foto",
+      "takePhotoHint": "Gunakan kamera Anda untuk memfoto formulir atau tabel — isinya akan menjadi data terstruktur yang dapat Anda periksa melalui foto"
     },
     "map": {
       "emptyTitle": "Letakkan data Anda pada peta",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "Cari, buat, dan perbarui tugas serta proyek."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Kueri sumber data, workbook, dan metrik Pulse yang telah dipublikasikan."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Cari dan perbarui data di semua objek Salesforce Anda."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Rancang, jadwalkan, dan publikasikan postingan media sosial."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Tinjau dan tanggapi percakapan di inbox media sosial."
       }
     },
     "connect": "Hubungkan",
@@ -3200,7 +3229,19 @@
       "missingState": "Tidak ada yang perlu diotorisasi",
       "close": "Anda dapat menutup jendela ini dan kembali ke aplikasi.",
       "closeButton": "Tutup jendela"
-    }
+    },
+    "oauthNoAppConfigured": "Masuk dengan {name} belum diatur pada deployment ini. Silakan hubungkan dengan mendaftarkan aplikasi OAuth Anda sendiri.",
+    "adminConnectorsTitle": "Dari organisasi Anda",
+    "adminConnectorsDescription": "Konektor yang diatur oleh administrator Anda. Yang dapat Anda lihat tergantung pada akses Anda.",
+    "managedByOrg": "Dikelola oleh organisasi Anda",
+    "connectorOauthNotConfigured": "Proses masuk belum selesai dikonfigurasi untuk konektor ini. Hubungi administrator Anda.",
+    "yourConnectorsTitle": "Konektor Anda",
+    "addTitle": "Tambah konektor",
+    "addDescription": "Pilih alat untuk dihubungkan. Anda akan mengatur akses setelah memilih.",
+    "add": "Tambah",
+    "filterLabel": "Filter konektor",
+    "filterPlaceholder": "Cari konektor",
+    "noMatches": "Tidak ada konektor yang cocok dengan “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Hubungkan sumber model",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "Agen prompt berhasil dibuat.",
     "promptAgentSaveSuccess": "Agen prompt berhasil disimpan.",
     "promptAgentDeleteSuccess": "Agen prompt berhasil dihapus.",
-    "promptAgentsUnavailableWarning": "Agen prompt tidak dapat dimuat dari penyimpanan. Saat ini, agen tidak dapat diedit."
+    "promptAgentsUnavailableWarning": "Agen prompt tidak dapat dimuat dari penyimpanan. Saat ini, agen tidak dapat diedit.",
+    "agentsTab": "Agen",
+    "connectorsTab": "Konektor",
+    "addConnector": "Tambah konektor",
+    "noConnectors": "Belum ada konektor.",
+    "connectorsUnavailableWarning": "Tidak dapat mengakses toko konektor, sehingga daftar ini mungkin tidak lengkap. Jangan membuat pengganti sebelum daftar ini selesai dimuat.",
+    "editAccess": "Edit akses",
+    "deleteConnector": "Hapus",
+    "deleteConnectorConfirm": "Hapus konektor ini? Siapa pun yang menggunakan akan langsung kehilangan akses.",
+    "confirmDeleteConnector": "Hapus konektor",
+    "connectorSaveSuccess": "Konektor berhasil disimpan.",
+    "connectorCreateSuccess": "Konektor berhasil dibuat.",
+    "connectorDeleteSuccess": "Konektor berhasil dihapus.",
+    "editConnectorTitle": "Edit konektor",
+    "newConnectorTitle": "Konektor baru",
+    "connectorPresetLabel": "Mulai dari template",
+    "connectorPresetNone": "Mulai dari awal",
+    "connectorNameLabel": "Nama",
+    "connectorDescriptionLabel": "Deskripsi",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "Ganti {placeholder} dalam URL dengan nilai Anda sendiri sebelum menyimpan.",
+    "connectorTransportLabel": "Transportasi",
+    "connectorAuthLabel": "Autentikasi",
+    "connectorAuthNone": "Tidak ada",
+    "connectorAuthBearer": "Token (setiap pengguna memberikan token sendiri)",
+    "connectorAuthOauth": "Masuk dengan OAuth",
+    "connectorSealingUnavailable": "OAuth tidak tersedia: deployment ini belum mengatur AUTH_SECRET untuk mengenkripsi client secret.",
+    "connectorTokenHelpLabel": "Tautan ke instruksi token (opsional)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Secret sudah tersimpan. Biarkan kosong untuk mempertahankan, atau isi yang baru untuk menggantinya.",
+    "connectorClientSecretHint": "Dienkripsi sebelum disimpan dan tidak pernah ditampilkan lagi.",
+    "connectorScopesLabel": "Scopes (dipisahkan spasi, opsional)"
   },
   "localModels": {
     "title": "Model lokal",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "Ambil tautan yang ditempel secara otomatis",
     "settingsDescription": "Saat Anda menempelkan tautan secara terpisah, halaman akan diambil dan teksnya dilampirkan agar asisten dapat membacanya. Matikan fitur ini untuk menyimpan tautan yang ditempel sebagai teks biasa — Anda tetap dapat melampirkan halaman secara manual dari menu +.",
     "addLink": "Tambah tautan"
+  },
+  "cameraAccessError": "Tidak dapat mengakses kamera. Periksa izin kamera Anda dan coba lagi.",
+  "cameraUnnamedDevice": "Kamera",
+  "pastedText": {
+    "fallbackName": "Teks yang ditempel",
+    "charCount": "{count, number} karakter",
+    "removeChip": "Hapus teks yang ditempel “{name}”",
+    "blockLabel": "Teks yang ditempel: {name}",
+    "doc": {
+      "heading": "Teks yang ditempel",
+      "pastedLabel": "Ditempel"
+    },
+    "settingsTitle": "Tempelan besar",
+    "settingsToggle": "Ubah tempelan besar menjadi lampiran",
+    "settingsDescription": "Menempel teks melebihi batas di bawah akan melampirkannya sebagai file, bukan mengisi kotak pesan. Teks digunakan persis seperti yang ditempel — tidak diambil atau diubah.",
+    "settingsThresholdLabel": "Lampirkan tempelan yang lebih panjang dari",
+    "settingsThresholdUnit": "karakter",
+    "settingsThresholdHint": "Antara {min, number} dan {max, number} karakter."
+  },
+  "structures": {
+    "section": "Struktur",
+    "sectionSubtitle": "Definisi kolom yang sudah disimpan. Gunakan sebagai resep ekstraksi, atau sebagai skema awal untuk meja alur data.",
+    "loadFromStructure": "Muat struktur",
+    "loadFromStructureTitle": "Ganti kolom ini dengan struktur yang disimpan",
+    "pickerEmpty": "Belum ada struktur yang disimpan.",
+    "pickerTitle": "Muat struktur yang disimpan",
+    "saveAsStructure": "Simpan sebagai struktur",
+    "saveAsStructureTitle": "Simpan kolom ini ke pustaka struktur Anda",
+    "savedToast": "Struktur “{name}” telah disimpan",
+    "namePlaceholder": "Nama struktur",
+    "fieldCount": "{count} kolom",
+    "fieldCountOne": "1 kolom",
+    "downgradedNotice": "{count} kolom dijadikan teks — setiap sel hanya menyimpan satu nilai: {names}",
+    "truncatedNotice": "{count} kolom dihapus — batas kolom tabel adalah {max}: {names}",
+    "skippedDerivedNotice": "{count} kolom terhitung tidak disimpan — rumus merujuk kolom pada tabel ini: {names}",
+    "loadReplacesColumns": "Ini akan menggantikan kolom yang ada. Baris yang ada tetap menyimpan nilai dengan nama kolom yang sama."
   }
 }

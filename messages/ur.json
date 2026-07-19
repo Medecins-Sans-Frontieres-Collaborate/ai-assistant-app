@@ -2118,7 +2118,9 @@
     "pin": "اوپر پن کریں",
     "unpin": "پن ہٹائیں",
     "moveToMore": "مزید میں منتقل کریں",
-    "moveOutOfMore": "مینو میں دکھائیں"
+    "moveOutOfMore": "مینو میں دکھائیں",
+    "showSources": "دیگر ذرائع دکھائیں",
+    "hideSources": "دیگر ذرائع چھپائیں"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "اپنی ذاتی ہدایات شامل کریں تاکہ AI کے ردعمل کو اپنی مرضی کے مطابق بنا سکیں۔ یہ ہدایات بنیادی رہنمائی کے ساتھ ملائی جاتی ہیں جو مددگار، درست اور محفوظ جوابات کو یقینی بناتی ہیں۔",
   "Tip: Type \"/\" to select from saved prompt templates_": "ٹپ: محفوظ شدہ پرومپٹ ٹیمپلیٹس میں سے منتخب کرنے کے لیے \"/\" ٹائپ کریں۔",
@@ -2808,7 +2810,16 @@
       "undoEdit": "واپس لیں",
       "clearResolved": "حل شدہ صاف کریں",
       "clearResolvedHint": "اس فہرست سے منظور شدہ، مسترد شدہ اور غیر متعلقہ تبدیلیاں ہٹا دیں",
-      "autoClearResolved": "حل شدہ تبدیلیاں خودکار طور پر صاف کریں"
+      "autoClearResolved": "حل شدہ تبدیلیاں خودکار طور پر صاف کریں",
+      "import": "درآمد کریں",
+      "importReplaceTitle": "دستاویز کو تبدیل کریں؟",
+      "importReplaceBody": "{name} کو درآمد کرنے سے موجودہ دستاویز تبدیل ہو جائے گی۔ آپ کے حوالہ جات، وضاحت اور انداز محفوظ رہیں گے۔",
+      "importReplaceConfirm": "تبدیل کریں",
+      "editorMode": "ایڈیٹر موڈ",
+      "editorModeRich": "ریچ ٹیکسٹ",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "ایڈیٹر موڈ تبدیل کرنے سے پہلے تجویز کردہ ترمیمات حل کریں۔"
     },
     "data": {
       "emptyTitle": "تجزیے کے لیے ڈیٹا درآمد کریں",
@@ -3007,7 +3018,9 @@
       "schemaFormulaArityError": "{fn} کو دلائل کی غلط تعداد دی گئی ہے",
       "schemaFormulaCycleError": "فارمولوں کے درمیان گردشی حوالہ",
       "derivedColumnTitle": "حساب شدہ: {formula}",
-      "derivedFrom": "حساب شدہ بذریعہ {formula}"
+      "derivedFrom": "حساب شدہ بذریعہ {formula}",
+      "takePhoto": "تصویر لیں",
+      "takePhotoHint": "فارم یا جدول کی تصویر لینے کے لیے اپنا کیمرہ استعمال کریں — اس کا مواد ساختی ڈیٹا بن جائے گا جسے آپ تصویر سے موازنہ کر سکتے ہیں"
     },
     "map": {
       "emptyTitle": "اپنا ڈیٹا نقشے پر ڈالیں",
@@ -3170,6 +3183,22 @@
       "asana": {
         "name": "Asana",
         "description": "ٹاسک اور پروجیکٹ تلاش کریں، بنائیں اور اپ ڈیٹ کریں۔"
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "شائع شدہ ڈیٹا سورسز، ورک بکس اور Pulse میٹرکس پر سوال کریں۔"
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "اپنے Salesforce آبجیکٹس میں ریکارڈز دیکھیں اور اپڈیٹ کریں۔"
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "سوشل میڈیا پوسٹس تیار کریں، شیڈول کریں اور شائع کریں۔"
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "سوشل ان باکس گفتگوؤں کا جائزہ لیں اور جواب دیں۔"
       }
     },
     "connect": "کنیکٹ کریں",
@@ -3230,7 +3259,19 @@
       "missingState": "اجازت کے لیے کچھ نہیں",
       "close": "آپ یہ ونڈو بند کر کے ایپ پر واپس جا سکتے ہیں۔",
       "closeButton": "ونڈو بند کریں"
-    }
+    },
+    "oauthNoAppConfigured": "{name} کے ذریعے سائن ان اس ڈیپلائمنٹ پر سیٹ نہیں ہے۔ کنیکٹ کرنے کے لیے اپنا OAuth ایپ رجسٹر کریں۔",
+    "adminConnectorsTitle": "آپ کی تنظیم کی طرف سے",
+    "adminConnectorsDescription": "وہ کنیکٹرز جو آپ کے منتظمین نے سیٹ کیے ہیں۔ آپ کو کون سے نظر آئیں گے یہ آپ کی رسائی پر منحصر ہے۔",
+    "managedByOrg": "آپ کی تنظیم کے زیر انتظام",
+    "connectorOauthNotConfigured": "اس کنیکٹر کے لیے سائن ان مکمل طور پر سیٹ نہیں ہوا۔ اپنے منتظم سے رابطہ کریں۔",
+    "yourConnectorsTitle": "آپ کے کنیکٹرز",
+    "addTitle": "کنیکٹر شامل کریں",
+    "addDescription": "کنیکٹ کرنے کے لیے ایک ٹول منتخب کریں۔ انتخاب کے بعد آپ کو رسائی سیٹ اپ کرنی ہوگی۔",
+    "add": "شامل کریں",
+    "filterLabel": "کنیکٹرز کو فلٹر کریں",
+    "filterPlaceholder": "کنیکٹرز تلاش کریں",
+    "noMatches": "کوئی کنیکٹر مطابقت نہیں رکھتا: “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "ماڈل سورس کنیکٹ کریں",
@@ -3548,7 +3589,39 @@
     "promptAgentCreateSuccess": "پرامپٹ ایجنٹ بنا دیا گیا۔",
     "promptAgentSaveSuccess": "پرامپٹ ایجنٹ محفوظ ہو گیا۔",
     "promptAgentDeleteSuccess": "پرامپٹ ایجنٹ حذف کر دیا گیا۔",
-    "promptAgentsUnavailableWarning": "پرامپٹ ایجنٹس اسٹوریج سے لوڈ نہیں ہو سکے۔ اس وقت ان میں ترمیم ممکن نہیں۔"
+    "promptAgentsUnavailableWarning": "پرامپٹ ایجنٹس اسٹوریج سے لوڈ نہیں ہو سکے۔ اس وقت ان میں ترمیم ممکن نہیں۔",
+    "agentsTab": "ایجنٹس",
+    "connectorsTab": "کنیکٹرز",
+    "addConnector": "کنیکٹر شامل کریں",
+    "noConnectors": "ابھی تک کوئی کنیکٹر نہیں۔",
+    "connectorsUnavailableWarning": "کنیکٹر اسٹور تک رسائی حاصل نہیں ہو سکی، لہٰذا یہ فہرست نامکمل ہو سکتی ہے۔ اس کے لوڈ ہونے تک متبادل نہ بنائیں۔",
+    "editAccess": "رسائی میں ترمیم کریں",
+    "deleteConnector": "حذف کریں",
+    "deleteConnectorConfirm": "کیا اس کنیکٹر کو حذف کریں؟ اسے استعمال کرنے والے فوراً رسائی کھو دیں گے۔",
+    "confirmDeleteConnector": "کنیکٹر حذف کریں",
+    "connectorSaveSuccess": "کنیکٹر محفوظ ہو گیا۔",
+    "connectorCreateSuccess": "کنیکٹر بن گیا۔",
+    "connectorDeleteSuccess": "کنیکٹر حذف ہو گیا۔",
+    "editConnectorTitle": "کنیکٹر میں ترمیم کریں",
+    "newConnectorTitle": "نیا کنیکٹر",
+    "connectorPresetLabel": "ٹیمپلیٹ سے شروع کریں",
+    "connectorPresetNone": "شروع سے آغاز کریں",
+    "connectorNameLabel": "نام",
+    "connectorDescriptionLabel": "تفصیل",
+    "connectorUrlLabel": "سرور URL",
+    "connectorUrlPlaceholderWarning": "URL میں موجود {placeholder} کو اپنی قدر سے تبدیل کریں پھر محفوظ کریں۔",
+    "connectorTransportLabel": "ٹرانسپورٹ",
+    "connectorAuthLabel": "تصدیق",
+    "connectorAuthNone": "کوئی نہیں",
+    "connectorAuthBearer": "ٹوکن (ہر صارف اپنا فراہم کرے)",
+    "connectorAuthOauth": "OAuth سائن اِن",
+    "connectorSealingUnavailable": "OAuth دستیاب نہیں: اس ڈپلائمنٹ میں AUTH_SECRET کنفیگر نہیں کیا گیا جس سے کلائنٹ سیکرٹس کو انکرپٹ کیا جا سکے۔",
+    "connectorTokenHelpLabel": "ٹوکن ہدایات کا لنک (اختیاری)",
+    "connectorClientIdLabel": "OAuth کلائنٹ ID",
+    "connectorClientSecretLabel": "OAuth کلائنٹ سیکرٹ",
+    "connectorClientSecretStored": "ایک سیکرٹ محفوظ ہے۔ برقرار رکھنے کے لیے خالی چھوڑ دیں یا نیا داخل کریں تاکہ پرانا بدل جائے۔",
+    "connectorClientSecretHint": "محفوظ کرنے سے پہلے اِنکرپٹ کیا جائے گا اور دوبارہ کبھی ظاہر نہیں ہو گا۔",
+    "connectorScopesLabel": "اسکوپس (خالی جگہ سے الگ کریں، اختیاری)"
   },
   "localModels": {
     "title": "لوکل ماڈلز",
@@ -3607,5 +3680,41 @@
     "settingsToggle": "پیسٹ کیے گئے لنکس خودکار طور پر حاصل کریں",
     "settingsDescription": "جب آپ صرف ایک لنک پیسٹ کرتے ہیں تو صفحہ حاصل کر کے اس کا متن منسلک کر دیا جاتا ہے تاکہ assistant اسے پڑھ سکے۔ اسے بند کریں تو پیسٹ شدہ لنکس صرف سادہ متن کے طور پر رہیں گے — آپ پھر بھی + مینو سے صفحہ دستی طور پر منسلک کر سکتے ہیں۔",
     "addLink": "لنک شامل کریں"
+  },
+  "cameraAccessError": "کیمرہ تک رسائی حاصل نہیں ہو سکی۔ اپنے کیمرہ اجازت نامے چیک کریں اور دوبارہ کوشش کریں۔",
+  "cameraUnnamedDevice": "کیمرہ",
+  "pastedText": {
+    "fallbackName": "چسپاں کردہ متن",
+    "charCount": "{count, number} حروف",
+    "removeChip": "چسپاں کردہ متن “{name}” ہٹائیں",
+    "blockLabel": "چسپاں کردہ متن: {name}",
+    "doc": {
+      "heading": "چسپاں کردہ متن",
+      "pastedLabel": "چسپاں"
+    },
+    "settingsTitle": "بڑا پیسٹ",
+    "settingsToggle": "بڑے پیسٹ کو اٹیچمنٹ میں تبدیل کریں",
+    "settingsDescription": "اگر درج ذیل حد سے زیادہ متن پیسٹ کیا جائے تو اسے فائل کے طور پر منسلک کیا جائے گا بجائے اس کے کہ پیغام کے خانے کو پُر کرے۔ متن بالکل ویسا ہی استعمال ہو گا جیسا چسپاں کیا گیا — کوئی چیز حاصل نہیں کی جاتی یا تبدیل نہیں کی جاتی۔",
+    "settingsThresholdLabel": "اس سے بڑے پیسٹ منسلک کریں",
+    "settingsThresholdUnit": "حروف",
+    "settingsThresholdHint": "{min, number} سے {max, number} حروف کے درمیان۔"
+  },
+  "structures": {
+    "section": "اسٹرکچر",
+    "sectionSubtitle": "محفوظ کردہ فیلڈ تعریفیں۔ کسی کو ایکسٹریکشن کے نسخے کے طور پر یا ڈیٹا ورک فلو ٹیبل کے بنیادی اسکیما کے طور پر استعمال کریں۔",
+    "loadFromStructure": "اسٹرکچر لوڈ کریں",
+    "loadFromStructureTitle": "ان کالمز کو محفوظ شدہ اسٹرکچر سے بدلیں",
+    "pickerEmpty": "ابھی کوئی محفوظ شدہ اسٹرکچر نہیں ہے۔",
+    "pickerTitle": "محفوظ شدہ اسٹرکچر لوڈ کریں",
+    "saveAsStructure": "اسٹرکچر کے طور پر محفوظ کریں",
+    "saveAsStructureTitle": "ان کالمز کو اپنی اسٹرکچر لائبریری میں محفوظ کریں",
+    "savedToast": "محفوظ شدہ اسٹرکچر “{name}”",
+    "namePlaceholder": "اسٹرکچر کا نام",
+    "fieldCount": "{count} فیلڈز",
+    "fieldCountOne": "1 فیلڈ",
+    "downgradedNotice": "{count} فیلڈ(ز) سادہ متن میں تبدیل کیے گئے — ٹیبل میں فی سیل ایک قدر رکھی جاتی ہے: {names}",
+    "truncatedNotice": "{count} فیلڈ(ز) ہٹا دیے گئے — ٹیبل کی حد {max} کالم ہے: {names}",
+    "skippedDerivedNotice": "{count} حسابی کالم محفوظ نہیں ہوئے — فارمولے اس ٹیبل کے کالمز کا حوالہ دیتے ہیں: {names}",
+    "loadReplacesColumns": "یہ موجودہ کالمز کو بدل دے گا۔ ایسے کالمز کے نام کے مطابق موجودہ صفوں کی اقدار برقرار رہیں گی۔"
   }
 }

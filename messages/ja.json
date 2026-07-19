@@ -2116,7 +2116,9 @@
     "pin": "トップにピン留め",
     "unpin": "ピンを外す",
     "moveToMore": "「その他」に移動",
-    "moveOutOfMore": "メニューで表示"
+    "moveOutOfMore": "メニューで表示",
+    "showSources": "他のソースを表示",
+    "hideSources": "他のソースを非表示"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AIの応答をカスタマイズするための個別指示を追加できます。これらは、役立つ・正確・安全な応答を保証するための基本的なガイドラインと組み合わされます。",
   "Tip: Type \"/\" to select from saved prompt templates_": "ヒント：「/」を入力すると保存されたプロンプトテンプレートから選択できます。",
@@ -2778,7 +2780,16 @@
       "undoEdit": "元に戻す",
       "clearResolved": "解決済みをクリア",
       "clearResolvedHint": "承認済み、却下済み、および該当しない編集をこのリストから削除します",
-      "autoClearResolved": "解決済み編集を自動でクリア"
+      "autoClearResolved": "解決済み編集を自動でクリア",
+      "import": "インポート",
+      "importReplaceTitle": "ドキュメントを置き換えますか？",
+      "importReplaceBody": "{name}をインポートすると、現在のドキュメントが置き換えられます。参照、仕様、トーンは保持されます。",
+      "importReplaceConfirm": "置き換える",
+      "editorMode": "エディターモード",
+      "editorModeRich": "リッチテキスト",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "エディターモードを切り替える前に、提案された編集を解決してください。"
     },
     "data": {
       "emptyTitle": "分析するデータをインポート",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "{fn} の引数の数が正しくありません",
       "schemaFormulaCycleError": "数式間で循環参照が発生しています",
       "derivedColumnTitle": "計算式：{formula}",
-      "derivedFrom": "{formula} から計算"
+      "derivedFrom": "{formula} から計算",
+      "takePhoto": "写真を撮る",
+      "takePhotoHint": "カメラでフォームや表を撮影すると、その内容が写真と照合可能な構造化データになります"
     },
     "map": {
       "emptyTitle": "データを地図に表示",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "タスクやプロジェクトの検索、作成、更新ができます。"
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "公開されたデータソース、ワークブック、Pulseメトリクスにクエリします。"
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Salesforceオブジェクト全体でレコードの検索と更新ができます。"
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "SNS投稿の下書き、スケジューリング、公開が行えます。"
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "ソーシャルインボックスの会話を確認・返信できます。"
       }
     },
     "connect": "接続",
@@ -3200,7 +3229,19 @@
       "missingState": "認証する内容がありません",
       "close": "このウィンドウを閉じてアプリに戻ってください。",
       "closeButton": "ウィンドウを閉じる"
-    }
+    },
+    "oauthNoAppConfigured": "{name}によるサインインはこのデプロイメントで設定されていません。ご自身のOAuthアプリを登録して接続してください。",
+    "adminConnectorsTitle": "組織による設定",
+    "adminConnectorsDescription": "管理者が設定したコネクタです。表示される内容はアクセス権限によります。",
+    "managedByOrg": "組織によって管理されています",
+    "connectorOauthNotConfigured": "このコネクタのサインイン設定が完了していません。管理者に連絡してください。",
+    "yourConnectorsTitle": "あなたのコネクタ",
+    "addTitle": "コネクタを追加",
+    "addDescription": "接続するツールを選択してください。選択後にアクセス設定を行います。",
+    "add": "追加",
+    "filterLabel": "コネクタを絞り込む",
+    "filterPlaceholder": "コネクタを検索",
+    "noMatches": "「{query}」に一致するコネクタはありません。"
   },
   "modelSources": {
     "connectButtonShort": "モデルソースを接続",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "プロンプトエージェントを作成しました。",
     "promptAgentSaveSuccess": "プロンプトエージェントを保存しました。",
     "promptAgentDeleteSuccess": "プロンプトエージェントを削除しました。",
-    "promptAgentsUnavailableWarning": "プロンプトエージェントをストレージから読み込めません。現在は編集できません。"
+    "promptAgentsUnavailableWarning": "プロンプトエージェントをストレージから読み込めません。現在は編集できません。",
+    "agentsTab": "エージェント",
+    "connectorsTab": "コネクタ",
+    "addConnector": "コネクタを追加",
+    "noConnectors": "コネクタはまだありません。",
+    "connectorsUnavailableWarning": "コネクタストアに接続できませんでした。リストが不完全な場合があります。読み込まれるまで代替品を作成しないでください。",
+    "editAccess": "アクセス権を編集",
+    "deleteConnector": "削除",
+    "deleteConnectorConfirm": "このコネクタを削除しますか？利用者全員が直ちにアクセスできなくなります。",
+    "confirmDeleteConnector": "コネクタを削除",
+    "connectorSaveSuccess": "コネクタを保存しました。",
+    "connectorCreateSuccess": "コネクタを作成しました。",
+    "connectorDeleteSuccess": "コネクタを削除しました。",
+    "editConnectorTitle": "コネクタを編集",
+    "newConnectorTitle": "新規コネクタ",
+    "connectorPresetLabel": "テンプレートから開始",
+    "connectorPresetNone": "最初から開始",
+    "connectorNameLabel": "名前",
+    "connectorDescriptionLabel": "説明",
+    "connectorUrlLabel": "サーバーURL",
+    "connectorUrlPlaceholderWarning": "保存前にURL内の{placeholder}を自身の値に置き換えてください。",
+    "connectorTransportLabel": "トランスポート",
+    "connectorAuthLabel": "認証",
+    "connectorAuthNone": "なし",
+    "connectorAuthBearer": "トークン（各ユーザーが個別に提供）",
+    "connectorAuthOauth": "OAuthサインイン",
+    "connectorSealingUnavailable": "OAuthは利用できません：このデプロイメントにはクライアントシークレットを暗号化するAUTH_SECRETが設定されていません。",
+    "connectorTokenHelpLabel": "トークン手順へのリンク（任意）",
+    "connectorClientIdLabel": "OAuthクライアントID",
+    "connectorClientSecretLabel": "OAuthクライアントシークレット",
+    "connectorClientSecretStored": "シークレットが保存されています。保持する場合は空欄のままにし、新しいものに変更する場合は入力してください。",
+    "connectorClientSecretHint": "保存前に暗号化され、一度も表示されません。",
+    "connectorScopesLabel": "スコープ（スペース区切り、任意）"
   },
   "localModels": {
     "title": "ローカルモデル",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "貼り付けたリンクを自動で取得",
     "settingsDescription": "単独でリンクを貼り付けた場合、そのページが取得され、テキストが添付されてアシスタントが読めるようになります。これをオフにすると、貼り付けたリンクはテキストのままになりますが、「＋」メニューから手動でページを添付することもできます。",
     "addLink": "リンクを追加"
+  },
+  "cameraAccessError": "カメラにアクセスできません。カメラの許可設定を確認し、再試行してください。",
+  "cameraUnnamedDevice": "カメラ",
+  "pastedText": {
+    "fallbackName": "貼り付けたテキスト",
+    "charCount": "{count, number}文字",
+    "removeChip": "貼り付けたテキスト「{name}」を削除",
+    "blockLabel": "貼り付けたテキスト: {name}",
+    "doc": {
+      "heading": "貼り付けたテキスト",
+      "pastedLabel": "貼り付け済み"
+    },
+    "settingsTitle": "大きな貼り付け",
+    "settingsToggle": "大きな貼り付けを添付ファイルに変換",
+    "settingsDescription": "下記の上限より多くテキストを貼り付けた場合、メッセージ欄に収めずファイルとして添付します。テキストは貼り付けられたまま利用され、取得や変更は行われません。",
+    "settingsThresholdLabel": "これより長い貼り付けを添付",
+    "settingsThresholdUnit": "文字",
+    "settingsThresholdHint": "{min, number}～{max, number}文字の間で設定できます。"
+  },
+  "structures": {
+    "section": "構造体",
+    "sectionSubtitle": "保存されたフィールド定義。抽出レシピやデータワークフローテーブルの初期スキーマとして利用できます。",
+    "loadFromStructure": "構造体を読み込む",
+    "loadFromStructureTitle": "これらの列を保存された構造体で置き換えます",
+    "pickerEmpty": "まだ保存された構造体がありません。",
+    "pickerTitle": "保存された構造体を読み込む",
+    "saveAsStructure": "構造体として保存",
+    "saveAsStructureTitle": "これらの列を構造体ライブラリに保存",
+    "savedToast": "「{name}」構造体を保存しました",
+    "namePlaceholder": "構造体名",
+    "fieldCount": "{count}項目",
+    "fieldCountOne": "1項目",
+    "downgradedNotice": "{count}項目がテキストに簡略化されました — テーブルでは各セルに1つの値しか保持できません: {names}",
+    "truncatedNotice": "{count}項目が削除されました — テーブルの列数上限は{max}列です: {names}",
+    "skippedDerivedNotice": "{count}個の計算列は保存されませんでした — 数式がこのテーブルの列を参照しています: {names}",
+    "loadReplacesColumns": "これにより現在の列が置き換わります。既存の行は列名が一致する値のみ維持されます。"
   }
 }

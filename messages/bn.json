@@ -2017,7 +2017,9 @@
     "pin": "শীর্ষে পিন করুন",
     "unpin": "আনপিন করুন",
     "moveToMore": "'আরও' তে সরান",
-    "moveOutOfMore": "মেনুতে দেখান"
+    "moveOutOfMore": "মেনুতে দেখান",
+    "showSources": "অন্যান্য সোর্স দেখান",
+    "hideSources": "অন্যান্য সোর্স লুকান"
   },
   "transcription": {
     "transcribesOnSend": "পাঠানোর সময় লিপিবদ্ধ করুন",
@@ -2778,7 +2780,16 @@
       "undoEdit": "পূর্বাবস্থা করুন",
       "clearResolved": "সমাধানকৃত মুছুন",
       "clearResolvedHint": "এই তালিকা থেকে গ্রহণকৃত, প্রত্যাখ্যাত, ও অপ্রযোজ্য সম্পাদনাগুলি সরিয়ে ফেলুন",
-      "autoClearResolved": "স্বয়ংক্রিয়ভাবে সমাধানকৃত সম্পাদনা মুছুন"
+      "autoClearResolved": "স্বয়ংক্রিয়ভাবে সমাধানকৃত সম্পাদনা মুছুন",
+      "import": "ইমপোর্ট",
+      "importReplaceTitle": "ডকুমেন্ট রিপ্লেস করবেন?",
+      "importReplaceBody": "{name} ইমপোর্ট করলে বর্তমান ডকুমেন্টটি প্রতিস্থাপিত হবে। আপনার রেফারেন্স, স্পেক ও টোন সংরক্ষিত থাকবে।",
+      "importReplaceConfirm": "প্রতিস্থাপন করুন",
+      "editorMode": "এডিটর মোড",
+      "editorModeRich": "রিচ টেক্সট",
+      "editorModeMarkdown": "মার্কডাউন",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "এডিটর মোড পরিবর্তনের আগে প্রস্তাবিত সম্পাদনাগুলো সমাধান করুন।"
     },
     "data": {
       "emptyTitle": "বিশ্লেষণের জন্য ডেটা ইমপোর্ট করুন",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "{fn}-এর জন্য ভুল সংখ্যক আর্গুমেন্ট",
       "schemaFormulaCycleError": "ফর্মুলাগুলির মধ্যে বৃত্তাকার রেফারেন্স",
       "derivedColumnTitle": "হিসাব: {formula}",
-      "derivedFrom": "{formula} থেকে হিসাব করা"
+      "derivedFrom": "{formula} থেকে হিসাব করা",
+      "takePhoto": "ছবি তুলুন",
+      "takePhotoHint": "ফর্ম বা টেবিলের ছবি তুলতে ক্যামেরা ব্যবহার করুন — এর তথ্য গঠনগত ডেটায় রূপান্তরিত হবে, যা আপনি ছবির সাথে মিলিয়ে পরীক্ষা করতে পারবেন"
     },
     "map": {
       "emptyTitle": "আপনার ডেটা মানচিত্রে রাখুন",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "কর্ম ও প্রকল্প খুঁজুন, তৈরি ও আপডেট করুন।"
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Published ডেটা সোর্স, ওয়ার্কবুক, এবং Pulse মেট্রিক্স কুয়েরি করুন।"
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "আপনার Salesforce অবজেক্টের রেকর্ড খুঁজুন এবং আপডেট করুন।"
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "সোশ্যাল মিডিয়া পোস্ট খসড়া, সময় নির্ধারণ ও প্রকাশ করুন।"
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "সোশ্যাল ইনবক্স কথোপকথন পর্যালোচনা করুন এবং উত্তর দিন।"
       }
     },
     "connect": "সংযোগ করুন",
@@ -3200,7 +3229,19 @@
       "missingState": "অনুমোদনের জন্য কিছু নেই",
       "close": "আপনি জানালাটি বন্ধ করে অ্যাপে ফিরে যেতে পারেন।",
       "closeButton": "জানালা বন্ধ করুন"
-    }
+    },
+    "oauthNoAppConfigured": "এই ডিপ্লয়মেন্টে {name} দিয়ে সাইন-ইন সেটআপ করা হয়নি। আপনার নিজস্ব OAuth অ্যাপ রেজিস্টার করে সংযোগ করুন।",
+    "adminConnectorsTitle": "আপনার সংস্থা থেকে",
+    "adminConnectorsDescription": "যেসব কানেক্টর আপনার অ্যাডমিন নির্ধারণ করেছেন। আপনি কোনগুলো দেখবেন, তা নির্ভর করে আপনার অ্যাক্সেসের উপর।",
+    "managedByOrg": "আপনার সংস্থার মাধ্যমে পরিচালিত",
+    "connectorOauthNotConfigured": "এই কানেক্টরের জন্য সাইন-ইন সম্পূর্ণরূপে সেটআপ হয়নি। আপনার অ্যাডমিনের সাথে যোগাযোগ করুন।",
+    "yourConnectorsTitle": "আপনার কানেক্টরসমূহ",
+    "addTitle": "একটি কানেক্টর যোগ করুন",
+    "addDescription": "সংযোগের জন্য একটি টুল বাছাই করুন। পরে অ্যাক্সেস সেটআপ করবেন।",
+    "add": "যোগ করুন",
+    "filterLabel": "কানেক্টর ফিল্টার করুন",
+    "filterPlaceholder": "কানেক্টর খুঁজুন",
+    "noMatches": "“{query}” নামে কোনো কানেক্টর পাওয়া যায়নি।"
   },
   "modelSources": {
     "connectButtonShort": "মডেল উৎস সংযোগ করুন",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "প্রম্পট এজেন্ট তৈরি হয়েছে।",
     "promptAgentSaveSuccess": "প্রম্পট এজেন্ট সংরক্ষণ হয়েছে।",
     "promptAgentDeleteSuccess": "প্রম্পট এজেন্ট মুছে ফেলা হয়েছে।",
-    "promptAgentsUnavailableWarning": "প্রম্পট এজেন্টগুলো স্টোরেজ থেকে লোড করা যায়নি। বর্তমানে এগুলো সম্পাদনা করা সম্ভব নয়।"
+    "promptAgentsUnavailableWarning": "প্রম্পট এজেন্টগুলো স্টোরেজ থেকে লোড করা যায়নি। বর্তমানে এগুলো সম্পাদনা করা সম্ভব নয়।",
+    "agentsTab": "এজেন্টস",
+    "connectorsTab": "কানেক্টরস",
+    "addConnector": "কানেক্টর যোগ করুন",
+    "noConnectors": "এখনও কোনো কানেক্টর নেই।",
+    "connectorsUnavailableWarning": "কানেক্টর স্টোরে সংযুক্ত হতে পারেনি, তাই এই তালিকা অসম্পূর্ণ হতে পারে। লোড না হওয়া পর্যন্ত রিপ্লেসমেন্ট তৈরি করবেন না।",
+    "editAccess": "অ্যাক্সেস সম্পাদনা করুন",
+    "deleteConnector": "মুছুন",
+    "deleteConnectorConfirm": "এই কানেক্টরটি মুছে ফেলবেন? এতে এটি ব্যবহার করা সকলের অ্যাক্সেস সঙ্গে সঙ্গে বন্ধ হয়ে যাবে।",
+    "confirmDeleteConnector": "কানেক্টর মুছুন",
+    "connectorSaveSuccess": "কানেক্টর সংরক্ষিত হয়েছে।",
+    "connectorCreateSuccess": "কানেক্টর তৈরি হয়েছে।",
+    "connectorDeleteSuccess": "কানেক্টর মুছে ফেলা হয়েছে।",
+    "editConnectorTitle": "কানেক্টর সম্পাদনা করুন",
+    "newConnectorTitle": "নতুন কানেক্টর",
+    "connectorPresetLabel": "টেমপ্লেট থেকে শুরু করুন",
+    "connectorPresetNone": "শূন্য থেকে শুরু করুন",
+    "connectorNameLabel": "নাম",
+    "connectorDescriptionLabel": "বর্ণনা",
+    "connectorUrlLabel": "সার্ভার URL",
+    "connectorUrlPlaceholderWarning": "সংরক্ষণের আগে URL-এ {placeholder} আপনার মান দিয়ে পরিবর্তন করুন।",
+    "connectorTransportLabel": "ট্রান্সপোর্ট",
+    "connectorAuthLabel": "অথেন্টিকেশন",
+    "connectorAuthNone": "কিছুই না",
+    "connectorAuthBearer": "টোকেন (প্রত্যেক ব্যবহারকারী তাদের নিজস্ব প্রদান করেন)",
+    "connectorAuthOauth": "OAuth সাইন-ইন",
+    "connectorSealingUnavailable": "OAuth অনুপলব্ধ: এই ডিপ্লয়মেন্টে ক্লায়েন্ট সিক্রেট এনক্রিপ্ট করার জন্য AUTH_SECRET কনফিগার করা নেই।",
+    "connectorTokenHelpLabel": "টোকেন নির্দেশাবলির লিঙ্ক (ঐচ্ছিক)",
+    "connectorClientIdLabel": "OAuth ক্লায়েন্ট ID",
+    "connectorClientSecretLabel": "OAuth ক্লায়েন্ট সিক্রেট",
+    "connectorClientSecretStored": "একটি সিক্রেট সংরক্ষিত আছে। এটি রাখতে ফাঁকা রাখুন, অথবা পরিবর্তন করতে নতুনটি দিন।",
+    "connectorClientSecretHint": "সংরক্ষণের আগে এনক্রিপ্ট করা হয়, এবং পরে আর দেখানো হয় না।",
+    "connectorScopesLabel": "স্কোপ (স্পেস দ্বারা পৃথক, ঐচ্ছিক)"
   },
   "localModels": {
     "title": "স্থানীয় মডেলসমূহ",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "পেস্ট করা লিংক স্বয়ংক্রিয়ভাবে আনুন",
     "settingsDescription": "আপনি যখন একটি লিংক শুধু পেস্ট করেন, পৃষ্ঠা আনা হয় এবং তার টেক্সট সংযুক্ত থাকে যাতে অ্যাসিস্ট্যান্টটি পড়তে পারে। এটি বন্ধ করলে পেস্ট করা লিংক সাধারণ টেক্সট হিসেবে থাকবে — এছাড়াও, + মেনু থেকে নিজে ওয়েব পাতা সংযুক্ত করতে পারবেন।",
     "addLink": "লিংক যোগ করুন"
+  },
+  "cameraAccessError": "ক্যামেরা অ্যাক্সেস করা যাচ্ছে না। আপনার ক্যামেরার অনুমতি যাচাই করুন এবং আবার চেষ্টা করুন।",
+  "cameraUnnamedDevice": "ক্যামেরা",
+  "pastedText": {
+    "fallbackName": "পেস্ট করা লেখা",
+    "charCount": "{count, number} অক্ষর",
+    "removeChip": "পেস্ট করা লেখা \"{name}\" অপসারণ করুন",
+    "blockLabel": "পেস্ট করা লেখা: {name}",
+    "doc": {
+      "heading": "পেস্ট করা লেখা",
+      "pastedLabel": "পেস্টেড"
+    },
+    "settingsTitle": "বড় পেস্ট",
+    "settingsToggle": "বড় পেস্টকে সংযুক্তি হিসেবে পরিণত করুন",
+    "settingsDescription": "নিচের সীমার চেয়ে বেশি টেক্সট পেস্ট করলে তা ফাইল হিসেবে সংযুক্ত হবে, বার্তাবক্সে দেখাবে না। পেস্ট করা টেক্সট একদম সেভাবেই ব্যবহৃত হবে — কিছুই ফেচ বা পরিবর্তন হয় না।",
+    "settingsThresholdLabel": "এত বড় পেস্ট সংযুক্ত করুন",
+    "settingsThresholdUnit": "অক্ষর",
+    "settingsThresholdHint": "{min, number} থেকে {max, number} অক্ষরের মধ্যে।"
+  },
+  "structures": {
+    "section": "স্ট্রাকচার",
+    "sectionSubtitle": "সংরক্ষিত ফিল্ড সংজ্ঞাসমূহ। একটিকে এক্সট্রাকশন রেসিপি হিসেবে অথবা ডেটা ওয়ার্কফ্লো টেবিলের প্রারম্ভিক স্কিমা হিসেবে ব্যবহার করুন।",
+    "loadFromStructure": "স্ট্রাকচার লোড করুন",
+    "loadFromStructureTitle": "এই কলামগুলি সংরক্ষিত স্ট্রাকচার দিয়ে প্রতিস্থাপন করুন",
+    "pickerEmpty": "এখনো কোনো সংরক্ষিত স্ট্রাকচার নেই।",
+    "pickerTitle": "সংরক্ষিত একটি স্ট্রাকচার লোড করুন",
+    "saveAsStructure": "স্ট্রাকচার হিসেবে সংরক্ষণ করুন",
+    "saveAsStructureTitle": "এই কলামগুলি আপনার স্ট্রাকচার লাইব্রেরিতে সংরক্ষণ করুন",
+    "savedToast": "সংরক্ষিত স্ট্রাকচার “{name}”",
+    "namePlaceholder": "স্ট্রাকচারের নাম",
+    "fieldCount": "{count}টি ফিল্ড",
+    "fieldCountOne": "১টি ফিল্ড",
+    "downgradedNotice": "{count}টি ফিল্ড সরল পাঠ্যে রূপান্তর — টেবিলে প্রতি সেলে একটি মান থাকে: {names}",
+    "truncatedNotice": "{count}টি ফিল্ড বাদ — টেবিলের সীমা হলো {max}টি কলাম: {names}",
+    "skippedDerivedNotice": "{count}টি গণিত কলাম সংরক্ষণ করা হয়নি — সূত্রগুলো এই টেবিলের কলামের সাথে যুক্ত: {names}",
+    "loadReplacesColumns": "এটি বর্তমান কলামগুলো প্রতিস্থাপন করবে। বিদ্যমান সারির কলাম নাম মেললে তাদের মান বজায় থাকবে।"
   }
 }

@@ -2116,7 +2116,9 @@
     "pin": "Fixa a dalt",
     "unpin": "Desfés fixació",
     "moveToMore": "Mou a Més",
-    "moveOutOfMore": "Mostra al menú"
+    "moveOutOfMore": "Mostra al menú",
+    "showSources": "Mostra altres fonts",
+    "hideSources": "Amaga altres fonts"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Afegeix les teves instruccions personals per personalitzar com respon la IA. Aquestes es combinen amb les directrius bàsiques de comportament que garanteixen respostes útils, precises i segures.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Consell: Escriu \"/\" per seleccionar d'entre les plantilles de prompt desades.",
@@ -2778,7 +2780,16 @@
       "undoEdit": "Desfés",
       "clearResolved": "Neteja resolts",
       "clearResolvedHint": "Elimina les edicions acceptades, rebutjades i no aplicables d'aquesta llista",
-      "autoClearResolved": "Neteja automàticament les edicions resoltes"
+      "autoClearResolved": "Neteja automàticament les edicions resoltes",
+      "import": "Importa",
+      "importReplaceTitle": "Voleu substituir el document?",
+      "importReplaceBody": "Importar {name} substituirà el document actual. Es conservaran les referències, l'especificació i el to.",
+      "importReplaceConfirm": "Substitueix",
+      "editorMode": "Mode editor",
+      "editorModeRich": "Text enriquit",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Resol els canvis suggerits abans de canviar el mode d'edició."
     },
     "data": {
       "emptyTitle": "Importa dades per analitzar",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "Nombre d'arguments incorrecte per a {fn}",
       "schemaFormulaCycleError": "Referència circular entre fórmules",
       "derivedColumnTitle": "Calculat: {formula}",
-      "derivedFrom": "Calculat a partir de {formula}"
+      "derivedFrom": "Calculat a partir de {formula}",
+      "takePhoto": "Fes una foto",
+      "takePhotoHint": "Utilitza la teva càmera per fotografiar un formulari o una taula; el contingut es convertirà en dades estructurades que podràs comprovar amb la foto"
     },
     "map": {
       "emptyTitle": "Situeu les vostres dades en un mapa",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "Cerca, crea i actualitza tasques i projectes."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Consulta fonts de dades publicades, llibres de treball i mètriques Pulse."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Consulta i actualitza registres als teus objectes de Salesforce."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Esbossa, programa i publica publicacions a xarxes socials."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Revisa i respon a converses de la safata d'entrada social."
       }
     },
     "connect": "Connecta",
@@ -3200,7 +3229,19 @@
       "missingState": "No hi ha res per autoritzar",
       "close": "Podeu tancar aquesta finestra i tornar a l'aplicació.",
       "closeButton": "Tanca la finestra"
-    }
+    },
+    "oauthNoAppConfigured": "L'inici de sessió amb {name} no està configurat en aquest desplegament. Connecteu-vos registrant la vostra pròpia aplicació OAuth.",
+    "adminConnectorsTitle": "De la vostra organització",
+    "adminConnectorsDescription": "Connectors que els vostres administradors han configurat. Els que veieu depenen del vostre accés.",
+    "managedByOrg": "Gestionat per la vostra organització",
+    "connectorOauthNotConfigured": "L'inici de sessió encara no està configurat per a aquest connector. Contacteu amb el vostre administrador.",
+    "yourConnectorsTitle": "Els vostres connectors",
+    "addTitle": "Afegeix un connector",
+    "addDescription": "Trieu una eina per connectar-hi. Configurareu l'accés després de triar-la.",
+    "add": "Afegeix",
+    "filterLabel": "Filtra connectors",
+    "filterPlaceholder": "Cerca connectors",
+    "noMatches": "Cap connector coincideix amb “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Connecta un origen de model",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "Agent de prompt creat.",
     "promptAgentSaveSuccess": "Agent de prompt desat.",
     "promptAgentDeleteSuccess": "Agent de prompt suprimit.",
-    "promptAgentsUnavailableWarning": "No s'han pogut carregar els agents de prompt de l'emmagatzematge. Ara mateix no es poden editar."
+    "promptAgentsUnavailableWarning": "No s'han pogut carregar els agents de prompt de l'emmagatzematge. Ara mateix no es poden editar.",
+    "agentsTab": "Agents",
+    "connectorsTab": "Connectors",
+    "addConnector": "Afegeix connector",
+    "noConnectors": "Encara no hi ha connectors.",
+    "connectorsUnavailableWarning": "No s'ha pogut accedir a la botiga de connectors; la llista pot estar incompleta. No en creeu cap de nou fins que es carregui del tot.",
+    "editAccess": "Edita l'accés",
+    "deleteConnector": "Suprimeix",
+    "deleteConnectorConfirm": "Voleu suprimir aquest connector? Qui l’estigui utilitzant perdrà l’accés immediatament.",
+    "confirmDeleteConnector": "Suprimeix connector",
+    "connectorSaveSuccess": "Connector desat.",
+    "connectorCreateSuccess": "Connector creat.",
+    "connectorDeleteSuccess": "Connector suprimit.",
+    "editConnectorTitle": "Edita connector",
+    "newConnectorTitle": "Nou connector",
+    "connectorPresetLabel": "Comença des d'una plantilla",
+    "connectorPresetNone": "Començar de zero",
+    "connectorNameLabel": "Nom",
+    "connectorDescriptionLabel": "Descripció",
+    "connectorUrlLabel": "URL del servidor",
+    "connectorUrlPlaceholderWarning": "Substituïu el {placeholder} de l'URL pel vostre propi valor abans de desar.",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Autenticació",
+    "connectorAuthNone": "Cap",
+    "connectorAuthBearer": "Testimoni (cada usuari proporciona el seu propi)",
+    "connectorAuthOauth": "Inici de sessió OAuth",
+    "connectorSealingUnavailable": "OAuth no està disponible: aquest desplegament no té AUTH_SECRET configurat per xifrar els secrets del client.",
+    "connectorTokenHelpLabel": "Enllaç a les instruccions del testimoni (opcional)",
+    "connectorClientIdLabel": "ID de client OAuth",
+    "connectorClientSecretLabel": "Secret de client OAuth",
+    "connectorClientSecretStored": "Hi ha un secret desat. Deixeu-ho en blanc per mantenir-lo, o introduïu-ne un de nou per substituir-lo.",
+    "connectorClientSecretHint": "Es xifra abans de desar-se, i no es mostra mai més.",
+    "connectorScopesLabel": "Scopes (separats per espais, opcional)"
   },
   "localModels": {
     "title": "Models locals",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "Recupera automàticament els enllaços enganxats",
     "settingsDescription": "Quan enganxis un enllaç sol, la pàgina es recupera i el seu text s'adjunta perquè l'assistent la pugui llegir. Pots desactivar-ho per mantenir els enllaços enganxats com a text pla. Encara pots adjuntar una pàgina manualment des del menú +.",
     "addLink": "Afegeix un enllaç"
+  },
+  "cameraAccessError": "No s'ha pogut accedir a la càmera. Comproveu els permisos de la càmera i torneu-ho a provar.",
+  "cameraUnnamedDevice": "Càmera",
+  "pastedText": {
+    "fallbackName": "Text enganxat",
+    "charCount": "{count, number} caràcters",
+    "removeChip": "Elimina el text enganxat “{name}”",
+    "blockLabel": "Text enganxat: {name}",
+    "doc": {
+      "heading": "Text enganxat",
+      "pastedLabel": "Enganxat"
+    },
+    "settingsTitle": "Enganxats grans",
+    "settingsToggle": "Converteix un enganxat gran en un fitxer adjunt",
+    "settingsDescription": "Si enganxeu més text que el límit de sota, s’adjunta com a fitxer en lloc d’omplir el quadre de missatge. El text s’utilitza exactament tal com s’ha enganxat: no es recupera ni es modifica res.",
+    "settingsThresholdLabel": "Adjunta enganxats més llargs de",
+    "settingsThresholdUnit": "caràcters",
+    "settingsThresholdHint": "Entre {min, number} i {max, number} caràcters."
+  },
+  "structures": {
+    "section": "Estructures",
+    "sectionSubtitle": "Definicions de camps desades. Utilitzeu-ne una com a recepta d’extracció o com a esquema inicial per a una taula de flux de dades.",
+    "loadFromStructure": "Carrega estructura",
+    "loadFromStructureTitle": "Substitueix aquestes columnes per una estructura desada",
+    "pickerEmpty": "Encara no hi ha estructures desades.",
+    "pickerTitle": "Carrega una estructura desada",
+    "saveAsStructure": "Desa com a estructura",
+    "saveAsStructureTitle": "Desa aquestes columnes a la biblioteca d’estructures",
+    "savedToast": "Estructura desada “{name}”",
+    "namePlaceholder": "Nom de l'estructura",
+    "fieldCount": "{count} camps",
+    "fieldCountOne": "1 camp",
+    "downgradedNotice": "{count} camp(s) simplificats a text — les taules només admeten un valor per cel·la: {names}",
+    "truncatedNotice": "{count} camp(s) eliminats — el límit de columnes és {max}: {names}",
+    "skippedDerivedNotice": "{count} columna/es calculada/es no desades — les fórmules fan referència a columnes d’aquesta taula: {names}",
+    "loadReplacesColumns": "Això substituirà les columnes actuals. Les files existents mantenen els valors dels noms de columna que coincideixen."
   }
 }

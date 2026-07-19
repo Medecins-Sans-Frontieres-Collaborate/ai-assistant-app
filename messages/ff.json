@@ -2091,7 +2091,9 @@
     "pin": "Huutor e dow",
     "unpin": "Juul huutorgal",
     "moveToMore": "Yah teeŋol",
-    "moveOutOfMore": "Hollu e wadalkal"
+    "moveOutOfMore": "Hollu e wadalkal",
+    "showSources": "Hollu suusumji goɗɗi",
+    "hideSources": "Faydu suusumji goɗɗi"
   },
   "transcription": {
     "transcribesOnSend": "Ina winndita nde neldaa",
@@ -2762,7 +2764,16 @@
       "undoEdit": "Firtu",
       "clearResolved": "Momtu jokkoraaɗi",
       "clearResolvedHint": "Momtu cuɓoraaɗi waɗii/eta, faalaaɗi, e waɗaani seeda e leydi ɗi kadi.",
-      "autoClearResolved": "Momtu cuɓoraaɗi jokkoraade bawgal"
+      "autoClearResolved": "Momtu cuɓoraaɗi jokkoraade bawgal",
+      "import": "Loddu",
+      "importReplaceTitle": "A tawii a wonaa waytude dokkito?",
+      "importReplaceBody": "Lodditude {name} maa wayti dokkito jooni. Noddataa laawol, spec e wanndude.",
+      "importReplaceConfirm": "Waytu",
+      "editorMode": "Hollu hulnde",
+      "editorModeRich": "Hollu buuba",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Sappo tan yamirde yaltine hollu hulnde."
     },
     "data": {
       "emptyTitle": "Kilot data ngol analiseede",
@@ -2961,7 +2972,9 @@
       "schemaFormulaArityError": "Lakka argumente kala e {fn}",
       "schemaFormulaCycleError": "Waylu dogiral majji",
       "derivedColumnTitle": "Hesere: {formula}",
-      "derivedFrom": "Hesere e {formula}"
+      "derivedFrom": "Hesere e {formula}",
+      "takePhoto": "Naatnu nguurndam",
+      "takePhotoHint": "Huutndo kamera maa nguurndam laataaji walla tebul, ɗum ndaarni binndol leytii heen e nguurndam."
     },
     "map": {
       "emptyTitle": "Waɗtu ndiyam maa e kartal",
@@ -3124,6 +3137,22 @@
       "asana": {
         "name": "Asana",
         "description": "Yiylo, ummtu, e hesɗit task e projektii."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Sappo tingiraan e noddata e workbooks e Pulse metrics."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Yeeyo e wayli binndi e Salesforce maa."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Winni, yihan e hollu binndol media jamfaare."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Nallita e waawi jooɗude e wadde e social inbox."
       }
     },
     "connect": "Naatnu",
@@ -3184,7 +3213,19 @@
       "missingState": "Ala runndu binndan",
       "close": "Waawda uddu window ngol e jokkondir e app.",
       "closeButton": "Uddu window"
-    }
+    },
+    "oauthNoAppConfigured": "Sign-in e {name} nattiniima e configuration jooni. Huutno mballi own OAuth app maa.",
+    "adminConnectorsTitle": "E jamfaare ɗee",
+    "adminConnectorsDescription": "Connectors woni e jamfaare to manage ko labelootii. Ko access maa ena heɓi.",
+    "managedByOrg": "Gollinira e jamfaare maa",
+    "connectorOauthNotConfigured": "Sign-in jumde connector tun waawaani e configuration. Huutno admin maa.",
+    "yourConnectorsTitle": "Connectors maa",
+    "addTitle": "Labo connector",
+    "addDescription": "Suɓo tool joodan. A hiddu access tagi.",
+    "add": "Lab",
+    "filterLabel": "Ribinaa connectors",
+    "filterPlaceholder": "Yiylo connectors",
+    "noMatches": "Connector sooma e “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Labbinaa lesdi model",
@@ -3502,7 +3543,39 @@
     "promptAgentCreateSuccess": "Agent mumtindol woni.",
     "promptAgentSaveSuccess": "Agent mumtindol suɓii.",
     "promptAgentDeleteSuccess": "Agent mumtindol mabboo.",
-    "promptAgentsUnavailableWarning": "Agent mumtindol waawan waawaniima ñifɗit e juulde naatnoy. Waawan waawaniima tallit goɗɗum."
+    "promptAgentsUnavailableWarning": "Agent mumtindol waawan waawaniima ñifɗit e juulde naatnoy. Waawan waawaniima tallit goɗɗum.",
+    "agentsTab": "Agents",
+    "connectorsTab": "Connectors",
+    "addConnector": "Labo connector",
+    "noConnectors": "Connector sooma jooni.",
+    "connectorsUnavailableWarning": "Mbeleediima ena artu ndajoo connectors, ɗaɗi ndiyam ngol tawataa. Hay so darti junni.",
+    "editAccess": "Waylu access",
+    "deleteConnector": "Momtu",
+    "deleteConnectorConfirm": "A momtu connector ngol? Soo kuɗi waawi nalla access men ndokkude.",
+    "confirmDeleteConnector": "Momtu connector",
+    "connectorSaveSuccess": "Connector weltii.",
+    "connectorCreateSuccess": "Connector sartii.",
+    "connectorDeleteSuccess": "Connector momtii.",
+    "editConnectorTitle": "Waylu connector",
+    "newConnectorTitle": "Connector keso",
+    "connectorPresetLabel": "Fuɗɗo e template",
+    "connectorPresetNone": "Hoɓɓir ɗum ummoraade",
+    "connectorNameLabel": "Innde",
+    "connectorDescriptionLabel": "Ndeefintoo",
+    "connectorUrlLabel": "URL server",
+    "connectorUrlPlaceholderWarning": "Mbay {placeholder} gooɗɗo e URL ngal ɗum, hokku mo leydi maa to a hokkude.",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Afaama",
+    "connectorAuthNone": "Alagantoo",
+    "connectorAuthBearer": "Token (kala huutoraa mo woni e jamfaande mum)",
+    "connectorAuthOauth": "OAuth seɗii",
+    "connectorSealingUnavailable": "OAuth alaa e mum: saaɗi laabi AUTH_SECRET juutude e cuurtooje Client.",
+    "connectorTokenHelpLabel": "Link nder njangirde token (ko feewi)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Secret ɗiɗi e juulnde. Faatu ngam waawi arnude, walla hobbu mayru am e juulnde.",
+    "connectorClientSecretHint": "Suusude e juulnde koo no mbaawi jogii, tee urtaaki woppu.",
+    "connectorScopesLabel": "Scopes (dunde e gese, ko feewi)"
   },
   "localModels": {
     "title": "Moodelji jowte ɗee",
@@ -3561,5 +3634,41 @@
     "settingsToggle": "Heftu linkji waɗi paste baawdi",
     "settingsDescription": "So a paste link tan, hello e heftii teeŋtinaajo giddo e jawdiima kadi. A waawi teppude e ndiyam so a ballu, walla a haɗto hello jooni e menu +.",
     "addLink": "Ɓeydu link"
+  },
+  "cameraAccessError": "Mbeleediima ena artu kamera. Seetaan jaabawol kamera maa, kono hokkanii.",
+  "cameraUnnamedDevice": "Kameraa",
+  "pastedText": {
+    "fallbackName": "Banndu juutugol",
+    "charCount": "{count, number} harfi",
+    "removeChip": "Momtu banndu juutugol “{name}”",
+    "blockLabel": "Banndu juutugol: {name}",
+    "doc": {
+      "heading": "Banndu juutugol",
+      "pastedLabel": "Juutirii"
+    },
+    "settingsTitle": "Banndu juutugol mawɗi",
+    "settingsToggle": "Goloti banndu juutugol mawɗi e suɓo",
+    "settingsDescription": "So a juuta banndu juutugol ko teddini ɗum faa waɗi gila leydi kuu waɗti, ko e suɓo ɓuri banngugol. Banndu ngal ko dow juutirde baɗi — ko faydaaki anndude walla yerude.",
+    "settingsThresholdLabel": "Suɓi banndu juutugol ɓuri",
+    "settingsThresholdUnit": "harfi",
+    "settingsThresholdHint": "Nder {min, number} e {max, number} harfi."
+  },
+  "structures": {
+    "section": "Laawol",
+    "sectionSubtitle": "Laawol safiraaɗo e doggol gese. Loowi gootel e ndimɗol e welnde, walla fuɗɗi hoore gootel schema e tabol gondata data.",
+    "loadFromStructure": "Loow tuuma",
+    "loadFromStructureTitle": "Mbay colliiji ɗee e tuuma safiraaɗo",
+    "pickerEmpty": "Alaa tuumeeje safiraaɗe.",
+    "pickerTitle": "Loow tuuma safiraaɗo",
+    "saveAsStructure": "Sif e tuuma",
+    "saveAsStructureTitle": "Sif colliiji ɗee nder makko tuumeeje",
+    "savedToast": "Tuuma safiraaɗo “{name}”",
+    "namePlaceholder": "Innde tuuma",
+    "fieldCount": "{count} colli",
+    "fieldCountOne": "Colli gooto",
+    "downgradedNotice": "{count} colli(i) sapporo e banndu— tabel njuta nilai gooto e cell: {names}",
+    "truncatedNotice": "{count} colli(i) momtanii — tabel ɓuri kolii e {max} colliiji: {names}",
+    "skippedDerivedNotice": "{count} colli kalkuledi alaa safi — formulaaɗi loow colliiji tabel ngal: {names}",
+    "loadReplacesColumns": "Mbiddi ɗee waɗi mbaydi colliiji gar. Looji data mooftiri kadi so innde colli makko ni gootel."
   }
 }

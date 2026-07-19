@@ -2091,7 +2091,9 @@
     "pin": "ኣብ ላዕሊ ሓኪል",
     "unpin": "ኣይተሓከለን",
     "moveToMore": "ናብ ተወሳኺ ኣካይዱ",
-    "moveOutOfMore": "ኣብ መኑ ርኣዮ"
+    "moveOutOfMore": "ኣብ መኑ ርኣዮ",
+    "showSources": "ተሓውቶ ምንጮታት ኣርኣዩ",
+    "hideSources": "ተሓውቶ ምንጮታት ኣሰውሩ"
   },
   "transcription": {
     "transcribesOnSend": "ኣብ ምልኣኽ ይጸሓፍ",
@@ -2762,7 +2764,16 @@
       "undoEdit": "ምልሳሕ መዘንኸር",
       "clearResolved": "ተፈታእኩሞ ኣጽዳእ",
       "clearResolvedHint": "ተቐባልየን፣ ተረጋገጹን፣ ዝሓለፉን ምልሳሓት ካብዚ ዝርዝር ኣውጹ",
-      "autoClearResolved": "ተፈታእኩሞ ምልሳሓት ብናብርቲ ኣጽዳእ"
+      "autoClearResolved": "ተፈታእኩሞ ምልሳሓት ብናብርቲ ኣጽዳእ",
+      "import": "ኣስደንግድ",
+      "importReplaceTitle": "መደብ ክትቀይር ትደሊ?",
+      "importReplaceBody": "ኣስደንገዲ {name} ዝተጠቐመልካዮ መደብ ይቕየር። ኣብቲ ማስተናገድ ምስ ዝተኸውን ድማ ኩሎም ማስተዋል ዘለዎም ኣገልግሎታት ክትፈጽም ትትኽክል።",
+      "importReplaceConfirm": "ቀይር",
+      "editorMode": "ዘይሕጉስ ዘርእስቲ",
+      "editorModeRich": "ዝሓለፈ ፅሑፍ",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "ናይ ምቅጻል ምምኽንያቶም ኣቐዲሙ ዘሎ ርእስቲ ክቕየር ክኸውን ኣይተትኽክለን።"
     },
     "data": {
       "emptyTitle": "ዳታ ኣስገብር ንምርመራ",
@@ -2961,7 +2972,9 @@
       "schemaFormulaArityError": "ዘይስእኑ መጠን ኣተሓድሶ ናብ {fn}",
       "schemaFormulaCycleError": "ብፎርሙላታት ዝተዛረቡ ርሓበል ኣገባብ",
       "derivedColumnTitle": "ተላዋጭ፡ {formula}",
-      "derivedFrom": "ካብ {formula} ተላዋጭ"
+      "derivedFrom": "ካብ {formula} ተላዋጭ",
+      "takePhoto": "ፎቶ ኣንሲስ",
+      "takePhotoHint": "ቅድመ-ፎቶ ፎርም ወይ ሰንጠረዥ ብካሜራኻ ኣንሲስ — ምትኩም ዳታ ወሲዱ ናብ ምስሉ ይሓውስ።"
     },
     "map": {
       "emptyTitle": "ዳታኻ ኣብ ካርታ ውሱኽ",
@@ -3124,6 +3137,22 @@
       "asana": {
         "name": "Asana",
         "description": "ተግባራትን ፕሮጀክታትን ፈትኑ፣ ኣኣስኩ፣ ምስያዝኩ።"
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "ዝተለቕሉ ምንጮታት ዳታ፣ ቁፅሪ ወንበርን ዘፈለጡ መሳይታትን መርመር።"
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "ናይ Salesforce እታተታትካ መፅሓፍቲ ስሩዕና፣ ኣርኣዩን ዘይኮኑ ድማ ኣቓይሉ።"
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "ዕላማታት ማህበራዊ ሚዲያ ኣብዛ ቅድመ፣ መዕረፅን ምህባን ማምለእ።"
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "ናይ ማህበራዊ ሚዲያ መደብ ገጽታት ኣቕርብን ምላሽ ልእኽ።"
       }
     },
     "connect": "ርከብ",
@@ -3184,7 +3213,19 @@
       "missingState": "ኣብዚ ናይ ፍቓድ ኣይኮነን",
       "close": "ነቲ window ዝተኻእልዎ ዝዘምታ ክትመለሱ ትኽእሉ።",
       "closeButton": "Window ዝዘምታ"
-    }
+    },
+    "oauthNoAppConfigured": "ብ {name} ክትብቅል ኣብዚ ምጥናት ኣይተተወኸኡን። ብ ናይካ ናይ OAuth app ምዝገብ ክትዳለዉ ክኸውን ይኽእል።",
+    "adminConnectorsTitle": "ካብ ውሽጢ ውድብኹም",
+    "adminConnectorsDescription": "ተገናኢቶ ኣቢሉ ፈጻሚ ዝምድን ማህበረ-ተጋሩ ይሰምዑ። ዝተለዋዋጦ ኣካይዱ እንታይ ከይትረኣየዩ ይወሰን።",
+    "managedByOrg": "ብውድብኻ ዝተመሓየሸ",
+    "connectorOauthNotConfigured": "ናይዚ ማህበረ-ተጋሩ ዕድል ዘለዎ ምዝገባ ሙሉእ ኣይተወዳአን። ኣስተዳዳሽካ ኣድራግ።",
+    "yourConnectorsTitle": "ናይካ ተዘራቢት",
+    "addTitle": "ተዘራቢት ኣኣጽእ",
+    "addDescription": "ስጋብ መሳርሒ ምምልእ ምርጫ ኣድርጋ። ኴም ምርጫ ኣድርጉ ብዛ ኳ ኣካውነት ትወስና።",
+    "add": "ኣኣጽእ",
+    "filterLabel": "ተዘራቢታት ፍልስል",
+    "filterPlaceholder": "ተዘራቢታት ድለ",
+    "noMatches": "ተዘራቢታት ን “{query}” ኣይመሳሰሉን።"
   },
   "modelSources": {
     "connectButtonShort": "ሞዴል ምንጪ ምትሕናው",
@@ -3502,7 +3543,39 @@
     "promptAgentCreateSuccess": "ተጸባጻቢ ኣጄንት ተፈጢሩ።",
     "promptAgentSaveSuccess": "ተጸባጻቢ ኣጄንት ተዓቢቡ።",
     "promptAgentDeleteSuccess": "ተጸባጻቢ ኣጄንት ተሰርዚ።",
-    "promptAgentsUnavailableWarning": "ተጸባጻቢ ኣጄንትታት ካብ ኣከባቢ ክትጻዓኑ ኣይተተኽእሉን። ሕጂ ምስክራን አይክእሉን።"
+    "promptAgentsUnavailableWarning": "ተጸባጻቢ ኣጄንትታት ካብ ኣከባቢ ክትጻዓኑ ኣይተተኽእሉን። ሕጂ ምስክራን አይክእሉን።",
+    "agentsTab": "ኣገልጋዮታት",
+    "connectorsTab": "ተዘራቢታት",
+    "addConnector": "ተዘራቢት ኣኣጽእ",
+    "noConnectors": "ናይክን ተዘራቢታት ኣይተመስሩን።",
+    "connectorsUnavailableWarning": "ዒላማ ማእከል ተዘራቢታት ምርኣዩ ኣይተዋህቦን። ምርኣይ ኣብ ምስተዋፍሩ እንተዳሊኩም መግበሪ ኣይተርኢኩም።",
+    "editAccess": "ዕድል ስሚኡ",
+    "deleteConnector": "ሰርዝ",
+    "deleteConnectorConfirm": "ዚተዘራቢት ክትሰርዝ ትደሊ? ዘሰተማማዕዎ ክትጸግቡ ብቐሊሉ ይዋግኑ።",
+    "confirmDeleteConnector": "ተዘራቢት ሰርዝ",
+    "connectorSaveSuccess": "ተዘራቢት ተዓቂቡ።",
+    "connectorCreateSuccess": "ተዘራቢት ተፈጢሩ።",
+    "connectorDeleteSuccess": "ተዘራቢት ተሰሪዙ።",
+    "editConnectorTitle": "ተዘራቢት ስሚኡ",
+    "newConnectorTitle": "ሓድሽ ተዘራቢት",
+    "connectorPresetLabel": "ካብ ቅርጸ-ተምሳሌት ጀምር",
+    "connectorPresetNone": "ኣብ መጀመርታ ጀምር",
+    "connectorNameLabel": "ሽም",
+    "connectorDescriptionLabel": "መብርሂ",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "ንቅዕብን {placeholder} ኣብ URL ቀይርካ ከይትዕቀፍ፡ ብናብ ሓሳብካ ዋጋ ክትምልአይ።",
+    "connectorTransportLabel": "መጓዓዝ",
+    "connectorAuthLabel": "ምምልካት",
+    "connectorAuthNone": "የለን",
+    "connectorAuthBearer": "ቶከን (ካልኦት ተጠቃሚ ዋጋ ይሓትቱ)",
+    "connectorAuthOauth": "OAuth ምእታው",
+    "connectorSealingUnavailable": "OAuth የብሉን: እዚ ምምዕባለ ኣይተወተነ AUTH_SECRET እንተዘይብሉ ብዚ ንነቲ client secrets ኣይክትክኪልን።",
+    "connectorTokenHelpLabel": "ሊንክ ናብ ቶከን መመሪያታት (ኦፕሽናል)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "ሽሓ ተኣቲቱ። ንምግባር ትምታምዶ ይፍጸም፡ ወይ ሓድሽ ኣእትዎ ንምቕያር።",
+    "connectorClientSecretHint": "ስእንካ ክበሃል፡ ድሕሪኡ ኣይትተቐርበን።",
+    "connectorScopesLabel": "Scopes (ብ ቦታ ዝተፋለየ፡ ኦፕሽናል)"
   },
   "localModels": {
     "title": "ኣካባቢ ሞዴልታት",
@@ -3561,5 +3634,41 @@
     "settingsToggle": "ኣተማሚ ምውሳድ ኣብ መገናኛታት ቀይር",
     "settingsDescription": "ንእሽቶ መገናኛ ኣብዚ ኣብ ቕፅል ከይምልኣካ፡ ገጻቹ ይውሰድ፡ ናይ ጽሑፉ ዝኽእል ኣብ መልእኽቲኻ ይጨብጨብ፡ ኣስተናግደካ ክንብብ ይከኣል። እዚን ኣብ ድሑር ምሕደር ትኽእል፡ ንእተዘልእሉ መገናኛ ብ-+ ዝብሉ መደብ ቁጽሪ ትጠቀም።",
     "addLink": "መገናኛ ደኣ ይጨምር"
+  },
+  "cameraAccessError": "ካሜራካ ምክንያት ክትግበሩ ኣይተዋህቦን። ፍቓድ ካሜራካ ኣረጋግጽና እንተደሊኻ ገና ሞክር።",
+  "cameraUnnamedDevice": "ካሜራ",
+  "pastedText": {
+    "fallbackName": "ጻፊ ተቐቢሉ ጽሑፍ",
+    "charCount": "{count, number} ፊደላት",
+    "removeChip": "ጽሑፍ ተቐቢሉ “{name}” ኣውጻእ",
+    "blockLabel": "ጽሑፍ ተቐቢሉ፡ {name}",
+    "doc": {
+      "heading": "ጽሑፍ ተቐቢሉ",
+      "pastedLabel": "ተቐቢሉ"
+    },
+    "settingsTitle": "ዓቢ ሓቁቶ ጽሑፋት",
+    "settingsToggle": "ዓቢ ሓቁቶ ንኣባል ሰነድ ቀይር",
+    "settingsDescription": "ንሓቁቶ ፍቑድ ካብ ትኽክለኛ ውሑድ ዝበለ ጽሑፍ፡ ተቐበሉ እንዳ ፋይል ይሰብር፡ ኣይወስድን ኣይተቐየረን።",
+    "settingsThresholdLabel": "ሓቁቶ ዘይብሉ ኣብ ሰነድ ሓደገ",
+    "settingsThresholdUnit": "ፊደላት",
+    "settingsThresholdHint": "ብዙሕት፡ {min, number} ን {max, number} ፊደል ውሑድ።"
+  },
+  "structures": {
+    "section": "ኣቋራጭታት",
+    "sectionSubtitle": "ዝተኣቐቡ መስክ መወዳእታት፡ ንምርጫ ናይ ምርፋሕ ወይ ንመጀመርታ ስክማ ውሱን ሓቤሩጥ መዳበር ጠቀም።",
+    "loadFromStructure": "ኣቋራጭ ጽፈን",
+    "loadFromStructureTitle": "እዚ ኮለምናት ብዝተኣቐበ ኣቋራጭ ቀይር",
+    "pickerEmpty": "ዝተዓበየ ኣቋራጭ የለን እቲ ግዜ።",
+    "pickerTitle": "ዝተዓበየ ኣቋራጭ ጽፈን",
+    "saveAsStructure": "ኣቋራጭ ኣድርእ",
+    "saveAsStructureTitle": "እዚ ኮለምናት ናብ ቤተ-መዛግብቲ ኣቋራጭታትካ ኣቐብል",
+    "savedToast": "ኣቋራጭ “{name}” ተኣቲቱ",
+    "namePlaceholder": "ሽም ኣቋራጭ",
+    "fieldCount": "{count} መስኮታት",
+    "fieldCountOne": "1 መስክ",
+    "downgradedNotice": "{count} መስኮታት ናብ ጽሑፍ ቀልሉ — ኣብ ታብል ነገር ኣብ ካልእ እዩ ይሰብር፡ {names}",
+    "truncatedNotice": "{count} መስኮታት ተኣንቦጸሉ — ውሑድ ናይ ታብል ኣብ {max} ኮለምናት ይወሰን፡ {names}",
+    "skippedDerivedNotice": "{count} ዝተማሃዩ ኮለምናት ኣይተኣቐቡን — ፎርሙላታት ናይ ታብል ኮለምናት ይመልከቱ፡ {names}",
+    "loadReplacesColumns": "እዚ ዝረከበካዮ ቀይር። ዝኾኑ መርዓታት እንዳ ዝሓዘዎም ኮለምናት ሽም ይቐብሉ።"
   }
 }

@@ -2091,7 +2091,9 @@
     "pin": "Linga na bängö",
     "unpin": "Tîrî linga",
     "moveToMore": "Gbenî na döko",
-    "moveOutOfMore": "Wüsa na menü"
+    "moveOutOfMore": "Wüsa na menü",
+    "showSources": "Hûngu mbi sôso fi",
+    "hideSources": "Sûku mbi sôso fi"
   },
   "transcription": {
     "transcribesOnSend": "Transcribes on send",
@@ -2762,7 +2764,16 @@
       "undoEdit": "Kɔta",
       "clearResolved": "Kpengbi na mo kɛ",
       "clearResolvedHint": "Kwêlê na likundu ôkoé, wa zia, na wa yeke ya ûse sô azui lo na lisolo ti awa",
-      "autoClearResolved": "Kpengbi na mo kɛ na yeke"
+      "autoClearResolved": "Kpengbi na mo kɛ na yeke",
+      "import": "Gu na",
+      "importReplaceTitle": "Loûtêng dokumento?",
+      "importReplaceBody": "Gu {name} loûtê dokumento ti yeke. Référence, spec na tone na mbi ape ti kété.",
+      "importReplaceConfirm": "Loûtêng",
+      "editorMode": "Mode ti éditeur",
+      "editorModeRich": "Teksto ti zia",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Sûru mbênso na téngbi na ndambu na mode na éditeur."
     },
     "data": {
       "emptyTitle": "Mandra data tî anali",
@@ -2961,7 +2972,9 @@
       "schemaFormulaArityError": "Mbênî ti mbousu ti {fn} ti hângu",
       "schemaFormulaCycleError": "Rapport ti formula ti yângbi ti mbênî",
       "derivedColumnTitle": "Hûndê: {formula}",
-      "derivedFrom": "Hûndê kutû ti {formula}"
+      "derivedFrom": "Hûndê kutû ti {formula}",
+      "takePhoto": "Fâ na foto",
+      "takePhotoHint": "Sûru caméra na mbî na fâ na foto ti formulaire ou table — dati ti yé mûtu na donne structurée mo yeke ko fa na foto."
     },
     "map": {
       "emptyTitle": "Sûndô données mo na carte",
@@ -3124,6 +3137,22 @@
       "asana": {
         "name": "Asana",
         "description": "Sôga, tî hû na sûèse tâche na project."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Soso dati ti mbi sô yeke na internet, workbook na Pulse metrics."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Sôso na gâta na records na Salesforce mo."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Gere, planifier na publier poste ti social media."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Lirï na yeke la bîngbi na social inbox, na tî-mbara so."
       }
     },
     "connect": "Köpî",
@@ -3184,7 +3213,19 @@
       "missingState": "Apété tî sèrè",
       "close": "Mo so kôfa fënî sô na zamba app sô.",
       "closeButton": "Kôfa fênî"
-    }
+    },
+    "oauthNoAppConfigured": "Mbeni ti entrer na {name} aboro à dîngbi na deployment na mbi. Sûru na app OAuth mo yeke.",
+    "adminConnectorsTitle": "Utî na organisation mo",
+    "adminConnectorsDescription": "Connectors na gérant mo bâ tî-lî. Mo ko yeke yâkû, mo sûku na accès mo.",
+    "managedByOrg": "Géré par organisation mo",
+    "connectorOauthNotConfigured": "Mbeni ti entrer aboro na connector so. Kûê ti bâ gérant mo.",
+    "yourConnectorsTitle": "Connectors mo",
+    "addTitle": "Gbwêtî connector",
+    "addDescription": "Pâsa na outil ti mo yeke gbwêtî. Mo ko défi accès après mo tî sè.",
+    "add": "Gbwêtî",
+    "filterLabel": "Filtré connectors",
+    "filterPlaceholder": "Sôso connectors",
+    "noMatches": "Ala connector ti matâ “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Bendé gbata ti model",
@@ -3502,7 +3543,39 @@
     "promptAgentCreateSuccess": "Prompt agent a züa.",
     "promptAgentSaveSuccess": "Prompt agent a séngo.",
     "promptAgentDeleteSuccess": "Prompt agent a küta.",
-    "promptAgentsUnavailableWarning": "Prompt agent ayike lenge a yeke tena ava na storage. Ayeke tena küeté."
+    "promptAgentsUnavailableWarning": "Prompt agent ayike lenge a yeke tena ava na storage. Ayeke tena küeté.",
+    "agentsTab": "Agents",
+    "connectorsTab": "Connectors",
+    "addConnector": "Gbwêtî connector",
+    "noConnectors": "Ala connector mo.",
+    "connectorsUnavailableWarning": "Apingbi ti sôso na magasin ti connector; listi ape ti zia nî. Ngu sô kûê na mo afo mô zî.",
+    "editAccess": "Vûtî accès",
+    "deleteConnector": "Sûku",
+    "deleteConnectorConfirm": "Sûku connector so? Mo bâ tî sè lo ko pingbi zî accès.",
+    "confirmDeleteConnector": "Sûku connector",
+    "connectorSaveSuccess": "Connector abâla.",
+    "connectorCreateSuccess": "Connector asuku.",
+    "connectorDeleteSuccess": "Connector asûku.",
+    "editConnectorTitle": "Vûtî connector",
+    "newConnectorTitle": "Connector môkô",
+    "connectorPresetLabel": "Kêtê na template",
+    "connectorPresetNone": "Kété na ndjoni",
+    "connectorNameLabel": "Ngbângo",
+    "connectorDescriptionLabel": "Bisï",
+    "connectorUrlLabel": "URL ti serveur",
+    "connectorUrlPlaceholderWarning": "Kwe na {placeholder} na URL lo kêtê na ndara mo mbênî lo kodro ni a zo zia",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Authentification",
+    "connectorAuthNone": "Ala",
+    "connectorAuthBearer": "Token (mbênî zo yeke na mbi token tî yi) ",
+    "connectorAuthOauth": "OAuth sign-in",
+    "connectorSealingUnavailable": "OAuth alingbi: AUTH_SECRET ala na déploiement ôko na kûê sekre tî client.",
+    "connectorTokenHelpLabel": "Lien na ndörö tî token (sô ayeke)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Sekre yeke na dépôt. Kûê oko sô o kûê na tètê, wala kêtê mbênî sô o kwe na lo.",
+    "connectorClientSecretHint": "A lingbi na sekre mû, lo ala lê na ndondo mo hana.",
+    "connectorScopesLabel": "Scopes (tî pato bako, ayeke)"
   },
   "localModels": {
     "title": "Model ti gbë na mbongo",
@@ -3561,5 +3634,41 @@
     "settingsToggle": "Gbè lîngû sô yeke klâ na nga te tî yângâ",
     "settingsDescription": "Sô mo klâ lîngû sô yêkö tî yângâ, döko a yeke gbè na tî lugbä mbênî na sêr ti yângâ mo, mbï MSF AI ayeke yeke lugbä wa. Sêkî sungbâ sô mo yeke fadï tî klâ lîngû la nga na te sô lo yeke hîngä na programasi — mo ligi na kûè döko nhùnî hûnda na menú +.",
     "addLink": "Duguë lîngû"
+  },
+  "cameraAccessError": "Apingbi ti alîngbi na caméra. Vingàna ti ndurü ti caméra na mbi, sô sè ti yeke mô so.",
+  "cameraUnnamedDevice": "Caméra",
+  "pastedText": {
+    "fallbackName": "Tèkë tî zîa",
+    "charCount": "{count, number} karakteri",
+    "removeChip": "Kûê tèkë tî zîa “{name}”",
+    "blockLabel": "Tèkë tî zîa: {name}",
+    "doc": {
+      "heading": "Tèkë tî zîa",
+      "pastedLabel": "Tèkë"
+    },
+    "settingsTitle": "Tèkë nzungu",
+    "settingsToggle": "Kwe tèkë nzungu baba na fichier",
+    "settingsDescription": "Sô tèkë mbi ndokë na limiti, lo yeke na fichier oko tî yê ti massa na sanduku tî singa. Tèkë ayeke ka na mo tèkë — woko ti yeke na mo wala kugbagba.",
+    "settingsThresholdLabel": "Kûê tèkë yeke mbi",
+    "settingsThresholdUnit": "karakteri",
+    "settingsThresholdHint": "Tî {min, number} na {max, number} karakteri."
+  },
+  "structures": {
+    "section": "Strukture",
+    "sectionSubtitle": "Definisio ti champ tî lê na dépôt. Yeke na mû tî extraction, wala na schema tî fambusu ti table workflow tî data.",
+    "loadFromStructure": "Bêda strukture",
+    "loadFromStructureTitle": "Kûê kolône ôko na strukture tî lê",
+    "pickerEmpty": "Strukture tî lê ayeke oko.",
+    "pickerTitle": "Bêda strukture tî lê",
+    "saveAsStructure": "Kê na strukture",
+    "saveAsStructureTitle": "Kê kolône so na bibliothèque tî strukture mo",
+    "savedToast": "Strukture tî lê “{name}”",
+    "namePlaceholder": "Ngbângo tî strukture",
+    "fieldCount": "{count} champ",
+    "fieldCountOne": "1 champ",
+    "downgradedNotice": "{count} champ mo kêtê na tè tî tèkë — table yeke na value oko na cellule: {names}",
+    "truncatedNotice": "{count} champ mo ti lê — limit tî table yeke na {max} kolône: {names}",
+    "skippedDerivedNotice": "{count} kolône tî calcul ayeke oko — formula ti referê kolône tî table: {names}",
+    "loadReplacesColumns": "Lo kûê kolône ti bûngbi na sanduku. Rôw tî yeke na valeur sô kolône yeke na ngbângo ôko."
   }
 }

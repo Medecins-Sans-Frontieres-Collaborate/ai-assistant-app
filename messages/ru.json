@@ -2017,7 +2017,9 @@
     "pin": "Закрепить сверху",
     "unpin": "Открепить",
     "moveToMore": "Переместить в \"Еще\"",
-    "moveOutOfMore": "Показать в меню"
+    "moveOutOfMore": "Показать в меню",
+    "showSources": "Показать другие источники",
+    "hideSources": "Скрыть другие источники"
   },
   "transcription": {
     "addInstructions": "Добавить инструкции",
@@ -2778,7 +2780,16 @@
       "undoEdit": "Отменить",
       "clearResolved": "Очистить решённые",
       "clearResolvedHint": "Удалить принятые, отклонённые и нерелевантные изменения из списка",
-      "autoClearResolved": "Автоматически очищать решённые изменения"
+      "autoClearResolved": "Автоматически очищать решённые изменения",
+      "import": "Импортировать",
+      "importReplaceTitle": "Заменить документ?",
+      "importReplaceBody": "Импорт {name} заменит текущий документ. Ваши ссылки, спецификация и тон останутся.",
+      "importReplaceConfirm": "Заменить",
+      "editorMode": "Режим редактора",
+      "editorModeRich": "Форматированный текст",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Разрешите предлагаемые изменения перед сменой режима редактора."
     },
     "data": {
       "emptyTitle": "Импортировать данные для анализа",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "Неверное число аргументов для {fn}",
       "schemaFormulaCycleError": "Циклическая ссылка между формулами",
       "derivedColumnTitle": "Вычислено: {formula}",
-      "derivedFrom": "Вычислено по формуле {formula}"
+      "derivedFrom": "Вычислено по формуле {formula}",
+      "takePhoto": "Сделать фото",
+      "takePhotoHint": "Используйте камеру для фотографирования формы или таблицы — содержимое будет преобразовано в структурированные данные, которые можно проверить по фото."
     },
     "map": {
       "emptyTitle": "Отобразите данные на карте",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "Находите, создавайте и обновляйте задачи и проекты."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Запрашивайте опубликованные источники данных, рабочие книги и метрики Pulse."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Просматривайте и обновляйте записи во всех ваших объектах Salesforce."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Создавайте, планируйте и публикуйте посты в социальных сетях."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Просматривайте и отвечайте на сообщения в социальной почте."
       }
     },
     "connect": "Подключить",
@@ -3200,7 +3229,19 @@
       "missingState": "Нет данных для авторизации",
       "close": "Вы можете закрыть это окно и вернуться в приложение.",
       "closeButton": "Закрыть окно"
-    }
+    },
+    "oauthNoAppConfigured": "Вход через {name} не настроен в этом развертывании. Подключитесь, зарегистрировав собственное OAuth-приложение.",
+    "adminConnectorsTitle": "От вашей организации",
+    "adminConnectorsDescription": "Коннекторы, настроенные вашими администраторами. Доступные варианты зависят от ваших прав доступа.",
+    "managedByOrg": "Управляется вашей организацией",
+    "connectorOauthNotConfigured": "Настройка входа для этого коннектора не завершена. Обратитесь к администратору.",
+    "yourConnectorsTitle": "Ваши коннекторы",
+    "addTitle": "Добавить коннектор",
+    "addDescription": "Выберите инструмент для подключения. Доступ будет настроен после выбора.",
+    "add": "Добавить",
+    "filterLabel": "Фильтр коннекторов",
+    "filterPlaceholder": "Поиск по коннекторам",
+    "noMatches": "Нет коннекторов, соответствующих запросу «{query}»."
   },
   "modelSources": {
     "connectButtonShort": "Подключить источник модели",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "Агент с подсказкой создан.",
     "promptAgentSaveSuccess": "Агент с подсказкой сохранён.",
     "promptAgentDeleteSuccess": "Агент с подсказкой удалён.",
-    "promptAgentsUnavailableWarning": "Не удалось загрузить агентов с подсказкой из хранилища. Редактирование сейчас недоступно."
+    "promptAgentsUnavailableWarning": "Не удалось загрузить агентов с подсказкой из хранилища. Редактирование сейчас недоступно.",
+    "agentsTab": "Агенты",
+    "connectorsTab": "Коннекторы",
+    "addConnector": "Добавить коннектор",
+    "noConnectors": "Коннекторов пока нет.",
+    "connectorsUnavailableWarning": "Не удалось подключиться к магазину коннекторов, поэтому список может быть неполным. Не создавайте замену, пока список не загрузится.",
+    "editAccess": "Редактировать доступ",
+    "deleteConnector": "Удалить",
+    "deleteConnectorConfirm": "Удалить этот коннектор? Все пользователи потеряют к нему доступ сразу.",
+    "confirmDeleteConnector": "Удалить коннектор",
+    "connectorSaveSuccess": "Коннектор сохранён.",
+    "connectorCreateSuccess": "Коннектор создан.",
+    "connectorDeleteSuccess": "Коннектор удалён.",
+    "editConnectorTitle": "Редактировать коннектор",
+    "newConnectorTitle": "Новый коннектор",
+    "connectorPresetLabel": "Начать с шаблона",
+    "connectorPresetNone": "Начать с нуля",
+    "connectorNameLabel": "Название",
+    "connectorDescriptionLabel": "Описание",
+    "connectorUrlLabel": "URL сервера",
+    "connectorUrlPlaceholderWarning": "Замените {placeholder} в URL на свое значение перед сохранением.",
+    "connectorTransportLabel": "Транспорт",
+    "connectorAuthLabel": "Аутентификация",
+    "connectorAuthNone": "Нет",
+    "connectorAuthBearer": "Токен (каждый пользователь указывает свой)",
+    "connectorAuthOauth": "Вход через OAuth",
+    "connectorSealingUnavailable": "OAuth недоступен: для этого развертывания не настроен AUTH_SECRET для шифрования клиентских секретов.",
+    "connectorTokenHelpLabel": "Ссылка на инструкцию по токену (необязательно)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Секрет сохранен. Оставьте поле пустым, чтобы оставить его, или введите новый, чтобы заменить.",
+    "connectorClientSecretHint": "Шифруется перед хранением, больше не отображается.",
+    "connectorScopesLabel": "Scope'ы (через пробел, необязательно)"
   },
   "localModels": {
     "title": "Локальные модели",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "Автоматически загружать вставленные ссылки",
     "settingsDescription": "Когда вы вставляете ссылку отдельно, страница загружается, и ее текст прикрепляется, чтобы ассистент мог его прочитать. Отключите это, чтобы вставленные ссылки оставались обычным текстом — вы все равно можете вручную добавить страницу через меню +.",
     "addLink": "Добавить ссылку"
+  },
+  "cameraAccessError": "Не удалось получить доступ к камере. Проверьте разрешения на использование камеры и попробуйте снова.",
+  "cameraUnnamedDevice": "Камера",
+  "pastedText": {
+    "fallbackName": "Вставленный текст",
+    "charCount": "{count, number} символов",
+    "removeChip": "Удалить вставленный текст «{name}»",
+    "blockLabel": "Вставленный текст: {name}",
+    "doc": {
+      "heading": "Вставленный текст",
+      "pastedLabel": "Вставлено"
+    },
+    "settingsTitle": "Большие вставки",
+    "settingsToggle": "Преобразовывать большую вставку в вложение",
+    "settingsDescription": "Если вставить текст длиннее указанного ниже лимита, он будет приложен файлом, а не вставлен в окно сообщения. Текст используется в точности как вставлен — ничего не загружается и не изменяется.",
+    "settingsThresholdLabel": "Вкладывать вставки длиннее",
+    "settingsThresholdUnit": "символов",
+    "settingsThresholdHint": "От {min, number} до {max, number} символов."
+  },
+  "structures": {
+    "section": "Структуры",
+    "sectionSubtitle": "Сохранённые определения полей. Используйте в качестве схемы извлечения или шаблона для таблицы рабочего процесса.",
+    "loadFromStructure": "Загрузить структуру",
+    "loadFromStructureTitle": "Заменить эти столбцы сохранённой структурой",
+    "pickerEmpty": "Сохранённых структур нет.",
+    "pickerTitle": "Загрузить сохранённую структуру",
+    "saveAsStructure": "Сохранить как структуру",
+    "saveAsStructureTitle": "Сохранить эти столбцы в библиотеке структур",
+    "savedToast": "Структура «{name}» сохранена",
+    "namePlaceholder": "Название структуры",
+    "fieldCount": "{count} полей",
+    "fieldCountOne": "1 поле",
+    "downgradedNotice": "{count} поле(й) упрощено до текста — таблица содержит только одно значение в ячейке: {names}",
+    "truncatedNotice": "{count} поле(й) не добавлено — лимит таблицы {max} столбцов: {names}",
+    "skippedDerivedNotice": "{count} вычисляемых столбца не сохранено — формулы ссылаются на столбцы этой таблицы: {names}",
+    "loadReplacesColumns": "Это заменит текущие столбцы. В существующих строках сохранятся значения с совпадающими названиями столбцов."
   }
 }

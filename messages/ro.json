@@ -2116,7 +2116,9 @@
     "pin": "Fixați în partea de sus",
     "unpin": "Detașați",
     "moveToMore": "Mută la Mai multe",
-    "moveOutOfMore": "Afișează în meniu"
+    "moveOutOfMore": "Afișează în meniu",
+    "showSources": "Afișează alte surse",
+    "hideSources": "Ascunde alte surse"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Adăugați instrucțiunile personale pentru a personaliza modul în care răspunde AI. Acestea sunt combinate cu liniile directoare de bază care asigură răspunsuri utile, corecte și sigure.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Sfat: Tastați \"/\" pentru a selecta dintre șabloanele de prompt salvate.",
@@ -2778,7 +2780,16 @@
       "undoEdit": "Anulează",
       "clearResolved": "Curăță rezolvate",
       "clearResolvedHint": "Eliminați modificările acceptate, respinse și neaplicabile din această listă",
-      "autoClearResolved": "Curăță automat modificările rezolvate"
+      "autoClearResolved": "Curăță automat modificările rezolvate",
+      "import": "Importă",
+      "importReplaceTitle": "Înlocuiți documentul?",
+      "importReplaceBody": "Importarea {name} va înlocui documentul actual. Referințele, specificațiile și tonul vor fi păstrate.",
+      "importReplaceConfirm": "Înlocuiește",
+      "editorMode": "Mod editor",
+      "editorModeRich": "Text îmbogățit",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Rezolvați sugestiile de modificare înainte de a schimba modul editorului."
     },
     "data": {
       "emptyTitle": "Importați date pentru analiză",
@@ -2977,7 +2988,9 @@
       "schemaFormulaArityError": "Număr incorect de argumente pentru {fn}",
       "schemaFormulaCycleError": "Referință circulară între formule",
       "derivedColumnTitle": "Calculat: {formula}",
-      "derivedFrom": "Calculat din {formula}"
+      "derivedFrom": "Calculat din {formula}",
+      "takePhoto": "Fă o fotografie",
+      "takePhotoHint": "Folosiți camera pentru a fotografia un formular sau un tabel — conținutul acestuia devine date structurate pe care le puteți verifica cu fotografia"
     },
     "map": {
       "emptyTitle": "Afișați datele pe o hartă",
@@ -3140,6 +3153,22 @@
       "asana": {
         "name": "Asana",
         "description": "Găsiți, creați și actualizați sarcini și proiecte."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Interogați surse de date publicate, workbook-uri și metrici Pulse."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Căutați și actualizați înregistrări între obiectele Salesforce."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Creați, programați și publicați postări pe rețelele de socializare."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Revizuiți și răspundeți la conversații din inbox-ul social."
       }
     },
     "connect": "Conectați",
@@ -3200,7 +3229,19 @@
       "missingState": "Nimic de autorizat",
       "close": "Puteți închide această fereastră și să reveniți la aplicație.",
       "closeButton": "Închideți fereastra"
-    }
+    },
+    "oauthNoAppConfigured": "Autentificarea cu {name} nu este configurată pe această implementare. Conectați-vă înregistrând propria aplicație OAuth.",
+    "adminConnectorsTitle": "De la organizația dumneavoastră",
+    "adminConnectorsDescription": "Conectori instalați de administratorii dvs. Ce conectori vedeți depinde de accesul dumneavoastră.",
+    "managedByOrg": "Administrat de organizația dumneavoastră",
+    "connectorOauthNotConfigured": "Autentificarea nu este finalizată pentru acest conector. Contactați administratorul.",
+    "yourConnectorsTitle": "Conectorii dumneavoastră",
+    "addTitle": "Adăugați un conector",
+    "addDescription": "Alegeți un instrument pentru conectare. Veți configura accesul după selectare.",
+    "add": "Adaugă",
+    "filterLabel": "Filtrați conectorii",
+    "filterPlaceholder": "Căutați conectori",
+    "noMatches": "Niciun conector nu corespunde cu „{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Conectați o sursă de modele",
@@ -3518,7 +3559,39 @@
     "promptAgentCreateSuccess": "Agentul de prompt a fost creat.",
     "promptAgentSaveSuccess": "Agentul de prompt a fost salvat.",
     "promptAgentDeleteSuccess": "Agentul de prompt a fost șters.",
-    "promptAgentsUnavailableWarning": "Agenții de prompt nu au putut fi încărcați din stocare. Nu pot fi editați în acest moment."
+    "promptAgentsUnavailableWarning": "Agenții de prompt nu au putut fi încărcați din stocare. Nu pot fi editați în acest moment.",
+    "agentsTab": "Agenți",
+    "connectorsTab": "Conectori",
+    "addConnector": "Adăugați conector",
+    "noConnectors": "Nu există încă niciun conector.",
+    "connectorsUnavailableWarning": "Nu s-a putut accesa magazinul de conectori, așa că această listă poate fi incompletă. Nu creați un înlocuitor până nu se încarcă.",
+    "editAccess": "Editați accesul",
+    "deleteConnector": "Ștergeți",
+    "deleteConnectorConfirm": "Ștergeți acest conector? Oricine îl folosește va pierde imediat accesul.",
+    "confirmDeleteConnector": "Ștergeți conectorul",
+    "connectorSaveSuccess": "Conectorul a fost salvat.",
+    "connectorCreateSuccess": "Conectorul a fost creat.",
+    "connectorDeleteSuccess": "Conectorul a fost șters.",
+    "editConnectorTitle": "Editați conectorul",
+    "newConnectorTitle": "Conector nou",
+    "connectorPresetLabel": "Pornire de la un template",
+    "connectorPresetNone": "Pornește de la zero",
+    "connectorNameLabel": "Nume",
+    "connectorDescriptionLabel": "Descriere",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "Înlocuiți {placeholder} din URL cu valoarea proprie înainte de a salva.",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Autentificare",
+    "connectorAuthNone": "Nicio",
+    "connectorAuthBearer": "Token (fiecare utilizator furnizează propriul token)",
+    "connectorAuthOauth": "Autentificare OAuth",
+    "connectorSealingUnavailable": "OAuth nu este disponibil: această implementare nu are AUTH_SECRET configurat pentru a cripta secretele clientului.",
+    "connectorTokenHelpLabel": "Link către instrucțiunile pentru token (opțional)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "Secret client OAuth",
+    "connectorClientSecretStored": "Un secret este salvat. Lăsați necompletat pentru a-l păstra sau introduceți unul nou pentru a-l înlocui.",
+    "connectorClientSecretHint": "Este criptat înainte de stocare și nu va mai fi afișat ulterior.",
+    "connectorScopesLabel": "Scope-uri (separate prin spațiu, opțional)"
   },
   "localModels": {
     "title": "Modele locale",
@@ -3577,5 +3650,41 @@
     "settingsToggle": "Preia automat linkurile lipite",
     "settingsDescription": "Când lipești un link separat, pagina este preluată, iar textul ei este atașat pentru ca asistentul să îl poată citi. Dezactivează această opțiune pentru a păstra linkurile doar ca text simplu — poți totuși atașa manual o pagină din meniul +.",
     "addLink": "Adaugă un link"
+  },
+  "cameraAccessError": "Nu s-a putut accesa camera. Verificați permisiunile camerei și încercați din nou.",
+  "cameraUnnamedDevice": "Cameră",
+  "pastedText": {
+    "fallbackName": "Text lipit",
+    "charCount": "{count, number} caractere",
+    "removeChip": "Șterge textul lipit „{name}”",
+    "blockLabel": "Text lipit: {name}",
+    "doc": {
+      "heading": "Text lipit",
+      "pastedLabel": "Lipit"
+    },
+    "settingsTitle": "Lipituri mari",
+    "settingsToggle": "Transformă un lipit mare în atașament",
+    "settingsDescription": "Dacă lipiți mai mult text decât limita de mai jos, acesta va fi atașat ca fișier, nu introdus în câmpul mesajului. Textul se folosește exact așa cum a fost lipit — nu se preia și nu se modifică nimic.",
+    "settingsThresholdLabel": "Atașează lipituri mai lungi de",
+    "settingsThresholdUnit": "caractere",
+    "settingsThresholdHint": "Între {min, number} și {max, number} caractere."
+  },
+  "structures": {
+    "section": "Structuri",
+    "sectionSubtitle": "Definiții de câmp salvate. Folosiți una ca rețetă de extragere sau ca schemă inițială pentru un tabel de workflow de date.",
+    "loadFromStructure": "Încarcă structură",
+    "loadFromStructureTitle": "Înlocuiește aceste coloane cu o structură salvată",
+    "pickerEmpty": "Nicio structură salvată momentan.",
+    "pickerTitle": "Încarcă o structură salvată",
+    "saveAsStructure": "Salvează ca structură",
+    "saveAsStructureTitle": "Salvează aceste coloane în biblioteca de structuri",
+    "savedToast": "Structura „{name}” a fost salvată",
+    "namePlaceholder": "Nume structură",
+    "fieldCount": "{count} câmpuri",
+    "fieldCountOne": "1 câmp",
+    "downgradedNotice": "{count} câmp(uri) simplificate la text — tabelele conțin o valoare pe celulă: {names}",
+    "truncatedNotice": "{count} câmp(uri) eliminate — limita tabelului este de {max} coloane: {names}",
+    "skippedDerivedNotice": "{count} coloană(e) calculate nesalvate — formulele fac referire la coloanele acestui tabel: {names}",
+    "loadReplacesColumns": "Aceasta va înlocui coloanele curente. Liniile existente păstrează valorile care au același nume de coloană."
   }
 }
