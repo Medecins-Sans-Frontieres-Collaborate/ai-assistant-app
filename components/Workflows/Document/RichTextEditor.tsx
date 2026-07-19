@@ -187,7 +187,12 @@ export const RichTextEditor = forwardRef<
 
   useEffect(() => {
     if (!editor) return;
-    editor.setEditable(editable);
+    // `emitUpdate` defaults to TRUE, which fires onUpdate for what is not a
+    // content change at all. On mount that wrote Tiptap's empty-document
+    // HTML (`<p></p>`) back over an untouched `docHtml: ''`, leaving a
+    // brand-new document looking edited — so merely opening the Document
+    // workflow and leaving asked the user to discard changes they never made.
+    editor.setEditable(editable, false);
   }, [editor, editable]);
 
   // Push the preview into the decoration plugin. A meta-only transaction
