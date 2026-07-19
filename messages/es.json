@@ -1183,7 +1183,19 @@
     "Backup": "Copia de seguridad",
     "Memories": "Memorias",
     "Agent Access": "Acceso de agente",
-    "LocalModels": "Modelos locales"
+    "LocalModels": "Modelos locales",
+    "suggestRevisions": {
+      "title": "Revisiones del documento",
+      "toggle": "Sugerir revisiones en lugar de aplicarlas",
+      "description": "Cuando solicite que el flujo de trabajo de Documento realice una revisión, los cambios llegan como sugerencias individuales que puede aceptar o rechazar, igual que en las evaluaciones de calidad.",
+      "exceptionsTitle": "Aplicar directamente de todos modos cuando:",
+      "exceptionSelection": "Se revisa una selección que ha resaltado",
+      "exceptionLargeRewrite": "La reescritura modifica la mayor parte del documento",
+      "exceptionReorder": "Las secciones se mueven en vez de editarse",
+      "thresholdLabel": "Considerar como reescritura cuando supere",
+      "thresholdUnit": "% del documento modificado",
+      "exceptionSelectionAlways": "Revisar una selección resaltada siempre se aplica directamente: el modelo devuelve solo el extracto revisado, que no puede dividirse en sugerencias para todo el documento."
+    }
   },
   "notFound": {
     "lostDog": "Perro perdido"
@@ -2656,7 +2668,8 @@
       "deleteCriterion": "Eliminar criterio",
       "manageCriteria": "Criterios personalizados",
       "addCriteria": "Agregar criterios",
-      "noUsableCriteria": "Seleccione al menos un criterio incorporado o asigne una rúbrica a sus criterios personalizados."
+      "noUsableCriteria": "Seleccione al menos un criterio incorporado o asigne una rúbrica a sus criterios personalizados.",
+      "criterionRubricTooLong": "Esta rúbrica supera el límite en {over} caracteres. Se envía con cada evaluación, por lo que debe recortarse antes de que se pueda utilizar este criterio."
     },
     "document": {
       "emptyTitle": "Describa el documento que desea",
@@ -2789,7 +2802,19 @@
       "editorModeRich": "Texto enriquecido",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Resuelva las ediciones sugeridas antes de cambiar el modo de editor."
+      "editorModeLockedEdits": "Resuelva las ediciones sugeridas antes de cambiar el modo de editor.",
+      "suggestChanges": "Sugerir cambios",
+      "suggestChangesHint": "Revise la revisión como sugerencias individuales en lugar de reescribir todo el documento inmediatamente.",
+      "suggestChangesSelectionNote": "Las revisiones sobre una selección se aplican directamente: la selección ya es el alcance elegido.",
+      "suggestedSummary": "Se sugirieron {count} {count, plural, one {cambio} other {cambios}} para revisión.",
+      "revisionSuggestionSummary": "Su solicitud de revisión generó {count} {count, plural, one {cambio sugerido} other {cambios sugeridos}}.",
+      "revisionCriterionLabel": "Revisión solicitada",
+      "fallbackSelection": "Aplicado directamente: las revisiones sobre una selección no se sugieren.",
+      "fallbackLargeRewrite": "Aplicado directamente: la reescritura modificó demasiado el documento como para revisarlo mediante sugerencias separadas.",
+      "fallbackReorder": "Aplicado directamente: las secciones se movieron, lo cual no se puede convertir en sugerencias revisables.",
+      "fallbackUnanchorable": "Aplicado directamente: los cambios no pudieron vincularse a pasajes específicos.",
+      "fallbackNoChanges": "No se requerían cambios.",
+      "criterionRubricTooLong": "Esta rúbrica supera el límite en {over} caracteres. Se envía con cada evaluación, por lo que debe recortarse antes de que se pueda utilizar este criterio."
     },
     "data": {
       "emptyTitle": "Importar datos para analizar",

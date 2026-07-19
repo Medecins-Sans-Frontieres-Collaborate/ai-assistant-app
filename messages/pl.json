@@ -1180,7 +1180,19 @@
     "Backup": "Kopia zapasowa",
     "Memories": "Wspomnienia",
     "Agent Access": "Dostęp agenta",
-    "LocalModels": "Modele lokalne"
+    "LocalModels": "Modele lokalne",
+    "suggestRevisions": {
+      "title": "Poprawki dokumentu",
+      "toggle": "Sugeruj poprawki zamiast ich bezpośredniego zastosowania",
+      "description": "Gdy poprosisz o poprawki w dokumencie, zmiany pojawią się jako osobne sugestie, które możesz zaakceptować lub odrzucić – tak samo jak oceny jakości.",
+      "exceptionsTitle": "I tak zastosuj bezpośrednio, gdy:",
+      "exceptionSelection": "Poprawiana jest wybrana przez Ciebie część tekstu",
+      "exceptionLargeRewrite": "Zmiana obejmuje większość dokumentu",
+      "exceptionReorder": "Sekcje są przenoszone zamiast edytowane",
+      "thresholdLabel": "Traktuj jako przepisywanie powyżej",
+      "thresholdUnit": "% dokumentu zmienione",
+      "exceptionSelectionAlways": "Wprowadzenie poprawek do zaznaczonego fragmentu zawsze działa bezpośrednio — model zwraca tylko poprawiony fragment, którego nie można podzielić na sugestie dotyczące całego dokumentu."
+    }
   },
   "notFound": {
     "lostDog": "Zagubiony pies"
@@ -2656,7 +2668,8 @@
       "deleteCriterion": "Usuń kryterium",
       "manageCriteria": "Własne kryteria",
       "addCriteria": "Dodaj kryteria",
-      "noUsableCriteria": "Wybierz przynajmniej jedno domyślne kryterium lub nadaj własnym kryteriom rubrykę."
+      "noUsableCriteria": "Wybierz przynajmniej jedno domyślne kryterium lub nadaj własnym kryteriom rubrykę.",
+      "criterionRubricTooLong": "Ta rubryka przekracza limit o {over} znaków. Jest wysyłana z każdą oceną, więc musi zostać skrócona, zanim taki kryterium będzie można użyć."
     },
     "document": {
       "emptyTitle": "Opisz dokument, który chcesz uzyskać",
@@ -2789,7 +2802,19 @@
       "editorModeRich": "Tekst sformatowany",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Rozwiąż sugerowane zmiany przed zmianą trybu edytora."
+      "editorModeLockedEdits": "Rozwiąż sugerowane zmiany przed zmianą trybu edytora.",
+      "suggestChanges": "Zasugeruj zmiany",
+      "suggestChangesHint": "Przeglądaj poprawki jako pojedyncze sugestie zamiast natychmiast przepisywać cały dokument.",
+      "suggestChangesSelectionNote": "Poprawki do zaznaczonego fragmentu są stosowane bezpośrednio — zakres już został wybrany.",
+      "suggestedSummary": "Zasugerowano {count} {count, plural, one {zmianę} other {zmian}} do przeglądu.",
+      "revisionSuggestionSummary": "Twoje żądanie poprawek dało {count} {count, plural, one {zasugerowaną zmianę} other {zasugerowanych zmian}}.",
+      "revisionCriterionLabel": "Żądana poprawka",
+      "fallbackSelection": "Zastosowano bezpośrednio — poprawki do zaznaczenia nie są sugerowane.",
+      "fallbackLargeRewrite": "Zastosowano bezpośrednio — zmiana objęła zbyt dużą część dokumentu, by można było je zrecenzować jako oddzielne sugestie.",
+      "fallbackReorder": "Zastosowano bezpośrednio — sekcje zostały przeniesione, co nie pozwala na utworzenie możliwych do przeglądu sugestii.",
+      "fallbackUnanchorable": "Zastosowano bezpośrednio — zmian nie można było przypisać do konkretnych fragmentów.",
+      "fallbackNoChanges": "Nie było potrzeby wprowadzania zmian.",
+      "criterionRubricTooLong": "Ta rubryka przekracza limit o {over} znaków. Jest wysyłana z każdą oceną, więc musi zostać skrócona, zanim taki kryterium będzie można użyć."
     },
     "data": {
       "emptyTitle": "Zaimportuj dane do analizy",

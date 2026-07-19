@@ -1148,7 +1148,19 @@
     "Backup": "Back-up",
     "Memories": "Herinneringen",
     "Agent Access": "Agenttoegang",
-    "LocalModels": "Lokale modellen"
+    "LocalModels": "Lokale modellen",
+    "suggestRevisions": {
+      "title": "Documentrevisies",
+      "toggle": "Suggesties voor revisies in plaats van direct toepassen",
+      "description": "Wanneer u het documentworkflow vraagt om een revisie, ontvangt u de wijzigingen als afzonderlijke suggesties die u kunt accepteren of weigeren, net zoals bij kwaliteitsbeoordelingen.",
+      "exceptionsTitle": "Toch direct toepassen wanneer:",
+      "exceptionSelection": "U een selectie heeft gemarkeerd voor revisie",
+      "exceptionLargeRewrite": "De herschrijving het grootste deel van het document aanpast",
+      "exceptionReorder": "Secties worden verplaatst in plaats van aangepast",
+      "thresholdLabel": "Behandel als herschrijving boven",
+      "thresholdUnit": "% van het document gewijzigd",
+      "exceptionSelectionAlways": "Het reviseren van een gemarkeerde selectie wordt altijd direct toegepast — het model geeft alleen het aangepaste fragment terug, wat niet kan worden opgesplitst in suggesties voor het hele document."
+    }
   },
   "notFound": {
     "lostDog": "Verloren hond"
@@ -2656,7 +2668,8 @@
       "deleteCriterion": "Criterium verwijderen",
       "manageCriteria": "Aangepaste criteria",
       "addCriteria": "Criteria toevoegen",
-      "noUsableCriteria": "Selecteer ten minste één ingebouwd criterium of geef uw aangepaste criteria een rubriek."
+      "noUsableCriteria": "Selecteer ten minste één ingebouwd criterium of geef uw aangepaste criteria een rubriek.",
+      "criterionRubricTooLong": "Deze beoordelingscriteria zijn {over} tekens boven de limiet. Ze worden bij elke beoordeling meegestuurd, dus ze moeten worden ingekort voordat dit criterium gebruikt kan worden."
     },
     "document": {
       "emptyTitle": "Beschrijf het gewenste document",
@@ -2789,7 +2802,19 @@
       "editorModeRich": "Opgemaakte tekst",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Los de voorgestelde wijzigingen op voordat u de editormodus wijzigt."
+      "editorModeLockedEdits": "Los de voorgestelde wijzigingen op voordat u de editormodus wijzigt.",
+      "suggestChanges": "Wijzigingen voorstellen",
+      "suggestChangesHint": "Bekijk de revisie als afzonderlijke suggesties in plaats van het document direct te herschrijven.",
+      "suggestChangesSelectionNote": "Revisies van een selectie worden direct toegepast — de selectie is reeds het door u gekozen bereik.",
+      "suggestedSummary": "{count} {count, plural, one {wijziging} other {wijzigingen}} voorgesteld ter beoordeling.",
+      "revisionSuggestionSummary": "Uw revisieverzoek heeft {count} {count, plural, one {voorgestelde wijziging} other {voorgestelde wijzigingen}} opgeleverd.",
+      "revisionCriterionLabel": "Aangevraagde revisie",
+      "fallbackSelection": "Direct toegepast — revisies van een selectie worden niet als suggestie weergegeven.",
+      "fallbackLargeRewrite": "Direct toegepast — de wijziging is te omvangrijk om als aparte suggesties te beoordelen.",
+      "fallbackReorder": "Direct toegepast — secties zijn verplaatst, dit kan niet worden opgesplitst in afzonderlijke suggesties.",
+      "fallbackUnanchorable": "Direct toegepast — de wijzigingen konden niet worden gekoppeld aan specifieke passages.",
+      "fallbackNoChanges": "Er waren geen wijzigingen nodig.",
+      "criterionRubricTooLong": "Deze beoordelingscriteria zijn {over} tekens boven de limiet. Ze worden bij elke beoordeling meegestuurd, dus ze moeten worden ingekort voordat dit criterium gebruikt kan worden."
     },
     "data": {
       "emptyTitle": "Importeer data om te analyseren",

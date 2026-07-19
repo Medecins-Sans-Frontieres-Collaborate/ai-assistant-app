@@ -1150,7 +1150,19 @@
     "Backup": "Backup",
     "Memories": "Memori",
     "Agent Access": "Akses Agen",
-    "LocalModels": "Model lokal"
+    "LocalModels": "Model lokal",
+    "suggestRevisions": {
+      "title": "Revisi dokumen",
+      "toggle": "Sarankan revisi daripada langsung menerapkannya",
+      "description": "Ketika Anda meminta alur kerja Dokumen untuk merevisi, perubahan akan dikirim sebagai saran individual yang dapat Anda terima atau tolak, sama seperti penilaian kualitas.",
+      "exceptionsTitle": "Tetap terapkan langsung ketika:",
+      "exceptionSelection": "Merevisi pilihan yang Anda sorot",
+      "exceptionLargeRewrite": "Penulisan ulang mengubah sebagian besar dokumen",
+      "exceptionReorder": "Bagian-bagian dipindahkan, bukan diedit",
+      "thresholdLabel": "Anggap sebagai penulisan ulang di atas",
+      "thresholdUnit": "% dokumen yang diubah",
+      "exceptionSelectionAlways": "Merevisi bagian yang disorot akan selalu diterapkan secara langsung — model hanya mengembalikan kutipan yang telah direvisi, yang tidak dapat dipecah menjadi saran untuk seluruh dokumen."
+    }
   },
   "notFound": {
     "lostDog": "Anjing hilang"
@@ -2656,7 +2668,8 @@
       "deleteCriterion": "Hapus kriteria",
       "manageCriteria": "Kriteria khusus",
       "addCriteria": "Tambah kriteria",
-      "noUsableCriteria": "Pilih minimal satu kriteria bawaan, atau tambahkan rubrik untuk kriteria khusus Anda."
+      "noUsableCriteria": "Pilih minimal satu kriteria bawaan, atau tambahkan rubrik untuk kriteria khusus Anda.",
+      "criterionRubricTooLong": "Rubrik ini {over} karakter melebihi batas. Rubrik ini dikirim dengan setiap penilaian, sehingga harus dipangkas sebelum kriteria ini dapat digunakan."
     },
     "document": {
       "emptyTitle": "Deskripsikan dokumen yang Anda inginkan",
@@ -2789,7 +2802,19 @@
       "editorModeRich": "Teks kaya",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Selesaikan saran pengeditan sebelum mengganti mode editor."
+      "editorModeLockedEdits": "Selesaikan saran pengeditan sebelum mengganti mode editor.",
+      "suggestChanges": "Sarankan perubahan",
+      "suggestChangesHint": "Tinjau revisi sebagai saran individual, bukan langsung menulis ulang dokumen.",
+      "suggestChangesSelectionNote": "Revisi pada pilihan diberlakukan langsung — pilihan tersebut sudah merupakan cakupan yang Anda pilih.",
+      "suggestedSummary": "{count} {count, plural, one {perubahan} other {perubahan}} yang disarankan untuk ditinjau.",
+      "revisionSuggestionSummary": "Permintaan revisi Anda menghasilkan {count} {count, plural, one {perubahan yang disarankan} other {perubahan yang disarankan}}.",
+      "revisionCriterionLabel": "Revisi yang diminta",
+      "fallbackSelection": "Diterapkan langsung — revisi pada pilihan tidak disarankan.",
+      "fallbackLargeRewrite": "Diterapkan langsung — penulisan ulang mengubah terlalu banyak dokumen sehingga tidak bisa ditinjau sebagai saran terpisah.",
+      "fallbackReorder": "Diterapkan langsung — bagian-bagian dipindahkan, sehingga tidak dapat dipecah menjadi saran yang dapat ditinjau.",
+      "fallbackUnanchorable": "Diterapkan langsung — perubahan tidak dapat dicocokkan dengan bagian tertentu.",
+      "fallbackNoChanges": "Tidak ada perubahan yang diperlukan.",
+      "criterionRubricTooLong": "Rubrik ini {over} karakter melebihi batas. Rubrik ini dikirim dengan setiap penilaian, sehingga harus dipangkas sebelum kriteria ini dapat digunakan."
     },
     "data": {
       "emptyTitle": "Impor data untuk dianalisis",

@@ -1336,7 +1336,19 @@
     "Backup": "Afẹyinti",
     "Memories": "Ìrántí",
     "Agent Access": "Ìwọlé aṣojú",
-    "LocalModels": "Àwòrán àgbéyẹ̀wò agbègbè"
+    "LocalModels": "Àwòrán àgbéyẹ̀wò agbègbè",
+    "suggestRevisions": {
+      "title": "Àtúnṣe iwe",
+      "toggle": "Ṣàtúnṣe dídá àbẹ́yẹ àpẹẹrẹ dipo fífikọ wọn taara",
+      "description": "Nígbà tí o bá sọ fún Ilana Ìwé láti ṣe àtúnṣe, àwọn ayípadà máa wá bí ìmòràn kọọkan tí o le fọwọsi tàbí kọ, gẹ́gẹ́ bí a ṣe máa n ṣe ìtọ́jú didara.",
+      "exceptionsTitle": "Ṣe taara ní gbogbo ọ̀nà yìí nigbati:",
+      "exceptionSelection": "Tí o bá ṣe àtúnṣe apá tí o yàn",
+      "exceptionLargeRewrite": "Ayípadà náà ti fẹrẹ yí gbogbo iwe padà",
+      "exceptionReorder": "Apá kan ti jẹ́ kí a gbe e rọ̀po dipo ṣiṣàtúnṣe rẹ",
+      "thresholdLabel": "Kà sí àtúnṣe àgbà yìí sáyà",
+      "thresholdUnit": "% ti iwe ti a ṣe ayípadà",
+      "exceptionSelectionAlways": "Atunṣe apakan ti a yan nigbagbogbo n ṣiṣẹ taara — awoṣe naa yoo da pada nikan apakan ti a ti tunṣe, ti ko le pin si awọn aba fun gbogbo iwe naa."
+    }
   },
   "emptyState": {
     "greeting": "Báwo ni mo ṣe lè ràn ọ́ lọ́wọ́?",
@@ -2640,7 +2652,8 @@
       "deleteCriterion": "Pa ìpinnu náà rẹ́",
       "manageCriteria": "Àwọn ìpinnu àdáyébá",
       "addCriteria": "Ṣàfikún ìpinnu",
-      "noUsableCriteria": "Yan ó kere tán ìpinnu kan tí ó wà fúnra rẹ̀ tàbí fi àwòrán ìdámọ̀ sí àwọn ìpinnu rẹ."
+      "noUsableCriteria": "Yan ó kere tán ìpinnu kan tí ó wà fúnra rẹ̀ tàbí fi àwòrán ìdámọ̀ sí àwọn ìpinnu rẹ.",
+      "criterionRubricTooLong": "Ìkànnì àtúpalẹ̀ yìí ti kọja ààlà ní {over} àmi lẹ́kunrẹ́rẹ́. A máa fì ranṣẹ́ pẹ̀lú ìtọ́jú kọọkan, nítorí náà ó gbọ́dọ̀ dín kù kí a tó lè lo àfihàn yìí."
     },
     "document": {
       "emptyTitle": "Ṣàpèjúwe iwe ti o fẹ",
@@ -2773,7 +2786,19 @@
       "editorModeRich": "Ọrọ ọlọrọ",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Yan awọn atunṣe ti a daba silẹ kí o tó yipada ipo olootu."
+      "editorModeLockedEdits": "Yan awọn atunṣe ti a daba silẹ kí o tó yipada ipo olootu.",
+      "suggestChanges": "Sọ ayípadà",
+      "suggestChangesHint": "Ṣàyẹwo àtúnṣe bí ìmòràn kọọkan dipo kó o tún iwe kọ gbogbo rẹ.",
+      "suggestChangesSelectionNote": "Àtúnṣe apá tí o yàn ni a maa ṣe taara — apá tí o yan ni àfikún ayipada rẹ.",
+      "suggestedSummary": "{count} {count, plural, one {ayípadà} other {awọn ayípadà}} ti a daba fún àyẹ̀wò.",
+      "revisionSuggestionSummary": "Ìbéèrè àtúnṣe rẹ dá {count} {count, plural, one {ayípadà tí a dabaa} other {awọn ayípadà tí a dabaa}}.",
+      "revisionCriterionLabel": "Àtúnṣe tí a bẹ̀rẹ̀",
+      "fallbackSelection": "A fi taara ṣe — Àtúnṣe apá tí a yàn kì í jẹ́ adaba.",
+      "fallbackLargeRewrite": "A fi taara ṣe — Ayípadà náà ti yí púpọ̀ nínú iwe padà jù láti ṣe bí ìmòràn kọọkan.",
+      "fallbackReorder": "A fi taara ṣe — a gbe àwọn apá rọ̀po, èyí kì í se àbẹ́yẹ tí a lè yàn.",
+      "fallbackUnanchorable": "A fi taara ṣe — kò ṣeé faramọ́ àwọn gbolohun pàtó.",
+      "fallbackNoChanges": "Kò sí ayípadà tí ó jẹ mọ́.",
+      "criterionRubricTooLong": "Ìkànnì àtúpalẹ̀ yìí ti kọja ààlà ní {over} àmi lẹ́kunrẹ́rẹ́. A máa fì ranṣẹ́ pẹ̀lú ìtọ́jú kọọkan, nítorí náà ó gbọ́dọ̀ dín kù kí a tó lè lo àfihàn yìí."
     },
     "data": {
       "emptyTitle": "Fọwọ́ ìwòye wá",

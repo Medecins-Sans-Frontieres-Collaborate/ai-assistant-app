@@ -1336,7 +1336,19 @@
     "Backup": "Kaydin",
     "Memories": "Xasuus",
     "Agent Access": "Helitaanka Wakiilka",
-    "LocalModels": "Moodallo maxalli ah"
+    "LocalModels": "Moodallo maxalli ah",
+    "suggestRevisions": {
+      "title": "Dib-u-eegista dukumentiga",
+      "toggle": "Soo jeedi dib-u-eegis halkii si toos ah loo samayn lahaa",
+      "description": "Markaad ku codsato habka-shaqada dukumentiga in la dib-u-eego, isbeddellada waxay kuu imanayaan soo jeedin mid mid ah oo aad aqbali karto ama diidi karto, sida qiimeynta tayada.",
+      "exceptionsTitle": "Si toos ah u dalacsi xataa marka:",
+      "exceptionSelection": "Waxaad dib-u-eegis ku sameyneyso xul aad muujisay",
+      "exceptionLargeRewrite": "Dib-u-qorista waxa ay beddeshay inta badan dukumentiga",
+      "exceptionReorder": "Qaybo waa la wareejiyay halkii la sixi lahaa",
+      "thresholdLabel": "U tixgeli dib-u-qoris haddii ka sarre maro",
+      "thresholdUnit": "% dukumentiga la beddelay",
+      "exceptionSelectionAlways": "Hagaajinta xulashada la iftiimiyay mar walba si toos ah ayay u saameysaa — moodeelku wuxuu soo celiyaa oo keliya qaybta la saxay, taas oo aan loo kala jari karin soojeedimo ka dhan ah dukumentiga oo dhan."
+    }
   },
   "emptyState": {
     "greeting": "Sideen kugu caawin karaa?",
@@ -2640,7 +2652,8 @@
       "deleteCriterion": "Tirtir shuruuda",
       "manageCriteria": "Shuruudo gaar ah",
       "addCriteria": "Kudar shuruudo",
-      "noUsableCriteria": "Dooro ugu yaraan hal shuruud oo dhisan ama dhig habbeed shuruudahaaga gaarka ah."
+      "noUsableCriteria": "Dooro ugu yaraan hal shuruud oo dhisan ama dhig habbeed shuruudahaaga gaarka ah.",
+      "criterionRubricTooLong": "Qodobkan waa {over} xaraf kor u dhaafay xadka. Waxa la socdaa qiimeynta kasta, sidaas darteed waa in la gaabiyo ka hor inta aan la isticmaalin qodobkan."
     },
     "document": {
       "emptyTitle": "Sharax dukumintiga aad rabto",
@@ -2773,7 +2786,19 @@
       "editorModeRich": "Qoraal muuqaal leh",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Hagaaji is-beddelka la soo jeediyay ka hor intaadan beddelin habka tifaftiraha."
+      "editorModeLockedEdits": "Hagaaji is-beddelka la soo jeediyay ka hor intaadan beddelin habka tifaftiraha.",
+      "suggestChanges": "Soo jeedi isbeddello",
+      "suggestChangesHint": "Dib-u-eeg dib-u-habeynta adoo isbeddel kasta si gaar ah u eegaya halkii sax ah dukumentiga si toos ah.",
+      "suggestChangesSelectionNote": "Dib-u-eegista xulasho si toos ah ayaa loo dalacsiyaa — xulashada waa aagga aad hore u dooratay.",
+      "suggestedSummary": "{count} {count, plural, one {isbeddel} other {isbeddello}} ayaa lagu soo jeediyay dib-u-eegis.",
+      "revisionSuggestionSummary": "Codsigaaga dib-u-eegis wuxuu soo saaray {count} {count, plural, one {isbeddel la soo jeediyay} other {isbeddello la soo jeediyay}}.",
+      "revisionCriterionLabel": "Dib-u-eegis la codsaday",
+      "fallbackSelection": "Si toos ah ayaa loo dalacsiiyay — dib-u-eegista xulasho lama soo jeediyo.",
+      "fallbackLargeRewrite": "Si toos ah ayaa loo dalacsiiyay — dib-u-qoristu waxa ay beddeshay qayb aad u badan si loogu kala saaro soo jeedinno gaar-gaar ah.",
+      "fallbackReorder": "Si toos ah ayaa loo dalacsiiyay — qaybo ayaa la wareejiyay, mana kala qaybsami karaan soo jeedin dib-u-eegis ah.",
+      "fallbackUnanchorable": "Si toos ah ayaa loo dalacsiiyay — isbeddellada looguma xirin karo meel gaar ah oo dukumentiga ka mid ah.",
+      "fallbackNoChanges": "Isbeddel looma baahnayn.",
+      "criterionRubricTooLong": "Qodobkan waa {over} xaraf kor u dhaafay xadka. Waxa la socdaa qiimeynta kasta, sidaas darteed waa in la gaabiyo ka hor inta aan la isticmaalin qodobkan."
     },
     "data": {
       "emptyTitle": "Keenso xog si loo falanqeeyo",

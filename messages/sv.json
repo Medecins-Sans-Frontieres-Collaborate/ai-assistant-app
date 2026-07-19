@@ -1183,7 +1183,19 @@
     "Backup": "Säkerhetskopiering",
     "Memories": "Minnen",
     "Agent Access": "Agentåtkomst",
-    "LocalModels": "Lokala modeller"
+    "LocalModels": "Lokala modeller",
+    "suggestRevisions": {
+      "title": "Dokumentrevisioner",
+      "toggle": "Föreslå ändringar istället för att tillämpa dem",
+      "description": "När du ber dokumentarbetsflödet att revidera, kommer ändringarna som individuella förslag som du kan acceptera eller avvisa, på samma sätt som kvalitetsbedömningar.",
+      "exceptionsTitle": "Tillämpa ändå direkt när:",
+      "exceptionSelection": "Du reviderar ett markerat urval",
+      "exceptionLargeRewrite": "Omskrivningen ändrar större delen av dokumentet",
+      "exceptionReorder": "Avsnitt flyttas istället för att redigeras",
+      "thresholdLabel": "Betrakta som omskrivning vid",
+      "thresholdUnit": "% av dokumentet ändrat",
+      "exceptionSelectionAlways": "När du reviderar ett markerat urval tillämpas ändringen alltid direkt — modellen returnerar endast det reviderade utdraget, vilket inte kan delas upp i förslag för hela dokumentet."
+    }
   },
   "notFound": {
     "lostDog": "Förlorad hund"
@@ -2656,7 +2668,8 @@
       "deleteCriterion": "Ta bort kriterium",
       "manageCriteria": "Egna kriterier",
       "addCriteria": "Lägg till kriterier",
-      "noUsableCriteria": "Välj minst ett inbyggt kriterium, eller ge dina egna kriterier en bedömningsmall."
+      "noUsableCriteria": "Välj minst ett inbyggt kriterium, eller ge dina egna kriterier en bedömningsmall.",
+      "criterionRubricTooLong": "Denna rubrik överskrider gränsen med {over} tecken. Den skickas med varje bedömning och måste förkortas innan detta kriterium kan användas."
     },
     "document": {
       "emptyTitle": "Beskriv dokumentet du vill ha",
@@ -2789,7 +2802,19 @@
       "editorModeRich": "Rich text",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Lös de föreslagna ändringarna innan du byter redigeringsläge."
+      "editorModeLockedEdits": "Lös de föreslagna ändringarna innan du byter redigeringsläge.",
+      "suggestChanges": "Föreslå ändringar",
+      "suggestChangesHint": "Granska revideringen som enskilda förslag istället för att skriva om dokumentet direkt.",
+      "suggestChangesSelectionNote": "Ändringar i ett markerat urval tillämpas direkt — markeringen är redan det område du valt.",
+      "suggestedSummary": "Föreslog {count} {count, plural, one {ändring} other {ändringar}} för granskning.",
+      "revisionSuggestionSummary": "Din revisionsförfrågan resulterade i {count} {count, plural, one {föreslagen ändring} other {föreslagna ändringar}}.",
+      "revisionCriterionLabel": "Begärd revidering",
+      "fallbackSelection": "Tillämpad direkt — ändringar i ett markerat urval föreslås inte.",
+      "fallbackLargeRewrite": "Tillämpad direkt — omskrivningen ändrade för mycket av dokumentet för att delas upp i enskilda förslag.",
+      "fallbackReorder": "Tillämpad direkt — avsnitt flyttades, vilket inte kan delas upp i granskbara förslag.",
+      "fallbackUnanchorable": "Tillämpad direkt — ändringarna kunde inte kopplas till specifika avsnitt.",
+      "fallbackNoChanges": "Inga ändringar behövdes.",
+      "criterionRubricTooLong": "Denna rubrik överskrider gränsen med {over} tecken. Den skickas med varje bedömning och måste förkortas innan detta kriterium kan användas."
     },
     "data": {
       "emptyTitle": "Importera data för analys",

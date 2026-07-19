@@ -1158,7 +1158,19 @@
     "Backup": "Backup",
     "Memories": "Memorie",
     "Agent Access": "Accesso agente",
-    "LocalModels": "Modelli locali"
+    "LocalModels": "Modelli locali",
+    "suggestRevisions": {
+      "title": "Revisioni dei documenti",
+      "toggle": "Suggerisci le revisioni invece di applicarle",
+      "description": "Quando chiedi al workflow dei documenti di revisionare, le modifiche arrivano come singoli suggerimenti che puoi accettare o rifiutare, proprio come avviene per le valutazioni di qualità.",
+      "exceptionsTitle": "Applica comunque direttamente quando:",
+      "exceptionSelection": "Si revisiona una selezione evidenziata",
+      "exceptionLargeRewrite": "La riscrittura modifica la maggior parte del documento",
+      "exceptionReorder": "Le sezioni vengono spostate invece che modificate",
+      "thresholdLabel": "Considera come riscrittura oltre",
+      "thresholdUnit": "% del documento modificato",
+      "exceptionSelectionAlways": "La revisione di una selezione evidenziata si applica sempre direttamente: il modello restituisce solo il brano rivisto, che non può essere suddiviso in suggerimenti rispetto all'intero documento."
+    }
   },
   "notFound": {
     "lostDog": "Cane smarrito"
@@ -2656,7 +2668,8 @@
       "deleteCriterion": "Elimina criterio",
       "manageCriteria": "Criteri personalizzati",
       "addCriteria": "Aggiungi criteri",
-      "noUsableCriteria": "Seleziona almeno un criterio integrato o aggiungi una rubrica ai tuoi criteri personalizzati."
+      "noUsableCriteria": "Seleziona almeno un criterio integrato o aggiungi una rubrica ai tuoi criteri personalizzati.",
+      "criterionRubricTooLong": "Questa rubrica supera di {over} caratteri il limite. Viene inviata con ogni valutazione, quindi deve essere ridotta prima di poter usare questo criterio."
     },
     "document": {
       "emptyTitle": "Descrivi il documento desiderato",
@@ -2789,7 +2802,19 @@
       "editorModeRich": "Testo formattato",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Risolvi le modifiche suggerite prima di cambiare modalità editor."
+      "editorModeLockedEdits": "Risolvi le modifiche suggerite prima di cambiare modalità editor.",
+      "suggestChanges": "Suggerisci modifiche",
+      "suggestChangesHint": "Rivedi la revisione come suggerimenti individuali invece di riscrivere immediatamente il documento.",
+      "suggestChangesSelectionNote": "Le revisioni su una selezione vengono applicate direttamente — la selezione è già l’area scelta.",
+      "suggestedSummary": "Sono state suggerite {count} {count, plural, one {modifica} other {modifiche}} per la revisione.",
+      "revisionSuggestionSummary": "La tua richiesta di revisione ha prodotto {count} {count, plural, one {modifica suggerita} other {modifiche suggerite}}.",
+      "revisionCriterionLabel": "Revisione richiesta",
+      "fallbackSelection": "Applicato direttamente — le revisioni su una selezione non vengono suggerite.",
+      "fallbackLargeRewrite": "Applicato direttamente — la riscrittura ha modificato troppo il documento per consentire suggerimenti separati.",
+      "fallbackReorder": "Applicato direttamente — le sezioni sono state spostate e questo non consente suggerimenti revisionabili.",
+      "fallbackUnanchorable": "Applicato direttamente — le modifiche non potevano essere associate a passaggi specifici.",
+      "fallbackNoChanges": "Non erano necessarie modifiche.",
+      "criterionRubricTooLong": "Questa rubrica supera di {over} caratteri il limite. Viene inviata con ogni valutazione, quindi deve essere ridotta prima di poter usare questo criterio."
     },
     "data": {
       "emptyTitle": "Importa dati da analizzare",

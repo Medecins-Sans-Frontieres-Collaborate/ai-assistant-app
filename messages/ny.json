@@ -1336,7 +1336,19 @@
     "Backup": "Kubwerera (Backup)",
     "Memories": "Zokumbukira",
     "Agent Access": "Kulowa kwa Agent",
-    "LocalModels": "Mitundu yapafupi"
+    "LocalModels": "Mitundu yapafupi",
+    "suggestRevisions": {
+      "title": "Kusintha kwa zikalata",
+      "toggle": "Nenani kusintha m'malo mopanga kusintha",
+      "description": "Mukapempha Document workflow kuti isinthe, kusintha kumabwera ngati malingaliro omwe mutha kuvomereza kapena kukana, mofanana ndi momwe kuyendera bwino kumachitikira.",
+      "exceptionsTitle": "Mupitilizabe kupangira mwachindunji nthawi izi:",
+      "exceptionSelection": "Mukusintha gawo lomwe mwatchulidwa",
+      "exceptionLargeRewrite": "Kusintha kuli ndi kusintha kwakukulu kwa kalatayo",
+      "exceptionReorder": "Magawo akuyenda m'malo mongosintha",
+      "thresholdLabel": "Tengani ngati kusintha kwakukulu pamwamba",
+      "thresholdUnit": "% ya kalata yasintha",
+      "exceptionSelectionAlways": "Kusintha gawo lomwe lidasankhidwa nthawi zonse kumagwiritsidwa ntchito nthawi yomweyo — model imabweretsa chigawo chosinthidwa chokha, chomwe sichingasiyanitsidwe kukhala malingaliro pa chikalata chonse."
+    }
   },
   "emptyState": {
     "greeting": "Kodi ndingathandize bwanji?",
@@ -2640,7 +2652,8 @@
       "deleteCriterion": "Chotsani mfundo",
       "manageCriteria": "Mfundo zomwe mwakhazikitsa nokha",
       "addCriteria": "Onjezerani mfundo",
-      "noUsableCriteria": "Sankhani imodzi mwa mfundo zomwe zilipo kapena perekani malangizo a mfundo zanu."
+      "noUsableCriteria": "Sankhani imodzi mwa mfundo zomwe zilipo kapena perekani malangizo a mfundo zanu.",
+      "criterionRubricTooLong": "Rubric iyi yapitilira malire ndi zilembo {over}. Amatumizidwa ndi chiweruzo chilichonse, choncho iyenera kuchepetsedwa musanagwiritse ntchito chikhalidwechi."
     },
     "document": {
       "emptyTitle": "Fotokozani chikalata chomwe mukufuna",
@@ -2773,7 +2786,19 @@
       "editorModeRich": "Zolembedwa zokongola",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Thandizani kusintha komwe kwakulimbikitsidwa musanasinthe njira yosintha."
+      "editorModeLockedEdits": "Thandizani kusintha komwe kwakulimbikitsidwa musanasinthe njira yosintha.",
+      "suggestChanges": "Nenani kusintha",
+      "suggestChangesHint": "Onani kusintha monga malingaliro a payekha m'malo molemba kalatayo nthawi yomweyo.",
+      "suggestChangesSelectionNote": "Kusintha pa gawo lomwe mwasankha kumapangidwa mwachindunji — gawoli ndilo mudasankha kale.",
+      "suggestedSummary": "Malingaliro {count} {count, plural, one {kusintha} other {kusintha}} aperekedwa kuti muwone.",
+      "revisionSuggestionSummary": "Pempho lanu lolemba lakhala ndi {count} {count, plural, one {malingaliro a kusintha} other {malingaliro a kusintha}}.",
+      "revisionCriterionLabel": "Kusintha komwe mwapempha",
+      "fallbackSelection": "Apangidwa mwachindunji — kusintha pa gawo silingaperekedwe monga malingaliro.",
+      "fallbackLargeRewrite": "Apangidwa mwachindunji — kusinthaku kwamusintha kwambiri kalata yonse kuti isagawidwe m'malingaliro osiyanasiyana.",
+      "fallbackReorder": "Apangidwa mwachindunji — magawo asunthidwa, zomwe sizingagawidwe m'malingaliro owunikiridwa.",
+      "fallbackUnanchorable": "Apangidwa mwachindunji — kusinthaku kunalephera kugwirizanitsidwa ndi mbali zayekha za kalatayo.",
+      "fallbackNoChanges": "Palibe kusintha komwe kunafunika.",
+      "criterionRubricTooLong": "Rubric iyi yapitilira malire ndi zilembo {over}. Amatumizidwa ndi chiweruzo chilichonse, choncho iyenera kuchepetsedwa musanagwiritse ntchito chikhalidwechi."
     },
     "data": {
       "emptyTitle": "Tengani deta kuti muyese",

@@ -1336,7 +1336,19 @@
     "Backup": "Kopie ya bokotisi",
     "Memories": "Ebakisi",
     "Agent Access": "Kopesa mopesi nzela",
-    "LocalModels": "Bamodelo ya esika"
+    "LocalModels": "Bamodelo ya esika",
+    "suggestRevisions": {
+      "title": "Mibongiseli ya mokanda",
+      "toggle": "Pesa mokano ya kobongisa na esika ya kosala mbala moko",
+      "description": "Soki omitiaki Document workflow ete ebongola, mabongiseli ekoya lokola bantina moko na moko oyo okoki kondima to koboya, kaka ndenge basalaka mpo na misala ya sima ya kalite.",
+      "exceptionsTitle": "Tosalela mbala moko soki:",
+      "exceptionSelection": "Ozali kobongisa eteni oyo omonisaki",
+      "exceptionLargeRewrite": "Bosakoli ebongolaki mingi na mokanda mobimba",
+      "exceptionReorder": "Biteni ebonguami esika ya kobongisama",
+      "thresholdLabel": "Tala lokola bosakoli soki eleki",
+      "thresholdUnit": "% ya mokanda ebongwani",
+      "exceptionSelectionAlways": "Kokoma lisusu eteni oyo epesami ndémba esalemi mbala nyonso — modèle ezongisaka kaka eteni oyo abakisi, ekoki te kokabwana lokola toli na mokanda mobimba."
+    }
   },
   "emptyState": {
     "greeting": "Ndenge nini nakoki kosalisa yo?",
@@ -2640,7 +2652,8 @@
       "deleteCriterion": "Kolongola motindo",
       "manageCriteria": "Mitindo ya yo moko",
       "addCriteria": "Kobakisa mitindo",
-      "noUsableCriteria": "Pona ata motindo moko ya liboso, to pesa mitindo na yo moko malako."
+      "noUsableCriteria": "Pona ata motindo moko ya liboso, to pesa mitindo na yo moko malako.",
+      "criterionRubricTooLong": "Rubrique oyo eleki {over} ba-karactère na ndelo. Ebatelaka na nyonso ya ba-évaluation, ndenge wana soki tomonisi ndelo, ezali na posa ya kokitisa yango mpo criterion oyo esangaka."
     },
     "document": {
       "emptyTitle": "Sosola mokanda olingi",
@@ -2773,7 +2786,19 @@
       "editorModeRich": "Maloba ya ndelo",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Solola balongolami bana esengami liboso ya kobongola mode ya mosali."
+      "editorModeLockedEdits": "Solola balongolami bana esengami liboso ya kobongola mode ya mosali.",
+      "suggestChanges": "Pesa mabongiseli",
+      "suggestChangesHint": "Tala mbongiseli lokola bapanzi moko na moko na esika ya kobongola mokanda mobimba mbala moko.",
+      "suggestChangesSelectionNote": "Mibongiseli na eteni esalemi mbala moko — eteni yango nde osili kopona.",
+      "suggestedSummary": "Mabongiseli {count} {count, plural, one {mbongiseli} other {mabongiseli}} epesami mpo na kotala.",
+      "revisionSuggestionSummary": "Bosengi na yo ya kobongisa ekomemi {count} {count, plural, one {mbongiseli esalamaki} other {mabongiseli esalamaki}}.",
+      "revisionCriterionLabel": "Bosengi ya mabongiseli",
+      "fallbackSelection": "Esalemi mbala moko — mabongiseli ya eteni epesami te.",
+      "fallbackLargeRewrite": "Esalemi mbala moko — bosakoli ebongoli mingi na mokanda mpo tekomi pasi kopesa yango lokola mabongiseli ya ndenge na ndenge.",
+      "fallbackReorder": "Esalemi mbala moko — biteni babonguaki esika, yango ekoki te kopanzana na mabongiseli oyo ekotangama.",
+      "fallbackUnanchorable": "Esalemi mbala moko — mabongiseli ekokani te na biteni ya mokanda polele.",
+      "fallbackNoChanges": "Mabongiseli esengeli te.",
+      "criterionRubricTooLong": "Rubrique oyo eleki {over} ba-karactère na ndelo. Ebatelaka na nyonso ya ba-évaluation, ndenge wana soki tomonisi ndelo, ezali na posa ya kokitisa yango mpo criterion oyo esangaka."
     },
     "data": {
       "emptyTitle": "Bokota ba data mpo epesa anàlizé",

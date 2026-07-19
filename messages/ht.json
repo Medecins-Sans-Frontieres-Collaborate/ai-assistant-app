@@ -1336,7 +1336,19 @@
     "Backup": "Sovgad",
     "Memories": "Memwa",
     "Agent Access": "Aksè Ajan",
-    "LocalModels": "Modèl lokal"
+    "LocalModels": "Modèl lokal",
+    "suggestRevisions": {
+      "title": "Revizyon dokiman yo",
+      "toggle": "Sijere revizyon olye de aplike yo",
+      "description": "Lè ou mande workflow Dokiman an pou revize, chanjman yo vini kòm sijesyon endividyèl ou ka aksepte oswa rejte, menm jan ak evalyasyon kalite yo.",
+      "exceptionsTitle": "Aplike dirèkteman kanmenm lè:",
+      "exceptionSelection": "W ap revize yon seleksyon ou make",
+      "exceptionLargeRewrite": "Reskri a chanje pifò nan dokiman an",
+      "exceptionReorder": "Seksyon yo deplase olye ke modifye",
+      "thresholdLabel": "Konsidere kòm yon reskri pi wo pase",
+      "thresholdUnit": "% nan dokiman an chanje",
+      "exceptionSelectionAlways": "Lè w ap modifye yon pati mete an avan, chanjman an ap aplike dirèkteman — modèl la retounen sèlman pati ki modifye a, epi ou pap ka konvèti l an kòmantè sou tout dokiman an."
+    }
   },
   "emptyState": {
     "greeting": "Kijan mwen ka ede ou?",
@@ -2640,7 +2652,8 @@
       "deleteCriterion": "Efase kritè",
       "manageCriteria": "Kritè pèsonalize",
       "addCriteria": "Ajoute kritè",
-      "noUsableCriteria": "Chwazi omwen yon kritè ki deja egziste oswa bay kritik pèsonalize ou yo yon ribrik."
+      "noUsableCriteria": "Chwazi omwen yon kritè ki deja egziste oswa bay kritik pèsonalize ou yo yon ribrik.",
+      "criterionRubricTooLong": "Ribrik sa depase pa {over} karaktè. Li voye ak chak evalyasyon, kidonk ou dwe koupe l avan ou ka itilize kritè sa a."
     },
     "document": {
       "emptyTitle": "Dekri dokiman ou vle a",
@@ -2773,7 +2786,19 @@
       "editorModeRich": "Tekst rich",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Rezoud modifikasyon yo sijere avan w chanje mòd editè a."
+      "editorModeLockedEdits": "Rezoud modifikasyon yo sijere avan w chanje mòd editè a.",
+      "suggestChanges": "Sijere chanjman",
+      "suggestChangesHint": "Revize modifikasyon an kòm sijesyon endividyèl olye ou reskri dokiman an touswit.",
+      "suggestChangesSelectionNote": "Revizyon sou yon seleksyon aplike dirèkteman — seleksyon an se deja domèn ou chwazi.",
+      "suggestedSummary": "{count} {count, plural, one {chanjman} other {chanjman}} sijere pou revizyon.",
+      "revisionSuggestionSummary": "Demann revizyon ou pwodui {count} {count, plural, one {sijesyon chanjman} other {sijesyon chanjman}}.",
+      "revisionCriterionLabel": "Revizyon mande",
+      "fallbackSelection": "Aplike dirèkteman — revizyon sou yon seleksyon pa sijere.",
+      "fallbackLargeRewrite": "Aplike dirèkteman — reskri a chanje twòp nan dokiman an pou ka revize kòm sijesyon separe.",
+      "fallbackReorder": "Aplike dirèkteman — seksyon yo te deplase, sa pa ka divize an sijesyon revizyon.",
+      "fallbackUnanchorable": "Aplike dirèkteman — chanjman yo pa te kapab matche ak pasaj espesifik.",
+      "fallbackNoChanges": "Pa te gen okenn chanjman ki nesesè.",
+      "criterionRubricTooLong": "Ribrik sa depase pa {over} karaktè. Li voye ak chak evalyasyon, kidonk ou dwe koupe l avan ou ka itilize kritè sa a."
     },
     "data": {
       "emptyTitle": "Enpòte done pou analize",

@@ -1158,7 +1158,19 @@
     "Backup": "גיבוי",
     "Memories": "זכרונות",
     "Agent Access": "גישה של סוכן",
-    "LocalModels": "מודלים מקומיים"
+    "LocalModels": "מודלים מקומיים",
+    "suggestRevisions": {
+      "title": "גרסאות מסמך",
+      "toggle": "הצע שינויים במקום להחיל אותם ישירות",
+      "description": "כאשר תבקש מהזרימת העבודה של המסמך לבצע תיקון, השינויים יופיעו כהצעות אישיות שניתן לאשר או לדחות, בדומה להערכות איכות.",
+      "exceptionsTitle": "בכל זאת החל ישירות כאשר:",
+      "exceptionSelection": "מתבצע תיקון על קטע שסימנת",
+      "exceptionLargeRewrite": "השכתוב משנה את רוב המסמך",
+      "exceptionReorder": "קטעים הוזזו במקום נערכו",
+      "thresholdLabel": "התייחס לעריכה כוללת מעל",
+      "thresholdUnit": "% מהמסמך שונה",
+      "exceptionSelectionAlways": "עריכת קטע מסומן תמיד מתבצעת ישירות — המודל מחזיר רק את הקטע הערוך, ואי אפשר להציג הצעות עבור כל המסמך."
+    }
   },
   "notFound": {
     "lostDog": "כלב אבוד"
@@ -2656,7 +2668,8 @@
       "deleteCriterion": "מחק קריטריון",
       "manageCriteria": "קריטריונים מותאמים",
       "addCriteria": "הוסף קריטריונים",
-      "noUsableCriteria": "בחרו לפחות קריטריון מובנה אחד, או הגדירו רובריקה לקריטריונים שלכם."
+      "noUsableCriteria": "בחרו לפחות קריטריון מובנה אחד, או הגדירו רובריקה לקריטריונים שלכם.",
+      "criterionRubricTooLong": "המדריך הזה חורג ב-{over} תווים מהמגבלה. הוא נשלח עם כל הערכה, לכן יש לקצר אותו לפני שניתן יהיה להשתמש בקריטריון זה."
     },
     "document": {
       "emptyTitle": "תאר את המסמך הרצוי",
@@ -2789,7 +2802,19 @@
       "editorModeRich": "טקסט עשיר",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "יש לסיים את העריכות המוצעות לפני מעבר מצב עורך."
+      "editorModeLockedEdits": "יש לסיים את העריכות המוצעות לפני מעבר מצב עורך.",
+      "suggestChanges": "הצע שינויים",
+      "suggestChangesHint": "סקור את התיקון כהצעות בודדות במקום לכתוב מחדש את המסמך מיד.",
+      "suggestChangesSelectionNote": "תיקונים על קטע נבחר מוחלים ישירות — הקטע כבר הוגדר לטיפול.",
+      "suggestedSummary": "הוצעו {count} {count, plural, one {שינוי} other {שינויים}} לסקירה.",
+      "revisionSuggestionSummary": "בקשתך לתיקון ייצרה {count} {count, plural, one {הצעת שינוי} other {הצעות שינוי}}.",
+      "revisionCriterionLabel": "תיקון שביקשת",
+      "fallbackSelection": "הוחל ישירות — שינויים בקטע נבחר אינם מוצעים.",
+      "fallbackLargeRewrite": "הוחל ישירות — השכתוב שינה יותר מדי מהמסמך כדי להציע כשינויים נפרדים.",
+      "fallbackReorder": "הוחל ישירות — קטעים הוזזו, כך שלא ניתן לפצל להצעות לסקירה.",
+      "fallbackUnanchorable": "הוחל ישירות — לא היה ניתן לשייך את השינויים לקטעים מסוימים.",
+      "fallbackNoChanges": "לא נדרשו שינויים.",
+      "criterionRubricTooLong": "המדריך הזה חורג ב-{over} תווים מהמגבלה. הוא נשלח עם כל הערכה, לכן יש לקצר אותו לפני שניתן יהיה להשתמש בקריטריון זה."
     },
     "data": {
       "emptyTitle": "ייבאו נתונים לניתוח",

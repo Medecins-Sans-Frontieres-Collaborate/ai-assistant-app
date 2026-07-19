@@ -1181,7 +1181,19 @@
     "Backup": "Backup",
     "Memories": "Memorii",
     "Agent Access": "Acces agent",
-    "LocalModels": "Modele locale"
+    "LocalModels": "Modele locale",
+    "suggestRevisions": {
+      "title": "Revizii ale documentului",
+      "toggle": "Sugerează revizii în loc să le aplici",
+      "description": "Când solicitați fluxului de lucru Document să facă o revizie, modificările vor apărea ca sugestii individuale pe care le puteți accepta sau respinge, la fel ca în evaluările de calitate.",
+      "exceptionsTitle": "Aplică direct totuși când:",
+      "exceptionSelection": "Revizuiești o selecție pe care ai evidențiat-o",
+      "exceptionLargeRewrite": "Rescrierea modifică majoritatea documentului",
+      "exceptionReorder": "Secțiunile sunt mutate, nu editate",
+      "thresholdLabel": "Consideră ca rescriere peste",
+      "thresholdUnit": "% din document modificat",
+      "exceptionSelectionAlways": "Revizuirea unei selecții evidențiate se aplică întotdeauna direct — modelul returnează doar fragmentul revizuit, care nu poate fi defalcat sub formă de sugestii pentru întregul document."
+    }
   },
   "notFound": {
     "lostDog": "Câine pierdut"
@@ -2656,7 +2668,8 @@
       "deleteCriterion": "Ștergeți criteriul",
       "manageCriteria": "Criterii personalizate",
       "addCriteria": "Adăugați criterii",
-      "noUsableCriteria": "Selectați cel puțin un criteriu implicit sau adăugați indicații criteriilor personalizate."
+      "noUsableCriteria": "Selectați cel puțin un criteriu implicit sau adăugați indicații criteriilor personalizate.",
+      "criterionRubricTooLong": "Această rubrică depășește limita cu {over} caractere. Este trimisă cu fiecare evaluare, deci trebuie scurtată înainte ca acest criteriu să poată fi folosit."
     },
     "document": {
       "emptyTitle": "Descrieți documentul dorit",
@@ -2789,7 +2802,19 @@
       "editorModeRich": "Text îmbogățit",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Rezolvați sugestiile de modificare înainte de a schimba modul editorului."
+      "editorModeLockedEdits": "Rezolvați sugestiile de modificare înainte de a schimba modul editorului.",
+      "suggestChanges": "Sugerează modificări",
+      "suggestChangesHint": "Revizuiește modificările sub formă de sugestii individuale în loc să rescrii documentul imediat.",
+      "suggestChangesSelectionNote": "Reviziile unei selecții sunt aplicate direct — selecția este deja zona pe care ai ales-o.",
+      "suggestedSummary": "Au fost sugerate {count} {count, plural, one {modificare} other {modificări}} pentru revizuire.",
+      "revisionSuggestionSummary": "Solicitarea dvs. de revizuire a generat {count} {count, plural, one {sugestie de modificare} other {sugestii de modificare}}.",
+      "revisionCriterionLabel": "Revizie solicitată",
+      "fallbackSelection": "Aplicat direct — reviziile pentru o selecție nu sunt sugerate.",
+      "fallbackLargeRewrite": "Aplicat direct — rescrierea a modificat prea mult din document pentru a putea fi sugerată ca modificări separate.",
+      "fallbackReorder": "Aplicat direct — secțiunile au fost mutate, ceea ce nu poate fi transformat în sugestii pentru revizuire.",
+      "fallbackUnanchorable": "Aplicat direct — modificările nu au putut fi asociate unor pasaje specifice.",
+      "fallbackNoChanges": "Nu au fost necesare modificări.",
+      "criterionRubricTooLong": "Această rubrică depășește limita cu {over} caractere. Este trimisă cu fiecare evaluare, deci trebuie scurtată înainte ca acest criteriu să poată fi folosit."
     },
     "data": {
       "emptyTitle": "Importați date pentru analiză",

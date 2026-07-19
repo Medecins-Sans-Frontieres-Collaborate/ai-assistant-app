@@ -1183,7 +1183,19 @@
     "Backup": "Hifadhi rudufu",
     "Memories": "Kumbukumbu",
     "Agent Access": "Ufikivu wa Wakala",
-    "LocalModels": "Miundo ya ndani"
+    "LocalModels": "Miundo ya ndani",
+    "suggestRevisions": {
+      "title": "Marekebisho ya hati",
+      "toggle": "Pendekeza marekebisho badala ya kuyatekeleza moja kwa moja",
+      "description": "Unapoomba mfumo wa Hati kufanya marekebisho, mabadiliko huwasilishwa kama mapendekezo ya mtu mmoja mmoja ambayo unaweza kukubali au kukataa, kama ilivyo katika tathmini za ubora.",
+      "exceptionsTitle": "Tekeleza moja kwa moja pale:",
+      "exceptionSelection": "Unapofanya marekebisho kwenye sehemu uliyoinua",
+      "exceptionLargeRewrite": "Marekebisho yamebadilisha sehemu kubwa ya hati",
+      "exceptionReorder": "Sehemu zimehamishwa badala ya kuhaririwa",
+      "thresholdLabel": "Chukulia kama uandishi upya ukizidi",
+      "thresholdUnit": "% ya hati iliyobadilishwa",
+      "exceptionSelectionAlways": "Kufanyia marekebisho sehemu iliyochaguliwa kunatumika moja kwa moja kila wakati — modeli hurudisha tu sehemu iliyorekebishwa, ambayo haiwezi kugawanywa kama mapendekezo dhidi ya hati nzima."
+    }
   },
   "notFound": {
     "lostDog": "Mbwa aliyepotea"
@@ -2656,7 +2668,8 @@
       "deleteCriterion": "Futa kigezo",
       "manageCriteria": "Vigezo maalum",
       "addCriteria": "Ongeza vigezo",
-      "noUsableCriteria": "Chagua angalau kigezo kimoja kilichojengwa, au weka mwongozo kwa vigezo vyako maalum."
+      "noUsableCriteria": "Chagua angalau kigezo kimoja kilichojengwa, au weka mwongozo kwa vigezo vyako maalum.",
+      "criterionRubricTooLong": "Rubric hii imezidi herufi {over} kuliko kikomo. Hutumwa na kila tathmini, hivyo lazima ipunguzwe kabla ya kutumia kigezo hiki."
     },
     "document": {
       "emptyTitle": "Eleza unachohitaji kwenye hati",
@@ -2789,7 +2802,19 @@
       "editorModeRich": "Maandishi yaliyoboreshwa",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Maliza mapendekezo ya mabadiliko kabla ya kubadili aina ya mhariri."
+      "editorModeLockedEdits": "Maliza mapendekezo ya mabadiliko kabla ya kubadili aina ya mhariri.",
+      "suggestChanges": "Pendekeza mabadiliko",
+      "suggestChangesHint": "Kagua marekebisho kama mapendekezo ya mmoja mmoja badala ya kuandika upya hati moja kwa moja.",
+      "suggestChangesSelectionNote": "Mabadiliko kwenye sehemu uliyochagua yanatekelezwa moja kwa moja — tayari umechagua eneo la marekebisho.",
+      "suggestedSummary": "Mapendekezo {count} {count, plural, one {mabadiliko} other {mabadiliko}} yaliyopendekezwa kwa ukaguzi.",
+      "revisionSuggestionSummary": "Ombi lako la marekebisho limezalisha {count} {count, plural, one {pendekezo la mabadiliko} other {mapendekezo ya mabadiliko}}.",
+      "revisionCriterionLabel": "Marekebisho uliyoyaomba",
+      "fallbackSelection": "Imetekelezwa moja kwa moja — marekebisho kwenye sehemu uliyoinua hayapendekezwi.",
+      "fallbackLargeRewrite": "Imetekelezwa moja kwa moja — uandishi upya umebadilisha sana hati kuliko kupendekeza mabadiliko ya mmoja mmoja.",
+      "fallbackReorder": "Imetekelezwa moja kwa moja — sehemu zimehamishwa, jambo ambalo haliwezi kugawanywa kuwa mapendekezo ya ukaguzi.",
+      "fallbackUnanchorable": "Imetekelezwa moja kwa moja — mabadiliko hayakuweza kuhusishwa na sehemu maalum.",
+      "fallbackNoChanges": "Hakukuwa na mabadiliko yaliyohitajika.",
+      "criterionRubricTooLong": "Rubric hii imezidi herufi {over} kuliko kikomo. Hutumwa na kila tathmini, hivyo lazima ipunguzwe kabla ya kutumia kigezo hiki."
     },
     "data": {
       "emptyTitle": "Ingiza data ili kuchanganua",

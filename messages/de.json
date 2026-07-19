@@ -1183,7 +1183,19 @@
     "Backup": "Backup",
     "Memories": "Erinnerungen",
     "Agent Access": "Agentenzugriff",
-    "LocalModels": "Lokale Modelle"
+    "LocalModels": "Lokale Modelle",
+    "suggestRevisions": {
+      "title": "Dokumentüberarbeitungen",
+      "toggle": "Überarbeitungen vorschlagen statt sie direkt anzuwenden",
+      "description": "Wenn Sie den Dokument-Workflow um eine Überarbeitung bitten, kommen die Änderungen als einzelne Vorschläge, die Sie annehmen oder ablehnen können – wie bei Qualitätsbewertungen.",
+      "exceptionsTitle": "Trotzdem direkt anwenden, wenn:",
+      "exceptionSelection": "Eine von Ihnen markierte Auswahl überarbeitet wird",
+      "exceptionLargeRewrite": "Die Überarbeitung den Großteil des Dokuments verändert",
+      "exceptionReorder": "Abschnitte verschoben werden, statt sie zu bearbeiten",
+      "thresholdLabel": "Als Überarbeitung behandeln ab",
+      "thresholdUnit": "% des Dokuments geändert",
+      "exceptionSelectionAlways": "Die Überarbeitung einer markierten Auswahl wird immer direkt angewendet – das Modell gibt nur den überarbeiteten Ausschnitt zurück, der nicht als Vorschlag für das gesamte Dokument aufgeteilt werden kann."
+    }
   },
   "emptyState": {
     "greeting": "Wie kann ich helfen?",
@@ -2656,7 +2668,8 @@
       "deleteCriterion": "Kriterium löschen",
       "manageCriteria": "Eigene Kriterien",
       "addCriteria": "Kriterien hinzufügen",
-      "noUsableCriteria": "Wählen Sie mindestens ein integriertes Kriterium oder ergänzen Sie Ihre eigenen Kriterien um eine Bewertungsanweisung."
+      "noUsableCriteria": "Wählen Sie mindestens ein integriertes Kriterium oder ergänzen Sie Ihre eigenen Kriterien um eine Bewertungsanweisung.",
+      "criterionRubricTooLong": "Diese Rubrik überschreitet das Limit um {over} Zeichen. Sie wird bei jeder Bewertung gesendet und muss daher gekürzt werden, bevor dieses Kriterium verwendet werden kann."
     },
     "document": {
       "emptyTitle": "Beschreiben Sie das gewünschte Dokument",
@@ -2789,7 +2802,19 @@
       "editorModeRich": "Rich-Text",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Lösen Sie die vorgeschlagenen Änderungen, bevor Sie den Editor-Modus wechseln."
+      "editorModeLockedEdits": "Lösen Sie die vorgeschlagenen Änderungen, bevor Sie den Editor-Modus wechseln.",
+      "suggestChanges": "Änderungen vorschlagen",
+      "suggestChangesHint": "Überprüfen Sie die Überarbeitung als einzelne Vorschläge, statt das Dokument sofort umzuschreiben.",
+      "suggestChangesSelectionNote": "Überarbeitungen einer Auswahl werden direkt angewendet – der gewählte Bereich entspricht bereits Ihrem gewünschten Umfang.",
+      "suggestedSummary": "{count} {count, plural, one {Vorschlag} other {Vorschläge}} zur Überprüfung vorgeschlagen.",
+      "revisionSuggestionSummary": "Ihre Überarbeitungsanfrage ergab {count} {count, plural, one {Vorschlag} other {Vorschläge}}.",
+      "revisionCriterionLabel": "Angeforderte Überarbeitung",
+      "fallbackSelection": "Direkt angewendet – Überarbeitungen einer Auswahl werden nicht vorgeschlagen.",
+      "fallbackLargeRewrite": "Direkt angewendet – die Überarbeitung hat zu viele Teile des Dokuments geändert, um sie als einzelne Vorschläge zu prüfen.",
+      "fallbackReorder": "Direkt angewendet – Abschnitte wurden verschoben, was nicht als überprüfbare Vorschläge aufgeteilt werden kann.",
+      "fallbackUnanchorable": "Direkt angewendet – die Änderungen konnten keinen bestimmten Textstellen zugeordnet werden.",
+      "fallbackNoChanges": "Keine Änderungen erforderlich.",
+      "criterionRubricTooLong": "Diese Rubrik überschreitet das Limit um {over} Zeichen. Sie wird bei jeder Bewertung gesendet und muss daher gekürzt werden, bevor dieses Kriterium verwendet werden kann."
     },
     "data": {
       "emptyTitle": "Daten zum Analysieren importieren",

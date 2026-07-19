@@ -1336,7 +1336,19 @@
     "Backup": "Kubika kopi y'umutekano",
     "Memories": "Imyibukiro",
     "Agent Access": "Uburenganzira bw’Umukozi",
-    "LocalModels": "Imiterere ziri kuri mudasobwa"
+    "LocalModels": "Imiterere ziri kuri mudasobwa",
+    "suggestRevisions": {
+      "title": "Ihindurwa ry'inyandiko",
+      "toggle": "Tanga ibisubizo by'ibyo wahinduye aho kubishyira mu buryo bw'agateganyo",
+      "description": "Iyo usabye ko Document workflow ikosora, impinduka ziza nk'ibitekerezo by'ibisubizo ushobora kwemera cyangwa kwanga, nk'uko biba no mu igenzura ry'ubuziranenge.",
+      "exceptionsTitle": "Byashyirwa ku nyandiko ako kanya igihe:",
+      "exceptionSelection": "Uri gukosora igice wahisemo",
+      "exceptionLargeRewrite": "Inyandiko yahinduwe cyane",
+      "exceptionReorder": "Ibice byimuriwe ahandi aho gukosorwa",
+      "thresholdLabel": "Fata nk'ihindurwa nini haruguru",
+      "thresholdUnit": "% by'inyandiko byahindutse",
+      "exceptionSelectionAlways": "Guhindura igice cyatoranijwe kiriho ibara bihita bisabwa ako kanya — icyitegererezo gitanga igice gihinduwe gusa, kandi ntigishobora kubyazwa izindi nama kuri documant irimo yose."
+    }
   },
   "emptyState": {
     "greeting": "Nakugufasha nte?",
@@ -2640,7 +2652,8 @@
       "deleteCriterion": "Siba igipimo",
       "manageCriteria": "Ibipimo byihariye",
       "addCriteria": "Ongeramo ibipimo",
-      "noUsableCriteria": "Hitamo nibura igipimo kimwe muri bisanzwe, cyangwa uhe ibyawe ibisobanuro."
+      "noUsableCriteria": "Hitamo nibura igipimo kimwe muri bisanzwe, cyangwa uhe ibyawe ibisobanuro.",
+      "criterionRubricTooLong": "Iyi rubric irengeje inyuguti {over} zemewe. Iyoherezwa hamwe n'ubugenzuzi bwose, bityo igomba kugabanywa mbere yo gukoreshwa muri iki gipimo."
     },
     "document": {
       "emptyTitle": "Sobanura inyandiko ushaka",
@@ -2773,7 +2786,19 @@
       "editorModeRich": "Inyandiko isobanutse",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Banza ukemure impinduka zasabwe mbere yo guhindura uburyo."
+      "editorModeLockedEdits": "Banza ukemure impinduka zasabwe mbere yo guhindura uburyo.",
+      "suggestChanges": "Tanga impinduka",
+      "suggestChangesHint": "Suzuma ihinduka nk'ibitekerezo byihariye aho guhita uhindura inyandiko yose.",
+      "suggestChangesSelectionNote": "Impinduka ku gice wahisemo zishyirwa ako kanya — kuko ni cyo wamaze guhitamo nk'ugushaka kwawe.",
+      "suggestedSummary": "Habonetse ibisubizo {count} {count, plural, one {ihinduka} other {impinduka}} byo gusuzuma.",
+      "revisionSuggestionSummary": "Gusaba guhindura kwawe kwatanze {count} {count, plural, one {igitekerezo cy'ihinduka} other {ibitekerezo by'ihinduka}}.",
+      "revisionCriterionLabel": "Ihindurwa wasabye",
+      "fallbackSelection": "Byashyizweho ako kanya — impinduka ku gice wahisemo ntizitunganywa nk'ibitekerezo.",
+      "fallbackLargeRewrite": "Byashyizweho ako kanya — impinduka zari nyinshi cyane kugira ngo zigire ibisubizo bitandukanye.",
+      "fallbackReorder": "Byashyizweho ako kanya — ibice byimuriwe aho kubisuzuma kimwe kimwe.",
+      "fallbackUnanchorable": "Byashyizweho ako kanya — impinduka ntizashoboye guhuza n'ibice byihariye.",
+      "fallbackNoChanges": "Nta mpinduka zasabwe.",
+      "criterionRubricTooLong": "Iyi rubric irengeje inyuguti {over} zemewe. Iyoherezwa hamwe n'ubugenzuzi bwose, bityo igomba kugabanywa mbere yo gukoreshwa muri iki gipimo."
     },
     "data": {
       "emptyTitle": "Injiza amakuru kugirango asuzumwe",

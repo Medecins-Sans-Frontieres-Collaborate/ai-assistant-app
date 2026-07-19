@@ -1336,7 +1336,19 @@
     "Backup": "Kubê ti ngi",
     "Memories": "Zîkö mbênî",
     "Agent Access": "Wako na agent",
-    "LocalModels": "Model ti gbë na mbongo"
+    "LocalModels": "Model ti gbë na mbongo",
+    "suggestRevisions": {
+      "title": "Ködörö ti dokumenti",
+      "toggle": "Suggéré kodörö mbênî tî ayeke kodörö",
+      "description": "Löndö li yeke Document workflow kodörö, ayeke sô ale yii na suggestion mo rena na mbi yeke kweni mbi yeke kwê na mo, tî ndanda na mbi yeke doko na mbi yeke sô a yeke na wafara ka nga kweni tî mû.",
+      "exceptionsTitle": "Mbi yeke kodörö dire dire sô :",
+      "exceptionSelection": "Kodi tî yenî mo a mbênî",
+      "exceptionLargeRewrite": "Sô kodörö a yeke mû a kodörö document tî mingi",
+      "exceptionReorder": "Sô sáké ti document a gbëtï tî lo ti ayeke kodörö",
+      "thresholdLabel": "Zia ti yê na kodörö mbênî sô lo",
+      "thresholdUnit": "% tî mbênî document a kodörö",
+      "exceptionSelectionAlways": "Sô i la yeke mouso ti loo mo kotïngö ti zîa, sô lo bagu ti yeke kundïngi awa — modelï na tîla na mo sô i la kodro, na kodro sô mbi tîla na mouso kpako ni doküma na."
+    }
   },
   "emptyState": {
     "greeting": "Mbi lingbi tî sâra yê?",
@@ -2640,7 +2652,8 @@
       "deleteCriterion": "Kuei likôlo",
       "manageCriteria": "Likôlo na mo kɛ",
       "addCriteria": "Zóngâ likôlo",
-      "noUsableCriteria": "Sâra likôlo mo kɛ aké tî singa, wala dî mo rubrik tî likôlo na mo."
+      "noUsableCriteria": "Sâra likôlo mo kɛ aké tî singa, wala dî mo rubrik tî likôlo na mo.",
+      "criterionRubricTooLong": "Rubric ti lo ayeke {over} caractère tî sô a sû tî tolé. Lo yeke falé na assessment kûê-kûê, ala lo köta mbïrï sô lo yeke ti yeke ïrïti criterion sô."
     },
     "document": {
       "emptyTitle": "Kue ini ti dokumente mbi ti mo yeke",
@@ -2773,7 +2786,19 @@
       "editorModeRich": "Teksto ti zia",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Sûru mbênso na téngbi na ndambu na mode na éditeur."
+      "editorModeLockedEdits": "Sûru mbênso na téngbi na ndambu na mode na éditeur.",
+      "suggestChanges": "Suggéré kodörö",
+      "suggestChangesHint": "Limbä kodörö ti mbênî mbênî sô suggéré tî ayeke kodörö document ngbanga.",
+      "suggestChangesSelectionNote": "Ködörö ti mbênî mo a mbênî ayeke dire dire — sô mo a selekeni ayeke mô tî kodörö ti mo na mbênî.",
+      "suggestedSummary": "Suggéré {count} {count, plural, one {kodörö} other {kodörö}} ti limbä.",
+      "revisionSuggestionSummary": "Demande ti kodörö mo ayeke {count} {count, plural, one {suggestion kodörö} other {suggestion kodörö}}.",
+      "revisionCriterionLabel": "Demande kodörö",
+      "fallbackSelection": "Ayeke dire dire — kodörö ti mbênî mo a mbênî ayeke na suggestion.",
+      "fallbackLargeRewrite": "Ayeke dire dire — kodörö ayeke na document mingi tî sô mbi yeke lingbi li ti suggestion mbênî.",
+      "fallbackReorder": "Ayeke dire dire — sáké ti document ayeke gbëtï, sô ayeke ti na suggestion kême mi limbä.",
+      "fallbackUnanchorable": "Ayeke dire dire — kodörö ayeke sô amâ ni mo ka gba na mbênî mo na document.",
+      "fallbackNoChanges": "Kodörö ayeke na mo.",
+      "criterionRubricTooLong": "Rubric ti lo ayeke {over} caractère tî sô a sû tî tolé. Lo yeke falé na assessment kûê-kûê, ala lo köta mbïrï sô lo yeke ti yeke ïrïti criterion sô."
     },
     "data": {
       "emptyTitle": "Mandra data tî anali",

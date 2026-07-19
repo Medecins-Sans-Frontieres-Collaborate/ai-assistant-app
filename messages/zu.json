@@ -1336,7 +1336,19 @@
     "Backup": "Ukusekelwa",
     "Memories": "Izinkumbulo",
     "Agent Access": "Ukufinyelela Kummeli",
-    "LocalModels": "Amamodeli endaweni"
+    "LocalModels": "Amamodeli endaweni",
+    "suggestRevisions": {
+      "title": "Izichibiyelo zombhalo",
+      "toggle": "Phakamisa izichibiyelo kunokuzisebenzisa ngqo",
+      "description": "Uma ucela ukuthi Kubuyekezwe Umbhalo ohlelweni, izinguquko zifika njengiziphakamiso ongazamukela noma uzinqabe, ngendlela efanayo lokho okwenziwa ukuhlolwa kwekhwalithi.",
+      "exceptionsTitle": "Sebenzisa ngqo noma kunjalo uma:",
+      "exceptionSelection": "Uchibiyela okukhethiwe obekugqamile",
+      "exceptionLargeRewrite": "Ukuchibiyela kushintsha ingxenye enkulu yombhalo",
+      "exceptionReorder": "Izingxenye zithutshwa esikhundleni sokuhlelwa",
+      "thresholdLabel": "Phatha njengokubhalwa kabusha ngenhla",
+      "thresholdUnit": "% yombhalo oshintshiwe",
+      "exceptionSelectionAlways": "Ukulungisa okukhethiwe okuveziwe kuhlala kusebenza ngqo — imodeli ibuyisa kuphela ingxenye eguquliwe, engakwazi ukuhlukaniswa iziphakamiso kukho konke umbhalo."
+    }
   },
   "emptyState": {
     "greeting": "Ngingakusiza kanjani?",
@@ -2640,7 +2652,8 @@
       "deleteCriterion": "Susa indinganiso",
       "manageCriteria": "Izindinganiso ezenziwe ngokwezifiso",
       "addCriteria": "Engeza izindinganiso",
-      "noUsableCriteria": "Khetha okungenani indinganiso eyakhelwe ngaphakathi, noma unikeze izindinganiso zakho umhlahlandlela."
+      "noUsableCriteria": "Khetha okungenani indinganiso eyakhelwe ngaphakathi, noma unikeze izindinganiso zakho umhlahlandlela.",
+      "criterionRubricTooLong": "Lena irubhrikhi idlule ngo-{over} izimpawu kumkhawulo. Ithunyelwa ngokuhlolwa ngakunye, ngakho kufanele yehlelwe ngaphambi kokusetshenziswa kwalesi simiso."
     },
     "document": {
       "emptyTitle": "Chaza umbhalo ofunayo",
@@ -2773,7 +2786,19 @@
       "editorModeRich": "Umbhalo ocebile",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Xazulula izihumusho eziphakanyisiwe ngaphambi kokushintsha imodi yomhleli."
+      "editorModeLockedEdits": "Xazulula izihumusho eziphakanyisiwe ngaphambi kokushintsha imodi yomhleli.",
+      "suggestChanges": "Phakamisa izinguquko",
+      "suggestChangesHint": "Bheka uchibiyelo njengemibono eyodwa kunokubhalwa kabusha kombhalo ngokushesha.",
+      "suggestChangesSelectionNote": "Izichibiyelo kukhetho kusetshenziswa ngqo — ukukhetha kuseyona ndawo oyikhethile.",
+      "suggestedSummary": "Kuphakanyiswe u-{count} {count, plural, one {ushintsho} other {izinguquko}} zokubuyekezwa.",
+      "revisionSuggestionSummary": "Isicelo sakho sochibiyelo sikhiqize u-{count} {count, plural, one {uchibiyelo oluphakanyisiwe} other {izichibiyelo eziphakanyisiwe}}.",
+      "revisionCriterionLabel": "Uchibiyelo oluceliwe",
+      "fallbackSelection": "Kusetshenziswe ngqo — izichibiyelo kukhetho aziphakanyiswanga.",
+      "fallbackLargeRewrite": "Kusetshenziswe ngqo — ukubhalwa kabusha kushintshe ingxenye enkulu yombhalo ukuze kucutshungulwe njengesiphakamiso esingahlukana.",
+      "fallbackReorder": "Kusetshenziswe ngqo — izingxenye ziye zathutshwa, lokhu akuphenduki iziphakamiso ezihlukene zokubuyekezwa.",
+      "fallbackUnanchorable": "Kusetshenziswe ngqo — izinguquko azikwazanga ukubekwa ezingxenyeni ezithize zombhalo.",
+      "fallbackNoChanges": "Azikho izinguquko ezidingekayo.",
+      "criterionRubricTooLong": "Lena irubhrikhi idlule ngo-{over} izimpawu kumkhawulo. Ithunyelwa ngokuhlolwa ngakunye, ngakho kufanele yehlelwe ngaphambi kokusetshenziswa kwalesi simiso."
     },
     "data": {
       "emptyTitle": "Faka idatha ukuze ihlaziywe",

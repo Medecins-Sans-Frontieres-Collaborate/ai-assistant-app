@@ -1336,7 +1336,19 @@
     "Backup": "Backup",
     "Memories": "Fitadidiana",
     "Agent Access": "Fidirana Agent",
-    "LocalModels": "Model eo an-toerana"
+    "LocalModels": "Model eo an-toerana",
+    "suggestRevisions": {
+      "title": "Fanovana antontan-taratasy",
+      "toggle": "Manolora fanitsiana fa tsy manova mivantana",
+      "description": "Rehefa angatahinao hanitsy ny antontan-taratasy ny workflow, dia tonga ho soso-kevitra isanisany ny fanovana azonao ekena na lavina, toy ny amin'ny fanombanana kalitao.",
+      "exceptionsTitle": "Atao mivantana ihany amin'ny toe-javatra:",
+      "exceptionSelection": "Manitsy ampahany nohasongadinao",
+      "exceptionLargeRewrite": "Raha fanoratana vaovao ka ankamaroan'ny antontan-taratasy no niova",
+      "exceptionReorder": "Raha nisy famindrana fizarana fa tsy fanitsiana",
+      "thresholdLabel": "Asio ho fanoratana vaovao raha mihoatra",
+      "thresholdUnit": "% amin'ny antontan-taratasy niova",
+      "exceptionSelectionAlways": "Ny fanitsiana amin'ny santionany voasongona dia mihatra mivantana foana — mamerina ny tapany voahitsy fotsiny ny modely, ka tsy azo zaraina ho soso-kevitra amin'ny tahirin-kevitra manontolo."
+    }
   },
   "emptyState": {
     "greeting": "Afaka manampy inona aho?",
@@ -2640,7 +2652,8 @@
       "deleteCriterion": "Fafao ny fenitra",
       "manageCriteria": "Fenitra manokana",
       "addCriteria": "Ampio fenitra",
-      "noUsableCriteria": "Fidio farafahakeliny fenitra iray efa misy, na omeo torolalana ny fenitrao manokana."
+      "noUsableCriteria": "Fidio farafahakeliny fenitra iray efa misy, na omeo torolalana ny fenitrao manokana.",
+      "criterionRubricTooLong": "Mihoatra ny fetra amin'ny tarehintsoratra {over} ity rubric ity. Alefa amin'ny fanombanana tsirairay izany, ka tsy maintsy ahena alohan'ny fampiasana ity fepetra ity."
     },
     "document": {
       "emptyTitle": "Lazao ny antontan-taratasy ilainao",
@@ -2773,7 +2786,19 @@
       "editorModeRich": "Lahatsoratra manankarena",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Vahao aloha ny fanovàna naroso talohan'ny hanovana fomba fanovàna."
+      "editorModeLockedEdits": "Vahao aloha ny fanovàna naroso talohan'ny hanovana fomba fanovàna.",
+      "suggestChanges": "Manolora fanovana",
+      "suggestChangesHint": "Diniho amin'ny soso-kevitra tsirairay ny fanitsiana fa tsy manitsy mivantana antontan-taratasy.",
+      "suggestChangesSelectionNote": "Napetraka mivantana ny fanitsiana amin'ny ampahany voafantina — efa nofidinao mialoha ny sehatra.",
+      "suggestedSummary": "Soso-kevitra {count} {count, plural, one {fanovana} other {fanovana}} ho dinihina.",
+      "revisionSuggestionSummary": "Ny fangatahanao fanitsiana dia niteraka {count} {count, plural, one {soso-kevitra fanovana} other {soso-kevitra fanovana}}.",
+      "revisionCriterionLabel": "Fanitsiana nangatahana",
+      "fallbackSelection": "Napetraka mivantana — tsy soso-kevitra ny fanovana amin'ny ampahany voafantina.",
+      "fallbackLargeRewrite": "Napetraka mivantana — niova be loatra ny antontan-taratasy ka tsy azo atao soso-kevitra tsirairay.",
+      "fallbackReorder": "Napetraka mivantana — nisy famindrana fizarana fa tsy azo zaraina ho soso-kevitra dinihina.",
+      "fallbackUnanchorable": "Napetraka mivantana — tsy azo nampifanarahana tamin'ny andalan-teny manokana ny fanovana.",
+      "fallbackNoChanges": "Tsy nisy fanovana ilaina.",
+      "criterionRubricTooLong": "Mihoatra ny fetra amin'ny tarehintsoratra {over} ity rubric ity. Alefa amin'ny fanombanana tsirairay izany, ka tsy maintsy ahena alohan'ny fampiasana ity fepetra ity."
     },
     "data": {
       "emptyTitle": "Ampidiro angon-drakitra hojerena",

@@ -1183,7 +1183,19 @@
     "Backup": "백업",
     "Memories": "기억",
     "Agent Access": "에이전트 접근",
-    "LocalModels": "로컬 모델"
+    "LocalModels": "로컬 모델",
+    "suggestRevisions": {
+      "title": "문서 개정",
+      "toggle": "개정 적용 대신 제안하기",
+      "description": "문서 워크플로우에 개정을 요청하면, 변경사항이 개별 제안으로 도착하여 품질 평가처럼 수락하거나 거부할 수 있습니다.",
+      "exceptionsTitle": "다음과 같은 경우에는 직접 적용:",
+      "exceptionSelection": "사용자가 강조 표시한 부분을 개정할 때",
+      "exceptionLargeRewrite": "대부분의 문서가 재작성될 때",
+      "exceptionReorder": "섹션을 편집이 아니라 이동할 때",
+      "thresholdLabel": "이 이상이면 재작성으로 간주",
+      "thresholdUnit": "문서 변경 비율(%)",
+      "exceptionSelectionAlways": "강조된 선택 영역을 수정하면 항상 직접 적용됩니다. 모델은 수정된 발췌 부분만 반환하며, 전체 문서에 대한 제안 사항으로 분리할 수 없습니다."
+    }
   },
   "notFound": {
     "lostDog": "잃어버린 개"
@@ -2656,7 +2668,8 @@
       "deleteCriterion": "기준 삭제",
       "manageCriteria": "맞춤 기준",
       "addCriteria": "기준 추가",
-      "noUsableCriteria": "최소 한 가지 내장 기준을 선택하거나 맞춤 기준에 평가기준을 입력하세요."
+      "noUsableCriteria": "최소 한 가지 내장 기준을 선택하거나 맞춤 기준에 평가기준을 입력하세요.",
+      "criterionRubricTooLong": "이 평가지표는 제한을 {over}자 초과합니다. 모든 평가와 함께 전송되므로, 이 기준을 사용하려면 길이를 줄여야 합니다."
     },
     "document": {
       "emptyTitle": "원하는 문서를 설명하세요",
@@ -2789,7 +2802,19 @@
       "editorModeRich": "리치 텍스트",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "편집기 모드를 전환하기 전에 제안된 수정을 먼저 처리하세요."
+      "editorModeLockedEdits": "편집기 모드를 전환하기 전에 제안된 수정을 먼저 처리하세요.",
+      "suggestChanges": "변경사항 제안",
+      "suggestChangesHint": "문서를 바로 재작성하지 않고 개별 제안으로 개정을 검토하세요.",
+      "suggestChangesSelectionNote": "선택 영역에 대한 개정은 바로 적용됩니다 — 이미 선택한 범위입니다.",
+      "suggestedSummary": "검토를 위해 {count}개 변경사항이 제안되었습니다.",
+      "revisionSuggestionSummary": "개정 요청 결과 {count}개 제안 변경사항이 생성되었습니다.",
+      "revisionCriterionLabel": "요청된 개정",
+      "fallbackSelection": "바로 적용됨 — 선택 영역에 대한 개정은 제안되지 않습니다.",
+      "fallbackLargeRewrite": "바로 적용됨 — 문서의 너무 많은 부분이 변경되어 개별 제안으로 나눌 수 없습니다.",
+      "fallbackReorder": "바로 적용됨 — 섹션이 이동되어 개별 검토 가능한 제안으로 분할되지 않습니다.",
+      "fallbackUnanchorable": "바로 적용됨 — 변경사항을 특정 구절에 연결할 수 없습니다.",
+      "fallbackNoChanges": "변경사항이 필요하지 않았습니다.",
+      "criterionRubricTooLong": "이 평가지표는 제한을 {over}자 초과합니다. 모든 평가와 함께 전송되므로, 이 기준을 사용하려면 길이를 줄여야 합니다."
     },
     "data": {
       "emptyTitle": "분석할 데이터 가져오기",

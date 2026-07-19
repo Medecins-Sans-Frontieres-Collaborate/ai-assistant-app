@@ -1126,7 +1126,19 @@
     "Backup": "ኦፕድ በሚያደርጉበት",
     "Memories": "ትዕዛዞች",
     "Agent Access": "የወኪል መዳረሻ",
-    "LocalModels": "የአካባቢ ሞዴሎች"
+    "LocalModels": "የአካባቢ ሞዴሎች",
+    "suggestRevisions": {
+      "title": "ዶክዩመንት እንደገና ማሻሻያዎች",
+      "toggle": "ማሻሻያዎችን ለመቀበል አካል ያድርጉ እንጂ በቀጥታ አትተግብሩ",
+      "description": "የዶክዩመንት ስራ እንደገና ማሻሻያን ሲጠይቁ፣ ለዚያ ብቻ የሚገቡ ግምገማዎች ሁሉንም ማንበብ ወይም መተው ይችላሉ፣ እንደ ጥራት ግምገማዎች ውስጥ ሆኖ።",
+      "exceptionsTitle": "በቀጥታ ሲተገበሩ የሚደረጉ በሚከተሉበት ጊዜ፦",
+      "exceptionSelection": "የትኩረት ቦታ ተመርጧል ሲሆን እዚህ ላይ ሲመረምሩ",
+      "exceptionLargeRewrite": "እንደገና ጻፎ ዶክዩመንቱ አብዛኛዉን ይቀይራል",
+      "exceptionReorder": "ክፍሎች ተንቀሳቃሽ ይቀየራሉ ግን አይታደሱም",
+      "thresholdLabel": "ከዚህ በላይ እንደ እንደገና ጻፍ ይቆጠራል",
+      "thresholdUnit": "የዶክዩመንቱ የተቀየረው %",
+      "exceptionSelectionAlways": "የታነሰውን ክፍል ማሻሻያ ስለሚደረግ ቀጥሎ ይተገበራል — ሞዴሉ የተሻሻለውን ክፍል ብቻ ይመልሳል፣ ይህም ማሻሻያውን ለሙሉ ሰነድ አካባቢ ወደ ጥናት ማድረግ አይቻልም።"
+    }
   },
   "notFound": {
     "lostDog": "የጠፋ ውሻ"
@@ -2656,7 +2668,8 @@
       "deleteCriterion": "መስፈርት ያጥፉ",
       "manageCriteria": "ብጁ መስፈርቶች",
       "addCriteria": "መስፈርቶችን ያክሉ",
-      "noUsableCriteria": "ቢያንስ አንድ built-in መስፈርት ይምረጡ፣ ወይም ለብጁ መስፈርቶችዎ መመሪያ ያቅርቡ።"
+      "noUsableCriteria": "ቢያንስ አንድ built-in መስፈርት ይምረጡ፣ ወይም ለብጁ መስፈርቶችዎ መመሪያ ያቅርቡ።",
+      "criterionRubricTooLong": "ይህ ሩብሪክ {over} ቁምፊ ከወሰኑ በላይ ነው። ከእያንዳንዱ ግምገማ ጋር ይላካል፣ ስለዚህ ከዚህ በፊት መቀነስ አለበት።"
     },
     "document": {
       "emptyTitle": "የሚፈልጉትን ሰነድ ይግለጹ",
@@ -2789,7 +2802,19 @@
       "editorModeRich": "የተደራሽ ጽሑፍ",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "የተጠቀሱትን ማሻሻያዎች ከመቀየር በፊት ይፍታቹ።"
+      "editorModeLockedEdits": "የተጠቀሱትን ማሻሻያዎች ከመቀየር በፊት ይፍታቹ።",
+      "suggestChanges": "ለውጦችን ያቅርቡ",
+      "suggestChangesHint": "የዶክዩመንትን ማሻሻያ እንደ አንድ አንድ ጥቆማ ይግለጹ እንጂ በቀጥታ አትቀይሩት።",
+      "suggestChangesSelectionNote": "በትኩረት የተቀየሩት ማሻሻያዎች በቀጥታ የተተገቡ ናቸው—ትኩረቱ የተመረጠው አይነቱ ነው።",
+      "suggestedSummary": "{count} የተጠቀሱ {count, plural, one {ለውጥ} other {ለውጦች}} ለእይታ ቀርበዋል።",
+      "revisionSuggestionSummary": "የእርስዎ የማሻሻያ ጥያቄ {count} {count, plural, one {የተጠቀሰ ለውጥ} other {የተጠቀሱ ለውጦች}} አስገነባለች።",
+      "revisionCriterionLabel": "የተጠየቀ ማሻሻያ",
+      "fallbackSelection": "በቀጥታ ተተግቧል — በምርጫ ላይ የተደረጉ ማሻሻያዎች አይጠቅሙም።",
+      "fallbackLargeRewrite": "በቀጥታ ተተግቧል — እንደገና ጻፉ ዶክዩመንቱ ብዙ ተቀይሯል ስለዚህ እንደ አንድ አንድ ጥቆማ ተገጥሟል።",
+      "fallbackReorder": "በቀጥታ ተተግቧል — ክፍሎች ተንቀሳቃሽ ተደርጓል፣ ግን የሚታዩ ማሻሻያዎች አይተስፋፋም።",
+      "fallbackUnanchorable": "በቀጥታ ተተግቧል — ለውጦቹ በየትዳር ማድረግ አልተቻለም።",
+      "fallbackNoChanges": "ምንም ለውጥ አልተፈለገም።",
+      "criterionRubricTooLong": "ይህ ሩብሪክ {over} ቁምፊ ከወሰኑ በላይ ነው። ከእያንዳንዱ ግምገማ ጋር ይላካል፣ ስለዚህ ከዚህ በፊት መቀነስ አለበት።"
     },
     "data": {
       "emptyTitle": "ለትንተና ውሂብ አስገባ",

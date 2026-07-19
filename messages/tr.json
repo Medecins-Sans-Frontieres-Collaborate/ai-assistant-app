@@ -1183,7 +1183,19 @@
     "Backup": "Yedekleme",
     "Memories": "Geçmiş Sohbetler",
     "Agent Access": "Agent Erişimi",
-    "LocalModels": "Yerel modeller"
+    "LocalModels": "Yerel modeller",
+    "suggestRevisions": {
+      "title": "Belge revizyonları",
+      "toggle": "Uygulamak yerine revizyon öner",
+      "description": "Belge iş akışına revizyon yapmasını istediğinizde, değişiklikler kalite değerlendirmelerinde olduğu gibi ayrı ayrı öneriler şeklinde gelir ve bunları kabul edebilir veya reddedebilirsiniz.",
+      "exceptionsTitle": "Aşağıdaki durumlarda yine de doğrudan uygula:",
+      "exceptionSelection": "Vurguladığınız bir seçimi revize ederken",
+      "exceptionLargeRewrite": "Yeniden yazma, belgenin çoğunu değiştiriyorsa",
+      "exceptionReorder": "Bölümler düzenlenmek yerine taşınıyorsa",
+      "thresholdLabel": "Şunun üzerindeyse yeniden yazma olarak değerlendir",
+      "thresholdUnit": "Değiştirilen belge yüzdesi",
+      "exceptionSelectionAlways": "Vurgulanan bir seçimi düzeltmek her zaman doğrudan uygulanır — model yalnızca düzeltilmiş kısmı döndürür ve bu, tüm belgeye karşı öneriler olarak ayrılamaz."
+    }
   },
   "notFound": {
     "lostDog": "Kayıp köpek"
@@ -2656,7 +2668,8 @@
       "deleteCriterion": "Kriteri sil",
       "manageCriteria": "Özel kriterler",
       "addCriteria": "Kriter ekle",
-      "noUsableCriteria": "En az bir yerleşik kriter seçin veya özel kriterlerinize bir değerlendirme ölçütü ekleyin."
+      "noUsableCriteria": "En az bir yerleşik kriter seçin veya özel kriterlerinize bir değerlendirme ölçütü ekleyin.",
+      "criterionRubricTooLong": "Bu rubrik, sınırı {over} karakter aşmaktadır. Her değerlendirme ile gönderildiği için, bu kriter kullanılmadan önce kısaltılmalıdır."
     },
     "document": {
       "emptyTitle": "İstediğiniz belgeyi tanımlayın",
@@ -2789,7 +2802,19 @@
       "editorModeRich": "Zengin metin",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Editör modunu değiştirmeden önce önerilen düzenlemeleri çözün."
+      "editorModeLockedEdits": "Editör modunu değiştirmeden önce önerilen düzenlemeleri çözün.",
+      "suggestChanges": "Değişiklik öner",
+      "suggestChangesHint": "Revizyonu belgenin tamamını yeniden yazmak yerine, bireysel öneriler olarak inceleyin.",
+      "suggestChangesSelectionNote": "Bir seçime yapılan revizyonlar doğrudan uygulanır — seçimin kapsamı zaten belirlenmiştir.",
+      "suggestedSummary": "İnceleme için {count} {count, plural, one {değişiklik} other {değişiklik}} önerildi.",
+      "revisionSuggestionSummary": "Revizyon talebiniz {count} {count, plural, one {önerilen değişiklik} other {önerilen değişiklik}} üretti.",
+      "revisionCriterionLabel": "Talep edilen revizyon",
+      "fallbackSelection": "Doğrudan uygulandı — bir seçime yapılan revizyonlar öneri olarak sunulmaz.",
+      "fallbackLargeRewrite": "Doğrudan uygulandı — yeniden yazma, belgenin çok büyük bir kısmını değiştirdiği için değişiklikler ayrı ayrı önerilemez.",
+      "fallbackReorder": "Doğrudan uygulandı — bölümler taşındı, bu nedenle ayrı ayrı incelenebilir önerilere bölünemez.",
+      "fallbackUnanchorable": "Doğrudan uygulandı — değişiklikler belirli pasajlarla eşleştirilemedi.",
+      "fallbackNoChanges": "Değişiklik gerekmedi.",
+      "criterionRubricTooLong": "Bu rubrik, sınırı {over} karakter aşmaktadır. Her değerlendirme ile gönderildiği için, bu kriter kullanılmadan önce kısaltılmalıdır."
     },
     "data": {
       "emptyTitle": "Analiz için veri içe aktar",

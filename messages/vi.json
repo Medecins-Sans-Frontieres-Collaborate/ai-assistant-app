@@ -1184,7 +1184,19 @@
     "Backup": "Sao lưu",
     "Memories": "Kỷ niệm",
     "Agent Access": "Quyền truy cập Agent",
-    "LocalModels": "Mô hình cục bộ"
+    "LocalModels": "Mô hình cục bộ",
+    "suggestRevisions": {
+      "title": "Sửa đổi tài liệu",
+      "toggle": "Đề xuất chỉnh sửa thay vì áp dụng trực tiếp",
+      "description": "Khi bạn yêu cầu quy trình làm việc Tài liệu sửa đổi, các thay đổi sẽ được gửi dưới dạng các đề xuất riêng lẻ mà bạn có thể chấp nhận hoặc từ chối, giống như các đánh giá chất lượng.",
+      "exceptionsTitle": "Vẫn áp dụng trực tiếp khi:",
+      "exceptionSelection": "Sửa phần đã chọn mà bạn đã tô sáng",
+      "exceptionLargeRewrite": "Việc viết lại thay đổi phần lớn tài liệu",
+      "exceptionReorder": "Các phần được di chuyển chứ không phải chỉnh sửa",
+      "thresholdLabel": "Xem như viết lại nếu vượt",
+      "thresholdUnit": "% tài liệu bị thay đổi",
+      "exceptionSelectionAlways": "Việc chỉnh sửa một đoạn được đánh dấu luôn được áp dụng trực tiếp — mô hình chỉ trả về phần trích dẫn đã chỉnh sửa, không thể tách thành các đề xuất so với toàn bộ tài liệu."
+    }
   },
   "notFound": {
     "lostDog": "Chó bị lạc"
@@ -2687,7 +2699,8 @@
       "deleteCriterion": "Xóa tiêu chí",
       "manageCriteria": "Tiêu chí tùy chỉnh",
       "addCriteria": "Thêm tiêu chí",
-      "noUsableCriteria": "Chọn ít nhất một tiêu chí tích hợp sẵn hoặc đặt chuẩn đánh giá cho tiêu chí tùy chỉnh của bạn."
+      "noUsableCriteria": "Chọn ít nhất một tiêu chí tích hợp sẵn hoặc đặt chuẩn đánh giá cho tiêu chí tùy chỉnh của bạn.",
+      "criterionRubricTooLong": "Bảng tiêu chí này vượt quá giới hạn {over} ký tự. Nó được gửi kèm mỗi lần đánh giá nên cần rút gọn trước khi dùng tiêu chí này."
     },
     "document": {
       "emptyTitle": "Mô tả tài liệu bạn muốn",
@@ -2820,7 +2833,19 @@
       "editorModeRich": "Văn bản phong phú",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Hãy giải quyết các chỉnh sửa được đề xuất trước khi chuyển chế độ chỉnh sửa."
+      "editorModeLockedEdits": "Hãy giải quyết các chỉnh sửa được đề xuất trước khi chuyển chế độ chỉnh sửa.",
+      "suggestChanges": "Đề xuất thay đổi",
+      "suggestChangesHint": "Xem lại chỉnh sửa dưới dạng đề xuất riêng lẻ thay vì viết lại toàn bộ tài liệu ngay lập tức.",
+      "suggestChangesSelectionNote": "Sửa đổi cho phần đã chọn sẽ được áp dụng trực tiếp — phạm vi này đã do bạn chọn.",
+      "suggestedSummary": "Đã đề xuất {count} {count, plural, one {thay đổi} other {thay đổi}} để xem xét.",
+      "revisionSuggestionSummary": "Yêu cầu sửa đổi của bạn đã tạo ra {count} {count, plural, one {đề xuất thay đổi} other {đề xuất thay đổi}}.",
+      "revisionCriterionLabel": "Sửa đổi được yêu cầu",
+      "fallbackSelection": "Áp dụng trực tiếp — sửa phần chọn sẽ không tạo thành đề xuất.",
+      "fallbackLargeRewrite": "Áp dụng trực tiếp — việc viết lại đã thay đổi quá nhiều nên không thể chia nhỏ thành đề xuất riêng lẻ.",
+      "fallbackReorder": "Áp dụng trực tiếp — các phần đã được di chuyển nên không thể chia thành đề xuất để xem xét.",
+      "fallbackUnanchorable": "Áp dụng trực tiếp — không thể liên kết thay đổi với đoạn cụ thể.",
+      "fallbackNoChanges": "Không có thay đổi nào cần thiết.",
+      "criterionRubricTooLong": "Bảng tiêu chí này vượt quá giới hạn {over} ký tự. Nó được gửi kèm mỗi lần đánh giá nên cần rút gọn trước khi dùng tiêu chí này."
     },
     "data": {
       "emptyTitle": "Nhập dữ liệu để phân tích",

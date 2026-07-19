@@ -1158,7 +1158,19 @@
     "Backup": "Còpia de seguretat",
     "Memories": "Memòries",
     "Agent Access": "Accés de l’agent",
-    "LocalModels": "Models locals"
+    "LocalModels": "Models locals",
+    "suggestRevisions": {
+      "title": "Revisions del document",
+      "toggle": "Suggereix revisions en lloc d’aplicar-les",
+      "description": "Quan demanis al flux de treball del document que revisi, els canvis arribaran com a suggeriments individuals que pots acceptar o rebutjar, igual que passa amb les avaluacions de qualitat.",
+      "exceptionsTitle": "Aplica directament igualment quan:",
+      "exceptionSelection": "Es revisa una selecció que has ressaltat",
+      "exceptionLargeRewrite": "La reescriptura canvia la major part del document",
+      "exceptionReorder": "Les seccions es mouen en lloc d’editar-se",
+      "thresholdLabel": "Considera com a reescriptura quan superi",
+      "thresholdUnit": "% del document canviat",
+      "exceptionSelectionAlways": "Revisar una selecció ressaltada s'aplica sempre directament: el model retorna només el fragment revisat, que no es pot dividir en suggeriments per al document complet."
+    }
   },
   "notFound": {
     "lostDog": "Gos perdut"
@@ -2656,7 +2668,8 @@
       "deleteCriterion": "Suprimeix criteri",
       "manageCriteria": "Criteris personalitzats",
       "addCriteria": "Afegeix criteris",
-      "noUsableCriteria": "Selecciona almenys un criteri integrat o afegeix una rúbrica als teus criteris personalitzats."
+      "noUsableCriteria": "Selecciona almenys un criteri integrat o afegeix una rúbrica als teus criteris personalitzats.",
+      "criterionRubricTooLong": "Aquesta rúbrica supera el límit en {over} caràcters. S’envia amb cada avaluació, així que cal retallar-la abans que aquest criteri es pugui utilitzar."
     },
     "document": {
       "emptyTitle": "Descriu el document que vols",
@@ -2789,7 +2802,19 @@
       "editorModeRich": "Text enriquit",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Resol els canvis suggerits abans de canviar el mode d'edició."
+      "editorModeLockedEdits": "Resol els canvis suggerits abans de canviar el mode d'edició.",
+      "suggestChanges": "Suggerir canvis",
+      "suggestChangesHint": "Revisa la revisió com a suggeriments individuals en comptes de reescriure directament el document.",
+      "suggestChangesSelectionNote": "Les revisions sobre una selecció s’apliquen directament: la selecció ja és l’àmbit que has triat.",
+      "suggestedSummary": "S’han suggerit {count} {count, plural, one {canvi} other {canvis}} per revisar.",
+      "revisionSuggestionSummary": "La teva sol·licitud de revisió ha produït {count} {count, plural, one {canvi suggerit} other {canvis suggerits}}.",
+      "revisionCriterionLabel": "Revisió sol·licitada",
+      "fallbackSelection": "Aplicat directament: les revisions a una selecció no són suggerides.",
+      "fallbackLargeRewrite": "Aplicat directament: la reescriptura ha canviat massa part del document per poder revisar-ho com a suggeriments separats.",
+      "fallbackReorder": "Aplicat directament: les seccions s’han mogut, cosa que no es pot separar en suggeriments revisables.",
+      "fallbackUnanchorable": "Aplicat directament: no s’han pogut assignar els canvis a passatges específics.",
+      "fallbackNoChanges": "No calia fer cap canvi.",
+      "criterionRubricTooLong": "Aquesta rúbrica supera el límit en {over} caràcters. S’envia amb cada avaluació, així que cal retallar-la abans que aquest criteri es pugui utilitzar."
     },
     "data": {
       "emptyTitle": "Importa dades per analitzar",

@@ -1336,7 +1336,19 @@
     "Backup": "Doggu",
     "Memories": "Hakkilɗiiji",
     "Agent Access": "Aade agent",
-    "LocalModels": "Moodelji jowte ɗee"
+    "LocalModels": "Moodelji jowte ɗee",
+    "suggestRevisions": {
+      "title": "Ɓeydude dokumeeji",
+      "toggle": "Hollu beydugol so wonaa nduttegoo",
+      "description": "So a waawi dokumeeji beydugol, waylude kadi, bimbudeeji ɓurɗe e bimbiɗi ɗaɗi, a waawaa ɗa juɗɗi walla woppita, ɗum kadi ko no waɗii seeɗa e caɗeele jiite.",
+      "exceptionsTitle": "Naatnu ɗum geɗe so...:",
+      "exceptionSelection": "Beydugol e dariindi gooɗum",
+      "exceptionLargeRewrite": "So rewtiɗi wayluɗɓe fayde tee seeroy dokumeeji",
+      "exceptionReorder": "So fannuɗi sarkaaji, tees gooɗi waawaama beydit",
+      "thresholdLabel": "Yiytu rewtiɗi nden laawol",
+      "thresholdUnit": "% dokumeeji waylude",
+      "exceptionSelectionAlways": "Gollal caggal kadi nder laawol danndaniima heen—model tottan to ekkita yiltoorde rewtiindi, o waawiida tuima sey a ngollinaama kisal bonan dokkita nder dokkal kissal."
+    }
   },
   "emptyState": {
     "greeting": "Hol no mbaaw-mi wallitde?",
@@ -2640,7 +2652,8 @@
       "deleteCriterion": "Momtu tiɗɗo",
       "manageCriteria": "Tiɗɗe jaŋtorde",
       "addCriteria": "Ɓeydu tiɗɗe",
-      "noUsableCriteria": "Seyda ɗum: suɓo goɗɗo tiɗɗo mokkoyaa, walla jokka rubrik ngal tiɗɗe maa."
+      "noUsableCriteria": "Seyda ɗum: suɓo goɗɗo tiɗɗo mokkoyaa, walla jokka rubrik ngal tiɗɗe maa.",
+      "criterionRubricTooLong": "Rubric on ko {over} ɓirtaari ɓuri doole. Ko ɗum feewi waɗude e caɗeele kala, kono ɗum waawi so tawtii e dow laabi."
     },
     "document": {
       "emptyTitle": "Winndu lan binndi dannde maa",
@@ -2773,7 +2786,19 @@
       "editorModeRich": "Hollu buuba",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Sappo tan yamirde yaltine hollu hulnde."
+      "editorModeLockedEdits": "Sappo tan yamirde yaltine hollu hulnde.",
+      "suggestChanges": "Hollu bimbiɗi",
+      "suggestChangesHint": "Gasanda dokumeeji cemma, bimbiɗi waawnde dari e holluɗi, tee so wonaa rewtiɗe dokumeeji.",
+      "suggestChangesSelectionNote": "Beydugol e dariindi gooɗum woni ngaari — dariindi woodi no a suɓi.",
+      "suggestedSummary": "{count} {count, plural, one {bimbiɗo} other {bimbiɗi}} ndiyam hollani ɗum.",
+      "revisionSuggestionSummary": "Kisalaki maa holli {count} {count, plural, one {bimbiɗo mbimmi} other {bimbiɗi mbimmi}}.",
+      "revisionCriterionLabel": "Kisalaki beydugol",
+      "fallbackSelection": "Ngaari — beydi e dariindi gooɗum waawataa hollude.",
+      "fallbackLargeRewrite": "Ngaari — rewtiɗi waylude hiɓɓe dokumeeji booyaani holludiraa.",
+      "fallbackReorder": "Ngaari — sarkaaji fannuɗi, tee ko waawataa ɗaɓɓitinde holluɗi.",
+      "fallbackUnanchorable": "Ngaari — bimbiɗi waawataa ndarra heen e caɗeele batte maa.",
+      "fallbackNoChanges": "Bimbiɗi alaa.",
+      "criterionRubricTooLong": "Rubric on ko {over} ɓirtaari ɓuri doole. Ko ɗum feewi waɗude e caɗeele kala, kono ɗum waawi so tawtii e dow laabi."
     },
     "data": {
       "emptyTitle": "Kilot data ngol analiseede",

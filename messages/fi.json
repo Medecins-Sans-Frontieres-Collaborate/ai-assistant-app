@@ -1158,7 +1158,19 @@
     "Backup": "Varmuuskopiointi",
     "Memories": "Muistot",
     "Agent Access": "Agentin käyttöoikeus",
-    "LocalModels": "Paikalliset mallit"
+    "LocalModels": "Paikalliset mallit",
+    "suggestRevisions": {
+      "title": "Asiakirjamuutokset",
+      "toggle": "Ehdota muutoksia suoran soveltamisen sijaan",
+      "description": "Kun pyydät asiakirjan työnkululta muutosta, muutokset tulevat yksittäisinä ehdotuksina, jotka voit hyväksyä tai hylätä samalla tavoin kuin laatuarvioinnit.",
+      "exceptionsTitle": "Sovella suoraan kuitenkin, kun:",
+      "exceptionSelection": "Muutat korostamaasi valintaa",
+      "exceptionLargeRewrite": "Uudelleenkirjoitus muuttaa suurimman osan asiakirjasta",
+      "exceptionReorder": "Osioita siirretään muokkaamisen sijaan",
+      "thresholdLabel": "Käsittele uudelleenkirjoituksena yli",
+      "thresholdUnit": "% asiakirjasta muuttunut",
+      "exceptionSelectionAlways": "Korjattaessa korostettua valintaa muutos toteutetaan aina suoraan — malli palauttaa vain korjatun otteen, eikä sitä voida esittää ehdotuksina koko dokumenttia vastaan."
+    }
   },
   "notFound": {
     "lostDog": "Kadonnut koira"
@@ -2656,7 +2668,8 @@
       "deleteCriterion": "Poista kriteeri",
       "manageCriteria": "Omat kriteerit",
       "addCriteria": "Lisää kriteereitä",
-      "noUsableCriteria": "Valitse vähintään yksi sisäänrakennettu kriteeri tai anna omille kriteereillesi ohjeistus."
+      "noUsableCriteria": "Valitse vähintään yksi sisäänrakennettu kriteeri tai anna omille kriteereillesi ohjeistus.",
+      "criterionRubricTooLong": "Tämä arviointikriteeri ylittää rajan {over} merkillä. Se lähetetään jokaisen arvioinnin yhteydessä, joten sitä täytyy lyhentää ennen tämän kriteerin käyttöä."
     },
     "document": {
       "emptyTitle": "Kuvaile haluamaasi asiakirjaa",
@@ -2789,7 +2802,19 @@
       "editorModeRich": "Muotoiltu teksti",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Ratkaise ehdotetut muutokset ennen muokkaustilan vaihtamista."
+      "editorModeLockedEdits": "Ratkaise ehdotetut muutokset ennen muokkaustilan vaihtamista.",
+      "suggestChanges": "Ehdota muutoksia",
+      "suggestChangesHint": "Tarkista revisio yksittäisinä ehdotuksina sen sijaan, että koko asiakirja kirjoitettaisiin heti uudelleen.",
+      "suggestChangesSelectionNote": "Valinnan muutokset sovelletaan suoraan — valinta on jo valitsemasi osuus.",
+      "suggestedSummary": "Ehdotettu {count} {count, plural, one {muutos} other {muutosta}} tarkistettavaksi.",
+      "revisionSuggestionSummary": "Pyyntösi tuotti {count} {count, plural, one {ehdotetun muutoksen} other {ehdotettua muutosta}}.",
+      "revisionCriterionLabel": "Pyydetty muutos",
+      "fallbackSelection": "Sovellettiin suoraan — valinnan muutoksia ei ehdoteta.",
+      "fallbackLargeRewrite": "Sovellettiin suoraan — uudelleenkirjoitus muutti liikaa asiakirjaa erillisten ehdotusten tarkistamiseen.",
+      "fallbackReorder": "Sovellettiin suoraan — osioita siirrettiin, joten tarkistettavia ehdotuksia ei voitu muodostaa.",
+      "fallbackUnanchorable": "Sovellettiin suoraan — muutoksia ei voitu kohdistaa tiettyihin kohtiin.",
+      "fallbackNoChanges": "Muutoksia ei tarvittu.",
+      "criterionRubricTooLong": "Tämä arviointikriteeri ylittää rajan {over} merkillä. Se lähetetään jokaisen arvioinnin yhteydessä, joten sitä täytyy lyhentää ennen tämän kriteerin käyttöä."
     },
     "data": {
       "emptyTitle": "Tuo analysoitavaa dataa",

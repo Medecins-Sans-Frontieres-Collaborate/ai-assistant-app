@@ -1336,7 +1336,19 @@
     "Backup": "ቦታ ምዝጋብ",
     "Memories": "ዝኽረኛት",
     "Agent Access": "Agent መግቢኡ",
-    "LocalModels": "ኣካባቢ ሞዴልታት"
+    "LocalModels": "ኣካባቢ ሞዴልታት",
+    "suggestRevisions": {
+      "title": "ማህደር እንደገና ማስተካከያት",
+      "toggle": "እተካኣላት ኣብ መተግበሪ ኣይኮነን ምልክት መቀርበልኩን",
+      "description": "ንማህደር ኮርኡ እንደገና ብዝበዝሐ ከም ትጠይቑ እንተሃበኩም፣ እተቀየሩ ናይ ሓደ ሓደ ምልክታት እዮም ዝመጡ፣ ተቐበልካ ወይ መከየድካ ትኽእል፡፡ ከምኡውን ብዝኾነ መረመሩ ኣብ ጥራይ ምርመራዎ ይኸውንሉ።",
+      "exceptionsTitle": "ንእሱ ግን ብቐጻሊ እንተተተገበረ፡",
+      "exceptionSelection": "ንዝረኸብካ ክፋል እንደገና ማሳሰቢ",
+      "exceptionLargeRewrite": "እተካኣላት ዋናውያኡ ዘለዎ ናይ ማህደር ክፋል ዝተቐየረ",
+      "exceptionReorder": "ክፋላት ቅድሚ ፡ ብመተካከል እዚ እንተተቀየሩ ኣይኮነን ዝምልከት",
+      "thresholdLabel": "ካብዚ ላዕሊ ንድሕሪት ተካእሏ ትቅበል",
+      "thresholdUnit": "% ናይ ማህደር ዝተቐየረ",
+      "exceptionSelectionAlways": "ናይቲ ተኣርኣዩ ምረጽ ዝተገልጸ ግዚ፡ ምትኽል ብድሕሪት ይተግበሩ። ኣብዚ ኩነታት ሞዴሉ ብብልጽግና ዝተስተረኽተ ክፋን ኢሎ ይመልሳ፣ ዚኾነስ ብኣይኑ ምኽንያቱ ብኣብዛ ድሑረት ውሑድ ሰብ ሰብ መኽንያቱ ኣይኽእልን።"
+    }
   },
   "emptyState": {
     "greeting": "ብኸመይ ክሕግዝ?",
@@ -2640,7 +2652,8 @@
       "deleteCriterion": "መሰረት ኣጽዳእ",
       "manageCriteria": "ብኣገልግሎት ዝተሰርሑ መሰረታት",
       "addCriteria": "መሰረታት ኣእትው",
-      "noUsableCriteria": "ብዙሕ ከም ምስክትው መሰረት ወይ ሩብሪክ ዘለዋ መሰረታት ስርጉ።"
+      "noUsableCriteria": "ብዙሕ ከም ምስክትው መሰረት ወይ ሩብሪክ ዘለዋ መሰረታት ስርጉ።",
+      "criterionRubricTooLong": "እዚ መስፈርሒ ብ {over}፡ ቁምፊ ግዜ ውፅኢቱ። ብኣኽባር ኣብ ኩሉ ውሳኔ ይልኣል፡፡ ቅድሚ ክተግበሩ ፣ ከይደፍኡዎ።"
     },
     "document": {
       "emptyTitle": "ዝብዝሕ ደብዳበ ኣንባብ",
@@ -2773,7 +2786,19 @@
       "editorModeRich": "ዝሓለፈ ፅሑፍ",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "ናይ ምቅጻል ምምኽንያቶም ኣቐዲሙ ዘሎ ርእስቲ ክቕየር ክኸውን ኣይተትኽክለን።"
+      "editorModeLockedEdits": "ናይ ምቅጻል ምምኽንያቶም ኣቐዲሙ ዘሎ ርእስቲ ክቕየር ክኸውን ኣይተትኽክለን።",
+      "suggestChanges": "መቀየሪ ምልክትን",
+      "suggestChangesHint": "ከም ምልክታት እተካኣላት ተርእዩ፡፡ ንብፅዕቲ ማህደር ከምዚ ደሓን ኣይተኻአልን።",
+      "suggestChangesSelectionNote": "እንደገና ማስተካከያት ንምረከቡ ቀጻሊ እተተመጸኡ፡ ዝረኸብካ ክፋል ግዲ ዝመረጽኻዮ እዩ።",
+      "suggestedSummary": "{count} {count, plural, one {መቀየሪ} other {መቀየራት}} ምስጢራት ምርመራ ተሓቢሩ።",
+      "revisionSuggestionSummary": "ናይካ ዝተደሊ መቀየሪ ጥያቄ {count} {count, plural, one {እተሓተቐ መቀየሪ} other {እተሓተቑ መቀየራት}} ።",
+      "revisionCriterionLabel": "ዝተሰማማዐ ማስተካከያ",
+      "fallbackSelection": "ቀጻሊ ተኸዲኡ — ንምረከቡ ቀጻሊ ኣተሓባቡን።",
+      "fallbackLargeRewrite": "ቀጻሊ ተኸዲኡ — እተካኣላት ዋናውያኡ ማህደር ተቐየረ፣ ንፍሉይ ምልክታት እንደ ስነት ክትፈትኑ ኣይትኽእሉን።",
+      "fallbackReorder": "ቀጻሊ ተኸዲኡ — ክፋላት ቅድሚ ቐደም ክተሓዝኡ ክህበካ ኣይከኣልን፡፡",
+      "fallbackUnanchorable": "ቀጻሊ ተኸዲኡ — እተቐየሩ በተወሳኺ ክፋል ክምልክት ኣይተኾነን።",
+      "fallbackNoChanges": "ምልክታት ኣይተፈጸመን።",
+      "criterionRubricTooLong": "እዚ መስፈርሒ ብ {over}፡ ቁምፊ ግዜ ውፅኢቱ። ብኣኽባር ኣብ ኩሉ ውሳኔ ይልኣል፡፡ ቅድሚ ክተግበሩ ፣ ከይደፍኡዎ።"
     },
     "data": {
       "emptyTitle": "ዳታ ኣስገብር ንምርመራ",

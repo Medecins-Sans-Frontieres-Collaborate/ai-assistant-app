@@ -1336,7 +1336,19 @@
     "Backup": "Ajiyayyen bayanai",
     "Memories": "Tarihi",
     "Agent Access": "Izinin wakili",
-    "LocalModels": "Samfuran cikin gida"
+    "LocalModels": "Samfuran cikin gida",
+    "suggestRevisions": {
+      "title": "Gyaran takardu",
+      "toggle": "Ba da shawarar gyare-gyare maimakon aiwatar da su kai tsaye",
+      "description": "Idan ka umarci tsarin Takardu da ya gyara, sauye-sauyen za su iso a matsayin shawarwari daban-daban da za ka iya amincewa da su ko ƙin amincewa, yadda ake yin kimanta inganci.",
+      "exceptionsTitle": "Aiwatar kai tsaye idan:",
+      "exceptionSelection": "Ana gyara abin da ka haskaka",
+      "exceptionLargeRewrite": "Sake rubutun ya shafi mafi yawan takardar",
+      "exceptionReorder": "An matsar da sassa maimakon a gyara su",
+      "thresholdLabel": "Dauka a matsayin sake rubutu idan ya wuce sama",
+      "thresholdUnit": "% na takarda da aka canza",
+      "exceptionSelectionAlways": "Gyaran abin da aka haskaka kai tsaye yana aiki — samfurin zai dawo da ɓangaren da aka gyara kawai, kuma ba zai iya riƙa ba da shawarwari a kan dukan takarda ba."
+    }
   },
   "emptyState": {
     "greeting": "Ta yaya zan iya taimaka?",
@@ -2640,7 +2652,8 @@
       "deleteCriterion": "Goge ƙa'ida",
       "manageCriteria": "Kundin ƙa'ida na musamman",
       "addCriteria": "Ƙara ƙa'idoji",
-      "noUsableCriteria": "Zaɓi akalla ƙa'ida ɗaya daga cikin da ke ciki, ko ka ƙayyade dangantaka ga ƙa'idojin ka na musamman."
+      "noUsableCriteria": "Zaɓi akalla ƙa'ida ɗaya daga cikin da ke ciki, ko ka ƙayyade dangantaka ga ƙa'idojin ka na musamman.",
+      "criterionRubricTooLong": "Wannan rubutun ya kai {over} haruffa fiye da iyaka. Ana aikawa da shi a kowane kimantawa, don haka dole a rage shi kafin a iya amfani da wannan mizanin."
     },
     "document": {
       "emptyTitle": "Bayyana takardar da kake so",
@@ -2773,7 +2786,19 @@
       "editorModeRich": "Rubutu mai inganci",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Warware gyare-gyaren da aka bayar kafin canza yanayin edita."
+      "editorModeLockedEdits": "Warware gyare-gyaren da aka bayar kafin canza yanayin edita.",
+      "suggestChanges": "Ba da shawarar canje-canje",
+      "suggestChangesHint": "Duba gyaran a matsayin shawarwari maimakon sake rubuta takardar gaba ɗaya nan da nan.",
+      "suggestChangesSelectionNote": "Gyare-gyare ga zaɓen da ka yi ana aiwatar da su kai tsaye — wannan zaɓin shine shiyyar da ka zaɓa.",
+      "suggestedSummary": "An ba da shawarar {count} {count, plural, one {canji} other {canje-canje}} don dubawa.",
+      "revisionSuggestionSummary": "Bukatar gyaranka ta samar da {count} {count, plural, one {shawarar canji} other {shawarwarin canje-canje}}.",
+      "revisionCriterionLabel": "Gyarawa da aka nema",
+      "fallbackSelection": "An aiwatar kai tsaye — ba a ba da shawarwari ga gyaran da aka zaɓa ba.",
+      "fallbackLargeRewrite": "An aiwatar kai tsaye — sake rubutun ya chanja yawancin takarda, ba a iya dubawa a matsayin shawarwari daban-daban.",
+      "fallbackReorder": "An aiwatar kai tsaye — an matsar da sassa, hakan ba zai iya zama shawarwari masu zaman kansu ba.",
+      "fallbackUnanchorable": "An aiwatar kai tsaye — ba a iya daidaita sauye-sauyen da takamaiman sashe ba.",
+      "fallbackNoChanges": "Ba a buƙatar canje-canje.",
+      "criterionRubricTooLong": "Wannan rubutun ya kai {over} haruffa fiye da iyaka. Ana aikawa da shi a kowane kimantawa, don haka dole a rage shi kafin a iya amfani da wannan mizanin."
     },
     "data": {
       "emptyTitle": "Shigo da bayanai don nazari",

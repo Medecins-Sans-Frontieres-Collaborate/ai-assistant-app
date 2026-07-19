@@ -1214,7 +1214,19 @@
     "Backup": "备份",
     "Memories": "记忆",
     "Agent Access": "代理访问",
-    "LocalModels": "本地模型"
+    "LocalModels": "本地模型",
+    "suggestRevisions": {
+      "title": "文档修订",
+      "toggle": "建议修订而非直接应用",
+      "description": "当您请求文档工作流程进行修订时，更改将作为单独建议列出，您可选择接受或拒绝，方式与质量评估相同。",
+      "exceptionsTitle": "在以下情况下仍直接应用：",
+      "exceptionSelection": "修订您高亮的选择部分",
+      "exceptionLargeRewrite": "重写内容占据文档大部分时",
+      "exceptionReorder": "内容为移动章节而非编辑",
+      "thresholdLabel": "若超过此比例视为重写",
+      "thresholdUnit": "文档更改百分比",
+      "exceptionSelectionAlways": "修改高亮选区时总是直接应用——模型只返回修改后的片段，无法将其拆分为针对整个文档的建议。"
+    }
   },
   "notFound": {
     "lostDog": "迷路的狗"
@@ -2687,7 +2699,8 @@
       "deleteCriterion": "删除标准",
       "manageCriteria": "自定义标准",
       "addCriteria": "添加标准",
-      "noUsableCriteria": "请至少选择一个内置标准，或为自定义标准添加评分细则。"
+      "noUsableCriteria": "请至少选择一个内置标准，或为自定义标准添加评分细则。",
+      "criterionRubricTooLong": "该评判标准超出限制 {over} 个字符。它会随每次评估发送，因此在使用此标准前必须进行裁剪。"
     },
     "document": {
       "emptyTitle": "描述您需要的文档",
@@ -2820,7 +2833,19 @@
       "editorModeRich": "富文本",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "在切换编辑器模式前，请先解决建议的修改。"
+      "editorModeLockedEdits": "在切换编辑器模式前，请先解决建议的修改。",
+      "suggestChanges": "建议更改",
+      "suggestChangesHint": "逐项审查修订建议，而不是直接重写整篇文档。",
+      "suggestChangesSelectionNote": "对所选内容的修订会直接应用——您已确定修改范围。",
+      "suggestedSummary": "建议了 {count} 项{count, plural, one {更改} other {更改}}供审核。",
+      "revisionSuggestionSummary": "您的修订请求产生了 {count} 项{count, plural, one {建议更改} other {建议更改}}。",
+      "revisionCriterionLabel": "请求的修订",
+      "fallbackSelection": "已直接应用——针对所选内容的修订不会建议。",
+      "fallbackLargeRewrite": "已直接应用——重写部分过多，无法分割为独立建议审核。",
+      "fallbackReorder": "已直接应用——章节为移动操作，无法拆分成建议审核。",
+      "fallbackUnanchorable": "已直接应用——无法将更改定位到具体段落。",
+      "fallbackNoChanges": "无需更改。",
+      "criterionRubricTooLong": "该评判标准超出限制 {over} 个字符。它会随每次评估发送，因此在使用此标准前必须进行裁剪。"
     },
     "data": {
       "emptyTitle": "导入数据进行分析",

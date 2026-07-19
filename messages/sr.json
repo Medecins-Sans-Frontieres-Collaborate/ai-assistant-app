@@ -1336,7 +1336,19 @@
     "Backup": "Bekap",
     "Memories": "Memorije",
     "Agent Access": "Pristup agentu",
-    "LocalModels": "Lokalni modeli"
+    "LocalModels": "Lokalni modeli",
+    "suggestRevisions": {
+      "title": "Revizije dokumenta",
+      "toggle": "Predloži izmene umesto trenutne primene",
+      "description": "Kada tražite od radnog toka za dokument da izvrši reviziju, izmene stižu kao pojedinačni predlozi koje možete prihvatiti ili odbiti, na isti način kao i kod procene kvaliteta.",
+      "exceptionsTitle": "Ipak primeni direktno kada:",
+      "exceptionSelection": "Revidirate izabrani deo koji ste označili",
+      "exceptionLargeRewrite": "Prepravka menja većinu dokumenta",
+      "exceptionReorder": "Sekcije su pomerene, a ne izmenjene",
+      "thresholdLabel": "Smatraj prepravkom iznad",
+      "thresholdUnit": "% dokumenta izmenjeno",
+      "exceptionSelectionAlways": "Izmena označenog dela uvek se primenjuje direktno — model vraća samo izmenjeni isečak, koji ne može biti podeljen na predloge u odnosu na ceo dokument."
+    }
   },
   "emptyState": {
     "greeting": "Како могу да помогнем?",
@@ -2640,7 +2652,8 @@
       "deleteCriterion": "Obriši kriterijum",
       "manageCriteria": "Prilagođeni kriterijumi",
       "addCriteria": "Dodaj kriterijume",
-      "noUsableCriteria": "Izaberite bar jedan ugrađeni kriterijum ili dodajte uputstvo svojim kriterijumima."
+      "noUsableCriteria": "Izaberite bar jedan ugrađeni kriterijum ili dodajte uputstvo svojim kriterijumima.",
+      "criterionRubricTooLong": "Ova smernica je duža za {over} znakova od dozvoljenog. Šalje se uz svaku procenu, pa mora biti skraćena pre nego što se ovaj kriterijum može koristiti."
     },
     "document": {
       "emptyTitle": "Opišite dokument koji želite",
@@ -2773,7 +2786,19 @@
       "editorModeRich": "Obogaćen tekst",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Razrešite predložene izmene pre promene režima uređivača."
+      "editorModeLockedEdits": "Razrešite predložene izmene pre promene režima uređivača.",
+      "suggestChanges": "Predloži izmene",
+      "suggestChangesHint": "Pregledajte revizije kao pojedinačne predloge umesto trenutnog prepravljanja celog dokumenta.",
+      "suggestChangesSelectionNote": "Revizije izabranog dela se primenjuju direktno — već ste odabrali obuhvat.",
+      "suggestedSummary": "Predloženo {count} {count, plural, one {izmena} few {izmene} other {izmena}} za pregled.",
+      "revisionSuggestionSummary": "Vaš zahtev za revizijom je dao {count} {count, plural, one {predloženu izmenu} few {predložene izmene} other {predloženih izmena}}.",
+      "revisionCriterionLabel": "Zatražena revizija",
+      "fallbackSelection": "Primeni direktno — izmene izabranog dela nisu predložene.",
+      "fallbackLargeRewrite": "Primeni direktno — prepravka je izmenila previše dokumenta za pregled kroz predloge.",
+      "fallbackReorder": "Primeni direktno — sekcije su pomerene, što se ne može podeliti na pregledive predloge.",
+      "fallbackUnanchorable": "Primeni direktno — izmene nije bilo moguće povezati sa određenim delovima teksta.",
+      "fallbackNoChanges": "Izmene nisu bile potrebne.",
+      "criterionRubricTooLong": "Ova smernica je duža za {over} znakova od dozvoljenog. Šalje se uz svaku procenu, pa mora biti skraćena pre nego što se ovaj kriterijum može koristiti."
     },
     "data": {
       "emptyTitle": "Uvezite podatke za analizu",

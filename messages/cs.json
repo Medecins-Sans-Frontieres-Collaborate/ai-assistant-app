@@ -1183,7 +1183,19 @@
     "Backup": "Záloha",
     "Memories": "Vzpomínky",
     "Agent Access": "Přístup agenta",
-    "LocalModels": "Lokální modely"
+    "LocalModels": "Lokální modely",
+    "suggestRevisions": {
+      "title": "Revize dokumentu",
+      "toggle": "Navrhovat revize místo jejich přímého použití",
+      "description": "Když požádáte workflow dokumentu o revizi, změny dorazí jako jednotlivé návrhy, které můžete přijmout nebo odmítnout, stejně jako u hodnocení kvality.",
+      "exceptionsTitle": "Přesto použít přímo, když:",
+      "exceptionSelection": "Reviduje se zvýrazněná pasáž",
+      "exceptionLargeRewrite": "Přepis mění většinu dokumentu",
+      "exceptionReorder": "Oddíly jsou přesunuty, nikoli upraveny",
+      "thresholdLabel": "Považovat za přepis, pokud přesáhne",
+      "thresholdUnit": "% změněného dokumentu",
+      "exceptionSelectionAlways": "Úprava zvýrazněného výběru se vždy použije okamžitě — model vrací pouze upravený úryvek, který nelze rozdělit na návrhy vůči celému dokumentu."
+    }
   },
   "notFound": {
     "lostDog": "Ztracený pes"
@@ -2656,7 +2668,8 @@
       "deleteCriterion": "Smazat kritérium",
       "manageCriteria": "Vlastní kritéria",
       "addCriteria": "Přidat kritéria",
-      "noUsableCriteria": "Vyberte alespoň jedno vestavěné kritérium, nebo zadejte vlastní rubriku ke svým kritériím."
+      "noUsableCriteria": "Vyberte alespoň jedno vestavěné kritérium, nebo zadejte vlastní rubriku ke svým kritériím.",
+      "criterionRubricTooLong": "Tato kritéria překračují limit o {over} znaků. Odesílají se s každým hodnocením, proto je nutné je zkrátit, než je lze použít."
     },
     "document": {
       "emptyTitle": "Popište požadovaný dokument",
@@ -2789,7 +2802,19 @@
       "editorModeRich": "Rich text",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Před změnou režimu editoru vyřešte navržené úpravy."
+      "editorModeLockedEdits": "Před změnou režimu editoru vyřešte navržené úpravy.",
+      "suggestChanges": "Navrhnout změny",
+      "suggestChangesHint": "Revizi zkontrolujte jako jednotlivé návrhy místo okamžitého přepsání celého dokumentu.",
+      "suggestChangesSelectionNote": "Revize výběru se použijí přímo — rozsah jste již zvolili.",
+      "suggestedSummary": "Navrženo {count} {count, plural, one {změna} few {změny} other {změn}} k revizi.",
+      "revisionSuggestionSummary": "Vaše žádost o revizi vygenerovala {count} {count, plural, one {navrženou změnu} few {navržené změny} other {navržených změn}}.",
+      "revisionCriterionLabel": "Požadovaná revize",
+      "fallbackSelection": "Použito přímo — revize výběru nejsou navrhovány.",
+      "fallbackLargeRewrite": "Použito přímo — přepis změnil příliš velkou část dokumentu, než aby šel rozdělit na jednotlivé návrhy.",
+      "fallbackReorder": "Použito přímo — oddíly byly přesunuty a nelze je navrhnout jednotlivě.",
+      "fallbackUnanchorable": "Použito přímo — změny nemohly být přiřazeny ke konkrétním pasážím.",
+      "fallbackNoChanges": "Žádné změny nebyly potřeba.",
+      "criterionRubricTooLong": "Tato kritéria překračují limit o {over} znaků. Odesílají se s každým hodnocením, proto je nutné je zkrátit, než je lze použít."
     },
     "data": {
       "emptyTitle": "Importujte data k analýze",
