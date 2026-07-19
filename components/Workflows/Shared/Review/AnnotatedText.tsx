@@ -104,12 +104,15 @@ export function AnnotatedText({
   className,
 }: AnnotatedTextProps) {
   const rootRef = useRef<HTMLElement>(null);
-  const [pinPoint, setPinPoint] = useState<PinPoint | null>(null);
-
-  // The point belongs to the pin; losing one must lose the other.
-  useEffect(() => {
-    if (!pinnedId) setPinPoint(null);
-  }, [pinnedId]);
+  // The point belongs to the pin, so it is stored keyed by the edit it was
+  // captured for and derived during render. Losing the pin loses the point
+  // with no effect round-trip, and a pin moved from outside (parent-driven)
+  // can't render its bar at the previous pin's position.
+  const [pinAnchor, setPinAnchor] = useState<{
+    id: string;
+    point: PinPoint;
+  } | null>(null);
+  const pinPoint = pinAnchor?.id === pinnedId ? pinAnchor.point : null;
 
   const marks = useMemo(() => {
     const searchable = edits
@@ -149,7 +152,7 @@ export function AnnotatedText({
       onPin(null);
       return;
     }
-    setPinPoint(point);
+    setPinAnchor({ id, point });
     onPin(id);
   };
 
