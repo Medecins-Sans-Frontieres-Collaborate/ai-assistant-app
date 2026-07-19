@@ -358,6 +358,23 @@ This is a **bold** paragraph with *italic* text.
     });
 
     it.each([
+      ['<p>&amp;</p>', 'a visible entity'],
+      ['<p>a &nosuchentity; b</p>', 'an unknown entity'],
+      ['<p>5 &lt; 6</p>', 'an escaped angle bracket'],
+    ])('treats %s as non-empty (%s)', (html) => {
+      expect(isEmptyDocHtml(html)).toBe(false);
+    });
+
+    it('is a predicate, not a sanitizer, on malformed nesting', () => {
+      // CodeQL flagged the previous strip-then-compare implementation because
+      // one pass over nesting like this can reassemble `<script`. Nothing is
+      // sanitized here: the answer is a boolean and no derived string escapes
+      // the function, so malformed input just has to produce a sane verdict.
+      expect(isEmptyDocHtml('<scr<x>ipt>alert(1)</script>')).toBe(false);
+      expect(typeof isEmptyDocHtml('<p>x</p>')).toBe('boolean');
+    });
+
+    it.each([
       ['<p>Text</p>', 'prose'],
       ['<h1>Title</h1>', 'a heading'],
       ['<p><img src="x.png"></p>', 'an image with no text'],
