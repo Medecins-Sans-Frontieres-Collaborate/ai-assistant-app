@@ -155,10 +155,16 @@ export interface McpOauthState {
  */
 export interface McpServerConfig {
   id: string;
-  /** Present ⇒ curated catalog entry ('github' | 'asana'); absent ⇒ arbitrary. */
+  /** Present ⇒ curated catalog entry ('github' | 'asana' | …). */
   catalogKey?: string;
+  /**
+   * Present ⇒ admin-authored connector. Like catalogKey the URL is resolved
+   * server-side, but resolution ALSO re-checks this user's access rules, so a
+   * stale entry for a revoked connector simply stops resolving.
+   */
+  connectorId?: string;
   name: string;
-  /** '' for curated entries; user-entered https URL otherwise. */
+  /** '' for curated entries and connectors; user-entered https URL otherwise. */
   url: string;
   /** How this server authenticates (mirrors the catalog for curated entries). */
   authMode: McpAuthMode;
