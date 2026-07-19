@@ -28,7 +28,6 @@ export const SuggestRevisionsSetting: FC = () => {
   );
 
   const exceptionRows = [
-    { key: 'selectionScoped', label: t('exceptionSelection') },
     { key: 'largeRewrites', label: t('exceptionLargeRewrite') },
     { key: 'structuralReorders', label: t('exceptionReorder') },
   ] as const;
@@ -58,6 +57,12 @@ export const SuggestRevisionsSetting: FC = () => {
       <div className="mt-3 ms-7">
         <p className="text-xs font-medium text-gray-600 dark:text-gray-400">
           {t('exceptionsTitle')}
+        </p>
+        {/* Stated, not offered: a selection revise returns only the revised
+            excerpt, so there is no document-shaped result to diff into
+            suggestions. Making it a toggle would offer a broken setting. */}
+        <p className="mt-1 max-w-[60ch] text-xs text-gray-500 dark:text-gray-400">
+          {t('exceptionSelectionAlways')}
         </p>
         <div className="mt-1.5 flex flex-col gap-1.5">
           {exceptionRows.map(({ key, label }) => (
