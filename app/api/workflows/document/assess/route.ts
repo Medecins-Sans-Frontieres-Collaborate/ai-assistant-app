@@ -16,6 +16,10 @@ import {
   isCustomCriterionId,
   isDocumentBuiltinCriterionId,
 } from '@/lib/utils/shared/document/qualityCriteria';
+import {
+  MAX_CRITERION_NAME_CHARS,
+  MAX_CRITERION_RUBRIC_CHARS,
+} from '@/lib/utils/shared/review/customCriteria';
 
 import { DocumentProfile, DocumentSpec } from '@/types/workflow';
 
@@ -26,8 +30,11 @@ export const maxDuration = 300;
 const MAX_DOC_CHARS = 60_000;
 const MAX_CRITERIA = 12;
 const MAX_SPEC_SECTIONS = 30;
-const MAX_RUBRIC_CHARS = 2_000;
-const MAX_NAME_CHARS = 100;
+// Re-exported from the shared module rather than redeclared: the editor that
+// creates these criteria enforces the same numbers, and a local copy silently
+// drifting is how an over-long rubric became "Unknown criterion".
+const MAX_RUBRIC_CHARS = MAX_CRITERION_RUBRIC_CHARS;
+const MAX_NAME_CHARS = MAX_CRITERION_NAME_CHARS;
 
 interface DocumentAssessRequest {
   /** htmlToMarkdown(docHtml) — always the FULL document. */
@@ -79,25 +86,48 @@ export async function POST(req: NextRequest) {
   }
 
   // Validate custom criterion definitions for every requested custom id.
+  //
+  // Rejections are recorded with a reason rather than just dropped. A
+  // definition that fails here still has a perfectly real id, so reporting
+  // "Unknown criterion" sends the user hunting for a criterion that plainly
+  // exists in their list — when the actual problem is that its rubric is too
+  // long for the prompt budget.
   const customById = new Map<string, { name: string; rubric: string }>();
+  const rejected = new Map<string, string>();
   for (const def of body.customCriteria ?? []) {
-    if (
-      def &&
-      typeof def.id === 'string' &&
-      isCustomCriterionId(def.id) &&
-      typeof def.name === 'string' &&
-      def.name.trim() !== '' &&
-      def.name.length <= MAX_NAME_CHARS &&
-      typeof def.rubric === 'string' &&
-      def.rubric.trim() !== '' &&
-      def.rubric.length <= MAX_RUBRIC_CHARS
-    ) {
-      customById.set(def.id, { name: def.name, rubric: def.rubric });
+    if (!def || typeof def.id !== 'string' || !isCustomCriterionId(def.id)) {
+      continue;
+    }
+    const name = typeof def.name === 'string' ? def.name : '';
+    const rubric = typeof def.rubric === 'string' ? def.rubric : '';
+    if (name.trim() === '') {
+      rejected.set(def.id, 'needs a name');
+    } else if (name.length > MAX_NAME_CHARS) {
+      rejected.set(
+        def.id,
+        `name is ${name.length} characters; the limit is ${MAX_NAME_CHARS}`,
+      );
+    } else if (rubric.trim() === '') {
+      rejected.set(def.id, 'needs a rubric');
+    } else if (rubric.length > MAX_RUBRIC_CHARS) {
+      rejected.set(
+        def.id,
+        `rubric is ${rubric.length} characters; the limit is ${MAX_RUBRIC_CHARS}`,
+      );
+    } else {
+      customById.set(def.id, { name, rubric });
     }
   }
   for (const id of criterionIds) {
     if (isDocumentBuiltinCriterionId(id)) continue;
     if (isCustomCriterionId(id) && customById.has(id)) continue;
+    const reason = rejected.get(id);
+    if (reason) {
+      const label = body.customCriteria?.find((d) => d?.id === id)?.name;
+      return badRequestResponse(
+        `Criterion ${label ? `"${label}"` : id} ${reason}`,
+      );
+    }
     return badRequestResponse('Unknown criterion');
   }
   if (criterionIds.includes('specAdherence') && !body.spec) {
