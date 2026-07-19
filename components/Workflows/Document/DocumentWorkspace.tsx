@@ -313,10 +313,22 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     const mode: 'generate' | 'revise' = hasDocument ? 'revise' : 'generate';
     // Selection scope only applies to revisions of an existing document.
     const scopedSelection = mode === 'revise' ? selection : null;
-    snapshotRef.current = docHtml;
+    const priorMarkdown = hasDocument ? htmlToMarkdown(docHtml) : '';
+    // Whether this run is HEADED for the review queue. Decided up front only
+    // to choose the preview behaviour — the real decision needs the finished
+    // text and happens below.
+    const intendToSuggest =
+      suggestRevisions &&
+      mode === 'revise' &&
+      !(scopedSelection && suggestRevisionsExceptions.selectionScoped);
     // Selection revisions land atomically on completion — no streaming
     // preview (the preview would misleadingly replace the whole document).
-    if (!scopedSelection) setStreamHtml(hasDocument ? docHtml : '');
+    // Suggested revisions suppress it for the same reason: the document is
+    // not changing, so watching it be rewritten and then snap back would be
+    // a lie about what happened.
+    if (!scopedSelection && !intendToSuggest) {
+      setStreamHtml(hasDocument ? docHtml : '');
+    }
 
     const references = state.references
       .map((ref) => ({
@@ -341,7 +353,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         },
         onText: (fullText) => {
           finalMarkdown = fullText;
-          if (scopedSelection) return; // atomic replace on completion
+          if (scopedSelection || intendToSuggest) return; // land on completion
           const now = Date.now();
           if (now - lastRenderRef.current >= STREAM_RENDER_INTERVAL_MS) {
             lastRenderRef.current = now;
@@ -349,6 +361,69 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           }
         },
       });
+
+      const plan = planRevision({
+        enabled: suggestRevisions,
+        mode,
+        scoped: scopedSelection !== null,
+        oldMarkdown: priorMarkdown,
+        newMarkdown: finalMarkdown,
+        exceptions: suggestRevisionsExceptions,
+        largeRewriteRatio: suggestRevisionsLargeRewriteRatio,
+      });
+
+      if (plan.kind === 'suggest') {
+        // The document is left exactly as it was; the rewrite becomes a queue
+        // of individually acceptable changes against the markdown the model
+        // was given, which is what `docMarkdown` has to be for `before` to
+        // keep matching.
+        updateWorkflowState(conversationId, (prev) => {
+          const p = prev as DocumentWorkflowState;
+          return {
+            ...p,
+            revisions: [
+              ...p.revisions,
+              {
+                id: uuidv4(),
+                instruction: trimmed,
+                at: new Date().toISOString(),
+              },
+            ],
+            assessment: {
+              id: uuidv4(),
+              criteria: [],
+              overallSummary: t('document.revisionSuggestionSummary', {
+                count: plan.changes.length,
+              }),
+              edits: plan.changes.map((change) => ({
+                id: uuidv4(),
+                criterion: REVISION_CRITERION,
+                before: change.before,
+                after: change.after,
+                reason: trimmed,
+                severity: 'minor' as const,
+                status: 'pending' as const,
+              })),
+              docMarkdown: priorMarkdown,
+              scope: 'document' as const,
+              labels: {
+                [REVISION_CRITERION]: t('document.revisionCriterionLabel'),
+              },
+              createdAt: new Date().toISOString(),
+            },
+            updatedAt: new Date().toISOString(),
+          };
+        });
+        setReviewOpen(true);
+        appendRailMessages(
+          trimmed,
+          t('document.suggestedSummary', { count: plan.changes.length }),
+        );
+        setInstruction('');
+        clearChips();
+        setStreamHtml(null);
+        return;
+      }
 
       let html: string;
       if (scopedSelection) {
@@ -395,13 +470,22 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           workflow: 'Document',
         });
       }
+      // Falling back is not a failure, but it IS a departure from what the
+      // ticked checkbox implied, so it is stated rather than left to be
+      // noticed by the document changing when the user expected suggestions.
+      const fallbackNote = FALLBACK_NOTE_KEYS[plan.reason];
       appendRailMessages(
         trimmed,
-        scopedSelection
-          ? t('document.revisedSelectionSummary')
-          : mode === 'generate'
-            ? t('document.generatedSummary')
-            : t('document.revisedSummary'),
+        [
+          scopedSelection
+            ? t('document.revisedSelectionSummary')
+            : mode === 'generate'
+              ? t('document.generatedSummary')
+              : t('document.revisedSummary'),
+          fallbackNote ? t(fallbackNote) : '',
+        ]
+          .filter(Boolean)
+          .join(' '),
       );
       setInstruction('');
       clearChips();
