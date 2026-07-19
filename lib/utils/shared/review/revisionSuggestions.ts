@@ -46,7 +46,6 @@ export interface RevisionPlanInput {
   oldMarkdown: string;
   newMarkdown: string;
   exceptions: {
-    selectionScoped: boolean;
     largeRewrites: boolean;
     structuralReorders: boolean;
   };
@@ -93,11 +92,18 @@ export function planRevision(input: RevisionPlanInput): RevisionPlan {
 export interface RevisionDiffResult {
   changes: RevisionChange[];
   /**
-   * How much of the document moved, 0–1, counting both sides. Near 0 is a
-   * touch-up; near 1 is a rewrite whose "suggestions" would be one giant
-   * before/after block that nobody can review meaningfully.
+   * How much of the document moved, 0–1, counting both sides. Informational:
+   * deliberately NOT the bypass signal, because "most of the document changed"
+   * and "the result is unreviewable" are different things. Twenty discrete
+   * sentence rewrites are a large change and a perfectly good review queue.
    */
   changeRatio: number;
+  /**
+   * The largest single change as a fraction of the document. THIS is what
+   * makes a rewrite unreviewable: one before/after block spanning the whole
+   * document is an "accept everything" button wearing a suggestion's clothes.
+   */
+  largestChangeRatio: number;
   /**
    * A block was moved rather than edited — deleted in one place and
    * reinserted verbatim in another. Split across two suggestions each half
@@ -155,7 +161,8 @@ function splitSentences(text: string): string[] {
 function matchKey(sentence: string): string {
   return sentence
     .replace(/\\([\\`*_{}[\]()#+\-.!>~|])/g, '$1') // drop turndown's escapes
-    .replace(/^(\s*[-*+])\s+/, '$1 ') // normalize list-marker padding
+    .replace(/^(\s*[-*+])\s+/, '$1 ') // bullet-marker padding
+    .replace(/^(\s*\d+[.)])\s+/, '$1 ') // ordered-marker padding (`1.  ` vs `1. `)
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -281,18 +288,29 @@ export function computeRevisionEdits(
   const empty: RevisionDiffResult = {
     changes: [],
     changeRatio: 0,
+    largestChangeRatio: 0,
     hasReorder: false,
     fullyAnchored: true,
   };
   if (oldText === newText) return empty;
   if (!oldText || !newText) {
-    return { ...empty, changeRatio: 1, fullyAnchored: false };
+    return {
+      ...empty,
+      changeRatio: 1,
+      largestChangeRatio: 1,
+      fullyAnchored: false,
+    };
   }
 
   const a = splitSentences(oldText);
   const b = splitSentences(newText);
   if (a.length > SENTENCE_LIMIT || b.length > SENTENCE_LIMIT) {
-    return { ...empty, changeRatio: 1, fullyAnchored: false };
+    return {
+      ...empty,
+      changeRatio: 1,
+      largestChangeRatio: 1,
+      fullyAnchored: false,
+    };
   }
 
   // Sentence-level LCS over normalized keys — see `matchKey`. Sentences that
@@ -382,5 +400,16 @@ export function computeRevisionEdits(
     kept.push(change);
   }
 
-  return { changes: kept, changeRatio, hasReorder, fullyAnchored };
+  const largestChangeRatio = kept.reduce(
+    (max, change) => Math.max(max, change.before.length / oldText.length),
+    0,
+  );
+
+  return {
+    changes: kept,
+    changeRatio,
+    largestChangeRatio,
+    hasReorder,
+    fullyAnchored,
+  };
 }
