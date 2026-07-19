@@ -2,13 +2,16 @@
 
 import { IconPlugConnected, IconPlus } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
+import { useAvailableConnectors } from '@/client/hooks/settings/useAvailableConnectors';
 import { useMcpOauthAvailability } from '@/client/hooks/settings/useMcpOauthAvailability';
 
+import { AdminConnectorRow } from '../Connectors/AdminConnectorRow';
+import { ConnectorBrowser } from '../Connectors/ConnectorBrowser';
 import { CuratedConnectorRow } from '../Connectors/CuratedConnectorRow';
 import { McpServerForm } from '../Connectors/McpServerForm';
 import { McpServerRow } from '../Connectors/McpServerRow';
@@ -45,13 +48,40 @@ export const ConnectorsSection: FC = () => {
 
   // Fetched once here rather than per row, so N connectors share one request.
   const { isOauthAppAvailable } = useMcpOauthAvailability();
+  // Admin-authored connectors this user is entitled to (server-filtered).
+  const { connectors: adminConnectors } = useAvailableConnectors();
 
+  // Which connector the user asked to add and is now configuring. Cleared
+  // when it lands in the store (it leaves the browser) or on dismiss.
+  const [configuringKey, setConfiguringKey] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [editingServer, setEditingServer] = useState<
     McpServerConfig | undefined
   >();
 
-  const arbitraryServers = mcpServers.filter((s) => !s.catalogKey);
+  // Connectors are server-resolved like catalog entries, so they must be
+  // excluded here too — otherwise they would render a second time as
+  // user-defined servers with an editable URL.
+  const arbitraryServers = mcpServers.filter(
+    (s) => !s.catalogKey && !s.connectorId,
+  );
+
+  // A connector is "connected" once it has a saved config, which is also
+  // what moves it out of the browser list — so the add flow needs no
+  // completion callback: the store update relocates the row by itself.
+  const connectedKeys = useMemo(
+    () =>
+      new Set(
+        mcpServers
+          .map((s) => s.catalogKey ?? s.connectorId)
+          .filter((key): key is string => key !== undefined),
+      ),
+    [mcpServers],
+  );
+  const connectedCatalog = Object.values(MCP_CATALOG).filter((entry) =>
+    connectedKeys.has(entry.key),
+  );
+  const connectedAdmin = adminConnectors.filter((c) => connectedKeys.has(c.id));
 
   const handleDelete = useCallback(
     (id: string) => {
@@ -109,17 +139,59 @@ export const ConnectorsSection: FC = () => {
         {t('localOnlyNote')}
       </p>
 
-      {/* Curated catalog */}
-      <div className="space-y-3">
-        {Object.values(MCP_CATALOG).map((entry) => (
-          <CuratedConnectorRow
-            key={entry.key}
-            entry={entry}
-            config={mcpServers.find((s) => s.catalogKey === entry.key)}
-            oauthAppAvailable={isOauthAppAvailable(entry.key)}
-          />
-        ))}
-      </div>
+      {/* Connected first: what the user already has is the thing they came
+          back to change. Everything on offer lives below, behind an add. */}
+      {connectedCatalog.length + connectedAdmin.length > 0 && (
+        <div>
+          <h3 className="mb-2 text-base font-semibold text-black dark:text-white">
+            {t('yourConnectorsTitle')}
+          </h3>
+          <div className="space-y-3">
+            {connectedCatalog.map((entry) => (
+              <CuratedConnectorRow
+                key={entry.key}
+                entry={entry}
+                config={mcpServers.find((s) => s.catalogKey === entry.key)}
+                oauthAppAvailable={isOauthAppAvailable(entry.key)}
+              />
+            ))}
+            {connectedAdmin.map((connector) => (
+              <AdminConnectorRow
+                key={connector.id}
+                connector={connector}
+                config={mcpServers.find((s) => s.connectorId === connector.id)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      <ConnectorBrowser
+        catalogEntries={Object.values(MCP_CATALOG)}
+        adminConnectors={adminConnectors}
+        connectedKeys={connectedKeys}
+        configuringKey={configuringKey}
+        onAdd={setConfiguringKey}
+        renderConfiguring={(key) => {
+          const catalogEntry = MCP_CATALOG[key];
+          if (catalogEntry) {
+            return (
+              <CuratedConnectorRow
+                entry={catalogEntry}
+                oauthAppAvailable={isOauthAppAvailable(key)}
+                onDismiss={() => setConfiguringKey(null)}
+              />
+            );
+          }
+          const connector = adminConnectors.find((c) => c.id === key);
+          return connector ? (
+            <AdminConnectorRow
+              connector={connector}
+              onDismiss={() => setConfiguringKey(null)}
+            />
+          ) : null;
+        }}
+      />
 
       {/* Arbitrary servers — only when the LD flag allows it at all */}
       {arbitraryFlagOn && (
