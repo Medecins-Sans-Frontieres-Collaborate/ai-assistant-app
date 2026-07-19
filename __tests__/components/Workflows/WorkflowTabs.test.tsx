@@ -268,7 +268,7 @@ describe('WorkflowTabs', () => {
     it('leaves the workflow untouched on cancel', () => {
       render(<WorkflowTabs />);
       fireEvent.click(screen.getByRole('tab', { name: MAP }));
-      fireEvent.click(screen.getByRole('button', { name: 'common.cancel' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
 
       expect(stored().conversationType).toBe('translation');
       expect(
