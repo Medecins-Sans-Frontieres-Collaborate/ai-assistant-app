@@ -33,11 +33,16 @@ export function sanitizeForLog(value: unknown): string {
     stringValue = String(value);
   }
 
-  // Remove control characters and normalize whitespace
-  // This prevents log injection via newlines, carriage returns, ANSI escape codes, etc.
-  // The newline replace is written as a literal alternation (not a character
-  // class) because CodeQL only models literal/alternation patterns as
-  // CWE-117 sanitizers — a `[\r\n]+` class keeps every call site flagged.
+  // Remove control characters and normalize whitespace: this is what prevents
+  // log injection via newlines, carriage returns, ANSI escape codes, etc.
+  //
+  // NOTE: CodeQL does NOT recognise this function as a CWE-117 barrier, so
+  // call sites still raise js/log-injection even though they are safe. The
+  // literal alternation below was originally written in the belief that it
+  // would be modelled where a `[\r\n]+` class would not — it isn't, and the
+  // spelling makes no difference to the scanner. Keep it or not on
+  // readability grounds; making the alerts stop needs a custom CodeQL model
+  // pack declaring this a sanitizer, not a different regex.
   return (
     stringValue
       .replace(/\r\n|\r|\n/g, ' ') // Replace newlines with spaces
