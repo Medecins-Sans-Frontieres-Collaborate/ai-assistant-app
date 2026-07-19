@@ -21,6 +21,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { useAutoFocusComposer } from '@/client/hooks/ui/useAutoFocusComposer';
+import { useCameraSupport } from '@/client/hooks/ui/useCameraSupport';
 import { usePasteComposer } from '@/client/hooks/ui/usePasteComposer';
 import { usePastedTextChips } from '@/client/hooks/workflows/usePastedTextChips';
 import { useTableImport } from '@/client/hooks/workflows/useTableImport';
@@ -73,6 +74,7 @@ import {
 } from '@/lib/services/workflows/data/transpose';
 
 import { FILE_COUNT_LIMITS } from '@/lib/utils/app/const';
+import { isMobile } from '@/lib/utils/app/env';
 import { DATA_QUALITY_CRITERIA } from '@/lib/utils/shared/data/qualityCriteria';
 import { downloadFile } from '@/lib/utils/shared/document/exportUtils';
 
@@ -84,6 +86,8 @@ import {
   ReviewEdit,
   ReviewEditStatus,
 } from '@/types/workflow';
+
+import CameraCaptureModal from '@/components/UI/CameraCaptureModal';
 
 import { PastedTextChips } from '../Shared/PastedTextChips';
 import { AssessmentPanel } from '../Shared/Review/AssessmentPanel';
@@ -167,6 +171,10 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const extractFileRef = useRef<HTMLInputElement>(null);
   const photoInputRef = useRef<HTMLInputElement>(null);
+  /** Mobile camera hand-off; desktop uses the in-page capture modal instead. */
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const [cameraOpen, setCameraOpen] = useState(false);
+  const hasCamera = useCameraSupport();
   /** Single-level undo snapshot; transient by design. */
   const undoRef = useRef<{ columns: DataColumn[]; rows: Rows } | null>(null);
   const [canUndo, setCanUndo] = useState(false);
@@ -605,7 +613,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
    * all its photo refs, so the QC pane can show every photo beside the
    * rows it produced.
    */
-  const handlePhotoFiles = async (files: FileList | null) => {
+  const handlePhotoFiles = async (files: FileList | File[] | null) => {
     const selected = Array.from(files ?? []).slice(
       0,
       FILE_COUNT_LIMITS.MAX_IMAGES,
@@ -693,6 +701,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     } finally {
       setBusy(null);
       if (photoInputRef.current) photoInputRef.current.value = '';
+      if (cameraInputRef.current) cameraInputRef.current.value = '';
     }
     if (ingestCheckSourceId) await runIngestCheck(ingestCheckSourceId);
   };
@@ -1133,6 +1142,29 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     }
   };
 
+  /**
+   * Mobile hands off to the native camera app (one shot, same ingest path);
+   * desktop opens the in-page capture modal.
+   */
+  const handleTakePhotoClick = () => {
+    if (isMobile()) {
+      cameraInputRef.current?.click();
+    } else {
+      setCameraOpen(true);
+    }
+  };
+
+  const cameraModal = (
+    <CameraCaptureModal
+      isOpen={cameraOpen}
+      onClose={() => setCameraOpen(false)}
+      onCapture={(file) => {
+        setCameraOpen(false);
+        void handlePhotoFiles([file]);
+      }}
+    />
+  );
+
   if (!state) return null;
 
   const importButtons = (
@@ -1181,6 +1213,28 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         hidden
         onChange={(e) => void handlePhotoFiles(e.target.files)}
       />
+      {hasCamera && (
+        <>
+          <button
+            type="button"
+            onClick={handleTakePhotoClick}
+            disabled={busy !== null}
+            title={t('data.takePhotoHint')}
+            className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border border-gray-300 px-2.5 py-1.5 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-surface-dark-elevated"
+          >
+            <IconCamera size={15} aria-hidden />
+            {t('data.takePhoto')}
+          </button>
+          <input
+            ref={cameraInputRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            hidden
+            onChange={(e) => void handlePhotoFiles(e.target.files)}
+          />
+        </>
+      )}
       {hasTable && (
         <button
           type="button"
@@ -1295,6 +1349,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
               {error}
             </p>
           )}
+          {cameraModal}
         </div>
       </div>
     );
@@ -1744,6 +1799,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           />
         </aside>
       )}
+      {cameraModal}
     </div>
   );
 }

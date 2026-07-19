@@ -23,6 +23,7 @@ import { createPortal } from 'react-dom';
 import { useLocale, useTranslations } from 'next-intl';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
+import { useCameraSupport } from '@/client/hooks/ui/useCameraSupport';
 import { useDropdownKeyboardNav } from '@/client/hooks/ui/useDropdownKeyboardNav';
 import useEnhancedOutsideClick from '@/client/hooks/ui/useEnhancedOutsideClick';
 import { useIsMobile } from '@/client/hooks/ui/useIsMobile';
@@ -144,34 +145,12 @@ const Dropdown: React.FC<DropdownProps> = ({
   const [query, setQuery] = useState('');
   const [showMore, setShowMore] = useState(false);
   const [urlModalOpen, setUrlModalOpen] = useState(false);
-  const [hasCameraSupport, setHasCameraSupport] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const locale = useLocale();
   const isMobile = useIsMobile();
-
-  useEffect(() => {
-    const checkCameraSupport = async () => {
-      try {
-        if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
-          const devices = await navigator.mediaDevices.enumerateDevices();
-          const hasCamera = devices.some(
-            (device) => device.kind === 'videoinput',
-          );
-          setHasCameraSupport(hasCamera);
-        } else {
-          console.error('MediaDevices API not supported');
-          setHasCameraSupport(false);
-        }
-      } catch (error) {
-        console.error('Error checking camera support:', error);
-        setHasCameraSupport(false);
-      }
-    };
-
-    checkCameraSupport();
-  }, []);
+  const hasCameraSupport = useCameraSupport();
 
   const closeDropdown = useCallback(() => {
     setIsOpen(false);
