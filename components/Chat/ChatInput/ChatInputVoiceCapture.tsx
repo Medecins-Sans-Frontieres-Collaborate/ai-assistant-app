@@ -101,7 +101,6 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
     navigator.mediaDevices.addEventListener('devicechange', refreshDevices);
 
     // Listen for permission changes to recover from 'denied' state
-    // eslint-disable-next-line no-undef
     let permissionStatus: PermissionStatus | null = null;
     let handleChange: (() => void) | null = null;
 
