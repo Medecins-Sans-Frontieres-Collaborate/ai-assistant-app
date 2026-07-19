@@ -15,14 +15,17 @@
  */
 import {
   StoredAgentAccessRule,
+  StoredMcpConnector,
   StoredPromptAgent,
   createAgentAccessBlobStorage,
+  listAllConnectors,
   listAllPromptAgents,
   listAllRules,
   readConfig,
 } from '@/lib/services/agentAccess/accessRulesStore';
 import {
   AgentAccessConfig,
+  McpConnector,
   PromptAgent,
 } from '@/lib/services/agentAccess/types';
 import { canonicalAgentKey } from '@/lib/services/agentAccess/types';
@@ -72,6 +75,8 @@ export interface AgentAccessSnapshot {
   configEtag: string | null;
   /** Prompt-agent personas; empty when the feature is off or never loaded. */
   promptAgents: PromptAgent[];
+  /** Admin MCP connectors; empty when the feature is off or never loaded. */
+  connectors: McpConnector[];
   /** Enabled + no last-known-good ruleset (cold start + storage outage). */
   rulesUnavailable: boolean;
   /** Epoch ms of the last successful refresh; null when never loaded. */
@@ -108,6 +113,8 @@ interface LoadedState {
   configEtag: string | null;
   promptAgents: PromptAgent[];
   promptAgentsById: Map<string, PromptAgent>;
+  connectors: McpConnector[];
+  connectorsById: Map<string, McpConnector>;
 }
 
 export class AgentAccessService {
@@ -189,6 +196,7 @@ export class AgentAccessService {
       config: this.state?.config ?? null,
       configEtag: this.state?.configEtag ?? null,
       promptAgents: this.state?.promptAgents ?? [],
+      connectors: this.state?.connectors ?? [],
       rulesUnavailable: this.isEnabled() && this.state === null,
       fetchedAt: this.state ? this.fetchedAt : null,
     };
@@ -204,6 +212,25 @@ export class AgentAccessService {
   getPromptAgentById(id: string): PromptAgent | null {
     if (!this.isEnabled()) return null;
     return this.state?.promptAgentsById.get(id) ?? null;
+  }
+
+  /** Admin MCP connectors from the cached snapshot — callers ensureFresh() first. */
+  getConnectors(): McpConnector[] {
+    if (!this.isEnabled()) return [];
+    return this.state?.connectors ?? [];
+  }
+
+  /**
+   * Single connector by immutable id; null when unknown (or feature off).
+   *
+   * Returning null when the feature is disabled is deliberate and differs from
+   * evaluateAccess's 'feature-disabled' → allow: an access RULE that cannot be
+   * consulted should not block an otherwise-configured agent, but a connector
+   * that cannot be loaded has no URL, and inventing one is not an option.
+   */
+  getConnectorById(id: string): McpConnector | null {
+    if (!this.isEnabled()) return null;
+    return this.state?.connectorsById.get(id) ?? null;
   }
 
   /**
@@ -350,6 +377,32 @@ export class AgentAccessService {
         );
       }
 
+      // Connectors: same isolated-failure contract as personas. Note the
+      // direction this degrades in — a listing failure leaves connectors
+      // ABSENT, and an absent connector resolves to nothing at chat time
+      // rather than to an unguarded URL. Failing to load is therefore failing
+      // closed, which is why it need not mark the snapshot unavailable.
+      let connectors: McpConnector[] = this.state?.connectors ?? [];
+      let connectorsById: Map<string, McpConnector> =
+        this.state?.connectorsById ?? new Map();
+      try {
+        const storedConnectors = await listAllConnectors(storage);
+        connectors = storedConnectors.map(
+          (stored: StoredMcpConnector) => stored.connector,
+        );
+        connectorsById = new Map<string, McpConnector>(
+          connectors.map((connector) => [connector.id, connector]),
+        );
+      } catch (error) {
+        console.error(
+          `[agent-access] connector listing failed (${
+            this.state
+              ? 'keeping last-known-good connectors'
+              : 'no connectors until a load succeeds'
+          }; rules snapshot unaffected): ${sanitizeForLog(error)}`,
+        );
+      }
+
       // Keeping the fetched state is always safe — it is never older than
       // what it replaces — but freshness is only stamped when no
       // invalidate() landed while this refresh was in flight. Otherwise
@@ -363,6 +416,8 @@ export class AgentAccessService {
         configEtag: configResult?.etag ?? null,
         promptAgents,
         promptAgentsById,
+        connectors,
+        connectorsById,
       };
       this.lastRefreshFailureAt = 0;
       this.fetchedAt = this.epoch === epochAtEntry ? Date.now() : 0;
