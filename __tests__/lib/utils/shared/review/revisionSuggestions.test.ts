@@ -182,7 +182,6 @@ describe('planRevision', () => {
     newMarkdown:
       'The project began in March. Funding came from four donors. The team had six members. Results were published in autumn.',
     exceptions: {
-      selectionScoped: true,
       largeRewrites: true,
       structuralReorders: true,
     },
@@ -222,44 +221,54 @@ describe('planRevision', () => {
       reason: 'selection',
     });
 
-    // The exception is configurable: off means selections get suggested too.
-    const plan = planRevision({
-      ...base,
-      scoped: true,
-      exceptions: { ...base.exceptions, selectionScoped: false },
-    });
-    expect(plan.kind).toBe('suggest');
+    // Unconditional, unlike the other bypasses. A selection revise returns
+    // only the revised excerpt, so there is no document to diff — turning
+    // this off could only produce nonsense suggestions.
+    expect(
+      planRevision({
+        ...base,
+        scoped: true,
+        exceptions: { largeRewrites: false, structuralReorders: false },
+      }),
+    ).toEqual({ kind: 'direct', reason: 'selection' });
   });
 
-  it('applies directly for a wholesale rewrite, at the configured threshold', () => {
+  it('suggests even a sentence-for-sentence total rewrite', () => {
+    // Every sentence replaced, but one-for-one — so it splits into four
+    // reviewable changes rather than one blob. This is the case the old
+    // total-change rule bypassed, which made "suggest changes" look broken.
     const rewrite = {
       ...base,
       newMarkdown:
         'Entirely new prose. Nothing here resembles the original text. Every sentence has been replaced. The subject matter differs.',
     };
-    expect(planRevision(rewrite)).toEqual({
-      kind: 'direct',
-      reason: 'largeRewrite',
-    });
+    const plan = planRevision(rewrite);
+    expect(plan.kind).toBe('suggest');
+    if (plan.kind === 'suggest') {
+      expect(plan.changes.length).toBeGreaterThan(1);
+    }
 
-    // The threshold is the knob, so bracket the MEASURED ratio rather than
-    // guessing a number — a total replacement measures exactly 1.0, which no
-    // threshold below 1 can clear.
-    const measured = computeRevisionEdits(
+    const diff = computeRevisionEdits(rewrite.oldMarkdown, rewrite.newMarkdown);
+    expect(diff.changeRatio).toBeGreaterThan(0.9); // almost all of it moved…
+    expect(diff.largestChangeRatio).toBeLessThan(0.5); // …but in small pieces
+  });
+
+  it('applies directly when the threshold is lowered under the largest change', () => {
+    const rewrite = {
+      ...base,
+      newMarkdown:
+        'Entirely new prose. Nothing here resembles the original text. Every sentence has been replaced. The subject matter differs.',
+    };
+    const { largestChangeRatio } = computeRevisionEdits(
       rewrite.oldMarkdown,
       rewrite.newMarkdown,
-    ).changeRatio;
-    expect(
-      planRevision({ ...rewrite, largeRewriteRatio: measured * 0.9 }).kind,
-    ).toBe('direct');
-
-    // Turning the exception off lets even a full rewrite through.
+    );
     expect(
       planRevision({
         ...rewrite,
-        exceptions: { ...base.exceptions, largeRewrites: false },
-      }).kind,
-    ).toBe('suggest');
+        largeRewriteRatio: largestChangeRatio * 0.9,
+      }),
+    ).toEqual({ kind: 'direct', reason: 'largeRewrite' });
   });
 
   it('applies directly when sections were moved, unless turned off', () => {
@@ -347,7 +356,6 @@ Supplies arrived late in the quarter.`;
         oldMarkdown: fromEditor,
         newMarkdown: fromModel,
         exceptions: {
-          selectionScoped: true,
           largeRewrites: true,
           structuralReorders: true,
         },
@@ -369,5 +377,64 @@ Supplies arrived late in the quarter.`;
       .replace(/- {3}/g, '- ');
     const diff = computeRevisionEdits(fromEditor, reformatted);
     expect(diff.changes).toHaveLength(0);
+  });
+});
+
+describe('granularity, not volume (regression)', () => {
+  // The complaint: requested revisions were "always made without confirmation".
+  // The old rule bypassed whenever TOTAL change crossed the threshold, so a
+  // thorough revision — exactly the kind worth reviewing — was the one case
+  // that never got reviewed.
+  const original = `The clinic opened in March. Staffing reached twelve by June. Supplies arrived late in the quarter. The cold chain held throughout. Reporting used the agreed template. Travel was arranged regionally.`;
+
+  // "Make this more formal" — nearly every sentence rewritten, but each one
+  // separately reviewable.
+  const thorough = `The facility commenced operations in March. Staffing levels attained twelve personnel by June. Supply deliveries were received late within the quarter. The cold chain was maintained throughout. Reporting adhered to the agreed template. Travel arrangements were coordinated regionally.`;
+
+  const base = {
+    enabled: true,
+    mode: 'revise' as const,
+    scoped: false,
+    exceptions: { largeRewrites: true, structuralReorders: false },
+    largeRewriteRatio: 0.5,
+  };
+
+  it('suggests a thorough rewrite instead of applying it', () => {
+    const diff = computeRevisionEdits(original, thorough);
+    // Most of the document changed...
+    expect(diff.changeRatio).toBeGreaterThan(0.5);
+    // ...but no single change dominates it, so it reviews fine.
+    expect(diff.largestChangeRatio).toBeLessThan(0.5);
+    expect(diff.changes.length).toBeGreaterThan(1);
+
+    expect(
+      planRevision({ ...base, oldMarkdown: original, newMarkdown: thorough })
+        .kind,
+    ).toBe('suggest');
+  });
+
+  it('still bypasses when the result is one indivisible block', () => {
+    // Nothing in common: the diff collapses to a single change spanning the
+    // whole document, and "accept" would mean accepting everything blind.
+    const unrelated =
+      'Completely different subject matter with no shared phrasing whatsoever throughout.';
+    const diff = computeRevisionEdits(original, unrelated);
+    expect(diff.largestChangeRatio).toBeGreaterThanOrEqual(0.5);
+
+    expect(
+      planRevision({ ...base, oldMarkdown: original, newMarkdown: unrelated }),
+    ).toEqual({ kind: 'direct', reason: 'largeRewrite' });
+  });
+
+  it('normalizes ordered-list markers, which turndown pads', () => {
+    const fromEditor =
+      '# Plan\n\n1.  First step\n2.  Second step\n3.  Third step';
+    const fromModel = '# Plan\n\n1. First step\n2. Revised step\n3. Third step';
+    const diff = computeRevisionEdits(fromEditor, fromModel);
+
+    expect(diff.fullyAnchored).toBe(true);
+    // Only the genuinely changed item — `1.  ` versus `1. ` is not a change.
+    expect(diff.changes).toHaveLength(1);
+    expect(diff.changes[0].after).toContain('Revised step');
   });
 });
