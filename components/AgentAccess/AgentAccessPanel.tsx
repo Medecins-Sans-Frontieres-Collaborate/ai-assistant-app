@@ -12,13 +12,17 @@ import {
   useAgentAccessAdmin,
 } from '@/client/hooks/settings/useAgentAccessAdmin';
 
+import { ConnectorEditor } from './ConnectorEditor';
 import { LocalAdminsSection } from './LocalAdminsSection';
 import { PromptAgentEditor } from './PromptAgentEditor';
 import { RuleEditor } from './RuleEditor';
 import {
+  AdminConnectorsResponse,
   AdminPromptAgentsResponse,
   AdminRulesResponse,
+  AdminStoredConnector,
   AgentsApiResponse,
+  CLIENT_MCP_CONNECTOR_SOURCE,
   CLIENT_PROMPT_AGENT_SOURCE,
   MergedAgentRow,
   clientCanonicalAgentKey,
@@ -27,11 +31,15 @@ import {
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { Link } from '@/lib/navigation';
 
-type PanelTab = 'rules' | 'localAdmins';
+type PanelTab = 'agents' | 'connectors' | 'localAdmins';
 
 /**
- * Admin panel for app-layer agent access rules
- * (docs/AGENT_ACCESS_CONTROL.md "Admin UI"). Merges the admin's OWN
+ * Admin panel for app-layer ACCESS CONTROL — agents and MCP connectors alike
+ * (docs/AGENT_ACCESS_CONTROL.md "Admin UI"). Both hang off the same
+ * canonical-key namespace, so both use the same rules, the same local-admin
+ * delegation, and the same RuleEditor; only the thing being scoped differs.
+ *
+ * The agents tab merges the admin's OWN
  * /api/agents discovery with all stored rules: discovered agents without a
  * rule are implicitly "Everyone"; rules whose agent is outside the admin's
  * discovery get a "not discoverable by you" badge. Local admins only see
@@ -100,7 +108,31 @@ export const AgentAccessPanel: FC = () => {
     refetchOnWindowFocus: false,
   });
 
-  const [activeTab, setActiveTab] = useState<PanelTab>('rules');
+  const connectorsQuery = useQuery<AdminConnectorsResponse>({
+    queryKey: ['agent-access-connectors'],
+    queryFn: async () => {
+      const response = await fetch('/api/agent-access/connectors');
+      if (!response.ok) {
+        throw new Error(`Failed to fetch connectors: ${response.status}`);
+      }
+      return unwrapApiData<AdminConnectorsResponse>(await response.json());
+    },
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
+  const [activeTab, setActiveTab] = useState<PanelTab>('agents');
+  const [isCreatingConnector, setIsCreatingConnector] = useState(false);
+  const [editingConnectorId, setEditingConnectorId] = useState<string | null>(
+    null,
+  );
+  const [editingConnectorRuleKey, setEditingConnectorRuleKey] = useState<
+    string | null
+  >(null);
+  const [confirmDeleteConnectorId, setConfirmDeleteConnectorId] = useState<
+    string | null
+  >(null);
+  const [isDeletingConnector, setIsDeletingConnector] = useState(false);
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [isCreatingAgent, setIsCreatingAgent] = useState(false);
   const [editingAgentKey, setEditingAgentKey] = useState<string | null>(null);
@@ -187,6 +219,86 @@ export const AgentAccessPanel: FC = () => {
     promptAgentsQuery.data,
     me?.editableAgentKeys,
   ]);
+
+  /**
+   * Connector rows reuse MergedAgentRow so RuleEditor works unchanged: the
+   * rule it writes is keyed on source + agentName, and a connector's
+   * canonical key is `mcp-connector::<id>` — the same shape a prompt agent
+   * uses. `discoverable` is always true here because the admin connectors
+   * listing IS the discovery for connectors; there is no second source that
+   * could know about one.
+   */
+  const connectorRows = useMemo(() => {
+    const rulesByKey = new Map(
+      (rulesQuery.data?.rules ?? []).map((r) => [r.canonicalKey, r]),
+    );
+    return (connectorsQuery.data?.connectors ?? [])
+      .map((entry: AdminStoredConnector) => ({
+        row: {
+          canonicalKey: entry.canonicalKey,
+          source: CLIENT_MCP_CONNECTOR_SOURCE,
+          agentName: entry.connector.id,
+          displayName: entry.connector.name,
+          discoverable: true,
+          stored: rulesByKey.get(entry.canonicalKey) ?? null,
+          promptAgent: null,
+        } satisfies MergedAgentRow,
+        entry,
+      }))
+      .sort((a, b) => a.row.displayName.localeCompare(b.row.displayName));
+  }, [connectorsQuery.data, rulesQuery.data]);
+
+  /**
+   * A connector mutation touches the admin listing, the rules that scope it,
+   * the user-facing connector list, and — because a local admin's create
+   * auto-delegates — the config map and the admin's own /me status.
+   */
+  const invalidateConnectorData = async () => {
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ['agent-access-connectors'] }),
+      queryClient.invalidateQueries({ queryKey: ['agent-access-rules'] }),
+      queryClient.invalidateQueries({ queryKey: ['mcp-available-connectors'] }),
+      queryClient.invalidateQueries({ queryKey: ['agent-access-config'] }),
+      queryClient.invalidateQueries({ queryKey: ['agent-access-me'] }),
+    ]);
+  };
+
+  const handleConnectorSaved = async () => {
+    setIsCreatingConnector(false);
+    setEditingConnectorId(null);
+    await invalidateConnectorData();
+  };
+
+  const handleConnectorConflictReload = async () => {
+    setIsCreatingConnector(false);
+    setEditingConnectorId(null);
+    await queryClient.invalidateQueries({
+      queryKey: ['agent-access-connectors'],
+    });
+  };
+
+  const handleDeleteConnector = async (entry: AdminStoredConnector) => {
+    setIsDeletingConnector(true);
+    try {
+      const params = new URLSearchParams({ id: entry.connector.id });
+      const response = await fetch(
+        `/api/agent-access/connectors?${params.toString()}`,
+        { method: 'DELETE', headers: { 'If-Match': entry.etag } },
+      );
+      // 404 = another admin already deleted it; the desired end state holds.
+      if (!response.ok && response.status !== 404) {
+        toast.error(t('saveError'));
+        return;
+      }
+      toast.success(t('connectorDeleteSuccess'));
+      setConfirmDeleteConnectorId(null);
+      await invalidateConnectorData();
+    } catch {
+      toast.error(t('saveError'));
+    } finally {
+      setIsDeletingConnector(false);
+    }
+  };
 
   const refetchRules = async () => {
     await queryClient.invalidateQueries({ queryKey: ['agent-access-rules'] });
@@ -329,10 +441,12 @@ export const AgentAccessPanel: FC = () => {
           {t('description')}
         </p>
 
-        {/* Tabs — the delegation map is global-admin only */}
-        {isGlobalAdmin && (
-          <div className="mb-6 flex gap-1 border-b border-gray-200 dark:border-gray-700">
-            {(['rules', 'localAdmins'] as const).map((tab) => (
+        {/* Tabs. Agents and connectors are open to every admin; the
+            delegation map stays global-admin only. */}
+        <div className="mb-6 flex gap-1 border-b border-gray-200 dark:border-gray-700">
+          {(['agents', 'connectors', 'localAdmins'] as const)
+            .filter((tab) => tab !== 'localAdmins' || isGlobalAdmin)
+            .map((tab) => (
               <button
                 key={tab}
                 type="button"
@@ -343,14 +457,220 @@ export const AgentAccessPanel: FC = () => {
                 }`}
                 onClick={() => setActiveTab(tab)}
               >
-                {tab === 'rules' ? t('rulesTab') : t('localAdminsTab')}
+                {tab === 'agents'
+                  ? t('agentsTab')
+                  : tab === 'connectors'
+                    ? t('connectorsTab')
+                    : t('localAdminsTab')}
               </button>
             ))}
-          </div>
-        )}
+        </div>
 
         {activeTab === 'localAdmins' && isGlobalAdmin ? (
           <LocalAdminsSection rows={rows} />
+        ) : activeTab === 'connectors' ? (
+          connectorsQuery.isLoading ? (
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              {t('loading')}
+            </p>
+          ) : connectorsQuery.error ||
+            connectorsQuery.data?.connectorsUnavailable === true ? (
+            <div className="text-sm text-red-600 dark:text-red-400">
+              {/* An outage returns an empty list; rendering it as "no
+                  connectors exist" would invite an admin to recreate one. */}
+              <p>
+                {connectorsQuery.data?.connectorsUnavailable
+                  ? t('connectorsUnavailableWarning')
+                  : t('loadError')}
+              </p>
+              <button
+                type="button"
+                className="mt-2 rounded-md border border-gray-300 dark:border-gray-600 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                onClick={() => void connectorsQuery.refetch()}
+              >
+                {t('retry')}
+              </button>
+            </div>
+          ) : (
+            <>
+              <button
+                type="button"
+                aria-expanded={isCreatingConnector}
+                className="mb-4 flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-gray-700 px-3 py-1.5 text-sm font-medium text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                onClick={() => setIsCreatingConnector((creating) => !creating)}
+              >
+                <IconPlus size={16} />
+                {t('addConnector')}
+              </button>
+
+              {isCreatingConnector && (
+                <div className="mb-4">
+                  <ConnectorEditor
+                    existing={null}
+                    secretSealingAvailable={
+                      connectorsQuery.data?.secretSealingAvailable !== false
+                    }
+                    onSaved={handleConnectorSaved}
+                    onCancel={() => setIsCreatingConnector(false)}
+                    onConflictReload={handleConnectorConflictReload}
+                  />
+                </div>
+              )}
+
+              {connectorRows.length === 0 ? (
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  {t('noConnectors')}
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                  {connectorRows.map(({ row, entry }) => {
+                    const isRestricted =
+                      row.stored?.rule.access.type === 'restricted';
+                    return (
+                      <li
+                        key={row.canonicalKey}
+                        className="rounded-lg border border-gray-200 dark:border-gray-700 p-3"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="min-w-0 flex-1">
+                            <span className="truncate text-sm font-medium text-black dark:text-white">
+                              {row.displayName}
+                            </span>
+                            <p
+                              className="truncate text-xs text-gray-500 dark:text-gray-400"
+                              title={entry.connector.url}
+                            >
+                              {entry.connector.url}
+                            </p>
+                          </div>
+                          <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                            {entry.connector.authStyle}
+                          </span>
+                          <span
+                            className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
+                              isRestricted
+                                ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                                : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                            }`}
+                          >
+                            {isRestricted
+                              ? t('accessRestricted')
+                              : t('accessEveryone')}
+                          </span>
+                          <button
+                            type="button"
+                            className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                            onClick={() =>
+                              setEditingConnectorRuleKey(
+                                editingConnectorRuleKey === row.canonicalKey
+                                  ? null
+                                  : row.canonicalKey,
+                              )
+                            }
+                          >
+                            {editingConnectorRuleKey === row.canonicalKey
+                              ? t('cancel')
+                              : t('editAccess')}
+                          </button>
+                          <button
+                            type="button"
+                            className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                            onClick={() =>
+                              setEditingConnectorId(
+                                editingConnectorId === entry.connector.id
+                                  ? null
+                                  : entry.connector.id,
+                              )
+                            }
+                          >
+                            {editingConnectorId === entry.connector.id
+                              ? t('cancel')
+                              : t('edit')}
+                          </button>
+                          <button
+                            type="button"
+                            className="shrink-0 rounded-md border border-red-200 dark:border-red-900 px-3 py-1 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                            onClick={() =>
+                              setConfirmDeleteConnectorId(
+                                confirmDeleteConnectorId === entry.connector.id
+                                  ? null
+                                  : entry.connector.id,
+                              )
+                            }
+                          >
+                            {t('deleteConnector')}
+                          </button>
+                        </div>
+
+                        <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+                          {t('updatedByLine', {
+                            user: entry.connector.updatedBy,
+                            date: entry.connector.updatedAt,
+                          })}
+                        </p>
+
+                        {editingConnectorRuleKey === row.canonicalKey && (
+                          <RuleEditor
+                            key={`${row.canonicalKey}:${row.stored?.etag ?? 'none'}`}
+                            row={row}
+                            onSaved={async () => {
+                              setEditingConnectorRuleKey(null);
+                              await invalidateConnectorData();
+                            }}
+                            onCancel={() => setEditingConnectorRuleKey(null)}
+                            onConflictReload={async () => {
+                              setEditingConnectorRuleKey(null);
+                              await refetchRules();
+                            }}
+                          />
+                        )}
+
+                        {editingConnectorId === entry.connector.id && (
+                          <ConnectorEditor
+                            key={`${entry.connector.id}:${entry.etag}`}
+                            existing={entry}
+                            secretSealingAvailable={
+                              connectorsQuery.data?.secretSealingAvailable !==
+                              false
+                            }
+                            onSaved={handleConnectorSaved}
+                            onCancel={() => setEditingConnectorId(null)}
+                            onConflictReload={handleConnectorConflictReload}
+                          />
+                        )}
+
+                        {confirmDeleteConnectorId === entry.connector.id && (
+                          <div className="mt-2 rounded-md border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/20 p-3 text-sm text-red-800 dark:text-red-300">
+                            <p>{t('deleteConnectorConfirm')}</p>
+                            <div className="mt-2 flex gap-2">
+                              <button
+                                type="button"
+                                className="rounded-md bg-red-600 px-3 py-1 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
+                                onClick={() => handleDeleteConnector(entry)}
+                                disabled={isDeletingConnector}
+                              >
+                                {t('confirmDeleteConnector')}
+                              </button>
+                              <button
+                                type="button"
+                                className="rounded-md px-3 py-1 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+                                onClick={() =>
+                                  setConfirmDeleteConnectorId(null)
+                                }
+                                disabled={isDeletingConnector}
+                              >
+                                {t('cancel')}
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </>
+          )
         ) : isLoading ? (
           <p className="text-sm text-gray-500 dark:text-gray-400">
             {t('loading')}
