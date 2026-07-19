@@ -33,6 +33,36 @@ export function detectFormat(fileName: string): SupportedFormat | null {
 }
 
 /**
+ * Whether HTML represents a document with nothing in it.
+ *
+ * An empty Tiptap editor serializes to `<p></p>` rather than `''`, and near
+ * variants (`<p><br></p>`, a stray `&nbsp;`) mean the same thing to a reader.
+ * Comparing against a single literal would miss those, so this strips markup
+ * and asks whether anything is left.
+ *
+ * Elements that carry meaning without carrying text — an image, a table, a
+ * rule — count as content, or a document holding only a figure would be
+ * mistaken for a blank one.
+ */
+export function isEmptyDocHtml(html: string): boolean {
+  if (!html) return true;
+  if (
+    /<(img|table|hr|iframe|video|audio|figure|blockquote|pre|ul|ol|input)\b/i.test(
+      html,
+    )
+  ) {
+    return false;
+  }
+  const text = html
+    .replace(/<br\s*\/?>/gi, '')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/<[^>]*>/g, '')
+    .replace(/\s+/g, '')
+    .trim();
+  return text === '';
+}
+
+/**
  * Convert markdown to HTML
  */
 export function markdownToHtml(markdown: string): string {
@@ -177,6 +207,19 @@ export async function convertToHtml(
 }
 
 /**
+ * Extensions whose text arrives ALREADY CONVERTED TO MARKDOWN by the server
+ * extraction pipeline (pandoc, in `lib/utils/server/file/fileHandling.ts`).
+ *
+ * The filename still says `.docx`, but the string in hand is markdown. Going
+ * by extension alone sends it to `textToHtml`, which wraps pandoc's
+ * `# Heading` and `**bold**` in a `<p>` verbatim — the import lands as one
+ * grey slab with the syntax showing. These are checked separately from
+ * `detectFormat`, which answers a different question (what the *file* is) and
+ * is relied on elsewhere.
+ */
+const EXTRACTED_AS_MARKDOWN = new Set(['docx', 'odt', 'rtf', 'epub']);
+
+/**
  * Auto-detect format and convert to HTML
  */
 export async function autoConvertToHtml(
@@ -195,6 +238,11 @@ export async function autoConvertToHtml(
   const format = detectFormat(fileName);
   if (format) {
     return await convertToHtml(content, format);
+  }
+
+  const ext = fileName.split('.').pop()?.toLowerCase();
+  if (ext && EXTRACTED_AS_MARKDOWN.has(ext)) {
+    return markdownToHtml(content);
   }
 
   // Fallback to text
