@@ -795,7 +795,8 @@
     "processingAudio": "Traitement de l’audio...",
     "ttsError": "Erreur lors de la génération de l’audio. Veuillez réessayer.",
     "unsupportedMessageType": "Erreur d’affichage du message : type de message non pris en charge",
-    "addLanguageOption": "Ajouter « {name} »…"
+    "addLanguageOption": "Ajouter « {name} »…",
+    "sources": "Sources"
   },
   "sidebar": {
     "collapseSidebar": "Réduire la barre latérale",
@@ -1178,7 +1179,23 @@
     "customInstructionsLabel": "Instructions personnalisées*",
     "defaultTemperatureLabel": "Température par défaut*",
     "Usage & Impact": "Utilisation et impact",
-    "Connectors": "Connecteurs"
+    "Connectors": "Connecteurs",
+    "Backup": "Sauvegarde",
+    "Memories": "Mémoires",
+    "Agent Access": "Accès agent",
+    "LocalModels": "Modèles locaux",
+    "suggestRevisions": {
+      "title": "Révisions du document",
+      "toggle": "Suggérer des révisions au lieu de les appliquer",
+      "description": "Lorsque vous demandez au workflow Document de réviser, les modifications sont envoyées sous forme de suggestions individuelles que vous pouvez accepter ou refuser, comme pour l'évaluation de la qualité.",
+      "exceptionsTitle": "Appliquer directement quand :",
+      "exceptionSelection": "Révision d’une sélection que vous avez surlignée",
+      "exceptionLargeRewrite": "La réécriture modifie la majeure partie du document",
+      "exceptionReorder": "Les sections sont déplacées plutôt que modifiées",
+      "thresholdLabel": "Considérer comme une réécriture au-dessus de",
+      "thresholdUnit": "% du document modifié",
+      "exceptionSelectionAlways": "La révision d'une sélection surlignée s'applique toujours directement : le modèle renvoie seulement l'extrait révisé, qui ne peut pas être transformé en suggestions pour l'ensemble du document."
+    }
   },
   "notFound": {
     "lostDog": "Chien perdu"
@@ -2012,7 +2029,9 @@
     "pin": "Épingler en haut",
     "unpin": "Désépingler",
     "moveToMore": "Déplacer vers Plus",
-    "moveOutOfMore": "Afficher dans le menu"
+    "moveOutOfMore": "Afficher dans le menu",
+    "showSources": "Afficher d'autres sources",
+    "hideSources": "Masquer d'autres sources"
   },
   "transcription": {
     "addInstructions": "Ajouter des instructions",
@@ -2424,7 +2443,8 @@
     "regionDefault": "Par défaut",
     "modelRow": "{requests} req · {grams} g",
     "disclosure": "Estimations basées sur les hypothèses v{version} · depuis {since} · discussions standard uniquement (agents et réponses de la base de connaissances non prises en compte).",
-    "reset": "Réinitialiser les statistiques d’utilisation"
+    "reset": "Réinitialiser les statistiques d’utilisation",
+    "estimatedPortion": "Inclut environ {grams} g CO₂e ({requests} requêtes) estimés à partir des conversations antérieures au suivi — rétrocalculé à partir du texte des messages stockés, et non du nombre de jetons mesuré."
   },
   "extraction": {
     "toggleLabel": "Extraire des données structurées",
@@ -2631,7 +2651,25 @@
       "pendingCount": "{count} en attente",
       "closeReview": "Fermer la révision de qualité",
       "showReview": "Afficher la révision",
-      "showReviewPending": "Afficher la révision ({count} en attente)"
+      "showReviewPending": "Afficher la révision ({count} en attente)",
+      "undoEdit": "Annuler",
+      "clearResolved": "Effacer les résolus",
+      "clearResolvedHint": "Supprimer les modifications acceptées, rejetées et non applicables de cette liste",
+      "autoClearResolved": "Effacer automatiquement les modifications résolues",
+      "customCriteria": "Critères personnalisés",
+      "closeCriteria": "Fermer les critères personnalisés",
+      "newCriterion": "Nouveau critère",
+      "newCriterionName": "Critère sans titre",
+      "criterionName": "Nom du critère",
+      "criterionRubric": "Grille d'évaluation",
+      "criterionRubricPlaceholder": "Décrivez ce que la traduction doit accomplir pour satisfaire ce critère, par ex. « Rendre toutes les instructions de posologie clinique à l’impératif, jamais à l’infinitif… »",
+      "criterionRubricHint": "Cette grille est donnée telle quelle à l’IA, en complément des dimensions MQM intégrées lors de l’évaluation d'une traduction.",
+      "criteriaEmpty": "Créez des critères personnalisés — par ex. style de maison, préférences terminologiques du client ou conventions régionales — pour évaluer les traductions au-delà des dimensions MQM intégrées. Enregistré sur cet appareil et réutilisable.",
+      "deleteCriterion": "Supprimer le critère",
+      "manageCriteria": "Critères personnalisés",
+      "addCriteria": "Ajouter des critères",
+      "noUsableCriteria": "Sélectionnez au moins un critère intégré ou attribuez une grille à vos critères personnalisés.",
+      "criterionRubricTooLong": "Ce critère dépasse de {over} caractères la limite autorisée. Il est envoyé avec chaque évaluation : il doit être raccourci avant de pouvoir être utilisé."
     },
     "document": {
       "emptyTitle": "Décrivez le document souhaité",
@@ -2751,7 +2789,32 @@
       "clearSelection": "Effacer la sélection (travailler sur le document complet)",
       "reviseSelectionPlaceholder": "Décrivez les modifications à apporter à la sélection…",
       "revisedSelectionSummary": "J'ai révisé le passage sélectionné dans l’espace de travail.",
-      "assessedSelection": "Sélection"
+      "assessedSelection": "Sélection",
+      "undoEdit": "Annuler",
+      "clearResolved": "Effacer les résolus",
+      "clearResolvedHint": "Supprimer les modifications acceptées, rejetées et non applicables de cette liste",
+      "autoClearResolved": "Effacer automatiquement les modifications résolues",
+      "import": "Importer",
+      "importReplaceTitle": "Remplacer le document ?",
+      "importReplaceBody": "L'importation de {name} remplacera le document actuel. Vos références, spécifications et ton seront conservés.",
+      "importReplaceConfirm": "Remplacer",
+      "editorMode": "Mode éditeur",
+      "editorModeRich": "Texte enrichi",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Résolvez les modifications suggérées avant de changer de mode d'édition.",
+      "suggestChanges": "Suggérer des modifications",
+      "suggestChangesHint": "Consultez la révision comme une série de suggestions individuelles au lieu de réécrire immédiatement l'ensemble du document.",
+      "suggestChangesSelectionNote": "Les révisions sur une sélection sont appliquées directement : la sélection constitue déjà le périmètre choisi.",
+      "suggestedSummary": "{count} {count, plural, one {modification proposée} other {modifications proposées}} pour révision.",
+      "revisionSuggestionSummary": "Votre demande de révision a généré {count} {count, plural, one {modification suggérée} other {modifications suggérées}}.",
+      "revisionCriterionLabel": "Révision demandée",
+      "fallbackSelection": "Appliqué directement — les révisions sur une sélection ne sont pas suggérées.",
+      "fallbackLargeRewrite": "Appliqué directement — la réécriture a trop modifié le document pour séparer les suggestions.",
+      "fallbackReorder": "Appliqué directement — les sections ont été déplacées, ce qui ne permet pas de proposer des suggestions distinctes.",
+      "fallbackUnanchorable": "Appliqué directement — les modifications n’ont pas pu être associées à des passages particuliers.",
+      "fallbackNoChanges": "Aucun changement n’était nécessaire.",
+      "criterionRubricTooLong": "Ce critère dépasse de {over} caractères la limite autorisée. Il est envoyé avec chaque évaluation : il doit être raccourci avant de pouvoir être utilisé."
     },
     "data": {
       "emptyTitle": "Importer des données à analyser",
@@ -2920,7 +2983,39 @@
       "autoCheckHint": "Après extraction des données de photos ou documents, une vérification qualité est automatiquement lancée sur les nouvelles lignes",
       "checkingNewRows": "Vérification des nouvelles lignes pour les problèmes de qualité…",
       "ingestCheckFailed": "La vérification qualité automatique a échoué ({message}) — vous pouvez la lancer manuellement avec Évaluer la qualité.",
-      "assessedIngest": "Nouvelles lignes ajoutées"
+      "assessedIngest": "Nouvelles lignes ajoutées",
+      "transpose": "Transposer",
+      "transposeAxisColumn": "Nom",
+      "transposeSuggestion": "Ce tableau semble transposé : les lignes sont des attributs et les colonnes des éléments. Voulez-vous inverser pour que chaque élément soit une ligne et chaque attribut une colonne typée ?",
+      "transposedTable": "Lignes et colonnes transposées",
+      "columns": "Colonnes",
+      "columnsHidden": "Colonnes ({count} masquées)",
+      "showAllColumns": "Tout afficher",
+      "chartScatter": "Nuage de points (x vs y)",
+      "chartPivot": "Tableau croisé",
+      "xColumn": "Colonne X",
+      "yColumn": "Colonne Y",
+      "splitByColumn": "Séparer par",
+      "splitNone": "Aucune séparation",
+      "pivotValueColumns": "Colonnes de valeurs",
+      "aggMin": "Min",
+      "aggMax": "Max",
+      "aggMedian": "Médiane",
+      "chartSeriesTruncated": "Affichage des {max} premières séries",
+      "chartPointsTruncated": "Affichage de {max} points échantillonnés",
+      "chartScatterAria": "Nuage de points de {x} par rapport à {y}",
+      "pivotTableAria": "Tableau croisé groupé par {column}",
+      "schemaFormula": "Formule",
+      "schemaFormulaPlaceholder": "ex. [Casiers] / [Population] * 1000",
+      "schemaFormulaHint": "Champ calculé : référencez d'autres champs comme [Nom] ; prend en charge + - * / %, parenthèses, ainsi que round, abs, min, max. Les valeurs se mettent à jour automatiquement et ne peuvent pas être modifiées directement.",
+      "schemaFormulaSyntaxError": "Formule invalide",
+      "schemaFormulaUnknownRef": "Champ inconnu : {ref}",
+      "schemaFormulaArityError": "Nombre d'arguments incorrect pour {fn}",
+      "schemaFormulaCycleError": "Référence circulaire entre formules",
+      "derivedColumnTitle": "Calculé : {formula}",
+      "derivedFrom": "Calculé à partir de {formula}",
+      "takePhoto": "Prendre une photo",
+      "takePhotoHint": "Utilisez votre caméra pour photographier un formulaire ou un tableau — son contenu deviendra des données structurées que vous pourrez vérifier à partir de la photo"
     },
     "map": {
       "emptyTitle": "Ajoutez vos données sur une carte",
@@ -2994,7 +3089,31 @@
         "jumpTo": "Aller à {label}",
         "slider": "Position sur la frise",
         "showUndated": "Afficher les lieux sans date",
-        "activeCount": "{count} actif(s)"
+        "activeCount": "{count} actif(s)",
+        "jump": {
+          "start": "Début",
+          "yearsLater": "{count, plural, one {1 an plus tard} other {# ans plus tard}}",
+          "monthsLater": "{count, plural, one {1 mois plus tard} other {# mois plus tard}}",
+          "daysLater": "{count, plural, one {1 jour plus tard} other {# jours plus tard}}",
+          "appears": "{count, plural, one {1 apparition} other {# apparitions}}",
+          "ends": "{count, plural, one {1 fin} other {# fins}}",
+          "progress": "Date {index} sur {total}"
+        },
+        "precision": {
+          "minute": "À la minute",
+          "hour": "À l’heure",
+          "day": "À la journée",
+          "month": "Datation au mois",
+          "year": "Datation à l’année",
+          "mixed": "(mixte)"
+        },
+        "pacing": {
+          "toggle": "Rythme de lecture",
+          "cardDuration": "Afficher chaque lieu pendant",
+          "seconds": "{seconds}s",
+          "maxCards": "Lieux affichés par date",
+          "hint": "Les dates les plus chargées sont affichées plus longtemps automatiquement."
+        }
       },
       "granularity": {
         "site": "Site",
@@ -3011,8 +3130,13 @@
         "color": "Couleur : niveau de confiance des coordonnées (bleu élevé, ambre moyen, rouge faible)",
         "size": "Taille du point : importance du lieu dans le document",
         "area": "Cercle en pointillés : étendue approximative d’un district, d’une région ou d’un pays",
-        "container": "Contour pâle : zone dont le contenu est cartographié individuellement"
-      }
+        "container": "Contour pâle : zone dont le contenu est cartographié individuellement",
+        "precisionHalo": "Anneau pointillé (lors d’une animation) : l’événement est daté uniquement au mois ou à l’année, donc le moment exact est incertain"
+      },
+      "sourceLabel": "Source : {name}",
+      "fetchAndMap": "Récupérer et cartographier",
+      "fetchingPage": "Chargement de la page…",
+      "railUrlRequest": "Récupérer et cartographier les emplacements depuis : {title} ({url})"
     },
     "shell": {
       "showConversation": "Afficher la conversation",
@@ -3030,6 +3154,16 @@
       "untitled": "Nouvelle conversation",
       "toggleMenu": "Afficher/masquer le menu",
       "model": "Modèle pour ce workflow"
+    },
+    "tabs": {
+      "label": "Mode conversation",
+      "chat": "Chat",
+      "chatDescription": "Une conversation standard avec l’assistant"
+    },
+    "discard": {
+      "title": "Abandonner ce brouillon ?",
+      "body": "Le passage à {target} efface le travail commencé dans {current}.",
+      "confirm": "Abandonner"
     }
   },
   "connectors": {
@@ -3044,6 +3178,22 @@
       "asana": {
         "name": "Asana",
         "description": "Recherchez, créez et mettez à jour des tâches et projets."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Interrogez des sources de données publiées, des classeurs et des indicateurs Pulse."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Recherchez et mettez à jour les enregistrements dans vos objets Salesforce."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Rédigez, planifiez et publiez des posts sur les réseaux sociaux."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Consultez et répondez aux conversations dans la messagerie sociale."
       }
     },
     "connect": "Connecter",
@@ -3104,7 +3254,19 @@
       "missingState": "Rien à autoriser",
       "close": "Vous pouvez fermer cette fenêtre et retourner à l’application.",
       "closeButton": "Fermer la fenêtre"
-    }
+    },
+    "oauthNoAppConfigured": "La connexion avec {name} n'est pas configurée dans ce déploiement. Connectez-vous en enregistrant votre propre application OAuth.",
+    "adminConnectorsTitle": "De votre organisation",
+    "adminConnectorsDescription": "Connecteurs mis en place par vos administrateurs. L'affichage dépend de vos droits d'accès.",
+    "managedByOrg": "Géré par votre organisation",
+    "connectorOauthNotConfigured": "La configuration de la connexion pour ce connecteur n'est pas terminée. Contactez votre administrateur.",
+    "yourConnectorsTitle": "Vos connecteurs",
+    "addTitle": "Ajouter un connecteur",
+    "addDescription": "Choisissez un outil à connecter. Vous configurerez l'accès après avoir choisi.",
+    "add": "Ajouter",
+    "filterLabel": "Filtrer les connecteurs",
+    "filterPlaceholder": "Rechercher des connecteurs",
+    "noMatches": "Aucun connecteur ne correspond à « {query} »."
   },
   "modelSources": {
     "connectButtonShort": "Connecter une source de modèle",
@@ -3155,5 +3317,399 @@
     "deselectAll": "Tout désélectionner",
     "autoAddLabel": "Ajouter automatiquement les nouveaux modèles",
     "autoAddDescription": "Les déploiements de modèles ajoutés ultérieurement à ce compte apparaîtront automatiquement. Les modèles non cochés resteront exclus."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Impact faible",
+      "moderate": "Impact modéré",
+      "high": "Impact élevé"
+    },
+    "tierTooltip": "Impact énergétique relatif par requête, estimé à partir de la taille du modèle. Il s'agit d'estimations fondées sur des moyennes publiées et des hypothèses v{version} — pas de mesures.",
+    "typicalRequest": "~{grams} g CO₂e par requête type",
+    "typicalRequestTooltip": "Estimation approximative par requête type (environ 1 000 jetons de prompt et 500 de complétion), calculée à partir des moyennes publiées et des hypothèses v{version}. L'impact réel varie selon la longueur de la conversation, les paramètres et la région d'hébergement.",
+    "activities": {
+      "netflixHd": "Streaming Netflix HD",
+      "zoomCall": "Appel Zoom (caméra activée)",
+      "webBrowsing": "Navigation web",
+      "spotifyAudio": "Audio Spotify"
+    },
+    "equivalents": {
+      "title": "≈ le même carbone que",
+      "note": "Comparaison de carbone avec l'empreinte par heure publiée de ces services — données indicatives, comme toutes les estimations ici."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Empreinte carbone estimée de cette conversation : {grams} grammes d'équivalent CO₂. Afficher le détail.",
+      "ariaLabelToday": "Empreinte carbone estimée de cette conversation aujourd'hui : {grams} grammes d'équivalent CO₂. Afficher le détail.",
+      "title": "Cette conversation (estimation)",
+      "today": "Aujourd'hui",
+      "total": "Depuis le début",
+      "measured": "À partir du nombre de jetons signalé",
+      "estimated": "Rétrocalculé à partir des anciens messages",
+      "lastRequest": "Dernière requête",
+      "disclaimer": "Estimations par requête à partir des nombres de jetons signalés ou approximés, en utilisant des moyennes et hypothèses publiées v{version}. Les anciens messages sont rétrocalculés à partir du texte stocké et du modèle actuel de la conversation. Il ne s'agit pas d'une mesure."
+    }
+  },
+  "table": {
+    "copyTable": "Copier le tableau",
+    "downloadTable": "Télécharger le tableau",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Exporté sous CSV",
+    "copyFailed": "Échec de la copie du tableau"
+  },
+  "backup": {
+    "intro": {
+      "title": "Sauvegardez vos discussions — en toute sécurité",
+      "body": "Vos conversations sont chiffrées sur cet appareil avant tout envoi. Nous ne pouvons jamais lire vos discussions.",
+      "keyWarning": "Votre clé de récupération est créée sur cet appareil. Nous ne la voyons jamais et ne pouvons pas la récupérer pour vous — la perdre signifie perdre la sauvegarde.",
+      "create": "Créer ma clé et sauvegarder",
+      "decline": "Pas maintenant — conserver les discussions uniquement sur cet appareil"
+    },
+    "ceremony": {
+      "titleCreate": "Enregistrez votre clé de récupération",
+      "titleRotate": "Enregistrez votre nouvelle clé de récupération",
+      "titleView": "Votre clé de récupération",
+      "description": "Cette clé est le seul moyen de restaurer votre sauvegarde sur un autre appareil. Conservez-la en lieu sûr — nous ne pouvons pas la récupérer pour vous.",
+      "copy": "Copier",
+      "copied": "Copié !",
+      "download": "Télécharger .txt",
+      "showQr": "Afficher le code QR",
+      "hideQr": "Masquer le code QR",
+      "savedCheckbox": "J'ai enregistré ma clé de récupération dans un endroit sûr",
+      "saveFirstHint": "Copiez ou téléchargez votre clé avant de continuer.",
+      "continue": "Continuer",
+      "done": "Terminé",
+      "cancel": "Annuler",
+      "cancelConfirmTitle": "Annuler la configuration de la sauvegarde ?",
+      "cancelConfirmBody": "Vos discussions ne seront pas sauvegardées. Vous pouvez activer la sauvegarde chiffrée à tout moment dans les paramètres.",
+      "cancelConfirmRotateBody": "Votre clé de récupération a déjà été modifiée. Vous pouvez la consulter à tout moment dans les paramètres.",
+      "cancelConfirmConfirm": "Oui, annuler",
+      "cancelConfirmDismiss": "Retour",
+      "loadError": "Impossible de charger votre clé de récupération sur cet appareil."
+    },
+    "file": {
+      "heading": "Clé de récupération de sauvegarde des discussions",
+      "warning": "Gardez cette clé en sécurité. Toute personne la possédant peut accéder à votre sauvegarde ; sans elle, la restauration est impossible."
+    },
+    "progress": {
+      "titleCreate": "Configuration de votre sauvegarde",
+      "titleRotate": "Changement de votre clé de récupération",
+      "encrypting": "{count, plural, one {Chiffrement et sauvegarde de # discussion…} other {Chiffrement et sauvegarde de # discussions…}}",
+      "success": "{count, plural, one {Sauvegarde terminée. # discussion est protégée.} other {Sauvegarde terminée. # discussions sont protégées.}}",
+      "error": "Échec de la sauvegarde. Vos discussions sont toujours sur cet appareil.",
+      "retry": "Réessayer",
+      "close": "Fermer",
+      "done": "Terminé"
+    },
+    "input": {
+      "label": "Clé de récupération",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Les clés ne contiennent jamais les lettres O, I ou L.",
+      "checksumError": "Cette clé ne semble pas correcte — vérifiez les fautes de frappe.",
+      "formatError": "Ceci ne ressemble pas à une clé de récupération.",
+      "incomplete": "Continuez à saisir — une clé de récupération comporte 56 caractères.",
+      "valid": "La clé semble valide."
+    },
+    "restore": {
+      "title": "Restaurer vos discussions",
+      "successTitle": "Sauvegarde restaurée",
+      "promptBody": "Nous avons trouvé une sauvegarde chiffrée pour votre compte. Saisissez votre clé de récupération pour la restaurer sur cet appareil.",
+      "submit": "Restaurer la sauvegarde",
+      "skip": "Ignorer — recommencer sur cet appareil",
+      "restoring": "Déchiffrement et restauration de vos discussions…",
+      "successBody": "{count, plural, one {# conversation restaurée.} other {# conversations restaurées.}}",
+      "wrongKey": "Cette clé est valide, mais elle ne déverrouille pas cette sauvegarde. Si vous avez changé de clé, utilisez la plus récente.",
+      "corrupt": "Cette sauvegarde n’a pas pu être lue — elle est peut-être endommagée. Vous pouvez recommencer sur cet appareil ou réessayer plus tard.",
+      "networkError": "Impossible d’atteindre le service de sauvegarde. Vérifiez votre connexion et réessayez.",
+      "tryAgain": "Essayer une autre clé",
+      "close": "Terminé"
+    },
+    "enterKey": {
+      "title": "Saisissez votre nouvelle clé de récupération",
+      "body": "Votre clé de récupération a été changée sur un autre appareil. Saisissez la nouvelle clé pour reprendre les sauvegardes sur cet appareil.",
+      "submit": "Utiliser cette clé"
+    },
+    "banner": {
+      "keyMismatchTitle": "Sauvegardes en pause — votre clé de récupération a changé sur un autre appareil.",
+      "enterNewKey": "Saisir une nouvelle clé",
+      "resetBackup": "Réinitialiser la sauvegarde",
+      "resetConfirmTitle": "Réinitialiser la sauvegarde avec la clé de cet appareil ?",
+      "resetConfirmBody": "La sauvegarde existante sera remplacée par les discussions de cet appareil, chiffrées avec la clé de cet appareil. Les autres appareils auront besoin de la clé de récupération de cet appareil.",
+      "resetConfirmAction": "Réinitialiser la sauvegarde",
+      "remoteMissingTitle": "Votre sauvegarde n’existe plus sur le serveur. Sauvegardes en pause.",
+      "backUpAgain": "Sauvegarder de nouveau",
+      "dismiss": "Fermer"
+    },
+    "rotate": {
+      "confirmTitle": "Changer votre clé de récupération ?",
+      "confirmBody": "Votre sauvegarde sera rechiffrée avec une nouvelle clé, et l’ancienne ne fonctionnera plus. Vous devrez enregistrer la nouvelle clé et la saisir sur vos autres appareils.",
+      "confirmAction": "Changer de clé"
+    },
+    "toast": {
+      "enrollLater": "Vous pouvez activer la sauvegarde chiffrée à tout moment dans les Paramètres.",
+      "keyUpdated": "Clé de récupération mise à jour. Sauvegardes reprises.",
+      "resetDone": "Sauvegarde réinitialisée avec la clé de cet appareil.",
+      "backupRestarted": "Sauvegarde recréée.",
+      "opFailed": "Un problème est survenu. Veuillez réessayer."
+    },
+    "settings": {
+      "statusOn": "Sauvegarde activée",
+      "statusOff": "Sauvegarde désactivée",
+      "offDescription": "Vos discussions sont uniquement présentes dans ce navigateur. Activez la sauvegarde chiffrée pour les sécuriser et les restaurer sur d’autres appareils. Les discussions sont chiffrées sur votre appareil — nous ne pouvons jamais les lire.",
+      "turnOn": "Activer la sauvegarde",
+      "restoreTitle": "Une sauvegarde existe déjà pour votre compte",
+      "restoreDescription": "Saisissez votre clé de récupération pour la restaurer sur cet appareil.",
+      "restore": "Restaurer la sauvegarde",
+      "lastBackup": "Dernière sauvegarde : {time}",
+      "lastBackupNever": "Aucune sauvegarde effectuée",
+      "keyFingerprint": "Clé ····-{tail}",
+      "syncState": {
+        "idle": "En attente de synchronisation",
+        "syncing": "Sauvegarde en cours…",
+        "ok": "À jour",
+        "keyOutOfDate": "En pause — la clé de récupération a changé sur un autre appareil",
+        "remoteMissing": "En pause — la sauvegarde a été supprimée du serveur",
+        "error": "La dernière tentative de sauvegarde a échoué"
+      },
+      "backUpNow": "Sauvegarder maintenant",
+      "backUpNowSuccess": "Sauvegarde terminée",
+      "backUpNowFailure": "Échec de la sauvegarde — vos conversations restent inchangées sur cet appareil",
+      "viewKey": "Afficher la clé de récupération",
+      "changeKey": "Modifier la clé de récupération",
+      "dangerTitle": "Zone à risque",
+      "turnOffDelete": "Désactiver et supprimer la sauvegarde",
+      "turnOffConfirmTitle": "Désactiver la sauvegarde ?",
+      "turnOffConfirmMessage": "Cela supprime votre sauvegarde de nos serveurs pour tous les appareils. Les discussions sur cet appareil resteront. Vous pourrez réactiver la sauvegarde plus tard avec une nouvelle clé de récupération.",
+      "turnOffConfirmAction": "Supprimer la sauvegarde",
+      "turnOffSuccess": "Sauvegarde désactivée et supprimée",
+      "turnOffFailure": "Impossible de supprimer la sauvegarde. Veuillez réessayer."
+    }
+  },
+  "memories": {
+    "title": "Mémoires",
+    "description": "Laissez l’assistant se souvenir des faits durables que vous partagez — comme votre rôle, vos préférences et vos projets en cours — et les utiliser dans toutes vos conversations.",
+    "enableToggle": "Activer les mémoires",
+    "privacyNote": "Les faits sont stockés uniquement dans ce navigateur et inclus dans vos discussions pour personnaliser les réponses.",
+    "empty": "Aucune mémoire pour l’instant. Les faits importants sont enregistrés automatiquement à partir de vos conversations.",
+    "savedOn": "Enregistré le {date}",
+    "deleteMemory": "Supprimer la mémoire",
+    "clearAll": "Effacer toutes les mémoires",
+    "clearAllConfirmQuestion": "Supprimer toutes les mémoires ? Cette action est irréversible.",
+    "clearAllConfirm": "Tout supprimer",
+    "cancel": "Annuler"
+  },
+  "contextWindow": {
+    "label": "Fenêtre de contexte",
+    "value": "{count} messages",
+    "fewer": "Moins de messages",
+    "more": "Plus de messages",
+    "description": "Les messages plus anciens dépassant cette limite sont résumés et envoyés en tant que contexte."
+  },
+  "agentAccess": {
+    "title": "Accès agent",
+    "description": "Gérez quels utilisateurs peuvent utiliser les agents Foundry partagés. Les règles ne peuvent que restreindre davantage ce que l’accès Azure personnel d’un utilisateur permet déjà — elles ne peuvent jamais accorder un accès refusé par Azure.",
+    "backToChat": "Retour à la discussion",
+    "loading": "Chargement des agents et des règles…",
+    "loadError": "Impossible de charger les données d’accès aux agents.",
+    "rulesUnavailableWarning": "Les règles d’accès n’ont pas pu être chargées depuis le stockage. L’appel d’agent est actuellement bloqué et les règles ne peuvent pas être modifiées.",
+    "retry": "Réessayer",
+    "rulesTab": "Règles des agents",
+    "localAdminsTab": "Admins locaux",
+    "noAgents": "Aucun agent à gérer.",
+    "sourceLabel": "Source",
+    "notDiscoverable": "Non découvrable par vous",
+    "notDiscoverableHint": "Une règle existe pour cet agent, mais il n’apparaît pas dans votre découverte — il a peut-être été renommé, votre accès Azure ne le permet pas ou sa règle d’accès ne vous inclut pas.",
+    "accessEveryone": "Tout le monde",
+    "accessRestricted": "Restreint",
+    "edit": "Modifier",
+    "updatedByLine": "Dernière mise à jour par {user} le {date}",
+    "accessTypeLabel": "Qui peut utiliser cet agent",
+    "everyoneDescription": "Toute personne pouvant déjà accéder à cet agent via son accès Azure.",
+    "restrictedDescription": "Seuls les utilisateurs et domaines listés ci-dessous.",
+    "allowDomainsLabel": "Domaines autorisés",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Utilisateurs autorisés",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Appuyez sur Entrée pour ajouter",
+    "removeChip": "Supprimer",
+    "groupsLabel": "Groupes autorisés",
+    "groupsPendingConsent": "L'accès par groupe est en attente du consentement de l'administrateur du locataire et ne peut pas être modifié pour le moment.",
+    "restrictedEmptyWarning": "Aucun utilisateur ou domaine n'est listé — personne ne pourra utiliser cet agent.",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "cancel": "Annuler",
+    "saveSuccess": "Règle d'accès enregistrée.",
+    "deleteSuccess": "Règle d'accès supprimée — tout le monde peut à nouveau utiliser cet agent.",
+    "saveError": "Impossible d'enregistrer. Veuillez réessayer.",
+    "conflictError": "Quelqu'un a modifié ceci pendant votre édition. Rechargez pour obtenir la dernière version, puis recommencez votre modification.",
+    "reload": "Recharger",
+    "localAdminsDescription": "Déléguez la gestion des règles pour des agents spécifiques sans redéploiement. Les administrateurs locaux peuvent uniquement modifier les règles des agents qui leur sont attribués.",
+    "noLocalAdmins": "Aucun administrateur local configuré.",
+    "addLocalAdmin": "Ajouter un administrateur local",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Supprimer l'administrateur local",
+    "delegatedAgentsLabel": "Agents délégués",
+    "noDelegatedAgents": "Aucun agent disponible à déléguer.",
+    "unknownAgentKey": "Clé d'agent inconnue",
+    "configSaveSuccess": "Administrateurs locaux enregistrés.",
+    "configConflictError": "Quelqu'un a modifié la liste des administrateurs locaux pendant votre édition. Rechargez et réessayez.",
+    "addAgent": "Ajouter un agent",
+    "newPromptAgentTitle": "Nouvel agent de prompt",
+    "editPromptAgentTitle": "Modifier l’agent de prompt",
+    "agentNameLabel": "Nom",
+    "agentNamePlaceholder": "ex. Conseiller voyage",
+    "agentDescriptionLabel": "Description",
+    "agentDescriptionPlaceholder": "Visible par les utilisateurs dans le sélecteur de modèle",
+    "agentSystemPromptLabel": "Invite système",
+    "agentSystemPromptPlaceholder": "Instructions définissant le comportement de cet agent",
+    "agentModelLabel": "Modèle",
+    "agentModelPlaceholder": "Sélectionner un modèle…",
+    "agentModelUnavailable": "{modelId} (indisponible)",
+    "agentModelUnknownError": "Le modèle sélectionné n’est plus disponible. Veuillez en choisir un autre et enregistrer à nouveau.",
+    "promptAgentBadge": "Agent de prompt",
+    "editAgent": "Modifier l’agent",
+    "deleteAgent": "Supprimer",
+    "deleteAgentConfirm": "Supprimer cet agent pour tous ? Il disparaîtra du sélecteur de modèle ; les conversations existantes conserveront leur historique.",
+    "confirmDeleteAgent": "Oui, supprimer",
+    "promptAgentCreateSuccess": "Agent de prompt créé.",
+    "promptAgentSaveSuccess": "Agent de prompt enregistré.",
+    "promptAgentDeleteSuccess": "Agent de prompt supprimé.",
+    "promptAgentsUnavailableWarning": "Les agents de prompt n’ont pas pu être chargés depuis le stockage. Ils ne peuvent pas être modifiés pour le moment.",
+    "agentsTab": "Agents",
+    "connectorsTab": "Connecteurs",
+    "addConnector": "Ajouter un connecteur",
+    "noConnectors": "Aucun connecteur pour le moment.",
+    "connectorsUnavailableWarning": "Impossible d'accéder au magasin de connecteurs, la liste peut donc être incomplète. N'en créez pas de nouveau tant qu'elle n'est pas chargée.",
+    "editAccess": "Modifier l'accès",
+    "deleteConnector": "Supprimer",
+    "deleteConnectorConfirm": "Supprimer ce connecteur ? Toute personne l'utilisant perdra immédiatement l'accès.",
+    "confirmDeleteConnector": "Supprimer le connecteur",
+    "connectorSaveSuccess": "Connecteur enregistré.",
+    "connectorCreateSuccess": "Connecteur créé.",
+    "connectorDeleteSuccess": "Connecteur supprimé.",
+    "editConnectorTitle": "Modifier le connecteur",
+    "newConnectorTitle": "Nouveau connecteur",
+    "connectorPresetLabel": "Commencer à partir d'un modèle",
+    "connectorPresetNone": "Commencer à partir de zéro",
+    "connectorNameLabel": "Nom",
+    "connectorDescriptionLabel": "Description",
+    "connectorUrlLabel": "URL du serveur",
+    "connectorUrlPlaceholderWarning": "Remplacez le {placeholder} dans l'URL par votre propre valeur avant d'enregistrer.",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Authentification",
+    "connectorAuthNone": "Aucune",
+    "connectorAuthBearer": "Jeton (chaque utilisateur fournit le sien)",
+    "connectorAuthOauth": "Connexion OAuth",
+    "connectorSealingUnavailable": "OAuth indisponible : cette instance n'a pas de AUTH_SECRET configuré pour chiffrer les secrets clients.",
+    "connectorTokenHelpLabel": "Lien vers les instructions du jeton (optionnel)",
+    "connectorClientIdLabel": "ID client OAuth",
+    "connectorClientSecretLabel": "Secret client OAuth",
+    "connectorClientSecretStored": "Un secret est enregistré. Laissez vide pour le conserver, ou saisissez-en un nouveau pour le remplacer.",
+    "connectorClientSecretHint": "Chiffré avant d'être stocké et jamais affiché à nouveau.",
+    "connectorScopesLabel": "Scopes (séparés par des espaces, optionnel)"
+  },
+  "localModels": {
+    "title": "Modèles locaux",
+    "description": "Discutez avec des modèles exécutés sur cet ordinateur. Les messages vont directement de votre navigateur à l’application locale et n’atteignent jamais nos serveurs : les réponses, titres de conversations et résumés restent donc sur votre machine.",
+    "detect": "Détecter les environnements locaux",
+    "detecting": "Détection…",
+    "experimental": "Expérimental",
+    "portLabel": "Port",
+    "statusUnknown": "Pas encore vérifié.",
+    "statusChecking": "Vérification…",
+    "statusReady": "{count, plural, =0 {Connecté, mais aucun modèle chargé.} one {Connecté — # modèle disponible.} other {Connecté — # modèles disponibles.}}",
+    "statusNotRunning": "Impossible d’atteindre {label}. Vérifiez qu’il fonctionne sur ce port et que votre navigateur est autorisé à accéder aux applications locales depuis ce site.",
+    "statusHttpError": "{label} a répondu avec une erreur. Consultez ses journaux.",
+    "corsHelp": {
+      "ollama": "Ollama fonctionne mais refuse les requêtes de ce site. Définissez OLLAMA_ORIGINS sur l’adresse de ce site, redémarrez Ollama puis relancez la détection.",
+      "lmstudio": "LM Studio fonctionne mais refuse les requêtes de ce site. Activez CORS dans les paramètres du serveur local, puis relancez la détection.",
+      "llamacpp": "llama.cpp fonctionne mais refuse les requêtes de ce site. Démarrez llama-server en permettant les requêtes inter-origines, puis relancez la détection."
+    },
+    "privacyNote": "Les modèles locaux ne prennent pas en charge les pièces jointes, images, recherches web ou connecteurs ; ceux-ci nécessitent nos serveurs. La détection ne vérifie que cet ordinateur."
+  },
+  "urlFetch": {
+    "sourceFallback": "Page web",
+    "fallbackHint": "Vous pouvez aussi ouvrir la page, copier le texte et le coller ici à la place.",
+    "shortExtract": "Seul un court extrait était lisible ; la page est peut-être payante ou nécessite une connexion.",
+    "errors": {
+      "invalidUrl": "Cela ne ressemble pas à une adresse web valide.",
+      "ssrfBlocked": "Cette adresse ne peut pas être récupérée pour des raisons de sécurité.",
+      "tooManyRedirects": "Ce lien a effectué trop de redirections.",
+      "timeout": "La page a mis trop de temps à répondre.",
+      "unreachable": "La page est inaccessible.",
+      "blocked": "Le site a refusé la requête — une connexion peut être nécessaire ou le site bloque les lecteurs automatisés.",
+      "notFound": "Cette page est introuvable.",
+      "upstream": "Le site a renvoyé une erreur.",
+      "pdf": "Ce lien est un PDF. Téléchargez-le puis ajoutez-le via le bouton de pièce jointe.",
+      "nonHtml": "Ce lien n'est pas une page web lisible.",
+      "tooLarge": "Cette page est trop volumineuse pour être récupérée.",
+      "empty": "Aucun texte d'article lisible n'a été trouvé sur cette page.",
+      "generic": "Impossible de récupérer la page."
+    },
+    "fetchingFile": "Récupération de {host}…",
+    "attachLink": "Joindre un lien",
+    "attachLinkTitle": "Joindre une page web",
+    "attachLinkDescription": "La page est récupérée et son texte lisible est joint à votre message.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Récupérer & joindre",
+    "attachLinkInvalid": "Cela ne ressemble pas à une adresse web.",
+    "linkBadge": "Depuis un lien",
+    "couldNotRetrieve": "Impossible de récupérer",
+    "doc": {
+      "sourceLabel": "Source",
+      "retrievedLabel": "Récupéré",
+      "attemptedLabel": "Tentative",
+      "failureHeading": "Impossible de récupérer la page web"
+    },
+    "settingsTitle": "Liens dans les messages",
+    "settingsToggle": "Récupérer automatiquement les liens collés",
+    "settingsDescription": "Lorsque vous collez un lien seul, la page est récupérée et son texte est joint afin que l’assistant puisse le lire. Désactivez cette option pour conserver les liens collés en texte brut — vous pouvez quand même joindre une page manuellement depuis le menu +.",
+    "addLink": "Ajouter un lien"
+  },
+  "cameraAccessError": "Impossible d'accéder à la caméra. Vérifiez les autorisations de la caméra et réessayez.",
+  "cameraUnnamedDevice": "Caméra",
+  "pastedText": {
+    "fallbackName": "Texte collé",
+    "charCount": "{count, number} caractères",
+    "removeChip": "Supprimer le texte collé « {name} »",
+    "blockLabel": "Texte collé : {name}",
+    "doc": {
+      "heading": "Texte collé",
+      "pastedLabel": "Collé"
+    },
+    "settingsTitle": "Collages volumineux",
+    "settingsToggle": "Convertir un collage volumineux en pièce jointe",
+    "settingsDescription": "Si vous collez plus de texte que la limite ci-dessous, il sera joint en tant que fichier au lieu de remplir la boîte de message. Le texte est utilisé tel quel — rien n'est récupéré ni modifié.",
+    "settingsThresholdLabel": "Joindre les collages supérieurs à",
+    "settingsThresholdUnit": "caractères",
+    "settingsThresholdHint": "Entre {min, number} et {max, number} caractères."
+  },
+  "structures": {
+    "section": "Structures",
+    "sectionSubtitle": "Définitions de champs enregistrées. Utilisez-en une comme recette d'extraction ou comme schéma de départ pour une table de flux de données.",
+    "loadFromStructure": "Charger la structure",
+    "loadFromStructureTitle": "Remplacer ces colonnes par une structure enregistrée",
+    "pickerEmpty": "Aucune structure enregistrée pour le moment.",
+    "pickerTitle": "Charger une structure enregistrée",
+    "saveAsStructure": "Enregistrer comme structure",
+    "saveAsStructureTitle": "Enregistrer ces colonnes dans votre bibliothèque de structures",
+    "savedToast": "Structure « {name} » enregistrée",
+    "namePlaceholder": "Nom de la structure",
+    "fieldCount": "{count} champs",
+    "fieldCountOne": "1 champ",
+    "downgradedNotice": "{count} champ(s) simplifié(s) en texte — les tableaux contiennent une valeur par cellule : {names}",
+    "truncatedNotice": "{count} champ(s) supprimé(s) — la limite du tableau est de {max} colonnes : {names}",
+    "skippedDerivedNotice": "{count} colonne(s) calculée(s) non enregistrée(s) — les formules font référence aux colonnes de cette table : {names}",
+    "loadReplacesColumns": "Cela remplace les colonnes actuelles. Les lignes existantes conservent les valeurs dont les noms de colonne correspondent."
   }
 }

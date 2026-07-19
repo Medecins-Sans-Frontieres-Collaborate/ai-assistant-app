@@ -38,7 +38,7 @@ const MAX_RECIPES_PER_TURN = 3;
  */
 export const ExtractionTray: FC = () => {
   const t = useTranslations('extraction');
-  const recipes = useSettingsStore((s) => s.extractionRecipes);
+  const recipes = useSettingsStore((s) => s.savedStructures);
   const selectedIds = useChatInputStore((s) => s.extractionRecipeIds);
   const removeRecipeId = useChatInputStore((s) => s.removeExtractionRecipeId);
   const clearRecipeIds = useChatInputStore((s) => s.clearExtractionRecipeIds);

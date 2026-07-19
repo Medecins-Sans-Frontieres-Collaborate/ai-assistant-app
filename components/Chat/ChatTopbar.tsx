@@ -13,6 +13,7 @@ import { useTranslations } from 'next-intl';
 import { SearchMode } from '@/types/searchMode';
 
 import { ClaudeIcon } from '@/components/Icons/providers/ClaudeIcon';
+import { WorkflowTabs } from '@/components/Workflows/WorkflowTabs';
 
 import {
   AzureAIIcon,
@@ -237,7 +238,15 @@ export const ChatTopbar = ({
           )}
         </div>
 
-        {/* Controls - 3-dot menu - only show when there are options */}
+        {/* One slot, two occupants. Before the first message the
+            conversation's mode is still changeable, so the workflow tabs
+            hold it; afterwards the mode is settled and the slot becomes the
+            3-dot menu. They never coexist. */}
+        {!hasMessages && (
+          <div className="flex items-center justify-center">
+            <WorkflowTabs />
+          </div>
+        )}
         {hasMessages && (
           <div className="flex items-center justify-center" ref={menuRef}>
             <div className="relative">

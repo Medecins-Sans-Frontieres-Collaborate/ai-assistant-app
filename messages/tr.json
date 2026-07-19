@@ -849,7 +849,8 @@
     "processingAudio": "Ses işleniyor...",
     "ttsError": "Ses oluşturulurken hata oluştu. Lütfen tekrar deneyin.",
     "unsupportedMessageType": "Mesaj görüntülenemedi: Desteklenmeyen mesaj türü",
-    "addLanguageOption": "\"{name}\" ekle…"
+    "addLanguageOption": "\"{name}\" ekle…",
+    "sources": "Kaynaklar"
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",
@@ -1178,7 +1179,23 @@
     "customInstructionsLabel": "Özel Talimatlar*",
     "defaultTemperatureLabel": "Varsayılan Temperature*",
     "Usage & Impact": "Kullanım ve Etki",
-    "Connectors": "Bağlayıcılar"
+    "Connectors": "Bağlayıcılar",
+    "Backup": "Yedekleme",
+    "Memories": "Geçmiş Sohbetler",
+    "Agent Access": "Agent Erişimi",
+    "LocalModels": "Yerel modeller",
+    "suggestRevisions": {
+      "title": "Belge revizyonları",
+      "toggle": "Uygulamak yerine revizyon öner",
+      "description": "Belge iş akışına revizyon yapmasını istediğinizde, değişiklikler kalite değerlendirmelerinde olduğu gibi ayrı ayrı öneriler şeklinde gelir ve bunları kabul edebilir veya reddedebilirsiniz.",
+      "exceptionsTitle": "Aşağıdaki durumlarda yine de doğrudan uygula:",
+      "exceptionSelection": "Vurguladığınız bir seçimi revize ederken",
+      "exceptionLargeRewrite": "Yeniden yazma, belgenin çoğunu değiştiriyorsa",
+      "exceptionReorder": "Bölümler düzenlenmek yerine taşınıyorsa",
+      "thresholdLabel": "Şunun üzerindeyse yeniden yazma olarak değerlendir",
+      "thresholdUnit": "Değiştirilen belge yüzdesi",
+      "exceptionSelectionAlways": "Vurgulanan bir seçimi düzeltmek her zaman doğrudan uygulanır — model yalnızca düzeltilmiş kısmı döndürür ve bu, tüm belgeye karşı öneriler olarak ayrılamaz."
+    }
   },
   "notFound": {
     "lostDog": "Kayıp köpek"
@@ -2111,7 +2128,9 @@
     "pin": "Üste sabitle",
     "unpin": "Sabitlemeyi kaldır",
     "moveToMore": "Daha Fazlaya taşı",
-    "moveOutOfMore": "Menüde göster"
+    "moveOutOfMore": "Menüde göster",
+    "showSources": "Diğer kaynakları göster",
+    "hideSources": "Diğer kaynakları gizle"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Yapay zekanın nasıl yanıt vereceğini özelleştirmek için kişisel talimatlarınızı ekleyin. Bunlar, yardımcı, doğru ve güvenli yanıtları garanti altına alan temel davranış yönergeleriyle birleştirilir.",
   "Tip: Type \"/\" to select from saved prompt templates_": "İpucu: Kayıtlı istem şablonlarından seçmek için \"/\" yazın.",
@@ -2424,7 +2443,8 @@
     "regionDefault": "Varsayılan",
     "modelRow": "{requests} istek · {grams} g",
     "disclosure": "Tahminler varsayımlara dayalıdır v{version} · {since} tarihinden itibaren · yalnızca standart sohbet (ajanlar ve bilgi tabanı cevapları dahil değildir).",
-    "reset": "Kullanım istatistiklerini sıfırla"
+    "reset": "Kullanım istatistiklerini sıfırla",
+    "estimatedPortion": "~{grams} g CO₂e ({requests} istek) içermektedir; izleme öncesindeki sohbetlerden tahmin edilmiştir — saklanan mesaj metninden geriye dönük hesaplanmış, ölçülen token sayılarından değil."
   },
   "extraction": {
     "toggleLabel": "Yapılandırılmış veriyi çıkar",
@@ -2631,7 +2651,25 @@
       "pendingCount": "{count} bekliyor",
       "closeReview": "Kalite değerlendirmesini kapat",
       "showReview": "Değerlendirmeyi göster",
-      "showReviewPending": "Değerlendirmeyi göster ({count} bekliyor)"
+      "showReviewPending": "Değerlendirmeyi göster ({count} bekliyor)",
+      "undoEdit": "Geri al",
+      "clearResolved": "Çözülenleri temizle",
+      "clearResolvedHint": "Kabul edilen, reddedilen ve uygulanamayan düzenlemeleri bu listeden kaldır",
+      "autoClearResolved": "Çözülen düzenlemeleri otomatik olarak temizle",
+      "customCriteria": "Özel kriterler",
+      "closeCriteria": "Özel kriterleri kapat",
+      "newCriterion": "Yeni kriter",
+      "newCriterionName": "Başlıksız kriter",
+      "criterionName": "Kriter adı",
+      "criterionRubric": "Değerlendirme ölçütü",
+      "criterionRubricPlaceholder": "Bu kriteri karşılamak için çevirinin ne yapması gerektiğini açıklayın, örn. \"Tüm klinik dozaj talimatlarını emir kipinde çevirin, hiçbir zaman mastar kullanmayın…\"",
+      "criterionRubricHint": "Bu ölçüt, bir çeviri değerlendirilirken yerleşik MQM boyutlarıyla birlikte AI'ya olduğu gibi verilir.",
+      "criteriaEmpty": "Yerleşik MQM boyutlarının ötesinde çevirileri değerlendirmek için özel kriterler oluşturun — örn. kurum tarzı, müşteri terminolojisi tercihleri veya bölgesel gelenekler. Bu cihazda kaydedilir ve tekrar kullanılabilir.",
+      "deleteCriterion": "Kriteri sil",
+      "manageCriteria": "Özel kriterler",
+      "addCriteria": "Kriter ekle",
+      "noUsableCriteria": "En az bir yerleşik kriter seçin veya özel kriterlerinize bir değerlendirme ölçütü ekleyin.",
+      "criterionRubricTooLong": "Bu rubrik, sınırı {over} karakter aşmaktadır. Her değerlendirme ile gönderildiği için, bu kriter kullanılmadan önce kısaltılmalıdır."
     },
     "document": {
       "emptyTitle": "İstediğiniz belgeyi tanımlayın",
@@ -2751,7 +2789,32 @@
       "clearSelection": "Seçimi temizle (tüm belgeyle çalış)",
       "reviseSelectionPlaceholder": "Seçili bölümde yapılacak değişiklikleri açıklayın…",
       "revisedSelectionSummary": "Çalışma alanında seçili bölümü revize ettim.",
-      "assessedSelection": "Seçim"
+      "assessedSelection": "Seçim",
+      "undoEdit": "Geri al",
+      "clearResolved": "Çözülenleri temizle",
+      "clearResolvedHint": "Kabul edilen, reddedilen ve uygulanamayan düzenlemeleri bu listeden kaldır",
+      "autoClearResolved": "Çözülen düzenlemeleri otomatik olarak temizle",
+      "import": "İçe aktar",
+      "importReplaceTitle": "Belge değiştirilsin mi?",
+      "importReplaceBody": "{name} içe aktarıldığında mevcut belge değiştirilecek. Referanslarınız, spesifikasyonunuz ve tonunuz korunur.",
+      "importReplaceConfirm": "Değiştir",
+      "editorMode": "Editör modu",
+      "editorModeRich": "Zengin metin",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Editör modunu değiştirmeden önce önerilen düzenlemeleri çözün.",
+      "suggestChanges": "Değişiklik öner",
+      "suggestChangesHint": "Revizyonu belgenin tamamını yeniden yazmak yerine, bireysel öneriler olarak inceleyin.",
+      "suggestChangesSelectionNote": "Bir seçime yapılan revizyonlar doğrudan uygulanır — seçimin kapsamı zaten belirlenmiştir.",
+      "suggestedSummary": "İnceleme için {count} {count, plural, one {değişiklik} other {değişiklik}} önerildi.",
+      "revisionSuggestionSummary": "Revizyon talebiniz {count} {count, plural, one {önerilen değişiklik} other {önerilen değişiklik}} üretti.",
+      "revisionCriterionLabel": "Talep edilen revizyon",
+      "fallbackSelection": "Doğrudan uygulandı — bir seçime yapılan revizyonlar öneri olarak sunulmaz.",
+      "fallbackLargeRewrite": "Doğrudan uygulandı — yeniden yazma, belgenin çok büyük bir kısmını değiştirdiği için değişiklikler ayrı ayrı önerilemez.",
+      "fallbackReorder": "Doğrudan uygulandı — bölümler taşındı, bu nedenle ayrı ayrı incelenebilir önerilere bölünemez.",
+      "fallbackUnanchorable": "Doğrudan uygulandı — değişiklikler belirli pasajlarla eşleştirilemedi.",
+      "fallbackNoChanges": "Değişiklik gerekmedi.",
+      "criterionRubricTooLong": "Bu rubrik, sınırı {over} karakter aşmaktadır. Her değerlendirme ile gönderildiği için, bu kriter kullanılmadan önce kısaltılmalıdır."
     },
     "data": {
       "emptyTitle": "Analiz için veri içe aktar",
@@ -2920,7 +2983,39 @@
       "autoCheckHint": "Fotoğraf veya belgelerden veri çıkarıldıktan sonra, yeni satırlarda otomatik kalite kontrolü çalıştırılır",
       "checkingNewRows": "Yeni eklenen satırlar kalite sorunları için kontrol ediliyor…",
       "ingestCheckFailed": "Otomatik kalite kontrolü başarısız oldu ({message}) — Manuel olarak ‘Kaliteyi değerlendir’ ile çalıştırabilirsiniz.",
-      "assessedIngest": "Yeni eklenen satırlar"
+      "assessedIngest": "Yeni eklenen satırlar",
+      "transpose": "Transpoze Et",
+      "transposeAxisColumn": "Ad",
+      "transposeSuggestion": "Bu tablo transpoze görünüyor: satırlar özellikler, sütunlar ise öğeler. Her öğe bir satır ve her özellik bir tür sütunu olacak şekilde tabloyu çevirmek ister misiniz?",
+      "transposedTable": "Transpoze satırlar ve sütunlar",
+      "columns": "Sütunlar",
+      "columnsHidden": "Sütunlar ({count} gizli)",
+      "showAllColumns": "Tümünü göster",
+      "chartScatter": "Serpme (x ve y)",
+      "chartPivot": "Pivot tablo",
+      "xColumn": "X sütunu",
+      "yColumn": "Y sütunu",
+      "splitByColumn": "Ayıran sütun",
+      "splitNone": "Ayrım yok",
+      "pivotValueColumns": "Değer sütunları",
+      "aggMin": "En düşük",
+      "aggMax": "En yüksek",
+      "aggMedian": "Medyan",
+      "chartSeriesTruncated": "En fazla {max} seriyi gösteriyor",
+      "chartPointsTruncated": "{max} örnek veri noktası gösteriliyor",
+      "chartScatterAria": "{x} ile {y} arasındaki serpme grafiği",
+      "pivotTableAria": "{column} sütununa göre gruplanmış pivot tablo",
+      "schemaFormula": "Formül",
+      "schemaFormulaPlaceholder": "örn. [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Hesaplanan alan: Diğer alanlara [Ad] olarak referans verin; + - * / %, parantezler ve round, abs, min, max desteklenir. Değerler otomatik güncellenir ve doğrudan düzenlenemez.",
+      "schemaFormulaSyntaxError": "Geçersiz formül",
+      "schemaFormulaUnknownRef": "Bilinmeyen alan: {ref}",
+      "schemaFormulaArityError": "{fn} için yanlış sayıda argüman",
+      "schemaFormulaCycleError": "Formüller arasında döngüsel referans",
+      "derivedColumnTitle": "Hesaplandı: {formula}",
+      "derivedFrom": "{formula} formülünden hesaplandı",
+      "takePhoto": "Fotoğraf çek",
+      "takePhotoHint": "Form veya tabloyu kameranızla çekin — içeriği yapılandırılmış verilere dönüştürülerek fotoğraf ile karşılaştırabilirsiniz"
     },
     "map": {
       "emptyTitle": "Verinizi haritada gösterin",
@@ -2994,7 +3089,31 @@
         "jumpTo": "{label}'a atla",
         "slider": "Zaman çizgisi konumu",
         "showUndated": "Tarihsiz konumları göster",
-        "activeCount": "{count} aktif"
+        "activeCount": "{count} aktif",
+        "jump": {
+          "start": "Başlangıç",
+          "yearsLater": "{count, plural, one {1 yıl sonra} other {# yıl sonra}}",
+          "monthsLater": "{count, plural, one {1 ay sonra} other {# ay sonra}}",
+          "daysLater": "{count, plural, one {1 gün sonra} other {# gün sonra}}",
+          "appears": "{count, plural, one {1 kere göründü} other {# kez göründü}}",
+          "ends": "{count, plural, one {1 kez sona erdi} other {# kez sona erdi}}",
+          "progress": "Tarih {index} / {total}"
+        },
+        "precision": {
+          "minute": "Dakika hassasiyetinde",
+          "hour": "Saat hassasiyetinde",
+          "day": "Gün hassasiyetinde",
+          "month": "Ay seviyesinde tarih",
+          "year": "Yıl seviyesinde tarih",
+          "mixed": "(karışık)"
+        },
+        "pacing": {
+          "toggle": "Oynatma hızı",
+          "cardDuration": "Her konumu gösterme süresi",
+          "seconds": "{seconds} sn",
+          "maxCards": "Tarih başına gösterilen konumlar",
+          "hint": "Yoğun günlerde otomatik olarak daha uzun süre gösterilir."
+        }
       },
       "granularity": {
         "site": "Saha",
@@ -3011,8 +3130,13 @@
         "color": "Renk: koordinat güveni (mavi yüksek, kehribar orta, kırmızı düşük)",
         "size": "Nokta boyutu: yerin materyaldeki önemi",
         "area": "Kesik daire: bir ilçe, bölge veya ülkenin yaklaşık sınırı",
-        "container": "Soluk çizgi: içeriği tek tek haritalanan bir alan"
-      }
+        "container": "Soluk çizgi: içeriği tek tek haritalanan bir alan",
+        "precisionHalo": "Yumuşak kesikli halka (zaman atlamasında): Olay sadece bir ay veya yıl olarak tarihlendirildi, bu nedenle tam zamanı belirsiz"
+      },
+      "sourceLabel": "Kaynak: {name}",
+      "fetchAndMap": "Getir ve eşleştir",
+      "fetchingPage": "Sayfa getiriliyor…",
+      "railUrlRequest": "Konumları getir ve eşleştir: {title} ({url})"
     },
     "shell": {
       "showConversation": "Konuşmayı göster",
@@ -3030,6 +3154,16 @@
       "untitled": "Yeni Konuşma",
       "toggleMenu": "Menüyü aç/kapat",
       "model": "Bu iş akışı için model"
+    },
+    "tabs": {
+      "label": "Konuşma modu",
+      "chat": "Sohbet",
+      "chatDescription": "Asistan ile standart bir konuşma"
+    },
+    "discard": {
+      "title": "Bu taslak silinsin mi?",
+      "body": "{target} konumuna geçerseniz, {current} içinde başlattığınız çalışma silinir.",
+      "confirm": "Sil"
     }
   },
   "connectors": {
@@ -3044,6 +3178,22 @@
       "asana": {
         "name": "Asana",
         "description": "Görev ve projeleri bulun, oluşturun ve güncelleyin."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Yayınlanmış veri kaynaklarını, çalışma kitaplarını ve Pulse metriklerini sorgulayın."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Salesforce nesnelerinizde kayıtları arayın ve güncelleyin."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Sosyal medya gönderileri taslağını oluşturun, planlayın ve yayınlayın."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Sosyal gelen kutusu görüşmelerini inceleyin ve yanıtlayın."
       }
     },
     "connect": "Bağla",
@@ -3104,7 +3254,19 @@
       "missingState": "Yetkilendirilecek bir şey yok",
       "close": "Bu pencereyi kapatabilir ve uygulamaya dönebilirsiniz.",
       "closeButton": "Pencereyi kapat"
-    }
+    },
+    "oauthNoAppConfigured": "{name} ile oturum açma bu dağıtımda ayarlanmadı. Kendi OAuth uygulamanızı kaydederek bağlanın.",
+    "adminConnectorsTitle": "Kuruluşunuzdan",
+    "adminConnectorsDescription": "Yöneticilerinizin ayarladığı konektörler. Hangi konektörleri görebileceğiniz erişiminize bağlıdır.",
+    "managedByOrg": "Kuruluşunuz tarafından yönetiliyor",
+    "connectorOauthNotConfigured": "Bu konektör için oturum açma kurulumu tamamlanmadı. Yöneticinizle iletişime geçin.",
+    "yourConnectorsTitle": "Konektörleriniz",
+    "addTitle": "Konektör ekle",
+    "addDescription": "Bağlanacak bir araç seçin. Seçim yaptıktan sonra erişimi ayarlayacaksınız.",
+    "add": "Ekle",
+    "filterLabel": "Konektörleri filtrele",
+    "filterPlaceholder": "Konektörlerde ara",
+    "noMatches": "Hiçbir konektör “{query}” ile eşleşmiyor."
   },
   "modelSources": {
     "connectButtonShort": "Bir model kaynağı bağlayın",
@@ -3155,5 +3317,399 @@
     "deselectAll": "Tümünün seçimini kaldır",
     "autoAddLabel": "Yeni modelleri otomatik ekle",
     "autoAddDescription": "Bu hesaba daha sonra eklenen model dağıtımları otomatik olarak görünür. Seçili olmayan modeller hariç tutulur."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Düşük etki",
+      "moderate": "Orta düzeyde etki",
+      "high": "Yüksek etki"
+    },
+    "tierTooltip": "Model boyutuna göre tahmini, isteğe göre göreli enerji etkisi. Bunlar v{version} sürümüne dayalı varsayım ve ortalamalara göre yapılan yaklaşık tahminlerdir — ölçüm değildir.",
+    "typicalRequest": "Ortalama bir istekte ~{grams} g CO₂e",
+    "typicalRequestTooltip": "Tipik bir istek (yaklaşık 1.000 prompt ve 500 tamamlanma tokenı) için yaklaşık bir tahmin; yayımlanan ortalama ve v{version} varsayımlarından türetilmiştir. Gerçek etki, konuşma uzunluğuna, ayarlara ve barındırma bölgesine bağlı olarak değişir.",
+    "activities": {
+      "netflixHd": "Netflix HD yayını",
+      "zoomCall": "Zoom araması (kamera açık)",
+      "webBrowsing": "Web taraması",
+      "spotifyAudio": "Spotify sesli yayın"
+    },
+    "equivalents": {
+      "title": "≈ aynı miktarda karbon",
+      "note": "Bu hizmetlerin açıklanan saatlik karbon ayak izine göre karbon karşılaştırması — burada olduğu gibi yaklaşık, kestirme değerlerdir."
+    },
+    "duration": {
+      "lessThanSecond": "<1 sn",
+      "seconds": "{value} sn",
+      "minutes": "{value} dk",
+      "hours": "{value} sa"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Bu konuşmanın tahmini karbon ayak izi: {grams} gram CO₂ eşdeğeri. Dağılımı göster.",
+      "ariaLabelToday": "Bu konuşmanın bugünkü tahmini karbon ayak izi: {grams} gram CO₂ eşdeğeri. Dağılımı göster.",
+      "title": "Bu konuşma (tahmini)",
+      "today": "Bugün",
+      "total": "Tüm zamanlar",
+      "measured": "Bildirilen token sayılarından",
+      "estimated": "Eski mesajlardan geriye dönük hesaplanan",
+      "lastRequest": "Son istek",
+      "disclaimer": "İstek başına tahminler, bildirilen veya tahmini token sayılarından, yayınlanmış ortalamalar ve varsayımlar v{version} kullanılarak yapılmıştır. Eski mesajlar, saklanan metin ve konuşmanın mevcut modeli kullanılarak geriye dönük hesaplanır. Bu bir ölçüm değildir."
+    }
+  },
+  "table": {
+    "copyTable": "Tabloyu kopyala",
+    "downloadTable": "Tabloyu indir",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "CSV olarak dışa aktarıldı",
+    "copyFailed": "Tablo kopyalanamadı"
+  },
+  "backup": {
+    "intro": {
+      "title": "Sohbetlerinizi güvenli bir şekilde yedekleyin",
+      "body": "Sohbetleriniz yüklenmeden önce bu cihazda şifrelenir. Sohbetlerinizi asla okuyamayız.",
+      "keyWarning": "Kurtarma anahtarınız bu cihazda oluşturulur. Biz asla göremeyiz ve sizin için kurtaramayız — anahtarı kaybetmek yedeği kaybetmek demektir.",
+      "create": "Anahtarımı oluştur ve yedekle",
+      "decline": "Şimdi değil — sohbetler sadece bu cihazda kalsın"
+    },
+    "ceremony": {
+      "titleCreate": "Kurtarma anahtarınızı kaydedin",
+      "titleRotate": "Yeni kurtarma anahtarınızı kaydedin",
+      "titleView": "Kurtarma anahtarınız",
+      "description": "Bu anahtar, yedeğinizi başka bir cihazda geri yüklemenin tek yoludur. Güvenli bir yerde saklayın — sizin için kurtaramayız.",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı!",
+      "download": ".txt olarak indir",
+      "showQr": "QR kodunu göster",
+      "hideQr": "QR kodunu gizle",
+      "savedCheckbox": "Kurtarma anahtarımı güvenli bir yere kaydettim",
+      "saveFirstHint": "Devam etmeden önce anahtarınızı kopyalayın veya indirin.",
+      "continue": "Devam et",
+      "done": "Tamamlandı",
+      "cancel": "İptal",
+      "cancelConfirmTitle": "Yedekleme kurulumu iptal edilsin mi?",
+      "cancelConfirmBody": "Sohbetleriniz yedeklenmeyecek. Ayarlardan istediğiniz zaman şifreli yedeklemeyi açabilirsiniz.",
+      "cancelConfirmRotateBody": "Kurtarma anahtarınız zaten değiştirildi. Ayarlardan istediğiniz zaman görebilirsiniz.",
+      "cancelConfirmConfirm": "Evet, iptal et",
+      "cancelConfirmDismiss": "Geri dön",
+      "loadError": "Kurtarma anahtarınız bu cihazda yüklenemedi."
+    },
+    "file": {
+      "heading": "Sohbet yedekleme kurtarma anahtarı",
+      "warning": "Bu anahtarı güvenli bir yerde saklayın. Anahtar elinde olan herkes yedeğinizi okuyabilir; anahtar olmadan yedek geri yüklenemez."
+    },
+    "progress": {
+      "titleCreate": "Yedeğiniz hazırlanıyor",
+      "titleRotate": "Kurtarma anahtarınız değiştiriliyor",
+      "encrypting": "{count, plural, one {# sohbet şifreleniyor ve yedekleniyor…} other {# sohbet şifreleniyor ve yedekleniyor…}}",
+      "success": "{count, plural, one {Yedekleme tamamlandı. # sohbet koruma altında.} other {Yedekleme tamamlandı. # sohbet koruma altında.}}",
+      "error": "Yedekleme başarısız oldu. Sohbetleriniz hâlâ bu cihazda.",
+      "retry": "Tekrar dene",
+      "close": "Kapat",
+      "done": "Tamamlandı"
+    },
+    "input": {
+      "label": "Kurtarma anahtarı",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Anahtarlarda asla O, I veya L harfleri bulunmaz.",
+      "checksumError": "Bu anahtar doğru görünmüyor — yazım hatası olup olmadığını kontrol edin.",
+      "formatError": "Bu bir kurtarma anahtarına benzemiyor.",
+      "incomplete": "Yazmaya devam edin — bir kurtarma anahtarı 56 karakterden oluşur.",
+      "valid": "Anahtar geçerli görünüyor."
+    },
+    "restore": {
+      "title": "Sohbetlerinizi geri yükleyin",
+      "successTitle": "Yedek geri yüklendi",
+      "promptBody": "Hesabınız için şifreli bir yedek bulduk. Bu cihaza geri yüklemek için kurtarma anahtarınızı girin.",
+      "submit": "Yedeği geri yükle",
+      "skip": "Atla — bu cihazda sıfırdan başla",
+      "restoring": "Sohbetleriniz çözümleniyor ve geri yükleniyor…",
+      "successBody": "{count, plural, one {# sohbet geri yüklendi.} other {# sohbet geri yüklendi.}}",
+      "wrongKey": "Bu anahtar geçerli, ancak bu yedeği açmıyor. Anahtarınızı değiştirdiyseniz, en yenisini kullanın.",
+      "corrupt": "Bu yedek okunamıyor — hasar görmüş olabilir. Bu cihazda sıfırdan başlayabilir veya daha sonra tekrar deneyebilirsiniz.",
+      "networkError": "Yedekleme servisine ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "tryAgain": "Başka bir anahtar deneyin",
+      "close": "Bitti"
+    },
+    "enterKey": {
+      "title": "Yeni kurtarma anahtarınızı girin",
+      "body": "Kurtarma anahtarınız başka bir cihazda değiştirildi. Bu cihazda yedeklemeye devam etmek için yeni anahtarı girin.",
+      "submit": "Bu anahtarı kullan"
+    },
+    "banner": {
+      "keyMismatchTitle": "Yedeklemeler duraklatıldı — kurtarma anahtarınız başka bir cihazda değiştirildi.",
+      "enterNewKey": "Yeni anahtar gir",
+      "resetBackup": "Yedeği sıfırla",
+      "resetConfirmTitle": "Yedeği bu cihazın anahtarıyla sıfırlansın mı?",
+      "resetConfirmBody": "Mevcut yedek, bu cihazın sohbetleri ile ve bu cihazın anahtarı ile şifrelenerek değiştirilecek. Diğer cihazlar bu cihazın kurtarma anahtarına ihtiyaç duyacak.",
+      "resetConfirmAction": "Yedeği sıfırla",
+      "remoteMissingTitle": "Yedeğiniz artık sunucuda mevcut değil. Yedeklemeler duraklatıldı.",
+      "backUpAgain": "Tekrar yedekle",
+      "dismiss": "Kapat"
+    },
+    "rotate": {
+      "confirmTitle": "Kurtarma anahtarınız değiştirilsin mi?",
+      "confirmBody": "Yedeğiniz yeni bir anahtarla yeniden şifrelenecek ve eski anahtar çalışmayacak. Yeni anahtarı kaydedip diğer cihazlarınızda girmeniz gerekecek.",
+      "confirmAction": "Anahtarı değiştir"
+    },
+    "toast": {
+      "enrollLater": "Şifreli yedeklemeyi dilediğiniz zaman Ayarlar'dan açabilirsiniz.",
+      "keyUpdated": "Kurtarma anahtarı güncellendi. Yedeklemeler devam ediyor.",
+      "resetDone": "Yedek, bu cihazın anahtarıyla sıfırlandı.",
+      "backupRestarted": "Yedek tekrar oluşturuldu.",
+      "opFailed": "Bir şeyler yanlış gitti. Lütfen tekrar deneyin."
+    },
+    "settings": {
+      "statusOn": "Yedekleme açık",
+      "statusOff": "Yedekleme kapalı",
+      "offDescription": "Sohbetleriniz yalnızca bu tarayıcıda bulunuyor. Şifreli yedeklemeyi açarak onları güvende tutabilir ve diğer cihazlarda geri yükleyebilirsiniz. Sohbetleriniz cihazınızda şifrelenir — asla okuyamayız.",
+      "turnOn": "Yedeklemeyi aç",
+      "restoreTitle": "Hesabınız için halihazırda bir yedek bulunuyor",
+      "restoreDescription": "Bu cihaza geri yüklemek için kurtarma anahtarınızı girin.",
+      "restore": "Yedeği geri yükle",
+      "lastBackup": "Son yedekleme: {time}",
+      "lastBackupNever": "Henüz yedekleme yapılmadı",
+      "keyFingerprint": "Anahtar ····-{tail}",
+      "syncState": {
+        "idle": "Senkronizasyon bekleniyor",
+        "syncing": "Yedekleniyor…",
+        "ok": "Güncel",
+        "keyOutOfDate": "Duraklatıldı — kurtarma anahtarı başka bir cihazda değiştirildi",
+        "remoteMissing": "Duraklatıldı — yedekleme sunucudan kaldırıldı",
+        "error": "Son yedekleme denemesi başarısız oldu"
+      },
+      "backUpNow": "Şimdi yedekle",
+      "backUpNowSuccess": "Yedekleme tamamlandı",
+      "backUpNowFailure": "Yedekleme başarısız oldu — sohbetleriniz bu cihazda değişmedi",
+      "viewKey": "Kurtarma anahtarını görüntüle",
+      "changeKey": "Kurtarma anahtarını değiştir",
+      "dangerTitle": "Tehlikeli alan",
+      "turnOffDelete": "Yedeklemeyi kapat ve sil",
+      "turnOffConfirmTitle": "Yedekleme kapatılsın mı?",
+      "turnOffConfirmMessage": "Bu işlem yedeklemenizi tüm cihazlar için sunucularımızdan siler. Bu cihazdaki sohbetleriniz kalır. Daha sonra yeni bir kurtarma anahtarıyla yedeklemeyi tekrar açabilirsiniz.",
+      "turnOffConfirmAction": "Yedeklemeyi sil",
+      "turnOffSuccess": "Yedekleme kapatıldı ve silindi",
+      "turnOffFailure": "Yedekleme silinemedi. Lütfen tekrar deneyin."
+    }
+  },
+  "memories": {
+    "title": "Anılar",
+    "description": "Asistanın sizinle paylaştığınız kalıcı bilgileri — rolünüz, tercihleriniz ve devam eden projeleriniz gibi — hatırlamasına ve bu bilgileri konuşmalar arasında kullanmasına izin verin.",
+    "enableToggle": "Anıları etkinleştir",
+    "privacyNote": "Bilgiler yalnızca bu tarayıcıda saklanır ve sohbetlerde kişisel yanıtlar için kullanılır.",
+    "empty": "Henüz anı yok. Hatırlanması gereken bilgiler, sohbetlerinizden otomatik olarak kaydedilir.",
+    "savedOn": "Kaydedildi {date}",
+    "deleteMemory": "Anıyı sil",
+    "clearAll": "Tüm anıları temizle",
+    "clearAllConfirmQuestion": "Tüm anılar silinsin mi? Bu işlem geri alınamaz.",
+    "clearAllConfirm": "Hepsini sil",
+    "cancel": "İptal"
+  },
+  "contextWindow": {
+    "label": "Bağlam penceresi",
+    "value": "{count} mesaj",
+    "fewer": "Daha az mesaj",
+    "more": "Daha fazla mesaj",
+    "description": "Bu sınırın dışındaki eski mesajlar özetlenerek bağlam olarak eklenir."
+  },
+  "agentAccess": {
+    "title": "Aracıya Erişim",
+    "description": "Hangi kullanıcıların paylaşılan Foundry ajanlarını kullanabileceğini yönetin. Kurallar yalnızca bir kullanıcının mevcut Azure erişimini daha fazla kısıtlar — Azure tarafından reddedilen erişimler hiçbir zaman verilemez.",
+    "backToChat": "Sohbete dön",
+    "loading": "Ajanlar ve kurallar yükleniyor…",
+    "loadError": "Aracı erişim verileri yüklenemedi.",
+    "rulesUnavailableWarning": "Erişim kuralları depodan yüklenemedi. Şu an ajan çağrısı engellendi ve kurallar düzenlenemiyor.",
+    "retry": "Tekrar dene",
+    "rulesTab": "Aracı kuralları",
+    "localAdminsTab": "Yerel yöneticiler",
+    "noAgents": "Yönetilecek ajan yok.",
+    "sourceLabel": "Kaynak",
+    "notDiscoverable": "Sizin tarafınızdan keşfedilemiyor",
+    "notDiscoverableHint": "Bu ajan için bir kural mevcut, ancak kendi keşfinizde yer almıyor — adı değiştirilmiş olabilir, Azure erişiminiz kapsamıyor olabilir veya erişim kuralı sizi içermiyor olabilir.",
+    "accessEveryone": "Herkes",
+    "accessRestricted": "Kısıtlı",
+    "edit": "Düzenle",
+    "updatedByLine": "Son güncelleyen: {user} — {date}",
+    "accessTypeLabel": "Bu ajanı kimler kullanabilir",
+    "everyoneDescription": "Zaten Azure erişimiyle bu ajanı kullanabilen herkes.",
+    "restrictedDescription": "Yalnızca aşağıda listelenen kullanıcılar ve alanlar.",
+    "allowDomainsLabel": "İzin verilen alan adları",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "İzin verilen kullanıcılar",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Eklemek için Enter'a basın",
+    "removeChip": "Kaldır",
+    "groupsLabel": "İzin verilen gruplar",
+    "groupsPendingConsent": "Grup tabanlı erişim, kiracı yöneticisinin onayı bekleniyor ve henüz düzenlenemez.",
+    "restrictedEmptyWarning": "Hiçbir kullanıcı veya alan adı listelenmemiş — bu ajanı kimse kullanamaz.",
+    "save": "Kaydet",
+    "saving": "Kaydediliyor…",
+    "cancel": "İptal",
+    "saveSuccess": "Erişim kuralı kaydedildi.",
+    "deleteSuccess": "Erişim kuralı kaldırıldı — herkes bu ajanı tekrar kullanabilir.",
+    "saveError": "Kaydedilemedi. Lütfen tekrar deneyin.",
+    "conflictError": "Siz düzenlerken başka biri değişiklik yaptı. Son sürümü yükleyip tekrar deneyin.",
+    "reload": "Yeniden Yükle",
+    "localAdminsDescription": "Belirli ajanlar için kural yönetimini yeniden dağıtıma gerek olmadan devredin. Yerel yöneticiler, yalnızca kendilerine atanan ajanların kurallarını düzenleyebilir.",
+    "noLocalAdmins": "Tanımlı yerel yönetici yok.",
+    "addLocalAdmin": "Yerel yönetici ekle",
+    "emailLabel": "E-posta",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Yerel yöneticiyi kaldır",
+    "delegatedAgentsLabel": "Devredilen ajanlar",
+    "noDelegatedAgents": "Devredilebilecek ajan yok.",
+    "unknownAgentKey": "Bilinmeyen ajan anahtarı",
+    "configSaveSuccess": "Yerel yöneticiler kaydedildi.",
+    "configConflictError": "Düzenlerken başka biri yerel yönetici listesini değiştirdi. Yeniden yükleyip tekrar deneyin.",
+    "addAgent": "Aracı ekle",
+    "newPromptAgentTitle": "Yeni komut aracı",
+    "editPromptAgentTitle": "Komut aracını düzenle",
+    "agentNameLabel": "Ad",
+    "agentNamePlaceholder": "örn. Seyahat Danışmanı",
+    "agentDescriptionLabel": "Açıklama",
+    "agentDescriptionPlaceholder": "Kullanıcılara model seçicide gösterilir",
+    "agentSystemPromptLabel": "Sistem komutu",
+    "agentSystemPromptPlaceholder": "Bu aracın nasıl davranacağını tanımlayan talimatlar",
+    "agentModelLabel": "Model",
+    "agentModelPlaceholder": "Bir model seçin…",
+    "agentModelUnavailable": "{modelId} (kullanılamıyor)",
+    "agentModelUnknownError": "Seçilen model artık mevcut değil. Başka bir model seçip tekrar kaydedin.",
+    "promptAgentBadge": "Komut aracı",
+    "editAgent": "Aracıyı düzenle",
+    "deleteAgent": "Sil",
+    "deleteAgentConfirm": "Bu aracı herkes için silinsin mi? Model seçiciden kaybolur; mevcut sohbetler geçmişini korur.",
+    "confirmDeleteAgent": "Evet, sil",
+    "promptAgentCreateSuccess": "Komut aracı oluşturuldu.",
+    "promptAgentSaveSuccess": "Komut aracı kaydedildi.",
+    "promptAgentDeleteSuccess": "Komut aracı silindi.",
+    "promptAgentsUnavailableWarning": "Komut araçları depodan yüklenemedi. Şu anda düzenlenemezler.",
+    "agentsTab": "Ajanlar",
+    "connectorsTab": "Konektörler",
+    "addConnector": "Konektör ekle",
+    "noConnectors": "Henüz konektör yok.",
+    "connectorsUnavailableWarning": "Konektör mağazasına ulaşılamadı, bu yüzden liste eksik olabilir. Yüklenene kadar yedek oluşturmayın.",
+    "editAccess": "Erişimi düzenle",
+    "deleteConnector": "Sil",
+    "deleteConnectorConfirm": "Bu konektör silinsin mi? Kullanan herkesin erişimi anında kesilir.",
+    "confirmDeleteConnector": "Konektörü sil",
+    "connectorSaveSuccess": "Konektör kaydedildi.",
+    "connectorCreateSuccess": "Konektör oluşturuldu.",
+    "connectorDeleteSuccess": "Konektör silindi.",
+    "editConnectorTitle": "Konektörü düzenle",
+    "newConnectorTitle": "Yeni konektör",
+    "connectorPresetLabel": "Bir şablondan başla",
+    "connectorPresetNone": "Sıfırdan başla",
+    "connectorNameLabel": "Ad",
+    "connectorDescriptionLabel": "Açıklama",
+    "connectorUrlLabel": "Sunucu URL'si",
+    "connectorUrlPlaceholderWarning": "Kaydetmeden önce URL'deki {placeholder} alanını kendi değerinizle değiştirin.",
+    "connectorTransportLabel": "İletim",
+    "connectorAuthLabel": "Kimlik Doğrulama",
+    "connectorAuthNone": "Yok",
+    "connectorAuthBearer": "Token (her kullanıcı kendi bilgisini girer)",
+    "connectorAuthOauth": "OAuth ile giriş",
+    "connectorSealingUnavailable": "OAuth kullanılamıyor: Bu dağıtımda istemci sırlarını şifrelemek için AUTH_SECRET yapılandırılmamış.",
+    "connectorTokenHelpLabel": "Token talimatlarına bağlantı (isteğe bağlı)",
+    "connectorClientIdLabel": "OAuth istemci ID'si",
+    "connectorClientSecretLabel": "OAuth istemci gizli anahtarı",
+    "connectorClientSecretStored": "Bir gizli anahtar kaydedildi. Korumak için boş bırakın veya değiştirmek için yeni bir anahtar girin.",
+    "connectorClientSecretHint": "Kaydedilmeden önce şifrelenir ve bir daha gösterilmez.",
+    "connectorScopesLabel": "Kapsamlar (boşlukla ayrılmış, isteğe bağlı)"
+  },
+  "localModels": {
+    "title": "Yerel modeller",
+    "description": "Bu bilgisayarda çalışan modellerle sohbet edin. Mesajlar doğrudan tarayıcınızdan yerel uygulamaya gider ve sunucularımıza asla ulaşmaz — dolayısıyla yanıtlar, konuşma başlıkları ve özetler tamamen cihazınızda kalır.",
+    "detect": "Yerel çalışma ortamlarını tespit et",
+    "detecting": "Tespit ediliyor…",
+    "experimental": "Deneysel",
+    "portLabel": "Port",
+    "statusUnknown": "Henüz kontrol edilmedi.",
+    "statusChecking": "Kontrol ediliyor…",
+    "statusReady": "{count, plural, =0 {Bağlandı, ancak model yüklenmedi.} one {Bağlandı — # model mevcut.} other {Bağlandı — # model mevcut.}}",
+    "statusNotRunning": "{label} uygulamasına ulaşılamıyor. Bu port üzerinde çalıştığından ve tarayıcınızın bu siteden yerel uygulamalara erişmesine izin verildiğinden emin olun.",
+    "statusHttpError": "{label} bir hata ile yanıt verdi. Kayıtlarını kontrol edin.",
+    "corsHelp": {
+      "ollama": "Ollama çalışıyor fakat bu siteden gelen istekleri reddediyor. OLLAMA_ORIGINS değişkenini bu sitenin adresine ayarlayın, Ollama’yı yeniden başlatın ve tekrar tespit edin.",
+      "lmstudio": "LM Studio çalışıyor fakat bu siteden gelen istekleri reddediyor. Yerel sunucu ayarlarından CORS'u etkinleştirin ve tekrar tespit edin.",
+      "llamacpp": "llama.cpp çalışıyor fakat bu siteden gelen istekleri reddediyor. llama-server’ı çapraz orijin isteklerine izin vererek başlatın ve tekrar tespit edin."
+    },
+    "privacyNote": "Yerel modeller dosya ekleri, resimler, web araması veya konektörleri desteklemez — bunlar için sunucularımız gerekir. Tespit işlemi yalnızca bu bilgisayarı kontrol eder."
+  },
+  "urlFetch": {
+    "sourceFallback": "Web sayfası",
+    "fallbackHint": "İsterseniz sayfayı açıp metni kopyalayıp buraya yapıştırabilirsiniz.",
+    "shortExtract": "Sadece kısa bir alıntı okunabildi — sayfa ücretli veya oturum açma gerektirebilir.",
+    "errors": {
+      "invalidUrl": "Bu geçerli bir web adresi gibi görünmüyor.",
+      "ssrfBlocked": "Güvenlik nedeniyle bu adrese erişilemiyor.",
+      "tooManyRedirects": "Bu bağlantı çok fazla yönlendirme yaptı.",
+      "timeout": "Sayfanın yanıt vermesi çok uzun sürdü.",
+      "unreachable": "Sayfaya erişilemedi.",
+      "blocked": "Site isteği reddetti — giriş yapmanız gerekebilir veya otomatik okuyucular engellenmiş olabilir.",
+      "notFound": "Bu sayfa bulunamadı.",
+      "upstream": "Site bir hata döndürdü.",
+      "pdf": "Bu bağlantı bir PDF dosyası. Lütfen indirip ekle butonunu kullanarak ekleyin.",
+      "nonHtml": "Bu bağlantı okunabilir bir web sayfası değil.",
+      "tooLarge": "Bu sayfa getirilemeyecek kadar büyük.",
+      "empty": "Bu sayfada okunabilir bir makale metni bulunamadı.",
+      "generic": "Sayfa getirilemedi."
+    },
+    "fetchingFile": "{host} getiriliyor…",
+    "attachLink": "Bağlantı ekle",
+    "attachLinkTitle": "Web sayfası ekle",
+    "attachLinkDescription": "Sayfa getirilir ve okunabilir metni mesajınıza eklenir.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Getir ve ekle",
+    "attachLinkInvalid": "Bu bir web adresi gibi görünmüyor.",
+    "linkBadge": "Bağlantıdan",
+    "couldNotRetrieve": "Getirilemedi",
+    "doc": {
+      "sourceLabel": "Kaynak",
+      "retrievedLabel": "Getirildi",
+      "attemptedLabel": "Denendi",
+      "failureHeading": "Web sayfası getirilemedi"
+    },
+    "settingsTitle": "Mesajlardaki bağlantılar",
+    "settingsToggle": "Yapıştırılan bağlantıları otomatik olarak getir",
+    "settingsDescription": "Bir bağlantı tek başına yapıştırıldığında, sayfa getirilir ve metni eklenir, böylece asistan okuyabilir. Bunu kapatırsanız bağlantılar düz metin olarak kalır — yine de + menüsünden bir sayfa ekleyebilirsiniz.",
+    "addLink": "Bağlantı ekle"
+  },
+  "cameraAccessError": "Kameraya erişilemiyor. Kamera izinlerinizi kontrol edin ve tekrar deneyin.",
+  "cameraUnnamedDevice": "Kamera",
+  "pastedText": {
+    "fallbackName": "Yapıştırılan metin",
+    "charCount": "{count, number} karakter",
+    "removeChip": "Yapıştırılan metni kaldır: “{name}”",
+    "blockLabel": "Yapıştırılan metin: {name}",
+    "doc": {
+      "heading": "Yapıştırılan metin",
+      "pastedLabel": "Yapıştırıldı"
+    },
+    "settingsTitle": "Büyük yapıştırmalar",
+    "settingsToggle": "Büyük bir yapıştırmayı ek dosyaya dönüştür",
+    "settingsDescription": "Aşağıdaki sınırı aşan metin ek dosya olarak eklenir, mesaj kutusunu doldurmaz. Metin tam olarak yapıştırıldığı gibi kullanılır — hiçbir şey indirilmez veya değiştirilmez.",
+    "settingsThresholdLabel": "Şundan daha uzun yapıştırmaları ekle:",
+    "settingsThresholdUnit": "karakter",
+    "settingsThresholdHint": "{min, number} ile {max, number} karakter arasında olmalı."
+  },
+  "structures": {
+    "section": "Yapılar",
+    "sectionSubtitle": "Kaydedilmiş alan tanımları. Birini çıkarım tarifi olarak veya veri iş akışı tablosu için başlangıç şeması olarak kullanabilirsiniz.",
+    "loadFromStructure": "Yapı yükle",
+    "loadFromStructureTitle": "Bu sütunları kaydedilmiş bir yapıyla değiştir",
+    "pickerEmpty": "Henüz kaydedilmiş yapı yok.",
+    "pickerTitle": "Kaydedilmiş bir yapı yükle",
+    "saveAsStructure": "Yapı olarak kaydet",
+    "saveAsStructureTitle": "Bu sütunları yapı kütüphanenize kaydedin",
+    "savedToast": "Yapı kaydedildi: “{name}”",
+    "namePlaceholder": "Yapı adı",
+    "fieldCount": "{count} alan",
+    "fieldCountOne": "1 alan",
+    "downgradedNotice": "{count} alan metin olarak sadeleştirildi — tablolar hücre başına bir değer tutar: {names}",
+    "truncatedNotice": "{count} alan çıkarıldı — tablo sınırı {max} sütundur: {names}",
+    "skippedDerivedNotice": "{count} hesaplanmış sütun kaydedilmedi — formüller bu tablonun sütunlarına referans veriyor: {names}",
+    "loadReplacesColumns": "Bu işlem mevcut sütunları değiştirir. Mevcut satırlar, sütun adları eşleşen değerleri korur."
   }
 }

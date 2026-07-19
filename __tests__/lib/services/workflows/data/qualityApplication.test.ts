@@ -36,6 +36,19 @@ function cellEdit(overrides: Partial<DataQualityEdit>): DataQualityEdit {
 }
 
 describe('applyCellEdit', () => {
+  it('refuses edits targeting derived (formula) columns', () => {
+    const derivedColumns: DataColumn[] = [
+      ...columns,
+      { id: 'double', name: 'Double', type: 'number', formula: '[cases] * 2' },
+    ];
+    const result = applyCellEdit(
+      [{ [ROW_ID_KEY]: '1', name: 'M', cases: 5, double: 10 }],
+      derivedColumns,
+      cellEdit({ columnId: 'double', before: '10', after: '12' }),
+    );
+    expect(result.applied).toBe(false);
+  });
+
   it('applies when the cell still matches and coerces to the column type', () => {
     const text = applyCellEdit(rows, columns, cellEdit({}));
     expect(text.applied).toBe(true);

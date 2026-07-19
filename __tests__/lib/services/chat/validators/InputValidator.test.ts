@@ -396,6 +396,101 @@ describe('validateChatRequest - custom-source (byom) trust boundary', () => {
   });
 });
 
+describe('validateChatRequest - conversationSummary and memories', () => {
+  const base = {
+    model: { id: 'gpt-5.2', name: 'GPT-5.2' },
+    messages: [{ role: 'user' as const, content: 'hi' }],
+  };
+
+  it('accepts a conversationSummary within the cap', () => {
+    const validator = new InputValidator();
+    const result = validator.validateChatRequest({
+      ...base,
+      conversationSummary: 'Earlier the user asked about X.',
+    });
+    expect(result.conversationSummary).toBe('Earlier the user asked about X.');
+  });
+
+  it('accepts a conversationSummary at exactly 8000 chars', () => {
+    const validator = new InputValidator();
+    const summary = 'x'.repeat(8000);
+    expect(
+      validator.validateChatRequest({ ...base, conversationSummary: summary })
+        .conversationSummary,
+    ).toBe(summary);
+  });
+
+  it('rejects a conversationSummary over 8000 chars', () => {
+    const validator = new InputValidator();
+    try {
+      validator.validateChatRequest({
+        ...base,
+        conversationSummary: 'x'.repeat(8001),
+      });
+      expect.fail('Should have thrown PipelineError');
+    } catch (error) {
+      expect(error).toBeInstanceOf(PipelineError);
+      expect((error as PipelineError).code).toBe(ErrorCode.VALIDATION_FAILED);
+    }
+  });
+
+  it('accepts memories within the caps', () => {
+    const validator = new InputValidator();
+    const memories = ['Works in logistics', 'Prefers concise answers'];
+    expect(
+      validator.validateChatRequest({ ...base, memories }).memories,
+    ).toEqual(memories);
+  });
+
+  it('accepts 60 memories of 600 chars each (at-cap)', () => {
+    const validator = new InputValidator();
+    const memories = Array.from({ length: 60 }, () => 'm'.repeat(600));
+    expect(
+      validator.validateChatRequest({ ...base, memories }).memories,
+    ).toHaveLength(60);
+  });
+
+  it('rejects more than 60 memories', () => {
+    const validator = new InputValidator();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        memories: Array.from({ length: 61 }, (_, i) => `memory ${i}`),
+      }),
+    ).toThrow(PipelineError);
+  });
+
+  it('rejects a memory item over 600 chars', () => {
+    const validator = new InputValidator();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        memories: ['ok', 'x'.repeat(601)],
+      }),
+    ).toThrow(PipelineError);
+  });
+
+  it('leaves both fields undefined when absent', () => {
+    const validator = new InputValidator();
+    const result = validator.validateChatRequest(base);
+    expect(result.conversationSummary).toBeUndefined();
+    expect(result.memories).toBeUndefined();
+  });
+
+  it('still rejects unknown top-level fields (schema stays strict)', () => {
+    const validator = new InputValidator();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        conversationSummaryV2: 'nope',
+      }),
+    ).toThrow(PipelineError);
+    expect(() =>
+      validator.validateChatRequest({ ...base, somethingElse: true }),
+    ).toThrow(PipelineError);
+  });
+});
+
 describe('validateChatRequest - hostedRegion', () => {
   const base = {
     model: { id: 'gpt-5.2', name: 'GPT-5.2' },

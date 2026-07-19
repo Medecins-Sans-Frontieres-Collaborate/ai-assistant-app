@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { DropdownMenuItem, MenuItem } from './DropdownMenuItem';
+import { DropdownItemRows, NestingProps } from './DropdownItemRows';
+import { MenuItem } from './DropdownMenuItem';
 
-interface DropdownCategoryGroupProps {
+interface DropdownCategoryGroupProps extends NestingProps {
   /**
    * Group name. No longer rendered as a visible heading — grouping is implicit
    * (ordering + a hairline separator). Kept as the group's `aria-label` so the
@@ -35,6 +36,9 @@ export const DropdownCategoryGroup: React.FC<DropdownCategoryGroupProps> = ({
   onTogglePin,
   onToggleHidden,
   isFirst = false,
+  childrenByParent,
+  expandedParentIds,
+  onToggleParentExpanded,
 }) => {
   if (items.length === 0) return null;
 
@@ -48,24 +52,17 @@ export const DropdownCategoryGroup: React.FC<DropdownCategoryGroupProps> = ({
           : 'mt-1 pt-1 border-t border-gray-200/70 dark:border-gray-700/60'
       }
     >
-      {items.map((item) => {
-        const itemIndex = flattenedItems.findIndex((i) => i.id === item.id);
-        return (
-          <DropdownMenuItem
-            key={item.id}
-            item={item}
-            isSelected={itemIndex === selectedIndex}
-            pinnable
-            pinned={pinnedToolIds.includes(item.id)}
-            onTogglePin={() => onTogglePin(item.id)}
-            hideable={Boolean(onToggleHidden)}
-            hidden={false}
-            onToggleHidden={
-              onToggleHidden ? () => onToggleHidden(item.id) : undefined
-            }
-          />
-        );
-      })}
+      <DropdownItemRows
+        items={items}
+        flattenedItems={flattenedItems}
+        selectedIndex={selectedIndex}
+        pinnedToolIds={pinnedToolIds}
+        onTogglePin={onTogglePin}
+        onToggleHidden={onToggleHidden}
+        childrenByParent={childrenByParent}
+        expandedParentIds={expandedParentIds}
+        onToggleParentExpanded={onToggleParentExpanded}
+      />
     </div>
   );
 };

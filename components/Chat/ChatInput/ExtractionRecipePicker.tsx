@@ -28,7 +28,7 @@ export const ExtractionRecipePicker: FC<ExtractionRecipePickerProps> = ({
   onClose,
 }) => {
   const t = useTranslations('extraction');
-  const recipes = useSettingsStore((s) => s.extractionRecipes);
+  const recipes = useSettingsStore((s) => s.savedStructures);
   const selectedIds = useChatInputStore((s) => s.extractionRecipeIds);
   const addRecipeId = useChatInputStore((s) => s.addExtractionRecipeId);
   const setIsCustomizationsOpen = useUIStore((s) => s.setIsCustomizationsOpen);
@@ -82,7 +82,7 @@ export const ExtractionRecipePicker: FC<ExtractionRecipePickerProps> = ({
   };
 
   const handleCreateNew = () => {
-    setCustomizationsInitialTab('recipes');
+    setCustomizationsInitialTab('structures');
     setIsCustomizationsOpen(true);
     onClose();
   };

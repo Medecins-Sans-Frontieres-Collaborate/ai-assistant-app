@@ -6,7 +6,6 @@ import {
   IconVolume,
   IconX,
 } from '@tabler/icons-react';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useEffect, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -14,17 +13,18 @@ import { useTranslations } from 'next-intl';
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useTones } from '@/client/hooks/settings/useTones';
+import { useStructuresEnabled } from '@/client/hooks/useStructuresEnabled';
 
 import { TabNavigation } from '@/components/UI/TabNavigation';
 
-import { ExtractionRecipesTab } from './ExtractionRecipesTab';
 import { PromptsTab } from './PromptsTab';
+import { StructuresTab } from './StructuresTab';
 import { TonesTab } from './TonesTab';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { useUIStore } from '@/client/stores/uiStore';
 
-type CustomizationTab = 'prompts' | 'tones' | 'recipes';
+type CustomizationTab = 'prompts' | 'tones' | 'structures';
 
 interface CustomizationsModalProps {
   isOpen: boolean;
@@ -42,17 +42,15 @@ export function CustomizationsModal({
   const { prompts } = useSettings();
   const { tones } = useTones();
   const { folders } = useConversations();
-  const extractionRecipes = useSettingsStore((s) => s.extractionRecipes);
+  const savedStructures = useSettingsStore((s) => s.savedStructures);
 
-  // Structured-data extraction is gated by a LaunchDarkly flag (fail-open).
-  // Off in prod until go-ahead; when disabled the Recipes tab is hidden.
-  // See docs/LAUNCHDARKLY_FLAGS.md.
-  const { structuredDataExtraction } = useFlags();
-  const isExtractionEnabled = structuredDataExtraction !== false;
+  // The structures library serves both extraction and the data workflow, so
+  // it shows when either is live (see the hook for the flag polarities).
+  const isStructuresEnabled = useStructuresEnabled();
 
-  // Honour an externally requested initial tab (set by the recipe picker
-  // when the user clicks "Create new recipe…"). Cleared after honouring so
-  // the next sidebar-driven open lands on the default Prompts tab.
+  // Honour an externally requested initial tab (set by the structure picker
+  // when the user clicks "Create new…"). Cleared after honouring so the next
+  // sidebar-driven open lands on the default Prompts tab.
   const requestedInitialTab = useUIStore((s) => s.customizationsInitialTab);
   const setCustomizationsInitialTab = useUIStore(
     (s) => s.setCustomizationsInitialTab,
@@ -60,9 +58,9 @@ export function CustomizationsModal({
 
   useEffect(() => {
     if (isOpen && requestedInitialTab) {
-      // Never land on the Recipes tab while the feature is flag-disabled.
+      // Never land on the Structures tab while the feature is flag-disabled.
       const target =
-        requestedInitialTab === 'recipes' && !isExtractionEnabled
+        requestedInitialTab === 'structures' && !isStructuresEnabled
           ? 'prompts'
           : requestedInitialTab;
       // Defer the state writes to a microtask so React doesn't see them as
@@ -76,7 +74,7 @@ export function CustomizationsModal({
     isOpen,
     requestedInitialTab,
     setCustomizationsInitialTab,
-    isExtractionEnabled,
+    isStructuresEnabled,
   ]);
 
   if (!isOpen) return null;
@@ -140,20 +138,20 @@ export function CustomizationsModal({
                 icon: <IconVolume size={16} className="hidden sm:block" />,
                 width: '150px',
               },
-              ...(isExtractionEnabled
+              ...(isStructuresEnabled
                 ? [
                     {
-                      id: 'recipes',
+                      id: 'structures',
                       label: (
                         <>
                           <span className="hidden sm:inline">
-                            {t('extraction.section')}
+                            {t('structures.section')}
                           </span>
                           <span className="sm:hidden">
                             <IconBraces size={16} />
                           </span>
                           <span className="ml-1">
-                            ({extractionRecipes.length})
+                            ({savedStructures.length})
                           </span>
                         </>
                       ),
@@ -188,8 +186,8 @@ export function CustomizationsModal({
             />
           )}
 
-          {isExtractionEnabled && activeTab === 'recipes' && (
-            <ExtractionRecipesTab />
+          {isStructuresEnabled && activeTab === 'structures' && (
+            <StructuresTab />
           )}
         </div>
       </div>

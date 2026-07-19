@@ -38,6 +38,14 @@ export interface McpCatalogEntry {
    * token relays as a Bearer credential exactly like a PAT.
    */
   alsoSupportsOauth?: boolean;
+  /**
+   * Server publishes a usable web-app registration endpoint, so browser DCR
+   * can mint a client on the fly and no MCP_OAUTH_<VENDOR>_CLIENT_ID is
+   * required. Most vendors do NOT (see getStaticOauthClient) — for those the
+   * settings UI hides "Connect with {name}" until an app is configured,
+   * because the click could only ever end in OAUTH_DCR_UNSUPPORTED.
+   */
+  supportsDynamicRegistration?: boolean;
   /** Where the user creates a token (bearer/header styles only). */
   tokenHelpUrl?: string;
   tokenPlaceholder?: string;
@@ -73,6 +81,61 @@ export const MCP_CATALOG: Record<string, McpCatalogEntry> = {
     nameKey: 'connectors.catalog.asana.name',
     descriptionKey: 'connectors.catalog.asana.description',
   },
+  tableau: {
+    key: 'tableau',
+    label: 'Tableau',
+    // Single non-templated host with pod-aware routing — works for every
+    // Tableau Cloud pod. Tableau SERVER (self-hosted) is NOT covered; those
+    // customers must self-deploy tableau/tableau-mcp and add it as a custom
+    // server. https://tableau.github.io/tableau-mcp/docs/hosted-tableau-mcp
+    url: 'https://mcp.tableau.com',
+    transport: 'streamable-http',
+    // OAuth 2.1 — the only connector in this batch that may complete DCR
+    // unaided, so the static app env vars are a fallback, not a requirement.
+    auth: { style: 'oauth' },
+    supportsDynamicRegistration: true,
+    nameKey: 'connectors.catalog.tableau.name',
+    descriptionKey: 'connectors.catalog.tableau.description',
+  },
+  salesforce: {
+    key: 'salesforce',
+    label: 'Salesforce',
+    // Global host; the ORG is resolved from the OAuth token, not the URL.
+    // Salesforce publishes several servers under /platform/mcp/v1/<name>;
+    // sobject-all is the general-purpose record CRUD surface. Sandboxes live
+    // under a /sandbox/ path segment and would need a separate entry.
+    // https://developer.salesforce.com/docs/platform/hosted-mcp-servers/references/reference/servers-reference.html
+    url: 'https://api.salesforce.com/platform/mcp/v1/platform/sobject-all',
+    transport: 'streamable-http',
+    // Requires an External Client App created in the org (scopes mcp_api +
+    // refresh_token) whose consumer key is supplied as the static client —
+    // Salesforce has no DCR, so MCP_OAUTH_SALESFORCE_CLIENT_ID is mandatory.
+    auth: { style: 'oauth' },
+    nameKey: 'connectors.catalog.salesforce.name',
+    descriptionKey: 'connectors.catalog.salesforce.description',
+  },
+  hootsuitePerch: {
+    key: 'hootsuitePerch',
+    label: 'Hootsuite Perch',
+    // Content creation & publishing. https://www.hootsuite.com/integrations/mcp
+    url: 'https://mcp.hootsuite.com/perch',
+    transport: 'streamable-http',
+    auth: { style: 'oauth' },
+    nameKey: 'connectors.catalog.hootsuitePerch.name',
+    descriptionKey: 'connectors.catalog.hootsuitePerch.description',
+  },
+  hootsuiteNest: {
+    key: 'hootsuiteNest',
+    label: 'Hootsuite Nest',
+    // Social inbox & customer care. Hootsuite's third server (Lumen) is
+    // deliberately omitted: it is hosted on app.talkwalker.com and needs a
+    // separate Talkwalker entitlement.
+    url: 'https://mcp.hootsuite.com/nest',
+    transport: 'streamable-http',
+    auth: { style: 'oauth' },
+    nameKey: 'connectors.catalog.hootsuiteNest.name',
+    descriptionKey: 'connectors.catalog.hootsuiteNest.description',
+  },
 };
 
 /** A server entry after catalog resolution — safe to hand to the MCP client. */
@@ -97,6 +160,18 @@ export interface ResolveMcpServersOptions {
    * dropped, not fatal.
    */
   isAllowedCustomUrl: (url: string) => boolean;
+  /**
+   * Resolves an admin-authored connector id to an executable config, or null
+   * when the connector is unknown, the feature is off, or THIS USER is not
+   * permitted to use it. Injected for the same reason as isAllowedCustomUrl:
+   * the access check needs the session, storage, and the agent-access service,
+   * none of which belong in this shared module.
+   *
+   * Omitting it disables connector resolution entirely — which is the correct
+   * default, because a caller that has not wired up an access check must not
+   * be able to reach a connector URL.
+   */
+  resolveConnector?: (connectorId: string) => ResolvedMcpServer | null;
 }
 
 /**
@@ -138,6 +213,25 @@ export function resolveMcpServers(
         // a (tampered/stale) client entry carries one.
         authToken:
           catalogEntry.auth.style === 'none' ? undefined : entry.authToken,
+      });
+      continue;
+    }
+
+    if (entry.connectorId !== undefined) {
+      // Unknown, feature-disabled, no resolver wired, or access denied — all
+      // collapse to "drop it". Never fall through to the custom-URL branch:
+      // a denied connector must not become resolvable just because the client
+      // also sent a url alongside the connectorId.
+      const connector = options.resolveConnector?.(entry.connectorId) ?? null;
+      if (!connector) continue;
+      seenIds.add(entry.id);
+      resolved.push({
+        ...connector,
+        id: entry.id,
+        // Belt-and-braces, mirroring the catalog branch: a 'none'-style
+        // connector gets no credential even if a stale client entry has one.
+        authToken:
+          connector.auth.style === 'none' ? undefined : entry.authToken,
       });
       continue;
     }

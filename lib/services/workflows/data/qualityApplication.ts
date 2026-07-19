@@ -23,6 +23,9 @@ export function applyCellEdit(
   const column = columns.find((c) => c.id === edit.columnId);
   const index = rows.findIndex((row) => getRowId(row) === edit.rid);
   if (!column || index === -1) return { rows, applied: false };
+  // Derived cells are formula-owned; a proposed fix degrades to
+  // unapplicable exactly like a stale cell.
+  if (column.formula) return { rows, applied: false };
 
   const current = rows[index][column.id];
   if (formatCell(current) !== edit.before) {

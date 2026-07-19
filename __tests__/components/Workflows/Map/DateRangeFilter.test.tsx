@@ -66,14 +66,16 @@ describe('DateRangeFilter', () => {
     fireEvent.click(chip as HTMLElement);
     expect(onChange).toHaveBeenCalledWith({
       fromMs: segments[0].startMs,
-      toMs: segments[0].endMs,
+      // The filter's `toMs` is INCLUSIVE while a segment's `endMs` is
+      // exclusive, so the chip stops one ms short of the next era.
+      toMs: segments[0].endMs - 1,
     });
   });
 
   it('an active era chip is pressed and toggles the filter off', () => {
     const segments = eras();
     const { onChange } = renderFilter({
-      range: { fromMs: segments[0].startMs, toMs: segments[0].endMs },
+      range: { fromMs: segments[0].startMs, toMs: segments[0].endMs - 1 },
     });
     const chip = screen.getByText('1812').closest('button');
     expect(chip).toHaveAttribute('aria-pressed', 'true');

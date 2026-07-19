@@ -1,5 +1,6 @@
 import {
   IconCheck,
+  IconChevronDown,
   IconChevronRight,
   IconEye,
   IconEyeOff,
@@ -26,6 +27,15 @@ export interface MenuItem {
   checked?: boolean;
   /** Clicking opens a dialog / picker / capture flow (shows a trailing chevron) */
   opensDialog?: boolean;
+  /**
+   * Groups this item under another tool as an alternate way of doing the same
+   * job (e.g. `attach-link` under `attach`). The parent keeps its own action —
+   * the child is an additional source, not a replacement. Nesting is one level
+   * deep and purely presentational: the child keeps its own id, pin state, and
+   * usage count, and renders as a normal flat row whenever it is pinned,
+   * frequently used, or matched by a search query.
+   */
+  parentId?: string;
 }
 
 interface DropdownMenuItemProps {
@@ -39,6 +49,12 @@ interface DropdownMenuItemProps {
   /** Whether this tool currently lives in the "More" section. */
   hidden?: boolean;
   onToggleHidden?: () => void;
+  /** This row owns nested children and renders an expand/collapse control. */
+  expandable?: boolean;
+  expanded?: boolean;
+  onToggleExpanded?: () => void;
+  /** This row is a nested child; indents it under its parent. */
+  nested?: boolean;
 }
 
 /**
@@ -56,6 +72,10 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
   hideable = false,
   hidden = false,
   onToggleHidden,
+  expandable = false,
+  expanded = false,
+  onToggleExpanded,
+  nested = false,
 }) => {
   const t = useTranslations();
   const [showInfo, setShowInfo] = useState(false);
@@ -107,9 +127,9 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
       <button
         id={`dropdown-item-${item.id}`}
         data-item-id={item.id}
-        className={`flex items-center gap-2.5 flex-1 min-w-0 px-3 py-2 text-left text-sm focus:outline-none ${
-          item.disabled ? 'cursor-not-allowed' : ''
-        }`}
+        className={`flex items-center gap-2.5 flex-1 min-w-0 py-2 pr-3 text-left text-sm focus:outline-none ${
+          nested ? 'pl-9' : 'pl-3'
+        } ${item.disabled ? 'cursor-not-allowed' : ''}`}
         onClick={item.disabled ? undefined : item.onClick}
         role={item.toggle ? 'menuitemcheckbox' : 'menuitem'}
         aria-current={isSelected ? 'true' : undefined}
@@ -119,80 +139,101 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
         disabled={item.disabled}
       >
         {item.icon}
-        <span className="truncate">{item.label}</span>
+        <span className="truncate" title={item.label}>
+          {item.label}
+        </span>
       </button>
 
-      <div className="flex items-center gap-0.5 flex-shrink-0 pr-2">
+      <div className="relative self-stretch flex items-center gap-0.5 flex-shrink-0 pr-2">
+        {/* Hover-revealed controls are overlaid on the label's tail rather than
+            held in flow. Reserving their width permanently clipped labels on
+            every row — and at 33 locales the long ones ("Audio/Video
+            transkribieren") have nothing to spare. Pinned / hidden rows keep
+            them visible, since there the state is the information. */}
+        {((hideable && onToggleHidden) || (pinnable && onTogglePin)) && (
+          <div
+            className={`absolute right-full top-0 bottom-0 flex items-center gap-0.5 pl-6 rounded-md transition-opacity duration-150 motion-reduce:transition-none ${
+              isSelected
+                ? 'bg-gray-100 dark:bg-gray-700'
+                : 'bg-white dark:bg-gray-800 group-hover:bg-gray-100 dark:group-hover:bg-gray-700'
+            } ${
+              pinned || hidden
+                ? 'opacity-100'
+                : 'opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto'
+            }`}
+          >
+            {hideable && onToggleHidden && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleHidden();
+                }}
+                title={
+                  hidden
+                    ? t('dropdown.moveOutOfMore')
+                    : t('dropdown.moveToMore')
+                }
+                aria-label={
+                  hidden
+                    ? t('dropdown.moveOutOfMore')
+                    : t('dropdown.moveToMore')
+                }
+                aria-pressed={hidden}
+                className="p-1 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+              >
+                {hidden ? <IconEye size={16} /> : <IconEyeOff size={16} />}
+              </button>
+            )}
+
+            {pinnable && onTogglePin && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onTogglePin();
+                }}
+                onMouseEnter={() => setPinHover(true)}
+                onMouseLeave={() => setPinHover(false)}
+                onFocus={() => setPinHover(true)}
+                onBlur={() => setPinHover(false)}
+                title={pinned ? t('dropdown.unpin') : t('dropdown.pin')}
+                aria-label={pinned ? t('dropdown.unpin') : t('dropdown.pin')}
+                aria-pressed={pinned}
+                className={`p-1 rounded ${
+                  pinned
+                    ? 'text-blue-500'
+                    : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'
+                }`}
+              >
+                {/* Show the resulting state on hover: an unpinned item previews
+                    the filled pin; a pinned item previews the pin-off. */}
+                {pinned ? (
+                  pinHover ? (
+                    <IconPinnedOff size={16} />
+                  ) : (
+                    <IconPinnedFilled size={16} />
+                  )
+                ) : pinHover ? (
+                  <IconPinnedFilled size={16} />
+                ) : (
+                  <IconPinned size={16} />
+                )}
+              </button>
+            )}
+          </div>
+        )}
+
         {/* Intent affordance: on-state mark for toggles, chevron for dialogs */}
         {item.toggle && item.checked && (
           <IconCheck size={16} className="text-blue-500" aria-hidden="true" />
         )}
-        {item.opensDialog && !item.toggle && (
+        {item.opensDialog && !item.toggle && !expandable && (
           <IconChevronRight
             size={16}
             className="text-gray-400 dark:text-gray-500"
             aria-hidden="true"
           />
-        )}
-
-        {hideable && onToggleHidden && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggleHidden();
-            }}
-            title={
-              hidden ? t('dropdown.moveOutOfMore') : t('dropdown.moveToMore')
-            }
-            aria-label={
-              hidden ? t('dropdown.moveOutOfMore') : t('dropdown.moveToMore')
-            }
-            aria-pressed={hidden}
-            className={`p-1 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-opacity ${
-              hidden
-                ? 'opacity-100'
-                : 'opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus:opacity-100'
-            }`}
-          >
-            {hidden ? <IconEye size={16} /> : <IconEyeOff size={16} />}
-          </button>
-        )}
-
-        {pinnable && onTogglePin && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onTogglePin();
-            }}
-            onMouseEnter={() => setPinHover(true)}
-            onMouseLeave={() => setPinHover(false)}
-            onFocus={() => setPinHover(true)}
-            onBlur={() => setPinHover(false)}
-            title={pinned ? t('dropdown.unpin') : t('dropdown.pin')}
-            aria-label={pinned ? t('dropdown.unpin') : t('dropdown.pin')}
-            aria-pressed={pinned}
-            className={`p-1 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-opacity ${
-              pinned
-                ? 'opacity-100 text-blue-500'
-                : 'opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus:opacity-100'
-            }`}
-          >
-            {/* Show the resulting state on hover: an unpinned item previews the
-                filled pin; a pinned item previews the pin-off. */}
-            {pinned ? (
-              pinHover ? (
-                <IconPinnedOff size={16} />
-              ) : (
-                <IconPinnedFilled size={16} />
-              )
-            ) : pinHover ? (
-              <IconPinnedFilled size={16} />
-            ) : (
-              <IconPinned size={16} />
-            )}
-          </button>
         )}
 
         {item.infoTooltip && (
@@ -211,6 +252,36 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
               className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-help"
             />
           </div>
+        )}
+
+        {/* Disclosure for nested sources. Always visible (unlike pin/hide,
+            which are hover-revealed) — it is the only cue that the row has
+            alternatives behind it. */}
+        {expandable && onToggleExpanded && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleExpanded();
+            }}
+            aria-expanded={expanded}
+            aria-controls={`dropdown-children-${item.id}`}
+            title={
+              expanded ? t('dropdown.hideSources') : t('dropdown.showSources')
+            }
+            aria-label={
+              expanded ? t('dropdown.hideSources') : t('dropdown.showSources')
+            }
+            className="px-2.5 py-3 -mr-1 rounded-md text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-200/70 dark:hover:bg-gray-600/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 transition-colors duration-150"
+          >
+            <IconChevronDown
+              size={16}
+              className={`transition-transform duration-150 motion-reduce:transition-none ${
+                expanded ? 'rotate-180' : ''
+              }`}
+              aria-hidden="true"
+            />
+          </button>
         )}
       </div>
 

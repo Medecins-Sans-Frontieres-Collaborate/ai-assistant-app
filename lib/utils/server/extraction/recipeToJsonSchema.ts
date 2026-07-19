@@ -61,7 +61,11 @@ export function recipeToArraySchema(
   for (const field of recipe.fields) {
     const fragment = fieldToSchemaFragment(field);
 
-    if (field.required === false) {
+    // Canonical polarity (shared with the data workflow since settings v41):
+    // absent or false = optional. The v41 migration stamped `required: true`
+    // onto every legacy recipe field that omitted the flag, so an absent flag
+    // here genuinely means optional rather than "unmigrated".
+    if (!field.required) {
       const currentType = fragment.type;
       if (typeof currentType === 'string') {
         fragment.type = [currentType, 'null'];

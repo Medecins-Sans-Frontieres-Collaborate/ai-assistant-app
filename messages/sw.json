@@ -849,7 +849,8 @@
     "processingAudio": "Inachakata sauti...",
     "ttsError": "Hitilafu kutengeneza sauti. Tafadhali jaribu tena.",
     "unsupportedMessageType": "Hitilafu kuonesha ujumbe: Aina ya ujumbe haitambuliwi",
-    "addLanguageOption": "Ongeza \"{name}\"…"
+    "addLanguageOption": "Ongeza \"{name}\"…",
+    "sources": "Vyanzo"
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",
@@ -1178,7 +1179,23 @@
     "customInstructionsLabel": "Maelekezo Maalum*",
     "defaultTemperatureLabel": "Joto Chaguo-msingi*",
     "Usage & Impact": "Matumizi na Athari",
-    "Connectors": "Viunganishi"
+    "Connectors": "Viunganishi",
+    "Backup": "Hifadhi rudufu",
+    "Memories": "Kumbukumbu",
+    "Agent Access": "Ufikivu wa Wakala",
+    "LocalModels": "Miundo ya ndani",
+    "suggestRevisions": {
+      "title": "Marekebisho ya hati",
+      "toggle": "Pendekeza marekebisho badala ya kuyatekeleza moja kwa moja",
+      "description": "Unapoomba mfumo wa Hati kufanya marekebisho, mabadiliko huwasilishwa kama mapendekezo ya mtu mmoja mmoja ambayo unaweza kukubali au kukataa, kama ilivyo katika tathmini za ubora.",
+      "exceptionsTitle": "Tekeleza moja kwa moja pale:",
+      "exceptionSelection": "Unapofanya marekebisho kwenye sehemu uliyoinua",
+      "exceptionLargeRewrite": "Marekebisho yamebadilisha sehemu kubwa ya hati",
+      "exceptionReorder": "Sehemu zimehamishwa badala ya kuhaririwa",
+      "thresholdLabel": "Chukulia kama uandishi upya ukizidi",
+      "thresholdUnit": "% ya hati iliyobadilishwa",
+      "exceptionSelectionAlways": "Kufanyia marekebisho sehemu iliyochaguliwa kunatumika moja kwa moja kila wakati — modeli hurudisha tu sehemu iliyorekebishwa, ambayo haiwezi kugawanywa kama mapendekezo dhidi ya hati nzima."
+    }
   },
   "notFound": {
     "lostDog": "Mbwa aliyepotea"
@@ -2111,7 +2128,9 @@
     "pin": "Pin juu",
     "unpin": "Ondoa pin",
     "moveToMore": "Hamisha kwenye Zaidi",
-    "moveOutOfMore": "Onyesha kwenye menyu"
+    "moveOutOfMore": "Onyesha kwenye menyu",
+    "showSources": "Onyesha vyanzo vingine",
+    "hideSources": "Ficha vyanzo vingine"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Ongeza maelekezo yako binafsi kubinafsisha jinsi AI inavyojibu. Haya yanaunganishwa na miongozo ya msingi ili kuhakikisha majibu ni ya msaada, sahihi na salama.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Dokezo: Andika \"/\" kuchagua kutoka kwenye templeti za maelekezo zilizohifadhiwa.",
@@ -2424,7 +2443,8 @@
     "regionDefault": "Chaguo-msingi",
     "modelRow": "{requests} ombi · {grams} g",
     "disclosure": "Makadirio msingi wa dhana v{version} · tangu {since} · mazungumzo ya kawaida pekee (mawakala na majibu ya msingi wa maarifa hayajahesabiwa).",
-    "reset": "Weka upya takwimu za matumizi"
+    "reset": "Weka upya takwimu za matumizi",
+    "estimatedPortion": "Inajumuisha takriban ~{grams} g CO₂e ({requests} maombi) iliyokadiriwa kutoka kwenye gumzo zilizotokea kabla ya ufuatiliaji — imekadiriwa kutoka kwa maandishi ya ujumbe yaliyohifadhiwa, si toka kwa idadi ya tokeni zilizopimwa."
   },
   "extraction": {
     "toggleLabel": "Dondoa data iliyo na muundo",
@@ -2631,7 +2651,25 @@
       "pendingCount": "{count} inasubiri",
       "closeReview": "Funga ukaguzi wa ubora",
       "showReview": "Onesha ukaguzi",
-      "showReviewPending": "Onesha ukaguzi ({count} inasubiri)"
+      "showReviewPending": "Onesha ukaguzi ({count} inasubiri)",
+      "undoEdit": "Tengua",
+      "clearResolved": "Futa zilizotatuliwa",
+      "clearResolvedHint": "Ondoa marekebisho yaliyokubaliwa, kukataliwa, na yasiyohusika kwenye orodha hii",
+      "autoClearResolved": "Futa marekebisho yaliyotatuliwa kiotomatiki",
+      "customCriteria": "Vigezo maalum",
+      "closeCriteria": "Funga vigezo maalum",
+      "newCriterion": "Kigezo kipya",
+      "newCriterionName": "Kigezo bila jina",
+      "criterionName": "Jina la kigezo",
+      "criterionRubric": "Mwongozo",
+      "criterionRubricPlaceholder": "Eleza kile ambacho tafsiri inapaswa kufanya ili kutimiza kigezo hiki, mfano \"Toa maagizo yote ya dozi ya kitabibu kwa amri, siyo katika hali ya infinitive...\"",
+      "criterionRubricHint": "Mwongozo huu hutolewa kwa AI kama ulivyo pamoja na vipengele vya MQM vilivyojengwa wakati wa kutathmini tafsiri.",
+      "criteriaEmpty": "Unda vigezo maalum — mfano, mtindo wa shirika, mapendeleo ya istilahi za mteja, au mila za kikanda — kutathmini tafsiri zaidi ya vipengele vilivyojengwa vya MQM. Vinaifadhiwa kwenye kifaa hiki na vinaweza kutumika tena.",
+      "deleteCriterion": "Futa kigezo",
+      "manageCriteria": "Vigezo maalum",
+      "addCriteria": "Ongeza vigezo",
+      "noUsableCriteria": "Chagua angalau kigezo kimoja kilichojengwa, au weka mwongozo kwa vigezo vyako maalum.",
+      "criterionRubricTooLong": "Rubric hii imezidi herufi {over} kuliko kikomo. Hutumwa na kila tathmini, hivyo lazima ipunguzwe kabla ya kutumia kigezo hiki."
     },
     "document": {
       "emptyTitle": "Eleza unachohitaji kwenye hati",
@@ -2751,7 +2789,32 @@
       "clearSelection": "Ondoa uteuzi (tumia hati nzima)",
       "reviseSelectionPlaceholder": "Eleza mabadiliko kwenye sehemu uliochagua...",
       "revisedSelectionSummary": "Nimehariri kifungu kilichochaguliwa katika eneo la kazi.",
-      "assessedSelection": "Uteuzi"
+      "assessedSelection": "Uteuzi",
+      "undoEdit": "Tengua",
+      "clearResolved": "Futa zilizotatuliwa",
+      "clearResolvedHint": "Ondoa marekebisho yaliyokubaliwa, kukataliwa, na yasiyohusika kwenye orodha hii",
+      "autoClearResolved": "Futa marekebisho yaliyotatuliwa kiotomatiki",
+      "import": "Ingiza",
+      "importReplaceTitle": "Badilisha hati?",
+      "importReplaceBody": "Kuingiza {name} kutabadilisha hati ya sasa. Rufaa zako, vipimo na mtindo vitahifadhiwa.",
+      "importReplaceConfirm": "Badilisha",
+      "editorMode": "Hali ya mhariri",
+      "editorModeRich": "Maandishi yaliyoboreshwa",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Maliza mapendekezo ya mabadiliko kabla ya kubadili aina ya mhariri.",
+      "suggestChanges": "Pendekeza mabadiliko",
+      "suggestChangesHint": "Kagua marekebisho kama mapendekezo ya mmoja mmoja badala ya kuandika upya hati moja kwa moja.",
+      "suggestChangesSelectionNote": "Mabadiliko kwenye sehemu uliyochagua yanatekelezwa moja kwa moja — tayari umechagua eneo la marekebisho.",
+      "suggestedSummary": "Mapendekezo {count} {count, plural, one {mabadiliko} other {mabadiliko}} yaliyopendekezwa kwa ukaguzi.",
+      "revisionSuggestionSummary": "Ombi lako la marekebisho limezalisha {count} {count, plural, one {pendekezo la mabadiliko} other {mapendekezo ya mabadiliko}}.",
+      "revisionCriterionLabel": "Marekebisho uliyoyaomba",
+      "fallbackSelection": "Imetekelezwa moja kwa moja — marekebisho kwenye sehemu uliyoinua hayapendekezwi.",
+      "fallbackLargeRewrite": "Imetekelezwa moja kwa moja — uandishi upya umebadilisha sana hati kuliko kupendekeza mabadiliko ya mmoja mmoja.",
+      "fallbackReorder": "Imetekelezwa moja kwa moja — sehemu zimehamishwa, jambo ambalo haliwezi kugawanywa kuwa mapendekezo ya ukaguzi.",
+      "fallbackUnanchorable": "Imetekelezwa moja kwa moja — mabadiliko hayakuweza kuhusishwa na sehemu maalum.",
+      "fallbackNoChanges": "Hakukuwa na mabadiliko yaliyohitajika.",
+      "criterionRubricTooLong": "Rubric hii imezidi herufi {over} kuliko kikomo. Hutumwa na kila tathmini, hivyo lazima ipunguzwe kabla ya kutumia kigezo hiki."
     },
     "data": {
       "emptyTitle": "Ingiza data ili kuchanganua",
@@ -2920,7 +2983,39 @@
       "autoCheckHint": "Baada ya kuchakata data kutoka picha au hati, fanya ukaguzi wa ubora moja kwa moja kwenye safu mpya",
       "checkingNewRows": "Inakagua safu mpya zilizoongezwa kwa masuala ya ubora…",
       "ingestCheckFailed": "Ukaguzi wa ubora wa moja kwa moja umeshindikana ({message}) — unaweza kuufanya mwenyewe kwa Kuangalia ubora.",
-      "assessedIngest": "Safu mpya zilizoongezwa"
+      "assessedIngest": "Safu mpya zilizoongezwa",
+      "transpose": "Geuza mpangilio",
+      "transposeAxisColumn": "Jina",
+      "transposeSuggestion": "Jedwali hili linaonekana limegeuzwa: safu ni sifa na nguzo ni vitu. Geuza ili kila kipengee kiwe safu na kila sifa iwe nguzo yenye aina?",
+      "transposedTable": "Safu na nguzo zimegeuzwa",
+      "columns": "Nguzo",
+      "columnsHidden": "Nguzo ({count} zimefichwa)",
+      "showAllColumns": "Onyesha zote",
+      "chartScatter": "Mchoro wa mtawanyiko (x dhidi ya y)",
+      "chartPivot": "Jedwali la pivot",
+      "xColumn": "Nguzo ya X",
+      "yColumn": "Nguzo ya Y",
+      "splitByColumn": "Gawa kwa",
+      "splitNone": "Hakuna mgawanyiko",
+      "pivotValueColumns": "Nguzo za Thamani",
+      "aggMin": "Chini",
+      "aggMax": "Juu",
+      "aggMedian": "Wastani wa kati",
+      "chartSeriesTruncated": "Inaonyesha mfuatano {max} ya juu zaidi",
+      "chartPointsTruncated": "Inaonyesha nukta zilizochaguliwa {max}",
+      "chartScatterAria": "Mchoro wa mtawanyiko wa {x} dhidi ya {y}",
+      "pivotTableAria": "Jedwali la pivot lililopangwa kwa {column}",
+      "schemaFormula": "Fomula",
+      "schemaFormulaPlaceholder": "mf. [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Sehemu iliyohesabiwa: taja sehemu zingine kama [Name]; inasaidia + - * / %, mabano, na round, abs, min, max. Thamani husasishwa moja kwa moja na haziwezi kuhaririwa moja kwa moja.",
+      "schemaFormulaSyntaxError": "Fomula sio sahihi",
+      "schemaFormulaUnknownRef": "Sehemu haijulikani: {ref}",
+      "schemaFormulaArityError": "Idadi isiyo sahihi ya hoja kwa {fn}",
+      "schemaFormulaCycleError": "Urejeleo wa mzunguko kati ya fomula",
+      "derivedColumnTitle": "Imehesabiwa: {formula}",
+      "derivedFrom": "Imehesabiwa kutumia {formula}",
+      "takePhoto": "Piga picha",
+      "takePhotoHint": "Tumia kamera yako kupiga picha ya fomu au jedwali — yaliyomo yatageuzwa kuwa data iliyopangwa unayoweza kuthibitisha dhidi ya picha"
     },
     "map": {
       "emptyTitle": "Weka data zako kwenye ramani",
@@ -2994,7 +3089,31 @@
         "jumpTo": "Nenda kwa {label}",
         "slider": "Nafasi kwenye muendelezo wa wakati",
         "showUndated": "Onyesha maeneo yasiyo na tarehe",
-        "activeCount": "{count} imewezeshwa"
+        "activeCount": "{count} imewezeshwa",
+        "jump": {
+          "start": "Anza",
+          "yearsLater": "{count, plural, one {Baada ya mwaka 1} other {Baada ya miaka #}}",
+          "monthsLater": "{count, plural, one {Baada ya mwezi 1} other {Baada ya miezi #}}",
+          "daysLater": "{count, plural, one {Baada ya siku 1} other {Baada ya siku #}}",
+          "appears": "{count, plural, one {1 inaonekana} other {# zinaonekana}}",
+          "ends": "{count, plural, one {1 inakamilika} other {# zinakamilika}}",
+          "progress": "Tarehe {index} kati ya {total}"
+        },
+        "precision": {
+          "minute": "Hadi dakika",
+          "hour": "Hadi saa",
+          "day": "Hadi siku",
+          "month": "Tarehe ya kiwango cha mwezi",
+          "year": "Tarehe ya kiwango cha mwaka",
+          "mixed": "(mchanganyiko)"
+        },
+        "pacing": {
+          "toggle": "Udhibiti wa mwendo wa uchezaji",
+          "cardDuration": "Onyesha kila eneo kwa",
+          "seconds": "{seconds}s",
+          "maxCards": "Maeneo yanayoonekana kwa tarehe",
+          "hint": "Tarehe zilizo na shughuli nyingi zinacheleweshwa zaidi kiotomatiki."
+        }
       },
       "granularity": {
         "site": "Kituo",
@@ -3011,8 +3130,13 @@
         "color": "Rangi: uhakika wa uratibu (bluu juu, chungwa wastani, nyekundu chini)",
         "size": "Ukubwa wa doa: umuhimu wa eneo kwenye nyenzo",
         "area": "Mduara uliokatwa: makadirio ya eneo la wilaya, mkoa, au nchi",
-        "container": "Mstari hafifu: eneo ambalo maudhui yake yanachorwa mmoja mmoja"
-      }
+        "container": "Mstari hafifu: eneo ambalo maudhui yake yanachorwa mmoja mmoja",
+        "precisionHalo": "Pete laini ya mstari iliyovunjika (wakati wa upitishaji wakati): tukio limedatishwa tu hadi mwezi au mwaka, kwa hivyo muda wake halisi haujulikani"
+      },
+      "sourceLabel": "Chanzo: {name}",
+      "fetchAndMap": "Pata & ramisha",
+      "fetchingPage": "Inaleta ukurasa…",
+      "railUrlRequest": "Pata na ramisha maeneo kutoka: {title} ({url})"
     },
     "shell": {
       "showConversation": "Onyesha mazungumzo",
@@ -3030,6 +3154,16 @@
       "untitled": "Mazungumzo Mapya",
       "toggleMenu": "Fungua/funga menyu",
       "model": "Mfano wa utiririshaji kazi huu"
+    },
+    "tabs": {
+      "label": "Hali ya mazungumzo",
+      "chat": "Mazungumzo",
+      "chatDescription": "Mazungumzo ya kawaida na msaidizi"
+    },
+    "discard": {
+      "title": "Ukatilie rasimu hii?",
+      "body": "Kuhama kwenda {target} kutafuta kazi uliyokuwa umeanza kwenye {current}.",
+      "confirm": "Katilia"
     }
   },
   "connectors": {
@@ -3044,6 +3178,22 @@
       "asana": {
         "name": "Asana",
         "description": "Tafuta, tengeneza, na sasisha kazi na miradi."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Tafuta vyanzo vya data vilivyochapishwa, vitabu vya kazi na vipimo vya Pulse."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Tafuta na sasisha rekodi kwenye vitu vya Salesforce yako."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Andika, panga na chapisha machapisho ya mitandao ya kijamii."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Kagua na jibu mazungumzo kwenye kisanduku cha ujumbe cha mitandao ya kijamii."
       }
     },
     "connect": "Unganisha",
@@ -3104,7 +3254,19 @@
       "missingState": "Hakuna cha kuidhinisha",
       "close": "Unaweza kufunga dirisha hili na kurudi kwenye programu.",
       "closeButton": "Funga dirisha"
-    }
+    },
+    "oauthNoAppConfigured": "Kuingia na {name} hakijasetiwa kwenye upokezi huu. Unganisha kwa kusajili programu yako ya OAuth.",
+    "adminConnectorsTitle": "Kutoka kwa shirika lako",
+    "adminConnectorsDescription": "Viunganishi vilivyowekwa na wasimamizi wako. Unavyoona vinategemea upatikanaji wako.",
+    "managedByOrg": "Inasimamiwa na shirika lako",
+    "connectorOauthNotConfigured": "Kuingia bado hakujakamilika kwa kiunganishi hiki. Wasiliana na msimamizi wako.",
+    "yourConnectorsTitle": "Viunganishi vyako",
+    "addTitle": "Ongeza kiunganishi",
+    "addDescription": "Chagua zana ya kuunganisha. Utaweka upatikanaji baada ya kuchagua.",
+    "add": "Ongeza",
+    "filterLabel": "Chuja viunganishi",
+    "filterPlaceholder": "Tafuta viunganishi",
+    "noMatches": "Hamna kiunganishi kinacholingana na “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Unganisha chanzo cha modeli",
@@ -3155,5 +3317,399 @@
     "deselectAll": "Ondoa chaguzi zote",
     "autoAddLabel": "Ongeza mifano mpya moja kwa moja",
     "autoAddDescription": "Mipangilio mpya ya modeli itakayoongezwa kwenye akaunti hii itaonekana moja kwa moja. Mifano isiyochaguliwa itaendelea kutengwa."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Athari ndogo",
+      "moderate": "Athari ya kati",
+      "high": "Athari kubwa"
+    },
+    "tierTooltip": "Athari ya nishati kulingana na maombi, imekadiria kutokana na ukubwa wa modeli. Hizi ni makadirio kutoka kwa wastani uliochapishwa na makadirio v{version} — siyo vipimo halisi.",
+    "typicalRequest": "~{grams} g CO₂e kwa ombi la kawaida",
+    "typicalRequestTooltip": "Makadirio ya haraka kwa ombi la kawaida (takriban tokeni 1,000 za dodoso na 500 za jibu), imetokana na wastani uliyochapishwa na makadirio v{version}. Athari halisi hubadilika kulingana na urefu wa mazungumzo, mipangilio, na eneo la mwenyeji.",
+    "activities": {
+      "netflixHd": "Kutiririsha Netflix HD",
+      "zoomCall": "Simu ya Zoom (kamera imewashwa)",
+      "webBrowsing": "Kuvinjari wavuti",
+      "spotifyAudio": "Sauti ya Spotify"
+    },
+    "equivalents": {
+      "title": "≈ sawa na kaboni kama",
+      "note": "Ulinganisho wa kaboni sawa dhidi ya alama zilizochapishwa kwa saa ya huduma hizi — makadirio ya kiwango kikubwa, kama makadirio mengine yote hapa."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} dk",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Makadirio ya kaboni ya mazungumzo haya: gramu {grams} za CO₂ sawa. Onyesha mgawanyo.",
+      "ariaLabelToday": "Makadirio ya kaboni ya mazungumzo haya leo: gramu {grams} za CO₂ sawa. Onyesha mgawanyo.",
+      "title": "Mazungumzo haya (makadirio)",
+      "today": "Leo",
+      "total": "Wakati wote",
+      "measured": "Kutoka kwa idadi ya tokeni zilivyoripotiwa",
+      "estimated": "Imekadiriwa kutoka kwa ujumbe wa zamani",
+      "lastRequest": "Ombi la mwisho",
+      "disclaimer": "Makadirio kwa kila ombi yanatokana na idadi ya tokeni zilivyoripotiwa au kukadiriwa, yakitumia wastani na dhana zilizochapishwa toleo v{version}. Ujumbe wa zamani umekadiriwa kutoka kwa maandishi yaliyohifadhiwa na muundo wa sasa wa mazungumzo. Hii si kipimo halisi."
+    }
+  },
+  "table": {
+    "copyTable": "Nakili jedwali",
+    "downloadTable": "Pakua jedwali",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Imetolewa kama CSV",
+    "copyFailed": "Imeshindwa kunakili jedwali"
+  },
+  "backup": {
+    "intro": {
+      "title": "Hifadhi gumzo zako — salama",
+      "body": "Mazungumzo yako yameenkriptishwa kwenye kifaa hiki kabla ya kupakiwa. Hatuwezi kusoma gumzo zako kamwe.",
+      "keyWarning": "Ufunguo wako wa kurejesha umeundwa kwenye kifaa hiki. Hatuuoni na hatuwezi kuurejesha kwako — kupoteza ufunguo kunamaanisha kupoteza hifadhi rudufu.",
+      "create": "Unda ufunguo wangu & hifadhi rudufu",
+      "decline": "Si sasa — weka gumzo kwenye kifaa hiki pekee"
+    },
+    "ceremony": {
+      "titleCreate": "Hifadhi ufunguo wako wa kurejesha",
+      "titleRotate": "Hifadhi ufunguo wako mpya wa kurejesha",
+      "titleView": "Ufunguo wako wa kurejesha",
+      "description": "Ufunguo huu ndio njia pekee ya kurejesha hifadhi yako rudufu kwenye kifaa kingine. Uweke mahali salama — hatuwezi kuurejesha kwako.",
+      "copy": "Nakili",
+      "copied": "Imenakiliwa!",
+      "download": "Pakua .txt",
+      "showQr": "Onyesha msimbo wa QR",
+      "hideQr": "Ficha msimbo wa QR",
+      "savedCheckbox": "Nimehifadhi ufunguo wangu wa kurejesha mahali salama",
+      "saveFirstHint": "Nakili au pakua ufunguo wako kabla ya kuendelea.",
+      "continue": "Endelea",
+      "done": "Imekamilika",
+      "cancel": "Ghairi",
+      "cancelConfirmTitle": "Ughairi usanidi wa hifadhi rudufu?",
+      "cancelConfirmBody": "Gumzo zako hazitahifadhiwa. Unaweza kuwasha hifadhi rudufu iliyosimbwa wakati wowote kwenye Mipangilio.",
+      "cancelConfirmRotateBody": "Ufunguo wako wa kurejesha tayari umebadilishwa. Unaweza kuuona wakati wowote kwenye Mipangilio.",
+      "cancelConfirmConfirm": "Ndiyo, ghairi",
+      "cancelConfirmDismiss": "Rudi nyuma",
+      "loadError": "Imeshindwa kupakia ufunguo wako wa kurejesha kwenye kifaa hiki."
+    },
+    "file": {
+      "heading": "Ufunguo wa kurejesha hifadhi ya gumzo",
+      "warning": "Hifadhi ufunguo huu mahali salama. Yeyote aliye nao anaweza kusoma hifadhi yako; bila huo hifadhi haiwezi kurejeshwa."
+    },
+    "progress": {
+      "titleCreate": "Inaandaa hifadhi yako rudufu",
+      "titleRotate": "Inabadilisha ufunguo wako wa kurejesha",
+      "encrypting": "{count, plural, one {Inasimba na kuhifadhi gumzo #...} other {Inasimba na kuhifadhi gumzo #...}}",
+      "success": "{count, plural, one {Usalama wa hifadhi umekamilika. Gumzo # imelindwa.} other {Usalama wa hifadhi umekamilika. Gumzo # zinalindwa.}}",
+      "error": "Hifadhi imeshindikana. Gumzo zako bado zipo kwenye kifaa hiki.",
+      "retry": "Jaribu tena",
+      "close": "Funga",
+      "done": "Imekamilika"
+    },
+    "input": {
+      "label": "Ufunguo wa kurejesha",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Vifunguo havina herufi O, I au L.",
+      "checksumError": "Ufunguo huo hauonekani kuwa sahihi — angalia kama kuna makosa ya herufi.",
+      "formatError": "Hauonekani kama ufunguo wa kurejesha.",
+      "incomplete": "Endelea kuandika — ufunguo wa kurejesha una herufi 56.",
+      "valid": "Ufunguo unaonekana kuwa sahihi."
+    },
+    "restore": {
+      "title": "Rejesha mazungumzo yako",
+      "successTitle": "Hifadhi imerejeshwa",
+      "promptBody": "Tumepata hifadhi iliyosimbwa kwa akaunti yako. Weka ufunguo wako wa kurejesha ili uirejeshe kwenye kifaa hiki.",
+      "submit": "Rejesha hifadhi",
+      "skip": "Ruka — anza upya kwenye kifaa hiki",
+      "restoring": "Inasimbua na kurejesha mazungumzo yako…",
+      "successBody": "{count, plural, one {Mazungumzo # yamerejeshwa.} other {Mazungumzo # yamerejeshwa.}}",
+      "wrongKey": "Ufunguo huu ni sahihi, lakini haufungui hifadhi hii. Ikiwa ulibadilisha ufunguo wako, tumia ule mpya zaidi.",
+      "corrupt": "Hifadhi hii haikuweza kusomwa — huenda imeharibika. Unaweza kuanza upya kwenye kifaa hiki au ujaribu tena baadaye.",
+      "networkError": "Huduma ya hifadhi haijapatikana. Hakikisha muunganisho wako na ujaribu tena.",
+      "tryAgain": "Jaribu ufunguo mwingine",
+      "close": "Imekamilika"
+    },
+    "enterKey": {
+      "title": "Weka ufunguo wako mpya wa kurejesha",
+      "body": "Ufunguo wako wa kurejesha umebadilishwa kwenye kifaa kingine. Weka ufunguo mpya ili kuendelea na hifadhi kwenye kifaa hiki.",
+      "submit": "Tumia ufunguo huu"
+    },
+    "banner": {
+      "keyMismatchTitle": "Hifadhi imesitishwa — ufunguo wako wa kurejesha umebadilika kwenye kifaa kingine.",
+      "enterNewKey": "Weka ufunguo mpya",
+      "resetBackup": "Weka upya hifadhi",
+      "resetConfirmTitle": "Uweke upya hifadhi kwa kutumia ufunguo wa kifaa hiki?",
+      "resetConfirmBody": "Hifadhi iliyopo itabadilishwa na mazungumzo ya kifaa hiki, yakiwa yamesimbwa kwa ufunguo wa kifaa hiki. Vifaa vingine vitahitaji ufunguo wa kurejesha wa kifaa hiki.",
+      "resetConfirmAction": "Weka upya hifadhi",
+      "remoteMissingTitle": "Hifadhi yako haipo tena kwenye seva. Hifadhi imesitishwa.",
+      "backUpAgain": "Hifadhi tena",
+      "dismiss": "Funga"
+    },
+    "rotate": {
+      "confirmTitle": "Badilisha ufunguo wako wa kurejesha?",
+      "confirmBody": "Hifadhi yako itasimbwa upya kwa kutumia ufunguo mpya, na ule wa zamani hautafanya kazi tena. Utahitaji kuhifadhi ufunguo mpya na kuuandika kwenye vifaa vingine.",
+      "confirmAction": "Badilisha ufunguo"
+    },
+    "toast": {
+      "enrollLater": "Unaweza kuwasha hifadhi iliyosimbwa wakati wowote kwenye Mipangilio.",
+      "keyUpdated": "Ufunguo wa kurejesha umesasishwa. Hifadhi imerejeshwa.",
+      "resetDone": "Hifadhi imewekwa upya kwa ufunguo wa kifaa hiki.",
+      "backupRestarted": "Hifadhi imeundwa tena.",
+      "opFailed": "Kuna tatizo limetokea. Tafadhali jaribu tena."
+    },
+    "settings": {
+      "statusOn": "Hifadhi imewashwa",
+      "statusOff": "Hifadhi imezimwa",
+      "offDescription": "Mazungumzo yako yapo kwenye kivinjari hiki pekee. Washa hifadhi iliyo salama ili kuyaweka salama na kuyarejesha kwenye vifaa vingine. Mazungumzo yanasimbwa kwenye kifaa chako — hatuwezi kuyaona kamwe.",
+      "turnOn": "Washa hifadhi",
+      "restoreTitle": "Hifadhi tayari ipo kwa akaunti yako",
+      "restoreDescription": "Weka ufunguo wako wa kurejesha ili uirejeshe kwenye kifaa hiki.",
+      "restore": "Rejesha hifadhi",
+      "lastBackup": "Hifadhi ya mwisho: {time}",
+      "lastBackupNever": "Hakuna hifadhi iliyokamilika bado",
+      "keyFingerprint": "Ufunguo ····-{tail}",
+      "syncState": {
+        "idle": "Inasubiri kusawazisha",
+        "syncing": "Inafanya hifadhi…",
+        "ok": "Imesasishwa hadi sasa",
+        "keyOutOfDate": "Imesitishwa — ufunguo wa kurejesha umebadilika kwenye kifaa kingine",
+        "remoteMissing": "Imesitishwa — nakala rudufu imeondolewa kwenye seva",
+        "error": "Jaribio la mwisho la kuhifadhi nakala lilishindwa"
+      },
+      "backUpNow": "Hifadhi nakala sasa",
+      "backUpNowSuccess": "Nakala rudufu imekamilika",
+      "backUpNowFailure": "Nakala rudufu imeshindwa — gumzo zako hazijabadilika kwenye kifaa hiki",
+      "viewKey": "Angalia ufunguo wa urejeshaji",
+      "changeKey": "Badilisha ufunguo wa urejeshaji",
+      "dangerTitle": "Eneo la hatari",
+      "turnOffDelete": "Zima na futa nakala rudufu",
+      "turnOffConfirmTitle": "Uzime nakala rudufu?",
+      "turnOffConfirmMessage": "Hii itafuta nakala rudufu kutoka kwenye seva zetu kwa vifaa vyote. Gumzo kwenye kifaa hiki zitabaki. Unaweza kuwasha nakala rudufu tena baadaye kwa kutumia ufunguo mpya wa urejeshaji.",
+      "turnOffConfirmAction": "Futa nakala rudufu",
+      "turnOffSuccess": "Nakala rudufu imezimwa na kufutwa",
+      "turnOffFailure": "Imeshindwa kufuta nakala rudufu. Tafadhali jaribu tena."
+    }
+  },
+  "memories": {
+    "title": "Kumbukumbu",
+    "description": "Msaidizi akumbuke taarifa muhimu unazoshiriki — kama jukumu lako, mapendeleo, na miradi inayoendelea — na azitumie katika mazungumzo yote.",
+    "enableToggle": "Washa kumbukumbu",
+    "privacyNote": "Taarifa zitawekwa kwenye kivinjari hiki pekee na kutumika kuboresha majibu kwenye gumzo zako.",
+    "empty": "Hakuna kumbukumbu bado. Taarifa muhimu zitahifadhiwa moja kwa moja kutoka kwenye mazungumzo yako.",
+    "savedOn": "Imehifadhiwa {date}",
+    "deleteMemory": "Futa kumbukumbu",
+    "clearAll": "Futa kumbukumbu zote",
+    "clearAllConfirmQuestion": "Ufute kumbukumbu zote? Hii haiwezi kutenduliwa.",
+    "clearAllConfirm": "Futa zote",
+    "cancel": "Ghairi"
+  },
+  "contextWindow": {
+    "label": "Dirisha la muktadha",
+    "value": "Jumla ya ujumbe {count}",
+    "fewer": "Ujumbe wachache",
+    "more": "Ujumbe zaidi",
+    "description": "Ujumbe wa zamani zaidi ya kikomo hiki utahimizwa na kutumwa kama muktadha."
+  },
+  "agentAccess": {
+    "title": "Upatikanaji wa Wakala",
+    "description": "Dhibiti ni watumiaji gani wanaoweza kutumia wakala wa Foundry walioshirikiwa. Sheria huzuia zaidi kile ambacho upatikanaji wa Azure wa mtumiaji tayari unaruhusu — haiwezi kutoa upatikanaji ambao Azure inakataza.",
+    "backToChat": "Rudi kwenye gumzo",
+    "loading": "Inapakia wakala na sheria…",
+    "loadError": "Imeshindwa kupakia taarifa za upatikanaji wa wakala.",
+    "rulesUnavailableWarning": "Sheria za upatikanaji hazikuweza kupakiwa kutoka kwenye hifadhi. Utekelezaji wa wakala umesitishwa kwa sasa na sheria haziwezi kuhaririwa.",
+    "retry": "Jaribu tena",
+    "rulesTab": "Sheria za wakala",
+    "localAdminsTab": "Wasimamizi wa ndani",
+    "noAgents": "Hakuna wakala wa kusimamia.",
+    "sourceLabel": "Chanzo",
+    "notDiscoverable": "Hauwezi kugundua",
+    "notDiscoverableHint": "Kuna sheria kwa wakala huyu, lakini hauko kwenye orodha yako ya kugundua — huenda jina limebadilishwa, upatikanaji wako wa Azure haufikii, au sheria ya upatikanaji haikujumuishi.",
+    "accessEveryone": "Kila mtu",
+    "accessRestricted": "Imewekewa kikomo",
+    "edit": "Hariri",
+    "updatedByLine": "Imesasishwa mwisho na {user} tarehe {date}",
+    "accessTypeLabel": "Nani anaweza kutumia wakala huyu",
+    "everyoneDescription": "Yeyote anayeweza kufikia wakala huyu kupitia upatikanaji wao wa Azure.",
+    "restrictedDescription": "Ni watumiaji na vikoa vilivyoorodheshwa hapa chini pekee.",
+    "allowDomainsLabel": "Tovuti zilizoidhinishwa",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Watumiaji walioruhusiwa",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Bonyeza Enter kuongeza",
+    "removeChip": "Ondoa",
+    "groupsLabel": "Makundi yaliyoruhusiwa",
+    "groupsPendingConsent": "Upatikanaji wa msingi wa kundi unasubiri idhini ya msimamizi wa mpangaji na hauwezi kubadilishwa bado.",
+    "restrictedEmptyWarning": "Hakuna watumiaji au tovuti zilizoorodheshwa — hakuna atakayeweza kutumia wakala huyu.",
+    "save": "Hifadhi",
+    "saving": "Inaifadhi...",
+    "cancel": "Ghairi",
+    "saveSuccess": "Sheria ya upatikanaji imehifadhiwa.",
+    "deleteSuccess": "Sheria ya upatikanaji imeondolewa — kila mtu anaweza kutumia wakala huyu tena.",
+    "saveError": "Imeshindikana kuhifadhi. Tafadhali jaribu tena.",
+    "conflictError": "Mtu mwingine amebadilisha huu wakati ulikuwa unahariri. Pakia upya ili kupata toleo la karibuni, kisha fanya mabadiliko tena.",
+    "reload": "Pakia upya",
+    "localAdminsDescription": "Peana usimamizi wa sheria kwa mawakala maalum bila kuredeploy. Wasimamizi wa eneo wanaweza kuhariri sheria za mawakala waliopangiwa pekee.",
+    "noLocalAdmins": "Hakuna wasimamizi wa eneo waliowekwa.",
+    "addLocalAdmin": "Ongeza msimamizi wa eneo",
+    "emailLabel": "Barua pepe",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Ondoa msimamizi wa eneo",
+    "delegatedAgentsLabel": "Mawakala waliokabidhiwa",
+    "noDelegatedAgents": "Hakuna mawakala wa kukabidhiwa.",
+    "unknownAgentKey": "Funguo ya wakala isiyojulikana",
+    "configSaveSuccess": "Wasimamizi wa eneo wamehifadhiwa.",
+    "configConflictError": "Mtu mwingine amebadilisha orodha ya wasimamizi wa eneo wakati ulikuwa unahariri. Pakia upya na ujaribu tena.",
+    "addAgent": "Ongeza wakala",
+    "newPromptAgentTitle": "Wakala mpya wa prompt",
+    "editPromptAgentTitle": "Hariri wakala wa prompt",
+    "agentNameLabel": "Jina",
+    "agentNamePlaceholder": "mf. Mshauri wa Safari",
+    "agentDescriptionLabel": "Maelezo",
+    "agentDescriptionPlaceholder": "Inaonyeshwa kwa watumiaji kwenye chaguo la modeli",
+    "agentSystemPromptLabel": "Prompt ya mfumo",
+    "agentSystemPromptPlaceholder": "Maelekezo yanayofafanua jinsi wakala huyu anavyofanya kazi",
+    "agentModelLabel": "Modeli",
+    "agentModelPlaceholder": "Chagua modeli...",
+    "agentModelUnavailable": "{modelId} (haipatikani)",
+    "agentModelUnknownError": "Modeli uliyohusika nayo haipatikani tena. Chagua modeli nyingine na hifadhi tena.",
+    "promptAgentBadge": "Wakala wa prompt",
+    "editAgent": "Hariri wakala",
+    "deleteAgent": "Futa",
+    "deleteAgentConfirm": "Ufute wakala huyu kwa wote? Itaondolewa kwenye chaguo la modeli; mazungumzo yaliyopo yataendelea kuwa na historia yake.",
+    "confirmDeleteAgent": "Ndiyo, futa",
+    "promptAgentCreateSuccess": "Wakala wa prompt ameundwa.",
+    "promptAgentSaveSuccess": "Wakala wa prompt ameokolewa.",
+    "promptAgentDeleteSuccess": "Wakala wa prompt amefutwa.",
+    "promptAgentsUnavailableWarning": "Mawakala wa prompt hawawezi kupakiwa kutoka kwenye hifadhi. Hawawezi kuhaririwa kwa sasa.",
+    "agentsTab": "Wakala",
+    "connectorsTab": "Viunganishi",
+    "addConnector": "Ongeza kiunganishi",
+    "noConnectors": "Hakuna viunganishi bado.",
+    "connectorsUnavailableWarning": "Imeshindikana kufikia duka la viunganishi, hivyo orodha hii inaweza kuwa si kamili. Usitengeneze mbadala hadi ipakie.",
+    "editAccess": "Hariri upatikanaji",
+    "deleteConnector": "Futa",
+    "deleteConnectorConfirm": "Ufute kiunganishi hiki? Yeyote anayekitumia atapoteza upatikanaji mara moja.",
+    "confirmDeleteConnector": "Futa kiunganishi",
+    "connectorSaveSuccess": "Kiunganishi kimehifadhiwa.",
+    "connectorCreateSuccess": "Kiunganishi kimeundwa.",
+    "connectorDeleteSuccess": "Kiunganishi kimefutwa.",
+    "editConnectorTitle": "Hariri kiunganishi",
+    "newConnectorTitle": "Kiunganishi kipya",
+    "connectorPresetLabel": "Anza na templeti",
+    "connectorPresetNone": "Anza upya",
+    "connectorNameLabel": "Jina",
+    "connectorDescriptionLabel": "Maelezo",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "Badilisha {placeholder} kwenye URL na thamani yako kabla ya kuhifadhi.",
+    "connectorTransportLabel": "Usafirishaji",
+    "connectorAuthLabel": "Uthibitishaji",
+    "connectorAuthNone": "Hakuna",
+    "connectorAuthBearer": "Token (mtumiaji kila mmoja anatoa yake)",
+    "connectorAuthOauth": "Ingia kwa OAuth",
+    "connectorSealingUnavailable": "OAuth haipatikani: usakinishaji huu hauna AUTH_SECRET iliyosetwa ili kusimba siri za wateja.",
+    "connectorTokenHelpLabel": "Kiungo cha maelekezo ya token (hiari)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Siri imehifadhiwa. Acha tupu kuihifadhi, au andika mpya kuibadilisha.",
+    "connectorClientSecretHint": "Imesimbwa kabla ya kuhifadhiwa, na haitatazama tena.",
+    "connectorScopesLabel": "Scopes (mbalimbali kwa nafasi, hiari)"
+  },
+  "localModels": {
+    "title": "Miundo ya ndani",
+    "description": "Zungumza na miundo inayoendeshwa kwenye kompyuta hii. Ujumbe huenda moja kwa moja kutoka kivinjari chako hadi kwenye programu ya ndani na hauendi kwa seva zetu kamwe — hivyo majibu, vichwa vya mazungumzo na muhtasari vinabaki kwenye mashine yako.",
+    "detect": "Tambua mazingira ya ndani",
+    "detecting": "Inatambua…",
+    "experimental": "Majaribio",
+    "portLabel": "Bandari",
+    "statusUnknown": "Bado haijakaguliwa.",
+    "statusChecking": "Inakagua…",
+    "statusReady": "{count, plural, =0 {Imeunganishwa, lakini hakuna muundo uliopakiwa.} one {Imeunganishwa — muundo 1 unapatikana.} other {Imeunganishwa — miundo # inapatikana.}}",
+    "statusNotRunning": "Haikuweza kufikia {label}. Hakikisha inaendeshwa kwenye bandari hii, na kivinjari chako kinaruhusiwa kufikia programu za ndani kutoka tovuti hii.",
+    "statusHttpError": "{label} imerudisha hitilafu. Angalia logi zake.",
+    "corsHelp": {
+      "ollama": "Ollama inaendeshwa lakini inakataa maombi kutoka tovuti hii. Weka OLLAMA_ORIGINS kwa anwani ya tovuti hii, anzisha upya Ollama, kisha jaribu tena kutambua.",
+      "lmstudio": "LM Studio inaendeshwa lakini inakataa maombi kutoka tovuti hii. Washa CORS kwenye mipangilio ya seva ya ndani, kisha jaribu tena kutambua.",
+      "llamacpp": "llama.cpp inaendeshwa lakini inakataa maombi kutoka tovuti hii. Anzisha llama-server ikiruhusu maombi kutoka vyanzo vingi, kisha jaribu tena kutambua."
+    },
+    "privacyNote": "Miundo ya ndani haiungi mkono viambatisho vya faili, picha, utafutaji mtandaoni au viunganishi — hivyo vinahitaji seva zetu. Utambuzi hufanya ukaguzi kwenye kompyuta hii tu."
+  },
+  "urlFetch": {
+    "sourceFallback": "Ukurasa wa wavuti",
+    "fallbackHint": "Pia unaweza kufungua ukurasa, kunakili maandishi, na kuyaweka hapa badala yake.",
+    "shortExtract": "Sehemu ndogo tu ya ukurasa ilisomeka — ukurasa huenda unahitaji malipo au kuingia.",
+    "errors": {
+      "invalidUrl": "Hiyo haionekani kama anwani sahihi ya wavuti.",
+      "ssrfBlocked": "Anwani hiyo haiwezi kupatikana kwa sababu za kiusalama.",
+      "tooManyRedirects": "Kiungo hicho kimeelekezwa mara nyingi sana.",
+      "timeout": "Ukurasa umechukua muda mrefu kujibu.",
+      "unreachable": "Ukurasa haukupatikana.",
+      "blocked": "Tovuti imekataa ombi — huenda ina hitaji kuingia au inazuia wasomaji otomatiki.",
+      "notFound": "Ukurasa huo haukupatikana.",
+      "upstream": "Tovuti imerudisha kosa.",
+      "pdf": "Kiungo hicho ni PDF. Pakua na utumie kitufe cha ambatisha ili kuongeza.",
+      "nonHtml": "Kiungo hicho si ukurasa wa wavuti tunaoweza kusoma.",
+      "tooLarge": "Ukurasa huo ni mkubwa mno kuvutwa.",
+      "empty": "Hakuna maandishi yanayoweza kusomwa yaliyopatikana kwenye ukurasa huo.",
+      "generic": "Ukurasa haukuweza kupatikana."
+    },
+    "fetchingFile": "Inavuta kutoka {host}…",
+    "attachLink": "Ambatisha kiungo",
+    "attachLinkTitle": "Ambatisha ukurasa wa wavuti",
+    "attachLinkDescription": "Ukurasa utavutwa na maandishi yake yanayoweza kusomwa yataambatishwa kwenye ujumbe wako.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Vuta & ambatisha",
+    "attachLinkInvalid": "Hilo halionekani kama anwani ya wavuti.",
+    "linkBadge": "Kutoka kwa kiungo",
+    "couldNotRetrieve": "Haikuweza kupatikana",
+    "doc": {
+      "sourceLabel": "Chanzo",
+      "retrievedLabel": "Imepatikana",
+      "attemptedLabel": "Imejaribiwa",
+      "failureHeading": "Ukurasa wa wavuti haukuweza kupatikana"
+    },
+    "settingsTitle": "Viungo kwenye ujumbe",
+    "settingsToggle": "Vuta viungo vilivyopakuliwa moja kwa moja",
+    "settingsDescription": "Unapobandika kiungo pekee, ukurasa utavutwa na maandishi yake yataambatishwa ili msaidizi asome. Zima hiki ili viungo vifutwe kama maandishi ya kawaida — bado unaweza ambatisha ukurasa mwenyewe kupitia menyu ya +.",
+    "addLink": "Ongeza kiungo"
+  },
+  "cameraAccessError": "Imeshindwa kufikia kamera. Hakikisha ruhusa za kamera zimeruhusiwa na ujaribu tena.",
+  "cameraUnnamedDevice": "Kamera",
+  "pastedText": {
+    "fallbackName": "Maandishi yaliyonakiliwa",
+    "charCount": "{count, number} herufi",
+    "removeChip": "Ondoa maandishi “{name}” yaliyopachikwa",
+    "blockLabel": "Maandishi yaliyopachikwa: {name}",
+    "doc": {
+      "heading": "Maandishi yaliyonakiliwa",
+      "pastedLabel": "Imepachikwa"
+    },
+    "settingsTitle": "Ubandikaji mkubwa",
+    "settingsToggle": "Geuza ubandikaji mkubwa kuwa kiambatisho",
+    "settingsDescription": "Ukibandika maandishi zaidi ya kikomo hapa chini, yataambatishwa kama faili badala ya kujaza kisanduku cha ujumbe. Maandishi yatatumika kama ulivyopachika — hakuna kinachopatikana wala kubadilishwa.",
+    "settingsThresholdLabel": "Ambatisha maandishi marefu kuliko",
+    "settingsThresholdUnit": "herufi",
+    "settingsThresholdHint": "Kati ya {min, number} na {max, number} herufi."
+  },
+  "structures": {
+    "section": "Miundo",
+    "sectionSubtitle": "Maelezo yaliyohifadhiwa ya uwanja. Tumia moja kama mapishi ya uchimbaji, au kama kigezo cha kuanzia kwa jedwali la mtiririko wa data.",
+    "loadFromStructure": "Pakia muundo",
+    "loadFromStructureTitle": "Badilisha safu hizi na muundo uliohifadhiwa",
+    "pickerEmpty": "Hakuna miundo iliyohifadhiwa bado.",
+    "pickerTitle": "Pakia muundo uliohifadhiwa",
+    "saveAsStructure": "Hifadhi kama muundo",
+    "saveAsStructureTitle": "Hifadhi safu hizi kwenye maktaba yako ya miundo",
+    "savedToast": "Muundo \"{name}\" umehifadhiwa",
+    "namePlaceholder": "Jina la muundo",
+    "fieldCount": "Sehemu {count}",
+    "fieldCountOne": "Sehemu 1",
+    "downgradedNotice": "Sehemu {count} zimefanywa rahisi kuwa maandishi — jedwali lina thamani moja kwa seli: {names}",
+    "truncatedNotice": "Sehemu {count} zimeondolewa — kikomo cha jedwali ni safu {max}: {names}",
+    "skippedDerivedNotice": "Safu {count} zilizokokotoa hazijahifadhiwa — fomula zinarejelea safu za jedwali hili: {names}",
+    "loadReplacesColumns": "Hii inabadilisha safu zilizopo. Safu mlalo zilizopo zitaendelea kuwa na thamani pale majina ya safu yanapolingana."
   }
 }

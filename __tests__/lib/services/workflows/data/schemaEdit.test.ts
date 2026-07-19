@@ -30,6 +30,127 @@ describe('applySchemaChanges', () => {
     expect(result.converted).toBe(0);
   });
 
+  it('stores formulas as id-refs with number type forced', () => {
+    const base: DataColumn[] = [
+      { id: 'cases', name: 'Cases', type: 'number' },
+      { id: 'pop', name: 'Population', type: 'number' },
+    ];
+    const result = applySchemaChanges(
+      base,
+      [{ [ROW_ID_KEY]: 'a', cases: 10, pop: 100 }],
+      [
+        { id: 'cases', name: 'Cases', type: 'number', required: false },
+        { id: 'pop', name: 'Population', type: 'number', required: false },
+        {
+          name: 'Rate',
+          type: 'text',
+          required: true,
+          formula: '[Cases] / [Population] * 1000',
+        },
+      ],
+    );
+    expect(result.columns[2]).toEqual({
+      id: 'rate',
+      name: 'Rate',
+      type: 'number',
+      formula: '[cases] / [pop] * 1000',
+    });
+    expect(result.converted).toBe(0);
+  });
+
+  it('resolves formula refs to columns added in the same draft', () => {
+    const result = applySchemaChanges(
+      [],
+      [],
+      [
+        { name: 'Base', type: 'number', required: false },
+        {
+          name: 'Twice',
+          type: 'number',
+          required: false,
+          formula: '[Base] * 2',
+        },
+      ],
+    );
+    expect(result.columns[1].formula).toBe('[base] * 2');
+  });
+
+  it('keeps a stored id-ref valid when the referenced column is renamed', () => {
+    const base: DataColumn[] = [
+      { id: 'pop', name: 'Population', type: 'number' },
+      { id: 'rate', name: 'Rate', type: 'number', formula: '[pop] * 2' },
+    ];
+    const result = applySchemaChanges(
+      base,
+      [],
+      [
+        { id: 'pop', name: 'People', type: 'number', required: false },
+        {
+          id: 'rate',
+          name: 'Rate',
+          type: 'number',
+          required: false,
+          formula: '[Population] * 2',
+        },
+      ],
+    );
+    // The old name still resolves within the same draft session.
+    expect(result.columns[1].formula).toBe('[pop] * 2');
+  });
+
+  it('strips raw cells when an existing column becomes derived', () => {
+    const base: DataColumn[] = [
+      { id: 'a', name: 'A', type: 'number' },
+      { id: 'b', name: 'B', type: 'number' },
+    ];
+    const result = applySchemaChanges(
+      base,
+      [{ [ROW_ID_KEY]: 'r', a: 1, b: 99 }],
+      [
+        { id: 'a', name: 'A', type: 'number', required: false },
+        {
+          id: 'b',
+          name: 'B',
+          type: 'number',
+          required: false,
+          formula: '[A] + 1',
+        },
+      ],
+    );
+    expect('b' in result.rows[0]).toBe(false);
+    expect(result.columns[1].formula).toBe('[a] + 1');
+  });
+
+  it('drops an unresolvable formula, leaving a plain number column', () => {
+    const result = applySchemaChanges(
+      [],
+      [],
+      [{ name: 'X', type: 'number', required: false, formula: '[Ghost] * 2' }],
+    );
+    expect(result.columns[0].formula).toBeUndefined();
+    expect(result.columns[0].type).toBe('number');
+  });
+
+  it('retype to number detects currency format and converts "$" cells', () => {
+    const costColumns: DataColumn[] = [
+      { id: 'cost', name: 'Cost', type: 'text' },
+    ];
+    const costRows = [
+      { [ROW_ID_KEY]: 'a', cost: '$25' },
+      { [ROW_ID_KEY]: 'b', cost: '$3.77' },
+      { [ROW_ID_KEY]: 'c', cost: '200' },
+    ];
+    const result = applySchemaChanges(costColumns, costRows, [
+      { id: 'cost', name: 'Cost', type: 'number', required: false },
+    ]);
+    expect(result.converted).toBe(0);
+    expect(result.rows.map((r) => r.cost)).toEqual([25, 3.77, 200]);
+    expect(result.columns[0].format).toEqual({
+      currency: '$',
+      numberStyle: 'us',
+    });
+  });
+
   it('retype re-coerces cells and counts unconvertible ones', () => {
     const result = applySchemaChanges(columns, rows, [
       { id: 'name', name: 'Name', type: 'text', required: false },

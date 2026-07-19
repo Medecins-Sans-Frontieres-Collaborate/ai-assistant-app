@@ -6,6 +6,7 @@ import {
   NamedConnection,
   resolveConnections,
 } from '@/lib/utils/shared/geo/connections';
+import { featureEventRange } from '@/lib/utils/shared/geo/eventTime';
 import { isValidCoordinate } from '@/lib/utils/shared/geo/geojson';
 
 import {
@@ -40,6 +41,9 @@ function entryToChatMessage(
 }
 
 function compactFeature(f: MapFeature): CompactMapFeature {
+  // Legacy features still carry the old partial-date fields; the accessor
+  // presents both shapes as one range.
+  const range = featureEventRange(f);
   return {
     name: f.name,
     lat: f.lat,
@@ -49,9 +53,10 @@ function compactFeature(f: MapFeature): CompactMapFeature {
     prominence: f.prominence ?? 'primary',
     confidence: f.confidence,
     countryCode: f.countryCode,
-    eventStart: f.eventStart,
-    eventEnd: f.eventEnd,
-    eventOngoing: f.eventOngoing,
+    eventStart: range?.start,
+    eventEnd: range?.end ?? undefined,
+    eventOngoing: range?.ongoing,
+    eventPrecision: range?.precision,
     description: (f.description ?? '').slice(0, DESCRIPTION_CHARS),
   };
 }

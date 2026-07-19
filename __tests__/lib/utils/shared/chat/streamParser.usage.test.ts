@@ -43,3 +43,49 @@ describe('StreamParser.getUsage', () => {
     expect(parser.getUsage()).toBeUndefined();
   });
 });
+
+describe('terminal metadata block split across chunks', () => {
+  // Regression: parseMetadataFromContent only reports metadataStartIndex once
+  // a block is COMPLETE. When the block straddled two network reads, the
+  // half-arrived marker was flushed into displayText — and since
+  // processedIndex is monotonic, it could never be retracted, so
+  // "<<<METADATA_START>>>{..." rendered inside the assistant message.
+  // Affects every streamed response whose metadata is large enough to split
+  // (citations, fileCacheUpdates), not just local-model turns.
+  const encoder = new TextEncoder();
+
+  const build = (text: string) =>
+    `${text}\n\n<<<METADATA_START>>>${JSON.stringify({
+      usage: {
+        promptTokens: 1,
+        completionTokens: 2,
+        totalTokens: 3,
+        modelId: 'gpt-test',
+        region: null,
+      },
+    })}<<<METADATA_END>>>`;
+
+  it('never leaks a partial marker into display text, at any split point', () => {
+    const raw = build('Visible answer');
+    const bytes = encoder.encode(raw);
+
+    // Every possible split, including ones landing mid-marker and mid-JSON.
+    for (let cut = 1; cut < bytes.length; cut++) {
+      const parser = new StreamParser();
+      parser.processChunk(bytes.slice(0, cut), { stream: true });
+      parser.processChunk(bytes.slice(cut), { stream: true });
+
+      expect(parser.finalize()).toBe('Visible answer');
+      expect(parser.getUsage()?.totalTokens).toBe(3);
+    }
+  });
+
+  it('holds back a trailing partial marker until the rest arrives', () => {
+    const parser = new StreamParser();
+    parser.processChunk(encoder.encode('Answer\n\n<<<METADATA_ST'), {
+      stream: true,
+    });
+    // Mid-stream the partial marker must already be hidden from the user.
+    expect(parser.finalize()).toBe('Answer');
+  });
+});

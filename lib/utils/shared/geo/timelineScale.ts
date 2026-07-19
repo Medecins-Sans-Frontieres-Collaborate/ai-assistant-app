@@ -1,8 +1,4 @@
-import {
-  parsePartialDate,
-  partialDateEndMs,
-  partialDateStartMs,
-} from '@/lib/utils/shared/date/partialDate';
+import { featureCoverInterval } from '@/lib/utils/shared/geo/eventTime';
 
 import { MapFeature } from '@/types/workflow';
 
@@ -86,31 +82,12 @@ export function featureDateRangeVerdict(
 ): 'in' | 'out' | 'undated' {
   const interval = featureCoverInterval(feature, nowMs);
   if (!interval) return 'undated';
-  if (range.fromMs !== null && interval.endMs < range.fromMs) return 'out';
+  // The interval's end is EXCLUSIVE (a "2026" event ends at 2027-01-01T00:00),
+  // so an event touching the bound exactly is out, not in — without the
+  // `<=`, every year-precision event would leak into the next year.
+  if (range.fromMs !== null && interval.endMs <= range.fromMs) return 'out';
   if (range.toMs !== null && interval.startMs > range.toMs) return 'out';
   return 'in';
-}
-
-function featureCoverInterval(
-  feature: MapFeature,
-  nowMs: number,
-): CoverInterval | null {
-  const start = parsePartialDate(feature.eventStart);
-  const end = parsePartialDate(feature.eventEnd);
-  if (!start && !end) return null;
-
-  let startMs = Infinity;
-  let endMs = -Infinity;
-  if (start) {
-    startMs = Math.min(startMs, partialDateStartMs(start));
-    endMs = Math.max(endMs, partialDateEndMs(start));
-  }
-  if (end) {
-    startMs = Math.min(startMs, partialDateStartMs(end));
-    endMs = Math.max(endMs, partialDateEndMs(end));
-  }
-  if (feature.eventOngoing) endMs = Math.max(endMs, nowMs);
-  return { startMs, endMs };
 }
 
 function ladderStepMs(spanMs: number): number {
@@ -304,9 +281,19 @@ export function msToStep(scale: TimelineScale, ms: number): number {
  * "Mar–Jun 2026", "Mar 2026". Raw Intl (UTC-pinned) like the control's
  * existing tick formatting — not i18n message content.
  */
+/**
+ * The last instant a segment actually covers. `endMs` is EXCLUSIVE, so
+ * anything user-facing — era labels, the filter's inclusive `toMs`, the
+ * timeline's end caption — has to step back off it, or a segment covering
+ * 1812 reads as "1812–1813".
+ */
+export function segmentLastInstant(segment: TimelineSegment): number {
+  return segment.endMs - 1;
+}
+
 export function segmentLabel(segment: TimelineSegment, locale: string): string {
   const start = new Date(segment.startMs);
-  const end = new Date(segment.endMs);
+  const end = new Date(segmentLastInstant(segment));
   const startYear = start.getUTCFullYear();
   const endYear = end.getUTCFullYear();
   try {

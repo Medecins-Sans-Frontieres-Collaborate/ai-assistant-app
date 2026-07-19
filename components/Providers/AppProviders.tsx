@@ -8,6 +8,8 @@ import { Toaster } from 'react-hot-toast';
 
 import { Session } from 'next-auth';
 
+import { AgentAccessEnabledContext } from '@/client/hooks/settings/useAgentAccessAdmin';
+
 import { UIPreferences } from '@/types/ui';
 
 import { SessionErrorHandler } from '@/components/Auth/SessionErrorHandler';
@@ -27,6 +29,12 @@ interface AppProvidersProps {
   children: ReactNode;
   session?: Session | null;
   launchDarklyClientId?: string;
+  /**
+   * Server-side AGENT_ACCESS_CONTROL_ENABLED, threaded down like
+   * launchDarklyClientId. Gates the client /api/agent-access/me fetch so
+   * nothing fires while the feature is disabled.
+   */
+  agentAccessEnabled?: boolean;
   userContext?: {
     id: string;
     email?: string;
@@ -48,6 +56,7 @@ export function AppProviders({
   children,
   session,
   launchDarklyClientId,
+  agentAccessEnabled,
   userContext,
   initialUIPreferences,
 }: AppProvidersProps) {
@@ -59,38 +68,40 @@ export function AppProviders({
     >
       <SessionErrorHandler />
       <QueryClientProvider client={queryClient}>
-        <UIPreferencesProvider initialPreferences={initialUIPreferences}>
-          {launchDarklyClientId ? (
-            <LDProvider
-              clientSideID={launchDarklyClientId}
-              options={{
-                bootstrap: 'localStorage',
-                sendEvents: true,
-              }}
-              context={{
-                kind: 'user',
-                key: userContext?.id || 'anonymous-user',
-                email: userContext?.email,
-                givenName: userContext?.givenName,
-                surName: userContext?.surname,
-                displayName: userContext?.displayName,
-                jobTitle: userContext?.jobTitle,
-                department: userContext?.department,
-                companyName: userContext?.companyName,
-              }}
-            >
+        <AgentAccessEnabledContext.Provider value={agentAccessEnabled ?? false}>
+          <UIPreferencesProvider initialPreferences={initialUIPreferences}>
+            {launchDarklyClientId ? (
+              <LDProvider
+                clientSideID={launchDarklyClientId}
+                options={{
+                  bootstrap: 'localStorage',
+                  sendEvents: true,
+                }}
+                context={{
+                  kind: 'user',
+                  key: userContext?.id || 'anonymous-user',
+                  email: userContext?.email,
+                  givenName: userContext?.givenName,
+                  surName: userContext?.surname,
+                  displayName: userContext?.displayName,
+                  jobTitle: userContext?.jobTitle,
+                  department: userContext?.department,
+                  companyName: userContext?.companyName,
+                }}
+              >
+                <TermsAcceptanceProvider>
+                  <Toaster position="top-center" />
+                  {children}
+                </TermsAcceptanceProvider>
+              </LDProvider>
+            ) : (
               <TermsAcceptanceProvider>
                 <Toaster position="top-center" />
                 {children}
               </TermsAcceptanceProvider>
-            </LDProvider>
-          ) : (
-            <TermsAcceptanceProvider>
-              <Toaster position="top-center" />
-              {children}
-            </TermsAcceptanceProvider>
-          )}
-        </UIPreferencesProvider>
+            )}
+          </UIPreferencesProvider>
+        </AgentAccessEnabledContext.Provider>
       </QueryClientProvider>
     </SessionProvider>
   );

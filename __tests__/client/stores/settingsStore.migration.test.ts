@@ -1,3 +1,8 @@
+import {
+  DEFAULT_MAP_TIMELAPSE,
+  MAX_CARDS_MAX,
+} from '@/lib/utils/shared/geo/timelapsePacing';
+
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { describe, expect, it } from 'vitest';
 
@@ -350,5 +355,286 @@ describe('settingsStore migration (v28 → v29)', () => {
     ) as Record<string, unknown>;
 
     expect(result.customAgentSources).toEqual(sources);
+  });
+});
+
+/**
+ * v34 adds the adjustable context window (conversation compaction) and the
+ * Memories opt-in. Backfill must reproduce prior behavior exactly: the old
+ * hard-coded 80-message window, memories off.
+ */
+describe('settingsStore migration (v33 → v34)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills contextWindowSize=80 and memoriesEnabled=false when migrating from v33', () => {
+    const persisted = {
+      customAgents: [],
+      // contextWindowSize / memoriesEnabled intentionally absent (pre-v34)
+    } as Record<string, unknown>;
+
+    const result = migrate(persisted, 33) as Record<string, unknown>;
+
+    expect(result.contextWindowSize).toBe(80);
+    expect(result.memoriesEnabled).toBe(false);
+  });
+
+  it('preserves existing values on a current-version store', () => {
+    const persisted = {
+      contextWindowSize: 120,
+      memoriesEnabled: true,
+    } as Record<string, unknown>;
+
+    const result = migrate(persisted, 34) as Record<string, unknown>;
+
+    expect(result.contextWindowSize).toBe(120);
+    expect(result.memoriesEnabled).toBe(true);
+  });
+});
+
+/**
+ * v35 → v36: automatic fetching of pasted links. Defaults ON, so an existing
+ * user gets the behavior without hunting for a setting; the toggle exists for
+ * those who would rather links stayed inert.
+ */
+describe('settingsStore migration (v35 → v36)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills autoFetchPastedLinks=true when migrating from v35', () => {
+    const persisted = {
+      customAgents: [],
+      // autoFetchPastedLinks intentionally absent (pre-v36)
+    } as Record<string, unknown>;
+
+    const result = migrate(persisted, 35) as Record<string, unknown>;
+
+    expect(result.autoFetchPastedLinks).toBe(true);
+  });
+
+  it('preserves an explicit opt-out on a current-version store', () => {
+    const persisted = {
+      autoFetchPastedLinks: false,
+    } as Record<string, unknown>;
+
+    const result = migrate(persisted, 36) as Record<string, unknown>;
+
+    expect(result.autoFetchPastedLinks).toBe(false);
+  });
+});
+
+/**
+ * v36 → v37: time-lapse pacing. Clamped rather than replaced wholesale, so a
+ * hand-edited or half-written value keeps whatever part of it was usable
+ * instead of silently reverting the user's tuning.
+ */
+describe('settingsStore migration (v36 → v37)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('seeds mapTimelapse defaults when migrating from v36', () => {
+    const persisted = {
+      customAgents: [],
+      // mapTimelapse intentionally absent (pre-v37)
+    } as Record<string, unknown>;
+
+    const result = migrate(persisted, 36) as Record<string, unknown>;
+
+    expect(result.mapTimelapse).toEqual(DEFAULT_MAP_TIMELAPSE);
+  });
+
+  it('keeps a tuned value, clamping only what is out of range', () => {
+    const persisted = {
+      mapTimelapse: { cardDurationMs: 4200, maxCardsPerDate: 40 },
+    } as Record<string, unknown>;
+
+    const result = migrate(persisted, 36) as Record<string, unknown>;
+
+    expect(result.mapTimelapse).toEqual({
+      cardDurationMs: 4200,
+      maxCardsPerDate: MAX_CARDS_MAX,
+    });
+  });
+
+  it('preserves an already-migrated value on a current-version store', () => {
+    const mapTimelapse = { cardDurationMs: 1400, maxCardsPerDate: 2 };
+    const result = migrate({ mapTimelapse }, 37) as Record<string, unknown>;
+
+    expect(result.mapTimelapse).toEqual(mapTimelapse);
+  });
+});
+
+/**
+ * v37 → v38: the auto-clear-resolved-edits preference. Defaults OFF so an
+ * upgrade never starts silently discarding a user's decision record.
+ */
+describe('settingsStore migration (v37 → v38)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills autoClearResolvedEdits=false when migrating from v37', () => {
+    const persisted = {
+      customAgents: [],
+      // autoClearResolvedEdits intentionally absent (pre-v38)
+    } as Record<string, unknown>;
+
+    const result = migrate(persisted, 37) as Record<string, unknown>;
+
+    expect(result.autoClearResolvedEdits).toBe(false);
+  });
+
+  it('preserves an opted-in value', () => {
+    const persisted = {
+      autoClearResolvedEdits: true,
+    } as Record<string, unknown>;
+
+    const result = migrate(persisted, 37) as Record<string, unknown>;
+
+    expect(result.autoClearResolvedEdits).toBe(true);
+  });
+});
+
+/**
+ * v38 → v39: custom quality criteria for the translation workflow. A
+ * separate list from documentCriteria on purpose — the rubrics are
+ * domain-specific, so one shared list would cross-contaminate both pickers.
+ */
+describe('settingsStore migration (v38 → v39)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills translationCriteria to an empty list', () => {
+    const persisted = {
+      customAgents: [],
+      // translationCriteria intentionally absent (pre-v39)
+    } as Record<string, unknown>;
+
+    const result = migrate(persisted, 38) as Record<string, unknown>;
+
+    expect(result.translationCriteria).toEqual([]);
+  });
+
+  it('preserves existing criteria and leaves documentCriteria alone', () => {
+    const translationCriteria = [
+      {
+        id: 'custom:a',
+        name: 'House style',
+        rubric: 'Use the imperative',
+        createdAt: '2026-07-18T00:00:00.000Z',
+        updatedAt: '2026-07-18T00:00:00.000Z',
+      },
+    ];
+    const documentCriteria = [{ id: 'custom:b', name: 'Brand', rubric: 'x' }];
+
+    const result = migrate(
+      { translationCriteria, documentCriteria },
+      38,
+    ) as Record<string, unknown>;
+
+    expect(result.translationCriteria).toEqual(translationCriteria);
+    expect(result.documentCriteria).toEqual(documentCriteria);
+  });
+
+  it('repairs a non-array value', () => {
+    const result = migrate({ translationCriteria: 'oops' }, 38) as Record<
+      string,
+      unknown
+    >;
+    expect(result.translationCriteria).toEqual([]);
+  });
+});
+
+/**
+ * v40 → v41: extractionRecipes → savedStructures, now shared with the data
+ * workflow. The delicate part is `required`: recipes treated an absent flag
+ * as *required*, the shared type treats it as *optional*. The migration must
+ * therefore write the flag explicitly, or every saved recipe silently
+ * loosens into nullable unions.
+ */
+describe('settingsStore migration (v40 → v41)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  const recipe = (fields: Record<string, unknown>[]) => ({
+    id: 'r1',
+    name: 'Invoices',
+    instructions: 'find invoices',
+    fields,
+    createdAt: '2026-07-01T00:00:00.000Z',
+    updatedAt: '2026-07-01T00:00:00.000Z',
+  });
+
+  it('renames the collection and drops the legacy key', () => {
+    const result = migrate({ extractionRecipes: [recipe([])] }, 40) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.savedStructures).toHaveLength(1);
+    expect(result).not.toHaveProperty('extractionRecipes');
+    expect(result.savedStructures).toMatchObject([
+      { id: 'r1', name: 'Invoices', instructions: 'find invoices' },
+    ]);
+  });
+
+  it('stamps required:true on fields that omitted the flag', () => {
+    const result = migrate(
+      {
+        extractionRecipes: [
+          recipe([
+            { id: 'a', name: 'a', type: 'text' },
+            { id: 'b', name: 'b', type: 'number', required: true },
+          ]),
+        ],
+      },
+      40,
+    ) as Record<string, unknown>;
+
+    const fields = (result.savedStructures as { fields: unknown[] }[])[0]
+      .fields;
+    expect(fields).toEqual([
+      { id: 'a', name: 'a', type: 'text', required: true },
+      { id: 'b', name: 'b', type: 'number', required: true },
+    ]);
+  });
+
+  it('preserves explicitly optional fields', () => {
+    const result = migrate(
+      {
+        extractionRecipes: [
+          recipe([{ id: 'a', name: 'a', type: 'text', required: false }]),
+        ],
+      },
+      40,
+    ) as Record<string, unknown>;
+
+    const fields = (result.savedStructures as { fields: unknown[] }[])[0]
+      .fields;
+    expect(fields).toEqual([
+      { id: 'a', name: 'a', type: 'text', required: false },
+    ]);
+  });
+
+  it('backfills an empty list when there were no recipes', () => {
+    const result = migrate({ customAgents: [] }, 40) as Record<string, unknown>;
+    expect(result.savedStructures).toEqual([]);
+  });
+
+  it('repairs a non-array legacy value and a non-array fields list', () => {
+    expect(
+      (migrate({ extractionRecipes: 'oops' }, 40) as Record<string, unknown>)
+        .savedStructures,
+    ).toEqual([]);
+
+    const result = migrate(
+      { extractionRecipes: [{ id: 'r1', name: 'x', fields: 'oops' }] },
+      40,
+    ) as Record<string, unknown>;
+    expect(
+      (result.savedStructures as { fields: unknown[] }[])[0].fields,
+    ).toEqual([]);
+  });
+
+  it('carries a very old store through v23→24 and on to savedStructures', () => {
+    // v23 predates extractionRecipes entirely; the v24 block backfills the
+    // legacy key and v41 must then rename it rather than stepping past it.
+    const result = migrate({ customAgents: [] }, 23) as Record<string, unknown>;
+
+    expect(result.savedStructures).toEqual([]);
+    expect(result).not.toHaveProperty('extractionRecipes');
   });
 });

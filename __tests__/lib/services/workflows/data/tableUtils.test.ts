@@ -2,6 +2,7 @@ import {
   MAX_ROWS,
   ROW_ID_KEY,
   buildTable,
+  carryRowIds,
   coerceCell,
   collectHeaders,
   deriveNextRowId,
@@ -144,6 +145,67 @@ describe('row identity helpers', () => {
       { a: 1 },
       { b: 2 },
     ]);
+  });
+
+  it('carryRowIds copies rids positionally when the row count matches', () => {
+    const prev = [
+      { a: 1, [ROW_ID_KEY]: 'x' },
+      { a: 2, [ROW_ID_KEY]: 'y' },
+    ];
+    const result = [{ b: 10 }, { b: 20 }];
+    expect(carryRowIds(prev, result)).toEqual([
+      { b: 10, [ROW_ID_KEY]: 'x' },
+      { b: 20, [ROW_ID_KEY]: 'y' },
+    ]);
+  });
+
+  it('carryRowIds leaves the result untouched when the row count differs', () => {
+    const prev = [{ a: 1, [ROW_ID_KEY]: 'x' }];
+    const result = [{ b: 10 }, { b: 20 }];
+    expect(carryRowIds(prev, result)).toBe(result);
+  });
+
+  it('carryRowIds skips positions whose previous row had no rid', () => {
+    const prev = [{ a: 1 }, { a: 2, [ROW_ID_KEY]: 'y' }];
+    const result = [{ b: 10 }, { b: 20 }];
+    expect(carryRowIds(prev, result)).toEqual([
+      { b: 10 },
+      { b: 20, [ROW_ID_KEY]: 'y' },
+    ]);
+  });
+});
+
+describe('currency-aware typing', () => {
+  it('coerceCell parses currency-tagged and style-aware numbers', () => {
+    expect(coerceCell('$25', 'number')).toBe(25);
+    expect(coerceCell('1.234,56', 'number', { numberStyle: 'eu' })).toBe(
+      1234.56,
+    );
+    expect(coerceCell('abc', 'number')).toBeNull();
+  });
+
+  it('buildTable types a partially $-tagged column as number with format', () => {
+    const { columns, rows } = buildTable(
+      ['Product', 'Cost'],
+      [
+        { Product: 'A', Cost: '25' },
+        { Product: 'B', Cost: '$3.77' },
+      ],
+    );
+    expect(columns[1]).toMatchObject({
+      type: 'number',
+      format: { currency: '$', numberStyle: 'us' },
+    });
+    expect(rows.map((r) => r.cost)).toEqual([25, 3.77]);
+  });
+
+  it('buildTable keeps mixed-currency columns as text', () => {
+    const { columns, rows } = buildTable(
+      ['Cost'],
+      [{ Cost: '$5' }, { Cost: '€5' }],
+    );
+    expect(columns[0].type).toBe('text');
+    expect(rows.map((r) => r.cost)).toEqual(['$5', '€5']);
   });
 });
 

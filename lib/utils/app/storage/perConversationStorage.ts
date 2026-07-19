@@ -38,6 +38,48 @@ const INDEX_KEY = 'conv-index';
 const CONV_PREFIX = 'conv-data-';
 const FOLDER_PREFIX = 'conv-folder-';
 const LEGACY_BLOB_KEY = 'conversation-storage';
+/**
+ * Sidecar for backup-sync metadata (deletion tombstones + folders LWW
+ * timestamp). These live in conversationStore's partialized state but not in
+ * the per-conversation key layout — without this sidecar they would silently
+ * vanish on every reload, resurrecting deleted conversations on other
+ * devices and reverting folder edits.
+ */
+const BACKUP_META_KEY = 'conv-backup-meta';
+
+interface BackupMeta {
+  deletedConversations: Record<string, string>;
+  foldersUpdatedAt: string | null;
+}
+
+function readBackupMeta(): BackupMeta {
+  try {
+    const raw = localStorage.getItem(BACKUP_META_KEY);
+    if (!raw) return { deletedConversations: {}, foldersUpdatedAt: null };
+    const parsed = JSON.parse(raw) as Partial<BackupMeta>;
+    return {
+      deletedConversations:
+        parsed.deletedConversations &&
+        typeof parsed.deletedConversations === 'object'
+          ? parsed.deletedConversations
+          : {},
+      foldersUpdatedAt:
+        typeof parsed.foldersUpdatedAt === 'string'
+          ? parsed.foldersUpdatedAt
+          : null,
+    };
+  } catch {
+    return { deletedConversations: {}, foldersUpdatedAt: null };
+  }
+}
+
+function writeBackupMeta(meta: BackupMeta): void {
+  try {
+    localStorage.setItem(BACKUP_META_KEY, JSON.stringify(meta));
+  } catch (e) {
+    console.warn('[PerConvStorage] Failed to write backup meta:', e);
+  }
+}
 
 /**
  * Check if an error is a QuotaExceededError.
@@ -918,11 +960,14 @@ export const perConversationStorage: StateStorage = {
         }
 
         // Return in Zustand persist format
+        const backupMeta = readBackupMeta();
         return JSON.stringify({
           state: {
             conversations,
             selectedConversationId: index.selectedConversationId,
             folders,
+            deletedConversations: backupMeta.deletedConversations,
+            foldersUpdatedAt: backupMeta.foldersUpdatedAt,
           },
           version: index.version,
         });
@@ -931,11 +976,14 @@ export const perConversationStorage: StateStorage = {
       // No index found — check for legacy blob and migrate
       const migrated = migrateFromLegacyBlob();
       if (migrated) {
+        const backupMeta = readBackupMeta();
         return JSON.stringify({
           state: {
             conversations: migrated.conversations,
             selectedConversationId: migrated.selectedConversationId,
             folders: migrated.folders,
+            deletedConversations: backupMeta.deletedConversations,
+            foldersUpdatedAt: backupMeta.foldersUpdatedAt,
           },
           version: migrated.version,
         });
@@ -957,6 +1005,8 @@ export const perConversationStorage: StateStorage = {
           conversations: Conversation[];
           selectedConversationId: string | null;
           folders: FolderInterface[];
+          deletedConversations?: Record<string, string>;
+          foldersUpdatedAt?: string | null;
         };
         version: number;
       }>(value);
@@ -967,6 +1017,10 @@ export const perConversationStorage: StateStorage = {
       }
 
       const { state, version } = parsed.data;
+      writeBackupMeta({
+        deletedConversations: state.deletedConversations ?? {},
+        foldersUpdatedAt: state.foldersUpdatedAt ?? null,
+      });
       const currentIndex = readIndex();
 
       const currentConvIds = new Set(currentIndex?.conversationIds ?? []);
@@ -1081,6 +1135,7 @@ export const perConversationStorage: StateStorage = {
         }
       }
       localStorage.removeItem(INDEX_KEY);
+      localStorage.removeItem(BACKUP_META_KEY);
       lastWrittenTimestamps.clear();
     } catch (e) {
       console.error('[PerConvStorage] Error in removeItem:', e);

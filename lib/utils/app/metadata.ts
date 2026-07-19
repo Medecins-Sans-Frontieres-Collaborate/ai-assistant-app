@@ -107,6 +107,54 @@ export interface ParsedMetadata {
 }
 
 /**
+ * Opening marker of the terminal metadata block.
+ *
+ * Exported so stream consumers can detect a block that has STARTED but not
+ * yet finished arriving — `parseMetadataFromContent` only reports
+ * `metadataStartIndex` once a block is complete, which is not enough to keep
+ * a half-arrived marker out of display text. See StreamParser.processChunk.
+ */
+export const METADATA_START_MARKER = '<<<METADATA_START>>>';
+
+/**
+ * Index at which an INCOMPLETE terminal metadata block begins, or -1.
+ *
+ * Covers both "the open marker is fully present but its closing marker
+ * hasn't arrived" and "the tail of the text is a partial prefix of the open
+ * marker" (e.g. the chunk ends with `<<<METADATA_ST`). Includes an
+ * immediately-preceding `\n\n` separator so the returned index matches what
+ * `metadataStartIndex` reports for a complete block.
+ *
+ * Callers use this to hold those bytes back until the rest arrives —
+ * otherwise they leak into the rendered message and, because scan cursors are
+ * monotonic, can never be retracted.
+ */
+export function pendingMetadataStartIndex(content: string): number {
+  let index = content.indexOf(METADATA_START_MARKER);
+
+  if (index === -1) {
+    // No full open marker — look for a partial one at the very end.
+    const maxPrefix = Math.min(
+      METADATA_START_MARKER.length - 1,
+      content.length,
+    );
+    for (let k = maxPrefix; k >= 1; k--) {
+      if (content.endsWith(METADATA_START_MARKER.slice(0, k))) {
+        index = content.length - k;
+        break;
+      }
+    }
+    if (index === -1) return -1;
+  }
+
+  // Match parseMetadataFromContent, whose index includes the optional
+  // leading blank line, so display text doesn't keep a trailing gap.
+  return index >= 2 && content.slice(index - 2, index) === '\n\n'
+    ? index - 2
+    : index;
+}
+
+/**
  * Parses metadata from content using the standard format
  * Format: <<<METADATA_START>>>{json}<<<METADATA_END>>>
  *
@@ -131,7 +179,7 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
 
   // Cheap exit when the marker isn't present at all — avoids running the
   // regex on long streams that have no terminal metadata block yet.
-  const metaIdx = content.indexOf('<<<METADATA_START>>>');
+  const metaIdx = content.indexOf(METADATA_START_MARKER);
   // A stream can carry MULTIPLE terminal blocks (the stream processor's
   // usage/citations block, then StandardChatHandler's file_cache_update
   // block). Parse and strip ALL of them, merging per-field with later

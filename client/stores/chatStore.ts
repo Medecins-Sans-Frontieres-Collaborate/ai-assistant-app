@@ -2,10 +2,20 @@
 
 import toast from 'react-hot-toast';
 
+import {
+  LocalRuntimeError,
+  localChatService,
+} from '@/client/services/chat/LocalChatService';
+import { updateConversationCompaction } from '@/client/services/compactionService';
 import { ensureFreshOauthToken } from '@/client/services/mcp/mcpOauth';
+import { extractMemories } from '@/client/services/memoryService';
 import { generateConversationTitle } from '@/client/services/titleService';
+import { isLocalModel } from '@/lib/services/models/localModels';
 
+import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
+import { buildConversationContextSections } from '@/lib/utils/app/systemPrompt';
+import { getCompactionBoundary } from '@/lib/utils/shared/chat/conversationCompaction';
 import { findMessageIndexForApprovalId } from '@/lib/utils/shared/chat/findMessageIndexForApprovalId';
 import { MessageContentAnalyzer } from '@/lib/utils/shared/chat/messageContentAnalyzer';
 import {
@@ -40,6 +50,7 @@ import { SearchMode } from '@/types/searchMode';
 
 import { useChatInputStore } from './chatInputStore';
 import { useConversationStore } from './conversationStore';
+import { MAX_MEMORY_TEXT_LENGTH, useMemoryStore } from './memoryStore';
 import { useSettingsStore } from './settingsStore';
 import { useUIStore } from './uiStore';
 
@@ -51,6 +62,18 @@ import { create } from 'zustand';
 
 /** Sentinel key for OAuth resume state when a server has no label. */
 const NO_SERVER_LABEL = '__no_label__';
+
+/**
+ * Clamps the user-adjustable context window size. Mirrors the settingsStore
+ * setter's bounds; the upper bound matters because the server rejects
+ * requests with more than MAX_API_MESSAGES messages.
+ */
+function clampContextWindowSize(size: number | undefined): number {
+  return Math.min(
+    Math.max(size ?? VALIDATION_LIMITS.CLIENT_MAX_MESSAGES, 20),
+    VALIDATION_LIMITS.MAX_API_MESSAGES,
+  );
+}
 
 /** Returns a new Set without `item`, or the same set when `item` isn't present
  *  (so an unchanged value keeps its reference and avoids a needless re-render). */
@@ -71,6 +94,7 @@ function buildAssistantMessage(
   finalContent: string,
   toolCalls?: ToolCallRecord[],
   consentRequests?: ConsentRequest[],
+  usage?: TokenUsageMetadata,
 ): Message {
   const assistantMessage = streamParser.toMessage(finalContent);
   if (toolCalls && toolCalls.length > 0) {
@@ -78,6 +102,9 @@ function buildAssistantMessage(
   }
   if (consentRequests && consentRequests.length > 0) {
     assistantMessage.consentRequests = consentRequests;
+  }
+  if (usage) {
+    assistantMessage.usage = usage;
   }
   return assistantMessage;
 }
@@ -540,7 +567,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       // Record real token usage for the local Usage & impact stats. Keyed by
       // the payload's served model/region — never the conversation's model
       // (the server fallback chain may have switched).
-      if (usage) {
+      // Local models are excluded from the aggregate: tokenUsageStats drives
+      // the Usage & Impact emissions view, and inference on the user's own
+      // hardware has no cloud cost or MSF-attributable footprint to report.
+      // The per-message `usage` still rides the metadata block, so per-message
+      // token display is unaffected.
+      if (usage && !isLocalModel(conversation.model)) {
         useSettingsStore.getState().recordTokenUsage(usage);
       }
 
@@ -550,6 +582,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         finalContent,
         toolCalls,
         consentRequests,
+        usage,
       );
 
       // Surface files that were excluded from this turn's context so the
@@ -807,10 +840,49 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // trailing entry to satisfy non-empty-array validators downstream.
     // Native-MCP resume sends the FULL windowed transcript instead — the
     // stateless server reconstructs the tool-call round from it.
-    const messagesForAPI =
-      approvalResponses?.length && !isMcpResume
-        ? flatMessages.slice(-1)
-        : windowMessagesForAPI(flatMessages);
+    const isFoundryApprovalResume = !!approvalResponses?.length && !isMcpResume;
+    const contextWindowSize = clampContextWindowSize(
+      settings.contextWindowSize,
+    );
+    const messagesForAPI = isFoundryApprovalResume
+      ? flatMessages.slice(-1)
+      : windowMessagesForAPI(flatMessages, contextWindowSize);
+
+    // Compaction summary rides along whenever windowing actually dropped
+    // messages. It may lag the boundary by a few messages (summaries refresh
+    // post-stream) — acceptable staleness by design — but must never LEAD the
+    // transcript being sent: mid-conversation regenerates (and stale
+    // failed-send retries) pass only a prefix of the conversation, and a
+    // summary covering messages beyond that prefix would leak the very
+    // content being replaced. Never attached on the Foundry approval-resume
+    // path: the thread keeps full server-side history.
+    const conversationSummary =
+      !isFoundryApprovalResume &&
+      conversation.compaction?.summary &&
+      conversation.compaction.upToEntryIndex <= flatMessages.length &&
+      getCompactionBoundary(flatMessages, contextWindowSize) > 0
+        ? conversation.compaction.summary
+        : undefined;
+
+    // Memories require BOTH the user opt-in and the LD flag mirror —
+    // flipping the flag off stops memories from being SENT, not just shown.
+    // Same Foundry approval-resume exclusion as the summary. Select the 60
+    // most recently UPDATED (the store array is insertion-ordered and
+    // updateMemory edits in place, so a tail slice would drop freshly
+    // corrected facts while keeping stale ones — and would contradict
+    // capMemories' evict-oldest-by-updatedAt policy). The length cap is
+    // belt-and-suspenders: an over-length entry (e.g. hand-edited
+    // localStorage) must degrade, never 400 the whole chat request on the
+    // server's per-memory cap.
+    const memoryTexts =
+      !isFoundryApprovalResume &&
+      settings.memoriesEnabled &&
+      settings.memoriesFlagEnabled
+        ? [...useMemoryStore.getState().memories]
+            .sort((a, b) => a.updatedAt.localeCompare(b.updatedAt))
+            .slice(-60)
+            .map((m) => m.text.slice(0, MAX_MEMORY_TEXT_LENGTH))
+        : [];
 
     // Echo the whole pending batch back (not just the answered ones): the
     // server auto-denies unanswered calls, mirroring the Foundry behavior.
@@ -853,8 +925,51 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // Get abort signal from store
     const { abortController } = get();
 
-    const orgAgentSearchAllowed =
-      isOrganizationAgent && conversation.model.id.startsWith('org-')
+    // Local-runtime models are served BROWSER-DIRECT over loopback and never
+    // reach /api/chat — the app is deployed, so a server-side fetch to
+    // localhost would hit the container, not the user's machine.
+    //
+    // Branching here, rather than at the chatService.chat() call below, is
+    // deliberate: everything between this point and there is server-pipeline
+    // setup that a local model can't use, and the MCP block in particular
+    // performs LIVE OAuth token refreshes against servers this request will
+    // never contact. We keep the work above (windowing, compaction summary,
+    // memories, tone) because it is all pure and equally valid here.
+    if (isLocalModel(modelToSend)) {
+      // Rebuild the parts of the server's system prompt that are pure text.
+      // Mirrors ToneService.applyTone, then reuses the shared section builder
+      // so the summary/memories block stays byte-identical to the server's.
+      let localPrompt = settings.systemPrompt ?? '';
+      if (tone?.voiceRules) {
+        localPrompt = `${localPrompt}\n\n# Writing Style\n${tone.voiceRules}`;
+      }
+      const contextSections = buildConversationContextSections(
+        conversationSummary,
+        memoryTexts,
+      );
+      if (contextSections) {
+        localPrompt = `${localPrompt}\n\n${contextSections}`.trim();
+      }
+
+      return await localChatService.chat(modelToSend, messagesForAPI, {
+        port: modelToSend.localRuntime
+          ? settings.localRuntimePorts[modelToSend.localRuntime]
+          : undefined,
+        prompt: localPrompt,
+        temperature: settings.temperature,
+        signal: abortController?.signal,
+      });
+    }
+
+    // Prompt-agent personas (admin-defined, server-generated 'prompt-' ids)
+    // execute on the standard path with normal web-search behavior — they are
+    // not in the static registry, so the allowWebSearch lookup below would
+    // otherwise strip searchMode for them.
+    const isPromptAgentPersona =
+      conversation.model.id.startsWith('org-prompt-');
+    const orgAgentSearchAllowed = isPromptAgentPersona
+      ? true
+      : isOrganizationAgent && conversation.model.id.startsWith('org-')
         ? getOrganizationAgentById(conversation.model.id.slice('org-'.length))
             ?.allowWebSearch === true
         : false;
@@ -874,6 +989,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           .filter(
             (s) =>
               s.catalogKey ||
+              // Connectors are server-resolved and access-checked; the
+              // arbitrary-URL flag does not apply to them.
+              s.connectorId ||
               (settings.allowArbitraryMcpServers &&
                 settings.mcpArbitraryFlagEnabled),
           );
@@ -890,16 +1008,18 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           } else if (s.authMode === 'none') {
             effectiveToken = undefined;
           } else {
-            if (!s.authToken && s.catalogKey) return null;
+            if (!s.authToken && (s.catalogKey || s.connectorId)) return null;
             effectiveToken = s.authToken;
           }
           return {
             id: s.id,
             name: s.name,
-            // The server resolves curated URLs from the catalog; don't send one.
-            url: s.catalogKey ? undefined : s.url,
+            // The server resolves curated and connector URLs itself; sending
+            // one would be ignored anyway (spoof-proofing).
+            url: s.catalogKey || s.connectorId ? undefined : s.url,
             authToken: effectiveToken,
             catalogKey: s.catalogKey,
+            connectorId: s.connectorId,
           };
         }),
       )
@@ -911,7 +1031,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const inputState = useChatInputStore.getState();
     let extraction: ExtractionRequest | undefined;
     if (inputState.extractionMode) {
-      const selectedRecipes = settings.extractionRecipes.filter((r) =>
+      const selectedRecipes = settings.savedStructures.filter((r) =>
         inputState.extractionRecipeIds.includes(r.id),
       );
       if (selectedRecipes.length > 0) {
@@ -970,6 +1090,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       mcpPendingToolCalls,
       mcpLoopRound,
       extraction,
+      conversationSummary,
+      memories: memoryTexts.length > 0 ? memoryTexts : undefined,
     });
   },
 
@@ -1232,6 +1354,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         const fallbackName = get().generateConversationName(firstMessage);
         if (fallbackName) {
           updates.name = fallbackName;
+          updates.nameAutoGenerated = true;
         }
 
         // Defer AI title generation if transcription is pending
@@ -1243,8 +1366,14 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           // Use filename as temporary title if available
           if (pendingTranscriptions[0]?.filename) {
             updates.name = pendingTranscriptions[0].filename;
+            updates.nameAutoGenerated = true;
           }
-        } else {
+        } else if (!isLocalModel(conversation.model)) {
+          // Local conversations keep the sync fallback name set above and
+          // never call the cloud titler: shipping the transcript to a server
+          // model just to name it would defeat the point of running the chat
+          // on the user's own machine.
+          //
           // Generate AI title async (fire and forget - updates when ready)
           const conversationId = conversation.id;
           const modelId = conversation.model.id;
@@ -1255,11 +1384,18 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
           generateConversationTitle(messageGroups, modelId)
             .then((result) => {
-              if (result?.title) {
-                conversationStore.updateConversation(conversationId, {
-                  name: result.title,
-                });
-              }
+              if (!result?.title) return;
+              // Re-read before writing: the user may have renamed the
+              // conversation during the round trip, and a background titler
+              // must never clobber a name they chose.
+              const latest = useConversationStore
+                .getState()
+                .conversations.find((c) => c.id === conversationId);
+              if (!latest || !latest.nameAutoGenerated) return;
+              conversationStore.updateConversation(conversationId, {
+                name: result.title,
+                nameAutoGenerated: true,
+              });
             })
             .catch((error) => {
               console.error('[ChatStore] Failed to generate AI title:', error);
@@ -1268,6 +1404,38 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       }
 
       conversationStore.updateConversation(conversation.id, updates);
+    }
+
+    // Post-exchange best-effort maintenance, fire-and-forget like title
+    // generation above. Unlike titles, these are NOT deferred while a
+    // transcription is pending — they operate on whatever text exists now.
+    // Read the finalized conversation back from the store so both the
+    // new-message and regeneration branches see the persisted state.
+    const finalConversation = useConversationStore
+      .getState()
+      .conversations.find((c) => c.id === conversation.id);
+    // Both of these POST the transcript to server endpoints (/api/chat/
+    // summarize and /api/chat/memories). Skipped entirely for local models,
+    // for the same reason as the titler above — the conversation stays on the
+    // user's machine. The cost is that long local conversations get windowed
+    // without a summary, and no memories are extracted from them.
+    if (finalConversation && !isLocalModel(conversation.model)) {
+      const settings = useSettingsStore.getState();
+      const flat = flattenEntriesForAPI(finalConversation.messages);
+      const contextWindowSize = clampContextWindowSize(
+        settings.contextWindowSize,
+      );
+      const boundary = getCompactionBoundary(flat, contextWindowSize);
+      if (boundary > (finalConversation.compaction?.upToEntryIndex ?? 0)) {
+        void updateConversationCompaction(
+          finalConversation,
+          flat,
+          contextWindowSize,
+        );
+      }
+      if (settings.memoriesEnabled && settings.memoriesFlagEnabled) {
+        void extractMemories(finalConversation, flat);
+      }
     }
   },
 
@@ -1339,25 +1507,31 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // Standard models that happen to be invoked via Foundry's agent service
     // (e.g. GPT-5.2 with `isAgent: true`) DO retry — that flag is just a
     // deployment-mechanism marker, not "user picked a curated agent".
+    //
+    // Local-runtime models are never retried either, and for a stronger
+    // reason: the fallback is a CLOUD model, so retrying would ship a
+    // conversation the user deliberately kept on their own machine off to
+    // Azure. A local failure must surface as a local failure.
     const { isRetrying } = get();
     const isNonRetryableClientError =
       error instanceof ApiError &&
       error.isClientError() &&
       error.status !== 429;
     const modelId = conversation?.model?.id ?? '';
-    const isCuratedAgent =
+    const isNonFallbackModel =
       conversation?.model?.isOrganizationAgent ||
       conversation?.model?.isCustomAgent ||
       modelId.startsWith('org-') ||
       modelId.startsWith('foundry-') ||
-      modelId.startsWith('custom-');
+      modelId.startsWith('custom-') ||
+      isLocalModel(conversation?.model);
     const nextFallbackModel = conversation
       ? getFallbackModel([conversation.model.id])
       : null;
 
     if (
       !isNonRetryableClientError &&
-      !isCuratedAgent &&
+      !isNonFallbackModel &&
       !isRetrying &&
       conversation &&
       nextFallbackModel
@@ -1391,7 +1565,28 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // Extract user-friendly error message
     let errorMessage = 'Failed to send message';
     let errorIsRecoverable = true;
-    if (error instanceof ApiError) {
+    if (error instanceof LocalRuntimeError) {
+      // Each of these has a different fix, and the user is the only one who
+      // can apply it — collapsing them into a generic failure would strand
+      // them. Note 'not_running' deliberately names the browser-permission
+      // cause too: a denied Local Network Access prompt and a refused
+      // connection are indistinguishable from JS.
+      const runtimeName = conversation?.model?.localRuntimeLabel ?? 'runtime';
+      switch (error.reason) {
+        case 'not_running':
+          errorMessage = `Couldn't reach ${runtimeName}. Check that it's running, and that your browser hasn't blocked local network access for this site.`;
+          break;
+        case 'cors_blocked':
+          errorMessage = `${runtimeName} is running but is refusing requests from this site. Allow this origin in its CORS settings, then detect again.`;
+          break;
+        case 'model_missing':
+          errorMessage = `${runtimeName} no longer has this model loaded. Re-run detection to refresh the list.`;
+          break;
+        default:
+          errorMessage = `${runtimeName} returned an error. Check its logs for details.`;
+      }
+      console.error('[chatStore] Local runtime error:', error.reason);
+    } else if (error instanceof ApiError) {
       errorMessage = error.getUserMessage();
       errorIsRecoverable = !error.isCorruptedHistoryError();
       console.error('API Error:', {
@@ -1526,7 +1721,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       // Record real token usage for the local Usage & impact stats. Keyed by
       // the payload's served model/region — never the conversation's model
       // (the server fallback chain may have switched).
-      if (usage) {
+      // Local models are excluded from the aggregate: tokenUsageStats drives
+      // the Usage & Impact emissions view, and inference on the user's own
+      // hardware has no cloud cost or MSF-attributable footprint to report.
+      // The per-message `usage` still rides the metadata block, so per-message
+      // token display is unaffected.
+      if (usage && !isLocalModel(conversation.model)) {
         useSettingsStore.getState().recordTokenUsage(usage);
       }
 
@@ -1536,6 +1736,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         finalContent,
         toolCalls,
         consentRequests,
+        usage,
       );
 
       // Surface dropped files (see send path for context).
@@ -1859,7 +2060,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         consentRequests,
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
 
-      if (usage) {
+      // Local models are excluded from the aggregate: tokenUsageStats drives
+      // the Usage & Impact emissions view, and inference on the user's own
+      // hardware has no cloud cost or MSF-attributable footprint to report.
+      // The per-message `usage` still rides the metadata block, so per-message
+      // token display is unaffected.
+      if (usage && !isLocalModel(conversation.model)) {
         useSettingsStore.getState().recordTokenUsage(usage);
       }
 
@@ -1868,6 +2074,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         finalContent,
         toolCalls,
         consentRequests,
+        usage,
       );
 
       await get().finalizeMessage(

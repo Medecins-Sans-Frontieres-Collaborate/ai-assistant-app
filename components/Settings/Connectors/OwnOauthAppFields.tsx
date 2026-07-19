@@ -1,6 +1,6 @@
 'use client';
 
-import { FC } from 'react';
+import { FC, useId } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -29,6 +29,8 @@ export const OwnOauthAppFields: FC<OwnOauthAppFieldsProps> = ({
   onClientSecretChange,
 }) => {
   const t = useTranslations('connectors');
+  // One row per connector renders these, so ids must be instance-scoped.
+  const fieldId = useId();
   const redirectUri =
     typeof window !== 'undefined'
       ? `${window.location.origin}/mcp-oauth-callback`
@@ -43,10 +45,14 @@ export const OwnOauthAppFields: FC<OwnOauthAppFieldsProps> = ({
         {t('ownAppHint', { name: providerName })}
       </p>
       <div>
-        <label className="mb-0.5 block text-xs font-medium text-gray-900 dark:text-white">
+        <label
+          htmlFor={`${fieldId}-redirect`}
+          className="mb-0.5 block text-xs font-medium text-gray-900 dark:text-white"
+        >
           {t('redirectUriLabel')}
         </label>
         <input
+          id={`${fieldId}-redirect`}
           type="text"
           readOnly
           value={redirectUri}
@@ -55,10 +61,14 @@ export const OwnOauthAppFields: FC<OwnOauthAppFieldsProps> = ({
         />
       </div>
       <div>
-        <label className="mb-0.5 block text-xs font-medium text-gray-900 dark:text-white">
+        <label
+          htmlFor={`${fieldId}-client-id`}
+          className="mb-0.5 block text-xs font-medium text-gray-900 dark:text-white"
+        >
           {t('clientIdLabel')}
         </label>
         <input
+          id={`${fieldId}-client-id`}
           type="text"
           autoComplete="off"
           spellCheck={false}
@@ -68,10 +78,14 @@ export const OwnOauthAppFields: FC<OwnOauthAppFieldsProps> = ({
         />
       </div>
       <div>
-        <label className="mb-0.5 block text-xs font-medium text-gray-900 dark:text-white">
+        <label
+          htmlFor={`${fieldId}-client-secret`}
+          className="mb-0.5 block text-xs font-medium text-gray-900 dark:text-white"
+        >
           {t('clientSecretLabel')}
         </label>
         <input
+          id={`${fieldId}-client-secret`}
           type="password"
           autoComplete="off"
           spellCheck={false}

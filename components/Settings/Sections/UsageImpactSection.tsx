@@ -10,6 +10,8 @@ import { useSettings } from '@/client/hooks/settings/useSettings';
 import {
   ASSUMPTIONS_VERSION,
   SMARTPHONE_CHARGE_GRAMS,
+  activityDurationParts,
+  estimateActivityEquivalents,
   estimateCO2Grams,
 } from '@/lib/utils/shared/emissions';
 
@@ -36,6 +38,7 @@ const numberFmt = new Intl.NumberFormat();
 export const UsageImpactSection: FC = () => {
   const t = useTranslations();
   const tokenUsageStats = useSettingsStore((s) => s.tokenUsageStats);
+  const estimatedUsageStats = useSettingsStore((s) => s.estimatedUsageStats);
   const firstTrackedAt = useSettingsStore((s) => s.tokenUsageFirstTrackedAt);
   const resetTokenUsageStats = useSettingsStore((s) => s.resetTokenUsageStats);
   // The live model list (discovery-aware) is the best source of size class /
@@ -44,44 +47,61 @@ export const UsageImpactSection: FC = () => {
   const { models } = useSettings();
 
   const summary = useMemo(() => {
-    const entries = Object.entries(tokenUsageStats);
     let totalRequests = 0;
     let totalPrompt = 0;
     let totalCompletion = 0;
     let totalCO2 = 0;
+    // The back-calculated portion, tracked separately so the UI can label it.
+    let estimatedCO2 = 0;
+    let estimatedRequests = 0;
     const byModel = new Map<string, { requests: number; gCO2e: number }>();
     const byRegion = new Map<string, { requests: number; gCO2e: number }>();
 
-    for (const [key, bucket] of entries) {
-      const { modelId, region, effort } = parseKey(key);
-      const model =
-        models.find((m) => m.id === modelId) ??
-        OpenAIModels[modelId as OpenAIModelID];
-      const { gCO2e } = estimateCO2Grams({
-        promptTokens: bucket.promptTokens,
-        completionTokens: bucket.completionTokens,
-        sizeClass: getModelSizeClass(model ?? {}),
-        isDedicatedReasoner: model?.modelType === 'reasoning',
-        reasoningEffort: effort === 'none' ? undefined : effort,
-        region: region === 'default' ? null : region,
-      });
+    const accumulate = (
+      stats: Record<
+        string,
+        { promptTokens: number; completionTokens: number; requests: number }
+      >,
+      isEstimated: boolean,
+    ) => {
+      for (const [key, bucket] of Object.entries(stats)) {
+        const { modelId, region, effort } = parseKey(key);
+        const model =
+          models.find((m) => m.id === modelId) ??
+          OpenAIModels[modelId as OpenAIModelID];
+        const { gCO2e } = estimateCO2Grams({
+          promptTokens: bucket.promptTokens,
+          completionTokens: bucket.completionTokens,
+          sizeClass: getModelSizeClass(model ?? {}),
+          isDedicatedReasoner: model?.modelType === 'reasoning',
+          reasoningEffort: effort === 'none' ? undefined : effort,
+          region: region === 'default' ? null : region,
+        });
 
-      totalRequests += bucket.requests;
-      totalPrompt += bucket.promptTokens;
-      totalCompletion += bucket.completionTokens;
-      totalCO2 += gCO2e;
+        totalRequests += bucket.requests;
+        totalPrompt += bucket.promptTokens;
+        totalCompletion += bucket.completionTokens;
+        totalCO2 += gCO2e;
+        if (isEstimated) {
+          estimatedCO2 += gCO2e;
+          estimatedRequests += bucket.requests;
+        }
 
-      const displayName = model?.name ?? modelId;
-      const m = byModel.get(displayName) ?? { requests: 0, gCO2e: 0 };
-      m.requests += bucket.requests;
-      m.gCO2e += gCO2e;
-      byModel.set(displayName, m);
+        const displayName = model?.name ?? modelId;
+        const m = byModel.get(displayName) ?? { requests: 0, gCO2e: 0 };
+        m.requests += bucket.requests;
+        m.gCO2e += gCO2e;
+        byModel.set(displayName, m);
 
-      const r = byRegion.get(region) ?? { requests: 0, gCO2e: 0 };
-      r.requests += bucket.requests;
-      r.gCO2e += gCO2e;
-      byRegion.set(region, r);
-    }
+        const r = byRegion.get(region) ?? { requests: 0, gCO2e: 0 };
+        r.requests += bucket.requests;
+        r.gCO2e += gCO2e;
+        byRegion.set(region, r);
+      }
+    };
+
+    accumulate(tokenUsageStats, false);
+    accumulate(estimatedUsageStats, true);
 
     const topModels = [...byModel.entries()]
       .sort((a, b) => b[1].gCO2e - a[1].gCO2e)
@@ -95,11 +115,15 @@ export const UsageImpactSection: FC = () => {
       totalPrompt,
       totalCompletion,
       totalCO2,
+      estimatedCO2,
+      estimatedRequests,
       topModels,
       regions,
-      isEmpty: entries.length === 0,
+      isEmpty:
+        Object.keys(tokenUsageStats).length === 0 &&
+        Object.keys(estimatedUsageStats).length === 0,
     };
-  }, [tokenUsageStats, models]);
+  }, [tokenUsageStats, estimatedUsageStats, models]);
 
   const smartphoneCharges =
     summary.totalCO2 > 0 ? summary.totalCO2 / SMARTPHONE_CHARGE_GRAMS : 0;
@@ -134,6 +158,17 @@ export const UsageImpactSection: FC = () => {
                 count: Math.round(smartphoneCharges),
               })}
             </p>
+            {summary.estimatedCO2 > 0 && (
+              <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                {t('usageImpact.estimatedPortion', {
+                  grams:
+                    summary.estimatedCO2 < 1
+                      ? summary.estimatedCO2.toFixed(1)
+                      : numberFmt.format(Math.round(summary.estimatedCO2)),
+                  requests: numberFmt.format(summary.estimatedRequests),
+                })}
+              </p>
+            )}
           </div>
 
           {/* Totals */}
@@ -164,6 +199,39 @@ export const UsageImpactSection: FC = () => {
                 </p>
               </div>
             ))}
+          </div>
+
+          {/* Everyday activity equivalents — same-carbon durations of other
+              services (comparators are assumptions in config/emissions.json) */}
+          <div>
+            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              {t('emissions.equivalents.title')}
+            </h3>
+            <div className="space-y-1">
+              {estimateActivityEquivalents(summary.totalCO2).map(
+                (equivalent) => {
+                  const { unit, value } = activityDurationParts(
+                    equivalent.seconds,
+                  );
+                  return (
+                    <div
+                      key={equivalent.key}
+                      className="flex items-center justify-between text-sm"
+                    >
+                      <span className="text-gray-800 dark:text-gray-200">
+                        {t(`emissions.activities.${equivalent.key}`)}
+                      </span>
+                      <span className="text-gray-500 dark:text-gray-400">
+                        {t(`emissions.duration.${unit}`, { value })}
+                      </span>
+                    </div>
+                  );
+                },
+              )}
+            </div>
+            <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-400">
+              {t('emissions.equivalents.note')}
+            </p>
           </div>
 
           {/* Per-model breakdown */}

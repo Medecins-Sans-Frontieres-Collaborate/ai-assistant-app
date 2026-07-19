@@ -195,6 +195,54 @@ export interface SystemPromptOptions {
   currentDateTime?: Date;
   /** Optional user information to include in prompt context */
   userInfo?: SystemPromptUserInfo;
+  /**
+   * Best-effort summary of earlier conversation messages dropped by
+   * client-side context windowing (conversation compaction).
+   */
+  conversationSummary?: string;
+  /** Long-term user memory snippets (Memories feature) */
+  memories?: string[];
+}
+
+/**
+ * Renders the '## Earlier Conversation Summary' and '## User Memories'
+ * sections from the compaction summary and memory snippets. Returns an empty
+ * string when neither is present.
+ *
+ * Exported so callers that override the system prompt entirely (e.g.
+ * RAGEnricher's org-agent prompt override) can re-append the same block and
+ * stay in sync with buildSystemPrompt.
+ */
+export function buildConversationContextSections(
+  conversationSummary?: string,
+  memories?: string[],
+): string {
+  const sections: string[] = [];
+
+  const summary = conversationSummary?.trim();
+  if (summary) {
+    sections.push(
+      '## Earlier Conversation Summary\n' +
+        'Summary of earlier messages in this conversation that are no longer included verbatim:\n' +
+        summary,
+    );
+  }
+
+  // Collapse whitespace so each memory stays on its own bullet line —
+  // interior newlines could otherwise forge markdown sections inside the
+  // system prompt (persistent injection surface).
+  const memoryItems = (memories ?? [])
+    .map((m) => m.replace(/\s+/g, ' ').trim())
+    .filter((m) => m.length > 0);
+  if (memoryItems.length > 0) {
+    sections.push(
+      '## User Memories\n' +
+        'Long-term facts the user has chosen to share across conversations. Use when relevant; do not recite unprompted:\n' +
+        memoryItems.map((m) => `- ${m}`).join('\n'),
+    );
+  }
+
+  return sections.join('\n\n');
 }
 
 /**
@@ -252,6 +300,16 @@ function buildDynamicContext(options: SystemPromptOptions): string {
       }
       parts.push(userSection);
     }
+  }
+
+  // Compaction summary + memories sections (same block RAGEnricher re-appends
+  // when it overrides the system prompt with an org agent's prompt)
+  const conversationContext = buildConversationContextSections(
+    options.conversationSummary,
+    options.memories,
+  );
+  if (conversationContext) {
+    parts.push('\n' + conversationContext);
   }
 
   return `# Dynamic Context\n\n${parts.join('\n')}\n`;

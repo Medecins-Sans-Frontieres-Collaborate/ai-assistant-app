@@ -18,6 +18,11 @@ const createMockConversation = (
   ...overrides,
 });
 
+/** A conversation that has been sent to — enough to settle its type. */
+const sentMessages = (): Conversation['messages'] => [
+  { role: 'user', content: 'hello' } as Conversation['messages'][number],
+];
+
 const translationState = (
   overrides: Partial<TranslationWorkflowState> = {},
 ): TranslationWorkflowState => ({
@@ -55,13 +60,59 @@ describe('conversationStore workflows', () => {
   });
 
   describe('updateConversation type guard', () => {
-    it('strips attempts to change an existing conversationType', () => {
+    // The type is settled by the first message, not the first selection —
+    // WorkflowTabs lets the user switch modes while the conversation is
+    // still empty.
+    it('allows changing conversationType while the conversation is empty', () => {
+      useConversationStore.getState().addConversation(
+        createMockConversation('w1', {
+          conversationType: 'translation',
+          workflowState: translationState(),
+        }),
+      );
+
+      useConversationStore.getState().updateConversation('w1', {
+        conversationType: 'map',
+        workflowState: {
+          kind: 'map',
+          features: [],
+          sources: [],
+          updatedAt: '',
+        },
+      });
+
+      const stored = useConversationStore.getState().conversations[0];
+      expect(stored.conversationType).toBe('map');
+      expect(stored.workflowState?.kind).toBe('map');
+    });
+
+    it('allows clearing conversationType back to plain chat while empty', () => {
+      useConversationStore.getState().addConversation(
+        createMockConversation('w1', {
+          conversationType: 'translation',
+          workflowState: translationState(),
+        }),
+      );
+
+      useConversationStore.getState().updateConversation('w1', {
+        conversationType: undefined,
+        workflowState: undefined,
+      });
+
+      const stored = useConversationStore.getState().conversations[0];
+      expect(stored.conversationType).toBeUndefined();
+      expect(stored.workflowState).toBeUndefined();
+    });
+
+    it('strips attempts to change conversationType once there are messages', () => {
       const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-      useConversationStore
-        .getState()
-        .addConversation(
-          createMockConversation('w1', { conversationType: 'translation' }),
-        );
+      useConversationStore.getState().addConversation(
+        createMockConversation('w1', {
+          conversationType: 'translation',
+          workflowState: translationState({ sourceText: 'bonjour' }),
+          messages: sentMessages(),
+        }),
+      );
 
       useConversationStore.getState().updateConversation('w1', {
         conversationType: 'map',
@@ -70,8 +121,39 @@ describe('conversationStore workflows', () => {
 
       const stored = useConversationStore.getState().conversations[0];
       expect(stored.conversationType).toBe('translation');
+      // Non-type fields in the same patch still apply.
       expect(stored.name).toBe('renamed');
       expect(warn).toHaveBeenCalled();
+    });
+
+    it('strips workflowState alongside a rejected type change', () => {
+      vi.spyOn(console, 'warn').mockImplementation(() => {});
+      useConversationStore.getState().addConversation(
+        createMockConversation('w1', {
+          conversationType: 'translation',
+          workflowState: translationState({ sourceText: 'bonjour' }),
+          messages: sentMessages(),
+        }),
+      );
+
+      useConversationStore.getState().updateConversation('w1', {
+        conversationType: 'map',
+        workflowState: {
+          kind: 'map',
+          features: [],
+          sources: [],
+          updatedAt: '',
+        },
+      });
+
+      // Letting the state through while rejecting the type would leave a
+      // workflowState whose `kind` disagrees with conversationType.
+      const stored = useConversationStore.getState().conversations[0];
+      expect(stored.conversationType).toBe('translation');
+      expect(stored.workflowState?.kind).toBe('translation');
+      expect(
+        (stored.workflowState as TranslationWorkflowState).sourceText,
+      ).toBe('bonjour');
     });
 
     it('allows setting conversationType on an untyped conversation', () => {

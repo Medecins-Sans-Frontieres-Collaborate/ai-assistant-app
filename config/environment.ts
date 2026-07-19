@@ -129,6 +129,27 @@ const serverEnvSchema = z.object({
   MCP_OAUTH_GITHUB_CLIENT_SECRET: z.string().optional(),
   MCP_OAUTH_ASANA_CLIENT_ID: z.string().optional(),
   MCP_OAUTH_ASANA_CLIENT_SECRET: z.string().optional(),
+  // Tableau speaks OAuth 2.1 and may complete DCR unaided; these are a
+  // fallback for deployments where registration is blocked.
+  MCP_OAUTH_TABLEAU_CLIENT_ID: z.string().optional(),
+  MCP_OAUTH_TABLEAU_CLIENT_SECRET: z.string().optional(),
+  // Salesforce has no DCR: create an External Client App in the org with the
+  // `mcp_api` and `refresh_token` scopes and set its consumer key here, or
+  // the connector cannot authenticate at all.
+  MCP_OAUTH_SALESFORCE_CLIENT_ID: z.string().optional(),
+  MCP_OAUTH_SALESFORCE_CLIENT_SECRET: z.string().optional(),
+  // Shared by both Hootsuite servers (Perch and Nest) — one Hootsuite OAuth
+  // app covers the whole account.
+  MCP_OAUTH_HOOTSUITE_CLIENT_ID: z.string().optional(),
+  MCP_OAUTH_HOOTSUITE_CLIENT_SECRET: z.string().optional(),
+
+  // App-layer agent access control (docs/AGENT_ACCESS_CONTROL.md)
+  // Master gate for enforcement + admin API + UI. Break-glass for a
+  // rules-blob outage: set to "false" and redeploy.
+  AGENT_ACCESS_CONTROL_ENABLED: booleanString(false),
+  // Comma-separated global-admin emails (Graph `mail` values, matched
+  // lowercased + trimmed). Bootstrap mechanism — changing it needs a redeploy.
+  AGENT_ACCESS_ADMINS: z.string().optional(),
 
   // Application Configuration
   // Optional explicit override; when unset the default model resolves

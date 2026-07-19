@@ -1,4 +1,10 @@
-import { MapConnection, MapFeature } from '@/types/workflow';
+import { featureEventRange } from '@/lib/utils/shared/geo/eventTime';
+import {
+  buildSourceIndex,
+  featureSource,
+} from '@/lib/utils/shared/geo/featureSources';
+
+import { MapConnection, MapFeature, MapSourceRecord } from '@/types/workflow';
 
 import { isValidCoordinate } from './geojson';
 
@@ -21,9 +27,11 @@ export function featuresToKml(
   features: MapFeature[],
   documentName = 'Locations',
   connections: MapConnection[] = [],
+  sources: MapSourceRecord[] = [],
 ): string {
   const valid = features.filter((f) => isValidCoordinate(f.lat, f.lon));
   const byId = new Map(valid.map((f) => [f.id, f]));
+  const sourceIndex = buildSourceIndex(sources);
 
   const linePlacemarks = connections
     .flatMap((c) => {
@@ -44,12 +52,17 @@ export function featuresToKml(
 
   const placemarks = valid
     .map((f) => {
+      const range = featureEventRange(f);
+      const source = featureSource(f, sourceIndex);
       const description = [
         f.description,
         f.category ? `Category: ${f.category}` : '',
         `Granularity: ${f.granularity ?? 'city'}${f.parentName ? ` (in ${f.parentName})` : ''}`,
-        f.eventStart || f.eventEnd || f.eventOngoing
-          ? `Dates: ${f.eventStart ?? ''}${f.eventEnd ? ` to ${f.eventEnd}` : ''}${f.eventOngoing ? ' (ongoing)' : ''}`.trim()
+        range
+          ? `Dates: ${range.start}${range.end ? ` to ${range.end}` : ''}${range.ongoing ? ' (ongoing)' : ''} [${range.precision} precision]`
+          : '',
+        source
+          ? `Source: ${source.name}${source.url ? ` (${source.url})` : ''}`
           : '',
         `Prominence: ${f.prominence ?? 'primary'}`,
         `Confidence: ${f.confidence}${f.confidenceReason ? ` (${f.confidenceReason})` : ''}`,

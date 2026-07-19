@@ -1,4 +1,5 @@
 import { ServiceContainer } from '@/lib/services/ServiceContainer';
+import { createConnectorResolver } from '@/lib/services/mcp/connectorResolution';
 import { isHttpsPublicShapedUrl } from '@/lib/services/mcp/mcpUrlGuard';
 import {
   MetricsService,
@@ -340,6 +341,13 @@ export class StandardChatHandler extends BasePipelineStage {
             ? resolveMcpServers(context.mcpServers, {
                 allowCustom: env.MCP_CUSTOM_SERVERS_ENABLED,
                 isAllowedCustomUrl: isHttpsPublicShapedUrl,
+                // Admin connectors are access-controlled, so entitlement is
+                // re-checked HERE on every request rather than trusted from
+                // the client's stored settings — which live in localStorage
+                // and long outlive a revoked rule.
+                resolveConnector: await createConnectorResolver(
+                  context.session,
+                ),
               })
             : undefined;
 

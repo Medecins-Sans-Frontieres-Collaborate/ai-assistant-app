@@ -1,5 +1,7 @@
 import {
+  IconBrain,
   IconDatabase,
+  IconDeviceDesktop,
   IconDeviceMobile,
   IconHelp,
   IconLeaf,
@@ -8,17 +10,23 @@ import {
   IconRefresh,
   IconRobot,
   IconSettings,
+  IconShieldLock,
+  IconUserShield,
 } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { FC, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useAgentAccessAdmin } from '@/client/hooks/settings/useAgentAccessAdmin';
+
 import { Settings } from '@/types/settings';
 
 import { SidebarButton } from '../Sidebar/SidebarButton';
 import { NavigationItem } from './NavigationItem';
 import { SettingsSection } from './types';
+
+import { Link } from '@/lib/navigation';
 
 interface SettingsSidebarProps {
   activeSection: SettingsSection;
@@ -45,9 +53,29 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
   const t = useTranslations();
   // Fail-open: undefined (LD unconfigured/unserved) → shown. Flip to false in
   // LaunchDarkly to hide the section.
-  const { showUsageImpact, mcpConnectors } = useFlags();
+  const {
+    showUsageImpact,
+    mcpConnectors,
+    enableEncryptedBackups,
+    enableMemories,
+    localModels,
+  } = useFlags();
   const isUsageImpactEnabled = showUsageImpact !== false;
   const isConnectorsEnabled = mcpConnectors !== false;
+  // Fail-closed (`=== true`) — deliberately the opposite polarity of the
+  // flags above: encrypted backup must stay hidden until LD explicitly
+  // serves the flag as true (like mcpArbitraryServers).
+  const isBackupEnabled = enableEncryptedBackups === true;
+  // Fail-closed (`=== true`): memories stay hidden until LD explicitly
+  // serves the flag as true (same rationale as encrypted backup).
+  const isMemoriesEnabled = enableMemories === true;
+  // Fail-closed (`=== true`): local models depend on browser behavior we
+  // can't control (Chrome's Local Network Access permission, enterprise
+  // policy), so the flag is the feature's kill switch — it must never
+  // default on.
+  const isLocalModelsEnabled = localModels === true;
+  // Visibility only — the admin page's server component is the real gate.
+  const { isAdmin: isAgentAccessAdmin } = useAgentAccessAdmin();
   const [showResetConfirmation, setShowResetConfirmation] = useState(false);
 
   const confirmReset = () => {
@@ -114,6 +142,49 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
               icon={<IconLeaf size={18} />}
               onClick={setActiveSection}
             />
+          )}
+
+          {isBackupEnabled && (
+            <NavigationItem
+              section={SettingsSection.BACKUP}
+              activeSection={activeSection}
+              label={t('settings.Backup')}
+              icon={<IconShieldLock size={18} />}
+              onClick={setActiveSection}
+            />
+          )}
+
+          {isMemoriesEnabled && (
+            <NavigationItem
+              section={SettingsSection.MEMORIES}
+              activeSection={activeSection}
+              label={t('settings.Memories')}
+              icon={<IconBrain size={18} />}
+              onClick={setActiveSection}
+            />
+          )}
+
+          {isLocalModelsEnabled && (
+            <NavigationItem
+              section={SettingsSection.LOCAL_MODELS}
+              activeSection={activeSection}
+              label={t('settings.LocalModels')}
+              icon={<IconDeviceDesktop size={18} />}
+              onClick={setActiveSection}
+            />
+          )}
+
+          {isAgentAccessAdmin && (
+            <Link
+              href="/admin/agent-access"
+              className="flex items-center w-full text-left p-3 my-1 rounded-lg text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+              onClick={onClose}
+            >
+              <span className="mr-3">
+                <IconUserShield size={18} />
+              </span>
+              <span>{t('settings.Agent Access')}</span>
+            </Link>
           )}
 
           <NavigationItem

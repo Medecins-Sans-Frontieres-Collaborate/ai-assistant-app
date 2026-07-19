@@ -166,6 +166,26 @@ describe('AppInitializer - model discovery wiring (W6 / W7)', () => {
     );
   });
 
+  it('mirrors the memories LD flag fail-closed: undefined (no LD provider) → false', async () => {
+    vi.stubGlobal('fetch', vi.fn());
+    // Pre-set true to prove the mirror actively resets a stale value — this
+    // file runs without an LDProvider, so useFlags() yields all-undefined
+    // flags and the fail-closed `=== true` mirror must land on false.
+    useSettingsStore.setState({ memoriesFlagEnabled: true });
+
+    render(<AppInitializer />);
+
+    await waitFor(() =>
+      expect(useSettingsStore.getState().memoriesFlagEnabled).toBe(false),
+    );
+  });
+
+  it('setMemoriesFlagEnabled flips the runtime mirror (the true case the effect drives when LD serves the flag)', () => {
+    useSettingsStore.getState().setMemoriesFlagEnabled(true);
+
+    expect(useSettingsStore.getState().memoriesFlagEnabled).toBe(true);
+  });
+
   it('mirrors the session region into the settings store', async () => {
     mockSession.data = { user: { region: 'US' } };
     vi.stubGlobal('fetch', vi.fn());

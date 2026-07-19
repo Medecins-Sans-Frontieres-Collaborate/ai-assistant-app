@@ -774,6 +774,101 @@ describe('ModelSelect', () => {
     });
   });
 
+  describe('Prompt agents (admin-defined personas)', () => {
+    const promptAgent = {
+      id: 'prompt-abc123def456',
+      name: 'Policy Assistant',
+      description: 'Answers policy questions',
+      agentName: 'prompt-abc123def456',
+      source: 'prompt-agent',
+      type: 'prompt',
+    };
+
+    it('maps a prompt agent to an org- picker model and selecting it sets conversation.bot', async () => {
+      mockFoundryAgents.foundryAgents = [promptAgent];
+
+      render(<ModelSelect />);
+      fireEvent.click(screen.getByText('Agents').closest('button')!);
+
+      const row = await screen.findByText('Policy Assistant');
+      fireEvent.click(row.closest('button')!);
+
+      await waitFor(() => {
+        expect(mockUseConversations.updateConversation).toHaveBeenCalledWith(
+          'conv-1',
+          expect.objectContaining({
+            // botId is the only key the server uses to resolve the persona.
+            bot: 'prompt-abc123def456',
+            model: expect.objectContaining({
+              id: 'org-prompt-abc123def456',
+              name: 'Policy Assistant',
+              description: 'Answers policy questions',
+              isOrganizationAgent: true,
+            }),
+          }),
+        );
+      });
+
+      // The mapped model must NOT carry Foundry routing fields — an agentId
+      // would promote the request into the Foundry agent execution path —
+      // while the cosmetic base-model spread keeps real token limits.
+      const updates = mockUseConversations.updateConversation.mock.calls.at(
+        -1,
+      )![1] as Partial<Conversation>;
+      expect(updates.model?.agentId).toBeUndefined();
+      expect(updates.model?.agentSource).toBeUndefined();
+      expect(updates.model?.foundryEndpoint).toBeUndefined();
+      expect(updates.model?.tokenLimit).toBe(
+        OpenAIModels[OpenAIModelID.GPT_4_1].tokenLimit,
+      );
+    });
+
+    it('gates prompt agents behind exploreBots like other org-managed agents', () => {
+      mockFlags.exploreBots = false;
+      mockFoundryAgents.foundryAgents = [promptAgent];
+
+      render(<ModelSelect />);
+      fireEvent.click(screen.getByText('Agents').closest('button')!);
+
+      expect(screen.queryByText('Policy Assistant')).not.toBeInTheDocument();
+    });
+
+    it('does not leak prompt agents into the foundry- id scheme', async () => {
+      // A prompt agent plus a real regional Foundry agent: only the latter
+      // may produce a foundry- model.
+      mockFoundryAgents.regionalPath = '/subscriptions/x/region-project';
+      mockFoundryAgents.foundryAgents = [
+        promptAgent,
+        {
+          id: 'region-1',
+          name: 'Region Agent',
+          agentName: 'asst_region',
+          source: '/subscriptions/x/region-project',
+          description: 'Org-managed regional agent',
+          type: 'foundry',
+        },
+      ];
+
+      render(<ModelSelect />);
+      fireEvent.click(screen.getByText('Agents').closest('button')!);
+
+      fireEvent.click(
+        (await screen.findByText('Region Agent')).closest('button')!,
+      );
+      await waitFor(() => {
+        expect(mockUseConversations.updateConversation).toHaveBeenCalledWith(
+          'conv-1',
+          expect.objectContaining({
+            model: expect.objectContaining({
+              id: expect.stringContaining('foundry-'),
+              agentId: 'asst_region',
+            }),
+          }),
+        );
+      });
+    });
+  });
+
   describe('Custom model sources (BYOM)', () => {
     const originalFetch = global.fetch;
 

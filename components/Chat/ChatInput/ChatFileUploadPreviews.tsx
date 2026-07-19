@@ -1,8 +1,10 @@
 import {
+  IconAlertTriangle,
   IconCheck,
   IconChevronDown,
   IconCode,
   IconInfoCircle,
+  IconLink,
   IconLoader2,
   IconX,
 } from '@tabler/icons-react';
@@ -620,6 +622,32 @@ const ChatFileUploadPreview: FC<ChatFileUploadPreviewProps> = ({
                 <div className="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400">
                   <IconInfoCircle size={12} className="flex-shrink-0" />
                   <span>{t('fileUpload.textExtraction')}</span>
+                </div>
+              )}
+              {/*
+                Link provenance. A page whose fetch failed is still a real,
+                sendable attachment — its content explains the failure — so it
+                is marked amber (a warning) rather than red (a broken upload).
+              */}
+              {filePreview.sourceUrl && (
+                <div
+                  className={`flex items-center gap-1 text-xs ${
+                    filePreview.sourceError
+                      ? 'text-amber-700 dark:text-amber-400'
+                      : 'text-gray-600 dark:text-gray-400'
+                  }`}
+                  title={filePreview.sourceError ?? filePreview.sourceUrl}
+                >
+                  {filePreview.sourceError ? (
+                    <IconAlertTriangle size={12} className="flex-shrink-0" />
+                  ) : (
+                    <IconLink size={12} className="flex-shrink-0" />
+                  )}
+                  <span className="truncate">
+                    {filePreview.sourceError
+                      ? t('urlFetch.couldNotRetrieve')
+                      : t('urlFetch.linkBadge')}
+                  </span>
                 </div>
               )}
               {(isAudio || isVideo) &&

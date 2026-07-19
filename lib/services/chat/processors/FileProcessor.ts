@@ -535,7 +535,11 @@ export class FileProcessor extends BasePipelineStage {
                     prompt: prompt || 'Summarize this document',
                     modelId: context.modelId,
                     user: context.user,
-                    botId: context.botId,
+                    // Prompt agents arrive via botId but must never trigger
+                    // a knowledge-base search (mirrors RAGEnricher): a
+                    // truthy botId turns the summarization into an Azure
+                    // "On Your Data" request grounded on the org KB index.
+                    botId: context.promptAgent ? undefined : context.botId,
                     stream: false,
                     // Don't pass images - blob URLs aren't accessible to Azure OpenAI during summarization
                     // Images will be included in the final message content by StandardChatHandler

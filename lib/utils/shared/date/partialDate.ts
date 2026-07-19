@@ -1,10 +1,14 @@
 /**
- * Variable-precision dates for extracted event data.
+ * The PREDECESSOR date shape for extracted event data: strings whose SHAPE
+ * encodes precision — "2026", "2026-03", "2026-03-12".
  *
- * The model reports dates as strings whose SHAPE encodes precision —
- * "2026", "2026-03", "2026-03-12" — so precision can never contradict the
- * value. Everything downstream (display, timeline math) goes through these
- * helpers; raw strings are never interpreted elsewhere.
+ * Superseded by `EventRange` (see ./eventRange.ts), which carries an
+ * explicit precision and reaches minute resolution. Nothing writes this
+ * shape any more, but every map saved before the change still stores it, so
+ * these parsers survive for exactly one caller: `eventRangeFromLegacy`,
+ * which converts on read. Display, normalization, and comparison helpers
+ * were removed with the shape — reintroducing one would mean interpreting
+ * legacy dates somewhere other than the single conversion point.
  */
 
 export type PartialDatePrecision = 'day' | 'month' | 'year';
@@ -78,63 +82,4 @@ export function partialDateEndMs(d: PartialDate): number {
     case 'year':
       return Date.UTC(d.year + 1, 0, 1) - 1;
   }
-}
-
-export function comparePartialDates(a: PartialDate, b: PartialDate): number {
-  return partialDateStartMs(a) - partialDateStartMs(b);
-}
-
-/** Precision-aware, locale-aware, UTC-pinned (no off-by-one) formatting. */
-export function formatPartialDate(d: PartialDate, locale: string): string {
-  const options: Intl.DateTimeFormatOptions =
-    d.precision === 'day'
-      ? { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' }
-      : d.precision === 'month'
-        ? { year: 'numeric', month: 'short', timeZone: 'UTC' }
-        : { year: 'numeric', timeZone: 'UTC' };
-  try {
-    return new Intl.DateTimeFormat(locale, options).format(
-      partialDateStartMs(d),
-    );
-  } catch {
-    // Unknown locale tag: fall back to the raw ISO-ish shape.
-    return d.precision === 'year'
-      ? String(d.year)
-      : d.precision === 'month'
-        ? `${d.year}-${String(d.month).padStart(2, '0')}`
-        : `${d.year}-${String(d.month).padStart(2, '0')}-${String(d.day).padStart(2, '0')}`;
-  }
-}
-
-export interface EventFields {
-  eventStart: string;
-  eventEnd: string;
-  eventOngoing: boolean;
-}
-
-/**
- * Server-side normalization of model-reported event fields:
- * - unparseable values become '' (undated)
- * - end before start → swapped (transposition is the likely model error)
- * - an explicit end outranks the ongoing flag
- * Future dates are allowed — planned events are legitimate.
- */
-export function normalizeEventFields(fields: {
-  eventStart?: string;
-  eventEnd?: string;
-  eventOngoing?: boolean;
-}): EventFields {
-  const start = parsePartialDate(fields.eventStart);
-  const end = parsePartialDate(fields.eventEnd);
-
-  let eventStart = start ? (fields.eventStart as string).trim() : '';
-  let eventEnd = end ? (fields.eventEnd as string).trim() : '';
-
-  if (start && end && partialDateEndMs(end) < partialDateStartMs(start)) {
-    [eventStart, eventEnd] = [eventEnd, eventStart];
-  }
-
-  const eventOngoing = eventEnd ? false : fields.eventOngoing === true;
-
-  return { eventStart, eventEnd, eventOngoing };
 }

@@ -1,6 +1,10 @@
 import {
   EMISSIONS_ASSUMPTIONS,
+  activityDurationParts,
+  estimateActivityEquivalents,
   estimateCO2Grams,
+  estimateTypicalRequestCO2,
+  getEmissionsTier,
 } from '@/lib/utils/shared/emissions';
 
 import { describe, expect, it } from 'vitest';
@@ -139,5 +143,94 @@ describe('estimateCO2Grams', () => {
         region: 'US',
       }).assumptionsVersion,
     ).toBe(EMISSIONS_ASSUMPTIONS.assumptionsVersion);
+  });
+});
+
+describe('getEmissionsTier', () => {
+  it('maps size classes to tiers', () => {
+    expect(getEmissionsTier('nano', false)).toBe('low');
+    expect(getEmissionsTier('mini', false)).toBe('low');
+    expect(getEmissionsTier('standard', false)).toBe('moderate');
+    expect(getEmissionsTier('large', false)).toBe('high');
+  });
+
+  it('bumps dedicated reasoners one tier (capped at high)', () => {
+    expect(getEmissionsTier('nano', true)).toBe('moderate');
+    expect(getEmissionsTier('mini', true)).toBe('moderate');
+    expect(getEmissionsTier('standard', true)).toBe('high');
+    expect(getEmissionsTier('large', true)).toBe('high');
+  });
+});
+
+describe('estimateTypicalRequestCO2', () => {
+  it('matches estimateCO2Grams for the configured typical request', () => {
+    const { typicalRequest } = EMISSIONS_ASSUMPTIONS;
+    const direct = estimateCO2Grams({
+      promptTokens: typicalRequest.promptTokens,
+      completionTokens: typicalRequest.completionTokens,
+      sizeClass: 'standard',
+      isDedicatedReasoner: false,
+      region: null,
+    });
+    expect(estimateTypicalRequestCO2('standard', false).gCO2e).toBeCloseTo(
+      direct.gCO2e,
+      9,
+    );
+  });
+
+  it('is positive and ordered by size class', () => {
+    const nano = estimateTypicalRequestCO2('nano', false).gCO2e;
+    const large = estimateTypicalRequestCO2('large', false).gCO2e;
+    expect(nano).toBeGreaterThan(0);
+    expect(large).toBeGreaterThan(nano);
+  });
+});
+
+describe('estimateActivityEquivalents', () => {
+  it('computes seconds = 3600 × grams / activity grams-per-hour', () => {
+    const activities = EMISSIONS_ASSUMPTIONS.equivalences.activityGramsPerHour;
+    const equivalents = estimateActivityEquivalents(1);
+    for (const equivalent of equivalents) {
+      expect(equivalent.seconds).toBeCloseTo(
+        3600 / activities[equivalent.key],
+        9,
+      );
+    }
+    // One entry per configured activity.
+    expect(equivalents.map((e) => e.key).sort()).toEqual(
+      Object.keys(activities).sort(),
+    );
+  });
+
+  it('scales linearly with grams', () => {
+    const one = estimateActivityEquivalents(1);
+    const ten = estimateActivityEquivalents(10);
+    expect(ten[0].seconds).toBeCloseTo(one[0].seconds * 10, 9);
+  });
+});
+
+describe('activityDurationParts', () => {
+  it('buckets durations into display units', () => {
+    expect(activityDurationParts(0.4)).toEqual({
+      unit: 'lessThanSecond',
+      value: '',
+    });
+    expect(activityDurationParts(45)).toEqual({ unit: 'seconds', value: '45' });
+    expect(activityDurationParts(91)).toEqual({
+      unit: 'minutes',
+      value: '1.5',
+    });
+    expect(activityDurationParts(600)).toEqual({
+      unit: 'minutes',
+      value: '10',
+    });
+    expect(activityDurationParts(3600 * 1.53)).toEqual({
+      unit: 'hours',
+      value: '1.5',
+    });
+    expect(activityDurationParts(3600 * 26)).toEqual({
+      unit: 'hours',
+      value: '26',
+    });
   });
 });

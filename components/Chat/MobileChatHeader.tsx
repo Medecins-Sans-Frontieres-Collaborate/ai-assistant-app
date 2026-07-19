@@ -24,6 +24,7 @@ import {
   OpenAIIcon,
   XAIIcon,
 } from '@/components/Icons/providers';
+import { WorkflowTabs } from '@/components/Workflows/WorkflowTabs';
 
 interface MobileHeaderProps {
   onModelSelectChange: (open: boolean) => void;
@@ -106,6 +107,10 @@ export function MobileChatHeader({ onModelSelectChange }: MobileHeaderProps) {
           </button>
         )}
       </div>
+
+      {/* Same slot-sharing as ChatTopbar: mode tabs while the conversation
+          is still empty, clear button once it isn't. */}
+      {!hasMessages && <WorkflowTabs />}
 
       {/* Clear button */}
       {hasMessages && (

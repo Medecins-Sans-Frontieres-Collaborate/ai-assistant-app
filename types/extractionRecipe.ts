@@ -1,76 +1,38 @@
 /**
  * Structured data extraction types.
  *
- * Recipes are user-authored, persisted locally in `useSettingsStore.extractionRecipes`,
- * and travel inline with each chat request (mirroring how `tones` and `prompts`
- * cross the wire today — the server has no recipe store).
+ * Recipes are saved structures (see `types/structure.ts`) used in extraction
+ * mode: user-authored, persisted locally in `useSettingsStore.savedStructures`,
+ * and travelling inline with each chat request (mirroring how `tones` and
+ * `prompts` cross the wire today — the server has no structure store).
  *
  * A turn that carries an `ExtractionRequest` is rendered server-side via the
  * OpenAI structured-outputs API (`response_format: { type: 'json_schema' }`),
  * and the result is parsed into an `ExtractionResultContent` message that the
  * chat surface renders as up to three stacked tables.
  */
+import {
+  SavedStructure,
+  StructureField,
+  StructureFieldType,
+} from './structure';
 
 /**
- * Field types supported by the recipe builder. Each maps to a JSON Schema
- * fragment via `recipeToJsonSchema`. Lists are flat (no nested objects in v1)
- * to keep the field-builder UX simple.
- */
-export type FieldType =
-  | 'text'
-  | 'number'
-  | 'date'
-  | 'boolean'
-  | 'enum'
-  | 'list<text>'
-  | 'list<number>';
-
-/**
- * A single field on a recipe.
+ * @deprecated Extraction-era aliases kept so existing call sites read the
+ * same. New code should use the `Structure*` names from `types/structure.ts`.
  *
- * `name` is used verbatim as the JSON key in the structured output (so it
- * should be a stable identifier — the UI snake_case's it on entry). `label`
- * is the optional display name shown in the result-table header; when absent,
- * the renderer falls back to `name`.
+ * Note the polarity change these aliases inherit: `required` now means
+ * absent = **optional** (it previously meant absent = required). The settings
+ * v41 migration stamps the flag explicitly on every legacy field.
  */
-export interface RecipeField {
-  id: string;
-  name: string;
-  label?: string;
-  type: FieldType;
-  description?: string;
-  /** Defaults to true in the UI; explicitly false marks the field optional. */
-  required?: boolean;
-  /** Required when `type === 'enum'`; ignored otherwise. */
-  enumValues?: string[];
-}
-
-/**
- * A saved extraction recipe. `instructions` is free-text "what to look for"
- * that the model receives alongside the schema — it does the work the schema
- * cannot (disambiguating intent, scoping the source material).
- */
-export interface ExtractionRecipe {
-  id: string;
-  name: string;
-  description?: string;
-  instructions: string;
-  fields: RecipeField[];
-  createdAt: string;
-  updatedAt: string;
-  /** Optional hint, reserved for future ranking in the recipe picker. */
-  sourceHint?: 'pdf' | 'transcript' | 'spreadsheet' | 'web' | 'any';
-
-  // Team-template metadata, mirroring Prompt/CustomAgent shapes.
-  templateId?: string;
-  templateName?: string;
-  importedAt?: string;
-}
+export type FieldType = StructureFieldType;
+export type RecipeField = StructureField;
+export type ExtractionRecipe = SavedStructure;
 
 /**
  * Extraction payload attached to a chat request body. Carried inline because
- * the server has no recipe store — the client persists recipes in
- * localStorage via `useSettingsStore.extractionRecipes` and sends the
+ * the server has no structure store — the client persists them in
+ * localStorage via `useSettingsStore.savedStructures` and sends the
  * selected subset on each turn (just like tones/prompts).
  *
  * Up to three recipes per request — enforced by the UI (the "+ add recipe"

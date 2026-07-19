@@ -849,7 +849,8 @@
     "processingAudio": "오디오 처리 중...",
     "ttsError": "오디오 생성 오류가 발생했습니다. 다시 시도해 주세요.",
     "unsupportedMessageType": "메시지 렌더링 오류: 지원되지 않는 메시지 유형",
-    "addLanguageOption": "\"{name}\" 추가…"
+    "addLanguageOption": "\"{name}\" 추가…",
+    "sources": "출처"
   },
   "sidebar": {
     "collapseSidebar": "사이드바 축소",
@@ -1178,7 +1179,23 @@
     "customInstructionsLabel": "맞춤 지침*",
     "defaultTemperatureLabel": "기본 Temperature*",
     "Usage & Impact": "사용 현황 및 영향",
-    "Connectors": "커넥터"
+    "Connectors": "커넥터",
+    "Backup": "백업",
+    "Memories": "기억",
+    "Agent Access": "에이전트 접근",
+    "LocalModels": "로컬 모델",
+    "suggestRevisions": {
+      "title": "문서 개정",
+      "toggle": "개정 적용 대신 제안하기",
+      "description": "문서 워크플로우에 개정을 요청하면, 변경사항이 개별 제안으로 도착하여 품질 평가처럼 수락하거나 거부할 수 있습니다.",
+      "exceptionsTitle": "다음과 같은 경우에는 직접 적용:",
+      "exceptionSelection": "사용자가 강조 표시한 부분을 개정할 때",
+      "exceptionLargeRewrite": "대부분의 문서가 재작성될 때",
+      "exceptionReorder": "섹션을 편집이 아니라 이동할 때",
+      "thresholdLabel": "이 이상이면 재작성으로 간주",
+      "thresholdUnit": "문서 변경 비율(%)",
+      "exceptionSelectionAlways": "강조된 선택 영역을 수정하면 항상 직접 적용됩니다. 모델은 수정된 발췌 부분만 반환하며, 전체 문서에 대한 제안 사항으로 분리할 수 없습니다."
+    }
   },
   "notFound": {
     "lostDog": "잃어버린 개"
@@ -2111,7 +2128,9 @@
     "pin": "상단에 고정",
     "unpin": "고정 해제",
     "moveToMore": "더 보기로 이동",
-    "moveOutOfMore": "메뉴에 표시"
+    "moveOutOfMore": "메뉴에 표시",
+    "showSources": "다른 소스 보기",
+    "hideSources": "다른 소스 숨기기"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI의 응답 방식을 맞춤화하려면 개인 지침을 추가하세요. 이는 유용하고 정확하며 안전한 응답을 보장하는 기본 행동 지침과 함께 적용됩니다.",
   "Tip: Type \"/\" to select from saved prompt templates_": "팁: \"/\"를 입력하면 저장된 프롬프트 템플릿을 선택할 수 있습니다.",
@@ -2424,7 +2443,8 @@
     "regionDefault": "기본값",
     "modelRow": "{requests}회 요청 · {grams} g",
     "disclosure": "추정치는 가정에 기반합니다(v{version}) · {since}부터 · 표준 채팅만 포함됨(에이전트 및 지식 기반 답변 제외).",
-    "reset": "사용 통계 초기화"
+    "reset": "사용 통계 초기화",
+    "estimatedPortion": "추적 이전 대화에서 저장된 메시지 텍스트로 역산(실제 토큰 수 미측정)하여 산출된 약 {grams}g CO₂e({requests}개 요청) 포함."
   },
   "extraction": {
     "toggleLabel": "구조화 데이터 추출",
@@ -2631,7 +2651,25 @@
       "pendingCount": "{count}건 대기 중",
       "closeReview": "품질 검토 닫기",
       "showReview": "검토 보기",
-      "showReviewPending": "검토 보기 ({count}건 대기 중)"
+      "showReviewPending": "검토 보기 ({count}건 대기 중)",
+      "undoEdit": "실행 취소",
+      "clearResolved": "해결됨 삭제",
+      "clearResolvedHint": "수락됨, 거절됨, 적용 불가한 편집을 목록에서 제거합니다",
+      "autoClearResolved": "해결된 편집 자동 삭제",
+      "customCriteria": "맞춤 기준",
+      "closeCriteria": "맞춤 기준 닫기",
+      "newCriterion": "새 기준",
+      "newCriterionName": "무제 기준",
+      "criterionName": "기준 이름",
+      "criterionRubric": "평가기준",
+      "criterionRubricPlaceholder": "이 기준을 만족하기 위해 번역에서 충족해야 할 내용을 설명하세요. 예: \"모든 임상 복용량 지시를 명령문으로만 표현, 부정사 사용 금지…\"",
+      "criterionRubricHint": "이 평가기준은 내장된 MQM 기준과 함께 AI에게 그대로 제공되어 번역 평가에 사용됩니다.",
+      "criteriaEmpty": "내장된 MQM 기준 외에도 번역 평가를 위해 하우스 스타일, 용어 선호나 지역 관습 등 맞춤 기준을 만드세요. 이 장치에 저장되며 재사용 가능합니다.",
+      "deleteCriterion": "기준 삭제",
+      "manageCriteria": "맞춤 기준",
+      "addCriteria": "기준 추가",
+      "noUsableCriteria": "최소 한 가지 내장 기준을 선택하거나 맞춤 기준에 평가기준을 입력하세요.",
+      "criterionRubricTooLong": "이 평가지표는 제한을 {over}자 초과합니다. 모든 평가와 함께 전송되므로, 이 기준을 사용하려면 길이를 줄여야 합니다."
     },
     "document": {
       "emptyTitle": "원하는 문서를 설명하세요",
@@ -2751,7 +2789,32 @@
       "clearSelection": "선택 해제 (전체 문서로 작업)",
       "reviseSelectionPlaceholder": "선택된 부분의 변경 내용을 설명하세요…",
       "revisedSelectionSummary": "작업 공간에서 선택된 부분을 수정했습니다.",
-      "assessedSelection": "선택 부분"
+      "assessedSelection": "선택 부분",
+      "undoEdit": "실행 취소",
+      "clearResolved": "해결됨 삭제",
+      "clearResolvedHint": "수락됨, 거절됨, 적용 불가한 편집을 목록에서 제거합니다",
+      "autoClearResolved": "해결된 편집 자동 삭제",
+      "import": "가져오기",
+      "importReplaceTitle": "문서를 교체하시겠습니까?",
+      "importReplaceBody": "{name}을(를) 가져오면 현재 문서가 교체됩니다. 참조, 사양 및 톤은 유지됩니다.",
+      "importReplaceConfirm": "교체",
+      "editorMode": "편집기 모드",
+      "editorModeRich": "리치 텍스트",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "편집기 모드를 전환하기 전에 제안된 수정을 먼저 처리하세요.",
+      "suggestChanges": "변경사항 제안",
+      "suggestChangesHint": "문서를 바로 재작성하지 않고 개별 제안으로 개정을 검토하세요.",
+      "suggestChangesSelectionNote": "선택 영역에 대한 개정은 바로 적용됩니다 — 이미 선택한 범위입니다.",
+      "suggestedSummary": "검토를 위해 {count}개 변경사항이 제안되었습니다.",
+      "revisionSuggestionSummary": "개정 요청 결과 {count}개 제안 변경사항이 생성되었습니다.",
+      "revisionCriterionLabel": "요청된 개정",
+      "fallbackSelection": "바로 적용됨 — 선택 영역에 대한 개정은 제안되지 않습니다.",
+      "fallbackLargeRewrite": "바로 적용됨 — 문서의 너무 많은 부분이 변경되어 개별 제안으로 나눌 수 없습니다.",
+      "fallbackReorder": "바로 적용됨 — 섹션이 이동되어 개별 검토 가능한 제안으로 분할되지 않습니다.",
+      "fallbackUnanchorable": "바로 적용됨 — 변경사항을 특정 구절에 연결할 수 없습니다.",
+      "fallbackNoChanges": "변경사항이 필요하지 않았습니다.",
+      "criterionRubricTooLong": "이 평가지표는 제한을 {over}자 초과합니다. 모든 평가와 함께 전송되므로, 이 기준을 사용하려면 길이를 줄여야 합니다."
     },
     "data": {
       "emptyTitle": "분석할 데이터 가져오기",
@@ -2920,7 +2983,39 @@
       "autoCheckHint": "사진이나 문서에서 데이터를 추출한 후, 새 행에 대해 자동으로 품질 검사를 실행합니다.",
       "checkingNewRows": "새로 추가된 행의 품질 문제를 확인 중…",
       "ingestCheckFailed": "자동 품질 검사 실패({message}) — 품질 평가를 통해 수동으로 검사할 수 있습니다.",
-      "assessedIngest": "새로 추가된 행"
+      "assessedIngest": "새로 추가된 행",
+      "transpose": "전치하기",
+      "transposeAxisColumn": "이름",
+      "transposeSuggestion": "이 표는 행이 속성이고 열이 항목인 전치된 표로 보입니다. 각 항목을 행으로, 각 속성을 타입이 지정된 열로 뒤집으시겠습니까?",
+      "transposedTable": "전치된 행과 열",
+      "columns": "열",
+      "columnsHidden": "열 ({count}개 숨김)",
+      "showAllColumns": "모두 보기",
+      "chartScatter": "산점도 (x 대 y)",
+      "chartPivot": "피벗 테이블",
+      "xColumn": "X 열",
+      "yColumn": "Y 열",
+      "splitByColumn": "열 기준 분할",
+      "splitNone": "분할 없음",
+      "pivotValueColumns": "값 열",
+      "aggMin": "최솟값",
+      "aggMax": "최댓값",
+      "aggMedian": "중앙값",
+      "chartSeriesTruncated": "상위 {max}개 시리즈만 표시됩니다",
+      "chartPointsTruncated": "샘플링된 {max} 지점 표시",
+      "chartScatterAria": "{x} 대 {y} 산점도",
+      "pivotTableAria": "{column} 기준으로 그룹화된 피벗 테이블",
+      "schemaFormula": "수식",
+      "schemaFormulaPlaceholder": "예: [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "계산 필드: 다른 필드는 [이름] 형식으로 참조하세요. + - * / %, 괄호, round, abs, min, max 지원. 값은 자동으로 업데이트되며 직접 편집할 수 없습니다.",
+      "schemaFormulaSyntaxError": "잘못된 수식",
+      "schemaFormulaUnknownRef": "알 수 없는 필드: {ref}",
+      "schemaFormulaArityError": "{fn} 함수에 인수가 잘못되었습니다",
+      "schemaFormulaCycleError": "수식 간 순환 참조",
+      "derivedColumnTitle": "계산됨: {formula}",
+      "derivedFrom": "{formula} 기준 계산",
+      "takePhoto": "사진 촬영",
+      "takePhotoHint": "카메라로 양식 또는 표를 촬영하면, 내용이 구조화된 데이터로 변환되어 사진과 함께 확인할 수 있습니다."
     },
     "map": {
       "emptyTitle": "데이터를 지도에 표시하기",
@@ -2994,7 +3089,31 @@
         "jumpTo": "{label}(으)로 이동",
         "slider": "타임라인 위치",
         "showUndated": "날짜 없는 위치 표시",
-        "activeCount": "{count}개 활성화됨"
+        "activeCount": "{count}개 활성화됨",
+        "jump": {
+          "start": "시작",
+          "yearsLater": "{count, plural, one {1년 후} other {#년 후}}",
+          "monthsLater": "{count, plural, one {1개월 후} other {#개월 후}}",
+          "daysLater": "{count, plural, one {1일 후} other {#일 후}}",
+          "appears": "{count, plural, one {1개 발생} other {#개 발생}}",
+          "ends": "{count, plural, one {1개 종료} other {#개 종료}}",
+          "progress": "날짜 {index} / {total}"
+        },
+        "precision": {
+          "minute": "분 단위",
+          "hour": "시간 단위",
+          "day": "일 단위",
+          "month": "월 단위 날짜",
+          "year": "연 단위 날짜",
+          "mixed": "(혼합)"
+        },
+        "pacing": {
+          "toggle": "재생 속도",
+          "cardDuration": "각 위치 표시 시간",
+          "seconds": "{seconds}초",
+          "maxCards": "날짜별 표시 위치 수",
+          "hint": "더 많은 위치가 있는 날짜는 자동으로 더 오래 표시됩니다."
+        }
       },
       "granularity": {
         "site": "현장",
@@ -3011,8 +3130,13 @@
         "color": "색상: 좌표 신뢰도 (파랑 높음, 노랑 중간, 빨강 낮음)",
         "size": "점 크기: 이 장소가 자료에서 얼마나 중심적인가",
         "area": "점선 원: 구역, 지역 또는 국가의 대략적인 범위",
-        "container": "옅은 외곽선: 개별적으로 내용이 매핑되는 영역"
-      }
+        "container": "옅은 외곽선: 개별적으로 내용이 매핑되는 영역",
+        "precisionHalo": "점선 테두리(타임랩스 중): 이벤트가 월 또는 년 단위로만 기록되어 정확한 시점이 확실하지 않음"
+      },
+      "sourceLabel": "원본: {name}",
+      "fetchAndMap": "가져오기 및 매핑",
+      "fetchingPage": "페이지 가져오는 중…",
+      "railUrlRequest": "다음에서 위치 정보 가져오기 및 매핑: {title} ({url})"
     },
     "shell": {
       "showConversation": "대화 보기",
@@ -3030,6 +3154,16 @@
       "untitled": "새 대화",
       "toggleMenu": "메뉴 토글",
       "model": "이 워크플로의 모델"
+    },
+    "tabs": {
+      "label": "대화 모드",
+      "chat": "채팅",
+      "chatDescription": "어시스턴트와의 일반적인 대화"
+    },
+    "discard": {
+      "title": "이 초안을 삭제하시겠습니까?",
+      "body": "{target}(으)로 전환하면 {current}에서 시작한 작업이 삭제됩니다.",
+      "confirm": "삭제"
     }
   },
   "connectors": {
@@ -3044,6 +3178,22 @@
       "asana": {
         "name": "Asana",
         "description": "작업 및 프로젝트 찾기, 생성, 업데이트."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "게시된 데이터 소스, 워크북, Pulse 지표를 조회합니다."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Salesforce 오브젝트의 레코드를 조회하고 업데이트합니다."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "소셜 미디어 게시물을 작성, 예약, 게시합니다."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "소셜 인박스 대화를 검토하고 답변합니다."
       }
     },
     "connect": "연결",
@@ -3104,7 +3254,19 @@
       "missingState": "승인할 항목이 없습니다",
       "close": "이 창을 닫고 앱으로 돌아가셔도 됩니다.",
       "closeButton": "창 닫기"
-    }
+    },
+    "oauthNoAppConfigured": "이 배포에서는 {name} 로그인 설정이 완료되지 않았습니다. 직접 OAuth 앱을 등록해 연결하세요.",
+    "adminConnectorsTitle": "조직에서 제공",
+    "adminConnectorsDescription": "관리자가 설정한 커넥터입니다. 접근 권한에 따라 보이는 항목이 달라집니다.",
+    "managedByOrg": "조직에서 관리",
+    "connectorOauthNotConfigured": "이 커넥터의 로그인 설정이 완료되지 않았습니다. 관리자에게 문의하세요.",
+    "yourConnectorsTitle": "내 커넥터",
+    "addTitle": "커넥터 추가",
+    "addDescription": "연결할 도구를 선택하세요. 선택 후 접근 권한을 설정할 수 있습니다.",
+    "add": "추가",
+    "filterLabel": "커넥터 필터",
+    "filterPlaceholder": "커넥터 검색",
+    "noMatches": "“{query}”와(과) 일치하는 커넥터가 없습니다."
   },
   "modelSources": {
     "connectButtonShort": "모델 소스 연결",
@@ -3155,5 +3317,399 @@
     "deselectAll": "모두 선택 취소",
     "autoAddLabel": "새 모델 자동 추가",
     "autoAddDescription": "이 계정에 나중에 추가된 모델 배포는 자동으로 표시됩니다. 선택하지 않은 모델은 제외된 상태로 유지됩니다."
+  },
+  "emissions": {
+    "tier": {
+      "low": "영향 낮음",
+      "moderate": "영향 보통",
+      "high": "영향 높음"
+    },
+    "tierTooltip": "모델 크기를 기준으로 추정한 요청별 상대 에너지 영향입니다. v{version} 기준 공개된 평균 및 가정에 기반한 추정치이며, 실제 측정이 아닙니다.",
+    "typicalRequest": "일반 요청당 약 {grams} g CO₂e",
+    "typicalRequestTooltip": "일반 요청(약 1,000 프롬프트 및 500 컴플리션 토큰)을 기준으로 공개 평균 및 가정 v{version}을 이용해 산출한 대략적 요청별 추정치입니다. 실제 영향은 대화 길이, 설정, 호스팅 지역에 따라 달라집니다.",
+    "activities": {
+      "netflixHd": "Netflix HD 스트리밍",
+      "zoomCall": "Zoom 통화(카메라 켬)",
+      "webBrowsing": "웹 브라우징",
+      "spotifyAudio": "Spotify 오디오"
+    },
+    "equivalents": {
+      "title": "≈ 동일 탄소량 활동",
+      "note": "각 서비스의 시간당 공개 탄소배출량을 기준으로 한 동등 탄소 비교입니다. 여기의 모든 수치와 마찬가지로 대략적인 추정치입니다."
+    },
+    "duration": {
+      "lessThanSecond": "<1초",
+      "seconds": "{value}초",
+      "minutes": "{value}분",
+      "hours": "{value}시간"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "이 대화의 추정 탄소발자국: CO₂e {grams}그램. 세부내역 보기.",
+      "ariaLabelToday": "오늘 이 대화의 추정 탄소발자국: CO₂e {grams}그램. 세부내역 보기.",
+      "title": "이 대화(추정치)",
+      "today": "오늘",
+      "total": "전체 기간",
+      "measured": "보고된 토큰 수 기준",
+      "estimated": "이전 메시지에서 역산됨",
+      "lastRequest": "마지막 요청",
+      "disclaimer": "보고된 또는 추정된 토큰 수를 기준으로 요청별로 산출된 추정치이며, 공개된 평균값과 가정(v{version})이 사용되었습니다. 이전 메시지는 저장된 텍스트와 대화의 현재 모델을 바탕으로 역산되었습니다. 실제 측정치가 아닙니다."
+    }
+  },
+  "table": {
+    "copyTable": "표 복사",
+    "downloadTable": "표 다운로드",
+    "copyMarkdown": "마크다운",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "CSV로 내보냈습니다",
+    "copyFailed": "표 복사에 실패했습니다"
+  },
+  "backup": {
+    "intro": {
+      "title": "대화 백업 — 안전하게",
+      "body": "대화 내용은 업로드 전에 이 기기에서 암호화됩니다. 저희는 대화를 볼 수 없습니다.",
+      "keyWarning": "복구 키는 이 기기에서 생성됩니다. 저희가 볼 수 없으며 복구해드릴 수 없습니다 — 키를 잃으면 백업도 잃게 됩니다.",
+      "create": "키 생성 및 백업 시작",
+      "decline": "지금은 안 함 — 대화 내용을 이 기기에만 저장"
+    },
+    "ceremony": {
+      "titleCreate": "복구 키 저장",
+      "titleRotate": "새 복구 키 저장",
+      "titleView": "복구 키",
+      "description": "이 키만이 다른 기기에서 백업을 복구할 수 있는 방법입니다. 안전한 곳에 보관하세요 — 저희가 복구해드릴 수 없습니다.",
+      "copy": "복사",
+      "copied": "복사됨!",
+      "download": ".txt 다운로드",
+      "showQr": "QR 코드 보기",
+      "hideQr": "QR 코드 숨기기",
+      "savedCheckbox": "복구 키를 안전한 곳에 저장했습니다",
+      "saveFirstHint": "계속하기 전에 키를 복사하거나 다운로드하세요.",
+      "continue": "계속",
+      "done": "완료",
+      "cancel": "취소",
+      "cancelConfirmTitle": "백업 설정을 취소하시겠습니까?",
+      "cancelConfirmBody": "대화가 백업되지 않습니다. 설정에서 암호화 백업을 언제든 켤 수 있습니다.",
+      "cancelConfirmRotateBody": "복구 키가 이미 변경되었습니다. 설정에서 언제든지 확인할 수 있습니다.",
+      "cancelConfirmConfirm": "네, 취소합니다",
+      "cancelConfirmDismiss": "돌아가기",
+      "loadError": "이 기기에서 복구 키를 불러올 수 없습니다."
+    },
+    "file": {
+      "heading": "대화 백업 복구 키",
+      "warning": "이 키를 안전하게 보관하세요. 가진 사람이 백업을 열람할 수 있으며, 키가 없으면 복구할 수 없습니다."
+    },
+    "progress": {
+      "titleCreate": "백업 설정 중",
+      "titleRotate": "복구 키 변경 중",
+      "encrypting": "{count, plural, one {#개의 대화를 암호화하고 백업 중…} other {#개의 대화를 암호화하고 백업 중…}}",
+      "success": "{count, plural, one {백업 완료. #개의 대화가 보호됩니다.} other {백업 완료. #개의 대화가 보호됩니다.}}",
+      "error": "백업에 실패했습니다. 대화는 여전히 이 기기에 있습니다.",
+      "retry": "다시 시도",
+      "close": "닫기",
+      "done": "완료"
+    },
+    "input": {
+      "label": "복구 키",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "키에는 O, I, L 문자가 포함되지 않습니다.",
+      "checksumError": "해당 키가 올바르지 않습니다. 오타를 확인해 주세요.",
+      "formatError": "복구 키 형식이 올바르지 않습니다.",
+      "incomplete": "계속 입력해 주세요. 복구 키는 56자입니다.",
+      "valid": "키가 유효합니다."
+    },
+    "restore": {
+      "title": "채팅 복원하기",
+      "successTitle": "백업이 복원되었습니다",
+      "promptBody": "귀하의 계정에 대해 암호화된 백업을 찾았습니다. 이 기기에서 복원하려면 복구 키를 입력해 주세요.",
+      "submit": "백업 복원",
+      "skip": "건너뛰기 — 이 기기에서 새로 시작",
+      "restoring": "채팅을 복호화하고 복원 중입니다…",
+      "successBody": "{count, plural, one {#개의 대화가 복원되었습니다.} other {#개의 대화가 복원되었습니다.}}",
+      "wrongKey": "키는 유효하지만 이 백업을 해제할 수 없습니다. 키를 변경한 경우 최신 키를 사용하세요.",
+      "corrupt": "이 백업을 읽을 수 없습니다. 손상되었을 수 있습니다. 이 기기에서 새로 시작하거나 나중에 다시 시도하세요.",
+      "networkError": "백업 서비스에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요.",
+      "tryAgain": "다른 키로 시도",
+      "close": "완료"
+    },
+    "enterKey": {
+      "title": "새 복구 키 입력",
+      "body": "다른 기기에서 복구 키가 변경되었습니다. 백업을 계속하려면 새 키를 입력하세요.",
+      "submit": "이 키 사용"
+    },
+    "banner": {
+      "keyMismatchTitle": "백업이 일시중지되었습니다 — 다른 기기에서 복구 키가 변경되었습니다.",
+      "enterNewKey": "새 키 입력",
+      "resetBackup": "백업 초기화",
+      "resetConfirmTitle": "이 기기의 키로 백업을 초기화하시겠습니까?",
+      "resetConfirmBody": "기존 백업이 이 기기의 채팅으로 대체되고, 이 기기의 키로 암호화됩니다. 다른 기기에서는 이 기기의 복구 키가 필요합니다.",
+      "resetConfirmAction": "백업 초기화",
+      "remoteMissingTitle": "서버에 백업이 더 이상 존재하지 않습니다. 백업이 일시중지되었습니다.",
+      "backUpAgain": "다시 백업하기",
+      "dismiss": "닫기"
+    },
+    "rotate": {
+      "confirmTitle": "복구 키를 변경하시겠습니까?",
+      "confirmBody": "새 키로 백업이 다시 암호화되며, 기존 키는 더 이상 사용할 수 없습니다. 새 키를 저장하고 다른 기기에도 입력해야 합니다.",
+      "confirmAction": "키 변경"
+    },
+    "toast": {
+      "enrollLater": "언제든지 설정에서 암호화 백업을 활성화할 수 있습니다.",
+      "keyUpdated": "복구 키가 업데이트되었습니다. 백업이 재개되었습니다.",
+      "resetDone": "이 기기의 키로 백업이 초기화되었습니다.",
+      "backupRestarted": "백업이 다시 생성되었습니다.",
+      "opFailed": "문제가 발생했습니다. 다시 시도해 주세요."
+    },
+    "settings": {
+      "statusOn": "백업이 켜져 있습니다",
+      "statusOff": "백업이 꺼져 있습니다",
+      "offDescription": "채팅은 이 브라우저에만 저장됩니다. 암호화 백업을 활성화하면 안전하게 보관하고 다른 기기에서 복원할 수 있습니다. 채팅은 기기에서 암호화되므로 저희가 읽을 수 없습니다.",
+      "turnOn": "백업 켜기",
+      "restoreTitle": "귀하의 계정에 이미 백업이 있습니다",
+      "restoreDescription": "이 기기에서 복원하려면 복구 키를 입력하세요.",
+      "restore": "백업 복원",
+      "lastBackup": "마지막 백업: {time}",
+      "lastBackupNever": "아직 백업이 완료되지 않았습니다",
+      "keyFingerprint": "키 ····-{tail}",
+      "syncState": {
+        "idle": "동기화 대기 중",
+        "syncing": "백업 중…",
+        "ok": "최신 상태",
+        "keyOutOfDate": "일시중지됨 — 복구 키가 다른 기기에서 변경되었습니다",
+        "remoteMissing": "일시 중지됨 — 백업이 서버에서 제거되었습니다",
+        "error": "마지막 백업 시도가 실패했습니다"
+      },
+      "backUpNow": "지금 백업",
+      "backUpNowSuccess": "백업 완료",
+      "backUpNowFailure": "백업 실패 — 이 기기의 대화 내용은 변경되지 않았습니다",
+      "viewKey": "복구 키 보기",
+      "changeKey": "복구 키 변경",
+      "dangerTitle": "위험 구역",
+      "turnOffDelete": "백업 끄기 및 삭제",
+      "turnOffConfirmTitle": "백업을 끄시겠습니까?",
+      "turnOffConfirmMessage": "이 작업은 모든 기기의 서버에서 백업을 삭제합니다. 이 기기의 대화 내용은 유지됩니다. 나중에 새 복구 키로 백업을 다시 켤 수 있습니다.",
+      "turnOffConfirmAction": "백업 삭제",
+      "turnOffSuccess": "백업이 꺼지고 삭제되었습니다",
+      "turnOffFailure": "백업을 삭제할 수 없습니다. 다시 시도해 주세요."
+    }
+  },
+  "memories": {
+    "title": "메모리",
+    "description": "어시스턴트가 귀하의 역할, 선호도, 진행 중인 프로젝트 등과 같은 중요한 사실을 기억하고 대화 전반에 활용할 수 있도록 허용합니다.",
+    "enableToggle": "메모리 활성화",
+    "privacyNote": "사실은 이 브라우저에만 저장되며, 대답을 맞춤화하기 위해 대화에 포함됩니다.",
+    "empty": "아직 메모리가 없습니다. 기억할 만한 사실은 대화에서 자동으로 저장됩니다.",
+    "savedOn": "{date}에 저장됨",
+    "deleteMemory": "메모리 삭제",
+    "clearAll": "모든 메모리 지우기",
+    "clearAllConfirmQuestion": "모든 메모리를 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.",
+    "clearAllConfirm": "모두 삭제",
+    "cancel": "취소"
+  },
+  "contextWindow": {
+    "label": "컨텍스트 창",
+    "value": "{count}개의 메시지",
+    "fewer": "메시지 줄이기",
+    "more": "메시지 늘리기",
+    "description": "이 한도를 초과하는 이전 메시지는 요약되어 컨텍스트로 전송됩니다."
+  },
+  "agentAccess": {
+    "title": "에이전트 액세스",
+    "description": "공유 Foundry 에이전트를 사용할 수 있는 사용자를 관리합니다. 이 규칙들은 사용자의 Azure 접근 권한 내에서만 추가적인 제한을 설정하며, Azure에서 거부된 접근은 허용할 수 없습니다.",
+    "backToChat": "채팅으로 돌아가기",
+    "loading": "에이전트와 규칙 불러오는 중…",
+    "loadError": "에이전트 액세스 데이터를 불러올 수 없습니다.",
+    "rulesUnavailableWarning": "스토리지에서 액세스 규칙을 불러올 수 없습니다. 현재 에이전트 호출이 차단되었으며 규칙을 수정할 수 없습니다.",
+    "retry": "다시 시도",
+    "rulesTab": "에이전트 규칙",
+    "localAdminsTab": "로컬 관리자",
+    "noAgents": "관리할 에이전트가 없습니다.",
+    "sourceLabel": "소스",
+    "notDiscoverable": "검색 불가",
+    "notDiscoverableHint": "이 에이전트에 대한 규칙은 존재하지만, 본인의 검색 목록에 없습니다. 이름이 변경되었거나, Azure 접근이 제한되어 있거나, 해당 규칙에 본인이 포함되지 않았을 수 있습니다.",
+    "accessEveryone": "모두",
+    "accessRestricted": "제한됨",
+    "edit": "수정",
+    "updatedByLine": "마지막 수정: {user} ({date})",
+    "accessTypeLabel": "이 에이전트를 사용할 수 있는 사람",
+    "everyoneDescription": "Azure 접근 권한을 통해 이미 이 에이전트에 접근할 수 있는 모든 사용자.",
+    "restrictedDescription": "아래에 나열된 사용자 및 도메인만.",
+    "allowDomainsLabel": "허용된 도메인",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "허용된 사용자",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Enter 키를 눌러 추가",
+    "removeChip": "제거",
+    "groupsLabel": "허용된 그룹",
+    "groupsPendingConsent": "그룹 기반 접근은 테넌트 관리자 승인 대기 중이며, 아직 수정할 수 없습니다.",
+    "restrictedEmptyWarning": "사용자 또는 도메인이 등록되지 않았습니다 — 누구도 이 에이전트를 사용할 수 없습니다.",
+    "save": "저장",
+    "saving": "저장 중…",
+    "cancel": "취소",
+    "saveSuccess": "접근 규칙이 저장되었습니다.",
+    "deleteSuccess": "접근 규칙이 삭제되었습니다 — 모두가 이 에이전트를 다시 사용할 수 있습니다.",
+    "saveError": "저장할 수 없습니다. 다시 시도해 주세요.",
+    "conflictError": "편집 중 다른 사용자가 변경했습니다. 최신 버전으로 다시 불러온 후 변경해 주세요.",
+    "reload": "다시 불러오기",
+    "localAdminsDescription": "특정 에이전트의 규칙 관리를 위임할 수 있습니다. 로컬 관리자는 지정된 에이전트에 대한 규칙만 수정할 수 있습니다.",
+    "noLocalAdmins": "등록된 로컬 관리자가 없습니다.",
+    "addLocalAdmin": "로컬 관리자 추가",
+    "emailLabel": "이메일",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "로컬 관리자 제거",
+    "delegatedAgentsLabel": "위임된 에이전트",
+    "noDelegatedAgents": "위임 가능한 에이전트가 없습니다.",
+    "unknownAgentKey": "알 수 없는 에이전트 키",
+    "configSaveSuccess": "로컬 관리자가 저장되었습니다.",
+    "configConflictError": "편집 중 다른 사용자가 로컬 관리자 목록을 변경했습니다. 다시 불러오고 재시도하세요.",
+    "addAgent": "에이전트 추가",
+    "newPromptAgentTitle": "새 프롬프트 에이전트",
+    "editPromptAgentTitle": "프롬프트 에이전트 편집",
+    "agentNameLabel": "이름",
+    "agentNamePlaceholder": "예: Travel Advisor",
+    "agentDescriptionLabel": "설명",
+    "agentDescriptionPlaceholder": "모델 선택기에서 사용자에게 표시됩니다",
+    "agentSystemPromptLabel": "시스템 프롬프트",
+    "agentSystemPromptPlaceholder": "이 에이전트의 동작을 정의하는 지침",
+    "agentModelLabel": "모델",
+    "agentModelPlaceholder": "모델 선택…",
+    "agentModelUnavailable": "{modelId} (사용 불가)",
+    "agentModelUnknownError": "선택한 모델을 더 이상 사용할 수 없습니다. 다른 모델을 선택하고 다시 저장하세요.",
+    "promptAgentBadge": "프롬프트 에이전트",
+    "editAgent": "에이전트 편집",
+    "deleteAgent": "삭제",
+    "deleteAgentConfirm": "모든 사용자에게서 이 에이전트를 삭제하시겠습니까? 모델 선택기에서 사라지며, 기존 대화의 기록은 유지됩니다.",
+    "confirmDeleteAgent": "네, 삭제합니다",
+    "promptAgentCreateSuccess": "프롬프트 에이전트가 생성되었습니다.",
+    "promptAgentSaveSuccess": "프롬프트 에이전트가 저장되었습니다.",
+    "promptAgentDeleteSuccess": "프롬프트 에이전트가 삭제되었습니다.",
+    "promptAgentsUnavailableWarning": "프롬프트 에이전트를 스토리지에서 불러올 수 없습니다. 현재 편집이 불가능합니다.",
+    "agentsTab": "에이전트",
+    "connectorsTab": "커넥터",
+    "addConnector": "커넥터 추가",
+    "noConnectors": "아직 커넥터가 없습니다.",
+    "connectorsUnavailableWarning": "커넥터 스토어에 연결할 수 없어 목록이 완전하지 않을 수 있습니다. 로드될 때까지 대체 커넥터를 생성하지 마세요.",
+    "editAccess": "접근 권한 수정",
+    "deleteConnector": "삭제",
+    "deleteConnectorConfirm": "이 커넥터를 삭제할까요? 사용자는 즉시 접근 권한을 잃게 됩니다.",
+    "confirmDeleteConnector": "커넥터 삭제",
+    "connectorSaveSuccess": "커넥터가 저장되었습니다.",
+    "connectorCreateSuccess": "커넥터가 생성되었습니다.",
+    "connectorDeleteSuccess": "커넥터가 삭제되었습니다.",
+    "editConnectorTitle": "커넥터 수정",
+    "newConnectorTitle": "새 커넥터",
+    "connectorPresetLabel": "템플릿에서 시작하기",
+    "connectorPresetNone": "처음부터 시작",
+    "connectorNameLabel": "이름",
+    "connectorDescriptionLabel": "설명",
+    "connectorUrlLabel": "서버 URL",
+    "connectorUrlPlaceholderWarning": "저장하기 전에 URL의 {placeholder}를 본인 값으로 바꿔주세요.",
+    "connectorTransportLabel": "전송 방식",
+    "connectorAuthLabel": "인증",
+    "connectorAuthNone": "없음",
+    "connectorAuthBearer": "토큰(각 사용자가 직접 입력)",
+    "connectorAuthOauth": "OAuth 로그인",
+    "connectorSealingUnavailable": "OAuth를 사용할 수 없습니다: 이 배포 환경에는 클라이언트 비밀을 암호화할 AUTH_SECRET가 설정되어 있지 않습니다.",
+    "connectorTokenHelpLabel": "토큰 안내 링크(선택 사항)",
+    "connectorClientIdLabel": "OAuth 클라이언트 ID",
+    "connectorClientSecretLabel": "OAuth 클라이언트 시크릿",
+    "connectorClientSecretStored": "시크릿이 저장되어 있습니다. 유지하려면 비워두고, 변경하려면 새 값을 입력하세요.",
+    "connectorClientSecretHint": "저장 전에 암호화되며, 다시 표시되지 않습니다.",
+    "connectorScopesLabel": "스코프(공백으로 구분, 선택 사항)"
+  },
+  "localModels": {
+    "title": "로컬 모델",
+    "description": "이 컴퓨터에서 실행 중인 모델과 채팅할 수 있습니다. 메시지는 브라우저에서 로컬 앱으로 직접 전송되며, 서버에 전송되지 않습니다. 답변, 대화 제목, 요약 모두 사용자의 컴퓨터에만 저장됩니다.",
+    "detect": "로컬 런타임 감지",
+    "detecting": "감지 중…",
+    "experimental": "실험적",
+    "portLabel": "포트",
+    "statusUnknown": "아직 확인하지 않았습니다.",
+    "statusChecking": "확인 중…",
+    "statusReady": "{count, plural, =0 {연결됨, 로드된 모델 없음.} one {연결됨 — #개의 모델 사용 가능.} other {연결됨 — #개의 모델 사용 가능.}}",
+    "statusNotRunning": "{label}에 연결할 수 없습니다. 해당 포트에서 실행 중인지, 그리고 이 사이트에서 로컬 앱에 접근할 수 있도록 브라우저가 허용되어 있는지 확인해 주세요.",
+    "statusHttpError": "{label}에서 오류 응답이 반환되었습니다. 로그를 확인해 주세요.",
+    "corsHelp": {
+      "ollama": "Ollama는 실행 중이지만 이 사이트의 요청을 거부하고 있습니다. OLLAMA_ORIGINS를 이 사이트 주소로 설정하고 Ollama를 재시작한 후 다시 감지해 주세요.",
+      "lmstudio": "LM Studio는 실행 중이지만 이 사이트의 요청을 거부하고 있습니다. 로컬 서버 설정에서 CORS를 활성화한 다음 다시 감지해 주세요.",
+      "llamacpp": "llama.cpp는 실행 중이지만 이 사이트의 요청을 거부하고 있습니다. cross-origin 요청 허용으로 llama-server를 시작한 후 다시 감지해 주세요."
+    },
+    "privacyNote": "로컬 모델은 파일 첨부, 이미지, 웹 검색 또는 커넥터를 지원하지 않습니다. 이러한 기능에는 서버가 필요합니다. 감지는 이 컴퓨터만 확인합니다."
+  },
+  "urlFetch": {
+    "sourceFallback": "웹페이지",
+    "fallbackHint": "페이지를 열어서 텍스트를 복사 후 여기에 붙여넣을 수도 있습니다.",
+    "shortExtract": "짧은 일부만 읽을 수 있습니다 — 페이지가 유료이거나 로그인 필요할 수 있습니다.",
+    "errors": {
+      "invalidUrl": "유효한 웹 주소가 아닌 것 같습니다.",
+      "ssrfBlocked": "보안상의 이유로 해당 주소를 가져올 수 없습니다.",
+      "tooManyRedirects": "해당 링크가 너무 많이 리디렉션되었습니다.",
+      "timeout": "페이지의 응답이 너무 오래 걸립니다.",
+      "unreachable": "페이지에 연결할 수 없습니다.",
+      "blocked": "사이트에서 요청을 거부했습니다 — 로그인 또는 자동 읽기 차단이 필요할 수 있습니다.",
+      "notFound": "페이지를 찾을 수 없습니다.",
+      "upstream": "사이트에서 오류를 반환했습니다.",
+      "pdf": "해당 링크는 PDF입니다. 파일을 다운로드한 후 첨부 버튼을 사용해 추가해 주세요.",
+      "nonHtml": "해당 링크는 읽을 수 있는 웹페이지가 아닙니다.",
+      "tooLarge": "페이지가 너무 커서 가져올 수 없습니다.",
+      "empty": "해당 페이지에서 읽을 수 있는 기사 텍스트를 찾을 수 없습니다.",
+      "generic": "페이지를 가져올 수 없습니다."
+    },
+    "fetchingFile": "{host} 가져오는 중…",
+    "attachLink": "링크 첨부",
+    "attachLinkTitle": "웹페이지 첨부",
+    "attachLinkDescription": "페이지를 가져와서 읽을 수 있는 텍스트를 메시지에 첨부합니다.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "가져오기 및 첨부",
+    "attachLinkInvalid": "웹 주소 형식이 올바르지 않습니다.",
+    "linkBadge": "링크에서 가져옴",
+    "couldNotRetrieve": "가져올 수 없음",
+    "doc": {
+      "sourceLabel": "출처",
+      "retrievedLabel": "가져옴",
+      "attemptedLabel": "시도함",
+      "failureHeading": "웹페이지를 가져올 수 없습니다"
+    },
+    "settingsTitle": "메시지 내 링크",
+    "settingsToggle": "붙여넣은 링크 자동 가져오기",
+    "settingsDescription": "링크만 따로 붙여넣으면, 페이지를 자동으로 가져와 텍스트를 첨부하여 어시스턴트가 읽을 수 있습니다. 이 옵션을 끄면 붙여넣은 링크는 일반 텍스트로 남습니다 — + 메뉴에서 수동으로 페이지를 첨부할 수도 있습니다.",
+    "addLink": "링크 추가"
+  },
+  "cameraAccessError": "카메라에 접근할 수 없습니다. 카메라 권한을 확인하고 다시 시도해 주세요.",
+  "cameraUnnamedDevice": "카메라",
+  "pastedText": {
+    "fallbackName": "붙여넣은 텍스트",
+    "charCount": "{count, number}자",
+    "removeChip": "붙여넣은 텍스트 “{name}” 제거",
+    "blockLabel": "붙여넣은 텍스트: {name}",
+    "doc": {
+      "heading": "붙여넣은 텍스트",
+      "pastedLabel": "붙여넣음"
+    },
+    "settingsTitle": "대용량 붙여넣기",
+    "settingsToggle": "대용량 텍스트를 첨부파일로 전환",
+    "settingsDescription": "아래 제한보다 더 많은 텍스트를 붙여넣으면 메시지 입력란이 아닌 파일로 첨부됩니다. 텍스트는 붙여넣은 그대로 사용되며, 별도로 변경되거나 불러오지 않습니다.",
+    "settingsThresholdLabel": "다음을 초과하는 붙여넣기 첨부",
+    "settingsThresholdUnit": "자",
+    "settingsThresholdHint": "{min, number}자 이상 {max, number}자 이내로 입력하세요."
+  },
+  "structures": {
+    "section": "구조",
+    "sectionSubtitle": "저장된 필드 정의입니다. 추출 방식 또는 데이터 워크플로우 테이블의 기본 스키마로 사용할 수 있습니다.",
+    "loadFromStructure": "구조 불러오기",
+    "loadFromStructureTitle": "이 컬럼을 저장된 구조로 교체",
+    "pickerEmpty": "저장된 구조가 없습니다.",
+    "pickerTitle": "저장된 구조 불러오기",
+    "saveAsStructure": "구조로 저장",
+    "saveAsStructureTitle": "이 컬럼을 구조 라이브러리에 저장",
+    "savedToast": "구조 “{name}” 저장됨",
+    "namePlaceholder": "구조 이름",
+    "fieldCount": "{count}개 필드",
+    "fieldCountOne": "1개 필드",
+    "downgradedNotice": "{count}개 필드가 텍스트로 단순화됨 — 테이블은 셀당 하나의 값만 가질 수 있습니다: {names}",
+    "truncatedNotice": "{count}개 필드가 제외됨 — 테이블 한도는 {max}개 컬럼입니다: {names}",
+    "skippedDerivedNotice": "{count}개 계산 컬럼이 저장되지 않았습니다 — 수식이 이 테이블의 컬럼을 참조합니다: {names}",
+    "loadReplacesColumns": "현재 컬럼을 대체합니다. 기존 행은 컬럼명이 일치하는 값만 유지됩니다."
   }
 }

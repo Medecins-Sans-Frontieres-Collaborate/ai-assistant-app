@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
+import { DEFAULT_MAP_TIMELAPSE } from '@/lib/utils/shared/geo/timelapsePacing';
 import {
   TimelineScale,
   computeTimelineScale,
@@ -67,6 +68,8 @@ function renderControl(
       showUndated
       onShowUndatedChange={vi.fn()}
       activeCount={3}
+      pacing={DEFAULT_MAP_TIMELAPSE}
+      onPacingChange={vi.fn()}
       {...overrides}
     />,
   );

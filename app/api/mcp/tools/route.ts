@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 
 import { connectMcp } from '@/lib/services/mcp/McpClientService';
+import { createConnectorResolver } from '@/lib/services/mcp/connectorResolution';
 import { isHttpsPublicShapedUrl } from '@/lib/services/mcp/mcpUrlGuard';
 import {
   getCachedTools,
@@ -43,6 +44,7 @@ const requestSchema = z
         id: z.string().regex(/^[a-zA-Z0-9_-]{1,64}$/),
         name: z.string().min(1).max(100),
         catalogKey: z.string().max(64).optional(),
+        connectorId: z.string().max(64).optional(),
         url: z.string().max(2048).optional(),
         authToken: z.string().max(8192).optional(), // OAuth access tokens (JWTs) can exceed 4KB
       })
@@ -81,7 +83,10 @@ export async function POST(request: NextRequest) {
 
   const { server, refresh } = parsed.data;
 
-  const isCustom = server.catalogKey === undefined;
+  // A connector is server-resolved like a catalog entry — it is emphatically
+  // not a "custom" server and must not be gated by the arbitrary-URL flag.
+  const isCustom =
+    server.catalogKey === undefined && server.connectorId === undefined;
   if (isCustom && !env.MCP_CUSTOM_SERVERS_ENABLED) {
     return forbiddenResponse(
       'Arbitrary MCP servers are not enabled on this deployment',
@@ -91,13 +96,19 @@ export async function POST(request: NextRequest) {
   const [resolved] = resolveMcpServers([server], {
     allowCustom: env.MCP_CUSTOM_SERVERS_ENABLED,
     isAllowedCustomUrl: isHttpsPublicShapedUrl,
+    resolveConnector: await createConnectorResolver(session),
   });
   if (!resolved) {
     return badRequestResponse(
       'MCP server config was rejected',
       isCustom
         ? 'The URL must be a public https address'
-        : 'Unknown catalog entry',
+        : server.connectorId !== undefined
+          ? // Deliberately not distinguished from "unknown": telling a user
+            // which connector ids exist but are barred from them leaks the
+            // admin's configuration.
+            'Unknown or unavailable connector'
+          : 'Unknown catalog entry',
     );
   }
 

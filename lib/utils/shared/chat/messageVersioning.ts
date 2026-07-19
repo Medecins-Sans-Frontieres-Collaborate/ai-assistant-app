@@ -32,6 +32,7 @@ export function entryToDisplayMessage(entry: ConversationEntry): Message {
       approvalSources: activeVersion.approvalSources,
       toolCalls: activeVersion.toolCalls,
       consentRequests: activeVersion.consentRequests,
+      usage: activeVersion.usage,
     };
   }
   return entry;
@@ -56,6 +57,7 @@ export function messageToVersion(message: Message): AssistantMessageVersion {
     approvalSources: message.approvalSources,
     toolCalls: message.toolCalls,
     consentRequests: message.consentRequests,
+    usage: message.usage,
     createdAt: new Date().toISOString(),
   };
 }

@@ -28,20 +28,76 @@ Three ways material reaches the extractor, all landing in the same
 
 Every feature carries, besides name/coords/category:
 
-| Field                     | Values                                              | Purpose                                                                                                                                                                                                                                                                          |
-| ------------------------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `confidence`              | `high` / `medium` / `low`                           | How sure the model is about the coordinates. Coordinates come from **model knowledge only** — no geocoding API is ever called (privacy). `(0,0)` and out-of-range coords are dropped server-side.                                                                                |
-| `prominence`              | `primary` / `secondary` / `mention`                 | How central the place is to the material. A report about Venezuela that mentions Syria in one sentence yields Venezuela `primary`, Syria `mention` — a passing aside must not read like a second theater of operations.                                                          |
-| `granularity`             | `site` / `city` / `district` / `region` / `country` | What kind of place it is. A pin for a field hospital and a centroid for a whole country mean different things; this field keeps them from looking identical.                                                                                                                     |
-| `countryCode`             | ISO 3166-1 alpha-2                                  | Containing country; uppercased server-side. Enables containment demotion and downstream GIS joins.                                                                                                                                                                               |
-| `parentName`              | string                                              | The broader mapped place this belongs to, as named in the material. Enables containment demotion.                                                                                                                                                                                |
-| `approxRadiusKm`          | number                                              | Model-estimated extent for area granularities; clamped per class at render time (`lib/utils/shared/geo/granularity.ts`).                                                                                                                                                         |
-| `eventStart` / `eventEnd` | `"YYYY"` / `"YYYY-MM"` / `"YYYY-MM-DD"`             | Event dates from the material, **precision encoded in the string shape** (never interpreted except via `lib/utils/shared/date/partialDate.ts`). Server normalization (`normalizeEventFields`): garbage → empty, transposed ranges swapped, explicit end clears the ongoing flag. |
-| `eventOngoing`            | boolean                                             | Started and still continuing ("since March", "remains closed").                                                                                                                                                                                                                  |
+| Field            | Values                                              | Purpose                                                                                                                                                                                                                 |
+| ---------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `confidence`     | `high` / `medium` / `low`                           | How sure the model is about the coordinates. Coordinates come from **model knowledge only** — no geocoding API is ever called (privacy). `(0,0)` and out-of-range coords are dropped server-side.                       |
+| `prominence`     | `primary` / `secondary` / `mention`                 | How central the place is to the material. A report about Venezuela that mentions Syria in one sentence yields Venezuela `primary`, Syria `mention` — a passing aside must not read like a second theater of operations. |
+| `granularity`    | `site` / `city` / `district` / `region` / `country` | What kind of place it is. A pin for a field hospital and a centroid for a whole country mean different things; this field keeps them from looking identical.                                                            |
+| `countryCode`    | ISO 3166-1 alpha-2                                  | Containing country; uppercased server-side. Enables containment demotion and downstream GIS joins.                                                                                                                      |
+| `parentName`     | string                                              | The broader mapped place this belongs to, as named in the material. Enables containment demotion.                                                                                                                       |
+| `approxRadiusKm` | number                                              | Model-estimated extent for area granularities; clamped per class at render time (`lib/utils/shared/geo/granularity.ts`).                                                                                                |
+| `event`          | `{ start, end, precision, ongoing? }`               | When it happened — see "Event timing" below. Never interpreted except via `lib/utils/shared/geo/eventTime.ts`.                                                                                                          |
+| `sourceId`       | uuid                                                | Which extraction run produced this feature, resolving to a `MapSourceRecord` (see "Provenance").                                                                                                                        |
 
 All fields are optional on persisted features: conversations saved before a
 field existed fall back to the old behavior (`prominence` → `primary`,
 `granularity` → `city`).
+
+### Event timing
+
+Timing is **always a range, always expressible to the minute, with the
+material's own precision recorded alongside** (`EventRange` in
+`types/workflow.ts`, interpreted by `lib/utils/shared/date/eventRange.ts`):
+
+- `start` — inclusive UTC instant, `'YYYY-MM-DDTHH:mm'`.
+- `end` — the first instant NOT covered (exclusive), or `null` when the
+  material stated no end. **`null` is not "ended now"**: an event with no
+  stated end persists on the map after it appears, because the material
+  reported that it happened, not that it stopped. Only an explicit `end`
+  removes a feature.
+- `precision` — `minute` | `hour` | `day` | `month` | `year`. A **display**
+  concern, plus the implied width of an open-ended event; it never enters
+  interval maths, since the range already says what it covers. This is what
+  lets "1812" render as `1812` rather than `1 Jan 1812, 00:00`.
+- `ongoing` — explicitly still running ("since March"). Extends coverage to
+  now on the timeline. An explicit `end` outranks it.
+
+Splitting the range from its precision is the point: the predecessor shape
+encoded precision in a partial ISO string (`"2026-03"`), which could not
+express a time of day at all — two events six hours apart collapsed into one
+moment on the timeline.
+
+**Legacy features are read, not migrated.** Every map built before this
+model still carries `eventStart`/`eventEnd`/`eventOngoing`, and
+`featureEventRange()` in `eventTime.ts` is the one read boundary that
+presents both shapes as a range. `__tests__/lib/utils/shared/geo/
+eventTimeEquivalence.test.ts` pins the contract: for every legacy shape, a
+feature and its converted twin agree on visibility at eight probe instants,
+on coverage, on display, and on keyframes. Two deliberate corrections came
+with the conversion, both documented there: an end-only feature now reads as
+the window the material named (it used to be visible from the dawn of time,
+an artifact of the old check order), and a stated end outranks the ongoing
+flag everywhere (matching what server normalization always claimed).
+
+Coverage intervals are **half-open** throughout. Anything user-facing that
+derives from an end has to step back one ms — `segmentLastInstant()`, the
+date filter's inclusive `toMs`, era labels, the timeline's end caption —
+or a segment covering 1812 reads as "1812–1813".
+
+### Provenance
+
+Every extraction run appends a `MapSourceRecord` (`{id, name, addedAt,
+featureCount, kind, query?, url?}`) and stamps its id onto the features it
+produced, where `kind` is `text` (name: "Pasted text") | `file` (the
+filename) | `search` (the query) | `url` (the page title) | `chat`.
+`lib/utils/shared/geo/featureSources.ts` resolves a feature back to its
+record, and `sourceHref()` returns an openable link **only** for `http(s)`
+URLs — a stored `javascript:` URL can never become a clickable payload.
+
+The attribution surfaces in the marker popup, the expanded sidebar row, the
+time-lapse spotlight cards, and all three exports. That is what makes a
+mapped point checkable: a reader can see which document put a marker on
+Goma, and open it when the source was a page.
 
 ## Visual channels (one meaning per channel)
 
@@ -174,7 +230,65 @@ the conversation — and both apply to the list AND the map together.
   with a "Show undated" toggle — hiding them would silently misrepresent
   the dataset. The control appears only when ≥2 dated features exist;
   the max extends to now when anything is ongoing; `prefers-reduced-motion`
-  slows playback to discrete ticks.
+  slows the sweep.
+
+  **Playback jumps between dates; it does not sweep them.**
+  `computeTimelineKeyframes` (`lib/utils/shared/geo/timelineKeyframes.ts`)
+  extracts the instants where the active set can actually change — a
+  start, or one ms past an end (mirroring `featureVerdictAt` exactly, so
+  the keyframes and what's drawn can never disagree). Every other
+  position on the scale renders an identical map, so a linear sweep
+  spends most of its runtime showing nothing happening. Playback visits
+  only the keyframes, and the closest-together keyframes merge once the
+  list exceeds 40 so a dense source can't produce an hour-long sweep. The
+  slider still runs on the scale's step indices, so the thumb tracks the
+  sweep and manual scrubbing stays continuous.
+
+  **Dwell is earned, not uniform** (`lib/utils/shared/geo/timelapsePacing.ts`).
+  A date's hold covers its cards opening, being read, and clearing, plus a
+  capped bonus per arrival the cards couldn't cover — so a date that lands
+  twenty places reads as a bigger moment than one that lands three, without
+  any single date stalling the sweep. A date where nothing arrives (only
+  endings) passes quickly.
+
+  Each landing is announced by `TimelineJumpBanner` over the map: the
+  date (rendered at the keyframe's own precision, so a bare `"1812"`
+  never becomes "Jan 1, 1812"), how much time the jump skipped as one
+  dominant unit ("214 years later"), what appeared/ended, sweep progress,
+  and a **precision readout** — a five-dot meter plus a label, flagged
+  `(mixed)` when the moment combines exactly-timed and vaguely-timed
+  events, since the label can only show one of them. An ending is
+  labelled at its last covered instant, so a March event ends in "Mar
+  2026" rather than "Apr 2026".
+
+  On the map itself, precision reads as an **uncertainty halo**: during a
+  sweep a feature dated only to a month or a year wears a soft dashed ring
+  (7px / 14px beyond its marker), because the sweep asserts "this is where
+  things stand on this date" and a year-precision event could belong
+  anywhere in that year. Day-and-finer gets no halo — at time-lapse
+  resolution that is exact. The halos are non-interactive and drawn first,
+  so they never intercept a click meant for their marker, and the legend
+  gains an entry while a sweep is active. Simultaneously `useTimelineSpotlight` auto-opens popups for
+  the arriving features — all of them when few, otherwise a sample of the
+  most prominent taken at an even STRIDE through the shortlist with a
+  random starting offset: cards shown at once overlap on screen, so
+  drawing them from spread-apart positions stops a crowded date
+  spotlighting the same neighbouring cluster three times, and the offset
+  means replays surface different places. Cards open on a stagger that is
+  a fraction of their lifetime, so they overlap rather than queue, and
+  the keyframe's dwell is derived from their timing. The popups are added
+  imperatively as plain Leaflet layers (`SpotlightPopups` in `MapView`),
+  never through `map.openPopup`, so they don't close a popup the user
+  opened by hand.
+
+  **Pacing is user-configurable** — card duration (1.2–6s) and cards per
+  date (1–6) — from a menu in the timeline bar (`TimelapsePacingMenu`),
+  where the effect can be watched while the knobs turn. The values live in
+  the settings store (`mapTimelapse`, v37), not workspace view state:
+  comfortable reading speed describes the viewer, not the map. Both are
+  clamped on read and on write, so a hand-edited localStorage value can't
+  produce a frozen sweep. Changes take effect on the next date rather than
+  restarting playback.
 
   **The scale is adaptive, not linear.** Real materials mix a dense
   burst of current events with sparse historical parallels ("similar
@@ -199,11 +313,14 @@ the conversation — and both apply to the list AND the map together.
 ## Exports
 
 `granularity`, `countryCode`, `parentName`, `approxRadiusKm`, `prominence`,
-`confidence`, and the event fields (`eventStart`/`eventEnd`/`eventOngoing`;
-CSV: `event_start`/`event_end`/`event_ongoing`) are all carried into
-GeoJSON properties, the KML description, and CSV columns, so ArcGIS/QGIS
-users can re-symbolize or time-enable layers by any of them. Exports are
-always the full (unfiltered) feature set. Geometry in exports is still
+`confidence`, the event range (`eventStart`/`eventEnd`/`eventPrecision`/
+`eventOngoing`; CSV: `event_start`/`event_end`/`event_precision`/
+`event_ongoing`) and the source (`source`/`sourceUrl`; CSV:
+`source`/`source_url`) are all carried into GeoJSON properties, the KML
+description, and CSV columns, so ArcGIS/QGIS users can re-symbolize or
+time-enable layers by any of them — and can trace any row back to the
+material it came from. Exports are always the full (unfiltered) feature
+set. Geometry in exports is still
 points — see below.
 
 ## Future work: true boundary polygons (planned)

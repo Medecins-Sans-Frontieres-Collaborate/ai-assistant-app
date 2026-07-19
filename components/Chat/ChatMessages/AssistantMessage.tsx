@@ -25,6 +25,7 @@ import { useSettings } from '@/client/hooks/settings/useSettings';
 
 import { translateText } from '@/lib/services/translation';
 
+import { appendCitationsToMarkdown } from '@/lib/utils/app/export/citationExport';
 import { getAutonym } from '@/lib/utils/app/locales';
 import { parseThinkingContent } from '@/lib/utils/app/stream/thinking';
 import { generateAudioFilename } from '@/lib/utils/shared/string/slugify';
@@ -884,7 +885,11 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                         ? undefined
                         : () => {
                             openDocument(
-                              displayedContent,
+                              appendCitationsToMarkdown(
+                                displayedContent,
+                                citations,
+                                t('chat.sources'),
+                              ),
                               'md',
                               'message.md',
                               'document',
