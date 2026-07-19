@@ -1,6 +1,11 @@
 'use client';
 
-import { IconPlus, IconTrash } from '@tabler/icons-react';
+import {
+  IconDeviceFloppy,
+  IconLibrary,
+  IconPlus,
+  IconTrash,
+} from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -11,9 +16,19 @@ import {
   formulaToDisplay,
   topoOrderFormulas,
 } from '@/lib/services/workflows/data/derived';
-import { SchemaDraftColumn } from '@/lib/services/workflows/data/schemaEdit';
+import {
+  SchemaDraftColumn,
+  applySchemaChanges,
+} from '@/lib/services/workflows/data/schemaEdit';
+import {
+  columnsToStructure,
+  structureToColumns,
+} from '@/lib/services/workflows/data/structureAdapters';
+import { MAX_COLUMNS } from '@/lib/services/workflows/data/tableUtils';
 
 import { DataColumn, DataColumnType } from '@/types/workflow';
+
+import { useSettingsStore } from '@/client/stores/settingsStore';
 
 interface SchemaEditorProps {
   columns: DataColumn[];
@@ -41,6 +56,7 @@ export function SchemaEditor({
   disabled,
 }: SchemaEditorProps) {
   const t = useTranslations('workflows.data');
+  const tStructures = useTranslations('structures');
   const [draft, setDraft] = useState<SchemaDraftColumn[]>(() =>
     columns.length > 0
       ? columns.map((c) => ({
@@ -121,6 +137,86 @@ export function SchemaEditor({
     draft.length > 0 &&
     draft.every((entry) => entry.name.trim().length > 0) &&
     formulaIssues.size === 0;
+
+  /* ---------------- saved structures ---------------- */
+
+  const savedStructures = useSettingsStore((s) => s.savedStructures);
+  const addSavedStructure = useSettingsStore((s) => s.addSavedStructure);
+  const [picking, setPicking] = useState(false);
+  const [saveName, setSaveName] = useState<string | null>(null);
+  /** Lossy-conversion messages from the last load/save, shown inline. */
+  const [notices, setNotices] = useState<string[]>([]);
+
+  const handleLoad = (structureId: string) => {
+    const structure = savedStructures.find((s) => s.id === structureId);
+    if (!structure) return;
+    const {
+      columns: loaded,
+      downgraded,
+      truncated,
+    } = structureToColumns(structure);
+
+    // Ids are regenerated from the structure, so nothing matches the current
+    // table by id — applySchemaChanges will treat every entry as new. That is
+    // the intent: loading a structure replaces the shape.
+    setDraft(
+      loaded.map((column) => ({
+        name: column.name,
+        type: column.type,
+        required: column.required === true,
+      })),
+    );
+
+    const next: string[] = [];
+    if (downgraded.length > 0) {
+      next.push(
+        tStructures('downgradedNotice', {
+          count: downgraded.length,
+          names: downgraded.join(', '),
+        }),
+      );
+    }
+    if (truncated.length > 0) {
+      next.push(
+        tStructures('truncatedNotice', {
+          count: truncated.length,
+          max: MAX_COLUMNS,
+          names: truncated.join(', '),
+        }),
+      );
+    }
+    setNotices(next);
+    setPicking(false);
+  };
+
+  const handleSave = () => {
+    const name = (saveName ?? '').trim();
+    if (!name || !canApply) return;
+    // Run the draft through the real apply path (with no rows) so ids are
+    // assigned and formulas canonicalised exactly as they would be on Apply
+    // — the structure then reflects what the user is actually looking at,
+    // not the pre-edit table.
+    const { columns: resolved } = applySchemaChanges(columns, [], draft);
+    const now = new Date().toISOString();
+    const { structure, skipped } = columnsToStructure(resolved, {
+      id: `structure_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      name,
+      now,
+    });
+    addSavedStructure(structure);
+
+    const next = [tStructures('savedToast', { name })];
+    if (skipped.length > 0) {
+      next.push(
+        tStructures('skippedDerivedNotice', {
+          count: skipped.length,
+          names: skipped.join(', '),
+        }),
+      );
+    }
+    setNotices(next);
+    setSaveName(null);
+  };
 
   return (
     <div className="border-b border-gray-200 p-3 dark:border-gray-700">
@@ -220,6 +316,39 @@ export function SchemaEditor({
           <IconPlus size={13} aria-hidden />
           {t('schemaAddField')}
         </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setPicking((prev) => !prev);
+            setSaveName(null);
+          }}
+          disabled={savedStructures.length === 0}
+          title={
+            savedStructures.length === 0
+              ? tStructures('pickerEmpty')
+              : tStructures('loadFromStructureTitle')
+          }
+          className="inline-flex min-h-[32px] items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
+        >
+          <IconLibrary size={13} aria-hidden />
+          {tStructures('loadFromStructure')}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setSaveName((prev) => (prev === null ? '' : null));
+            setPicking(false);
+          }}
+          disabled={!canApply}
+          title={tStructures('saveAsStructureTitle')}
+          className="inline-flex min-h-[32px] items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
+        >
+          <IconDeviceFloppy size={13} aria-hidden />
+          {tStructures('saveAsStructure')}
+        </button>
+
         <div className="ms-auto flex items-center gap-2">
           <button
             type="button"
@@ -238,6 +367,84 @@ export function SchemaEditor({
           </button>
         </div>
       </div>
+
+      {picking && (
+        <div
+          role="listbox"
+          aria-label={tStructures('pickerTitle')}
+          className="mt-2 max-h-48 overflow-y-auto rounded-lg border border-gray-200 p-1 dark:border-gray-700"
+        >
+          <p className="px-2 py-1 text-xs text-gray-500 dark:text-gray-400">
+            {tStructures('loadReplacesColumns')}
+          </p>
+          {savedStructures.map((structure) => (
+            <button
+              key={structure.id}
+              type="button"
+              role="option"
+              aria-selected={false}
+              onClick={() => handleLoad(structure.id)}
+              className="flex w-full items-baseline gap-2 rounded-md px-2 py-1.5 text-start text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-surface-dark-elevated"
+            >
+              <span className="truncate">{structure.name}</span>
+              <span className="ms-auto flex-shrink-0 text-xs text-gray-500 dark:text-gray-400">
+                {structure.fields.length === 1
+                  ? tStructures('fieldCountOne')
+                  : tStructures('fieldCount', {
+                      count: structure.fields.length,
+                    })}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {saveName !== null && (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSave();
+          }}
+          className="mt-2 flex items-center gap-2"
+        >
+          <input
+            type="text"
+            autoFocus
+            value={saveName}
+            onChange={(e) => setSaveName(e.target.value)}
+            placeholder={tStructures('namePlaceholder')}
+            aria-label={tStructures('namePlaceholder')}
+            className={`w-64 ${inputClasses}`}
+          />
+          <button
+            type="submit"
+            disabled={saveName.trim().length === 0}
+            className="min-h-[32px] rounded-lg bg-gray-300 px-3 py-1 text-xs font-medium text-gray-900 hover:bg-gray-400 disabled:opacity-30 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated"
+          >
+            {tStructures('saveAsStructure')}
+          </button>
+          <button
+            type="button"
+            onClick={() => setSaveName(null)}
+            className="min-h-[32px] rounded-lg px-2.5 py-1 text-xs text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
+          >
+            {t('schemaCancel')}
+          </button>
+        </form>
+      )}
+
+      {notices.length > 0 && (
+        <ul className="mt-2 space-y-0.5">
+          {notices.map((notice) => (
+            <li
+              key={notice}
+              className="max-w-[75ch] text-xs text-amber-700 dark:text-amber-500"
+            >
+              {notice}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
