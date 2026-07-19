@@ -2,6 +2,7 @@ import {
   autoConvertToHtml,
   convertToHtml,
   detectFormat,
+  isEmptyDocHtml,
   markdownToHtml,
   sanitizeHtml,
   textToHtml,
@@ -326,6 +327,45 @@ This is a **bold** paragraph with *italic* text.
       const html = await autoConvertToHtml(content, 'README');
       // Should fallback to markdown detection or text
       expect(html).toBeTruthy();
+    });
+
+    it.each(['report.docx', 'notes.odt', 'memo.rtf', 'book.epub'])(
+      'parses %s as markdown, since server extraction already converted it',
+      async (fileName) => {
+        // Pandoc hands these back as markdown. Dispatching on the extension
+        // alone sent them to textToHtml, which wrapped `# Heading` in a <p>
+        // and left the syntax showing in the imported document.
+        const html = await autoConvertToHtml(
+          '# Quarterly report\n\nWith **bold** text.',
+          fileName,
+        );
+        expect(html).toContain('<h1');
+        expect(html).toContain('<strong>');
+        expect(html).not.toContain('# Quarterly report');
+      },
+    );
+  });
+
+  describe('isEmptyDocHtml', () => {
+    it.each([
+      ['', 'empty string'],
+      ['<p></p>', 'an untouched Tiptap document'],
+      ['<p><br></p>', 'a single empty line'],
+      ['<p>&nbsp;</p>', 'a non-breaking space'],
+      ['<p>   </p>\n<p></p>', 'whitespace across paragraphs'],
+    ])('treats %s as empty (%s)', (html) => {
+      expect(isEmptyDocHtml(html)).toBe(true);
+    });
+
+    it.each([
+      ['<p>Text</p>', 'prose'],
+      ['<h1>Title</h1>', 'a heading'],
+      ['<p><img src="x.png"></p>', 'an image with no text'],
+      ['<table><tr><td></td></tr></table>', 'an empty table'],
+      ['<hr>', 'a horizontal rule'],
+      ['<ul><li></li></ul>', 'an empty list'],
+    ])('treats %s as non-empty (%s)', (html) => {
+      expect(isEmptyDocHtml(html)).toBe(false);
     });
   });
 
