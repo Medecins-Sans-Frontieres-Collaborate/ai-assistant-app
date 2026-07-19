@@ -2730,6 +2730,8 @@
     "sectionPinned": "Pinned",
     "sectionFrequent": "Frequently used",
     "sectionMore": "More",
+    "showSources": "Show other sources",
+    "hideSources": "Hide other sources",
     "categoryWeb": "Web",
     "categoryMedia": "Media & files",
     "categoryTransform": "Transform",
