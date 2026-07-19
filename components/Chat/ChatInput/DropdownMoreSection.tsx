@@ -3,9 +3,10 @@ import React from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { DropdownMenuItem, MenuItem } from './DropdownMenuItem';
+import { DropdownItemRows, NestingProps } from './DropdownItemRows';
+import { MenuItem } from './DropdownMenuItem';
 
-interface DropdownMoreSectionProps {
+interface DropdownMoreSectionProps extends NestingProps {
   items: MenuItem[];
   /** Full list in render order, for resolving each item's highlight index */
   flattenedItems: MenuItem[];
@@ -33,6 +34,9 @@ export const DropdownMoreSection: React.FC<DropdownMoreSectionProps> = ({
   onToggleHidden,
   expanded,
   onToggleExpanded,
+  childrenByParent,
+  expandedParentIds,
+  onToggleParentExpanded,
 }) => {
   const t = useTranslations();
 
@@ -63,23 +67,20 @@ export const DropdownMoreSection: React.FC<DropdownMoreSectionProps> = ({
         </span>
       </button>
 
-      {expanded &&
-        items.map((item) => {
-          const itemIndex = flattenedItems.findIndex((i) => i.id === item.id);
-          return (
-            <DropdownMenuItem
-              key={item.id}
-              item={item}
-              isSelected={itemIndex === selectedIndex}
-              pinnable
-              pinned={pinnedToolIds.includes(item.id)}
-              onTogglePin={() => onTogglePin(item.id)}
-              hideable
-              hidden
-              onToggleHidden={() => onToggleHidden(item.id)}
-            />
-          );
-        })}
+      {expanded && (
+        <DropdownItemRows
+          items={items}
+          flattenedItems={flattenedItems}
+          selectedIndex={selectedIndex}
+          pinnedToolIds={pinnedToolIds}
+          onTogglePin={onTogglePin}
+          onToggleHidden={onToggleHidden}
+          hidden
+          childrenByParent={childrenByParent}
+          expandedParentIds={expandedParentIds}
+          onToggleParentExpanded={onToggleParentExpanded}
+        />
+      )}
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import {
   IconCheck,
+  IconChevronDown,
   IconChevronRight,
   IconEye,
   IconEyeOff,
@@ -26,6 +27,15 @@ export interface MenuItem {
   checked?: boolean;
   /** Clicking opens a dialog / picker / capture flow (shows a trailing chevron) */
   opensDialog?: boolean;
+  /**
+   * Groups this item under another tool as an alternate way of doing the same
+   * job (e.g. `attach-link` under `attach`). The parent keeps its own action —
+   * the child is an additional source, not a replacement. Nesting is one level
+   * deep and purely presentational: the child keeps its own id, pin state, and
+   * usage count, and renders as a normal flat row whenever it is pinned,
+   * frequently used, or matched by a search query.
+   */
+  parentId?: string;
 }
 
 interface DropdownMenuItemProps {
@@ -39,6 +49,12 @@ interface DropdownMenuItemProps {
   /** Whether this tool currently lives in the "More" section. */
   hidden?: boolean;
   onToggleHidden?: () => void;
+  /** This row owns nested children and renders an expand/collapse control. */
+  expandable?: boolean;
+  expanded?: boolean;
+  onToggleExpanded?: () => void;
+  /** This row is a nested child; indents it under its parent. */
+  nested?: boolean;
 }
 
 /**
@@ -56,6 +72,10 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
   hideable = false,
   hidden = false,
   onToggleHidden,
+  expandable = false,
+  expanded = false,
+  onToggleExpanded,
+  nested = false,
 }) => {
   const t = useTranslations();
   const [showInfo, setShowInfo] = useState(false);
@@ -107,9 +127,9 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
       <button
         id={`dropdown-item-${item.id}`}
         data-item-id={item.id}
-        className={`flex items-center gap-2.5 flex-1 min-w-0 px-3 py-2 text-left text-sm focus:outline-none ${
-          item.disabled ? 'cursor-not-allowed' : ''
-        }`}
+        className={`flex items-center gap-2.5 flex-1 min-w-0 py-2 pr-3 text-left text-sm focus:outline-none ${
+          nested ? 'pl-9' : 'pl-3'
+        } ${item.disabled ? 'cursor-not-allowed' : ''}`}
         onClick={item.disabled ? undefined : item.onClick}
         role={item.toggle ? 'menuitemcheckbox' : 'menuitem'}
         aria-current={isSelected ? 'true' : undefined}
@@ -127,7 +147,7 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
         {item.toggle && item.checked && (
           <IconCheck size={16} className="text-blue-500" aria-hidden="true" />
         )}
-        {item.opensDialog && !item.toggle && (
+        {item.opensDialog && !item.toggle && !expandable && (
           <IconChevronRight
             size={16}
             className="text-gray-400 dark:text-gray-500"
@@ -211,6 +231,36 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
               className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-help"
             />
           </div>
+        )}
+
+        {/* Disclosure for nested sources. Always visible (unlike pin/hide,
+            which are hover-revealed) — it is the only cue that the row has
+            alternatives behind it. */}
+        {expandable && onToggleExpanded && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleExpanded();
+            }}
+            aria-expanded={expanded}
+            aria-controls={`dropdown-children-${item.id}`}
+            title={
+              expanded ? t('dropdown.hideSources') : t('dropdown.showSources')
+            }
+            aria-label={
+              expanded ? t('dropdown.hideSources') : t('dropdown.showSources')
+            }
+            className="px-2.5 py-3 -mr-1 rounded-md text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-200/70 dark:hover:bg-gray-600/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 transition-colors duration-150"
+          >
+            <IconChevronDown
+              size={16}
+              className={`transition-transform duration-150 motion-reduce:transition-none ${
+                expanded ? 'rotate-180' : ''
+              }`}
+              aria-hidden="true"
+            />
+          </button>
         )}
       </div>
 
