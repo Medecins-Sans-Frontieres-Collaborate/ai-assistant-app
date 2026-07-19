@@ -182,4 +182,16 @@ export default [
       },
     },
   },
+  {
+    // `no-undef` can't see TypeScript type space, so every DOM *type* used in
+    // an annotation (BlobCallback, MediaRecorderOptions, …) has to be hand-
+    // added to the globals list above or it errors — a list that silently goes
+    // stale as the DOM lib grows. tsc already resolves these, and CI runs
+    // `tsc --noEmit`, so the rule is pure duplicate work on typed files.
+    // This is the configuration typescript-eslint documents for exactly this.
+    files: ['**/*.{ts,tsx}'],
+    rules: {
+      'no-undef': 'off',
+    },
+  },
 ];
