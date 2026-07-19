@@ -69,16 +69,22 @@ export function planRevision(input: RevisionPlanInput): RevisionPlan {
   if (!input.enabled) return direct('disabled');
   if (input.automatic) return direct('automatic');
   if (input.mode === 'generate') return direct('generate');
-  if (input.scoped && input.exceptions.selectionScoped) {
-    return direct('selection');
-  }
+  // NOT configurable, unlike the others. A selection-scoped revise asks the
+  // model for the revised EXCERPT alone ("do NOT rewrite the document" — see
+  // buildSelectionReviseUserPrompt), so `newMarkdown` is a fragment. Diffing a
+  // fragment against the whole document produces garbage, not suggestions.
+  if (input.scoped) return direct('selection');
 
   const diff = computeRevisionEdits(input.oldMarkdown, input.newMarkdown);
   if (!diff.fullyAnchored) return direct('unanchorable');
   if (diff.changes.length === 0) return direct('noChanges');
+  // Granularity, not volume. Bypassing whenever "most of the document changed"
+  // meant a thorough revision — precisely the kind worth reviewing — was the
+  // one case that never got reviewed. What actually defeats a review queue is
+  // a single change so large that accepting it is accepting everything.
   if (
     input.exceptions.largeRewrites &&
-    diff.changeRatio >= input.largeRewriteRatio
+    diff.largestChangeRatio >= input.largeRewriteRatio
   ) {
     return direct('largeRewrite');
   }
