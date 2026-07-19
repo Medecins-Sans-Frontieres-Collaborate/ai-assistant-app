@@ -45,6 +45,16 @@ export interface McpOauthContext {
   resource?: string;
 }
 
+export interface ResolveOauthContextOptions {
+  /**
+   * Access-checked connector resolver (see createConnectorResolver). Required
+   * for any entry carrying a connectorId — without it the entry resolves to
+   * nothing and discovery fails closed, which is the correct default for a
+   * route that has not established who is asking.
+   */
+  resolveConnector?: (connectorId: string) => ResolvedMcpServer | null;
+}
+
 export class McpOauthError extends Error {
   constructor(
     message: string,
@@ -84,8 +94,12 @@ async function validateDiscoveredEndpoint(
  */
 export async function resolveOauthContext(
   entry: McpServerRequestEntry,
+  options: ResolveOauthContextOptions = {},
 ): Promise<McpOauthContext> {
-  const isCustom = entry.catalogKey === undefined;
+  // A connector is server-resolved like a catalog entry, so it is not
+  // "custom" and must not be gated by the arbitrary-URL flag.
+  const isCustom =
+    entry.catalogKey === undefined && entry.connectorId === undefined;
   if (isCustom && !env.MCP_CUSTOM_SERVERS_ENABLED) {
     throw new McpOauthError(
       'Arbitrary MCP servers are not enabled on this deployment',
@@ -101,12 +115,16 @@ export async function resolveOauthContext(
         id: entry.id,
         name: entry.name,
         catalogKey: entry.catalogKey,
+        connectorId: entry.connectorId,
         url: entry.url,
       },
     ],
     {
       allowCustom: env.MCP_CUSTOM_SERVERS_ENABLED,
       isAllowedCustomUrl: isHttpsPublicShapedUrl,
+      // Absent resolver → connectors resolve to nothing, so an OAuth route
+      // that forgets to pass one cannot start a flow against a connector.
+      resolveConnector: options.resolveConnector,
     },
   );
   if (!resolved) {
@@ -171,9 +189,13 @@ export async function resolveOauthContext(
 
 /**
  * Pre-registered ("static") OAuth apps for curated connectors, configured
- * via env. Needed because neither provider supports web-app DCR: GitHub
- * publishes no registration endpoint, and Asana's DCR only allows LOOPBACK
- * redirect URIs (fine for localhost dev, never for a deployed origin).
+ * via env. Needed because usable web-app DCR is the exception, not the rule,
+ * across these providers: GitHub publishes no registration endpoint, Asana's
+ * DCR only allows LOOPBACK redirect URIs (fine for localhost dev, never for a
+ * deployed origin), and Salesforce and Hootsuite require an app registered in
+ * the vendor console. Tableau (OAuth 2.1) may register dynamically, so its
+ * entry here is a fallback rather than a precondition — returning null simply
+ * lets the DCR path run.
  * The client SECRET stays server-side: the register route returns only the
  * clientId to the browser, and the token route injects the secret when it
  * recognizes the static clientId.
@@ -181,28 +203,113 @@ export async function resolveOauthContext(
 export function getStaticOauthClient(
   catalogKey: string | undefined,
 ): { clientId: string; clientSecret?: string } | null {
-  if (catalogKey === 'github' && env.MCP_OAUTH_GITHUB_CLIENT_ID) {
-    return {
+  if (catalogKey === undefined) return null;
+  // Both Hootsuite servers share one OAuth app — the account, not the
+  // server, is what the user authorizes.
+  const credentials: Record<
+    string,
+    { clientId?: string; clientSecret?: string }
+  > = {
+    github: {
       clientId: env.MCP_OAUTH_GITHUB_CLIENT_ID,
       clientSecret: env.MCP_OAUTH_GITHUB_CLIENT_SECRET,
-    };
-  }
-  if (catalogKey === 'asana' && env.MCP_OAUTH_ASANA_CLIENT_ID) {
-    return {
+    },
+    asana: {
       clientId: env.MCP_OAUTH_ASANA_CLIENT_ID,
       clientSecret: env.MCP_OAUTH_ASANA_CLIENT_SECRET,
-    };
+    },
+    tableau: {
+      clientId: env.MCP_OAUTH_TABLEAU_CLIENT_ID,
+      clientSecret: env.MCP_OAUTH_TABLEAU_CLIENT_SECRET,
+    },
+    salesforce: {
+      clientId: env.MCP_OAUTH_SALESFORCE_CLIENT_ID,
+      clientSecret: env.MCP_OAUTH_SALESFORCE_CLIENT_SECRET,
+    },
+    hootsuitePerch: {
+      clientId: env.MCP_OAUTH_HOOTSUITE_CLIENT_ID,
+      clientSecret: env.MCP_OAUTH_HOOTSUITE_CLIENT_SECRET,
+    },
+    hootsuiteNest: {
+      clientId: env.MCP_OAUTH_HOOTSUITE_CLIENT_ID,
+      clientSecret: env.MCP_OAUTH_HOOTSUITE_CLIENT_SECRET,
+    },
+  };
+
+  const entry = credentials[catalogKey];
+  if (!entry?.clientId) return null;
+  return { clientId: entry.clientId, clientSecret: entry.clientSecret };
+}
+
+/**
+ * The OAuth client to authenticate as, for EITHER kind of server-resolved
+ * entry: a curated catalog key (app configured via env) or an admin-authored
+ * connector (app stored on the connector record, secret sealed at rest).
+ *
+ * Returns null when no app is configured, which lets the caller fall back to
+ * dynamic client registration.
+ *
+ * Callers MUST have resolved the entry through an access-checked path first
+ * (resolveOauthContext with a resolveConnector). This function deliberately
+ * does not re-authorize: it is reached only after resolution succeeded, and
+ * duplicating the check here would invite the two copies to drift apart.
+ *
+ * A connector whose sealed secret cannot be unsealed — the expected shape of
+ * an AUTH_SECRET rotation — surfaces as a distinct error rather than a silent
+ * fallback to DCR, because falling back would authenticate as the wrong
+ * client and fail confusingly at the vendor instead of here.
+ */
+export async function getOauthClientCredentials(
+  entry: Pick<McpServerRequestEntry, 'catalogKey' | 'connectorId'>,
+): Promise<{ clientId: string; clientSecret?: string } | null> {
+  if (entry.connectorId === undefined) {
+    return getStaticOauthClient(entry.catalogKey);
   }
-  return null;
+
+  const { AgentAccessService } =
+    await import('@/lib/services/agentAccess/AgentAccessService');
+  const service = AgentAccessService.getInstance();
+  await service.ensureFresh();
+  const connector = service.getConnectorById(entry.connectorId);
+  if (!connector?.oauthClientId) return null;
+
+  if (!connector.oauthClientSecret) {
+    // A public client: the connector was configured with an id but no secret.
+    return { clientId: connector.oauthClientId };
+  }
+
+  const { ConnectorSecretIntegrityError, unsealConnectorSecret } =
+    await import('@/lib/services/agentAccess/connectorSecretCrypto');
+  try {
+    return {
+      clientId: connector.oauthClientId,
+      clientSecret: unsealConnectorSecret(
+        connector.id,
+        connector.oauthClientSecret,
+      ),
+    };
+  } catch (error) {
+    if (error instanceof ConnectorSecretIntegrityError) {
+      throw new McpOauthError(
+        'This connector’s stored client secret could not be read; an administrator must re-enter it',
+        503,
+        'CONNECTOR_SECRET_UNREADABLE',
+      );
+    }
+    throw error;
+  }
 }
 
 /**
  * Which curated connectors have an OAuth app to tie into on THIS deployment.
  *
- * For catalog entries this is exactly "is a static app configured": per
- * getStaticOauthClient above, neither provider offers usable web-app DCR, so
- * without MCP_OAUTH_*_CLIENT_ID a "Connect with {name}" click can only end in
- * OAUTH_DCR_UNSUPPORTED. Surfacing it (booleans only — no ids, no secrets)
+ * For most catalog entries this is exactly "is a static app configured": per
+ * getStaticOauthClient above, they offer no usable web-app DCR, so without
+ * MCP_OAUTH_*_CLIENT_ID a "Connect with {name}" click can only end in
+ * OAUTH_DCR_UNSUPPORTED. Entries flagged supportsDynamicRegistration are the
+ * exception — they can register a client mid-flow, so the affordance stays
+ * available with no deployment app. Surfacing this (booleans only — no ids,
+ * no secrets)
  * lets the settings UI hide an affordance that cannot work instead of
  * failing the user after a popup round-trip. Users bringing their OWN app
  * are unaffected; that path doesn't need a deployment app.
@@ -214,7 +321,9 @@ export function getCatalogOauthAppAvailability(): Record<string, boolean> {
   const availability: Record<string, boolean> = {};
   for (const entry of Object.values(MCP_CATALOG)) {
     if (entry.auth.style !== 'oauth' && !entry.alsoSupportsOauth) continue;
-    availability[entry.key] = getStaticOauthClient(entry.key) !== null;
+    availability[entry.key] =
+      entry.supportsDynamicRegistration === true ||
+      getStaticOauthClient(entry.key) !== null;
   }
   return availability;
 }
