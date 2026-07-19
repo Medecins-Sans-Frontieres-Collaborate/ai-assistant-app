@@ -59,12 +59,12 @@ function emptyRecipe(): ExtractionRecipe {
  * name, description, instructions, field builder, and a "Suggest with AI"
  * button that hits `/api/extraction/suggest-schema`.
  */
-export const ExtractionRecipesTab: FC = () => {
+export const StructuresTab: FC = () => {
   const t = useTranslations('extraction');
-  const recipes = useSettingsStore((s) => s.extractionRecipes);
-  const addRecipe = useSettingsStore((s) => s.addExtractionRecipe);
-  const updateRecipe = useSettingsStore((s) => s.updateExtractionRecipe);
-  const deleteRecipe = useSettingsStore((s) => s.deleteExtractionRecipe);
+  const recipes = useSettingsStore((s) => s.savedStructures);
+  const addRecipe = useSettingsStore((s) => s.addSavedStructure);
+  const updateRecipe = useSettingsStore((s) => s.updateSavedStructure);
+  const deleteRecipe = useSettingsStore((s) => s.deleteSavedStructure);
 
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -169,7 +169,7 @@ const RecipeRow: FC<RecipeRowProps> = ({
   };
 
   const handleSuggest = async () => {
-    if (!recipe.instructions.trim()) {
+    if (!(recipe.instructions ?? '').trim()) {
       setSuggestError(t('suggestNeedsInstructions'));
       return;
     }
@@ -340,10 +340,10 @@ const RecipeRow: FC<RecipeRowProps> = ({
               <button
                 type="button"
                 onClick={handleSuggest}
-                disabled={suggesting || !recipe.instructions.trim()}
+                disabled={suggesting || !(recipe.instructions ?? '').trim()}
                 className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                 title={
-                  recipe.instructions.trim()
+                  (recipe.instructions ?? '').trim()
                     ? t('suggest')
                     : t('suggestNeedsInstructions')
                 }
