@@ -12,6 +12,8 @@ import {
 
 import { useTranslations } from 'next-intl';
 
+import { isEmptyDocHtml } from '@/lib/utils/shared/document/formatConverter';
+
 import '@/components/DocumentEditor/editor.css';
 
 import type { PinPoint } from '../Shared/Review/EditQuickActions';
@@ -218,15 +220,34 @@ export const RichTextEditor = forwardRef<
     }
   }, [editor, previewEdits, activeEditId, pinnedEditId, onPinEdit, handlePin]);
 
-  // Apply external content changes (streaming revisions, state rehydration)
-  // without clobbering the user's in-progress typing: only reset when the
-  // incoming HTML differs from what the editor already has.
+  // Apply external content changes (streaming revisions, applied edits, state
+  // rehydration) without disturbing the person typing.
   useEffect(() => {
     if (!editor) return;
     const current = editor.getHTML();
-    if (contentHtml && contentHtml !== current) {
-      editor.commands.setContent(contentHtml);
-    }
+    if (contentHtml === current) return;
+    // '' and '<p></p>' are the same empty document. The workspace stores the
+    // former (see isEmptyDocHtml) while the editor always reports the latter,
+    // so a raw comparison sees a difference on every render once the document
+    // has been emptied — and rewrites the document each time.
+    if (isEmptyDocHtml(contentHtml) && isEmptyDocHtml(current)) return;
+
+    // Replacing the document collapses the selection to the end, which is
+    // what "typing throws me to the end" is: an external write landing
+    // mid-keystroke. Restore where the caret was, clamped to the new size.
+    const { from, to } = editor.state.selection;
+    // `emitUpdate` defaults to TRUE. Left on, this swap announces itself as a
+    // user edit: onChange fires with ProseMirror's RE-NORMALIZED HTML (it
+    // rewrites entities and whitespace on parse — `&nbsp;` versus a plain
+    // space is the common one), that normalized string lands back in state,
+    // which no longer matches `contentHtml`, so this effect runs again. Each
+    // pass resets the caret.
+    editor.commands.setContent(contentHtml, { emitUpdate: false });
+    const end = editor.state.doc.content.size;
+    editor.commands.setTextSelection({
+      from: Math.min(from, end),
+      to: Math.min(to, end),
+    });
   }, [editor, contentHtml]);
 
   if (!editor) return null;
