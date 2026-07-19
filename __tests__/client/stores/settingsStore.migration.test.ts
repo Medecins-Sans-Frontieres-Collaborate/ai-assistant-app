@@ -538,3 +538,103 @@ describe('settingsStore migration (v38 → v39)', () => {
     expect(result.translationCriteria).toEqual([]);
   });
 });
+
+/**
+ * v40 → v41: extractionRecipes → savedStructures, now shared with the data
+ * workflow. The delicate part is `required`: recipes treated an absent flag
+ * as *required*, the shared type treats it as *optional*. The migration must
+ * therefore write the flag explicitly, or every saved recipe silently
+ * loosens into nullable unions.
+ */
+describe('settingsStore migration (v40 → v41)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  const recipe = (fields: Record<string, unknown>[]) => ({
+    id: 'r1',
+    name: 'Invoices',
+    instructions: 'find invoices',
+    fields,
+    createdAt: '2026-07-01T00:00:00.000Z',
+    updatedAt: '2026-07-01T00:00:00.000Z',
+  });
+
+  it('renames the collection and drops the legacy key', () => {
+    const result = migrate({ extractionRecipes: [recipe([])] }, 40) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.savedStructures).toHaveLength(1);
+    expect(result).not.toHaveProperty('extractionRecipes');
+    expect(result.savedStructures).toMatchObject([
+      { id: 'r1', name: 'Invoices', instructions: 'find invoices' },
+    ]);
+  });
+
+  it('stamps required:true on fields that omitted the flag', () => {
+    const result = migrate(
+      {
+        extractionRecipes: [
+          recipe([
+            { id: 'a', name: 'a', type: 'text' },
+            { id: 'b', name: 'b', type: 'number', required: true },
+          ]),
+        ],
+      },
+      40,
+    ) as Record<string, unknown>;
+
+    const fields = (result.savedStructures as { fields: unknown[] }[])[0]
+      .fields;
+    expect(fields).toEqual([
+      { id: 'a', name: 'a', type: 'text', required: true },
+      { id: 'b', name: 'b', type: 'number', required: true },
+    ]);
+  });
+
+  it('preserves explicitly optional fields', () => {
+    const result = migrate(
+      {
+        extractionRecipes: [
+          recipe([{ id: 'a', name: 'a', type: 'text', required: false }]),
+        ],
+      },
+      40,
+    ) as Record<string, unknown>;
+
+    const fields = (result.savedStructures as { fields: unknown[] }[])[0]
+      .fields;
+    expect(fields).toEqual([
+      { id: 'a', name: 'a', type: 'text', required: false },
+    ]);
+  });
+
+  it('backfills an empty list when there were no recipes', () => {
+    const result = migrate({ customAgents: [] }, 40) as Record<string, unknown>;
+    expect(result.savedStructures).toEqual([]);
+  });
+
+  it('repairs a non-array legacy value and a non-array fields list', () => {
+    expect(
+      (migrate({ extractionRecipes: 'oops' }, 40) as Record<string, unknown>)
+        .savedStructures,
+    ).toEqual([]);
+
+    const result = migrate(
+      { extractionRecipes: [{ id: 'r1', name: 'x', fields: 'oops' }] },
+      40,
+    ) as Record<string, unknown>;
+    expect(
+      (result.savedStructures as { fields: unknown[] }[])[0].fields,
+    ).toEqual([]);
+  });
+
+  it('carries a very old store through v23→24 and on to savedStructures', () => {
+    // v23 predates extractionRecipes entirely; the v24 block backfills the
+    // legacy key and v41 must then rename it rather than stepping past it.
+    const result = migrate({ customAgents: [] }, 23) as Record<string, unknown>;
+
+    expect(result.savedStructures).toEqual([]);
+    expect(result).not.toHaveProperty('extractionRecipes');
+  });
+});
