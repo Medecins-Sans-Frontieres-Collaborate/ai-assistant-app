@@ -302,3 +302,72 @@ describe('planRevision', () => {
     expect(plan).toEqual({ kind: 'direct', reason: 'unanchorable' });
   });
 });
+
+describe('turndown vs model formatting (regression)', () => {
+  // The editor's HTML goes through turndown, which escapes markdown
+  // metacharacters and pads list markers. The model returns plain markdown.
+  // Comparing raw, nothing matched, every revision measured as a full rewrite
+  // and silently bypassed suggestions.
+  const fromEditor = `# Field Report 2024
+
+Costs rose 30% in Q1 (see annex\\_2). Staffing reached twelve by June.
+
+-   Gloves
+-   Masks
+
+Supplies arrived late in the quarter.`;
+
+  const fromModel = `# Field Report 2024
+
+Costs rose 30% in Q1 (see annex_2). Staffing reached fifteen by June.
+
+- Gloves
+- Masks
+
+Supplies arrived late in the quarter.`;
+
+  it('suggests the real change rather than reporting a full rewrite', () => {
+    const diff = computeRevisionEdits(fromEditor, fromModel);
+
+    expect(diff.fullyAnchored).toBe(true);
+    // Only the sentence that actually changed — escaping and list padding are
+    // not user-visible changes and must not become suggestions.
+    expect(diff.changes).toHaveLength(1);
+    expect(diff.changes[0].before).toContain('twelve');
+    expect(diff.changes[0].after).toContain('fifteen');
+    expect(diff.changeRatio).toBeLessThan(0.5);
+  });
+
+  it('plans to suggest it', () => {
+    expect(
+      planRevision({
+        enabled: true,
+        mode: 'revise',
+        scoped: false,
+        oldMarkdown: fromEditor,
+        newMarkdown: fromModel,
+        exceptions: {
+          selectionScoped: true,
+          largeRewrites: true,
+          structuralReorders: true,
+        },
+        largeRewriteRatio: 0.5,
+      }).kind,
+    ).toBe('suggest');
+  });
+
+  it('anchors against the ORIGINAL escaped text, so applyEdit can find it', () => {
+    const diff = computeRevisionEdits(fromEditor, fromModel);
+    for (const change of diff.changes) {
+      expect(fromEditor).toContain(change.before);
+    }
+  });
+
+  it('does not suggest anything when only formatting differs', () => {
+    const reformatted = fromEditor
+      .replace(/annex\\_2/, 'annex_2')
+      .replace(/- {3}/g, '- ');
+    const diff = computeRevisionEdits(fromEditor, reformatted);
+    expect(diff.changes).toHaveLength(0);
+  });
+});
