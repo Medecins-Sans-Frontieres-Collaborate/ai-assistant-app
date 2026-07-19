@@ -5,7 +5,10 @@ import { useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { customCriterionId } from '@/lib/utils/shared/review/customCriteria';
+import {
+  MAX_CRITERION_RUBRIC_CHARS,
+  customCriterionId,
+} from '@/lib/utils/shared/review/customCriteria';
 
 import { CustomCriterion } from '@/types/workflow';
 
@@ -46,6 +49,12 @@ export function CriteriaManager({
     criteria[0]?.id ?? null,
   );
   const editing = criteria.find((c) => c.id === editingId);
+  // Not clamped with `maxLength`: a criterion saved before this limit was
+  // surfaced would be silently truncated on the next keystroke, destroying
+  // text the user never asked to lose. Show the overage and let them cut it.
+  const rubricOverBy = editing
+    ? editing.rubric.length - MAX_CRITERION_RUBRIC_CHARS
+    : 0;
 
   const handleCreate = () => {
     const now = new Date().toISOString();
@@ -137,11 +146,37 @@ export function CriteriaManager({
                 rows={5}
                 placeholder={t('criterionRubricPlaceholder')}
                 aria-label={t('criterionRubric')}
-                className={`${inputClass} w-full resize-y`}
+                aria-invalid={rubricOverBy > 0}
+                className={`${inputClass} w-full resize-y ${
+                  rubricOverBy > 0 ? 'border-red-500 dark:border-red-500' : ''
+                }`}
               />
-              <p className="mt-1 max-w-[65ch] text-xs text-gray-500 dark:text-gray-400">
-                {t('criterionRubricHint')}
-              </p>
+              {/* The rubric goes verbatim into every assessment prompt, so the
+                  server caps it. Without a visible count an over-long rubric
+                  saved fine and then failed each assessment at request time,
+                  where the cause was far from the cause. */}
+              <div className="mt-1 flex flex-wrap items-baseline justify-between gap-x-3">
+                <p className="max-w-[65ch] text-xs text-gray-500 dark:text-gray-400">
+                  {t('criterionRubricHint')}
+                </p>
+                <span
+                  className={`shrink-0 text-xs tabular-nums ${
+                    rubricOverBy > 0
+                      ? 'font-medium text-red-700 dark:text-red-400'
+                      : 'text-gray-400 dark:text-gray-500'
+                  }`}
+                >
+                  {editing.rubric.length} / {MAX_CRITERION_RUBRIC_CHARS}
+                </span>
+              </div>
+              {rubricOverBy > 0 && (
+                <p
+                  role="alert"
+                  className="mt-1 max-w-[65ch] text-xs text-red-700 dark:text-red-400"
+                >
+                  {t('criterionRubricTooLong', { over: rubricOverBy })}
+                </p>
+              )}
             </>
           ) : (
             <p className="max-w-[50ch] text-sm text-gray-500 dark:text-gray-400">
