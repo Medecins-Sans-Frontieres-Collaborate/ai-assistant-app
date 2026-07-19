@@ -98,12 +98,15 @@ export const RichTextEditor = forwardRef<
   const t = useTranslations();
 
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [pinPoint, setPinPoint] = useState<PinPoint | null>(null);
-
-  // The point belongs to the pin; losing one must lose the other.
-  useEffect(() => {
-    if (!pinnedEditId) setPinPoint(null);
-  }, [pinnedEditId]);
+  // The point belongs to the pin, so it is stored keyed by the edit it was
+  // captured for and derived during render. Losing the pin loses the point
+  // with no effect round-trip, and a pin moved from outside (parent-driven)
+  // can't render its bar at the previous pin's position.
+  const [pinAnchor, setPinAnchor] = useState<{
+    id: string;
+    point: PinPoint;
+  } | null>(null);
+  const pinPoint = pinAnchor?.id === pinnedEditId ? pinAnchor.point : null;
 
   /**
    * Records where in the scrolled content the click landed, so the action
@@ -118,12 +121,15 @@ export const RichTextEditor = forwardRef<
         // unlaid-out container would pin everything to x=0.
         const width = container.clientWidth;
         const maxX = width > 60 ? width - 56 : Infinity;
-        setPinPoint({
-          x: Math.min(
-            event.clientX - rect.left + container.scrollLeft + 4,
-            maxX,
-          ),
-          y: event.clientY - rect.top + container.scrollTop,
+        setPinAnchor({
+          id,
+          point: {
+            x: Math.min(
+              event.clientX - rect.left + container.scrollLeft + 4,
+              maxX,
+            ),
+            y: event.clientY - rect.top + container.scrollTop,
+          },
         });
       }
       onPinEdit?.(id);
