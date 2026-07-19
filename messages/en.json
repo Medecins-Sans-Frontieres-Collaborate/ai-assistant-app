@@ -1632,7 +1632,16 @@
       "clearSelection": "Clear selection (work with the full document)",
       "reviseSelectionPlaceholder": "Describe changes to the selection…",
       "revisedSelectionSummary": "I revised the selected passage in the workspace.",
-      "assessedSelection": "Selection"
+      "assessedSelection": "Selection",
+      "import": "Import",
+      "importReplaceTitle": "Replace document?",
+      "importReplaceBody": "Importing {name} will replace the current document. Your references, spec and tone are kept.",
+      "importReplaceConfirm": "Replace",
+      "editorMode": "Editor mode",
+      "editorModeRich": "Rich text",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Resolve the suggested edits before switching editor mode."
     },
     "data": {
       "emptyTitle": "Import data to analyze",
