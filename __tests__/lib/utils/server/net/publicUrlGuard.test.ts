@@ -2,6 +2,7 @@ import { FetchUrlError } from '@/lib/utils/server/net/fetchUrlError';
 import {
   fetchPublicUrl,
   isHttpsPublicShapedUrl,
+  isPrivateAddress,
   normalizeInputUrl,
   readBodyWithLimit,
 } from '@/lib/utils/server/net/publicUrlGuard';
@@ -261,5 +262,71 @@ describe('isHttpsPublicShapedUrl (moved, still enforced)', () => {
     'https://169.254.169.254/latest/meta-data',
   ])('rejects %s', (url) => {
     expect(isHttpsPublicShapedUrl(url)).toBe(false);
+  });
+});
+
+describe('isPrivateAddress', () => {
+  it.each([
+    ['10.0.0.1', 'RFC1918 /8'],
+    ['172.16.0.1', 'RFC1918 /12'],
+    ['192.168.1.1', 'RFC1918 /16'],
+    ['127.0.0.1', 'loopback'],
+    ['0.0.0.0', 'this network'],
+    ['169.254.169.254', 'cloud metadata'],
+    ['100.64.0.1', 'CGNAT'],
+    ['224.0.0.1', 'multicast'],
+    ['192.0.0.1', 'IETF protocol assignments'],
+    ['192.0.2.5', 'TEST-NET-1'],
+    ['198.18.0.1', 'benchmarking /15'],
+    ['198.19.255.254', 'benchmarking /15 upper half'],
+    ['198.51.100.5', 'TEST-NET-2'],
+    ['203.0.113.5', 'TEST-NET-3'],
+  ])('treats IPv4 %s as private (%s)', (address) => {
+    expect(isPrivateAddress(address)).toBe(true);
+  });
+
+  it.each([
+    ['::1', 'loopback'],
+    ['::', 'unspecified'],
+    ['fe80::1', 'link-local'],
+    ['febf::1', 'link-local upper bound of /10'],
+    ['fc00::1', 'ULA'],
+    ['fdff::1', 'ULA upper half'],
+    ['ff02::1', 'multicast'],
+    ['2001:0:1234::1', 'Teredo'],
+    ['2001:db8::1', 'documentation'],
+    // Tunnelling/translation forms that smuggle an IPv4 address inside a
+    // public-looking IPv6 literal — each of these decodes to a blocked v4.
+    ['::ffff:127.0.0.1', 'v4-mapped dotted'],
+    ['::ffff:7f00:1', 'v4-mapped hex'],
+    ['::ffff:169.254.169.254', 'v4-mapped metadata'],
+    ['::127.0.0.1', 'v4-compatible'],
+    ['64:ff9b::169.254.169.254', 'NAT64 metadata'],
+    ['64:ff9b::7f00:1', 'NAT64 loopback hex'],
+    ['64:ff9b:1::a9fe:a9fe', 'NAT64 /48 metadata'],
+    ['2002:a9fe:a9fe::1', '6to4 metadata'],
+    ['2002:7f00:1::1', '6to4 loopback'],
+  ])('treats IPv6 %s as private (%s)', (address) => {
+    expect(isPrivateAddress(address)).toBe(true);
+  });
+
+  it.each([
+    ['93.184.216.34', 'public IPv4'],
+    ['8.8.8.8', 'public resolver'],
+    ['198.20.0.1', 'just below the benchmarking range'],
+    ['198.51.101.1', 'adjacent to TEST-NET-2'],
+    ['2606:2800:220:1:248:1893:25c8:1946', 'public IPv6'],
+    ['2002:5db8:d822::1', '6to4 wrapping a PUBLIC v4'],
+    ['64:ff9b::5db8:d822', 'NAT64 wrapping a PUBLIC v4'],
+  ])('treats %s as public (%s)', (address) => {
+    expect(isPrivateAddress(address)).toBe(false);
+  });
+
+  it('is an IP-literal predicate: hostnames are not its job', () => {
+    // Callers only reach it behind an isIP() check (isHttpsPublicShapedUrl)
+    // or with resolver output (assertPublicHost), so anything that isn't an
+    // IP literal falls through to the hostname/DNS checks instead.
+    expect(isPrivateAddress('localhost')).toBe(false);
+    expect(isPrivateAddress('::ffff:not:a:valid:addr:::1')).toBe(false);
   });
 });

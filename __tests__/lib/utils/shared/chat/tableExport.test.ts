@@ -58,6 +58,18 @@ describe('tableRowsToMarkdown', () => {
     );
   });
 
+  it('escapes backslashes so a literal \\| cannot break the column', () => {
+    // Without escaping the backslash first this emits `a\\|b`, which GFM
+    // reads as an escaped backslash followed by a live pipe — splitting the
+    // row into two columns and shifting every cell after it.
+    expect(tableRowsToMarkdown([['a\\|b', 'next']])).toBe(
+      '| a\\\\\\|b | next |\n| --- | --- |',
+    );
+    expect(tableRowsToMarkdown([['C:\\path\\']])).toBe(
+      '| C:\\\\path\\\\ |\n| --- |',
+    );
+  });
+
   it('pads ragged rows to the widest row', () => {
     expect(tableRowsToMarkdown([['A', 'B'], ['only-one']])).toBe(
       '| A | B |\n| --- | --- |\n| only-one |  |',
