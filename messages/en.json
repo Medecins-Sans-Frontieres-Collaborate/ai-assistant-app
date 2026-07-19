@@ -1353,7 +1353,7 @@
     "Usage & Impact": "Usage & Impact",
     "Backup": "Backup",
     "Memories": "Memories",
-    "Agent Access": "Agent Access",
+    "Agent Access": "Access & Connectors",
     "LocalModels": "Local models"
   },
   "workflows": {
@@ -3135,6 +3135,22 @@
       "asana": {
         "name": "Asana",
         "description": "Find, create, and update tasks and projects."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Query published data sources, workbooks, and Pulse metrics."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Look up and update records across your Salesforce objects."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Draft, schedule, and publish social media posts."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Review and respond to social inbox conversations."
       }
     },
     "connect": "Connect",
@@ -3196,7 +3212,18 @@
       "missingState": "Nothing to authorize",
       "close": "You can close this window and return to the app.",
       "closeButton": "Close window"
-    }
+    },
+    "adminConnectorsTitle": "From your organization",
+    "adminConnectorsDescription": "Connectors your administrators have set up. Which ones you see depends on your access.",
+    "managedByOrg": "Managed by your organization",
+    "connectorOauthNotConfigured": "Sign-in isn't finished being set up for this connector. Contact your administrator.",
+    "yourConnectorsTitle": "Your connectors",
+    "addTitle": "Add a connector",
+    "addDescription": "Pick a tool to connect. You'll set up access after choosing.",
+    "add": "Add",
+    "filterLabel": "Filter connectors",
+    "filterPlaceholder": "Search connectors",
+    "noMatches": "No connectors match “{query}”."
   },
   "backup": {
     "intro": {
@@ -3347,11 +3374,11 @@
     "description": "Older messages beyond this limit are summarized and sent as context."
   },
   "agentAccess": {
-    "title": "Agent Access",
-    "description": "Control which users can use shared Foundry agents. Rules only further restrict what a user's own Azure access already allows — they can never grant access Azure denies.",
+    "title": "Access & Connectors",
+    "description": "Control which users can use shared agents and organization connectors. Rules only further restrict what a user's own Azure access already allows — they can never grant access Azure denies.",
     "backToChat": "Back to chat",
-    "loading": "Loading agents and rules…",
-    "loadError": "Couldn't load agent access data.",
+    "loading": "Loading…",
+    "loadError": "Couldn't load access data.",
     "rulesUnavailableWarning": "Access rules could not be loaded from storage. Agent invocation is currently blocked and rules cannot be edited.",
     "retry": "Retry",
     "rulesTab": "Agent rules",
@@ -3416,7 +3443,39 @@
     "promptAgentCreateSuccess": "Prompt agent created.",
     "promptAgentSaveSuccess": "Prompt agent saved.",
     "promptAgentDeleteSuccess": "Prompt agent deleted.",
-    "promptAgentsUnavailableWarning": "Prompt agents could not be loaded from storage. They cannot be edited right now."
+    "promptAgentsUnavailableWarning": "Prompt agents could not be loaded from storage. They cannot be edited right now.",
+    "agentsTab": "Agents",
+    "connectorsTab": "Connectors",
+    "addConnector": "Add connector",
+    "noConnectors": "No connectors yet.",
+    "connectorsUnavailableWarning": "Couldn't reach the connector store, so this list may be incomplete. Don't create a replacement until it loads.",
+    "editAccess": "Edit access",
+    "deleteConnector": "Delete",
+    "deleteConnectorConfirm": "Delete this connector? Anyone using it will lose access immediately.",
+    "confirmDeleteConnector": "Delete connector",
+    "connectorSaveSuccess": "Connector saved.",
+    "connectorCreateSuccess": "Connector created.",
+    "connectorDeleteSuccess": "Connector deleted.",
+    "editConnectorTitle": "Edit connector",
+    "newConnectorTitle": "New connector",
+    "connectorPresetLabel": "Start from a template",
+    "connectorPresetNone": "Start from scratch",
+    "connectorNameLabel": "Name",
+    "connectorDescriptionLabel": "Description",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "Replace the {placeholder} in the URL with your own value before saving.",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Authentication",
+    "connectorAuthNone": "None",
+    "connectorAuthBearer": "Token (each user provides their own)",
+    "connectorAuthOauth": "OAuth sign-in",
+    "connectorSealingUnavailable": "OAuth is unavailable: this deployment has no AUTH_SECRET configured to encrypt client secrets with.",
+    "connectorTokenHelpLabel": "Link to token instructions (optional)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "A secret is stored. Leave blank to keep it, or enter a new one to replace it.",
+    "connectorClientSecretHint": "Encrypted before it is stored, and never shown again.",
+    "connectorScopesLabel": "Scopes (space-separated, optional)"
   },
   "extraction": {
     "toggleLabel": "Extract structured data",

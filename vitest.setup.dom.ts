@@ -31,6 +31,8 @@ vi.mock('katex/dist/katex.min.css', () => ({}));
 // This provides a global mock that looks up translations from a messages object.
 const mockMessages: Record<string, unknown> = {
   common: {
+    cancel: 'Cancel',
+    undo: 'Undo',
     close: 'Close',
     closeModal: 'Close modal',
     remove: 'Remove',
@@ -171,12 +173,50 @@ const mockMessages: Record<string, unknown> = {
     },
   },
   agentAccess: {
-    title: 'Agent Access',
+    title: 'Access & Connectors',
     description:
-      "Control which users can use shared Foundry agents. Rules only further restrict what a user's own Azure access already allows — they can never grant access Azure denies.",
+      "Control which users can use shared agents and organization connectors. Rules only further restrict what a user's own Azure access already allows — they can never grant access Azure denies.",
     backToChat: 'Back to chat',
-    loading: 'Loading agents and rules…',
-    loadError: "Couldn't load agent access data.",
+    loading: 'Loading…',
+    loadError: "Couldn't load access data.",
+    agentsTab: 'Agents',
+    connectorsTab: 'Connectors',
+    addConnector: 'Add connector',
+    noConnectors: 'No connectors yet.',
+    connectorsUnavailableWarning:
+      "Couldn't reach the connector store, so this list may be incomplete. Don't create a replacement until it loads.",
+    editAccess: 'Edit access',
+    deleteConnector: 'Delete',
+    deleteConnectorConfirm:
+      'Delete this connector? Anyone using it will lose access immediately.',
+    confirmDeleteConnector: 'Delete connector',
+    connectorSaveSuccess: 'Connector saved.',
+    connectorCreateSuccess: 'Connector created.',
+    connectorDeleteSuccess: 'Connector deleted.',
+    editConnectorTitle: 'Edit connector',
+    newConnectorTitle: 'New connector',
+    connectorPresetLabel: 'Start from a template',
+    connectorPresetNone: 'Start from scratch',
+    connectorNameLabel: 'Name',
+    connectorDescriptionLabel: 'Description',
+    connectorUrlLabel: 'Server URL',
+    connectorUrlPlaceholderWarning:
+      'Replace the {placeholder} in the URL with your own value before saving.',
+    connectorTransportLabel: 'Transport',
+    connectorAuthLabel: 'Authentication',
+    connectorAuthNone: 'None',
+    connectorAuthBearer: 'Token (each user provides their own)',
+    connectorAuthOauth: 'OAuth sign-in',
+    connectorSealingUnavailable:
+      'OAuth is unavailable: this deployment has no AUTH_SECRET configured to encrypt client secrets with.',
+    connectorTokenHelpLabel: 'Link to token instructions (optional)',
+    connectorClientIdLabel: 'OAuth client ID',
+    connectorClientSecretLabel: 'OAuth client secret',
+    connectorClientSecretStored:
+      'A secret is stored. Leave blank to keep it, or enter a new one to replace it.',
+    connectorClientSecretHint:
+      'Encrypted before it is stored, and never shown again.',
+    connectorScopesLabel: 'Scopes (space-separated, optional)',
     rulesUnavailableWarning:
       'Access rules could not be loaded from storage. Agent invocation is currently blocked and rules cannot be edited.',
     retry: 'Retry',
@@ -326,6 +366,20 @@ const mockMessages: Record<string, unknown> = {
     title: 'Connectors',
     description:
       'Connect external tools through the Model Context Protocol (MCP). Connected tools become available to models in chat, and every tool call runs only after you approve it.',
+    adminConnectorsTitle: 'From your organization',
+    yourConnectorsTitle: 'Your connectors',
+    addTitle: 'Add a connector',
+    addDescription:
+      "Pick a tool to connect. You'll set up access after choosing.",
+    add: 'Add',
+    filterLabel: 'Filter connectors',
+    filterPlaceholder: 'Search connectors',
+    noMatches: 'No connectors match “{query}”.',
+    adminConnectorsDescription:
+      'Connectors your administrators have set up. Which ones you see depends on your access.',
+    managedByOrg: 'Managed by your organization',
+    connectorOauthNotConfigured:
+      "Sign-in isn't finished being set up for this connector. Contact your administrator.",
     localOnlyNote:
       'You sign in directly with each provider. Access keys are encrypted and stored only on this device, and are relayed through the app server with each request — never stored or logged there.',
     catalog: {
