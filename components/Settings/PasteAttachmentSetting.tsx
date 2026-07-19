@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -39,9 +39,16 @@ export const PasteAttachmentSetting: FC = () => {
   const [draft, setDraft] = useState(
     String(pasteAsAttachmentChars || DEFAULT_PASTE_ATTACHMENT_CHARS),
   );
-  useEffect(() => {
+
+  // Re-sync the field when the stored value changes underneath us (another
+  // tab, a settings reset). Adjusting during render rather than in an effect:
+  // React re-runs this render before committing, so the field never paints
+  // the previous value first. See "You Might Not Need an Effect".
+  const [syncedChars, setSyncedChars] = useState(pasteAsAttachmentChars);
+  if (pasteAsAttachmentChars !== syncedChars) {
+    setSyncedChars(pasteAsAttachmentChars);
     if (pasteAsAttachmentChars > 0) setDraft(String(pasteAsAttachmentChars));
-  }, [pasteAsAttachmentChars]);
+  }
 
   const commitDraft = () => {
     const parsed = Number(draft);
