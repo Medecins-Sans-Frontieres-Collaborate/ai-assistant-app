@@ -1,9 +1,10 @@
 import { NextRequest } from 'next/server';
 
+import { createConnectorResolver } from '@/lib/services/mcp/connectorResolution';
 import {
   McpOauthError,
+  getOauthClientCredentials,
   getOauthRedirectUri,
-  getStaticOauthClient,
   resolveOauthContext,
 } from '@/lib/services/mcp/mcpOauthDiscovery';
 import { guardedFetch } from '@/lib/services/mcp/mcpUrlGuard';
@@ -38,6 +39,7 @@ const serverSchema = z
     id: z.string().regex(/^[a-zA-Z0-9_-]{1,64}$/),
     name: z.string().min(1).max(100),
     catalogKey: z.string().max(64).optional(),
+    connectorId: z.string().max(64).optional(),
     url: z.string().max(2048).optional(),
   })
   .strict();
@@ -93,13 +95,15 @@ export async function POST(request: NextRequest) {
   const { server, grant } = parsed.data;
 
   try {
-    const context = await resolveOauthContext(server);
+    const context = await resolveOauthContext(server, {
+      resolveConnector: await createConnectorResolver(session),
+    });
     const metadata = context.metadata as AuthorizationServerMetadata;
     const fetchFn = context.resolved.trusted ? undefined : guardedFetch();
     // Static (pre-registered) clients: the browser only ever holds the
     // clientId — the SECRET lives in env and is injected here, server-side.
     // Any browser-sent secret is ignored for a recognized static clientId.
-    const staticClient = getStaticOauthClient(server.catalogKey);
+    const staticClient = await getOauthClientCredentials(server);
     const clientInformation =
       staticClient && grant.clientId === staticClient.clientId
         ? {
