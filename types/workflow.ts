@@ -366,6 +366,14 @@ export interface DocumentWorkflowState {
   toneId?: string;
   /** Pinned spelling variety; absent = 'auto' (detected, mixing flagged). */
   spellingVariety?: 'auto' | 'US' | 'UK';
+  /**
+   * Source-editing mode. ABSENT (the default) means the rich-text editor —
+   * left undefined rather than defaulting to a literal so a freshly created
+   * document still compares equal to `createInitialWorkflowState('document')`
+   * and leaving it doesn't prompt to discard. `docHtml` stays canonical in
+   * every mode; these are views onto it.
+   */
+  editorMode?: 'markdown' | 'html';
   profile?: DocumentProfile;
   assessment?: DocumentAssessment;
   updatedAt: string;
