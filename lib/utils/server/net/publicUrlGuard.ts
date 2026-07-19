@@ -13,12 +13,51 @@ import { isIP } from 'node:net';
  * That covers redirects and any follow-up URLs a response steers to.
  */
 
+/**
+ * Expands any IPv6 spelling — `::` compression, embedded dotted quad — into
+ * exactly 8 numeric hextets, so ranges can be tested numerically instead of
+ * by string prefix. Returns null if the input isn't a parseable IPv6 literal;
+ * callers treat that as private (fail closed).
+ */
+function expandIpv6(address: string): number[] | null {
+  let text = address;
+
+  // A trailing dotted quad (::ffff:192.168.0.1) becomes two hextets.
+  const lastColon = text.lastIndexOf(':');
+  const tail = text.slice(lastColon + 1);
+  if (isIP(tail) === 4) {
+    const [o0, o1, o2, o3] = tail.split('.').map(Number);
+    text = `${text.slice(0, lastColon + 1)}${(((o0 << 8) | o1) >>> 0).toString(16)}:${(((o2 << 8) | o3) >>> 0).toString(16)}`;
+  }
+
+  const halves = text.split('::');
+  if (halves.length > 2) return null;
+
+  const parse = (part: string): string[] => (part ? part.split(':') : []);
+  const head = parse(halves[0]);
+  let groups: string[];
+  if (halves.length === 1) {
+    groups = head;
+  } else {
+    const rear = parse(halves[1]);
+    const missing = 8 - head.length - rear.length;
+    if (missing < 0) return null;
+    groups = [...head, ...Array<string>(missing).fill('0'), ...rear];
+  }
+  if (groups.length !== 8) return null;
+
+  const hextets = groups.map((group) =>
+    /^[0-9a-f]{1,4}$/.test(group) ? parseInt(group, 16) : NaN,
+  );
+  return hextets.some(Number.isNaN) ? null : hextets;
+}
+
 /** Private/loopback/link-local/ULA IPv4+IPv6 detector. */
 export function isPrivateAddress(address: string): boolean {
   const version = isIP(address);
   if (version === 4) {
     const octets = address.split('.').map(Number);
-    const [a, b] = octets;
+    const [a, b, c] = octets;
     return (
       a === 0 || // 0.0.0.0/8 "this network"
       a === 10 || // 10.0.0.0/8
@@ -26,32 +65,41 @@ export function isPrivateAddress(address: string): boolean {
       (a === 169 && b === 254) || // link-local
       (a === 172 && b >= 16 && b <= 31) || // 172.16.0.0/12
       (a === 192 && b === 168) || // 192.168.0.0/16
+      (a === 192 && b === 0 && c === 0) || // IETF protocol assignments
+      (a === 192 && b === 0 && c === 2) || // TEST-NET-1
+      (a === 198 && (b === 18 || b === 19)) || // benchmarking 198.18.0.0/15
+      (a === 198 && b === 51 && c === 100) || // TEST-NET-2
+      (a === 203 && b === 0 && c === 113) || // TEST-NET-3
       (a === 100 && b >= 64 && b <= 127) || // CGNAT 100.64.0.0/10
       a >= 224 // multicast + reserved
     );
   }
   if (version === 6) {
-    const lower = address.toLowerCase();
-    if (lower === '::' || lower === '::1') return true; // unspecified/loopback
-    if (/^fe[89ab]/.test(lower)) return true; // link-local fe80::/10
-    if (/^f[cd]/.test(lower)) return true; // ULA fc00::/7
-    if (lower.startsWith('::ffff:')) {
-      // v4-mapped — recheck the embedded IPv4. The URL parser emits the hex
-      // form (::ffff:c0a8:1), resolvers may emit dotted (::ffff:192.168.0.1).
-      const rest = lower.slice('::ffff:'.length);
-      if (isIP(rest) === 4) return isPrivateAddress(rest);
-      const groups = rest.split(':');
-      if (groups.length <= 2) {
-        const hi = parseInt(groups.length === 2 ? groups[0] : '0', 16);
-        const lo = parseInt(groups[groups.length - 1], 16);
-        if (!Number.isNaN(hi) && !Number.isNaN(lo)) {
-          return isPrivateAddress(
-            `${hi >> 8}.${hi & 0xff}.${lo >> 8}.${lo & 0xff}`,
-          );
-        }
-      }
-      return true; // unparseable mapped form — fail closed
+    const g = expandIpv6(address.toLowerCase());
+    if (!g) return true; // unparseable — fail closed
+
+    const embedded = (hi: number, lo: number) =>
+      `${hi >> 8}.${hi & 0xff}.${lo >> 8}.${lo & 0xff}`;
+    const zeros = (upTo: number) => g.slice(0, upTo).every((x) => x === 0);
+
+    if (zeros(8)) return true; // :: unspecified
+    if (zeros(7) && g[7] === 1) return true; // ::1 loopback
+
+    // Forms that carry an IPv4 address inside them: recheck the embedded v4,
+    // or ::ffff:127.0.0.1 / 64:ff9b::169.254.169.254 walk straight past us.
+    if (zeros(5) && g[5] === 0xffff)
+      return isPrivateAddress(embedded(g[6], g[7])); // v4-mapped
+    if (zeros(6)) return isPrivateAddress(embedded(g[6], g[7])); // v4-compatible ::a.b.c.d
+    if (g[0] === 0x0064 && g[1] === 0xff9b) {
+      return isPrivateAddress(embedded(g[6], g[7])); // NAT64 64:ff9b::/96 + /48
     }
+    if (g[0] === 0x2002) return isPrivateAddress(embedded(g[1], g[2])); // 6to4 2002::/16
+
+    if ((g[0] & 0xffc0) === 0xfe80) return true; // link-local fe80::/10
+    if ((g[0] & 0xfe00) === 0xfc00) return true; // ULA fc00::/7
+    if (g[0] === 0x2001 && g[1] === 0x0000) return true; // Teredo 2001::/32
+    if (g[0] === 0x2001 && g[1] === 0x0db8) return true; // documentation
+    if ((g[0] & 0xff00) === 0xff00) return true; // multicast ff00::/8
     return false;
   }
   return false;
