@@ -359,9 +359,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     // to choose the preview behaviour — the real decision needs the finished
     // text and happens below.
     const intendToSuggest =
-      suggestRevisions &&
-      mode === 'revise' &&
-      !(scopedSelection && suggestRevisionsExceptions.selectionScoped);
+      suggestRevisions && mode === 'revise' && !scopedSelection;
     // Selection revisions land atomically on completion — no streaming
     // preview (the preview would misleadingly replace the whole document).
     // Suggested revisions suppress it for the same reason: the document is
@@ -1204,18 +1202,25 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           {scopeChip}
           {/* Only meaningful for a revision: with a blank document there is
               nothing to suggest changes against. */}
+          {/* With a selection active the checkbox cannot do anything — that
+              path always applies directly — so it is disabled and says why,
+              rather than sitting there ticked and being quietly ignored. */}
           <label
-            className="inline-flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400"
+            className={`inline-flex items-center gap-1.5 text-xs ${
+              selection
+                ? 'text-gray-400 dark:text-gray-600'
+                : 'text-gray-600 dark:text-gray-400'
+            }`}
             title={
-              selection && suggestRevisionsExceptions.selectionScoped
+              selection
                 ? t('document.suggestChangesSelectionNote')
                 : t('document.suggestChangesHint')
             }
           >
             <input
               type="checkbox"
-              checked={suggestRevisions}
-              disabled={isBusy || hasUnresolvedEdits}
+              checked={suggestRevisions && !selection}
+              disabled={isBusy || hasUnresolvedEdits || selection !== null}
               onChange={(e) => setSuggestOverride(e.target.checked)}
               className="h-3.5 w-3.5 accent-gray-600 disabled:opacity-50 dark:accent-gray-400"
             />
