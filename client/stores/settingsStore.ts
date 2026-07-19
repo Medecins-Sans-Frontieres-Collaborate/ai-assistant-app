@@ -611,21 +611,22 @@ interface SettingsStore {
    * because suggesting would be unhelpful or misleading. All default on.
    */
   suggestRevisionsExceptions: {
-    /** Revising a selection — the selection already is the review. */
-    selectionScoped: boolean;
-    /** A rewrite so extensive the suggestion is one unreviewable block. */
+    /** A single change so large that accepting it accepts the whole rewrite. */
     largeRewrites: boolean;
     /** Sections moved rather than edited; each half reads as nonsense. */
     structuralReorders: boolean;
   };
-  /** Change ratio (0–1) at or above which `largeRewrites` triggers. */
+  /**
+   * Fraction of the document (0–1) that ONE change must span before
+   * `largeRewrites` treats the result as unreviewable.
+   */
   suggestRevisionsLargeRewriteRatio: number;
   setConfirmStopFromButton: (enabled: boolean) => void;
   setConfirmStopFromKeyboard: (enabled: boolean) => void;
   setAutoClearResolvedEdits: (enabled: boolean) => void;
   setSuggestRevisions: (enabled: boolean) => void;
   setSuggestRevisionsException: (
-    key: 'selectionScoped' | 'largeRewrites' | 'structuralReorders',
+    key: 'largeRewrites' | 'structuralReorders',
     enabled: boolean,
   ) => void;
   setSuggestRevisionsLargeRewriteRatio: (ratio: number) => void;
@@ -740,9 +741,8 @@ export const useSettingsStore = create<SettingsStore>()(
       autoClearResolvedEdits: false,
       suggestRevisions: true,
       suggestRevisionsExceptions: {
-        selectionScoped: true,
         largeRewrites: true,
-        structuralReorders: true,
+        structuralReorders: false,
       },
       suggestRevisionsLargeRewriteRatio: DEFAULT_LARGE_REWRITE_RATIO,
 
@@ -1438,16 +1438,15 @@ export const useSettingsStore = create<SettingsStore>()(
           autoClearResolvedEdits: false,
           suggestRevisions: true,
           suggestRevisionsExceptions: {
-            selectionScoped: true,
             largeRewrites: true,
-            structuralReorders: true,
+            structuralReorders: false,
           },
           suggestRevisionsLargeRewriteRatio: DEFAULT_LARGE_REWRITE_RATIO,
         }),
     }),
     {
       name: 'settings-storage',
-      version: 42, // Increment this when schema changes to trigger migrations
+      version: 43, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1948,7 +1947,6 @@ export const useSettingsStore = create<SettingsStore>()(
             | Record<string, unknown>
             | undefined;
           state.suggestRevisionsExceptions = {
-            selectionScoped: exceptions?.selectionScoped !== false,
             largeRewrites: exceptions?.largeRewrites !== false,
             structuralReorders: exceptions?.structuralReorders !== false,
           };
@@ -1956,6 +1954,23 @@ export const useSettingsStore = create<SettingsStore>()(
             state.suggestRevisionsLargeRewriteRatio =
               DEFAULT_LARGE_REWRITE_RATIO;
           }
+        }
+
+        // Version 42 → 43: the v42 exceptions were far too eager — in practice
+        // a requested revision was almost always applied instead of suggested,
+        // which is the opposite of what the feature is for. The threshold now
+        // measures the LARGEST SINGLE change rather than total change, reorder
+        // detection is off by default (a moved block still reviews fine), and
+        // `selectionScoped` is gone: it is now unconditional, because a
+        // selection revise returns an excerpt that cannot be diffed against
+        // the document at all. Reset rather than preserved — these were our
+        // broken defaults, not a considered user choice.
+        if (version < 43) {
+          state.suggestRevisionsExceptions = {
+            largeRewrites: true,
+            structuralReorders: false,
+          };
+          state.suggestRevisionsLargeRewriteRatio = DEFAULT_LARGE_REWRITE_RATIO;
         }
 
         return state;
