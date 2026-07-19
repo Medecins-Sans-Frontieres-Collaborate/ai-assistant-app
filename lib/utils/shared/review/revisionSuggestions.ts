@@ -180,6 +180,40 @@ interface DiffRun {
   ins: string;
 }
 
+/**
+ * Breaks one replaced run into sentence-sized pieces.
+ *
+ * Without this, a run of consecutive changed sentences is a SINGLE change —
+ * so "make this more formal", which rewrites every sentence, collapses into
+ * one before/after block covering the whole document. That is unreviewable,
+ * and it was the case most in need of review.
+ *
+ * Sentences are paired positionally; the final pair absorbs any leftover on
+ * either side, so the pieces still concatenate back to the whole run and
+ * accepting all of them reproduces the rewrite exactly. Positional pairing can
+ * put unrelated sentences together when the model splits or merges one, but
+ * each pair is still a valid, individually acceptable before/after.
+ */
+function splitRun(run: DiffRun): DiffRun[] {
+  const delCount = run.delEnd - run.delStart;
+  const inserted = run.ins ? splitSentences(run.ins) : [];
+  // A pure insertion or pure deletion has nothing to pair against.
+  if (delCount === 0 || inserted.length === 0) return [run];
+
+  const pairs = Math.min(delCount, inserted.length);
+  const out: DiffRun[] = [];
+  for (let k = 0; k < pairs; k += 1) {
+    const isLast = k === pairs - 1;
+    const delStart = run.delStart + k;
+    out.push({
+      delStart,
+      delEnd: isLast ? run.delEnd : delStart + 1,
+      ins: isLast ? inserted.slice(k).join('') : inserted[k],
+    });
+  }
+  return out;
+}
+
 function countOccurrences(haystack: string, needle: string): number {
   if (!needle) return 0;
   let count = 0;
@@ -381,7 +415,9 @@ export function computeRevisionEdits(
 
   const changes: RevisionChange[] = [];
   let fullyAnchored = true;
-  for (const run of runs) {
+  // Reorder detection runs on the UNSPLIT runs — a moved block is a property
+  // of the whole run, and splitting it first would hide the match.
+  for (const run of runs.flatMap(splitRun)) {
     const anchored = anchorRun(run, a, oldText);
     if (!anchored) {
       fullyAnchored = false;
