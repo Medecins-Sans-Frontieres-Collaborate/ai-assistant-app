@@ -19,6 +19,7 @@ import type { OpenAIModel } from '@/types/openai';
 import { AgentAccessPanel } from '@/components/AgentAccess/AgentAccessPanel';
 import type {
   AdminConfigResponse,
+  AdminStoredConnector,
   AdminStoredPromptAgent,
   AdminStoredRule,
   DiscoveredAgentSummary,
@@ -172,6 +173,16 @@ function jsonResponse(status: number, body: unknown) {
   };
 }
 
+let connectorsResponse: AdminStoredConnector[] = [];
+let connectorsUnavailable = false;
+let secretSealingAvailable = true;
+const connectorWriteCalls: {
+  method: string;
+  headers: Record<string, string>;
+  body: unknown;
+  url: string;
+}[] = [];
+
 const fetchMock = vi.fn(async (input: string | URL, init?: RequestInit) => {
   const url = String(input);
   const method = init?.method ?? 'GET';
@@ -278,6 +289,26 @@ const fetchMock = vi.fn(async (input: string | URL, init?: RequestInit) => {
   if (url.startsWith('/api/agent-access/config')) {
     return jsonResponse(200, { success: true, data: configResponse });
   }
+  if (url.startsWith('/api/agent-access/connectors')) {
+    if (method !== 'GET') {
+      connectorWriteCalls.push({
+        method,
+        url,
+        headers: (init?.headers ?? {}) as Record<string, string>,
+        body: init?.body ? JSON.parse(String(init.body)) : null,
+      });
+      return jsonResponse(200, { success: true, data: {} });
+    }
+    return jsonResponse(200, {
+      success: true,
+      data: {
+        connectors: connectorsResponse,
+        connectorsUnavailable,
+        secretSealingAvailable,
+        fetchedAt: 1752700000000,
+      },
+    });
+  }
   if (url.startsWith('/api/agents')) {
     // /api/agents responds without the {success, data} envelope.
     return jsonResponse(200, { agents: agentsResponse });
@@ -324,6 +355,10 @@ describe('AgentAccessPanel', () => {
     agentDeleteStatus = 200;
     agentDeleteCalls = [];
     agentSaveErrorBody = {};
+    connectorsResponse = [];
+    connectorsUnavailable = false;
+    secretSealingAvailable = true;
+    connectorWriteCalls.length = 0;
     fetchMock.mockClear();
     vi.mocked(toast.success).mockClear();
     vi.mocked(toast.error).mockClear();
@@ -457,7 +492,7 @@ describe('AgentAccessPanel', () => {
     // The /me query retries once with ~1s backoff before settling into its
     // error state, so allow more than the default findBy timeout.
     expect(
-      await screen.findByText("Couldn't load agent access data.", undefined, {
+      await screen.findByText("Couldn't load access data.", undefined, {
         timeout: 5000,
       }),
     ).toBeInTheDocument();
@@ -826,5 +861,119 @@ describe('AgentAccessPanel', () => {
     expect(
       within(promptLabel as HTMLElement).getByRole('checkbox'),
     ).not.toBeChecked();
+  });
+
+  describe('connectors tab', () => {
+    const netsuiteConnector: AdminStoredConnector = {
+      canonicalKey: 'mcp-connector::connector-abc123def456',
+      etag: '"etag-conn-1"',
+      connector: {
+        id: 'connector-abc123def456',
+        name: 'Contoso NetSuite',
+        description: 'Query NetSuite records',
+        url: 'https://acct123.suitetalk.api.netsuite.com/services/mcp/v1/all',
+        transport: 'streamable-http',
+        authStyle: 'oauth',
+        oauthClientId: 'client-id',
+        oauthScopes: [],
+        hasClientSecret: true,
+        createdBy: 'admin@example.org',
+        createdAt: '2026-07-18T00:00:00.000Z',
+        updatedBy: 'admin@example.org',
+        updatedAt: '2026-07-18T00:00:00.000Z',
+      },
+    };
+
+    const openConnectorsTab = async () => {
+      renderPanel();
+      fireEvent.click(await screen.findByText('Connectors'));
+    };
+
+    it('lists connectors with their URL and access state', async () => {
+      connectorsResponse = [netsuiteConnector];
+      await openConnectorsTab();
+
+      expect(await screen.findByText('Contoso NetSuite')).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'https://acct123.suitetalk.api.netsuite.com/services/mcp/v1/all',
+        ),
+      ).toBeInTheDocument();
+      // No rule for this key → deny-list semantics means everyone.
+      expect(screen.getByText('Everyone')).toBeInTheDocument();
+    });
+
+    it('shows the outage warning instead of an empty list', async () => {
+      // An empty list during an outage would invite an admin to recreate a
+      // connector that already exists.
+      connectorsUnavailable = true;
+      await openConnectorsTab();
+
+      expect(
+        await screen.findByText(/Couldn't reach the connector store/),
+      ).toBeInTheDocument();
+      expect(screen.queryByText('No connectors yet.')).not.toBeInTheDocument();
+    });
+
+    it('disables the OAuth style when the deployment cannot seal secrets', async () => {
+      secretSealingAvailable = false;
+      await openConnectorsTab();
+
+      fireEvent.click(await screen.findByText('Add connector'));
+
+      const oauthOption = (await screen.findByText(
+        'OAuth sign-in',
+      )) as HTMLOptionElement;
+      expect(oauthOption.disabled).toBe(true);
+      expect(
+        screen.getByText(/this deployment has no AUTH_SECRET/),
+      ).toBeInTheDocument();
+    });
+
+    it('omits the client secret from an edit that leaves the field blank', async () => {
+      // The server reads "absent" as "keep the stored secret"; sending an
+      // empty string would clear it.
+      connectorsResponse = [netsuiteConnector];
+      await openConnectorsTab();
+
+      fireEvent.click(await screen.findByText('Edit'));
+      fireEvent.click(screen.getByText('Save'));
+
+      await waitFor(() => expect(connectorWriteCalls).toHaveLength(1));
+      const call = connectorWriteCalls[0];
+      expect(call.method).toBe('PUT');
+      expect(call.headers['If-Match']).toBe('"etag-conn-1"');
+      expect(call.body).not.toHaveProperty('oauthClientSecret');
+      expect(call.body).toMatchObject({ id: 'connector-abc123def456' });
+    });
+
+    it('deletes with the CAS etag after confirmation', async () => {
+      connectorsResponse = [netsuiteConnector];
+      await openConnectorsTab();
+
+      fireEvent.click(await screen.findByText('Delete'));
+      fireEvent.click(screen.getByText('Delete connector'));
+
+      await waitFor(() => expect(connectorWriteCalls).toHaveLength(1));
+      const call = connectorWriteCalls[0];
+      expect(call.method).toBe('DELETE');
+      expect(call.url).toContain('id=connector-abc123def456');
+      expect(call.headers['If-Match']).toBe('"etag-conn-1"');
+    });
+
+    it('blocks saving while the URL still contains a template placeholder', async () => {
+      await openConnectorsTab();
+      fireEvent.click(await screen.findByText('Add connector'));
+
+      fireEvent.change(screen.getByLabelText('Name'), {
+        target: { value: 'My NetSuite' },
+      });
+      fireEvent.change(screen.getByLabelText('Server URL'), {
+        target: { value: 'https://{accountid}.suitetalk.api.netsuite.com/x' },
+      });
+
+      expect(screen.getByText(/Replace the .* in the URL/)).toBeInTheDocument();
+      expect(screen.getByText('Save')).toBeDisabled();
+    });
   });
 });
