@@ -33,6 +33,7 @@ interface OauthEntry {
   id: string;
   name: string;
   catalogKey?: string;
+  connectorId?: string;
   url?: string;
 }
 
@@ -60,13 +61,20 @@ async function proxyPost<T>(path: string, body: unknown): Promise<T> {
   return json.data as T;
 }
 
+/**
+ * Server-resolved entries (catalog keys and connectors) send their key ONLY —
+ * never a url, which the server would ignore anyway. Keeping the url out of
+ * the payload for those keeps the spoof-proofing obvious at the call site.
+ */
 function wireEntry(entry: OauthEntry) {
   return {
     id: entry.id,
     name: entry.name,
     ...(entry.catalogKey
       ? { catalogKey: entry.catalogKey }
-      : { url: entry.url }),
+      : entry.connectorId
+        ? { connectorId: entry.connectorId }
+        : { url: entry.url }),
   };
 }
 
@@ -261,6 +269,7 @@ export async function ensureFreshOauthToken(
           id: server.id,
           name: server.name,
           catalogKey: server.catalogKey,
+          connectorId: server.connectorId,
           url: server.url || undefined,
         }),
         grant: {
