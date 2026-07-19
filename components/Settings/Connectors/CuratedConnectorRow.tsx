@@ -2,11 +2,8 @@
 
 import {
   IconAlertTriangle,
-  IconBrandAsana,
-  IconBrandGithub,
   IconCheck,
   IconExternalLink,
-  IconPlugConnected,
 } from '@tabler/icons-react';
 import { FC, useState } from 'react';
 
@@ -17,6 +14,7 @@ import { useMcpTools } from '@/client/hooks/settings/useMcpTools';
 import { connectMcpOauth } from '@/client/services/mcp/mcpOauth';
 
 import { OwnOauthAppFields } from './OwnOauthAppFields';
+import { catalogIcon } from './catalogIcons';
 import { validateMcpServer } from './validateMcpServer';
 
 import {
@@ -24,15 +22,6 @@ import {
   useSettingsStore,
 } from '@/client/stores/settingsStore';
 import { McpCatalogEntry } from '@/config/mcpCatalog';
-
-/** Catalog icons live here (the catalog module stays React-free). */
-const CATALOG_ICONS: Record<
-  string,
-  FC<{ size?: number; className?: string }>
-> = {
-  github: IconBrandGithub,
-  asana: IconBrandAsana,
-};
 
 interface CuratedConnectorRowProps {
   entry: McpCatalogEntry;
@@ -44,6 +33,14 @@ interface CuratedConnectorRowProps {
    * only end in oauth_unavailable. Bringing your own app still works.
    */
   oauthAppAvailable?: boolean;
+  /**
+   * Present while the row is being configured from the browser list rather
+   * than shown as an already-connected connector. Renders a way back out,
+   * and opens a token-only connector's field immediately — the user already
+   * expressed intent by clicking Add; making them click Connect too would be
+   * a second gesture for the same decision.
+   */
+  onDismiss?: () => void;
 }
 
 /**
@@ -68,6 +65,7 @@ export const CuratedConnectorRow: FC<CuratedConnectorRowProps> = ({
   entry,
   config,
   oauthAppAvailable = true,
+  onDismiss,
 }) => {
   const t = useTranslations('connectors');
   const tCommon = useTranslations('common');
@@ -75,7 +73,12 @@ export const CuratedConnectorRow: FC<CuratedConnectorRowProps> = ({
   const updateMcpServer = useSettingsStore((s) => s.updateMcpServer);
   const deleteMcpServer = useSettingsStore((s) => s.deleteMcpServer);
 
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(
+    () =>
+      Boolean(onDismiss) &&
+      entry.auth.style !== 'oauth' &&
+      !entry.alsoSupportsOauth,
+  );
   const [token, setToken] = useState('');
   const [isBusy, setIsBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -88,7 +91,7 @@ export const CuratedConnectorRow: FC<CuratedConnectorRowProps> = ({
 
   const { tools, isLoadingTools } = useMcpTools(config);
 
-  const Icon = CATALOG_ICONS[entry.key] ?? IconPlugConnected;
+  const Icon = catalogIcon(entry.key);
   const oauthSupported =
     entry.auth.style === 'oauth' || !!entry.alsoSupportsOauth;
   const patAvailable =
@@ -337,6 +340,15 @@ export const CuratedConnectorRow: FC<CuratedConnectorRowProps> = ({
                     {t('ownAppToggle')}
                   </button>
                 )}
+                {onDismiss && (
+                  <button
+                    type="button"
+                    onClick={onDismiss}
+                    className="text-sm text-gray-600 dark:text-gray-400 hover:underline"
+                  >
+                    {tCommon('cancel')}
+                  </button>
+                )}
               </div>
               {!oauthAppAvailable && (
                 <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -399,6 +411,9 @@ export const CuratedConnectorRow: FC<CuratedConnectorRowProps> = ({
                     setExpanded(false);
                     setToken('');
                     setError(null);
+                    // In add mode collapsing would leave an empty row with no
+                    // way back to the list, so leave the flow entirely.
+                    onDismiss?.();
                   }}
                   className="rounded-lg px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
