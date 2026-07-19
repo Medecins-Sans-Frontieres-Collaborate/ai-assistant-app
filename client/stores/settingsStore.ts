@@ -600,13 +600,46 @@ interface SettingsStore {
   confirmStopFromKeyboard: boolean;
   /** Drop accepted/rejected review edits from the queue automatically. */
   autoClearResolvedEdits: boolean;
+  /**
+   * Default state of the "Suggest changes" checkbox on the Document composer:
+   * a revision comes back as reviewable suggestions instead of overwriting the
+   * document. Per-run the user can still tick it either way.
+   */
+  suggestRevisions: boolean;
+  /**
+   * Cases where a revision is applied DIRECTLY even with suggestions on,
+   * because suggesting would be unhelpful or misleading. All default on.
+   */
+  suggestRevisionsExceptions: {
+    /** Revising a selection — the selection already is the review. */
+    selectionScoped: boolean;
+    /** A rewrite so extensive the suggestion is one unreviewable block. */
+    largeRewrites: boolean;
+    /** Sections moved rather than edited; each half reads as nonsense. */
+    structuralReorders: boolean;
+  };
+  /** Change ratio (0–1) at or above which `largeRewrites` triggers. */
+  suggestRevisionsLargeRewriteRatio: number;
   setConfirmStopFromButton: (enabled: boolean) => void;
   setConfirmStopFromKeyboard: (enabled: boolean) => void;
   setAutoClearResolvedEdits: (enabled: boolean) => void;
+  setSuggestRevisions: (enabled: boolean) => void;
+  setSuggestRevisionsException: (
+    key: 'selectionScoped' | 'largeRewrites' | 'structuralReorders',
+    enabled: boolean,
+  ) => void;
+  setSuggestRevisionsLargeRewriteRatio: (ratio: number) => void;
 
   // Reset
   resetSettings: () => void;
 }
+
+/**
+ * Fraction of a document that must change before a revision counts as a
+ * wholesale rewrite. Half is the point past which a suggestion queue stops
+ * being a review and starts being "accept the whole thing".
+ */
+const DEFAULT_LARGE_REWRITE_RATIO = 0.5;
 
 const DEFAULT_TEMPERATURE = 0.5;
 const DEFAULT_CONTEXT_WINDOW_SIZE = VALIDATION_LIMITS.CLIENT_MAX_MESSAGES; // 80
@@ -705,6 +738,13 @@ export const useSettingsStore = create<SettingsStore>()(
       confirmStopFromButton: true,
       confirmStopFromKeyboard: true,
       autoClearResolvedEdits: false,
+      suggestRevisions: true,
+      suggestRevisionsExceptions: {
+        selectionScoped: true,
+        largeRewrites: true,
+        structuralReorders: true,
+      },
+      suggestRevisionsLargeRewriteRatio: DEFAULT_LARGE_REWRITE_RATIO,
 
       // Actions
       setTemperature: (temperature) => set({ temperature }),
@@ -1328,6 +1368,26 @@ export const useSettingsStore = create<SettingsStore>()(
       setAutoClearResolvedEdits: (enabled) =>
         set({ autoClearResolvedEdits: enabled }),
 
+      setSuggestRevisions: (enabled) => set({ suggestRevisions: enabled }),
+
+      setSuggestRevisionsException: (key, enabled) =>
+        set((state) => ({
+          suggestRevisionsExceptions: {
+            ...state.suggestRevisionsExceptions,
+            [key]: enabled,
+          },
+        })),
+
+      setSuggestRevisionsLargeRewriteRatio: (ratio) =>
+        set({
+          // Clamped: a ratio outside this band would make the exception either
+          // always or never fire, which reads as the feature being broken.
+          suggestRevisionsLargeRewriteRatio: Math.min(
+            0.95,
+            Math.max(0.1, ratio),
+          ),
+        }),
+
       resetSettings: () =>
         set({
           temperature: DEFAULT_TEMPERATURE,
@@ -1376,11 +1436,18 @@ export const useSettingsStore = create<SettingsStore>()(
           confirmStopFromButton: true,
           confirmStopFromKeyboard: true,
           autoClearResolvedEdits: false,
+          suggestRevisions: true,
+          suggestRevisionsExceptions: {
+            selectionScoped: true,
+            largeRewrites: true,
+            structuralReorders: true,
+          },
+          suggestRevisionsLargeRewriteRatio: DEFAULT_LARGE_REWRITE_RATIO,
         }),
     }),
     {
       name: 'settings-storage',
-      version: 41, // Increment this when schema changes to trigger migrations
+      version: 42, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1465,6 +1532,10 @@ export const useSettingsStore = create<SettingsStore>()(
         confirmStopFromButton: state.confirmStopFromButton,
         confirmStopFromKeyboard: state.confirmStopFromKeyboard,
         autoClearResolvedEdits: state.autoClearResolvedEdits,
+        suggestRevisions: state.suggestRevisions,
+        suggestRevisionsExceptions: state.suggestRevisionsExceptions,
+        suggestRevisionsLargeRewriteRatio:
+          state.suggestRevisionsLargeRewriteRatio,
       }),
       migrate: (persistedState, version) => {
         const state = persistedState as Record<string, unknown>;
@@ -1864,6 +1935,27 @@ export const useSettingsStore = create<SettingsStore>()(
             })),
           }));
           delete state.extractionRecipes;
+        }
+
+        // Version 41 → 42: Suggested revisions. Defaults ON — a requested
+        // revision comes back reviewable rather than overwriting the document
+        // — with all three bypasses on, matching the shipped defaults.
+        if (version < 42) {
+          if (state.suggestRevisions === undefined) {
+            state.suggestRevisions = true;
+          }
+          const exceptions = state.suggestRevisionsExceptions as
+            | Record<string, unknown>
+            | undefined;
+          state.suggestRevisionsExceptions = {
+            selectionScoped: exceptions?.selectionScoped !== false,
+            largeRewrites: exceptions?.largeRewrites !== false,
+            structuralReorders: exceptions?.structuralReorders !== false,
+          };
+          if (typeof state.suggestRevisionsLargeRewriteRatio !== 'number') {
+            state.suggestRevisionsLargeRewriteRatio =
+              DEFAULT_LARGE_REWRITE_RATIO;
+          }
         }
 
         return state;
