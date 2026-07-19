@@ -77,8 +77,8 @@ const DatasetCard: FC<DatasetCardProps> = ({ dataset }) => {
   const t = useTranslations('extraction');
   const defaultFormat = useUIStore((s) => s.extractionDefaultFormat);
   const setDefaultFormat = useUIStore((s) => s.setExtractionDefaultFormat);
-  const addRecipe = useSettingsStore((s) => s.addExtractionRecipe);
-  const existingRecipes = useSettingsStore((s) => s.extractionRecipes);
+  const addRecipe = useSettingsStore((s) => s.addSavedStructure);
+  const existingRecipes = useSettingsStore((s) => s.savedStructures);
 
   const [showPreview, setShowPreview] = useState(false);
   const [downloadOpen, setDownloadOpen] = useState(false);
