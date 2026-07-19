@@ -2,6 +2,7 @@ import { Session } from 'next-auth';
 
 import {
   AGENT_ACCESS_CONFIG_PATH,
+  AGENT_ACCESS_CONNECTORS_PREFIX,
   AGENT_ACCESS_PROMPT_AGENTS_PREFIX,
   AGENT_ACCESS_RULES_PREFIX,
   AgentAccessConfig,
@@ -10,12 +11,18 @@ import {
   AgentAccessHistoryEntrySchema,
   AgentAccessRule,
   AgentAccessRuleSchema,
+  MCP_CONNECTOR_SOURCE,
+  McpConnector,
+  McpConnectorHistoryEntry,
+  McpConnectorHistoryEntrySchema,
+  McpConnectorSchema,
   PROMPT_AGENT_SOURCE,
   PromptAgent,
   PromptAgentHistoryEntry,
   PromptAgentHistoryEntrySchema,
   PromptAgentSchema,
   canonicalAgentKey,
+  connectorBlobPath,
   historyBlobPath,
   promptAgentBlobPath,
   ruleBlobPath,
@@ -83,6 +90,20 @@ export interface StoredPromptAgent {
 
 export interface PromptAgentReadResult {
   agent: PromptAgent;
+  etag: string;
+}
+
+export interface StoredMcpConnector {
+  /** `mcp-connector::<id>` — flows through delegation and rules unchanged. */
+  canonicalKey: string;
+  blobPath: string;
+  connector: McpConnector;
+  /** Raw (quoted) Azure ETag — echoed to admin clients for If-Match CAS. */
+  etag: string;
+}
+
+export interface McpConnectorReadResult {
+  connector: McpConnector;
   etag: string;
 }
 
@@ -521,6 +542,156 @@ export async function writePromptAgentHistoryEntry(
           conditions: { ifNoneMatch: '*' },
         }),
       { label: 'agentAccess.writePromptAgentHistoryEntry' },
+    );
+  } catch (error) {
+    if (statusCodeOf(error) === 412) return;
+    throw error;
+  }
+}
+
+/**
+ * Lists every admin-authored MCP connector. Malformed blobs are SKIPPED with a
+ * loud log, never thrown — identical rationale to listAllPromptAgents: one
+ * corrupt connector must not take down the rules snapshot that refresh()
+ * loads alongside it. Storage-level errors still throw.
+ */
+export async function listAllConnectors(
+  storage: BlobStorage,
+): Promise<StoredMcpConnector[]> {
+  const names = await storage.listBlobs(AGENT_ACCESS_CONNECTORS_PREFIX);
+  const results = await Promise.all(
+    names.map(async (name): Promise<StoredMcpConnector | null> => {
+      // 404 → deleted between list and get; skip silently.
+      const downloaded = await downloadBlob(storage, name);
+      if (downloaded === null) return null;
+
+      let json: unknown;
+      try {
+        json = JSON.parse(downloaded.buffer.toString('utf8'));
+      } catch {
+        console.error(
+          `[agent-access] SKIPPING connector blob with invalid JSON (broken connector degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
+        );
+        return null;
+      }
+      const parsed = McpConnectorSchema.safeParse(json);
+      if (!parsed.success) {
+        console.error(
+          `[agent-access] SKIPPING malformed connector blob (broken connector degrades alone; rules snapshot unaffected) ${sanitizeForLog(name)}: ${sanitizeForLog(parsed.error.message)}`,
+        );
+        return null;
+      }
+      if (connectorBlobPath(parsed.data.id) !== name) {
+        // A stray blob must not shadow (or masquerade as) another id's
+        // connector — that would let one land at a trusted id's URL.
+        console.error(
+          `[agent-access] SKIPPING connector blob whose name does not match its content's id (broken connector degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
+        );
+        return null;
+      }
+      return {
+        canonicalKey: canonicalAgentKey(MCP_CONNECTOR_SOURCE, parsed.data.id),
+        blobPath: name,
+        connector: parsed.data,
+        etag: downloaded.etag,
+      };
+    }),
+  );
+  return results.filter((r): r is StoredMcpConnector => r !== null);
+}
+
+/** Reads a single connector by id. Returns null when none exists. */
+export async function readConnector(
+  storage: BlobStorage,
+  id: string,
+): Promise<McpConnectorReadResult | null> {
+  const result = await downloadBlob(storage, connectorBlobPath(id));
+  if (result === null) return null;
+  const parsed = McpConnectorSchema.safeParse(
+    JSON.parse(result.buffer.toString('utf8')),
+  );
+  if (!parsed.success) {
+    throw new Error(
+      `Malformed connector blob for id ${id}: ${parsed.error.message}`,
+    );
+  }
+  return { connector: parsed.data, etag: result.etag };
+}
+
+/**
+ * Compare-and-swap connector write. The blob path is derived from the
+ * record's own id, so a connector can never land at another id's path — which
+ * also keeps the sealed client secret's AAD binding meaningful.
+ * `ifMatchEtag` set → update (`If-Match`); null → creation only
+ * (`If-None-Match: *`). 412 → {@link AgentAccessConflictError}.
+ * Returns the new ETag.
+ */
+export async function writeConnector(
+  storage: BlobStorage,
+  connector: McpConnector,
+  ifMatchEtag: string | null,
+): Promise<string> {
+  const parsed = McpConnectorSchema.parse(connector);
+  return uploadJson(
+    storage,
+    connectorBlobPath(parsed.id),
+    parsed,
+    ifMatchEtag,
+    'agentAccess.writeConnector',
+  );
+}
+
+/**
+ * Conditional connector delete (`If-Match`). Returns false when the blob was
+ * already absent (idempotent); 412 → {@link AgentAccessConflictError}.
+ */
+export async function deleteConnector(
+  storage: BlobStorage,
+  id: string,
+  ifMatchEtag: string,
+): Promise<boolean> {
+  const client = storage.getBlockBlobClient(connectorBlobPath(id));
+  try {
+    await withAzureRetry(
+      () => client.delete({ conditions: { ifMatch: ifMatchEtag } }),
+      { label: 'agentAccess.deleteConnector' },
+    );
+    return true;
+  } catch (error) {
+    const status = statusCodeOf(error);
+    if (status === 404) return false;
+    if (status === 412) throw new AgentAccessConflictError();
+    throw error;
+  }
+}
+
+/**
+ * Appends an immutable connector history entry (`If-None-Match: *`) at
+ * `historyBlobPath(canonicalKey)` — same audit namespace as rules. A 412
+ * means an earlier attempt (or a retry) already landed this exact entry —
+ * treated as idempotent success. Callers wrap this best-effort: a history
+ * failure must never fail the mutation (mirror appendHistoryBestEffort).
+ *
+ * The persisted entry carries the connector verbatim, INCLUDING its sealed
+ * client secret — sealed, so the audit trail never holds plaintext.
+ */
+export async function writeConnectorHistoryEntry(
+  storage: BlobStorage,
+  entry: McpConnectorHistoryEntry,
+): Promise<void> {
+  const parsed = McpConnectorHistoryEntrySchema.parse(entry);
+  const client = storage.getBlockBlobClient(
+    historyBlobPath(parsed.canonicalKey, parsed.updatedAt),
+  );
+  const content = Buffer.from(JSON.stringify(parsed), 'utf8');
+  try {
+    await withAzureRetry(
+      () =>
+        client.upload(content, content.length, {
+          blobHTTPHeaders: { blobContentType: 'application/json' },
+          conditions: { ifNoneMatch: '*' },
+        }),
+      { label: 'agentAccess.writeConnectorHistoryEntry' },
     );
   } catch (error) {
     if (statusCodeOf(error) === 412) return;
