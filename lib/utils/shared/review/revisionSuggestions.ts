@@ -137,6 +137,29 @@ function splitSentences(text: string): string[] {
   return text.match(/[^.!?\n]+[.!?\n]*\s*/g) ?? (text ? [text] : []);
 }
 
+/**
+ * Comparison key for two sentences that "say the same thing".
+ *
+ * The two sides of this diff are produced by different writers and never
+ * agree byte-for-byte on formatting. The old text comes from turndown, which
+ * escapes markdown metacharacters (`annex\_2`) and pads list markers
+ * (`-   Gloves`); the model writes plain, unescaped markdown (`annex_2`,
+ * `- Gloves`). Comparing raw, almost NO sentence matches, the diff reports
+ * the whole document as changed, and every revision trips the large-rewrite
+ * bypass instead of ever being suggested.
+ *
+ * Only matching is normalized — the spans handed to the review queue are
+ * still sliced from the original text, because `applyEdit` needs `before` to
+ * be a verbatim substring.
+ */
+function matchKey(sentence: string): string {
+  return sentence
+    .replace(/\\([\\`*_{}[\]()#+\-.!>~|])/g, '$1') // drop turndown's escapes
+    .replace(/^(\s*[-*+])\s+/, '$1 ') // normalize list-marker padding
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 /** Contiguous run of deleted sentences [delStart, delEnd) replaced by `ins`. */
 interface DiffRun {
   delStart: number;
@@ -223,7 +246,7 @@ const REORDER_MIN_SENTENCE_CHARS = 40;
  * applied directly instead of suggested, and the behaviour is user-configurable.
  */
 function detectReorder(runs: DiffRun[], sentences: string[]): boolean {
-  const norm = (s: string) => s.replace(/\s+/g, ' ').trim();
+  const norm = matchKey;
   const substantial = (s: string) => s.length >= REORDER_MIN_SENTENCE_CHARS;
 
   const deleted = new Set<string>();
@@ -272,14 +295,18 @@ export function computeRevisionEdits(
     return { ...empty, changeRatio: 1, fullyAnchored: false };
   }
 
-  // Sentence-level LCS.
+  // Sentence-level LCS over normalized keys — see `matchKey`. Sentences that
+  // differ only in escaping or whitespace count as unchanged, so a formatting
+  // mismatch between turndown and the model is not reported as a rewrite.
+  const keyA = a.map(matchKey);
+  const keyB = b.map(matchKey);
   const dp: number[][] = Array.from({ length: a.length + 1 }, () =>
     new Array<number>(b.length + 1).fill(0),
   );
   for (let i = a.length - 1; i >= 0; i--) {
     for (let j = b.length - 1; j >= 0; j--) {
       dp[i][j] =
-        a[i] === b[j]
+        keyA[i] === keyB[j]
           ? dp[i + 1][j + 1] + 1
           : Math.max(dp[i + 1][j], dp[i][j + 1]);
     }
@@ -299,7 +326,7 @@ export function computeRevisionEdits(
   };
 
   while (i < a.length && j < b.length) {
-    if (a[i] === b[j]) {
+    if (keyA[i] === keyB[j]) {
       flush(i);
       i++;
       j++;
