@@ -14,7 +14,7 @@ export type StopGenerationSource = 'button' | 'keyboard';
 export type ExtractionDownloadFormat = 'json' | 'csv' | 'tsv';
 
 /** Tabs available inside the Quick Actions / Customizations modal. */
-export type CustomizationsTabKey = 'prompts' | 'tones' | 'recipes';
+export type CustomizationsTabKey = 'prompts' | 'tones' | 'structures';
 
 /** Which encrypted-backup modal (if any) is showing. Null = none. */
 export type BackupModalView =

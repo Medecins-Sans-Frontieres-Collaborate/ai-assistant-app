@@ -1031,7 +1031,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const inputState = useChatInputStore.getState();
     let extraction: ExtractionRequest | undefined;
     if (inputState.extractionMode) {
-      const selectedRecipes = settings.extractionRecipes.filter((r) =>
+      const selectedRecipes = settings.savedStructures.filter((r) =>
         inputState.extractionRecipeIds.includes(r.id),
       );
       if (selectedRecipes.length > 0) {

@@ -13,7 +13,6 @@ import {
 } from '@/lib/utils/shared/paste/pastedText';
 import { UserRegion } from '@/lib/utils/shared/region';
 
-import { ExtractionRecipe } from '@/types/extractionRecipe';
 import {
   LOCAL_RUNTIMES,
   LocalRuntime,
@@ -37,6 +36,7 @@ import {
   StreamingSpeedConfig,
   Verbosity,
 } from '@/types/settings';
+import { SavedStructure } from '@/types/structure';
 import { Tone } from '@/types/tone';
 import { DEFAULT_TTS_SETTINGS, TTSSettings } from '@/types/tts';
 import {
@@ -333,8 +333,12 @@ interface SettingsStore {
    * selectability without hook access. Runtime-only, not persisted.
    */
   userRegion: UserRegion | null;
-  /** User-defined structured-data extraction recipes (Connectors → Recipes). */
-  extractionRecipes: ExtractionRecipe[];
+  /**
+   * User-defined data structures (Customizations → Structures). Shared: an
+   * entry is usable as an extraction recipe and as a data-workflow table
+   * schema. Renamed from `extractionRecipes` in v41.
+   */
+  savedStructures: SavedStructure[];
   streamingSpeed: StreamingSpeedConfig;
 
   /** Whether to include user info (name, title, email, dept) in system prompt */
@@ -471,14 +475,11 @@ interface SettingsStore {
   setMemoriesEnabled: (enabled: boolean) => void;
   setMemoriesFlagEnabled: (enabled: boolean) => void;
 
-  // Extraction Recipe Actions
-  setExtractionRecipes: (recipes: ExtractionRecipe[]) => void;
-  addExtractionRecipe: (recipe: ExtractionRecipe) => void;
-  updateExtractionRecipe: (
-    id: string,
-    updates: Partial<ExtractionRecipe>,
-  ) => void;
-  deleteExtractionRecipe: (id: string) => void;
+  // Saved Structure Actions
+  setSavedStructures: (structures: SavedStructure[]) => void;
+  addSavedStructure: (structure: SavedStructure) => void;
+  updateSavedStructure: (id: string, updates: Partial<SavedStructure>) => void;
+  deleteSavedStructure: (id: string) => void;
 
   // Hidden Model/Agent Actions
   hideModel: (id: string) => void;
@@ -656,7 +657,7 @@ export const useSettingsStore = create<SettingsStore>()(
       historicalUsageBackfilledAt: null,
       modelListSource: null,
       userRegion: null,
-      extractionRecipes: [],
+      savedStructures: [],
       streamingSpeed: DEFAULT_STREAMING_SPEED,
       includeUserInfoInPrompt: false, // Default off for privacy
       preferredName: '',
@@ -1078,24 +1079,24 @@ export const useSettingsStore = create<SettingsStore>()(
             state.historicalUsageBackfilledAt ?? new Date().toISOString(),
         })),
 
-      // Extraction Recipe Actions
-      setExtractionRecipes: (recipes) => set({ extractionRecipes: recipes }),
+      // Saved Structure Actions
+      setSavedStructures: (structures) => set({ savedStructures: structures }),
 
-      addExtractionRecipe: (recipe) =>
+      addSavedStructure: (structure) =>
         set((state) => ({
-          extractionRecipes: [...state.extractionRecipes, recipe],
+          savedStructures: [...state.savedStructures, structure],
         })),
 
-      updateExtractionRecipe: (id, updates) =>
+      updateSavedStructure: (id, updates) =>
         set((state) => ({
-          extractionRecipes: state.extractionRecipes.map((r) =>
-            r.id === id ? { ...r, ...updates } : r,
+          savedStructures: state.savedStructures.map((s) =>
+            s.id === id ? { ...s, ...updates } : s,
           ),
         })),
 
-      deleteExtractionRecipe: (id) =>
+      deleteSavedStructure: (id) =>
         set((state) => ({
-          extractionRecipes: state.extractionRecipes.filter((r) => r.id !== id),
+          savedStructures: state.savedStructures.filter((s) => s.id !== id),
         })),
 
       // Model Ordering Actions
@@ -1351,7 +1352,7 @@ export const useSettingsStore = create<SettingsStore>()(
           tokenUsageFirstTrackedAt: null,
           estimatedUsageStats: {},
           historicalUsageBackfilledAt: null,
-          extractionRecipes: [],
+          savedStructures: [],
           streamingSpeed: DEFAULT_STREAMING_SPEED,
           includeUserInfoInPrompt: false,
           preferredName: '',
@@ -1379,7 +1380,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 40, // Increment this when schema changes to trigger migrations
+      version: 41, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1437,7 +1438,7 @@ export const useSettingsStore = create<SettingsStore>()(
         tokenUsageFirstTrackedAt: state.tokenUsageFirstTrackedAt,
         estimatedUsageStats: state.estimatedUsageStats,
         historicalUsageBackfilledAt: state.historicalUsageBackfilledAt,
-        extractionRecipes: state.extractionRecipes,
+        savedStructures: state.savedStructures,
         streamingSpeed: state.streamingSpeed,
         includeUserInfoInPrompt: state.includeUserInfoInPrompt,
         preferredName: state.preferredName,
@@ -1841,6 +1842,30 @@ export const useSettingsStore = create<SettingsStore>()(
           );
         }
 
+        // Version 40 → 41: extractionRecipes → savedStructures. The
+        // collection is now shared with the data workflow, so `required`
+        // adopts the tabular polarity: absent = OPTIONAL. Recipes meant the
+        // opposite (absent = required, see the old recipeToJsonSchema), so
+        // every legacy field that omitted the flag is stamped `true` here.
+        // Without this, every saved recipe would silently loosen and start
+        // emitting nullable unions for fields the user marked required.
+        if (version < 41) {
+          const legacy = Array.isArray(state.extractionRecipes)
+            ? (state.extractionRecipes as Record<string, unknown>[])
+            : [];
+          state.savedStructures = legacy.map((recipe) => ({
+            ...recipe,
+            fields: (Array.isArray(recipe.fields)
+              ? (recipe.fields as Record<string, unknown>[])
+              : []
+            ).map((field) => ({
+              ...field,
+              required: field.required !== false,
+            })),
+          }));
+          delete state.extractionRecipes;
+        }
+
         return state;
       },
       onRehydrateStorage: () => (state) => {
@@ -1984,10 +2009,10 @@ export const useSettingsStore = create<SettingsStore>()(
             state.estimatedUsageStats = {};
           }
 
-          // Defensive: extractionRecipes must always be an array (same
-          // rationale as mcpServers) so recipe `.map`/`.filter` never throw.
-          if (!Array.isArray(state.extractionRecipes)) {
-            state.extractionRecipes = [];
+          // Defensive: savedStructures must always be an array (same
+          // rationale as mcpServers) so `.map`/`.filter` never throw.
+          if (!Array.isArray(state.savedStructures)) {
+            state.savedStructures = [];
           }
         }
       },
