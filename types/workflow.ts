@@ -7,6 +7,7 @@
  * standard chat. The type is fixed at creation time: it is only ever set on
  * an empty conversation and never changed afterward.
  */
+import { TabularFieldType } from './structure';
 
 export const CONVERSATION_WORKFLOW_TYPES = [
   'translation',
@@ -374,7 +375,14 @@ export interface DocumentWorkflowState {
 /* Data analysis                                                       */
 /* ------------------------------------------------------------------ */
 
-export type DataColumnType = 'text' | 'number' | 'date' | 'boolean';
+/**
+ * Table columns hold one scalar per cell, so they accept exactly the tabular
+ * subset of the shared structure vocabulary. Aliased (rather than redeclared)
+ * so the subset relationship is type-enforced: a `DataColumn.type` is always
+ * assignable to a `StructureField.type`, and adding a non-tabular structure
+ * type can never silently widen the grid.
+ */
+export type DataColumnType = TabularFieldType;
 
 /**
  * Display-only numeric formatting captured at import/conversion time.
