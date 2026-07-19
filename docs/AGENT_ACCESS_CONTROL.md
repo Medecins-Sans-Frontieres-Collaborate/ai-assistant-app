@@ -1,4 +1,10 @@
-# App-Layer Agent Access Control (Option 2 implementation)
+# App-Layer Access Control — Agents & MCP Connectors (Option 2 implementation)
+
+> **Scope note.** This document was originally agent-only. It now also covers **admin-authored MCP
+> connectors**, which reuse the same canonical-key namespace, the same rules, the same local-admin
+> delegation, and the same audit history. Storage prefixes and the `AGENT_ACCESS_*` env vars keep
+> their original names deliberately — renaming them would require migrating live blobs and a
+> coordinated env change for zero functional gain. The admin UI is titled "Access & Connectors".
 
 **Status:** Implemented (v1) — flag-gated, off by default.
 **Origin:** `docs/AGENT_PERMISSION_GRANULARITY_PROPOSAL.md` Option 2, with modifications agreed 2026-07-17.
@@ -39,7 +45,12 @@ system/agent-access/config.json                          # delegation map (globa
 system/agent-access/rules/<sha256(canonicalKey)>.json    # one rule file per agent
 system/agent-access/history/<sha256(canonicalKey)>/<iso-ts>.json  # immutable audit copies
 system/agent-access/prompt-agents/<id>.json              # app-defined prompt agents (see below)
+system/agent-access/connectors/<id>.json                 # admin-authored MCP connectors (see below)
 ```
+
+`connectors/` is a sibling of `rules/` for exactly the same reason as `prompt-agents/`, and shares
+the skip-with-a-loud-error listing posture: one malformed connector blob must never take down the
+ruleset that gates every Foundry invocation.
 
 `prompt-agents/` is deliberately a **sibling** of `rules/`, never nested under it: the rules listing
 is fail-closed (any schema-invalid blob under `rules/` fails the whole ruleset load and denies all
@@ -189,6 +200,11 @@ global admins are env-derived and unaffected.
 | `/api/agent-access/prompt-agents` | POST    | **any** admin (incl. zero-key local) | body `{name, description?, systemPrompt, modelId}`; server generates the id; non-global creators are auto-delegated (503 + rollback on failure; a _failed_ rollback answers a distinct 503 naming the orphaned agent id — see below); writes history                                                                                                                                                  |
 | `/api/agent-access/prompt-agents` | PUT     | admins (per-key authz)               | body = POST fields + `id`, header `If-Match` (strong ETag required); 409 on conflict; writes history                                                                                                                                                                                                                                                                                                  |
 | `/api/agent-access/prompt-agents` | DELETE  | admins (per-key authz)               | query `id`, header `If-Match`; writes tombstone history; delegation keys are left dangling (see below)                                                                                                                                                                                                                                                                                                |
+| `/api/agent-access/connectors`    | GET     | admins                               | global: all connectors; local: only delegated keys. Sealed OAuth secrets are replaced by `hasClientSecret: boolean` — the secret is never echoed. Also returns `secretSealingAvailable` so the editor can disable the OAuth style rather than offer a choice the server will 503                                                                                                                      |
+| `/api/agent-access/connectors`    | POST    | **any** admin (incl. zero-key local) | body `{name, description?, url, transport?, authStyle, tokenHelpUrl?, oauthClientId?, oauthClientSecret?, oauthScopes?}`; server generates the id; same auto-delegation + rollback contract as prompt agents                                                                                                                                                                                          |
+| `/api/agent-access/connectors`    | PUT     | admins (per-key authz)               | body = POST fields + `id`, header `If-Match`. **Omitting `oauthClientSecret` keeps the stored one**; an empty string clears it                                                                                                                                                                                                                                                                        |
+| `/api/agent-access/connectors`    | DELETE  | admins (per-key authz)               | query `id`, header `If-Match`; writes tombstone history                                                                                                                                                                                                                                                                                                                                               |
+| `/api/mcp/connectors`             | GET     | any signed-in                        | **End-user** listing: the connectors this user may use, already access-filtered. Deliberately omits the URL and OAuth client id — the client never needs either                                                                                                                                                                                                                                       |
 
 ## Prompt agents
 
@@ -335,6 +351,79 @@ the usual ≤60s TTL.
   re-filtering those rows through `/me`'s ≤60s-stale `editableAgentKeys`, so a fresh create by a
   zero-key local admin never vanishes behind a stale snapshot on another replica.
 
+## MCP connectors
+
+Admin-authored MCP servers whose URL is **tenant-specific** — NetSuite's per-account host, a
+customer's own Matomo — which the compile-time catalog (`config/mcpCatalog.ts`) structurally cannot
+express, because its `url` is a fixed string shared by every deployment. Curated catalog entries
+stay where they are; connectors are the escape hatch for everything per-tenant.
+
+### Identity & storage
+
+Canonical key is `mcp-connector::<id>` where `<id>` is a server-generated, immutable
+`connector-<12 hex>`. Because the id is immutable, renames never orphan a rule or a delegation, and
+the sealed client secret's AAD binding stays meaningful (see below).
+
+### Enforcement — the important part
+
+A connector is **not** safe to resolve from a client-sent key alone, unlike a catalog entry that
+everyone may use. MCP server entries live in the user's `localStorage`, which long outlives a
+revoked rule, so entitlement is re-checked **on every request that could reach a connector URL**:
+
+- `resolveMcpServers` (`config/mcpCatalog.ts`) stays pure and client-importable; the access check is
+  **injected** as `resolveConnector`, exactly as `isAllowedCustomUrl` already was.
+- `createConnectorResolver` (`lib/services/mcp/connectorResolution.ts`) builds that callback from the
+  session and audits every decision through `emitAccessAudit`.
+- Wired into **both** URL-reaching paths: `StandardChatHandler` and `/api/mcp/tools`, plus all three
+  `/api/mcp/oauth/*` routes.
+
+Fails closed on every ambiguity: feature disabled, connector unknown, ruleset `unavailable`, or no
+resolver wired at all. Note the last one — **omitting `resolveConnector` disables connectors
+entirely**, so a call site that forgets the check cannot accidentally reach a connector URL.
+`unavailable` denies here even though discovery paths pass through on it: reaching a connector's URL
+is invocation, not discovery.
+
+A denied connector is dropped rather than falling through to the custom-URL branch, even when the
+client also sends a `url` alongside the `connectorId`.
+
+### URL validation
+
+Validated as **https + public-shaped host at write time** (`isHttpsPublicShapedUrl`). Connectors
+resolve as `trusted: true` (skipping the per-request DNS guard, like catalog entries) and the tool
+loop fetches them from the app's own network position — so a connector pointing at loopback or
+link-local would be a genuine SSRF primitive.
+
+### OAuth client secrets at rest
+
+Unlike every other credential in the MCP stack, a connector's OAuth **client** secret is a
+deployment secret that must live server-side so the token proxy can inject it; it cannot ride in the
+per-user client vault. `lib/services/agentAccess/connectorSecretCrypto.ts` is the only thing that
+puts it in storage:
+
+- AES-256-GCM under `HKDF(AUTH_SECRET, info='connector-oauth-client-secret')` — the same stateless
+  posture as `/api/mcp/vault-key`, no new key-management surface.
+- AAD binds each ciphertext to its connector id, so a sealed secret copied onto another connector
+  record fails authentication instead of silently authenticating the wrong server.
+- **No AUTH_SECRET ⇒ it refuses to seal rather than degrading to plaintext.** The API then rejects
+  the OAuth style with `503 CONNECTOR_SECRETS_UNCONFIGURED` and the editor disables the option with
+  an explanation. Bearer and none-style connectors are unaffected.
+- A rotated `AUTH_SECRET` makes stored secrets unreadable; that surfaces as a distinct
+  `CONNECTOR_SECRET_UNREADABLE` (503) telling an admin to re-enter it — never a silent fallback to
+  DCR, which would authenticate as the wrong client and fail confusingly at the vendor.
+
+### Presets
+
+`config/mcpConnectorPresets.ts` prefills the editor for NetSuite and Matomo. A preset is a
+convenience only — never a trust boundary; the admin substitutes the `{placeholder}` and the server
+re-validates the final URL. Presets exist precisely because both vendors are per-tenant.
+
+### Known limitations (connectors)
+
+- No per-connector **tool** scoping — a user entitled to a connector gets all of its tools.
+- `allowGroups` is scaffolded but unevaluated, exactly as for agents.
+- Deleting a connector leaves its delegation keys dangling in `config.json` (same accepted behaviour
+  as prompt agents).
+
 ## Group grants — scaffold status & completion checklist
 
 Group-based grants are **schema-complete but disabled**. Blocked on Entra tenant admin consent
@@ -353,10 +442,11 @@ Group-based grants are **schema-complete but disabled**. Blocked on Entra tenant
 
 ## Environment variables
 
-| Var                            | Default | Purpose                                                   |
-| ------------------------------ | ------- | --------------------------------------------------------- |
-| `AGENT_ACCESS_CONTROL_ENABLED` | `false` | Master gate for enforcement + admin API + UI              |
-| `AGENT_ACCESS_ADMINS`          | —       | Comma-separated global-admin emails (Graph `mail` values) |
+| Var                               | Default | Purpose                                                                                                                                                                                                       |
+| --------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AGENT_ACCESS_CONTROL_ENABLED`    | `false` | Master gate for enforcement + admin API + UI                                                                                                                                                                  |
+| `AGENT_ACCESS_ADMINS`             | —       | Comma-separated global-admin emails (Graph `mail` values)                                                                                                                                                     |
+| `AUTH_SECRET` / `NEXTAUTH_SECRET` | —       | Already required for auth; **also** derives the key that seals connector OAuth client secrets. Absent ⇒ the OAuth connector style is disabled in the API (503 `CONNECTOR_SECRETS_UNCONFIGURED`) and in the UI |
 
 ## Known limitations (v1, accepted)
 
