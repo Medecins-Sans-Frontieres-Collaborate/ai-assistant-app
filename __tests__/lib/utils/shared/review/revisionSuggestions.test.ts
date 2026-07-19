@@ -1,5 +1,8 @@
 import { applyEditsInOrder } from '@/lib/utils/shared/review/editApplication';
-import { computeRevisionEdits } from '@/lib/utils/shared/review/revisionSuggestions';
+import {
+  computeRevisionEdits,
+  planRevision,
+} from '@/lib/utils/shared/review/revisionSuggestions';
 
 import { describe, expect, it } from 'vitest';
 
@@ -166,5 +169,136 @@ describe('computeRevisionEdits', () => {
 
     expect(result.fullyAnchored).toBe(true);
     expect(applyAll(before, result.changes).text).toBe(after);
+  });
+});
+
+describe('planRevision', () => {
+  const base = {
+    enabled: true,
+    mode: 'revise' as const,
+    scoped: false,
+    oldMarkdown:
+      'The project began in March. Funding came from three donors. The team had six members. Results were published in autumn.',
+    newMarkdown:
+      'The project began in March. Funding came from four donors. The team had six members. Results were published in autumn.',
+    exceptions: {
+      selectionScoped: true,
+      largeRewrites: true,
+      structuralReorders: true,
+    },
+    largeRewriteRatio: 0.5,
+  };
+
+  it('suggests an ordinary requested revision', () => {
+    const plan = planRevision(base);
+    expect(plan.kind).toBe('suggest');
+    if (plan.kind === 'suggest') {
+      expect(plan.changes.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('applies directly when the user unticked the checkbox', () => {
+    const plan = planRevision({ ...base, enabled: false });
+    expect(plan).toEqual({ kind: 'direct', reason: 'disabled' });
+  });
+
+  it('applies directly when writing from a blank document', () => {
+    const plan = planRevision({
+      ...base,
+      mode: 'generate',
+      oldMarkdown: '',
+    });
+    expect(plan).toEqual({ kind: 'direct', reason: 'generate' });
+  });
+
+  it('applies directly for a revision the user did not request', () => {
+    const plan = planRevision({ ...base, automatic: true });
+    expect(plan).toEqual({ kind: 'direct', reason: 'automatic' });
+  });
+
+  it('applies directly for a selection-scoped revision, unless turned off', () => {
+    expect(planRevision({ ...base, scoped: true })).toEqual({
+      kind: 'direct',
+      reason: 'selection',
+    });
+
+    // The exception is configurable: off means selections get suggested too.
+    const plan = planRevision({
+      ...base,
+      scoped: true,
+      exceptions: { ...base.exceptions, selectionScoped: false },
+    });
+    expect(plan.kind).toBe('suggest');
+  });
+
+  it('applies directly for a wholesale rewrite, at the configured threshold', () => {
+    const rewrite = {
+      ...base,
+      newMarkdown:
+        'Entirely new prose. Nothing here resembles the original text. Every sentence has been replaced. The subject matter differs.',
+    };
+    expect(planRevision(rewrite)).toEqual({
+      kind: 'direct',
+      reason: 'largeRewrite',
+    });
+
+    // The threshold is the knob, so bracket the MEASURED ratio rather than
+    // guessing a number — a total replacement measures exactly 1.0, which no
+    // threshold below 1 can clear.
+    const measured = computeRevisionEdits(
+      rewrite.oldMarkdown,
+      rewrite.newMarkdown,
+    ).changeRatio;
+    expect(
+      planRevision({ ...rewrite, largeRewriteRatio: measured * 0.9 }).kind,
+    ).toBe('direct');
+
+    // Turning the exception off lets even a full rewrite through.
+    expect(
+      planRevision({
+        ...rewrite,
+        exceptions: { ...base.exceptions, largeRewrites: false },
+      }).kind,
+    ).toBe('suggest');
+  });
+
+  it('applies directly when sections were moved, unless turned off', () => {
+    // Long enough that relocating one sentence stays well under the
+    // large-rewrite threshold — otherwise that exception fires first and the
+    // reorder rule is never reached.
+    const filler =
+      'The team met weekly to review progress against the plan. Each milestone was signed off by the steering group. Travel was arranged through the regional office. Procurement followed the standard framework. Reporting used the agreed template throughout.';
+    const section =
+      'Funding came from three donors who each committed to a multi-year grant.';
+    const moved = {
+      ...base,
+      oldMarkdown: `The project began in March. ${section} ${filler} Results were published in autumn.`,
+      newMarkdown: `The project began in March. ${filler} Results were published in autumn. ${section}`,
+    };
+    expect(planRevision(moved)).toEqual({ kind: 'direct', reason: 'reorder' });
+
+    expect(
+      planRevision({
+        ...moved,
+        exceptions: { ...base.exceptions, structuralReorders: false },
+      }).kind,
+    ).not.toBe('direct');
+  });
+
+  it('applies directly when the rewrite came back identical', () => {
+    const plan = planRevision({ ...base, newMarkdown: base.oldMarkdown });
+    expect(plan).toEqual({ kind: 'direct', reason: 'noChanges' });
+  });
+
+  it('applies directly when changes cannot be anchored', () => {
+    const huge = Array.from({ length: 500 }, (_, i) => `Sentence ${i}.`).join(
+      ' ',
+    );
+    const plan = planRevision({
+      ...base,
+      oldMarkdown: huge,
+      newMarkdown: `${huge} Extra.`,
+    });
+    expect(plan).toEqual({ kind: 'direct', reason: 'unanchorable' });
   });
 });
