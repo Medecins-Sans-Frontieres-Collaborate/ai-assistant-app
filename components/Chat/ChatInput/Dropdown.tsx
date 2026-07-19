@@ -129,9 +129,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   const recordSuccessfulToolUsage = useSettingsStore(
     (state) => state.recordSuccessfulToolUsage,
   );
-  const extractionRecipes = useSettingsStore(
-    (state) => state.extractionRecipes,
-  );
+  const savedStructures = useSettingsStore((state) => state.savedStructures);
   const { selectedConversation, updateConversation } = useConversations();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -571,11 +569,11 @@ const Dropdown: React.FC<DropdownProps> = ({
   const defaultHiddenIds = useMemo(() => {
     const ids = ['camera'];
     if (tones.length === 0) ids.push('tone');
-    if (isExtractionEnabled && extractionRecipes.length === 0) {
+    if (isExtractionEnabled && savedStructures.length === 0) {
       ids.push('extract');
     }
     return ids;
-  }, [tones.length, isExtractionEnabled, extractionRecipes.length]);
+  }, [tones.length, isExtractionEnabled, savedStructures.length]);
 
   // Move a tool into / out of "More". Resolves whether the tool is hidden by
   // default so the store toggles the right set.
