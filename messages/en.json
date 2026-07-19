@@ -3634,5 +3634,23 @@
     "settingsThresholdLabel": "Attach pastes longer than",
     "settingsThresholdUnit": "characters",
     "settingsThresholdHint": "Between {min, number} and {max, number} characters."
+  },
+  "structures": {
+    "section": "Structures",
+    "sectionSubtitle": "Saved field definitions. Use one as an extraction recipe, or as the starting schema for a data workflow table.",
+    "loadFromStructure": "Load structure",
+    "loadFromStructureTitle": "Replace these columns with a saved structure",
+    "pickerEmpty": "No saved structures yet.",
+    "pickerTitle": "Load a saved structure",
+    "saveAsStructure": "Save as structure",
+    "saveAsStructureTitle": "Save these columns to your structures library",
+    "savedToast": "Saved structure “{name}”",
+    "namePlaceholder": "Structure name",
+    "fieldCount": "{count} fields",
+    "fieldCountOne": "1 field",
+    "downgradedNotice": "{count} field(s) simplified to text — tables hold one value per cell: {names}",
+    "truncatedNotice": "{count} field(s) dropped — the table limit is {max} columns: {names}",
+    "skippedDerivedNotice": "{count} calculated column(s) not saved — formulas refer to this table's columns: {names}",
+    "loadReplacesColumns": "This replaces the current columns. Existing rows keep values whose column names match."
   }
 }
