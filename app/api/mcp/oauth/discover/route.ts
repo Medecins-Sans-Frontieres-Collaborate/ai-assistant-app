@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server';
 
+import { createConnectorResolver } from '@/lib/services/mcp/connectorResolution';
 import {
   McpOauthError,
   resolveOauthContext,
@@ -33,6 +34,7 @@ const requestSchema = z
         id: z.string().regex(/^[a-zA-Z0-9_-]{1,64}$/),
         name: z.string().min(1).max(100),
         catalogKey: z.string().max(64).optional(),
+        connectorId: z.string().max(64).optional(),
         url: z.string().max(2048).optional(),
       })
       .strict(),
@@ -62,7 +64,9 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const context = await resolveOauthContext(parsed.data.server);
+    const context = await resolveOauthContext(parsed.data.server, {
+      resolveConnector: await createConnectorResolver(session),
+    });
     return successResponse({
       serverLabel: context.resolved.label,
       authorizationEndpoint: context.metadata.authorization_endpoint ?? null,
