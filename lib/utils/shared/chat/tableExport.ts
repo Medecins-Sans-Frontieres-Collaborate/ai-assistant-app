@@ -31,7 +31,13 @@ export function tableRowsToTsv(rows: TableRows): string {
 }
 
 function markdownCell(value: string): string {
-  return value.replace(/\|/g, '\\|').replace(/\r?\n/g, '<br>');
+  // Backslashes escape first, or a cell containing a literal `\|` would emit
+  // `\\|` — GFM reads that as an escaped backslash followed by a LIVE pipe and
+  // splits the column there, shifting every cell after it.
+  return value
+    .replace(/\\/g, '\\\\')
+    .replace(/\|/g, '\\|')
+    .replace(/\r?\n/g, '<br>');
 }
 
 export function tableRowsToMarkdown(rows: TableRows): string {
