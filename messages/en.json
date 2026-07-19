@@ -1362,11 +1362,11 @@
       "toggle": "Suggest revisions instead of applying them",
       "description": "When you ask the Document workflow to revise, the changes arrive as individual suggestions you can accept or reject, the same way quality assessments do.",
       "exceptionsTitle": "Apply directly anyway when:",
-      "exceptionSelection": "Revising a selection you highlighted",
-      "exceptionLargeRewrite": "The rewrite changes most of the document",
+      "exceptionLargeRewrite": "A single change would cover most of the document",
       "exceptionReorder": "Sections are moved rather than edited",
-      "thresholdLabel": "Treat as a rewrite above",
-      "thresholdUnit": "% of the document changed"
+      "thresholdLabel": "Treat one change as unreviewable above",
+      "thresholdUnit": "% of the document",
+      "exceptionSelectionAlways": "Revising a highlighted selection always applies directly — the model returns only the revised excerpt, which cannot be broken into suggestions against the whole document."
     }
   },
   "workflows": {
@@ -1661,7 +1661,7 @@
       "revisionSuggestionSummary": "Your revision request produced {count} {count, plural, one {suggested change} other {suggested changes}}.",
       "revisionCriterionLabel": "Requested revision",
       "fallbackSelection": "Applied directly — revisions to a selection are not suggested.",
-      "fallbackLargeRewrite": "Applied directly — the rewrite changed too much of the document to review as separate suggestions.",
+      "fallbackLargeRewrite": "Applied directly — the rewrite came back as one block covering most of the document, which cannot be reviewed piece by piece.",
       "fallbackReorder": "Applied directly — sections were moved, which does not split into reviewable suggestions.",
       "fallbackUnanchorable": "Applied directly — the changes could not be matched to specific passages.",
       "fallbackNoChanges": "No changes were needed.",
