@@ -1,9 +1,10 @@
 import { NextRequest } from 'next/server';
 
+import { createConnectorResolver } from '@/lib/services/mcp/connectorResolution';
 import {
   McpOauthError,
+  getOauthClientCredentials,
   getOauthRedirectUri,
-  getStaticOauthClient,
   resolveOauthContext,
 } from '@/lib/services/mcp/mcpOauthDiscovery';
 import { guardedFetch } from '@/lib/services/mcp/mcpUrlGuard';
@@ -37,6 +38,7 @@ const requestSchema = z
         id: z.string().regex(/^[a-zA-Z0-9_-]{1,64}$/),
         name: z.string().min(1).max(100),
         catalogKey: z.string().max(64).optional(),
+        connectorId: z.string().max(64).optional(),
         url: z.string().max(2048).optional(),
       })
       .strict(),
@@ -71,12 +73,14 @@ export async function POST(request: NextRequest) {
     // origins (its DCR only allows loopback redirect URIs). Only the
     // clientId goes to the browser; the secret stays in env and is injected
     // by the token route.
-    const staticClient = getStaticOauthClient(parsed.data.server.catalogKey);
+    const staticClient = await getOauthClientCredentials(parsed.data.server);
     if (staticClient) {
       return successResponse({ clientId: staticClient.clientId });
     }
 
-    const context = await resolveOauthContext(parsed.data.server);
+    const context = await resolveOauthContext(parsed.data.server, {
+      resolveConnector: await createConnectorResolver(session),
+    });
     if (!context.metadata.registration_endpoint) {
       return errorResponse(
         `"${context.resolved.label}" does not support dynamic client registration. Configure a pre-registered OAuth app (MCP_OAUTH_*_CLIENT_ID) for this deployment.`,
