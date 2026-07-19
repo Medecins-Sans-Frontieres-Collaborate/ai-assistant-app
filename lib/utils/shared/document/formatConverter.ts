@@ -32,34 +32,74 @@ export function detectFormat(fileName: string): SupportedFormat | null {
   return ext && formatMap[ext] ? formatMap[ext] : null;
 }
 
+/** Entities that render as blank space and so do not count as content. */
+const BLANK_ENTITIES = new Set([
+  'nbsp',
+  'ensp',
+  'emsp',
+  'thinsp',
+  '#160',
+  '#xa0',
+  '#32',
+]);
+
+/** Elements that carry meaning without carrying any text. */
+const CONTENT_BEARING_TAG =
+  /<(img|table|hr|iframe|video|audio|figure|blockquote|pre|ul|ol|input)\b/i;
+
+/**
+ * Whether any non-whitespace character sits outside a tag.
+ *
+ * A SCANNER, deliberately not a strip-then-compare. Removing tags with
+ * `replace(/<[^>]*>/g, '')` is the shape of an HTML sanitizer — CodeQL flags
+ * it as one (js/incomplete-multi-character-sanitization), and correctly so in
+ * general, since one pass over malformed nesting can reassemble `<script`.
+ * Nothing here is sanitizing: the result is a boolean and no string derived
+ * from the input is ever returned or rendered. Scanning says that plainly,
+ * and handles malformed nesting without pretending to clean it.
+ */
+function hasVisibleText(html: string): boolean {
+  let depth = 0;
+  for (let i = 0; i < html.length; i += 1) {
+    const ch = html[i];
+    if (ch === '<') {
+      depth += 1;
+      continue;
+    }
+    if (ch === '>') {
+      if (depth > 0) depth -= 1;
+      continue;
+    }
+    if (depth > 0) continue;
+    if (ch === '&') {
+      const end = html.indexOf(';', i);
+      // Bounded: a bare '&' with no terminator is just a visible character.
+      if (end === -1 || end - i > 10) return true;
+      const name = html.slice(i + 1, end).toLowerCase();
+      i = end;
+      if (BLANK_ENTITIES.has(name)) continue;
+      return true;
+    }
+    if (!/\s/.test(ch)) return true;
+  }
+  return false;
+}
+
 /**
  * Whether HTML represents a document with nothing in it.
  *
  * An empty Tiptap editor serializes to `<p></p>` rather than `''`, and near
- * variants (`<p><br></p>`, a stray `&nbsp;`) mean the same thing to a reader.
- * Comparing against a single literal would miss those, so this strips markup
- * and asks whether anything is left.
+ * variants (`<p><br></p>`, a stray `&nbsp;`) mean the same thing to a reader,
+ * so this asks whether anything would actually show rather than comparing
+ * against a literal.
  *
- * Elements that carry meaning without carrying text — an image, a table, a
- * rule — count as content, or a document holding only a figure would be
- * mistaken for a blank one.
+ * An image, a table or a rule counts as content, or a document holding only a
+ * figure would be mistaken for a blank one.
  */
 export function isEmptyDocHtml(html: string): boolean {
   if (!html) return true;
-  if (
-    /<(img|table|hr|iframe|video|audio|figure|blockquote|pre|ul|ol|input)\b/i.test(
-      html,
-    )
-  ) {
-    return false;
-  }
-  const text = html
-    .replace(/<br\s*\/?>/gi, '')
-    .replace(/&nbsp;/gi, ' ')
-    .replace(/<[^>]*>/g, '')
-    .replace(/\s+/g, '')
-    .trim();
-  return text === '';
+  if (CONTENT_BEARING_TAG.test(html)) return false;
+  return !hasVisibleText(html);
 }
 
 /**
