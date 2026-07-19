@@ -989,6 +989,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           .filter(
             (s) =>
               s.catalogKey ||
+              // Connectors are server-resolved and access-checked; the
+              // arbitrary-URL flag does not apply to them.
+              s.connectorId ||
               (settings.allowArbitraryMcpServers &&
                 settings.mcpArbitraryFlagEnabled),
           );
@@ -1005,16 +1008,18 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           } else if (s.authMode === 'none') {
             effectiveToken = undefined;
           } else {
-            if (!s.authToken && s.catalogKey) return null;
+            if (!s.authToken && (s.catalogKey || s.connectorId)) return null;
             effectiveToken = s.authToken;
           }
           return {
             id: s.id,
             name: s.name,
-            // The server resolves curated URLs from the catalog; don't send one.
-            url: s.catalogKey ? undefined : s.url,
+            // The server resolves curated and connector URLs itself; sending
+            // one would be ignored anyway (spoof-proofing).
+            url: s.catalogKey || s.connectorId ? undefined : s.url,
             authToken: effectiveToken,
             catalogKey: s.catalogKey,
+            connectorId: s.connectorId,
           };
         }),
       )
