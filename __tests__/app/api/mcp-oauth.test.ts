@@ -368,12 +368,28 @@ describe('/api/mcp/oauth/*', () => {
   });
 
   describe('GET /availability', () => {
-    it('reports every oauth-capable catalog key as unavailable with no env apps', async () => {
+    it('reports static-app-dependent catalog keys as unavailable with no env apps', async () => {
       const res = await availabilityGET();
       const body = await parseJsonResponse(res);
 
       expect(res.status).toBe(200);
-      expect(body.data.availability).toEqual({ github: false, asana: false });
+      // These vendors publish no usable web-app DCR, so without a configured
+      // app the connect button must stay hidden.
+      expect(body.data.availability).toMatchObject({
+        github: false,
+        asana: false,
+        salesforce: false,
+        hootsuitePerch: false,
+        hootsuiteNest: false,
+      });
+    });
+
+    it('reports a DCR-capable connector as available without any env app', async () => {
+      // Tableau speaks OAuth 2.1 and can register a client mid-flow, so
+      // hiding the affordance would deny a flow that actually works.
+      const body = await parseJsonResponse(await availabilityGET());
+
+      expect(body.data.availability.tableau).toBe(true);
     });
 
     it('reports only the connectors whose app is configured', async () => {
@@ -381,7 +397,21 @@ describe('/api/mcp/oauth/*', () => {
 
       const body = await parseJsonResponse(await availabilityGET());
 
-      expect(body.data.availability).toEqual({ github: false, asana: true });
+      expect(body.data.availability).toMatchObject({
+        github: false,
+        asana: true,
+      });
+    });
+
+    it('shares one Hootsuite app across both Hootsuite servers', async () => {
+      mockEnv.MCP_OAUTH_HOOTSUITE_CLIENT_ID = 'hootsuite-static-id';
+
+      const body = await parseJsonResponse(await availabilityGET());
+
+      expect(body.data.availability).toMatchObject({
+        hootsuitePerch: true,
+        hootsuiteNest: true,
+      });
     });
 
     it('never leaks the client id or secret — booleans only', async () => {
