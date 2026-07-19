@@ -1519,7 +1519,8 @@
       "pendingCount": "{count} pending",
       "closeReview": "Close quality review",
       "showReview": "Show review",
-      "showReviewPending": "Show review ({count} pending)"
+      "showReviewPending": "Show review ({count} pending)",
+      "criterionRubricTooLong": "This rubric is {over} characters over the limit. It is sent with every assessment, so it must be trimmed before this criterion can be used."
     },
     "document": {
       "emptyTitle": "Describe the document you want",
@@ -1663,7 +1664,8 @@
       "fallbackLargeRewrite": "Applied directly — the rewrite changed too much of the document to review as separate suggestions.",
       "fallbackReorder": "Applied directly — sections were moved, which does not split into reviewable suggestions.",
       "fallbackUnanchorable": "Applied directly — the changes could not be matched to specific passages.",
-      "fallbackNoChanges": "No changes were needed."
+      "fallbackNoChanges": "No changes were needed.",
+      "criterionRubricTooLong": "This rubric is {over} characters over the limit. It is sent with every assessment, so it must be trimmed before this criterion can be used."
     },
     "data": {
       "emptyTitle": "Import data to analyze",
