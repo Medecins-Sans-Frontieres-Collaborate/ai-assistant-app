@@ -80,6 +80,54 @@ export interface AdminPromptAgentsResponse {
 }
 
 /**
+ * Client mirror of MCP_CONNECTOR_SOURCE (value import forbidden here — see
+ * the module comment above). The pseudo-source half of every connector's
+ * canonical key.
+ */
+export const CLIENT_MCP_CONNECTOR_SOURCE = 'mcp-connector';
+
+/**
+ * A connector as served by GET /api/agent-access/connectors. Mirrors the
+ * server's admin view: the sealed OAuth secret is replaced by a boolean, so
+ * this type deliberately has no field that could hold one.
+ */
+export interface AdminConnectorView {
+  id: string;
+  name: string;
+  description: string;
+  url: string;
+  transport: 'streamable-http' | 'sse';
+  authStyle: 'none' | 'bearer' | 'oauth';
+  tokenHelpUrl?: string;
+  oauthClientId?: string;
+  oauthScopes: string[];
+  hasClientSecret: boolean;
+  createdBy: string;
+  createdAt: string;
+  updatedBy: string;
+  updatedAt: string;
+}
+
+export interface AdminStoredConnector {
+  canonicalKey: string;
+  connector: AdminConnectorView;
+  etag: string;
+}
+
+export interface AdminConnectorsResponse {
+  connectors: AdminStoredConnector[];
+  /** Same outage contract as rulesUnavailable — empty ≠ "none exist". */
+  connectorsUnavailable?: boolean;
+  /**
+   * False when the deployment has no AUTH_SECRET to seal client secrets
+   * with: the editor must then disable the oauth style and explain why,
+   * rather than offering a choice the server will reject with 503.
+   */
+  secretSealingAvailable?: boolean;
+  fetchedAt?: number | null;
+}
+
+/**
  * One row in the admin list: an agent from the admin's own discovery, a
  * stored rule, or both. `discoverable` false = rule exists but the agent is
  * not in the admin's own /api/agents discovery ("not discoverable by you").
