@@ -50,6 +50,10 @@ import {
   invertPatch,
   withoutResolvedEdits,
 } from '@/lib/utils/shared/review/reviewQueue';
+import {
+  DirectApplyReason,
+  planRevision,
+} from '@/lib/utils/shared/review/revisionSuggestions';
 import { stringHash } from '@/lib/utils/shared/stringHash';
 
 import { Message, MessageType } from '@/types/chat';
@@ -86,6 +90,26 @@ import { v4 as uuidv4 } from 'uuid';
 
 /** Streaming preview refresh interval — full re-parse of markdown → HTML. */
 const STREAM_RENDER_INTERVAL_MS = 300;
+
+/**
+ * Criterion id for edits that came from a revision request rather than a
+ * quality assessment. Not one of DOCUMENT_QUALITY_CRITERIA — the review UI
+ * resolves it through the assessment's `labels` map instead.
+ */
+const REVISION_CRITERION = 'revision';
+
+/**
+ * Rail note explaining why a revision was written straight in despite
+ * "Suggest changes" being ticked. Reasons the user did not ask about
+ * (`disabled`, `generate`) get no note — nothing surprising happened.
+ */
+const FALLBACK_NOTE_KEYS: Partial<Record<DirectApplyReason, string>> = {
+  selection: 'document.fallbackSelection',
+  largeRewrite: 'document.fallbackLargeRewrite',
+  reorder: 'document.fallbackReorder',
+  unanchorable: 'document.fallbackUnanchorable',
+  noChanges: 'document.fallbackNoChanges',
+};
 
 function extractTitle(markdown: string): string {
   const match = markdown.match(/^#\s+(.+)$/m);
@@ -127,6 +151,13 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const setAutoClearResolvedEdits = useSettingsStore(
     (s) => s.setAutoClearResolvedEdits,
   );
+  const suggestRevisionsDefault = useSettingsStore((s) => s.suggestRevisions);
+  const suggestRevisionsExceptions = useSettingsStore(
+    (s) => s.suggestRevisionsExceptions,
+  );
+  const suggestRevisionsLargeRewriteRatio = useSettingsStore(
+    (s) => s.suggestRevisionsLargeRewriteRatio,
+  );
 
   const [instruction, setInstruction] = useState('');
   const [streamHtml, setStreamHtml] = useState<string | null>(null);
@@ -148,6 +179,14 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       ),
   );
   const [selection, setSelection] = useState<EditorSelection | null>(null);
+  /**
+   * Per-conversation override of the "Suggest changes" default. Null means
+   * "follow the setting" — deriving rather than seeding useState matters
+   * because the store hydrates from localStorage after first render, and a
+   * seeded copy would keep the pre-hydration default forever.
+   */
+  const [suggestOverride, setSuggestOverride] = useState<boolean | null>(null);
+  const suggestRevisions = suggestOverride ?? suggestRevisionsDefault;
   const exportButtonRef = useRef<HTMLButtonElement>(null);
   const basisInputRef = useRef<HTMLInputElement>(null);
   const editorRef = useRef<RichTextEditorHandle>(null);
@@ -234,12 +273,14 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
 
   const resolveCriterionLabel = useCallback(
     (id: string) => {
+      // The labels snapshot wins for ANY id, not just custom ones: it also
+      // carries the name for revision-derived edits, whose criterion is the
+      // request rather than a quality rubric. Without this they would fall
+      // through to `document.criteria.revision.label`, which does not exist.
+      const snapshot = assessment?.labels?.[id];
+      if (snapshot) return snapshot;
       if (isCustomCriterionId(id)) {
-        return (
-          assessment?.labels?.[id] ??
-          documentCriteria.find((c) => c.id === id)?.name ??
-          id
-        );
+        return documentCriteria.find((c) => c.id === id)?.name ?? id;
       }
       return t(`document.criteria.${id}.label`);
     },
@@ -512,6 +553,9 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     appendRailMessages,
     buildWritingConstraints,
     clearError,
+    suggestRevisions,
+    suggestRevisionsExceptions,
+    suggestRevisionsLargeRewriteRatio,
     t,
   ]);
 
@@ -1155,7 +1199,30 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           {t('document.runFailed', { message: run.error })}
         </p>
       )}
-      {hasDocument && <div className="mb-1.5">{scopeChip}</div>}
+      {hasDocument && (
+        <div className="mb-1.5 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+          {scopeChip}
+          {/* Only meaningful for a revision: with a blank document there is
+              nothing to suggest changes against. */}
+          <label
+            className="inline-flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400"
+            title={
+              selection && suggestRevisionsExceptions.selectionScoped
+                ? t('document.suggestChangesSelectionNote')
+                : t('document.suggestChangesHint')
+            }
+          >
+            <input
+              type="checkbox"
+              checked={suggestRevisions}
+              disabled={isBusy || hasUnresolvedEdits}
+              onChange={(e) => setSuggestOverride(e.target.checked)}
+              className="h-3.5 w-3.5 accent-gray-600 disabled:opacity-50 dark:accent-gray-400"
+            />
+            {t('document.suggestChanges')}
+          </label>
+        </div>
+      )}
       <PastedTextChips chips={chips} onRemove={removeChip} />
       <div className="flex items-end gap-2">
         <textarea
