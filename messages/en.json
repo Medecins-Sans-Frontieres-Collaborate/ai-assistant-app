@@ -1356,7 +1356,18 @@
     "Backup": "Backup",
     "Memories": "Memories",
     "Agent Access": "Access & Connectors",
-    "LocalModels": "Local models"
+    "LocalModels": "Local models",
+    "suggestRevisions": {
+      "title": "Document revisions",
+      "toggle": "Suggest revisions instead of applying them",
+      "description": "When you ask the Document workflow to revise, the changes arrive as individual suggestions you can accept or reject, the same way quality assessments do.",
+      "exceptionsTitle": "Apply directly anyway when:",
+      "exceptionSelection": "Revising a selection you highlighted",
+      "exceptionLargeRewrite": "The rewrite changes most of the document",
+      "exceptionReorder": "Sections are moved rather than edited",
+      "thresholdLabel": "Treat as a rewrite above",
+      "thresholdUnit": "% of the document changed"
+    }
   },
   "workflows": {
     "types": {
@@ -1641,7 +1652,18 @@
       "editorModeRich": "Rich text",
       "editorModeMarkdown": "Markdown",
       "editorModeHtml": "HTML",
-      "editorModeLockedEdits": "Resolve the suggested edits before switching editor mode."
+      "editorModeLockedEdits": "Resolve the suggested edits before switching editor mode.",
+      "suggestChanges": "Suggest changes",
+      "suggestChangesHint": "Review the revision as individual suggestions instead of rewriting the document straight away.",
+      "suggestChangesSelectionNote": "Revisions to a selection are applied directly — the selection is already the scope you chose.",
+      "suggestedSummary": "Suggested {count} {count, plural, one {change} other {changes}} for review.",
+      "revisionSuggestionSummary": "Your revision request produced {count} {count, plural, one {suggested change} other {suggested changes}}.",
+      "revisionCriterionLabel": "Requested revision",
+      "fallbackSelection": "Applied directly — revisions to a selection are not suggested.",
+      "fallbackLargeRewrite": "Applied directly — the rewrite changed too much of the document to review as separate suggestions.",
+      "fallbackReorder": "Applied directly — sections were moved, which does not split into reviewable suggestions.",
+      "fallbackUnanchorable": "Applied directly — the changes could not be matched to specific passages.",
+      "fallbackNoChanges": "No changes were needed."
     },
     "data": {
       "emptyTitle": "Import data to analyze",
