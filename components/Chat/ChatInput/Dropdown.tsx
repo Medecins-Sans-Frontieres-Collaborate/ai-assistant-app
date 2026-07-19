@@ -934,7 +934,7 @@ const Dropdown: React.FC<DropdownProps> = ({
           return (
             <div
               ref={dropdownRef}
-              className={`absolute ${openDownward ? 'top-full mt-2 z-[10000]' : 'bottom-full mb-2 z-[9999]'} left-0 flex flex-col bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg w-64 outline-none overflow-hidden ${
+              className={`absolute ${openDownward ? 'top-full mt-2 z-[10000]' : 'bottom-full mb-2 z-[9999]'} left-0 flex flex-col bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg w-80 outline-none overflow-hidden ${
                 openDownward ? 'animate-slide-down-reverse' : 'animate-slide-up'
               }`}
               tabIndex={-1}

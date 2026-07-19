@@ -139,10 +139,91 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
         disabled={item.disabled}
       >
         {item.icon}
-        <span className="truncate">{item.label}</span>
+        <span className="truncate" title={item.label}>
+          {item.label}
+        </span>
       </button>
 
-      <div className="flex items-center gap-0.5 flex-shrink-0 pr-2">
+      <div className="relative self-stretch flex items-center gap-0.5 flex-shrink-0 pr-2">
+        {/* Hover-revealed controls are overlaid on the label's tail rather than
+            held in flow. Reserving their width permanently clipped labels on
+            every row — and at 33 locales the long ones ("Audio/Video
+            transkribieren") have nothing to spare. Pinned / hidden rows keep
+            them visible, since there the state is the information. */}
+        {((hideable && onToggleHidden) || (pinnable && onTogglePin)) && (
+          <div
+            className={`absolute right-full top-0 bottom-0 flex items-center gap-0.5 pl-6 rounded-md transition-opacity duration-150 motion-reduce:transition-none ${
+              isSelected
+                ? 'bg-gray-100 dark:bg-gray-700'
+                : 'bg-white dark:bg-gray-800 group-hover:bg-gray-100 dark:group-hover:bg-gray-700'
+            } ${
+              pinned || hidden
+                ? 'opacity-100'
+                : 'opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto'
+            }`}
+          >
+            {hideable && onToggleHidden && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleHidden();
+                }}
+                title={
+                  hidden
+                    ? t('dropdown.moveOutOfMore')
+                    : t('dropdown.moveToMore')
+                }
+                aria-label={
+                  hidden
+                    ? t('dropdown.moveOutOfMore')
+                    : t('dropdown.moveToMore')
+                }
+                aria-pressed={hidden}
+                className="p-1 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+              >
+                {hidden ? <IconEye size={16} /> : <IconEyeOff size={16} />}
+              </button>
+            )}
+
+            {pinnable && onTogglePin && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onTogglePin();
+                }}
+                onMouseEnter={() => setPinHover(true)}
+                onMouseLeave={() => setPinHover(false)}
+                onFocus={() => setPinHover(true)}
+                onBlur={() => setPinHover(false)}
+                title={pinned ? t('dropdown.unpin') : t('dropdown.pin')}
+                aria-label={pinned ? t('dropdown.unpin') : t('dropdown.pin')}
+                aria-pressed={pinned}
+                className={`p-1 rounded ${
+                  pinned
+                    ? 'text-blue-500'
+                    : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'
+                }`}
+              >
+                {/* Show the resulting state on hover: an unpinned item previews
+                    the filled pin; a pinned item previews the pin-off. */}
+                {pinned ? (
+                  pinHover ? (
+                    <IconPinnedOff size={16} />
+                  ) : (
+                    <IconPinnedFilled size={16} />
+                  )
+                ) : pinHover ? (
+                  <IconPinnedFilled size={16} />
+                ) : (
+                  <IconPinned size={16} />
+                )}
+              </button>
+            )}
+          </div>
+        )}
+
         {/* Intent affordance: on-state mark for toggles, chevron for dialogs */}
         {item.toggle && item.checked && (
           <IconCheck size={16} className="text-blue-500" aria-hidden="true" />
@@ -153,66 +234,6 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
             className="text-gray-400 dark:text-gray-500"
             aria-hidden="true"
           />
-        )}
-
-        {hideable && onToggleHidden && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggleHidden();
-            }}
-            title={
-              hidden ? t('dropdown.moveOutOfMore') : t('dropdown.moveToMore')
-            }
-            aria-label={
-              hidden ? t('dropdown.moveOutOfMore') : t('dropdown.moveToMore')
-            }
-            aria-pressed={hidden}
-            className={`p-1 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-opacity ${
-              hidden
-                ? 'opacity-100'
-                : 'opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus:opacity-100'
-            }`}
-          >
-            {hidden ? <IconEye size={16} /> : <IconEyeOff size={16} />}
-          </button>
-        )}
-
-        {pinnable && onTogglePin && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onTogglePin();
-            }}
-            onMouseEnter={() => setPinHover(true)}
-            onMouseLeave={() => setPinHover(false)}
-            onFocus={() => setPinHover(true)}
-            onBlur={() => setPinHover(false)}
-            title={pinned ? t('dropdown.unpin') : t('dropdown.pin')}
-            aria-label={pinned ? t('dropdown.unpin') : t('dropdown.pin')}
-            aria-pressed={pinned}
-            className={`p-1 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-opacity ${
-              pinned
-                ? 'opacity-100 text-blue-500'
-                : 'opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus:opacity-100'
-            }`}
-          >
-            {/* Show the resulting state on hover: an unpinned item previews the
-                filled pin; a pinned item previews the pin-off. */}
-            {pinned ? (
-              pinHover ? (
-                <IconPinnedOff size={16} />
-              ) : (
-                <IconPinnedFilled size={16} />
-              )
-            ) : pinHover ? (
-              <IconPinnedFilled size={16} />
-            ) : (
-              <IconPinned size={16} />
-            )}
-          </button>
         )}
 
         {item.infoTooltip && (
