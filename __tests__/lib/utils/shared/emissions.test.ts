@@ -1,10 +1,15 @@
 import {
   EMISSIONS_ASSUMPTIONS,
+  EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
+  EMISSIONS_CHIP_AUTOHIDE_MAX_MS,
+  EMISSIONS_CHIP_AUTOHIDE_MIN_MS,
   activityDurationParts,
+  clampEmissionsChipAutoHideMs,
   estimateActivityEquivalents,
   estimateCO2Grams,
   estimateTypicalRequestCO2,
   getEmissionsTier,
+  isEmissionsChipVisibility,
 } from '@/lib/utils/shared/emissions';
 
 import { describe, expect, it } from 'vitest';
@@ -232,5 +237,50 @@ describe('activityDurationParts', () => {
       unit: 'hours',
       value: '26',
     });
+  });
+});
+
+describe('clampEmissionsChipAutoHideMs', () => {
+  it('passes through values inside the range', () => {
+    expect(clampEmissionsChipAutoHideMs(4000)).toBe(4000);
+    expect(clampEmissionsChipAutoHideMs(EMISSIONS_CHIP_AUTOHIDE_MIN_MS)).toBe(
+      EMISSIONS_CHIP_AUTOHIDE_MIN_MS,
+    );
+    expect(clampEmissionsChipAutoHideMs(EMISSIONS_CHIP_AUTOHIDE_MAX_MS)).toBe(
+      EMISSIONS_CHIP_AUTOHIDE_MAX_MS,
+    );
+  });
+
+  it('pulls out-of-range values to the nearest bound', () => {
+    expect(clampEmissionsChipAutoHideMs(0)).toBe(
+      EMISSIONS_CHIP_AUTOHIDE_MIN_MS,
+    );
+    expect(clampEmissionsChipAutoHideMs(-5000)).toBe(
+      EMISSIONS_CHIP_AUTOHIDE_MIN_MS,
+    );
+    expect(clampEmissionsChipAutoHideMs(10_000_000)).toBe(
+      EMISSIONS_CHIP_AUTOHIDE_MAX_MS,
+    );
+  });
+
+  it('falls back to the default for non-finite input rather than to a bound', () => {
+    // A corrupt value should not masquerade as a deliberate extreme.
+    expect(clampEmissionsChipAutoHideMs(NaN)).toBe(
+      EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
+    );
+    expect(clampEmissionsChipAutoHideMs(Infinity)).toBe(
+      EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
+    );
+  });
+});
+
+describe('isEmissionsChipVisibility', () => {
+  it('accepts the three known modes and rejects anything else', () => {
+    expect(isEmissionsChipVisibility('always')).toBe(true);
+    expect(isEmissionsChipVisibility('auto')).toBe(true);
+    expect(isEmissionsChipVisibility('hidden')).toBe(true);
+    expect(isEmissionsChipVisibility('sometimes')).toBe(false);
+    expect(isEmissionsChipVisibility(undefined)).toBe(false);
+    expect(isEmissionsChipVisibility(null)).toBe(false);
   });
 });
