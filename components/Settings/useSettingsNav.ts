@@ -1,5 +1,4 @@
 import {
-  type Icon,
   IconBrain,
   IconDatabase,
   IconDeviceDesktop,
@@ -13,12 +12,20 @@ import {
   IconUserShield,
 } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
+import { ComponentType } from 'react';
 
 import { useTranslations } from 'next-intl';
 
 import { useAgentAccessAdmin } from '@/client/hooks/settings/useAgentAccessAdmin';
 
 import { SettingsSection } from './types';
+
+/**
+ * Structural rather than Tabler's own `Icon` export, which is a namespace in
+ * v3 and can't be used as a type. This is all the call sites need: each
+ * renders the icon via `createElement(icon, { size })`.
+ */
+type NavIcon = ComponentType<{ size?: number | string; className?: string }>;
 
 /**
  * A section the dialog can show, or an outbound link rendered alongside them
@@ -30,13 +37,13 @@ export type SettingsNavItem =
       kind: 'section';
       section: SettingsSection;
       label: string;
-      icon: Icon;
+      icon: NavIcon;
     }
   | {
       kind: 'link';
       href: string;
       label: string;
-      icon: Icon;
+      icon: NavIcon;
     };
 
 /**
@@ -84,7 +91,7 @@ export function useSettingsNav(): SettingsNavItem[] {
   const section = (
     id: SettingsSection,
     label: string,
-    icon: Icon,
+    icon: NavIcon,
   ): SettingsNavItem => ({ kind: 'section', section: id, label, icon });
 
   return [
