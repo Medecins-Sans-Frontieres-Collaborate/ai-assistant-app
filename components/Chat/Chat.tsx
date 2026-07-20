@@ -569,7 +569,7 @@ export function Chat({
   }
 
   return (
-    <div className="chat-split-container relative flex h-full w-full overflow-hidden bg-white dark:bg-surface-dark">
+    <div className="chat-split-container relative flex min-w-0 h-full w-full overflow-hidden bg-white dark:bg-surface-dark">
       {/* Main chat area */}
       <div
         className="flex flex-col h-full overflow-hidden min-w-0"
@@ -631,8 +631,15 @@ export function Chat({
         >
           {!hasMessages ? (
             /* Empty state with centered input */
-            <div className="h-full flex flex-col items-center justify-center px-4 py-8">
-              <div className="w-full flex flex-col items-center justify-center gap-6 -translate-y-12">
+            /* min-h-full, not h-full: inside an overflow-y-auto parent,
+               `h-full` clamps this box to the visible height, and a scroll
+               container cannot scroll above its content origin — so on short
+               viewports the top of the greeting became unreachable. `min-h-full`
+               keeps the centered look when there is room and lets the box grow
+               and scroll when there isn't. The -translate-y lift is a desktop
+               optical adjustment; on mobile it only costs scarce height. */
+            <div className="min-h-full flex flex-col items-center justify-center px-4 py-6 sm:py-8">
+              <div className="w-full flex flex-col items-center justify-center gap-4 sm:gap-6 sm:-translate-y-12">
                 {/* Logo and Heading */}
                 <EmptyState
                   userName={getUserDisplayName(
@@ -643,8 +650,14 @@ export function Chat({
                   user={session?.user}
                 />
 
-                {/* Centered Chat Input */}
-                <div className="w-full max-w-3xl mx-auto relative z-50">
+                {/* Centered Chat Input.
+                    z-20, not z-50: the mobile sidebar drawer is z-50 and its
+                    backdrop z-40, and this renders after <Sidebar /> in
+                    ChatShell — so at z-50 the composer's opaque background
+                    painted straight over the open drawer. z-20 still clears
+                    the sibling EmptyState and SuggestedPrompts (z-10) while
+                    sitting under the drawer and its scrim. */}
+                <div className="w-full max-w-3xl mx-auto relative z-20">
                   <ChatInput
                     onSend={handleSend}
                     onRegenerate={handleRegenerate}
@@ -657,8 +670,13 @@ export function Chat({
                   />
                 </div>
 
-                {/* Suggested Prompts below input */}
-                <div className="relative z-10">
+                {/* Suggested Prompts below input.
+                    w-full min-w-0: as a flex item under items-center this
+                    sized to the pill row's max-content and got centred,
+                    clipping pills off BOTH edges so the first one could never
+                    be tapped. Constraining it lets the inner overflow-x-auto
+                    scroll from the left edge instead. */}
+                <div className="relative z-10 w-full min-w-0">
                   <SuggestedPrompts onSelectPrompt={handleSelectPrompt} />
                 </div>
               </div>
