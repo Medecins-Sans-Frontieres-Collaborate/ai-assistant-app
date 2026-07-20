@@ -295,6 +295,8 @@ export function SettingDialog() {
                   <MobileSettingsHeader
                     activeSection={activeSection}
                     setActiveSection={setActiveSection}
+                    handleReset={handleReset}
+                    onClose={() => setIsSettingsOpen(false)}
                   />
                 )}
 
