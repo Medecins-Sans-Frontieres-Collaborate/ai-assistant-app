@@ -104,15 +104,17 @@ describe('mcpCredentialSync', () => {
     useSettingsStore.getState().updateMcpServer('github', {
       authToken: 'github_pat_new',
     });
-    await flushAsync();
-    expect(await getServerSecrets('github')).toEqual({
-      authToken: 'github_pat_new',
+    await expectEventually(async () => {
+      expect(await getServerSecrets('github')).toEqual({
+        authToken: 'github_pat_new',
+      });
     });
 
     // Disconnect (server removed)
     useSettingsStore.getState().deleteMcpServer('github');
-    await flushAsync();
-    expect(await getServerSecrets('github')).toBeNull();
+    await expectEventually(async () => {
+      expect(await getServerSecrets('github')).toBeNull();
+    });
   });
 
   it('cleans up vault records for servers that no longer exist', async () => {
@@ -120,9 +122,10 @@ describe('mcpCredentialSync', () => {
     useSettingsStore.setState({ mcpServers: [] });
 
     unsubscribe = await initMcpCredentialSync();
-    await flushAsync();
 
-    expect(await getServerSecrets('ghost')).toBeNull();
+    await expectEventually(async () => {
+      expect(await getServerSecrets('ghost')).toBeNull();
+    });
   });
 
   it('degrades gracefully when the vault key endpoint is unavailable', async () => {
