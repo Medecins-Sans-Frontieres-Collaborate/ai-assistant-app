@@ -110,7 +110,7 @@ export function MobileChatHeader({ onModelSelectChange }: MobileHeaderProps) {
 
       {/* Same slot-sharing as ChatTopbar: mode tabs while the conversation
           is still empty, clear button once it isn't. */}
-      {!hasMessages && <WorkflowTabs />}
+      {!hasMessages && <WorkflowTabs variant="compact" />}
 
       {/* Clear button */}
       {hasMessages && (
