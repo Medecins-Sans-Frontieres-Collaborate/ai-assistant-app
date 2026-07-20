@@ -111,7 +111,10 @@ body {
   overflow: hidden;
   position: fixed;
   width: 100%;
-  height: 100%;
+  /* Matches the shell's h-dvh. Cosmetic only (overflow is hidden), but it
+     stops the body box extending under the mobile URL bar and keeps any
+     future `height: 100%` descendant honest. */
+  height: 100dvh;
 }
 
 /* Code block overflow handling for responsive layouts */
@@ -137,11 +140,11 @@ pre {
   overflow-x: auto;
 }
 
-@media (max-width: 720px) {
-  pre {
-    width: calc(100vw - 110px);
-  }
-}
+/* Removed: `@media (max-width: 720px) { pre { width: calc(100vw - 110px) } }`.
+   It set `width`, not `max-width`, so every code block was forced to that
+   width regardless of content, and the 110px gutter matched no current layout
+   (the sidebar is hidden below `md`). The `pre { max-width: 100% }` rule
+   above already handles containment. */
 
 pre:has(div.codeblock) {
   padding: 0;
