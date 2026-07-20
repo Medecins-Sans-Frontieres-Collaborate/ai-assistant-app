@@ -307,8 +307,8 @@ export function reconcile(params: {
         align: 'Yes',
         differences: narrName
           ? nameAligned
-            ? ''
-            : `Allocation name "${e.name}" vs narrative name "${narrName}"`
+            ? `Code found; allocation name "${e.name}" matches narrative name "${narrName}"`
+            : `Code found; allocation name "${e.name}" vs narrative name "${narrName}"`
           : `Code ${code} found in narrative "${foundDoc.file}"`,
         aligned: narrName
           ? nameAligned
