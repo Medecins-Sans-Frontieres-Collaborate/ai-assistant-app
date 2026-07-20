@@ -105,7 +105,7 @@ export function buildExtractionPrompt(
   if (ocName === 'OCA') {
     codeHint = 'Format is P + 3-4 digit number (e.g., P1412, P987)';
   } else if (ocName === 'OCBA') {
-    codeHint = `Format is ES + 2-letter country + 2-4 digit number (e.g., ESAF183, ESCD507). Prefix "${codePrefix}" is required.`;
+    codeHint = `Format is ES + 2-letter country + 2-4 digit number (e.g., ESAF183, ESCD507). In OCBA documents the code is frequently written WITHOUT the "ES" prefix, and sometimes as ONLY the number — e.g. "CODE PROJET: NE110", "AF183", or "CÓDIGO DEL PROYECTO: 102". Return the code as country-letters + number: if the two country letters are already present, keep them; if ONLY the number is given, prepend the project country's ISO 3166-1 alpha-2 code (a project in Mexico numbered 102 → "MX102"; Niger 183 → "NE183"; note Niger=NE and Nigeria=NG differ). Do NOT add the "${codePrefix}" prefix yourself — it is applied automatically. NEVER discard a code just because it lacks the prefix.`;
   } else if (ocName === 'OCP') {
     codeHint =
       'Format is 2-letter country code + 2-4 digit number (e.g., AF110, CD507). One document may contain MULTIPLE projects.';
