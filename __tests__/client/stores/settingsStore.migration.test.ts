@@ -1,4 +1,9 @@
 import {
+  EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
+  EMISSIONS_CHIP_AUTOHIDE_MIN_MS,
+  EMISSIONS_CHIP_VISIBILITY_DEFAULT,
+} from '@/lib/utils/shared/emissions';
+import {
   DEFAULT_MAP_TIMELAPSE,
   MAX_CARDS_MAX,
 } from '@/lib/utils/shared/geo/timelapsePacing';
@@ -636,5 +641,48 @@ describe('settingsStore migration (v40 → v41)', () => {
 
     expect(result.savedStructures).toEqual([]);
     expect(result).not.toHaveProperty('extractionRecipes');
+  });
+});
+
+/**
+ * v43 → v44 adds the per-user emissions chip visibility setting. It defaults
+ * to `always` — the behavior existing users already have — so the migration is
+ * a no-op for them. Both fields round-trip through localStorage, so a stale or
+ * hand-edited value must be repaired rather than trusted at the render path.
+ */
+describe('settingsStore migration (v43 → v44)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills emissions chip defaults when migrating from v43', () => {
+    const result = migrate({}, 43) as Record<string, unknown>;
+
+    expect(result.emissionsChipVisibility).toBe(
+      EMISSIONS_CHIP_VISIBILITY_DEFAULT,
+    );
+    expect(result.emissionsChipAutoHideMs).toBe(
+      EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
+    );
+  });
+
+  it('preserves a deliberate choice', () => {
+    const result = migrate(
+      { emissionsChipVisibility: 'auto', emissionsChipAutoHideMs: 8000 },
+      43,
+    ) as Record<string, unknown>;
+
+    expect(result.emissionsChipVisibility).toBe('auto');
+    expect(result.emissionsChipAutoHideMs).toBe(8000);
+  });
+
+  it('repairs an unrecognized mode and clamps an out-of-range delay', () => {
+    const result = migrate(
+      { emissionsChipVisibility: 'sometimes', emissionsChipAutoHideMs: 10 },
+      43,
+    ) as Record<string, unknown>;
+
+    expect(result.emissionsChipVisibility).toBe(
+      EMISSIONS_CHIP_VISIBILITY_DEFAULT,
+    );
+    expect(result.emissionsChipAutoHideMs).toBe(EMISSIONS_CHIP_AUTOHIDE_MIN_MS);
   });
 });

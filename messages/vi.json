@@ -2475,7 +2475,18 @@
     "modelRow": "{requests} yc · {grams} g",
     "disclosure": "Ước tính dựa trên các giả định v{version} · từ {since} · chỉ tính chat tiêu chuẩn (không tính câu trả lời của agent và knowledge-base).",
     "reset": "Đặt lại thống kê sử dụng",
-    "estimatedPortion": "Bao gồm khoảng ~{grams} g CO₂e ({requests} yêu cầu) được ước tính từ các cuộc trò chuyện trước khi có theo dõi — tính toán lại từ văn bản tin nhắn lưu trữ, không phải số lượng token đã đo."
+    "estimatedPortion": "Bao gồm khoảng ~{grams} g CO₂e ({requests} yêu cầu) được ước tính từ các cuộc trò chuyện trước khi có theo dõi — tính toán lại từ văn bản tin nhắn lưu trữ, không phải số lượng token đã đo.",
+    "chipTitle": "Chip khí thải",
+    "chipDescription": "Ước tính lượng phát thải carbon của cuộc trò chuyện hiện tại, hiển thị phía trên ô nhập trò chuyện.",
+    "chipAlways": "Luôn hiển thị",
+    "chipAlwaysHint": "Chip luôn hiển thị bất cứ khi nào cuộc trò chuyện có ước tính.",
+    "chipAuto": "Hiển thị khi cập nhật hoặc di chuột",
+    "chipAutoHint": "Chip sẽ xuất hiện khi ước tính thay đổi, sau đó tự động mờ dần. Di chuột hoặc tập trung vào chip sẽ làm hiện lại.",
+    "chipHidden": "Đã ẩn",
+    "chipHiddenHint": "Chip sẽ không bao giờ hiển thị. Tổng số vẫn được ghi nhận và hiển thị tại trang này.",
+    "chipAutoHideLabel": "Tự động mờ sau",
+    "chipAutoHideUnit": "giây",
+    "chipAutoHideHint": "Từ {min} đến {max} giây."
   },
   "extraction": {
     "toggleLabel": "Trích xuất dữ liệu có cấu trúc",
@@ -3384,7 +3395,15 @@
       "measured": "Dựa trên số lượng token đã báo cáo",
       "estimated": "Tính toán lại từ các tin nhắn cũ",
       "lastRequest": "Yêu cầu gần nhất",
-      "disclaimer": "Ước tính cho từng yêu cầu dựa trên số lượng token đã báo cáo hoặc ước lượng, sử dụng các giá trị trung bình và giả định được công bố v{version}. Các tin nhắn cũ được tính toán lại từ văn bản lưu trữ và mô hình hiện tại của cuộc trò chuyện. Không phải số liệu đo lường."
+      "disclaimer": "Ước tính cho từng yêu cầu dựa trên số lượng token đã báo cáo hoặc ước lượng, sử dụng các giá trị trung bình và giả định được công bố v{version}. Các tin nhắn cũ được tính toán lại từ văn bản lưu trữ và mô hình hiện tại của cuộc trò chuyện. Không phải số liệu đo lường.",
+      "visibilityGroup": "Hiển thị chip khí thải",
+      "visibilityLabel": "Hiển thị:",
+      "visibility": {
+        "always": "Luôn luôn",
+        "auto": "Tự động",
+        "hidden": "Ẩn"
+      },
+      "visibilityHint": "Chế độ Tự động sẽ hiển thị chip khi ước tính được cập nhật hoặc khi bạn di chuột vào. Bạn có thể thay đổi lại trong Cài đặt › Sử dụng & Tác động."
     }
   },
   "table": {

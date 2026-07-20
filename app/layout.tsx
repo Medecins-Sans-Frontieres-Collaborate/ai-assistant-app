@@ -48,7 +48,13 @@ export const viewport: Viewport = {
   ],
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
+  // Chrome Android 108+: let the on-screen keyboard resize the layout
+  // viewport. `dvh` alone does not shrink for the keyboard, so without this
+  // the composer ends up behind it. No-op on iOS Safari.
+  interactiveWidget: 'resizes-content',
+  // `maximumScale: 1` deliberately omitted — it blocks pinch-zoom (WCAG
+  // 1.4.4). The iOS zoom-on-focus it used to guard against is already handled
+  // by the composer inheriting a 16px font size.
 };
 
 /**

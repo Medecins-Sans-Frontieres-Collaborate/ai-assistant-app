@@ -3144,7 +3144,15 @@
       "measured": "From reported token counts",
       "estimated": "Back-calculated from older messages",
       "lastRequest": "Last request",
-      "disclaimer": "Per-request estimates from reported or approximated token counts, using published averages and assumptions v{version}. Older messages are back-calculated from stored text and the conversation's current model. Not a measurement."
+      "disclaimer": "Per-request estimates from reported or approximated token counts, using published averages and assumptions v{version}. Older messages are back-calculated from stored text and the conversation's current model. Not a measurement.",
+      "visibilityGroup": "Emissions chip visibility",
+      "visibilityLabel": "Show:",
+      "visibility": {
+        "always": "Always",
+        "auto": "Auto",
+        "hidden": "Hide"
+      },
+      "visibilityHint": "Auto shows the chip when the estimate updates or you hover it. Change this again in Settings › Usage & Impact."
     }
   },
   "usageImpact": {
@@ -3160,7 +3168,18 @@
     "modelRow": "{requests} req · {grams} g",
     "estimatedPortion": "Includes ~{grams} g CO₂e ({requests} requests) estimated from chats that predate tracking — back-calculated from stored message text, not measured token counts.",
     "disclosure": "Estimates based on assumptions v{version} · since {since} · standard chat only (agents and knowledge-base answers not counted). Totals include back-calculated estimates for chats from before tracking began.",
-    "reset": "Reset usage stats"
+    "reset": "Reset usage stats",
+    "chipTitle": "Emissions chip",
+    "chipDescription": "The estimated carbon footprint of the current conversation, shown above the chat input.",
+    "chipAlways": "Always show",
+    "chipAlwaysHint": "The chip stays visible whenever the conversation has an estimate.",
+    "chipAuto": "Show on update or hover",
+    "chipAutoHint": "The chip appears when the estimate changes, then fades out. Hovering or focusing it brings it back.",
+    "chipHidden": "Hidden",
+    "chipHiddenHint": "The chip is never shown. Totals are still tracked and appear on this page.",
+    "chipAutoHideLabel": "Fade out after",
+    "chipAutoHideUnit": "seconds",
+    "chipAutoHideHint": "Between {min} and {max} seconds."
   },
   "connectors": {
     "title": "Connectors",

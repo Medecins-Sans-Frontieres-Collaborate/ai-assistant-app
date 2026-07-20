@@ -2428,7 +2428,18 @@
     "modelRow": "{requests} zahteva · {grams} g",
     "disclosure": "Procene se zasnivaju na pretpostavkama v{version} · od {since} · samo standardni čet (agenti i odgovori iz baze znanja nisu uračunati).",
     "reset": "Resetuj statistiku upotrebe",
-    "estimatedPortion": "Uključuje ~{grams} g CO₂e ({requests} zahteva) procenjenih iz razgovora pre početka praćenja — povratno izračunato iz sačuvanog teksta poruka, a ne izmerenog broja tokena."
+    "estimatedPortion": "Uključuje ~{grams} g CO₂e ({requests} zahteva) procenjenih iz razgovora pre početka praćenja — povratno izračunato iz sačuvanog teksta poruka, a ne izmerenog broja tokena.",
+    "chipTitle": "Oznaka emisija",
+    "chipDescription": "Procena ugljeničkog otiska za trenutni razgovor, prikazana iznad polja za unos poruke.",
+    "chipAlways": "Uvek prikaži",
+    "chipAlwaysHint": "Oznaka je uvek vidljiva kada postoji procena u razgovoru.",
+    "chipAuto": "Prikaži pri promeni ili prelasku mišem",
+    "chipAutoHint": "Oznaka se pojavljuje kada se procena promeni, zatim nestaje. Prelazak mišem ili fokus vraća njen prikaz.",
+    "chipHidden": "Skriveno",
+    "chipHiddenHint": "Oznaka nikada nije prikazana. Zbirni podaci se i dalje prate i prikazuju na ovoj stranici.",
+    "chipAutoHideLabel": "Nestani nakon",
+    "chipAutoHideUnit": "sekundi",
+    "chipAutoHideHint": "Između {min} i {max} sekundi."
   },
   "extraction": {
     "toggleLabel": "Ekstrahuj strukturirane podatke",
@@ -3337,7 +3348,15 @@
       "measured": "Na osnovu prijavljenog broja tokena",
       "estimated": "Povratno izračunato iz starijih poruka",
       "lastRequest": "Poslednji zahtev",
-      "disclaimer": "Procene po zahtevu na osnovu prijavljenog ili aproksimiranog broja tokena, koristeći objavljene proseke i pretpostavke v{version}. Starije poruke su povratno izračunate iz sačuvanog teksta i trenutnog modela razgovora. Nije merenje."
+      "disclaimer": "Procene po zahtevu na osnovu prijavljenog ili aproksimiranog broja tokena, koristeći objavljene proseke i pretpostavke v{version}. Starije poruke su povratno izračunate iz sačuvanog teksta i trenutnog modela razgovora. Nije merenje.",
+      "visibilityGroup": "Vidljivost oznake emisija",
+      "visibilityLabel": "Prikaži:",
+      "visibility": {
+        "always": "Uvek",
+        "auto": "Automatski",
+        "hidden": "Sakrij"
+      },
+      "visibilityHint": "Automatski prikazuje oznaku kada se procena osveži ili pređete mišem preko nje. Ovo možete ponovo promeniti u Podešavanja › Upotreba i uticaj."
     }
   },
   "table": {

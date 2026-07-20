@@ -215,6 +215,58 @@ export function estimateActivityEquivalents(
   }));
 }
 
+/**
+ * How persistently the floating emissions chip is shown.
+ *
+ * - `always` — visible whenever the conversation has a non-zero estimate.
+ * - `auto`   — fades in when the estimate changes or the user reaches for it
+ *              (hover/focus/open), fades out otherwise.
+ * - `hidden` — never rendered.
+ */
+export type EmissionsChipVisibility = 'always' | 'auto' | 'hidden';
+
+/** Today's behavior, so existing users see no change after the migration. */
+export const EMISSIONS_CHIP_VISIBILITY_DEFAULT: EmissionsChipVisibility =
+  'always';
+
+export const EMISSIONS_CHIP_VISIBILITY_OPTIONS: readonly EmissionsChipVisibility[] =
+  ['always', 'auto', 'hidden'] as const;
+
+/** Narrows an arbitrary persisted value to a known mode. */
+export function isEmissionsChipVisibility(
+  value: unknown,
+): value is EmissionsChipVisibility {
+  return EMISSIONS_CHIP_VISIBILITY_OPTIONS.includes(
+    value as EmissionsChipVisibility,
+  );
+}
+
+/**
+ * Long enough to read the figure after a response settles, short enough that
+ * the chip stops being furniture.
+ */
+export const EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS = 4000;
+
+/** Below ~1s the chip would flicker rather than inform. */
+export const EMISSIONS_CHIP_AUTOHIDE_MIN_MS = 1000;
+
+/** Past a minute "auto" is indistinguishable from "always". */
+export const EMISSIONS_CHIP_AUTOHIDE_MAX_MS = 60_000;
+
+/**
+ * Normalizes the stored auto-hide delay. Applied on write *and* on read: a
+ * hand-edited localStorage value must not be able to wedge the chip permanently
+ * on or off. Non-finite values fall back to the default rather than to a bound,
+ * since a corrupt value should not silently become a deliberate-looking choice.
+ */
+export function clampEmissionsChipAutoHideMs(ms: number): number {
+  if (!Number.isFinite(ms)) return EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS;
+  return Math.min(
+    EMISSIONS_CHIP_AUTOHIDE_MAX_MS,
+    Math.max(EMISSIONS_CHIP_AUTOHIDE_MIN_MS, Math.round(ms)),
+  );
+}
+
 export interface ActivityDurationParts {
   /** i18n key suffix under `emissions.duration.*`. */
   unit: 'lessThanSecond' | 'seconds' | 'minutes' | 'hours';

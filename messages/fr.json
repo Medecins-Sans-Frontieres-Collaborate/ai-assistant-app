@@ -2444,7 +2444,18 @@
     "modelRow": "{requests} req · {grams} g",
     "disclosure": "Estimations basées sur les hypothèses v{version} · depuis {since} · discussions standard uniquement (agents et réponses de la base de connaissances non prises en compte).",
     "reset": "Réinitialiser les statistiques d’utilisation",
-    "estimatedPortion": "Inclut environ {grams} g CO₂e ({requests} requêtes) estimés à partir des conversations antérieures au suivi — rétrocalculé à partir du texte des messages stockés, et non du nombre de jetons mesuré."
+    "estimatedPortion": "Inclut environ {grams} g CO₂e ({requests} requêtes) estimés à partir des conversations antérieures au suivi — rétrocalculé à partir du texte des messages stockés, et non du nombre de jetons mesuré.",
+    "chipTitle": "Pastille d’émissions",
+    "chipDescription": "L’empreinte carbone estimée de la conversation en cours, affichée au-dessus de la zone de saisie du chat.",
+    "chipAlways": "Toujours afficher",
+    "chipAlwaysHint": "La pastille reste visible tant qu’une estimation est disponible.",
+    "chipAuto": "Afficher lors de la mise à jour ou au survol",
+    "chipAutoHint": "La pastille apparaît lors d’un changement de l’estimation, puis disparaît progressivement. Survoler ou la cibler la fait réapparaître.",
+    "chipHidden": "Masquée",
+    "chipHiddenHint": "La pastille n’est jamais affichée. Les totaux restent suivis et s’affichent sur cette page.",
+    "chipAutoHideLabel": "Disparaît après",
+    "chipAutoHideUnit": "secondes",
+    "chipAutoHideHint": "Entre {min} et {max} secondes."
   },
   "extraction": {
     "toggleLabel": "Extraire des données structurées",
@@ -3353,7 +3364,15 @@
       "measured": "À partir du nombre de jetons signalé",
       "estimated": "Rétrocalculé à partir des anciens messages",
       "lastRequest": "Dernière requête",
-      "disclaimer": "Estimations par requête à partir des nombres de jetons signalés ou approximés, en utilisant des moyennes et hypothèses publiées v{version}. Les anciens messages sont rétrocalculés à partir du texte stocké et du modèle actuel de la conversation. Il ne s'agit pas d'une mesure."
+      "disclaimer": "Estimations par requête à partir des nombres de jetons signalés ou approximés, en utilisant des moyennes et hypothèses publiées v{version}. Les anciens messages sont rétrocalculés à partir du texte stocké et du modèle actuel de la conversation. Il ne s'agit pas d'une mesure.",
+      "visibilityGroup": "Visibilité de la pastille d’émissions",
+      "visibilityLabel": "Afficher :",
+      "visibility": {
+        "always": "Toujours",
+        "auto": "Automatique",
+        "hidden": "Masquer"
+      },
+      "visibilityHint": "Le mode automatique affiche la pastille lorsque l’estimation est mise à jour ou au survol. Vous pouvez modifier ce réglage dans Paramètres › Utilisation & Impact."
     }
   },
   "table": {

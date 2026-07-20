@@ -287,17 +287,17 @@ describe('NavigationItem', () => {
       expect(screen.getByText('Data Management')).toBeInTheDocument();
     });
 
-    it('works with ACCOUNT section', () => {
+    it('works with USAGE_IMPACT section', () => {
       render(
         <NavigationItem
-          section={SettingsSection.ACCOUNT}
-          activeSection={SettingsSection.ACCOUNT}
-          label="Account"
+          section={SettingsSection.USAGE_IMPACT}
+          activeSection={SettingsSection.USAGE_IMPACT}
+          label="Usage & Impact"
           onClick={mockOnClick}
         />,
       );
 
-      expect(screen.getByText('Account')).toBeInTheDocument();
+      expect(screen.getByText('Usage & Impact')).toBeInTheDocument();
     });
   });
 });

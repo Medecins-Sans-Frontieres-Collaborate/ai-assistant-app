@@ -2444,7 +2444,18 @@
     "modelRow": "{requests} sol. · {grams} g",
     "disclosure": "Estimaciones basadas en supuestos v{version} · desde {since} · solo chat estándar (no se cuentan agentes ni respuestas de la base de conocimientos).",
     "reset": "Restablecer estadísticas de uso",
-    "estimatedPortion": "Incluye ~{grams} g CO₂e ({requests} solicitudes) estimados de chats anteriores al seguimiento — recalculado a partir del texto almacenado, no de recuentos de tokens medidos."
+    "estimatedPortion": "Incluye ~{grams} g CO₂e ({requests} solicitudes) estimados de chats anteriores al seguimiento — recalculado a partir del texto almacenado, no de recuentos de tokens medidos.",
+    "chipTitle": "Chip de emisiones",
+    "chipDescription": "La huella de carbono estimada de la conversación actual, mostrada arriba del campo de entrada de chat.",
+    "chipAlways": "Mostrar siempre",
+    "chipAlwaysHint": "El chip permanece visible siempre que la conversación tenga una estimación.",
+    "chipAuto": "Mostrar al actualizar o al pasar el cursor",
+    "chipAutoHint": "El chip aparece cuando la estimación cambia y luego se desvanece. Al pasar el cursor o enfocarlo, vuelve a aparecer.",
+    "chipHidden": "Oculto",
+    "chipHiddenHint": "El chip nunca se muestra. Los totales siguen registrándose y aparecen en esta página.",
+    "chipAutoHideLabel": "Desvanecer después de",
+    "chipAutoHideUnit": "segundos",
+    "chipAutoHideHint": "Entre {min} y {max} segundos."
   },
   "extraction": {
     "toggleLabel": "Extraer datos estructurados",
@@ -3353,7 +3364,15 @@
       "measured": "Según recuento de tokens informados",
       "estimated": "Recalculado a partir de mensajes antiguos",
       "lastRequest": "Última solicitud",
-      "disclaimer": "Estimaciones por solicitud basadas en recuentos de tokens informados o aproximados, utilizando promedios y supuestos publicados v{version}. Los mensajes antiguos se recalculan a partir del texto almacenado y el modelo actual de la conversación. No es una medición."
+      "disclaimer": "Estimaciones por solicitud basadas en recuentos de tokens informados o aproximados, utilizando promedios y supuestos publicados v{version}. Los mensajes antiguos se recalculan a partir del texto almacenado y el modelo actual de la conversación. No es una medición.",
+      "visibilityGroup": "Visibilidad del chip de emisiones",
+      "visibilityLabel": "Mostrar:",
+      "visibility": {
+        "always": "Siempre",
+        "auto": "Automático",
+        "hidden": "Ocultar"
+      },
+      "visibilityHint": "Automático muestra el chip cuando la estimación se actualiza o al pasar el cursor. Puede cambiar esto nuevamente en Configuración › Uso e impacto."
     }
   },
   "table": {

@@ -2444,7 +2444,18 @@
     "modelRow": "{requests} pyyntöä · {grams} g",
     "disclosure": "Arviot perustuvat oletuksiin v{version} · alkaen {since} · vain tavallinen chat (agenttien ja tietopankkivastausten käyttöä ei lasketa).",
     "reset": "Nollaa käyttötilastot",
-    "estimatedPortion": "Sisältää noin {grams} g CO₂e ({requests} pyyntöä), jotka on arvioitu keskusteluista ennen seurannan aloittamista — takaisinlaskettu tallennetusta viestitekstistä, ei mitatuista tokenmääristä."
+    "estimatedPortion": "Sisältää noin {grams} g CO₂e ({requests} pyyntöä), jotka on arvioitu keskusteluista ennen seurannan aloittamista — takaisinlaskettu tallennetusta viestitekstistä, ei mitatuista tokenmääristä.",
+    "chipTitle": "Päästösiru",
+    "chipDescription": "Käynnissä olevan keskustelun arvioitu hiilijalanjälki, näytetään chatin syötekentän yläpuolella.",
+    "chipAlways": "Näytä aina",
+    "chipAlwaysHint": "Siru pysyy näkyvissä aina, kun keskustelulla on arvio.",
+    "chipAuto": "Näytä päivityksessä tai hiiren ollessa päällä",
+    "chipAutoHint": "Siru ilmestyy, kun arvio muuttuu, ja häviää hetken kuluttua. Hiiren vieminen sen päälle tai siihen keskittyminen tuo sen takaisin näkyviin.",
+    "chipHidden": "Piilotettu",
+    "chipHiddenHint": "Siru ei näy koskaan. Kokonaismäärät ovat silti seurattavissa ja näkyvät tällä sivulla.",
+    "chipAutoHideLabel": "Häivytä pois jälkeen",
+    "chipAutoHideUnit": "sekuntia",
+    "chipAutoHideHint": "{min}–{max} sekuntia."
   },
   "extraction": {
     "toggleLabel": "Luo jäsenneltyä dataa",
@@ -3353,7 +3364,15 @@
       "measured": "Ilmoitettujen tokenimäärien perusteella",
       "estimated": "Takaisinlaskettu vanhoista viesteistä",
       "lastRequest": "Viimeisin pyyntö",
-      "disclaimer": "Kohtaiset arviot raportoituista tai arvioiduista tokenmääristä, käyttäen julkaistuja keskiarvoja ja oletuksia v{version}. Vanhemmat viestit on takaisinlaskettu tallennetusta tekstistä ja keskustelun nykyisestä mallista. Ei ole mittaus."
+      "disclaimer": "Kohtaiset arviot raportoituista tai arvioiduista tokenmääristä, käyttäen julkaistuja keskiarvoja ja oletuksia v{version}. Vanhemmat viestit on takaisinlaskettu tallennetusta tekstistä ja keskustelun nykyisestä mallista. Ei ole mittaus.",
+      "visibilityGroup": "Päästösirun näkyvyys",
+      "visibilityLabel": "Näytä:",
+      "visibility": {
+        "always": "Aina",
+        "auto": "Automaattisesti",
+        "hidden": "Piilota"
+      },
+      "visibilityHint": "Automaattinen näyttää sirun, kun arvio päivittyy tai viet hiiren sen päälle. Voit muuttaa tätä asetuksissa kohdasta Käyttö ja vaikutus."
     }
   },
   "table": {

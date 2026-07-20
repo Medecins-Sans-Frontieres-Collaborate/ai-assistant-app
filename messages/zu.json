@@ -2428,7 +2428,18 @@
     "modelRow": "{requests} izicelo · {grams} g",
     "disclosure": "Ukulinganiselwa kusekelwe ezicabangweni v{version} · kusukela {since} · izingxoxo ezijwayelekile kuphela (ama-agent kanye nezimpendulo ezisekwe olwazi azibaliwe).",
     "reset": "Setha kabusha izibalo zokusetshenziswa",
-    "estimatedPortion": "Faka cishe u-{grams} g we-CO₂e ({requests} izicelo) okucatshangwa ukuthi kuvela ezingxoxweni ezandulela ukuqapha — kuhlanganiswe kusukela embhalweni olondoloziwe wemilayezo, hhayi ezibalweni zama-tokens ezifakwe esikalini."
+    "estimatedPortion": "Faka cishe u-{grams} g we-CO₂e ({requests} izicelo) okucatshangwa ukuthi kuvela ezingxoxweni ezandulela ukuqapha — kuhlanganiswe kusukela embhalweni olondoloziwe wemilayezo, hhayi ezibalweni zama-tokens ezifakwe esikalini.",
+    "chipTitle": "I-chip yokukhishwa komoya",
+    "chipDescription": "Ulinganiselwa umkhondo wekhabhoni wengxoxo yamanje, okukhonjiswa ngenhla kokufakwa kwe-chat.",
+    "chipAlways": "Hlale ubonisa",
+    "chipAlwaysHint": "I-chip ihlala ibonakala noma nini uma ingxoxo inalinganiselwa.",
+    "chipAuto": "Bonisa lapho kubuyekezwa noma lapho kubekwa igundane",
+    "chipAutoHint": "I-chip iyavela lapho inani lishintsha, bese iyanyamalala. Ukubeka noma ukugxila kuyibuyisa.",
+    "chipHidden": "Ifihliwe",
+    "chipHiddenHint": "I-chip ayikaze iboniswe. Izibalo zisalandelwa futhi zivele kuleli khasi.",
+    "chipAutoHideLabel": "Nyamalala ngemva",
+    "chipAutoHideUnit": "amasekhondi",
+    "chipAutoHideHint": "Phakathi kuka-{min} no-{max} amasekhondi."
   },
   "extraction": {
     "toggleLabel": "Khipha idatha ehlelekile",
@@ -3337,7 +3348,15 @@
       "measured": "Kusuka kokubalwa kwama-tokens okubikiwe",
       "estimated": "Kubuyekezwe kusetshenziswa imilayezo endala",
       "lastRequest": "Isicelo sokugcina",
-      "disclaimer": "Izilinganiso zesicelo ngasinye zisuselwa kwizinombolo zama-tokens ezibikiwe noma ezilinganisiwe, kusetshenziswa izilinganiso nezibalo ezishicilelwe v{version}. Imilayezo endala ibuyekezwa kusukela embhalweni olondoloziwe kanye nemodeli yengxoxo yamanje. Akusona isilinganiso esiqondile."
+      "disclaimer": "Izilinganiso zesicelo ngasinye zisuselwa kwizinombolo zama-tokens ezibikiwe noma ezilinganisiwe, kusetshenziswa izilinganiso nezibalo ezishicilelwe v{version}. Imilayezo endala ibuyekezwa kusukela embhalweni olondoloziwe kanye nemodeli yengxoxo yamanje. Akusona isilinganiso esiqondile.",
+      "visibilityGroup": "Ukubonakala kwe-chip yokukhishwa komoya",
+      "visibilityLabel": "Bonisa:",
+      "visibility": {
+        "always": "Njalo",
+        "auto": "Okuzenzakalelayo",
+        "hidden": "Fihla"
+      },
+      "visibilityHint": "Okwenziwa ngokuzenzakalelayo kubonisa i-chip uma inani libuyekezwa noma uma ubeka igundane phezu kwayo. Ungashintsha lokhu futhi kokuthi Izilungiselelo › Ukusetshenziswa & Umthelela."
     }
   },
   "table": {

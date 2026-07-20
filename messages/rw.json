@@ -2428,7 +2428,18 @@
     "modelRow": "{requests} bisabwe · {grams} g",
     "disclosure": "Imibare ishingiye ku byibazwa v{version} · kuva {since} · gusa ku biganiro bisanzwe (ibisubizo by'abakozi n'ibiri muri knowledge-base ntibyabarwamo).",
     "reset": "Subiza imibare ya stats ku ntangiriro",
-    "estimatedPortion": "Birimo hafi {grams} g za CO₂e ({requests} ibisabwa) byagereranijwe kuva mu biganiro byabaye mbere y’itangira gukurikirana — byabaruwe kongera gusubiramo inyandiko ibitse, si ku mubare w’inyuguti wapimwe."
+    "estimatedPortion": "Birimo hafi {grams} g za CO₂e ({requests} ibisabwa) byagereranijwe kuva mu biganiro byabaye mbere y’itangira gukurikirana — byabaruwe kongera gusubiramo inyandiko ibitse, si ku mubare w’inyuguti wapimwe.",
+    "chipTitle": "Chip y’imyuka ihumanya",
+    "chipDescription": "Igipimo cy’uburyo iyi gahunda ivamo imyuka ihumanya, cyerekana hejuru y’aho wandikira.",
+    "chipAlways": "Erekana igihe cyose",
+    "chipAlwaysHint": "Chip igaragara igihe cyose iyo ikiganiro gifite igipimo.",
+    "chipAuto": "Erekana igihe havuguruwe cyangwa uyikozemo",
+    "chipAutoHint": "Chip iragaragara igihe igipimo gihindutse, hanyuma igacika. Gukoraho cyangwa kuyishyiraho umutwe birayigarura.",
+    "chipHidden": "Yahishwe",
+    "chipHiddenHint": "Chip ntizagaragaraga na rimwe. Ingereranyo ziracyasohoka kandi zigaragara kuri uru rupapuro.",
+    "chipAutoHideLabel": "Ihishwe nyuma",
+    "chipAutoHideUnit": "amasegonda",
+    "chipAutoHideHint": "Hagati ya {min} na {max} amasegonda."
   },
   "extraction": {
     "toggleLabel": "Sohora amakuru ateguye",
@@ -3337,7 +3348,15 @@
       "measured": "Bishingiye ku mubare w’inyuguti watanzwe",
       "estimated": "Byabaruwe kongera gusubiramo ubutumwa bwa kera",
       "lastRequest": "Gusaba guheruka",
-      "disclaimer": "Iyi mibare ni ukugerageza gukoresheje imibare y’inyuguti zatanzwe cyangwa zagereranijwe, hakoreshejwe impuzandengo n’ibyemejwe byasohotse v{version}. Ubutumwa bwa kera bwabaruwe kongera gusubiramo inyandiko ibitse na model ikoreshwa ubu mu kiganiro. Sio igipimo nyacyo."
+      "disclaimer": "Iyi mibare ni ukugerageza gukoresheje imibare y’inyuguti zatanzwe cyangwa zagereranijwe, hakoreshejwe impuzandengo n’ibyemejwe byasohotse v{version}. Ubutumwa bwa kera bwabaruwe kongera gusubiramo inyandiko ibitse na model ikoreshwa ubu mu kiganiro. Sio igipimo nyacyo.",
+      "visibilityGroup": "Kugaragara kwa chip y’imyuka ihumanya",
+      "visibilityLabel": "Erekana:",
+      "visibility": {
+        "always": "Igihe cyose",
+        "auto": "Byikora",
+        "hidden": "Bihishe"
+      },
+      "visibilityHint": "Ibyikora, chip iragaragara iyo igipimo kivuguruwe cyangwa iyo uyikoreyeho. Ushobora kubihindura nanone muri Settings › Usage & Impact."
     }
   },
   "table": {

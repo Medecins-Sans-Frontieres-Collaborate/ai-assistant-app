@@ -17,6 +17,8 @@ import {
 
 import { OpenAIModelID, OpenAIModels, getModelSizeClass } from '@/types/openai';
 
+import { EmissionsChipSetting } from '@/components/Settings/EmissionsChipSetting';
+
 import { useSettingsStore } from '@/client/stores/settingsStore';
 
 /** Splits a `modelId|region|effort` bucket key back into its parts. */
@@ -138,6 +140,12 @@ export const UsageImpactSection: FC = () => {
         <h2 className="text-xl font-bold text-black dark:text-white">
           {t('settings.Usage & Impact')}
         </h2>
+      </div>
+
+      {/* Above the empty-state branch on purpose: a user with no recorded
+          usage still needs to be able to turn the chip off. */}
+      <div className="mb-6 border-b border-gray-200 pb-6 dark:border-gray-700">
+        <EmissionsChipSetting />
       </div>
 
       {summary.isEmpty ? (

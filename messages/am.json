@@ -2444,7 +2444,18 @@
     "modelRow": "{requests} ጥያቄ · {grams} ግራም",
     "disclosure": "ግምቶች በሰሜን v{version} ላይ የተመሰረቱ · ከ{since} ጀምሮ · መደበኛ ቻት ብቻ (የagent እና knowledge-base መልስ አይተከተሉም።)",
     "reset": "የአጠቃቀም ስታቲስቲክስን ቀይር",
-    "estimatedPortion": "ይህ ወደ tracking ከመጀመር በፊት በተደረጉ ውይይቶች ላይ ከተያዙት መልዕክት ጽሑፍ በተመሠረት ለ~{grams} ግራም CO₂e ({requests} ጥያቄዎች) የተገመተ መጠን አካትቷል፤ የተዘገቡ ቶክን ቁጥሮች አይደለም።"
+    "estimatedPortion": "ይህ ወደ tracking ከመጀመር በፊት በተደረጉ ውይይቶች ላይ ከተያዙት መልዕክት ጽሑፍ በተመሠረት ለ~{grams} ግራም CO₂e ({requests} ጥያቄዎች) የተገመተ መጠን አካትቷል፤ የተዘገቡ ቶክን ቁጥሮች አይደለም።",
+    "chipTitle": "የእንፋሎት ቺፕ",
+    "chipDescription": "የአሁኑ ውይይቱ የተገመተው የካርቦን እግር አሻራ፣ ከውይይቱ አናት በላይ የሚታይ።",
+    "chipAlways": "ሁልጊዜ አሳይ",
+    "chipAlwaysHint": "ለውይይቱ ግምት ካለ ቺፑ ሁልጊዜ ይታያል።",
+    "chipAuto": "ግምት ሲቀየር ወይም ሲታገድ አሳይ",
+    "chipAutoHint": "ግምቱ ሲቀየር ቺፑ ይታያል፣ ከዚያ ያሸመቃል። ሲታገድ ወይም ስታንቀሳቀስ በድጋሚ ይታያል።",
+    "chipHidden": "የተደበቀ",
+    "chipHiddenHint": "ቺፑ ፈጽሞ አይታይም። ጠቅላላዎቹ ግን በዚህ ገፅ ላይ ይቆጠራሉ።",
+    "chipAutoHideLabel": "ከዚያ በኋላ ያሸመቅ",
+    "chipAutoHideUnit": "ሰከንዶች",
+    "chipAutoHideHint": "በ {min} እና {max} ሰከንዶች መካከል።"
   },
   "extraction": {
     "toggleLabel": "የዋቅ መረጃ ያውጡ",
@@ -3353,7 +3364,15 @@
       "measured": "ከተዘገቡ ቶክን ብዛት የተገነባ",
       "estimated": "ከአሮጌ መልዕክቶች በኋላ የተቆጠረ",
       "lastRequest": "ቅርብ ጥያቄ",
-      "disclaimer": "ለእያንዳንዱ ጥያቄ ግምት ከተዘገቡ ወይም ከግምት ቶክን ብዛቶች በመጠቀም፣ በታተመ አማካይ ዋጋና ጥምረቶች v{version} የተደረገ፡፡ አሮጌ መልዕክቶች ከተያዙት ጽሑፍ እና የውይይቱ የአሁኑ ሞዴል በመጠቀም ተቆጥረዋል።  measurement አይደለም።"
+      "disclaimer": "ለእያንዳንዱ ጥያቄ ግምት ከተዘገቡ ወይም ከግምት ቶክን ብዛቶች በመጠቀም፣ በታተመ አማካይ ዋጋና ጥምረቶች v{version} የተደረገ፡፡ አሮጌ መልዕክቶች ከተያዙት ጽሑፍ እና የውይይቱ የአሁኑ ሞዴል በመጠቀም ተቆጥረዋል።  measurement አይደለም።",
+      "visibilityGroup": "የእንፋሎት ቺፕ የታይነት አስተዳደር",
+      "visibilityLabel": "አሳይ:",
+      "visibility": {
+        "always": "ሁልጊዜ",
+        "auto": "ራስ-ሰር",
+        "hidden": "ሰውም አትል"
+      },
+      "visibilityHint": "\"ራስ-ሰር\" ቺፑን ግምቱ ሲቀየር ወይም ሲታገድ ብቻ ያሳያል። ይህን ከዚህ በኋላ Settings › Usage & Impact ውስጥ ማሻሻል ይችላሉ።"
     }
   },
   "table": {

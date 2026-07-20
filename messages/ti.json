@@ -2428,7 +2428,18 @@
     "modelRow": "{requests} ጥያቄ · {grams} ግራም",
     "disclosure": "ቅድመሓሳቡ ብምስማማዕ ናይ v{version} · ካብ {since} · ምድላይ መዓልቲ ሓሳብ ብቐዳይ (ኣገንትን ናይ ዕውታት ቋንቋ መልሲ ኣይተቆጸረን)።",
     "reset": "ናይ ኣጠቓቕማ ውህኖታት ኣቐምጥ",
-    "estimatedPortion": "ዝኾነ ~{grams} g CO₂e ({requests} መጠየታት) ካብ ዝንብር tracking ስር chats ተቅሚኡ፣ ካብ ተዓቐኑ ዞባ መልእኽቲ ጽሑፋት፣ ኣይተሳንዕ token ቁጽሪታት እዩ።"
+    "estimatedPortion": "ዝኾነ ~{grams} g CO₂e ({requests} መጠየታት) ካብ ዝንብር tracking ስር chats ተቅሚኡ፣ ካብ ተዓቐኑ ዞባ መልእኽቲ ጽሑፋት፣ ኣይተሳንዕ token ቁጽሪታት እዩ።",
+    "chipTitle": "ምርት ቻይፕ",
+    "chipDescription": "ግምቲ ካርቦን እግሪ ኣብዚ ባህሪ ዓውደ-ቃለ-መጠይቂ ብምስራሕ ክትተረከብ ብይቕረና፡ ኣብ ላዕሊ ዝኾነ ቃለ-መጠይቅ ግበታ እዩ የተረኸበ።",
+    "chipAlways": "ሁሉግዜ ኣትረኣዩ",
+    "chipAlwaysHint": "ዝተገመተ ንባዕሉ ዝርከብ ግደፍካ ቻይፑ የተረከበ ይብቃ።",
+    "chipAuto": "ብሓደስ፡ ወይ ስትራይ የተረከበ",
+    "chipAutoHint": "ቻይፑ ምስ ግምቲ ተሓዲሰ እዩ የተረከበ፡ ኣብ ቀጥዐ ይዕፀይ። ስትራይ ወይ ዝምርኣዩ ምቅላል እንተ ስለሃቡ ይተመሃል።",
+    "chipHidden": "ዝተሰውረ",
+    "chipHiddenHint": "ቻይፑ ክኸውን ኣይተረከበን። ጠቕላላ መዓልቲ ግምቲ መዝግቡ ይቕፀልና፡ ኣብዚ ገጽ ይርከብ።",
+    "chipAutoHideLabel": "ካብ ዝተሓደሰ መዓልቲ ዕፀይ",
+    "chipAutoHideUnit": "ሰከንድ",
+    "chipAutoHideHint": "ካብ {min} ናብ {max} ሰከንድ ውስጢ።"
   },
   "extraction": {
     "toggleLabel": "ውክልናዊ ዳታ ምልባስ",
@@ -3337,7 +3348,15 @@
       "measured": "ካብ ተዘግዐ token ቁጽሪታት",
       "estimated": "ካብ ድሓን መልእኽቲ ተቃለልካ ተስተኸለ",
       "lastRequest": "መደበር ሓሳብ መጠየቢ",
-      "disclaimer": "ንእዋናውነት መጠየቢ ብተዘግዐ ወይ ብተቑሚ token ቁጽሪታት፣ ብተታቕፉ ኣብ ጥቕሚ እናቋሠር ዝተሰብሰበ ቁጽሪ ምኻነካ ብመንገዲ v{version}. ሓደን መልእኽቲ ካብ ተዓቐኑ ጽሑፋትን ናይ ዘሎ ሞዴል ውድብ ብተቃለልካ ይፈልጠሉ። መወፅኦ ኣይኮነን።"
+      "disclaimer": "ንእዋናውነት መጠየቢ ብተዘግዐ ወይ ብተቑሚ token ቁጽሪታት፣ ብተታቕፉ ኣብ ጥቕሚ እናቋሠር ዝተሰብሰበ ቁጽሪ ምኻነካ ብመንገዲ v{version}. ሓደን መልእኽቲ ካብ ተዓቐኑ ጽሑፋትን ናይ ዘሎ ሞዴል ውድብ ብተቃለልካ ይፈልጠሉ። መወፅኦ ኣይኮነን።",
+      "visibilityGroup": "ምርት ቻይፕ ኣብ ዕይታ",
+      "visibilityLabel": "ምርኣዩ:",
+      "visibility": {
+        "always": "ሁሉግዜ",
+        "auto": "ብሓላፍነት",
+        "hidden": "ኣይትረኣይ"
+      },
+      "visibilityHint": "\"ብሓላፍነት\" ቻይፑ ኣብ እቲ ግምት ካብ ሓደስነቱ ወይ ካብ ስትራይ ምስ ትቕለል እዩ የርከቡ። እዚ ኣብ ቅንጡ፡ Usage & Impact ውሽጢ ቀይርዎ።"
     }
   },
   "table": {

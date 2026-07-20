@@ -2444,7 +2444,18 @@
     "modelRow": "{requests} ver. · {grams} g",
     "disclosure": "Schattingen gebaseerd op aannames v{version} · sinds {since} · alleen standaardchat (agents en kennisbankantwoorden niet meegeteld).",
     "reset": "Gebruikstatistieken resetten",
-    "estimatedPortion": "Inclusief ~{grams} g CO₂e ({requests} verzoeken) geraamd uit chats van vóór tracking — terugberekend uit opgeslagen berichttekst, niet uit gemeten tokenaantallen."
+    "estimatedPortion": "Inclusief ~{grams} g CO₂e ({requests} verzoeken) geraamd uit chats van vóór tracking — terugberekend uit opgeslagen berichttekst, niet uit gemeten tokenaantallen.",
+    "chipTitle": "Emissiechip",
+    "chipDescription": "De geschatte ecologische voetafdruk van het huidige gesprek, weergegeven boven het chatveld.",
+    "chipAlways": "Altijd tonen",
+    "chipAlwaysHint": "De chip blijft zichtbaar zolang er een schatting is voor het gesprek.",
+    "chipAuto": "Tonen bij update of zweven",
+    "chipAutoHint": "De chip verschijnt als de schatting verandert en vervaagt daarna weer. Door eroverheen te bewegen of te focussen, wordt de chip opnieuw zichtbaar.",
+    "chipHidden": "Verborgen",
+    "chipHiddenHint": "De chip wordt nooit getoond. Totalen worden nog steeds bijgehouden en zijn op deze pagina te zien.",
+    "chipAutoHideLabel": "Vervagen na",
+    "chipAutoHideUnit": "seconden",
+    "chipAutoHideHint": "Tussen {min} en {max} seconden."
   },
   "extraction": {
     "toggleLabel": "Gestructureerde gegevens extraheren",
@@ -3353,7 +3364,15 @@
       "measured": "Op basis van gerapporteerde tokenaantallen",
       "estimated": "Terugberekend uit oudere berichten",
       "lastRequest": "Laatste verzoek",
-      "disclaimer": "Raming per verzoek op basis van gerapporteerde of benaderde tokenaantallen, met gebruik van gepubliceerde gemiddelden en aannames v{version}. Oudere berichten zijn terugberekend vanuit opgeslagen tekst en het huidige model van het gesprek. Geen meting."
+      "disclaimer": "Raming per verzoek op basis van gerapporteerde of benaderde tokenaantallen, met gebruik van gepubliceerde gemiddelden en aannames v{version}. Oudere berichten zijn terugberekend vanuit opgeslagen tekst en het huidige model van het gesprek. Geen meting.",
+      "visibilityGroup": "Zichtbaarheid emissiechip",
+      "visibilityLabel": "Weergeven:",
+      "visibility": {
+        "always": "Altijd",
+        "auto": "Auto",
+        "hidden": "Verbergen"
+      },
+      "visibilityHint": "De chip wordt automatisch getoond wanneer de schatting wordt bijgewerkt of wanneer u eroverheen beweegt. U kunt dit later aanpassen in Instellingen › Gebruik & Impact."
     }
   },
   "table": {

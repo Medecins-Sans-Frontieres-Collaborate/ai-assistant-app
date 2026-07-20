@@ -2428,7 +2428,18 @@
     "modelRow": "{requests} basɛngami · {grams} g",
     "disclosure": "Bakonzi ezali kolanda makoki v{version} · banda {since} · kaka na masolo ya pamba (agents mpe biyano na banque ya boyebi ekotaki te).",
     "reset": "Bozongisela stati ya kosalela",
-    "estimatedPortion": "Ekoki na ~{grams} g CO₂e ({requests} basenga) na mikano ya ba chats esalemaki liboso tracking—kolongola lisusu na maloba ebombami, te na mituya ya token emonisami."
+    "estimatedPortion": "Ekoki na ~{grams} g CO₂e ({requests} basenga) na mikano ya ba chats esalemaki liboso tracking—kolongola lisusu na maloba ebombami, te na mituya ya token emonisami.",
+    "chipTitle": "Chip ya émissions",
+    "chipDescription": "Likeko ya motuya ya carbone ya lisolo oyo, ezali likolo ya esika okotaka message.",
+    "chipAlways": "Lakisa ntango nyonso",
+    "chipAlwaysHint": "Chip ezalaka komonana ntango nyonso soki lisolo ezali na estimate.",
+    "chipAuto": "Lakisa na mise à jour to kokoma",
+    "chipAutoHint": "Chip emonana soki estimate ebongwani, sima elongwa polele. Kosala hover to kobenda likebi ekobongisa yango lisusu.",
+    "chipHidden": "Ebombami",
+    "chipHiddenHint": "Chip ekomonana te. Total ezali kaka kosukolama mpe ekomonana awa.",
+    "chipAutoHideLabel": "Ebongwana sima ya",
+    "chipAutoHideUnit": "sekonde",
+    "chipAutoHideHint": "Kati na {min} na {max} sekonde."
   },
   "extraction": {
     "toggleLabel": "Kolongola donnee na forme ya mobongisi",
@@ -3337,7 +3348,15 @@
       "measured": "Kolongola na mituya ya token oyo emonisami",
       "estimated": "Kolongola lisusu na nsima ya sango ya kala",
       "lastRequest": "Senga ya suka",
-      "disclaimer": "Bokeseni na senga moko likoló ya mituya ya token oyo emonisami to esakwami, kosalela pɔsɔndɔ esamaki na makambo basangisi v{version}. Sango ya kala ezali kolongolama lisusu na maloba babombaki mpe modèle ya likita lelo. Ezali te mindele."
+      "disclaimer": "Bokeseni na senga moko likoló ya mituya ya token oyo emonisami to esakwami, kosalela pɔsɔndɔ esamaki na makambo basangisi v{version}. Sango ya kala ezali kolongolama lisusu na maloba babombaki mpe modèle ya likita lelo. Ezali te mindele.",
+      "visibilityGroup": "Komonana ya chip ya émissions",
+      "visibilityLabel": "Lakisa:",
+      "visibility": {
+        "always": "Ntango nyonso",
+        "auto": "Auto",
+        "hidden": "Kobomba"
+      },
+      "visibilityHint": "Auto ekolakisa chip soki ba estimate ebongwani to soki okomiti na yango. Okoki kobongola yango lisusu na Paramètres › Usage & Impact."
     }
   },
   "table": {

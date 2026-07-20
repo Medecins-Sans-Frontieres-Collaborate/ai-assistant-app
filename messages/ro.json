@@ -2444,7 +2444,18 @@
     "modelRow": "{requests} cereri · {grams} g",
     "disclosure": "Estimări bazate pe ipoteze v{version} · din {since} · doar conversație standard (agenții și răspunsurile din baza de cunoștințe nu sunt incluse).",
     "reset": "Resetează statisticile de utilizare",
-    "estimatedPortion": "Include aproximativ {grams} g CO₂e ({requests} cereri) estimate pentru conversațiile anterioare urmăririi — recalculate pe baza textului stocat al mesajelor, nu a numărului măsurat de tokeni."
+    "estimatedPortion": "Include aproximativ {grams} g CO₂e ({requests} cereri) estimate pentru conversațiile anterioare urmăririi — recalculate pe baza textului stocat al mesajelor, nu a numărului măsurat de tokeni.",
+    "chipTitle": "Insignă emisii",
+    "chipDescription": "Amprenta de carbon estimată a conversației curente, afișată deasupra câmpului de chat.",
+    "chipAlways": "Afișează întotdeauna",
+    "chipAlwaysHint": "Insigna rămâne vizibilă atâta timp cât există o estimare pentru conversație.",
+    "chipAuto": "Afișează la actualizare sau la trecere mouse",
+    "chipAutoHint": "Insigna apare când se modifică estimarea, apoi dispare treptat. La trecerea mouse-ului sau la focalizare, revine vizibilă.",
+    "chipHidden": "Ascunsă",
+    "chipHiddenHint": "Insigna nu este afișată niciodată. Totalurile rămân înregistrate și apar pe această pagină.",
+    "chipAutoHideLabel": "Se estompează după",
+    "chipAutoHideUnit": "secunde",
+    "chipAutoHideHint": "Între {min} și {max} secunde."
   },
   "extraction": {
     "toggleLabel": "Extrage date structurate",
@@ -3353,7 +3364,15 @@
       "measured": "Pe baza numărului raportat de tokeni",
       "estimated": "Recalculat pentru mesajele vechi",
       "lastRequest": "Ultima cerere",
-      "disclaimer": "Estimări la nivel de cerere pe baza numărului de tokeni raportați sau aproximați, folosind medii și ipoteze publicate v{version}. Mesajele mai vechi sunt recalculate pe baza textului stocat și a modelului de conversație curent. Nu reprezintă o măsurare."
+      "disclaimer": "Estimări la nivel de cerere pe baza numărului de tokeni raportați sau aproximați, folosind medii și ipoteze publicate v{version}. Mesajele mai vechi sunt recalculate pe baza textului stocat și a modelului de conversație curent. Nu reprezintă o măsurare.",
+      "visibilityGroup": "Vizibilitate insignă emisii",
+      "visibilityLabel": "Afișează:",
+      "visibility": {
+        "always": "Întotdeauna",
+        "auto": "Automat",
+        "hidden": "Ascunde"
+      },
+      "visibilityHint": "Modul automat afișează insigna când estimarea se actualizează sau la trecerea mouse-ului peste. Poți schimba această opțiune oricând din Setări › Utilizare & Impact."
     }
   },
   "table": {

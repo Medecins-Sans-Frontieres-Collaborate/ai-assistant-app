@@ -1,30 +1,13 @@
-import {
-  IconBrain,
-  IconDatabase,
-  IconDeviceDesktop,
-  IconDeviceMobile,
-  IconHelp,
-  IconLeaf,
-  IconMessage,
-  IconPlugConnected,
-  IconRefresh,
-  IconRobot,
-  IconSettings,
-  IconShieldLock,
-  IconUserShield,
-} from '@tabler/icons-react';
-import { useFlags } from 'launchdarkly-react-client-sdk';
-import { FC, useState } from 'react';
+import { IconRefresh } from '@tabler/icons-react';
+import { FC, createElement, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { useAgentAccessAdmin } from '@/client/hooks/settings/useAgentAccessAdmin';
-
 import { Settings } from '@/types/settings';
 
-import { SidebarButton } from '../Sidebar/SidebarButton';
 import { NavigationItem } from './NavigationItem';
 import { SettingsSection } from './types';
+import { useSettingsNav } from './useSettingsNav';
 
 import { Link } from '@/lib/navigation';
 
@@ -51,31 +34,9 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
   dispatch,
 }) => {
   const t = useTranslations();
-  // Fail-open: undefined (LD unconfigured/unserved) → shown. Flip to false in
-  // LaunchDarkly to hide the section.
-  const {
-    showUsageImpact,
-    mcpConnectors,
-    enableEncryptedBackups,
-    enableMemories,
-    localModels,
-  } = useFlags();
-  const isUsageImpactEnabled = showUsageImpact !== false;
-  const isConnectorsEnabled = mcpConnectors !== false;
-  // Fail-closed (`=== true`) — deliberately the opposite polarity of the
-  // flags above: encrypted backup must stay hidden until LD explicitly
-  // serves the flag as true (like mcpArbitraryServers).
-  const isBackupEnabled = enableEncryptedBackups === true;
-  // Fail-closed (`=== true`): memories stay hidden until LD explicitly
-  // serves the flag as true (same rationale as encrypted backup).
-  const isMemoriesEnabled = enableMemories === true;
-  // Fail-closed (`=== true`): local models depend on browser behavior we
-  // can't control (Chrome's Local Network Access permission, enterprise
-  // policy), so the flag is the feature's kill switch — it must never
-  // default on.
-  const isLocalModelsEnabled = localModels === true;
-  // Visibility only — the admin page's server component is the real gate.
-  const { isAdmin: isAgentAccessAdmin } = useAgentAccessAdmin();
+  // Section list, labels, icons and every LD gate live in one place, shared
+  // with the mobile sheet so the two can't drift.
+  const navItems = useSettingsNav();
   const [showResetConfirmation, setShowResetConfirmation] = useState(false);
 
   const confirmReset = () => {
@@ -100,116 +61,30 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
         </h2>
 
         <div className="space-y-1">
-          <NavigationItem
-            section={SettingsSection.GENERAL}
-            activeSection={activeSection}
-            label={t('settings.General')}
-            icon={<IconSettings size={18} />}
-            onClick={setActiveSection}
-          />
-
-          <NavigationItem
-            section={SettingsSection.CHAT_SETTINGS}
-            activeSection={activeSection}
-            label={t('settings.Chat Settings')}
-            icon={<IconMessage size={18} />}
-            onClick={setActiveSection}
-          />
-
-          {/* <NavigationItem
-            section={SettingsSection.AGENT_FEATURES}
-            activeSection={activeSection}
-            label={t('Agent Features')}
-            icon={<IconRobot size={18} />}
-            onClick={setActiveSection}
-          /> */}
-
-          {isConnectorsEnabled && (
-            <NavigationItem
-              section={SettingsSection.CONNECTORS}
-              activeSection={activeSection}
-              label={t('settings.Connectors')}
-              icon={<IconPlugConnected size={18} />}
-              onClick={setActiveSection}
-            />
+          {navItems.map((item) =>
+            item.kind === 'link' ? (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="flex items-center w-full text-left p-3 my-1 rounded-lg text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+                onClick={onClose}
+              >
+                <span className="mr-3">
+                  {createElement(item.icon, { size: 18 })}
+                </span>
+                <span>{item.label}</span>
+              </Link>
+            ) : (
+              <NavigationItem
+                key={item.section}
+                section={item.section}
+                activeSection={activeSection}
+                label={item.label}
+                icon={createElement(item.icon, { size: 18 })}
+                onClick={setActiveSection}
+              />
+            ),
           )}
-
-          {isUsageImpactEnabled && (
-            <NavigationItem
-              section={SettingsSection.USAGE_IMPACT}
-              activeSection={activeSection}
-              label={t('settings.Usage & Impact')}
-              icon={<IconLeaf size={18} />}
-              onClick={setActiveSection}
-            />
-          )}
-
-          {isBackupEnabled && (
-            <NavigationItem
-              section={SettingsSection.BACKUP}
-              activeSection={activeSection}
-              label={t('settings.Backup')}
-              icon={<IconShieldLock size={18} />}
-              onClick={setActiveSection}
-            />
-          )}
-
-          {isMemoriesEnabled && (
-            <NavigationItem
-              section={SettingsSection.MEMORIES}
-              activeSection={activeSection}
-              label={t('settings.Memories')}
-              icon={<IconBrain size={18} />}
-              onClick={setActiveSection}
-            />
-          )}
-
-          {isLocalModelsEnabled && (
-            <NavigationItem
-              section={SettingsSection.LOCAL_MODELS}
-              activeSection={activeSection}
-              label={t('settings.LocalModels')}
-              icon={<IconDeviceDesktop size={18} />}
-              onClick={setActiveSection}
-            />
-          )}
-
-          {isAgentAccessAdmin && (
-            <Link
-              href="/admin/agent-access"
-              className="flex items-center w-full text-left p-3 my-1 rounded-lg text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
-              onClick={onClose}
-            >
-              <span className="mr-3">
-                <IconUserShield size={18} />
-              </span>
-              <span>{t('settings.Agent Access')}</span>
-            </Link>
-          )}
-
-          <NavigationItem
-            section={SettingsSection.DATA_MANAGEMENT}
-            activeSection={activeSection}
-            label={t('settings.Data Management')}
-            icon={<IconDatabase size={18} />}
-            onClick={setActiveSection}
-          />
-
-          <NavigationItem
-            section={SettingsSection.MOBILE_APP}
-            activeSection={activeSection}
-            label={t('settings.Mobile App')}
-            icon={<IconDeviceMobile size={18} />}
-            onClick={setActiveSection}
-          />
-
-          <NavigationItem
-            section={SettingsSection.HELP_SUPPORT}
-            activeSection={activeSection}
-            label={t('settings.Help & Support')}
-            icon={<IconHelp size={18} />}
-            onClick={setActiveSection}
-          />
         </div>
       </div>
 

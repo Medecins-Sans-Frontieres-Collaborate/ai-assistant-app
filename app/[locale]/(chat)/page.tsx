@@ -37,7 +37,10 @@ export default function ChatPage() {
     <>
       <MobileChatHeader onModelSelectChange={setIsModelSelectOpen} />
 
-      <div className="flex flex-1 pt-14 md:pt-0">
+      {/* min-w-0: as a flex item this defaults to min-width:auto, so it
+          refused to shrink below the composer's min-content width (~652px)
+          and overflowed the viewport on narrow screens. */}
+      <div className="flex min-w-0 flex-1 pt-14 md:pt-0">
         <Suspense fallback={<LoadingScreen />}>
           <Chat
             mobileModelSelectOpen={isModelSelectOpen}

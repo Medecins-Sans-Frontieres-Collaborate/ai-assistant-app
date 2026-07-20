@@ -2444,7 +2444,18 @@
     "modelRow": "{requests} żąd. · {grams} g",
     "disclosure": "Szacunki oparte na założeniach v{version} · od {since} · tylko standardowy chat (odpowiedzi agentów i bazy wiedzy nie są liczone).",
     "reset": "Resetuj statystyki użycia",
-    "estimatedPortion": "Obejmuje około {grams} g CO₂e ({requests} żądań) oszacowane z czatów sprzed uruchomienia śledzenia — wyliczone wstecznie z przechowywanego tekstu wiadomości, a nie zmierzonych liczby tokenów."
+    "estimatedPortion": "Obejmuje około {grams} g CO₂e ({requests} żądań) oszacowane z czatów sprzed uruchomienia śledzenia — wyliczone wstecznie z przechowywanego tekstu wiadomości, a nie zmierzonych liczby tokenów.",
+    "chipTitle": "Wskaźnik emisji",
+    "chipDescription": "Szacowany ślad węglowy obecnej rozmowy, wyświetlany nad polem czatu.",
+    "chipAlways": "Zawsze pokazuj",
+    "chipAlwaysHint": "Wskaźnik pozostaje widoczny, gdy rozmowa posiada szacunkową wartość.",
+    "chipAuto": "Pokaż przy aktualizacji lub najechaniu",
+    "chipAutoHint": "Wskaźnik pojawia się przy zmianie szacowania, a następnie znika. Ponowne najechanie lub skupienie przywraca go.",
+    "chipHidden": "Ukryty",
+    "chipHiddenHint": "Wskaźnik nie jest wyświetlany. Suma nadal jest rejestrowana i widoczna na tej stronie.",
+    "chipAutoHideLabel": "Zanikanie po",
+    "chipAutoHideUnit": "sekundach",
+    "chipAutoHideHint": "Od {min} do {max} sekund."
   },
   "extraction": {
     "toggleLabel": "Wyodrębnij dane strukturalne",
@@ -3353,7 +3364,15 @@
       "measured": "Na podstawie zgłoszonych liczby tokenów",
       "estimated": "Wyliczone wstecznie ze starszych wiadomości",
       "lastRequest": "Ostatnie żądanie",
-      "disclaimer": "Szacunkowe wartości na żądanie na podstawie zgłoszonych lub przybliżonych liczby tokenów, z wykorzystaniem opublikowanych średnich i założeń v{version}. Starsze wiadomości są wyliczane wstecznie na podstawie przechowywanego tekstu i aktualnego modelu konwersacji. Nie jest to pomiar."
+      "disclaimer": "Szacunkowe wartości na żądanie na podstawie zgłoszonych lub przybliżonych liczby tokenów, z wykorzystaniem opublikowanych średnich i założeń v{version}. Starsze wiadomości są wyliczane wstecznie na podstawie przechowywanego tekstu i aktualnego modelu konwersacji. Nie jest to pomiar.",
+      "visibilityGroup": "Widoczność wskaźnika emisji",
+      "visibilityLabel": "Pokaż:",
+      "visibility": {
+        "always": "Zawsze",
+        "auto": "Automatycznie",
+        "hidden": "Ukryj"
+      },
+      "visibilityHint": "Opcja „Automatycznie” pokazuje wskaźnik, gdy szacowanie jest aktualizowane lub po najechaniu kursorem. Możesz to zmienić ponownie w Ustawieniach › Użycie i wpływ."
     }
   },
   "table": {

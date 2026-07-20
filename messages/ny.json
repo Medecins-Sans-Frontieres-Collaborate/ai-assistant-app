@@ -2428,7 +2428,18 @@
     "modelRow": "{requests} zopempha · {grams} g",
     "disclosure": "Zowerengera izi ndi zochokera pa malingaliro v{version} · kuyambira {since} · kulankhula wamba kokha (ma agents ndi mayankho ochokera mu knowledge-base sizikuphatikizidwa).",
     "reset": "Bwezerani ziwerengero za kagwiritsidwe",
-    "estimatedPortion": "Zimaphatikizapo ~{grams} g CO₂e ({requests} mapempho) owerengedwa kuchokera pa macheza amene anachitika asanayambe kutsata — zowerengedwa kuchokera mauthenga osungidwa, osati chiwerengero cha ma tokeni omwe anayeza."
+    "estimatedPortion": "Zimaphatikizapo ~{grams} g CO₂e ({requests} mapempho) owerengedwa kuchokera pa macheza amene anachitika asanayambe kutsata — zowerengedwa kuchokera mauthenga osungidwa, osati chiwerengero cha ma tokeni omwe anayeza.",
+    "chipTitle": "Chip ya emissions",
+    "chipDescription": "Kuwerengera kwa carbon footprint ya nthawi iyi ya kucheza, kukuwonetsedwa pamwamba pa malo olembera uthenga.",
+    "chipAlways": "Onetsani nthawi zonse",
+    "chipAlwaysHint": "Chip imakhala ikuwonekera nthawi zonse ngati pali kuwerengera pa kucheza.",
+    "chipAuto": "Onetsani pa kusintha kapena kuikapo mbewa",
+    "chipAutoHint": "Chip imawoneka ikangosiya kuwerengera, kenako imazimiririka. Kuyang'ana kapena kukhudza chip kumabwezeretsa kuonekera.",
+    "chipHidden": "Yobisidwa",
+    "chipHiddenHint": "Chip siiwonetsedwa nthawi iliyonse. Komabe, chiwerengero chonse chikadalipo patsamba lino.",
+    "chipAutoHideLabel": "Zimirira patapita",
+    "chipAutoHideUnit": "masekondi",
+    "chipAutoHideHint": "Pakatikati pa {min} ndi {max} masekondi."
   },
   "extraction": {
     "toggleLabel": "Tengani deta yamakonzedwe",
@@ -3337,7 +3348,15 @@
       "measured": "Kuchokera kwa chiwerengero cha ma tokeni omwe ananenedwa",
       "estimated": "Kuwerengedwa mobwezeretsedwanso kuchokera mauthenga akale",
       "lastRequest": "Pempho lomaliza",
-      "disclaimer": "Zowerengedwa pa pempho lililonse kuchokera pa ma tokeni omwe ananenedwa kapena zowerengedwa moyerekeza, pogwiritsa ntchito ma averedzi ofalitsidwa ndi malingaliro a v{version}. Mauthenga akale awerengedwa mwanzeru kuchokera pa mauthenga osungidwa ndi model yapano ya kukambirana. Izi siye kuyeza."
+      "disclaimer": "Zowerengedwa pa pempho lililonse kuchokera pa ma tokeni omwe ananenedwa kapena zowerengedwa moyerekeza, pogwiritsa ntchito ma averedzi ofalitsidwa ndi malingaliro a v{version}. Mauthenga akale awerengedwa mwanzeru kuchokera pa mauthenga osungidwa ndi model yapano ya kukambirana. Izi siye kuyeza.",
+      "visibilityGroup": "Kuwoneka kwa chip ya emissions",
+      "visibilityLabel": "Onetsani:",
+      "visibility": {
+        "always": "Nthawi zonse",
+        "auto": "Mwakokhazikika",
+        "hidden": "Bisani"
+      },
+      "visibilityHint": "Auto imasonyeza chip ikangotuluka chiwerengero chatsopano kapena mukayika mbewa pa chip. Muthanso kusintha izi mu Zikhazikiko › Kugwiritsa ndi Zotsatira."
     }
   },
   "table": {

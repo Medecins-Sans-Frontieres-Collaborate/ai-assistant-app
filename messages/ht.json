@@ -2428,7 +2428,18 @@
     "modelRow": "{requests} demann · {grams} g",
     "disclosure": "Estimasyon sou baz sipozisyon v{version} · depi {since} · sèlman pou chat estanda (pa konte ajan ak repons baz konesans).",
     "reset": "Reyajiste estatistik itilizasyon",
-    "estimatedPortion": "Gen ladan apeprè {grams} g CO₂e ({requests} demann) ki estime soti nan konvèsasyon avan siveyans — rekalkile sou tèks mesaj sove, pa sou kantite jèton mezire."
+    "estimatedPortion": "Gen ladan apeprè {grams} g CO₂e ({requests} demann) ki estime soti nan konvèsasyon avan siveyans — rekalkile sou tèks mesaj sove, pa sou kantite jèton mezire.",
+    "chipTitle": "Chip emisyon",
+    "chipDescription": "Estimasyon mak kabòn konvèsasyon aktyèl la, ki montre anlè bwat chat la.",
+    "chipAlways": "Toujou montre",
+    "chipAlwaysHint": "Chip la rete vizib chak fwa konvèsasyon an gen yon estimasyon.",
+    "chipAuto": "Montre lè mete ajou oswa pase sou li",
+    "chipAutoHint": "Chip la parèt lè estimasyon an chanje, epi disparèt apre. Pase sourit sou li oswa klike sou li ap fè li parèt ankò.",
+    "chipHidden": "Kache",
+    "chipHiddenHint": "Chip la pap janm parèt. Total yo toujou ap kontabilize epi parèt sou paj sa a.",
+    "chipAutoHideLabel": "Disparèt apre",
+    "chipAutoHideUnit": "segond",
+    "chipAutoHideHint": "Ant {min} ak {max} segond."
   },
   "extraction": {
     "toggleLabel": "Extra done estriktire",
@@ -3337,7 +3348,15 @@
       "measured": "Soti nan kantite jèton rapòte",
       "estimated": "Rekalkile soti nan ansyen mesaj yo",
       "lastRequest": "Dènye demann lan",
-      "disclaimer": "Estimasyon pa demann yo baze sou kantite jèton rapòte oswa apwoksime, ak mwayèn ak sipozisyon pibliye v{version}. Mesaj ki pi ansyen yo rekalkile soti nan tèks sove ak modèl aktyèl konvèsasyon an. Sa pa yon mezi."
+      "disclaimer": "Estimasyon pa demann yo baze sou kantite jèton rapòte oswa apwoksime, ak mwayèn ak sipozisyon pibliye v{version}. Mesaj ki pi ansyen yo rekalkile soti nan tèks sove ak modèl aktyèl konvèsasyon an. Sa pa yon mezi.",
+      "visibilityGroup": "Vizibilite chip emisyon",
+      "visibilityLabel": "Montre:",
+      "visibility": {
+        "always": "Toujou",
+        "auto": "Otomatik",
+        "hidden": "Kache"
+      },
+      "visibilityHint": "Otomatik ap montre chip la lè estimasyon an ap mete ajou oswa ou pase sourit sou li. Ou ka chanje sa ankò nan Anviwònman › Itilizasyon & Enpak."
     }
   },
   "table": {

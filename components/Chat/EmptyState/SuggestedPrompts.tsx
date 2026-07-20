@@ -47,15 +47,20 @@ export function SuggestedPrompts({
     }));
   }, [count, t]);
 
+  // Wraps at every width rather than scrolling horizontally below sm. Only
+  // `count` (default 3) pills ever render, so stacking costs a couple of short
+  // rows in space the empty state already has — and it drops a scroll
+  // affordance that had no visual cue and competed with the page's own
+  // vertical scroll.
   return (
-    <div className="flex overflow-x-auto sm:overflow-x-visible sm:flex-wrap sm:justify-center gap-2 sm:gap-3 max-w-5xl mx-auto px-1 pb-2 sm:pb-0 scrollbar-none">
+    <div className="flex flex-wrap justify-center gap-2 sm:gap-3 max-w-5xl mx-auto px-1">
       {displayedPrompts.map((prompt) => {
         const Icon = prompt.icon;
 
         return (
           <button
             key={prompt.key}
-            className="group relative bg-white dark:bg-surface-dark text-black dark:text-white border border-gray-200 dark:border-gray-700 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-center hover:border-gray-400 dark:hover:border-gray-600 hover:shadow-lg dark:hover:shadow-black/60 transition-all duration-200 ease-in-out flex-shrink-0"
+            className="group relative bg-white dark:bg-surface-dark text-black dark:text-white border border-gray-200 dark:border-gray-700 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-center hover:border-gray-400 dark:hover:border-gray-600 hover:shadow-lg dark:hover:shadow-black/60 transition-all duration-200 ease-in-out flex-shrink-0 max-w-full"
             onClick={() => onSelectPrompt?.(prompt.prompt)}
           >
             {Icon && (
