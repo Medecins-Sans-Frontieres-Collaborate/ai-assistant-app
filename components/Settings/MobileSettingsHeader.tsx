@@ -84,11 +84,13 @@ export const MobileSettingsHeader: FC<MobileSettingsHeaderProps> = ({
         createPortal(
           <>
             <div
+              data-settings-portal
               className="fixed inset-0 z-[10000] bg-black/40 backdrop-blur-sm animate-fade-in-fast"
               aria-hidden="true"
               onClick={() => setIsMenuOpen(false)}
             />
             <div
+              data-settings-portal
               role="menu"
               aria-label={t('settings.Settings')}
               className="fixed inset-x-0 bottom-0 z-[10001] flex max-h-[75dvh] flex-col overflow-y-auto rounded-t-2xl border-t border-gray-200 bg-white shadow-lg outline-none animate-slide-up pb-[env(safe-area-inset-bottom)] dark:border-gray-700 dark:bg-surface-dark-base"
