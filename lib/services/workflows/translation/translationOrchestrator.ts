@@ -1,10 +1,10 @@
+import { criterionRubricLine } from '@/lib/utils/shared/review/customCriteria';
 import { computeSegmentChanges } from '@/lib/utils/shared/translation/editApplication';
-import { TRANSLATION_QUALITY_CRITERIA } from '@/lib/utils/shared/translation/qualityCriteria';
+import { builtinRubricLine } from '@/lib/utils/shared/translation/qualityCriteria';
 
 import {
   GlossaryEntry,
   TranslationAnalysis,
-  TranslationCriterionId,
   TranslationCriterionRating,
   TranslationEdit,
   TranslationReviewIssue,
@@ -181,7 +181,10 @@ export interface TranslationAssessmentOptions {
   sourceText: string;
   translation: string;
   targetLanguage: string;
-  criterionIds: TranslationCriterionId[];
+  /** Built-in ids and/or 'custom:<uuid>' ids, already validated. */
+  criterionIds: string[];
+  /** Rubrics for the custom ids in `criterionIds`. */
+  customById: Map<string, { name: string; rubric: string }>;
   glossaryEntries: GlossaryEntry[];
   modelId?: string;
 }
@@ -194,7 +197,7 @@ export interface TranslationAssessmentResult {
 
 interface LlmAssessment {
   criteria: Array<{
-    id: TranslationCriterionId;
+    id: string;
     rating: number;
     summary: string;
   }>;
@@ -213,9 +216,13 @@ const MAX_ASSESSMENT_EDITS = 20;
 export async function runTranslationAssessment(
   options: TranslationAssessmentOptions,
 ): Promise<TranslationAssessmentResult> {
-  const rubric = TRANSLATION_QUALITY_CRITERIA.filter((c) =>
-    options.criterionIds.includes(c.id),
-  ).map((c) => c.promptDescription);
+  // Built over the REQUESTED ids (not by filtering the built-in list), so
+  // custom criteria reach the prompt instead of being silently dropped.
+  const rubric = options.criterionIds
+    .map((id) =>
+      criterionRubricLine(id, builtinRubricLine(id), options.customById),
+    )
+    .filter((line): line is string => line !== null);
   const glossaryBlock = buildGlossaryBlock(
     options.glossaryEntries,
     options.sourceText,

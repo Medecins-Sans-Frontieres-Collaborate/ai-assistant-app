@@ -54,7 +54,12 @@ function renderList() {
   const onFocus = vi.fn();
   const onRemove = vi.fn();
   render(
-    <FeatureList features={features} onFocus={onFocus} onRemove={onRemove} />,
+    <FeatureList
+      sourceLabel={() => null}
+      features={features}
+      onFocus={onFocus}
+      onRemove={onRemove}
+    />,
   );
   return { onFocus, onRemove };
 }

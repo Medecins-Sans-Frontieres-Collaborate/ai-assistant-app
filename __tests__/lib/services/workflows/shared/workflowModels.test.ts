@@ -46,6 +46,20 @@ describe('isWorkflowEligibleModel', () => {
     expect(isWorkflowEligibleModel({})).toBe(true);
   });
 
+  it('rejects BYO-source models', () => {
+    // buildCustomSourceModel keeps provider 'openai' and forces isDisabled
+    // false, so a byom model looks eligible on every other field — but its
+    // id is absent from the static catalog, so the resolver would silently
+    // swap it for the default. The picker must not offer one.
+    const byom = {
+      id: 'byom-a1b2c3d4-my-gpt4o-deployment',
+      provider: 'openai',
+      isDisabled: false,
+    };
+    expect(isWorkflowEligibleModel(byom)).toBe(false);
+    expect(resolveWorkflowModelId(byom.id)).toBe(DEFAULT_ANALYSIS_MODEL);
+  });
+
   it('agrees with the resolver on every configured model', () => {
     for (const model of Object.values(OpenAIModels)) {
       const resolved = resolveWorkflowModelId(model.id);

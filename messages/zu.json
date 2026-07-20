@@ -907,7 +907,8 @@
     "processingAudio": "Kucubungulwa umsindo...",
     "ttsError": "Iphutha ekukhiqizeni umsindo. Zama futhi.",
     "unsupportedMessageType": "Iphutha ekuboniseni umlayezo: Uhlobo lomlayezo alusekelwa",
-    "addLanguageOption": "Engeza \"{name}\"..."
+    "addLanguageOption": "Engeza \"{name}\"...",
+    "sources": "Imithombo"
   },
   "transcript": {
     "originalTranscript": "Okubhaliwe Kokuqala",
@@ -1331,7 +1332,23 @@
     "customInstructionsLabel": "Imiyalelo Yangokwezifiso*",
     "defaultTemperatureLabel": "Izinga Lokushisa Okuzenzakalelayo*",
     "Usage & Impact": "Ukusetshenziswa & Umthelela",
-    "Connectors": "Izixhumi"
+    "Connectors": "Izixhumi",
+    "Backup": "Ukusekelwa",
+    "Memories": "Izinkumbulo",
+    "Agent Access": "Ukufinyelela Kummeli",
+    "LocalModels": "Amamodeli endaweni",
+    "suggestRevisions": {
+      "title": "Izichibiyelo zombhalo",
+      "toggle": "Phakamisa izichibiyelo kunokuzisebenzisa ngqo",
+      "description": "Uma ucela ukuthi Kubuyekezwe Umbhalo ohlelweni, izinguquko zifika njengiziphakamiso ongazamukela noma uzinqabe, ngendlela efanayo lokho okwenziwa ukuhlolwa kwekhwalithi.",
+      "exceptionsTitle": "Sebenzisa ngqo noma kunjalo uma:",
+      "exceptionSelection": "Uchibiyela okukhethiwe obekugqamile",
+      "exceptionLargeRewrite": "Ukuchibiyela kushintsha ingxenye enkulu yombhalo",
+      "exceptionReorder": "Izingxenye zithutshwa esikhundleni sokuhlelwa",
+      "thresholdLabel": "Phatha njengokubhalwa kabusha ngenhla",
+      "thresholdUnit": "% yombhalo oshintshiwe",
+      "exceptionSelectionAlways": "Ukulungisa okukhethiwe okuveziwe kuhlala kusebenza ngqo — imodeli ibuyisa kuphela ingxenye eguquliwe, engakwazi ukuhlukaniswa iziphakamiso kukho konke umbhalo."
+    }
   },
   "emptyState": {
     "greeting": "Ngingakusiza kanjani?",
@@ -2086,7 +2103,9 @@
     "pin": "Beka phezulu",
     "unpin": "Susa phezulu",
     "moveToMore": "Hambisa kokunye",
-    "moveOutOfMore": "Bonisa kwimenyu"
+    "moveOutOfMore": "Bonisa kwimenyu",
+    "showSources": "Bonisa eminye imithombo",
+    "hideSources": "Fihla eminye imithombo"
   },
   "transcription": {
     "transcribesOnSend": "Kubhalwa phansi uma kuthunyelwa",
@@ -2408,7 +2427,8 @@
     "regionDefault": "Okuzenzakalelayo",
     "modelRow": "{requests} izicelo · {grams} g",
     "disclosure": "Ukulinganiselwa kusekelwe ezicabangweni v{version} · kusukela {since} · izingxoxo ezijwayelekile kuphela (ama-agent kanye nezimpendulo ezisekwe olwazi azibaliwe).",
-    "reset": "Setha kabusha izibalo zokusetshenziswa"
+    "reset": "Setha kabusha izibalo zokusetshenziswa",
+    "estimatedPortion": "Faka cishe u-{grams} g we-CO₂e ({requests} izicelo) okucatshangwa ukuthi kuvela ezingxoxweni ezandulela ukuqapha — kuhlanganiswe kusukela embhalweni olondoloziwe wemilayezo, hhayi ezibalweni zama-tokens ezifakwe esikalini."
   },
   "extraction": {
     "toggleLabel": "Khipha idatha ehlelekile",
@@ -2615,7 +2635,25 @@
       "pendingCount": "{count} kusalindile",
       "closeReview": "Vala ukuhlolwa kwekhwalithi",
       "showReview": "Bonisa ukuhlolwa",
-      "showReviewPending": "Bonisa ukuhlolwa ({count} kusalindile)"
+      "showReviewPending": "Bonisa ukuhlolwa ({count} kusalindile)",
+      "undoEdit": "Buyisa emuva",
+      "clearResolved": "Sula ezixazululiwe",
+      "clearResolvedHint": "Susa okwamukelwe, okwenqatshiwe, nokungasebenzi kulolu hlu",
+      "autoClearResolved": "Sula ngokuzenzakalelayo okuxazululiwe",
+      "customCriteria": "Izindinganiso ezenziwe ngokwezifiso",
+      "closeCriteria": "Vala izindinganiso ezenziwe ngokwezifiso",
+      "newCriterion": "Indinganiso entsha",
+      "newCriterionName": "Indinganiso engenamagama",
+      "criterionName": "Igama lendinganiso",
+      "criterionRubric": "Umhlahlandlela",
+      "criterionRubricPlaceholder": "Chaza ukuthi ukuhunyushwa kufanele kwenzenjani ukuze kuhlangabezane nalesi sidingo, isb. \"Bonisa yonke imiyalelo yokuthatha imithi ngendlela eyala, hhayi eyi-infinitive…\"",
+      "criterionRubricHint": "Lo mhlahlandlela unikezwa i-AI ngendlela efanayo nezinga le-MQM lapho kuhlolwa ukuhunyushwa.",
+      "criteriaEmpty": "Yakha izindinganiso ezenziwe ngokwezifiso — isb. isitayela senkampani, amagama akhethwa iklayenti, noma imithetho yesifunda — ukuhlola ukuhumusha okungaphezu kwezilinganiso ze-MQM. Kulondolozwe kudivayisi le, kuyaphindwa kusetshenziswe.",
+      "deleteCriterion": "Susa indinganiso",
+      "manageCriteria": "Izindinganiso ezenziwe ngokwezifiso",
+      "addCriteria": "Engeza izindinganiso",
+      "noUsableCriteria": "Khetha okungenani indinganiso eyakhelwe ngaphakathi, noma unikeze izindinganiso zakho umhlahlandlela.",
+      "criterionRubricTooLong": "Lena irubhrikhi idlule ngo-{over} izimpawu kumkhawulo. Ithunyelwa ngokuhlolwa ngakunye, ngakho kufanele yehlelwe ngaphambi kokusetshenziswa kwalesi simiso."
     },
     "document": {
       "emptyTitle": "Chaza umbhalo ofunayo",
@@ -2735,7 +2773,32 @@
       "clearSelection": "Sula okukhethiwe (sebenza nombhalo ophelele)",
       "reviseSelectionPlaceholder": "Chaza izinguquko ezizokwenziwa kokukhethiwe…",
       "revisedSelectionSummary": "Ngishintshe ingxenye ekhethiwe endaweni yokusebenza.",
-      "assessedSelection": "Okukhethiwe"
+      "assessedSelection": "Okukhethiwe",
+      "undoEdit": "Buyisa emuva",
+      "clearResolved": "Sula ezixazululiwe",
+      "clearResolvedHint": "Susa okwamukelwe, okwenqatshiwe, nokungasebenzi kulolu hlu",
+      "autoClearResolved": "Sula ngokuzenzakalelayo okuxazululiwe",
+      "import": "Ngenisa",
+      "importReplaceTitle": "Ufuna ukufaka esikhundleni sombhalo?",
+      "importReplaceBody": "Ukulethela {name} kuzofaka esikhundleni sombhalo okhona okwamanje. Izinkomba, incazelo nokuthinta kuzogcinwa.",
+      "importReplaceConfirm": "Faka esikhundleni",
+      "editorMode": "Imodi yomhleli",
+      "editorModeRich": "Umbhalo ocebile",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Xazulula izihumusho eziphakanyisiwe ngaphambi kokushintsha imodi yomhleli.",
+      "suggestChanges": "Phakamisa izinguquko",
+      "suggestChangesHint": "Bheka uchibiyelo njengemibono eyodwa kunokubhalwa kabusha kombhalo ngokushesha.",
+      "suggestChangesSelectionNote": "Izichibiyelo kukhetho kusetshenziswa ngqo — ukukhetha kuseyona ndawo oyikhethile.",
+      "suggestedSummary": "Kuphakanyiswe u-{count} {count, plural, one {ushintsho} other {izinguquko}} zokubuyekezwa.",
+      "revisionSuggestionSummary": "Isicelo sakho sochibiyelo sikhiqize u-{count} {count, plural, one {uchibiyelo oluphakanyisiwe} other {izichibiyelo eziphakanyisiwe}}.",
+      "revisionCriterionLabel": "Uchibiyelo oluceliwe",
+      "fallbackSelection": "Kusetshenziswe ngqo — izichibiyelo kukhetho aziphakanyiswanga.",
+      "fallbackLargeRewrite": "Kusetshenziswe ngqo — ukubhalwa kabusha kushintshe ingxenye enkulu yombhalo ukuze kucutshungulwe njengesiphakamiso esingahlukana.",
+      "fallbackReorder": "Kusetshenziswe ngqo — izingxenye ziye zathutshwa, lokhu akuphenduki iziphakamiso ezihlukene zokubuyekezwa.",
+      "fallbackUnanchorable": "Kusetshenziswe ngqo — izinguquko azikwazanga ukubekwa ezingxenyeni ezithize zombhalo.",
+      "fallbackNoChanges": "Azikho izinguquko ezidingekayo.",
+      "criterionRubricTooLong": "Lena irubhrikhi idlule ngo-{over} izimpawu kumkhawulo. Ithunyelwa ngokuhlolwa ngakunye, ngakho kufanele yehlelwe ngaphambi kokusetshenziswa kwalesi simiso."
     },
     "data": {
       "emptyTitle": "Faka idatha ukuze ihlaziywe",
@@ -2904,7 +2967,39 @@
       "autoCheckHint": "Ngemuva kokuthola idatha ezithombeni noma emibhalweni, qala ngokuzenzakalelayo ukuhlola ikhwalithi kwemigqa emisha",
       "checkingNewRows": "Kuhlolwa imigqa emisha yezinkinga zekhwalithi…",
       "ingestCheckFailed": "Ukuhlolwa kwekhwalithi okuzenzakalelayo kwehlulekile ({message}) — ungakwazi ukukwenza mathupha nge-Assess quality.",
-      "assessedIngest": "Imigqa emisha engenisiwe"
+      "assessedIngest": "Imigqa emisha engenisiwe",
+      "transpose": "Guqula okuqondile",
+      "transposeAxisColumn": "Igama",
+      "transposeSuggestion": "Leli tafula libonakala lishintshiwe: imiqolo ingamapharamitha bese amakholomu yizinto. Liguqule ukuze into ngayinye ibe ngumqolo futhi iphuzu ngalinye libe yikholomu enohlobo?",
+      "transposedTable": "Imiqolo namakholomu asuke endaweni yawo",
+      "columns": "Amakholomu",
+      "columnsHidden": "Amakholomu ({count} afihliwe)",
+      "showAllColumns": "Bonisa konke",
+      "chartScatter": "Scatter (x vs y)",
+      "chartPivot": "Iphivothethi yethebhulethi",
+      "xColumn": "Ikholomu X",
+      "yColumn": "Ikholomu Y",
+      "splitByColumn": "Hlukanisa ngo",
+      "splitNone": "Akukho ukuhlukanisa",
+      "pivotValueColumns": "Amakholomu evelu",
+      "aggMin": "Okuncane",
+      "aggMax": "Okukhulu",
+      "aggMedian": "Inqununu",
+      "chartSeriesTruncated": "Kuboniswa uchungechunge oluphezulu olungu-{max}",
+      "chartPointsTruncated": "Kuboniswa amaphoyinti angu-{max} aqokwe",
+      "chartScatterAria": "Iscather plot ye-{x} uma kuqhathaniswa no-{y}",
+      "pivotTableAria": "Iphivothethi yethebula ehlukaniswe ngo-{column}",
+      "schemaFormula": "Ifomula",
+      "schemaFormulaPlaceholder": "isb. [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Inkambu ebaliwe: bheka ezinye izinkambu njenge [Name]; isekela + - * / %, izibiyela, kanye ne-round, abs, min, max. Amanani abuyekezwa ngokuzenzakalelayo futhi ngeke aguqulwe ngokuqondile.",
+      "schemaFormulaSyntaxError": "Ifomula ayivumelekile",
+      "schemaFormulaUnknownRef": "Inkambu engaziwa: {ref}",
+      "schemaFormulaArityError": "Inani elingalungile labaphikisi ku-{fn}",
+      "schemaFormulaCycleError": "Ireferensi eziphindayo phakathi kwamafomula",
+      "derivedColumnTitle": "Kubaliwe: {formula}",
+      "derivedFrom": "Kubonwe kusuka ku-{formula}",
+      "takePhoto": "Thatha isithombe",
+      "takePhotoHint": "Sebenzisa ikhamera yakho ukuthatha isithombe sefomu noma ithebula — okuqukethwe kwaso kuzoba idatha ehlelekile ongakwazi ukuyiqinisekisa nesithombe."
     },
     "map": {
       "emptyTitle": "Beka idatha yakho emephini",
@@ -2978,7 +3073,31 @@
         "jumpTo": "Yiya ku-{label}",
         "slider": "Isikhundla kumugqa wesikhathi",
         "showUndated": "Bonisa izindawo ezinganalo usuku",
-        "activeCount": "Ezisebenzayo: {count}"
+        "activeCount": "Ezisebenzayo: {count}",
+        "jump": {
+          "start": "Qala",
+          "yearsLater": "{count, plural, one {1 unyaka kamuva} other {# iminyaka kamuva}}",
+          "monthsLater": "{count, plural, one {1 inyanga kamuva} other {# izinyanga kamuva}}",
+          "daysLater": "{count, plural, one {1 usuku kamuva} other {# izinsuku kamuva}}",
+          "appears": "{count, plural, one {1 ivela} other {# zivele}}",
+          "ends": "{count, plural, one {1 iyaphela} other {# ziphela}}",
+          "progress": "Usuku {index} ku-{total}"
+        },
+        "precision": {
+          "minute": "Kuqondiswe kumzuzu",
+          "hour": "Kuqondiswe kwehora",
+          "day": "Kuqondiswe usuku",
+          "month": "Usuku lwenyanga",
+          "year": "Usuku lonyaka",
+          "mixed": "(kuhlanganisile)"
+        },
+        "pacing": {
+          "toggle": "Ijubane lokudlala",
+          "cardDuration": "Bonisa indawo ngayinye",
+          "seconds": "{seconds}s",
+          "maxCards": "Izindawo ezikhonjiswe ngosuku",
+          "hint": "Izinsuku ezinomsebenzi omningi zigcinwa isikhathi eside ngokuzenzakalelayo."
+        }
       },
       "granularity": {
         "site": "Isayithi",
@@ -2995,8 +3114,13 @@
         "color": "Umbala: ukuzethemba kwezixhumanisi (okuluhlaza okwesibhakabhaka kuphezulu, onsomi maphakathi, okubomvu kuphansi)",
         "size": "Usayizi wedoti: ukuthi indawo ibaluleke kangakanani kulolwazi",
         "area": "Umugqa wamehlo: indawo ecishe ifane nesifunda, isifundazwe, noma izwe",
-        "container": "Uhlaka olucacile: indawo okuhlelwe ukuthi okuqukethwe kwayo kubhalwe wethulwe ngokwehlukana"
-      }
+        "container": "Uhlaka olucacile: indawo okuhlelwe ukuthi okuqukethwe kwayo kubhalwe wethulwe ngokwehlukana",
+        "precisionHalo": "Umucu omncane onamachashazi (ngesikhathi kuvulwa isikhathi): umcimbi ubhalwe kuphela ngenyanga noma unyaka, isikhathi sawo esiqondile asiqinisekile"
+      },
+      "sourceLabel": "Umthombo: {name}",
+      "fetchAndMap": "Thola & meba",
+      "fetchingPage": "Kutholakala ikhasi…",
+      "railUrlRequest": "Thola bese umebula izindawo ezivela: {title} ({url})"
     },
     "shell": {
       "showConversation": "Bonisa ingxoxo",
@@ -3014,6 +3138,16 @@
       "untitled": "Ingxoxo Entsha",
       "toggleMenu": "Vula noma vula kabusha imenyu",
       "model": "Imodeli yomsebenzi lo"
+    },
+    "tabs": {
+      "label": "Imodi yengxoxo",
+      "chat": "Ingxoxo",
+      "chatDescription": "Ingxoxo evamile nomsizi"
+    },
+    "discard": {
+      "title": "Udinga ukulahla lo mqulu?",
+      "body": "Ukwenza ushintshe ku-{target} kuzosusa umsebenzi oqale ku-{current}.",
+      "confirm": "Lahla"
     }
   },
   "connectors": {
@@ -3028,6 +3162,22 @@
       "asana": {
         "name": "Asana",
         "description": "Thola, dala, futhi ubuyekeze imisebenzi namaphrojekthi."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Buza imithombo yedatha eshicilelwe, ama-workbook, nama-Pulse metrics."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Bheka uvuselele amarekhodi kuwo wonke ama-objekthi e-Salesforce yakho."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Hlela, hlela isikhathi, bese ushicilela okuthunyelwe kwimidiya yokuxhumana."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Bukisisa bese uphendula izingxoxo ze-inbox yezokuxhumana."
       }
     },
     "connect": "Xhuma",
@@ -3088,7 +3238,19 @@
       "missingState": "Akukho ongakugunyaza",
       "close": "Ungavala le fasitela bese ubuya ohlelweni.",
       "closeButton": "Vala iwindi"
-    }
+    },
+    "oauthNoAppConfigured": "Ukungena ngemvume nge-{name} akusethwanga kule deployment. Xhuma ngokubhalisa uhlelo lwakho lwe-OAuth.",
+    "adminConnectorsTitle": "Okuvela enhlanganweni yakho",
+    "adminConnectorsDescription": "Izixhumi abaphathi bakho abazisethile. Lokho okubonayo kuncike ekutheni unamvume yokufinyelela kuphi.",
+    "managedByOrg": "Uphethwe yinhlangano yakho",
+    "connectorOauthNotConfigured": "Ukungena ngemvume akukapheleli ukusethwa kwalesi sixhumi. Xhumana nomphathi wakho.",
+    "yourConnectorsTitle": "Izixhumi zakho",
+    "addTitle": "Engeza isixhumi",
+    "addDescription": "Khetha ithuluzi ozolixhuma. Uzoqala ukufaka ukufinyelela emva kokukhetha.",
+    "add": "Engeza",
+    "filterLabel": "Hlunga izixhumi",
+    "filterPlaceholder": "Sesha izixhumi",
+    "noMatches": "Awekho izixhumi ezihambisana no-“{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Xhuma umthombo wemodeli",
@@ -3139,5 +3301,399 @@
     "deselectAll": "Susa konke okukhethiwe",
     "autoAddLabel": "Faka imodeli ngokuzenzakalela",
     "autoAddDescription": "Ama-model deployments azongezwa kule akhawunti esikhathini esizayo azovezwa ngokuzenzakalelayo. Ama-models angakhethiwe azoqhubeka engafakiwe."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Umthelela ophansi",
+      "moderate": "Umthelela ophakathi",
+      "high": "Umthelela ophezulu"
+    },
+    "tierTooltip": "Umthelela wamandla ohlotshwe ngesicelo, kuqikelelwa ngosayizi wemodeli. Lokhu kuyingqikithi esekelwe ku-avareji eshicilelwe kanye nemibono v{version} — akusiyona imiphumela eqondile.",
+    "typicalRequest": "~{grams} g CO₂e ngesicelo esivamile",
+    "typicalRequestTooltip": "Isilinganiso esijwayelekile ngesicelo ngasinye (cishe ama-1,000 prompt nama-500 completion tokens), sithathwe kuma-averages ashicilelwe nemibono v{version}. Umthelela wangempela uyahlukahluka ngokuya ngobude bengxoxo, izilungiselelo, kanye nesifunda sokubamba.",
+    "activities": {
+      "netflixHd": "Ukusakaza kwe-Netflix HD",
+      "zoomCall": "Ikholi ye-Zoom (ikhamera ivuliwe)",
+      "webBrowsing": "Ukubhekabheka kwewebhu",
+      "spotifyAudio": "Spotify umsindo"
+    },
+    "equivalents": {
+      "title": "≈ okufanayo nekhabhoni njenge",
+      "note": "Ukuqhathanisa okulinganayo kwekhabhoni ngokumelene nombhalo owodwa wehora walezi zinsizakalo — isilinganiso esivamile, okuqikelela njenganakho konke okuhlolwayo lapha."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Kulindeleke ukuthi le ngxoxo ikhiqize ikhabhoni elinganiselwa ku-{grams} amagremu e-CO₂e. Bonisa ukuhlukaniswa.",
+      "ariaLabelToday": "Kulindeleke ukuthi le ngxoxo namuhla ikhiqize ikhabhoni elinganiselwa ku-{grams} amagremu e-CO₂e. Bonisa ukuhlukaniswa.",
+      "title": "Lengxoxo (okulinganisiwe)",
+      "today": "Namuhla",
+      "total": "Konke isikhathi",
+      "measured": "Kusuka kokubalwa kwama-tokens okubikiwe",
+      "estimated": "Kubuyekezwe kusetshenziswa imilayezo endala",
+      "lastRequest": "Isicelo sokugcina",
+      "disclaimer": "Izilinganiso zesicelo ngasinye zisuselwa kwizinombolo zama-tokens ezibikiwe noma ezilinganisiwe, kusetshenziswa izilinganiso nezibalo ezishicilelwe v{version}. Imilayezo endala ibuyekezwa kusukela embhalweni olondoloziwe kanye nemodeli yengxoxo yamanje. Akusona isilinganiso esiqondile."
+    }
+  },
+  "table": {
+    "copyTable": "Kopisha ithebula",
+    "downloadTable": "Landa ithebula",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Kuthunyelwe njenge-CSV",
+    "copyFailed": "Ithebula alikwazanga ukukopishwa"
+  },
+  "backup": {
+    "intro": {
+      "title": "Sekela izingxoxo zakho ngokuphepha",
+      "body": "Izingxoxo zakho zifihlwa kudivayisi ngaphambi kokuthi kuthunyelwe noma yini. Asisoze sabona izingxoxo zakho.",
+      "keyWarning": "Ukhiye wakho wokubuyisela wenziwa kudivayisi. Asiwuboni futhi asikwazi ukuwubuyisela — uma ulahleka, ulahlekelwa usekelo.",
+      "create": "Dala ukhiye wami & sekelisa",
+      "decline": "Hhayi manje — gcina izingxoxo kudivayisi kuphela"
+    },
+    "ceremony": {
+      "titleCreate": "Londoloza ukhiye wakho wokubuyisela",
+      "titleRotate": "Londoloza ukhiye wakho omusha wokubuyisela",
+      "titleView": "Ukhiye wakho wokubuyisela",
+      "description": "Lo ukhiye ukuphela kwendlela yokubuyisela usekelo kwenye idivayisi. Ugcine endaweni ephephile — asikwazi ukuwubuyisela kuwena.",
+      "copy": "Kopisha",
+      "copied": "Kukopishiwe!",
+      "download": "Landa .txt",
+      "showQr": "Bonisa ikhodi ye-QR",
+      "hideQr": "Fihla ikhodi ye-QR",
+      "savedCheckbox": "Ngilondoloze ukhiye wokubuyisela endaweni ephephile",
+      "saveFirstHint": "Kopisha noma ulande ukhiye wakho ngaphambi kokuqhubeka.",
+      "continue": "Qhubeka",
+      "done": "Kuqediwe",
+      "cancel": "Khansela",
+      "cancelConfirmTitle": "Ufuna ukukhanisela ukusetha usekelo?",
+      "cancelConfirmBody": "Izingxoxo zakho ngeke zisesekelwe. Ungavula ukusekela okufihliwe noma kunini kuzilungiselelo.",
+      "cancelConfirmRotateBody": "Ukhiye wakho wokubuyisela usushintshiwe. Ungawubuka noma kunini kuzilungiselelo.",
+      "cancelConfirmConfirm": "Yebo, khansela",
+      "cancelConfirmDismiss": "Buyela emuva",
+      "loadError": "Ukhiye wakho wokubuyisela awukwazi ukulayishwa kudivayisi."
+    },
+    "file": {
+      "heading": "Ukhiye wokubuyisela usekelo lwezingxoxo",
+      "warning": "Londoloza lo ukhiye ngokuphepha. Noma ubani onawo angafunda usekelo lwakho; ngaphandle kwawo awukwazi ukubuyiselwa."
+    },
+    "progress": {
+      "titleCreate": "Kusethwa usekelo lwakho",
+      "titleRotate": "Kushintshwa ukhiye wakho wokubuyisela",
+      "encrypting": "{count, plural, one {Kuvalwa futhi kusekelwa ingxoxo engu-# …} other {Kuvalwa futhi kusekelwa izingxoxo ezingu-# …}}",
+      "success": "{count, plural, one {Usekelo luqediwe. Ingxoxo engu-# ivikelekile.} other {Usekelo luqediwe. Izingxoxo ezingu-# zivikelekile.}}",
+      "error": "Usekelo aluphumelelanga. Izingxoxo zakho zisekudivayisini.",
+      "retry": "Zama futhi",
+      "close": "Vala",
+      "done": "Kuqediwe"
+    },
+    "input": {
+      "label": "Ukhiye wokubuyisela",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Amakhodi awafaki izinhlamvu O, I noma L.",
+      "checksumError": "Le khodi ayilungile — hlola amaphutha wokuthayipha.",
+      "formatError": "Lokhu akubukeki njengokhiye wokubuyisela.",
+      "incomplete": "Qhubeka uthayiphe — ukhiye wokubuyisela unezinhlamvu ezingu-56.",
+      "valid": "Ukhiye ubukeka ulungile."
+    },
+    "restore": {
+      "title": "Buyisela izingxoxo zakho",
+      "successTitle": "I-backup ibuyiselwe",
+      "promptBody": "Sithole i-backup evisiwe ye-akhawunti yakho. Faka ukhiye wokubuyisela ukuze uyibuyisele kule divayisi.",
+      "submit": "Buyisela i-backup",
+      "skip": "Yeqa — qala kabusha kule divayisi",
+      "restoring": "Kuvulwa futhi kubuyiselwa izingxoxo zakho…",
+      "successBody": "{count, plural, one {# ingxoxo ibuyiselwe.} other {# izingxoxo zibuyiselwe.}}",
+      "wrongKey": "Lo ukhiye ulungile, kodwa awuvuli le backup. Uma ushintshe ukhiye, sebenzisa omusha.",
+      "corrupt": "Le backup ayikwazi ukufundwa — ingase yonakele. Ungaqala kabusha kule divayisi noma uzame futhi kamuva.",
+      "networkError": "Ayikwazanga ukufinyelela insiza ye-backup. Hlola uxhumano lwakho uzame futhi.",
+      "tryAgain": "Zama omunye ukhiye",
+      "close": "Kuqedile"
+    },
+    "enterKey": {
+      "title": "Faka ukhiye wakho omusha wokubuyisela",
+      "body": "Ukhiye wakho wokubuyisela ushintshwe kwenye idivayisi. Faka omusha ukuze uqhubeke nama-backup kule divayisi.",
+      "submit": "Sebenzisa lo ukhiye"
+    },
+    "banner": {
+      "keyMismatchTitle": "Ama-backup ame — ukhiye wakho wokubuyisela ushintshe kwenye idivayisi.",
+      "enterNewKey": "Faka ukhiye omusha",
+      "resetBackup": "Setha kabusha i-backup",
+      "resetConfirmTitle": "Setha kabusha i-backup usebenzisa ukhiye wale divayisi?",
+      "resetConfirmBody": "I-backup yamanje izoshintshwa ngezinkulumo zale divayisi, ezivikelwe ngokhiye wale divayisi. Amanye amadivayisi azodinga ukhiye wokubuyisela wale divayisi.",
+      "resetConfirmAction": "Setha kabusha i-backup",
+      "remoteMissingTitle": "I-backup yakho ayisekho kuseva. Ama-backup ame.",
+      "backUpAgain": "Yenza i-backup futhi",
+      "dismiss": "Vala"
+    },
+    "rotate": {
+      "confirmTitle": "Ushintshe ukhiye wakho wokubuyisela?",
+      "confirmBody": "I-backup yakho izovikelwa kabusha ngokhiye omusha, bese okudala kunqamuka ukusebenza. Kufanele ugcine ukhiye omusha futhi uwufake kwamanye amadivayisi akho.",
+      "confirmAction": "Shintsha ukhiye"
+    },
+    "toast": {
+      "enrollLater": "Ungayivula i-backup evisiwe noma nini kuzilungiselelo.",
+      "keyUpdated": "Ukhiye wokubuyisela ubuyekeziwe. Ama-backup aqhubekile.",
+      "resetDone": "I-backup isethwe kabusha ngokhiye wale divayisi.",
+      "backupRestarted": "I-backup yenziwe futhi.",
+      "opFailed": "Kukhona okungahambanga kahle. Sicela uzame futhi."
+    },
+    "settings": {
+      "statusOn": "I-backup ivuliwe",
+      "statusOff": "I-backup ivaliwe",
+      "offDescription": "Izingxoxo zakho zisesipheqululini kuphela. Vula i-backup evisiwe ukuze ukwazi ukuzivuselela kumadivayisi ahlukene. Izingxoxo zivikelwe kudivayisi yakho — asikwazi ukufunda okuqukethwe kuzo.",
+      "turnOn": "Vula i-backup",
+      "restoreTitle": "I-backup isivele ikhona kwi-akhawunti yakho",
+      "restoreDescription": "Faka ukhiye wakho wokubuyisela ukuze uyibuyisele kule divayisi.",
+      "restore": "Buyisela i-backup",
+      "lastBackup": "I-backup yokugcina: {time}",
+      "lastBackupNever": "Awukakaze uqede i-backup",
+      "keyFingerprint": "Ukhiye ····-{tail}",
+      "syncState": {
+        "idle": "Kulindelwe ukuvumelanisa",
+        "syncing": "Kuyabekwa i-backup…",
+        "ok": "Kuvuselelwe",
+        "keyOutOfDate": "Kumisiwe — ukhiye wokubuyisela ushintshwe kwenye idivayisi",
+        "remoteMissing": "Kuyamiswa — isipele sisusiwe kuseva",
+        "error": "Umzamo wokugcina isipele nokugcina uhlulekile"
+      },
+      "backUpNow": "Yenza isipele manje",
+      "backUpNowSuccess": "Isipele siqediwe",
+      "backUpNowFailure": "Isipele sehlulekile — izingxoxo zakho aziguqukile kudivayisi le",
+      "viewKey": "Buka okhiye wokutakula",
+      "changeKey": "Shintsha okhiye wokutakula",
+      "dangerTitle": "Indawo eyingozi",
+      "turnOffDelete": "Cima & susa isipele",
+      "turnOffConfirmTitle": "Ucima isipele?",
+      "turnOffConfirmMessage": "Lokhu kususa isipele sakho kusuka kuma-server ethu kuwo wonke amadivayisi. Izingxoxo ezikudivayisi le zihlala zikhona. Ungakwazi ukuvula isipele futhi kamuva usebenzisa okhiye omusha wokutakula.",
+      "turnOffConfirmAction": "Susa isipele",
+      "turnOffSuccess": "Isipele sicishiwe futhi sisusiwe",
+      "turnOffFailure": "Akukwazanga ukususa isipele. Sicela uzame futhi."
+    }
+  },
+  "memories": {
+    "title": "Izinkumbulo",
+    "description": "Vumela umsizi akhumbule amaqiniso abalulekile owabelana ngawo — njengendima yakho, okuthandayo, neziphrojekthi eziqhubekayo — bese ewasebenzisa ezingxoxweni ezahlukene.",
+    "enableToggle": "Vula izinkumbulo",
+    "privacyNote": "Amaqiniso agcinwa kuphela kulesi siphequluli futhi afakwe ezingxoxweni zakho ukuze kuphendulwe okuqondene nawe.",
+    "empty": "Azikabikho izinkumbulo. Amaqiniso abalulekile ayagcinwa ngokuzenzakalelayo ezingxoxweni zakho.",
+    "savedOn": "Kugcinwe ngo-{date}",
+    "deleteMemory": "Susa inkumbulo",
+    "clearAll": "Sula zonke izinkumbulo",
+    "clearAllConfirmQuestion": "Uyasifuna ukususa zonke izinkumbulo? Lokhu ngeke kulungiswe.",
+    "clearAllConfirm": "Susa konke",
+    "cancel": "Khansela"
+  },
+  "contextWindow": {
+    "label": "Iwindi lombhalo",
+    "value": "Imilayezo engu-{count}",
+    "fewer": "Imilayezo embalwa",
+    "more": "Imilayezo eningi",
+    "description": "Imilayezo endala edlula lo mkhawulo iyafingqwa bese ithunyelwa njengomongo."
+  },
+  "agentAccess": {
+    "title": "Ukufinyelela kwama-ejenti",
+    "description": "Lawula ukuthi yimaphi abasebenzisi abangasebenzisa ama-agent e-Foundry abelwe. Imithetho inqamula okusele sekugunyazwe ukufinyelela kwe-Azure yomuntu — ayikwazi ukunikeza ukufinyelela i-Azure enqabile.",
+    "backToChat": "Buyela ezingxoxweni",
+    "loading": "Kulayishwa ama-agent nemithetho…",
+    "loadError": "Akukwazanga ukulayisha imininingwane yokufinyelela kuma-agent.",
+    "rulesUnavailableWarning": "Imithetho yokufinyelela ayikwazanga ukulayishwa kusuka kokugcinelwe. Ukusebenzisa ama-agent kumiswe okwamanje futhi imithetho ayikwazi ukuhlelwa.",
+    "retry": "Phinda uzame",
+    "rulesTab": "Imithetho yama-agent",
+    "localAdminsTab": "Abaphathi bendawo",
+    "noAgents": "Ayikho ama-agent ongawalawula.",
+    "sourceLabel": "Umsuka",
+    "notDiscoverable": "Awutholakali kuwe",
+    "notDiscoverableHint": "Kukhona umthetho walo agent, kodwa awukho ekutholakaleni kwakho — kungenzeka uhluziwe kabusha, ukufinyelela kwakho kwe-Azure akukufinyeleli, noma umthetho wokufinyelela awukufaki.",
+    "accessEveryone": "Wonke umuntu",
+    "accessRestricted": "Kunomkhawulo",
+    "edit": "Hlela",
+    "updatedByLine": "Kugcine ukuhlaziywa ngu-{user} ngo-{date}",
+    "accessTypeLabel": "Ubani ongasebenzisa lo agent",
+    "everyoneDescription": "Noma ubani osevele ekwazi ukufinyelela lo agent nge-Azure yakhe.",
+    "restrictedDescription": "Abasebenzisi nama-domain akuleli kuphela.",
+    "allowDomainsLabel": "Ama-domain avumelekile",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Abasebenzisi abavumelekile",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Cindezela u-Enter ukuze ungeze",
+    "removeChip": "Susa",
+    "groupsLabel": "Amaqembu avumelekile",
+    "groupsPendingConsent": "Ukufinyelela ngokuya ngamaqembu kulindele imvume yomlawuli womqashi futhi akukwazi ukuhlelwa okwamanje.",
+    "restrictedEmptyWarning": "Azikho abasebenzisi noma ama-domain abhalwe — akekho onga sebenzisa lo mjengeli.",
+    "save": "Londoloza",
+    "saving": "Kuyalondolozwa...",
+    "cancel": "Khansela",
+    "saveSuccess": "Umthetho wokufinyelela ugciniwe.",
+    "deleteSuccess": "Umthetho wokufinyelela ususiwe — wonke umuntu angasebenzisa lo mjengeli futhi.",
+    "saveError": "Akuphumelelanga ukulondoloza. Sicela uzame futhi.",
+    "conflictError": "Omunye ushintshe lokhu ngesikhathi uwuhlela. Layisha kabusha ukuze uthole uhlobo lwakamuva, bese uphinda ushintshe.",
+    "reload": "Layisha kabusha",
+    "localAdminsDescription": "Nika omunye amandla okulawula imithetho yamajensi athile ngaphandle kokuwabuyekeza ngokuphelele. Abaphathi bendawo bangahlela kuphela imithetho yama-agent abaphoqelelwe kubo.",
+    "noLocalAdmins": "Azikho iziphathi zendawo ezisethwe.",
+    "addLocalAdmin": "Engeza umphathi wendawo",
+    "emailLabel": "I-imeyili",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Susa umphathi wendawo",
+    "delegatedAgentsLabel": "Ama-agent adalelwe",
+    "noDelegatedAgents": "Awukho ama-agent atholakalayo okudalelwa.",
+    "unknownAgentKey": "Ukhiye womjengeli ongaziwa",
+    "configSaveSuccess": "Abaphathi bendawo bagciniwe.",
+    "configConflictError": "Omunye ushintshe uhlu lwabaphathi bendawo ngesikhathi uwuhlela. Layisha kabusha bese uzama futhi.",
+    "addAgent": "Engeza umenzeli",
+    "newPromptAgentTitle": "Umenzeli omusha wemyalelo",
+    "editPromptAgentTitle": "Hlela umenzeli wemyalelo",
+    "agentNameLabel": "Igama",
+    "agentNamePlaceholder": "isb. Umeluleki Wokuhamba",
+    "agentDescriptionLabel": "Incazelo",
+    "agentDescriptionPlaceholder": "Kuboniswa kubasebenzisi ekukhetheni imodeli",
+    "agentSystemPromptLabel": "Umyalelo wohlelo",
+    "agentSystemPromptPlaceholder": "Imiyalelo echaza indlela lo menzeli aziphethe ngayo",
+    "agentModelLabel": "Imodeli",
+    "agentModelPlaceholder": "Khetha imodeli…",
+    "agentModelUnavailable": "{modelId} (akutholakali)",
+    "agentModelUnknownError": "Imodeli ekhethiwe ayisatholakali. Khetha enye imodeli bese ulondoloza futhi.",
+    "promptAgentBadge": "Umenzeli wemyalelo",
+    "editAgent": "Hlela umenzeli",
+    "deleteAgent": "Susa",
+    "deleteAgentConfirm": "Ususe lo menzeli kubo bonke? Uzonyamalala ekukhetheni imodeli; izingxoxo ezikhona zizoqhubeka nomlando wazo.",
+    "confirmDeleteAgent": "Yebo, susa",
+    "promptAgentCreateSuccess": "Umenzeli wemyalelo usuwakhiwe.",
+    "promptAgentSaveSuccess": "Umenzeli wemyalelo usulondoloziwe.",
+    "promptAgentDeleteSuccess": "Umenzeli wemyalelo usususwe.",
+    "promptAgentsUnavailableWarning": "Abamenzeli bemyalelo abakwazanga ukulayishwa kusuka kugcino. Abanakuhlelwa njengamanje.",
+    "agentsTab": "AbaPhathi",
+    "connectorsTab": "Izixhumi",
+    "addConnector": "Engeza isixhumi",
+    "noConnectors": "Azikho izixhumi okwamanje.",
+    "connectorsUnavailableWarning": "Akwenzekanga ukufinyelela esitolo sezixhumi, ngakho lezi zingase zingaphelele. Ungakhi esikhundleni kuze kube ilethwe yonke.",
+    "editAccess": "Hlela ukufinyelela",
+    "deleteConnector": "Susa",
+    "deleteConnectorConfirm": "Susa lesi sixhumi? Bonke abasebenzisi balo bazolahlekelwa ukufinyelela masinya.",
+    "confirmDeleteConnector": "Susa isixhumi",
+    "connectorSaveSuccess": "Isixhumi silondoloziwe.",
+    "connectorCreateSuccess": "Isixhumi sakhiwe.",
+    "connectorDeleteSuccess": "Isixhumi sisusiwe.",
+    "editConnectorTitle": "Hlela isixhumi",
+    "newConnectorTitle": "Isixhumi esisha",
+    "connectorPresetLabel": "Qala ukusuka ku-template",
+    "connectorPresetNone": "Qala kusukela ekuqaleni",
+    "connectorNameLabel": "Igama",
+    "connectorDescriptionLabel": "Incazelo",
+    "connectorUrlLabel": "I-Server URL",
+    "connectorUrlPlaceholderWarning": "Shintsha i-{placeholder} ku-URL ngeyakho inani ngaphambi kokugcina.",
+    "connectorTransportLabel": "Ezokuthutha",
+    "connectorAuthLabel": "Ukuqinisekiswa",
+    "connectorAuthNone": "Akukho",
+    "connectorAuthBearer": "Ithokheni (umsebenzisi ngamunye uletha eyakhe)",
+    "connectorAuthOauth": "Ukungena nge-OAuth",
+    "connectorSealingUnavailable": "I-OAuth ayitholakali: lokhu kufakwa akunayo i-AUTH_SECRET yokufihla ama-client secrets.",
+    "connectorTokenHelpLabel": "Isixhumanisi semiyalelo yethokheni (ozikhethela)",
+    "connectorClientIdLabel": "I-OAuth client ID",
+    "connectorClientSecretLabel": "I-OAuth client secret",
+    "connectorClientSecretStored": "Imfihlo isilondoloziwe. Shiya ingenalutho ukuyigcina, noma faka entsha ukuyifaka esikhundleni.",
+    "connectorClientSecretHint": "Ifihlwa ngaphambi kokuba ilondolozwe, futhi ayisaboniswa futhi.",
+    "connectorScopesLabel": "Izinga (hlukaniswa ngesikhala, ozikhethela)"
+  },
+  "localModels": {
+    "title": "Amamodeli endaweni",
+    "description": "Xoxa namamodeli agijima kulomshini. Imilayezo iya ngqo kusuka ku-browser yakho iye kuhlelo lwendawo futhi ayifiki ku-seva yethu — okwenza izimpendulo, izihloko zengxoxo kanye nokufingqa kusale kudivayisi yakho.",
+    "detect": "Thola izinhlelo ezifakwe endaweni",
+    "detecting": "Kutholwa…",
+    "experimental": "Kuyazanywa",
+    "portLabel": "Iphothi",
+    "statusUnknown": "Akukakahlolisiswa.",
+    "statusChecking": "Kuyaqinisekiswa…",
+    "statusReady": "{count, plural, =0 {Kuxhunywe, kodwa awekho amamodeli alayishiwe.} one {Kuxhunywe — imodeli engu-# iyatholakala.} other {Kuxhunywe — amamodeli angu-# ayatholakala.}}",
+    "statusNotRunning": "Akukwazeki ukufinyelela {label}. Qinisekisa ukuthi kuyasebenza kule phothi, futhi ukuthi i-browser yakho ivunyelwe ukufinyelela uhlelo lwendawo kule sayithi.",
+    "statusHttpError": "{label} iphendule ngenkinga. Hlola imilayezo yephutha yohlelo.",
+    "corsHelp": {
+      "ollama": "I-Ollama iyasebenza kodwa iyenqaba izicelo ezivela kule sayithi. Setha i-OLLAMA_ORIGINS ekhelini lalesi sayithi, uqale kabusha i-Ollama, bese uthola futhi.",
+      "lmstudio": "I-LM Studio iyasebenza kodwa iyenqaba izicelo ezivela kule sayithi. Vula i-CORS kuzilungiselelo zeseva yendawo, bese uthola futhi.",
+      "llamacpp": "i-llama.cpp iyasebenza kodwa iyenqaba izicelo ezivela kule sayithi. Qalisa i-llama-server ivumele izicelo ze-cross-origin, bese uthola futhi."
+    },
+    "privacyNote": "Amamodeli endaweni awaxhasi okunamathiselwa amafayela, izithombe, usesho lwewebhu noma oxhasi — leyo misebenzi idinga amaseva ethu. Ukuhlola kusebenza kuphela kuleli khompyutha."
+  },
+  "urlFetch": {
+    "sourceFallback": "Ikhasi lewebhu",
+    "fallbackHint": "Ungavula ikhasi, ukopishe umbhalo, bese uwuthayipha lapha esikhundleni salokho.",
+    "shortExtract": "Kutholakale nje ingxenye encane — ikhasi lingase likhokhelwe noma lidige ukungena.",
+    "errors": {
+      "invalidUrl": "Leyonkulumo ayibukeki njengekheli lewebhu elivumelekile.",
+      "ssrfBlocked": "Lelikheli alikwazi ukutholwa ngezizathu zokuphepha.",
+      "tooManyRedirects": "Lelixhumanisi lisebenzise iziqondiso eziningi kakhulu.",
+      "timeout": "Ikhasi lithathe isikhathi eside ukuphendula.",
+      "unreachable": "Ikhasi alikwazanga ukufinyelelwa.",
+      "blocked": "Isayithi inqabile isicelo — kungase kudingeke ungene ngemvume noma ivimbele ukufunda okuzenzakalelayo.",
+      "notFound": "Ikhasi lelo alitholakali.",
+      "upstream": "Isayithi libuyise iphutha.",
+      "pdf": "Leya xhumanisi iyi-PDF. Landa yona bese usebenzisa inkinobho yokunamathisela ukuze uyifake esikhundleni salokho.",
+      "nonHtml": "Leyo xhumanisi akuyona ikhasi lewebhu esingakwazi ukulifunda.",
+      "tooLarge": "Ikhasi lelo likhulu kakhulu ukufakwa.",
+      "empty": "Alukho umbhalo otholakalayo kulokho ikhasi.",
+      "generic": "Ikhasi alikwazanga ukufakwa."
+    },
+    "fetchingFile": "Kuthathwa {host}…",
+    "attachLink": "Namathisela isixhumanisi",
+    "attachLinkTitle": "Namathisela ikhasi lewebhu",
+    "attachLinkDescription": "Ikhasi lizothathwa, bese umbhalo ofundekayo uhanjiswa kumlayezo wakho.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Thatha & namathisela",
+    "attachLinkInvalid": "Lokho akubukeki njengekheli lewebhu.",
+    "linkBadge": "Okuvela kusixhumanisi",
+    "couldNotRetrieve": "Akwazanga ukutholwa",
+    "doc": {
+      "sourceLabel": "Umthombo",
+      "retrievedLabel": "Kutholwe",
+      "attemptedLabel": "Kuzanywe",
+      "failureHeading": "Ikhasi lewebhu alikwazanga ukutholwa"
+    },
+    "settingsTitle": "Izixhumanisi kwimiyalezo",
+    "settingsToggle": "Thatha izixhumanisi ezinamathiselwe ngokuzenzakalela",
+    "settingsDescription": "Uma okunamathiselwe isixhumanisi sodwa, ikhasi likhishwa bese umbhalo ofundekayo unamathiselwa ukuze umsizi akwazi ukufunda. Cisha lokhu ukuze izixhumanisi zihlale zingumbhalo ojwayelekile — ungakwazi futhi ukufaka ikhasi mathupha kusuka ku-+ imenyu.",
+    "addLink": "Faka isixhumanisi"
+  },
+  "cameraAccessError": "Ihlulekile ukufinyelela ikhamera. Hlola izimvume zekhamera yakho bese uzama futhi.",
+  "cameraUnnamedDevice": "Ikhamera",
+  "pastedText": {
+    "fallbackName": "Umbhalo onamathiselwe",
+    "charCount": "{count, number} izinhlamvu",
+    "removeChip": "Susa umbhalo onamathiselwe “{name}”",
+    "blockLabel": "Umbhalo onamathiselwe: {name}",
+    "doc": {
+      "heading": "Umbhalo onamathiselwe",
+      "pastedLabel": "Onamathiselwe"
+    },
+    "settingsTitle": "Onamathiselwe amade",
+    "settingsToggle": "Guqula umbhalo omude ube isesekeli",
+    "settingsDescription": "Ukuphawula umbhalo ongaphezu komkhawulo ongezansi kuzenza ufakwe njengefayela esikhundleni sokugcwalisa ibhokisi lombhalo. Umbhalo usetshenziswa njengoba unamathiselwe — akukho okuthathwayo noma okuguquliwayo.",
+    "settingsThresholdLabel": "Faka njengefayela uma kudlula",
+    "settingsThresholdUnit": "izinhlamvu",
+    "settingsThresholdHint": "Phakathi kuka-{min, number} no-{max, number} izinhlamvu."
+  },
+  "structures": {
+    "section": "Izakhiwo",
+    "sectionSubtitle": "Izincazelo zenkambu ezigciniwe. Sebenzisa eyodwa njengephepha lokukhipha imininingwane, noma njengohlelo lokuqala lwethebula lomsebenzi wedatha.",
+    "loadFromStructure": "Layisha isakhiwo",
+    "loadFromStructureTitle": "Shintsha lawa makholomu ngasakhiwo esilondoloziwe",
+    "pickerEmpty": "Azikagcinwa izakhiwo okwamanje.",
+    "pickerTitle": "Layisha isakhiwo esilondoloziwe",
+    "saveAsStructure": "Londoloza njengesakhiwo",
+    "saveAsStructureTitle": "Londoloza lawa makholomu kuthiwe esilondolozwe izakhiwo zakho",
+    "savedToast": "Isakhiwo esilondoloziwe “{name}”",
+    "namePlaceholder": "Igama lesakhiwo",
+    "fieldCount": "{count} izinkambu",
+    "fieldCountOne": "Inkambu eyodwa",
+    "downgradedNotice": "{count} inkambu(kambu) ilungiswe yaba umbhalo — amatafula agcina inani elilodwa kwiselula ngayinye: {names}",
+    "truncatedNotice": "{count} inkambu(zinkambu) zishiywe — umkhawulo wethebula ngu-{max} amakholomu: {names}",
+    "skippedDerivedNotice": "{count} ikholomu(ezibaliwe) azigciniwanga — amafomula abhekisa kumakholomu ethebula: {names}",
+    "loadReplacesColumns": "Lokhu kushintsha amakholomu akhona. Imigqa ekhona igcina amanani lapho amagama amakholomu efana."
   }
 }

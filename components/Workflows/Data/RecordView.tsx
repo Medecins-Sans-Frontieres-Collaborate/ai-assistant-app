@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { formulaToDisplay } from '@/lib/services/workflows/data/derived';
 import { formatCell, getRowId } from '@/lib/services/workflows/data/tableUtils';
 
 import { DataColumn } from '@/types/workflow';
@@ -110,11 +111,32 @@ export function RecordView({
                       *
                     </span>
                   )}
+                  {column.formula && (
+                    <span className="ms-1 text-[10px] font-semibold italic text-blue-600 dark:text-blue-400">
+                      ƒx
+                    </span>
+                  )}
                   <span className="ms-1.5 text-[10px] font-normal uppercase text-gray-400">
                     {column.type}
                   </span>
                 </label>
-                {column.type === 'boolean' ? (
+                {column.formula ? (
+                  <>
+                    <input
+                      id={inputId}
+                      type="text"
+                      value={value}
+                      readOnly
+                      disabled
+                      className={`min-h-[36px] w-full rounded-lg border bg-gray-50 px-2.5 py-1.5 text-sm text-gray-600 dark:bg-surface-dark-recessed dark:text-gray-400 ${flagClasses}`}
+                    />
+                    <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                      {t('derivedFrom', {
+                        formula: formulaToDisplay(column.formula, columns),
+                      })}
+                    </p>
+                  </>
+                ) : column.type === 'boolean' ? (
                   <select
                     id={inputId}
                     value={value}

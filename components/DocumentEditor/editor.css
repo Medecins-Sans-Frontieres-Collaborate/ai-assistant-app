@@ -139,3 +139,69 @@
   pointer-events: none;
   height: 0;
 }
+
+/* ------------------------------------------------------------------ */
+/* Review edit preview (workflow document review)                      */
+/* Decorations only — the document is never mutated to show these.     */
+/* ------------------------------------------------------------------ */
+
+/* Resting: every pending suggestion's target span. Quiet enough to
+   read past, present enough to signal "the review touched this". */
+.ProseMirror .edit-suggestion-mark {
+  background-color: rgba(253, 230, 138, 0.5);
+  cursor: pointer;
+  border-radius: 2px;
+  text-decoration: underline dotted rgba(251, 191, 36, 0.7);
+  text-underline-offset: 2px;
+}
+
+.ProseMirror .edit-suggestion-mark:hover {
+  background-color: rgba(253, 230, 138, 0.85);
+}
+
+.dark .ProseMirror .edit-suggestion-mark:hover {
+  background-color: rgba(251, 191, 36, 0.22);
+}
+
+.dark .ProseMirror .edit-suggestion-mark {
+  background-color: rgba(251, 191, 36, 0.12);
+  text-decoration-color: rgba(245, 158, 11, 0.6);
+}
+
+/* Hovered: the same span, opened into a diff. */
+.ProseMirror .edit-suggestion-active {
+  background-color: rgba(253, 230, 138, 0.75);
+  cursor: pointer;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.7);
+}
+
+.dark .ProseMirror .edit-suggestion-active {
+  background-color: rgba(251, 191, 36, 0.18);
+  box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.5);
+}
+
+.ProseMirror .edit-suggestion-del {
+  background-color: rgba(254, 202, 202, 0.85);
+  color: #b91c1c;
+  text-decoration: line-through;
+  text-decoration-color: #f87171;
+}
+
+.dark .ProseMirror .edit-suggestion-del {
+  background-color: rgba(127, 29, 29, 0.5);
+  color: #fca5a5;
+}
+
+.ProseMirror ins.edit-suggestion-ins {
+  background-color: rgba(187, 247, 208, 0.85);
+  color: #15803d;
+  text-decoration: none;
+  border-radius: 2px;
+  user-select: none;
+}
+
+.dark .ProseMirror ins.edit-suggestion-ins {
+  background-color: rgba(20, 83, 45, 0.55);
+  color: #86efac;
+}

@@ -1,8 +1,9 @@
 'use client';
 
+import { CustomCriterionDefinition } from '@/lib/utils/shared/review/customCriteria';
+
 import {
   GlossaryEntry,
-  TranslationCriterionId,
   TranslationCriterionRating,
   TranslationEdit,
 } from '@/types/workflow';
@@ -11,7 +12,13 @@ export interface AssessTranslationInput {
   sourceText: string;
   translation: string;
   targetLanguage: string;
-  criteria: TranslationCriterionId[];
+  /** Built-in ids and/or 'custom:<uuid>' ids. */
+  criteria: string[];
+  /**
+   * Definitions for every custom id in `criteria`. The server is stateless
+   * and never reads the user's settings, so the rubrics ride the request.
+   */
+  customCriteria?: CustomCriterionDefinition[];
   glossaryEntries?: GlossaryEntry[];
   modelId?: string;
   signal?: AbortSignal;

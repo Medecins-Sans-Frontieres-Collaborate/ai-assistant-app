@@ -849,7 +849,8 @@
     "processingAudio": "音声を処理中...",
     "ttsError": "音声の生成中にエラーが発生しました。再試行してください。",
     "unsupportedMessageType": "メッセージの表示エラー：サポートされていないメッセージタイプ",
-    "addLanguageOption": "「{name}」を追加…"
+    "addLanguageOption": "「{name}」を追加…",
+    "sources": "出典"
   },
   "sidebar": {
     "collapseSidebar": "サイドバーを折りたたむ",
@@ -1178,7 +1179,23 @@
     "customInstructionsLabel": "カスタム指示*",
     "defaultTemperatureLabel": "デフォルト温度*",
     "Usage & Impact": "使用状況と影響",
-    "Connectors": "コネクタ"
+    "Connectors": "コネクタ",
+    "Backup": "バックアップ",
+    "Memories": "メモリー",
+    "Agent Access": "エージェントアクセス",
+    "LocalModels": "ローカルモデル",
+    "suggestRevisions": {
+      "title": "ドキュメントの改訂",
+      "toggle": "改訂を直接適用せず提案のみ行う",
+      "description": "ドキュメントワークフローに改訂を依頼すると、変更は個別の提案として届きます。品質評価と同様に、受け入れるか却下するかを選択できます。",
+      "exceptionsTitle": "次の場合は直接適用します:",
+      "exceptionSelection": "選択範囲の改訂",
+      "exceptionLargeRewrite": "ほとんどのドキュメントが書き換えられた場合",
+      "exceptionReorder": "編集ではなくセクションの移動のみの場合",
+      "thresholdLabel": "上記以上の変更をリライトとして扱う",
+      "thresholdUnit": "ドキュメントの変更率（%）",
+      "exceptionSelectionAlways": "ハイライトされた選択範囲の修正は常に直接適用されます。モデルは修正済みの抜粋のみを返し、ドキュメント全体に対する提案として分割することはできません。"
+    }
   },
   "notFound": {
     "lostDog": "迷子の犬"
@@ -2111,7 +2128,9 @@
     "pin": "トップにピン留め",
     "unpin": "ピンを外す",
     "moveToMore": "「その他」に移動",
-    "moveOutOfMore": "メニューで表示"
+    "moveOutOfMore": "メニューで表示",
+    "showSources": "他のソースを表示",
+    "hideSources": "他のソースを非表示"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AIの応答をカスタマイズするための個別指示を追加できます。これらは、役立つ・正確・安全な応答を保証するための基本的なガイドラインと組み合わされます。",
   "Tip: Type \"/\" to select from saved prompt templates_": "ヒント：「/」を入力すると保存されたプロンプトテンプレートから選択できます。",
@@ -2424,7 +2443,8 @@
     "regionDefault": "デフォルト",
     "modelRow": "{requests} 回 · {grams} g",
     "disclosure": "推定値は仮定 v{version} に基づく · {since} 以降 · 標準チャットのみ（エージェントやナレッジベースの回答は含まれていません）。",
-    "reset": "使用統計のリセット"
+    "reset": "使用統計のリセット",
+    "estimatedPortion": "トラッキング開始前のチャットから推定された約{grams}g CO₂e（{requests}件）を含みます。これは保存されたメッセージテキストから逆算したもので、トークン数を実測したものではありません。"
   },
   "extraction": {
     "toggleLabel": "構造化データを抽出",
@@ -2631,7 +2651,25 @@
       "pendingCount": "{count} 件保留中",
       "closeReview": "品質レビューを閉じる",
       "showReview": "レビューを表示",
-      "showReviewPending": "レビューを表示（{count} 件保留中）"
+      "showReviewPending": "レビューを表示（{count} 件保留中）",
+      "undoEdit": "元に戻す",
+      "clearResolved": "解決済みをクリア",
+      "clearResolvedHint": "承認済み、却下済み、および該当しない編集をこのリストから削除します",
+      "autoClearResolved": "解決済み編集を自動でクリア",
+      "customCriteria": "カスタム基準",
+      "closeCriteria": "カスタム基準を閉じる",
+      "newCriterion": "新しい基準",
+      "newCriterionName": "無題の基準",
+      "criterionName": "基準名",
+      "criterionRubric": "評価基準",
+      "criterionRubricPlaceholder": "この基準を満たすために翻訳が何をすべきか説明してください。例：「全ての臨床用投与指示を命令形で書き、不定詞は使わない…」",
+      "criterionRubricHint": "この評価基準は、組み込みのMQM指標と共にAIにそのまま渡され、翻訳評価に利用されます。",
+      "criteriaEmpty": "組み込みのMQM指標以外にも、ハウススタイル・用語選択・地域規則などのカスタム基準を作成して翻訳を評価できます。端末上に保存され、再利用可能です。",
+      "deleteCriterion": "基準を削除",
+      "manageCriteria": "カスタム基準",
+      "addCriteria": "基準を追加",
+      "noUsableCriteria": "少なくとも1つの組み込み基準を選択するか、カスタム基準に評価基準を設定してください。",
+      "criterionRubricTooLong": "このルーブリックは上限を{over}文字超えています。すべての評価に送信されるため、この基準を使用するには短縮が必要です。"
     },
     "document": {
       "emptyTitle": "作成したい文書の説明",
@@ -2751,7 +2789,32 @@
       "clearSelection": "選択を解除（全文書で作業）",
       "reviseSelectionPlaceholder": "選択部分の変更内容を記述してください…",
       "revisedSelectionSummary": "ワークスペース内の選択箇所を修正しました。",
-      "assessedSelection": "選択部分"
+      "assessedSelection": "選択部分",
+      "undoEdit": "元に戻す",
+      "clearResolved": "解決済みをクリア",
+      "clearResolvedHint": "承認済み、却下済み、および該当しない編集をこのリストから削除します",
+      "autoClearResolved": "解決済み編集を自動でクリア",
+      "import": "インポート",
+      "importReplaceTitle": "ドキュメントを置き換えますか？",
+      "importReplaceBody": "{name}をインポートすると、現在のドキュメントが置き換えられます。参照、仕様、トーンは保持されます。",
+      "importReplaceConfirm": "置き換える",
+      "editorMode": "エディターモード",
+      "editorModeRich": "リッチテキスト",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "エディターモードを切り替える前に、提案された編集を解決してください。",
+      "suggestChanges": "変更を提案",
+      "suggestChangesHint": "ドキュメント全体を書き換えず、改訂内容を個別の提案としてレビューできます。",
+      "suggestChangesSelectionNote": "選択範囲への改訂は直接適用されます — すでに指定した範囲が対象です。",
+      "suggestedSummary": "レビュー用に{count}件の{count, plural, one {変更} other {変更}}が提案されました。",
+      "revisionSuggestionSummary": "改訂リクエストにより{count}件の{count, plural, one {提案された変更} other {提案された変更}}が作成されました。",
+      "revisionCriterionLabel": "依頼された改訂",
+      "fallbackSelection": "直接適用 — 選択範囲への改訂は提案されません。",
+      "fallbackLargeRewrite": "直接適用 — リライトの変更範囲が広すぎるため、個別の提案としてレビューできません。",
+      "fallbackReorder": "直接適用 — セクションが移動されたため、個別にレビュー可能な提案になりません。",
+      "fallbackUnanchorable": "直接適用 — 変更箇所を指定の文章に結び付けられませんでした。",
+      "fallbackNoChanges": "変更はありませんでした。",
+      "criterionRubricTooLong": "このルーブリックは上限を{over}文字超えています。すべての評価に送信されるため、この基準を使用するには短縮が必要です。"
     },
     "data": {
       "emptyTitle": "分析するデータをインポート",
@@ -2920,7 +2983,39 @@
       "autoCheckHint": "写真や文書からデータ抽出後、新しい行に自動で品質チェックを実行します",
       "checkingNewRows": "新規追加行の品質チェック中…",
       "ingestCheckFailed": "自動品質チェックが失敗しました（{message}）—Assess qualityで手動実行できます。",
-      "assessedIngest": "新規追加行"
+      "assessedIngest": "新規追加行",
+      "transpose": "転置",
+      "transposeAxisColumn": "名称",
+      "transposeSuggestion": "この表は転置されているようです：行が属性、列が項目になっています。各項目を行、各属性を型付き列にして入れ替えますか？",
+      "transposedTable": "行と列を転置",
+      "columns": "列",
+      "columnsHidden": "列（{count} 件非表示）",
+      "showAllColumns": "すべて表示",
+      "chartScatter": "散布図（x 対 y）",
+      "chartPivot": "ピボットテーブル",
+      "xColumn": "X 列",
+      "yColumn": "Y 列",
+      "splitByColumn": "分割",
+      "splitNone": "分割しない",
+      "pivotValueColumns": "値の列",
+      "aggMin": "最小",
+      "aggMax": "最大",
+      "aggMedian": "中央値",
+      "chartSeriesTruncated": "上位 {max} 件の系列を表示しています",
+      "chartPointsTruncated": "{max} 件のサンプル点を表示中",
+      "chartScatterAria": "{x} と {y} の散布図",
+      "pivotTableAria": "{column} でグループ化されたピボットテーブル",
+      "schemaFormula": "数式",
+      "schemaFormulaPlaceholder": "例：[Cases] / [Population] * 1000",
+      "schemaFormulaHint": "計算フィールド：[名称] で他のフィールドを参照できます。+ - * / %、括弧、round, abs, min, max が利用可能です。値は自動更新され、直接編集できません。",
+      "schemaFormulaSyntaxError": "無効な数式",
+      "schemaFormulaUnknownRef": "不明なフィールド：{ref}",
+      "schemaFormulaArityError": "{fn} の引数の数が正しくありません",
+      "schemaFormulaCycleError": "数式間で循環参照が発生しています",
+      "derivedColumnTitle": "計算式：{formula}",
+      "derivedFrom": "{formula} から計算",
+      "takePhoto": "写真を撮る",
+      "takePhotoHint": "カメラでフォームや表を撮影すると、その内容が写真と照合可能な構造化データになります"
     },
     "map": {
       "emptyTitle": "データを地図に表示",
@@ -2994,7 +3089,31 @@
         "jumpTo": "{label}にジャンプ",
         "slider": "タイムライン位置",
         "showUndated": "日付なしの場所を表示",
-        "activeCount": "{count}件がアクティブ"
+        "activeCount": "{count}件がアクティブ",
+        "jump": {
+          "start": "開始",
+          "yearsLater": "{count, plural, one {1年後} other {#年後}}",
+          "monthsLater": "{count, plural, one {1か月後} other {#か月後}}",
+          "daysLater": "{count, plural, one {1日後} other {#日後}}",
+          "appears": "{count, plural, one {1件出現} other {#件出現}}",
+          "ends": "{count, plural, one {1件終了} other {#件終了}}",
+          "progress": "{total} のうち {index} 日付"
+        },
+        "precision": {
+          "minute": "分単位まで",
+          "hour": "時間単位まで",
+          "day": "日単位まで",
+          "month": "月単位での日付",
+          "year": "年単位での日付",
+          "mixed": "（混合）"
+        },
+        "pacing": {
+          "toggle": "再生速度調整",
+          "cardDuration": "各ロケーションの表示時間",
+          "seconds": "{seconds}秒",
+          "maxCards": "1日あたりのロケーション表示数",
+          "hint": "混雑している日は自動的に長く表示されます。"
+        }
       },
       "granularity": {
         "site": "施設",
@@ -3011,8 +3130,13 @@
         "color": "色：座標の信頼度（青：高　黄：中　赤：低）",
         "size": "点の大きさ：資料内での重要度",
         "area": "破線の円：地区、地域、または国のおおよその範囲",
-        "container": "薄い輪郭：中身が個別にマッピングされている領域"
-      }
+        "container": "薄い輪郭：中身が個別にマッピングされている領域",
+        "precisionHalo": "点線リング（タイムラプス中）：月または年までしか日付が分からず、正確な日時が不明なイベント"
+      },
+      "sourceLabel": "出典：{name}",
+      "fetchAndMap": "取得＆マッピング",
+      "fetchingPage": "ページ取得中…",
+      "railUrlRequest": "以下からロケーションを取得してマッピング：{title}（{url}）"
     },
     "shell": {
       "showConversation": "会話を表示",
@@ -3030,6 +3154,16 @@
       "untitled": "新しい会話",
       "toggleMenu": "メニューの切り替え",
       "model": "このワークフローのモデル"
+    },
+    "tabs": {
+      "label": "会話モード",
+      "chat": "チャット",
+      "chatDescription": "アシスタントとの標準的な会話"
+    },
+    "discard": {
+      "title": "この下書きを破棄しますか？",
+      "body": "{target}に切り替えると、{current}で開始した作業が削除されます。",
+      "confirm": "破棄"
     }
   },
   "connectors": {
@@ -3044,6 +3178,22 @@
       "asana": {
         "name": "Asana",
         "description": "タスクやプロジェクトの検索、作成、更新ができます。"
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "公開されたデータソース、ワークブック、Pulseメトリクスにクエリします。"
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Salesforceオブジェクト全体でレコードの検索と更新ができます。"
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "SNS投稿の下書き、スケジューリング、公開が行えます。"
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "ソーシャルインボックスの会話を確認・返信できます。"
       }
     },
     "connect": "接続",
@@ -3104,7 +3254,19 @@
       "missingState": "認証する内容がありません",
       "close": "このウィンドウを閉じてアプリに戻ってください。",
       "closeButton": "ウィンドウを閉じる"
-    }
+    },
+    "oauthNoAppConfigured": "{name}によるサインインはこのデプロイメントで設定されていません。ご自身のOAuthアプリを登録して接続してください。",
+    "adminConnectorsTitle": "組織による設定",
+    "adminConnectorsDescription": "管理者が設定したコネクタです。表示される内容はアクセス権限によります。",
+    "managedByOrg": "組織によって管理されています",
+    "connectorOauthNotConfigured": "このコネクタのサインイン設定が完了していません。管理者に連絡してください。",
+    "yourConnectorsTitle": "あなたのコネクタ",
+    "addTitle": "コネクタを追加",
+    "addDescription": "接続するツールを選択してください。選択後にアクセス設定を行います。",
+    "add": "追加",
+    "filterLabel": "コネクタを絞り込む",
+    "filterPlaceholder": "コネクタを検索",
+    "noMatches": "「{query}」に一致するコネクタはありません。"
   },
   "modelSources": {
     "connectButtonShort": "モデルソースを接続",
@@ -3155,5 +3317,399 @@
     "deselectAll": "すべて選択解除",
     "autoAddLabel": "新しいモデルを自動で追加",
     "autoAddDescription": "後からこのアカウントに追加されたモデルのデプロイが自動的に表示されます。未選択のモデルは除外されたままになります。"
+  },
+  "emissions": {
+    "tier": {
+      "low": "影響が小さい",
+      "moderate": "影響が中程度",
+      "high": "影響が大きい"
+    },
+    "tierTooltip": "リクエストごとの相対的なエネルギー影響（モデルサイズからの推定値）。公開された平均値と仮定（バージョン {version}）に基づく推定であり、実測値ではありません。",
+    "typicalRequest": "1 回の標準リクエストあたり約 {grams} g CO₂e",
+    "typicalRequestTooltip": "標準的なリクエスト（約 1,000 プロンプト＋500 完了トークン）あたりの概算値です。公開された平均値と仮定（バージョン {version}）に基づきます。実際の影響は会話の長さ・設定・ホスティング地域等により異なります。",
+    "activities": {
+      "netflixHd": "Netflix HD ストリーミング",
+      "zoomCall": "Zoom 通話（カメラオン）",
+      "webBrowsing": "ウェブ閲覧",
+      "spotifyAudio": "Spotify オーディオ"
+    },
+    "equivalents": {
+      "title": "≈ 同等の炭素排出量",
+      "note": "これらサービスの公表されている 1 時間あたりのカーボンフットプリントと大まかに比較しています。ここで示される推定値はいずれも概算・オーダー単位のものです。"
+    },
+    "duration": {
+      "lessThanSecond": "<1 秒",
+      "seconds": "{value} 秒",
+      "minutes": "{value} 分",
+      "hours": "{value} 時間"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "この会話の推定カーボンフットプリント：{grams} グラムのCO₂相当。詳細を表示。",
+      "ariaLabelToday": "本日のこの会話の推定カーボンフットプリント：{grams} グラムのCO₂相当。詳細を表示。",
+      "title": "この会話（推定値）",
+      "today": "本日",
+      "total": "累計",
+      "measured": "報告されたトークン数に基づく",
+      "estimated": "過去のメッセージから逆算",
+      "lastRequest": "直近のリクエスト",
+      "disclaimer": "公開されている平均値と仮定（v{version}）を用いて、報告されたまたは推定されたトークン数からリクエストごとの推定値を算出しています。古いメッセージは保存されたテキストと現在の会話モデルから逆算しています。実測値ではありません。"
+    }
+  },
+  "table": {
+    "copyTable": "テーブルをコピー",
+    "downloadTable": "テーブルをダウンロード",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV（.csv）",
+    "exportedAsCsv": "CSVとしてエクスポート",
+    "copyFailed": "テーブルのコピーに失敗しました"
+  },
+  "backup": {
+    "intro": {
+      "title": "チャットを安全にバックアップ",
+      "body": "会話はアップロード前にこの端末で暗号化されます。当社がチャットを読むことはありません。",
+      "keyWarning": "復元キーはこの端末で作成されます。当社が見ることも回復することもできません—キーを失うとバックアップも失われます。",
+      "create": "キーを作成してバックアップ",
+      "decline": "今はしない — この端末にのみチャットを保存"
+    },
+    "ceremony": {
+      "titleCreate": "復元キーを保存",
+      "titleRotate": "新しい復元キーを保存",
+      "titleView": "あなたの復元キー",
+      "description": "このキーは他の端末でバックアップを復元する唯一の方法です。安全な場所に保管してください—当社では回復できません。",
+      "copy": "コピー",
+      "copied": "コピーしました！",
+      "download": ".txtをダウンロード",
+      "showQr": "QRコードを表示",
+      "hideQr": "QRコードを非表示",
+      "savedCheckbox": "復元キーを安全な場所に保存しました",
+      "saveFirstHint": "続行する前にキーをコピーまたはダウンロードしてください。",
+      "continue": "続行",
+      "done": "完了",
+      "cancel": "キャンセル",
+      "cancelConfirmTitle": "バックアップ設定をキャンセルしますか？",
+      "cancelConfirmBody": "チャットはバックアップされません。設定からいつでも暗号化バックアップを有効にできます。",
+      "cancelConfirmRotateBody": "復元キーはすでに変更されています。設定からいつでも表示できます。",
+      "cancelConfirmConfirm": "はい、キャンセルします",
+      "cancelConfirmDismiss": "戻る",
+      "loadError": "この端末で復元キーを読み込めませんでした。"
+    },
+    "file": {
+      "heading": "チャットバックアップ復元キー",
+      "warning": "このキーを安全に保管してください。持っている人なら誰でもバックアップを閲覧できます。キーがないとバックアップを復元できません。"
+    },
+    "progress": {
+      "titleCreate": "バックアップを設定中",
+      "titleRotate": "復元キーを変更中",
+      "encrypting": "{count, plural, one {#件の会話を暗号化してバックアップ中…} other {#件の会話を暗号化してバックアップ中…}}",
+      "success": "{count, plural, one {バックアップ完了。#件の会話が保護されました。} other {バックアップ完了。#件の会話が保護されました。}}",
+      "error": "バックアップに失敗しました。チャットは引き続きこの端末に保存されています。",
+      "retry": "再試行",
+      "close": "閉じる",
+      "done": "完了"
+    },
+    "input": {
+      "label": "復元キー",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "キーにO、I、Lの文字は含まれません。",
+      "checksumError": "このキーは正しくないようです。入力ミスがないかご確認ください。",
+      "formatError": "これはリカバリーキーではありません。",
+      "incomplete": "続けて入力してください。リカバリーキーは56文字です。",
+      "valid": "キーは有効です。"
+    },
+    "restore": {
+      "title": "チャットを復元する",
+      "successTitle": "バックアップが復元されました",
+      "promptBody": "お客様のアカウント用の暗号化されたバックアップが見つかりました。この端末で復元するにはリカバリーキーを入力してください。",
+      "submit": "バックアップを復元",
+      "skip": "スキップして新しく始める",
+      "restoring": "チャットを復号して復元しています…",
+      "successBody": "{count, plural, one {#件の会話を復元しました。} other {#件の会話を復元しました。}}",
+      "wrongKey": "このキーは有効ですが、このバックアップを復元できません。キーを変更した場合は、最新のものをご利用ください。",
+      "corrupt": "このバックアップは読み取れません。破損している可能性があります。この端末で新規開始するか、後で再度お試しください。",
+      "networkError": "バックアップサービスに接続できません。接続を確認して再度お試しください。",
+      "tryAgain": "別のキーを試す",
+      "close": "完了"
+    },
+    "enterKey": {
+      "title": "新しいリカバリーキーを入力",
+      "body": "他の端末でリカバリーキーが変更されました。新しいキーを入力してバックアップを再開してください。",
+      "submit": "このキーを使用する"
+    },
+    "banner": {
+      "keyMismatchTitle": "バックアップが一時停止されています—リカバリーキーが他の端末で変更されました。",
+      "enterNewKey": "新しいキーを入力",
+      "resetBackup": "バックアップをリセット",
+      "resetConfirmTitle": "この端末のキーでバックアップをリセットしますか？",
+      "resetConfirmBody": "既存のバックアップはこの端末のチャットに置き換えられ、この端末のキーで暗号化されます。他の端末はこの端末のリカバリーキーが必要になります。",
+      "resetConfirmAction": "バックアップをリセット",
+      "remoteMissingTitle": "サーバー上のバックアップが存在しません。バックアップが一時停止されています。",
+      "backUpAgain": "再度バックアップ",
+      "dismiss": "閉じる"
+    },
+    "rotate": {
+      "confirmTitle": "リカバリーキーを変更しますか？",
+      "confirmBody": "バックアップは新しいキーで再暗号化され、古いキーは無効になります。新しいキーを保存し、他の端末でも入力する必要があります。",
+      "confirmAction": "キーを変更"
+    },
+    "toast": {
+      "enrollLater": "暗号化バックアップは、設定からいつでも有効にできます。",
+      "keyUpdated": "リカバリーキーが更新されました。バックアップが再開されました。",
+      "resetDone": "この端末のキーでバックアップがリセットされました。",
+      "backupRestarted": "バックアップが再作成されました。",
+      "opFailed": "問題が発生しました。再度お試しください。"
+    },
+    "settings": {
+      "statusOn": "バックアップが有効です",
+      "statusOff": "バックアップが無効です",
+      "offDescription": "チャットはこのブラウザ内のみで保存されています。安全のため暗号化バックアップを有効にすると、他の端末でも復元できます。チャットは端末で暗号化されており、当方が閲覧することはありません。",
+      "turnOn": "バックアップを有効にする",
+      "restoreTitle": "お客様のアカウントには既にバックアップがあります",
+      "restoreDescription": "この端末で復元するにはリカバリーキーを入力してください。",
+      "restore": "バックアップを復元",
+      "lastBackup": "最終バックアップ：{time}",
+      "lastBackupNever": "まだバックアップは作成されていません",
+      "keyFingerprint": "キー ····-{tail}",
+      "syncState": {
+        "idle": "同期待機中",
+        "syncing": "バックアップ中…",
+        "ok": "最新の状態です",
+        "keyOutOfDate": "一時停止中—リカバリーキーが他の端末で変更されました",
+        "remoteMissing": "一時停止中 — バックアップがサーバーから削除されました",
+        "error": "最後のバックアップ試行が失敗しました"
+      },
+      "backUpNow": "今すぐバックアップ",
+      "backUpNowSuccess": "バックアップ完了",
+      "backUpNowFailure": "バックアップに失敗しました — このデバイスのチャットは変更されていません",
+      "viewKey": "リカバリーキーを表示",
+      "changeKey": "リカバリーキーを変更",
+      "dangerTitle": "危険ゾーン",
+      "turnOffDelete": "バックアップをオフにして削除",
+      "turnOffConfirmTitle": "バックアップをオフにしますか？",
+      "turnOffConfirmMessage": "バックアップはすべてのデバイスで当社サーバーから削除されます。このデバイスのチャットは残ります。後で新しいリカバリーキーでバックアップを再オンにできます。",
+      "turnOffConfirmAction": "バックアップを削除",
+      "turnOffSuccess": "バックアップをオフにして削除しました",
+      "turnOffFailure": "バックアップを削除できませんでした。もう一度お試しください。"
+    }
+  },
+  "memories": {
+    "title": "メモリー",
+    "description": "あなたが共有した役職や好み、進行中のプロジェクトなどの持続的な情報をアシスタントが記憶し、会話全体で活用します。",
+    "enableToggle": "メモリーを有効にする",
+    "privacyNote": "情報はこのブラウザのみに保存され、パーソナライズのためチャット内で使用されます。",
+    "empty": "まだメモリーがありません。記憶する価値のある情報は会話から自動的に保存されます。",
+    "savedOn": "{date} に保存",
+    "deleteMemory": "メモリーを削除",
+    "clearAll": "すべてのメモリーを削除",
+    "clearAllConfirmQuestion": "すべてのメモリーを削除しますか？この操作は元に戻せません。",
+    "clearAllConfirm": "すべて削除",
+    "cancel": "キャンセル"
+  },
+  "contextWindow": {
+    "label": "コンテキストウィンドウ",
+    "value": "{count} 件のメッセージ",
+    "fewer": "メッセージを減らす",
+    "more": "メッセージを増やす",
+    "description": "この件数を超える古いメッセージは要約し、コンテキストとして送信されます。"
+  },
+  "agentAccess": {
+    "title": "エージェントアクセス",
+    "description": "どのユーザーが共有Foundryエージェントを利用できるかを管理します。これらのルールは既にユーザー自身のAzureアクセスで許可されている範囲内でのみさらに制限がかかります — Azureが拒否しているアクセスを許可することはできません。",
+    "backToChat": "チャットに戻る",
+    "loading": "エージェントとルールを読み込み中…",
+    "loadError": "エージェントアクセスデータを読み込めませんでした。",
+    "rulesUnavailableWarning": "ストレージからアクセスルールを読み込めませんでした。現在、エージェントの呼び出しはブロックされ、ルールの編集もできません。",
+    "retry": "再試行",
+    "rulesTab": "エージェントルール",
+    "localAdminsTab": "ローカル管理者",
+    "noAgents": "管理するエージェントがありません。",
+    "sourceLabel": "ソース",
+    "notDiscoverable": "あなたからは検出不可",
+    "notDiscoverableHint": "このエージェントにはルールがありますが、あなた自身の検出範囲にはありません。名前が変更されたか、あなたのAzureアクセス範囲外、またはアクセスルールに含まれていない可能性があります。",
+    "accessEveryone": "全員",
+    "accessRestricted": "制限あり",
+    "edit": "編集",
+    "updatedByLine": "最終更新者：{user}（{date}）",
+    "accessTypeLabel": "このエージェントを使用できる人",
+    "everyoneDescription": "既にAzureアクセスでこのエージェントに到達できるすべての人。",
+    "restrictedDescription": "下記のユーザーおよびドメインのみ。",
+    "allowDomainsLabel": "許可されたドメイン",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "許可されたユーザー",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Enterキーで追加",
+    "removeChip": "削除",
+    "groupsLabel": "許可されたグループ",
+    "groupsPendingConsent": "グループによるアクセスはテナント管理者の承認待ちのため、まだ編集できません。",
+    "restrictedEmptyWarning": "ユーザーまたはドメインが指定されていません—このエージェントは誰も利用できません。",
+    "save": "保存",
+    "saving": "保存中…",
+    "cancel": "キャンセル",
+    "saveSuccess": "アクセスルールを保存しました。",
+    "deleteSuccess": "アクセスルールを削除しました — すべてのユーザーがこのエージェントを再び利用できます。",
+    "saveError": "保存できませんでした。もう一度お試しください。",
+    "conflictError": "編集中に他の人が内容を変更しました。最新バージョンを読み込んで、再度変更してください。",
+    "reload": "再読み込み",
+    "localAdminsDescription": "特定のエージェントに対するルール管理を再デプロイなしで委任できます。ローカル管理者は担当エージェントのルールのみ編集できます。",
+    "noLocalAdmins": "ローカル管理者は設定されていません。",
+    "addLocalAdmin": "ローカル管理者を追加",
+    "emailLabel": "メールアドレス",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "ローカル管理者を削除",
+    "delegatedAgentsLabel": "委任されたエージェント",
+    "noDelegatedAgents": "委任できるエージェントがありません。",
+    "unknownAgentKey": "不明なエージェントキー",
+    "configSaveSuccess": "ローカル管理者を保存しました。",
+    "configConflictError": "編集中に他の人がローカル管理者リストを変更しました。再読み込み後、もう一度お試しください。",
+    "addAgent": "エージェントを追加",
+    "newPromptAgentTitle": "新規プロンプトエージェント",
+    "editPromptAgentTitle": "プロンプトエージェントを編集",
+    "agentNameLabel": "名前",
+    "agentNamePlaceholder": "例：旅行アドバイザー",
+    "agentDescriptionLabel": "説明",
+    "agentDescriptionPlaceholder": "モデル選択画面でユーザーに表示されます",
+    "agentSystemPromptLabel": "システムプロンプト",
+    "agentSystemPromptPlaceholder": "このエージェントの動作を定義する指示",
+    "agentModelLabel": "モデル",
+    "agentModelPlaceholder": "モデルを選択…",
+    "agentModelUnavailable": "{modelId}（利用不可）",
+    "agentModelUnknownError": "選択したモデルは利用できなくなりました。別のモデルを選択して保存してください。",
+    "promptAgentBadge": "プロンプトエージェント",
+    "editAgent": "エージェントを編集",
+    "deleteAgent": "削除",
+    "deleteAgentConfirm": "このエージェントを全員から削除しますか？モデル選択画面からは消えますが、既存の会話の履歴は保持されます。",
+    "confirmDeleteAgent": "はい、削除します",
+    "promptAgentCreateSuccess": "プロンプトエージェントを作成しました。",
+    "promptAgentSaveSuccess": "プロンプトエージェントを保存しました。",
+    "promptAgentDeleteSuccess": "プロンプトエージェントを削除しました。",
+    "promptAgentsUnavailableWarning": "プロンプトエージェントをストレージから読み込めません。現在は編集できません。",
+    "agentsTab": "エージェント",
+    "connectorsTab": "コネクタ",
+    "addConnector": "コネクタを追加",
+    "noConnectors": "コネクタはまだありません。",
+    "connectorsUnavailableWarning": "コネクタストアに接続できませんでした。リストが不完全な場合があります。読み込まれるまで代替品を作成しないでください。",
+    "editAccess": "アクセス権を編集",
+    "deleteConnector": "削除",
+    "deleteConnectorConfirm": "このコネクタを削除しますか？利用者全員が直ちにアクセスできなくなります。",
+    "confirmDeleteConnector": "コネクタを削除",
+    "connectorSaveSuccess": "コネクタを保存しました。",
+    "connectorCreateSuccess": "コネクタを作成しました。",
+    "connectorDeleteSuccess": "コネクタを削除しました。",
+    "editConnectorTitle": "コネクタを編集",
+    "newConnectorTitle": "新規コネクタ",
+    "connectorPresetLabel": "テンプレートから開始",
+    "connectorPresetNone": "最初から開始",
+    "connectorNameLabel": "名前",
+    "connectorDescriptionLabel": "説明",
+    "connectorUrlLabel": "サーバーURL",
+    "connectorUrlPlaceholderWarning": "保存前にURL内の{placeholder}を自身の値に置き換えてください。",
+    "connectorTransportLabel": "トランスポート",
+    "connectorAuthLabel": "認証",
+    "connectorAuthNone": "なし",
+    "connectorAuthBearer": "トークン（各ユーザーが個別に提供）",
+    "connectorAuthOauth": "OAuthサインイン",
+    "connectorSealingUnavailable": "OAuthは利用できません：このデプロイメントにはクライアントシークレットを暗号化するAUTH_SECRETが設定されていません。",
+    "connectorTokenHelpLabel": "トークン手順へのリンク（任意）",
+    "connectorClientIdLabel": "OAuthクライアントID",
+    "connectorClientSecretLabel": "OAuthクライアントシークレット",
+    "connectorClientSecretStored": "シークレットが保存されています。保持する場合は空欄のままにし、新しいものに変更する場合は入力してください。",
+    "connectorClientSecretHint": "保存前に暗号化され、一度も表示されません。",
+    "connectorScopesLabel": "スコープ（スペース区切り、任意）"
+  },
+  "localModels": {
+    "title": "ローカルモデル",
+    "description": "このコンピューターで動作しているモデルとチャットします。メッセージはブラウザからローカルアプリに直送され、当社サーバーには送信されません。そのため、返信や会話タイトル、要約もすべてこの端末内に留まります。",
+    "detect": "ローカルランタイムの検出",
+    "detecting": "検出中…",
+    "experimental": "実験的",
+    "portLabel": "ポート",
+    "statusUnknown": "まだ確認されていません。",
+    "statusChecking": "確認中…",
+    "statusReady": "{count, plural, =0 {接続済みですが、モデルは読み込まれていません。} one {接続済み — # 件のモデルが利用可能です。} other {接続済み — # 件のモデルが利用可能です。}}",
+    "statusNotRunning": "{label}に接続できません。該当ポートで稼働しているか、またブラウザがこのサイトからローカルアプリにアクセスできる設定かご確認ください。",
+    "statusHttpError": "{label}がエラーを返しました。ログをご確認ください。",
+    "corsHelp": {
+      "ollama": "Ollamaは稼働中ですが、このサイトからのリクエストを拒否しています。OLLAMA_ORIGINSにこのサイトのアドレスを設定し、Ollamaを再起動後、再度検出してください。",
+      "lmstudio": "LM Studioは稼働中ですが、このサイトからのリクエストを拒否しています。ローカルサーバー設定でCORSを有効にしてから、再度検出してください。",
+      "llamacpp": "llama.cppは稼働中ですが、このサイトからのリクエストを拒否しています。llama-serverをクロスオリジンリクエスト許可で起動し、再度検出してください。"
+    },
+    "privacyNote": "ローカルモデルではファイル添付、画像、Web検索、コネクターの機能は利用できません。これらは当社サーバーが必要です。検出はこのコンピューターのみを確認します。"
+  },
+  "urlFetch": {
+    "sourceFallback": "ウェブページ",
+    "fallbackHint": "ページを開いてテキストをコピーし、ここに貼り付けることもできます。",
+    "shortExtract": "読めたのは短い抜粋のみです。ページが有料・認証制かもしれません。",
+    "errors": {
+      "invalidUrl": "正しいウェブアドレスではないようです。",
+      "ssrfBlocked": "セキュリティ上の理由でこのアドレスは取得できません。",
+      "tooManyRedirects": "このリンクはリダイレクトが多すぎます。",
+      "timeout": "ページの応答に時間がかかりすぎています。",
+      "unreachable": "ページにアクセスできませんでした。",
+      "blocked": "サイトからリクエストが拒否されました。サインインが必要、または自動リーダーがブロックされている可能性があります。",
+      "notFound": "そのページは見つかりませんでした。",
+      "upstream": "サイトからエラーが返されました。",
+      "pdf": "そのリンクはPDFです。ダウンロードして、「添付」ボタンで追加してください。",
+      "nonHtml": "そのリンクは読み取れるウェブページではありません。",
+      "tooLarge": "そのページは大きすぎて取得できません。",
+      "empty": "そのページに読み取れる記事テキストが見つかりませんでした。",
+      "generic": "ページを取得できませんでした。"
+    },
+    "fetchingFile": "{host} を取得中…",
+    "attachLink": "リンクを添付",
+    "attachLinkTitle": "ウェブページを添付",
+    "attachLinkDescription": "ページが取得され、読み取れるテキストがメッセージに添付されます。",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "取得して添付",
+    "attachLinkInvalid": "正しいウェブアドレスではありません。",
+    "linkBadge": "リンクより",
+    "couldNotRetrieve": "取得できませんでした",
+    "doc": {
+      "sourceLabel": "出典",
+      "retrievedLabel": "取得日時",
+      "attemptedLabel": "試行日時",
+      "failureHeading": "ウェブページを取得できませんでした"
+    },
+    "settingsTitle": "メッセージ内のリンク",
+    "settingsToggle": "貼り付けたリンクを自動で取得",
+    "settingsDescription": "単独でリンクを貼り付けた場合、そのページが取得され、テキストが添付されてアシスタントが読めるようになります。これをオフにすると、貼り付けたリンクはテキストのままになりますが、「＋」メニューから手動でページを添付することもできます。",
+    "addLink": "リンクを追加"
+  },
+  "cameraAccessError": "カメラにアクセスできません。カメラの許可設定を確認し、再試行してください。",
+  "cameraUnnamedDevice": "カメラ",
+  "pastedText": {
+    "fallbackName": "貼り付けたテキスト",
+    "charCount": "{count, number}文字",
+    "removeChip": "貼り付けたテキスト「{name}」を削除",
+    "blockLabel": "貼り付けたテキスト: {name}",
+    "doc": {
+      "heading": "貼り付けたテキスト",
+      "pastedLabel": "貼り付け済み"
+    },
+    "settingsTitle": "大きな貼り付け",
+    "settingsToggle": "大きな貼り付けを添付ファイルに変換",
+    "settingsDescription": "下記の上限より多くテキストを貼り付けた場合、メッセージ欄に収めずファイルとして添付します。テキストは貼り付けられたまま利用され、取得や変更は行われません。",
+    "settingsThresholdLabel": "これより長い貼り付けを添付",
+    "settingsThresholdUnit": "文字",
+    "settingsThresholdHint": "{min, number}～{max, number}文字の間で設定できます。"
+  },
+  "structures": {
+    "section": "構造体",
+    "sectionSubtitle": "保存されたフィールド定義。抽出レシピやデータワークフローテーブルの初期スキーマとして利用できます。",
+    "loadFromStructure": "構造体を読み込む",
+    "loadFromStructureTitle": "これらの列を保存された構造体で置き換えます",
+    "pickerEmpty": "まだ保存された構造体がありません。",
+    "pickerTitle": "保存された構造体を読み込む",
+    "saveAsStructure": "構造体として保存",
+    "saveAsStructureTitle": "これらの列を構造体ライブラリに保存",
+    "savedToast": "「{name}」構造体を保存しました",
+    "namePlaceholder": "構造体名",
+    "fieldCount": "{count}項目",
+    "fieldCountOne": "1項目",
+    "downgradedNotice": "{count}項目がテキストに簡略化されました — テーブルでは各セルに1つの値しか保持できません: {names}",
+    "truncatedNotice": "{count}項目が削除されました — テーブルの列数上限は{max}列です: {names}",
+    "skippedDerivedNotice": "{count}個の計算列は保存されませんでした — 数式がこのテーブルの列を参照しています: {names}",
+    "loadReplacesColumns": "これにより現在の列が置き換わります。既存の行は列名が一致する値のみ維持されます。"
   }
 }

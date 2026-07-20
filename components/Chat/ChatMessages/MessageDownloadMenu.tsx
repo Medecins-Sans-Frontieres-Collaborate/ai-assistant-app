@@ -8,13 +8,17 @@ import { useTranslations } from 'next-intl';
 import { ExportFormat } from '@/client/hooks/document/exportFormats';
 import { useDocumentExport } from '@/client/hooks/document/useDocumentExport';
 
+import { appendCitationsToMarkdown } from '@/lib/utils/app/export/citationExport';
 import { markdownToHtml } from '@/lib/utils/shared/document/formatConverter';
+
+import { Citation } from '@/types/rag';
 
 import { DropdownPortal } from '@/components/UI/DropdownPortal';
 import { ExportFormatMenu } from '@/components/UI/ExportFormatMenu';
 
 interface MessageDownloadMenuProps {
   content: string;
+  citations?: Citation[];
   disabled?: boolean;
   disabledTitle?: string;
   fileName?: string;
@@ -44,6 +48,7 @@ function deriveFilename(content: string): string {
 
 export const MessageDownloadMenu: FC<MessageDownloadMenuProps> = ({
   content,
+  citations,
   disabled = false,
   disabledTitle,
   fileName,
@@ -60,11 +65,18 @@ export const MessageDownloadMenu: FC<MessageDownloadMenuProps> = ({
 
   const handleDownload = async (format: ExportFormat) => {
     setShowMenu(false);
+    // Citations live outside the message body, so append them as a Sources
+    // section before export — otherwise inline [n] markers reference nothing.
+    const exportContent = appendCitationsToMarkdown(
+      content,
+      citations ?? [],
+      t('chat.sources'),
+    );
     // For non-md formats we precompute HTML from the markdown source. For md
     // we pass an empty `html` and let the hook write the markdown source
     // directly — keeping the empty-content check in one place (the hook).
-    const html = format === 'md' ? '' : markdownToHtml(content);
-    await exportAs(format, html, resolvedFileName, content);
+    const html = format === 'md' ? '' : markdownToHtml(exportContent);
+    await exportAs(format, html, resolvedFileName, exportContent);
   };
 
   const triggerClass = disabled

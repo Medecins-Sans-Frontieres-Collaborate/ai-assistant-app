@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessService';
+import { PROMPT_AGENT_SOURCE } from '@/lib/services/agentAccess/types';
 import {
   AgentDiscoveryService,
   DiscoveredAgent,
@@ -22,11 +24,51 @@ import { auth, getAccessTokenForOBO } from '@/auth';
  * Optional query param `sources` — comma-separated ARM resource paths to
  * additional Foundry projects to discover agents from (user-configured).
  *
- * Returns empty array (not an error) if:
+ * Returns an empty Foundry list (not an error) if:
  * - Multi-region is not configured (no ARM resource paths)
  * - OBO token acquisition fails (graceful degradation)
  * - User has no agent access
+ *
+ * App-defined prompt agents (access-filtered) are served on EVERY response
+ * path, including the two discovery skips above — they need neither ARM
+ * discovery paths nor an OBO token.
  */
+
+/**
+ * Prompt-agent entries from the AgentAccessService snapshot (hot path —
+ * never reads storage directly), access-filtered for the user. The wire
+ * shape deliberately omits systemPrompt and modelId: those are admin-only
+ * fields; the server resolves them from botId at invocation time.
+ * 'unavailable' passes through like the Foundry discovery filter (this is a
+ * visibility-only surface — in practice an unavailable snapshot carries no
+ * prompt agents anyway). Empty when the feature is disabled.
+ */
+async function getVisiblePromptAgentEntries(
+  userMail: string | undefined,
+): Promise<DiscoveredAgent[]> {
+  const accessService = AgentAccessService.getInstance();
+  if (!accessService.isEnabled()) return [];
+  await accessService.ensureFresh();
+  const entries: DiscoveredAgent[] = [];
+  for (const promptAgent of accessService.getPromptAgents()) {
+    const { decision } = accessService.evaluateAccess({
+      userMail,
+      source: PROMPT_AGENT_SOURCE,
+      agentName: promptAgent.id,
+    });
+    if (decision !== 'deny') {
+      entries.push({
+        id: promptAgent.id,
+        name: promptAgent.name,
+        description: promptAgent.description,
+        agentName: promptAgent.id,
+        source: PROMPT_AGENT_SOURCE,
+        type: 'prompt',
+      });
+    }
+  }
+  return entries;
+}
 export async function GET(request: NextRequest) {
   const session = await auth();
 
@@ -66,9 +108,15 @@ export async function GET(request: NextRequest) {
     ];
     const allPaths = Array.from(new Set(orderedPaths));
 
+    // Computed up front so every response path — including the discovery
+    // early-returns below — serves the (access-filtered) prompt agents.
+    const promptAgentEntries = await getVisiblePromptAgentEntries(
+      session.user.mail,
+    );
+
     if (allPaths.length === 0) {
       return NextResponse.json({
-        agents: [],
+        agents: promptAgentEntries,
         regionalPath: null,
         officePaths: [],
       });
@@ -112,7 +160,7 @@ export async function GET(request: NextRequest) {
           `[/api/agents] OBO failed for ${session.user.mail ?? 'unknown'}: ${errMsg}`,
         );
         return NextResponse.json({
-          agents: [],
+          agents: promptAgentEntries,
           regionalPath,
           officePaths,
         });
@@ -169,14 +217,52 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // App-layer access filter (docs/AGENT_ACCESS_CONTROL.md). Drops agents
+    // the user fails evaluateAccess for — UX-level only; the invocation
+    // guard in the chat pipeline is the security control. On 'unavailable'
+    // (enabled + no last-known-good ruleset) discovery passes through
+    // unfiltered: this is a visibility-only surface, and invocation fails
+    // closed independently.
+    let visibleAgents: DiscoveredAgent[] = allAgents;
+    const accessService = AgentAccessService.getInstance();
+    if (accessService.isEnabled()) {
+      await accessService.ensureFresh();
+      const filtered: DiscoveredAgent[] = [];
+      let rulesUnavailable = false;
+      for (const agent of allAgents) {
+        const { decision } = accessService.evaluateAccess({
+          userMail: session.user.mail,
+          source: agent.source,
+          agentName: agent.agentName,
+        });
+        if (decision === 'unavailable') {
+          rulesUnavailable = true;
+          break;
+        }
+        if (decision === 'allow') {
+          filtered.push(agent);
+        }
+      }
+      if (rulesUnavailable) {
+        console.error(
+          '[/api/agents] Agent access rules unavailable; returning unfiltered discovery (invocation still fails closed)',
+        );
+      } else {
+        visibleAgents = filtered;
+      }
+    }
+
     // Cache each discovered agent's endpoint for this specific user AND
     // source path. This is the trust anchor for the chat pipeline — the
     // user has just passed RBAC against ARM, so we know they're authorized
     // for these endpoints. The chat middleware reads from this cache
     // instead of trusting the request body's `foundryEndpoint` field.
+    // Denied agents are excluded so their endpoints are never anchored.
+    // Prompt agents are kept out of this loop entirely — they have no
+    // Foundry endpoint and must never enter the trust-anchor cache.
     const userMail = session.user.mail;
     if (userMail) {
-      for (const agent of allAgents) {
+      for (const agent of visibleAgents) {
         discoveryService.cacheUserAgentEndpoint(
           userMail,
           agent.agentName,
@@ -187,7 +273,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({
-      agents: allAgents,
+      agents: [...visibleAgents, ...promptAgentEntries],
       regionalPath,
       officePaths,
     });

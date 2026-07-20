@@ -824,7 +824,8 @@
     "processingAudio": "Käsitellään ääntä...",
     "ttsError": "Virhe ääntä luodessa. Yritä uudelleen.",
     "unsupportedMessageType": "Virhe viestin näyttämisessä: Ei-tuettu viestityyppi",
-    "addLanguageOption": "Lisää \"{name}\"..."
+    "addLanguageOption": "Lisää \"{name}\"...",
+    "sources": "Lähteet"
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",
@@ -1153,7 +1154,23 @@
     "customInstructionsLabel": "Mukautetut ohjeet*",
     "defaultTemperatureLabel": "Oletuslämpötila*",
     "Usage & Impact": "Käyttö ja vaikutus",
-    "Connectors": "Liitännät"
+    "Connectors": "Liitännät",
+    "Backup": "Varmuuskopiointi",
+    "Memories": "Muistot",
+    "Agent Access": "Agentin käyttöoikeus",
+    "LocalModels": "Paikalliset mallit",
+    "suggestRevisions": {
+      "title": "Asiakirjamuutokset",
+      "toggle": "Ehdota muutoksia suoran soveltamisen sijaan",
+      "description": "Kun pyydät asiakirjan työnkululta muutosta, muutokset tulevat yksittäisinä ehdotuksina, jotka voit hyväksyä tai hylätä samalla tavoin kuin laatuarvioinnit.",
+      "exceptionsTitle": "Sovella suoraan kuitenkin, kun:",
+      "exceptionSelection": "Muutat korostamaasi valintaa",
+      "exceptionLargeRewrite": "Uudelleenkirjoitus muuttaa suurimman osan asiakirjasta",
+      "exceptionReorder": "Osioita siirretään muokkaamisen sijaan",
+      "thresholdLabel": "Käsittele uudelleenkirjoituksena yli",
+      "thresholdUnit": "% asiakirjasta muuttunut",
+      "exceptionSelectionAlways": "Korjattaessa korostettua valintaa muutos toteutetaan aina suoraan — malli palauttaa vain korjatun otteen, eikä sitä voida esittää ehdotuksina koko dokumenttia vastaan."
+    }
   },
   "notFound": {
     "lostDog": "Kadonnut koira"
@@ -2111,7 +2128,9 @@
     "pin": "Kiinnitä ylös",
     "unpin": "Poista kiinnitys",
     "moveToMore": "Siirrä kohtaan Lisää",
-    "moveOutOfMore": "Näytä valikossa"
+    "moveOutOfMore": "Näytä valikossa",
+    "showSources": "Näytä muut lähteet",
+    "hideSources": "Piilota muut lähteet"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Lisää omat ohjeesi räätälöidäksesi, miten tekoäly vastaa. Nämä yhdistetään ydinkäyttäytymissääntöihin, jotka takaavat hyödylliset, tarkat ja turvalliset vastaukset.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Vinkki: Kirjoita \"/\" valitaksesi tallennetuista kehotepohjista.",
@@ -2424,7 +2443,8 @@
     "regionDefault": "Oletus",
     "modelRow": "{requests} pyyntöä · {grams} g",
     "disclosure": "Arviot perustuvat oletuksiin v{version} · alkaen {since} · vain tavallinen chat (agenttien ja tietopankkivastausten käyttöä ei lasketa).",
-    "reset": "Nollaa käyttötilastot"
+    "reset": "Nollaa käyttötilastot",
+    "estimatedPortion": "Sisältää noin {grams} g CO₂e ({requests} pyyntöä), jotka on arvioitu keskusteluista ennen seurannan aloittamista — takaisinlaskettu tallennetusta viestitekstistä, ei mitatuista tokenmääristä."
   },
   "extraction": {
     "toggleLabel": "Luo jäsenneltyä dataa",
@@ -2631,7 +2651,25 @@
       "pendingCount": "{count} odottaa",
       "closeReview": "Sulje laatuarviointi",
       "showReview": "Näytä arviointi",
-      "showReviewPending": "Näytä arviointi ({count} odottaa)"
+      "showReviewPending": "Näytä arviointi ({count} odottaa)",
+      "undoEdit": "Kumoa",
+      "clearResolved": "Tyhjennä ratkaistut",
+      "clearResolvedHint": "Poista hyväksytyt, hylätyt ja soveltumattomat muokkaukset tältä listalta",
+      "autoClearResolved": "Tyhjennä ratkaistut muokkaukset automaattisesti",
+      "customCriteria": "Omat kriteerit",
+      "closeCriteria": "Sulje omat kriteerit",
+      "newCriterion": "Uusi kriteeri",
+      "newCriterionName": "Nimetön kriteeri",
+      "criterionName": "Kriteerin nimi",
+      "criterionRubric": "Ohjeistus",
+      "criterionRubricPlaceholder": "Kuvaile, mitä kriteerin täyttäminen vaatii; esim. \"Kaikki kliiniset annosohjeet imperatiivissa, ei koskaan infinitiivissä…\"",
+      "criterionRubricHint": "Tämä ohjeistus annetaan AI:lle sellaisenaan yhdessä sisäänrakennettujen MQM-ulottuvuuksien kanssa käännöstä arvioitaessa.",
+      "criteriaEmpty": "Luo omia kriteereitä — esimerkiksi organisaation tyyli, asiakkaan termitoiveet tai alueelliset käytännöt — arvioidaksesi käännöksiä laajemmin kuin sisäänrakennetut MQM-ulottuvuudet. Tallennetaan tälle laitteelle ja käytettävissä uudelleen.",
+      "deleteCriterion": "Poista kriteeri",
+      "manageCriteria": "Omat kriteerit",
+      "addCriteria": "Lisää kriteereitä",
+      "noUsableCriteria": "Valitse vähintään yksi sisäänrakennettu kriteeri tai anna omille kriteereillesi ohjeistus.",
+      "criterionRubricTooLong": "Tämä arviointikriteeri ylittää rajan {over} merkillä. Se lähetetään jokaisen arvioinnin yhteydessä, joten sitä täytyy lyhentää ennen tämän kriteerin käyttöä."
     },
     "document": {
       "emptyTitle": "Kuvaile haluamaasi asiakirjaa",
@@ -2751,7 +2789,32 @@
       "clearSelection": "Tyhjennä valinta (käsittele koko asiakirjaa)",
       "reviseSelectionPlaceholder": "Kuvaile muutokset valittuun osaan…",
       "revisedSelectionSummary": "Muokkasin valitun tekstikohdan työtilassa.",
-      "assessedSelection": "Valinta"
+      "assessedSelection": "Valinta",
+      "undoEdit": "Kumoa",
+      "clearResolved": "Tyhjennä ratkaistut",
+      "clearResolvedHint": "Poista hyväksytyt, hylätyt ja soveltumattomat muokkaukset tältä listalta",
+      "autoClearResolved": "Tyhjennä ratkaistut muokkaukset automaattisesti",
+      "import": "Tuo",
+      "importReplaceTitle": "Korvataanko asiakirja?",
+      "importReplaceBody": "Tiedoston {name} tuominen korvaa nykyisen asiakirjan. Viitteesi, määritykset ja sävy säilyvät.",
+      "importReplaceConfirm": "Korvaa",
+      "editorMode": "Muokkaustila",
+      "editorModeRich": "Muotoiltu teksti",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Ratkaise ehdotetut muutokset ennen muokkaustilan vaihtamista.",
+      "suggestChanges": "Ehdota muutoksia",
+      "suggestChangesHint": "Tarkista revisio yksittäisinä ehdotuksina sen sijaan, että koko asiakirja kirjoitettaisiin heti uudelleen.",
+      "suggestChangesSelectionNote": "Valinnan muutokset sovelletaan suoraan — valinta on jo valitsemasi osuus.",
+      "suggestedSummary": "Ehdotettu {count} {count, plural, one {muutos} other {muutosta}} tarkistettavaksi.",
+      "revisionSuggestionSummary": "Pyyntösi tuotti {count} {count, plural, one {ehdotetun muutoksen} other {ehdotettua muutosta}}.",
+      "revisionCriterionLabel": "Pyydetty muutos",
+      "fallbackSelection": "Sovellettiin suoraan — valinnan muutoksia ei ehdoteta.",
+      "fallbackLargeRewrite": "Sovellettiin suoraan — uudelleenkirjoitus muutti liikaa asiakirjaa erillisten ehdotusten tarkistamiseen.",
+      "fallbackReorder": "Sovellettiin suoraan — osioita siirrettiin, joten tarkistettavia ehdotuksia ei voitu muodostaa.",
+      "fallbackUnanchorable": "Sovellettiin suoraan — muutoksia ei voitu kohdistaa tiettyihin kohtiin.",
+      "fallbackNoChanges": "Muutoksia ei tarvittu.",
+      "criterionRubricTooLong": "Tämä arviointikriteeri ylittää rajan {over} merkillä. Se lähetetään jokaisen arvioinnin yhteydessä, joten sitä täytyy lyhentää ennen tämän kriteerin käyttöä."
     },
     "data": {
       "emptyTitle": "Tuo analysoitavaa dataa",
@@ -2920,7 +2983,39 @@
       "autoCheckHint": "Kun tiedot on purettu valokuvista tai asiakirjoista, suorita automaattinen laaduntarkastus uusille riveille",
       "checkingNewRows": "Tarkistetaan lisättyjä rivejä laadun varalta…",
       "ingestCheckFailed": "Automaattinen laaduntarkastus epäonnistui ({message}) — voit suorittaa sen manuaalisesti valitsemalla Arvioi laatu.",
-      "assessedIngest": "Uudet lisätyt rivit"
+      "assessedIngest": "Uudet lisätyt rivit",
+      "transpose": "Transponoi",
+      "transposeAxisColumn": "Nimi",
+      "transposeSuggestion": "Tämä taulukko näyttää transponoidulta: rivit ovat ominaisuuksia ja sarakkeet kohteita. Käännetäänkö se niin, että jokaisesta kohteesta tulee rivi ja jokaisesta ominaisuudesta oma sarake?",
+      "transposedTable": "Transponoidut rivit ja sarakkeet",
+      "columns": "Sarakkeet",
+      "columnsHidden": "Sarakkeet ({count} piilotettu)",
+      "showAllColumns": "Näytä kaikki",
+      "chartScatter": "Hajontakaavio (x vs y)",
+      "chartPivot": "Pivot-taulukko",
+      "xColumn": "X-sarake",
+      "yColumn": "Y-sarake",
+      "splitByColumn": "Jaa sarakkeen mukaan",
+      "splitNone": "Ei jakoa",
+      "pivotValueColumns": "Arvosarakkeet",
+      "aggMin": "Minimi",
+      "aggMax": "Maksimi",
+      "aggMedian": "Mediaani",
+      "chartSeriesTruncated": "Näytetään {max} ensimmäistä sarjaa",
+      "chartPointsTruncated": "Näytetään {max} näytettäytyä pistettä",
+      "chartScatterAria": "Hajontakaavio: {x} verrattuna {y}",
+      "pivotTableAria": "Pivot-taulukko ryhmiteltynä sarakkeella {column}",
+      "schemaFormula": "Kaava",
+      "schemaFormulaPlaceholder": "esim. [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Lasketaan kenttä: viittaa muihin kenttiin muodossa [Nimi]; tukee + - * / %, sulkuja sekä round, abs, min, max. Arvot päivittyvät automaattisesti eikä niitä voi muokata suoraan.",
+      "schemaFormulaSyntaxError": "Virheellinen kaava",
+      "schemaFormulaUnknownRef": "Tuntematon kenttä: {ref}",
+      "schemaFormulaArityError": "Väärä määrä argumentteja funktiolle {fn}",
+      "schemaFormulaCycleError": "Kaavojen välinen syklinen viittaus",
+      "derivedColumnTitle": "Laskettu: {formula}",
+      "derivedFrom": "Laskettu kaavasta {formula}",
+      "takePhoto": "Ota kuva",
+      "takePhotoHint": "Kuvaa lomake tai taulukko kameralla — sen sisältö muutetaan rakenteiseksi tiedoksi, jota voit verrata kuvaan."
     },
     "map": {
       "emptyTitle": "Näytä tiedot kartalla",
@@ -2994,7 +3089,31 @@
         "jumpTo": "Siirry ajanjaksolle {label}",
         "slider": "Aikajanan sijainti",
         "showUndated": "Näytä ajoittamattomat sijainnit",
-        "activeCount": "{count} aktiivinen"
+        "activeCount": "{count} aktiivinen",
+        "jump": {
+          "start": "Alku",
+          "yearsLater": "{count, plural, one {1 vuosi myöhemmin} other {# vuotta myöhemmin}}",
+          "monthsLater": "{count, plural, one {1 kuukausi myöhemmin} other {# kuukautta myöhemmin}}",
+          "daysLater": "{count, plural, one {1 päivä myöhemmin} other {# päivää myöhemmin}}",
+          "appears": "{count, plural, one {1 ilmestyy} other {# ilmestyy}}",
+          "ends": "{count, plural, one {1 päättyy} other {# päättyy}}",
+          "progress": "Päivä {index} / {total}"
+        },
+        "precision": {
+          "minute": "Tarkkuus minuuttiin",
+          "hour": "Tarkkuus tuntiin",
+          "day": "Tarkkuus päivään",
+          "month": "Kuukausitaso",
+          "year": "Vuositaso",
+          "mixed": "(sekoitettu)"
+        },
+        "pacing": {
+          "toggle": "Toistonopeus",
+          "cardDuration": "Näytä jokainen sijainti",
+          "seconds": "{seconds} s",
+          "maxCards": "Sijainteja per pvm",
+          "hint": "Vilkkaammat päivät näkyvät automaattisesti kauemmin."
+        }
       },
       "granularity": {
         "site": "Kohde",
@@ -3011,8 +3130,13 @@
         "color": "Väri: koordinaattien varmuus (sininen korkea, keltainen keskitaso, punainen matala)",
         "size": "Pisteen koko: kuinka keskeinen paikka on materiaalissa",
         "area": "Katkoviivainen ympyrä: alueen, piirin tai maan arvioitu laajuus",
-        "container": "Häivytetty reunaviiva: alue, jonka sisältö kartoitetaan erikseen"
-      }
+        "container": "Häivytetty reunaviiva: alue, jonka sisältö kartoitetaan erikseen",
+        "precisionHalo": "Pehmeä katkoviivakehä (aikajatkumossa): tapahtuma on ajoitettu vain kuukaudelle tai vuodelle, joten tarkka ajankohta on epävarma"
+      },
+      "sourceLabel": "Lähde: {name}",
+      "fetchAndMap": "Nouda & kartoita",
+      "fetchingPage": "Noudetaan sivua…",
+      "railUrlRequest": "Nouda ja kartoita sijainnit lähteestä: {title} ({url})"
     },
     "shell": {
       "showConversation": "Näytä keskustelu",
@@ -3030,6 +3154,16 @@
       "untitled": "Uusi keskustelu",
       "toggleMenu": "Avaa/sulje valikko",
       "model": "Työnkulun malli"
+    },
+    "tabs": {
+      "label": "Keskustelutila",
+      "chat": "Chat",
+      "chatDescription": "Tavallinen keskustelu avustajan kanssa"
+    },
+    "discard": {
+      "title": "Hylätäänkö tämä luonnos?",
+      "body": "Siirtyminen kohteeseen {target} poistaa kaiken työn, jonka olet aloittanut kohteessa {current}.",
+      "confirm": "Hylkää"
     }
   },
   "connectors": {
@@ -3044,6 +3178,22 @@
       "asana": {
         "name": "Asana",
         "description": "Etsi, luo ja päivitä tehtäviä ja projekteja."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Tee kyselyjä julkaistuihin tietolähteisiin, työkirjoihin ja Pulse-mittareihin."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Etsi ja päivitä tietueita Salesforce-objekteissasi."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Laadi, ajasta ja julkaise sosiaalisen median julkaisuja."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Arvioi ja vastaa sosiaalisen median viestikeskusteluihin."
       }
     },
     "connect": "Yhdistä",
@@ -3104,7 +3254,19 @@
       "missingState": "Ei valtuutettavaa",
       "close": "Voit sulkea tämän ikkunan ja palata sovellukseen.",
       "closeButton": "Sulje ikkuna"
-    }
+    },
+    "oauthNoAppConfigured": "Kirjautuminen palvelulla {name} ei ole käytettävissä tässä käyttöönotossa. Yhdistä rekisteröimällä oma OAuth-sovellus.",
+    "adminConnectorsTitle": "Organisaatioltasi",
+    "adminConnectorsDescription": "Ylläpitäjiesi määrittämät liitännäiset. Näkyvät liitännäiset riippuvat käyttöoikeuksistasi.",
+    "managedByOrg": "Organisaatiosi hallinnoima",
+    "connectorOauthNotConfigured": "Tämän liitännäisen kirjautumista ei ole viimeistelty. Ota yhteyttä ylläpitäjään.",
+    "yourConnectorsTitle": "Omat liitännäiset",
+    "addTitle": "Lisää liitännäinen",
+    "addDescription": "Valitse yhdistettävä työkalu. Määrität käyttöoikeuden valinnan jälkeen.",
+    "add": "Lisää",
+    "filterLabel": "Suodata liitännäisiä",
+    "filterPlaceholder": "Etsi liitännäisiä",
+    "noMatches": "Yhtään liitännäistä ei vastaa hakua “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Yhdistä mallilähde",
@@ -3155,5 +3317,399 @@
     "deselectAll": "Poista kaikki valinnat",
     "autoAddLabel": "Lisää uudet mallit automaattisesti",
     "autoAddDescription": "Tähän tiliin myöhemmin lisätyt mallijakelut näkyvät automaattisesti. Valitsemattomat mallit pysyvät poissuljettuina."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Pienempi vaikutus",
+      "moderate": "Kohtalainen vaikutus",
+      "high": "Suurempi vaikutus"
+    },
+    "tierTooltip": "Suhteellinen energiavaikutus pyyntöä kohti, arvioitu mallin koon perusteella. Arviot perustuvat julkaistuihin keskiarvoihin ja oletuksiin v{version} — eivät mittauksiin.",
+    "typicalRequest": "~{grams} g CO₂e per tavanomainen pyyntö",
+    "typicalRequestTooltip": "Suunnilleen arvio per pyyntö (noin 1 000 kehotetta ja 500 vastaustokenia), johdettu julkaistuista keskiarvoista ja oletuksista v{version}. Todellinen vaikutus vaihtelee keskustelun pituuden, asetusten ja isännöintialueen mukaan.",
+    "activities": {
+      "netflixHd": "Netflix HD -suoratoisto",
+      "zoomCall": "Zoom-puhelu (kamera päällä)",
+      "webBrowsing": "Verkkoselaus",
+      "spotifyAudio": "Spotify-audio"
+    },
+    "equivalents": {
+      "title": "≈ sama hiilidioksidimäärä kuin",
+      "note": "Sama-hiilivertailu näiden palveluiden julkaistuja tuntikohtaisia jalanjälkiä vastaan — karkea suuruusluokkien arvio kuten muutkin arviot tässä."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Tämän keskustelun arvioitu hiilijalanjälki: {grams} grammaa CO₂-ekvivalenttia. Näytä erittely.",
+      "ariaLabelToday": "Tämän keskustelun arvioitu hiilijalanjälki tänään: {grams} grammaa CO₂-ekvivalenttia. Näytä erittely.",
+      "title": "Tämä keskustelu (arvio)",
+      "today": "Tänään",
+      "total": "Kaikki ajat",
+      "measured": "Ilmoitettujen tokenimäärien perusteella",
+      "estimated": "Takaisinlaskettu vanhoista viesteistä",
+      "lastRequest": "Viimeisin pyyntö",
+      "disclaimer": "Kohtaiset arviot raportoituista tai arvioiduista tokenmääristä, käyttäen julkaistuja keskiarvoja ja oletuksia v{version}. Vanhemmat viestit on takaisinlaskettu tallennetusta tekstistä ja keskustelun nykyisestä mallista. Ei ole mittaus."
+    }
+  },
+  "table": {
+    "copyTable": "Kopioi taulukko",
+    "downloadTable": "Lataa taulukko",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Viety CSV-muodossa",
+    "copyFailed": "Taulukon kopiointi epäonnistui"
+  },
+  "backup": {
+    "intro": {
+      "title": "Varmuuskopioi keskustelusi — turvallisesti",
+      "body": "Keskustelusi salataan tällä laitteella ennen lataamista. Emme koskaan näe keskustelujasi.",
+      "keyWarning": "Palautusavain luodaan tällä laitteella. Emme näe sitä emmekä voi palauttaa sitä puolestasi — jos avain katoaa, myös varmuuskopio menetetään.",
+      "create": "Luo avaimeni ja varmuuskopioi",
+      "decline": "Ei nyt — pidä keskustelut vain tällä laitteella"
+    },
+    "ceremony": {
+      "titleCreate": "Tallenna palautusavaimesi",
+      "titleRotate": "Tallenna uusi palautusavaimesi",
+      "titleView": "Palautusavaimesi",
+      "description": "Tämä avain on ainoa tapa palauttaa varmuuskopio toiselle laitteelle. Säilytä se turvallisesti — emme voi palauttaa sitä puolestasi.",
+      "copy": "Kopioi",
+      "copied": "Kopioitu!",
+      "download": "Lataa .txt",
+      "showQr": "Näytä QR-koodi",
+      "hideQr": "Piilota QR-koodi",
+      "savedCheckbox": "Olen tallentanut palautusavaimeni turvalliseen paikkaan",
+      "saveFirstHint": "Kopioi tai lataa avaimesi ennen jatkamista.",
+      "continue": "Jatka",
+      "done": "Valmis",
+      "cancel": "Peruuta",
+      "cancelConfirmTitle": "Peruutetaanko varmuuskopion määritys?",
+      "cancelConfirmBody": "Keskusteluja ei varmuuskopioida. Voit ottaa salatun varmuuskopion käyttöön milloin tahansa Asetuksista.",
+      "cancelConfirmRotateBody": "Palautusavaimesi on jo vaihdettu. Voit tarkastella sitä milloin tahansa Asetuksissa.",
+      "cancelConfirmConfirm": "Kyllä, peruuta",
+      "cancelConfirmDismiss": "Palaa takaisin",
+      "loadError": "Palautusavaintasi ei voitu ladata tällä laitteella."
+    },
+    "file": {
+      "heading": "Keskustelujen varmuuskopion palautusavain",
+      "warning": "Säilytä tämä avain turvallisesti. Jokainen, jolla on avain, voi lukea varmuuskopiosi. Ilman avainta varmuuskopiota ei voi palauttaa."
+    },
+    "progress": {
+      "titleCreate": "Varmuuskopiointia valmistellaan",
+      "titleRotate": "Palautusavaimen vaihtaminen",
+      "encrypting": "{count, plural, one {Salaus ja varmuuskopiointi # keskustelu…} other {Salaus ja varmuuskopiointi # keskustelua…}}",
+      "success": "{count, plural, one {Varmuuskopiointi valmis. # keskustelu suojattu.} other {Varmuuskopiointi valmis. # keskustelua suojattu.}}",
+      "error": "Varmuuskopiointi epäonnistui. Keskustelusi ovat yhä tällä laitteella.",
+      "retry": "Yritä uudelleen",
+      "close": "Sulje",
+      "done": "Valmis"
+    },
+    "input": {
+      "label": "Palautusavain",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Avaimissa ei koskaan ole kirjaimia O, I tai L.",
+      "checksumError": "Tämä avain ei vaikuta oikealta — tarkista mahdolliset kirjoitusvirheet.",
+      "formatError": "Tämä ei vaikuta palautusavaimelta.",
+      "incomplete": "Jatka kirjoittamista — palautusavain sisältää 56 merkkiä.",
+      "valid": "Avain vaikuttaa kelvolliselta."
+    },
+    "restore": {
+      "title": "Palauta keskustelusi",
+      "successTitle": "Varmuuskopio palautettu",
+      "promptBody": "Löysimme tilillesi salatun varmuuskopion. Syötä palautusavain palauttaaksesi sen tähän laitteeseen.",
+      "submit": "Palauta varmuuskopio",
+      "skip": "Ohita — aloita alusta tällä laitteella",
+      "restoring": "Puretaan salausta ja palautetaan keskustelut…",
+      "successBody": "{count, plural, one {# keskustelu palautettu.} other {# keskustelua palautettu.}}",
+      "wrongKey": "Avain on kelvollinen, mutta ei avaa tätä varmuuskopiota. Jos olet vaihtanut avainta, käytä uusinta.",
+      "corrupt": "Varmuuskopioita ei voitu lukea — se voi olla vahingoittunut. Voit aloittaa alusta tällä laitteella tai yrittää myöhemmin uudelleen.",
+      "networkError": "Varmuuskopalveluun ei saatu yhteyttä. Tarkista yhteys ja yritä uudelleen.",
+      "tryAgain": "Kokeile toista avainta",
+      "close": "Valmis"
+    },
+    "enterKey": {
+      "title": "Anna uusi palautusavaimesi",
+      "body": "Palautusavaimesi on vaihdettu toisella laitteella. Anna uusi avain jatkaaksesi varmuuskopiointia tällä laitteella.",
+      "submit": "Käytä tätä avainta"
+    },
+    "banner": {
+      "keyMismatchTitle": "Varmuuskopiointi keskeytetty — palautusavain on vaihdettu toisella laitteella.",
+      "enterNewKey": "Anna uusi avain",
+      "resetBackup": "Nollaa varmuuskopio",
+      "resetConfirmTitle": "Nollataanko varmuuskopio tämän laitteen avaimella?",
+      "resetConfirmBody": "Nykyinen varmuuskopio korvataan tämän laitteen keskusteluilla ja salataan tämän laitteen avaimella. Muut laitteet tarvitsevat tämän laitteen palautusavaimen.",
+      "resetConfirmAction": "Nollaa varmuuskopio",
+      "remoteMissingTitle": "Varmuuskopiota ei enää löydy palvelimelta. Varmuuskopiointi on keskeytetty.",
+      "backUpAgain": "Varmuuskopioi uudelleen",
+      "dismiss": "Sulje"
+    },
+    "rotate": {
+      "confirmTitle": "Vaihda palautusavaimesi?",
+      "confirmBody": "Varmuuskopiosi salataan uudelleen uudella avaimella ja vanha avain lakkaa toimimasta. Sinun täytyy tallentaa uusi avain ja syöttää se muilla laitteilla.",
+      "confirmAction": "Vaihda avain"
+    },
+    "toast": {
+      "enrollLater": "Voit ottaa salatun varmuuskopion käyttöön milloin tahansa Asetuksista.",
+      "keyUpdated": "Palautusavain päivitetty. Varmuuskopiointi jatkuu.",
+      "resetDone": "Varmuuskopio nollattu tämän laitteen avaimella.",
+      "backupRestarted": "Varmuuskopio luotu uudelleen.",
+      "opFailed": "Jokin meni pieleen. Yritä uudelleen."
+    },
+    "settings": {
+      "statusOn": "Varmuuskopiointi on käytössä",
+      "statusOff": "Varmuuskopiointi ei ole käytössä",
+      "offDescription": "Keskustelusi sijaitsevat vain tässä selaimessa. Ota salattu varmuuskopio käyttöön säilyttääksesi ne turvassa ja palauttaaksesi ne muilla laitteilla. Keskustelut salataan laitteellasi — emme koskaan voi lukea niitä.",
+      "turnOn": "Ota varmuuskopio käyttöön",
+      "restoreTitle": "Tilillesi on jo olemassa varmuuskopio",
+      "restoreDescription": "Syötä palautusavaimesi palauttaaksesi sen tälle laitteelle.",
+      "restore": "Palauta varmuuskopio",
+      "lastBackup": "Edellinen varmuuskopio: {time}",
+      "lastBackupNever": "Yhtään varmuuskopiota ei vielä tehty",
+      "keyFingerprint": "Avain ····-{tail}",
+      "syncState": {
+        "idle": "Odotetaan synkronointia",
+        "syncing": "Varmuuskopioidaan…",
+        "ok": "Ajantasalla",
+        "keyOutOfDate": "Keskeytetty — palautusavain vaihdettu toisella laitteella",
+        "remoteMissing": "Keskeytetty — varmuuskopio poistettu palvelimelta",
+        "error": "Viimeisin varmuuskopiointi epäonnistui"
+      },
+      "backUpNow": "Varmuuskopioi nyt",
+      "backUpNowSuccess": "Varmuuskopiointi valmis",
+      "backUpNowFailure": "Varmuuskopiointi epäonnistui — keskustelusi pysyvät muuttumattomina tällä laitteella",
+      "viewKey": "Näytä palautusavain",
+      "changeKey": "Vaihda palautusavain",
+      "dangerTitle": "Vaaravyöhyke",
+      "turnOffDelete": "Poista käytöstä & poista varmuuskopio",
+      "turnOffConfirmTitle": "Poistetaanko varmuuskopio käytöstä?",
+      "turnOffConfirmMessage": "Tämä poistaa varmuuskopiosi palvelimiltamme kaikilta laitteilta. Keskustelut säilyvät tällä laitteella. Voit ottaa varmuuskopion käyttöön myöhemmin uudella palautusavaimella.",
+      "turnOffConfirmAction": "Poista varmuuskopio",
+      "turnOffSuccess": "Varmuuskopio poistettu käytöstä ja poistettu",
+      "turnOffFailure": "Varmuuskopion poistaminen epäonnistui. Yritä uudelleen."
+    }
+  },
+  "memories": {
+    "title": "Muistot",
+    "description": "Anna avustajan muistaa tärkeitä faktoja, kuten roolisi, mieltymyksesi ja meneillään olevat projektit, ja käyttää niitä keskusteluissa.",
+    "enableToggle": "Ota muistot käyttöön",
+    "privacyNote": "Tiedot tallennetaan vain tähän selaimeen ja lisätään keskusteluihin vastausten personoimiseksi.",
+    "empty": "Ei muistoja vielä. Tärkeitä faktoja tallennetaan automaattisesti keskusteluistasi.",
+    "savedOn": "Tallennettu {date}",
+    "deleteMemory": "Poista muisto",
+    "clearAll": "Tyhjennä kaikki muistot",
+    "clearAllConfirmQuestion": "Poistetaanko kaikki muistot? Tätä ei voi perua.",
+    "clearAllConfirm": "Poista kaikki",
+    "cancel": "Peruuta"
+  },
+  "contextWindow": {
+    "label": "Kontekstiruutu",
+    "value": "{count} viestiä",
+    "fewer": "Vähemmän viestejä",
+    "more": "Enemmän viestejä",
+    "description": "Tätä rajaa vanhemmat viestit tiivistetään ja lähetetään kontekstina."
+  },
+  "agentAccess": {
+    "title": "Agenttipääsy",
+    "description": "Määritä, mitkä käyttäjät voivat käyttää jaettuja Foundry-agentteja. Säännöt rajoittavat vain lisää sitä, mihin käyttäjän oma Azure-pääsy jo sallii — niiden kautta ei voi antaa oikeuksia, joita Azure evää.",
+    "backToChat": "Takaisin keskusteluun",
+    "loading": "Ladataan agentteja ja sääntöjä…",
+    "loadError": "Agenttipääsytietoja ei voitu ladata.",
+    "rulesUnavailableWarning": "Sääntöjä ei voitu ladata tallennustilasta. Agentin käyttö on tällä hetkellä estetty, eikä sääntöjä voi muokata.",
+    "retry": "Yritä uudelleen",
+    "rulesTab": "Agentin säännöt",
+    "localAdminsTab": "Paikalliset ylläpitäjät",
+    "noAgents": "Ei hallittavia agentteja.",
+    "sourceLabel": "Lähde",
+    "notDiscoverable": "Ei löydettävissä sinulle",
+    "notDiscoverableHint": "Agentille on olemassa sääntö, mutta sitä ei löydy omasta näkymästäsi — sitä on ehkä nimetty uudelleen, Azure-pääsysi ei kata sitä, tai pääsysääntö ei sisällä sinua.",
+    "accessEveryone": "Kaikki",
+    "accessRestricted": "Rajoitettu",
+    "edit": "Muokkaa",
+    "updatedByLine": "Viimeksi päivittänyt {user} {date}",
+    "accessTypeLabel": "Kuka voi käyttää tätä agenttia",
+    "everyoneDescription": "Kaikki, joilla on jo pääsy tähän agenttiin Azure-pääsynsä kautta.",
+    "restrictedDescription": "Vain alla luetellut käyttäjät ja verkkoalueet.",
+    "allowDomainsLabel": "Sallitut verkkoalueet",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Sallitut käyttäjät",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Paina Enter lisätäksesi",
+    "removeChip": "Poista",
+    "groupsLabel": "Sallitut ryhmät",
+    "groupsPendingConsent": "Ryhmäperusteinen käyttö vaatii vielä pääkäyttäjän suostumuksen, eikä sitä voi vielä muokata.",
+    "restrictedEmptyWarning": "Käyttäjiä tai verkkoalueita ei ole listattu — kukaan ei voi käyttää tätä agenttia.",
+    "save": "Tallenna",
+    "saving": "Tallennetaan…",
+    "cancel": "Peruuta",
+    "saveSuccess": "Käyttösääntö tallennettu.",
+    "deleteSuccess": "Käyttösääntö poistettu — kaikki voivat taas käyttää tätä agenttia.",
+    "saveError": "Tallentaminen epäonnistui. Yritä uudelleen.",
+    "conflictError": "Joku muu muutti tätä samaan aikaan. Päivitä sivu saadaksesi uusin versio ja tee muutokset uudelleen.",
+    "reload": "Päivitä",
+    "localAdminsDescription": "Delegoi sääntöjen hallinta yksittäisille agenteille ilman uudelleen käyttöönottoa. Paikalliset ylläpitäjät voivat muokata vain heille osoitettujen agenttien sääntöjä.",
+    "noLocalAdmins": "Paikallisia ylläpitäjiä ei ole määritetty.",
+    "addLocalAdmin": "Lisää paikallinen ylläpitäjä",
+    "emailLabel": "Sähköposti",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Poista paikallinen ylläpitäjä",
+    "delegatedAgentsLabel": "Delegoidut agentit",
+    "noDelegatedAgents": "Ei delegoitavia agentteja.",
+    "unknownAgentKey": "Tuntematon agenttiavain",
+    "configSaveSuccess": "Paikalliset ylläpitäjät tallennettu.",
+    "configConflictError": "Joku muu muutti paikallisten ylläpitäjien listaa samaan aikaan. Päivitä sivu ja yritä uudelleen.",
+    "addAgent": "Lisää agentti",
+    "newPromptAgentTitle": "Uusi prompt-agentti",
+    "editPromptAgentTitle": "Muokkaa prompt-agenttia",
+    "agentNameLabel": "Nimi",
+    "agentNamePlaceholder": "esim. Matkaneuvoja",
+    "agentDescriptionLabel": "Kuvaus",
+    "agentDescriptionPlaceholder": "Näkyy käyttäjille mallin valinnassa",
+    "agentSystemPromptLabel": "Järjestelmän prompt",
+    "agentSystemPromptPlaceholder": "Ohjeet, jotka määrittelevät agentin toiminnan",
+    "agentModelLabel": "Malli",
+    "agentModelPlaceholder": "Valitse malli…",
+    "agentModelUnavailable": "{modelId} (ei saatavilla)",
+    "agentModelUnknownError": "Valittu malli ei ole enää saatavilla. Valitse toinen malli ja tallenna uudelleen.",
+    "promptAgentBadge": "Prompt-agentti",
+    "editAgent": "Muokkaa agenttia",
+    "deleteAgent": "Poista",
+    "deleteAgentConfirm": "Poistetaanko tämä agentti kaikilta? Agentti poistuu mallivalitsimesta; olemassa olevat keskustelut säilyttävät historiansa.",
+    "confirmDeleteAgent": "Kyllä, poista",
+    "promptAgentCreateSuccess": "Prompt-agentti luotu.",
+    "promptAgentSaveSuccess": "Prompt-agentti tallennettu.",
+    "promptAgentDeleteSuccess": "Prompt-agentti poistettu.",
+    "promptAgentsUnavailableWarning": "Prompt-agenteja ei voitu ladata tallennustilasta. Niitä ei voi tällä hetkellä muokata.",
+    "agentsTab": "Agentit",
+    "connectorsTab": "Liitännäiset",
+    "addConnector": "Lisää liitännäinen",
+    "noConnectors": "Ei liitännäisiä vielä.",
+    "connectorsUnavailableWarning": "Liitännäiskauppaan ei saatu yhteyttä, joten lista voi olla puutteellinen. Älä luo korvaavaa ennen kuin lataus on valmis.",
+    "editAccess": "Muokkaa käyttöoikeuksia",
+    "deleteConnector": "Poista",
+    "deleteConnectorConfirm": "Poistetaanko tämä liitännäinen? Kaikki käyttäjät menettävät käyttöoikeuden välittömästi.",
+    "confirmDeleteConnector": "Poista liitännäinen",
+    "connectorSaveSuccess": "Liitännäinen tallennettu.",
+    "connectorCreateSuccess": "Liitännäinen luotu.",
+    "connectorDeleteSuccess": "Liitännäinen poistettu.",
+    "editConnectorTitle": "Muokkaa liitännäistä",
+    "newConnectorTitle": "Uusi liitännäinen",
+    "connectorPresetLabel": "Aloita mallipohjasta",
+    "connectorPresetNone": "Aloita tyhjästä",
+    "connectorNameLabel": "Nimi",
+    "connectorDescriptionLabel": "Kuvaus",
+    "connectorUrlLabel": "Palvelimen URL",
+    "connectorUrlPlaceholderWarning": "Korvaa URL-osoitteen {placeholder} omalla arvollasi ennen tallentamista.",
+    "connectorTransportLabel": "Siirtotapa",
+    "connectorAuthLabel": "Tunnistautuminen",
+    "connectorAuthNone": "Ei mitään",
+    "connectorAuthBearer": "Token (jokainen käyttäjä syöttää oman)",
+    "connectorAuthOauth": "OAuth-kirjautuminen",
+    "connectorSealingUnavailable": "OAuth ei ole käytettävissä: tähän asennukseen ei ole määritetty AUTH_SECRET-arvoa, jolla asiakassalaisuudet salataan.",
+    "connectorTokenHelpLabel": "Linkki token-ohjeisiin (valinnainen)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Salaisuus tallennettu. Jätä tyhjäksi säilyttääksesi nykyisen, tai syötä uusi korvataksesi sen.",
+    "connectorClientSecretHint": "Salataan ennen tallennusta, eikä näytetä uudestaan.",
+    "connectorScopesLabel": "Scope-arvot (välilyönnillä eroteltuna, vapaaehtoinen)"
+  },
+  "localModels": {
+    "title": "Paikalliset mallit",
+    "description": "Keskustele malleilla, jotka toimivat tällä tietokoneella. Viestit siirtyvät selaimestasi suoraan paikalliseen sovellukseen eivätkä koskaan päädy palvelimillemme – joten vastaukset, keskustelujen nimet ja yhteenvedot pysyvät vain laitteellasi.",
+    "detect": "Tunnista paikalliset ympäristöt",
+    "detecting": "Tunnistetaan…",
+    "experimental": "Kokeellinen",
+    "portLabel": "Portti",
+    "statusUnknown": "Ei vielä tarkistettu.",
+    "statusChecking": "Tarkistetaan…",
+    "statusReady": "{count, plural, =0 {Yhdistetty, mutta malleja ei ladattu.} one {Yhdistetty — # malli saatavilla.} other {Yhdistetty — # mallia saatavilla.}}",
+    "statusNotRunning": "{label} ei tavoitettu. Tarkista, että se on käynnissä tällä portilla ja että selaimesi saa käyttää paikallisia sovelluksia tältä sivustolta.",
+    "statusHttpError": "{label} palautti virheen. Tarkista sen lokit.",
+    "corsHelp": {
+      "ollama": "Ollama on käynnissä, mutta estää pyynnöt tältä sivustolta. Aseta OLLAMA_ORIGINS tämän sivuston osoitteeksi, käynnistä Ollama uudelleen ja tunnista uudelleen.",
+      "lmstudio": "LM Studio on käynnissä, mutta estää pyynnöt tältä sivustolta. Ota CORS käyttöön sen paikallisen palvelimen asetuksissa ja tunnista uudelleen.",
+      "llamacpp": "llama.cpp on käynnissä, mutta estää pyynnöt tältä sivustolta. Käynnistä llama-server sallien cross-origin-pyynnöt ja tunnista uudelleen."
+    },
+    "privacyNote": "Paikalliset mallit eivät tue liitetiedostoja, kuvia, verkkohakua tai liittimiä – nämä vaativat palvelimemme. Tunnistus tarkistaa vain tämän tietokoneen."
+  },
+  "urlFetch": {
+    "sourceFallback": "Verkkosivu",
+    "fallbackHint": "Voit myös avata sivun, kopioida tekstin ja liittää sen tähän.",
+    "shortExtract": "Vain lyhyt ote oli luettavissa — sivu voi olla maksumuurin takana tai vaatia kirjautumisen.",
+    "errors": {
+      "invalidUrl": "Tämä ei vaikuta kelvolliselta verkkosivun osoitteelta.",
+      "ssrfBlocked": "Tätä osoitetta ei voi noutaa tietoturvasyistä.",
+      "tooManyRedirects": "Tämä linkki ohjautui liian monta kertaa.",
+      "timeout": "Sivu vastasi liian hitaasti.",
+      "unreachable": "Sivua ei saatu tavoitettua.",
+      "blocked": "Sivusto esti pyynnön — se saattaa vaatia kirjautumisen tai estää automaattiset lukijat.",
+      "notFound": "Sivua ei löytynyt.",
+      "upstream": "Sivusto palautti virheen.",
+      "pdf": "Tämä linkki johtaa PDF-tiedostoon. Lataa tiedosto ja liitä se käyttämällä liitä-painiketta.",
+      "nonHtml": "Linkki ei johda luettavaan verkkosivuun.",
+      "tooLarge": "Sivu on liian suuri noudettavaksi.",
+      "empty": "Sivulta ei löytynyt luettavaa artikkelitekstiä.",
+      "generic": "Sivua ei voitu noutaa."
+    },
+    "fetchingFile": "Noudetaan kohteesta {host}…",
+    "attachLink": "Liitä linkki",
+    "attachLinkTitle": "Liitä verkkosivu",
+    "attachLinkDescription": "Sivu noudetaan ja sen luettava teksti liitetään viestiisi.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Nouda & liitä",
+    "attachLinkInvalid": "Tämä ei näytä verkkosivun osoitteelta.",
+    "linkBadge": "Linkistä",
+    "couldNotRetrieve": "Ei voitu noutaa",
+    "doc": {
+      "sourceLabel": "Lähde",
+      "retrievedLabel": "Noudettu",
+      "attemptedLabel": "Yritys",
+      "failureHeading": "Verkkosivua ei voitu noutaa"
+    },
+    "settingsTitle": "Linkit viesteissä",
+    "settingsToggle": "Nouda liitetyt linkit automaattisesti",
+    "settingsDescription": "Kun liität linkin yksinään, sivu noudetaan ja sen teksti liitetään viestiin, jotta avustaja voi lukea sen. Voit ottaa tämän pois päältä, jolloin liitetyt linkit jäävät pelkiksi tekstilinkeiksi — voit silti liittää sivun käsin + -valikosta.",
+    "addLink": "Lisää linkki"
+  },
+  "cameraAccessError": "Kameraan ei saatu yhteyttä. Tarkista kameran käyttöoikeudet ja yritä uudelleen.",
+  "cameraUnnamedDevice": "Kamera",
+  "pastedText": {
+    "fallbackName": "Liitetty teksti",
+    "charCount": "{count, number} merkkiä",
+    "removeChip": "Poista liitetty teksti ”{name}”",
+    "blockLabel": "Liitetty teksti: {name}",
+    "doc": {
+      "heading": "Liitetty teksti",
+      "pastedLabel": "Liitetty"
+    },
+    "settingsTitle": "Isot liitetyt tekstit",
+    "settingsToggle": "Muuta suuri liite liitteeksi",
+    "settingsDescription": "Jos liität enemmän tekstiä kuin alla oleva raja, se liitetään tiedostona viestikentän täyttämisen sijaan. Tekstiä käytetään sellaisenaan — mitään ei haeta tai muuteta.",
+    "settingsThresholdLabel": "Liitä liitteeksi, jos pituus ylittää",
+    "settingsThresholdUnit": "merkkiä",
+    "settingsThresholdHint": "Välillä {min, number}–{max, number} merkkiä."
+  },
+  "structures": {
+    "section": "Rakennekuvaukset",
+    "sectionSubtitle": "Tallennetut kenttämäärittelyt. Käytä yhtä poimintamallina tai lähtökaaviona tietotyön taulukkoon.",
+    "loadFromStructure": "Lataa rakenne",
+    "loadFromStructureTitle": "Korvaa nämä sarakkeet tallennetulla rakenteella",
+    "pickerEmpty": "Tallennettuja rakenteita ei ole vielä.",
+    "pickerTitle": "Lataa tallennettu rakenne",
+    "saveAsStructure": "Tallenna rakenteena",
+    "saveAsStructureTitle": "Tallenna nämä sarakkeet omaan rakennekirjastoon",
+    "savedToast": "Tallennettu rakenne ”{name}”",
+    "namePlaceholder": "Rakenteen nimi",
+    "fieldCount": "{count} kenttää",
+    "fieldCountOne": "1 kenttä",
+    "downgradedNotice": "{count} kenttä(ä) yksinkertaistettu tekstiksi — taulukossa vain yksi arvo per solu: {names}",
+    "truncatedNotice": "{count} kenttä(ä) jätetty pois — taulukon maksimi on {max} saraketta: {names}",
+    "skippedDerivedNotice": "{count} laskettua saraketta ei tallennettu — kaavat viittaavat tämän taulukon sarakkeisiin: {names}",
+    "loadReplacesColumns": "Tämä korvaa nykyiset sarakkeet. Olemassa olevat rivit säilyttävät niiden arvot, joiden sarake nimet täsmäävät."
   }
 }

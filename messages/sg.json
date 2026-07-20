@@ -907,7 +907,8 @@
     "processingAudio": "A rûngbi audio...",
     "ttsError": "Faut ti kûê audio. Bï nga tîngbïngö.",
     "unsupportedMessageType": "Faut ti vë mesajï: Tîpi mesajï so a sô ndöka",
-    "addLanguageOption": "Gbêtî \"{name}\"…"
+    "addLanguageOption": "Gbêtî \"{name}\"…",
+    "sources": "Ngu nzönî"
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",
@@ -1331,7 +1332,23 @@
     "customInstructionsLabel": "Mbêtï ti tôgbo*",
     "defaultTemperatureLabel": "Températûrë ti yéké*",
     "Usage & Impact": "Sêlêni na mbeni",
-    "Connectors": "Bâa ti kêtî"
+    "Connectors": "Bâa ti kêtî",
+    "Backup": "Kubê ti ngi",
+    "Memories": "Zîkö mbênî",
+    "Agent Access": "Wako na agent",
+    "LocalModels": "Model ti gbë na mbongo",
+    "suggestRevisions": {
+      "title": "Ködörö ti dokumenti",
+      "toggle": "Suggéré kodörö mbênî tî ayeke kodörö",
+      "description": "Löndö li yeke Document workflow kodörö, ayeke sô ale yii na suggestion mo rena na mbi yeke kweni mbi yeke kwê na mo, tî ndanda na mbi yeke doko na mbi yeke sô a yeke na wafara ka nga kweni tî mû.",
+      "exceptionsTitle": "Mbi yeke kodörö dire dire sô :",
+      "exceptionSelection": "Kodi tî yenî mo a mbênî",
+      "exceptionLargeRewrite": "Sô kodörö a yeke mû a kodörö document tî mingi",
+      "exceptionReorder": "Sô sáké ti document a gbëtï tî lo ti ayeke kodörö",
+      "thresholdLabel": "Zia ti yê na kodörö mbênî sô lo",
+      "thresholdUnit": "% tî mbênî document a kodörö",
+      "exceptionSelectionAlways": "Sô i la yeke mouso ti loo mo kotïngö ti zîa, sô lo bagu ti yeke kundïngi awa — modelï na tîla na mo sô i la kodro, na kodro sô mbi tîla na mouso kpako ni doküma na."
+    }
   },
   "emptyState": {
     "greeting": "Mbi lingbi tî sâra yê?",
@@ -2086,7 +2103,9 @@
     "pin": "Linga na bängö",
     "unpin": "Tîrî linga",
     "moveToMore": "Gbenî na döko",
-    "moveOutOfMore": "Wüsa na menü"
+    "moveOutOfMore": "Wüsa na menü",
+    "showSources": "Hûngu mbi sôso fi",
+    "hideSources": "Sûku mbi sôso fi"
   },
   "transcription": {
     "transcribesOnSend": "Transcribes on send",
@@ -2408,7 +2427,8 @@
     "regionDefault": "Défa",
     "modelRow": "{requests} demande · {grams} g",
     "disclosure": "Estimation ti dî ti assumption v{version} · depi {since} · chat standard mbî (agent na réponse ti base de données ape na séne).",
-    "reset": "Rétablir statistique ti usage"
+    "reset": "Rétablir statistique ti usage",
+    "estimatedPortion": "Kodô tî ~{grams} g CO₂e ({requests} na sara) sô mbi bala na chats sô kô sô tracking ape — bala mbi yeke na kidipé ti maburu ti message, ape na maburu token."
   },
   "extraction": {
     "toggleLabel": "Hâ lâ tî data ti yângâ",
@@ -2615,7 +2635,25 @@
       "pendingCount": "{count} ti hila sô",
       "closeReview": "Küpe ketekete ti mbi",
       "showReview": "Hombere ketekete",
-      "showReviewPending": "Hombere ketekete ({count} ti hila sô)"
+      "showReviewPending": "Hombere ketekete ({count} ti hila sô)",
+      "undoEdit": "Kɔta",
+      "clearResolved": "Kpengbi na mo kɛ",
+      "clearResolvedHint": "Kwêlê na likundu ôkoé, wa zia, na wa yeke ya ûse sô azui lo na lisolo ti awa",
+      "autoClearResolved": "Kpengbi na mo kɛ na yeke",
+      "customCriteria": "Likôlo na mo kɛ",
+      "closeCriteria": "Zâ lâ likôlo na mo kɛ",
+      "newCriterion": "Likôlo mbârâ",
+      "newCriterionName": "Likôlo na mo tî nzönî",
+      "criterionName": "Tî likôlo",
+      "criterionRubric": "Rubrik",
+      "criterionRubricPlaceholder": "Zo kê yângâ ndôro tî likondö sô a yeke kûê na likôlo âwa, ti y'ê kôdörö \"Yângâ na façon na zo yeke sô mbi tî sangɔ, na mininga a kêtê...\"",
+      "criterionRubricHint": "Rubrik âwa na kêtê wi na AI tî hêhê ti MQM likôlo bâ zia na ndâti likondö.",
+      "criteriaEmpty": "Suluşionga likôlo na mo — dî na façon tî mbi tî sangɔ, dôkita na sôngô, wala façon na dörö — tî kundakunda likondö na likôlo bâ MQM. Bê re ndâ ti mâ gôlo na aparèy sô ê na mo na ga yeke yângâ tu.",
+      "deleteCriterion": "Kuei likôlo",
+      "manageCriteria": "Likôlo na mo kɛ",
+      "addCriteria": "Zóngâ likôlo",
+      "noUsableCriteria": "Sâra likôlo mo kɛ aké tî singa, wala dî mo rubrik tî likôlo na mo.",
+      "criterionRubricTooLong": "Rubric ti lo ayeke {over} caractère tî sô a sû tî tolé. Lo yeke falé na assessment kûê-kûê, ala lo köta mbïrï sô lo yeke ti yeke ïrïti criterion sô."
     },
     "document": {
       "emptyTitle": "Kue ini ti dokumente mbi ti mo yeke",
@@ -2735,7 +2773,32 @@
       "clearSelection": "Fë seleksyon (lakü na dokument mbi yeke)",
       "reviseSelectionPlaceholder": "Gbêla atene na seleksyon…",
       "revisedSelectionSummary": "Mbi a seleksionî pasaji a na workspace.",
-      "assessedSelection": "Seleksyon"
+      "assessedSelection": "Seleksyon",
+      "undoEdit": "Kɔta",
+      "clearResolved": "Kpengbi na mo kɛ",
+      "clearResolvedHint": "Kwêlê na likundu ôkoé, wa zia, na wa yeke ya ûse sô azui lo na lisolo ti awa",
+      "autoClearResolved": "Kpengbi na mo kɛ na yeke",
+      "import": "Gu na",
+      "importReplaceTitle": "Loûtêng dokumento?",
+      "importReplaceBody": "Gu {name} loûtê dokumento ti yeke. Référence, spec na tone na mbi ape ti kété.",
+      "importReplaceConfirm": "Loûtêng",
+      "editorMode": "Mode ti éditeur",
+      "editorModeRich": "Teksto ti zia",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Sûru mbênso na téngbi na ndambu na mode na éditeur.",
+      "suggestChanges": "Suggéré kodörö",
+      "suggestChangesHint": "Limbä kodörö ti mbênî mbênî sô suggéré tî ayeke kodörö document ngbanga.",
+      "suggestChangesSelectionNote": "Ködörö ti mbênî mo a mbênî ayeke dire dire — sô mo a selekeni ayeke mô tî kodörö ti mo na mbênî.",
+      "suggestedSummary": "Suggéré {count} {count, plural, one {kodörö} other {kodörö}} ti limbä.",
+      "revisionSuggestionSummary": "Demande ti kodörö mo ayeke {count} {count, plural, one {suggestion kodörö} other {suggestion kodörö}}.",
+      "revisionCriterionLabel": "Demande kodörö",
+      "fallbackSelection": "Ayeke dire dire — kodörö ti mbênî mo a mbênî ayeke na suggestion.",
+      "fallbackLargeRewrite": "Ayeke dire dire — kodörö ayeke na document mingi tî sô mbi yeke lingbi li ti suggestion mbênî.",
+      "fallbackReorder": "Ayeke dire dire — sáké ti document ayeke gbëtï, sô ayeke ti na suggestion kême mi limbä.",
+      "fallbackUnanchorable": "Ayeke dire dire — kodörö ayeke sô amâ ni mo ka gba na mbênî mo na document.",
+      "fallbackNoChanges": "Kodörö ayeke na mo.",
+      "criterionRubricTooLong": "Rubric ti lo ayeke {over} caractère tî sô a sû tî tolé. Lo yeke falé na assessment kûê-kûê, ala lo köta mbïrï sô lo yeke ti yeke ïrïti criterion sô."
     },
     "data": {
       "emptyTitle": "Mandra data tî anali",
@@ -2904,7 +2967,39 @@
       "autoCheckHint": "Kangbi ti yeke pere données na foto ôko na document, système ape yeke sô ifa kôdö vérification ti qualité na ndö na yângâ.",
       "checkingNewRows": "Ape yeke vérifié ndö na yângâ kôdö problémé ti qualité…",
       "ingestCheckFailed": "Vérification automatique ti qualité a mousso ({message}) — oko yeke sô uwe ti zûnga na Vérifier qualité.",
-      "assessedIngest": "Ndö na yângâ"
+      "assessedIngest": "Ndö na yângâ",
+      "transpose": "Sôkô ti ti mbi",
+      "transposeAxisColumn": "Nzönï",
+      "transposeSuggestion": "Tabelê a ne sôkô: mbi ɓeti matché nzönï ti tabelê ti mbi. Ŵa kufãli ti bảngo na, kôi na mbi kê tabelê na kêtî, na mbi kê nzönï na nzönï ti ambeni?",
+      "transposedTable": "Tabelê sôkô mbi na nzönï",
+      "columns": "Nzönï",
+      "columnsHidden": "Nzönï ({count} zo hangu ti mo",
+      "showAllColumns": "Hûndo na",
+      "chartScatter": "Sôki (x na y)",
+      "chartPivot": "Tabelê ti pivot",
+      "xColumn": "Nzönï X",
+      "yColumn": "Nzönï Y",
+      "splitByColumn": "Bê ti",
+      "splitNone": "Bê ti hangu",
+      "pivotValueColumns": "Nzönï ti modû na",
+      "aggMin": "Bêndê",
+      "aggMax": "Kêtê",
+      "aggMedian": "Median",
+      "chartSeriesTruncated": "Ti hûnda {max} seri",
+      "chartPointsTruncated": "Ti hûnda {max} pi yi zolo",
+      "chartScatterAria": "Schema ti sôki ti {x} na {y}",
+      "pivotTableAria": "Tabelê ti pivot ti akê na {column}",
+      "schemaFormula": "Formula",
+      "schemaFormulaPlaceholder": "tînzî. [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Zolo ti hûnda: a ti kûê nzönï na [Name]; a sâra + - * / %, parenthesis, na round, abs, min, max. Dönî a ti sô na mbênî na a lôndöngö. Ngu wala a bendi ti hûnda zo sô-a-yê na mo.",
+      "schemaFormulaSyntaxError": "Formula ti hângu",
+      "schemaFormulaUnknownRef": "Nzönï ti mo yéké: {ref}",
+      "schemaFormulaArityError": "Mbênî ti mbousu ti {fn} ti hângu",
+      "schemaFormulaCycleError": "Rapport ti formula ti yângbi ti mbênî",
+      "derivedColumnTitle": "Hûndê: {formula}",
+      "derivedFrom": "Hûndê kutû ti {formula}",
+      "takePhoto": "Fâ na foto",
+      "takePhotoHint": "Sûru caméra na mbî na fâ na foto ti formulaire ou table — dati ti yé mûtu na donne structurée mo yeke ko fa na foto."
     },
     "map": {
       "emptyTitle": "Sûndô données mo na carte",
@@ -2978,7 +3073,31 @@
         "jumpTo": "Sô nîngê na {label}",
         "slider": "Mbôtî tî période",
         "showUndated": "Hîngbi kêtê sô yèkè datê",
-        "activeCount": "{count} ke na hîngbi"
+        "activeCount": "{count} ke na hîngbi",
+        "jump": {
+          "start": "Bêrê",
+          "yearsLater": "{count, plural, one {1 ngbanga ngû wânga} other {# ngbanga ngû}}",
+          "monthsLater": "{count, plural, one {mwa wânga na mbênî} other {# mwa na mbênî}}",
+          "daysLater": "{count, plural, one {lâ wânga na mbênî} other {# lâ na mbênî}}",
+          "appears": "{count, plural, one {yeke ngbâ} other {# yeke ngbâ}}",
+          "ends": "{count, plural, one {yeke kété} other {# yeke kété}}",
+          "progress": "Banga {index} na {total}"
+        },
+        "precision": {
+          "minute": "Na miniti",
+          "hour": "Na kânda",
+          "day": "Na lâ",
+          "month": "Tî daté mwa",
+          "year": "Tî daté ngbanga ngû",
+          "mixed": "(tî bangî bangî)"
+        },
+        "pacing": {
+          "toggle": "Temp tî kêtê na ngbanga",
+          "cardDuration": "Yângâ zîngö na ngbanga",
+          "seconds": "{seconds}s",
+          "maxCards": "Ngbanga gbanga ti yângâ na daté",
+          "hint": "Daté sô itênî na ndô sô apêke yângâ li mbongo."
+        }
       },
       "granularity": {
         "site": "Kêtê",
@@ -2995,8 +3114,13 @@
         "color": "Kôlon : confiance ti coordonnées (blue mingui, amber kôda, red kere)",
         "size": "Kaba ti dot : ndé ti kêtê a na matière",
         "area": "Ködörö na ndö: Gbûgû ayeke ndö na distriki, rézön, sökè mboka.",
-        "container": "Kötö-kötö yângâ: Ndö ayeke mbi mbeni yângâ ländä yângâ."
-      }
+        "container": "Kötö-kötö yângâ: Ndö ayeke mbi mbeni yângâ ländä yângâ.",
+        "precisionHalo": "Ring sô tî bâbângô ti makôngo (na temp lapse): événement a yeke nangâ mwa wala ngbanga, anguè tî temp tî lo tîâ wala fâa"
+      },
+      "sourceLabel": "Ngû: {name}",
+      "fetchAndMap": "Sôhênî & dörö gbanga",
+      "fetchingPage": "Sôhênî page…",
+      "railUrlRequest": "Sôhênî na dörö gbanga ndâ la: {title} ({url})"
     },
     "shell": {
       "showConversation": "Wüsa bêrê-bîanî",
@@ -3014,6 +3138,16 @@
       "untitled": "Bêrê-bîanî mû",
       "toggleMenu": "Sûngbo menü",
       "model": "Modelo ti workflow ôko"
+    },
+    "tabs": {
+      "label": "Fason ya mbëtïrï",
+      "chat": "Mbëtïrï",
+      "chatDescription": "Mbëtïrï tî poto mo na assistant"
+    },
+    "discard": {
+      "title": "Wëngë drafti aï?",
+      "body": "Sô köta na {target}, a tîlî aköngö tî mo yeke sô {current}.",
+      "confirm": "Wëngë"
     }
   },
   "connectors": {
@@ -3028,6 +3162,22 @@
       "asana": {
         "name": "Asana",
         "description": "Sôga, tî hû na sûèse tâche na project."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Soso dati ti mbi sô yeke na internet, workbook na Pulse metrics."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Sôso na gâta na records na Salesforce mo."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Gere, planifier na publier poste ti social media."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Lirï na yeke la bîngbi na social inbox, na tî-mbara so."
       }
     },
     "connect": "Köpî",
@@ -3088,7 +3238,19 @@
       "missingState": "Apété tî sèrè",
       "close": "Mo so kôfa fënî sô na zamba app sô.",
       "closeButton": "Kôfa fênî"
-    }
+    },
+    "oauthNoAppConfigured": "Mbeni ti entrer na {name} aboro à dîngbi na deployment na mbi. Sûru na app OAuth mo yeke.",
+    "adminConnectorsTitle": "Utî na organisation mo",
+    "adminConnectorsDescription": "Connectors na gérant mo bâ tî-lî. Mo ko yeke yâkû, mo sûku na accès mo.",
+    "managedByOrg": "Géré par organisation mo",
+    "connectorOauthNotConfigured": "Mbeni ti entrer aboro na connector so. Kûê ti bâ gérant mo.",
+    "yourConnectorsTitle": "Connectors mo",
+    "addTitle": "Gbwêtî connector",
+    "addDescription": "Pâsa na outil ti mo yeke gbwêtî. Mo ko défi accès après mo tî sè.",
+    "add": "Gbwêtî",
+    "filterLabel": "Filtré connectors",
+    "filterPlaceholder": "Sôso connectors",
+    "noMatches": "Ala connector ti matâ “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Bendé gbata ti model",
@@ -3139,5 +3301,399 @@
     "deselectAll": "Gbênga bängö",
     "autoAddLabel": "Kömbëtï modeli tî mo wala kidö",
     "autoAddDescription": "Modeli sô a kötä na ngangu-ködörö oko ayeke tî mo wala kidö. Modeli sô a ayeke yângâ ayeke dë."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Lêngbi ti mbi",
+      "moderate": "Mediocre ti mbi",
+      "high": "Gâgô ti mbi"
+    },
+    "tierTooltip": "Lêngbi ti énerziê na demande kêtê-kêtê, a ti bé ti modelê. A yeke doni na mô tî kêtê kêtê sôa tî wön. v{version} — mbi wala ti damuşa.",
+    "typicalRequest": "~{grams} g CO₂e na demande ti mbi",
+    "typicalRequestTooltip": "Mbênî sô yeke sâra na demande ti mbi (yôko 1,000 prompt na 500 token ti banga), a yeke kêtê na mbênî ti wön v{version}. Gâgô ti mbi a ti fängö na dë aka, paramétèrè, na rézion ti ôko.",
+    "activities": {
+      "netflixHd": "Gazarâ Netflix HD",
+      "zoomCall": "Zoom call (kamera ti hûndo na)",
+      "webBrowsing": "Lukündö Internet",
+      "spotifyAudio": "Spotify na yângâ"
+    },
+    "equivalents": {
+      "title": "≈ lika ti carbon",
+      "note": "Likô tî carbon ti lingbi ti servisî na mbênî ti ôko — mbênî a yeke kêtê wön, lêngbi ti mbênî, dùkö mbi bîrî ti sô yeke sâra na mo."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Gâgô ti carbon na damuşa a mbi: {grams} gram CO₂ e. Sôkô mô na mbi.",
+      "ariaLabelToday": "Gâgô ti carbon na damuşa a mbi lo: {grams} gram CO₂ e. Sôkô mô na mbi.",
+      "title": "Damuzi a mbi (gâgô)",
+      "today": "Leniyo",
+      "total": "Dzoni kɛ̈",
+      "measured": "Ngu bê ti yeke na maburu ti token",
+      "estimated": "Ngu bê ti yeke na bala mbi yeke na barafunu kidî tî sô",
+      "lastRequest": "Sa ti yi tî sô",
+      "disclaimer": "Kötörö ti na sara so na maburu token, to mbi yeke tî token sô pe tî mingi, na mopé tî averages na assumptions v{version} sô a zéré. Barafunu kidî tî sô a yeke na bala mbi yeke na kidipé ti mbênî yi na model tî conversation. Kôdoro ape."
+    }
+  },
+  "table": {
+    "copyTable": "Kopi tablô",
+    "downloadTable": "Bêtï tablô",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Azongbi oko na CSV",
+    "copyFailed": "Kopi tablô ayeke"
+  },
+  "backup": {
+    "intro": {
+      "title": "Kubê aka yângâ mo — na sirî",
+      "body": "Zîa yângâ mo li tongbi balê na ndatï ayeke sô ayeke bê. Ala mo ayeke kêtê zîa yângâ mo.",
+      "keyWarning": "Ködörö ti ködro na sirî a hîngbi balê ngbangâ. Ala mo ayeke yâ na mbi na ayeke sirë, nî sô mo köte ködro mo, köte backup mo.",
+      "create": "Ngambi ködro mo & kubê",
+      "decline": "Lesse — tî mbi zîa yângâ na balê lâke"
+    },
+    "ceremony": {
+      "titleCreate": "Sèn ködro tî zuru backup mo",
+      "titleRotate": "Sèn ködro tî zuru backup mo mbïkö",
+      "titleView": "Ködro tî zuru backup mo",
+      "description": "Ködro a zingo ti kubê mo na fetï ndatï ayeke tî da ngbangâ. Sèn bala na ndatï sirï — ala mo ayeke sô.",
+      "copy": "Kopi",
+      "copied": "Akopié !",
+      "download": "Bêtï .txt",
+      "showQr": "Hûna QR code",
+      "hideQr": "Küwisa QR code",
+      "savedCheckbox": "Nabê sèngö ködro tî zuru backup mo na ndatï sirï",
+      "saveFirstHint": "Kopi ô bêtï ködro mo lôko ayeke yâ.",
+      "continue": "Tîmbè",
+      "done": "Asilî",
+      "cancel": "Gbesë",
+      "cancelConfirmTitle": "Gbësë tî kubê ?",
+      "cancelConfirmBody": "Zîa yângâ mo alingo kubê. Mo agbegë kubê ti sirï tûnyè na Settings.",
+      "cancelConfirmRotateBody": "Ködro tî zuru backup mo ambingbi sono. Mo hûna a tûnyè na Settings.",
+      "cancelConfirmConfirm": "Wê, gbësë",
+      "cancelConfirmDismiss": "Zongbi",
+      "loadError": "Ayeke hûna ködro tî zuru backup mo na balê aïsi."
+    },
+    "file": {
+      "heading": "Ködro tî zuru backup ti zîa yângâ",
+      "warning": "Bë sèngö ködro a na sirï. Sèkè sô a yeke a sâlo mo ayeke hûna kubê mo; sô mo köte a, alingo kubê."
+    },
+    "progress": {
+      "titleCreate": "Kubê ti zîa yângâ mo",
+      "titleRotate": "Kubê ködro tî zuru backup mo mbïkö",
+      "encrypting": "{count, plural, one {Kubê ti zîa yângâ #...} other {Kubê ti zîa yângâ #...}}",
+      "success": "{count, plural, one {Kubê asôsô. Zîa yângâ # ayeke sôsô.} other {Kubê asôsô. Zîa yângâ # ayeke sôsô.}}",
+      "error": "Kubê ayeke. Zîa yângâ mo alingo balê aïsi.",
+      "retry": "Kû mû na ndï",
+      "close": "Küi",
+      "done": "Asilî"
+    },
+    "input": {
+      "label": "Ködro tî zuru backup",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Ködro a alingo na lettr O, I, ô L.",
+      "checksumError": "Ndolo ayeke — key ayeke se ti yeke.",
+      "formatError": "Ndolo ayeke se ti key ti tî kobîngö.",
+      "incomplete": "Ganza mo sô — key ti kobîngö a sô 56 kodoro.",
+      "valid": "Key ayeke mbi agu."
+    },
+    "restore": {
+      "title": "Sîngî na mo na diskuta",
+      "successTitle": "Backup a sîngi",
+      "promptBody": "Mî gbenî backup ti akunzi mo ti kôdörö. Ganza key ti kobîngö mo na sîngî mo na apparaat âne yâ.",
+      "submit": "Sîngî backup",
+      "skip": "Sôkou — kangä dzî na apparaat âne yâ",
+      "restoring": "Yî tî kîrî na sîngî diskuta mo...",
+      "successBody": "{count, plural, one {# diskuta a sîngi.} other {# diskuta a sîngi.}}",
+      "wrongKey": "Key âlï ayeke mbi agu, nzönî ayete tî gbâ ti backup âli. Sô mo a sâra key, sâra mbi kokonda key mo.",
+      "corrupt": "Backup âli ayeke se te tî lä yângâ — a kêtê yâ na yâ. Mo kîrî kangä dzî na apparaat âne yâ, mbi sôkou awalï.",
+      "networkError": "Apamuke tî ké backup service. Gbenî connexion mo mbi sôkou.",
+      "tryAgain": "Sôkou ti key",
+      "close": "Kété"
+    },
+    "enterKey": {
+      "title": "Ganza mbi key ti kobîngö",
+      "body": "Key ti kobîngö mo a sâra na apparaat ozo. Ganza mbi key ti sîngî backup na apparaat âne yâ.",
+      "submit": "Yeke key âli"
+    },
+    "banner": {
+      "keyMismatchTitle": "Backup a sûka — key ti kobîngö mo a sâra na apparaat ozo.",
+      "enterNewKey": "Ganza mbi key",
+      "resetBackup": "Reset backup",
+      "resetConfirmTitle": "Reset backup na key ti apparaat âli?",
+      "resetConfirmBody": "Backup ti yâ a sâra na diskuta ti apparaat âli, pèpé na key ti apparaat âli. Apparaat ozo na sé key ti apparaat âli.",
+      "resetConfirmAction": "Reset backup",
+      "remoteMissingTitle": "Backup mo ayeke se na server. Backup a sûka.",
+      "backUpAgain": "Backup ti yâ sôkou",
+      "dismiss": "Kété"
+    },
+    "rotate": {
+      "confirmTitle": "Sâra key ti kobîngö mo?",
+      "confirmBody": "Backup mo a kîrî na mbi key, na key ti yâ ayeke se yâ. Mo na gû sû mbi key, mbi ganza na apparaat ozo mo.",
+      "confirmAction": "Sâra key"
+    },
+    "toast": {
+      "enrollLater": "Mo na hûlî backup kîrî na settings kapan na kapan.",
+      "keyUpdated": "Key ti kobîngö a sâra. Backup a sôkou.",
+      "resetDone": "Backup a reset na key ti apparaat âli.",
+      "backupRestarted": "Backup a sînga sôkou.",
+      "opFailed": "Mo sôkô ayeke tî yângâ. Sôkou awalï."
+    },
+    "settings": {
+      "statusOn": "Backup ayeke",
+      "statusOff": "Backup ayeke se",
+      "offDescription": "Diskuta ti mo ayeke fa na browser âli sôkô. Hûlî backup kîrî sô na sûni mbi diskuta mo, na sîngî na apparaat ozo mo. Diskuta yî ti encrypté na apparaat mo — mî ayeke se tî yèkê lä.",
+      "turnOn": "Hûlî backup",
+      "restoreTitle": "Backup yâ ayeke na akunzi mo",
+      "restoreDescription": "Ganza key ti kobîngö mo na sîngî backup na apparaat âne yâ.",
+      "restore": "Sîngî backup",
+      "lastBackup": "Backup ti sô na yângâ: {time}",
+      "lastBackupNever": "Backup ayeke sô",
+      "keyFingerprint": "Key ····-{tail}",
+      "syncState": {
+        "idle": "Yeke hûtî tî sync",
+        "syncing": "Backup tî yâ...",
+        "ok": "Ayeke tî yângâ",
+        "keyOutOfDate": "A sûka — key ti kobîngö ayeke sâra na apparaat ozo",
+        "remoteMissing": "Kóto — backup ayeke na server",
+        "error": "Backup na mbi na maboko asala mbënî"
+      },
+      "backUpNow": "Sala backup tî nzönî",
+      "backUpNowSuccess": "Backup asili",
+      "backUpNowFailure": "Backup ayeke — palaver na maboko ayeke dagbêtî na aparêyi sêso",
+      "viewKey": "Vata clé tî récupération",
+      "changeKey": "Balêka clé tî récupération",
+      "dangerTitle": "Zône tî mayou",
+      "turnOffDelete": "Kúè na kûlî backup",
+      "turnOffConfirmTitle": "Kúè backup?",
+      "turnOffConfirmMessage": "Lo kûlî backup tî mo na server so ape appe aparêyi ngubê. Palaver na aparêyi sêso ayeke. A sô mbi yeke lo backup agô tî clé tî récupération yéké sôkô.",
+      "turnOffConfirmAction": "Kûlî backup",
+      "turnOffSuccess": "Backup akûè na akûlî",
+      "turnOffFailure": "Mbi pê anzu kûlî backup. Sôkô bîan."
+    }
+  },
+  "memories": {
+    "title": "Meme",
+    "description": "Wanda assistant yeke hapa bale ti mbi sô lo mara — mû o tî baka, mbi yângâ, na miwo tî mbi yeke sala — na hû ô fa memê ye fetingo na palavers.",
+    "enableToggle": "Hû meme",
+    "privacyNote": "Mara ayeke-ndoye na browser só sôkô na ayeke hû na palaver mo na gî ma nî kodro na réponde.",
+    "empty": "Meme ayeke. Mara sô ayeke ya so hû na memê ayeke-ndoye so lo na palavers na mo.",
+    "savedOn": "Ayeke-ndoye {date}",
+    "deleteMemory": "Kûlî meme",
+    "clearAll": "Kûlî meme nyoso",
+    "clearAllConfirmQuestion": "Kûlî meme nyoso? Lo pê apida mo.",
+    "clearAllConfirm": "Kûlî nyoso",
+    "cancel": "Kangû"
+  },
+  "contextWindow": {
+    "label": "Fenêtre tî contexte",
+    "value": "{count} mesaj",
+    "fewer": "Mesaj ponta",
+    "more": "Mesaj mingi",
+    "description": "Mesaj mobutu so ayeke na lo tapéro ayeke hû na résumé na yeke yâ tî contexte."
+  },
+  "agentAccess": {
+    "title": "Accès tî agent",
+    "description": "Sûnga nde aningâ wâ sô ayeke zanza agents tî Foundry. Règlements ayeke hângâ mbênî tî ndoyenge mo na accès Azure mo — mo pê apê yângâ accès Azure ayeke yèkè.",
+    "backToChat": "Zamba na palaver",
+    "loading": "Yeke gôzo agents na règlements…",
+    "loadError": "Mbi pê agôkê data tî accès agent.",
+    "rulesUnavailableWarning": "Règlements tî accès apê agôkê na stockage. Agent ayeke yabî na nzönî wa règlements apê abêti.",
+    "retry": "Sôkô",
+    "rulesTab": "Règlements tî agent",
+    "localAdminsTab": "Admins tî gbaga",
+    "noAgents": "Agent keti na kôna.",
+    "sourceLabel": "Sûrse",
+    "notDiscoverable": "Mo pê abê ti hû",
+    "notDiscoverableHint": "Règlement ayeke ti agent so, mbênî apê na découverte tî mo — a pê ayeke balêka ngâ, accès Azure tî mo apê ayeke ni, ou règlements ayeke ni mo.",
+    "accessEveryone": "Bê africa nyoso",
+    "accessRestricted": "Yéké",
+    "edit": "Sûngui",
+    "updatedByLine": "Yeke bâlêka na {user} na {date}",
+    "accessTypeLabel": "Bê tî hû ti agent lê",
+    "everyoneDescription": "Kõ na bê na yeke sô ayeke hû agent lê adé tî accès Azure ti mo.",
+    "restrictedDescription": "Pô na bê na domaine so ayeke na lî gbata mbênî.",
+    "allowDomainsLabel": "Domain ti sô ayeke na",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Mo sô ayeke na",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Pesa Enter tene ayeke",
+    "removeChip": "Gbagara",
+    "groupsLabel": "Groupe ti sô ayeke na",
+    "groupsPendingConsent": "Zia groupe ti accéder ayeke kûê, fo ti tenant admin ape okü na, na a kodro ape sêsê.",
+    "restrictedEmptyWarning": "Mo wala domains ape nî—pëteni mo eke ɓe ti yeke agent so.",
+    "save": "Sêda",
+    "saving": "Sêda...",
+    "cancel": "Kûê",
+    "saveSuccess": "Loi ti accéder asi sêda.",
+    "deleteSuccess": "Loi ti accéder asi gbagara—mo susu ti yeke agent so na ndongò.",
+    "saveError": "Sêda ape kûê. Nga yeke pû na mbî.",
+    "conflictError": "Mö ndra abiani akpa azende lo so a yeke kode. Nga yeke recharger tene yeke ti mbârï-mbârï, kôngô yeke bale mo zo yè.",
+    "reload": "Recharger",
+    "localAdminsDescription": "Pêdere na mo ti gouverner loi ti agent so wala redeploy. Local admins ayeke kode loi ti agent so ti biani aban na yeke.",
+    "noLocalAdmins": "Local admins ape kodro.",
+    "addLocalAdmin": "Yeke local admin",
+    "emailLabel": "Imêl",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Gbagara local admin",
+    "delegatedAgentsLabel": "Agent ti na pê werê",
+    "noDelegatedAgents": "Agent ti na pê werê ape kodro.",
+    "unknownAgentKey": "Cle ti agent tîngï ape sô",
+    "configSaveSuccess": "Local admins asi sêda.",
+    "configConflictError": "Mbênî kodro mo zo ayeke na local admin ko a yeke bale. Nga yeke recharger na kufa bale.",
+    "addAgent": "Küéta agent",
+    "newPromptAgentTitle": "Prompt agent mbïngi",
+    "editPromptAgentTitle": "Küete prompt agent",
+    "agentNameLabel": "Ngbanga",
+    "agentNamePlaceholder": "dö : Travel Advisor",
+    "agentDescriptionLabel": "Mbïrï",
+    "agentDescriptionPlaceholder": "A zïngbï na yeke na model picker",
+    "agentSystemPromptLabel": "System prompt",
+    "agentSystemPromptPlaceholder": "Mbïrï a sïngï ete agent a yeke",
+    "agentModelLabel": "Model",
+    "agentModelPlaceholder": "Pöpöngö model...",
+    "agentModelUnavailable": "{modelId} (tena ava)",
+    "agentModelUnknownError": "Model a ködörö a yeke tena ava. Pöpöngö model mingi na séngö kögï.",
+    "promptAgentBadge": "Prompt agent",
+    "editAgent": "Küete agent",
+    "deleteAgent": "Küta",
+    "deleteAgentConfirm": "Küta agent a na mbiâamü? A waliki na model picker; butû a yeke vingbi a kodro.",
+    "confirmDeleteAgent": "Wa, küta",
+    "promptAgentCreateSuccess": "Prompt agent a züa.",
+    "promptAgentSaveSuccess": "Prompt agent a séngo.",
+    "promptAgentDeleteSuccess": "Prompt agent a küta.",
+    "promptAgentsUnavailableWarning": "Prompt agent ayike lenge a yeke tena ava na storage. Ayeke tena küeté.",
+    "agentsTab": "Agents",
+    "connectorsTab": "Connectors",
+    "addConnector": "Gbwêtî connector",
+    "noConnectors": "Ala connector mo.",
+    "connectorsUnavailableWarning": "Apingbi ti sôso na magasin ti connector; listi ape ti zia nî. Ngu sô kûê na mo afo mô zî.",
+    "editAccess": "Vûtî accès",
+    "deleteConnector": "Sûku",
+    "deleteConnectorConfirm": "Sûku connector so? Mo bâ tî sè lo ko pingbi zî accès.",
+    "confirmDeleteConnector": "Sûku connector",
+    "connectorSaveSuccess": "Connector abâla.",
+    "connectorCreateSuccess": "Connector asuku.",
+    "connectorDeleteSuccess": "Connector asûku.",
+    "editConnectorTitle": "Vûtî connector",
+    "newConnectorTitle": "Connector môkô",
+    "connectorPresetLabel": "Kêtê na template",
+    "connectorPresetNone": "Kété na ndjoni",
+    "connectorNameLabel": "Ngbângo",
+    "connectorDescriptionLabel": "Bisï",
+    "connectorUrlLabel": "URL ti serveur",
+    "connectorUrlPlaceholderWarning": "Kwe na {placeholder} na URL lo kêtê na ndara mo mbênî lo kodro ni a zo zia",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Authentification",
+    "connectorAuthNone": "Ala",
+    "connectorAuthBearer": "Token (mbênî zo yeke na mbi token tî yi) ",
+    "connectorAuthOauth": "OAuth sign-in",
+    "connectorSealingUnavailable": "OAuth alingbi: AUTH_SECRET ala na déploiement ôko na kûê sekre tî client.",
+    "connectorTokenHelpLabel": "Lien na ndörö tî token (sô ayeke)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Sekre yeke na dépôt. Kûê oko sô o kûê na tètê, wala kêtê mbênî sô o kwe na lo.",
+    "connectorClientSecretHint": "A lingbi na sekre mû, lo ala lê na ndondo mo hana.",
+    "connectorScopesLabel": "Scopes (tî pato bako, ayeke)"
+  },
+  "localModels": {
+    "title": "Model ti gbë na mbongo",
+    "description": "Mbëtïrï na model sô gbë na mbongo ti or. Banzi yeke gï na browser ti mo kïri ngâ local app na cp ti mo, a yïne ti sô sîngï server tî nzönî — alo bïanë, sêngö tî mbëtïrï na resüme yeke sèngö na mbongo ti mo.",
+    "detect": "Fängä gbë tî mbongo",
+    "detecting": "Fängä...",
+    "experimental": "Gbèkè",
+    "portLabel": "Port",
+    "statusUnknown": "Abéngö nzönï.",
+    "statusChecking": "Ebïngö...",
+    "statusReady": "{count, plural, =0 {Akpö mbï, model ködörö akpö.} one {Akpö — # model té yeke.} other {Akpö — # model té yeke.}}",
+    "statusNotRunning": "Abeti akpö {label}. Gbalë sô yeke na port dë, na browser ti or ténï sî yeke sô a tî mbongo ngâ site ëa.",
+    "statusHttpError": "{label} api tî erörï. Gbalë logs ti model ëa.",
+    "corsHelp": {
+      "ollama": "Ollama yeke na mbongo mä a garë sô banzi längwa na site ëa. Sëtï OLLAMA_ORIGINS na adrès ti site ëa, sî na Ollama, ndö fängä gbë sï.",
+      "lmstudio": "LM Studio yeke na mbongo, mä a garë banzi na site ëa. Vënê CORS na settings tî server tî mbongo, ndö fängä gbë sï.",
+      "llamacpp": "llama.cpp yeke na mbongo mä a garë banzi na site ëa. Kanï llama-server ngâ cross-origin requests sô a teni, ndö fängä gbë sï."
+    },
+    "privacyNote": "Model tî gbë na mbongo a tönî sêngö attachment, image, web search tî connector — yënga yeke na server tî nzönî. Detection yeke gbëngö na mbongo ti mo dölï."
+  },
+  "urlFetch": {
+    "sourceFallback": "Page web",
+    "fallbackHint": "O sângi ti yângâ page bâ gunga, kopi nginza, tî mbari ti rê na awa.",
+    "shortExtract": "Kêtê na ndöro nginza sô apepe — page a yeke na mbeti-payi wala a sô sâ mbênî.",
+    "errors": {
+      "invalidUrl": "Adresse web sô apepe walî.",
+      "ssrfBlocked": "Adresse âwa a sô ayeke tî sôhênî tî mbênî sécurité.",
+      "tooManyRedirects": "Lien âwa a yeke tî zongu ti mininga mingi.",
+      "timeout": "Döko a yeke na tîngö nî ngu nzönî.",
+      "unreachable": "Ala ti fâ inge sô lo yeke kpë.",
+      "blocked": "Sîte ayeke gaba sô ngânde — lo yeke mû sô mo si siriri na lo wa mo atasâ na zîa programasi.",
+      "notFound": "Döko a ala inge sô lo yeke hînga.",
+      "upstream": "Sîte ayeke tîngö na e yeke gâdämärë.",
+      "pdf": "Lîngû a yeke PDF. Téléchargé lo, na kända botón attach na sêr na yângâ.",
+      "nonHtml": "Lîngû a ala web döko sô tî lâ nî a yeke lugbä hîngâ.",
+      "tooLarge": "Döko a yeke zûngö mingi, tî pâsi tî gbè.",
+      "empty": "Ala landi sô lê ti lugbä hîngâ na döko a.",
+      "generic": "Ala fâ inge pâsi tî gbè döko a."
+    },
+    "fetchingFile": "Gbë {host}…",
+    "attachLink": "Kûè lîngû",
+    "attachLinkTitle": "Kûè web döko",
+    "attachLinkDescription": "Döko a yeke gbè na tî tî lugbä mbênî na bi lo sêr na yângâ mo.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Gbè na kûè",
+    "attachLinkInvalid": "Ala yeke adrèsê ti web.",
+    "linkBadge": "Tî lîngû",
+    "couldNotRetrieve": "Ala tî kûê",
+    "doc": {
+      "sourceLabel": "Mbîlä",
+      "retrievedLabel": "Kûê",
+      "attemptedLabel": "Gbalû",
+      "failureHeading": "Ala gbè tî kûê web döko"
+    },
+    "settingsTitle": "Lîngû sô yeke na nzu",
+    "settingsToggle": "Gbè lîngû sô yeke klâ na nga te tî yângâ",
+    "settingsDescription": "Sô mo klâ lîngû sô yêkö tî yângâ, döko a yeke gbè na tî lugbä mbênî na sêr ti yângâ mo, mbï MSF AI ayeke yeke lugbä wa. Sêkî sungbâ sô mo yeke fadï tî klâ lîngû la nga na te sô lo yeke hîngä na programasi — mo ligi na kûè döko nhùnî hûnda na menú +.",
+    "addLink": "Duguë lîngû"
+  },
+  "cameraAccessError": "Apingbi ti alîngbi na caméra. Vingàna ti ndurü ti caméra na mbi, sô sè ti yeke mô so.",
+  "cameraUnnamedDevice": "Caméra",
+  "pastedText": {
+    "fallbackName": "Tèkë tî zîa",
+    "charCount": "{count, number} karakteri",
+    "removeChip": "Kûê tèkë tî zîa “{name}”",
+    "blockLabel": "Tèkë tî zîa: {name}",
+    "doc": {
+      "heading": "Tèkë tî zîa",
+      "pastedLabel": "Tèkë"
+    },
+    "settingsTitle": "Tèkë nzungu",
+    "settingsToggle": "Kwe tèkë nzungu baba na fichier",
+    "settingsDescription": "Sô tèkë mbi ndokë na limiti, lo yeke na fichier oko tî yê ti massa na sanduku tî singa. Tèkë ayeke ka na mo tèkë — woko ti yeke na mo wala kugbagba.",
+    "settingsThresholdLabel": "Kûê tèkë yeke mbi",
+    "settingsThresholdUnit": "karakteri",
+    "settingsThresholdHint": "Tî {min, number} na {max, number} karakteri."
+  },
+  "structures": {
+    "section": "Strukture",
+    "sectionSubtitle": "Definisio ti champ tî lê na dépôt. Yeke na mû tî extraction, wala na schema tî fambusu ti table workflow tî data.",
+    "loadFromStructure": "Bêda strukture",
+    "loadFromStructureTitle": "Kûê kolône ôko na strukture tî lê",
+    "pickerEmpty": "Strukture tî lê ayeke oko.",
+    "pickerTitle": "Bêda strukture tî lê",
+    "saveAsStructure": "Kê na strukture",
+    "saveAsStructureTitle": "Kê kolône so na bibliothèque tî strukture mo",
+    "savedToast": "Strukture tî lê “{name}”",
+    "namePlaceholder": "Ngbângo tî strukture",
+    "fieldCount": "{count} champ",
+    "fieldCountOne": "1 champ",
+    "downgradedNotice": "{count} champ mo kêtê na tè tî tèkë — table yeke na value oko na cellule: {names}",
+    "truncatedNotice": "{count} champ mo ti lê — limit tî table yeke na {max} kolône: {names}",
+    "skippedDerivedNotice": "{count} kolône tî calcul ayeke oko — formula ti referê kolône tî table: {names}",
+    "loadReplacesColumns": "Lo kûê kolône ti bûngbi na sanduku. Rôw tî yeke na valeur sô kolône yeke na ngbângo ôko."
   }
 }

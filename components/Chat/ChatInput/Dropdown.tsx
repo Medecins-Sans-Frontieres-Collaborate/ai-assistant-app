@@ -5,6 +5,7 @@ import {
   IconFileMusic,
   IconFileText,
   IconLanguage,
+  IconLink,
   IconPaperclip,
   IconReportMoney,
   IconVolume,
@@ -24,6 +25,7 @@ import { createPortal } from 'react-dom';
 import { useLocale, useTranslations } from 'next-intl';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
+import { useCameraSupport } from '@/client/hooks/ui/useCameraSupport';
 import { useDropdownKeyboardNav } from '@/client/hooks/ui/useDropdownKeyboardNav';
 import useEnhancedOutsideClick from '@/client/hooks/ui/useEnhancedOutsideClick';
 import { useIsMobile } from '@/client/hooks/ui/useIsMobile';
@@ -31,6 +33,7 @@ import { useIsMobile } from '@/client/hooks/ui/useIsMobile';
 import { canAccessGrants } from '@/lib/services/grants/access';
 
 import { normalizeForSearch } from '@/lib/utils/app/localeSearch';
+import { isRTL } from '@/lib/utils/app/rtl';
 
 import {
   AssistantMessageGroup,
@@ -59,6 +62,7 @@ import Modal from '@/components/UI/Modal';
 import { DropdownCategoryGroup } from './DropdownCategoryGroup';
 import { DropdownMenuItem, MenuItem } from './DropdownMenuItem';
 import { DropdownMoreSection } from './DropdownMoreSection';
+import UrlAttachModal from './UrlAttachModal';
 
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
@@ -129,9 +133,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   const recordSuccessfulToolUsage = useSettingsStore(
     (state) => state.recordSuccessfulToolUsage,
   );
-  const extractionRecipes = useSettingsStore(
-    (state) => state.extractionRecipes,
-  );
+  const savedStructures = useSettingsStore((state) => state.savedStructures);
   const { selectedConversation, updateConversation } = useConversations();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -145,45 +147,36 @@ const Dropdown: React.FC<DropdownProps> = ({
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [query, setQuery] = useState('');
   const [showMore, setShowMore] = useState(false);
-  const [hasCameraSupport, setHasCameraSupport] = useState(false);
+  // Parent rows whose nested sources are currently revealed (e.g. `attach`).
+  const [expandedParentIds, setExpandedParentIds] = useState<string[]>([]);
+  const [urlModalOpen, setUrlModalOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const locale = useLocale();
   const isMobile = useIsMobile();
-
-  useEffect(() => {
-    const checkCameraSupport = async () => {
-      try {
-        if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
-          const devices = await navigator.mediaDevices.enumerateDevices();
-          const hasCamera = devices.some(
-            (device) => device.kind === 'videoinput',
-          );
-          setHasCameraSupport(hasCamera);
-        } else {
-          console.error('MediaDevices API not supported');
-          setHasCameraSupport(false);
-        }
-      } catch (error) {
-        console.error('Error checking camera support:', error);
-        setHasCameraSupport(false);
-      }
-    };
-
-    checkCameraSupport();
-  }, []);
+  const hasCameraSupport = useCameraSupport();
 
   const closeDropdown = useCallback(() => {
     setIsOpen(false);
     setSelectedIndex(-1);
     setQuery('');
     setShowMore(false);
+    setExpandedParentIds([]);
+  }, []);
+
+  const toggleParentExpanded = useCallback((parentId: string) => {
+    setExpandedParentIds((prev) =>
+      prev.includes(parentId)
+        ? prev.filter((id) => id !== parentId)
+        : [...prev, parentId],
+    );
   }, []);
 
   const t = useTranslations();
   const { data: session } = useSession();
   const showGrants = canAccessGrants(session?.user);
+  const tUrl = useTranslations('urlFetch');
 
   const chatInputImageRef = useRef<{ openFilePicker: () => void }>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -462,6 +455,26 @@ const Dropdown: React.FC<DropdownProps> = ({
         category: 'media',
       },
       {
+        id: 'attach-link',
+        icon: (
+          <IconLink
+            size={18}
+            className="flex-shrink-0 text-gray-700 dark:text-gray-300"
+          />
+        ),
+        label: tUrl('attachLink'),
+        infoTooltip: tUrl('attachLinkDescription'),
+        onClick: () => {
+          setUrlModalOpen(true);
+          closeDropdown();
+        },
+        category: 'media',
+        opensDialog: true,
+        // An alternate source for the same job as `attach`, so it nests under
+        // it. The modal lives outside the menu, so closing the menu is safe.
+        parentId: 'attach',
+      },
+      {
         id: 'transcribe',
         icon: (
           <IconFileMusic size={18} className="text-orange-500 flex-shrink-0" />
@@ -563,6 +576,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       t,
       showGrants,
       locale,
+      tUrl,
       searchMode,
       selectedToneId,
       tones,
@@ -588,11 +602,11 @@ const Dropdown: React.FC<DropdownProps> = ({
   const defaultHiddenIds = useMemo(() => {
     const ids = ['camera'];
     if (tones.length === 0) ids.push('tone');
-    if (isExtractionEnabled && extractionRecipes.length === 0) {
+    if (isExtractionEnabled && savedStructures.length === 0) {
       ids.push('extract');
     }
     return ids;
-  }, [tones.length, isExtractionEnabled, extractionRecipes.length]);
+  }, [tones.length, isExtractionEnabled, savedStructures.length]);
 
   // Move a tool into / out of "More". Resolves whether the tool is hidden by
   // default so the store toggles the right set.
@@ -637,12 +651,14 @@ const Dropdown: React.FC<DropdownProps> = ({
 
   // Build the sectioned view (unfiltered) or a flat filtered list. Each item
   // appears exactly once: Pinned, else Frequently used, else its category.
-  const { sections, flatVisibleItems } = useMemo(() => {
+  const { sections, childrenByParent, flatVisibleItems } = useMemo(() => {
     if (isFiltering) {
       const filtered = trackedItems.filter((item) =>
         normalizeForSearch(item.label, locale).includes(normalizedQuery),
       );
-      return { sections: [], flatVisibleItems: filtered };
+      // Search flattens the hierarchy: every source is its own hit, so typing
+      // "link" finds the nested link row without expanding anything.
+      return { sections: [], childrenByParent: {}, flatVisibleItems: filtered };
     }
 
     const pinnedSet = new Set(pinnedToolIds);
@@ -650,8 +666,6 @@ const Dropdown: React.FC<DropdownProps> = ({
     const pinned = pinnedToolIds
       .map((id) => trackedItems.find((item) => item.id === id))
       .filter((item): item is (typeof trackedItems)[number] => Boolean(item));
-
-    const hiddenItems = trackedItems.filter((item) => isToolHidden(item.id));
 
     // A credited usage bump now equals CONSECUTIVE_USAGE_THRESHOLD real uses,
     // so surface at >= 1. Hidden items stay in "More" regardless of frequency.
@@ -668,11 +682,35 @@ const Dropdown: React.FC<DropdownProps> = ({
       .slice(0, 3);
     const frequentSet = new Set(frequent.map((item) => item.id));
 
+    // Resolve which children actually render nested. A child only tucks under
+    // its parent when it has no stronger claim to a row of its own: pinning it,
+    // using it often, or moving just one of the pair into "More" all promote it
+    // back to a flat row, so a user who prefers it top-level always wins.
+    const nestedChildIds = new Set<string>();
+    const childrenByParent: Record<string, MenuItem[]> = {};
+    for (const item of trackedItems) {
+      if (!item.parentId) continue;
+      const parent = trackedItems.find((p) => p.id === item.parentId);
+      if (!parent) continue;
+      if (pinnedSet.has(item.id) || frequentSet.has(item.id)) continue;
+      if (isToolHidden(item.id) !== isToolHidden(parent.id)) continue;
+      nestedChildIds.add(item.id);
+      childrenByParent[parent.id] = [
+        ...(childrenByParent[parent.id] ?? []),
+        item,
+      ];
+    }
+
+    const hiddenItems = trackedItems.filter(
+      (item) => isToolHidden(item.id) && !nestedChildIds.has(item.id),
+    );
+
     const remaining = trackedItems.filter(
       (item) =>
         !pinnedSet.has(item.id) &&
         !frequentSet.has(item.id) &&
-        !isToolHidden(item.id),
+        !isToolHidden(item.id) &&
+        !nestedChildIds.has(item.id),
     );
     const byCategory = (category: MenuItem['category']) =>
       remaining.filter((item) => item.category === category);
@@ -702,11 +740,21 @@ const Dropdown: React.FC<DropdownProps> = ({
       { key: 'more', label: t('dropdown.sectionMore'), items: hiddenItems },
     ].filter((section) => section.items.length > 0);
 
+    // Splice each parent's revealed children in directly after it, so the
+    // keyboard walks the list in the same order the eye reads it.
+    const withChildren = (items: MenuItem[]) =>
+      items.flatMap((item) =>
+        expandedParentIds.includes(item.id)
+          ? [item, ...(childrenByParent[item.id] ?? [])]
+          : [item],
+      );
+
     return {
       sections: built,
+      childrenByParent,
       // Collapsed "More" items are not keyboard-navigable until expanded.
       flatVisibleItems: built.flatMap((section) =>
-        section.key === 'more' && !showMore ? [] : section.items,
+        section.key === 'more' && !showMore ? [] : withChildren(section.items),
       ),
     };
   }, [
@@ -718,6 +766,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     isToolHidden,
     toolUsageCounts,
     showMore,
+    expandedParentIds,
     t,
   ]);
 
@@ -749,7 +798,8 @@ const Dropdown: React.FC<DropdownProps> = ({
     },
   });
 
-  // Escape clears the query first (if any), then closes on the next press
+  // Escape clears the query first (if any), then closes on the next press.
+  // The inline axis also expands/collapses nested sources, mirrored under RTL.
   const handleMenuKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
       if (event.key === 'Escape' && query) {
@@ -758,9 +808,56 @@ const Dropdown: React.FC<DropdownProps> = ({
         setQuery('');
         return;
       }
+
+      const expandKey = isRTL(locale) ? 'ArrowLeft' : 'ArrowRight';
+      const collapseKey = isRTL(locale) ? 'ArrowRight' : 'ArrowLeft';
+      const selected = flatVisibleItems[selectedIndex];
+
+      if (selected) {
+        const isParent = Boolean(childrenByParent[selected.id]?.length);
+
+        if (
+          event.key === expandKey &&
+          isParent &&
+          !expandedParentIds.includes(selected.id)
+        ) {
+          event.preventDefault();
+          toggleParentExpanded(selected.id);
+          return;
+        }
+
+        if (event.key === collapseKey) {
+          // Collapse an open parent; from a child, collapse and step back up
+          // onto the parent row so focus never lands nowhere.
+          const target =
+            isParent && expandedParentIds.includes(selected.id)
+              ? selected.id
+              : selected.parentId;
+
+          if (target && expandedParentIds.includes(target)) {
+            event.preventDefault();
+            toggleParentExpanded(target);
+            const parentIndex = flatVisibleItems.findIndex(
+              (item) => item.id === target,
+            );
+            if (parentIndex >= 0) setSelectedIndex(parentIndex);
+            return;
+          }
+        }
+      }
+
       handleKeyDown(event);
     },
-    [query, handleKeyDown],
+    [
+      query,
+      locale,
+      handleKeyDown,
+      flatVisibleItems,
+      selectedIndex,
+      childrenByParent,
+      expandedParentIds,
+      toggleParentExpanded,
+    ],
   );
 
   const activeDescendantId =
@@ -837,6 +934,9 @@ const Dropdown: React.FC<DropdownProps> = ({
                       onToggleHidden={handleToggleHidden}
                       expanded={showMore}
                       onToggleExpanded={() => setShowMore((prev) => !prev)}
+                      childrenByParent={childrenByParent}
+                      expandedParentIds={expandedParentIds}
+                      onToggleParentExpanded={toggleParentExpanded}
                     />
                   ) : (
                     <DropdownCategoryGroup
@@ -849,6 +949,9 @@ const Dropdown: React.FC<DropdownProps> = ({
                       onTogglePin={togglePinnedTool}
                       onToggleHidden={handleToggleHidden}
                       isFirst={index === 0}
+                      childrenByParent={childrenByParent}
+                      expandedParentIds={expandedParentIds}
+                      onToggleParentExpanded={toggleParentExpanded}
                     />
                   ),
                 )
@@ -862,7 +965,7 @@ const Dropdown: React.FC<DropdownProps> = ({
           return (
             <div
               ref={dropdownRef}
-              className={`absolute ${openDownward ? 'top-full mt-2 z-[10000]' : 'bottom-full mb-2 z-[9999]'} left-0 flex flex-col bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg w-64 outline-none overflow-hidden ${
+              className={`absolute ${openDownward ? 'top-full mt-2 z-[10000]' : 'bottom-full mb-2 z-[9999]'} left-0 flex flex-col bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg w-80 outline-none overflow-hidden ${
                 openDownward ? 'animate-slide-down-reverse' : 'animate-slide-up'
               }`}
               tabIndex={-1}
@@ -1016,6 +1119,11 @@ const Dropdown: React.FC<DropdownProps> = ({
         setParentModalIsOpen={setIsImageOpen}
         simulateClick={false}
         labelText=""
+      />
+
+      <UrlAttachModal
+        isOpen={urlModalOpen}
+        onClose={() => setUrlModalOpen(false)}
       />
 
       {/* Hidden file input for all file types: images, documents, data, code, audio, and video */}

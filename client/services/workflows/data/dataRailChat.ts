@@ -2,6 +2,7 @@
 
 import { DIGEST_SAMPLE_ROWS } from '@/lib/services/workflows/data/chatPrompts';
 import { profileTable } from '@/lib/services/workflows/data/columnStats';
+import { applyDerivedColumns } from '@/lib/services/workflows/data/derived';
 import { strideSample } from '@/lib/services/workflows/data/tableUtils';
 
 import {
@@ -78,7 +79,9 @@ export async function sendRailMessage(
     .map((m) => ({ ...m, content: m.content.slice(0, MAX_MESSAGE_CHARS) }));
 
   const columns = state?.columns ?? [];
-  const rows = state?.rows ?? [];
+  // Overlay derived-column cells: the rail digest must describe the
+  // same values the grid shows (store rows carry only raw cells).
+  const rows = applyDerivedColumns(columns, state?.rows ?? []);
   const stats = [...profileTable(columns, rows).values()];
   const sampleRows = strideSample(rows, DIGEST_SAMPLE_ROWS);
 

@@ -51,8 +51,12 @@ export class ToolRouterEnricher extends BasePipelineStage {
   }
 
   shouldRun(context: ChatContext): boolean {
-    // Check if org agent allows web search
-    if (context.botId) {
+    // Check if org agent allows web search. Prompt agents also arrive via
+    // botId but ride the standard execution path — web search must behave
+    // exactly as for a plain model, so they take the standard search-mode
+    // check below instead of the static org-agent gate (mirrors
+    // RAGEnricher's `!context.promptAgent` guard).
+    if (context.botId && !context.promptAgent) {
       const agent = getOrganizationAgentById(context.botId);
       if (agent?.allowWebSearch) {
         return (

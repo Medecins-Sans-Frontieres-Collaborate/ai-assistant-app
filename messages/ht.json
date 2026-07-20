@@ -907,7 +907,8 @@
     "processingAudio": "Nap trete odyo...",
     "ttsError": "Erè pandan kreyasyon odyo. Tanpri eseye ankò.",
     "unsupportedMessageType": "Erè pandan afichaj mesaj la: Tip mesaj sa a pa sipòte",
-    "addLanguageOption": "Ajoute \"{name}\"…"
+    "addLanguageOption": "Ajoute \"{name}\"…",
+    "sources": "Sous"
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",
@@ -1331,7 +1332,23 @@
     "customInstructionsLabel": "Enstriksyon Pèsonalize*",
     "defaultTemperatureLabel": "Tanperati pa defo*",
     "Usage & Impact": "Itilizasyon & Enpak",
-    "Connectors": "Konektè"
+    "Connectors": "Konektè",
+    "Backup": "Sovgad",
+    "Memories": "Memwa",
+    "Agent Access": "Aksè Ajan",
+    "LocalModels": "Modèl lokal",
+    "suggestRevisions": {
+      "title": "Revizyon dokiman yo",
+      "toggle": "Sijere revizyon olye de aplike yo",
+      "description": "Lè ou mande workflow Dokiman an pou revize, chanjman yo vini kòm sijesyon endividyèl ou ka aksepte oswa rejte, menm jan ak evalyasyon kalite yo.",
+      "exceptionsTitle": "Aplike dirèkteman kanmenm lè:",
+      "exceptionSelection": "W ap revize yon seleksyon ou make",
+      "exceptionLargeRewrite": "Reskri a chanje pifò nan dokiman an",
+      "exceptionReorder": "Seksyon yo deplase olye ke modifye",
+      "thresholdLabel": "Konsidere kòm yon reskri pi wo pase",
+      "thresholdUnit": "% nan dokiman an chanje",
+      "exceptionSelectionAlways": "Lè w ap modifye yon pati mete an avan, chanjman an ap aplike dirèkteman — modèl la retounen sèlman pati ki modifye a, epi ou pap ka konvèti l an kòmantè sou tout dokiman an."
+    }
   },
   "emptyState": {
     "greeting": "Kijan mwen ka ede ou?",
@@ -2086,7 +2103,9 @@
     "pin": "Mete anwo",
     "unpin": "Retire soti anwo",
     "moveToMore": "Mete nan Plis",
-    "moveOutOfMore": "Montre nan meni an"
+    "moveOutOfMore": "Montre nan meni an",
+    "showSources": "Montre lòt sous",
+    "hideSources": "Kache lòt sous"
   },
   "transcription": {
     "transcribesOnSend": "Transkri lè voye",
@@ -2408,7 +2427,8 @@
     "regionDefault": "Defo",
     "modelRow": "{requests} demann · {grams} g",
     "disclosure": "Estimasyon sou baz sipozisyon v{version} · depi {since} · sèlman pou chat estanda (pa konte ajan ak repons baz konesans).",
-    "reset": "Reyajiste estatistik itilizasyon"
+    "reset": "Reyajiste estatistik itilizasyon",
+    "estimatedPortion": "Gen ladan apeprè {grams} g CO₂e ({requests} demann) ki estime soti nan konvèsasyon avan siveyans — rekalkile sou tèks mesaj sove, pa sou kantite jèton mezire."
   },
   "extraction": {
     "toggleLabel": "Extra done estriktire",
@@ -2615,7 +2635,25 @@
       "pendingCount": "{count} ann atant",
       "closeReview": "Fèmen revizyon kalite",
       "showReview": "Montre revizyon",
-      "showReviewPending": "Montre revizyon ({count} ann atant)"
+      "showReviewPending": "Montre revizyon ({count} ann atant)",
+      "undoEdit": "Anile",
+      "clearResolved": "Netwaye sa ki rezoud",
+      "clearResolvedHint": "Retire modifikasyon ki aksepte, rejte, oswa ki pa aplikab sou lis sa a",
+      "autoClearResolved": "Netwaye otomatikman sa ki rezoud yo",
+      "customCriteria": "Kritè pèsonalize",
+      "closeCriteria": "Fèmen kritè pèsonalize",
+      "newCriterion": "Nouvo kritè",
+      "newCriterionName": "Kritè san non",
+      "criterionName": "Non kritè",
+      "criterionRubric": "Ribrik",
+      "criterionRubricPlaceholder": "Dekri sa tradiksyon an dwe fè pou satisfè kritè sa a, egzanp: \"Tradui tout enstriksyon dòz medikal yo nan fòm enperatif, pa janm nan fòm enfinitif...\"",
+      "criterionRubricHint": "Ribrik sa a ap bay AI a egzakteman konsa ansanm ak dimansyon MQM ki deja enkli lè yap evalye yon tradiksyon.",
+      "criteriaEmpty": "Kreye kritè pèsonalize — egzanp stil òganizasyon, preferans tèm kliyan, oswa konvansyon rejyonal — pou evalye tradiksyon pi lwen pase dimansyon MQM yo. Sove sou aparèy sa a e reutilizab.",
+      "deleteCriterion": "Efase kritè",
+      "manageCriteria": "Kritè pèsonalize",
+      "addCriteria": "Ajoute kritè",
+      "noUsableCriteria": "Chwazi omwen yon kritè ki deja egziste oswa bay kritik pèsonalize ou yo yon ribrik.",
+      "criterionRubricTooLong": "Ribrik sa depase pa {over} karaktè. Li voye ak chak evalyasyon, kidonk ou dwe koupe l avan ou ka itilize kritè sa a."
     },
     "document": {
       "emptyTitle": "Dekri dokiman ou vle a",
@@ -2735,7 +2773,32 @@
       "clearSelection": "Retire seleksyon (travay ak tout dokiman an)",
       "reviseSelectionPlaceholder": "Dekri chanjman pou seleksyon an...",
       "revisedSelectionSummary": "Mwen modifye pasaj seleksyone a nan atelye travay la.",
-      "assessedSelection": "Seleksyon"
+      "assessedSelection": "Seleksyon",
+      "undoEdit": "Anile",
+      "clearResolved": "Netwaye sa ki rezoud",
+      "clearResolvedHint": "Retire modifikasyon ki aksepte, rejte, oswa ki pa aplikab sou lis sa a",
+      "autoClearResolved": "Netwaye otomatikman sa ki rezoud yo",
+      "import": "Enpòte",
+      "importReplaceTitle": "Ranplase dokiman an?",
+      "importReplaceBody": "Lè w enpòte {name}, w ap ranplase dokiman aktyèl la. Referans ou yo, espesifikasyon ak ton ap konsève.",
+      "importReplaceConfirm": "Ranplase",
+      "editorMode": "Mòd editè",
+      "editorModeRich": "Tekst rich",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Rezoud modifikasyon yo sijere avan w chanje mòd editè a.",
+      "suggestChanges": "Sijere chanjman",
+      "suggestChangesHint": "Revize modifikasyon an kòm sijesyon endividyèl olye ou reskri dokiman an touswit.",
+      "suggestChangesSelectionNote": "Revizyon sou yon seleksyon aplike dirèkteman — seleksyon an se deja domèn ou chwazi.",
+      "suggestedSummary": "{count} {count, plural, one {chanjman} other {chanjman}} sijere pou revizyon.",
+      "revisionSuggestionSummary": "Demann revizyon ou pwodui {count} {count, plural, one {sijesyon chanjman} other {sijesyon chanjman}}.",
+      "revisionCriterionLabel": "Revizyon mande",
+      "fallbackSelection": "Aplike dirèkteman — revizyon sou yon seleksyon pa sijere.",
+      "fallbackLargeRewrite": "Aplike dirèkteman — reskri a chanje twòp nan dokiman an pou ka revize kòm sijesyon separe.",
+      "fallbackReorder": "Aplike dirèkteman — seksyon yo te deplase, sa pa ka divize an sijesyon revizyon.",
+      "fallbackUnanchorable": "Aplike dirèkteman — chanjman yo pa te kapab matche ak pasaj espesifik.",
+      "fallbackNoChanges": "Pa te gen okenn chanjman ki nesesè.",
+      "criterionRubricTooLong": "Ribrik sa depase pa {over} karaktè. Li voye ak chak evalyasyon, kidonk ou dwe koupe l avan ou ka itilize kritè sa a."
     },
     "data": {
       "emptyTitle": "Enpòte done pou analize",
@@ -2904,7 +2967,39 @@
       "autoCheckHint": "Apre ou fin ekstrè done soti nan foto oswa dokiman, verifye otomatikman kalite nouvo ranje yo",
       "checkingNewRows": "Ap verifye nouvo ranje yo pou pwoblèm kalite…",
       "ingestCheckFailed": "Vérifikasyon kalite otomatik echwe ({message}) — ou ka lanse li manyèlman ak Evalye kalite.",
-      "assessedIngest": "Nouvo ranje ki ajoute"
+      "assessedIngest": "Nouvo ranje ki ajoute",
+      "transpose": "Transpoze",
+      "transposeAxisColumn": "Non",
+      "transposeSuggestion": "Tab sa a sanble li transpoze: liy yo se atribi epi kolòn yo se atik yo. Vle chanje l pou chak atik vin tounen yon liy epi chak atribi vin yon kolòn ak tip?",
+      "transposedTable": "Liy ak kolòn transpoze",
+      "columns": "Kolòn",
+      "columnsHidden": "Kolòn ({count} kache)",
+      "showAllColumns": "Montre tout",
+      "chartScatter": "Dispèsyon (x kont y)",
+      "chartPivot": "Tab pivote",
+      "xColumn": "Kolòn X",
+      "yColumn": "Kolòn Y",
+      "splitByColumn": "Separe pa",
+      "splitNone": "Pa gen separasyon",
+      "pivotValueColumns": "Kolòn valè",
+      "aggMin": "Pi piti",
+      "aggMax": "Pi gwo",
+      "aggMedian": "Medyàn",
+      "chartSeriesTruncated": "Ap montre {max} seri ki pi wo yo",
+      "chartPointsTruncated": "Ap montre {max} pwen echantiyone",
+      "chartScatterAria": "Graf dispèsyon {x} kont {y}",
+      "pivotTableAria": "Tab pivote gwoupe pa {column}",
+      "schemaFormula": "Fòmil",
+      "schemaFormulaPlaceholder": "egzanp: [Ka] / [Popilasyon] * 1000",
+      "schemaFormulaHint": "Chan kalkile: refere lòt chan kòm [Non]; sipòte + - * / %, parantèz, epi round, abs, min, max. Valè yo ap mete ajou otomatikman e ou pa ka modifye dirèkteman.",
+      "schemaFormulaSyntaxError": "Fòmil pa valab",
+      "schemaFormulaUnknownRef": "Chan enkoni: {ref}",
+      "schemaFormulaArityError": "Move kantite agiman pou {fn}",
+      "schemaFormulaCycleError": "Referans sikilè ant fòmil yo",
+      "derivedColumnTitle": "Kalkile: {formula}",
+      "derivedFrom": "Kalkile soti nan {formula}",
+      "takePhoto": "Pran foto",
+      "takePhotoHint": "Sèvi ak kamera ou pou w pran foto yon fòm oswa tab — sa l genyen ap vin done estriktire ou ka verifye ak foto a."
     },
     "map": {
       "emptyTitle": "Mete done ou sou yon kat",
@@ -2978,7 +3073,31 @@
         "jumpTo": "Ale dirèkteman nan {label}",
         "slider": "Pozisyon sou liy tan",
         "showUndated": "Montre kote san dat",
-        "activeCount": "{count} aktif"
+        "activeCount": "{count} aktif",
+        "jump": {
+          "start": "Kòmanse",
+          "yearsLater": "{count, plural, one {1 ane apre} other {# ane apre}}",
+          "monthsLater": "{count, plural, one {1 mwa apre} other {# mwa apre}}",
+          "daysLater": "{count, plural, one {1 jou apre} other {# jou apre}}",
+          "appears": "{count, plural, one {1 aparisyon} other {# aparisyon}}",
+          "ends": "{count, plural, one {1 fen} other {# fen}}",
+          "progress": "Dat {index} sou {total}"
+        },
+        "precision": {
+          "minute": "Jiskout minit la",
+          "hour": "Jiskout lè a",
+          "day": "Jiskout jou a",
+          "month": "Datasyon nan nivo mwa",
+          "year": "Datasyon nan nivo ane",
+          "mixed": "(melanje)"
+        },
+        "pacing": {
+          "toggle": "Vitès lekti kat la",
+          "cardDuration": "Montre chak kote pandan",
+          "seconds": "{seconds}s",
+          "maxCards": "Kote montre pa dat",
+          "hint": "Dat ki gen plis evènman ap rete pi lontan otomatikman."
+        }
       },
       "granularity": {
         "site": "Sitou",
@@ -2995,8 +3114,13 @@
         "color": "Koulè: konfyans sou kowòdone (ble wo, zoranj mwayen, wouj ba)",
         "size": "Gwosè pwen: kijan kote a enpòtan pou materyèl la",
         "area": "Sèk ak liy kout: zòn apwoksimatif yon distri, rejyon oswa peyi",
-        "container": "Kontou pal: yon zòn kote chak bagay andedan li make separeman"
-      }
+        "container": "Kontou pal: yon zòn kote chak bagay andedan li make separeman",
+        "precisionHalo": "Bagon tire mou (lè gen mouvman tan): evènman an dat li sèlman pou yon mwa oswa yon ane, donk lè egzak la pa sèten"
+      },
+      "sourceLabel": "Sous : {name}",
+      "fetchAndMap": "Chache & tabli kat la",
+      "fetchingPage": "Y ap chache paj la...",
+      "railUrlRequest": "Chache epi tabli kote yo soti nan : {title} ({url})"
     },
     "shell": {
       "showConversation": "Montre konvèsasyon",
@@ -3014,6 +3138,16 @@
       "untitled": "Nouvo Konvèsasyon",
       "toggleMenu": "Afiche/oswa kache meni an",
       "model": "Modèl pou workflow sa a"
+    },
+    "tabs": {
+      "label": "Mòd konvèsasyon",
+      "chat": "Chat",
+      "chatDescription": "Yon konvèsasyon estanda ak asistan an"
+    },
+    "discard": {
+      "title": "Efase bouyon sa a?",
+      "body": "Chanje pou {target} ap efase travay ou te kòmanse nan {current}.",
+      "confirm": "Efase"
     }
   },
   "connectors": {
@@ -3028,6 +3162,22 @@
       "asana": {
         "name": "Asana",
         "description": "Chèche, kreye, epi mete ajou travay ak pwojè yo."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Fè rechèch sou sous done, kaye travay ak metrik Pulse ki pibliye."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Chèche epi mete ajou dosye atravè objè Salesforce ou yo."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Ekri, planifye, epi pibliye pòs sou rezo sosyal yo."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Revize epi reponn konvèsasyon bwat resepsyon sou rezo sosyal yo."
       }
     },
     "connect": "Konekte",
@@ -3088,7 +3238,19 @@
       "missingState": "Pa gen anyen pou otorize",
       "close": "Ou ka fèmen fenèt sa a epi tounen sou aplikasyon an.",
       "closeButton": "Fèmen fenèt la"
-    }
+    },
+    "oauthNoAppConfigured": "Koneksyon ak {name} pa configuré sou deplwaman sa a. Konekte pa enskri pwòp aplikasyon OAuth ou.",
+    "adminConnectorsTitle": "Soti nan òganizasyon ou",
+    "adminConnectorsDescription": "Konektè administratè òganizasyon ou mete. Kisa ou wè depann de aksè ou.",
+    "managedByOrg": "Jere pa òganizasyon ou",
+    "connectorOauthNotConfigured": "Koneksyon pa fini configuré pou konektè sa a. Kontakte administratè ou.",
+    "yourConnectorsTitle": "Konektè ou yo",
+    "addTitle": "Ajoute yon konektè",
+    "addDescription": "Chwazi yon zouti pou konekte. W ap konfigire aksè apre ou fin chwazi.",
+    "add": "Ajoute",
+    "filterLabel": "Filtre konektè yo",
+    "filterPlaceholder": "Chèche konektè",
+    "noMatches": "Pa gen konektè ki koresponn ak “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Konekte yon sous modèl",
@@ -3139,5 +3301,399 @@
     "deselectAll": "Deklike tout",
     "autoAddLabel": "Ajoute nouvo modèl otomatikman",
     "autoAddDescription": "Depwaman modèl yo ajoute pita nan kont sa a ap parèt otomatikman. Modèl ki pa chwazi yo ap rete eskli."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Ti enpak",
+      "moderate": "Enpak modere",
+      "high": "Gwo enpak"
+    },
+    "tierTooltip": "Enpak anèji relatif pa demann, estime dapre gwosè modèl la. Se estimasyon ki baze sou mwayèn pibliye ak sipozisyon v{version} — pa mezi reyèl.",
+    "typicalRequest": "~{grams} g CO₂e pa demann tipik",
+    "typicalRequestTooltip": "Estimasyon apwoksimatif pou chak demann tipik (apre 1,000 siy + 500 siy repons), sòti nan mwayèn pibliye ak sipozisyon v{version}. Reyèl enpak depann de longè konvèsasyon, paramèt, ak rejyon kote l ap òspite.",
+    "activities": {
+      "netflixHd": "Netflix HD an difizyon",
+      "zoomCall": "Apèl Zoom (kamera limen)",
+      "webBrowsing": "Navige sou entènèt",
+      "spotifyAudio": "Spotify odyo"
+    },
+    "equivalents": {
+      "title": "≈ menm kabòn ak",
+      "note": "Konparezon menm nivo kabòn ak anprint pou chak èdtan sèvis sa yo — se chif apwoksimatif, menm jan ak tout estimasyon isi a."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Enpak kabòn estime pou konvèsasyon sa a: {grams} gram CO₂ ekivalan. Montre detay yo.",
+      "ariaLabelToday": "Enpak kabòn estime pou konvèsasyon sa a jodi a: {grams} gram CO₂ ekivalan. Montre detay yo.",
+      "title": "Konvèsasyon sa a (estimasyon)",
+      "today": "Jodi a",
+      "total": "Tout tan",
+      "measured": "Soti nan kantite jèton rapòte",
+      "estimated": "Rekalkile soti nan ansyen mesaj yo",
+      "lastRequest": "Dènye demann lan",
+      "disclaimer": "Estimasyon pa demann yo baze sou kantite jèton rapòte oswa apwoksime, ak mwayèn ak sipozisyon pibliye v{version}. Mesaj ki pi ansyen yo rekalkile soti nan tèks sove ak modèl aktyèl konvèsasyon an. Sa pa yon mezi."
+    }
+  },
+  "table": {
+    "copyTable": "Kopi tab la",
+    "downloadTable": "Telechaje tab la",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Ekspòte kòm CSV",
+    "copyFailed": "Kopi tab la echwe"
+  },
+  "backup": {
+    "intro": {
+      "title": "Sovgad konvèsasyon ou yo — an sekirite",
+      "body": "Konvèsasyon ou yo ankripte sou aparèy sa a anvan nenpòt bagay telechaje. Nou pap janm ka li chat ou yo.",
+      "keyWarning": "Kle rekiperasyon ou kreye sou aparèy sa a. Nou pa janm wè l epi nou pa ka rekipere l pou ou — si ou pèdi kle a, ou pèdi sovgad la.",
+      "create": "Kreye kle mwen & fè sovgad",
+      "decline": "Pa kounye a — kenbe chat yo sou aparèy sa sèlman"
+    },
+    "ceremony": {
+      "titleCreate": "Sove kle rekiperasyon ou",
+      "titleRotate": "Sove nouvo kle rekiperasyon ou",
+      "titleView": "Kle rekiperasyon ou",
+      "description": "Kle sa a se sèl fason pou retabli sovgad ou sou yon lòt aparèy. Kenbe li an sekirite — nou pa ka rekipere l pou ou.",
+      "copy": "Kopi",
+      "copied": "Kopiye!",
+      "download": "Telechaje .txt",
+      "showQr": "Montre kòd QR",
+      "hideQr": "Kache kòd QR",
+      "savedCheckbox": "Mwen sove kle rekiperasyon mwen yon kote ki an sekirite",
+      "saveFirstHint": "Kopi oswa telechaje kle ou anvan ou kontinye.",
+      "continue": "Kontinye",
+      "done": "Fini",
+      "cancel": "Anile",
+      "cancelConfirmTitle": "Anile konfigirasyon sovgad la?",
+      "cancelConfirmBody": "Chat ou yo pap sove an sovgad. Ou ka aktive sovgad ankripte nenpòt kilè nan Paramèt.",
+      "cancelConfirmRotateBody": "Kle rekiperasyon ou deja chanje. Ou ka wè li nenpòt kilè nan Paramèt.",
+      "cancelConfirmConfirm": "Wi, anile",
+      "cancelConfirmDismiss": "Retounen",
+      "loadError": "Pa ka chaje kle rekiperasyon ou sou aparèy sa a."
+    },
+    "file": {
+      "heading": "Kle rekiperasyon sovgad chat",
+      "warning": "Kenbe kle sa a an sekirite. Nenpòt moun ki gen li ka li sovgad ou; san li sovgad la pap ka retabli."
+    },
+    "progress": {
+      "titleCreate": "Ap mete sovgad ou an plas",
+      "titleRotate": "Ap chanje kle rekiperasyon ou",
+      "encrypting": "{count, plural, one {Ap ankripte ak sovgad # konvèsasyon…} other {Ap ankripte ak sovgad # konvèsasyon…}}",
+      "success": "{count, plural, one {Sovgad fini. # konvèsasyon pwoteje.} other {Sovgad fini. # konvèsasyon pwoteje.}}",
+      "error": "Sovgad echwe. Chat ou toujou sou aparèy sa a.",
+      "retry": "Eseye ankò",
+      "close": "Fèmen",
+      "done": "Fini"
+    },
+    "input": {
+      "label": "Kle rekiperasyon",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Kle yo pa janm gen lèt O, I oswa L.",
+      "checksumError": "Kle sa a pa sanble kòrèk — tcheke si gen erè.",
+      "formatError": "Sa pa sanble ak yon kle rekiperasyon.",
+      "incomplete": "Kontinye tape — yon kle rekiperasyon gen 56 karaktè.",
+      "valid": "Kle a sanble valab."
+    },
+    "restore": {
+      "title": "Restaure chat ou yo",
+      "successTitle": "Sovgade retabli",
+      "promptBody": "Nou jwenn yon sovgade ankripte pou kont ou. Mete kle rekiperasyon ou pou retabli li sou aparèy sa a.",
+      "submit": "Retabli sovgade a",
+      "skip": "Sote — kòmanse soti a zewo sou aparèy sa a",
+      "restoring": "Ap dekripte epi retabli chat ou yo...",
+      "successBody": "{count, plural, one {# konvèsasyon retabli.} other {# konvèsasyon retabli.}}",
+      "wrongKey": "Kle sa a valab, men li pa ouvri sovgade sa a. Si ou chanje kle ou, itilize dènye a.",
+      "corrupt": "Sovgade sa a pa kapab li — li ka domaje. Ou ka kòmanse nan papòt sou aparèy sa a oswa eseye ankò pita.",
+      "networkError": "Pa kapab konekte ak sèvis sovgade a. Tcheke koneksyon ou epi eseye ankò.",
+      "tryAgain": "Eseye yon lòt kle",
+      "close": "Fini"
+    },
+    "enterKey": {
+      "title": "Antre nouvo kle rekiperasyon ou",
+      "body": "Yo te chanje kle rekiperasyon ou sou yon lòt aparèy. Mete nouvo kle a pou kontinye sovgade sou aparèy sa a.",
+      "submit": "Sèvi ak kle sa a"
+    },
+    "banner": {
+      "keyMismatchTitle": "Sovgade yo pran poz — kle rekiperasyon ou te chanje sou yon lòt aparèy.",
+      "enterNewKey": "Antre nouvo kle a",
+      "resetBackup": "Reyajiste sovgade",
+      "resetConfirmTitle": "Reyajiste sovgade ak kle aparèy sa a?",
+      "resetConfirmBody": "Sovgade ki egziste la ap ranplase ak chat aparèy sa a, ankripte ak kle aparèy sa a. Lòt aparèy yo ap bezwen kle rekiperasyon aparèy sa a.",
+      "resetConfirmAction": "Reyajiste sovgade",
+      "remoteMissingTitle": "Sovgade ou a pa egziste ankò sou sèvè a. Sovgade yo sou poz.",
+      "backUpAgain": "Sovgade ankò",
+      "dismiss": "Fèmen"
+    },
+    "rotate": {
+      "confirmTitle": "Chanje kle rekiperasyon ou?",
+      "confirmBody": "Sovgade ou ap re-ankripte ak yon nouvo kle, epi ansyen kle a pap mache ankò. Ou dwe sove nouvo kle a epi mete li sou lòt aparèy yo.",
+      "confirmAction": "Chanje kle a"
+    },
+    "toast": {
+      "enrollLater": "Ou ka aktive sovgade ankripte nenpòt ki lè nan Anviwònman.",
+      "keyUpdated": "Kle rekiperasyon mete ajou. Sovgade yo reprann.",
+      "resetDone": "Sovgade reyajiste ak kle aparèy sa a.",
+      "backupRestarted": "Sovgade kreye ankò.",
+      "opFailed": "Yon erè rive. Tanpri eseye ankò."
+    },
+    "settings": {
+      "statusOn": "Sovgade aktive",
+      "statusOff": "Sovgade dezaktive",
+      "offDescription": "Chat ou yo sèlman disponib nan navigatè sa a. Limen sovgade ankripte pou pwoteje yo epi retabli yo sou lòt aparèy. Chat yo ankripte sou aparèy ou — nou pa janm ka li yo.",
+      "turnOn": "Limèn sovgade",
+      "restoreTitle": "Yon sovgade deja egziste pou kont ou",
+      "restoreDescription": "Mete kle rekiperasyon ou pou retabli li sou aparèy sa a.",
+      "restore": "Retabli sovgade a",
+      "lastBackup": "Dènye sovgade: {time}",
+      "lastBackupNever": "Pa gen sovgade ki fèt ankò",
+      "keyFingerprint": "Kle ····-{tail}",
+      "syncState": {
+        "idle": "Ap tann pou senkronize",
+        "syncing": "Ap sovgade...",
+        "ok": "An dènye",
+        "keyOutOfDate": "Pran poz — kle rekiperasyon an te chanje sou yon lòt aparèy",
+        "remoteMissing": "Pòz — sovgad la te retire sou sèvè a",
+        "error": "Dènye tantativ sovgad la echwe"
+      },
+      "backUpNow": "Sove kounye a",
+      "backUpNowSuccess": "Sovgad fini",
+      "backUpNowFailure": "Sovgad la echwe — konvèsasyon ou yo pa chanje sou aparèy sa a",
+      "viewKey": "Gade kle rekiperasyon",
+      "changeKey": "Chanje kle rekiperasyon",
+      "dangerTitle": "Zòn danje",
+      "turnOffDelete": "Dekonekte & efase sovgad la",
+      "turnOffConfirmTitle": "Vle dekonekte sovgad la?",
+      "turnOffConfirmMessage": "Sa ap efase sovgad ou sou sèvè nou yo pou tout aparèy yo. Konvèsasyon ki sou aparèy sa a ap rete. Ou ka aktive sovgad ankò pita ak yon nouvo kle rekiperasyon.",
+      "turnOffConfirmAction": "Efase sovgad la",
+      "turnOffSuccess": "Sovgad la dekonekte epi efase",
+      "turnOffFailure": "Sovgad la pa t ka efase. Tanpri eseye ankò."
+    }
+  },
+  "memories": {
+    "title": "Memwa",
+    "description": "Kite asistan an sonje enfòmasyon ki dire sou ou — tankou wòl ou, preferans ou, ak pwojè w ap travay sou yo — epi itilize yo atravè diferan konvèsasyon.",
+    "enableToggle": "Aktive memwa",
+    "privacyNote": "Enfòmasyon yo estoke sèlman nan navigatè sa a epi enkli nan konvèsasyon ou yo pou pèsonalize repons yo.",
+    "empty": "Pa gen memwa ankò. Enfòmasyon ki vo sonje yo sove otomatikman depi konvèsasyon ou yo.",
+    "savedOn": "Sove {date}",
+    "deleteMemory": "Efase memwa",
+    "clearAll": "Efase tout memwa",
+    "clearAllConfirmQuestion": "Efase tout memwa? Aksyon sa a pap ka anile.",
+    "clearAllConfirm": "Efase tout",
+    "cancel": "Anile"
+  },
+  "contextWindow": {
+    "label": "Fenèt kontèks",
+    "value": "{count} mesaj",
+    "fewer": "Mwens mesaj",
+    "more": "Plis mesaj",
+    "description": "Mesaj ki pi ansyen pase limit sa a ap rezime epi voye kòm kontèks."
+  },
+  "agentAccess": {
+    "title": "Aksè ajan",
+    "description": "Kontwole ki itilizatè ki ka itilize ajan Foundry yo an komen. Règ sa yo limite sa aksè Azure itilizatè a deja pèmèt — yo p ap janm ka bay aksè Azure refize.",
+    "backToChat": "Retounen nan chat",
+    "loading": "Y ap chaje ajan ak règ yo…",
+    "loadError": "Pa kapab chaje done aksè ajan yo.",
+    "rulesUnavailableWarning": "Règ aksè yo pa t ka chaje depi depo a. Itilizasyon ajan an bloke pou kounye a epi ou pa ka modifye règ yo.",
+    "retry": "Repran",
+    "rulesTab": "Règ ajan",
+    "localAdminsTab": "Administratè lokal",
+    "noAgents": "Pa gen ajan pou jere.",
+    "sourceLabel": "Sous",
+    "notDiscoverable": "Ou pa ka jwenn li",
+    "notDiscoverableHint": "Gen yon règ pou ajan sa a, men li pa parèt nan lis ou — li ka chanje non, aksè Azure ou pa rive jwenn li, oswa règ aksè li pa enkli ou.",
+    "accessEveryone": "Tout moun",
+    "accessRestricted": "Restrenn",
+    "edit": "Modifye",
+    "updatedByLine": "Dènye mizajou pa {user} le {date}",
+    "accessTypeLabel": "Ki moun ki kapab itilize ajan sa a",
+    "everyoneDescription": "Nenpòt moun ki deja ka jwenn aksè ak ajan sa a atravè aksè Azure yo.",
+    "restrictedDescription": "Sèlman itilizatè ak domèn ki anba a.",
+    "allowDomainsLabel": "Domèn otorize",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Itilizatè otorize",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Peze Antre pou ajoute",
+    "removeChip": "Retire",
+    "groupsLabel": "Gwoup otorize",
+    "groupsPendingConsent": "Aksè selon gwoup ap tann konsantman administratè lokatè epi li pa ka modifye ankò.",
+    "restrictedEmptyWarning": "Pa gen itilizatè oswa domèn ki make — pèsonn p ap kapab itilize ajan sa a.",
+    "save": "Sove",
+    "saving": "Ap sove…",
+    "cancel": "Anile",
+    "saveSuccess": "Règ aksè a anrejistre.",
+    "deleteSuccess": "Règ aksè a retire — tout moun ka itilize ajan sa a ankò.",
+    "saveError": "Pa t kapab sove. Tanpri rekòmanse.",
+    "conflictError": "Yon lòt moun modifye sa pandan w ap edite. Chaje ankò pou jwenn dènye vèsyon an epi eseye ankò.",
+    "reload": "Chaje ankò",
+    "localAdminsDescription": "Delegasyon jesyon règ pou ajan espesifik san rekòmanse deplwaman. Administratè lokal yo ka modifye règ sèlman pou ajan ki asiyen yo.",
+    "noLocalAdmins": "Pa gen administratè lokal ki konfigire.",
+    "addLocalAdmin": "Ajoute administratè lokal",
+    "emailLabel": "Imèl",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Retire administratè lokal",
+    "delegatedAgentsLabel": "Ajan delege",
+    "noDelegatedAgents": "Pa gen ajan pou delege.",
+    "unknownAgentKey": "Kle ajan enkoni",
+    "configSaveSuccess": "Administratè lokal yo anrejistre.",
+    "configConflictError": "Yon lòt moun modifye lis administratè lokal yo pandan w ap edite. Chaje ankò epi eseye ankò.",
+    "addAgent": "Ajoute ajan",
+    "newPromptAgentTitle": "Nouvo ajan avi",
+    "editPromptAgentTitle": "Modifye ajan avi",
+    "agentNameLabel": "Non",
+    "agentNamePlaceholder": "egzanp: Konsiltan Vwayaj",
+    "agentDescriptionLabel": "Deskripsyon",
+    "agentDescriptionPlaceholder": "Parèt bay itilizatè yo nan selektè modèl la",
+    "agentSystemPromptLabel": "Avi sistèm",
+    "agentSystemPromptPlaceholder": "Enstriksyon ki defini kijan ajan sa a dwe aji",
+    "agentModelLabel": "Modèl",
+    "agentModelPlaceholder": "Chwazi yon modèl...",
+    "agentModelUnavailable": "{modelId} (pa disponib)",
+    "agentModelUnknownError": "Modèl ou te chwazi a pa disponib ankò. Chwazi yon lòt modèl epi sove ankò.",
+    "promptAgentBadge": "Ajan avi",
+    "editAgent": "Modifye ajan",
+    "deleteAgent": "Efase",
+    "deleteAgentConfirm": "Efase ajan sa a pou tout moun? Li p ap parèt ankò nan selektè modèl la; konvèsasyon ki egziste yo ap kenbe istwa yo.",
+    "confirmDeleteAgent": "Wi, efase",
+    "promptAgentCreateSuccess": "Ajan avi kreye.",
+    "promptAgentSaveSuccess": "Ajan avi sove.",
+    "promptAgentDeleteSuccess": "Ajan avi efase.",
+    "promptAgentsUnavailableWarning": "Ajan avi yo pa ka chaje soti nan depo a. Ou pa ka modifye yo kounye a.",
+    "agentsTab": "Ajan yo",
+    "connectorsTab": "Konektè yo",
+    "addConnector": "Ajoute konektè",
+    "noConnectors": "Pa gen konektè pou kounya.",
+    "connectorsUnavailableWarning": "Pa t ka jwenn magazen konektè a, lis la ka pa konplè. Pa kreye ranplasman jiskaske li fini chaje.",
+    "editAccess": "Modifye aksè",
+    "deleteConnector": "Efase",
+    "deleteConnectorConfirm": "Efase konektè sa a? Nenpòt moun k ap itilize li ap pèdi aksè imedyatman.",
+    "confirmDeleteConnector": "Efase konektè",
+    "connectorSaveSuccess": "Konektè anrejistre.",
+    "connectorCreateSuccess": "Konektè kreye.",
+    "connectorDeleteSuccess": "Konektè efase.",
+    "editConnectorTitle": "Modifye konektè",
+    "newConnectorTitle": "Nouvo konektè",
+    "connectorPresetLabel": "Kòmanse ak yon modèl",
+    "connectorPresetNone": "Kòmanse depi nan kòmansman",
+    "connectorNameLabel": "Non",
+    "connectorDescriptionLabel": "Deskripsyon",
+    "connectorUrlLabel": "URL Sèvè",
+    "connectorUrlPlaceholderWarning": "Ranplase {placeholder} ki nan URL la ak pwòp valè pa w anvan ou sove.",
+    "connectorTransportLabel": "Transpò",
+    "connectorAuthLabel": "Otentifikasyon",
+    "connectorAuthNone": "Okenn",
+    "connectorAuthBearer": "Token (chak itilizatè bay pa yo)",
+    "connectorAuthOauth": "OAuth konekte",
+    "connectorSealingUnavailable": "OAuth pa disponib: deplwaman sa a pa gen AUTH_SECRET ki configure pou ankripte sekrè kliyan yo.",
+    "connectorTokenHelpLabel": "Lyen pou enstriksyon sou token (opsyonèl)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Yon sekrè deja anrejistre. Kite vid pou kontinye itilize li, oswa mete yon nouvo pou ranplase li.",
+    "connectorClientSecretHint": "Ankripte anvan li estoke, epi li pap janm parèt ankò.",
+    "connectorScopesLabel": "Scopes (separe ak espas, opsyonèl)"
+  },
+  "localModels": {
+    "title": "Modèl lokal",
+    "description": "Chate ak modèl k ap kouri sou òdinatè sa a. Mesaj yo soti dirèkteman nan navigatè ou a al nan aplikasyon lokal la epi yo pa janm rive sou sèvè nou yo — sa vle di repons yo, tit konvèsasyon yo ak rezime yo ap rete sou òdinatè ou.",
+    "detect": "Detekte ekzekisyon lokal",
+    "detecting": "Ap detekte…",
+    "experimental": "Egzperimantal",
+    "portLabel": "Pò",
+    "statusUnknown": "Ankò pa tcheke.",
+    "statusChecking": "Ap tcheke…",
+    "statusReady": "{count, plural, =0 {Konekte, men pa gen modèl ki chaje.} one {Konekte — # modèl disponib.} other {Konekte — # modèl disponib.}}",
+    "statusNotRunning": "Pa kapab jwenn {label}. Tcheke si l ap kouri sou pò sa a, epi asire navigatè ou a gen dwa pou l jwenn aksè ak aplikasyon lokal yo sou sit sa a.",
+    "statusHttpError": "{label} reponn ak yon erè. Tcheke loj la.",
+    "corsHelp": {
+      "ollama": "Ollama ap kouri men li refize demann ki soti sou sit sa a. Mete OLLAMA_ORIGINS ak adrès sit sa a, rekòmanse Ollama, epi detekte ankò.",
+      "lmstudio": "LM Studio ap kouri men li refize demann ki soti sou sit sa a. Limen CORS nan paramèt sèvè lokal li a, epi detekte ankò.",
+      "llamacpp": "llama.cpp ap kouri men li refize demann ki soti sou sit sa a. Kòmanse llama-server ak demann cross-origin pèmèt, epi detekte ankò."
+    },
+    "privacyNote": "Modèl lokal yo pa sipòte atachman fichye, imaj, rechèch sou entènèt oswa konektè — sa yo bezwen sèvè nou yo. Deteksyon ap tcheke sèlman òdinatè sa a."
+  },
+  "urlFetch": {
+    "sourceFallback": "Paj entènèt",
+    "fallbackHint": "Ou ka ouvri paj la, kopye tèks la, epi kole li isit la tou.",
+    "shortExtract": "Sèlman yon ti ekstrè te kapab li — ka gen pawa oswa bezwen konekte.",
+    "errors": {
+      "invalidUrl": "Sa pa sanble ak yon adrès entènèt ki valab.",
+      "ssrfBlocked": "Adrès sa a pa ka chache pou rezon sekirite.",
+      "tooManyRedirects": "Lyen sa a te redirije twòp fwa.",
+      "timeout": "Paj la pran twòp tan pou reponn.",
+      "unreachable": "Paj la pa t ka jwenn.",
+      "blocked": "Sitou a rejte demann nan — li ka mande pou w konekte oswa bloke lekti otomatik.",
+      "notFound": "Paj sa a pa jwenn.",
+      "upstream": "Sitou a voye yon erè.",
+      "pdf": "Lyen sa a se yon PDF. Telechaje l epi itilize bouton atache a pou ajoute li pito.",
+      "nonHtml": "Lyen sa a pa yon paj entènèt nou ka li.",
+      "tooLarge": "Paj sa a twò gwo pou nou rale l.",
+      "empty": "Pa gen okenn tèks atik ki ka li sou paj sa a.",
+      "generic": "Paj la pa t ka rale."
+    },
+    "fetchingFile": "Ap rale {host}…",
+    "attachLink": "Atache yon lyen",
+    "attachLinkTitle": "Atache yon paj entènèt",
+    "attachLinkDescription": "Nou pral rale paj la epi atache tèks li nou ka li a ak mesaj ou.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Rale & atache",
+    "attachLinkInvalid": "Sa pa sanble ak yon adrès entènèt.",
+    "linkBadge": "Soti nan yon lyen",
+    "couldNotRetrieve": "Pa t ka rale",
+    "doc": {
+      "sourceLabel": "Sous",
+      "retrievedLabel": "Rale",
+      "attemptedLabel": "Tante",
+      "failureHeading": "Paj entènèt la pa t ka rale"
+    },
+    "settingsTitle": "Lyen nan mesaj yo",
+    "settingsToggle": "Rale lyen kole otomatikman",
+    "settingsDescription": "Lè ou kole yon lyen sèl, paj la ap rale epi atache tèks li pou asistan an ka li li. Retire opsyon sa a pou kenbe lyen yo kòm tèks senp — ou ka toujou atache yon paj manyèlman depi meni + a.",
+    "addLink": "Ajoute yon lyen"
+  },
+  "cameraAccessError": "Pa t kapab jwenn aksè ak kamera a. Tcheke pèmisyon kamera ou epi eseye ankò.",
+  "cameraUnnamedDevice": "Kamera",
+  "pastedText": {
+    "fallbackName": "Tèks kole",
+    "charCount": "{count, number} karaktè",
+    "removeChip": "Retire tèks kole “{name}”",
+    "blockLabel": "Tèks kole: {name}",
+    "doc": {
+      "heading": "Tèks kole",
+      "pastedLabel": "Kole"
+    },
+    "settingsTitle": "Gwo kole",
+    "settingsToggle": "Vire yon gwo kole an atachman",
+    "settingsDescription": "Si w kole plis tèks pase limit ki anba a, sa pral atache li kòm fichye olye li plen bwat mesaj la. Tèks la itilize egzakteman jan li kole — anyen pa chaje oubyen chanje.",
+    "settingsThresholdLabel": "Atache kole ki depase",
+    "settingsThresholdUnit": "karaktè",
+    "settingsThresholdHint": "Ant {min, number} ak {max, number} karaktè."
+  },
+  "structures": {
+    "section": "Estrikti",
+    "sectionSubtitle": "Definisyon jaden anrejistre. Sèvi ak youn kòm resèt ekstraksyon, oswa kòm baz pou yon tab workflow done.",
+    "loadFromStructure": "Chaje estrikti",
+    "loadFromStructureTitle": "Ranplase kolòn sa yo ak yon estrikti anrejistre",
+    "pickerEmpty": "Pa gen estrikti anrejistre ankò.",
+    "pickerTitle": "Chaje yon estrikti anrejistre",
+    "saveAsStructure": "Sove kòm estrikti",
+    "saveAsStructureTitle": "Sove kolòn sa yo nan bibliyotèk estrikti ou",
+    "savedToast": "Estrikti “{name}” sove",
+    "namePlaceholder": "Non estrikti",
+    "fieldCount": "{count} jaden",
+    "fieldCountOne": "1 jaden",
+    "downgradedNotice": "{count} jaden senplifye an tèks — tab yo kenbe yon sèl valè pa selil: {names}",
+    "truncatedNotice": "{count} jaden retire — limit tab la se {max} kolòn: {names}",
+    "skippedDerivedNotice": "{count} kolòn kalkile pa sove — fòmil yo depann de kolòn tab sa a: {names}",
+    "loadReplacesColumns": "Sa ap ranplase kolòn aktyèl yo. Liy ki egziste ap kenbe valè yo si non kolòn yo koresponn."
   }
 }

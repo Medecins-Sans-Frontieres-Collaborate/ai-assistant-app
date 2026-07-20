@@ -1,3 +1,5 @@
+import { LocalRuntime } from '@/types/localRuntime';
+
 import modelMetadata from '@/config/models.json';
 import { z } from 'zod';
 
@@ -73,6 +75,19 @@ export interface OpenAIModel {
    */
   isCustomSourceModel?: boolean;
   /**
+   * Model served by a local runtime on the user's own machine (Ollama, LM
+   * Studio, llama.cpp). These are reached BROWSER-DIRECT over loopback and
+   * never touch /api/chat, so most server-backed features (RAG, MCP tools,
+   * image inflation, cloud fallback) do not apply. Runtime-derived and
+   * client-only — deliberately NOT in the zod openAIModelSchema.
+   * Test with isLocalModel() from lib/services/models/localModels.ts.
+   */
+  isLocalModel?: boolean;
+  /** Which local runtime serves this model. Set with isLocalModel. */
+  localRuntime?: LocalRuntime;
+  /** Display label for the serving runtime, e.g. "Ollama". Display only. */
+  localRuntimeLabel?: string;
+  /**
    * Azure region of the byom source ACCOUNT (display only, e.g.
    * "swedencentral"). Runtime-only like hostedIn — set by /api/models/sources,
    * deliberately NOT in the zod openAIModelSchema (never authored in config).
@@ -95,11 +110,12 @@ export interface OpenAIModel {
   /**
    * Where inference runs. 'azure' (default when absent) = inside MSF's Azure
    * environment; 'external' = the provider's own infrastructure reached
-   * through Azure AI Foundry (currently the claude-* models). Compliance
-   * disclosure — deliberately NOT settable via ARM ui-* tags. Read through
-   * getModelHosting() so the default lives in one place.
+   * through Azure AI Foundry (currently the claude-* models); 'local' =
+   * entirely on the user's own machine, leaving it for no cloud at all.
+   * Compliance disclosure — deliberately NOT settable via ARM ui-* tags.
+   * Read through getModelHosting() so the default lives in one place.
    */
-  hosting?: 'azure' | 'external';
+  hosting?: 'azure' | 'external' | 'local';
   /**
    * Picker curation tier: 'featured' models are DEFAULT FAVORITES (surface in
    * the Favorites section until the user unstars them), 'legacy' versions are

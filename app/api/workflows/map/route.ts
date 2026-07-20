@@ -20,7 +20,7 @@ import {
   successResponse,
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
-import { normalizeEventFields } from '@/lib/utils/shared/date/partialDate';
+import { normalizeEventRange } from '@/lib/utils/shared/date/eventRange';
 import { isValidCoordinate } from '@/lib/utils/shared/geo/geojson';
 
 import { OpenAIModelID, OpenAIModels } from '@/types/openai';
@@ -100,9 +100,12 @@ interface LlmMapFeature {
   countryCode: string;
   parentName: string;
   approxRadiusKm: number;
-  eventStart: string;
-  eventEnd: string;
-  eventOngoing: boolean;
+  event: {
+    start: string;
+    end: string;
+    precision: string;
+    ongoing: boolean;
+  };
 }
 
 /**
@@ -191,17 +194,21 @@ export async function POST(req: NextRequest) {
 
     const features = result.features
       .filter((f) => isValidCoordinate(f.lat, f.lon))
-      .map((f) => ({
-        ...f,
-        countryCode: f.countryCode?.trim().toUpperCase().slice(0, 2) ?? '',
-        approxRadiusKm:
-          typeof f.approxRadiusKm === 'number' &&
-          Number.isFinite(f.approxRadiusKm) &&
-          f.approxRadiusKm > 0
-            ? f.approxRadiusKm
-            : 0,
-        ...normalizeEventFields(f),
-      }));
+      .map((f) => {
+        const event = normalizeEventRange(f.event);
+        return {
+          ...f,
+          countryCode: f.countryCode?.trim().toUpperCase().slice(0, 2) ?? '',
+          approxRadiusKm:
+            typeof f.approxRadiusKm === 'number' &&
+            Number.isFinite(f.approxRadiusKm) &&
+            f.approxRadiusKm > 0
+              ? f.approxRadiusKm
+              : 0,
+          // Undated features simply carry no `event` key.
+          ...(event ? { event } : {}),
+        };
+      });
     const dropped = result.features.length - features.length;
 
     const connections = Array.isArray(result.connections)

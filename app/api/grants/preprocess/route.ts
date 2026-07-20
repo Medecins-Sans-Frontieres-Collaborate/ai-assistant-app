@@ -365,7 +365,9 @@ async function loadExpectedList(params: {
 
   let blobNames: string[] = [];
   try {
-    const blobs = await blobClient.listBlobs(`grants/${oc}/supplemental/`);
+    const blobs = await blobClient.listBlobsDetailed(
+      `grants/${oc}/supplemental/`,
+    );
     blobNames = blobs.map((b: { name: string }) => b.name);
   } catch {
     return [];

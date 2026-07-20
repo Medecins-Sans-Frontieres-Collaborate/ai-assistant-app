@@ -54,7 +54,9 @@ describe('computeTimelineScale — single-segment (linear) behavior', () => {
     ]);
     expect(scale.segments).toHaveLength(1);
     expect(scale.minMs).toBe(Date.UTC(2026, 0, 10));
-    expect(scale.maxMs).toBe(Date.UTC(2026, 5, 1) - 1);
+    // Coverage ends EXCLUSIVELY: a May end covers through 31 May, so the
+    // first uncovered instant is 1 June.
+    expect(scale.maxMs).toBe(Date.UTC(2026, 5, 1));
     expect(scale.datedCount).toBe(2);
   });
 

@@ -1,4 +1,6 @@
-import { DataColumn, DataColumnType } from '@/types/workflow';
+import { DataColumn, DataColumnFormat, DataColumnType } from '@/types/workflow';
+
+import { detectColumnNumberFormat, parseFormattedNumber } from './numberFormat';
 
 /**
  * Client-safe table helpers: column-id generation, type inference from raw
@@ -51,6 +53,26 @@ export function deriveNextRowId(rows: Record<string, unknown>[]): number {
     if (Number.isFinite(parsed) && parsed >= max) max = parsed + 1;
   }
   return max;
+}
+
+/**
+ * Positional rid carry-over for full-table LLM transforms: result rows
+ * come back rid-stripped, and regenerating ids would orphan source→row
+ * attribution (blanking a QC-pane-filtered grid). When the row count is
+ * unchanged (column reshapes, cell edits) each result row inherits the
+ * rid at its position; otherwise the result is returned untouched and
+ * withRowIds assigns fresh ids. Best-effort: a reordering transform
+ * shifts attribution with position.
+ */
+export function carryRowIds(
+  prev: Record<string, unknown>[],
+  result: Record<string, unknown>[],
+): Record<string, unknown>[] {
+  if (result.length !== prev.length) return result;
+  return result.map((row, i) => {
+    const rid = getRowId(prev[i]);
+    return rid ? { ...row, [ROW_ID_KEY]: rid } : row;
+  });
 }
 
 /** Strips the reserved id key (export/prompt hygiene where needed). */
@@ -110,7 +132,8 @@ const DATE_RE =
   /^\d{4}-\d{2}-\d{2}([T ]\d{2}:\d{2}(:\d{2})?)?$|^\d{1,2}[/.]\d{1,2}[/.]\d{2,4}$/;
 const BOOL_VALUES = new Set(['true', 'false', 'yes', 'no', 'y', 'n']);
 
-function inferValueType(value: unknown): DataColumnType | null {
+/** Infers the type of one cell value (null = empty/no signal). */
+export function inferValueType(value: unknown): DataColumnType | null {
   if (value === null || value === undefined || value === '') return null;
   if (typeof value === 'number') return 'number';
   if (typeof value === 'boolean') return 'boolean';
@@ -119,6 +142,8 @@ function inferValueType(value: unknown): DataColumnType | null {
   if (BOOL_VALUES.has(s.toLowerCase())) return 'boolean';
   if (DATE_RE.test(s)) return 'date';
   if (!Number.isNaN(Number(s.replace(/,/g, '')))) return 'number';
+  // Currency-tagged / locale-formatted numbers ("$25", "1.234,56 €").
+  if (parseFormattedNumber(s) !== null) return 'number';
   return 'text';
 }
 
@@ -147,14 +172,21 @@ export function inferColumnType(values: unknown[]): DataColumnType {
 }
 
 /** Coerces a raw imported cell to the column's declared type. */
-export function coerceCell(value: unknown, type: DataColumnType): unknown {
+export function coerceCell(
+  value: unknown,
+  type: DataColumnType,
+  format?: DataColumnFormat,
+): unknown {
   if (value === null || value === undefined || value === '') return null;
   switch (type) {
     case 'number': {
-      const n =
-        typeof value === 'number'
-          ? value
-          : Number(String(value).replace(/,/g, ''));
+      if (typeof value === 'number') return value;
+      const s = String(value);
+      // Formatted parse first: it understands currency tokens and the
+      // column's separator style ("25,50" as 25.5 in an EU column).
+      const parsed = parseFormattedNumber(s, format?.numberStyle);
+      if (parsed) return parsed.value;
+      const n = Number(s.replace(/,/g, ''));
       return Number.isNaN(n) ? null : n;
     }
     case 'boolean': {
@@ -186,10 +218,20 @@ export function buildTable(
   const columns: DataColumn[] = limitedHeaders.map((header, index) => {
     const id = toColumnId(header, index);
     const sample = rawRows.map((row) => row[header]);
+    let type = inferColumnType(sample);
+    let format: DataColumnFormat | undefined;
+    if (type === 'number') {
+      // Capture currency/separator style, or veto the numeric read
+      // entirely (e.g. mixed currencies must stay text).
+      const detected = detectColumnNumberFormat(sample);
+      if (detected === null) type = 'text';
+      else if (Object.keys(detected).length > 0) format = detected;
+    }
     return {
       id,
       name: header.trim() || `Column ${index + 1}`,
-      type: inferColumnType(sample),
+      type,
+      ...(format ? { format } : {}),
     };
   });
 
@@ -204,7 +246,11 @@ export function buildTable(
   const rows = rawRows.map((raw) => {
     const row: Record<string, unknown> = {};
     columns.forEach((column, index) => {
-      row[column.id] = coerceCell(raw[limitedHeaders[index]], column.type);
+      row[column.id] = coerceCell(
+        raw[limitedHeaders[index]],
+        column.type,
+        column.format,
+      );
     });
     return row;
   });

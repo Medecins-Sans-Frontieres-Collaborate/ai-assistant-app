@@ -31,6 +31,8 @@ vi.mock('katex/dist/katex.min.css', () => ({}));
 // This provides a global mock that looks up translations from a messages object.
 const mockMessages: Record<string, unknown> = {
   common: {
+    cancel: 'Cancel',
+    undo: 'Undo',
     close: 'Close',
     closeModal: 'Close modal',
     remove: 'Remove',
@@ -57,6 +59,7 @@ const mockMessages: Record<string, unknown> = {
     loadingImage: 'Loading image...',
     download: 'Download',
     downloadResponse: 'Download response',
+    sources: 'Sources',
     openAsDocument: 'Open as Document',
     openInCodeEditor: 'Open in Code Editor',
     failedToOpenCodeEditor:
@@ -91,6 +94,16 @@ const mockMessages: Record<string, unknown> = {
     languages: {
       autoDetect: 'Auto-detect',
     },
+  },
+  table: {
+    copyTable: 'Copy table',
+    downloadTable: 'Download table',
+    copyMarkdown: 'Markdown',
+    copyCsv: 'CSV',
+    copyTsv: 'TSV',
+    formatCsv: 'CSV (.csv)',
+    exportedAsCsv: 'Exported as CSV',
+    copyFailed: 'Failed to copy table',
   },
   artifact: {
     startWriting: 'Start writing...',
@@ -158,6 +171,116 @@ const mockMessages: Record<string, unknown> = {
       title: 'No regional / organization agents available',
       description: 'Connect a Foundry project below to discover its agents.',
     },
+  },
+  agentAccess: {
+    title: 'Access & Connectors',
+    description:
+      "Control which users can use shared agents and organization connectors. Rules only further restrict what a user's own Azure access already allows — they can never grant access Azure denies.",
+    backToChat: 'Back to chat',
+    loading: 'Loading…',
+    loadError: "Couldn't load access data.",
+    agentsTab: 'Agents',
+    connectorsTab: 'Connectors',
+    addConnector: 'Add connector',
+    noConnectors: 'No connectors yet.',
+    connectorsUnavailableWarning:
+      "Couldn't reach the connector store, so this list may be incomplete. Don't create a replacement until it loads.",
+    editAccess: 'Edit access',
+    deleteConnector: 'Delete',
+    deleteConnectorConfirm:
+      'Delete this connector? Anyone using it will lose access immediately.',
+    confirmDeleteConnector: 'Delete connector',
+    connectorSaveSuccess: 'Connector saved.',
+    connectorCreateSuccess: 'Connector created.',
+    connectorDeleteSuccess: 'Connector deleted.',
+    editConnectorTitle: 'Edit connector',
+    newConnectorTitle: 'New connector',
+    connectorPresetLabel: 'Start from a template',
+    connectorPresetNone: 'Start from scratch',
+    connectorNameLabel: 'Name',
+    connectorDescriptionLabel: 'Description',
+    connectorUrlLabel: 'Server URL',
+    connectorUrlPlaceholderWarning:
+      'Replace the {placeholder} in the URL with your own value before saving.',
+    connectorTransportLabel: 'Transport',
+    connectorAuthLabel: 'Authentication',
+    connectorAuthNone: 'None',
+    connectorAuthBearer: 'Token (each user provides their own)',
+    connectorAuthOauth: 'OAuth sign-in',
+    connectorSealingUnavailable:
+      'OAuth is unavailable: this deployment has no AUTH_SECRET configured to encrypt client secrets with.',
+    connectorTokenHelpLabel: 'Link to token instructions (optional)',
+    connectorClientIdLabel: 'OAuth client ID',
+    connectorClientSecretLabel: 'OAuth client secret',
+    connectorClientSecretStored:
+      'A secret is stored. Leave blank to keep it, or enter a new one to replace it.',
+    connectorClientSecretHint:
+      'Encrypted before it is stored, and never shown again.',
+    connectorScopesLabel: 'Scopes (space-separated, optional)',
+    rulesUnavailableWarning:
+      'Access rules could not be loaded from storage. Agent invocation is currently blocked and rules cannot be edited.',
+    retry: 'Retry',
+    rulesTab: 'Agent rules',
+    localAdminsTab: 'Local admins',
+    noAgents: 'No agents to manage.',
+    sourceLabel: 'Source',
+    notDiscoverable: 'Not discoverable by you',
+    notDiscoverableHint:
+      "A rule exists for this agent, but it isn't in your own discovery — it may have been renamed, your Azure access doesn't reach it, or its access rule doesn't include you.",
+    accessEveryone: 'Everyone',
+    accessRestricted: 'Restricted',
+    edit: 'Edit',
+    updatedByLine: 'Last updated by {user} on {date}',
+    accessTypeLabel: 'Who can use this agent',
+    everyoneDescription:
+      'Anyone who can already reach this agent through their Azure access.',
+    restrictedDescription: 'Only the users and domains listed below.',
+    allowDomainsLabel: 'Allowed domains',
+    allowDomainsPlaceholder: 'example.org',
+    allowUsersLabel: 'Allowed users',
+    allowUsersPlaceholder: 'person@example.org',
+    chipAddHint: 'Press Enter to add',
+    removeChip: 'Remove',
+    groupsLabel: 'Allowed groups',
+    groupsPendingConsent:
+      "Group-based access is pending tenant admin consent and can't be edited yet.",
+    restrictedEmptyWarning:
+      'No users or domains are listed — nobody will be able to use this agent.',
+    save: 'Save',
+    saving: 'Saving…',
+    cancel: 'Cancel',
+    saveSuccess: 'Access rule saved.',
+    deleteSuccess: 'Access rule removed — everyone can use this agent again.',
+    saveError: "Couldn't save. Please try again.",
+    conflictError:
+      'Someone else changed this while you were editing. Reload to load the latest version, then make your change again.',
+    reload: 'Reload',
+    addAgent: 'Add agent',
+    newPromptAgentTitle: 'New prompt agent',
+    editPromptAgentTitle: 'Edit prompt agent',
+    agentNameLabel: 'Name',
+    agentNamePlaceholder: 'e.g. Travel Advisor',
+    agentDescriptionLabel: 'Description',
+    agentDescriptionPlaceholder: 'Shown to users in the model picker',
+    agentSystemPromptLabel: 'System prompt',
+    agentSystemPromptPlaceholder:
+      'Instructions that define how this agent behaves',
+    agentModelLabel: 'Model',
+    agentModelPlaceholder: 'Select a model…',
+    agentModelUnavailable: '{modelId} (unavailable)',
+    agentModelUnknownError:
+      'The selected model is no longer available. Choose another model and save again.',
+    promptAgentBadge: 'Prompt agent',
+    editAgent: 'Edit agent',
+    deleteAgent: 'Delete',
+    deleteAgentConfirm:
+      'Delete this agent for everyone? It disappears from the model picker; existing conversations keep their history.',
+    confirmDeleteAgent: 'Yes, delete',
+    promptAgentCreateSuccess: 'Prompt agent created.',
+    promptAgentSaveSuccess: 'Prompt agent saved.',
+    promptAgentDeleteSuccess: 'Prompt agent deleted.',
+    promptAgentsUnavailableWarning:
+      'Prompt agents could not be loaded from storage. They cannot be edited right now.',
   },
   modelSources: {
     connectButtonShort: 'Connect a model source',
@@ -243,6 +366,20 @@ const mockMessages: Record<string, unknown> = {
     title: 'Connectors',
     description:
       'Connect external tools through the Model Context Protocol (MCP). Connected tools become available to models in chat, and every tool call runs only after you approve it.',
+    adminConnectorsTitle: 'From your organization',
+    yourConnectorsTitle: 'Your connectors',
+    addTitle: 'Add a connector',
+    addDescription:
+      "Pick a tool to connect. You'll set up access after choosing.",
+    add: 'Add',
+    filterLabel: 'Filter connectors',
+    filterPlaceholder: 'Search connectors',
+    noMatches: 'No connectors match “{query}”.',
+    adminConnectorsDescription:
+      'Connectors your administrators have set up. Which ones you see depends on your access.',
+    managedByOrg: 'Managed by your organization',
+    connectorOauthNotConfigured:
+      "Sign-in isn't finished being set up for this connector. Contact your administrator.",
     localOnlyNote:
       'You sign in directly with each provider. Access keys are encrypted and stored only on this device, and are relayed through the app server with each request — never stored or logged there.',
     catalog: {
@@ -298,6 +435,8 @@ const mockMessages: Record<string, unknown> = {
     oauthCancelled: 'Sign-in was cancelled.',
     oauthUnavailable:
       "Sign-in isn't available for this connector on this deployment. Use an access token instead, or ask your administrator to configure the OAuth app.",
+    oauthNoAppConfigured:
+      "Signing in with {name} isn't set up on this deployment. Connect by registering your own OAuth app.",
     ownAppToggle: 'Use your own OAuth app',
     ownAppHint:
       'Register an OAuth app in your {name} account (your organization, workspace, or enterprise instance) with the callback URL below, then paste its credentials here. Leave this closed to use the built-in app.',
@@ -325,6 +464,30 @@ const mockMessages: Record<string, unknown> = {
       closeButton: 'Close window',
     },
   },
+  memories: {
+    title: 'Memories',
+    description:
+      'Let the assistant remember durable facts you share — like your role, preferences, and ongoing projects — and use them across conversations.',
+    enableToggle: 'Enable memories',
+    privacyNote:
+      'Facts are stored only in this browser and included in your chats to personalize replies.',
+    empty:
+      'No memories yet. Facts worth remembering are saved automatically from your conversations.',
+    savedOn: 'Saved {date}',
+    deleteMemory: 'Delete memory',
+    clearAll: 'Clear all memories',
+    clearAllConfirmQuestion: 'Delete all memories? This cannot be undone.',
+    clearAllConfirm: 'Delete all',
+    cancel: 'Cancel',
+  },
+  contextWindow: {
+    label: 'Context window',
+    value: '{count} messages',
+    fewer: 'Fewer messages',
+    more: 'More messages',
+    description:
+      'Older messages beyond this limit are summarized and sent as context.',
+  },
   usageImpact: {
     empty: 'No usage tracked yet.',
     co2Value: '{grams} g CO2e',
@@ -336,8 +499,50 @@ const mockMessages: Record<string, unknown> = {
     byRegion: 'By hosting region',
     regionDefault: 'Default',
     modelRow: '{requests} req - {grams} g',
+    estimatedPortion:
+      'Includes ~{grams} g CO2e ({requests} requests) estimated from chats that predate tracking',
     disclosure: 'Estimates based on assumptions v{version} - since {since}.',
     reset: 'Reset usage stats',
+  },
+  emissions: {
+    tier: {
+      low: 'Lower impact',
+      moderate: 'Moderate impact',
+      high: 'Higher impact',
+    },
+    tierTooltip: 'Relative energy impact per request (assumptions v{version})',
+    typicalRequest: '~{grams} g CO2e per typical request',
+    typicalRequestTooltip:
+      'Rough per-request estimate (assumptions v{version})',
+    activities: {
+      netflixHd: 'Netflix HD streaming',
+      zoomCall: 'Zoom call (camera on)',
+      webBrowsing: 'Web browsing',
+      spotifyAudio: 'Spotify audio',
+    },
+    equivalents: {
+      title: '~ the same carbon as',
+      note: 'Same-carbon comparison against published per-hour footprints',
+    },
+    duration: {
+      lessThanSecond: '<1 s',
+      seconds: '{value} s',
+      minutes: '{value} min',
+      hours: '{value} h',
+    },
+    chip: {
+      label: '{grams} g CO2e',
+      ariaLabel: 'Estimated carbon footprint: {grams} grams. Show breakdown.',
+      ariaLabelToday:
+        'Estimated carbon footprint today: {grams} grams. Show breakdown.',
+      title: 'This conversation (estimated)',
+      today: 'Today',
+      total: 'All time',
+      measured: 'From reported token counts',
+      estimated: 'Back-calculated from older messages',
+      lastRequest: 'Last request',
+      disclaimer: 'Per-request estimates (assumptions v{version})',
+    },
   },
   modelSelect: {
     tabs: {
@@ -572,7 +777,9 @@ vi.mock('next-intl', () => ({
   useNow: () => new Date(),
   useTimeZone: () => 'UTC',
   useFormatter: () => ({
-    dateTime: () => '',
+    // Deterministic (timezone-independent) date output so tests can assert it.
+    dateTime: (date: Date | number) =>
+      new Date(date).toISOString().slice(0, 10),
     number: () => '',
     relativeTime: () => '',
   }),

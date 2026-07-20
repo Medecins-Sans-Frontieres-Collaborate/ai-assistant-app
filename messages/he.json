@@ -824,7 +824,8 @@
     "processingAudio": "מעבד שמע...",
     "ttsError": "שגיאה ביצירת שמע. נא לנסות שוב.",
     "unsupportedMessageType": "שגיאה בהצגת ההודעה: סוג הודעה לא נתמך",
-    "addLanguageOption": "הוסף \"{name}\"…"
+    "addLanguageOption": "הוסף \"{name}\"…",
+    "sources": "מקורות"
   },
   "sidebar": {
     "collapseSidebar": "כיווץ סרגל צד",
@@ -1153,7 +1154,23 @@
     "customInstructionsLabel": "הוראות מותאמות אישית*",
     "defaultTemperatureLabel": "Default Temperature*",
     "Usage & Impact": "שימוש והשפעה",
-    "Connectors": "מחברים"
+    "Connectors": "מחברים",
+    "Backup": "גיבוי",
+    "Memories": "זכרונות",
+    "Agent Access": "גישה של סוכן",
+    "LocalModels": "מודלים מקומיים",
+    "suggestRevisions": {
+      "title": "גרסאות מסמך",
+      "toggle": "הצע שינויים במקום להחיל אותם ישירות",
+      "description": "כאשר תבקש מהזרימת העבודה של המסמך לבצע תיקון, השינויים יופיעו כהצעות אישיות שניתן לאשר או לדחות, בדומה להערכות איכות.",
+      "exceptionsTitle": "בכל זאת החל ישירות כאשר:",
+      "exceptionSelection": "מתבצע תיקון על קטע שסימנת",
+      "exceptionLargeRewrite": "השכתוב משנה את רוב המסמך",
+      "exceptionReorder": "קטעים הוזזו במקום נערכו",
+      "thresholdLabel": "התייחס לעריכה כוללת מעל",
+      "thresholdUnit": "% מהמסמך שונה",
+      "exceptionSelectionAlways": "עריכת קטע מסומן תמיד מתבצעת ישירות — המודל מחזיר רק את הקטע הערוך, ואי אפשר להציג הצעות עבור כל המסמך."
+    }
   },
   "notFound": {
     "lostDog": "כלב אבוד"
@@ -2111,7 +2128,9 @@
     "pin": "נעץ בחלק העליון",
     "unpin": "הסר נעיצה",
     "moveToMore": "העבר ל'עוד'",
-    "moveOutOfMore": "הצג בתפריט"
+    "moveOutOfMore": "הצג בתפריט",
+    "showSources": "הצג מקורות נוספים",
+    "hideSources": "הסתר מקורות נוספים"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "הוסיפו הוראות אישיות כדי להתאים את תגובת הבינה המלאכותית. הוראות אלו משולבות עם הנחיות ליבה שמבטיחות תגובות מועילות, מדויקות ובטוחות.",
   "Tip: Type \"/\" to select from saved prompt templates_": "עצה: הקלידו \"/\" כדי לבחור מהתבניות השמורות.",
@@ -2424,7 +2443,8 @@
     "regionDefault": "ברירת מחדל",
     "modelRow": "{requests} בק׳ · {grams} גר'",
     "disclosure": "ההערכות מבוססות על הנחות v{version} · מאז {since} · רק צ'אט רגיל (תשובות סוכנים ומסד ידע לא נספרות).",
-    "reset": "איפוס סטטיסטיקת שימוש"
+    "reset": "איפוס סטטיסטיקת שימוש",
+    "estimatedPortion": "כולל כ־{grams} גרם CO₂e ({requests} בקשות) שמוערכים מצ'אטים שנעשו לפני תחילת המעקב — מחושב מחדש מתוך טקסט ההודעות השמורות, לא מספירות טוקנים מדויקות."
   },
   "extraction": {
     "toggleLabel": "חלץ נתונים מובְנָים",
@@ -2631,7 +2651,25 @@
       "pendingCount": "{count} ממתינים",
       "closeReview": "סגור סקירת איכות",
       "showReview": "הצג סקירה",
-      "showReviewPending": "הצג סקירה ({count} ממתינים)"
+      "showReviewPending": "הצג סקירה ({count} ממתינים)",
+      "undoEdit": "בטל פעולה",
+      "clearResolved": "נקה הערות שטופלו",
+      "clearResolvedHint": "הסר עריכות שאושרו, נדחו או אינן רלוונטיות מהרשימה",
+      "autoClearResolved": "נקה אוטומטית עריכות שטופלו",
+      "customCriteria": "קריטריונים מותאמים",
+      "closeCriteria": "סגור קריטריונים מותאמים",
+      "newCriterion": "קריטריון חדש",
+      "newCriterionName": "קריטריון ללא שם",
+      "criterionName": "שם קריטריון",
+      "criterionRubric": "רובריקה",
+      "criterionRubricPlaceholder": "תאר מה נדרש בתרגום כדי לעמוד בקריטריון זה, לדוג' \"הצג את כל הוראות המינון הקליניות בציווי בלבד, לעולם לא באינפיניטיב…\"",
+      "criterionRubricHint": "רובריקה זו מוצגת ל-AI ככתבה לצד ממדי MQM המובנים בעת הערכת תרגום.",
+      "criteriaEmpty": "צרו קריטריונים מותאמים—כגון סגנון בית, העדפות מינוחים של הלקוח או מוסכמות אזוריות—כדי להעריך תרגומים מעבר לממדי MQM המובנים. נשמר במכשיר זה וניתן לשימוש חוזר.",
+      "deleteCriterion": "מחק קריטריון",
+      "manageCriteria": "קריטריונים מותאמים",
+      "addCriteria": "הוסף קריטריונים",
+      "noUsableCriteria": "בחרו לפחות קריטריון מובנה אחד, או הגדירו רובריקה לקריטריונים שלכם.",
+      "criterionRubricTooLong": "המדריך הזה חורג ב-{over} תווים מהמגבלה. הוא נשלח עם כל הערכה, לכן יש לקצר אותו לפני שניתן יהיה להשתמש בקריטריון זה."
     },
     "document": {
       "emptyTitle": "תאר את המסמך הרצוי",
@@ -2751,7 +2789,32 @@
       "clearSelection": "נקה בחירה (עבודה עם כל המסמך)",
       "reviseSelectionPlaceholder": "תארו שינויים לבחירה…",
       "revisedSelectionSummary": "ערכתי את הקטע הנבחר באזור העבודה.",
-      "assessedSelection": "בחירה"
+      "assessedSelection": "בחירה",
+      "undoEdit": "בטל פעולה",
+      "clearResolved": "נקה הערות שטופלו",
+      "clearResolvedHint": "הסר עריכות שאושרו, נדחו או אינן רלוונטיות מהרשימה",
+      "autoClearResolved": "נקה אוטומטית עריכות שטופלו",
+      "import": "ייבוא",
+      "importReplaceTitle": "להחליף את המסמך?",
+      "importReplaceBody": "ייבוא {name} יחליף את המסמך הנוכחי. ההפניות שלך, המפרט והטון יישמרו.",
+      "importReplaceConfirm": "החלף",
+      "editorMode": "מצב עורך",
+      "editorModeRich": "טקסט עשיר",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "יש לסיים את העריכות המוצעות לפני מעבר מצב עורך.",
+      "suggestChanges": "הצע שינויים",
+      "suggestChangesHint": "סקור את התיקון כהצעות בודדות במקום לכתוב מחדש את המסמך מיד.",
+      "suggestChangesSelectionNote": "תיקונים על קטע נבחר מוחלים ישירות — הקטע כבר הוגדר לטיפול.",
+      "suggestedSummary": "הוצעו {count} {count, plural, one {שינוי} other {שינויים}} לסקירה.",
+      "revisionSuggestionSummary": "בקשתך לתיקון ייצרה {count} {count, plural, one {הצעת שינוי} other {הצעות שינוי}}.",
+      "revisionCriterionLabel": "תיקון שביקשת",
+      "fallbackSelection": "הוחל ישירות — שינויים בקטע נבחר אינם מוצעים.",
+      "fallbackLargeRewrite": "הוחל ישירות — השכתוב שינה יותר מדי מהמסמך כדי להציע כשינויים נפרדים.",
+      "fallbackReorder": "הוחל ישירות — קטעים הוזזו, כך שלא ניתן לפצל להצעות לסקירה.",
+      "fallbackUnanchorable": "הוחל ישירות — לא היה ניתן לשייך את השינויים לקטעים מסוימים.",
+      "fallbackNoChanges": "לא נדרשו שינויים.",
+      "criterionRubricTooLong": "המדריך הזה חורג ב-{over} תווים מהמגבלה. הוא נשלח עם כל הערכה, לכן יש לקצר אותו לפני שניתן יהיה להשתמש בקריטריון זה."
     },
     "data": {
       "emptyTitle": "ייבאו נתונים לניתוח",
@@ -2920,7 +2983,39 @@
       "autoCheckHint": "לאחר חילוץ נתונים מתמונות או מסמכים, תתבצע בדיקת איכות אוטומטית לשורות שנוספו",
       "checkingNewRows": "בודק את השורות החדשות לאיתור בעיות איכות…",
       "ingestCheckFailed": "בדיקת האיכות האוטומטית נכשלה ({message}) — ניתן להפעילה ידנית באמצעות 'הערכת איכות'.",
-      "assessedIngest": "שורות שנוספו"
+      "assessedIngest": "שורות שנוספו",
+      "transpose": "הפוך שורות ועמודות",
+      "transposeAxisColumn": "שם",
+      "transposeSuggestion": "נראה כי הטבלה הזו הפוכה: השורות הן מאפיינים והעמודות הן פריטים. האם להפוך כך שכל פריט יהיה שורה וכל מאפיין יהפוך לעמודה עם טיפוס?",
+      "transposedTable": "שורות ועמודות הפוכות",
+      "columns": "עמודות",
+      "columnsHidden": "עמודות ({count} מוסתרות)",
+      "showAllColumns": "הצג הכל",
+      "chartScatter": "פיזור (x מול y)",
+      "chartPivot": "טבלת ציר",
+      "xColumn": "עמודת X",
+      "yColumn": "עמודת Y",
+      "splitByColumn": "פיצול לפי",
+      "splitNone": "ללא פיצול",
+      "pivotValueColumns": "עמודות ערך",
+      "aggMin": "מינימום",
+      "aggMax": "מקסימום",
+      "aggMedian": "חציון",
+      "chartSeriesTruncated": "מציג עד {max} סדרות",
+      "chartPointsTruncated": "מציג {max} נקודות דגימה",
+      "chartScatterAria": "גרף פיזור של {x} מול {y}",
+      "pivotTableAria": "טבלת ציר מקובצת לפי {column}",
+      "schemaFormula": "נוסחה",
+      "schemaFormulaPlaceholder": "לדוג׳ [מקרים] / [אוכלוסייה] * 1000",
+      "schemaFormulaHint": "שדה מחושב: יש להתייחס לשדות אחרים כ-[שם]; נתמך: + - * / %, סוגריים, ופונקציות round, abs, min, max. הערכים מתעדכנים אוטומטית ואינם ניתנים לעריכה ישירה.",
+      "schemaFormulaSyntaxError": "נוסחה לא תקינה",
+      "schemaFormulaUnknownRef": "שדה לא ידוע: {ref}",
+      "schemaFormulaArityError": "מספר ארגומנטים שגוי עבור ‎{fn}",
+      "schemaFormulaCycleError": "ייחוס מעגלי בין נוסחאות",
+      "derivedColumnTitle": "מחושב: {formula}",
+      "derivedFrom": "מחושב על פי {formula}",
+      "takePhoto": "צלם תמונה",
+      "takePhotoHint": "השתמשו במצלמה כדי לצלם טופס או טבלה — התוכן שלה יהפוך לנתונים מובנים שתוכלו לבדוק מול התמונה"
     },
     "map": {
       "emptyTitle": "הצג את הנתונים שלך על גבי מפה",
@@ -2994,7 +3089,31 @@
         "jumpTo": "דלג ל{label}",
         "slider": "מיקום בציר הזמן",
         "showUndated": "הצג מיקומים ללא תאריך",
-        "activeCount": "{count} פעילים"
+        "activeCount": "{count} פעילים",
+        "jump": {
+          "start": "התחלה",
+          "yearsLater": "{count, plural, one {שנה לאחר מכן} other {# שנים לאחר מכן}}",
+          "monthsLater": "{count, plural, one {חודש לאחר מכן} other {# חודשים לאחר מכן}}",
+          "daysLater": "{count, plural, one {יום לאחר מכן} other {# ימים לאחר מכן}}",
+          "appears": "{count, plural, one {1 מופיע} other {# מופיעים}}",
+          "ends": "{count, plural, one {1 מסתיים} other {# מסתיימים}}",
+          "progress": "תאריך {index} מתוך {total}"
+        },
+        "precision": {
+          "minute": "דיוק לדקה",
+          "hour": "דיוק לשעה",
+          "day": "דיוק ליום",
+          "month": "דיוק לפי חודש",
+          "year": "דיוק לפי שנה",
+          "mixed": "(מעורב)"
+        },
+        "pacing": {
+          "toggle": "מהירות הצגה",
+          "cardDuration": "הציגו כל מיקום למשך",
+          "seconds": "{seconds} שנ'",
+          "maxCards": "מספר מיקומים לכל תאריך",
+          "hint": "תאריכים עמוסים מוצגים למשך זמן ארוך יותר אוטומטית."
+        }
       },
       "granularity": {
         "site": "אתר",
@@ -3011,8 +3130,13 @@
         "color": "צבע: רמת ביטחון של הקואורדינטות (כחול גבוה, כתום בינוני, אדום נמוך)",
         "size": "גודל הנקודה: מרכזיות המקום בחומר",
         "area": "עיגול מקווקו: הערכה משוערת של גבולות מחוז, אזור או מדינה",
-        "container": "מתאר דהוי: אזור שתוכנו ממופה בנפרד"
-      }
+        "container": "מתאר דהוי: אזור שתוכנו ממופה בנפרד",
+        "precisionHalo": "טבעת מקווקוות רכה (במהלך הילוך זמן): האירוע מתוארך רק לחודש או לשנה, ולכן זמנו המדויק אינו ידוע"
+      },
+      "sourceLabel": "מקור: {name}",
+      "fetchAndMap": "משוך ומפה",
+      "fetchingPage": "טוען עמוד…",
+      "railUrlRequest": "משוך ומפה את המיקומים מ: {title} ({url})"
     },
     "shell": {
       "showConversation": "הצג שיחה",
@@ -3030,6 +3154,16 @@
       "untitled": "שיחה חדשה",
       "toggleMenu": "הצג/הסתר תפריט",
       "model": "מודל לתהליך עבודה זה"
+    },
+    "tabs": {
+      "label": "מצב שיחה",
+      "chat": "צ'אט",
+      "chatDescription": "שיחה רגילה עם הסייען"
+    },
+    "discard": {
+      "title": "להשליך את הטיוטה הזו?",
+      "body": "מעבר ל{target} ימחק את העבודה שהתחלת ב{current}.",
+      "confirm": "השלך"
     }
   },
   "connectors": {
@@ -3044,6 +3178,22 @@
       "asana": {
         "name": "Asana",
         "description": "מצא, צור ועדכן משימות ופרויקטים."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "שליפת מקורות נתונים, חוברות עבודה ומדדי Pulse שפורסמו."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "איתור ועדכון רשומות בין אובייקטים של Salesforce שלך."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "טיוטה, תזמון ופרסום פוסטים ברשתות החברתיות."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "סקירה ומענה לשיחות בתיבת ההודעות החברתית."
       }
     },
     "connect": "חבר",
@@ -3104,7 +3254,19 @@
       "missingState": "אין מה לאשר",
       "close": "אפשר לסגור חלון זה ולחזור לאפליקציה.",
       "closeButton": "סגירת חלון"
-    }
+    },
+    "oauthNoAppConfigured": "התחברות עם {name} לא מוגדרת בפריסה זו. התחברו על ידי רישום אפליקציית OAuth משלכם.",
+    "adminConnectorsTitle": "מהארגון שלך",
+    "adminConnectorsDescription": "מחברים שהוגדרו על ידי מנהלי המערכת. אילו מהם מוצגים תלוי בהרשאות הגישה שלך.",
+    "managedByOrg": "מנוהל על ידי הארגון שלך",
+    "connectorOauthNotConfigured": "ההגדרות של ההתחברות למחבר זה לא הושלמו. צרו קשר עם מנהל המערכת.",
+    "yourConnectorsTitle": "המחברים שלך",
+    "addTitle": "הוסף מחבר",
+    "addDescription": "בחרו כלי לחיבור. הגדרת ההרשאות תתבצע לאחר הבחירה.",
+    "add": "הוסף",
+    "filterLabel": "סנן מחברים",
+    "filterPlaceholder": "חפש מחברים",
+    "noMatches": "אין מחברים התואמים ל-“{query}”."
   },
   "modelSources": {
     "connectButtonShort": "חבר מקור מודל",
@@ -3155,5 +3317,399 @@
     "deselectAll": "בטל בחירה מהכל",
     "autoAddLabel": "הוסף מודלים חדשים אוטומטית",
     "autoAddDescription": "הפצות מודלים שיתווספו לחשבון זה מאוחר יותר יוצגו אוטומטית. מודלים שלא מסומנים יישארו מוחרגים."
+  },
+  "emissions": {
+    "tier": {
+      "low": "השפעה נמוכה",
+      "moderate": "השפעה מתונה",
+      "high": "השפעה גבוהה"
+    },
+    "tierTooltip": "השפעת אנרגיה יחסית לכל בקשה, לפי הערכה מגודל המודל. אלו הערכות בלבד ומבוססות על ממוצעים ונתונים פומביים, גרסה v{version} — לא מדידות בפועל.",
+    "typicalRequest": "~{grams} גרם CO₂e לבקשה טיפוסית",
+    "typicalRequestTooltip": "הערכה גסה לבקשה טיפוסית (כ-1,000 טוקנים בהנחיה ו-500 בהשלמה), לפי ממוצעים פומביים וגרסה v{version}. השפעה בפועל משתנה לפי אורך השיחה, הגדרות ומיקום השרתים.",
+    "activities": {
+      "netflixHd": "סטרימינג Netflix HD",
+      "zoomCall": "שיחת Zoom (מצלמה פועלת)",
+      "webBrowsing": "גלישה באינטרנט",
+      "spotifyAudio": "סטרימינג Spotify אודיו"
+    },
+    "equivalents": {
+      "title": "≈ שווה ערך לפליטה הזו",
+      "note": "השוואת פליטות פחמן לפי טביעת רגל שפורסמה לשעה עבור שירותים אלו — נתונים משוערים בלבד, כמו שאר ההערכות."
+    },
+    "duration": {
+      "lessThanSecond": "<1 שנ׳",
+      "seconds": "{value} שנ׳",
+      "minutes": "{value} דק׳",
+      "hours": "{value} שע׳"
+    },
+    "chip": {
+      "label": "{grams} גרם CO₂e",
+      "ariaLabel": "הערכת פליטת פחמן של שיחה זו: {grams} גרם CO₂ שווה ערך. הצגת פירוט.",
+      "ariaLabelToday": "הערכת פליטת פחמן של שיחה זו היום: {grams} גרם CO₂ שווה ערך. הצגת פירוט.",
+      "title": "שיחה זו (הערכה)",
+      "today": "היום",
+      "total": "כל הזמנים",
+      "measured": "לפי ספירת טוקנים מדווחת",
+      "estimated": "חושב מחדש מהודעות ישנות",
+      "lastRequest": "הבקשה האחרונה",
+      "disclaimer": "הערכות לכל בקשה מבוססות על ספירת טוקנים מדווחת או מקורבת, תוך שימוש בממוצעים וסטיות פורסמו בגרסה v{version}. הודעות ישנות מחושבות מחדש מתוך הטקסט השמור ומן המודל הנוכחי של השיחה. לא מדידה בפועל."
+    }
+  },
+  "table": {
+    "copyTable": "העתקת טבלה",
+    "downloadTable": "הורדת טבלה",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV‏ (.csv)",
+    "exportedAsCsv": "יוצא כ־CSV",
+    "copyFailed": "נכשל בהעתקת הטבלה"
+  },
+  "backup": {
+    "intro": {
+      "title": "גבו את הצ'אטים שלכם — בצורה מאובטחת",
+      "body": "השיחות שלכם מוצפנות במכשיר זה לפני העלאה. אין לנו אפשרות לקרוא את הצ'אטים שלכם.",
+      "keyWarning": "מפתח השחזור שלכם נוצר במכשיר זה. אין לנו אפשרות לראות אותו או לשחזר אותו עבורכם — איבוד המפתח משמע איבוד הגיבוי.",
+      "create": "יצירת מפתח וגיבוי",
+      "decline": "לא עכשיו — שמור צ'אטים רק במכשיר זה"
+    },
+    "ceremony": {
+      "titleCreate": "שמרו את מפתח השחזור שלכם",
+      "titleRotate": "שמרו את מפתח השחזור החדש שלכם",
+      "titleView": "מפתח השחזור שלכם",
+      "description": "מפתח זה הוא הדרך היחידה לשחזר את הגיבוי במכשיר אחר. שמרו אותו במקום בטוח — אין לנו אפשרות לשחזר אותו עבורכם.",
+      "copy": "העתקה",
+      "copied": "הועתק!",
+      "download": "הורדת .txt",
+      "showQr": "הצגת קוד QR",
+      "hideQr": "הסתרת קוד QR",
+      "savedCheckbox": "שמרתי את מפתח השחזור שלי במקום בטוח",
+      "saveFirstHint": "העתיקו או הורידו את המפתח לפני שאתם ממשיכים.",
+      "continue": "המשך",
+      "done": "סיום",
+      "cancel": "ביטול",
+      "cancelConfirmTitle": "לבטל את הגדרת הגיבוי?",
+      "cancelConfirmBody": "הצ'אטים שלכם לא יגובו. באפשרותכם להפעיל גיבוי מוצפן בכל עת דרך ההגדרות.",
+      "cancelConfirmRotateBody": "מפתח השחזור שלכם כבר שונה. ניתן לצפות בו בכל עת דרך ההגדרות.",
+      "cancelConfirmConfirm": "כן, לבטל",
+      "cancelConfirmDismiss": "חזרה",
+      "loadError": "לא ניתן לטעון את מפתח השחזור במכשיר זה."
+    },
+    "file": {
+      "heading": "מפתח שחזור לגיבוי צ'אט",
+      "warning": "שמרו מפתח זה במקום בטוח. כל אדם שמחזיק בו יכול לקרוא את הגיבוי; ללא המפתח לא ניתן לשחזר את הגיבוי."
+    },
+    "progress": {
+      "titleCreate": "הגדרת הגיבוי",
+      "titleRotate": "שינוי מפתח השחזור",
+      "encrypting": "{count, plural, one {מצפין ומגבה # שיחה…} other {מצפין ומגבה # שיחות…}}",
+      "success": "{count, plural, one {הגיבוי הושלם. שיחה אחת מוגנת.} other {הגיבוי הושלם. # שיחות מוגנות.}}",
+      "error": "הגיבוי נכשל. הצ'אטים שלכם עדיין במכשיר זה.",
+      "retry": "נסו שוב",
+      "close": "סגירה",
+      "done": "סיום"
+    },
+    "input": {
+      "label": "מפתח שחזור",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "המפתחות אינם כוללים את האותיות O, I או L.",
+      "checksumError": "המפתח הזה לא נראה נכון — בדקו שאין שגיאות הקלדה.",
+      "formatError": "זה לא נראה כמו מפתח שחזור.",
+      "incomplete": "המשיכו להקליד — למפתח שחזור יש 56 תווים.",
+      "valid": "המפתח נראה תקין."
+    },
+    "restore": {
+      "title": "שחזור הצ’אטים שלך",
+      "successTitle": "הגיבוי שוחזר",
+      "promptBody": "מצאנו גיבוי מוצפן לחשבונך. הזינו את מפתח השחזור כדי לשחזר אותו במכשיר הזה.",
+      "submit": "שחזר גיבוי",
+      "skip": "דלגו — התחלה חדשה במכשיר הזה",
+      "restoring": "מפענח ומשחזר את הצ’אטים שלך…",
+      "successBody": "{count, plural, one {# שיחה שוחזרה.} other {# שיחות שוחזרו.}}",
+      "wrongKey": "המפתח הזה תקף, אך אינו פותח את הגיבוי הזה. אם שינית את המפתח, השתמש במפתח המעודכן.",
+      "corrupt": "הגיבוי הזה לא ניתן לקריאה — ייתכן שהוא פגום. אפשר להתחיל מחדש במכשיר הזה או לנסות שוב מאוחר יותר.",
+      "networkError": "לא ניתן להתחבר לשירות הגיבוי. בדקו את החיבור ונסו שוב.",
+      "tryAgain": "נסו מפתח אחר",
+      "close": "סיום"
+    },
+    "enterKey": {
+      "title": "הזינו את מפתח השחזור החדש",
+      "body": "מפתח השחזור שונה במכשיר אחר. הזינו את המפתח החדש כדי להמשיך גיבויים במכשיר הזה.",
+      "submit": "השתמשו במפתח הזה"
+    },
+    "banner": {
+      "keyMismatchTitle": "הגיבויים הושהו — מפתח השחזור שונה במכשיר אחר.",
+      "enterNewKey": "הזינו מפתח חדש",
+      "resetBackup": "אפס גיבוי",
+      "resetConfirmTitle": "לאפס את הגיבוי עם מפתח המכשיר הזה?",
+      "resetConfirmBody": "הגיבוי הקיים יוחלף בצ’אטים של מכשיר זה, מוצפנים עם המפתח של מכשיר זה. מכשירים אחרים יידרשו למפתח השחזור של מכשיר זה.",
+      "resetConfirmAction": "אפס גיבוי",
+      "remoteMissingTitle": "הגיבוי שלך לא קיים יותר בשרת. הגיבויים הושהו.",
+      "backUpAgain": "גבה מחדש",
+      "dismiss": "סגור"
+    },
+    "rotate": {
+      "confirmTitle": "לשנות את מפתח השחזור?",
+      "confirmBody": "הגיבוי שלך יוצפן מחדש עם מפתח חדש, והמפתח הקודם יחדל מלעבוד. יש לשמור את המפתח החדש ולהזין אותו במכשירים אחרים.",
+      "confirmAction": "שנה מפתח"
+    },
+    "toast": {
+      "enrollLater": "ניתן להפעיל גיבוי מוצפן בכל עת תחת ההגדרות.",
+      "keyUpdated": "מפתח השחזור עודכן. הגיבויים חודשו.",
+      "resetDone": "הגיבוי אופס עם המפתח של מכשיר זה.",
+      "backupRestarted": "הגיבוי נוצר מחדש.",
+      "opFailed": "משהו השתבש. אנא נסו שוב."
+    },
+    "settings": {
+      "statusOn": "הגיבוי מופעל",
+      "statusOff": "הגיבוי כבוי",
+      "offDescription": "הצ’אטים שלך נשמרים רק בדפדפן זה. הפעל גיבוי מוצפן כדי לשמור אותם ולשחזרם במכשירים נוספים. הצ’אטים מוצפנים במכשיר שלך — אין באפשרותנו לקרוא אותם.",
+      "turnOn": "הפעל גיבוי",
+      "restoreTitle": "כבר קיים גיבוי לחשבונך",
+      "restoreDescription": "הזינו את מפתח השחזור כדי לשחזר אותו במכשיר הזה.",
+      "restore": "שחזר גיבוי",
+      "lastBackup": "גיבוי אחרון: {time}",
+      "lastBackupNever": "עדיין לא בוצע גיבוי",
+      "keyFingerprint": "מפתח ····-{tail}",
+      "syncState": {
+        "idle": "ממתין לסנכרון",
+        "syncing": "מגבה…",
+        "ok": "מעודכן",
+        "keyOutOfDate": "הושהה — מפתח השחזור שונה במכשיר אחר",
+        "remoteMissing": "בהשהיה — הגיבוי הוסר מהשרת",
+        "error": "ניסיון הגיבוי האחרון נכשל"
+      },
+      "backUpNow": "גבה כעת",
+      "backUpNowSuccess": "הגיבוי הסתיים",
+      "backUpNowFailure": "הגיבוי נכשל — השיחות במכשיר זה לא השתנו",
+      "viewKey": "הצג מפתח שחזור",
+      "changeKey": "שנה מפתח שחזור",
+      "dangerTitle": "אזור מסוכן",
+      "turnOffDelete": "כבה ומחק גיבוי",
+      "turnOffConfirmTitle": "לכבות את הגיבוי?",
+      "turnOffConfirmMessage": "פעולה זו תמחק את הגיבוי מהשרתים שלנו עבור כל המכשירים. השיחות במכשיר זה יישארו. תוכל להפעיל גיבוי שוב מאוחר יותר עם מפתח שחזור חדש.",
+      "turnOffConfirmAction": "מחק גיבוי",
+      "turnOffSuccess": "הגיבוי כובה ונמחק",
+      "turnOffFailure": "לא ניתן היה למחוק את הגיבוי. אנא נסה שוב."
+    }
+  },
+  "memories": {
+    "title": "זיכרונות",
+    "description": "אפשר לאסיסטנט לזכור עובדות מתמשכות שאתה משתף — כמו תפקידך, העדפותיך ופרויקטים מתמשכים — ולהשתמש בהן בשיחות.",
+    "enableToggle": "הפעל זיכרונות",
+    "privacyNote": "העובדות נשמרות רק בדפדפן זה ונכללות בצ'אטים שלך להתאמת התגובות.",
+    "empty": "אין עדיין זיכרונות. עובדות חשובות נשמרות אוטומטית מתוך השיחות שלך.",
+    "savedOn": "נשמר ב-{{date}}",
+    "deleteMemory": "מחק זיכרון",
+    "clearAll": "נקה את כל הזיכרונות",
+    "clearAllConfirmQuestion": "למחוק את כל הזיכרונות? לא ניתן לשחזר פעולה זו.",
+    "clearAllConfirm": "מחק הכול",
+    "cancel": "ביטול"
+  },
+  "contextWindow": {
+    "label": "חלון הקשר",
+    "value": "{count} הודעות",
+    "fewer": "פחות הודעות",
+    "more": "עוד הודעות",
+    "description": "הודעות ישנות מעבר למגבלה זו מסוכמות ונשלחות כהקשר."
+  },
+  "agentAccess": {
+    "title": "גישה לסוכן",
+    "description": "שלוט באילו משתמשים מורשים להשתמש בסוכני Foundry משותפים. הכללים מצמצמים עוד יותר מזכויות הגישה של המשתמש ב-Azure — אין אפשרות להעניק גישה אם Azure חוסם אותה.",
+    "backToChat": "חזרה לצ'אט",
+    "loading": "טוען סוכנים וכללים...",
+    "loadError": "לא ניתן לטעון נתוני גישת סוכן.",
+    "rulesUnavailableWarning": "לא ניתן היה לטעון כללי גישה מהאחסון. קריאות לסוכן חסומות כרגע ולא ניתן לערוך כללים.",
+    "retry": "נסה שוב",
+    "rulesTab": "כללי סוכן",
+    "localAdminsTab": "מנהלי מערכת מקומיים",
+    "noAgents": "אין סוכנים לניהול.",
+    "sourceLabel": "מקור",
+    "notDiscoverable": "לא ניתן לגילוי עבורך",
+    "notDiscoverableHint": "קיים כלל עבור סוכן זה, אך הוא לא מופיע ברשימת הגילוי שלך — ייתכן ששונה שמו, אין לך גישה ב-Azure, או שכלל הגישה אינו כולל אותך.",
+    "accessEveryone": "כולם",
+    "accessRestricted": "מוגבל",
+    "edit": "ערוך",
+    "updatedByLine": "עודכן לאחרונה על ידי {user} בתאריך {date}",
+    "accessTypeLabel": "מי יכול להשתמש בסוכן זה",
+    "everyoneDescription": "כל מי שכבר יכול להגיע לסוכן הזה דרך הגישה שלו ב-Azure.",
+    "restrictedDescription": "רק המשתמשים והדומיינים המפורטים למטה.",
+    "allowDomainsLabel": "דומיינים מורשים",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "משתמשים מורשים",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "לחץ Enter להוספה",
+    "removeChip": "הסר",
+    "groupsLabel": "קבוצות מורשות",
+    "groupsPendingConsent": "הגישה לפי קבוצה ממתינה לאישור מנהל הדייר ואינה ניתנת לעריכה כעת.",
+    "restrictedEmptyWarning": "לא צוינו משתמשים או דומיינים – אף אחד לא יוכל להשתמש בסוכן זה.",
+    "save": "שמור",
+    "saving": "שומר…",
+    "cancel": "ביטול",
+    "saveSuccess": "כלל הגישה נשמר.",
+    "deleteSuccess": "כלל הגישה הוסר – כולם יכולים כעת להשתמש בסוכן זה מחדש.",
+    "saveError": "לא ניתן לשמור. אנא נסה שוב.",
+    "conflictError": "מישהו אחר שינה זאת בזמן העריכה שלך. טען מחדש לקבלת הגרסה העדכנית, ואז בצע את השינוי שוב.",
+    "reload": "טען מחדש",
+    "localAdminsDescription": "העבר ניהול כללים לסוכנים מסוימים ללא פריסה מחדש. מנהלי משנה יכולים לערוך כללים רק עבור הסוכנים שהוקצו להם.",
+    "noLocalAdmins": "לא הוגדרו מנהלי משנה.",
+    "addLocalAdmin": "הוסף מנהל משנה",
+    "emailLabel": "דוא\"ל",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "הסר מנהל משנה",
+    "delegatedAgentsLabel": "סוכנים שהוקצו",
+    "noDelegatedAgents": "אין סוכנים זמינים להקצאה.",
+    "unknownAgentKey": "מפתח סוכן לא ידוע",
+    "configSaveSuccess": "מנהלי משנה נשמרו.",
+    "configConflictError": "מישהו אחר שינה את רשימת מנהלי המשנה בזמן העריכה. טען מחדש ונסה שוב.",
+    "addAgent": "הוסף סוכן",
+    "newPromptAgentTitle": "סוכן פקודה חדש",
+    "editPromptAgentTitle": "עריכת סוכן פקודה",
+    "agentNameLabel": "שם",
+    "agentNamePlaceholder": "לדוג' יועץ נסיעות",
+    "agentDescriptionLabel": "תיאור",
+    "agentDescriptionPlaceholder": "מופיע למשתמשים בבורר המודלים",
+    "agentSystemPromptLabel": "פניית מערכת",
+    "agentSystemPromptPlaceholder": "הנחיות שמגדירות כיצד סוכן זה פועל",
+    "agentModelLabel": "מודל",
+    "agentModelPlaceholder": "בחר מודל…",
+    "agentModelUnavailable": "{modelId} (לא זמין)",
+    "agentModelUnknownError": "המודל הנבחר אינו זמין יותר. בחר מודל אחר ושמור שוב.",
+    "promptAgentBadge": "סוכן פקודה",
+    "editAgent": "ערוך סוכן",
+    "deleteAgent": "מחק",
+    "deleteAgentConfirm": "האם למחוק סוכן זה עבור כולם? הוא ייעלם מבורר המודלים; שיחות קיימות ישמרו את ההיסטוריה שלהן.",
+    "confirmDeleteAgent": "כן, מחק",
+    "promptAgentCreateSuccess": "סוכן פקודה נוצר.",
+    "promptAgentSaveSuccess": "סוכן פקודה נשמר.",
+    "promptAgentDeleteSuccess": "סוכן פקודה נמחק.",
+    "promptAgentsUnavailableWarning": "לא ניתן לטעון את סוכני הפקודה מהאחסון. לא ניתן לערוך אותם כעת.",
+    "agentsTab": "סוכנים",
+    "connectorsTab": "מחברים",
+    "addConnector": "הוסף מחבר",
+    "noConnectors": "אין מחברים עדיין.",
+    "connectorsUnavailableWarning": "לא ניתן היה לגשת לחנות המחברים, ייתכן שהרשימה לא מלאה. אל תצרו מחליף עד שנטען.",
+    "editAccess": "עריכת הרשאות",
+    "deleteConnector": "מחק",
+    "deleteConnectorConfirm": "למחוק מחבר זה? כל המשתמשים בו יאבדו גישה מידית.",
+    "confirmDeleteConnector": "מחק מחבר",
+    "connectorSaveSuccess": "המחבר נשמר.",
+    "connectorCreateSuccess": "המחבר נוצר.",
+    "connectorDeleteSuccess": "המחבר נמחק.",
+    "editConnectorTitle": "ערוך מחבר",
+    "newConnectorTitle": "מחבר חדש",
+    "connectorPresetLabel": "התחל מתבנית",
+    "connectorPresetNone": "התחלה מאפס",
+    "connectorNameLabel": "שם",
+    "connectorDescriptionLabel": "תיאור",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "החליפו את {placeholder} ב-URL בערך שלכם לפני השמירה.",
+    "connectorTransportLabel": "פרוטוקול העברה",
+    "connectorAuthLabel": "אימות",
+    "connectorAuthNone": "ללא",
+    "connectorAuthBearer": "Token (כל משתמש מזין משלו)",
+    "connectorAuthOauth": "התחברות עם OAuth",
+    "connectorSealingUnavailable": "OAuth אינו זמין: בפריסה זו לא מוגדר AUTH_SECRET להצפנת ה-client secrets.",
+    "connectorTokenHelpLabel": "קישור להוראות הפקת Token (אופציונלי)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "קיים סוד שמור. השאירו ריק כדי לשמור אותו, או הזינו חדש להחלפה.",
+    "connectorClientSecretHint": "מוצפן לפני השמירה, ולא יוצג שוב.",
+    "connectorScopesLabel": "Scopes (מופרדים ברווחים, אופציונלי)"
+  },
+  "localModels": {
+    "title": "מודלים מקומיים",
+    "description": "שיחה עם מודלים שפועלים על מחשב זה. ההודעות עוברות ישירות מהדפדפן לאפליקציה המקומית ולעולם לא מגיעות לשרתינו — כך שתשובות, כותרות שיחה וסיכומים נשמרים אצלך במחשב.",
+    "detect": "אתר סביבת ריצה מקומית",
+    "detecting": "מאתר…",
+    "experimental": "ניסיוני",
+    "portLabel": "פורט",
+    "statusUnknown": "טרם נבדק.",
+    "statusChecking": "בודק…",
+    "statusReady": "{count, plural, =0 {חיבור קיים, אך אין מודלים טעונים.} one {חיבור קיים — מודל אחד זמין.} other {חיבור קיים — {count} מודלים זמינים.}}",
+    "statusNotRunning": "אין גישה אל {label}. ודא שהוא רץ בפורט הזה ושהדפדפן שלך מורשה לגשת לאפליקציות מקומיות מאתר זה.",
+    "statusHttpError": "{label} הגיב עם שגיאה. בדוק את הלוגים.",
+    "corsHelp": {
+      "ollama": "Ollama רץ אך מסרב לבקשות מאתר זה. הגדר את OLLAMA_ORIGINS לכתובת של אתר זה, הפעל מחדש את Ollama, ואז נסה לאתר שוב.",
+      "lmstudio": "LM Studio רץ אך מסרב לבקשות מאתר זה. הפעל CORS בהגדרות השרת המקומי שלו, ואז נסה לאתר שוב.",
+      "llamacpp": "llama.cpp רץ אך מסרב לבקשות מאתר זה. הפעל את llama-server עם הרשאה לבקשות cross-origin, ואז נסה לאתר שוב."
+    },
+    "privacyNote": "מודלים מקומיים אינם תומכים בקבצים מצורפים, תמונות, חיפוש באינטרנט או מחברים — אלה דורשים את השרתים שלנו. בדיקה מתבצעת רק במחשב זה."
+  },
+  "urlFetch": {
+    "sourceFallback": "דף אינטרנט",
+    "fallbackHint": "ניתן גם לפתוח את הדף, להעתיק את הטקסט ולהדביקו כאן במקום.",
+    "shortExtract": "ניתן היה לקרוא רק קטע קצר—העמוד עשוי להיות מאחורי חומת תשלום או לדרוש כניסה.",
+    "errors": {
+      "invalidUrl": "זה לא נראה כמו כתובת אתר תקינה.",
+      "ssrfBlocked": "לא ניתן לשלוף כתובת זו מסיבות אבטחה.",
+      "tooManyRedirects": "הקישור הופנה מחדש מספר פעמים רב מדי.",
+      "timeout": "העמוד לקח יותר מדי זמן להגיב.",
+      "unreachable": "לא ניתן לגשת לעמוד זה.",
+      "blocked": "האתר סירב לבקשה — ייתכן שנדרש להתחבר או שהוא חוסם קוראים אוטומטיים.",
+      "notFound": "העמוד לא נמצא.",
+      "upstream": "האתר החזיר שגיאה.",
+      "pdf": "הקישור הוא לקובץ PDF. יש להוריד אותו ולהשתמש בכפתור ההוספה לצירוף הקובץ.",
+      "nonHtml": "הקישור אינו לעמוד אינטרנט קריא.",
+      "tooLarge": "העמוד גדול מדי להבאה.",
+      "empty": "לא נמצא טקסט קריא במאמר בעמוד זה.",
+      "generic": "לא ניתן היה להביא את העמוד."
+    },
+    "fetchingFile": "מביא את {host}…",
+    "attachLink": "צרף קישור",
+    "attachLinkTitle": "צרף עמוד אינטרנט",
+    "attachLinkDescription": "העמוד יובא והטקסט הקריא ממנו יצורף להודעה שלך.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "הבא וצורף",
+    "attachLinkInvalid": "זה לא נראה כמו כתובת אינטרנט תקינה.",
+    "linkBadge": "מקישור",
+    "couldNotRetrieve": "לא ניתן היה לאחזר",
+    "doc": {
+      "sourceLabel": "מקור",
+      "retrievedLabel": "אוחזר",
+      "attemptedLabel": "ניסיון",
+      "failureHeading": "לא ניתן היה לאחזר את עמוד האינטרנט"
+    },
+    "settingsTitle": "קישורים בהודעות",
+    "settingsToggle": "הבא אוטומטית קישורים שהודבקו",
+    "settingsDescription": "כאשר אתה מדביק קישור בפני עצמו, העמוד יובא והטקסט ממנו יצורף להודעה כדי שהעוזר יוכל לקרוא אותו. כבה אפשרות זו כדי להשאיר קישורים מודבקים כטקסט רגיל — ניתן עדיין לצרף עמוד ידנית מתפריט ה-+.",
+    "addLink": "הוסף קישור"
+  },
+  "cameraAccessError": "לא ניתן לגשת למצלמה. בדקו את הרשאות המצלמה ונסו שוב.",
+  "cameraUnnamedDevice": "מצלמה",
+  "pastedText": {
+    "fallbackName": "טקסט שהודבק",
+    "charCount": "{count, number} תווים",
+    "removeChip": "הסר טקסט שהודבק “{name}”",
+    "blockLabel": "טקסט שהודבק: {name}",
+    "doc": {
+      "heading": "טקסט שהודבק",
+      "pastedLabel": "הודבק"
+    },
+    "settingsTitle": "הדבקות גדולות",
+    "settingsToggle": "הפכו הדבקה גדולה לקובץ מצורף",
+    "settingsDescription": "הדבקת טקסט מעבר למגבלה למטה תצרף אותו כקובץ במקום למלא בתיבה. הטקסט נשמר בדיוק כפי שהודבק — לא מתבצע שליפה או שינוי.",
+    "settingsThresholdLabel": "צרף הדבקות מעל",
+    "settingsThresholdUnit": "תווים",
+    "settingsThresholdHint": "בין {min, number} ל-{max, number} תווים."
+  },
+  "structures": {
+    "section": "מבנים",
+    "sectionSubtitle": "הגדרות שדה שמורות. השתמשו כאבן דרך לחילוץ מידע, או כבסיס לסכמת טבלת זרימת נתונים.",
+    "loadFromStructure": "טען מבנה",
+    "loadFromStructureTitle": "החלף עמודות אלה במבנה שמור",
+    "pickerEmpty": "אין מבנים שמורים עדיין.",
+    "pickerTitle": "טען מבנה שמור",
+    "saveAsStructure": "שמור כמבנה",
+    "saveAsStructureTitle": "שמור עמודות אלו בספריית המבנים שלך",
+    "savedToast": "מבנה “{name}” נשמר",
+    "namePlaceholder": "שם מבנה",
+    "fieldCount": "{count} שדות",
+    "fieldCountOne": "שדה אחד",
+    "downgradedNotice": "{count} שדה/ות הותאמו לטקסט — טבלאות מחזיקות ערך אחד לתא: {names}",
+    "truncatedNotice": "{count} שדה/ות הושמטו — מגבלת הטבלה היא {max} עמודות: {names}",
+    "skippedDerivedNotice": "{count} עמודת חישוב לא נשמרו — נוסחאות מתייחסות לעמודות הטבלה הזו: {names}",
+    "loadReplacesColumns": "פעולה זו מחליפה את העמודות הנוכחיות. שורות קיימות ישמרו ערכים של עמודות בעלי שם תואם."
   }
 }

@@ -824,7 +824,8 @@
     "processingAudio": "Processant àudio...",
     "ttsError": "Error en generar l'àudio. Torni-ho a provar.",
     "unsupportedMessageType": "Error en mostrar el missatge: tipus de missatge no compatible",
-    "addLanguageOption": "Afegeix \"{name}\"…"
+    "addLanguageOption": "Afegeix \"{name}\"…",
+    "sources": "Fonts"
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",
@@ -1153,7 +1154,23 @@
     "customInstructionsLabel": "Instruccions personalitzades*",
     "defaultTemperatureLabel": "Temperatura predeterminada*",
     "Usage & Impact": "Ús i impacte",
-    "Connectors": "Connectors"
+    "Connectors": "Connectors",
+    "Backup": "Còpia de seguretat",
+    "Memories": "Memòries",
+    "Agent Access": "Accés de l’agent",
+    "LocalModels": "Models locals",
+    "suggestRevisions": {
+      "title": "Revisions del document",
+      "toggle": "Suggereix revisions en lloc d’aplicar-les",
+      "description": "Quan demanis al flux de treball del document que revisi, els canvis arribaran com a suggeriments individuals que pots acceptar o rebutjar, igual que passa amb les avaluacions de qualitat.",
+      "exceptionsTitle": "Aplica directament igualment quan:",
+      "exceptionSelection": "Es revisa una selecció que has ressaltat",
+      "exceptionLargeRewrite": "La reescriptura canvia la major part del document",
+      "exceptionReorder": "Les seccions es mouen en lloc d’editar-se",
+      "thresholdLabel": "Considera com a reescriptura quan superi",
+      "thresholdUnit": "% del document canviat",
+      "exceptionSelectionAlways": "Revisar una selecció ressaltada s'aplica sempre directament: el model retorna només el fragment revisat, que no es pot dividir en suggeriments per al document complet."
+    }
   },
   "notFound": {
     "lostDog": "Gos perdut"
@@ -2111,7 +2128,9 @@
     "pin": "Fixa a dalt",
     "unpin": "Desfés fixació",
     "moveToMore": "Mou a Més",
-    "moveOutOfMore": "Mostra al menú"
+    "moveOutOfMore": "Mostra al menú",
+    "showSources": "Mostra altres fonts",
+    "hideSources": "Amaga altres fonts"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Afegeix les teves instruccions personals per personalitzar com respon la IA. Aquestes es combinen amb les directrius bàsiques de comportament que garanteixen respostes útils, precises i segures.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Consell: Escriu \"/\" per seleccionar d'entre les plantilles de prompt desades.",
@@ -2424,7 +2443,8 @@
     "regionDefault": "Per defecte",
     "modelRow": "{requests} sol·lic. · {grams} g",
     "disclosure": "Estimacions basades en suposicions v{version} · des de {since} · només xat estàndard (no es compten respostes d'agents ni de base de coneixement).",
-    "reset": "Reinicia les estadístiques d’ús"
+    "reset": "Reinicia les estadístiques d’ús",
+    "estimatedPortion": "Inclou aproximadament {grams} g CO₂e ({requests} sol·licituds) estimats de xats anteriors al seguiment — recalculat a partir del text dels missatges emmagatzemats, no de recompte de tokens mesurat."
   },
   "extraction": {
     "toggleLabel": "Extreu dades estructurades",
@@ -2631,7 +2651,25 @@
       "pendingCount": "{count} pendent(s)",
       "closeReview": "Tancar revisió de qualitat",
       "showReview": "Mostra la revisió",
-      "showReviewPending": "Mostra la revisió ({count} pendents)"
+      "showReviewPending": "Mostra la revisió ({count} pendents)",
+      "undoEdit": "Desfés",
+      "clearResolved": "Neteja resolts",
+      "clearResolvedHint": "Elimina les edicions acceptades, rebutjades i no aplicables d'aquesta llista",
+      "autoClearResolved": "Neteja automàticament les edicions resoltes",
+      "customCriteria": "Criteris personalitzats",
+      "closeCriteria": "Tanca criteris personalitzats",
+      "newCriterion": "Nou criteri",
+      "newCriterionName": "Criteri sense títol",
+      "criterionName": "Nom del criteri",
+      "criterionRubric": "Rúbrica",
+      "criterionRubricPlaceholder": "Descriu què ha de complir la traducció per satisfer aquest criteri, p. ex.: «Inclou totes les instruccions de dosi clínica a l’imperatiu, mai a l’infinitiu…»",
+      "criterionRubricHint": "Aquesta rúbrica es proporciona a la IA textualment junt amb les dimensions MQM integrades per valorar una traducció.",
+      "criteriaEmpty": "Crea criteris personalitzats — p. ex. estil corporatiu, preferències terminològiques del client o convencions regionals — per avaluar les traduccions més enllà de les dimensions MQM integrades. S’emmagatzemen en aquest dispositiu i són reutilitzables.",
+      "deleteCriterion": "Suprimeix criteri",
+      "manageCriteria": "Criteris personalitzats",
+      "addCriteria": "Afegeix criteris",
+      "noUsableCriteria": "Selecciona almenys un criteri integrat o afegeix una rúbrica als teus criteris personalitzats.",
+      "criterionRubricTooLong": "Aquesta rúbrica supera el límit en {over} caràcters. S’envia amb cada avaluació, així que cal retallar-la abans que aquest criteri es pugui utilitzar."
     },
     "document": {
       "emptyTitle": "Descriu el document que vols",
@@ -2751,7 +2789,32 @@
       "clearSelection": "Neteja selecció (treballa amb el document complet)",
       "reviseSelectionPlaceholder": "Descriviu els canvis a la selecció…",
       "revisedSelectionSummary": "He revisat el fragment seleccionat a l'espai de treball.",
-      "assessedSelection": "Selecció"
+      "assessedSelection": "Selecció",
+      "undoEdit": "Desfés",
+      "clearResolved": "Neteja resolts",
+      "clearResolvedHint": "Elimina les edicions acceptades, rebutjades i no aplicables d'aquesta llista",
+      "autoClearResolved": "Neteja automàticament les edicions resoltes",
+      "import": "Importa",
+      "importReplaceTitle": "Voleu substituir el document?",
+      "importReplaceBody": "Importar {name} substituirà el document actual. Es conservaran les referències, l'especificació i el to.",
+      "importReplaceConfirm": "Substitueix",
+      "editorMode": "Mode editor",
+      "editorModeRich": "Text enriquit",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Resol els canvis suggerits abans de canviar el mode d'edició.",
+      "suggestChanges": "Suggerir canvis",
+      "suggestChangesHint": "Revisa la revisió com a suggeriments individuals en comptes de reescriure directament el document.",
+      "suggestChangesSelectionNote": "Les revisions sobre una selecció s’apliquen directament: la selecció ja és l’àmbit que has triat.",
+      "suggestedSummary": "S’han suggerit {count} {count, plural, one {canvi} other {canvis}} per revisar.",
+      "revisionSuggestionSummary": "La teva sol·licitud de revisió ha produït {count} {count, plural, one {canvi suggerit} other {canvis suggerits}}.",
+      "revisionCriterionLabel": "Revisió sol·licitada",
+      "fallbackSelection": "Aplicat directament: les revisions a una selecció no són suggerides.",
+      "fallbackLargeRewrite": "Aplicat directament: la reescriptura ha canviat massa part del document per poder revisar-ho com a suggeriments separats.",
+      "fallbackReorder": "Aplicat directament: les seccions s’han mogut, cosa que no es pot separar en suggeriments revisables.",
+      "fallbackUnanchorable": "Aplicat directament: no s’han pogut assignar els canvis a passatges específics.",
+      "fallbackNoChanges": "No calia fer cap canvi.",
+      "criterionRubricTooLong": "Aquesta rúbrica supera el límit en {over} caràcters. S’envia amb cada avaluació, així que cal retallar-la abans que aquest criteri es pugui utilitzar."
     },
     "data": {
       "emptyTitle": "Importa dades per analitzar",
@@ -2920,7 +2983,39 @@
       "autoCheckHint": "Després d'extreure dades de fotos o documents, executa automàticament una comprovació de qualitat a les noves files",
       "checkingNewRows": "S'estan comprovant les files afegides per si tenen problemes de qualitat…",
       "ingestCheckFailed": "La comprovació automàtica de qualitat ha fallat ({message}) — la podeu executar manualment amb Avalua la qualitat.",
-      "assessedIngest": "Files recent afegides"
+      "assessedIngest": "Files recent afegides",
+      "transpose": "Transposa",
+      "transposeAxisColumn": "Nom",
+      "transposeSuggestion": "Aquesta taula sembla transposada: les files són atributs i les columnes són elements. Vols invertir-la perquè cada element sigui una fila i cada atribut esdevingui una columna tipada?",
+      "transposedTable": "Files i columnes transposades",
+      "columns": "Columnes",
+      "columnsHidden": "Columnes ({count} ocultes)",
+      "showAllColumns": "Mostra-ho tot",
+      "chartScatter": "Dispersió (x vs y)",
+      "chartPivot": "Taula dinàmica",
+      "xColumn": "Columna X",
+      "yColumn": "Columna Y",
+      "splitByColumn": "Divideix per",
+      "splitNone": "Sense divisió",
+      "pivotValueColumns": "Columnes de valor",
+      "aggMin": "Mínim",
+      "aggMax": "Màxim",
+      "aggMedian": "Mediana",
+      "chartSeriesTruncated": "S'estan mostrant les {max} sèries principals",
+      "chartPointsTruncated": "S'estan mostrant {max} punts mostrejats",
+      "chartScatterAria": "Diagrama de dispersió de {x} enfront de {y}",
+      "pivotTableAria": "Taula dinàmica agrupada per {column}",
+      "schemaFormula": "Fórmula",
+      "schemaFormulaPlaceholder": "p. ex. [Casos] / [Població] * 1000",
+      "schemaFormulaHint": "Camp calculat: referencia altres camps com [Nom]; admet + - * / %, parèntesis i round, abs, min, max. Els valors s'actualitzen automàticament i no es poden editar directament.",
+      "schemaFormulaSyntaxError": "Fórmula no vàlida",
+      "schemaFormulaUnknownRef": "Camp desconegut: {ref}",
+      "schemaFormulaArityError": "Nombre d'arguments incorrecte per a {fn}",
+      "schemaFormulaCycleError": "Referència circular entre fórmules",
+      "derivedColumnTitle": "Calculat: {formula}",
+      "derivedFrom": "Calculat a partir de {formula}",
+      "takePhoto": "Fes una foto",
+      "takePhotoHint": "Utilitza la teva càmera per fotografiar un formulari o una taula; el contingut es convertirà en dades estructurades que podràs comprovar amb la foto"
     },
     "map": {
       "emptyTitle": "Situeu les vostres dades en un mapa",
@@ -2994,7 +3089,31 @@
         "jumpTo": "Vés a {label}",
         "slider": "Posició a la línia temporal",
         "showUndated": "Mostra ubicacions sense data",
-        "activeCount": "{count} actives"
+        "activeCount": "{count} actives",
+        "jump": {
+          "start": "Inici",
+          "yearsLater": "{count, plural, one {1 any després} other {# anys després}}",
+          "monthsLater": "{count, plural, one {1 mes després} other {# mesos després}}",
+          "daysLater": "{count, plural, one {1 dia després} other {# dies després}}",
+          "appears": "{count, plural, one {1 apareix} other {# apareixen}}",
+          "ends": "{count, plural, one {1 finalitza} other {# finalitzen}}",
+          "progress": "Data {index} de {total}"
+        },
+        "precision": {
+          "minute": "Al minut",
+          "hour": "A l’hora",
+          "day": "Al dia",
+          "month": "Data a nivell de mes",
+          "year": "Data a nivell d’any",
+          "mixed": "(mixt)"
+        },
+        "pacing": {
+          "toggle": "Ritme de reproducció",
+          "cardDuration": "Mostra cada ubicació durant",
+          "seconds": "{seconds}s",
+          "maxCards": "Ubicacions mostrades per data",
+          "hint": "Les dates més atapeïdes duren més temps automàticament."
+        }
       },
       "granularity": {
         "site": "Emplaçament",
@@ -3011,8 +3130,13 @@
         "color": "Color: confiança en la coordenada (blau alta, ambre mitjana, vermell baixa)",
         "size": "Mida del punt: centralitat del lloc en el material",
         "area": "Cercle discontínu: extensió aproximada d’un districte, regió o país",
-        "container": "Contorn tènue: àrea amb continguts cartografiats individualment"
-      }
+        "container": "Contorn tènue: àrea amb continguts cartografiats individualment",
+        "precisionHalo": "Anell discontinu suau (durant una seqüència accelerada): l’esdeveniment només està datat a mes o any, així que el moment exacte és incert"
+      },
+      "sourceLabel": "Font: {name}",
+      "fetchAndMap": "Obté i mapeja",
+      "fetchingPage": "S’està obtenint la pàgina…",
+      "railUrlRequest": "Obté i mapeja les ubicacions de: {title} ({url})"
     },
     "shell": {
       "showConversation": "Mostra la conversa",
@@ -3030,6 +3154,16 @@
       "untitled": "Nova conversa",
       "toggleMenu": "Alterna el menú",
       "model": "Model per a aquest flux de treball"
+    },
+    "tabs": {
+      "label": "Mode conversa",
+      "chat": "Xat",
+      "chatDescription": "Una conversa estàndard amb l’assistent"
+    },
+    "discard": {
+      "title": "Voleu descartar aquest esborrany?",
+      "body": "Si canvieu a {target}, es perdrà la feina iniciada a {current}.",
+      "confirm": "Descarta"
     }
   },
   "connectors": {
@@ -3044,6 +3178,22 @@
       "asana": {
         "name": "Asana",
         "description": "Cerca, crea i actualitza tasques i projectes."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Consulta fonts de dades publicades, llibres de treball i mètriques Pulse."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Consulta i actualitza registres als teus objectes de Salesforce."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Esbossa, programa i publica publicacions a xarxes socials."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Revisa i respon a converses de la safata d'entrada social."
       }
     },
     "connect": "Connecta",
@@ -3104,7 +3254,19 @@
       "missingState": "No hi ha res per autoritzar",
       "close": "Podeu tancar aquesta finestra i tornar a l'aplicació.",
       "closeButton": "Tanca la finestra"
-    }
+    },
+    "oauthNoAppConfigured": "L'inici de sessió amb {name} no està configurat en aquest desplegament. Connecteu-vos registrant la vostra pròpia aplicació OAuth.",
+    "adminConnectorsTitle": "De la vostra organització",
+    "adminConnectorsDescription": "Connectors que els vostres administradors han configurat. Els que veieu depenen del vostre accés.",
+    "managedByOrg": "Gestionat per la vostra organització",
+    "connectorOauthNotConfigured": "L'inici de sessió encara no està configurat per a aquest connector. Contacteu amb el vostre administrador.",
+    "yourConnectorsTitle": "Els vostres connectors",
+    "addTitle": "Afegeix un connector",
+    "addDescription": "Trieu una eina per connectar-hi. Configurareu l'accés després de triar-la.",
+    "add": "Afegeix",
+    "filterLabel": "Filtra connectors",
+    "filterPlaceholder": "Cerca connectors",
+    "noMatches": "Cap connector coincideix amb “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Connecta un origen de model",
@@ -3155,5 +3317,399 @@
     "deselectAll": "Desselecciona-ho tot",
     "autoAddLabel": "Afegeix automàticament nous models",
     "autoAddDescription": "Els desplegaments de models afegits més endavant a aquest compte apareixeran automàticament. Els models desmarcats seguiran exclosos."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Impacte baix",
+      "moderate": "Impacte moderat",
+      "high": "Impacte alt"
+    },
+    "tierTooltip": "Impacte energètic relatiu per sol·licitud, estimat segons la mida del model. Aquestes són estimacions basades en mitjanes publicades i supòsits v{version} — no mesures.",
+    "typicalRequest": "~{grams} g CO₂e per sol·licitud típica",
+    "typicalRequestTooltip": "Estimació aproximada per a una sol·licitud típica (unes 1.000 paraules d'entrada i 500 de sortida), basada en mitjanes publicades i supòsits v{version}. L'impacte real varia segons la llargada de la conversa, configuracions i regió d'allotjament.",
+    "activities": {
+      "netflixHd": "Reproducció de Netflix en HD",
+      "zoomCall": "Trucada de Zoom (càmera activada)",
+      "webBrowsing": "Navegació web",
+      "spotifyAudio": "Àudio de Spotify"
+    },
+    "equivalents": {
+      "title": "≈ el mateix carboni que",
+      "note": "Comparació de carboni equivalent segons empremtes estimades per hora publicades d'aquests serveis — xifres orientatives, com totes les estimacions d'aquí."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Empremta de carboni estimada d'aquesta conversa: {grams} grams de CO₂ equivalent. Mostra el detall.",
+      "ariaLabelToday": "Empremta de carboni estimada d'aquesta conversa avui: {grams} grams de CO₂ equivalent. Mostra el detall.",
+      "title": "Aquesta conversa (estimació)",
+      "today": "Avui",
+      "total": "Des de sempre",
+      "measured": "A partir del recompte de tokens informat",
+      "estimated": "Recalculat a partir de missatges antics",
+      "lastRequest": "Darrera sol·licitud",
+      "disclaimer": "Estimacions per sol·licitud a partir de recompte de tokens informat o aproximat, utilitzant mitjanes i suposicions publicades v{version}. Els missatges antics es recalculen a partir del text emmagatzemat i el model actual de la conversa. No és una mesura."
+    }
+  },
+  "table": {
+    "copyTable": "Copia la taula",
+    "downloadTable": "Descarrega la taula",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Exportat com a CSV",
+    "copyFailed": "No s’ha pogut copiar la taula"
+  },
+  "backup": {
+    "intro": {
+      "title": "Fes una còpia de seguretat dels teus xats — de manera segura",
+      "body": "Les teves converses s’encripten en aquest dispositiu abans de pujar-les. No podrem llegir mai els teus xats.",
+      "keyWarning": "La clau de recuperació es crea en aquest dispositiu. Nosaltres no la veiem ni la podem recuperar per a tu — si la perds, perds la còpia de seguretat.",
+      "create": "Crea la meva clau i fes la còpia",
+      "decline": "Ara no — només guarda els xats en aquest dispositiu"
+    },
+    "ceremony": {
+      "titleCreate": "Desa la teva clau de recuperació",
+      "titleRotate": "Desa la teva nova clau de recuperació",
+      "titleView": "La teva clau de recuperació",
+      "description": "Aquesta clau és l’única manera de restaurar la còpia en un altre dispositiu. Desa-la en un lloc segur — no la podem recuperar per a tu.",
+      "copy": "Copia",
+      "copied": "Copiat!",
+      "download": "Descarrega .txt",
+      "showQr": "Mostra el codi QR",
+      "hideQr": "Amaga el codi QR",
+      "savedCheckbox": "He desat la meva clau de recuperació en un lloc segur",
+      "saveFirstHint": "Copia o descarrega la teva clau abans de continuar.",
+      "continue": "Continua",
+      "done": "Fet",
+      "cancel": "Cancel·la",
+      "cancelConfirmTitle": "Cancel·lar la configuració de la còpia de seguretat?",
+      "cancelConfirmBody": "No es farà cap còpia de seguretat dels teus xats. Pots activar la còpia encriptada en qualsevol moment a la configuració.",
+      "cancelConfirmRotateBody": "La teva clau de recuperació ja ha estat modificada. Pots consultar-la sempre que vulguis a la configuració.",
+      "cancelConfirmConfirm": "Sí, cancel·la",
+      "cancelConfirmDismiss": "Torna enrere",
+      "loadError": "No s’ha pogut carregar la teva clau de recuperació en aquest dispositiu."
+    },
+    "file": {
+      "heading": "Clau de recuperació de la còpia de seguretat del xat",
+      "warning": "Guarda aquesta clau de manera segura. Qualsevol persona amb la clau podrà llegir la teva còpia; sense ella, la còpia no es podrà restaurar."
+    },
+    "progress": {
+      "titleCreate": "Configurant la teva còpia de seguretat",
+      "titleRotate": "Canviant la teva clau de recuperació",
+      "encrypting": "{count, plural, one {Encriptant i guardant la còpia d’# conversa…} other {Encriptant i guardant la còpia de # converses…}}",
+      "success": "{count, plural, one {Còpia finalitzada. # conversa protegida.} other {Còpia finalitzada. # converses protegides.}}",
+      "error": "Error en fer la còpia de seguretat. Els teus xats continuen en aquest dispositiu.",
+      "retry": "Torna-ho a provar",
+      "close": "Tanca",
+      "done": "Fet"
+    },
+    "input": {
+      "label": "Clau de recuperació",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Les claus no contenen mai les lletres O, I ni L.",
+      "checksumError": "Aquesta clau no sembla correcta — comprova si hi ha errors de tecleig.",
+      "formatError": "Això no sembla una clau de recuperació.",
+      "incomplete": "Segueix escrivint — una clau de recuperació té 56 caràcters.",
+      "valid": "La clau sembla vàlida."
+    },
+    "restore": {
+      "title": "Restaura les teves converses",
+      "successTitle": "Còpia de seguretat restaurada",
+      "promptBody": "Hem trobat una còpia de seguretat encriptada per al teu compte. Introdueix la teva clau de recuperació per restaurar-la en aquest dispositiu.",
+      "submit": "Restaura la còpia de seguretat",
+      "skip": "Omet — comença de nou en aquest dispositiu",
+      "restoring": "Desxifrant i restaurant les teves converses…",
+      "successBody": "{count, plural, one {# conversa restaurada.} other {# converses restaurades.}}",
+      "wrongKey": "Aquesta clau és vàlida, però no desbloqueja aquesta còpia de seguretat. Si has canviat la teva clau, fes servir la més recent.",
+      "corrupt": "No s'ha pogut llegir aquesta còpia de seguretat — pot estar danyada. Pots començar de nou en aquest dispositiu o provar-ho més tard.",
+      "networkError": "No s'ha pogut accedir al servei de còpia de seguretat. Comprova la teva connexió i torna-ho a intentar.",
+      "tryAgain": "Prova amb una altra clau",
+      "close": "Fet"
+    },
+    "enterKey": {
+      "title": "Introdueix la nova clau de recuperació",
+      "body": "La teva clau de recuperació s'ha canviat en un altre dispositiu. Introdueix la nova clau per reprendre les còpies de seguretat en aquest dispositiu.",
+      "submit": "Fes servir aquesta clau"
+    },
+    "banner": {
+      "keyMismatchTitle": "Còpies de seguretat en pausa — la teva clau de recuperació ha canviat en un altre dispositiu.",
+      "enterNewKey": "Introdueix la nova clau",
+      "resetBackup": "Reinicia la còpia de seguretat",
+      "resetConfirmTitle": "Vols reiniciar la còpia de seguretat amb la clau d'aquest dispositiu?",
+      "resetConfirmBody": "La còpia de seguretat existent es reemplaçarà amb les converses d'aquest dispositiu, encriptades amb la seva clau. Els altres dispositius hauran de fer servir la clau de recuperació d'aquest dispositiu.",
+      "resetConfirmAction": "Reinicia la còpia de seguretat",
+      "remoteMissingTitle": "La teva còpia de seguretat ja no existeix al servidor. Còpies de seguretat en pausa.",
+      "backUpAgain": "Torna a fer una còpia de seguretat",
+      "dismiss": "Descarta"
+    },
+    "rotate": {
+      "confirmTitle": "Vols canviar la teva clau de recuperació?",
+      "confirmBody": "La teva còpia de seguretat es tornarà a encriptar amb una nova clau, i la clau antiga deixarà de funcionar. Hauràs de desar la nova clau i introduir-la en la resta de dispositius.",
+      "confirmAction": "Canvia la clau"
+    },
+    "toast": {
+      "enrollLater": "Pots activar la còpia de seguretat encriptada en qualsevol moment des de Configuració.",
+      "keyUpdated": "Clau de recuperació actualitzada. Còpies de seguretat activades.",
+      "resetDone": "Còpia de seguretat reiniciada amb la clau d'aquest dispositiu.",
+      "backupRestarted": "Còpia de seguretat creada de nou.",
+      "opFailed": "Alguna cosa ha fallat. Torna-ho a intentar."
+    },
+    "settings": {
+      "statusOn": "La còpia de seguretat està activada",
+      "statusOff": "La còpia de seguretat està desactivada",
+      "offDescription": "Les teves converses només es troben en aquest navegador. Activa la còpia de seguretat encriptada per mantenir-les segures i poder-les restaurar en altres dispositius. Les converses estan xifrades al teu dispositiu — nosaltres no les podrem llegir mai.",
+      "turnOn": "Activa la còpia de seguretat",
+      "restoreTitle": "Ja existeix una còpia de seguretat pel teu compte",
+      "restoreDescription": "Introdueix la teva clau de recuperació per restaurar-la en aquest dispositiu.",
+      "restore": "Restaura la còpia de seguretat",
+      "lastBackup": "Darrera còpia de seguretat: {time}",
+      "lastBackupNever": "Encara no s'ha completat cap còpia de seguretat",
+      "keyFingerprint": "Clau ····-{tail}",
+      "syncState": {
+        "idle": "Esperant per sincronitzar",
+        "syncing": "Fent còpia de seguretat…",
+        "ok": "Actualitzat",
+        "keyOutOfDate": "En pausa — la clau de recuperació s'ha canviat en un altre dispositiu",
+        "remoteMissing": "En pausa — la còpia de seguretat s'ha eliminat del servidor",
+        "error": "L'últim intent de còpia de seguretat ha fallat"
+      },
+      "backUpNow": "Fer una còpia ara",
+      "backUpNowSuccess": "Còpia de seguretat completada",
+      "backUpNowFailure": "La còpia de seguretat ha fallat — les converses d'aquest dispositiu no han canviat",
+      "viewKey": "Veure clau de recuperació",
+      "changeKey": "Canviar clau de recuperació",
+      "dangerTitle": "Zona perillosa",
+      "turnOffDelete": "Desactivar i eliminar còpia de seguretat",
+      "turnOffConfirmTitle": "Vols desactivar la còpia de seguretat?",
+      "turnOffConfirmMessage": "Això eliminarà la còpia de seguretat dels nostres servidors per a tots els dispositius. Les converses d'aquest dispositiu quedaran. Pots tornar a activar la còpia de seguretat més endavant amb una clau de recuperació nova.",
+      "turnOffConfirmAction": "Eliminar còpia de seguretat",
+      "turnOffSuccess": "Còpia de seguretat desactivada i eliminada",
+      "turnOffFailure": "No s'ha pogut eliminar la còpia de seguretat. Torna-ho a provar."
+    }
+  },
+  "memories": {
+    "title": "Records",
+    "description": "Permet que l'assistent recordi fets importants que comparteixis — com el teu rol, preferències i projectes en curs — i els utilitzi en diferents converses.",
+    "enableToggle": "Activar records",
+    "privacyNote": "Els fets només es desen en aquest navegador i s'inclouen a les converses per personalitzar les respostes.",
+    "empty": "Encara no hi ha records. Els fets rellevants es guarden automàticament a partir de les teves converses.",
+    "savedOn": "Desat el {date}",
+    "deleteMemory": "Eliminar record",
+    "clearAll": "Esborrar tots els records",
+    "clearAllConfirmQuestion": "Vols eliminar tots els records? Aquesta acció no es pot desfer.",
+    "clearAllConfirm": "Eliminar-ho tot",
+    "cancel": "Cancel·la"
+  },
+  "contextWindow": {
+    "label": "Finestra de context",
+    "value": "{count} missatges",
+    "fewer": "Menys missatges",
+    "more": "Més missatges",
+    "description": "Els missatges més antics que superen aquest límit es resumeixen i s'envien com a context."
+  },
+  "agentAccess": {
+    "title": "Accés d'agent",
+    "description": "Controla quins usuaris poden utilitzar agents compartits de Foundry. Les regles només restringeixen més l'accés que ja permet Azure — mai no podran concedir accés que Azure denega.",
+    "backToChat": "Tornar al xat",
+    "loading": "S'estan carregant agents i regles…",
+    "loadError": "No s'han pogut carregar les dades d'accés dels agents.",
+    "rulesUnavailableWarning": "Les regles d'accés no s'han pogut carregar de l'emmagatzematge. Ara mateix la invocació de l'agent està bloquejada i les regles no es poden editar.",
+    "retry": "Torna-ho a provar",
+    "rulesTab": "Regles d'agent",
+    "localAdminsTab": "Administradors locals",
+    "noAgents": "No hi ha agents per gestionar.",
+    "sourceLabel": "Origen",
+    "notDiscoverable": "No descobrible per tu",
+    "notDiscoverableHint": "Hi ha una regla per a aquest agent, però no forma part del teu entorn de descoberta — pot ser que s'hagi canviat de nom, que el teu accés Azure no arribi o que la seva regla d'accés no t'inclogui.",
+    "accessEveryone": "Tothom",
+    "accessRestricted": "Restringit",
+    "edit": "Edita",
+    "updatedByLine": "Darrera actualització per {user} el {date}",
+    "accessTypeLabel": "Qui pot utilitzar aquest agent",
+    "everyoneDescription": "Qualsevol persona que ja pugui accedir a aquest agent a través del seu accés Azure.",
+    "restrictedDescription": "Només els usuaris i dominis indicats a continuació.",
+    "allowDomainsLabel": "Dominis permesos",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Usuaris permesos",
+    "allowUsersPlaceholder": "persona@example.org",
+    "chipAddHint": "Premeu Enter per afegir",
+    "removeChip": "Elimina",
+    "groupsLabel": "Grups permesos",
+    "groupsPendingConsent": "L'accés per grup espera el consentiment de l'administrador del llogater i encara no es pot editar.",
+    "restrictedEmptyWarning": "No hi ha usuaris ni dominis — ningú podrà utilitzar aquest agent.",
+    "save": "Desa",
+    "saving": "Desant…",
+    "cancel": "Cancel·la",
+    "saveSuccess": "Regla d’accés desada.",
+    "deleteSuccess": "Regla d’accés eliminada — tothom pot tornar a utilitzar aquest agent.",
+    "saveError": "No s’ha pogut desar. Torneu-ho a provar.",
+    "conflictError": "Algú altre ha fet canvis mentre editàveu. Recarregueu per carregar l’última versió i torneu a fer els canvis.",
+    "reload": "Recarrega",
+    "localAdminsDescription": "Delegueu la gestió de regles per a agents concrets sense haver de tornar a desplegar. Els administradors locals només poden editar regles dels agents assignats.",
+    "noLocalAdmins": "No hi ha administradors locals configurats.",
+    "addLocalAdmin": "Afegeix administrador local",
+    "emailLabel": "Correu electrònic",
+    "emailPlaceholder": "persona@example.org",
+    "removeAdmin": "Elimina administrador local",
+    "delegatedAgentsLabel": "Agents delegats",
+    "noDelegatedAgents": "No hi ha agents disponibles per delegar.",
+    "unknownAgentKey": "Clau d’agent desconeguda",
+    "configSaveSuccess": "Administradors locals desats.",
+    "configConflictError": "Algú altre ha canviat la llista d’administradors locals mentre editàveu. Recarregueu i torneu-ho a provar.",
+    "addAgent": "Afegeix un agent",
+    "newPromptAgentTitle": "Agent de prompt nou",
+    "editPromptAgentTitle": "Edita l'agent de prompt",
+    "agentNameLabel": "Nom",
+    "agentNamePlaceholder": "p. ex. Assessor de viatges",
+    "agentDescriptionLabel": "Descripció",
+    "agentDescriptionPlaceholder": "Es mostra als usuaris al selector de models",
+    "agentSystemPromptLabel": "Prompt del sistema",
+    "agentSystemPromptPlaceholder": "Instruccions que defineixen el comportament d'aquest agent",
+    "agentModelLabel": "Model",
+    "agentModelPlaceholder": "Seleccioneu un model…",
+    "agentModelUnavailable": "{modelId} (no disponible)",
+    "agentModelUnknownError": "El model seleccionat ja no està disponible. Trieu-ne un altre i deseu de nou.",
+    "promptAgentBadge": "Agent de prompt",
+    "editAgent": "Edita l'agent",
+    "deleteAgent": "Suprimeix",
+    "deleteAgentConfirm": "Voleu suprimir aquest agent per a tothom? Desapareixerà del selector de models; les converses existents mantenen l'historial.",
+    "confirmDeleteAgent": "Sí, suprimeix",
+    "promptAgentCreateSuccess": "Agent de prompt creat.",
+    "promptAgentSaveSuccess": "Agent de prompt desat.",
+    "promptAgentDeleteSuccess": "Agent de prompt suprimit.",
+    "promptAgentsUnavailableWarning": "No s'han pogut carregar els agents de prompt de l'emmagatzematge. Ara mateix no es poden editar.",
+    "agentsTab": "Agents",
+    "connectorsTab": "Connectors",
+    "addConnector": "Afegeix connector",
+    "noConnectors": "Encara no hi ha connectors.",
+    "connectorsUnavailableWarning": "No s'ha pogut accedir a la botiga de connectors; la llista pot estar incompleta. No en creeu cap de nou fins que es carregui del tot.",
+    "editAccess": "Edita l'accés",
+    "deleteConnector": "Suprimeix",
+    "deleteConnectorConfirm": "Voleu suprimir aquest connector? Qui l’estigui utilitzant perdrà l’accés immediatament.",
+    "confirmDeleteConnector": "Suprimeix connector",
+    "connectorSaveSuccess": "Connector desat.",
+    "connectorCreateSuccess": "Connector creat.",
+    "connectorDeleteSuccess": "Connector suprimit.",
+    "editConnectorTitle": "Edita connector",
+    "newConnectorTitle": "Nou connector",
+    "connectorPresetLabel": "Comença des d'una plantilla",
+    "connectorPresetNone": "Començar de zero",
+    "connectorNameLabel": "Nom",
+    "connectorDescriptionLabel": "Descripció",
+    "connectorUrlLabel": "URL del servidor",
+    "connectorUrlPlaceholderWarning": "Substituïu el {placeholder} de l'URL pel vostre propi valor abans de desar.",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Autenticació",
+    "connectorAuthNone": "Cap",
+    "connectorAuthBearer": "Testimoni (cada usuari proporciona el seu propi)",
+    "connectorAuthOauth": "Inici de sessió OAuth",
+    "connectorSealingUnavailable": "OAuth no està disponible: aquest desplegament no té AUTH_SECRET configurat per xifrar els secrets del client.",
+    "connectorTokenHelpLabel": "Enllaç a les instruccions del testimoni (opcional)",
+    "connectorClientIdLabel": "ID de client OAuth",
+    "connectorClientSecretLabel": "Secret de client OAuth",
+    "connectorClientSecretStored": "Hi ha un secret desat. Deixeu-ho en blanc per mantenir-lo, o introduïu-ne un de nou per substituir-lo.",
+    "connectorClientSecretHint": "Es xifra abans de desar-se, i no es mostra mai més.",
+    "connectorScopesLabel": "Scopes (separats per espais, opcional)"
+  },
+  "localModels": {
+    "title": "Models locals",
+    "description": "Xategeu amb models que s’executen en aquest ordinador. Els missatges van directament del vostre navegador a l’aplicació local i no arriben mai als nostres servidors — així, les respostes, els títols de conversa i els resums es queden només a la vostra màquina.",
+    "detect": "Detecta entorns locals",
+    "detecting": "S’està detectant…",
+    "experimental": "Experimental",
+    "portLabel": "Port",
+    "statusUnknown": "Encara no s’ha comprovat.",
+    "statusChecking": "S’està comprovant…",
+    "statusReady": "{count, plural, =0 {Connectat, però no hi ha models carregats.} one {Connectat — # model disponible.} other {Connectat — # models disponibles.}}",
+    "statusNotRunning": "No s’ha pogut accedir a {label}. Comproveu que està funcionant en aquest port i que el navegador té permís per accedir a aplicacions locals des d’aquest lloc.",
+    "statusHttpError": "{label} ha respost amb un error. Comproveu els seus registres.",
+    "corsHelp": {
+      "ollama": "Ollama s’està executant però rebutja les peticions d’aquest lloc. Configureu OLLAMA_ORIGINS amb l’adreça d’aquest lloc, reinicieu Ollama i torneu a detectar.",
+      "lmstudio": "LM Studio s’està executant però rebutja les peticions d’aquest lloc. Activeu CORS a la configuració del servidor local i torneu a detectar.",
+      "llamacpp": "llama.cpp s’està executant però rebutja les peticions d’aquest lloc. Inicieu llama-server amb permisos per a sol·licituds d’origen creuat i torneu a detectar."
+    },
+    "privacyNote": "Els models locals no admeten fitxers adjunts, imatges, cerca web ni connectors; per això calen els nostres servidors. La detecció només comprova aquest ordinador."
+  },
+  "urlFetch": {
+    "sourceFallback": "Pàgina web",
+    "fallbackHint": "També pots obrir la pàgina, copiar el text i enganxar-lo aquí.",
+    "shortExtract": "Només es va poder llegir un fragment — potser la pàgina està restringida o requereix inici de sessió.",
+    "errors": {
+      "invalidUrl": "Aquesta adreça no sembla vàlida.",
+      "ssrfBlocked": "Per motius de seguretat, no es pot obtenir aquesta adreça.",
+      "tooManyRedirects": "Aquest enllaç s’ha redirigit massa vegades.",
+      "timeout": "La pàgina ha trigat massa a respondre.",
+      "unreachable": "No s'ha pogut accedir a la pàgina.",
+      "blocked": "El lloc ha rebutjat la sol·licitud; pot ser que calgui iniciar sessió o que bloquegi lectors automatitzats.",
+      "notFound": "No s'ha trobat aquesta pàgina.",
+      "upstream": "El lloc ha retornat un error.",
+      "pdf": "Aquest enllaç és un PDF. Descarregueu-lo i utilitzeu el botó d'adjuntar per afegir-lo.",
+      "nonHtml": "Aquest enllaç no és una pàgina web que puguem llegir.",
+      "tooLarge": "Aquesta pàgina és massa gran per recuperar-la.",
+      "empty": "No s'ha trobat cap text llegible a la pàgina.",
+      "generic": "No s'ha pogut recuperar la pàgina."
+    },
+    "fetchingFile": "S'està obtenint {host}…",
+    "attachLink": "Adjunta un enllaç",
+    "attachLinkTitle": "Adjunta una pàgina web",
+    "attachLinkDescription": "La pàgina es recuperarà i el seu text llegible s'adjuntarà al teu missatge.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Recupera i adjunta",
+    "attachLinkInvalid": "Això no sembla una adreça web.",
+    "linkBadge": "Des d’un enllaç",
+    "couldNotRetrieve": "No s'ha pogut recuperar",
+    "doc": {
+      "sourceLabel": "Font",
+      "retrievedLabel": "Recuperat",
+      "attemptedLabel": "Intentat",
+      "failureHeading": "No s'ha pogut recuperar la pàgina web"
+    },
+    "settingsTitle": "Enllaços als missatges",
+    "settingsToggle": "Recupera automàticament els enllaços enganxats",
+    "settingsDescription": "Quan enganxis un enllaç sol, la pàgina es recupera i el seu text s'adjunta perquè l'assistent la pugui llegir. Pots desactivar-ho per mantenir els enllaços enganxats com a text pla. Encara pots adjuntar una pàgina manualment des del menú +.",
+    "addLink": "Afegeix un enllaç"
+  },
+  "cameraAccessError": "No s'ha pogut accedir a la càmera. Comproveu els permisos de la càmera i torneu-ho a provar.",
+  "cameraUnnamedDevice": "Càmera",
+  "pastedText": {
+    "fallbackName": "Text enganxat",
+    "charCount": "{count, number} caràcters",
+    "removeChip": "Elimina el text enganxat “{name}”",
+    "blockLabel": "Text enganxat: {name}",
+    "doc": {
+      "heading": "Text enganxat",
+      "pastedLabel": "Enganxat"
+    },
+    "settingsTitle": "Enganxats grans",
+    "settingsToggle": "Converteix un enganxat gran en un fitxer adjunt",
+    "settingsDescription": "Si enganxeu més text que el límit de sota, s’adjunta com a fitxer en lloc d’omplir el quadre de missatge. El text s’utilitza exactament tal com s’ha enganxat: no es recupera ni es modifica res.",
+    "settingsThresholdLabel": "Adjunta enganxats més llargs de",
+    "settingsThresholdUnit": "caràcters",
+    "settingsThresholdHint": "Entre {min, number} i {max, number} caràcters."
+  },
+  "structures": {
+    "section": "Estructures",
+    "sectionSubtitle": "Definicions de camps desades. Utilitzeu-ne una com a recepta d’extracció o com a esquema inicial per a una taula de flux de dades.",
+    "loadFromStructure": "Carrega estructura",
+    "loadFromStructureTitle": "Substitueix aquestes columnes per una estructura desada",
+    "pickerEmpty": "Encara no hi ha estructures desades.",
+    "pickerTitle": "Carrega una estructura desada",
+    "saveAsStructure": "Desa com a estructura",
+    "saveAsStructureTitle": "Desa aquestes columnes a la biblioteca d’estructures",
+    "savedToast": "Estructura desada “{name}”",
+    "namePlaceholder": "Nom de l'estructura",
+    "fieldCount": "{count} camps",
+    "fieldCountOne": "1 camp",
+    "downgradedNotice": "{count} camp(s) simplificats a text — les taules només admeten un valor per cel·la: {names}",
+    "truncatedNotice": "{count} camp(s) eliminats — el límit de columnes és {max}: {names}",
+    "skippedDerivedNotice": "{count} columna/es calculada/es no desades — les fórmules fan referència a columnes d’aquesta taula: {names}",
+    "loadReplacesColumns": "Això substituirà les columnes actuals. Les files existents mantenen els valors dels noms de columna que coincideixen."
   }
 }

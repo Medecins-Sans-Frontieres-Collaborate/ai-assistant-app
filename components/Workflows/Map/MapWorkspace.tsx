@@ -4,7 +4,7 @@ import {
   IconDownload,
   IconHistory,
   IconInfoCircle,
-  IconUpload,
+  IconPaperclip,
   IconWorld,
 } from '@tabler/icons-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -12,8 +12,18 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 
+import { useAutoFocusComposer } from '@/client/hooks/ui/useAutoFocusComposer';
+import { usePasteComposer } from '@/client/hooks/ui/usePasteComposer';
+
+import {
+  fetchUrlContent,
+  hostnameOf,
+  isLikelyUrl,
+  urlErrorKey,
+} from '@/client/services/url/urlFetchClient';
 import { uploadAndExtractText } from '@/client/services/workflows/fileTextExtraction';
 import { appendWorkflowRailMessages } from '@/client/services/workflows/railMessages';
+import { nameWorkflowConversation } from '@/client/services/workflows/workflowTitle';
 
 import { downloadFile } from '@/lib/utils/shared/document/exportUtils';
 import {
@@ -26,12 +36,19 @@ import {
   resolveConnections,
 } from '@/lib/utils/shared/geo/connections';
 import {
+  featureEventRange,
   featureVerdictAt,
   formatFeatureDates,
 } from '@/lib/utils/shared/geo/eventTime';
+import {
+  buildSourceIndex,
+  featureSource,
+  sourceHref,
+} from '@/lib/utils/shared/geo/featureSources';
 import { featuresToGeoJson } from '@/lib/utils/shared/geo/geojson';
 import { findDemotedAreaIds } from '@/lib/utils/shared/geo/granularity';
 import { featuresToKml } from '@/lib/utils/shared/geo/kml';
+import { computeTimelineKeyframes } from '@/lib/utils/shared/geo/timelineKeyframes';
 import {
   DateRange,
   computeTimelineScale,
@@ -41,7 +58,7 @@ import {
   stepToMs,
 } from '@/lib/utils/shared/geo/timelineScale';
 
-import { MapFeature, MapWorkflowState } from '@/types/workflow';
+import { EventPrecision, MapFeature, MapWorkflowState } from '@/types/workflow';
 
 import { WorkflowWorkspaceProps } from '../registry';
 import { CategoryFilterBar } from './CategoryFilterBar';
@@ -49,9 +66,12 @@ import { DateRangeFilter } from './DateRangeFilter';
 import { FeatureList } from './FeatureList';
 import type { MapFocus } from './MapView';
 import { TimelineControl } from './TimelineControl';
+import { TimelineJumpBanner } from './TimelineJumpBanner';
 import { useTimelinePlayback } from './useTimelinePlayback';
+import { useTimelineSpotlight } from './useTimelineSpotlight';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import Papa from 'papaparse';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -72,6 +92,9 @@ const MAX_FEATURES = 2_000;
 export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const t = useTranslations('workflows');
   const tMap = useTranslations('workflows.map');
+  // Link-fetch copy is shared with the chat composer, so it lives in its own
+  // top-level namespace rather than under workflows.map.
+  const tUrl = useTranslations('urlFetch');
   const locale = useLocale();
   const conversation = useConversationStore((s) =>
     s.conversations.find((c) => c.id === conversationId),
@@ -87,7 +110,31 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
 
   const [sourceText, setSourceText] = useState('');
   const [searchMode, setSearchMode] = useState(false);
-  const [busy, setBusy] = useState(false);
+  // 'fetching' is the URL path's extra leg, so the button can say what it is
+  // waiting on rather than showing one undifferentiated spinner label.
+  const [phase, setPhase] = useState<'idle' | 'fetching' | 'extracting'>(
+    'idle',
+  );
+  const busy = phase !== 'idle';
+
+  // Stray typing and pasting land in the source box. No `onAttach`: this
+  // field is meant to receive pasted prose that gets mined for locations,
+  // and it already routes a pasted link through its own URL path.
+  const sourceRef = useRef<HTMLTextAreaElement>(null);
+  const appendSource = useCallback(
+    (text: string) => setSourceText((prev) => prev + text),
+    [],
+  );
+  useAutoFocusComposer({
+    textareaRef: sourceRef,
+    enabled: !busy,
+    append: appendSource,
+  });
+  usePasteComposer({
+    textareaRef: sourceRef,
+    enabled: !busy,
+    append: appendSource,
+  });
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [tileError, setTileError] = useState(false);
@@ -131,10 +178,7 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     [categoryFiltered],
   );
   const undatedCount = useMemo(
-    () =>
-      categoryFiltered.filter(
-        (f) => !f.eventStart && !f.eventEnd && !f.eventOngoing,
-      ).length,
+    () => categoryFiltered.filter((f) => featureEventRange(f) === null).length,
     [categoryFiltered],
   );
   const dateFiltered = useMemo(() => {
@@ -149,38 +193,64 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   }, [categoryFiltered, dateRange, showUndated]);
 
   /* ---- time lapse (over the date-filtered set: scrub WITHIN a range) ---- */
+  // Playback pacing is a viewer preference, so unlike the filters above it
+  // persists rather than living in workspace state.
+  const pacing = useSettingsStore((s) => s.mapTimelapse);
+  const setPacing = useSettingsStore((s) => s.setMapTimelapse);
   // Memoized: the playback hook stops on scale identity changes.
   const timelineScale = useMemo(
     () => computeTimelineScale(dateFiltered),
     [dateFiltered],
   );
-  const { timeMs, setTimeMs, playing, togglePlay } =
-    useTimelinePlayback(timelineScale);
+  // Playback visits only the instants where the map actually changes; the
+  // scale above stays the slider's geometry.
+  const keyframes = useMemo(
+    () => computeTimelineKeyframes(dateFiltered),
+    [dateFiltered],
+  );
+  const { timeMs, setTimeMs, playing, togglePlay, cue } = useTimelinePlayback(
+    timelineScale,
+    keyframes,
+    pacing,
+  );
+  const spotlightIds = useTimelineSpotlight(cue);
   const timelineActive = timelineScale !== null && timeMs !== null;
 
-  const { visibleFeatures, faintIds, activeCount } = useMemo(() => {
-    if (!timelineActive) {
-      return {
-        visibleFeatures: dateFiltered,
-        faintIds: undefined as Set<string> | undefined,
-        activeCount: dateFiltered.length,
-      };
-    }
-    const visible: MapFeature[] = [];
-    const faint = new Set<string>();
-    let active = 0;
-    for (const feature of dateFiltered) {
-      const verdict = featureVerdictAt(feature, timeMs as number);
-      if (verdict === 'active') {
-        visible.push(feature);
-        active += 1;
-      } else if (verdict === 'undated' && showUndated) {
-        visible.push(feature);
-        faint.add(feature.id);
+  const { visibleFeatures, faintIds, activeCount, precisionById } =
+    useMemo(() => {
+      if (!timelineActive) {
+        return {
+          visibleFeatures: dateFiltered,
+          faintIds: undefined as Set<string> | undefined,
+          activeCount: dateFiltered.length,
+          // Halos are a time-lapse affordance: outside a sweep there is no
+          // "current date" for a vague one to be vague ABOUT.
+          precisionById: undefined as Map<string, EventPrecision> | undefined,
+        };
       }
-    }
-    return { visibleFeatures: visible, faintIds: faint, activeCount: active };
-  }, [dateFiltered, timelineActive, timeMs, showUndated]);
+      const visible: MapFeature[] = [];
+      const faint = new Set<string>();
+      const precisions = new Map<string, EventPrecision>();
+      let active = 0;
+      for (const feature of dateFiltered) {
+        const verdict = featureVerdictAt(feature, timeMs as number);
+        if (verdict === 'active') {
+          visible.push(feature);
+          active += 1;
+          const range = featureEventRange(feature);
+          if (range) precisions.set(feature.id, range.precision);
+        } else if (verdict === 'undated' && showUndated) {
+          visible.push(feature);
+          faint.add(feature.id);
+        }
+      }
+      return {
+        visibleFeatures: visible,
+        faintIds: faint,
+        activeCount: active,
+        precisionById: precisions,
+      };
+    }, [dateFiltered, timelineActive, timeMs, showUndated]);
 
   // List order: what the material is about first, passing mentions last.
   const listFeatures = useMemo(
@@ -222,6 +292,21 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const dateLabel = useCallback(
     (feature: MapFeature) => formatFeatureDates(feature, locale, tMap),
     [locale, tMap],
+  );
+  const sourceIndex = useMemo(
+    () => buildSourceIndex(state?.sources),
+    [state?.sources],
+  );
+  const sourceLabel = useCallback(
+    (feature: MapFeature) => {
+      const source = featureSource(feature, sourceIndex);
+      if (!source) return null;
+      return {
+        name: t('map.sourceLabel', { name: source.name }),
+        href: sourceHref(source),
+      };
+    },
+    [sourceIndex, t],
   );
 
   // View persistence is debounced and skips no-op writes. Leaflet fires
@@ -269,11 +354,17 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const runExtraction = async (
     input: { sourceText: string } | { searchQuery: string },
     sourceName: string,
-    kind: 'text' | 'file' | 'search',
+    kind: 'text' | 'file' | 'search' | 'url',
+    extra?: { url?: string; notice?: string },
   ) => {
     setError(null);
-    setNotice(null);
-    setBusy(true);
+    setPhase('extracting');
+    // Notices accumulate rather than overwrite: a caller's warning (a thin
+    // page read) must survive alongside anything the extraction itself
+    // reports, and low-confidence hits must not silently replace unresolved
+    // connections.
+    const notices: string[] = extra?.notice ? [extra.notice] : [];
+    setNotice(notices.length > 0 ? notices.join(' ') : null);
     try {
       const response = await fetch('/api/workflows/map', {
         method: 'POST',
@@ -299,7 +390,8 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         url: string;
       }>;
       if (incoming.length === 0) {
-        setNotice(t('map.noneFound'));
+        notices.push(t('map.noneFound'));
+        setNotice(notices.join(' '));
         return;
       }
       if (features.length + incoming.length > MAX_FEATURES) {
@@ -336,13 +428,23 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
               ...(kind === 'search' && 'searchQuery' in input
                 ? { query: input.searchQuery }
                 : {}),
+              ...(extra?.url ? { url: extra.url } : {}),
             },
           ],
           updatedAt: new Date().toISOString(),
         };
       });
+      // Name from the first material put on the map; later additions leave
+      // the established name alone.
+      if (features.length === 0) {
+        nameWorkflowConversation(conversationId, {
+          label: kind === 'file' || kind === 'url' ? sourceName : undefined,
+          sample: 'sourceText' in input ? input.sourceText : input.searchQuery,
+          workflow: 'Map',
+        });
+      }
       if (unresolved > 0) {
-        setNotice(
+        notices.push(
           t('map.connections.unresolved', { count: String(unresolved) }),
         );
       }
@@ -355,33 +457,43 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
               .map((c) => `${c.number}. [${c.title || c.url}](${c.url})`)
               .join('\n')}`
           : '';
+      // Fetched pages carry their link into the rail too, so the source of
+      // every mapped place stays auditable from the conversation.
+      const sourceLink =
+        kind === 'url' && extra?.url ? `\n\n[${sourceName}](${extra.url})` : '';
       appendWorkflowRailMessages(
         conversationId,
         kind === 'search'
           ? t('map.railSearchRequest', { query: sourceName })
-          : t('map.railRequest', { source: sourceName }),
-        `${t('map.railDone', { count: String(incoming.length) })}${citationLines}`,
+          : kind === 'url'
+            ? t('map.railUrlRequest', {
+                title: sourceName,
+                url: extra?.url ?? '',
+              })
+            : t('map.railRequest', { source: sourceName }),
+        `${t('map.railDone', { count: String(incoming.length) })}${citationLines}${sourceLink}`,
       );
       setSourceText('');
       const lowConfidence = incoming.filter(
         (f) => f.confidence === 'low',
       ).length;
       if (lowConfidence > 0) {
-        setNotice(
+        notices.push(
           t('map.lowConfidenceNotice', { count: String(lowConfidence) }),
         );
       }
+      if (notices.length > 0) setNotice(notices.join(' '));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
-      setBusy(false);
+      setPhase('idle');
     }
   };
 
   const handleUploadFile = async (files: FileList | null) => {
     const file = files?.[0];
     if (!file) return;
-    setBusy(true);
+    setPhase('extracting');
     setError(null);
     try {
       const extracted = await uploadAndExtractText(file);
@@ -391,9 +503,46 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       await runExtraction({ sourceText: extracted.text }, file.name, 'file');
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
-      setBusy(false);
+      setPhase('idle');
     } finally {
       if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  /**
+   * Fetches a pasted link server-side, then maps the extracted prose.
+   *
+   * On failure the URL is deliberately left in the textarea: the message tells
+   * the user to open the page and paste its text, which is easier if the link
+   * is still there to click.
+   */
+  const handleFetchUrl = async (rawUrl: string) => {
+    setError(null);
+    setNotice(null);
+    setPhase('fetching');
+    try {
+      const result = await fetchUrlContent(rawUrl, {
+        modelId: conversation?.model?.id,
+      });
+      if (!result.ok) {
+        setError(`${tUrl(urlErrorKey(result.code))} ${tUrl('fallbackHint')}`);
+        return;
+      }
+
+      const { text, title, resolvedUrl } = result.page;
+      const sourceName = (
+        title?.trim() ||
+        hostnameOf(resolvedUrl) ||
+        tUrl('sourceFallback')
+      ).slice(0, 120);
+      await runExtraction({ sourceText: text }, sourceName, 'url', {
+        url: resolvedUrl,
+        // A paywalled page still returns 200 with a teaser, so flag thin
+        // reads rather than silently mapping three paragraphs.
+        notice: text.length < 800 ? tUrl('shortExtract') : undefined,
+      });
+    } finally {
+      setPhase('idle');
     }
   };
 
@@ -416,7 +565,11 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       case 'geojson':
         downloadFile(
           JSON.stringify(
-            featuresToGeoJson(features, state?.connections ?? []),
+            featuresToGeoJson(
+              features,
+              state?.connections ?? [],
+              state?.sources ?? [],
+            ),
             null,
             2,
           ),
@@ -430,6 +583,7 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             features,
             conversation?.name || 'Locations',
             state?.connections ?? [],
+            state?.sources ?? [],
           ),
           'locations.kml',
           'application/vnd.google-earth.kml+xml',
@@ -438,23 +592,30 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       case 'csv':
         downloadFile(
           Papa.unparse(
-            features.map((f) => ({
-              name: f.name,
-              lat: f.lat,
-              lon: f.lon,
-              category: f.category,
-              granularity: f.granularity ?? 'city',
-              country_code: f.countryCode ?? '',
-              parent: f.parentName ?? '',
-              approx_radius_km: f.approxRadiusKm ?? 0,
-              event_start: f.eventStart ?? '',
-              event_end: f.eventEnd ?? '',
-              event_ongoing: f.eventOngoing ?? false,
-              prominence: f.prominence ?? 'primary',
-              confidence: f.confidence,
-              confidence_reason: f.confidenceReason,
-              description: f.description,
-            })),
+            features.map((f) => {
+              const range = featureEventRange(f);
+              const source = featureSource(f, sourceIndex);
+              return {
+                name: f.name,
+                lat: f.lat,
+                lon: f.lon,
+                category: f.category,
+                granularity: f.granularity ?? 'city',
+                country_code: f.countryCode ?? '',
+                parent: f.parentName ?? '',
+                approx_radius_km: f.approxRadiusKm ?? 0,
+                event_start: range?.start ?? '',
+                event_end: range?.end ?? '',
+                event_precision: range?.precision ?? '',
+                event_ongoing: range?.ongoing ?? false,
+                prominence: f.prominence ?? 'primary',
+                confidence: f.confidence,
+                confidence_reason: f.confidenceReason,
+                description: f.description,
+                source: source?.name ?? '',
+                source_url: source?.url ?? '',
+              };
+            }),
           ),
           'locations.csv',
           'text/csv',
@@ -464,6 +625,25 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   };
 
   if (!state) return null;
+
+  const trimmedSource = sourceText.trim();
+  // Pasting a link is the whole affordance — no extra toggle to discover.
+  const urlCandidate = !searchMode && isLikelyUrl(trimmedSource);
+
+  const handleSubmit = () => {
+    if (!trimmedSource || busy) return;
+    if (urlCandidate) {
+      void handleFetchUrl(trimmedSource);
+      return;
+    }
+    void runExtraction(
+      searchMode
+        ? { searchQuery: trimmedSource }
+        : { sourceText: trimmedSource },
+      searchMode ? trimmedSource : t('map.pastedSource'),
+      searchMode ? 'search' : 'text',
+    );
+  };
 
   const inputPanel = (
     <div className="border-t border-gray-200 p-3 dark:border-gray-700">
@@ -479,6 +659,7 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       )}
       <div className="flex items-end gap-2">
         <textarea
+          ref={sourceRef}
           value={sourceText}
           onChange={(e) => setSourceText(e.target.value)}
           rows={searchMode ? 1 : 2}
@@ -487,15 +668,15 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             searchMode ? t('map.searchPlaceholder') : t('map.inputPlaceholder')
           }
           onKeyDown={(e) => {
-            if (searchMode && e.key === 'Enter' && !e.shiftKey) {
+            // A link is a single line, so Enter submits it the way it does
+            // in search mode; pasted prose keeps Enter as a newline.
+            if (
+              (searchMode || urlCandidate) &&
+              e.key === 'Enter' &&
+              !e.shiftKey
+            ) {
               e.preventDefault();
-              if (sourceText.trim() && !busy) {
-                void runExtraction(
-                  { searchQuery: sourceText.trim() },
-                  sourceText.trim(),
-                  'search',
-                );
-              }
+              handleSubmit();
             }
           }}
           className="min-h-[44px] flex-1 resize-none rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-600 focus:outline-none disabled:opacity-50 dark:border-gray-700 dark:bg-surface-dark-elevated dark:text-gray-100 dark:placeholder-gray-400"
@@ -523,7 +704,7 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             aria-label={t('map.uploadFile')}
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
           >
-            <IconUpload size={16} aria-hidden />
+            <IconPaperclip size={16} aria-hidden />
           </button>
         )}
         <input
@@ -535,25 +716,21 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         />
         <button
           type="button"
-          onClick={() =>
-            void runExtraction(
-              searchMode
-                ? { searchQuery: sourceText.trim() }
-                : { sourceText: sourceText.trim() },
-              searchMode ? sourceText.trim() : t('map.pastedSource'),
-              searchMode ? 'search' : 'text',
-            )
-          }
-          disabled={busy || !sourceText.trim()}
+          onClick={handleSubmit}
+          disabled={busy || !trimmedSource}
           className="min-h-[36px] shrink-0 rounded-lg bg-gray-300 px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-400 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated"
         >
           {busy
-            ? searchMode
-              ? t('map.searching')
-              : t('map.finding')
+            ? phase === 'fetching'
+              ? t('map.fetchingPage')
+              : searchMode
+                ? t('map.searching')
+                : t('map.finding')
             : searchMode
               ? t('map.searchAndMap')
-              : t('map.mapIt')}
+              : urlCandidate
+                ? t('map.fetchAndMap')
+                : t('map.mapIt')}
         </button>
       </div>
       <p className="mt-2 max-w-[75ch] text-xs text-gray-500 dark:text-gray-400">
@@ -646,6 +823,8 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             connections={state.connections ?? []}
             demotedIds={demotedIds}
             faintIds={faintIds}
+            spotlightIds={spotlightIds}
+            precisionById={precisionById}
             view={state.view}
             focus={focus}
             onViewChange={persistView}
@@ -654,7 +833,9 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             prominenceLabel={prominenceLabel}
             granularityLabel={granularityLabel}
             dateLabel={dateLabel}
+            sourceLabel={sourceLabel}
           />
+          {cue && <TimelineJumpBanner cue={cue} />}
           {legendOpen && (
             <div className="absolute bottom-6 start-2 z-[1000] w-60 rounded-lg border border-gray-200 bg-white/95 p-3 text-xs text-gray-700 shadow-lg dark:border-gray-700 dark:bg-surface-dark/95 dark:text-gray-300">
               <p className="font-semibold text-gray-900 dark:text-gray-100">
@@ -679,6 +860,15 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
                 <span className="me-1.5 inline-block h-3.5 w-3.5 rounded-full border border-dashed border-gray-400 align-middle" />
                 {t('map.legend.container')}
               </p>
+              {timelineActive && (
+                <p className="mt-1.5">
+                  <span className="relative me-1.5 inline-flex h-3.5 w-3.5 items-center justify-center align-middle">
+                    <span className="absolute inset-0 rounded-full border border-dashed border-blue-400 opacity-60" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
+                  </span>
+                  {t('map.legend.precisionHalo')}
+                </p>
+              )}
             </div>
           )}
         </div>
@@ -704,6 +894,7 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             <div className="min-h-0 flex-1">
               <FeatureList
                 features={listFeatures}
+                sourceLabel={sourceLabel}
                 demotedIds={demotedIds}
                 faintIds={faintIds}
                 onFocus={focusFeature}
@@ -740,6 +931,8 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           showUndated={showUndated}
           onShowUndatedChange={setShowUndated}
           activeCount={activeCount}
+          pacing={pacing}
+          onPacingChange={setPacing}
         />
       )}
 

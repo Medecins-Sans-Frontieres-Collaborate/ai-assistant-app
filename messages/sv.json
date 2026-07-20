@@ -849,7 +849,8 @@
     "processingAudio": "Bearbetar ljud...",
     "ttsError": "Fel vid generering av ljud. Försök igen.",
     "unsupportedMessageType": "Fel vid visning av meddelande: Ej stödd meddelandetyp",
-    "addLanguageOption": "Lägg till \"{name}\"…"
+    "addLanguageOption": "Lägg till \"{name}\"…",
+    "sources": "Källor"
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",
@@ -1178,7 +1179,23 @@
     "customInstructionsLabel": "Anpassade instruktioner*",
     "defaultTemperatureLabel": "Standardtemperatur*",
     "Usage & Impact": "Användning & påverkan",
-    "Connectors": "Anslutningar"
+    "Connectors": "Anslutningar",
+    "Backup": "Säkerhetskopiering",
+    "Memories": "Minnen",
+    "Agent Access": "Agentåtkomst",
+    "LocalModels": "Lokala modeller",
+    "suggestRevisions": {
+      "title": "Dokumentrevisioner",
+      "toggle": "Föreslå ändringar istället för att tillämpa dem",
+      "description": "När du ber dokumentarbetsflödet att revidera, kommer ändringarna som individuella förslag som du kan acceptera eller avvisa, på samma sätt som kvalitetsbedömningar.",
+      "exceptionsTitle": "Tillämpa ändå direkt när:",
+      "exceptionSelection": "Du reviderar ett markerat urval",
+      "exceptionLargeRewrite": "Omskrivningen ändrar större delen av dokumentet",
+      "exceptionReorder": "Avsnitt flyttas istället för att redigeras",
+      "thresholdLabel": "Betrakta som omskrivning vid",
+      "thresholdUnit": "% av dokumentet ändrat",
+      "exceptionSelectionAlways": "När du reviderar ett markerat urval tillämpas ändringen alltid direkt — modellen returnerar endast det reviderade utdraget, vilket inte kan delas upp i förslag för hela dokumentet."
+    }
   },
   "notFound": {
     "lostDog": "Förlorad hund"
@@ -2111,7 +2128,9 @@
     "pin": "Fäst längst upp",
     "unpin": "Ta bort fästning",
     "moveToMore": "Flytta till Fler",
-    "moveOutOfMore": "Visa i menyn"
+    "moveOutOfMore": "Visa i menyn",
+    "showSources": "Visa andra källor",
+    "hideSources": "Dölj andra källor"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Lägg till dina egna instruktioner för att anpassa hur AI:n svarar. Dessa kombineras med grundläggande riktlinjer som säkerställer hjälpsamma, korrekta och säkra svar.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tips: Skriv \"/\" för att välja bland sparade promptmallar.",
@@ -2424,7 +2443,8 @@
     "regionDefault": "Standard",
     "modelRow": "{requests} frq · {grams} g",
     "disclosure": "Uppskattningar baseras på antaganden v{version} · sedan {since} · endast standardchatt (agenter och kunskapsbaserade svar räknas inte).",
-    "reset": "Återställ användningsstatistik"
+    "reset": "Återställ användningsstatistik",
+    "estimatedPortion": "Inkluderar cirka {grams} g CO₂e ({requests} förfrågningar) uppskattat från chattar som föregår spårning — bakåträkning från lagrad meddelandetext, inte uppmätta token."
   },
   "extraction": {
     "toggleLabel": "Extrahera strukturerad data",
@@ -2631,7 +2651,25 @@
       "pendingCount": "{count} väntande",
       "closeReview": "Stäng kvalitetsgranskning",
       "showReview": "Visa granskning",
-      "showReviewPending": "Visa granskning ({count} väntande)"
+      "showReviewPending": "Visa granskning ({count} väntande)",
+      "undoEdit": "Ångra",
+      "clearResolved": "Rensa åtgärdade",
+      "clearResolvedHint": "Ta bort godkända, avvisade och irrelevanta ändringar från listan",
+      "autoClearResolved": "Rensa åtgärdade ändringar automatiskt",
+      "customCriteria": "Egna kriterier",
+      "closeCriteria": "Stäng egna kriterier",
+      "newCriterion": "Nytt kriterium",
+      "newCriterionName": "Namnlöst kriterium",
+      "criterionName": "Kriterienamn",
+      "criterionRubric": "Bedömningsmall",
+      "criterionRubricPlaceholder": "Beskriv vad översättningen måste uppfylla för detta kriterium, t.ex. \"Alla kliniska doseringsinstruktioner ska anges i imperativ, aldrig infinitiv…\"",
+      "criterionRubricHint": "Den här bedömningsmallen ges ordagrant till AI:t tillsammans med de inbyggda MQM-dimensionerna vid bedömning av översättningen.",
+      "criteriaEmpty": "Skapa egna kriterier — t.ex. husstil, kundens termpreferenser eller regionala konventioner — för att bedöma översättningar utöver de inbyggda MQM-dimensionerna. Sparas på denna enhet och kan återanvändas.",
+      "deleteCriterion": "Ta bort kriterium",
+      "manageCriteria": "Egna kriterier",
+      "addCriteria": "Lägg till kriterier",
+      "noUsableCriteria": "Välj minst ett inbyggt kriterium, eller ge dina egna kriterier en bedömningsmall.",
+      "criterionRubricTooLong": "Denna rubrik överskrider gränsen med {over} tecken. Den skickas med varje bedömning och måste förkortas innan detta kriterium kan användas."
     },
     "document": {
       "emptyTitle": "Beskriv dokumentet du vill ha",
@@ -2751,7 +2789,32 @@
       "clearSelection": "Rensa markering (arbeta med hela dokumentet)",
       "reviseSelectionPlaceholder": "Beskriv ändringar för markeringen…",
       "revisedSelectionSummary": "Jag reviderade det markerade avsnittet i arbetsytan.",
-      "assessedSelection": "Markering"
+      "assessedSelection": "Markering",
+      "undoEdit": "Ångra",
+      "clearResolved": "Rensa åtgärdade",
+      "clearResolvedHint": "Ta bort godkända, avvisade och irrelevanta ändringar från listan",
+      "autoClearResolved": "Rensa åtgärdade ändringar automatiskt",
+      "import": "Importera",
+      "importReplaceTitle": "Byt ut dokument?",
+      "importReplaceBody": "Att importera {name} kommer att ersätta det aktuella dokumentet. Dina referenser, specifikation och ton behålls.",
+      "importReplaceConfirm": "Byt ut",
+      "editorMode": "Redigeringsläge",
+      "editorModeRich": "Rich text",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Lös de föreslagna ändringarna innan du byter redigeringsläge.",
+      "suggestChanges": "Föreslå ändringar",
+      "suggestChangesHint": "Granska revideringen som enskilda förslag istället för att skriva om dokumentet direkt.",
+      "suggestChangesSelectionNote": "Ändringar i ett markerat urval tillämpas direkt — markeringen är redan det område du valt.",
+      "suggestedSummary": "Föreslog {count} {count, plural, one {ändring} other {ändringar}} för granskning.",
+      "revisionSuggestionSummary": "Din revisionsförfrågan resulterade i {count} {count, plural, one {föreslagen ändring} other {föreslagna ändringar}}.",
+      "revisionCriterionLabel": "Begärd revidering",
+      "fallbackSelection": "Tillämpad direkt — ändringar i ett markerat urval föreslås inte.",
+      "fallbackLargeRewrite": "Tillämpad direkt — omskrivningen ändrade för mycket av dokumentet för att delas upp i enskilda förslag.",
+      "fallbackReorder": "Tillämpad direkt — avsnitt flyttades, vilket inte kan delas upp i granskbara förslag.",
+      "fallbackUnanchorable": "Tillämpad direkt — ändringarna kunde inte kopplas till specifika avsnitt.",
+      "fallbackNoChanges": "Inga ändringar behövdes.",
+      "criterionRubricTooLong": "Denna rubrik överskrider gränsen med {over} tecken. Den skickas med varje bedömning och måste förkortas innan detta kriterium kan användas."
     },
     "data": {
       "emptyTitle": "Importera data för analys",
@@ -2920,7 +2983,39 @@
       "autoCheckHint": "När data extraherats från foton eller dokument, kör automatiskt en kvalitetskontroll på de nya raderna",
       "checkingNewRows": "Kontrollerar de nyligen tillagda raderna för kvalitetsproblem…",
       "ingestCheckFailed": "Den automatiska kvalitetskontrollen misslyckades ({message}) — du kan köra den manuellt med Bedöm kvalitet.",
-      "assessedIngest": "Nyligen tillagda rader"
+      "assessedIngest": "Nyligen tillagda rader",
+      "transpose": "Transponera",
+      "transposeAxisColumn": "Namn",
+      "transposeSuggestion": "Den här tabellen verkar vara transponerad: rader är attribut och kolumner är objekt. Vill du vända på den så att varje objekt blir en rad och varje attribut blir en typad kolumn?",
+      "transposedTable": "Transponerade rader och kolumner",
+      "columns": "Kolumner",
+      "columnsHidden": "Kolumner ({count} dolda)",
+      "showAllColumns": "Visa alla",
+      "chartScatter": "Punktdiagram (x mot y)",
+      "chartPivot": "Pivottabell",
+      "xColumn": "X-kolumn",
+      "yColumn": "Y-kolumn",
+      "splitByColumn": "Dela upp efter",
+      "splitNone": "Ingen uppdelning",
+      "pivotValueColumns": "Värdekolumner",
+      "aggMin": "Min",
+      "aggMax": "Max",
+      "aggMedian": "Median",
+      "chartSeriesTruncated": "Visar de {max} största serierna",
+      "chartPointsTruncated": "Visar {max} utvalda punkter",
+      "chartScatterAria": "Punktdiagram av {x} mot {y}",
+      "pivotTableAria": "Pivottabell grupperad efter {column}",
+      "schemaFormula": "Formel",
+      "schemaFormulaPlaceholder": "t.ex. [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Beräknat fält: referera till andra fält som [Namn]; stöder + - * / %, parenteser och round, abs, min, max. Värden uppdateras automatiskt och kan inte redigeras direkt.",
+      "schemaFormulaSyntaxError": "Ogiltig formel",
+      "schemaFormulaUnknownRef": "Okänt fält: {ref}",
+      "schemaFormulaArityError": "Fel antal argument till {fn}",
+      "schemaFormulaCycleError": "Cirkulär referens mellan formler",
+      "derivedColumnTitle": "Beräknad: {formula}",
+      "derivedFrom": "Beräknad från {formula}",
+      "takePhoto": "Ta foto",
+      "takePhotoHint": "Använd din kamera för att fotografera ett formulär eller en tabell – innehållet blir strukturerad data som du kan kontrollera mot fotot"
     },
     "map": {
       "emptyTitle": "Visa din data på en karta",
@@ -2994,7 +3089,31 @@
         "jumpTo": "Hoppa till {label}",
         "slider": "Tidslinjeposition",
         "showUndated": "Visa odaterade platser",
-        "activeCount": "{count} aktiva"
+        "activeCount": "{count} aktiva",
+        "jump": {
+          "start": "Start",
+          "yearsLater": "{count, plural, one {1 år senare} other {# år senare}}",
+          "monthsLater": "{count, plural, one {1 månad senare} other {# månader senare}}",
+          "daysLater": "{count, plural, one {1 dag senare} other {# dagar senare}}",
+          "appears": "{count, plural, one {1 visas} other {# visas}}",
+          "ends": "{count, plural, one {1 avslutas} other {# avslutas}}",
+          "progress": "Datum {index} av {total}"
+        },
+        "precision": {
+          "minute": "Till minuten",
+          "hour": "Till timmen",
+          "day": "Till dagen",
+          "month": "Datum på månadsnivå",
+          "year": "Datum på årsnivå",
+          "mixed": "(blandat)"
+        },
+        "pacing": {
+          "toggle": "Uppspelningstempo",
+          "cardDuration": "Visa varje plats i",
+          "seconds": "{seconds}s",
+          "maxCards": "Platser per datum",
+          "hint": "Tätare datum visas automatiskt längre."
+        }
       },
       "granularity": {
         "site": "Plats",
@@ -3011,8 +3130,13 @@
         "color": "Färg: koordinatens tillförlitlighet (blå hög, bärnsten medel, röd låg)",
         "size": "Prickstorlek: hur central platsen är i materialet",
         "area": "Streckad cirkel: ungefärlig omfattning av ett distrikt, en region eller ett land",
-        "container": "Tunn kontur: ett område vars innehåll har kartlagts individuellt"
-      }
+        "container": "Tunn kontur: ett område vars innehåll har kartlagts individuellt",
+        "precisionHalo": "Prickad mjuk ring (under tidsförlopp): händelsen är endast daterad till en månad eller ett år, så exakt tidpunkt är osäker"
+      },
+      "sourceLabel": "Källa: {name}",
+      "fetchAndMap": "Hämta & kartlägg",
+      "fetchingPage": "Hämtar sida…",
+      "railUrlRequest": "Hämta och kartlägg platser från: {title} ({url})"
     },
     "shell": {
       "showConversation": "Visa konversation",
@@ -3030,6 +3154,16 @@
       "untitled": "Ny konversation",
       "toggleMenu": "Visa/dölj meny",
       "model": "Modell för detta arbetsflöde"
+    },
+    "tabs": {
+      "label": "Konversationsläge",
+      "chat": "Chatt",
+      "chatDescription": "En standardkonversation med assistenten"
+    },
+    "discard": {
+      "title": "Kasta utkastet?",
+      "body": "Om du växlar till {target} rensas arbetet du påbörjat i {current}.",
+      "confirm": "Kasta"
     }
   },
   "connectors": {
@@ -3044,6 +3178,22 @@
       "asana": {
         "name": "Asana",
         "description": "Hitta, skapa och uppdatera uppgifter och projekt."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Sök i publicerade datakällor, arbetsböcker och Pulse-mått."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Slå upp och uppdatera poster i dina Salesforce-objekt."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Skapa, schemalägg och publicera inlägg på sociala medier."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Granska och svara på konversationer i sociala inkorgen."
       }
     },
     "connect": "Anslut",
@@ -3104,7 +3254,19 @@
       "missingState": "Inget att auktorisera",
       "close": "Du kan stänga detta fönster och återgå till appen.",
       "closeButton": "Stäng fönster"
-    }
+    },
+    "oauthNoAppConfigured": "Inloggning med {name} är inte konfigurerat för denna installation. Anslut genom att registrera din egen OAuth-app.",
+    "adminConnectorsTitle": "Från din organisation",
+    "adminConnectorsDescription": "Connectorer som dina administratörer har ställt in. Vilka du ser beror på din åtkomst.",
+    "managedByOrg": "Hanteras av din organisation",
+    "connectorOauthNotConfigured": "Inloggningen är inte helt konfigurerad för denna connector. Kontakta din administratör.",
+    "yourConnectorsTitle": "Dina connectorer",
+    "addTitle": "Lägg till en connector",
+    "addDescription": "Välj ett verktyg att ansluta. Du ställer in åtkomst efter valet.",
+    "add": "Lägg till",
+    "filterLabel": "Filtrera connectorer",
+    "filterPlaceholder": "Sök connectorer",
+    "noMatches": "Inga connectorer matchar “{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Anslut en modellkälla",
@@ -3155,5 +3317,399 @@
     "deselectAll": "Avmarkera alla",
     "autoAddLabel": "Lägg till nya modeller automatiskt",
     "autoAddDescription": "Modellutplaceringar som läggs till på detta konto senare visas automatiskt. Avmarkerade modeller förblir undantagna."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Lägre påverkan",
+      "moderate": "Måttlig påverkan",
+      "high": "Högre påverkan"
+    },
+    "tierTooltip": "Relativ energipåverkan per förfrågan, uppskattad utifrån modellstorlek. Detta är uppskattningar baserade på publicerade genomsnittsvärden och antaganden v{version} — inte mätningar.",
+    "typicalRequest": "~{grams} g CO₂e per typisk förfrågan",
+    "typicalRequestTooltip": "Ungefärlig uppskattning per förfrågan (cirka 1 000 prompt- och 500 completion-token), baserat på publicerade genomsnitt och antaganden v{version}. Den faktiska påverkan varierar beroende på konversationslängd, inställningar och värdregion.",
+    "activities": {
+      "netflixHd": "Netflix HD-strömning",
+      "zoomCall": "Zoom-samtal (kamera på)",
+      "webBrowsing": "Surfa på webben",
+      "spotifyAudio": "Spotify-ljud"
+    },
+    "equivalents": {
+      "title": "≈ samma koldioxid som",
+      "note": "Jämförelse av koldioxid mot publicerade utsläpp per timme för dessa tjänster — ungefärliga, storleksordningsmässiga siffror, precis som alla uppskattningar här."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Uppskattat koldioxidavtryck för denna konversation: {grams} gram CO₂-ekvivalent. Visa fördelning.",
+      "ariaLabelToday": "Uppskattat koldioxidavtryck för denna konversation idag: {grams} gram CO₂-ekvivalent. Visa fördelning.",
+      "title": "Denna konversation (uppskattning)",
+      "today": "Idag",
+      "total": "Alla tider",
+      "measured": "Från rapporterade tokenantal",
+      "estimated": "Bakåträkning från äldre meddelanden",
+      "lastRequest": "Senaste förfrågan",
+      "disclaimer": "Uppskattningar per förfrågan baserade på rapporterade eller uppskattade tokenantal, med hjälp av publicerade genomsnitt och antaganden v{version}. Äldre meddelanden bakåträknares från lagrad text och konversationens nuvarande modell. Ingen mätning."
+    }
+  },
+  "table": {
+    "copyTable": "Kopiera tabell",
+    "downloadTable": "Ladda ned tabell",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Exporterad som CSV",
+    "copyFailed": "Misslyckades att kopiera tabell"
+  },
+  "backup": {
+    "intro": {
+      "title": "Säkerhetskopiera dina chattar — säkert",
+      "body": "Dina konversationer krypteras på den här enheten innan något laddas upp. Vi kan aldrig läsa dina chattar.",
+      "keyWarning": "Din återställningsnyckel skapas på den här enheten. Vi ser den aldrig och kan inte återställa den åt dig — om du förlorar nyckeln förlorar du säkerhetskopian.",
+      "create": "Skapa min nyckel och säkerhetskopiera",
+      "decline": "Inte nu — behåll chattarna endast på den här enheten"
+    },
+    "ceremony": {
+      "titleCreate": "Spara din återställningsnyckel",
+      "titleRotate": "Spara din nya återställningsnyckel",
+      "titleView": "Din återställningsnyckel",
+      "description": "Den här nyckeln är det enda sättet att återställa din säkerhetskopia på en annan enhet. Förvara den säkert — vi kan inte återställa den åt dig.",
+      "copy": "Kopiera",
+      "copied": "Kopierat!",
+      "download": "Ladda ned .txt",
+      "showQr": "Visa QR-kod",
+      "hideQr": "Dölj QR-kod",
+      "savedCheckbox": "Jag har sparat min återställningsnyckel på en säker plats",
+      "saveFirstHint": "Kopiera eller ladda ned din nyckel innan du fortsätter.",
+      "continue": "Fortsätt",
+      "done": "Klart",
+      "cancel": "Avbryt",
+      "cancelConfirmTitle": "Avbryt säkerhetskopieringsinställning?",
+      "cancelConfirmBody": "Dina chattar kommer inte att säkerhetskopieras. Du kan aktivera krypterad säkerhetskopiering när som helst i Inställningar.",
+      "cancelConfirmRotateBody": "Din återställningsnyckel har redan ändrats. Du kan se den när som helst i Inställningar.",
+      "cancelConfirmConfirm": "Ja, avbryt",
+      "cancelConfirmDismiss": "Gå tillbaka",
+      "loadError": "Det gick inte att ladda din återställningsnyckel på den här enheten."
+    },
+    "file": {
+      "heading": "Återställningsnyckel för chattsäkerhetskopia",
+      "warning": "Förvara denna nyckel säkert. Alla som har den kan läsa din säkerhetskopia; utan den kan säkerhetskopian inte återställas."
+    },
+    "progress": {
+      "titleCreate": "Ställer in din säkerhetskopia",
+      "titleRotate": "Byter din återställningsnyckel",
+      "encrypting": "{count, plural, one {Krypterar och säkerhetskopierar # konversation…} other {Krypterar och säkerhetskopierar # konversationer…}}",
+      "success": "{count, plural, one {Säkerhetskopiering klar. # konversation är skyddad.} other {Säkerhetskopiering klar. # konversationer är skyddade.}}",
+      "error": "Säkerhetskopieringen misslyckades. Dina chattar finns kvar på den här enheten.",
+      "retry": "Försök igen",
+      "close": "Stäng",
+      "done": "Klart"
+    },
+    "input": {
+      "label": "Återställningsnyckel",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Nycklarna innehåller aldrig bokstäverna O, I eller L.",
+      "checksumError": "Den nyckeln verkar inte stämma — kontrollera om det finns stavfel.",
+      "formatError": "Det här ser inte ut som en återställningsnyckel.",
+      "incomplete": "Fortsätt skriva — en återställningsnyckel har 56 tecken.",
+      "valid": "Nyckeln verkar giltig."
+    },
+    "restore": {
+      "title": "Återställ dina chattar",
+      "successTitle": "Backup återställd",
+      "promptBody": "Vi hittade en krypterad backup för ditt konto. Ange din återställningsnyckel för att återställa den på den här enheten.",
+      "submit": "Återställ backup",
+      "skip": "Hoppa över — börja om på denna enhet",
+      "restoring": "Dekrypterar och återställer dina chattar…",
+      "successBody": "{count, plural, one {# konversation återställd.} other {# konversationer återställda.}}",
+      "wrongKey": "Den nyckeln är giltig, men den låser inte upp denna backup. Om du har ändrat nyckel, använd den senaste.",
+      "corrupt": "Backuppen kunde inte läsas — den kan vara skadad. Du kan börja om på denna enhet eller försöka igen senare.",
+      "networkError": "Det gick inte att nå backup-tjänsten. Kontrollera din anslutning och försök igen.",
+      "tryAgain": "Prova en annan nyckel",
+      "close": "Klar"
+    },
+    "enterKey": {
+      "title": "Ange din nya återställningsnyckel",
+      "body": "Din återställningsnyckel har ändrats på en annan enhet. Ange den nya nyckeln för att återuppta backup på denna enhet.",
+      "submit": "Använd denna nyckel"
+    },
+    "banner": {
+      "keyMismatchTitle": "Backup pausad — din återställningsnyckel ändrades på en annan enhet.",
+      "enterNewKey": "Ange ny nyckel",
+      "resetBackup": "Återställ backup",
+      "resetConfirmTitle": "Återställ backup med denna enhets nyckel?",
+      "resetConfirmBody": "Den befintliga backupen ersätts med denna enhets chattar, krypterade med denna enhets nyckel. Andra enheter kommer att behöva denna enhets återställningsnyckel.",
+      "resetConfirmAction": "Återställ backup",
+      "remoteMissingTitle": "Din backup finns inte längre på servern. Backup är pausad.",
+      "backUpAgain": "Säkerhetskopiera igen",
+      "dismiss": "Stäng"
+    },
+    "rotate": {
+      "confirmTitle": "Byt återställningsnyckel?",
+      "confirmBody": "Din backup kommer att krypteras om med en ny nyckel, och den gamla slutar fungera. Du måste spara den nya nyckeln och ange den på dina andra enheter.",
+      "confirmAction": "Byt nyckel"
+    },
+    "toast": {
+      "enrollLater": "Du kan när som helst slå på krypterad backup i Inställningar.",
+      "keyUpdated": "Återställningsnyckel uppdaterad. Backup återupptagen.",
+      "resetDone": "Backup återställd med denna enhets nyckel.",
+      "backupRestarted": "Backup skapad igen.",
+      "opFailed": "Något gick fel. Försök igen."
+    },
+    "settings": {
+      "statusOn": "Backup är påslagen",
+      "statusOff": "Backup är avstängd",
+      "offDescription": "Dina chattar finns endast i denna webbläsare. Aktivera krypterad backup för att skydda dem och återställa på andra enheter. Chattar är krypterade på din enhet — vi kan aldrig läsa dem.",
+      "turnOn": "Aktivera backup",
+      "restoreTitle": "En backup finns redan för ditt konto",
+      "restoreDescription": "Ange din återställningsnyckel för att återställa den på denna enhet.",
+      "restore": "Återställ backup",
+      "lastBackup": "Senaste backup: {time}",
+      "lastBackupNever": "Ingen backup har genomförts än",
+      "keyFingerprint": "Nyckel ····-{tail}",
+      "syncState": {
+        "idle": "Väntar på synkronisering",
+        "syncing": "Säkerhetskopierar…",
+        "ok": "Uppdaterad",
+        "keyOutOfDate": "Pausad — återställningsnyckeln ändrades på en annan enhet",
+        "remoteMissing": "Pausad — säkerhetskopian har tagits bort från servern",
+        "error": "Senaste försök till säkerhetskopiering misslyckades"
+      },
+      "backUpNow": "Säkerhetskopiera nu",
+      "backUpNowSuccess": "Säkerhetskopiering klar",
+      "backUpNowFailure": "Säkerhetskopiering misslyckades — dina chattar är oförändrade på den här enheten",
+      "viewKey": "Visa återställningsnyckel",
+      "changeKey": "Byt återställningsnyckel",
+      "dangerTitle": "Farligt område",
+      "turnOffDelete": "Stäng av och ta bort säkerhetskopian",
+      "turnOffConfirmTitle": "Stäng av säkerhetskopiering?",
+      "turnOffConfirmMessage": "Detta tar bort din säkerhetskopia från våra servrar för alla enheter. Chattar på denna enhet finns kvar. Du kan aktivera säkerhetskopiering igen senare med en ny återställningsnyckel.",
+      "turnOffConfirmAction": "Ta bort säkerhetskopia",
+      "turnOffSuccess": "Säkerhetskopiering avstängd och borttagen",
+      "turnOffFailure": "Det gick inte att ta bort säkerhetskopian. Försök igen."
+    }
+  },
+  "memories": {
+    "title": "Minnen",
+    "description": "Låt assistenten komma ihåg varaktiga fakta du delar — som din roll, dina preferenser och pågående projekt — och använda dem i olika konversationer.",
+    "enableToggle": "Aktivera minnen",
+    "privacyNote": "Fakta lagras endast i denna webbläsare och inkluderas i dina chattar för att anpassa svaren.",
+    "empty": "Inga minnen ännu. Fakta värda att minnas sparas automatiskt från dina konversationer.",
+    "savedOn": "Sparad {date}",
+    "deleteMemory": "Ta bort minne",
+    "clearAll": "Rensa alla minnen",
+    "clearAllConfirmQuestion": "Ta bort alla minnen? Detta kan inte ångras.",
+    "clearAllConfirm": "Ta bort alla",
+    "cancel": "Avbryt"
+  },
+  "contextWindow": {
+    "label": "Kontextfönster",
+    "value": "{count} meddelanden",
+    "fewer": "Färre meddelanden",
+    "more": "Fler meddelanden",
+    "description": "Äldre meddelanden utöver denna gräns sammanfattas och skickas som kontext."
+  },
+  "agentAccess": {
+    "title": "Agenttillgång",
+    "description": "Kontrollera vilka användare som kan använda delade Foundry-agenter. Regler kan endast ytterligare begränsa vad en användares egna Azure-tillgång redan tillåter — de kan aldrig ge åtkomst som Azure nekar.",
+    "backToChat": "Tillbaka till chatt",
+    "loading": "Laddar agenter och regler…",
+    "loadError": "Det gick inte att ladda information om agenttillgång.",
+    "rulesUnavailableWarning": "Åtkomstregler kunde inte hämtas från lagring. Agentanrop är för närvarande blockerade och regler kan inte redigeras.",
+    "retry": "Försök igen",
+    "rulesTab": "Agentregler",
+    "localAdminsTab": "Lokala administratörer",
+    "noAgents": "Inga agenter att hantera.",
+    "sourceLabel": "Källa",
+    "notDiscoverable": "Inte upptäckbar för dig",
+    "notDiscoverableHint": "En regel finns för denna agent, men den är inte synlig för dig — den kan ha bytt namn, din Azure-åtkomst når inte den, eller dess åtkomstregel inkluderar inte dig.",
+    "accessEveryone": "Alla",
+    "accessRestricted": "Begränsad",
+    "edit": "Redigera",
+    "updatedByLine": "Senast uppdaterad av {user} den {date}",
+    "accessTypeLabel": "Vem kan använda denna agent",
+    "everyoneDescription": "Alla som redan kan nå denna agent via sin Azure-åtkomst.",
+    "restrictedDescription": "Endast användare och domäner som listas nedan.",
+    "allowDomainsLabel": "Tillåtna domäner",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Tillåtna användare",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Tryck på Enter för att lägga till",
+    "removeChip": "Ta bort",
+    "groupsLabel": "Tillåtna grupper",
+    "groupsPendingConsent": "Grupptillgång väntar på samtycke från hyresadministratör och kan inte redigeras än.",
+    "restrictedEmptyWarning": "Inga användare eller domäner är listade — ingen kommer att kunna använda denna agent.",
+    "save": "Spara",
+    "saving": "Sparar…",
+    "cancel": "Avbryt",
+    "saveSuccess": "Åtkomstregel sparad.",
+    "deleteSuccess": "Åtkomstregeln borttagen — alla kan nu använda denna agent igen.",
+    "saveError": "Kunde inte spara. Försök igen.",
+    "conflictError": "Någon annan ändrade detta medan du redigerade. Ladda om för att få den senaste versionen och försök igen.",
+    "reload": "Ladda om",
+    "localAdminsDescription": "Delegera regelhantering för specifika agenter utan ominstallation. Lokala administratörer kan endast redigera regler för sina tilldelade agenter.",
+    "noLocalAdmins": "Inga lokala administratörer konfigurerade.",
+    "addLocalAdmin": "Lägg till lokal administratör",
+    "emailLabel": "E-post",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Ta bort lokal administratör",
+    "delegatedAgentsLabel": "Delegerade agenter",
+    "noDelegatedAgents": "Inga agenter tillgängliga för delegering.",
+    "unknownAgentKey": "Okänd agentnyckel",
+    "configSaveSuccess": "Lokala administratörer sparade.",
+    "configConflictError": "Någon annan ändrade listan över lokala administratörer medan du redigerade. Ladda om och försök igen.",
+    "addAgent": "Lägg till agent",
+    "newPromptAgentTitle": "Ny promptagent",
+    "editPromptAgentTitle": "Redigera promptagent",
+    "agentNameLabel": "Namn",
+    "agentNamePlaceholder": "t.ex. Rådgivare för resor",
+    "agentDescriptionLabel": "Beskrivning",
+    "agentDescriptionPlaceholder": "Visas för användare i modellsvalet",
+    "agentSystemPromptLabel": "Systemprompt",
+    "agentSystemPromptPlaceholder": "Instruktioner som definierar hur denna agent beter sig",
+    "agentModelLabel": "Modell",
+    "agentModelPlaceholder": "Välj en modell…",
+    "agentModelUnavailable": "{modelId} (otillgänglig)",
+    "agentModelUnknownError": "Den valda modellen är inte längre tillgänglig. Välj en annan modell och spara igen.",
+    "promptAgentBadge": "Promptagent",
+    "editAgent": "Redigera agent",
+    "deleteAgent": "Ta bort",
+    "deleteAgentConfirm": "Ta bort denna agent för alla? Den försvinner från modellsvalet; befintliga konversationer behåller sin historik.",
+    "confirmDeleteAgent": "Ja, ta bort",
+    "promptAgentCreateSuccess": "Promptagent skapad.",
+    "promptAgentSaveSuccess": "Promptagent sparad.",
+    "promptAgentDeleteSuccess": "Promptagent borttagen.",
+    "promptAgentsUnavailableWarning": "Promptagenter kunde inte laddas från lagring. De kan inte redigeras just nu.",
+    "agentsTab": "Agenter",
+    "connectorsTab": "Connectorer",
+    "addConnector": "Lägg till connector",
+    "noConnectors": "Inga connectorer ännu.",
+    "connectorsUnavailableWarning": "Kunde inte nå connector-butiken, så listan kan vara ofullständig. Skapa ingen ersättning förrän den har laddats.",
+    "editAccess": "Redigera åtkomst",
+    "deleteConnector": "Ta bort",
+    "deleteConnectorConfirm": "Ta bort denna connector? Alla som använder den tappar omedelbart åtkomst.",
+    "confirmDeleteConnector": "Ta bort connector",
+    "connectorSaveSuccess": "Connector sparad.",
+    "connectorCreateSuccess": "Connector skapad.",
+    "connectorDeleteSuccess": "Connector borttagen.",
+    "editConnectorTitle": "Redigera connector",
+    "newConnectorTitle": "Ny connector",
+    "connectorPresetLabel": "Börja från en mall",
+    "connectorPresetNone": "Börja från början",
+    "connectorNameLabel": "Namn",
+    "connectorDescriptionLabel": "Beskrivning",
+    "connectorUrlLabel": "Server-URL",
+    "connectorUrlPlaceholderWarning": "Byt ut {placeholder} i URL:en mot ditt eget värde innan du sparar.",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Autentisering",
+    "connectorAuthNone": "Ingen",
+    "connectorAuthBearer": "Token (varje användare anger sin egen)",
+    "connectorAuthOauth": "OAuth-inloggning",
+    "connectorSealingUnavailable": "OAuth är inte tillgängligt: den här miljön har ingen AUTH_SECRET konfigurerad för att kryptera klienthemligheter.",
+    "connectorTokenHelpLabel": "Länk till token-instruktioner (valfritt)",
+    "connectorClientIdLabel": "OAuth Client ID",
+    "connectorClientSecretLabel": "OAuth Client Secret",
+    "connectorClientSecretStored": "En hemlighet är sparad. Lämna tomt för att behålla den, eller ange en ny för att ersätta.",
+    "connectorClientSecretHint": "Krypteras innan den sparas och visas aldrig igen.",
+    "connectorScopesLabel": "Scopes (mellanslag-separerade, valfritt)"
+  },
+  "localModels": {
+    "title": "Lokala modeller",
+    "description": "Chatta med modeller som körs på den här datorn. Meddelanden går direkt från din webbläsare till den lokala appen och når aldrig våra servrar — så svar, konversationstitlar och sammanfattningar stannar på din dator.",
+    "detect": "Identifiera lokala miljöer",
+    "detecting": "Identifierar…",
+    "experimental": "Experimentell",
+    "portLabel": "Port",
+    "statusUnknown": "Ej kontrollerat än.",
+    "statusChecking": "Kontrollerar…",
+    "statusReady": "{count, plural, =0 {Ansluten, men inga modeller laddade.} one {Ansluten — # modell tillgänglig.} other {Ansluten — # modeller tillgängliga.}}",
+    "statusNotRunning": "Kunde inte nå {label}. Kontrollera att det körs på denna port och att din webbläsare har tillåtelse att komma åt lokala appar från den här sidan.",
+    "statusHttpError": "{label} svarade med ett felmeddelande. Kontrollera dess loggar.",
+    "corsHelp": {
+      "ollama": "Ollama körs men vägrar begäran från denna sida. Ställ in OLLAMA_ORIGINS till denna sidans adress, starta om Ollama och försök identifiera igen.",
+      "lmstudio": "LM Studio körs men vägrar begäran från denna sida. Slå på CORS i dess lokala serverinställningar och försök identifiera igen.",
+      "llamacpp": "llama.cpp körs men vägrar begäran från denna sida. Starta llama-server med stöd för cross-origin begäran och försök identifiera igen."
+    },
+    "privacyNote": "Lokala modeller stödjer inte filbilagor, bilder, webbsökning eller connectors — det kräver våra servrar. Detektering kontrollerar endast denna dator."
+  },
+  "urlFetch": {
+    "sourceFallback": "Webbsida",
+    "fallbackHint": "Du kan också öppna sidan, kopiera texten och klistra in den här.",
+    "shortExtract": "Endast ett kort utdrag var läsbart — sidan kan ha betalvägg eller kräver inloggning.",
+    "errors": {
+      "invalidUrl": "Det ser inte ut som en giltig webbadress.",
+      "ssrfBlocked": "Den adressen kan inte hämtas av säkerhetsskäl.",
+      "tooManyRedirects": "Länken omdirigerade för många gånger.",
+      "timeout": "Sidan tog för lång tid att svara.",
+      "unreachable": "Sidan kunde inte nås.",
+      "blocked": "Webbplatsen vägrade begäran — den kan kräva inloggning eller blockera automatiska läsare.",
+      "notFound": "Sidan hittades inte.",
+      "upstream": "Webbplatsen returnerade ett fel.",
+      "pdf": "Den länken är en PDF. Ladda ner den och använd bifogaknappen istället.",
+      "nonHtml": "Den länken är inte en webbsida vi kan läsa.",
+      "tooLarge": "Sidan är för stor för att hämtas.",
+      "empty": "Ingen läsbar artikeldel hittades på sidan.",
+      "generic": "Sidan kunde inte hämtas."
+    },
+    "fetchingFile": "Hämtar {host}…",
+    "attachLink": "Bifoga en länk",
+    "attachLinkTitle": "Bifoga en webbsida",
+    "attachLinkDescription": "Sidan hämtas och den läsbara texten bifogas till ditt meddelande.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Hämta & bifoga",
+    "attachLinkInvalid": "Det där ser inte ut som en webbadress.",
+    "linkBadge": "Från en länk",
+    "couldNotRetrieve": "Kunde inte hämtas",
+    "doc": {
+      "sourceLabel": "Källa",
+      "retrievedLabel": "Hämtad",
+      "attemptedLabel": "Försök gjordes",
+      "failureHeading": "Webbsidan kunde inte hämtas"
+    },
+    "settingsTitle": "Länkar i meddelanden",
+    "settingsToggle": "Hämta inklistrade länkar automatiskt",
+    "settingsDescription": "När du klistrar in en länk själv hämtas sidan och dess text bifogas så att assistenten kan läsa den. Stäng av detta för att behålla inklistrade länkar som vanlig text — du kan fortfarande bifoga en sida manuellt via + menyn.",
+    "addLink": "Lägg till en länk"
+  },
+  "cameraAccessError": "Kunde inte komma åt kameran. Kontrollera dina kamerabehörigheter och försök igen.",
+  "cameraUnnamedDevice": "Kamera",
+  "pastedText": {
+    "fallbackName": "Inklistrad text",
+    "charCount": "{count, number} tecken",
+    "removeChip": "Ta bort inklistrad text “{name}”",
+    "blockLabel": "Inklistrad text: {name}",
+    "doc": {
+      "heading": "Inklistrad text",
+      "pastedLabel": "Inklistrad"
+    },
+    "settingsTitle": "Stora inklistringar",
+    "settingsToggle": "Gör en stor inklistring till en bilaga",
+    "settingsDescription": "Om du klistrar in mer text än gränsen nedan, bifogas den som en fil istället för att fylla meddelanderutan. Texten används exakt som inklistrad — inget hämtas eller ändras.",
+    "settingsThresholdLabel": "Bifoga inklistringar längre än",
+    "settingsThresholdUnit": "tecken",
+    "settingsThresholdHint": "Mellan {min, number} och {max, number} tecken."
+  },
+  "structures": {
+    "section": "Strukturer",
+    "sectionSubtitle": "Sparade fältdefinitioner. Använd en som ett extraktionsrecept eller som startschema för en dataflödestabell.",
+    "loadFromStructure": "Hämta struktur",
+    "loadFromStructureTitle": "Byt ut dessa kolumner mot en sparad struktur",
+    "pickerEmpty": "Inga sparade strukturer ännu.",
+    "pickerTitle": "Ladda en sparad struktur",
+    "saveAsStructure": "Spara som struktur",
+    "saveAsStructureTitle": "Spara dessa kolumner till din strukturbibliotek",
+    "savedToast": "Struktur “{name}” har sparats",
+    "namePlaceholder": "Strukturnamn",
+    "fieldCount": "{count} fält",
+    "fieldCountOne": "1 fält",
+    "downgradedNotice": "{count} fält har förenklats till text — tabeller har ett värde per cell: {names}",
+    "truncatedNotice": "{count} fält borttagna — tabellgränsen är {max} kolumner: {names}",
+    "skippedDerivedNotice": "{count} beräknade kolumner sparades inte — formler refererar till denna tabells kolumner: {names}",
+    "loadReplacesColumns": "Detta ersätter nuvarande kolumner. Befintliga rader behåller värden vars kolumnnamn matchar."
   }
 }

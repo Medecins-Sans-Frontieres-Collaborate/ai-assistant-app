@@ -6,6 +6,7 @@ import {
   parseJsonResponse,
 } from './helpers';
 
+import { GET as availabilityGET } from '@/app/api/mcp/oauth/availability/route';
 import { POST as discoverPOST } from '@/app/api/mcp/oauth/discover/route';
 import { POST as registerPOST } from '@/app/api/mcp/oauth/register/route';
 import { POST as tokenPOST } from '@/app/api/mcp/oauth/token/route';
@@ -363,6 +364,72 @@ describe('/api/mcp/oauth/*', () => {
     expect(mockExchange.mock.calls[0][1].clientInformation).toEqual({
       client_id: 'users-own-app-id',
       client_secret: 'users-own-app-secret',
+    });
+  });
+
+  describe('GET /availability', () => {
+    it('reports static-app-dependent catalog keys as unavailable with no env apps', async () => {
+      const res = await availabilityGET();
+      const body = await parseJsonResponse(res);
+
+      expect(res.status).toBe(200);
+      // These vendors publish no usable web-app DCR, so without a configured
+      // app the connect button must stay hidden.
+      expect(body.data.availability).toMatchObject({
+        github: false,
+        asana: false,
+        salesforce: false,
+        hootsuitePerch: false,
+        hootsuiteNest: false,
+      });
+    });
+
+    it('reports a DCR-capable connector as available without any env app', async () => {
+      // Tableau speaks OAuth 2.1 and can register a client mid-flow, so
+      // hiding the affordance would deny a flow that actually works.
+      const body = await parseJsonResponse(await availabilityGET());
+
+      expect(body.data.availability.tableau).toBe(true);
+    });
+
+    it('reports only the connectors whose app is configured', async () => {
+      mockEnv.MCP_OAUTH_ASANA_CLIENT_ID = 'asana-static-id';
+
+      const body = await parseJsonResponse(await availabilityGET());
+
+      expect(body.data.availability).toMatchObject({
+        github: false,
+        asana: true,
+      });
+    });
+
+    it('shares one Hootsuite app across both Hootsuite servers', async () => {
+      mockEnv.MCP_OAUTH_HOOTSUITE_CLIENT_ID = 'hootsuite-static-id';
+
+      const body = await parseJsonResponse(await availabilityGET());
+
+      expect(body.data.availability).toMatchObject({
+        hootsuitePerch: true,
+        hootsuiteNest: true,
+      });
+    });
+
+    it('never leaks the client id or secret — booleans only', async () => {
+      mockEnv.MCP_OAUTH_GITHUB_CLIENT_ID = 'gh-static-id';
+      mockEnv.MCP_OAUTH_GITHUB_CLIENT_SECRET = 'gh-static-secret';
+
+      const raw = JSON.stringify(
+        await parseJsonResponse(await availabilityGET()),
+      );
+
+      expect(raw).not.toContain('gh-static-id');
+      expect(raw).not.toContain('gh-static-secret');
+    });
+
+    it('requires a session', async () => {
+      mockAuth.mockResolvedValue(null);
+
+      expect((await availabilityGET()).status).toBe(401);
     });
   });
 });

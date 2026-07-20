@@ -1,4 +1,4 @@
-import { TranslationCriterionId } from '@/types/workflow';
+import { TranslationBuiltinCriterionId } from '@/types/workflow';
 
 /**
  * Translation quality criteria, derived from the MQM (Multidimensional
@@ -11,7 +11,7 @@ import { TranslationCriterionId } from '@/types/workflow';
  */
 
 export interface TranslationQualityCriterion {
-  id: TranslationCriterionId;
+  id: TranslationBuiltinCriterionId;
   /** i18n keys under workflows.translation.criteria.<id>.* */
   labelKey: string;
   descriptionKey: string;
@@ -69,14 +69,20 @@ const CRITERION_IDS = new Set<string>(
   TRANSLATION_QUALITY_CRITERIA.map((c) => c.id),
 );
 
-export function isTranslationCriterionId(
+export function isTranslationBuiltinCriterionId(
   value: unknown,
-): value is TranslationCriterionId {
+): value is TranslationBuiltinCriterionId {
   return typeof value === 'string' && CRITERION_IDS.has(value);
 }
 
+/** Undefined for a custom id — callers fall back to the user's rubric. */
 export function getCriterion(
-  id: TranslationCriterionId,
-): TranslationQualityCriterion {
-  return TRANSLATION_QUALITY_CRITERIA.find((c) => c.id === id)!;
+  id: string,
+): TranslationQualityCriterion | undefined {
+  return TRANSLATION_QUALITY_CRITERIA.find((c) => c.id === id);
+}
+
+/** The built-in rubric line for `id`, or undefined if it isn't a built-in. */
+export function builtinRubricLine(id: string): string | undefined {
+  return getCriterion(id)?.promptDescription;
 }

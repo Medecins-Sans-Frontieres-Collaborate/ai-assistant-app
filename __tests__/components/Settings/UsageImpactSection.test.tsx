@@ -17,6 +17,8 @@ describe('UsageImpactSection', () => {
     useSettingsStore.setState({
       tokenUsageStats: {},
       tokenUsageFirstTrackedAt: null,
+      estimatedUsageStats: {},
+      historicalUsageBackfilledAt: null,
     });
   });
 
@@ -53,6 +55,77 @@ describe('UsageImpactSection', () => {
     // Per-model + per-region sections present.
     expect(screen.getByText('GPT-5.2')).toBeInTheDocument();
     expect(screen.getByText('DeepSeek-R1')).toBeInTheDocument();
+    // Everyday activity equivalents present.
+    expect(screen.getByText(/the same carbon as/i)).toBeInTheDocument();
+    expect(screen.getByText('Netflix HD streaming')).toBeInTheDocument();
+    expect(screen.getByText('Spotify audio')).toBeInTheDocument();
+  });
+
+  it('includes back-calculated buckets in totals and labels the estimated portion', () => {
+    useSettingsStore.setState({
+      tokenUsageStats: {
+        [`${OpenAIModelID.GPT_5_2}|US|none`]: {
+          promptTokens: 1000,
+          completionTokens: 2000,
+          requests: 3,
+        },
+      },
+      estimatedUsageStats: {
+        [`${OpenAIModelID.GPT_5_2}|default|none`]: {
+          promptTokens: 500,
+          completionTokens: 500,
+          requests: 2,
+        },
+      },
+      tokenUsageFirstTrackedAt: '2026-07-01T00:00:00.000Z',
+    });
+
+    render(<UsageImpactSection />);
+
+    // Totals include both records: 5 requests, 1500 prompt, 2500 completion.
+    expect(screen.getByText('5')).toBeInTheDocument();
+    expect(screen.getByText('1,500')).toBeInTheDocument();
+    expect(screen.getByText('2,500')).toBeInTheDocument();
+    // The estimated portion is labeled.
+    expect(
+      screen.getByText(/estimated from chats that predate tracking/i),
+    ).toBeInTheDocument();
+  });
+
+  it('does not label an estimated portion when there are no back-calculated buckets', () => {
+    useSettingsStore.setState({
+      tokenUsageStats: {
+        [`${OpenAIModelID.GPT_5_2}|US|none`]: {
+          promptTokens: 1000,
+          completionTokens: 2000,
+          requests: 3,
+        },
+      },
+      tokenUsageFirstTrackedAt: '2026-07-01T00:00:00.000Z',
+    });
+
+    render(<UsageImpactSection />);
+    expect(
+      screen.queryByText(/estimated from chats that predate tracking/i),
+    ).not.toBeInTheDocument();
+  });
+
+  it('leaves the empty state when only estimated stats exist', () => {
+    useSettingsStore.setState({
+      estimatedUsageStats: {
+        [`${OpenAIModelID.GPT_5_2}|default|none`]: {
+          promptTokens: 500,
+          completionTokens: 500,
+          requests: 2,
+        },
+      },
+    });
+
+    render(<UsageImpactSection />);
+    expect(screen.queryByText(/No usage tracked yet/i)).not.toBeInTheDocument();
+    expect(
+      screen.getByText(/estimated from chats that predate tracking/i),
+    ).toBeInTheDocument();
   });
 
   it('renders a retired/unknown model id by falling back to standard class', () => {

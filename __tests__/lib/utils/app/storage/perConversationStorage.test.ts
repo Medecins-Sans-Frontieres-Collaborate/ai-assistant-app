@@ -305,6 +305,54 @@ describe('perConversationStorage', () => {
   });
 
   describe('setItem', () => {
+    it('round-trips backup tombstones and foldersUpdatedAt through the sidecar', () => {
+      // Regression: these fields are partialized by conversationStore v7 but
+      // are not part of the per-conversation key layout — losing them on
+      // reload would resurrect deleted conversations on other devices and
+      // revert folder edits made shortly before tab close.
+      const deletedConversations = { gone1: '2026-07-17T00:00:00.000Z' };
+      const foldersUpdatedAt = '2026-07-17T01:00:00.000Z';
+      perConversationStorage.setItem(
+        'conversation-storage',
+        JSON.stringify({
+          state: {
+            conversations: [makeConversation('c1')],
+            selectedConversationId: null,
+            folders: [makeFolder('f1')],
+            deletedConversations,
+            foldersUpdatedAt,
+          },
+          version: 7,
+        }),
+      );
+
+      const raw = perConversationStorage.getItem('conversation-storage');
+      expect(raw).not.toBeNull();
+      const parsed = JSON.parse(raw!);
+      expect(parsed.state.deletedConversations).toEqual(deletedConversations);
+      expect(parsed.state.foldersUpdatedAt).toBe(foldersUpdatedAt);
+    });
+
+    it('defaults backup sidecar fields when absent from stored data', () => {
+      perConversationStorage.setItem(
+        'conversation-storage',
+        JSON.stringify({
+          state: {
+            conversations: [makeConversation('c1')],
+            selectedConversationId: null,
+            folders: [],
+          },
+          version: 5,
+        }),
+      );
+
+      const parsed = JSON.parse(
+        perConversationStorage.getItem('conversation-storage')!,
+      );
+      expect(parsed.state.deletedConversations).toEqual({});
+      expect(parsed.state.foldersUpdatedAt).toBeNull();
+    });
+
     it('writes conversations to individual keys', () => {
       const state = {
         state: {

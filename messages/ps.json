@@ -907,7 +907,8 @@
     "processingAudio": "غږ پروسس کېږي...",
     "ttsError": "د غږ جوړولو تېروتنه. مهرباني وکړئ بیا هڅه وکړئ.",
     "unsupportedMessageType": "د پیغام ښودلو تېروتنه: نه ملاتړېدونکی ډول",
-    "addLanguageOption": "\"{name}\" اضافه کړئ..."
+    "addLanguageOption": "\"{name}\" اضافه کړئ...",
+    "sources": "سرچینې"
   },
   "transcript": {
     "originalTranscript": "اصلي لیک",
@@ -1331,7 +1332,23 @@
     "customInstructionsLabel": "دودیز لارښوونې*",
     "defaultTemperatureLabel": "اصلي تودوخه*",
     "Usage & Impact": "کارونه او اغېز",
-    "Connectors": "وصلونکي"
+    "Connectors": "وصلونکي",
+    "Backup": "بکاپ",
+    "Memories": "یادداشتونه",
+    "Agent Access": "اجنټ ته لاسرسی",
+    "LocalModels": "محلي ماډلونه",
+    "suggestRevisions": {
+      "title": "د سند اصلاحات",
+      "toggle": "د اصلاحاتو وړاندیز وکړئ پر ځای د تطبیقولو",
+      "description": "کله چې تاسو له سند ورک فلو څخه د اصلاح غوښتنه وکړئ، بدلونونه د جلا وړاندیزونو په بڼه راځي چې تاسو یې منلی یا ردولی شئ، لکه څنګه چې د کیفیت ارزونه کیږي.",
+      "exceptionsTitle": "بیا هم مستقیم تطبیق کړئ کله چې:",
+      "exceptionSelection": "هغه انتخاب اصلاح کوئ چې تاسو برجسته کړی وي",
+      "exceptionLargeRewrite": "ځای لیک ډېرې برخې بدلوي",
+      "exceptionReorder": "برخې انتقال شوې وي نه اصلاح شوې",
+      "thresholdLabel": "پورته د جای لیک په توګه واخلي",
+      "thresholdUnit": "٪ د سند بدل شوی",
+      "exceptionSelectionAlways": "د ټینګار شوي انتخاب اصلاح کول تل مستقیم تطبیق کېږي — ماډل یواځې اصلاح شوی برخه بېرته ورکوي، چې د ټول سند لپاره وړاندیزونو ته نه شي وېشل کېدای."
+    }
   },
   "emptyState": {
     "greeting": "څنګه مرسته کولی شم؟",
@@ -2086,7 +2103,9 @@
     "pin": "پورته يې ټومبل",
     "unpin": "ناټومبل",
     "moveToMore": "نور ته ولیږدول",
-    "moveOutOfMore": "په مینو کې ښکاره کړئ"
+    "moveOutOfMore": "په مینو کې ښکاره کړئ",
+    "showSources": "نورې سرچینې وښایاست",
+    "hideSources": "نورې سرچینې پټې کړئ"
   },
   "transcription": {
     "transcribesOnSend": "په استولو سره ټرانسکرېپشن کېږي",
@@ -2408,7 +2427,8 @@
     "regionDefault": "پرمختښتی",
     "modelRow": "{requests} ځله · {grams} ګرامه",
     "disclosure": "اټکلونه د فرضیو پر بنسټ v{version} · له {since} راهیسې · یوازې معیاري چټ (ایجنټونه او د پوهې-بنسټ ځوابونه نه شمېرل کېږي).",
-    "reset": "د کارونې احصائیې بیا تنظیم کړئ"
+    "reset": "د کارونې احصائیې بیا تنظیم کړئ",
+    "estimatedPortion": "شاوخوا ~{grams} g CO₂e ({requests} غوښتنې) پکې شامل دي چې له خبرو اترو نه اټکل شوي چې د ثبت له پیل مخکې دي—له ذخیره شوي پیغامونو نه شاته حساب شوي، د ټوکن شمېرې نه دي اندازه شوي."
   },
   "extraction": {
     "toggleLabel": "جوړښت لرونکي معلومات راوباسئ",
@@ -2615,7 +2635,25 @@
       "pendingCount": "{count} پاتې",
       "closeReview": "د کیفیت ارزونه وتړئ",
       "showReview": "ارزونه وښایئ",
-      "showReviewPending": "ارزونه وښایئ ({count} پاتې)"
+      "showReviewPending": "ارزونه وښایئ ({count} پاتې)",
+      "undoEdit": "واپس واخلئ",
+      "clearResolved": "تصفيه شوي پاک کړئ",
+      "clearResolvedHint": "له دې لیست څخه منل شوي، رد شوي او نامناسب سمونونه لرې کړئ",
+      "autoClearResolved": "تصفيه شوي سمونونه په اوتومات ډول پاک کړئ",
+      "customCriteria": "مخصوص معیارونه",
+      "closeCriteria": "مخصوص معیارونه وتړئ",
+      "newCriterion": "نوی معیار",
+      "newCriterionName": "بې نوم معیار",
+      "criterionName": "د معیار نوم",
+      "criterionRubric": "لارښود",
+      "criterionRubricPlaceholder": "تشریح کړئ چې ژباړه باید د دې معیار د پوره کولو لپاره څه وکړي، مثلاً: \"ټول کلینیکي دوز لارښوونې باید په امر کې وړاندې شي، هیڅکله په مصدري ...\"",
+      "criterionRubricHint": "دا لارښود د ژباړې ارزونې پر مهال AI ته د MQM جوړ شویو ابعادو ترڅنګ همداسې ورکول کېږي.",
+      "criteriaEmpty": "مخصوص معیارونه جوړ کړئ — لکه د موسسې اسلوب، د پیرودونکي اصطلاحات یا سیمه ییز اصول — ترڅو ژباړې د جوړ شوي MQM ابعادو څخه ورهاخوا وارزوئ. یوازې په دې وسیله کې خوندي کېږي او بیا کارېدونکي دي.",
+      "deleteCriterion": "معیار پاک کړئ",
+      "manageCriteria": "مخصوص معیارونه",
+      "addCriteria": "معیارونه اضافه کړئ",
+      "noUsableCriteria": "لږ تر لږه یو جوړ شوی معیار وټاکئ یا خپلو ځانګړو معیارونو ته لارښود ورکړئ.",
+      "criterionRubricTooLong": "دا اصول د حد څخه {over} حروف لوړ دي. دا له هرې ارزونې سره لیږي، باید لنډ شي تر څو وکارول شي."
     },
     "document": {
       "emptyTitle": "هغه سند تشریح کړئ چې غواړئ",
@@ -2735,7 +2773,32 @@
       "clearSelection": "انتخاب پاک کړئ (له ټول سند سره کار وکړئ)",
       "reviseSelectionPlaceholder": "د انتخاب تغیرات تشریح کړئ…",
       "revisedSelectionSummary": "ما ټاکل شویه برخه په کاري ساحه کې اصلاح کړه.",
-      "assessedSelection": "ټاکل شوې برخه"
+      "assessedSelection": "ټاکل شوې برخه",
+      "undoEdit": "واپس واخلئ",
+      "clearResolved": "تصفيه شوي پاک کړئ",
+      "clearResolvedHint": "له دې لیست څخه منل شوي، رد شوي او نامناسب سمونونه لرې کړئ",
+      "autoClearResolved": "تصفيه شوي سمونونه په اوتومات ډول پاک کړئ",
+      "import": "واردول",
+      "importReplaceTitle": "اسناد ځای ناستی کړئ؟",
+      "importReplaceBody": "د {name} واردول به اوسنی سند ځای ناستی کړي. ستاسو حوالې، مشخصات او طرز پاتېږي.",
+      "importReplaceConfirm": "ځای ناستی کړئ",
+      "editorMode": "د ایډیټر حالت",
+      "editorModeRich": "بډایه متن",
+      "editorModeMarkdown": "مارکډاون",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "د ایډیټر حالت بدلولو مخکې وړاندیز شوي سمونې حل کړئ.",
+      "suggestChanges": "د بدلونونو وړاندیز وکړئ",
+      "suggestChangesHint": "اصلاحات د جلا وړاندیزونو په توګه وګورئ؛ نه دا چې سمدلاسه ټول سند بدل کړئ.",
+      "suggestChangesSelectionNote": "د ټاکل شوې برخې اصلاحات مستقیم تطبیق کیږي — دا ټاکنه ستاسو د انتخاب حدود دی.",
+      "suggestedSummary": "{count} {count, plural, one {بدلون} other {بدلونونه}} د بیاکتنې لپاره وړاندیز شول.",
+      "revisionSuggestionSummary": "ستاسو د اصلاح غوښتنې {count} {count, plural, one {وړاندیز شوی بدلون} other {وړاندیز شوي بدلونونه}} تولید کړل.",
+      "revisionCriterionLabel": "غوښتل شوې اصلاح",
+      "fallbackSelection": "مستقیم تطبیق شول — ټاکل شوې برخې ته اصلاحات وړاندیز نه کیږي.",
+      "fallbackLargeRewrite": "مستقیم تطبیق شول — جای لیک دومره ډېر بدلون راوست چې جلا وړاندیزونه نه کېږي.",
+      "fallbackReorder": "مستقیم تطبیق شول — برخې انتقال شوې دي، چې دا د بیاکتنې وړ وړاندیزونه نه جوړوي.",
+      "fallbackUnanchorable": "مستقیم تطبیق شول — بدلونونه له ځانګړو برخو سره نشو تړلی.",
+      "fallbackNoChanges": "هیڅ بدلون ته اړتیا نه وه.",
+      "criterionRubricTooLong": "دا اصول د حد څخه {over} حروف لوړ دي. دا له هرې ارزونې سره لیږي، باید لنډ شي تر څو وکارول شي."
     },
     "data": {
       "emptyTitle": "د تحلیل لپاره معلومات وارد کړئ",
@@ -2904,7 +2967,39 @@
       "autoCheckHint": "له عکسونو یا اسنادو څخه د معلوماتو کډولو وروسته، نوي قطارونه اتومات کیفیت چیک ته وسپارئ",
       "checkingNewRows": "نوي اضافه شوي قطارونه د کیفیت لپاره ارزول کېږي…",
       "ingestCheckFailed": "اتومات کیفیت چیک ناکام شو ({message}) — تاسې کولای شئ دا یي د Assess quality سره دستی ترسره کړئ.",
-      "assessedIngest": "نوي اضافه شوي قطارونه"
+      "assessedIngest": "نوي اضافه شوي قطارونه",
+      "transpose": "بدلونول",
+      "transposeAxisColumn": "نوم",
+      "transposeSuggestion": "دا جدول ښايي بدل شوی وي: قطارونه ځانګړتیاوې او ستنې توکي دي. غواړئ دا واړوئ چې هر توکی یو قطار شي او هره ځانګړتیا ټایپ شوې ستنه وګرځي؟",
+      "transposedTable": "قطارونه او ستنې بدل شوې",
+      "columns": "ستنې",
+      "columnsHidden": "ستنې ({count} پټې شوې)",
+      "showAllColumns": "ټولې وښایئ",
+      "chartScatter": "سکېټر (x vs y)",
+      "chartPivot": "Pivot جدول",
+      "xColumn": "X ستنه",
+      "yColumn": "Y ستنه",
+      "splitByColumn": "تقسیم په",
+      "splitNone": "تقسیم نشته",
+      "pivotValueColumns": "د ارزښت ستنې",
+      "aggMin": "تر ټولو لږ",
+      "aggMax": "تر ټولو زیات",
+      "aggMedian": "منځنی",
+      "chartSeriesTruncated": "یوازې تر ټولو لوړ {max} لړۍ ښودل شوې",
+      "chartPointsTruncated": "یوازې {max} نمونې ټکي ښودل شوي",
+      "chartScatterAria": "د {x} او {y} ترمنځ سکېټر پلټ",
+      "pivotTableAria": "Pivot جدول د {column} پراساس ګروپ شوی دی",
+      "schemaFormula": "فورمول",
+      "schemaFormulaPlaceholder": "لکه [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "محاسبه شوې برخه: نورې برخې د [Name] په بڼه حواله کړئ؛ د + - * / %، ګردونه، قوسونه، round، abs، min، max ملاتړ لري. ارزښتونه په اوتومات ډول تازه کېږي او نشي ایډیټ کېدای.",
+      "schemaFormulaSyntaxError": "ناسم فورمول",
+      "schemaFormulaUnknownRef": "نامعلومه برخه: {ref}",
+      "schemaFormulaArityError": "د {fn} لپاره ناسم شمېر ارګومېنټونه",
+      "schemaFormulaCycleError": "د فورمولونو ترمنځ حلقوي حواله",
+      "derivedColumnTitle": "محاسبه شوی: {formula}",
+      "derivedFrom": "د {formula} نه حساب شوی",
+      "takePhoto": "انځور واخلئ",
+      "takePhotoHint": "د فورمې یا جدول تصویر اخیستلو لپاره خپله کمره وکاروئ — منځپانګه به ستروکچر شویو معلوماتو ته واوړي چې له عکس سره یې پرتله کولی شئ"
     },
     "map": {
       "emptyTitle": "خپل معلومات نقشې ته واچوئ",
@@ -2978,7 +3073,31 @@
         "jumpTo": "{label} ته لاړ شئ",
         "slider": "د مهالویش موقعیت",
         "showUndated": "بې نېټې ځایونه وښایئ",
-        "activeCount": "{count} فعال"
+        "activeCount": "{count} فعال",
+        "jump": {
+          "start": "شروع",
+          "yearsLater": "{count, plural, one {۱ کال وروسته} other {# کاله وروسته}}",
+          "monthsLater": "{count, plural, one {۱ میاشت وروسته} other {# میاشتې وروسته}}",
+          "daysLater": "{count, plural, one {۱ ورځ وروسته} other {# ورځې وروسته}}",
+          "appears": "{count, plural, one {۱ ځل ښکاري} other {# ځل ښکاري}}",
+          "ends": "{count, plural, one {۱ پای ته ورسېد} other {# پای ته ورسېدل}}",
+          "progress": "نیټه {index} د {total} څخه"
+        },
+        "precision": {
+          "minute": "تر دقیقې پورې",
+          "hour": "تر ساعت پورې",
+          "day": "تر ورځې پورې",
+          "month": "د میاشتې کچه نیټه",
+          "year": "د کال کچه نیټه",
+          "mixed": "(مخلوط)"
+        },
+        "pacing": {
+          "toggle": "د پلیبیک سرعت",
+          "cardDuration": "هر موقعیت وښایئ",
+          "seconds": "{seconds} ثانیې",
+          "maxCards": "هرې نیټې ته ښکاره شوي موقعیتونه",
+          "hint": "د ګڼه ګوڼه لرونکي نیټې په اوتومات ډول اوږدې نیول کېږي."
+        }
       },
       "granularity": {
         "site": "سایت",
@@ -2995,8 +3114,13 @@
         "color": "رنګ: د کوارډینیت باور (آبي لوړ، زېړ منځنی، سور ټیټ)",
         "size": "ډوټ اندازه: دا ځای څومره مهم دی",
         "area": "مات شوی دائره: د ولسوالۍ، سیمې یا هیواد اټکليزه ساحه",
-        "container": "روڼ کرښه: یوه سیمه چې منځپانګې یې جلا جلا نقشه شوي وي"
-      }
+        "container": "روڼ کرښه: یوه سیمه چې منځپانګې یې جلا جلا نقشه شوي وي",
+        "precisionHalo": "نرمه نقطه دایره (په ټایم لپس کې): پېښه یوازې میاشت یا کال ته نېشته ده، نو د دقیق وخت ناڅرګندتیا لري"
+      },
+      "sourceLabel": "سرچینه: {name}",
+      "fetchAndMap": "راواخله او نقشه کړه",
+      "fetchingPage": "مخ راخوستی کیږي…",
+      "railUrlRequest": "موقعیتونه له دې څخه راوړئ او نقشه کړئ: {title} ({url})"
     },
     "shell": {
       "showConversation": "مکالمه ښکاره کړئ",
@@ -3014,6 +3138,16 @@
       "untitled": "نوې مکالمه",
       "toggleMenu": "مینو پرانیزئ یا بند کړئ",
       "model": "د دې کاري بهیر ماډل"
+    },
+    "tabs": {
+      "label": "مکالموي طریقه",
+      "chat": "چټ",
+      "chatDescription": "د مرسته کوونکي سره عادي خبرې اترې"
+    },
+    "discard": {
+      "title": "دا مسوده لغو کړئ؟",
+      "body": "{target} ته د تبدیلېدو سره، تاسو په {current} کې پیل کړی کار به پاک شي.",
+      "confirm": "لغو کړه"
     }
   },
   "connectors": {
@@ -3028,6 +3162,22 @@
       "asana": {
         "name": "Asana",
         "description": "دندې او پروژې پیدا کړئ، جوړ کړئ او تازه یې کړئ."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "خپرې شوې ډاټا سرچینو، ورک‌بوکونو او Pulse میټریکس پوښتنه وکړئ."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "ستاسو د Salesforce شیانو کې ریکارډونه وګورئ او نوي کړئ."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "ټولنیزو رسنیو پوسټونه مسوده کړئ، مهالویش کړئ او خپاره کړئ."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "د ټولنیزو پیغامونو خبرې وګورئ او ځواب ورکړئ."
       }
     },
     "connect": "وصل کړئ",
@@ -3088,7 +3238,19 @@
       "missingState": "هیڅ د تصدیق لپاره نشته",
       "close": "تاسو کولی شئ دا کړکۍ وتړئ او اپ ته راوګرځئ.",
       "closeButton": "کړکۍ وتړئ"
-    }
+    },
+    "oauthNoAppConfigured": "د {name} سره ننوتل په دې نصب کې تنظیم نه دي شوي. د خپل OAuth اپ ثبتونې سره وصل شئ.",
+    "adminConnectorsTitle": "ستاسو د سازمان له خوا",
+    "adminConnectorsDescription": "دا هغه نښلوونکي دي چې ستاسې ادارو تنظیم کړي. کوم چې تاسو ته ښکاري، ستاسو تر لاسرسي پورې اړه لري.",
+    "managedByOrg": "ستاسو د سازمان لخوا اداره کېږي",
+    "connectorOauthNotConfigured": "د دې نښلوونکي لپاره ننوتل لا بشپړ نه دي ترتیب شوي. له خپل ادمین سره اړیکه ونیسئ.",
+    "yourConnectorsTitle": "ستاسې نښلوونکي",
+    "addTitle": "نوی نښلوونکی اضافه کړئ",
+    "addDescription": "د وصلولو لپاره یو وسیله وټاکئ. تر ټاکلو وروسته لاسرسی تنظیمئ.",
+    "add": "اضافه کړئ",
+    "filterLabel": "نښلوونکي فلټر کړئ",
+    "filterPlaceholder": "نښلوونکي ولټوئ",
+    "noMatches": "هیڅ نښلوونکی د “{query}” سره نه سمون خوري."
   },
   "modelSources": {
     "connectButtonShort": "ماډل سرچینه ونښلوئ",
@@ -3139,5 +3301,399 @@
     "deselectAll": "ټول غیرفعال کړئ",
     "autoAddLabel": "نوي ماډلونه په اوتومات ډول اضافه کړئ",
     "autoAddDescription": "دې حساب ته وروسته زیات شوي ماډلونه به په اوتومات ډول ښکاره شي. نه ټاکل شوي ماډلونه به نه ښکاري."
+  },
+  "emissions": {
+    "tier": {
+      "low": "ټيټ اغېز",
+      "moderate": "منځنی اغېز",
+      "high": "لوړ اغېز"
+    },
+    "tierTooltip": "د هر غوښتنې نسبي انرژی اغېز، د ماډل د حجم له مخې اټکل شوی. دا اټکلونه پر منځنیو ارزښتونو او فرضیو ولاړ دي v{version} — دا حقیقي اندازه نه ده.",
+    "typicalRequest": "شاوخوا ~{grams} g CO₂e د هر عادي غوښتنې لپاره",
+    "typicalRequestTooltip": "د هر عادي غوښتنې تقریبي ارزونه (نږدې ۱,۰۰۰ پرامپټ او ۵۰۰ تکمیل ټوکنونه)، له خپاره شویو ارقامو او فرضیو څخه اخیستل شوې v{version}. حقیقي اغېز د خبرو اترو اوږدوالي، امستنو، او د کوربه سیمې سره تغیر کوي.",
+    "activities": {
+      "netflixHd": "Netflix HD سټریم",
+      "zoomCall": "Zoom زنګ (کامره روښانه)",
+      "webBrowsing": "ویب ګټه اخیستنه",
+      "spotifyAudio": "Spotify آډیو"
+    },
+    "equivalents": {
+      "title": "≈ د همدې کاربن سره برابره",
+      "note": "د همدې کاربن مقایسه د دغو سرویسونو د هر ساعت خپاره شويو ارزښتونو سره — دا هم تخمینې، حدودي شمېرې دي لکه نور اټکلونه."
+    },
+    "duration": {
+      "lessThanSecond": "<۱ ث",
+      "seconds": "{value} ث",
+      "minutes": "{value} دقیقې",
+      "hours": "{value} ساعته"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "د دې خبرې اترو د کاربن اټکلي خپرېدنه: {grams} ګرام CO₂ سره معادل. جزییات وښایئ.",
+      "ariaLabelToday": "نن د دې خبرې اترو د کاربن اټکلي خپرېدنه: {grams} ګرام CO₂ سره معادل. جزییات وښایئ.",
+      "title": "دا خبرې اترې (اټکلی)",
+      "today": "نن",
+      "total": "ټول وخت",
+      "measured": "د راپور شویو ټوکن شمېرې پراساس",
+      "estimated": "له زړو پیغامونو نه شاته حساب شوی",
+      "lastRequest": "وروستی غوښتنه",
+      "disclaimer": "د هرې غوښتنې اټکلي شمېرې د راپور شویو یا نږدې شویو ټوکن شمېرې پراساس، د خپرو شویو اوسطونو او فرضیاتو v{version} مطابق. زاړه پیغامونه له ذخیره شوي متن څخه د اوسني ماډل پراساس شاته حساب شوي. دا اندازه نه ده."
+    }
+  },
+  "table": {
+    "copyTable": "جدول کاپي کړئ",
+    "downloadTable": "جدول ډاونلوډ کړئ",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "په CSV کې صادر شو",
+    "copyFailed": "جدول کاپي نه شو"
+  },
+  "backup": {
+    "intro": {
+      "title": "خپل چټونه خوندي بکاپ کړئ — په خوندي ډول",
+      "body": "ستاسې خبرې اترې په دې وسیله کې کوډ کېږي مخکې له دې چې پورته شي. موږ هېڅکله ستاسې چټونه نه شو لوستلی.",
+      "keyWarning": "د بېرته راګرځولو کیلي یوازې په دې وسیله جوړیږي. موږ نه شو ورته لاسرسی لرلی او نه یې درته بېرته راګرځولی شو — د دې کیلي له لاسه ورکول، بکاپ له لاسه ورکول دي.",
+      "create": "زما کیلي جوړه او بکاپ کړئ",
+      "decline": "اوس نه — چټونه یوازې په دې وسیله وساتئ"
+    },
+    "ceremony": {
+      "titleCreate": "د بېرته راګرځولو کیلي خوندي کړئ",
+      "titleRotate": "خپله نوې کیلي خوندي کړئ",
+      "titleView": "ستاسو د بېرته راګرځولو کیلي",
+      "description": "دا کیلي یوازېنی لاره ده چې بکاپ بلې وسیله ته بېرته راوګرځوئ. دا خوندي ځای کې وساتئ — موږ نه شو درته بېرته راګرځولی.",
+      "copy": "کاپي کړئ",
+      "copied": "کاپي شو!",
+      "download": ".txt ډاونلوډ کړئ",
+      "showQr": "QR کوډ ښکاره کړئ",
+      "hideQr": "QR کوډ پټ کړئ",
+      "savedCheckbox": "ما خپله بېرته راګرځولو کیلي خوندي ځای کې ساتلې ده",
+      "saveFirstHint": "له دوام مخکې خپله کیلي کاپي یا ډاونلوډ کړئ.",
+      "continue": "دوام ورکړئ",
+      "done": "ختم",
+      "cancel": "لغوه کړئ",
+      "cancelConfirmTitle": "بکاپ تنظیمول لغوه کړئ؟",
+      "cancelConfirmBody": "ستاسې چټونه به بکاپ نه شي. کولای شئ کله هم په تنظیماتو کې کوډ شوی بکاپ فعال کړئ.",
+      "cancelConfirmRotateBody": "ستاسو د بېرته راګرځولو کیلي مخکې بدله شوې ده. کولای شئ هر وخت په تنظیماتو کې یې وګورئ.",
+      "cancelConfirmConfirm": "هو، لغوه کړئ",
+      "cancelConfirmDismiss": "بېرته لاړ شئ",
+      "loadError": "ستاسو د بېرته راګرځولو کیلي په دې وسیله کې ونه شوې لوستلای."
+    },
+    "file": {
+      "heading": "د چټ بکاپ د بېرته راګرځولو کیلي",
+      "warning": "دا کیلي خوندي وساتئ. هر څوک چې دا ولري، ستاسې بکاپ لوستلای شي؛ که یې نه لرئ، بکاپ نه شي بېرته راوګرځول کیدلی."
+    },
+    "progress": {
+      "titleCreate": "ستاسې د بکاپ اماده کول",
+      "titleRotate": "ستاسې د بېرته راګرځولو کیلي بدلول",
+      "encrypting": "{count, plural, one { # مکالمه کوډ او بکاپ کېږي…} other { # مکالمې کوډ او بکاپ کېږي…}}",
+      "success": "{count, plural, one {بکاپ بشپړ شو. # مکالمه خوندي شوه.} other {بکاپ بشپړ شو. # مکالمې خوندي شوې.}}",
+      "error": "بکاپ ناکام شو. ستاسې چټونه لا هم په دې وسیله کې دي.",
+      "retry": "بیا هڅه وکړئ",
+      "close": "بند کړئ",
+      "done": "ختم"
+    },
+    "input": {
+      "label": "د بېرته راګرځولو کیلي",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "کیلي هېڅکله O، I یا L توري نه لري.",
+      "checksumError": "دغه کلی سم نه ښکاري — د ټايپ تېروتنه وګورئ.",
+      "formatError": "دا د بیا ترلاسه کولو کلی نه ښکاري.",
+      "incomplete": "نور ټايپ کړئ — د بیا ترلاسه کولو کلی ۵۶ توري لري.",
+      "valid": "کلی سم ښکاري."
+    },
+    "restore": {
+      "title": "خپلې خبرې بیرته راواخلئ",
+      "successTitle": "بک اپ بیرته راوګرځول شو",
+      "promptBody": "ستاسو اکاونټ لپاره یو کوډ شوی بک اپ موندل شوی. دا وسیله کې د بیا ترلاسه کولو لپاره خپل د ریکوري کلی داخل کړئ.",
+      "submit": "بک اپ بیرته راوګرځوئ",
+      "skip": "تېر شئ — په دې وسیله نوې پیل وکړئ",
+      "restoring": "ستاسو خبرې ډيکرپتېږي او بیرته راګرځول کېږي…",
+      "successBody": "{count, plural, one {# گفتگو بیرته راوګرځول شوه.} other {# گفتگوګانې بیرته راوګرځول شوې.}}",
+      "wrongKey": "دا کلی سم دی، خو دا بک اپ نه خلاصولای. که مو کلی بدل کړی وي، نو نوی کلی استعمال کړئ.",
+      "corrupt": "دا بک اپ نه شي لوستل کېدای — ښايي خراب شوی وي. کولای شئ په دې وسیله نوې پیل وکړئ یا بیا وروسته هڅه وکړئ.",
+      "networkError": "د بک اپ خدمت ته لاسرسی ونه شو. خپله اړیکه وګورئ او بیا هڅه وکړئ.",
+      "tryAgain": "بل کلی وازمويئ",
+      "close": "خلاص شو"
+    },
+    "enterKey": {
+      "title": "خپل نوی د ریکوري کلی داخل کړئ",
+      "body": "ستاسو د بیا ترلاسه کولو کلی په بله وسیله بدل شوی. د نوې بیک اپ لپاره نوی کلی داخل کړئ.",
+      "submit": "دا کلی وکاروئ"
+    },
+    "banner": {
+      "keyMismatchTitle": "بک اپ ګانې تم شوې — ستاسو د ریکوري کلی په بله وسیله بدل شوی.",
+      "enterNewKey": "نوی کلی داخل کړئ",
+      "resetBackup": "بک اپ ریسیټ کړئ",
+      "resetConfirmTitle": "بک اپ د دې وسیله له کلۍ سره ریسیټ کړئ؟",
+      "resetConfirmBody": "شExisting بک اپ به د دې وسیلې خبرو سره بدل شي، او د دې وسیله د کلۍ سره به کوډ شي. نوري وسیلې به د دې وسیله د بیا ترلاسه کولو کلی ته اړتیا ولري.",
+      "resetConfirmAction": "بک اپ ریسیټ کړئ",
+      "remoteMissingTitle": "ستاسو بک اپ نور سرور کې نشته. بک اپ ګانې تم شوې.",
+      "backUpAgain": "بیا بک اپ وکړئ",
+      "dismiss": "وتړئ"
+    },
+    "rotate": {
+      "confirmTitle": "خپل د بیا ترلاسه کولو کلی بدل کړئ؟",
+      "confirmBody": "ستاسو بک اپ به له نوې کلۍ سره بیا کوډ شي او پخوانۍ کلی به کار ونه کړي. باید نوې کلی خوندي وساتئ او نورو وسایلو کې داخل کړئ.",
+      "confirmAction": "کلی بدل کړئ"
+    },
+    "toast": {
+      "enrollLater": "کولی شئ کوډ شوی بک اپ هر وخت د ترتیباتو څخه فعال کړئ.",
+      "keyUpdated": "د بیا ترلاسه کولو کلی اپډیټ شو. بک اپونه بیا پیل شول.",
+      "resetDone": "بک اپ د دې وسیله له کلۍ سره ریسیټ شو.",
+      "backupRestarted": "بک اپ بیا جوړ شو.",
+      "opFailed": "یوه ستونزه رامنځته شوه. مهرباني وکړئ بیا هڅه وکړئ."
+    },
+    "settings": {
+      "statusOn": "بک اپ فعال دی",
+      "statusOff": "بک اپ غیرفعال دی",
+      "offDescription": "ستاسو خبرې یوازې په دې براوزر کې دي. د خوندي ساتلو او نورو وسایلو ته د انتقال لپاره کوډ شوی بک اپ فعال کړئ. خبرې مو یوازې ستاسو په وسیله کوډېږي — موږ یې هېڅکله نشو لوستلای.",
+      "turnOn": "بک اپ فعال کړئ",
+      "restoreTitle": "ستاسو اکاونټ لپاره یو بک اپ شته",
+      "restoreDescription": "دا وسیله کې د بیرته راوګرځولو لپاره خپل د ریکوري کلی داخل کړئ.",
+      "restore": "بک اپ بیرته راوګرځوئ",
+      "lastBackup": "وروستی بک اپ: {time}",
+      "lastBackupNever": "تر اوسه هیچا بک اپ نه دی بشپړ شوی",
+      "keyFingerprint": "کلی ····-{tail}",
+      "syncState": {
+        "idle": "د همغږۍ لپاره انتظار",
+        "syncing": "بک اپ کېږي…",
+        "ok": "اوسمهال شوی",
+        "keyOutOfDate": "تم شوی — د ریکوري کلی په بله وسیله بدل شوی",
+        "remoteMissing": "درول شوی — بیک اپ له سرور څخه لرې شوی",
+        "error": "وروستۍ بیک اپ هڅه ناکامه شوه"
+      },
+      "backUpNow": "اوس بیک اپ وکړئ",
+      "backUpNowSuccess": "بیک اپ بشپړ شو",
+      "backUpNowFailure": "بیک اپ ناکام شو — ستاسې چټونه په دې وسیله کې همداسې پاتې دي",
+      "viewKey": "د بیا ترلاسه کولو کلید وګورئ",
+      "changeKey": "د بیا ترلاسه کولو کلید بدل کړئ",
+      "dangerTitle": "خطر زون",
+      "turnOffDelete": "بیک اپ بند او حذف کړئ",
+      "turnOffConfirmTitle": "بیک اپ بند کړئ؟",
+      "turnOffConfirmMessage": "دا به ستاسې بیک اپ زموږ له سرورونو څخه د ټولو وسایلو لپاره حذف کړي. چټونه په دې وسیله کې ساتل کېږي. وروسته کولای شئ بیک اپ د نوي کلید سره بیا فعال کړئ.",
+      "turnOffConfirmAction": "بیک اپ حذف کړئ",
+      "turnOffSuccess": "بیک اپ بند او حذف شو",
+      "turnOffFailure": "بیک اپ حذف نشو. مهرباني وکړئ بیا هڅه وکړئ."
+    }
+  },
+  "memories": {
+    "title": "یادښتونه",
+    "description": "مرستندویه ته اجازه ورکړئ ستاسې مهم معلومات ـ لکه ستاسې دنده، خوښې او روانې پروژې ـ یاد وساتي او په مختلفو خبرو کې ترې ګټه واخلي.",
+    "enableToggle": "یادښتونه فعال کړئ",
+    "privacyNote": "معلومات یوازې په همدې براوزر کې ساتل کېږي او ستاسې چټونو ته د ځانګړي ځواب لپاره شاملېږي.",
+    "empty": "لا تر اوسه هیڅ یادښت نشته. مهم معلومات له خبرو څخه په اتومات ډول خوندي کېږي.",
+    "savedOn": "خوندي شو {date}",
+    "deleteMemory": "یادښت حذف کړئ",
+    "clearAll": "ټول یادښتونه پاک کړئ",
+    "clearAllConfirmQuestion": "ټول یادښتونه حذف کړئ؟ دا به نه بېرته راګرځول کېږي.",
+    "clearAllConfirm": "ټول حذف کړئ",
+    "cancel": "لغوه کړئ"
+  },
+  "contextWindow": {
+    "label": "د متن کړکۍ",
+    "value": "{count} پیغامونه",
+    "fewer": "کم پیغامونه",
+    "more": "ډېر پیغامونه",
+    "description": "له دې محدودیت څخه زاړه پیغامونه لنډیز کېږي او د متن حیثیت لري."
+  },
+  "agentAccess": {
+    "title": "د اجنټ لاسرسی",
+    "description": "کنټرول کړئ کوم کاروونکي کولی شي شریکی Foundry اجنټونه وکاروي. رولونه یوازې نور محدودیت زیاتوي ـ د کارونکي Azure لاسرسی چې څه اجازه نه ورکوي، هیچا ته نه ورکول کېږي.",
+    "backToChat": "بېرته چټ ته",
+    "loading": "اجنټونه او رولونه پورته کېږي…",
+    "loadError": "د اجنټ لاسرسي معلومات پورته نشول.",
+    "rulesUnavailableWarning": "لاسرسي رولونه له ذخیرې څخه ونه شوای پورته کېدلی. د اجنټ فعالول دا مهال بند دي او رولونه نه شي ایډیټ کېدلی.",
+    "retry": "بیا هڅه وکړئ",
+    "rulesTab": "د اجنټ رولونه",
+    "localAdminsTab": "محلي ادمینان",
+    "noAgents": "د مدیریت لپاره هیڅ اجنټ نشته.",
+    "sourceLabel": "سرچینه",
+    "notDiscoverable": "تاسې ته نه ښکاري",
+    "notDiscoverableHint": "دې اجنټ ته رول شته، خو ستاسې د موندنې په لست کې نه دی — کېدای شي نوم یې بدل شوی وي، Azure لاسرسی مو نه لري، یا رول کې تاسې نشته.",
+    "accessEveryone": "ټول",
+    "accessRestricted": "محدود",
+    "edit": "سمول",
+    "updatedByLine": "ورستۍ ځل تازه شو د {user} لخوا په {date}",
+    "accessTypeLabel": "څوک دا اجنټ کارولی شي",
+    "everyoneDescription": "هرڅوک چې دمخه د Azure له لارې دې اجنټ ته لاسرسی لري.",
+    "restrictedDescription": "یوازې لاندې کاروونکي او ډومېنونه.",
+    "allowDomainsLabel": "اجازه ورکړل شوي ډومېنونه",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "اجازه لرونکي کاروونکي",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "د داخل کیلي ټینګ کړئ د زیاتولو لپاره",
+    "removeChip": "لرې کړئ",
+    "groupsLabel": "اجازه لرونکې ډلې",
+    "groupsPendingConsent": "د ډلې پراساس لاسرسی د کرایه ورکوونکي مدیر د تایید په انتظار کې دی او لا تر اوسه نشي تنظیمېدای.",
+    "restrictedEmptyWarning": "هیڅ کارونکي یا ډومېن نه دي لیست شوي — هیڅوک به ونه شي کولای دا ایجنټ وکاروي.",
+    "save": "ثبت کړئ",
+    "saving": "ثبتېږي…",
+    "cancel": "لغوه کړئ",
+    "saveSuccess": "د لاسرسي قانون ثبت شو.",
+    "deleteSuccess": "د لاسرسي قاعده لرې شوه — اوس هر څوک کولی شي دا ایجنټ وکاروي.",
+    "saveError": "ثبت نه شو. مهرباني وکړئ بیا هڅه وکړئ.",
+    "conflictError": "بل چا دا بدله کړې ده کله چې تاسو سمون ورکاوه. د وروستي نسخې لپاره بیا پورته (Reload) کړئ او بیا خپل بدلون وکړئ.",
+    "reload": "بیا پورته کړئ",
+    "localAdminsDescription": "د ځانګړو ایجنټانو لپاره د قواعدو مدیریت وویشئ پرته له بیا نصبونې. سیمه ییز مدیران یوازې د هغو ایجنټانو قواعد سمولای شي چې هغوی ته سپارل شوي وي.",
+    "noLocalAdmins": "هیڅ سیمه ییز مدیر نه دی تنظیم شوی.",
+    "addLocalAdmin": "سیمه ییز مدیر اضافه کړئ",
+    "emailLabel": "بریښنالیک",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "سیمه ییز مدیر لرې کړئ",
+    "delegatedAgentsLabel": "سپارل شوي ایجنټان",
+    "noDelegatedAgents": "هیڅ ایجنټ نه شته چې سپارل شي.",
+    "unknownAgentKey": "ناپیژندل شوی ایجنټ کیلي",
+    "configSaveSuccess": "سیمه ییز مدیران ثبت شول.",
+    "configConflictError": "بل چا د سیمه ییزو مدیرانو لیست بدل کړی دی کله چې تاسې سمون ورکاوه. بیا پورته کړئ، او بیا هڅه وکړئ.",
+    "addAgent": "ایجنټ اضافه کړئ",
+    "newPromptAgentTitle": "نوی پرامپټ ایجنټ",
+    "editPromptAgentTitle": "د پرامپټ ایجنټ سمون",
+    "agentNameLabel": "نوم",
+    "agentNamePlaceholder": "لکه: د سفر مشاور",
+    "agentDescriptionLabel": "توضیحات",
+    "agentDescriptionPlaceholder": "کاروونکو ته د ماډل ټاکلو کې ښکاره کېږي",
+    "agentSystemPromptLabel": "سیسټم پرامپټ",
+    "agentSystemPromptPlaceholder": "لارښوونې چې د دې ایجنټ چلند ټاکي",
+    "agentModelLabel": "ماډل",
+    "agentModelPlaceholder": "ماډل انتخاب کړئ…",
+    "agentModelUnavailable": "{modelId} (شتون نه لري)",
+    "agentModelUnknownError": "انتخاب شوی ماډل نور نشته. بل ماډل وټاکئ او بیا یې ذخیره کړئ.",
+    "promptAgentBadge": "پرامپټ ایجنټ",
+    "editAgent": "ایجنټ سم کړئ",
+    "deleteAgent": "حذف کړئ",
+    "deleteAgentConfirm": "ایا غواړئ دا ایجنټ د ټولو لپاره حذف کړئ؟ دا به د ماډل ټاکلو نه ورک شي؛ شته خبرو اترو کې یې تاریخ پاته کېږي.",
+    "confirmDeleteAgent": "هو، حذف کړئ",
+    "promptAgentCreateSuccess": "پرامپټ ایجنټ جوړ شو.",
+    "promptAgentSaveSuccess": "پرامپټ ایجنټ ذخیره شو.",
+    "promptAgentDeleteSuccess": "پرامپټ ایجنټ حذف شو.",
+    "promptAgentsUnavailableWarning": "پرامپټ ایجنټونه له ذخیرې څخه نشي لوستل کېدای. اوس یې نشئ سمولای.",
+    "agentsTab": "اجنټان",
+    "connectorsTab": "نښلوونکي",
+    "addConnector": "نوی نښلوونکی اضافه کړئ",
+    "noConnectors": "تر اوسه نښلوونکی نشته.",
+    "connectorsUnavailableWarning": "د نښلوونکو زیرمتون ته لاسرسی نشو کولی، نو دا لست کېدای شي بشپړ نه وي. تر بار شي پورې بدیل مه جوړوئ.",
+    "editAccess": "لاسرسی سمول",
+    "deleteConnector": "ړنګول",
+    "deleteConnectorConfirm": "دا نښلوونکی ړنګ کړئ؟ هر څوک چې یې کاروي، سملاسي به لاسرسی له لاسه ورکړي.",
+    "confirmDeleteConnector": "نښلوونکی ړنګ کړئ",
+    "connectorSaveSuccess": "نښلوونکی خوندي شو.",
+    "connectorCreateSuccess": "نښلوونکی جوړ شو.",
+    "connectorDeleteSuccess": "نښلوونکی ړنګ شو.",
+    "editConnectorTitle": "نښلوونکی سمول",
+    "newConnectorTitle": "نوی نښلوونکی",
+    "connectorPresetLabel": "د قالب څخه پیل وکړئ",
+    "connectorPresetNone": "له پيله پیل کړئ",
+    "connectorNameLabel": "نوم",
+    "connectorDescriptionLabel": "توضیحات",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "له ذخیره کولو مخکې، د URL کې {placeholder} د خپل ارزښت سره بدل کړئ.",
+    "connectorTransportLabel": "ټرانسپورټ",
+    "connectorAuthLabel": "تصدیق",
+    "connectorAuthNone": "هیڅ",
+    "connectorAuthBearer": "ټوکین (هر کاروونکی خپل ټوکین ورکوي)",
+    "connectorAuthOauth": "OAuth ننوتل",
+    "connectorSealingUnavailable": "OAuth نشته: په دې نصب کې د AUTH_SECRET تنظیم ندی شوی چې د پټنومونو د کوډ کولو لپاره ترې ګټه واخیستل شي.",
+    "connectorTokenHelpLabel": "د ټوکین لارښوونو لینک (اختیاري)",
+    "connectorClientIdLabel": "د OAuth پیرودونکي ID",
+    "connectorClientSecretLabel": "د OAuth پیرودونکي پټنوم",
+    "connectorClientSecretStored": "پټنوم خوندي شوی دی. که وغواړئ همدا وساتئ، تش پرېږدئ؛ که نوي غواړئ، نوی ولیکئ.",
+    "connectorClientSecretHint": "د ذخیره کولو مخکې کوډ (Encrypted) کیږي، او بیا به نه ښکاري.",
+    "connectorScopesLabel": "Scopes (جلا جلا له ځای سره، اختیاري)"
+  },
+  "localModels": {
+    "title": "محلي ماډلونه",
+    "description": "پر دې کمپیوټر چلېدونکو ماډلونو سره چټ وکړئ. پیغامونه نېغ په نېغه له ستاسو براوزر څخه ځایي اپ ته لیږل کېږي او هیڅکله زموږ سرورونو ته نه ځي — ځوابونه، د خبرو اترو سرلیکونه او لنډیزونه ټول ستاسو په وسیله پاتې کېږي.",
+    "detect": "محلي چاپېریالونه وپېژنئ",
+    "detecting": "پېژندنه روانه ده…",
+    "experimental": "تجربوي",
+    "portLabel": "پورټ",
+    "statusUnknown": "تر اوسه نه دی کتل شوی.",
+    "statusChecking": "معاینه روانه ده…",
+    "statusReady": "{count, plural, =0 {وصل دی، خو ماډل نه دی پورته شوی.} one {وصل دی — # ماډل شته.} other {وصل دی — # ماډلونه شته.}}",
+    "statusNotRunning": "{label} ته لاسرسی نشته. وګورئ چې دا پورټ فعاله دی او براوزر ته له دې سایټ څخه ځایي اپ ته د لاسرسي اجازه ورکړل شوې ده.",
+    "statusHttpError": "{label} د خطا پیغام ورکړ. د دې لاګونه وګورئ.",
+    "corsHelp": {
+      "ollama": "Ollama روان دی، خو له دې سایټ څخه غوښتنې نه مني. OLLAMA_ORIGINS ته د دې سایټ پته ورکړئ، Ollama بیا پیل کړئ، بیا یې وپېژنئ.",
+      "lmstudio": "LM Studio روان دی، خو له دې سایټ څخه غوښتنې نه مني. د دې په ځایي سرور امستنو کې CORS فعال کړئ، بیا یې وپېژنئ.",
+      "llamacpp": "llama.cpp روان دی، خو له دې سایټ څخه غوښتنې نه مني. llama-server د cross-origin غوښتنو سره پیل کړئ، بیا یې وپېژنئ."
+    },
+    "privacyNote": "محلي ماډلونه د فایل د ضمیمو، انځورونو، ویب لټون یا کنیکټرونو ملاتړ نه کوي — د دې لپاره زموږ سرورونه پکار دي. پېژندنه یوازې دا کمپیوټر ګوري."
+  },
+  "urlFetch": {
+    "sourceFallback": "ویب پاڼه",
+    "fallbackHint": "تاسو کولای شئ پاڼه خلاصه کړئ، متن نقل کړئ او دلته یې ونښلوئ.",
+    "shortExtract": "یوازې یو لنډه برخه لوستله کېدله — کېدای شي دا پاڼه پیسو ته اړتیا ولري یا ننوتل غواړي.",
+    "errors": {
+      "invalidUrl": "دا داسې نه ښکاري چې یوه معتبره ویب پته وي.",
+      "ssrfBlocked": "دا پته د امنیتي دلیلونو له مخې نه شي اخیستل کېدلی.",
+      "tooManyRedirects": "دا لینک ډېر ځل یاستون ته واوښت.",
+      "timeout": "پاڼه ځواب ویلو ته ډېر وخت نیسي.",
+      "unreachable": "پاڼې ته لاسرسی نشو ترلاسه کولای.",
+      "blocked": "سایټ غوښتنه رد کړه — کېدای شي ننوتلو ته اړتیا ولري یا اتومات لوستونکي بند کړي وي.",
+      "notFound": "دغه پاڼه ونه موندل شوه.",
+      "upstream": "سایټ یوه تېروتنه ښکاره کړه.",
+      "pdf": "دغه لینک PDF دی. فایل ډاونلوډ کړئ او د attach تڼۍ وکاروئ.",
+      "nonHtml": "دغه لینک یوه ویب پاڼه نه ده چې لوستلای شو.",
+      "tooLarge": "دغه پاڼه د رااخیستلو لپاره ډېره لویه ده.",
+      "empty": "په دغه پاڼه کې د لوستلو وړ مقاله ونه موندل شوه.",
+      "generic": "پاڼه رااخیستل نشوه."
+    },
+    "fetchingFile": "{host} راوړل کېږي…",
+    "attachLink": "لینک نښلول",
+    "attachLinkTitle": "ویب پاڼه نښلول",
+    "attachLinkDescription": "پاڼه راوړل کېږي او لوستلو وړ متن یې ستاسو پیغام ته نښلول کېږي.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "راواخله او ونښلوه",
+    "attachLinkInvalid": "دا یو درست ویب آدرس نه ښکاري.",
+    "linkBadge": "د لینک څخه",
+    "couldNotRetrieve": "ترلاسه نشو",
+    "doc": {
+      "sourceLabel": "سرچینه",
+      "retrievedLabel": "ترلاسه شو",
+      "attemptedLabel": "هڅه وشوه",
+      "failureHeading": "ویب پاڼه ترلاسه نشوه"
+    },
+    "settingsTitle": "پیغامونو کې لینکونه",
+    "settingsToggle": "خپلې پیسټ شوې لینکونه اتومات راوړه",
+    "settingsDescription": "کله چې یوازې یو لینک پیسټ کړئ، پاڼه راوړل کېږي او متن یې نښلول کېږي څو اسسټنټ یې ولولي. که دا بنده کړئ، پیسټ شوې لینکونه به ساده متن پاتې شي — تاسې لا هم د + مېنو نه یو لینک لاسوند کولی شئ.",
+    "addLink": "لینک اضافه کړئ"
+  },
+  "cameraAccessError": "کمرې ته لاسرسی نشو کولی. د خپلې کمرې اجازې وګورئ او بیا هڅه وکړئ.",
+  "cameraUnnamedDevice": "کمره",
+  "pastedText": {
+    "fallbackName": "پیچل شوی متن",
+    "charCount": "{count, number} توري",
+    "removeChip": "پیچل شوی متن “{name}” لرې کړئ",
+    "blockLabel": "پیچل شوی متن: {name}",
+    "doc": {
+      "heading": "پیچل شوی متن",
+      "pastedLabel": "پیچل شوی"
+    },
+    "settingsTitle": "لوی پیچونه",
+    "settingsToggle": "لوی پیچ د فایل ضمیمه کړئ",
+    "settingsDescription": "که له لاندې محدودیت څخه زیات متن پیس کړئ، دا د فایل په ډول ضمیمه کیږي نه چې پیغام بکس ته ځای شي. متن هماغسې کارول کېږي، بدلون یا تر لاسه کېدل نه پکې کیږي.",
+    "settingsThresholdLabel": "پیچونه چې له دې څخه اوږده وي، ضمیمه کړئ",
+    "settingsThresholdUnit": "توري",
+    "settingsThresholdHint": "د {min, number} او {max, number} تورو ترمنځ."
+  },
+  "structures": {
+    "section": "جوړښتونه",
+    "sectionSubtitle": "خوندي شوي د ساحو تعریفونه. له دې څخه یو د استخراج لپاره وکاروئ یا د معلوماتو جدول لپاره د پیل سکیمه ګڼه.",
+    "loadFromStructure": "جوړښت راوړل",
+    "loadFromStructureTitle": "دا ستوني د خوندي شوي جوړښت سره بدل کړئ",
+    "pickerEmpty": "تر اوسه هېڅ جوړښت ندی خوندي شوی.",
+    "pickerTitle": "یو خوندي شوی جوړښت راوړئ",
+    "saveAsStructure": "د جوړښت په توګه خوندي کړئ",
+    "saveAsStructureTitle": "دا ستوني خپل د جوړښتونو کتابتون ته خوندي کړئ",
+    "savedToast": "جوړښت خوندي شو “{name}”",
+    "namePlaceholder": "د جوړښت نوم",
+    "fieldCount": "{count} ساحې",
+    "fieldCountOne": "۱ ساحه",
+    "downgradedNotice": "{count} ساحې یوازې ټکي ته ساده شوې ـ جدول هر حجره کې یواځې یو ارزښت لري: {names}",
+    "truncatedNotice": "{count} ساحې لیرې شوې ـ د جدول حد {max} ستنه دی: {names}",
+    "skippedDerivedNotice": "{count} محاسبه شوي ستنې خوندي نشوې ـ فارمولاوې د جدول ستنو ته راجع دي: {names}",
+    "loadReplacesColumns": "اوسني ستنې به بدل شي. پخوانۍ قطارونه یوازې هغه ارزښتونه ساتي چې د ستنې نومونه یې برابر وي."
   }
 }

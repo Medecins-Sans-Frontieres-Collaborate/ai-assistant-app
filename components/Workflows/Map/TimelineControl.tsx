@@ -7,6 +7,7 @@ import {
 
 import { useLocale, useTranslations } from 'next-intl';
 
+import { MapTimelapseSettings } from '@/lib/utils/shared/geo/timelapsePacing';
 import {
   TimelineScale,
   msToStep,
@@ -14,6 +15,8 @@ import {
   segmentLabel,
   stepToMs,
 } from '@/lib/utils/shared/geo/timelineScale';
+
+import { TimelapsePacingMenu } from './TimelapsePacingMenu';
 
 interface TimelineControlProps {
   scale: TimelineScale;
@@ -25,6 +28,8 @@ interface TimelineControlProps {
   onShowUndatedChange: (value: boolean) => void;
   /** Features active at the current time (after filters). */
   activeCount: number;
+  pacing: MapTimelapseSettings;
+  onPacingChange: (settings: Partial<MapTimelapseSettings>) => void;
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -48,6 +53,8 @@ export function TimelineControl({
   showUndated,
   onShowUndatedChange,
   activeCount,
+  pacing,
+  onPacingChange,
 }: TimelineControlProps) {
   const t = useTranslations('workflows');
   const locale = useLocale();
@@ -127,6 +134,8 @@ export function TimelineControl({
           )}
         </button>
 
+        <TimelapsePacingMenu pacing={pacing} onChange={onPacingChange} />
+
         {!multiEra && (
           <span className="w-20 shrink-0 text-xs text-gray-500 dark:text-gray-400">
             {formatTick(scale.minMs, currentSegment.stepMs)}
@@ -147,7 +156,8 @@ export function TimelineControl({
         />
         {!multiEra && (
           <span className="w-20 shrink-0 text-xs text-gray-500 dark:text-gray-400">
-            {formatTick(scale.maxMs, currentSegment.stepMs)}
+            {/* maxMs is exclusive — caption the last covered instant. */}
+            {formatTick(scale.maxMs - 1, currentSegment.stepMs)}
           </span>
         )}
 

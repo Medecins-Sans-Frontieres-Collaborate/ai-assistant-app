@@ -9,9 +9,14 @@ import {
   successResponse,
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
-import { isTranslationCriterionId } from '@/lib/utils/shared/translation/qualityCriteria';
+import {
+  CustomCriterionDefinition,
+  collectCustomCriteria,
+  isCustomCriterionId,
+} from '@/lib/utils/shared/review/customCriteria';
+import { isTranslationBuiltinCriterionId } from '@/lib/utils/shared/translation/qualityCriteria';
 
-import { GlossaryEntry, TranslationCriterionId } from '@/types/workflow';
+import { GlossaryEntry } from '@/types/workflow';
 
 import { auth } from '@/auth';
 
@@ -20,12 +25,14 @@ export const maxDuration = 300;
 const MAX_TEXT_CHARS = 60_000;
 const MAX_LANGUAGE_LABEL_CHARS = 80;
 const MAX_GLOSSARY_ENTRIES = 500;
+const MAX_CRITERIA = 24;
 
 interface TranslationAssessRequest {
   sourceText: string;
   translation: string;
   targetLanguage: string;
-  criteria: TranslationCriterionId[];
+  criteria: string[];
+  customCriteria?: CustomCriterionDefinition[];
   glossaryEntries?: GlossaryEntry[];
   modelId?: string;
 }
@@ -65,7 +72,18 @@ export async function POST(req: NextRequest) {
   if (!Array.isArray(body.criteria) || body.criteria.length === 0) {
     return badRequestResponse('At least one criterion is required');
   }
-  if (!body.criteria.every(isTranslationCriterionId)) {
+  const criterionIds = [...new Set(body.criteria)];
+  if (criterionIds.length > MAX_CRITERIA) {
+    return badRequestResponse('Too many criteria');
+  }
+
+  // Two-phase: keep only well-formed custom definitions, then require every
+  // requested custom id to have one. A criterion with no usable rubric is
+  // rejected rather than reaching the model as a blank line.
+  const customById = collectCustomCriteria(body.customCriteria);
+  for (const id of criterionIds) {
+    if (isTranslationBuiltinCriterionId(id)) continue;
+    if (isCustomCriterionId(id) && customById.has(id)) continue;
     return badRequestResponse('Unknown criterion');
   }
 
@@ -85,7 +103,8 @@ export async function POST(req: NextRequest) {
       // client's working text, so no trimming beyond the emptiness check.
       translation: body.translation,
       targetLanguage,
-      criterionIds: [...new Set(body.criteria)],
+      criterionIds,
+      customById,
       glossaryEntries,
       modelId: resolveWorkflowModelId(body.modelId),
     });

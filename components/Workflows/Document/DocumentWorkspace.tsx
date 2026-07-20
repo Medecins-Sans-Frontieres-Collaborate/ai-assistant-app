@@ -13,10 +13,15 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import type { ExportFormat } from '@/client/hooks/document/exportFormats';
+import { useAutoFocusComposer } from '@/client/hooks/ui/useAutoFocusComposer';
+import { usePasteComposer } from '@/client/hooks/ui/usePasteComposer';
+import { useEditPreview } from '@/client/hooks/workflows/useEditPreview';
+import { usePastedTextChips } from '@/client/hooks/workflows/usePastedTextChips';
 import { useWorkflowStream } from '@/client/hooks/workflows/useWorkflowStream';
 
 import { assessDocument } from '@/client/services/workflows/documentAssessment';
 import { uploadAndExtractText } from '@/client/services/workflows/fileTextExtraction';
+import { nameWorkflowConversation } from '@/client/services/workflows/workflowTitle';
 
 import {
   downloadFile,
@@ -28,6 +33,7 @@ import {
 } from '@/lib/utils/shared/document/exportUtils';
 import {
   autoConvertToHtml,
+  isEmptyDocHtml,
   markdownToHtml,
 } from '@/lib/utils/shared/document/formatConverter';
 import {
@@ -39,6 +45,15 @@ import {
   applyEdit,
   applyEditsInOrder,
 } from '@/lib/utils/shared/review/editApplication';
+import {
+  hasResolvedEdits,
+  invertPatch,
+  withoutResolvedEdits,
+} from '@/lib/utils/shared/review/reviewQueue';
+import {
+  DirectApplyReason,
+  planRevision,
+} from '@/lib/utils/shared/review/revisionSuggestions';
 import { stringHash } from '@/lib/utils/shared/stringHash';
 
 import { Message, MessageType } from '@/types/chat';
@@ -48,13 +63,16 @@ import {
   ReviewEditStatus,
 } from '@/types/workflow';
 
+import { ConfirmDialog } from '@/components/UI/ConfirmDialog';
 import { DropdownPortal } from '@/components/UI/DropdownPortal';
 import { ExportFormatMenu } from '@/components/UI/ExportFormatMenu';
 
+import { PastedTextChips } from '../Shared/PastedTextChips';
 import { AssessmentPanel } from '../Shared/Review/AssessmentPanel';
+import { CriteriaManager } from '../Shared/Review/CriteriaManager';
 import { CriteriaPicker } from '../Shared/Review/CriteriaPicker';
+import { EditQuickActions } from '../Shared/Review/EditQuickActions';
 import { WorkflowWorkspaceProps } from '../registry';
-import { CriteriaManager } from './CriteriaManager';
 import { DocumentProfilePanel } from './DocumentProfilePanel';
 import { ReferencePanel } from './ReferencePanel';
 import {
@@ -62,6 +80,7 @@ import {
   RichTextEditor,
   RichTextEditorHandle,
 } from './RichTextEditor';
+import { SourceEditor } from './SourceEditor';
 import { SpecManager } from './SpecManager';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
@@ -71,6 +90,26 @@ import { v4 as uuidv4 } from 'uuid';
 
 /** Streaming preview refresh interval — full re-parse of markdown → HTML. */
 const STREAM_RENDER_INTERVAL_MS = 300;
+
+/**
+ * Criterion id for edits that came from a revision request rather than a
+ * quality assessment. Not one of DOCUMENT_QUALITY_CRITERIA — the review UI
+ * resolves it through the assessment's `labels` map instead.
+ */
+const REVISION_CRITERION = 'revision';
+
+/**
+ * Rail note explaining why a revision was written straight in despite
+ * "Suggest changes" being ticked. Reasons the user did not ask about
+ * (`disabled`, `generate`) get no note — nothing surprising happened.
+ */
+const FALLBACK_NOTE_KEYS: Partial<Record<DirectApplyReason, string>> = {
+  selection: 'document.fallbackSelection',
+  largeRewrite: 'document.fallbackLargeRewrite',
+  reorder: 'document.fallbackReorder',
+  unanchorable: 'document.fallbackUnanchorable',
+  noChanges: 'document.fallbackNoChanges',
+};
 
 function extractTitle(markdown: string): string {
   const match = markdown.match(/^#\s+(.+)$/m);
@@ -99,6 +138,26 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const documentSpecs = useSettingsStore((s) => s.documentSpecs);
   const documentCriteria = useSettingsStore((s) => s.documentCriteria);
   const tones = useSettingsStore((s) => s.tones);
+  const addDocumentCriterion = useSettingsStore((s) => s.addDocumentCriterion);
+  const updateDocumentCriterion = useSettingsStore(
+    (s) => s.updateDocumentCriterion,
+  );
+  const deleteDocumentCriterion = useSettingsStore(
+    (s) => s.deleteDocumentCriterion,
+  );
+  const autoClearResolvedEdits = useSettingsStore(
+    (s) => s.autoClearResolvedEdits,
+  );
+  const setAutoClearResolvedEdits = useSettingsStore(
+    (s) => s.setAutoClearResolvedEdits,
+  );
+  const suggestRevisionsDefault = useSettingsStore((s) => s.suggestRevisions);
+  const suggestRevisionsExceptions = useSettingsStore(
+    (s) => s.suggestRevisionsExceptions,
+  );
+  const suggestRevisionsLargeRewriteRatio = useSettingsStore(
+    (s) => s.suggestRevisionsLargeRewriteRatio,
+  );
 
   const [instruction, setInstruction] = useState('');
   const [streamHtml, setStreamHtml] = useState<string | null>(null);
@@ -109,6 +168,8 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const [specsOpen, setSpecsOpen] = useState(false);
   const [criteriaOpen, setCriteriaOpen] = useState(false);
   const [uploadingBasis, setUploadingBasis] = useState(false);
+  /** File awaiting the "replace the current document?" confirmation. */
+  const [pendingImport, setPendingImport] = useState<File | null>(null);
   const [selectedCriteria, setSelectedCriteria] = useState<Set<string>>(
     () =>
       new Set(
@@ -118,6 +179,14 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       ),
   );
   const [selection, setSelection] = useState<EditorSelection | null>(null);
+  /**
+   * Per-conversation override of the "Suggest changes" default. Null means
+   * "follow the setting" — deriving rather than seeding useState matters
+   * because the store hydrates from localStorage after first render, and a
+   * seeded copy would keep the pre-hydration default forever.
+   */
+  const [suggestOverride, setSuggestOverride] = useState<boolean | null>(null);
+  const suggestRevisions = suggestOverride ?? suggestRevisionsDefault;
   const exportButtonRef = useRef<HTMLButtonElement>(null);
   const basisInputRef = useRef<HTMLInputElement>(null);
   const editorRef = useRef<RichTextEditorHandle>(null);
@@ -128,14 +197,62 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
 
   const isRunning = run?.isRunning ?? false;
   const docHtml = state?.docHtml ?? '';
-  const hasDocument = docHtml.trim().length > 0;
+  // Not a plain length check: an editor that has been opened and left alone
+  // still reports `<p></p>`, which would count as "has a document" and both
+  // hide the import empty-state and push the first prompt into revise mode.
+  const hasDocument = !isEmptyDocHtml(docHtml);
 
   const assessment = state?.assessment;
   const hasUnresolvedEdits =
     assessment?.edits.some((e) => e.status === 'pending') ?? false;
+
+  // In-text preview of the review queue: pending edits are decorated in the
+  // editor, the active one opens into a full word diff, and a clicked span
+  // pins itself with inline accept/reject. Edits are written against
+  // markdown while the editor shows rendered HTML, so the decoration plugin
+  // locates them by visible text and skips any it cannot place.
+  const previewEdits = useMemo(
+    () => assessment?.edits.filter((e) => e.status === 'pending') ?? [],
+    [assessment],
+  );
+  const pendingIds = useMemo(
+    () => previewEdits.map((e) => e.id),
+    [previewEdits],
+  );
+  const preview = useEditPreview(pendingIds);
   const attachedSpec = documentSpecs.find((s) => s.id === state?.specId);
   const attachedTone = tones.find((tone) => tone.id === state?.toneId);
   const isBusy = isRunning || assessing || uploadingBasis;
+
+  // Stray typing and pasting land in the instruction composer. Unlike the
+  // bulk-paste fields, a wall of text here is almost always material the
+  // instruction refers to rather than the instruction itself, so it is held
+  // beside the composer and folded back in at run time.
+  const instructionRef = useRef<HTMLTextAreaElement>(null);
+  const composerBlocked = isBusy || hasUnresolvedEdits;
+  const {
+    chips,
+    hasChips,
+    attachPastedText,
+    removeChip,
+    clearChips,
+    composeWithChips,
+  } = usePastedTextChips();
+  const appendInstruction = useCallback(
+    (text: string) => setInstruction((prev) => prev + text),
+    [],
+  );
+  useAutoFocusComposer({
+    textareaRef: instructionRef,
+    enabled: !composerBlocked,
+    append: appendInstruction,
+  });
+  usePasteComposer({
+    textareaRef: instructionRef,
+    enabled: !composerBlocked,
+    append: appendInstruction,
+    onAttach: attachPastedText,
+  });
 
   const criteriaItems = useMemo(() => {
     const builtins = availableDocumentCriteria({
@@ -156,12 +273,14 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
 
   const resolveCriterionLabel = useCallback(
     (id: string) => {
+      // The labels snapshot wins for ANY id, not just custom ones: it also
+      // carries the name for revision-derived edits, whose criterion is the
+      // request rather than a quality rubric. Without this they would fall
+      // through to `document.criteria.revision.label`, which does not exist.
+      const snapshot = assessment?.labels?.[id];
+      if (snapshot) return snapshot;
       if (isCustomCriterionId(id)) {
-        return (
-          assessment?.labels?.[id] ??
-          documentCriteria.find((c) => c.id === id)?.name ??
-          id
-        );
+        return documentCriteria.find((c) => c.id === id)?.name ?? id;
       }
       return t(`document.criteria.${id}.label`);
     },
@@ -219,17 +338,36 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   }, [selectedCriteria, documentCriteria, attachedSpec, attachedTone]);
 
   const handleRun = useCallback(async () => {
-    const trimmed = instruction.trim();
-    if (!trimmed || isBusy || hasUnresolvedEdits || !state) return;
+    // Held pastes are part of the instruction, so a chip alone is enough to
+    // run — "rewrite this" with the material attached is a complete request.
+    if (
+      (!instruction.trim() && !hasChips) ||
+      isBusy ||
+      hasUnresolvedEdits ||
+      !state
+    ) {
+      return;
+    }
+    const trimmed = composeWithChips(instruction);
     clearError(conversationId);
 
     const mode: 'generate' | 'revise' = hasDocument ? 'revise' : 'generate';
     // Selection scope only applies to revisions of an existing document.
     const scopedSelection = mode === 'revise' ? selection : null;
-    snapshotRef.current = docHtml;
+    const priorMarkdown = hasDocument ? htmlToMarkdown(docHtml) : '';
+    // Whether this run is HEADED for the review queue. Decided up front only
+    // to choose the preview behaviour — the real decision needs the finished
+    // text and happens below.
+    const intendToSuggest =
+      suggestRevisions && mode === 'revise' && !scopedSelection;
     // Selection revisions land atomically on completion — no streaming
     // preview (the preview would misleadingly replace the whole document).
-    if (!scopedSelection) setStreamHtml(hasDocument ? docHtml : '');
+    // Suggested revisions suppress it for the same reason: the document is
+    // not changing, so watching it be rewritten and then snap back would be
+    // a lie about what happened.
+    if (!scopedSelection && !intendToSuggest) {
+      setStreamHtml(hasDocument ? docHtml : '');
+    }
 
     const references = state.references
       .map((ref) => ({
@@ -254,7 +392,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         },
         onText: (fullText) => {
           finalMarkdown = fullText;
-          if (scopedSelection) return; // atomic replace on completion
+          if (scopedSelection || intendToSuggest) return; // land on completion
           const now = Date.now();
           if (now - lastRenderRef.current >= STREAM_RENDER_INTERVAL_MS) {
             lastRenderRef.current = now;
@@ -262,6 +400,69 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           }
         },
       });
+
+      const plan = planRevision({
+        enabled: suggestRevisions,
+        mode,
+        scoped: scopedSelection !== null,
+        oldMarkdown: priorMarkdown,
+        newMarkdown: finalMarkdown,
+        exceptions: suggestRevisionsExceptions,
+        largeRewriteRatio: suggestRevisionsLargeRewriteRatio,
+      });
+
+      if (plan.kind === 'suggest') {
+        // The document is left exactly as it was; the rewrite becomes a queue
+        // of individually acceptable changes against the markdown the model
+        // was given, which is what `docMarkdown` has to be for `before` to
+        // keep matching.
+        updateWorkflowState(conversationId, (prev) => {
+          const p = prev as DocumentWorkflowState;
+          return {
+            ...p,
+            revisions: [
+              ...p.revisions,
+              {
+                id: uuidv4(),
+                instruction: trimmed,
+                at: new Date().toISOString(),
+              },
+            ],
+            assessment: {
+              id: uuidv4(),
+              criteria: [],
+              overallSummary: t('document.revisionSuggestionSummary', {
+                count: plan.changes.length,
+              }),
+              edits: plan.changes.map((change) => ({
+                id: uuidv4(),
+                criterion: REVISION_CRITERION,
+                before: change.before,
+                after: change.after,
+                reason: trimmed,
+                severity: 'minor' as const,
+                status: 'pending' as const,
+              })),
+              docMarkdown: priorMarkdown,
+              scope: 'document' as const,
+              labels: {
+                [REVISION_CRITERION]: t('document.revisionCriterionLabel'),
+              },
+              createdAt: new Date().toISOString(),
+            },
+            updatedAt: new Date().toISOString(),
+          };
+        });
+        setReviewOpen(true);
+        appendRailMessages(
+          trimmed,
+          t('document.suggestedSummary', { count: plan.changes.length }),
+        );
+        setInstruction('');
+        clearChips();
+        setStreamHtml(null);
+        return;
+      }
 
       let html: string;
       if (scopedSelection) {
@@ -299,18 +500,34 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           updatedAt: new Date().toISOString(),
         };
       });
-      if (title && conversation && !conversation.name) {
-        updateConversation(conversationId, { name: title });
+      // The document's own heading is authoritative once it exists, so it
+      // upgrades a name taken from a reference upload — but never one the
+      // user typed. No sample: there is nothing for a titler to improve on.
+      if (title) {
+        nameWorkflowConversation(conversationId, {
+          label: title,
+          workflow: 'Document',
+        });
       }
+      // Falling back is not a failure, but it IS a departure from what the
+      // ticked checkbox implied, so it is stated rather than left to be
+      // noticed by the document changing when the user expected suggestions.
+      const fallbackNote = FALLBACK_NOTE_KEYS[plan.reason];
       appendRailMessages(
         trimmed,
-        scopedSelection
-          ? t('document.revisedSelectionSummary')
-          : mode === 'generate'
-            ? t('document.generatedSummary')
-            : t('document.revisedSummary'),
+        [
+          scopedSelection
+            ? t('document.revisedSelectionSummary')
+            : mode === 'generate'
+              ? t('document.generatedSummary')
+              : t('document.revisedSummary'),
+          fallbackNote ? t(fallbackNote) : '',
+        ]
+          .filter(Boolean)
+          .join(' '),
       );
       setInstruction('');
+      clearChips();
       setStreamHtml(null);
     } catch {
       // Run store carries the error; restore the pre-run document view.
@@ -318,6 +535,9 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     }
   }, [
     instruction,
+    hasChips,
+    composeWithChips,
+    clearChips,
     isBusy,
     hasUnresolvedEdits,
     state,
@@ -328,21 +548,28 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     conversation,
     runWorkflowStream,
     updateWorkflowState,
-    updateConversation,
     appendRailMessages,
     buildWritingConstraints,
     clearError,
+    suggestRevisions,
+    suggestRevisionsExceptions,
+    suggestRevisionsLargeRewriteRatio,
     t,
   ]);
 
   const handleEditorChange = useCallback(
     (html: string) => {
       if (isRunning || hasUnresolvedEdits) return;
-      updateWorkflowState(conversationId, (prev) => ({
-        ...(prev as DocumentWorkflowState),
-        docHtml: html,
-        updatedAt: new Date().toISOString(),
-      }));
+      updateWorkflowState(conversationId, (prev) => {
+        const p = prev as DocumentWorkflowState;
+        // An empty Tiptap document serializes to `<p></p>`, not `''`. Writing
+        // that over an untouched `docHtml: ''` makes a pristine workflow look
+        // edited, which costs the user a spurious "discard changes?" on the
+        // way out. Nothing downstream distinguishes the two, so normalise.
+        const next = isEmptyDocHtml(html) ? '' : html;
+        if (next === p.docHtml) return p;
+        return { ...p, docHtml: next, updatedAt: new Date().toISOString() };
+      });
     },
     [conversationId, isRunning, hasUnresolvedEdits, updateWorkflowState],
   );
@@ -461,6 +688,58 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             status = 'unapplicable';
           }
         }
+        const edits = p.assessment.edits.map((e) =>
+          e.id === editId
+            ? { ...e, status, resolvedAt: new Date().toISOString() }
+            : e,
+        );
+        return {
+          ...p,
+          docHtml: html,
+          title,
+          assessment: {
+            ...p.assessment,
+            docMarkdown,
+            // Unapplicable edits survive auto-clear: a change that silently
+            // failed to land is the one the user most needs to still see.
+            edits: autoClearResolvedEdits
+              ? withoutResolvedEdits(edits, { keepUnapplicable: true })
+              : edits,
+          },
+          updatedAt: new Date().toISOString(),
+        };
+      });
+    },
+    [conversationId, updateWorkflowState, autoClearResolvedEdits],
+  );
+
+  /**
+   * Puts a resolved edit back in the queue. An accepted edit also has its
+   * text change undone by applying the inverse patch to the markdown
+   * snapshot; when that patch can no longer be located (a later edit
+   * overwrote it, or it was a pure deletion with nothing to search for) the
+   * decision stands rather than the document being corrupted on a guess.
+   */
+  const revertEdit = useCallback(
+    (editId: string) => {
+      updateWorkflowState(conversationId, (prev) => {
+        const p = prev as DocumentWorkflowState;
+        if (!p.assessment) return p;
+        const edit = p.assessment.edits.find((e) => e.id === editId);
+        if (!edit || edit.status === 'pending') return p;
+
+        let docMarkdown = p.assessment.docMarkdown;
+        let html = p.docHtml;
+        let title = p.title;
+        if (edit.status === 'accepted') {
+          const inverse = invertPatch(edit);
+          if (!inverse) return p;
+          const outcome = applyEdit(docMarkdown, inverse);
+          if (!outcome.applied) return p;
+          docMarkdown = outcome.text;
+          html = markdownToHtml(docMarkdown);
+          title = extractTitle(docMarkdown) || title;
+        }
         return {
           ...p,
           docHtml: html,
@@ -470,7 +749,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             docMarkdown,
             edits: p.assessment.edits.map((e) =>
               e.id === editId
-                ? { ...e, status, resolvedAt: new Date().toISOString() }
+                ? { ...e, status: 'pending' as const, resolvedAt: undefined }
                 : e,
             ),
           },
@@ -480,6 +759,22 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     },
     [conversationId, updateWorkflowState],
   );
+
+  /** Drops the decision record, leaving only edits still awaiting a call. */
+  const clearResolved = useCallback(() => {
+    updateWorkflowState(conversationId, (prev) => {
+      const p = prev as DocumentWorkflowState;
+      if (!p.assessment || !hasResolvedEdits(p.assessment.edits)) return p;
+      return {
+        ...p,
+        assessment: {
+          ...p.assessment,
+          edits: withoutResolvedEdits(p.assessment.edits),
+        },
+        updatedAt: new Date().toISOString(),
+      };
+    });
+  }, [conversationId, updateWorkflowState]);
 
   const resolveAll = useCallback(
     (decision: 'accepted' | 'rejected') => {
@@ -535,11 +830,15 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     [conversationId, updateWorkflowState],
   );
 
-  /** Empty-state entry: an uploaded file becomes the document basis. */
+  /**
+   * An uploaded file becomes the document basis, replacing whatever is there.
+   * Importing into a document that already has content is confirmed first (see
+   * `requestImport`) — this runs only once that's settled.
+   */
   const handleUploadBasis = useCallback(
     async (files: FileList | null) => {
       const file = files?.[0];
-      if (!file || hasDocument) return;
+      if (!file) return;
       setAssessError(null);
       setUploadingBasis(true);
       try {
@@ -549,12 +848,19 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         }
         const html = await autoConvertToHtml(extracted.text, file.name);
         const docMarkdown = htmlToMarkdown(html);
+        const basisTitle =
+          extractTitle(docMarkdown) || file.name.replace(/\.[^.]+$/, '');
         updateWorkflowState(conversationId, (prev) => ({
           ...(prev as DocumentWorkflowState),
           docHtml: html,
-          title: extractTitle(docMarkdown) || file.name.replace(/\.[^.]+$/, ''),
+          title: basisTitle,
           updatedAt: new Date().toISOString(),
         }));
+        // The uploaded document's own heading is the name to use.
+        nameWorkflowConversation(conversationId, {
+          label: basisTitle,
+          workflow: 'Document',
+        });
         // Agentic pre-assessment of the basis (profile-only run).
         const result = await assessDocument({
           docMarkdown,
@@ -578,14 +884,35 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         if (basisInputRef.current) basisInputRef.current.value = '';
       }
     },
-    [
-      hasDocument,
-      conversationId,
-      conversation?.model?.id,
-      updateWorkflowState,
-      t,
-    ],
+    [conversationId, conversation?.model?.id, updateWorkflowState, t],
   );
+
+  /**
+   * Import entry point. With an empty document this goes straight through;
+   * with content already in the editor it parks the file and asks first,
+   * because the import replaces the document wholesale.
+   */
+  const requestImport = useCallback(
+    (files: FileList | null) => {
+      const file = files?.[0];
+      if (!file) return;
+      if (hasDocument) {
+        setPendingImport(file);
+        return;
+      }
+      void handleUploadBasis(files);
+    },
+    [hasDocument, handleUploadBasis],
+  );
+
+  const confirmImport = useCallback(() => {
+    const file = pendingImport;
+    setPendingImport(null);
+    if (!file) return;
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    void handleUploadBasis(transfer.files);
+  }, [pendingImport, handleUploadBasis]);
 
   const handleExport = useCallback(
     async (format: ExportFormat) => {
@@ -637,6 +964,14 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           updatedAt: new Date().toISOString(),
         };
       });
+      // Provisional name from the first reference. A later generate run
+      // upgrades it to the document's own heading, which is the better
+      // title once one exists.
+      nameWorkflowConversation(conversationId, {
+        label: reference.name,
+        sample: text,
+        workflow: 'Document',
+      });
     },
     [conversationId, updateWorkflowState],
   );
@@ -659,6 +994,58 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const editorHtml = useMemo(
     () => (streamHtml !== null ? streamHtml : docHtml),
     [streamHtml, docHtml],
+  );
+
+  /* ---------------- Source editing (markdown / HTML modes) ------------- */
+
+  // Streaming and pending review edits are rich-text surfaces — the former
+  // repaints HTML continuously, the latter draws decorations a textarea can't
+  // show — so both fall back to the rich editor regardless of the stored mode.
+  const sourceMode =
+    streamHtml === null && !hasUnresolvedEdits ? state?.editorMode : undefined;
+
+  // The buffer is what the user is typing; `html` is what it produced, kept so
+  // an external change to docHtml (a revision landing, edits applied) can be
+  // told apart from our own write and reseed the buffer.
+  const [sourceDraft, setSourceDraft] = useState<{
+    mode: 'markdown' | 'html';
+    text: string;
+    html: string;
+  } | null>(null);
+
+  if (
+    sourceMode &&
+    (sourceDraft?.mode !== sourceMode || sourceDraft.html !== docHtml)
+  ) {
+    setSourceDraft({
+      mode: sourceMode,
+      text: sourceMode === 'markdown' ? htmlToMarkdown(docHtml) : docHtml,
+      html: docHtml,
+    });
+  }
+
+  const handleSourceChange = useCallback(
+    (text: string) => {
+      if (!sourceMode) return;
+      const produced = sourceMode === 'markdown' ? markdownToHtml(text) : text;
+      // Store the NORMALISED html so the reseed check above compares like for
+      // like — handleEditorChange collapses an empty document to ''.
+      const normalised = isEmptyDocHtml(produced) ? '' : produced;
+      setSourceDraft({ mode: sourceMode, text, html: normalised });
+      handleEditorChange(produced);
+    },
+    [sourceMode, handleEditorChange],
+  );
+
+  const setEditorMode = useCallback(
+    (mode: 'markdown' | 'html' | undefined) => {
+      updateWorkflowState(conversationId, (prev) => ({
+        ...(prev as DocumentWorkflowState),
+        editorMode: mode,
+        updatedAt: new Date().toISOString(),
+      }));
+    },
+    [conversationId, updateWorkflowState],
   );
 
   const attachSpec = useCallback(
@@ -810,9 +1197,41 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           {t('document.runFailed', { message: run.error })}
         </p>
       )}
-      {hasDocument && <div className="mb-1.5">{scopeChip}</div>}
+      {hasDocument && (
+        <div className="mb-1.5 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+          {scopeChip}
+          {/* Only meaningful for a revision: with a blank document there is
+              nothing to suggest changes against. */}
+          {/* With a selection active the checkbox cannot do anything — that
+              path always applies directly — so it is disabled and says why,
+              rather than sitting there ticked and being quietly ignored. */}
+          <label
+            className={`inline-flex items-center gap-1.5 text-xs ${
+              selection
+                ? 'text-gray-400 dark:text-gray-600'
+                : 'text-gray-600 dark:text-gray-400'
+            }`}
+            title={
+              selection
+                ? t('document.suggestChangesSelectionNote')
+                : t('document.suggestChangesHint')
+            }
+          >
+            <input
+              type="checkbox"
+              checked={suggestRevisions && !selection}
+              disabled={isBusy || hasUnresolvedEdits || selection !== null}
+              onChange={(e) => setSuggestOverride(e.target.checked)}
+              className="h-3.5 w-3.5 accent-gray-600 disabled:opacity-50 dark:accent-gray-400"
+            />
+            {t('document.suggestChanges')}
+          </label>
+        </div>
+      )}
+      <PastedTextChips chips={chips} onRemove={removeChip} />
       <div className="flex items-end gap-2">
         <textarea
+          ref={instructionRef}
           value={instruction}
           onChange={(e) => setInstruction(e.target.value)}
           onKeyDown={(e) => {
@@ -850,7 +1269,9 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           <button
             type="button"
             onClick={() => void handleRun()}
-            disabled={!instruction.trim() || isBusy || hasUnresolvedEdits}
+            disabled={
+              (!instruction.trim() && !hasChips) || isBusy || hasUnresolvedEdits
+            }
             className="flex min-h-[36px] shrink-0 items-center gap-1.5 rounded-lg bg-gray-300 px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-400 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated"
           >
             <IconSparkles size={15} aria-hidden />
@@ -872,26 +1293,76 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         <span className="truncate text-sm font-medium text-gray-700 dark:text-gray-300">
           {state.title || t('document.untitledDocument')}
         </span>
-        <div className="relative">
+        <div className="flex items-center gap-1">
+          {/* Editor mode. Advanced, so it reads as a quiet segmented control
+              rather than a labelled setting — writers who don't want it can
+              ignore it, and rich text stays the default. */}
+          <div
+            role="group"
+            aria-label={t('document.editorMode')}
+            className="mr-1 hidden items-center rounded-lg bg-gray-100 p-0.5 sm:flex dark:bg-surface-dark-base"
+          >
+            {(
+              [
+                [undefined, t('document.editorModeRich')],
+                ['markdown', t('document.editorModeMarkdown')],
+                ['html', t('document.editorModeHtml')],
+              ] as const
+            ).map(([mode, label]) => {
+              const active = (state.editorMode ?? undefined) === mode;
+              return (
+                <button
+                  key={label}
+                  type="button"
+                  aria-pressed={active}
+                  disabled={isRunning || hasUnresolvedEdits}
+                  onClick={() => setEditorMode(mode)}
+                  title={
+                    hasUnresolvedEdits
+                      ? t('document.editorModeLockedEdits')
+                      : undefined
+                  }
+                  className={`rounded-md px-2 py-1 text-xs transition-colors disabled:opacity-30 ${
+                    active
+                      ? 'bg-white text-gray-900 shadow-sm dark:bg-surface-dark-elevated dark:text-white'
+                      : 'text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200'
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
           <button
-            ref={exportButtonRef}
             type="button"
-            onClick={() => setExportOpen((open) => !open)}
-            disabled={!hasDocument || isRunning}
+            onClick={() => basisInputRef.current?.click()}
+            disabled={isBusy}
             className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-300 dark:hover:bg-surface-dark-elevated"
           >
-            <IconDownload size={15} aria-hidden />
-            {t('document.export')}
+            <IconFileImport size={15} aria-hidden />
+            {uploadingBasis ? t('document.uploading') : t('document.import')}
           </button>
-          <DropdownPortal
-            triggerRef={exportButtonRef}
-            isOpen={exportOpen}
-            onClose={() => setExportOpen(false)}
-          >
-            <ExportFormatMenu
-              onSelect={(format) => void handleExport(format)}
-            />
-          </DropdownPortal>
+          <div className="relative">
+            <button
+              ref={exportButtonRef}
+              type="button"
+              onClick={() => setExportOpen((open) => !open)}
+              disabled={!hasDocument || isRunning}
+              className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-300 dark:hover:bg-surface-dark-elevated"
+            >
+              <IconDownload size={15} aria-hidden />
+              {t('document.export')}
+            </button>
+            <DropdownPortal
+              triggerRef={exportButtonRef}
+              isOpen={exportOpen}
+              onClose={() => setExportOpen(false)}
+            >
+              <ExportFormatMenu
+                onSelect={(format) => void handleExport(format)}
+              />
+            </DropdownPortal>
+          </div>
         </div>
       </div>
       {controlsStrip}
@@ -922,23 +1393,54 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
                   ? t('document.uploading')
                   : t('document.uploadBasis')}
               </button>
-              <input
-                ref={basisInputRef}
-                type="file"
-                accept=".pdf,.doc,.docx,.txt,.md,.html"
-                hidden
-                onChange={(e) => void handleUploadBasis(e.target.files)}
-              />
             </div>
           )}
+          {/* Outside the empty-state block: import is available at any time,
+              replacing the current document after a confirmation. */}
+          <input
+            ref={basisInputRef}
+            type="file"
+            accept=".pdf,.docx,.odt,.rtf,.txt,.md,.markdown,.html"
+            hidden
+            onChange={(e) => requestImport(e.target.files)}
+          />
           <div className="min-h-0 flex-1">
-            <RichTextEditor
-              ref={editorRef}
-              contentHtml={editorHtml}
-              onChange={handleEditorChange}
-              editable={!isRunning && !assessing && !hasUnresolvedEdits}
-              onSelectionUpdate={setSelection}
-            />
+            {sourceMode ? (
+              <SourceEditor
+                value={sourceDraft?.text ?? ''}
+                onChange={handleSourceChange}
+                editable={!isRunning && !assessing}
+                label={
+                  sourceMode === 'markdown'
+                    ? t('document.editorModeMarkdown')
+                    : t('document.editorModeHtml')
+                }
+              />
+            ) : (
+              <RichTextEditor
+                ref={editorRef}
+                contentHtml={editorHtml}
+                onChange={handleEditorChange}
+                editable={!isRunning && !assessing && !hasUnresolvedEdits}
+                onSelectionUpdate={setSelection}
+                previewEdits={previewEdits}
+                activeEditId={preview.activeId}
+                pinnedEditId={preview.pinnedId}
+                onPinEdit={preview.setPinned}
+                renderQuickActions={(position) =>
+                  preview.pinnedId && (
+                    <EditQuickActions
+                      editId={preview.pinnedId}
+                      i18nNamespace="workflows.document"
+                      position={position}
+                      onAccept={(id) => resolveEdit(id, 'accepted')}
+                      onReject={(id) => resolveEdit(id, 'rejected')}
+                      disabled={isBusy}
+                    />
+                  )
+                }
+              />
+            )}
           </div>
 
           {/* Quality assessment controls */}
@@ -1011,6 +1513,8 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
               assessment={assessment}
               resolveCriterionLabel={resolveCriterionLabel}
               i18nNamespace="workflows.document"
+              previewEditId={preview.activeId}
+              onPreviewEdit={preview.setHovered}
               scopeLabel={
                 assessment.scope === 'selection'
                   ? t('document.assessedSelection')
@@ -1020,6 +1524,10 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
               onReject={(id) => resolveEdit(id, 'rejected')}
               onAcceptAll={() => resolveAll('accepted')}
               onRejectAll={() => resolveAll('rejected')}
+              onRevert={revertEdit}
+              onClearResolved={clearResolved}
+              autoClearResolved={autoClearResolvedEdits}
+              onToggleAutoClear={setAutoClearResolvedEdits}
               onClose={() => setReviewOpen(false)}
               disabled={isBusy}
             />
@@ -1042,11 +1550,33 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       )}
       {criteriaOpen && (
         <div className="h-72 shrink-0">
-          <CriteriaManager onClose={() => setCriteriaOpen(false)} />
+          <CriteriaManager
+            criteria={documentCriteria}
+            i18nNamespace="workflows.document"
+            onCreate={addDocumentCriterion}
+            onUpdate={updateDocumentCriterion}
+            onDelete={deleteDocumentCriterion}
+            onClose={() => setCriteriaOpen(false)}
+          />
         </div>
       )}
 
       {composer}
+
+      <ConfirmDialog
+        isOpen={pendingImport !== null}
+        title={t('document.importReplaceTitle')}
+        message={t('document.importReplaceBody', {
+          name: pendingImport?.name ?? '',
+        })}
+        confirmLabel={t('document.importReplaceConfirm')}
+        confirmVariant="danger"
+        onConfirm={confirmImport}
+        onCancel={() => {
+          setPendingImport(null);
+          if (basisInputRef.current) basisInputRef.current.value = '';
+        }}
+      />
     </div>
   );
 }

@@ -41,11 +41,22 @@ interface ChartFrameProps {
   ariaLabel: string;
   /** Y axis maximum (use niceMax of the data max). */
   yMax: number;
+  /** Y axis minimum; defaults to the historical 0 baseline. */
+  yMin?: number;
+  /** When set, renders min/mid/max labels along the x axis (scatter). */
+  xDomain?: { min: number; max: number };
   children: ReactNode;
 }
 
-export function ChartFrame({ ariaLabel, yMax, children }: ChartFrameProps) {
-  const ticks = [0, yMax / 2, yMax];
+export function ChartFrame({
+  ariaLabel,
+  yMax,
+  yMin = 0,
+  xDomain,
+  children,
+}: ChartFrameProps) {
+  const ticks = [yMin, (yMin + yMax) / 2, yMax];
+  const ySpan = yMax - yMin || 1;
   return (
     <svg
       viewBox={`0 0 ${CHART_W} ${CHART_H}`}
@@ -54,8 +65,28 @@ export function ChartFrame({ ariaLabel, yMax, children }: ChartFrameProps) {
       className="h-full w-full"
       preserveAspectRatio="xMidYMid meet"
     >
+      {xDomain &&
+        [
+          { value: xDomain.min, x: PLOT.left, anchor: 'start' as const },
+          {
+            value: (xDomain.min + xDomain.max) / 2,
+            x: PLOT.left + PLOT_W / 2,
+            anchor: 'middle' as const,
+          },
+          { value: xDomain.max, x: PLOT.left + PLOT_W, anchor: 'end' as const },
+        ].map((tick) => (
+          <text
+            key={`x${tick.x}`}
+            x={tick.x}
+            y={PLOT.top + PLOT_H + 14}
+            textAnchor={tick.anchor}
+            className="fill-gray-500 text-[10px] tabular-nums dark:fill-gray-400"
+          >
+            {formatTick(tick.value)}
+          </text>
+        ))}
       {ticks.map((tick) => {
-        const y = PLOT.top + PLOT_H - (tick / yMax) * PLOT_H;
+        const y = PLOT.top + PLOT_H - ((tick - yMin) / ySpan) * PLOT_H;
         return (
           <g key={tick}>
             <line

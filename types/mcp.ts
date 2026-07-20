@@ -27,6 +27,14 @@ export interface McpServerRequestEntry {
   id: string;
   name: string;
   catalogKey?: string;
+  /**
+   * Admin-authored connector id (`connector-<hex>`). Like `catalogKey`, the
+   * url/transport/auth are resolved server-side and any client-sent `url` is
+   * ignored — but unlike the catalog, the resolution ALSO evaluates this
+   * user's access rules and fails closed. A client holding a stale entry for
+   * a connector it is no longer entitled to gets nothing back.
+   */
+  connectorId?: string;
   url?: string;
   authToken?: string;
 }

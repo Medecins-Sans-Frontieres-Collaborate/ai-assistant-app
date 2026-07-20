@@ -20,6 +20,16 @@
  *    (and Anthropic thinking tokens in output_tokens), so the multipliers
  *    here model only longer-sequence attention/KV overhead — keep them
  *    modest or reasoning cost gets double-counted.
+ *  - typicalRequest 1000/500: ~1k prompt ≈ a short system prompt plus a few
+ *    turns of context; 500 completion ≈ the 500–800-output-token public
+ *    medians the whPer1kTokens figures were derived from.
+ *  - activityGramsPerHour: per-hour carbon of everyday digital activities,
+ *    for the "your usage ≈ N seconds of X" equivalents. Netflix HD 45 (36–55
+ *    operational, Digital Equivalencies Matrix), Zoom camera-on 50
+ *    (operational central; true range is very wide), web browsing 25
+ *    (operational), Spotify audio ~1 (full-chain consumer calculators).
+ *    Mixed accounting boundaries — fine for an order-of-magnitude comparison,
+ *    which is all the UI claims.
  *  - PUE 1.15 ≈ Azure fleet average (1.12–1.18).
  *  - Grid intensity (gCO2e/kWh): US grid ≈ 370 (EPA eGRID), EU ≈ 230 (EEA
  *    EU-27). "default" covers requests served by the region-blind default
@@ -55,6 +65,16 @@ const emissionsAssumptionsSchema = z.object({
   dedicatedReasoningMultiplier: z.number().min(0),
   equivalences: z.object({
     smartphoneChargeGrams: z.number().positive(),
+    activityGramsPerHour: z.object({
+      netflixHd: z.number().positive(),
+      zoomCall: z.number().positive(),
+      webBrowsing: z.number().positive(),
+      spotifyAudio: z.number().positive(),
+    }),
+  }),
+  typicalRequest: z.object({
+    promptTokens: z.number().positive(),
+    completionTokens: z.number().positive(),
   }),
 });
 
@@ -122,5 +142,104 @@ export function estimateCO2Grams(input: EmissionsInput): EmissionsEstimate {
     gCO2e: (energyWh * intensity) / 1000,
     energyWh,
     assumptionsVersion: a.assumptionsVersion,
+  };
+}
+
+/** Relative per-request impact tier, for at-a-glance model comparison. */
+export type EmissionsTier = 'low' | 'moderate' | 'high';
+
+const SIZE_CLASS_TIER: Record<ModelSizeClass, EmissionsTier> = {
+  nano: 'low',
+  mini: 'low',
+  standard: 'moderate',
+  large: 'high',
+};
+
+/**
+ * Tier from size class; dedicated reasoners bump one tier because the
+ * always-on reasoning multiplier materially raises per-request energy.
+ */
+export function getEmissionsTier(
+  sizeClass: ModelSizeClass,
+  isDedicatedReasoner: boolean,
+): EmissionsTier {
+  const tier = SIZE_CLASS_TIER[sizeClass];
+  if (!isDedicatedReasoner) return tier;
+  return tier === 'low' ? 'moderate' : 'high';
+}
+
+/**
+ * Estimate for one "typical request" (assumption-defined token counts), used
+ * for the comparative per-model number in the model selector. Region is left
+ * at the default grid on purpose — the number is comparative, and regional
+ * intensity is second-order; UI copy notes actual impact varies by region.
+ */
+export function estimateTypicalRequestCO2(
+  sizeClass: ModelSizeClass,
+  isDedicatedReasoner: boolean,
+  reasoningEffort?: EmissionsInput['reasoningEffort'],
+): EmissionsEstimate {
+  return estimateCO2Grams({
+    promptTokens: EMISSIONS_ASSUMPTIONS.typicalRequest.promptTokens,
+    completionTokens: EMISSIONS_ASSUMPTIONS.typicalRequest.completionTokens,
+    sizeClass,
+    isDedicatedReasoner,
+    reasoningEffort,
+    region: null,
+  });
+}
+
+export type ActivityKey =
+  keyof EmissionsAssumptions['equivalences']['activityGramsPerHour'];
+
+export interface ActivityEquivalent {
+  key: ActivityKey;
+  /** Seconds of the activity with the same carbon footprint as `gCO2e`. */
+  seconds: number;
+}
+
+/**
+ * Expresses a CO2e amount as durations of everyday digital activities:
+ * seconds = 3600 × gCO2e / activityGramsPerHour. Same-carbon comparison
+ * against published per-hour activity footprints (see the header JSDoc for
+ * the comparator grounding) — order-of-magnitude, like every figure here.
+ * Returned in config order; callers label the keys via i18n.
+ */
+export function estimateActivityEquivalents(
+  gCO2e: number,
+): ActivityEquivalent[] {
+  const activities = EMISSIONS_ASSUMPTIONS.equivalences.activityGramsPerHour;
+  return (Object.keys(activities) as ActivityKey[]).map((key) => ({
+    key,
+    seconds: (3600 * gCO2e) / activities[key],
+  }));
+}
+
+export interface ActivityDurationParts {
+  /** i18n key suffix under `emissions.duration.*`. */
+  unit: 'lessThanSecond' | 'seconds' | 'minutes' | 'hours';
+  /** Pre-formatted magnitude ("" for lessThanSecond). */
+  value: string;
+}
+
+/**
+ * Buckets an activity duration into a display unit. Pure so the rounding
+ * rules are testable; components interpolate `value` into the localized
+ * `emissions.duration.<unit>` template.
+ */
+export function activityDurationParts(seconds: number): ActivityDurationParts {
+  if (seconds < 1) return { unit: 'lessThanSecond', value: '' };
+  if (seconds < 90) return { unit: 'seconds', value: `${Math.round(seconds)}` };
+  const minutes = seconds / 60;
+  if (minutes < 90) {
+    return {
+      unit: 'minutes',
+      value: minutes < 10 ? minutes.toFixed(1) : `${Math.round(minutes)}`,
+    };
+  }
+  const hours = minutes / 60;
+  return {
+    unit: 'hours',
+    value: hours < 10 ? hours.toFixed(1) : `${Math.round(hours)}`,
   };
 }

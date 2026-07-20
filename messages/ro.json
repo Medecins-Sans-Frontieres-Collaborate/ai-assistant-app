@@ -847,7 +847,8 @@
     "processingAudio": "Se procesează audio...",
     "ttsError": "Eroare la generarea audio. Vă rugăm să încercați din nou.",
     "unsupportedMessageType": "Eroare la afișarea mesajului: Tip de mesaj neacceptat",
-    "addLanguageOption": "Adăugați „{name}”..."
+    "addLanguageOption": "Adăugați „{name}”...",
+    "sources": "Surse"
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",
@@ -1176,7 +1177,23 @@
     "customInstructionsLabel": "Instrucțiuni personalizate*",
     "defaultTemperatureLabel": "Temperatură implicită*",
     "Usage & Impact": "Utilizare & Impact",
-    "Connectors": "Conectori"
+    "Connectors": "Conectori",
+    "Backup": "Backup",
+    "Memories": "Memorii",
+    "Agent Access": "Acces agent",
+    "LocalModels": "Modele locale",
+    "suggestRevisions": {
+      "title": "Revizii ale documentului",
+      "toggle": "Sugerează revizii în loc să le aplici",
+      "description": "Când solicitați fluxului de lucru Document să facă o revizie, modificările vor apărea ca sugestii individuale pe care le puteți accepta sau respinge, la fel ca în evaluările de calitate.",
+      "exceptionsTitle": "Aplică direct totuși când:",
+      "exceptionSelection": "Revizuiești o selecție pe care ai evidențiat-o",
+      "exceptionLargeRewrite": "Rescrierea modifică majoritatea documentului",
+      "exceptionReorder": "Secțiunile sunt mutate, nu editate",
+      "thresholdLabel": "Consideră ca rescriere peste",
+      "thresholdUnit": "% din document modificat",
+      "exceptionSelectionAlways": "Revizuirea unei selecții evidențiate se aplică întotdeauna direct — modelul returnează doar fragmentul revizuit, care nu poate fi defalcat sub formă de sugestii pentru întregul document."
+    }
   },
   "notFound": {
     "lostDog": "Câine pierdut"
@@ -2111,7 +2128,9 @@
     "pin": "Fixați în partea de sus",
     "unpin": "Detașați",
     "moveToMore": "Mută la Mai multe",
-    "moveOutOfMore": "Afișează în meniu"
+    "moveOutOfMore": "Afișează în meniu",
+    "showSources": "Afișează alte surse",
+    "hideSources": "Ascunde alte surse"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Adăugați instrucțiunile personale pentru a personaliza modul în care răspunde AI. Acestea sunt combinate cu liniile directoare de bază care asigură răspunsuri utile, corecte și sigure.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Sfat: Tastați \"/\" pentru a selecta dintre șabloanele de prompt salvate.",
@@ -2424,7 +2443,8 @@
     "regionDefault": "Implicit",
     "modelRow": "{requests} cereri · {grams} g",
     "disclosure": "Estimări bazate pe ipoteze v{version} · din {since} · doar conversație standard (agenții și răspunsurile din baza de cunoștințe nu sunt incluse).",
-    "reset": "Resetează statisticile de utilizare"
+    "reset": "Resetează statisticile de utilizare",
+    "estimatedPortion": "Include aproximativ {grams} g CO₂e ({requests} cereri) estimate pentru conversațiile anterioare urmăririi — recalculate pe baza textului stocat al mesajelor, nu a numărului măsurat de tokeni."
   },
   "extraction": {
     "toggleLabel": "Extrage date structurate",
@@ -2631,7 +2651,25 @@
       "pendingCount": "{count} în așteptare",
       "closeReview": "Închide revizuirea calității",
       "showReview": "Arată revizuirea",
-      "showReviewPending": "Arată revizuirea ({count} în așteptare)"
+      "showReviewPending": "Arată revizuirea ({count} în așteptare)",
+      "undoEdit": "Anulează",
+      "clearResolved": "Curăță rezolvate",
+      "clearResolvedHint": "Eliminați modificările acceptate, respinse și neaplicabile din această listă",
+      "autoClearResolved": "Curăță automat modificările rezolvate",
+      "customCriteria": "Criterii personalizate",
+      "closeCriteria": "Închide criteriile personalizate",
+      "newCriterion": "Criteriu nou",
+      "newCriterionName": "Criteriu fără titlu",
+      "criterionName": "Numele criteriului",
+      "criterionRubric": "Indicații",
+      "criterionRubricPlaceholder": "Descrieți ce trebuie să facă traducerea pentru a îndeplini acest criteriu, ex.: „Redați toate instrucțiunile de dozaj clinic la imperativ, niciodată la infinitiv…”",
+      "criterionRubricHint": "Aceste indicații sunt oferite AI-ului ca atare, împreună cu dimensiunile MQM implicite, la evaluarea unei traduceri.",
+      "criteriaEmpty": "Creați criterii personalizate – de ex. stil intern, preferințe terminologice ale clientului sau convenții regionale – pentru a evalua traducerile dincolo de dimensiunile MQM prestabilite. Salvate pe acest dispozitiv și reutilizabile.",
+      "deleteCriterion": "Ștergeți criteriul",
+      "manageCriteria": "Criterii personalizate",
+      "addCriteria": "Adăugați criterii",
+      "noUsableCriteria": "Selectați cel puțin un criteriu implicit sau adăugați indicații criteriilor personalizate.",
+      "criterionRubricTooLong": "Această rubrică depășește limita cu {over} caractere. Este trimisă cu fiecare evaluare, deci trebuie scurtată înainte ca acest criteriu să poată fi folosit."
     },
     "document": {
       "emptyTitle": "Descrieți documentul dorit",
@@ -2751,7 +2789,32 @@
       "clearSelection": "Eliminați selecția (lucrează cu întregul document)",
       "reviseSelectionPlaceholder": "Descrieți modificările aduse selecției…",
       "revisedSelectionSummary": "Am revizuit pasajul selectat în spațiul de lucru.",
-      "assessedSelection": "Selecție"
+      "assessedSelection": "Selecție",
+      "undoEdit": "Anulează",
+      "clearResolved": "Curăță rezolvate",
+      "clearResolvedHint": "Eliminați modificările acceptate, respinse și neaplicabile din această listă",
+      "autoClearResolved": "Curăță automat modificările rezolvate",
+      "import": "Importă",
+      "importReplaceTitle": "Înlocuiți documentul?",
+      "importReplaceBody": "Importarea {name} va înlocui documentul actual. Referințele, specificațiile și tonul vor fi păstrate.",
+      "importReplaceConfirm": "Înlocuiește",
+      "editorMode": "Mod editor",
+      "editorModeRich": "Text îmbogățit",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Rezolvați sugestiile de modificare înainte de a schimba modul editorului.",
+      "suggestChanges": "Sugerează modificări",
+      "suggestChangesHint": "Revizuiește modificările sub formă de sugestii individuale în loc să rescrii documentul imediat.",
+      "suggestChangesSelectionNote": "Reviziile unei selecții sunt aplicate direct — selecția este deja zona pe care ai ales-o.",
+      "suggestedSummary": "Au fost sugerate {count} {count, plural, one {modificare} other {modificări}} pentru revizuire.",
+      "revisionSuggestionSummary": "Solicitarea dvs. de revizuire a generat {count} {count, plural, one {sugestie de modificare} other {sugestii de modificare}}.",
+      "revisionCriterionLabel": "Revizie solicitată",
+      "fallbackSelection": "Aplicat direct — reviziile pentru o selecție nu sunt sugerate.",
+      "fallbackLargeRewrite": "Aplicat direct — rescrierea a modificat prea mult din document pentru a putea fi sugerată ca modificări separate.",
+      "fallbackReorder": "Aplicat direct — secțiunile au fost mutate, ceea ce nu poate fi transformat în sugestii pentru revizuire.",
+      "fallbackUnanchorable": "Aplicat direct — modificările nu au putut fi asociate unor pasaje specifice.",
+      "fallbackNoChanges": "Nu au fost necesare modificări.",
+      "criterionRubricTooLong": "Această rubrică depășește limita cu {over} caractere. Este trimisă cu fiecare evaluare, deci trebuie scurtată înainte ca acest criteriu să poată fi folosit."
     },
     "data": {
       "emptyTitle": "Importați date pentru analiză",
@@ -2920,7 +2983,39 @@
       "autoCheckHint": "După extragerea datelor din fotografii sau documente, rulează automat o verificare a calității pentru rândurile noi",
       "checkingNewRows": "Se verifică rândurile nou adăugate pentru probleme de calitate…",
       "ingestCheckFailed": "Verificarea automată a calității a eșuat ({message}) — o puteți rula manual cu Evaluează calitatea.",
-      "assessedIngest": "Rânduri nou adăugate"
+      "assessedIngest": "Rânduri nou adăugate",
+      "transpose": "Transpune",
+      "transposeAxisColumn": "Nume",
+      "transposeSuggestion": "Această tabelă pare transpusă: rândurile sunt atribute, iar coloanele sunt elemente. Să inversăm astfel încât fiecare element să fie pe un rând, iar fiecare atribut să devină o coloană tipizată?",
+      "transposedTable": "Rânduri și coloane transpuse",
+      "columns": "Coloane",
+      "columnsHidden": "Coloane ({count} ascunse)",
+      "showAllColumns": "Afișează tot",
+      "chartScatter": "Puncte dispersate (x vs y)",
+      "chartPivot": "Tabel pivot",
+      "xColumn": "Coloana X",
+      "yColumn": "Coloana Y",
+      "splitByColumn": "Împarte după",
+      "splitNone": "Fără împărțire",
+      "pivotValueColumns": "Coloane de valori",
+      "aggMin": "Minim",
+      "aggMax": "Maxim",
+      "aggMedian": "Mediană",
+      "chartSeriesTruncated": "Se afișează primele {max} serii",
+      "chartPointsTruncated": "Se afișează {max} puncte eșantionate",
+      "chartScatterAria": "Grafic de dispersie {x} versus {y}",
+      "pivotTableAria": "Tabel pivot grupat după {column}",
+      "schemaFormula": "Formulă",
+      "schemaFormulaPlaceholder": "ex: [Cazuri] / [Populație] * 1000",
+      "schemaFormulaHint": "Câmp calculat: referiți la alte câmpuri ca [Nume]; suportă + - * / %, paranteze și round, abs, min, max. Valorile se actualizează automat și nu pot fi editate direct.",
+      "schemaFormulaSyntaxError": "Formulă invalidă",
+      "schemaFormulaUnknownRef": "Câmp necunoscut: {ref}",
+      "schemaFormulaArityError": "Număr incorect de argumente pentru {fn}",
+      "schemaFormulaCycleError": "Referință circulară între formule",
+      "derivedColumnTitle": "Calculat: {formula}",
+      "derivedFrom": "Calculat din {formula}",
+      "takePhoto": "Fă o fotografie",
+      "takePhotoHint": "Folosiți camera pentru a fotografia un formular sau un tabel — conținutul acestuia devine date structurate pe care le puteți verifica cu fotografia"
     },
     "map": {
       "emptyTitle": "Afișați datele pe o hartă",
@@ -2994,7 +3089,31 @@
         "jumpTo": "Sari la {label}",
         "slider": "Poziție pe axa timpului",
         "showUndated": "Afișează locațiile fără dată",
-        "activeCount": "{count} active"
+        "activeCount": "{count} active",
+        "jump": {
+          "start": "Început",
+          "yearsLater": "{count, plural, one {1 an mai târziu} other {# ani mai târziu}}",
+          "monthsLater": "{count, plural, one {1 lună mai târziu} other {# luni mai târziu}}",
+          "daysLater": "{count, plural, one {1 zi mai târziu} other {# zile mai târziu}}",
+          "appears": "{count, plural, one {1 apariție} other {# apariții}}",
+          "ends": "{count, plural, one {1 sfârșit} other {# sfârșituri}}",
+          "progress": "Data {index} din {total}"
+        },
+        "precision": {
+          "minute": "La minut",
+          "hour": "La oră",
+          "day": "La zi",
+          "month": "Datare la nivel de lună",
+          "year": "Datare la nivel de an",
+          "mixed": "(mixt)"
+        },
+        "pacing": {
+          "toggle": "Ritm redare",
+          "cardDuration": "Afișează fiecare locație timp de",
+          "seconds": "{seconds}s",
+          "maxCards": "Locații afișate pe dată",
+          "hint": "Datele mai aglomerate sunt menținute mai mult automat."
+        }
       },
       "granularity": {
         "site": "Locație",
@@ -3011,8 +3130,13 @@
         "color": "Culoare: încredere coordonate (albastru ridicat, portocaliu mediu, roșu scăzut)",
         "size": "Dimensiune punct: cât de centrală este locația pentru material",
         "area": "Cerc întrerupt: extindere aproximativă a unui district, regiuni sau țări",
-        "container": "Contur estompat: o zonă ale cărei conținuturi sunt cartografiate individual"
-      }
+        "container": "Contur estompat: o zonă ale cărei conținuturi sunt cartografiate individual",
+        "precisionHalo": "Contur punctat subtire (în timpul unui timelapse): evenimentul este datat doar la lună sau an, deci momentul exact nu este sigur"
+      },
+      "sourceLabel": "Sursă: {name}",
+      "fetchAndMap": "Preia și asociază",
+      "fetchingPage": "Se preia pagina…",
+      "railUrlRequest": "Preluați și asociați locațiile din: {title} ({url})"
     },
     "shell": {
       "showConversation": "Afișează conversația",
@@ -3030,6 +3154,16 @@
       "untitled": "Conversație nouă",
       "toggleMenu": "Comută meniul",
       "model": "Model pentru acest flux de lucru"
+    },
+    "tabs": {
+      "label": "Mod conversație",
+      "chat": "Chat",
+      "chatDescription": "O conversație standard cu asistentul"
+    },
+    "discard": {
+      "title": "Renunțați la această schiță?",
+      "body": "Comutarea la {target} va șterge munca începută în {current}.",
+      "confirm": "Renunță"
     }
   },
   "connectors": {
@@ -3044,6 +3178,22 @@
       "asana": {
         "name": "Asana",
         "description": "Găsiți, creați și actualizați sarcini și proiecte."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Interogați surse de date publicate, workbook-uri și metrici Pulse."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Căutați și actualizați înregistrări între obiectele Salesforce."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Creați, programați și publicați postări pe rețelele de socializare."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Revizuiți și răspundeți la conversații din inbox-ul social."
       }
     },
     "connect": "Conectați",
@@ -3104,7 +3254,19 @@
       "missingState": "Nimic de autorizat",
       "close": "Puteți închide această fereastră și să reveniți la aplicație.",
       "closeButton": "Închideți fereastra"
-    }
+    },
+    "oauthNoAppConfigured": "Autentificarea cu {name} nu este configurată pe această implementare. Conectați-vă înregistrând propria aplicație OAuth.",
+    "adminConnectorsTitle": "De la organizația dumneavoastră",
+    "adminConnectorsDescription": "Conectori instalați de administratorii dvs. Ce conectori vedeți depinde de accesul dumneavoastră.",
+    "managedByOrg": "Administrat de organizația dumneavoastră",
+    "connectorOauthNotConfigured": "Autentificarea nu este finalizată pentru acest conector. Contactați administratorul.",
+    "yourConnectorsTitle": "Conectorii dumneavoastră",
+    "addTitle": "Adăugați un conector",
+    "addDescription": "Alegeți un instrument pentru conectare. Veți configura accesul după selectare.",
+    "add": "Adaugă",
+    "filterLabel": "Filtrați conectorii",
+    "filterPlaceholder": "Căutați conectori",
+    "noMatches": "Niciun conector nu corespunde cu „{query}”."
   },
   "modelSources": {
     "connectButtonShort": "Conectați o sursă de modele",
@@ -3155,5 +3317,399 @@
     "deselectAll": "Deselectează tot",
     "autoAddLabel": "Adaugă automat modele noi",
     "autoAddDescription": "Implementările de modele adăugate ulterior în acest cont vor apărea automat. Modelele debifate rămân excluse."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Impact scăzut",
+      "moderate": "Impact moderat",
+      "high": "Impact ridicat"
+    },
+    "tierTooltip": "Impactul energetic relativ per cerere, estimat pe baza dimensiunii modelului. Acestea sunt estimări bazate pe medii publicate și presupuneri v{version} — nu măsurători.",
+    "typicalRequest": "~{grams} g CO₂e per cerere tipică",
+    "typicalRequestTooltip": "Estimare brută per cerere pentru o cerere tipică (aproximativ 1.000 de tokenuri prompt și 500 de tokenuri completare), derivată din medii și presupuneri publicate v{version}. Impactul real variază în funcție de lungimea conversației, setări și regiunea de găzduire.",
+    "activities": {
+      "netflixHd": "Vizionare Netflix HD",
+      "zoomCall": "Apel Zoom (cu cameră pornită)",
+      "webBrowsing": "Navigare web",
+      "spotifyAudio": "Audio Spotify"
+    },
+    "equivalents": {
+      "title": "≈ același carbon ca",
+      "note": "Comparare a emisiilor de carbon cu amprentele publicate pe oră ale acestor servicii — valori aproximative, orientative, ca toate estimările de aici."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Amprenta estimată de carbon a acestei conversații: {grams} grame echivalent CO₂. Afișează detalii.",
+      "ariaLabelToday": "Amprenta estimată de carbon a acestei conversații astăzi: {grams} grame echivalent CO₂. Afișează detalii.",
+      "title": "Această conversație (estimat)",
+      "today": "Astăzi",
+      "total": "Tot timpul",
+      "measured": "Pe baza numărului raportat de tokeni",
+      "estimated": "Recalculat pentru mesajele vechi",
+      "lastRequest": "Ultima cerere",
+      "disclaimer": "Estimări la nivel de cerere pe baza numărului de tokeni raportați sau aproximați, folosind medii și ipoteze publicate v{version}. Mesajele mai vechi sunt recalculate pe baza textului stocat și a modelului de conversație curent. Nu reprezintă o măsurare."
+    }
+  },
+  "table": {
+    "copyTable": "Copiază tabelul",
+    "downloadTable": "Descarcă tabelul",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Exportat ca CSV",
+    "copyFailed": "Copierea tabelului a eșuat"
+  },
+  "backup": {
+    "intro": {
+      "title": "Salvați conversațiile — în siguranță",
+      "body": "Conversațiile sunt criptate pe acest dispozitiv înainte de a fi încărcate. Noi nu putem citi mesajele dumneavoastră.",
+      "keyWarning": "Cheia de recuperare este generată pe acest dispozitiv. Nu o vedem niciodată și nu o putem recupera — dacă o pierdeți, pierdeți și backupul.",
+      "create": "Creează cheia mea și efectuează backup",
+      "decline": "Nu acum — păstrează conversațiile doar pe acest dispozitiv"
+    },
+    "ceremony": {
+      "titleCreate": "Salvați cheia de recuperare",
+      "titleRotate": "Salvați noua cheie de recuperare",
+      "titleView": "Cheia dumneavoastră de recuperare",
+      "description": "Această cheie este singura modalitate de a restaura backupul pe un alt dispozitiv. Păstrați-o într-un loc sigur — nu o putem recupera pentru dumneavoastră.",
+      "copy": "Copiază",
+      "copied": "Copiat!",
+      "download": "Descarcă .txt",
+      "showQr": "Afișează cod QR",
+      "hideQr": "Ascunde cod QR",
+      "savedCheckbox": "Am salvat cheia de recuperare într-un loc sigur",
+      "saveFirstHint": "Copiați sau descărcați cheia înainte de a continua.",
+      "continue": "Continuă",
+      "done": "Gata",
+      "cancel": "Anulează",
+      "cancelConfirmTitle": "Anulați configurarea backupului?",
+      "cancelConfirmBody": "Conversațiile nu vor fi salvate în backup. Puteți activa oricând backupul criptat din Setări.",
+      "cancelConfirmRotateBody": "Cheia de recuperare a fost deja modificată. O puteți vizualiza oricând în Setări.",
+      "cancelConfirmConfirm": "Da, anulează",
+      "cancelConfirmDismiss": "Înapoi",
+      "loadError": "Nu am putut încărca cheia de recuperare pe acest dispozitiv."
+    },
+    "file": {
+      "heading": "Cheia de recuperare a backupului conversațiilor",
+      "warning": "Păstrați această cheie în siguranță. Oricine o deține poate accesa backupul; fără ea, backupul nu poate fi recuperat."
+    },
+    "progress": {
+      "titleCreate": "Configurare backup",
+      "titleRotate": "Schimbare cheie de recuperare",
+      "encrypting": "{count, plural, one {Se criptează și se salvează # conversație…} other {Se criptează și se salvează # conversații…}}",
+      "success": "{count, plural, one {Backup finalizat. # conversație este protejată.} other {Backup finalizat. # conversații sunt protejate.}}",
+      "error": "Backupul a eșuat. Conversațiile sunt în continuare pe acest dispozitiv.",
+      "retry": "Reîncercați",
+      "close": "Închide",
+      "done": "Gata"
+    },
+    "input": {
+      "label": "Cheie de recuperare",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Cheile nu conțin literele O, I sau L.",
+      "checksumError": "Acea cheie nu pare corectă — verificați dacă există greșeli de tastare.",
+      "formatError": "Aceasta nu pare a fi o cheie de recuperare.",
+      "incomplete": "Continuați să scrieți — o cheie de recuperare are 56 de caractere.",
+      "valid": "Cheia pare validă."
+    },
+    "restore": {
+      "title": "Restaurați conversațiile",
+      "successTitle": "Backup restaurat",
+      "promptBody": "Am găsit un backup criptat pentru contul dumneavoastră. Introduceți cheia de recuperare pentru a-l restaura pe acest dispozitiv.",
+      "submit": "Restaurează backup-ul",
+      "skip": "Omiteți — începeți de la zero pe acest dispozitiv",
+      "restoring": "Se decriptează și se restaurează conversațiile…",
+      "successBody": "{count, plural, one {# conversație restaurată.} other {# conversații restaurate.}}",
+      "wrongKey": "Acea cheie este validă, dar nu deblochează acest backup. Dacă ați schimbat cheia, folosiți-o pe cea mai recentă.",
+      "corrupt": "Acest backup nu a putut fi citit — este posibil să fie deteriorat. Puteți începe de la zero pe acest dispozitiv sau încercați din nou mai târziu.",
+      "networkError": "Nu s-a putut accesa serviciul de backup. Verificați conexiunea și încercați din nou.",
+      "tryAgain": "Încercați altă cheie",
+      "close": "Gata"
+    },
+    "enterKey": {
+      "title": "Introduceți noua cheie de recuperare",
+      "body": "Cheia de recuperare a fost schimbată pe un alt dispozitiv. Introduceți noua cheie pentru a relua backup-urile pe acest dispozitiv.",
+      "submit": "Folosiți această cheie"
+    },
+    "banner": {
+      "keyMismatchTitle": "Backup-urile sunt întrerupte — cheia de recuperare a fost schimbată pe un alt dispozitiv.",
+      "enterNewKey": "Introduceți noua cheie",
+      "resetBackup": "Resetați backup-ul",
+      "resetConfirmTitle": "Resetați backup-ul cu cheia acestui dispozitiv?",
+      "resetConfirmBody": "Backup-ul existent va fi înlocuit cu conversațiile de pe acest dispozitiv, criptate cu cheia acestui dispozitiv. Alte dispozitive vor avea nevoie de cheia de recuperare a acestui dispozitiv.",
+      "resetConfirmAction": "Resetați backup-ul",
+      "remoteMissingTitle": "Backup-ul nu mai există pe server. Backup-urile sunt întrerupte.",
+      "backUpAgain": "Creați din nou backup",
+      "dismiss": "Închideți"
+    },
+    "rotate": {
+      "confirmTitle": "Schimbați cheia de recuperare?",
+      "confirmBody": "Backup-ul va fi re-criptat cu o nouă cheie, iar cheia veche nu va mai funcționa. Trebuie să salvați noua cheie și să o introduceți pe celelalte dispozitive.",
+      "confirmAction": "Schimbați cheia"
+    },
+    "toast": {
+      "enrollLater": "Puteți activa oricând backup-ul criptat din Setări.",
+      "keyUpdated": "Cheia de recuperare a fost actualizată. Backup-urile au fost reluate.",
+      "resetDone": "Backup-ul a fost resetat cu cheia acestui dispozitiv.",
+      "backupRestarted": "Backup-ul a fost creat din nou.",
+      "opFailed": "Ceva nu a funcționat. Vă rugăm să încercați din nou."
+    },
+    "settings": {
+      "statusOn": "Backup-ul este activ",
+      "statusOff": "Backup-ul este inactiv",
+      "offDescription": "Conversațiile dumneavoastră există doar în acest browser. Activați backup-ul criptat pentru a le păstra în siguranță și a le putea restaura pe alte dispozitive. Conversațiile sunt criptate pe dispozitivul dumneavoastră — noi nu le putem citi niciodată.",
+      "turnOn": "Activați backup-ul",
+      "restoreTitle": "Există deja un backup pentru contul dumneavoastră",
+      "restoreDescription": "Introduceți cheia de recuperare pentru a-l restaura pe acest dispozitiv.",
+      "restore": "Restaurează backup-ul",
+      "lastBackup": "Ultimul backup: {time}",
+      "lastBackupNever": "Niciun backup finalizat până acum",
+      "keyFingerprint": "Cheie ····-{tail}",
+      "syncState": {
+        "idle": "Se așteaptă sincronizarea",
+        "syncing": "Se face backup…",
+        "ok": "La zi",
+        "keyOutOfDate": "Pauză — cheia de recuperare a fost schimbată pe un alt dispozitiv",
+        "remoteMissing": "Pauzat — backup-ul a fost eliminat de pe server",
+        "error": "Ultima încercare de backup a eșuat"
+      },
+      "backUpNow": "Efectuează backup acum",
+      "backUpNowSuccess": "Backup finalizat",
+      "backUpNowFailure": "Backup-ul a eșuat — conversațiile de pe acest dispozitiv au rămas neschimbate",
+      "viewKey": "Vezi cheia de recuperare",
+      "changeKey": "Schimbă cheia de recuperare",
+      "dangerTitle": "Zonă periculoasă",
+      "turnOffDelete": "Dezactivează și șterge backup-ul",
+      "turnOffConfirmTitle": "Dezactivați backup-ul?",
+      "turnOffConfirmMessage": "Aceasta va șterge backup-ul de pe serverele noastre pentru toate dispozitivele. Conversațiile rămân pe acest dispozitiv. Puteți reactiva backup-ul mai târziu folosind o nouă cheie de recuperare.",
+      "turnOffConfirmAction": "Șterge backup-ul",
+      "turnOffSuccess": "Backup-ul a fost dezactivat și șters",
+      "turnOffFailure": "Nu s-a putut șterge backup-ul. Vă rugăm să încercați din nou."
+    }
+  },
+  "memories": {
+    "title": "Amintiri",
+    "description": "Permite asistentului să rețină informații durabile pe care le împărtășiți — precum rolul, preferințele și proiectele în desfășurare — și să le utilizeze în conversații.",
+    "enableToggle": "Activează amintirile",
+    "privacyNote": "Informațiile sunt stocate doar în acest browser și sunt incluse în conversațiile dvs. pentru personalizarea răspunsurilor.",
+    "empty": "Nicio amintire încă. Informațiile relevante sunt salvate automat din conversațiile dvs.",
+    "savedOn": "Salvat la {date}",
+    "deleteMemory": "Șterge amintirea",
+    "clearAll": "Șterge toate amintirile",
+    "clearAllConfirmQuestion": "Ștergeți toate amintirile? Această acțiune nu poate fi anulată.",
+    "clearAllConfirm": "Șterge tot",
+    "cancel": "Anulează"
+  },
+  "contextWindow": {
+    "label": "Fereastră de context",
+    "value": "{count} mesaje",
+    "fewer": "Mai puține mesaje",
+    "more": "Mai multe mesaje",
+    "description": "Mesajele mai vechi care depășesc această limită sunt rezumate și trimise ca context."
+  },
+  "agentAccess": {
+    "title": "Acces agent",
+    "description": "Controlați care utilizatori pot folosi agenții Foundry partajați. Regulile doar restricționează suplimentar ceea ce permite deja accesul Azure al utilizatorului — nu se poate acorda acces dacă Azure îl refuză.",
+    "backToChat": "Înapoi la chat",
+    "loading": "Se încarcă agenții și regulile…",
+    "loadError": "Nu s-au putut încărca datele de acces ale agentului.",
+    "rulesUnavailableWarning": "Regulile de acces nu au putut fi încărcate din stocare. Invocarea agentului este momentan blocată și regulile nu pot fi editate.",
+    "retry": "Reîncercați",
+    "rulesTab": "Reguli agent",
+    "localAdminsTab": "Administratori locali",
+    "noAgents": "Nu există agenți de administrat.",
+    "sourceLabel": "Sursă",
+    "notDiscoverable": "Neaccesibil pentru dvs.",
+    "notDiscoverableHint": "Există o regulă pentru acest agent, dar nu apare în lista dvs. de descoperire — este posibil să fi fost redenumit, accesul dvs. Azure să nu ajungă la el sau regula de acces să nu vă includă.",
+    "accessEveryone": "Toți",
+    "accessRestricted": "Restricționat",
+    "edit": "Editează",
+    "updatedByLine": "Ultima actualizare de {user} la {date}",
+    "accessTypeLabel": "Cine poate folosi acest agent",
+    "everyoneDescription": "Oricine are deja acces la acest agent prin Azure.",
+    "restrictedDescription": "Doar utilizatorii și domeniile enumerate mai jos.",
+    "allowDomainsLabel": "Domenii permise",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Utilizatori permisi",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Apăsați Enter pentru a adăuga",
+    "removeChip": "Elimină",
+    "groupsLabel": "Grupuri permise",
+    "groupsPendingConsent": "Accesul pe baza grupului este în așteptarea consimțământului administratorului chiriașului și nu poate fi editat momentan.",
+    "restrictedEmptyWarning": "Nu există utilizatori sau domenii listate — nimeni nu va putea utiliza acest agent.",
+    "save": "Salvează",
+    "saving": "Se salvează…",
+    "cancel": "Anulează",
+    "saveSuccess": "Regula de acces a fost salvată.",
+    "deleteSuccess": "Regula de acces a fost eliminată — toată lumea poate folosi din nou acest agent.",
+    "saveError": "Nu s-a putut salva. Vă rugăm să încercați din nou.",
+    "conflictError": "Altcineva a făcut modificări în timp ce editați. Reîncărcați pentru a încărca cea mai recentă versiune, apoi efectuați din nou modificarea.",
+    "reload": "Reîncărcați",
+    "localAdminsDescription": "Delegați gestionarea regulilor pentru anumiți agenți fără redeploy. Administratorii locali pot edita doar regulile pentru agenții desemnați lor.",
+    "noLocalAdmins": "Nu sunt configurați administratori locali.",
+    "addLocalAdmin": "Adaugă administrator local",
+    "emailLabel": "Email",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Elimină administrator local",
+    "delegatedAgentsLabel": "Agenți delegați",
+    "noDelegatedAgents": "Nu există agenți disponibili pentru delegare.",
+    "unknownAgentKey": "Cheie de agent necunoscută",
+    "configSaveSuccess": "Administratorii locali au fost salvați.",
+    "configConflictError": "Altcineva a modificat lista administratorilor locali în timp ce editați. Reîncărcați și încercați din nou.",
+    "addAgent": "Adaugă agent",
+    "newPromptAgentTitle": "Agent nou de prompt",
+    "editPromptAgentTitle": "Editează agentul de prompt",
+    "agentNameLabel": "Nume",
+    "agentNamePlaceholder": "ex: Consultant de călătorii",
+    "agentDescriptionLabel": "Descriere",
+    "agentDescriptionPlaceholder": "Afișat utilizatorilor în selectorul de modele",
+    "agentSystemPromptLabel": "Prompt de sistem",
+    "agentSystemPromptPlaceholder": "Instrucțiuni care definesc comportamentul acestui agent",
+    "agentModelLabel": "Model",
+    "agentModelPlaceholder": "Selectează un model...",
+    "agentModelUnavailable": "{modelId} (indisponibil)",
+    "agentModelUnknownError": "Modelul selectat nu mai este disponibil. Alegeți alt model și salvați din nou.",
+    "promptAgentBadge": "Agent de prompt",
+    "editAgent": "Editează agentul",
+    "deleteAgent": "Șterge",
+    "deleteAgentConfirm": "Ștergeți acest agent pentru toți utilizatorii? Acesta va dispărea din selectorul de modele; conversațiile existente își păstrează istoricul.",
+    "confirmDeleteAgent": "Da, șterge",
+    "promptAgentCreateSuccess": "Agentul de prompt a fost creat.",
+    "promptAgentSaveSuccess": "Agentul de prompt a fost salvat.",
+    "promptAgentDeleteSuccess": "Agentul de prompt a fost șters.",
+    "promptAgentsUnavailableWarning": "Agenții de prompt nu au putut fi încărcați din stocare. Nu pot fi editați în acest moment.",
+    "agentsTab": "Agenți",
+    "connectorsTab": "Conectori",
+    "addConnector": "Adăugați conector",
+    "noConnectors": "Nu există încă niciun conector.",
+    "connectorsUnavailableWarning": "Nu s-a putut accesa magazinul de conectori, așa că această listă poate fi incompletă. Nu creați un înlocuitor până nu se încarcă.",
+    "editAccess": "Editați accesul",
+    "deleteConnector": "Ștergeți",
+    "deleteConnectorConfirm": "Ștergeți acest conector? Oricine îl folosește va pierde imediat accesul.",
+    "confirmDeleteConnector": "Ștergeți conectorul",
+    "connectorSaveSuccess": "Conectorul a fost salvat.",
+    "connectorCreateSuccess": "Conectorul a fost creat.",
+    "connectorDeleteSuccess": "Conectorul a fost șters.",
+    "editConnectorTitle": "Editați conectorul",
+    "newConnectorTitle": "Conector nou",
+    "connectorPresetLabel": "Pornire de la un template",
+    "connectorPresetNone": "Pornește de la zero",
+    "connectorNameLabel": "Nume",
+    "connectorDescriptionLabel": "Descriere",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "Înlocuiți {placeholder} din URL cu valoarea proprie înainte de a salva.",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Autentificare",
+    "connectorAuthNone": "Nicio",
+    "connectorAuthBearer": "Token (fiecare utilizator furnizează propriul token)",
+    "connectorAuthOauth": "Autentificare OAuth",
+    "connectorSealingUnavailable": "OAuth nu este disponibil: această implementare nu are AUTH_SECRET configurat pentru a cripta secretele clientului.",
+    "connectorTokenHelpLabel": "Link către instrucțiunile pentru token (opțional)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "Secret client OAuth",
+    "connectorClientSecretStored": "Un secret este salvat. Lăsați necompletat pentru a-l păstra sau introduceți unul nou pentru a-l înlocui.",
+    "connectorClientSecretHint": "Este criptat înainte de stocare și nu va mai fi afișat ulterior.",
+    "connectorScopesLabel": "Scope-uri (separate prin spațiu, opțional)"
+  },
+  "localModels": {
+    "title": "Modele locale",
+    "description": "Conversați cu modele care rulează pe acest computer. Mesajele merg direct din browserul dvs. către aplicația locală și nu ajung niciodată pe serverele noastre — astfel, răspunsurile, titlurile și rezumatele conversațiilor rămân pe propriul dispozitiv.",
+    "detect": "Detectează runtime-urile locale",
+    "detecting": "Se detectează…",
+    "experimental": "Experimental",
+    "portLabel": "Port",
+    "statusUnknown": "Nu a fost verificat încă.",
+    "statusChecking": "Se verifică…",
+    "statusReady": "{count, plural, =0 {Conectat, dar niciun model încărcat.} one {Conectat — # model disponibil.} other {Conectat — # modele disponibile.}}",
+    "statusNotRunning": "Nu s-a putut accesa {label}. Verificați dacă rulează pe acest port și dacă browserul permite accesul către aplicațiile locale de pe acest site.",
+    "statusHttpError": "{label} a răspuns cu o eroare. Verificați log-urile sale.",
+    "corsHelp": {
+      "ollama": "Ollama rulează, dar refuză solicitările de pe acest site. Setați OLLAMA_ORIGINS la adresa acestui site, reporniți Ollama și apoi detectați din nou.",
+      "lmstudio": "LM Studio rulează, dar refuză solicitările de pe acest site. Activați CORS în setările serverului local, apoi detectați din nou.",
+      "llamacpp": "llama.cpp rulează, dar refuză solicitările de pe acest site. Porniți llama-server cu permisiunea pentru cereri cross-origin, apoi detectați din nou."
+    },
+    "privacyNote": "Modelele locale nu suportă atașamente de fișiere, imagini, căutare web sau conectori — acestea necesită serverele noastre. Detectarea verifică doar acest computer."
+  },
+  "urlFetch": {
+    "sourceFallback": "Pagină web",
+    "fallbackHint": "Puteți deschide pagina, copia textul și lipi aici în schimb.",
+    "shortExtract": "Doar un scurt extras a putut fi citit — este posibil ca pagina să fie restricționată sau să necesite autentificare.",
+    "errors": {
+      "invalidUrl": "Aceasta nu pare a fi o adresă web validă.",
+      "ssrfBlocked": "Această adresă nu poate fi preluată din motive de securitate.",
+      "tooManyRedirects": "Acest link a redirecționat de prea multe ori.",
+      "timeout": "Pagina a răspuns prea târziu.",
+      "unreachable": "Pagina nu a putut fi accesată.",
+      "blocked": "Site-ul a refuzat cererea — poate necesita autentificare sau blochează cititorii automați.",
+      "notFound": "Pagina nu a fost găsită.",
+      "upstream": "Site-ul a returnat o eroare.",
+      "pdf": "Acest link duce la un PDF. Descarcă fișierul și folosește butonul de atașare pentru a-l adăuga.",
+      "nonHtml": "Acest link nu duce la o pagină web care poate fi citită.",
+      "tooLarge": "Pagina este prea mare pentru a fi preluată.",
+      "empty": "Nu a fost găsit text citibil pe acea pagină.",
+      "generic": "Pagina nu a putut fi preluată."
+    },
+    "fetchingFile": "Se preia {host}…",
+    "attachLink": "Atașează un link",
+    "attachLinkTitle": "Atașează o pagină web",
+    "attachLinkDescription": "Pagina este preluată, iar textul citibil este atașat la mesajul dvs.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Preia & atașează",
+    "attachLinkInvalid": "Acesta nu pare a fi un link web valid.",
+    "linkBadge": "Dintr-un link",
+    "couldNotRetrieve": "Nu a putut fi preluat",
+    "doc": {
+      "sourceLabel": "Sursă",
+      "retrievedLabel": "Preluat",
+      "attemptedLabel": "Încercat",
+      "failureHeading": "Pagina web nu a putut fi preluată"
+    },
+    "settingsTitle": "Linkuri în mesaje",
+    "settingsToggle": "Preia automat linkurile lipite",
+    "settingsDescription": "Când lipești un link separat, pagina este preluată, iar textul ei este atașat pentru ca asistentul să îl poată citi. Dezactivează această opțiune pentru a păstra linkurile doar ca text simplu — poți totuși atașa manual o pagină din meniul +.",
+    "addLink": "Adaugă un link"
+  },
+  "cameraAccessError": "Nu s-a putut accesa camera. Verificați permisiunile camerei și încercați din nou.",
+  "cameraUnnamedDevice": "Cameră",
+  "pastedText": {
+    "fallbackName": "Text lipit",
+    "charCount": "{count, number} caractere",
+    "removeChip": "Șterge textul lipit „{name}”",
+    "blockLabel": "Text lipit: {name}",
+    "doc": {
+      "heading": "Text lipit",
+      "pastedLabel": "Lipit"
+    },
+    "settingsTitle": "Lipituri mari",
+    "settingsToggle": "Transformă un lipit mare în atașament",
+    "settingsDescription": "Dacă lipiți mai mult text decât limita de mai jos, acesta va fi atașat ca fișier, nu introdus în câmpul mesajului. Textul se folosește exact așa cum a fost lipit — nu se preia și nu se modifică nimic.",
+    "settingsThresholdLabel": "Atașează lipituri mai lungi de",
+    "settingsThresholdUnit": "caractere",
+    "settingsThresholdHint": "Între {min, number} și {max, number} caractere."
+  },
+  "structures": {
+    "section": "Structuri",
+    "sectionSubtitle": "Definiții de câmp salvate. Folosiți una ca rețetă de extragere sau ca schemă inițială pentru un tabel de workflow de date.",
+    "loadFromStructure": "Încarcă structură",
+    "loadFromStructureTitle": "Înlocuiește aceste coloane cu o structură salvată",
+    "pickerEmpty": "Nicio structură salvată momentan.",
+    "pickerTitle": "Încarcă o structură salvată",
+    "saveAsStructure": "Salvează ca structură",
+    "saveAsStructureTitle": "Salvează aceste coloane în biblioteca de structuri",
+    "savedToast": "Structura „{name}” a fost salvată",
+    "namePlaceholder": "Nume structură",
+    "fieldCount": "{count} câmpuri",
+    "fieldCountOne": "1 câmp",
+    "downgradedNotice": "{count} câmp(uri) simplificate la text — tabelele conțin o valoare pe celulă: {names}",
+    "truncatedNotice": "{count} câmp(uri) eliminate — limita tabelului este de {max} coloane: {names}",
+    "skippedDerivedNotice": "{count} coloană(e) calculate nesalvate — formulele fac referire la coloanele acestui tabel: {names}",
+    "loadReplacesColumns": "Aceasta va înlocui coloanele curente. Liniile existente păstrează valorile care au același nume de coloană."
   }
 }

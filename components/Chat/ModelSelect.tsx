@@ -1,5 +1,6 @@
 import {
   IconBrain,
+  IconDeviceDesktop,
   IconPlug,
   IconPlugConnectedX,
   IconX,
@@ -16,6 +17,9 @@ import { useModelOrder } from '@/client/hooks/settings/useModelOrder';
 import { useModelSelectState } from '@/client/hooks/settings/useModelSelectState';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useCustomSourceModels } from '@/client/hooks/useCustomSourceModels';
+import { useLocalRuntimeModels } from '@/client/hooks/useLocalRuntimeModels';
+
+import { isLocalModel } from '@/lib/services/models/localModels';
 
 import { shortSourceHash } from '@/lib/utils/app/agentId';
 import { modelIdToLocaleKey } from '@/lib/utils/app/locales';
@@ -26,6 +30,7 @@ import {
 } from '@/lib/utils/app/modelSeries';
 
 import { Conversation } from '@/types/chat';
+import { LOCAL_RUNTIMES, LOCAL_RUNTIME_DEFAULTS } from '@/types/localRuntime';
 import {
   OpenAIModel,
   OpenAIModelID,
@@ -68,9 +73,35 @@ import {
 
 interface ModelSelectProps {
   onClose?: () => void;
+  /**
+   * Restricts which models may be listed or selected. Workflow
+   * conversations pass `isWorkflowEligibleModel`, because the workflow
+   * routes silently fall back to a default rather than erroring on an
+   * ineligible model — offering one would swap the user's choice without
+   * telling them. Applies to base models, BYO-source models, and the
+   * selection validity check alike.
+   */
+  modelFilter?: (model: OpenAIModel) => boolean;
+  /**
+   * Hides the Agents tab. Workflow routes call Azure OpenAI chat
+   * completions directly and can't run an agent at all.
+   */
+  hideAgentsTab?: boolean;
+  /**
+   * Apply the pick to this conversation only, leaving the user's global
+   * default model for new chats alone. Set for workflows, where the list
+   * is restricted and quietly re-defaulting every future chat off a
+   * narrowed set would be a surprise.
+   */
+  scopedToConversation?: boolean;
 }
 
-export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
+export const ModelSelect: FC<ModelSelectProps> = ({
+  onClose,
+  modelFilter,
+  hideAgentsTab = false,
+  scopedToConversation = false,
+}) => {
   const t = useTranslations();
   const { exploreBots, enableClaudeModels, enableBYOModels } = useFlags();
   const { selectedConversation, updateConversation, conversations } =
@@ -112,7 +143,9 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     setMobileView,
     showAgentWarning,
     setShowAgentWarning,
-  } = useModelSelectState(isSelectedModelAgent);
+    // Never open onto the Agents tab when it isn't rendered: a workflow
+    // conversation carrying a stale agent model would land on a blank pane.
+  } = useModelSelectState(isSelectedModelAgent && !hideAgentsTab);
 
   // Agent source management
   const customAgentSources = useSettingsStore((s) => s.customAgentSources);
@@ -172,10 +205,19 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
   // Flat list for selection/details lookup. Deliberately NOT merged into
   // baseModels: byom models render in their own per-source sections, never in
   // the family tree, and bypass app-level curation (isDisabled, Claude flag).
-  const customSourceModels = useMemo(
-    () => [...visibleSourceModels.values()].flat(),
-    [visibleSourceModels],
-  );
+  const customSourceModels = useMemo(() => {
+    const flat = [...visibleSourceModels.values()].flat();
+    return modelFilter ? flat.filter(modelFilter) : flat;
+  }, [visibleSourceModels, modelFilter]);
+
+  // Locally-detected runtimes (Ollama / LM Studio / llama.cpp). Read-only
+  // here: detection is triggered from Settings, never from the picker, so
+  // opening the model list can't raise a browser permission prompt.
+  const { modelsByRuntime: localModelsByRuntime } = useLocalRuntimeModels();
+  const localModels = useMemo(() => {
+    const flat = Object.values(localModelsByRuntime).flat();
+    return modelFilter ? flat.filter(modelFilter) : flat;
+  }, [localModelsByRuntime, modelFilter]);
 
   // Hidden models/agents — one list keyed by model ID covers both.
   const hiddenModelIds = useSettingsStore((s) => s.hiddenModelIds);
@@ -246,9 +288,10 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
           !m.id.startsWith('custom-') &&
           !m.isCustomAgent &&
           (OpenAIModels[m.id as OpenAIModelID]?.provider !== 'anthropic' ||
-            isClaudeEnabled),
+            isClaudeEnabled) &&
+          (!modelFilter || modelFilter(m)),
       ),
-    [models, isClaudeEnabled],
+    [models, isClaudeEnabled, modelFilter],
   );
 
   // Use the model ordering hook for sorting and reordering
@@ -312,11 +355,34 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
       };
     });
 
+    // Admin-defined prompt agents arrive through /api/agents with
+    // type: 'prompt'. They ride the org- id prefix so the existing
+    // conversation.bot wiring applies; the server resolves the persona and
+    // its real model from botId. The base-model spread is cosmetic only
+    // (sdk/deploymentName are stripped server-side). agentId/agentSource
+    // must stay unset — an agentId would promote the request into the
+    // Foundry agent execution path.
+    const promptAgentModels = visibleFoundryAgents
+      .filter((agent) => agent.type === 'prompt')
+      .map((agent) => ({
+        ...OpenAIModels[OpenAIModelID.GPT_4_1],
+        id: `org-${agent.id}`,
+        name: agent.name,
+        description: agent.description,
+        modelType: undefined,
+        agentId: undefined,
+        isOrganizationAgent: true,
+      }));
+
+    const discoveredFoundryAgents = visibleFoundryAgents.filter(
+      (agent) => agent.type !== 'prompt',
+    );
+
     // Dynamically discovered Foundry agents from ARM API (RBAC-filtered per user).
     // Model ID includes a short hash of the source path so the same-named agent
     // discovered from two different Foundry projects produces two distinct models
     // (otherwise React key collisions + ambiguous selection).
-    const dynamicModels = visibleFoundryAgents.map((agent) => {
+    const dynamicModels = discoveredFoundryAgents.map((agent) => {
       const baseModel = OpenAIModels[OpenAIModelID.GPT_4_1];
       const sourceHash = shortSourceHash(agent.source);
       return {
@@ -336,19 +402,33 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     // Deduplicate: if a Foundry agent exists in both static config and dynamic discovery,
     // prefer the dynamic version (it has RBAC validation)
     const dynamicAgentNames = new Set(
-      visibleFoundryAgents.map((a) => a.agentName),
+      discoveredFoundryAgents.map((a) => a.agentName),
     );
     const deduplicatedStatic = staticModels.filter(
       (m) => !m.agentId || !dynamicAgentNames.has(m.agentId),
     );
 
-    return [...deduplicatedStatic, ...dynamicModels];
+    return [...deduplicatedStatic, ...dynamicModels, ...promptAgentModels];
   }, [isBotsEnabled, foundryAgents, customAgentSources]);
 
   // Combine base models, organization/discovered agents, and custom-source models
+  // baseModels and customSourceModels are already filtered; agents are
+  // dropped wholesale when the Agents tab is hidden, so a stale agent on
+  // the conversation can't be re-selected from the details panel.
   const availableModels = useMemo(
-    () => [...baseModels, ...organizationAgentModels, ...customSourceModels],
-    [baseModels, organizationAgentModels, customSourceModels],
+    () => [
+      ...baseModels,
+      ...(hideAgentsTab ? [] : organizationAgentModels),
+      ...customSourceModels,
+      ...localModels,
+    ],
+    [
+      baseModels,
+      organizationAgentModels,
+      customSourceModels,
+      localModels,
+      hideAgentsTab,
+    ],
   );
 
   const selectedModel =
@@ -425,11 +505,17 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
       // Switch to details view on mobile when a model is selected
       setMobileView('details');
 
-      // Set as default model for future conversations
-      console.log(
-        `[ModelSelect] Setting default model to: ${model.id} (${model.name})`,
-      );
-      setDefaultModelId(model.id as OpenAIModelID);
+      // Set as default model for future conversations — skipped when the
+      // picker is scoped to one conversation (see scopedToConversation), and
+      // for local models: they exist only while their runtime is detected, so
+      // a persisted local default would leave a fresh session pointing at a
+      // model that isn't in any list until the user re-runs detection.
+      if (!scopedToConversation && !isLocalModel(model)) {
+        console.log(
+          `[ModelSelect] Setting default model to: ${model.id} (${model.name})`,
+        );
+        setDefaultModelId(model.id as OpenAIModelID);
+      }
 
       // Update conversation with selected model
       // Initialize defaultSearchMode to INTELLIGENT (privacy-focused) if not already set
@@ -495,6 +581,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
       setMobileView,
       setDefaultModelId,
       updateConversation,
+      scopedToConversation,
     ],
   );
 
@@ -674,12 +761,16 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
             icon: <AzureOpenAIIcon className="w-5 h-5" />,
             width: '115px',
           },
-          {
-            id: 'agents',
-            label: t('modelSelect.tabs.agents'),
-            icon: <AzureAIIcon className="w-5 h-5" />,
-            width: '115px',
-          },
+          ...(hideAgentsTab
+            ? []
+            : [
+                {
+                  id: 'agents',
+                  label: t('modelSelect.tabs.agents'),
+                  icon: <AzureAIIcon className="w-5 h-5" />,
+                  width: '115px',
+                },
+              ]),
         ]}
         activeTab={activeTab}
         onTabChange={(tab) => setActiveTab(tab as 'models' | 'agents')}
@@ -738,7 +829,11 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
 
                   // Informational badges: hosting region (US users, models
                   // with no US instance — still selectable, chat routes to
-                  // the hosting region) and external hosting.
+                  // the hosting region) and external hosting. Emissions tier
+                  // deliberately does NOT appear here: a consolidated series
+                  // row spans variants/versions with different tiers, so one
+                  // badge would be wrong; tiers live on the variant/version
+                  // pickers and the details-panel estimate instead.
                   const badgeFor = (model: OpenAIModel) => {
                     const isExternal =
                       getModelHosting(metaOf(model)) === 'external';
@@ -1184,6 +1279,56 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                           </section>
                         );
                       })}
+                      {/* Local runtimes. Rendered only when a runtime was
+                          detected AND is serving models: detection failures
+                          are silent here by design — the picker shows fewer
+                          options rather than errors the user didn't ask for.
+                          Diagnostics live in Settings › Local models, where
+                          they explicitly went looking. Plain rows only; local
+                          models carry no series and never join the tree. */}
+                      {LOCAL_RUNTIMES.filter(
+                        (runtime) =>
+                          (localModelsByRuntime[runtime]?.length ?? 0) > 0,
+                      ).map((runtime) => (
+                        <section
+                          key={runtime}
+                          className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700"
+                        >
+                          <div className="flex items-center gap-1.5 min-w-0 mb-1.5">
+                            <IconDeviceDesktop
+                              size={12}
+                              className="shrink-0 text-gray-400 dark:text-gray-500"
+                              aria-hidden="true"
+                            />
+                            <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase truncate">
+                              {LOCAL_RUNTIME_DEFAULTS[runtime].label}
+                            </span>
+                            <span className="text-xs font-semibold tabular-nums text-gray-400 dark:text-gray-500">
+                              ({localModelsByRuntime[runtime]?.length ?? 0})
+                            </span>
+                          </div>
+                          <div className="space-y-1">
+                            {(localModelsByRuntime[runtime] ?? []).map(
+                              (model) => (
+                                <ModelCard
+                                  key={model.id}
+                                  id={model.id}
+                                  name={model.name}
+                                  isSelected={selectedModelId === model.id}
+                                  onClick={() => handleModelSelect(model)}
+                                  icon={
+                                    <IconDeviceDesktop
+                                      size={16}
+                                      className="text-gray-500 dark:text-gray-400"
+                                    />
+                                  }
+                                />
+                              ),
+                            )}
+                          </div>
+                        </section>
+                      ))}
+
                       {/* Connect a model source */}
                       {enableBYOModels && (
                         <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">

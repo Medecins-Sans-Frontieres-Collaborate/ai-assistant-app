@@ -20,6 +20,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useAutoFocusComposer } from '@/client/hooks/ui/useAutoFocusComposer';
+import { useCameraSupport } from '@/client/hooks/ui/useCameraSupport';
+import { usePasteComposer } from '@/client/hooks/ui/usePasteComposer';
+import { usePastedTextChips } from '@/client/hooks/workflows/usePastedTextChips';
 import { useTableImport } from '@/client/hooks/workflows/useTableImport';
 
 import { assessData } from '@/client/services/workflows/data/dataAssessment';
@@ -30,7 +34,12 @@ import {
 } from '@/client/services/workflows/data/photoExtraction';
 import { uploadAndExtractText } from '@/client/services/workflows/fileTextExtraction';
 import { appendWorkflowRailMessages } from '@/client/services/workflows/railMessages';
+import { nameWorkflowConversation } from '@/client/services/workflows/workflowTitle';
 import { profileTable } from '@/lib/services/workflows/data/columnStats';
+import {
+  applyDerivedColumns,
+  stripDerivedCells,
+} from '@/lib/services/workflows/data/derived';
 import {
   ColumnFilter,
   applyFilters,
@@ -51,6 +60,7 @@ import { mergeScopedResult } from '@/lib/services/workflows/data/scopedMerge';
 import {
   MAX_ASSESS_ROWS,
   MAX_ROWS,
+  carryRowIds,
   coerceCell,
   deriveNextRowId,
   getRowId,
@@ -58,8 +68,13 @@ import {
   stripRowIds,
   withRowIds,
 } from '@/lib/services/workflows/data/tableUtils';
+import {
+  detectAttributeMatrix,
+  transposeTable,
+} from '@/lib/services/workflows/data/transpose';
 
 import { FILE_COUNT_LIMITS } from '@/lib/utils/app/const';
+import { isMobile } from '@/lib/utils/app/env';
 import { DATA_QUALITY_CRITERIA } from '@/lib/utils/shared/data/qualityCriteria';
 import { downloadFile } from '@/lib/utils/shared/document/exportUtils';
 
@@ -72,6 +87,9 @@ import {
   ReviewEditStatus,
 } from '@/types/workflow';
 
+import CameraCaptureModal from '@/components/UI/CameraCaptureModal';
+
+import { PastedTextChips } from '../Shared/PastedTextChips';
 import { AssessmentPanel } from '../Shared/Review/AssessmentPanel';
 import { CriteriaPicker } from '../Shared/Review/CriteriaPicker';
 import { WorkflowWorkspaceProps } from '../registry';
@@ -88,6 +106,25 @@ import Papa from 'papaparse';
 import { v4 as uuidv4 } from 'uuid';
 
 type Rows = Record<string, unknown>[];
+
+/** Rows sampled into the title seed — enough to characterize the table. */
+const TITLE_SAMPLE_ROWS = 3;
+
+/**
+ * Compact header + first-rows rendering of a table, used only as context
+ * for auto-titling. Not user-facing, so it stays untranslated.
+ */
+function describeTable(columns: DataColumn[], rows: Rows): string {
+  if (columns.length === 0) return '';
+  const names = columns.map((column) => column.name);
+  const lines = [names.join(', ')];
+  for (const row of rows.slice(0, TITLE_SAMPLE_ROWS)) {
+    lines.push(
+      columns.map((column) => String(row[column.id] ?? '')).join(', '),
+    );
+  }
+  return lines.join('\n');
+}
 
 export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const t = useTranslations('workflows');
@@ -134,13 +171,74 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const extractFileRef = useRef<HTMLInputElement>(null);
   const photoInputRef = useRef<HTMLInputElement>(null);
+  /** Mobile camera hand-off; desktop uses the in-page capture modal instead. */
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const [cameraOpen, setCameraOpen] = useState(false);
+  const hasCamera = useCameraSupport();
   /** Single-level undo snapshot; transient by design. */
   const undoRef = useRef<{ columns: DataColumn[]; rows: Rows } | null>(null);
   const [canUndo, setCanUndo] = useState(false);
 
   const columns = useMemo(() => state?.columns ?? [], [state?.columns]);
-  const rows = useMemo(() => state?.rows ?? [], [state?.rows]);
+  const rawRows = useMemo(() => state?.rows ?? [], [state?.rows]);
+  /**
+   * The choke point every consumer reads (grid, filters, exports,
+   * transform payloads, insights): persisted rows overlaid with
+   * computed derived-column cells. Identity when no formulas exist.
+   */
+  const rows = useMemo(
+    () => applyDerivedColumns(columns, rawRows),
+    [columns, rawRows],
+  );
   const hasTable = columns.length > 0;
+
+  // Two composers compete for stray input here, so the open paste box wins:
+  // opening it is an explicit "I am about to paste a table". It takes no
+  // `onAttach` — a pasted CSV must reach the import parser, not become an
+  // attachment. The transform bar gets the attaching behavior instead, since
+  // a wall of text there is material, not an instruction.
+  const pasteRef = useRef<HTMLTextAreaElement>(null);
+  const instructionRef = useRef<HTMLTextAreaElement>(null);
+  const idle = busy === null;
+  const {
+    chips,
+    hasChips,
+    attachPastedText,
+    removeChip,
+    clearChips,
+    composeWithChips,
+  } = usePastedTextChips();
+
+  const appendPaste = useCallback(
+    (text: string) => setPasteText((prev) => prev + text),
+    [],
+  );
+  useAutoFocusComposer({
+    textareaRef: pasteRef,
+    enabled: pasteOpen && idle,
+    append: appendPaste,
+  });
+  usePasteComposer({
+    textareaRef: pasteRef,
+    enabled: pasteOpen && idle,
+    append: appendPaste,
+  });
+
+  const appendInstruction = useCallback(
+    (text: string) => setInstruction((prev) => prev + text),
+    [],
+  );
+  useAutoFocusComposer({
+    textareaRef: instructionRef,
+    enabled: !pasteOpen && hasTable && idle,
+    append: appendInstruction,
+  });
+  usePasteComposer({
+    textareaRef: instructionRef,
+    enabled: !pasteOpen && hasTable && idle,
+    append: appendInstruction,
+    onAttach: attachPastedText,
+  });
   /** Exact stats over the FULL table (prompt ground truth + header popovers). */
   const profiles = useMemo(() => profileTable(columns, rows), [columns, rows]);
   const policy: MissingFieldPolicy =
@@ -163,6 +261,12 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         ? new Set(activeQcSource.rowIds)
         : null,
     [activeQcSource],
+  );
+
+  /** Feature-matrix shape (attributes as rows) → offer a transpose. */
+  const matrixDetected = useMemo(
+    () => hasTable && detectAttributeMatrix(columns, rows),
+    [hasTable, columns, rows],
   );
 
   const filterList = useMemo(() => Object.values(filters), [filters]);
@@ -224,21 +328,38 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         | { source?: DataAnalysisWorkflowState['sources'][number] }
         | { operation?: DataAnalysisWorkflowState['operations'][number] },
     ) => {
-      undoRef.current = { columns, rows };
+      // Snapshot RAW rows: overlaid derived cells must never persist,
+      // and undo writes the snapshot straight back to the store.
+      undoRef.current = { columns, rows: rawRows };
       setCanUndo(true);
       setSelectedRows(new Set());
       updateWorkflowState(conversationId, (prev) => {
         const p = prev as DataAnalysisWorkflowState;
-        // Assign stable ids to any id-less rows (imports, transform output).
+        // Canonicalize: drop derived cells (they are recomputed by the
+        // overlay), then assign stable ids to any id-less rows.
+        const strippedRows = stripDerivedCells(next.columns, next.rows);
         const { rows: nextRows, nextRowId } = withRowIds(
-          next.rows,
-          p.nextRowId ?? deriveNextRowId(next.rows),
+          strippedRows,
+          p.nextRowId ?? deriveNextRowId(strippedRows),
         );
         // Rids only exist after withRowIds, so source→row attribution is
         // injected here: appended rows = positions that had no rid before.
         const appendedRowIds = next.rows
           .map((row, i) => (getRowId(row) ? null : getRowId(nextRows[i])))
           .filter((rid): rid is string => !!rid);
+        // Source attribution must reference rows that still exist —
+        // stale rids would blank a QC-pane-filtered grid.
+        const keptRids = new Set(
+          nextRows.map((row) => getRowId(row)).filter(Boolean),
+        );
+        const prunedSources = p.sources.map((source) =>
+          source.rowIds?.some((rid) => !keptRids.has(rid))
+            ? {
+                ...source,
+                rowIds: source.rowIds.filter((rid) => keptRids.has(rid)),
+              }
+            : source,
+        );
         return {
           ...p,
           columns: next.columns,
@@ -248,8 +369,13 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           assessment: undefined,
           sources:
             'source' in record && record.source
-              ? [...p.sources, { ...record.source, rowIds: appendedRowIds }]
-              : p.sources,
+              ? [...prunedSources, { ...record.source, rowIds: appendedRowIds }]
+              : prunedSources,
+          // New data may be matrix-shaped again — re-offer the transpose.
+          transposeSuggestionDismissed:
+            'source' in record && record.source
+              ? undefined
+              : p.transposeSuggestionDismissed,
           operations:
             'operation' in record && record.operation
               ? [...p.operations, record.operation]
@@ -257,8 +383,20 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           updatedAt: new Date().toISOString(),
         };
       });
+
+      // Name from the first table imported; later imports and transforms
+      // leave the established name alone.
+      if ('source' in record && record.source && !sources?.length) {
+        nameWorkflowConversation(conversationId, {
+          label: record.source.name,
+          // Headers plus a couple of rows say far more about what this
+          // table is than its filename does.
+          sample: describeTable(next.columns, next.rows),
+          workflow: 'Data analysis',
+        });
+      }
     },
-    [columns, rows, conversationId, updateWorkflowState],
+    [columns, rawRows, sources, conversationId, updateWorkflowState],
   );
 
   const handleUndo = useCallback(() => {
@@ -406,7 +544,9 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           sourceText,
-          columns,
+          // Derived columns are computed locally — never ask the model
+          // to extract values for them.
+          columns: columns.filter((c) => !c.formula),
           modelId: conversation?.model?.id,
         }),
       });
@@ -473,7 +613,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
    * all its photo refs, so the QC pane can show every photo beside the
    * rows it produced.
    */
-  const handlePhotoFiles = async (files: FileList | null) => {
+  const handlePhotoFiles = async (files: FileList | File[] | null) => {
     const selected = Array.from(files ?? []).slice(
       0,
       FILE_COUNT_LIMITS.MAX_IMAGES,
@@ -495,7 +635,11 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
 
       let addedCount = 0;
       if (hasTable) {
-        const result = await photoExtract({ imageRefs, columns, modelId });
+        const result = await photoExtract({
+          imageRefs,
+          columns: columns.filter((c) => !c.formula),
+          modelId,
+        });
         const newRows = admitRows(result.rows as Rows, columns);
         const merged = mergeRows(newRows);
         addedCount = newRows.length;
@@ -557,13 +701,15 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     } finally {
       setBusy(null);
       if (photoInputRef.current) photoInputRef.current.value = '';
+      if (cameraInputRef.current) cameraInputRef.current.value = '';
     }
     if (ingestCheckSourceId) await runIngestCheck(ingestCheckSourceId);
   };
 
   const handleTransform = async () => {
-    const trimmed = instruction.trim();
-    if (!trimmed || !hasTable) return;
+    // Held pastes are part of the instruction, so a chip alone is enough.
+    if ((!instruction.trim() && !hasChips) || !hasTable) return;
+    const trimmed = composeWithChips(instruction);
     const scoped = scope !== 'table';
     setError(null);
     setBusy('transform');
@@ -586,11 +732,29 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           parsed?.error || `Transform failed (${response.status})`,
         );
       }
-      const resultColumns = parsed.data.columns as DataColumn[];
+      // The LLM round-trip loses format/formula metadata — re-attach
+      // for columns that kept their id and number type. (Materialized
+      // derived values in the result are stripped again in applyTable;
+      // the overlay recomputes them.)
+      const prevById = new Map(columns.map((column) => [column.id, column]));
+      const resultColumns = (parsed.data.columns as DataColumn[]).map(
+        (column) => {
+          const prev = prevById.get(column.id);
+          if (!prev || prev.type !== 'number' || column.type !== 'number') {
+            return column;
+          }
+          const carried: DataColumn = { ...column };
+          if (prev.format && !carried.format) carried.format = prev.format;
+          if (prev.formula && !carried.formula) carried.formula = prev.formula;
+          return carried;
+        },
+      );
       const resultRows = parsed.data.rows as Rows;
 
       let nextRows = resultRows;
-      if (scoped) {
+      if (!scoped) {
+        nextRows = carryRowIds(rows, resultRows);
+      } else {
         // Positional merge-back (server enforced same count/order): each
         // scoped row keeps its rid; out-of-scope rows get null for any
         // new columns.
@@ -631,11 +795,31 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         parsed.data.explanation || t('data.railTransformDone'),
       );
       setInstruction('');
+      clearChips();
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
       setBusy(null);
     }
+  };
+
+  const handleTranspose = () => {
+    applyTable(transposeTable(columns, rows, t('data.transposeAxisColumn')), {
+      operation: {
+        id: uuidv4(),
+        engine: 'client',
+        instruction: t('data.transposedTable'),
+        at: new Date().toISOString(),
+      },
+    });
+  };
+
+  const dismissTransposeSuggestion = () => {
+    updateWorkflowState(conversationId, (prev) => ({
+      ...(prev as DataAnalysisWorkflowState),
+      transposeSuggestionDismissed: true,
+      updatedAt: new Date().toISOString(),
+    }));
   };
 
   const handleDeleteSelected = () => {
@@ -809,7 +993,10 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     const source = s.sources.find((entry) => entry.id === sourceId);
     const rids = new Set(source?.rowIds ?? []);
     if (rids.size === 0) return;
-    const newRows = s.rows.filter((row) => {
+    // Store rows bypass the workspace memo — overlay derived cells so
+    // ingest checks see the same values manual assessments do.
+    const allRows = applyDerivedColumns(s.columns, s.rows);
+    const newRows = allRows.filter((row) => {
       const rid = getRowId(row);
       return !!rid && rids.has(rid);
     });
@@ -820,7 +1007,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       await runAssessment({
         targetRows: newRows,
         targetColumns: s.columns,
-        allRows: s.rows,
+        allRows,
         criteria: DATA_QUALITY_CRITERIA.filter((c) => c.defaultOn).map(
           (c) => c.id,
         ),
@@ -848,7 +1035,8 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       updateWorkflowState(conversationId, (prev) => {
         const p = prev as DataAnalysisWorkflowState;
         const column = p.columns.find((c) => c.id === columnId);
-        if (!column) return p;
+        // Derived cells are formula-owned — never directly writable.
+        if (!column || column.formula) return p;
         const index = p.rows.findIndex((row) => getRowId(row) === rid);
         if (index === -1) return p;
         const value = raw === '' ? null : coerceCell(raw, column.type);
@@ -954,6 +1142,29 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     }
   };
 
+  /**
+   * Mobile hands off to the native camera app (one shot, same ingest path);
+   * desktop opens the in-page capture modal.
+   */
+  const handleTakePhotoClick = () => {
+    if (isMobile()) {
+      cameraInputRef.current?.click();
+    } else {
+      setCameraOpen(true);
+    }
+  };
+
+  const cameraModal = (
+    <CameraCaptureModal
+      isOpen={cameraOpen}
+      onClose={() => setCameraOpen(false)}
+      onCapture={(file) => {
+        setCameraOpen(false);
+        void handlePhotoFiles([file]);
+      }}
+    />
+  );
+
   if (!state) return null;
 
   const importButtons = (
@@ -1002,6 +1213,28 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         hidden
         onChange={(e) => void handlePhotoFiles(e.target.files)}
       />
+      {hasCamera && (
+        <>
+          <button
+            type="button"
+            onClick={handleTakePhotoClick}
+            disabled={busy !== null}
+            title={t('data.takePhotoHint')}
+            className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border border-gray-300 px-2.5 py-1.5 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-surface-dark-elevated"
+          >
+            <IconCamera size={15} aria-hidden />
+            {t('data.takePhoto')}
+          </button>
+          <input
+            ref={cameraInputRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            hidden
+            onChange={(e) => void handlePhotoFiles(e.target.files)}
+          />
+        </>
+      )}
       {hasTable && (
         <button
           type="button"
@@ -1091,6 +1324,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           {pasteOpen && (
             <div className="mt-3">
               <textarea
+                ref={pasteRef}
                 value={pasteText}
                 onChange={(e) => setPasteText(e.target.value)}
                 rows={6}
@@ -1115,6 +1349,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
               {error}
             </p>
           )}
+          {cameraModal}
         </div>
       </div>
     );
@@ -1249,6 +1484,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         {pasteOpen && (
           <div className="border-b border-gray-200 p-3 dark:border-gray-700">
             <textarea
+              ref={pasteRef}
               value={pasteText}
               onChange={(e) => setPasteText(e.target.value)}
               rows={4}
@@ -1338,6 +1574,32 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             >
               {t('data.dismiss')}
             </button>
+          </p>
+        )}
+
+        {matrixDetected && !state?.transposeSuggestionDismissed && (
+          <p
+            className="flex items-center justify-between gap-2 border-b border-gray-200 px-3 py-2 text-sm text-gray-700 dark:border-gray-700 dark:text-gray-300"
+            role="status"
+          >
+            {t('data.transposeSuggestion')}
+            <span className="flex shrink-0 items-center gap-3">
+              <button
+                type="button"
+                onClick={handleTranspose}
+                disabled={busy !== null}
+                className="text-sm font-medium text-blue-700 underline-offset-2 hover:underline disabled:opacity-50 dark:text-blue-400"
+              >
+                {t('data.transpose')}
+              </button>
+              <button
+                type="button"
+                onClick={dismissTransposeSuggestion}
+                className="text-xs text-gray-500 underline-offset-2 hover:underline dark:text-gray-400"
+              >
+                {t('data.dismiss')}
+              </button>
+            </span>
           </p>
         )}
 
@@ -1461,8 +1723,10 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
               </button>
             </div>
           </div>
+          <PastedTextChips chips={chips} onRemove={removeChip} />
           <div className="flex items-end gap-2">
             <textarea
+              ref={instructionRef}
               value={instruction}
               onChange={(e) => setInstruction(e.target.value)}
               onKeyDown={(e) => {
@@ -1479,7 +1743,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             <button
               type="button"
               onClick={() => void handleTransform()}
-              disabled={!instruction.trim() || busy !== null}
+              disabled={(!instruction.trim() && !hasChips) || busy !== null}
               className="flex min-h-[36px] shrink-0 items-center gap-1.5 rounded-lg bg-gray-300 px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-400 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated"
             >
               <IconSparkles size={15} aria-hidden />
@@ -1535,6 +1799,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           />
         </aside>
       )}
+      {cameraModal}
     </div>
   );
 }

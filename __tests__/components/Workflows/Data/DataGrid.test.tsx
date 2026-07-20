@@ -90,6 +90,26 @@ describe('DataGrid row identity', () => {
   });
 });
 
+describe('DataGrid column visibility', () => {
+  it('hides a column from the columns menu and restores it via show all', () => {
+    renderGrid();
+    expect(screen.getByText('30')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'data.columns' }));
+    fireEvent.click(screen.getByRole('checkbox', { name: /Cases/ }));
+    expect(screen.queryByText('30')).not.toBeInTheDocument();
+    // The footer button now reports the hidden count.
+    fireEvent.click(screen.getByText('data.showAllColumns'));
+    expect(screen.getByText('30')).toBeInTheDocument();
+  });
+
+  it('never allows hiding the last visible column', () => {
+    renderGrid();
+    fireEvent.click(screen.getByRole('button', { name: 'data.columns' }));
+    fireEvent.click(screen.getByRole('checkbox', { name: /Cases/ }));
+    expect(screen.getByRole('checkbox', { name: /Name/ })).toBeDisabled();
+  });
+});
+
 describe('DataGrid cell flags', () => {
   it('marks missing-required (red) and pending-edit (amber) cells', () => {
     const cellFlags = new Map([

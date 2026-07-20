@@ -899,4 +899,48 @@ You should be concise.`;
       expect(useSettingsStore.getState().allowArbitraryMcpServers).toBe(false);
     });
   });
+
+  describe('Context Window / Memories', () => {
+    beforeEach(() => {
+      useSettingsStore.setState({
+        contextWindowSize: 80,
+        memoriesEnabled: false,
+        memoriesFlagEnabled: false,
+      });
+    });
+
+    it('toggles the memories opt-in and the LD flag mirror', () => {
+      useSettingsStore.getState().setMemoriesEnabled(true);
+      useSettingsStore.getState().setMemoriesFlagEnabled(true);
+
+      expect(useSettingsStore.getState().memoriesEnabled).toBe(true);
+      expect(useSettingsStore.getState().memoriesFlagEnabled).toBe(true);
+    });
+
+    it('sets the context window size within bounds', () => {
+      useSettingsStore.getState().setContextWindowSize(120);
+
+      expect(useSettingsStore.getState().contextWindowSize).toBe(120);
+    });
+
+    it('clamps the context window size to 20..200', () => {
+      useSettingsStore.getState().setContextWindowSize(5);
+      expect(useSettingsStore.getState().contextWindowSize).toBe(20);
+
+      useSettingsStore.getState().setContextWindowSize(999);
+      expect(useSettingsStore.getState().contextWindowSize).toBe(200);
+    });
+
+    it('resetSettings restores the default window and turns memories off', () => {
+      useSettingsStore.setState({
+        contextWindowSize: 150,
+        memoriesEnabled: true,
+      });
+
+      useSettingsStore.getState().resetSettings();
+
+      expect(useSettingsStore.getState().contextWindowSize).toBe(80);
+      expect(useSettingsStore.getState().memoriesEnabled).toBe(false);
+    });
+  });
 });

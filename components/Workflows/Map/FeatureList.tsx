@@ -23,6 +23,10 @@ const CONFIDENCE_BADGE: Record<MapFeature['confidence'], string> = {
 
 interface FeatureListProps {
   features: MapFeature[];
+  /** Where each feature came from, with a link when the source has one. */
+  sourceLabel: (
+    feature: MapFeature,
+  ) => { name: string; href: string | null } | null;
   /** Container areas demoted to outline-only on the map. */
   demotedIds?: Set<string>;
   /** Rows dimmed (undated features during a time-lapse sweep). */
@@ -33,6 +37,7 @@ interface FeatureListProps {
 
 export function FeatureList({
   features,
+  sourceLabel,
   demotedIds,
   faintIds,
   onFocus,
@@ -76,6 +81,7 @@ export function FeatureList({
           const dateLine = formatFeatureDates(feature, locale, tMap);
           const isFaint = faintIds?.has(feature.id) ?? false;
           const isExpanded = expandedId === feature.id;
+          const source = sourceLabel(feature);
           return (
             <li
               key={feature.id}
@@ -177,11 +183,31 @@ export function FeatureList({
                           .join(' · ')}
                       </span>
                     )}
+                  {isExpanded && source && (
+                    <span className="mt-0.5 block text-xs text-gray-500 dark:text-gray-400">
+                      {source.href ? (
+                        <a
+                          href={source.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          // The row itself focuses the map; this link must
+                          // not also trigger that.
+                          onClick={(e) => e.stopPropagation()}
+                          className="underline hover:text-blue-700 dark:hover:text-blue-300"
+                        >
+                          {source.name}
+                        </a>
+                      ) : (
+                        source.name
+                      )}
+                    </span>
+                  )}
                 </span>
               </button>
               {(feature.description ||
                 feature.confidenceReason ||
-                feature.parentName) && (
+                feature.parentName ||
+                source) && (
                 <button
                   type="button"
                   onClick={() =>

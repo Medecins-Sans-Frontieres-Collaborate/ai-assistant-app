@@ -73,6 +73,15 @@ export interface BlobStorage {
    */
   deleteIfExists(blobName: string): Promise<boolean>;
   /**
+   * Lists the names of all blobs under the given prefix. Used to wipe a
+   * user-scoped prefix (e.g. encrypted backup data) without tracking
+   * individual blob names.
+   *
+   * @param prefix - Blob name prefix to enumerate (e.g. `${userId}/backup/`)
+   * @returns Promise resolving to the full blob names, unordered
+   */
+  listBlobs(prefix: string): Promise<string[]>;
+  /**
    * Generates a SAS URL for accessing the blob with read permissions.
    * Used for batch transcription API which requires a publicly accessible URL.
    *
@@ -111,7 +120,7 @@ export interface BlobStorage {
    * @param prefix - The blob name prefix to filter by (e.g., "grants/OCA/narratives/")
    * @returns Promise resolving to an array of blob items with name and size
    */
-  listBlobs(
+  listBlobsDetailed(
     prefix: string,
   ): Promise<Array<{ name: string; size: number; lastModified: Date }>>;
 }
@@ -364,6 +373,22 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
     return result.succeeded;
   }
 
+  async listBlobs(prefix: string): Promise<string[]> {
+    const containerClient = this.blobServiceClient.getContainerClient(
+      this.containerName as string,
+    );
+    return withAzureRetry(
+      async () => {
+        const names: string[] = [];
+        for await (const blob of containerClient.listBlobsFlat({ prefix })) {
+          names.push(blob.name);
+        }
+        return names;
+      },
+      { label: 'blob.listBlobs' },
+    );
+  }
+
   async getBlobSize(blobName: string): Promise<number> {
     const containerClient = this.blobServiceClient.getContainerClient(
       this.containerName as string,
@@ -579,7 +604,7 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
    * Lists blobs under a given prefix (virtual directory).
    * Returns blob name, size, and last modified date for each match.
    */
-  async listBlobs(
+  async listBlobsDetailed(
     prefix: string,
   ): Promise<Array<{ name: string; size: number; lastModified: Date }>> {
     const perfStart = performance.now();
@@ -596,7 +621,7 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       });
     }
     console.log(
-      `[Perf] AzureBlobStorage.listBlobs: ${(performance.now() - perfStart).toFixed(1)}ms (${results.length} blobs)`,
+      `[Perf] AzureBlobStorage.listBlobsDetailed: ${(performance.now() - perfStart).toFixed(1)}ms (${results.length} blobs)`,
     );
     return results;
   }

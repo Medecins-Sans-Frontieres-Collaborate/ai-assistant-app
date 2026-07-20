@@ -110,8 +110,8 @@ export async function GET(request: NextRequest) {
 
     // Fetch OC-specific and shared supplemental files in parallel
     const [ocBlobs, sharedBlobs] = await Promise.all([
-      storage.listBlobs(`grants/${oc}/supplemental/`),
-      storage.listBlobs('grants/shared/supplemental/'),
+      storage.listBlobsDetailed(`grants/${oc}/supplemental/`),
+      storage.listBlobsDetailed('grants/shared/supplemental/'),
     ]);
 
     const ocFiles = ocBlobs.map((blob) => ({
@@ -188,7 +188,9 @@ export async function DELETE(request: NextRequest) {
         );
       }
 
-      const blobs = await storage.listBlobs(`grants/${oc}/supplemental/`);
+      const blobs = await storage.listBlobsDetailed(
+        `grants/${oc}/supplemental/`,
+      );
       let deleted = 0;
       for (const blob of blobs) {
         await storage.deleteIfExists(blob.name);

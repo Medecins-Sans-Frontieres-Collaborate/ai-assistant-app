@@ -23,9 +23,13 @@ export interface CompactMapFeature {
   prominence: string;
   confidence: string;
   countryCode?: string;
+  /** Range start instant, 'YYYY-MM-DDTHH:mm'. */
   eventStart?: string;
+  /** Exclusive range end instant; absent when the material stated no end. */
   eventEnd?: string;
   eventOngoing?: boolean;
+  /** How finely the material stated the timing. */
+  eventPrecision?: string;
   description: string;
 }
 
@@ -38,9 +42,19 @@ const PROMINENCE_ORDER: Record<string, number> = {
   mention: 2,
 };
 
+/**
+ * Compact timing for the digest: the range plus its precision, so the model
+ * can see that "1812-01-01T00:00@year" is a year-level claim rather than a
+ * New Year's Day event.
+ */
 function dateSpan(f: CompactMapFeature): string {
-  if (!f.eventStart && !f.eventEnd && !f.eventOngoing) return '';
-  return `${f.eventStart ?? ''}${f.eventOngoing ? '..ongoing' : f.eventEnd ? `..${f.eventEnd}` : ''}`;
+  if (!f.eventStart) return '';
+  const end = f.eventOngoing
+    ? '..ongoing'
+    : f.eventEnd
+      ? `..${f.eventEnd}`
+      : '';
+  return `${f.eventStart}${end}@${f.eventPrecision ?? 'day'}`;
 }
 
 function fullLine(f: CompactMapFeature): string {

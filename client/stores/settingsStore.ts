@@ -1,9 +1,24 @@
 'use client';
 
+import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
+import {
+  DEFAULT_MAP_TIMELAPSE,
+  MapTimelapseSettings,
+  clampTimelapseSettings,
+} from '@/lib/utils/shared/geo/timelapsePacing';
+import {
+  DEFAULT_PASTE_ATTACHMENT_CHARS,
+  clampPasteAttachmentChars,
+} from '@/lib/utils/shared/paste/pastedText';
 import { UserRegion } from '@/lib/utils/shared/region';
 
-import { ExtractionRecipe } from '@/types/extractionRecipe';
+import {
+  LOCAL_RUNTIMES,
+  LocalRuntime,
+  LocalRuntimeStatus,
+  isValidPort,
+} from '@/types/localRuntime';
 import {
   DEFAULT_MODEL_ORDER,
   ModelListSource,
@@ -21,12 +36,14 @@ import {
   StreamingSpeedConfig,
   Verbosity,
 } from '@/types/settings';
+import { SavedStructure } from '@/types/structure';
 import { Tone } from '@/types/tone';
 import { DEFAULT_TTS_SETTINGS, TTSSettings } from '@/types/tts';
 import {
   CustomTranslationLanguage,
   DocumentCustomCriterion,
   DocumentSpec,
+  TranslationCustomCriterion,
   TranslationGlossary,
 } from '@/types/workflow';
 
@@ -57,7 +74,9 @@ export interface TokenUsageBucket {
 }
 
 /** Builds the tokenUsageStats bucket key for one request's usage. */
-export function tokenUsageKey(usage: TokenUsageMetadata): string {
+export function tokenUsageKey(
+  usage: Pick<TokenUsageMetadata, 'modelId' | 'region' | 'reasoningEffort'>,
+): string {
   return `${usage.modelId}|${usage.region ?? 'default'}|${usage.reasoningEffort ?? 'none'}`;
 }
 
@@ -136,10 +155,16 @@ export interface McpOauthState {
  */
 export interface McpServerConfig {
   id: string;
-  /** Present ⇒ curated catalog entry ('github' | 'asana'); absent ⇒ arbitrary. */
+  /** Present ⇒ curated catalog entry ('github' | 'asana' | …). */
   catalogKey?: string;
+  /**
+   * Present ⇒ admin-authored connector. Like catalogKey the URL is resolved
+   * server-side, but resolution ALSO re-checks this user's access rules, so a
+   * stale entry for a revoked connector simply stops resolving.
+   */
+  connectorId?: string;
   name: string;
-  /** '' for curated entries; user-entered https URL otherwise. */
+  /** '' for curated entries and connectors; user-entered https URL otherwise. */
   url: string;
   /** How this server authenticates (mirrors the catalog for curated entries). */
   authMode: McpAuthMode;
@@ -202,6 +227,23 @@ interface SettingsStore {
   customAgentSources: AgentSource[];
   /** BYO Foundry accounts the user connected for model discovery. */
   customModelSources: ModelSource[];
+  /**
+   * User port overrides for local model runtimes. Only overrides are stored —
+   * defaults live in LOCAL_RUNTIME_DEFAULTS. The HOST is never user-editable
+   * (always 127.0.0.1), so this is the only persisted value that influences
+   * where a local request goes; it is re-validated on rehydrate.
+   */
+  localRuntimePorts: Partial<Record<LocalRuntime, number>>;
+  /**
+   * Session-scoped detection results, keyed by runtime. Deliberately NOT
+   * persisted: a runtime that was running yesterday tells us nothing about
+   * today, and a stale "ready" would offer models that can't answer.
+   * Lives in the store rather than the hook because the picker and the
+   * settings pane both read it, and the picker unmounts on close.
+   */
+  localRuntimeStatus: Partial<Record<LocalRuntime, LocalRuntimeStatus>>;
+  /** LaunchDarkly `localModels` mirror. Fail-closed; never persisted. */
+  localModelsFlagEnabled: boolean;
   /** Reusable terminology glossaries for the translation workflow. */
   glossaries: TranslationGlossary[];
   /** User-added translation target languages (flagged in the picker). */
@@ -210,6 +252,8 @@ interface SettingsStore {
   documentSpecs: DocumentSpec[];
   /** User-defined document quality criteria (document workflow). */
   documentCriteria: DocumentCustomCriterion[];
+  /** User-defined MQM-style criteria for the translation workflow. */
+  translationCriteria: TranslationCustomCriterion[];
   /** MCP servers the user connected (Connectors settings section). */
   mcpServers: McpServerConfig[];
   /** User opt-in for adding/sending arbitrary (non-catalog) MCP servers. */
@@ -221,6 +265,23 @@ interface SettingsStore {
    * only flips on an explicit `=== true` flag value. NOT persisted.
    */
   mcpArbitraryFlagEnabled: boolean;
+  /**
+   * Max messages sent per chat request (the "context window"). Defaults to
+   * the legacy hard cut (VALIDATION_LIMITS.CLIENT_MAX_MESSAGES); the dropped
+   * middle is summarized via conversation compaction instead of silently
+   * lost. The setter clamps to 20..200 (server zod rejects >MAX_API_MESSAGES).
+   */
+  contextWindowSize: number;
+  /** User opt-in for cross-conversation Memories (default off). */
+  memoriesEnabled: boolean;
+  /**
+   * Runtime-only mirror of the LaunchDarkly `enableMemories` flag, set by
+   * AppInitializer so vanilla stores (chatStore) can gate without hook
+   * access (same pattern as mcpArbitraryFlagEnabled). Fail-closed: defaults
+   * to false and only flips on an explicit `=== true` flag value. NOT
+   * persisted.
+   */
+  memoriesFlagEnabled: boolean;
   /**
    * Model IDs the user has hidden from the picker. Covers base models and
    * agents alike (everything in the picker is keyed by a string model ID:
@@ -246,6 +307,19 @@ interface SettingsStore {
   tokenUsageStats: Record<string, TokenUsageBucket>;
   /** ISO timestamp of the first recorded usage (display: "since ..."). */
   tokenUsageFirstTrackedAt: string | null;
+  /**
+   * Usage BACK-CALCULATED from conversations that predate tracking (tokens
+   * approximated from stored message text — see usageBackfill.ts). Kept
+   * separate from tokenUsageStats so the UI can label the estimated portion.
+   * Same key format and raw-counts-only convention as tokenUsageStats.
+   */
+  estimatedUsageStats: Record<string, TokenUsageBucket>;
+  /**
+   * ISO timestamp stamped when the one-time historical backfill ran (or was
+   * intentionally skipped). Non-null = never run it again — including for
+   * conversations imported later (accepted limitation).
+   */
+  historicalUsageBackfilledAt: string | null;
 
   /**
    * Provenance of the current `models` list (from /api/models). Runtime-only,
@@ -259,8 +333,12 @@ interface SettingsStore {
    * selectability without hook access. Runtime-only, not persisted.
    */
   userRegion: UserRegion | null;
-  /** User-defined structured-data extraction recipes (Connectors → Recipes). */
-  extractionRecipes: ExtractionRecipe[];
+  /**
+   * User-defined data structures (Customizations → Structures). Shared: an
+   * entry is usable as an extraction recipe and as a data-workflow table
+   * schema. Renamed from `extractionRecipes` in v41.
+   */
+  savedStructures: SavedStructure[];
   streamingSpeed: StreamingSpeedConfig;
 
   /** Whether to include user info (name, title, email, dept) in system prompt */
@@ -342,6 +420,12 @@ interface SettingsStore {
     updates: Partial<Omit<DocumentCustomCriterion, 'id'>>,
   ) => void;
   deleteDocumentCriterion: (id: string) => void;
+  addTranslationCriterion: (criterion: TranslationCustomCriterion) => void;
+  updateTranslationCriterion: (
+    id: string,
+    updates: Partial<Omit<TranslationCustomCriterion, 'id'>>,
+  ) => void;
+  deleteTranslationCriterion: (id: string) => void;
 
   // Glossary Actions (translation workflow)
   addGlossary: (glossary: TranslationGlossary) => void;
@@ -367,6 +451,18 @@ interface SettingsStore {
   updateCustomModelSource: (source: ModelSource) => void;
   deleteCustomModelSource: (id: string) => void;
 
+  // Local Runtime Actions (Ollama / LM Studio / llama.cpp)
+  /** Sets a port override, or clears it when given undefined. */
+  setLocalRuntimePort: (
+    runtime: LocalRuntime,
+    port: number | undefined,
+  ) => void;
+  setLocalRuntimeStatus: (
+    runtime: LocalRuntime,
+    status: LocalRuntimeStatus,
+  ) => void;
+  setLocalModelsFlagEnabled: (enabled: boolean) => void;
+
   // MCP Server Actions (Connectors)
   addMcpServer: (server: McpServerConfig) => void;
   updateMcpServer: (id: string, updates: Partial<McpServerConfig>) => void;
@@ -374,14 +470,16 @@ interface SettingsStore {
   setAllowArbitraryMcpServers: (enabled: boolean) => void;
   setMcpArbitraryFlagEnabled: (enabled: boolean) => void;
 
-  // Extraction Recipe Actions
-  setExtractionRecipes: (recipes: ExtractionRecipe[]) => void;
-  addExtractionRecipe: (recipe: ExtractionRecipe) => void;
-  updateExtractionRecipe: (
-    id: string,
-    updates: Partial<ExtractionRecipe>,
-  ) => void;
-  deleteExtractionRecipe: (id: string) => void;
+  // Context Window / Memories Actions
+  setContextWindowSize: (size: number) => void;
+  setMemoriesEnabled: (enabled: boolean) => void;
+  setMemoriesFlagEnabled: (enabled: boolean) => void;
+
+  // Saved Structure Actions
+  setSavedStructures: (structures: SavedStructure[]) => void;
+  addSavedStructure: (structure: SavedStructure) => void;
+  updateSavedStructure: (id: string, updates: Partial<SavedStructure>) => void;
+  deleteSavedStructure: (id: string) => void;
 
   // Hidden Model/Agent Actions
   hideModel: (id: string) => void;
@@ -394,6 +492,14 @@ interface SettingsStore {
   // Token usage tracking (see tokenUsageStats)
   recordTokenUsage: (usage: TokenUsageMetadata) => void;
   resetTokenUsageStats: () => void;
+  /**
+   * Folds back-calculated historical buckets into estimatedUsageStats AND
+   * stamps historicalUsageBackfilledAt in one atomic set — a re-invoked
+   * effect (StrictMode) reads the marker and skips, so no double merge.
+   */
+  mergeEstimatedUsage: (entries: Record<string, TokenUsageBucket>) => void;
+  /** Stamps the backfill marker when there was nothing to merge (or on failure). */
+  markHistoricalBackfillDone: () => void;
 
   // Model list provenance / region (runtime-only)
   setModelListSource: (source: ModelListSource | null) => void;
@@ -458,17 +564,90 @@ interface SettingsStore {
   autoInjectPinnedImages: boolean;
   setAutoInjectPinnedImages: (enabled: boolean) => void;
 
+  /**
+   * When ON (default): pasting a bare link into the chat composer fetches
+   * that page server-side and attaches its readable text, so the model can
+   * actually read what was linked instead of only seeing the URL.
+   *
+   * When OFF: a pasted link stays plain text. The explicit "Attach a link"
+   * action still works — this gates only the automatic behavior.
+   */
+  autoFetchPastedLinks: boolean;
+  setAutoFetchPastedLinks: (enabled: boolean) => void;
+
+  /**
+   * Character count above which pasted text becomes an attachment instead of
+   * composer content. A wall of pasted text is a document, not a sentence:
+   * inlining it buries the actual question and makes the composer unusable.
+   *
+   * `0` disables the behavior entirely. Values in between are clamped to
+   * `PASTE_ATTACHMENT_MIN_CHARS` on read and write, so a hand-edited
+   * localStorage value can't make every two-word paste into a file.
+   */
+  pasteAsAttachmentChars: number;
+  setPasteAsAttachmentChars: (chars: number) => void;
+
+  /**
+   * Pacing of the map workflow's time-lapse. Persisted rather than kept as
+   * workspace view state: how fast is comfortable to read is a property of
+   * the person watching, not of the map they happen to have open.
+   */
+  mapTimelapse: MapTimelapseSettings;
+  setMapTimelapse: (settings: Partial<MapTimelapseSettings>) => void;
+
   // Stop-generation confirmation preferences
   confirmStopFromButton: boolean;
   confirmStopFromKeyboard: boolean;
+  /** Drop accepted/rejected review edits from the queue automatically. */
+  autoClearResolvedEdits: boolean;
+  /**
+   * Default state of the "Suggest changes" checkbox on the Document composer:
+   * a revision comes back as reviewable suggestions instead of overwriting the
+   * document. Per-run the user can still tick it either way.
+   */
+  suggestRevisions: boolean;
+  /**
+   * Cases where a revision is applied DIRECTLY even with suggestions on,
+   * because suggesting would be unhelpful or misleading. All default on.
+   */
+  suggestRevisionsExceptions: {
+    /** A single change so large that accepting it accepts the whole rewrite. */
+    largeRewrites: boolean;
+    /** Sections moved rather than edited; each half reads as nonsense. */
+    structuralReorders: boolean;
+  };
+  /**
+   * Fraction of the document (0–1) that ONE change must span before
+   * `largeRewrites` treats the result as unreviewable.
+   */
+  suggestRevisionsLargeRewriteRatio: number;
   setConfirmStopFromButton: (enabled: boolean) => void;
   setConfirmStopFromKeyboard: (enabled: boolean) => void;
+  setAutoClearResolvedEdits: (enabled: boolean) => void;
+  setSuggestRevisions: (enabled: boolean) => void;
+  setSuggestRevisionsException: (
+    key: 'largeRewrites' | 'structuralReorders',
+    enabled: boolean,
+  ) => void;
+  setSuggestRevisionsLargeRewriteRatio: (ratio: number) => void;
 
   // Reset
   resetSettings: () => void;
 }
 
+/**
+ * Fraction of a document that must change before a revision counts as a
+ * wholesale rewrite. Half is the point past which a suggestion queue stops
+ * being a review and starts being "accept the whole thing".
+ */
+const DEFAULT_LARGE_REWRITE_RATIO = 0.5;
+
 const DEFAULT_TEMPERATURE = 0.5;
+const DEFAULT_CONTEXT_WINDOW_SIZE = VALIDATION_LIMITS.CLIENT_MAX_MESSAGES; // 80
+// Clamp bounds: below ~20 messages chats lose too much context; the server's
+// ChatBodySchema rejects more than VALIDATION_LIMITS.MAX_API_MESSAGES (200).
+const CONTEXT_WINDOW_MIN = 20;
+const CONTEXT_WINDOW_MAX = VALIDATION_LIMITS.MAX_API_MESSAGES;
 const DEFAULT_SYSTEM_PROMPT = '';
 const DEFAULT_DISPLAY_NAME_PREFERENCE: DisplayNamePreference = 'firstName';
 const DEFAULT_CUSTOM_DISPLAY_NAME = '';
@@ -490,20 +669,29 @@ export const useSettingsStore = create<SettingsStore>()(
       customAgents: [],
       customAgentSources: [],
       customModelSources: [],
+      localRuntimePorts: {},
+      localRuntimeStatus: {},
+      localModelsFlagEnabled: false,
       glossaries: [],
       customLanguages: [],
       documentSpecs: [],
       documentCriteria: [],
+      translationCriteria: [],
       mcpServers: [],
       allowArbitraryMcpServers: false,
       mcpArbitraryFlagEnabled: false,
+      contextWindowSize: DEFAULT_CONTEXT_WINDOW_SIZE,
+      memoriesEnabled: false,
+      memoriesFlagEnabled: false,
       hiddenModelIds: [],
       starredModelIds: [],
       tokenUsageStats: {},
       tokenUsageFirstTrackedAt: null,
+      estimatedUsageStats: {},
+      historicalUsageBackfilledAt: null,
       modelListSource: null,
       userRegion: null,
-      extractionRecipes: [],
+      savedStructures: [],
       streamingSpeed: DEFAULT_STREAMING_SPEED,
       includeUserInfoInPrompt: false, // Default off for privacy
       preferredName: '',
@@ -539,9 +727,24 @@ export const useSettingsStore = create<SettingsStore>()(
       autoPinActiveFiles: true, // Auto-pin uploaded files by default
       autoInjectPinnedImages: true, // Re-inject pinned images each turn by default
 
+      // Fetch pasted links and attach their text by default
+      autoFetchPastedLinks: true,
+
+      // Pasting more than this many characters attaches instead of inlining
+      pasteAsAttachmentChars: DEFAULT_PASTE_ATTACHMENT_CHARS,
+
+      mapTimelapse: DEFAULT_MAP_TIMELAPSE,
+
       // Stop-generation confirmation preferences (both default ON)
       confirmStopFromButton: true,
       confirmStopFromKeyboard: true,
+      autoClearResolvedEdits: false,
+      suggestRevisions: true,
+      suggestRevisionsExceptions: {
+        largeRewrites: true,
+        structuralReorders: false,
+      },
+      suggestRevisionsLargeRewriteRatio: DEFAULT_LARGE_REWRITE_RATIO,
 
       // Actions
       setTemperature: (temperature) => set({ temperature }),
@@ -649,6 +852,31 @@ export const useSettingsStore = create<SettingsStore>()(
           documentCriteria: state.documentCriteria.filter((c) => c.id !== id),
         })),
 
+      // Custom criteria actions (translation workflow). Kept separate from
+      // documentCriteria: the rubrics are domain-specific (MQM dimensions
+      // vs document quality), so one shared list would put irrelevant
+      // criteria in both pickers.
+      addTranslationCriterion: (criterion) =>
+        set((state) => ({
+          translationCriteria: [...state.translationCriteria, criterion],
+        })),
+
+      updateTranslationCriterion: (id, updates) =>
+        set((state) => ({
+          translationCriteria: state.translationCriteria.map((c) =>
+            c.id === id
+              ? { ...c, ...updates, updatedAt: new Date().toISOString() }
+              : c,
+          ),
+        })),
+
+      deleteTranslationCriterion: (id) =>
+        set((state) => ({
+          translationCriteria: state.translationCriteria.filter(
+            (c) => c.id !== id,
+          ),
+        })),
+
       // Custom language actions (translation workflow)
       addCustomLanguage: (language) =>
         set((state) => ({
@@ -740,6 +968,31 @@ export const useSettingsStore = create<SettingsStore>()(
           ),
         })),
 
+      // Local Runtime Actions (Ollama / LM Studio / llama.cpp)
+      setLocalRuntimePort: (runtime, port) =>
+        set((state) => {
+          const next = { ...state.localRuntimePorts };
+          // Reject anything undialable at the write boundary too, not just on
+          // rehydrate — this value decides where a request is sent.
+          if (port === undefined || !isValidPort(port)) {
+            delete next[runtime];
+          } else {
+            next[runtime] = port;
+          }
+          return { localRuntimePorts: next };
+        }),
+
+      setLocalRuntimeStatus: (runtime, status) =>
+        set((state) => ({
+          localRuntimeStatus: {
+            ...state.localRuntimeStatus,
+            [runtime]: status,
+          },
+        })),
+
+      setLocalModelsFlagEnabled: (enabled) =>
+        set({ localModelsFlagEnabled: enabled }),
+
       // MCP Server Actions (Connectors)
       addMcpServer: (server) =>
         set((state) => ({ mcpServers: [...state.mcpServers, server] })),
@@ -761,6 +1014,20 @@ export const useSettingsStore = create<SettingsStore>()(
 
       setMcpArbitraryFlagEnabled: (enabled) =>
         set({ mcpArbitraryFlagEnabled: enabled }),
+
+      // Context Window / Memories Actions
+      setContextWindowSize: (size) =>
+        set({
+          contextWindowSize: Math.min(
+            Math.max(size, CONTEXT_WINDOW_MIN),
+            CONTEXT_WINDOW_MAX,
+          ),
+        }),
+
+      setMemoriesEnabled: (enabled) => set({ memoriesEnabled: enabled }),
+
+      setMemoriesFlagEnabled: (enabled) =>
+        set({ memoriesFlagEnabled: enabled }),
 
       // Hidden Model/Agent Actions. Hiding unstars: a model can't be both
       // surfaced in "Your models" and hidden from the picker.
@@ -818,26 +1085,58 @@ export const useSettingsStore = create<SettingsStore>()(
         }),
 
       resetTokenUsageStats: () =>
-        set({ tokenUsageStats: {}, tokenUsageFirstTrackedAt: null }),
+        set({
+          tokenUsageStats: {},
+          tokenUsageFirstTrackedAt: null,
+          estimatedUsageStats: {},
+          // Stamp (not null) so the one-time backfill doesn't resurrect the
+          // history the user just chose to clear.
+          historicalUsageBackfilledAt: new Date().toISOString(),
+        }),
 
-      // Extraction Recipe Actions
-      setExtractionRecipes: (recipes) => set({ extractionRecipes: recipes }),
+      mergeEstimatedUsage: (entries) =>
+        set((state) => {
+          const merged = { ...state.estimatedUsageStats };
+          for (const [key, bucket] of Object.entries(entries)) {
+            const existing = merged[key];
+            merged[key] = {
+              promptTokens: (existing?.promptTokens ?? 0) + bucket.promptTokens,
+              completionTokens:
+                (existing?.completionTokens ?? 0) + bucket.completionTokens,
+              requests: (existing?.requests ?? 0) + bucket.requests,
+            };
+          }
+          return {
+            estimatedUsageStats: merged,
+            historicalUsageBackfilledAt:
+              state.historicalUsageBackfilledAt ?? new Date().toISOString(),
+          };
+        }),
 
-      addExtractionRecipe: (recipe) =>
+      markHistoricalBackfillDone: () =>
         set((state) => ({
-          extractionRecipes: [...state.extractionRecipes, recipe],
+          historicalUsageBackfilledAt:
+            state.historicalUsageBackfilledAt ?? new Date().toISOString(),
         })),
 
-      updateExtractionRecipe: (id, updates) =>
+      // Saved Structure Actions
+      setSavedStructures: (structures) => set({ savedStructures: structures }),
+
+      addSavedStructure: (structure) =>
         set((state) => ({
-          extractionRecipes: state.extractionRecipes.map((r) =>
-            r.id === id ? { ...r, ...updates } : r,
+          savedStructures: [...state.savedStructures, structure],
+        })),
+
+      updateSavedStructure: (id, updates) =>
+        set((state) => ({
+          savedStructures: state.savedStructures.map((s) =>
+            s.id === id ? { ...s, ...updates } : s,
           ),
         })),
 
-      deleteExtractionRecipe: (id) =>
+      deleteSavedStructure: (id) =>
         set((state) => ({
-          extractionRecipes: state.extractionRecipes.filter((r) => r.id !== id),
+          savedStructures: state.savedStructures.filter((s) => s.id !== id),
         })),
 
       // Model Ordering Actions
@@ -1041,11 +1340,53 @@ export const useSettingsStore = create<SettingsStore>()(
       setAutoInjectPinnedImages: (enabled) =>
         set({ autoInjectPinnedImages: enabled }),
 
+      setAutoFetchPastedLinks: (enabled) =>
+        set({ autoFetchPastedLinks: enabled }),
+
+      // Clamped on write as well as on read, for the same reason as the
+      // timelapse sliders below: the UI is bounded, but a hand-edited
+      // localStorage value must not make every paste an attachment.
+      setPasteAsAttachmentChars: (chars) =>
+        set({ pasteAsAttachmentChars: clampPasteAttachmentChars(chars) }),
+
+      // Clamped on write as well as on read: the sliders are bounded, but a
+      // hand-edited localStorage value must not produce a frozen sweep.
+      setMapTimelapse: (settings) =>
+        set((state) => ({
+          mapTimelapse: clampTimelapseSettings({
+            ...state.mapTimelapse,
+            ...settings,
+          }),
+        })),
+
       // Stop-generation confirmation actions
       setConfirmStopFromButton: (enabled) =>
         set({ confirmStopFromButton: enabled }),
       setConfirmStopFromKeyboard: (enabled) =>
         set({ confirmStopFromKeyboard: enabled }),
+
+      setAutoClearResolvedEdits: (enabled) =>
+        set({ autoClearResolvedEdits: enabled }),
+
+      setSuggestRevisions: (enabled) => set({ suggestRevisions: enabled }),
+
+      setSuggestRevisionsException: (key, enabled) =>
+        set((state) => ({
+          suggestRevisionsExceptions: {
+            ...state.suggestRevisionsExceptions,
+            [key]: enabled,
+          },
+        })),
+
+      setSuggestRevisionsLargeRewriteRatio: (ratio) =>
+        set({
+          // Clamped: a ratio outside this band would make the exception either
+          // always or never fire, which reads as the feature being broken.
+          suggestRevisionsLargeRewriteRatio: Math.min(
+            0.95,
+            Math.max(0.1, ratio),
+          ),
+        }),
 
       resetSettings: () =>
         set({
@@ -1058,15 +1399,20 @@ export const useSettingsStore = create<SettingsStore>()(
           tones: [],
           customAgents: [],
           glossaries: [],
+          translationCriteria: [],
           // Wipes connector tokens too — Reset Settings clears everything,
           // and lingering secrets after a "reset" would be worse.
           mcpServers: [],
           allowArbitraryMcpServers: false,
+          contextWindowSize: DEFAULT_CONTEXT_WINDOW_SIZE,
+          memoriesEnabled: false,
           hiddenModelIds: [],
           starredModelIds: [],
           tokenUsageStats: {},
           tokenUsageFirstTrackedAt: null,
-          extractionRecipes: [],
+          estimatedUsageStats: {},
+          historicalUsageBackfilledAt: null,
+          savedStructures: [],
           streamingSpeed: DEFAULT_STREAMING_SPEED,
           includeUserInfoInPrompt: false,
           preferredName: '',
@@ -1084,13 +1430,23 @@ export const useSettingsStore = create<SettingsStore>()(
           toolUsageCounts: {},
           autoPinActiveFiles: true,
           autoInjectPinnedImages: true,
+          autoFetchPastedLinks: true,
+          pasteAsAttachmentChars: DEFAULT_PASTE_ATTACHMENT_CHARS,
+          mapTimelapse: DEFAULT_MAP_TIMELAPSE,
           confirmStopFromButton: true,
           confirmStopFromKeyboard: true,
+          autoClearResolvedEdits: false,
+          suggestRevisions: true,
+          suggestRevisionsExceptions: {
+            largeRewrites: true,
+            structuralReorders: false,
+          },
+          suggestRevisionsLargeRewriteRatio: DEFAULT_LARGE_REWRITE_RATIO,
         }),
     }),
     {
       name: 'settings-storage',
-      version: 30, // Increment this when schema changes to trigger migrations
+      version: 43, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1105,12 +1461,18 @@ export const useSettingsStore = create<SettingsStore>()(
         customAgents: state.customAgents,
         customAgentSources: state.customAgentSources,
         customModelSources: state.customModelSources,
+        // Port overrides persist; localRuntimeStatus and localModelsFlagEnabled
+        // deliberately do NOT — see their declarations for why.
+        localRuntimePorts: state.localRuntimePorts,
         glossaries: state.glossaries,
         customLanguages: state.customLanguages,
         documentSpecs: state.documentSpecs,
         documentCriteria: state.documentCriteria,
-        // NOTE: mcpArbitraryFlagEnabled is deliberately NOT persisted — it
-        // mirrors a LaunchDarkly flag and must re-derive each session.
+        translationCriteria: state.translationCriteria,
+        // NOTE: mcpArbitraryFlagEnabled and memoriesFlagEnabled are
+        // deliberately NOT persisted — they mirror LaunchDarkly flags and
+        // must re-derive each session (a persisted true would survive a
+        // flag-off).
         //
         // SECRETS ARE REDACTED from the persisted blob: localStorage holds
         // NO MCP credentials (PATs, OAuth tokens, client secrets). They live
@@ -1134,11 +1496,15 @@ export const useSettingsStore = create<SettingsStore>()(
             : undefined,
         })),
         allowArbitraryMcpServers: state.allowArbitraryMcpServers,
+        contextWindowSize: state.contextWindowSize,
+        memoriesEnabled: state.memoriesEnabled,
         hiddenModelIds: state.hiddenModelIds,
         starredModelIds: state.starredModelIds,
         tokenUsageStats: state.tokenUsageStats,
         tokenUsageFirstTrackedAt: state.tokenUsageFirstTrackedAt,
-        extractionRecipes: state.extractionRecipes,
+        estimatedUsageStats: state.estimatedUsageStats,
+        historicalUsageBackfilledAt: state.historicalUsageBackfilledAt,
+        savedStructures: state.savedStructures,
         streamingSpeed: state.streamingSpeed,
         includeUserInfoInPrompt: state.includeUserInfoInPrompt,
         preferredName: state.preferredName,
@@ -1159,8 +1525,16 @@ export const useSettingsStore = create<SettingsStore>()(
         consecutiveToolUsage: state.consecutiveToolUsage,
         autoPinActiveFiles: state.autoPinActiveFiles,
         autoInjectPinnedImages: state.autoInjectPinnedImages,
+        autoFetchPastedLinks: state.autoFetchPastedLinks,
+        pasteAsAttachmentChars: state.pasteAsAttachmentChars,
+        mapTimelapse: state.mapTimelapse,
         confirmStopFromButton: state.confirmStopFromButton,
         confirmStopFromKeyboard: state.confirmStopFromKeyboard,
+        autoClearResolvedEdits: state.autoClearResolvedEdits,
+        suggestRevisions: state.suggestRevisions,
+        suggestRevisionsExceptions: state.suggestRevisionsExceptions,
+        suggestRevisionsLargeRewriteRatio:
+          state.suggestRevisionsLargeRewriteRatio,
       }),
       migrate: (persistedState, version) => {
         const state = persistedState as Record<string, unknown>;
@@ -1440,6 +1814,165 @@ export const useSettingsStore = create<SettingsStore>()(
           }
         }
 
+        // Version 30 → 31: Back-calculated (estimated) usage buckets + the
+        // one-time historical-backfill marker. Backfill empty/null; the
+        // AppInitializer effect runs the actual back-calculation.
+        if (version < 31) {
+          if (
+            state.estimatedUsageStats == null ||
+            typeof state.estimatedUsageStats !== 'object'
+          ) {
+            state.estimatedUsageStats = {};
+          }
+          if (state.historicalUsageBackfilledAt === undefined) {
+            state.historicalUsageBackfilledAt = null;
+          }
+        }
+
+        // Version 31 → 33: Estimated buckets are derived data; wipe and
+        // re-arm the one-shot backfill whenever its math is corrected so
+        // stats rebuild cleanly. v32: the v31 backfill wrongly skipped
+        // conversations whose model carries isAgent:true (a "web-search
+        // agent available" marker on ordinary base models — not an agent
+        // chat). v33: back-calc now windows context like the real pipeline
+        // (first + last 79 messages, capped at model context) instead of
+        // growing quadratically on long conversations.
+        if (version < 33) {
+          state.estimatedUsageStats = {};
+          state.historicalUsageBackfilledAt = null;
+        }
+
+        // Version 33 → 34: Adjustable context window (conversation
+        // compaction) + Memories opt-in. Backfill to the previous hard-coded
+        // window size and feature-off so behavior is unchanged until the
+        // user opts in.
+        if (version < 34) {
+          if (state.contextWindowSize === undefined) {
+            state.contextWindowSize = DEFAULT_CONTEXT_WINDOW_SIZE;
+          }
+          if (state.memoriesEnabled === undefined) {
+            state.memoriesEnabled = false;
+          }
+        }
+
+        // Version 34 → 35: Local model runtime port overrides. Backfill to {}
+        // so downstream lookups never index undefined; every runtime falls
+        // back to its default port until the user changes one.
+        if (version < 35) {
+          if (
+            state.localRuntimePorts === null ||
+            typeof state.localRuntimePorts !== 'object'
+          ) {
+            state.localRuntimePorts = {};
+          }
+        }
+
+        // Version 35 → 36: Add autoFetchPastedLinks (default ON — pasting a
+        // link and having its content read is the useful behavior; the
+        // toggle exists for users who would rather links stay inert).
+        if (version < 36) {
+          if (state.autoFetchPastedLinks === undefined) {
+            state.autoFetchPastedLinks = true;
+          }
+        }
+
+        // Version 36 → 37: Add mapTimelapse pacing. Clamped rather than
+        // replaced, so a partially-written value keeps whatever half of it
+        // was valid.
+        if (version < 37) {
+          state.mapTimelapse = clampTimelapseSettings(
+            state.mapTimelapse as Partial<MapTimelapseSettings> | undefined,
+          );
+        }
+
+        // Version 37 → 38: Add the auto-clear-resolved-edits preference.
+        // Defaults off so the decision record stays visible until asked
+        // otherwise.
+        if (version < 38) {
+          if (state.autoClearResolvedEdits === undefined) {
+            state.autoClearResolvedEdits = false;
+          }
+        }
+
+        // Version 38 → 39: custom quality criteria for the translation
+        // workflow, mirroring documentCriteria (v28).
+        if (version < 39) {
+          if (!Array.isArray(state.translationCriteria)) {
+            state.translationCriteria = [];
+          }
+        }
+
+        // Version 39 → 40: Add pasteAsAttachmentChars. Clamped rather than
+        // defaulted so an out-of-range hand-edited value keeps its intent
+        // (a very large threshold still means "rarely attach") instead of
+        // silently snapping back to the default.
+        if (version < 40) {
+          state.pasteAsAttachmentChars = clampPasteAttachmentChars(
+            state.pasteAsAttachmentChars,
+          );
+        }
+
+        // Version 40 → 41: extractionRecipes → savedStructures. The
+        // collection is now shared with the data workflow, so `required`
+        // adopts the tabular polarity: absent = OPTIONAL. Recipes meant the
+        // opposite (absent = required, see the old recipeToJsonSchema), so
+        // every legacy field that omitted the flag is stamped `true` here.
+        // Without this, every saved recipe would silently loosen and start
+        // emitting nullable unions for fields the user marked required.
+        if (version < 41) {
+          const legacy = Array.isArray(state.extractionRecipes)
+            ? (state.extractionRecipes as Record<string, unknown>[])
+            : [];
+          state.savedStructures = legacy.map((recipe) => ({
+            ...recipe,
+            fields: (Array.isArray(recipe.fields)
+              ? (recipe.fields as Record<string, unknown>[])
+              : []
+            ).map((field) => ({
+              ...field,
+              required: field.required !== false,
+            })),
+          }));
+          delete state.extractionRecipes;
+        }
+
+        // Version 41 → 42: Suggested revisions. Defaults ON — a requested
+        // revision comes back reviewable rather than overwriting the document
+        // — with all three bypasses on, matching the shipped defaults.
+        if (version < 42) {
+          if (state.suggestRevisions === undefined) {
+            state.suggestRevisions = true;
+          }
+          const exceptions = state.suggestRevisionsExceptions as
+            | Record<string, unknown>
+            | undefined;
+          state.suggestRevisionsExceptions = {
+            largeRewrites: exceptions?.largeRewrites !== false,
+            structuralReorders: exceptions?.structuralReorders !== false,
+          };
+          if (typeof state.suggestRevisionsLargeRewriteRatio !== 'number') {
+            state.suggestRevisionsLargeRewriteRatio =
+              DEFAULT_LARGE_REWRITE_RATIO;
+          }
+        }
+
+        // Version 42 → 43: the v42 exceptions were far too eager — in practice
+        // a requested revision was almost always applied instead of suggested,
+        // which is the opposite of what the feature is for. The threshold now
+        // measures the LARGEST SINGLE change rather than total change, reorder
+        // detection is off by default (a moved block still reviews fine), and
+        // `selectionScoped` is gone: it is now unconditional, because a
+        // selection revise returns an excerpt that cannot be diffed against
+        // the document at all. Reset rather than preserved — these were our
+        // broken defaults, not a considered user choice.
+        if (version < 43) {
+          state.suggestRevisionsExceptions = {
+            largeRewrites: true,
+            structuralReorders: false,
+          };
+          state.suggestRevisionsLargeRewriteRatio = DEFAULT_LARGE_REWRITE_RATIO;
+        }
+
         return state;
       },
       onRehydrateStorage: () => (state) => {
@@ -1524,6 +2057,33 @@ export const useSettingsStore = create<SettingsStore>()(
             state.mcpServers = [];
           }
 
+          // SECURITY: localRuntimePorts is the only persisted value that
+          // steers where a local chat request is sent, so a tampered or
+          // corrupt localStorage blob must not survive rehydration. Anything
+          // that isn't an integer port in 1–65535 is dropped, falling the
+          // runtime back to its built-in default. (The host is never
+          // persisted — it is hard-coded to 127.0.0.1 — so this is the whole
+          // attack surface.)
+          if (
+            state.localRuntimePorts === null ||
+            typeof state.localRuntimePorts !== 'object' ||
+            Array.isArray(state.localRuntimePorts)
+          ) {
+            state.localRuntimePorts = {};
+          } else {
+            const sanitized: Partial<Record<LocalRuntime, number>> = {};
+            for (const runtime of LOCAL_RUNTIMES) {
+              const port = state.localRuntimePorts[runtime];
+              if (isValidPort(port)) sanitized[runtime] = port;
+            }
+            state.localRuntimePorts = sanitized;
+          }
+
+          // Detection results are session-scoped; never trust a rehydrated
+          // one even if a future partialize change starts writing them.
+          state.localRuntimeStatus = {};
+          state.localModelsFlagEnabled = false;
+
           // Defensive: hiddenModelIds must always be an array. NOTE: do not
           // prune entries against OpenAIModels here — agent IDs (`org-*`,
           // `foundry-*`) are not keys in that registry, so validating against
@@ -1548,10 +2108,18 @@ export const useSettingsStore = create<SettingsStore>()(
             state.tokenUsageStats = {};
           }
 
-          // Defensive: extractionRecipes must always be an array (same
-          // rationale as mcpServers) so recipe `.map`/`.filter` never throw.
-          if (!Array.isArray(state.extractionRecipes)) {
-            state.extractionRecipes = [];
+          // Defensive: estimated (back-calculated) usage — same rationale.
+          if (
+            state.estimatedUsageStats == null ||
+            typeof state.estimatedUsageStats !== 'object'
+          ) {
+            state.estimatedUsageStats = {};
+          }
+
+          // Defensive: savedStructures must always be an array (same
+          // rationale as mcpServers) so `.map`/`.filter` never throw.
+          if (!Array.isArray(state.savedStructures)) {
+            state.savedStructures = [];
           }
         }
       },

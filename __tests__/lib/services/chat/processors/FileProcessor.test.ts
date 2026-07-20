@@ -468,6 +468,103 @@ describe('FileProcessor', () => {
       expect(result.processedContent?.inlineFiles).toBeUndefined();
     });
 
+    it('forwards botId to summarization for org KB agents (no promptAgent)', async () => {
+      const largeText = 'A'.repeat(60000);
+      mockLoadDocument.mockResolvedValue(largeText);
+      mockCalcChunkConfig.mockReturnValue({
+        chunkSize: 50000,
+        batchSize: 3,
+        maxCompletionTokens: 5000,
+        maxSummaryLength: 32000,
+      });
+      mockParseAndQuery.mockResolvedValue('KB-grounded summary.');
+
+      const context = createTestChatContext({
+        hasFiles: true,
+        botId: 'msf_communications',
+        messages: [
+          {
+            role: 'user',
+            content: [
+              { type: 'text', text: 'Analyze this file' },
+              {
+                type: 'file_url',
+                url: 'https://blob.com/large-report.txt',
+                originalFilename: 'large-report.txt',
+              },
+            ],
+            messageType: MessageType.FILE,
+          },
+        ],
+      });
+
+      await fileProcessor.execute(context);
+
+      expect(mockParseAndQuery).toHaveBeenCalledWith(
+        expect.objectContaining({ botId: 'msf_communications' }),
+      );
+    });
+
+    it('suppresses KB grounding for prompt-agent chats (botId not forwarded)', async () => {
+      // Prompt agents arrive via botId but must never trigger a
+      // knowledge-base search (mirrors RAGEnricher): a truthy botId would
+      // turn the large-file summarization into an Azure "On Your Data"
+      // request grounded on the org KB index.
+      const largeText = 'A'.repeat(60000);
+      mockLoadDocument.mockResolvedValue(largeText);
+      mockCalcChunkConfig.mockReturnValue({
+        chunkSize: 50000,
+        batchSize: 3,
+        maxCompletionTokens: 5000,
+        maxSummaryLength: 32000,
+      });
+      mockParseAndQuery.mockResolvedValue('Plain summary.');
+
+      const context = createTestChatContext({
+        hasFiles: true,
+        botId: 'prompt-abc123def456',
+        messages: [
+          {
+            role: 'user',
+            content: [
+              { type: 'text', text: 'Analyze this file' },
+              {
+                type: 'file_url',
+                url: 'https://blob.com/large-report.txt',
+                originalFilename: 'large-report.txt',
+              },
+            ],
+            messageType: MessageType.FILE,
+          },
+        ],
+      });
+      context.promptAgent = {
+        version: 1,
+        id: 'prompt-abc123def456',
+        name: 'Persona',
+        description: '',
+        systemPrompt: 'You are a persona.',
+        modelId: 'gpt-5.2',
+        createdBy: 'admin@msf.org',
+        createdAt: '2026-07-18T00:00:00.000Z',
+        updatedBy: 'admin@msf.org',
+        updatedAt: '2026-07-18T00:00:00.000Z',
+      };
+
+      const result = await fileProcessor.execute(context);
+
+      expect(mockParseAndQuery).toHaveBeenCalledWith(
+        expect.objectContaining({ botId: undefined }),
+      );
+      // The summarization itself still runs on the standard path.
+      expect(result.processedContent?.fileSummaries).toEqual([
+        expect.objectContaining({
+          filename: 'large-report.txt',
+          summary: 'Plain summary.',
+        }),
+      ]);
+    });
+
     it('should handle mix of small and large files', async () => {
       const smallText = 'Short content.';
       const largeText = 'B'.repeat(60000);

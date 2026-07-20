@@ -152,6 +152,28 @@ describe('RAGEnricher', () => {
 
       expect(enricher.shouldRun(context)).toBe(false);
     });
+
+    it('should return false when a prompt agent was resolved for the botId', () => {
+      // Prompt agents also ride botId but are handled by PromptAgentEnricher
+      // and must never trigger a knowledge-base search.
+      const context = createTestChatContext({
+        botId: 'prompt-abc123def456',
+      });
+      context.promptAgent = {
+        version: 1,
+        id: 'prompt-abc123def456',
+        name: 'Persona',
+        description: '',
+        systemPrompt: 'You are a persona.',
+        modelId: 'gpt-5.2',
+        createdBy: 'admin@msf.org',
+        createdAt: '2026-07-18T00:00:00.000Z',
+        updatedBy: 'admin@msf.org',
+        updatedAt: '2026-07-18T00:00:00.000Z',
+      };
+
+      expect(enricher.shouldRun(context)).toBe(false);
+    });
   });
 
   describe('executeStage', () => {

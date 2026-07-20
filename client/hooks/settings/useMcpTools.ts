@@ -58,7 +58,9 @@ export function useMcpTools(server: McpServerConfig | undefined) {
             name: server.name,
             ...(server.catalogKey
               ? { catalogKey: server.catalogKey }
-              : { url: server.url }),
+              : server.connectorId
+                ? { connectorId: server.connectorId }
+                : { url: server.url }),
             ...(effectiveToken ? { authToken: effectiveToken } : {}),
           },
         }),

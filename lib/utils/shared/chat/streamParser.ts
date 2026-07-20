@@ -5,6 +5,7 @@ import {
   TranscriptMetadata,
   createStreamDecoder,
   parseMetadataFromContent,
+  pendingMetadataStartIndex,
 } from '@/lib/utils/app/metadata';
 
 import {
@@ -32,6 +33,12 @@ export class StreamParser {
   private text: string = '';
   /** Bytes before this index are either in `displayText` or were events. */
   private processedIndex: number = 0;
+  /**
+   * Set once a terminal metadata block has been seen, complete or partial.
+   * Gates trailing-newline trimming so a metadata-free stream keeps any
+   * newlines the model actually produced.
+   */
+  private sawMetadataBoundary: boolean = false;
   /** What the markdown renderer sees. Incomplete marker tails are excluded. */
   private displayText: string = '';
   private extractedCitations: Citation[] = [];
@@ -92,6 +99,23 @@ export class StreamParser {
     let scanEnd = this.text.length;
     if (parsed.metadataStartIndex != null) {
       scanEnd = Math.min(scanEnd, parsed.metadataStartIndex);
+    } else {
+      // The block has only PARTIALLY arrived (split across network reads):
+      // parseMetadataFromContent reports no index until it sees the closing
+      // marker, so without this the half-marker flushes into displayText —
+      // and because processedIndex is monotonic, it can never be taken back.
+      // Hold those bytes until the rest of the block lands.
+      const pendingMeta = pendingMetadataStartIndex(this.text);
+      if (pendingMeta !== -1) {
+        scanEnd = Math.min(scanEnd, pendingMeta);
+      }
+    }
+    // Once we know a metadata block exists, any trailing newlines in the
+    // display text are its `\n\n` separator, never content — the separator
+    // itself can be split across reads, so its first `\n` may already have
+    // flushed before the marker became recognizable.
+    if (parsed.metadataStartIndex != null || scanEnd < this.text.length) {
+      this.sawMetadataBoundary = true;
     }
     const scanInput =
       scanEnd === this.text.length ? this.text : this.text.slice(0, scanEnd);
@@ -142,10 +166,13 @@ export class StreamParser {
     // Strip dangling "[1] [2]" citation indices at the end so the CitationList
     // below the message owns citation display. Derived per-render — the raw
     // accumulator keeps all bytes in case a later chunk extends past them.
-    const renderedDisplayText = this.displayText.replace(
+    let renderedDisplayText = this.displayText.replace(
       /\n*\s*(?:\[\d+\]\s*)+\s*$/g,
       '',
     );
+    if (this.sawMetadataBoundary) {
+      renderedDisplayText = renderedDisplayText.replace(/\n+$/, '');
+    }
 
     // Update citations if found and different from previous
     const currentCitationsStr = JSON.stringify(parsed.citations);

@@ -105,7 +105,7 @@ export async function GET(request: NextRequest) {
 
     const storage = createBlobStorageClient(session);
     const prefix = `grants/${oc}/${type}s/`;
-    const blobs = await storage.listBlobs(prefix);
+    const blobs = await storage.listBlobsDetailed(prefix);
 
     const documents = blobs.map((blob) => ({
       name: blob.name.split('/').pop() || blob.name,
@@ -171,7 +171,7 @@ export async function DELETE(request: NextRequest) {
         );
       }
 
-      const blobs = await storage.listBlobs(`grants/${oc}/narratives/`);
+      const blobs = await storage.listBlobsDetailed(`grants/${oc}/narratives/`);
       let deleted = 0;
       for (const blob of blobs) {
         await storage.deleteIfExists(blob.name);

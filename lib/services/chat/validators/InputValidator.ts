@@ -401,6 +401,18 @@ const ChatBodySchema = z
     activeFilesTokensUsed: z.number().int().min(0).optional(),
     autoInjectPinnedImages: z.boolean().optional(),
     extraction: ExtractionRequestSchema.optional(),
+    // Best-effort summary of messages dropped by client-side context
+    // windowing (conversation compaction) — rendered into the system prompt.
+    conversationSummary: z
+      .string()
+      .max(8000, 'Conversation summary too long (max 8,000 chars)')
+      .optional(),
+    // Long-term user memory snippets (Memories feature) — rendered into the
+    // system prompt.
+    memories: z
+      .array(z.string().max(600, 'Memory too long (max 600 chars)'))
+      .max(60, 'Too many memories (max 60)')
+      .optional(),
   })
   .strict(); // Reject unknown properties
 
