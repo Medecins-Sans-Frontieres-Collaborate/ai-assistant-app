@@ -2428,7 +2428,18 @@
     "modelRow": "{requests} ñaɗɗo · {grams} g",
     "disclosure": "Naatal ɗi accii luungal version {version} · jokkondir {since} · chat tenor (agent e annditorde knowledge-base waawaaniima).",
     "reset": "Fannu jumɗe jokkol",
-    "estimatedPortion": "Nana veŋtani ~{grams} g CO₂e ({requests} njiytorde) hesɗinira e konngol chaten ɓen jokkude ɓuri taggi — hesɗinira e binndi ndiyam, teeŋtinde njoɓdi token ɓe wonani."
+    "estimatedPortion": "Nana veŋtani ~{grams} g CO₂e ({requests} njiytorde) hesɗinira e konngol chaten ɓen jokkude ɓuri taggi — hesɗinira e binndi ndiyam, teeŋtinde njoɓdi token ɓe wonani.",
+    "chipTitle": "Chip walal",
+    "chipDescription": "Jaaɓnirgal mujje makko karbon e doggol e jamma, on refti top chat input.",
+    "chipAlways": "Hollu hoore",
+    "chipAlwaysHint": "Chip maa holli so tawii jaaɓnirgal makko.",
+    "chipAuto": "Hollu e rewteede walla duunde ko",
+    "chipAutoHint": "Chip on woodi so jaaɓnirgal rewtii, ɗum so ina ɓuri. Duunde ko walla fokusi ɗum on artii.",
+    "chipHidden": "Mballu",
+    "chipHiddenHint": "Chip on mballu so wonaa refti. Jaaɓnirgal balɗe hokka ko e hello ngo.",
+    "chipAutoHideLabel": "Sakkito ngam",
+    "chipAutoHideUnit": "hawndu",
+    "chipAutoHideHint": "He {min} e {max} hawndu."
   },
   "extraction": {
     "toggleLabel": "Fowndo ɗiɗi e jamfa",
@@ -3337,7 +3348,15 @@
       "measured": "Teeŋtinirɗe e njoɓdi token ɓe",
       "estimated": "Hesɗinira e ƴeewte yimɓe baɗte",
       "lastRequest": "Njiytorde ɗiɗal",
-      "disclaimer": "Hesɗinɗe kala njiytorde ena POOF njoɓdi token ɓe teeŋtinira walla ƴeewtora, jogi e cakkitiiwol ɓuri jeyɗaal e juumre v{version}. Yimɓe baɗte hesɗinira e binndi ndiyam e model jokkol e jawdi. Teeŋtinirde wonani."
+      "disclaimer": "Hesɗinɗe kala njiytorde ena POOF njoɓdi token ɓe teeŋtinira walla ƴeewtora, jogi e cakkitiiwol ɓuri jeyɗaal e juumre v{version}. Yimɓe baɗte hesɗinira e binndi ndiyam e model jokkol e jawdi. Teeŋtinirde wonani.",
+      "visibilityGroup": "Ñaamngal yaltii chip maaɓɓe",
+      "visibilityLabel": "Hollu:",
+      "visibility": {
+        "always": "Hoore",
+        "auto": "Auto",
+        "hidden": "Mballu"
+      },
+      "visibilityHint": "Auto on holli chip so tawii njoɓɗo rewtii walla so a woodi duunde ko. Aɗa waawi topptude ɗum kadi e Settings › Usage & Impact."
     }
   },
   "table": {

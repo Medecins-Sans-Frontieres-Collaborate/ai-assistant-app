@@ -2444,7 +2444,18 @@
     "modelRow": "{requests} richieste · {grams} g",
     "disclosure": "Stime basate su assunzioni v{version} · dal {since} · solo chat standard (agenti e risposte da knowledge base escluse).",
     "reset": "Reimposta statistiche utilizzo",
-    "estimatedPortion": "Include circa {grams} g di CO₂e ({requests} richieste) stimati da chat precedenti al tracciamento — ricalcolati dal testo dei messaggi memorizzati, non da conteggi di token misurati."
+    "estimatedPortion": "Include circa {grams} g di CO₂e ({requests} richieste) stimati da chat precedenti al tracciamento — ricalcolati dal testo dei messaggi memorizzati, non da conteggi di token misurati.",
+    "chipTitle": "Chip emissioni",
+    "chipDescription": "L’impronta di carbonio stimata per la conversazione corrente, mostrata sopra il campo di input della chat.",
+    "chipAlways": "Mostra sempre",
+    "chipAlwaysHint": "Il chip resta visibile ogni volta che la conversazione ha una stima.",
+    "chipAuto": "Mostra su aggiornamento o al passaggio del mouse",
+    "chipAutoHint": "Il chip appare quando la stima cambia, poi svanisce. Passarci sopra o attivarlo lo fa riapparire.",
+    "chipHidden": "Nascosto",
+    "chipHiddenHint": "Il chip non viene mai mostrato. I totali vengono comunque registrati e appaiono in questa pagina.",
+    "chipAutoHideLabel": "Svanisci dopo",
+    "chipAutoHideUnit": "secondi",
+    "chipAutoHideHint": "Tra {min} e {max} secondi."
   },
   "extraction": {
     "toggleLabel": "Estrai dati strutturati",
@@ -3353,7 +3364,15 @@
       "measured": "Da conteggi di token segnalati",
       "estimated": "Ricalcolato da messaggi meno recenti",
       "lastRequest": "Ultima richiesta",
-      "disclaimer": "Stime per richiesta da conteggi di token segnalati o approssimati, utilizzando medie pubblicate e assunzioni v{version}. I messaggi meno recenti sono ricalcolati dal testo memorizzato e dal modello attuale della conversazione. Non è una misurazione."
+      "disclaimer": "Stime per richiesta da conteggi di token segnalati o approssimati, utilizzando medie pubblicate e assunzioni v{version}. I messaggi meno recenti sono ricalcolati dal testo memorizzato e dal modello attuale della conversazione. Non è una misurazione.",
+      "visibilityGroup": "Visibilità del chip emissioni",
+      "visibilityLabel": "Mostra:",
+      "visibility": {
+        "always": "Sempre",
+        "auto": "Auto",
+        "hidden": "Nascondi"
+      },
+      "visibilityHint": "La modalità automatica mostra il chip quando la stima si aggiorna o quando ci passi sopra con il mouse. Puoi modificarlo di nuovo in Impostazioni › Utilizzo e Impatto."
     }
   },
   "table": {

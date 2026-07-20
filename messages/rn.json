@@ -2428,7 +2428,18 @@
     "modelRow": "{requests} vyasabwe · {grams} g",
     "disclosure": "Ibi vyiyumviro vyashingiwe ku bikekwa v{version} · kuva {since} · ibiganiro bisanzwe gusa (ivyo abakozi hamwe n’inyishu zo muri knowledge-base ntibibarwa).",
     "reset": "Siba ibiharuro vy'ukoresheje",
-    "estimatedPortion": "Harimwo nk’~{grams} g CO₂e ({requests} ibisabwa) vyabazwe bivuye mu biganiro vyabaye mbere y’uturonde, vyasubirwamwo bivuye ku butumwa bwabitswe, si ku mubare wa token wapimwe."
+    "estimatedPortion": "Harimwo nk’~{grams} g CO₂e ({requests} ibisabwa) vyabazwe bivuye mu biganiro vyabaye mbere y’uturonde, vyasubirwamwo bivuye ku butumwa bwabitswe, si ku mubare wa token wapimwe.",
+    "chipTitle": "Emissions chip",
+    "chipDescription": "Ibipimo vy’uruhara rwa karubone vy’iki kiganiro, biboneka hejuru y’ahandikirwa ubutumwa.",
+    "chipAlways": "Yamye iboneka",
+    "chipAlwaysHint": "Chip iguma iboneka igihe cose ikiganiro gifise igipimo cakozwe.",
+    "chipAuto": "Erekana ku mpinduka canke kuyitora",
+    "chipAutoHint": "Chip iboneka iyo igipimo gihindutse, hanyuma igacika. Kuyitora canke kuyihereza isubira kwibonekeza.",
+    "chipHidden": "Ntiboneka",
+    "chipHiddenHint": "Chip ntiba igaragara. Ibipimo vyose biguma bikurikiranwa kandi biboneka kuri uru rupapuro.",
+    "chipAutoHideLabel": "Igume igaragara amezi",
+    "chipAutoHideUnit": "amasegonda",
+    "chipAutoHideHint": "Hagati ya {min} na {max} amasegonda."
   },
   "extraction": {
     "toggleLabel": "Kuyungurura amakuru ateguye",
@@ -3337,7 +3348,15 @@
       "measured": "Bishingiye ku mubare wa token watanzwe",
       "estimated": "Vyasubiwemwo bivuye ku butumwa bwa kera",
       "lastRequest": "Ibisabwe biheruka",
-      "disclaimer": "Ibipimwa ku gisabwa kimwe cose bivuye ku mubare wa token watanzwe canke wiyumvirijwe, ukoresheje impuzandengo zishirwa ahabona n’ivyiyumviro v{version}. Ubutumwa bwa kera busubirwamwo bivuye ku butumwa bwabitswe hamwe n’igihe (model) iriho ubu mu kiganiro. Si igipimo nyakuri."
+      "disclaimer": "Ibipimwa ku gisabwa kimwe cose bivuye ku mubare wa token watanzwe canke wiyumvirijwe, ukoresheje impuzandengo zishirwa ahabona n’ivyiyumviro v{version}. Ubutumwa bwa kera busubirwamwo bivuye ku butumwa bwabitswe hamwe n’igihe (model) iriho ubu mu kiganiro. Si igipimo nyakuri.",
+      "visibilityGroup": "Kwerekana uburyo chip iboneka",
+      "visibilityLabel": "Erekana:",
+      "visibility": {
+        "always": "Igihe cose",
+        "auto": "Vyikora",
+        "hidden": "Ntibigaragara"
+      },
+      "visibilityHint": "Auto ishusha chip iyo umwimbu uhindutse canke iyo uyitoye. Ushobora guhindura ivyo muri Settings › Usage & Impact."
     }
   },
   "table": {

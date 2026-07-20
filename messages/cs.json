@@ -2444,7 +2444,18 @@
     "modelRow": "{requests} pož. · {grams} g",
     "disclosure": "Odhady založené na předpokladech v{version} · od {since} · pouze standardní chat (odpovědi agentů a znalostní báze nejsou započítány).",
     "reset": "Resetovat statistiky využití",
-    "estimatedPortion": "Zahrnuje přibližně {grams} g CO₂e ({requests} požadavků) odhadnutých z chatů před zavedením sledování — zpětně vypočítáno z uložených zpráv, nikoli z měřených počtů tokenů."
+    "estimatedPortion": "Zahrnuje přibližně {grams} g CO₂e ({requests} požadavků) odhadnutých z chatů před zavedením sledování — zpětně vypočítáno z uložených zpráv, nikoli z měřených počtů tokenů.",
+    "chipTitle": "Emisní čip",
+    "chipDescription": "Odhadovaná uhlíková stopa aktuální konverzace, zobrazená nad vstupním polem chatu.",
+    "chipAlways": "Zobrazovat vždy",
+    "chipAlwaysHint": "Čip zůstává viditelný, pokud má konverzace odhad.",
+    "chipAuto": "Zobrazit při aktualizaci nebo najetí",
+    "chipAutoHint": "Čip se objeví, když se odhad změní, poté zmizí. Při najetí myší nebo kliknutí se opět zobrazí.",
+    "chipHidden": "Skryto",
+    "chipHiddenHint": "Čip se nikdy nezobrazuje. Součty jsou stále sledovány a zobrazeny na této stránce.",
+    "chipAutoHideLabel": "Vyprší po",
+    "chipAutoHideUnit": "sekundách",
+    "chipAutoHideHint": "Mezi {min} a {max} sekundami."
   },
   "extraction": {
     "toggleLabel": "Extrahovat strukturovaná data",
@@ -3353,7 +3364,15 @@
       "measured": "Z hlášených počtů tokenů",
       "estimated": "Zpětně vypočítáno ze starších zpráv",
       "lastRequest": "Poslední požadavek",
-      "disclaimer": "Odhady na požadavek z hlášených nebo přibližných počtů tokenů, s využitím zveřejněných průměrů a předpokladů v{version}. Starší zprávy jsou zpětně dopočítány z uloženého textu a aktuálního modelu konverzace. Nejde o měření."
+      "disclaimer": "Odhady na požadavek z hlášených nebo přibližných počtů tokenů, s využitím zveřejněných průměrů a předpokladů v{version}. Starší zprávy jsou zpětně dopočítány z uloženého textu a aktuálního modelu konverzace. Nejde o měření.",
+      "visibilityGroup": "Viditelnost emisního čipu",
+      "visibilityLabel": "Zobrazit:",
+      "visibility": {
+        "always": "Vždy",
+        "auto": "Automaticky",
+        "hidden": "Skrýt"
+      },
+      "visibilityHint": "Při volbě Automaticky se čip zobrazí, když se odhad aktualizuje nebo na něj najedete myší. Toto nastavení můžete kdykoli změnit v Nastavení › Využití a dopad."
     }
   },
   "table": {

@@ -2444,7 +2444,18 @@
     "modelRow": "{requests} permintaan · {grams} g",
     "disclosure": "Estimasi berdasarkan asumsi v{version} · sejak {since} · hanya chat standar (jawaban agen dan basis pengetahuan tidak dihitung).",
     "reset": "Atur ulang statistik penggunaan",
-    "estimatedPortion": "Mencakup ~{grams} g CO₂e ({requests} permintaan) yang diestimasi dari percakapan sebelum pelacakan — dihitung ulang dari teks pesan yang disimpan, bukan dari jumlah token yang diukur."
+    "estimatedPortion": "Mencakup ~{grams} g CO₂e ({requests} permintaan) yang diestimasi dari percakapan sebelum pelacakan — dihitung ulang dari teks pesan yang disimpan, bukan dari jumlah token yang diukur.",
+    "chipTitle": "Chip emisi",
+    "chipDescription": "Perkiraan jejak karbon dari percakapan saat ini, ditampilkan di atas kolom input chat.",
+    "chipAlways": "Selalu tampilkan",
+    "chipAlwaysHint": "Chip akan selalu terlihat selama terdapat estimasi dalam percakapan.",
+    "chipAuto": "Tampilkan saat diperbarui atau diarahkan",
+    "chipAutoHint": "Chip muncul saat estimasi berubah, lalu perlahan menghilang. Mengarahkan kursor atau memilih chip akan menampilkannya kembali.",
+    "chipHidden": "Tersembunyi",
+    "chipHiddenHint": "Chip tidak pernah ditampilkan. Total tetap dicatat dan muncul di halaman ini.",
+    "chipAutoHideLabel": "Menghilang setelah",
+    "chipAutoHideUnit": "detik",
+    "chipAutoHideHint": "Antara {min} dan {max} detik."
   },
   "extraction": {
     "toggleLabel": "Ekstrak data terstruktur",
@@ -3353,7 +3364,15 @@
       "measured": "Dari jumlah token yang dilaporkan",
       "estimated": "Dihitung ulang dari pesan lama",
       "lastRequest": "Permintaan terakhir",
-      "disclaimer": "Perkiraan per permintaan dari jumlah token yang dilaporkan atau diperkirakan, menggunakan rata-rata dan asumsi terpublikasi v{version}. Pesan lama dihitung ulang dari teks yang disimpan dan model percakapan saat ini. Bukan pengukuran."
+      "disclaimer": "Perkiraan per permintaan dari jumlah token yang dilaporkan atau diperkirakan, menggunakan rata-rata dan asumsi terpublikasi v{version}. Pesan lama dihitung ulang dari teks yang disimpan dan model percakapan saat ini. Bukan pengukuran.",
+      "visibilityGroup": "Visibilitas chip emisi",
+      "visibilityLabel": "Tampilkan:",
+      "visibility": {
+        "always": "Selalu",
+        "auto": "Otomatis",
+        "hidden": "Sembunyikan"
+      },
+      "visibilityHint": "Otomatis akan menampilkan chip saat estimasi diperbarui atau saat Anda mengarahkan kursor. Ubah pengaturan ini kembali di Pengaturan › Penggunaan & Dampak."
     }
   },
   "table": {

@@ -2444,7 +2444,18 @@
     "modelRow": "{requests} Anfragen · {grams} g",
     "disclosure": "Schätzungen basieren auf Annahmen v{version} · seit {since} · nur Standard-Chat (Agenten und Knowledge-Base-Antworten nicht berücksichtigt).",
     "reset": "Nutzungsstatistik zurücksetzen",
-    "estimatedPortion": "Beinhaltet ca. {grams} g CO₂e ({requests} Anfragen), geschätzt aus Chats vor Beginn der Nachverfolgung – rückwirkend aus gespeichertem Nachrichtentext berechnet, nicht aus gemessenen Token-Zahlen."
+    "estimatedPortion": "Beinhaltet ca. {grams} g CO₂e ({requests} Anfragen), geschätzt aus Chats vor Beginn der Nachverfolgung – rückwirkend aus gespeichertem Nachrichtentext berechnet, nicht aus gemessenen Token-Zahlen.",
+    "chipTitle": "Emissions-Chip",
+    "chipDescription": "Der geschätzte CO₂-Fußabdruck der aktuellen Unterhaltung, angezeigt oberhalb des Chat-Eingabefelds.",
+    "chipAlways": "Immer anzeigen",
+    "chipAlwaysHint": "Der Chip bleibt immer sichtbar, solange eine Schätzung vorliegt.",
+    "chipAuto": "Bei Aktualisierung oder Hover anzeigen",
+    "chipAutoHint": "Der Chip erscheint, wenn sich die Schätzung ändert, und blendet sich anschließend aus. Beim Überfahren oder Fokussieren wird er wieder angezeigt.",
+    "chipHidden": "Ausgeblendet",
+    "chipHiddenHint": "Der Chip wird nie angezeigt. Die Gesamtsummen werden weiterhin erfasst und auf dieser Seite angezeigt.",
+    "chipAutoHideLabel": "Ausblenden nach",
+    "chipAutoHideUnit": "Sekunden",
+    "chipAutoHideHint": "Zwischen {min} und {max} Sekunden."
   },
   "extraction": {
     "toggleLabel": "Strukturierte Daten extrahieren",
@@ -3353,7 +3364,15 @@
       "measured": "Basierend auf gemeldeten Token-Zahlen",
       "estimated": "Rückwirkend aus älteren Nachrichten berechnet",
       "lastRequest": "Letzte Anfrage",
-      "disclaimer": "Schätzungen pro Anfrage auf Basis gemeldeter oder angenäherter Token-Zahlen, unter Verwendung veröffentlichter Durchschnittswerte und Annahmen v{version}. Ältere Nachrichten werden rückwirkend aus gespeichertem Text und dem aktuellen Modell der Unterhaltung berechnet. Keine Messung."
+      "disclaimer": "Schätzungen pro Anfrage auf Basis gemeldeter oder angenäherter Token-Zahlen, unter Verwendung veröffentlichter Durchschnittswerte und Annahmen v{version}. Ältere Nachrichten werden rückwirkend aus gespeichertem Text und dem aktuellen Modell der Unterhaltung berechnet. Keine Messung.",
+      "visibilityGroup": "Sichtbarkeit des Emissions-Chips",
+      "visibilityLabel": "Anzeigen:",
+      "visibility": {
+        "always": "Immer",
+        "auto": "Automatisch",
+        "hidden": "Ausblenden"
+      },
+      "visibilityHint": "Automatisch zeigt den Chip an, wenn die Schätzung aktualisiert wird oder Sie mit der Maus darüber fahren. Dies kann in den Einstellungen › Nutzung & Auswirkungen erneut geändert werden."
     }
   },
   "table": {

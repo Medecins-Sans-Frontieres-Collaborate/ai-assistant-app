@@ -2444,7 +2444,18 @@
     "modelRow": "{requests} istek · {grams} g",
     "disclosure": "Tahminler varsayımlara dayalıdır v{version} · {since} tarihinden itibaren · yalnızca standart sohbet (ajanlar ve bilgi tabanı cevapları dahil değildir).",
     "reset": "Kullanım istatistiklerini sıfırla",
-    "estimatedPortion": "~{grams} g CO₂e ({requests} istek) içermektedir; izleme öncesindeki sohbetlerden tahmin edilmiştir — saklanan mesaj metninden geriye dönük hesaplanmış, ölçülen token sayılarından değil."
+    "estimatedPortion": "~{grams} g CO₂e ({requests} istek) içermektedir; izleme öncesindeki sohbetlerden tahmin edilmiştir — saklanan mesaj metninden geriye dönük hesaplanmış, ölçülen token sayılarından değil.",
+    "chipTitle": "Emisyon çipi",
+    "chipDescription": "Mevcut sohbetin tahmini karbon ayak izi, sohbet girişinin üstünde gösterilir.",
+    "chipAlways": "Her zaman göster",
+    "chipAlwaysHint": "Sohbetin bir tahmini olduğunda çip sürekli görünür.",
+    "chipAuto": "Güncellemede veya üzerine gelindiğinde göster",
+    "chipAutoHint": "Tahmin değiştiğinde çip görünür, sonra kademeli olarak kaybolur. Üzerine gelmek veya odaklamak çipi tekrar getirir.",
+    "chipHidden": "Gizli",
+    "chipHiddenHint": "Çip hiç gösterilmez. Toplamlar yine de takip edilip bu sayfada görünür.",
+    "chipAutoHideLabel": "Sonrasında kaybol",
+    "chipAutoHideUnit": "saniye",
+    "chipAutoHideHint": "{min} ile {max} saniye arasında."
   },
   "extraction": {
     "toggleLabel": "Yapılandırılmış veriyi çıkar",
@@ -3353,7 +3364,15 @@
       "measured": "Bildirilen token sayılarından",
       "estimated": "Eski mesajlardan geriye dönük hesaplanan",
       "lastRequest": "Son istek",
-      "disclaimer": "İstek başına tahminler, bildirilen veya tahmini token sayılarından, yayınlanmış ortalamalar ve varsayımlar v{version} kullanılarak yapılmıştır. Eski mesajlar, saklanan metin ve konuşmanın mevcut modeli kullanılarak geriye dönük hesaplanır. Bu bir ölçüm değildir."
+      "disclaimer": "İstek başına tahminler, bildirilen veya tahmini token sayılarından, yayınlanmış ortalamalar ve varsayımlar v{version} kullanılarak yapılmıştır. Eski mesajlar, saklanan metin ve konuşmanın mevcut modeli kullanılarak geriye dönük hesaplanır. Bu bir ölçüm değildir.",
+      "visibilityGroup": "Emisyon çipi görünürlüğü",
+      "visibilityLabel": "Göster:",
+      "visibility": {
+        "always": "Her zaman",
+        "auto": "Otomatik",
+        "hidden": "Gizle"
+      },
+      "visibilityHint": "Otomatik, çip güncellendiğinde veya üzerine geldiğinizde gösterir. Bunu Ayarlar › Kullanım ve Etki bölümünden tekrar değiştirebilirsiniz."
     }
   },
   "table": {

@@ -2428,7 +2428,18 @@
     "modelRow": "{requests} buk. · {grams} g",
     "disclosure": "Kiyasin ya dogara ne da hasashe v{version} · tun daga {since} · hira ta al'ada kawai (ba a lissafa amsoshin ‘agents’ da kundin sani ba).",
     "reset": "Sake saiti kididdigar amfani",
-    "estimatedPortion": "Ya haɗa da ~{grams} g CO₂e ({requests} buƙatu) da aka kimanta daga tattaunawa kafin fara bin diddigi — an sake lissafawa daga rubutun saƙonni da aka adana, ba daga adadin token da aka auna ba."
+    "estimatedPortion": "Ya haɗa da ~{grams} g CO₂e ({requests} buƙatu) da aka kimanta daga tattaunawa kafin fara bin diddigi — an sake lissafawa daga rubutun saƙonni da aka adana, ba daga adadin token da aka auna ba.",
+    "chipTitle": "Gunkin fitar da hayaƙi",
+    "chipDescription": "An kimanta adadin hayaƙin carbon na wannan tattaunawa, ana nunawa a sama da shigar da saƙo.",
+    "chipAlways": "Kullum nuna",
+    "chipAlwaysHint": "Gunkin yana bayyana duk lokacin da tattaunawa tana da hasashe.",
+    "chipAuto": "Nuna idan an sabunta ko ka matsa sama",
+    "chipAutoHint": "Gunkin zai bayyana idan hasashen ya canza, sai ya ɓace da lokaci. Idan ka matsa ko fita zai dawo.",
+    "chipHidden": "An ɓoye",
+    "chipHiddenHint": "Gunkin ba zai bayyana ba. Za a ci gaba da lissafa jimlolin kuma zai bayyana a wannan shafi.",
+    "chipAutoHideLabel": "Ya ɓace bayan",
+    "chipAutoHideUnit": "daƙiƙu",
+    "chipAutoHideHint": "Tsakanin {min} da {max} daƙiƙu."
   },
   "extraction": {
     "toggleLabel": "Ciro bayani tsari",
@@ -3337,7 +3348,15 @@
       "measured": "Daga adadin token da aka ruwaito",
       "estimated": "An sake lissafawa daga tsoffin saƙonni",
       "lastRequest": "Bukata ta ƙarshe",
-      "disclaimer": "Kimantawa na kowane bukata daga adadin token da aka ruwaito ko kimanta, ana amfani da matsakaici da ƙa’idoji da aka wallafa v{version}. Tsoffin saƙonni an sake lissafawa su daga rubutun da aka adana da kuma nau'in samfurin tattaunawar yanzu. Ba auna ko gwadawa ba ne."
+      "disclaimer": "Kimantawa na kowane bukata daga adadin token da aka ruwaito ko kimanta, ana amfani da matsakaici da ƙa’idoji da aka wallafa v{version}. Tsoffin saƙonni an sake lissafawa su daga rubutun da aka adana da kuma nau'in samfurin tattaunawar yanzu. Ba auna ko gwadawa ba ne.",
+      "visibilityGroup": "Bayyanar gunkin fitar da hayaƙi",
+      "visibilityLabel": "Nuna:",
+      "visibility": {
+        "always": "Kullum",
+        "auto": "Ta atomatik",
+        "hidden": "Boye"
+      },
+      "visibilityHint": "Ta atomatik zai nuna gunkin idan an sabunta hasashe ko ka matsa sama da shi. Za ka iya canza wannan daga Saituna › Amfani & Tasiri."
     }
   },
   "table": {

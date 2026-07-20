@@ -2428,7 +2428,18 @@
     "modelRow": "{requests} ìbéèrè · {grams} g",
     "disclosure": "Ìṣirò dá lórí àfọ̀mọ́sùn v{version} · látìgbà {since} · ìbáṣepọ̀ àkọ́tún ṣoṣo (àwọn agent àti ìdáhùn knowledge-base kì í ṣe kó).",
     "reset": "Tún àkọsílẹ̀ lilo ṣe",
-    "estimatedPortion": "Ó ní àfọ̀mọ̀ ~{grams} g CO₂e ({requests} ìbéèrè) tí a ṣe àfìmọ̀ látinú ìjíròrò tó ṣẹ̀ṣẹ̀ ṣáájú ìtọ́pa — a tún ṣe àfìmọ̀ padà láti ọrọ ìfiránṣẹ́ tí a fipamọ́, kì í ṣe iye àmi tí a gbéjọro."
+    "estimatedPortion": "Ó ní àfọ̀mọ̀ ~{grams} g CO₂e ({requests} ìbéèrè) tí a ṣe àfìmọ̀ látinú ìjíròrò tó ṣẹ̀ṣẹ̀ ṣáájú ìtọ́pa — a tún ṣe àfìmọ̀ padà láti ọrọ ìfiránṣẹ́ tí a fipamọ́, kì í ṣe iye àmi tí a gbéjọro.",
+    "chipTitle": "Chip àfọwọ́kà",
+    "chipDescription": "Ìṣirò àfọwọ́kà erogba fún ibanisọ̀rọ̀ yìí, tí ó wà lókè apamọ̀ ìrọ̀rùn.",
+    "chipAlways": "Máa fi hàn nígbà gbogbo",
+    "chipAlwaysHint": "Chip máa fi hàn nígbà gbogbo tí àfikún bá wà fún ibanisọ̀rọ̀.",
+    "chipAuto": "Fi hàn nígbà ìmúdájú tabi sí àmì lórí",
+    "chipAutoHint": "Chip yóò hàn nígbà tí àṣeyọrí bá yá, lè dànù lẹ́yìnna. Síi àkíyèsí tàbí fòkúsì rẹ yóò mú ú padà.",
+    "chipHidden": "Pa mọ́",
+    "chipHiddenHint": "A kì yóò fi chip hàn rárá. Àpapọ̀ ṣi n tẹle ati wí lórí ojúewé yìí.",
+    "chipAutoHideLabel": "Dànù lẹ́yìn",
+    "chipAutoHideUnit": "ìṣẹ́jú ààyá",
+    "chipAutoHideHint": "Láàrin {min} sí {max} ìṣẹ́jú ààyá."
   },
   "extraction": {
     "toggleLabel": "Yọ data eto jade",
@@ -3337,7 +3348,15 @@
       "measured": "Láti iye àmi tí a gbéjọro",
       "estimated": "A tún ṣe àfìmọ̀ padà láti àwọn ìfiránṣẹ́ àtijọ́",
       "lastRequest": "Ìbéèrè tó kẹ́yìn",
-      "disclaimer": "Ìṣírò kọọkan da lórí iye àmi tí a gbéjọro tàbí àfojúsùn, pẹ̀lú àdàkọ àti àfojúsùn tí a tẹ̀jáde v{version}. Àwọn ìfiránṣẹ́ àtijọ́ ni a tún ṣe àfìmọ̀ padà láti inu ọrọ tí a fipamọ́ àti àwǹn àpẹrẹ rẹ̀ yìí. Kì í ṣe ìwádìí gangan."
+      "disclaimer": "Ìṣírò kọọkan da lórí iye àmi tí a gbéjọro tàbí àfojúsùn, pẹ̀lú àdàkọ àti àfojúsùn tí a tẹ̀jáde v{version}. Àwọn ìfiránṣẹ́ àtijọ́ ni a tún ṣe àfìmọ̀ padà láti inu ọrọ tí a fipamọ́ àti àwǹn àpẹrẹ rẹ̀ yìí. Kì í ṣe ìwádìí gangan.",
+      "visibilityGroup": "Ìhàn àfihàn chip àfọwọ́kà",
+      "visibilityLabel": "Fi hàn:",
+      "visibility": {
+        "always": "Nígbà gbogbo",
+        "auto": "Laifọwọyi",
+        "hidden": "Pa mọ́"
+      },
+      "visibilityHint": "‘Auto’ máa fi chip hàn nígbà tí àfikún bá ti yẹ̀ wò tàbí tí o bá fi àmì sí lórí rẹ. O le yí e pada yìí ní Eto › Lílò & Ìpapọ̀."
     }
   },
   "table": {

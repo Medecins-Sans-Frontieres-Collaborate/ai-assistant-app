@@ -2428,7 +2428,18 @@
     "modelRow": "{requests} fangatahana · {grams} g",
     "disclosure": "Tombana mifototra amin’ny angon-drakitra sy kajy v{version} · hatramin’ny {since} · chat mahazatra ihany (tsy asiana ny agents sy valin’ny knowledge-base).",
     "reset": "Averina ny antontan’isa fampiasana",
-    "estimatedPortion": "Ahitana ~{grams} g CO₂e ({requests} fangatahana) tombanana avy amin'ny chat talohan'ny fandraisana an-tsoratra — hajaina amin'ny lahatsoratra voatahiry amin'ny hafatra, fa tsy amin'ny isan'ny token voarefy."
+    "estimatedPortion": "Ahitana ~{grams} g CO₂e ({requests} fangatahana) tombanana avy amin'ny chat talohan'ny fandraisana an-tsoratra — hajaina amin'ny lahatsoratra voatahiry amin'ny hafatra, fa tsy amin'ny isan'ny token voarefy.",
+    "chipTitle": "Chip emissions",
+    "chipDescription": "Ny vinavina amin'ny dian-kafon'ny karbona amin'ny resaka ankehitriny, aseho etsy ambonin'ny tontolon'ny hafatra.",
+    "chipAlways": "Asehoy foana",
+    "chipAlwaysHint": "Mitohy miseho ny chip raha vao manana vinavina ilay resaka.",
+    "chipAuto": "Asehoy amin'ny fanavaozana na fikasihana",
+    "chipAutoHint": "Miseho ny chip rehefa miova ny vinavina, avy eo manjavona. Raha soratana na tsidihina dia miverina miseho.",
+    "chipHidden": "Afina",
+    "chipHiddenHint": "Tsy aseho mihitsy ny chip. Mbola voarakitra sy aseho amin'ity pejy ity ny fitambaran'izany.",
+    "chipAutoHideLabel": "Manjavona aorian'ny",
+    "chipAutoHideUnit": "segondra",
+    "chipAutoHideHint": "Eo anelanelan'ny {min} sy {max} segondra."
   },
   "extraction": {
     "toggleLabel": "Alaivo ny angona voaendrika",
@@ -3337,7 +3348,15 @@
       "measured": "Avy amin'ny isan'ny token navoaka tatitra",
       "estimated": "Hajaina amin'ny hafatra taloha",
       "lastRequest": "Fangatahana farany",
-      "disclaimer": "Fanombanana isaky ny fangatahana avy amin'ny isan'ny token navoaka tatitra na vinavinaina, amin'ny fampiasana salan'isa sy hevi-dalina navoaka ho an'ny vahoaka v{version}. Ny hafatra taloha dia hajaina avy amin'ny lahatsoratra voatahiry sy ny modely amin'izao resaka izao. Tsy fandrefesana marina."
+      "disclaimer": "Fanombanana isaky ny fangatahana avy amin'ny isan'ny token navoaka tatitra na vinavinaina, amin'ny fampiasana salan'isa sy hevi-dalina navoaka ho an'ny vahoaka v{version}. Ny hafatra taloha dia hajaina avy amin'ny lahatsoratra voatahiry sy ny modely amin'izao resaka izao. Tsy fandrefesana marina.",
+      "visibilityGroup": "Fisehoan'ny chip emissions",
+      "visibilityLabel": "Asehoy:",
+      "visibility": {
+        "always": "Foana",
+        "auto": "Auto",
+        "hidden": "Afeno"
+      },
+      "visibilityHint": "Asehon'ny Auto ny chip rehefa misy fanavaozana amin'ny vinavina na rehefa soratana amin'izay ianao. Azonao ovaina indray eto: Settings › Usage & Impact."
     }
   },
   "table": {

@@ -2428,7 +2428,18 @@
     "modelRow": "{requests} codsi · {grams} g",
     "disclosure": "Qiyaasaha waxa lagu salaynayaa maldahan v{version} · wixii ka bilaabmay {since} · kaliya sheekada caadiga ah (awoodaha agent-yada iyo jawaabaha knowledge-base laguma darin).",
     "reset": "Tirtir tirakoobka isticmaalka",
-    "estimatedPortion": "Waxay ka mid yihiin ku dhawaad ~{grams} g CO₂e ({requests} codsi) oo laga qiyaasay doodaha ka horreeyay raad-raaca — lagu xisaabiyay qoraalka fariimaha la keydiyay, balse aan lagu tirin token."
+    "estimatedPortion": "Waxay ka mid yihiin ku dhawaad ~{grams} g CO₂e ({requests} codsi) oo laga qiyaasay doodaha ka horreeyay raad-raaca — lagu xisaabiyay qoraalka fariimaha la keydiyay, balse aan lagu tirin token.",
+    "chipTitle": "Emissions chip",
+    "chipDescription": "Qiyaasta raad-carbon ee wada sheekaysigan hadda, oo lagu muujiyey kore ee meesha qoraalka sheekada.",
+    "chipAlways": "Had iyo jeer muuji",
+    "chipAlwaysHint": "Chip-ku wuu muuqanayaa mar kasta oo wada sheekaysigu leeyahay qiyaas.",
+    "chipAuto": "Muuji marka la cusbooneysiiyo ama la dul istaago",
+    "chipAutoHint": "Chip-ka wuxuu soo muuqdaa marka qiyaastu isbeddesho, markaas ayuu libdhi doonaa. Dul istaagista ama diiradda saaridu waxay keenaysaa inuu soo noqdo.",
+    "chipHidden": "La qariyey",
+    "chipHiddenHint": "Chip-ka marna lama muujiyo. Wadarta wali waa laga raadin karaa oo waxay ka muuqanaysaa boggan.",
+    "chipAutoHideLabel": "Libdho kadib",
+    "chipAutoHideUnit": "ilbiriqsi",
+    "chipAutoHideHint": "U dhaxaysa {min} iyo {max} ilbiriqsi."
   },
   "extraction": {
     "toggleLabel": "Ka saar xog habaysan",
@@ -3337,7 +3348,15 @@
       "measured": "Laga soo xigtay tirinta token-ka la soo sheegay",
       "estimated": "Laga xisaabiyay fariimaha hore",
       "lastRequest": "Codsigii ugu dambeeyay",
-      "disclaimer": "Qiyaasaha codsi kasta waxaa lagu salaynayaa tirada token-ka ee la soo sheegay ama lagu qiyaasay, iyadoo la adeegsanayo celcelisyo la daabacay iyo mala'awaal v{version}. Fariimaha hore waxaa lagu xisaabiyay qoraalka la keydiyay iyo moodeelka hadda socda ee wadahadalka. Kani maaha qiyaas toos ah."
+      "disclaimer": "Qiyaasaha codsi kasta waxaa lagu salaynayaa tirada token-ka ee la soo sheegay ama lagu qiyaasay, iyadoo la adeegsanayo celcelisyo la daabacay iyo mala'awaal v{version}. Fariimaha hore waxaa lagu xisaabiyay qoraalka la keydiyay iyo moodeelka hadda socda ee wadahadalka. Kani maaha qiyaas toos ah.",
+      "visibilityGroup": "Muuqaalka Emissions chip",
+      "visibilityLabel": "Muuji:",
+      "visibility": {
+        "always": "Had iyo jeer",
+        "auto": "Toos",
+        "hidden": "Qari"
+      },
+      "visibilityHint": "Toos wuxuu muujiyaa chip-ka marka qiyaasta la cusbooneysiiyo ama aad dul istaagto. Waxaad tan markale ka beddeli kartaa Dejinta › Isticmaalka & Saameynta."
     }
   },
   "table": {

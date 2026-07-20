@@ -2444,7 +2444,18 @@
     "modelRow": "{requests} ombi · {grams} g",
     "disclosure": "Makadirio msingi wa dhana v{version} · tangu {since} · mazungumzo ya kawaida pekee (mawakala na majibu ya msingi wa maarifa hayajahesabiwa).",
     "reset": "Weka upya takwimu za matumizi",
-    "estimatedPortion": "Inajumuisha takriban ~{grams} g CO₂e ({requests} maombi) iliyokadiriwa kutoka kwenye gumzo zilizotokea kabla ya ufuatiliaji — imekadiriwa kutoka kwa maandishi ya ujumbe yaliyohifadhiwa, si toka kwa idadi ya tokeni zilizopimwa."
+    "estimatedPortion": "Inajumuisha takriban ~{grams} g CO₂e ({requests} maombi) iliyokadiriwa kutoka kwenye gumzo zilizotokea kabla ya ufuatiliaji — imekadiriwa kutoka kwa maandishi ya ujumbe yaliyohifadhiwa, si toka kwa idadi ya tokeni zilizopimwa.",
+    "chipTitle": "Chipu ya uzalishaji",
+    "chipDescription": "Makadirio ya kiwango cha hewa ukaa ya mazungumzo haya, yanaonyeshwa juu ya sehemu ya kuandika ujumbe.",
+    "chipAlways": "Onyesha daima",
+    "chipAlwaysHint": "Chipu inaendelea kuonekana wakati wowote mazungumzo yana makadirio.",
+    "chipAuto": "Onyesha inaposasishwa au unapobonyeza",
+    "chipAutoHint": "Chipu inaonekana makadirio yanapobadilika, kisha inatoweka. Kuweka kipanya au kuibofya kunairudisha.",
+    "chipHidden": "Imefichwa",
+    "chipHiddenHint": "Chipu haiwezi kuonekana. Jumla bado inafuatiliwa na itaonekana kwenye ukurasa huu.",
+    "chipAutoHideLabel": "Fifisha baada ya",
+    "chipAutoHideUnit": "sekunde",
+    "chipAutoHideHint": "Kati ya {min} na {max} sekunde."
   },
   "extraction": {
     "toggleLabel": "Dondoa data iliyo na muundo",
@@ -3353,7 +3364,15 @@
       "measured": "Kutoka kwa idadi ya tokeni zilivyoripotiwa",
       "estimated": "Imekadiriwa kutoka kwa ujumbe wa zamani",
       "lastRequest": "Ombi la mwisho",
-      "disclaimer": "Makadirio kwa kila ombi yanatokana na idadi ya tokeni zilivyoripotiwa au kukadiriwa, yakitumia wastani na dhana zilizochapishwa toleo v{version}. Ujumbe wa zamani umekadiriwa kutoka kwa maandishi yaliyohifadhiwa na muundo wa sasa wa mazungumzo. Hii si kipimo halisi."
+      "disclaimer": "Makadirio kwa kila ombi yanatokana na idadi ya tokeni zilivyoripotiwa au kukadiriwa, yakitumia wastani na dhana zilizochapishwa toleo v{version}. Ujumbe wa zamani umekadiriwa kutoka kwa maandishi yaliyohifadhiwa na muundo wa sasa wa mazungumzo. Hii si kipimo halisi.",
+      "visibilityGroup": "Mwonekano wa chipu ya uzalishaji",
+      "visibilityLabel": "Onyesha:",
+      "visibility": {
+        "always": "Daima",
+        "auto": "Otomatiki",
+        "hidden": "Ficha"
+      },
+      "visibilityHint": "Otomatiki itaonyesha chipu wakati makadirio yanasasishwa au unapobonya juu yake. Badilisha hili tena kwenye Mipangilio › Matumizi & Athari."
     }
   },
   "table": {

@@ -2444,7 +2444,18 @@
     "modelRow": "{requests} sol·lic. · {grams} g",
     "disclosure": "Estimacions basades en suposicions v{version} · des de {since} · només xat estàndard (no es compten respostes d'agents ni de base de coneixement).",
     "reset": "Reinicia les estadístiques d’ús",
-    "estimatedPortion": "Inclou aproximadament {grams} g CO₂e ({requests} sol·licituds) estimats de xats anteriors al seguiment — recalculat a partir del text dels missatges emmagatzemats, no de recompte de tokens mesurat."
+    "estimatedPortion": "Inclou aproximadament {grams} g CO₂e ({requests} sol·licituds) estimats de xats anteriors al seguiment — recalculat a partir del text dels missatges emmagatzemats, no de recompte de tokens mesurat.",
+    "chipTitle": "Xip d’emissions",
+    "chipDescription": "L’estimació de la petjada de carboni de la conversa actual, mostrada sobre el camp d’entrada del xat.",
+    "chipAlways": "Mostra sempre",
+    "chipAlwaysHint": "El xip roman visible sempre que la conversa tingui una estimació.",
+    "chipAuto": "Mostra en actualitzar-se o en passar-hi el cursor",
+    "chipAutoHint": "El xip apareix quan s’actualitza l’estimació i després s’esvaeix. Passar-hi el cursor o enfocar-lo el fa reaparèixer.",
+    "chipHidden": "Ocult",
+    "chipHiddenHint": "El xip no es mostra mai. Els totals encara es registren i apareixen en aquesta pàgina.",
+    "chipAutoHideLabel": "Esvaeix després de",
+    "chipAutoHideUnit": "segons",
+    "chipAutoHideHint": "Entre {min} i {max} segons."
   },
   "extraction": {
     "toggleLabel": "Extreu dades estructurades",
@@ -3353,7 +3364,15 @@
       "measured": "A partir del recompte de tokens informat",
       "estimated": "Recalculat a partir de missatges antics",
       "lastRequest": "Darrera sol·licitud",
-      "disclaimer": "Estimacions per sol·licitud a partir de recompte de tokens informat o aproximat, utilitzant mitjanes i suposicions publicades v{version}. Els missatges antics es recalculen a partir del text emmagatzemat i el model actual de la conversa. No és una mesura."
+      "disclaimer": "Estimacions per sol·licitud a partir de recompte de tokens informat o aproximat, utilitzant mitjanes i suposicions publicades v{version}. Els missatges antics es recalculen a partir del text emmagatzemat i el model actual de la conversa. No és una mesura.",
+      "visibilityGroup": "Visibilitat del xip d’emissions",
+      "visibilityLabel": "Mostra:",
+      "visibility": {
+        "always": "Sempre",
+        "auto": "Automàtic",
+        "hidden": "Amaga"
+      },
+      "visibilityHint": "El mode automàtic mostra el xip quan s’actualitza l’estimació o en passar-hi el cursor. Pots canviar això de nou a Configuració › Ús i Impacte."
     }
   },
   "table": {

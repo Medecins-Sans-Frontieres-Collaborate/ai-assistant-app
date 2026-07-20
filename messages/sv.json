@@ -2444,7 +2444,18 @@
     "modelRow": "{requests} frq · {grams} g",
     "disclosure": "Uppskattningar baseras på antaganden v{version} · sedan {since} · endast standardchatt (agenter och kunskapsbaserade svar räknas inte).",
     "reset": "Återställ användningsstatistik",
-    "estimatedPortion": "Inkluderar cirka {grams} g CO₂e ({requests} förfrågningar) uppskattat från chattar som föregår spårning — bakåträkning från lagrad meddelandetext, inte uppmätta token."
+    "estimatedPortion": "Inkluderar cirka {grams} g CO₂e ({requests} förfrågningar) uppskattat från chattar som föregår spårning — bakåträkning från lagrad meddelandetext, inte uppmätta token.",
+    "chipTitle": "Emissionschip",
+    "chipDescription": "Den uppskattade koldioxidpåverkan för denna konversation, visas ovanför chattfältet.",
+    "chipAlways": "Visa alltid",
+    "chipAlwaysHint": "Chipet är synligt så länge konversationen har en uppskattning.",
+    "chipAuto": "Visa vid uppdatering eller hover",
+    "chipAutoHint": "Chipet visas när uppskattningen ändras, och tonar sedan bort. Att hovra eller fokusera på det tar fram det igen.",
+    "chipHidden": "Dold",
+    "chipHiddenHint": "Chipet visas aldrig. Totalvärden registreras fortfarande och syns på denna sida.",
+    "chipAutoHideLabel": "Tona ut efter",
+    "chipAutoHideUnit": "sekunder",
+    "chipAutoHideHint": "Mellan {min} och {max} sekunder."
   },
   "extraction": {
     "toggleLabel": "Extrahera strukturerad data",
@@ -3353,7 +3364,15 @@
       "measured": "Från rapporterade tokenantal",
       "estimated": "Bakåträkning från äldre meddelanden",
       "lastRequest": "Senaste förfrågan",
-      "disclaimer": "Uppskattningar per förfrågan baserade på rapporterade eller uppskattade tokenantal, med hjälp av publicerade genomsnitt och antaganden v{version}. Äldre meddelanden bakåträknares från lagrad text och konversationens nuvarande modell. Ingen mätning."
+      "disclaimer": "Uppskattningar per förfrågan baserade på rapporterade eller uppskattade tokenantal, med hjälp av publicerade genomsnitt och antaganden v{version}. Äldre meddelanden bakåträknares från lagrad text och konversationens nuvarande modell. Ingen mätning.",
+      "visibilityGroup": "Emissionschip-synlighet",
+      "visibilityLabel": "Visa:",
+      "visibility": {
+        "always": "Alltid",
+        "auto": "Auto",
+        "hidden": "Dölj"
+      },
+      "visibilityHint": "Auto visar chipet när uppskattningen uppdateras eller när du hovrar över det. Du kan ändra detta igen under Inställningar › Användning & påverkan."
     }
   },
   "table": {

@@ -2428,7 +2428,18 @@
     "modelRow": "{requests} demande · {grams} g",
     "disclosure": "Estimation ti dî ti assumption v{version} · depi {since} · chat standard mbî (agent na réponse ti base de données ape na séne).",
     "reset": "Rétablir statistique ti usage",
-    "estimatedPortion": "Kodô tî ~{grams} g CO₂e ({requests} na sara) sô mbi bala na chats sô kô sô tracking ape — bala mbi yeke na kidipé ti maburu ti message, ape na maburu token."
+    "estimatedPortion": "Kodô tî ~{grams} g CO₂e ({requests} na sara) sô mbi bala na chats sô kô sô tracking ape — bala mbi yeke na kidipé ti maburu ti message, ape na maburu token.",
+    "chipTitle": "Chip ti Emissions",
+    "chipDescription": "Lê ti carbon footprint ti yângâ ti mo so, ayeke sô na lo da chat.",
+    "chipAlways": "Wene toua",
+    "chipAlwaysHint": "Chip ape na wâ ti estimâ ti yângâ ayeke.",
+    "chipAuto": "Wene sô lôsô mbeti na estimâ",
+    "chipAutoHint": "Chip ape sô estimâ ti dzî, aprè lo fô. Sô mo yô kôde wâ, chip ape na ndö.",
+    "chipHidden": "Hida",
+    "chipHiddenHint": "Chip ape wa. Bê ti totals ké sô ayeke na page wa.",
+    "chipAutoHideLabel": "Fô na",
+    "chipAutoHideUnit": "sekônde",
+    "chipAutoHideHint": "Lâ sô {min} na {max} sekônde."
   },
   "extraction": {
     "toggleLabel": "Hâ lâ tî data ti yângâ",
@@ -3337,7 +3348,15 @@
       "measured": "Ngu bê ti yeke na maburu ti token",
       "estimated": "Ngu bê ti yeke na bala mbi yeke na barafunu kidî tî sô",
       "lastRequest": "Sa ti yi tî sô",
-      "disclaimer": "Kötörö ti na sara so na maburu token, to mbi yeke tî token sô pe tî mingi, na mopé tî averages na assumptions v{version} sô a zéré. Barafunu kidî tî sô a yeke na bala mbi yeke na kidipé ti mbênî yi na model tî conversation. Kôdoro ape."
+      "disclaimer": "Kötörö ti na sara so na maburu token, to mbi yeke tî token sô pe tî mingi, na mopé tî averages na assumptions v{version} sô a zéré. Barafunu kidî tî sô a yeke na bala mbi yeke na kidipé ti mbênî yi na model tî conversation. Kôdoro ape.",
+      "visibilityGroup": "Keti na yeke a Emissions chip",
+      "visibilityLabel": "Wene :",
+      "visibility": {
+        "always": "Toua",
+        "auto": "Auto",
+        "hidden": "Hida"
+      },
+      "visibilityHint": "Auto ape na chip sô ti estimá ti dzî na bê ti loo sè mbi yângâ ti yéké. O yeke fâla tî cîni na Settings › Usage & Impact."
     }
   },
   "table": {
