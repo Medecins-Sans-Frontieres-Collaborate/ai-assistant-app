@@ -542,6 +542,15 @@ const mockMessages: Record<string, unknown> = {
       estimated: 'Back-calculated from older messages',
       lastRequest: 'Last request',
       disclaimer: 'Per-request estimates (assumptions v{version})',
+      visibilityGroup: 'Emissions chip visibility',
+      visibilityLabel: 'Show:',
+      visibility: {
+        always: 'Always',
+        auto: 'Auto',
+        hidden: 'Hide',
+      },
+      visibilityHint:
+        'Auto shows the chip when the estimate updates or you hover it.',
     },
   },
   modelSelect: {
