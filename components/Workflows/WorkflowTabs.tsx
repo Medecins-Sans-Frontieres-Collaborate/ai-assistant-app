@@ -1,8 +1,15 @@
 'use client';
 
-import { IconMessage } from '@tabler/icons-react';
+import { IconCheck, IconChevronDown, IconMessage } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import { KeyboardEvent, useRef, useState } from 'react';
+import {
+  KeyboardEvent,
+  createElement,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import { createPortal } from 'react-dom';
 
 import { useTranslations } from 'next-intl';
 
@@ -22,6 +29,48 @@ const CHAT_TAB = 'chat' as const;
 type TabId = typeof CHAT_TAB | (typeof CONVERSATION_WORKFLOW_TYPES)[number];
 
 const TAB_IDS: readonly TabId[] = [CHAT_TAB, ...CONVERSATION_WORKFLOW_TYPES];
+
+const iconFor = (tab: TabId) =>
+  tab === CHAT_TAB ? IconMessage : WORKFLOW_META[tab].icon;
+
+/**
+ * Renders a tab's icon via `createElement` rather than binding it to a
+ * capitalized local first: assigning a component to a variable during render
+ * trips `react-hooks/static-components`. (The tablist branch below gets away
+ * with `const Icon = ...` only because it sits inside a `.map()` callback.)
+ */
+function TabIcon({
+  tab,
+  size,
+  className,
+}: {
+  tab: TabId;
+  size: number;
+  className?: string;
+}) {
+  return createElement(iconFor(tab), {
+    size,
+    'aria-hidden': true,
+    className,
+  });
+}
+
+/**
+ * Two presentations, switched by CSS at `md` rather than by a prop or a JS
+ * media query:
+ *
+ * - below `md`, the active mode plus a chevron, opening a bottom sheet with
+ *   the full list. Five icons already crowd the model name on a phone and
+ *   each new workflow would make it worse. It is a menu, not a tablist — the
+ *   roving-tabindex contract doesn't survive collapsing to one control — and
+ *   the sheet has room for the descriptions that `title` can never surface on
+ *   touch.
+ * - at `md` and up, the full ARIA tablist strip, unchanged.
+ *
+ * Both are rendered from one component instance so the pending-discard state
+ * and ConfirmDialog exist once. A prop was the wrong shape here: WorkflowShell
+ * renders the tabs at every width, so it had no breakpoint to key off.
+ */
 
 /**
  * Whether the workflow feature is available to this user at all.
@@ -62,6 +111,17 @@ export function WorkflowTabs() {
   const listRef = useRef<HTMLDivElement>(null);
   /** Target of a switch waiting on the discard confirmation. */
   const [pendingTab, setPendingTab] = useState<TabId | null>(null);
+  /** `compact` only: whether the bottom sheet is showing. */
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isSheetOpen) return;
+    const onKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key === 'Escape') setIsSheetOpen(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [isSheetOpen]);
 
   if (!enabled) return null;
   if (!selectedConversation || selectedConversation.messages.length > 0) {
@@ -150,14 +210,101 @@ export function WorkflowTabs() {
 
   return (
     <>
+      {/* Below md: active mode + chevron, opening the sheet below. */}
+      <button
+        type="button"
+        aria-haspopup="menu"
+        aria-expanded={isSheetOpen}
+        aria-label={t('tabs.label')}
+        onClick={() => setIsSheetOpen(true)}
+        className="inline-flex min-h-[44px] shrink-0 items-center gap-1.5 rounded-lg bg-gray-100 px-2 text-sm font-medium text-blue-600 transition-colors md:hidden dark:bg-surface-dark-elevated dark:text-blue-400"
+      >
+        <TabIcon tab={activeTab} size={16} />
+        <span className="whitespace-nowrap">{labelFor(activeTab)}</span>
+        <IconChevronDown size={14} className="opacity-60" aria-hidden />
+      </button>
+
+      {isSheetOpen &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <>
+            <div
+              className="fixed inset-0 z-[10000] bg-black/40 backdrop-blur-sm animate-fade-in-fast"
+              aria-hidden="true"
+              onClick={() => setIsSheetOpen(false)}
+            />
+            <div
+              role="menu"
+              aria-label={t('tabs.label')}
+              className="fixed inset-x-0 bottom-0 z-[10001] flex max-h-[75dvh] flex-col overflow-y-auto rounded-t-2xl border-t border-gray-200 bg-white shadow-lg outline-none animate-slide-up pb-[env(safe-area-inset-bottom)] dark:border-gray-700 dark:bg-surface-dark"
+            >
+              <div className="p-2">
+                {TAB_IDS.map((tab) => {
+                  const isActive = tab === activeTab;
+                  return (
+                    <button
+                      key={tab}
+                      type="button"
+                      role="menuitemradio"
+                      aria-checked={isActive}
+                      onClick={() => {
+                        setIsSheetOpen(false);
+                        selectTab(tab);
+                      }}
+                      className={`flex w-full items-center gap-3 rounded-lg px-3 py-3 text-start transition-colors ${
+                        isActive
+                          ? 'bg-gray-100 dark:bg-surface-dark-elevated'
+                          : 'hover:bg-gray-50 dark:hover:bg-surface-dark-elevated'
+                      }`}
+                    >
+                      <TabIcon
+                        tab={tab}
+                        size={20}
+                        className={`shrink-0 ${
+                          isActive
+                            ? 'text-blue-600 dark:text-blue-400'
+                            : 'text-gray-500 dark:text-gray-400'
+                        }`}
+                      />
+                      <span className="min-w-0 flex-1">
+                        <span
+                          className={`block text-sm font-medium ${
+                            isActive
+                              ? 'text-blue-600 dark:text-blue-400'
+                              : 'text-gray-900 dark:text-gray-100'
+                          }`}
+                        >
+                          {labelFor(tab)}
+                        </span>
+                        {/* The description the icon strip could never show:
+                              `title` never fires on touch. */}
+                        <span className="mt-0.5 block text-xs text-gray-500 dark:text-gray-400">
+                          {descriptionFor(tab)}
+                        </span>
+                      </span>
+                      {isActive && (
+                        <IconCheck
+                          size={18}
+                          aria-hidden
+                          className="shrink-0 text-blue-600 dark:text-blue-400"
+                        />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </>,
+          document.body,
+        )}
+
+      {/* md and up: the full tablist, unchanged. */}
       <div
         ref={listRef}
         role="tablist"
         aria-label={t('tabs.label')}
         aria-orientation="horizontal"
-        // shrink-0: on a narrow phone the model name (min-w-0 + truncate)
-        // gives way before the tabs do.
-        className="flex shrink-0 items-center gap-0.5 rounded-lg bg-gray-100 p-0.5 dark:bg-surface-dark-elevated"
+        className="hidden shrink-0 items-center gap-0.5 rounded-lg bg-gray-100 p-0.5 md:flex dark:bg-surface-dark-elevated"
       >
         {TAB_IDS.map((tab) => {
           const Icon = tab === CHAT_TAB ? IconMessage : WORKFLOW_META[tab].icon;
