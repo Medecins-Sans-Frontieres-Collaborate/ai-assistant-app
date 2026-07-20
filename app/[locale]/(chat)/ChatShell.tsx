@@ -92,7 +92,11 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
         severity={storageThreshold}
       />
       <AppInitializer />
-      <div className="flex h-screen w-screen overflow-hidden">
+      {/* h-dvh, not h-screen: `100vh` is the *large* viewport, so on mobile
+          browsers the bottom of the layout — including the composer — sits
+          under the URL bar. `w-full` rather than `w-screen` because `100vw`
+          includes the scrollbar gutter and overflows horizontally. */}
+      <div className="flex h-dvh w-full overflow-hidden">
         <Sidebar />
 
         <div
