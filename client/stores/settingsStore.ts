@@ -3,6 +3,13 @@
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
 import {
+  EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
+  EMISSIONS_CHIP_VISIBILITY_DEFAULT,
+  EmissionsChipVisibility,
+  clampEmissionsChipAutoHideMs,
+  isEmissionsChipVisibility,
+} from '@/lib/utils/shared/emissions';
+import {
   DEFAULT_MAP_TIMELAPSE,
   MapTimelapseSettings,
   clampTimelapseSettings,
@@ -588,6 +595,25 @@ interface SettingsStore {
   setPasteAsAttachmentChars: (chars: number) => void;
 
   /**
+   * How persistently the floating emissions chip is shown. Defaults to
+   * `always` so the migration is a no-op for existing users; `auto` fades it
+   * out between updates, `hidden` removes it entirely.
+   *
+   * Per-user and local, deliberately separate from the tenant-wide
+   * `showUsageImpact` LaunchDarkly flag: the flag decides whether the feature
+   * exists at all, this decides how loud it is for one person.
+   */
+  emissionsChipVisibility: EmissionsChipVisibility;
+  setEmissionsChipVisibility: (visibility: EmissionsChipVisibility) => void;
+
+  /**
+   * How long the chip stays up after an update in `auto` mode, in ms. Ignored
+   * by the other two modes.
+   */
+  emissionsChipAutoHideMs: number;
+  setEmissionsChipAutoHideMs: (ms: number) => void;
+
+  /**
    * Pacing of the map workflow's time-lapse. Persisted rather than kept as
    * workspace view state: how fast is comfortable to read is a property of
    * the person watching, not of the map they happen to have open.
@@ -732,6 +758,10 @@ export const useSettingsStore = create<SettingsStore>()(
 
       // Pasting more than this many characters attaches instead of inlining
       pasteAsAttachmentChars: DEFAULT_PASTE_ATTACHMENT_CHARS,
+
+      // Emissions chip shown persistently by default
+      emissionsChipVisibility: EMISSIONS_CHIP_VISIBILITY_DEFAULT,
+      emissionsChipAutoHideMs: EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
 
       mapTimelapse: DEFAULT_MAP_TIMELAPSE,
 
@@ -1349,6 +1379,13 @@ export const useSettingsStore = create<SettingsStore>()(
       setPasteAsAttachmentChars: (chars) =>
         set({ pasteAsAttachmentChars: clampPasteAttachmentChars(chars) }),
 
+      setEmissionsChipVisibility: (visibility) =>
+        set({ emissionsChipVisibility: visibility }),
+
+      // Clamped on write for the same reason as the paste threshold above.
+      setEmissionsChipAutoHideMs: (ms) =>
+        set({ emissionsChipAutoHideMs: clampEmissionsChipAutoHideMs(ms) }),
+
       // Clamped on write as well as on read: the sliders are bounded, but a
       // hand-edited localStorage value must not produce a frozen sweep.
       setMapTimelapse: (settings) =>
@@ -1432,6 +1469,8 @@ export const useSettingsStore = create<SettingsStore>()(
           autoInjectPinnedImages: true,
           autoFetchPastedLinks: true,
           pasteAsAttachmentChars: DEFAULT_PASTE_ATTACHMENT_CHARS,
+          emissionsChipVisibility: EMISSIONS_CHIP_VISIBILITY_DEFAULT,
+          emissionsChipAutoHideMs: EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
           mapTimelapse: DEFAULT_MAP_TIMELAPSE,
           confirmStopFromButton: true,
           confirmStopFromKeyboard: true,
@@ -1446,7 +1485,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 43, // Increment this when schema changes to trigger migrations
+      version: 44, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1527,6 +1566,8 @@ export const useSettingsStore = create<SettingsStore>()(
         autoInjectPinnedImages: state.autoInjectPinnedImages,
         autoFetchPastedLinks: state.autoFetchPastedLinks,
         pasteAsAttachmentChars: state.pasteAsAttachmentChars,
+        emissionsChipVisibility: state.emissionsChipVisibility,
+        emissionsChipAutoHideMs: state.emissionsChipAutoHideMs,
         mapTimelapse: state.mapTimelapse,
         confirmStopFromButton: state.confirmStopFromButton,
         confirmStopFromKeyboard: state.confirmStopFromKeyboard,
@@ -1971,6 +2012,21 @@ export const useSettingsStore = create<SettingsStore>()(
             structuralReorders: false,
           };
           state.suggestRevisionsLargeRewriteRatio = DEFAULT_LARGE_REWRITE_RATIO;
+        }
+
+        // Version 43 → 44: Add per-user emissions chip visibility. Defaults to
+        // `always`, i.e. the behavior these users already have — the setting
+        // exists to let them turn it down, not to change anything for them.
+        // Both fields are validated rather than trusted: they round-trip
+        // through localStorage where a stale or hand-edited value would
+        // otherwise reach the render path.
+        if (version < 44) {
+          if (!isEmissionsChipVisibility(state.emissionsChipVisibility)) {
+            state.emissionsChipVisibility = EMISSIONS_CHIP_VISIBILITY_DEFAULT;
+          }
+          state.emissionsChipAutoHideMs = clampEmissionsChipAutoHideMs(
+            state.emissionsChipAutoHideMs as number,
+          );
         }
 
         return state;
