@@ -24,6 +24,7 @@ const GRANTS_ALLOWED_DISPLAY_NAMES = new Set<string>([
   'nelli ayvazyan',
   'mary vonckx',
   'christopher graham',
+  'kathryn hymes',
 ]);
 
 // Allowlisted emails (lowercase). Preferred identifier — add the grants team's
@@ -32,6 +33,7 @@ const GRANTS_ALLOWED_EMAILS = new Set<string>([
   'nelli.ayvazyan@newyork.msf.org',
   'mary.vonckx@newyork.msf.org',
   'christopher.graham@newyork.msf.org',
+  'kathryn.hymes@newyork.msf.org',
 ]);
 
 function norm(value?: string | null): string {
