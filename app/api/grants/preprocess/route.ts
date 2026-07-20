@@ -14,6 +14,7 @@ import {
 import {
   type DocExtract,
   type ExpectedProject,
+  normalizeName,
   reconcile,
 } from '@/lib/services/grants/preprocess';
 import { preprocessProgressPath } from '@/lib/services/grants/preprocessProgress';
@@ -202,22 +203,26 @@ async function lookupProjectNameForCode(
   // document, not at the codes first mention (which is frequently a budget line
   // or a context sentence). Gather a window around EVERY occurrence of the code,
   // plus the document head for context, so the model can see the actual name.
-  const upper = text.toUpperCase();
-  const CODE = code.toUpperCase();
   const radius = 1800;
+  // Locate the code whitespace-tolerantly.
+  const codePattern = code
+    .toUpperCase()
+    .split('')
+    .map((c) => c.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    .join('\\s*');
+  const codeRe = new RegExp(codePattern, 'gi');
   const windows: string[] = [];
-  let from = 0;
   let occ = 0;
-  while (occ < 8) {
-    const idx = upper.indexOf(CODE, from);
-    if (idx < 0) break;
+  let m: RegExpExecArray | null;
+  while (occ < 8 && (m = codeRe.exec(text)) !== null) {
+    const idx = m.index;
     windows.push(
       text.slice(
         Math.max(0, idx - radius),
-        Math.min(text.length, idx + CODE.length + radius),
+        Math.min(text.length, idx + m[0].length + radius),
       ),
     );
-    from = idx + CODE.length;
+    codeRe.lastIndex = idx + m[0].length;
     occ++;
   }
   const windowText = (
@@ -229,12 +234,12 @@ async function lookupProjectNameForCode(
 
   const prompt =
     `You are reading excerpts of one MSF grant document that describes MULTIPLE projects. ` +
-    `Find the project identified by the code "${code}" and return its PROJECT NAME/TITLE — the label used for this project ` +
-    `in a project list, table, or section heading. The name may be a place/location (e.g. "Katsina") or a thematic name (e.g. "Cutaneous Leishmaniasis"). ` +
-    `Return it EXACTLY as written in the document — verbatim; do NOT translate, standardize, expand acronyms, or reformat it. ` +
-    `Do NOT return a full sentence, an objective, or an activity description (e.g. NOT "Scaling up of the nutrition activities in Katsina"). ` +
-    `Also do NOT return the bare project code or a lone abbreviation on its own — return the actual project name. ` +
-    `If the project is labeled in several places, use the clearest project name/title as written. ` +
+    `Find the project identified by the code "${code}" and return its PROJECT NAME/TITLE. ` +
+    `Return the project's descriptive TITLE exactly as written in its own heading, title box, or project-list entry — a title-cased phrase, place, or disease name that labels the project (e.g. "Pediatric care in Maiduguri and Rural medical interventions with KFP (Borno)", "Cutaneous Leishmaniasis KPK", "Katsina"). ` +
+    `A title that a heading shows together with sibling codes (e.g. a box reading "<title> … <codeA> & <codeB>") genuinely names this project — use it. ` +
+    `Do NOT return a bare disease or activity word taken from a DATA or EMERGENCY-RESPONSE table row that sits beside case counts, dates, months, or durations (e.g. "${code} Meningitis 3 months 262 cases") — that is an outbreak/activity entry, not the project title. ` +
+    `Only if the document EXPLICITLY states the project was renamed or split into separate projects each with its OWN distinct name (e.g. "<codeA> – Shinkafi, violence", "<codeB> – Zurmi, violence") should you return this code's distinct name instead of the shared title. ` +
+    `Do NOT return a full sentence, an objective, the bare project code, or a lone abbreviation. Return it verbatim — do NOT translate, standardize, expand acronyms, or reformat it. ` +
     `If you cannot confidently determine the project name for "${code}", return an empty string. ` +
     `Return strictly JSON: {"projectName": "..."}\n\n` +
     `DOCUMENT EXCERPTS:\n---\n${windowText}`;
@@ -573,6 +578,60 @@ async function runCoverageCheck(params: {
         prog.phase(
           `Resolving project names (${resolved}/${toResolve.length})…`,
           96 + (toResolve.length ? (resolved / toResolve.length) * 3 : 0),
+        );
+      }
+    }
+
+    // 5b-2. Single-project OCs occasionally have ONE narrative that documents
+    //       several projects — e.g. OCBA's "Zamfara" project split into Shinkafi
+    //       (ESNG107) and Zurmi (ESNG109) in a single file. The shared
+    //       document-level name would otherwise be stamped onto every code in
+    //       that file, so re-resolve each such code's name from a window around
+    //       its own mention. Only fires when a file backs 2+ matched codes, so
+    //       the common one-code-per-document rows are untouched.
+    if (!ocCfg.multi_project) {
+      const docByFile = new Map(docs.map((d) => [d.file, d]));
+      const codesPerFile = new Map<string, number>();
+      for (const r of reconciliation.rows) {
+        if (r.align === 'Yes' && r.narrativeFile) {
+          codesPerFile.set(
+            r.narrativeFile,
+            (codesPerFile.get(r.narrativeFile) || 0) + 1,
+          );
+        }
+      }
+      const shared = reconciliation.rows.filter(
+        (r) =>
+          r.align === 'Yes' &&
+          r.narrativeFile &&
+          (codesPerFile.get(r.narrativeFile) || 0) > 1,
+      );
+      const concurrency = 5;
+      for (let i = 0; i < shared.length; i += concurrency) {
+        const batch = shared.slice(i, i + concurrency);
+        await Promise.all(
+          batch.map(async (row) => {
+            const doc = docByFile.get(row.narrativeFile as string);
+            if (!doc) return;
+            const name = await lookupProjectNameForCode(
+              client,
+              deployment,
+              doc.text,
+              row.projectCodeInNarrative || row.projectCode,
+            );
+            if (!name) return;
+            row.projectNameInNarrative = name;
+            // Name changed from the shared document name — recompute the note
+            // against the allocation-list name so the row stays consistent.
+            const aligned =
+              normalizeName(row.projectName) === normalizeName(name);
+            row.differences = aligned
+              ? `Code found; allocation name "${row.projectName}" matches narrative name "${name}"`
+              : `Code found; allocation name "${row.projectName}" vs narrative name "${name}"`;
+            row.aligned = aligned
+              ? 'Code and name match'
+              : 'Code matches (name not compared)';
+          }),
         );
       }
     }
