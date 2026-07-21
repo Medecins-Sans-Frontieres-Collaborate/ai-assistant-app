@@ -227,7 +227,7 @@ async function summarizeChunk(
       ...(supportsTemperature && { temperature: 0.1 }),
       max_completion_tokens: maxCompletionTokens,
       stream: false,
-      user: JSON.stringify(user),
+      ...userFieldFor(modelConfig, user),
     });
 
     console.log(
@@ -252,6 +252,26 @@ async function summarizeChunk(
  * @param args - Configuration for document processing
  * @returns A ReadableStream for streaming responses, or a string for non-streaming
  */
+/**
+ * Builds the optional `user` request field for a summarization call.
+ *
+ * Both helpers in this file are invoked with the *selected chat model*
+ * (`FileProcessor` passes `context.modelId`), so a third-party Foundry model
+ * such as Mistral can land here. Those serving containers validate the body
+ * strictly (Pydantic `extra="forbid"`) and 422 on any key outside their
+ * schema — `user` included, regardless of how small the value is.
+ *
+ * Only the Azure OpenAI path is known to accept it. Fails safe: an unknown or
+ * unmapped model omits the field, since dropping it costs only provider-side
+ * abuse telemetry while sending it can fail the whole request.
+ */
+function userFieldFor(
+  modelConfig: OpenAIModel | undefined,
+  user: Session['user'],
+): { user: string } | Record<string, never> {
+  return modelConfig?.sdk === 'azure-openai' ? { user: user.id } : {};
+}
+
 export async function parseAndQueryFileOpenAI({
   file,
   prompt,
@@ -426,7 +446,7 @@ export async function parseAndQueryFileOpenAI({
     ...(supportsTemperature && { temperature: 0.1 }),
     max_completion_tokens: chunkConfig.maxCompletionTokens,
     stream: stream,
-    user: JSON.stringify(user),
+    ...userFieldFor(modelConfig, user),
   };
 
   console.log(
