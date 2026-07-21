@@ -227,7 +227,7 @@ async function summarizeChunk(
       ...(supportsTemperature && { temperature: 0.1 }),
       max_completion_tokens: maxCompletionTokens,
       stream: false,
-      user: JSON.stringify(user),
+      user: user.id,
     });
 
     console.log(
@@ -426,7 +426,7 @@ export async function parseAndQueryFileOpenAI({
     ...(supportsTemperature && { temperature: 0.1 }),
     max_completion_tokens: chunkConfig.maxCompletionTokens,
     stream: stream,
-    user: JSON.stringify(user),
+    user: user.id,
   };
 
   console.log(
