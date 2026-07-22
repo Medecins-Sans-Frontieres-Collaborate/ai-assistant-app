@@ -141,11 +141,15 @@ async function extractNameAndCode(
   deployment: string,
   text: string,
   codeRegex: string,
+  codePrefix: string = '',
 ): Promise<{ rawProjectName: string; projectCodeIfPresent: string }> {
+  const prefixNote = codePrefix
+    ? ` NOTE: in these documents the code is frequently written WITHOUT the "${codePrefix}" prefix (e.g. "BF103" or "ML 107" next to a "CODE PROJET"/"Project Code" label, for a full code like ${codePrefix}BF103/${codePrefix}ML107). If you see such a partial code, return it EXACTLY as written — do NOT add the "${codePrefix}" prefix yourself, and NEVER discard a code just because the prefix is missing.`
+    : '';
   const prompt =
     `You are reading one MSF grant narrative document. Extract ONLY two things and return them as JSON:\n` +
     `1. "rawProjectName": the project name EXACTLY as written in the document — verbatim. Do NOT translate, standardize, expand acronyms, or reformat it. Copy it word-for-word as it appears after a "Project Name"/"Project"/"Title" label (or the document's own title if that's the project name).\n` +
-    `2. "projectCodeIfPresent": the project code if one is EXPLICITLY written in the document (it should match the pattern ${codeRegex}). If no code is present in the text, return an empty string "". Do NOT guess or invent a code.\n\n` +
+    `2. "projectCodeIfPresent": the project code if one is EXPLICITLY written in the document (the full form matches the pattern ${codeRegex}).${prefixNote} If no code is present in the text, return an empty string "". Do NOT guess or invent a code.\n\n` +
     `Return strictly: {"rawProjectName": "...", "projectCodeIfPresent": "..."}\n\n` +
     `DOCUMENT TEXT:\n---\n`;
 
@@ -446,6 +450,7 @@ async function runCoverageCheck(params: {
               deployment,
               text,
               ocCfg.code_regex,
+              ocCfg.code_prefix,
             );
           return {
             file: filename,
@@ -478,6 +483,7 @@ async function runCoverageCheck(params: {
       docs,
       multiProject: ocCfg.multi_project,
       coordKeywords: ocCfg.coord_keywords,
+      codePrefix: ocCfg.code_prefix,
     });
 
     // 5b. Multi-project OCs (e.g. OCP): the micro-pass yields only one name per
@@ -588,6 +594,15 @@ async function runCoverageCheck(params: {
             if (!bareNumber) return;
             const e = expectedByCode.get(code);
             const country = e?.country || '';
+            // Whole-word country match — a substring test let "Mali" match
+            // inside Spanish words like "normalidad", attaching a Mexican
+            // narrative's evidence to a Malian project.
+            const countryRe = country
+              ? new RegExp(
+                  `\\b${country.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`,
+                  'i',
+                )
+              : null;
             const numRe = new RegExp(`\\b${bareNumber}\\b`);
             const coordKw = ocCfg.coord_keywords || [];
             const isCoord = (f: string) =>
@@ -602,10 +617,13 @@ async function runCoverageCheck(params: {
               .filter(
                 (d) =>
                   numRe.test(d.text) &&
-                  (!country ||
-                    `${d.text} ${d.file}`
-                      .toLowerCase()
-                      .includes(country.toLowerCase())),
+                  // Filename separators become spaces so "\bMexico\b" still
+                  // hits "2026_E_AP_Mexico_CAI_Final.docx" (underscores are
+                  // word characters and would defeat the boundary).
+                  (!countryRe ||
+                    countryRe.test(
+                      `${d.text} ${d.file.replace(/[_\-.]/g, ' ')}`,
+                    )),
               )
               .sort((a, b) => Number(isCoord(a.file)) - Number(isCoord(b.file)))
               .slice(0, 5);
@@ -638,6 +656,56 @@ async function runCoverageCheck(params: {
           `Recovering unlabeled project codes (${tried}/${notFoundRows.length})…`,
           99,
         );
+      }
+
+      // 5d. Name-based fallback: rows STILL not found after code search and
+      //     number recovery, but whose allocation name content-matched a
+      //     narrative (reconcile's proposals), surface as a "Likely (review)"
+      //     match. These docs contain no code in any form, so the match can
+      //     never be code-verified — it is flagged for human review, never
+      //     shown as a confirmed match. Number-based recovery (5c) ran first
+      //     because a project-number citation is stronger evidence than a name.
+      {
+        const proposalByCode = new Map(
+          reconciliation.proposals.map((p) => [
+            p.proposedCode.trim().toUpperCase(),
+            p,
+          ]),
+        );
+        for (const row of reconciliation.rows) {
+          if (row.align !== 'No' || row.recovered) continue;
+          const p = proposalByCode.get(row.projectCode.trim().toUpperCase());
+          if (!p || p.confidence < 0.5) continue;
+          // Anchor requirement: at least one matched term that is NOT part of
+          // the country name must appear in the document's filename. Generic
+          // terms ("violence", "crisis", the country itself) match many
+          // narratives; the location appearing in the filename is what makes
+          // the attribution reviewable rather than noise (and is exactly the
+          // Bunyakiri/Ansongo/CAI shape the stakeholder flagged).
+          const e = expectedByCode.get(row.projectCode.trim().toUpperCase());
+          const countryToks = new Set(
+            normalizeName(e?.country || '')
+              .split(' ')
+              .filter(Boolean),
+          );
+          const fileNorm = normalizeName(p.file);
+          const anchored = p.matchedTerms.some(
+            (t) => !countryToks.has(t) && fileNorm.includes(t),
+          );
+          if (!anchored) continue;
+          row.recovered = true;
+          row.narrativeFile = p.file;
+          if (p.narrativeName) row.projectNameInNarrative = p.narrativeName;
+          row.evidence =
+            `Allocation name terms found in document: ${p.matchedTerms.join(', ')}` +
+            (p.countryMatched ? '; country matches' : '');
+          row.differences =
+            `Likely match — no project code written in the narrative; ` +
+            `allocation name "${row.projectName}" matched content in "${p.file}"` +
+            (p.narrativeName
+              ? ` (document names the project "${p.narrativeName}")`
+              : '');
+        }
       }
 
       // Recovered codes are no longer "missing" — drop them from that list so
