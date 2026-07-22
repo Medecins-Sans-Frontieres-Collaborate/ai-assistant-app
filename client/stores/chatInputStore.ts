@@ -65,6 +65,15 @@ interface ChatInputState {
   searchMode: SearchMode;
   selectedToneId: string | null;
 
+  /**
+   * Structured extraction mode. When true, the composer renders the
+   * ExtractionTray and the next send attaches the selected recipes to the
+   * request body. Ephemeral — never persisted; resets between conversations.
+   */
+  extractionMode: boolean;
+  /** Up to 3 selected recipe IDs (UI enforces the cap). */
+  extractionRecipeIds: string[];
+
   // Upload state
   filePreviews: FilePreview[];
   fileFieldValue: FileFieldValue;
@@ -104,6 +113,12 @@ interface ChatInputState {
   // Actions - Search mode & tone
   setSearchMode: (mode: SearchMode) => void;
   setSelectedToneId: (id: string | null) => void;
+
+  // Actions - Extraction
+  setExtractionMode: (enabled: boolean) => void;
+  addExtractionRecipeId: (id: string) => void;
+  removeExtractionRecipeId: (id: string) => void;
+  clearExtractionRecipeIds: () => void;
 
   // Actions - Upload
   setFilePreviews: (
@@ -160,6 +175,10 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
   searchMode: SearchMode.OFF,
   selectedToneId: null,
 
+  // Initial state - Extraction (ephemeral; per-conversation)
+  extractionMode: false,
+  extractionRecipeIds: [],
+
   // Initial state - Upload
   filePreviews: [],
   fileFieldValue: null,
@@ -214,6 +233,24 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
   // Actions - Search mode & tone
   setSearchMode: (mode) => set({ searchMode: mode }),
   setSelectedToneId: (id) => set({ selectedToneId: id }),
+
+  // Actions - Extraction
+  setExtractionMode: (enabled) => set({ extractionMode: enabled }),
+  addExtractionRecipeId: (id) =>
+    set((state) => {
+      if (
+        state.extractionRecipeIds.includes(id) ||
+        state.extractionRecipeIds.length >= 3
+      ) {
+        return state;
+      }
+      return { extractionRecipeIds: [...state.extractionRecipeIds, id] };
+    }),
+  removeExtractionRecipeId: (id) =>
+    set((state) => ({
+      extractionRecipeIds: state.extractionRecipeIds.filter((r) => r !== id),
+    })),
+  clearExtractionRecipeIds: () => set({ extractionRecipeIds: [] }),
 
   // Actions - Upload
   setFilePreviews: (previews) =>
@@ -380,6 +417,8 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
       textFieldValue: '',
       searchMode: defaultSearchMode,
       selectedToneId: null,
+      extractionMode: false,
+      extractionRecipeIds: [],
       filePreviews: [],
       fileFieldValue: null,
       imageFieldValue: null,

@@ -437,7 +437,22 @@
     "noProjectsFound": "Walaa project. Ina waɗi \"default\".",
     "selectAllRequired": "Suɓo subscription, account, e project.",
     "subscriptionRequired": "Suɓo keñgol",
-    "accountRequired": "Suɓo konto Foundry"
+    "accountRequired": "Suɓo konto Foundry",
+    "projectSelectionRequired": "Suɓo projekti e listo.",
+    "scanningResources": "Ngollu Azure subscribtionji maa...",
+    "searchProjectsPlaceholder": "Njiilna projekteji...",
+    "noProjectsDiscovered": "So projekte Foundry anndaa e subscribeji maa. Eɓɓo utpitde käs manual so a anndaa path.",
+    "discoveryPartialWarning": "{count, plural, one {# subscription} other {# subscriptionji}} hokkiima ngollude. Eɓɓo utpitde käs manual so projekte maa mahanni.",
+    "discoveryTruncatedWarning": "Resourceji hedde, ngal wondiima ngam ngollude fow. Eɓɓo utpitde käs manual so projekte maa mahanni.",
+    "retryScan": "Ngolla caɗeele",
+    "next": "Jokkondir",
+    "back": "Firtu",
+    "selectAgentsDescription": "Suɓo golleekuji ɗee e projekte nde ɓe fowdi e model picker maa.",
+    "selectAll": "Suɓi fow",
+    "deselectAll": "Momtu fow",
+    "agentsSelectedCount": "{selected} e {total} golleekuji suɓi",
+    "autoAddLabel": "Jokki golleekuji kesol",
+    "autoAddDescription": "Golleekuji njoɓaani e projekte nde kokkanii jokkitii. Golleekuji mumtani ndiyam jokkanii."
   },
   "Quick Actions": "Golle Jaawɗe",
   "Type / in chat to access your prompts": "Tap / e yeewtere ngam heɓde tinndinooje maa",
@@ -805,7 +820,7 @@
     "stopGenerationDontAskAgainButton": "Hoto welta anndude so a huli e batiindi",
     "stopGenerationDontAskAgainKeyboard": "Hoto welta anndude so a huli e dillere",
     "generateResponseButton": "Naatnu jangirde",
-    "downloadResponse": "Aawto jaɓɓorgo",
+    "downloadResponse": "Aawtoy yanfaare",
     "activity": {
       "callingTool": "Njiɗɗo nguurndam…",
       "callingService": "Njiɗɗo cuɓoraaɗi janngo…",
@@ -818,7 +833,19 @@
       "listingTools": "Nana dati nguurndeeji juulirɗe…",
       "analyzingFiles": "Nana waawi fileji maa…",
       "searchingKnowledge": "Nana yiɗi e jaŋngol moƴƴi…",
-      "cancellingPriorTool": "Nana haaytu laylaytol nguurndam woɗnde…"
+      "cancellingPriorTool": "Nana haaytu laylaytol nguurndam woɗnde…",
+      "workflow": {
+        "preparingDocument": "Ngula baafalji...",
+        "writingDocument": "Nana windu baafal...",
+        "analyzingSource": "Nana waawi junnginde finnde...",
+        "translating": "Nana hirna...",
+        "reviewingTranslation": "Ronde e peeragol {round} e {total}...",
+        "revisingTranslation": "Nana waɗtude arda peeragol...",
+        "extractingRows": "Nana yali layti e {source}...",
+        "transformingTable": "Nana waatna table...",
+        "findingLocations": "Nana feynude leydi...",
+        "updatingMap": "Nana hesɗita karte..."
+      }
     },
     "toolSummary": {
       "usedTools": "Njoɓɗo {count, plural, one {# nguurndam} other {# nguurndeeji}}",
@@ -879,7 +906,9 @@
     "listen": "Yeewtu",
     "processingAudio": "Fayda awdiyo...",
     "ttsError": "Jaɓɓorgo winndito awdiyo. Huumtu e gite.",
-    "unsupportedMessageType": "Jaɓɓorgo njettude ndemgol: No waawani ndemgol ngol"
+    "unsupportedMessageType": "Jaɓɓorgo njettude ndemgol: No waawani ndemgol ngol",
+    "addLanguageOption": "Naatnu \"{name}\"…",
+    "sources": "Janngiiji"
   },
   "transcript": {
     "originalTranscript": "Winnditagol Goongɗinɗo",
@@ -1292,16 +1321,34 @@
     "unsavedChanges": "Waylotoo waɗii suɓaaki",
     "unsavedChangesMessage": "A jabii waylotoo waɗii suɓaaki. Mbarri ɗee?",
     "characterCount": "{current}/{max}",
-    "clearField": "Momtu sukkil",
-    "autosaveNote": "Wayli ɗiɗɗo e mum anndaa.",
-    "responseSection": "Jaɓɓorgo",
-    "voiceSection": "Mbayka",
-    "behaviorSection": "Timmunde",
-    "resetChatSettings": "Hurmiti teelte chat",
-    "resetChatSettingsConfirmTitle": "A hurmiti teelte chat?",
-    "resetChatSettingsConfirmMessage": "Ɓeññiti teelte fow e panel goo: taama, keftinirde bayyinirɗe, Eɓɓe En, jaɓɓorgo model, daande ngol, luugal to mbayka, fileji feewi, e caggolnga. Mbele e saareeji maa fayi.",
+    "clearField": "Momtu ñiiri",
+    "autosaveNote": "Wayludees magganii.",
+    "responseSection": "Yanfaare",
+    "voiceSection": "Sabatugol",
+    "behaviorSection": "Ɓeydirde",
+    "resetChatSettings": "Firtu teeltagol chat",
+    "resetChatSettingsConfirmTitle": "Firtay teeltagol chat?",
+    "resetChatSettingsConfirmMessage": "Ko fayde sare: temperature, jaytinoo e jamfa, Nde ma, yanfaare model, wondude, tekt-su-sabatugol, fiil suɓi, e jebiiɗi. Ko ma jogora heen e konfangol maa.",
     "customInstructionsLabel": "Jaŋtol cuɓal",
-    "defaultTemperatureLabel": "Heewtorgo ndiyam"
+    "defaultTemperatureLabel": "Heewtorgo ndiyam",
+    "Usage & Impact": "Jumɗe e Naatal",
+    "Connectors": "Golleekuji",
+    "Backup": "Doggu",
+    "Memories": "Hakkilɗiiji",
+    "Agent Access": "Aade agent",
+    "LocalModels": "Moodelji jowte ɗee",
+    "suggestRevisions": {
+      "title": "Ɓeydude dokumeeji",
+      "toggle": "Hollu beydugol so wonaa nduttegoo",
+      "description": "So a waawi dokumeeji beydugol, waylude kadi, bimbudeeji ɓurɗe e bimbiɗi ɗaɗi, a waawaa ɗa juɗɗi walla woppita, ɗum kadi ko no waɗii seeɗa e caɗeele jiite.",
+      "exceptionsTitle": "Naatnu ɗum geɗe so...:",
+      "exceptionSelection": "Beydugol e dariindi gooɗum",
+      "exceptionLargeRewrite": "So rewtiɗi wayluɗɓe fayde tee seeroy dokumeeji",
+      "exceptionReorder": "So fannuɗi sarkaaji, tees gooɗi waawaama beydit",
+      "thresholdLabel": "Yiytu rewtiɗi nden laawol",
+      "thresholdUnit": "% dokumeeji waylude",
+      "exceptionSelectionAlways": "Gollal caggal kadi nder laawol danndaniima heen—model tottan to ekkita yiltoorde rewtiindi, o waawiida tuima sey a ngollinaama kisal bonan dokkita nder dokkal kissal."
+    }
   },
   "emptyState": {
     "greeting": "Hol no mbaaw-mi wallitde?",
@@ -1447,33 +1494,78 @@
     },
     "title": "Suɓo model",
     "modelsDescription": "Suɓ model AI ngam haasay maa. Model goɗɗo ina daɗi e bannguuji, suɓo ɗam gollu e ɗum.",
-    "recommended": "Mo tawtii"
+    "recommended": "Mo tawtii",
+    "familyAll": "Fof",
+    "familyFilterLabel": "Suɓo moode e leydi moode",
+    "searchPlaceholder": "Yiylu moodelji",
+    "searchEmpty": "Moodel wala neɗɗa yiylitaade e yiytude maa.",
+    "star": "Sanyinaa {name}",
+    "unstar": "Momtu sanyinaa {name}",
+    "otherFamily": "Golle",
+    "hostedExternally": "Soowdi e kañum gumɗo jogi moƴƴi e Azure AI Foundry, waawan e kille MSF Azure.",
+    "hostedIn": {
+      "label": "Soowdi e {regions}",
+      "tooltip": "Ɓurndi Azure kala moodel soowdi. Hitaande e moodel on mbaawi e ɓurnda maa."
+    },
+    "badges": {
+      "external": "Golle bana",
+      "externalTooltip": "Soowdi e kañum gumɗo jogi moƴƴi e Azure AI Foundry, waawan e kille MSF Azure.",
+      "regionHostedTooltip": "Soowdi e ɓurndi Azure {region}. Wadi hitaande e moodel on mbaawi ngon."
+    },
+    "favorites": "Moodelji mbelɗum",
+    "euResidencyNote": "Moodel ɗiɗi soowdi e ɓurndi Azure e EU.",
+    "hostedRegion": {
+      "label": "Ɓurndi soowdi",
+      "processedIn": "Hitaande on mbaawi e ɓurndi Azure {region}.",
+      "euOnlyNote": "{name} soowdi e ɓurndi Azure e EU; hitaande e mo on mbaawi ngon."
+    },
+    "version": {
+      "label": "Ndogu"
+    },
+    "reasoningModel": "Moodel jajjannde: njaaja sikke-jeye e wowli. Hemɓude, ammbita mo haala gollu ɗiɗi.",
+    "variant": {
+      "label": "Laawol"
+    },
+    "deployment": {
+      "title": "Hurmitere",
+      "source": "Lesdi",
+      "account": "Compte",
+      "location": "Heɗere",
+      "deployment": "Hurmitere",
+      "modelVersion": "Leemunde model",
+      "publisher": "Naatinde"
+    }
   },
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Masiŋ AI golliroowo GPT-4.1 e yiylaango geese sahaa-goonga rewrude e Bing. Ena hokka humpito keso, ñeɲtinol goonga, e ganndol kewuuji jooni. Ɓuri moƴƴude ngam wiɗto hatojinɗo humpito keso, ƴeewndital kewuuji, e ñeɲtinol goonga.",
-      "knowledgeCutoff": "Yiylaango geese sahaa-goonga"
+      "knowledgeCutoff": "Yiylaango geese sahaa-goonga",
+      "tagline": "OpenAI yurnde jangirde nden"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Masiŋ OpenAI ɓurɗo toowde, ɓurɗo waawde e miijo ɓittɗo, mahde dokkol, e ñaawde caɗeele karallaagal. Ɓuri moƴƴude ngam golle ƴeewndital, pellitte dokkol, wiɗto, e faaminde ceɓɓitiiɗe. Ena walliita waylude tiiɗndam miijo e ɓeydagol jaabtol.",
-      "knowledgeCutoff": "Dec 2025"
+      "knowledgeCutoff": "Dec 2025",
+      "tagline": "Code, tattaanal, coogal"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Yamre GPT-5 ɓurnde yaawde e lesde njaru, moƴƴitinɗo ngam yaawnere tawi moƴƴol toowɗo. Timmi ngam golle ñalnde kala, naamne jaawɗe, e jaaɓnirɗe hatojinɗe jaabte jaawɗe. Potiɗɗo moƴƴo e golle e moƴƴol.",
-      "knowledgeCutoff": "Aug 6, 2025 8:00 PM"
+      "knowledgeCutoff": "Aug 6, 2025 8:00 PM",
+      "tagline": "Heddu maa jawdi ndiyan"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Dec 2025",
-      "description": "Ñaawanre GPT-5.2 wentorɗo e jaɓɓorgo moƴƴude ley conversational e yimɓe ɓuri hilde. Moƴƴi e ñaama buggitare, heftinirde yimɓe, geseede kiɗɗe, e waɗde ñaawdi to ñaawndu. Moƴƴi tawa ñaawdi to feere, ɗaɓɓannde counseling, e suɓre ɓe nanndiri yimɓe."
+      "description": "Ñaawanre GPT-5.2 wentorɗo e jaɓɓorgo moƴƴude ley conversational e yimɓe ɓuri hilde. Moƴƴi e ñaama buggitare, heftinirde yimɓe, geseede kiɗɗe, e waɗde ñaawdi to ñaawndu. Moƴƴi tawa ñaawdi to feere, ɗaɓɓannde counseling, e suɓre ɓe nanndiri yimɓe.",
+      "tagline": "Sirnude, ceertu ɗeele"
     },
     "o3": {
       "name": "o3",
       "description": "Masiŋ miijo OpenAI ɓurɗo toowde jogiiɗo baɗe ñaawde caɗeele ɓennduɗe. Ɓuri waawde e hiisaaje ɓittɗe, miijo ganndal, pellitte dokkol, e golle miijo daaƴre-keewɗe. Palal saraaji 200K yaajɗo. Ena walliita ɗowde tiiɗndam miijo.",
-      "knowledgeCutoff": "Apr 8, 2025 8:00 PM"
+      "knowledgeCutoff": "Apr 8, 2025 8:00 PM",
+      "tagline": "Tattanal tun-tun to goɗɗo"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1483,47 +1575,256 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Annduɗo miijo holloowo golle mum daaƴre-daaƴre. Moƴƴo sanne ngam caɗeele hiisaaje, pellitte miijo, e faamde miijooji ɓittɗi. Ƴeew no miijtortoo caɗeele e sahaa-goonga.",
-      "knowledgeCutoff": "Jan 20, 2025"
+      "knowledgeCutoff": "Jan 20, 2025",
+      "tagline": "Hanndita tattaanal tun-tun"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Masiŋ semmbe kuuɓɗo ɓurɗo waawde e winndiyankaagal dokkol e karallaagal. Moƴƴo ngam moƴƴitinde dokkol, winndiyankaagal ɗereeji, e faaminde miijooji karallaagal. Yaawɗo e hoolaare ngam golle mahdi.",
-      "knowledgeCutoff": "Apr 16, 2025 12:45 AM"
+      "knowledgeCutoff": "Apr 16, 2025 12:45 AM",
+      "tagline": "Moƴƴi yamiroowo open-source"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Masiŋ baawɗo keewɗum iwde xAI ganndaaɗo sabu jaabte ceertuɗe. Moƴƴo ngam yeewterɗe udditiiɗe, eɓɓooje cosaan, e ñaawde caɗeele ɓittɗe.",
-      "knowledgeCutoff": "May 13, 2025 12:16 AM"
+      "knowledgeCutoff": "May 13, 2025 12:16 AM",
+      "tagline": "Moƴƴi yamiroowo xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Masiŋ Anthropic ɓurɗo waawde jogiiɗo miijo, dokkol, e cosaan tiiɗɗi. Ɓuri moƴƴude ngam ƴeewndital ɓittɗo, wiɗto, e golle hatojinɗe faamol luggiɗɗo.",
-      "knowledgeCutoff": "January 2025"
+      "knowledgeCutoff": "January 2025",
+      "tagline": "Janngirde Opus jokkondirde"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Masiŋ Claude potiɗɗo hokkuɗo golle moƴƴe e dokkol, ƴeewndital, e golle cosaan. Moƴƴo ngam kuutoragol ñalnde kala e jaabte jaawɗe.",
-      "knowledgeCutoff": "January 2025"
+      "knowledgeCutoff": "January 2025",
+      "tagline": "Jangirde Sonnet jokkondirde"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Masiŋ Claude Opus gontaangal ɓennuɗo. Moƴƴo sanne ngam golle dokkol ɓittɗe, ƴeewndital ceɓɓitiiɗo, e faamol ceertuɗo.",
-      "knowledgeCutoff": "January 2025"
+      "knowledgeCutoff": "January 2025",
+      "tagline": "Opus jokkondirde nden"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Masiŋ Claude yaawɗo e lesɗo njaru moƴƴitinɗo ngam golle jaawɗe. Moƴƴo ngam naamne ñeeñɗe, tonngol, e jaaɓnirɗe keewɗe.",
-      "knowledgeCutoff": "January 2025"
+      "knowledgeCutoff": "January 2025",
+      "tagline": "Claude doole ko jooɗi"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Model Antropic mo handi. Mo addani e winndude to bannge, jamiroo e faltooji tuma bone.",
-      "knowledgeCutoff": "Fewre 2026"
+      "knowledgeCutoff": "Fewre 2026",
+      "tagline": "Bindugol kewɗe e tattaanal"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Model Claude mo feewi. Mo handi e winndude kulle jogii, falde, e codduji e jawdi.",
-      "knowledgeCutoff": "Fewre 2026"
+      "knowledgeCutoff": "Fewre 2026",
+      "tagline": "Claude moƴƴi goɗɗo kala"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Model mo Meta jooɗii, waɗi sembe. Muɗiɗo ɗum e windugol, jamfaaji e puttugol ceppol.",
+      "tagline": "Moƴƴi yamiroowo open-source"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Model OpenAI maa dow o mumbar. Mo gese e windugol, njiɗɗugol, kodugo e golli kuutorgol ceɗɗam.",
+      "tagline": "GPT moƴƴi daɗi"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Nano GPT keso e moh. Mo waɗi sembe e golli cabbuji, kolay e haɗi ndiyam lowre.",
+      "tagline": "GPT ndiyan e heddun ndiyan"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "GPT mo darndi waawnugol jawdi doole e garabgol. Mo feere e hokkugol jawdi, rewtagol, e hirnugol.",
+      "tagline": "GPT sirnude hesere"
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "GPT-5 mumbar gooto. Ena waawi mo e windugol, tinngugol e kodugo.",
+      "tagline": "GPT doole jokkondirde"
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "GPT-5 mo waawnugol jawdi. Ena gese e jawdi ñalngu e rewtagol.",
+      "tagline": "GPT sirnude jokkondirde"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Kisal GPT mo taari. Mo waawi ɗum e windugol ñalngu e diiwal e laylaygol kaa mo gollu men ndiyam.",
+      "tagline": "GPT multimodal nguu ngona"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "GPT-4.1 mo nene e moh. Mo yuɓɓi e golli ñalngu ñaŋ.",
+      "tagline": "GPT jokkondirde feewi"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Model mumbar e moƴƴi Anthropic. Ena gese e windugol dexal, njiɗɗugol, kodugo e golli tinngol.",
+      "tagline": "Claude mum moƴƴi e doole"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Model DeepSeek mo jooɗii. Ena dogondir e windugol ñalngu e ceppol gese.",
+      "tagline": "Moƴƴi yamiroowo open-source"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Model Mistral mumbar. Mo tan Europeen e windugol, jamfaaji e ceppol njaltu.",
+      "tagline": "Model yuropa ngoodi open-weight"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Model GPT-5 ndiyam. Ena waawi mo kono e windugol, tinngugol, kodugo.",
+      "tagline": "GPT-5 doole jokkondirde"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Model GPT-5 waawnugol jawdi ndiyam. Mo feere e jawdi ñalngu e rewtagol.",
+      "tagline": "GPT sirnude jokkondirde nden"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Nano GPT-5, mo moh e gese. Ena feere e golli cabbuji, kolay e haɗi ndiyam buufu.",
+      "tagline": "GPT ndiyan jokkondirde"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Nano GPT-4.1. Ena waawi mo e cabbuji ñalngu lesdi les.",
+      "tagline": "GPT jokkondirde ndiyan"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Mini GPT-4o, moh e gese. Feere e golli cabu jinaa, jawdi ndiyam ndiyam moƴƴi.",
+      "tagline": "GPT multimodal ngona feewi"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Model jokkere leyɗe. Ena feere e matam, laabaridgo e golli defte e ndiyam buufu.",
+      "tagline": "Tattaanal heddun e jawdi"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Model leyɗe deftere ndiyam. Ena joggi matam, saynsi e laabaridgo khisu e lowre buufu.",
+      "tagline": "Tattaanal tun-tun e feewi"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Claude mo moƴƴi Anthropic, makko gooto Claude 5. Ena gese e golli keso majji, njiɗɗugol e kodugo.",
+      "tagline": "Model ceertu Anthropic"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Claude mo ndiyam. Mo gese e windugol ñalngu, tinngugo, kodugo e jawdi buuɗɗu.",
+      "tagline": "Claude moƴƴi e suufu mum"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Model baɗɗo Mistral. Europeen tan mo joggi leyɗe e gese ñalngu.",
+      "tagline": "Model suufu Yuropa"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Model Mistral mo ndiyam. Ena gese e jamfaaji, drafts e ceppol ñaŋ.",
+      "tagline": "Model feewi e heddun Yuropa"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Model mo Mistral mo tinene. Gese feere e golli cabbuji, kolay e haɗi ndiyam lowre.",
+      "tagline": "Mistral ndiyan moƴƴi edge"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Model DeepSeek-R1 ndiyam. Ena holli matam ɗamɗam defte e jokkere leyɗe doole.",
+      "tagline": "Model tattaanal open yamiroowo hesere"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Model mo Meta jooɗii mo ndiyam. Ena gese e windugol, jamfaaji e ceppol ñalngu.",
+      "tagline": "Llama open-source moƴƴi e jawdi"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Golle mum sooɗi dari Meta. Iya feɗi walla walla e ndemɗe fagudɗo e ƴeewteede hulnde.",
+      "tagline": "Llama open-source nguu ngona"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Muddal xAI mawɗo. Naati tigi e hoore mum e waawoo walla walla e haasere, jaŋte e gollal kayiɗɗo.",
+      "tagline": "Model doole xAI"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Golle OpenAI woɗnde mum mawɗo. Dari walla walla e seɗaade, jaŋte, coddude e waawi fayde palal e ndemɗe lohi.",
+      "tagline": "GPT doole mum hesere"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (woɗnde feewi)",
+      "description": "Kuytu rolondiral kono kala kadi e OpenAI chat-tuned model feewi. Eyi wannda Azure software gollal gpt-*-chat woɗɗi.",
+      "tagline": "Kadi GPT sirnude moƴƴi hesere"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Golle Opus woɗnde leggal 4.6 e 4.8. Dari walla walla e binndol daɗol, jaŋte, coddude e haɓtidol ceptal.",
+      "tagline": "Opus hesere so tawii"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Golle DeepSeek woɗnde feewi e kuytal famɗude Azure e layin R1. Naatta hoore mum ko pela-pela.",
+      "tagline": "Model tattaanal open hesere"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "V4 DeepSeek kuytal teddungal e dari Azure layin V3. Huutora binndol daɗol e ceɗɗo nder mbiraan teknikal.",
+      "tagline": "Moƴƴi open-source heddun"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "description": "Muddal xAI kuytal famɗugol. Naatta hoore mum pela-pela e njamfaayɓe balɗe.",
+      "tagline": "Model tattaanal heddun xAI"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Muddal xAI haasere kuytal. Fesii njamfaayɓe walla walla e ceede adunaandi e haasere.",
+      "tagline": "Model sirnude heddun xAI"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Muddal xAI soogaygal. Baggol e mawnirde ngoodi e binndanɗe daɗɗo e haasere gooɗɗi.",
+      "tagline": "Model xAI feewi"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Dowrowal OpenAI GPT-5.6. Mo ɗo feewi e janngirde e waawde windugol, hummagol, kodugol, e heftinde lamɗe ɗiɗi.",
+      "tagline": "Doole mum GPT hesere"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Tagdi jokkondirde OpenAI GPT-5.6. Mo feewi e windugol ñalawma, lijjite e kodugol, e yahande jaaba jaati.",
+      "tagline": "GPT-5.6 kuutorgo ñaamirde"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Dabbunde laawol OpenAI GPT-5.6. Mo waawi no gollu laawol tigi, jaaba jaati e goongɗude ceertu.",
+      "tagline": "GPT-5.6 teddu, jokka"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Leemunde Mistral hessere. Mo jokkondirde Iwroop, feewi e dowtagol ɗum e jaaba jaati e leyda.",
+      "tagline": "Mudel uroppe kuutorgo"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Moonshot AI mudel ngal open-weight. Danndu e heftinde agent, sunkito e dokomentji ndiyam.",
+      "tagline": "Mudel open-weight agentic"
     }
   },
   "searchMode": {
@@ -1789,7 +2090,22 @@
     "useDefaultStyle": "Huutoro mbaydi winndiyankaagal goowɗo",
     "noTonesCreated": "Alaa daande sosaade taawo",
     "createTonesHint": "Sos daande e Golle Jaawɗe",
-    "translateDocumentTooltip": "Momta dokkal e ɗemngal gooto.\n\nDow heɓtugol: Word, Excel, PowerPoint, HTML, TXT\nJokkondirde max: 40MB\n\nMoƴƴi ɓe 80+ ɗemngal e fayli glossary seŋii."
+    "translateDocumentTooltip": "Momta dokkal e ɗemngal gooto.\n\nDow heɓtugol: Word, Excel, PowerPoint, HTML, TXT\nJokkondirde max: 40MB\n\nMoƴƴi ɓe 80+ ɗemngal e fayli glossary seŋii.",
+    "translateTooltip": "Jokki kaɓirgal ɗiɗi deftere goonga dow mbay.",
+    "cameraTooltip": "Naan calo njoɓdi toowde ɗum e yowiti to jannginoo.",
+    "noResults": "Ko fayde hay am jamfa",
+    "sectionPinned": "Huutori",
+    "sectionFrequent": "Ko feccita",
+    "sectionMore": "Teeŋol",
+    "categoryWeb": "Web",
+    "categoryMedia": "Media e fiilde",
+    "categoryTransform": "Waylude",
+    "pin": "Huutor e dow",
+    "unpin": "Juul huutorgal",
+    "moveToMore": "Yah teeŋol",
+    "moveOutOfMore": "Hollu e wadalkal",
+    "showSources": "Hollu suusumji goɗɗi",
+    "hideSources": "Faydu suusumji goɗɗi"
   },
   "transcription": {
     "transcribesOnSend": "Ina winndita nde neldaa",
@@ -1923,7 +2239,14 @@
     "expiresSoon": "Ena gasoo e balɗe {days} - aawto law",
     "expires": "Ena woodi ngam balɗe {days}",
     "unofficialBadgeLabel": "Enndol fow",
-    "unofficialLanguageWarning": "Ɗemngal tawii ummoraama e jam. Hinaa anndidiri tammbitaako. Fawa, neɗɗo nannde walla e jam ɗemngal fow teddina e caɗeele."
+    "unofficialLanguageWarning": "Ɗemngal tawii ummoraama e jam. Hinaa anndidiri tammbitaako. Fawa, neɗɗo nannde walla e jam ɗemngal fow teddina e caɗeele.",
+    "translationSubmitted": "Daaƴne mum tawii—PDF heɓani feere e leñol.",
+    "pendingTitle": "Nana daaƴna {filename}…",
+    "pendingHint": "Daaƴndiral PDF heɓani feere e leñol, e mbarna feere. A waawi ndiyam laawol mum—kaarte nde mbaɗi ndokkude so dokmenta heɓi, e hoore e reewtol.",
+    "asyncFailed": "Daaƴndiral dokmenta suusii: {error}",
+    "jobNotFound": "gaa daaƴndiral laawol on yetti nden. Tiiɗno fuɗɗi ndagain.",
+    "retryPolling": "Huɗin ndagain",
+    "pollingStalled": "Min mbaɗaani ndiyam e sarver ngol honndude ceertu. Daaƴndiral moƴƴi wonee haanan."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -1973,6 +2296,10 @@
       "technicalDetails": "Carii teknikal",
       "agentCountLabel": "Agent {count}",
       "disconnectedToast": "Liggital toggo {name}"
+    },
+    "emptyState": {
+      "title": "Agentji dow nguu/ko organisation ngam hollude walaa",
+      "description": "Jokku e project Foundry ko ñaam kono waɗu agentjee mum."
     }
   },
   "privacy": {
@@ -2083,5 +2410,1309 @@
     "review": "Yiylo",
     "itemId": "ID: {id}",
     "itemSource": "{date} eɓɓo {source}"
+  },
+  "regionOverride": {
+    "warning": "Jommbondirde nokkuɗo ena heddii — jawdi maa naanii ekkiti ɗaa {region} data region. Eɗen jommbondirde nokkuɗo sintin, kono ko jeyaa kammu.",
+    "clear": "Momtu jommbondirde"
+  },
+  "usageImpact": {
+    "empty": "Jumɗe yettaa arii. Jumɗe token maa e naatal co2maa maa teeɗaniima fii hitaande batta a waawi chat.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} caasaaji smartphone",
+    "requests": "Ñaɗɗo",
+    "promptTokens": "Token ndaarol",
+    "completionTokens": "Token timmintal",
+    "topModels": "Ko to model",
+    "byRegion": "Ko to gese mum",
+    "regionDefault": "Cuusa",
+    "modelRow": "{requests} ñaɗɗo · {grams} g",
+    "disclosure": "Naatal ɗi accii luungal version {version} · jokkondir {since} · chat tenor (agent e annditorde knowledge-base waawaaniima).",
+    "reset": "Fannu jumɗe jokkol",
+    "estimatedPortion": "Nana veŋtani ~{grams} g CO₂e ({requests} njiytorde) hesɗinira e konngol chaten ɓen jokkude ɓuri taggi — hesɗinira e binndi ndiyam, teeŋtinde njoɓdi token ɓe wonani.",
+    "chipTitle": "Chip walal",
+    "chipDescription": "Jaaɓnirgal mujje makko karbon e doggol e jamma, on refti top chat input.",
+    "chipAlways": "Hollu hoore",
+    "chipAlwaysHint": "Chip maa holli so tawii jaaɓnirgal makko.",
+    "chipAuto": "Hollu e rewteede walla duunde ko",
+    "chipAutoHint": "Chip on woodi so jaaɓnirgal rewtii, ɗum so ina ɓuri. Duunde ko walla fokusi ɗum on artii.",
+    "chipHidden": "Mballu",
+    "chipHiddenHint": "Chip on mballu so wonaa refti. Jaaɓnirgal balɗe hokka ko e hello ngo.",
+    "chipAutoHideLabel": "Sakkito ngam",
+    "chipAutoHideUnit": "hawndu",
+    "chipAutoHideHint": "He {min} e {max} hawndu."
+  },
+  "extraction": {
+    "toggleLabel": "Fowndo ɗiɗi e jamfa",
+    "trayLabel": "Fowngol",
+    "trayPrefix": "Fowngo",
+    "trayInfo": "Fowngol ina arta tabliiji mooɗi 3. Nguuru geliɗi wawataa to noki.",
+    "autoChip": "Auto — AI jogii jamfa",
+    "addRecipe": "Ɓeydii nguuru",
+    "addRecipeTitle": "Ɓeydii nguuru e fowngol ɗiɗi",
+    "addRecipeFullTitle": "Ekol nguuruuji 3 fowngol gooto",
+    "removeRecipe": "Momtu nguuru: {name}",
+    "remove": "Momtu",
+    "section": "Nguuru fowngol",
+    "sectionSubtitle": "Nguuruuji ndiyam jokkondirii kuuɗii, fiilji e URLji e tabliiji jamfa. Labo dow nguuru 3 kuutorgo gooto.",
+    "newRecipe": "Nguuru hesere",
+    "untitledRecipe": "(Nguuru baɗɗo tekt)",
+    "deleteRecipe": "Momtu nguuru",
+    "delete": "Momtu",
+    "deleteConfirm": "Momtaa?",
+    "cancel": "Haaytu",
+    "name": "Innde",
+    "namePlaceholder": "misal: Jom-ngeene",
+    "description": "Fayde",
+    "optional": "(kiisol)",
+    "descriptionPlaceholder": "Ganndal ndiyam suɓi to jokkol nguuru",
+    "instructions": "Jokkol",
+    "instructionsPlaceholder": "Hol ko AI dennda fannal fowngol?",
+    "fields": "Ñiiri",
+    "field": "ñiiri",
+    "fieldsPlural": "ñiiri",
+    "fieldName": "Innde ñiiri",
+    "fieldType": "Lewgol ñiiri",
+    "fieldNamePlaceholder": "innde_ñiiri",
+    "addField": "Ɓeydii ñiiri",
+    "removeField": "Momtu ñiiri",
+    "toggleDetails": "Lolla ceertu",
+    "fieldDetailsTitle": "Fayde, enum valueji",
+    "fieldDescriptionPlaceholder": "Fayde (umtorii AI e ñiiri ɗii)",
+    "enumValuesPlaceholder": "Valueji waawii, feettodirii e comma",
+    "required": "yaawto",
+    "suggest": "Hulnude e AI",
+    "suggesting": "Hulnude…",
+    "suggestNeedsInstructions": "Naata jaɓe gollal nder, e AI jogii woni waɗa ɗum",
+    "searchRecipes": "Yiyoo templateji",
+    "pickerEmpty": "Template walaa. Soɗɗo koɗɗe to waɗii junngo.",
+    "pickerEmptyMatch": "Template ñaam waɗiima.",
+    "editorEmpty": "Template walaa. Soɗɗo ko ɗum e AI maa waawi ballugol sahaji.",
+    "noData": "Jeytino walaa",
+    "noRecords": "Walaa coogal {name}",
+    "row": "tonnde",
+    "rows": "tonndeeji",
+    "record": "coogal",
+    "records": "coogale",
+    "complete": "jommbugol",
+    "download": "Aawtoy",
+    "preview": "Winndit",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} doggol",
+    "fieldCountOne": "1 doggol",
+    "andMoreFields": "+ {count} ɓurɗe",
+    "saveAsRecipe": "Danndu ko template",
+    "savedAsRecipeToast": "Danndino ko template \"{name}\"",
+    "previewTruncated": "Winndita tonndeeji 3 ko first e {total}. Aawtoy sabu jamfa jeytino.",
+    "previewEmpty": "Tonndeeji walaa huunde winndit",
+    "proposedSchemaTip": "AI njiɗii schema ɗe. Danndu ko ngo fayde balɗe maɓɓe.",
+    "downloadAriaLabel": "Aawtoy {name} e {format}",
+    "previewAriaLabel": "Hirna winndit {name}",
+    "changeFormatAriaLabel": "Wayli aawtoy format {name}",
+    "materialWarningTitle": "Naata ciftugal jeytino",
+    "materialWarningBody": "Siiɗa habar nder, jokka fayil walla naata URL.",
+    "materialAttach": "Jokka fayil",
+    "willExtractPrefix": "Jeytinaa e:",
+    "materialText": "habar mataki",
+    "materialFiles": "{count, plural, one {1 fayil} other {# fayile}}",
+    "materialActiveFiles": "{count, plural, one {1 fayil mawndu} other {# fayile mawndu}}",
+    "dismiss": "Dartina jeytino"
+  },
+  "Connectors": "Golleekuji",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "Hubitere",
+        "description": "Hubit finnde e junngol, glossarieji e peeragolji"
+      },
+      "document": {
+        "label": "Baafal",
+        "description": "Winndu e hokka baafal e caɗeele konngol"
+      },
+      "dataAnalysis": {
+        "label": "Junggol dencuka",
+        "description": "Naata tableji e feenno walla waat dencuka maa"
+      },
+      "map": {
+        "label": "Karte",
+        "description": "Waɗ e dencuka ko leydi e karte"
+      }
+    },
+    "chooser": {
+      "prompt": "Wallay buggit workspace iwde ley"
+    },
+    "sidebar": {
+      "newTranslation": "Hubitere hesere",
+      "newDocument": "Baafal hesere",
+      "newDataAnalysis": "Junggol dencuka hesere",
+      "newMap": "Karte hesere"
+    },
+    "translation": {
+      "chooseLanguage": "Ɓernde hubitere",
+      "customLanguageHint": "\"{name}\" ko ɓernde maa naati — AI tammbitii dow ɓernde fow, ammoo teddungal ko anndiɗaa.",
+      "addedByYou": "A naatinii",
+      "glossary": "Glossary",
+      "noGlossary": "Glossary anndaa",
+      "manageGlossaries": "Glossaryji",
+      "glossaries": "Glossaryji",
+      "closeGlossaries": "Uddu glossaryji",
+      "glossariesEmpty": "Winndu glossary tawi a lumtidi humondiral fayde hubitere. Glossaryji danndaa hisi e appareil nde tawi hokkanee dow hubitereji.",
+      "newGlossary": "Glossary hesere",
+      "newGlossaryName": "Glossary wondude",
+      "glossaryName": "Innde glossary",
+      "deleteGlossary": "Momtu glossary",
+      "sourceTerm": "Cakkitiiɗo",
+      "targetTerm": "Tarjamɗo",
+      "note": "Njoɓdi",
+      "noteOptional": "Njoɓdi (so wonaa moƴƴi)",
+      "addEntry": "Ɓeydu cakkitiiɗo",
+      "removeEntry": "Momtu {term}",
+      "mode": "Ngal tarjamde",
+      "modeQuick": "Hari-hari",
+      "modeAgentic": "Yiytigol",
+      "modeQuickHint": "Tarjamde goɗɗo, tonti laawol",
+      "modeAgenticHint": "A naatli jayngol nder text, kadi a tarjamii, a ngoodi 3 nder reftine",
+      "translate": "Tarjam",
+      "translating": "Naatande...",
+      "sourceLabel": "Text cakkitiiɗo",
+      "targetLabel": "Tarjamɗo",
+      "sourcePlaceholder": "Nashu walla wind text maa tarjam, walla naatlor moƴƴugol dokumangol.",
+      "targetEmpty": "Tarjamɗo maa woni fii.",
+      "uploadDocument": "Naatlor dokumangol",
+      "copy": "Nattii",
+      "copied": "Nattitan",
+      "tooLong": "Text ngal daani {max} jottinaaji. Rumbina ko nder paykun, walla huutora tarjamde dokumangol nder fayde.",
+      "analysisTitle": "Jayngol ko nder tarjamde",
+      "register": "Jettino",
+      "reviewTitle": "Reftineere",
+      "roundLabel": "Reftineere {round}",
+      "verdictApprove": "Ɓeyditere",
+      "verdictRevise": "Danndan",
+      "railRequest": "Tarjam text cakkitiiɗo to {language}.",
+      "railDoneAgentic": "Ngu daani. Mi jaynii text, mi tarjamii, mi ngoodi {rounds} reftineere. Ngal jaɓɓugol woni nder workspace.",
+      "railDoneQuick": "Ngu daani. Tarjamɗo woni nder workspace.",
+      "railAssessRequest": "Jiygol laawol tarjamɗo {language}.",
+      "railAssessDone": "Jayngol timmi: darnaaji woni nder workspace e {count} danndiral walla danndiɗi.",
+      "roundChanges": "Dentol e reftineere {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "Hakkilitaade",
+          "description": "A njaɓi e ɗum ko hol no waɗii cakkitiiɗo — e hoore ko feewaani tarjamde huunde, naata, min walla bagian cakkitiiɗo winndaaɓe"
+        },
+        "fluency": {
+          "label": "Dokkal",
+          "description": "Daday, jowde, komɗin, e dokkal woni jawdi e tarjamɗo"
+        },
+        "terminology": {
+          "label": "Teminoliji",
+          "description": "Cakkitiiɗe domaine ɗii naƴi e moƴƴi; glossary huutora ko ɗum bayyi"
+        },
+        "style": {
+          "label": "Siil",
+          "description": "Laawol, dorgo e ɗoore ndimi ko cakkitiiɗo e heɓtude laawol"
+        },
+        "localeConventions": {
+          "label": "Kaɓirgol locale",
+          "description": "Ñalngu, lambaaji, unitte e komɗin naati normaaji locale tarjamɗo"
+        },
+        "audience": {
+          "label": "Balɗe",
+          "description": "Nana e laawol ambar e nder heɓtude e laawol fuddi e text"
+        }
+      },
+      "severity": {
+        "minor": "Honnde",
+        "major": "Meeɗen"
+      },
+      "assess": "Fenndu cippol",
+      "assessing": "Fennude…",
+      "assessmentTitle": "Nyaɗɗugol cippol",
+      "criteriaPicker": "Kriteriiɗi ngol fennude",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Fayde e teeltinooɓe",
+      "noEditsSuggested": "Teeltinooɓe alaa — juumre cippol tawii.",
+      "acceptEdit": "Toppu",
+      "rejectEdit": "Tuuma",
+      "acceptAll": "Toppu fow",
+      "rejectAll": "Tuuma fow",
+      "editAccepted": "Toppude",
+      "editRejected": "Tuumaade",
+      "editUnapplicable": "Himo waawi anndude ɗeen nguurndu e binndi mabbe — so tawii alaa wonaani",
+      "editTranslation": "Teelta",
+      "doneEditing": "Golle gasii",
+      "pasteTranslationPlaceholder": "Winndu walla hollu njeertinoo e faale…",
+      "editingBlockedPendingEdits": "Taara fayde walla tuuma teeltinooɓe dadɗo tun",
+      "pendingCount": "{count} honndu",
+      "closeReview": "Uddu cippol nyaɗɗi",
+      "showReview": "Hollu nyaɗɗugol",
+      "showReviewPending": "Hollu nyaɗɗugol ({count} honndu)",
+      "undoEdit": "Firtu",
+      "clearResolved": "Momtu jokkoraaɗi",
+      "clearResolvedHint": "Momtu cuɓoraaɗi waɗii/eta, faalaaɗi, e waɗaani seeda e leydi ɗi kadi.",
+      "autoClearResolved": "Momtu cuɓoraaɗi jokkoraade bawgal",
+      "customCriteria": "Tiɗɗe jaŋtorde",
+      "closeCriteria": "Uddu tiɗɗe jaŋtorde",
+      "newCriterion": "Tiɗɗo hesere",
+      "newCriterionName": "Tiɗɗo andaa",
+      "criterionName": "Innde tiɗɗo",
+      "criterionRubric": "Rubrik",
+      "criterionRubricPlaceholder": "Binndi hol ko jaɓi tuubannde waɗde tiɗɗo on, misal \"Yiytuɗe fiirugol holli klinikal e feewi waɗugol, si tawii ko ceertu...\"",
+      "criterionRubricHint": "Rubrik on ndon no ɲaamii AI rewti e MQM ɗin e goongon, so ko yaaɓii cuɓoraaɗe.",
+      "criteriaEmpty": "Sos tiɗɗe jaŋtorde — misal: ceede suudu, tere mum, walla tohonirɗe ɗi laawol — ngam foti e juuɗitinde cuɓoraaɗe marfee. Ko fayda e jom mbirnde on, tee tawi fayi.",
+      "deleteCriterion": "Momtu tiɗɗo",
+      "manageCriteria": "Tiɗɗe jaŋtorde",
+      "addCriteria": "Ɓeydu tiɗɗe",
+      "noUsableCriteria": "Seyda ɗum: suɓo goɗɗo tiɗɗo mokkoyaa, walla jokka rubrik ngal tiɗɗe maa.",
+      "criterionRubricTooLong": "Rubric on ko {over} ɓirtaari ɓuri doole. Ko ɗum feewi waɗude e caɗeele kala, kono ɗum waawi so tawtii e dow laabi."
+    },
+    "document": {
+      "emptyTitle": "Winndu lan binndi dannde maa",
+      "emptyBody": "Hulnoy e ngol assistant lan dir e binndi; sida rapport, leta jayngal, wakkati dowrowol. Sappu fayde fiilde ruf e hoore heddoodi tee a yiɗi eɓɓiɗe ladde e jaŋngol.",
+      "generatePlaceholder": "Hulnoy lan binndi dannde…",
+      "revisePlaceholder": "Winndu fayde ngol seeda laata…",
+      "generate": "Suɓo",
+      "revise": "Golle e fayde",
+      "writing": "Winndude…",
+      "export": "Jokka",
+      "references": "referaansii",
+      "addReference": "Suɓo fiilde",
+      "uploading": "Naataa…",
+      "removeReference": "Momtu {name}",
+      "referenceChars": "{chars} aɗɗi binndi nattirde",
+      "referenceEmpty": "Binndi waawi nattude e {name} alaa",
+      "uploadFailed": "Naataade dogani",
+      "untitledDocument": "Binndi dannde alaa",
+      "generatedSummary": "Mi binndi dannde ci topirgal. Nyaɗɗo tee yidii fayde, hul min tintinii.",
+      "revisedSummary": "Mi faydi dannde ci topirgal.",
+      "runFailed": "Heddu wayi: {message}",
+      "uploadBasis": "Fuɗɗo e binndi mawɗo",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "Caggal e binndi",
+          "description": "Caggal e binndi mbakkeede, e doole ebinndi; daade lestati e mbaawi US walla UK moƴƴi — dogude ndin tee juumre"
+        },
+        "consistency": {
+          "label": "Lamɗi",
+          "description": "Tiitol, innde, gorkiti e sooditaade binndi fayda fow"
+        },
+        "clarity": {
+          "label": "Jeyngal",
+          "description": "Haa fitta, winndugol gudduiye e ñiiɓirde; binndol tagi jeye jawɗi"
+        },
+        "sensitivity": {
+          "label": "Sanngoyde",
+          "description": "Nattoore e feewayde, teeltu e teeltagol humanitarian (suɓo moftor) "
+        },
+        "specAdherence": {
+          "label": "Soobagol e Spec",
+          "description": "Dokument ngal soobii spec woni aade: baafii soɓɓiɓe waɗii e jawdi, heɓa kaba heewi."
+        },
+        "toneAdherence": {
+          "label": "Soobagol e leydii",
+          "description": "Dokument ngal soobii leydii e lada giddo."
+        }
+      },
+      "severity": {
+        "minor": "Ngoodi",
+        "major": "Mbadi"
+      },
+      "assess": "Sari mooƴa",
+      "assessing": "Nana sari... ",
+      "assessmentTitle": "Tebbi mooƴa",
+      "criteriaPicker": "Teeldu ɗe ena sari",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Yiytude waylude",
+      "noEditsSuggested": "Waylude alaa, dokument ngal laatninii ceertu teeldu waɗitorde.",
+      "acceptEdit": "Naamata",
+      "rejectEdit": "Yiɗii",
+      "acceptAll": "Naamata fota",
+      "rejectAll": "Yiɗii fota",
+      "editAccepted": "Naamataama",
+      "editRejected": "Yiɗoraa",
+      "editUnapplicable": "Ndaftoraa ndon ko ɓurtii e hoore tekst ngal – teeɓaani",
+      "editingBlockedPendingEdits": "Les walba waylude yiytitii ko dow, na resolve walla yiɗiima ko ɗuuɓi",
+      "pendingCount": "{count} yiytitii",
+      "closeReview": "Uddu tebbirde mooƴa",
+      "showReview": "Hollu tebbirde",
+      "showReviewPending": "Hollu tebbirde ({count} yiytitii)",
+      "railAssessRequest": "Sari mooƴa dokument ngal toppi teeldu loowaande.",
+      "railAssessDone": "Tebbirde tiɗɗo: doole sarii, {count} waylude yiytude he workspace.",
+      "spec": "Spec dokument",
+      "noSpec": "Spec alaa",
+      "manageSpecs": "Specs",
+      "specs": "Specs dokument",
+      "closeSpecs": "Uddu specs",
+      "specsEmpty": "Sos spec tuma nde woni sosde dokumente e format sagoɗɗo — baafii soɓɓiɓe, jawdi e ruttin baafii soɓɓe (sagol e SitreRep). Specs ɗe ndiyataa e janngirde ɓurnde so faa.",
+      "newSpec": "Spec hesere",
+      "newSpecName": "Spec inndaa",
+      "specName": "Innde Spec",
+      "specDescription": "Faŋkude (moftor)",
+      "deleteSpec": "Momtu spec",
+      "sectionHeading": "Teelte innde",
+      "sectionGuidance": "Kebbal (moftor)",
+      "sectionRequired": "Dirka",
+      "addSection": "Suppli telte",
+      "removeSection": "Momtu teelte",
+      "generalGuidance": "Kebbal dungel (moftor)",
+      "tone": "Leydi",
+      "noTone": "Leydi alaa",
+      "customCriteria": "Teeldu ballal",
+      "manageCriteria": "Teeldu ballal",
+      "closeCriteria": "Uddu teeldu ballal",
+      "criteriaEmpty": "Sosso teddungal mum – mesal, dikkinaaji e jamfaare mum, walla kalimaaji yumma – so tawii a ngolli doggal e waawi cippitoowo. Ko e hesere ma e mo waawi useede baali.",
+      "newCriterion": "Teddungal mum hesere",
+      "newCriterionName": "Teddungal mum fofontorde",
+      "criterionName": "Innde teddungal",
+      "criterionRubric": "Rubrik",
+      "criterionRubricPlaceholder": "Fay suusude no ndeeri dokment ngal waawi wawtude teddungal mum, mesal: \"Hay soomi hakkunde makko e jamma; fannuu ndimon teddungal 'dawre anndiwaaɓe'…\"",
+      "criterionRubricHint": "Rubrik ngol mballi so wonaa ko e AI am to doggude e cippital.",
+      "deleteCriterion": "Momtu teddungal",
+      "profileTitle": "Kisinal dokment",
+      "profileDocType": "Ngirnde",
+      "profileLanguage": "Cemmbungal",
+      "profileAudience": "Ndaari mbindi",
+      "profilePurpose": "Njaatigi",
+      "profileRegister": "Joomirnde",
+      "profileTone": "Goongol",
+      "profileConventions": "Nooneeji",
+      "emptyHint": "Fuɗɗo windude nder fayde, walla faale keɓe e sanngude, walla fuɗɗo e file.",
+      "addSpec": "Suudo spec",
+      "addCriteria": "Suudo teddungalji",
+      "scopeFullDocument": "Loktol: dokment fow",
+      "scopeSelection": "Loktol: suɓorgo — “{preview}…” ({count} ngesa)",
+      "clearSelection": "Momtu suɓorgo (liggui dokment fow)",
+      "reviseSelectionPlaceholder": "Siffoy juulɗi suɓorgol…",
+      "revisedSelectionSummary": "Mi juuldi suɓorgol nden nder tefere.",
+      "assessedSelection": "Suɓorgo",
+      "undoEdit": "Firtu",
+      "clearResolved": "Momtu jokkoraaɗi",
+      "clearResolvedHint": "Momtu cuɓoraaɗi waɗii/eta, faalaaɗi, e waɗaani seeda e leydi ɗi kadi.",
+      "autoClearResolved": "Momtu cuɓoraaɗi jokkoraade bawgal",
+      "import": "Loddu",
+      "importReplaceTitle": "A tawii a wonaa waytude dokkito?",
+      "importReplaceBody": "Lodditude {name} maa wayti dokkito jooni. Noddataa laawol, spec e wanndude.",
+      "importReplaceConfirm": "Waytu",
+      "editorMode": "Hollu hulnde",
+      "editorModeRich": "Hollu buuba",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Sappo tan yamirde yaltine hollu hulnde.",
+      "suggestChanges": "Hollu bimbiɗi",
+      "suggestChangesHint": "Gasanda dokumeeji cemma, bimbiɗi waawnde dari e holluɗi, tee so wonaa rewtiɗe dokumeeji.",
+      "suggestChangesSelectionNote": "Beydugol e dariindi gooɗum woni ngaari — dariindi woodi no a suɓi.",
+      "suggestedSummary": "{count} {count, plural, one {bimbiɗo} other {bimbiɗi}} ndiyam hollani ɗum.",
+      "revisionSuggestionSummary": "Kisalaki maa holli {count} {count, plural, one {bimbiɗo mbimmi} other {bimbiɗi mbimmi}}.",
+      "revisionCriterionLabel": "Kisalaki beydugol",
+      "fallbackSelection": "Ngaari — beydi e dariindi gooɗum waawataa hollude.",
+      "fallbackLargeRewrite": "Ngaari — rewtiɗi waylude hiɓɓe dokumeeji booyaani holludiraa.",
+      "fallbackReorder": "Ngaari — sarkaaji fannuɗi, tee ko waawataa ɗaɓɓitinde holluɗi.",
+      "fallbackUnanchorable": "Ngaari — bimbiɗi waawataa ndarra heen e caɗeele batte maa.",
+      "fallbackNoChanges": "Bimbiɗi alaa.",
+      "criterionRubricTooLong": "Rubric on ko {over} ɓirtaari ɓuri doole. Ko ɗum feewi waɗude e caɗeele kala, kono ɗum waawi so tawtii e dow laabi."
+    },
+    "data": {
+      "emptyTitle": "Kilot data ngol analiseede",
+      "emptyBody": "Kel file CSV, Excel, walla JSON, walla cuppi rautine fow. So tabli mum feewi, waawi sortingol, e yaltinde neɗɗaaji e dokmentji, e waylude e hannde cemmbungal.",
+      "importFile": "Kilot file",
+      "importing": "Naɗi e kilde…",
+      "pasteData": "Cuppi data",
+      "pastePlaceholder": "Cuppi CSV, TSV, walla JSON fuɗɗan…",
+      "import": "Import",
+      "addFromSource": "Suudo e keɓe mum",
+      "extractHint": "Cuppi kadi walla suɓo dokment; ndaari ndiyamta e cuɓtooji ndee waawi foti. Tagngal e anndaa wurtorde moofti — hay banni woɗnde.",
+      "extractPlaceholder": "Cuppi tekt ngel jooɗnde data…",
+      "extractRows": "Foti ndaari",
+      "extractFromFile": "Ko e file…",
+      "extracting": "Fottingol…",
+      "pastedSource": "Tekt cuppirde",
+      "transform": "Waylu",
+      "transforming": "Wayludaa…",
+      "transformPlaceholder": "Loondir taawde waylutal, mesal: \"suudo rubrik ngon e cawre 1000 cuɓirɗe\"…",
+      "transformCapHint": "Waylutal handini to {max} ndaari. Momtu walla siftu ndaari ɗon ko feewa table mawnde.",
+      "undo": "Firtu",
+      "deleteSelected": "Momtu {count}",
+      "deletedRows": "Ndaari {count} momtini",
+      "selectAllRows": "Suɓo ndaari fow",
+      "selectRow": "Suɓo ndaari {row}",
+      "rowCount": "{count} ndaari",
+      "rowCapExceeded": "Ko {count} ndaari, table watchi {max}. Fale data walla export ngam hollude.",
+      "railExtractRequest": "Naatir rowji ɗiɗi e tabla laabi e: {source}",
+      "railExtractDone": "Rowji {count} naatirɗe ɓe dabli e tabla.",
+      "railTransformDone": "Tabla rewti.",
+      "columnProfileFor": "Statistikii kolom {column}",
+      "profileMissing": "Wudndaaka",
+      "profileDistinct": "Nana-danee",
+      "profileRange": "Pinal",
+      "profileMean": "Lakaji",
+      "profileMedian": "Meedyaan",
+      "profileTopValues": "Valuuji waɗi seɗa",
+      "filterColumnFor": "Firti {column}",
+      "filterContains": "Ina kaɗi…",
+      "filterMin": "Minimiyam",
+      "filterMax": "Maksimiyam",
+      "filterClear": "Momtu",
+      "clearFilters": "Momtu firtii",
+      "showingRows": "Nana holli {shown} e {total} rowji",
+      "scopeLabel": "Banndu hol ko jogii",
+      "scopeTable": "Fof ({count})",
+      "scopeFiltered": "Firti ({count})",
+      "scopeSelection": "Seydi ({count})",
+      "scopedInstruction": "{instruction} (e {count} rowji laabi)",
+      "assess": "Okki dow laawol ngoodi",
+      "assessing": "Nana okka…",
+      "criteria": {
+        "validity": {
+          "label": "Yamorde",
+          "description": "Valuuji ina bokki no moƴƴi e laabi kolom am e dow nderi laabi"
+        },
+        "consistency": {
+          "label": "Naatude lamɗo",
+          "description": "Valuuji kala eɗen ina naatani, ɗuum si 'M' / 'Male', unitji ruuwi tan, walla moƴƴere leydi."
+        },
+        "duplicates": {
+          "label": "Faale ñaɗɗi",
+          "description": "Rowji ɓe hokkani ko yeddugol ngal walla ɗuum e ɓurnde jwaarii"
+        },
+        "plausibility": {
+          "label": "Moƴƴere",
+          "description": "Valuuji moƴƴaake walla waɗi baɗte nder kontekst"
+        }
+      },
+      "assessmentTitle": "Rewti laawol ngoodi",
+      "pendingCount": "{count} nayi",
+      "closeReview": "Uddu rewti laawol ngoodi",
+      "suggestedEdits": "Supi rewtii",
+      "noEditsSuggested": "Supi rewtii alaa — laawol ngoodi muusaa kriteeri yamiraande.",
+      "acceptAll": "Nogdu fof",
+      "rejectAll": "Jokku fof",
+      "acceptEdit": "Nogdu",
+      "rejectEdit": "Jokku",
+      "editAccepted": "Laabi",
+      "editRejected": "Jokkude",
+      "editUnapplicable": "Sellal ngol wayii—bayyani jokkataa",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "Kriteeri dow okkude",
+      "severity": {
+        "minor": "Kankundirnde",
+        "major": "Mankundirnde"
+      },
+      "editLocation": "row {row} · {column}",
+      "editLocationRow": "row {row} (momtu)",
+      "showReview": "Hollu kefirɗe",
+      "showReviewPending": "Hollu kefirɗe ({count} waɗi)",
+      "assessedFiltered": "Jaytoore filtorde",
+      "assessedSelection": "Jaytoore suɓinaaɗe",
+      "assessedSample": "Ñaari {shown} e {total}",
+      "railAssessRequest": "Nana waawi juulnde min to bariindi tabal (jaytora {count}) ngal e criteriiji suɓaɗe.",
+      "railAssessDone": "Tawi {count} tuubaaji ceŋtol data — holle e workspace.",
+      "insights": "Loowdi",
+      "chartKind": "Noone garawol",
+      "chartBar": "Bar (gollo group by)",
+      "chartHistogram": "Histogram",
+      "chartLine": "Line (dokkude waare)",
+      "groupByColumn": "Gruppi e kolon",
+      "dateColumn": "Kolon ñalnde",
+      "valueColumn": "Kolon kiisol",
+      "aggFn": "Mbaykaare",
+      "aggCount": "Konte",
+      "aggSum": "Sumpu",
+      "aggMean": "Mean",
+      "chartTruncated": "Nana hollu gese leydi {max} group",
+      "chartNoData": "Aladaaki noone hollanii jaytore ɓe faama.",
+      "chartBarAria": "Garawol bars groupii e {column}",
+      "chartHistogramAria": "Histogram ngal {column}",
+      "chartLineAria": "Garawol line ngal {column} e waare",
+      "editStructure": "Mbayka",
+      "defineStructure": "Cif mbayka",
+      "schemaHint": "Cif leydi jaytinooje mbayka maa. Leydi fow naatnaa e tawaare missing-data ka doggol import; waylude noone mbayla leydi maa, cellji ɓe waɗii laawol waawa suusiɓe semta e fannu.",
+      "schemaFieldName": "Innde leydi",
+      "schemaFieldType": "Noone leydi",
+      "schemaRequired": "Naatnoy",
+      "schemaAddField": "Mum leydi",
+      "schemaDeleteField": "Momtu leydi {field}",
+      "schemaApply": "Taƴa mbayka",
+      "schemaCancel": "Haaytu",
+      "schemaEdited": "Mbayka tabal juulnii",
+      "schemaCellsConverted": "Cellji {count} waawi so suusa e noone mobi ɓe semta.",
+      "missingFieldPolicy": "Jaytii leydi",
+      "policyStrict": "Tinndo — refta jaytore mawnde",
+      "policyFlag": "Motta — import te tagg",
+      "policyLenient": "Yannde — import sabuundu",
+      "droppedIncompleteRows": "Jaytore {count} ɓe jaytii leydi naatnoy feccaniima: {fields}",
+      "dismiss": "Firtu",
+      "requiredColumn": "Leydi naatnoy",
+      "flagMissingRequired": "Leydi naatnoy semtii",
+      "flagPendingEdit": "Tuuba juulnaaki ceertu cell ngol — teeŋti kefirɗe ceŋtol",
+      "fromPhoto": "E fotto",
+      "fromPhotoHint": "Fotto jooni fommadhu walla tabal — wonataa e data mbayka ngoni duttude e fotto ngol",
+      "readingPhoto": "Nana janga fotto...",
+      "photoBatchName": "Fottoji {count}",
+      "railPhotoRequest": "Sotti data mbayka e {count} fotto(ji): {name}",
+      "railPhotoDone": "Ɓeytii {count} ndiyam/ngir ndottiinu. Ñaamle ndee e photo ɗee e ngam workspace.",
+      "sourcesLabel": "Ñaamle jeyaaɗe",
+      "openPhotoQc": "Ɗaɗndu ndiyam e {name}",
+      "qcRowsFromPhoto": "{count} ladde",
+      "qcClose": "Uddu ɗaɗndu photo",
+      "qcZoomIn": "Saggit",
+      "qcZoomOut": "Wayla",
+      "qcPrevPhoto": "Photo mo woyde",
+      "qcNextPhoto": "Photo mo uddite",
+      "qcImageLoading": "Naatnaade photo...",
+      "qcImageFailed": "Photo walaa naatde.",
+      "qcImageAlt": "Photo jeyaaɗe: {name}",
+      "qcHint": "Tabbere ndee waɗi ladde photo ndee tan — ƴeewto ko yeddu e photo, teene juul walla momtu ladde waawannde.",
+      "sourceFilterChip": "Ladde e {name}",
+      "clearSourceFilter": "Hollu ladde fow kisa",
+      "viewAsRecord": "Hollude form",
+      "viewAsTable": "Hollude tabbere",
+      "recordEmpty": "Aladii ndiyam.",
+      "recordOf": "Ndiyam {index} e {count}",
+      "recordPrev": "Ndiyam mo woyde",
+      "recordNext": "Ndiyam mo uddite",
+      "recordBooleanUnset": "(feccit)",
+      "flagsChip": "{count} ɗaɓɓinde",
+      "flagsChipOpenReview": "Uddu ceertine mumtinɗe",
+      "flagsChipMissingOnly": "Dakulat e hoore ndee feccit — tawte maa rewiti ndiyam lessit",
+      "autoCheck": "Ɗaɗndude ndiyam mumtorde",
+      "autoCheckHint": "Nde joddi ndiyam e photo walla dokkitaŋe, ceertu ɗaɗndu mumtorde bonannde baɗi ladde mumtuɗe",
+      "checkingNewRows": "Ɗaɗndu wonande ladde mumtuɗe e mumtorde bonannde...",
+      "ingestCheckFailed": "Ɗaɗndu mumtorde bonannde waɗi fofndi ({message}) — aɗa waawi lannda ka hande e Assess quality.",
+      "assessedIngest": "Ladde mumtuɗe",
+      "transpose": "Waytu",
+      "transposeAxisColumn": "Innde",
+      "transposeSuggestion": "Tabbere nde waytu: laylayji ɗiɗi e laataa, e soowdi laa nda ko laylayji, tagi bernde si laataa ko laylayji ɗiɗi, e feere ɓe tagi laa.",
+      "transposedTable": "Waytude laataa e laylayji",
+      "columns": "Laa",
+      "columnsHidden": "Laa ({{count}} ɓe dowɗi)",
+      "showAllColumns": "Hollu fow",
+      "chartScatter": "Diagrama scatter (x e y)",
+      "chartPivot": "Tabbere Pivot",
+      "xColumn": "Laa X",
+      "yColumn": "Laa Y",
+      "splitByColumn": "Faggita e",
+      "splitNone": "Faggita alaa",
+      "pivotValueColumns": "Laa jiite",
+      "aggMin": "Min",
+      "aggMax": "Max",
+      "aggMedian": "Median",
+      "chartSeriesTruncated": "Naɗɗo e cuɓi {max} series",
+      "chartPointsTruncated": "Naɗɗo {max} pointi suɓtu",
+      "chartScatterAria": "Scatter plot e {x} e {y}",
+      "pivotTableAria": "Pivot tabbere dow leydi {column}",
+      "schemaFormula": "Formula",
+      "schemaFormulaPlaceholder": "misal: [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Dogiral hesere: sosde laa goɗɗe e [Innde]; naatnude + - * / %, parenthèse, e round, abs, min, max. Keewal majju e keɓe waawan sakkude waɗi.",
+      "schemaFormulaSyntaxError": "Formula wowli",
+      "schemaFormulaUnknownRef": "Laa anndaaka: {ref}",
+      "schemaFormulaArityError": "Lakka argumente kala e {fn}",
+      "schemaFormulaCycleError": "Waylu dogiral majji",
+      "derivedColumnTitle": "Hesere: {formula}",
+      "derivedFrom": "Hesere e {formula}",
+      "takePhoto": "Naatnu nguurndam",
+      "takePhotoHint": "Huutndo kamera maa nguurndam laataaji walla tebul, ɗum ndaarni binndol leytii heen e nguurndam."
+    },
+    "map": {
+      "emptyTitle": "Waɗtu ndiyam maa e kartal",
+      "emptyBody": "Gollu sitrep, tabbere laydi, jallii kawtal, walla coowte mum faaleere — walla yuuyta dokkitaŋ. Nokkuure maa ɗiɗi, konngi, ummeta e ratings; aɗa waawi feewndu, yuuytude e ArcGIS walla GIS komɗe fow.",
+      "inputPlaceholder": "Gollu coowte kisalɗi ƴeewde...",
+      "uploadFile": "Yuuyta file",
+      "pastedSource": "Golli coowte",
+      "mapIt": "Kartal",
+      "finding": "Nokku haa kisalɗe...",
+      "featureCount": "{count} kisalɗe",
+      "featureCapExceeded": "Kartal doo moƴƴi kisalɗe {max} tan.",
+      "noneFound": "Kisalɗe walaa jooni e dokkitaŋ ndee.",
+      "lowConfidenceNotice": "{count} kisalɗe waɗi nokkuure feccit — ƴeewto e hokkude to kartal.",
+      "tilesOffline": "Kartal tiles walaa — lisɗe kisalɗe woni tan.",
+      "disclaimer": "Kordinaatji ɗiɗi AI-model, teeƴte geocoding service — ƴeewto loowo, hokkude e ngaari to gondu. Tiles kartal iwrii e tile server; ndiyam maa acci naatude e ngalaa ndee.",
+      "flyTo": "Hollu {name} e kartal",
+      "removeFeature": "Momtu {name}",
+      "expandFeature": "Hollu cuɓoraaɗi mayde e {name}",
+      "collapseFeature": "Fowru cuɓoraaɗi {name}",
+      "detailsParent": "Ɓeytii e {parent}",
+      "railRequest": "Kartal kisalɗe e: {source}",
+      "railSearchRequest": "Neldu web e kartal kisalɗe e: {query}",
+      "railDone": "{count} nokkuure joɓɗe. Yiɗi e wali waɗe teelɗe e low-confidence, rewti e dawrugol.",
+      "searchToggle": "Modu web search",
+      "searchToggleHint": "Yiylo e web nokkuure, waawan to dow pasting; nattaade to results grounded e saatnude.",
+      "searchPlaceholder": "Yiylo e web, yoɓii: \"cholera outbreaks East Africa 2026\"…",
+      "searchAndMap": "Yiylo & saatnu",
+      "searching": "Yiytude…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "Gaɗa: {kind}",
+        "unresolved": "{count} gaɗa juulde noddanii nokkuure ɗeeɓi saattani e mayri."
+      },
+      "confidence": {
+        "high": "Buɓɓe",
+        "medium": "Leemun",
+        "low": "Nettin"
+      },
+      "prominence": {
+        "primary": "Nokkuure mawnde",
+        "secondary": "Nokkuure jannugo",
+        "mention": "Teeŋngude hoɗɗon"
+      },
+      "prominenceMentionHint": "Ceertu jeytinoyte ɗum e teeŋngude tan — no mootir e saatnorde e sa’i ngol, waawa e nden jeytaama.",
+      "dates": {
+        "since": "gam {date}",
+        "range": "{start} – {end}",
+        "ongoing": "Golle Timmiiɗo"
+      },
+      "filters": {
+        "label": "Sefe to kategori",
+        "other": "Ko woni",
+        "clear": "Momtu",
+        "showing": "{shown} e {total} nokkuure",
+        "noneMatch": "Nokkuure walaa jonnoy golle sefeeji ɗee."
+      },
+      "dateFilter": {
+        "label": "Ñalɗi",
+        "from": "E hoore",
+        "to": "E cuɓe",
+        "fromAria": "Naatnu booyre ɗiɗo to ñalɗo ndee tan",
+        "toAria": "Naatnu booyre ɗiɗo hondude ñalɗo ndee",
+        "clear": "Momtu ñalɗi",
+        "eraChip": "Naatnu booyre ɗiɗo to {label}"
+      },
+      "timeline": {
+        "toggle": "Time lapse",
+        "play": "Daɗɗa time lapse",
+        "pause": "Naatnu ɓeydaare time lapse",
+        "eras": "Ñalɗe juulde",
+        "jumpTo": "Sollu to {label}",
+        "slider": "Sikko ñalɗe juulde",
+        "showUndated": "Naatnu nokkuureji walaa ñalɗo",
+        "activeCount": "{count} goongɗinteejo",
+        "jump": {
+          "start": "Fuuna",
+          "yearsLater": "{count, plural, one {1 hoore heen} other {# hoore heen}}",
+          "monthsLater": "{count, plural, one {1 lewru heen} other {# lewru heen}}",
+          "daysLater": "{count, plural, one {1 ñalnde heen} other {# ñalnde heen}}",
+          "appears": "{count, plural, one {1 ngoodi} other {# ngoodi}}",
+          "ends": "{count, plural, one {1 haani} other {# haani}}",
+          "progress": "Ñalngu {index} e {total}"
+        },
+        "precision": {
+          "minute": "Daggol goɗɗo",
+          "hour": "Daggol awa",
+          "day": "Daggol ñalnde",
+          "month": "Lewru njaarorde",
+          "year": "Hoore njaarorde",
+          "mixed": "(naatioo)"
+        },
+        "pacing": {
+          "toggle": "Daggol hunyugo",
+          "cardDuration": "Hollu leydi kala",
+          "seconds": "{seconds}s",
+          "maxCards": "Leydi hollitii kala ñalngu",
+          "hint": "Ñalnde fuɗii heɓa maddu to tammba."
+        }
+      },
+      "granularity": {
+        "site": "Site",
+        "city": "Duunde/rewle",
+        "district": "Diistiriktu",
+        "region": "Gila",
+        "country": "Lesdi"
+      },
+      "granularityAreaHint": "Gila, nattude e ndotti cemmaare fayde e ko adande e boski — ko waawan wonde nokkuure mbaydi walla daŋngol.",
+      "containerHint": "Ɗuum jogii nokkuureji saattinde, tee komoraa e line funaande tan.",
+      "legend": {
+        "toggle": "Legende",
+        "title": "Ko gollu saatndorde nokkuure",
+        "color": "Cuura: goɗɗunde confidaance (bulo – buɓɓe, ember – leemun, mbirnde – nettin)",
+        "size": "Hoore dot: ko woni nokkuure ɗuum e ceertu",
+        "area": "Suutorgal ndotti: sojondiral ɗiɗal e njoɓdi, leydi walla gese.",
+        "container": "Lintiyol fayde: gese gooto ɗiɗi men mbaɗi suudu-ɗon e njoɓdi.",
+        "precisionHalo": "Tiɗdi kurki ceertu (e hunyugo laabi): doggol ndon tawi e lewru walla hoore tan, kono saɗaankon fayde ngoodi."
+      },
+      "sourceLabel": "Ɗawgal: {name}",
+      "fetchAndMap": "Dartini & piondir",
+      "fetchingPage": "Dartinaade hello…",
+      "railUrlRequest": "Dartini e piondir leydi e: {title} ({url})"
+    },
+    "shell": {
+      "showConversation": "Hollu ñaamtu",
+      "hideConversation": "Summi ñaamtu",
+      "workspaceTab": "Cuɓorgal laawol",
+      "conversationTab": "Ñaamtu",
+      "paneTabsLabel": "Cuɓorgal laawol danyel",
+      "railEmpty": "Ñaamtaade e ndokkude hay goɗɗum hoore ko fayde nden.",
+      "railInputPlaceholder": "Noddu jawdi e keɓal…",
+      "assistantThinking": "Nyaam…",
+      "sendMessage": "Noddu jawdi",
+      "stopGenerating": "Jokkondir suusde",
+      "loadingWorkspace": "Nana harru cuɓorgal laawol…",
+      "unknownType": "Ñaamtu ɗin naatnoyaa laawol tawa njiɓinii. Histori ñaamtu ndiyam ena uddita dow kawtal.",
+      "untitled": "Ñaamtu hesere",
+      "toggleMenu": "Luɓtu wadalkal",
+      "model": "Moƴƴol laawol on"
+    },
+    "tabs": {
+      "label": "Haɓaare hiraande",
+      "chat": "Hiraa",
+      "chatDescription": "Hiraande caɗeele e joom am"
+    },
+    "discard": {
+      "title": "Aɗa yiɗi jogi draft ɗee?",
+      "body": "So a ndeer {target}, ngonka e {current} maa waawataa.",
+      "confirm": "Jogi"
+    }
+  },
+  "connectors": {
+    "title": "Njikkitii",
+    "description": "Naatnu ngurndan hakkunde Model Context Protocol (MCP). Ngurndan naatnoyaa waawi loowdi e jawdi, e goɗɗum laawol nda waawi, tawa a jaɓni.",
+    "localOnlyNote": "A winni e ko ɓurɗo hoyre. Lenndol finndini e cuɓorgal on e mballal, tawa misɗe loowdi e app server goɗɗum—so tawii heen ala yiilnde walla jaalnude.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "Yiylo repoositoriye, jango e ummtoylo issues e pull requests."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "Yiylo, ummtu, e hesɗit task e projektii."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Sappo tingiraan e noddata e workbooks e Pulse metrics."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Yeeyo e wayli binndi e Salesforce maa."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Winni, yihan e hollu binndol media jamfaare."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Nallita e waawi jooɗude e wadde e social inbox."
+      }
+    },
+    "connect": "Naatnu",
+    "connected": "Naatnoyaa",
+    "tokenEndsIn": "njaa e ••••{last4}",
+    "disconnect": "Toppu njikkitorgal",
+    "toolCount": "{count, plural, =1 {Cuɓorgol gooto ena feewi} other {# cuɓorgal ena feewi}}",
+    "patLabel": "Token access mum",
+    "createTokenLink": "Sappo token",
+    "tokenScopeHint": "Honndu token maande cuɗɗi ɗiɗi fiyaay ngurndan ɗen.",
+    "validating": "Nana hollo njikkitorgal…",
+    "validationFailed": "Mbeleedi soodaani. Kañɗir hol goɗɗum e fuɗɗit topir.",
+    "authFailed": "Server ngol addaani token. Kañɗir hol e fuɗɗit topir.",
+    "tokenRequired": "Token ɗiɗi.",
+    "enableServer": "Naatan e chat",
+    "arbitraryTitle": "MCP serverji goɗɗe",
+    "arbitraryToggle": "Jokku MCP serverji goɗɗe",
+    "arbitraryWarning": "Konne woni ka MCP server waya waawani arda binndanɗe cuɓi makko. Jokku e serverji men mbimbi. Jokkol gotel e cuɓe woodi anndindam ma e kala doggol tuma.",
+    "addServer": "MCP server nuɓɓu",
+    "editServer": "Sinnot MCP server",
+    "serverName": "Innde",
+    "serverUrl": "Server URL",
+    "nameRequired": "Innde ɗiɗi",
+    "urlRequired": "URL ɗiɗi",
+    "invalidUrl": "Hummu public https:// address",
+    "namePlaceholder": "MCP server am",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "Access token (so wonaa) ",
+    "keepTokenPlaceholder": "Fay waɗan seeɗa e janno woni token",
+    "disconnectedToast": "{name} wowlanii",
+    "save": "Danndu",
+    "connectWithProvider": "Jokku e {name}",
+    "useTokenInstead": "Huutor access token jayngol",
+    "oauthWaiting": "Ndetta ko e yetto binndan…",
+    "oauthFailed": "Binndan faale. Fuɗɗit topir.",
+    "oauthDenied": "Naatugol jaɓtii.",
+    "oauthTimeout": "Binndan waktini. Fuɗɗit topir.",
+    "oauthCancelled": "Binndan jaɓii.",
+    "oauthUnavailable": "Binndan alaa e connector ngol e ndiyam ngol. Huutor access token walla njaari admin maa waɗa configure OAuth app.",
+    "ownAppToggle": "Huutor OAuth app maa",
+    "ownAppHint": "Jádda OAuth app e konto {name} maa (coɗɗin, workspace walla enterprise maa) e callback URL ɗiɗi wonde, hono credentials makko, waɗan fi. Fay faydan si tawii hokkutuu app wonande.",
+    "ownAppCustomHint": "Ittan so wonaa, jokku credentials OAuth app maa ɗiɗi, fay waɗan fayndu to server ngol.",
+    "ownAppInUse": "Naatan e OAuth app maa.",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client secret (so app maa woodi)",
+    "redirectUriLabel": "Callback / redirect URL waɗa jádda",
+    "reconnect": "Jokku so",
+    "needsReauth": "Sofna jokku so",
+    "disconnectOauthNote": "Woowlington ngol addani naatanugol e roŋo ñaamo. To faa waasugol access, tambit appji jaɓtanii e konto {name} maa.",
+    "authModeLabel": "Jaatugol binndan",
+    "authModeNone": "Alaa",
+    "authModeBearer": "Access token",
+    "authModeOauth": "Naatu e jaatirgal (OAuth)",
+    "oauthCustomHint": "Konngol naatan e ko jaatirgal server ngol to pop-up window, so danndaa.",
+    "saveAndSignIn": "Danndu & naatu",
+    "oauthCallback": {
+      "title": "Binndan tagi",
+      "missingState": "Ala runndu binndan",
+      "close": "Waawda uddu window ngol e jokkondir e app.",
+      "closeButton": "Uddu window"
+    },
+    "oauthNoAppConfigured": "Sign-in e {name} nattiniima e configuration jooni. Huutno mballi own OAuth app maa.",
+    "adminConnectorsTitle": "E jamfaare ɗee",
+    "adminConnectorsDescription": "Connectors woni e jamfaare to manage ko labelootii. Ko access maa ena heɓi.",
+    "managedByOrg": "Gollinira e jamfaare maa",
+    "connectorOauthNotConfigured": "Sign-in jumde connector tun waawaani e configuration. Huutno admin maa.",
+    "yourConnectorsTitle": "Connectors maa",
+    "addTitle": "Labo connector",
+    "addDescription": "Suɓo tool joodan. A hiddu access tagi.",
+    "add": "Lab",
+    "filterLabel": "Ribinaa connectors",
+    "filterPlaceholder": "Yiylo connectors",
+    "noMatches": "Connector sooma e “{query}”."
+  },
+  "modelSources": {
+    "connectButtonShort": "Labbinaa lesdi model",
+    "addAnother": "Naatnu lesdi model kammu",
+    "edit": "Taƴto",
+    "disconnect": "Dofnu {name}",
+    "disconnectedToast": "Dofnu {name}",
+    "modelCountLabel": "{count} modelaji",
+    "loadingModels": "Modelaji nayi...",
+    "noModelsAvailable": "Modelaji lesdi ɗee alaa",
+    "sourceUnreachable": "Alanyi seŋa lesdi ɗee. Hakkunde maa waawii waawde walla keftine, walla ngolle heɓanande e jamɗo.",
+    "retry": "Try lagi",
+    "connectFoundryAccount": "Labbinaa Compte Microsoft Azure Foundry",
+    "connectFoundryDescription": "Abinira hurmitere modelaji ba Azure Foundry konto maa. Yimɓe hakkilmaa yamiroo ndaa teertine — tee rennda laabi modelaji kono huuɓi.",
+    "selectModelsDescription": "Suɓo lenyol hurmitere modelaji konto ɗee uddirta e suɓagol modelaji.",
+    "editConnection": "Taƴto Ɓeydam",
+    "nameLabel": "Innde",
+    "namePlaceholder": "misal: Team am Sandibok",
+    "nameRequired": "Innde lesdi ena heɓi daraja",
+    "foundryAccountLabel": "Compte Foundry",
+    "enterManually": "Tabbo e keftingol",
+    "browseResources": "Jekki jaɓɓorgol",
+    "subscriptionIdLabel": "ID kubirnde",
+    "resourceGroupLabel": "Gruup Jaɓɓorgol",
+    "accountNameLabel": "Innde compte",
+    "subscriptionRequired": "Suɓo kubirnde",
+    "accountRequired": "Suɓo compte Foundry",
+    "accountSelectionRequired": "Suɓo compte e ɓeyngal.",
+    "selectAllRequired": "Suɓo kubirnde, gruup jaɓɓorgol, e compte.",
+    "connectionFailed": "Alanyi seŋa konto ɗee. Suɗori keftine e moƴƴi e hakkilmaa.",
+    "duplicateSource": "Konto ɗee hokka ko yoɓii lesdi \"{name}\".",
+    "connectionSuccessModels": "Labbii — {count} hurmitere modelaji nayi",
+    "connectionSuccessEmpty": "Labbii, kono hurmitere modelaji alaa e konto ɗee.",
+    "checkingConnection": "Ɓeydaama...",
+    "next": "Ton",
+    "back": "Rutto",
+    "cancel": "Haaynu",
+    "connect": "Danndu",
+    "save": "Danndu",
+    "scanningResources": "Ndeenndude Azure subscriptions maa...",
+    "discoveryPartialWarning": "{count, plural, one {# subscription} other {# subscriptions}} waawataa ndeenndude. Naatnu seydude baafal so alaa ko accaunt maa.",
+    "discoveryTruncatedWarning": "Aɗa jogii baayi dow ko feewi ndeenndude jayngol. Naatnu seydude baafal so accaunt maa alaa.",
+    "noAccountsDiscovered": "Accaunt Foundry soowaani e subscriptions maa. Naatnu seydude baafal so a andi path ngal.",
+    "retryScan": "Ndeenndu kadi",
+    "searchAccountsPlaceholder": "Yiy accauntji...",
+    "modelsSelectedCount": "{selected} e {total} moodelji labtinaama",
+    "selectAll": "Labtu fofu",
+    "deselectAll": "Momtu fofu",
+    "autoAddLabel": "Moodelji kesol aawtu-ɗam",
+    "autoAddDescription": "Moodelji jayngol woni accaunt ngol ɗo mbaɗi so tawii ɗaawaani. Moodelji moomtii moƴƴaani."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Fiɗɗirde ndiyam",
+      "moderate": "Fiɗɗirde middel",
+      "high": "Fiɗɗirde balɗe"
+    },
+    "tierTooltip": "Fiɗɗirde kornoore leydi goɗɗe ndiyam, sakketee e gese model. Wadde ko sabu nalmaare makko e laawol ndokkude, version {version}, noon laawde.",
+    "typicalRequest": "~{grams} g CO₂e e waawde goɗɗe",
+    "typicalRequestTooltip": "Toppere keewal waawde e request goɗɗe (ka 1.000 tasriinu e 500 taggi), sabu nalmaare tawii version {version}. Fiɗɗirde makko naatnu e dawirde yillere, settings, e laamu hosting.",
+    "activities": {
+      "netflixHd": "Nana Netflix HD",
+      "zoomCall": "Zoom call (kamira fiɗɗi)",
+      "webBrowsing": "Seŋto web",
+      "spotifyAudio": "Spotify audio"
+    },
+    "equivalents": {
+      "title": "≈ Ɲande karbo fayi",
+      "note": "Teeŋtere karbo fayi e talli jamdi-jamnde iri waawde, toosani e jamdi-jamnde gese sabu noon laawde."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Sakkatol karbo fayi e ngir kokkorde nde: {grams} gram CO₂ yiitinde. Hollu ciftital.",
+      "ariaLabelToday": "Sakkatol karbo fayi e ngir kokkorde nde hannde: {grams} gram CO₂ yiitinde. Hollu ciftital.",
+      "title": "Kokkorde nde (sakkita)",
+      "today": "Hannde",
+      "total": "Keewal fow",
+      "measured": "Teeŋtinirɗe e njoɓdi token ɓe",
+      "estimated": "Hesɗinira e ƴeewte yimɓe baɗte",
+      "lastRequest": "Njiytorde ɗiɗal",
+      "disclaimer": "Hesɗinɗe kala njiytorde ena POOF njoɓdi token ɓe teeŋtinira walla ƴeewtora, jogi e cakkitiiwol ɓuri jeyɗaal e juumre v{version}. Yimɓe baɗte hesɗinira e binndi ndiyam e model jokkol e jawdi. Teeŋtinirde wonani.",
+      "visibilityGroup": "Ñaamngal yaltii chip maaɓɓe",
+      "visibilityLabel": "Hollu:",
+      "visibility": {
+        "always": "Hoore",
+        "auto": "Auto",
+        "hidden": "Mballu"
+      },
+      "visibilityHint": "Auto on holli chip so tawii njoɓɗo rewtii walla so a woodi duunde ko. Aɗa waawi topptude ɗum kadi e Settings › Usage & Impact."
+    }
+  },
+  "table": {
+    "copyTable": "Nattii tabol",
+    "downloadTable": "Aaw tabol",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Aawii ko CSV",
+    "copyFailed": "Tabol nattude woorii"
+  },
+  "backup": {
+    "intro": {
+      "title": "Doggur konngol maa — e jam",
+      "body": "Konnere maa woni e keɓe nappaani e janngol tuuba nden, sahii, e hoore ma tan. Min mballa waawaatin jangdir konngol maa.",
+      "keyWarning": "Ngenndi jingirtaade nde heddii e janngol tuuba nden. Min mballa waawaatin seydaama, tuma nde a mungi mari, konngol maa mbarataa doggol.",
+      "create": "Sos ngendii am & doggu",
+      "decline": "Hay so — konngol e janngol tuuba nden tan"
+    },
+    "ceremony": {
+      "titleCreate": "Arda ngendii ngirtaade maa",
+      "titleRotate": "Arda ngendii ngirtaade maa hesere",
+      "titleView": "Ngendii ngirtaade maa",
+      "description": "Ngenndi nde tan tan ko firti tergit doggol maa e kañum lanndu. Arda mo ko feewi — min mballa waawaatin sos ama.",
+      "copy": "Nattii",
+      "copied": "Nattude!",
+      "download": "Aaw .txt",
+      "showQr": "Hollu QR code",
+      "hideQr": "Suddii QR code",
+      "savedCheckbox": "Mi arɗii ngendii am e feere jawdi",
+      "saveFirstHint": "Nattii walla aaw ngendi maa ka seŋngo tuugol.",
+      "continue": "Gollu dongol",
+      "done": "Nasta",
+      "cancel": "Haaytu",
+      "cancelConfirmTitle": "Haaytu doggol doggu?",
+      "cancelConfirmBody": "Konnere maa mbarataa doggol. A waawi hurmitir doggu e waawan Settings.",
+      "cancelConfirmRotateBody": "Ngendii ngirtaade maa heseree. A waawi yenoyo e Settings.",
+      "cancelConfirmConfirm": "Eyo, haaytu",
+      "cancelConfirmDismiss": "Golli baylo",
+      "loadError": "Ngendii ngirtaade maa waawaatini jinndude e janngol tuuba nden."
+    },
+    "file": {
+      "heading": "Ngendii ngirtaade doggol konngol",
+      "warning": "Arda ngendii nde e jawdi. Neɗɗo woni e mo waawi jangde doggu maa; booyde mo doggu mbarataa tergit."
+    },
+    "progress": {
+      "titleCreate": "Doggol doggu maa e hoore mabbe",
+      "titleRotate": "Njiɗgol ngendii ngirtaade maa",
+      "encrypting": "{count, plural, one {Nagii & doggol konngol # konngol…} other {Nagii & doggol konngol # hakkilɗe…}}",
+      "success": "{count, plural, one {Doggu gasii. # konngol wanndi e jam.} other {Doggu gasii. # hakkilɗe wanndi e jam.}}",
+      "error": "Doggu woorii. Konnere maa ngey e janngol tuuba nden.",
+      "retry": "Fuɗɗi tuugol",
+      "close": "Uddu",
+      "done": "Nasta"
+    },
+    "input": {
+      "label": "Ngendii ngirtaade",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Ngendiiji waawaani mari ɗereeji O, I, walla L.",
+      "checksumError": "Kila mun neɗɗa moƴƴi—yaɗti e to jamɗe.",
+      "formatError": "Kila mbele moƴƴi naange key nde sakkitii.",
+      "incomplete": "Hawru ndillude—key nde sakkitii tawi 56 carɗi.",
+      "valid": "Key ɗen moƴƴi."
+    },
+    "restore": {
+      "title": "Artu hainoyɗe maa",
+      "successTitle": "Backup artanɗo",
+      "promptBody": "Min aranii backup jokkondirɗo e account maa. Naatnu key nde sakkitii kono artude e binndol ɗee.",
+      "submit": "Artu backup",
+      "skip": "Heddu—fuɗɗi hesere e binndol ɗee",
+      "restoring": "Naatnde e artude hainoyɗe maa…",
+      "successBody": "{count, plural, one {# hainoyɗo artanɗo.} other {# hainoyɗe artanɗe.}}",
+      "wrongKey": "Key ɗen moƴƴi, kono waawi artude backup ɗee. So to key maa wayli, huutor key juulirde.",
+      "corrupt": "Backup ɗen waawi anndude—ina potndi. Aɗa waawi fuɗɗude hesere e binndol ɗee walla waawi jokkude caɗee.",
+      "networkError": "Waawi jokkude e backup service. Yiɗii seŋa jokkol e waawi jokkude caɗee.",
+      "tryAgain": "Huuto key goɗɗo",
+      "close": "Naatnde"
+    },
+    "enterKey": {
+      "title": "Naatnu key nde sakkitii juulirde maa",
+      "body": "Key nde sakkitii maa wayli ɗon e binndol goɗɗo. Naatnu key juulirde kono jokkude backup e binndol ɗee.",
+      "submit": "Huutor key ɗen"
+    },
+    "banner": {
+      "keyMismatchTitle": "Backup paasi—key nde sakkitii wayli e binndol goɗɗo.",
+      "enterNewKey": "Naatnu key juulirde",
+      "resetBackup": "Firtor backup",
+      "resetConfirmTitle": "Firtor backup e key binndol ɗee?",
+      "resetConfirmBody": "Backup jeɗɗi ɗon moƴƴi artude e hainoyɗe binndol ɗee, jokkondirɗe e key binndol ɗee. Binndeeji goɗɗi ɗon yiɗi key nde sakkitii binndol ɗee.",
+      "resetConfirmAction": "Firtor backup",
+      "remoteMissingTitle": "Backup maa waawi anndude e server. Backup paasi.",
+      "backUpAgain": "Backup caɗee",
+      "dismiss": "Sanngita"
+    },
+    "rotate": {
+      "confirmTitle": "Waylu key nde sakkitii maa?",
+      "confirmBody": "Backup maa maa rewondirɗa e key juulirde, key jawdi woppoda. Aɗa yiɗi anndude key juulirde wa naatnu e binndeeji maa goɗɗi.",
+      "confirmAction": "Waylu key"
+    },
+    "toast": {
+      "enrollLater": "Aɗa waawi hurmude backup jokkondirɗo e Settings ko waawa.",
+      "keyUpdated": "Key nde sakkitii juulirde. Backup fuɗɗi.",
+      "resetDone": "Backup firtanɗo e key binndol ɗee.",
+      "backupRestarted": "Backup artanɗo caɗee.",
+      "opFailed": "Ko gollal feeƴi. Huuto caɗee."
+    },
+    "settings": {
+      "statusOn": "Backup to moƴƴi",
+      "statusOff": "Backup to paasi",
+      "offDescription": "Hainoyɗe maa onon e browser ɗee tan. Hurmo backup jokkondirɗo banndu moƴƴi e artu hoore binndol goɗɗi. Hainoyɗe nde jokkondirɗe e binndol maa—min waawi waawde loowe heɓa.",
+      "turnOn": "Hurmo backup",
+      "restoreTitle": "Backup jogii e account maa",
+      "restoreDescription": "Naatnu key nde sakkitii kono artude e binndol ɗee.",
+      "restore": "Artu backup",
+      "lastBackup": "Backup hande: {time}",
+      "lastBackupNever": "Backup goɗɗo jokkaade",
+      "keyFingerprint": "Key ····-{tail}",
+      "syncState": {
+        "idle": "Ngam nanndinundle a waawi sync",
+        "syncing": "Jokkondirde backup…",
+        "ok": "To jamɗo",
+        "keyOutOfDate": "Backup paasi—key nde sakkitii maa wayli e binndol goɗɗo",
+        "remoteMissing": "Dagginii — backup ɗee yewtii e server ngal",
+        "error": "Juumɗo backup jokkaaji majjii"
+      },
+      "backUpNow": "Hakkil backup jooni",
+      "backUpNowSuccess": "Backup tambitii",
+      "backUpNowFailure": "Backup majjii — jaɓɓorgo maa e ndee ordinatir ngal anndanii canɗum",
+      "viewKey": "Hollu kelal resgii",
+      "changeKey": "Waylu kelal resgii",
+      "dangerTitle": "Dogirnde juuti",
+      "turnOffDelete": "Mballa & momtu backup",
+      "turnOffConfirmTitle": "Mballa backup?",
+      "turnOffConfirmMessage": "Kono waɗa momtude backup maa e server am, e alla ordinatirji. Jaɓɓorgo maa e ordinatir ngal jokkii. Ina waawi mbaldude backup baɗi kelal resgii hesere.",
+      "turnOffConfirmAction": "Momtu backup",
+      "turnOffSuccess": "Backup mballitii tee momtii",
+      "turnOffFailure": "Backup majjii momtude. Jaramma, fuɗɗito golla."
+    }
+  },
+  "memories": {
+    "title": "Pat-ɗeeji",
+    "description": "Noddu jamaaɗo yo waɗa suɓa goɗɗe juuti — ballal maa, anndugol maa, e feddejo maa — tee j'altu e hokkunde cakkitiiɗi.",
+    "enableToggle": "Hurmiti pat-ɗeeji",
+    "privacyNote": "Goɗɗe juuti waɗi mbaytii tan e browser ndee, tee ko e caklaaɗe maa beere gollal.",
+    "empty": "Pat-ɗeeji alaa. Goɗɗe juuti teddinii e hokkunde gollal maa.",
+    "savedOn": "Teddinii {date}",
+    "deleteMemory": "Momtu pat-ɗee",
+    "clearAll": "Sudet pat-ɗeeji fofu",
+    "clearAllConfirmQuestion": "Momtu pat-ɗeeji fofu? So wonaa waawde woppude.",
+    "clearAllConfirm": "Momtu fofu",
+    "cancel": "Haaytu"
+  },
+  "contextWindow": {
+    "label": "Window kontekt",
+    "value": "{count} binndi",
+    "fewer": "Danndu binndi",
+    "more": "Binndi ɓurɗo",
+    "description": "Binndi mawnude awa he mbaydi, ngona summora tee naatna kontekst."
+  },
+  "agentAccess": {
+    "title": "Hakkil agent",
+    "description": "Doole keɗɗitir aafgol e jammaaji Foundry. Dooleeji ngol jokkude anndugol humane jammaaji Azure ndeno waɗi — waawaa aafgol so Azure wi'i alaa.",
+    "backToChat": "Ruttu e binndi",
+    "loading": "Nenndi agentji e dooleeji...",
+    "loadError": "Njama waawi nenndude hakkil agentji.",
+    "rulesUnavailableWarning": "Dooleeji hakkil waawaa nenndude e mbaydi. Waawi waawde gollude agent ngal tee waawi waawde wayludaa dooleeji.",
+    "retry": "Fuɗɗito",
+    "rulesTab": "Dooleeji agent",
+    "localAdminsTab": "Adminji heen",
+    "noAgents": "Agent alaa juulugol.",
+    "sourceLabel": "Timmito",
+    "notDiscoverable": "Alaa e ceewde maa",
+    "notDiscoverableHint": "Doole daalti agent ngal, kono ko anndaa e ceewde maa — waawi nenndude ko innde ummora, ko Azure maa alaa, walla doole ngal anndaa maa.",
+    "accessEveryone": "Fof",
+    "accessRestricted": "Miijii",
+    "edit": "Waylu",
+    "updatedByLine": "Jokkuuji majjii {user} e {date}",
+    "accessTypeLabel": "Hol ko waawi gollude agent ngal",
+    "everyoneDescription": "Ko hande inna waawaa juulugol agent ngal e Azure maa.",
+    "restrictedDescription": "Fayde ko jammaaji e domaynji teɗɗi harɗi e hoore mum.",
+    "allowDomainsLabel": "Domaaji waɗi waawi",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Ndeweni waɗi waawi",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Naat Enter balla jokkondir",
+    "removeChip": "Momtu",
+    "groupsLabel": "Gruupu waɗi waawi",
+    "groupsPendingConsent": "Jokkondir e grupe am yowtiima jaɓɓorgo ngal tenant admin, tee umma waawi nattude.",
+    "restrictedEmptyWarning": "Ndee waawaniima ena nooki koɗɗe e domaji — hay sendi waawi jogii agent nde.",
+    "save": "Danndu",
+    "saving": "Dannduɗaa…",
+    "cancel": "Haayti",
+    "saveSuccess": "Kaɗol jokkuɗe dannditaama.",
+    "deleteSuccess": "Kaɗol jokkuɗe momtaama — fow waawi jogii agent nde seɗɗa.",
+    "saveError": "Danndude waawi. Tanndu kadi.",
+    "conflictError": "Golle mawɗo feewnani e po tuma nde yimɓe waawaniima nattude. Fittoy e cuɓii kesɗit nde, saggit mo tarte.",
+    "reload": "Fittoy",
+    "localAdminsDescription": "Jokkondir danndude kaɗol agent jokki ɗii ba bala addagol hoo. Local admins waawi nattude kaɗol agent ɓe sonnii.",
+    "noLocalAdmins": "Advansoor ɗi jokki umma waawi.",
+    "addLocalAdmin": "Nattir local admin",
+    "emailLabel": "Email",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Momtu local admin",
+    "delegatedAgentsLabel": "Agent jokki",
+    "noDelegatedAgents": "Agent jokki umma waawi.",
+    "unknownAgentKey": "Key agent annduɗaa",
+    "configSaveSuccess": "Advansoor jokki dannditaama.",
+    "configConflictError": "Golle mawɗo feewnani e cuɓi advansoor jokki tuma nde umi yaha. Fittoy kadi cuɓ.",
+    "addAgent": "Afeg agent",
+    "newPromptAgentTitle": "Agent mumtindol hesere",
+    "editPromptAgentTitle": "Tallin agent mumtindol",
+    "agentNameLabel": "Innde",
+    "agentNamePlaceholder": "Misal: Jaawdi jaŋngorde",
+    "agentDescriptionLabel": "Ndetta",
+    "agentDescriptionPlaceholder": "Ndetta e heftagol modil suɓaare",
+    "agentSystemPromptLabel": "Mumtugol system",
+    "agentSystemPromptPlaceholder": "Laawol mumtugol ko honɗun agent ɗe ngoodi",
+    "agentModelLabel": "Modil",
+    "agentModelPlaceholder": "Dobo modil...",
+    "agentModelUnavailable": "{modelId} (waaɗanii)",
+    "agentModelUnknownError": "Modil mo dobooma waawan waawaniima. Tot modil goɗɗo te suusu ɗum.",
+    "promptAgentBadge": "Agent mumtindol",
+    "editAgent": "Tallin agent",
+    "deleteAgent": "Mabbugol",
+    "deleteAgentConfirm": "Mabbugol agent ɗee les e baɗen? Naatnoy e heftagol modil; jawdi jawdi toŋngoy hannda to ka suudu.",
+    "confirmDeleteAgent": "Eyo, mabbu",
+    "promptAgentCreateSuccess": "Agent mumtindol woni.",
+    "promptAgentSaveSuccess": "Agent mumtindol suɓii.",
+    "promptAgentDeleteSuccess": "Agent mumtindol mabboo.",
+    "promptAgentsUnavailableWarning": "Agent mumtindol waawan waawaniima ñifɗit e juulde naatnoy. Waawan waawaniima tallit goɗɗum.",
+    "agentsTab": "Agents",
+    "connectorsTab": "Connectors",
+    "addConnector": "Labo connector",
+    "noConnectors": "Connector sooma jooni.",
+    "connectorsUnavailableWarning": "Mbeleediima ena artu ndajoo connectors, ɗaɗi ndiyam ngol tawataa. Hay so darti junni.",
+    "editAccess": "Waylu access",
+    "deleteConnector": "Momtu",
+    "deleteConnectorConfirm": "A momtu connector ngol? Soo kuɗi waawi nalla access men ndokkude.",
+    "confirmDeleteConnector": "Momtu connector",
+    "connectorSaveSuccess": "Connector weltii.",
+    "connectorCreateSuccess": "Connector sartii.",
+    "connectorDeleteSuccess": "Connector momtii.",
+    "editConnectorTitle": "Waylu connector",
+    "newConnectorTitle": "Connector keso",
+    "connectorPresetLabel": "Fuɗɗo e template",
+    "connectorPresetNone": "Hoɓɓir ɗum ummoraade",
+    "connectorNameLabel": "Innde",
+    "connectorDescriptionLabel": "Ndeefintoo",
+    "connectorUrlLabel": "URL server",
+    "connectorUrlPlaceholderWarning": "Mbay {placeholder} gooɗɗo e URL ngal ɗum, hokku mo leydi maa to a hokkude.",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Afaama",
+    "connectorAuthNone": "Alagantoo",
+    "connectorAuthBearer": "Token (kala huutoraa mo woni e jamfaande mum)",
+    "connectorAuthOauth": "OAuth seɗii",
+    "connectorSealingUnavailable": "OAuth alaa e mum: saaɗi laabi AUTH_SECRET juutude e cuurtooje Client.",
+    "connectorTokenHelpLabel": "Link nder njangirde token (ko feewi)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Secret ɗiɗi e juulnde. Faatu ngam waawi arnude, walla hobbu mayru am e juulnde.",
+    "connectorClientSecretHint": "Suusude e juulnde koo no mbaawi jogii, tee urtaaki woppu.",
+    "connectorScopesLabel": "Scopes (dunde e gese, ko feewi)"
+  },
+  "localModels": {
+    "title": "Moodelji jowte ɗee",
+    "description": "Hiraa e moodelji waɗi e kañum-ɗaa. Iwolji fayda e ngolak-maa eɓa woppi ko e joomi kambeanol — e ɗuum, jawaabi, innde hiraande e cokali ɗee nmokkani e ɓernde-maa.",
+    "detect": "Ruuɗoo kaɓe jowte ɗee",
+    "detecting": "Nde ruuɗi...",
+    "experimental": "Woppitorde",
+    "portLabel": "Port",
+    "statusUnknown": "Ndee waawaa yetto.",
+    "statusChecking": "Nde yetti...",
+    "statusReady": "{count, plural, =0 {Yumii e caɗeele, moodel waawaa heɓtude.} one {Yumii — moodel # waawde.} other {Yumii — moodelji # waawde.}}",
+    "statusNotRunning": "A waawi wonaa teeŋtingol {label}. Yamiro mo tawi mo jogii e port-ndan, tawi e ngolak-maa waawaani heɓde joomi kaɓe jowte ɗee.",
+    "statusHttpError": "{label} windii caɗeele. Yamiro logs maa.",
+    "corsHelp": {
+      "ollama": "Ollama jogii kono naatataa yilatugol e site-ndan. Waɗ OLLAMA_ORIGINS e address site-ndan, doolettin Ollama, so tawii ruuɗ-ɗaa maa.",
+      "lmstudio": "LM Studio jogii kono naatataa yilatugol e site-ndan. Hurmit CORSell e settings server jowte, so tawii ruuɗ-ɗaa maa.",
+      "llamacpp": "llama.cpp jogii kono waawataa yilatugol e site-ndan. Hurmit llama-server e eslaade yilata cross-origin, so tawii ruuɗ-ɗaa maa."
+    },
+    "privacyNote": "Moodelji jowte ɗee waawataa fayde e suɓa fayli, naatude jogne, yitde web walla connectors — ɗee don ngiɗan joomi servere ɗe. Ruuɗagol, so ndon, heɓi ko kañum-ɗaa tan."
+  },
+  "urlFetch": {
+    "sourceFallback": "Hello Web",
+    "fallbackHint": "Mbiydouda maa hello on, natta mbaydi, tee nuyta nde wuuɗa he.",
+    "shortExtract": "Handi kaɗa mbaare waawaani jangi — hello on ko feewi seeram kono walla soodi geeɗu.",
+    "errors": {
+      "invalidUrl": "Aloo, ɗum waawani ko web adresse moƴƴi.",
+      "ssrfBlocked": "Adresen on waawani dartinaade sabu moƴƴude juulnde.",
+      "tooManyRedirects": "Link on ngaddi be pilte jokkoraaɗe.",
+      "timeout": "Hello e sotti, wondude jam.",
+      "unreachable": "Hello o waawi umɓude.",
+      "blocked": "Hello o yaltini ñaamde — goonga o waawi yuɓɗe walla o welti ndon bots.",
+      "notFound": "Hello ɓe heɓaani.",
+      "upstream": "Hello o artini jabiraa.",
+      "pdf": "Doon link ɗo PDF. Daalee e naat button attach ngol to haɗtude.",
+      "nonHtml": "Doon link o woodani web page amen waawani jangude.",
+      "tooLarge": "Hello o bari kadi e heftude.",
+      "empty": "Teeŋtineejo jango umɓaani e hello ɗon.",
+      "generic": "Hello o waawi umɓude."
+    },
+    "fetchingFile": "Nana heftingol {host}…",
+    "attachLink": "Haɗto link",
+    "attachLinkTitle": "Haɗto web page",
+    "attachLinkDescription": "Hello e heftii, e teeŋtinaajo ndiyam gaa e jawdiima.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Heftu e haɗtu",
+    "attachLinkInvalid": "Doon waawi web address.",
+    "linkBadge": "E link",
+    "couldNotRetrieve": "Umɓaani heftude",
+    "doc": {
+      "sourceLabel": "Ndogal",
+      "retrievedLabel": "Heftii",
+      "attemptedLabel": "Hawruɗo",
+      "failureHeading": "Web page umɓaani heftude"
+    },
+    "settingsTitle": "Linkji e jaaɓnirgal",
+    "settingsToggle": "Heftu linkji waɗi paste baawdi",
+    "settingsDescription": "So a paste link tan, hello e heftii teeŋtinaajo giddo e jawdiima kadi. A waawi teppude e ndiyam so a ballu, walla a haɗto hello jooni e menu +.",
+    "addLink": "Ɓeydu link"
+  },
+  "cameraAccessError": "Mbeleediima ena artu kamera. Seetaan jaabawol kamera maa, kono hokkanii.",
+  "cameraUnnamedDevice": "Kameraa",
+  "pastedText": {
+    "fallbackName": "Banndu juutugol",
+    "charCount": "{count, number} harfi",
+    "removeChip": "Momtu banndu juutugol “{name}”",
+    "blockLabel": "Banndu juutugol: {name}",
+    "doc": {
+      "heading": "Banndu juutugol",
+      "pastedLabel": "Juutirii"
+    },
+    "settingsTitle": "Banndu juutugol mawɗi",
+    "settingsToggle": "Goloti banndu juutugol mawɗi e suɓo",
+    "settingsDescription": "So a juuta banndu juutugol ko teddini ɗum faa waɗi gila leydi kuu waɗti, ko e suɓo ɓuri banngugol. Banndu ngal ko dow juutirde baɗi — ko faydaaki anndude walla yerude.",
+    "settingsThresholdLabel": "Suɓi banndu juutugol ɓuri",
+    "settingsThresholdUnit": "harfi",
+    "settingsThresholdHint": "Nder {min, number} e {max, number} harfi."
+  },
+  "structures": {
+    "section": "Laawol",
+    "sectionSubtitle": "Laawol safiraaɗo e doggol gese. Loowi gootel e ndimɗol e welnde, walla fuɗɗi hoore gootel schema e tabol gondata data.",
+    "loadFromStructure": "Loow tuuma",
+    "loadFromStructureTitle": "Mbay colliiji ɗee e tuuma safiraaɗo",
+    "pickerEmpty": "Alaa tuumeeje safiraaɗe.",
+    "pickerTitle": "Loow tuuma safiraaɗo",
+    "saveAsStructure": "Sif e tuuma",
+    "saveAsStructureTitle": "Sif colliiji ɗee nder makko tuumeeje",
+    "savedToast": "Tuuma safiraaɗo “{name}”",
+    "namePlaceholder": "Innde tuuma",
+    "fieldCount": "{count} colli",
+    "fieldCountOne": "Colli gooto",
+    "downgradedNotice": "{count} colli(i) sapporo e banndu— tabel njuta nilai gooto e cell: {names}",
+    "truncatedNotice": "{count} colli(i) momtanii — tabel ɓuri kolii e {max} colliiji: {names}",
+    "skippedDerivedNotice": "{count} colli kalkuledi alaa safi — formulaaɗi loow colliiji tabel ngal: {names}",
+    "loadReplacesColumns": "Mbiddi ɗee waɗi mbaydi colliiji gar. Looji data mooftiri kadi so innde colli makko ni gootel."
   }
 }

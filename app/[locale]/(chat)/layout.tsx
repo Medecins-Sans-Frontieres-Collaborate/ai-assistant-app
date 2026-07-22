@@ -8,6 +8,7 @@ import { AppProviders } from '@/components/Providers/AppProviders';
 import { ChatShell } from './ChatShell';
 
 import { auth } from '@/auth';
+import { env } from '@/config/environment';
 
 /**
  * Layout for authenticated chat pages
@@ -45,6 +46,7 @@ export default async function ChatLayout({
     <AppProviders
       session={session}
       launchDarklyClientId={process.env.LAUNCHDARKLY_CLIENT_ID}
+      agentAccessEnabled={env.AGENT_ACCESS_CONTROL_ENABLED}
       userContext={{
         id: session.user?.id || 'anonymous',
         email: session.user?.mail,

@@ -15,6 +15,17 @@ export const SETTINGS_CONSTANTS = {
      */
     CONSECUTIVE_USAGE_THRESHOLD: 3,
   },
+
+  /**
+   * Chat-input "+" dropdown tool ordering
+   */
+  TOOL_ORDER: {
+    /**
+     * Number of consecutive uses of the same tool required before its durable
+     * usage count is incremented. Keeps the "Frequently used" order stable.
+     */
+    CONSECUTIVE_USAGE_THRESHOLD: 3,
+  },
 } as const;
 
 /**

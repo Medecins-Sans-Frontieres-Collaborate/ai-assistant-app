@@ -462,7 +462,22 @@
     "noProjectsFound": "未找到项目，使用“default”。",
     "selectAllRequired": "请选择订阅、账户和项目。",
     "subscriptionRequired": "请选择订阅",
-    "accountRequired": "请选择 Foundry 账户"
+    "accountRequired": "请选择 Foundry 账户",
+    "projectSelectionRequired": "请从列表中选择一个项目。",
+    "scanningResources": "正在扫描您的 Azure 订阅...",
+    "searchProjectsPlaceholder": "搜索项目...",
+    "noProjectsDiscovered": "您的订阅中未找到 Foundry 项目。如知道路径，请手动输入。",
+    "discoveryPartialWarning": "有 {count, plural, one {# 个订阅} other {# 个订阅}} 未能扫描。如项目缺失，请手动输入。",
+    "discoveryTruncatedWarning": "资源过多，未能完全扫描。如项目缺失，请手动输入。",
+    "retryScan": "重试扫描",
+    "next": "下一步",
+    "back": "返回",
+    "selectAgentsDescription": "选择此项目中在模型选择器中显示的 agent。",
+    "selectAll": "全选",
+    "deselectAll": "取消全选",
+    "agentsSelectedCount": "已选择 {selected} / {total} 个 agent",
+    "autoAddLabel": "自动添加新 agent",
+    "autoAddDescription": "之后发布到此项目的 agent 会自动显示。未勾选的 agent 会保持排除状态。"
   },
   "Quick Actions": "快速操作",
   "Type / in chat to access your prompts": "在聊天中输入 / 以访问您的提示",
@@ -791,7 +806,19 @@
       "listingTools": "正在查找可用工具…",
       "analyzingFiles": "正在分析您的文件…",
       "searchingKnowledge": "正在搜索知识库…",
-      "cancellingPriorTool": "正在取消先前的工具请求…"
+      "cancellingPriorTool": "正在取消先前的工具请求…",
+      "workflow": {
+        "preparingDocument": "正在准备参考资料...",
+        "writingDocument": "正在撰写文档...",
+        "analyzingSource": "正在分析源文本...",
+        "translating": "正在翻译...",
+        "reviewingTranslation": "第 {round} / {total} 轮审核...",
+        "revisingTranslation": "正在应用审核反馈...",
+        "extractingRows": "正在从 {source} 提取行...",
+        "transformingTable": "正在转换表格...",
+        "findingLocations": "正在识别地点...",
+        "updatingMap": "正在更新地图..."
+      }
     },
     "toolSummary": {
       "usedTools": "已用 {count, plural, one {# 个工具} other {# 个工具}}",
@@ -852,7 +879,9 @@
     "listen": "收听",
     "processingAudio": "正在处理音频...",
     "ttsError": "生成音频时出错。请重试。",
-    "unsupportedMessageType": "消息渲染错误：不支持的消息类型"
+    "unsupportedMessageType": "消息渲染错误：不支持的消息类型",
+    "addLanguageOption": "添加“{name}”…",
+    "sources": "来源"
   },
   "sidebar": {
     "collapseSidebar": "折叠侧边栏",
@@ -1177,9 +1206,27 @@
     "behaviorSection": "行为",
     "resetChatSettings": "重置聊天设置",
     "resetChatSettingsConfirmTitle": "重置聊天设置？",
-    "resetChatSettingsConfirmMessage": "这将恢复本面板中所有内容为默认值：温度、自定义指令、关于你、模型回复、流式速度、语音合成、活动文件和确认设置。不会影响您的对话内容。",
+    "resetChatSettingsConfirmMessage": "此操作将恢复此面板中所有内容的默认设置：temperature、自定义指令、关于你、模型回复、流式速度、语音合成、活跃文件以及确认信息。不会影响你的对话。",
     "customInstructionsLabel": "自定义指令*",
-    "defaultTemperatureLabel": "默认 Temperature*"
+    "defaultTemperatureLabel": "默认 Temperature*",
+    "Usage & Impact": "使用情况与影响",
+    "Connectors": "连接器",
+    "Backup": "备份",
+    "Memories": "记忆",
+    "Agent Access": "代理访问",
+    "LocalModels": "本地模型",
+    "suggestRevisions": {
+      "title": "文档修订",
+      "toggle": "建议修订而非直接应用",
+      "description": "当您请求文档工作流程进行修订时，更改将作为单独建议列出，您可选择接受或拒绝，方式与质量评估相同。",
+      "exceptionsTitle": "在以下情况下仍直接应用：",
+      "exceptionSelection": "修订您高亮的选择部分",
+      "exceptionLargeRewrite": "重写内容占据文档大部分时",
+      "exceptionReorder": "内容为移动章节而非编辑",
+      "thresholdLabel": "若超过此比例视为重写",
+      "thresholdUnit": "文档更改百分比",
+      "exceptionSelectionAlways": "修改高亮选区时总是直接应用——模型只返回修改后的片段，无法将其拆分为针对整个文档的建议。"
+    }
   },
   "notFound": {
     "lostDog": "迷路的狗"
@@ -1328,33 +1375,78 @@
     },
     "title": "选择模型",
     "modelsDescription": "为您的会话选择一个 AI 模型。每个模型有不同的优势——选择查看详情。",
-    "recommended": "推荐"
+    "recommended": "推荐",
+    "familyAll": "全部",
+    "familyFilterLabel": "按系列筛选模型",
+    "searchPlaceholder": "搜索模型",
+    "searchEmpty": "未找到匹配的模型。",
+    "star": "收藏 {name}",
+    "unstar": "取消收藏 {name}",
+    "otherFamily": "其他",
+    "hostedExternally": "通过 Azure AI Foundry 在提供方自有基础设施上运行，不在 MSF 的 Azure 环境内。",
+    "hostedIn": {
+      "label": "托管于 {regions}",
+      "tooltip": "该模型部署所在的 Azure 区域。对话将在您自己的区域内处理。"
+    },
+    "badges": {
+      "external": "外部",
+      "externalTooltip": "通过 Azure AI Foundry 在提供方自有基础设施上运行，不在 MSF 的 Azure 环境内。",
+      "regionHostedTooltip": "托管于 {region} Azure 区域。与此模型的对话将在该区域处理。"
+    },
+    "favorites": "收藏夹",
+    "euResidencyNote": "所有模型均在欧盟 Azure 区域运行。",
+    "hostedRegion": {
+      "label": "托管区域",
+      "processedIn": "此对话将在 {region} Azure 区域处理。",
+      "euOnlyNote": "{name} 托管于欧盟 Azure 区域，与其的对话将在该区域处理。"
+    },
+    "version": {
+      "label": "版本"
+    },
+    "reasoningModel": "推理模型：先逐步思考再作答。速度较慢，擅长解决复杂问题。",
+    "variant": {
+      "label": "变体"
+    },
+    "deployment": {
+      "title": "部署",
+      "source": "来源",
+      "account": "账户",
+      "location": "位置",
+      "deployment": "部署",
+      "modelVersion": "模型版本",
+      "publisher": "发布者"
+    }
   },
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "由 GPT-4.1 驱动的 AI 模型，通过 Bing 提供实时网络搜索。提供最新信息、事实核查和当前事件知识。非常适合需要新鲜信息、新闻分析和事实核查的研究。",
-      "knowledgeCutoff": "实时网络搜索"
+      "knowledgeCutoff": "实时网络搜索",
+      "tagline": "OpenAI上一代"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "OpenAI 最先进的模型，擅长复杂推理、代码生成和技术问题解决。非常适合分析任务、编程挑战、研究和详细解释。支持可调节的推理努力和响应详细程度。",
-      "knowledgeCutoff": "2025年8月6日 20:00"
+      "knowledgeCutoff": "2025年8月6日 20:00",
+      "tagline": "上一代GPT旗舰"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "GPT-5 的更快、更经济的变体，在保持高质量的同时优化了速度。非常适合日常任务、快速查询、工具路由和需要快速响应的应用程序。在性能和效率之间取得了极好的平衡。",
-      "knowledgeCutoff": "2025年8月6日 20:00"
+      "knowledgeCutoff": "2025年8月6日 20:00",
+      "tagline": "更快、更低成本"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "GPT-5 的专门变体，针对对话互动和情商进行了优化。擅长共情沟通、心理健康支持、创意写作、头脑风暴和自然对话。非常适合休闲对话、咨询场景和需要情感意识的任务。",
-      "knowledgeCutoff": "2025年10月1日 20:00"
+      "knowledgeCutoff": "2025年10月1日 20:00",
+      "tagline": "上一代对话GPT"
     },
     "o3": {
       "name": "o3",
       "description": "OpenAI 最先进的推理模型，具有革命性的问题解决能力。擅长复杂数学、科学推理、编程挑战和多步骤逻辑任务。扩展了 200K 上下文窗口。支持推理努力控制。",
-      "knowledgeCutoff": "2025年4月8日 20:00"
+      "knowledgeCutoff": "2025年4月8日 20:00",
+      "tagline": "深入逐步推理"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1364,57 +1456,258 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "逐步展示工作的推理专家。擅长数学问题、逻辑谜题和理解复杂概念。实时观察它如何思考问题。",
-      "knowledgeCutoff": "2025年1月20日"
+      "knowledgeCutoff": "2025年1月20日",
+      "tagline": "逐步展示推理过程"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "特别擅长编程和技术写作的多功能模型。擅长调试代码、编写文档和解释技术概念。快速可靠，适合开发工作。",
-      "knowledgeCutoff": "2025年4月16日 00:45"
+      "knowledgeCutoff": "2025年4月16日 00:45",
+      "tagline": "开源替代方案"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "xAI 的多功能模型，以细致入微的回答著称。擅长开放式讨论、创意项目和解决复杂问题。",
-      "knowledgeCutoff": "2025年5月13日 00:16"
+      "knowledgeCutoff": "2025年5月13日 00:16",
+      "tagline": "xAI替代方案"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Anthropic 最强大的模型，具有卓越的推理、编程和创意能力。非常适合复杂分析、研究和需要深入理解的任务。",
-      "knowledgeCutoff": "2025年1月"
+      "knowledgeCutoff": "2025年1月",
+      "tagline": "Opus早期版本"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "平衡的 Claude 模型，在编程、分析和创意任务方面表现出色。非常适合日常使用，响应速度快。",
-      "knowledgeCutoff": "2025年1月"
+      "knowledgeCutoff": "2025年1月",
+      "tagline": "Sonnet上一代"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "上一代 Claude Opus 模型。擅长复杂编程任务、详细分析和细致入微的理解。",
-      "knowledgeCutoff": "2025年1月"
+      "knowledgeCutoff": "2025年1月",
+      "tagline": "Opus上一代"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "快速、经济的 Claude 模型，针对快速任务进行了优化。擅长简单查询、摘要和高容量应用。",
-      "knowledgeCutoff": "2025年1月"
+      "knowledgeCutoff": "2025年1月",
+      "tagline": "快速Claude版本"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "OpenAI 最先进的模型，擅长复杂推理、代码生成和技术问题解决。非常适合分析任务、编程挑战、研究和详细解释。支持可调节的推理深度和回复详细程度。",
-      "knowledgeCutoff": "2025年12月"
+      "knowledgeCutoff": "2025年12月",
+      "tagline": "编程、分析、研究"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "description": "GPT-5.2 的专用变体，针对对话交互和情感智能进行了优化。擅长共情沟通、心理健康支持、创意写作、头脑风暴和自然对话。非常适合日常交流、咨询场景和需要情感洞察的任务。",
-      "knowledgeCutoff": "2025年12月"
+      "knowledgeCutoff": "2025年12月",
+      "tagline": "对话、头脑风暴"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Anthropic 最强大的模型。适合长篇写作、研究及需要深入思考的任务。",
-      "knowledgeCutoff": "2026年2月"
+      "knowledgeCutoff": "2026年2月",
+      "tagline": "长篇写作与分析"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "一款均衡的 Claude 模型。适合日常写作、分析及快速回应的编程任务。",
-      "knowledgeCutoff": "2026年2月"
+      "knowledgeCutoff": "2026年2月",
+      "tagline": "均衡日常Claude"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Meta 发布的开源模型。适合写作、摘要和快速问答。",
+      "tagline": "开源替代方案"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "OpenAI 最新旗舰模型。擅长写作、调研、编程和复杂问题解决。",
+      "tagline": "最新GPT旗舰"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "最小、最快的 GPT 版本。适合快速、简单任务，且成本最低。",
+      "tagline": "最小最快GPT"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "面向对话优化的 GPT 版本。适用于日常聊天、头脑风暴和支持性讨论。",
+      "tagline": "新一代对话GPT"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "较早的多模态 GPT。适用于日常写作和问答，无需最新功能时使用。",
+      "tagline": "旧版多模态GPT"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "更小更快的 GPT-4.1 版本，适合日常快速任务。",
+      "tagline": "轻量上一代GPT"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Anthropic 最新、最强大的模型。擅长长篇写作、调研、编程和深入分析。",
+      "tagline": "最新最强Claude"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "DeepSeek 最新的开源模型。适合通用写作和技术问答。",
+      "tagline": "开源替代方案"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Mistral 的旗舰模型。为欧洲写作、摘要和通用问答提供替代选择。",
+      "tagline": "欧洲开放权重模型"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "较早版本的 GPT-5 旗舰。依然擅长写作、分析和编程。",
+      "tagline": "早期GPT-5旗舰"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "早期对话优化的 GPT-5 版本。适合日常交流和头脑风暴。",
+      "tagline": "早期对话GPT"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "最小的 GPT-5 版本。适合快速、简单任务，且成本最低。",
+      "tagline": "体积小的上一代GPT"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "最小的 GPT-4.1 版本。适合速度和成本要求高的快速、简单任务。",
+      "tagline": "最小上一代GPT"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "小巧、快速的 GPT-4o 版本。适合日常简易任务，无需最新功能时使用。",
+      "tagline": "轻量旧多模态GPT"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "紧凑型推理模型。适合数学、逻辑及分步问题，成本低于 o3。",
+      "tagline": "快速实惠推理"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "早期的紧凑型推理模型。可在低成本下处理数学、科学和逻辑题。",
+      "tagline": "紧凑逐步推理"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Anthropic 最智能的模型，Claude 5 系列首作。适合最复杂的写作、调研和编程任务。",
+      "tagline": "Anthropic前沿模型"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "最新的平衡型 Claude，Claude 5 家族首作。日常写作、分析和编程表现强劲，响应迅速。",
+      "tagline": "最新均衡Claude"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Mistral 的中型模型。欧洲方案，兼顾能力与速度，适合日常工作。",
+      "tagline": "均衡欧洲模型"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Mistral 的小型模型。适合摘要、草稿和简单问题，快速且低价。",
+      "tagline": "小型快速欧洲模型"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Mistral 的超小模型。非常适合极快、简单的低成本任务。",
+      "tagline": "迷你边缘版Mistral"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "更新版 DeepSeek-R1。推理更深入，可分步展示思路。",
+      "tagline": "更新的开放推理模型"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Meta 发布的轻量开源模型。适合写作、摘要及日常问答，响应快速。",
+      "tagline": "高效开源Llama"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Meta 较早的开源模型。依然适合通用写作和问答。",
+      "tagline": "旧版开源Llama"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "xAI 的旗舰模型。适合开放式讨论、分析及创意项目。",
+      "tagline": "xAI旗舰"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "OpenAI 最新旗舰模型。擅长写作、研究、编程及复杂问题解决。",
+      "tagline": "最新GPT旗舰"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat（最新）",
+      "description": "始终指向 OpenAI 最新对话优化模型的动态别名。是 Azure 用于替换已下线版本化 gpt-*-chat 模型的方案。",
+      "tagline": "始终最新对话GPT"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "最新 Opus 版本，介于 4.6 与 4.8 之间。擅长长篇写作、研究、编程和细致分析。",
+      "tagline": "最新Opus版本"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "DeepSeek 最新推理模型，也是 Azure 替代 R1 系列的产品。能够分步骤展示推理过程。",
+      "tagline": "最新开放推理模型"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "DeepSeek 快速版 V4，也是 Azure 替代 V3 系列的产品。适用于常规写作和技术问题，响应快速。",
+      "tagline": "快速开源替代方案"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast（推理版）",
+      "description": "xAI 快速推理模型。逐步思考，响应迅速。",
+      "tagline": "快速xAI推理模型"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "xAI 快速聊天模型。适合日常提问和对话，响应快捷。",
+      "tagline": "快速xAI对话模型"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "轻量级 xAI 模型。适用于快速问答和轻松对话，速度更快、成本更低。",
+      "tagline": "轻量xAI模型"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "OpenAI GPT-5.6 三款模型中的旗舰，写作、研究、编码及复杂问题解决能力最强。",
+      "tagline": "最新GPT旗舰级"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "OpenAI GPT-5.6 三款模型中的平衡版，日常写作、分析和编码表现优秀，响应快速。",
+      "tagline": "均衡型日常 GPT-5.6"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "OpenAI GPT-5.6 三款模型中的轻量级和高速型号，适合低成本快速提问与简单任务。",
+      "tagline": "轻量快速版 GPT-5.6"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mistral 最新的中型模型。作为欧洲替代选择，兼具能力与速度，适合日常工作。",
+      "tagline": "均衡型欧洲模型"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Moonshot AI 的开放权重模型。擅长代理任务、编程和长文档处理。",
+      "tagline": "具代理能力的开放权重模型"
     }
   },
   "searchMode": {
@@ -1754,7 +2047,22 @@
     "useDefaultStyle": "使用默认写作风格",
     "noTonesCreated": "尚未创建语气",
     "createTonesHint": "可在快捷操作中创建语气",
-    "translateDocumentTooltip": "将文档翻译为其他语言。\n\n支持格式：Word、Excel、PowerPoint、HTML、TXT\n最大文件大小：40MB\n\n支持80多种语言，可选用术语表文件。"
+    "translateDocumentTooltip": "将文档翻译为其他语言。\n\n支持格式：Word、Excel、PowerPoint、HTML、TXT\n最大文件大小：40MB\n\n支持80多种语言，可选用术语表文件。",
+    "translateTooltip": "将文本片段翻译为另一种语言。\n\n如需翻译整个文件（Word、Excel、PowerPoint、HTML、TXT），请改用“翻译文档”。",
+    "cameraTooltip": "使用设备相机拍照并附加到消息中。",
+    "noResults": "无匹配操作",
+    "sectionPinned": "已固定",
+    "sectionFrequent": "常用",
+    "sectionMore": "更多",
+    "categoryWeb": "网页",
+    "categoryMedia": "媒体和文件",
+    "categoryTransform": "转换",
+    "pin": "置顶",
+    "unpin": "取消置顶",
+    "moveToMore": "移至更多",
+    "moveOutOfMore": "在菜单中显示",
+    "showSources": "显示其他来源",
+    "hideSources": "隐藏其他来源"
   },
   "transcription": {
     "addInstructions": "添加说明",
@@ -1964,7 +2272,14 @@
     "learnMore": "了解更多",
     "advancedOptions": "高级选项",
     "unofficialBadgeLabel": "非官方",
-    "unofficialLanguageWarning": "此语言尚未获得官方支持。翻译质量未经验证。请在分享之前让流利或母语者进行审阅。"
+    "unofficialLanguageWarning": "此语言尚未获得官方支持。翻译质量未经验证。请在分享之前让流利或母语者进行审阅。",
+    "translationSubmitted": "已开始翻译 — PDF将在后台处理。",
+    "pendingTitle": "正在翻译 {filename}…",
+    "pendingHint": "PDF翻译在后台运行，可能需几分钟。您可继续工作——文档准备好后卡片会自动更新，即使刷新后也是如此。",
+    "asyncFailed": "文档翻译失败：{error}",
+    "jobNotFound": "翻译任务已不可用。请重试。",
+    "retryPolling": "再次检查",
+    "pollingStalled": "无法连接服务器检查进度，翻译可能仍在进行中。"
   },
   "terms": {
     "officialLanguages": "官方版本：",
@@ -2028,6 +2343,10 @@
       "technicalDetails": "技术详情",
       "agentCountLabel": "{count} 个代理",
       "disconnectedToast": "已断开 {name}"
+    },
+    "emptyState": {
+      "title": "暂无区域／组织代理可用",
+      "description": "请在下方连接一个 Foundry 项目以查看其代理。"
     }
   },
   "privacy": {
@@ -2138,5 +2457,1309 @@
     "review": "审核",
     "itemId": "ID：{id}",
     "itemSource": "{date} 来自 {source}"
+  },
+  "regionOverride": {
+    "warning": "位置覆盖已激活 — 您的请求正在路由到 {region} 数据区域。这是手动测试覆盖，不代表您的实际位置。",
+    "clear": "清除覆盖"
+  },
+  "usageImpact": {
+    "empty": "尚无使用记录。聊天后，您的令牌使用量和预计碳排放将在此显示。",
+    "co2Value": "{grams} 克 CO₂e",
+    "equivalence": "≈ {count} 次智能手机充电",
+    "requests": "请求数",
+    "promptTokens": "提示令牌",
+    "completionTokens": "完成令牌",
+    "topModels": "按模型",
+    "byRegion": "按托管区域",
+    "regionDefault": "默认",
+    "modelRow": "{requests} 次请求 · {grams} 克",
+    "disclosure": "估算基于假设 v{version} · 自 {since} 起 · 仅限标准聊天（不计代理和知识库答案）。",
+    "reset": "重置使用统计",
+    "estimatedPortion": "包含约 {grams} 克 CO₂e（{requests} 次请求），为在跟踪前的聊天估算值——根据存储的消息文本回算，并非基于实际 token 计数。",
+    "chipTitle": "排放信息条",
+    "chipDescription": "显示当前对话的碳足迹估算值，位于聊天输入框上方。",
+    "chipAlways": "始终显示",
+    "chipAlwaysHint": "有估算时，信息条将一直可见。",
+    "chipAuto": "更新或悬停时显示",
+    "chipAutoHint": "估算发生变化时显示，随后淡出。鼠标悬停或聚焦可重新显示。",
+    "chipHidden": "隐藏",
+    "chipHiddenHint": "信息条不会显示，但总计仍会被记录并显示在此页面。",
+    "chipAutoHideLabel": "淡出时长",
+    "chipAutoHideUnit": "秒",
+    "chipAutoHideHint": "介于 {min} 到 {max} 秒之间。"
+  },
+  "extraction": {
+    "toggleLabel": "提取结构化数据",
+    "trayLabel": "提取",
+    "trayPrefix": "提取",
+    "trayInfo": "最多返回3个结构化表格。配方本地保存。",
+    "autoChip": "自动 — AI提议结构",
+    "addRecipe": "添加配方",
+    "addRecipeTitle": "为此次提取添加配方",
+    "addRecipeFullTitle": "每次提取最多3个配方",
+    "removeRecipe": "移除配方：{name}",
+    "remove": "移除",
+    "section": "提取配方",
+    "sectionSubtitle": "已保存模板，可将原始文本、文件或URL转换为结构化表格。每次提取最多选3个。",
+    "newRecipe": "新配方",
+    "untitledRecipe": "（未命名配方）",
+    "deleteRecipe": "删除配方",
+    "delete": "删除",
+    "deleteConfirm": "确认删除？",
+    "cancel": "取消",
+    "name": "名称",
+    "namePlaceholder": "例如：病人",
+    "description": "描述",
+    "optional": "（可选）",
+    "descriptionPlaceholder": "在配方选择器中显示的简要说明",
+    "instructions": "说明",
+    "instructionsPlaceholder": "AI 应在材料中查找哪些内容？",
+    "fields": "字段",
+    "field": "字段",
+    "fieldsPlural": "字段",
+    "fieldName": "字段名称",
+    "fieldType": "字段类型",
+    "fieldNamePlaceholder": "field_name",
+    "addField": "添加字段",
+    "removeField": "移除字段",
+    "toggleDetails": "展开/收起详情",
+    "fieldDetailsTitle": "描述，枚举值",
+    "fieldDescriptionPlaceholder": "描述（帮助AI找到该字段）",
+    "enumValuesPlaceholder": "以逗号分隔的允许值",
+    "required": "必填",
+    "suggest": "AI 智能建议",
+    "suggesting": "正在生成建议…",
+    "suggestNeedsInstructions": "请先添加说明，让 AI 知道要查找什么",
+    "searchRecipes": "搜索方案",
+    "pickerEmpty": "暂无方案。请新建以开始。",
+    "pickerEmptyMatch": "无匹配的方案",
+    "editorEmpty": "暂无方案。请新建，AI 可协助填写字段。",
+    "noData": "未提取到数据",
+    "noRecords": "未找到{name}记录",
+    "row": "行",
+    "rows": "行",
+    "record": "记录",
+    "records": "记录",
+    "complete": "完成",
+    "download": "下载",
+    "preview": "预览",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} 个字段",
+    "fieldCountOne": "1 个字段",
+    "andMoreFields": "另有 +{count} 项",
+    "saveAsRecipe": "另存为方案",
+    "savedAsRecipeToast": "已另存为方案“{name}”",
+    "previewTruncated": "仅显示前 3 行（共 {total} 行）。下载可获取全部数据。",
+    "previewEmpty": "暂无可预览的行",
+    "proposedSchemaTip": "AI 推荐的结构。保存后可复用。",
+    "downloadAriaLabel": "将{name}下载为{format}",
+    "previewAriaLabel": "切换{name}的预览",
+    "changeFormatAriaLabel": "更改{name}的下载格式",
+    "materialWarningTitle": "添加提取材料",
+    "materialWarningBody": "在下方输入消息、附加文件或包含 URL。",
+    "materialAttach": "附加文件",
+    "willExtractPrefix": "将提取自：",
+    "materialText": "消息文本",
+    "materialFiles": "{count, plural, one {1 个文件} other {# 个文件}}",
+    "materialActiveFiles": "{count, plural, one {1 个活动文件} other {# 个活动文件}}",
+    "dismiss": "关闭提取"
+  },
+  "Connectors": "连接器",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "翻译",
+        "description": "通过分析、词汇表和多轮审核来翻译文本"
+      },
+      "document": {
+        "label": "文档",
+        "description": "借助助手起草和完善文档"
+      },
+      "dataAnalysis": {
+        "label": "数据分析",
+        "description": "导入表格，探索或转换数据"
+      },
+      "map": {
+        "label": "地图",
+        "description": "将数据转为地图上的地点"
+      }
+    },
+    "chooser": {
+      "prompt": "或开启专注工作区"
+    },
+    "sidebar": {
+      "newTranslation": "新建翻译",
+      "newDocument": "新建文档",
+      "newDataAnalysis": "新建数据分析",
+      "newMap": "新建地图"
+    },
+    "translation": {
+      "chooseLanguage": "目标语言",
+      "customLanguageHint": "“{name}”是您添加的语言 —— AI 可尝试任意语言，但质量未验证。",
+      "addedByYou": "您已添加",
+      "glossary": "词汇表",
+      "noGlossary": "无词汇表",
+      "manageGlossaries": "词汇表",
+      "glossaries": "词汇表",
+      "closeGlossaries": "关闭词汇表",
+      "glossariesEmpty": "创建词汇表可锁定特定术语的译法。词汇表保存在本设备，可在多次翻译中复用。",
+      "newGlossary": "新建术语表",
+      "newGlossaryName": "未命名术语表",
+      "glossaryName": "术语表名称",
+      "deleteGlossary": "删除术语表",
+      "sourceTerm": "原文术语",
+      "targetTerm": "译文",
+      "note": "备注",
+      "noteOptional": "备注（可选）",
+      "addEntry": "添加术语",
+      "removeEntry": "移除{term}",
+      "mode": "翻译模式",
+      "modeQuick": "快速",
+      "modeAgentic": "已审查",
+      "modeQuickHint": "仅一次翻译，速度最快",
+      "modeAgenticHint": "先分析文本，再翻译并最多进行3轮审核",
+      "translate": "翻译",
+      "translating": "正在翻译…",
+      "sourceLabel": "原文",
+      "targetLabel": "译文",
+      "sourcePlaceholder": "粘贴或输入待翻译文本，或上传文档。",
+      "targetEmpty": "翻译内容将在此显示。",
+      "uploadDocument": "上传文档",
+      "copy": "复制",
+      "copied": "已复制",
+      "tooLong": "文本超过{max}个字符。请分段，或使用文档翻译功能处理完整文件。",
+      "analysisTitle": "翻译前分析",
+      "register": "注册",
+      "reviewTitle": "审核轮次",
+      "roundLabel": "第{round}轮",
+      "verdictApprove": "已批准",
+      "verdictRevise": "已修订",
+      "railRequest": "请将原文翻译成{language}。",
+      "railDoneAgentic": "已完成。我已分析文本、翻译，并进行了{rounds}轮审核。结果已保存至工作区。",
+      "railDoneQuick": "已完成。译文已保存到工作区。",
+      "railAssessRequest": "请评估{language}译文的质量。",
+      "railAssessDone": "评估完成：评分已在工作区，同时有{count}项建议修改待审核。",
+      "roundChanges": "第{round}轮更改",
+      "criteria": {
+        "accuracy": {
+          "label": "准确性",
+          "description": "准确传达原文含义——无误译、遗漏、增译或未翻译片段"
+        },
+        "fluency": {
+          "label": "流畅度",
+          "description": "语法、拼写、标点及衔接在目标语言中自然流畅"
+        },
+        "terminology": {
+          "label": "术语",
+          "description": "专业术语使用一致且正确，严格遵循术语表"
+        },
+        "style": {
+          "label": "风格",
+          "description": "用语、语气及表达风格与原文一致且保持统一"
+        },
+        "localeConventions": {
+          "label": "本地规范",
+          "description": "日期、数字、单位及标点符号符合目标语言本地规范"
+        },
+        "audience": {
+          "label": "受众",
+          "description": "适合文本的具体用途及目标阅读群体"
+        }
+      },
+      "severity": {
+        "minor": "轻微",
+        "major": "重大"
+      },
+      "assess": "质量评估",
+      "assessing": "正在评估…",
+      "assessmentTitle": "质量评估",
+      "criteriaPicker": "评估标准",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "建议修改",
+      "noEditsSuggested": "未建议修改 — 翻译符合所选标准。",
+      "acceptEdit": "接受",
+      "rejectEdit": "拒绝",
+      "acceptAll": "全部接受",
+      "rejectAll": "全部拒绝",
+      "editAccepted": "已接受",
+      "editRejected": "已拒绝",
+      "editUnapplicable": "无法在当前文本中找到该段落 — 未应用",
+      "editTranslation": "编辑",
+      "doneEditing": "完成",
+      "pasteTranslationPlaceholder": "输入或粘贴待处理的译文…",
+      "editingBlockedPendingEdits": "请先处理或拒绝待定的建议修改",
+      "pendingCount": "{count} 条待处理",
+      "closeReview": "关闭质量复核",
+      "showReview": "显示复核",
+      "showReviewPending": "显示复核（{count} 条待处理）",
+      "undoEdit": "撤销",
+      "clearResolved": "清除已解决",
+      "clearResolvedHint": "从此列表中移除已接受、已拒绝和不适用的修改",
+      "autoClearResolved": "自动清除已解决的修改",
+      "customCriteria": "自定义标准",
+      "closeCriteria": "关闭自定义标准",
+      "newCriterion": "新增标准",
+      "newCriterionName": "未命名标准",
+      "criterionName": "标准名称",
+      "criterionRubric": "评分细则",
+      "criterionRubricPlaceholder": "描述此标准下译文必须达到的要求，例如：“所有临床剂量说明须用祈使句表达，不能用不定式……”",
+      "criterionRubricHint": "利用此评分细则结合内置MQM维度对译文进行评估，原文将直接提供给AI。",
+      "criteriaEmpty": "创建自定义标准（如内部风格、客户术语偏好或地域规范），以便补充内置MQM维度进行译文评估。标准保存在本设备上，可重复使用。",
+      "deleteCriterion": "删除标准",
+      "manageCriteria": "自定义标准",
+      "addCriteria": "添加标准",
+      "noUsableCriteria": "请至少选择一个内置标准，或为自定义标准添加评分细则。",
+      "criterionRubricTooLong": "该评判标准超出限制 {over} 个字符。它会随每次评估发送，因此在使用此标准前必须进行裁剪。"
+    },
+    "document": {
+      "emptyTitle": "描述您需要的文档",
+      "emptyBody": "请告诉助手要撰写的内容，如情况报告、捐赠信、会议纪要。如需引用和事实，请先添加参考文件。",
+      "generatePlaceholder": "描述需要撰写的文档…",
+      "revisePlaceholder": "描述需要修改的内容…",
+      "generate": "生成",
+      "revise": "修改",
+      "writing": "正在撰写…",
+      "export": "导出",
+      "references": "参考资料",
+      "addReference": "添加文件",
+      "uploading": "正在上传…",
+      "removeReference": "移除 {name}",
+      "referenceChars": "已提取文本 {chars} 个字符",
+      "referenceEmpty": "无法从 {name} 中提取文本",
+      "uploadFailed": "上传失败",
+      "untitledDocument": "未命名文档",
+      "generatedSummary": "我已在工作区完成文档，请查看并告知需要修改的内容。",
+      "revisedSummary": "我已在工作区修改了文档。",
+      "runFailed": "出现问题：{message}",
+      "uploadBasis": "从现有文档开始",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "语法与拼写",
+          "description": "语法和拼写正确；使用统一的英文（美式或英式均可）— 混用为错误"
+        },
+        "consistency": {
+          "label": "一致性",
+          "description": "术语、名称、大小写和格式在全文中统一"
+        },
+        "clarity": {
+          "label": "清晰度",
+          "description": "表达直接、无歧义，结构有助于阅读"
+        },
+        "sensitivity": {
+          "label": "敏感性",
+          "description": "包容性、冲突和人道主义敏感的措辞（可选检查）"
+        },
+        "specAdherence": {
+          "label": "规范遵循",
+          "description": "遵循所附文档规范：包含所需部分，顺序正确，并符合作品指导要求"
+        },
+        "toneAdherence": {
+          "label": "语气遵循",
+          "description": "遵循所附的语音与语气规则"
+        }
+      },
+      "severity": {
+        "minor": "轻微",
+        "major": "严重"
+      },
+      "assess": "评估质量",
+      "assessing": "正在评估…",
+      "assessmentTitle": "质量审查",
+      "criteriaPicker": "评估标准",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "建议修改",
+      "noEditsSuggested": "未建议修改 — 文档通过了所选标准。",
+      "acceptEdit": "接受",
+      "rejectEdit": "拒绝",
+      "acceptAll": "全部接受",
+      "rejectAll": "全部拒绝",
+      "editAccepted": "已接受",
+      "editRejected": "已拒绝",
+      "editUnapplicable": "无法在当前文本中定位该段落 — 未应用",
+      "editingBlockedPendingEdits": "请先解决或拒绝待处理的建议修改",
+      "pendingCount": "{count} 项待处理",
+      "closeReview": "关闭质量审查",
+      "showReview": "显示审查",
+      "showReviewPending": "显示审查（{count} 项待处理）",
+      "railAssessRequest": "根据所选标准评估文档质量。",
+      "railAssessDone": "评估完成：评分已显示在工作区，有 {count} 项建议修改待审核。",
+      "spec": "文档规范",
+      "noSpec": "无规范",
+      "manageSpecs": "规范",
+      "specs": "文档规范",
+      "closeSpecs": "关闭规范",
+      "specsEmpty": "创建规范以按固定格式编写文档——包含必需部分、顺序和分部分指导（如 SitRep 模板）。规范会保存在本设备且可重复使用。",
+      "newSpec": "新建规范",
+      "newSpecName": "未命名规范",
+      "specName": "规范名称",
+      "specDescription": "描述（可选）",
+      "deleteSpec": "删除规范",
+      "sectionHeading": "部分标题",
+      "sectionGuidance": "指导（可选）",
+      "sectionRequired": "必填",
+      "addSection": "添加部分",
+      "removeSection": "移除部分",
+      "generalGuidance": "总体指导（可选）",
+      "tone": "语气",
+      "noTone": "无语气",
+      "customCriteria": "自定义标准",
+      "manageCriteria": "自定义标准",
+      "closeCriteria": "关闭自定义标准",
+      "criteriaEmpty": "创建自定义标准，如品牌要求或组织语言，用于评估文件和指导修订。保存在本设备上，可重复使用。",
+      "newCriterion": "新建标准",
+      "newCriterionName": "未命名标准",
+      "criterionName": "标准名称",
+      "criterionRubric": "评分标准",
+      "criterionRubricPlaceholder": "描述文件需要满足此标准的要求，例如：“绝不使用关于我们工作的夸张语；始终称受助人为‘我们协助的人’……”",
+      "criterionRubricHint": "此评分标准将在评估和修订时原文提供给 AI。",
+      "deleteCriterion": "删除标准",
+      "profileTitle": "文件概要",
+      "profileDocType": "类型",
+      "profileLanguage": "语言",
+      "profileAudience": "受众",
+      "profilePurpose": "用途",
+      "profileRegister": "语体",
+      "profileTone": "语气",
+      "profileConventions": "惯例",
+      "emptyHint": "请在下方输入内容，或在底部输入框描述写作要求，或从文件开始。",
+      "addSpec": "添加说明",
+      "addCriteria": "添加标准",
+      "scopeFullDocument": "范围：全文",
+      "scopeSelection": "范围：选中部分 — “{preview}…”（{count} 字）",
+      "clearSelection": "清除选择（处理全文）",
+      "reviseSelectionPlaceholder": "描述对选中内容的修改…",
+      "revisedSelectionSummary": "我已在工作区修订所选内容。",
+      "assessedSelection": "选中部分",
+      "undoEdit": "撤销",
+      "clearResolved": "清除已解决",
+      "clearResolvedHint": "从此列表中移除已接受、已拒绝和不适用的修改",
+      "autoClearResolved": "自动清除已解决的修改",
+      "import": "导入",
+      "importReplaceTitle": "替换文档？",
+      "importReplaceBody": "导入{name}将替换当前文档。您的参考资料、规范和语气将被保留。",
+      "importReplaceConfirm": "替换",
+      "editorMode": "编辑器模式",
+      "editorModeRich": "富文本",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "在切换编辑器模式前，请先解决建议的修改。",
+      "suggestChanges": "建议更改",
+      "suggestChangesHint": "逐项审查修订建议，而不是直接重写整篇文档。",
+      "suggestChangesSelectionNote": "对所选内容的修订会直接应用——您已确定修改范围。",
+      "suggestedSummary": "建议了 {count} 项{count, plural, one {更改} other {更改}}供审核。",
+      "revisionSuggestionSummary": "您的修订请求产生了 {count} 项{count, plural, one {建议更改} other {建议更改}}。",
+      "revisionCriterionLabel": "请求的修订",
+      "fallbackSelection": "已直接应用——针对所选内容的修订不会建议。",
+      "fallbackLargeRewrite": "已直接应用——重写部分过多，无法分割为独立建议审核。",
+      "fallbackReorder": "已直接应用——章节为移动操作，无法拆分成建议审核。",
+      "fallbackUnanchorable": "已直接应用——无法将更改定位到具体段落。",
+      "fallbackNoChanges": "无需更改。",
+      "criterionRubricTooLong": "该评判标准超出限制 {over} 个字符。它会随每次评估发送，因此在使用此标准前必须进行裁剪。"
+    },
+    "data": {
+      "emptyTitle": "导入数据进行分析",
+      "emptyBody": "可导入 CSV、Excel 或 JSON 文件，或直接粘贴数据行。表格加载后可排序、从文档提取更多行，并用自然语言指令进行转换。",
+      "importFile": "导入文件",
+      "importing": "正在导入…",
+      "pasteData": "粘贴数据",
+      "pastePlaceholder": "在此粘贴 CSV、TSV 或 JSON…",
+      "import": "导入",
+      "addFromSource": "从来源添加",
+      "extractHint": "粘贴文本或选择文件；系统将从中提取与当前列匹配的数据行。未知值保持为空——保证不虚构。",
+      "extractPlaceholder": "粘贴包含数据的非结构化文本…",
+      "extractRows": "提取行",
+      "extractFromFile": "从文件…",
+      "extracting": "正在提取…",
+      "pastedSource": "已粘贴文本",
+      "transform": "转换",
+      "transforming": "正在转换…",
+      "transformPlaceholder": "描述需要的转换，如“添加每千人口病例数一栏”…",
+      "transformCapHint": "转换最多支持 {max} 行。若表格较大，请先删除或筛选行。",
+      "undo": "撤销",
+      "deleteSelected": "删除 {count}",
+      "deletedRows": "已删除 {count} 行",
+      "selectAllRows": "全选行",
+      "selectRow": "选择第 {row} 行",
+      "rowCount": "{count} 行",
+      "rowCapExceeded": "这将达到 {count} 行，表格上限为 {max}。请拆分数据或导出。",
+      "railExtractRequest": "从 {source} 提取符合表结构的行",
+      "railExtractDone": "已将 {count} 个提取的行添加到表中。",
+      "railTransformDone": "已转换表格。",
+      "columnProfileFor": "{column} 列统计信息",
+      "profileMissing": "缺失",
+      "profileDistinct": "唯一值",
+      "profileRange": "范围",
+      "profileMean": "平均值",
+      "profileMedian": "中位数",
+      "profileTopValues": "最常见值",
+      "filterColumnFor": "筛选 {column}",
+      "filterContains": "包含…",
+      "filterMin": "最小值",
+      "filterMax": "最大值",
+      "filterClear": "清除",
+      "clearFilters": "清除筛选条件",
+      "showingRows": "显示 {shown} / {total} 行",
+      "scopeLabel": "工作范围",
+      "scopeTable": "全部 ({count})",
+      "scopeFiltered": "已筛选 ({count})",
+      "scopeSelection": "已选择 ({count})",
+      "scopedInstruction": "{instruction}（针对 {count} 行）",
+      "assess": "评估质量",
+      "assessing": "正在评估…",
+      "criteria": {
+        "validity": {
+          "label": "有效性",
+          "description": "数值符合其列类型和期望格式"
+        },
+        "consistency": {
+          "label": "一致性",
+          "description": "相同的值始终保持写法一致（无“M”/“Male”变体、单位混杂或大小写漂移）"
+        },
+        "duplicates": {
+          "label": "重复项",
+          "description": "同一实体或事件被重复记录的行"
+        },
+        "plausibility": {
+          "label": "合理性",
+          "description": "异常值及上下文中的不合理数值"
+        }
+      },
+      "assessmentTitle": "数据质量审核",
+      "pendingCount": "{count} 个待处理",
+      "closeReview": "关闭质量审核",
+      "suggestedEdits": "建议修正",
+      "noEditsSuggested": "未建议修正 — 数据通过所选标准。",
+      "acceptAll": "全部接受",
+      "rejectAll": "全部拒绝",
+      "acceptEdit": "接受",
+      "rejectEdit": "拒绝",
+      "editAccepted": "已应用",
+      "editRejected": "已拒绝",
+      "editUnapplicable": "自评估后单元格已更改—未应用",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "评估标准",
+      "severity": {
+        "minor": "轻微",
+        "major": "严重"
+      },
+      "editLocation": "第 {row} 行 · {column}",
+      "editLocationRow": "第 {row} 行（已删除）",
+      "showReview": "显示审核",
+      "showReviewPending": "显示审核（{count} 个待处理）",
+      "assessedFiltered": "筛选的行",
+      "assessedSelection": "选中的行",
+      "assessedSample": "样本：共 {total} 行，显示 {shown} 行",
+      "railAssessRequest": "根据所选标准评估表格质量（{count} 行）。",
+      "railAssessDone": "已提出 {count} 项数据质量修正建议—请在工作区审核。",
+      "insights": "分析",
+      "chartKind": "图表类型",
+      "chartBar": "柱状图（分组）",
+      "chartHistogram": "直方图",
+      "chartLine": "折线图（随时间）",
+      "groupByColumn": "按列分组",
+      "dateColumn": "日期列",
+      "valueColumn": "数值列",
+      "aggFn": "聚合方式",
+      "aggCount": "计数",
+      "aggSum": "求和",
+      "aggMean": "平均值",
+      "chartTruncated": "显示前 {max} 个分组",
+      "chartNoData": "当前行中无可生成图表的值。",
+      "chartBarAria": "按 {column} 分组的柱状图",
+      "chartHistogramAria": "{column} 的直方图",
+      "chartLineAria": "{column} 随时间的折线图",
+      "editStructure": "结构",
+      "defineStructure": "定义结构",
+      "schemaHint": "定义数据结构的字段。导入时必须填写的字段会影响缺失数据策略；更改字段类型会转换现有值（无法转换的单元格会变为空）。",
+      "schemaFieldName": "字段名",
+      "schemaFieldType": "字段类型",
+      "schemaRequired": "必填",
+      "schemaAddField": "添加字段",
+      "schemaDeleteField": "删除字段 {field}",
+      "schemaApply": "应用结构",
+      "schemaCancel": "取消",
+      "schemaEdited": "已编辑表结构",
+      "schemaCellsConverted": "{count} 个单元格无法转换为新类型，现已置空。",
+      "missingFieldPolicy": "缺失数据",
+      "policyStrict": "严格 — 拒绝不完整行",
+      "policyFlag": "标记 — 导入并标注",
+      "policyLenient": "宽松 — 默默导入",
+      "droppedIncompleteRows": "已丢弃 {count} 行缺少必填字段：{fields}",
+      "dismiss": "忽略",
+      "requiredColumn": "必填字段",
+      "flagMissingRequired": "必填字段为空",
+      "flagPendingEdit": "此单元格有待审核的修正建议—参见质量审核",
+      "fromPhoto": "来自照片",
+      "fromPhotoHint": "拍摄纸质表单或表格—内容将转为可比对照片的结构化数据",
+      "readingPhoto": "读取照片中…",
+      "photoBatchName": "{count} 张照片",
+      "railPhotoRequest": "从 {count} 张照片提取结构化数据：{name}",
+      "railPhotoDone": "已从照片添加了 {count} 条记录。在工作区与照片进行核对。",
+      "sourcesLabel": "来源",
+      "openPhotoQc": "与 {name} 对比数据",
+      "qcRowsFromPhoto": "{count} 行",
+      "qcClose": "关闭照片核对",
+      "qcZoomIn": "放大",
+      "qcZoomOut": "缩小",
+      "qcPrevPhoto": "上一张照片",
+      "qcNextPhoto": "下一张照片",
+      "qcImageLoading": "正在加载照片…",
+      "qcImageFailed": "无法加载照片。",
+      "qcImageAlt": "来源照片：{name}",
+      "qcHint": "表格只显示此照片的行 — 请比对每个值，编辑或删除不匹配的行。",
+      "sourceFilterChip": "来自 {name} 的行",
+      "clearSourceFilter": "再次显示所有行",
+      "viewAsRecord": "表单视图",
+      "viewAsTable": "表格视图",
+      "recordEmpty": "暂无记录。",
+      "recordOf": "第 {index} 条记录，共 {count} 条",
+      "recordPrev": "上一条记录",
+      "recordNext": "下一条记录",
+      "recordBooleanUnset": "（空）",
+      "flagsChip": "{count} 个标记",
+      "flagsChipOpenReview": "打开质量审核",
+      "flagsChipMissingOnly": "必填项为空 — 请填写或调整结构",
+      "autoCheck": "自动检测新数据",
+      "autoCheckHint": "从照片或文件提取数据后，自动对新行进行质量检查",
+      "checkingNewRows": "正在检测新添加的行的质量问题…",
+      "ingestCheckFailed": "自动质量检查失败（{message}）— 可使用“评估质量”手动运行。",
+      "assessedIngest": "新添加的行",
+      "transpose": "转置",
+      "transposeAxisColumn": "名称",
+      "transposeSuggestion": "此表格看起来已被转置：行是属性，列是项目。是否翻转为每个项目一行，每个属性为一个类型列？",
+      "transposedTable": "行列转置",
+      "columns": "列",
+      "columnsHidden": "列（已隐藏 {count} 项）",
+      "showAllColumns": "显示全部",
+      "chartScatter": "散点图（x 对 y）",
+      "chartPivot": "数据透视表",
+      "xColumn": "X 列",
+      "yColumn": "Y 列",
+      "splitByColumn": "按列拆分",
+      "splitNone": "不拆分",
+      "pivotValueColumns": "数值列",
+      "aggMin": "最小值",
+      "aggMax": "最大值",
+      "aggMedian": "中位数",
+      "chartSeriesTruncated": "显示前 {max} 个序列",
+      "chartPointsTruncated": "显示 {max} 个采样点",
+      "chartScatterAria": "{x} 与 {y} 的散点图",
+      "pivotTableAria": "按 {column} 分组的数据透视表",
+      "schemaFormula": "公式",
+      "schemaFormulaPlaceholder": "例如 [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "计算字段：以 [名称] 方式引用其他字段；支持 + - * / %、括号，以及 round、abs、min、max。数值会自动更新，无法直接编辑。",
+      "schemaFormulaSyntaxError": "无效公式",
+      "schemaFormulaUnknownRef": "未知字段：{ref}",
+      "schemaFormulaArityError": "{fn} 的参数数量错误",
+      "schemaFormulaCycleError": "公式间存在循环引用",
+      "derivedColumnTitle": "计算列：{formula}",
+      "derivedFrom": "来源于公式 {formula}",
+      "takePhoto": "拍照",
+      "takePhotoHint": "使用摄像头拍摄表格或表单内容—内容会转化为结构化数据以便核对照片。"
+    },
+    "map": {
+      "emptyTitle": "在地图上展示您的数据",
+      "emptyBody": "粘贴态势报告、线列表、会议纪要或任何包含地名的文本，或上传文档。系统将识别并标注地点，并给出置信度评分。可导出数据至 ArcGIS 或其他 GIS 工具。",
+      "inputPlaceholder": "粘贴包含地点名称的文本…",
+      "uploadFile": "上传文件",
+      "pastedSource": "已粘贴文本",
+      "mapIt": "制图",
+      "finding": "正在检索地点…",
+      "featureCount": "{count} 个地点",
+      "featureCapExceeded": "地图最多显示 {max} 个地点。",
+      "noneFound": "未在该材料中发现地点。",
+      "lowConfidenceNotice": "{count} 个地点的坐标置信度较低 — 请在依赖地图前进行核查。",
+      "tilesOffline": "地图瓦片不可用，地点列表仍可使用。",
+      "disclaimer": "坐标由 AI 根据模型知识估算，并非地理编码服务所得 — 请在实际操作前核实。地图瓦片由瓦片服务器加载，您的数据始终保存在本设备。",
+      "flyTo": "在地图上显示 {name}",
+      "removeFeature": "移除 {name}",
+      "expandFeature": "显示 {name} 的完整信息",
+      "collapseFeature": "收起 {name} 的详细信息",
+      "detailsParent": "属于 {parent}",
+      "railRequest": "标注下列内容中的地点：{source}",
+      "railSearchRequest": "搜索网页并标注以下内容的地点：{query}",
+      "railDone": "已标注 {count} 个位置。请在列表中审查低置信度的位置。",
+      "searchToggle": "网页搜索模式",
+      "searchToggleHint": "以网页搜索替代粘贴文本；基础搜索结果将被标注。",
+      "searchPlaceholder": "搜索网页，例如“cholera outbreaks East Africa 2026”等…",
+      "searchAndMap": "搜索并标注",
+      "searching": "搜索中…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "关联类型：{kind}",
+        "unresolved": "{count} 个关联引用了地图上未标注的位置，已跳过。"
+      },
+      "confidence": {
+        "high": "高",
+        "medium": "中",
+        "low": "低"
+      },
+      "prominence": {
+        "primary": "主要位置",
+        "secondary": "辅助位置",
+        "mention": "偶然提及"
+      },
+      "prominenceMentionHint": "资料中仅偶然提及此处——地图上显示较小，且不纳入初始视图。",
+      "dates": {
+        "since": "自 {date}",
+        "range": "{start} – {end}",
+        "ongoing": "进行中"
+      },
+      "filters": {
+        "label": "按类别筛选",
+        "other": "其他",
+        "clear": "清除",
+        "showing": "显示 {shown} / {total} 个位置",
+        "noneMatch": "当前筛选条件下无匹配的位置。"
+      },
+      "dateFilter": {
+        "label": "日期",
+        "from": "起始",
+        "to": "结束",
+        "fromAria": "仅显示此日期及之后的事件",
+        "toAria": "仅显示此日期之前的事件",
+        "clear": "清除日期",
+        "eraChip": "仅显示“{label}”期间的事件"
+      },
+      "timeline": {
+        "toggle": "时间推移",
+        "play": "播放时间推移",
+        "pause": "暂停时间推移",
+        "eras": "时间轴阶段",
+        "jumpTo": "跳转至 {label}",
+        "slider": "时间轴位置",
+        "showUndated": "显示无日期位置",
+        "activeCount": "{count} 个激活",
+        "jump": {
+          "start": "开始",
+          "yearsLater": "{count, plural, one {1年后} other {#年后}}",
+          "monthsLater": "{count, plural, one {1个月后} other {#个月后}}",
+          "daysLater": "{count, plural, one {1天后} other {#天后}}",
+          "appears": "{count, plural, one {出现1次} other {出现#次}}",
+          "ends": "{count, plural, one {结束1次} other {结束#次}}",
+          "progress": "第{index}个日期，共{total}个"
+        },
+        "precision": {
+          "minute": "精确到分钟",
+          "hour": "精确到小时",
+          "day": "精确到天",
+          "month": "精确到月",
+          "year": "精确到年",
+          "mixed": "（混合）"
+        },
+        "pacing": {
+          "toggle": "播放节奏",
+          "cardDuration": "每个地点展示时长",
+          "seconds": "{seconds}秒",
+          "maxCards": "每个日期显示的地点数",
+          "hint": "活动日期较多时会自动延长显示时间。"
+        }
+      },
+      "granularity": {
+        "site": "场所",
+        "city": "城市/城镇",
+        "district": "地区",
+        "region": "区域",
+        "country": "国家"
+      },
+      "granularityAreaHint": "为区域，在其质心周围以大致范围圆表示——非精确位置或边界。",
+      "containerHint": "包含其他已标注位置，因此仅以轮廓显示。",
+      "legend": {
+        "toggle": "图例",
+        "title": "如何解读地图",
+        "color": "颜色：坐标置信度（蓝色高、琥珀色中、红色低）",
+        "size": "点的大小：该地在资料中的重要程度",
+        "area": "虚线圆：表示行政区、地区或国家的大致范围",
+        "container": "浅色轮廓：其中内容单独标注的区域",
+        "precisionHalo": "虚线圈（时间轴播放期间）：事件仅精确到月或年，具体时间不确定"
+      },
+      "sourceLabel": "来源：{name}",
+      "fetchAndMap": "获取并映射",
+      "fetchingPage": "正在获取页面…",
+      "railUrlRequest": "从以下来源获取并映射位置：{title} ({url})"
+    },
+    "shell": {
+      "showConversation": "显示会话",
+      "hideConversation": "隐藏会话",
+      "workspaceTab": "工作区",
+      "conversationTab": "会话",
+      "paneTabsLabel": "工作流面板",
+      "railEmpty": "助手的消息和进度将显示在这里。",
+      "railInputPlaceholder": "向助手发送消息…",
+      "assistantThinking": "思考中…",
+      "sendMessage": "发送消息",
+      "stopGenerating": "停止生成",
+      "loadingWorkspace": "正在加载工作区…",
+      "unknownType": "此会话使用的工作流当前版本无法识别。下方显示会话历史记录。",
+      "untitled": "新会话",
+      "toggleMenu": "切换菜单",
+      "model": "此工作流使用的模型"
+    },
+    "tabs": {
+      "label": "对话模式",
+      "chat": "聊天",
+      "chatDescription": "与助手的标准对话"
+    },
+    "discard": {
+      "title": "要放弃此草稿吗？",
+      "body": "切换到{target}将清除你在{current}中已开始的工作。",
+      "confirm": "放弃"
+    }
+  },
+  "connectors": {
+    "title": "连接器",
+    "description": "通过模型上下文协议（MCP）连接外部工具。已连接的工具可在聊天中被模型调用，每次调用都会经过您的确认后才会运行。",
+    "localOnlyNote": "您直接在每个服务商处登录。访问密钥经过加密，仅存储在本地设备上，并随每次请求通过应用服务器中继——绝不会在服务器存储或记录。",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "搜索仓库，读取及创建问题和拉取请求。"
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "查找、创建和更新任务及项目。"
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "查询已发布的数据源、工作簿和Pulse指标。"
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "查找和更新您的Salesforce对象中的记录。"
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "草拟、安排和发布社交媒体帖子。"
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "查看并回复社交收件箱对话。"
+      }
+    },
+    "connect": "连接",
+    "connected": "已连接",
+    "tokenEndsIn": "以 ••••{last4} 结尾",
+    "disconnect": "断开连接",
+    "toolCount": "{count, plural, =1 {1 个工具可用} other {# 个工具可用}}",
+    "patLabel": "个人访问令牌",
+    "createTokenLink": "创建令牌",
+    "tokenScopeHint": "请使用只授予所需权限的细粒度令牌。",
+    "validating": "正在检查连接…",
+    "validationFailed": "无法连接。请检查地址后重试。",
+    "authFailed": "服务器拒绝了令牌。请检查后重试。",
+    "tokenRequired": "需要令牌",
+    "enableServer": "可在聊天中使用",
+    "arbitraryTitle": "其他 MCP 服务器",
+    "arbitraryToggle": "允许任意 MCP 服务器",
+    "arbitraryWarning": "任何运行 MCP 服务器的人都可以看到发送到其工具的消息。请仅连接您信任的服务器。每次工具调用仍需您的批准。",
+    "addServer": "添加 MCP 服务器",
+    "editServer": "编辑 MCP 服务器",
+    "serverName": "名称",
+    "serverUrl": "服务器 URL",
+    "nameRequired": "名称不能为空",
+    "urlRequired": "URL 不能为空",
+    "invalidUrl": "请输入公开的 https:// 地址",
+    "namePlaceholder": "我的 MCP 服务器",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "访问令牌（可选）",
+    "keepTokenPlaceholder": "留空以保留当前令牌",
+    "disconnectedToast": "{name} 已断开连接",
+    "save": "保存",
+    "connectWithProvider": "通过 {name} 连接",
+    "useTokenInstead": "改用访问令牌",
+    "oauthWaiting": "正在等待授权…",
+    "oauthFailed": "登录失败，请重试。",
+    "oauthDenied": "服务提供方拒绝了访问。",
+    "oauthTimeout": "登录超时，请重试。",
+    "oauthCancelled": "登录已取消。",
+    "oauthUnavailable": "此部署环境下不支持该连接器的登录。请改用访问令牌，或请管理员配置 OAuth 应用。",
+    "ownAppToggle": "使用您自己的 OAuth 应用",
+    "ownAppHint": "在您的 {name} 账户（组织、工作区或企业实例）中注册 OAuth 应用，使用下方回调 URL，然后将其凭据粘贴到此处。如用内置应用可保持关闭。",
+    "ownAppCustomHint": "您也可以在下方填写自己的 OAuth 应用凭据，留空则自动向服务器注册。",
+    "ownAppInUse": "已通过您自己的 OAuth 应用连接。",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "客户端密钥（如有）",
+    "redirectUriLabel": "需注册的回调/重定向 URL",
+    "reconnect": "重新连接",
+    "needsReauth": "需要重新连接",
+    "disconnectOauthNote": "断开连接仅会移除此设备的访问权限。如需彻底撤销访问，请在 {name} 账户中管理已授权应用。",
+    "authModeLabel": "身份验证",
+    "authModeNone": "无",
+    "authModeBearer": "访问令牌",
+    "authModeOauth": "通过服务提供方登录（OAuth）",
+    "oauthCustomHint": "保存后将通过弹出窗口，用服务器提供方账户登录。",
+    "saveAndSignIn": "保存并登录",
+    "oauthCallback": {
+      "title": "授权完成",
+      "missingState": "无授权事项",
+      "close": "您可关闭此窗口并返回应用。",
+      "closeButton": "关闭窗口"
+    },
+    "oauthNoAppConfigured": "当前部署未设置用{name}登录。请通过注册自己的OAuth应用进行连接。",
+    "adminConnectorsTitle": "来自您的组织",
+    "adminConnectorsDescription": "由您的管理员设置的连接器。可见项取决于您的访问权限。",
+    "managedByOrg": "由您的组织管理",
+    "connectorOauthNotConfigured": "此连接器的登录设置尚未完成。请联系管理员。",
+    "yourConnectorsTitle": "您的连接器",
+    "addTitle": "添加连接器",
+    "addDescription": "选择要连接的工具。选择后将进行访问设置。",
+    "add": "添加",
+    "filterLabel": "筛选连接器",
+    "filterPlaceholder": "搜索连接器",
+    "noMatches": "没有与“{query}”匹配的连接器。"
+  },
+  "modelSources": {
+    "connectButtonShort": "连接模型来源",
+    "addAnother": "添加另一个模型来源",
+    "edit": "编辑",
+    "disconnect": "断开 {name}",
+    "disconnectedToast": "已断开 {name}",
+    "modelCountLabel": "{count} 个模型",
+    "loadingModels": "正在加载模型...",
+    "noModelsAvailable": "此来源无可用模型",
+    "sourceUnreachable": "无法访问此来源。您的访问权限可能已更改，或服务暂时不可用。",
+    "retry": "重试",
+    "connectFoundryAccount": "连接 Microsoft Azure Foundry 账户",
+    "connectFoundryDescription": "从您有权限访问的 Azure Foundry 账户中发现模型部署。每次请求都由您的 Azure 权限授权，该应用的模型限制不适用。",
+    "selectModelsDescription": "选择该账户中哪些模型部署将显示在您的模型选择器中。",
+    "editConnection": "编辑连接",
+    "nameLabel": "名称",
+    "namePlaceholder": "例如：我的团队沙箱",
+    "nameRequired": "必须填写来源名称",
+    "foundryAccountLabel": "Foundry 账户",
+    "enterManually": "手动输入",
+    "browseResources": "浏览资源",
+    "subscriptionIdLabel": "订阅 ID",
+    "resourceGroupLabel": "资源组",
+    "accountNameLabel": "账户名称",
+    "subscriptionRequired": "请选择订阅",
+    "accountRequired": "请选择 Foundry 账户",
+    "accountSelectionRequired": "请从列表中选择账户。",
+    "selectAllRequired": "请选择订阅、资源组和账户。",
+    "connectionFailed": "无法访问该账户。请检查信息是否正确并确认您有访问权限。",
+    "duplicateSource": "该账户已作为“{name}”连接。",
+    "connectionSuccessModels": "已连接 —— 找到 {count} 个模型部署",
+    "connectionSuccessEmpty": "已连接，但该账户下未找到模型部署。",
+    "checkingConnection": "正在检查连接...",
+    "next": "下一步",
+    "back": "返回",
+    "cancel": "取消",
+    "connect": "连接",
+    "save": "保存",
+    "scanningResources": "正在扫描您的 Azure 订阅…",
+    "discoveryPartialWarning": "{count, plural, one {# 个订阅} other {# 个订阅}}无法扫描。如您的帐户未显示，请手动输入。",
+    "discoveryTruncatedWarning": "资源数量过多，未能全部扫描。如您的帐户未显示，请手动输入。",
+    "noAccountsDiscovered": "在您的订阅中未找到 Foundry 帐户。如您知道路径，请手动输入。",
+    "retryScan": "重试扫描",
+    "searchAccountsPlaceholder": "搜索帐户…",
+    "modelsSelectedCount": "已选 {selected} 个，共 {total} 个模型",
+    "selectAll": "全选",
+    "deselectAll": "取消全选",
+    "autoAddLabel": "自动添加新模型",
+    "autoAddDescription": "之后添加到该帐户的模型部署将自动显示。未勾选的模型将继续排除。"
+  },
+  "emissions": {
+    "tier": {
+      "low": "较低影响",
+      "moderate": "中等影响",
+      "high": "较高影响"
+    },
+    "tierTooltip": "每个请求的相对能耗影响，依据模型大小估算。数据基于已发布的平均值和假设 v{version}，非实际测量值。",
+    "typicalRequest": "每次典型请求约 ~{grams} g CO₂e",
+    "typicalRequestTooltip": "单次典型请求（约 1,000 个 prompt 和 500 个 completion tokens）的粗略碳排放估算，基于公开平均值和假设 v{version}。实际影响取决于会话长度、设置及托管地区。",
+    "activities": {
+      "netflixHd": "Netflix 高清视频流",
+      "zoomCall": "Zoom 通话（摄像头开）",
+      "webBrowsing": "网页浏览",
+      "spotifyAudio": "Spotify 音频"
+    },
+    "equivalents": {
+      "title": "≈ 相当于同等碳排放",
+      "note": "基于这些服务每小时碳足迹的对比，仅为大致数量级估算，所有数据仅供参考。"
+    },
+    "duration": {
+      "lessThanSecond": "<1 秒",
+      "seconds": "{value} 秒",
+      "minutes": "{value} 分",
+      "hours": "{value} 小时"
+    },
+    "chip": {
+      "label": "{grams} 克 CO₂e",
+      "ariaLabel": "本次对话的估算碳足迹：{grams} 克 CO₂e。显示明细。",
+      "ariaLabelToday": "本日对话的估算碳足迹：{grams} 克 CO₂e。显示明细。",
+      "title": "本次对话（估算值）",
+      "today": "今日",
+      "total": "全部时间",
+      "measured": "来自报告的 token 数量",
+      "estimated": "根据较早消息回算得出",
+      "lastRequest": "上一次请求",
+      "disclaimer": "每次请求的估算基于报告或近似的 token 数量，并使用已发布的平均值和假设 v{version}。较早的消息由存储的文本和当前对话模型回算得出。此数据仅供参考，不代表实际测量。",
+      "visibilityGroup": "排放信息条显示方式",
+      "visibilityLabel": "显示：",
+      "visibility": {
+        "always": "始终",
+        "auto": "自动",
+        "hidden": "隐藏"
+      },
+      "visibilityHint": "自动：在估算更新或鼠标悬停时显示信息条。可在 设置 › 使用与影响 中再次更改。"
+    }
+  },
+  "table": {
+    "copyTable": "复制表格",
+    "downloadTable": "下载表格",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV（.csv）",
+    "exportedAsCsv": "已导出为 CSV",
+    "copyFailed": "复制表格失败"
+  },
+  "backup": {
+    "intro": {
+      "title": "安全备份您的聊天记录",
+      "body": "您的对话会先在本设备上加密，然后再上传。我们无法读取您的聊天内容。",
+      "keyWarning": "恢复密钥在本设备上生成。我们无法看到，也无法为您找回——丢失密钥即丢失备份。",
+      "create": "创建我的密钥并备份",
+      "decline": "暂不备份，仅在本设备保存聊天记录"
+    },
+    "ceremony": {
+      "titleCreate": "请保存您的恢复密钥",
+      "titleRotate": "请保存您的新恢复密钥",
+      "titleView": "您的恢复密钥",
+      "description": "此密钥是唯一能在其他设备上恢复备份的方式。请安全保存——我们无法为您恢复它。",
+      "copy": "复制",
+      "copied": "已复制！",
+      "download": "下载 .txt",
+      "showQr": "显示二维码",
+      "hideQr": "隐藏二维码",
+      "savedCheckbox": "我已安全保存恢复密钥",
+      "saveFirstHint": "请先复制或下载您的密钥，再继续。",
+      "continue": "继续",
+      "done": "完成",
+      "cancel": "取消",
+      "cancelConfirmTitle": "取消备份设置？",
+      "cancelConfirmBody": "您的聊天记录不会被备份。您可随时在设置中启用加密备份。",
+      "cancelConfirmRotateBody": "您的恢复密钥已更改。您可随时在设置中查看。",
+      "cancelConfirmConfirm": "是的，取消",
+      "cancelConfirmDismiss": "返回",
+      "loadError": "无法在本设备上加载您的恢复密钥。"
+    },
+    "file": {
+      "heading": "聊天备份恢复密钥",
+      "warning": "请妥善保管此密钥。拥有密钥的人可以读取您的备份；没有密钥则无法恢复备份。"
+    },
+    "progress": {
+      "titleCreate": "正在设置备份",
+      "titleRotate": "正在更换恢复密钥",
+      "encrypting": "{count, plural, one {正在加密并备份 # 个会话…} other {正在加密并备份 # 个会话…}}",
+      "success": "{count, plural, one {备份完成。# 个会话已受保护。} other {备份完成。# 个会话已受保护。}}",
+      "error": "备份失败。您的聊天记录仍保存在本设备上。",
+      "retry": "重试",
+      "close": "关闭",
+      "done": "完成"
+    },
+    "input": {
+      "label": "恢复密钥",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "密钥不包含字母 O、I 或 L。",
+      "checksumError": "该密钥看起来不正确，请检查是否有拼写错误。",
+      "formatError": "这似乎不是恢复密钥。",
+      "incomplete": "请继续输入 — 恢复密钥共有56位字符。",
+      "valid": "密钥有效。"
+    },
+    "restore": {
+      "title": "恢复您的聊天记录",
+      "successTitle": "备份已恢复",
+      "promptBody": "我们为您的账户找到了加密备份。请输入您的恢复密钥以在此设备上进行恢复。",
+      "submit": "恢复备份",
+      "skip": "跳过 — 在此设备重新开始",
+      "restoring": "正在解密并恢复聊天记录…",
+      "successBody": "{count, plural, one {已恢复 # 个会话。} other {已恢复 # 个会话。}}",
+      "wrongKey": "该密钥有效，但无法解锁此备份。如果您更改了密钥，请使用最新的密钥。",
+      "corrupt": "无法读取该备份，可能已损坏。您可以在此设备重新开始，或稍后重试。",
+      "networkError": "无法连接到备份服务。请检查网络连接并重试。",
+      "tryAgain": "尝试其他密钥",
+      "close": "完成"
+    },
+    "enterKey": {
+      "title": "请输入您的新恢复密钥",
+      "body": "您的恢复密钥已在其他设备更改。在此设备上输入新密钥以继续备份。",
+      "submit": "使用该密钥"
+    },
+    "banner": {
+      "keyMismatchTitle": "备份已暂停 — 恢复密钥已在其他设备更改。",
+      "enterNewKey": "输入新密钥",
+      "resetBackup": "重置备份",
+      "resetConfirmTitle": "要用此设备的密钥重置备份吗？",
+      "resetConfirmBody": "现有备份将被此设备的聊天记录替换，并用此设备的密钥加密。其他设备需要此设备的恢复密钥。",
+      "resetConfirmAction": "重置备份",
+      "remoteMissingTitle": "您的备份已不再存在于服务器上，备份已暂停。",
+      "backUpAgain": "重新备份",
+      "dismiss": "忽略"
+    },
+    "rotate": {
+      "confirmTitle": "要更改恢复密钥吗？",
+      "confirmBody": "您的备份将用新密钥重新加密，旧密钥将失效。请保存新密钥，并在其他设备上输入。",
+      "confirmAction": "更改密钥"
+    },
+    "toast": {
+      "enrollLater": "您可以随时在设置中开启加密备份。",
+      "keyUpdated": "恢复密钥已更新，备份已恢复。",
+      "resetDone": "备份已用此设备的密钥重置。",
+      "backupRestarted": "备份已重新创建。",
+      "opFailed": "出现问题，请重试。"
+    },
+    "settings": {
+      "statusOn": "备份已开启",
+      "statusOff": "备份已关闭",
+      "offDescription": "您的聊天记录仅保存在此浏览器中。开启加密备份可保障安全，并在其他设备上恢复。聊天记录仅在您的设备上加密——我们无法读取内容。",
+      "turnOn": "开启备份",
+      "restoreTitle": "您的账户已存在备份",
+      "restoreDescription": "请输入您的恢复密钥以在此设备上恢复。",
+      "restore": "恢复备份",
+      "lastBackup": "上次备份：{time}",
+      "lastBackupNever": "尚未完成任何备份",
+      "keyFingerprint": "密钥 ····-{tail}",
+      "syncState": {
+        "idle": "等待同步",
+        "syncing": "正在备份…",
+        "ok": "已是最新状态",
+        "keyOutOfDate": "已暂停 — 恢复密钥已在其他设备更改",
+        "remoteMissing": "已暂停 — 备份已从服务器移除",
+        "error": "上次备份尝试失败"
+      },
+      "backUpNow": "立即备份",
+      "backUpNowSuccess": "备份完成",
+      "backUpNowFailure": "备份失败 — 此设备上的对话未更改",
+      "viewKey": "查看恢复密钥",
+      "changeKey": "更改恢复密钥",
+      "dangerTitle": "危险区域",
+      "turnOffDelete": "关闭并删除备份",
+      "turnOffConfirmTitle": "关闭备份？",
+      "turnOffConfirmMessage": "这将从我们服务器上删除所有设备的备份。此设备上的对话不受影响。您可以稍后用新的恢复密钥重新打开备份功能。",
+      "turnOffConfirmAction": "删除备份",
+      "turnOffSuccess": "已关闭并删除备份",
+      "turnOffFailure": "无法删除备份。请重试。"
+    }
+  },
+  "memories": {
+    "title": "记忆",
+    "description": "让助手记住您分享的重要信息——如您的角色、偏好和正在进行的项目，并在对话中加以应用。",
+    "enableToggle": "启用记忆",
+    "privacyNote": "信息仅存储在此浏览器中，并将包含在您的聊天中以个性化回复。",
+    "empty": "暂无记忆。有价值的信息会自动从您的对话中保存。",
+    "savedOn": "已保存 {date}",
+    "deleteMemory": "删除记忆",
+    "clearAll": "清除所有记忆",
+    "clearAllConfirmQuestion": "删除所有记忆？此操作无法撤销。",
+    "clearAllConfirm": "全部删除",
+    "cancel": "取消"
+  },
+  "contextWindow": {
+    "label": "上下文窗口",
+    "value": "{count} 条消息",
+    "fewer": "减少消息",
+    "more": "增加消息",
+    "description": "超出此限制的较早消息将被摘要并作为上下文发送。"
+  },
+  "agentAccess": {
+    "title": "代理访问",
+    "description": "控制哪些用户可以使用共享的 Foundry 代理。规则只会进一步限制用户现有的 Azure 访问权限——不能赋予 Azure 已拒绝的访问权限。",
+    "backToChat": "返回聊天",
+    "loading": "正在加载代理和规则…",
+    "loadError": "无法加载代理访问数据。",
+    "rulesUnavailableWarning": "无法从存储加载访问规则。代理调用当前被阻止，规则无法编辑。",
+    "retry": "重试",
+    "rulesTab": "代理规则",
+    "localAdminsTab": "本地管理员",
+    "noAgents": "无可管理的代理。",
+    "sourceLabel": "来源",
+    "notDiscoverable": "您无法发现",
+    "notDiscoverableHint": "此代理有规则，但未出现在您的发现列表中——可能已被重命名，您的 Azure 访问权限无法访问，或其访问规则未将您包含在内。",
+    "accessEveryone": "所有人",
+    "accessRestricted": "受限",
+    "edit": "编辑",
+    "updatedByLine": "最后由 {user} 于 {date} 更新",
+    "accessTypeLabel": "谁可以使用此代理",
+    "everyoneDescription": "任何已通过其 Azure 访问权限能够访问此代理的人。",
+    "restrictedDescription": "仅限下方列出的用户和域。",
+    "allowDomainsLabel": "允许的域名",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "允许的用户",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "按 Enter 添加",
+    "removeChip": "移除",
+    "groupsLabel": "允许的群组",
+    "groupsPendingConsent": "基于群组的访问正在等待租户管理员同意，目前无法编辑。",
+    "restrictedEmptyWarning": "未列出任何用户或域名——无人可使用该 Agent。",
+    "save": "保存",
+    "saving": "正在保存…",
+    "cancel": "取消",
+    "saveSuccess": "访问规则已保存。",
+    "deleteSuccess": "访问规则已删除——所有人可再次使用该 Agent。",
+    "saveError": "无法保存。请重试。",
+    "conflictError": "编辑期间其他人已做更改。请重新加载以获取最新版本，然后再次修改。",
+    "reload": "重新加载",
+    "localAdminsDescription": "可为特定 Agent 授权规则管理，无需重新部署。本地管理员只能编辑分配给他们的 Agent 规则。",
+    "noLocalAdmins": "尚未配置本地管理员。",
+    "addLocalAdmin": "添加本地管理员",
+    "emailLabel": "邮箱",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "移除本地管理员",
+    "delegatedAgentsLabel": "被授权的 Agent",
+    "noDelegatedAgents": "暂无可授权的 Agent。",
+    "unknownAgentKey": "未知的 Agent 密钥",
+    "configSaveSuccess": "本地管理员已保存。",
+    "configConflictError": "您编辑期间其他人已更改本地管理员列表。请重新加载并重试。",
+    "addAgent": "添加代理",
+    "newPromptAgentTitle": "新建提示代理",
+    "editPromptAgentTitle": "编辑提示代理",
+    "agentNameLabel": "名称",
+    "agentNamePlaceholder": "例如：旅行顾问",
+    "agentDescriptionLabel": "描述",
+    "agentDescriptionPlaceholder": "在模型选择器中显示给用户",
+    "agentSystemPromptLabel": "系统提示词",
+    "agentSystemPromptPlaceholder": "定义此代理行为的说明",
+    "agentModelLabel": "模型",
+    "agentModelPlaceholder": "请选择模型…",
+    "agentModelUnavailable": "{modelId}（不可用）",
+    "agentModelUnknownError": "所选模型已不可用。请选择其他模型并重新保存。",
+    "promptAgentBadge": "提示代理",
+    "editAgent": "编辑代理",
+    "deleteAgent": "删除",
+    "deleteAgentConfirm": "要为所有人删除此代理吗？它会从模型选择器中消失，现有对话将保留历史记录。",
+    "confirmDeleteAgent": "是，删除",
+    "promptAgentCreateSuccess": "提示代理已创建。",
+    "promptAgentSaveSuccess": "提示代理已保存。",
+    "promptAgentDeleteSuccess": "提示代理已删除。",
+    "promptAgentsUnavailableWarning": "无法从存储中加载提示代理，暂时无法编辑。",
+    "agentsTab": "代理",
+    "connectorsTab": "连接器",
+    "addConnector": "添加连接器",
+    "noConnectors": "尚无连接器。",
+    "connectorsUnavailableWarning": "无法连接到连接器商店，此列表可能不完整。加载完成前请勿创建替代项。",
+    "editAccess": "编辑访问权限",
+    "deleteConnector": "删除",
+    "deleteConnectorConfirm": "确定删除此连接器？使用此连接器的用户将立即失去访问权限。",
+    "confirmDeleteConnector": "删除连接器",
+    "connectorSaveSuccess": "连接器已保存。",
+    "connectorCreateSuccess": "连接器已创建。",
+    "connectorDeleteSuccess": "连接器已删除。",
+    "editConnectorTitle": "编辑连接器",
+    "newConnectorTitle": "新建连接器",
+    "connectorPresetLabel": "从模板开始",
+    "connectorPresetNone": "从头开始",
+    "connectorNameLabel": "名称",
+    "connectorDescriptionLabel": "描述",
+    "connectorUrlLabel": "服务器 URL",
+    "connectorUrlPlaceholderWarning": "在保存前将 URL 中的 {placeholder} 替换为您自己的值。",
+    "connectorTransportLabel": "传输方式",
+    "connectorAuthLabel": "认证",
+    "connectorAuthNone": "无",
+    "connectorAuthBearer": "令牌（每位用户自行提供）",
+    "connectorAuthOauth": "OAuth 登录",
+    "connectorSealingUnavailable": "OAuth 不可用：此部署未配置 AUTH_SECRET，无法用于加密客户端密钥。",
+    "connectorTokenHelpLabel": "令牌指南链接（可选）",
+    "connectorClientIdLabel": "OAuth 客户端 ID",
+    "connectorClientSecretLabel": "OAuth 客户端密钥",
+    "connectorClientSecretStored": "密钥已存储。保留为空继续使用现有密钥，或输入新密钥以替换。",
+    "connectorClientSecretHint": "存储前会加密，且不会再次显示。",
+    "connectorScopesLabel": "Scopes（以空格分隔，可选）"
+  },
+  "localModels": {
+    "title": "本地模型",
+    "description": "与运行在此计算机上的模型聊天。消息将直接从浏览器发送到本地应用，不会经过我们的服务器——因此回复、对话标题和摘要都只保留在你的设备上。",
+    "detect": "检测本地运行环境",
+    "detecting": "正在检测…",
+    "experimental": "实验性",
+    "portLabel": "端口",
+    "statusUnknown": "尚未检查。",
+    "statusChecking": "正在检查…",
+    "statusReady": "{count, plural, =0 {已连接，但未加载模型。} one {已连接—#个模型可用。} other {已连接—#个模型可用。}}",
+    "statusNotRunning": "无法连接到{label}。请确认它正在此端口运行，并允许浏览器从本网站访问本地应用。",
+    "statusHttpError": "{label}响应错误。请检查其日志。",
+    "corsHelp": {
+      "ollama": "Ollama 已运行，但拒绝了来自本站点的请求。请将 OLLAMA_ORIGINS 设置为本站点地址，重启 Ollama 后重新检测。",
+      "lmstudio": "LM Studio 已运行，但拒绝了来自本站点的请求。请在其本地服务器设置中开启 CORS，然后重新检测。",
+      "llamacpp": "llama.cpp 已运行，但拒绝了来自本站点的请求。请以允许跨域请求方式启动 llama-server，然后重新检测。"
+    },
+    "privacyNote": "本地模型不支持文件附件、图片、网页搜索或连接器——这些功能需要我们的服务器。检测仅检查此计算机。"
+  },
+  "urlFetch": {
+    "sourceFallback": "网页",
+    "fallbackHint": "您也可以打开页面，复制文本并粘贴到这里。",
+    "shortExtract": "仅能读取部分摘录——网页可能需要付费或登录。",
+    "errors": {
+      "invalidUrl": "该地址不是有效的网址。",
+      "ssrfBlocked": "出于安全原因，无法获取该地址。",
+      "tooManyRedirects": "该链接重定向次数过多。",
+      "timeout": "页面响应超时。",
+      "unreachable": "无法访问该页面。",
+      "blocked": "该网站拒绝了请求——可能需要登录或禁止自动访问。",
+      "notFound": "未找到该页面。",
+      "upstream": "该网站返回了错误。",
+      "pdf": "该链接为 PDF 文件。请下载后使用附件按钮上传。",
+      "nonHtml": "该链接不是可读取的网页。",
+      "tooLarge": "该页面过大，无法获取。",
+      "empty": "该页面未找到可读取的正文内容。",
+      "generic": "无法获取该页面。"
+    },
+    "fetchingFile": "正在获取 {host}…",
+    "attachLink": "附加链接",
+    "attachLinkTitle": "附加网页",
+    "attachLinkDescription": "页面内容会被获取，并可读文本将附加到您的消息中。",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "获取并附加",
+    "attachLinkInvalid": "这似乎不是一个有效的网址。",
+    "linkBadge": "来自链接",
+    "couldNotRetrieve": "无法获取",
+    "doc": {
+      "sourceLabel": "来源",
+      "retrievedLabel": "已获取",
+      "attemptedLabel": "尝试",
+      "failureHeading": "无法获取网页"
+    },
+    "settingsTitle": "消息中的链接",
+    "settingsToggle": "自动获取粘贴的链接内容",
+    "settingsDescription": "当您单独粘贴一个链接时，页面内容会被获取，其文本将附加，以便助手读取。关闭此功能可将粘贴的链接保留为纯文本，您仍可通过 + 菜单手动附加页面。",
+    "addLink": "添加链接"
+  },
+  "cameraAccessError": "无法访问摄像头。请检查您的摄像头权限并重试。",
+  "cameraUnnamedDevice": "摄像头",
+  "pastedText": {
+    "fallbackName": "粘贴文本",
+    "charCount": "{count, number} 个字符",
+    "removeChip": "移除粘贴文本“{name}”",
+    "blockLabel": "粘贴文本：{name}",
+    "doc": {
+      "heading": "粘贴文本",
+      "pastedLabel": "已粘贴"
+    },
+    "settingsTitle": "大段粘贴",
+    "settingsToggle": "将大段粘贴内容转为附件",
+    "settingsDescription": "如果粘贴的文本超过下方限制，将作为文件附件，而不是填充到消息框。文本内容将完全按原样使用——不会被抓取或更改。",
+    "settingsThresholdLabel": "当粘贴内容超过",
+    "settingsThresholdUnit": "字符时附加",
+    "settingsThresholdHint": "在 {min, number} 至 {max, number} 个字符之间。"
+  },
+  "structures": {
+    "section": "结构",
+    "sectionSubtitle": "已保存的字段定义。可用作提取模板，或作为数据工作流表的起始结构。",
+    "loadFromStructure": "加载结构",
+    "loadFromStructureTitle": "用已保存的结构替换这些列",
+    "pickerEmpty": "尚未保存结构。",
+    "pickerTitle": "加载已保存的结构",
+    "saveAsStructure": "另存为结构",
+    "saveAsStructureTitle": "将这些列保存到您的结构库中",
+    "savedToast": "结构“{name}”已保存",
+    "namePlaceholder": "结构名称",
+    "fieldCount": "{count} 个字段",
+    "fieldCountOne": "1 个字段",
+    "downgradedNotice": "{count} 个字段已简化为文本——表格每格仅存一个值：{names}",
+    "truncatedNotice": "{count} 个字段已移除——表格列数上限为 {max}：{names}",
+    "skippedDerivedNotice": "{count} 个计算列未保存——公式使用了本表的列：{names}",
+    "loadReplacesColumns": "这将替换当前列。已有行会保留列名相同的值。"
   }
 }

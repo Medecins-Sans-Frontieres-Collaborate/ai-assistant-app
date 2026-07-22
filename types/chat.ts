@@ -1,5 +1,9 @@
-import { TranscriptMetadata } from '@/lib/utils/app/metadata';
+import {
+  TokenUsageMetadata,
+  TranscriptMetadata,
+} from '@/lib/utils/app/metadata';
 
+import { ExtractionRequest } from './extractionRecipe';
 import { OpenAIModel } from './openai';
 import { Citation } from './rag';
 import { DisplayNamePreference, StreamingSpeedConfig } from './settings';
@@ -61,6 +65,48 @@ export interface ThinkingContent {
   thinking: string;
 }
 
+/**
+ * Result of a structured-data-extraction turn (server-emitted only).
+ *
+ * `datasets` is the parsed JSON output of the strict json_schema call,
+ * one entry per recipe in request-time order. `rows` is the array
+ * returned by the model for that recipe; `fields` mirrors the recipe's
+ * field list so the table renderer can lay out columns without round-
+ * tripping to the client store.
+ *
+ * `proposedSchema` is set only in auto mode — the model invented a
+ * structure for the material and the renderer offers "Save as recipe".
+ */
+export interface ExtractionDataset {
+  recipeId: string;
+  recipeName: string;
+  fields: Array<{
+    name: string;
+    label?: string;
+    type: string;
+    required?: boolean;
+  }>;
+  rows: Array<Record<string, unknown>>;
+  /** Auto-mode only: structure the model proposed. */
+  proposedSchema?: {
+    instructions?: string;
+    fields: Array<{
+      name: string;
+      label?: string;
+      type: string;
+      required?: boolean;
+      description?: string;
+    }>;
+  };
+}
+
+export interface ExtractionResultContent {
+  type: 'extraction_result';
+  datasets: ExtractionDataset[];
+  /** Optional model-emitted note about the extraction (caveats, gaps). */
+  note?: string;
+}
+
 export interface Message extends MessageToolArtifacts {
   /** Stable id for referencing messages (optional until migration runs) */
   id?: string;
@@ -70,7 +116,8 @@ export interface Message extends MessageToolArtifacts {
     | Array<TextMessageContent | FileMessageContent>
     | Array<TextMessageContent | ImageMessageContent>
     | Array<TextMessageContent | FileMessageContent | ImageMessageContent> // Support mixed content (images + files + text)
-    | TextMessageContent;
+    | TextMessageContent
+    | ExtractionResultContent;
   messageType: MessageType | ChatInputSubmitTypes | undefined;
   citations?: Citation[];
   thinking?: string;
@@ -129,6 +176,12 @@ export interface MessageToolArtifacts {
    * card after the stream finalizes and on conversation reload.
    */
   consentRequests?: ConsentRequest[];
+  /**
+   * Real token usage reported by the provider for the request that produced
+   * this turn. Absent on turns from before usage tracking existed — those are
+   * back-calculated from text for emissions estimates (see usageBackfill).
+   */
+  usage?: TokenUsageMetadata;
 }
 
 /**
@@ -140,6 +193,12 @@ export interface ConsentRequest {
   consent_url?: string;
   approval_request_id?: string;
   server_label?: string | null;
+  /**
+   * Native-MCP server id (McpServerConfig.id) for tool-loop approvals; the
+   * client uses it to rebuild `mcpPendingToolCalls` on resume. Absent on
+   * Foundry-agent approvals.
+   */
+  server_id?: string | null;
   tool_name?: string | null;
   tool_arguments?: string | null;
 }
@@ -158,7 +217,8 @@ export interface AssistantMessageVersion extends MessageToolArtifacts {
     | Array<TextMessageContent | FileMessageContent>
     | Array<TextMessageContent | ImageMessageContent>
     | Array<TextMessageContent | FileMessageContent | ImageMessageContent>
-    | TextMessageContent;
+    | TextMessageContent
+    | ExtractionResultContent;
   messageType: MessageType | ChatInputSubmitTypes | undefined;
   citations?: Citation[];
   thinking?: string;
@@ -225,6 +285,12 @@ export interface ChatBody {
   reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high'; // For GPT-5 and o3 models
   verbosity?: 'low' | 'medium' | 'high'; // For GPT-5 models
   forcedAgentType?: string; // Force routing to specific agent type (e.g., 'web_search')
+  /**
+   * Which region's hosted instance this conversation chats with
+   * (cross-region routing). Client preference only: the server forces EU
+   * users to EU regardless (resolveChatRegion).
+   */
+  hostedRegion?: 'US' | 'EU';
   isEditorOpen?: boolean; // Indicates if code editor is currently open
   tone?: Tone; // Full tone object (if tone is selected)
   streamingSpeed?: StreamingSpeedConfig; // Smooth streaming speed configuration
@@ -252,12 +318,52 @@ export interface ChatBody {
    */
   agentSourcePath?: string;
   /**
+   * ARM resource path of the user-added Foundry account a custom-source
+   * (`byom-`) model belongs to. Same trust model as `agentSourcePath`: the
+   * server re-validates the path, strips it to the account, and re-resolves
+   * the deployment under the user's own ARM OBO token before any routing.
+   */
+  modelSourcePath?: string;
+  /**
    * MCP tool-approval responses to submit alongside (or in lieu of) a new
    * user message. When this is non-empty the server skips creating a new
    * user-message conversation item and instead posts `mcp_approval_response`
    * items, then resumes the agent's response stream. See AIFoundryAgentHandler.
    */
   approvalResponses?: ApprovalResponse[];
+  /**
+   * MCP servers whose tools the model may call this turn (native MCP tool
+   * loop in the direct SDK paths — NOT the Foundry agent path). Assembled
+   * client-side from the Connectors settings. Curated entries carry a
+   * catalogKey and the server ignores any client-sent url for them.
+   */
+  mcpServers?: import('./mcp').McpServerRequestEntry[];
+  /**
+   * Tool calls the model requested last round, echoed back with the user's
+   * approvalResponses so the stateless server can reconstruct the transcript
+   * and execute approved calls. Built from persisted consent requests.
+   */
+  mcpPendingToolCalls?: import('./mcp').McpPendingToolCall[];
+  /** 0-based MCP tool-loop round counter; the server caps it (see loop). */
+  mcpLoopRound?: number;
+  /**
+   * Structured data extraction payload. Up to 3 recipes; the chat pipeline
+   * picks this up via `ExtractionEnricher` and issues a strict JSON-schema
+   * call (`StandardChatHandler` honours `context.responseFormat`).
+   */
+  extraction?: ExtractionRequest;
+  /**
+   * Best-effort summary of earlier messages dropped by client-side context
+   * windowing (conversation compaction). Rendered into the system prompt
+   * server-side. Cap 8,000 chars (enforced in InputValidator).
+   */
+  conversationSummary?: string;
+  /**
+   * Long-term user memory snippets (Memories feature, LD-gated client-side).
+   * Rendered into the system prompt server-side. Caps: 60 items x 600 chars
+   * (enforced in InputValidator).
+   */
+  memories?: string[];
 }
 
 /**
@@ -285,6 +391,13 @@ export interface Conversation {
   reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high'; // For GPT-5 and o3 models
   verbosity?: 'low' | 'medium' | 'high'; // For GPT-5 models
   defaultSearchMode?: import('./searchMode').SearchMode; // Default search mode for this conversation
+  /**
+   * Which region's hosted instance this conversation chats with. Set from
+   * the details panel (US users, dually-hosted models) or implicitly when a
+   * US user selects an EU-only model. EU users never carry a US value — the
+   * server forces EU regardless.
+   */
+  hostedRegion?: 'US' | 'EU';
   // Active file context (optional; initialized via migration)
   activeFiles?: ActiveFile[];
   activeFilesTokenBudget?: number;
@@ -301,6 +414,37 @@ export interface Conversation {
    * without surfacing a card. Set via "Always approve all tools".
    */
   alwaysApproveAllTools?: boolean;
+  /**
+   * True when `name` was produced by auto-titling rather than typed by the
+   * user. Auto-namers may upgrade an auto-generated name (a truncation
+   * being replaced by a written title, a workflow's first upload being
+   * replaced by the document's own heading) but must never overwrite a name
+   * the user chose. Absent is treated as user-set, so conversations named
+   * before this field existed are left alone.
+   */
+  nameAutoGenerated?: boolean;
+  /**
+   * Workflow specialization. Absent = normal chat. Settable while the
+   * conversation is still empty (WorkflowTabs lets the user switch modes);
+   * the first message settles it, after which conversationStore strips
+   * attempts to mutate it.
+   */
+  conversationType?: import('./workflow').ConversationWorkflowType;
+  /**
+   * Workflow-specific persisted state; its `kind` must match
+   * `conversationType`. Write via conversationStore.updateWorkflowState only.
+   */
+  workflowState?: import('./workflow').WorkflowState;
+  /**
+   * Conversation compaction state. `summary` covers entries
+   * `1..upToEntryIndex-1` (exclusive index; entry 0 is always sent verbatim).
+   * Entry indices map 1:1 to flattened message indices.
+   */
+  compaction?: {
+    summary: string;
+    upToEntryIndex: number;
+    updatedAt: string;
+  };
 }
 
 export type FileFieldValue =
@@ -363,6 +507,20 @@ export interface FilePreview {
     originalSize: number;
     extractedSize: number;
   };
+  /**
+   * Set when this attachment came from a pasted or entered link rather than a
+   * picked file. Drives the link badge on the tile.
+   */
+  sourceUrl?: string;
+  /**
+   * Localized reason the page behind `sourceUrl` could not be retrieved.
+   *
+   * The attachment is still valid and still sent — its content is a document
+   * explaining this failure — so `status` stays `completed` and submission is
+   * never blocked. This field exists purely to mark the tile, and must not be
+   * conflated with `status: 'failed'`, which means the *upload* itself broke.
+   */
+  sourceError?: string;
 }
 
 // Tool Router Types

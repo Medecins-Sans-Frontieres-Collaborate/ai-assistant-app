@@ -107,7 +107,9 @@ export class HealthCheckService {
             'azureOpenAI',
             'azureSearch',
             'azureBlobStorage',
+            'azureBlobStorageEU',
             'azureSpeechWhisper',
+            'ffmpeg',
           ];
 
     // Run all checks in parallel with timeouts
@@ -223,10 +225,53 @@ export class HealthCheckService {
         return this.checkAzureSearch();
       case 'azureBlobStorage':
         return this.checkAzureBlobStorage();
+      case 'azureBlobStorageEU':
+        return this.checkAzureBlobStorageEU();
       case 'azureSpeechWhisper':
         return this.checkAzureSpeechWhisper();
+      case 'ffmpeg':
+        return this.checkFfmpeg();
       default:
         return { status: 'skip', message: 'unknown service' };
+    }
+  }
+
+  /**
+   * Checks that a working FFmpeg binary is available on the server.
+   *
+   * Transcription depends on it for every non-Whisper-native format: video
+   * containers (mkv/mov/m4v/…), compressed audio (ogg/flac/aac/opus), the
+   * chunked splitter for >25MB files, and notably Firefox voice capture
+   * (whose MediaRecorder produces audio/ogg, transcoded server-side). A
+   * missing/broken binary silently degrades all of those — this makes it an
+   * observable deep-check failure instead. Dynamic import because the
+   * extractor module resolves binary paths (execSync) at load time.
+   */
+  private async checkFfmpeg(): Promise<ServiceCheck> {
+    const startTime = Date.now();
+
+    try {
+      const { isFFmpegAvailable } =
+        await import('@/lib/utils/server/audio/audioExtractor');
+      const available = await isFFmpegAvailable();
+      const latencyMs = Date.now() - startTime;
+
+      if (available) {
+        return { status: 'pass', latencyMs };
+      }
+      return {
+        status: 'fail',
+        latencyMs,
+        message:
+          'FFmpeg binary not found or not functional (set FFMPEG_BIN or install ffmpeg-static)',
+      };
+    } catch (error) {
+      const latencyMs = Date.now() - startTime;
+      return {
+        status: 'fail',
+        latencyMs,
+        message: error instanceof Error ? error.message : 'unknown error',
+      };
     }
   }
 
@@ -313,11 +358,42 @@ export class HealthCheckService {
    * Uses containerClient.exists() for a lightweight check.
    */
   private async checkAzureBlobStorage(): Promise<ServiceCheck> {
-    const startTime = Date.now();
-    const storageAccountName = env.AZURE_BLOB_STORAGE_NAME;
-    const containerName =
+    return this.checkBlobAccount(
+      env.AZURE_BLOB_STORAGE_NAME,
       env.AZURE_BLOB_STORAGE_CONTAINER ||
-      env.AZURE_BLOB_STORAGE_IMAGE_CONTAINER;
+        env.AZURE_BLOB_STORAGE_IMAGE_CONTAINER,
+    );
+  }
+
+  /**
+   * Checks the EU regional blob storage account (`AZURE_BLOB_STORAGE_NAME_EU`).
+   *
+   * EU users' uploads are routed to this account; it lives in a different
+   * region than the app's VNet and is reachable only via a private endpoint.
+   * A half-applied infra change (missing private endpoint / firewall rule /
+   * RBAC) makes it unreachable and surfaces to users as upload 500s — this
+   * check turns that into an observable readiness failure instead. Skips
+   * cleanly when no EU account is configured (single-region deployments).
+   */
+  private async checkAzureBlobStorageEU(): Promise<ServiceCheck> {
+    return this.checkBlobAccount(
+      env.AZURE_BLOB_STORAGE_NAME_EU,
+      env.AZURE_BLOB_STORAGE_CONTAINER ||
+        env.AZURE_BLOB_STORAGE_IMAGE_CONTAINER,
+    );
+  }
+
+  /**
+   * Verifies a blob storage account is reachable and authorized by doing a
+   * lightweight `containerClient.exists()` against it with managed identity —
+   * the same credential and code path the upload route uses, so a firewall or
+   * RBAC problem shows up here exactly as it would on a real upload.
+   */
+  private async checkBlobAccount(
+    storageAccountName: string | undefined,
+    containerName: string | undefined,
+  ): Promise<ServiceCheck> {
+    const startTime = Date.now();
 
     if (!storageAccountName) {
       return { status: 'skip', message: 'storage account not configured' };

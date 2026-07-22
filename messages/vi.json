@@ -432,7 +432,22 @@
     "noProjectsFound": "Không tìm thấy dự án nào. Đang sử dụng \"default\".",
     "selectAllRequired": "Chọn đăng ký, tài khoản và dự án.",
     "subscriptionRequired": "Chọn một gói đăng ký",
-    "accountRequired": "Chọn tài khoản Foundry"
+    "accountRequired": "Chọn tài khoản Foundry",
+    "projectSelectionRequired": "Chọn một dự án từ danh sách.",
+    "scanningResources": "Đang quét các đăng ký Azure của bạn...",
+    "searchProjectsPlaceholder": "Tìm kiếm dự án...",
+    "noProjectsDiscovered": "Không tìm thấy dự án Foundry nào trong đăng ký của bạn. Vui lòng nhập thủ công nếu bạn biết đường dẫn.",
+    "discoveryPartialWarning": "Không quét được {count, plural, one {# đăng ký} other {# đăng ký}}. Vui lòng nhập thủ công nếu dự án của bạn không có.",
+    "discoveryTruncatedWarning": "Có quá nhiều tài nguyên để quét hoàn toàn. Vui lòng nhập thủ công nếu dự án của bạn không có.",
+    "retryScan": "Quét lại",
+    "next": "Tiếp",
+    "back": "Quay lại",
+    "selectAgentsDescription": "Chọn các agent từ dự án này để hiển thị trong bộ chọn mô hình.",
+    "selectAll": "Chọn tất cả",
+    "deselectAll": "Bỏ chọn tất cả",
+    "agentsSelectedCount": "Đã chọn {selected} trên tổng {total} agent",
+    "autoAddLabel": "Tự động thêm agent mới",
+    "autoAddDescription": "Các agent được xuất bản sau vào dự án này sẽ tự động xuất hiện. Các agent không được chọn sẽ tiếp tục bị loại trừ."
   },
   "Quick Actions": "Thao tác nhanh",
   "Type / in chat to access your prompts": "Gõ / trong trò chuyện để truy cập lời nhắc của bạn",
@@ -761,7 +776,19 @@
       "listingTools": "Đang kiểm tra công cụ khả dụng…",
       "analyzingFiles": "Đang phân tích tập tin của bạn…",
       "searchingKnowledge": "Đang tìm kiếm trong kho tri thức…",
-      "cancellingPriorTool": "Đang hủy yêu cầu công cụ trước đó…"
+      "cancellingPriorTool": "Đang hủy yêu cầu công cụ trước đó…",
+      "workflow": {
+        "preparingDocument": "Đang chuẩn bị tài liệu tham khảo…",
+        "writingDocument": "Đang soạn tài liệu…",
+        "analyzingSource": "Đang phân tích văn bản nguồn…",
+        "translating": "Đang dịch…",
+        "reviewingTranslation": "Vòng duyệt {round} trên {total}…",
+        "revisingTranslation": "Đang áp dụng góp ý duyệt…",
+        "extractingRows": "Đang tách dòng từ {source}…",
+        "transformingTable": "Đang chuyển đổi bảng…",
+        "findingLocations": "Đang xác định vị trí…",
+        "updatingMap": "Đang cập nhật bản đồ…"
+      }
     },
     "toolSummary": {
       "usedTools": "Đã sử dụng {count, plural, one {# công cụ} other {# công cụ}}",
@@ -822,7 +849,9 @@
     "listen": "Nghe",
     "processingAudio": "Đang xử lý âm thanh...",
     "ttsError": "Lỗi tạo âm thanh. Vui lòng thử lại.",
-    "unsupportedMessageType": "Lỗi hiển thị tin nhắn: Loại tin nhắn không được hỗ trợ"
+    "unsupportedMessageType": "Lỗi hiển thị tin nhắn: Loại tin nhắn không được hỗ trợ",
+    "addLanguageOption": "Thêm \"{name}\"…",
+    "sources": "Nguồn"
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",
@@ -1147,9 +1176,27 @@
     "behaviorSection": "Hành vi",
     "resetChatSettings": "Đặt lại cài đặt trò chuyện",
     "resetChatSettingsConfirmTitle": "Đặt lại cài đặt trò chuyện?",
-    "resetChatSettingsConfirmMessage": "Thao tác này sẽ khôi phục tất cả mặc định trong bảng này: nhiệt độ, hướng dẫn tùy chỉnh, Thông tin về bạn, phản hồi của mô hình, tốc độ truyền, chuyển văn bản thành giọng nói, tệp đang sử dụng và xác nhận. Nội dung cuộc trò chuyện của bạn sẽ không bị ảnh hưởng.",
+    "resetChatSettingsConfirmMessage": "Thao tác này sẽ khôi phục tất cả giá trị mặc định cho bảng này: nhiệt độ, hướng dẫn tùy chỉnh, Thông tin cá nhân, phản hồi mô hình, tốc độ truyền phát, chuyển văn bản thành giọng nói, các tệp đang dùng và xác nhận. Các cuộc trò chuyện của bạn sẽ không bị ảnh hưởng.",
     "customInstructionsLabel": "Hướng dẫn tùy chỉnh*",
-    "defaultTemperatureLabel": "Nhiệt độ mặc định*"
+    "defaultTemperatureLabel": "Nhiệt độ mặc định*",
+    "Usage & Impact": "Sử dụng & Tác động",
+    "Connectors": "Kết nối",
+    "Backup": "Sao lưu",
+    "Memories": "Kỷ niệm",
+    "Agent Access": "Quyền truy cập Agent",
+    "LocalModels": "Mô hình cục bộ",
+    "suggestRevisions": {
+      "title": "Sửa đổi tài liệu",
+      "toggle": "Đề xuất chỉnh sửa thay vì áp dụng trực tiếp",
+      "description": "Khi bạn yêu cầu quy trình làm việc Tài liệu sửa đổi, các thay đổi sẽ được gửi dưới dạng các đề xuất riêng lẻ mà bạn có thể chấp nhận hoặc từ chối, giống như các đánh giá chất lượng.",
+      "exceptionsTitle": "Vẫn áp dụng trực tiếp khi:",
+      "exceptionSelection": "Sửa phần đã chọn mà bạn đã tô sáng",
+      "exceptionLargeRewrite": "Việc viết lại thay đổi phần lớn tài liệu",
+      "exceptionReorder": "Các phần được di chuyển chứ không phải chỉnh sửa",
+      "thresholdLabel": "Xem như viết lại nếu vượt",
+      "thresholdUnit": "% tài liệu bị thay đổi",
+      "exceptionSelectionAlways": "Việc chỉnh sửa một đoạn được đánh dấu luôn được áp dụng trực tiếp — mô hình chỉ trả về phần trích dẫn đã chỉnh sửa, không thể tách thành các đề xuất so với toàn bộ tài liệu."
+    }
   },
   "notFound": {
     "lostDog": "Chó bị lạc"
@@ -1427,33 +1474,78 @@
     },
     "title": "Chọn một mô hình",
     "modelsDescription": "Chọn một mô hình AI cho cuộc trò chuyện của bạn. Mỗi mô hình có điểm mạnh riêng — chọn để xem chi tiết.",
-    "recommended": "Đề xuất"
+    "recommended": "Đề xuất",
+    "familyAll": "Tất cả",
+    "familyFilterLabel": "Lọc mô hình theo nhóm",
+    "searchPlaceholder": "Tìm kiếm mô hình",
+    "searchEmpty": "Không có mô hình nào phù hợp với tìm kiếm của bạn.",
+    "star": "Đánh dấu {name}",
+    "unstar": "Bỏ đánh dấu {name}",
+    "otherFamily": "Khác",
+    "hostedExternally": "Chạy trên hạ tầng riêng của nhà cung cấp thông qua Azure AI Foundry, không nằm trong môi trường Azure của MSF.",
+    "hostedIn": {
+      "label": "Được lưu trữ tại {regions}",
+      "tooltip": "Khu vực Azure nơi mô hình này được triển khai. Các cuộc hội thoại sẽ được xử lý tại khu vực của bạn."
+    },
+    "badges": {
+      "external": "Bên ngoài",
+      "externalTooltip": "Chạy trên hạ tầng riêng của nhà cung cấp thông qua Azure AI Foundry, không nằm trong môi trường Azure của MSF.",
+      "regionHostedTooltip": "Lưu trữ tại khu vực Azure {region}. Các hội thoại với mô hình này sẽ được xử lý tại đó."
+    },
+    "favorites": "Yêu thích",
+    "euResidencyNote": "Tất cả mô hình đều chạy tại khu vực Azure EU.",
+    "hostedRegion": {
+      "label": "Khu vực lưu trữ",
+      "processedIn": "Cuộc hội thoại này được xử lý tại khu vực Azure {region}.",
+      "euOnlyNote": "{name} được lưu trữ tại khu vực Azure EU; các cuộc hội thoại với mô hình sẽ được xử lý tại đó."
+    },
+    "version": {
+      "label": "Phiên bản"
+    },
+    "reasoningModel": "Mô hình suy luận: suy nghĩ từng bước trước khi trả lời. Chậm hơn, xử lý tốt hơn các vấn đề khó.",
+    "variant": {
+      "label": "Biến thể"
+    },
+    "deployment": {
+      "title": "Triển khai",
+      "source": "Nguồn",
+      "account": "Tài khoản",
+      "location": "Vị trí",
+      "deployment": "Triển khai",
+      "modelVersion": "Phiên bản mô hình",
+      "publisher": "Nhà phát hành"
+    }
   },
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Mô hình AI dựa trên GPT-4.1 với khả năng tìm kiếm web thực tế qua Bing. Cung cấp thông tin cập nhật, kiểm tra sự thật và nhận biết sự kiện hiện tại. Phù hợp nhất cho nghiên cứu cần thông tin mới, phân tích tin tức và xác minh thực tế.",
-      "knowledgeCutoff": "Tìm kiếm web thời gian thực"
+      "knowledgeCutoff": "Tìm kiếm web thời gian thực",
+      "tagline": "Thế hệ trước của OpenAI"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "Mô hình tiến tiến nhất của OpenAI, vượt trội về lý luận phức tạp, sinh mã và giải quyết vấn đề kỹ thuật. Tốt nhất cho các tác vụ phân tích, thử thách lập trình, nghiên cứu và giải thích chi tiết. Hỗ trợ điều chỉnh mức độ lý luận và độ dài phản hồi.",
-      "knowledgeCutoff": "6 Thg 8, 2025 8:00 PM"
+      "knowledgeCutoff": "6 Thg 8, 2025 8:00 PM",
+      "tagline": "GPT đầu bảng trước đây"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Biến thể của GPT-5 nhanh hơn và tiết kiệm chi phí hơn, tối ưu cho tốc độ nhưng vẫn đảm bảo chất lượng cao. Phù hợp cho các tác vụ hàng ngày, truy vấn nhanh, định tuyến công cụ và ứng dụng cần phản hồi nhanh. Cân bằng tuyệt vời giữa hiệu suất và hiệu quả.",
-      "knowledgeCutoff": "6 Thg 8, 2025 8:00 PM"
+      "knowledgeCutoff": "6 Thg 8, 2025 8:00 PM",
+      "tagline": "Nhanh hơn, chi phí thấp hơn"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "Biến thể chuyên biệt của GPT-5 tối ưu cho tương tác hội thoại và trí tuệ cảm xúc. Xuất sắc trong giao tiếp giàu cảm thông, hỗ trợ sức khỏe tâm thần, viết sáng tạo, động não và đối thoại tự nhiên. Phù hợp nhất cho trò chuyện thông thường, tư vấn và các nhiệm vụ cần nhận diện cảm xúc.",
-      "knowledgeCutoff": "1 Thg 10, 2025 8:00 PM"
+      "knowledgeCutoff": "1 Thg 10, 2025 8:00 PM",
+      "tagline": "GPT hội thoại trước đây"
     },
     "o3": {
       "name": "o3",
       "description": "Mô hình lý luận tiên tiến nhất của OpenAI với khả năng giải quyết vấn đề vượt trội. Vượt trội trong toán học phức tạp, lý luận khoa học, thử thách lập trình và các tác vụ logic đa bước. Hỗ trợ cửa sổ ngữ cảnh mở rộng 200K. Có thể điều chỉnh nỗ lực lý luận.",
-      "knowledgeCutoff": "8 Thg 4, 2025 8:00 PM"
+      "knowledgeCutoff": "8 Thg 4, 2025 8:00 PM",
+      "tagline": "Lý luận tuần tự chuyên sâu"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1463,57 +1555,258 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Chuyên gia lý luận với khả năng trình bày từng bước giải quyết. Tuyệt vời cho các bài toán, câu đố logic và hiểu các khái niệm phức tạp. Theo dõi quá trình suy nghĩ thời gian thực.",
-      "knowledgeCutoff": "20 Thg 1, 2025"
+      "knowledgeCutoff": "20 Thg 1, 2025",
+      "tagline": "Hiển thị từng bước lý luận"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Mô hình đa năng mạnh mẽ, đặc biệt xuất sắc trong lập trình và viết tài liệu kỹ thuật. Tuyệt vời trong sửa lỗi, viết tài liệu và giải thích các khái niệm kỹ thuật. Nhanh và đáng tin cậy cho công việc phát triển.",
-      "knowledgeCutoff": "16 Thg 4, 2025 12:45 AM"
+      "knowledgeCutoff": "16 Thg 4, 2025 12:45 AM",
+      "tagline": "Giải pháp mã nguồn mở"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Mô hình đa năng của xAI nổi bật với phản hồi tinh tế. Phù hợp cho thảo luận mở, dự án sáng tạo và giải quyết vấn đề phức tạp.",
-      "knowledgeCutoff": "13 Thg 5, 2025 12:16 AM"
+      "knowledgeCutoff": "13 Thg 5, 2025 12:16 AM",
+      "tagline": "Giải pháp thay thế xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Mô hình mạnh nhất của Anthropic với lý luận, lập trình và sáng tạo xuất sắc. Lý tưởng cho phân tích phức tạp, nghiên cứu và các nhiệm vụ yêu cầu hiểu biết sâu.",
-      "knowledgeCutoff": "Tháng 1, 2025"
+      "knowledgeCutoff": "Tháng 1, 2025",
+      "tagline": "Thế hệ Opus trước đây"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Mô hình Claude cân bằng, hiệu suất vượt trội trong lập trình, phân tích và sáng tạo. Phù hợp cho nhu cầu sử dụng hằng ngày với thời gian phản hồi nhanh.",
-      "knowledgeCutoff": "Tháng 1, 2025"
+      "knowledgeCutoff": "Tháng 1, 2025",
+      "tagline": "Sonnet thế hệ trước"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Phiên bản trước của mô hình Claude Opus. Xuất sắc cho các tác vụ lập trình phức tạp, phân tích chi tiết và hiểu biết sâu sắc.",
-      "knowledgeCutoff": "Tháng 1 năm 2025"
+      "knowledgeCutoff": "Tháng 1 năm 2025",
+      "tagline": "Opus thế hệ trước"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Mô hình Claude nhanh và tiết kiệm, tối ưu cho các tác vụ nhanh. Phù hợp với câu hỏi đơn giản, tóm tắt và các ứng dụng số lượng lớn.",
-      "knowledgeCutoff": "Tháng 1 năm 2025"
+      "knowledgeCutoff": "Tháng 1 năm 2025",
+      "tagline": "Claude phiên bản nhanh"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Mô hình tiên tiến nhất của OpenAI, vượt trội về lập luận phức tạp, tạo mã và giải quyết các vấn đề kỹ thuật. Phù hợp nhất cho các tác vụ phân tích, thử thách lập trình, nghiên cứu và giải thích chi tiết. Hỗ trợ điều chỉnh mức độ lập luận và độ dài phản hồi.",
-      "knowledgeCutoff": "Tháng 12/2025"
+      "knowledgeCutoff": "Tháng 12/2025",
+      "tagline": "Lập trình, phân tích, nghiên cứu"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "description": "Biến thể chuyên biệt của GPT-5.2 được tối ưu cho tương tác hội thoại và trí tuệ cảm xúc. Vượt trội về giao tiếp đồng cảm, hỗ trợ sức khỏe tinh thần, sáng tác sáng tạo, động não và đối thoại tự nhiên. Phù hợp cho trò chuyện thân mật, tư vấn và các nhiệm vụ cần sự nhận biết cảm xúc.",
-      "knowledgeCutoff": "Tháng 12/2025"
+      "knowledgeCutoff": "Tháng 12/2025",
+      "tagline": "Đối thoại, động não"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Mô hình mạnh nhất của Anthropic. Thích hợp cho viết dài, nghiên cứu, và các tác vụ cần tư duy cẩn thận.",
-      "knowledgeCutoff": "Tháng 2/2026"
+      "knowledgeCutoff": "Tháng 2/2026",
+      "tagline": "Viết dài và phân tích chuyên sâu"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Mô hình Claude cân bằng. Phù hợp cho viết hằng ngày, phân tích và lập trình với phản hồi nhanh.",
-      "knowledgeCutoff": "Tháng 2/2026"
+      "knowledgeCutoff": "Tháng 2/2026",
+      "tagline": "Claude cân bằng cho mọi ngày"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Model mã nguồn mở từ Meta. Hiệu quả cho viết lách, tóm tắt và câu hỏi nhanh.",
+      "tagline": "Giải pháp mã nguồn mở"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Model mới nhất của OpenAI. Mạnh về viết lách, nghiên cứu, lập trình và giải quyết vấn đề phức tạp.",
+      "tagline": "GPT đầu bảng mới nhất"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Biến thể GPT nhỏ nhất và nhanh nhất. Tốt nhất cho các tác vụ nhanh, đơn giản với chi phí tối thiểu.",
+      "tagline": "GPT nhỏ nhất và nhanh nhất"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Biến thể GPT cho hội thoại, tối ưu cho đối thoại. Phù hợp trò chuyện, lên ý tưởng và thảo luận hỗ trợ.",
+      "tagline": "GPT hội thoại mới hơn"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "GPT đa phương thức phiên bản cũ hơn. Phù hợp viết lách hàng ngày và hỏi đáp khi không cần tính năng mới nhất.",
+      "tagline": "GPT đa phương thức cũ hơn"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Biến thể nhỏ hơn, nhanh hơn của GPT-4.1 cho các công việc hàng ngày.",
+      "tagline": "GPT thế hệ trước nhẹ"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Model mới và mạnh nhất của Anthropic. Xuất sắc cho viết dài, nghiên cứu, lập trình và phân tích chuyên sâu.",
+      "tagline": "Claude mới nhất và mạnh nhất"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Model mã nguồn mở mới nhất của DeepSeek. Đáng tin cậy cho viết lách chung và câu hỏi kỹ thuật.",
+      "tagline": "Giải pháp mã nguồn mở"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Model hàng đầu của Mistral. Lựa chọn châu Âu cho viết lách, tóm tắt, và các câu hỏi chung.",
+      "tagline": "Mô hình mở châu Âu"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Phiên bản trước của GPT-5 hàng đầu. Vẫn mạnh về viết lách, phân tích và lập trình.",
+      "tagline": "GPT-5 đầu bảng trước đây"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Biến thể hội thoại của GPT-5 trước đó. Thích hợp cho hội thoại hàng ngày và lên ý tưởng.",
+      "tagline": "GPT hội thoại trước đó"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Biến thể nhỏ nhất của GPT-5. Phù hợp cho các tác vụ nhanh, đơn giản với chi phí tối thiểu.",
+      "tagline": "GPT thế hệ trước siêu nhỏ"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Biến thể nhỏ nhất của GPT-4.1. Phù hợp cho các tác vụ nhanh, đơn giản, ưu tiên tốc độ và chi phí.",
+      "tagline": "GPT thế hệ trước nhỏ nhất"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Biến thể nhỏ, nhanh của GPT-4o. Phù hợp cho các tác vụ nhanh hàng ngày khi không cần tính năng mới nhất.",
+      "tagline": "GPT đa phương thức cũ phiên bản nhẹ"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Model suy luận gọn nhẹ. Tốt cho toán học, logic, và giải từng bước với chi phí thấp hơn o3.",
+      "tagline": "Lý luận nhanh, giá hợp lý"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Model suy luận gọn nhẹ phiên bản trước. Xử lý toán học, khoa học và câu đố logic với ngân sách tiết kiệm.",
+      "tagline": "Lý luận tuần tự tinh gọn"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Model thông minh nhất của Anthropic, là phiên bản đầu tiên của dòng Claude 5. Xuất sắc cho các tác vụ viết, nghiên cứu, và lập trình khó nhất.",
+      "tagline": "Mô hình tiên phong của Anthropic"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Phiên bản Claude cân bằng mới nhất, đầu tiên của dòng Claude 5. Mạnh về viết lách, phân tích, lập trình hàng ngày với tốc độ phản hồi nhanh.",
+      "tagline": "Claude cân bằng mới nhất"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Model tầm trung của Mistral. Lựa chọn châu Âu cân bằng giữa khả năng và tốc độ cho công việc hàng ngày.",
+      "tagline": "Mô hình châu Âu cân bằng"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Model nhỏ của Mistral. Nhanh và tiết kiệm cho tóm tắt, bản nháp và câu hỏi đơn giản.",
+      "tagline": "Mô hình châu Âu nhỏ, nhanh"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Model siêu nhỏ của Mistral. Tốt nhất cho tác vụ cực nhanh, đơn giản với chi phí tối thiểu.",
+      "tagline": "Mistral cỡ nhỏ cho biên"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Bản cập nhật mới của DeepSeek-R1. Trình bày suy nghĩ từng bước với khả năng suy luận sâu hơn.",
+      "tagline": "Mô hình lý luận mở đã cập nhật"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Model mã nguồn mở nhẹ hơn từ Meta. Nhanh cho viết, tóm tắt và các câu hỏi hằng ngày.",
+      "tagline": "Llama mã nguồn mở hiệu quả"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Model mã nguồn mở cũ hơn từ Meta. Vẫn phù hợp cho viết lách tổng quát và hỏi đáp.",
+      "tagline": "Llama mã nguồn mở cũ hơn"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Model hàng đầu của xAI. Tốt cho thảo luận mở, phân tích và dự án sáng tạo.",
+      "tagline": "xAI đầu bảng"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Mẫu hàng đầu mới nhất của OpenAI. Mạnh về viết, nghiên cứu, lập trình và giải quyết vấn đề phức tạp.",
+      "tagline": "GPT đầu bảng mới nhất"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (mới nhất)",
+      "description": "Bí danh động luôn trỏ đến mẫu chat-tuned mới nhất của OpenAI. Thay thế trên Azure cho dòng gpt-*-chat đã ngừng sử dụng.",
+      "tagline": "Luôn là GPT hội thoại mới nhất"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Phiên bản Opus gần đây, nằm giữa 4.6 và 4.8. Mạnh về viết dài, nghiên cứu, lập trình và phân tích kỹ lưỡng.",
+      "tagline": "Opus phát hành gần đây"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Mẫu suy luận mới nhất của DeepSeek và là lựa chọn thay thế của Azure cho dòng R1. Thể hiện quá trình suy nghĩ từng bước.",
+      "tagline": "Mô hình lý luận mở mới nhất"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Phiên bản V4 nhanh của DeepSeek và là lựa chọn thay thế của Azure cho dòng V3. Nhanh cho viết chung và các câu hỏi kỹ thuật.",
+      "tagline": "Giải pháp mã nguồn mở nhanh"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Suy luận)",
+      "description": "Mẫu suy luận nhanh của xAI. Suy nghĩ theo từng bước với phản hồi nhanh.",
+      "tagline": "Mô hình lý luận xAI nhanh"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Mẫu chat nhanh của xAI. Phản hồi nhanh cho các câu hỏi thường ngày và thảo luận.",
+      "tagline": "Mô hình chat xAI nhanh"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Mẫu xAI nhẹ hơn. Nhanh và tiết kiệm cho các câu hỏi ngắn và trò chuyện thông thường.",
+      "tagline": "Mô hình xAI nhẹ hơn"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Phiên bản đầu tàu của bộ ba GPT-5.6 của OpenAI. Mạnh nhất trong viết, nghiên cứu, lập trình và giải quyết vấn đề phức tạp.",
+      "tagline": "GPT đầu bảng mới nhất hiện nay"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Tầng cân bằng của bộ ba GPT-5.6 của OpenAI. Phù hợp cho công việc viết, phân tích và lập trình hằng ngày với phản hồi nhanh.",
+      "tagline": "GPT-5.6 cân bằng cho nhu cầu hàng ngày"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Tầng nhẹ và nhanh của bộ ba GPT-5.6 của OpenAI. Tốt nhất cho câu hỏi nhanh và tác vụ đơn giản với chi phí thấp.",
+      "tagline": "GPT-5.6 nhẹ, nhanh"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mô hình tầm trung mới nhất của Mistral. Lựa chọn thay thế châu Âu cân bằng giữa khả năng và tốc độ cho công việc hằng ngày.",
+      "tagline": "Mô hình châu Âu cân bằng"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Mô hình open-weight của Moonshot AI. Mạnh về các tác vụ đại diện, lập trình và tài liệu dài.",
+      "tagline": "Mô hình open-weight đại diện"
     }
   },
   "searchMode": {
@@ -1853,7 +2146,22 @@
     "useDefaultStyle": "Sử dụng phong cách viết mặc định",
     "noTonesCreated": "Chưa tạo giọng điệu nào",
     "createTonesHint": "Tạo giọng điệu trong Quick Actions",
-    "translateDocumentTooltip": "Dịch tài liệu sang ngôn ngữ khác.\n\nĐịnh dạng hỗ trợ: Word, Excel, PowerPoint, HTML, TXT\nKích thước tối đa: 40MB\n\nHỗ trợ hơn 80 ngôn ngữ với file thuật ngữ tùy chọn."
+    "translateDocumentTooltip": "Dịch tài liệu sang ngôn ngữ khác.\n\nĐịnh dạng hỗ trợ: Word, Excel, PowerPoint, HTML, TXT\nKích thước tối đa: 40MB\n\nHỗ trợ hơn 80 ngôn ngữ với file thuật ngữ tùy chọn.",
+    "translateTooltip": "Dịch một đoạn văn bản sang ngôn ngữ khác.\n\nĐể dịch toàn bộ tệp (Word, Excel, PowerPoint, HTML, TXT), vui lòng sử dụng chức năng Dịch tài liệu.",
+    "cameraTooltip": "Chụp ảnh bằng camera thiết bị và đính kèm vào tin nhắn.",
+    "noResults": "Không có hành động phù hợp",
+    "sectionPinned": "Đã ghim",
+    "sectionFrequent": "Thường dùng",
+    "sectionMore": "Thêm",
+    "categoryWeb": "Web",
+    "categoryMedia": "Phương tiện & tệp",
+    "categoryTransform": "Biến đổi",
+    "pin": "Ghim lên trên",
+    "unpin": "Bỏ ghim",
+    "moveToMore": "Chuyển vào mục Thêm",
+    "moveOutOfMore": "Hiển thị trong menu",
+    "showSources": "Hiển thị các nguồn khác",
+    "hideSources": "Ẩn các nguồn khác"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Thêm hướng dẫn cá nhân của bạn để tùy chỉnh cách AI phản hồi. Các hướng dẫn này sẽ được kết hợp với các quy tắc hành vi cốt lõi nhằm đảm bảo phản hồi hữu ích, chính xác và an toàn.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Mẹo: Gõ \"/\" để chọn từ các mẫu gợi ý đã lưu.",
@@ -1964,7 +2272,14 @@
     "learnMore": "Tìm hiểu thêm",
     "advancedOptions": "Tùy chọn nâng cao",
     "unofficialBadgeLabel": "Không chính thức",
-    "unofficialLanguageWarning": "Ngôn ngữ này không được hỗ trợ chính thức. Chất lượng bản dịch chưa được xác minh. Vui lòng nhờ người thành thạo hoặc bản ngữ kiểm tra lại trước khi chia sẻ."
+    "unofficialLanguageWarning": "Ngôn ngữ này không được hỗ trợ chính thức. Chất lượng bản dịch chưa được xác minh. Vui lòng nhờ người thành thạo hoặc bản ngữ kiểm tra lại trước khi chia sẻ.",
+    "translationSubmitted": "Đã bắt đầu dịch — Các tập tin PDF được xử lý ở chế độ nền.",
+    "pendingTitle": "Đang dịch {filename}…",
+    "pendingHint": "Việc dịch PDF sẽ chạy nền và có thể mất vài phút. Bạn có thể tiếp tục làm việc — thẻ này sẽ cập nhật khi tài liệu sẵn sàng, ngay cả sau khi tải lại trang.",
+    "asyncFailed": "Dịch tài liệu thất bại: {error}",
+    "jobNotFound": "công việc dịch không còn tồn tại. Vui lòng thử lại.",
+    "retryPolling": "Kiểm tra lại",
+    "pollingStalled": "Chúng tôi không thể kết nối đến máy chủ để kiểm tra tiến trình. Việc dịch có thể vẫn đang chạy."
   },
   "terms": {
     "officialLanguages": "Phiên bản chính thức:",
@@ -2028,6 +2343,10 @@
       "technicalDetails": "Chi tiết kỹ thuật",
       "agentCountLabel": "{count} agent",
       "disconnectedToast": "Đã ngắt kết nối {name}"
+    },
+    "emptyState": {
+      "title": "Không có agent khu vực / tổ chức nào",
+      "description": "Kết nối một dự án Foundry bên dưới để khám phá các agent của dự án."
     }
   },
   "privacy": {
@@ -2138,5 +2457,1309 @@
     "review": "Xem xét",
     "itemId": "ID: {id}",
     "itemSource": "{date} từ {source}"
+  },
+  "regionOverride": {
+    "warning": "Ghi đè vị trí đang hoạt động — yêu cầu của bạn đang được chuyển hướng đến khu vực dữ liệu {region}. Đây là thao tác kiểm tra thủ công, không phải vị trí thực của bạn.",
+    "clear": "Xóa ghi đè"
+  },
+  "usageImpact": {
+    "empty": "Chưa có dữ liệu sử dụng. Việc sử dụng token và ước tính phát thải sẽ hiển thị tại đây sau khi bạn trò chuyện.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} lần sạc điện thoại thông minh",
+    "requests": "Yêu cầu",
+    "promptTokens": "Token nhắc (prompt)",
+    "completionTokens": "Token hoàn thành",
+    "topModels": "Theo mô hình",
+    "byRegion": "Theo khu vực lưu trữ",
+    "regionDefault": "Mặc định",
+    "modelRow": "{requests} yc · {grams} g",
+    "disclosure": "Ước tính dựa trên các giả định v{version} · từ {since} · chỉ tính chat tiêu chuẩn (không tính câu trả lời của agent và knowledge-base).",
+    "reset": "Đặt lại thống kê sử dụng",
+    "estimatedPortion": "Bao gồm khoảng ~{grams} g CO₂e ({requests} yêu cầu) được ước tính từ các cuộc trò chuyện trước khi có theo dõi — tính toán lại từ văn bản tin nhắn lưu trữ, không phải số lượng token đã đo.",
+    "chipTitle": "Chip khí thải",
+    "chipDescription": "Ước tính lượng phát thải carbon của cuộc trò chuyện hiện tại, hiển thị phía trên ô nhập trò chuyện.",
+    "chipAlways": "Luôn hiển thị",
+    "chipAlwaysHint": "Chip luôn hiển thị bất cứ khi nào cuộc trò chuyện có ước tính.",
+    "chipAuto": "Hiển thị khi cập nhật hoặc di chuột",
+    "chipAutoHint": "Chip sẽ xuất hiện khi ước tính thay đổi, sau đó tự động mờ dần. Di chuột hoặc tập trung vào chip sẽ làm hiện lại.",
+    "chipHidden": "Đã ẩn",
+    "chipHiddenHint": "Chip sẽ không bao giờ hiển thị. Tổng số vẫn được ghi nhận và hiển thị tại trang này.",
+    "chipAutoHideLabel": "Tự động mờ sau",
+    "chipAutoHideUnit": "giây",
+    "chipAutoHideHint": "Từ {min} đến {max} giây."
+  },
+  "extraction": {
+    "toggleLabel": "Trích xuất dữ liệu có cấu trúc",
+    "trayLabel": "Trích xuất",
+    "trayPrefix": "Trích xuất",
+    "trayInfo": "Trích xuất trả về tối đa 3 bảng có cấu trúc. Các công thức được lưu trên thiết bị.",
+    "autoChip": "Tự động — AI đề xuất cấu trúc",
+    "addRecipe": "Thêm công thức",
+    "addRecipeTitle": "Thêm công thức vào trích xuất này",
+    "addRecipeFullTitle": "Tối đa 3 công thức cho mỗi lần trích xuất",
+    "removeRecipe": "Xóa công thức: {name}",
+    "remove": "Xóa",
+    "section": "Công thức trích xuất",
+    "sectionSubtitle": "Mẫu đã lưu chuyển đổi văn bản thô, tệp hoặc URL thành bảng có cấu trúc. Chọn tối đa 3 công thức cho mỗi lần trích xuất.",
+    "newRecipe": "Công thức mới",
+    "untitledRecipe": "(Chưa đặt tên công thức)",
+    "deleteRecipe": "Xóa công thức",
+    "delete": "Xóa",
+    "deleteConfirm": "Xóa?",
+    "cancel": "Hủy",
+    "name": "Tên",
+    "namePlaceholder": "vd. Bệnh nhân",
+    "description": "Mô tả",
+    "optional": "(không bắt buộc)",
+    "descriptionPlaceholder": "Tóm tắt ngắn xuất hiện trong bộ chọn công thức",
+    "instructions": "Hướng dẫn",
+    "instructionsPlaceholder": "AI nên tìm những gì trong tài liệu?",
+    "fields": "Trường",
+    "field": "trường",
+    "fieldsPlural": "các trường",
+    "fieldName": "Tên trường",
+    "fieldType": "Loại trường",
+    "fieldNamePlaceholder": "ten_truong",
+    "addField": "Thêm trường",
+    "removeField": "Xóa trường",
+    "toggleDetails": "Hiện/ẩn chi tiết",
+    "fieldDetailsTitle": "Mô tả, giá trị enum",
+    "fieldDescriptionPlaceholder": "Mô tả (giúp AI xác định trường này)",
+    "enumValuesPlaceholder": "Giá trị cho phép, phân cách bởi dấu phẩy",
+    "required": "bắt buộc",
+    "suggest": "Gợi ý bằng AI",
+    "suggesting": "Đang gợi ý…",
+    "suggestNeedsInstructions": "Thêm hướng dẫn trước để AI biết cần tìm gì",
+    "searchRecipes": "Tìm kiếm công thức",
+    "pickerEmpty": "Chưa có công thức nào. Tạo mới để bắt đầu.",
+    "pickerEmptyMatch": "Không tìm thấy công thức phù hợp",
+    "editorEmpty": "Chưa có công thức nào. Tạo mới và AI sẽ hỗ trợ điền thông tin.",
+    "noData": "Chưa trích xuất dữ liệu",
+    "noRecords": "Không tìm thấy bản ghi {name}",
+    "row": "dòng",
+    "rows": "dòng",
+    "record": "bản ghi",
+    "records": "bản ghi",
+    "complete": "hoàn tất",
+    "download": "Tải xuống",
+    "preview": "Xem trước",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} trường",
+    "fieldCountOne": "1 trường",
+    "andMoreFields": "+ {count} trường nữa",
+    "saveAsRecipe": "Lưu thành công thức",
+    "savedAsRecipeToast": "Đã lưu thành công thức \"{name}\"",
+    "previewTruncated": "Đang hiển thị 3 trong tổng số {total} dòng. Hãy tải xuống để xem đầy đủ.",
+    "previewEmpty": "Không có dòng nào để xem trước",
+    "proposedSchemaTip": "AI đã đề xuất sơ đồ này. Lưu lại để sử dụng lần sau.",
+    "downloadAriaLabel": "Tải xuống {name} dạng {format}",
+    "previewAriaLabel": "Bật/tắt xem trước {name}",
+    "changeFormatAriaLabel": "Đổi định dạng tải xuống cho {name}",
+    "materialWarningTitle": "Thêm tài liệu để trích xuất",
+    "materialWarningBody": "Nhập tin nhắn bên dưới, đính kèm tệp hoặc thêm URL.",
+    "materialAttach": "Đính kèm tệp",
+    "willExtractPrefix": "Sẽ trích xuất từ:",
+    "materialText": "nội dung tin nhắn",
+    "materialFiles": "{count, plural, one {1 tệp} other {# tệp}}",
+    "materialActiveFiles": "{count, plural, one {1 tệp đang hoạt động} other {# tệp đang hoạt động}}",
+    "dismiss": "Tắt trích xuất"
+  },
+  "Connectors": "Kết nối",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "Dịch thuật",
+        "description": "Dịch văn bản với phân tích, thuật ngữ và các vòng duyệt"
+      },
+      "document": {
+        "label": "Tài liệu",
+        "description": "Soạn thảo và chỉnh sửa tài liệu với trợ lý"
+      },
+      "dataAnalysis": {
+        "label": "Phân tích dữ liệu",
+        "description": "Nhập bảng và khám phá hoặc chuyển đổi dữ liệu của bạn"
+      },
+      "map": {
+        "label": "Bản đồ",
+        "description": "Biến mọi dữ liệu thành vị trí trên bản đồ"
+      }
+    },
+    "chooser": {
+      "prompt": "Hoặc bắt đầu không gian làm việc chuyên biệt"
+    },
+    "sidebar": {
+      "newTranslation": "Dịch mới",
+      "newDocument": "Tài liệu mới",
+      "newDataAnalysis": "Phân tích dữ liệu mới",
+      "newMap": "Bản đồ mới"
+    },
+    "translation": {
+      "chooseLanguage": "Ngôn ngữ đích",
+      "customLanguageHint": "\"{name}\" là ngôn ngữ bạn đã thêm — AI sẽ thử mọi ngôn ngữ, nhưng chất lượng chưa được kiểm định.",
+      "addedByYou": "Bạn đã thêm",
+      "glossary": "Thuật ngữ",
+      "noGlossary": "Chưa có thuật ngữ",
+      "manageGlossaries": "Thuật ngữ",
+      "glossaries": "Thuật ngữ",
+      "closeGlossaries": "Đóng thuật ngữ",
+      "glossariesEmpty": "Tạo một thuật ngữ để cố định cách dịch các thuật ngữ chuyên biệt. Thuật ngữ sẽ được lưu trên thiết bị này và dùng lại cho các lần dịch khác.",
+      "newGlossary": "Tạo bảng thuật ngữ mới",
+      "newGlossaryName": "Bảng thuật ngữ chưa đặt tên",
+      "glossaryName": "Tên bảng thuật ngữ",
+      "deleteGlossary": "Xóa bảng thuật ngữ",
+      "sourceTerm": "Thuật ngữ nguồn",
+      "targetTerm": "Bản dịch",
+      "note": "Ghi chú",
+      "noteOptional": "Ghi chú (không bắt buộc)",
+      "addEntry": "Thêm thuật ngữ",
+      "removeEntry": "Xóa {term}",
+      "mode": "Chế độ dịch",
+      "modeQuick": "Nhanh",
+      "modeAgentic": "Đã rà soát",
+      "modeQuickHint": "Một lần dịch, nhanh nhất",
+      "modeAgenticHint": "Phân tích trước, sau đó dịch và thực hiện tối đa 3 vòng rà soát",
+      "translate": "Dịch",
+      "translating": "Đang dịch…",
+      "sourceLabel": "Văn bản nguồn",
+      "targetLabel": "Bản dịch",
+      "sourcePlaceholder": "Dán hoặc nhập văn bản cần dịch, hoặc tải lên tài liệu.",
+      "targetEmpty": "Bản dịch sẽ hiện ở đây.",
+      "uploadDocument": "Tải lên tài liệu",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép",
+      "tooLong": "Văn bản dài hơn {max} ký tự. Hãy chia thành nhiều phần, hoặc sử dụng chức năng dịch tài liệu cho toàn bộ tệp.",
+      "analysisTitle": "Phân tích trước khi dịch",
+      "register": "Đăng ký",
+      "reviewTitle": "Các vòng rà soát",
+      "roundLabel": "Vòng {round}",
+      "verdictApprove": "đã duyệt",
+      "verdictRevise": "đã chỉnh sửa",
+      "railRequest": "Dịch văn bản nguồn sang {language}.",
+      "railDoneAgentic": "Hoàn thành. Tôi đã phân tích, dịch văn bản và thực hiện {rounds} vòng rà soát. Kết quả đã có trong không gian làm việc.",
+      "railDoneQuick": "Hoàn thành. Bản dịch đã có trong không gian làm việc.",
+      "railAssessRequest": "Đánh giá chất lượng bản dịch {language}.",
+      "railAssessDone": "Đã đánh giá: điểm số có trong không gian làm việc với {count} đề xuất chỉnh sửa.",
+      "roundChanges": "Thay đổi trong vòng {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "Độ chính xác",
+          "description": "Truyền đạt chính xác ý nghĩa nguồn — không sai nghĩa, thiếu/thiếu sót, bổ sung hoặc sót không dịch"
+        },
+        "fluency": {
+          "label": "Tính trôi chảy",
+          "description": "Ngữ pháp, chính tả, chấm câu và mạch lạc tự nhiên trong ngôn ngữ đích"
+        },
+        "terminology": {
+          "label": "Thuật ngữ",
+          "description": "Thuật ngữ chuyên ngành thống nhất, chính xác; tuân thủ đúng bảng thuật ngữ"
+        },
+        "style": {
+          "label": "Văn phong",
+          "description": "Mức độ trang trọng, giọng điệu và cách diễn đạt khớp với văn bản nguồn và được duy trì"
+        },
+        "localeConventions": {
+          "label": "Quy tắc địa phương",
+          "description": "Ngày tháng, số, đơn vị và chấm câu đúng theo thông lệ địa phương"
+        },
+        "audience": {
+          "label": "Đối tượng",
+          "description": "Phù hợp với mục đích và đối tượng sử dụng văn bản"
+        }
+      },
+      "severity": {
+        "minor": "Nhẹ",
+        "major": "Nghiêm trọng"
+      },
+      "assess": "Đánh giá chất lượng",
+      "assessing": "Đang đánh giá…",
+      "assessmentTitle": "Đánh giá chất lượng",
+      "criteriaPicker": "Tiêu chí đánh giá",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Chỉnh sửa đề xuất",
+      "noEditsSuggested": "Không có chỉnh sửa nào được đề xuất — bản dịch đã đạt các tiêu chí được chọn.",
+      "acceptEdit": "Chấp nhận",
+      "rejectEdit": "Từ chối",
+      "acceptAll": "Chấp nhận tất cả",
+      "rejectAll": "Từ chối tất cả",
+      "editAccepted": "Đã chấp nhận",
+      "editRejected": "Đã từ chối",
+      "editUnapplicable": "Không thể tìm đoạn này trong văn bản hiện tại — không áp dụng",
+      "editTranslation": "Chỉnh sửa",
+      "doneEditing": "Hoàn tất",
+      "pasteTranslationPlaceholder": "Nhập hoặc dán bản dịch để chỉnh sửa…",
+      "editingBlockedPendingEdits": "Vui lòng xử lý hoặc từ chối các chỉnh sửa đang chờ trước",
+      "pendingCount": "{count} đang chờ",
+      "closeReview": "Đóng đánh giá chất lượng",
+      "showReview": "Xem đánh giá",
+      "showReviewPending": "Xem đánh giá ({count} đang chờ)",
+      "undoEdit": "Hoàn tác",
+      "clearResolved": "Xóa mục đã giải quyết",
+      "clearResolvedHint": "Loại bỏ các chỉnh sửa đã chấp nhận, bị từ chối hoặc không áp dụng khỏi danh sách này",
+      "autoClearResolved": "Tự động xóa các chỉnh sửa đã giải quyết",
+      "customCriteria": "Tiêu chí tùy chỉnh",
+      "closeCriteria": "Đóng tiêu chí tùy chỉnh",
+      "newCriterion": "Tiêu chí mới",
+      "newCriterionName": "Tiêu chí chưa có tên",
+      "criterionName": "Tên tiêu chí",
+      "criterionRubric": "Chuẩn đánh giá",
+      "criterionRubricPlaceholder": "Mô tả những yêu cầu bản dịch phải đáp ứng cho tiêu chí này, ví dụ: \"Diễn đạt tất cả hướng dẫn liều lượng lâm sàng ở thể mệnh lệnh, không dùng động từ nguyên thể…\"",
+      "criterionRubricHint": "Chuẩn đánh giá này sẽ được AI sử dụng nguyên văn cùng với các tiêu chí MQM tích hợp sẵn khi đánh giá bản dịch.",
+      "criteriaEmpty": "Tạo tiêu chí tùy chỉnh — ví dụ: phong cách nội bộ, thuật ngữ theo yêu cầu khách hàng, hoặc quy ước vùng miền — để đánh giá bản dịch ngoài các tiêu chí MQM tích hợp. Lưu trên thiết bị này và có thể sử dụng lại.",
+      "deleteCriterion": "Xóa tiêu chí",
+      "manageCriteria": "Tiêu chí tùy chỉnh",
+      "addCriteria": "Thêm tiêu chí",
+      "noUsableCriteria": "Chọn ít nhất một tiêu chí tích hợp sẵn hoặc đặt chuẩn đánh giá cho tiêu chí tùy chỉnh của bạn.",
+      "criterionRubricTooLong": "Bảng tiêu chí này vượt quá giới hạn {over} ký tự. Nó được gửi kèm mỗi lần đánh giá nên cần rút gọn trước khi dùng tiêu chí này."
+    },
+    "document": {
+      "emptyTitle": "Mô tả tài liệu bạn muốn",
+      "emptyBody": "Hãy cho trợ lý biết bạn muốn viết gì — báo cáo tình hình, thư gửi nhà tài trợ, biên bản cuộc họp. Nếu muốn trích dẫn và dữ kiện từ tệp, hãy thêm tệp tham khảo trước.",
+      "generatePlaceholder": "Mô tả tài liệu cần viết…",
+      "revisePlaceholder": "Mô tả chỉnh sửa cần thực hiện…",
+      "generate": "Tạo",
+      "revise": "Chỉnh sửa",
+      "writing": "Đang viết…",
+      "export": "Xuất",
+      "references": "Tham khảo",
+      "addReference": "Thêm tệp",
+      "uploading": "Đang tải lên…",
+      "removeReference": "Xóa {name}",
+      "referenceChars": "{chars} ký tự văn bản đã trích xuất",
+      "referenceEmpty": "Không thể trích xuất văn bản từ {name}",
+      "uploadFailed": "Tải lên thất bại",
+      "untitledDocument": "Tài liệu chưa đặt tên",
+      "generatedSummary": "Tôi đã soạn tài liệu trong không gian làm việc. Vui lòng xem lại và cho biết cần chỉnh gì.",
+      "revisedSummary": "Tôi đã chỉnh sửa tài liệu trong không gian làm việc.",
+      "runFailed": "Có lỗi xảy ra: {message}",
+      "uploadBasis": "Bắt đầu từ tài liệu hiện có",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "Ngữ pháp & chính tả",
+          "description": "Ngữ pháp và chính tả đúng; sử dụng một loại tiếng Anh nhất quán (Mỹ hoặc Anh) — trộn lẫn là lỗi"
+        },
+        "consistency": {
+          "label": "Tính nhất quán",
+          "description": "Thuật ngữ, tên riêng, viết hoa và định dạng được sử dụng thống nhất xuyên suốt"
+        },
+        "clarity": {
+          "label": "Độ rõ ràng",
+          "description": "Câu văn trực tiếp, rõ ràng; cấu trúc hỗ trợ người đọc"
+        },
+        "sensitivity": {
+          "label": "Tính nhạy cảm",
+          "description": "Ngôn từ mang tính bao gồm, nhạy cảm với xung đột và nhân đạo (tùy chọn kiểm tra)"
+        },
+        "specAdherence": {
+          "label": "Tuân thủ spec",
+          "description": "Tuân thủ spec tài liệu đính kèm: đầy đủ các phần bắt buộc, đúng thứ tự và theo hướng dẫn"
+        },
+        "toneAdherence": {
+          "label": "Tuân thủ tông giọng",
+          "description": "Tuân thủ quy tắc tông giọng và văn phong đính kèm"
+        }
+      },
+      "severity": {
+        "minor": "Nhẹ",
+        "major": "Nghiêm trọng"
+      },
+      "assess": "Đánh giá chất lượng",
+      "assessing": "Đang đánh giá…",
+      "assessmentTitle": "Đánh giá chất lượng",
+      "criteriaPicker": "Tiêu chí đánh giá",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Đề xuất chỉnh sửa",
+      "noEditsSuggested": "Không có chỉnh sửa nào được đề xuất — tài liệu đạt các tiêu chí đã chọn.",
+      "acceptEdit": "Chấp nhận",
+      "rejectEdit": "Từ chối",
+      "acceptAll": "Chấp nhận tất cả",
+      "rejectAll": "Từ chối tất cả",
+      "editAccepted": "Đã chấp nhận",
+      "editRejected": "Đã từ chối",
+      "editUnapplicable": "Không tìm thấy đoạn này trong văn bản hiện tại — không áp dụng",
+      "editingBlockedPendingEdits": "Vui lòng xử lý hoặc từ chối các đề xuất chỉnh sửa còn chờ trước",
+      "pendingCount": "{count} đang chờ",
+      "closeReview": "Đóng đánh giá chất lượng",
+      "showReview": "Xem đánh giá",
+      "showReviewPending": "Xem đánh giá ({count} đang chờ)",
+      "railAssessRequest": "Đánh giá chất lượng tài liệu theo các tiêu chí đã chọn.",
+      "railAssessDone": "Hoàn tất đánh giá: kết quả đã có trong workspace với {count} chỉnh sửa được đề xuất cần xem lại.",
+      "spec": "Spec tài liệu",
+      "noSpec": "Không có spec",
+      "manageSpecs": "Specs",
+      "specs": "Specs tài liệu",
+      "closeSpecs": "Đóng specs",
+      "specsEmpty": "Tạo spec để soạn tài liệu theo định dạng cố định — các phần bắt buộc, thứ tự và hướng dẫn cho từng phần (ví dụ: mẫu SitRep). Specs sẽ được lưu trên thiết bị này và có thể sử dụng lại.",
+      "newSpec": "Spec mới",
+      "newSpecName": "Spec chưa đặt tên",
+      "specName": "Tên spec",
+      "specDescription": "Mô tả (tùy chọn)",
+      "deleteSpec": "Xóa spec",
+      "sectionHeading": "Tiêu đề phần",
+      "sectionGuidance": "Hướng dẫn (tùy chọn)",
+      "sectionRequired": "Bắt buộc",
+      "addSection": "Thêm phần",
+      "removeSection": "Xóa phần",
+      "generalGuidance": "Hướng dẫn chung (tùy chọn)",
+      "tone": "Tông giọng",
+      "noTone": "Không có tông giọng",
+      "customCriteria": "Tiêu chí tùy chỉnh",
+      "manageCriteria": "Tiêu chí tùy chỉnh",
+      "closeCriteria": "Đóng tiêu chí tùy chỉnh",
+      "criteriaEmpty": "Tạo tiêu chí tùy chỉnh — ví dụ như lưu ý về thương hiệu hoặc ngôn ngữ tổ chức — để đánh giá tài liệu và định hướng chỉnh sửa. Được lưu trên thiết bị này và có thể sử dụng lại.",
+      "newCriterion": "Tiêu chí mới",
+      "newCriterionName": "Tiêu chí chưa đặt tên",
+      "criterionName": "Tên tiêu chí",
+      "criterionRubric": "Tiêu chuẩn đánh giá",
+      "criterionRubricPlaceholder": "Mô tả yêu cầu tài liệu cần đáp ứng để đạt tiêu chí này, ví dụ: \"Không dùng tính từ ca ngợi cho công việc của chúng ta; luôn gọi người thụ hưởng là 'người được hỗ trợ'…\"",
+      "criterionRubricHint": "Tiêu chuẩn này sẽ được AI sử dụng nguyên văn trong quá trình đánh giá và chỉnh sửa.",
+      "deleteCriterion": "Xóa tiêu chí",
+      "profileTitle": "Hồ sơ tài liệu",
+      "profileDocType": "Loại",
+      "profileLanguage": "Ngôn ngữ",
+      "profileAudience": "Đối tượng",
+      "profilePurpose": "Mục đích",
+      "profileRegister": "Phong cách ngôn ngữ",
+      "profileTone": "Giọng điệu",
+      "profileConventions": "Quy ước",
+      "emptyHint": "Bắt đầu nhập bên dưới, mô tả nội dung cần viết vào ô dưới cùng, hoặc bắt đầu từ tệp.",
+      "addSpec": "Thêm đặc tả",
+      "addCriteria": "Thêm tiêu chí",
+      "scopeFullDocument": "Phạm vi: toàn bộ tài liệu",
+      "scopeSelection": "Phạm vi: vùng chọn — “{preview}…” ({count} từ)",
+      "clearSelection": "Xóa vùng chọn (làm việc với toàn bộ tài liệu)",
+      "reviseSelectionPlaceholder": "Mô tả các thay đổi cho vùng đã chọn…",
+      "revisedSelectionSummary": "Tôi đã chỉnh sửa đoạn được chọn trong không gian làm việc.",
+      "assessedSelection": "Vùng chọn",
+      "undoEdit": "Hoàn tác",
+      "clearResolved": "Xóa mục đã giải quyết",
+      "clearResolvedHint": "Loại bỏ các chỉnh sửa đã chấp nhận, bị từ chối hoặc không áp dụng khỏi danh sách này",
+      "autoClearResolved": "Tự động xóa các chỉnh sửa đã giải quyết",
+      "import": "Nhập khẩu",
+      "importReplaceTitle": "Thay thế tài liệu?",
+      "importReplaceBody": "Việc nhập khẩu {name} sẽ thay thế tài liệu hiện tại. Tham chiếu, thông số và giọng điệu của bạn sẽ được giữ nguyên.",
+      "importReplaceConfirm": "Thay thế",
+      "editorMode": "Chế độ chỉnh sửa",
+      "editorModeRich": "Văn bản phong phú",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Hãy giải quyết các chỉnh sửa được đề xuất trước khi chuyển chế độ chỉnh sửa.",
+      "suggestChanges": "Đề xuất thay đổi",
+      "suggestChangesHint": "Xem lại chỉnh sửa dưới dạng đề xuất riêng lẻ thay vì viết lại toàn bộ tài liệu ngay lập tức.",
+      "suggestChangesSelectionNote": "Sửa đổi cho phần đã chọn sẽ được áp dụng trực tiếp — phạm vi này đã do bạn chọn.",
+      "suggestedSummary": "Đã đề xuất {count} {count, plural, one {thay đổi} other {thay đổi}} để xem xét.",
+      "revisionSuggestionSummary": "Yêu cầu sửa đổi của bạn đã tạo ra {count} {count, plural, one {đề xuất thay đổi} other {đề xuất thay đổi}}.",
+      "revisionCriterionLabel": "Sửa đổi được yêu cầu",
+      "fallbackSelection": "Áp dụng trực tiếp — sửa phần chọn sẽ không tạo thành đề xuất.",
+      "fallbackLargeRewrite": "Áp dụng trực tiếp — việc viết lại đã thay đổi quá nhiều nên không thể chia nhỏ thành đề xuất riêng lẻ.",
+      "fallbackReorder": "Áp dụng trực tiếp — các phần đã được di chuyển nên không thể chia thành đề xuất để xem xét.",
+      "fallbackUnanchorable": "Áp dụng trực tiếp — không thể liên kết thay đổi với đoạn cụ thể.",
+      "fallbackNoChanges": "Không có thay đổi nào cần thiết.",
+      "criterionRubricTooLong": "Bảng tiêu chí này vượt quá giới hạn {over} ký tự. Nó được gửi kèm mỗi lần đánh giá nên cần rút gọn trước khi dùng tiêu chí này."
+    },
+    "data": {
+      "emptyTitle": "Nhập dữ liệu để phân tích",
+      "emptyBody": "Thêm tệp CSV, Excel hoặc JSON, hoặc dán các dòng dữ liệu trực tiếp. Sau khi tải bảng, bạn có thể sắp xếp, trích xuất thêm dòng từ tài liệu và chuyển đổi bằng hướng dẫn ngôn ngữ tự nhiên.",
+      "importFile": "Nhập tệp",
+      "importing": "Đang nhập…",
+      "pasteData": "Dán dữ liệu",
+      "pastePlaceholder": "Dán CSV, TSV hoặc JSON tại đây…",
+      "import": "Nhập",
+      "addFromSource": "Thêm từ nguồn",
+      "extractHint": "Dán văn bản hoặc chọn tài liệu; các dòng phù hợp với cột hiện tại sẽ được trích xuất. Giá trị không xác định sẽ để trống — không tự động tạo mới.",
+      "extractPlaceholder": "Dán văn bản chưa cấu trúc chứa dữ liệu…",
+      "extractRows": "Trích xuất dòng",
+      "extractFromFile": "Từ tệp…",
+      "extracting": "Đang trích xuất…",
+      "pastedSource": "Văn bản đã dán",
+      "transform": "Chuyển đổi",
+      "transforming": "Đang chuyển đổi…",
+      "transformPlaceholder": "Mô tả chuyển đổi, ví dụ: \"thêm một cột với số ca mỗi 1000 dân\"…",
+      "transformCapHint": "Chuyển đổi giới hạn {max} dòng. Vui lòng xóa hoặc lọc dòng trước với bảng lớn.",
+      "undo": "Hoàn tác",
+      "deleteSelected": "Xóa {count}",
+      "deletedRows": "Đã xóa {count} dòng",
+      "selectAllRows": "Chọn tất cả dòng",
+      "selectRow": "Chọn dòng {row}",
+      "rowCount": "{count} dòng",
+      "rowCapExceeded": "Điều này sẽ là {count} dòng; bảng chỉ cho phép tối đa {max}. Vui lòng tách dữ liệu hoặc xuất ra ngoài.",
+      "railExtractRequest": "Trích xuất các dòng phù hợp với lược đồ bảng từ: {source}",
+      "railExtractDone": "Đã thêm {count} dòng trích xuất vào bảng.",
+      "railTransformDone": "Đã chuyển đổi bảng.",
+      "columnProfileFor": "Thống kê cột cho {column}",
+      "profileMissing": "Thiếu",
+      "profileDistinct": "Duy nhất",
+      "profileRange": "Khoảng",
+      "profileMean": "Trung bình",
+      "profileMedian": "Trung vị",
+      "profileTopValues": "Giá trị hàng đầu",
+      "filterColumnFor": "Lọc {column}",
+      "filterContains": "Chứa…",
+      "filterMin": "Nhỏ nhất",
+      "filterMax": "Lớn nhất",
+      "filterClear": "Xóa",
+      "clearFilters": "Xóa bộ lọc",
+      "showingRows": "Đang hiển thị {shown} trên tổng số {total} dòng",
+      "scopeLabel": "Phạm vi làm việc",
+      "scopeTable": "Tất cả ({count})",
+      "scopeFiltered": "Đã lọc ({count})",
+      "scopeSelection": "Đã chọn ({count})",
+      "scopedInstruction": "{instruction} (trên {count} dòng thuộc phạm vi)",
+      "assess": "Đánh giá chất lượng",
+      "assessing": "Đang đánh giá…",
+      "criteria": {
+        "validity": {
+          "label": "Tính hợp lệ",
+          "description": "Giá trị tuân thủ loại và định dạng mong đợi của cột"
+        },
+        "consistency": {
+          "label": "Tính nhất quán",
+          "description": "Giá trị giống nhau được ghi nhất quán (không có biến thể như 'M' / 'Male', đơn vị lẫn lộn hoặc sai biệt kiểu chữ)"
+        },
+        "duplicates": {
+          "label": "Trùng lặp",
+          "description": "Các dòng ghi lại cùng một thực thể hoặc sự kiện hai lần"
+        },
+        "plausibility": {
+          "label": "Tính hợp lý",
+          "description": "Giá trị ngoại lệ và không thể xảy ra trong ngữ cảnh"
+        }
+      },
+      "assessmentTitle": "Đánh giá chất lượng dữ liệu",
+      "pendingCount": "{count} đang chờ",
+      "closeReview": "Đóng đánh giá chất lượng",
+      "suggestedEdits": "Đề xuất sửa chữa",
+      "noEditsSuggested": "Không có đề xuất sửa chữa — dữ liệu đã đạt tiêu chí được chọn.",
+      "acceptAll": "Chấp nhận tất cả",
+      "rejectAll": "Từ chối tất cả",
+      "acceptEdit": "Chấp nhận",
+      "rejectEdit": "Từ chối",
+      "editAccepted": "Đã áp dụng",
+      "editRejected": "Đã từ chối",
+      "editUnapplicable": "Ô đã thay đổi từ khi đánh giá — không áp dụng",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "Tiêu chí đánh giá",
+      "severity": {
+        "minor": "Nhẹ",
+        "major": "Nghiêm trọng"
+      },
+      "editLocation": "dòng {row} · {column}",
+      "editLocationRow": "dòng {row} (xóa)",
+      "showReview": "Hiển thị đánh giá",
+      "showReviewPending": "Hiển thị đánh giá (còn {count} chờ xử lý)",
+      "assessedFiltered": "Các dòng đã lọc",
+      "assessedSelection": "Các dòng đã chọn",
+      "assessedSample": "mẫu {shown} trên tổng số {total}",
+      "railAssessRequest": "Đánh giá chất lượng bảng ({count} dòng) theo tiêu chí đã chọn.",
+      "railAssessDone": "Đề xuất {count} cách sửa chất lượng dữ liệu — xem lại trong không gian làm việc.",
+      "insights": "Thông tin chi tiết",
+      "chartKind": "Loại biểu đồ",
+      "chartBar": "Cột (phân nhóm theo)",
+      "chartHistogram": "Biểu đồ tần suất",
+      "chartLine": "Đường (theo thời gian)",
+      "groupByColumn": "Nhóm theo cột",
+      "dateColumn": "Cột ngày",
+      "valueColumn": "Cột giá trị",
+      "aggFn": "Tổng hợp",
+      "aggCount": "Đếm",
+      "aggSum": "Tổng",
+      "aggMean": "Trung bình",
+      "chartTruncated": "Hiển thị tối đa {max} nhóm",
+      "chartNoData": "Không có giá trị phù hợp để vẽ biểu đồ cho các dòng hiện tại.",
+      "chartBarAria": "Biểu đồ cột phân nhóm theo {column}",
+      "chartHistogramAria": "Biểu đồ tần suất của {column}",
+      "chartLineAria": "Biểu đồ đường của {column} theo thời gian",
+      "editStructure": "Cấu trúc",
+      "defineStructure": "Định nghĩa cấu trúc",
+      "schemaHint": "Xác định các trường của cấu trúc dữ liệu. Trường bắt buộc sẽ áp dụng chính sách thiếu dữ liệu khi nhập; thay đổi loại trường sẽ chuyển đổi giá trị hiện tại (ô không chuyển đổi được sẽ để trống).",
+      "schemaFieldName": "Tên trường",
+      "schemaFieldType": "Loại trường",
+      "schemaRequired": "Bắt buộc",
+      "schemaAddField": "Thêm trường",
+      "schemaDeleteField": "Xóa trường {field}",
+      "schemaApply": "Áp dụng cấu trúc",
+      "schemaCancel": "Hủy",
+      "schemaEdited": "Đã chỉnh sửa cấu trúc bảng",
+      "schemaCellsConverted": "{count} ô không thể chuyển đổi sang kiểu mới và hiện đang để trống.",
+      "missingFieldPolicy": "Thiếu dữ liệu",
+      "policyStrict": "Nghiêm ngặt — loại bỏ dòng không đầy đủ",
+      "policyFlag": "Gắn cờ — nhập và đánh dấu",
+      "policyLenient": "Dễ dàng — nhập không thông báo",
+      "droppedIncompleteRows": "Đã loại bỏ {count} dòng thiếu trường bắt buộc: {fields}",
+      "dismiss": "Bỏ qua",
+      "requiredColumn": "Trường bắt buộc",
+      "flagMissingRequired": "Trường bắt buộc trống",
+      "flagPendingEdit": "Có sửa chữa đang chờ duyệt cho ô này — xem phần đánh giá chất lượng",
+      "fromPhoto": "Từ ảnh",
+      "fromPhotoHint": "Chụp ảnh biểu mẫu giấy hoặc bảng — nội dung của nó sẽ thành dữ liệu có cấu trúc để bạn so sánh với ảnh",
+      "readingPhoto": "Đang đọc ảnh…",
+      "photoBatchName": "{count} ảnh",
+      "railPhotoRequest": "Trích xuất dữ liệu có cấu trúc từ {count} ảnh: {name}",
+      "railPhotoDone": "Đã thêm {count} bản ghi từ ảnh. Hãy kiểm tra với ảnh trong không gian làm việc.",
+      "sourcesLabel": "Nguồn",
+      "openPhotoQc": "So sánh dữ liệu với {name}",
+      "qcRowsFromPhoto": "{count} dòng",
+      "qcClose": "Đóng kiểm tra ảnh",
+      "qcZoomIn": "Phóng to",
+      "qcZoomOut": "Thu nhỏ",
+      "qcPrevPhoto": "Ảnh trước",
+      "qcNextPhoto": "Ảnh tiếp theo",
+      "qcImageLoading": "Đang tải ảnh…",
+      "qcImageFailed": "Không thể tải ảnh.",
+      "qcImageAlt": "Ảnh nguồn: {name}",
+      "qcHint": "Bảng chỉ hiển thị các dòng của ảnh này — so sánh từng giá trị với ảnh và chỉnh sửa/khoá các dòng không khớp.",
+      "sourceFilterChip": "Các dòng từ {name}",
+      "clearSourceFilter": "Hiện lại tất cả các dòng",
+      "viewAsRecord": "Xem dạng biểu mẫu",
+      "viewAsTable": "Xem dạng bảng",
+      "recordEmpty": "Chưa có bản ghi nào.",
+      "recordOf": "Bản ghi {index} trên {count}",
+      "recordPrev": "Bản ghi trước",
+      "recordNext": "Bản ghi tiếp theo",
+      "recordBooleanUnset": "(trống)",
+      "flagsChip": "{count} cờ",
+      "flagsChipOpenReview": "Mở xem lại chất lượng",
+      "flagsChipMissingOnly": "Trường bắt buộc đang trống — vui lòng điền hoặc điều chỉnh cấu trúc",
+      "autoCheck": "Tự động kiểm tra dữ liệu mới",
+      "autoCheckHint": "Sau khi trích xuất dữ liệu từ ảnh hoặc tài liệu, tự động thực hiện kiểm tra chất lượng với các dòng mới",
+      "checkingNewRows": "Đang kiểm tra các dòng vừa thêm cho vấn đề chất lượng…",
+      "ingestCheckFailed": "Kiểm tra chất lượng tự động thất bại ({message}) — bạn có thể kiểm tra thủ công bằng chức năng Đánh giá chất lượng.",
+      "assessedIngest": "Các dòng vừa thêm",
+      "transpose": "Hoán vị",
+      "transposeAxisColumn": "Tên",
+      "transposeSuggestion": "Bảng này có vẻ đã bị hoán vị: các hàng là thuộc tính, cột là mục. Đảo lại để mỗi mục là một hàng và mỗi thuộc tính thành một cột có kiểu?",
+      "transposedTable": "Đã hoán vị hàng và cột",
+      "columns": "Các cột",
+      "columnsHidden": "Cột ({count} bị ẩn)",
+      "showAllColumns": "Hiện tất cả",
+      "chartScatter": "Biểu đồ phân tán (x so với y)",
+      "chartPivot": "Bảng tổng hợp",
+      "xColumn": "Cột X",
+      "yColumn": "Cột Y",
+      "splitByColumn": "Tách theo",
+      "splitNone": "Không tách",
+      "pivotValueColumns": "Cột giá trị",
+      "aggMin": "Nhỏ nhất",
+      "aggMax": "Lớn nhất",
+      "aggMedian": "Trung vị",
+      "chartSeriesTruncated": "Chỉ hiển thị {max} chuỗi dữ liệu đầu",
+      "chartPointsTruncated": "Chỉ hiển thị {max} điểm mẫu",
+      "chartScatterAria": "Biểu đồ phân tán của {x} so với {y}",
+      "pivotTableAria": "Bảng tổng hợp được nhóm theo {column}",
+      "schemaFormula": "Công thức",
+      "schemaFormulaPlaceholder": "vd: [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Trường tính toán: tham chiếu các trường khác dạng [Tên]; hỗ trợ + - * / %, dấu ngoặc, và round, abs, min, max. Giá trị sẽ cập nhật tự động và không thể chỉnh sửa trực tiếp.",
+      "schemaFormulaSyntaxError": "Công thức không hợp lệ",
+      "schemaFormulaUnknownRef": "Trường không xác định: {ref}",
+      "schemaFormulaArityError": "Số lượng tham số không đúng cho {fn}",
+      "schemaFormulaCycleError": "Tham chiếu vòng lặp giữa các công thức",
+      "derivedColumnTitle": "Tính toán: {formula}",
+      "derivedFrom": "Được tính từ {formula}",
+      "takePhoto": "Chụp ảnh",
+      "takePhotoHint": "Dùng camera để chụp mẫu đơn hoặc bảng — nội dung sẽ được chuyển thành dữ liệu có cấu trúc để bạn kiểm tra so với ảnh."
+    },
+    "map": {
+      "emptyTitle": "Đặt dữ liệu của bạn lên bản đồ",
+      "emptyBody": "Dán một sitrep, danh sách dòng, ghi chú họp hoặc bất kỳ văn bản nào có tên địa điểm — hoặc tải lên tài liệu. Hệ thống sẽ xác định, gán toạ độ tự tin và bạn có thể xuất cho ArcGIS hoặc các công cụ GIS khác.",
+      "inputPlaceholder": "Dán văn bản chứa tên địa điểm…",
+      "uploadFile": "Tải tệp lên",
+      "pastedSource": "Văn bản đã dán",
+      "mapIt": "Đưa lên bản đồ",
+      "finding": "Đang tìm địa điểm…",
+      "featureCount": "{count} địa điểm",
+      "featureCapExceeded": "Bản đồ giới hạn tối đa {max} địa điểm.",
+      "noneFound": "Không tìm thấy địa điểm nào trong tài liệu đó.",
+      "lowConfidenceNotice": "{count} địa điểm có toạ độ không chắc chắn — hãy kiểm tra trước khi sử dụng.",
+      "tilesOffline": "Không thể tải bản đồ nền — danh sách địa điểm vẫn hiển thị.",
+      "disclaimer": "Toạ độ được AI ước tính dựa vào hiểu biết của mô hình, không phải dịch vụ geocoding — hãy xác minh trước khi dùng cho hoạt động. Bản đồ nền được tải từ tile server; dữ liệu của bạn luôn lưu trên thiết bị này.",
+      "flyTo": "Hiển thị {name} trên bản đồ",
+      "removeFeature": "Xoá {name}",
+      "expandFeature": "Xem chi tiết đầy đủ cho {name}",
+      "collapseFeature": "Thu gọn chi tiết cho {name}",
+      "detailsParent": "Thuộc {parent}",
+      "railRequest": "Đưa các địa điểm trong: {source} lên bản đồ",
+      "railSearchRequest": "Tìm kiếm trên web và đưa địa điểm từ: {query} lên bản đồ",
+      "railDone": "Đã định vị {count} địa điểm. Vui lòng xem lại các địa điểm độ tin cậy thấp trong danh sách.",
+      "searchToggle": "Chế độ tìm kiếm web",
+      "searchToggleHint": "Tìm kiếm trên web thay vì dán văn bản; các kết quả phù hợp sẽ được định vị trên bản đồ.",
+      "searchPlaceholder": "Tìm kiếm trên web, ví dụ: \"bùng phát dịch tả Đông Phi 2026\"…",
+      "searchAndMap": "Tìm kiếm & định vị",
+      "searching": "Đang tìm kiếm…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "Kết nối: {kind}",
+        "unresolved": "{count} kết nối tham chiếu đến các địa điểm không có trên bản đồ và đã bị bỏ qua."
+      },
+      "confidence": {
+        "high": "Cao",
+        "medium": "Trung bình",
+        "low": "Thấp"
+      },
+      "prominence": {
+        "primary": "Địa điểm chính",
+        "secondary": "Địa điểm phụ",
+        "mention": "Nhắc thoáng qua"
+      },
+      "prominenceMentionHint": "Nội dung chỉ nhắc đến địa điểm này thoáng qua — sẽ hiển thị nhỏ hơn trên bản đồ và không nằm trong khung xem ban đầu.",
+      "dates": {
+        "since": "từ {date}",
+        "range": "{start} – {end}",
+        "ongoing": "Đang diễn ra"
+      },
+      "filters": {
+        "label": "Lọc theo danh mục",
+        "other": "Khác",
+        "clear": "Xóa",
+        "showing": "Đang hiển thị {shown} / {total} địa điểm",
+        "noneMatch": "Không có địa điểm nào phù hợp với bộ lọc hiện tại."
+      },
+      "dateFilter": {
+        "label": "Ngày",
+        "from": "Từ",
+        "to": "Đến",
+        "fromAria": "Chỉ hiển thị sự kiện từ ngày này",
+        "toAria": "Chỉ hiển thị sự kiện tới ngày này",
+        "clear": "Xóa ngày",
+        "eraChip": "Chỉ hiển thị sự kiện trong {label}"
+      },
+      "timeline": {
+        "toggle": "Dải thời gian",
+        "play": "Phát dải thời gian",
+        "pause": "Tạm dừng dải thời gian",
+        "eras": "Các giai đoạn thời gian",
+        "jumpTo": "Chuyển đến {label}",
+        "slider": "Vị trí trên dải thời gian",
+        "showUndated": "Hiển thị địa điểm chưa xác định ngày",
+        "activeCount": "{count} đang hoạt động",
+        "jump": {
+          "start": "Bắt đầu",
+          "yearsLater": "{count, plural, one {1 năm sau} other {# năm sau}}",
+          "monthsLater": "{count, plural, one {1 tháng sau} other {# tháng sau}}",
+          "daysLater": "{count, plural, one {1 ngày sau} other {# ngày sau}}",
+          "appears": "{count, plural, one {1 xuất hiện} other {# xuất hiện}}",
+          "ends": "{count, plural, one {1 kết thúc} other {# kết thúc}}",
+          "progress": "Ngày {index} trong {total}"
+        },
+        "precision": {
+          "minute": "Chính xác đến phút",
+          "hour": "Chính xác đến giờ",
+          "day": "Chính xác đến ngày",
+          "month": "Ngày ở cấp tháng",
+          "year": "Ngày ở cấp năm",
+          "mixed": "(kết hợp)"
+        },
+        "pacing": {
+          "toggle": "Tốc độ phát lại",
+          "cardDuration": "Hiển thị mỗi địa điểm trong",
+          "seconds": "{seconds} giây",
+          "maxCards": "Số địa điểm hiển thị mỗi ngày",
+          "hint": "Những ngày bận rộn sẽ tự động được giữ lâu hơn."
+        }
+      },
+      "granularity": {
+        "site": "Điểm",
+        "city": "Thành phố/thị trấn",
+        "district": "Quận/huyện",
+        "region": "Khu vực",
+        "country": "Quốc gia"
+      },
+      "granularityAreaHint": "Là một khu vực, được thể hiện bằng một vòng tròn xung quanh trọng tâm — không phải vị trí hoặc ranh giới chính xác.",
+      "containerHint": "Chứa các địa điểm khác đã được định vị, nên chỉ hiển thị dưới dạng đường viền.",
+      "legend": {
+        "toggle": "Chú giải",
+        "title": "Cách đọc bản đồ",
+        "color": "Màu: độ tin cậy định vị (xanh đậm là cao, vàng là trung bình, đỏ là thấp)",
+        "size": "Kích thước chấm: mức độ trung tâm của địa điểm so với nội dung",
+        "area": "Vòng tròn nét đứt: phạm vi ước lượng của một quận, vùng hoặc quốc gia",
+        "container": "Viền mờ: khu vực có nội dung được ánh xạ riêng lẻ",
+        "precisionHalo": "Vòng đứt nét mềm (trong tua nhanh thời gian): sự kiện chỉ được ghi nhận đến cấp tháng hoặc năm, nên thời gian chính xác không xác định"
+      },
+      "sourceLabel": "Nguồn: {name}",
+      "fetchAndMap": "Lấy dữ liệu & ánh xạ",
+      "fetchingPage": "Đang lấy trang…",
+      "railUrlRequest": "Lấy và ánh xạ vị trí từ: {title} ({url})"
+    },
+    "shell": {
+      "showConversation": "Hiển thị hội thoại",
+      "hideConversation": "Ẩn hội thoại",
+      "workspaceTab": "Không gian làm việc",
+      "conversationTab": "Hội thoại",
+      "paneTabsLabel": "Bảng quy trình làm việc",
+      "railEmpty": "Tin nhắn và tiến trình của trợ lý sẽ hiển thị ở đây.",
+      "railInputPlaceholder": "Gửi tin nhắn cho trợ lý…",
+      "assistantThinking": "Đang suy nghĩ…",
+      "sendMessage": "Gửi tin nhắn",
+      "stopGenerating": "Dừng tạo nội dung",
+      "loadingWorkspace": "Đang tải không gian làm việc…",
+      "unknownType": "Cuộc hội thoại này sử dụng quy trình làm việc mà phiên bản này chưa nhận diện được. Lịch sử hội thoại được hiển thị bên dưới.",
+      "untitled": "Cuộc hội thoại mới",
+      "toggleMenu": "Chuyển đổi menu",
+      "model": "Mô hình cho quy trình làm việc này"
+    },
+    "tabs": {
+      "label": "Chế độ hội thoại",
+      "chat": "Trò chuyện",
+      "chatDescription": "Một cuộc trò chuyện tiêu chuẩn với trợ lý"
+    },
+    "discard": {
+      "title": "Hủy bản nháp này?",
+      "body": "Chuyển sang {target} sẽ xóa công việc bạn đã bắt đầu trong {current}.",
+      "confirm": "Hủy"
+    }
+  },
+  "connectors": {
+    "title": "Kết nối",
+    "description": "Kết nối các công cụ bên ngoài qua Model Context Protocol (MCP). Các công cụ đã kết nối sẽ khả dụng cho các mô hình trong chat và mỗi thao tác chỉ chạy khi bạn xác nhận.",
+    "localOnlyNote": "Bạn đăng nhập trực tiếp với từng nhà cung cấp. Mã truy cập được mã hóa và chỉ lưu trên thiết bị này, được chuyển qua máy chủ ứng dụng với mỗi yêu cầu — không bao giờ lưu trữ hoặc ghi lại ở đó.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "Tìm kiếm kho lưu trữ, đọc và tạo issue, pull request."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "Tìm, tạo và cập nhật nhiệm vụ, dự án."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Truy vấn các nguồn dữ liệu, workbook và chỉ số Pulse đã xuất bản."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Tra cứu và cập nhật các bản ghi trên các đối tượng Salesforce của bạn."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Soạn thảo, lên lịch và đăng bài trên mạng xã hội."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Xem lại và phản hồi các cuộc trò chuyện hộp thư xã hội."
+      }
+    },
+    "connect": "Kết nối",
+    "connected": "Đã kết nối",
+    "tokenEndsIn": "kết thúc bằng ••••{last4}",
+    "disconnect": "Ngắt kết nối",
+    "toolCount": "{count, plural, =1 {1 công cụ khả dụng} other {# công cụ khả dụng}}",
+    "patLabel": "Token truy cập cá nhân",
+    "createTokenLink": "Tạo token",
+    "tokenScopeHint": "Sử dụng token phân quyền phù hợp với nhu cầu truy cập của các công cụ này.",
+    "validating": "Đang kiểm tra kết nối…",
+    "validationFailed": "Không thể kết nối. Vui lòng kiểm tra địa chỉ và thử lại.",
+    "authFailed": "Máy chủ từ chối token. Vui lòng kiểm tra lại và thử lại.",
+    "tokenRequired": "Yêu cầu token",
+    "enableServer": "Có sẵn trong trò chuyện",
+    "arbitraryTitle": "Máy chủ MCP khác",
+    "arbitraryToggle": "Cho phép máy chủ MCP tùy ý",
+    "arbitraryWarning": "Bất kỳ ai chạy máy chủ MCP đều có thể xem các tin nhắn gửi đến công cụ của họ. Chỉ kết nối với các máy chủ bạn tin tưởng. Mỗi lần sử dụng công cụ đều cần bạn xác nhận.",
+    "addServer": "Thêm máy chủ MCP",
+    "editServer": "Chỉnh sửa máy chủ MCP",
+    "serverName": "Tên",
+    "serverUrl": "URL máy chủ",
+    "nameRequired": "Yêu cầu tên",
+    "urlRequired": "Yêu cầu URL",
+    "invalidUrl": "Nhập địa chỉ https:// công khai",
+    "namePlaceholder": "Máy chủ MCP của tôi",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "Access token (không bắt buộc)",
+    "keepTokenPlaceholder": "Để trống để giữ token hiện tại",
+    "disconnectedToast": "{name} đã ngắt kết nối",
+    "save": "Lưu",
+    "connectWithProvider": "Kết nối với {name}",
+    "useTokenInstead": "Sử dụng access token thay thế",
+    "oauthWaiting": "Đang chờ xác thực…",
+    "oauthFailed": "Đăng nhập không thành công. Vui lòng thử lại.",
+    "oauthDenied": "Nhà cung cấp đã từ chối truy cập.",
+    "oauthTimeout": "Hết thời gian đăng nhập. Vui lòng thử lại.",
+    "oauthCancelled": "Đăng nhập đã bị hủy.",
+    "oauthUnavailable": "Đăng nhập không khả dụng cho connector này trên bản triển khai này. Vui lòng sử dụng access token hoặc liên hệ quản trị viên để cấu hình ứng dụng OAuth.",
+    "ownAppToggle": "Sử dụng ứng dụng OAuth riêng",
+    "ownAppHint": "Đăng ký một ứng dụng OAuth trong tài khoản {name} của bạn (tổ chức, không gian làm việc hoặc phiên bản doanh nghiệp) với URL callback bên dưới, sau đó dán thông tin xác thực tại đây. Để đóng phần này nếu muốn sử dụng ứng dụng tích hợp sẵn.",
+    "ownAppCustomHint": "Bạn có thể cung cấp thông tin xác thực ứng dụng OAuth riêng bên dưới; để trống để tự động đăng ký với máy chủ.",
+    "ownAppInUse": "Đã kết nối bằng ứng dụng OAuth riêng của bạn.",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client secret (nếu ứng dụng của bạn có)",
+    "redirectUriLabel": "Callback / redirect URL cần đăng ký",
+    "reconnect": "Kết nối lại",
+    "needsReauth": "Cần kết nối lại",
+    "disconnectOauthNote": "Ngắt kết nối chỉ xóa quyền truy cập trên thiết bị này. Để thu hồi hoàn toàn, hãy quản lý ứng dụng được ủy quyền trong tài khoản {name} của bạn.",
+    "authModeLabel": "Xác thực",
+    "authModeNone": "Không có",
+    "authModeBearer": "Access token",
+    "authModeOauth": "Đăng nhập với nhà cung cấp (OAuth)",
+    "oauthCustomHint": "Bạn sẽ đăng nhập với nhà cung cấp của máy chủ trong cửa sổ bật lên sau khi lưu.",
+    "saveAndSignIn": "Lưu & đăng nhập",
+    "oauthCallback": {
+      "title": "Hoàn tất xác thực",
+      "missingState": "Không có gì để xác thực",
+      "close": "Bạn có thể đóng cửa sổ này và quay lại ứng dụng.",
+      "closeButton": "Đóng cửa sổ"
+    },
+    "oauthNoAppConfigured": "Việc đăng nhập bằng {name} chưa được cấu hình trên hệ thống này. Hãy kết nối bằng cách đăng ký ứng dụng OAuth của riêng bạn.",
+    "adminConnectorsTitle": "Từ tổ chức của bạn",
+    "adminConnectorsDescription": "Các kết nối do quản trị viên thiết lập. Quyền truy cập của bạn sẽ xác định những gì có thể xem.",
+    "managedByOrg": "Được quản lý bởi tổ chức của bạn",
+    "connectorOauthNotConfigured": "Thiết lập đăng nhập cho kết nối này chưa hoàn tất. Vui lòng liên hệ với quản trị viên.",
+    "yourConnectorsTitle": "Kết nối của bạn",
+    "addTitle": "Thêm kết nối",
+    "addDescription": "Chọn một công cụ để kết nối. Bạn sẽ thiết lập quyền truy cập sau khi chọn.",
+    "add": "Thêm",
+    "filterLabel": "Bộ lọc kết nối",
+    "filterPlaceholder": "Tìm kiếm kết nối",
+    "noMatches": "Không có kết nối nào phù hợp với \"{query}\"."
+  },
+  "modelSources": {
+    "connectButtonShort": "Kết nối nguồn mô hình",
+    "addAnother": "Thêm nguồn mô hình khác",
+    "edit": "Chỉnh sửa",
+    "disconnect": "Ngắt kết nối {name}",
+    "disconnectedToast": "Đã ngắt kết nối {name}",
+    "modelCountLabel": "{count} mô hình",
+    "loadingModels": "Đang tải mô hình...",
+    "noModelsAvailable": "Không có mô hình nào từ nguồn này",
+    "sourceUnreachable": "Không thể truy cập nguồn này. Quyền truy cập của bạn có thể đã thay đổi hoặc dịch vụ tạm thời không khả dụng.",
+    "retry": "Thử lại",
+    "connectFoundryAccount": "Kết nối tài khoản Microsoft Azure Foundry",
+    "connectFoundryDescription": "Khám phá các triển khai mô hình từ tài khoản Azure Foundry mà bạn có quyền truy cập. Quyền Azure của bạn xác thực mọi yêu cầu — các giới hạn mô hình của ứng dụng không áp dụng tại đây.",
+    "selectModelsDescription": "Chọn các triển khai mô hình từ tài khoản này sẽ xuất hiện trong bộ chọn mô hình của bạn.",
+    "editConnection": "Chỉnh sửa kết nối",
+    "nameLabel": "Tên",
+    "namePlaceholder": "vd. Không gian thử nghiệm nhóm tôi",
+    "nameRequired": "Cần nhập tên nguồn",
+    "foundryAccountLabel": "Tài khoản Foundry",
+    "enterManually": "Nhập thủ công",
+    "browseResources": "Duyệt tài nguyên",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Nhóm tài nguyên",
+    "accountNameLabel": "Tên tài khoản",
+    "subscriptionRequired": "Chọn một gói đăng ký",
+    "accountRequired": "Chọn tài khoản Foundry",
+    "accountSelectionRequired": "Chọn một tài khoản từ danh sách.",
+    "selectAllRequired": "Chọn gói đăng ký, nhóm tài nguyên và tài khoản.",
+    "connectionFailed": "Không thể truy cập tài khoản này. Vui lòng kiểm tra thông tin chi tiết và đảm bảo bạn có quyền truy cập.",
+    "duplicateSource": "Tài khoản này đã được kết nối với tên \"{name}\".",
+    "connectionSuccessModels": "Đã kết nối — tìm thấy {count} triển khai mô hình",
+    "connectionSuccessEmpty": "Đã kết nối, nhưng không tìm thấy triển khai mô hình nào trong tài khoản này.",
+    "checkingConnection": "Đang kiểm tra kết nối...",
+    "next": "Tiếp tục",
+    "back": "Quay lại",
+    "cancel": "Hủy",
+    "connect": "Kết nối",
+    "save": "Lưu",
+    "scanningResources": "Đang quét các đăng ký Azure của bạn...",
+    "discoveryPartialWarning": "Không thể quét {count, plural, one {# đăng ký} other {# đăng ký}}. Vui lòng nhập thủ công nếu tài khoản của bạn bị thiếu.",
+    "discoveryTruncatedWarning": "Có quá nhiều tài nguyên để quét đầy đủ. Vui lòng nhập thủ công nếu tài khoản của bạn bị thiếu.",
+    "noAccountsDiscovered": "Không tìm thấy tài khoản Foundry nào trong các đăng ký của bạn. Vui lòng nhập thủ công nếu bạn biết đường dẫn.",
+    "retryScan": "Quét lại",
+    "searchAccountsPlaceholder": "Tìm kiếm tài khoản...",
+    "modelsSelectedCount": "Đã chọn {selected} trên tổng số {total} mô hình",
+    "selectAll": "Chọn tất cả",
+    "deselectAll": "Bỏ chọn tất cả",
+    "autoAddLabel": "Tự động thêm mô hình mới",
+    "autoAddDescription": "Các mô hình được triển khai thêm vào tài khoản này sau này sẽ tự động hiển thị. Các mô hình chưa chọn sẽ tiếp tục bị loại trừ."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Tác động thấp hơn",
+      "moderate": "Tác động trung bình",
+      "high": "Tác động cao hơn"
+    },
+    "tierTooltip": "Tác động năng lượng tương đối cho mỗi yêu cầu, ước tính dựa trên kích thước mô hình. Các số liệu này là ước tính dựa trên trung bình công bố và giả định bản v{version} — không phải đo lường thực tế.",
+    "typicalRequest": "~{grams} g CO₂e cho mỗi yêu cầu điển hình",
+    "typicalRequestTooltip": "Ước tính sơ bộ cho mỗi yêu cầu thông thường (khoảng 1.000 prompt và 500 completion tokens), dựa trên trung bình công bố và giả định bản v{version}. Tác động thực tế thay đổi theo độ dài hội thoại, thiết lập và khu vực lưu trữ.",
+    "activities": {
+      "netflixHd": "Xem Netflix HD",
+      "zoomCall": "Gọi Zoom (mở camera)",
+      "webBrowsing": "Duyệt web",
+      "spotifyAudio": "Nghe nhạc Spotify"
+    },
+    "equivalents": {
+      "title": "≈ lượng carbon tương đương",
+      "note": "So sánh lượng carbon dựa trên dấu chân phát thải mỗi giờ được công bố của các dịch vụ này — là số liệu mang tính ước tính, chỉ để tham khảo sơ bộ."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} phút",
+      "hours": "{value} giờ"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Ước tính lượng phát thải carbon của cuộc hội thoại này: {grams} gam CO₂ tương đương. Xem chi tiết.",
+      "ariaLabelToday": "Ước tính lượng phát thải carbon hôm nay cho cuộc hội thoại này: {grams} gam CO₂ tương đương. Xem chi tiết.",
+      "title": "Cuộc hội thoại này (ước tính)",
+      "today": "Hôm nay",
+      "total": "Tổng cộng",
+      "measured": "Dựa trên số lượng token đã báo cáo",
+      "estimated": "Tính toán lại từ các tin nhắn cũ",
+      "lastRequest": "Yêu cầu gần nhất",
+      "disclaimer": "Ước tính cho từng yêu cầu dựa trên số lượng token đã báo cáo hoặc ước lượng, sử dụng các giá trị trung bình và giả định được công bố v{version}. Các tin nhắn cũ được tính toán lại từ văn bản lưu trữ và mô hình hiện tại của cuộc trò chuyện. Không phải số liệu đo lường.",
+      "visibilityGroup": "Hiển thị chip khí thải",
+      "visibilityLabel": "Hiển thị:",
+      "visibility": {
+        "always": "Luôn luôn",
+        "auto": "Tự động",
+        "hidden": "Ẩn"
+      },
+      "visibilityHint": "Chế độ Tự động sẽ hiển thị chip khi ước tính được cập nhật hoặc khi bạn di chuột vào. Bạn có thể thay đổi lại trong Cài đặt › Sử dụng & Tác động."
+    }
+  },
+  "table": {
+    "copyTable": "Sao chép bảng",
+    "downloadTable": "Tải bảng xuống",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Đã xuất dưới dạng CSV",
+    "copyFailed": "Không thể sao chép bảng"
+  },
+  "backup": {
+    "intro": {
+      "title": "Sao lưu trò chuyện của bạn — an toàn",
+      "body": "Cuộc trò chuyện của bạn được mã hóa trên thiết bị này trước khi tải lên. Chúng tôi không thể đọc nội dung trò chuyện của bạn.",
+      "keyWarning": "Khóa khôi phục của bạn được tạo trên thiết bị này. Chúng tôi không bao giờ thấy và không thể khôi phục lại cho bạn — mất khóa đồng nghĩa với mất sao lưu.",
+      "create": "Tạo khóa & sao lưu",
+      "decline": "Để sau — chỉ lưu trò chuyện trên thiết bị này"
+    },
+    "ceremony": {
+      "titleCreate": "Lưu khóa khôi phục của bạn",
+      "titleRotate": "Lưu khóa khôi phục mới của bạn",
+      "titleView": "Khóa khôi phục của bạn",
+      "description": "Đây là cách duy nhất để khôi phục sao lưu của bạn trên thiết bị khác. Hãy lưu giữ ở nơi an toàn — chúng tôi không thể khôi phục lại cho bạn.",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép!",
+      "download": "Tải về .txt",
+      "showQr": "Hiện mã QR",
+      "hideQr": "Ẩn mã QR",
+      "savedCheckbox": "Tôi đã lưu khóa khôi phục ở nơi an toàn",
+      "saveFirstHint": "Hãy sao chép hoặc tải khóa xuống trước khi tiếp tục.",
+      "continue": "Tiếp tục",
+      "done": "Hoàn tất",
+      "cancel": "Hủy",
+      "cancelConfirmTitle": "Hủy thiết lập sao lưu?",
+      "cancelConfirmBody": "Trò chuyện của bạn sẽ không được sao lưu. Bạn có thể bật sao lưu mã hóa bất cứ lúc nào trong Cài đặt.",
+      "cancelConfirmRotateBody": "Khóa khôi phục đã được thay đổi. Bạn có thể xem lại bất cứ lúc nào trong Cài đặt.",
+      "cancelConfirmConfirm": "Đúng, hãy hủy",
+      "cancelConfirmDismiss": "Quay lại",
+      "loadError": "Không thể tải khóa khôi phục trên thiết bị này."
+    },
+    "file": {
+      "heading": "Khóa khôi phục sao lưu trò chuyện",
+      "warning": "Giữ gìn khóa này cẩn thận. Ai có khóa sẽ đọc được bản sao lưu; không có khóa thì không thể khôi phục."
+    },
+    "progress": {
+      "titleCreate": "Đang thiết lập sao lưu",
+      "titleRotate": "Đang thay đổi khóa khôi phục",
+      "encrypting": "{count, plural, one {Đang mã hóa và sao lưu # cuộc trò chuyện…} other {Đang mã hóa và sao lưu # cuộc trò chuyện…}}",
+      "success": "{count, plural, one {Sao lưu hoàn tất. # cuộc trò chuyện đã được bảo vệ.} other {Sao lưu hoàn tất. # cuộc trò chuyện đã được bảo vệ.}}",
+      "error": "Sao lưu thất bại. Trò chuyện của bạn vẫn còn trên thiết bị này.",
+      "retry": "Thử lại",
+      "close": "Đóng",
+      "done": "Hoàn tất"
+    },
+    "input": {
+      "label": "Khóa khôi phục",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Khóa không bao giờ chứa chữ O, I hoặc L.",
+      "checksumError": "Khóa này có vẻ không đúng — vui lòng kiểm tra lại lỗi đánh máy.",
+      "formatError": "Đây không phải là khóa khôi phục hợp lệ.",
+      "incomplete": "Tiếp tục nhập — khóa khôi phục có 56 ký tự.",
+      "valid": "Khóa hợp lệ."
+    },
+    "restore": {
+      "title": "Khôi phục trò chuyện của bạn",
+      "successTitle": "Đã khôi phục sao lưu",
+      "promptBody": "Chúng tôi đã tìm thấy một bản sao lưu mã hóa cho tài khoản của bạn. Hãy nhập khóa khôi phục để lấy lại trên thiết bị này.",
+      "submit": "Khôi phục sao lưu",
+      "skip": "Bỏ qua — bắt đầu mới trên thiết bị này",
+      "restoring": "Đang giải mã và khôi phục trò chuyện…",
+      "successBody": "{count, plural, one {# cuộc trò chuyện đã khôi phục.} other {# cuộc trò chuyện đã khôi phục.}}",
+      "wrongKey": "Khóa này hợp lệ nhưng không mở được bản sao lưu này. Nếu bạn đã thay đổi khóa, hãy dùng khóa mới nhất.",
+      "corrupt": "Không thể đọc được bản sao lưu này — có thể đã bị hỏng. Bạn có thể bắt đầu mới trên thiết bị này hoặc thử lại sau.",
+      "networkError": "Không thể kết nối với dịch vụ sao lưu. Vui lòng kiểm tra kết nối và thử lại.",
+      "tryAgain": "Thử khóa khác",
+      "close": "Hoàn tất"
+    },
+    "enterKey": {
+      "title": "Nhập khóa khôi phục mới của bạn",
+      "body": "Khóa khôi phục của bạn đã được thay đổi trên thiết bị khác. Nhập khóa mới để tiếp tục sao lưu trên thiết bị này.",
+      "submit": "Sử dụng khóa này"
+    },
+    "banner": {
+      "keyMismatchTitle": "Đã tạm dừng sao lưu — khóa khôi phục của bạn đã thay đổi trên thiết bị khác.",
+      "enterNewKey": "Nhập khóa mới",
+      "resetBackup": "Đặt lại sao lưu",
+      "resetConfirmTitle": "Đặt lại sao lưu với khóa của thiết bị này?",
+      "resetConfirmBody": "Bản sao lưu hiện tại sẽ được thay thế bằng trò chuyện của thiết bị này và mã hóa với khóa của thiết bị này. Thiết bị khác sẽ cần có khóa khôi phục của thiết bị này.",
+      "resetConfirmAction": "Đặt lại sao lưu",
+      "remoteMissingTitle": "Sao lưu của bạn không còn tồn tại trên máy chủ. Đã tạm dừng sao lưu.",
+      "backUpAgain": "Sao lưu lại",
+      "dismiss": "Bỏ qua"
+    },
+    "rotate": {
+      "confirmTitle": "Thay đổi khóa khôi phục?",
+      "confirmBody": "Sao lưu của bạn sẽ được mã hóa lại với khóa mới và khóa cũ sẽ không còn sử dụng được. Bạn cần lưu khóa mới và nhập khóa trên các thiết bị khác.",
+      "confirmAction": "Thay đổi khóa"
+    },
+    "toast": {
+      "enrollLater": "Bạn có thể bật sao lưu mã hóa bất cứ lúc nào trong Cài đặt.",
+      "keyUpdated": "Đã cập nhật khóa khôi phục. Đã tiếp tục sao lưu.",
+      "resetDone": "Đã đặt lại sao lưu bằng khóa của thiết bị này.",
+      "backupRestarted": "Đã tạo lại bản sao lưu.",
+      "opFailed": "Đã xảy ra lỗi. Vui lòng thử lại."
+    },
+    "settings": {
+      "statusOn": "Đang bật sao lưu",
+      "statusOff": "Đang tắt sao lưu",
+      "offDescription": "Trò chuyện của bạn chỉ có trên trình duyệt này. Bật sao lưu mã hóa để bảo vệ và khôi phục dữ liệu trên thiết bị khác. Các đoạn trò chuyện được mã hóa ngay trên thiết bị của bạn — chúng tôi không thể đọc được nội dung.",
+      "turnOn": "Bật sao lưu",
+      "restoreTitle": "Đã có bản sao lưu cho tài khoản của bạn",
+      "restoreDescription": "Nhập khóa khôi phục để khôi phục trên thiết bị này.",
+      "restore": "Khôi phục sao lưu",
+      "lastBackup": "Sao lưu cuối: {time}",
+      "lastBackupNever": "Chưa có bản sao lưu nào",
+      "keyFingerprint": "Khóa ····-{tail}",
+      "syncState": {
+        "idle": "Đang chờ đồng bộ",
+        "syncing": "Đang sao lưu…",
+        "ok": "Đã cập nhật",
+        "keyOutOfDate": "Tạm dừng — khóa khôi phục đã được thay đổi trên thiết bị khác",
+        "remoteMissing": "Tạm dừng — bản sao lưu đã bị xóa khỏi máy chủ",
+        "error": "Lần sao lưu gần nhất không thành công"
+      },
+      "backUpNow": "Sao lưu ngay",
+      "backUpNowSuccess": "Sao lưu hoàn tất",
+      "backUpNowFailure": "Sao lưu không thành công — các cuộc trò chuyện trên thiết bị này không thay đổi",
+      "viewKey": "Xem khóa khôi phục",
+      "changeKey": "Thay đổi khóa khôi phục",
+      "dangerTitle": "Khu vực nguy hiểm",
+      "turnOffDelete": "Tắt & xóa sao lưu",
+      "turnOffConfirmTitle": "Tắt sao lưu?",
+      "turnOffConfirmMessage": "Việc này sẽ xóa bản sao lưu của bạn khỏi máy chủ cho tất cả thiết bị. Các cuộc trò chuyện trên thiết bị này vẫn giữ nguyên. Bạn có thể bật lại sao lưu sau với khóa khôi phục mới.",
+      "turnOffConfirmAction": "Xóa sao lưu",
+      "turnOffSuccess": "Đã tắt và xóa sao lưu",
+      "turnOffFailure": "Không thể xóa bản sao lưu. Vui lòng thử lại."
+    }
+  },
+  "memories": {
+    "title": "Ký ức",
+    "description": "Giúp trợ lý ghi nhớ các thông tin quan trọng bạn cung cấp — như vai trò, sở thích, và dự án đang thực hiện — để sử dụng trong các cuộc trò chuyện tiếp theo.",
+    "enableToggle": "Bật ký ức",
+    "privacyNote": "Thông tin chỉ được lưu trên trình duyệt này và sẽ được bao gồm trong các cuộc trò chuyện để cá nhân hóa phản hồi.",
+    "empty": "Chưa có ký ức nào. Các thông tin quan trọng sẽ được tự động lưu lại từ cuộc trò chuyện của bạn.",
+    "savedOn": "Đã lưu {date}",
+    "deleteMemory": "Xóa ký ức",
+    "clearAll": "Xóa tất cả ký ức",
+    "clearAllConfirmQuestion": "Xóa tất cả ký ức? Hành động này không thể hoàn tác.",
+    "clearAllConfirm": "Xóa tất cả",
+    "cancel": "Hủy"
+  },
+  "contextWindow": {
+    "label": "Cửa sổ ngữ cảnh",
+    "value": "{count} tin nhắn",
+    "fewer": "Ít tin nhắn hơn",
+    "more": "Nhiều tin nhắn hơn",
+    "description": "Các tin nhắn cũ vượt quá giới hạn này sẽ được tóm tắt và gửi làm ngữ cảnh."
+  },
+  "agentAccess": {
+    "title": "Quyền truy cập tác nhân",
+    "description": "Kiểm soát người dùng nào có thể sử dụng tác nhân Foundry chia sẻ. Các quy tắc chỉ giới hạn thêm quyền mà Azure của người dùng đã cấp — bạn không thể cấp quyền truy cập nếu Azure không cho phép.",
+    "backToChat": "Quay lại trò chuyện",
+    "loading": "Đang tải tác nhân và quy tắc…",
+    "loadError": "Không thể tải dữ liệu quyền truy cập tác nhân.",
+    "rulesUnavailableWarning": "Không thể tải quy tắc truy cập từ bộ nhớ. Hiện tại không thể gọi tác nhân và không thể chỉnh sửa quy tắc.",
+    "retry": "Thử lại",
+    "rulesTab": "Quy tắc tác nhân",
+    "localAdminsTab": "Quản trị viên cục bộ",
+    "noAgents": "Không có tác nhân nào để quản lý.",
+    "sourceLabel": "Nguồn",
+    "notDiscoverable": "Bạn không thể tìm thấy",
+    "notDiscoverableHint": "Đã có quy tắc cho tác nhân này, nhưng không có trong mục khám phá của bạn — có thể tác nhân đã được đổi tên, quyền Azure của bạn không đủ truy cập hoặc quy tắc truy cập không bao gồm bạn.",
+    "accessEveryone": "Tất cả mọi người",
+    "accessRestricted": "Bị giới hạn",
+    "edit": "Chỉnh sửa",
+    "updatedByLine": "Cập nhật lần cuối bởi {user} vào {date}",
+    "accessTypeLabel": "Ai có thể sử dụng tác nhân này",
+    "everyoneDescription": "Bất kỳ ai đã có quyền truy cập tác nhân này qua Azure của họ.",
+    "restrictedDescription": "Chỉ những người dùng và tên miền liệt kê bên dưới.",
+    "allowDomainsLabel": "Tên miền được phép",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Người dùng được phép",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Nhấn Enter để thêm",
+    "removeChip": "Xóa",
+    "groupsLabel": "Nhóm được phép",
+    "groupsPendingConsent": "Truy cập theo nhóm đang chờ quản trị viên phê duyệt và chưa thể chỉnh sửa.",
+    "restrictedEmptyWarning": "Không có người dùng hoặc tên miền nào được liệt kê — không ai có thể sử dụng agent này.",
+    "save": "Lưu",
+    "saving": "Đang lưu…",
+    "cancel": "Hủy",
+    "saveSuccess": "Quy tắc truy cập đã được lưu.",
+    "deleteSuccess": "Quy tắc truy cập đã được xóa — mọi người đều có thể sử dụng agent này trở lại.",
+    "saveError": "Không thể lưu. Vui lòng thử lại.",
+    "conflictError": "Có người khác đã thay đổi trong lúc bạn chỉnh sửa. Tải lại để lấy phiên bản mới nhất, sau đó chỉnh sửa lại.",
+    "reload": "Tải lại",
+    "localAdminsDescription": "Phân quyền quản lý quy tắc cho từng agent mà không cần triển khai lại. Quản trị viên cục bộ chỉ có thể chỉnh sửa quy tắc của các agent được giao.",
+    "noLocalAdmins": "Chưa cấu hình quản trị viên cục bộ nào.",
+    "addLocalAdmin": "Thêm quản trị viên cục bộ",
+    "emailLabel": "Email",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Xóa quản trị viên cục bộ",
+    "delegatedAgentsLabel": "Agent được phân quyền",
+    "noDelegatedAgents": "Không có agent nào để phân quyền.",
+    "unknownAgentKey": "Khóa agent không xác định",
+    "configSaveSuccess": "Đã lưu quản trị viên cục bộ.",
+    "configConflictError": "Danh sách quản trị viên cục bộ đã bị thay đổi trong lúc bạn chỉnh sửa. Tải lại và thử lại.",
+    "addAgent": "Thêm agent",
+    "newPromptAgentTitle": "Agent prompt mới",
+    "editPromptAgentTitle": "Chỉnh sửa agent prompt",
+    "agentNameLabel": "Tên",
+    "agentNamePlaceholder": "ví dụ: Tư vấn Du lịch",
+    "agentDescriptionLabel": "Mô tả",
+    "agentDescriptionPlaceholder": "Hiển thị cho người dùng trong trình chọn mô hình",
+    "agentSystemPromptLabel": "Prompt hệ thống",
+    "agentSystemPromptPlaceholder": "Hướng dẫn xác định cách agent này hoạt động",
+    "agentModelLabel": "Mô hình",
+    "agentModelPlaceholder": "Chọn một mô hình…",
+    "agentModelUnavailable": "{modelId} (không khả dụng)",
+    "agentModelUnknownError": "Mô hình đã chọn không còn khả dụng. Vui lòng chọn mô hình khác và lưu lại.",
+    "promptAgentBadge": "Agent prompt",
+    "editAgent": "Chỉnh sửa agent",
+    "deleteAgent": "Xóa",
+    "deleteAgentConfirm": "Xóa agent này cho tất cả mọi người? Agent sẽ biến mất khỏi trình chọn mô hình; các cuộc trò chuyện hiện tại vẫn giữ lại lịch sử.",
+    "confirmDeleteAgent": "Đồng ý, xóa",
+    "promptAgentCreateSuccess": "Đã tạo agent prompt.",
+    "promptAgentSaveSuccess": "Đã lưu agent prompt.",
+    "promptAgentDeleteSuccess": "Đã xóa agent prompt.",
+    "promptAgentsUnavailableWarning": "Không thể tải agent prompt từ kho lưu trữ. Hiện tại không thể chỉnh sửa chúng.",
+    "agentsTab": "Tác nhân",
+    "connectorsTab": "Kết nối",
+    "addConnector": "Thêm kết nối",
+    "noConnectors": "Chưa có kết nối nào.",
+    "connectorsUnavailableWarning": "Không thể truy cập kho kết nối, danh sách này có thể chưa đầy đủ. Không tạo kết nối thay thế cho đến khi tải xong.",
+    "editAccess": "Chỉnh sửa quyền truy cập",
+    "deleteConnector": "Xóa",
+    "deleteConnectorConfirm": "Xóa kết nối này? Tất cả những ai đang sử dụng sẽ mất quyền truy cập ngay lập tức.",
+    "confirmDeleteConnector": "Xóa kết nối",
+    "connectorSaveSuccess": "Đã lưu kết nối.",
+    "connectorCreateSuccess": "Đã tạo kết nối.",
+    "connectorDeleteSuccess": "Đã xóa kết nối.",
+    "editConnectorTitle": "Chỉnh sửa kết nối",
+    "newConnectorTitle": "Kết nối mới",
+    "connectorPresetLabel": "Bắt đầu từ mẫu",
+    "connectorPresetNone": "Bắt đầu từ đầu",
+    "connectorNameLabel": "Tên",
+    "connectorDescriptionLabel": "Mô tả",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "Thay {placeholder} trong URL bằng giá trị của bạn trước khi lưu.",
+    "connectorTransportLabel": "Phương thức truyền",
+    "connectorAuthLabel": "Xác thực",
+    "connectorAuthNone": "Không có",
+    "connectorAuthBearer": "Token (mỗi người dùng cung cấp riêng)",
+    "connectorAuthOauth": "Đăng nhập bằng OAuth",
+    "connectorSealingUnavailable": "OAuth không khả dụng: triển khai này chưa cấu hình AUTH_SECRET để mã hóa client secrets.",
+    "connectorTokenHelpLabel": "Liên kết hướng dẫn về token (tuỳ chọn)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Đã lưu một secret. Để trống nếu muốn giữ lại, hoặc nhập mới để thay thế.",
+    "connectorClientSecretHint": "Được mã hoá trước khi lưu, và sẽ không hiển thị lại.",
+    "connectorScopesLabel": "Scopes (phân cách bằng dấu cách, tuỳ chọn)"
+  },
+  "localModels": {
+    "title": "Mô hình cục bộ",
+    "description": "Trò chuyện với các mô hình chạy trên máy tính này. Tin nhắn đi thẳng từ trình duyệt của bạn đến ứng dụng cục bộ và không bao giờ đến máy chủ của chúng tôi — vì vậy các phản hồi, tiêu đề và tóm tắt hội thoại đều ở lại trên máy của bạn.",
+    "detect": "Phát hiện môi trường cục bộ",
+    "detecting": "Đang phát hiện…",
+    "experimental": "Thử nghiệm",
+    "portLabel": "Cổng",
+    "statusUnknown": "Chưa kiểm tra.",
+    "statusChecking": "Đang kiểm tra…",
+    "statusReady": "{count, plural, =0 {Đã kết nối, nhưng chưa tải mô hình nào.} one {Đã kết nối — có # mô hình.} other {Đã kết nối — có # mô hình.}}",
+    "statusNotRunning": "Không thể kết nối tới {label}. Hãy kiểm tra xem nó đã chạy ở cổng này chưa và trình duyệt của bạn có quyền truy cập ứng dụng cục bộ từ trang này không.",
+    "statusHttpError": "{label} phản hồi với lỗi. Hãy kiểm tra log của nó.",
+    "corsHelp": {
+      "ollama": "Ollama đang chạy nhưng từ chối yêu cầu từ trang này. Hãy đặt OLLAMA_ORIGINS thành địa chỉ của trang này, khởi động lại Ollama rồi phát hiện lại.",
+      "lmstudio": "LM Studio đang chạy nhưng từ chối yêu cầu từ trang này. Hãy bật CORS trong cài đặt máy chủ cục bộ, sau đó phát hiện lại.",
+      "llamacpp": "llama.cpp đang chạy nhưng từ chối yêu cầu từ trang này. Hãy khởi động llama-server với quyền cho phép truy cập chéo, rồi phát hiện lại."
+    },
+    "privacyNote": "Mô hình cục bộ không hỗ trợ đính kèm tệp, hình ảnh, tìm kiếm web hoặc kết nối — những chức năng này cần máy chủ của chúng tôi. Việc phát hiện chỉ kiểm tra trên máy tính này."
+  },
+  "urlFetch": {
+    "sourceFallback": "Trang web",
+    "fallbackHint": "Bạn cũng có thể mở trang web, sao chép văn bản và dán vào đây.",
+    "shortExtract": "Chỉ có thể đọc được một đoạn trích ngắn — trang có thể bị khóa hoặc yêu cầu đăng nhập.",
+    "errors": {
+      "invalidUrl": "Đây không có vẻ là địa chỉ web hợp lệ.",
+      "ssrfBlocked": "Địa chỉ này không thể lấy về vì lý do bảo mật.",
+      "tooManyRedirects": "Liên kết này chuyển hướng quá nhiều lần.",
+      "timeout": "Trang mất quá nhiều thời gian để phản hồi.",
+      "unreachable": "Không thể truy cập trang này.",
+      "blocked": "Trang web từ chối yêu cầu — có thể cần đăng nhập hoặc chặn trình đọc tự động.",
+      "notFound": "Không tìm thấy trang này.",
+      "upstream": "Trang web trả về lỗi.",
+      "pdf": "Liên kết này là tệp PDF. Vui lòng tải xuống và sử dụng nút đính kèm để thêm tệp này.",
+      "nonHtml": "Liên kết này không phải trang web mà chúng tôi có thể đọc.",
+      "tooLarge": "Trang này quá lớn để tải.",
+      "empty": "Không tìm thấy nội dung bài viết có thể đọc được trên trang này.",
+      "generic": "Không thể tải trang này."
+    },
+    "fetchingFile": "Đang tải {host}…",
+    "attachLink": "Đính kèm liên kết",
+    "attachLinkTitle": "Đính kèm trang web",
+    "attachLinkDescription": "Trang web sẽ được tải và nội dung dễ đọc sẽ được đính kèm vào tin nhắn của bạn.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Tải & đính kèm",
+    "attachLinkInvalid": "Đây không có vẻ là địa chỉ web hợp lệ.",
+    "linkBadge": "Từ liên kết",
+    "couldNotRetrieve": "Không thể truy xuất",
+    "doc": {
+      "sourceLabel": "Nguồn",
+      "retrievedLabel": "Đã truy xuất",
+      "attemptedLabel": "Đã thử truy xuất",
+      "failureHeading": "Không thể truy xuất trang web"
+    },
+    "settingsTitle": "Liên kết trong tin nhắn",
+    "settingsToggle": "Tự động tải liên kết dán vào",
+    "settingsDescription": "Khi bạn dán một liên kết riêng lẻ, trang sẽ được tải và phần văn bản sẽ được đính kèm để trợ lý có thể đọc. Tắt tính năng này để giữ liên kết ở dạng văn bản thuần — bạn vẫn có thể đính kèm trang thủ công từ menu +.",
+    "addLink": "Thêm liên kết"
+  },
+  "cameraAccessError": "Không thể truy cập vào camera. Vui lòng kiểm tra quyền truy cập camera và thử lại.",
+  "cameraUnnamedDevice": "Camera",
+  "pastedText": {
+    "fallbackName": "Văn bản đã dán",
+    "charCount": "{count, number} ký tự",
+    "removeChip": "Xóa văn bản đã dán “{name}”",
+    "blockLabel": "Văn bản đã dán: {name}",
+    "doc": {
+      "heading": "Văn bản đã dán",
+      "pastedLabel": "Đã dán"
+    },
+    "settingsTitle": "Dán văn bản lớn",
+    "settingsToggle": "Chuyển dán lớn thành tệp đính kèm",
+    "settingsDescription": "Khi dán văn bản vượt giới hạn dưới đây, nội dung sẽ được đính kèm dưới dạng tệp thay vì điền vào ô tin nhắn. Văn bản được sử dụng nguyên trạng như khi dán — không truy xuất hoặc thay đổi gì.",
+    "settingsThresholdLabel": "Đính kèm các lần dán dài hơn",
+    "settingsThresholdUnit": "ký tự",
+    "settingsThresholdHint": "Trong khoảng từ {min, number} đến {max, number} ký tự."
+  },
+  "structures": {
+    "section": "Cấu trúc",
+    "sectionSubtitle": "Định nghĩa trường đã lưu. Sử dụng như công thức trích xuất, hoặc làm mẫu dữ liệu khởi đầu cho bảng quy trình.",
+    "loadFromStructure": "Tải cấu trúc",
+    "loadFromStructureTitle": "Thay các cột này bằng một cấu trúc đã lưu",
+    "pickerEmpty": "Chưa có cấu trúc nào được lưu.",
+    "pickerTitle": "Tải cấu trúc đã lưu",
+    "saveAsStructure": "Lưu thành cấu trúc",
+    "saveAsStructureTitle": "Lưu các cột này vào thư viện cấu trúc của bạn",
+    "savedToast": "Đã lưu cấu trúc “{name}”",
+    "namePlaceholder": "Tên cấu trúc",
+    "fieldCount": "{count} trường",
+    "fieldCountOne": "1 trường",
+    "downgradedNotice": "{count} trường đã chuyển thành dạng văn bản — bảng chỉ chứa một giá trị cho mỗi ô: {names}",
+    "truncatedNotice": "{count} trường bị loại bỏ — số cột tối đa của bảng là {max}: {names}",
+    "skippedDerivedNotice": "{count} cột tính toán không được lưu — công thức tham chiếu đến các cột trong bảng này: {names}",
+    "loadReplacesColumns": "Hành động này sẽ thay thế các cột hiện tại. Các dòng đã có sẽ giữ lại giá trị nếu tên cột trùng khớp."
   }
 }

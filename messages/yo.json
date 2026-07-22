@@ -437,7 +437,22 @@
     "noProjectsFound": "Ko si iṣẹ́ tí a rí. Lilo \"default\".",
     "selectAllRequired": "Yan alabapin, akọọlẹ, ati iṣẹ́.",
     "subscriptionRequired": "Yan ìforúkọsílẹ̀ kan",
-    "accountRequired": "Yan àkọọlẹ Foundry kan"
+    "accountRequired": "Yan àkọọlẹ Foundry kan",
+    "projectSelectionRequired": "Yan iṣẹ́ agbese kan lára àkójọpọ̀.",
+    "scanningResources": "N ṣàwárí àwọn àfikún Azure rẹ...",
+    "searchProjectsPlaceholder": "Wa iṣẹ́ agbese...",
+    "noProjectsDiscovered": "Kò sí iṣẹ́ Foundry tí a rí nínú àfikún rẹ. Lo ìfọwọ́kọ ọ̀tọ̀ bí o bá mọ ọ̀nà.",
+    "discoveryPartialWarning": "{count, plural, one {# àfikún} other {# àfikún}} kò le ṣàwárí. Lo ìfọwọ́kọ ọ̀tọ̀ tí iṣẹ́ agbese rẹ bá bọ́.",
+    "discoveryTruncatedWarning": "Ọ̀pọ̀lọpọ̀ àfikún wa tí kò jẹ́ kó ṣàwárí tan. Lo ìfọwọ́kọ ọ̀tọ̀ bí iṣẹ́ agbese rẹ bá bọ́.",
+    "retryScan": "Tun ṣàwárí lẹ́ẹ̀kàn síi",
+    "next": "Tẹ̀ síwájú",
+    "back": "Pada",
+    "selectAgentsDescription": "Yan àwọn agent wo ni iṣẹ́ agbese yìí tí yóò hàn nínú aṣàyan àwòrán rẹ.",
+    "selectAll": "Yan gbogbo rẹ",
+    "deselectAll": "Yọ gbogbo yànkànkan",
+    "agentsSelectedCount": "{selected} nínú {total} agent ni a yàn",
+    "autoAddLabel": "Ìfi agent tuntun sílẹ̀ laifọwọ́si",
+    "autoAddDescription": "Àwọn agent tuntun tí a gbe sórí iṣẹ́ agbese yìí yóò farahàn laifọwọ́si. Àwọn agent tí a kò yàn ṣì máa kúrò."
   },
   "Quick Actions": "Àwọn Ìṣe Kíákíá",
   "Type / in chat to access your prompts": "Tẹ / nínú ìfọ̀rọ̀wérọ̀ láti wọlé sí àwọn ìtọ́sọ́nà rẹ",
@@ -805,7 +820,7 @@
     "stopGenerationDontAskAgainButton": "Má ṣe béèrè mọ́ tí mo bá dákẹ́ pẹ̀lú bọtìnì",
     "stopGenerationDontAskAgainKeyboard": "Má ṣe béèrè mọ́ tí mo bá dákẹ́ pẹ̀lú bọtìnì kọ́ńpútà",
     "generateResponseButton": "Ṣẹdá ìdáhùn",
-    "downloadResponse": "Gba idahun silẹ",
+    "downloadResponse": "Gba idahun kalẹ",
     "activity": {
       "callingTool": "Npe ohun ìṣàkóso…",
       "callingService": "Npe iṣẹ́ ọ̀fẹ́…",
@@ -818,7 +833,19 @@
       "listingTools": "N ṣàyẹ̀wò àwọn ohun ìṣàkóso tó wà…",
       "analyzingFiles": "N ṣe àyẹ̀wò fáìlì rẹ…",
       "searchingKnowledge": "N wa nínú ibi ìmọ̀…",
-      "cancellingPriorTool": "N fagilé ìbéèrè ohun ìṣàkóso tó kọjá…"
+      "cancellingPriorTool": "N fagilé ìbéèrè ohun ìṣàkóso tó kọjá…",
+      "workflow": {
+        "preparingDocument": "N pèsè àwọn àtọkànwá...",
+        "writingDocument": "N kọ àkọsílẹ̀...",
+        "analyzingSource": "N ṣe àyẹ̀wò orísun ọrọ...",
+        "translating": "N túmọ̀...",
+        "reviewingTranslation": "Ìpẹ̀yà àyẹ̀wò {round} nínú {total}...",
+        "revisingTranslation": "N fi àbájáde àyẹ̀wò kún in...",
+        "extractingRows": "N yà àwọn ìlà jáde láti {source}...",
+        "transformingTable": "N yí tábìlì padà...",
+        "findingLocations": "N ráyè mọ ibi...",
+        "updatingMap": "N ṣe imudojúìpẹ̀ maapu..."
+      }
     },
     "toolSummary": {
       "usedTools": "Lo {count, plural, one {# ohun ìṣàkóso} other {# àwọn ohun ìṣàkóso}}",
@@ -879,7 +906,9 @@
     "listen": "Gbọ",
     "processingAudio": "Nṣiṣẹ ohun...",
     "ttsError": "Asise lakoko iṣejade ohun. Jọwọ gbiyanju lẹẹkansi.",
-    "unsupportedMessageType": "Aṣiṣe ṣiṣi ifiranṣẹ: Iru ifiranṣẹ ti a ko ṣe atilẹyin"
+    "unsupportedMessageType": "Aṣiṣe ṣiṣi ifiranṣẹ: Iru ifiranṣẹ ti a ko ṣe atilẹyin",
+    "addLanguageOption": "Ṣàfikún \"{name}\"…",
+    "sources": "Àwọn orísun"
   },
   "transcript": {
     "originalTranscript": "Ìkọsílẹ̀ Àkọ́kọ́",
@@ -1293,15 +1322,33 @@
     "unsavedChangesMessage": "O ní àyípadà tí kò tíì fipamọ́. Ṣe o fẹ́ sọ wọn di asán?",
     "characterCount": "{current}/{max}",
     "clearField": "Nu aaye",
-    "autosaveNote": "Ayipada n ṣe fipamọ laifọwọyi.",
+    "autosaveNote": "Àtúnṣe ti fipamọ laifọwọyi.",
     "responseSection": "Idahun",
     "voiceSection": "Ohùn",
-    "behaviorSection": "Ihuwasi",
+    "behaviorSection": "Ìhùwàsí",
     "resetChatSettings": "Tun eto iwiregbe ṣe",
     "resetChatSettingsConfirmTitle": "Ṣe tun eto iwiregbe ṣe?",
-    "resetChatSettingsConfirmMessage": "Eleyi yoo mu gbogbo eto apakan yii pada si aiyipada: iwọn otutu, ilana ara rẹ, Nipa Rẹ, idahun awoṣe, iyara ṣiṣanwọle, ọrọ-sí-ohùn, awọn faili to ṣiṣẹ, ati ìmúlòlùú. Kò ní kan ìjíròrò rẹ.",
+    "resetChatSettingsConfirmMessage": "Eyi yoo da awọn aiyipada pada fun gbogbo ohun inu àpó yii: iwọn otutu, ìlànà ti a ṣafikun, Nipa Rẹ, idahun awoṣe, iyara ṣiṣànwọle, ọrọ-si-ohùn, awọn faili tí n ṣiṣẹ, àti ìmúlòlùfẹ. Kò ní kan àwọn ìjíròrò rẹ.",
     "customInstructionsLabel": "Ìtọsọna àdáṣe*",
-    "defaultTemperatureLabel": "Ìtẹ̀tẹ ayára aiyipada*"
+    "defaultTemperatureLabel": "Ìtẹ̀tẹ ayára aiyipada*",
+    "Usage & Impact": "Lilo & Ipa",
+    "Connectors": "Asopọ",
+    "Backup": "Afẹyinti",
+    "Memories": "Ìrántí",
+    "Agent Access": "Ìwọlé aṣojú",
+    "LocalModels": "Àwòrán àgbéyẹ̀wò agbègbè",
+    "suggestRevisions": {
+      "title": "Àtúnṣe iwe",
+      "toggle": "Ṣàtúnṣe dídá àbẹ́yẹ àpẹẹrẹ dipo fífikọ wọn taara",
+      "description": "Nígbà tí o bá sọ fún Ilana Ìwé láti ṣe àtúnṣe, àwọn ayípadà máa wá bí ìmòràn kọọkan tí o le fọwọsi tàbí kọ, gẹ́gẹ́ bí a ṣe máa n ṣe ìtọ́jú didara.",
+      "exceptionsTitle": "Ṣe taara ní gbogbo ọ̀nà yìí nigbati:",
+      "exceptionSelection": "Tí o bá ṣe àtúnṣe apá tí o yàn",
+      "exceptionLargeRewrite": "Ayípadà náà ti fẹrẹ yí gbogbo iwe padà",
+      "exceptionReorder": "Apá kan ti jẹ́ kí a gbe e rọ̀po dipo ṣiṣàtúnṣe rẹ",
+      "thresholdLabel": "Kà sí àtúnṣe àgbà yìí sáyà",
+      "thresholdUnit": "% ti iwe ti a ṣe ayípadà",
+      "exceptionSelectionAlways": "Atunṣe apakan ti a yan nigbagbogbo n ṣiṣẹ taara — awoṣe naa yoo da pada nikan apakan ti a ti tunṣe, ti ko le pin si awọn aba fun gbogbo iwe naa."
+    }
   },
   "emptyState": {
     "greeting": "Báwo ni mo ṣe lè ràn ọ́ lọ́wọ́?",
@@ -1447,33 +1494,78 @@
     },
     "title": "Yan awoṣe",
     "modelsDescription": "Yan awoṣe AI fun ibaraẹnisọrọ rẹ. Kọọkan ni agbara tirẹ — yan lati wo alaye.",
-    "recommended": "Tí a ṣedáwọ́lé"
+    "recommended": "Tí a ṣedáwọ́lé",
+    "familyAll": "Gbogbo",
+    "familyFilterLabel": "Ṣààlẹ̀wádìí àwọn àwòrán àpẹẹrẹ pẹ̀lú ẹbí",
+    "searchPlaceholder": "Ṣàwárí àwòrán",
+    "searchEmpty": "Kò sí àwòrán tó bá àwárí rẹ mu.",
+    "star": "Fí irawọ sí {name}",
+    "unstar": "Yọ irawọ kúrò lórí {name}",
+    "otherFamily": "Míì",
+    "hostedExternally": "Nṣíṣe lórí amáyédẹrùn ti olupèsè pẹ̀lú Azure AI Foundry, kì í ṣe nínú ayika Azure MSF.",
+    "hostedIn": {
+      "label": "Ti gbalejo ní {regions}",
+      "tooltip": "Agbègbè Azure tí àwòrán yìí ti wà. Àwọn ibànilẹ́rọ yín máa wáyé ní agbègbè tirẹ."
+    },
+    "badges": {
+      "external": "Ìta",
+      "externalTooltip": "Nṣíṣe lórí amáyédẹrùn ti olupèsè pẹ̀lú Azure AI Foundry, kì í ṣe nínú ayika Azure MSF.",
+      "regionHostedTooltip": "Ti gbalejo ní agbègbè Azure {region}. Àwọn ibànilẹ́rọ pẹ̀lú àwòrán yìí máa wáyé níbẹ̀."
+    },
+    "favorites": "Ayànfẹ́",
+    "euResidencyNote": "Gbogbo àwòrán n ṣiṣẹ́ ní agbègbè Azure EU.",
+    "hostedRegion": {
+      "label": "Agbègbè tí a gbalejo sí",
+      "processedIn": "Ibànilẹ́rọ yìí ni a n ṣiṣẹ́ ní agbègbè Azure {region}.",
+      "euOnlyNote": "{name} ni a gbalejo sí agbègbè Azure EU; gbogbo ibànilẹ́rọ pẹ̀lú rẹ ni a máa ṣe níbẹ̀."
+    },
+    "version": {
+      "label": "Ẹ̀dà"
+    },
+    "reasoningModel": "Àwòrán ìròyìn: ń rò lẹ́ẹ̀kansi ṣáájú ìdáhùn. Dájújẹ, dára jùlọ ní àwọn iṣoro tó le.",
+    "variant": {
+      "label": "Oniruuru"
+    },
+    "deployment": {
+      "title": "Ilọṣọkan",
+      "source": "Orisun",
+      "account": "Iroyin",
+      "location": "Ibùdó",
+      "deployment": "Ilọṣọkan",
+      "modelVersion": "Ẹya àwòrán",
+      "publisher": "Olùtẹ̀jáde"
+    }
   },
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Àwòṣe AI tí GPT-4.1 ń ṣe agbára rẹ̀ pẹ̀lú ìwádìí wẹ́ẹ̀bù ní àkókò gidi nípasẹ̀ Bing. Ó ń pèsè àlàyé tó ṣẹ̀ṣẹ̀, ìdánilójú otítọ́, àti ìmọ̀ nípa àwọn ìṣẹ̀lẹ̀ lọ́wọ́lọ́wọ́. Ó dára jù fún ìwádìí tó nílò àlàyé tuntun, àtúpalẹ̀ ìròyìn, àti ìdánilójú otítọ́.",
-      "knowledgeCutoff": "Ìwádìí wẹ́ẹ̀bù ní àkókò gidi"
+      "knowledgeCutoff": "Ìwádìí wẹ́ẹ̀bù ní àkókò gidi",
+      "tagline": "Ìdílé ṣáájú ti OpenAI"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Àwòṣe tó gbéga jù ti OpenAI, tó tayọ nínú ìronú ẹlẹ́gẹ́, ṣíṣẹ̀dá kóòdù, àti yíyanjú ìṣòro ìmọ̀-ẹ̀rọ. Ó dára jù fún àwọn iṣẹ́ àtúpalẹ̀, àwọn ìpèníjà kíkóòdù, ìwádìí, àti àwọn àlàyé kíkún. Ó ṣe àtìlẹ́yìn fún ìgbìyànjú ìronú àti àlàyé ìdáhùn tó ṣe é yí padà.",
-      "knowledgeCutoff": "Oṣù Kejìlá 2025"
+      "knowledgeCutoff": "Oṣù Kejìlá 2025",
+      "tagline": "Kóòdù, atúpalẹ̀, ìwádìí"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Ẹ̀yà tó yára jù àti tó jẹ́ owó kéré ti GPT-5, tí a ṣe ìmúdára fún ìyára nígbà tí ó ń ṣe ìtọ́jú dídára gíga. Ó péye fún àwọn iṣẹ́ ojoojúmọ́, àwọn ìbéèrè kíákíá, ìtọ́ka irinṣẹ́, àti àwọn ohun èlò tó nílò àkókò ìdáhùn tó yára. Ìṣedédé tó dára ti iṣẹ́ àti ìmúnádóko.",
-      "knowledgeCutoff": "Oṣù Kẹjọ 6, 2025 8:00 PM"
+      "knowledgeCutoff": "Oṣù Kẹjọ 6, 2025 8:00 PM",
+      "tagline": "Yára àti iye owó kéré"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Ìfọ̀rọ̀wérọ̀",
       "knowledgeCutoff": "Oṣù Kejìlá 2025",
-      "description": "Ẹya pataki ti GPT-5.2 ti a ṣe atunṣe fun ibaraẹnisọrọ ati oye ẹdun. O jẹ amọja ninu ibaraẹnisọrọ onirẹlẹ, kikọ iṣẹda, ironu papọ, ati iwiregbe adayeba. Dara julọ fun ibaraẹnisọrọ alaafia, ijumọsọrọ, ati awọn iṣẹ ti o nilo imọ ẹdun."
+      "description": "Ẹya pataki ti GPT-5.2 ti a ṣe atunṣe fun ibaraẹnisọrọ ati oye ẹdun. O jẹ amọja ninu ibaraẹnisọrọ onirẹlẹ, kikọ iṣẹda, ironu papọ, ati iwiregbe adayeba. Dara julọ fun ibaraẹnisọrọ alaafia, ijumọsọrọ, ati awọn iṣẹ ti o nilo imọ ẹdun.",
+      "tagline": "Ìjíròrò, àwárí àfọ̀mọ̀"
     },
     "o3": {
       "name": "o3",
       "description": "Àwòṣe ìronú tó gbéga jù ti OpenAI pẹ̀lú àwọn agbára yíyanjú ìṣòro tó tayọ. Ó tayọ nínú ìṣirò ẹlẹ́gẹ́, ìronú ìmọ̀-ìjìnlẹ̀, àwọn ìpèníjà kíkóòdù, àti àwọn iṣẹ́ ọgbọ́n ẹlẹ́ní ìgbésẹ̀ púpọ̀. Fèrèsé àyíká 200K tí a fẹ̀. Ó ṣe àtìlẹ́yìn fún ìdarí ìgbìyànjú ìronú.",
-      "knowledgeCutoff": "Oṣù Kẹrin 8, 2025 8:00 PM"
+      "knowledgeCutoff": "Oṣù Kẹrin 8, 2025 8:00 PM",
+      "tagline": "Ìròyìn títọ̀ lẹ́sẹ̀sẹ̀"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1483,47 +1575,256 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Alámọ̀jà ìronú tó ń fi iṣẹ́ rẹ̀ hàn ní ìgbésẹ̀-lẹ́yìn-ìgbésẹ̀. Ó tayọ fún àwọn ìṣòro ìṣirò, àwọn àwàdà ọgbọ́n, àti ìmòye àwọn èrò ẹlẹ́gẹ́. Wo bí ó ṣe ń ronú àwọn ìṣòro ní àkókò gidi.",
-      "knowledgeCutoff": "Oṣù Kínní 20, 2025"
+      "knowledgeCutoff": "Oṣù Kínní 20, 2025",
+      "tagline": "Fí ìròyìn hàn lẹ́sẹ̀sẹ̀"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Àwòṣe gbogbo-ẹ̀gbẹ́ tó lágbára tó dára ní pàtàkì nínú kíkóòdù àti kíkọ̀wé ìmọ̀-ẹ̀rọ. Ó dára fún ṣíṣàtúnṣe kóòdù, kíkọ ìwé àkọsílẹ̀, àti ṣíṣàlàyé àwọn èrò ìmọ̀-ẹ̀rọ. Ó yára àti ó ṣe é gbáralé fún iṣẹ́ ìdàgbàsókè.",
-      "knowledgeCutoff": "Oṣù Kẹrin 16, 2025 12:45 AM"
+      "knowledgeCutoff": "Oṣù Kẹrin 16, 2025 12:45 AM",
+      "tagline": "Àmúlò àkọmọlẹ̀ oríṣìíríṣìí"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Àwòṣe olóríṣiríṣi láti ọ̀dọ̀ xAI tí a mọ̀ fún àwọn ìdáhùn aláìlẹ́gbẹ́. Ó dára fún àwọn ìjíròrò ṣíṣí, àwọn iṣẹ́ àkànṣe aṣẹ̀dá, àti kíkojú àwọn ìṣòro ẹlẹ́gẹ́.",
-      "knowledgeCutoff": "Oṣù Karùn-ún 13, 2025 12:16 AM"
+      "knowledgeCutoff": "Oṣù Karùn-ún 13, 2025 12:16 AM",
+      "tagline": "Àmúlò yíyípadà xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Àwòṣe tó lágbára jù ti Anthropic pẹ̀lú agbára ìronú, kíkóòdù, àti aṣẹ̀dá tó tayọ. Ó dára jù fún àtúpalẹ̀ ẹlẹ́gẹ́, ìwádìí, àti àwọn iṣẹ́ tó nílò ìmòye jíjìn.",
-      "knowledgeCutoff": "Oṣù Kínní 2025"
+      "knowledgeCutoff": "Oṣù Kínní 2025",
+      "tagline": "Ìdílé Opus ṣáájú"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Àwòṣe Claude tó ní ìṣedédé tó ń fún ní iṣẹ́ tó tayọ jákèjádò kíkóòdù, àtúpalẹ̀, àti àwọn iṣẹ́ aṣẹ̀dá. Ó dára fún ìlò ojoojúmọ́ pẹ̀lú àwọn àkókò ìdáhùn tó yára.",
-      "knowledgeCutoff": "Oṣù Kínní 2025"
+      "knowledgeCutoff": "Oṣù Kínní 2025",
+      "tagline": "Ìdílé Sonnet ṣáájú"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Àwòṣe Claude Opus ìran tẹ́lẹ̀. Ó tayọ fún àwọn iṣẹ́ kíkóòdù ẹlẹ́gẹ́, àtúpalẹ̀ kíkún, àti ìmòye aláìlẹ́gbẹ́.",
-      "knowledgeCutoff": "Oṣù Kínní 2025"
+      "knowledgeCutoff": "Oṣù Kínní 2025",
+      "tagline": "Ìdílé Opus ṣáájú"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Àwòṣe Claude tó yára àti tó jẹ́ owó kéré tí a ṣe ìmúdára fún àwọn iṣẹ́ kíákíá. Ó dára fún àwọn ìbéèrè tó rọrùn, ṣíṣe àkópọ̀, àti àwọn ohun èlò tí iye rẹ̀ pọ̀.",
-      "knowledgeCutoff": "Oṣù Kínní 2025"
+      "knowledgeCutoff": "Oṣù Kínní 2025",
+      "tagline": "Irú Claude tó yara"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Awoṣe to lágbára jù lọ ti Anthropic. Dáa fún kikọ gígùn, ìwádìí, àti iṣẹ tí ó fẹ dákẹ́lẹ̀rìn.",
-      "knowledgeCutoff": "Kínni 2026"
+      "knowledgeCutoff": "Kínni 2026",
+      "tagline": "Kíkọ́ tó gbòòrò àti atúpalẹ̀"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Awọṣe Claude ìwontù. Dáa fún kikọ ojoojúmọ́, ìtupalẹ, àti kóòdù pẹ̀lú ìbáṣepọ́ yára.",
-      "knowledgeCutoff": "Kínni 2026"
+      "knowledgeCutoff": "Kínni 2026",
+      "tagline": "Claude tó dojú kọ́ ojoojúmọ́"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Awoṣe orisun-ṣiṣi lati ọdọ Meta. Dara fun kikọ, akopọ, ati awọn ibeere yarayara.",
+      "tagline": "Àmúlò àkọmọlẹ̀ oríṣìíríṣìí"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Awoṣe tuntun ti OpenAI. Lagbara fun kikọ, iwadii, kóòdì, ati yanju iṣoro to nira.",
+      "tagline": "Ti tuntun jùlọ GPT tó lágbára"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Awoṣe GPT ti o kere julọ ati yiyara julọ. Dara jùlọ fun iṣẹ kekere ati rọọrun ni iye owo kékèké.",
+      "tagline": "GPT tó kéréjù àti tó yara jù"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Awoṣe GPT ti a ṣatunṣe fun iwiregbe. Dara fun ijiroro lasan, ero, ati ifọkansi ọrẹ.",
+      "tagline": "GPT ohun-ànfàní ìjíròrò tuntun"
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "Awoṣe asiwaju GPT-5 akọkọ. Ṣi fara mọ iṣe ni kikọ, itupalẹ, ati kóòdì.",
+      "tagline": "Àgbáyé GPT ṣáájú"
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "Awoṣe iṣatunṣe iwiregbe fun GPT-5. Dara fun ijiroro ojoojumọ ati ero-pọ.",
+      "tagline": "GPT ohun-ànfàní ìjíròrò ṣáájú"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Awoṣe GPT oniruuru atijọ. Dára fun kikọ ojoojumọ ati ibeere-ọrọ nibiti agbara tuntun ko ṣe pataki.",
+      "tagline": "GPT multimodal atijọ́"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Awoṣe GPT-4.1 kekere ati yiyara fun iṣẹ ojoojumọ yarayara.",
+      "tagline": "GPT ṣáájú tó rọrùn"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Awoṣe tuntun ati ti o lagbara julọ ti Anthropic. Pẹlẹ fun kikọ pipẹ, iwadii, kóòdì, ati itupalẹ pẹkipẹki.",
+      "tagline": "Claude tuntun jùlọ àti tó lágbára jù"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Awoṣe tuntun orisun-ṣiṣi lati DeepSeek. Gbẹkẹle fun kikọ gbogbogbo ati ibeere imọ.",
+      "tagline": "Àmúlò àkọmọlẹ̀ oríṣìíríṣìí"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Awoṣe asiwaju Mistral. Aṣayan Yúróòpù fun kikọ, akopọ, ati ibeere gbogbogbo.",
+      "tagline": "Àmúlò European open-weight"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Awoṣe atunṣe akọkọ ti GPT-5. Ṣi lagbara fun kikọ, itupalẹ ati kóòdì.",
+      "tagline": "GPT-5 àgbáyé ṣáájú"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Atunṣe iṣatunṣe iwiregbe ti GPT-5. Dára fun ijiroro ojoojumọ ati ero-pọ.",
+      "tagline": "GPT ohun-ànfàní ìjíròrò ṣáájú"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Awoṣe GPT-5 ti o kere julọ. Dara jùlọ fun iṣẹ yarayara ati rọọrun pẹlu iye owo kékèké.",
+      "tagline": "GPT ṣáájú tí kéré jù"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Awoṣe GPT-4.1 ti o kere ju. Dára fun iṣẹ yarayara ati rọọrun nibiti iyara ati iye owo ṣe pataki.",
+      "tagline": "GPT ṣáájú tó kéré jù"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Awoṣe GPT-4o kekere ati yiyara. Dára fun iṣẹ yarayara lojoojumọ nibiti agbara tuntun ko ṣe pataki.",
+      "tagline": "GPT multimodal atijọ́ tó rọrùn"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Awoṣe reasoning adígbẹ. Dára fun iṣiro, lójíkì ati iṣẹ igbesẹ-nipasẹ-ọgbẹse ni owo ti o kere ju o3.",
+      "tagline": "Ìròyìn yara tó dájú"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Awoṣe reasoning adígbẹ akọkọ. Ṣe iṣiro, sayensi, ati lójíkì ni inawo kekere.",
+      "tagline": "Ìròyìn títọ̀ lẹ́sẹ̀sẹ̀ tó kéré"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Awoṣe to jọgbọn julọ ti Anthropic, akọkọ ninu idile Claude 5. Pẹlẹ fun awọn iṣẹ kikọ, iwadii, ati kóòdì to nira julọ.",
+      "tagline": "Àmúlò àgbá Meta Anthropics"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Claude tuntun ti aṣoṣo, akọkọ ninu idile Claude 5. Lagbara fun kikọ ojoojumọ, itupalẹ, ati kóòdì pẹlu idahun yarayara.",
+      "tagline": "Claude tuntun jùlọ tó dojú kọ́"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Awoṣe arin Mistral. Aṣayan Yúróòpù to da ìṣàkóso ati iyara pọ fun iṣẹ ojoojumọ.",
+      "tagline": "Àmúlò European tó dojú kọ́"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Awoṣe kekere Mistral. Yiyara ati din owo fun akopọ, asọyé, ati awọn ibeere rọọrun.",
+      "tagline": "Àmúlò European kékèké tó yara"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Awoṣe Mistral to kéré jùlọ. Dara jùlọ fun iṣẹ yarayara ati rọọrun pẹlu iye owo kékèké.",
+      "tagline": "Mistral tó kéré ti ẹ̀gbẹ́ edge"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Atunṣe tuntun ti DeepSeek-R1. Ṣafihan ero rẹ igbesẹ-nipasẹ-ọgbẹse pẹlu reasoning to jinlẹ sii.",
+      "tagline": "Àmúlò ìròyìn ṣíṣàtúnṣe tuntun"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Awoṣe orisun-ṣiṣi ti o rọ lati Meta. Yiyara fun kikọ, akopọ, ati ibeere ojoojumọ.",
+      "tagline": "Llama àkọmọlẹ̀ tó munadoko"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Awoṣe atijọ ti orisun-ṣiṣi lati ọdọ Meta. Ṣi dara fun kikọ gbogbogbo ati awọn ibeere ati idahun.",
+      "tagline": "Llama àkọmọlẹ̀ atijọ́"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Awoṣe akọkọ ti xAI. Dara fun ibaraẹnisọrọ alabapade, itupalẹ, ati iṣẹ ọnà.",
+      "tagline": "Àgbáyé xAI"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Awoṣe tuntun julọ lati ọdọ OpenAI. Alagbara ni kikọ, iwadii, koodu, ati ipinnu iṣoro to nira.",
+      "tagline": "Àgbáyé GPT tuntun jùlọ"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (tuntun julọ)",
+      "description": "Orukọ iyipada ti o n tọka si awoṣe tuntun ti OpenAI fun ibaraẹnisọrọ. Rọpo awoṣe gpt-*-chat ti a ti yọ kuro lori Azure.",
+      "tagline": "GPT ìjíròrò tuntun nígbà gbogbo"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Itu jade Opus tuntun laarin 4.6 ati 4.8. Alagbara fun kikọ gigun, iwadii, koodu, ati itupalẹ pẹkipẹki.",
+      "tagline": "Ìtẹ̀jáde Opus tó ṣẹ́ṣẹ̀"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Awoṣe ironu tuntun ti DeepSeek ati rirọpo Azure fun laini R1. Ṣafihan ero rẹ ni igbesẹ nipa igbesẹ.",
+      "tagline": "Àmúlò ìròyìn ṣíṣàtúnṣe tuntun jùlọ"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Iyaapu V4 yara ti DeepSeek ati rirọpo Azure fun laini V3. Yara fun kikọ gbogbogbo ati awọn ibeere imọ-ẹrọ.",
+      "tagline": "Àmúlò àkọmọlẹ̀ yara"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Ironu)",
+      "description": "Awoṣe ironu yara ti xAI. N ronu igbesẹ nipa igbesẹ pẹlu idahun yarayara.",
+      "tagline": "Àmúlò ìròyìn xAI tó yara"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Awoṣe ibaraẹnisọrọ yara ti xAI. Yara fun awọn idahun si awọn ibeere ojoojumọ ati ijiroro.",
+      "tagline": "Àmúlò ìjíròrò xAI tó yara"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Awoṣe xAI to rọrùn. Yara ati din owo fun ibeere kiakia ati ibaraẹnisọrọ lasan.",
+      "tagline": "Àmúlò xAI tó rọrùn"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Akọ́kọ́ ni lẹsẹ mẹta GPT-5.6 ti OpenAI. O lagbara julọ fun kikọ, ìwádìí, kóòdù, ati ìyànjú iṣoro to nira.",
+      "tagline": "Ìpò àgbáyé GPT tuntun jùlọ"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Apá àárín mi ẹlẹsẹ mẹta GPT-5.6 ti OpenAI. O dara fun awọn iṣẹ kikọ ojoojúmọ́, àyẹ̀wò, ati kóòdù pẹ̀lú idáhùn yarayara.",
+      "tagline": "GPT-5.6 to peye fun gbogbo ọjọ"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Akọ̀ọ́kan jùlọ, yara jùlọ ninu lẹsẹ mẹta GPT-5.6 ti OpenAI. Dara fun ibeere yara ati iṣẹ lílọ̀rọ̀ pẹlu ọmọ owó kekere.",
+      "tagline": "GPT-5.6 fẹẹrẹ, yarayara"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Àwòrán aarin tuntun Mistral. Aṣayan Yúróòpù tí o mu agbara ati iyara pọ̀ jùlọ fun iṣẹ ojoojúmọ́.",
+      "tagline": "Awoṣe Europe to peye"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Awoṣe open-weight ti Moonshot AI. Lagbara ninu awọn iṣẹ alatunto, kodẹ, ati awọn iwe pẹlẹbẹ gigun.",
+      "tagline": "Awoṣe open-weight alatunto"
     }
   },
   "searchMode": {
@@ -1789,7 +2090,22 @@
     "useDefaultStyle": "Lo àṣà kíkọ̀wé ìbẹ̀rẹ̀",
     "noTonesCreated": "A kò tíì ṣẹ̀dá ohùn kankan",
     "createTonesHint": "Ṣẹ̀dá àwọn ohùn nínú Àwọn Ìgbésẹ̀ Kíákíá",
-    "translateDocumentTooltip": "Ṣe túmọ̀ àwọn dọ́kíúmẹ́ntì sí èdè míràn.\n\nÀwọn àkópọ̀ tí a gbà: Word, Excel, PowerPoint, HTML, TXT\nÌwọn tó pọ̀jù: 40MB\n\nṢe àtìlẹ́yìn fún èdè méjìlélọ́gọ́rin (80+) pẹ̀lú àṣàyàn fáìlì glossary."
+    "translateDocumentTooltip": "Ṣe túmọ̀ àwọn dọ́kíúmẹ́ntì sí èdè míràn.\n\nÀwọn àkópọ̀ tí a gbà: Word, Excel, PowerPoint, HTML, TXT\nÌwọn tó pọ̀jù: 40MB\n\nṢe àtìlẹ́yìn fún èdè méjìlélọ́gọ́rin (80+) pẹ̀lú àṣàyàn fáìlì glossary.",
+    "translateTooltip": "Tú ọrọ kukuru sí èdè mìíràn.\n\nFun gbogbo faili (Word, Excel, PowerPoint, HTML, TXT), lo **Translate Document** dipo.",
+    "cameraTooltip": "Ya fọto pẹ̀lú kámerà ẹrọ rẹ kí o fi so mọ ìfiránṣẹ.",
+    "noResults": "Ko si iṣe to bá a mu",
+    "sectionPinned": "Tí a tifì mọ́lé",
+    "sectionFrequent": "Tí a lò pọ̀",
+    "sectionMore": "Ẹlòmíràn",
+    "categoryWeb": "Ayélujára",
+    "categoryMedia": "Mẹ́díà & fáìlì",
+    "categoryTransform": "Ìyípadà",
+    "pin": "Gbìmọ́ sórí",
+    "unpin": "Yọ gbìmọ́ kúrò",
+    "moveToMore": "Gbé sí Ẹlòmíràn",
+    "moveOutOfMore": "Fihàn nínú àkójọ aṣayan",
+    "showSources": "Fi awọn orisun miran han",
+    "hideSources": "Tọju awọn orisun miran"
   },
   "transcription": {
     "transcribesOnSend": "Ó ń kọ sí ọ̀rọ̀ nígbà fífiránṣẹ́",
@@ -1923,7 +2239,14 @@
     "expiresSoon": "Ó parí ní ọjọ́ {days} - ṣe ìgbasílẹ̀ láìpẹ́",
     "expires": "Ó wà fún ọjọ́ {days}",
     "unofficialBadgeLabel": "Kì í ṣe ìsọfúnni",
-    "unofficialLanguageWarning": "Ede yi kò ní ìtẹwọgba lásìkò. Didarí itumọ naa kò tii ni idaniloju. Jọ̀wọ̀, jẹ́ kí amoye tabi ẹni to mọ ede yi dájú kí o tó pin."
+    "unofficialLanguageWarning": "Ede yi kò ní ìtẹwọgba lásìkò. Didarí itumọ naa kò tii ni idaniloju. Jọ̀wọ̀, jẹ́ kí amoye tabi ẹni to mọ ede yi dájú kí o tó pin.",
+    "translationSubmitted": "Ìtumọ̀ bẹ̀rẹ̀ — a n ṣiṣẹ́ PDF lónìí kúrò ní kẹ̀hìn.",
+    "pendingTitle": "Ìtumọ̀ {filename}…",
+    "pendingHint": "Ìtumọ̀ PDF ń lọ lẹ́hìn iṣẹ́, ó lè gba ìsẹjú díẹ. O lè bá iṣẹ́ rẹ lọ — kaadi yìí máa yípadà nígbàtí iwe naa bá ti ṣetan, paápàá lẹ́yìn títún gbé.",
+    "asyncFailed": "Ìtumọ̀ iwe kùnà: {error}",
+    "jobNotFound": "ọ̀pẹ̀ iṣẹ́ ìtumọ̀ kò sí mọ́. Jọwọ tún gbìyànjú.",
+    "retryPolling": "Ṣàyẹ̀wò lẹẹkansi",
+    "pollingStalled": "A kò le dé sẹ́rẹ́fà láti ṣàyẹ̀wò ìlera. Ìtumọ̀ le ṣi ń lọ."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -1973,6 +2296,10 @@
       "technicalDetails": "Alaye imọ-ẹrọ",
       "agentCountLabel": "{count} àgéntì",
       "disconnectedToast": "Ti yọ {name} kúrò"
+    },
+    "emptyState": {
+      "title": "Kò sí aṣojú agbègbè/tabili tó wà",
+      "description": "Sopọ iṣẹ́ Foundry kan ní isalẹ láti ṣàwárí àwọn aṣojú rẹ."
     }
   },
   "privacy": {
@@ -2083,5 +2410,1309 @@
     "review": "Ìtúpalẹ̀",
     "itemId": "ID: {id}",
     "itemSource": "{date} láti {source}"
+  },
+  "regionOverride": {
+    "warning": "Aṣiṣe ipo ti wa lọwọlọwọ — a n ṣe itọsọna awọn ibeere rẹ si agbegbe data {region}. Eyi jẹ idanwo ọwọ, kii ṣe ipo gidi rẹ.",
+    "clear": "Pa aṣiṣe kuro"
+  },
+  "usageImpact": {
+    "empty": "Ko si lilo tọwọ-tẹlọlọwọ. Lilo token rẹ ati iṣiro itujade yoo han nibi lẹyin ti o ba bá wa sọrọ.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} igbesẹ foonu alagbeka",
+    "requests": "Ìbéèrè",
+    "promptTokens": "Ami àbájáde ṣíṣe",
+    "completionTokens": "Ami ìkànjú",
+    "topModels": "Nípa àwòrán",
+    "byRegion": "Nípa agbègbè ìtẹ́wọ́gbà",
+    "regionDefault": "Aiyipada",
+    "modelRow": "{requests} ìbéèrè · {grams} g",
+    "disclosure": "Ìṣirò dá lórí àfọ̀mọ́sùn v{version} · látìgbà {since} · ìbáṣepọ̀ àkọ́tún ṣoṣo (àwọn agent àti ìdáhùn knowledge-base kì í ṣe kó).",
+    "reset": "Tún àkọsílẹ̀ lilo ṣe",
+    "estimatedPortion": "Ó ní àfọ̀mọ̀ ~{grams} g CO₂e ({requests} ìbéèrè) tí a ṣe àfìmọ̀ látinú ìjíròrò tó ṣẹ̀ṣẹ̀ ṣáájú ìtọ́pa — a tún ṣe àfìmọ̀ padà láti ọrọ ìfiránṣẹ́ tí a fipamọ́, kì í ṣe iye àmi tí a gbéjọro.",
+    "chipTitle": "Chip àfọwọ́kà",
+    "chipDescription": "Ìṣirò àfọwọ́kà erogba fún ibanisọ̀rọ̀ yìí, tí ó wà lókè apamọ̀ ìrọ̀rùn.",
+    "chipAlways": "Máa fi hàn nígbà gbogbo",
+    "chipAlwaysHint": "Chip máa fi hàn nígbà gbogbo tí àfikún bá wà fún ibanisọ̀rọ̀.",
+    "chipAuto": "Fi hàn nígbà ìmúdájú tabi sí àmì lórí",
+    "chipAutoHint": "Chip yóò hàn nígbà tí àṣeyọrí bá yá, lè dànù lẹ́yìnna. Síi àkíyèsí tàbí fòkúsì rẹ yóò mú ú padà.",
+    "chipHidden": "Pa mọ́",
+    "chipHiddenHint": "A kì yóò fi chip hàn rárá. Àpapọ̀ ṣi n tẹle ati wí lórí ojúewé yìí.",
+    "chipAutoHideLabel": "Dànù lẹ́yìn",
+    "chipAutoHideUnit": "ìṣẹ́jú ààyá",
+    "chipAutoHideHint": "Láàrin {min} sí {max} ìṣẹ́jú ààyá."
+  },
+  "extraction": {
+    "toggleLabel": "Yọ data eto jade",
+    "trayLabel": "Iyọjade",
+    "trayPrefix": "Yọ jade",
+    "trayInfo": "Iyọjade máa pada to tabili eto mẹta (3) pọ. A fipamọ awopọ si ẹrọ rẹ.",
+    "autoChip": "Aifọwọyi — AI maa so eto to ba yẹ",
+    "addRecipe": "Fi awọpọ kun",
+    "addRecipeTitle": "Fi awopọ kun sí iyọjade yìí",
+    "addRecipeFullTitle": "Tó pọ̀ sí mẹta (3) awọpọ fún iyọjade kọọkan",
+    "removeRecipe": "Yọ awọpọ: {name}",
+    "remove": "Yọ kúrò",
+    "section": "Awọpọ iyọjade",
+    "sectionSubtitle": "Àwúrúju títọ́sọ́rẹ́ tí ń yí ọrọ àtẹ̀wọ́, faili, tàbí URL pada sí tabili títọ́. Yàn tó pọ̀ sí mẹta (3) fun iyọjade kọọkan.",
+    "newRecipe": "Awọpọ tuntun",
+    "untitledRecipe": "(Awọpọ tí kì í sí orúkọ)",
+    "deleteRecipe": "Pa awopọ náà rẹ́",
+    "delete": "Pa rẹ́",
+    "deleteConfirm": "Ṣe pa rẹ́?",
+    "cancel": "Fagilé",
+    "name": "Orúkọ",
+    "namePlaceholder": "àpẹẹrẹ: Àwọn alaisan",
+    "description": "Àpejuwe",
+    "optional": "(yànláàyè)",
+    "descriptionPlaceholder": "Akọ́kọ́ àkótán tí a fi hàn nínú aṣàyan awọpọ",
+    "instructions": "Ìtọná",
+    "instructionsPlaceholder": "Kí ni kó AI wá nínú ohun tí a fi ranṣẹ?",
+    "fields": "Àwọn ààyè",
+    "field": "ààyè",
+    "fieldsPlural": "àwọn ààyè",
+    "fieldName": "Orúkọ ààyè",
+    "fieldType": "Iru ààyè",
+    "fieldNamePlaceholder": "oruko_aye",
+    "addField": "Fi ààyè kun",
+    "removeField": "Yọ ààyè",
+    "toggleDetails": "Ṣí/tabi pa awọn alaye",
+    "fieldDetailsTitle": "Àpejuwe, iye enum",
+    "fieldDescriptionPlaceholder": "Àpejuwe (ran AI lórí ààyè yìí)",
+    "enumValuesPlaceholder": "Iye to wulo, kọọkan yapa pẹ̀lú àmi ìdákọ̀rọ̀",
+    "required": "pàtàkì",
+    "suggest": "Ṣàpèjúwe pẹ̀lú AI",
+    "suggesting": "Ń ṣàpèjúwe…",
+    "suggestNeedsInstructions": "Fi àtọka kún un kí AI lè mọ ohun tó yẹ kó wá",
+    "searchRecipes": "Wá àtòjọ àkọsílẹ́",
+    "pickerEmpty": "Kò sí àtòjọ àkọsílẹ́ kankan. Ṣẹda tuntun láti bẹ̀rẹ̀.",
+    "pickerEmptyMatch": "Kò sí àtòjọ àkọsílẹ́ tó bá àwárí mu",
+    "editorEmpty": "Kò sí àtòjọ àkọsílẹ́ kankan. Ṣẹda tuntun kí AI lè ràn ọ́ lọ́wọ́ pẹ̀lú àfọwọ́kọ.",
+    "noData": "Kò sí data tí a fa jáde",
+    "noRecords": "A kò rí ìwé {name} kankan",
+    "row": "ìlà",
+    "rows": "àwọn ìlà",
+    "record": "ìwé",
+    "records": "àwọn ìwé",
+    "complete": "parí",
+    "download": "Gba wọlé",
+    "preview": "Àkíyèsí",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} àwọn pápá",
+    "fieldCountOne": "pápá 1",
+    "andMoreFields": "+ {count} síi",
+    "saveAsRecipe": "Fi pamọ̀ gẹ́gẹ́ bí àtòjọ àkọsílẹ́",
+    "savedAsRecipeToast": "Ti fipamọ̀ gẹ́gẹ́ bí àtòjọ àkọsílẹ́ \"{name}\"",
+    "previewTruncated": "Fífi ìlà mẹ́ta àkọ́kọ́ nínú {total} hàn. Gba wọlé fún gbogbo data.",
+    "previewEmpty": "Kò sí ìlà kankan láti ṣe àkíyèsí",
+    "proposedSchemaTip": "AI ti ṣàpèjúwe àtòjọ yìí. Fi pamọ̀ kí o lè lò ó lẹ́yìn náà.",
+    "downloadAriaLabel": "Gba {name} wọlé gẹ́gẹ́ bí {format}",
+    "previewAriaLabel": "Yípadà àkíyèsí {name}",
+    "changeFormatAriaLabel": "Yí oríṣìíríṣìí fọ́ọ́mátì ìgbawọlé {name}",
+    "materialWarningTitle": "Fikun ohun ìkó láti yọ jade",
+    "materialWarningBody": "Kọ ìfiranṣẹ̀ sílẹ̀, fi fáìlì kún un, tàbí ra URL.",
+    "materialAttach": "Fikun fáìlì",
+    "willExtractPrefix": "Yóò fa jáde láti:",
+    "materialText": "ìfiranṣẹ̀ ọrọ̀",
+    "materialFiles": "{count, plural, one {1 fáìlì} other {# àwọn fáìlì}}",
+    "materialActiveFiles": "{count, plural, one {1 fáìlì tó n ṣiṣẹ́} other {# àwọn fáìlì tó n ṣiṣẹ́}}",
+    "dismiss": "Pa iṣẹ́ àyọkàsí rẹ́"
+  },
+  "Connectors": "Asopọ",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "Ìtumọ̀",
+        "description": "Túmọ̀ ọrọ pẹ̀lú àyẹ̀wò, àtòkasí, àti iodáyẹ̀wò àwọn àkókò."
+      },
+      "document": {
+        "label": "Àkọsílẹ̀",
+        "description": "Darapọ̀ àkọsílẹ̀ àti ṣe àtúnṣe pẹ̀lú olùrànlọ́wọ́."
+      },
+      "dataAnalysis": {
+        "label": "Ìtúpalẹ̀ data",
+        "description": "Gbà tábìlì wọlé kí o ṣàwárí tàbí yí data rẹ padà"
+      },
+      "map": {
+        "label": "Maapu",
+        "description": "Ṣèyí data kankan di ibi lórí maapu"
+      }
+    },
+    "chooser": {
+      "prompt": "Tàbí bẹ̀rẹ̀ ibi iṣẹ́ amúlò kan"
+    },
+    "sidebar": {
+      "newTranslation": "Ìtumọ̀ tuntun",
+      "newDocument": "Àkọsílẹ̀ tuntun",
+      "newDataAnalysis": "Ìtúpalẹ̀ data tuntun",
+      "newMap": "Maapu tuntun"
+    },
+    "translation": {
+      "chooseLanguage": "Èdè ibi-afẹ́",
+      "customLanguageHint": "\"{name}\" jẹ́ èdè tí o ṣàfikún — AI yóò gbìyànjú èdè kankan, ṣùgbọ́n àlẹ́pọ̀ àyẹ̀wò kò tíì wà.",
+      "addedByYou": "Ìwọ ni o ṣàfikún",
+      "glossary": "Ìtówólétumo",
+      "noGlossary": "Kò sí ìtówólétumo",
+      "manageGlossaries": "Ìtówólétumo",
+      "glossaries": "Ìtówólétumo",
+      "closeGlossaries": "Pa ìtówólétumo",
+      "glossariesEmpty": "Ṣẹ́da ìtówólétumo láti fi mú bí a ṣe túmọ̀ àwọn ọ̀rọ̀ pàtó. Ìtówólétumo máa dákẹ́ lórí ìmúlò yìí, ó sì le lo fun ìtumọ̀ míì.",
+      "newGlossary": "Akojọ itumọ tuntun",
+      "newGlossaryName": "Akojọ itumọ laisi orukọ",
+      "glossaryName": "Orukọ akojọ itumọ",
+      "deleteGlossary": "Pa akojọ itumọ rẹ́",
+      "sourceTerm": "Ọrọ orisun",
+      "targetTerm": "Itumọ",
+      "note": "Akọsilẹ",
+      "noteOptional": "Akọsilẹ (aṣayan)",
+      "addEntry": "Fikun ọrọ",
+      "removeEntry": "Yọ {term} kuro",
+      "mode": "Ipo itumọ",
+      "modeQuick": "Kia-kia",
+      "modeAgentic": "Ti a ṣe ayẹwo",
+      "modeQuickHint": "Itumọ lẹ̀kan ṣoṣo, ti o yara jù",
+      "modeAgenticHint": "Ṣẹ ayẹwo ọrọ akọkọ, lẹhin naa tumọ ki o si ṣe iyika ayẹwo to 3",
+      "translate": "Tumọ",
+      "translating": "N túmọ…",
+      "sourceLabel": "Ọrọ orisun",
+      "targetLabel": "Itumọ",
+      "sourcePlaceholder": "F’Amọran tabi kọ ọrọ ti o fẹ tumọ, tabi ṣe ikojọpọ iwe aṣẹ.",
+      "targetEmpty": "Itumọ yoo han níbí.",
+      "uploadDocument": "Ṣe ikojọpọ iwe aṣẹ",
+      "copy": "Daakọ",
+      "copied": "Ti daakọ",
+      "tooLong": "Ọrọ ju {max} awọn lẹta lọ. Pin sí apá, tàbí lo ìtumọ iwe aṣẹ fún gbogbo faili.",
+      "analysisTitle": "Ayẹwo ṣaaju itumọ",
+      "register": "Forukọsilẹ",
+      "reviewTitle": "Yika ayẹwo",
+      "roundLabel": "Yika {round}",
+      "verdictApprove": "ti fọwọsi",
+      "verdictRevise": "tunṣe",
+      "railRequest": "Túmọ ọrọ orisun sí {language}.",
+      "railDoneAgentic": "Ti pari. Mo ṣe ayẹwo ọrọ naa, mo túmọ, mo si ṣe {rounds} yika ayẹwo. Abajade wa ninu ibi iṣẹ.",
+      "railDoneQuick": "Ti pari. Itumọ wa ninu ibi iṣẹ.",
+      "railAssessRequest": "Ṣayẹwo didara itumọ {language}.",
+      "railAssessDone": "Ayẹwo pari: abajade ati Awọn atunṣe {count} labẹ ayẹwo wa ninu ibi iṣẹ.",
+      "roundChanges": "Ayipada ninu yika {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "Ìdánilọ́tọ̀",
+          "description": "Ṣàfihàn itumọ patapata ti ọrọ orisun — kò si aṣiṣe, isọdọmọ, afikun, tabi apá tí a kò túmọ"
+        },
+        "fluency": {
+          "label": "Ìmúlòṣùwò",
+          "description": "Girama, amí akọtọ, ati isopọpọ ni ede ibi-ọjọ túmọ kia wo bi ede abinibi"
+        },
+        "terminology": {
+          "label": "Òrò amáyédẹrùn",
+          "description": "Àwọn ọrọ ibáṣepọ̀ wa ní kànsílẹ̀ ati pé deede; a tẹle akojo itumọ bó ṣe yẹ"
+        },
+        "style": {
+          "label": "Ìṣàgbọ̀wọ̀",
+          "description": "Ìfohùn, ìtan, àti agbára rẹ̀ baramu orisun, ko si yato."
+        },
+        "localeConventions": {
+          "label": "Àṣà ibi-ọjọ",
+          "description": "Ọjọ́, nọ́mbà, ìpinnu, àti ami akọtọ tẹ̀le àṣà ibi-ọjọ ti ede ààbò."
+        },
+        "audience": {
+          "label": "Awon ti ọrọ yi lọ",
+          "description": "Bára ìdí ati awon onkawe ọrọ naa mu"
+        }
+      },
+      "severity": {
+        "minor": "Kekere",
+        "major": "Pataki"
+      },
+      "assess": "Ṣe ayẹwo didara",
+      "assessing": "N ṣe ayẹwo…",
+      "assessmentTitle": "Ayẹwo didara",
+      "criteriaPicker": "Ìlànà ayẹwo",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Àtúnṣe tí a daba",
+      "noEditsSuggested": "Ko sí àtúnṣe tí a daba — itumọ naa bọ ìlànà tí a yàn.",
+      "acceptEdit": "Gba",
+      "rejectEdit": "Kọ",
+      "acceptAll": "Gba gbogbo",
+      "rejectAll": "Kọ gbogbo",
+      "editAccepted": "Ti gba",
+      "editRejected": "Ti kọ",
+      "editUnapplicable": "A ko ri apá yìí nínú ọrọ lọwọlọwọ — a ko lo",
+      "editTranslation": "Ṣatúnṣe",
+      "doneEditing": "Pari",
+      "pasteTranslationPlaceholder": "Tẹ̀sí or ìtúmọ̀ kí o ṣiṣẹ́ lórí…",
+      "editingBlockedPendingEdits": "Yanju tàbí kọ àtúnṣe tí ó wà nídánígbo kíkọ́",
+      "pendingCount": "{count} dúró de",
+      "closeReview": "Pa àyẹ̀wò didara",
+      "showReview": "Fihan àyẹ̀wò",
+      "showReviewPending": "Fihan àyẹ̀wò ({count} dúró de)",
+      "undoEdit": "Dà pada",
+      "clearResolved": "Nu àwọn tí a ti dá sílẹ̀",
+      "clearResolvedHint": "Yọ àwọn ìtọ́ka tí a fọwọ́ sí, tí a kọ́, àti tí kò yẹ kúrò nínú àtòjọ yìí",
+      "autoClearResolved": "Nu àwọn ìtọ́ka tí a ti dá sílẹ̀ laifọwọ́yi",
+      "customCriteria": "Àwọn ìpinnu àdáyébá",
+      "closeCriteria": "Pa àwọn ìpinnu àdáyébá",
+      "newCriterion": "Ìpinnu tuntun",
+      "newCriterionName": "Ìpinnu tí kò ní orúkọ",
+      "criterionName": "Orúkọ ìpinnu",
+      "criterionRubric": "Àwòrán ìdámọ̀",
+      "criterionRubricPlaceholder": "Ṣàlàyé ohun tí ìtumọ̀ náà gbọ́dọ̀ ṣe láti péye ìpinnu yìí, àpẹẹrẹ: \"Jẹ́ kí gbogbo ìlànà dósè cliníkà jẹ́ nínú àṣẹ, kì í ṣe infinitive…\"",
+      "criterionRubricHint": "Àwòrán ìdámọ̀ yìí ni a fi fún AI gẹ́gẹ́ bíi tí a tí kọ́ títí nínú MQM nigba àyẹ̀wò ìtumọ̀.",
+      "criteriaEmpty": "Ṣẹda àwọn ìpinnu àdáyébá — bíi irú-kíkọ ilé-iṣẹ́, ayanfẹ ọrọ́ oníbára, tàbí ìlànà agbègbè — láti fọwọ́yẹ àwọn ìtumọ̀ yàtọ̀ sí àwọn àmúyẹ MQM. A fipamọ́ sí ẹrọ yìí kò sì le tú tún lo.",
+      "deleteCriterion": "Pa ìpinnu náà rẹ́",
+      "manageCriteria": "Àwọn ìpinnu àdáyébá",
+      "addCriteria": "Ṣàfikún ìpinnu",
+      "noUsableCriteria": "Yan ó kere tán ìpinnu kan tí ó wà fúnra rẹ̀ tàbí fi àwòrán ìdámọ̀ sí àwọn ìpinnu rẹ.",
+      "criterionRubricTooLong": "Ìkànnì àtúpalẹ̀ yìí ti kọja ààlà ní {over} àmi lẹ́kunrẹ́rẹ́. A máa fì ranṣẹ́ pẹ̀lú ìtọ́jú kọọkan, nítorí náà ó gbọ́dọ̀ dín kù kí a tó lè lo àfihàn yìí."
+    },
+    "document": {
+      "emptyTitle": "Ṣàpèjúwe iwe ti o fẹ",
+      "emptyBody": "So fún iranlọ́wọ́ ohun tí kó - àkọsílẹ̀ ipo, lẹ́tà fún oníṣirò, àkótán ìpàdé. Fi fáìlì itọ́kasi kúnàkọ́kọ́ tí o bá fẹ́ kí a sọ òtítọ̀ tàbí bíbọ́ láti inú wọn.",
+      "generatePlaceholder": "Ṣàpèjúwe iwe tí a ó kọ…",
+      "revisePlaceholder": "Ṣàpèjúwe ayipada tí a máa ṣe…",
+      "generate": "Ṣẹda",
+      "revise": "Tunṣe",
+      "writing": "N kọ…",
+      "export": "Gbe jáde",
+      "references": "Ìtọ́kasi",
+      "addReference": "Fi fáìlì kun",
+      "uploading": "N gbé sórí ayélujára…",
+      "removeReference": "Yọ {name} kúrò",
+      "referenceChars": "{chars} àmí-ọrọ láti inú ọrọ tí a yọ síta",
+      "referenceEmpty": "A kò rí ọrọ láti yọ nínú {name}",
+      "uploadFailed": "Ìkójọpọ̀ padà bọ",
+      "untitledDocument": "Iwé lai orúkọ",
+      "generatedSummary": "Mo kọ iwe naa sínú ibi-iṣẹ́. Ṣàyẹ̀wò rẹ̀ kí o sọ ohun tí mo yẹ kí n yí pa dà.",
+      "revisedSummary": "Mo ti tun iwe naa ṣe nínú ibi-iṣẹ́.",
+      "runFailed": "Ohun kan ṣẹlẹ̀: {message}",
+      "uploadBasis": "Bẹrẹ láti inú iwe tí ó wà",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "Girama & ìtúnkó",
+          "description": "Girama àti ìtúnkó tó peye; irú English kan ṣoṣo (US tàbí UK) ló péye — darapọ̀ jẹ́ aṣíṣe"
+        },
+        "consistency": {
+          "label": "Ìfarapa",
+          "description": "Ìtúmọ̀, orúkọ, àkọ́lé, àti àtẹ̀jáde ni a lo pẹ̀lú àìpẹ̀ tó jọjú ní gbogbo ibi"
+        },
+        "clarity": {
+          "label": "Kedere",
+          "description": "Ìtàn kíkọ́ tó rọrùn láti ye; ìtọsọna tó ràn onkawe lọwọ"
+        },
+        "sensitivity": {
+          "label": "Ìmọ̀tara-ẹni-láyọkà",
+          "description": "Ìtọ́ka tó fí àfiyèsí sìn, aríyànjiyàn àti àkóso oníṣòwò (àyànfẹ́ ṣàyẹ̀wò)"
+        },
+        "specAdherence": {
+          "label": "Múra tó tẹ̀lé spec",
+          "description": "Tẹ̀lé ìfilọ́lẹ̀ àfikún àkọsílẹ̀: gbogbo apá pàtàkì wà, ní àtẹ̀le, tí ń ṣètẹ̀wọ̀n ìmọ̀ràn wọn"
+        },
+        "toneAdherence": {
+          "label": "Múra tó tẹ̀lé àbọ̀wọ̀n orin",
+          "description": "Tẹ̀lé àṣẹ ohùn àti àwọ̀n orin tó wà lórí àfikún"
+        }
+      },
+      "severity": {
+        "minor": "Kèkèké",
+        "major": "Tóbi"
+      },
+      "assess": "Ṣàyẹ̀wò àyè",
+      "assessing": "Níṣíṣe ayẹwo…",
+      "assessmentTitle": "Àyẹ̀wò didára",
+      "criteriaPicker": "Àwọn ìtọ́ka láti ṣàyẹ̀wò",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Àtúnṣe tó dájú",
+      "noEditsSuggested": "Kò sí àtúnṣe tó dájú — àkọsílẹ̀ kọja ìtọ́ka tí a yàn.",
+      "acceptEdit": "Gbà",
+      "rejectEdit": "Kọ",
+      "acceptAll": "Gbà gbogbo",
+      "rejectAll": "Kọ gbogbo",
+      "editAccepted": "Ti gbà",
+      "editRejected": "Ti kọ",
+      "editUnapplicable": "A kò rí apá yìí nínú àkọsílẹ̀ lónìí — kò fi sílẹ̀",
+      "editingBlockedPendingEdits": "Tẹ̀síwájú kó tó le ṣàtúnṣe tàbí kọ àwọn ìfilọ́pọ̀ àtúnṣe tó wà",
+      "pendingCount": "{count} tó ń dúró",
+      "closeReview": "Pà àyẹ̀wò didára",
+      "showReview": "Fi àyẹ̀wò hàn",
+      "showReviewPending": "Fi àyẹ̀wò hàn ({count} tó ń dúró)",
+      "railAssessRequest": "Ṣàyẹ̀wò didára àkọsílẹ̀ gége bó ti ṣé pẹ̀lú ìtọ́ka tí a yàn.",
+      "railAssessDone": "Ayẹwo parí: àwọn amí abajade wà nínú workspace pẹ̀lú {count} àtúnṣe tó dájú láti ṣàyẹ̀wò.",
+      "spec": "Spec àkọsílẹ̀",
+      "noSpec": "Kò sí spec",
+      "manageSpecs": "Specs",
+      "specs": "Àwọn spec àkọsílẹ̀",
+      "closeSpecs": "Pà specs",
+      "specsEmpty": "Ṣẹda spec láti kọ àwọn àkọsílẹ̀ sí irú-àtọka kan — apá pàtàkì, àtẹ̀le, àti ìmọ̀ràn fún apá kọọkan (gẹ́gẹ́ bí àpẹẹrẹ SitRep). Specs wa lori ẹrọ yìí àti pé o lè tún lo.",
+      "newSpec": "Spec tuntun",
+      "newSpecName": "Spec àìmọ̀ orúkọ",
+      "specName": "Orúkọ spec",
+      "specDescription": "Apejuwe (àyànfẹ́)",
+      "deleteSpec": "Pa spec rẹ́",
+      "sectionHeading": "Ìkọkọ apá",
+      "sectionGuidance": "Ìmọ̀ràn (àyànfẹ́)",
+      "sectionRequired": "Pàtàkì",
+      "addSection": "Fikun apá",
+      "removeSection": "Yọ apá kúrò",
+      "generalGuidance": "Ìmọ̀ràn gbogbogbò (àyànfẹ́)",
+      "tone": "Orin",
+      "noTone": "Kò sí orin",
+      "customCriteria": "Ìtọ́ka ti ara rẹ",
+      "manageCriteria": "Ìtọ́ka ti ara rẹ",
+      "closeCriteria": "Pa ìtọ́ka ti ara rẹ",
+      "criteriaEmpty": "Ṣẹda awọn kẹ́rẹ́tíà àṣà tirẹ — bíi ìmọ̀ràn orúkọ àmúyẹ tàbí èdè ajọ — láti ṣe ayẹwo àwọn ìwé àti tọ́nà àtúnyẹwò. A fi pamọ́ sori ẹrọ yìí, ó sì tún le lò.",
+      "newCriterion": "Kẹ́rẹ́tíà tuntun",
+      "newCriterionName": "Kẹ́rẹ́tíà aláìlórúkọ",
+      "criterionName": "Orúkọ kẹ́rẹ́tíà",
+      "criterionRubric": "Àtúnjúwe",
+      "criterionRubricPlaceholder": "Ṣàpèjúwe ohun tí ìwé náà gbọ́dọ̀ ṣe láti péye kẹ́rẹ́tíà yìí, àpẹẹrẹ: \"Má ṣe lò àwọn ọ̀rọ̀ gbogbo-gbogbo fún iṣẹ́ wa; pè àwọn to ń rí ìrànlọ́wọ́ sí wa ní ‘àwọn tí a ń ràn lọwọ’…\"",
+      "criterionRubricHint": "Àtúnjúwe yi ni a máa fún AI gẹgẹ bí ó ṣe wà nígbà àyẹ̀wò àti àtúnyẹwò.",
+      "deleteCriterion": "Ṣẹ́ kẹ́rẹ́tíà rẹ kuro",
+      "profileTitle": "Profailì ìwé",
+      "profileDocType": "Ìru",
+      "profileLanguage": "Èdè",
+      "profileAudience": "Awon olugbọ",
+      "profilePurpose": "Ìdí",
+      "profileRegister": "Ìṣẹ̀lẹ̀ èdè",
+      "profileTone": "Ìfarahàn",
+      "profileConventions": "Àṣà",
+      "emptyHint": "Bẹ̀rẹ̀ sí ní kọ́ nísàlẹ̀, sọ ohun tí kó jùmọ̀ kọ sí apoti isàlẹ̀, tàbí bẹ̀rẹ̀ pẹ̀lú fáìlì kan.",
+      "addSpec": "Ṣàfikún ìlànà",
+      "addCriteria": "Ṣàfikún àwọn kẹ́rẹ́tíà",
+      "scopeFullDocument": "Ibi iṣẹ́: gbogbo ìwé",
+      "scopeSelection": "Ibi iṣẹ́: yíyan — “{preview}…” ({count} àwọn ọ̀rọ̀)",
+      "clearSelection": "Pa yíyan rẹ kúrò (ṣe pẹ̀lú gbogbo ìwé)",
+      "reviseSelectionPlaceholder": "Ṣàpèjúwe àwọn àtúnṣe tí ẹ́ fẹ́ ṣe sí eyi tí a yàn…",
+      "revisedSelectionSummary": "Mo tọ́na apá tí mo yàn nínú àyè iṣẹ́.",
+      "assessedSelection": "Yíyan",
+      "undoEdit": "Dà pada",
+      "clearResolved": "Nu àwọn tí a ti dá sílẹ̀",
+      "clearResolvedHint": "Yọ àwọn ìtọ́ka tí a fọwọ́ sí, tí a kọ́, àti tí kò yẹ kúrò nínú àtòjọ yìí",
+      "autoClearResolved": "Nu àwọn ìtọ́ka tí a ti dá sílẹ̀ laifọwọ́yi",
+      "import": "Gbigbasilẹ",
+      "importReplaceTitle": "Ṣe rọpo iwe aṣẹ?",
+      "importReplaceBody": "Gbigbasilẹ {name} yoo rọpo iwe aṣẹ lọwọlọwọ. Awọn itọkasi rẹ, specifikẹṣan ati ọna ọrọ rẹ yoo wa.",
+      "importReplaceConfirm": "Rọpo",
+      "editorMode": "Ipo olootu",
+      "editorModeRich": "Ọrọ ọlọrọ",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Yan awọn atunṣe ti a daba silẹ kí o tó yipada ipo olootu.",
+      "suggestChanges": "Sọ ayípadà",
+      "suggestChangesHint": "Ṣàyẹwo àtúnṣe bí ìmòràn kọọkan dipo kó o tún iwe kọ gbogbo rẹ.",
+      "suggestChangesSelectionNote": "Àtúnṣe apá tí o yàn ni a maa ṣe taara — apá tí o yan ni àfikún ayipada rẹ.",
+      "suggestedSummary": "{count} {count, plural, one {ayípadà} other {awọn ayípadà}} ti a daba fún àyẹ̀wò.",
+      "revisionSuggestionSummary": "Ìbéèrè àtúnṣe rẹ dá {count} {count, plural, one {ayípadà tí a dabaa} other {awọn ayípadà tí a dabaa}}.",
+      "revisionCriterionLabel": "Àtúnṣe tí a bẹ̀rẹ̀",
+      "fallbackSelection": "A fi taara ṣe — Àtúnṣe apá tí a yàn kì í jẹ́ adaba.",
+      "fallbackLargeRewrite": "A fi taara ṣe — Ayípadà náà ti yí púpọ̀ nínú iwe padà jù láti ṣe bí ìmòràn kọọkan.",
+      "fallbackReorder": "A fi taara ṣe — a gbe àwọn apá rọ̀po, èyí kì í se àbẹ́yẹ tí a lè yàn.",
+      "fallbackUnanchorable": "A fi taara ṣe — kò ṣeé faramọ́ àwọn gbolohun pàtó.",
+      "fallbackNoChanges": "Kò sí ayípadà tí ó jẹ mọ́.",
+      "criterionRubricTooLong": "Ìkànnì àtúpalẹ̀ yìí ti kọja ààlà ní {over} àmi lẹ́kunrẹ́rẹ́. A máa fì ranṣẹ́ pẹ̀lú ìtọ́jú kọọkan, nítorí náà ó gbọ́dọ̀ dín kù kí a tó lè lo àfihàn yìí."
+    },
+    "data": {
+      "emptyTitle": "Fọwọ́ ìwòye wá",
+      "emptyBody": "Mú fáìlì CSV, Excel, tàbí JSON wá, tàbí kàn fi àwọn ìlà sílẹ̀ tààrà. Lẹ́yìn tí tábìlì rẹ bá kún, o le tọ́na rẹ, yọ àwọn ìlà jiná síta láti ìwé, àti yí i padà pẹ̀lú àṣẹ èdè tí ẹ le lóye.",
+      "importFile": "Gbé fáìlì wọlé",
+      "importing": "N gbé wọlé…",
+      "pasteData": "Lẹ ẹ̀dá àkọsílẹ̀",
+      "pastePlaceholder": "Lẹ CSV, TSV, tàbí JSON síbí…",
+      "import": "Gbé wọlé",
+      "addFromSource": "Ṣàfikún láti orísun",
+      "extractHint": "Lẹ́ àkọsílẹ̀ tàbí yàn ìwé kan; àwọn ìlà tó bá àwọ̀n kólọ́òmù rẹ mu ni a máa yọ́. Àwọn tọ́kùnwa tí a kò mọ̀ yóò ṣofo — a kìí dá nkan sí.",
+      "extractPlaceholder": "Lẹ̀ àkọsílẹ̀ àìtọ́-ṣàtọ̀pẹ̀ tó ní data…",
+      "extractRows": "Yọ àwọn ìlà",
+      "extractFromFile": "Látinú fáìlì…",
+      "extracting": "N yọ…",
+      "pastedSource": "Àkọsílẹ̀ tí a lẹ̀",
+      "transform": "Yí padà",
+      "transforming": "N yí padà…",
+      "transformPlaceholder": "Ṣàpèjúwe bí ẹ́ ṣe fẹ́ yí padà, àpẹẹrẹ: \"fi kólọ́òmù pọ̀ pẹ̀lú ẹ̀jọ́ fún 1000 èèyàn\"…",
+      "transformCapHint": "Àwọn àtúnṣe dínà sí {max} ìlà. Pa tàbí ṣàtẹ̀jáde àwọn ìlà ṣáájú fún tábìlì ńlá.",
+      "undo": "Ṣe àtìparí",
+      "deleteSelected": "Pa {count} kúrò",
+      "deletedRows": "A pa {count} ìlà kúrò",
+      "selectAllRows": "Yan gbogbo ìlà",
+      "selectRow": "Yan ìlà {row}",
+      "rowCount": "{count} ìlà",
+      "rowCapExceeded": "Yìí máa jẹ́ {count} ìlà; tábìlì kì í kọja {max}. Pín data rẹ tàbí ṣe àtẹ̀jáde dípò.",
+      "railExtractRequest": "Yọ awọn ila ti o ba eto tabili mu lati: {source}",
+      "railExtractDone": "Afikun {count} awọn ila tí a yọ sí tabili.",
+      "railTransformDone": "A ti yí tabili padà.",
+      "columnProfileFor": "Ìtòsìn àkọsílẹ fún {column}",
+      "profileMissing": "Kò sí",
+      "profileDistinct": "Oníyàtọ̀",
+      "profileRange": "Ìwọ̀n",
+      "profileMean": "Apapọ",
+      "profileMedian": "Àárín-ibí",
+      "profileTopValues": "Àwọn iye tó ga jù lọ",
+      "filterColumnFor": "Fílọ {column}",
+      "filterContains": "Ní…",
+      "filterMin": "Kekere jù",
+      "filterMax": "Tó pọ̀ jù",
+      "filterClear": "Nu kúrò",
+      "clearFilters": "Nu gbogbo fílọ kúrò",
+      "showingRows": "Fifi {shown} ninu {total} awọn ila hàn",
+      "scopeLabel": "Ipò iṣẹ́",
+      "scopeTable": "Gbogbo ({count})",
+      "scopeFiltered": "Ti a fílọ ({count})",
+      "scopeSelection": "Tí a yàn ({count})",
+      "scopedInstruction": "{instruction} (lórí {count} awọn ila yàn)",
+      "assess": "Ṣàyẹ̀wò didara",
+      "assessing": "Ìṣàyẹ̀wò…",
+      "criteria": {
+        "validity": {
+          "label": "Ìtẹ́wọgbà",
+          "description": "Àwọn iye bá irú àti àkóbá àkọọlẹ wọn mu"
+        },
+        "consistency": {
+          "label": "Ìfarapámọ̀",
+          "description": "Kọ́ iye kàn sílẹ̀ ní àfojúsùn tó dọ́gba (kò sí 'M' / 'Male' yàtọ̀, amúnisiyesi oriṣiriṣi, tàbí adúláwọ̀ lẹ́nu ọrọ̀)"
+        },
+        "duplicates": {
+          "label": "Ìtakò",
+          "description": "Àwọn ila tí ńkọ ọ̀kan pàtàkì tàbí iṣẹlẹ mejeeji lẹ́meji"
+        },
+        "plausibility": {
+          "label": "Ìjẹ́jẹ́pamọ̀",
+          "description": "Àwọn iye tí kò bóye/ti kò yẹ nínú àyíká"
+        }
+      },
+      "assessmentTitle": "Ìdánwò didara data",
+      "pendingCount": "{count} tí ń dúró",
+      "closeReview": "Ṣí parí ìdánwò didara",
+      "suggestedEdits": "Àwọn ìmúdára tó dájú",
+      "noEditsSuggested": "Kò sí ìmúdára tó dájú — data kọja àwùjọ àṣàyàn.",
+      "acceptAll": "Fọwọsí gbogbo",
+      "rejectAll": "Kọ gbogbo",
+      "acceptEdit": "Fọwọsí",
+      "rejectEdit": "Ṣàkọsílẹ̀",
+      "editAccepted": "Ti lo",
+      "editRejected": "A kọ́",
+      "editUnapplicable": "Sélù yí padà látígbà tí a ṣe ìdánwò — kò ti lo",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "Àṣàyàn àfihàn",
+      "severity": {
+        "minor": "Kekere",
+        "major": "Nla"
+      },
+      "editLocation": "ila {row} · {column}",
+      "editLocationRow": "ila {row} (pa)",
+      "showReview": "Fi atunyẹwo han",
+      "showReviewPending": "Fi atunyẹwo han ({count} ṣíṣe)",
+      "assessedFiltered": "Awọn ila ti a yà",
+      "assessedSelection": "Awọn ila ti a yan",
+      "assessedSample": "apẹẹrẹ ti {shown} nínú {total}",
+      "railAssessRequest": "Ṣayẹwo didara tabili ({count} ila) gége bi àṣàyàn àyẹ̀wò.",
+      "railAssessDone": "A dabaa atunṣe didara data {count} — ṣayẹwo wọn nínú àyè iṣẹ.",
+      "insights": "Ìmọ̀lára",
+      "chartKind": "Iru àwòrán",
+      "chartBar": "Àwọn àpá (gbẹ̀gbẹ̀po)",
+      "chartHistogram": "Ìtẹ̀sí àwòrán",
+      "chartLine": "Ìlà (pẹ̀lú àkókò)",
+      "groupByColumn": "Pín pọ̀ ní kólọ́mù",
+      "dateColumn": "Kólọ́mù àkókò",
+      "valueColumn": "Kólọ́mù àwọn àkọ́silẹ̀",
+      "aggFn": "Ìkànsípọ̀",
+      "aggCount": "Ìkànsí",
+      "aggSum": "Apapọ̀",
+      "aggMean": "Apapọ̀ àráààrín",
+      "chartTruncated": "Ìfihàn ẹgbẹ̀ {max} tó ga jùlọ",
+      "chartNoData": "Kò sí àkópọ̀ tó yẹ fún àwòrán nínú àwọn ila tó wà.",
+      "chartBarAria": "Ìtẹ̀sí àwọn àpá tí a pín pọ̀ ní {column}",
+      "chartHistogramAria": "Ìtẹ̀sí àwòrán ti {column}",
+      "chartLineAria": "Ìlà àwòrán ti {column} pẹ̀lú àkókò",
+      "editStructure": "Ìtò",
+      "defineStructure": "Ṣàlàyé ìtò",
+      "schemaHint": "Ṣàlàyé àwọ̀n pápá ìtò data rẹ. Àwọn àkíyèsí àwọ̀n pápá tó ṣe pàtàkì máa ṣàmúlò ìlànà data tí kò pé àkókò ìkó wọlé; yípọ̀ tìpẹ̀ pápá kan á yí àwọn iye yìí pa (àwọn sẹẹli tí kò yè kó di òfo).",
+      "schemaFieldName": "Orúkọ pápá",
+      "schemaFieldType": "Iru pápá",
+      "schemaRequired": "Pàtàkì",
+      "schemaAddField": "Fi pápá kun",
+      "schemaDeleteField": "Pa pápá {field} rẹ́",
+      "schemaApply": "Lo ìtò",
+      "schemaCancel": "Fagilé",
+      "schemaEdited": "Ṣàtúnṣe ìtò tabili",
+      "schemaCellsConverted": "{count} sẹẹli kò le yípadà sí iru tuntun, wọ́n sì di òfo.",
+      "missingFieldPolicy": "Àìsí data",
+      "policyStrict": "Tó tító — kọ àwọn ila tí kò pé",
+      "policyFlag": "Fàgùn — kó wọle, samí mọ́lẹ̀",
+      "policyLenient": "Rọrùn — kó wọle láíláí",
+      "droppedIncompleteRows": "Kọ ilá {count} tí kò ní àwọn pápá pàtàkì: {fields}",
+      "dismiss": "Pa kuro",
+      "requiredColumn": "Pápá pàtàkì",
+      "flagMissingRequired": "Pápá pàtàkì ṣofo",
+      "flagPendingEdit": "Ìtúnṣe tí a daba ṣíṣe wà fún sẹẹli yìí — wo àyẹ̀wò didara",
+      "fromPhoto": "Látọ́ orúkọ yàwòrán",
+      "fromPhotoHint": "Ya fọ́tò fọ́ọmù tàbí tabili — akoonu yóò di data tó tìtò tí o le fi wé fọ́tò náà",
+      "readingPhoto": "N ka àwòrán…",
+      "photoBatchName": "{count} àwòrán",
+      "railPhotoRequest": "Fa data tó tìtò jáde látinú {count} àwòrán: {name}",
+      "railPhotoDone": "A fi {count} ìkọ̀ọkan láti inú fọ́tò. Ṣàyẹ̀wò wọn pẹ̀lú fọ́tò nínú ibi iṣẹ́.",
+      "sourcesLabel": "Orísun",
+      "openPhotoQc": "Ṣàyẹ̀wò data pẹ̀lú {name}",
+      "qcRowsFromPhoto": "{count} ìlà",
+      "qcClose": "Tí fọ́tò ṣàyẹ̀wò pa",
+      "qcZoomIn": "Sún mọ́",
+      "qcZoomOut": "Yọ kúrò",
+      "qcPrevPhoto": "Fọ́tò tó kọjá",
+      "qcNextPhoto": "Fọ́tò tó tẹ̀síwájú",
+      "qcImageLoading": "N gbé fọ́tò wọlé…",
+      "qcImageFailed": "A kò lè gbé fọ́tò wọlé.",
+      "qcImageAlt": "Fọ́tò orísun: {name}",
+      "qcHint": "Tẹ́bùlù yìí fi ìlà fọ́tò yìí nìkan hàn — fi gbogbo iye ṣàyẹ̀wò pẹ̀lú fọ́tò, yí padà tàbí pa ìlà tí kò bá mu.",
+      "sourceFilterChip": "Ìlà láti {name}",
+      "clearSourceFilter": "Fi gbogbo ìlà hàn lẹ́ẹ̀kàn síi",
+      "viewAsRecord": "Ìwò àwòrán fọ́ọmù",
+      "viewAsTable": "Ìwò tẹ́bùlù",
+      "recordEmpty": "Kò sí ìkọ̀ọkan sibẹ́.",
+      "recordOf": "Ìkọ̀ọkan {index} nínú {count}",
+      "recordPrev": "Ìkọ̀ọkan tó kọjá",
+      "recordNext": "Ìkọ̀ọkan tó tẹ̀síwájú",
+      "recordBooleanUnset": "(ófò)",
+      "flagsChip": "{count} àfihàn",
+      "flagsChipOpenReview": "Ṣí ìfọ̀yemọ́ didara",
+      "flagsChipMissingOnly": "Àwọn pápá pàtàkì ṣókùnfa — fi wọn kún tàbí ṣe àtúnṣe",
+      "autoCheck": "Ṣàyẹ̀wò laifọwọyi data tuntun",
+      "autoCheckHint": "Lẹ́yìn tí a bá jáde data láti fọ́tò tàbí àkọsílẹ̀, dajudaju máa ṣiṣẹ́ ṣàyẹ̀wò didara lórí àwọn ìlà tuntun",
+      "checkingNewRows": "N ṣàyẹ̀wò ìlà tuntun fún ìṣòro didara...",
+      "ingestCheckFailed": "Ṣàyẹ̀wò didara laifọwọyi kuna ({message}) — o lè ṣiṣẹ́ rẹ́ ní ọwọ́ pẹ̀lú Ṣàyẹ̀wò didara.",
+      "assessedIngest": "Ìlà tuntun to kún",
+      "transpose": "Ṣe iyipo",
+      "transposeAxisColumn": "Orukọ",
+      "transposeSuggestion": "Ìtòsí yìí dà bí ẹni pé wọ́n ti yi i padà: àwọn ìlà ni àkọsílẹ̀, àwọn kòlàmù ni àwọn ohun. Ṣe fẹ́ yí i padà ki ọkọọkan ohun di ìlà, kò gbogbo àkọsílẹ̀ di kòlàmù pẹ̀lú irú wọn?",
+      "transposedTable": "Ìyípo àwọn ìlà àti kòlàmù",
+      "columns": "Àwọn kòlàmù",
+      "columnsHidden": "Àwọn kòlàmù ({count} tìpa mọ́)",
+      "showAllColumns": "Fi gbogbo han",
+      "chartScatter": "Ìtànkálẹ̀ (x sí y)",
+      "chartPivot": "Tábìlì pivot",
+      "xColumn": "Kòlàmù X",
+      "yColumn": "Kòlàmù Y",
+      "splitByColumn": "Pín gẹ́gẹ́ bí",
+      "splitNone": "Kò sí ipin",
+      "pivotValueColumns": "Àwọn kòlàmù iye",
+      "aggMin": "Kékèké",
+      "aggMax": "Tó pọ̀ jù",
+      "aggMedian": "Àrìn",
+      "chartSeriesTruncated": "Fífi àwọn àfihàn {max} tó ga jù lọ hàn",
+      "chartPointsTruncated": "Fífi {max} àyọkà àṣàyàn hàn",
+      "chartScatterAria": "Gbólóhùn ìtànkálẹ̀ {x} sí {y}",
+      "pivotTableAria": "Tábìlì pivot tó dá lórí {column}",
+      "schemaFormula": "Fọ́ọ́mùlà",
+      "schemaFormulaPlaceholder": "àpẹẹrẹ: [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "Akọ́ àyẹ̀wò: tọ́kasí àwọn apá míì bí [Orukọ]; gba + - * / %, parentheses, ati round, abs, min, max. Àwọn iye yìí máa yí padà laifọwọyi, kì kò le ṣàtúnṣe taara.",
+      "schemaFormulaSyntaxError": "Fọ́ọ́mùlà búburú",
+      "schemaFormulaUnknownRef": "Apá aimọ̀: {ref}",
+      "schemaFormulaArityError": "Ìpè aṣiṣe opolopo si {fn}",
+      "schemaFormulaCycleError": "Ìtọ́kasí àyíká láàrín àwọn fọ́ọ́mùlà",
+      "derivedColumnTitle": "Sísàgbéyẹ̀wò: {formula}",
+      "derivedFrom": "Àbájáde láti {formula}",
+      "takePhoto": "Ya fọto",
+      "takePhotoHint": "Lo kamẹra rẹ lati ya fọto fọọmu tabi tabili — akoonu rẹ yoo di data to ṣeto ti o le fi wẹyìn si fọto naa"
+    },
+    "map": {
+      "emptyTitle": "Fi data rẹ́ sí maapu",
+      "emptyBody": "Lẹ̀ẹ̀mọ́kan sitrep, akojọ àwọn orúkọ, àkọọ́lẹ̀ ipade, tàbí ọrọ tí ń darúkọ ibi — tàbí ṣe ìkó àwòrán. A máa mọ ibi tó wà, kí a sì fi wọn sí maapu pẹ̀lú ìkejì ìdánilójú; lásìkò yìí, o lè ṣàkóso síta fún ArcGIS tàbí irinṣẹ́ GIS míì.",
+      "inputPlaceholder": "Lẹ̀ẹ̀mọ́kan ọrọ tó darúkọ ibi…",
+      "uploadFile": "Gbé fáìlì sẹ́yìn",
+      "pastedSource": "Òrọ̀ tó lẹ̀ẹ̀mọ́kan",
+      "mapIt": "Ṣe maapu rẹ́",
+      "finding": "N wa ibi…",
+      "featureCount": "{count} ibi",
+      "featureCapExceeded": "Maapu pọ́ tó {max} ibi nìkan.",
+      "noneFound": "Kò sí ibi kankan tí a rí nínú ohun tí o fi sílẹ̀ yìí.",
+      "lowConfidenceNotice": "{count} ibi ní kókọ ìdánilójú kéré — ṣàyẹ̀wò wọn kí o tó gbẹ́kẹ̀ lé maapu.",
+      "tilesOffline": "Máapu tile kò sí — àtòjọ ibi ṣi n ṣiṣẹ́.",
+      "disclaimer": "Ìpò ṣeéṣe AI lórí ìmọ̀ tó wa lórí àwoṣe, kì í ṣe iṣẹ́ geocoding — jèrè ìdánilójú ṣáájú ọkọ́ iṣẹ́ gidi. Maapu tile wà láti tile server; data rẹ́ kù lórí iríṣàlẹ̀ yìí.",
+      "flyTo": "Fi {name} han lórí maapu",
+      "removeFeature": "Yọ {name} kúrò",
+      "expandFeature": "Fi gbogbo àlàyé fún {name} hàn",
+      "collapseFeature": "Dín àlàyé {name} kù",
+      "detailsParent": "Apá {parent}",
+      "railRequest": "Ṣe maapu àwọn ibi nínú: {source}",
+      "railSearchRequest": "Wá lórí wẹ́bù kí o sì ṣe maapu àwọn ibi fún: {query}",
+      "railDone": "A ti ṣe maapu {count} ipo. Ṣayẹwo awọn ti igbekele-kekere ninu akojọ naa.",
+      "searchToggle": "Ipo àwárí wẹẹbu",
+      "searchToggleHint": "Ṣàwárí lori wẹẹbu dipo fífikọ ọrọ; abajade tó dá lórí ìdánilójú ni a ṣe maapu.",
+      "searchPlaceholder": "Ṣàwárí lori wẹẹbu, àpẹẹrẹ \"cholera outbreaks East Africa 2026\"…",
+      "searchAndMap": "Ṣàwárí & ṣe maapu",
+      "searching": "Nlọ àwárí…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "Ìbáṣepọ: {kind}",
+        "unresolved": "{count} ìbáṣepọ tọka si awọn ibi tí kò wa lórí maapu, a sì fo wọn."
+      },
+      "confidence": {
+        "high": "Gíga",
+        "medium": "Aárín",
+        "low": "Kekere"
+      },
+      "prominence": {
+        "primary": "Ipo pàtàkì",
+        "secondary": "Ipo atilẹyin",
+        "mention": "Ìtòrí kúkúrú"
+      },
+      "prominenceMentionHint": "Ohun elo naa tọka sí ibi yìí lásán — a fi hàn kékeré lórí maapu, a sì yọ rẹ́ kúrò ninu àkóso ìbẹ̀rẹ̀.",
+      "dates": {
+        "since": "látì {date}",
+        "range": "{start} – {end}",
+        "ongoing": "Nlọ lọwọ"
+      },
+      "filters": {
+        "label": "Fílíìtá pẹ̀lú oríṣìíríṣìí",
+        "other": "Ẹlòmíràn",
+        "clear": "Nu kúrò",
+        "showing": "{shown} nínú {total} àwọn ipo",
+        "noneMatch": "Ko si ipo tó bà a mu pẹlu fílíìtá tó wà lọwọlọwọ."
+      },
+      "dateFilter": {
+        "label": "Ọjọ́",
+        "from": "Láti",
+        "to": "Sí",
+        "fromAria": "Fi àwọn iṣẹlẹ́ ṣoṣo láti ọjọ́ yìí hàn",
+        "toAria": "Fi àwọn iṣẹlẹ́ ṣoṣo tí ó tó ọjọ́ yìí hàn",
+        "clear": "Nu ọjọ́ kúrò",
+        "eraChip": "Fi iṣẹlẹ́ nínú {label} ṣoṣo hàn"
+      },
+      "timeline": {
+        "toggle": "Akoko lọ",
+        "play": "Ṣiṣẹ akoko lọ",
+        "pause": "Dákẹ́ akoko lọ",
+        "eras": "Àwọn àkókò timeline",
+        "jumpTo": "Lelé sí {label}",
+        "slider": "Ipò timeline",
+        "showUndated": "Fi àwọn ipo tí kò ní ọjọ́ hàn",
+        "activeCount": "{count} lẹsẹkẹsẹ",
+        "jump": {
+          "start": "Bẹrẹ",
+          "yearsLater": "{count, plural, one {Lẹ́yìn ọdún 1} other {Lẹ́yìn ọdún #}}",
+          "monthsLater": "{count, plural, one {Lẹ́yìn oṣù 1} other {Lẹ́yìn oṣù #}}",
+          "daysLater": "{count, plural, one {Lẹ́yìn ọjọ́ 1} other {Lẹ́yìn ọjọ́ #}}",
+          "appears": "{count, plural, one {1 hàn} other {# hàn}}",
+          "ends": "{count, plural, one {1 parí} other {# parí}}",
+          "progress": "Ọjọ́ {index} nínú {total}"
+        },
+        "precision": {
+          "minute": "Díẹ̀ sí ìṣẹ́jú",
+          "hour": "Díẹ̀ sí wákàtí",
+          "day": "Díẹ̀ sí ọjọ́",
+          "month": "Ìbọ́ ọjọ́ oṣù",
+          "year": "Ìbọ́ ọjọ́ ọdún",
+          "mixed": "(àpapọ̀)"
+        },
+        "pacing": {
+          "toggle": "Iṣakoso ìfọ́hùnṣọ̀rọ̀",
+          "cardDuration": "Fihàn ibi kọọkan fún",
+          "seconds": "{seconds}s",
+          "maxCards": "Awọn ibi tí a fi hàn ní ọjọ́ kan",
+          "hint": "Àwọn ọjọ́ tí kún ju ni a máa gbé soke pẹ ju laifọwọ́yi."
+        }
+      },
+      "granularity": {
+        "site": "Ojúlé",
+        "city": "Ìlú/abúlé",
+        "district": "Agbègbè",
+        "region": "Ìpínlẹ̀",
+        "country": "Orílẹ̀-èdè"
+      },
+      "granularityAreaHint": "Agbègbè kan, a fi pamọ́ gẹ́gẹ́ bí ààlà tó yika arin rẹ̀ — kì í ṣe ipo tòótọ́ tàbí ààlà gangan.",
+      "containerHint": "Ó ní àwọn ipo mìíràn lori maapu, nítorí náà, a fi hàn gẹ́gẹ́ bí àpẹrẹ lásán.",
+      "legend": {
+        "toggle": "Ìtúpalẹ̀",
+        "title": "Bí a ṣe le kà maapu",
+        "color": "Awọ̀: ìdánilójú ìpò (bulu gíga, àmùbẹ́ arin, pupa kere)",
+        "size": "Ìwọn dòtì: bó ṣe jẹ́ pátákì ibi náà sí ohun tó wà lórí maapu",
+        "area": "Ilẹ-àyipada onigun yika: iwọn àgbègbè, agbègbè, tàbí orílẹ̀-èdè pẹ̀lú àfikún.",
+        "container": "Ilẹ̀ pẹlẹbẹ: àgbègbè tí akoonu rẹ̀ yàtọ̀ síra ni àtẹ̀jáde.",
+        "precisionHalo": "Oruka kékèké tí ó nílò kúkúrú (nígbà ìtẹ̀síwájú àkókò): ìṣẹlẹ̀ náà kì í ní ọjọ́ gangan, o jẹ́ pé oṣù tàbí ọdún ni a mọ̀, ọjọ́ gbangba rẹ kò dájú"
+      },
+      "sourceLabel": "Orísun: {name}",
+      "fetchAndMap": "Gbé wá & ṣàtúnṣà",
+      "fetchingPage": "N gbé ìwé wá…",
+      "railUrlRequest": "Gbé wá àti ṣàtúnṣà àwọn ibi látinú: {title} ({url})"
+    },
+    "shell": {
+      "showConversation": "Ṣàfihàn ibànísọ̀rọ̀",
+      "hideConversation": "Tító ibànísọ̀rọ̀",
+      "workspaceTab": "Ibùdó iṣẹ́",
+      "conversationTab": "Ibànísọ̀rọ̀",
+      "paneTabsLabel": "Àfihàn iṣẹ́",
+      "railEmpty": "Ìfiranṣẹ́ àti ìlera iranlọwọ yìí yóò hàn níbí.",
+      "railInputPlaceholder": "Firanṣẹ́ sí aṣàyánsọrọ…",
+      "assistantThinking": "Ṣàpèjúwe…",
+      "sendMessage": "Firanṣẹ́ ìfiranṣẹ́",
+      "stopGenerating": "Dákẹ́ àtẹ̀jáde",
+      "loadingWorkspace": "N gbígbà ibùdó iṣẹ́…",
+      "unknownType": "Ibànísọ̀rọ̀ yìí n lò iṣẹ́ tí ẹ̀dá yìí kò mọ̀. Àkọsílẹ̀ ibànísọ̀rọ̀ wà lókè yìí.",
+      "untitled": "Ibànísọ̀rọ̀ Tuntun",
+      "toggleMenu": "Yi àkójọ aṣayan padà",
+      "model": "Àpẹẹrẹ fún iṣẹ́ yìí"
+    },
+    "tabs": {
+      "label": "Ipo ìbànísọ̀rọ̀",
+      "chat": "Ìbànísọ̀rọ̀",
+      "chatDescription": "Ìbànísọ̀rọ̀ àwòkọ́sùn pẹ̀lú iranwọ́"
+    },
+    "discard": {
+      "title": "Ṣe o fẹ́ kọ àtẹ̀jáde yìí sílẹ̀?",
+      "body": "Yípadà sí {target} máa yọ iṣẹ́ tí o ti bẹ̀rẹ̀ sí {current} kúrò.",
+      "confirm": "Kọ sílẹ̀"
+    }
+  },
+  "connectors": {
+    "title": "Àsopọ",
+    "description": "Sopọ́ àwọn irinṣẹ́ àta gbéyàrá lórí Model Context Protocol (MCP). Àwọn irinṣẹ́ tí a ti sọ pọ̀ máa wa fún àpẹẹrẹ nínú ibànísọ̀rọ̀, gbogbo ìpè irinṣẹ́ máa ṣiṣẹ́ lẹ́yìn ìmúlò.",
+    "localOnlyNote": "O wọlé t'ara rẹ̀ pẹ̀lú akọ̀kọ̀tọ àwọn olupese. Àwọn kókó wiwọle ni a ṣe ẹ̀tọ́ sí i, a sì tọju wọn nínu ẹrọ yìí péré, a maa fi wọn ranṣẹ́ pẹ̀lú kóòdù lórí aṣàyan — a kò tọju tàbí ṣe àkọsílẹ̀ wọn níbẹ.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "Wá àwọn ibi-ipamọ̀, kà àti dá àwọn ìṣòro àti ìbéèrè fa-pọ."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "Wá, dá, àti ṣe imúdájú àwọn iṣẹ́ àti àwùjọ."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Ṣe ìbéèrè orisun data ti a ti tẹjade, awọn iwe-ipamọ iṣẹ, ati awọn metiriki Pulse."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Ṣawari ati ṣe imudojuiwọn awọn igbasilẹ kọja awọn ohun Salesforce rẹ."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Ṣẹda, ṣeto, ati kede awọn ifiweranṣẹ lori awọn iru-ewé awujọ."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Ṣayẹwo ati fesi si awọn ijiroro apoti ifiranṣẹ awujọ."
+      }
+    },
+    "connect": "Sopọ́",
+    "connected": "Ti sopọ́",
+    "tokenEndsIn": "parí ní ••••{last4}",
+    "disconnect": "Ya àsopọ̀ kúrò",
+    "toolCount": "{count, plural, =1 {irinṣẹ́ 1 wa} other {irinṣẹ́ # wa}}",
+    "patLabel": "Kókó wiwọlé t’ara ẹni",
+    "createTokenLink": "Ṣẹda token kan",
+    "tokenScopeHint": "Lo token pẹkipẹki tó ní àkọsílẹ̀ tó yẹ fún irinṣẹ́ wọ̀nyí nikan.",
+    "validating": "N ṣàyẹ̀wò àsopọ̀…",
+    "validationFailed": "A ko le so pọ. Ṣayẹwo adirẹsi ki o tun gbiyanju.",
+    "authFailed": "Sẹ́ẹ́vá ti kọ́ token naa. Ṣayẹwo ki o tun gbiyanju.",
+    "tokenRequired": "Token jẹ dandan",
+    "enableServer": "Wa ninu iwiregbe",
+    "arbitraryTitle": "Awọn olupin MCP miiran",
+    "arbitraryToggle": "Fọwọsi awọn olupin MCP mìíràn",
+    "arbitraryWarning": "Enikẹni ti o nṣiṣẹ olupin MCP le rii awọn ifiranṣẹ ti a fi ranṣẹ si awọn irinṣẹ rẹ. So pọ nikan pẹlu awọn olupin ti o gbẹkẹle. Gbogbo ipe irinṣẹ ṣi nilo ifọwọsi rẹ.",
+    "addServer": "Ṣafikun olupin MCP",
+    "editServer": "Ṣatunkọ olupin MCP",
+    "serverName": "Orukọ",
+    "serverUrl": "Server URL",
+    "nameRequired": "Orukọ jẹ dandan",
+    "urlRequired": "URL jẹ dandan",
+    "invalidUrl": "Tẹ adirẹsi https:// ti gbogbo eniyan le wọle si",
+    "namePlaceholder": "Olupin MCP mi",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "Access token (aṣayan)",
+    "keepTokenPlaceholder": "Fi silẹ silẹ lati tọju token lọwọlọwọ",
+    "disconnectedToast": "{name} ti ge asopọ",
+    "save": "Fipamọ",
+    "connectWithProvider": "So pọ pẹlu {name}",
+    "useTokenInstead": "Lo access token dipo bẹẹ",
+    "oauthWaiting": "N duro de aṣẹ…",
+    "oauthFailed": "Iforukọsilẹ kuna. Tun gbiyanju.",
+    "oauthDenied": "Olupese kọ wiwọle.",
+    "oauthTimeout": "Iforukọsilẹ pẹ ju. Tun gbiyanju.",
+    "oauthCancelled": "Iforukọsilẹ ti kọ.",
+    "oauthUnavailable": "A ko le ṣe iforukọsilẹ fun asopọ yii lori fifi sori yii. Lo access token dipo bẹẹ, tabi be adarí rẹ lati tunto app OAuth.",
+    "ownAppToggle": "Lo OAuth app tirẹ",
+    "ownAppHint": "Forukọsilẹ OAuth app kan ninu àkọọlẹ {name} rẹ (agbari, ibi iṣẹ, tabi àdánù rẹ) pẹlu callback URL ti o wa ni isalẹ, lẹhinna lẹẹ mọ credentials rẹ si ibi. Fi eyi pa silẹ lati lo app ti a fi ṣe.",
+    "ownAppCustomHint": "O le fi credentials OAuth app tirẹ si isalẹ bi o ba fẹ; fi silẹ silẹ lati forukọsilẹ laifọwọyi pẹlu olupin.",
+    "ownAppInUse": "Ti sopọ pẹlu OAuth app tirẹ.",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client secret (bi app rẹ ba ni)",
+    "redirectUriLabel": "Callback / redirect URL lati forukọsilẹ",
+    "reconnect": "Tun so pọ",
+    "needsReauth": "Nilo atunso pọ",
+    "disconnectOauthNote": "Gige asopọ yìí yoo yọ wiwọle latilẹ ẹrọ yii nikan. Lati fagile wiwọle patapata, ṣakoso awọn app to fọwọsi ninu àkọọlẹ {name} rẹ.",
+    "authModeLabel": "Aṣayan wiwọle",
+    "authModeNone": "Ko si",
+    "authModeBearer": "Access token",
+    "authModeOauth": "Wọle pẹlu olupese (OAuth)",
+    "oauthCustomHint": "Iwọ yoo wọlé pẹlu olupese olupin ninu ferese tuntun lẹyin fifipamọ.",
+    "saveAndSignIn": "Fipamọ & wọlé",
+    "oauthCallback": {
+      "title": "Aṣẹ pari",
+      "missingState": "Ko si ohun lati fọwọsi",
+      "close": "O le pa ferese yii ki o pada si app.",
+      "closeButton": "Pa ferese"
+    },
+    "oauthNoAppConfigured": "Wíwọlé pẹlu {name} kò tíì ṣetan lori fifi sori yii. So pọ nipa iforukọsilẹ OAuth app tirẹ.",
+    "adminConnectorsTitle": "Láti agbari rẹ",
+    "adminConnectorsDescription": "Awọn asopo ti awọn adarí rẹ ti ṣeto. Awọn ti o ri da lori iraye rẹ.",
+    "managedByOrg": "Ṣe abojuto nipasẹ agbari rẹ",
+    "connectorOauthNotConfigured": "Wíwọlé kò tíì pari fifi sori fún asopo yìí. Kan si adarí rẹ.",
+    "yourConnectorsTitle": "Awọn asopo rẹ",
+    "addTitle": "Fi asopo kun",
+    "addDescription": "Yan irinṣẹ lati sopọ. Iwọ yoo ṣeto iraye lẹyin yiyan.",
+    "add": "Fi kun",
+    "filterLabel": "Àyípọ̀ asopo",
+    "filterPlaceholder": "Ṣawari asopo",
+    "noMatches": "Ko si asopo tó ba “{query}” mu."
+  },
+  "modelSources": {
+    "connectButtonShort": "Sopọ́ orisun àwòrán kan",
+    "addAnother": "Fi orisun àwòrán míì kún",
+    "edit": "Ṣatúnṣe",
+    "disconnect": "Ya orisun {name} kuro",
+    "disconnectedToast": "Ti ya orisun {name} kuro",
+    "modelCountLabel": "{count} awọn àwòrán",
+    "loadingModels": "N gbasilẹ awọn àwòrán...",
+    "noModelsAvailable": "Ko sí àwòrán kankan lati orisun yi",
+    "sourceUnreachable": "A kò le gba orisun yi. O ṣee ṣe pe ìwọle rẹ ti yipada tàbí iṣẹ le ma wa lásìkò yìí.",
+    "retry": "Tun gbìyànjú",
+    "connectFoundryAccount": "Sopọ akọọlẹ Microsoft Azure Foundry",
+    "connectFoundryDescription": "Wa awọn ilosoke àwòrán lati akọọlẹ Azure Foundry tí o ní wọle sí. Àṣẹ tirẹ ni Azure ni yó ṣatọ́ka gbogbo ìbéèrè — àìlèwu àwòrán ìṣàkóso app kò kan ibi yi.",
+    "selectModelsDescription": "Yan iru ilosoke àwòrán lati akọọlẹ yi lati han ninu yiyan àwòrán rẹ.",
+    "editConnection": "Ṣatúnṣe asopọ",
+    "nameLabel": "Orúkọ",
+    "namePlaceholder": "àpẹẹrẹ: Sandbox Ẹgbẹ Mi",
+    "nameRequired": "A nilo orukọ orisun",
+    "foundryAccountLabel": "Akọọlẹ Foundry",
+    "enterManually": "Fọwọ́wọ́ jẹ",
+    "browseResources": "Ṣàwárí àwọn orísun",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Ẹgbẹ Orísun",
+    "accountNameLabel": "Orúkọ àkọọlẹ",
+    "subscriptionRequired": "Yan ìforúkọsílẹ̀ kan",
+    "accountRequired": "Yan akọọlẹ Foundry kan",
+    "accountSelectionRequired": "Yan akọọlẹ kan láti àkójọ.",
+    "selectAllRequired": "Yan ìforúkọsílẹ̀, ẹgbẹ orísun, àti akọọlẹ.",
+    "connectionFailed": "A kò le gba akọọlẹ yi. Ṣayẹwo alaye ati daju pe o ní iwọle.",
+    "duplicateSource": "Akọọlẹ yi ti wa ni asopọ tẹlẹ gẹ́gẹ́ bí \"{name}\".",
+    "connectionSuccessModels": "Ti sopọ — {count} ìlọṣọkan àwòrán rí",
+    "connectionSuccessEmpty": "Ti sopọ, ṣùgbọ́n kò rí ìlọṣọkan àwòrán kankan lori akọọlẹ yi.",
+    "checkingConnection": "N ṣàyẹ̀wò asopọ...",
+    "next": "Tẹ̀síwájú",
+    "back": "Padà",
+    "cancel": "Fagilé",
+    "connect": "So pọ",
+    "save": "Fipamọ",
+    "scanningResources": "N ṣe ayẹwo awọn alabapin Azure rẹ...",
+    "discoveryPartialWarning": "{count, plural, one {# alabapin} other {# awọn alabapin}} ko le ṣe ayẹwo. Lo ìfimúnáka ọwọ́ bíi pé àkọọlẹ rẹ̀ kò sí.",
+    "discoveryTruncatedWarning": "Ọpọ awọn orisun lo wa ju ti a le ṣe ayẹwo tan. Lo ìfimúnáka ọwọ́ bíi pé àkọọlẹ rẹ̀ kò sí.",
+    "noAccountsDiscovered": "Ko si àkọọlẹ Foundry tí a rí nínú awọn alabapin rẹ. Lo ìfimúnáka ọwọ́ bíi pé o mọ́ ọna.",
+    "retryScan": "Tun ṣe ayẹwo",
+    "searchAccountsPlaceholder": "Wa àkọọlẹ...",
+    "modelsSelectedCount": "{selected} ninu {total} awọn àwòrán ayẹwo ti a yan",
+    "selectAll": "Yan gbogbo rẹ",
+    "deselectAll": "Yọ gbogbo yàn",
+    "autoAddLabel": "Ṣafikun àwòrán tuntun laifọwọyi",
+    "autoAddDescription": "Awọn imupese awoṣe tí a ṣafikun sí àkọọlẹ yìí lẹ́yìn náà máa farahàn laifọwọyi. Awọn awoṣe tí kò ní àmí akanṣe máa wa níta."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Ìká tí kò pọ̀",
+      "moderate": "Ìká àárín",
+      "high": "Ìká tó pọ̀"
+    },
+    "tierTooltip": "Ìká agbára fún gbogbo ìlò kọọkan, sísàtúnwò láti ipò àwọ̀n àkópọ̀ àyèje. Ìyí jẹ́ àfihàn gẹ́gẹ́ bí apapọ àti ìròyìn, v{version} — kì í ṣe ìmúlòlùfẹ̀.",
+    "typicalRequest": "~{grams} g CO₂e fún ìbéèrè àfojúsùn kan",
+    "typicalRequestTooltip": "Ìṣirò apapọ fún ìbéèrè àfojúsùn kan (àwọn tóókùnù prompt ~1,000 àti completion 500), tí a kà láti apapọ àfojúsùn àti ìròyìn, v{version}. Ìká gidi le yàtọ̀ gẹ́gẹ́ bí pípẹ̀ ijiroro, ìtòsi, àti agbègbè tó n gbà.",
+    "activities": {
+      "netflixHd": "Sàmúlò Netflix HD",
+      "zoomCall": "Pè nípa Zoom (kámẹ́rà wà lórí)",
+      "webBrowsing": "Ìbòmíṣìn lórí Ayelujara",
+      "spotifyAudio": "Gbọ orin Spotify"
+    },
+    "equivalents": {
+      "title": "≈ iye amúnibajẹ carbon tó dọgba",
+      "note": "Ìfíwéwe carbon pẹ̀lú àpẹẹrẹ ìṣirò ti iṣẹ́ àkọsílẹ̀ wákàtí kan—ẹ̀sìn gbígbóná, fífi iye àfojúsùn yìí ṣe àfọwọ̀ṣà."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} wákàtí"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Àfihàn carbon tó wulẹ̀ jẹ́ fún ìjíròrò yìí: {grams} giramu ti CO₂ tó dọ́gba. Fi àyẹ̀wò han.",
+      "ariaLabelToday": "Àfihàn carbon tó wulẹ̀ jẹ́ lónìí fún ìjíròrò yìí: {grams} giramu ti CO₂ tó dọ́gba. Fi àyẹ̀wò han.",
+      "title": "Ìjíròrò yìí (àfihàn àfojúsùn)",
+      "today": "Lónìí",
+      "total": "Ní gbogbo àkókò",
+      "measured": "Láti iye àmi tí a gbéjọro",
+      "estimated": "A tún ṣe àfìmọ̀ padà láti àwọn ìfiránṣẹ́ àtijọ́",
+      "lastRequest": "Ìbéèrè tó kẹ́yìn",
+      "disclaimer": "Ìṣírò kọọkan da lórí iye àmi tí a gbéjọro tàbí àfojúsùn, pẹ̀lú àdàkọ àti àfojúsùn tí a tẹ̀jáde v{version}. Àwọn ìfiránṣẹ́ àtijọ́ ni a tún ṣe àfìmọ̀ padà láti inu ọrọ tí a fipamọ́ àti àwǹn àpẹrẹ rẹ̀ yìí. Kì í ṣe ìwádìí gangan.",
+      "visibilityGroup": "Ìhàn àfihàn chip àfọwọ́kà",
+      "visibilityLabel": "Fi hàn:",
+      "visibility": {
+        "always": "Nígbà gbogbo",
+        "auto": "Laifọwọyi",
+        "hidden": "Pa mọ́"
+      },
+      "visibilityHint": "‘Auto’ máa fi chip hàn nígbà tí àfikún bá ti yẹ̀ wò tàbí tí o bá fi àmì sí lórí rẹ. O le yí e pada yìí ní Eto › Lílò & Ìpapọ̀."
+    }
+  },
+  "table": {
+    "copyTable": "Da tábìlì ká",
+    "downloadTable": "GB tábìlì sílẹ̀",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "A ti ẹkspọ́ọ̀tì gẹ́gẹ́ bí CSV",
+    "copyFailed": "Akùnàkò da tábìlì ká"
+  },
+  "backup": {
+    "intro": {
+      "title": "Ṣe afẹyinti ìjíròrò rẹ — ní ààbò",
+      "body": "Àwọn àjíròrò rẹ ni a ṣìfipamọ́nà lórí ẹrọ yìí kí kíkan tó bójú wò. A kìí lè ka àjíròrò rẹ.",
+      "keyWarning": "Bọtìnì ìmúlòlùú rẹ ni a dá lórí ẹrọ yìí. A kò rí i kó ṣeé rí gba fún ọ — lílọ bọtìnì naa túmọ̀ sí lílọ afẹyinti.",
+      "create": "Ṣẹda bọtìnì mi & ṣe afẹyinti",
+      "decline": "Kì í ṣe báyìí — jẹ kí àjíròrò wà lórí ẹrọ yìí nìkan"
+    },
+    "ceremony": {
+      "titleCreate": "Fipamọ́ bọtìnì ìmúlòlùú rẹ",
+      "titleRotate": "Fipamọ́ bọtìnì ìmúlòlùú tuntun rẹ",
+      "titleView": "Bọtìnì ìmúlòlùú rẹ",
+      "description": "Bọtìnì yìí nikan ni ọ̀nà láti tún afẹyinti rẹ ṣe lórí ẹrọ míràn. Fipamọ́ sí ààbò — a kò le rí gba fún ọ.",
+      "copy": "Da ká",
+      "copied": "A ti da ká!",
+      "download": "Gba .txt sílẹ̀",
+      "showQr": "Fi QR kọ́òdù hàn",
+      "hideQr": "Pa QR kọ́òdù mọ́",
+      "savedCheckbox": "Mo ti fipamọ́ bọtìnì ìmúlòlùú mi sí ààbò",
+      "saveFirstHint": "Da bọtìnì rẹ ká tàbí gba á sílẹ̀ kí o tó tẹ̀síwájú.",
+      "continue": "Tẹ̀síwájú",
+      "done": "Tán",
+      "cancel": "Fagile",
+      "cancelConfirmTitle": "Fagile ìtòlẹ́sẹẹsẹ afẹyinti?",
+      "cancelConfirmBody": "A ò ní ṣe afẹyinti àjíròrò rẹ. O lè tan afẹyinti ìfọkànsìn sílẹ̀ nígbàkúgbà nínú Ìtọ́sọ́nà.",
+      "cancelConfirmRotateBody": "A ti yí bọtìnì ìmúlòlùú rẹ padà. O lè wo ó nígbàkúgbà nínú Ìtọ́sọ́nà.",
+      "cancelConfirmConfirm": "Bẹ́ẹ̀ni, fagile",
+      "cancelConfirmDismiss": "Padà",
+      "loadError": "A kọ́ lè gbé bọtìnì ìmúlòlùú rẹ kalẹ̀ lórí ẹrọ yìí."
+    },
+    "file": {
+      "heading": "Bọtìnì ìmúlòlùú afẹyinti àjíròrò",
+      "warning": "Dá bọtìnì yìí sí ààbò. Ẹnikẹ́ni tí ó bá ní i lè ka afẹyinti rẹ; láì ní i, afẹyinti kì yóò tún bọ sẹ́yìn."
+    },
+    "progress": {
+      "titleCreate": "Ṣíṣe ìtòlẹ́sẹẹsẹ afẹyinti rẹ",
+      "titleRotate": "Yí bọtìnì ìmúlòlùú rẹ padà",
+      "encrypting": "{count, plural, one {Ṣíṣìfipamọ́nà àti ṣi afẹyinti àjíròrò #…} other {Ṣíṣìfipamọ́nà àti ṣi afẹyinti awọn àjíròrò #…}}",
+      "success": "{count, plural, one {Afẹyinti pari. Àjíròrò # ti dáàbò bo.} other {Afẹyinti pari. Àwọn àjíròrò # ti dáàbò bo.}}",
+      "error": "Afẹyinti kùnà. Àjíròrò rẹ ṣi wà lórí ẹrọ yìí.",
+      "retry": "Tun gbìyànjú",
+      "close": "Pa mọ́",
+      "done": "Tán"
+    },
+    "input": {
+      "label": "Bọtìnì ìmúlòlùú",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Kò sí lẹ́tà O, I tàbí L nínú bọtìnì.",
+      "checksumError": "Bọtini naa kò dájú — ṣàyèwò pé ko si aṣiṣe.",
+      "formatError": "Iwọnyi kò dàbí bọtini imupadà.",
+      "incomplete": "Tesiwaju kikọ — bọtini imupadà ní àwọn lẹ́tà 56.",
+      "valid": "Bọtini naa dájú."
+    },
+    "restore": {
+      "title": "Mu àjùmòṣe rẹ pada",
+      "successTitle": "A ti mu àjùmòṣe pada",
+      "promptBody": "A rí àyàfi àjùmòṣe tó wa nínú akọọlẹ rẹ. Tẹ bọtini imupadà rẹ sílẹ̀ láti mú un pada sí ẹrọ yìí.",
+      "submit": "Mú àjùmòṣe pada",
+      "skip": "Fo o kọja — bẹ̀rẹ̀ tuntun lori ẹrọ yìí",
+      "restoring": "Nṣiṣẹ ìtúpalẹ àti mimu àjùmòṣe rẹ pada…",
+      "successBody": "{count, plural, one {# ijiroro ti pada.} other {# awọn ijiroro ti pada.}}",
+      "wrongKey": "Bọtini yii dájú, ṣùgbọ́n ko ṣi àjùmòṣe yìí. Bí o bá ti yí bọtini rẹ pa dà, lo titun.",
+      "corrupt": "A kò le ka àjùmòṣe yii — ó le ti bajẹ. O le bẹ̀rẹ̀ tuntun lori ẹrọ yìí tabi gbìyànjú lẹ́yìnna.",
+      "networkError": "A kò le gba àjùmòṣe. Ṣàyẹ̀wò asopọ rẹ ki o gbìyànjú lẹ́ẹ̀kàn síi.",
+      "tryAgain": "Gbìyànjú bọtini mìíràn",
+      "close": "Pari"
+    },
+    "enterKey": {
+      "title": "Tẹ bọtini imupadà tuntun rẹ",
+      "body": "Bọtini imupadà rẹ ti yí pa dà lori ẹrọ mìíràn. Tẹ tuntun naa ki àjùmòṣe le tẹ̀síwájú lori ẹrọ yìí.",
+      "submit": "Lo bọtini yìí"
+    },
+    "banner": {
+      "keyMismatchTitle": "A ti dá àjùmòṣe dúró — bọtini imupadà rẹ yí pa dà lori ẹrọ mìíràn.",
+      "enterNewKey": "Tẹ bọtini tuntun",
+      "resetBackup": "Tun àjùmòṣe ṣe",
+      "resetConfirmTitle": "Tún àjùmòṣe ṣe pẹ̀lú bọtini ẹrọ yìí?",
+      "resetConfirmBody": "Àjùmòṣe to wà yoo jẹ́ kí a rọpò rẹ pẹ̀lú ìjíròrò ẹrọ yìí, tí a fi bọtini ẹrọ yìí pamọ́. Ẹrọ mìíràn yoo nílò bọtini imupadà ẹrọ yìí.",
+      "resetConfirmAction": "Tun àjùmòṣe ṣe",
+      "remoteMissingTitle": "Àjùmòṣe rẹ kò sí mọ́ lori sẹ́ǹfà. Àjùmòṣe ti dá dúró.",
+      "backUpAgain": "Ṣe àjùmòṣe lẹ́ẹ̀kan síi",
+      "dismiss": "Pa náà nù"
+    },
+    "rotate": {
+      "confirmTitle": "Ṣe o fẹ yí bọtini imupadà rẹ pa dà?",
+      "confirmBody": "A ó tún ṣe àjùmòṣe kí a sì fi bọtini tuntun pá mọ́, bọtini àtijọ́ yóó dá ṣiṣẹ́. O gbọdọ fi bọtini tuntun pamọ́, kí o sì tẹ sí àwọn ẹrọ mìíràn rẹ.",
+      "confirmAction": "Yí bọtini pa dà"
+    },
+    "toast": {
+      "enrollLater": "O le tan àjùmòṣe tí a fi aṣírí pamọ́ sílẹ̀ nigbakugba lábẹ́ Eto.",
+      "keyUpdated": "A ti ṣe àtúnṣe bọtini imupadà. Àjùmòṣe ti tẹ̀síwájú.",
+      "resetDone": "A ti tun àjùmòṣe ṣe pẹ̀lú bọtini ẹrọ yìí.",
+      "backupRestarted": "A ti tún ṣe àjùmòṣe lẹ́ẹ̀kan síi.",
+      "opFailed": "Ohun kan ṣẹlẹ. Jọ̀wọ́ gbìyànjú lẹ́ẹ̀kan síi."
+    },
+    "settings": {
+      "statusOn": "Àjùmòṣe wa lórí",
+      "statusOff": "Àjùmòṣe wa nípò pipa",
+      "offDescription": "Ìjíròrò rẹ wà nìkan lórí aṣàwákiri yìí. Tan àjùmòṣe tí a fi aṣírí pamọ́ sílẹ̀ láti dáàbò bò wón, kí o sì le mú wọn pada lori ẹrọ mìíràn. Ìjíròrò rẹ ni a fi aṣírí pamọ́ lori ẹrọ rẹ — a kò lè ka wọn.",
+      "turnOn": "Tan àjùmòṣe sílẹ̀",
+      "restoreTitle": "Àjùmòṣe kan ti wà tẹlẹ fún akọọlẹ rẹ",
+      "restoreDescription": "Tẹ bọtini imupadà rẹ sílẹ̀ láti mú un pada sí ẹrọ yìí.",
+      "restore": "Mú àjùmòṣe pada",
+      "lastBackup": "Àjùmòṣe to kẹhin: {time}",
+      "lastBackupNever": "Kò tí í sí àjùmòṣe to parí",
+      "keyFingerprint": "Bọtini ····-{tail}",
+      "syncState": {
+        "idle": "N dúró de amuṣiṣẹpọ",
+        "syncing": "N ṣe àjùmòṣe…",
+        "ok": "Tí di imudojuiwọn",
+        "keyOutOfDate": "Ti dá dúró — bọtini imupadà yí pada lori ẹrọ mìíràn",
+        "remoteMissing": "Dákẹ́ — a ti yọ ikópa pẹ̀lú pámẹ́pọ̀ kúrò lórí sẹ́ńfà",
+        "error": "Ìgbìyànjú ikọsẹ àkọ́kọ́ kọ́ ṣẹ́ṣeyọrí"
+      },
+      "backUpNow": "Ṣẹ̀dáàpọ̀ báyìí",
+      "backUpNowSuccess": "Ikọsẹ parí",
+      "backUpNowFailure": "Ikọsẹ kọ́ ṣẹ́ṣeyọrí — àwọn ifọrọwanilẹnuwo rẹ kò yípadà lórí ẹrọ yìí",
+      "viewKey": "Wò bọtìnà ìmúpadàbọ̀",
+      "changeKey": "Ṣàtúnṣe bọtìnà ìmúpadàbọ̀",
+      "dangerTitle": "Agbègbè ewu",
+      "turnOffDelete": "Pa ikọsẹ rẹ̀ & yọ ikọsẹ rẹ̀ kúrò",
+      "turnOffConfirmTitle": "Pa ikọsẹ rẹ̀ nìkan?",
+      "turnOffConfirmMessage": "Èyí yóò yọ ikọsẹ rẹ̀ kúrò lórí sẹ́ńfà wa fún gbogbo ẹrọ. Ifọrọwanilẹnuwo lórí ẹrọ yìí máa wà. O lè tún bẹrẹ ikọsẹ pẹ̀lú bọtìnà ìmúpadàbọ̀ tuntun lẹ́yìn náà.",
+      "turnOffConfirmAction": "Yọ ikọsẹ rẹ̀ kúrò",
+      "turnOffSuccess": "A ti pa ikọsẹ rẹ̀ àti yọ ọ kúrò",
+      "turnOffFailure": "A kò le yọ ikọsẹ rẹ̀ kúrò. Jọ̀wọ́ gbìyànjú lẹ́ẹ̀kansi."
+    }
+  },
+  "memories": {
+    "title": "Ìrántí",
+    "description": "Jẹ́ kí iranwọ́ náà rántí àwọn òtítọ́ pẹ̀lú tí o pín — bí ipa rẹ, àwọn tìfẹ́ rẹ, àti iṣẹ́ tó ń lọ — kí o sì lò wọn kọjá sí àwọn ìjíròrò.",
+    "enableToggle": "Mú ìrántí ṣiṣẹ́",
+    "privacyNote": "A tọju àwọn òtítọ́ nìkan nínú búràúsà yìí, a sì fi kún àwọn ifọrọwanilẹnuwo rẹ láti jẹ́ kí idáhùn dáa ju.",
+    "empty": "Kò tí í sí ìrántí. A ṣàpapọ̀ àwọn òtítọ́ to ṣe páta laifọwọyi látinú ìjíròrò rẹ.",
+    "savedOn": "Fipamọ́ {date}",
+    "deleteMemory": "Pa ìrántí náà",
+    "clearAll": "Nu gbogbo ìrántí kúrò",
+    "clearAllConfirmQuestion": "Pa gbogbo ìrántí rẹ kúrò? Kò le tún bọ padà lẹ́yìn.",
+    "clearAllConfirm": "Pa gbogbo rẹ kúrò",
+    "cancel": "Fagilé"
+  },
+  "contextWindow": {
+    "label": "Ferese àkọsílẹ̀",
+    "value": "Ìfọrọwanilẹnuwo {count}",
+    "fewer": "Ìfọrọwanilẹnuwo díẹ̀",
+    "more": "Ìfọrọwanilẹnuwo púpọ̀",
+    "description": "A dàkó gbogbo ìfọrọwanilẹnuwo tó kọja ààlà yìí, a sì fi wọn ránṣẹ́ gẹ́gẹ́ bí àkọsílẹ̀."
+  },
+  "agentAccess": {
+    "title": "Ìbáṣepọ̀ Aṣẹ́júwe",
+    "description": "Ṣàkóso àwọn tó lè lo àwọn aṣojú Foundry tí a pín. Àwọn òfin yìí kàn dá ààlà síi lori ohun tí iwọle Azure olumulo náà ti gba — wọn ki í fi le iṣẹ Azure tókùnrinà fàṣẹ.",
+    "backToChat": "Padà sí ìjíròrò",
+    "loading": "N gbìyànjú láti kó àwọn aṣojú àti òfin wọlé…",
+    "loadError": "A kọ́ le kó ìbáṣepọ̀ aṣojú wọlé.",
+    "rulesUnavailableWarning": "A kò le kó àwọn òfin wọlé láti ibi ìfipamọ́. Aṣojú kò le ṣiṣẹ́ báyìí àti àwọn òfin kò le yípadà.",
+    "retry": "Tun gbìyànjú",
+    "rulesTab": "Àwọn òfin aṣojú",
+    "localAdminsTab": "Àwọn alákóso abẹ́lẹ̀",
+    "noAgents": "Kò sí aṣojú láti ṣàtọwọdá.",
+    "sourceLabel": "Orísun",
+    "notDiscoverable": "Ko ṣó le wà fún ọ",
+    "notDiscoverableHint": "Òfin wa fún aṣojú yìí, ṣùgbọ́n kò wà nínú àwárí rẹ — ó ṣèéṣe kó jẹ́ wípé a ti tún orúkọ rẹ ṣàtúnṣe, iwọle Azure rẹ kò bọ́ síbẹ̀, tàbí kò kà ọ síi nínú òfin ìbáṣepọ̀.",
+    "accessEveryone": "Gbogbo ènìyàn",
+    "accessRestricted": "Ìfiṣókànilẹ́tọ́",
+    "edit": "Ṣàtúnṣe",
+    "updatedByLine": "A gbélẹ̀ tuntun nipasẹ {user} ní {date}",
+    "accessTypeLabel": "Ta ni le lo aṣojú yìí",
+    "everyoneDescription": "Eyin to ti ní iwọle si aṣojú yìí nínú Azure wọn le wọlé.",
+    "restrictedDescription": "Àwọn olumulo àti àwọn àgbègbè to wà lókè yìí nìkan.",
+    "allowDomainsLabel": "Àwọn àgbègbè tó fara mù",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Àwọn oníṣe tó fara mù",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Tẹ Enter láti fi kún",
+    "removeChip": "Yọkúrò",
+    "groupsLabel": "Àwọn ẹgbẹ́ tó fara mù",
+    "groupsPendingConsent": "Ìwọlé pẹ̀lú ẹgbẹ́ ń dúró de ìfọwọ́sowọ́pọ̀ olùṣàkóso tenant, kò sì ṣètò yí padà títí di wí pé a fọwọ́sowọ́pọ̀.",
+    "restrictedEmptyWarning": "Kò sí àwọn oníṣe tàbí àgbègbè kankan — kò sí ẹni tí yóò lè lò olùrànlọwọ yìí.",
+    "save": "Fipamọ́",
+    "saving": "Náà fipamọ́…",
+    "cancel": "Fagilé",
+    "saveSuccess": "Ilàna àwọlé ti fipamọ́.",
+    "deleteSuccess": "Ilàna àwọlé ti yọ kúrò — gbogbo ènìyàn lè lo olùrànlọwọ yìí lẹ́ẹ̀kàn síi.",
+    "saveError": "Kò le fipamọ́. Jọ̀wọ́ gbìyànjú lẹ́ẹkansi.",
+    "conflictError": "Ẹlomíì ti yíi padà nígbà tí o ń ṣàtúnṣe. Tún kó ròyìn láti rí àtúnṣe tuntun, lẹhin náà ṣe àtúnṣe rẹ.",
+    "reload": "Tún kó ròyìn",
+    "localAdminsDescription": "Fi ìṣàkóso ilana sílẹ̀ fún àwọn olùrànlọwọ kan pẹ̀lú láìṣe padà sẹ́yìn. Àwọn admin agbègbè le ṣàtúnṣe ilana fún àwọn olùrànlọwọ tí wọ́n yan fún wọn nìkan.",
+    "noLocalAdmins": "Kò sí admin agbègbè tó ṣètò.",
+    "addLocalAdmin": "Fi admin agbègbè kún",
+    "emailLabel": "Ìmélì",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Yọ admin agbègbè kúrò",
+    "delegatedAgentsLabel": "Àwọn olùrànlọwọ tí a yàn",
+    "noDelegatedAgents": "Kò sí olùrànlọwọ tó wà láti yàn.",
+    "unknownAgentKey": "Bọtìnì olùrànlọwọ tí a kò mọ̀",
+    "configSaveSuccess": "Àwọn admin agbègbè ti fipamọ́.",
+    "configConflictError": "Ẹlomíì ti yí àkójọ admin agbègbè padà nígbà tí o ń ṣàtúnṣe. Jọ̀wọ́ tún kó ròyìn kí o gbìyànjú lẹ́ẹkansi.",
+    "addAgent": "Fi aṣoju kun",
+    "newPromptAgentTitle": "Aṣoju ìbéèrè tuntun",
+    "editPromptAgentTitle": "Ṣatúnṣe aṣoju ìbéèrè",
+    "agentNameLabel": "Orukọ",
+    "agentNamePlaceholder": "àp.: Olùkọrin Irin-ajo",
+    "agentDescriptionLabel": "Apejuwe",
+    "agentDescriptionPlaceholder": "A fihan ìyìí fún àwọn onílo nínú aṣàyàn àwọ̀n",
+    "agentSystemPromptLabel": "Ìbéèrè eto",
+    "agentSystemPromptPlaceholder": "Àtọkasi fún ìṣe aṣoju yìí",
+    "agentModelLabel": "Àmì-ọ̀nà",
+    "agentModelPlaceholder": "Yan àwòṣe…",
+    "agentModelUnavailable": "{modelId} (kò sí nípò)",
+    "agentModelUnknownError": "Àwòṣe tí a yàn kò sí mọ́. Jọ̀wọ́ yan àwòṣe míràn kí o sì fipamọ́ lẹ́ẹ̀kàn síi.",
+    "promptAgentBadge": "Aṣoju ìbéèrè",
+    "editAgent": "Ṣatúnṣe aṣoju",
+    "deleteAgent": "Pa kuro",
+    "deleteAgentConfirm": "Ṣe o fẹ́ pa aṣoju yìí kuro fún gbogbo ènìyàn? Yóò parí nínú aṣàyàn àwòṣe; ìtàn mẹsìdì tó wà kò ní bàjẹ́.",
+    "confirmDeleteAgent": "Bẹ́ẹ̀ni, pa kuro",
+    "promptAgentCreateSuccess": "A ti dá aṣoju ìbéèrè ṣẹ.",
+    "promptAgentSaveSuccess": "A ti fipamọ́ aṣoju ìbéèrè.",
+    "promptAgentDeleteSuccess": "A ti pa aṣoju ìbéèrè.",
+    "promptAgentsUnavailableWarning": "A ko le gbe awọn aṣoju ìbéèrè wọ́lọ́ sí àkójọ data. Wọn kò le ṣatúnṣe nísinsin yìí.",
+    "agentsTab": "Awọn aṣoju",
+    "connectorsTab": "Awọn asopo",
+    "addConnector": "Fi asopo kun",
+    "noConnectors": "Ko si asopo sibẹsibẹ.",
+    "connectorsUnavailableWarning": "A ko le wọ ile itaja asopo, nítorí náà akojọ yii le ma péye. Má ṣe dá atupale tuntun ṣẹ titi o fi kun.",
+    "editAccess": "Ṣatúnṣe iraye",
+    "deleteConnector": "Pa asopo rẹ",
+    "deleteConnectorConfirm": "Pa asopo yi rẹ? Ẹnikẹ́ni tó nlo yóò padanu iraye lẹsẹkẹsẹ.",
+    "confirmDeleteConnector": "Pa asopo rẹ",
+    "connectorSaveSuccess": "Asopo ti fipamọ.",
+    "connectorCreateSuccess": "Asopo ti dá ṣẹ.",
+    "connectorDeleteSuccess": "Asopo ti pa.",
+    "editConnectorTitle": "Ṣatúnṣe asopo",
+    "newConnectorTitle": "Asopo tuntun",
+    "connectorPresetLabel": "Bẹrẹ lati àpẹrẹ",
+    "connectorPresetNone": "Bẹrẹ lati ibere",
+    "connectorNameLabel": "Orukọ",
+    "connectorDescriptionLabel": "Apejuwe",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "Rọpo {placeholder} ninu URL pẹlu iye tirẹ kí o to fipamọ.",
+    "connectorTransportLabel": "Ero gbigbe",
+    "connectorAuthLabel": "Ìmúdáni wọlé",
+    "connectorAuthNone": "Ko si",
+    "connectorAuthBearer": "Token (ọmọọkan ara ẹni ni olumulo yoo fi tirẹ si)",
+    "connectorAuthOauth": "OAuth wọlé",
+    "connectorSealingUnavailable": "OAuth ko le ṣee lo: aṣa iṣeto yii ko ni AUTH_SECRET fun fifi asiri oníbára pamọ.",
+    "connectorTokenHelpLabel": "Ìsọkan àtúnse token (àṣàyàn)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Asiri kan ti fipamọ. Fi silẹ bọṣeyii lati pa a mọ, tabi tẹ tuntun lati ropo rẹ.",
+    "connectorClientSecretHint": "A fi ẹ̀kọ́ pamọ́ ṣáájú fífi ṣe ìkànsí, a kò ní fi hàn lẹ́ẹ̀kansi mó.",
+    "connectorScopesLabel": "Ṣàkóso (ya sọtọ pẹlu ààrin àyè, àṣàyàn)"
+  },
+  "localModels": {
+    "title": "Àwòrán àgbéyẹ̀wò agbègbè",
+    "description": "Ìbànísọ̀rọ̀ pẹ̀lú àwòrán tó ń ṣiṣẹ́ lórí kọ̀m̀pútà yìí. Ìfiranṣẹ́ rẹ taara láti aṣàwákiri rẹ sí àpẹrẹ agbègbè, kò sì lọ sí àwọn sẹ́fà wa — gbogbo ìdáhùn, akọlé ìbànísọ̀rọ̀ àti àkótán yóò wà lórí ẹrọ rẹ.",
+    "detect": "Ṣàbẹ̀wò àkókò agbègbè",
+    "detecting": "Ṣíwádìí…",
+    "experimental": "Ìdánwò",
+    "portLabel": "Ibùdó",
+    "statusUnknown": "Kò tíì ṣiṣàyẹ̀wò.",
+    "statusChecking": "Ṣàyẹ̀wò…",
+    "statusReady": "{count, plural, =0 {Ti ṣopọ, àmọ́ kò sí àwòrán kankan.} one {Ti ṣopọ — àwòrán kan wà.} other {Ti ṣopọ — àwòrán # wà.}}",
+    "statusNotRunning": "A kó le ráyè wọle sí {label}. Ṣàyẹ̀wò pé ó ń ṣiṣẹ́ lórí ibùdó yìí, àti pé aṣàwákiri rẹ ní àṣẹ láti wọlé sáwọn app agbègbè láti ojúlé yìí.",
+    "statusHttpError": "{label} dáhùn pẹ̀lú aṣìṣe. Ṣàyẹ̀wò àkọọlẹ rẹ.",
+    "corsHelp": {
+      "ollama": "Ollama ń ṣiṣẹ́ ṣùgbọ́n kò gba ìbéèrè láti ojúlé yìí. Ṣètò OLLAMA_ORIGINS sí àdírẹ́sì ojúlé yìí, tún Ollama bẹ̀rẹ̀, lẹ́yìn náà ṣàyẹ̀wò tùn.",
+      "lmstudio": "LM Studio ń ṣiṣẹ́ ṣùgbọ́n kò gba ìbéèrè láti ojúlé yìí. Ṣí COR̀S nínú eto sẹ́bà app agbègbè rẹ, lẹ́yìn náà ṣàyẹ̀wò tùn.",
+      "llamacpp": "llama.cpp ń ṣiṣẹ́ ṣùgbọ́n kò gba ìbéèrè láti ojúlé yìí. Bẹrẹ llama-server pẹ̀lú àṣẹ fun ìbéèrè kúrò, lẹ́yìn náà ṣàyẹ̀wò tùn."
+    },
+    "privacyNote": "Àwòrán agbègbè kò gbàwọlé fifi mọ́ àtẹ̀jáde fáìlì, àwòrán, àwárí wẹẹ̀bù tàbí àwọn àmúṣiṣẹ́ — àwọn wọ̀nyí nílò sẹ́fà wa. Ṣíwádìí mà kàn kọ̀m̀pútà yìí nìkan ní."
+  },
+  "urlFetch": {
+    "sourceFallback": "Ojú-ìwé ayelujara",
+    "fallbackHint": "O tún lè ṣí oju-iwe náà, da lẹ́ta rẹ kọ́, kí o sì lẹ́ẹ̀ mọ́ síbí dípò rẹ.",
+    "shortExtract": "Ìyàtọ̀ kékeré ló ṣeé kà — ó ṣeéṣe pé oju-iwe náà gba owó tàbí ó fẹ́ kí wọlé.",
+    "errors": {
+      "invalidUrl": "Àwọn àdírẹ́sì wẹẹ́bù yìí kò dájú.",
+      "ssrfBlocked": "Àdírẹ́sì yìí kò le gbé wá nítorí ìdí ààbò.",
+      "tooManyRedirects": "Àsopọ̀ yìí títún-ṣàkóso pó ju.",
+      "timeout": "Ojú-ìwé náà péjù lọ láti dáhùn.",
+      "unreachable": "A kò le dé oju-ìwé náà.",
+      "blocked": "Aaye naa kọ ìbéèrè náà — ó le nilo wíwọlé tàbí ń dí àwọn oluka aifọwọyi.",
+      "notFound": "A kò rí ojú-ìwé náà.",
+      "upstream": "Aaye naa fi aṣiṣe pada.",
+      "pdf": "Asopọ yìí jẹ́ PDF. Ṣe igbasilẹ rẹ̀ ki o lo bọtini ìfikún láti fi kún un dípò.",
+      "nonHtml": "Asopọ yìí kì í ṣe ojú-ìwé àwùjọ tó le ka.",
+      "tooLarge": "Ojú-ìwé náà tóbi ju kí a tó le fà á.",
+      "empty": "A kò rí ìtàn tó wúlò tó le ka lórí ojú-ìwé náà.",
+      "generic": "A kò le fà ojú-ìwé náà."
+    },
+    "fetchingFile": "Nfá {host}…",
+    "attachLink": "Fọwọsowọpọ asopọ",
+    "attachLinkTitle": "Fọwọsowọpọ ojú-ìwé àwùjọ",
+    "attachLinkDescription": "A máa fá ojú-ìwé náà, a sì máa so ìtàn tó rọrùn tó le ka mọ́ ifiranṣẹ rẹ.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Fá & fi kún",
+    "attachLinkInvalid": "Èyí kò dà bí adirẹsi oju-ìwé àwùjọ.",
+    "linkBadge": "Láti asopọ kan",
+    "couldNotRetrieve": "A kò le gba",
+    "doc": {
+      "sourceLabel": "Orísun",
+      "retrievedLabel": "A ti gba",
+      "attemptedLabel": "Àyíyẹnṣe",
+      "failureHeading": "A kò le gba ojú-ìwé àwùjọ náà"
+    },
+    "settingsTitle": "Àsopọ nínú ifiranṣẹ",
+    "settingsToggle": "Fà àwọn àsopọ tó tẹ ara wọn laifọwọyi",
+    "settingsDescription": "Nigba tí o bá tẹ asopọ, oju-ìwé náà a máa fà a, a si máa so ìtàn rẹ mọ́ ifiranṣẹ rẹ kí olùrànlọ́wọ́ lè ka a. Pa a ni pátápátá kí àwọn asopọ tí o tẹ kù di ọrọ àtẹ̀jáde lasan — o tún le fi ojú-ìwé kún un lọ́wọ́ ara rẹ láti akojọ +.",
+    "addLink": "Ṣàfikún asopọ"
+  },
+  "cameraAccessError": "A kùnle lati wọ kamẹra. Ṣayẹwo awọn igbanilaaye kamẹra rẹ ki o gbiyanju lẹẹkansi.",
+  "cameraUnnamedDevice": "Kamẹra",
+  "pastedText": {
+    "fallbackName": "Ìtẹ̀sí ọrọ tó lẹ́ẹ̀kọ",
+    "charCount": "{count, number} àmi",
+    "removeChip": "Yọ ọrọ tó lẹ́ẹ̀kọ “{name}”",
+    "blockLabel": "Òrò tó lẹ́ẹ̀kọ: {name}",
+    "doc": {
+      "heading": "Òrò tó lẹ́ẹ̀kọ",
+      "pastedLabel": "Tó lẹ́ẹ̀kọ"
+    },
+    "settingsTitle": "Ìtẹ̀sí tó pọ̀",
+    "settingsToggle": "Yí ìtẹ̀sí tó pọ̀ pada sí àfikún fáìlì",
+    "settingsDescription": "Títẹ̀sí ọrọ tó ju àyè tó wa lókè lọ máa dà a fúnní gẹ́gẹ́ bí fáìlì dípò pípa apoti ifọrọranṣẹ. Ọrọ naa máa wulo gẹ́gẹ́ bó ṣe tẹ̀sé — kò si ohun tí a máa gba tàbí yí padà.",
+    "settingsThresholdLabel": "Fi àfikún fún ìtẹ̀sí tó ju",
+    "settingsThresholdUnit": "àmi",
+    "settingsThresholdHint": "Láàárin {min, number} àti {max, number} àmi."
+  },
+  "structures": {
+    "section": "Ilana",
+    "sectionSubtitle": "Ìtóngbẹ̀ àwọn àyẹ̀wò pápá. Lo ọkan gẹ́gẹ́ bí àtànpako àwárí data, tàbí gẹ́gẹ́ bí àkọ́kọ́ fọ́ọ̀mù tábìlì.",
+    "loadFromStructure": "Gbé ilana wọlé",
+    "loadFromStructureTitle": "Rọpo awọn kólọ́mù wọ̀nyí pẹ̀lú ilana tó fipamọ",
+    "pickerEmpty": "Kò sí ilana tí a fipamọ sibẹ.",
+    "pickerTitle": "Gbé ilana tí a fipamọ wọlé",
+    "saveAsStructure": "Fipamọ gẹ́gẹ́ bí ilana",
+    "saveAsStructureTitle": "Fipamọ àwọn kólọ́mù wọ̀nyí sí ile ìkànsí ilana rẹ",
+    "savedToast": "Ilana tó fipamọ “{name}”",
+    "namePlaceholder": "Orukọ ilana",
+    "fieldCount": "{count} pápá",
+    "fieldCountOne": "Pápá kan",
+    "downgradedNotice": "{count} pápá ti yí padà sí ọrọ — tábìlì kọọkan ní iye kan pẹ̀lú ẹyọkan: {names}",
+    "truncatedNotice": "{count} pápá ti foju kọ — àìmọye tó pọju fún tábìlì ni {max} kólọ́mù: {names}",
+    "skippedDerivedNotice": "{count} kólọ́mù iṣiro kò fipamọ — fọ́ọ̀mù ṣàbẹwò sí àwọn kólọ́mù tábìlì yìí: {names}",
+    "loadReplacesColumns": "Eleyi máa rọpo gbogbo kólọ́mù tó wà nísisì. Àwọn orí laini pẹ̀lú orukọ kólọ́mù tó bára wọn mu yóò dá a tán."
   }
 }

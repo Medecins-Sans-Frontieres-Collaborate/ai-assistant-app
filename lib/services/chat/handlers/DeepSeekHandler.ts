@@ -106,11 +106,17 @@ export class DeepSeekHandler extends ModelHandler {
     // Use deployment name if specified (e.g., "DeepSeek-R1")
     const modelToUse = this.getModelIdForRequest(modelId, modelConfig);
 
+    // No `user` field — see StandardOpenAIHandler. Third-party serving
+    // containers behind Foundry reject unknown body keys.
     const params: any = {
       model: modelToUse,
       messages,
-      user: JSON.stringify(user),
       stream: streamResponse,
+      // Ask the provider to append a terminal usage chunk (empty `choices`,
+      // populated `usage`) so real token counts can be captured for
+      // tracking + emissions estimation. Non-streaming responses carry
+      // `usage` on the completion object without this.
+      ...(streamResponse ? { stream_options: { include_usage: true } } : {}),
     };
 
     // DeepSeek models support temperature

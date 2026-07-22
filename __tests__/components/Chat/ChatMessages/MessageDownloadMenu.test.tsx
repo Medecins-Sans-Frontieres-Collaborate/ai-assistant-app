@@ -220,6 +220,81 @@ describe('MessageDownloadMenu', () => {
     expect(toastMock.error).toHaveBeenCalledWith('No content to export');
   });
 
+  it('appends a Sources section to markdown downloads when citations are passed', () => {
+    render(
+      <MessageDownloadMenu
+        content="# hi"
+        fileName="response"
+        citations={[
+          {
+            title: 'Example Source',
+            url: 'https://example.com/article',
+            date: '2026-01-15',
+            number: 1,
+          },
+        ]}
+      />,
+    );
+    openMenu();
+    fireEvent.click(screen.getByText('Markdown (.md)'));
+
+    const [downloadedContent] = downloadFileMock.mock.calls[0];
+    expect(downloadedContent).toContain('# hi');
+    expect(downloadedContent).toContain('## Sources');
+    expect(downloadedContent).toContain(
+      '1. [Example Source](https://example.com/article) — 2026-01-15',
+    );
+  });
+
+  it('includes the Sources section in the HTML conversion for non-md formats', async () => {
+    render(
+      <MessageDownloadMenu
+        content="# hi"
+        fileName="response"
+        citations={[
+          {
+            title: 'Example Source',
+            url: 'https://example.com/article',
+            date: '2026-01-15',
+            number: 1,
+          },
+        ]}
+      />,
+    );
+    openMenu();
+    fireEvent.click(screen.getByText('Plain Text (.txt)'));
+
+    await waitFor(() => {
+      expect(downloadFileMock).toHaveBeenCalled();
+    });
+    const [converted] = markdownToHtmlMock.mock.calls[0];
+    expect(converted).toContain('## Sources');
+    expect(converted).toContain(
+      '[Example Source](https://example.com/article)',
+    );
+  });
+
+  it('still derives the filename from the body, not the Sources section', () => {
+    render(
+      <MessageDownloadMenu
+        content="# Status."
+        citations={[
+          {
+            title: 'Example Source',
+            url: 'https://example.com/article',
+            date: '2026-01-15',
+            number: 1,
+          },
+        ]}
+      />,
+    );
+    openMenu();
+    fireEvent.click(screen.getByText('Markdown (.md)'));
+
+    const [, downloadedName] = downloadFileMock.mock.calls[0];
+    expect(downloadedName).toBe('Status.md');
+  });
+
   it('does nothing when disabled', () => {
     render(
       <MessageDownloadMenu

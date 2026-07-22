@@ -437,7 +437,22 @@
     "noProjectsFound": "ፕሮጀክታት ኣይተገኙን። \"default\" ትጥቀም።",
     "selectAllRequired": "ኣባልነት፣ ኣካውንትን ፕሮጀክትን ምረፅ።",
     "subscriptionRequired": "ምዝገባ ምረፅ",
-    "accountRequired": "መለኪዓ ኣካውንት ይምረፁ"
+    "accountRequired": "መለኪዓ ኣካውንት ይምረፁ",
+    "projectSelectionRequired": "ፕሮጀክት ካብ ዝርዝር ምረፅ።",
+    "scanningResources": "ዝርከብካ ኣዙር ስብስክሪፕሽኖት እዩ ዝመርመር...",
+    "searchProjectsPlaceholder": "ፕሮጀክታት ድለ ኣካል።",
+    "noProjectsDiscovered": "በኣልካ ስብስክሪፕሽኖት ፋንድሪ ፕሮጀክት ኣልቦ። መንገዲ እትእትዉን'ውን ዕትም ብትህቲ ምስ በለካ ምልእ።",
+    "discoveryPartialWarning": "{count, plural, one {# ስብስክሪፕሽን} other {# ስብስክሪፕሽኖት}} ምርመራ ኣይተኻኣለን። ፕሮጀክትካ መጽንኡ ኣይተረኸበካን እንተበለ በኣል ምምዝጋብ ፈጺሙ።",
+    "discoveryTruncatedWarning": "ብዙሕ ረኦታት ዝነበረ እሞ ኩልኡ ምርመራ ኣይተኻኣለን። ፕሮጀክትካ መጽንኡ ኣይተረኸበካን እንተበለ በኣል ቅድሚ ምምዝጋብ ኣቐዲሉ።",
+    "retryScan": "መርመር እከውን ጀምር",
+    "next": "ቀጺሉ",
+    "back": "ተወዲኡ",
+    "selectAgentsDescription": "ካብዚ ፕሮጀክት ዘሎን ዝትረኽበሉን ኤጄንት ኣይትምርፅ።",
+    "selectAll": "ኩሎም ምርፅ",
+    "deselectAll": "ኩሎም ምንባር",
+    "agentsSelectedCount": "{selected} ካብ {total} ኤጄንት ተመርጺ እዩ",
+    "autoAddLabel": "ሓደሽቲ ኤጄንት ብሓላፊ ወስኺ",
+    "autoAddDescription": "ቅድሚ ዝታሃዙ ኤጄንት ናብዚ ፕሮጀክት ብሓላፊ ይቀመጡ። ዘይተመርጺ ኤጄንት ክልተዉ ይቆፅፉ።"
   },
   "Quick Actions": "ቅልጡፍ ተግባራት",
   "Type / in chat to access your prompts": "ፕሮምፕትታትካ ንምርካብ ኣብ ዕላል / ጸሓፍ",
@@ -805,7 +820,7 @@
     "stopGenerationDontAskAgainButton": "ብኣዝዩ ኣቁም ብዝተፈለጠ ደጊምካ ኣይሕበን",
     "stopGenerationDontAskAgainKeyboard": "ብኪቦርድ ምቁም ደጊምካ ኣይሕበን",
     "generateResponseButton": "መልሲ ምፍላጥ",
-    "downloadResponse": "ምላሽ ውርሻ",
+    "downloadResponse": "መልሲ ንኣውርድ",
     "activity": {
       "callingTool": "እተምጥብ መሳርሒ…",
       "callingService": "ናይ ወጻኢ ባህሪ እተጥርእ…",
@@ -818,7 +833,19 @@
       "listingTools": "ተመሳርሒታት እየዝርዝሩ…",
       "analyzingFiles": "ፋይልታትካ እየተረኽቦም…",
       "searchingKnowledge": "ኣብ መሰብ ብምረፅ እየፈቱ…",
-      "cancellingPriorTool": "ንቀዳማይ ጥያቄ መሳርሒ እየበሳሐ…"
+      "cancellingPriorTool": "ንቀዳማይ ጥያቄ መሳርሒ እየበሳሐ…",
+      "workflow": {
+        "preparingDocument": "መንገዲ መደብ ተዘጋጂኡ...",
+        "writingDocument": "መደብ እዩ ዝፃኢ...",
+        "analyzingSource": "ምንባብ መዳብ ተርኣዮ...",
+        "translating": "ትርጉም እዩ ዝግበር...",
+        "reviewingTranslation": "ደቂ ርእይቶ {round} ካብ {total}...",
+        "revisingTranslation": "ናይ ርእይቶ መልሲ ዝቕጽል...",
+        "extractingRows": "ካብ {source} ሰንድ ምስዋቕ...",
+        "transformingTable": "ጣውላ ኣብ ሕጂ ዝቀንዖ...",
+        "findingLocations": "ቦታታት ምርኣይ...",
+        "updatingMap": "ካርታ ምሕዳስ..."
+      }
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# መሳርሒ} other {# መሳርሒታት} } ተጠቒሙ",
@@ -879,7 +906,9 @@
     "listen": "ስማ",
     "processingAudio": "ድምጺ እየ ተተው...",
     "ttsError": "ስህተት ኣብ ምፍጣር ድምጺ። እቲ ግዜ ደገ ፈትኑ።",
-    "unsupportedMessageType": "ስህተት ኣብ ምርሕያብ መልእኽቲ፡ ዘይተደገፀ ዓይነት መልእኽቲ"
+    "unsupportedMessageType": "ስህተት ኣብ ምርሕያብ መልእኽቲ፡ ዘይተደገፀ ዓይነት መልእኽቲ",
+    "addLanguageOption": "\"{name}\" ኩናት ኣእቱ...",
+    "sources": "ምንጮታት"
   },
   "transcript": {
     "originalTranscript": "ኦሪጂናል ጽሕፈት",
@@ -1292,16 +1321,34 @@
     "unsavedChanges": "ዘይተኣካዩ ለውጦታት",
     "unsavedChangesMessage": "ዘይተኣካዩ ለውጦታት ኣሎካ። ንምውዳእ ትደሊ?",
     "characterCount": "{current}/{max}",
-    "clearField": "ሜዳ ኣጽዳ",
-    "autosaveNote": "ለውጦታት ብሓላፍነት እየተዓትተን።",
-    "responseSection": "ምላሽ",
+    "clearField": "ቦታ ኣንጻፍ",
+    "autosaveNote": "መለዋወጢ ብምሉእ ኣብ ቆርጥታ ይጠበቕ።",
+    "responseSection": "መልሲ",
     "voiceSection": "ድምፂ",
-    "behaviorSection": "ውሳነ ኣካላት",
-    "resetChatSettings": "ቅንብሮታት ቻት ኣዳልው",
-    "resetChatSettingsConfirmTitle": "ቅንብሮታት ቻት ኣዳልው?",
-    "resetChatSettingsConfirmMessage": "ዚኣ ቃል ናይቲ ፓኔል ኩሉ ንቅንብሮታት ናይ መደብ መልሲ ፣ ብቑዓት ምትእታው፣ ፍትሒ ናብናብ መላእክቲ፣ ስለ ኣንቲ፣ ሓንደበት ናይ ሞዴል መልሲ፣ ብምፍላጥ ምስናይ፣ ጽሑፍ-ናብ-ድምፂ፣ ኣካባቢ ፋይላትን ምርጫታትን ወይ ናይ ሓበሬታታት ፣ ቃል ንክሳቕ፣ ምርምርን። ንሕዝብ ትምህርትካት ኣይጽሑፉን።",
+    "behaviorSection": "ገዛእነት",
+    "resetChatSettings": "ቅንጥታታት ቻት ወደ መጀመርታ መልስ",
+    "resetChatSettingsConfirmTitle": "ቅንጥታታት ቻት ኣብ መጀመርታ መልስ?",
+    "resetChatSettingsConfirmMessage": "እዚ ኩሉ ቅንጥታታት ዝርከበሉ ኣብዚ ፓነል: መደበኛ ናይ ትም temperature, ተምሪ መምርሒ, ‘About You’, መልሲ፡ ንሞዴል፡ ፍጥነት ናይ ስትሪሚንግ፡ ከፊተኛ ሰነዳት፡ ናይ ጽግያ አጋጣሚ፡ ክልተ ይመልስ። መደበኛ ነገር ንሓበሬታኻ አይተዳለን።",
     "customInstructionsLabel": "ብኻንያ መመሪያታት*",
-    "defaultTemperatureLabel": "ነቶም መደብ መዓዛ*"
+    "defaultTemperatureLabel": "ነቶም መደብ መዓዛ*",
+    "Usage & Impact": "ኣጠቓቕማ ንቑልብትን",
+    "Connectors": "ተገናኝቲ",
+    "Backup": "ቦታ ምዝጋብ",
+    "Memories": "ዝኽረኛት",
+    "Agent Access": "Agent መግቢኡ",
+    "LocalModels": "ኣካባቢ ሞዴልታት",
+    "suggestRevisions": {
+      "title": "ማህደር እንደገና ማስተካከያት",
+      "toggle": "እተካኣላት ኣብ መተግበሪ ኣይኮነን ምልክት መቀርበልኩን",
+      "description": "ንማህደር ኮርኡ እንደገና ብዝበዝሐ ከም ትጠይቑ እንተሃበኩም፣ እተቀየሩ ናይ ሓደ ሓደ ምልክታት እዮም ዝመጡ፣ ተቐበልካ ወይ መከየድካ ትኽእል፡፡ ከምኡውን ብዝኾነ መረመሩ ኣብ ጥራይ ምርመራዎ ይኸውንሉ።",
+      "exceptionsTitle": "ንእሱ ግን ብቐጻሊ እንተተተገበረ፡",
+      "exceptionSelection": "ንዝረኸብካ ክፋል እንደገና ማሳሰቢ",
+      "exceptionLargeRewrite": "እተካኣላት ዋናውያኡ ዘለዎ ናይ ማህደር ክፋል ዝተቐየረ",
+      "exceptionReorder": "ክፋላት ቅድሚ ፡ ብመተካከል እዚ እንተተቀየሩ ኣይኮነን ዝምልከት",
+      "thresholdLabel": "ካብዚ ላዕሊ ንድሕሪት ተካእሏ ትቅበል",
+      "thresholdUnit": "% ናይ ማህደር ዝተቐየረ",
+      "exceptionSelectionAlways": "ናይቲ ተኣርኣዩ ምረጽ ዝተገልጸ ግዚ፡ ምትኽል ብድሕሪት ይተግበሩ። ኣብዚ ኩነታት ሞዴሉ ብብልጽግና ዝተስተረኽተ ክፋን ኢሎ ይመልሳ፣ ዚኾነስ ብኣይኑ ምኽንያቱ ብኣብዛ ድሑረት ውሑድ ሰብ ሰብ መኽንያቱ ኣይኽእልን።"
+    }
   },
   "emptyState": {
     "greeting": "ብኸመይ ክሕግዝ?",
@@ -1447,33 +1494,78 @@
     },
     "title": "ሞዴል ምረፅ",
     "modelsDescription": "ንውዕልናኻ ኣይ ሞዴል ምረፅ። ተወዳዳሪ ውጻኢታት ኣሎም — መርሓት ናይ መረጻ ተያዩ።",
-    "recommended": "ዝመኽር"
+    "recommended": "ዝመኽር",
+    "familyAll": "ኩሉ",
+    "familyFilterLabel": "ሞዴላት ብቤተሰብ ኣምራኽ",
+    "searchPlaceholder": "ሞዴሎታት ድለ",
+    "searchEmpty": "ምልካም ሞዴል ተረኽበንካኣይኮነን።",
+    "star": "{name} ምስውዕ",
+    "unstar": "{name} ምኽፋል ምስውዕ",
+    "otherFamily": "ካብኡ ዝሓለፈ",
+    "hostedExternally": "ብ Azure AI Foundry ኣብ ውሽጢ ተጠቒሙ ዝሕሸ እዩ፡ ኣይኮነን ኣብ MSF ዝምልከት Azure ኣንቫየረንት።",
+    "hostedIn": {
+      "label": "ተዳልየ ኣብ {regions}",
+      "tooltip": "ናይ Azure ክልል(ታት) ዝሞሉ እዮም። ዕማጽኦትኩም ኣብ ናትኩም ክልል ተሕሪፉ ይግባእ።"
+    },
+    "badges": {
+      "external": "ወጻኢ",
+      "externalTooltip": "ብ Azure AI Foundry ኣብ ውሽጢ ተጠቒሙ ዝሕሸ እዩ፡ ኣይኮነን ኣብ MSF ዝምልከት Azure ኣንቫየረንት።",
+      "regionHostedTooltip": "ተዳልየ ኣብ {region} Azure ክልል። ዕማጽኦት ኣብዚ ተሕሪፉ ይግባእ።"
+    },
+    "favorites": "ወዳጅታት",
+    "euResidencyNote": "ኩሉ ሞዴሎታት ኣብ EU Azure ክልል ይሕሸዉ።",
+    "hostedRegion": {
+      "label": "ኣቦ ዝተዳለየ ክልል",
+      "processedIn": "እዚ ዕማጽኦ ኣብ {region} Azure ክልል ይተሕርፋሉ።",
+      "euOnlyNote": "{name} ኣብ EU Azure ክልል ተዳልየ እዩ፡ ዕማጽኦታቱ ኣብዚ ይተሕርፉ።"
+    },
+    "version": {
+      "label": "መንገዲ"
+    },
+    "reasoningModel": "ሞዴል ምስማር፡ ዳግማይ ብደሓን ይሓትት እንዳ ይመልስ። ዝቐርሰን ምርጡ ብዓበይቲ ጸገማታት።",
+    "variant": {
+      "label": "ቅዱስ ኣይነት"
+    },
+    "deployment": {
+      "title": "ምምዕባል",
+      "source": "ምንጪ",
+      "account": "መለያ",
+      "location": "ኣብ ኣካባቢ",
+      "deployment": "ምምዕባል",
+      "modelVersion": "ቅድሚ ምንዳን ፋንታ",
+      "publisher": "ታሪኛ"
+    }
   },
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "ብBing ናይ ቅጽበት ወብ ድልያ ዘለዎ ብGPT-4.1 ዝሰርሕ AI ሞዴል። እዋናዊ ሓበሬታ፣ ናይ ሓቂ ምርግጋጽ፣ ከምኡ'ውን ናይ ህሉው ፍጻሜታት ንቕሓት ይህብ። ንሓድሽ ሓበሬታ ዝጠልብ ምርምር፣ ናይ ዜና ትንተና፣ ከምኡ'ውን ናይ ሓቂ ምርግጋጽ ዝበለጸ።",
-      "knowledgeCutoff": "ናይ ቅጽበት ወብ ድልያ"
+      "knowledgeCutoff": "ናይ ቅጽበት ወብ ድልያ",
+      "tagline": "ዓላማ ኣቐዲሉ ኦፕን ኤ.ኣይ."
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "ናይ OpenAI ዝለዓለ ዝተራቐቐ ሞዴል፣ ኣብ ዝተሓላለኸ ምኽንያት፣ ኮድ ምፍጣር፣ ከምኡ'ውን ቴክኒካዊ ጸገም-ምፍታሕ ዝበርዕ። ንናይ ትንተና ስራሓት፣ ናይ ፕሮግራሚንግ ብድሆታት፣ ምርምር፣ ከምኡ'ውን ዝርዝር መግለጺታት ዝበለጸ። ዝተመዓራረይ ናይ ምኽንያት ጻዕርን ናይ መልሲ ምርብራብን ይድግፍ።",
-      "knowledgeCutoff": "ሕዳር 2025"
+      "knowledgeCutoff": "ሕዳር 2025",
+      "tagline": "ኮድ፣ ትንክሳዊ ምርመራ፣ ምይንጋገፍ"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "ንቕልጣፈ ዝተመሓየሸ ዝቐልጠፈን ዝሓሰረን ናይ GPT-5 ዓይነት ልዑል ጽሬት እንከይጎድል። ንዕለታዊ ስራሓት፣ ቅልጡፍ ሕቶታት፣ ናይ መሳርሒ ማኣዝን፣ ከምኡ'ውን ቅልጡፍ ምላሽ ዝጠልቡ ኣፕሊኬሽናት ፍጹም። ብሉጽ ሚዛን ናይ ኣፈጻጽማን ብቕዓትን።",
-      "knowledgeCutoff": "ነሓሰ 6, 2025 8:00 PM"
+      "knowledgeCutoff": "ነሓሰ 6, 2025 8:00 PM",
+      "tagline": "ብምብልና ፈጣንን ብዝተቐነዐ ዋጋ"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "ሕዳር 2025",
-      "description": "ዝተማሃረ ስሪት ናይ GPT-5.2 ዝግበረ ንቀሊል ውይይትን ንፍቓድ ግንዛቤን። ብምሕላው ውይይት፣ ፈጠራዊ ጽሑፍ፣ ምምዝጋብን ናይ ተፈጥሮ ውይይትን ይሰራሕ። ንተወካይ ውይይታታት፣ መካነ ኣግልጋይ ኣቕሓዳይነትን ናይ ነፍሲ ግንዛቤ ዝደሊ ስራሕታት ዝበለጸ።"
+      "description": "ዝተማሃረ ስሪት ናይ GPT-5.2 ዝግበረ ንቀሊል ውይይትን ንፍቓድ ግንዛቤን። ብምሕላው ውይይት፣ ፈጠራዊ ጽሑፍ፣ ምምዝጋብን ናይ ተፈጥሮ ውይይትን ይሰራሕ። ንተወካይ ውይይታታት፣ መካነ ኣግልጋይ ኣቕሓዳይነትን ናይ ነፍሲ ግንዛቤ ዝደሊ ስራሕታት ዝበለጸ።",
+      "tagline": "ውዕል፣ ምኽንያታዊ ምምራሕ"
     },
     "o3": {
       "name": "o3",
       "description": "ናይ OpenAI ዝለዓለ ዝተራቐቐ ናይ ምኽንያት ሞዴል ምስ ግስጋሰ ናይ ጸገም-ምፍታሕ ዓቕምታት። ኣብ ዝተሓላለኸ ሒሳብ፣ ናይ ሳይንስ ምኽንያት፣ ናይ ኮድ ብድሆታት፣ ከምኡ'ውን ብዙሕ-ስጉምቲ ሎጂካዊ ስራሓት ይበርዕ። ዝተናውሐ 200K ናይ ኮንተክስት ዊንዶው። ናይ ምኽንያት ጻዕሪ ቍጽጽር ይድግፍ።",
-      "knowledgeCutoff": "ሚያዝያ 8, 2025 8:00 PM"
+      "knowledgeCutoff": "ሚያዝያ 8, 2025 8:00 PM",
+      "tagline": "ጥራይ ምርኣይ ከባቢያዊ ተመን ብተመን"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1483,47 +1575,256 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "ስጉምቲ-ብስጉምቲ ስርሑ ዘርኢ ናይ ምኽንያት ክኢላ። ንናይ ሒሳብ ጸገማት፣ ናይ ሎጂክ ግድላት፣ ከምኡ'ውን ዝተሓላለኹ ሓሳባት ምርዳእ ብሉጽ። ብቕጽበት ጸገማት ብኸመይ ከም ዝሓስብ ርአ።",
-      "knowledgeCutoff": "ጥሪ 20, 2025"
+      "knowledgeCutoff": "ጥሪ 20, 2025",
+      "tagline": "ዝደለኻ መርሓ ምርኣይ ኣብ ምእዙዝ"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "ብፍላይ ኣብ ኮድን ቴክኒካዊ ጽሕፈትን ብሉጽ ሓያል ኩሉ-ዙሪያ ሞዴል። ንኮድ ምፍታሕ፣ ሰነዳት ምጽሓፍ፣ ከምኡ'ውን ቴክኒካዊ ሓሳባት ምግላጽ ብሉጽ። ንናይ ልምዓት ስራሕ ቅልጡፍን ኣመንን።",
-      "knowledgeCutoff": "ሚያዝያ 16, 2025 12:45 AM"
+      "knowledgeCutoff": "ሚያዝያ 16, 2025 12:45 AM",
+      "tagline": "ክንደይ ዝነበረ መንጎ ፍትሒ"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "ብስሉጥ መልስታት ዝፍለጥ ካብ xAI ዝተፈላለየ ሞዴል። ንክፉት ዝርርባት፣ ፈጠራዊ ፕሮጀክትታት፣ ከምኡ'ውን ዝተሓላለኹ ጸገማት ምፍታሕ ብሉጽ።",
-      "knowledgeCutoff": "ግንቦት 13, 2025 12:16 AM"
+      "knowledgeCutoff": "ግንቦት 13, 2025 12:16 AM",
+      "tagline": "xAI ክንደይ"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "ናይ Anthropic ዝለዓለ ዓቕሚ ዘለዎ ሞዴል ምስ ፍሉይ ምኽንያት፣ ኮድ፣ ከምኡ'ውን ፈጠራዊ ዓቕምታት። ንዝተሓላለኸ ትንተና፣ ምርምር፣ ከምኡ'ውን ዓሚቝ ምርዳእ ዝጠልቡ ስራሓት ዝበለጸ።",
-      "knowledgeCutoff": "ጥሪ 2025"
+      "knowledgeCutoff": "ጥሪ 2025",
+      "tagline": "ጨዋታ ዝቕደሰ ኦፑስ"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "ኣብ ኮድ፣ ትንተና፣ ከምኡ'ውን ፈጠራዊ ስራሓት ብሉጽ ኣፈጻጽማ ዘቕርብ ሚዛናዊ Claude ሞዴል። ንዕለታዊ ኣጠቓቕማ ምስ ቅልጡፍ ናይ ምላሽ ግዜ ብሉጽ።",
-      "knowledgeCutoff": "ጥሪ 2025"
+      "knowledgeCutoff": "ጥሪ 2025",
+      "tagline": "ጨዋታ ዝቕደሰ ሶኔት"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "ናይ ቀዳማይ ወለዶ Claude Opus ሞዴል። ንዝተሓላለኹ ናይ ኮድ ስራሓት፣ ዝርዝር ትንተና፣ ከምኡ'ውን ስሉጥ ምርዳእ ብሉጽ።",
-      "knowledgeCutoff": "ጥሪ 2025"
+      "knowledgeCutoff": "ጥሪ 2025",
+      "tagline": "ጨዋታ ዝቕደሰ ኦፑስ"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "ንቅልጡፍ ስራሓት ዝተመሓየሸ ቅልጡፍን ዝሓሰረን Claude ሞዴል። ንቐለልቲ ሕቶታት፣ ጽማቝ፣ ከምኡ'ውን ብዙሕ-መጠን ኣፕሊኬሽናት ብሉጽ።",
-      "knowledgeCutoff": "ጥሪ 2025"
+      "knowledgeCutoff": "ጥሪ 2025",
+      "tagline": "ፈጣን ክላውድ ሓይኩ"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "ኣብ ኣንፈጽሞ ብAnthropic ዝበለጸ ሞዴል። ርእሰ ጽሑፍ ፣ ምምሃር ንእትውልኹ ብምስቓዕ ዝሓገዝ።",
-      "knowledgeCutoff": "መጋቢት 2026"
+      "knowledgeCutoff": "መጋቢት 2026",
+      "tagline": "ናይ ረዚ ፅሕፈትን ትንክሳዊ ትምርቲ"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "ተምታኻኸሎ ሞዴል፡ ምሉእ ግዜ ምስራሕ፣ ትንታነ፣ ኮዲንግ ኣብ ፈጣን መልሲ ዝሓገዝ።",
-      "knowledgeCutoff": "መጋቢት 2026"
+      "knowledgeCutoff": "መጋቢት 2026",
+      "tagline": "ተመናባብራ ከምዚ ዘለዎ ክላውድ"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "ካብ Meta ዝተሰርሐ ነፃ ሞዴል። ብተሓጋጋዚ ምጻው ፣ ምዕንቲ ፈጺምን ፈጺሞታት ሕቶታትን ይግበር።",
+      "tagline": "ክንደይ ዝነበረ መንጎ ፍትሒ"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "አዳዲሕ ፍለጣዊ ሞዴል OpenAI። ብተሓጋጋዚ ምጻው፣ ምምርሒ፣ ኮዲንግን ርከባን ምፍታው ጉዳያትን።",
+      "tagline": "አዳማዊ ዋና GPT"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "ንቡር እና ብጣዕሚ ፈጣን GPT ዘይብሉ ዘብሉ፡ ከምዝሕጉስ ዝቐልጠሉ ቀሊል ግዜ ጽሑፍን ቀሊል መሰረታዊ ስራሕታትን ይተዓብባል።",
+      "tagline": "ንእሽቶኡን ፈጣኑን GPT"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "ለሓሳብታት ዝተስናአ ኣነጋገር GPT። ንሰማዕታዊ ውይይታታት፣ ምስምር ኣብ ጋንታን ናብ ዝዓበየ ግዜ ዝተዘጋጅ ውይይታታት ጽቡቅ።",
+      "tagline": "ዓዲ ዝዘዋዋሪ GPT ዝተዘጋጀ ውዕል"
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "መጀመርያዊ ኣብ ፍለጣዊ GPT-5 ሞዴል። እዋናዊ ብዛዕባ ምጻው፣ ትንታነ፣ ኮዲንግ፣ ዝተሓጋገዘ ተግባር ይግበር።",
+      "tagline": "ዋና GPT ዝቕደሰ"
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "ኣነጋገር GPT-5 ዝተስናአ ዝበለ ሞዴል። ንመዓርነት ቀዳሞ ውይይታታትን ብሓሳብ ርእይቶን ጽቡቅ።",
+      "tagline": "ዝቕደሰ GPT ዝተዘጋጀ ውዕል"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "እቲ ቀዲሚ ፍልሲ GPT-ባህሊ ሞዴል። ንልምዓት ምጻውን መሰረት ሕቶ መልሲን ኣይተጠናጠኑ ክስደድ ከለኻ ይኸውን።",
+      "tagline": "ዝቕደሰ ኦልተማዶ GPT"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "ዝቐልጠለ ን ቀሊል ጉዳያት ፈጣን GPT-4.1 ሞዴል።",
+      "tagline": "ቀዋሚ ቆላ ዝቕደሰ GPT"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "ኣዳዲሕን ዝበለን ሞዴል Anthropic። ኣብ ናይ ዝንባብ ራዕይ ፣ ምምርሒ ፣ ኮዲንግን ጥማይ ትንታነን ብግቡእ ይሰርሕ።",
+      "tagline": "አዳማዊን ብርቱዕን ክላውድ"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "ኣዳዲሕ ነፃ DeepSeek ሞዴል። ንናይ መደበኛ ምጻውን መሰረታዊ ቴክኒካል ሕቶታት ታህዋት ኣለዎ።",
+      "tagline": "ክንደይ ዝነበረ መንጎ ፍትሒ"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "መዓልታዊ Mistral ሞዴል። ግናዊ ኣልጎርቲም ኣውልቲ ናብ ግነኽ ዝምግናው ፣ ምጻው ፣ ማዕከን ጥያቄ መልሲ ንኤውሮፓ ምስ የሳናጸ ተውሳኦ።",
+      "tagline": "ዩሮፓዊ ዝነበረ መደበኛ መርፍት"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "የቐዲም GPT-5 ፍለጣዊ ሞዴል። እዋናዊ ብዛዕባ ምጻው፣ ትንታነን ኮዲንግን ይሰርሕ።",
+      "tagline": "ጨዋታ ዝቕደሰ GPT-5"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "ቀዳሞ ብኣነጋገር ዝተስናአ GPT-5 ሞዴል። ንዕላማታት ዝሕግዝ ዉይይታታትን ሓሳብ ርእይቶን ጽቡቅ።",
+      "tagline": "ጨዋታ ዝቕደሰ ውዕል GPT"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "ዝንኡኡ GPT-5 ሞዴል። ንቀሊልን ፈጣንን ስራሕታት ብንኡኡ ወጻኢ ይሰርሕ።",
+      "tagline": "ንእሽቶኡ ዝቕደሰ GPT"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "ንምስራሕ ፈጣንን ቀሊልን ተግባራት ብ ዝንኡኡ GPT-4.1 ይግበር።",
+      "tagline": "ንእሽቶኡ ዝቕደሰ GPT"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "ፈጣንን ንቀሊልን ግዜ ምስዘለዎ ዕላማ ሓደ ናይ GPT-4o ሞዴል።",
+      "tagline": "ቀዋሚ ቆላ ኦልተማዶ GPT"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "ቀሊልን ዝግበር ሞዴል ምስታሕቲ ኣንታስ። ምስ ቁጽሪ ግዜ ናይ ታሪኽ፣ ሎጂክን ስጺሗት በቐሊሉ ይስደድ።",
+      "tagline": "ብቅልጡፍ ዋጋ ፈጣን ምርኣይ"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "ቀዳሞ ቀሊል ዝዓበየ ሞዴል። ሒሳብ፣ ሳይንሳዊን ሎጂክ ምስጢራትን ቦጀት ብናዕቱ ይሰርሕ።",
+      "tagline": "ቕንዛዕ ምርኣይ ከባቢያዊ"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "ኣብ መኽንያት ዝመሃዙ ሞዴል Anthropic፣ ብመጀመር ናይ Claude 5 ሰርዓ። ኣብ ናይ ሓደጋ ምጻው፣ ምምርሒን ኮዲንግን ጽቡቅ ይኹን።",
+      "tagline": "ፍሮንቲር ሞዴል ኣንተሮፒክ"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "እቲ አዳዲሕ ሚዛናዊ Claude፣ መጀመር Claude 5 ሰርዓ። ንመዓልታ ምጻው፣ ትንታነን ኮዲንግን ብተፈጥሮ ፈጹማዊ መልስታት ይሰርሕ።",
+      "tagline": "አዳማዊ ተመናባብራ ክላውድ"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Mistral መካነውዲ ሞዴል። ዝተዛመደ ግበርነትን ፈጣንን መደበናዊ ስራሕታትን የማሩ።",
+      "tagline": "ተመናባብራ ዩሮፓዊ ሞዴል"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Mistral ናይ ቀሊሉ ሞዴል። ብፍጥነት ኣይኽእል ናይ ምዕንቲን ሕሳብ ቅድሚ ኣብ ንቀላል ግዜ ይሰራሕ።",
+      "tagline": "ንእሽቶኡ ፈጣን ዩሮፓዊ ሞዴል"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Mistral ናይ ሕኽንና ዝፈጠረ ሞዴል። ንቀሊሉን ፈጣንን ስራሕታት ናይ ቀላል ወጻኢ ይግበር።",
+      "tagline": "ንእሽቶ ፋንታ ሞዴል Mistral"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "ዝሓደሰወ ርእይቶ DeepSeek-R1። ኣብ ከይምግባር ዝያዳ ብደረጃ ግምገማ ረኺቡ ይግበር።",
+      "tagline": "ዝተሕደሰ ክንደይ ሞዴል ምርኣይ"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "ነፃ ኣብ ዝንኡኡ፡ ኩነታት ከም ኣዝዩ ዘሎ፡ ብፍጥነት ምጻው፣ ማዕከናዊ ምዕንቲን ዕላማታትን የተዓብባል።",
+      "tagline": "ተጠቃሚ ክንደይ መንጎ Llama"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "ከም ድሕሪ ግዜ ዝወጸ ናይ Meta ክፋል ነቲ ናይ ሓፈሻዊ ሞዴል እዩ። እቲ ሓፈሻዊ መጽሓፍቲን መልስ ሕቶታትን ውፅኢቱ ጽኑዕ እዩ።",
+      "tagline": "ዝቕደሰ ክንደይ Llama"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "ናይ xAI ዋና ሞዴል። ምስ ገለ ዘይ ውልቀ ምውዳእታት፣ ትንታነታትን ፈጠራ ፕሮጀክትታትን ንጥፈት ጽቡቕ እዩ።",
+      "tagline": "xAI ዋና ሞዴል"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "ናይ OpenAI ሓዳስ ዋና ሞዴል። ብጽቡቅ መጽሓፍቲ፣ ምምርማር፣ ከይዲን ዓብዪ ሓገዝ ፍትሓትን ዚገበረ እዩ።",
+      "tagline": "ሓዳሽ ዋና GPT"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (ሓዳሽ)",
+      "description": "ዝዘርእ ስም እዩ ዝሰርሕ፣ ኩሉ ግዜ ናይ OpenAI ሓዳስ ናይ ሻይ Chat ሞዴል ይወፅእ። ናይ Azure ካብቲ ምዕራፍ ዝተሰርሓ ንተኻኒ እዩ።",
+      "tagline": "ኩሉ ጊዜ አዳማዊ ዝተዘጋጀ GPT ውዕል"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "ናይ ቅልጡፍ ልዕሊ Opus እዩ፣ ብድሓን 4.6ን 4.8ን ዕፀ። ዝንብረ መጽሓፍቲ፣ ምምርማር፣ ከይዲን ንጥፈት ጽኑዕ እዩ።",
+      "tagline": "ኣብዚ ዓለም ዝተመርፀ ኦፑስ"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "ናይ DeepSeek ሓዳስ ምክር ሞዴልን ናይ Azure ነቲ R1 መስመር ተኻኒ እዩ። ኣራኢኡ እቲ ሓሳቡ ኣብ እዋኡ ይመልከት።",
+      "tagline": "አዳማዊ ክንደይ ሞዴል ምርኣይ"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "ናይ DeepSeek ብቕልጡፍ ምስላ፣ ናይ Azure መምረጢ ን ነቲ V3 መስመር። ሓሳቡ ብቕልጡፍ መጽሓፍቲን ብቀላል ኩታት ጥዕናዊ ሕቶታትን።",
+      "tagline": "ፈጣን ክንደይ መንጎ ፍትሒ"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "description": "ናይ xAI ብቕልጡፍ ምክር ሞዴል። ኣብ እዋኡ ብመደብ ምምልሳ ይሐክር።",
+      "tagline": "ፈጣን xAI ሞዴል ምርኣይ"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "ናይ xAI ብቕልጡፍ ቻት ሞዴል። ን መደበኛ ሕቶታትን ውዕልታትን ብቕልጡፍ መልሲ።",
+      "tagline": "ፈጣን xAI ዝተዘጋጀ ውዕል ሞዴል"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "ንብርት ትንንሽ ዝረኣየ xAI ሞዴል። ለንበለን ንዝቑረብ ሕቶታትን ቀለልቲ ቻትታትን ብቕልጡፍን ዝርከብን እዩ።",
+      "tagline": "ቀዋሚ ዝነበረ xAI ሞዴል"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "ሓደጋዊ ናይ OpenAI GPT-5.6 ክፍሊት፡ ኣብ ጻፍነት፣ ምስርሕ፣ ኮዲንግን ብስተቀረቡ ኣብ ውሑደኛ ችግሮታት ዝበለጸ።",
+      "tagline": "አዳማዊ ምዕዝና ደረጃ GPT"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "ኣንፀባረቐ ክፍሊት ናይ GPT-5.6 ኣብ OpenAI። ንዕሉዋይ ጻፍነት፣ ትንታነን ኮዲንግን ኣብ ቅልጡፍ መልሲ ፍሉይ ዱባ።",
+      "tagline": "ሚዛናዊ ኣመዳደቢ  GPT-5.6"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "ቀሊልን ብቕልጡፍን ክፍሊት ናይ GPT-5.6 OpenAI። ንቅልጡፍ ሕቶታትን ሓሳባታት ምስናእሰር ቦታ ዘለዎ።",
+      "tagline": "ብሓላፍነት፣ ብቕልጡፍ  GPT-5.6"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "ነዳዊ መካነ ውን ሞዴል ናይ Mistral። ናይ ኢውሩፓ ተመሳሳሊ ምምዕባሪ ክንደይን ቅልጡፍን ዘምበጃ ፍሉይ ሞዴል።",
+      "tagline": "ሚዛናዊ ዩኮፕያን ኢመዴል"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Moonshot AI ናይ ብክፋል ክትትል ሞዴል። ኣብ ናይ ውድብ ስራሕ፣ ኮዲንግ እና ዝንባእ ዶኩመንታታት ጽቡቕ እያ።",
+      "tagline": "ውድባዊ ብክብሪ ሞዴል"
     }
   },
   "searchMode": {
@@ -1789,7 +2090,22 @@
     "useDefaultStyle": "ውሁድ ናይ ጽሕፈት ዘይቲ ተጠቐም",
     "noTonesCreated": "ክሳብ ሕጂ ቃናታት ኣይተፈጥሩን",
     "createTonesHint": "ኣብ ቅልጡፍ ተግባራት ቃናታት ፍጠር",
-    "translateDocumentTooltip": "መዝገብታት ናብ ካልእ ቋንቋ ትርጉም።\n\nዝደገፉ ፎርማታት: Word, Excel, PowerPoint, HTML, TXT\nኣብዚ ኣብሓተ ዝርከብ መጠን: 40MB\n\n80+ ቋንቋታት ንግብሪ ካብ ግብሪ ግሩካይ ፋይልታት ግን ይደግፉ።"
+    "translateDocumentTooltip": "መዝገብታት ናብ ካልእ ቋንቋ ትርጉም።\n\nዝደገፉ ፎርማታት: Word, Excel, PowerPoint, HTML, TXT\nኣብዚ ኣብሓተ ዝርከብ መጠን: 40MB\n\n80+ ቋንቋታት ንግብሪ ካብ ግብሪ ግሩካይ ፋይልታት ግን ይደግፉ።",
+    "translateTooltip": "ንኩሉ ገለ ጽሑፍ ናይ ቋንቋ ሓደ ናብ ካልኦት ትርጉም።\n\nንኩሉ ፋይል (Word, Excel, PowerPoint, HTML, TXT)፡ Translate Document ተጠቀም።",
+    "cameraTooltip": "ኣብ መሳርሒ ካሜራ ፎቶ ውስደካ ንመልእኽቲ ፣ ኣጭንካ",
+    "noResults": "ዝተሳሓተ ኣካላት የለን",
+    "sectionPinned": "ዝተቐናቐኑ",
+    "sectionFrequent": "ብዙሕ ዝተጠቐሙ",
+    "sectionMore": "ተወሳኺ",
+    "categoryWeb": "Web",
+    "categoryMedia": "መሕደራትን ፋይልን",
+    "categoryTransform": "ምቅዋም",
+    "pin": "ኣብ ላዕሊ ሓኪል",
+    "unpin": "ኣይተሓከለን",
+    "moveToMore": "ናብ ተወሳኺ ኣካይዱ",
+    "moveOutOfMore": "ኣብ መኑ ርኣዮ",
+    "showSources": "ተሓውቶ ምንጮታት ኣርኣዩ",
+    "hideSources": "ተሓውቶ ምንጮታት ኣሰውሩ"
   },
   "transcription": {
     "transcribesOnSend": "ኣብ ምልኣኽ ይጸሓፍ",
@@ -1923,7 +2239,14 @@
     "expiresSoon": "ድሕሪ {days} መዓልቲ(ታት) ግዜኡ ይውዳእ - ቀልጢፍካ ኣውርድ",
     "expires": "ን{days} መዓልትታት ይርከብ",
     "unofficialBadgeLabel": "ዘይብዙሕ፣ ብፍቓድ ዘይተፈቀደ",
-    "unofficialLanguageWarning": "እዚ ቋንቋ ብደሓን ኣይተሰርሕን። ጥራይ ትርጉም ኣይተረጋገጸን። ኣብ ምስትተሓቀቱ ቃል ብቋንቋ ዝምልከታ ወይ ብነበሳ የለን ንግሓፉ ኣብርሓ።"
+    "unofficialLanguageWarning": "እዚ ቋንቋ ብደሓን ኣይተሰርሕን። ጥራይ ትርጉም ኣይተረጋገጸን። ኣብ ምስትተሓቀቱ ቃል ብቋንቋ ዝምልከታ ወይ ብነበሳ የለን ንግሓፉ ኣብርሓ።",
+    "translationSubmitted": "ትርጉም መጀመርኡ — PDFታት ኣብ ቅድሚ መስመር ትሰርሕ።",
+    "pendingTitle": "{filename} ተተርጎምካ…",
+    "pendingHint": "ትርጉም PDF ዝርከበ ኣብ ቅድሚ መስመር ኣይብርጽኡን። ንገርና ስራሕልካ ቀጺሉ — ብዝተዘለኹም ፋይል ዝተዘዋወሩ ኣብዚ ካርድ ይዘርከብ፡ ንከኣ ኣብ ትሕዝቶ ክትረኽቡ።",
+    "asyncFailed": "ትርጉም መደብ ኣፍኢኡ፡ {error}",
+    "jobNotFound": "ትርጉም ስራሕ ኣይተረኸበን። ኣደላይ ፈትኑ።",
+    "retryPolling": "ብደጋሚ ፈትኑ",
+    "pollingStalled": "ትርጉም ምምዝጋብ ከባቢ ኣልኣይናን። ትርጉም ኣብ ሓደሽቲ ይቀጽል ዝኾነ ይኽእል።"
   },
   "agentsTab": {
     "organizationAgents": {
@@ -1973,6 +2296,10 @@
       "technicalDetails": "ዝተኣኽበረ ዝርዝር",
       "agentCountLabel": "{count} ውሳነታት",
       "disconnectedToast": "{name} ተቁጺጺ"
+    },
+    "emptyState": {
+      "title": "ናይ ክልል/ኣደባባይ ኤጀንትስ የለን።",
+      "description": "ናይ Foundry ፕሮጀክት ታሕቲ ምያያይ ኤጀንትስ ንክትረዱ ሓበሬታ ይህብ።"
     }
   },
   "privacy": {
@@ -2083,5 +2410,1309 @@
     "review": "ኣየው",
     "itemId": "መለያ: {id}",
     "itemSource": "{date} ካብ {source}"
+  },
+  "regionOverride": {
+    "warning": "ኣካባቢ ተለዋዋጭ ብሓላፊ ይሰርሕ ኣሎ — ጥየታትኩም {region} ዝብሉ ክፍሊ መረብ ይልከኩ። እዚ ብእግሊ ፈተና ዝተደረገ ሕወሓት እዩ፣ እንተወሃቦ ኣካባቢኩም ኣይኮነን።",
+    "clear": "ቆልዑ ተለዋዋጭ"
+  },
+  "usageImpact": {
+    "empty": "እዚ ገና ኣጠቓቕም ኣይተመዝገበን። ናይ ቶክን ኣጠቓቕምካን ብዝነብሩ ኣብዚ ምስተዓወትካ እዚ ይበጽሓ።",
+    "co2Value": "{grams} ግራም ኲፐር ኦ ብራብር (CO₂e)",
+    "equivalence": "≈ ብቁጽሪ {count} ጦም ስማርትፎን።",
+    "requests": "ጥያቄታት",
+    "promptTokens": "ቅድሚ ቃላት ቶክን",
+    "completionTokens": "ምውዳእ ቃላት ቶክን",
+    "topModels": "ብ ሞዴል",
+    "byRegion": "ብ ገዛኢ ዞባ",
+    "regionDefault": "ምርጫ ኣብ መደበኛ",
+    "modelRow": "{requests} ጥያቄ · {grams} ግራም",
+    "disclosure": "ቅድመሓሳቡ ብምስማማዕ ናይ v{version} · ካብ {since} · ምድላይ መዓልቲ ሓሳብ ብቐዳይ (ኣገንትን ናይ ዕውታት ቋንቋ መልሲ ኣይተቆጸረን)።",
+    "reset": "ናይ ኣጠቓቕማ ውህኖታት ኣቐምጥ",
+    "estimatedPortion": "ዝኾነ ~{grams} g CO₂e ({requests} መጠየታት) ካብ ዝንብር tracking ስር chats ተቅሚኡ፣ ካብ ተዓቐኑ ዞባ መልእኽቲ ጽሑፋት፣ ኣይተሳንዕ token ቁጽሪታት እዩ።",
+    "chipTitle": "ምርት ቻይፕ",
+    "chipDescription": "ግምቲ ካርቦን እግሪ ኣብዚ ባህሪ ዓውደ-ቃለ-መጠይቂ ብምስራሕ ክትተረከብ ብይቕረና፡ ኣብ ላዕሊ ዝኾነ ቃለ-መጠይቅ ግበታ እዩ የተረኸበ።",
+    "chipAlways": "ሁሉግዜ ኣትረኣዩ",
+    "chipAlwaysHint": "ዝተገመተ ንባዕሉ ዝርከብ ግደፍካ ቻይፑ የተረከበ ይብቃ።",
+    "chipAuto": "ብሓደስ፡ ወይ ስትራይ የተረከበ",
+    "chipAutoHint": "ቻይፑ ምስ ግምቲ ተሓዲሰ እዩ የተረከበ፡ ኣብ ቀጥዐ ይዕፀይ። ስትራይ ወይ ዝምርኣዩ ምቅላል እንተ ስለሃቡ ይተመሃል።",
+    "chipHidden": "ዝተሰውረ",
+    "chipHiddenHint": "ቻይፑ ክኸውን ኣይተረከበን። ጠቕላላ መዓልቲ ግምቲ መዝግቡ ይቕፀልና፡ ኣብዚ ገጽ ይርከብ።",
+    "chipAutoHideLabel": "ካብ ዝተሓደሰ መዓልቲ ዕፀይ",
+    "chipAutoHideUnit": "ሰከንድ",
+    "chipAutoHideHint": "ካብ {min} ናብ {max} ሰከንድ ውስጢ።"
+  },
+  "extraction": {
+    "toggleLabel": "ውክልናዊ ዳታ ምልባስ",
+    "trayLabel": "ምልባስ",
+    "trayPrefix": "ኣርእስቲ ልብስ",
+    "trayInfo": "ምልባስ ክልተ ናይ ውክልና ሓበሬታ ታብሎት ይመልስ። ሪሰፒት ኣብ ኩሎስትኒ ይቑጽሉ።",
+    "autoChip": "አውቶ — ኤአይ ንውክልና ይገብር",
+    "addRecipe": "ሪሰፒ ደምስ",
+    "addRecipeTitle": "ናይኹም ምልባስ ሪሰፒ ደምስ",
+    "addRecipeFullTitle": "ክ 3 ሪሰፒት ናይ ናይቲ ምልባስ ጊዜ",
+    "removeRecipe": "ሪሰፒ ውጽኢ፡ {name}",
+    "remove": "ውጽኢ",
+    "section": "ሪሰፒት ምልባስ",
+    "sectionSubtitle": "ተፈጢሩ ቴምፕሌትታት፡ ዝቐሰለ ጽሑፍ፣ ፋይል፣ ወይ URL ናይ ውክልና ታብሎት ዝሓቱ። ክልተ 3 ንምልባስ ጊዜ ምርጽ።",
+    "newRecipe": "ሪሰፒ ሓዲሽ",
+    "untitledRecipe": "(ሪሰፒ ዘይመሰለ)",
+    "deleteRecipe": "ሪሰፒ ሰርዚ",
+    "delete": "ሰርዚ",
+    "deleteConfirm": "ሰርዚ?",
+    "cancel": "ተወ",
+    "name": "ሽም",
+    "namePlaceholder": "ምሳሌ፡ Patients",
+    "description": "ንዑስ መግለጺ",
+    "optional": "(ካልእ ከም ዝደለይ)",
+    "descriptionPlaceholder": "አጭር ሓንዚ ኣብ ሪሰፒ ምርጫ ይታይ",
+    "instructions": "መመሪያታት",
+    "instructionsPlaceholder": "ኤአይ ኣብ እዚ ስነት ነቲ ምንባብ ይደሊ?",
+    "fields": "ቦታታት",
+    "field": "ቦታ",
+    "fieldsPlural": "ቦታታት",
+    "fieldName": "ሽም ቦታ",
+    "fieldType": "ዓይነት ቦታ",
+    "fieldNamePlaceholder": "field_name",
+    "addField": "ቦታ ጨምር",
+    "removeField": "ቦታ ውጽኢ",
+    "toggleDetails": "ዝርዝር ቀየር",
+    "fieldDetailsTitle": "መግለጺ፣ ናይ enum ዋጋታት",
+    "fieldDescriptionPlaceholder": "መግለጺ (ንኤአይ እዚ ቦታ ክሽፍን ይረዳ)",
+    "enumValuesPlaceholder": "ብኤርትዮ ዝተፋለየ ዝተፈቀዱ ዋጋታት",
+    "required": "ኣገደስ",
+    "suggest": "AI ኣዝሓበ",
+    "suggesting": "ኣብ ምዝሓብ…",
+    "suggestNeedsInstructions": "ኣብ መጀመርታ መመሪሕቲ ወስኽ፡ እንተዘይኮነ ፣ AI እቲ ዝርከብ ኣይፈልጠን",
+    "searchRecipes": "ረሲዓት ድለይ",
+    "pickerEmpty": "ረሲዓት የለን። ናይ መጀመርታ ሓድሽ ፍጠር።",
+    "pickerEmptyMatch": "ምምጻዕ ረሲዓት የለን",
+    "editorEmpty": "ረሲዓት የለን። ሓድሽ ፍጠር እዚ AI ንምምላእ ክረክብ ክኸውን ይኽኣል።",
+    "noData": "ውሳኔ የተወገደን",
+    "noRecords": "ዝተረኸበ {name} መዝገቦታት የለን",
+    "row": "መስመር",
+    "rows": "መስመራት",
+    "record": "መዝገብ",
+    "records": "መዝገቦታት",
+    "complete": "ተዛዚሙ",
+    "download": "ኣውርድ",
+    "preview": "ቅድሚ ኣይነት",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} ሳባታት",
+    "fieldCountOne": "1 ሳብ",
+    "andMoreFields": "+ {count} ካብዚ ኣብዚ",
+    "saveAsRecipe": "ከም ረሲዓ ቆም",
+    "savedAsRecipeToast": "ከም ረሲዓ \"{name}\" ተደልዮሉ",
+    "previewTruncated": "እቲ መጀመርታ 3 ከምስ {total} መስመራት ተርእይ። ኽቡራት ውሳኔ ንምምላእ ኣውርድ።",
+    "previewEmpty": "ቅድሚ ኣይነት ዝርከብ መስመር የለን",
+    "proposedSchemaTip": "AI እዚ ስክሪፕታ ቀሪቡ። ቀጸልካ ናይ ናይ ዝቀጠል ግበር።",
+    "downloadAriaLabel": "{name} ከም {format} ኣውርድ",
+    "previewAriaLabel": "ቅድሚ ኣይነት {name} ኣቐልብ",
+    "changeFormatAriaLabel": "ነዚ {name} ንኽውነት ዘንጉዕ ፎርማት ቀይር",
+    "materialWarningTitle": "ዝንገብ ኩነታት ወስኽ",
+    "materialWarningBody": "ሞያ ትምህርቲ ብቕፅል ኣእትዎ፡፣ ፋይል ሓትት፡ ወይ  URL ኣካትት።",
+    "materialAttach": "ፋይል ሓትት",
+    "willExtractPrefix": "ካብዚ ክውሰድ ይበሃል፡",
+    "materialText": "መልእኽቲ ጽሑፍ",
+    "materialFiles": "{count, plural, one {1 ፋይል} other {# ፋይልታት}}",
+    "materialActiveFiles": "{count, plural, one {1 ኣኣታዊ ፋይል} other {# ኣኣታዉታት ፋይልታት}}",
+    "dismiss": "ምልቃስ ውሳኔ ሕልዎ"
+  },
+  "Connectors": "ተገናኝቲ",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "ትርጉም",
+        "description": "ጽሑፍ ብትርጉም፣ ኣባህላዊ መዝገቦትን፣ ደቂ ርእይቶን ተርጎም።"
+      },
+      "document": {
+        "label": "መደብ",
+        "description": "መደብ ኣብ ሓገዝ ኣፃፅእ ንማሕተትን ንምቕጻልን።"
+      },
+      "dataAnalysis": {
+        "label": "ውህብቲ ትንታነ",
+        "description": "ጣውላት ኣምጽኡ ውህብታትካ ኣርኣዩ ወይ ለውጡ።"
+      },
+      "map": {
+        "label": "ካርታ",
+        "description": "ብዝኾነ ውህብቲ ኣብ ካርታ ቦታ ምቕያር"
+      }
+    },
+    "chooser": {
+      "prompt": "ወይ ትሕተት ስራሕ ጀምር"
+    },
+    "sidebar": {
+      "newTranslation": "ሓድሽ ትርጉም",
+      "newDocument": "ሓድሽ መደብ",
+      "newDataAnalysis": "ሓድሽ ውህብቲ ትንታነ",
+      "newMap": "ሓድሽ ካርታ"
+    },
+    "translation": {
+      "chooseLanguage": "ትርጉም ቋንቋ",
+      "customLanguageHint": "\"{name}\" ንኽትወሃብ ቋንቋ እዩ — AI ምስ ብዛዕባከም ክግበር ይፈትኑ፡ ጥራይ ግና ኣይተኣረጋገጸን።",
+      "addedByYou": "ንኽትወሃብካ",
+      "glossary": "መዝገብ ቓላት",
+      "noGlossary": "መዝገብ ቓላት ኣይተሰብረን።",
+      "manageGlossaries": "መዝገቦት ቓላት",
+      "glossaries": "መዝገቦት ቓላት",
+      "closeGlossaries": "መዝገቦት ቓላት ዕጽሓ።",
+      "glossariesEmpty": "ምንኣብ ተለዋዋጥ ቃላት እንታይ እኮ ዝተተሓሓዙ ክትርግሙ መዝገብ በጅሉ። መዝገቦት ቓላት ኣብዚ መሳርሒት ይዓቅቡን ኩሉ ትርጉም ግን ንምጠቃም ይኻነ።",
+      "newGlossary": "ናይ ሓድሽ ጓሳይ",
+      "newGlossaryName": "መንግስ መዓልቲ ዘይብሉ ጓሳይ",
+      "glossaryName": "ስም ጓሳይ",
+      "deleteGlossary": "ጓሳይ ምድምሳስ",
+      "sourceTerm": "ቃላት መእተዊ",
+      "targetTerm": "ትርጉም",
+      "note": "ሓበሬታ",
+      "noteOptional": "ሓበሬታ (ኣገዳሲ)",
+      "addEntry": "ቃላት ይወስኹ",
+      "removeEntry": "{term} ኣውጺኡ",
+      "mode": "ዓይነት ትርጉም",
+      "modeQuick": "ብትኽክል",
+      "modeAgentic": "ተቐዲምቲ ትርጉም",
+      "modeQuickHint": "ትሓፍት ትርጉም፣ ብሕጋይ ሓንሳብ",
+      "modeAgenticHint": "በዓመይ ኣንታይ እዩ ምስሓቡ፣ ብዝኾነ ሓደ ዓቕላዊ ምርካብን ክንቲብን እንተደሊኩም ክርኢኑ ኣሎ",
+      "translate": "ተመሓየሽ",
+      "translating": "ኣብ ምትርጉም…",
+      "sourceLabel": "መእተዊ ጽሑፍ",
+      "targetLabel": "ትርጉም",
+      "sourcePlaceholder": "ዝትርጉሙ ጽሑፍ ቁልፊ ወይ ጻፍ፡ ወይ ሰነድ ኣእቱ።",
+      "targetEmpty": "ትርጉሙ ኣብዚ ይቆፅሩ።",
+      "uploadDocument": "ሰነድ ኣእትዉ",
+      "copy": "አቐዲሉ",
+      "copied": "ተቐዲሉ",
+      "tooLong": "ጽሑፉ ካብ {max} ፊደላት ዝበለጸ። ንቅርፅ ክፉሉ፡ ወይ ንኩሉ ሰነድ ትርጉም ጥቀሱ።",
+      "analysisTitle": "ቅድመ-ትርጉም ትንተና",
+      "register": "ዝመዝገበ",
+      "reviewTitle": "እዋን ግምገማ",
+      "roundLabel": "ዙር {round}",
+      "verdictApprove": "ተስማሚ",
+      "verdictRevise": "ተስተኻኺኡ",
+      "railRequest": "መእተዊ ጽሑፍ ናብ {language} ተመሓየሽ።",
+      "railDoneAgentic": "ተዛሪቡ። ጽሑፉ ተተናበረ፣ ተተርጎሞ፡ እና ናይ {rounds} ግምገማ ዙር(ታት) ተኸይዱ። ውጽኢቱ ኣብ workspace ኣሎ።",
+      "railDoneQuick": "ተዛሪቡ። ትርጉሙ ኣብ workspace ኣሎ።",
+      "railAssessRequest": "ጥራይ ትርጉም {language} ግምግም።",
+      "railAssessDone": "ግምገማ ተዛሪቡ፡ ውጽኢቱ ኣብ workspace ኣሎ ን{count} ናይ ምትካል ጥራይ(ታት) ብግምገማ እኳ።",
+      "roundChanges": "ምስዓታት ኣብ ዙር {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "ውሑድነት",
+          "description": "ትርጉሙ ኣብ ትክክልኡ መሓላጅ መእተዊ ፍትሒ ይሃብ፡ እቲ ባህርያት ምኽንያት፡ ትርጉም ጽፉት ወይ ተጨማሪ ወይ ዘይትመሓየሸ ክፋን የለን።"
+        },
+        "fluency": {
+          "label": "ልሳነት",
+          "description": "እናቅፅለኩም ቅድመ መርሓቕ፡ ኣርከት፡ ፍሉይ ቃላትን ሕቶን ኣብ ቋንቋ ዕላማ ብተፈጥሮ ይነብር።"
+        },
+        "terminology": {
+          "label": "ታሪኽ ቃላት",
+          "description": "ኣብ ነገር ዘርከበ ቃላት ቁሩብነት ኣላፍ፡ ጓሳይ ትክክል ተከታተሉ"
+        },
+        "style": {
+          "label": "ቅርጸ-ልውልዋይ",
+          "description": "ርእሰ መደበኛነት፣ ቅጥታን ድምጺን ከመእተዊ ጽሑፍ ጋር ይመሓያሽ ድማ ውሑድ ይኾን"
+        },
+        "localeConventions": {
+          "label": "ውሑድ መወዳእታ ቦታ",
+          "description": "ዕለታት፣ ቁፅር፣ መወንጋታትን ትሕዝቶ ዝገብር ተለቪ ዝኾነ ፈሊስቲ ይሰርሕ።"
+        },
+        "audience": {
+          "label": "ተሳቢሕቲ",
+          "description": "ሓላፍነቱን ተሳቢሕቲ ግዳም የተሓጎሰ ዝኾነ ይማላ።"
+        }
+      },
+      "severity": {
+        "minor": "ንቑስ",
+        "major": "ዋና"
+      },
+      "assess": "ምግምጋም ጽቡቕነት",
+      "assessing": "ኣብ ምግምጋም…",
+      "assessmentTitle": "ጥራይ ምግምጋም",
+      "criteriaPicker": "ናይ ምግምጋም መደብ",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "ተፈላለዩ ምሕዳራት",
+      "noEditsSuggested": "ምሕዳራት ኣይተፈላለዩን — ትርጉም ናብ ተመርጺ መደብ ኣልፎ እዩ።",
+      "acceptEdit": "ተቐቢሉ",
+      "rejectEdit": "ኣልተቐበሉን",
+      "acceptAll": "ኩሉ ተቐቢሉ",
+      "rejectAll": "ኩሉ ኣልተቐበሉን",
+      "editAccepted": "ተቐቢሉ",
+      "editRejected": "ኣልተቐበሉን",
+      "editUnapplicable": "ዝኾነት ክምሕዳር ኣብ ሕጉስ ጽሑፍ ኣይተረኸበን — ኣይተተገበረን",
+      "editTranslation": "ምሕዳር",
+      "doneEditing": "ዝተዛወሰ",
+      "pasteTranslationPlaceholder": "ትርጉም ጻፍ ወይ ገብር ንምስራሕ…",
+      "editingBlockedPendingEdits": "ምቕጻል ወይ ምሕዳር ኣቐዲሙ ተፈላለዩ ምሕዳራት ኣይተርፈን",
+      "pendingCount": "{count} ቀጺሉ",
+      "closeReview": "ጥራይ ርኣዩ ዝዕጽፍ",
+      "showReview": "ርኣይ ርኣዩ",
+      "showReviewPending": "ርኣይ ርኣዩ ({count} ቀጺሉ)",
+      "undoEdit": "ምልሳሕ መዘንኸር",
+      "clearResolved": "ተፈታእኩሞ ኣጽዳእ",
+      "clearResolvedHint": "ተቐባልየን፣ ተረጋገጹን፣ ዝሓለፉን ምልሳሓት ካብዚ ዝርዝር ኣውጹ",
+      "autoClearResolved": "ተፈታእኩሞ ምልሳሓት ብናብርቲ ኣጽዳእ",
+      "customCriteria": "ብኣገልግሎት ዝተሰርሑ መሰረታት",
+      "closeCriteria": "ብኣገልግሎት ዝተሰርሑ መሰረታት ዝጽው",
+      "newCriterion": "መሰረት ሓድሽ",
+      "newCriterionName": "ቃል መሰረት የተሰነየን",
+      "criterionName": "ሽም መሰረት",
+      "criterionRubric": "ሩብሪክ",
+      "criterionRubricPlaceholder": "ዝሓለፉ መሰረት ምስክትው ፣ ትርጉም ክብጽሖ ዘለዎ ምውሳን መግለጺ – ኣብ ንምሳሌ፣ “ኩሉ ሕክምናዊ ናይ መውጽእታ መመዝገቢ ትእዛዝ'ው ኣብ መፍትሒ ፣ ኣይኮነን ናብ ዘይምትባል…”",
+      "criterionRubricHint": "እዚ ሩብሪክ ኣብርሳሕ ኣርብ ከም'ዝኾነ ከም መደባት MQM ሓበሬታታት ምእካብ ገብሮላ AI ይኸውን ይገብር።",
+      "criteriaEmpty": "ስምዓት መሰረታት ክፍል፡ ኣብ ምሳሌ – ዘይምስል ስደታዊ ባይታ፣ ቃላት ሕጂኡ ወይ ኩባንያ መደብ፣ ወይ ክልቲ ቦታ ምምልከት – ብምግባር ከም MQM ምምዕባለ መሰረታት ተሰብስቡ። ኣብኡ እዚ ገምገም ይሰበስባፈ እናውን ክትሰንበት ትኽእል።",
+      "deleteCriterion": "መሰረት ኣጽዳእ",
+      "manageCriteria": "ብኣገልግሎት ዝተሰርሑ መሰረታት",
+      "addCriteria": "መሰረታት ኣእትው",
+      "noUsableCriteria": "ብዙሕ ከም ምስክትው መሰረት ወይ ሩብሪክ ዘለዋ መሰረታት ስርጉ።",
+      "criterionRubricTooLong": "እዚ መስፈርሒ ብ {over}፡ ቁምፊ ግዜ ውፅኢቱ። ብኣኽባር ኣብ ኩሉ ውሳኔ ይልኣል፡፡ ቅድሚ ክተግበሩ ፣ ከይደፍኡዎ።"
+    },
+    "document": {
+      "emptyTitle": "ዝብዝሕ ደብዳበ ኣንባብ",
+      "emptyBody": "ኣብ ዘለኹሞ ኣገልጋሊ ዝብዝሕ መጽናዕቲ ወይ ጽሑፍ ብዛዕባ ደብዳበ፣ መላእኽ ኣካይዱ። ፍላጥ ኣብርኹም ብዛዕባ ምስ ዘይኮነ ወሲኑ ውሳነ።",
+      "generatePlaceholder": "ዝብዝሕ ደብዳበ ኣንባብ…",
+      "revisePlaceholder": "ንምልሳስ ዘለኻ ለውጢ ብዝሒ…",
+      "generate": "ምፍጣር",
+      "revise": "ምግማር",
+      "writing": "ኣብ ምጻፍ…",
+      "export": "ምልኣኽ",
+      "references": "ማረጋገጫታት",
+      "addReference": "ፋይል ወስኽ",
+      "uploading": "ኣብ ምውስኽ…",
+      "removeReference": "{name} ወስደን",
+      "referenceChars": "{chars} ፊደላት ዝወጹ ጽሑፋት",
+      "referenceEmpty": "ካብ {name} ጽሑፍ ምውጣእ ኣይተሳነን",
+      "uploadFailed": "ምውስኽ ኣይሳነን",
+      "untitledDocument": "ዚ-ርእስ ዘይብሉ ደብዳበ",
+      "generatedSummary": "ደብዳቡ ኣብ workspace ጸሓፍኹ። ኣተሓቐኑ ልውጡ ግዝፉ።",
+      "revisedSummary": "ደብዳቡ ኣብ workspace ልወጠስ።",
+      "runFailed": "ሓደ ጉድለት ተፈጺሞ፡ {message}",
+      "uploadBasis": "ካብ ብቑዓል ዘለኹም መጽሓፍ ጀምሩ",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "ውድብ ቃላትን ፅሒፍን",
+          "description": "ውድብ ቃላትን ፅሒፍን ክኸውን፡ ሓደ ተዋዲኡ ኣእታው ስለምዃን (US ወይ UK) ይግበር፡ ምልሳስ ይኸውን ጉድለት እዩ"
+        },
+        "consistency": {
+          "label": "ግጥሚት",
+          "description": "ትርጉም፣ ስሞም፣ ምርኣያን ምኽኣርን ኣብ ዝበለ ሓሳብ ከምዝገበረ ኣይፈለጥዎ"
+        },
+        "clarity": {
+          "label": "ግልጡን ምስክርነት",
+          "description": "ብግልጽነት ኣይትሓስብን ዘለዋ እዋናዎች፣ ዝረሓቡ ተሞክሮ መዋቅር"
+        },
+        "sensitivity": {
+          "label": "ክቡርነት",
+          "description": "ውሳኔ ኣቦልኦን ወንጉህንን ደያ ሃናነታውን ምርካብ (ኣርእስተ ጥያቄ ዘይደለን)"
+        },
+        "specAdherence": {
+          "label": "ምትእግባር ምስ spec",
+          "description": "ሕቶ ዝተኣተፈሉ ዶኩመንት spec ይከተል፡ ዝደለዩ ክፋላት ኣሎም፣ ብቐዳዒ ትውልዲ ይወፅኡ፣ ንምምኻኻል ናይኦም መምርሒ ይፈጽሙ።"
+        },
+        "toneAdherence": {
+          "label": "ምትእግባር ናይ ድምፂ ናይ ቅንፀ ቃል",
+          "description": "ሕቶ ዝተኣተፈሉ ናይ ድምፅን ናይ ቅንፀ ቃልን መመሪሕቲ ይከተል"
+        }
+      },
+      "severity": {
+        "minor": "ንእሽቶ",
+        "major": "ዋና"
+      },
+      "assess": "ጥራይ ተመርመር",
+      "assessing": "ተምርመራ ኣርእየ...",
+      "assessmentTitle": "ጥራይ ኣርእያት",
+      "criteriaPicker": "ዝምኽእል መደብ",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "ዝተገለፀ ምሕደራት",
+      "noEditsSuggested": "ኣይተገለፀን ምሕደር — ዶኩመንት ዝተመርጸ መደብ ኣላፈጠ።",
+      "acceptEdit": "ተረኺቡ",
+      "rejectEdit": "ኣተቓለሰ",
+      "acceptAll": "ኩሉ ተረኺቡ",
+      "rejectAll": "ኩሉ ኣተቓለሰ",
+      "editAccepted": "ተረኺቡ",
+      "editRejected": "ኣተቓለሰ",
+      "editUnapplicable": "ነዚ ክፋል ኣብ ሕጂ ጽሑፍ ምረጽን ኣልቦን — ኣይተተገበረን",
+      "editingBlockedPendingEdits": "እቲ ዝተገለፀ ምሕደር ንኸርእዉ ወይ ንተቓልስ ኣብ መጀመርታ ኣድርጉ",
+      "pendingCount": "{count} ተምባኺ",
+      "closeReview": "ጥራይ ኣርእያት ዝግ",
+      "showReview": "ኣርእያት ርኣዩ",
+      "showReviewPending": "ኣርእያት ርኣዩ ({count} ተምባኺ)",
+      "railAssessRequest": "ጥራይ ዶኩመንት ብዝተመርጸ መደብ ምኽኣር።",
+      "railAssessDone": "መርመር ተዓጺቡ፡ ውህብታት ኣብ workspace ኣሎ፣ {count} ዝተገለፀ ምሕደር(ታት) ንምርኣይ ይግበሩ።",
+      "spec": "Document spec",
+      "noSpec": "Spec ኣይተረኽበን",
+      "manageSpecs": "Specs",
+      "specs": "Document specs",
+      "closeSpecs": "Specs ዝግ",
+      "specsEmpty": "Spec ሓድሽ ፍጥሩ ንዶኩመንት ኣብ ቀዳዲ ቅርጸ-ቃል ንምውሳን — ዝደለዩ ክፋላት፣ ትውልዲ፣ ንርእስት-ክፋል መመሪሕቲ (ምሳና ናይ SitRep template)። Specs ኣብዚ እቲ መሳርሒ ብቐጻሊ ይቆመሉን ከምኡ'ውን እንተደለኹ ይተገበሩ።",
+      "newSpec": "ሓድሽ spec",
+      "newSpecName": "ቃል ዘይተሰናይ spec",
+      "specName": "spec ስም",
+      "specDescription": "መግለጺ (ኣካል ዘይደለን)",
+      "deleteSpec": "spec ሰርዝ",
+      "sectionHeading": "ርእስ ክፋል",
+      "sectionGuidance": "መመሪሒ (ኣካል ዘይደለን)",
+      "sectionRequired": "የግዳሒ",
+      "addSection": "ክፋል ወስኽ",
+      "removeSection": "ክፋል ደምስስ",
+      "generalGuidance": "ናይ ሓፈሻዊ መመሪሒ (ኣካል ዘይደለን)",
+      "tone": "ቅንፀ ቃል",
+      "noTone": "ቅንፀ ቃል ኣይተመረጸን",
+      "customCriteria": "ብቐጻሊ መደብ",
+      "manageCriteria": "ብቐጻሊ መደብ",
+      "closeCriteria": "ብቐጻሊ መደብ ዝግ",
+      "criteriaEmpty": "ብነርኡ ቦታ ምምርጫ ኣፅርፉ — እቲ ኣይኮነን ምምክር ወይ ዘመሳሰሊ ቋንቋ ኣካዊ ምምርማር ናብ ሰነድታትን ትግበሩ ዝኽእሉ ኣብዚ እተሰቃለ ኣብዚ መሳርሒ ተቐሚጡ ክንደይ ትጠቀሙ።",
+      "newCriterion": "ሓዲሽ መደብ",
+      "newCriterionName": "ዘይተሰናይ መደብ",
+      "criterionName": "ስም መደብ",
+      "criterionRubric": "ሩብሪክ",
+      "criterionRubricPlaceholder": "ሰነድታት ዝምልከት መደብ ምግባር በጃኹም ኣስተርሑ፣ ምሳና፡ \"ምስ ድሕሪ ኣብ ስራሕና ምስ አብዚ ዝተፈላለየ ፍሉይ ቃላት ኣይተጠቒምን፤ የቐንየልና ዝሓጎስናት ሰባት 'ሰብኣዊ ዝናገረና' ክብሉ…\"",
+      "criterionRubricHint": "እዚ ሩብሪክ ኣብ ገጻታት ምምርማርን ምውዳእን ምስ ብAI ኣብዚ መእተዊ እንተሃበ።",
+      "deleteCriterion": "መደብ ሰርዝ",
+      "profileTitle": "ፕሮፋይል ሰነድ",
+      "profileDocType": "ዓይነት",
+      "profileLanguage": "ቋንቋ",
+      "profileAudience": "ተቆጣጣሪ",
+      "profilePurpose": "ዓላማ",
+      "profileRegister": "ረጀስተር",
+      "profileTone": "ቃሊት",
+      "profileConventions": "መደባት",
+      "emptyHint": "በታሓት መስተግበሪ መጀመር፣ ካልኦት ምንባብ ብምብጻሕ ውድብካን ኣይሓይሽን፣ ወይስ ከም መጀመርታ አብ ፋይል ኣመልከት።",
+      "addSpec": "መርዓን ኣኣክል",
+      "addCriteria": "መደባት ኣኣክል",
+      "scopeFullDocument": "መደብ: ኩሉ ሰነድ",
+      "scopeSelection": "መደብ: ምርጫ — “{preview}…” ({count} ቃላት)",
+      "clearSelection": "ምርጫ ሰርዝ (ብኩሉ ሰነድ ሰርሕ)",
+      "reviseSelectionPlaceholder": "ብምርጫ ዘምግባር ንምቑያም መግለጺ ብርሃን ኣመልከት…",
+      "revisedSelectionSummary": "ነቲ ተመርጺ ክፋል ኣብ workspace ኣርአዩ ኣረከብኩ።",
+      "assessedSelection": "ምርጫ",
+      "undoEdit": "ምልሳሕ መዘንኸር",
+      "clearResolved": "ተፈታእኩሞ ኣጽዳእ",
+      "clearResolvedHint": "ተቐባልየን፣ ተረጋገጹን፣ ዝሓለፉን ምልሳሓት ካብዚ ዝርዝር ኣውጹ",
+      "autoClearResolved": "ተፈታእኩሞ ምልሳሓት ብናብርቲ ኣጽዳእ",
+      "import": "ኣስደንግድ",
+      "importReplaceTitle": "መደብ ክትቀይር ትደሊ?",
+      "importReplaceBody": "ኣስደንገዲ {name} ዝተጠቐመልካዮ መደብ ይቕየር። ኣብቲ ማስተናገድ ምስ ዝተኸውን ድማ ኩሎም ማስተዋል ዘለዎም ኣገልግሎታት ክትፈጽም ትትኽክል።",
+      "importReplaceConfirm": "ቀይር",
+      "editorMode": "ዘይሕጉስ ዘርእስቲ",
+      "editorModeRich": "ዝሓለፈ ፅሑፍ",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "ናይ ምቅጻል ምምኽንያቶም ኣቐዲሙ ዘሎ ርእስቲ ክቕየር ክኸውን ኣይተትኽክለን።",
+      "suggestChanges": "መቀየሪ ምልክትን",
+      "suggestChangesHint": "ከም ምልክታት እተካኣላት ተርእዩ፡፡ ንብፅዕቲ ማህደር ከምዚ ደሓን ኣይተኻአልን።",
+      "suggestChangesSelectionNote": "እንደገና ማስተካከያት ንምረከቡ ቀጻሊ እተተመጸኡ፡ ዝረኸብካ ክፋል ግዲ ዝመረጽኻዮ እዩ።",
+      "suggestedSummary": "{count} {count, plural, one {መቀየሪ} other {መቀየራት}} ምስጢራት ምርመራ ተሓቢሩ።",
+      "revisionSuggestionSummary": "ናይካ ዝተደሊ መቀየሪ ጥያቄ {count} {count, plural, one {እተሓተቐ መቀየሪ} other {እተሓተቑ መቀየራት}} ።",
+      "revisionCriterionLabel": "ዝተሰማማዐ ማስተካከያ",
+      "fallbackSelection": "ቀጻሊ ተኸዲኡ — ንምረከቡ ቀጻሊ ኣተሓባቡን።",
+      "fallbackLargeRewrite": "ቀጻሊ ተኸዲኡ — እተካኣላት ዋናውያኡ ማህደር ተቐየረ፣ ንፍሉይ ምልክታት እንደ ስነት ክትፈትኑ ኣይትኽእሉን።",
+      "fallbackReorder": "ቀጻሊ ተኸዲኡ — ክፋላት ቅድሚ ቐደም ክተሓዝኡ ክህበካ ኣይከኣልን፡፡",
+      "fallbackUnanchorable": "ቀጻሊ ተኸዲኡ — እተቐየሩ በተወሳኺ ክፋል ክምልክት ኣይተኾነን።",
+      "fallbackNoChanges": "ምልክታት ኣይተፈጸመን።",
+      "criterionRubricTooLong": "እዚ መስፈርሒ ብ {over}፡ ቁምፊ ግዜ ውፅኢቱ። ብኣኽባር ኣብ ኩሉ ውሳኔ ይልኣል፡፡ ቅድሚ ክተግበሩ ፣ ከይደፍኡዎ።"
+    },
+    "data": {
+      "emptyTitle": "ዳታ ኣስገብር ንምርመራ",
+      "emptyBody": "CSV, Excel ወይ JSON ፋይል ኣግብር፡ ወይ ቀጥታ መልክዑ። ነዚ ታሕቲ መደብ ንኽትኣተዉ ትኽእሉ፣ ምርምር፣ ብቃላ ቀጥታ ኣዝዩ፡ ከምኡውን ሓደ ሰነድ ፅርጋታት ክትወስዱ።",
+      "importFile": "ፋይል ኣስገብር",
+      "importing": "ኣብ ምውሳእ…",
+      "pasteData": "ዳታ ኣጽብእ",
+      "pastePlaceholder": "ኣብዚ CSV, TSV, ወይ JSON ኣጽብኡ…",
+      "import": "ኣስገብር",
+      "addFromSource": "ካብ ምንጪ ኣኣክል",
+      "extractHint": "ትኽእሉ ቃላት ኣጽብኡ ወይ ፋይል ምርጡ፤ ናይቲ ኣርኣያትኩም ዝምልከት ኵነታት ክተወግዱ ይኽእሉ። ዘይታወተ ዋጋታት ባዶ ይቆፅሩ — ሓደ ኣይተፈጠረን።",
+      "extractPlaceholder": "ዳታ ዝምድና ዘይብሉ ጽሑፍ ኣጽብኡ…",
+      "extractRows": "ረኣይቲ ምውጣእ",
+      "extractFromFile": "ካብ ፋይል…",
+      "extracting": "ብምውጣእ…",
+      "pastedSource": "ዝተጸበጠ ጽሑፍ",
+      "transform": "ለውጥ",
+      "transforming": "ብምለዋጥ…",
+      "transformPlaceholder": "ለውጥ መግለጺ ኣብ ቅድሚኡ፣ ምሳና፡ \"ወይ ቀጥታ ረኣይቲ በትረ 1000 ህዝቢ ኣኣክል\"…",
+      "transformCapHint": "ለውጥ ክሳብ {max} ረኣይቲ የተድልዎም። ብነዚ’ሲ ረኣይቲ ኣስወግዱ ወይ ፈልጡ ሞሉኡ ታብል ከብሉ።",
+      "undo": "ኣቆራእ",
+      "deleteSelected": "{count} ሰርዝ",
+      "deletedRows": "{count} ረኣይቲ ተሰሪዙ",
+      "selectAllRows": "ኩሉ ረኣይቲ ምረጽ",
+      "selectRow": "ረኣይቲ {row} ምረጽ",
+      "rowCount": "{count} ረኣይቲ",
+      "rowCapExceeded": "ኢዩ ይግበር {count} ረኣይቲ፤ ታብሉ ክሳብ {max} ይደልዎ። ዳታ ክፈልጡ ወይ ኣውጡ።",
+      "railExtractRequest": "ረዳት ዝርዝር ቦታ ናይ መሰረታዊ ሰነደ መዳበር ካብ: {source}",
+      "railExtractDone": "{count} ዝተረዳቱ ዝርዝራት ናብ መዳበር ተወስኹ።",
+      "railTransformDone": "መዳበሩ ተቀይሩ።",
+      "columnProfileFor": "ስታትስቲክስ ናይ {column} ኮሎን",
+      "profileMissing": "ዝተጎዱ",
+      "profileDistinct": "ዝበዝሕ ዘለዉ",
+      "profileRange": "ክልኢት",
+      "profileMean": "ኣማን",
+      "profileMedian": "መካኡ",
+      "profileTopValues": "ከምዚ ዘሎም ዋጋታት",
+      "filterColumnFor": "ልዚኦ {column} ፍልተር",
+      "filterContains": "ይዛበ…",
+      "filterMin": "ንእሽተይ",
+      "filterMax": "ኣብዚተይ",
+      "filterClear": "ኣንጻር",
+      "clearFilters": "ፍልተራት ኣንጻር",
+      "showingRows": "{shown} ዝርዝራት ካብ {total} ኣሪኡ",
+      "scopeLabel": "ወረዳ ስራሕ",
+      "scopeTable": "ኩሉ ({count})",
+      "scopeFiltered": "ዝተፍልተሮ ({count})",
+      "scopeSelection": "ዝተመርፁ ({count})",
+      "scopedInstruction": "{instruction} (ኣብ {count} ዝተመረፀ ዝርዝራት)",
+      "assess": "ውሳኔ ጥራይ",
+      "assessing": "ዝውሰን…",
+      "criteria": {
+        "validity": {
+          "label": "ርእስነት",
+          "description": "ትዕዛዝ ዘለዎም ዋጋታት ኮሎን ኣይነትን ተደፍኦ ዝገበረ ፈርዲን"
+        },
+        "consistency": {
+          "label": "ዕቤትነት",
+          "description": "ክሳብ መዳበር ዝኾኑ ዋጋታት ከመዘለኩም ዘይተቐየሩ (ምሳሌ፡ 'M' / 'Male' ዝኾኑ ልዩ ድምቦታት፣ ምውዳእ መዓስከላ፣ ወይ ድምብ ፦ ሂደት)"
+        },
+        "duplicates": {
+          "label": "ድገምታት",
+          "description": "ዝተዛዚሙ መርበቦታት ወይ ሓደ ግንባር/ሓደ ዝኽርብ ሃዋላ ክውን"
+        },
+        "plausibility": {
+          "label": "ኣገባብነት",
+          "description": "ኣብ ምምሳርን ዝያዳ ወይ ዘይተቐበሉ ዋጋታት"
+        }
+      },
+      "assessmentTitle": "እተምርሓት ጥራይ ዳታ",
+      "pendingCount": "{count} ዝጸበረ",
+      "closeReview": "ናብ ዝተዛወረ እተምርሓት ጥራይ ዝውድኣ",
+      "suggestedEdits": "ዝተገረሞ መገሳጽታት",
+      "noEditsSuggested": "መገሳጽቲ የብሉን — ዳታ ምምርሓት ዝተመረፀ ስርዓት ሰሊሑ.",
+      "acceptAll": "ኩሉ ተቐቢሉ",
+      "rejectAll": "ኩሉ ተተው",
+      "acceptEdit": "ተቐቢሉ",
+      "rejectEdit": "ተተዉ",
+      "editAccepted": "ተግብሩ",
+      "editRejected": "ተተወ",
+      "editUnapplicable": "ገዛዚ ሴል ከኣ ቐይሩ፣ ኣይተግበረን",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "ዝተመርፁ መሰል መደባት",
+      "severity": {
+        "minor": "ንእሽቶ",
+        "major": "ኣብዚተይ"
+      },
+      "editLocation": "ረድኤት {row} · {column}",
+      "editLocationRow": "ረድኤት {row} (ምስዳድ)",
+      "showReview": "ናይ ግምገማ ርኣይ",
+      "showReviewPending": "ናይ ግምገማ ርኣይ ({{count}} ናይ ምግባር ተደጊሙ)",
+      "assessedFiltered": "ተቕራጺ ረድፎት",
+      "assessedSelection": "ተመረጹ ረድፎት",
+      "assessedSample": "ናይ ናሙና {shown} ካብ {total}",
+      "railAssessRequest": "ጥራይታ ናይ ታረት ({count} ረድፎት) ብተመረጡ መሰረታት ግምገም።",
+      "railAssessDone": "{count} ናይ ጥራይታ-ዝተመነጠቑ መጠንቀቕታት — ኣብ መድብ ርኣዮም።",
+      "insights": "ትርፍ ናይ ሓሳብ",
+      "chartKind": "ዓይነት ገበታ",
+      "chartBar": "ባር (ብመደብ)",
+      "chartHistogram": "ሒስቶግራም",
+      "chartLine": "መስመር (ብዘመን)",
+      "groupByColumn": "ብመደቦም ዕሰር",
+      "dateColumn": "ዕለት ዕሰር",
+      "valueColumn": "ዋጋ ዕሰር",
+      "aggFn": "ሓባራዊ መጠን",
+      "aggCount": "መቁጽጻር",
+      "aggSum": "ድምር",
+      "aggMean": "መንጎ",
+      "chartTruncated": "ንላዕሊ {max} ቡድናት ተቀሊጡ እዩ።",
+      "chartNoData": "ኣብ ረድፎት ዘለዎ ሓቅነት ግምገማ የለን።",
+      "chartBarAria": "ባር ገበታ ብ{column} ዝተመደበ",
+      "chartHistogramAria": "ሒስቶግራም ናይ {column}",
+      "chartLineAria": "መስመር ገበታ ናይ {column} ብዘመን",
+      "editStructure": "መደብ",
+      "defineStructure": "መደብ ውስኽ",
+      "schemaHint": "ሜዳታት ናይ ውድብካ መንእሰያት ውስኽ። ኣላማ ዝለዎም ሜዳታት ኣብ መግቢ ዝተጎዱን መባዕታታት ይሕንዱ፣ ዓይነቱ ሜዳ ድምበት ምቅዳም ትሕወስ ተቓላዒ እንተዘይኮነ ጎድኦት ባዶ ይኹኑ።",
+      "schemaFieldName": "ስም ሜዳ",
+      "schemaFieldType": "ዓይነት ሜዳ",
+      "schemaRequired": "ኣላማ ዘለዎ",
+      "schemaAddField": "ሜዳ ወስኽ",
+      "schemaDeleteField": "ሜዳ {field} ሰርዝ",
+      "schemaApply": "መደብ ፈጺሙ",
+      "schemaCancel": "ሰርሕ",
+      "schemaEdited": "መደብ ናይ ታረት ተስተኻኸለ",
+      "schemaCellsConverted": "{count} ሴሎት ናብ ዓይነታት ሓደሽቲ ምቅዳም ኣይከኣሉንን፣ ሕቶዎም ሃልወኻዮም።",
+      "missingFieldPolicy": "ጎድኦ ውሱን መረጋገጲ",
+      "policyStrict": "ጽኑዕ — ዘይ ተሞሉኦም ረድፎት ኣትተቆበልን።",
+      "policyFlag": "ናይ ምልክታ — ኣገብ እናሰናኻዎ",
+      "policyLenient": "ረስተምነት — ራህቦም ኣገብ",
+      "droppedIncompleteRows": "{count} ረድፎት ናይ ዝድኽኦም መስፍን ሜዳታት: {fields} ተሪፉ።",
+      "dismiss": "ኣልፎ ምትእው",
+      "requiredColumn": "ኣላማ ዘለዎ ሜዳ",
+      "flagMissingRequired": "ኣላማ ዘለዎ ሜዳ ባዶ እዩ",
+      "flagPendingEdit": "ፈትኑ መጠንቀቕቲ ክገብር ይብቃ እዩ ኣብዚ ሴል - ኣብ ጥራይታ ግምገማ ርኣየዋ።",
+      "fromPhoto": "ካብ ፎቶ",
+      "fromPhotoHint": "ናይ ወረቐት ቅፅ ወይ ገበታ ፎቶ ውስኽ — ውሲኡ ተመዲቡ ውሳኔ ዳታ ይኸይድ ኣብ ፎቶ ትረኣዮ።",
+      "readingPhoto": "ፎቶ ተቐቢሉ ኣሎ…",
+      "photoBatchName": "{count} ፎቶዎት",
+      "railPhotoRequest": "ተመዲብ ዳታ ካብ {count} ፎቶ(ታት): {name}",
+      "railPhotoDone": "ካብ ፎቶ {count} መዝገብ(ታት) ተወሓዱ። ኣብ workspace ፎቶን ምስ እቲ መዝገቦት ኣረጋግፅ።",
+      "sourcesLabel": "መንገዲታት",
+      "openPhotoQc": "መረጋገጺ ውሑስ ን {name} ኣረጋግፅ",
+      "qcRowsFromPhoto": "{count} ረድኦታት",
+      "qcClose": "መረጋገጺ ፎቶ ዝግብ",
+      "qcZoomIn": "ቅብሊ",
+      "qcZoomOut": "ርቅዒ",
+      "qcPrevPhoto": "ፎቶ ቀዳማይ",
+      "qcNextPhoto": "ፎቶ ቀጻሊ",
+      "qcImageLoading": "ፎቶ ኣብ ምጽዓን …",
+      "qcImageFailed": "ፎቶ ኣይከኣለን ክትጸዓን።",
+      "qcImageAlt": "ፎቶ መንገዲ: {name}",
+      "qcHint": "ዘለኹም ሰንጠረይ ከም እዚ ፎቶ ኣብዚ ዘሎ ረድኦታት ብብሉይ። ቦታኣት ስሙኡ ምምሃር ንፎቶ መሰረት ኣርኣዩ፣ ዘይዛመዱ ረድኦታት ይቕየሩ ወይ ይሰርዩ።",
+      "sourceFilterChip": "ረድኦታት ካብ {name}",
+      "clearSourceFilter": "ኩሉ ረድኦታት ድሓን ርኢ",
+      "viewAsRecord": "ናይ ቅፅሪ መርዓት",
+      "viewAsTable": "ናይ ሰንጠረይ መርዓት",
+      "recordEmpty": "መዝገብ የለን እቲ ግዜ።",
+      "recordOf": "መዝገብ {index} ካብ {count}",
+      "recordPrev": "መዝገብ ቀዳማይ",
+      "recordNext": "መዝገብ ቀጻሊ",
+      "recordBooleanUnset": "(ባዶ)",
+      "flagsChip": "{count} ግልጋሎት",
+      "flagsChipOpenReview": "መረጋገጺ ጥራይ ክክፈት",
+      "flagsChipMissingOnly": "ኣገደስቲ ዓይነት ቦታኣት ባዶ እዮም — ሙሉኹምካ ወይ ዝምልከቶ መዋቅሩ ቕየሩ",
+      "autoCheck": "ሓደጋዊ መርመራ ዳታ ኣብ ምትሓተት",
+      "autoCheckHint": "ካብ ፎቶ ወይ ዶኩመንት ዳታ ክትልክሉ ደቂቕ ዳታ ናይቲ ሓደጋዊ መርመራ ይምርምር",
+      "checkingNewRows": "ረድኦታት ሓድሽ ኣብ መርመራ ጥራይ …",
+      "ingestCheckFailed": "ሓደጋዊ መርመራ ጥራይ ኣመናኸትን ኣይተሳነን ({message}) — ብ Assess quality ትሕቲ እትከኣል ትበጽሕ።",
+      "assessedIngest": "ሓድሽ ተወሳኺ ረድኦታት",
+      "transpose": "መለወጥ",
+      "transposeAxisColumn": "ስም",
+      "transposeSuggestion": "እዚ ሰንጠረዥ ተለዋዋጭ እዩ፡ ረዳት ኣቓራቢታት እዮም እና ንዕኡ ዕቃታት እዮም። እዋንካ እንድዩ ዕቃታት ክሎም ደርዩ ቦታውን ከም ረዳት ይለወጡ?",
+      "transposedTable": "ኣቀዲሙ ዝወሰኑ መስመራትን ኮሎናትን",
+      "columns": "ኮሎናት",
+      "columnsHidden": "ኮሎናት ({count} ተሰውሮም)",
+      "showAllColumns": "ኩሉ ኣርኢ",
+      "chartScatter": "ምቕላብ (x ንከም y)",
+      "chartPivot": "Pivot ሰንጠረዥ",
+      "xColumn": "X ኮሎን",
+      "yColumn": "Y ኮሎን",
+      "splitByColumn": "ብኮሎን ክፋል",
+      "splitNone": "ንኡስ ተከፊል የብሉን",
+      "pivotValueColumns": "ክብሪ ኮሎናት",
+      "aggMin": "ንእሽቶ",
+      "aggMax": "ኣበራ",
+      "aggMedian": "መማእከል",
+      "chartSeriesTruncated": "ኣብ ጭራዊ {max} ተደራሲት ተቀምጦም ምስር፣",
+      "chartPointsTruncated": "{max} ተመሳሳሊ ነጥብታት ኣርአየኒ",
+      "chartScatterAria": "ምቕላብ ሕብረት {x} ንከም {y}",
+      "pivotTableAria": "ኣብ {column} ዝተደራሰነ Pivot ሰንጠረዥ",
+      "schemaFormula": "ፎርሙላ",
+      "schemaFormulaPlaceholder": "ልክ፡ [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "ንውነት ዝሓሸተ ቦታ፡ ካብ ካብኡ ከም [Name] ስምዎታት ምብጻሒ ይተኻእሉ፡  + - * / %, ()፣ እና round, abs, min, max ይድረስ፡። ክብሪ ብምሕያው ኤልያሳ ይተቐይሩ እና ሕጂ ብነጻ ኣይተስተኻኸሉን።",
+      "schemaFormulaSyntaxError": "ፎርሙላ ዘይስራሕ",
+      "schemaFormulaUnknownRef": "ዘይፍለጥ ቦታ፡ {ref}",
+      "schemaFormulaArityError": "ዘይስእኑ መጠን ኣተሓድሶ ናብ {fn}",
+      "schemaFormulaCycleError": "ብፎርሙላታት ዝተዛረቡ ርሓበል ኣገባብ",
+      "derivedColumnTitle": "ተላዋጭ፡ {formula}",
+      "derivedFrom": "ካብ {formula} ተላዋጭ",
+      "takePhoto": "ፎቶ ኣንሲስ",
+      "takePhotoHint": "ቅድመ-ፎቶ ፎርም ወይ ሰንጠረዥ ብካሜራኻ ኣንሲስ — ምትኩም ዳታ ወሲዱ ናብ ምስሉ ይሓውስ።"
+    },
+    "map": {
+      "emptyTitle": "ዳታኻ ኣብ ካርታ ውሱኽ",
+      "emptyBody": "sitrep፣ line list፣ ግዚኣት ቦታ የሪኣ ዝብል ወይ ዶኩመንት ኣብ ካርታ ምምሳር ትኽእል። ቦታታት ኣብ AI ብዝኾአ ስም ይስርሕኩምዎ፣ ን ArcGIS ወይ ካልኦት GIS መሳርሒ ትወግድ ትኽእል።",
+      "inputPlaceholder": "ዝመጸ ቦታታት ቃላት ሰቐቑ…",
+      "uploadFile": "ፋይል ውጽኢ",
+      "pastedSource": "ናይ ሰቐቒ ጽሑፍ",
+      "mapIt": "ካርታ ልኹ",
+      "finding": "ቦታታት ኣብ ምርፋሕ…",
+      "featureCount": "{count} ቦታታት",
+      "featureCapExceeded": "ካርታ ናብ {max} ቦታታት ድማ ይገደድ።",
+      "noneFound": "ቦታ ኣብ ሓደ ዶኩመንት ኣይተረኸበን።",
+      "lowConfidenceNotice": "{count} ቦታታት ብትንታነት ዝኣቱ ኩነታት ናብ ካርታ ከም እዚ ኣታሓዘ — ድሓን ንኣገልግሎትካ ምህባካ ናይ እታ ካርታ ኣረጋግፅ።",
+      "tilesOffline": "ናይ ካርታ ጥራይ የለን — ዝርዝሩ ናይ ቦታታት ይሰርሕ።",
+      "disclaimer": "ኮኦርዲናታት AI ካብ ሞዴል እዮም ዝቐሰለሉ እንተዘይካብ geocoding service — ቅድሚ ናይ ስራሕ ኣጻዉዒ ኣረጋግፅ። ናይ ካርታ ጥራይ ካብ ውሽጣዊ tile server ይጸዓኡ። ዳታኻ ደ however ካብኡኽ ይኩኣ።",
+      "flyTo": "{name} ኣብ ካርታ ርኢ",
+      "removeFeature": "{name} ኣውጽእ",
+      "expandFeature": "ናይ {name} ብዙዕ ዝርዝር ርኢ",
+      "collapseFeature": "ናይ {name} ዝርዝር ኣሕፅፅ",
+      "detailsParent": "ክፋል ካብ {parent}",
+      "railRequest": "ኣብ {source} ዘሎ ቦታ በዝሓል ኣብ ካርታ ልኹ",
+      "railSearchRequest": "ኣብ መደብ መሰልኹ፣ ቦታታት በዝሓልኩ ኣብ ካርታ ልኹ፡ {query}",
+      "railDone": "{count} ኣካባቢ(ታት) ተጣጣሙ። ንነዚ ናይ ውሑድ ምምእና ኣካባቢታት ኣብ ምዝገባ ፈትኑ።",
+      "searchToggle": "ምርመራ ኣብ ድሕሪ መለለይ",
+      "searchToggleHint": "ብምኻንያ ጽሑፍ ዘይኮነ ንእትምረምር ምርመራ ብ ድሕሪ መለለይ ግበር፤ ናይ መደብ ውጽኢታት ክትዓተዩ ይገልጻ።",
+      "searchPlaceholder": "ኣብ ድሕሪ መለለይ ዝተኻአነ ምርመራ፣ ምሳሌ፡ \"ቆለራ ምምፋዕ ምብራቕ ኣፍሪቃ 2026\"…",
+      "searchAndMap": "ምርመራ & ኣጣጣም",
+      "searching": "ኣብ ምርመራ…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "ግንኙነት፡ {kind}",
+        "unresolved": "{count} ግንኙነት(ታት) ዝተመልከቱ ኣካባቢታት ኣብ ካርታ ኣይተሓዱን ክፍሊት ተመልሳ።"
+      },
+      "confidence": {
+        "high": "ብርቱዕ",
+        "medium": "መካነ",
+        "low": "ዝተንእሰይ"
+      },
+      "prominence": {
+        "primary": "ዋና ኣካባቢ",
+        "secondary": "ናይ ድግፍ ኣካባቢ",
+        "mention": "ብምቑመጥ ብልከት"
+      },
+      "prominenceMentionHint": "እዚ ቦታ ብምቑመጥ ብልኩም ይተጠቀመ፡ ኣብ ካርታ ብንኡዲ ይተረአየ እንተዘይኮነ’ውን ኣብ መጀመርታ ቀዳማዊ ማህደር ኣይኮነን።",
+      "dates": {
+        "since": "ካብ {date}",
+        "range": "{start} – {end}",
+        "ongoing": "ቀጺሉ ኣሎ"
+      },
+      "filters": {
+        "label": "ብ መደብ ምጽናት",
+        "other": "ካልእ",
+        "clear": "ኣፍልጦ",
+        "showing": "{shown} ካብ {total} ኣካባቢታት",
+        "noneMatch": "ንእዚ ዘሎ ድኳና ምጽናት ግብሪ ዘይምምላእ ኣካባቢ የለን።"
+      },
+      "dateFilter": {
+        "label": "ዕለታት",
+        "from": "ካብ",
+        "to": "ናብ",
+        "fromAria": "ካብእዋን ብቐፃሊ ኣተወቲ ግብሮታት ኣሪኑ",
+        "toAria": "ክሳብእዋን ኣተወቲ ግብሮታት ብቐፃሊ ኣሪኑ",
+        "clear": "ዕለታት ኣፍልጦ",
+        "eraChip": "ኣብ {label} ዘሎ ግብሪ ብቑጽሪ ኣሪኑ"
+      },
+      "timeline": {
+        "toggle": "እዋናዊ ቅዲ-ምልክት",
+        "play": "እዋናዊ ቅዲ-ምልክት ኣቕርብ",
+        "pause": "እዋናዊ ቅዲ-ምልክት ምዕጋድ",
+        "eras": "ዘመን እዋናዊ ቅዲ-ምልክት",
+        "jumpTo": "ወደ {label} ቅልጡፍ",
+        "slider": "ቦታ ኣብ እዋናዊ ቅዲ-ምልክት",
+        "showUndated": "ዕለት ዘይሕብ ኣካባቢታት ርኣዩ",
+        "activeCount": "{count} ንጡፍ ኣሎ",
+        "jump": {
+          "start": "መጀመርታ",
+          "yearsLater": "{count, plural, one {1 ዓመት ቀጺሉ} other {# ዓመት ቀጺሉ}}",
+          "monthsLater": "{count, plural, one {1 ወርሒ ቀጺሉ} other {# ወርሒ ቀጺሉ}}",
+          "daysLater": "{count, plural, one {1 መዓልቲ ቀጺሉ} other {# መዓልቲ ቀጺሉ}}",
+          "appears": "{count, plural, one {1 ንግግር ተሓቢሩ} other {# ንግግራት ተሓቢሩ}}",
+          "ends": "{count, plural, one {1 ምውዳእ ተሓቢሩ} other {# ምውዳኣት ተሓቢሩ}}",
+          "progress": "ቀንዲ {index} ካብ {total}"
+        },
+        "precision": {
+          "minute": "ናብ ደቒቕ",
+          "hour": "ናብ ሰዓት",
+          "day": "ናብ መዓልቲ",
+          "month": "ወርሒ-መደበ ቀንዲ",
+          "year": "ዓመት-መደበ ቀንዲ",
+          "mixed": "(ተቓላበለ)"
+        },
+        "pacing": {
+          "toggle": "ግዜ መቆጣጠሪ",
+          "cardDuration": "ካብ መድረኽ እያ ቦታ ርኣየ",
+          "seconds": "{seconds} ሰከንድ",
+          "maxCards": "ቦታታት ናይ እያ ቀንዲ ዝተረከቡ",
+          "hint": "ፍርጥራጣ ቀንዳት ሓቢርኦም ብሓሳብ ይወስዱ።"
+        }
+      },
+      "granularity": {
+        "site": "ሰብሳብ",
+        "city": "ከተማ/ከበሮ",
+        "district": "ዞባ",
+        "region": "ክልል",
+        "country": "ሃገር"
+      },
+      "granularityAreaHint": "እዚ ቦታ ናይ ሓሙኹሽ መጠን ክትረክብ ይፈትኑ፣ ግን ቅድሚ ስለይ ኣይትሃበኡን ድማ መጥን ወይ ድንገይ ኣይኮነን።",
+      "containerHint": "ካብኡ ንሓንቲ መጠን ቦታታት ዝተኣቱ፡ እዚ ብቐንጡ ብምንጽር ብበለ ይበጽሕ።",
+      "legend": {
+        "toggle": "መርኣያ",
+        "title": "ካርታ ከመይ ክትኣአትዉ",
+        "color": "ሕብሪ፡ መርገጺ ምምእና (ሰማያዊ ብርቱዕ፣ ወርቃዊ መካነ፣ ቀይሕ ዝተንእሰይ)",
+        "size": "መጠን ናብዚ ቦታ ዝያዳ ብምኽንያት",
+        "area": "ተቀዳሚ ክብደቲ ዞባ፣ ክልል ወይ ዝርዝር ከባቢ ምግልጋል",
+        "container": "ጽቡቕ ግርጌ፡ ዝሓዘ እተወሃበ ክሳብ እያ ዝተዕርፈ ከባቢ",
+        "precisionHalo": "ደቂቕ ምክትል (ኣብ ግልግሎት ግዝያዊ ንደጋ): ሓደ ክስራ ኽፉል'ዩ ከምዚ ወርሒ ወይ ዓመት ብምውጽእ፡ ቅድሚ ግዜ ኣይትታሰሩን።"
+      },
+      "sourceLabel": "መንገዲ፡ {name}",
+      "fetchAndMap": "ኣምጻእ & ካብ መድረኽ",
+      "fetchingPage": "መጽሓፍ ኣምጻእ...",
+      "railUrlRequest": "ናይ ቦታታት ኣብ {title} ({url}) ምንዳብ ኣወሓትን ካብ መድረኽ"
+    },
+    "shell": {
+      "showConversation": "ውይይት ርኣዩ",
+      "hideConversation": "ውይይት ሰግሩ",
+      "workspaceTab": "መደብ ስራሕ",
+      "conversationTab": "ውይይት",
+      "paneTabsLabel": "ፓኔታት ውልቀ ስራሕ",
+      "railEmpty": "መልስን ምምዝጋብን ናይ መርሒ ጽቡቕ ኣብዚ ይቕረብ።",
+      "railInputPlaceholder": "መላእ ጽቡቕ ርአዮ…",
+      "assistantThinking": "እትዕርባ…",
+      "sendMessage": "መልእኽቲ ልኣኽ",
+      "stopGenerating": "ምፍጣር ዕወት",
+      "loadingWorkspace": "መደብ ስራሕ እዚ ተጻወቲ…",
+      "unknownType": "እዚ ውይይት ዘይትረዳኦ ዓይነት workflow ተጠቒምካ። ታሪኽ ውይይት ታሕቲ ተረኽበሉ እዩ።",
+      "untitled": "ዓዲ ውይይት",
+      "toggleMenu": "ምዝዋር መኑ",
+      "model": "መደብ ዝተጠቐሙ ናይዚ ውልቀ ስራሕ"
+    },
+    "tabs": {
+      "label": "ምዝናና ሞዴ",
+      "chat": "ቆይታ",
+      "chatDescription": "ብመላእክቲ ዘለኻ ዋናዊ ቆይታ"
+    },
+    "discard": {
+      "title": "እዚ መፃፍቲ ንትጥል?",
+      "body": "ናብ {target} ምቕያር ዝጀመረካዮ ስራሕ ካብ {current} ይወጽእ።",
+      "confirm": "ኣጥፍእ"
+    }
+  },
+  "connectors": {
+    "title": "ተጠሊያት",
+    "description": "መሳርሒ ደገ ብ Model Context Protocol (MCP) ርከብ። በዚ ደርድር ዝተጠሉዩ መሳርሒታት ኣብ chat ሞዴልታት ይሰጋገሩ፡ ኩዑል ጥሪ ሞዴሉ ኣብቲ ኩነታቱ ኣካይዶ ይኸውን።",
+    "localOnlyNote": "ካብ ንናይ ትካታይ ፈጺሞ ትበጽሓ። Access keyታት ይቑጽሉ፣ ኣብዚ መሳርሒ ኣብ እቲ app እዩ ንናይ ጥሪ ንኣብ ምስ ይሕሰን፣ ኣይተታሓወሱን።",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "ማህደራት ድለ ፈትኑ፡ ጉዳያትን ጥሪታትን ኣኣስኩ።"
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "ተግባራትን ፕሮጀክታትን ፈትኑ፣ ኣኣስኩ፣ ምስያዝኩ።"
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "ዝተለቕሉ ምንጮታት ዳታ፣ ቁፅሪ ወንበርን ዘፈለጡ መሳይታትን መርመር።"
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "ናይ Salesforce እታተታትካ መፅሓፍቲ ስሩዕና፣ ኣርኣዩን ዘይኮኑ ድማ ኣቓይሉ።"
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "ዕላማታት ማህበራዊ ሚዲያ ኣብዛ ቅድመ፣ መዕረፅን ምህባን ማምለእ።"
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "ናይ ማህበራዊ ሚዲያ መደብ ገጽታት ኣቕርብን ምላሽ ልእኽ።"
+      }
+    },
+    "connect": "ርከብ",
+    "connected": "ተዓጽዊ",
+    "tokenEndsIn": "…ብቁጽሪ ••••{last4} ይሕውን",
+    "disconnect": "ምቁጽር",
+    "toolCount": "{count, plural, =1 {1 መሳርሒ ይረክብ} other {# መሳርሒታት ይረክቡ}}",
+    "patLabel": "ብዙሕ ኣገባብ ቶክን",
+    "createTokenLink": "ቶክን ፍጠሩ",
+    "tokenScopeHint": "ኣብዚ መሳርሒታት ዝደሊ ኩነታት ዘለዎ ቶክን ተጠቂሙ።",
+    "validating": "ተዋዪነት ኣደላይ…",
+    "validationFailed": "ምብጻሕ ኣይተዓቀበን። ኣድራሻን ተመልከቱ እናኣደልዩ ፈትኑ።",
+    "authFailed": "ሰርቨሩ ቶከኑ ኣልተቐበለን። ኣብርሑን እናኣደልዩ ፈትኑ።",
+    "tokenRequired": "ቶከን ኣላውጽኦ ይግበሩ።",
+    "enableServer": "ኣብ ቻት ዝተዘጋጀ",
+    "arbitraryTitle": "ካልኦት MCP ሰርቨራት",
+    "arbitraryToggle": "ካልኦት MCP ሰርቨራት መፍታው ፍቃድ",
+    "arbitraryWarning": "እዚ ተመሳሳሊ MCP ሰርቨር ዘራእየሉ ብዛዕባ መልእኽቲ ምልክት ይኽእሉ። ዝተቃጸመሉ ሰርቨራት ብጥልያይ ክብጻሕ ይመርሑ። ኩሉ መተግበሪ ግና ንምፍታት ፍቓድኩም ይጠይቕ።",
+    "addServer": "MCP ሰርቨር ወስኽ",
+    "editServer": "MCP ሰርቨር ምዕዳስ",
+    "serverName": "ሽም",
+    "serverUrl": "Server URL",
+    "nameRequired": "ሽም የግበር እዩ",
+    "urlRequired": "URL የግበር እዩ",
+    "invalidUrl": "ናይ ሕዝባዊ https:// ኣድራሻ ኣእቱ",
+    "namePlaceholder": "ኣነ MCP ሰርቨር",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "የማንነት ቶከን (ኦፕሽናል)",
+    "keepTokenPlaceholder": "ቶከኑ ዝሓለፈ ክቅርበልኩም ከምዚ ባዶ ይተዉ",
+    "disconnectedToast": "{name} ግንኙነት ተቋረጠ",
+    "save": "ኣቐምጥ",
+    "connectWithProvider": "ብ {name} ሰርቨር ተገናንቦ",
+    "useTokenInstead": "ተቀይሮ ቶከን ተጠቒም",
+    "oauthWaiting": "ፍቓድ ተሰቕሊ ኣሎ…",
+    "oauthFailed": "መእተዊ ናይ ግባ ተዓቢዩ። እናኣደልዩ ፈትኑ።",
+    "oauthDenied": "እተኣሳኸነ ኣብ ሰጋራ ተቃውሞ ተሰጊሑ።",
+    "oauthTimeout": "ግባ ጊዜ ኣብቲ ሓደጋ ኣይተፈጸመን። እናኣደልዩ ፈትኑ።",
+    "oauthCancelled": "ግባ ተቋረጠ።",
+    "oauthUnavailable": "እዚ መተሓለፊ ኣብዚ እቲ connector ውሽጢ ኣይተዘጋጀን። ተቀይሮ ቶከን ተጠቒም ወይ ሓላፍኻ ኣካውንት ንምዝጋብ OAuth app ረኣዩ።",
+    "ownAppToggle": "ናይካ ዝሓለካ OAuth app ተጠቒም",
+    "ownAppHint": "ኣብካ በጀት / ቦታ / ቅድሚ ኣቆራጺ ካብ {name} ኣካውንት ናብ ታሕቲ ምንቢብ ዝስዕብ ናይ OAuth app ምምዝጋብ ኣድርጉ። ትሕዝቶ ኣብዚ ኣእቱ። ዝታሃደሰ ምስሊኩም ህዋጡ ተመንጣጠኑ።",
+    "ownAppCustomHint": "ብፍቓድኻ ናይካ ዝሓለካ OAuth መሰንብቲ ብቲ ትሕትና ኣእቱ፤ ምስ ባዶ ብትዉ ዊን ብተስፋፋ ግንኙነት ትምዝገቡ።",
+    "ownAppInUse": "ብናይካ ዝሓለካ OAuth app ተገናኑ።",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client secret (እንተሎ ዓፍዋኻ)",
+    "redirectUriLabel": "Callback / redirect URL ንምዝጋብ",
+    "reconnect": "ዳግማይ ተገናነቡ",
+    "needsReauth": "ዳግማይ ግንኙነት የድልዩ",
+    "disconnectOauthNote": "ክብዛሕ ዝበለ ኣቕሓቂ ኣብዚ ዝርከብ መሳርሒ ብቑጽሪኡ ይተረፈ። ብሙሉ ለውጢ ፈታዊ ዝያዳ Apps እቲ {name} account ኣብ ናይካ ኣካውንት ኣስተዋውቱ።",
+    "authModeLabel": "ኣድሓንነት",
+    "authModeNone": "ምንም ኣይተመደበን",
+    "authModeBearer": "ኣገባብ ቶከን",
+    "authModeOauth": "ብ Provider (OAuth) ግባ",
+    "oauthCustomHint": "ብሕጂ ኣእቲኹም ዝሓለወ Server provider ብ ሓደ መስክ ናይ ፈጂኡ መልእኽቲ ይብል።",
+    "saveAndSignIn": "ኣቐምጥ ንግባ",
+    "oauthCallback": {
+      "title": "ፍቓድ ተዛዚሑ",
+      "missingState": "ኣብዚ ናይ ፍቓድ ኣይኮነን",
+      "close": "ነቲ window ዝተኻእልዎ ዝዘምታ ክትመለሱ ትኽእሉ።",
+      "closeButton": "Window ዝዘምታ"
+    },
+    "oauthNoAppConfigured": "ብ {name} ክትብቅል ኣብዚ ምጥናት ኣይተተወኸኡን። ብ ናይካ ናይ OAuth app ምዝገብ ክትዳለዉ ክኸውን ይኽእል።",
+    "adminConnectorsTitle": "ካብ ውሽጢ ውድብኹም",
+    "adminConnectorsDescription": "ተገናኢቶ ኣቢሉ ፈጻሚ ዝምድን ማህበረ-ተጋሩ ይሰምዑ። ዝተለዋዋጦ ኣካይዱ እንታይ ከይትረኣየዩ ይወሰን።",
+    "managedByOrg": "ብውድብኻ ዝተመሓየሸ",
+    "connectorOauthNotConfigured": "ናይዚ ማህበረ-ተጋሩ ዕድል ዘለዎ ምዝገባ ሙሉእ ኣይተወዳአን። ኣስተዳዳሽካ ኣድራግ።",
+    "yourConnectorsTitle": "ናይካ ተዘራቢት",
+    "addTitle": "ተዘራቢት ኣኣጽእ",
+    "addDescription": "ስጋብ መሳርሒ ምምልእ ምርጫ ኣድርጋ። ኴም ምርጫ ኣድርጉ ብዛ ኳ ኣካውነት ትወስና።",
+    "add": "ኣኣጽእ",
+    "filterLabel": "ተዘራቢታት ፍልስል",
+    "filterPlaceholder": "ተዘራቢታት ድለ",
+    "noMatches": "ተዘራቢታት ን “{query}” ኣይመሳሰሉን።"
+  },
+  "modelSources": {
+    "connectButtonShort": "ሞዴል ምንጪ ምትሕናው",
+    "addAnother": "ካልኦት ሞዴል ምንጪ ደምር",
+    "edit": "ኣርትዕ",
+    "disconnect": "{name} ብቕናጽ",
+    "disconnectedToast": "{name} ተቐይሩ",
+    "modelCountLabel": "{count} ሞዴላት",
+    "loadingModels": "ሞዴላት ተመጽዓኡ...",
+    "noModelsAvailable": "ካብዚ ምንጪ ሞዴላት የብሉን",
+    "sourceUnreachable": "ነዚ ምንጪ ክትረኽቦ ኣይተኻኣለን። ንኣካውንትካ መኻነ ድማ ሰርቪሱ ድሕሪ ግዜ ኣይተሰርኦን ይኸውን።",
+    "retry": "ተሰርዙ",
+    "connectFoundryAccount": "Microsoft Azure Foundry መለያ ምትሕናው",
+    "connectFoundryDescription": "ካብ ኣካውንት ናይ Azure Foundry ዘሎኻ ሞዴል ምምዕባላት ኣግናኡ። ብወገናኻ Azure ፈቐደኻ ክሳብ ብጸንዐኻ ዝርከብ፣ ውሑድ ውዕል ሞዴላ ናይ መተግበሪ ኣይግበርን።",
+    "selectModelsDescription": "ካብዚ ኣካውንት በርቱዕ ዝቭዕስ ሞዴል ምምዕባላት ይመርጹ።",
+    "editConnection": "ትሕናዊ ገጽታ ኣርትዕ",
+    "nameLabel": "ስም",
+    "namePlaceholder": "ምሳሌ፡ My Team Sandbox",
+    "nameRequired": "ስም ምንጪ ይግደፍ",
+    "foundryAccountLabel": "Foundry መለያ",
+    "enterManually": "ብእግሪ ኣእቱ",
+    "browseResources": "ምምዃኑ ምግቢራት",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Resource Group",
+    "accountNameLabel": "ስም መለያ",
+    "subscriptionRequired": "ምዕባል ይመርጹ",
+    "accountRequired": "Foundry መለያ ይመረጹ",
+    "accountSelectionRequired": "ካብ ዝርዝር መለያ ይመርጹ።",
+    "selectAllRequired": "Subscription፣ Resource Groupን መለያን ይመርጹ።",
+    "connectionFailed": "ንዚ መለያ ክትረኽቦ ኣይተኻኣለን። ብልጽጽም ዝርዝር ወሲዶን ወይ ፍቐዲ ኣለካ ዶ ሓግዝ።",
+    "duplicateSource": "ነዚ መለያ ክንደይ ገና ተዋሃቦ እዩ ከም \"{name}\"።",
+    "connectionSuccessModels": "ተዳለየ — {count} መምዕባል(ታት) ተረኸቡ",
+    "connectionSuccessEmpty": "ተዳለየ፣ ግን ብዙሕ መምዕባላት ኣብዚ መለያ የብሉን።",
+    "checkingConnection": "ብቕናጽ ተናዛቢ...",
+    "next": "ቀጻሊ",
+    "back": "ተመለስ",
+    "cancel": "ሰርዝ",
+    "connect": "ኣገናንዮ",
+    "save": "ኣቑፅል",
+    "scanningResources": "ብኣዙር ስብስክሪፕሽኖም ንቛሊሉ እዩ ተፈቶይ...",
+    "discoveryPartialWarning": "{count, plural, one {# ስብስክሪፕሽን} other {# ስብስክሪፕሽኖታት}} ክትቃለል ኣይተኻአልን። ኣካውንትካ ምስዘይተረከበ ብኢዋጅ ምምዝጋብ ትምጽእ።",
+    "discoveryTruncatedWarning": "ምስኒሱ ሰናይ ሃብታት ኣብ ትሕቲ ተመዝጊቡ እንተኾኑ ፣ ምምዝጋብ ብኢዋጅ ተጠቀም።",
+    "noAccountsDiscovered": "ፋውንድሪ ኣካውንታት ኣብ ስብስክሪፕሽኖም ኣይተረኸበን። መንገዲ እትፈልጦ ድኣ ብኢዋጅ ምምዝጋብ ትምጽእ።",
+    "retryScan": "ቀደም የለን ሕቶ ዳግማይ ፈትኑ",
+    "searchAccountsPlaceholder": "ኣካውንታት ተፈልጉ...",
+    "modelsSelectedCount": "{selected} ካብ {total} ሞደሎም ተመርፆም",
+    "selectAll": "ኩሉ ምርፅ",
+    "deselectAll": "ኩሉ ኣይምርፅን",
+    "autoAddLabel": "ሞደሎም ብሓቶት ደኣ ኣእትዉ",
+    "autoAddDescription": "ናይ ሞደል መደበትታት ድሕሪ ዝገበረ ኣብኡ ብተኾላና ይመልከቱ። ዘይተመርፆም ሞደሎም ብዙሕ እዮም ብዙሕ ይኽእል ክኸውን ይጽብቕ።"
+  },
+  "emissions": {
+    "tier": {
+      "low": "ዝተቕነቐነ ተጽእኖ",
+      "moderate": "ደንገጺ ተጽእኖ",
+      "high": "ጽቡቕ ተጽእኖ"
+    },
+    "tierTooltip": "ብዝተቐየሩ ቦታ ክብሪ ባዕሉ ፣ ካብ ናይ ሞዴል መጠን ዝተወሰነ፡ ዝተቐየሩ ምስናታት ከኣ ዝተለዋወጡ ተቐይሩታት እዮም እና ኣብ ምምዕታት v{version} — ዝኾነን ውቅርን።",
+    "typicalRequest": "~{grams} ግራም CO₂e ብኣብዚ ዘለዎ ጥያቄ",
+    "typicalRequestTooltip": "ኣብዛ ተመሳሳሊ ጥያቄ (ካብ 1,000 ብፅሒፍ እና 500 ምውዳእ ቶከናት) ዝተረኽበ ዝተመነጨ ክብሪ፣ ካብ ምሓደራዊ መዓልታዊ ናይ ተቐይሪ ዝተረኽበ ዝተናገረ v{version}። ፍሉይ ተጽእኖ ኣብ ዕለት ምውዓው ቦታ፣ ቅድመ ቅንዕብን ዞባ ፉርናን ይገልጽ።",
+    "activities": {
+      "netflixHd": "ናይ Netflix HD ስትሪሚንግ",
+      "zoomCall": "Zoom ቅጽል (ካሜራ ኣብ ላዕሊ)",
+      "webBrowsing": "ድሕሪት ድህረመርበብ",
+      "spotifyAudio": "Spotify ድምጺ"
+    },
+    "equivalents": {
+      "title": "≈ እንደዚ እዋዒ ካርቦን",
+      "note": "ኣብ ዝተመልአንዎም ገዛአዊ ናይ ገዛ ሰዓት እዋዒ ምውሳነ እዚ ዝተመልአን ባህሪ — ትካላዊ ዓይነት ዝተመነጩ ቁጽሪታት፣ ከም ካብዚ ወሲኑ ትሕቲ ንኹሉ።"
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "ዝተመነጨ ካርቦን ነቒቕቲ ዝስዕብኩም ወይ ኣራዊት ተውዕሉ፡ {grams} ግራም CO₂ እኩነታ፡ ክንዲ ምብፅፅእ.",
+      "ariaLabelToday": "ዝተመነጨ ካርቦን ነቒቕቲ ሎሚ ናይዚ ቃለ-መሕትት፡ {grams} ግራም CO₂ እኩነታ፡ ክንዲ ምብፅፅእ.",
+      "title": "ዝተመነጨ ዝውውር ካብዚ ቃለ-መሕትት",
+      "today": "ሎሚ",
+      "total": "ኩሉ ግዜ",
+      "measured": "ካብ ተዘግዐ token ቁጽሪታት",
+      "estimated": "ካብ ድሓን መልእኽቲ ተቃለልካ ተስተኸለ",
+      "lastRequest": "መደበር ሓሳብ መጠየቢ",
+      "disclaimer": "ንእዋናውነት መጠየቢ ብተዘግዐ ወይ ብተቑሚ token ቁጽሪታት፣ ብተታቕፉ ኣብ ጥቕሚ እናቋሠር ዝተሰብሰበ ቁጽሪ ምኻነካ ብመንገዲ v{version}. ሓደን መልእኽቲ ካብ ተዓቐኑ ጽሑፋትን ናይ ዘሎ ሞዴል ውድብ ብተቃለልካ ይፈልጠሉ። መወፅኦ ኣይኮነን።",
+      "visibilityGroup": "ምርት ቻይፕ ኣብ ዕይታ",
+      "visibilityLabel": "ምርኣዩ:",
+      "visibility": {
+        "always": "ሁሉግዜ",
+        "auto": "ብሓላፍነት",
+        "hidden": "ኣይትረኣይ"
+      },
+      "visibilityHint": "\"ብሓላፍነት\" ቻይፑ ኣብ እቲ ግምት ካብ ሓደስነቱ ወይ ካብ ስትራይ ምስ ትቕለል እዩ የርከቡ። እዚ ኣብ ቅንጡ፡ Usage & Impact ውሽጢ ቀይርዎ።"
+    }
+  },
+  "table": {
+    "copyTable": "ታረዲ ጣብል",
+    "downloadTable": "ጣብል ውርድ",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "ኣብ CSV ውጹፍኩም",
+    "copyFailed": "ታረዲ ጣብል ኣይተሳነን"
+  },
+  "backup": {
+    "intro": {
+      "title": "ናይ ቻትካ backup ፅሩይ ኣድርግ",
+      "body": "መወያያትኻ ንብፅሕትኡ ኣብዚ መሳርሒ ኣብ crypt ይግበር። ናይ ቻትካ ኣይንደአነ።",
+      "keyWarning": "ናይ ትካትናኻ መፍለይ ኣብዚ መሳርሒ ይፈጠር። ንኔና ኣይንከየን፣ ንከነትኡ ኣይንተመላእን። መፍለዩ ናብለይካ እንተጠፍአ ናይ backup ጠፊኡ።",
+      "create": "መፍለይ ፍጠርኒ & ቻትን ኣሽኮል",
+      "decline": "ሕጂ ኣይትግበርን — ቻት ኣብዚ መሳርሒ ከብለ።"
+    },
+    "ceremony": {
+      "titleCreate": "ናይ ናፊትካ መፍለይ ኣቑጸብ",
+      "titleRotate": "መፍለይ ሓዲስ ኣቑጸብ",
+      "titleView": "መፍለይ ናፊትኻ",
+      "description": "እዚ መፍለይ ኩሎም መንገዲ ናይ backup ኣብ ካልእ መሳርሒ ክትመልስ እዩ። ኣብ ዓውደ-ዕላማ ኣቑጸብካ። ንኔና ኣይንገብርን።",
+      "copy": "ታረዲ",
+      "copied": "ተተዓረደ!",
+      "download": "ዝወርድ .txt",
+      "showQr": "QR ኮድ ርኣይ",
+      "hideQr": "QR ኮድ ሰብኣይ",
+      "savedCheckbox": "መፍለይ ናይ ናፊትኻ ጥራይ ኣቑጸበኒ",
+      "saveFirstHint": "ቀደም ከይተኸደን መፍለይካ ታረዲ ወይ ውርድ።",
+      "continue": "ቀጽል",
+      "done": "ተዛዚሙ",
+      "cancel": "ሰርዝ",
+      "cancelConfirmTitle": "ናይ backupካ ኣገባብ ተዓጊዝ?",
+      "cancelConfirmBody": "ቻትኻ backup ኣይኮነን። ናይ ምቅባል backup በቲ ቑፅሪ ቅሩብ ክትኸውን ትኽእል ኢኻ።",
+      "cancelConfirmRotateBody": "መፍለይ ናፊትኻ ኣብዚ ተቐይሩ ኣሎ። ንኔና ኣብ ቅሩብ ቅይር ይቕበል።",
+      "cancelConfirmConfirm": "እወ፣ ተስይዕ",
+      "cancelConfirmDismiss": "ተመለስ",
+      "loadError": "ናይ ናፊትኻ መፍለይ ኣብዚ መሳርሕ ኣይተጀመረን።"
+    },
+    "file": {
+      "heading": "ናይ ቻት backup መፍለይ ናፊትኻ",
+      "warning": "እዚ መፍለይ ጥራይ ኣቑጸብካ። መፍለዩ ነዚ ኣብዚ ወሲደ ሰብ ናይ backup ኣይተናበበን በለይሉ ይኸውን።"
+    },
+    "progress": {
+      "titleCreate": "ናይ backup ዝተሰርሐ እዩ",
+      "titleRotate": "መፍለይ ናፊትኻ ኣዝዩ",
+      "encrypting": "{count, plural, one {ናይ መወያያ # ትጣብይ ምዝጋብን ምእማንን...} other {# መወያያት ትጣብያት ምዝጋባትን ምእማናትን...}}",
+      "success": "{count, plural, one {Backup ተዛዚሙ። መወያይ # ተጻዋዕት።} other {Backup ተዛዚሙ። # መወያያታት ተጻውዑ።}}",
+      "error": "Backup ኣይተሳነን። መወያያታትኻ ኣብዚ መሳርሒ እዮም ዝረኽቡ።",
+      "retry": "እንደገና ፍለጥ",
+      "close": "ዝጅም",
+      "done": "ተዛዚሙ"
+    },
+    "input": {
+      "label": "መፍለይ ናፊትኻ",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "መፍለዮም ቁጽሪ ኣይኮንን ዝኾኑ O, I ወይ L።",
+      "checksumError": "እቲ ቁልፊ ትኽክልን የለን — ደቂቕ አብ ግልጽ ሓጺርካ።",
+      "formatError": "እዚ ቁልፊ ናይ መልሳ ኣይኮነን።",
+      "incomplete": "ቀጽል እዚ ቁልፊ 56 ፊደላት ኣለዎ።",
+      "valid": "ቁልፊ ትኽክል ዚመስል ኣሎ።"
+    },
+    "restore": {
+      "title": "ቻታትካ መልስ",
+      "successTitle": "ኦርቶም ተመልሳ",
+      "promptBody": "ናይ ኣካውንትካ ዝቕረበ ዝቕየለ ኦርቶም ረኣየና። ክልተ ድማ ክትመልሰንን ማለት ናይ መልሳ ቁልፊኻ ኣእትው።",
+      "submit": "ኦርቶም መልስ",
+      "skip": "ኣልፎ — ምልካም በዚ መሳርሒ",
+      "restoring": "ቻታትካ እዩ እዚ ተመልሳ ዘሎ…",
+      "successBody": "{count, plural, one {# ቻታ ተመልሰ።} other {# ቻታት ተመልሱ።}}",
+      "wrongKey": "እዚ ቁልፊ ትኽክል እዩ ግና እዚ ኦርቶም ኣይፈታንን። ቁልፊኻ ተለዊሳ ዝኾነ እንተሃለወ ዝሓወሱ ቁልፊ ተጠቒሙ።",
+      "corrupt": "እዚ ኦርቶም ኣይተኣክልን ብዙሕ ምኽንያቱ ተጉዳደሊ ይኸውን። በዚ መሳርሒ ብህይወት ጀምር ወይ ደጊም ፈትን።",
+      "networkError": "ናይ ኦርቶም አገልግሎት ርእስና ኣይተኻአናን። መርበብኻን ምርምርን ደጊም ፈትን።",
+      "tryAgain": "ካልኣይ ቁልፊ ፈትን",
+      "close": "ሓደሽ"
+    },
+    "enterKey": {
+      "title": "ናይ መልሳ ቁልፊ ኣእትው",
+      "body": "ቁልፊ መልሳኻ ኣብ ካልኣይ መሳርሒ ተቐይሩ። ኦርቶም ክትጸንሕ ናይተሓደሰ ቁልፊ ኣእትው።",
+      "submit": "እዚ ቁልፊ መጠቀም"
+    },
+    "banner": {
+      "keyMismatchTitle": "ኦርቶም ተኣትና — ቁልፊ መልሳ ኣብ ካልኣይ መሳርሒ ተቐይሩ።",
+      "enterNewKey": "ቀሊል ቁልፊ ኣእትው",
+      "resetBackup": "ኦርቶም ጀምር ወይ",
+      "resetConfirmTitle": "ኦርቶም ብዚ መሳርሒ ቁልፊ ናይ መልስ ክትጀመር?",
+      "resetConfirmBody": "ነቲ ኣሎ ኦርቶም ብዚ መሳርሒ ቻታት ይተቐይሩ ይኸውን፣ ብዚ መሳርሒ ቁልፊ ይደብቁ። ካልኣይ መሳርሓት ደሓን ናይዚ መሳርሒ ቁልፊ ፈጺሙ ምጥቃም የግባእም።",
+      "resetConfirmAction": "ኦርቶም ጀምር ወይ",
+      "remoteMissingTitle": "ናይ ኦርቶምኻ ኣብ ሰርቨር ኣይርከብንን። ኦርቶም ተቐጢሉ።",
+      "backUpAgain": "ቀደም ኦርቶም ሓደስ",
+      "dismiss": "ዕፀው"
+    },
+    "rotate": {
+      "confirmTitle": "ቁልፊ መልሳኻ ቕየር?",
+      "confirmBody": "ኦርቶም ብቑልፊ ናይ መልሳ ይተዳልዩ፡ ነዚ ናይ ቀደም ቁልፊ ከቋሕን። ቁልፊ ቀሊል ኣርእስበካ ካብ ካልኣይ መሳርሓት ከም ምእታው ብዛዕባ።",
+      "confirmAction": "ቁልፊ ቕየር"
+    },
+    "toast": {
+      "enrollLater": "ኦርቶም ዝቑይነትኩም ኣብ ቅንጢፋት ዘይሕጂ ክትበጽሑ ትከኣል።",
+      "keyUpdated": "ቁልፊ መልሳ ተሓዲሱ። ኦርቶም ደጊም ጀመሩ።",
+      "resetDone": "ኦርቶም ብዚ መሳርሒ ቁልፊ ተጀመሩ።",
+      "backupRestarted": "ኦርቶም ደጊም ተፈጠሩ።",
+      "opFailed": "ምንታይነት ጉድና ኣለና። ደጊም ፈትኑ።"
+    },
+    "settings": {
+      "statusOn": "ኦርቶም ኣብ እናጽእኦ",
+      "statusOff": "ኦርቶም ብምውዳእ እዩ",
+      "offDescription": "ቻታትኻ እቲ ፍተዋዊ እቲ ብራውዘር ብሓዚ ይኸውን። ምሕደራ ዝቕየለ ኦርቶም ኣምልክሉ እንተፈቱ፡ ቻታትኻ ሕዝነቶም ተሓጺቡ፡ ኣብ ካልኣይ መሳርሓት መልሱ ትከኣል። ቻታትኻ እቲ መሳርሒኻ ላዕሊ ይተሓጺቡ ናይ ሃገር ኣይኮኑን።",
+      "turnOn": "ኦርቶም ኣብ ናብ ተኣታት ኣምልክሉ",
+      "restoreTitle": "ናይ ኣካውንትኻ ኦርቶም ቀደም ኣሎ",
+      "restoreDescription": "ኦርቶም ክትመልስ ናይ መልሳ ቁልፊ ኣእትው።",
+      "restore": "ኦርቶም መልስ",
+      "lastBackup": "መወዳእታ ኦርቶም: {time}",
+      "lastBackupNever": "ኦርቶም ኣይተዳሉን",
+      "keyFingerprint": "ቁልፊ ····-{tail}",
+      "syncState": {
+        "idle": "ምግባር እናደፈስከግ",
+        "syncing": "ኦርቶም እዩ ተፈጥሮ…",
+        "ok": "ክሳብሎ እዩ",
+        "keyOutOfDate": "ተኣትና — ቁልፊ መልሳ ኣብ ካልኣይ መሳርሒ ተቐይሩ",
+        "remoteMissing": "ዝተቋረጠ — ባካፑ ካብ server ተወሲዱ",
+        "error": "መደገፊ ባካፑ መጨረሻ ውድቖ"
+      },
+      "backUpNow": "ሕጂ ባካፕ ኣድርጉ",
+      "backUpNowSuccess": "ባካፑ ተሳኢ",
+      "backUpNowFailure": "ባካፑ ዓይ ኣለን — ቻትታትኩም ብዝያዳ ዚሕስኡ እዮም",
+      "viewKey": "መፍጣዕ ምርካብ ኣሳዩ",
+      "changeKey": "መፍጣዕ ምርካብ ቀይሩ",
+      "dangerTitle": "አእታዊ መቦብ",
+      "turnOffDelete": "ባካፕ ዕልኩን ሰርዩን",
+      "turnOffConfirmTitle": "ባካፕ ዕልኩ ደሊ?",
+      "turnOffConfirmMessage": "እዚ ባካፑ ካብ server ንኹሉ መሳርሒ ይወስድ። ቻትታትኩም ንዚ መሳርሒ ልብ ይኣክሉ። ንቀጻሊ ባካፕ ብሓደ ሓድሽ መፍጣዕ ምርካብ ተመሊሱ ትኽእሉ ኢኹም።",
+      "turnOffConfirmAction": "ባካፕ ሰርዩ",
+      "turnOffSuccess": "ባካፕ ዕልኩን ሰርዩን",
+      "turnOffFailure": "ባካፕ ምስርዙ ኣይተኻአነን። እንተ ሓደገ ፈጽሞ።"
+    }
+  },
+  "memories": {
+    "title": "ኣሳሳብታት",
+    "description": "ኣሳሳብታት ዝወሓኖ ዝርከብ — ምስ ደሓን ዝነበሩ መሰል፣ ምትእካቤትኻ እናም ዝጽውዑ ፕሮጀክታት ከምዝወሓኑ ሓበሬታታት ተሓድሶ ካብ ምርጫ ውሽጣዊ ይጥቀም።",
+    "enableToggle": "ኣሳሳብታት ኣኣክሉ",
+    "privacyNote": "ዝተገለጸ ሓበሬታ ኣብዚ browser እቲ ብእግሪ ይኣክል እዩን፣ ንመልሲ ፍለጥ ናብ ቻት ይእተው።",
+    "empty": "ገና ኣሳሳብታት የለን። ዝተረኽቡ ሓበሬታታት ካብ ዓውደ-ቃልኩም ንሓላፍነት ይሕዝኡ።",
+    "savedOn": "ተዓቲቑ {date}",
+    "deleteMemory": "ኣሳሳብ ሰርዩ",
+    "clearAll": "ኩሉ ኣሳሳብታት ኣንጻጽሉ",
+    "clearAllConfirmQuestion": "ኩሉ ኣሳሳብታት ሰርዩ? እዚ ኣይተመለሰን።",
+    "clearAllConfirm": "ኩሉ ሰርዩ",
+    "cancel": "ሰርዝ"
+  },
+  "contextWindow": {
+    "label": "ዓውደ-ትሕዝቶ",
+    "value": "{count} መልእኽቲ",
+    "fewer": "ዝበለ አነስተይ መልእኽቲ",
+    "more": "ዝበለ ዝበለ መልእኽቲ",
+    "description": "ብዝመለስ ዝነበሩ ኣብዚ ድሕሪ ዓውደ ትሕዝቶ ሕቶታት ይቀረጻ ምዃኑ ናብ ኣብታትኩም እንደ ምስ context ይበጽሕ።"
+  },
+  "agentAccess": {
+    "title": "በዓል ኣገባብ ዘይኮነ Agent",
+    "description": "ንመን እዩ ዝኸውን እንተዘይ group Foundry agents ንምጥቃም ኩሉ ዚተሓደሰ ህግ ኣብዚ ኰነ። ህጉ ዝሎ ሓተት መበገሲ ኣብ Azure ዝምልከት ተጻኒዑ ምገባ። ዘይተፈቐደ ናይ Azure ኣለናዮም ኣብዚ rule ንዚ agent ኣይደሊን።",
+    "backToChat": "ናብ ቻት ተመልሰ",
+    "loading": "agents ንምጽዋት እና ምስ ህጉታት ይጽዋዕ…",
+    "loadError": "ዝኾነ ዘይተጻወተ መረጋገጺ ባህሪ ረኣዩ።",
+    "rulesUnavailableWarning": "ህጉታት ካብ ክንደድ ኣይተኻአኑን። Agent ትሕዝቶ ተዐጺፁ እዩም፣ ህጉታት ደጋዊ ምክንያት ኣይደሉን።",
+    "retry": "ደገ ፈቲኑ",
+    "rulesTab": "ህጉታት Agent",
+    "localAdminsTab": "ነዛ ኣስተዳዳሪት",
+    "noAgents": "ዝምህሩ Agent የለን።",
+    "sourceLabel": "ወሰን",
+    "notDiscoverable": "ንኽትረክቦ ዘይክእልኩም",
+    "notDiscoverableHint": "ንዚ agent ሕጉ ኣሎ፣ ግና ኣብ ንኹሉ ረኸበ ዘለኹም ዝያዳን ይኹን ስሙ ተለውጦ፣ ወይ Azure ግብዞ ይደፍኣኹም ይረኣዩ፣ ወይ ብህጉ ዘይተቐበሉ ኢኹም።",
+    "accessEveryone": "ኩሉ",
+    "accessRestricted": "ተቐንጹ",
+    "edit": "ኣስተካክል",
+    "updatedByLine": "መዘኻኸር መደብ ብ {user} ኣብ {date}",
+    "accessTypeLabel": "መን ይተገበራ",
+    "everyoneDescription": "ዝኾነ ዚልከይ Agent ኣብ Azure ዝበቐሉ ሓይሊ ኾይኑ ሩቡ እዩ።",
+    "restrictedDescription": "ንብቲ ተቐጸሉ ተጠቃሚታትን domains ንታሕቲ ዝብሉ።",
+    "allowDomainsLabel": "ዝተፈቐደ ዶሜንታት",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "ዝተፈቐዱ ተጠቃሚታት",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "ምዝካብ ዘይብፅዕ ኤንተር ይግዙ",
+    "removeChip": "ምውጻእ",
+    "groupsLabel": "ዝተፈቐዱ መደብታት",
+    "groupsPendingConsent": "መደብ-ተመሳሳሊ መኻእን ምውጻእ እየ ምስ ታዋቂ ኣድሚን ምምሓዝ የብሉን።",
+    "restrictedEmptyWarning": "ተጠቃሚ ወይ ዶሜን ዝርዝር ኣይቲፈቅዶም — ድሕሪ ዚ ዝኾነ ኣብዚ agent ምጥጋብ የተኻአንን።",
+    "save": "ኣክል",
+    "saving": "እዩ ኣኽውሎ…",
+    "cancel": "ሰርዝ",
+    "saveSuccess": "መኻእን ደልዩ።",
+    "deleteSuccess": "መኻእን ይወጽኡ — ኩሉ ደጊም ምጥጋብ agent ይኽእሉ።",
+    "saveError": "ኣክልና ኣይክእልን። ደጊም ፈትኑ።",
+    "conflictError": "መካንኩም ኣኮርኩም ክገምግም ዚኣቱ ሰብ ኣብ ቀዳማይ ለውጢ። ቅድሚ ዚ መጽናዕ ደሓን ኣወግዱ።",
+    "reload": "መጽናዕ ደጊም ኣወግዱ",
+    "localAdminsDescription": "ዘተኻእነቱ መኻእን ኣብተሓጊኑ ናይ ኣዲምዝ ዘሎ ግን ዙቕኡ። ዓዲ ኣድሚን ኣብዚ ተወሳኺ ናይ agent መኻእን እንተደልዩ ምግዛእ ይኽእሉ።",
+    "noLocalAdmins": "ዘይተዳለወ ዓዲ ኣድሚን ኣይኮኑን።",
+    "addLocalAdmin": "ዓዲ ኣድሚን ይወስኹ",
+    "emailLabel": "ኢመይል",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "ዓዲ ኣድሚን ኣውጻእ",
+    "delegatedAgentsLabel": "ዝወሰኑ agent'ታት",
+    "noDelegatedAgents": "ዝወሰኑ agent'ታት ኣይኮኑን።",
+    "unknownAgentKey": "ዝያዳ agent key",
+    "configSaveSuccess": "ዓዲ ኣድሚን ደልዩ።",
+    "configConflictError": "ዓዲ ኣድሚን ዝርዝር እንተለወጠ ምስኹም እዩ። መጽናዕ ደጊም ፈትኑ።",
+    "addAgent": "ኣጄንት ወስኺ",
+    "newPromptAgentTitle": "ሓድሽ ተጸባጻቢ ኣጄንት",
+    "editPromptAgentTitle": "ተጸባጻቢ ኣጄንት ኣስተኻኽል",
+    "agentNameLabel": "ሽም",
+    "agentNamePlaceholder": "ምሳሌ፡ ምግቢ መኣስስቢ",
+    "agentDescriptionLabel": "መግለጺ",
+    "agentDescriptionPlaceholder": "ኣብ ሞዴል መረጻ ሓበሬታ ንተጠቃሚ ይብሉ",
+    "agentSystemPromptLabel": "ሲስተም ማስግደቲ",
+    "agentSystemPromptPlaceholder": "ምምሕዳር ዘይደኣ ነፃ ስለተሓገዘ መልክዕኣገባብ መግለጺ",
+    "agentModelLabel": "ሞዴል",
+    "agentModelPlaceholder": "ሞዴል ምረፅ…",
+    "agentModelUnavailable": "{modelId} (የለን)",
+    "agentModelUnknownError": "ዝተመረፀ ሞዴል ከይኮነን። ካልኣይ ሞዴል ምረፅካ እንደገና ኣካብን።",
+    "promptAgentBadge": "ተጸባጻቢ ኣጄንት",
+    "editAgent": "ኣጄንት ኣስተኻኽል",
+    "deleteAgent": "ኣሰርዝ",
+    "deleteAgentConfirm": "ነዚ ኣጄንት ንኩሎም ኣሰርዝዎ? ካብ ሞዴል መረጻ ይተሓበያ፤ ዝተኣመሓሩ ውይይት ናይ ታሪኻትኡ ይቀፅል።",
+    "confirmDeleteAgent": "እወ፣ ኣሰርዝ",
+    "promptAgentCreateSuccess": "ተጸባጻቢ ኣጄንት ተፈጢሩ።",
+    "promptAgentSaveSuccess": "ተጸባጻቢ ኣጄንት ተዓቢቡ።",
+    "promptAgentDeleteSuccess": "ተጸባጻቢ ኣጄንት ተሰርዚ።",
+    "promptAgentsUnavailableWarning": "ተጸባጻቢ ኣጄንትታት ካብ ኣከባቢ ክትጻዓኑ ኣይተተኽእሉን። ሕጂ ምስክራን አይክእሉን።",
+    "agentsTab": "ኣገልጋዮታት",
+    "connectorsTab": "ተዘራቢታት",
+    "addConnector": "ተዘራቢት ኣኣጽእ",
+    "noConnectors": "ናይክን ተዘራቢታት ኣይተመስሩን።",
+    "connectorsUnavailableWarning": "ዒላማ ማእከል ተዘራቢታት ምርኣዩ ኣይተዋህቦን። ምርኣይ ኣብ ምስተዋፍሩ እንተዳሊኩም መግበሪ ኣይተርኢኩም።",
+    "editAccess": "ዕድል ስሚኡ",
+    "deleteConnector": "ሰርዝ",
+    "deleteConnectorConfirm": "ዚተዘራቢት ክትሰርዝ ትደሊ? ዘሰተማማዕዎ ክትጸግቡ ብቐሊሉ ይዋግኑ።",
+    "confirmDeleteConnector": "ተዘራቢት ሰርዝ",
+    "connectorSaveSuccess": "ተዘራቢት ተዓቂቡ።",
+    "connectorCreateSuccess": "ተዘራቢት ተፈጢሩ።",
+    "connectorDeleteSuccess": "ተዘራቢት ተሰሪዙ።",
+    "editConnectorTitle": "ተዘራቢት ስሚኡ",
+    "newConnectorTitle": "ሓድሽ ተዘራቢት",
+    "connectorPresetLabel": "ካብ ቅርጸ-ተምሳሌት ጀምር",
+    "connectorPresetNone": "ኣብ መጀመርታ ጀምር",
+    "connectorNameLabel": "ሽም",
+    "connectorDescriptionLabel": "መብርሂ",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "ንቅዕብን {placeholder} ኣብ URL ቀይርካ ከይትዕቀፍ፡ ብናብ ሓሳብካ ዋጋ ክትምልአይ።",
+    "connectorTransportLabel": "መጓዓዝ",
+    "connectorAuthLabel": "ምምልካት",
+    "connectorAuthNone": "የለን",
+    "connectorAuthBearer": "ቶከን (ካልኦት ተጠቃሚ ዋጋ ይሓትቱ)",
+    "connectorAuthOauth": "OAuth ምእታው",
+    "connectorSealingUnavailable": "OAuth የብሉን: እዚ ምምዕባለ ኣይተወተነ AUTH_SECRET እንተዘይብሉ ብዚ ንነቲ client secrets ኣይክትክኪልን።",
+    "connectorTokenHelpLabel": "ሊንክ ናብ ቶከን መመሪያታት (ኦፕሽናል)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "ሽሓ ተኣቲቱ። ንምግባር ትምታምዶ ይፍጸም፡ ወይ ሓድሽ ኣእትዎ ንምቕያር።",
+    "connectorClientSecretHint": "ስእንካ ክበሃል፡ ድሕሪኡ ኣይትተቐርበን።",
+    "connectorScopesLabel": "Scopes (ብ ቦታ ዝተፋለየ፡ ኦፕሽናል)"
+  },
+  "localModels": {
+    "title": "ኣካባቢ ሞዴልታት",
+    "description": "ብነቲ ኮምፒተረኻ ዝሰርሑ ሞዴልታት ቆይታ ፈጺም። መልእኽታታት ብቕድሚኡ ካብ ብራውዘርኻ ናብ ኣካባቢ መተግበሪ ይመጽኡ እንጂ ናብ ሰርቨርና ኣይስአሉን — ምላሽታት፣ ኣቓራቢ ቆይታን ንኡስ ዝጽኑ ብኣካባቢኻ እዮም ዝርከቡ።",
+    "detect": "ኣካባቢ ሰርቨር ምርካብ",
+    "detecting": "ተረኺቡን…",
+    "experimental": "ሙከራዊ",
+    "portLabel": "ፖርት",
+    "statusUnknown": "ንዚ ድማ ኣይተመርመርን።",
+    "statusChecking": "እዚ ኣረኺቡ…",
+    "statusReady": "{count, plural, =0 {ተገናኢ እዩ፣ ግና ሞዴል ኣይስዋሕን።} one {ተገናኢ እዩ — # ሞዴል ተዘጋጅኦ።} other {ተገናኢ እዩ — # ሞዴልታት ተዘጋጅኡ።}}",
+    "statusNotRunning": "{label} ምድላው ኣይተቐበለን። እንተ እዚ ፖርት ብሓባሩ ዝሰርሕ እንዶ ኣረጋግጽ፣ ብራውዘርኻውን ካብዚ ሳይት ናብ ኣካባቢ መተግበሪ ዝቕበለሉ ኣረጋግጽ።",
+    "statusHttpError": "{label} ብሓጺባ መልሶ ኣቐሪቡ። ኣርእዮ ሎግኡ።",
+    "corsHelp": {
+      "ollama": "Ollama ኣለና፣ ግና ካብዚ ሳይት ሕቶታት ምቕባል ይኣክልን። ሓንቲ OLLAMA_ORIGINS ናብ ኣድራሻ ዚሕዋት ኣድርኦ፣ ድሕሪኡ Ollama ደግመሉ፣ እንደገና ምርካብ።",
+      "lmstudio": "LM Studio ኣለና፣ ግና ካብዚ ሳይት ሕቶታት ምቕባል ይኣክልን። ብሰናይ CORS ናብ ኣካባቢ ሰርቨር ቅንጢጡ ቕፅል፣ እንደገና ምርካብ።",
+      "llamacpp": "llama.cpp ኣለና፣ ግና ካብዚ ሳይት ሕቶታት ምቕባል ይኣክልን። llama-server ብዝፍቀደ ዝሓፀበ ኣብ ኩዑሉ ሓገዝ ጀምር፣ እንደገና ምርካብ።"
+    },
+    "privacyNote": "ኣካባቢ ሞዴልታት ፋይል ምያዳድ፣ ስእሊ፣ ድሕሪ መርበብ ምድላው ወይ ንተዓይነታት ዘይደግፉን። እዚ ኣካባቢ ኮምፒተር መርመራ ብተሓዊሱ እዩ ዝፈጸመ።"
+  },
+  "urlFetch": {
+    "sourceFallback": "መድረኽ መሰኻኽ",
+    "fallbackHint": "ገጽ ምክትል ክትከፍቱ፡ ጽሑፍ ክትቅፃሉ እተዘይክእል ኣብዚ ዋና ድሕሪኡ ኣእትዉ ትኽእሉ።",
+    "shortExtract": "ብሓጺር አጭር ገፅ ተንብቦ ድኾነ፡ መድረኹ እቲ ክትከፍቱ ድሓን ከምትፈልጥ ክኸውን ኣሎ ወይ መእተዊ ኣለና።",
+    "errors": {
+      "invalidUrl": "እዚ ንእሽቶ ዝግበር መርካቶ መድረኽ አይትመስልን።",
+      "ssrfBlocked": "ዚ ናብቲ ኣድራሻ ንምንዳብ ኣይክእልን ምስ ጥንካሬ እምስላ።",
+      "tooManyRedirects": "እዚ ሊንክ ብዙሕ ግዘት ተለውዉጡ።",
+      "timeout": "ገጽኡ ዝንብል ጊዜ ተወሲዱ ኣለዎ።",
+      "unreachable": "ገጽኡ ምስራዕ ኣይተቻለን።",
+      "blocked": "መሳይቲ ጥዕና ምልእቲ ዘይተቐበለ ኣሎ። ብቕድሚ ምእታው ግባ ወይ ኣብ ብኣውቶማቲክ ንቕዓት ዝረኣዩ ተዓጠበ።",
+      "notFound": "እዚ ገጽ ኣልተረኽበን።",
+      "upstream": "መሳይቲ ስንኡ ሓገዝ መውጽኦ ኣመጸ።",
+      "pdf": "ዝተርአየ መገናኛ PDF እዩ። ኣውርዱካ እናተኣኸብልካ በጃኻ ዝኾነ ኣጽድቂ መደብ ተጠቀም።",
+      "nonHtml": "ዝተርአየ መገናኛ ንንብብ ዝኽእል ዝኾነ ዋዛ ኣይኰነን።",
+      "tooLarge": "ዝተቓነበሉ ገጽ ብዙሕ እዩ፣ ምምውሳድ ኣይተኻእለን።",
+      "empty": "ኣብ ዚ ገጽ ዝኽእል ምንባብ ሓበሬታ ኣልተረኽበን።",
+      "generic": "ገጽኡ ምምውሳድ ኣይተቻለን።"
+    },
+    "fetchingFile": "ኣብሓል {host} እዩ ዝርከብ…",
+    "attachLink": "መገናኛ ተጠቒም",
+    "attachLinkTitle": "ዋዛ ፔጅ ተጠቒም",
+    "attachLinkDescription": "ገጽኡ ይውሰድ፡ ናይኡ ዝኽእል ጽሑፍ ኣብ መልእኽቲኻ ይጨብጨብ።",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "ምውሳድ & ምትጣብ",
+    "attachLinkInvalid": "እዚ ከም ዞባ መገናኛ ኣይተመሓየሸን።",
+    "linkBadge": "ካብ መገናኛ",
+    "couldNotRetrieve": "ምምውሳድ ኣይተኻእለን",
+    "doc": {
+      "sourceLabel": "መንገዲ",
+      "retrievedLabel": "ተውሲዱ",
+      "attemptedLabel": "ተፈቲኑ",
+      "failureHeading": "ዋዛ ፔጅ ምምውሳድ ኣይተቻለን"
+    },
+    "settingsTitle": "መገናኛታት ኣብ መልእኽቲታት",
+    "settingsToggle": "ኣተማሚ ምውሳድ ኣብ መገናኛታት ቀይር",
+    "settingsDescription": "ንእሽቶ መገናኛ ኣብዚ ኣብ ቕፅል ከይምልኣካ፡ ገጻቹ ይውሰድ፡ ናይ ጽሑፉ ዝኽእል ኣብ መልእኽቲኻ ይጨብጨብ፡ ኣስተናግደካ ክንብብ ይከኣል። እዚን ኣብ ድሑር ምሕደር ትኽእል፡ ንእተዘልእሉ መገናኛ ብ-+ ዝብሉ መደብ ቁጽሪ ትጠቀም።",
+    "addLink": "መገናኛ ደኣ ይጨምር"
+  },
+  "cameraAccessError": "ካሜራካ ምክንያት ክትግበሩ ኣይተዋህቦን። ፍቓድ ካሜራካ ኣረጋግጽና እንተደሊኻ ገና ሞክር።",
+  "cameraUnnamedDevice": "ካሜራ",
+  "pastedText": {
+    "fallbackName": "ጻፊ ተቐቢሉ ጽሑፍ",
+    "charCount": "{count, number} ፊደላት",
+    "removeChip": "ጽሑፍ ተቐቢሉ “{name}” ኣውጻእ",
+    "blockLabel": "ጽሑፍ ተቐቢሉ፡ {name}",
+    "doc": {
+      "heading": "ጽሑፍ ተቐቢሉ",
+      "pastedLabel": "ተቐቢሉ"
+    },
+    "settingsTitle": "ዓቢ ሓቁቶ ጽሑፋት",
+    "settingsToggle": "ዓቢ ሓቁቶ ንኣባል ሰነድ ቀይር",
+    "settingsDescription": "ንሓቁቶ ፍቑድ ካብ ትኽክለኛ ውሑድ ዝበለ ጽሑፍ፡ ተቐበሉ እንዳ ፋይል ይሰብር፡ ኣይወስድን ኣይተቐየረን።",
+    "settingsThresholdLabel": "ሓቁቶ ዘይብሉ ኣብ ሰነድ ሓደገ",
+    "settingsThresholdUnit": "ፊደላት",
+    "settingsThresholdHint": "ብዙሕት፡ {min, number} ን {max, number} ፊደል ውሑድ።"
+  },
+  "structures": {
+    "section": "ኣቋራጭታት",
+    "sectionSubtitle": "ዝተኣቐቡ መስክ መወዳእታት፡ ንምርጫ ናይ ምርፋሕ ወይ ንመጀመርታ ስክማ ውሱን ሓቤሩጥ መዳበር ጠቀም።",
+    "loadFromStructure": "ኣቋራጭ ጽፈን",
+    "loadFromStructureTitle": "እዚ ኮለምናት ብዝተኣቐበ ኣቋራጭ ቀይር",
+    "pickerEmpty": "ዝተዓበየ ኣቋራጭ የለን እቲ ግዜ።",
+    "pickerTitle": "ዝተዓበየ ኣቋራጭ ጽፈን",
+    "saveAsStructure": "ኣቋራጭ ኣድርእ",
+    "saveAsStructureTitle": "እዚ ኮለምናት ናብ ቤተ-መዛግብቲ ኣቋራጭታትካ ኣቐብል",
+    "savedToast": "ኣቋራጭ “{name}” ተኣቲቱ",
+    "namePlaceholder": "ሽም ኣቋራጭ",
+    "fieldCount": "{count} መስኮታት",
+    "fieldCountOne": "1 መስክ",
+    "downgradedNotice": "{count} መስኮታት ናብ ጽሑፍ ቀልሉ — ኣብ ታብል ነገር ኣብ ካልእ እዩ ይሰብር፡ {names}",
+    "truncatedNotice": "{count} መስኮታት ተኣንቦጸሉ — ውሑድ ናይ ታብል ኣብ {max} ኮለምናት ይወሰን፡ {names}",
+    "skippedDerivedNotice": "{count} ዝተማሃዩ ኮለምናት ኣይተኣቐቡን — ፎርሙላታት ናይ ታብል ኮለምናት ይመልከቱ፡ {names}",
+    "loadReplacesColumns": "እዚ ዝረከበካዮ ቀይር። ዝኾኑ መርዓታት እንዳ ዝሓዘዎም ኮለምናት ሽም ይቐብሉ።"
   }
 }

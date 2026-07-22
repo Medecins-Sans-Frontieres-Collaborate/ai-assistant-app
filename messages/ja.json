@@ -433,7 +433,22 @@
     "noProjectsFound": "プロジェクトが見つかりません。「default」を使用します。",
     "selectAllRequired": "サブスクリプション、アカウント、プロジェクトを選択してください。",
     "subscriptionRequired": "サブスクリプションを選択してください",
-    "accountRequired": "Foundryアカウントを選択してください"
+    "accountRequired": "Foundryアカウントを選択してください",
+    "projectSelectionRequired": "リストからプロジェクトを選択してください。",
+    "scanningResources": "Azure サブスクリプションをスキャン中...",
+    "searchProjectsPlaceholder": "プロジェクトを検索...",
+    "noProjectsDiscovered": "サブスクリプション内に Foundry プロジェクトが見つかりません。パスが分かる場合は手動で入力してください。",
+    "discoveryPartialWarning": "{count, plural, one {# 件のサブスクリプション} other {# 件のサブスクリプション}}がスキャンできませんでした。プロジェクトが表示されない場合は手動で入力してください。",
+    "discoveryTruncatedWarning": "リソースが多すぎて完全にスキャンできませんでした。プロジェクトが表示されない場合は手動で入力してください。",
+    "retryScan": "再スキャン",
+    "next": "次へ",
+    "back": "戻る",
+    "selectAgentsDescription": "このプロジェクトからモデルピッカーに表示するエージェントを選択してください。",
+    "selectAll": "すべて選択",
+    "deselectAll": "すべて解除",
+    "agentsSelectedCount": "{total} 件中 {selected} 件のエージェントが選択されています",
+    "autoAddLabel": "新しいエージェントを自動的に追加",
+    "autoAddDescription": "後からこのプロジェクトに公開されたエージェントは自動的に表示されます。未選択のエージェントは除外されたままになります。"
   },
   "Quick Actions": "クイックアクション",
   "Type / in chat to access your prompts": "チャットで / を入力してプロンプトにアクセス",
@@ -760,7 +775,19 @@
       "listingTools": "利用可能なツールを調査中…",
       "analyzingFiles": "ファイルを分析中…",
       "searchingKnowledge": "ナレッジベースを検索中…",
-      "cancellingPriorTool": "前回のツールリクエストをキャンセル中…"
+      "cancellingPriorTool": "前回のツールリクエストをキャンセル中…",
+      "workflow": {
+        "preparingDocument": "参考文献を準備中...",
+        "writingDocument": "ドキュメントを作成中...",
+        "analyzingSource": "原文を分析中...",
+        "translating": "翻訳中...",
+        "reviewingTranslation": "レビュー {round}/{total} 回目...",
+        "revisingTranslation": "レビューのフィードバックを反映中...",
+        "extractingRows": "{source} から行を抽出中...",
+        "transformingTable": "テーブルを変換中...",
+        "findingLocations": "ロケーションを特定中...",
+        "updatingMap": "地図を更新中..."
+      }
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# 件のツールを使用} other {# 件のツールを使用}}",
@@ -821,7 +848,9 @@
     "listen": "再生",
     "processingAudio": "音声を処理中...",
     "ttsError": "音声の生成中にエラーが発生しました。再試行してください。",
-    "unsupportedMessageType": "メッセージの表示エラー：サポートされていないメッセージタイプ"
+    "unsupportedMessageType": "メッセージの表示エラー：サポートされていないメッセージタイプ",
+    "addLanguageOption": "「{name}」を追加…",
+    "sources": "出典"
   },
   "sidebar": {
     "collapseSidebar": "サイドバーを折りたたむ",
@@ -1140,15 +1169,33 @@
     "unsavedChangesMessage": "未保存の変更があります。破棄しますか？",
     "characterCount": "{current}/{max}",
     "clearField": "フィールドをクリア",
-    "autosaveNote": "変更内容は自動的に保存されます。",
+    "autosaveNote": "変更は自動的に保存されます。",
     "responseSection": "応答",
     "voiceSection": "音声",
-    "behaviorSection": "挙動",
+    "behaviorSection": "動作",
     "resetChatSettings": "チャット設定をリセット",
     "resetChatSettingsConfirmTitle": "チャット設定をリセットしますか？",
-    "resetChatSettingsConfirmMessage": "このパネル内のすべてが初期設定に戻ります：温度、カスタムインストラクション、About You、モデル応答、ストリーミング速度、音声読み上げ、アクティブファイル、確認画面。ただし、会話内容には影響しません。",
+    "resetChatSettingsConfirmMessage": "このパネル内のすべて（温度、カスタム指示、「あなたについて」、モデル応答、ストリーミング速度、音声読み上げ、アクティブファイル、確認）を初期設定に戻します。会話には影響しません。",
     "customInstructionsLabel": "カスタム指示*",
-    "defaultTemperatureLabel": "デフォルト温度*"
+    "defaultTemperatureLabel": "デフォルト温度*",
+    "Usage & Impact": "使用状況と影響",
+    "Connectors": "コネクタ",
+    "Backup": "バックアップ",
+    "Memories": "メモリー",
+    "Agent Access": "エージェントアクセス",
+    "LocalModels": "ローカルモデル",
+    "suggestRevisions": {
+      "title": "ドキュメントの改訂",
+      "toggle": "改訂を直接適用せず提案のみ行う",
+      "description": "ドキュメントワークフローに改訂を依頼すると、変更は個別の提案として届きます。品質評価と同様に、受け入れるか却下するかを選択できます。",
+      "exceptionsTitle": "次の場合は直接適用します:",
+      "exceptionSelection": "選択範囲の改訂",
+      "exceptionLargeRewrite": "ほとんどのドキュメントが書き換えられた場合",
+      "exceptionReorder": "編集ではなくセクションの移動のみの場合",
+      "thresholdLabel": "上記以上の変更をリライトとして扱う",
+      "thresholdUnit": "ドキュメントの変更率（%）",
+      "exceptionSelectionAlways": "ハイライトされた選択範囲の修正は常に直接適用されます。モデルは修正済みの抜粋のみを返し、ドキュメント全体に対する提案として分割することはできません。"
+    }
   },
   "notFound": {
     "lostDog": "迷子の犬"
@@ -1297,33 +1344,78 @@
     },
     "title": "モデルを選択",
     "modelsDescription": "会話用のAIモデルを選択してください。各モデルには異なる特長があります。選択すると詳細を確認できます。",
-    "recommended": "おすすめ"
+    "recommended": "おすすめ",
+    "familyAll": "すべて",
+    "familyFilterLabel": "ファミリーでモデルを絞り込む",
+    "searchPlaceholder": "モデルを検索",
+    "searchEmpty": "検索条件に一致するモデルはありません。",
+    "star": "{name} をお気に入りに追加",
+    "unstar": "{name} をお気に入りから削除",
+    "otherFamily": "その他",
+    "hostedExternally": "Azure AI Foundry を通じてプロバイダー独自のインフラで実行されており、MSF の Azure 環境内ではありません。",
+    "hostedIn": {
+      "label": "ホスト場所：{regions}",
+      "tooltip": "このモデルがデプロイされている Azure リージョンです。会話はお客様のリージョン内で処理されます。"
+    },
+    "badges": {
+      "external": "外部",
+      "externalTooltip": "Azure AI Foundry を通じてプロバイダー独自のインフラで実行されており、MSF の Azure 環境内ではありません。",
+      "regionHostedTooltip": "{region} Azure リージョンでホストされています。このモデルによる会話はそのリージョンで処理されます。"
+    },
+    "favorites": "お気に入り",
+    "euResidencyNote": "すべてのモデルは EU Azure リージョンで稼働しています。",
+    "hostedRegion": {
+      "label": "ホストリージョン",
+      "processedIn": "この会話は {region} Azure リージョンで処理されます。",
+      "euOnlyNote": "{name} は EU Azure リージョンでホストされ、やり取りもそこで処理されます。"
+    },
+    "version": {
+      "label": "バージョン"
+    },
+    "reasoningModel": "推論モデル：回答前に段階的に思考します。処理は遅くなりますが、難しい問題に強いです。",
+    "variant": {
+      "label": "バリアント"
+    },
+    "deployment": {
+      "title": "デプロイメント",
+      "source": "ソース",
+      "account": "アカウント",
+      "location": "ロケーション",
+      "deployment": "デプロイメント",
+      "modelVersion": "モデルバージョン",
+      "publisher": "発行者"
+    }
   },
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Bingによるリアルタイムウェブ検索を備えたGPT-4.1搭載AIモデル。最新情報、事実確認、現在のイベント認識を提供します。最新情報、ニュース分析、事実確認が必要な調査に最適です。",
-      "knowledgeCutoff": "リアルタイムウェブ検索"
+      "knowledgeCutoff": "リアルタイムウェブ検索",
+      "tagline": "OpenAIの前世代"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "OpenAIの最も先進的なモデルで、複雑な推論、コード生成、技術的な問題解決に優れています。分析タスク、プログラミングの課題、研究、詳細な説明に最適です。調整可能な推論努力と応答の詳細度をサポートします。",
-      "knowledgeCutoff": "2025年8月6日 20:00"
+      "knowledgeCutoff": "2025年8月6日 20:00",
+      "tagline": "前のGPTフラッグシップ"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "GPT-5のより高速でコスト効率の良いバージョンで、高品質を維持しながら速度に最適化されています。日常タスク、素早い質問、ツールルーティング、高速な応答時間を必要とするアプリケーションに最適です。パフォーマンスと効率の優れたバランス。",
-      "knowledgeCutoff": "2025年8月6日 20:00"
+      "knowledgeCutoff": "2025年8月6日 20:00",
+      "tagline": "高速かつ低コスト"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "会話のやり取りと感情知性に最適化されたGPT-5の専門バージョン。共感的なコミュニケーション、メンタルヘルスサポート、クリエイティブライティング、ブレインストーミング、自然な対話に優れています。カジュアルな会話、カウンセリングシナリオ、感情認識が必要なタスクに最適です。",
-      "knowledgeCutoff": "2025年10月1日 20:00"
+      "knowledgeCutoff": "2025年10月1日 20:00",
+      "tagline": "前のチャット特化GPT"
     },
     "o3": {
       "name": "o3",
       "description": "革新的な問題解決能力を持つOpenAIの最も先進的な推論モデル。複雑な数学、科学的推論、プログラミングの課題、多段階の論理タスクに優れています。拡張200Kコンテキストウィンドウ。推論努力制御をサポートします。",
-      "knowledgeCutoff": "2025年4月8日 20:00"
+      "knowledgeCutoff": "2025年4月8日 20:00",
+      "tagline": "段階的な深い推論"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1333,57 +1425,258 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "ステップバイステップで作業を示す推論スペシャリスト。数学の問題、論理パズル、複雑な概念の理解に優れています。リアルタイムで問題についてどのように考えているかを確認できます。",
-      "knowledgeCutoff": "2025年1月20日"
+      "knowledgeCutoff": "2025年1月20日",
+      "tagline": "推論の過程を表示"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "特にプログラミングと技術文書作成に優れた汎用モデル。コードのデバッグ、ドキュメント作成、技術概念の説明に最適です。開発作業に高速で信頼性があります。",
-      "knowledgeCutoff": "2025年4月16日 00:45"
+      "knowledgeCutoff": "2025年4月16日 00:45",
+      "tagline": "オープンソースの代替"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "ニュアンスのある応答で知られるxAIの汎用モデル。オープンエンドの議論、クリエイティブプロジェクト、複雑な問題への取り組みに最適です。",
-      "knowledgeCutoff": "2025年5月13日 00:16"
+      "knowledgeCutoff": "2025年5月13日 00:16",
+      "tagline": "xAIの代替"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "優れた推論、プログラミング、クリエイティブ能力を持つAnthropicの最も高性能なモデル。複雑な分析、研究、深い理解が必要なタスクに最適です。",
-      "knowledgeCutoff": "2025年1月"
+      "knowledgeCutoff": "2025年1月",
+      "tagline": "初期のOpus世代"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "プログラミング、分析、クリエイティブタスクで優れたパフォーマンスを提供するバランスの取れたClaudeモデル。高速な応答時間で日常使用に最適です。",
-      "knowledgeCutoff": "2025年1月"
+      "knowledgeCutoff": "2025年1月",
+      "tagline": "前世代Sonnet"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "前世代のClaude Opusモデル。複雑なプログラミングタスク、詳細な分析、ニュアンスのある理解に優れています。",
-      "knowledgeCutoff": "2025年1月"
+      "knowledgeCutoff": "2025年1月",
+      "tagline": "前世代Opus"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "迅速なタスクに最適化された高速でコスト効率の良いClaudeモデル。シンプルなクエリ、要約、大量のアプリケーションに最適です。",
-      "knowledgeCutoff": "2025年1月"
+      "knowledgeCutoff": "2025年1月",
+      "tagline": "高速なClaudeバリアント"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "OpenAIの最先端モデルで、複雑な推論、コード生成、技術的な問題解決に優れています。分析作業、プログラミング課題、研究、詳細な説明に最適です。推論の深さや応答の詳細度を調整できます。",
-      "knowledgeCutoff": "2025年12月"
+      "knowledgeCutoff": "2025年12月",
+      "tagline": "コード、分析、研究"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "2025年12月",
-      "description": "会話や感情知能に最適化されたGPT-5.2の専用バリアントです。共感的なコミュニケーション、クリエイティブな文章作成、ブレインストーミング、自然な対話に優れています。カジュアルな会話、カウンセリング、感情への配慮が求められる業務に最適です。"
+      "description": "会話や感情知能に最適化されたGPT-5.2の専用バリアントです。共感的なコミュニケーション、クリエイティブな文章作成、ブレインストーミング、自然な対話に優れています。カジュアルな会話、カウンセリング、感情への配慮が求められる業務に最適です。",
+      "tagline": "会話、ブレインストーミング"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Anthropic社の最強モデル。長文作成、調査、慎重な思考が必要な作業に最適です。",
-      "knowledgeCutoff": "2026年2月"
+      "knowledgeCutoff": "2026年2月",
+      "tagline": "長文執筆と分析"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "バランスの取れたClaudeモデル。日常的なライティング、分析、素早い反応でのコーディングに適しています。",
-      "knowledgeCutoff": "2026年2月"
+      "knowledgeCutoff": "2026年2月",
+      "tagline": "バランスの取れた日常向けClaude"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Meta提供のオープンソースモデル。文章作成や要約、簡単な質問に安定して対応します。",
+      "tagline": "オープンソースの代替"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "OpenAIの最新かつ最上位のモデル。文章作成、リサーチ、コーディング、複雑な問題解決に優れています。",
+      "tagline": "最新のGPTフラッグシップ"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "GPTシリーズで最小・最速のモデル。シンプルな作業を迅速かつ低コストで実行します。",
+      "tagline": "最小かつ最速のGPT"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "会話向けに調整されたGPTのバリエーション。カジュアルなチャットやブレインストーミング、サポート的な対話に適しています。",
+      "tagline": "新しいチャット特化GPT"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "旧世代のマルチモーダルGPT。最新機能が不要な日常の文章作成やQ&Aに適しています。",
+      "tagline": "旧世代マルチモーダルGPT"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "小型で高速なGPT-4.1バリエーション。日常的なタスクを素早く完了します。",
+      "tagline": "軽量な前世代GPT"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Anthropicの最新かつ最強モデル。長文作成やリサーチ、コーディング、詳細な分析に最適です。",
+      "tagline": "最新かつ最強のClaude"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "DeepSeekの最新オープンソースモデル。一般的な文章作成や技術的な質問に信頼できます。",
+      "tagline": "オープンソースの代替"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Mistralの最上位モデル。ヨーロッパ発の選択肢として、文章作成、要約、一般的な質問に対応します。",
+      "tagline": "欧州オープンウェイトモデル"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "以前のGPT-5の最上位バージョン。文章作成、分析、コーディングにも依然として強力です。",
+      "tagline": "初期のGPT-5フラッグシップ"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "以前のチャット向けGPT-5バージョン。日常会話やブレインストーミングに適しています。",
+      "tagline": "初期のチャット特化GPT"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "GPT-5で最小のバリエーション。シンプルなタスクを迅速かつ低コストで実行します。",
+      "tagline": "極小型の前世代GPT"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "GPT-4.1の最小バリエーション。速度やコスト重視のシンプルな作業に適しています。",
+      "tagline": "最小の前世代GPT"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "小型・高速なGPT-4oバリエーション。最新機能が不要な日常の簡単なタスクに向いています。",
+      "tagline": "軽量な旧マルチモーダルGPT"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "コンパクトな推論モデル。o3より低コストで、数学や論理、手順を追った問題に適しています。",
+      "tagline": "高速で手頃な推論"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "以前のコンパクトな推論モデル。低コストで数学や科学、論理パズルに対応します。",
+      "tagline": "コンパクトな段階的推論"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Anthropicで最もインテリジェントなモデル、Claude 5ファミリーの初代。特に高度な文章作成やリサーチ、コーディングに優れています。",
+      "tagline": "Anthropicの先端モデル"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Claude 5ファミリーの最新・バランス型モデル。日常的な文章作成や分析、コーディングを素早くこなします。",
+      "tagline": "最新のバランス型Claude"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Mistralの中型モデル。ヨーロッパ発で、日常業務において能力と速度のバランスが取れています。",
+      "tagline": "バランスの取れた欧州モデル"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Mistralの小型モデル。要約や下書き、簡単な質問を素早く安価に処理します。",
+      "tagline": "小型・高速な欧州モデル"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Mistralの極小モデル。非常に素早く、簡単な作業を最低コストで行います。",
+      "tagline": "極小型エッジ向けMistral"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "DeepSeek-R1のアップデート版。より深い推論で思考過程を段階的に示します。",
+      "tagline": "更新版オープン推論モデル"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Meta提供の軽量オープンソースモデル。文章作成や要約、日常的な質問に素早く対応します。",
+      "tagline": "高効率オープンソースLlama"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Meta提供の旧型オープンソースモデル。一般的な文章作成やQ&Aに依然として有効です。",
+      "tagline": "旧世代オープンソースLlama"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "xAIのフラッグシップモデル。自由な議論や分析、創造的なプロジェクトに適しています。",
+      "tagline": "xAIフラッグシップ"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "OpenAIの最新フラッグシップモデル。文章作成、リサーチ、コーディング、複雑な問題解決に強みがあります。",
+      "tagline": "最新のGPTフラッグシップ"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat（最新）",
+      "description": "常にOpenAIの最新チャットモデルを指すロールエイリアス。Azureが廃止したバージョン型gpt-*-chatモデルの代替です。",
+      "tagline": "常に最新のチャットGPT"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Opusの最近のリリース。4.6と4.8の間のバージョンです。長文作成、リサーチ、コーディング、丁寧な分析に強みがあります。",
+      "tagline": "最近リリースされたOpus"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "DeepSeekの最新の推論モデルで、AzureのR1シリーズの代替です。思考過程を段階的に示します。",
+      "tagline": "最新のオープン推論モデル"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "DeepSeekの高速V4バリアントで、AzureのV3シリーズの代替です。一般的な文章作成や技術的な質問に素早く対応します。",
+      "tagline": "高速オープンソース代替"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast（推論）",
+      "description": "xAIの高速推論モデル。素早く段階的に思考し応答します。",
+      "tagline": "高速xAI推論モデル"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "xAIの高速チャットモデル。日常的な質問や会話に素早く応答します。",
+      "tagline": "高速xAIチャットモデル"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "xAIの軽量モデル。簡単な質問やカジュアルなチャットに速く低コストで対応できます。",
+      "tagline": "軽量なxAIモデル"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "OpenAIのGPT-5.6トリオの最上位モデル。執筆、リサーチ、コーディング、複雑な問題解決に最適です。",
+      "tagline": "最新のGPTフラッグシップティア"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "OpenAIのGPT-5.6トリオのバランス型。日常の文章作成、分析、コーディングに迅速に対応します。",
+      "tagline": "バランスの取れた日常用GPT-5.6"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "OpenAIのGPT-5.6トリオの軽量・高速モデル。低コストで簡易な作業や素早い質問に最適です。",
+      "tagline": "軽量・高速GPT-5.6"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mistralの最新中型モデル。欧州発の選択肢で、日常業務に最適な性能と速度のバランスを実現します。",
+      "tagline": "バランスの取れた欧州モデル"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Moonshot AIのオープンウェイトモデル。エージェント業務、コーディング、長文処理に強みがあります。",
+      "tagline": "エージェンティックなオープンウェイトモデル"
     }
   },
   "transcription": {
@@ -1822,7 +2115,22 @@
     "useDefaultStyle": "デフォルトの文体を使用",
     "noTonesCreated": "トーンはまだ作成されていません",
     "createTonesHint": "クイックアクションでトーンを作成",
-    "translateDocumentTooltip": "ドキュメントを他言語に翻訳します。\n\n対応形式：Word、Excel、PowerPoint、HTML、TXT\n最大サイズ：40MB\n\n80以上の言語に対応、オプショングロッサリーファイルも利用可能です。"
+    "translateDocumentTooltip": "ドキュメントを他言語に翻訳します。\n\n対応形式：Word、Excel、PowerPoint、HTML、TXT\n最大サイズ：40MB\n\n80以上の言語に対応、オプショングロッサリーファイルも利用可能です。",
+    "translateTooltip": "テキストの一部を別の言語に翻訳します。\n\nファイル全体（Word、Excel、PowerPoint、HTML、TXT）の場合は「ドキュメント翻訳」をご利用ください。",
+    "cameraTooltip": "デバイスのカメラで写真を撮り、メッセージに添付します。",
+    "noResults": "該当するアクションはありません",
+    "sectionPinned": "ピン留め",
+    "sectionFrequent": "よく使う",
+    "sectionMore": "その他",
+    "categoryWeb": "Web",
+    "categoryMedia": "メディア・ファイル",
+    "categoryTransform": "変換",
+    "pin": "トップにピン留め",
+    "unpin": "ピンを外す",
+    "moveToMore": "「その他」に移動",
+    "moveOutOfMore": "メニューで表示",
+    "showSources": "他のソースを表示",
+    "hideSources": "他のソースを非表示"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AIの応答をカスタマイズするための個別指示を追加できます。これらは、役立つ・正確・安全な応答を保証するための基本的なガイドラインと組み合わされます。",
   "Tip: Type \"/\" to select from saved prompt templates_": "ヒント：「/」を入力すると保存されたプロンプトテンプレートから選択できます。",
@@ -1933,7 +2241,14 @@
     "learnMore": "詳細はこちら",
     "advancedOptions": "詳細オプション",
     "unofficialBadgeLabel": "非公式",
-    "unofficialLanguageWarning": "この言語は正式にサポートされていません。翻訳品質は確認されていません。共有前に流暢な話者またはネイティブスピーカーによる確認をお願いします。"
+    "unofficialLanguageWarning": "この言語は正式にサポートされていません。翻訳品質は確認されていません。共有前に流暢な話者またはネイティブスピーカーによる確認をお願いします。",
+    "translationSubmitted": "翻訳を開始しました—PDFはバックグラウンドで処理されます。",
+    "pendingTitle": "{filename} を翻訳中…",
+    "pendingHint": "PDF翻訳はバックグラウンドで実行され、数分かかることがあります。作業を続けることができ、ドキュメントの準備ができるとこのカードが更新されます（再読み込み後も反映されます）。",
+    "asyncFailed": "ドキュメント翻訳に失敗しました: {error}",
+    "jobNotFound": "翻訳ジョブは利用できなくなりました。もう一度お試しください。",
+    "retryPolling": "再確認",
+    "pollingStalled": "進捗確認のためサーバーに接続できませんでした。翻訳はまだ実行中かもしれません。"
   },
   "terms": {
     "officialLanguages": "公式版：",
@@ -1997,6 +2312,10 @@
       "technicalDetails": "技術詳細",
       "agentCountLabel": "{count} エージェント",
       "disconnectedToast": "{name}の接続を解除しました"
+    },
+    "emptyState": {
+      "title": "利用可能な地域・組織エージェントはありません",
+      "description": "以下でFoundryプロジェクトを接続して、そのエージェントを確認してください。"
     }
   },
   "privacy": {
@@ -2107,5 +2426,1309 @@
     "review": "確認",
     "itemId": "ID：{id}",
     "itemSource": "{source} より {date}"
+  },
+  "regionOverride": {
+    "warning": "ロケーションの上書きが有効です — リクエストは {region} データリージョンにルーティングされています。これは手動のテスト上書きであり、実際の所在地ではありません。",
+    "clear": "上書きをクリア"
+  },
+  "usageImpact": {
+    "empty": "まだ使用状況は記録されていません。チャット後にトークン使用量と推定排出量がここに表示されます。",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "約 {count} 回のスマートフォン充電",
+    "requests": "リクエスト数",
+    "promptTokens": "プロンプトトークン",
+    "completionTokens": "コンプリ―ショントークン",
+    "topModels": "モデル別",
+    "byRegion": "ホスティング地域別",
+    "regionDefault": "デフォルト",
+    "modelRow": "{requests} 回 · {grams} g",
+    "disclosure": "推定値は仮定 v{version} に基づく · {since} 以降 · 標準チャットのみ（エージェントやナレッジベースの回答は含まれていません）。",
+    "reset": "使用統計のリセット",
+    "estimatedPortion": "トラッキング開始前のチャットから推定された約{grams}g CO₂e（{requests}件）を含みます。これは保存されたメッセージテキストから逆算したもので、トークン数を実測したものではありません。",
+    "chipTitle": "排出量チップ",
+    "chipDescription": "現在の会話の推定カーボンフットプリントを、チャット入力欄の上に表示します。",
+    "chipAlways": "常に表示する",
+    "chipAlwaysHint": "会話に見積りがある場合、チップは常に表示されます。",
+    "chipAuto": "更新時またはホバー時に表示",
+    "chipAutoHint": "見積りが変更されたときにチップが表示され、その後フェードアウトします。ホバーまたはフォーカスで再表示されます。",
+    "chipHidden": "非表示",
+    "chipHiddenHint": "チップは表示されませんが、合計値は引き続き記録され、このページで表示されます。",
+    "chipAutoHideLabel": "フェードアウトまでの時間",
+    "chipAutoHideUnit": "秒",
+    "chipAutoHideHint": "{min}〜{max}秒の間で設定できます。"
+  },
+  "extraction": {
+    "toggleLabel": "構造化データを抽出",
+    "trayLabel": "抽出",
+    "trayPrefix": "抽出",
+    "trayInfo": "抽出は最大3つの構造化テーブルを返します。レシピはローカルに保存されます。",
+    "autoChip": "自動 — AIが構造を提案",
+    "addRecipe": "レシピを追加",
+    "addRecipeTitle": "この抽出にレシピを追加",
+    "addRecipeFullTitle": "抽出ごとに最大3件のレシピ",
+    "removeRecipe": "レシピを削除: {name}",
+    "remove": "削除",
+    "section": "抽出レシピ",
+    "sectionSubtitle": "生テキストやファイル、URLを構造化テーブルに変換する保存済みテンプレートです。抽出ごとに最大3件選択できます。",
+    "newRecipe": "新規レシピ",
+    "untitledRecipe": "（無題のレシピ）",
+    "deleteRecipe": "レシピを削除",
+    "delete": "削除",
+    "deleteConfirm": "削除しますか？",
+    "cancel": "キャンセル",
+    "name": "名称",
+    "namePlaceholder": "例: 患者",
+    "description": "説明",
+    "optional": "（任意）",
+    "descriptionPlaceholder": "レシピ選択画面で表示される短い概要",
+    "instructions": "指示",
+    "instructionsPlaceholder": "AIはどのような情報を抽出すべきですか？",
+    "fields": "フィールド",
+    "field": "フィールド",
+    "fieldsPlural": "フィールド",
+    "fieldName": "フィールド名",
+    "fieldType": "フィールドタイプ",
+    "fieldNamePlaceholder": "field_name",
+    "addField": "フィールドを追加",
+    "removeField": "フィールドを削除",
+    "toggleDetails": "詳細の切り替え",
+    "fieldDetailsTitle": "説明、列挙値",
+    "fieldDescriptionPlaceholder": "説明（AIがこのフィールドを見つけやすくなります）",
+    "enumValuesPlaceholder": "カンマ区切りで許可される値",
+    "required": "必須",
+    "suggest": "AIで提案",
+    "suggesting": "提案中…",
+    "suggestNeedsInstructions": "まず指示を追加してください。AIが抽出内容を判断します。",
+    "searchRecipes": "レシピ検索",
+    "pickerEmpty": "まだレシピがありません。作成して開始しましょう。",
+    "pickerEmptyMatch": "一致するレシピがありません",
+    "editorEmpty": "まだレシピがありません。作成するとAIが自動入力を手伝います。",
+    "noData": "データが抽出されていません",
+    "noRecords": "{name}の記録が見つかりません",
+    "row": "行",
+    "rows": "行",
+    "record": "レコード",
+    "records": "レコード",
+    "complete": "完了",
+    "download": "ダウンロード",
+    "preview": "プレビュー",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count}項目",
+    "fieldCountOne": "1項目",
+    "andMoreFields": "他{count}件",
+    "saveAsRecipe": "レシピとして保存",
+    "savedAsRecipeToast": "レシピ「{name}」として保存しました",
+    "previewTruncated": "{total}行中、最初の3行を表示しています。全データはダウンロードしてください。",
+    "previewEmpty": "プレビューする行がありません",
+    "proposedSchemaTip": "AIがこのスキーマを提案しました。保存すると次回も利用できます。",
+    "downloadAriaLabel": "{name}を{format}形式でダウンロード",
+    "previewAriaLabel": "{name}のプレビューを切り替え",
+    "changeFormatAriaLabel": "{name}のダウンロード形式を変更",
+    "materialWarningTitle": "抽出する素材を追加",
+    "materialWarningBody": "下にメッセージを入力するか、ファイル添付またはURLを追加してください。",
+    "materialAttach": "ファイルを添付",
+    "willExtractPrefix": "抽出対象:",
+    "materialText": "メッセージテキスト",
+    "materialFiles": "{count, plural, one {1ファイル} other {#ファイル}}",
+    "materialActiveFiles": "{count, plural, one {1件の有効ファイル} other {#件の有効ファイル}}",
+    "dismiss": "抽出をオフにする"
+  },
+  "Connectors": "コネクタ",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "翻訳",
+        "description": "分析、用語集、レビュー付きでテキストを翻訳"
+      },
+      "document": {
+        "label": "ドキュメント",
+        "description": "アシスタントと一緒にドキュメントを作成・修正"
+      },
+      "dataAnalysis": {
+        "label": "データ分析",
+        "description": "テーブルをインポートし、データを探索・変換"
+      },
+      "map": {
+        "label": "マップ",
+        "description": "任意のデータを地図上のロケーションに変換"
+      }
+    },
+    "chooser": {
+      "prompt": "または専用ワークスペースを開始"
+    },
+    "sidebar": {
+      "newTranslation": "新しい翻訳",
+      "newDocument": "新しいドキュメント",
+      "newDataAnalysis": "新しいデータ分析",
+      "newMap": "新しいマップ"
+    },
+    "translation": {
+      "chooseLanguage": "対象言語",
+      "customLanguageHint": "「{name}」はあなたが追加した言語です — AI はあらゆる言語に対応可能ですが、品質は保証されていません。",
+      "addedByYou": "あなたが追加しました",
+      "glossary": "用語集",
+      "noGlossary": "用語集なし",
+      "manageGlossaries": "用語集",
+      "glossaries": "用語集",
+      "closeGlossaries": "用語集を閉じる",
+      "glossariesEmpty": "特定用語の訳を固定したい場合は用語集を作成してください。用語集はこのデバイスに保存され、他の翻訳でも再利用できます。",
+      "newGlossary": "新しい用語集",
+      "newGlossaryName": "無題の用語集",
+      "glossaryName": "用語集名",
+      "deleteGlossary": "用語集を削除",
+      "sourceTerm": "原文用語",
+      "targetTerm": "訳語",
+      "note": "メモ",
+      "noteOptional": "メモ（任意）",
+      "addEntry": "用語を追加",
+      "removeEntry": "{term}を削除",
+      "mode": "翻訳モード",
+      "modeQuick": "簡易",
+      "modeAgentic": "レビュー付き",
+      "modeQuickHint": "1回の翻訳で最速",
+      "modeAgenticHint": "最初にテキストを分析し、翻訳後3回までレビューを実施",
+      "translate": "翻訳する",
+      "translating": "翻訳中…",
+      "sourceLabel": "原文",
+      "targetLabel": "訳文",
+      "sourcePlaceholder": "翻訳したいテキストを貼り付けるか入力してください。ドキュメントのアップロードも可能です。",
+      "targetEmpty": "ここに翻訳結果が表示されます。",
+      "uploadDocument": "ドキュメントをアップロード",
+      "copy": "コピー",
+      "copied": "コピーしました",
+      "tooLong": "テキストが{max}文字を超えています。分割するか、ドキュメント翻訳機能をご利用ください。",
+      "analysisTitle": "翻訳前の分析",
+      "register": "登録",
+      "reviewTitle": "レビューラウンド",
+      "roundLabel": "第{round}ラウンド",
+      "verdictApprove": "承認",
+      "verdictRevise": "修正",
+      "railRequest": "原文を{language}に翻訳してください。",
+      "railDoneAgentic": "完了しました。テキストを分析し、翻訳および{rounds}回のレビューを行いました。結果はワークスペースにあります。",
+      "railDoneQuick": "完了しました。翻訳結果はワークスペースにあります。",
+      "railAssessRequest": "{language}訳の品質を評価してください。",
+      "railAssessDone": "評価が完了しました。レーティングはワークスペースにあり、{count}件の修正案があります。",
+      "roundChanges": "第{round}ラウンドでの変更点",
+      "criteria": {
+        "accuracy": {
+          "label": "正確さ",
+          "description": "原文の意味を正確に伝達 — 誤訳・脱落・追加・未翻訳がない"
+        },
+        "fluency": {
+          "label": "流暢さ",
+          "description": "訳文の文法・スペル・句読点・結束性が自然である"
+        },
+        "terminology": {
+          "label": "専門用語",
+          "description": "専門用語が正確かつ一貫していて、用語集に忠実に準拠"
+        },
+        "style": {
+          "label": "文体",
+          "description": "レジスター・トーン・声が原文と一致し、一貫性がある"
+        },
+        "localeConventions": {
+          "label": "ローカル規則",
+          "description": "日付・数字・単位・句読点が現地基準に従っている"
+        },
+        "audience": {
+          "label": "読者",
+          "description": "想定される用途・読者層に適している"
+        }
+      },
+      "severity": {
+        "minor": "軽微",
+        "major": "重大"
+      },
+      "assess": "品質を評価",
+      "assessing": "評価中…",
+      "assessmentTitle": "品質評価",
+      "criteriaPicker": "評価基準",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "提案された修正",
+      "noEditsSuggested": "修正は提案されていません — 翻訳は選択した基準を満たしています。",
+      "acceptEdit": "承認",
+      "rejectEdit": "却下",
+      "acceptAll": "すべて承認",
+      "rejectAll": "すべて却下",
+      "editAccepted": "承認済み",
+      "editRejected": "却下済み",
+      "editUnapplicable": "この箇所が現在のテキストに見つかりません — 適用されませんでした",
+      "editTranslation": "編集",
+      "doneEditing": "完了",
+      "pasteTranslationPlaceholder": "翻訳文を入力または貼り付けて作業してください…",
+      "editingBlockedPendingEdits": "保留中の修正案を先に処理または却下してください",
+      "pendingCount": "{count} 件保留中",
+      "closeReview": "品質レビューを閉じる",
+      "showReview": "レビューを表示",
+      "showReviewPending": "レビューを表示（{count} 件保留中）",
+      "undoEdit": "元に戻す",
+      "clearResolved": "解決済みをクリア",
+      "clearResolvedHint": "承認済み、却下済み、および該当しない編集をこのリストから削除します",
+      "autoClearResolved": "解決済み編集を自動でクリア",
+      "customCriteria": "カスタム基準",
+      "closeCriteria": "カスタム基準を閉じる",
+      "newCriterion": "新しい基準",
+      "newCriterionName": "無題の基準",
+      "criterionName": "基準名",
+      "criterionRubric": "評価基準",
+      "criterionRubricPlaceholder": "この基準を満たすために翻訳が何をすべきか説明してください。例：「全ての臨床用投与指示を命令形で書き、不定詞は使わない…」",
+      "criterionRubricHint": "この評価基準は、組み込みのMQM指標と共にAIにそのまま渡され、翻訳評価に利用されます。",
+      "criteriaEmpty": "組み込みのMQM指標以外にも、ハウススタイル・用語選択・地域規則などのカスタム基準を作成して翻訳を評価できます。端末上に保存され、再利用可能です。",
+      "deleteCriterion": "基準を削除",
+      "manageCriteria": "カスタム基準",
+      "addCriteria": "基準を追加",
+      "noUsableCriteria": "少なくとも1つの組み込み基準を選択するか、カスタム基準に評価基準を設定してください。",
+      "criterionRubricTooLong": "このルーブリックは上限を{over}文字超えています。すべての評価に送信されるため、この基準を使用するには短縮が必要です。"
+    },
+    "document": {
+      "emptyTitle": "作成したい文書の説明",
+      "emptyBody": "アシスタントに書いてほしい内容を伝えてください（例：状況報告書、ドナー向けの手紙、議事録など）。引用や事実を含めたい場合は、先に参考ファイルを追加してください。",
+      "generatePlaceholder": "作成したい文書の説明を入力…",
+      "revisePlaceholder": "変更内容を入力…",
+      "generate": "作成",
+      "revise": "修正",
+      "writing": "執筆中…",
+      "export": "エクスポート",
+      "references": "参考資料",
+      "addReference": "ファイルを追加",
+      "uploading": "アップロード中…",
+      "removeReference": "{name} を削除",
+      "referenceChars": "抽出されたテキスト {chars} 文字",
+      "referenceEmpty": "{name} からテキストを抽出できませんでした",
+      "uploadFailed": "アップロードに失敗しました",
+      "untitledDocument": "無題の文書",
+      "generatedSummary": "ワークスペースに文書を作成しました。内容を確認し、修正点を教えてください。",
+      "revisedSummary": "ワークスペースの文書を修正しました。",
+      "runFailed": "エラーが発生しました: {message}",
+      "uploadBasis": "既存の文書から開始",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "文法とスペル",
+          "description": "文法とスペルが正しいこと。英語のバリエーション（米・英）を統一すること — 混在はミスとなります。"
+        },
+        "consistency": {
+          "label": "一貫性",
+          "description": "用語、名称、大文字の使い方、書式が全体で一貫していること"
+        },
+        "clarity": {
+          "label": "明確さ",
+          "description": "直接的でわかりやすい文、読み手を支える構成"
+        },
+        "sensitivity": {
+          "label": "配慮",
+          "description": "包括的で、紛争や人道的な配慮をした表現（任意のチェック）"
+        },
+        "specAdherence": {
+          "label": "仕様準拠",
+          "description": "添付されたドキュメント仕様に従っている：必要なセクションが順番通りにあり、ガイダンスが満たされている"
+        },
+        "toneAdherence": {
+          "label": "トーン準拠",
+          "description": "添付された声やトーンのルールに従っている"
+        }
+      },
+      "severity": {
+        "minor": "軽微",
+        "major": "重大"
+      },
+      "assess": "品質を評価",
+      "assessing": "評価中…",
+      "assessmentTitle": "品質レビュー",
+      "criteriaPicker": "評価基準",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "提案された修正",
+      "noEditsSuggested": "修正の提案はありません — ドキュメントは選択された基準を満たしています。",
+      "acceptEdit": "承認",
+      "rejectEdit": "却下",
+      "acceptAll": "すべて承認",
+      "rejectAll": "すべて却下",
+      "editAccepted": "承認済み",
+      "editRejected": "却下済み",
+      "editUnapplicable": "該当する箇所が現テキスト内に見つかりませんでした ― 適用されません",
+      "editingBlockedPendingEdits": "保留中の修正案を解決または却下してください",
+      "pendingCount": "{count}件保留中",
+      "closeReview": "品質レビューを閉じる",
+      "showReview": "レビューを表示",
+      "showReviewPending": "レビューを表示（{count}件保留中）",
+      "railAssessRequest": "選択した基準に基づきドキュメントの品質を評価します。",
+      "railAssessDone": "評価完了：ワークスペースに評価結果が保存され、{count}件の修正提案があります。",
+      "spec": "ドキュメント仕様",
+      "noSpec": "仕様なし",
+      "manageSpecs": "仕様",
+      "specs": "ドキュメント仕様",
+      "closeSpecs": "仕様を閉じる",
+      "specsEmpty": "仕様を作成して、決まった形式でドキュメントを作成しましょう ― 必須セクションや順序、各セクションのガイダンスを指定します（例：SitRepテンプレート）。仕様はこの端末内に保存され、再利用できます。",
+      "newSpec": "新規仕様",
+      "newSpecName": "名称未設定仕様",
+      "specName": "仕様名",
+      "specDescription": "説明（任意）",
+      "deleteSpec": "仕様を削除",
+      "sectionHeading": "セクション見出し",
+      "sectionGuidance": "ガイダンス（任意）",
+      "sectionRequired": "必須",
+      "addSection": "セクションを追加",
+      "removeSection": "セクションを削除",
+      "generalGuidance": "全体ガイダンス（任意）",
+      "tone": "トーン",
+      "noTone": "トーンなし",
+      "customCriteria": "カスタム基準",
+      "manageCriteria": "カスタム基準",
+      "closeCriteria": "カスタム基準を閉じる",
+      "criteriaEmpty": "独自の基準（例：ブランドの要件や組織で使う言葉など）を作成し、文書の評価や修正の指針とできます。基準はこの端末に保存され、再利用可能です。",
+      "newCriterion": "新しい基準",
+      "newCriterionName": "無題の基準",
+      "criterionName": "基準名",
+      "criterionRubric": "評価基準",
+      "criterionRubricPlaceholder": "この基準を満たすために文書がどのような要件を満たす必要があるかを記述してください。例：「自分たちの活動を絶対視しない／受益者は常に『支援対象者』と呼ぶ…」",
+      "criterionRubricHint": "この評価基準は、査定や修正の際にAIにそのまま提供されます。",
+      "deleteCriterion": "基準を削除",
+      "profileTitle": "ドキュメントプロファイル",
+      "profileDocType": "種類",
+      "profileLanguage": "言語",
+      "profileAudience": "対象読者",
+      "profilePurpose": "目的",
+      "profileRegister": "レジスター",
+      "profileTone": "トーン",
+      "profileConventions": "記述規則",
+      "emptyHint": "下に入力を開始するか、一番下の欄に書く内容を指示するか、ファイルから開始してください。",
+      "addSpec": "仕様を追加",
+      "addCriteria": "基準を追加",
+      "scopeFullDocument": "範囲：全文書",
+      "scopeSelection": "範囲：選択部分 — “{preview}…”（{count}語）",
+      "clearSelection": "選択を解除（全文書で作業）",
+      "reviseSelectionPlaceholder": "選択部分の変更内容を記述してください…",
+      "revisedSelectionSummary": "ワークスペース内の選択箇所を修正しました。",
+      "assessedSelection": "選択部分",
+      "undoEdit": "元に戻す",
+      "clearResolved": "解決済みをクリア",
+      "clearResolvedHint": "承認済み、却下済み、および該当しない編集をこのリストから削除します",
+      "autoClearResolved": "解決済み編集を自動でクリア",
+      "import": "インポート",
+      "importReplaceTitle": "ドキュメントを置き換えますか？",
+      "importReplaceBody": "{name}をインポートすると、現在のドキュメントが置き換えられます。参照、仕様、トーンは保持されます。",
+      "importReplaceConfirm": "置き換える",
+      "editorMode": "エディターモード",
+      "editorModeRich": "リッチテキスト",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "エディターモードを切り替える前に、提案された編集を解決してください。",
+      "suggestChanges": "変更を提案",
+      "suggestChangesHint": "ドキュメント全体を書き換えず、改訂内容を個別の提案としてレビューできます。",
+      "suggestChangesSelectionNote": "選択範囲への改訂は直接適用されます — すでに指定した範囲が対象です。",
+      "suggestedSummary": "レビュー用に{count}件の{count, plural, one {変更} other {変更}}が提案されました。",
+      "revisionSuggestionSummary": "改訂リクエストにより{count}件の{count, plural, one {提案された変更} other {提案された変更}}が作成されました。",
+      "revisionCriterionLabel": "依頼された改訂",
+      "fallbackSelection": "直接適用 — 選択範囲への改訂は提案されません。",
+      "fallbackLargeRewrite": "直接適用 — リライトの変更範囲が広すぎるため、個別の提案としてレビューできません。",
+      "fallbackReorder": "直接適用 — セクションが移動されたため、個別にレビュー可能な提案になりません。",
+      "fallbackUnanchorable": "直接適用 — 変更箇所を指定の文章に結び付けられませんでした。",
+      "fallbackNoChanges": "変更はありませんでした。",
+      "criterionRubricTooLong": "このルーブリックは上限を{over}文字超えています。すべての評価に送信されるため、この基準を使用するには短縮が必要です。"
+    },
+    "data": {
+      "emptyTitle": "分析するデータをインポート",
+      "emptyBody": "CSV・Excel・JSONファイルを取り込むか、行を直接貼り付けてください。テーブルが読み込まれると、並べ替えや、文書からの行の抽出、平易な言葉での変換が可能です。",
+      "importFile": "ファイルをインポート",
+      "importing": "インポート中…",
+      "pasteData": "データを貼り付け",
+      "pastePlaceholder": "ここにCSV、TSV、またはJSONを貼り付けてください…",
+      "import": "インポート",
+      "addFromSource": "ソースから追加",
+      "extractHint": "テキストを貼り付けるかドキュメントを選択してください。現在の列と一致する行を抽出します。不明な値は空欄のままです—新たに作成されることはありません。",
+      "extractPlaceholder": "データを含む非構造化テキストを貼り付けてください…",
+      "extractRows": "行を抽出",
+      "extractFromFile": "ファイルから…",
+      "extracting": "抽出中…",
+      "pastedSource": "貼り付けたテキスト",
+      "transform": "変換",
+      "transforming": "変換中…",
+      "transformPlaceholder": "変換内容を記述してください。例：「人口1,000人あたりの件数の列を追加」…",
+      "transformCapHint": "変換は最大{max}行までです。大きなテーブルの場合は先に行を削除またはフィルタしてください。",
+      "undo": "元に戻す",
+      "deleteSelected": "{count}件を削除",
+      "deletedRows": "{count}行を削除しました",
+      "selectAllRows": "すべての行を選択",
+      "selectRow": "{row}行目を選択",
+      "rowCount": "{count}行",
+      "rowCapExceeded": "{count}行になりますが、テーブルは{max}行までです。データを分割するかエクスポートしてください。",
+      "railExtractRequest": "テーブルスキーマに合致する行を抽出: {source}",
+      "railExtractDone": "抽出した{count}行をテーブルに追加しました。",
+      "railTransformDone": "テーブルを変換しました。",
+      "columnProfileFor": "{column}の列統計情報",
+      "profileMissing": "欠損",
+      "profileDistinct": "ユニーク",
+      "profileRange": "範囲",
+      "profileMean": "平均",
+      "profileMedian": "中央値",
+      "profileTopValues": "上位値",
+      "filterColumnFor": "{column}でフィルタ",
+      "filterContains": "含む…",
+      "filterMin": "最小",
+      "filterMax": "最大",
+      "filterClear": "クリア",
+      "clearFilters": "フィルタをクリア",
+      "showingRows": "{shown} / {total} 行を表示中",
+      "scopeLabel": "作業範囲",
+      "scopeTable": "すべて（{count}）",
+      "scopeFiltered": "フィルタ済み（{count}）",
+      "scopeSelection": "選択済み（{count}）",
+      "scopedInstruction": "{instruction}（対象 {count} 行で）",
+      "assess": "品質を評価",
+      "assessing": "評価中…",
+      "criteria": {
+        "validity": {
+          "label": "妥当性",
+          "description": "値が列の型と想定フォーマットに適合している"
+        },
+        "consistency": {
+          "label": "一貫性",
+          "description": "同じ値が一貫した表記で記載されていること（例: 'M'/'Male'、単位混在、大文字小文字のばらつき無）"
+        },
+        "duplicates": {
+          "label": "重複",
+          "description": "同じ対象やイベントを2回記録した行"
+        },
+        "plausibility": {
+          "label": "もっともらしさ",
+          "description": "文脈上の外れ値・不可能な値"
+        }
+      },
+      "assessmentTitle": "データ品質レビュー",
+      "pendingCount": "{count} 件の保留中",
+      "closeReview": "品質レビューを閉じる",
+      "suggestedEdits": "提案された修正",
+      "noEditsSuggested": "修正案はありません — データは選択された基準を満たしています。",
+      "acceptAll": "すべて承認",
+      "rejectAll": "すべて却下",
+      "acceptEdit": "承認",
+      "rejectEdit": "却下",
+      "editAccepted": "適用済み",
+      "editRejected": "却下済み",
+      "editUnapplicable": "評価後にセルが変更されたため、適用されません",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "評価基準",
+      "severity": {
+        "minor": "軽微",
+        "major": "重大"
+      },
+      "editLocation": "{row}行・{column}",
+      "editLocationRow": "{row}行（削除）",
+      "showReview": "レビューを表示",
+      "showReviewPending": "レビューを表示（未処理{count}件）",
+      "assessedFiltered": "フィルタ済み行",
+      "assessedSelection": "選択済み行",
+      "assessedSample": "{total}件中{shown}件のサンプル",
+      "railAssessRequest": "選択した基準に基づき、テーブル（{count}行）の品質を評価します。",
+      "railAssessDone": "{count}件のデータ品質修正案を提案しました—ワークスペースでご確認ください。",
+      "insights": "インサイト",
+      "chartKind": "グラフ種別",
+      "chartBar": "棒グラフ（グループ化）",
+      "chartHistogram": "ヒストグラム",
+      "chartLine": "折れ線グラフ（時系列）",
+      "groupByColumn": "グループ化列",
+      "dateColumn": "日付列",
+      "valueColumn": "値の列",
+      "aggFn": "集計方法",
+      "aggCount": "件数",
+      "aggSum": "合計",
+      "aggMean": "平均",
+      "chartTruncated": "上位{max}グループを表示中",
+      "chartNoData": "現在の行にグラフ化できる値がありません。",
+      "chartBarAria": "{column}でグループ化した棒グラフ",
+      "chartHistogramAria": "{column}のヒストグラム",
+      "chartLineAria": "{column}の折れ線グラフ（時系列）",
+      "editStructure": "構造",
+      "defineStructure": "構造を定義",
+      "schemaHint": "データ構造のフィールドを定義してください。必須フィールドはインポート時の不足データ方針に影響します。フィールドの型を変更すると、既存値が変換されます（変換できないセルは空になります）。",
+      "schemaFieldName": "フィールド名",
+      "schemaFieldType": "フィールド型",
+      "schemaRequired": "必須",
+      "schemaAddField": "フィールド追加",
+      "schemaDeleteField": "フィールド{field}を削除",
+      "schemaApply": "構造を適用",
+      "schemaCancel": "キャンセル",
+      "schemaEdited": "テーブル構造を編集しました",
+      "schemaCellsConverted": "{count}件のセルが新しい型へ変換できず、空になりました。",
+      "missingFieldPolicy": "不足データ",
+      "policyStrict": "厳格—不完全な行は拒否",
+      "policyFlag": "フラグ—インポートしマーク",
+      "policyLenient": "寛容—そのままインポート",
+      "droppedIncompleteRows": "必須フィールド {fields} が不足している{count}行を削除しました",
+      "dismiss": "閉じる",
+      "requiredColumn": "必須フィールド",
+      "flagMissingRequired": "必須フィールドが空です",
+      "flagPendingEdit": "このセルには修正案が保留中です—品質レビューをご確認ください",
+      "fromPhoto": "写真から取り込み",
+      "fromPhotoHint": "用紙のフォームや表を撮影すると、その内容が写真と照合できる構造化データになります。",
+      "readingPhoto": "写真を読み取り中…",
+      "photoBatchName": "{count}枚の写真",
+      "railPhotoRequest": "{count}枚の写真から構造化データを抽出：{name}",
+      "railPhotoDone": "写真から{count}件のレコードを追加しました。ワークスペース内の写真と照合してください。",
+      "sourcesLabel": "ソース",
+      "openPhotoQc": "{name}とデータを照合",
+      "qcRowsFromPhoto": "{count} 行",
+      "qcClose": "写真チェックを閉じる",
+      "qcZoomIn": "拡大",
+      "qcZoomOut": "縮小",
+      "qcPrevPhoto": "前の写真",
+      "qcNextPhoto": "次の写真",
+      "qcImageLoading": "写真を読み込み中…",
+      "qcImageFailed": "写真を読み込めませんでした。",
+      "qcImageAlt": "ソース写真: {name}",
+      "qcHint": "テーブルにはこの写真の行のみ表示されています—各値を写真と比較し、一致しない行は編集または削除してください。",
+      "sourceFilterChip": "{name}の行",
+      "clearSourceFilter": "すべての行を再表示",
+      "viewAsRecord": "フォームビュー",
+      "viewAsTable": "テーブルビュー",
+      "recordEmpty": "まだレコードがありません。",
+      "recordOf": "{index}/{count} レコード",
+      "recordPrev": "前のレコード",
+      "recordNext": "次のレコード",
+      "recordBooleanUnset": "（空）",
+      "flagsChip": "{count} 件のフラグ",
+      "flagsChipOpenReview": "品質レビューを開く",
+      "flagsChipMissingOnly": "必須項目が未入力です—入力するか、構造を調整してください",
+      "autoCheck": "新規データを自動チェック",
+      "autoCheckHint": "写真や文書からデータ抽出後、新しい行に自動で品質チェックを実行します",
+      "checkingNewRows": "新規追加行の品質チェック中…",
+      "ingestCheckFailed": "自動品質チェックが失敗しました（{message}）—Assess qualityで手動実行できます。",
+      "assessedIngest": "新規追加行",
+      "transpose": "転置",
+      "transposeAxisColumn": "名称",
+      "transposeSuggestion": "この表は転置されているようです：行が属性、列が項目になっています。各項目を行、各属性を型付き列にして入れ替えますか？",
+      "transposedTable": "行と列を転置",
+      "columns": "列",
+      "columnsHidden": "列（{count} 件非表示）",
+      "showAllColumns": "すべて表示",
+      "chartScatter": "散布図（x 対 y）",
+      "chartPivot": "ピボットテーブル",
+      "xColumn": "X 列",
+      "yColumn": "Y 列",
+      "splitByColumn": "分割",
+      "splitNone": "分割しない",
+      "pivotValueColumns": "値の列",
+      "aggMin": "最小",
+      "aggMax": "最大",
+      "aggMedian": "中央値",
+      "chartSeriesTruncated": "上位 {max} 件の系列を表示しています",
+      "chartPointsTruncated": "{max} 件のサンプル点を表示中",
+      "chartScatterAria": "{x} と {y} の散布図",
+      "pivotTableAria": "{column} でグループ化されたピボットテーブル",
+      "schemaFormula": "数式",
+      "schemaFormulaPlaceholder": "例：[Cases] / [Population] * 1000",
+      "schemaFormulaHint": "計算フィールド：[名称] で他のフィールドを参照できます。+ - * / %、括弧、round, abs, min, max が利用可能です。値は自動更新され、直接編集できません。",
+      "schemaFormulaSyntaxError": "無効な数式",
+      "schemaFormulaUnknownRef": "不明なフィールド：{ref}",
+      "schemaFormulaArityError": "{fn} の引数の数が正しくありません",
+      "schemaFormulaCycleError": "数式間で循環参照が発生しています",
+      "derivedColumnTitle": "計算式：{formula}",
+      "derivedFrom": "{formula} から計算",
+      "takePhoto": "写真を撮る",
+      "takePhotoHint": "カメラでフォームや表を撮影すると、その内容が写真と照合可能な構造化データになります"
+    },
+    "map": {
+      "emptyTitle": "データを地図に表示",
+      "emptyBody": "Sitrepやリスト、会議メモなどの、地名を含むテキストを貼り付けるか、文書をアップロードしてください。場所が特定され、信頼度付きでマッピングされます。ArcGISや他のGISツール向けにエクスポートも可能です。",
+      "inputPlaceholder": "地名を含むテキストを貼り付け…",
+      "uploadFile": "ファイルをアップロード",
+      "pastedSource": "貼り付けたテキスト",
+      "mapIt": "地図化",
+      "finding": "場所を特定中…",
+      "featureCount": "{count}か所",
+      "featureCapExceeded": "地図は最大{max}か所まで表示されます。",
+      "noneFound": "その資料からは場所が見つかりませんでした。",
+      "lowConfidenceNotice": "{count}か所の座標は信頼度が低いため、地図を利用する前に確認してください。",
+      "tilesOffline": "地図タイルは利用できません—位置リストは引き続き利用可能です。",
+      "disclaimer": "座標はAIモデルの知識から推定されたものであり、ジオコーディングサービスによるものではありません。運用前に必ず確認してください。地図タイルはタイルサーバーから読み込まれますが、データ自体はこの端末上に残ります。",
+      "flyTo": "地図上で{name}を表示",
+      "removeFeature": "{name}を削除",
+      "expandFeature": "{name}の詳細を表示",
+      "collapseFeature": "{name}の詳細を折りたたむ",
+      "detailsParent": "{parent}の一部",
+      "railRequest": "{source}の場所を地図化",
+      "railSearchRequest": "Web検索し、{query}の場所を地図で表示",
+      "railDone": "{count}件の場所をマッピングしました。信頼度の低いものはリストでご確認ください。",
+      "searchToggle": "ウェブ検索モード",
+      "searchToggleHint": "テキスト貼り付けの代わりにウェブ検索を行います。取得した結果がマッピングされます。",
+      "searchPlaceholder": "ウェブで検索（例：「2026年 東アフリカ コレラ流行」…）",
+      "searchAndMap": "検索 & マッピング",
+      "searching": "検索中…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "接続種別: {kind}",
+        "unresolved": "{count}件の接続先が地図上にないため、スキップされました。"
+      },
+      "confidence": {
+        "high": "高い",
+        "medium": "中程度",
+        "low": "低い"
+      },
+      "prominence": {
+        "primary": "主要な場所",
+        "secondary": "補助的な場所",
+        "mention": "言及のみ"
+      },
+      "prominenceMentionHint": "この場所は簡単に言及されているだけです。地図上では小さく表示され、初期表示の範囲には含まれません。",
+      "dates": {
+        "since": "{date}以降",
+        "range": "{start} ～ {end}",
+        "ongoing": "継続中"
+      },
+      "filters": {
+        "label": "カテゴリで絞り込む",
+        "other": "その他",
+        "clear": "クリア",
+        "showing": "{total}件中{shown}件の場所を表示",
+        "noneMatch": "現在のフィルターに一致する場所はありません。"
+      },
+      "dateFilter": {
+        "label": "日付",
+        "from": "開始日",
+        "to": "終了日",
+        "fromAria": "この日付以降のイベントのみ表示",
+        "toAria": "この日付までのイベントのみ表示",
+        "clear": "日付をクリア",
+        "eraChip": "{label}のイベントのみ表示"
+      },
+      "timeline": {
+        "toggle": "タイムラプス",
+        "play": "タイムラプス再生",
+        "pause": "タイムラプス停止",
+        "eras": "タイムラインの時代",
+        "jumpTo": "{label}にジャンプ",
+        "slider": "タイムライン位置",
+        "showUndated": "日付なしの場所を表示",
+        "activeCount": "{count}件がアクティブ",
+        "jump": {
+          "start": "開始",
+          "yearsLater": "{count, plural, one {1年後} other {#年後}}",
+          "monthsLater": "{count, plural, one {1か月後} other {#か月後}}",
+          "daysLater": "{count, plural, one {1日後} other {#日後}}",
+          "appears": "{count, plural, one {1件出現} other {#件出現}}",
+          "ends": "{count, plural, one {1件終了} other {#件終了}}",
+          "progress": "{total} のうち {index} 日付"
+        },
+        "precision": {
+          "minute": "分単位まで",
+          "hour": "時間単位まで",
+          "day": "日単位まで",
+          "month": "月単位での日付",
+          "year": "年単位での日付",
+          "mixed": "（混合）"
+        },
+        "pacing": {
+          "toggle": "再生速度調整",
+          "cardDuration": "各ロケーションの表示時間",
+          "seconds": "{seconds}秒",
+          "maxCards": "1日あたりのロケーション表示数",
+          "hint": "混雑している日は自動的に長く表示されます。"
+        }
+      },
+      "granularity": {
+        "site": "施設",
+        "city": "都市／町",
+        "district": "地区",
+        "region": "地域",
+        "country": "国"
+      },
+      "granularityAreaHint": "エリアは重心を中心に範囲円で表示され、正確な位置や境界ではありません。",
+      "containerHint": "他のマッピングされた場所を含むため、輪郭のみ表示されます。",
+      "legend": {
+        "toggle": "凡例",
+        "title": "地図の見方",
+        "color": "色：座標の信頼度（青：高　黄：中　赤：低）",
+        "size": "点の大きさ：資料内での重要度",
+        "area": "破線の円：地区、地域、または国のおおよその範囲",
+        "container": "薄い輪郭：中身が個別にマッピングされている領域",
+        "precisionHalo": "点線リング（タイムラプス中）：月または年までしか日付が分からず、正確な日時が不明なイベント"
+      },
+      "sourceLabel": "出典：{name}",
+      "fetchAndMap": "取得＆マッピング",
+      "fetchingPage": "ページ取得中…",
+      "railUrlRequest": "以下からロケーションを取得してマッピング：{title}（{url}）"
+    },
+    "shell": {
+      "showConversation": "会話を表示",
+      "hideConversation": "会話を非表示",
+      "workspaceTab": "ワークスペース",
+      "conversationTab": "会話",
+      "paneTabsLabel": "ワークフローペイン",
+      "railEmpty": "アシスタントのメッセージと進捗がここに表示されます。",
+      "railInputPlaceholder": "アシスタントにメッセージを送る…",
+      "assistantThinking": "考え中…",
+      "sendMessage": "メッセージを送信",
+      "stopGenerating": "生成を停止",
+      "loadingWorkspace": "ワークスペースを読み込み中…",
+      "unknownType": "この会話は本バージョンが認識できないワークフローを使用しています。会話履歴を以下に表示します。",
+      "untitled": "新しい会話",
+      "toggleMenu": "メニューの切り替え",
+      "model": "このワークフローのモデル"
+    },
+    "tabs": {
+      "label": "会話モード",
+      "chat": "チャット",
+      "chatDescription": "アシスタントとの標準的な会話"
+    },
+    "discard": {
+      "title": "この下書きを破棄しますか？",
+      "body": "{target}に切り替えると、{current}で開始した作業が削除されます。",
+      "confirm": "破棄"
+    }
+  },
+  "connectors": {
+    "title": "コネクタ",
+    "description": "Model Context Protocol（MCP）を通じて外部ツールを接続します。接続したツールはチャット内でモデルから利用でき、各ツール呼び出しは承認後にのみ実行されます。",
+    "localOnlyNote": "各プロバイダーに直接サインインします。アクセストークンは暗号化され、この端末のみに保存され、各リクエスト時にアプリサーバー経由で中継されますが、サーバーには保存・記録されません。",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "リポジトリの検索、Issueやプルリクエストの閲覧・作成ができます。"
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "タスクやプロジェクトの検索、作成、更新ができます。"
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "公開されたデータソース、ワークブック、Pulseメトリクスにクエリします。"
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Salesforceオブジェクト全体でレコードの検索と更新ができます。"
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "SNS投稿の下書き、スケジューリング、公開が行えます。"
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "ソーシャルインボックスの会話を確認・返信できます。"
+      }
+    },
+    "connect": "接続",
+    "connected": "接続済み",
+    "tokenEndsIn": "••••{last4} で終了",
+    "disconnect": "切断",
+    "toolCount": "{count, plural, =1 {利用可能なツール 1 件} other {利用可能なツール # 件}}",
+    "patLabel": "パーソナルアクセストークン",
+    "createTokenLink": "トークンを作成",
+    "tokenScopeHint": "これらのツールに必要なアクセス権のみを持つきめ細かなトークンをご利用ください。",
+    "validating": "接続を確認中…",
+    "validationFailed": "接続できませんでした。アドレスを確認して再試行してください。",
+    "authFailed": "サーバーがトークンを拒否しました。ご確認のうえ、再試行してください。",
+    "tokenRequired": "トークンが必要です",
+    "enableServer": "チャットで利用可能",
+    "arbitraryTitle": "その他のMCPサーバー",
+    "arbitraryToggle": "任意のMCPサーバーを許可する",
+    "arbitraryWarning": "MCPサーバーを運用する誰もが、そのツールに送信されたメッセージを閲覧できます。信頼できるサーバーのみ接続してください。各ツールの呼び出しには常に承認が必要です。",
+    "addServer": "MCPサーバーを追加",
+    "editServer": "MCPサーバーを編集",
+    "serverName": "名前",
+    "serverUrl": "サーバーURL",
+    "nameRequired": "名前は必須です",
+    "urlRequired": "URLは必須です",
+    "invalidUrl": "公開されている https:// アドレスを入力してください",
+    "namePlaceholder": "マイMCPサーバー",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "アクセストークン（任意）",
+    "keepTokenPlaceholder": "現在のトークンを保持するには空欄のままにしてください",
+    "disconnectedToast": "{name} が切断されました",
+    "save": "保存",
+    "connectWithProvider": "{name} と接続",
+    "useTokenInstead": "代わりにアクセストークンを使用する",
+    "oauthWaiting": "認証を待機しています…",
+    "oauthFailed": "サインインに失敗しました。再試行してください。",
+    "oauthDenied": "プロバイダーによってアクセスが拒否されました。",
+    "oauthTimeout": "サインインのタイムアウトが発生しました。再試行してください。",
+    "oauthCancelled": "サインインがキャンセルされました。",
+    "oauthUnavailable": "この展開環境では、このコネクター用のサインインは利用できません。代わりにアクセストークンを使用するか、管理者にOAuthアプリの設定を依頼してください。",
+    "ownAppToggle": "独自のOAuthアプリを使用する",
+    "ownAppHint": "下記のコールバックURLで、ご自身の{name}アカウント（組織、ワークスペース、またはエンタープライズインスタンス）にOAuthアプリを登録し、その認証情報をこちらに貼り付けてください。内蔵アプリを利用する場合は閉じたままにしてください。",
+    "ownAppCustomHint": "必要に応じて下記にご自身のOAuthアプリの認証情報を入力できます。空欄の場合はサーバーに自動登録されます。",
+    "ownAppInUse": "独自のOAuthアプリで接続しています。",
+    "clientIdLabel": "クライアントID",
+    "clientSecretLabel": "クライアントシークレット（アプリに設定されている場合）",
+    "redirectUriLabel": "登録用コールバック／リダイレクトURL",
+    "reconnect": "再接続",
+    "needsReauth": "再接続が必要です",
+    "disconnectOauthNote": "切断しても、このデバイスのみでアクセスが解除されます。完全にアクセスを取り消すには、{name}アカウントの認可済みアプリを管理してください。",
+    "authModeLabel": "認証",
+    "authModeNone": "なし",
+    "authModeBearer": "アクセストークン",
+    "authModeOauth": "プロバイダーでサインイン（OAuth）",
+    "oauthCustomHint": "保存後、ポップアップウィンドウでサーバーのプロバイダーにサインインします。",
+    "saveAndSignIn": "保存してサインイン",
+    "oauthCallback": {
+      "title": "認証が完了しました",
+      "missingState": "認証する内容がありません",
+      "close": "このウィンドウを閉じてアプリに戻ってください。",
+      "closeButton": "ウィンドウを閉じる"
+    },
+    "oauthNoAppConfigured": "{name}によるサインインはこのデプロイメントで設定されていません。ご自身のOAuthアプリを登録して接続してください。",
+    "adminConnectorsTitle": "組織による設定",
+    "adminConnectorsDescription": "管理者が設定したコネクタです。表示される内容はアクセス権限によります。",
+    "managedByOrg": "組織によって管理されています",
+    "connectorOauthNotConfigured": "このコネクタのサインイン設定が完了していません。管理者に連絡してください。",
+    "yourConnectorsTitle": "あなたのコネクタ",
+    "addTitle": "コネクタを追加",
+    "addDescription": "接続するツールを選択してください。選択後にアクセス設定を行います。",
+    "add": "追加",
+    "filterLabel": "コネクタを絞り込む",
+    "filterPlaceholder": "コネクタを検索",
+    "noMatches": "「{query}」に一致するコネクタはありません。"
+  },
+  "modelSources": {
+    "connectButtonShort": "モデルソースを接続",
+    "addAnother": "別のモデルソースを追加",
+    "edit": "編集",
+    "disconnect": "{name}の接続を解除",
+    "disconnectedToast": "{name}の接続を解除しました",
+    "modelCountLabel": "{count}件のモデル",
+    "loadingModels": "モデルを読み込み中...",
+    "noModelsAvailable": "このソースには利用可能なモデルがありません",
+    "sourceUnreachable": "このソースに接続できません。アクセス権が変更されたか、一時的にサービスがご利用いただけない可能性があります。",
+    "retry": "再試行",
+    "connectFoundryAccount": "Microsoft Azure Foundryアカウントを接続",
+    "connectFoundryDescription": "ご自身がアクセス可能なAzure Foundryアカウントのモデルデプロイメントを検索できます。ご自身のAzure権限がすべてのリクエストに適用され、アプリケーションのモデル制限は適用されません。",
+    "selectModelsDescription": "このアカウントのどのモデルデプロイメントをモデル選択に表示するか選択してください。",
+    "editConnection": "接続を編集",
+    "nameLabel": "名前",
+    "namePlaceholder": "例: マイチームサンドボックス",
+    "nameRequired": "ソース名は必須です",
+    "foundryAccountLabel": "Foundryアカウント",
+    "enterManually": "手動入力",
+    "browseResources": "リソースを参照",
+    "subscriptionIdLabel": "サブスクリプションID",
+    "resourceGroupLabel": "リソースグループ",
+    "accountNameLabel": "アカウント名",
+    "subscriptionRequired": "サブスクリプションを選択してください",
+    "accountRequired": "Foundryアカウントを選択してください",
+    "accountSelectionRequired": "リストからアカウントを選択してください。",
+    "selectAllRequired": "サブスクリプション、リソースグループ、アカウントを選択してください。",
+    "connectionFailed": "このアカウントに接続できません。情報が正しいか、またアクセス権があるかご確認ください。",
+    "duplicateSource": "このアカウントはすでに「{name}」として接続されています。",
+    "connectionSuccessModels": "接続しました — {count}件のモデルデプロイメントが見つかりました",
+    "connectionSuccessEmpty": "接続済みですが、このアカウントにはモデルデプロイメントがありません。",
+    "checkingConnection": "接続を確認中...",
+    "next": "次へ",
+    "back": "戻る",
+    "cancel": "キャンセル",
+    "connect": "接続",
+    "save": "保存",
+    "scanningResources": "Azure サブスクリプションをスキャン中...",
+    "discoveryPartialWarning": "{count, plural, one {# 件のサブスクリプション} other {# 件のサブスクリプション}}はスキャンできませんでした。アカウントが表示されない場合は手動入力をご利用ください。",
+    "discoveryTruncatedWarning": "リソースが多すぎてすべてを完全にスキャンできませんでした。アカウントが表示されない場合は手動入力をご利用ください。",
+    "noAccountsDiscovered": "サブスクリプション内にFoundryアカウントが見つかりませんでした。パスがわかる場合は手動入力をご利用ください。",
+    "retryScan": "再スキャン",
+    "searchAccountsPlaceholder": "アカウントを検索...",
+    "modelsSelectedCount": "{total} 件中 {selected} 件のモデルが選択されています",
+    "selectAll": "すべて選択",
+    "deselectAll": "すべて選択解除",
+    "autoAddLabel": "新しいモデルを自動で追加",
+    "autoAddDescription": "後からこのアカウントに追加されたモデルのデプロイが自動的に表示されます。未選択のモデルは除外されたままになります。"
+  },
+  "emissions": {
+    "tier": {
+      "low": "影響が小さい",
+      "moderate": "影響が中程度",
+      "high": "影響が大きい"
+    },
+    "tierTooltip": "リクエストごとの相対的なエネルギー影響（モデルサイズからの推定値）。公開された平均値と仮定（バージョン {version}）に基づく推定であり、実測値ではありません。",
+    "typicalRequest": "1 回の標準リクエストあたり約 {grams} g CO₂e",
+    "typicalRequestTooltip": "標準的なリクエスト（約 1,000 プロンプト＋500 完了トークン）あたりの概算値です。公開された平均値と仮定（バージョン {version}）に基づきます。実際の影響は会話の長さ・設定・ホスティング地域等により異なります。",
+    "activities": {
+      "netflixHd": "Netflix HD ストリーミング",
+      "zoomCall": "Zoom 通話（カメラオン）",
+      "webBrowsing": "ウェブ閲覧",
+      "spotifyAudio": "Spotify オーディオ"
+    },
+    "equivalents": {
+      "title": "≈ 同等の炭素排出量",
+      "note": "これらサービスの公表されている 1 時間あたりのカーボンフットプリントと大まかに比較しています。ここで示される推定値はいずれも概算・オーダー単位のものです。"
+    },
+    "duration": {
+      "lessThanSecond": "<1 秒",
+      "seconds": "{value} 秒",
+      "minutes": "{value} 分",
+      "hours": "{value} 時間"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "この会話の推定カーボンフットプリント：{grams} グラムのCO₂相当。詳細を表示。",
+      "ariaLabelToday": "本日のこの会話の推定カーボンフットプリント：{grams} グラムのCO₂相当。詳細を表示。",
+      "title": "この会話（推定値）",
+      "today": "本日",
+      "total": "累計",
+      "measured": "報告されたトークン数に基づく",
+      "estimated": "過去のメッセージから逆算",
+      "lastRequest": "直近のリクエスト",
+      "disclaimer": "公開されている平均値と仮定（v{version}）を用いて、報告されたまたは推定されたトークン数からリクエストごとの推定値を算出しています。古いメッセージは保存されたテキストと現在の会話モデルから逆算しています。実測値ではありません。",
+      "visibilityGroup": "排出量チップの表示設定",
+      "visibilityLabel": "表示:",
+      "visibility": {
+        "always": "常に表示",
+        "auto": "自動",
+        "hidden": "非表示"
+      },
+      "visibilityHint": "「自動」は、見積りが更新されたときやホバーしたときにチップを表示します。設定 › 使用状況と影響 で変更できます。"
+    }
+  },
+  "table": {
+    "copyTable": "テーブルをコピー",
+    "downloadTable": "テーブルをダウンロード",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV（.csv）",
+    "exportedAsCsv": "CSVとしてエクスポート",
+    "copyFailed": "テーブルのコピーに失敗しました"
+  },
+  "backup": {
+    "intro": {
+      "title": "チャットを安全にバックアップ",
+      "body": "会話はアップロード前にこの端末で暗号化されます。当社がチャットを読むことはありません。",
+      "keyWarning": "復元キーはこの端末で作成されます。当社が見ることも回復することもできません—キーを失うとバックアップも失われます。",
+      "create": "キーを作成してバックアップ",
+      "decline": "今はしない — この端末にのみチャットを保存"
+    },
+    "ceremony": {
+      "titleCreate": "復元キーを保存",
+      "titleRotate": "新しい復元キーを保存",
+      "titleView": "あなたの復元キー",
+      "description": "このキーは他の端末でバックアップを復元する唯一の方法です。安全な場所に保管してください—当社では回復できません。",
+      "copy": "コピー",
+      "copied": "コピーしました！",
+      "download": ".txtをダウンロード",
+      "showQr": "QRコードを表示",
+      "hideQr": "QRコードを非表示",
+      "savedCheckbox": "復元キーを安全な場所に保存しました",
+      "saveFirstHint": "続行する前にキーをコピーまたはダウンロードしてください。",
+      "continue": "続行",
+      "done": "完了",
+      "cancel": "キャンセル",
+      "cancelConfirmTitle": "バックアップ設定をキャンセルしますか？",
+      "cancelConfirmBody": "チャットはバックアップされません。設定からいつでも暗号化バックアップを有効にできます。",
+      "cancelConfirmRotateBody": "復元キーはすでに変更されています。設定からいつでも表示できます。",
+      "cancelConfirmConfirm": "はい、キャンセルします",
+      "cancelConfirmDismiss": "戻る",
+      "loadError": "この端末で復元キーを読み込めませんでした。"
+    },
+    "file": {
+      "heading": "チャットバックアップ復元キー",
+      "warning": "このキーを安全に保管してください。持っている人なら誰でもバックアップを閲覧できます。キーがないとバックアップを復元できません。"
+    },
+    "progress": {
+      "titleCreate": "バックアップを設定中",
+      "titleRotate": "復元キーを変更中",
+      "encrypting": "{count, plural, one {#件の会話を暗号化してバックアップ中…} other {#件の会話を暗号化してバックアップ中…}}",
+      "success": "{count, plural, one {バックアップ完了。#件の会話が保護されました。} other {バックアップ完了。#件の会話が保護されました。}}",
+      "error": "バックアップに失敗しました。チャットは引き続きこの端末に保存されています。",
+      "retry": "再試行",
+      "close": "閉じる",
+      "done": "完了"
+    },
+    "input": {
+      "label": "復元キー",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "キーにO、I、Lの文字は含まれません。",
+      "checksumError": "このキーは正しくないようです。入力ミスがないかご確認ください。",
+      "formatError": "これはリカバリーキーではありません。",
+      "incomplete": "続けて入力してください。リカバリーキーは56文字です。",
+      "valid": "キーは有効です。"
+    },
+    "restore": {
+      "title": "チャットを復元する",
+      "successTitle": "バックアップが復元されました",
+      "promptBody": "お客様のアカウント用の暗号化されたバックアップが見つかりました。この端末で復元するにはリカバリーキーを入力してください。",
+      "submit": "バックアップを復元",
+      "skip": "スキップして新しく始める",
+      "restoring": "チャットを復号して復元しています…",
+      "successBody": "{count, plural, one {#件の会話を復元しました。} other {#件の会話を復元しました。}}",
+      "wrongKey": "このキーは有効ですが、このバックアップを復元できません。キーを変更した場合は、最新のものをご利用ください。",
+      "corrupt": "このバックアップは読み取れません。破損している可能性があります。この端末で新規開始するか、後で再度お試しください。",
+      "networkError": "バックアップサービスに接続できません。接続を確認して再度お試しください。",
+      "tryAgain": "別のキーを試す",
+      "close": "完了"
+    },
+    "enterKey": {
+      "title": "新しいリカバリーキーを入力",
+      "body": "他の端末でリカバリーキーが変更されました。新しいキーを入力してバックアップを再開してください。",
+      "submit": "このキーを使用する"
+    },
+    "banner": {
+      "keyMismatchTitle": "バックアップが一時停止されています—リカバリーキーが他の端末で変更されました。",
+      "enterNewKey": "新しいキーを入力",
+      "resetBackup": "バックアップをリセット",
+      "resetConfirmTitle": "この端末のキーでバックアップをリセットしますか？",
+      "resetConfirmBody": "既存のバックアップはこの端末のチャットに置き換えられ、この端末のキーで暗号化されます。他の端末はこの端末のリカバリーキーが必要になります。",
+      "resetConfirmAction": "バックアップをリセット",
+      "remoteMissingTitle": "サーバー上のバックアップが存在しません。バックアップが一時停止されています。",
+      "backUpAgain": "再度バックアップ",
+      "dismiss": "閉じる"
+    },
+    "rotate": {
+      "confirmTitle": "リカバリーキーを変更しますか？",
+      "confirmBody": "バックアップは新しいキーで再暗号化され、古いキーは無効になります。新しいキーを保存し、他の端末でも入力する必要があります。",
+      "confirmAction": "キーを変更"
+    },
+    "toast": {
+      "enrollLater": "暗号化バックアップは、設定からいつでも有効にできます。",
+      "keyUpdated": "リカバリーキーが更新されました。バックアップが再開されました。",
+      "resetDone": "この端末のキーでバックアップがリセットされました。",
+      "backupRestarted": "バックアップが再作成されました。",
+      "opFailed": "問題が発生しました。再度お試しください。"
+    },
+    "settings": {
+      "statusOn": "バックアップが有効です",
+      "statusOff": "バックアップが無効です",
+      "offDescription": "チャットはこのブラウザ内のみで保存されています。安全のため暗号化バックアップを有効にすると、他の端末でも復元できます。チャットは端末で暗号化されており、当方が閲覧することはありません。",
+      "turnOn": "バックアップを有効にする",
+      "restoreTitle": "お客様のアカウントには既にバックアップがあります",
+      "restoreDescription": "この端末で復元するにはリカバリーキーを入力してください。",
+      "restore": "バックアップを復元",
+      "lastBackup": "最終バックアップ：{time}",
+      "lastBackupNever": "まだバックアップは作成されていません",
+      "keyFingerprint": "キー ····-{tail}",
+      "syncState": {
+        "idle": "同期待機中",
+        "syncing": "バックアップ中…",
+        "ok": "最新の状態です",
+        "keyOutOfDate": "一時停止中—リカバリーキーが他の端末で変更されました",
+        "remoteMissing": "一時停止中 — バックアップがサーバーから削除されました",
+        "error": "最後のバックアップ試行が失敗しました"
+      },
+      "backUpNow": "今すぐバックアップ",
+      "backUpNowSuccess": "バックアップ完了",
+      "backUpNowFailure": "バックアップに失敗しました — このデバイスのチャットは変更されていません",
+      "viewKey": "リカバリーキーを表示",
+      "changeKey": "リカバリーキーを変更",
+      "dangerTitle": "危険ゾーン",
+      "turnOffDelete": "バックアップをオフにして削除",
+      "turnOffConfirmTitle": "バックアップをオフにしますか？",
+      "turnOffConfirmMessage": "バックアップはすべてのデバイスで当社サーバーから削除されます。このデバイスのチャットは残ります。後で新しいリカバリーキーでバックアップを再オンにできます。",
+      "turnOffConfirmAction": "バックアップを削除",
+      "turnOffSuccess": "バックアップをオフにして削除しました",
+      "turnOffFailure": "バックアップを削除できませんでした。もう一度お試しください。"
+    }
+  },
+  "memories": {
+    "title": "メモリー",
+    "description": "あなたが共有した役職や好み、進行中のプロジェクトなどの持続的な情報をアシスタントが記憶し、会話全体で活用します。",
+    "enableToggle": "メモリーを有効にする",
+    "privacyNote": "情報はこのブラウザのみに保存され、パーソナライズのためチャット内で使用されます。",
+    "empty": "まだメモリーがありません。記憶する価値のある情報は会話から自動的に保存されます。",
+    "savedOn": "{date} に保存",
+    "deleteMemory": "メモリーを削除",
+    "clearAll": "すべてのメモリーを削除",
+    "clearAllConfirmQuestion": "すべてのメモリーを削除しますか？この操作は元に戻せません。",
+    "clearAllConfirm": "すべて削除",
+    "cancel": "キャンセル"
+  },
+  "contextWindow": {
+    "label": "コンテキストウィンドウ",
+    "value": "{count} 件のメッセージ",
+    "fewer": "メッセージを減らす",
+    "more": "メッセージを増やす",
+    "description": "この件数を超える古いメッセージは要約し、コンテキストとして送信されます。"
+  },
+  "agentAccess": {
+    "title": "エージェントアクセス",
+    "description": "どのユーザーが共有Foundryエージェントを利用できるかを管理します。これらのルールは既にユーザー自身のAzureアクセスで許可されている範囲内でのみさらに制限がかかります — Azureが拒否しているアクセスを許可することはできません。",
+    "backToChat": "チャットに戻る",
+    "loading": "エージェントとルールを読み込み中…",
+    "loadError": "エージェントアクセスデータを読み込めませんでした。",
+    "rulesUnavailableWarning": "ストレージからアクセスルールを読み込めませんでした。現在、エージェントの呼び出しはブロックされ、ルールの編集もできません。",
+    "retry": "再試行",
+    "rulesTab": "エージェントルール",
+    "localAdminsTab": "ローカル管理者",
+    "noAgents": "管理するエージェントがありません。",
+    "sourceLabel": "ソース",
+    "notDiscoverable": "あなたからは検出不可",
+    "notDiscoverableHint": "このエージェントにはルールがありますが、あなた自身の検出範囲にはありません。名前が変更されたか、あなたのAzureアクセス範囲外、またはアクセスルールに含まれていない可能性があります。",
+    "accessEveryone": "全員",
+    "accessRestricted": "制限あり",
+    "edit": "編集",
+    "updatedByLine": "最終更新者：{user}（{date}）",
+    "accessTypeLabel": "このエージェントを使用できる人",
+    "everyoneDescription": "既にAzureアクセスでこのエージェントに到達できるすべての人。",
+    "restrictedDescription": "下記のユーザーおよびドメインのみ。",
+    "allowDomainsLabel": "許可されたドメイン",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "許可されたユーザー",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Enterキーで追加",
+    "removeChip": "削除",
+    "groupsLabel": "許可されたグループ",
+    "groupsPendingConsent": "グループによるアクセスはテナント管理者の承認待ちのため、まだ編集できません。",
+    "restrictedEmptyWarning": "ユーザーまたはドメインが指定されていません—このエージェントは誰も利用できません。",
+    "save": "保存",
+    "saving": "保存中…",
+    "cancel": "キャンセル",
+    "saveSuccess": "アクセスルールを保存しました。",
+    "deleteSuccess": "アクセスルールを削除しました — すべてのユーザーがこのエージェントを再び利用できます。",
+    "saveError": "保存できませんでした。もう一度お試しください。",
+    "conflictError": "編集中に他の人が内容を変更しました。最新バージョンを読み込んで、再度変更してください。",
+    "reload": "再読み込み",
+    "localAdminsDescription": "特定のエージェントに対するルール管理を再デプロイなしで委任できます。ローカル管理者は担当エージェントのルールのみ編集できます。",
+    "noLocalAdmins": "ローカル管理者は設定されていません。",
+    "addLocalAdmin": "ローカル管理者を追加",
+    "emailLabel": "メールアドレス",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "ローカル管理者を削除",
+    "delegatedAgentsLabel": "委任されたエージェント",
+    "noDelegatedAgents": "委任できるエージェントがありません。",
+    "unknownAgentKey": "不明なエージェントキー",
+    "configSaveSuccess": "ローカル管理者を保存しました。",
+    "configConflictError": "編集中に他の人がローカル管理者リストを変更しました。再読み込み後、もう一度お試しください。",
+    "addAgent": "エージェントを追加",
+    "newPromptAgentTitle": "新規プロンプトエージェント",
+    "editPromptAgentTitle": "プロンプトエージェントを編集",
+    "agentNameLabel": "名前",
+    "agentNamePlaceholder": "例：旅行アドバイザー",
+    "agentDescriptionLabel": "説明",
+    "agentDescriptionPlaceholder": "モデル選択画面でユーザーに表示されます",
+    "agentSystemPromptLabel": "システムプロンプト",
+    "agentSystemPromptPlaceholder": "このエージェントの動作を定義する指示",
+    "agentModelLabel": "モデル",
+    "agentModelPlaceholder": "モデルを選択…",
+    "agentModelUnavailable": "{modelId}（利用不可）",
+    "agentModelUnknownError": "選択したモデルは利用できなくなりました。別のモデルを選択して保存してください。",
+    "promptAgentBadge": "プロンプトエージェント",
+    "editAgent": "エージェントを編集",
+    "deleteAgent": "削除",
+    "deleteAgentConfirm": "このエージェントを全員から削除しますか？モデル選択画面からは消えますが、既存の会話の履歴は保持されます。",
+    "confirmDeleteAgent": "はい、削除します",
+    "promptAgentCreateSuccess": "プロンプトエージェントを作成しました。",
+    "promptAgentSaveSuccess": "プロンプトエージェントを保存しました。",
+    "promptAgentDeleteSuccess": "プロンプトエージェントを削除しました。",
+    "promptAgentsUnavailableWarning": "プロンプトエージェントをストレージから読み込めません。現在は編集できません。",
+    "agentsTab": "エージェント",
+    "connectorsTab": "コネクタ",
+    "addConnector": "コネクタを追加",
+    "noConnectors": "コネクタはまだありません。",
+    "connectorsUnavailableWarning": "コネクタストアに接続できませんでした。リストが不完全な場合があります。読み込まれるまで代替品を作成しないでください。",
+    "editAccess": "アクセス権を編集",
+    "deleteConnector": "削除",
+    "deleteConnectorConfirm": "このコネクタを削除しますか？利用者全員が直ちにアクセスできなくなります。",
+    "confirmDeleteConnector": "コネクタを削除",
+    "connectorSaveSuccess": "コネクタを保存しました。",
+    "connectorCreateSuccess": "コネクタを作成しました。",
+    "connectorDeleteSuccess": "コネクタを削除しました。",
+    "editConnectorTitle": "コネクタを編集",
+    "newConnectorTitle": "新規コネクタ",
+    "connectorPresetLabel": "テンプレートから開始",
+    "connectorPresetNone": "最初から開始",
+    "connectorNameLabel": "名前",
+    "connectorDescriptionLabel": "説明",
+    "connectorUrlLabel": "サーバーURL",
+    "connectorUrlPlaceholderWarning": "保存前にURL内の{placeholder}を自身の値に置き換えてください。",
+    "connectorTransportLabel": "トランスポート",
+    "connectorAuthLabel": "認証",
+    "connectorAuthNone": "なし",
+    "connectorAuthBearer": "トークン（各ユーザーが個別に提供）",
+    "connectorAuthOauth": "OAuthサインイン",
+    "connectorSealingUnavailable": "OAuthは利用できません：このデプロイメントにはクライアントシークレットを暗号化するAUTH_SECRETが設定されていません。",
+    "connectorTokenHelpLabel": "トークン手順へのリンク（任意）",
+    "connectorClientIdLabel": "OAuthクライアントID",
+    "connectorClientSecretLabel": "OAuthクライアントシークレット",
+    "connectorClientSecretStored": "シークレットが保存されています。保持する場合は空欄のままにし、新しいものに変更する場合は入力してください。",
+    "connectorClientSecretHint": "保存前に暗号化され、一度も表示されません。",
+    "connectorScopesLabel": "スコープ（スペース区切り、任意）"
+  },
+  "localModels": {
+    "title": "ローカルモデル",
+    "description": "このコンピューターで動作しているモデルとチャットします。メッセージはブラウザからローカルアプリに直送され、当社サーバーには送信されません。そのため、返信や会話タイトル、要約もすべてこの端末内に留まります。",
+    "detect": "ローカルランタイムの検出",
+    "detecting": "検出中…",
+    "experimental": "実験的",
+    "portLabel": "ポート",
+    "statusUnknown": "まだ確認されていません。",
+    "statusChecking": "確認中…",
+    "statusReady": "{count, plural, =0 {接続済みですが、モデルは読み込まれていません。} one {接続済み — # 件のモデルが利用可能です。} other {接続済み — # 件のモデルが利用可能です。}}",
+    "statusNotRunning": "{label}に接続できません。該当ポートで稼働しているか、またブラウザがこのサイトからローカルアプリにアクセスできる設定かご確認ください。",
+    "statusHttpError": "{label}がエラーを返しました。ログをご確認ください。",
+    "corsHelp": {
+      "ollama": "Ollamaは稼働中ですが、このサイトからのリクエストを拒否しています。OLLAMA_ORIGINSにこのサイトのアドレスを設定し、Ollamaを再起動後、再度検出してください。",
+      "lmstudio": "LM Studioは稼働中ですが、このサイトからのリクエストを拒否しています。ローカルサーバー設定でCORSを有効にしてから、再度検出してください。",
+      "llamacpp": "llama.cppは稼働中ですが、このサイトからのリクエストを拒否しています。llama-serverをクロスオリジンリクエスト許可で起動し、再度検出してください。"
+    },
+    "privacyNote": "ローカルモデルではファイル添付、画像、Web検索、コネクターの機能は利用できません。これらは当社サーバーが必要です。検出はこのコンピューターのみを確認します。"
+  },
+  "urlFetch": {
+    "sourceFallback": "ウェブページ",
+    "fallbackHint": "ページを開いてテキストをコピーし、ここに貼り付けることもできます。",
+    "shortExtract": "読めたのは短い抜粋のみです。ページが有料・認証制かもしれません。",
+    "errors": {
+      "invalidUrl": "正しいウェブアドレスではないようです。",
+      "ssrfBlocked": "セキュリティ上の理由でこのアドレスは取得できません。",
+      "tooManyRedirects": "このリンクはリダイレクトが多すぎます。",
+      "timeout": "ページの応答に時間がかかりすぎています。",
+      "unreachable": "ページにアクセスできませんでした。",
+      "blocked": "サイトからリクエストが拒否されました。サインインが必要、または自動リーダーがブロックされている可能性があります。",
+      "notFound": "そのページは見つかりませんでした。",
+      "upstream": "サイトからエラーが返されました。",
+      "pdf": "そのリンクはPDFです。ダウンロードして、「添付」ボタンで追加してください。",
+      "nonHtml": "そのリンクは読み取れるウェブページではありません。",
+      "tooLarge": "そのページは大きすぎて取得できません。",
+      "empty": "そのページに読み取れる記事テキストが見つかりませんでした。",
+      "generic": "ページを取得できませんでした。"
+    },
+    "fetchingFile": "{host} を取得中…",
+    "attachLink": "リンクを添付",
+    "attachLinkTitle": "ウェブページを添付",
+    "attachLinkDescription": "ページが取得され、読み取れるテキストがメッセージに添付されます。",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "取得して添付",
+    "attachLinkInvalid": "正しいウェブアドレスではありません。",
+    "linkBadge": "リンクより",
+    "couldNotRetrieve": "取得できませんでした",
+    "doc": {
+      "sourceLabel": "出典",
+      "retrievedLabel": "取得日時",
+      "attemptedLabel": "試行日時",
+      "failureHeading": "ウェブページを取得できませんでした"
+    },
+    "settingsTitle": "メッセージ内のリンク",
+    "settingsToggle": "貼り付けたリンクを自動で取得",
+    "settingsDescription": "単独でリンクを貼り付けた場合、そのページが取得され、テキストが添付されてアシスタントが読めるようになります。これをオフにすると、貼り付けたリンクはテキストのままになりますが、「＋」メニューから手動でページを添付することもできます。",
+    "addLink": "リンクを追加"
+  },
+  "cameraAccessError": "カメラにアクセスできません。カメラの許可設定を確認し、再試行してください。",
+  "cameraUnnamedDevice": "カメラ",
+  "pastedText": {
+    "fallbackName": "貼り付けたテキスト",
+    "charCount": "{count, number}文字",
+    "removeChip": "貼り付けたテキスト「{name}」を削除",
+    "blockLabel": "貼り付けたテキスト: {name}",
+    "doc": {
+      "heading": "貼り付けたテキスト",
+      "pastedLabel": "貼り付け済み"
+    },
+    "settingsTitle": "大きな貼り付け",
+    "settingsToggle": "大きな貼り付けを添付ファイルに変換",
+    "settingsDescription": "下記の上限より多くテキストを貼り付けた場合、メッセージ欄に収めずファイルとして添付します。テキストは貼り付けられたまま利用され、取得や変更は行われません。",
+    "settingsThresholdLabel": "これより長い貼り付けを添付",
+    "settingsThresholdUnit": "文字",
+    "settingsThresholdHint": "{min, number}～{max, number}文字の間で設定できます。"
+  },
+  "structures": {
+    "section": "構造体",
+    "sectionSubtitle": "保存されたフィールド定義。抽出レシピやデータワークフローテーブルの初期スキーマとして利用できます。",
+    "loadFromStructure": "構造体を読み込む",
+    "loadFromStructureTitle": "これらの列を保存された構造体で置き換えます",
+    "pickerEmpty": "まだ保存された構造体がありません。",
+    "pickerTitle": "保存された構造体を読み込む",
+    "saveAsStructure": "構造体として保存",
+    "saveAsStructureTitle": "これらの列を構造体ライブラリに保存",
+    "savedToast": "「{name}」構造体を保存しました",
+    "namePlaceholder": "構造体名",
+    "fieldCount": "{count}項目",
+    "fieldCountOne": "1項目",
+    "downgradedNotice": "{count}項目がテキストに簡略化されました — テーブルでは各セルに1つの値しか保持できません: {names}",
+    "truncatedNotice": "{count}項目が削除されました — テーブルの列数上限は{max}列です: {names}",
+    "skippedDerivedNotice": "{count}個の計算列は保存されませんでした — 数式がこのテーブルの列を参照しています: {names}",
+    "loadReplacesColumns": "これにより現在の列が置き換わります。既存の行は列名が一致する値のみ維持されます。"
   }
 }

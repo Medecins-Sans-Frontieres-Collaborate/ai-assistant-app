@@ -1,3 +1,4 @@
+import { ExtractionResultContent } from '@/types/chat';
 import { Citation } from '@/types/rag';
 
 /**
@@ -26,6 +27,23 @@ export interface PendingTranscriptionInfo {
 }
 
 /**
+ * Real token usage for one chat request, as reported by the model provider
+ * and attributed server-side. Travels in the terminal metadata block (and in
+ * non-streaming JSON bodies) so the client can accumulate per-user stats.
+ */
+export interface TokenUsageMetadata {
+  promptTokens: number;
+  completionTokens: number;
+  totalTokens: number;
+  /** The model that ACTUALLY served (the fallback chain may have switched). */
+  modelId: string;
+  /** Resolved chat region; null = default (home) clients. */
+  region: 'US' | 'EU' | null;
+  /** The reasoning effort actually applied to the request, if any. */
+  reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high';
+}
+
+/**
  * Metadata object that can be embedded in streamed responses
  */
 export interface StreamMetadata {
@@ -35,6 +53,7 @@ export interface StreamMetadata {
   transcript?: TranscriptMetadata;
   action?: string; // Current action being performed (e.g., "searching_web", "processing")
   pendingTranscriptions?: PendingTranscriptionInfo[]; // Async batch transcription jobs
+  usage?: TokenUsageMetadata;
   fileCacheUpdates?: Array<{
     fileId: string;
     processedContent: {
@@ -53,6 +72,12 @@ export interface StreamMetadata {
    * which pinned/active files are not visible to the model right now.
    */
   activeFilesDropped?: string[];
+  /**
+   * Structured-data extraction result. When present, the chat surface
+   * replaces the assistant message's `content` with this payload and
+   * renders it as a download card instead of a text body.
+   */
+  extractionResult?: ExtractionResultContent;
 }
 
 /**
@@ -69,6 +94,8 @@ export interface ParsedMetadata {
   fileCacheUpdates?: StreamMetadata['fileCacheUpdates'];
   activeFilesTokensConsumed?: number;
   activeFilesDropped?: string[];
+  usage?: TokenUsageMetadata;
+  extractionResult?: ExtractionResultContent;
   extractionMethod: 'metadata' | 'none';
   /**
    * Character index in the input string where the terminal
@@ -77,6 +104,54 @@ export interface ParsedMetadata {
    * walk into the terminal metadata block.
    */
   metadataStartIndex: number | null;
+}
+
+/**
+ * Opening marker of the terminal metadata block.
+ *
+ * Exported so stream consumers can detect a block that has STARTED but not
+ * yet finished arriving — `parseMetadataFromContent` only reports
+ * `metadataStartIndex` once a block is complete, which is not enough to keep
+ * a half-arrived marker out of display text. See StreamParser.processChunk.
+ */
+export const METADATA_START_MARKER = '<<<METADATA_START>>>';
+
+/**
+ * Index at which an INCOMPLETE terminal metadata block begins, or -1.
+ *
+ * Covers both "the open marker is fully present but its closing marker
+ * hasn't arrived" and "the tail of the text is a partial prefix of the open
+ * marker" (e.g. the chunk ends with `<<<METADATA_ST`). Includes an
+ * immediately-preceding `\n\n` separator so the returned index matches what
+ * `metadataStartIndex` reports for a complete block.
+ *
+ * Callers use this to hold those bytes back until the rest arrives —
+ * otherwise they leak into the rendered message and, because scan cursors are
+ * monotonic, can never be retracted.
+ */
+export function pendingMetadataStartIndex(content: string): number {
+  let index = content.indexOf(METADATA_START_MARKER);
+
+  if (index === -1) {
+    // No full open marker — look for a partial one at the very end.
+    const maxPrefix = Math.min(
+      METADATA_START_MARKER.length - 1,
+      content.length,
+    );
+    for (let k = maxPrefix; k >= 1; k--) {
+      if (content.endsWith(METADATA_START_MARKER.slice(0, k))) {
+        index = content.length - k;
+        break;
+      }
+    }
+    if (index === -1) return -1;
+  }
+
+  // Match parseMetadataFromContent, whose index includes the optional
+  // leading blank line, so display text doesn't keep a trailing gap.
+  return index >= 2 && content.slice(index - 2, index) === '\n\n'
+    ? index - 2
+    : index;
 }
 
 /**
@@ -97,61 +172,79 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
   let fileCacheUpdates: StreamMetadata['fileCacheUpdates'] | undefined;
   let activeFilesTokensConsumed: number | undefined;
   let activeFilesDropped: string[] | undefined;
+  let usage: TokenUsageMetadata | undefined;
+  let extractionResult: ExtractionResultContent | undefined;
   let extractionMethod: ParsedMetadata['extractionMethod'] = 'none';
   let metadataStartIndex: number | null = null;
 
   // Cheap exit when the marker isn't present at all — avoids running the
   // regex on long streams that have no terminal metadata block yet.
-  const metaIdx = content.indexOf('<<<METADATA_START>>>');
-  const metadataMatch =
-    metaIdx === -1
-      ? null
-      : content.match(/\n\n<<<METADATA_START>>>(.*?)<<<METADATA_END>>>/s);
-  if (metadataMatch) {
+  const metaIdx = content.indexOf(METADATA_START_MARKER);
+  // A stream can carry MULTIPLE terminal blocks (the stream processor's
+  // usage/citations block, then StandardChatHandler's file_cache_update
+  // block). Parse and strip ALL of them, merging per-field with later
+  // blocks winning; only the first block's index caps the inline-event scan.
+  // The `\n\n` prefix is optional: regular streamed responses carry it, but
+  // extraction turns emit the block as the ENTIRE response (no prefix).
+  const blockRegex = /(?:\n\n)?<<<METADATA_START>>>(.*?)<<<METADATA_END>>>/gs;
+  const matches = metaIdx === -1 ? [] : [...content.matchAll(blockRegex)];
+  if (matches.length > 0) {
     extractionMethod = 'metadata';
-    // Record the start index of the leading `\n\n` so the scanner caps
-    // its inline-event search before the metadata block.
-    metadataStartIndex = metadataMatch.index ?? metaIdx;
-    mainContent = content.replace(
-      /\n\n<<<METADATA_START>>>.*?<<<METADATA_END>>>/s,
-      '',
-    );
+    // Record the start index (of the leading `\n\n` when present) so the
+    // scanner caps its inline-event search before the first metadata block.
+    metadataStartIndex = matches[0].index ?? metaIdx;
+    mainContent = content.replace(blockRegex, '');
 
-    try {
-      const parsedData = JSON.parse(
-        metadataMatch[1],
-      ) as Partial<StreamMetadata>;
-      if (parsedData.citations) {
-        citations = parsedData.citations;
+    for (const match of matches) {
+      try {
+        const parsedData = JSON.parse(match[1]) as Partial<StreamMetadata>;
+        if (parsedData.citations) {
+          citations = parsedData.citations;
+        }
+        if (parsedData.threadId) {
+          threadId = parsedData.threadId;
+        }
+        if (parsedData.thinking) {
+          thinking = parsedData.thinking;
+        }
+        if (parsedData.transcript) {
+          transcript = parsedData.transcript;
+        }
+        if (parsedData.action) {
+          action = parsedData.action;
+        }
+        if (parsedData.pendingTranscriptions) {
+          pendingTranscriptions = parsedData.pendingTranscriptions;
+        }
+        if (parsedData.fileCacheUpdates) {
+          fileCacheUpdates = parsedData.fileCacheUpdates;
+        }
+        if (typeof parsedData.activeFilesTokensConsumed === 'number') {
+          activeFilesTokensConsumed = parsedData.activeFilesTokensConsumed;
+        }
+        if (Array.isArray(parsedData.activeFilesDropped)) {
+          activeFilesDropped = parsedData.activeFilesDropped.filter(
+            (id: unknown): id is string => typeof id === 'string',
+          );
+        }
+        if (parsedData.usage) {
+          usage = parsedData.usage;
+        }
+        const anyData = parsedData as unknown as {
+          extractionResult?: unknown;
+        };
+        if (
+          anyData.extractionResult &&
+          typeof anyData.extractionResult === 'object' &&
+          (anyData.extractionResult as { type?: string }).type ===
+            'extraction_result'
+        ) {
+          extractionResult =
+            anyData.extractionResult as ExtractionResultContent;
+        }
+      } catch (error) {
+        console.error('Error parsing metadata JSON:', error);
       }
-      if (parsedData.threadId) {
-        threadId = parsedData.threadId;
-      }
-      if (parsedData.thinking) {
-        thinking = parsedData.thinking;
-      }
-      if (parsedData.transcript) {
-        transcript = parsedData.transcript;
-      }
-      if (parsedData.action) {
-        action = parsedData.action;
-      }
-      if (parsedData.pendingTranscriptions) {
-        pendingTranscriptions = parsedData.pendingTranscriptions;
-      }
-      if (parsedData.fileCacheUpdates) {
-        fileCacheUpdates = parsedData.fileCacheUpdates;
-      }
-      if (typeof parsedData.activeFilesTokensConsumed === 'number') {
-        activeFilesTokensConsumed = parsedData.activeFilesTokensConsumed;
-      }
-      if (Array.isArray(parsedData.activeFilesDropped)) {
-        activeFilesDropped = parsedData.activeFilesDropped.filter(
-          (id: unknown): id is string => typeof id === 'string',
-        );
-      }
-    } catch (error) {
-      console.error('Error parsing metadata JSON:', error);
     }
   }
 
@@ -170,6 +263,8 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
     fileCacheUpdates,
     activeFilesTokensConsumed,
     activeFilesDropped,
+    usage,
+    extractionResult,
     extractionMethod,
     metadataStartIndex,
   };
@@ -198,6 +293,7 @@ export function appendMetadataToStream(
   if (metadata.action) cleanMetadata.action = metadata.action;
   if (metadata.pendingTranscriptions)
     cleanMetadata.pendingTranscriptions = metadata.pendingTranscriptions;
+  if (metadata.usage) cleanMetadata.usage = metadata.usage;
 
   // Only append if we have actual metadata
   if (Object.keys(cleanMetadata).length > 0) {

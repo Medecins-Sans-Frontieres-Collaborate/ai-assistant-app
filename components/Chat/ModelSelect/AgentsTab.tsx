@@ -162,7 +162,6 @@ export const AgentsTab: FC<AgentsTabProps> = ({
 
   const organizationAgents = getOrganizationAgents();
   const isBotsEnabled = exploreBots !== false;
-  const hasOrganizationAgents = isBotsEnabled && organizationAgents.length > 0;
 
   // Region/office labels. Office name is user-defined config (place name), so it
   // isn't translated; the rest is.
@@ -185,16 +184,30 @@ export const AgentsTab: FC<AgentsTabProps> = ({
 
   // Bucket discovered agents by source: regional (org default), office (extra
   // office-scoped projects), and custom (user-added connections, rendered per-source below).
+  // Admin-defined prompt agents (type 'prompt') are org-managed and render in
+  // the regional section with `org-<id>` model ids — never the foundry- id
+  // scheme (they have no Foundry source path).
   const officePathSet = new Set(officePaths);
+  const promptAgents = foundryAgents.filter((a) => a.type === 'prompt');
   const regionalAgents = foundryAgents.filter(
-    (a) => !a.source || a.source === regionalPath,
+    (a) => a.type !== 'prompt' && (!a.source || a.source === regionalPath),
   );
   const officeFoundryAgents = foundryAgents.filter(
-    (a) => a.source && officePathSet.has(a.source),
+    (a) => a.type !== 'prompt' && a.source && officePathSet.has(a.source),
   );
   const getSourceAgents = (sourcePath: string) =>
     foundryAgents.filter((a) => a.source === sourcePath);
-  const hasOfficeSection = officeName != null && officeFoundryAgents.length > 0;
+  // Region/office org agents are gated by the discovery flag (exploreBots);
+  // custom (BYO) sources rendered below are not. The region section shows when
+  // there's any static org agent OR a discovered regional agent, so a
+  // discovery-only region isn't hidden just because it has no static agents.
+  const hasOrganizationAgents =
+    isBotsEnabled &&
+    (organizationAgents.length > 0 ||
+      regionalAgents.length > 0 ||
+      promptAgents.length > 0);
+  const hasOfficeSection =
+    isBotsEnabled && officeName != null && officeFoundryAgents.length > 0;
 
   // Stable model ID for a discovered Foundry agent — matches what ModelSelect
   // builds when constructing organizationAgentModels. Includes a source hash so
@@ -226,7 +239,10 @@ export const AgentsTab: FC<AgentsTabProps> = ({
       }
     };
     organizationAgents.forEach((a) => consider(`org-${a.id}`, a.name));
-    foundryAgents.forEach((a) => consider(foundryModelId(a), a.name));
+    promptAgents.forEach((a) => consider(`org-${a.id}`, a.name));
+    foundryAgents
+      .filter((a) => a.type !== 'prompt')
+      .forEach((a) => consider(foundryModelId(a), a.name));
     return Array.from(byId.values());
   })();
 
@@ -239,6 +255,16 @@ export const AgentsTab: FC<AgentsTabProps> = ({
     ? organizationAgents.find((a) => `org-${a.id}` === selectedModelId)
     : undefined;
 
+  // Prompt agents select as `org-<id>` but live in the discovered list, not
+  // the static registry — synthesize a display agent so the details panel
+  // renders. Typed 'foundry' (not 'rag') so the panel doesn't fetch RAG
+  // recent-sources for a persona that has none; no agentId (prompt agents
+  // never route through the Foundry execution path).
+  const selectedPromptAgent =
+    !selectedStaticOrgAgent && selectedModelId?.startsWith('org-')
+      ? promptAgents.find((a) => `org-${a.id}` === selectedModelId)
+      : undefined;
+
   // For Foundry-discovered agents, synthesize a minimal OrganizationAgent so the
   // details header renders the same hexagon + matte color shown in the list,
   // instead of falling back to the generic provider icon.
@@ -248,19 +274,30 @@ export const AgentsTab: FC<AgentsTabProps> = ({
       : undefined;
   const selectedOrgAgent = selectedStaticOrgAgent
     ? selectedStaticOrgAgent
-    : selectedFoundryAgent
+    : selectedPromptAgent
       ? {
-          id: selectedFoundryAgent.id,
-          name: selectedFoundryAgent.name,
-          description: selectedFoundryAgent.description ?? '',
-          icon: selectedFoundryAgent.icon || 'IconHexagon',
+          id: selectedPromptAgent.id,
+          name: selectedPromptAgent.name,
+          description: selectedPromptAgent.description ?? '',
+          icon: selectedPromptAgent.icon || 'IconHexagon',
           color:
-            selectedFoundryAgent.color ||
-            colorForAgent(selectedFoundryAgent.name),
+            selectedPromptAgent.color ||
+            colorForAgent(selectedPromptAgent.name),
           type: 'foundry' as const,
-          agentId: selectedFoundryAgent.agentName,
         }
-      : undefined;
+      : selectedFoundryAgent
+        ? {
+            id: selectedFoundryAgent.id,
+            name: selectedFoundryAgent.name,
+            description: selectedFoundryAgent.description ?? '',
+            icon: selectedFoundryAgent.icon || 'IconHexagon',
+            color:
+              selectedFoundryAgent.color ||
+              colorForAgent(selectedFoundryAgent.name),
+            type: 'foundry' as const,
+            agentId: selectedFoundryAgent.agentName,
+          }
+        : undefined;
 
   const handleDeleteWithConfirm = (id: string) => {
     if (confirmingDeleteId === id) {
@@ -321,14 +358,24 @@ export const AgentsTab: FC<AgentsTabProps> = ({
                   }
                 }}
                 selectedAgentId={selectedModelId ?? undefined}
-                discoveredAgents={regionalAgents.map((a) => ({
-                  id: a.id,
-                  name: a.name,
-                  description: a.description,
-                  icon: a.icon,
-                  color: a.color,
-                  matchId: foundryModelId(a),
-                }))}
+                discoveredAgents={[
+                  ...regionalAgents.map((a) => ({
+                    id: a.id,
+                    name: a.name,
+                    description: a.description,
+                    icon: a.icon,
+                    color: a.color,
+                    matchId: foundryModelId(a),
+                  })),
+                  ...promptAgents.map((a) => ({
+                    id: a.id,
+                    name: a.name,
+                    description: a.description,
+                    icon: a.icon,
+                    color: a.color,
+                    matchId: `org-${a.id}`,
+                  })),
+                ]}
                 hiddenIds={hiddenIds}
                 onHide={onHideAgent}
                 hideLabel={hideLabel}
@@ -479,6 +526,25 @@ export const AgentsTab: FC<AgentsTabProps> = ({
               </section>
             );
           })}
+
+          {/* Empty state — nothing to show in any section. Keeps the Connect
+              button below as the call to action instead of leaving it bare. */}
+          {organizationAgentModels.length === 0 &&
+            agentSources.length === 0 && (
+              <div className="rounded-lg border border-dashed border-gray-300 dark:border-gray-700 px-4 py-6 text-center">
+                <IconHexagon
+                  size={24}
+                  className="mx-auto text-gray-300 dark:text-gray-600"
+                  aria-hidden="true"
+                />
+                <p className="mt-2 text-sm font-medium text-gray-600 dark:text-gray-300 leading-tight">
+                  {t('emptyState.title')}
+                </p>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 leading-snug">
+                  {t('emptyState.description')}
+                </p>
+              </div>
+            )}
 
           {/* Connect button */}
           <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">

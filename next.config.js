@@ -11,6 +11,11 @@ const nextConfig = {
   // should be handled by the upstream reverse proxy / CDN instead.
   compress: false,
 
+  // jsdom (used by the workflow page-fetcher to run Readability) resolves
+  // optional native deps like `canvas` at require time, which the bundler
+  // cannot follow. Leave it and Readability as real Node requires.
+  serverExternalPackages: ['jsdom', '@mozilla/readability'],
+
   // Experimental settings for large file uploads
   // Supports up to 1.5GB video files + buffer for form data overhead
   experimental: {
@@ -133,7 +138,15 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; " +
               "img-src 'self' data: https: blob:; " +
               "font-src 'self' data:; " +
-              "connect-src 'self' https://login.microsoftonline.com https://graph.microsoft.com https://*.ai.msfusa.org https://*.launchdarkly.com; " +
+              // Loopback origins are permitted so local model runtimes
+              // (Ollama, LM Studio, llama.cpp) can be reached browser-direct:
+              // the app is deployed, so a server-side fetch to localhost would
+              // hit the container, not the user's machine. Only loopback is
+              // allowed — never an arbitrary host. This widening is
+              // unconditional because a static header can't be flag-gated;
+              // the risk is low, since an attacker who can already run script
+              // in the page gains little from loopback reachability.
+              "connect-src 'self' https://login.microsoftonline.com https://graph.microsoft.com https://*.ai.msfusa.org https://*.launchdarkly.com http://127.0.0.1:* http://localhost:*; " +
               "media-src 'self' blob:; " +
               "worker-src 'self' blob:; " +
               "frame-src 'self'; " +

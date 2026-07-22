@@ -1,12 +1,19 @@
 import {
   PendingTranscriptionInfo,
   StreamMetadata,
+  TokenUsageMetadata,
   TranscriptMetadata,
   createStreamDecoder,
   parseMetadataFromContent,
+  pendingMetadataStartIndex,
 } from '@/lib/utils/app/metadata';
 
-import { Message, MessageType, ToolCallRecord } from '@/types/chat';
+import {
+  ExtractionResultContent,
+  Message,
+  MessageType,
+  ToolCallRecord,
+} from '@/types/chat';
 import { Citation } from '@/types/rag';
 
 import {
@@ -26,6 +33,12 @@ export class StreamParser {
   private text: string = '';
   /** Bytes before this index are either in `displayText` or were events. */
   private processedIndex: number = 0;
+  /**
+   * Set once a terminal metadata block has been seen, complete or partial.
+   * Gates trailing-newline trimming so a metadata-free stream keeps any
+   * newlines the model actually produced.
+   */
+  private sawMetadataBoundary: boolean = false;
   /** What the markdown renderer sees. Incomplete marker tails are excluded. */
   private displayText: string = '';
   private extractedCitations: Citation[] = [];
@@ -35,6 +48,8 @@ export class StreamParser {
   private extractedFileCacheUpdates?: StreamMetadata['fileCacheUpdates'];
   private extractedActiveFilesTokensConsumed?: number;
   private extractedActiveFilesDropped?: string[];
+  private extractedUsage?: TokenUsageMetadata;
+  private extractedExtractionResult?: ExtractionResultContent;
   private hasReceivedContent: boolean = false;
   private prevDisplayText: string = '';
   private prevCitationsStr: string = '[]';
@@ -84,6 +99,23 @@ export class StreamParser {
     let scanEnd = this.text.length;
     if (parsed.metadataStartIndex != null) {
       scanEnd = Math.min(scanEnd, parsed.metadataStartIndex);
+    } else {
+      // The block has only PARTIALLY arrived (split across network reads):
+      // parseMetadataFromContent reports no index until it sees the closing
+      // marker, so without this the half-marker flushes into displayText —
+      // and because processedIndex is monotonic, it can never be taken back.
+      // Hold those bytes until the rest of the block lands.
+      const pendingMeta = pendingMetadataStartIndex(this.text);
+      if (pendingMeta !== -1) {
+        scanEnd = Math.min(scanEnd, pendingMeta);
+      }
+    }
+    // Once we know a metadata block exists, any trailing newlines in the
+    // display text are its `\n\n` separator, never content — the separator
+    // itself can be split across reads, so its first `\n` may already have
+    // flushed before the marker became recognizable.
+    if (parsed.metadataStartIndex != null || scanEnd < this.text.length) {
+      this.sawMetadataBoundary = true;
     }
     const scanInput =
       scanEnd === this.text.length ? this.text : this.text.slice(0, scanEnd);
@@ -134,10 +166,13 @@ export class StreamParser {
     // Strip dangling "[1] [2]" citation indices at the end so the CitationList
     // below the message owns citation display. Derived per-render — the raw
     // accumulator keeps all bytes in case a later chunk extends past them.
-    const renderedDisplayText = this.displayText.replace(
+    let renderedDisplayText = this.displayText.replace(
       /\n*\s*(?:\[\d+\]\s*)+\s*$/g,
       '',
     );
+    if (this.sawMetadataBoundary) {
+      renderedDisplayText = renderedDisplayText.replace(/\n+$/, '');
+    }
 
     // Update citations if found and different from previous
     const currentCitationsStr = JSON.stringify(parsed.citations);
@@ -182,6 +217,19 @@ export class StreamParser {
     // Capture dropped active file IDs if present
     if (parsed.activeFilesDropped && this.extractedActiveFilesDropped == null) {
       this.extractedActiveFilesDropped = parsed.activeFilesDropped;
+    }
+
+    // Capture per-request token usage if present (terminal metadata block)
+    if (parsed.usage && this.extractedUsage == null) {
+      this.extractedUsage = parsed.usage;
+    }
+
+    // Capture structured-extraction result if present. When set, this
+    // replaces the assistant message's `content` — text-body is empty on
+    // an extraction turn, so the message renders entirely from the
+    // datasets carried here.
+    if (parsed.extractionResult && !this.extractedExtractionResult) {
+      this.extractedExtractionResult = parsed.extractionResult;
     }
 
     // `hasReceivedContent` checks the raw accumulator so a citations-only
@@ -233,6 +281,10 @@ export class StreamParser {
         if (jsonResponse.text) {
           finalText = jsonResponse.text;
         }
+        // Non-streaming bodies carry usage inline instead of via metadata
+        if (jsonResponse.usage && this.extractedUsage == null) {
+          this.extractedUsage = jsonResponse.usage as TokenUsageMetadata;
+        }
       } catch (e) {
         // Not JSON or parsing failed, use text as-is
       }
@@ -245,6 +297,16 @@ export class StreamParser {
    * Convert parsed stream to a complete assistant message
    */
   toMessage(content: string): Message {
+    // If an extraction result was emitted, the assistant message is the
+    // structured payload itself — not the streamed text body.
+    if (this.extractedExtractionResult) {
+      return {
+        role: 'assistant',
+        content: this.extractedExtractionResult,
+        messageType: MessageType.TEXT,
+      };
+    }
+
     return {
       role: 'assistant',
       content,
@@ -255,6 +317,13 @@ export class StreamParser {
           : undefined,
       transcript: this.extractedTranscript,
     };
+  }
+
+  /**
+   * Get the extraction result if one was emitted on the stream.
+   */
+  getExtractionResult(): ExtractionResultContent | undefined {
+    return this.extractedExtractionResult;
   }
 
   /**
@@ -305,6 +374,14 @@ export class StreamParser {
    */
   getActiveFilesDropped(): string[] | undefined {
     return this.extractedActiveFilesDropped;
+  }
+
+  /**
+   * Get the per-request token usage reported by the server (terminal
+   * metadata block for streams, inline `usage` for non-streaming JSON).
+   */
+  getUsage(): TokenUsageMetadata | undefined {
+    return this.extractedUsage;
   }
 
   /**

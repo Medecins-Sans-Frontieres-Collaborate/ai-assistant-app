@@ -477,7 +477,16 @@ export async function loadDocumentFromPath(
       break;
     case mimeType.startsWith(
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    ):
+    ) ||
+      mimeType.startsWith('application/rtf') ||
+      mimeType.startsWith('text/rtf') ||
+      mimeType.startsWith('application/vnd.oasis.opendocument.text') ||
+      originalFilename.endsWith('.rtf') ||
+      originalFilename.endsWith('.odt'):
+      // Pandoc infers the input format from the file extension, which
+      // buildTempFilePath preserves. Legacy binary `.doc` is deliberately NOT
+      // routed here — pandoc cannot read it, and falling through to the raw
+      // UTF-8 default would hand back mojibake rather than an honest failure.
       text = await convertWithPandoc(filePath, 'markdown');
       break;
     case mimeType.startsWith(

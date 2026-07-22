@@ -6,7 +6,6 @@ import {
   findPrecedingUserMessageIndex,
   flattenEntriesForAPI,
 } from '@/lib/utils/shared/chat/messageVersioning';
-import { windowMessagesForAPI } from '@/lib/utils/shared/chat/messageWindowing';
 
 import {
   ActiveFile,
@@ -79,8 +78,20 @@ export function useChatActions({
         idx === messageIndex ? editedMessage : entry,
       );
 
+      // Editing a message inside the summarized region would otherwise keep
+      // feeding the model the OLD fact via the compaction summary forever
+      // (the watermark only moves forward, so re-summarization never
+      // triggers). Invalidate compaction so the next post-stream refresh
+      // rebuilds the summary from the edited content.
+      const editedFlatIndex = flattenEntriesForAPI(
+        currentConversation.messages.slice(0, messageIndex),
+      ).length;
+      const invalidateCompaction =
+        editedFlatIndex < (currentConversation.compaction?.upToEntryIndex ?? 0);
+
       updateConversation(currentConversation.id, {
         messages: updatedMessages,
+        ...(invalidateCompaction ? { compaction: undefined } : {}),
       });
     },
     [updateConversation],
@@ -228,12 +239,12 @@ export function useChatActions({
       // Set the regenerating index in chat store
       chatState.setRegeneratingIndex(targetIndex);
 
-      // Create a flattened conversation snapshot for the API call
-      // Only include messages up to and including the user message, with windowing
-      const messagesForAPI = windowMessagesForAPI(
-        flattenEntriesForAPI(
-          currentConversation.messages.slice(0, userMessageIndex + 1),
-        ),
+      // Create a flattened conversation snapshot for the API call, including
+      // only messages up to and including the user message. No pre-windowing:
+      // chatStore.sendChatRequest is the single windowing point (it must see
+      // the full history so compaction knows what was dropped).
+      const messagesForAPI = flattenEntriesForAPI(
+        currentConversation.messages.slice(0, userMessageIndex + 1),
       );
 
       const apiConversation = {
@@ -272,11 +283,10 @@ export function useChatActions({
 
     const userMessage = entryToDisplayMessage(lastEntry);
 
-    // Include the entire conversation in the API window (the trailing user
-    // message is the prompt to respond to).
-    const messagesForAPI = windowMessagesForAPI(
-      flattenEntriesForAPI(currentConversation.messages),
-    );
+    // Include the entire conversation (the trailing user message is the
+    // prompt to respond to). No pre-windowing: chatStore.sendChatRequest is
+    // the single windowing point.
+    const messagesForAPI = flattenEntriesForAPI(currentConversation.messages);
 
     const apiConversation = {
       ...currentConversation,

@@ -433,7 +433,22 @@
     "noProjectsFound": "Nebyly nalezeny žádné projekty. Používá se \"defaultní\".",
     "selectAllRequired": "Vyberte předplatné, účet a projekt.",
     "subscriptionRequired": "Vyberte předplatné",
-    "accountRequired": "Vyberte účet Foundry"
+    "accountRequired": "Vyberte účet Foundry",
+    "projectSelectionRequired": "Vyberte projekt ze seznamu.",
+    "scanningResources": "Probíhá skenování vašich Azure předplatných...",
+    "searchProjectsPlaceholder": "Hledat projekty...",
+    "noProjectsDiscovered": "Ve vašich předplatných nebyly nalezeny žádné Foundry projekty. Pokud znáte cestu, použijte ruční zadání.",
+    "discoveryPartialWarning": "{count, plural, one {# předplatné} other {# předplatných}} nebylo možné skenovat. Pokud váš projekt chybí, použijte ruční zadání.",
+    "discoveryTruncatedWarning": "Bylo příliš mnoho zdrojů na kompletní skenování. Pokud váš projekt chybí, použijte ruční zadání.",
+    "retryScan": "Zkusit znovu skenovat",
+    "next": "Další",
+    "back": "Zpět",
+    "selectAgentsDescription": "Vyberte, které agenty z tohoto projektu zobrazit ve výběru modelu.",
+    "selectAll": "Vybrat vše",
+    "deselectAll": "Odznačit vše",
+    "agentsSelectedCount": "Vybráno {selected} z {total} agentů",
+    "autoAddLabel": "Automaticky přidávat nové agenty",
+    "autoAddDescription": "Agentí později publikovaní do tohoto projektu se zobrazí automaticky. Nezaškrtnutí agenti zůstanou vyloučeni."
   },
   "Quick Actions": "Rychlé akce",
   "Type / in chat to access your prompts": "Napište / v chatu pro přístup k vašim výzvám",
@@ -760,7 +775,19 @@
       "listingTools": "Vyhledávání dostupných nástrojů…",
       "analyzingFiles": "Analýza vašich souborů…",
       "searchingKnowledge": "Vyhledávání v znalostní bázi…",
-      "cancellingPriorTool": "Rušení předchozího požadavku na nástroj…"
+      "cancellingPriorTool": "Rušení předchozího požadavku na nástroj…",
+      "workflow": {
+        "preparingDocument": "Příprava referencí…",
+        "writingDocument": "Píše se dokument…",
+        "analyzingSource": "Analýza zdrojového textu…",
+        "translating": "Překlad…",
+        "reviewingTranslation": "Kolo kontroly {round} z {total}…",
+        "revisingTranslation": "Zpracovávání zpětné vazby z kontroly…",
+        "extractingRows": "Extrahování řádků ze zdroje {source}…",
+        "transformingTable": "Transformace tabulky…",
+        "findingLocations": "Identifikace míst…",
+        "updatingMap": "Aktualizace mapy…"
+      }
     },
     "toolSummary": {
       "usedTools": "Použito {count, plural, one {# nástroj} few {# nástroje} other {# nástrojů}}",
@@ -821,7 +848,9 @@
     "listen": "Poslechnout",
     "processingAudio": "Zpracovávám zvuk...",
     "ttsError": "Chyba při generování zvuku. Zkuste to prosím znovu.",
-    "unsupportedMessageType": "Chyba při zobrazení zprávy: Nepodporovaný typ zprávy"
+    "unsupportedMessageType": "Chyba při zobrazení zprávy: Nepodporovaný typ zprávy",
+    "addLanguageOption": "Přidat „{name}“…",
+    "sources": "Zdroje"
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",
@@ -1146,9 +1175,27 @@
     "behaviorSection": "Chování",
     "resetChatSettings": "Obnovit nastavení chatu",
     "resetChatSettingsConfirmTitle": "Obnovit nastavení chatu?",
-    "resetChatSettingsConfirmMessage": "Tímto obnovíte výchozí nastavení všech položek v tomto panelu: teplota, vlastní instrukce, O vás, odpověď modelu, rychlost streamování, převod textu na řeč, aktivní soubory a potvrzení. Nedotkne se to vašich konverzací.",
+    "resetChatSettingsConfirmMessage": "Tím obnovíte výchozí nastavení všeho v tomto panelu: teplota, vlastní instrukce, O vás, odpověď modelu, rychlost streamování, převod textu na řeč, aktivní soubory a potvrzení. Nemá vliv na vaše konverzace.",
     "customInstructionsLabel": "Vlastní pokyny*",
-    "defaultTemperatureLabel": "Výchozí teplota*"
+    "defaultTemperatureLabel": "Výchozí teplota*",
+    "Usage & Impact": "Využití a dopad",
+    "Connectors": "Konektory",
+    "Backup": "Záloha",
+    "Memories": "Vzpomínky",
+    "Agent Access": "Přístup agenta",
+    "LocalModels": "Lokální modely",
+    "suggestRevisions": {
+      "title": "Revize dokumentu",
+      "toggle": "Navrhovat revize místo jejich přímého použití",
+      "description": "Když požádáte workflow dokumentu o revizi, změny dorazí jako jednotlivé návrhy, které můžete přijmout nebo odmítnout, stejně jako u hodnocení kvality.",
+      "exceptionsTitle": "Přesto použít přímo, když:",
+      "exceptionSelection": "Reviduje se zvýrazněná pasáž",
+      "exceptionLargeRewrite": "Přepis mění většinu dokumentu",
+      "exceptionReorder": "Oddíly jsou přesunuty, nikoli upraveny",
+      "thresholdLabel": "Považovat za přepis, pokud přesáhne",
+      "thresholdUnit": "% změněného dokumentu",
+      "exceptionSelectionAlways": "Úprava zvýrazněného výběru se vždy použije okamžitě — model vrací pouze upravený úryvek, který nelze rozdělit na návrhy vůči celému dokumentu."
+    }
   },
   "notFound": {
     "lostDog": "Ztracený pes"
@@ -1297,33 +1344,78 @@
     },
     "title": "Vyberte model",
     "modelsDescription": "Vyberte AI model pro svou konverzaci. Každý model má jiné přednosti — vyberte jeden pro zobrazení podrobností.",
-    "recommended": "Doporučeno"
+    "recommended": "Doporučeno",
+    "familyAll": "Vše",
+    "familyFilterLabel": "Filtrovat modely podle rodiny",
+    "searchPlaceholder": "Hledat modely",
+    "searchEmpty": "Žádné modely neodpovídají vašemu hledání.",
+    "star": "Oblíbený {name}",
+    "unstar": "Odebrat z oblíbených {name}",
+    "otherFamily": "Ostatní",
+    "hostedExternally": "Spouští se na vlastní infrastruktuře poskytovatele přes Azure AI Foundry, nikoliv v prostředí MSF Azure.",
+    "hostedIn": {
+      "label": "Hostováno v {regions}",
+      "tooltip": "Azure region(y), kde je tento model nasazen. Konverzace jsou zpracovávány ve vašem vlastním regionu."
+    },
+    "badges": {
+      "external": "Externí",
+      "externalTooltip": "Spouští se na vlastní infrastruktuře poskytovatele přes Azure AI Foundry, nikoliv v prostředí MSF Azure.",
+      "regionHostedTooltip": "Hostováno v Azure regionu {region}. Konverzace s tímto modelem jsou zpracovávány tam."
+    },
+    "favorites": "Oblíbené",
+    "euResidencyNote": "Všechny modely běží v EU Azure regionu.",
+    "hostedRegion": {
+      "label": "Hostovaný region",
+      "processedIn": "Tato konverzace je zpracovávána v Azure regionu {region}.",
+      "euOnlyNote": "{name} je hostován v EU Azure regionu; konverzace s ním jsou zpracovány tam."
+    },
+    "version": {
+      "label": "Verze"
+    },
+    "reasoningModel": "Model pro uvažování: před odpovědí přemýšlí krok za krokem. Pomalejší, vhodnější na složité úlohy.",
+    "variant": {
+      "label": "Varianta"
+    },
+    "deployment": {
+      "title": "Nasazení",
+      "source": "Zdroj",
+      "account": "Účet",
+      "location": "Umístění",
+      "deployment": "Nasazení",
+      "modelVersion": "Verze modelu",
+      "publisher": "Vydavatel"
+    }
   },
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "AI model poháněný GPT-4.1 s webovým vyhledáváním v reálném čase prostřednictvím Bingu. Poskytuje aktuální informace, ověřování faktů a znalosti aktuálních událostí. Ideální pro výzkum vyžadující čerstvé informace, analýzu zpráv a ověřování faktů.",
-      "knowledgeCutoff": "Webové vyhledávání v reálném čase"
+      "knowledgeCutoff": "Webové vyhledávání v reálném čase",
+      "tagline": "Předchozí generace OpenAI"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "Nejpokročilejší model OpenAI, vyniká ve složitém uvažování, generování kódu a řešení technických problémů. Ideální pro analytické úkoly, programátorské výzvy, výzkum a podrobná vysvětlení. Podporuje nastavitelné úsilí při uvažování a mnohomluvnost odpovědí.",
-      "knowledgeCutoff": "6. srpna 2025, 20:00"
+      "knowledgeCutoff": "6. srpna 2025, 20:00",
+      "tagline": "Předchozí vlajkový GPT"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Rychlejší a nákladově efektivnější varianta GPT-5, optimalizovaná pro rychlost při zachování vysoké kvality. Perfektní pro každodenní úkoly, rychlé dotazy, směrování nástrojů a aplikace vyžadující rychlé odezvy. Vynikající rovnováha mezi výkonem a efektivitou.",
-      "knowledgeCutoff": "6. srpna 2025, 20:00"
+      "knowledgeCutoff": "6. srpna 2025, 20:00",
+      "tagline": "Rychlejší a úspornější"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "Specializovaná varianta GPT-5 optimalizovaná pro konverzační interakce a emocionální inteligenci. Vyniká v empatické komunikaci, podpoře duševního zdraví, kreativním psaní, brainstormingu a přirozeném dialogu. Ideální pro neformální konverzace, poradenské scénáře a úkoly vyžadující emocionální uvědomění.",
-      "knowledgeCutoff": "1. října 2025, 20:00"
+      "knowledgeCutoff": "1. října 2025, 20:00",
+      "tagline": "Předchozí chat GPT"
     },
     "o3": {
       "name": "o3",
       "description": "Nejpokročilejší model uvažování OpenAI s revolučními schopnostmi řešení problémů. Vyniká ve složité matematice, vědeckém uvažování, programátorských výzvách a víceúrovňových logických úkolech. Rozšířené kontextové okno 200K. Podporuje řízení úsilí při uvažování.",
-      "knowledgeCutoff": "8. dubna 2025, 20:00"
+      "knowledgeCutoff": "8. dubna 2025, 20:00",
+      "tagline": "Hluboké postupné uvažování"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1333,57 +1425,258 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Specialista na uvažování, který ukazuje svou práci krok za krokem. Skvělý pro matematické problémy, logické hádanky a pochopení složitých konceptů. Sledujte, jak přemýšlí nad problémy v reálném čase.",
-      "knowledgeCutoff": "20. ledna 2025"
+      "knowledgeCutoff": "20. ledna 2025",
+      "tagline": "Ukazuje uvažování krok za krokem"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Všestranný model obzvláště dobrý v programování a technickém psaní. Skvělý pro ladění kódu, psaní dokumentace a vysvětlování technických konceptů. Rychlý a spolehlivý pro vývojovou práci.",
-      "knowledgeCutoff": "16. dubna 2025, 00:45"
+      "knowledgeCutoff": "16. dubna 2025, 00:45",
+      "tagline": "Otevřená alternativa"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Všestranný model od xAI známý pro nuancované odpovědi. Skvělý pro otevřené diskuze, kreativní projekty a řešení složitých problémů.",
-      "knowledgeCutoff": "13. května 2025, 00:16"
+      "knowledgeCutoff": "13. května 2025, 00:16",
+      "tagline": "xAI alternativa"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Nejschopnější model Anthropic s výjimečným uvažováním, programováním a kreativními schopnostmi. Ideální pro složité analýzy, výzkum a úkoly vyžadující hluboké porozumění.",
-      "knowledgeCutoff": "Leden 2025"
+      "knowledgeCutoff": "Leden 2025",
+      "tagline": "Starší generace Opus"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Vyvážený model Claude nabízející vynikající výkon v programování, analýze a kreativních úkolech. Skvělý pro každodenní použití s rychlými odezvami.",
-      "knowledgeCutoff": "Leden 2025"
+      "knowledgeCutoff": "Leden 2025",
+      "tagline": "Předchozí generace Sonnet"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Model Claude Opus předchozí generace. Skvělý pro složité programátorské úkoly, podrobnou analýzu a nuancované porozumění.",
-      "knowledgeCutoff": "Leden 2025"
+      "knowledgeCutoff": "Leden 2025",
+      "tagline": "Předchozí generace Opus"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Rychlý a nákladově efektivní model Claude optimalizovaný pro rychlé úkoly. Skvělý pro jednoduché dotazy, shrnutí a aplikace s vysokým objemem.",
-      "knowledgeCutoff": "Leden 2025"
+      "knowledgeCutoff": "Leden 2025",
+      "tagline": "Rychlá varianta Claude"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Nejvyspělejší model OpenAI, vynikající v komplexním uvažování, generování kódu a řešení technických problémů. Nejlepší pro analytické úkoly, programátorské výzvy, výzkum a podrobné vysvětlení. Podporuje nastavitelnou úroveň uvažování a délku odpovědí.",
-      "knowledgeCutoff": "Prosinec 2025"
+      "knowledgeCutoff": "Prosinec 2025",
+      "tagline": "Kód, analýza, výzkum"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Prosinec 2025",
-      "description": "Speciální varianta GPT-5.2 optimalizovaná pro konverzační interakce a emocionální inteligenci. Vyniká v empatické komunikaci, kreativním psaní, brainstormingu a přirozeném dialogu. Nejvhodnější pro neformální rozhovory, poradenské situace a úkoly vyžadující emocionální vnímavost."
+      "description": "Speciální varianta GPT-5.2 optimalizovaná pro konverzační interakce a emocionální inteligenci. Vyniká v empatické komunikaci, kreativním psaní, brainstormingu a přirozeném dialogu. Nejvhodnější pro neformální rozhovory, poradenské situace a úkoly vyžadující emocionální vnímavost.",
+      "tagline": "Konverzace, brainstorming"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Nejsilnější model od Anthropic. Vhodný pro dlouhé psaní, výzkum a úkoly, které vyžadují pečlivé uvažování.",
-      "knowledgeCutoff": "únor 2026"
+      "knowledgeCutoff": "únor 2026",
+      "tagline": "Dlouhé texty a analýza"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Vyvážený model Claude. Vhodný pro každodenní psaní, analýzu a rychlé programování.",
-      "knowledgeCutoff": "únor 2026"
+      "knowledgeCutoff": "únor 2026",
+      "tagline": "Vyvážený Claude pro každodenní použití"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Open-source model od společnosti Meta. Spolehlivý pro psaní, shrnutí a rychlé dotazy.",
+      "tagline": "Otevřená alternativa"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Nejnovější vlajkový model od OpenAI. Vyniká v psaní, výzkumu, programování a řešení složitých problémů.",
+      "tagline": "Nejnovější vlajkový GPT"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Nejmenší a nejrychlejší varianta GPT. Nejlepší pro rychlé a jednoduché úkoly s minimálními náklady.",
+      "tagline": "Nejmenší a nejrychlejší GPT"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Konverzační verze GPT zaměřená na dialog. Vhodná pro neformální chaty, brainstorming a podpůrné diskuse.",
+      "tagline": "Novější chat GPT"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Starší multimodální GPT. Dobře poslouží pro každodenní psaní a dotazy tam, kde nejsou potřeba nejnovější funkce.",
+      "tagline": "Starší multimodální GPT"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Malá a rychlá varianta GPT-4.1 pro rychlé každodenní úkoly.",
+      "tagline": "Lehký předchozí GPT"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Nejnovější a nejvýkonnější model od Anthropic. Skvělý pro dlouhé psaní, výzkum, programování a důkladnou analýzu.",
+      "tagline": "Nejnovější a nejsilnější Claude"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Nejnovější open-source model DeepSeek. Spolehlivý pro běžné psaní a technické dotazy.",
+      "tagline": "Otevřená alternativa"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Vlajkový model Mistral. Evropská alternativa pro psaní, shrnutí a obecné dotazy.",
+      "tagline": "Evropský open-weight model"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Dřívější vlajková verze GPT-5. Stále silný v psaní, analýze a programování.",
+      "tagline": "Starší vlajkový GPT-5"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Starší verze GPT-5 upravená pro chat. Dobrá pro běžné konverzace a brainstorming.",
+      "tagline": "Starší chat GPT"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Nejmenší varianta GPT-5. Nejvhodnější pro rychlé a jednoduché úkoly s minimálními náklady.",
+      "tagline": "Malý předchozí GPT"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Nejmenší varianta GPT-4.1. Dobrá pro rychlé a jednoduché úkoly, kde je důležitá rychlost a cena.",
+      "tagline": "Nejmenší předchozí GPT"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Malá, rychlá varianta GPT-4o. Dobrá pro každodenní rychlé úkoly, kde nejsou potřeba nejnovější funkce.",
+      "tagline": "Lehký starší multimodální GPT"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Kompaktní model pro logické úlohy. Vhodný pro matematiku, logiku a úlohy krok po kroku za nižší cenu než o3.",
+      "tagline": "Rychlé a cenově dostupné uvažování"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Starší kompaktní model pro logické úlohy. Zvládá matematiku, přírodní vědy a logické hádanky s omezeným rozpočtem.",
+      "tagline": "Kompaktní postupné uvažování"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Nejinteligentnější model od Anthropic, první z rodiny Claude 5. Výborný pro nejnáročnější psaní, výzkum a programování.",
+      "tagline": "Frontier model od Anthropicu"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Nejnovější vyvážená verze Claude, první z rodiny Claude 5. Silný v každodenním psaní, analýze a programování s rychlými odpověďmi.",
+      "tagline": "Nejnovější vyvážený Claude"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Střední model Mistral. Evropská alternativa, která vyvažuje schopnosti a rychlost pro běžné použití.",
+      "tagline": "Vyvážený evropský model"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Malý model Mistral. Rychlý a levný pro shrnutí, návrhy a jednoduché dotazy.",
+      "tagline": "Malý rychlý evropský model"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Nejmenší model Mistral. Nejlepší pro velmi rychlé a jednoduché úkoly za minimální cenu.",
+      "tagline": "Malý Mistral pro edge zařízení"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Aktualizovaná verze DeepSeek-R1. Postupně vysvětluje své myšlení s vylepšenou hloubkou úsudku.",
+      "tagline": "Aktualizovaný model pro otevřené uvažování"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Odlehčený open-source model od společnosti Meta. Rychlý pro psaní, shrnutí a běžné dotazy.",
+      "tagline": "Efektivní open-source Llama"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Starší open-source model od společnosti Meta. Stále spolehlivý pro obecné psaní a dotazy.",
+      "tagline": "Starší open-source Llama"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Vlajkový model xAI. Dobře se hodí pro otevřené diskuse, analýzy a kreativní projekty.",
+      "tagline": "Vlajkový model xAI"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Nejnovější špičkový model od OpenAI. Vyniká v psaní, výzkumu, programování a řešení složitých problémů.",
+      "tagline": "Nejnovější vlajkový GPT"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (nejnovější)",
+      "description": "Průběžný alias, který vždy ukazuje na nejnovější chatovací model od OpenAI. V Azure nahrazuje ukončené verze modelů gpt-*-chat.",
+      "tagline": "Vždy nejnovější chat GPT"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Nedávné vydání Opus, mezi verzemi 4.6 a 4.8. Silný v delších textech, výzkumu, kódování a pečlivé analýze.",
+      "tagline": "Nedávné vydání Opus"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Nejnovější model pro uvažování od DeepSeek a náhrada řady R1 v Azure. Ukazuje své myšlení krok za krokem.",
+      "tagline": "Nejnovější otevřený model uvažování"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Rychlá varianta V4 od DeepSeek a náhrada řady V3 v Azure. Rychlý pro běžné psaní a technické dotazy.",
+      "tagline": "Rychlá otevřená alternativa"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Uvažování)",
+      "description": "Rychlý model pro uvažování od xAI. Přemýšlí krok za krokem a odpovídá rychle.",
+      "tagline": "Rychlý xAI model uvažování"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Rychlý chatovací model od xAI. Rychlé odpovědi na každodenní dotazy a konverzace.",
+      "tagline": "Rychlý xAI chat model"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Odlehčený model xAI. Rychlejší a levnější pro krátké dotazy a neformální chatování.",
+      "tagline": "Lehký xAI model"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Vlajkový model ze sady GPT-5.6 od OpenAI. Nejlepší pro psaní, výzkum, programování a řešení složitých problémů.",
+      "tagline": "Nejnovější úroveň vlajkového GPT"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Vyvážená úroveň modelu GPT-5.6 od OpenAI. Vhodný pro běžné psaní, analýzy a programování s rychlými odpověďmi.",
+      "tagline": "Vyvážený každodenní GPT-5.6"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Lehká a rychlá varianta GPT-5.6 od OpenAI. Ideální pro rychlé dotazy a jednoduché úlohy s nízkými náklady.",
+      "tagline": "Lehký, rychlý GPT-5.6"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Nejnovější středně velký model Mistral. Evropská alternativa, která vyvažuje schopnosti a rychlost pro každodenní práci.",
+      "tagline": "Vyvážený evropský model"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Model s otevřenými váhami od Moonshot AI. Silný v agentních úlohách, programování a práci s dlouhými dokumenty.",
+      "tagline": "Agentní model s otevřenými váhami"
     }
   },
   "searchMode": {
@@ -1723,7 +2016,22 @@
     "useDefaultStyle": "Použít výchozí styl psaní",
     "noTonesCreated": "Zatím nebyly vytvořeny žádné tóny",
     "createTonesHint": "Vytvořte tóny v Rychlých akcích",
-    "translateDocumentTooltip": "Přeložte dokumenty do jiného jazyka.\n\nPodporované formáty: Word, Excel, PowerPoint, HTML, TXT\nMax. velikost: 40 MB\n\nPodpora více než 80 jazyků a volitelných slovníků."
+    "translateDocumentTooltip": "Přeložte dokumenty do jiného jazyka.\n\nPodporované formáty: Word, Excel, PowerPoint, HTML, TXT\nMax. velikost: 40 MB\n\nPodpora více než 80 jazyků a volitelných slovníků.",
+    "translateTooltip": "Přeložte úryvek textu do jiného jazyka.\n\nPro celé soubory (Word, Excel, PowerPoint, HTML, TXT) použijte místo toho Přeložit dokument.",
+    "cameraTooltip": "Pořiďte fotografii pomocí fotoaparátu zařízení a připojte ji k zprávě.",
+    "noResults": "Žádné odpovídající akce",
+    "sectionPinned": "Připnuté",
+    "sectionFrequent": "Často používané",
+    "sectionMore": "Více",
+    "categoryWeb": "Web",
+    "categoryMedia": "Média a soubory",
+    "categoryTransform": "Transformovat",
+    "pin": "Připnout nahoru",
+    "unpin": "Odepnout",
+    "moveToMore": "Přesunout do Více",
+    "moveOutOfMore": "Zobrazit v menu",
+    "showSources": "Zobrazit další zdroje",
+    "hideSources": "Skrýt další zdroje"
   },
   "transcription": {
     "addInstructions": "Přidat pokyny",
@@ -1933,7 +2241,14 @@
     "learnMore": "Zjistit více",
     "advancedOptions": "Pokročilé možnosti",
     "unofficialBadgeLabel": "Neoficiální",
-    "unofficialLanguageWarning": "Tento jazyk není oficiálně podporován. Kvalita překladu nebyla ověřena. Nechte výsledek před sdílením zkontrolovat rodilým či plynulým mluvčím."
+    "unofficialLanguageWarning": "Tento jazyk není oficiálně podporován. Kvalita překladu nebyla ověřena. Nechte výsledek před sdílením zkontrolovat rodilým či plynulým mluvčím.",
+    "translationSubmitted": "Překlad zahájen — PDF soubory se zpracovávají na pozadí.",
+    "pendingTitle": "Překládá se {filename}…",
+    "pendingHint": "PDF překlady probíhají na pozadí a mohou trvat několik minut. Můžete pokračovat v práci — tato karta se aktualizuje, jakmile bude dokument připraven, i po znovunačtení.",
+    "asyncFailed": "Překlad dokumentu selhal: {error}",
+    "jobNotFound": "úloha překladu již není dostupná. Zkuste to prosím znovu.",
+    "retryPolling": "Zkontrolovat znovu",
+    "pollingStalled": "Nepodařilo se připojit k serveru kvůli ověření postupu. Překlad může stále probíhat."
   },
   "terms": {
     "officialLanguages": "Oficiální verze:",
@@ -1997,6 +2312,10 @@
       "technicalDetails": "Technické detaily",
       "agentCountLabel": "{count} agentů",
       "disconnectedToast": "Odpojeno {name}"
+    },
+    "emptyState": {
+      "title": "Nejsou dostupní žádní regionální ani organizační agenti",
+      "description": "Pro zobrazení agentů připojte níže projekt Foundry."
     }
   },
   "privacy": {
@@ -2107,5 +2426,1309 @@
     "review": "Zkontrolovat",
     "itemId": "ID: {id}",
     "itemSource": "{date} od {source}"
+  },
+  "regionOverride": {
+    "warning": "Přepsání polohy je aktivní — vaše požadavky jsou směrovány do datového regionu {region}. Toto je manuální testovací přepsání, ne vaše skutečná poloha.",
+    "clear": "Zrušit přepsání"
+  },
+  "usageImpact": {
+    "empty": "Zatím nebylo zaznamenáno žádné využití. Po chatování se zde zobrazí vaše spotřeba tokenů a odhadované emise.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} nabití smartphonu",
+    "requests": "Požadavky",
+    "promptTokens": "Tokeny zadání",
+    "completionTokens": "Tokeny odpovědi",
+    "topModels": "Podle modelu",
+    "byRegion": "Podle hostitelského regionu",
+    "regionDefault": "Výchozí",
+    "modelRow": "{requests} pož. · {grams} g",
+    "disclosure": "Odhady založené na předpokladech v{version} · od {since} · pouze standardní chat (odpovědi agentů a znalostní báze nejsou započítány).",
+    "reset": "Resetovat statistiky využití",
+    "estimatedPortion": "Zahrnuje přibližně {grams} g CO₂e ({requests} požadavků) odhadnutých z chatů před zavedením sledování — zpětně vypočítáno z uložených zpráv, nikoli z měřených počtů tokenů.",
+    "chipTitle": "Emisní čip",
+    "chipDescription": "Odhadovaná uhlíková stopa aktuální konverzace, zobrazená nad vstupním polem chatu.",
+    "chipAlways": "Zobrazovat vždy",
+    "chipAlwaysHint": "Čip zůstává viditelný, pokud má konverzace odhad.",
+    "chipAuto": "Zobrazit při aktualizaci nebo najetí",
+    "chipAutoHint": "Čip se objeví, když se odhad změní, poté zmizí. Při najetí myší nebo kliknutí se opět zobrazí.",
+    "chipHidden": "Skryto",
+    "chipHiddenHint": "Čip se nikdy nezobrazuje. Součty jsou stále sledovány a zobrazeny na této stránce.",
+    "chipAutoHideLabel": "Vyprší po",
+    "chipAutoHideUnit": "sekundách",
+    "chipAutoHideHint": "Mezi {min} a {max} sekundami."
+  },
+  "extraction": {
+    "toggleLabel": "Extrahovat strukturovaná data",
+    "trayLabel": "Extrakce",
+    "trayPrefix": "Extrahovat",
+    "trayInfo": "Extrakce vrací až 3 strukturované tabulky. Recepty se ukládají lokálně.",
+    "autoChip": "Auto — AI navrhne strukturu",
+    "addRecipe": "Přidat recept",
+    "addRecipeTitle": "Přidat recept do této extrakce",
+    "addRecipeFullTitle": "Maximálně 3 recepty na jednu extrakci",
+    "removeRecipe": "Odebrat recept: {name}",
+    "remove": "Odebrat",
+    "section": "Recepty pro extrakci",
+    "sectionSubtitle": "Uložené šablony, které převádějí surový text, soubory nebo URL na strukturované tabulky. Vyberte až 3 na každé kolo extrakce.",
+    "newRecipe": "Nový recept",
+    "untitledRecipe": "(Nepojmenovaný recept)",
+    "deleteRecipe": "Smazat recept",
+    "delete": "Smazat",
+    "deleteConfirm": "Smazat?",
+    "cancel": "Zrušit",
+    "name": "Název",
+    "namePlaceholder": "např. Pacienti",
+    "description": "Popis",
+    "optional": "(volitelné)",
+    "descriptionPlaceholder": "Krátké shrnutí zobrazené v seznamu receptů",
+    "instructions": "Instrukce",
+    "instructionsPlaceholder": "Co má AI v materiálu hledat?",
+    "fields": "Pole",
+    "field": "pole",
+    "fieldsPlural": "pole",
+    "fieldName": "Název pole",
+    "fieldType": "Typ pole",
+    "fieldNamePlaceholder": "nazev_pole",
+    "addField": "Přidat pole",
+    "removeField": "Odebrat pole",
+    "toggleDetails": "Zobrazit podrobnosti",
+    "fieldDetailsTitle": "Popis, hodnoty enumu",
+    "fieldDescriptionPlaceholder": "Popis (pomáhá AI najít toto pole)",
+    "enumValuesPlaceholder": "Povolené hodnoty oddělené čárkou",
+    "required": "povinné",
+    "suggest": "Navrhnout pomocí AI",
+    "suggesting": "Navrhuji…",
+    "suggestNeedsInstructions": "Nejprve přidejte instrukce, aby AI věděla, co hledat",
+    "searchRecipes": "Hledat recepty",
+    "pickerEmpty": "Zatím žádné recepty. Vytvořte jeden pro zahájení.",
+    "pickerEmptyMatch": "Žádné odpovídající recepty",
+    "editorEmpty": "Zatím žádné recepty. Vytvořte jeden a AI pomůže vyplnit pole.",
+    "noData": "Žádná data nebyla extrahována",
+    "noRecords": "Žádné záznamy {name} nebyly nalezeny",
+    "row": "řádek",
+    "rows": "řádky",
+    "record": "záznam",
+    "records": "záznamy",
+    "complete": "dokončeno",
+    "download": "Stáhnout",
+    "preview": "Náhled",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} polí",
+    "fieldCountOne": "1 pole",
+    "andMoreFields": "+ {count} dalších",
+    "saveAsRecipe": "Uložit jako recept",
+    "savedAsRecipeToast": "Uloženo jako recept „{name}“",
+    "previewTruncated": "Zobrazeny první 3 z {total} řádků. Pro celé údaje stáhněte soubor.",
+    "previewEmpty": "Žádné řádky k zobrazení",
+    "proposedSchemaTip": "AI navrhla toto schéma. Uložte si ho pro budoucí použití.",
+    "downloadAriaLabel": "Stáhnout {name} jako {format}",
+    "previewAriaLabel": "Přepnout náhled {name}",
+    "changeFormatAriaLabel": "Změnit formát stažení pro {name}",
+    "materialWarningTitle": "Přidejte materiál k extrakci",
+    "materialWarningBody": "Napište zprávu, připojte soubor nebo zadejte URL adresu.",
+    "materialAttach": "Přiložit soubor",
+    "willExtractPrefix": "Bude extrahováno z:",
+    "materialText": "text zprávy",
+    "materialFiles": "{count, plural, one {1 soubor} other {# souborů}}",
+    "materialActiveFiles": "{count, plural, one {1 aktivní soubor} other {# aktivních souborů}}",
+    "dismiss": "Vypnout extrakci"
+  },
+  "Connectors": "Konektory",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "Překlad",
+        "description": "Překládejte text s analýzou, glosáři a kontrolními koly"
+      },
+      "document": {
+        "label": "Dokument",
+        "description": "Vytvářejte a upravujte dokument s asistentem"
+      },
+      "dataAnalysis": {
+        "label": "Analýza dat",
+        "description": "Importujte tabulky a prozkoumávejte či upravujte svá data"
+      },
+      "map": {
+        "label": "Mapa",
+        "description": "Převádějte libovolná data na umístění v mapě"
+      }
+    },
+    "chooser": {
+      "prompt": "Nebo začněte pracovat v zaměřeném pracovním prostoru"
+    },
+    "sidebar": {
+      "newTranslation": "Nový překlad",
+      "newDocument": "Nový dokument",
+      "newDataAnalysis": "Nová analýza dat",
+      "newMap": "Nová mapa"
+    },
+    "translation": {
+      "chooseLanguage": "Cílový jazyk",
+      "customLanguageHint": "„{name}“ je jazyk, který jste přidali — AI se pokusí o jakýkoli jazyk, ale kvalita není ověřena.",
+      "addedByYou": "Přidáno vámi",
+      "glossary": "Glosář",
+      "noGlossary": "Žádný glosář",
+      "manageGlossaries": "Glosáře",
+      "glossaries": "Glosáře",
+      "closeGlossaries": "Zavřít glosáře",
+      "glossariesEmpty": "Vytvořte glosář, abyste určili, jak mají být určité termíny překládány. Glosáře jsou uloženy v tomto zařízení a lze je znovu používat napříč překlady.",
+      "newGlossary": "Nový glosář",
+      "newGlossaryName": "Nepojmenovaný glosář",
+      "glossaryName": "Název glosáře",
+      "deleteGlossary": "Smazat glosář",
+      "sourceTerm": "Zdrojový termín",
+      "targetTerm": "Překlad",
+      "note": "Poznámka",
+      "noteOptional": "Poznámka (nepovinné)",
+      "addEntry": "Přidat termín",
+      "removeEntry": "Odstranit {term}",
+      "mode": "Režim překladu",
+      "modeQuick": "Rychlý",
+      "modeAgentic": "Zkontrolovaný",
+      "modeQuickHint": "Jednopřechodový překlad, nejrychlejší",
+      "modeAgenticHint": "Text se nejprve analyzuje, poté překládá a provádí až 3 kola kontroly",
+      "translate": "Přeložit",
+      "translating": "Překládání…",
+      "sourceLabel": "Zdrojový text",
+      "targetLabel": "Překlad",
+      "sourcePlaceholder": "Vložte nebo napište text k překladu, nebo nahrajte dokument.",
+      "targetEmpty": "Zde se zobrazí překlad.",
+      "uploadDocument": "Nahrát dokument",
+      "copy": "Kopírovat",
+      "copied": "Zkopírováno",
+      "tooLong": "Text je delší než {max} znaků. Rozdělte jej na části, nebo k překladu celých souborů použijte dokumentovou funkci.",
+      "analysisTitle": "Překladová analýza",
+      "register": "Registrovat",
+      "reviewTitle": "Kola kontroly",
+      "roundLabel": "Kolo {round}",
+      "verdictApprove": "schváleno",
+      "verdictRevise": "upravena",
+      "railRequest": "Přeložte zdrojový text do jazyka {language}.",
+      "railDoneAgentic": "Hotovo. Text jsem analyzoval, přeložil a provedl {rounds} kontrolní kolo/-a. Výsledek je ve workspace.",
+      "railDoneQuick": "Hotovo. Překlad je ve workspace.",
+      "railAssessRequest": "Zhodnoťte kvalitu překladu do {language}.",
+      "railAssessDone": "Hodnocení dokončeno: hodnocení je ve workspace s {count} navrženými úpravami k revizi.",
+      "roundChanges": "Změny v kole {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "Přesnost",
+          "description": "Přesně vyjadřuje význam zdroje — bez chybného překladu, vynechání, přidání nebo nepřeložených segmentů"
+        },
+        "fluency": {
+          "label": "Plynulost",
+          "description": "Gramatika, pravopis, interpunkce a soudržnost odpovídají přirozenému jazyku cílové skupiny"
+        },
+        "terminology": {
+          "label": "Terminologie",
+          "description": "Odborné pojmy jsou správné a jednotné; glosář je přesně dodržen"
+        },
+        "style": {
+          "label": "Styl",
+          "description": "Registr, tón a styl odpovídají zdroji a zůstávají konzistentní"
+        },
+        "localeConventions": {
+          "label": "Místní zvyklosti",
+          "description": "Data, čísla, jednotky a interpunkce odpovídají normám cílového jazyka"
+        },
+        "audience": {
+          "label": "Publikum",
+          "description": "Odpovídá účelu a čtenářské skupině textu"
+        }
+      },
+      "severity": {
+        "minor": "Drobné",
+        "major": "Závažné"
+      },
+      "assess": "Posoudit kvalitu",
+      "assessing": "Posuzování…",
+      "assessmentTitle": "Hodnocení kvality",
+      "criteriaPicker": "Kritéria k posouzení",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Navržené úpravy",
+      "noEditsSuggested": "Nenavrženy žádné úpravy — překlad splnil zvolená kritéria.",
+      "acceptEdit": "Přijmout",
+      "rejectEdit": "Odmítnout",
+      "acceptAll": "Přijmout vše",
+      "rejectAll": "Odmítnout vše",
+      "editAccepted": "Přijato",
+      "editRejected": "Odmítnuto",
+      "editUnapplicable": "Tuto pasáž nelze v aktuálním textu najít — nebylo použito",
+      "editTranslation": "Upravit",
+      "doneEditing": "Hotovo",
+      "pasteTranslationPlaceholder": "Zadejte nebo vložte překlad, na kterém chcete pracovat…",
+      "editingBlockedPendingEdits": "Nejprve vyřešte nebo odmítněte čekající navržené úpravy",
+      "pendingCount": "{count} čeká",
+      "closeReview": "Zavřít kontrolu kvality",
+      "showReview": "Zobrazit kontrolu",
+      "showReviewPending": "Zobrazit kontrolu ({count} čeká)",
+      "undoEdit": "Zpět",
+      "clearResolved": "Vymazat vyřešené",
+      "clearResolvedHint": "Odstranit přijaté, zamítnuté a neaplikovatelné úpravy z tohoto seznamu",
+      "autoClearResolved": "Automaticky mazat vyřešené úpravy",
+      "customCriteria": "Vlastní kritéria",
+      "closeCriteria": "Zavřít vlastní kritéria",
+      "newCriterion": "Nové kritérium",
+      "newCriterionName": "Nepojmenované kritérium",
+      "criterionName": "Název kritéria",
+      "criterionRubric": "Rubrika",
+      "criterionRubricPlaceholder": "Popište, co musí překlad splnit, aby vyhověl tomuto kritériu, např. \"Převádějte všechny klinické dávkovací instrukce v rozkazovacím způsobu, nikdy v infinitivu...\"",
+      "criterionRubricHint": "Tato rubrika je AI předávána doslovně spolu s vestavěnými dimenzemi MQM při hodnocení překladu.",
+      "criteriaEmpty": "Vytvořte vlastní kritéria — např. firemní styl, preferovanou terminologii klienta nebo regionální zvyklosti — pro hodnocení překladů nad rámec vestavěných MQM dimenzí. Ukládá se na tomto zařízení a lze znovu použít.",
+      "deleteCriterion": "Smazat kritérium",
+      "manageCriteria": "Vlastní kritéria",
+      "addCriteria": "Přidat kritéria",
+      "noUsableCriteria": "Vyberte alespoň jedno vestavěné kritérium, nebo zadejte vlastní rubriku ke svým kritériím.",
+      "criterionRubricTooLong": "Tato kritéria překračují limit o {over} znaků. Odesílají se s každým hodnocením, proto je nutné je zkrátit, než je lze použít."
+    },
+    "document": {
+      "emptyTitle": "Popište požadovaný dokument",
+      "emptyBody": "Napište asistentovi, co má sepsat — například situační zprávu, dopis dárcům či zápis z porady. Pokud chcete citace a fakta, přidejte nejprve soubory jako reference.",
+      "generatePlaceholder": "Popište, jaký dokument má být vytvořen…",
+      "revisePlaceholder": "Popište, jaké změny chcete provést…",
+      "generate": "Vytvořit",
+      "revise": "Upravit",
+      "writing": "Píšu…",
+      "export": "Exportovat",
+      "references": "Reference",
+      "addReference": "Přidat soubor",
+      "uploading": "Nahrávání…",
+      "removeReference": "Odebrat {name}",
+      "referenceChars": "{chars} znaků extrahovaného textu",
+      "referenceEmpty": "Ze souboru {name} nebyl extrahován žádný text",
+      "uploadFailed": "Nahrávání se nezdařilo",
+      "untitledDocument": "Dokument bez názvu",
+      "generatedSummary": "Dokument jsem vytvořil v pracovní oblasti. Zkontrolujte ho a napište, co mám změnit.",
+      "revisedSummary": "Dokument jsem v pracovní oblasti upravil.",
+      "runFailed": "Něco se nepovedlo: {message}",
+      "uploadBasis": "Začněte z existujícího dokumentu",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "Gramatika a pravopis",
+          "description": "Správná gramatika a pravopis; jednotná anglická varianta (US nebo UK) je v pořádku — jejich míchání je chyba"
+        },
+        "consistency": {
+          "label": "Konzistence",
+          "description": "Terminologie, názvy, velká písmena a formátování použito všude stejně"
+        },
+        "clarity": {
+          "label": "Srozumitelnost",
+          "description": "Přímočaré, jednoznačné věty; struktura podporující čtenáře"
+        },
+        "sensitivity": {
+          "label": "Citlivost",
+          "description": "Inkluzivní, konfliktově a humanitárně citlivá formulace (volitelná kontrola)"
+        },
+        "specAdherence": {
+          "label": "Dodržení specifikace",
+          "description": "Dodržuje přiloženou specifikaci dokumentu: požadované sekce přítomny, ve správném pořadí a podle pokynů"
+        },
+        "toneAdherence": {
+          "label": "Dodržení tónu",
+          "description": "Dodržuje přiložená pravidla pro hlas a tón"
+        }
+      },
+      "severity": {
+        "minor": "Menší",
+        "major": "Větší"
+      },
+      "assess": "Posoudit kvalitu",
+      "assessing": "Posuzování…",
+      "assessmentTitle": "Kontrola kvality",
+      "criteriaPicker": "Kritéria k posouzení",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Navržené úpravy",
+      "noEditsSuggested": "Nebyly navrženy žádné úpravy — dokument splňuje zvolená kritéria.",
+      "acceptEdit": "Přijmout",
+      "rejectEdit": "Odmítnout",
+      "acceptAll": "Přijmout vše",
+      "rejectAll": "Odmítnout vše",
+      "editAccepted": "Přijato",
+      "editRejected": "Odmítnuto",
+      "editUnapplicable": "Tuto pasáž nelze v aktuálním textu najít — nebylo aplikováno",
+      "editingBlockedPendingEdits": "Nejprve dokončete nebo odmítněte čekající návrhy úprav",
+      "pendingCount": "{count} čeká",
+      "closeReview": "Ukončit kontrolu kvality",
+      "showReview": "Zobrazit kontrolu",
+      "showReviewPending": "Zobrazit kontrolu ({count} čeká)",
+      "railAssessRequest": "Posuďte kvalitu dokumentu podle zvolených kritérií.",
+      "railAssessDone": "Hodnocení dokončeno: výsledky jsou v pracovním prostoru se {count} návrhem úprav ke kontrole.",
+      "spec": "Specifikace dokumentu",
+      "noSpec": "Bez specifikace",
+      "manageSpecs": "Specifikace",
+      "specs": "Specifikace dokumentu",
+      "closeSpecs": "Ukončit specifikace",
+      "specsEmpty": "Vytvořte specifikaci pro úpravu dokumentů do pevného formátu — povinné sekce, pořadí a pokyny k jednotlivým sekcím (např. šablona SitRep). Specifikace jsou uloženy v tomto zařízení a lze je znovu použít.",
+      "newSpec": "Nová specifikace",
+      "newSpecName": "Nepojmenovaná specifikace",
+      "specName": "Název specifikace",
+      "specDescription": "Popis (volitelné)",
+      "deleteSpec": "Odstranit specifikaci",
+      "sectionHeading": "Nadpis sekce",
+      "sectionGuidance": "Pokyny (volitelné)",
+      "sectionRequired": "Povinné",
+      "addSection": "Přidat sekci",
+      "removeSection": "Odebrat sekci",
+      "generalGuidance": "Obecné pokyny (volitelné)",
+      "tone": "Tón",
+      "noTone": "Bez tónu",
+      "customCriteria": "Vlastní kritéria",
+      "manageCriteria": "Vlastní kritéria",
+      "closeCriteria": "Ukončit vlastní kritéria",
+      "criteriaEmpty": "Vytvořte vlastní kritéria — např. specifika značky nebo organizační jazyk — pro hodnocení dokumentů a řízení revizí. Uloženo na tomto zařízení a znovupoužitelné.",
+      "newCriterion": "Nové kritérium",
+      "newCriterionName": "Nepojmenované kritérium",
+      "criterionName": "Název kritéria",
+      "criterionRubric": "Rubrika",
+      "criterionRubricPlaceholder": "Popište, co musí dokument splňovat, aby vyhověl tomuto kritériu, např. \"Nikdy nepoužívejte superlativy o naší práci; příjemce vždy nazývejte 'lidé, kterým pomáháme'…\"",
+      "criterionRubricHint": "Tato rubrika je předána AI doslovně při hodnocení a revizích.",
+      "deleteCriterion": "Smazat kritérium",
+      "profileTitle": "Profil dokumentu",
+      "profileDocType": "Typ",
+      "profileLanguage": "Jazyk",
+      "profileAudience": "Cílová skupina",
+      "profilePurpose": "Účel",
+      "profileRegister": "Registr",
+      "profileTone": "Tón",
+      "profileConventions": "Konvence",
+      "emptyHint": "Začněte psát níže, popište, co napsat do pole dole, nebo začněte ze souboru.",
+      "addSpec": "Přidat specifikaci",
+      "addCriteria": "Přidat kritéria",
+      "scopeFullDocument": "Rozsah: celý dokument",
+      "scopeSelection": "Rozsah: výběr — „{preview}…” ({count} slov)",
+      "clearSelection": "Zrušit výběr (práce s celým dokumentem)",
+      "reviseSelectionPlaceholder": "Popište úpravy tohoto výběru…",
+      "revisedSelectionSummary": "Upravil(a) jsem vybranou pasáž v pracovním prostoru.",
+      "assessedSelection": "Výběr",
+      "undoEdit": "Zpět",
+      "clearResolved": "Vymazat vyřešené",
+      "clearResolvedHint": "Odstranit přijaté, zamítnuté a neaplikovatelné úpravy z tohoto seznamu",
+      "autoClearResolved": "Automaticky mazat vyřešené úpravy",
+      "import": "Importovat",
+      "importReplaceTitle": "Nahradit dokument?",
+      "importReplaceBody": "Import dokumentu {name} nahradí aktuální dokument. Vaše reference, specifikace a tón budou zachovány.",
+      "importReplaceConfirm": "Nahradit",
+      "editorMode": "Režim editoru",
+      "editorModeRich": "Rich text",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Před změnou režimu editoru vyřešte navržené úpravy.",
+      "suggestChanges": "Navrhnout změny",
+      "suggestChangesHint": "Revizi zkontrolujte jako jednotlivé návrhy místo okamžitého přepsání celého dokumentu.",
+      "suggestChangesSelectionNote": "Revize výběru se použijí přímo — rozsah jste již zvolili.",
+      "suggestedSummary": "Navrženo {count} {count, plural, one {změna} few {změny} other {změn}} k revizi.",
+      "revisionSuggestionSummary": "Vaše žádost o revizi vygenerovala {count} {count, plural, one {navrženou změnu} few {navržené změny} other {navržených změn}}.",
+      "revisionCriterionLabel": "Požadovaná revize",
+      "fallbackSelection": "Použito přímo — revize výběru nejsou navrhovány.",
+      "fallbackLargeRewrite": "Použito přímo — přepis změnil příliš velkou část dokumentu, než aby šel rozdělit na jednotlivé návrhy.",
+      "fallbackReorder": "Použito přímo — oddíly byly přesunuty a nelze je navrhnout jednotlivě.",
+      "fallbackUnanchorable": "Použito přímo — změny nemohly být přiřazeny ke konkrétním pasážím.",
+      "fallbackNoChanges": "Žádné změny nebyly potřeba.",
+      "criterionRubricTooLong": "Tato kritéria překračují limit o {over} znaků. Odesílají se s každým hodnocením, proto je nutné je zkrátit, než je lze použít."
+    },
+    "data": {
+      "emptyTitle": "Importujte data k analýze",
+      "emptyBody": "Nahrajte soubor CSV, Excel nebo JSON, nebo vložte řádky přímo. Jakmile se tabulka načte, můžete ji seřadit, vytěžit z dokumentů další řádky nebo ji transformovat pomocí zadání v běžném jazyce.",
+      "importFile": "Importovat soubor",
+      "importing": "Probíhá import…",
+      "pasteData": "Vložit data",
+      "pastePlaceholder": "Vložte CSV, TSV nebo JSON sem…",
+      "import": "Importovat",
+      "addFromSource": "Přidat ze zdroje",
+      "extractHint": "Vložte text nebo vyberte dokument; řádky odpovídající vašim aktuálním sloupcům z něj budou vytěženy. Neznámé hodnoty zůstanou prázdné — nic nebude vymyšleno.",
+      "extractPlaceholder": "Vložte nestrukturovaný text obsahující data…",
+      "extractRows": "Vytěžit řádky",
+      "extractFromFile": "Ze souboru…",
+      "extracting": "Probíhá těžba…",
+      "pastedSource": "Vložený text",
+      "transform": "Transformovat",
+      "transforming": "Probíhá transformace…",
+      "transformPlaceholder": "Popište transformaci, např. \"přidat sloupec s počtem případů na 1000 obyvatel\"…",
+      "transformCapHint": "Transformace jsou omezené na {max} řádků. U větších tabulek nejprve řádky smažte nebo filtrujte.",
+      "undo": "Zpět",
+      "deleteSelected": "Smazat {count}",
+      "deletedRows": "Smazáno {count} řádků",
+      "selectAllRows": "Vybrat všechny řádky",
+      "selectRow": "Vybrat řádek {row}",
+      "rowCount": "{count} řádků",
+      "rowCapExceeded": "To by bylo {count} řádků; tabulka je omezena na {max}. Data rozdělte nebo exportujte.",
+      "railExtractRequest": "Extrahovat řádky odpovídající schématu tabulky z: {source}",
+      "railExtractDone": "Přidáno {count} extrahovaných řádků do tabulky.",
+      "railTransformDone": "Tabulka byla transformována.",
+      "columnProfileFor": "Statistiky sloupce pro {column}",
+      "profileMissing": "Chybí",
+      "profileDistinct": "Unikátní",
+      "profileRange": "Rozsah",
+      "profileMean": "Průměr",
+      "profileMedian": "Medián",
+      "profileTopValues": "Nejčastější hodnoty",
+      "filterColumnFor": "Filtrovat {column}",
+      "filterContains": "Obsahuje…",
+      "filterMin": "Min",
+      "filterMax": "Max",
+      "filterClear": "Vymazat",
+      "clearFilters": "Vymazat filtry",
+      "showingRows": "Zobrazeno {shown} z {total} řádků",
+      "scopeLabel": "Pracovní rozsah",
+      "scopeTable": "Vše ({count})",
+      "scopeFiltered": "Filtrované ({count})",
+      "scopeSelection": "Vybrané ({count})",
+      "scopedInstruction": "{instruction} (na {count} vybraných řádcích)",
+      "assess": "Posoudit kvalitu",
+      "assessing": "Probíhá posouzení…",
+      "criteria": {
+        "validity": {
+          "label": "Validita",
+          "description": "Hodnoty odpovídají typu sloupce a očekávanému formátu"
+        },
+        "consistency": {
+          "label": "Konzistence",
+          "description": "Stejná hodnota je všude zapsána stejným způsobem (žádné varianty 'M' / 'Muž', smíšené jednotky nebo rozdíly ve velikosti písmen)"
+        },
+        "duplicates": {
+          "label": "Duplicitní záznamy",
+          "description": "Řádky se stejnou entitou nebo událostí dvakrát"
+        },
+        "plausibility": {
+          "label": "Pravděpodobnost",
+          "description": "Odlehlé a nemožné hodnoty v daném kontextu"
+        }
+      },
+      "assessmentTitle": "Kontrola kvality dat",
+      "pendingCount": "{count} čeká na vyřízení",
+      "closeReview": "Ukončit kontrolu kvality",
+      "suggestedEdits": "Navržené opravy",
+      "noEditsSuggested": "Nebyly navrženy žádné opravy — data splňují vybraná kritéria.",
+      "acceptAll": "Přijmout vše",
+      "rejectAll": "Odmítnout vše",
+      "acceptEdit": "Přijmout",
+      "rejectEdit": "Odmítnout",
+      "editAccepted": "Uloženo",
+      "editRejected": "Odmítnuto",
+      "editUnapplicable": "Buňka se od vyhodnocení změnila — nebylo použito",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "Kritéria pro posouzení",
+      "severity": {
+        "minor": "Menší",
+        "major": "Závažné"
+      },
+      "editLocation": "řádek {row} · {column}",
+      "editLocationRow": "řádek {row} (odstranit)",
+      "showReview": "Zobrazit kontrolu",
+      "showReviewPending": "Zobrazit kontrolu ({count} čeká)",
+      "assessedFiltered": "Filtrované řádky",
+      "assessedSelection": "Vybrané řádky",
+      "assessedSample": "vzorek {shown} z {total}",
+      "railAssessRequest": "Posuďte kvalitu tabulky ({count} řádků) podle zvolených kritérií.",
+      "railAssessDone": "Navrženo {count} úprav pro zlepšení kvality dat — zkontrolujte je v pracovním prostoru.",
+      "insights": "Zjištění",
+      "chartKind": "Typ grafu",
+      "chartBar": "Sloupcový (seskupení podle)",
+      "chartHistogram": "Histogram",
+      "chartLine": "Spojnicový (v čase)",
+      "groupByColumn": "Seskupit podle sloupce",
+      "dateColumn": "Sloupec s datem",
+      "valueColumn": "Sloupec s hodnotou",
+      "aggFn": "Agregace",
+      "aggCount": "Počet",
+      "aggSum": "Součet",
+      "aggMean": "Průměr",
+      "chartTruncated": "Zobrazeno nejvýše {max} skupin",
+      "chartNoData": "V aktuálních řádcích nejsou hodnoty vhodné pro zobrazení grafu.",
+      "chartBarAria": "Sloupcový graf seskupený podle {column}",
+      "chartHistogramAria": "Histogram sloupce {column}",
+      "chartLineAria": "Spojnicový graf sloupce {column} v čase",
+      "editStructure": "Struktura",
+      "defineStructure": "Definovat strukturu",
+      "schemaHint": "Definujte pole datové struktury. Povinná pole stanovují pravidla pro chybějící data při importu; změna typu pole převádí stávající hodnoty (nehodící se buňky budou prázdné).",
+      "schemaFieldName": "Název pole",
+      "schemaFieldType": "Typ pole",
+      "schemaRequired": "Povinné",
+      "schemaAddField": "Přidat pole",
+      "schemaDeleteField": "Smazat pole {field}",
+      "schemaApply": "Použít strukturu",
+      "schemaCancel": "Zrušit",
+      "schemaEdited": "Struktura tabulky upravena",
+      "schemaCellsConverted": "{count} buněk nebylo možné převést na nový typ a jsou nyní prázdné.",
+      "missingFieldPolicy": "Chybějící data",
+      "policyStrict": "Striktní — odmítnout neúplné řádky",
+      "policyFlag": "Označit — importovat a označit",
+      "policyLenient": "Mírný — importovat bez upozornění",
+      "droppedIncompleteRows": "Vyřazeno {count} řádků s chybějícími povinnými poli: {fields}",
+      "dismiss": "Zavřít",
+      "requiredColumn": "Povinné pole",
+      "flagMissingRequired": "Povinné pole je prázdné",
+      "flagPendingEdit": "Pro tuto buňku je navržená oprava — viz kontrola kvality",
+      "fromPhoto": "Z fotografie",
+      "fromPhotoHint": "Vyfoťte papírový formulář nebo tabulku — obsah bude převeden na strukturovaná data, která můžete ověřit podle fotografie",
+      "readingPhoto": "Načítání fotografie…",
+      "photoBatchName": "{count} fotografií",
+      "railPhotoRequest": "Extrahovat strukturovaná data z {count} fotografie(í): {name}",
+      "railPhotoDone": "Přidáno {count} záznam(ů) z fotografie/fotografií. Porovnejte je s fotografií ve workspace.",
+      "sourcesLabel": "Zdroje",
+      "openPhotoQc": "Zkontrolujte data podle {name}",
+      "qcRowsFromPhoto": "{count} řádků",
+      "qcClose": "Zavřít kontrolu fotografie",
+      "qcZoomIn": "Přiblížit",
+      "qcZoomOut": "Oddálit",
+      "qcPrevPhoto": "Předchozí fotografie",
+      "qcNextPhoto": "Další fotografie",
+      "qcImageLoading": "Načítání fotografie…",
+      "qcImageFailed": "Fotografii se nepodařilo načíst.",
+      "qcImageAlt": "Zdrojová fotografie: {name}",
+      "qcHint": "Tabulka zobrazuje pouze řádky z této fotografie — porovnejte každou hodnotu s fotografií a upravte nebo smažte řádky, které nesouhlasí.",
+      "sourceFilterChip": "Řádky ze zdroje {name}",
+      "clearSourceFilter": "Zobrazit znovu všechny řádky",
+      "viewAsRecord": "Zobrazení formuláře",
+      "viewAsTable": "Zobrazení tabulky",
+      "recordEmpty": "Zatím žádné záznamy.",
+      "recordOf": "Záznam {index} z {count}",
+      "recordPrev": "Předchozí záznam",
+      "recordNext": "Další záznam",
+      "recordBooleanUnset": "(prázdné)",
+      "flagsChip": "{count} příznak(ů)",
+      "flagsChipOpenReview": "Otevřít kontrolu kvality",
+      "flagsChipMissingOnly": "Povinná pole jsou prázdná — doplňte je nebo upravte strukturu",
+      "autoCheck": "Automatická kontrola nových dat",
+      "autoCheckHint": "Po extrakci dat z fotografií nebo dokumentů automaticky spustí kontrolu kvality na nových řádcích",
+      "checkingNewRows": "Kontrola nově přidaných řádků na problémy s kvalitou…",
+      "ingestCheckFailed": "Automatická kontrola kvality selhala ({message}) — můžete ji spustit ručně pomocí 'Posoudit kvalitu'.",
+      "assessedIngest": "Nově přidané řádky",
+      "transpose": "Transponovat",
+      "transposeAxisColumn": "Název",
+      "transposeSuggestion": "Tato tabulka vypadá, že je transponovaná: řádky jsou atributy a sloupce položky. Chcete ji převrátit, aby každá položka byla řádek a každý atribut typovaný sloupec?",
+      "transposedTable": "Transponované řádky a sloupce",
+      "columns": "Sloupce",
+      "columnsHidden": "Sloupce (skryto: {count})",
+      "showAllColumns": "Zobrazit vše",
+      "chartScatter": "Bodový graf (x vs y)",
+      "chartPivot": "Kontingenční tabulka",
+      "xColumn": "Sloupec X",
+      "yColumn": "Sloupec Y",
+      "splitByColumn": "Rozdělit podle",
+      "splitNone": "Bez rozdělení",
+      "pivotValueColumns": "Sloupce hodnot",
+      "aggMin": "Minimum",
+      "aggMax": "Maximum",
+      "aggMedian": "Medián",
+      "chartSeriesTruncated": "Zobrazuje se top {max} sérií",
+      "chartPointsTruncated": "Zobrazuje se {max} náhodně vybraných bodů",
+      "chartScatterAria": "Bodový graf {x} versus {y}",
+      "pivotTableAria": "Kontingenční tabulka seskupená podle {column}",
+      "schemaFormula": "Vzorec",
+      "schemaFormulaPlaceholder": "např. [Případy] / [Populace] * 1000",
+      "schemaFormulaHint": "Vypočítané pole: odkazujte na jiná pole jako [Název]; podporuje + - * / %, závorky a round, abs, min, max. Hodnoty se aktualizují automaticky a nelze je upravovat přímo.",
+      "schemaFormulaSyntaxError": "Neplatný vzorec",
+      "schemaFormulaUnknownRef": "Neznámé pole: {ref}",
+      "schemaFormulaArityError": "Nesprávný počet argumentů pro {fn}",
+      "schemaFormulaCycleError": "Cyklický odkaz mezi vzorci",
+      "derivedColumnTitle": "Vypočteno: {formula}",
+      "derivedFrom": "Vypočteno ze vzorce {formula}",
+      "takePhoto": "Pořídit fotografii",
+      "takePhotoHint": "Použijte kameru k nafocení formuláře nebo tabulky — jejich obsah se převede na strukturovaná data, která můžete ověřit podle fotografie"
+    },
+    "map": {
+      "emptyTitle": "Zobrazte svá data na mapě",
+      "emptyBody": "Vložte sitrep, seznam míst, poznámky ze schůzky nebo jiný text s názvy míst — nebo nahrajte dokument. Lokace jsou rozpoznány a zobrazeny na mapě s hodnocením jistoty; poté je můžete exportovat do ArcGIS nebo jiných GIS nástrojů.",
+      "inputPlaceholder": "Vložte text s názvy míst…",
+      "uploadFile": "Nahrát soubor",
+      "pastedSource": "Vložený text",
+      "mapIt": "Zobrazit na mapě",
+      "finding": "Vyhledávání míst…",
+      "featureCount": "{count} lokalit",
+      "featureCapExceeded": "Mapa je omezena na {max} lokalit.",
+      "noneFound": "V tomto materiálu nebyly nalezeny žádné lokality.",
+      "lowConfidenceNotice": "{count} lokalit má souřadnice s nízkou jistotou — ověřte je před dalším použitím mapy.",
+      "tilesOffline": "Mapové podklady nejsou dostupné — seznam míst funguje dál.",
+      "disclaimer": "Souřadnice jsou odhadnuty AI podle znalostí modelu, ne pomocí geokódovací služby — před použitím ověřte. Mapové podklady se načítají z tile serveru; samotná data zůstávají na tomto zařízení.",
+      "flyTo": "Zobrazit {name} na mapě",
+      "removeFeature": "Odebrat {name}",
+      "expandFeature": "Zobrazit detail {name}",
+      "collapseFeature": "Skrýt detail {name}",
+      "detailsParent": "Součást {parent}",
+      "railRequest": "Zmapovat lokality v: {source}",
+      "railSearchRequest": "Vyhledat na webu a zmapovat lokality pro: {query}",
+      "railDone": "Zmapováno {count} lokalit. Zkontrolujte ty s nízkou spolehlivostí v seznamu.",
+      "searchToggle": "Režim vyhledávání na webu",
+      "searchToggleHint": "Namísto vkládání textu vyhledávejte na webu; výsledky budou přiřazeny na mapu.",
+      "searchPlaceholder": "Hledejte na webu, např. „epidemie cholery východní Afrika 2026“…",
+      "searchAndMap": "Vyhledat & zmapovat",
+      "searching": "Vyhledávání…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "Spojení: {kind}",
+        "unresolved": "{count} spojení odkazovalo na místa, která nejsou na mapě, a byla vynechána."
+      },
+      "confidence": {
+        "high": "Vysoká",
+        "medium": "Střední",
+        "low": "Nízká"
+      },
+      "prominence": {
+        "primary": "Hlavní lokalita",
+        "secondary": "Vedlejší lokalita",
+        "mention": "Zmínka"
+      },
+      "prominenceMentionHint": "V materiálu se toto místo objevuje jen okrajově – na mapě je zobrazeno menší a není zahrnuto v počátečním zobrazení.",
+      "dates": {
+        "since": "od {date}",
+        "range": "{start} – {end}",
+        "ongoing": "Probíhá"
+      },
+      "filters": {
+        "label": "Filtrovat podle kategorie",
+        "other": "Jiné",
+        "clear": "Vymazat",
+        "showing": "Zobrazeno {shown} z {total} lokalit",
+        "noneMatch": "Žádné lokality neodpovídají aktuálním filtrům."
+      },
+      "dateFilter": {
+        "label": "Data",
+        "from": "Od",
+        "to": "Do",
+        "fromAria": "Zobrazit pouze události od tohoto data",
+        "toAria": "Zobrazit pouze události do tohoto data",
+        "clear": "Vymazat data",
+        "eraChip": "Zobrazit pouze události v období {label}"
+      },
+      "timeline": {
+        "toggle": "Časový posun",
+        "play": "Přehrát časový posun",
+        "pause": "Pozastavit časový posun",
+        "eras": "Období časové osy",
+        "jumpTo": "Přejít na {label}",
+        "slider": "Pozice na časové ose",
+        "showUndated": "Zobrazit nedatované lokality",
+        "activeCount": "{count} aktivních",
+        "jump": {
+          "start": "Začátek",
+          "yearsLater": "{count, plural, one {za 1 rok} other {za # let}}",
+          "monthsLater": "{count, plural, one {za 1 měsíc} other {za # měsíců}}",
+          "daysLater": "{count, plural, one {za 1 den} other {za # dnů}}",
+          "appears": "{count, plural, one {1 výskyt} other {# výskytů}}",
+          "ends": "{count, plural, one {1 konec} other {# konců}}",
+          "progress": "Datum {index} z {total}"
+        },
+        "precision": {
+          "minute": "Přesně na minutu",
+          "hour": "Přesně na hodinu",
+          "day": "Přesně na den",
+          "month": "Datace na úrovni měsíce",
+          "year": "Datace na úrovni roku",
+          "mixed": "(smíšené)"
+        },
+        "pacing": {
+          "toggle": "Rychlost přehrávání",
+          "cardDuration": "Zobrazit každou lokaci po",
+          "seconds": "{seconds}s",
+          "maxCards": "Lokace zobrazené na datum",
+          "hint": "Rušnější data jsou automaticky zobrazena déle."
+        }
+      },
+      "granularity": {
+        "site": "Místo",
+        "city": "Město/obec",
+        "district": "Okres",
+        "region": "Region",
+        "country": "Země"
+      },
+      "granularityAreaHint": "Oblast zobrazená jako přibližný kruh kolem centroidu — nejde o přesné místo nebo hranici.",
+      "containerHint": "Obsahuje další zmapované lokality, proto je zobrazen pouze obrys.",
+      "legend": {
+        "toggle": "Legenda",
+        "title": "Jak číst mapu",
+        "color": "Barva: spolehlivost souřadnic (modrá – vysoká, žlutá – střední, červená – nízká)",
+        "size": "Velikost bodu: jak je místo důležité pro materiál",
+        "area": "Přerušovaný kruh: přibližný rozsah okresu, regionu nebo země",
+        "container": "Slabý obrys: oblast, jejíž obsah je zmapován jednotlivě",
+        "precisionHalo": "Měkký čárkovaný kruh (během časosběru): událost je datována pouze na měsíc nebo rok, takže přesné načasování není jisté"
+      },
+      "sourceLabel": "Zdroj: {name}",
+      "fetchAndMap": "Načíst a mapovat",
+      "fetchingPage": "Načítání stránky…",
+      "railUrlRequest": "Načíst a mapovat lokace ze zdroje: {title} ({url})"
+    },
+    "shell": {
+      "showConversation": "Zobrazit konverzaci",
+      "hideConversation": "Skrýt konverzaci",
+      "workspaceTab": "Pracovní plocha",
+      "conversationTab": "Konverzace",
+      "paneTabsLabel": "Panely workflow",
+      "railEmpty": "Zprávy asistenta a postup se zobrazí zde.",
+      "railInputPlaceholder": "Napište asistentovi…",
+      "assistantThinking": "Přemýšlím…",
+      "sendMessage": "Odeslat zprávu",
+      "stopGenerating": "Zastavit generování",
+      "loadingWorkspace": "Načítání pracovní plochy…",
+      "unknownType": "Tato konverzace používá workflow, které tato verze nezná. Historie konverzace je uvedena níže.",
+      "untitled": "Nová konverzace",
+      "toggleMenu": "Přepnout menu",
+      "model": "Model pro tento workflow"
+    },
+    "tabs": {
+      "label": "Režim konverzace",
+      "chat": "Chat",
+      "chatDescription": "Standardní konverzace s asistentem"
+    },
+    "discard": {
+      "title": "Zahodit tento návrh?",
+      "body": "Přepnutím na {target} se odstraní práce, kterou jste začali v {current}.",
+      "confirm": "Zahodit"
+    }
+  },
+  "connectors": {
+    "title": "Konektory",
+    "description": "Propojte externí nástroje přes Model Context Protocol (MCP). Připojené nástroje budou dostupné v chatu a každý požadavek na nástroj proběhne až po vašem schválení.",
+    "localOnlyNote": "Přihlašujete se přímo u každého poskytovatele. Přístupové klíče jsou šifrované a uložené pouze na tomto zařízení a s každým požadavkem jsou předávány přes server aplikace — nikdy se tam neukládají ani nezaznamenávají.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "Vyhledávejte repozitáře, čtěte a vytvářejte issue a pull requesty."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "Najděte, vytvořte a aktualizujte úkoly a projekty."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Dotazujte publikované datové zdroje, workbooks a Pulse metriky."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Vyhledávejte a aktualizujte záznamy ve vašich Salesforce objektech."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Připravujte, plánujte a publikujte příspěvky na sociální sítě."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Kontrolujte a odpovídejte na konverzace v sociální schránce."
+      }
+    },
+    "connect": "Připojit",
+    "connected": "Připojeno",
+    "tokenEndsIn": "končí na ••••{last4}",
+    "disconnect": "Odpojit",
+    "toolCount": "{count, plural, =1 {1 nástroj k dispozici} other {# nástrojů k dispozici}}",
+    "patLabel": "Osobní přístupový token",
+    "createTokenLink": "Vytvořit token",
+    "tokenScopeHint": "Použijte token s omezeným přístupem, který bude mít jen potřebná oprávnění pro tyto nástroje.",
+    "validating": "Kontroluji připojení…",
+    "validationFailed": "Nelze se připojit. Zkontrolujte adresu a zkuste to znovu.",
+    "authFailed": "Server odmítl token. Zkontrolujte jej a zkuste to znovu.",
+    "tokenRequired": "Token je vyžadován",
+    "enableServer": "Dostupné v chatu",
+    "arbitraryTitle": "Ostatní MCP servery",
+    "arbitraryToggle": "Povolit libovolné MCP servery",
+    "arbitraryWarning": "Kdokoli, kdo provozuje MCP server, může vidět zprávy odeslané jeho nástrojům. Připojujte pouze servery, kterým důvěřujete. Každé použití nástroje stále vyžaduje vaše potvrzení.",
+    "addServer": "Přidat MCP server",
+    "editServer": "Upravit MCP server",
+    "serverName": "Název",
+    "serverUrl": "URL serveru",
+    "nameRequired": "Název je povinný",
+    "urlRequired": "URL je povinné",
+    "invalidUrl": "Zadejte veřejnou adresu https://",
+    "namePlaceholder": "Můj MCP server",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "Přístupový token (volitelné)",
+    "keepTokenPlaceholder": "Nechte prázdné pro zachování aktuálního tokenu",
+    "disconnectedToast": "{name} odpojen",
+    "save": "Uložit",
+    "connectWithProvider": "Připojit pomocí {name}",
+    "useTokenInstead": "Místo toho použít přístupový token",
+    "oauthWaiting": "Čeká se na autorizaci…",
+    "oauthFailed": "Přihlášení se nezdařilo. Zkuste to znovu.",
+    "oauthDenied": "Přístup byl poskytovatelem zamítnut.",
+    "oauthTimeout": "Časový limit pro přihlášení vypršel. Zkuste to znovu.",
+    "oauthCancelled": "Přihlášení bylo zrušeno.",
+    "oauthUnavailable": "Přihlášení není pro tento konektor v tomto nasazení dostupné. Místo toho použijte přístupový token nebo požádejte správce o nastavení OAuth aplikace.",
+    "ownAppToggle": "Použít vlastní OAuth aplikaci",
+    "ownAppHint": "Zaregistrujte OAuth aplikaci ve svém účtu {name} (vaší organizaci, pracovním prostoru nebo enterprise instanci) s níže uvedenou callback URL a poté sem vložte její údaje. Pro použití vestavěné aplikace ponechte zavřené.",
+    "ownAppCustomHint": "Volitelně zadejte níže údaje vlastní OAuth aplikace; ponechte prázdné pro automatickou registraci se serverem.",
+    "ownAppInUse": "Připojeno přes vaši vlastní OAuth aplikaci.",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client secret (pokud Vaše aplikace má)",
+    "redirectUriLabel": "Callback / redirect URL k registraci",
+    "reconnect": "Znovu připojit",
+    "needsReauth": "Vyžaduje znovu připojit",
+    "disconnectOauthNote": "Odpojením odeberete přístup pouze z tohoto zařízení. Pro úplné odebrání přístupu spravujte autorizované aplikace ve svém účtu {name}.",
+    "authModeLabel": "Autentizace",
+    "authModeNone": "Žádná",
+    "authModeBearer": "Přístupový token",
+    "authModeOauth": "Přihlásit se přes poskytovatele (OAuth)",
+    "oauthCustomHint": "Po uložení se přihlásíte u poskytovatele serveru v samostatném okně.",
+    "saveAndSignIn": "Uložit a přihlásit se",
+    "oauthCallback": {
+      "title": "Autorizace dokončena",
+      "missingState": "Není co autorizovat",
+      "close": "Toto okno můžete zavřít a vrátit se do aplikace.",
+      "closeButton": "Zavřít okno"
+    },
+    "oauthNoAppConfigured": "Přihlášení přes {name} není v této instalaci nastavené. Připojte se registrací vlastního OAuth app.",
+    "adminConnectorsTitle": "Z vaší organizace",
+    "adminConnectorsDescription": "Konektory nastavené vašimi administrátory. Zobrazení závisí na vašem přístupu.",
+    "managedByOrg": "Spravuje vaše organizace",
+    "connectorOauthNotConfigured": "Přihlášení pro tento konektor ještě není nastavené. Kontaktujte svého administrátora.",
+    "yourConnectorsTitle": "Vaše konektory",
+    "addTitle": "Přidat konektor",
+    "addDescription": "Vyberte nástroj pro připojení. Přístup nastavíte po výběru.",
+    "add": "Přidat",
+    "filterLabel": "Filtrovat konektory",
+    "filterPlaceholder": "Hledat konektory",
+    "noMatches": "Žádné konektory neodpovídají „{query}“."
+  },
+  "modelSources": {
+    "connectButtonShort": "Připojit zdroj modelu",
+    "addAnother": "Přidat další zdroj modelu",
+    "edit": "Upravit",
+    "disconnect": "Odpojit {name}",
+    "disconnectedToast": "Odpojeno: {name}",
+    "modelCountLabel": "{count} modelů",
+    "loadingModels": "Načítání modelů...",
+    "noModelsAvailable": "Z tohoto zdroje nejsou k dispozici žádné modely",
+    "sourceUnreachable": "Nelze se připojit ke zdroji. Vaše oprávnění se mohla změnit nebo je služba dočasně nedostupná.",
+    "retry": "Zkusit znovu",
+    "connectFoundryAccount": "Připojit účet Microsoft Azure Foundry",
+    "connectFoundryDescription": "Objevte nasazení modelů z Azure Foundry účtu, ke kterému máte přístup. Všechny požadavky jsou autorizovány vašimi Azure oprávněními — omezení modelů aplikace zde neplatí.",
+    "selectModelsDescription": "Vyberte, které nasazení modelů z tohoto účtu se mají zobrazovat ve vašem výběru modelů.",
+    "editConnection": "Upravit připojení",
+    "nameLabel": "Název",
+    "namePlaceholder": "např. Můj týmový sandbox",
+    "nameRequired": "Název zdroje je povinný",
+    "foundryAccountLabel": "Foundry účet",
+    "enterManually": "Zadat ručně",
+    "browseResources": "Procházet zdroje",
+    "subscriptionIdLabel": "ID předplatného",
+    "resourceGroupLabel": "Skupina prostředků",
+    "accountNameLabel": "Název účtu",
+    "subscriptionRequired": "Vyberte předplatné",
+    "accountRequired": "Vyberte Foundry účet",
+    "accountSelectionRequired": "Vyberte účet ze seznamu.",
+    "selectAllRequired": "Vyberte předplatné, skupinu prostředků a účet.",
+    "connectionFailed": "Nelze se připojit k tomuto účtu. Zkontrolujte správnost údajů a svá oprávnění.",
+    "duplicateSource": "Tento účet je již připojen jako „{name}“.",
+    "connectionSuccessModels": "Připojeno — nalezeno {count} nasazení modelů",
+    "connectionSuccessEmpty": "Připojeno, ale na tomto účtu nebyla nalezena žádná nasazení modelů.",
+    "checkingConnection": "Kontrola připojení...",
+    "next": "Další",
+    "back": "Zpět",
+    "cancel": "Zrušit",
+    "connect": "Připojit",
+    "save": "Uložit",
+    "scanningResources": "Probíhá skenování vašich Azure předplatných...",
+    "discoveryPartialWarning": "{count, plural, one {# předplatné nebylo možné proskanovat} few {# předplatná nebylo možné proskanovat} other {# předplatných nebylo možné proskanovat}}. Pokud vám nějaký účet chybí, použijte ruční zadání.",
+    "discoveryTruncatedWarning": "Bylo příliš mnoho prostředků na úplné skenování. Pokud vám nějaký účet chybí, použijte ruční zadání.",
+    "noAccountsDiscovered": "Ve vašich předplatných nebyly nalezeny žádné Foundry účty. Pokud znáte cestu, použijte ruční zadání.",
+    "retryScan": "Zkusit znovu skenovat",
+    "searchAccountsPlaceholder": "Hledat účty...",
+    "modelsSelectedCount": "Vybráno {selected} z {total} modelů",
+    "selectAll": "Vybrat vše",
+    "deselectAll": "Zrušit výběr všech",
+    "autoAddLabel": "Automaticky přidávat nové modely",
+    "autoAddDescription": "Nasazení modelů přidaná do tohoto účtu se zobrazí automaticky. Nezaškrtnuté modely zůstávají vyloučeny."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Nižší dopad",
+      "moderate": "Střední dopad",
+      "high": "Vyšší dopad"
+    },
+    "tierTooltip": "Relativní energetický dopad na požadavek, odhadnutý podle velikosti modelu. Jedná se o odhady na základě publikovaných průměrů a předpokladů v{version} — nikoliv měření.",
+    "typicalRequest": "~{grams} g CO₂e na typický požadavek",
+    "typicalRequestTooltip": "Hrubý odhad dopadu na jeden typický požadavek (cca 1 000 vstupních a 500 výstupních tokenů), vypočtený z publikovaných průměrů a předpokladů v{version}. Skutečný dopad se liší podle délky konverzace, nastavení a oblasti hostování.",
+    "activities": {
+      "netflixHd": "Netflix streamování v HD",
+      "zoomCall": "Zoom hovor (kamera zapnuta)",
+      "webBrowsing": "Prohlížení webu",
+      "spotifyAudio": "Spotify audio"
+    },
+    "equivalents": {
+      "title": "≈ stejné množství uhlíku jako",
+      "note": "Porovnání se stejným množstvím uhlíku podle publikovaných hodinových stop těchto služeb — hrubé, orientační hodnoty, stejně jako všechny zde uvedené odhady."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Odhadovaná uhlíková stopa této konverzace: {grams} gramů CO₂ ekvivalentu. Zobrazit rozpis.",
+      "ariaLabelToday": "Odhadovaná uhlíková stopa této konverzace dnes: {grams} gramů CO₂ ekvivalentu. Zobrazit rozpis.",
+      "title": "Tato konverzace (odhad)",
+      "today": "Dnes",
+      "total": "Celkem",
+      "measured": "Z hlášených počtů tokenů",
+      "estimated": "Zpětně vypočítáno ze starších zpráv",
+      "lastRequest": "Poslední požadavek",
+      "disclaimer": "Odhady na požadavek z hlášených nebo přibližných počtů tokenů, s využitím zveřejněných průměrů a předpokladů v{version}. Starší zprávy jsou zpětně dopočítány z uloženého textu a aktuálního modelu konverzace. Nejde o měření.",
+      "visibilityGroup": "Viditelnost emisního čipu",
+      "visibilityLabel": "Zobrazit:",
+      "visibility": {
+        "always": "Vždy",
+        "auto": "Automaticky",
+        "hidden": "Skrýt"
+      },
+      "visibilityHint": "Při volbě Automaticky se čip zobrazí, když se odhad aktualizuje nebo na něj najedete myší. Toto nastavení můžete kdykoli změnit v Nastavení › Využití a dopad."
+    }
+  },
+  "table": {
+    "copyTable": "Kopírovat tabulku",
+    "downloadTable": "Stáhnout tabulku",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Exportováno jako CSV",
+    "copyFailed": "Nepodařilo se zkopírovat tabulku"
+  },
+  "backup": {
+    "intro": {
+      "title": "Zálohujte své konverzace — bezpečně",
+      "body": "Vaše konverzace jsou šifrovány na tomto zařízení před nahráním. Nikdy nemůžeme číst vaše chaty.",
+      "keyWarning": "Obnovovací klíč je vytvořen na tomto zařízení. Nikdy ho nevidíme a nemůžeme ho obnovit — pokud klíč ztratíte, ztratíte i zálohu.",
+      "create": "Vytvořit klíč & zálohovat",
+      "decline": "Teď ne — ponechat chaty pouze v tomto zařízení"
+    },
+    "ceremony": {
+      "titleCreate": "Uložte si svůj obnovovací klíč",
+      "titleRotate": "Uložte si nový obnovovací klíč",
+      "titleView": "Váš obnovovací klíč",
+      "description": "Tento klíč je jedinou možností, jak obnovit zálohu na jiném zařízení. Uložte si ho na bezpečné místo — nemůžeme ho pro vás obnovit.",
+      "copy": "Kopírovat",
+      "copied": "Zkopírováno!",
+      "download": "Stáhnout .txt",
+      "showQr": "Zobrazit QR kód",
+      "hideQr": "Skrýt QR kód",
+      "savedCheckbox": "Uložil/a jsem svůj obnovovací klíč na bezpečné místo",
+      "saveFirstHint": "Nejprve klíč zkopírujte nebo stáhněte.",
+      "continue": "Pokračovat",
+      "done": "Hotovo",
+      "cancel": "Zrušit",
+      "cancelConfirmTitle": "Zrušit nastavení zálohy?",
+      "cancelConfirmBody": "Vaše chaty nebudou zálohovány. Šifrovanou zálohu lze kdykoliv zapnout v Nastavení.",
+      "cancelConfirmRotateBody": "Váš obnovovací klíč již byl změněn. Zobrazit si ho můžete kdykoli v Nastavení.",
+      "cancelConfirmConfirm": "Ano, zrušit",
+      "cancelConfirmDismiss": "Zpět",
+      "loadError": "Nepodařilo se načíst obnovovací klíč na tomto zařízení."
+    },
+    "file": {
+      "heading": "Obnovovací klíč zálohy chatu",
+      "warning": "Uchovejte tento klíč v bezpečí. Kdokoliv s tímto klíčem může číst vaši zálohu; bez něj nelze zálohu obnovit."
+    },
+    "progress": {
+      "titleCreate": "Nastavuje se záloha",
+      "titleRotate": "Mění se obnovovací klíč",
+      "encrypting": "{count, plural, one {Šifruje a zálohuje se # konverzace…} few {Šifrují a zálohují se # konverzace…} many {Šifruje a zálohuje se # konverzací…} other {Šifruje a zálohuje se # konverzací…}}",
+      "success": "{count, plural, one {Záloha dokončena. # konverzace je chráněna.} few {Záloha dokončena. # konverzace jsou chráněny.} many {Záloha dokončena. # konverzací je chráněno.} other {Záloha dokončena. # konverzací je chráněno.}}",
+      "error": "Zálohování selhalo. Vaše chaty zůstávají v tomto zařízení.",
+      "retry": "Zkusit znovu",
+      "close": "Zavřít",
+      "done": "Hotovo"
+    },
+    "input": {
+      "label": "Obnovovací klíč",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Klíče nikdy neobsahují písmena O, I ani L.",
+      "checksumError": "Tento klíč nevypadá správně — zkontrolujte překlepy.",
+      "formatError": "Toto nevypadá jako obnovovací klíč.",
+      "incomplete": "Pokračujte v zadávání — obnovovací klíč má 56 znaků.",
+      "valid": "Klíč vypadá platně."
+    },
+    "restore": {
+      "title": "Obnovte své chaty",
+      "successTitle": "Záloha obnovena",
+      "promptBody": "Našli jsme šifrovanou zálohu vašeho účtu. Zadejte svůj obnovovací klíč pro obnovení na tomto zařízení.",
+      "submit": "Obnovit zálohu",
+      "skip": "Přeskočit — začít na tomto zařízení znovu",
+      "restoring": "Probíhá dešifrování a obnovení chatů…",
+      "successBody": "{count, plural, one {# konverzace obnovena.} few {# konverzace obnoveny.} other {# konverzací obnoveno.}}",
+      "wrongKey": "Tento klíč je platný, ale tuto zálohu neodemkne. Pokud jste klíč změnili, použijte ten nejnovější.",
+      "corrupt": "Tuto zálohu nelze přečíst — může být poškozená. Můžete začít znovu na tomto zařízení nebo to zkusit později.",
+      "networkError": "Nepodařilo se připojit ke službě záloh. Zkontrolujte připojení a zkuste to znovu.",
+      "tryAgain": "Zkusit jiný klíč",
+      "close": "Hotovo"
+    },
+    "enterKey": {
+      "title": "Zadejte svůj nový obnovovací klíč",
+      "body": "Obnovovací klíč byl změněn na jiném zařízení. Zadejte nový klíč pro obnovení záloh na tomto zařízení.",
+      "submit": "Použít tento klíč"
+    },
+    "banner": {
+      "keyMismatchTitle": "Zálohování pozastaveno — obnovovací klíč byl změněn na jiném zařízení.",
+      "enterNewKey": "Zadat nový klíč",
+      "resetBackup": "Resetovat zálohu",
+      "resetConfirmTitle": "Resetovat zálohu pomocí klíče tohoto zařízení?",
+      "resetConfirmBody": "Stávající záloha bude nahrazena chaty z tohoto zařízení, zašifrovanými klíčem tohoto zařízení. Ostatní zařízení budou potřebovat obnovovací klíč tohoto zařízení.",
+      "resetConfirmAction": "Resetovat zálohu",
+      "remoteMissingTitle": "Vaše záloha již na serveru neexistuje. Zálohování je pozastaveno.",
+      "backUpAgain": "Zálohovat znovu",
+      "dismiss": "Zavřít"
+    },
+    "rotate": {
+      "confirmTitle": "Změnit svůj obnovovací klíč?",
+      "confirmBody": "Záloha bude znovu zašifrována novým klíčem a starý klíč přestane fungovat. Nový klíč si uložte a zadejte ho na ostatních zařízeních.",
+      "confirmAction": "Změnit klíč"
+    },
+    "toast": {
+      "enrollLater": "Šifrovanou zálohu můžete kdykoli zapnout v Nastavení.",
+      "keyUpdated": "Obnovovací klíč aktualizován. Zálohování pokračuje.",
+      "resetDone": "Záloha resetována klíčem tohoto zařízení.",
+      "backupRestarted": "Záloha znovu vytvořena.",
+      "opFailed": "Něco se pokazilo. Zkuste to prosím znovu."
+    },
+    "settings": {
+      "statusOn": "Zálohování je zapnuto",
+      "statusOff": "Zálohování je vypnuto",
+      "offDescription": "Vaše chaty jsou pouze v tomto prohlížeči. Zapněte šifrovanou zálohu, abyste je zabezpečili a mohli obnovit na jiných zařízeních. Chaty jsou šifrovány přímo ve vašem zařízení — nikdy je nemůžeme číst.",
+      "turnOn": "Zapnout zálohování",
+      "restoreTitle": "Pro váš účet již existuje záloha",
+      "restoreDescription": "Zadejte svůj obnovovací klíč pro obnovení na tomto zařízení.",
+      "restore": "Obnovit zálohu",
+      "lastBackup": "Poslední záloha: {time}",
+      "lastBackupNever": "Žádná záloha dosud neproběhla",
+      "keyFingerprint": "Klíč ····-{tail}",
+      "syncState": {
+        "idle": "Čeká na synchronizaci",
+        "syncing": "Probíhá zálohování…",
+        "ok": "Aktuální stav",
+        "keyOutOfDate": "Pozastaveno — obnovovací klíč byl změněn na jiném zařízení",
+        "remoteMissing": "Pozastaveno — záloha byla odstraněna ze serveru",
+        "error": "Poslední pokus o zálohu selhal"
+      },
+      "backUpNow": "Zálohovat nyní",
+      "backUpNowSuccess": "Zálohování dokončeno",
+      "backUpNowFailure": "Zálohování selhalo — vaše konverzace na tomto zařízení zůstaly beze změny",
+      "viewKey": "Zobrazit obnovovací klíč",
+      "changeKey": "Změnit obnovovací klíč",
+      "dangerTitle": "Nebezpečná zóna",
+      "turnOffDelete": "Vypnout a odstranit zálohu",
+      "turnOffConfirmTitle": "Vypnout zálohování?",
+      "turnOffConfirmMessage": "Tím odstraníte zálohu z našich serverů pro všechna zařízení. Konverzace na tomto zařízení zůstanou. Zálohování můžete později opět zapnout s novým obnovovacím klíčem.",
+      "turnOffConfirmAction": "Odstranit zálohu",
+      "turnOffSuccess": "Zálohování bylo vypnuto a odstraněno",
+      "turnOffFailure": "Zálohu se nepodařilo odstranit. Zkuste to prosím znovu."
+    }
+  },
+  "memories": {
+    "title": "Vzpomínky",
+    "description": "Nechte asistenta pamatovat si trvalé informace, které mu sdělíte — například vaši roli, preference nebo probíhající projekty — a využívat je v dalších konverzacích.",
+    "enableToggle": "Povolit vzpomínky",
+    "privacyNote": "Informace jsou uloženy pouze v tomto prohlížeči a použity v chatech pro personalizaci odpovědí.",
+    "empty": "Zatím žádné vzpomínky. Informace vhodné k zapamatování jsou ukládány automaticky z vašich konverzací.",
+    "savedOn": "Uloženo {date}",
+    "deleteMemory": "Odstranit vzpomínku",
+    "clearAll": "Vymazat všechny vzpomínky",
+    "clearAllConfirmQuestion": "Odstranit všechny vzpomínky? Tuto akci nelze vrátit zpět.",
+    "clearAllConfirm": "Odstranit vše",
+    "cancel": "Zrušit"
+  },
+  "contextWindow": {
+    "label": "Okno kontextu",
+    "value": "{count} zpráv",
+    "fewer": "Méně zpráv",
+    "more": "Více zpráv",
+    "description": "Starší zprávy nad tímto limitem jsou shrnuty a odeslány jako kontext."
+  },
+  "agentAccess": {
+    "title": "Přístup k agentovi",
+    "description": "Nastavte, kteří uživatelé mohou používat sdílené Foundry agenty. Pravidla pouze dále omezují to, co Azure přístup uživatele již umožňuje – nikdy nemohou poskytnout větší přístup, než povoluje Azure.",
+    "backToChat": "Zpět do chatu",
+    "loading": "Načítání agentů a pravidel…",
+    "loadError": "Nepodařilo se načíst data o přístupu k agentům.",
+    "rulesUnavailableWarning": "Pravidla přístupu se nepodařilo načíst z úložiště. Spuštění agenta je nyní blokováno a pravidla nelze upravovat.",
+    "retry": "Zkusit znovu",
+    "rulesTab": "Pravidla agenta",
+    "localAdminsTab": "Lokální administrátoři",
+    "noAgents": "Není co spravovat.",
+    "sourceLabel": "Zdroj",
+    "notDiscoverable": "Není pro vás dostupný",
+    "notDiscoverableHint": "Existuje pravidlo pro tohoto agenta, ale není ve vašem vlastním vyhledávání — mohl být přejmenován, váš Azure přístup jej neobsahuje, nebo jeho pravidlo přístupu vás nezahrnuje.",
+    "accessEveryone": "Všichni",
+    "accessRestricted": "Omezeno",
+    "edit": "Upravit",
+    "updatedByLine": "Naposledy upravil {user} dne {date}",
+    "accessTypeLabel": "Kdo může tohoto agenta použít",
+    "everyoneDescription": "Kdokoli, kdo má již přístup k tomuto agentovi skrze svůj Azure přístup.",
+    "restrictedDescription": "Pouze níže uvedení uživatelé a domény.",
+    "allowDomainsLabel": "Povolené domény",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Povolení uživatelé",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Stiskněte Enter pro přidání",
+    "removeChip": "Odebrat",
+    "groupsLabel": "Povolené skupiny",
+    "groupsPendingConsent": "Přístup na základě skupin čeká na schválení správcem a zatím jej nelze upravovat.",
+    "restrictedEmptyWarning": "Nejsou uvedeni žádní uživatelé ani domény – nikdo nebude mít k agentovi přístup.",
+    "save": "Uložit",
+    "saving": "Ukládání...",
+    "cancel": "Zrušit",
+    "saveSuccess": "Pravidlo přístupu bylo uloženo.",
+    "deleteSuccess": "Pravidlo přístupu bylo odstraněno – tento agent je opět přístupný pro všechny.",
+    "saveError": "Nelze uložit. Zkuste to prosím znovu.",
+    "conflictError": "Mezitím došlo ke změně. Obnovte stránku a proveďte změnu znovu.",
+    "reload": "Obnovit",
+    "localAdminsDescription": "Delegujte správu pravidel konkrétním agentům bez nutnosti nového nasazení. Místní administrátoři mohou upravovat pouze pravidla u svěřených agentů.",
+    "noLocalAdmins": "Nebyli nastaveni žádní místní administrátoři.",
+    "addLocalAdmin": "Přidat místního administrátora",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Odebrat místního administrátora",
+    "delegatedAgentsLabel": "Delegovaní agenti",
+    "noDelegatedAgents": "Nejsou k dispozici žádní agenti k delegování.",
+    "unknownAgentKey": "Neznámý klíč agenta",
+    "configSaveSuccess": "Místní administrátoři uloženi.",
+    "configConflictError": "Seznam místních administrátorů byl mezitím změněn. Obnovte stránku a zkuste to znovu.",
+    "addAgent": "Přidat agenta",
+    "newPromptAgentTitle": "Nový prompt agent",
+    "editPromptAgentTitle": "Upravit prompt agenta",
+    "agentNameLabel": "Název",
+    "agentNamePlaceholder": "např. Cestovní poradce",
+    "agentDescriptionLabel": "Popis",
+    "agentDescriptionPlaceholder": "Zobrazí se uživatelům ve výběru modelu",
+    "agentSystemPromptLabel": "Systémový prompt",
+    "agentSystemPromptPlaceholder": "Instrukce, které určují chování tohoto agenta",
+    "agentModelLabel": "Model",
+    "agentModelPlaceholder": "Vyberte model…",
+    "agentModelUnavailable": "{modelId} (nedostupné)",
+    "agentModelUnknownError": "Vybraný model již není k dispozici. Zvolte jiný model a znovu uložte.",
+    "promptAgentBadge": "Prompt agent",
+    "editAgent": "Upravit agenta",
+    "deleteAgent": "Smazat",
+    "deleteAgentConfirm": "Opravdu smazat tohoto agenta pro všechny? Zmizí z výběru modelů; existující konverzace si ponechají svoji historii.",
+    "confirmDeleteAgent": "Ano, smazat",
+    "promptAgentCreateSuccess": "Prompt agent byl vytvořen.",
+    "promptAgentSaveSuccess": "Prompt agent byl uložen.",
+    "promptAgentDeleteSuccess": "Prompt agent byl smazán.",
+    "promptAgentsUnavailableWarning": "Prompt agenty se nepodařilo načíst z úložiště. Momentálně je nelze upravovat.",
+    "agentsTab": "Agenti",
+    "connectorsTab": "Konektory",
+    "addConnector": "Přidat konektor",
+    "noConnectors": "Zatím žádné konektory.",
+    "connectorsUnavailableWarning": "Nepodařilo se načíst seznam konektorů, proto může být neúplný. Nevytvářejte náhradu, dokud se seznam nenačte.",
+    "editAccess": "Upravit přístup",
+    "deleteConnector": "Smazat",
+    "deleteConnectorConfirm": "Smazat tento konektor? Každý, kdo ho používá, okamžitě ztratí přístup.",
+    "confirmDeleteConnector": "Smazat konektor",
+    "connectorSaveSuccess": "Konektor uložen.",
+    "connectorCreateSuccess": "Konektor vytvořen.",
+    "connectorDeleteSuccess": "Konektor smazán.",
+    "editConnectorTitle": "Upravit konektor",
+    "newConnectorTitle": "Nový konektor",
+    "connectorPresetLabel": "Začít ze šablony",
+    "connectorPresetNone": "Začít od začátku",
+    "connectorNameLabel": "Název",
+    "connectorDescriptionLabel": "Popis",
+    "connectorUrlLabel": "URL serveru",
+    "connectorUrlPlaceholderWarning": "Před uložením nahraďte {placeholder} v URL svou hodnotou.",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Ověření",
+    "connectorAuthNone": "Žádné",
+    "connectorAuthBearer": "Token (každý uživatel zadává svůj vlastní)",
+    "connectorAuthOauth": "OAuth přihlášení",
+    "connectorSealingUnavailable": "OAuth není dostupný: v tomto nasazení není nastaven AUTH_SECRET pro šifrování klientských tajemství.",
+    "connectorTokenHelpLabel": "Odkaz na pokyny k tokenu (volitelné)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Tajemství je uloženo. Nechte prázdné pro zachování, nebo zadejte nové pro nahrazení.",
+    "connectorClientSecretHint": "Před uložením je zašifrováno a již nebude zobrazeno.",
+    "connectorScopesLabel": "Scopes (oddělené mezerou, volitelné)"
+  },
+  "localModels": {
+    "title": "Lokální modely",
+    "description": "Chatování s modely běžícími na tomto počítači. Zprávy jdou přímo z vašeho prohlížeče do lokální aplikace a nikdy se nedostanou na naše servery — odpovědi, názvy konverzací a shrnutí tak zůstávají pouze na vašem zařízení.",
+    "detect": "Detekovat lokální runtime",
+    "detecting": "Detekuje se…",
+    "experimental": "Experimentální",
+    "portLabel": "Port",
+    "statusUnknown": "Zatím nebylo zkontrolováno.",
+    "statusChecking": "Kontroluje se…",
+    "statusReady": "{count, plural, =0 {Připojeno, ale žádné modely nejsou načteny.} one {Připojeno — # model k dispozici.} other {Připojeno — # modelů k dispozici.}}",
+    "statusNotRunning": "Nelze se spojit s {label}. Zkontrolujte, zda běží na tomto portu a zda má váš prohlížeč přístup k lokálním aplikacím z tohoto webu.",
+    "statusHttpError": "{label} odpověděl s chybou. Zkontrolujte jeho logy.",
+    "corsHelp": {
+      "ollama": "Ollama běží, ale odmítá požadavky z tohoto webu. Nastavte OLLAMA_ORIGINS na adresu tohoto webu, restartujte Ollama a detekujte znovu.",
+      "lmstudio": "LM Studio běží, ale odmítá požadavky z tohoto webu. Zapněte CORS v nastavení jeho lokálního serveru a poté detekujte znovu.",
+      "llamacpp": "llama.cpp běží, ale odmítá požadavky z tohoto webu. Spusťte llama-server s povolenými požadavky z jiných domén a poté detekujte znovu."
+    },
+    "privacyNote": "Lokální modely nepodporují přílohy souborů, obrázky, webové vyhledávání ani konektory — tyto funkce vyžadují naše servery. Detekce kontroluje pouze tento počítač."
+  },
+  "urlFetch": {
+    "sourceFallback": "Webová stránka",
+    "fallbackHint": "Můžete také otevřít stránku, zkopírovat text a vložit ho sem.",
+    "shortExtract": "Přečístelný byl pouze krátký úryvek — stránka může být blokována nebo vyžadovat přihlášení.",
+    "errors": {
+      "invalidUrl": "To nevypadá jako platná webová adresa.",
+      "ssrfBlocked": "Tuto adresu nelze načíst z bezpečnostních důvodů.",
+      "tooManyRedirects": "Tento odkaz byl přesměrován příliš mnohokrát.",
+      "timeout": "Stránka reagovala příliš dlouho.",
+      "unreachable": "Stránku se nepodařilo načíst.",
+      "blocked": "Stránka odmítla požadavek — může být vyžadováno přihlášení nebo blokuje automatické čtečky.",
+      "notFound": "Stránka nebyla nalezena.",
+      "upstream": "Stránka vrátila chybu.",
+      "pdf": "Tento odkaz je PDF. Stáhněte jej a přidejte pomocí tlačítka pro přiložení.",
+      "nonHtml": "Tento odkaz není webová stránka, kterou lze přečíst.",
+      "tooLarge": "Tato stránka je příliš velká na stažení.",
+      "empty": "Na této stránce nebyl nalezen žádný čitelný text článku.",
+      "generic": "Stránku se nepodařilo načíst."
+    },
+    "fetchingFile": "Načítání {host}…",
+    "attachLink": "Přiložit odkaz",
+    "attachLinkTitle": "Přiložit webovou stránku",
+    "attachLinkDescription": "Stránka bude stažena a její text přiložen k vaší zprávě.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Načíst a přiložit",
+    "attachLinkInvalid": "To nevypadá jako webová adresa.",
+    "linkBadge": "Z odkazu",
+    "couldNotRetrieve": "Nepodařilo se načíst",
+    "doc": {
+      "sourceLabel": "Zdroj",
+      "retrievedLabel": "Načteno",
+      "attemptedLabel": "Pokus o načtení",
+      "failureHeading": "Webovou stránku se nepodařilo načíst"
+    },
+    "settingsTitle": "Odkazy ve zprávách",
+    "settingsToggle": "Automaticky načítat vložené odkazy",
+    "settingsDescription": "Když vložíte odkaz samostatně, stránka se stáhne a text přiloží, aby jej asistent mohl číst. Vypněte pro ponechání odkazů jako prostý text — stránku lze stále přiložit ručně z nabídky +.",
+    "addLink": "Přidat odkaz"
+  },
+  "cameraAccessError": "Nelze získat přístup ke kameře. Zkontrolujte oprávnění ke kameře a zkuste to znovu.",
+  "cameraUnnamedDevice": "Kamera",
+  "pastedText": {
+    "fallbackName": "Vložený text",
+    "charCount": "{count, number} znaků",
+    "removeChip": "Odebrat vložený text “{name}”",
+    "blockLabel": "Vložený text: {name}",
+    "doc": {
+      "heading": "Vložený text",
+      "pastedLabel": "Vloženo"
+    },
+    "settingsTitle": "Velké vložené texty",
+    "settingsToggle": "Proměnit velký vložený text v přílohu",
+    "settingsDescription": "Při vložení textu přesahujícího níže uvedený limit bude text připojen jako soubor místo vyplnění zprávy. Text se použije přesně tak, jak byl vložen — nic se nestahuje ani nemění.",
+    "settingsThresholdLabel": "Připojit vložené texty delší než",
+    "settingsThresholdUnit": "znaků",
+    "settingsThresholdHint": "Mezi {min, number} a {max, number} znaky."
+  },
+  "structures": {
+    "section": "Struktury",
+    "sectionSubtitle": "Uložené definice polí. Použijte jako recept pro extrakci nebo jako výchozí schéma pro tabulku datového workflow.",
+    "loadFromStructure": "Načíst strukturu",
+    "loadFromStructureTitle": "Nahradit tyto sloupce uloženou strukturou",
+    "pickerEmpty": "Zatím zde nejsou žádné uložené struktury.",
+    "pickerTitle": "Načíst uloženou strukturu",
+    "saveAsStructure": "Uložit jako strukturu",
+    "saveAsStructureTitle": "Uložit tyto sloupce do knihovny struktur",
+    "savedToast": "Struktura „{name}“ byla uložena",
+    "namePlaceholder": "Název struktury",
+    "fieldCount": "{count} polí",
+    "fieldCountOne": "1 pole",
+    "downgradedNotice": "{count} pole/polí zjednodušeno na text — tabulky obsahují jednu hodnotu na buňku: {names}",
+    "truncatedNotice": "{count} pole/polí vynecháno — limit tabulky je {max} sloupců: {names}",
+    "skippedDerivedNotice": "{count} odvozených sloupců nebylo uloženo — vzorce odkazují na sloupce této tabulky: {names}",
+    "loadReplacesColumns": "Tímto nahradíte aktuální sloupce. Stávající řádky si ponechají hodnoty se stejným názvem sloupce."
   }
 }

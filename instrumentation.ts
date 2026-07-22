@@ -28,6 +28,14 @@ export async function register() {
       );
     }
 
+    // Surface access-control misconfigurations at boot. The enable flag and
+    // the admin roster are independent by design (see startupWarnings.ts),
+    // which makes "I set the admins and nothing happened" an easy trap —
+    // so say so rather than let it be discovered by absence.
+    await (
+      await import('@/lib/services/agentAccess/startupWarnings')
+    ).logAccessControlStartupWarnings();
+
     // Skip OpenTelemetry in development unless explicitly enabled.
     // OTel's request body cloning conflicts with routes that read request.text().
     // Set ENABLE_OTEL=true to enable telemetry in development for testing.

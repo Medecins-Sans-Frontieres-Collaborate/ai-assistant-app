@@ -25,6 +25,7 @@ import { useSettings } from '@/client/hooks/settings/useSettings';
 
 import { translateText } from '@/lib/services/translation';
 
+import { appendCitationsToMarkdown } from '@/lib/utils/app/export/citationExport';
 import { getAutonym } from '@/lib/utils/app/locales';
 import { parseThinkingContent } from '@/lib/utils/app/stream/thinking';
 import { generateAudioFilename } from '@/lib/utils/shared/string/slugify';
@@ -94,12 +95,19 @@ function isBlobTranscriptReference(content: string): boolean {
 }
 
 /**
- * Checks if content is a document translation reference.
- * Format: [Translation: filename | lang:code | blob:jobId | ext:extension | expires:ISO_TIMESTAMP]
+ * Checks if content is a document translation reference — completed
+ * ([Translation: …]) or a still-running async job ([TranslationPending: …]).
+ * Both render via DocumentTranslationViewer (which polls for pending ones).
  */
 function isDocumentTranslationReference(content: string): boolean {
-  return /^\[Translation:\s*.+?\s*\|\s*lang:[a-zA-Z-]+\s*\|\s*blob:[a-fA-F0-9-]+\s*\|\s*ext:[a-zA-Z0-9]+\s*\|\s*expires:\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z\]$/.test(
-    content.trim(),
+  const trimmed = content.trim();
+  return (
+    /^\[Translation:\s*.+?\s*\|\s*lang:[a-zA-Z-]+\s*\|\s*blob:[a-fA-F0-9-]+\s*\|\s*ext:[a-zA-Z0-9]+\s*\|\s*expires:\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z\]$/.test(
+      trimmed,
+    ) ||
+    /^\[TranslationPending:\s*.+?\s*\|\s*lang:[a-zA-Z-]+\s*\|\s*job:[a-fA-F0-9-]+\s*\|\s*ext:[a-zA-Z0-9]+\s*\|\s*submitted:\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z\]$/.test(
+      trimmed,
+    )
   );
 }
 
@@ -877,7 +885,11 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                         ? undefined
                         : () => {
                             openDocument(
-                              displayedContent,
+                              appendCitationsToMarkdown(
+                                displayedContent,
+                                citations,
+                                t('chat.sources'),
+                              ),
                               'md',
                               'message.md',
                               'document',

@@ -5,6 +5,7 @@ import {
   IconVolume,
   IconWorld,
 } from '@tabler/icons-react';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import {
   Dispatch,
   KeyboardEvent,
@@ -29,6 +30,7 @@ import { usePromptSelection } from '@/client/hooks/ui/usePromptSelection';
 
 import { FILE_SIZE_LIMITS } from '@/lib/utils/app/const';
 import { isMobileDevice } from '@/lib/utils/client/device/detection';
+import { getExtractionMaterialState } from '@/lib/utils/shared/chat/extractionMaterial';
 import {
   shouldPreventSubmission,
   validateMessageSubmission,
@@ -59,6 +61,7 @@ import ChatInputFile from '@/components/Chat/ChatInput/ChatInputFile';
 import ChatInputImageCapture, {
   ChatInputImageCaptureRef,
 } from '@/components/Chat/ChatInput/ChatInputImageCapture';
+import { ExtractionTray } from '@/components/Chat/ChatInput/ExtractionTray';
 import { InputControlsBar } from '@/components/Chat/ChatInput/InputControlsBar';
 import { MessageTextarea } from '@/components/Chat/ChatInput/MessageTextarea';
 import { SearchModeBadge } from '@/components/Chat/ChatInput/SearchModeBadge';
@@ -66,6 +69,7 @@ import { ToneBadge } from '@/components/Chat/ChatInput/ToneBadge';
 
 import { PromptList } from './ChatInput/PromptList';
 import { VariableModal } from './ChatInput/VariableModal';
+import { EmissionsChip } from './EmissionsChip';
 import { TranscriptionProgressIndicator } from './TranscriptionProgressIndicator';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
@@ -146,6 +150,12 @@ export const ChatInput = ({
   );
   const searchMode = useChatInputStore((state) => state.searchMode);
   const setSearchMode = useChatInputStore((state) => state.setSearchMode);
+  const extractionMode = useChatInputStore((state) => state.extractionMode);
+  // Structured-data extraction is gated by a LaunchDarkly flag (fail-open).
+  // Off in prod until go-ahead; when disabled the tray never renders.
+  // See docs/LAUNCHDARKLY_FLAGS.md.
+  const { structuredDataExtraction } = useFlags();
+  const isExtractionEnabled = structuredDataExtraction !== false;
   const selectedToneId = useChatInputStore((state) => state.selectedToneId);
   const setSelectedToneId = useChatInputStore(
     (state) => state.setSelectedToneId,
@@ -461,14 +471,31 @@ export const ChatInput = ({
     noKeyboard: true, // Don't trigger on keyboard
   });
 
-  const preventSubmission = (): boolean =>
-    isTranscriptionLocked ||
-    shouldPreventSubmission(
-      isTranscribing,
-      isStreaming,
-      filePreviews,
-      uploadProgress,
-    );
+  const preventSubmission = (): boolean => {
+    if (isTranscriptionLocked) return true;
+    if (
+      shouldPreventSubmission(
+        isTranscribing,
+        isStreaming,
+        filePreviews,
+        uploadProgress,
+      )
+    ) {
+      return true;
+    }
+    // Extraction mode requires material — text, a composer file, or an
+    // active file from a prior turn. Block send until at least one is
+    // available; the tray surfaces the warning above the textarea.
+    if (extractionMode) {
+      const material = getExtractionMaterialState({
+        textFieldValue,
+        filePreviewCount: filePreviews.length,
+        activeFileCount: selectedConversation?.activeFiles?.length ?? 0,
+      });
+      if (!material.hasAny) return true;
+    }
+    return false;
+  };
 
   const inputPlaceholder = isTranscribing
     ? t('transcribingChatPlaceholder')
@@ -537,6 +564,9 @@ export const ChatInput = ({
           />
         )}
 
+        {/* Structured Extraction Tray — recipe chip row above the composer */}
+        {isExtractionEnabled && extractionMode && <ExtractionTray />}
+
         <div className="items-center pt-4">
           <div className="flex justify-center items-center space-x-2 px-2 md:px-4">
             <ChatInputImageCapture
@@ -551,7 +581,11 @@ export const ChatInput = ({
               hasCameraSupport={true}
             />
 
-            <div className="relative mx-auto w-full max-w-3xl flex-grow px-2 sm:px-4">
+            {/* min-w-0: flex-grow alone still leaves min-width:auto, so this
+                column could not shrink below the textarea's intrinsic width
+                plus its pr-24 gutter — the root of the horizontal overflow on
+                narrow viewports. */}
+            <div className="relative mx-auto w-full min-w-0 max-w-3xl flex-grow px-2 sm:px-4">
               <div
                 className={`relative flex w-full flex-col rounded-full border border-gray-300 bg-white dark:border-0 dark:bg-surface-dark-input dark:text-white focus-within:outline-none focus-within:ring-0 z-0 ${searchMode === SearchMode.ALWAYS || selectedToneId ? 'min-h-[80px] !rounded-3xl' : ''} ${isMultiline && searchMode !== SearchMode.ALWAYS && !selectedToneId ? '!rounded-2xl' : ''}`}
               >
@@ -627,7 +661,12 @@ export const ChatInput = ({
                 </div>
 
                 <div
-                  className={`absolute bottom-20 left-1/2 -translate-x-1/2 md:bottom-16 z-[9999] transition-all duration-200 ease-in-out ${
+                  /* bottom-full sits above the pill whichever height variant
+                     is active, replacing the bottom-20/md:bottom-16 pair that
+                     existed only to clear the tall (search/tone) pill — and
+                     that gave mobile the *larger* offset despite having less
+                     room, floating it over message text. */
+                  className={`absolute bottom-full mb-2 left-1/2 -translate-x-1/2 z-[9999] transition-all duration-200 ease-in-out ${
                     showScrollDownButton && !isFocused
                       ? 'opacity-100 scale-100 pointer-events-auto'
                       : 'opacity-0 scale-90 pointer-events-none'
@@ -643,6 +682,13 @@ export const ChatInput = ({
                   >
                     <IconArrowDown size={18} />
                   </button>
+                </div>
+
+                {/* Conversation emissions estimate — right-aligned sibling of
+                    the (bottom-center) scroll button, anchored to the chat
+                    column so split view is respected. */}
+                <div className="absolute bottom-full mb-2 right-2 z-[9999]">
+                  <EmissionsChip conversation={selectedConversation} />
                 </div>
 
                 {showPromptList && filteredPrompts.length > 0 && (

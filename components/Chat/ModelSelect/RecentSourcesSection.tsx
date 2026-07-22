@@ -3,7 +3,7 @@ import {
   IconExternalLink,
   IconRefresh,
 } from '@tabler/icons-react';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -31,28 +31,41 @@ export const RecentSourcesSection: FC<RecentSourcesSectionProps> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchRecentSources = async (id: string) => {
-    setLoading(true);
-    setError(null);
+  const fetchRecentSources = useCallback(
+    async (id: string, signal?: AbortSignal) => {
+      setLoading(true);
+      setError(null);
 
-    try {
-      const response = await fetch(`/api/search/recent?agentId=${id}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch');
+      try {
+        const response = await fetch(
+          `/api/search/recent?agentId=${encodeURIComponent(id)}`,
+          { signal },
+        );
+        if (!response.ok) {
+          throw new Error('Failed to fetch');
+        }
+        const data = await response.json();
+        setSources(data.sources || []);
+      } catch (err) {
+        // A superseded request is not a failure — leave the state alone so
+        // the newer request's result stands.
+        if (signal?.aborted) return;
+        setError(t('unableToLoad'));
+        console.error('[RecentSourcesSection] Error:', err);
+      } finally {
+        if (!signal?.aborted) setLoading(false);
       }
-      const data = await response.json();
-      setSources(data.sources || []);
-    } catch (err) {
-      setError(t('unableToLoad'));
-      console.error('[RecentSourcesSection] Error:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    [t],
+  );
 
   useEffect(() => {
-    fetchRecentSources(agentId);
-  }, [agentId]);
+    // Abort on agentId change so a slow response for the previous agent
+    // can't land after the new one's and show the wrong sources.
+    const controller = new AbortController();
+    fetchRecentSources(agentId, controller.signal);
+    return () => controller.abort();
+  }, [agentId, fetchRecentSources]);
 
   // Format date for display
   const formatDate = (dateString: string) => {

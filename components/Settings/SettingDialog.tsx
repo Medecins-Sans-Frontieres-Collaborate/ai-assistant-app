@@ -18,11 +18,16 @@ import { DEFAULT_STREAMING_SPEED, Settings } from '@/types/settings';
 import packageJson from '../../package.json';
 import { MigrationDialog } from '../Migration/MigrationDialog';
 import { MobileSettingsHeader } from './MobileSettingsHeader';
+import { BackupSection } from './Sections/BackupSection';
 import { ChatSettingsSection } from './Sections/ChatSettingsSection';
+import { ConnectorsSection } from './Sections/ConnectorsSection';
 import { DataManagementSection } from './Sections/DataManagementSection';
 import { GeneralSection } from './Sections/GeneralSection';
 import { HelpSupportSection } from './Sections/HelpSupportSection';
+import { LocalModelsSection } from './Sections/LocalModelsSection';
+import { MemoriesSection } from './Sections/MemoriesSection';
 import { MobileAppSection } from './Sections/MobileAppSection';
+import { UsageImpactSection } from './Sections/UsageImpactSection';
 import { SettingsSidebar } from './SettingsSidebar';
 import { SettingsSection } from './types';
 
@@ -88,6 +93,13 @@ export function SettingDialog() {
     const handleMouseDown = (e: MouseEvent) => {
       // Don't close if MigrationDialog is open - it's rendered outside modalRef
       if (showMigrationDialog) return;
+
+      // Portaled children of this dialog (the mobile nav sheet and its scrim)
+      // live on document.body, so `modalRef.contains` reads them as "outside"
+      // and would close the whole dialog mid-interaction — taking the button
+      // with it before its click handler could run. They opt out by marking
+      // themselves instead.
+      if ((e.target as Element)?.closest?.('[data-settings-portal]')) return;
 
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         window.addEventListener('mouseup', handleMouseUp);
@@ -290,6 +302,8 @@ export function SettingDialog() {
                   <MobileSettingsHeader
                     activeSection={activeSection}
                     setActiveSection={setActiveSection}
+                    handleReset={handleReset}
+                    onClose={() => setIsSettingsOpen(false)}
                   />
                 )}
 
@@ -314,6 +328,24 @@ export function SettingDialog() {
                     onSave={handleSave}
                     onClose={() => setIsSettingsOpen(false)}
                   />
+                )}
+
+                {activeSection === SettingsSection.CONNECTORS && (
+                  <ConnectorsSection />
+                )}
+
+                {activeSection === SettingsSection.USAGE_IMPACT && (
+                  <UsageImpactSection />
+                )}
+
+                {activeSection === SettingsSection.BACKUP && <BackupSection />}
+
+                {activeSection === SettingsSection.MEMORIES && (
+                  <MemoriesSection />
+                )}
+
+                {activeSection === SettingsSection.LOCAL_MODELS && (
+                  <LocalModelsSection />
                 )}
 
                 {activeSection === SettingsSection.DATA_MANAGEMENT && (

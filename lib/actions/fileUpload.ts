@@ -29,6 +29,7 @@ import {
   signChunkedSession,
   verifyChunkedSession,
 } from '@/lib/utils/server/upload/chunkedSessionSigning';
+import { sanitizeBlobExtension } from '@/lib/utils/shared/blobPath';
 
 import type {
   ChunkUploadResult,
@@ -203,7 +204,10 @@ async function uploadFileToBlobStorage(
 
   // Hash buffer directly - avoids base64 string length limit for large files
   const hashedFileContents = Hasher.sha256(data);
-  const extension: string | undefined = filename.split('.').pop();
+  const rawExtension: string | undefined = filename.split('.').pop();
+  // Sanitized separately for the CONTENT-TYPE lookup (below) vs the blob
+  // PATH: the path must never carry traversal/separators.
+  const extension = rawExtension;
 
   // Determine content type
   let contentType: string;
@@ -245,7 +249,7 @@ async function uploadFileToBlobStorage(
     data = result.data;
   }
 
-  const blobPath = `${userId}/uploads/${uploadLocation}/${hashedFileContents}.${extension}`;
+  const blobPath = `${userId}/uploads/${uploadLocation}/${hashedFileContents}.${sanitizeBlobExtension(rawExtension)}`;
 
   const url = await blobStorageClient.upload(blobPath, data, {
     blobHTTPHeaders: {
@@ -314,10 +318,12 @@ export async function initChunkedUploadAction(
 
     const userId = getUserIdFromSession(session);
     const uploadId = uuidv4();
-    const extension = filename.split('.').pop() || '';
+    const extension = sanitizeBlobExtension(filename.split('.').pop(), '');
     const uploadLocation = filetype === 'image' ? 'images' : 'files';
 
-    // Generate a unique blob path using uploadId (content hash not available until all chunks received)
+    // Generate a unique blob path using uploadId (content hash not available
+    // until all chunks received). uploadId is a UUID; extension is sanitized
+    // so neither segment can traverse.
     const blobPath = `${userId}/uploads/${uploadLocation}/${uploadId}.${extension}`;
 
     const totalChunks = Math.ceil(totalSize / chunkSize);
@@ -423,6 +429,36 @@ export async function uploadChunkAction(
         chunkIndex,
         error: `Chunk size ${chunkBuffer.length} exceeds expected maximum ${expectedMaxChunkSize}`,
       };
+    }
+
+    // Magic-byte validation for audio/video, mirroring the whole-file paths
+    // (uploadFileToBlobStorage / the upload route). Chunked uploads previously
+    // skipped this entirely, so any >10MB file bypassed the signature gate.
+    // The file header lives in chunk 0; later chunks are arbitrary media data.
+    if (chunkIndex === 0) {
+      const isAudioVideo =
+        (session.mimeType &&
+          (session.mimeType.startsWith('audio/') ||
+            session.mimeType.startsWith('video/'))) ||
+        session.filetype === 'audio' ||
+        session.filetype === 'video';
+
+      if (isAudioVideo) {
+        const signatureValidation = validateBufferSignature(
+          chunkBuffer,
+          'any',
+          session.filename,
+        );
+        if (!signatureValidation.isValid) {
+          return {
+            success: false,
+            chunkIndex,
+            error:
+              signatureValidation.error ||
+              'File content does not match expected audio/video format',
+          };
+        }
+      }
     }
 
     // Get blob storage client

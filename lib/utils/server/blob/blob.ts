@@ -12,7 +12,7 @@ import {
   BlockBlobClient,
   BlockBlobUploadOptions,
   ContainerClient,
-  StorageSharedKeyCredential,
+  ContainerSASPermissions,
   generateBlobSASQueryParameters,
 } from '@azure/storage-blob';
 import {
@@ -21,7 +21,6 @@ import {
   QueueDeleteMessageResponse,
   QueueSendMessageResponse,
   QueueServiceClient,
-  StorageSharedKeyCredential as QueueSharedKeyCredential,
 } from '@azure/storage-queue';
 import { lookup } from 'mime-types';
 import { performance } from 'perf_hooks';
@@ -72,6 +71,15 @@ export interface BlobStorage {
    * collected by Azure after 7 days regardless of this call.
    */
   deleteIfExists(blobName: string): Promise<boolean>;
+  /**
+   * Lists the names of all blobs under the given prefix. Used to wipe a
+   * user-scoped prefix (e.g. encrypted backup data) without tracking
+   * individual blob names.
+   *
+   * @param prefix - Blob name prefix to enumerate (e.g. `${userId}/backup/`)
+   * @returns Promise resolving to the full blob names, unordered
+   */
+  listBlobs(prefix: string): Promise<string[]>;
   /**
    * Generates a SAS URL for accessing the blob with read permissions.
    * Used for batch transcription API which requires a publicly accessible URL.
@@ -334,6 +342,22 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
     return result.succeeded;
   }
 
+  async listBlobs(prefix: string): Promise<string[]> {
+    const containerClient = this.blobServiceClient.getContainerClient(
+      this.containerName as string,
+    );
+    return withAzureRetry(
+      async () => {
+        const names: string[] = [];
+        for await (const blob of containerClient.listBlobsFlat({ prefix })) {
+          names.push(blob.name);
+        }
+        return names;
+      },
+      { label: 'blob.listBlobs' },
+    );
+  }
+
   async getBlobSize(blobName: string): Promise<number> {
     const containerClient = this.blobServiceClient.getContainerClient(
       this.containerName as string,
@@ -417,12 +441,62 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       expiresOn,
     );
 
-    // Generate the SAS token with read permission
+    // Read-only blob-scoped SAS.
     const sasToken = generateBlobSASQueryParameters(
       {
         containerName: this.containerName as string,
         blobName,
-        permissions: BlobSASPermissions.parse('r'), // Read only
+        permissions: BlobSASPermissions.parse('r'),
+        startsOn,
+        expiresOn,
+      },
+      userDelegationKey,
+      this.blobServiceClient.accountName,
+    ).toString();
+
+    return `${blockBlobClient.url}?${sasToken}`;
+  }
+
+  /**
+   * Generates a CONTAINER-scoped SAS appended to a blob URL — the exact
+   * shape Azure Document Translation requires: its access validation needs
+   * `list`, which only exists at container scope (a blob SAS cannot carry
+   * it), and Microsoft's own storageType:'File' samples sign `sr=c` with
+   * `sp=rl` (source) / `sp=wl` (target) on blob URLs.
+   *
+   * SCOPE CAVEAT: unlike generateSasUrl, this grants the permissions on the
+   * WHOLE container, not one blob. It must only ever be handed to trusted
+   * Azure services (the Translator batch API) inside a server-to-server
+   * request body — never to a browser — and expiry should stay short.
+   *
+   * @param blobName - Blob path the URL points at (SAS itself is container-wide)
+   * @param expiryHours - Keep short; translation jobs finish in minutes
+   * @param permissions - 'rl' (source: read+list) or 'wl' (target: write+list)
+   */
+  async generateContainerScopedSasUrl(
+    blobName: string,
+    expiryHours: number,
+    permissions: 'rl' | 'wl',
+  ): Promise<string> {
+    const containerClient = this.blobServiceClient.getContainerClient(
+      this.containerName as string,
+    );
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+    const startsOn = new Date();
+    const expiresOn = new Date(
+      startsOn.getTime() + expiryHours * 60 * 60 * 1000,
+    );
+    const userDelegationKey = await this.blobServiceClient.getUserDelegationKey(
+      startsOn,
+      expiresOn,
+    );
+
+    // No blobName in the signed values → container-scoped (sr=c).
+    const sasToken = generateBlobSASQueryParameters(
+      {
+        containerName: this.containerName as string,
+        permissions: ContainerSASPermissions.parse(permissions),
         startsOn,
         expiresOn,
       },

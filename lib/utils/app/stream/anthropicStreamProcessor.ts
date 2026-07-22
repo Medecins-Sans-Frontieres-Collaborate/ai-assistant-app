@@ -1,8 +1,10 @@
 import {
+  TokenUsageMetadata,
   TranscriptMetadata,
   appendMetadataToStream,
   createStreamEncoder,
 } from '@/lib/utils/app/metadata';
+import { UsageContext } from '@/lib/utils/app/stream/streamProcessor';
 
 import { Citation } from '@/types/rag';
 
@@ -30,6 +32,7 @@ export function createAnthropicStreamProcessor(
   stopConversationRef?: { current: boolean },
   transcript?: TranscriptMetadata,
   webSearchCitations?: Citation[],
+  usageContext?: UsageContext,
 ): ReadableStream {
   return new ReadableStream({
     start: (controller) => {
@@ -37,6 +40,9 @@ export function createAnthropicStreamProcessor(
       let allContent = '';
       let allThinking = '';
       let controllerClosed = false;
+      let inputTokens = 0;
+      let outputTokens = 0;
+      let sawUsage = false;
 
       (async function () {
         try {
@@ -60,6 +66,17 @@ export function createAnthropicStreamProcessor(
                 }
               }
               return;
+            }
+
+            // Usage: message_start carries input_tokens; message_delta
+            // carries CUMULATIVE output_tokens (take the last value seen).
+            if (event.type === 'message_start' && event.message?.usage) {
+              inputTokens = event.message.usage.input_tokens ?? 0;
+              sawUsage = true;
+            }
+            if (event.type === 'message_delta' && event.usage) {
+              outputTokens = event.usage.output_tokens ?? outputTokens;
+              sawUsage = true;
             }
 
             // Handle content_block_delta events
@@ -103,11 +120,26 @@ export function createAnthropicStreamProcessor(
               };
             }
 
+            // Attribute captured provider usage for the client + server sinks.
+            let usage: TokenUsageMetadata | undefined;
+            if (usageContext && sawUsage) {
+              usage = {
+                promptTokens: inputTokens,
+                completionTokens: outputTokens,
+                totalTokens: inputTokens + outputTokens,
+                modelId: usageContext.modelId,
+                region: usageContext.region,
+                reasoningEffort: usageContext.reasoningEffort,
+              };
+              usageContext.onUsage?.(usage);
+            }
+
             // Append metadata directly to controller (bypass smooth buffer)
             appendMetadataToStream(controller, {
               citations,
               thinking: allThinking || undefined,
               transcript: transcriptMetadata,
+              usage,
             });
           }
 

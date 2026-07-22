@@ -24,6 +24,16 @@ vi.mock('@/lib/utils/app/stream/streamProcessor', () => ({
 
 vi.mock('@/lib/services/chat/handlers/HandlerFactory');
 
+// MCP tool loops are unit-tested separately; here we only assert dispatch.
+vi.mock('@/lib/services/mcp/McpToolLoopService', () => ({
+  runMcpToolLoop: vi.fn().mockResolvedValue(new Response('openai-mcp')),
+}));
+vi.mock('@/lib/services/mcp/AnthropicMcpToolLoopService', () => ({
+  runAnthropicMcpToolLoop: vi
+    .fn()
+    .mockResolvedValue(new Response('anthropic-mcp')),
+}));
+
 vi.mock('fs');
 
 // Mock Tiktoken initialization
@@ -311,6 +321,10 @@ describe('StandardChatService', () => {
         undefined, // transcript (not provided in this test)
         undefined, // citations (not provided in this test)
         undefined, // pendingTranscriptions (not provided in this test)
+        expect.objectContaining({
+          modelId: expect.any(String),
+          onUsage: expect.any(Function),
+        }), // usageContext for token tracking
       );
     });
 
@@ -748,6 +762,164 @@ describe('StandardChatService', () => {
 
       // Verify StandardOpenAIHandler was used
       expect(HandlerFactory.getHandlerName).toHaveBeenCalledWith(model);
+    });
+  });
+
+  describe('MCP dispatch', () => {
+    const claudeModel = {
+      ...OpenAIModels[OpenAIModelID.CLAUDE_OPUS_4_8],
+      supportsTools: true,
+    };
+    const messages: Message[] = [
+      { role: 'user', content: 'Hello', messageType: undefined },
+    ];
+    const resolvedServer = {
+      id: 'github',
+      label: 'GitHub',
+      url: 'https://api.githubcopilot.com/mcp/',
+      transport: 'streamable-http' as const,
+      auth: { style: 'bearer' as const },
+      trusted: true,
+      authToken: 't',
+    };
+
+    async function setupCommon(stream: boolean, modelConfig: OpenAIModel) {
+      vi.mocked(mockModelSelector.selectModel).mockReturnValue({
+        modelId: modelConfig.id,
+        modelConfig,
+      });
+      vi.mocked(mockToneService.applyTone).mockReturnValue('sys');
+      vi.mocked(mockStreamingService.getStreamConfig).mockReturnValue({
+        stream,
+        temperature: 0.7,
+      });
+      const { getMessagesToSend } =
+        await import('@/lib/utils/server/chat/chat');
+      vi.mocked(getMessagesToSend).mockResolvedValue(messages);
+    }
+
+    it('routes Claude + MCP + stream to the Anthropic tool loop', async () => {
+      const anthropicService = new StandardChatService(
+        mockAzureClient,
+        mockOpenAIClient,
+        {} as never, // anthropic client present
+        mockModelSelector,
+        mockToneService,
+        mockStreamingService,
+      );
+      vi.mocked(HandlerFactory.isAnthropicModel).mockReturnValue(true);
+      await setupCommon(true, claudeModel);
+
+      const { runAnthropicMcpToolLoop } =
+        await import('@/lib/services/mcp/AnthropicMcpToolLoopService');
+      const plainSpy = vi
+        .spyOn(
+          anthropicService as never as { handleAnthropicChat: () => unknown },
+          'handleAnthropicChat',
+        )
+        .mockResolvedValue(new Response('plain') as never);
+
+      const response = await anthropicService.handleChat({
+        messages,
+        model: claudeModel,
+        user: testUser as never,
+        systemPrompt: 'sys',
+        stream: true,
+        mcpServers: [resolvedServer],
+        mcpLoopRound: 0,
+      });
+
+      expect(await response.text()).toBe('anthropic-mcp');
+      expect(runAnthropicMcpToolLoop).toHaveBeenCalledWith(
+        expect.objectContaining({
+          servers: [resolvedServer],
+          loopRound: 0,
+        }),
+      );
+      expect(plainSpy).not.toHaveBeenCalled();
+    });
+
+    it('Claude + MCP but stream:false falls through to the plain Anthropic path', async () => {
+      const anthropicService = new StandardChatService(
+        mockAzureClient,
+        mockOpenAIClient,
+        {} as never,
+        mockModelSelector,
+        mockToneService,
+        mockStreamingService,
+      );
+      vi.mocked(HandlerFactory.isAnthropicModel).mockReturnValue(true);
+      await setupCommon(false, claudeModel);
+
+      const { runAnthropicMcpToolLoop } =
+        await import('@/lib/services/mcp/AnthropicMcpToolLoopService');
+      vi.mocked(runAnthropicMcpToolLoop).mockClear();
+      const plainSpy = vi
+        .spyOn(
+          anthropicService as never as { handleAnthropicChat: () => unknown },
+          'handleAnthropicChat',
+        )
+        .mockResolvedValue(new Response('plain') as never);
+
+      const response = await anthropicService.handleChat({
+        messages,
+        model: claudeModel,
+        user: testUser as never,
+        systemPrompt: 'sys',
+        stream: false,
+        mcpServers: [resolvedServer],
+      });
+
+      expect(await response.text()).toBe('plain');
+      expect(runAnthropicMcpToolLoop).not.toHaveBeenCalled();
+      expect(plainSpy).toHaveBeenCalled();
+    });
+
+    it('Claude + MCP with no Anthropic client returns 503', async () => {
+      vi.mocked(HandlerFactory.isAnthropicModel).mockReturnValue(true);
+      await setupCommon(true, claudeModel);
+
+      // `service` from the outer beforeEach has anthropicFoundryClient=undefined.
+      const response = await service.handleChat({
+        messages,
+        model: claudeModel,
+        user: testUser as never,
+        systemPrompt: 'sys',
+        stream: true,
+        mcpServers: [resolvedServer],
+      });
+
+      expect(response.status).toBe(503);
+    });
+
+    it('non-Claude + MCP still routes to the OpenAI tool loop (regression on the moved gate)', async () => {
+      const gptModel = {
+        ...OpenAIModels[OpenAIModelID.GPT_5_2],
+        supportsTools: true,
+      };
+      vi.mocked(HandlerFactory.isAnthropicModel).mockReturnValue(false);
+      await setupCommon(true, gptModel);
+      vi.mocked(HandlerFactory.getHandler).mockReturnValue(mockHandler);
+      vi.mocked(HandlerFactory.getHandlerName).mockReturnValue(
+        'AzureOpenAIHandler',
+      );
+      vi.mocked(mockHandler.prepareMessages).mockReturnValue([] as never);
+
+      const { runMcpToolLoop } =
+        await import('@/lib/services/mcp/McpToolLoopService');
+      vi.mocked(runMcpToolLoop).mockClear();
+
+      const response = await service.handleChat({
+        messages,
+        model: gptModel,
+        user: testUser as never,
+        systemPrompt: 'sys',
+        stream: true,
+        mcpServers: [resolvedServer],
+      });
+
+      expect(await response.text()).toBe('openai-mcp');
+      expect(runMcpToolLoop).toHaveBeenCalled();
     });
   });
 });

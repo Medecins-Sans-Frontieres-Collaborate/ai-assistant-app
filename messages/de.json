@@ -433,7 +433,22 @@
     "noProjectsFound": "Keine Projekte gefunden. \"default\" wird verwendet.",
     "selectAllRequired": "Wählen Sie eine Subscription, ein Konto und ein Projekt aus.",
     "subscriptionRequired": "Wählen Sie ein Abonnement",
-    "accountRequired": "Wählen Sie ein Foundry-Konto"
+    "accountRequired": "Wählen Sie ein Foundry-Konto",
+    "projectSelectionRequired": "Wählen Sie ein Projekt aus der Liste.",
+    "scanningResources": "Azure-Abonnements werden gescannt...",
+    "searchProjectsPlaceholder": "Projekte suchen...",
+    "noProjectsDiscovered": "Keine Foundry-Projekte in Ihren Abonnements gefunden. Geben Sie den Pfad manuell ein, wenn Sie ihn kennen.",
+    "discoveryPartialWarning": "{count, plural, one {# Abonnement} other {# Abonnements}} konnten nicht gescannt werden. Fügen Sie das Projekt manuell hinzu, falls es fehlt.",
+    "discoveryTruncatedWarning": "Es gab zu viele Ressourcen für einen vollständigen Scan. Fügen Sie das Projekt manuell hinzu, falls es fehlt.",
+    "retryScan": "Scan wiederholen",
+    "next": "Weiter",
+    "back": "Zurück",
+    "selectAgentsDescription": "Wählen Sie aus, welche Agenten dieses Projekts im Modell-Auswähler erscheinen.",
+    "selectAll": "Alle auswählen",
+    "deselectAll": "Alle abwählen",
+    "agentsSelectedCount": "{selected} von {total} Agenten ausgewählt",
+    "autoAddLabel": "Neue Agenten automatisch hinzufügen",
+    "autoAddDescription": "Später veröffentlichte Agenten werden automatisch hinzugefügt. Nicht ausgewählte Agenten bleiben ausgeschlossen."
   },
   "Quick Actions": "Schnellaktionen",
   "Type / in chat to access your prompts": "Geben Sie / im Chat ein, um auf Ihre Eingabeaufforderungen zuzugreifen",
@@ -706,7 +721,19 @@
       "listingTools": "Verfügbare Tools werden gesucht…",
       "analyzingFiles": "Ihre Dateien werden analysiert…",
       "searchingKnowledge": "Wissensdatenbank wird durchsucht…",
-      "cancellingPriorTool": "Vorherige Tool-Anfrage wird abgebrochen…"
+      "cancellingPriorTool": "Vorherige Tool-Anfrage wird abgebrochen…",
+      "workflow": {
+        "preparingDocument": "Referenzen werden vorbereitet…",
+        "writingDocument": "Dokument wird erstellt…",
+        "analyzingSource": "Quelltext wird analysiert…",
+        "translating": "Übersetzen…",
+        "reviewingTranslation": "Überprüfungsrunde {round} von {total}…",
+        "revisingTranslation": "Überprüfungsfeedback wird angewendet…",
+        "extractingRows": "Zeilen werden aus {source} extrahiert…",
+        "transformingTable": "Tabelle wird umgewandelt…",
+        "findingLocations": "Standorte werden identifiziert…",
+        "updatingMap": "Karte wird aktualisiert…"
+      }
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# Tool verwendet} other {# Tools verwendet}}",
@@ -767,7 +794,9 @@
     "listen": "Anhören",
     "processingAudio": "Audio wird verarbeitet...",
     "ttsError": "Fehler beim Generieren des Audios. Bitte erneut versuchen.",
-    "unsupportedMessageType": "Fehler beim Anzeigen der Nachricht: Nicht unterstützter Nachrichtentyp"
+    "unsupportedMessageType": "Fehler beim Anzeigen der Nachricht: Nicht unterstützter Nachrichtentyp",
+    "addLanguageOption": "„{name}“ hinzufügen…",
+    "sources": "Quellen"
   },
   "sidebar": {
     "collapseSidebar": "Seitenleiste einklappen",
@@ -1142,13 +1171,31 @@
     "clearField": "Feld leeren",
     "autosaveNote": "Änderungen werden automatisch gespeichert.",
     "responseSection": "Antwort",
-    "voiceSection": "Sprache",
+    "voiceSection": "Stimme",
     "behaviorSection": "Verhalten",
     "resetChatSettings": "Chat-Einstellungen zurücksetzen",
     "resetChatSettingsConfirmTitle": "Chat-Einstellungen zurücksetzen?",
-    "resetChatSettingsConfirmMessage": "Dies stellt die Standardeinstellungen für alle Optionen in diesem Bereich wieder her: Temperatur, benutzerdefinierte Anweisungen, Über Sie, Modellantwort, Streaming-Geschwindigkeit, Text-to-Speech, aktive Dateien und Bestätigungen. Ihre Unterhaltungen bleiben unberührt.",
+    "resetChatSettingsConfirmMessage": "Dadurch werden alle Einstellungen in diesem Bereich auf Standardwerte zurückgesetzt: Temperatur, benutzerdefinierte Anweisungen, Über Sie, Modellantwort, Streaming-Geschwindigkeit, Text-zu-Sprache, aktive Dateien und Bestätigungen. Ihre Unterhaltungen bleiben unberührt.",
     "customInstructionsLabel": "Individuelle Anweisungen*",
-    "defaultTemperatureLabel": "Standard-Temperatur*"
+    "defaultTemperatureLabel": "Standard-Temperatur*",
+    "Usage & Impact": "Nutzung & Auswirkungen",
+    "Connectors": "Connectoren",
+    "Backup": "Backup",
+    "Memories": "Erinnerungen",
+    "Agent Access": "Agentenzugriff",
+    "LocalModels": "Lokale Modelle",
+    "suggestRevisions": {
+      "title": "Dokumentüberarbeitungen",
+      "toggle": "Überarbeitungen vorschlagen statt sie direkt anzuwenden",
+      "description": "Wenn Sie den Dokument-Workflow um eine Überarbeitung bitten, kommen die Änderungen als einzelne Vorschläge, die Sie annehmen oder ablehnen können – wie bei Qualitätsbewertungen.",
+      "exceptionsTitle": "Trotzdem direkt anwenden, wenn:",
+      "exceptionSelection": "Eine von Ihnen markierte Auswahl überarbeitet wird",
+      "exceptionLargeRewrite": "Die Überarbeitung den Großteil des Dokuments verändert",
+      "exceptionReorder": "Abschnitte verschoben werden, statt sie zu bearbeiten",
+      "thresholdLabel": "Als Überarbeitung behandeln ab",
+      "thresholdUnit": "% des Dokuments geändert",
+      "exceptionSelectionAlways": "Die Überarbeitung einer markierten Auswahl wird immer direkt angewendet – das Modell gibt nur den überarbeiteten Ausschnitt zurück, der nicht als Vorschlag für das gesamte Dokument aufgeteilt werden kann."
+    }
   },
   "emptyState": {
     "greeting": "Wie kann ich helfen?",
@@ -1294,33 +1341,78 @@
     },
     "title": "Modell auswählen",
     "modelsDescription": "Wählen Sie ein KI-Modell für Ihr Gespräch. Jedes Modell hat unterschiedliche Stärken – wählen Sie eines aus, um Details anzuzeigen.",
-    "recommended": "Empfohlen"
+    "recommended": "Empfohlen",
+    "familyAll": "Alle",
+    "familyFilterLabel": "Modelle nach Familie filtern",
+    "searchPlaceholder": "Modelle suchen",
+    "searchEmpty": "Keine Modelle entsprechen Ihrer Suche.",
+    "star": "{name} als Favorit markieren",
+    "unstar": "{name} als Favorit entfernen",
+    "otherFamily": "Andere",
+    "hostedExternally": "Läuft auf der eigenen Infrastruktur des Anbieters über Azure AI Foundry, nicht in der Azure-Umgebung von MSF.",
+    "hostedIn": {
+      "label": "Gehostet in {regions}",
+      "tooltip": "Die Azure-Region(en), in denen dieses Modell bereitgestellt ist. Unterhaltungen werden in Ihrer eigenen Region verarbeitet."
+    },
+    "badges": {
+      "external": "Extern",
+      "externalTooltip": "Läuft auf der eigenen Infrastruktur des Anbieters über Azure AI Foundry, nicht in der Azure-Umgebung von MSF.",
+      "regionHostedTooltip": "Gehostet in der Azure-Region {region}. Unterhaltungen mit diesem Modell werden dort verarbeitet."
+    },
+    "favorites": "Favoriten",
+    "euResidencyNote": "Alle Modelle laufen in der EU-Azure-Region.",
+    "hostedRegion": {
+      "label": "Gehostete Region",
+      "processedIn": "Dieses Gespräch wird in der Azure-Region {region} verarbeitet.",
+      "euOnlyNote": "{name} wird in der EU-Azure-Region gehostet; Unterhaltungen damit werden dort verarbeitet."
+    },
+    "version": {
+      "label": "Version"
+    },
+    "reasoningModel": "Reasoning-Modell: denkt Schritt für Schritt vor der Antwort. Langsamer, besser bei schwierigen Aufgaben.",
+    "variant": {
+      "label": "Variante"
+    },
+    "deployment": {
+      "title": "Bereitstellung",
+      "source": "Quelle",
+      "account": "Konto",
+      "location": "Standort",
+      "deployment": "Bereitstellung",
+      "modelVersion": "Modellversion",
+      "publisher": "Herausgeber"
+    }
   },
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "KI-Modell mit GPT-4.1 und Echtzeit-Websuche über Bing. Bietet aktuelle Informationen, Faktenprüfung und Kenntnis aktueller Ereignisse. Ideal für Recherchen, die aktuelle Informationen, Nachrichtenanalyse und Faktenverifizierung erfordern.",
-      "knowledgeCutoff": "Echtzeit-Websuche"
+      "knowledgeCutoff": "Echtzeit-Websuche",
+      "tagline": "Vorherige Generation von OpenAI"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "OpenAIs fortschrittlichstes Modell, hervorragend bei komplexem Reasoning, Code-Generierung und technischer Problemlösung. Ideal für analytische Aufgaben, Programmierherausforderungen, Forschung und detaillierte Erklärungen. Unterstützt einstellbaren Reasoning-Aufwand und Antwort-Ausführlichkeit.",
-      "knowledgeCutoff": "6. Aug 2025 20:00"
+      "knowledgeCutoff": "6. Aug 2025 20:00",
+      "tagline": "Vorheriges GPT-Flaggschiff"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Schnellere und kostengünstigere Variante von GPT-5, für Geschwindigkeit optimiert bei hoher Qualität. Perfekt für alltägliche Aufgaben, schnelle Anfragen, Tool-Routing und Anwendungen, die schnelle Antwortzeiten erfordern. Ausgezeichnete Balance zwischen Leistung und Effizienz.",
-      "knowledgeCutoff": "6. Aug 2025 20:00"
+      "knowledgeCutoff": "6. Aug 2025 20:00",
+      "tagline": "Schneller und günstiger"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "Spezialisierte Variante von GPT-5, optimiert für Konversationsinteraktionen und emotionale Intelligenz. Hervorragend bei empathischer Kommunikation, Mental-Health-Unterstützung, kreativem Schreiben, Brainstorming und natürlichem Dialog. Ideal für ungezwungene Gespräche, Beratungsszenarien und Aufgaben, die emotionales Bewusstsein erfordern.",
-      "knowledgeCutoff": "1. Okt 2025 20:00"
+      "knowledgeCutoff": "1. Okt 2025 20:00",
+      "tagline": "Vorherige GPT-Chat-Variante"
     },
     "o3": {
       "name": "o3",
       "description": "OpenAIs fortschrittlichstes Reasoning-Modell mit bahnbrechenden Problemlösungsfähigkeiten. Hervorragend bei komplexer Mathematik, wissenschaftlichem Reasoning, Programmierherausforderungen und mehrstufigen logischen Aufgaben. Erweitertes 200K-Kontextfenster. Unterstützt Reasoning-Aufwand-Steuerung.",
-      "knowledgeCutoff": "8. Apr 2025 20:00"
+      "knowledgeCutoff": "8. Apr 2025 20:00",
+      "tagline": "Detailliertes schrittweises Denken"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1330,57 +1422,258 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Reasoning-Spezialist, der seine Arbeit Schritt für Schritt zeigt. Hervorragend für mathematische Probleme, logische Rätsel und das Verstehen komplexer Konzepte. Sehen Sie in Echtzeit, wie es über Probleme nachdenkt.",
-      "knowledgeCutoff": "20. Jan 2025"
+      "knowledgeCutoff": "20. Jan 2025",
+      "tagline": "Zeigt Denkprozesse Schritt für Schritt"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Starkes Allround-Modell, besonders gut bei Programmierung und technischem Schreiben. Ideal zum Debuggen von Code, Schreiben von Dokumentation und Erklären technischer Konzepte. Schnell und zuverlässig für Entwicklungsarbeit.",
-      "knowledgeCutoff": "16. Apr 2025 00:45"
+      "knowledgeCutoff": "16. Apr 2025 00:45",
+      "tagline": "Open-Source-Alternative"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Vielseitiges Modell von xAI, bekannt für nuancierte Antworten. Ideal für offene Diskussionen, kreative Projekte und die Bewältigung komplexer Probleme.",
-      "knowledgeCutoff": "13. Mai 2025 00:16"
+      "knowledgeCutoff": "13. Mai 2025 00:16",
+      "tagline": "xAI-Alternative"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Anthropics leistungsfähigstes Modell mit außergewöhnlichem Reasoning, Programmier- und Kreativfähigkeiten. Ideal für komplexe Analysen, Forschung und Aufgaben, die tiefes Verständnis erfordern.",
-      "knowledgeCutoff": "Januar 2025"
+      "knowledgeCutoff": "Januar 2025",
+      "tagline": "Frühere Opus-Generation"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Ausgewogenes Claude-Modell mit hervorragender Leistung bei Programmierung, Analyse und kreativen Aufgaben. Ideal für den täglichen Gebrauch mit schnellen Antwortzeiten.",
-      "knowledgeCutoff": "Januar 2025"
+      "knowledgeCutoff": "Januar 2025",
+      "tagline": "Vorherige Sonnet-Generation"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Claude Opus-Modell der vorherigen Generation. Hervorragend für komplexe Programmieraufgaben, detaillierte Analysen und nuanciertes Verständnis.",
-      "knowledgeCutoff": "Januar 2025"
+      "knowledgeCutoff": "Januar 2025",
+      "tagline": "Vorherige Opus-Generation"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Schnelles und kostengünstiges Claude-Modell, optimiert für schnelle Aufgaben. Ideal für einfache Anfragen, Zusammenfassungen und Hochvolumen-Anwendungen.",
-      "knowledgeCutoff": "Januar 2025"
+      "knowledgeCutoff": "Januar 2025",
+      "tagline": "Schnelle Claude-Variante"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "OpenAIs fortschrittlichstes Modell – hervorragend geeignet für komplexes Denken, Code-Generierung und technische Problemlösungen. Am besten für analytische Aufgaben, Programmierherausforderungen, Forschung und detaillierte Erklärungen. Unterstützt anpassbaren Denkaufwand und Antwortlänge.",
-      "knowledgeCutoff": "Dez 2025"
+      "knowledgeCutoff": "Dez 2025",
+      "tagline": "Code, Analyse, Recherche"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Dez 2025",
-      "description": "Spezialisierte Variante von GPT-5.2, optimiert für Gespräche und emotionale Intelligenz. Hervorragend geeignet für einfühlsame Kommunikation, kreatives Schreiben, Brainstorming und natürliche Dialoge. Am besten geeignet für informelle Gespräche, Beratungssituationen und Aufgaben, die emotionale Sensibilität erfordern."
+      "description": "Spezialisierte Variante von GPT-5.2, optimiert für Gespräche und emotionale Intelligenz. Hervorragend geeignet für einfühlsame Kommunikation, kreatives Schreiben, Brainstorming und natürliche Dialoge. Am besten geeignet für informelle Gespräche, Beratungssituationen und Aufgaben, die emotionale Sensibilität erfordern.",
+      "tagline": "Unterhaltungen, Ideensammlung"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Anthrowpics stärkstes Modell. Geeignet für lange Texte, Recherche und Aufgaben, die sorgfältiges Nachdenken erfordern.",
-      "knowledgeCutoff": "Feb 2026"
+      "knowledgeCutoff": "Feb 2026",
+      "tagline": "Langform-Text und Analyse"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Ein ausgewogenes Claude-Modell. Gut für den täglichen Schriftverkehr, Analysen und schnelles Programmieren.",
-      "knowledgeCutoff": "Feb 2026"
+      "knowledgeCutoff": "Feb 2026",
+      "tagline": "Ausgewogener Claude für den Alltag"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Ein Open-Source-Modell von Meta. Gut geeignet für Schreiben, Zusammenfassungen und schnelle Fragen.",
+      "tagline": "Open-Source-Alternative"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "OpenAIs neuestes Flaggschiff-Modell. Stärk in Textverfassung, Recherche, Programmierung und komplexer Problemlösung.",
+      "tagline": "Neuestes GPT-Flaggschiff"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Die kleinste und schnellste GPT-Variante. Am besten für schnelle, einfache Aufgaben bei minimalen Kosten.",
+      "tagline": "Kleinstes und schnellstes GPT"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Eine auf Dialog optimierte GPT-Variante. Geeignet für zwanglose Gespräche, Brainstorming und unterstützende Diskussionen.",
+      "tagline": "Neuere GPT-Chat-Variante"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Ein älteres multimodales GPT. Ausreichend für alltägliches Schreiben und Fragen & Antworten, wenn die neuesten Funktionen nicht benötigt werden.",
+      "tagline": "Älteres multimodales GPT"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Eine kleinere, schnellere GPT-4.1-Variante für schnelle Alltagsaufgaben.",
+      "tagline": "Leichtes GPT der vorherigen Generation"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Anthropics neuestes und leistungsstärkstes Modell. Hervorragend für lange Texte, Recherche, Programmierung und gründliche Analysen.",
+      "tagline": "Neuster und stärkster Claude"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "DeepSeeks neuestes Open-Source-Modell. Zuverlässig für allgemeines Schreiben und technische Fragen.",
+      "tagline": "Open-Source-Alternative"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Das Flaggschiff-Modell von Mistral. Eine europäische Alternative für Schreiben, Zusammenfassungen und allgemeine Fragen.",
+      "tagline": "Europäisches Open-Weight-Modell"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Eine frühere Flaggschiff-Version von GPT-5. Immer noch stark in Textverfassung, Analyse und Programmierung.",
+      "tagline": "Früheres GPT-5-Flaggschiff"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Eine frühere chat-optimierte GPT-5-Version. Gut für alltägliche Gespräche und Brainstorming.",
+      "tagline": "Frühere GPT-Chat-Variante"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Die kleinste GPT-5-Variante. Am besten für schnelle, einfache Aufgaben bei minimalen Kosten.",
+      "tagline": "Kleines GPT der vorherigen Generation"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Die kleinste GPT-4.1-Variante. Geeignet für schnelle, einfache Aufgaben, bei denen Geschwindigkeit und Kosten im Vordergrund stehen.",
+      "tagline": "Kleinstes GPT der vorherigen Generation"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Eine kleine, schnelle GPT-4o-Variante. Ausreichend für schnelle Alltagsaufgaben, wenn die neuesten Funktionen nicht benötigt werden.",
+      "tagline": "Leichtes älteres multimodales GPT"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Ein kompaktes Schlussfolgerungsmodell. Gut für Mathematik, Logik und Schritt-für-Schritt-Aufgaben zu geringeren Kosten als o3.",
+      "tagline": "Schnelles, kostengünstiges Denken"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Ein früheres kompaktes Modell für Schlussfolgerungen. Bearbeitet Mathematik-, Wissenschafts- und Logikaufgaben kostengünstig.",
+      "tagline": "Kompaktes schrittweises Denken"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Anthropics intelligentestes Modell, das erste der Claude-5-Familie. Hervorragend für anspruchsvollste Schreib-, Forschungs- und Programmieraufgaben.",
+      "tagline": "Anthropics fortschrittliches Modell"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Der neueste ausgewogene Claude, der erste der Claude-5-Familie. Starke Alltagsleistungen bei Schreiben, Analyse und Programmierung mit schnellen Antworten.",
+      "tagline": "Neuster ausgewogener Claude"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Das mittelgroße Modell von Mistral. Eine europäische Alternative, die Leistung und Geschwindigkeit für den Alltag ausbalanciert.",
+      "tagline": "Ausgewogenes europäisches Modell"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Das kleine Modell von Mistral. Schnell und günstig für Zusammenfassungen, Entwürfe und einfache Fragen.",
+      "tagline": "Kleines, schnelles europäisches Modell"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Das kleinste Mistral-Modell. Am besten für sehr schnelle, einfache Aufgaben bei minimalen Kosten.",
+      "tagline": "Winziges Edge-Mistral-Modell"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Eine aktualisierte DeepSeek-R1-Version. Zeigt die Gedankenführung Schritt für Schritt mit verbesserter Argumentationstiefe.",
+      "tagline": "Aktualisiertes Open-Reasoning-Modell"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Ein leichtes Open-Source-Modell von Meta. Schnell beim Schreiben, Zusammenfassen und bei Alltagsfragen.",
+      "tagline": "Effizientes Open-Source-Llama"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Ein älteres Open-Source-Modell von Meta. Noch immer solide für allgemeines Schreiben und Fragen & Antworten.",
+      "tagline": "Älteres Open-Source-Llama"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "xAIs Flaggschiff-Modell. Gut für offene Diskussionen, Analysen und kreative Projekte.",
+      "tagline": "xAI-Flaggschiff"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "OpenAIs neuestes Spitzenmodell. Hervorragend in Schreiben, Recherche, Programmierung und der Lösung komplexer Probleme.",
+      "tagline": "Aktuelles GPT-Flaggschiff"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (aktuell)",
+      "description": "Ein fortlaufender Alias, der immer auf das neueste chat-optimierte Modell von OpenAI verweist. Azures Ersatz für die eingestellten versionierten gpt-*-chat-Modelle.",
+      "tagline": "Immer das neueste GPT-Chat-Modell"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Eine aktuelle Opus-Version zwischen 4.6 und 4.8. Besonders geeignet für umfangreiche Texte, Recherche, Programmierung und sorgfältige Analysen.",
+      "tagline": "Neue Opus-Version"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "DeepSeeks neuestes Modell für logisches Denken und Azures Ersatz für die R1-Reihe. Erklärt seine Gedankengänge Schritt für Schritt.",
+      "tagline": "Neuestes Open-Reasoning-Modell"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "DeepSeeks schnelles V4-Modell und Azures Ersatz für die V3-Reihe. Schnell für allgemeine Texte und technische Fragen.",
+      "tagline": "Schnelle Open-Source-Alternative"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "description": "xAIs schnelles Modell für logisches Denken. Schrittweises Denken mit schnellen Antworten.",
+      "tagline": "Schnelles xAI-Reasoning-Modell"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "xAIs schnelles Chat-Modell. Schnelle Antworten auf alltägliche Fragen und Gespräche.",
+      "tagline": "Schnelles xAI-Chat-Modell"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Ein schlankeres xAI-Modell. Schneller und günstiger für kurze Fragen und lockere Chats.",
+      "tagline": "Leichtes xAI-Modell"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Das Flaggschiff des GPT-5.6-Trios von OpenAI. Am stärksten beim Schreiben, Recherchieren, Programmieren und Lösen komplexer Probleme.",
+      "tagline": "Neuestes GPT-Flaggschiff-Tier"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Die ausgewogene Variante des GPT-5.6-Trios von OpenAI. Gut für tägliches Schreiben, Analysen und Programmieren mit schnellen Antworten.",
+      "tagline": "Ausgewogenes Alltagsmodell GPT-5.6"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Die leichte, schnelle Variante des GPT-5.6-Trios von OpenAI. Am besten für schnelle Fragen und einfache Aufgaben zu niedrigen Kosten.",
+      "tagline": "Leichtes, schnelles GPT-5.6"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mistrals neuestes mittelgroßes Modell. Eine europäische Alternative, die Leistungsfähigkeit und Geschwindigkeit für die tägliche Arbeit ausbalanciert.",
+      "tagline": "Ausgewogenes europäisches Modell"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Open-Weight-Modell von Moonshot AI. Stark bei agentischen Aufgaben, Programmierung und langen Dokumenten.",
+      "tagline": "Agentisches Open-Weight-Modell"
     }
   },
   "searchMode": {
@@ -1822,7 +2115,22 @@
     "useDefaultStyle": "Standard-Schreibstil verwenden",
     "noTonesCreated": "Noch keine Tonfälle erstellt",
     "createTonesHint": "Tonfälle in den Schnellaktionen erstellen",
-    "translateDocumentTooltip": "Dokumente in eine andere Sprache übersetzen.\n\nUnterstützte Formate: Word, Excel, PowerPoint, HTML, TXT\nMaximale Größe: 40 MB\n\nUnterstützt über 80 Sprachen mit optionalen Glossardateien."
+    "translateDocumentTooltip": "Dokumente in eine andere Sprache übersetzen.\n\nUnterstützte Formate: Word, Excel, PowerPoint, HTML, TXT\nMaximale Größe: 40 MB\n\nUnterstützt über 80 Sprachen mit optionalen Glossardateien.",
+    "translateTooltip": "Übersetzen Sie einen Textausschnitt in eine andere Sprache.\n\nFür ganze Dateien (Word, Excel, PowerPoint, HTML, TXT) verwenden Sie stattdessen Dokument übersetzen.",
+    "cameraTooltip": "Machen Sie ein Foto mit der Kamera Ihres Geräts und fügen Sie es der Nachricht an.",
+    "noResults": "Keine passenden Aktionen",
+    "sectionPinned": "Angeheftet",
+    "sectionFrequent": "Häufig verwendet",
+    "sectionMore": "Mehr",
+    "categoryWeb": "Web",
+    "categoryMedia": "Medien & Dateien",
+    "categoryTransform": "Transformieren",
+    "pin": "Oben anheften",
+    "unpin": "Lösen",
+    "moveToMore": "Zu 'Mehr' verschieben",
+    "moveOutOfMore": "Im Menü anzeigen",
+    "showSources": "Weitere Quellen anzeigen",
+    "hideSources": "Weitere Quellen ausblenden"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Fügen Sie persönliche Anweisungen hinzu, um die Antworten der KI anzupassen. Diese werden mit den zentralen Verhaltensrichtlinien kombiniert, um hilfreiche, genaue und sichere Antworten zu gewährleisten.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tipp: Geben Sie \"/\" ein, um gespeicherte Vorlagen auszuwählen.",
@@ -1933,7 +2241,14 @@
     "learnMore": "Mehr erfahren",
     "advancedOptions": "Erweiterte Optionen",
     "unofficialBadgeLabel": "Inoffiziell",
-    "unofficialLanguageWarning": "Diese Sprache wird nicht offiziell unterstützt. Die Übersetzungsqualität wurde nicht überprüft. Lassen Sie das Ergebnis bitte von einer fließend sprechenden oder muttersprachlichen Person prüfen, bevor Sie es weitergeben."
+    "unofficialLanguageWarning": "Diese Sprache wird nicht offiziell unterstützt. Die Übersetzungsqualität wurde nicht überprüft. Lassen Sie das Ergebnis bitte von einer fließend sprechenden oder muttersprachlichen Person prüfen, bevor Sie es weitergeben.",
+    "translationSubmitted": "Übersetzung gestartet — PDFs werden im Hintergrund verarbeitet.",
+    "pendingTitle": "{filename} wird übersetzt…",
+    "pendingHint": "PDF-Übersetzungen laufen im Hintergrund und können einige Minuten dauern. Sie können weiterarbeiten — diese Karte wird aktualisiert, sobald das Dokument bereit ist, auch nach einem Neuladen.",
+    "asyncFailed": "Übersetzung des Dokuments fehlgeschlagen: {error}",
+    "jobNotFound": "Der Übersetzungsauftrag ist nicht mehr verfügbar. Bitte versuchen Sie es erneut.",
+    "retryPolling": "Erneut prüfen",
+    "pollingStalled": "Der Server konnte nicht erreicht werden, um den Fortschritt zu überprüfen. Die Übersetzung läuft möglicherweise noch."
   },
   "terms": {
     "officialLanguages": "Offizielle Version:",
@@ -1997,6 +2312,10 @@
       "technicalDetails": "Technische Details",
       "agentCountLabel": "{count} Agents",
       "disconnectedToast": "{name} getrennt"
+    },
+    "emptyState": {
+      "title": "Keine regionalen/organisatorischen Agenten verfügbar",
+      "description": "Verbinden Sie unten ein Foundry-Projekt, um dessen Agenten anzuzeigen."
     }
   },
   "privacy": {
@@ -2107,5 +2426,1309 @@
     "review": "Prüfen",
     "itemId": "ID: {id}",
     "itemSource": "{date} von {source}"
+  },
+  "regionOverride": {
+    "warning": "Standort-Override aktiv — Ihre Anfragen werden an die Datenregion {region} weitergeleitet. Dies ist ein manueller Test-Override, nicht Ihr tatsächlicher Standort.",
+    "clear": "Override löschen"
+  },
+  "usageImpact": {
+    "empty": "Noch keine Nutzung erfasst. Ihr Tokenverbrauch und die geschätzten Emissionen werden nach dem Chat hier angezeigt.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} Smartphone-Ladungen",
+    "requests": "Anfragen",
+    "promptTokens": "Prompt-Token",
+    "completionTokens": "Completion-Token",
+    "topModels": "Nach Modell",
+    "byRegion": "Nach Hosting-Region",
+    "regionDefault": "Standard",
+    "modelRow": "{requests} Anfragen · {grams} g",
+    "disclosure": "Schätzungen basieren auf Annahmen v{version} · seit {since} · nur Standard-Chat (Agenten und Knowledge-Base-Antworten nicht berücksichtigt).",
+    "reset": "Nutzungsstatistik zurücksetzen",
+    "estimatedPortion": "Beinhaltet ca. {grams} g CO₂e ({requests} Anfragen), geschätzt aus Chats vor Beginn der Nachverfolgung – rückwirkend aus gespeichertem Nachrichtentext berechnet, nicht aus gemessenen Token-Zahlen.",
+    "chipTitle": "Emissions-Chip",
+    "chipDescription": "Der geschätzte CO₂-Fußabdruck der aktuellen Unterhaltung, angezeigt oberhalb des Chat-Eingabefelds.",
+    "chipAlways": "Immer anzeigen",
+    "chipAlwaysHint": "Der Chip bleibt immer sichtbar, solange eine Schätzung vorliegt.",
+    "chipAuto": "Bei Aktualisierung oder Hover anzeigen",
+    "chipAutoHint": "Der Chip erscheint, wenn sich die Schätzung ändert, und blendet sich anschließend aus. Beim Überfahren oder Fokussieren wird er wieder angezeigt.",
+    "chipHidden": "Ausgeblendet",
+    "chipHiddenHint": "Der Chip wird nie angezeigt. Die Gesamtsummen werden weiterhin erfasst und auf dieser Seite angezeigt.",
+    "chipAutoHideLabel": "Ausblenden nach",
+    "chipAutoHideUnit": "Sekunden",
+    "chipAutoHideHint": "Zwischen {min} und {max} Sekunden."
+  },
+  "extraction": {
+    "toggleLabel": "Strukturierte Daten extrahieren",
+    "trayLabel": "Extraktion",
+    "trayPrefix": "Extrahieren",
+    "trayInfo": "Die Extraktion liefert bis zu 3 strukturierte Tabellen. Rezepte werden lokal gespeichert.",
+    "autoChip": "Auto — KI schlägt eine Struktur vor",
+    "addRecipe": "Rezept hinzufügen",
+    "addRecipeTitle": "Fügen Sie dieser Extraktion ein Rezept hinzu",
+    "addRecipeFullTitle": "Bis zu 3 Rezepte pro Extraktion",
+    "removeRecipe": "Rezept entfernen: {name}",
+    "remove": "Entfernen",
+    "section": "Extraktionsrezepte",
+    "sectionSubtitle": "Gespeicherte Vorlagen, die Rohtext, Dateien oder URLs in strukturierte Tabellen umwandeln. Wählen Sie bis zu 3 pro Extraktionsdurchgang aus.",
+    "newRecipe": "Neues Rezept",
+    "untitledRecipe": "(Unbenanntes Rezept)",
+    "deleteRecipe": "Rezept löschen",
+    "delete": "Löschen",
+    "deleteConfirm": "Löschen?",
+    "cancel": "Abbrechen",
+    "name": "Name",
+    "namePlaceholder": "z. B. Patienten",
+    "description": "Beschreibung",
+    "optional": "(optional)",
+    "descriptionPlaceholder": "Kurze Zusammenfassung, die im Rezept-Auswahlfenster angezeigt wird",
+    "instructions": "Anweisungen",
+    "instructionsPlaceholder": "Wonach soll die KI im Material suchen?",
+    "fields": "Felder",
+    "field": "Feld",
+    "fieldsPlural": "Felder",
+    "fieldName": "Feldname",
+    "fieldType": "Feldtyp",
+    "fieldNamePlaceholder": "feld_name",
+    "addField": "Feld hinzufügen",
+    "removeField": "Feld entfernen",
+    "toggleDetails": "Details ein-/ausblenden",
+    "fieldDetailsTitle": "Beschreibung, Enum-Werte",
+    "fieldDescriptionPlaceholder": "Beschreibung (hilft der KI, dieses Feld zu finden)",
+    "enumValuesPlaceholder": "Kommagetrennte erlaubte Werte",
+    "required": "erforderlich",
+    "suggest": "Mit KI vorschlagen",
+    "suggesting": "Vorschlag wird erstellt…",
+    "suggestNeedsInstructions": "Fügen Sie zuerst Anweisungen hinzu, damit die KI weiß, wonach sie suchen soll",
+    "searchRecipes": "Rezepte suchen",
+    "pickerEmpty": "Noch keine Rezepte. Erstellen Sie eines, um zu beginnen.",
+    "pickerEmptyMatch": "Keine passenden Rezepte",
+    "editorEmpty": "Noch keine Rezepte. Erstellen Sie eines und die KI kann helfen, die Felder auszufüllen.",
+    "noData": "Keine Daten extrahiert",
+    "noRecords": "Keine {name}-Einträge gefunden",
+    "row": "Zeile",
+    "rows": "Zeilen",
+    "record": "Eintrag",
+    "records": "Einträge",
+    "complete": "abgeschlossen",
+    "download": "Download",
+    "preview": "Vorschau",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} Felder",
+    "fieldCountOne": "1 Feld",
+    "andMoreFields": "+ {count} weitere",
+    "saveAsRecipe": "Als Rezept speichern",
+    "savedAsRecipeToast": "Als Rezept \"{name}\" gespeichert",
+    "previewTruncated": "Erste 3 von {total} Zeilen angezeigt. Für alle Daten herunterladen.",
+    "previewEmpty": "Keine Zeilen zur Vorschau",
+    "proposedSchemaTip": "Die KI hat dieses Schema vorgeschlagen. Speichern, um es das nächste Mal wiederzuverwenden.",
+    "downloadAriaLabel": "{name} als {format} herunterladen",
+    "previewAriaLabel": "Vorschau von {name} umschalten",
+    "changeFormatAriaLabel": "Download-Format für {name} ändern",
+    "materialWarningTitle": "Material zum Extrahieren hinzufügen",
+    "materialWarningBody": "Geben Sie unten eine Nachricht ein, hängen Sie eine Datei an oder fügen Sie eine URL hinzu.",
+    "materialAttach": "Datei anhängen",
+    "willExtractPrefix": "Wird extrahiert aus:",
+    "materialText": "Nachrichtentext",
+    "materialFiles": "{count, plural, one {1 Datei} other {# Dateien}}",
+    "materialActiveFiles": "{count, plural, one {1 aktive Datei} other {# aktive Dateien}}",
+    "dismiss": "Extraktion deaktivieren"
+  },
+  "Connectors": "Connectoren",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "Übersetzung",
+        "description": "Text übersetzen mit Analyse, Glossaren und Überprüfungsrunden"
+      },
+      "document": {
+        "label": "Dokument",
+        "description": "Erstellen und überarbeiten Sie ein Dokument mit dem Assistenten"
+      },
+      "dataAnalysis": {
+        "label": "Datenanalyse",
+        "description": "Tabellen importieren und Daten erkunden oder umwandeln"
+      },
+      "map": {
+        "label": "Karte",
+        "description": "Verwandeln Sie beliebige Daten in Standorte auf einer Karte"
+      }
+    },
+    "chooser": {
+      "prompt": "Oder beginnen Sie einen fokussierten Arbeitsbereich"
+    },
+    "sidebar": {
+      "newTranslation": "Neue Übersetzung",
+      "newDocument": "Neues Dokument",
+      "newDataAnalysis": "Neue Datenanalyse",
+      "newMap": "Neue Karte"
+    },
+    "translation": {
+      "chooseLanguage": "Zielsprache",
+      "customLanguageHint": "„{name}“ ist eine von Ihnen hinzugefügte Sprache — die KI versucht jede Sprache, aber die Qualität ist nicht geprüft.",
+      "addedByYou": "Von Ihnen hinzugefügt",
+      "glossary": "Glossar",
+      "noGlossary": "Kein Glossar",
+      "manageGlossaries": "Glossare",
+      "glossaries": "Glossare",
+      "closeGlossaries": "Glossare schließen",
+      "glossariesEmpty": "Erstellen Sie ein Glossar, um die Übersetzung spezifischer Begriffe festzulegen. Glossare werden auf diesem Gerät gespeichert und sind für künftige Übersetzungen wiederverwendbar.",
+      "newGlossary": "Neues Glossar",
+      "newGlossaryName": "Unbenanntes Glossar",
+      "glossaryName": "Glossarname",
+      "deleteGlossary": "Glossar löschen",
+      "sourceTerm": "Quellbegriff",
+      "targetTerm": "Übersetzung",
+      "note": "Notiz",
+      "noteOptional": "Notiz (optional)",
+      "addEntry": "Begriff hinzufügen",
+      "removeEntry": "{term} entfernen",
+      "mode": "Übersetzungsmodus",
+      "modeQuick": "Schnell",
+      "modeAgentic": "Überprüft",
+      "modeQuickHint": "Ein Übersetzungsdurchgang, am schnellsten",
+      "modeAgenticHint": "Analysiert den Text zuerst, übersetzt und führt bis zu 3 Überprüfungsrunden durch",
+      "translate": "Übersetzen",
+      "translating": "Übersetze…",
+      "sourceLabel": "Quelltext",
+      "targetLabel": "Übersetzung",
+      "sourcePlaceholder": "Text zum Übersetzen einfügen oder eingeben oder ein Dokument hochladen.",
+      "targetEmpty": "Die Übersetzung erscheint hier.",
+      "uploadDocument": "Dokument hochladen",
+      "copy": "Kopieren",
+      "copied": "Kopiert",
+      "tooLong": "Der Text ist länger als {max} Zeichen. Bitte in Teile aufteilen oder die Dokumentübersetzung für ganze Dateien verwenden.",
+      "analysisTitle": "Vorübersetzungsanalyse",
+      "register": "Registrieren",
+      "reviewTitle": "Überprüfungsrunden",
+      "roundLabel": "Runde {round}",
+      "verdictApprove": "genehmigt",
+      "verdictRevise": "überarbeitet",
+      "railRequest": "Übersetzen Sie den Quelltext ins {language}.",
+      "railDoneAgentic": "Fertig. Ich habe den Text analysiert, übersetzt und {rounds} Überprüfungsrunde(n) durchgeführt. Das Ergebnis befindet sich im Arbeitsbereich.",
+      "railDoneQuick": "Fertig. Die Übersetzung befindet sich im Arbeitsbereich.",
+      "railAssessRequest": "Bewerten Sie die Qualität der {language}-Übersetzung.",
+      "railAssessDone": "Bewertung abgeschlossen: Die Ergebnisse finden Sie im Arbeitsbereich mit {count} vorgeschlagenen Änderung(en) zur Überprüfung.",
+      "roundChanges": "Änderungen in Runde {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "Genauigkeit",
+          "description": "Gibt die ursprüngliche Bedeutung exakt wieder — keine Fehlübersetzung, Auslassung, Hinzufügung oder nicht übersetzte Abschnitte"
+        },
+        "fluency": {
+          "label": "Flüssigkeit",
+          "description": "Grammatik, Rechtschreibung, Zeichensetzung und Zusammenhalt lesen sich natürlich in der Zielsprache"
+        },
+        "terminology": {
+          "label": "Terminologie",
+          "description": "Fachbegriffe sind korrekt und konsistent; das Glossar wird exakt eingehalten"
+        },
+        "style": {
+          "label": "Stil",
+          "description": "Register, Tonfall und Stimme entsprechen dem Original und bleiben konsistent"
+        },
+        "localeConventions": {
+          "label": "Konventionen der Zielsprache",
+          "description": "Daten, Zahlen, Einheiten und Zeichensetzung entsprechen den Normen der Zielsprache"
+        },
+        "audience": {
+          "label": "Zielgruppe",
+          "description": "Entspricht dem Zweck und der Leserschaft des Textes"
+        }
+      },
+      "severity": {
+        "minor": "Geringfügig",
+        "major": "Schwerwiegend"
+      },
+      "assess": "Qualität bewerten",
+      "assessing": "Bewertung läuft…",
+      "assessmentTitle": "Qualitätsbewertung",
+      "criteriaPicker": "Zu bewertende Kriterien",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Vorgeschlagene Änderungen",
+      "noEditsSuggested": "Keine Änderungen vorgeschlagen — die Übersetzung erfüllt die ausgewählten Kriterien.",
+      "acceptEdit": "Annehmen",
+      "rejectEdit": "Ablehnen",
+      "acceptAll": "Alle annehmen",
+      "rejectAll": "Alle ablehnen",
+      "editAccepted": "Angenommen",
+      "editRejected": "Abgelehnt",
+      "editUnapplicable": "Dieser Abschnitt konnte im aktuellen Text nicht gefunden werden — nicht angewandt",
+      "editTranslation": "Bearbeiten",
+      "doneEditing": "Fertig",
+      "pasteTranslationPlaceholder": "Geben Sie eine Übersetzung ein oder fügen Sie sie zum Bearbeiten ein…",
+      "editingBlockedPendingEdits": "Bitte zuerst die ausstehenden Änderungsvorschläge annehmen oder ablehnen",
+      "pendingCount": "{count} ausstehend",
+      "closeReview": "Qualitätsüberprüfung schließen",
+      "showReview": "Überprüfung anzeigen",
+      "showReviewPending": "Überprüfung anzeigen ({count} ausstehend)",
+      "undoEdit": "Rückgängig",
+      "clearResolved": "Erledigte entfernen",
+      "clearResolvedHint": "Akzeptierte, abgelehnte und nicht zutreffende Änderungen aus dieser Liste entfernen",
+      "autoClearResolved": "Erledigte Änderungen automatisch entfernen",
+      "customCriteria": "Eigene Kriterien",
+      "closeCriteria": "Eigene Kriterien schließen",
+      "newCriterion": "Neues Kriterium",
+      "newCriterionName": "Unbenanntes Kriterium",
+      "criterionName": "Kriteriumsname",
+      "criterionRubric": "Bewertungskriterium",
+      "criterionRubricPlaceholder": "Beschreiben Sie, was die Übersetzung erfüllen muss, um dieses Kriterium zu erfüllen, z.B. \"Alle Dosierungsanweisungen im Imperativ, nie im Infinitiv wiedergeben…\"",
+      "criterionRubricHint": "Diese Bewertungsanweisung wird der KI zusammen mit den integrierten MQM-Dimensionen wortgetreu vorgelegt, um die Übersetzung zu bewerten.",
+      "criteriaEmpty": "Erstellen Sie eigene Kriterien – z.B. Hausschreibweise, Kundenterminologie oder regionale Konventionen –, um Übersetzungen über die integrierten MQM-Dimensionen hinaus zu bewerten. Lokal gespeichert und wiederverwendbar.",
+      "deleteCriterion": "Kriterium löschen",
+      "manageCriteria": "Eigene Kriterien",
+      "addCriteria": "Kriterien hinzufügen",
+      "noUsableCriteria": "Wählen Sie mindestens ein integriertes Kriterium oder ergänzen Sie Ihre eigenen Kriterien um eine Bewertungsanweisung.",
+      "criterionRubricTooLong": "Diese Rubrik überschreitet das Limit um {over} Zeichen. Sie wird bei jeder Bewertung gesendet und muss daher gekürzt werden, bevor dieses Kriterium verwendet werden kann."
+    },
+    "document": {
+      "emptyTitle": "Beschreiben Sie das gewünschte Dokument",
+      "emptyBody": "Teilen Sie dem Assistenten mit, was erstellt werden soll – z. B. einen Lagebericht, einen Spendenbrief oder ein Sitzungsprotokoll. Fügen Sie zuerst Referenzdateien hinzu, wenn Sie möchten, dass daraus Zitate und Fakten verwendet werden.",
+      "generatePlaceholder": "Beschreiben Sie das zu erstellende Dokument…",
+      "revisePlaceholder": "Beschreiben Sie die gewünschten Änderungen…",
+      "generate": "Erstellen",
+      "revise": "Überarbeiten",
+      "writing": "Wird geschrieben…",
+      "export": "Exportieren",
+      "references": "Referenzen",
+      "addReference": "Datei hinzufügen",
+      "uploading": "Wird hochgeladen…",
+      "removeReference": "{name} entfernen",
+      "referenceChars": "{chars} Zeichen extrahierter Text",
+      "referenceEmpty": "Es konnte kein Text aus {name} extrahiert werden",
+      "uploadFailed": "Hochladen fehlgeschlagen",
+      "untitledDocument": "Unbenanntes Dokument",
+      "generatedSummary": "Ich habe das Dokument im Arbeitsbereich erstellt. Prüfen Sie es und teilen Sie mir mit, was geändert werden soll.",
+      "revisedSummary": "Ich habe das Dokument im Arbeitsbereich überarbeitet.",
+      "runFailed": "Es ist ein Fehler aufgetreten: {message}",
+      "uploadBasis": "Mit bestehendem Dokument beginnen",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "Grammatik & Rechtschreibung",
+          "description": "Korrekte Grammatik und Rechtschreibung; eine durchgehend verwendete englische Variante (US oder UK) ist in Ordnung — das Mischen gilt als Fehler"
+        },
+        "consistency": {
+          "label": "Konsistenz",
+          "description": "Terminologie, Namen, Groß- und Kleinschreibung sowie Formatierung werden im gesamten Dokument einheitlich verwendet"
+        },
+        "clarity": {
+          "label": "Klarheit",
+          "description": "Direkte, eindeutige Sätze; eine Struktur, die die Lesenden unterstützt"
+        },
+        "sensitivity": {
+          "label": "Sensibilität",
+          "description": "Inklusive, konflikt- und humanitärsensible Formulierung (optionale Prüfung)"
+        },
+        "specAdherence": {
+          "label": "Spezifikationstreue",
+          "description": "Entspricht der beigefügten Dokumentenspezifikation: erforderliche Abschnitte sind vorhanden, in der richtigen Reihenfolge und gemäß Anleitung ausgefüllt"
+        },
+        "toneAdherence": {
+          "label": "Tonfalltreue",
+          "description": "Befolgt die beigefügten Vorgaben zu Sprache und Tonfall"
+        }
+      },
+      "severity": {
+        "minor": "Geringfügig",
+        "major": "Schwerwiegend"
+      },
+      "assess": "Qualität bewerten",
+      "assessing": "Bewertung läuft…",
+      "assessmentTitle": "Qualitätsprüfung",
+      "criteriaPicker": "Zu bewertende Kriterien",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Vorgeschlagene Änderungen",
+      "noEditsSuggested": "Keine Änderungen vorgeschlagen — das Dokument entspricht den ausgewählten Kriterien.",
+      "acceptEdit": "Annehmen",
+      "rejectEdit": "Ablehnen",
+      "acceptAll": "Alle annehmen",
+      "rejectAll": "Alle ablehnen",
+      "editAccepted": "Angenommen",
+      "editRejected": "Abgelehnt",
+      "editUnapplicable": "Dieser Abschnitt konnte im aktuellen Text nicht gefunden werden — nicht angewendet",
+      "editingBlockedPendingEdits": "Bitte zuerst alle vorgeschlagenen Änderungen klären oder ablehnen",
+      "pendingCount": "{count} ausstehend",
+      "closeReview": "Qualitätsprüfung schließen",
+      "showReview": "Prüfung anzeigen",
+      "showReviewPending": "Prüfung anzeigen ({count} ausstehend)",
+      "railAssessRequest": "Bewerten Sie die Qualität des Dokuments anhand der ausgewählten Kriterien.",
+      "railAssessDone": "Bewertung abgeschlossen: Die Bewertungen sind im Arbeitsbereich, mit {count} vorgeschlagenen Änderung(en) zur Prüfung.",
+      "spec": "Dokumentenspezifikation",
+      "noSpec": "Keine Spezifikation",
+      "manageSpecs": "Spezifikationen",
+      "specs": "Dokumentenspezifikationen",
+      "closeSpecs": "Spezifikationen schließen",
+      "specsEmpty": "Erstellen Sie eine Spezifikation, um Dokumente in einem festen Format zu verfassen — mit erforderlichen Abschnitten, Reihenfolge und abschnittsweiser Anleitung (z. B. eine SitRep-Vorlage). Spezifikationen werden auf diesem Gerät gespeichert und sind wiederverwendbar.",
+      "newSpec": "Neue Spezifikation",
+      "newSpecName": "Unbenannte Spezifikation",
+      "specName": "Spezifikationsname",
+      "specDescription": "Beschreibung (optional)",
+      "deleteSpec": "Spezifikation löschen",
+      "sectionHeading": "Abschnittsüberschrift",
+      "sectionGuidance": "Anleitung (optional)",
+      "sectionRequired": "Erforderlich",
+      "addSection": "Abschnitt hinzufügen",
+      "removeSection": "Abschnitt entfernen",
+      "generalGuidance": "Allgemeine Hinweise (optional)",
+      "tone": "Tonfall",
+      "noTone": "Kein Tonfall",
+      "customCriteria": "Eigene Kriterien",
+      "manageCriteria": "Eigene Kriterien",
+      "closeCriteria": "Eigene Kriterien schließen",
+      "criteriaEmpty": "Erstellen Sie benutzerdefinierte Kriterien – z. B. Markenrichtlinien oder organisationsspezifische Sprache –, um Dokumente zu bewerten und Überarbeitungen zu steuern. Auf diesem Gerät gespeichert und wiederverwendbar.",
+      "newCriterion": "Neues Kriterium",
+      "newCriterionName": "Unbenanntes Kriterium",
+      "criterionName": "Kriterienname",
+      "criterionRubric": "Bewertungskriterium",
+      "criterionRubricPlaceholder": "Beschreiben Sie, was das Dokument erfüllen muss, um dieses Kriterium zu erfüllen, z. B. „Niemals Superlative über unsere eigene Arbeit verwenden; Betroffene immer als ‚Menschen, denen wir helfen‘ bezeichnen…“",
+      "criterionRubricHint": "Diese Bewertungsvorgabe wird der KI bei Bewertungen und Überarbeitungen wörtlich übergeben.",
+      "deleteCriterion": "Kriterium löschen",
+      "profileTitle": "Dokumentenprofil",
+      "profileDocType": "Typ",
+      "profileLanguage": "Sprache",
+      "profileAudience": "Zielgruppe",
+      "profilePurpose": "Zweck",
+      "profileRegister": "Sprachstil",
+      "profileTone": "Ton",
+      "profileConventions": "Konventionen",
+      "emptyHint": "Beginnen Sie unten zu tippen, beschreiben Sie im Feld unten, was geschrieben werden soll, oder starten Sie mit einer Datei.",
+      "addSpec": "Spezifikation hinzufügen",
+      "addCriteria": "Kriterien hinzufügen",
+      "scopeFullDocument": "Bereich: gesamtes Dokument",
+      "scopeSelection": "Bereich: Auswahl – „{preview}…“ ({count} Wörter)",
+      "clearSelection": "Auswahl aufheben (mit dem gesamten Dokument arbeiten)",
+      "reviseSelectionPlaceholder": "Beschreiben Sie die Änderungen an der Auswahl…",
+      "revisedSelectionSummary": "Ich habe den ausgewählten Abschnitt im Arbeitsbereich überarbeitet.",
+      "assessedSelection": "Auswahl",
+      "undoEdit": "Rückgängig",
+      "clearResolved": "Erledigte entfernen",
+      "clearResolvedHint": "Akzeptierte, abgelehnte und nicht zutreffende Änderungen aus dieser Liste entfernen",
+      "autoClearResolved": "Erledigte Änderungen automatisch entfernen",
+      "import": "Importieren",
+      "importReplaceTitle": "Dokument ersetzen?",
+      "importReplaceBody": "Das Importieren von {name} ersetzt das aktuelle Dokument. Ihre Referenzen, Spezifikation und Tonfall bleiben erhalten.",
+      "importReplaceConfirm": "Ersetzen",
+      "editorMode": "Editor-Modus",
+      "editorModeRich": "Rich-Text",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Lösen Sie die vorgeschlagenen Änderungen, bevor Sie den Editor-Modus wechseln.",
+      "suggestChanges": "Änderungen vorschlagen",
+      "suggestChangesHint": "Überprüfen Sie die Überarbeitung als einzelne Vorschläge, statt das Dokument sofort umzuschreiben.",
+      "suggestChangesSelectionNote": "Überarbeitungen einer Auswahl werden direkt angewendet – der gewählte Bereich entspricht bereits Ihrem gewünschten Umfang.",
+      "suggestedSummary": "{count} {count, plural, one {Vorschlag} other {Vorschläge}} zur Überprüfung vorgeschlagen.",
+      "revisionSuggestionSummary": "Ihre Überarbeitungsanfrage ergab {count} {count, plural, one {Vorschlag} other {Vorschläge}}.",
+      "revisionCriterionLabel": "Angeforderte Überarbeitung",
+      "fallbackSelection": "Direkt angewendet – Überarbeitungen einer Auswahl werden nicht vorgeschlagen.",
+      "fallbackLargeRewrite": "Direkt angewendet – die Überarbeitung hat zu viele Teile des Dokuments geändert, um sie als einzelne Vorschläge zu prüfen.",
+      "fallbackReorder": "Direkt angewendet – Abschnitte wurden verschoben, was nicht als überprüfbare Vorschläge aufgeteilt werden kann.",
+      "fallbackUnanchorable": "Direkt angewendet – die Änderungen konnten keinen bestimmten Textstellen zugeordnet werden.",
+      "fallbackNoChanges": "Keine Änderungen erforderlich.",
+      "criterionRubricTooLong": "Diese Rubrik überschreitet das Limit um {over} Zeichen. Sie wird bei jeder Bewertung gesendet und muss daher gekürzt werden, bevor dieses Kriterium verwendet werden kann."
+    },
+    "data": {
+      "emptyTitle": "Daten zum Analysieren importieren",
+      "emptyBody": "Importieren Sie eine CSV-, Excel- oder JSON-Datei, oder fügen Sie Zeilen direkt ein. Nachdem Ihre Tabelle geladen ist, können Sie sie sortieren, weitere Zeilen aus Dokumenten extrahieren und sie mit einfachen Anweisungen umwandeln.",
+      "importFile": "Datei importieren",
+      "importing": "Importiere…",
+      "pasteData": "Daten einfügen",
+      "pastePlaceholder": "Fügen Sie hier CSV, TSV oder JSON ein…",
+      "import": "Importieren",
+      "addFromSource": "Aus Quelle hinzufügen",
+      "extractHint": "Fügen Sie Text ein oder wählen Sie ein Dokument; Zeilen, die mit Ihren aktuellen Spalten übereinstimmen, werden daraus extrahiert. Unbekannte Werte bleiben leer – es wird nichts erfunden.",
+      "extractPlaceholder": "Unstrukturierten Text mit Daten einfügen…",
+      "extractRows": "Zeilen extrahieren",
+      "extractFromFile": "Aus einer Datei…",
+      "extracting": "Extrahiere…",
+      "pastedSource": "Eingefügter Text",
+      "transform": "Transformieren",
+      "transforming": "Transformiere…",
+      "transformPlaceholder": "Beschreiben Sie eine Transformation, z. B. „Spalte mit Fällen pro 1000 Einwohner hinzufügen“…",
+      "transformCapHint": "Transformationen sind auf {max} Zeilen begrenzt. Löschen oder filtern Sie vorab Zeilen für größere Tabellen.",
+      "undo": "Rückgängig",
+      "deleteSelected": "{count} löschen",
+      "deletedRows": "{count} Zeilen gelöscht",
+      "selectAllRows": "Alle Zeilen auswählen",
+      "selectRow": "Zeile {row} auswählen",
+      "rowCount": "{count} Zeilen",
+      "rowCapExceeded": "Das wären {count} Zeilen; die Tabelle ist auf {max} begrenzt. Teilen Sie die Daten oder exportieren Sie sie stattdessen.",
+      "railExtractRequest": "Zeilen extrahieren, die dem Tabellenschema entsprechen, aus: {source}",
+      "railExtractDone": "{count} extrahierte Zeilen zur Tabelle hinzugefügt.",
+      "railTransformDone": "Tabelle transformiert.",
+      "columnProfileFor": "Spaltenstatistik für {column}",
+      "profileMissing": "Fehlend",
+      "profileDistinct": "Unterschiedlich",
+      "profileRange": "Bereich",
+      "profileMean": "Mittelwert",
+      "profileMedian": "Median",
+      "profileTopValues": "Häufigste Werte",
+      "filterColumnFor": "{column} filtern",
+      "filterContains": "Enthält…",
+      "filterMin": "Min",
+      "filterMax": "Max",
+      "filterClear": "Zurücksetzen",
+      "clearFilters": "Filter zurücksetzen",
+      "showingRows": "{shown} von {total} Zeilen angezeigt",
+      "scopeLabel": "Arbeitsbereich",
+      "scopeTable": "Alle ({count})",
+      "scopeFiltered": "Gefiltert ({count})",
+      "scopeSelection": "Ausgewählt ({count})",
+      "scopedInstruction": "{instruction} (bei {count} ausgewählten Zeilen)",
+      "assess": "Qualität bewerten",
+      "assessing": "Bewertung läuft…",
+      "criteria": {
+        "validity": {
+          "label": "Gültigkeit",
+          "description": "Werte entsprechen dem Typ und Format der Spalte"
+        },
+        "consistency": {
+          "label": "Konsistenz",
+          "description": "Gleicher Wert wird immer gleich geschrieben (keine 'M'/'Mann'-Varianten, gemischte Einheiten oder unterschiedliche Groß-/Kleinschreibung)"
+        },
+        "duplicates": {
+          "label": "Duplikate",
+          "description": "Zeilen, die dasselbe Objekt oder Ereignis doppelt erfassen"
+        },
+        "plausibility": {
+          "label": "Plausibilität",
+          "description": "Ausreißer und unmögliche Werte im Kontext"
+        }
+      },
+      "assessmentTitle": "Datenqualitätsprüfung",
+      "pendingCount": "{count} ausstehend",
+      "closeReview": "Qualitätsprüfung schließen",
+      "suggestedEdits": "Vorgeschlagene Korrekturen",
+      "noEditsSuggested": "Keine Korrekturen vorgeschlagen – die Daten erfüllen die ausgewählten Kriterien.",
+      "acceptAll": "Alle akzeptieren",
+      "rejectAll": "Alle ablehnen",
+      "acceptEdit": "Akzeptieren",
+      "rejectEdit": "Ablehnen",
+      "editAccepted": "Übernommen",
+      "editRejected": "Abgelehnt",
+      "editUnapplicable": "Die Zelle wurde seit der Bewertung geändert – nicht übernommen",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "Zu bewertende Kriterien",
+      "severity": {
+        "minor": "Gering",
+        "major": "Schwerwiegend"
+      },
+      "editLocation": "Zeile {row} · {column}",
+      "editLocationRow": "Zeile {row} (löschen)",
+      "showReview": "Review anzeigen",
+      "showReviewPending": "Review anzeigen ({count} ausstehend)",
+      "assessedFiltered": "Gefilterte Zeilen",
+      "assessedSelection": "Ausgewählte Zeilen",
+      "assessedSample": "Stichprobe von {shown} von {total}",
+      "railAssessRequest": "Bewerten Sie die Qualität der Tabelle ({count} Zeilen) anhand der ausgewählten Kriterien.",
+      "railAssessDone": "{count} Vorschläge zur Datenqualität — prüfen Sie sie im Arbeitsbereich.",
+      "insights": "Einblicke",
+      "chartKind": "Diagrammtyp",
+      "chartBar": "Balken (Gruppierung)",
+      "chartHistogram": "Histogramm",
+      "chartLine": "Linie (über Zeit)",
+      "groupByColumn": "Nach Spalte gruppieren",
+      "dateColumn": "Datums-Spalte",
+      "valueColumn": "Wert-Spalte",
+      "aggFn": "Aggregation",
+      "aggCount": "Anzahl",
+      "aggSum": "Summe",
+      "aggMean": "Mittelwert",
+      "chartTruncated": "Zeige die {max} wichtigsten Gruppen",
+      "chartNoData": "Keine darstellbaren Werte in den aktuellen Zeilen.",
+      "chartBarAria": "Balkendiagramm gruppiert nach {column}",
+      "chartHistogramAria": "Histogramm von {column}",
+      "chartLineAria": "Liniendiagramm von {column} über die Zeit",
+      "editStructure": "Struktur",
+      "defineStructure": "Struktur definieren",
+      "schemaHint": "Definieren Sie die Felder Ihrer Datenstruktur. Pflichtfelder bestimmen die Richtlinie für fehlende Daten beim Import; das Ändern eines Feldtyps konvertiert vorhandene Werte (nicht konvertierbare Zellen werden geleert).",
+      "schemaFieldName": "Feldname",
+      "schemaFieldType": "Feldtyp",
+      "schemaRequired": "Erforderlich",
+      "schemaAddField": "Feld hinzufügen",
+      "schemaDeleteField": "Feld {field} löschen",
+      "schemaApply": "Struktur übernehmen",
+      "schemaCancel": "Abbrechen",
+      "schemaEdited": "Tabellenstruktur bearbeitet",
+      "schemaCellsConverted": "{count} Zellen konnten nicht in den neuen Typ konvertiert werden und sind nun leer.",
+      "missingFieldPolicy": "Fehlende Daten",
+      "policyStrict": "Strikt – unvollständige Zeilen ablehnen",
+      "policyFlag": "Markieren – importieren und kennzeichnen",
+      "policyLenient": "Nachsichtig – stillschweigend importieren",
+      "droppedIncompleteRows": "{count} Zeilen mit fehlenden Pflichtfeldern wurden entfernt: {fields}",
+      "dismiss": "Schließen",
+      "requiredColumn": "Pflichtfeld",
+      "flagMissingRequired": "Pflichtfeld ist leer",
+      "flagPendingEdit": "Für diese Zelle ist eine vorgeschlagene Korrektur offen — siehe Qualitätsprüfung",
+      "fromPhoto": "Aus Foto",
+      "fromPhotoHint": "Fotografieren Sie ein Papierformular oder eine Tabelle – der Inhalt wird als strukturierte Daten übernommen, die Sie mit dem Foto abgleichen können.",
+      "readingPhoto": "Foto wird gelesen…",
+      "photoBatchName": "{count} Fotos",
+      "railPhotoRequest": "Strukturierte Daten aus {count} Foto(s) extrahieren: {name}",
+      "railPhotoDone": "{count} Datensatz/Datensätze aus dem/den Foto(s) hinzugefügt. Überprüfen Sie sie anhand des Fotos im Arbeitsbereich.",
+      "sourcesLabel": "Quellen",
+      "openPhotoQc": "Daten mit {name} abgleichen",
+      "qcRowsFromPhoto": "{count} Zeilen",
+      "qcClose": "Fotoprüfung schließen",
+      "qcZoomIn": "Vergrößern",
+      "qcZoomOut": "Verkleinern",
+      "qcPrevPhoto": "Vorheriges Foto",
+      "qcNextPhoto": "Nächstes Foto",
+      "qcImageLoading": "Foto wird geladen…",
+      "qcImageFailed": "Das Foto konnte nicht geladen werden.",
+      "qcImageAlt": "Quellfoto: {name}",
+      "qcHint": "Die Tabelle zeigt nur die Zeilen dieses Fotos – vergleichen Sie jeden Wert mit dem Foto und bearbeiten oder löschen Sie Zeilen, die nicht übereinstimmen.",
+      "sourceFilterChip": "Zeilen von {name}",
+      "clearSourceFilter": "Alle Zeilen wieder anzeigen",
+      "viewAsRecord": "Formularansicht",
+      "viewAsTable": "Tabellenansicht",
+      "recordEmpty": "Noch keine Datensätze.",
+      "recordOf": "Datensatz {index} von {count}",
+      "recordPrev": "Vorheriger Datensatz",
+      "recordNext": "Nächster Datensatz",
+      "recordBooleanUnset": "(leer)",
+      "flagsChip": "{count} Hinweise",
+      "flagsChipOpenReview": "Qualitätsprüfung öffnen",
+      "flagsChipMissingOnly": "Pflichtfelder sind leer – bitte ausfüllen oder Struktur anpassen",
+      "autoCheck": "Neue Daten automatisch prüfen",
+      "autoCheckHint": "Nach dem Extrahieren von Daten aus Fotos oder Dokumenten automatisch eine Qualitätsprüfung für die neuen Zeilen durchführen",
+      "checkingNewRows": "Überprüfe die neu hinzugefügten Zeilen auf Qualitätsprobleme…",
+      "ingestCheckFailed": "Die automatische Qualitätsprüfung ist fehlgeschlagen ({message}) – Sie können sie manuell mit \"Qualität prüfen\" ausführen.",
+      "assessedIngest": "Neu hinzugefügte Zeilen",
+      "transpose": "Transponieren",
+      "transposeAxisColumn": "Name",
+      "transposeSuggestion": "Diese Tabelle scheint transponiert zu sein: Zeilen sind Attribute und Spalten sind Einträge. Möchten Sie sie umdrehen, sodass jeder Eintrag eine Zeile ist und jedes Attribut eine typisierte Spalte wird?",
+      "transposedTable": "Transponierte Zeilen und Spalten",
+      "columns": "Spalten",
+      "columnsHidden": "Spalten ({count} ausgeblendet)",
+      "showAllColumns": "Alle anzeigen",
+      "chartScatter": "Streudiagramm (x vs. y)",
+      "chartPivot": "Pivot-Tabelle",
+      "xColumn": "X-Spalte",
+      "yColumn": "Y-Spalte",
+      "splitByColumn": "Aufteilen nach",
+      "splitNone": "Keine Aufteilung",
+      "pivotValueColumns": "Wertespalten",
+      "aggMin": "Min",
+      "aggMax": "Max",
+      "aggMedian": "Median",
+      "chartSeriesTruncated": "Top {max} Datenreihen werden angezeigt",
+      "chartPointsTruncated": "{max} Stichprobenpunkte werden angezeigt",
+      "chartScatterAria": "Streudiagramm von {x} gegen {y}",
+      "pivotTableAria": "Pivot-Tabelle gruppiert nach {column}",
+      "schemaFormula": "Formel",
+      "schemaFormulaPlaceholder": "z. B. [Fälle] / [Bevölkerung] * 1000",
+      "schemaFormulaHint": "Berechnetes Feld: Verweisen Sie auf andere Felder als [Name]; unterstützt + - * / %, Klammern sowie round, abs, min, max. Werte werden automatisch aktualisiert und können nicht direkt bearbeitet werden.",
+      "schemaFormulaSyntaxError": "Ungültige Formel",
+      "schemaFormulaUnknownRef": "Unbekanntes Feld: {ref}",
+      "schemaFormulaArityError": "Falsche Anzahl von Argumenten für {fn}",
+      "schemaFormulaCycleError": "Zirkulärer Bezug zwischen Formeln",
+      "derivedColumnTitle": "Berechnet: {formula}",
+      "derivedFrom": "Berechnet aus {formula}",
+      "takePhoto": "Foto aufnehmen",
+      "takePhotoHint": "Nutzen Sie Ihre Kamera, um ein Formular oder eine Tabelle zu fotografieren — der Inhalt wird zu strukturierten Daten, die Sie mit dem Foto abgleichen können."
+    },
+    "map": {
+      "emptyTitle": "Stellen Sie Ihre Daten auf einer Karte dar",
+      "emptyBody": "Fügen Sie einen Lagebericht, eine Line List, Protokolle oder beliebigen Text mit Ortsnamen ein – oder laden Sie ein Dokument hoch. Orte werden identifiziert und mit einem Vertrauenswert auf der Karte angezeigt; Sie können sie anschließend für ArcGIS oder andere GIS-Tools exportieren.",
+      "inputPlaceholder": "Text mit Ortsnamen einfügen…",
+      "uploadFile": "Datei hochladen",
+      "pastedSource": "Eingefügter Text",
+      "mapIt": "Kartieren",
+      "finding": "Orte werden gesucht…",
+      "featureCount": "{count} Orte",
+      "featureCapExceeded": "Die Karte ist auf {max} Orte begrenzt.",
+      "noneFound": "In diesem Material wurden keine Orte gefunden.",
+      "lowConfidenceNotice": "{count} Ort(e) mit Koordinaten geringer Sicherheit – überprüfen Sie diese, bevor Sie sich auf die Karte verlassen.",
+      "tilesOffline": "Kartendaten nicht verfügbar – die Standortliste funktioniert dennoch.",
+      "disclaimer": "Koordinaten werden KI-basiert vom Modell geschätzt, nicht durch einen Geocoding-Dienst – bitte vor operativer Nutzung prüfen. Kartendaten werden von einem Tile-Server geladen; Ihre Daten verbleiben auf diesem Gerät.",
+      "flyTo": "{name} auf der Karte anzeigen",
+      "removeFeature": "{name} entfernen",
+      "expandFeature": "Alle Details für {name} anzeigen",
+      "collapseFeature": "Details für {name} ausblenden",
+      "detailsParent": "Teil von {parent}",
+      "railRequest": "Orte kartieren in: {source}",
+      "railSearchRequest": "Im Web suchen und Orte kartieren für: {query}",
+      "railDone": "{count} Ort(e) zugeordnet. Überprüfen Sie die Orte mit geringer Zuverlässigkeit in der Liste.",
+      "searchToggle": "Websuche-Modus",
+      "searchToggleHint": "Das Web durchsuchen statt Text einzufügen; die verknüpften Ergebnisse werden zugeordnet.",
+      "searchPlaceholder": "Im Web suchen, z. B. \"Choleraausbrüche Ostafrika 2026\"…",
+      "searchAndMap": "Suchen & zuordnen",
+      "searching": "Suche…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "Verbindung: {kind}",
+        "unresolved": "{count} Verbindung(en) verweisen auf Orte, die nicht auf der Karte sind und übersprungen wurden."
+      },
+      "confidence": {
+        "high": "Hoch",
+        "medium": "Mittel",
+        "low": "Niedrig"
+      },
+      "prominence": {
+        "primary": "Hauptort",
+        "secondary": "Unterstützender Ort",
+        "mention": "Erwähnung am Rande"
+      },
+      "prominenceMentionHint": "Der Ort wird im Material nur am Rande erwähnt – auf der Karte verkleinert dargestellt und zunächst nicht hervorgehoben.",
+      "dates": {
+        "since": "seit {date}",
+        "range": "{start} – {end}",
+        "ongoing": "Laufend"
+      },
+      "filters": {
+        "label": "Nach Kategorie filtern",
+        "other": "Andere",
+        "clear": "Zurücksetzen",
+        "showing": "{shown} von {total} Orten",
+        "noneMatch": "Keine Orte entsprechen den aktuellen Filtern."
+      },
+      "dateFilter": {
+        "label": "Daten",
+        "from": "Von",
+        "to": "Bis",
+        "fromAria": "Nur Ereignisse ab diesem Datum anzeigen",
+        "toAria": "Nur Ereignisse bis zu diesem Datum anzeigen",
+        "clear": "Daten zurücksetzen",
+        "eraChip": "Nur Ereignisse in {label} anzeigen"
+      },
+      "timeline": {
+        "toggle": "Zeitraffer",
+        "play": "Zeitraffer abspielen",
+        "pause": "Zeitraffer pausieren",
+        "eras": "Zeitleisten-Äras",
+        "jumpTo": "Springe zu {label}",
+        "slider": "Position auf der Zeitleiste",
+        "showUndated": "Orte ohne Datum anzeigen",
+        "activeCount": "{count} aktiv",
+        "jump": {
+          "start": "Start",
+          "yearsLater": "{count, plural, one {1 Jahr später} other {# Jahre später}}",
+          "monthsLater": "{count, plural, one {1 Monat später} other {# Monate später}}",
+          "daysLater": "{count, plural, one {1 Tag später} other {# Tage später}}",
+          "appears": "{count, plural, one {1 erscheint} other {# erscheinen}}",
+          "ends": "{count, plural, one {1 endet} other {# enden}}",
+          "progress": "Datum {index} von {total}"
+        },
+        "precision": {
+          "minute": "Auf die Minute genau",
+          "hour": "Auf die Stunde genau",
+          "day": "Auf den Tag genau",
+          "month": "Monatgenaue Datierung",
+          "year": "Jahrgenaue Datierung",
+          "mixed": "(gemischt)"
+        },
+        "pacing": {
+          "toggle": "Wiedergabegeschwindigkeit",
+          "cardDuration": "Jede Position anzeigen für",
+          "seconds": "{seconds}s",
+          "maxCards": "Positionen pro Datum",
+          "hint": "Für besonders volle Tage wird automatisch mehr Zeit eingeplant."
+        }
+      },
+      "granularity": {
+        "site": "Standort",
+        "city": "Stadt/Ort",
+        "district": "Bezirk",
+        "region": "Region",
+        "country": "Land"
+      },
+      "granularityAreaHint": "Ein Gebiet, das als Kreis um den Mittelpunkt angezeigt wird — keine genaue Position oder Grenze.",
+      "containerHint": "Beinhaltet andere zugeordnete Orte und wird daher nur als Umriss angezeigt.",
+      "legend": {
+        "toggle": "Legende",
+        "title": "So lesen Sie die Karte",
+        "color": "Farbe: Koordinaten-Zuverlässigkeit (Blau hoch, Gelb mittel, Rot niedrig)",
+        "size": "Punktgröße: wie zentral der Ort im Material ist",
+        "area": "Gestrichelter Kreis: ungefährer Umfang eines Bezirks, einer Region oder eines Landes",
+        "container": "Schwache Umrandung: ein Bereich, dessen Inhalte einzeln abgebildet werden",
+        "precisionHalo": "Weicher gestrichelter Ring (bei Zeitraffern): Das Ereignis ist nur auf Monat oder Jahr datiert, das exakte Datum ist unsicher."
+      },
+      "sourceLabel": "Quelle: {name}",
+      "fetchAndMap": "Abrufen & zuordnen",
+      "fetchingPage": "Seite wird geladen…",
+      "railUrlRequest": "Standorte abrufen und zuordnen von: {title} ({url})"
+    },
+    "shell": {
+      "showConversation": "Konversation anzeigen",
+      "hideConversation": "Konversation ausblenden",
+      "workspaceTab": "Arbeitsbereich",
+      "conversationTab": "Konversation",
+      "paneTabsLabel": "Workflow-Bereiche",
+      "railEmpty": "Die Nachrichten und der Fortschritt des Assistenten werden hier angezeigt.",
+      "railInputPlaceholder": "Assistenten eine Nachricht senden…",
+      "assistantThinking": "Denke nach…",
+      "sendMessage": "Nachricht senden",
+      "stopGenerating": "Generierung stoppen",
+      "loadingWorkspace": "Arbeitsbereich wird geladen…",
+      "unknownType": "Diese Konversation verwendet einen Workflow, den diese Version nicht erkennt. Der Konversationsverlauf wird unten angezeigt.",
+      "untitled": "Neue Konversation",
+      "toggleMenu": "Menü ein-/ausblenden",
+      "model": "Modell für diesen Workflow"
+    },
+    "tabs": {
+      "label": "Konversationsmodus",
+      "chat": "Chat",
+      "chatDescription": "Ein Standardgespräch mit dem Assistenten"
+    },
+    "discard": {
+      "title": "Diesen Entwurf verwerfen?",
+      "body": "Beim Wechsel zu {target} wird die begonnene Arbeit in {current} gelöscht.",
+      "confirm": "Verwerfen"
+    }
+  },
+  "connectors": {
+    "title": "Connectors",
+    "description": "Externe Tools über das Model Context Protocol (MCP) verbinden. Verbundene Tools stehen im Chat zur Verfügung, und jeder Tool-Aufruf wird erst nach Ihrer Bestätigung ausgeführt.",
+    "localOnlyNote": "Sie melden sich direkt bei jedem Anbieter an. Zugangsschlüssel werden verschlüsselt und nur auf diesem Gerät gespeichert und mit jeder Anfrage über den App-Server weitergeleitet – niemals dort gespeichert oder protokolliert.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "Repositories durchsuchen, Issues und Pull Requests lesen und erstellen."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "Aufgaben und Projekte suchen, erstellen und aktualisieren."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Abfragen von veröffentlichten Datenquellen, Arbeitsmappen und Pulse-Kennzahlen."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Suchen und aktualisieren Sie Datensätze in Ihren Salesforce-Objekten."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Verfassen, planen und veröffentlichen Sie Social-Media-Beiträge."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Überprüfen und beantworten Sie Nachrichten im Social Inbox."
+      }
+    },
+    "connect": "Verbinden",
+    "connected": "Verbunden",
+    "tokenEndsIn": "endet mit ••••{last4}",
+    "disconnect": "Verbindung trennen",
+    "toolCount": "{count, plural, =1 {1 Tool verfügbar} other {# Tools verfügbar}}",
+    "patLabel": "Persönlicher Zugriffstoken",
+    "createTokenLink": "Token erstellen",
+    "tokenScopeHint": "Verwenden Sie einen fein abgestuften Token mit nur den Zugriffsrechten, die diese Tools benötigen.",
+    "validating": "Verbindung wird geprüft…",
+    "validationFailed": "Verbindung fehlgeschlagen. Überprüfen Sie die Adresse und versuchen Sie es erneut.",
+    "authFailed": "Der Server hat das Token abgelehnt. Überprüfen Sie es und versuchen Sie es erneut.",
+    "tokenRequired": "Ein Token ist erforderlich",
+    "enableServer": "Im Chat verfügbar",
+    "arbitraryTitle": "Andere MCP-Server",
+    "arbitraryToggle": "Beliebige MCP-Server erlauben",
+    "arbitraryWarning": "Jede Person, die einen MCP-Server betreibt, kann die an dessen Tools gesendeten Nachrichten einsehen. Verbinden Sie nur Server, denen Sie vertrauen. Jeder Tool-Aufruf erfordert weiterhin Ihre Zustimmung.",
+    "addServer": "MCP-Server hinzufügen",
+    "editServer": "MCP-Server bearbeiten",
+    "serverName": "Name",
+    "serverUrl": "Server-URL",
+    "nameRequired": "Name ist erforderlich",
+    "urlRequired": "URL ist erforderlich",
+    "invalidUrl": "Geben Sie eine öffentliche https://-Adresse ein",
+    "namePlaceholder": "Mein MCP-Server",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "Zugriffstoken (optional)",
+    "keepTokenPlaceholder": "Leer lassen, um das aktuelle Token zu behalten",
+    "disconnectedToast": "{name} getrennt",
+    "save": "Speichern",
+    "connectWithProvider": "Mit {name} verbinden",
+    "useTokenInstead": "Stattdessen Zugriffstoken verwenden",
+    "oauthWaiting": "Warten auf Autorisierung…",
+    "oauthFailed": "Anmeldung fehlgeschlagen. Bitte erneut versuchen.",
+    "oauthDenied": "Der Zugriff wurde vom Anbieter verweigert.",
+    "oauthTimeout": "Anmeldung abgelaufen. Bitte erneut versuchen.",
+    "oauthCancelled": "Anmeldung wurde abgebrochen.",
+    "oauthUnavailable": "Anmeldung ist für diesen Connector bei dieser Bereitstellung nicht verfügbar. Verwenden Sie stattdessen ein Zugriffstoken oder bitten Sie Ihren Administrator, die OAuth-App zu konfigurieren.",
+    "ownAppToggle": "Eigene OAuth-App verwenden",
+    "ownAppHint": "Registrieren Sie eine OAuth-App in Ihrem {name}-Konto (Organisation, Arbeitsbereich oder Enterprise-Instanz) mit der unten stehenden Callback-URL und fügen Sie die Zugangsdaten hier ein. Lassen Sie dies geschlossen, um die integrierte App zu verwenden.",
+    "ownAppCustomHint": "Optional können Sie unten eigene OAuth-App-Zugangsdaten eingeben; lassen Sie sie leer für eine automatische Registrierung mit dem Server.",
+    "ownAppInUse": "Mit Ihrer eigenen OAuth-App verbunden.",
+    "clientIdLabel": "Client-ID",
+    "clientSecretLabel": "Client-Secret (falls Ihre App eines hat)",
+    "redirectUriLabel": "Callback-/Redirect-URL zur Registrierung",
+    "reconnect": "Erneut verbinden",
+    "needsReauth": "Erneute Verbindung erforderlich",
+    "disconnectOauthNote": "Die Trennung entfernt den Zugriff nur von diesem Gerät. Um den Zugriff vollständig zu widerrufen, verwalten Sie die autorisierten Apps in Ihrem {name}-Konto.",
+    "authModeLabel": "Authentifizierung",
+    "authModeNone": "Keine",
+    "authModeBearer": "Zugriffstoken",
+    "authModeOauth": "Beim Anbieter anmelden (OAuth)",
+    "oauthCustomHint": "Sie melden sich nach dem Speichern in einem Pop-up-Fenster beim Provider des Servers an.",
+    "saveAndSignIn": "Speichern & anmelden",
+    "oauthCallback": {
+      "title": "Autorisierung abgeschlossen",
+      "missingState": "Nichts zu autorisieren",
+      "close": "Sie können dieses Fenster schließen und zur App zurückkehren.",
+      "closeButton": "Fenster schließen"
+    },
+    "oauthNoAppConfigured": "Die Anmeldung mit {name} ist in dieser Bereitstellung nicht eingerichtet. Verbinden Sie sich, indem Sie eine eigene OAuth-App registrieren.",
+    "adminConnectorsTitle": "Von Ihrer Organisation",
+    "adminConnectorsDescription": "Von Ihren Administratoren eingerichtete Connectoren. Ihre Zugriffsberechtigungen bestimmen, welche angezeigt werden.",
+    "managedByOrg": "Verwaltet von Ihrer Organisation",
+    "connectorOauthNotConfigured": "Die Anmeldung für diesen Connector ist noch nicht abgeschlossen. Bitte wenden Sie sich an Ihren Administrator.",
+    "yourConnectorsTitle": "Ihre Connectoren",
+    "addTitle": "Connector hinzufügen",
+    "addDescription": "Wählen Sie ein Tool zum Verbinden aus. Nach der Auswahl richten Sie den Zugriff ein.",
+    "add": "Hinzufügen",
+    "filterLabel": "Connectoren filtern",
+    "filterPlaceholder": "Connectoren durchsuchen",
+    "noMatches": "Keine passenden Connectoren für „{query}“."
+  },
+  "modelSources": {
+    "connectButtonShort": "Modellquelle verbinden",
+    "addAnother": "Weitere Modellquelle hinzufügen",
+    "edit": "Bearbeiten",
+    "disconnect": "{name} trennen",
+    "disconnectedToast": "{name} wurde getrennt",
+    "modelCountLabel": "{count} Modelle",
+    "loadingModels": "Modelle werden geladen...",
+    "noModelsAvailable": "Keine Modelle von dieser Quelle verfügbar",
+    "sourceUnreachable": "Diese Quelle konnte nicht erreicht werden. Ihr Zugriff könnte sich geändert haben, oder der Dienst ist vorübergehend nicht verfügbar.",
+    "retry": "Erneut versuchen",
+    "connectFoundryAccount": "Microsoft Azure Foundry-Konto verbinden",
+    "connectFoundryDescription": "Entdecken Sie Modellbereitstellungen aus einem Azure Foundry-Konto, auf das Sie Zugriff haben. Ihre eigenen Azure-Berechtigungen autorisieren jede Anfrage – die Modellbeschränkungen der App gelten hier nicht.",
+    "selectModelsDescription": "Wählen Sie aus, welche Modellbereitstellungen aus diesem Konto im Modell-Auswahlmenü angezeigt werden.",
+    "editConnection": "Verbindung bearbeiten",
+    "nameLabel": "Name",
+    "namePlaceholder": "z. B. Mein Team-Sandbox",
+    "nameRequired": "Quellenname ist erforderlich",
+    "foundryAccountLabel": "Foundry-Konto",
+    "enterManually": "Manuell eingeben",
+    "browseResources": "Ressourcen durchsuchen",
+    "subscriptionIdLabel": "Abonnement-ID",
+    "resourceGroupLabel": "Ressourcengruppe",
+    "accountNameLabel": "Kontoname",
+    "subscriptionRequired": "Wählen Sie ein Abonnement",
+    "accountRequired": "Wählen Sie ein Foundry-Konto",
+    "accountSelectionRequired": "Wählen Sie ein Konto aus der Liste.",
+    "selectAllRequired": "Wählen Sie ein Abonnement, eine Ressourcengruppe und ein Konto aus.",
+    "connectionFailed": "Auf dieses Konto konnte nicht zugegriffen werden. Prüfen Sie, ob die Angaben korrekt sind und Sie Zugriff haben.",
+    "duplicateSource": "Dieses Konto ist bereits als \"{name}\" verbunden.",
+    "connectionSuccessModels": "Verbunden – {count} Modellbereitstellung(en) gefunden",
+    "connectionSuccessEmpty": "Verbunden, aber keine Modellbereitstellungen auf diesem Konto gefunden.",
+    "checkingConnection": "Verbindung wird überprüft...",
+    "next": "Weiter",
+    "back": "Zurück",
+    "cancel": "Abbrechen",
+    "connect": "Verbinden",
+    "save": "Speichern",
+    "scanningResources": "Ihre Azure-Abonnements werden gescannt...",
+    "discoveryPartialWarning": "{count, plural, one {# Abonnement} other {# Abonnements}} konnten nicht gescannt werden. Verwenden Sie die manuelle Eingabe, wenn Ihr Konto fehlt.",
+    "discoveryTruncatedWarning": "Es waren zu viele Ressourcen vorhanden, um sie vollständig zu scannen. Verwenden Sie die manuelle Eingabe, wenn Ihr Konto fehlt.",
+    "noAccountsDiscovered": "Keine Foundry-Konten in Ihren Abonnements gefunden. Verwenden Sie die manuelle Eingabe, wenn Sie den Pfad kennen.",
+    "retryScan": "Scan erneut versuchen",
+    "searchAccountsPlaceholder": "Konten suchen...",
+    "modelsSelectedCount": "{selected} von {total} Modellen ausgewählt",
+    "selectAll": "Alle auswählen",
+    "deselectAll": "Alle abwählen",
+    "autoAddLabel": "Neue Modelle automatisch hinzufügen",
+    "autoAddDescription": "Später zu diesem Konto hinzugefügte Modelldepployments erscheinen automatisch. Nicht ausgewählte Modelle bleiben ausgeschlossen."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Geringere Auswirkung",
+      "moderate": "Mittlere Auswirkung",
+      "high": "Höhere Auswirkung"
+    },
+    "tierTooltip": "Relativer Energieaufwand pro Anfrage, geschätzt anhand der Modellgröße. Diese Werte sind Schätzungen basierend auf veröffentlichten Durchschnittswerten und Annahmen v{version} — keine Messungen.",
+    "typicalRequest": "~{grams} g CO₂e pro typischer Anfrage",
+    "typicalRequestTooltip": "Grobe Schätzung pro Anfrage für eine typische Nutzung (etwa 1.000 Prompt- und 500 Completion-Tokens), basierend auf veröffentlichten Durchschnittswerten und Annahmen v{version}. Der tatsächliche Einfluss variiert je nach Gesprächslänge, Einstellungen und Hosting-Region.",
+    "activities": {
+      "netflixHd": "Netflix HD-Streaming",
+      "zoomCall": "Zoom-Anruf (Kamera an)",
+      "webBrowsing": "Web-Browsing",
+      "spotifyAudio": "Spotify-Audio"
+    },
+    "equivalents": {
+      "title": "≈ entspricht dem CO₂-Ausstoß von",
+      "note": "CO₂-Vergleich mit veröffentlichten stündlichen Durchschnittswerten dieser Dienste — wie alle Schätzungen hier grobe Näherungswerte."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Geschätzter CO₂-Fußabdruck dieses Gesprächs: {grams} Gramm CO₂-Äquivalent. Aufschlüsselung anzeigen.",
+      "ariaLabelToday": "Geschätzter CO₂-Fußabdruck dieses Gesprächs heute: {grams} Gramm CO₂-Äquivalent. Aufschlüsselung anzeigen.",
+      "title": "Dieses Gespräch (geschätzt)",
+      "today": "Heute",
+      "total": "Gesamte Zeit",
+      "measured": "Basierend auf gemeldeten Token-Zahlen",
+      "estimated": "Rückwirkend aus älteren Nachrichten berechnet",
+      "lastRequest": "Letzte Anfrage",
+      "disclaimer": "Schätzungen pro Anfrage auf Basis gemeldeter oder angenäherter Token-Zahlen, unter Verwendung veröffentlichter Durchschnittswerte und Annahmen v{version}. Ältere Nachrichten werden rückwirkend aus gespeichertem Text und dem aktuellen Modell der Unterhaltung berechnet. Keine Messung.",
+      "visibilityGroup": "Sichtbarkeit des Emissions-Chips",
+      "visibilityLabel": "Anzeigen:",
+      "visibility": {
+        "always": "Immer",
+        "auto": "Automatisch",
+        "hidden": "Ausblenden"
+      },
+      "visibilityHint": "Automatisch zeigt den Chip an, wenn die Schätzung aktualisiert wird oder Sie mit der Maus darüber fahren. Dies kann in den Einstellungen › Nutzung & Auswirkungen erneut geändert werden."
+    }
+  },
+  "table": {
+    "copyTable": "Tabelle kopieren",
+    "downloadTable": "Tabelle herunterladen",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Als CSV exportiert",
+    "copyFailed": "Tabelle konnte nicht kopiert werden"
+  },
+  "backup": {
+    "intro": {
+      "title": "Chats sicher sichern",
+      "body": "Ihre Unterhaltungen werden auf diesem Gerät verschlüsselt, bevor etwas hochgeladen wird. Wir können Ihre Chats niemals lesen.",
+      "keyWarning": "Ihr Wiederherstellungsschlüssel wird auf diesem Gerät erstellt. Wir sehen ihn nie und können ihn nicht für Sie wiederherstellen — wenn Sie den Schlüssel verlieren, verlieren Sie das Backup.",
+      "create": "Schlüssel erstellen & Backup starten",
+      "decline": "Nicht jetzt — Chats nur auf diesem Gerät behalten"
+    },
+    "ceremony": {
+      "titleCreate": "Wiederherstellungsschlüssel speichern",
+      "titleRotate": "Neuen Wiederherstellungsschlüssel speichern",
+      "titleView": "Ihr Wiederherstellungsschlüssel",
+      "description": "Dieser Schlüssel ist der einzige Weg, Ihr Backup auf einem anderen Gerät wiederherzustellen. Bewahren Sie ihn sicher auf — wir können ihn nicht wiederherstellen.",
+      "copy": "Kopieren",
+      "copied": "Kopiert!",
+      "download": ".txt herunterladen",
+      "showQr": "QR-Code anzeigen",
+      "hideQr": "QR-Code ausblenden",
+      "savedCheckbox": "Ich habe meinen Wiederherstellungsschlüssel sicher gespeichert",
+      "saveFirstHint": "Kopieren oder laden Sie Ihren Schlüssel herunter, bevor Sie fortfahren.",
+      "continue": "Weiter",
+      "done": "Fertig",
+      "cancel": "Abbrechen",
+      "cancelConfirmTitle": "Backup-Einrichtung abbrechen?",
+      "cancelConfirmBody": "Ihre Chats werden nicht gesichert. Sie können das verschlüsselte Backup jederzeit in den Einstellungen aktivieren.",
+      "cancelConfirmRotateBody": "Ihr Wiederherstellungsschlüssel wurde bereits geändert. Sie können ihn jederzeit in den Einstellungen einsehen.",
+      "cancelConfirmConfirm": "Ja, abbrechen",
+      "cancelConfirmDismiss": "Zurück",
+      "loadError": "Ihr Wiederherstellungsschlüssel konnte auf diesem Gerät nicht geladen werden."
+    },
+    "file": {
+      "heading": "Wiederherstellungsschlüssel des Chat-Backups",
+      "warning": "Bewahren Sie diesen Schlüssel sicher auf. Jeder, der ihn besitzt, kann Ihr Backup lesen; ohne ihn kann das Backup nicht wiederhergestellt werden."
+    },
+    "progress": {
+      "titleCreate": "Backup wird eingerichtet",
+      "titleRotate": "Wiederherstellungsschlüssel wird geändert",
+      "encrypting": "{count, plural, one {# Unterhaltung wird verschlüsselt und gesichert …} other {# Unterhaltungen werden verschlüsselt und gesichert …}}",
+      "success": "{count, plural, one {Backup abgeschlossen. # Unterhaltung ist geschützt.} other {Backup abgeschlossen. # Unterhaltungen sind geschützt.}}",
+      "error": "Backup fehlgeschlagen. Ihre Chats sind weiterhin auf diesem Gerät.",
+      "retry": "Erneut versuchen",
+      "close": "Schließen",
+      "done": "Fertig"
+    },
+    "input": {
+      "label": "Wiederherstellungsschlüssel",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Schlüssel enthalten niemals die Buchstaben O, I oder L.",
+      "checksumError": "Dieser Schlüssel sieht nicht korrekt aus – bitte auf Tippfehler prüfen.",
+      "formatError": "Das sieht nicht wie ein Wiederherstellungsschlüssel aus.",
+      "incomplete": "Bitte weiterschreiben – ein Wiederherstellungsschlüssel hat 56 Zeichen.",
+      "valid": "Schlüssel sieht gültig aus."
+    },
+    "restore": {
+      "title": "Chats wiederherstellen",
+      "successTitle": "Backup wiederhergestellt",
+      "promptBody": "Für Ihr Konto wurde ein verschlüsseltes Backup gefunden. Geben Sie Ihren Wiederherstellungsschlüssel ein, um es auf diesem Gerät wiederherzustellen.",
+      "submit": "Backup wiederherstellen",
+      "skip": "Überspringen – auf diesem Gerät neu starten",
+      "restoring": "Chats werden entschlüsselt und wiederhergestellt…",
+      "successBody": "{count, plural, one {# Unterhaltung wiederhergestellt.} other {# Unterhaltungen wiederhergestellt.}}",
+      "wrongKey": "Dieser Schlüssel ist gültig, schließt dieses Backup jedoch nicht auf. Wenn Sie Ihren Schlüssel geändert haben, verwenden Sie den neuesten.",
+      "corrupt": "Dieses Backup konnte nicht gelesen werden – es ist möglicherweise beschädigt. Sie können auf diesem Gerät neu starten oder es später erneut versuchen.",
+      "networkError": "Der Backup-Dienst konnte nicht erreicht werden. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "tryAgain": "Anderen Schlüssel versuchen",
+      "close": "Fertig"
+    },
+    "enterKey": {
+      "title": "Neuen Wiederherstellungsschlüssel eingeben",
+      "body": "Ihr Wiederherstellungsschlüssel wurde auf einem anderen Gerät geändert. Geben Sie den neuen Schlüssel ein, um Backups auf diesem Gerät fortzusetzen.",
+      "submit": "Diesen Schlüssel verwenden"
+    },
+    "banner": {
+      "keyMismatchTitle": "Backups pausiert – Ihr Wiederherstellungsschlüssel wurde auf einem anderen Gerät geändert.",
+      "enterNewKey": "Neuen Schlüssel eingeben",
+      "resetBackup": "Backup zurücksetzen",
+      "resetConfirmTitle": "Backup mit dem Schlüssel dieses Geräts zurücksetzen?",
+      "resetConfirmBody": "Das bestehende Backup wird durch die Chats dieses Geräts ersetzt und mit dessen Schlüssel verschlüsselt. Andere Geräte benötigen dann den Wiederherstellungsschlüssel dieses Geräts.",
+      "resetConfirmAction": "Backup zurücksetzen",
+      "remoteMissingTitle": "Ihr Backup existiert nicht mehr auf dem Server. Backups sind pausiert.",
+      "backUpAgain": "Erneut sichern",
+      "dismiss": "Schließen"
+    },
+    "rotate": {
+      "confirmTitle": "Wiederherstellungsschlüssel ändern?",
+      "confirmBody": "Ihr Backup wird mit einem neuen Schlüssel neu verschlüsselt. Der alte Schlüssel wird ungültig. Sie müssen den neuen Schlüssel speichern und auf Ihren anderen Geräten eingeben.",
+      "confirmAction": "Schlüssel ändern"
+    },
+    "toast": {
+      "enrollLater": "Sie können verschlüsselte Backups jederzeit in den Einstellungen aktivieren.",
+      "keyUpdated": "Wiederherstellungsschlüssel aktualisiert. Backups wurden fortgesetzt.",
+      "resetDone": "Backup wurde mit dem Schlüssel dieses Geräts zurückgesetzt.",
+      "backupRestarted": "Backup erneut erstellt.",
+      "opFailed": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+    },
+    "settings": {
+      "statusOn": "Backup ist aktiviert",
+      "statusOff": "Backup ist deaktiviert",
+      "offDescription": "Ihre Chats befinden sich nur in diesem Browser. Schalten Sie verschlüsselte Backups ein, um sie zu sichern und auf anderen Geräten wiederherzustellen. Chats werden auf Ihrem Gerät verschlüsselt – wir können sie niemals lesen.",
+      "turnOn": "Backup aktivieren",
+      "restoreTitle": "Für Ihr Konto existiert bereits ein Backup",
+      "restoreDescription": "Geben Sie Ihren Wiederherstellungsschlüssel ein, um es auf diesem Gerät wiederherzustellen.",
+      "restore": "Backup wiederherstellen",
+      "lastBackup": "Letztes Backup: {time}",
+      "lastBackupNever": "Noch kein Backup abgeschlossen",
+      "keyFingerprint": "Schlüssel ····-{tail}",
+      "syncState": {
+        "idle": "Warten auf Synchronisierung",
+        "syncing": "Wird gesichert…",
+        "ok": "Auf dem neuesten Stand",
+        "keyOutOfDate": "Pausiert – der Wiederherstellungsschlüssel wurde auf einem anderen Gerät geändert",
+        "remoteMissing": "Pausiert — das Backup wurde vom Server entfernt",
+        "error": "Letzter Backup-Versuch fehlgeschlagen"
+      },
+      "backUpNow": "Jetzt sichern",
+      "backUpNowSuccess": "Backup abgeschlossen",
+      "backUpNowFailure": "Backup fehlgeschlagen — Ihre Chats wurden auf diesem Gerät nicht verändert",
+      "viewKey": "Wiederherstellungsschlüssel anzeigen",
+      "changeKey": "Wiederherstellungsschlüssel ändern",
+      "dangerTitle": "Gefahrenzone",
+      "turnOffDelete": "Backup deaktivieren & löschen",
+      "turnOffConfirmTitle": "Backup deaktivieren?",
+      "turnOffConfirmMessage": "Dadurch wird Ihr Backup von unseren Servern für alle Geräte gelöscht. Die Chats auf diesem Gerät bleiben erhalten. Sie können das Backup später mit einem neuen Wiederherstellungsschlüssel erneut aktivieren.",
+      "turnOffConfirmAction": "Backup löschen",
+      "turnOffSuccess": "Backup deaktiviert und gelöscht",
+      "turnOffFailure": "Das Backup konnte nicht gelöscht werden. Bitte versuchen Sie es erneut."
+    }
+  },
+  "memories": {
+    "title": "Erinnerungen",
+    "description": "Lassen Sie den Assistenten dauerhafte Fakten speichern, die Sie teilen – wie Ihre Rolle, Präferenzen und laufende Projekte – und diese in verschiedenen Unterhaltungen verwenden.",
+    "enableToggle": "Erinnerungen aktivieren",
+    "privacyNote": "Fakten werden nur in diesem Browser gespeichert und in Ihren Chats genutzt, um Antworten zu personalisieren.",
+    "empty": "Noch keine Erinnerungen. Merkenswerte Fakten werden automatisch aus Ihren Unterhaltungen gespeichert.",
+    "savedOn": "Gespeichert am {date}",
+    "deleteMemory": "Erinnerung löschen",
+    "clearAll": "Alle Erinnerungen löschen",
+    "clearAllConfirmQuestion": "Alle Erinnerungen löschen? Dies kann nicht rückgängig gemacht werden.",
+    "clearAllConfirm": "Alle löschen",
+    "cancel": "Abbrechen"
+  },
+  "contextWindow": {
+    "label": "Kontextfenster",
+    "value": "{count} Nachrichten",
+    "fewer": "Weniger Nachrichten",
+    "more": "Mehr Nachrichten",
+    "description": "Ältere Nachrichten über dieses Limit hinaus werden zusammengefasst und als Kontext gesendet."
+  },
+  "agentAccess": {
+    "title": "Agentenzugriff",
+    "description": "Steuern Sie, welche Nutzer gemeinsam genutzte Foundry-Agenten verwenden können. Die Regeln schränken nur weiter ein, was bereits durch den eigenen Azure-Zugriff erlaubt ist — Zugriffsrechte, die Azure verweigert, können nie gewährt werden.",
+    "backToChat": "Zurück zum Chat",
+    "loading": "Lade Agenten und Regeln…",
+    "loadError": "Agentenzugriffs-Daten konnten nicht geladen werden.",
+    "rulesUnavailableWarning": "Zugriffsregeln konnten nicht aus dem Speicher geladen werden. Das Ausführen von Agenten ist momentan blockiert und Regeln können nicht bearbeitet werden.",
+    "retry": "Erneut versuchen",
+    "rulesTab": "Agentenregeln",
+    "localAdminsTab": "Lokale Administratoren",
+    "noAgents": "Keine Agenten zu verwalten.",
+    "sourceLabel": "Quelle",
+    "notDiscoverable": "Für Sie nicht auffindbar",
+    "notDiscoverableHint": "Für diesen Agenten existiert eine Regel, aber er ist für Sie nicht auffindbar – er wurde möglicherweise umbenannt, Ihr Azure-Zugriff reicht nicht aus oder seine Zugriffsregel schließt Sie aus.",
+    "accessEveryone": "Jeder",
+    "accessRestricted": "Eingeschränkt",
+    "edit": "Bearbeiten",
+    "updatedByLine": "Zuletzt aktualisiert von {user} am {date}",
+    "accessTypeLabel": "Wer kann diesen Agenten nutzen",
+    "everyoneDescription": "Jeder, der über seinen Azure-Zugang bereits auf diesen Agenten zugreifen kann.",
+    "restrictedDescription": "Nur die unten aufgelisteten Nutzer und Domains.",
+    "allowDomainsLabel": "Zugelassene Domains",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Zugelassene Benutzer",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Drücken Sie Enter, um hinzuzufügen",
+    "removeChip": "Entfernen",
+    "groupsLabel": "Zugelassene Gruppen",
+    "groupsPendingConsent": "Der Gruppenbasierte Zugriff wartet auf die Zustimmung des Tenant-Administrators und kann noch nicht bearbeitet werden.",
+    "restrictedEmptyWarning": "Es sind keine Benutzer oder Domains eingetragen — niemand kann diesen Agenten verwenden.",
+    "save": "Speichern",
+    "saving": "Wird gespeichert…",
+    "cancel": "Abbrechen",
+    "saveSuccess": "Zugriffsregel gespeichert.",
+    "deleteSuccess": "Zugriffsregel entfernt — jeder kann diesen Agenten wieder verwenden.",
+    "saveError": "Konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.",
+    "conflictError": "Jemand anderes hat während Ihrer Bearbeitung Änderungen vorgenommen. Laden Sie die aktuelle Version neu und versuchen Sie es erneut.",
+    "reload": "Neu laden",
+    "localAdminsDescription": "Regelverwaltung für bestimmte Agenten delegieren, ohne eine erneute Bereitstellung. Lokale Admins können nur Regeln für zugewiesene Agenten bearbeiten.",
+    "noLocalAdmins": "Keine lokalen Admins konfiguriert.",
+    "addLocalAdmin": "Lokalen Admin hinzufügen",
+    "emailLabel": "E-Mail",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Lokalen Admin entfernen",
+    "delegatedAgentsLabel": "Delegierte Agenten",
+    "noDelegatedAgents": "Keine Agenten zum Delegieren verfügbar.",
+    "unknownAgentKey": "Unbekannter Agenten-Schlüssel",
+    "configSaveSuccess": "Lokale Admins gespeichert.",
+    "configConflictError": "Jemand anderes hat die Liste der lokalen Admins während Ihrer Bearbeitung geändert. Bitte neu laden und erneut versuchen.",
+    "addAgent": "Agent hinzufügen",
+    "newPromptAgentTitle": "Neuer Prompt-Agent",
+    "editPromptAgentTitle": "Prompt-Agent bearbeiten",
+    "agentNameLabel": "Name",
+    "agentNamePlaceholder": "z. B. Reiseberater",
+    "agentDescriptionLabel": "Beschreibung",
+    "agentDescriptionPlaceholder": "Wird im Modellauswahlmenü angezeigt",
+    "agentSystemPromptLabel": "System-Prompt",
+    "agentSystemPromptPlaceholder": "Anweisungen, die das Verhalten dieses Agents definieren",
+    "agentModelLabel": "Modell",
+    "agentModelPlaceholder": "Modell auswählen…",
+    "agentModelUnavailable": "{modelId} (nicht verfügbar)",
+    "agentModelUnknownError": "Das ausgewählte Modell ist nicht mehr verfügbar. Bitte wählen Sie ein anderes Modell und speichern Sie erneut.",
+    "promptAgentBadge": "Prompt-Agent",
+    "editAgent": "Agent bearbeiten",
+    "deleteAgent": "Löschen",
+    "deleteAgentConfirm": "Diesen Agenten für alle löschen? Er verschwindet aus dem Modellauswahlmenü; bestehende Unterhaltungen behalten ihren Verlauf.",
+    "confirmDeleteAgent": "Ja, löschen",
+    "promptAgentCreateSuccess": "Prompt-Agent erstellt.",
+    "promptAgentSaveSuccess": "Prompt-Agent gespeichert.",
+    "promptAgentDeleteSuccess": "Prompt-Agent gelöscht.",
+    "promptAgentsUnavailableWarning": "Prompt-Agents konnten nicht aus dem Speicher geladen werden. Sie können aktuell nicht bearbeitet werden.",
+    "agentsTab": "Agenten",
+    "connectorsTab": "Connectoren",
+    "addConnector": "Connector hinzufügen",
+    "noConnectors": "Noch keine Connectoren.",
+    "connectorsUnavailableWarning": "Der Connector-Store ist momentan nicht erreichbar, daher könnte diese Liste unvollständig sein. Erstellen Sie keinen Ersatz, bis die Liste geladen ist.",
+    "editAccess": "Zugriff bearbeiten",
+    "deleteConnector": "Löschen",
+    "deleteConnectorConfirm": "Diesen Connector löschen? Wer ihn nutzt, verliert sofort den Zugriff.",
+    "confirmDeleteConnector": "Connector löschen",
+    "connectorSaveSuccess": "Connector gespeichert.",
+    "connectorCreateSuccess": "Connector erstellt.",
+    "connectorDeleteSuccess": "Connector gelöscht.",
+    "editConnectorTitle": "Connector bearbeiten",
+    "newConnectorTitle": "Neuer Connector",
+    "connectorPresetLabel": "Mit einer Vorlage beginnen",
+    "connectorPresetNone": "Neu beginnen",
+    "connectorNameLabel": "Name",
+    "connectorDescriptionLabel": "Beschreibung",
+    "connectorUrlLabel": "Server-URL",
+    "connectorUrlPlaceholderWarning": "Ersetzen Sie das {placeholder} in der URL vor dem Speichern durch Ihren eigenen Wert.",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Authentifizierung",
+    "connectorAuthNone": "Keine",
+    "connectorAuthBearer": "Token (jeder Benutzer gibt sein eigenes an)",
+    "connectorAuthOauth": "OAuth-Anmeldung",
+    "connectorSealingUnavailable": "OAuth ist nicht verfügbar: Für diese Bereitstellung wurde kein AUTH_SECRET konfiguriert, um Client-Secrets zu verschlüsseln.",
+    "connectorTokenHelpLabel": "Link zu Token-Anweisungen (optional)",
+    "connectorClientIdLabel": "OAuth-Client-ID",
+    "connectorClientSecretLabel": "OAuth-Client-Secret",
+    "connectorClientSecretStored": "Ein Secret ist gespeichert. Lassen Sie das Feld leer, um es zu behalten, oder geben Sie ein neues ein, um es zu ersetzen.",
+    "connectorClientSecretHint": "Wird vor der Speicherung verschlüsselt und nie wieder angezeigt.",
+    "connectorScopesLabel": "Scopes (mit Leerzeichen getrennt, optional)"
+  },
+  "localModels": {
+    "title": "Lokale Modelle",
+    "description": "Unterhalten Sie sich mit Modellen, die auf diesem Computer laufen. Nachrichten werden direkt von Ihrem Browser an die lokale App gesendet und erreichen niemals unsere Server – so bleiben Antworten, Konversationstitel und Zusammenfassungen immer auf Ihrem Gerät.",
+    "detect": "Lokale Laufzeiten erkennen",
+    "detecting": "Erkennung läuft…",
+    "experimental": "Experimentell",
+    "portLabel": "Port",
+    "statusUnknown": "Noch nicht geprüft.",
+    "statusChecking": "Überprüfung läuft…",
+    "statusReady": "{count, plural, =0 {Verbunden, aber keine Modelle geladen.} one {Verbunden – # Modell verfügbar.} other {Verbunden – # Modelle verfügbar.}}",
+    "statusNotRunning": "{label} konnte nicht erreicht werden. Prüfen Sie, ob es auf diesem Port läuft und ob Ihr Browser lokalen Apps von dieser Seite aus den Zugriff erlaubt.",
+    "statusHttpError": "{label} hat mit einem Fehler geantwortet. Prüfen Sie die Logs.",
+    "corsHelp": {
+      "ollama": "Ollama läuft, verweigert jedoch Anfragen von dieser Seite. Setzen Sie OLLAMA_ORIGINS auf die Adresse dieser Seite, starten Sie Ollama neu und führen Sie die Erkennung erneut durch.",
+      "lmstudio": "LM Studio läuft, verweigert jedoch Anfragen von dieser Seite. Aktivieren Sie CORS in den lokalen Servereinstellungen und führen Sie die Erkennung erneut durch.",
+      "llamacpp": "llama.cpp läuft, verweigert jedoch Anfragen von dieser Seite. Starten Sie llama-server mit erlaubten Cross-Origin-Anfragen und führen Sie die Erkennung erneut durch."
+    },
+    "privacyNote": "Lokale Modelle unterstützen keine Dateianhänge, Bilder, Websuche oder Konnektoren – dafür werden unsere Server benötigt. Die Erkennung prüft ausschließlich diesen Computer."
+  },
+  "urlFetch": {
+    "sourceFallback": "Webseite",
+    "fallbackHint": "Sie können die Seite auch öffnen, den Text kopieren und hier einfügen.",
+    "shortExtract": "Nur ein kurzer Auszug war lesbar – die Seite ist möglicherweise hinter einer Bezahlschranke oder erfordert eine Anmeldung.",
+    "errors": {
+      "invalidUrl": "Das scheint keine gültige Webadresse zu sein.",
+      "ssrfBlocked": "Diese Adresse kann aus Sicherheitsgründen nicht abgerufen werden.",
+      "tooManyRedirects": "Dieser Link wurde zu oft weitergeleitet.",
+      "timeout": "Die Seite hat zu lange zum Antworten gebraucht.",
+      "unreachable": "Die Seite konnte nicht erreicht werden.",
+      "blocked": "Die Seite hat die Anfrage abgelehnt – möglicherweise ist eine Anmeldung erforderlich oder automatische Zugriffe werden blockiert.",
+      "notFound": "Diese Seite wurde nicht gefunden.",
+      "upstream": "Die Seite hat einen Fehler zurückgegeben.",
+      "pdf": "Dieser Link verweist auf eine PDF-Datei. Bitte laden Sie sie herunter und fügen Sie sie stattdessen über den Anhang-Button hinzu.",
+      "nonHtml": "Dieser Link verweist nicht auf eine lesbare Webseite.",
+      "tooLarge": "Diese Seite ist zu groß zum Herunterladen.",
+      "empty": "Auf dieser Seite wurde kein lesbarer Artikeltext gefunden.",
+      "generic": "Die Seite konnte nicht abgerufen werden."
+    },
+    "fetchingFile": "{host} wird abgerufen…",
+    "attachLink": "Link anhängen",
+    "attachLinkTitle": "Webseite anhängen",
+    "attachLinkDescription": "Die Seite wird abgerufen und ihr lesbarer Text wird Ihrer Nachricht angehängt.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Abrufen & anhängen",
+    "attachLinkInvalid": "Das sieht nicht nach einer Webadresse aus.",
+    "linkBadge": "Über einen Link",
+    "couldNotRetrieve": "Konnte nicht abgerufen werden",
+    "doc": {
+      "sourceLabel": "Quelle",
+      "retrievedLabel": "Abgerufen",
+      "attemptedLabel": "Versucht",
+      "failureHeading": "Webseite konnte nicht abgerufen werden"
+    },
+    "settingsTitle": "Links in Nachrichten",
+    "settingsToggle": "Eingefügte Links automatisch abrufen",
+    "settingsDescription": "Wenn Sie einen Link einzeln einfügen, wird die Seite abgerufen und ihr Text angehängt, damit der Assistent sie lesen kann. Deaktivieren Sie diese Funktion, um eingefügte Links als reinen Text zu behalten – Sie können Seiten weiterhin manuell über das + Menü anhängen.",
+    "addLink": "Link hinzufügen"
+  },
+  "cameraAccessError": "Zugriff auf die Kamera nicht möglich. Prüfen Sie die Kameraberechtigungen und versuchen Sie es erneut.",
+  "cameraUnnamedDevice": "Kamera",
+  "pastedText": {
+    "fallbackName": "Eingefügter Text",
+    "charCount": "{count, number} Zeichen",
+    "removeChip": "Eingefügten Text „{name}“ entfernen",
+    "blockLabel": "Eingefügter Text: {name}",
+    "doc": {
+      "heading": "Eingefügter Text",
+      "pastedLabel": "Eingefügt"
+    },
+    "settingsTitle": "Große Einfügungen",
+    "settingsToggle": "Große Einfügung als Anhang speichern",
+    "settingsDescription": "Wenn Sie mehr Text als das untenstehende Limit einfügen, wird dieser als Datei angehängt, anstatt das Nachrichtenfeld auszufüllen. Der Text wird exakt wie eingefügt verwendet – es wird nichts abgerufen oder verändert.",
+    "settingsThresholdLabel": "Einfügungen anhängen ab",
+    "settingsThresholdUnit": "Zeichen",
+    "settingsThresholdHint": "Zwischen {min, number} und {max, number} Zeichen."
+  },
+  "structures": {
+    "section": "Strukturen",
+    "sectionSubtitle": "Gespeicherte Felddefinitionen. Nutzen Sie eine davon als Extraktionsvorlage oder als Ausgangsschema für eine Daten-Workflow-Tabelle.",
+    "loadFromStructure": "Struktur laden",
+    "loadFromStructureTitle": "Diese Spalten durch eine gespeicherte Struktur ersetzen",
+    "pickerEmpty": "Noch keine gespeicherten Strukturen.",
+    "pickerTitle": "Gespeicherte Struktur laden",
+    "saveAsStructure": "Als Struktur speichern",
+    "saveAsStructureTitle": "Diese Spalten in Ihrer Struktursammlung speichern",
+    "savedToast": "Struktur „{name}“ gespeichert",
+    "namePlaceholder": "Strukturname",
+    "fieldCount": "{count} Felder",
+    "fieldCountOne": "1 Feld",
+    "downgradedNotice": "{count} Feld(er) in Text vereinfacht — Tabellen enthalten einen Wert pro Zelle: {names}",
+    "truncatedNotice": "{count} Feld(er) ausgelassen — Tabellenlimit sind {max} Spalten: {names}",
+    "skippedDerivedNotice": "{count} berechnete Spalte(n) nicht gespeichert — Formeln verweisen auf Spalten dieser Tabelle: {names}",
+    "loadReplacesColumns": "Dies ersetzt die aktuellen Spalten. Vorhandene Zeilen behalten Werte, deren Spaltennamen übereinstimmen."
   }
 }

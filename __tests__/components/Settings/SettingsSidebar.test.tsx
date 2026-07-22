@@ -1,0 +1,142 @@
+import { fireEvent, render, screen } from '@testing-library/react';
+import React from 'react';
+
+import { Settings } from '@/types/settings';
+
+import { SettingsSidebar } from '@/components/Settings/SettingsSidebar';
+import { SettingsSection } from '@/components/Settings/types';
+
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+// Mutable LD flags (mirrors ConnectorsSection test pattern).
+const mockFlags: Record<string, unknown> = {};
+vi.mock('launchdarkly-react-client-sdk', () => ({
+  useFlags: () => mockFlags,
+}));
+
+// next-intl's createNavigation resolves next/navigation at import time,
+// which vitest cannot load — stub the Link to a plain anchor.
+vi.mock('@/lib/navigation', () => ({
+  Link: ({
+    href,
+    children,
+    ...rest
+  }: { href: string; children: React.ReactNode } & Record<string, unknown>) => (
+    <a href={href} {...rest}>
+      {children}
+    </a>
+  ),
+}));
+
+// Mutable admin status; the real hook needs a QueryClientProvider (and the
+// AgentAccessEnabledContext — its flag-off no-fetch behavior is covered in
+// __tests__/components/AgentAccess/useAgentAccessAdmin.test.tsx).
+const mockAgentAccess = { isAdmin: false };
+vi.mock('@/client/hooks/settings/useAgentAccessAdmin', () => ({
+  useAgentAccessAdmin: () => ({
+    me: null,
+    isAdmin: mockAgentAccess.isAdmin,
+    isGlobalAdmin: mockAgentAccess.isAdmin,
+    isLoading: false,
+    error: null,
+    refetch: vi.fn(),
+  }),
+}));
+
+// The setup-level next-intl mock has no `settings` namespace, so labels
+// render as their raw keys ('settings.Backup' etc.) — assert on those.
+function renderSidebar(setActiveSection = vi.fn()) {
+  render(
+    <SettingsSidebar
+      activeSection={SettingsSection.GENERAL}
+      setActiveSection={setActiveSection}
+      handleReset={vi.fn()}
+      onClose={vi.fn()}
+      state={{} as Settings}
+      dispatch={vi.fn()}
+    />,
+  );
+  return setActiveSection;
+}
+
+describe('SettingsSidebar — backup nav item gating', () => {
+  beforeEach(() => {
+    for (const key of Object.keys(mockFlags)) delete mockFlags[key];
+    mockAgentAccess.isAdmin = false;
+  });
+
+  it('hides the Agent Access link for non-admins and shows it for admins', () => {
+    renderSidebar();
+    expect(screen.queryByText('settings.Agent Access')).not.toBeInTheDocument();
+
+    mockAgentAccess.isAdmin = true;
+    renderSidebar();
+    const link = screen.getByText('settings.Agent Access').closest('a');
+    expect(link).toHaveAttribute('href', '/admin/agent-access');
+  });
+
+  it('hides Backup when the flag is absent (fail-closed), unlike the fail-open Usage & Impact', () => {
+    renderSidebar();
+
+    expect(screen.queryByText('settings.Backup')).not.toBeInTheDocument();
+    // Polarity divergence: with no flags served, fail-open sections show...
+    expect(screen.getByText('settings.Usage & Impact')).toBeInTheDocument();
+    expect(screen.getByText('settings.Connectors')).toBeInTheDocument();
+  });
+
+  it('hides Backup when the flag is explicitly false', () => {
+    mockFlags.enableEncryptedBackups = false;
+    renderSidebar();
+    expect(screen.queryByText('settings.Backup')).not.toBeInTheDocument();
+  });
+
+  it('hides Backup on a truthy-but-not-true flag value', () => {
+    mockFlags.enableEncryptedBackups = 'yes';
+    renderSidebar();
+    expect(screen.queryByText('settings.Backup')).not.toBeInTheDocument();
+  });
+
+  it('shows Backup only when the flag is exactly true, and navigates on click', () => {
+    mockFlags.enableEncryptedBackups = true;
+    const setActiveSection = renderSidebar();
+
+    const item = screen.getByText('settings.Backup');
+    expect(item).toBeInTheDocument();
+
+    fireEvent.click(item);
+    expect(setActiveSection).toHaveBeenCalledWith(SettingsSection.BACKUP);
+  });
+});
+
+describe('SettingsSidebar — memories nav item gating', () => {
+  beforeEach(() => {
+    for (const key of Object.keys(mockFlags)) delete mockFlags[key];
+    mockAgentAccess.isAdmin = false;
+  });
+
+  it('hides Memories when the flag is absent (fail-closed)', () => {
+    renderSidebar();
+    expect(screen.queryByText('settings.Memories')).not.toBeInTheDocument();
+  });
+
+  it('hides Memories when the flag is explicitly false or truthy-but-not-true', () => {
+    mockFlags.enableMemories = false;
+    renderSidebar();
+    expect(screen.queryByText('settings.Memories')).not.toBeInTheDocument();
+
+    mockFlags.enableMemories = 'yes';
+    renderSidebar();
+    expect(screen.queryByText('settings.Memories')).not.toBeInTheDocument();
+  });
+
+  it('shows Memories only when the flag is exactly true, and navigates on click', () => {
+    mockFlags.enableMemories = true;
+    const setActiveSection = renderSidebar();
+
+    const item = screen.getByText('settings.Memories');
+    expect(item).toBeInTheDocument();
+
+    fireEvent.click(item);
+    expect(setActiveSection).toHaveBeenCalledWith(SettingsSection.MEMORIES);
+  });
+});

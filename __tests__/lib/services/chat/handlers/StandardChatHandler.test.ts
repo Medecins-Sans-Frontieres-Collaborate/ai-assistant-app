@@ -3,14 +3,17 @@ import { StandardChatHandler } from '@/lib/services/chat/handlers/StandardChatHa
 import { ChatContext } from '@/lib/services/chat/pipeline/ChatContext';
 
 import { Message, MessageType } from '@/types/chat';
+import { ErrorCode, PipelineError } from '@/types/errors';
 
 import { createTestChatContext } from '../testUtils';
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
-// buildFinalMessages is private; expose it via a narrow cast for unit tests.
+// buildFinalMessages/executeStage are private/protected; expose them via a
+// narrow cast for unit tests.
 type HandlerInternals = {
   buildFinalMessages(context: ChatContext): Message[];
+  executeStage(context: ChatContext): Promise<ChatContext>;
 };
 
 function createHandler(): HandlerInternals {
@@ -155,5 +158,103 @@ describe('StandardChatHandler.buildFinalMessages', () => {
 
     expect(result).toHaveLength(1);
     expect(result[0].content).toBe('Hello there');
+  });
+});
+
+describe('StandardChatHandler — custom-source (byom) glue', () => {
+  const BYOM_ENDPOINT = 'https://my-acct.services.ai.azure.com';
+
+  // The seam under test is the REAL executeStage wiring: only the service it
+  // hands off to is mocked.
+  function createByomSetup() {
+    const handleChat = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ text: 'ok' }), {
+        headers: { 'Content-Type': 'application/json' },
+      }),
+    );
+    const handler = new StandardChatHandler({
+      handleChat,
+    } as unknown as StandardChatService) as unknown as HandlerInternals;
+    return { handler, handleChat };
+  }
+
+  function byomContext(overrides: Partial<ChatContext> = {}): ChatContext {
+    const credential = {
+      getToken: vi.fn(),
+    } as unknown as ChatContext['userCredential'];
+    return {
+      ...createTestChatContext({
+        model: {
+          id: 'byom-abc123-my-gpt',
+          name: 'my-gpt',
+          isCustomSourceModel: true,
+        },
+        stream: false,
+      }),
+      foundryEndpoint: BYOM_ENDPOINT,
+      userCredential: credential,
+      ...overrides,
+    };
+  }
+
+  it('passes the middleware-resolved endpoint + credential to the service as customSource', async () => {
+    const { handler, handleChat } = createByomSetup();
+    const context = byomContext();
+
+    const result = await handler.executeStage(context);
+
+    expect(handleChat).toHaveBeenCalledTimes(1);
+    expect(handleChat).toHaveBeenCalledWith(
+      expect.objectContaining({
+        model: context.model,
+        customSource: {
+          endpoint: BYOM_ENDPOINT,
+          credential: context.userCredential,
+        },
+      }),
+    );
+    expect(result.response).toBeDefined();
+  });
+
+  it('throws MODEL_UNAVAILABLE when a byom model lost its resolved endpoint', async () => {
+    const { handler, handleChat } = createByomSetup();
+
+    const promise = handler.executeStage(
+      byomContext({ foundryEndpoint: undefined }),
+    );
+
+    await expect(promise).rejects.toBeInstanceOf(PipelineError);
+    await expect(promise).rejects.toMatchObject({
+      code: ErrorCode.MODEL_UNAVAILABLE,
+    });
+    // Fail closed: the byom request must never reach the app's clients.
+    expect(handleChat).not.toHaveBeenCalled();
+  });
+
+  it('throws MODEL_UNAVAILABLE when a byom model lost its user credential', async () => {
+    const { handler, handleChat } = createByomSetup();
+
+    await expect(
+      handler.executeStage(byomContext({ userCredential: undefined })),
+    ).rejects.toMatchObject({ code: ErrorCode.MODEL_UNAVAILABLE });
+    expect(handleChat).not.toHaveBeenCalled();
+  });
+
+  it('never builds customSource for a non-byom model, even with endpoint/credential in context', async () => {
+    const { handler, handleChat } = createByomSetup();
+    const context = byomContext({
+      model: {
+        id: 'gpt-5.2-chat',
+        name: 'GPT-5.2 Chat',
+        maxLength: 128000,
+        tokenLimit: 16384,
+      },
+    });
+
+    await handler.executeStage(context);
+
+    expect(handleChat).toHaveBeenCalledWith(
+      expect.objectContaining({ customSource: undefined }),
+    );
   });
 });

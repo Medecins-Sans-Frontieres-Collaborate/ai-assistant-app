@@ -437,7 +437,22 @@
     "noProjectsFound": "Pa gen pwojè jwenn. Nap sèvi ak \"default\".",
     "selectAllRequired": "Chwazi yon abònman, kont, ak pwojè.",
     "subscriptionRequired": "Chwazi yon abònman",
-    "accountRequired": "Chwazi yon kont Foundry"
+    "accountRequired": "Chwazi yon kont Foundry",
+    "projectSelectionRequired": "Chwazi yon pwojè nan lis la.",
+    "scanningResources": "Nap eskane abònman Azure ou yo...",
+    "searchProjectsPlaceholder": "Chèche pwojè...",
+    "noProjectsDiscovered": "Pa gen okenn pwojè Foundry jwenn nan abònman ou yo. Sèvi ak antre manyèl si ou konnen chemen an.",
+    "discoveryPartialWarning": "{count, plural, one {# abònman} other {# abònman}} pa t ka eskane. Sèvi ak antre manyèl si pwojè ou manke.",
+    "discoveryTruncatedWarning": "Gen twòp resous pou eskane totalman. Sèvi ak antre manyèl si pwojè ou manke.",
+    "retryScan": "Repran eskane",
+    "next": "Pwochen",
+    "back": "Retounen",
+    "selectAgentsDescription": "Chwazi ajan nan pwojè sa a pou parèt nan chwa modèl ou a.",
+    "selectAll": "Chwazi tout",
+    "deselectAll": "Dekache tout",
+    "agentsSelectedCount": "{selected} sou {total} ajan yo chwazi",
+    "autoAddLabel": "Ajoute nouvo ajan otomatikman",
+    "autoAddDescription": "Ajan ki pibliye pita sou pwojè sa a ap ajoute otomatikman. Ajan ou dekache yo ap rete eskli."
   },
   "Quick Actions": "Aksyon Rapid",
   "Type / in chat to access your prompts": "Tape / nan chat pou jwenn aksè nan enstriksyon ou yo",
@@ -805,7 +820,7 @@
     "stopGenerationDontAskAgainButton": "Pa mande ankò lè w ap sispann ak bouton an",
     "stopGenerationDontAskAgainKeyboard": "Pa mande ankò lè w ap sispann ak klavye a",
     "generateResponseButton": "Jenere repons",
-    "downloadResponse": "Telechaje repons lan",
+    "downloadResponse": "Telechaje repons",
     "activity": {
       "callingTool": "Aplike zouti…",
       "callingService": "Aplike sèvis ekstèn…",
@@ -818,7 +833,19 @@
       "listingTools": "Ap chèche zouti ki disponib…",
       "analyzingFiles": "Ap analize fichye ou yo…",
       "searchingKnowledge": "Ap chèche nan baz konesans lan…",
-      "cancellingPriorTool": "Ap anile demann zouti anvan…"
+      "cancellingPriorTool": "Ap anile demann zouti anvan…",
+      "workflow": {
+        "preparingDocument": "Nap prepare referans yo…",
+        "writingDocument": "Nap ekri dokiman an…",
+        "analyzingSource": "Nap analize tèks sous la…",
+        "translating": "Nap tradui…",
+        "reviewingTranslation": "Ronde revizyon {round} sou {total}…",
+        "revisingTranslation": "Nap aplike fidbak revizyon an…",
+        "extractingRows": "Nap ekstrè ranje soti nan {source}…",
+        "transformingTable": "Nap transfòme tab la…",
+        "findingLocations": "Nap idantifye kote yo…",
+        "updatingMap": "Nap mete kat la ajou…"
+      }
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# zouti itilize} other {# zouti yo itilize}}",
@@ -879,7 +906,9 @@
     "listen": "Koute",
     "processingAudio": "Nap trete odyo...",
     "ttsError": "Erè pandan kreyasyon odyo. Tanpri eseye ankò.",
-    "unsupportedMessageType": "Erè pandan afichaj mesaj la: Tip mesaj sa a pa sipòte"
+    "unsupportedMessageType": "Erè pandan afichaj mesaj la: Tip mesaj sa a pa sipòte",
+    "addLanguageOption": "Ajoute \"{name}\"…",
+    "sources": "Sous"
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",
@@ -1292,16 +1321,34 @@
     "unsavedChanges": "Chanjman ki pa sove",
     "unsavedChangesMessage": "Ou gen chanjman ki pa sove. Anile yo?",
     "characterCount": "{current}/{max}",
-    "clearField": "Netwaye chan an",
+    "clearField": "Efase chan",
     "autosaveNote": "Chanjman yo sove otomatikman.",
     "responseSection": "Repons",
     "voiceSection": "Vwa",
     "behaviorSection": "Konpòtman",
-    "resetChatSettings": "Reyajiste paramèt chat yo",
-    "resetChatSettingsConfirmTitle": "Reyajiste paramèt chat yo?",
-    "resetChatSettingsConfirmMessage": "Sa ap retabli tout paramèt ki default nan panèl sa a: tanperati, enstriksyon pèsonalize, Enfòmasyon sou ou, repons modèl, vitès difizyon, tèks an vwa, fichye aktif, ak konfimasyon. Sa pap afekte konvèsasyon ou yo.",
+    "resetChatSettings": "Reyajiste paramèt chat",
+    "resetChatSettingsConfirmTitle": "Reyajiste paramèt chat?",
+    "resetChatSettingsConfirmMessage": "Sa ap retabli tout paramèt default nan panel sa a: tanperati, enstriksyon pèsonalize, Sou Ou, repons modèl, vitès kouran, text-to-speech, fichye aktif, ak konfimasyon yo. Sa pa afekte konvèsasyon ou yo.",
     "customInstructionsLabel": "Enstriksyon Pèsonalize*",
-    "defaultTemperatureLabel": "Tanperati pa defo*"
+    "defaultTemperatureLabel": "Tanperati pa defo*",
+    "Usage & Impact": "Itilizasyon & Enpak",
+    "Connectors": "Konektè",
+    "Backup": "Sovgad",
+    "Memories": "Memwa",
+    "Agent Access": "Aksè Ajan",
+    "LocalModels": "Modèl lokal",
+    "suggestRevisions": {
+      "title": "Revizyon dokiman yo",
+      "toggle": "Sijere revizyon olye de aplike yo",
+      "description": "Lè ou mande workflow Dokiman an pou revize, chanjman yo vini kòm sijesyon endividyèl ou ka aksepte oswa rejte, menm jan ak evalyasyon kalite yo.",
+      "exceptionsTitle": "Aplike dirèkteman kanmenm lè:",
+      "exceptionSelection": "W ap revize yon seleksyon ou make",
+      "exceptionLargeRewrite": "Reskri a chanje pifò nan dokiman an",
+      "exceptionReorder": "Seksyon yo deplase olye ke modifye",
+      "thresholdLabel": "Konsidere kòm yon reskri pi wo pase",
+      "thresholdUnit": "% nan dokiman an chanje",
+      "exceptionSelectionAlways": "Lè w ap modifye yon pati mete an avan, chanjman an ap aplike dirèkteman — modèl la retounen sèlman pati ki modifye a, epi ou pap ka konvèti l an kòmantè sou tout dokiman an."
+    }
   },
   "emptyState": {
     "greeting": "Kijan mwen ka ede ou?",
@@ -1447,33 +1494,78 @@
     },
     "title": "Chwazi yon modèl",
     "modelsDescription": "Chwazi yon modèl AI pou konvèsasyon ou. Chak modèl gen avantaj li — chwazi youn pou wè detay yo.",
-    "recommended": "Rekòmande"
+    "recommended": "Rekòmande",
+    "familyAll": "Tout",
+    "familyFilterLabel": "Filtre modèl pa kategori",
+    "searchPlaceholder": "Chèche modèl yo",
+    "searchEmpty": "Pa gen okenn modèl ki koresponn ak rechèch ou.",
+    "star": "Make {name} kòm pi renmen",
+    "unstar": "Retire {name} nan pi renmen yo",
+    "otherFamily": "Lòt",
+    "hostedExternally": "Fonksyone sou enfraestrikti founisè a atravè Azure AI Foundry, pa andedan anviwònman Azure MSF la.",
+    "hostedIn": {
+      "label": "Héberge nan {regions}",
+      "tooltip": "Zòn Azure kote modèl sa a deplwaye. Konvèsasyon yo trete nan pwòp zòn ou."
+    },
+    "badges": {
+      "external": "Ekstèn",
+      "externalTooltip": "Fonksyone sou enfraestrikti founisè a atravè Azure AI Foundry, pa andedan anviwònman Azure MSF la.",
+      "regionHostedTooltip": "Héberge nan zòn Azure {region}. Konvèsasyon ak modèl sa a trete la."
+    },
+    "favorites": "Pi renmen yo",
+    "euResidencyNote": "Tout modèl yo fonksyone nan zòn Azure Inyon Ewopeyen an.",
+    "hostedRegion": {
+      "label": "Zòn héberge",
+      "processedIn": "Konvèsasyon sa a trete nan zòn Azure {region}.",
+      "euOnlyNote": "{name} héberge nan zòn Azure Inyon Ewopeyen an; konvèsasyon ak li ap trete la."
+    },
+    "version": {
+      "label": "Vèsyon"
+    },
+    "reasoningModel": "Modèl rezònman: panse etap pa etap anvan li reponn. Pito dousman, pi efikas pou pwoblèm ki difisil.",
+    "variant": {
+      "label": "Varyan"
+    },
+    "deployment": {
+      "title": "Deplwaman",
+      "source": "Sous",
+      "account": "Konto",
+      "location": "Kote",
+      "deployment": "Deplwaman",
+      "modelVersion": "Vèsyon modèl",
+      "publisher": "Piblikatè"
+    }
   },
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Modèl AI ki alimante pa GPT-4.1 ak rechèch wèb an tan reyèl via Bing. Bay enfòmasyon ajou, verifikasyon fè, ak konsyans evènman aktyèl. Pi bon pou rechèch ki bezwen enfòmasyon resan, analiz nouvèl, ak verifikasyon fè.",
-      "knowledgeCutoff": "Rechèch wèb an tan reyèl"
+      "knowledgeCutoff": "Rechèch wèb an tan reyèl",
+      "tagline": "Dènye jenerasyon OpenAI anvan an"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Modèl pi avanse OpenAI a, ki ekselè nan rezonman konplèks, jenerasyon kòd, ak rezolisyon pwoblèm teknik. Pi bon pou travay analitik, defi pwogramasyon, rechèch, ak eksplikasyon detaye. Sipòte efò rezonman ajistab ak vèbozite repons.",
-      "knowledgeCutoff": "Des 2025"
+      "knowledgeCutoff": "Des 2025",
+      "tagline": "Kòd, analiz, rechèch"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Varyant pi rapid ak pi ekonomik GPT-5, optimize pou vitès pandan li kenbe kalite wo. Pafè pou travay chak jou, demann rapid, acheminman zouti, ak aplikasyon ki bezwen tan repons rapid. Ekselan balans pèfòmans ak efikasite.",
-      "knowledgeCutoff": "6 Out 2025 8:00 PM"
+      "knowledgeCutoff": "6 Out 2025 8:00 PM",
+      "tagline": "Pi rapid ak pi ba pri"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Des 2025",
-      "description": "Varyan espesyalize GPT-5.2 ki optimize pou entèraksyon konvèsasyonèl ak entèlijans emosyonèl. Li siperyè nan kominikasyon ak anpil konpasyon, ekriti kreyatif, reflechi ansanm, ak dyalòg natirèl. Ideyal pou konvèsasyon chak jou, sipò konsèy, ak travay ki mande konsyans emosyonèl."
+      "description": "Varyan espesyalize GPT-5.2 ki optimize pou entèraksyon konvèsasyonèl ak entèlijans emosyonèl. Li siperyè nan kominikasyon ak anpil konpasyon, ekriti kreyatif, reflechi ansanm, ak dyalòg natirèl. Ideyal pou konvèsasyon chak jou, sipò konsèy, ak travay ki mande konsyans emosyonèl.",
+      "tagline": "Konvèsasyon, refleksyon kolektif"
     },
     "o3": {
       "name": "o3",
       "description": "Modèl rezonman pi avanse OpenAI ak kapasite rezolisyon pwoblèm revolisyonè. Ekselè nan matematik konplèks, rezonman syantifik, defi kodaj, ak travay lojik milti-etap. Fenèt kontèks 200K elaji. Sipòte kontwòl efò rezonman.",
-      "knowledgeCutoff": "8 Avr 2025 8:00 PM"
+      "knowledgeCutoff": "8 Avr 2025 8:00 PM",
+      "tagline": "Rezonman etap pa etap pwofon"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1483,47 +1575,256 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Espesyalis rezonman ki montre travay li pa etap. Ekselan pou pwoblèm matematik, casse-tête lojik, ak konpreyansyon konsèp konplèks. Wè kijan li reflechi sou pwoblèm an tan reyèl.",
-      "knowledgeCutoff": "20 Jan 2025"
+      "knowledgeCutoff": "20 Jan 2025",
+      "tagline": "Montre rezònman etap pa etap"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Modèl solid an jeneral espesyalman bon nan kodaj ak ekriti teknik. Ekselan pou deboge kòd, ekri dokimantasyon, ak eksplike konsèp teknik. Rapid epi fyab pou travay devlopman.",
-      "knowledgeCutoff": "16 Avr 2025 12:45 AM"
+      "knowledgeCutoff": "16 Avr 2025 12:45 AM",
+      "tagline": "Altènativ sous-ouvert"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Modèl vèsatil ki soti nan xAI ki rekonèt pou repons nyanse. Ekselan pou diskisyon ouvè, pwojè kreyatif, ak rezoud pwoblèm konplèks.",
-      "knowledgeCutoff": "13 Me 2025 12:16 AM"
+      "knowledgeCutoff": "13 Me 2025 12:16 AM",
+      "tagline": "Altènativ xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Modèl pi kapab Anthropic ak kapasite rezonman, kodaj, ak kreyativite eksepsyonèl. Pi bon pou analiz konplèks, rechèch, ak travay ki bezwen konpreyansyon pwofon.",
-      "knowledgeCutoff": "Janvye 2025"
+      "knowledgeCutoff": "Janvye 2025",
+      "tagline": "Jenerasyon Opus anvan an"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Modèl Claude balanse ki ofri ekselan pèfòmans nan kodaj, analiz, ak travay kreyatif. Ekselan pou itilizasyon chak jou ak tan repons rapid.",
-      "knowledgeCutoff": "Janvye 2025"
+      "knowledgeCutoff": "Janvye 2025",
+      "tagline": "Jenerasyon Sonnet anvan an"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Modèl Claude Opus jenerasyon anvan. Ekselan pou travay kodaj konplèks, analiz detaye, ak konpreyansyon nyanse.",
-      "knowledgeCutoff": "Janvye 2025"
+      "knowledgeCutoff": "Janvye 2025",
+      "tagline": "Opus jenerasyon anvan an"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Modèl Claude rapid ak ekonomik optimize pou travay rapid. Ekselan pou demann senp, rezime, ak aplikasyon gwo volim.",
-      "knowledgeCutoff": "Janvye 2025"
+      "knowledgeCutoff": "Janvye 2025",
+      "tagline": "Variant Claude rapid"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Pi fò modèl Anthropic lan. Bon pou ekri long, rechèch, ak travay k ap mande refleksyon.",
-      "knowledgeCutoff": "Fev 2026"
+      "knowledgeCutoff": "Fev 2026",
+      "tagline": "Ekriti long ak analiz"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Yon modèl Claude balanse. Bon pou ekri chak jou, analiz, ak kodaj ak repons rapid.",
-      "knowledgeCutoff": "Fev 2026"
+      "knowledgeCutoff": "Fev 2026",
+      "tagline": "Claude ekilibre pou chak jou"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Yon modèl sous louvri ki soti nan Meta. Bon pou ekriti, rezime, ak kesyon rapid.",
+      "tagline": "Altènativ sous-ouvert"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Dènye modèl prensipal OpenAI. Pwisan pou ekriti, rechèch, kodaj, ak rezoud pwoblèm konplèks.",
+      "tagline": "Dènye modèl GPT prensipal la"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Varyasyon GPT ki pi piti ak pi rapid. Pi bon pou travay rapid ak senp ak pri minim.",
+      "tagline": "Pi piti ak pi rapid GPT la"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Varyasyon GPT pou konvèsasyon, adapte pou dyalòg. Bon pou ti pale, jete ide, ak diskisyon sipò.",
+      "tagline": "Nouvo chat GPT ajiste"
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "Premye modèl GPT-5 prensipal. Toujou efikas pou ekriti, analiz, ak kodaj.",
+      "tagline": "Modèl GPT prensipal anvan an"
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "Varyasyon GPT-5 adapte pou konvèsasyon. Bon pou ti pale chak jou ak jete ide.",
+      "tagline": "GPT pou chat ajiste anvan an"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Yon ansyen modèl GPT miltimodal. Apwopriye pou ekriti ak Q&A chak jou kote ou pa bezwen dènye kapasite yo.",
+      "tagline": "Vye GPT multimodal"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Yon vèsyon GPT-4.1 ki pi piti, pi rapid pou travay rapid chak jou.",
+      "tagline": "GPT limyè jenerasyon anvan an"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Dènye ak pi pwisan modèl Anthropic. Ekselan pou tèks long, rechèch, kodaj, ak analiz pwofon.",
+      "tagline": "Claude ki pi nouvo e pi pwisan"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Dènye modèl sous louvri DeepSeek. Fyab pou ekriti jeneral ak kesyon teknik.",
+      "tagline": "Altènativ sous-ouvert"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Modèl prensipal Mistral. Yon altènatif Ewopeyen pou ekriti, rezime, ak kesyon jeneral.",
+      "tagline": "Modèl Ewopeyen sous ouvè lou"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Yon vèsyon GPT-5 prensipal ki pi ansyen. Toujou solid pou ekriti, analiz, ak kodaj.",
+      "tagline": "Pi ansyen modèl GPT-5 prensipal"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Yon vèsyon GPT-5 adapte pou konvèsasyon, nan edisyon pi ansyen. Bon pou ti pale ak jete ide.",
+      "tagline": "Pi ansyen chat GPT ajiste"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Varyasyon GPT-5 ki pi piti. Pi bon pou travay rapid ak senp ak pri ki ba.",
+      "tagline": "GPT piti jenerasyon anvan an"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Vèsyon GPT-4.1 ki pi piti. Bon pou travay rapid, senp kote vitès ak pri gen plis enpòtans.",
+      "tagline": "Pi piti GPT jenerasyon anvan an"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Yon vèsyon GPT-4o ki piti e rapid. Bon pou travay rapid chak jou kote ou pa bezwen pi dènye kapasite yo.",
+      "tagline": "GPT multimodal limyè, vèsyon ansyen"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Yon modèl rezonman konpak. Bon pou matematik, lojik, ak pwoblèm etap-pa-etap ak pi ba pri pase o3.",
+      "tagline": "Rezonman vit ak abòdab"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Yon modèl rezonman konpak ki pi ansyen. Trete matematik, syans, ak devinèt lojik ak ti bidjè.",
+      "tagline": "Rezonman etap pa etap konpak"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Modèl ki pi entelijan Anthropic lan, premye nan fanmi Claude 5. Ekselan pou travay ekriti, rechèch, ak kodaj ki pi difisil.",
+      "tagline": "Modèl frontyè Anthropic lan"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Pi nouvo Claude ki ekilibre, premye nan fanmi Claude 5. Solid pou ekriti, analiz, ak kodaj chak jou ak repons rapid.",
+      "tagline": "Claude ekilibre ki pi nouvo"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Modèl Mistral mwayen. Yon altènatif Ewopeyen ki balanse kapasite ak vitès pou travay chak jou.",
+      "tagline": "Modèl Ewopeyen ekilibre"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Modèl piti Mistral. Rapid ak pa chè pou rezime, bouyon, ak kesyon senp.",
+      "tagline": "Modèl Ewopeyen piti ak vit"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Modèl Mistral ki pi piti a. Pi bon pou travay trè rapid, senp ak pri ki minim.",
+      "tagline": "Mistral gwosè minimòm"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Yon vèsyon DeepSeek-R1 ki mete ajou. Montre fason panse li etap-pa-etap ak pi bon kapasite rezonman.",
+      "tagline": "Modèl rezònman ouvè mete ajou"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Yon modèl sous louvri ki pi lejè soti nan Meta. Rapid pou ekriti, rezime, ak kesyon chak jou.",
+      "tagline": "Llama sous-ouvert efikas"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Yon ansyen modèl open-source ki soti nan Meta. Toujou solid pou ekriti jeneral ak kesyon-repons.",
+      "tagline": "Llama sous-ouvert vèsyon ansyen"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Modèl prensipal xAI a. Bon pou diskisyon ouvè, analiz, ak pwojè kreyatif.",
+      "tagline": "Modèl prensipal xAI"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Dènye modèl prensipal OpenAI a. Fò nan ekriti, rechèch, kodaj, ak rezoud pwoblèm konplike.",
+      "tagline": "Dènye modèl GPT prensipal"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (dènye)",
+      "description": "Yon alias k ap swiv dènye modèl chat OpenAI mete ajou yo. Sa se ranplasman Azure pou ansyen modèl gpt-*-chat yo.",
+      "tagline": "Toujou dènye chat GPT la"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Yon nouvo vèsyon Opus, ant 4.6 ak 4.8. Solid pou ekriti long, rechèch, kodaj, ak analiz pridan.",
+      "tagline": "Dènye vèsyon Opus la"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Dènye modèl rasyonalizasyon DeepSeek la ak ranplasman Azure pou seri R1. Montre panse li etap pa etap.",
+      "tagline": "Dènye modèl rezònman ouvè"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Varyant rapid DeepSeek V4 la ak ranplasman Azure pou seri V3. Rapide pou ekriti jeneral ak kesyon teknik.",
+      "tagline": "Altènativ sous-ouvert rapid"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Rasyonalizasyon)",
+      "description": "Modèl rasyonalizasyon rapid xAI a. Panse etap pa etap ak repons rapid.",
+      "tagline": "Modèl rezònman xAI rapid"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Modèl chat rapid xAI a. Repons rapid pou kesyon ak diskisyon chak jou.",
+      "tagline": "Modèl chat xAI rapid"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Yon modèl xAI ki pi lejè. Pi rapid ak pi bon mache pou kesyon rapid ak ti pale senp.",
+      "tagline": "Modèl xAI ki pi limyè"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Pi bon modèl nan triy OpenAI GPT-5.6. Pi fò pou ekri, rechèch, pwogramasyon, ak rezoud pwoblèm konplike.",
+      "tagline": "Dènye kategori GPT prensipal la"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Modèl ki balanse nan triy OpenAI GPT-5.6. Bon pou ekri chak jou, analiz, ak pwogramasyon ak repons rapid.",
+      "tagline": "GPT-5.6 ekilibre pou chak jou"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Modèl ki pi limyè ak rapid nan triy OpenAI GPT-5.6. Pi bon pou kesyon rapid ak travay senp ak pri ba.",
+      "tagline": "GPT-5.6 lejè, rapid"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Dènye modèl Mistral mwayen. Yon altènativ Ewopeyen ki bay bon balans ant kapasite ak vitès pou travay chak jou.",
+      "tagline": "Modèl Ewopeyen ki ekilibre"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Modèl open-weight pa Moonshot AI. Fò nan travay ajan, kòd, ak dokiman long yo.",
+      "tagline": "Modèl open-weight ajan"
     }
   },
   "searchMode": {
@@ -1789,7 +2090,22 @@
     "useDefaultStyle": "Itilize estil ekriti pa defo",
     "noTonesCreated": "Pa gen ton kreye ankò",
     "createTonesHint": "Kreye ton nan Aksyon Rapid",
-    "translateDocumentTooltip": "Tradui dokiman yo nan yon lòt lang.\n\nFòma sipòte: Word, Excel, PowerPoint, HTML, TXT\nGwosè maksimòm: 40MB\n\nSipòte plis pase 80 lang ak dosye glosè opsyonèl."
+    "translateDocumentTooltip": "Tradui dokiman yo nan yon lòt lang.\n\nFòma sipòte: Word, Excel, PowerPoint, HTML, TXT\nGwosè maksimòm: 40MB\n\nSipòte plis pase 80 lang ak dosye glosè opsyonèl.",
+    "translateTooltip": "Tradui yon ti moso tèks nan yon lòt lang.\n\nPou tout fichye (Word, Excel, PowerPoint, HTML, TXT), sèvi ak Tradui Dokiman pito.",
+    "cameraTooltip": "Pran yon foto ak kamera aparèy ou epi mete l nan mesaj la.",
+    "noResults": "Pa gen aksyon ki koresponn",
+    "sectionPinned": "Pine",
+    "sectionFrequent": "Pi souvan itilize",
+    "sectionMore": "Plis",
+    "categoryWeb": "Web",
+    "categoryMedia": "Medya & fichye",
+    "categoryTransform": "Transfòme",
+    "pin": "Mete anwo",
+    "unpin": "Retire soti anwo",
+    "moveToMore": "Mete nan Plis",
+    "moveOutOfMore": "Montre nan meni an",
+    "showSources": "Montre lòt sous",
+    "hideSources": "Kache lòt sous"
   },
   "transcription": {
     "transcribesOnSend": "Transkri lè voye",
@@ -1923,7 +2239,14 @@
     "expiresSoon": "Ekspire nan {days} jou - telechaje byento",
     "expires": "Disponib pou {days} jou",
     "unofficialBadgeLabel": "Pa ofisyèl",
-    "unofficialLanguageWarning": "Lang sa a pa sipòte ofisyèlman. Kalite tradiksyon an pa verifye. Tanpri fè yon moun ki pale lang lan byen oswa natif verifye rezilta a anvan ou pataje li."
+    "unofficialLanguageWarning": "Lang sa a pa sipòte ofisyèlman. Kalite tradiksyon an pa verifye. Tanpri fè yon moun ki pale lang lan byen oswa natif verifye rezilta a anvan ou pataje li.",
+    "translationSubmitted": "Tradiksyon lanse — analiz PDF fèt an bakgrawnd.",
+    "pendingTitle": "Tradiksyon {filename}…",
+    "pendingHint": "Tradiksyon PDF ap fèt an bakgrawnd e li ka pran kèk minit. Ou ka kontinye travay — kat sa a ap ajou menm apre ou rcharje paj la.",
+    "asyncFailed": "Tradiksyon dokiman an echwe: {error}",
+    "jobNotFound": "travay tradiksyon an pa disponib ankò. Tanpri eseye ankò.",
+    "retryPolling": "Re-tcheke",
+    "pollingStalled": "Nou pa ka kontakte sèvè a pou verifye pwogrè a. Tradiksyon an ka toujou ap kouri."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -1973,6 +2296,10 @@
       "technicalDetails": "Detay teknik",
       "agentCountLabel": "{count} ajan",
       "disconnectedToast": "Dekonekte {name}"
+    },
+    "emptyState": {
+      "title": "Pa gen ajan rejyonal / òganizasyonèl disponib",
+      "description": "Konekte yon pwojè Foundry anba a pou w dekouvri ajan li yo."
     }
   },
   "privacy": {
@@ -2083,5 +2410,1309 @@
     "review": "Revize",
     "itemId": "ID: {id}",
     "itemSource": "{date} soti nan {source}"
+  },
+  "regionOverride": {
+    "warning": "Chanjman kote aktive — demann ou yo ap voye bay rejyon done {region}. Sa a se yon chanjman manyèl pou tès, li pa kote ou aktyèlman ye.",
+    "clear": "Retire chanjman"
+  },
+  "usageImpact": {
+    "empty": "Pa gen itilizasyon ki anrejistre ankò. Itilizasyon tokèn ou ak emisyon estime yo ap parèt isit la apre ou fin pale.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} chaj telefòn entelijan",
+    "requests": "Demand",
+    "promptTokens": "Tokèn pou demann",
+    "completionTokens": "Tokèn pou repons",
+    "topModels": "Pa modèl",
+    "byRegion": "Pa rejyon ki òganize a",
+    "regionDefault": "Defo",
+    "modelRow": "{requests} demann · {grams} g",
+    "disclosure": "Estimasyon sou baz sipozisyon v{version} · depi {since} · sèlman pou chat estanda (pa konte ajan ak repons baz konesans).",
+    "reset": "Reyajiste estatistik itilizasyon",
+    "estimatedPortion": "Gen ladan apeprè {grams} g CO₂e ({requests} demann) ki estime soti nan konvèsasyon avan siveyans — rekalkile sou tèks mesaj sove, pa sou kantite jèton mezire.",
+    "chipTitle": "Chip emisyon",
+    "chipDescription": "Estimasyon mak kabòn konvèsasyon aktyèl la, ki montre anlè bwat chat la.",
+    "chipAlways": "Toujou montre",
+    "chipAlwaysHint": "Chip la rete vizib chak fwa konvèsasyon an gen yon estimasyon.",
+    "chipAuto": "Montre lè mete ajou oswa pase sou li",
+    "chipAutoHint": "Chip la parèt lè estimasyon an chanje, epi disparèt apre. Pase sourit sou li oswa klike sou li ap fè li parèt ankò.",
+    "chipHidden": "Kache",
+    "chipHiddenHint": "Chip la pap janm parèt. Total yo toujou ap kontabilize epi parèt sou paj sa a.",
+    "chipAutoHideLabel": "Disparèt apre",
+    "chipAutoHideUnit": "segond",
+    "chipAutoHideHint": "Ant {min} ak {max} segond."
+  },
+  "extraction": {
+    "toggleLabel": "Extra done estriktire",
+    "trayLabel": "Ekstraksyon",
+    "trayPrefix": "Extra",
+    "trayInfo": "Ekstraksyon bay jiska 3 tab estriktire. Resèt yo sove lokalman.",
+    "autoChip": "Oto — AI pwopoze yon estrikti",
+    "addRecipe": "Ajoute resèt",
+    "addRecipeTitle": "Ajoute yon resèt nan ekstraksyon sa a",
+    "addRecipeFullTitle": "Jiska 3 resèt pa ekstraksyon",
+    "removeRecipe": "Retire resèt: {name}",
+    "remove": "Retire",
+    "section": "Resèt ekstraksyon",
+    "sectionSubtitle": "Modèl sove ki transfòme tèks, fichye, oswa URL an tab estriktire. Chwazi jiska 3 pa ekstraksyon.",
+    "newRecipe": "Nouvo resèt",
+    "untitledRecipe": "(Resèt san tit)",
+    "deleteRecipe": "Efase resèt",
+    "delete": "Efase",
+    "deleteConfirm": "Efase?",
+    "cancel": "Anile",
+    "name": "Non",
+    "namePlaceholder": "egzanp: Pasyan",
+    "description": "Deskripsyon",
+    "optional": "(opsyonèl)",
+    "descriptionPlaceholder": "Rezime kout ki parèt nan lis resèt yo",
+    "instructions": "Enstriksyon",
+    "instructionsPlaceholder": "Kisa AI a ta dwe chèche nan materyèl la?",
+    "fields": "Chan yo",
+    "field": "chan",
+    "fieldsPlural": "chan yo",
+    "fieldName": "Non chan",
+    "fieldType": "Kalite chan",
+    "fieldNamePlaceholder": "non_chan",
+    "addField": "Ajoute chan",
+    "removeField": "Retire chan",
+    "toggleDetails": "Montre/sere detay",
+    "fieldDetailsTitle": "Deskripsyon, valè enum",
+    "fieldDescriptionPlaceholder": "Deskripsyon (ede AI jwenn chan sa a)",
+    "enumValuesPlaceholder": "Valè yo separe ak vigil",
+    "required": "obligatwa",
+    "suggest": "Sijere ak AI",
+    "suggesting": "Ap sijere…",
+    "suggestNeedsInstructions": "Ajoute enstriksyon pou AI a ka konnen sa li dwe chèche",
+    "searchRecipes": "Chèche resèt",
+    "pickerEmpty": "Pa gen okenn resèt ankò. Kreye youn pou kòmanse.",
+    "pickerEmptyMatch": "Pa gen resèt ki koresponn",
+    "editorEmpty": "Pa gen okenn resèt ankò. Kreye youn epi AI a ka ede ranpli chan yo.",
+    "noData": "Pa gen done ki ekstrè",
+    "noRecords": "Pa jwenn okenn anrejistreman {name}",
+    "row": "liy",
+    "rows": "liy",
+    "record": "anrejistreman",
+    "records": "anrejistreman",
+    "complete": "konplè",
+    "download": "Telechaje",
+    "preview": "Previzyalize",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} chan",
+    "fieldCountOne": "1 chan",
+    "andMoreFields": "+ {count} ankò",
+    "saveAsRecipe": "Sere kòm resèt",
+    "savedAsRecipeToast": "Sere kòm resèt \"{name}\"",
+    "previewTruncated": "Ap montre 3 premye nan {total} liy. Telechaje pou jwenn tout done yo.",
+    "previewEmpty": "Pa gen liy pou previzyalize",
+    "proposedSchemaTip": "AI a pwopoze eskèm sa. Sere li pou itilize ankò.",
+    "downloadAriaLabel": "Telechaje {name} kòm {format}",
+    "previewAriaLabel": "Chanje previzyon pou {name}",
+    "changeFormatAriaLabel": "Chanje fòma telechajman pou {name}",
+    "materialWarningTitle": "Ajoute materyèl pou ekstrè",
+    "materialWarningBody": "Ekri yon mesaj pi ba a, atache yon fichye, oswa mete yon URL.",
+    "materialAttach": "Atache fichye",
+    "willExtractPrefix": "Ap ekstrè soti nan:",
+    "materialText": "tèks mesaj",
+    "materialFiles": "{count, plural, one {1 fichye} other {# fichye} }",
+    "materialActiveFiles": "{count, plural, one {1 fichye aktif} other {# fichye aktif}}",
+    "dismiss": "Dezaktive ekstraksyon"
+  },
+  "Connectors": "Konektè",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "Tradiksyon",
+        "description": "Tradui tèks ak analiz, glosè, ak revizyon"
+      },
+      "document": {
+        "label": "Dokiman",
+        "description": "Ekri ak amelyore yon dokiman ak asistan an"
+      },
+      "dataAnalysis": {
+        "label": "Analiz done",
+        "description": "Enpòte tab epi eksplore oswa transfòme done ou"
+      },
+      "map": {
+        "label": "Kat",
+        "description": "Konvèti nenpòt done an kote sou yon kat"
+      }
+    },
+    "chooser": {
+      "prompt": "Oswa kòmanse yon espas travay konsantre"
+    },
+    "sidebar": {
+      "newTranslation": "Nouvo tradiksyon",
+      "newDocument": "Nouvo dokiman",
+      "newDataAnalysis": "Nouvo analiz done",
+      "newMap": "Nouvo kat"
+    },
+    "translation": {
+      "chooseLanguage": "Lang sib",
+      "customLanguageHint": "\"{name}\" se yon lang ou te ajoute — AI a ap eseye nenpòt lang, men kalite pa verifye.",
+      "addedByYou": "Ajoute pa ou",
+      "glossary": "Glosè",
+      "noGlossary": "Pa gen glosè",
+      "manageGlossaries": "Glosè yo",
+      "glossaries": "Glosè yo",
+      "closeGlossaries": "Fèmen glosè yo",
+      "glossariesEmpty": "Kreye yon glosè pou fikse kijan tèm espesifik yo tradui. Glosè yo sove sou aparèy sa a e ou ka reutilize yo pou lòt tradiksyon.",
+      "newGlossary": "Nouvo glosè",
+      "newGlossaryName": "Glosè san tit",
+      "glossaryName": "Non glosè a",
+      "deleteGlossary": "Efase glosè a",
+      "sourceTerm": "Tèm sous",
+      "targetTerm": "Tradiksyon",
+      "note": "Nòt",
+      "noteOptional": "Nòt (opsyonèl)",
+      "addEntry": "Ajoute tèm",
+      "removeEntry": "Retire {term}",
+      "mode": "Mòd tradiksyon",
+      "modeQuick": "Rapid",
+      "modeAgentic": "Revize",
+      "modeQuickHint": "Yon sèl pasaj tradiksyon, pi rapid",
+      "modeAgenticHint": "Analize tèks la avan, apre sa tradui epi fè jiska 3 wonn revizyon",
+      "translate": "Tradui",
+      "translating": "Y ap tradui…",
+      "sourceLabel": "Tèks sous",
+      "targetLabel": "Tradiksyon",
+      "sourcePlaceholder": "Kole oswa tape tèks ou vle tradui, oubyen telechaje yon dokiman.",
+      "targetEmpty": "Tradiksyon an ap parèt isit la.",
+      "uploadDocument": "Telechaje dokiman",
+      "copy": "Kopye",
+      "copied": "Kopye",
+      "tooLong": "Tèks la plis pase {max} karaktè. Separe l an plizyè pati, oswa itilize tradiksyon dokiman pou tout fichye a.",
+      "analysisTitle": "Analiz avan tradiksyon",
+      "register": "Enskri",
+      "reviewTitle": "Wonn revizyon",
+      "roundLabel": "Wonn {round}",
+      "verdictApprove": "apwouve",
+      "verdictRevise": "revize",
+      "railRequest": "Tradui tèks sous la an {language}.",
+      "railDoneAgentic": "Fini. Mwen te analize tèks la, tradui li, epi fè {rounds} wonn revizyon. Rezilta a nan espas travay la.",
+      "railDoneQuick": "Fini. Tradiksyon an nan espas travay la.",
+      "railAssessRequest": "Evalye kalite tradiksyon an an {language}.",
+      "railAssessDone": "Evalyasyon fini: evalyasyon yo ak {count} korèktyon pou revize nan espas travay la.",
+      "roundChanges": "Chanjman nan wonn {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "Presizyon",
+          "description": "Transmèt egzakteman sans sous la — pa gen move tradiksyon, omisyon, ajoute, oubyen segman ki pa tradui"
+        },
+        "fluency": {
+          "label": "Flidite",
+          "description": "Granmè, òtograf, ponktiyasyon ak koerans li natirèl nan lang sib la"
+        },
+        "terminology": {
+          "label": "Tèminoloji",
+          "description": "Tèm domèn yo konsistan e kòrèk; glosè a respekte egzakteman"
+        },
+        "style": {
+          "label": "Style",
+          "description": "Rejis, ton ak vwa mache ak sous la epi rete konsistan"
+        },
+        "localeConventions": {
+          "label": "Konvansyon lokal",
+          "description": "Dat, nimewo, inite ak ponktiyasyon respekte nòmal lokal sib la"
+        },
+        "audience": {
+          "label": "Odyans",
+          "description": "Apwopriye pou objektif ak lektè evidan tèks la"
+        }
+      },
+      "severity": {
+        "minor": "Minè",
+        "major": "Gwo"
+      },
+      "assess": "Evalye kalite",
+      "assessing": "Ap evalye…",
+      "assessmentTitle": "Evalyasyon kalite",
+      "criteriaPicker": "Kritè pou evalye",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Modifikasyon pwopoze",
+      "noEditsSuggested": "Pa gen modifikasyon pwopoze — tradiksyon an satisfè kritè ou te chwazi yo.",
+      "acceptEdit": "Aksepte",
+      "rejectEdit": "Rejte",
+      "acceptAll": "Aksepte tout",
+      "rejectAll": "Rejte tout",
+      "editAccepted": "Aksepte",
+      "editRejected": "Rejte",
+      "editUnapplicable": "Pasyaj sa a pa jwenn nan tèks aktyèl la — pa aplike",
+      "editTranslation": "Modifye",
+      "doneEditing": "Fini",
+      "pasteTranslationPlaceholder": "Ekri oswa kole yon tradiksyon pou travay sou li…",
+      "editingBlockedPendingEdits": "Rezoud oswa rejte modifikasyon yo pwopoze anvan",
+      "pendingCount": "{count} ann atant",
+      "closeReview": "Fèmen revizyon kalite",
+      "showReview": "Montre revizyon",
+      "showReviewPending": "Montre revizyon ({count} ann atant)",
+      "undoEdit": "Anile",
+      "clearResolved": "Netwaye sa ki rezoud",
+      "clearResolvedHint": "Retire modifikasyon ki aksepte, rejte, oswa ki pa aplikab sou lis sa a",
+      "autoClearResolved": "Netwaye otomatikman sa ki rezoud yo",
+      "customCriteria": "Kritè pèsonalize",
+      "closeCriteria": "Fèmen kritè pèsonalize",
+      "newCriterion": "Nouvo kritè",
+      "newCriterionName": "Kritè san non",
+      "criterionName": "Non kritè",
+      "criterionRubric": "Ribrik",
+      "criterionRubricPlaceholder": "Dekri sa tradiksyon an dwe fè pou satisfè kritè sa a, egzanp: \"Tradui tout enstriksyon dòz medikal yo nan fòm enperatif, pa janm nan fòm enfinitif...\"",
+      "criterionRubricHint": "Ribrik sa a ap bay AI a egzakteman konsa ansanm ak dimansyon MQM ki deja enkli lè yap evalye yon tradiksyon.",
+      "criteriaEmpty": "Kreye kritè pèsonalize — egzanp stil òganizasyon, preferans tèm kliyan, oswa konvansyon rejyonal — pou evalye tradiksyon pi lwen pase dimansyon MQM yo. Sove sou aparèy sa a e reutilizab.",
+      "deleteCriterion": "Efase kritè",
+      "manageCriteria": "Kritè pèsonalize",
+      "addCriteria": "Ajoute kritè",
+      "noUsableCriteria": "Chwazi omwen yon kritè ki deja egziste oswa bay kritik pèsonalize ou yo yon ribrik.",
+      "criterionRubricTooLong": "Ribrik sa depase pa {over} karaktè. Li voye ak chak evalyasyon, kidonk ou dwe koupe l avan ou ka itilize kritè sa a."
+    },
+    "document": {
+      "emptyTitle": "Dekri dokiman ou vle a",
+      "emptyBody": "Di asistan an sa pou li ekri — yon rapò sitiyasyon, yon lèt pou donatè, nòt reyinyon. Ajoute fichye referans avan si ou vle gen sitasyon ak enfòmasyon ki soti ladan yo.",
+      "generatePlaceholder": "Dekri dokiman pou ekri…",
+      "revisePlaceholder": "Dekri chanjman ou vle fè yo…",
+      "generate": "Jenere",
+      "revise": "Revize",
+      "writing": "Ap ekri…",
+      "export": "Ekspòte",
+      "references": "Referans",
+      "addReference": "Ajoute fichye",
+      "uploading": "Ap telechaje…",
+      "removeReference": "Retire {name}",
+      "referenceChars": "{chars} karaktè tèks ekstrè",
+      "referenceEmpty": "Pa gen tèks ki te ka ekstrè nan {name}",
+      "uploadFailed": "Telechajman echwe",
+      "untitledDocument": "Dokiman san tit",
+      "generatedSummary": "Mwen ekri dokiman an nan espas travay la. Revize li epi di m sa pou m chanje.",
+      "revisedSummary": "Mwen modifye dokiman an nan espas travay la.",
+      "runFailed": "Yon erè fèt: {message}",
+      "uploadBasis": "Kòmanse ak yon dokiman ki deja egziste",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "Grama ak òtograf",
+          "description": "Grama ak òtograf kòrèk; yon sèl varyete anglè (US oswa UK) ase — melanje se erè"
+        },
+        "consistency": {
+          "label": "Konsistans",
+          "description": "Terminoloji, non, majiskil ak fòma itilize menm jan tout kote"
+        },
+        "clarity": {
+          "label": "Klarte",
+          "description": "Fraz dirèk, san anbigwite; estrikti ki ede lektè a"
+        },
+        "sensitivity": {
+          "label": "Sansibilite",
+          "description": "Mo enklizif, sansib pou konfli ak imanitè (chèk opsyonèl)"
+        },
+        "specAdherence": {
+          "label": "Respè ak spec",
+          "description": "Respekte spec dokiman an ki kole: seksyon obligatwa yo prezan, nan lòd, epi swiv direktiv yo"
+        },
+        "toneAdherence": {
+          "label": "Respè ak ton",
+          "description": "Respekte règleman vwa ak ton ki kole a"
+        }
+      },
+      "severity": {
+        "minor": "Minè",
+        "major": "Majè"
+      },
+      "assess": "Evalye kalite",
+      "assessing": "Ap evalye…",
+      "assessmentTitle": "Revizyon kalite",
+      "criteriaPicker": "Kritè pou evalye",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Modifikasyon pwopoze",
+      "noEditsSuggested": "Pa gen modifyasyon pwopoze — dokiman an satisfè kritè yo chwazi.",
+      "acceptEdit": "Aksepte",
+      "rejectEdit": "Rejte",
+      "acceptAll": "Aksepte tout",
+      "rejectAll": "Rejte tout",
+      "editAccepted": "Aksepte",
+      "editRejected": "Rejte",
+      "editUnapplicable": "Pa ka jwenn pasaj sa a nan tèks aktyèl la — pa aplike",
+      "editingBlockedPendingEdits": "Rezoud oswa rejte modifyasyon ki an atant yo anvan",
+      "pendingCount": "{count} an atant",
+      "closeReview": "Fèmen revizyon kalite",
+      "showReview": "Montre revizyon",
+      "showReviewPending": "Montre revizyon ({count} an atant)",
+      "railAssessRequest": "Evalye kalite dokiman an selon kritè yo chwazi yo.",
+      "railAssessDone": "Evalyasyon fini: nòt yo disponib nan workspace la ak {count} modifyasyon pou revize.",
+      "spec": "Spec dokiman",
+      "noSpec": "Pa gen spec",
+      "manageSpecs": "Specs",
+      "specs": "Specs dokiman",
+      "closeSpecs": "Fèmen specs",
+      "specsEmpty": "Kreye yon spec pou ekri dokiman nan yon fòma fikse — seksyon obligatwa, lòd, ak direktiv pa seksyon (egzanp: modèl SitRep). Specs yo sove sou aparèy sa a epi ou ka reitilize yo.",
+      "newSpec": "Nouvo spec",
+      "newSpecName": "Spec san non",
+      "specName": "Non spec",
+      "specDescription": "Deskripsyon (opsyonèl)",
+      "deleteSpec": "Efase spec",
+      "sectionHeading": "Tit seksyon",
+      "sectionGuidance": "Direktiv (opsyonèl)",
+      "sectionRequired": "Obligatwa",
+      "addSection": "Ajoute seksyon",
+      "removeSection": "Retire seksyon",
+      "generalGuidance": "Direktiv jeneral (opsyonèl)",
+      "tone": "Ton",
+      "noTone": "Pa gen ton",
+      "customCriteria": "Kritè pèsonalize",
+      "manageCriteria": "Kritè pèsonalize",
+      "closeCriteria": "Fèmen kritè pèsonalize",
+      "criteriaEmpty": "Kreye kritè pèsonalize — egzanp konsidere mak oswa lang òganizasyon an — pou evalye dokiman yo epi oryante revizyon yo. Sove sou aparèy sa epi reutilizab.",
+      "newCriterion": "Nouvo kritè",
+      "newCriterionName": "Kritè san tit",
+      "criterionName": "Non kritè a",
+      "criterionRubric": "Ribrik",
+      "criterionRubricPlaceholder": "Dekri sa dokiman an dwe fè pou satisfè kritè sa a, egzanp \"Pa janm itilize sipèlatif sou travay pa nou; toujou rele benefisyè yo 'moun n ap ede'...\"",
+      "criterionRubricHint": "Ribrik sa a bay AI a egzakteman jan li ye pandan evalyasyon ak revizyon yo.",
+      "deleteCriterion": "Efase kritè",
+      "profileTitle": "Pwofil dokiman",
+      "profileDocType": "Kalite",
+      "profileLanguage": "Lang",
+      "profileAudience": "Odyans",
+      "profilePurpose": "Objektif",
+      "profileRegister": "Nivo langaj",
+      "profileTone": "Ton",
+      "profileConventions": "Konvansyon",
+      "emptyHint": "Kòmanse tape anba a, dekri sa pou ekri nan bwat anba a, oswa kòmanse ak yon fichye.",
+      "addSpec": "Ajoute spesifikasyon",
+      "addCriteria": "Ajoute kritè",
+      "scopeFullDocument": "Sijè: tout dokiman an",
+      "scopeSelection": "Sijè: seleksyon — “{preview}…” ({count} mo)",
+      "clearSelection": "Retire seleksyon (travay ak tout dokiman an)",
+      "reviseSelectionPlaceholder": "Dekri chanjman pou seleksyon an...",
+      "revisedSelectionSummary": "Mwen modifye pasaj seleksyone a nan atelye travay la.",
+      "assessedSelection": "Seleksyon",
+      "undoEdit": "Anile",
+      "clearResolved": "Netwaye sa ki rezoud",
+      "clearResolvedHint": "Retire modifikasyon ki aksepte, rejte, oswa ki pa aplikab sou lis sa a",
+      "autoClearResolved": "Netwaye otomatikman sa ki rezoud yo",
+      "import": "Enpòte",
+      "importReplaceTitle": "Ranplase dokiman an?",
+      "importReplaceBody": "Lè w enpòte {name}, w ap ranplase dokiman aktyèl la. Referans ou yo, espesifikasyon ak ton ap konsève.",
+      "importReplaceConfirm": "Ranplase",
+      "editorMode": "Mòd editè",
+      "editorModeRich": "Tekst rich",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Rezoud modifikasyon yo sijere avan w chanje mòd editè a.",
+      "suggestChanges": "Sijere chanjman",
+      "suggestChangesHint": "Revize modifikasyon an kòm sijesyon endividyèl olye ou reskri dokiman an touswit.",
+      "suggestChangesSelectionNote": "Revizyon sou yon seleksyon aplike dirèkteman — seleksyon an se deja domèn ou chwazi.",
+      "suggestedSummary": "{count} {count, plural, one {chanjman} other {chanjman}} sijere pou revizyon.",
+      "revisionSuggestionSummary": "Demann revizyon ou pwodui {count} {count, plural, one {sijesyon chanjman} other {sijesyon chanjman}}.",
+      "revisionCriterionLabel": "Revizyon mande",
+      "fallbackSelection": "Aplike dirèkteman — revizyon sou yon seleksyon pa sijere.",
+      "fallbackLargeRewrite": "Aplike dirèkteman — reskri a chanje twòp nan dokiman an pou ka revize kòm sijesyon separe.",
+      "fallbackReorder": "Aplike dirèkteman — seksyon yo te deplase, sa pa ka divize an sijesyon revizyon.",
+      "fallbackUnanchorable": "Aplike dirèkteman — chanjman yo pa te kapab matche ak pasaj espesifik.",
+      "fallbackNoChanges": "Pa te gen okenn chanjman ki nesesè.",
+      "criterionRubricTooLong": "Ribrik sa depase pa {over} karaktè. Li voye ak chak evalyasyon, kidonk ou dwe koupe l avan ou ka itilize kritè sa a."
+    },
+    "data": {
+      "emptyTitle": "Enpòte done pou analize",
+      "emptyBody": "Mete yon fichye CSV, Excel oswa JSON, oswa kole ranje dirèkteman. Lè tab ou chaje, ou ka klase li, retire plis ranje soti nan dokiman, epi transfòme li ak enstriksyon an lang klè.",
+      "importFile": "Enpòte fichye",
+      "importing": "Ap enpòte...",
+      "pasteData": "Kole done",
+      "pastePlaceholder": "Kole CSV, TSV, oswa JSON isit la...",
+      "import": "Enpòte",
+      "addFromSource": "Ajoute soti nan sous",
+      "extractHint": "Kole tèks oswa chwazi yon dokiman; ranje ki matche ak kolòn aktyèl yo ap sòti ladan li. Valè enkoni ap rete vid — pa gen anyen ki envante.",
+      "extractPlaceholder": "Kole tèks ki pa òganize ki gen done...",
+      "extractRows": "Ekstrè ranje",
+      "extractFromFile": "Soti nan fichye...",
+      "extracting": "Ap ekstrè...",
+      "pastedSource": "Tèks kole",
+      "transform": "Transfòme",
+      "transforming": "Ap transfòme...",
+      "transformPlaceholder": "Dekri yon transfòmasyon, egzanp \"ajoute yon kolòn ak ka pou chak 1000 moun\"...",
+      "transformCapHint": "Transfòmasyon limite a {max} ranje. Efase oswa filtre ranje yo anvan pou tab pi gwo.",
+      "undo": "Anile",
+      "deleteSelected": "Efase {count}",
+      "deletedRows": "{count} ranje efase",
+      "selectAllRows": "Chwazi tout ranje yo",
+      "selectRow": "Chwazi ranje {row}",
+      "rowCount": "{count} ranje",
+      "rowCapExceeded": "Sa ap fè {count} ranje; tab la limite a {max}. Separe done yo oswa ekspòte pito.",
+      "railExtractRequest": "Ekstrè liy ki koresponn ak estrikti tab la soti nan: {source}",
+      "railExtractDone": "Ajoute {count} liy ekstrè nan tab la.",
+      "railTransformDone": "Modifye tab la.",
+      "columnProfileFor": "Estatistik kolòn pou {column}",
+      "profileMissing": "Manke",
+      "profileDistinct": "Distenk",
+      "profileRange": "Wanj",
+      "profileMean": "Mwayèn",
+      "profileMedian": "Medyàn",
+      "profileTopValues": "Pi gwo valè",
+      "filterColumnFor": "Filtre {column}",
+      "filterContains": "Gen ladan…",
+      "filterMin": "Min",
+      "filterMax": "Max",
+      "filterClear": "Efase",
+      "clearFilters": "Efase tout filtè",
+      "showingRows": "Montre {shown} sou {total} liy",
+      "scopeLabel": "Sèvi ak anvlòp travay la",
+      "scopeTable": "Tout ({count})",
+      "scopeFiltered": "Filtre ({count})",
+      "scopeSelection": "Chwazi ({count})",
+      "scopedInstruction": "{instruction} (sou {count} liy seleksyone)",
+      "assess": "Evalye kalite",
+      "assessing": "Ap evalye…",
+      "criteria": {
+        "validity": {
+          "label": "Validite",
+          "description": "Valè yo respekte tip ak fòma kolòn yo dwe genyen"
+        },
+        "consistency": {
+          "label": "Konsistans",
+          "description": "Menm valè ekri menm jan tout kote (pa gen variant 'M' / 'Male', inite melanje, oswa chanjman majiskil/miniskil)"
+        },
+        "duplicates": {
+          "label": "Double",
+          "description": "Liy ki anrejistre menm sib oswa evènman de fwa"
+        },
+        "plausibility": {
+          "label": "Plauzibilite",
+          "description": "Eksepsyon oswa valè enposib nan kontèks la"
+        }
+      },
+      "assessmentTitle": "Revizyon kalite done",
+      "pendingCount": "{count} an atant",
+      "closeReview": "Fèmen revizyon kalite",
+      "suggestedEdits": "Rekòmandasyon koreksyon",
+      "noEditsSuggested": "Pa gen koreksyon rekòmande — done yo satisfè kritè yo chwazi.",
+      "acceptAll": "Aksepte tout",
+      "rejectAll": "Rejte tout",
+      "acceptEdit": "Aksepte",
+      "rejectEdit": "Rejte",
+      "editAccepted": "Aplike",
+      "editRejected": "Rejete",
+      "editUnapplicable": "Selil la te chanje depi evalyasyon — pa aplike",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "Kritè pou evalye",
+      "severity": {
+        "minor": "Minè",
+        "major": "Majè"
+      },
+      "editLocation": "liy {row} · {column}",
+      "editLocationRow": "liy {row} (efase)",
+      "showReview": "Montre revizyon",
+      "showReviewPending": "Montre revizyon ({count} anreta)",
+      "assessedFiltered": "Ranje filtre",
+      "assessedSelection": "Ranje chwazi",
+      "assessedSample": "echantiyon {shown} sou {total}",
+      "railAssessRequest": "Evalye kalite tablo a ({count} ranje) dapre kritè chwazi yo.",
+      "railAssessDone": "Pwopoze {count} korèksyon sou kalite done yo — revize yo nan espas travay la.",
+      "insights": "Analiz",
+      "chartKind": "Kalite graf",
+      "chartBar": "Bar (gwoupe pa)",
+      "chartHistogram": "Istwa graf",
+      "chartLine": "Liy (sou tan)",
+      "groupByColumn": "Gwoupe pa kolòn",
+      "dateColumn": "Kolòn dat",
+      "valueColumn": "Kolòn valè",
+      "aggFn": "Agregasyon",
+      "aggCount": "Konte",
+      "aggSum": "Som",
+      "aggMean": "Mwayèn",
+      "chartTruncated": "Montre {max} gwoup ki an tèt yo",
+      "chartNoData": "Pa gen done ka montre an graf nan ranje aktyèl yo.",
+      "chartBarAria": "Graf bar gwoupe pa {column}",
+      "chartHistogramAria": "Istwa graf {column}",
+      "chartLineAria": "Graf liy pou {column} sou tan",
+      "editStructure": "Estrikti",
+      "defineStructure": "Defini estrikti",
+      "schemaHint": "Defini chan estrikti done ou. Chans obligatwa yo detèmine règleman sou done ki manke pandan enpòtasyon; chanje tip chan ap konvèti valè ki egziste yo (selil ki pa kapab konvèti ap vin vid).",
+      "schemaFieldName": "Non chan",
+      "schemaFieldType": "Tip chan",
+      "schemaRequired": "Obligatwa",
+      "schemaAddField": "Ajoute chan",
+      "schemaDeleteField": "Efase chan {field}",
+      "schemaApply": "Aplike estrikti",
+      "schemaCancel": "Anile",
+      "schemaEdited": "Estrikti tablo a modifye",
+      "schemaCellsConverted": "{count} selil pa t ka konvèti nan nouvo tip la, yo kounye a vid.",
+      "missingFieldPolicy": "Done ki manke",
+      "policyStrict": "Estrik — rejte ranje ki pa konplè",
+      "policyFlag": "Make — enpòte epi make",
+      "policyLenient": "Fleksib — enpòte san avètisman",
+      "droppedIncompleteRows": "Jete {count} ranje ki pa gen chan obligatwa yo: {fields}",
+      "dismiss": "Fèmen",
+      "requiredColumn": "Chan obligatwa",
+      "flagMissingRequired": "Chan obligatwa a vid",
+      "flagPendingEdit": "Gen yon chanjman pwopoze pou selil sa a — gade revizyon kalite a",
+      "fromPhoto": "Soti nan foto",
+      "fromPhotoHint": "Pran foto yon fòm oswa tablo sou papye — sa ladann ap tounen done estriktire ou ka verifye ak foto a",
+      "readingPhoto": "Ap li foto...",
+      "photoBatchName": "{count} foto",
+      "railPhotoRequest": "Ekstrè done estriktire ki soti nan {count} foto: {name}",
+      "railPhotoDone": "Ajoute {count} dosye ki sòti nan foto yo. Tcheke yo ak foto a nan espas travay la.",
+      "sourcesLabel": "Sous",
+      "openPhotoQc": "Tcheke done yo ak {name}",
+      "qcRowsFromPhoto": "{count} ranje",
+      "qcClose": "Fèmen verifikasyon foto a",
+      "qcZoomIn": "Rale antre",
+      "qcZoomOut": "Rale soti",
+      "qcPrevPhoto": "Foto anvan",
+      "qcNextPhoto": "Foto apre",
+      "qcImageLoading": "Chajman foto…",
+      "qcImageFailed": "Foto a pa t ka chaje.",
+      "qcImageAlt": "Foto sous: {name}",
+      "qcHint": "Tabl la montre sèlman ranje foto sa — konpare chak valè ak foto a epi modifye oswa efase ranje ki pa matche.",
+      "sourceFilterChip": "Ranje ki soti nan {name}",
+      "clearSourceFilter": "Montre tout ranje yo ankò",
+      "viewAsRecord": "Fòm",
+      "viewAsTable": "Tabl",
+      "recordEmpty": "Pa gen dosye ankò.",
+      "recordOf": "Dosye {index} sou {count}",
+      "recordPrev": "Dosye anvan",
+      "recordNext": "Dosye apre",
+      "recordBooleanUnset": "(vid)",
+      "flagsChip": "{count} avètisman",
+      "flagsChipOpenReview": "Louvri revizyon kalite a",
+      "flagsChipMissingOnly": "Champs obligatwa yo vid — ranpli yo oswa ajiste estrikti a",
+      "autoCheck": "Vérifikasyon otomatik nouvo done",
+      "autoCheckHint": "Apre ou fin ekstrè done soti nan foto oswa dokiman, verifye otomatikman kalite nouvo ranje yo",
+      "checkingNewRows": "Ap verifye nouvo ranje yo pou pwoblèm kalite…",
+      "ingestCheckFailed": "Vérifikasyon kalite otomatik echwe ({message}) — ou ka lanse li manyèlman ak Evalye kalite.",
+      "assessedIngest": "Nouvo ranje ki ajoute",
+      "transpose": "Transpoze",
+      "transposeAxisColumn": "Non",
+      "transposeSuggestion": "Tab sa a sanble li transpoze: liy yo se atribi epi kolòn yo se atik yo. Vle chanje l pou chak atik vin tounen yon liy epi chak atribi vin yon kolòn ak tip?",
+      "transposedTable": "Liy ak kolòn transpoze",
+      "columns": "Kolòn",
+      "columnsHidden": "Kolòn ({count} kache)",
+      "showAllColumns": "Montre tout",
+      "chartScatter": "Dispèsyon (x kont y)",
+      "chartPivot": "Tab pivote",
+      "xColumn": "Kolòn X",
+      "yColumn": "Kolòn Y",
+      "splitByColumn": "Separe pa",
+      "splitNone": "Pa gen separasyon",
+      "pivotValueColumns": "Kolòn valè",
+      "aggMin": "Pi piti",
+      "aggMax": "Pi gwo",
+      "aggMedian": "Medyàn",
+      "chartSeriesTruncated": "Ap montre {max} seri ki pi wo yo",
+      "chartPointsTruncated": "Ap montre {max} pwen echantiyone",
+      "chartScatterAria": "Graf dispèsyon {x} kont {y}",
+      "pivotTableAria": "Tab pivote gwoupe pa {column}",
+      "schemaFormula": "Fòmil",
+      "schemaFormulaPlaceholder": "egzanp: [Ka] / [Popilasyon] * 1000",
+      "schemaFormulaHint": "Chan kalkile: refere lòt chan kòm [Non]; sipòte + - * / %, parantèz, epi round, abs, min, max. Valè yo ap mete ajou otomatikman e ou pa ka modifye dirèkteman.",
+      "schemaFormulaSyntaxError": "Fòmil pa valab",
+      "schemaFormulaUnknownRef": "Chan enkoni: {ref}",
+      "schemaFormulaArityError": "Move kantite agiman pou {fn}",
+      "schemaFormulaCycleError": "Referans sikilè ant fòmil yo",
+      "derivedColumnTitle": "Kalkile: {formula}",
+      "derivedFrom": "Kalkile soti nan {formula}",
+      "takePhoto": "Pran foto",
+      "takePhotoHint": "Sèvi ak kamera ou pou w pran foto yon fòm oswa tab — sa l genyen ap vin done estriktire ou ka verifye ak foto a."
+    },
+    "map": {
+      "emptyTitle": "Mete done ou sou yon kat",
+      "emptyBody": "Kole yon sitrep, lis liy, nòt reyinyon, oswa nenpòt tèks ki site kote — oswa telechaje yon dokiman. Sistèm nan idantifye epi plase kote yo sou kat la ak yon nivo konfyans; ou ka ekspòte yo pou ArcGIS oswa lòt zouti GIS.",
+      "inputPlaceholder": "Kole tèks ki site kote yo…",
+      "uploadFile": "Telechaje yon fichye",
+      "pastedSource": "Tèks kole",
+      "mapIt": "Plase sou kat",
+      "finding": "Ap chèche kote yo…",
+      "featureCount": "{count} kote",
+      "featureCapExceeded": "Kat la limite ak {max} kote.",
+      "noneFound": "Pa jwenn okenn kote nan materyèl sa a.",
+      "lowConfidenceNotice": "{count} kote gen kowòdone ki pa twò asire — tcheke yo anvan ou fè konfyans kat la.",
+      "tilesOffline": "Kat pa disponib — lis kote yo ap fonksyone toujou.",
+      "disclaimer": "Kowòdone yo se prediksyon AI sòti nan konesans modèl la, se pa yon sèvis geocoding — verifye avan ou itilize pou operasyon. Tablèt kat yo chaje soti nan yon sèvè tablèt; done ou yo rete sou aparèy sa a.",
+      "flyTo": "Montre {name} sou kat la",
+      "removeFeature": "Retire {name}",
+      "expandFeature": "Montre tout detay pou {name}",
+      "collapseFeature": "Rale detay pou {name}",
+      "detailsParent": "Pati de {parent}",
+      "railRequest": "Plase kote sa yo sou kat: {source}",
+      "railSearchRequest": "Chèche sou entènèt epi mete kote yo sou kat pou: {query}",
+      "railDone": "{count} kote make sou kat la. Revize sa ki gen konfyans fèb nan lis la.",
+      "searchToggle": "Mòd rechèch sou entènèt",
+      "searchToggleHint": "Fè rechèch sou entènèt olye ke kole tèks; rezilta verifye yo ap make sou kat la.",
+      "searchPlaceholder": "Rechèch sou entènèt, egzanp \"epidemi kolera Afrik Lès 2026\"…",
+      "searchAndMap": "Rechèch & make",
+      "searching": "Ap fè rechèch…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "Koneksyon: {kind}",
+        "unresolved": "{count} koneksyon pale de kote ki pa sou kat la e ki sote."
+      },
+      "confidence": {
+        "high": "Wo",
+        "medium": "Mwayen",
+        "low": "Ba"
+      },
+      "prominence": {
+        "primary": "Kote prensipal",
+        "secondary": "Kote sipò",
+        "mention": "Mansyon pasajè"
+      },
+      "prominenceMentionHint": "Materyèl la faites sèlman referans rapid ak kote sa a — li parèt pi piti sou kat la e yo pa mete l nan ekspozisyon inisyal la.",
+      "dates": {
+        "since": "depwi {date}",
+        "range": "{start} – {end}",
+        "ongoing": "Ap kontinye"
+      },
+      "filters": {
+        "label": "Filtre pa kategori",
+        "other": "Lòt",
+        "clear": "Klè",
+        "showing": "{shown} nan {total} kote",
+        "noneMatch": "Okenn kote pa koresponn ak filtè yo."
+      },
+      "dateFilter": {
+        "label": "Dat",
+        "from": "Soti",
+        "to": "Jiska",
+        "fromAria": "Montre sèlman evènman ki soti dat sa a",
+        "toAria": "Montre sèlman evènman jiska dat sa a",
+        "clear": "Efase dat yo",
+        "eraChip": "Montre sèlman evènman nan {label}"
+      },
+      "timeline": {
+        "toggle": "Kouran tan",
+        "play": "Jwe kouran tan",
+        "pause": "Pòz kouran tan",
+        "eras": "Epòk sou liy tan",
+        "jumpTo": "Ale dirèkteman nan {label}",
+        "slider": "Pozisyon sou liy tan",
+        "showUndated": "Montre kote san dat",
+        "activeCount": "{count} aktif",
+        "jump": {
+          "start": "Kòmanse",
+          "yearsLater": "{count, plural, one {1 ane apre} other {# ane apre}}",
+          "monthsLater": "{count, plural, one {1 mwa apre} other {# mwa apre}}",
+          "daysLater": "{count, plural, one {1 jou apre} other {# jou apre}}",
+          "appears": "{count, plural, one {1 aparisyon} other {# aparisyon}}",
+          "ends": "{count, plural, one {1 fen} other {# fen}}",
+          "progress": "Dat {index} sou {total}"
+        },
+        "precision": {
+          "minute": "Jiskout minit la",
+          "hour": "Jiskout lè a",
+          "day": "Jiskout jou a",
+          "month": "Datasyon nan nivo mwa",
+          "year": "Datasyon nan nivo ane",
+          "mixed": "(melanje)"
+        },
+        "pacing": {
+          "toggle": "Vitès lekti kat la",
+          "cardDuration": "Montre chak kote pandan",
+          "seconds": "{seconds}s",
+          "maxCards": "Kote montre pa dat",
+          "hint": "Dat ki gen plis evènman ap rete pi lontan otomatikman."
+        }
+      },
+      "granularity": {
+        "site": "Sitou",
+        "city": "Vil/bourad",
+        "district": "Depatman",
+        "region": "Rejyon",
+        "country": "Peyi"
+      },
+      "granularityAreaHint": "Yon zòn, parèt kòm yon sèk apwoksimatif otou sant li — pa yon kote oswa limit egzak.",
+      "containerHint": "Gen lòt kote make anndan l, kidonk li parèt sèlman an kontou.",
+      "legend": {
+        "toggle": "Lejand",
+        "title": "Kijan pou li kat la",
+        "color": "Koulè: konfyans sou kowòdone (ble wo, zoranj mwayen, wouj ba)",
+        "size": "Gwosè pwen: kijan kote a enpòtan pou materyèl la",
+        "area": "Sèk ak liy kout: zòn apwoksimatif yon distri, rejyon oswa peyi",
+        "container": "Kontou pal: yon zòn kote chak bagay andedan li make separeman",
+        "precisionHalo": "Bagon tire mou (lè gen mouvman tan): evènman an dat li sèlman pou yon mwa oswa yon ane, donk lè egzak la pa sèten"
+      },
+      "sourceLabel": "Sous : {name}",
+      "fetchAndMap": "Chache & tabli kat la",
+      "fetchingPage": "Y ap chache paj la...",
+      "railUrlRequest": "Chache epi tabli kote yo soti nan : {title} ({url})"
+    },
+    "shell": {
+      "showConversation": "Montre konvèsasyon",
+      "hideConversation": "Kache konvèsasyon",
+      "workspaceTab": "Espace travay",
+      "conversationTab": "Konvèsasyon",
+      "paneTabsLabel": "Panèl workflow yo",
+      "railEmpty": "Mesaj ak pwogrè asistan an ap parèt isit la.",
+      "railInputPlaceholder": "Voye mesaj bay asistan an…",
+      "assistantThinking": "Reflechi…",
+      "sendMessage": "Voye mesaj",
+      "stopGenerating": "Sispann jenerasyon",
+      "loadingWorkspace": "Chaje espace travay…",
+      "unknownType": "Konvèsasyon sa ap itilize yon workflow vèsyon sa a pa rekonèt. Istwa konvèsasyon an parèt anba a.",
+      "untitled": "Nouvo Konvèsasyon",
+      "toggleMenu": "Afiche/oswa kache meni an",
+      "model": "Modèl pou workflow sa a"
+    },
+    "tabs": {
+      "label": "Mòd konvèsasyon",
+      "chat": "Chat",
+      "chatDescription": "Yon konvèsasyon estanda ak asistan an"
+    },
+    "discard": {
+      "title": "Efase bouyon sa a?",
+      "body": "Chanje pou {target} ap efase travay ou te kòmanse nan {current}.",
+      "confirm": "Efase"
+    }
+  },
+  "connectors": {
+    "title": "Konektè",
+    "description": "Konekte zouti ekstèn atravè Model Context Protocol (MCP). Zouti konekte yo disponib pou modèl yo pandan chat, epi chak itilizasyon zouti ap fèt sèlman apre ou bay otorizasyon.",
+    "localOnlyNote": "Ou konekte dirèkteman ak chak founisè. Kle aksè yo ankripte epi sèlman sove sou aparèy sa a, epi yo pase atravè sèvè aplikasyon an pou chak demann — yo pa janm sove oubyen anrejistre la.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "Chèche nan repozitwa, li ak kreye pwoblèm ak demann chanjman."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "Chèche, kreye, epi mete ajou travay ak pwojè yo."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Fè rechèch sou sous done, kaye travay ak metrik Pulse ki pibliye."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Chèche epi mete ajou dosye atravè objè Salesforce ou yo."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Ekri, planifye, epi pibliye pòs sou rezo sosyal yo."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Revize epi reponn konvèsasyon bwat resepsyon sou rezo sosyal yo."
+      }
+    },
+    "connect": "Konekte",
+    "connected": "Konekte",
+    "tokenEndsIn": "fini ak ••••{last4}",
+    "disconnect": "Dekonekte",
+    "toolCount": "{count, plural, =1 {1 zouti disponib} other {# zouti disponib}}",
+    "patLabel": "Token aksè pèsonèl",
+    "createTokenLink": "Kreye yon token",
+    "tokenScopeHint": "Itilize yon token limite sèlman ak aksè zouti sa yo bezwen.",
+    "validating": "Ap verifye koneksyon…",
+    "validationFailed": "Pa ka konekte. Tcheke adrès la epi eseye ankò.",
+    "authFailed": "Sèvè a rejte token lan. Tcheke li epi eseye ankò.",
+    "tokenRequired": "Yo mande yon token",
+    "enableServer": "Disponib nan chat",
+    "arbitraryTitle": "Lòt sèvè MCP",
+    "arbitraryToggle": "Pèmèt lòt sèvè MCP",
+    "arbitraryWarning": "Nenpòt moun ki ap kouri yon sèvè MCP ka wè mesaj ki voye bay zouti li yo. Konekte sèlman ak sèvè ou fè konfyans. Chak apèl zouti ap toujou mande apwobasyon ou.",
+    "addServer": "Ajoute sèvè MCP",
+    "editServer": "Modifye sèvè MCP",
+    "serverName": "Non",
+    "serverUrl": "URL sèvè",
+    "nameRequired": "Non obligatwa",
+    "urlRequired": "URL obligatwa",
+    "invalidUrl": "Antre yon adrès piblik https://",
+    "namePlaceholder": "Sèvè MCP pa mwen",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "Token aksè (opsyonèl)",
+    "keepTokenPlaceholder": "Kite vid pou kenbe token aktyèl la",
+    "disconnectedToast": "{name} dekonekte",
+    "save": "Sove",
+    "connectWithProvider": "Konekte ak {name}",
+    "useTokenInstead": "Itilize yon token aksè olye",
+    "oauthWaiting": "Ap tann otorizasyon…",
+    "oauthFailed": "Koneksyon echwe. Eseye ankò.",
+    "oauthDenied": "Aksè te refize pa founisè a.",
+    "oauthTimeout": "Koneksyon an ekspire. Eseye ankò.",
+    "oauthCancelled": "Koneksyon an anile.",
+    "oauthUnavailable": "Koneksyon pa disponib pou konektè sa a sou deplwaman sa a. Itilize yon token aksè olye, oswa mande administratè ou a pou configured aplikasyon OAuth la.",
+    "ownAppToggle": "Itilize aplikasyon OAuth pa w lan",
+    "ownAppHint": "Enskri yon aplikasyon OAuth nan kont {name} ou (òganizasyon, workspace, oswa antite ou) ak URL retou ki anba a, epi kole aksè li yo isit la. Kite sa fèmen pou itilize aplikasyon entegre a.",
+    "ownAppCustomHint": "Ou ka bay aksè pa w aplikasyon OAuth anba a; kite yo vid pou enskripsyon otomatik ak sèvè a.",
+    "ownAppInUse": "Konekte ak aplikasyon OAuth ou.",
+    "clientIdLabel": "ID Kliyan",
+    "clientSecretLabel": "Sekrè Kliyan (si aplikasyon ou genyen)",
+    "redirectUriLabel": "URL retou / reyalave pou enskri",
+    "reconnect": "Rekonekte",
+    "needsReauth": "Bezwen rekonekte",
+    "disconnectOauthNote": "Dekonekte ap retire aksè sèlman sou aparèy sa a. Pou anile aksè totalman, jere aplikasyon otorize nan kont {name} ou.",
+    "authModeLabel": "Otentifikasyon",
+    "authModeNone": "Pa genyen",
+    "authModeBearer": "Token aksè",
+    "authModeOauth": "Konekte ak founisè a (OAuth)",
+    "oauthCustomHint": "Ou pral konekte ak founisè sèvè a nan yon fenèt pop-up apre ou fin sove.",
+    "saveAndSignIn": "Sove & konekte",
+    "oauthCallback": {
+      "title": "Otorizasyon fini",
+      "missingState": "Pa gen anyen pou otorize",
+      "close": "Ou ka fèmen fenèt sa a epi tounen sou aplikasyon an.",
+      "closeButton": "Fèmen fenèt la"
+    },
+    "oauthNoAppConfigured": "Koneksyon ak {name} pa configuré sou deplwaman sa a. Konekte pa enskri pwòp aplikasyon OAuth ou.",
+    "adminConnectorsTitle": "Soti nan òganizasyon ou",
+    "adminConnectorsDescription": "Konektè administratè òganizasyon ou mete. Kisa ou wè depann de aksè ou.",
+    "managedByOrg": "Jere pa òganizasyon ou",
+    "connectorOauthNotConfigured": "Koneksyon pa fini configuré pou konektè sa a. Kontakte administratè ou.",
+    "yourConnectorsTitle": "Konektè ou yo",
+    "addTitle": "Ajoute yon konektè",
+    "addDescription": "Chwazi yon zouti pou konekte. W ap konfigire aksè apre ou fin chwazi.",
+    "add": "Ajoute",
+    "filterLabel": "Filtre konektè yo",
+    "filterPlaceholder": "Chèche konektè",
+    "noMatches": "Pa gen konektè ki koresponn ak “{query}”."
+  },
+  "modelSources": {
+    "connectButtonShort": "Konekte yon sous modèl",
+    "addAnother": "Ajoute yon lòt sous modèl",
+    "edit": "Modifye",
+    "disconnect": "Dekonekte {name}",
+    "disconnectedToast": "{name} dekonekte",
+    "modelCountLabel": "{count} modèl",
+    "loadingModels": "Chaje modèl yo...",
+    "noModelsAvailable": "Pa gen modèl ki disponib nan sous sa a",
+    "sourceUnreachable": "Pa ka jwenn aksè ak sous sa. Petèt aksè ou chanje, oswa sèvis la pa disponib pou kounye a.",
+    "retry": "Repran",
+    "connectFoundryAccount": "Konekte yon kont Microsoft Azure Foundry",
+    "connectFoundryDescription": "Dekouvri deplwaman modèl nan yon kont Azure Foundry ou gen aksè ladanl. Pwòp pèmisyon Azure ou otorize chak demann — restriksyon sou modèl aplikasyon an pa aplike isit la.",
+    "selectModelsDescription": "Chwazi ki deplwaman modèl sou kont sa a ki ap parèt nan selektè modèl ou.",
+    "editConnection": "Modifye koneksyon",
+    "nameLabel": "Non",
+    "namePlaceholder": "egzanp: Sandbox ekip mwen",
+    "nameRequired": "Non sous obligatwa",
+    "foundryAccountLabel": "Kont Foundry",
+    "enterManually": "Antre manyèlman",
+    "browseResources": "Navige resous yo",
+    "subscriptionIdLabel": "ID abònman",
+    "resourceGroupLabel": "Gwoup resous",
+    "accountNameLabel": "Non kont",
+    "subscriptionRequired": "Chwazi yon abònman",
+    "accountRequired": "Chwazi yon kont Foundry",
+    "accountSelectionRequired": "Chwazi yon kont nan lis la.",
+    "selectAllRequired": "Chwazi yon abònman, gwoup resous, ak kont.",
+    "connectionFailed": "Pa ka rive jwenn kont sa a. Tcheke si detay yo kòrèk epi si ou gen aksè.",
+    "duplicateSource": "Kont sa a deja konekte kòm \"{name}\".",
+    "connectionSuccessModels": "Konekte — {count} deplwaman modèl jwenn",
+    "connectionSuccessEmpty": "Konekte, men pa gen okenn deplwaman modèl sou kont sa a.",
+    "checkingConnection": "Ap verifye koneksyon...",
+    "next": "Swiv",
+    "back": "Retounen",
+    "cancel": "Anile",
+    "connect": "Konekte",
+    "save": "Sove",
+    "scanningResources": "Y ap eskane abònman Azure ou yo...",
+    "discoveryPartialWarning": "{count, plural, one {# abònman} other {# abònman}} pa t ka eskane. Sèvi ak antre manyèl si kont ou pa parèt.",
+    "discoveryTruncatedWarning": "Te gen twòp resous pou eskane tout. Sèvi ak antre manyèl si kont ou pa parèt.",
+    "noAccountsDiscovered": "Pa jwenn okenn kont Foundry nan abònman ou yo. Sèvi ak antre manyèl si ou konnen chimen an.",
+    "retryScan": "Rekòmanse eskane",
+    "searchAccountsPlaceholder": "Chèche kont...",
+    "modelsSelectedCount": "{selected} sou {total} modèl chwazi",
+    "selectAll": "Chwazi tout",
+    "deselectAll": "Deklike tout",
+    "autoAddLabel": "Ajoute nouvo modèl otomatikman",
+    "autoAddDescription": "Depwaman modèl yo ajoute pita nan kont sa a ap parèt otomatikman. Modèl ki pa chwazi yo ap rete eskli."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Ti enpak",
+      "moderate": "Enpak modere",
+      "high": "Gwo enpak"
+    },
+    "tierTooltip": "Enpak anèji relatif pa demann, estime dapre gwosè modèl la. Se estimasyon ki baze sou mwayèn pibliye ak sipozisyon v{version} — pa mezi reyèl.",
+    "typicalRequest": "~{grams} g CO₂e pa demann tipik",
+    "typicalRequestTooltip": "Estimasyon apwoksimatif pou chak demann tipik (apre 1,000 siy + 500 siy repons), sòti nan mwayèn pibliye ak sipozisyon v{version}. Reyèl enpak depann de longè konvèsasyon, paramèt, ak rejyon kote l ap òspite.",
+    "activities": {
+      "netflixHd": "Netflix HD an difizyon",
+      "zoomCall": "Apèl Zoom (kamera limen)",
+      "webBrowsing": "Navige sou entènèt",
+      "spotifyAudio": "Spotify odyo"
+    },
+    "equivalents": {
+      "title": "≈ menm kabòn ak",
+      "note": "Konparezon menm nivo kabòn ak anprint pou chak èdtan sèvis sa yo — se chif apwoksimatif, menm jan ak tout estimasyon isi a."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Enpak kabòn estime pou konvèsasyon sa a: {grams} gram CO₂ ekivalan. Montre detay yo.",
+      "ariaLabelToday": "Enpak kabòn estime pou konvèsasyon sa a jodi a: {grams} gram CO₂ ekivalan. Montre detay yo.",
+      "title": "Konvèsasyon sa a (estimasyon)",
+      "today": "Jodi a",
+      "total": "Tout tan",
+      "measured": "Soti nan kantite jèton rapòte",
+      "estimated": "Rekalkile soti nan ansyen mesaj yo",
+      "lastRequest": "Dènye demann lan",
+      "disclaimer": "Estimasyon pa demann yo baze sou kantite jèton rapòte oswa apwoksime, ak mwayèn ak sipozisyon pibliye v{version}. Mesaj ki pi ansyen yo rekalkile soti nan tèks sove ak modèl aktyèl konvèsasyon an. Sa pa yon mezi.",
+      "visibilityGroup": "Vizibilite chip emisyon",
+      "visibilityLabel": "Montre:",
+      "visibility": {
+        "always": "Toujou",
+        "auto": "Otomatik",
+        "hidden": "Kache"
+      },
+      "visibilityHint": "Otomatik ap montre chip la lè estimasyon an ap mete ajou oswa ou pase sourit sou li. Ou ka chanje sa ankò nan Anviwònman › Itilizasyon & Enpak."
+    }
+  },
+  "table": {
+    "copyTable": "Kopi tab la",
+    "downloadTable": "Telechaje tab la",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Ekspòte kòm CSV",
+    "copyFailed": "Kopi tab la echwe"
+  },
+  "backup": {
+    "intro": {
+      "title": "Sovgad konvèsasyon ou yo — an sekirite",
+      "body": "Konvèsasyon ou yo ankripte sou aparèy sa a anvan nenpòt bagay telechaje. Nou pap janm ka li chat ou yo.",
+      "keyWarning": "Kle rekiperasyon ou kreye sou aparèy sa a. Nou pa janm wè l epi nou pa ka rekipere l pou ou — si ou pèdi kle a, ou pèdi sovgad la.",
+      "create": "Kreye kle mwen & fè sovgad",
+      "decline": "Pa kounye a — kenbe chat yo sou aparèy sa sèlman"
+    },
+    "ceremony": {
+      "titleCreate": "Sove kle rekiperasyon ou",
+      "titleRotate": "Sove nouvo kle rekiperasyon ou",
+      "titleView": "Kle rekiperasyon ou",
+      "description": "Kle sa a se sèl fason pou retabli sovgad ou sou yon lòt aparèy. Kenbe li an sekirite — nou pa ka rekipere l pou ou.",
+      "copy": "Kopi",
+      "copied": "Kopiye!",
+      "download": "Telechaje .txt",
+      "showQr": "Montre kòd QR",
+      "hideQr": "Kache kòd QR",
+      "savedCheckbox": "Mwen sove kle rekiperasyon mwen yon kote ki an sekirite",
+      "saveFirstHint": "Kopi oswa telechaje kle ou anvan ou kontinye.",
+      "continue": "Kontinye",
+      "done": "Fini",
+      "cancel": "Anile",
+      "cancelConfirmTitle": "Anile konfigirasyon sovgad la?",
+      "cancelConfirmBody": "Chat ou yo pap sove an sovgad. Ou ka aktive sovgad ankripte nenpòt kilè nan Paramèt.",
+      "cancelConfirmRotateBody": "Kle rekiperasyon ou deja chanje. Ou ka wè li nenpòt kilè nan Paramèt.",
+      "cancelConfirmConfirm": "Wi, anile",
+      "cancelConfirmDismiss": "Retounen",
+      "loadError": "Pa ka chaje kle rekiperasyon ou sou aparèy sa a."
+    },
+    "file": {
+      "heading": "Kle rekiperasyon sovgad chat",
+      "warning": "Kenbe kle sa a an sekirite. Nenpòt moun ki gen li ka li sovgad ou; san li sovgad la pap ka retabli."
+    },
+    "progress": {
+      "titleCreate": "Ap mete sovgad ou an plas",
+      "titleRotate": "Ap chanje kle rekiperasyon ou",
+      "encrypting": "{count, plural, one {Ap ankripte ak sovgad # konvèsasyon…} other {Ap ankripte ak sovgad # konvèsasyon…}}",
+      "success": "{count, plural, one {Sovgad fini. # konvèsasyon pwoteje.} other {Sovgad fini. # konvèsasyon pwoteje.}}",
+      "error": "Sovgad echwe. Chat ou toujou sou aparèy sa a.",
+      "retry": "Eseye ankò",
+      "close": "Fèmen",
+      "done": "Fini"
+    },
+    "input": {
+      "label": "Kle rekiperasyon",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Kle yo pa janm gen lèt O, I oswa L.",
+      "checksumError": "Kle sa a pa sanble kòrèk — tcheke si gen erè.",
+      "formatError": "Sa pa sanble ak yon kle rekiperasyon.",
+      "incomplete": "Kontinye tape — yon kle rekiperasyon gen 56 karaktè.",
+      "valid": "Kle a sanble valab."
+    },
+    "restore": {
+      "title": "Restaure chat ou yo",
+      "successTitle": "Sovgade retabli",
+      "promptBody": "Nou jwenn yon sovgade ankripte pou kont ou. Mete kle rekiperasyon ou pou retabli li sou aparèy sa a.",
+      "submit": "Retabli sovgade a",
+      "skip": "Sote — kòmanse soti a zewo sou aparèy sa a",
+      "restoring": "Ap dekripte epi retabli chat ou yo...",
+      "successBody": "{count, plural, one {# konvèsasyon retabli.} other {# konvèsasyon retabli.}}",
+      "wrongKey": "Kle sa a valab, men li pa ouvri sovgade sa a. Si ou chanje kle ou, itilize dènye a.",
+      "corrupt": "Sovgade sa a pa kapab li — li ka domaje. Ou ka kòmanse nan papòt sou aparèy sa a oswa eseye ankò pita.",
+      "networkError": "Pa kapab konekte ak sèvis sovgade a. Tcheke koneksyon ou epi eseye ankò.",
+      "tryAgain": "Eseye yon lòt kle",
+      "close": "Fini"
+    },
+    "enterKey": {
+      "title": "Antre nouvo kle rekiperasyon ou",
+      "body": "Yo te chanje kle rekiperasyon ou sou yon lòt aparèy. Mete nouvo kle a pou kontinye sovgade sou aparèy sa a.",
+      "submit": "Sèvi ak kle sa a"
+    },
+    "banner": {
+      "keyMismatchTitle": "Sovgade yo pran poz — kle rekiperasyon ou te chanje sou yon lòt aparèy.",
+      "enterNewKey": "Antre nouvo kle a",
+      "resetBackup": "Reyajiste sovgade",
+      "resetConfirmTitle": "Reyajiste sovgade ak kle aparèy sa a?",
+      "resetConfirmBody": "Sovgade ki egziste la ap ranplase ak chat aparèy sa a, ankripte ak kle aparèy sa a. Lòt aparèy yo ap bezwen kle rekiperasyon aparèy sa a.",
+      "resetConfirmAction": "Reyajiste sovgade",
+      "remoteMissingTitle": "Sovgade ou a pa egziste ankò sou sèvè a. Sovgade yo sou poz.",
+      "backUpAgain": "Sovgade ankò",
+      "dismiss": "Fèmen"
+    },
+    "rotate": {
+      "confirmTitle": "Chanje kle rekiperasyon ou?",
+      "confirmBody": "Sovgade ou ap re-ankripte ak yon nouvo kle, epi ansyen kle a pap mache ankò. Ou dwe sove nouvo kle a epi mete li sou lòt aparèy yo.",
+      "confirmAction": "Chanje kle a"
+    },
+    "toast": {
+      "enrollLater": "Ou ka aktive sovgade ankripte nenpòt ki lè nan Anviwònman.",
+      "keyUpdated": "Kle rekiperasyon mete ajou. Sovgade yo reprann.",
+      "resetDone": "Sovgade reyajiste ak kle aparèy sa a.",
+      "backupRestarted": "Sovgade kreye ankò.",
+      "opFailed": "Yon erè rive. Tanpri eseye ankò."
+    },
+    "settings": {
+      "statusOn": "Sovgade aktive",
+      "statusOff": "Sovgade dezaktive",
+      "offDescription": "Chat ou yo sèlman disponib nan navigatè sa a. Limen sovgade ankripte pou pwoteje yo epi retabli yo sou lòt aparèy. Chat yo ankripte sou aparèy ou — nou pa janm ka li yo.",
+      "turnOn": "Limèn sovgade",
+      "restoreTitle": "Yon sovgade deja egziste pou kont ou",
+      "restoreDescription": "Mete kle rekiperasyon ou pou retabli li sou aparèy sa a.",
+      "restore": "Retabli sovgade a",
+      "lastBackup": "Dènye sovgade: {time}",
+      "lastBackupNever": "Pa gen sovgade ki fèt ankò",
+      "keyFingerprint": "Kle ····-{tail}",
+      "syncState": {
+        "idle": "Ap tann pou senkronize",
+        "syncing": "Ap sovgade...",
+        "ok": "An dènye",
+        "keyOutOfDate": "Pran poz — kle rekiperasyon an te chanje sou yon lòt aparèy",
+        "remoteMissing": "Pòz — sovgad la te retire sou sèvè a",
+        "error": "Dènye tantativ sovgad la echwe"
+      },
+      "backUpNow": "Sove kounye a",
+      "backUpNowSuccess": "Sovgad fini",
+      "backUpNowFailure": "Sovgad la echwe — konvèsasyon ou yo pa chanje sou aparèy sa a",
+      "viewKey": "Gade kle rekiperasyon",
+      "changeKey": "Chanje kle rekiperasyon",
+      "dangerTitle": "Zòn danje",
+      "turnOffDelete": "Dekonekte & efase sovgad la",
+      "turnOffConfirmTitle": "Vle dekonekte sovgad la?",
+      "turnOffConfirmMessage": "Sa ap efase sovgad ou sou sèvè nou yo pou tout aparèy yo. Konvèsasyon ki sou aparèy sa a ap rete. Ou ka aktive sovgad ankò pita ak yon nouvo kle rekiperasyon.",
+      "turnOffConfirmAction": "Efase sovgad la",
+      "turnOffSuccess": "Sovgad la dekonekte epi efase",
+      "turnOffFailure": "Sovgad la pa t ka efase. Tanpri eseye ankò."
+    }
+  },
+  "memories": {
+    "title": "Memwa",
+    "description": "Kite asistan an sonje enfòmasyon ki dire sou ou — tankou wòl ou, preferans ou, ak pwojè w ap travay sou yo — epi itilize yo atravè diferan konvèsasyon.",
+    "enableToggle": "Aktive memwa",
+    "privacyNote": "Enfòmasyon yo estoke sèlman nan navigatè sa a epi enkli nan konvèsasyon ou yo pou pèsonalize repons yo.",
+    "empty": "Pa gen memwa ankò. Enfòmasyon ki vo sonje yo sove otomatikman depi konvèsasyon ou yo.",
+    "savedOn": "Sove {date}",
+    "deleteMemory": "Efase memwa",
+    "clearAll": "Efase tout memwa",
+    "clearAllConfirmQuestion": "Efase tout memwa? Aksyon sa a pap ka anile.",
+    "clearAllConfirm": "Efase tout",
+    "cancel": "Anile"
+  },
+  "contextWindow": {
+    "label": "Fenèt kontèks",
+    "value": "{count} mesaj",
+    "fewer": "Mwens mesaj",
+    "more": "Plis mesaj",
+    "description": "Mesaj ki pi ansyen pase limit sa a ap rezime epi voye kòm kontèks."
+  },
+  "agentAccess": {
+    "title": "Aksè ajan",
+    "description": "Kontwole ki itilizatè ki ka itilize ajan Foundry yo an komen. Règ sa yo limite sa aksè Azure itilizatè a deja pèmèt — yo p ap janm ka bay aksè Azure refize.",
+    "backToChat": "Retounen nan chat",
+    "loading": "Y ap chaje ajan ak règ yo…",
+    "loadError": "Pa kapab chaje done aksè ajan yo.",
+    "rulesUnavailableWarning": "Règ aksè yo pa t ka chaje depi depo a. Itilizasyon ajan an bloke pou kounye a epi ou pa ka modifye règ yo.",
+    "retry": "Repran",
+    "rulesTab": "Règ ajan",
+    "localAdminsTab": "Administratè lokal",
+    "noAgents": "Pa gen ajan pou jere.",
+    "sourceLabel": "Sous",
+    "notDiscoverable": "Ou pa ka jwenn li",
+    "notDiscoverableHint": "Gen yon règ pou ajan sa a, men li pa parèt nan lis ou — li ka chanje non, aksè Azure ou pa rive jwenn li, oswa règ aksè li pa enkli ou.",
+    "accessEveryone": "Tout moun",
+    "accessRestricted": "Restrenn",
+    "edit": "Modifye",
+    "updatedByLine": "Dènye mizajou pa {user} le {date}",
+    "accessTypeLabel": "Ki moun ki kapab itilize ajan sa a",
+    "everyoneDescription": "Nenpòt moun ki deja ka jwenn aksè ak ajan sa a atravè aksè Azure yo.",
+    "restrictedDescription": "Sèlman itilizatè ak domèn ki anba a.",
+    "allowDomainsLabel": "Domèn otorize",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Itilizatè otorize",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Peze Antre pou ajoute",
+    "removeChip": "Retire",
+    "groupsLabel": "Gwoup otorize",
+    "groupsPendingConsent": "Aksè selon gwoup ap tann konsantman administratè lokatè epi li pa ka modifye ankò.",
+    "restrictedEmptyWarning": "Pa gen itilizatè oswa domèn ki make — pèsonn p ap kapab itilize ajan sa a.",
+    "save": "Sove",
+    "saving": "Ap sove…",
+    "cancel": "Anile",
+    "saveSuccess": "Règ aksè a anrejistre.",
+    "deleteSuccess": "Règ aksè a retire — tout moun ka itilize ajan sa a ankò.",
+    "saveError": "Pa t kapab sove. Tanpri rekòmanse.",
+    "conflictError": "Yon lòt moun modifye sa pandan w ap edite. Chaje ankò pou jwenn dènye vèsyon an epi eseye ankò.",
+    "reload": "Chaje ankò",
+    "localAdminsDescription": "Delegasyon jesyon règ pou ajan espesifik san rekòmanse deplwaman. Administratè lokal yo ka modifye règ sèlman pou ajan ki asiyen yo.",
+    "noLocalAdmins": "Pa gen administratè lokal ki konfigire.",
+    "addLocalAdmin": "Ajoute administratè lokal",
+    "emailLabel": "Imèl",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Retire administratè lokal",
+    "delegatedAgentsLabel": "Ajan delege",
+    "noDelegatedAgents": "Pa gen ajan pou delege.",
+    "unknownAgentKey": "Kle ajan enkoni",
+    "configSaveSuccess": "Administratè lokal yo anrejistre.",
+    "configConflictError": "Yon lòt moun modifye lis administratè lokal yo pandan w ap edite. Chaje ankò epi eseye ankò.",
+    "addAgent": "Ajoute ajan",
+    "newPromptAgentTitle": "Nouvo ajan avi",
+    "editPromptAgentTitle": "Modifye ajan avi",
+    "agentNameLabel": "Non",
+    "agentNamePlaceholder": "egzanp: Konsiltan Vwayaj",
+    "agentDescriptionLabel": "Deskripsyon",
+    "agentDescriptionPlaceholder": "Parèt bay itilizatè yo nan selektè modèl la",
+    "agentSystemPromptLabel": "Avi sistèm",
+    "agentSystemPromptPlaceholder": "Enstriksyon ki defini kijan ajan sa a dwe aji",
+    "agentModelLabel": "Modèl",
+    "agentModelPlaceholder": "Chwazi yon modèl...",
+    "agentModelUnavailable": "{modelId} (pa disponib)",
+    "agentModelUnknownError": "Modèl ou te chwazi a pa disponib ankò. Chwazi yon lòt modèl epi sove ankò.",
+    "promptAgentBadge": "Ajan avi",
+    "editAgent": "Modifye ajan",
+    "deleteAgent": "Efase",
+    "deleteAgentConfirm": "Efase ajan sa a pou tout moun? Li p ap parèt ankò nan selektè modèl la; konvèsasyon ki egziste yo ap kenbe istwa yo.",
+    "confirmDeleteAgent": "Wi, efase",
+    "promptAgentCreateSuccess": "Ajan avi kreye.",
+    "promptAgentSaveSuccess": "Ajan avi sove.",
+    "promptAgentDeleteSuccess": "Ajan avi efase.",
+    "promptAgentsUnavailableWarning": "Ajan avi yo pa ka chaje soti nan depo a. Ou pa ka modifye yo kounye a.",
+    "agentsTab": "Ajan yo",
+    "connectorsTab": "Konektè yo",
+    "addConnector": "Ajoute konektè",
+    "noConnectors": "Pa gen konektè pou kounya.",
+    "connectorsUnavailableWarning": "Pa t ka jwenn magazen konektè a, lis la ka pa konplè. Pa kreye ranplasman jiskaske li fini chaje.",
+    "editAccess": "Modifye aksè",
+    "deleteConnector": "Efase",
+    "deleteConnectorConfirm": "Efase konektè sa a? Nenpòt moun k ap itilize li ap pèdi aksè imedyatman.",
+    "confirmDeleteConnector": "Efase konektè",
+    "connectorSaveSuccess": "Konektè anrejistre.",
+    "connectorCreateSuccess": "Konektè kreye.",
+    "connectorDeleteSuccess": "Konektè efase.",
+    "editConnectorTitle": "Modifye konektè",
+    "newConnectorTitle": "Nouvo konektè",
+    "connectorPresetLabel": "Kòmanse ak yon modèl",
+    "connectorPresetNone": "Kòmanse depi nan kòmansman",
+    "connectorNameLabel": "Non",
+    "connectorDescriptionLabel": "Deskripsyon",
+    "connectorUrlLabel": "URL Sèvè",
+    "connectorUrlPlaceholderWarning": "Ranplase {placeholder} ki nan URL la ak pwòp valè pa w anvan ou sove.",
+    "connectorTransportLabel": "Transpò",
+    "connectorAuthLabel": "Otentifikasyon",
+    "connectorAuthNone": "Okenn",
+    "connectorAuthBearer": "Token (chak itilizatè bay pa yo)",
+    "connectorAuthOauth": "OAuth konekte",
+    "connectorSealingUnavailable": "OAuth pa disponib: deplwaman sa a pa gen AUTH_SECRET ki configure pou ankripte sekrè kliyan yo.",
+    "connectorTokenHelpLabel": "Lyen pou enstriksyon sou token (opsyonèl)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Yon sekrè deja anrejistre. Kite vid pou kontinye itilize li, oswa mete yon nouvo pou ranplase li.",
+    "connectorClientSecretHint": "Ankripte anvan li estoke, epi li pap janm parèt ankò.",
+    "connectorScopesLabel": "Scopes (separe ak espas, opsyonèl)"
+  },
+  "localModels": {
+    "title": "Modèl lokal",
+    "description": "Chate ak modèl k ap kouri sou òdinatè sa a. Mesaj yo soti dirèkteman nan navigatè ou a al nan aplikasyon lokal la epi yo pa janm rive sou sèvè nou yo — sa vle di repons yo, tit konvèsasyon yo ak rezime yo ap rete sou òdinatè ou.",
+    "detect": "Detekte ekzekisyon lokal",
+    "detecting": "Ap detekte…",
+    "experimental": "Egzperimantal",
+    "portLabel": "Pò",
+    "statusUnknown": "Ankò pa tcheke.",
+    "statusChecking": "Ap tcheke…",
+    "statusReady": "{count, plural, =0 {Konekte, men pa gen modèl ki chaje.} one {Konekte — # modèl disponib.} other {Konekte — # modèl disponib.}}",
+    "statusNotRunning": "Pa kapab jwenn {label}. Tcheke si l ap kouri sou pò sa a, epi asire navigatè ou a gen dwa pou l jwenn aksè ak aplikasyon lokal yo sou sit sa a.",
+    "statusHttpError": "{label} reponn ak yon erè. Tcheke loj la.",
+    "corsHelp": {
+      "ollama": "Ollama ap kouri men li refize demann ki soti sou sit sa a. Mete OLLAMA_ORIGINS ak adrès sit sa a, rekòmanse Ollama, epi detekte ankò.",
+      "lmstudio": "LM Studio ap kouri men li refize demann ki soti sou sit sa a. Limen CORS nan paramèt sèvè lokal li a, epi detekte ankò.",
+      "llamacpp": "llama.cpp ap kouri men li refize demann ki soti sou sit sa a. Kòmanse llama-server ak demann cross-origin pèmèt, epi detekte ankò."
+    },
+    "privacyNote": "Modèl lokal yo pa sipòte atachman fichye, imaj, rechèch sou entènèt oswa konektè — sa yo bezwen sèvè nou yo. Deteksyon ap tcheke sèlman òdinatè sa a."
+  },
+  "urlFetch": {
+    "sourceFallback": "Paj entènèt",
+    "fallbackHint": "Ou ka ouvri paj la, kopye tèks la, epi kole li isit la tou.",
+    "shortExtract": "Sèlman yon ti ekstrè te kapab li — ka gen pawa oswa bezwen konekte.",
+    "errors": {
+      "invalidUrl": "Sa pa sanble ak yon adrès entènèt ki valab.",
+      "ssrfBlocked": "Adrès sa a pa ka chache pou rezon sekirite.",
+      "tooManyRedirects": "Lyen sa a te redirije twòp fwa.",
+      "timeout": "Paj la pran twòp tan pou reponn.",
+      "unreachable": "Paj la pa t ka jwenn.",
+      "blocked": "Sitou a rejte demann nan — li ka mande pou w konekte oswa bloke lekti otomatik.",
+      "notFound": "Paj sa a pa jwenn.",
+      "upstream": "Sitou a voye yon erè.",
+      "pdf": "Lyen sa a se yon PDF. Telechaje l epi itilize bouton atache a pou ajoute li pito.",
+      "nonHtml": "Lyen sa a pa yon paj entènèt nou ka li.",
+      "tooLarge": "Paj sa a twò gwo pou nou rale l.",
+      "empty": "Pa gen okenn tèks atik ki ka li sou paj sa a.",
+      "generic": "Paj la pa t ka rale."
+    },
+    "fetchingFile": "Ap rale {host}…",
+    "attachLink": "Atache yon lyen",
+    "attachLinkTitle": "Atache yon paj entènèt",
+    "attachLinkDescription": "Nou pral rale paj la epi atache tèks li nou ka li a ak mesaj ou.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Rale & atache",
+    "attachLinkInvalid": "Sa pa sanble ak yon adrès entènèt.",
+    "linkBadge": "Soti nan yon lyen",
+    "couldNotRetrieve": "Pa t ka rale",
+    "doc": {
+      "sourceLabel": "Sous",
+      "retrievedLabel": "Rale",
+      "attemptedLabel": "Tante",
+      "failureHeading": "Paj entènèt la pa t ka rale"
+    },
+    "settingsTitle": "Lyen nan mesaj yo",
+    "settingsToggle": "Rale lyen kole otomatikman",
+    "settingsDescription": "Lè ou kole yon lyen sèl, paj la ap rale epi atache tèks li pou asistan an ka li li. Retire opsyon sa a pou kenbe lyen yo kòm tèks senp — ou ka toujou atache yon paj manyèlman depi meni + a.",
+    "addLink": "Ajoute yon lyen"
+  },
+  "cameraAccessError": "Pa t kapab jwenn aksè ak kamera a. Tcheke pèmisyon kamera ou epi eseye ankò.",
+  "cameraUnnamedDevice": "Kamera",
+  "pastedText": {
+    "fallbackName": "Tèks kole",
+    "charCount": "{count, number} karaktè",
+    "removeChip": "Retire tèks kole “{name}”",
+    "blockLabel": "Tèks kole: {name}",
+    "doc": {
+      "heading": "Tèks kole",
+      "pastedLabel": "Kole"
+    },
+    "settingsTitle": "Gwo kole",
+    "settingsToggle": "Vire yon gwo kole an atachman",
+    "settingsDescription": "Si w kole plis tèks pase limit ki anba a, sa pral atache li kòm fichye olye li plen bwat mesaj la. Tèks la itilize egzakteman jan li kole — anyen pa chaje oubyen chanje.",
+    "settingsThresholdLabel": "Atache kole ki depase",
+    "settingsThresholdUnit": "karaktè",
+    "settingsThresholdHint": "Ant {min, number} ak {max, number} karaktè."
+  },
+  "structures": {
+    "section": "Estrikti",
+    "sectionSubtitle": "Definisyon jaden anrejistre. Sèvi ak youn kòm resèt ekstraksyon, oswa kòm baz pou yon tab workflow done.",
+    "loadFromStructure": "Chaje estrikti",
+    "loadFromStructureTitle": "Ranplase kolòn sa yo ak yon estrikti anrejistre",
+    "pickerEmpty": "Pa gen estrikti anrejistre ankò.",
+    "pickerTitle": "Chaje yon estrikti anrejistre",
+    "saveAsStructure": "Sove kòm estrikti",
+    "saveAsStructureTitle": "Sove kolòn sa yo nan bibliyotèk estrikti ou",
+    "savedToast": "Estrikti “{name}” sove",
+    "namePlaceholder": "Non estrikti",
+    "fieldCount": "{count} jaden",
+    "fieldCountOne": "1 jaden",
+    "downgradedNotice": "{count} jaden senplifye an tèks — tab yo kenbe yon sèl valè pa selil: {names}",
+    "truncatedNotice": "{count} jaden retire — limit tab la se {max} kolòn: {names}",
+    "skippedDerivedNotice": "{count} kolòn kalkile pa sove — fòmil yo depann de kolòn tab sa a: {names}",
+    "loadReplacesColumns": "Sa ap ranplase kolòn aktyèl yo. Liy ki egziste ap kenbe valè yo si non kolòn yo koresponn."
   }
 }

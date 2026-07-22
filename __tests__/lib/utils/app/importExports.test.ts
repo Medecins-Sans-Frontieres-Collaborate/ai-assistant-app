@@ -14,6 +14,7 @@ import {
 import { ExportFormatV1, ExportFormatV2, ExportFormatV4 } from '@/types/export';
 import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 
+import { getDefaultModel } from '@/config/models';
 import { describe, expect, it } from 'vitest';
 
 describe('Export Format Functions', () => {
@@ -97,7 +98,9 @@ describe('cleanData Functions', () => {
       const conv = obj.history[0];
       expect(conv.id).toBe(1);
       expect(conv.name).toBe('conversation 1');
-      expect(conv.model).toEqual(OpenAIModels[OpenAIModelID.GPT_5_2_CHAT]);
+      expect(conv.model).toEqual(
+        OpenAIModels[getDefaultModel() as OpenAIModelID],
+      );
       expect(conv.prompt).toBe(DEFAULT_SYSTEM_PROMPT);
       expect(conv.temperature).toBe(DEFAULT_TEMPERATURE);
       expect(conv.folderId).toBeNull();
@@ -159,7 +162,9 @@ describe('cleanData Functions', () => {
       const conv = obj.history[0];
       expect(conv.id).toBe('1');
       expect(conv.name).toBe('conversation 1');
-      expect(conv.model).toEqual(OpenAIModels[OpenAIModelID.GPT_5_2_CHAT]);
+      expect(conv.model).toEqual(
+        OpenAIModels[getDefaultModel() as OpenAIModelID],
+      );
       expect(conv.prompt).toBe(DEFAULT_SYSTEM_PROMPT);
       expect(conv.temperature).toBe(DEFAULT_TEMPERATURE);
       expect(conv.folderId).toBeNull();

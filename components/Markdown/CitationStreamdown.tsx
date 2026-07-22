@@ -11,6 +11,7 @@ import React, {
 import { Citation } from '@/types/rag';
 
 import { CitationItem } from '../Chat/Citations/CitationItem';
+import { MarkdownTable } from './MarkdownTable';
 
 import { Streamdown } from 'streamdown';
 import type { StreamdownProps } from 'streamdown';
@@ -139,6 +140,10 @@ export const CitationStreamdown: FC<CitationStreamdownProps> = memo(
       };
 
       return {
+        // Replace Streamdown's built-in table (and its CSV-only controls)
+        // with the app's table, which adds Markdown/Word downloads. Callers
+        // can still override via `components.table`.
+        table: MarkdownTable,
         ...components,
         p({ children, ...props }: any) {
           const processedChildren = processChildren(children);

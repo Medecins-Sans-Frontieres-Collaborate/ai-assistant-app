@@ -9,9 +9,13 @@ import { SearchMode } from '@/types/searchMode';
 
 import { AdvancedOptionsSection } from './AdvancedOptionsSection';
 import { CustomAgentInfo } from './CustomAgentInfo';
+import { DeploymentDetailsSection } from './DeploymentDetailsSection';
+import { HostedRegionSection } from './HostedRegionSection';
 import { ModelHeader } from './ModelHeader';
 import { RecentSourcesSection } from './RecentSourcesSection';
 import { SearchModeSection } from './SearchModeSection';
+import { VariantSection } from './VariantSection';
+import { VersionSection } from './VersionSection';
 
 import { CustomAgent } from '@/client/stores/settingsStore';
 
@@ -29,6 +33,16 @@ interface ModelDetailsPanelProps {
   handleSetSearchMode: (mode: SearchMode) => void;
   setShowModelAdvanced: (show: boolean) => void;
   updateConversation: (id: string, updates: Partial<Conversation>) => void;
+  /** Selects another version of the selected model's series (base models). */
+  onSelectVersion?: (model: OpenAIModel) => void;
+  /**
+   * All visible custom-source (byom) models. Feeds the Variant/Version
+   * switchers when the selection is a byom model, whose family lives
+   * outside the catalog list.
+   */
+  customSourceModels?: OpenAIModel[];
+  /** Display name of the byom source the selected model came from. */
+  customSourceName?: string;
   // Custom agent props for action buttons
   customAgent?: CustomAgent;
   onEditAgent?: (agent: CustomAgent) => void;
@@ -51,12 +65,16 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
   handleSetSearchMode,
   setShowModelAdvanced,
   updateConversation,
+  onSelectVersion,
+  customSourceModels,
+  customSourceName,
   customAgent,
   onEditAgent,
   onDeleteAgent,
   organizationAgent,
 }) => {
   const hasAgentImage = organizationAgent?.image;
+  const isCustomSourceModel = selectedModel.isCustomSourceModel === true;
 
   return (
     <div className="space-y-4 md:space-y-6">
@@ -112,6 +130,42 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
           modelConfig={modelConfig}
           setMobileView={setMobileView}
           organizationAgent={organizationAgent}
+        />
+      )}
+
+      {/* Variant + version switchers for family models (list shows one row
+          per family; variant = size/tier axis, version chips follow the
+          active variant) */}
+      {!isCustomAgent && !organizationAgent && onSelectVersion && (
+        <>
+          <VariantSection
+            selectedModel={selectedModel}
+            onSelectVariant={onSelectVersion}
+            familyModels={isCustomSourceModel ? customSourceModels : undefined}
+          />
+          <VersionSection
+            selectedModel={selectedModel}
+            onSelectVersion={onSelectVersion}
+            familyModels={isCustomSourceModel ? customSourceModels : undefined}
+          />
+        </>
+      )}
+
+      {/* Provenance of custom-source (byom) models: source, account, region,
+          ARM deployment. */}
+      {isCustomSourceModel && (
+        <DeploymentDetailsSection
+          selectedModel={selectedModel}
+          sourceName={customSourceName}
+        />
+      )}
+
+      {/* Hosting-region choice for base models (US users, dual-hosted) */}
+      {!isCustomAgent && !organizationAgent && (
+        <HostedRegionSection
+          selectedModel={selectedModel}
+          selectedConversation={selectedConversation}
+          updateConversation={updateConversation}
         />
       )}
 

@@ -429,7 +429,22 @@
     "noProjectsFound": "ፕሮጀክቶች አልተገኙም። \"default\" ተጠቅመዋል።",
     "selectAllRequired": "ሲሰብስክሪፕሽን፣ አካውንትና ፕሮጀክት ይምረጡ።",
     "subscriptionRequired": "የደንበኝነት አይነት ይምረጡ",
-    "accountRequired": "የFoundry መለያ ይምረጡ"
+    "accountRequired": "የFoundry መለያ ይምረጡ",
+    "projectSelectionRequired": "ከዝርዝሩ ፕሮጀክት ይምረጡ።",
+    "scanningResources": "የAzure ምዝገባዎትን ተግባራት በመስካከል ላይ...",
+    "searchProjectsPlaceholder": "ፕሮጀክቶችን ይፈልጉ...",
+    "noProjectsDiscovered": "በምዝገባዎት ውስጥ የFoundry ፕሮጀክቶች አልተገኙም። መንገዱን ካወቁ በእጅ ያስገቡ።",
+    "discoveryPartialWarning": "{count, plural, one {# ምዝገባ} other {# ምዝገባዎች}} ማስካከል አልተቻለም። ፕሮጀክትዎ ካልታየ በእጅ ያስገቡ።",
+    "discoveryTruncatedWarning": "ሙሉ በሙሉ ለማስካከል ብዙ ሰነዶች አገኙ። ፕሮጀክትዎ ካልታየ በእጅ ያስገቡ።",
+    "retryScan": "መርምሩን ዳግመኛ ይሞክሩ",
+    "next": "ቀጣይ",
+    "back": "ወደኋላ",
+    "selectAgentsDescription": "ከዚህ ፕሮጀክት በሞዴል መምረጫዎ ላይ የሚታዩትን ወኪሎች ይምረጡ።",
+    "selectAll": "ሁሉንም ይምረጡ",
+    "deselectAll": "ሁሉንም ያትሉ",
+    "agentsSelectedCount": "{selected} ከ {total} ወኪሎች ተመርጠዋል",
+    "autoAddLabel": "አዲስ ወኪሎችን በራስአደው አክል",
+    "autoAddDescription": "ለዚህ ፕሮጀክት በኋላ የታተመ ወኪል ራሱ ይታያል። ያልተመረጡት ወኪሎች ውጭ ይቆያሉ።"
   },
   "Quick Actions": "ፈጣን ድርጊቶች",
   "Type / in chat to access your prompts": "ጥያቄዎችዎን ለማግኘት በውይይት ውስጥ / ይተይቡ",
@@ -690,7 +705,7 @@
     "stopGenerationDontAskAgainButton": "በቁልፍ ሲቆም ዳግም አትጠይቅ",
     "stopGenerationDontAskAgainKeyboard": "በዴስክቶፕ ሲቆም ዳግም አትጠይቅ",
     "generateResponseButton": "ምላሽ ፍጠር",
-    "downloadResponse": "ምላሹን ያውርዱ",
+    "downloadResponse": "ምላሻ ያውርዱ",
     "activity": {
       "callingTool": "መሳሪያን በመጥቀስ…",
       "callingService": "ውጪ አገልግሎት በመጠራት…",
@@ -703,7 +718,19 @@
       "listingTools": "የሚገኙ መሳሪያዎችን በመፈለግ…",
       "analyzingFiles": "ፋይሎችዎን በመተንተን…",
       "searchingKnowledge": "በዕውቀት መሰብ ውስጥ በመፈለግ…",
-      "cancellingPriorTool": "ያለፈውን መሳሪያ ጥያቄ በማጥፋት…"
+      "cancellingPriorTool": "ያለፈውን መሳሪያ ጥያቄ በማጥፋት…",
+      "workflow": {
+        "preparingDocument": "ማጣቀሻዎችን በማዘጋጀት ላይ...",
+        "writingDocument": "ሰነዱን በመጻፍ ላይ...",
+        "analyzingSource": "የምንጩን ጽሁፍ በመተንተን ላይ...",
+        "translating": "ትርጉም በማድረግ ላይ...",
+        "reviewingTranslation": "የግምገማ ዙር {round} ከ {total} ...",
+        "revisingTranslation": "የግምገማ አስተያየቶችን በመተግበር ላይ...",
+        "extractingRows": "ከ {source} ረድፎችን በመውጣት ላይ...",
+        "transformingTable": "ሰንጠረዡን በመቀየር ላይ...",
+        "findingLocations": "ቦታዎችን በመለየት ላይ...",
+        "updatingMap": "ካርታውን በማዘመን ላይ..."
+      }
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# መሳሪያ} other {# መሳሪያዎች}} ተጠቅመዋል",
@@ -764,7 +791,9 @@
     "listen": "አድምጥ",
     "processingAudio": "ድምጹን በመስራት ላይ...",
     "ttsError": "ድምጽ ለመፍጠር ስህተት አጋጥሟል። እባክዎ ደግመው ይሞክሩ።",
-    "unsupportedMessageType": "መልእክቱን ማሳየት ላይ ስህተት፡ የማይደገፍ ዓይነት"
+    "unsupportedMessageType": "መልእክቱን ማሳየት ላይ ስህተት፡ የማይደገፍ ዓይነት",
+    "addLanguageOption": "\"{name}\" ያክሉ…",
+    "sources": "ምንጮች"
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",
@@ -1082,16 +1111,34 @@
     "unsavedChanges": "ያልተቀመጡ ለውጦች",
     "unsavedChangesMessage": "ያልተቀመጡ ለውጦች አሉዎት። ልትተዉአቸው?",
     "characterCount": "{current}/{max}",
-    "clearField": "መስኩን ማጽጃ",
-    "autosaveNote": "ለውጦቹ በራስ-ሰር ይቀመጣሉ።",
-    "responseSection": "ምላሽ",
-    "voiceSection": "ድምጽ",
-    "behaviorSection": "አኗኗር",
-    "resetChatSettings": "የቻት ቅንብሮችን ወደ መደበኛ አውጣ",
-    "resetChatSettingsConfirmTitle": "የቻት ቅንብሮችን ወደ መደበኛ መመለስ?",
-    "resetChatSettingsConfirmMessage": "ይህ በዚህ ፓነል ያሉትን ሁሉ ወደ መደበኛ ነባር ይመልሳል፡ ሙቀት, ባለብዙ አመለካከቶች፣ ስለ እርስዎ፣ የሞዴል ምላሽ፣ የመስተንግዶ ፍጥነት፣ ከጽሑፍ ወደ ድምፅ፣ አንደኛ የሆኑ ፋይሎች፣ እና ማረጋገጫዎች። ውይይቶቻችሁን ግን አያስተካክልም።",
+    "clearField": "መስኩን አጽዳ",
+    "autosaveNote": "ለውጦቹ በራስ ላይ ይተመውማሉ።",
+    "responseSection": "ምላሻ",
+    "voiceSection": "ድምፅ",
+    "behaviorSection": "አጠቃቀም",
+    "resetChatSettings": "የውይይት ቅንብሮችን ወደ መደበኛ አስጀምር",
+    "resetChatSettingsConfirmTitle": "የውይይት ቅንብሮችን እንደገና አስጀምር?",
+    "resetChatSettingsConfirmMessage": "ይህ በዚህ ፓነል ውስጥ ላሉ ሁሉም ነገሮች የመደበኛ ቅንብር ያፈርሳል፡፡ temperature፣ custom instructions፣ About You፣ model response፣ streaming speed፣ text-to-speech፣ active files፣ confirmations ይቀየራሉ። ከዚህ ውጭ ውይይቶችዎ አይቀየሩም።",
     "customInstructionsLabel": "ብቻውን መመሪያዎች*",
-    "defaultTemperatureLabel": "ነባሪ ቤር*"
+    "defaultTemperatureLabel": "ነባሪ ቤር*",
+    "Usage & Impact": "አጠቃቀም እና ተፅዕኖ",
+    "Connectors": "አገናኞች",
+    "Backup": "ኦፕድ በሚያደርጉበት",
+    "Memories": "ትዕዛዞች",
+    "Agent Access": "የወኪል መዳረሻ",
+    "LocalModels": "የአካባቢ ሞዴሎች",
+    "suggestRevisions": {
+      "title": "ዶክዩመንት እንደገና ማሻሻያዎች",
+      "toggle": "ማሻሻያዎችን ለመቀበል አካል ያድርጉ እንጂ በቀጥታ አትተግብሩ",
+      "description": "የዶክዩመንት ስራ እንደገና ማሻሻያን ሲጠይቁ፣ ለዚያ ብቻ የሚገቡ ግምገማዎች ሁሉንም ማንበብ ወይም መተው ይችላሉ፣ እንደ ጥራት ግምገማዎች ውስጥ ሆኖ።",
+      "exceptionsTitle": "በቀጥታ ሲተገበሩ የሚደረጉ በሚከተሉበት ጊዜ፦",
+      "exceptionSelection": "የትኩረት ቦታ ተመርጧል ሲሆን እዚህ ላይ ሲመረምሩ",
+      "exceptionLargeRewrite": "እንደገና ጻፎ ዶክዩመንቱ አብዛኛዉን ይቀይራል",
+      "exceptionReorder": "ክፍሎች ተንቀሳቃሽ ይቀየራሉ ግን አይታደሱም",
+      "thresholdLabel": "ከዚህ በላይ እንደ እንደገና ጻፍ ይቆጠራል",
+      "thresholdUnit": "የዶክዩመንቱ የተቀየረው %",
+      "exceptionSelectionAlways": "የታነሰውን ክፍል ማሻሻያ ስለሚደረግ ቀጥሎ ይተገበራል — ሞዴሉ የተሻሻለውን ክፍል ብቻ ይመልሳል፣ ይህም ማሻሻያውን ለሙሉ ሰነድ አካባቢ ወደ ጥናት ማድረግ አይቻልም።"
+    }
   },
   "notFound": {
     "lostDog": "የጠፋ ውሻ"
@@ -1294,33 +1341,78 @@
     },
     "title": "ሞዴል ይምረጡ",
     "modelsDescription": "ለንግግርዎ AI ሞዴል ይምረጡ። እያንዳንዱ ሞዴል የተለያዩ ጥናቶች አሉት — ዝርዝሩን ለማየት አንድ ይምረጡ።",
-    "recommended": "የሚመከር"
+    "recommended": "የሚመከር",
+    "familyAll": "ሁሉም",
+    "familyFilterLabel": "ሞዴሎችን በቤተሰብ መተጣበቅ",
+    "searchPlaceholder": "ሞዴሎችን ይፈልጉ",
+    "searchEmpty": "ከፍለጋዎ ጋር የሚዛመዱ ሞዴሎች የሉም።",
+    "star": "{name} ወደ ውድ ያክሉ",
+    "unstar": "{name} ከውድ ያስወግዱ",
+    "otherFamily": "ሌላ",
+    "hostedExternally": "በAzure AI Foundry በአቅራቢው የራሱ አዋጅ ላይ ይተገበራል፤ በMSF ውስጣዊ Azure አካባቢ አይደለም።",
+    "hostedIn": {
+      "label": "በ{regions} ውስጥ የተያዘ",
+      "tooltip": "ይህ ሞዴል የተገጠመበት የAzure አካባቢ (ቦታ) ነው። ውይይቶችህ በራስዎ አካባቢ ይተገበራሉ።"
+    },
+    "badges": {
+      "external": "ውጫዊ",
+      "externalTooltip": "በAzure AI Foundry በአቅራቢው የራሱ አዋጅ ላይ ይተገበራል፤ በMSF ውስጣዊ Azure አካባቢ አይደለም።",
+      "regionHostedTooltip": "በ{region} የAzure አካባቢ ውስጥ የተያዘ። ከዚህ ሞዴል ጋር የሚደረጉ ውይይቶች በዚያ ይተገበራሉ።"
+    },
+    "favorites": "ውድ",
+    "euResidencyNote": "ሁሉም ሞዴሎች በEU Azure አካባቢ ውስጥ ይተገበራሉ።",
+    "hostedRegion": {
+      "label": "የተያዘበት አካባቢ",
+      "processedIn": "ይህ ውይይት በ{region} የAzure አካባቢ ውስጥ ይተገበራል።",
+      "euOnlyNote": "{name} በEU Azure አካባቢ ተያዝቷል፤ ከእሱ ጋር የሚደረጉ ውይይቶች በዚያ ይተገበራሉ።"
+    },
+    "version": {
+      "label": "እትም"
+    },
+    "reasoningModel": "የአስተያየት ሞዴል፡ ምላሹን ከመስጠት በፊት ደረጃ በደረጃ ያስባል። የሚያዘግዝ፣ በከባድ ችግሮች ላይ ይሻላል።",
+    "variant": {
+      "label": "ዓይነት"
+    },
+    "deployment": {
+      "title": "መሰራተኛ",
+      "source": "ምንጭ",
+      "account": "መለያ",
+      "location": "ቦታ",
+      "deployment": "መሰራተኛ",
+      "modelVersion": "የሞዴል እትም",
+      "publisher": "አሳታሚ"
+    }
   },
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "በBing በኩል የእውነተኛ ጊዜ የድር ፍለጋ ያለው በGPT-4.1 የተጎላበተ AI ሞዴል። ዘመናዊ መረጃ፣ እውነታ ማረጋገጥ እና ወቅታዊ ዝግጅቶችን ማወቅ ይሰጣል። የቅርብ ጊዜ መረጃ ለሚያስፈልግ ምርምር፣ ዜና ትንተና እና እውነታ ማረጋገጫ ምርጥ ነው።",
-      "knowledgeCutoff": "የእውነተኛ ጊዜ የድር ፍለጋ"
+      "knowledgeCutoff": "የእውነተኛ ጊዜ የድር ፍለጋ",
+      "tagline": "የOpenAI ያለፈው ትውልድ"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "የOpenAI በጣም ከፍተኛ ሞዴል፣ ውስብስብ ማመዛዘን፣ ኮድ ማመንጨት እና ቴክኒካል ችግር መፍታት ላይ የተካነ። ለትንታኔ ስራዎች፣ የፕሮግራሚንግ ፈተናዎች፣ ምርምር እና ዝርዝር ማብራሪያዎች ምርጥ። ሊስተካከል የሚችል የማመዛዘን ጥረት እና የምላሽ ቃላዊነት ይደግፋል።",
-      "knowledgeCutoff": "ነሐሴ 6, 2025 8:00 ማታ"
+      "knowledgeCutoff": "ነሐሴ 6, 2025 8:00 ማታ",
+      "tagline": "ያለፈው GPT ትኩረት ሞዴል"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "ከፍተኛ ጥራትን ሲጠብቅ ለፍጥነት የተመቻቸ ፈጣን እና ኢኮኖሚያዊ የGPT-5 ልዩነት። ለዕለታዊ ስራዎች፣ ፈጣን ጥያቄዎች፣ መሳሪያ ማዞሪያ እና ፈጣን የምላሽ ጊዜ ለሚያስፈልጋቸው መተግበሪያዎች ፍጹም። የአፈጻጸም እና ውጤታማነት ምርጥ ሚዛን።",
-      "knowledgeCutoff": "ነሐሴ 6, 2025 8:00 ማታ"
+      "knowledgeCutoff": "ነሐሴ 6, 2025 8:00 ማታ",
+      "tagline": "ዝንባሌ ፣ ዝቅተኛ ዋጋ"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "ለውይይት መስተጋብር እና ስሜታዊ ብልህነት የተመቻቸ ልዩ የGPT-5 ልዩነት። በርኅራኄ ያለው ግንኙነት፣ የአእምሮ ጤና ድጋፍ፣ ፈጠራ ጽሑፍ፣ ሀሳብ ማውጣት እና ተፈጥሯዊ ውይይት ላይ የተካነ። ለተራ ውይይቶች፣ ምክር ሁኔታዎች እና ስሜታዊ ግንዛቤ ለሚያስፈልጋቸው ስራዎች ምርጥ።",
-      "knowledgeCutoff": "ጥቅምት 1, 2025 8:00 ማታ"
+      "knowledgeCutoff": "ጥቅምት 1, 2025 8:00 ማታ",
+      "tagline": "ያለፈው ወደ ውይይት ተስተካክሏቸው GPT"
     },
     "o3": {
       "name": "o3",
       "description": "የOpenAI በጣም ከፍተኛ ማመዛዘን ሞዴል ከፍተኛ የችግር መፍታት ችሎታዎች ያለው። ውስብስብ ሒሳብ፣ ሳይንሳዊ ማመዛዘን፣ የኮድ ፈተናዎች እና ብዙ-ደረጃ ምክንያታዊ ስራዎች ላይ የተካነ። የተራዘመ 200K አውድ መስኮት። የማመዛዘን ጥረት ቁጥጥር ይደግፋል።",
-      "knowledgeCutoff": "ሚያዝያ 8, 2025 8:00 ማታ"
+      "knowledgeCutoff": "ሚያዝያ 8, 2025 8:00 ማታ",
+      "tagline": "በደረጃ የተከተለ ጥንቃቄ"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1330,57 +1422,258 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "ስራውን በደረጃ የሚያሳይ ማመዛዘን ስፔሻሊስት። ለሒሳብ ችግሮች፣ ምክንያታዊ እንቆቅልሾች እና ውስብስብ ጽንሰ-ሀሳቦችን ለመረዳት ምርጥ። ችግሮችን በእውነተኛ ጊዜ እንዴት እንደሚያስብባቸው ይመልከቱ።",
-      "knowledgeCutoff": "ጥር 20, 2025"
+      "knowledgeCutoff": "ጥር 20, 2025",
+      "tagline": "የማስተዋልን ሂደት በደረጃ ያሳያል"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "በኮድ እና ቴክኒካል ጽሑፍ በተለይ ጥሩ የሆነ ጠንካራ ሁሉን አቀፍ ሞዴል። ኮድን ለማረም፣ ሰነዶችን ለመጻፍ እና ቴክኒካል ጽንሰ-ሀሳቦችን ለማብራራት ምርጥ። ለልማት ስራ ፈጣን እና አስተማማኝ።",
-      "knowledgeCutoff": "ሚያዝያ 16, 2025 12:45 ጥዋት"
+      "knowledgeCutoff": "ሚያዝያ 16, 2025 12:45 ጥዋት",
+      "tagline": "ክፍት ምንጭ አማራጭ"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "ከxAI የመጣ ለድቃቃ ምላሾች የታወቀ ሁለገብ ሞዴል። ለክፍት ውይይቶች፣ ፈጠራ ፕሮጀክቶች እና ውስብስብ ችግሮችን ለመፍታት ምርጥ።",
-      "knowledgeCutoff": "ግንቦት 13, 2025 12:16 ጥዋት"
+      "knowledgeCutoff": "ግንቦት 13, 2025 12:16 ጥዋት",
+      "tagline": "xAI አማራጭ"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "ልዩ ማመዛዘን፣ ኮድ እና ፈጠራ ችሎታዎች ያለው የAnthropic በጣም ችሎታ ያለው ሞዴል። ለውስብስብ ትንተና፣ ምርምር እና ጥልቅ ግንዛቤ ለሚያስፈልጋቸው ስራዎች ምርጥ።",
-      "knowledgeCutoff": "ጥር 2025"
+      "knowledgeCutoff": "ጥር 2025",
+      "tagline": "የOpus ቀደም ትውልድ"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "በኮድ፣ ትንተና እና ፈጠራ ስራዎች ላይ ምርጥ አፈጻጸም የሚሰጥ ሚዛናዊ Claude ሞዴል። ከፈጣን የምላሽ ጊዜዎች ጋር ለዕለታዊ አጠቃቀም ምርጥ።",
-      "knowledgeCutoff": "ጥር 2025"
+      "knowledgeCutoff": "ጥር 2025",
+      "tagline": "ያለፈው ትውልድ Sonnet"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "ቀድሞ ትውልድ Claude Opus ሞዴል። ለውስብስብ የኮድ ስራዎች፣ ዝርዝር ትንተና እና ድቃቃ ግንዛቤ ምርጥ።",
-      "knowledgeCutoff": "ጥር 2025"
+      "knowledgeCutoff": "ጥር 2025",
+      "tagline": "ያለፈው ትውልድ Opus"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "ለፈጣን ስራዎች የተመቻቸ ፈጣን እና ኢኮኖሚያዊ Claude ሞዴል። ለቀላል ጥያቄዎች፣ ማጠቃለያ እና ከፍተኛ መጠን መተግበሪያዎች ምርጥ።",
-      "knowledgeCutoff": "ጥር 2025"
+      "knowledgeCutoff": "ጥር 2025",
+      "tagline": "ፈጣን Claude ስርዓት"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "የOpenAI በጣም የሚያስተላለፍ ሞዴል፣ በበጣም የተዘጋጀ አስተካክል ፣ ኮድ መፍጠር እና ቴክኒካዊ ችግሮችን መፍታት ላይ የሚበልጥ አማካሪ ነው። ለትንታኔ ስራዎች፣ ለፕሮግራሚንግ ፈተናዎች፣ ለምርምር እና ለዝርዝር ማብራሪያዎች ተስተናግዷል። የሚሰጡትን አስተያየትና ዝርዝሩን ማስተካከል ይችላሉ።",
-      "knowledgeCutoff": "ዲሴምበር 2025"
+      "knowledgeCutoff": "ዲሴምበር 2025",
+      "tagline": "ኮድ፣ ትንተና፣ ምርምር"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 ውይይት",
       "knowledgeCutoff": "ዲሴምበር 2025",
-      "description": "ለውይይት መስክ እና ስሜታዊ ብልጽግና የተሞላ የGPT-5.2 ልዩ እትም ነው። በርካታ አስተማማኝ እና ፈጣን የመግባቢያ ታሪክ ማቅረብ፣ ፈጣን ፅኑ ማስተላለፊያ ስራዎች፣ ፈጣን ፃፊ ሥራዎች፣ የፈጠራ ይዘቶች፣ ፈጣን ምክርና ተፈጥሯዊ ውይይት ላይ በጥሩ ይታያል። ለቀላል ውይይቶች፣ ምክር ስፋት ፣ ስሜታዊ ገንዘብ የሚፈልጉ ሥራዎች በጣም ይገባል።"
+      "description": "ለውይይት መስክ እና ስሜታዊ ብልጽግና የተሞላ የGPT-5.2 ልዩ እትም ነው። በርካታ አስተማማኝ እና ፈጣን የመግባቢያ ታሪክ ማቅረብ፣ ፈጣን ፅኑ ማስተላለፊያ ስራዎች፣ ፈጣን ፃፊ ሥራዎች፣ የፈጠራ ይዘቶች፣ ፈጣን ምክርና ተፈጥሯዊ ውይይት ላይ በጥሩ ይታያል። ለቀላል ውይይቶች፣ ምክር ስፋት ፣ ስሜታዊ ገንዘብ የሚፈልጉ ሥራዎች በጣም ይገባል።",
+      "tagline": "ውይይቶች፣ አስተዋየት"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "የAnthropic ብርቱ ሞዴል። ለአረፋዊ ጽሁፍ፣ ምርምር፣ ወይም ትንንሽ ትንታኔ የሚፈልጉትን ተግባራት ተስማሚ ነው።",
-      "knowledgeCutoff": "ጥር 2026"
+      "knowledgeCutoff": "ጥር 2026",
+      "tagline": "ረዥም አነጋገርና ትንተና"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "ሚዛናዊ Claude ሞዴል። ለቀናቸው ጽሁፍ፣ ትንታኔ፣ ማከል እና ፈጣን ምላሾች መረጣ ነው።",
-      "knowledgeCutoff": "ጥር 2026"
+      "knowledgeCutoff": "ጥር 2026",
+      "tagline": "ተመጣጣኝ የመደበኛው Claude"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "የMeta ክፍት ምንጭ ሞዴል። ለመጻፍ፣ ማጠቃለያና ፈጣን ጥያቄዎች ጠንካራ ነው።",
+      "tagline": "ክፍት ምንጭ አማራጭ"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "የOpenAI አዲሱ ዋና ሞዴል። ለመጻፍ፣ ምርምር፣ መቅዳትና ውስብስብ ችግር መፍታት የታቀፈ ነው።",
+      "tagline": "አዲሱ GPT ትኩረት ሞዴል"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "አብዛኛውን አነስተኛና ፈጣን GPT አይነት። ለፈጣንና ቀላል ስራዎች በዝቅተኛ ወጪ ትችላለች።",
+      "tagline": "የትንሹና ፈጣኑ GPT"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "በውይይት የታደሰ የGPT አይነት። ለቀለል ውይይቶች፣ አስባበሰና የድጋፍ ንግግሮች ተመጣጣኝ ነው።",
+      "tagline": "አዲሱ ወደ ውይይት ተስተካክሏቸው GPT"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "አሮጌ ባለብዙ ተግባር GPT። ለዕለታዊ መጻፍና ጥያቄ-መልስ በየአዲሱ አገዳደብ ሳይፈለግ መርጡ ነው።",
+      "tagline": "ያለፈው ባለብዙ ሞዴል GPT"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "ትንሽ፣ ፈጣን GPT-4.1 አይነት። ለፈጣን ዕለታዊ ስራዎች ተስማሚ ነው።",
+      "tagline": "ቀላል ያለፈው ትውልድ GPT"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "የAnthropic የበለፀጉ የአሁኑ ሞዴል። ለረዘም የቆየ መጻፍ፣ ምርምር፣ መቅዳት እና ጥንቃቄ ግኝት የታረቀ ነው።",
+      "tagline": "አዲሱና በጽናት የተለየ Claude"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "የDeepSeek አዲስ ክፍት ምንጭ ሞዴል። ለየትኛውም መጻፍና ለቴክኒክ ጥያቄዎች የታመነ ነው።",
+      "tagline": "ክፍት ምንጭ አማራጭ"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "የMistral ዋና ሞዴል። አውሮፓዊ ተካፋይ ለመጻፍ፣ ማጠቃለያና አጠቃላይ ጥያቄዎች።",
+      "tagline": "የአውሮፓ ክፍት ቊጥቋጥ ሞዴል"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "የቀደመው የGPT-5 ዋና ሞዴል ማሻሻያ። ለመጻፍ፣ ግምገማና መቅዳት ጠንካራ ነው።",
+      "tagline": "ቀደም የነበረ GPT-5 ትኩረት"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "የቀደመው በውይይት ታደሰ የGPT-5 ማሻሻያ። ለዕለታዊ ውይይቶችና አስባበሰ መርጡ ነው።",
+      "tagline": "ቀደም የውይይት ተዘጋጅቷቸው GPT"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "አብዛኛውን ትንሽ GPT-5 አይነት። ለፈጣንና ቀላል ስራዎች በዝቅተኛ ወጪ የተሻለ ነው።",
+      "tagline": "ትንሹ ያለፈው ትውልድ GPT"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "አብዛኛውን ትንሽ GPT-4.1 አይነት። በፍጥነትና ወጪ በጣም በግፍ ሲሆን ለቀላል ስራዎች መርጡ ነው።",
+      "tagline": "ትንሹ ያለፈው ትውልድ GPT"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "ትንሽና ፈጣን GPT-4o አይነት። ለዕለታዊ ፈጣን ስራዎች አዲሱ ችሎታ ሳይያስፈልግ የበቂ ነው።",
+      "tagline": "ቀላል ያለፈው ባለብዙ ሞዴል GPT"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "አጥቂቅ የአእምሮ አስተዳደር ሞዴል። ለሂሳብ፣ ሎጅክ እና በእሴቶች ላይ ደረጃ ደረጃ ችግር እንዲያቃልል ከo3 በታች ወጪ ይሰራል።",
+      "tagline": "ፈጣን እና ትኖ ጥንቃቄ"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "የቀደመው አጥቂቅ የአእምሮ አስተዳደር ሞዴል። በቅናሽ ወጪ ሂሳብ፣ ሳይንስና ሎጅክ ጥያቄዎች ችሎታ አለው።",
+      "tagline": "አጭር በደረጃ የተከተለ ጥንቃቄ"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "የAnthropic በጣም አዋቂ ሞዴል፣ የClaude 5 ቤተሰብ የመጀመሪያው። ለከባድ የመጻፍ፣ ምርምርና መቅዳት ስራዎች የተሻለ ነው።",
+      "tagline": "የAnthropic አስተዳደር ሞዴል"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "አዲሱ የተመጣጠነ Claude፣ የClaude 5 ቤተሰብ የመጀመሪያው። ለዕለታዊ መጻፍ፣ ግምገማና መቅዳት በፈጣን ምላሽ ጠንካራ ነው።",
+      "tagline": "አዲሱ ተመጣጣኝ Claude"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "የMistral መካከለኛ መጠን ሞዴል። አውሮፓዊ ተካፋይ፣ ኃይልና ፍጥነትን ለዕለታዊ ስራ ይመጣጣል።",
+      "tagline": "ተመጣጣኝ የአውሮፓ ሞዴል"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "የMistral ትንሽ ሞዴል። ለማጠቃለያ፣ ረቂቅና ቀላል ጥያቄዎች ፈጣንና ወጪ ቀና ነው።",
+      "tagline": "ትንሽ ፈጣን የአውሮፓ ሞዴል"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "የMistral በጣም ትንሽ ሞዴል። ለአንዳንድ ፈጣንና ቀላል ስራዎች በዝቅተኛ ወጪ የተሻለ ነው።",
+      "tagline": "ትንሹ ወደ ጠረጴዛ ያለ  Mistral"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "የታደሰው DeepSeek-R1 ማሻሻያ። እንዴት እንደሚያስበ የደረጃ ደረጃ ግኝት ይያያዛል።",
+      "tagline": "የታደሰ ክፍት ማስተዋል ሞዴል"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "ቀላል ክፍት ምንጭ ሞዴል ከMeta። ለመጻፍ፣ ማጠቃለያና ዕለታዊ ጥያቄዎች ፈጣን ነው።",
+      "tagline": "ውጤታማ ክፍት ምንጭ Llama"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "አሮጌ ክፍት ምንጭ ሞዴል ከMeta። ለአጠቃላይ መጻፍና ጥያቄ-መልስ እንኳን ትችላለች።",
+      "tagline": "ያለፈው ክፍት ምንጭ Llama"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "የxAI ዋና ሞዴል። ለዝርዝር ያልተገደቡ ውይይቶች፣ ግምገማና ፈጣሪ አስተዋፅኦ መርጡ ነው።",
+      "tagline": "xAI ትኩረት"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "የ OpenAI ቅርጸ ተለዋዋጭ አዲሱ ሞዴል። ለመጻፍ፣ ለምርምር፣ ለኮዲንግ፣ ለውስብስብ ችግሮች መፍታት ጠንካራ ነው።",
+      "tagline": "ቅንጣት GPT ትኩረት"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT ቻት (አዲሱ)",
+      "description": "ሁሌም ወደ OpenAI አዲሱ ቻት ዝግጅት የታዘዘ ትንሽ ስም ነው። በ Azure ውስጥ ከተነሣው gpt-*-chat ሞዴሎች ተካላይ ነው።",
+      "tagline": "ሁልጊዜ አዳዲስ የውይይት GPT"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "በቅርቡ የተለቀቀ Opus ስሪት፣ በ 4.6 እና 4.8 መካከል። ለረጅም ጽሁፍ፣ ምርምር፣ ኮዲንግ እና እጅግ በጥንቃቄ ሚደረግ ትንተና ይጠካል።",
+      "tagline": "የቅርብ ጊዜ Opus እትም"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "የ DeepSeek አዲሱ የማስተንተኛ ሞዴል እና በ Azure ውስጥ የ R1 ስሪት ተካላይ። ስለሚያስብ እርስ በርስ ይቀርባል።",
+      "tagline": "አዲሱ ክፍት ማስተዋል ሞዴል"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "የ DeepSeek ፈጣን V4 ስሪት እና በ Azure ውስጥ የ V3 ተካላይ። በአጠቃላይ ጽሁፍና በቴክኒክ ጥያቄዎች ላይ ፈጣን ይመልሳል።",
+      "tagline": "ፈጣን ክፍት ምንጭ አማራጭ"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (ማስተንተኛ)",
+      "description": "የ xAI ፈጣን ማስተንተኛ ሞዴል። በእርስ በርስ እየተነቀላ ፈጣን መልስ ይሰጣል።",
+      "tagline": "ፈጣን xAI ተከታታይ ማስተዋል ሞዴል"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "የ xAI ፈጣን ቻት ሞዴል። ለዕለታዊ ጥያቄዎችና ውይይቶች ፈጣን ምላሽ ይሰጣል።",
+      "tagline": "ፈጣን xAI የውይይት ሞዴል"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "ቀላል የ xAI ሞዴል። ለፈጣን ጥያቄዎችና ለአጭር ውይይቶች ፈጣን እና ቀላል ነው።",
+      "tagline": "ቀላል xAI ሞዴል"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "የOpenAI GPT-5.6 ትልቁ ሞዴል። በጽሁፍ፣ ጥናት፣ መች ፅሁፍና በችግኝ መፍታት ጥልቅ አማካይ ነው።",
+      "tagline": "አዲሱ GPT ትውልድ ደረጃ"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "የOpenAI GPT-5.6 ዋናው ደረጃ። አዳዲስ ጽሁፍ፣ ትንተና እና መች ፅሁፍ ለቀናቸው ተግባራት ፈጣን ምላሽ ይሰጣል።",
+      "tagline": "የተመመጠ የዕለታዊ አጠቃቀም GPT-5.6"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "የOpenAI GPT-5.6 ቀላልና ፈጣን ደረጃ ሞዴል። ለፈጣን ጥያቄዎች እና ቀላል ተግባራት በችር ዋጋ ከፍተኛ ስራ ይሰርቃል።",
+      "tagline": "ቀላልና ፈጣን GPT-5.6"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "የMistral አዲሱ የመካከለኛ መጠን ሞዴል። አውሮፓዊ አማራጭ፣ ችሎታና ፍጥነት ለየቀኑ ስራ የተባረከ ነው።",
+      "tagline": "የተመመጠ የአውሮፓ ሞዴል"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "የMoonshot AI የበጎ ክብደት ሞዴል። በagentic ተግባራት፣ ኮዲንግና ረጅም ሰነዶች ላይ ጠንካራ ነው።",
+      "tagline": "Agentic የበጎ ክብደት ሞዴል"
     }
   },
   "searchMode": {
@@ -1723,7 +2016,22 @@
     "useDefaultStyle": "ነባሪ የመጻፍ ዘዴ ይጠቀሙ",
     "noTonesCreated": "ምንም ድምፅ አልተፈጠረም",
     "createTonesHint": "ድምፆችን በፈጣን ተግባራት ውስጥ ይፍጠሩ",
-    "translateDocumentTooltip": "ሰነዶችን ወደ ሌላ ቋንቋ ትርጉም ያድርጉ።\n\nየሚደገፉ ፎርማቶች፡ Word, Excel, PowerPoint, HTML, TXT\nከፍተኛ መጠን፡ 40MB\n\n80 በላይ ቋንቋዎችን ማግኘት እና ምርጥ ቅርጸ-ቃላት ፋይሎችን ይደግፋል።"
+    "translateDocumentTooltip": "ሰነዶችን ወደ ሌላ ቋንቋ ትርጉም ያድርጉ።\n\nየሚደገፉ ፎርማቶች፡ Word, Excel, PowerPoint, HTML, TXT\nከፍተኛ መጠን፡ 40MB\n\n80 በላይ ቋንቋዎችን ማግኘት እና ምርጥ ቅርጸ-ቃላት ፋይሎችን ይደግፋል።",
+    "translateTooltip": "የጽሑፍ አካልን ወደ ሌላ ቋንቋ ትርጉም አድርግ።\n\nሙሉ ፋይሎች (Word, Excel, PowerPoint, HTML, TXT) ለማትረጉም  instead በ Translate Document ይጠቀሙ።",
+    "cameraTooltip": "በመሣሪያዎ ካሜራ ፎቶ ውስጥ ውስጥ ይውሰዱ እና በመልኩ ይያዙት።",
+    "noResults": "የሚዛመዱ እርምጃዎች አልተገኙም",
+    "sectionPinned": "ተያይዞ የታመደ",
+    "sectionFrequent": "በተደጋጋሚ የሚጠቀመው",
+    "sectionMore": "ተጨማሪ",
+    "categoryWeb": "ዌብ",
+    "categoryMedia": "ሚዲያና ፋይሎች",
+    "categoryTransform": "መለወጥ",
+    "pin": "ከፍ ላይ አስረግፍ",
+    "unpin": "ከዚህ አልቀም",
+    "moveToMore": "ወደ 'ተጨማሪ' አንቀሳቅስ",
+    "moveOutOfMore": "በምናሌ አሳይ",
+    "showSources": "ሌሎች ምንጮችን አሳይ",
+    "hideSources": "ሌሎች ምንጮችን ደብቅ"
   },
   "transcription": {
     "transcribesOnSend": "በመላክ ጊዜ ይቀዳል",
@@ -1933,7 +2241,14 @@
     "learnMore": "ተጨማሪ ያስሱ",
     "advancedOptions": "የቀላል አማራጮች",
     "unofficialBadgeLabel": "ያልተፈቀደ",
-    "unofficialLanguageWarning": "ይህ ቋንቋ በመደበኛ ሁኔታ አልተደገፈም። የትርጉም ጥራት አልተረጋገጠም። ውጤቱን ከመካፈልዎ በፊት በቋንቋው በተለመዱ ወይም በተፈጥሯ ተናጋሪ ይግለጹት።"
+    "unofficialLanguageWarning": "ይህ ቋንቋ በመደበኛ ሁኔታ አልተደገፈም። የትርጉም ጥራት አልተረጋገጠም። ውጤቱን ከመካፈልዎ በፊት በቋንቋው በተለመዱ ወይም በተፈጥሯ ተናጋሪ ይግለጹት።",
+    "translationSubmitted": "ትርጉም ቀዳሚ ጀምሯል — PDFዎች በመካከለኛ ቅድሚያ እየተሰሩ ናቸው።",
+    "pendingTitle": "{filename} ትርጉም በሂደት ላይ…",
+    "pendingHint": "የPDF ትርጉሞች በመካከለኛ ይሄዳሉ እና ጥቂት ደቂቃዎች ሊውሉ ይችላሉ። ስራዎን ቀጥሉ — ሰነዱ ተዘጋጅቶ ሲሆን ይህ ካርድ ይዘመናል፣ እንኳን ከእንደገና አከፋፈል በኋላም።",
+    "asyncFailed": "የሰነዱ ትርጉም አልተሳካም፡ {error}",
+    "jobNotFound": "የትርጉም ስራው አልተገኘም። እባክዎ እንደገና ይሞክሩ።",
+    "retryPolling": "እንደገና ይፈትሹ",
+    "pollingStalled": "የግልጽ ጉዞ አለመቻል ምክንያት ፡ ትርጉሙ እንደገና በሂደት ላይ ሊሆን ይችላል።"
   },
   "terms": {
     "officialLanguages": "አካባቢ ትክክለኛ ቅጽ:",
@@ -1997,6 +2312,10 @@
       "technicalDetails": "ቴክኒካዊ ዝርዝሮች",
       "agentCountLabel": "{count} ወኪሎች",
       "disconnectedToast": "{name} ከተገናኙ ተቋርጧል"
+    },
+    "emptyState": {
+      "title": "የክልል / የድርጅት ወኪሎች የሉም",
+      "description": "የ Foundry ፕሮጀክት ያገናኙ እና ዋና ወኪሎቹን ያግኙ።"
     }
   },
   "privacy": {
@@ -2107,5 +2426,1309 @@
     "review": "አድምጥ",
     "itemId": "መታወቂያ፡ {id}",
     "itemSource": "{date} ከ {source}"
+  },
+  "regionOverride": {
+    "warning": "ቦታ ማሻሻያ አንቀሳቅሷል — ጥያቄዎችዎ ወደ {region} የውሂብ ክልል እየተላኩ ናቸው። ይህ እጅግ እንደ ሙከራ የተደረገ ማሻሻያ ነው፣ እውነተኛ ቦታዎ አይደለም።",
+    "clear": "ማሻሻያውን አጽዳ"
+  },
+  "usageImpact": {
+    "empty": "እስካሁን ድረስ ምንም አጠቃቀም አልተመዘገበም። የቶክን አጠቃቀምዎ እና የተገመገመ ማህበረ-ተፅዕኖ ከሚያወዛውዝ በኋላ እዚህ ይታያል።",
+    "co2Value": "{grams} ግራም ኦሲዎች፣ CO₂e",
+    "equivalence": "≈ የ{count} ስማርትፎን አንደበት አንደበት",
+    "requests": "ጥያቄዎች",
+    "promptTokens": "የጥያቄ ቶክኖች",
+    "completionTokens": "የመጨረሻ ቶክኖች",
+    "topModels": "በሞዴል",
+    "byRegion": "በአካባቢ",
+    "regionDefault": "ነባሪ",
+    "modelRow": "{requests} ጥያቄ · {grams} ግራም",
+    "disclosure": "ግምቶች በሰሜን v{version} ላይ የተመሰረቱ · ከ{since} ጀምሮ · መደበኛ ቻት ብቻ (የagent እና knowledge-base መልስ አይተከተሉም።)",
+    "reset": "የአጠቃቀም ስታቲስቲክስን ቀይር",
+    "estimatedPortion": "ይህ ወደ tracking ከመጀመር በፊት በተደረጉ ውይይቶች ላይ ከተያዙት መልዕክት ጽሑፍ በተመሠረት ለ~{grams} ግራም CO₂e ({requests} ጥያቄዎች) የተገመተ መጠን አካትቷል፤ የተዘገቡ ቶክን ቁጥሮች አይደለም።",
+    "chipTitle": "የእንፋሎት ቺፕ",
+    "chipDescription": "የአሁኑ ውይይቱ የተገመተው የካርቦን እግር አሻራ፣ ከውይይቱ አናት በላይ የሚታይ።",
+    "chipAlways": "ሁልጊዜ አሳይ",
+    "chipAlwaysHint": "ለውይይቱ ግምት ካለ ቺፑ ሁልጊዜ ይታያል።",
+    "chipAuto": "ግምት ሲቀየር ወይም ሲታገድ አሳይ",
+    "chipAutoHint": "ግምቱ ሲቀየር ቺፑ ይታያል፣ ከዚያ ያሸመቃል። ሲታገድ ወይም ስታንቀሳቀስ በድጋሚ ይታያል።",
+    "chipHidden": "የተደበቀ",
+    "chipHiddenHint": "ቺፑ ፈጽሞ አይታይም። ጠቅላላዎቹ ግን በዚህ ገፅ ላይ ይቆጠራሉ።",
+    "chipAutoHideLabel": "ከዚያ በኋላ ያሸመቅ",
+    "chipAutoHideUnit": "ሰከንዶች",
+    "chipAutoHideHint": "በ {min} እና {max} ሰከንዶች መካከል።"
+  },
+  "extraction": {
+    "toggleLabel": "የዋቅ መረጃ ያውጡ",
+    "trayLabel": "ውጤት መረጃ መውጫ",
+    "trayPrefix": "ያውጡ",
+    "trayInfo": "ውጤቱ እስከ 3 የተዋቀሩ ሰንጠረዦችን ይኖራል። መዝገቦቹ በአካባቢዎ ተቀምጠዋል።",
+    "autoChip": "መፈጸሚያ — AI አዋቅ ነባር አቅርቦት",
+    "addRecipe": "መዝገብ አክል",
+    "addRecipeTitle": "ወደዚህ ውጤት መውጫ መዝገብ ያክሉ",
+    "addRecipeFullTitle": "እስከ 3 መዝገቦች በአንድ መውጫ ዙር",
+    "removeRecipe": "መዝገብ ያስወግዱ፡ {name}",
+    "remove": "ያስወግዱ",
+    "section": "የውጤት መዝገቦች",
+    "sectionSubtitle": "የተቀመጡ አብነቶች ሲሆኑ ደንብ የሌላቸውን ጽሑፎች፣ ፋይሎች፣ ወይም URLs ወደ የተዋቀሩ ሰንጠረዦች ይቀይራሉ። እስከ 3 ትክክለኛ ማውጫ ትችላለህ።",
+    "newRecipe": "አዲስ መዝገብ",
+    "untitledRecipe": "(ስም የሌለው መዝገብ)",
+    "deleteRecipe": "መዝገብ ሰርዝ",
+    "delete": "ሰርዝ",
+    "deleteConfirm": "ሰርዝ?",
+    "cancel": "ይቅር",
+    "name": "ስም",
+    "namePlaceholder": "ለምሳሌ፡ ታካሚዎች",
+    "description": "መግለጫ",
+    "optional": "(አማራጭ)",
+    "descriptionPlaceholder": "በመዝገብ ምርጫ ላይ የሚታይ አጭር መግለጫ",
+    "instructions": "መመሪያዎች",
+    "instructionsPlaceholder": "AI በዚህ ቁምፊ ውስጥ ምን ያድርጋ እንደሚገባ?",
+    "fields": "መስኮች",
+    "field": "መስክ",
+    "fieldsPlural": "መስኮች",
+    "fieldName": "የመስክ ስም",
+    "fieldType": "የመስክ ዓይነት",
+    "fieldNamePlaceholder": "field_name",
+    "addField": "መስክ አክል",
+    "removeField": "መስክ አስወግድ",
+    "toggleDetails": "ዝርዝሮችን አሰናዳ",
+    "fieldDetailsTitle": "መግለጫ፣ የእና እሴቶች",
+    "fieldDescriptionPlaceholder": "መግለጫ (ይህ መስክ እንዲገኝ ለ AI ይረዳል)",
+    "enumValuesPlaceholder": "በነጠላ ነጥብ የተለያዩ ተቀባይነት ያላቸው እሴቶች",
+    "required": "አስፈላጊ",
+    "suggest": "AI በመጠቀም ያቅርቡ",
+    "suggesting": "በማቅረብ ላይ…",
+    "suggestNeedsInstructions": "AI ምን እንደሚፈለግ እንዲያውቅ መመሪያ አስገባት",
+    "searchRecipes": "አቀራረቦች ፈልግ",
+    "pickerEmpty": "አሁን ገና ምንም አቀራረብ የለም። ለመጀመር አዲስ ይፍጠሩ።",
+    "pickerEmptyMatch": "ከሚመስሉ አቀራረቦች የሉም",
+    "editorEmpty": "አሁን ገና ምንም አቀራረብ የለም። ይፍጠሩ እና AI ቦታዎቹ ለመሙላት ይረዳዎታል።",
+    "noData": "ውሂብ አልተገኘም",
+    "noRecords": "ምንም {name} መዝገቦች አልተገኙም",
+    "row": "ረድፍ",
+    "rows": "ረዳፎች",
+    "record": "መዝገብ",
+    "records": "መዝገቦች",
+    "complete": "ተጠናቋል",
+    "download": "አውርድ",
+    "preview": "ቅድመ እይታ",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} መስኮች",
+    "fieldCountOne": "1 መስክ",
+    "andMoreFields": "+ {count} ተጨማሪ",
+    "saveAsRecipe": "እንደ አቀራረብ አስቀምጥ",
+    "savedAsRecipeToast": "እንደ \"{name}\" አቀራረብ ተቀምጧል",
+    "previewTruncated": "ከ {total} ረዳፎች 3 የመጀመሪያውን ብቻ እያሳየ። ሙሉውን ውሂብ ለማግኘት አውርዱ።",
+    "previewEmpty": "ለቅድመ እይታ ምንም ረዳፎች የሉም",
+    "proposedSchemaTip": "ይህንን የውሂብ አዋቂነት የAI ጠየቀው ነው። ቀጣዩ ጊዜ ለመድገም ያስቀምጡት።",
+    "downloadAriaLabel": "{name} ን {format} በመጠቀም አውርድ",
+    "previewAriaLabel": "የ {name} ቅድመ እይታ ቀይር",
+    "changeFormatAriaLabel": "ለ {name} የአውርድ ቅርጸ-ትንታኔ ቀይር",
+    "materialWarningTitle": "ለመሰብሰብ ንጥረ ነገር ያክሉ",
+    "materialWarningBody": "ታች መልእክት ይጻፉ፣ ፋይል ያካትቱ፣ ወይም URL ያክሉ።",
+    "materialAttach": "ፋይል አካትት",
+    "willExtractPrefix": "ከዚህ ማውጣት ይቻላል፦",
+    "materialText": "የመልእክት ጽሑፍ",
+    "materialFiles": "{count, plural, one {1 ፋይል} other {# ፋዎች}}",
+    "materialActiveFiles": "{count, plural, one {1 ንቁ ፋይል} other {# ንቁ ፋዎች}}",
+    "dismiss": "ማሰባሰብን ያቁሙ"
+  },
+  "Connectors": "አገናኞች",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "ትርጉም",
+        "description": "ጽሁፍን በትንሽ ትናንሽ ትናኝነት፣ ማብራሪያዎች፣ የግምገማ ዙሮች ይተረጉሙ"
+      },
+      "document": {
+        "label": "ሰነድ",
+        "description": "ሰነድ ይሰሩና ያድኑ ተባባሪው ከፈጠሩት ጋር"
+      },
+      "dataAnalysis": {
+        "label": "የውሂብ ትንተና",
+        "description": "ሰንጠረዦችን ያስመጡና ውሂብዎን ያሳይ/ያቀይሩ"
+      },
+      "map": {
+        "label": "ካርታ",
+        "description": "ማንኛውንም ውሂብ በካርታ ላይ ቦታ ያድርጉ"
+      }
+    },
+    "chooser": {
+      "prompt": "ወይም የተስተካከለ የመስሪያ ቦታ ይጀምሩ"
+    },
+    "sidebar": {
+      "newTranslation": "አዲስ ትርጉም",
+      "newDocument": "አዲስ ሰነድ",
+      "newDataAnalysis": "አዲስ የውሂብ ትንተና",
+      "newMap": "አዲስ ካርታ"
+    },
+    "translation": {
+      "chooseLanguage": "የትርጉም ቋንቋ",
+      "customLanguageHint": "\"{name}\" የጨመሩት ቋንቋ ነው — AI ማንኛውንም ቋንቋ ለመሞከር ትሞክራለች፣ ጥራት ግን አልተረጋገጠም።",
+      "addedByYou": "የታከለው በእርስዎ",
+      "glossary": "መዝገበ ቃላት",
+      "noGlossary": "መዝገበ ቃላት የለም",
+      "manageGlossaries": "መዝገበ ቃላት",
+      "glossaries": "መዝገበ ቃላት",
+      "closeGlossaries": "መዝገበ ቃላትን ዝጋ",
+      "glossariesEmpty": "አንዳንድ ተወላጅ ቃላት እንዴት እንደሚተረጉሙ ለማየት መዝገበ ቃላት ይፍጠሩ። መዝገበ ቃላት በዚህ መሳሪያ ላይ ይቀመጣሉ እና በትርጉማት መካከል መድገም ይችላሉ።",
+      "newGlossary": "አዲስ ግሎሳሪ",
+      "newGlossaryName": "ስም የሌለው ግሎሳሪ",
+      "glossaryName": "የግሎሳሪ ስም",
+      "deleteGlossary": "ግሎሳሪ ማጥፋት",
+      "sourceTerm": "የመጣበት ቃል",
+      "targetTerm": "ትርጉም",
+      "note": "ማስታወሻ",
+      "noteOptional": "ማስታወሻ (አማራጭ)",
+      "addEntry": "ቃል ማክለት",
+      "removeEntry": "{term} ማስወገድ",
+      "mode": "የትርጓሜ ዘዴ",
+      "modeQuick": "ፈጣን",
+      "modeAgentic": "ታይቷል",
+      "modeQuickHint": "አንድ ትርጉም እሴት፣ ፈጣን ሂደት",
+      "modeAgenticHint": "የሚተረጉሙትን ጽሑፍ ይቀየራል፣ ከዚያ ይተረጉማል እና እስከ 3 የእይታ ዙር ያካሂዳል",
+      "translate": "ትርጉም",
+      "translating": "በትርጓሜ ላይ…",
+      "sourceLabel": "የመጣበት ጽሑፍ",
+      "targetLabel": "ትርጉም",
+      "sourcePlaceholder": "የሚተረጉሙትን ጽሑፍ ይቅናቱ ወይም ይጻፉ፣ ወይም ሰነድ ያስገቡ።",
+      "targetEmpty": "ትርጉሙ እዚህ ይታያል።",
+      "uploadDocument": "ሰነድ ማስገቢያ",
+      "copy": "ቅዳ",
+      "copied": "ተቀድቷል",
+      "tooLong": "ጽሑፉ {max} ቁምፊዎች ይበልጣል። ወደ ክፍሎች ተከፍሉት፣ ወይም ሙሉ ሰነዶች ላይ የሰነድ ትርጉም ይጠቀሙ።",
+      "analysisTitle": "ትርጓሜ በፊት ትንታኔ",
+      "register": "ይመዝገቡ",
+      "reviewTitle": "የእይታ ዙሮች",
+      "roundLabel": "ዙር {round}",
+      "verdictApprove": "ተፀድቷል",
+      "verdictRevise": "ተቀይሯል",
+      "railRequest": "የመጣበት ጽሑፉን ወደ {language} ይተረጉሙ።",
+      "railDoneAgentic": "ተጠናቋል። ጽሑፉን ተንትኗል፣ ተተረጉመው እና {rounds} የእይታ ዙሮች ተካሂዷል። ውጤቱ በውስጥ ስፍራ ውስጥ ነው።",
+      "railDoneQuick": "ተጠናቋል። ትርጉሙ በውስጥ ስፍራ ውስጥ ነው።",
+      "railAssessRequest": "የ{language} ትርጉምን ጥራት ይገምግሙ።",
+      "railAssessDone": "ግምገማው ተጠናቋል፡ ደረጃዎች በውስጥ ስፍራ አሉና {count} የሚገባው ማስተካከያ (ያደርጉ) ሊያሳዩ ነው።",
+      "roundChanges": "በዙር {round} ውስጥ የተፈጸመው ለውጥ",
+      "criteria": {
+        "accuracy": {
+          "label": "ትክክለኛነት",
+          "description": "የመጣበትን ትክክለኛ ትርጉም ያሳያል፤ ምሕረት የለም፣ ትርጉም ወይም ባለሙትን አይደለም፣ ያልተተረጉመ ክፍል የለም"
+        },
+        "fluency": {
+          "label": "ዝርዝርነት",
+          "description": "ሰውነት፣ ማይቀጥለው፣ ሰውነት፣ ህብረቱ በተደላይ ቋንቋ በፈጣሪ እና በቀዳሚ ሀሳብ ተጽናኒ ይነበባል"
+        },
+        "terminology": {
+          "label": "ቴርሚኖሎጂ",
+          "description": "የክስተት ቃላት ትክክልነትና ጥራት ያለው ነው፣ የግሎሳሪው መመሪያ በትክክል ተከተል።"
+        },
+        "style": {
+          "label": "ዘዴ",
+          "description": "የምዕራፍ ቅጥፍ፣ ድምፅና ዘዴ ከመጣበት ጋር ይዛመዳል እና የተስተካከለ ነው"
+        },
+        "localeConventions": {
+          "label": "የአካባቢ ስርዓቶች",
+          "description": "ቀናት፣ ቁጥሮች፣ መለኪያዎችና ምልክቶች የመዳበሪያ አካባቢ ደንቦችን ይያዙ"
+        },
+        "audience": {
+          "label": "ተወካዩ",
+          "description": "የጽሑፉን ዓላማ እና አካባቢ ለሚስማማ ፈጠራ የተሟላ ነው"
+        }
+      },
+      "severity": {
+        "minor": "ትንሽ",
+        "major": "ታላቅ"
+      },
+      "assess": "ጥራት አወጣ",
+      "assessing": "በተገምጋም ላይ…",
+      "assessmentTitle": "የጥራት ግምገማ",
+      "criteriaPicker": "ለመግምገም የሚፈለጉ መስፈርቶች",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "የተጠቀሱ ማስተካከያዎች",
+      "noEditsSuggested": "ማስተካከያ አልተጠቀሰም — ትርጉሙ የተመረጡትን መስፈርቶች አለፈ።",
+      "acceptEdit": "ተቀበል",
+      "rejectEdit": "አትቀበል",
+      "acceptAll": "ሁሉንም ተቀበል",
+      "rejectAll": "ሁሉንም አትቀበል",
+      "editAccepted": "ተቀባ",
+      "editRejected": "ውድቅ ተደረገ",
+      "editUnapplicable": "ይህን አካል በቅናት ጽሑፍ ላይ ማግኘት አልተቻለም — አልተተገበረም",
+      "editTranslation": "አርትዕ",
+      "doneEditing": "ተጠናቀቀ",
+      "pasteTranslationPlaceholder": "ለማስተካከል ትርጉም ይተይዙ ወይም ይቅኑ…",
+      "editingBlockedPendingEdits": "ከዚህ በፊት የተጠቀሱትን ማስተካከያዎች ይወድቁ ወይም ይችሉ",
+      "pendingCount": "{count} በመጠባበቅ ላይ",
+      "closeReview": "የጥራት አየትን ዝጋ",
+      "showReview": "አየት አሳይ",
+      "showReviewPending": "አየት አሳይ ({count} በመጠባበቅ ላይ)",
+      "undoEdit": "ይቅር",
+      "clearResolved": "ተደርሷ የተፈቱትን ያጥፉ",
+      "clearResolvedHint": "ተቀባይነት ያገኙትን፣ የተቀበሉትን፣ የተቀበሉትን እና የተረፈውን ማሻሻያዎች ከዚህ ዝርዝር ያጥፉ",
+      "autoClearResolved": "ተደርሷ የተፈቱትን ማሻሻያዎች በራስ-ሰር ያጥፉ",
+      "customCriteria": "ብጁ መስፈርቶች",
+      "closeCriteria": "ብጁ መስፈርቶችን ዝጋ",
+      "newCriterion": "አዲስ መስፈርት",
+      "newCriterionName": "ያልተሰየመ መስፈርት",
+      "criterionName": "የመስፈርት ስም",
+      "criterionRubric": "መመሪያ",
+      "criterionRubricPlaceholder": "ይህን መስፈርት ለማሟሟት ትርጉሙ ምን ማድረግ እንደሚገባ በአጭር ይግለጹ፣ ለምሳሌ፦ «ሁሉንም የክሊኒክ የመድሃኒት መመሪያዎች በትእዛዝ ቃል ማቅረብ፣ ፈጽሞ በፍጹም መልኩ አይሆንም…»",
+      "criterionRubricHint": "ይህ መመሪያ AI እና built-in MQM መስፈርቶችን በመከታተል ስለመተርጎም በቀጥታ ይሰጣል።",
+      "criteriaEmpty": "ከ built-in MQM መስፈርቶች በላይ ትርጉሞችን ለማወገድ እንደ የጉልበት ቅጂ፣ የደንበኛ ቃላት ምርጫ፣ ወይም ክልላዊ ተግባር ብጁ መስፈርቶችን ይፍጠሩ። በዚህ መሣሪያ ላይ ይቀመጣሉ እና ለድጋፍ ይጠቀማሉ።",
+      "deleteCriterion": "መስፈርት ያጥፉ",
+      "manageCriteria": "ብጁ መስፈርቶች",
+      "addCriteria": "መስፈርቶችን ያክሉ",
+      "noUsableCriteria": "ቢያንስ አንድ built-in መስፈርት ይምረጡ፣ ወይም ለብጁ መስፈርቶችዎ መመሪያ ያቅርቡ።",
+      "criterionRubricTooLong": "ይህ ሩብሪክ {over} ቁምፊ ከወሰኑ በላይ ነው። ከእያንዳንዱ ግምገማ ጋር ይላካል፣ ስለዚህ ከዚህ በፊት መቀነስ አለበት።"
+    },
+    "document": {
+      "emptyTitle": "የሚፈልጉትን ሰነድ ይግለጹ",
+      "emptyBody": "ረዳቱን የሚፈልጉትን አይነት ይቀርቡ፣ ሁኔታ ሪፖርት, የአከፋፈል ደብዳቤ, የስብሰባ ጉባኤ ዝርዝር ወዘተ። ከመጣጥፉ በፊት ከምንጭ ፋይሎች የሚታሰሩ እና ውሳኔዎች ካሉ፣ ይጨምሩ።",
+      "generatePlaceholder": "የሚፈልጉትን ሰነድ ይግለጹ…",
+      "revisePlaceholder": "ማድረግ የሚፈልጉትን ለውጦች ይግለጹ…",
+      "generate": "ያመነጩ",
+      "revise": "ያሻሽሉ",
+      "writing": "በመጻፍ ላይ…",
+      "export": "ወደውጭ አውጣ",
+      "references": "ምንጮች",
+      "addReference": "ፋይል ያክሉ",
+      "uploading": "በመጫን ላይ…",
+      "removeReference": "{name} ያስወግዱ",
+      "referenceChars": "{chars} ፊደሎች የተመደበ ጽሑፍ",
+      "referenceEmpty": "ከ{name} ጽሑፍ ማውጣት አልተቻለም",
+      "uploadFailed": "ማስገባት አልተሳካም",
+      "untitledDocument": "ስም የሌለው ሰነድ",
+      "generatedSummary": "ሰነዱን በአስተዳደር ውስጥ ጻፍኩት። ይመርምሩና ማቀያያን ያሳውቁኝ።",
+      "revisedSummary": "ሰነዱን በአስተዳደር ውስጥ አሻሻለው።",
+      "runFailed": "ችግር ተፈጥሯል፡ {message}",
+      "uploadBasis": "ከነበረ ሰነድ ይጀምሩ",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "ሰዋሰው እና የአጽዋማ ስህተት",
+          "description": "ትክክለኛ ሰዋሰው እና አጽዋማ፤ አንድ ዓይነት የእንግሊዝኛ እንደ (US ወይም UK) መጠቀም ይችላሉ — መውሰድ የሚያሳይ የስህተት መሆን ነው"
+        },
+        "consistency": {
+          "label": "አንደኝነት",
+          "description": "ተወላጅ ቃላት፣ ስሞች፣ በላይነት፣ እና ቅንብሮችን በሙሉ ይከተላሉ"
+        },
+        "clarity": {
+          "label": "ግልጽነት",
+          "description": "ድርብና አያንሳፉ ድርሰት ከሚሰጠው ፅኑ የተለየ፤ መዋቅሩ አንባቢውን የሚደግፍ"
+        },
+        "sensitivity": {
+          "label": "ስሜት አንቀጽ",
+          "description": "የሁሉን አካት ያደርገው፣ በግጭት እና በሰብአዊ አገልግሎት ተጠናቋል (አማራጭ ምርመራ)"
+        },
+        "specAdherence": {
+          "label": "ከSpec ጋር የተያያዘ መከተል",
+          "description": "የታተመውን የሰነዱ ስፔክ ይከተላል፡ ያስፈልጉ ክፍሎች በትክክል፣ በተከታታይነት እና መመሪያው ተከትሎ"
+        },
+        "toneAdherence": {
+          "label": "የቅንጅት መጠን መከተል",
+          "description": "የታተመውን የድምፅና ቅንጅት ደንቦች ይከተላል"
+        }
+      },
+      "severity": {
+        "minor": "ትንሽ",
+        "major": "ከፍተኛ"
+      },
+      "assess": "ጥራት ይገምግሙ",
+      "assessing": "በመገምገም ላይ…",
+      "assessmentTitle": "የጥራት እይታ",
+      "criteriaPicker": "የሚገምገሙበት መመሪያ",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "ተገቢ ማስተካከያዎች",
+      "noEditsSuggested": "ምንም ማስተካከያ አልተጠየቀም — ሰነዱ የተመረጡትን መስፈርቶች አልፎበታል።",
+      "acceptEdit": "ተቀበል",
+      "rejectEdit": "አትቀበል",
+      "acceptAll": "ሁሉንም ተቀበል",
+      "rejectAll": "ሁሉንም አትቀበል",
+      "editAccepted": "ተቀብሏል",
+      "editRejected": "አልተቀበለም",
+      "editUnapplicable": "ይህን አንቀፅ በወቅታዊ ጽሁፍ ውስጥ ማግኘት አልተቻለም፣ አልተተገበረም",
+      "editingBlockedPendingEdits": "ቀድሞ በቀጠሉ ያሉትን የሚጠየቁትን ማስተካከያዎች መፍታት ወይም መጥፋት ይገባዋል",
+      "pendingCount": "{count} በመጠባበቅ ላይ",
+      "closeReview": "የጥራት እይታ ዝጋ",
+      "showReview": "እይታ አሳይ",
+      "showReviewPending": "እይታ አሳይ ({count} በመጠባበቅ ላይ)",
+      "railAssessRequest": "የሰነዱን ጥራት በተመረጡት መስፈርቶች ላይ ይገምግሉ።",
+      "railAssessDone": "ግምገማ ተጠናቋል፤ ውጤቶች በworkspace ውስጥ አሉ፣ {count} ተገምጋሚ ማስተካከያ(ዎች) ለእይታ ዝግጁ ናቸው።",
+      "spec": "የሰነዱ ስፔክ",
+      "noSpec": "ምንም ስፔክ የለም",
+      "manageSpecs": "ስፔኮች",
+      "specs": "የሰነዶች ስፔኮች",
+      "closeSpecs": "ስፔኮችን ዝጋ",
+      "specsEmpty": "ሰነዶችን ወደ የተቀየረ ፎርማት ለመጻፍ ስፔክ ይፍጠሩ — የአስፈላጊ ክፍሎች፣ ቅደም ተከተልና የክፍል መመሪያ (ለምሳሌ፦ SitRep template)። ስፔኮች በዚህ መሳሪያ ላይ ተቀምጠው ይቀመጣሉ፣ እናም ማንኛውም ጊዜ መደገፍ ይችላሉ።",
+      "newSpec": "አዲስ ስፔክ",
+      "newSpecName": "ያልተሰየመ ስፔክ",
+      "specName": "የስፔክ ስም",
+      "specDescription": "መግለጫ (አማራጭ)",
+      "deleteSpec": "ስፔክ ሰርዝ",
+      "sectionHeading": "የክፍል አርእስት",
+      "sectionGuidance": "መመሪያ (አማራጭ)",
+      "sectionRequired": "አስፈላጊ",
+      "addSection": "ክፍል ያክሉ",
+      "removeSection": "ክፍል ያስወግዱ",
+      "generalGuidance": "አጠቃላይ መመሪያ (አማራጭ)",
+      "tone": "ቅንጅት",
+      "noTone": "ምንም ቅንጅት የለም",
+      "customCriteria": "ብጁ መስፈርት",
+      "manageCriteria": "ብጁ መስፈርት",
+      "closeCriteria": "ብጁ መስፈርቶችን ዝጋ",
+      "criteriaEmpty": "በተለየ መልኩ መደበኞችን — ለምሳሌ የብራንድ ልኩን ወይም የድርጅቱን ቋንቋ — በሰነዶች ላይ ለማረጋገጥ እና ለማሻሻል ፍርድ ይፍጠሩ። በዚህ መሳሪያ ላይ ይቀመጣል እና እንደገና መጠቀም ይችላሉ።",
+      "newCriterion": "አዲስ መደበኛ",
+      "newCriterionName": "አልተሰየመለው መደበኛ",
+      "criterionName": "የመደበኛ ስም",
+      "criterionRubric": "ሩብሪክ",
+      "criterionRubricPlaceholder": "ሰነዱ ይህን መደበኛ ለማሟሟል ምን ማድረግ እንዳለበት ይግለጹ፣ ለምሳሌ፦ \"ስለራሳችን ምርጥ የሆኑ ቃላት አትጠቀሙ፤ እያንዳንዱን ተጠቃሚ ሳይኖረው 'የምንደግፋቸው ሰዎች' ብለን ይጠሩ...\"",
+      "criterionRubricHint": "ይህ ሩብሪክ በምርመራ እና የማሻሻያ ዙር የሚሰጠው ለAI በቃሉ ላይ ነው።",
+      "deleteCriterion": "መደበኛ ሰርዝ",
+      "profileTitle": "የሰነድ ፕሮፋይል",
+      "profileDocType": "አይነት",
+      "profileLanguage": "ቋንቋ",
+      "profileAudience": "ተወካዮች",
+      "profilePurpose": "ዓላማ",
+      "profileRegister": "የቋንቋ ደረጃ",
+      "profileTone": "ድምፅ",
+      "profileConventions": "ልምዶች",
+      "emptyHint": "ከታች መጻፍ ይጀምሩ፣ ወይም በታች ሳጥኑ ውስጥ ምን እንደሚፃፉ ይገልፁ፣ ወይም ከፋይል ይጀምሩ።",
+      "addSpec": "መንገድ አክል",
+      "addCriteria": "መደበኞች አክል",
+      "scopeFullDocument": "ድርሻ፦ ሙሉ ሰነድ",
+      "scopeSelection": "ድርሻ፦ ተመርጧል — “{preview}…” ({count} ቃላት)",
+      "clearSelection": "ምረጡትን አጥፋ (ከሙሉ ሰነድ ይስሩ)",
+      "reviseSelectionPlaceholder": "በተመረጠው ላይ ምን ማሻሻል እንደተፈጸመ ይግለጹ...",
+      "revisedSelectionSummary": "በስራ ቦታው ውስጥ የተመረጠውን ክፍል ማሻሻል አደረግሁ።",
+      "assessedSelection": "ተመርጧል",
+      "undoEdit": "ይቅር",
+      "clearResolved": "ተደርሷ የተፈቱትን ያጥፉ",
+      "clearResolvedHint": "ተቀባይነት ያገኙትን፣ የተቀበሉትን፣ የተረፈውንም ማሻሻያዎች ከዚህ ዝርዝር ያጥፉ",
+      "autoClearResolved": "ተደርሷ የተፈቱትን ማሻሻያዎች በራስ-ሰር ያጥፉ",
+      "import": "አስመጣ",
+      "importReplaceTitle": "ሰነዱን ይቀይሩ?",
+      "importReplaceBody": "{name} ሲያመጡ የአሁኑን ሰነድ ይቀየራል። የዝርዝሮችዎ፣ ስፔክ እና ቶን ይቀጥላሉ።",
+      "importReplaceConfirm": "ቀይር",
+      "editorMode": "የአርታዒ ዘዴ",
+      "editorModeRich": "የተደራሽ ጽሑፍ",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "የተጠቀሱትን ማሻሻያዎች ከመቀየር በፊት ይፍታቹ።",
+      "suggestChanges": "ለውጦችን ያቅርቡ",
+      "suggestChangesHint": "የዶክዩመንትን ማሻሻያ እንደ አንድ አንድ ጥቆማ ይግለጹ እንጂ በቀጥታ አትቀይሩት።",
+      "suggestChangesSelectionNote": "በትኩረት የተቀየሩት ማሻሻያዎች በቀጥታ የተተገቡ ናቸው—ትኩረቱ የተመረጠው አይነቱ ነው።",
+      "suggestedSummary": "{count} የተጠቀሱ {count, plural, one {ለውጥ} other {ለውጦች}} ለእይታ ቀርበዋል።",
+      "revisionSuggestionSummary": "የእርስዎ የማሻሻያ ጥያቄ {count} {count, plural, one {የተጠቀሰ ለውጥ} other {የተጠቀሱ ለውጦች}} አስገነባለች።",
+      "revisionCriterionLabel": "የተጠየቀ ማሻሻያ",
+      "fallbackSelection": "በቀጥታ ተተግቧል — በምርጫ ላይ የተደረጉ ማሻሻያዎች አይጠቅሙም።",
+      "fallbackLargeRewrite": "በቀጥታ ተተግቧል — እንደገና ጻፉ ዶክዩመንቱ ብዙ ተቀይሯል ስለዚህ እንደ አንድ አንድ ጥቆማ ተገጥሟል።",
+      "fallbackReorder": "በቀጥታ ተተግቧል — ክፍሎች ተንቀሳቃሽ ተደርጓል፣ ግን የሚታዩ ማሻሻያዎች አይተስፋፋም።",
+      "fallbackUnanchorable": "በቀጥታ ተተግቧል — ለውጦቹ በየትዳር ማድረግ አልተቻለም።",
+      "fallbackNoChanges": "ምንም ለውጥ አልተፈለገም።",
+      "criterionRubricTooLong": "ይህ ሩብሪክ {over} ቁምፊ ከወሰኑ በላይ ነው። ከእያንዳንዱ ግምገማ ጋር ይላካል፣ ስለዚህ ከዚህ በፊት መቀነስ አለበት።"
+    },
+    "data": {
+      "emptyTitle": "ለትንተና ውሂብ አስገባ",
+      "emptyBody": "CSV፣ Excel ወይም JSON ፋይል አስገባ፣ ወይም ቀጥታ ሰቅ ያድርጉ። መደብዎ ከተሸከመ በኋላ ማስኬድ፣ ከሰነዶች በተጨማሪ ረድፎችን ማውጣት እና በቀላሉ መመሪያ መቀየር ትችላላችሁ።",
+      "importFile": "ፋይል አስገባ",
+      "importing": "እየተሰቀመ...",
+      "pasteData": "ውሂብ ሰቅ ያድርጉ",
+      "pastePlaceholder": "CSV፣ TSV ወይም JSON እዚህ ይሰቅ...",
+      "import": "አስገባ",
+      "addFromSource": "ከምንጭ አክል",
+      "extractHint": "ጽሑፍ ይሰቅ ወይም ሰነድ ይምረጡ፤ አሁን ያሉበት አይነት የሚያከታተሉ ረድፎች ይመረጣሉ። ያልታወቀ እንደሆነ ባዶ ይቆያል – አንዳችም አይፈጠርም።",
+      "extractPlaceholder": "ውሂብ የያዘ ያልተዋበ ጽሑፍ እዚህ ይሰቅ...",
+      "extractRows": "ረድፎችን ያውጡ",
+      "extractFromFile": "ከፋይል...",
+      "extracting": "በመውጣት...",
+      "pastedSource": "የተሰቀመ ጽሑፍ",
+      "transform": "ቀይር",
+      "transforming": "በመቀየር...",
+      "transformPlaceholder": "የሚፈለገውን ለውጥ ይግለጹ፣ ለምሳሌ፣ \"በ1000 ህዝብ ላይ የተሆኑ ክስተቶች ያለው አዲስ አምድ አክል\"...",
+      "transformCapHint": "ለውጦች {max} ረድፎች ውስጥ ይገደባሉ። ለትልቅ መደብ ቅዳ ወይም አጣሪ መጀመር አለብህ።",
+      "undo": "ተመለስ",
+      "deleteSelected": "{count} ሰርዝ",
+      "deletedRows": "{count} ረድፎች ተሰርዙ",
+      "selectAllRows": "ሁሉንም ረድፎች ይምረጡ",
+      "selectRow": "ረድፍ {row} ይምረጡ",
+      "rowCount": "{count} ረድፎች",
+      "rowCapExceeded": "ይህ {count} ረድፎች ይሆናል፤ በሰንጠረዡ ውስጥ ከፍተኛው {max} ነው። ውሂቡን አካፍል ወይም ላይቀይር አስፈላጊ ነው።",
+      "railExtractRequest": "ከ{source} በመደበኛው የውሂብ ሰንጠረዥ አቀራረብ የሚዛመዱ ቅጾችን ያውጡ",
+      "railExtractDone": "{count} የተወጡ ረድኦችን ወደ ሰንጠረዥ ታክለዋል።",
+      "railTransformDone": "ሰንጠረዡ ተለውጦል።",
+      "columnProfileFor": "ለ{column} የኮለም ስታቲስቲኮች",
+      "profileMissing": "ቀሪ",
+      "profileDistinct": "ልዩ",
+      "profileRange": "ክልል",
+      "profileMean": "አማካይ",
+      "profileMedian": "መካከለኛ",
+      "profileTopValues": "ከፍተኛ ዋጋዎች",
+      "filterColumnFor": "{column} ይመስክ",
+      "filterContains": "ይዟል…",
+      "filterMin": "ዝቅተኛ",
+      "filterMax": "ከፍተኛ",
+      "filterClear": "አጽዳ",
+      "clearFilters": "ማጣሪያዎችን አጽዳ",
+      "showingRows": "{shown} ከ{total} ቅጾችን እያሳየ ነው",
+      "scopeLabel": "የስራ አይነት",
+      "scopeTable": "ሁሉም ({count})",
+      "scopeFiltered": "ተማጣረ ({count})",
+      "scopeSelection": "ተመርጧል ({count})",
+      "scopedInstruction": "{instruction} (በ{count} የተመረጡ ቅጾች ላይ)",
+      "assess": "ጥራትን ያረጋግጡ",
+      "assessing": "በመዘነጋት ላይ…",
+      "criteria": {
+        "validity": {
+          "label": "ትክክለኛነት",
+          "description": "ዋጋዎች የኮለሙን አይነትና ተገቢ ቅርጸ ቃላትን ይከተላሉ"
+        },
+        "consistency": {
+          "label": "ተመጣጣነት",
+          "description": "አንደኛው ዋጋ በሁሉም አካባቢ በአንደኛው መንገድ የተጻፈ (ምሳ. 'M' / 'Male' የተያዙ ወይም የተዋሃዱ አማራጮች የሉም)"
+        },
+        "duplicates": {
+          "label": "ቅድሚያዎች",
+          "description": "ተመሳሳይ እትም ወይም ክስተት ሁለት ጊዜ የተመዘገቡ ቅጾች"
+        },
+        "plausibility": {
+          "label": "ልክነት",
+          "description": "የተወሰኑ አይገባውም ዋጋዎች እና አልተቻሉም ዋጋዎች"
+        }
+      },
+      "assessmentTitle": "የውሂብ ጥራት እይታ",
+      "pendingCount": "{count} በመጠባበቅ ላይ",
+      "closeReview": "የጥራት እይታን ዝጋ",
+      "suggestedEdits": "የተጠቀሱ ማሻሻያዎች",
+      "noEditsSuggested": "ማሻሻያ አልተጠቀሰም — ውሂቡ የተመረጡትን መደብ አላፈጠናም።",
+      "acceptAll": "ሁሉንም ተቀበል",
+      "rejectAll": "ሁሉንም አትቀበል",
+      "acceptEdit": "ተቀበል",
+      "rejectEdit": "አትቀበል",
+      "editAccepted": "ተፈጸመ",
+      "editRejected": "ተተኪው አልተቀበለም",
+      "editUnapplicable": "ክፍሉ ከጥራት እይታ በኋላ ተለውጦል — አልተፈጸመም",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "የሚወሰኑ መደቦች",
+      "severity": {
+        "minor": "ትንሽ",
+        "major": "ዋና"
+      },
+      "editLocation": "ረድኤ {row} · {column}",
+      "editLocationRow": "ረድኤ {row} (ሰርዝ)",
+      "showReview": "ግምገማ አሳይ",
+      "showReviewPending": "ግምገማ አሳይ ({count} በትእዛዝ)",
+      "assessedFiltered": "ተደመሩ ረዳዶች",
+      "assessedSelection": "ተመረጡ ረዳዶች",
+      "assessedSample": "ናና ከ {total} ውስጥ {shown}",
+      "railAssessRequest": "የሰንጠረዡን ጥራት ({count} ረዳዶች) በተመረጡ መጠን መሰረት ይገምግሙ።",
+      "railAssessDone": "{count} የውሃነት መልስ ተዘጋጅቷል — በስራ ቦት ውስጥ ይግምግሙ።",
+      "insights": "ውሂብ ግኝት",
+      "chartKind": "የገበታ አይነት",
+      "chartBar": "አሞዝ (በመደበቅ)",
+      "chartHistogram": "ሂስተግራም",
+      "chartLine": "መስመር (በጊዜ)",
+      "groupByColumn": "በአምድ ደብል",
+      "dateColumn": "የቀን አምድ",
+      "valueColumn": "የእሴት አምድ",
+      "aggFn": "ማጠናከሪያ",
+      "aggCount": "ቆጠር",
+      "aggSum": "ድምር",
+      "aggMean": "አማካይ",
+      "chartTruncated": "ከፍተኛውን {max} ቡድኖች እየተሳዩ ነው",
+      "chartNoData": "በአሁኑ ረዳዶች ውስጥ የሚታወቅ ውሂብ የለም።",
+      "chartBarAria": "በ {column} የተመደበ የማዞ ገበታ",
+      "chartHistogramAria": "የ {column} ሂስተግራም",
+      "chartLineAria": "የ {column} መስመር ገበታ በጊዜ",
+      "editStructure": "አወቃቀር",
+      "defineStructure": "አወቃቀሩን ግለጽ",
+      "schemaHint": "የውሂቡን አወቃቀር ሜዳዎች ይግለጹ። ተጠያቂ ሜዳዎች በሚሰቀሉበት ጊዜ የጎድተኛ ውሂብ ፖሊሲን ይመሩ፤ የሜዳ አይነት ሲቀየር አሁኑ አካባቢ ያሉ ዋጋዎች ይቀየራሉ (የማይተለውጡ ክፍሎች ባዶ ይሆናሉ።)",
+      "schemaFieldName": "የሜዳ ስም",
+      "schemaFieldType": "የሜዳ አይነት",
+      "schemaRequired": "አስፈላጊ",
+      "schemaAddField": "ሜዳ አክል",
+      "schemaDeleteField": "ሜዳ {field} ሰርዝ",
+      "schemaApply": "አወቃቀሩን ተግብር",
+      "schemaCancel": "ይቅር",
+      "schemaEdited": "የሰንጠረዡን አወቃቀር ቀይሯል",
+      "schemaCellsConverted": "{count} ሴሎች ወደ አዲሱ አይነት ማድመስ አልተቻለም እና አሁን ባዶ ናቸው።",
+      "missingFieldPolicy": "ጎድተኛ ውሂብ",
+      "policyStrict": "ጥብቅ — ያልተበቁ ረዳዶችን አስተውል",
+      "policyFlag": "ምልክት — አስመጣ እና ምልክት አድርግ",
+      "policyLenient": "ቅርሶ — በዝም አስመጣ",
+      "droppedIncompleteRows": "የ {fields} ተጠያቂ ሜዳዎች የጎደሉን {count} ረዳዶች ተወው።",
+      "dismiss": "አጥፋ",
+      "requiredColumn": "የአስፈላጊ ሜዳ",
+      "flagMissingRequired": "አስፈላጊ ሜዳ ባዶ ነው",
+      "flagPendingEdit": "ለዚህ ሴል የተጠየቀ ማሳካት በትእዛዝ ላይ ነው — የጥራት ግምገማውን ይመልከቱ",
+      "fromPhoto": "ከፎቶ",
+      "fromPhotoHint": "የወረቀት ቅጽ ወይም ሰንጠረዥ ፎቶ ውስጥ ይውሰዱ — ይውሰዱት ይዞታ ወደ የተዋበ ውሂብ ይቀየራል እና ከፎቶው ጋር መወዳደር ይችላሉ",
+      "readingPhoto": "ፎቶ በእይታ ላይ…",
+      "photoBatchName": "{count} ፎቶዎች",
+      "railPhotoRequest": "ከፎቶዎች {count} ውሂብ ያውጡ፡ {name}",
+      "railPhotoDone": "ከፎቶ(ዎቹ) {count} መዝገቦች ታክለዋል። በስራ ቦት ውስጥ ካለው ፎቶ ጋር አንጻሩት።",
+      "sourcesLabel": "ምንጮች",
+      "openPhotoQc": "ዳታውን ከ{name} ጋር ያረጋግጡ",
+      "qcRowsFromPhoto": "{count} ተረጋጋ ረድፎች",
+      "qcClose": "ፎቶ ምርመራውን ዝጋ",
+      "qcZoomIn": "አቀማመጡን አቅርብ",
+      "qcZoomOut": "አቀማመጡን አርቅ",
+      "qcPrevPhoto": "የቀድሞው ፎቶ",
+      "qcNextPhoto": "የሚቀጥለው ፎቶ",
+      "qcImageLoading": "ፎቶ በመጫን ላይ…",
+      "qcImageFailed": "ፎቶውን ማጫን አልተቻለም።",
+      "qcImageAlt": "የምንጭ ፎቶ፡ {name}",
+      "qcHint": "ግብሩ የዚህ ፎቶ ከሆኑት ረድፎች ብቻ ያሳያል — እያንዳንዱን እሴት ከፎቶው ጋር ያንጻሩ፣ የማይሆኑትን ረድፎች ያስተካክሉ ወይም ያስወግዱ።",
+      "sourceFilterChip": "ከ{name} እየወጡ የተጠቀሱ ረድፎች",
+      "clearSourceFilter": "ሁሉንም ረድፎች ዳግም አሳይ",
+      "viewAsRecord": "የፎርም አቅራቢያ",
+      "viewAsTable": "የመሰንጠሪያ አቅራቢያ",
+      "recordEmpty": "ምንም መዝገቦች አልተጨመሩም።",
+      "recordOf": "መዝገብ {index} ከ {count}",
+      "recordPrev": "የቀድሞው መዝገብ",
+      "recordNext": "የሚቀጥለው መዝገብ",
+      "recordBooleanUnset": "(ባዶ)",
+      "flagsChip": "{count} ምልክቶች",
+      "flagsChipOpenReview": "የጥራት ግምገማን ክፈት",
+      "flagsChipMissingOnly": "አስፈላጊ ቦታዎች ባዶ ናቸው — እነሱን ይሙሉ ወይም አቅራቢያውን ያስተካክሉ",
+      "autoCheck": "አዲስ ዳታ ራሱ ይነጽ",
+      "autoCheckHint": "ከፎቶዎች ወይም ሰነዶች ዳታ ከተወሰደ በኋላ፣ በራሱ ላይ በአዲስ ረድፎች ላይ የጥራት ምርመራ ይሰጣል",
+      "checkingNewRows": "አዲስ የተጨመሩ ረድፎችን ለዝርዝር ጥራት በመመርመር ላይ…",
+      "ingestCheckFailed": "በራሱ ላይ የደረገው የጥራት ምርመራ አልተሳካም ({message}) — በ Assessment quality በእጅ ሊደረግ ይችላል።",
+      "assessedIngest": "አዲስ የተጨመሩ ረድፎች",
+      "transpose": "ግዛት መቀየሪያ",
+      "transposeAxisColumn": "ስም",
+      "transposeSuggestion": "ይህ ሰንጠረዥ ማዕከሉን ይዞ ተለዋዋጭ ይመስላል፡ ረዳት ባሉበት ረዳቶች ናቸው፣ አምድዎች ግን እቃዎች። ያቀዙትን እቃ እያንዳንዱ ተለዋዋጭ ረዳት እንዲሆንና ያንዳንዱ እቃ ተለዋዋጭ አምድ እንዲሆን ትይዩ?",
+      "transposedTable": "የተቀየሩ ረዳቶች እና አምዶች",
+      "columns": "አምዶች",
+      "columnsHidden": "አምዶች ({count} የተደበቁ)",
+      "showAllColumns": "ሁሉንም አሳይ",
+      "chartScatter": "እቃ መቀመጫ (x ከ y ጋር)",
+      "chartPivot": "የመሽጫ ሰንጠረዥ",
+      "xColumn": "X አምድ",
+      "yColumn": "Y አምድ",
+      "splitByColumn": "በ... ክፈል",
+      "splitNone": "የተከፈለ የለም",
+      "pivotValueColumns": "የዋጋ አምዶች",
+      "aggMin": "ዝቅተኛ",
+      "aggMax": "ከፍተኛ",
+      "aggMedian": "መካከለኛ",
+      "chartSeriesTruncated": "ላይኛው {max} ተከታታይ ብቻ ታሳያለች",
+      "chartPointsTruncated": "{max} መጠራረት ያላቸው ነጥቦች ብቻ ታሳያለች",
+      "chartScatterAria": "በ {x} ከ {y} ጋር የተሰራ የእቃ መቀመጫ ግምት",
+      "pivotTableAria": "በ {column} የተቀመጡት የመሽጫ ሰንጠረዥ",
+      "schemaFormula": "ፎርሙላ",
+      "schemaFormulaPlaceholder": "ለምሳሌ [Cases] / [Population] * 1000",
+      "schemaFormulaHint": "የታዘዘ መስክ፡ ሌሎች መስኮችን እንደ [Name] ይጠቀሙ፤ + - * / %, ቅርጸ ቃላት እና round, abs, min, max ይቀበላሉ። እሴት በራሱ ተቀይሯል፣ በቀጥታ ማስተካከል አይቻልም።",
+      "schemaFormulaSyntaxError": "ልክ ያልሆነ ፎርሙላ",
+      "schemaFormulaUnknownRef": "ያልታወቀ መስክ፡ {ref}",
+      "schemaFormulaArityError": "ልክ ያልሆነ አርጉመንት በ {fn}",
+      "schemaFormulaCycleError": "እስክስክ በፎርሙላዎች",
+      "derivedColumnTitle": "ተመሳሳይ፡ {formula}",
+      "derivedFrom": "ከ{formula} ተመሳሳይ",
+      "takePhoto": "ፎቶ ይነጥቡ",
+      "takePhotoHint": "ቅጽ ወይም ሰንጠረዥ ለመነታት ካሜራዎን ይጠቀሙ — ይዘቱ የተዋቀረ ዳታ ሆኖ ከፎቶ ጋር ማረጋገጫ ይችላሉ"
+    },
+    "map": {
+      "emptyTitle": "ዳታዎን በካርታ ላይ ያሳዩ",
+      "emptyBody": "sitrep፣ line list፣ የስብሰባ ማስታወሻ ወይም ቦታ የተጠቀሱባቸውን ከዚህ ምንጮች ይቀጥሉ—ወይም ሰነድ ይጫኑ። ቦታዎች በእምነት ደረጃ ይመለከታሉ፤ ከዚያም ArcGIS ወይም ሌሎች GIS መሳሪያዎች ውጭ ላይ ማስመዝገብ ይችላሉ።",
+      "inputPlaceholder": "ቦታዎች ስሞች የተቀመጡበት ጽሑፍ አስቀምጡ…",
+      "uploadFile": "ፋይል ይጫኑ",
+      "pastedSource": "ተቀመጠ ጽሁፍ",
+      "mapIt": "ካርታ ላይ አሳይ",
+      "finding": "ቦታዎችን በመፈለግ ላይ…",
+      "featureCount": "{count} ቦታዎች",
+      "featureCapExceeded": "ካርታው እስከ {max} ቦታዎች ያተኮራል።",
+      "noneFound": "ከዚያ ውስጥ ምንም ቦታዎች አልተገኙም።",
+      "lowConfidenceNotice": "{count} የቦታ ኮርድኔቶች በዝቅተኛ እምነት ላይ ናቸው — ካርታውን ለመጠቀም በፊት ያረጋግጡ።",
+      "tilesOffline": "የካርታ ክፍታዎች አይገኙም — የቦታዎች ዝርዝሩ እንደገና ይሰራል።",
+      "disclaimer": "ኮርድኔቶች በአይነቱ AI ሞዴል እውቀት የተገመቱ ናቸው፣ ሳይሆን ከጀኦኮዲንግ አገልግሎት አይውሉም — ሲጠቀሙ በፊት ያረጋግጡ። የካርታ ክፍታዎች ከክፍታ አገልግሎት እየተጫኑ ናቸው፤ ዳታዎ ራሱ በዚህ መሳሪያ ላይ ይቆያል።",
+      "flyTo": "{name} ካርታ ላይ አሳይ",
+      "removeFeature": "{name} አስወግድ",
+      "expandFeature": "ከ {name} ዙሪያ ሙሉ ዝርዝር አሳይ",
+      "collapseFeature": "የ {name} ዝርዝሮችን ሰብስብ",
+      "detailsParent": "የ{parent} አባል",
+      "railRequest": "ቦታዎቹን በካርታ ላይ አሳይ: {source}",
+      "railSearchRequest": "መረጃን በመድረክ ላይ ፈልግና ቦታውን በካርታ ላይ አሳይ፡ {query}",
+      "railDone": "{count} ቦታ(ዎች) ተሳትፋል። የአስተሳሰብ ደረጃ ዝቅተኛ ያሉትን በዝርዝሩ ውስጥ ይወርዱ።",
+      "searchToggle": "የድህረ ገጽ ፍለጋ ዘዴ",
+      "searchToggleHint": "የድህረ ገጽ ፍለጋ ይስሙ፤ የተሟሉት ውጤቶች ተሳትፋ ይደርሳሉ።",
+      "searchPlaceholder": "ድህረ ገጽ ፍለጋ፣ ለምሳሌ፦ “cholera outbreaks East Africa 2026”…",
+      "searchAndMap": "ፈልግና አሳስር",
+      "searching": "በፍለጋ ላይ…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "ግንኙነት፡ {kind}",
+        "unresolved": "{count} ግንኙነት(ዎች) የተጠቀሱ ቦታዎች በካርታው ላይ አልተገኙም፣ ስለዚህ ተወው።"
+      },
+      "confidence": {
+        "high": "ከፍተኛ",
+        "medium": "መካከለኛ",
+        "low": "ዝቅተኛ"
+      },
+      "prominence": {
+        "primary": "ዋና ቦታ",
+        "secondary": "አገዳው ቦታ",
+        "mention": "ሐሳብ ብቻ"
+      },
+      "prominenceMentionHint": "ይህ ቦታ በተገለፀው መገለጫ ብቻ ተጠቅሟል — በካርታው ላይ ትንሽ ይታያል እና ከመጀመሪያ መድብ ውጭ ይቆጠራል።",
+      "dates": {
+        "since": "ከ{date} ጀምሮ",
+        "range": "{start} – {end}",
+        "ongoing": "በቀጣይ ላይ"
+      },
+      "filters": {
+        "label": "በምድብ ይተርጎሙ",
+        "other": "ሌላ",
+        "clear": "አጥፋ",
+        "showing": "{shown} ከ {total} ቦታዎች",
+        "noneMatch": "ከአሁኑ ማጣሪያዎች ጋር የሚዛመዱ ቦታዎች የሉም።"
+      },
+      "dateFilter": {
+        "label": "ቀናት",
+        "from": "ከ",
+        "to": "እስከ",
+        "fromAria": "ለዚህ ቀን ብቻ አውድ ላይ ያሉትን ነገሮች አሳይ",
+        "toAria": "እስከዚህ ቀን ድረስ ያሉትን ነገሮች አሳይ",
+        "clear": "ቀናት አጥፋ",
+        "eraChip": "ከ{label} ውስጥ ያሉ ነገሮችን ብቻ አሳይ"
+      },
+      "timeline": {
+        "toggle": "የጊዜ ተንቀሳቃሽ",
+        "play": "የጊዜ ተንቀሳቃሽ አስጀምር",
+        "pause": "የጊዜ ተንቀሳቃሽ አቁም",
+        "eras": "የጊዜ መስመር ዘመናት",
+        "jumpTo": "ወደ {label} ይሂዱ",
+        "slider": "የጊዜ መስመር አቀማመጥ",
+        "showUndated": "ቀን የሌላቸውን ቦታዎች አሳይ",
+        "activeCount": "{count} ንቁ",
+        "jump": {
+          "start": "መጀመሪያ",
+          "yearsLater": "{count, plural, one {ከ1 ዓመት በኋላ} other {ከ# ዓመታት በኋላ}}",
+          "monthsLater": "{count, plural, one {ከ1 ወር በኋላ} other {ከ# ወራት በኋላ}}",
+          "daysLater": "{count, plural, one {ከ1 ቀን በኋላ} other {ከ# ቀናት በኋላ}}",
+          "appears": "{count, plural, one {1 ታይቷል} other {# ታይቷል}}",
+          "ends": "{count, plural, one {1 ጨርሷል} other {# ጨርሷል}}",
+          "progress": "ቀን {index} ከ{total}"
+        },
+        "precision": {
+          "minute": "ደቂቃ ድረስ",
+          "hour": "ሰዓት ድረስ",
+          "day": "ቀን ድረስ",
+          "month": "ወር ደረጃ ቀን መያዣ",
+          "year": "ዓመት ደረጃ ቀን መያዣ",
+          "mixed": "(የተቀላቀለ)"
+        },
+        "pacing": {
+          "toggle": "እንቅስቃሴ ፍጥነት",
+          "cardDuration": "እያንዳንዱ ቦታ የሚታየው ጊዜ",
+          "seconds": "{seconds}በ",
+          "maxCards": "በአንድ ቀን የሚታዩ ቦታዎች",
+          "hint": "የተሰበሰቡ ቀናት በራስ-ሰር የበጎ ጊዜ ይይዣሉ።"
+        }
+      },
+      "granularity": {
+        "site": "ጣቢያ",
+        "city": "ከተማ/ከተሞች",
+        "district": "ዞን",
+        "region": "ክልል",
+        "country": "ሀገር"
+      },
+      "granularityAreaHint": "አካባቢ ነው፣ በመዋቅሩ ዙሪያ በአቀማመጡ ዙሪያ በቀስት ይደርሳል — በትክክል ቦታ ወይም ድንበር አይደለም።",
+      "containerHint": "ሌሎች ቦታዎችን ይይዛል፤ ስለዚህ ብቻ እንደ አድጋ ብቻ ይታያል።",
+      "legend": {
+        "toggle": "ምልክት",
+        "title": "ካርታውን እንዴት ማንበብ ይቻላል",
+        "color": "ቀለም፡ የማቀነበሪያ እምነት (ሰማያዊ ከፍተኛ፣ አምበር መካከለኛ፣ ቀይ ዝቅተኛ)",
+        "size": "የነጠላ መጠን፡ ቦታው ለዚያ ጉዳይ ምን ያህል ዋና ነው",
+        "area": "የዳሽድ ክበብ፡ የዞን፣ የክልል፣ ወይም የአገር ቅርጸ አካባቢ (በግምት)",
+        "container": "የጭነት ጥልፍ ፡ ይህ ካርድ የውስጡ ንብረት በብቻ የታተመ አካባቢ ነው",
+        "precisionHalo": "ሞራሞራ ያለ ድሩ ክብረ ቅድሚያ (በጊዜ ዴይድ ላይ): ክስተቱ ለወር ወይም ለዓመት ብቻ ታውቋል፤ ትክክለኛው ጊዜ አይታወቅም"
+      },
+      "sourceLabel": "ምንጭ፦ {name}",
+      "fetchAndMap": "አምጣ እና አሟላ",
+      "fetchingPage": "ገጹን በመፈለግ…",
+      "railUrlRequest": "ቦታዎቹን ከዚህ አምጥና አሟላ፦ {title} ({url})"
+    },
+    "shell": {
+      "showConversation": "ውይይቱን አሳይ",
+      "hideConversation": "ውይይቱን ደብቅ",
+      "workspaceTab": "የመስራት ቦታ",
+      "conversationTab": "ውይይት",
+      "paneTabsLabel": "የስራ አሰራር ፓኖች",
+      "railEmpty": "የአገልጋዩ መልዕክቶችና ግብረ ጉዞ እዚህ ይታያሉ።",
+      "railInputPlaceholder": "ለአገልጋዩ መልዕክት ይላኩ…",
+      "assistantThinking": "በማሰብ ላይ…",
+      "sendMessage": "መልዕክት ላክ",
+      "stopGenerating": "ማመንጨት አቁም",
+      "loadingWorkspace": "የመስራት ቦታ በመጫን ላይ…",
+      "unknownType": "ይህ ውይይት ይህንን አሰራር የማይታወቀውን ስሪት ተጠቃሚ ነው። የውይይቱ ታሪክ ከታች ታየ.",
+      "untitled": "አዲስ ውይይት",
+      "toggleMenu": "ምናሌውን ቀይር",
+      "model": "ለዚህ ስሪት አባል ሞዴል"
+    },
+    "tabs": {
+      "label": "የቆይታ ሁነታ",
+      "chat": "ውይይት",
+      "chatDescription": "ከአገልጋዩ ጋር የተለመደ ውይይት"
+    },
+    "discard": {
+      "title": "ይህን ረቂቅ እንደት ይቆም?",
+      "body": "ወደ {target} ማሻሻል በ {current} የጀመሩትን ስራ ያጠፋል።",
+      "confirm": "አስወግድ"
+    }
+  },
+  "connectors": {
+    "title": "መገናኛዎች",
+    "description": "ውጭ መሳሪያዎችን በModel Context Protocol (MCP) ያገናኙ። ተገናኝተው የሆኑ መሳሪያዎች በውይይት ላይ ለሞዴሎች ይገኛሉ፣ እያንዳንዱም ጥሪ እርስዎ ከፈቀዱ በኋላ ብቻ ይገናኛል።",
+    "localOnlyNote": "በእያንዳንዱ አቅራቢ ውስጥ ቀጥሎ ይግቡ። የመዳረሻ ቁልፎች የተመሰጠውና ለዚህ መሣሪያ ብቻ የተያዙ ናቸው፤ በእያንዳንዱ ጥያቄ የአፕ ሰርቨር በኩል ተላልፈዋል — በዚያ በቋሚ አይቀመጡም፣ አይመዘገቡም።",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "ማውጣት፣ እቃ መፈለግ፣ ጉዳዮችንና የማውጫ ጥያቄዎችን ማንበብ፣ መፍጠር።"
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "ተግባሮችና ፕሮጀክቶችን ፈልጉ፣ ፍጠሩና ያዘምኑ።"
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "አስተላባች የሆኑ የዳታ ምንጮች፣ workbooks እና Pulse metrics ይጠይቁ።"
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "በSalesforce ኦቤጅክቶችዎ ላይ ውሂብ ይፈልጉ እና ያዘምኑ።"
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "የሚዲያ ልማዶችን ደምዝ፣ ቅድመ ሳምንት ይዞታ እና አስተላልፉ።"
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "የማህበራዊ ግንኙነት መያዣዎችን ይይዙ እና ይመልሱ።"
+      }
+    },
+    "connect": "ያገናኙ",
+    "connected": "ተገናኝቷል",
+    "tokenEndsIn": "••••{last4} ላይ ይጠናቀቃል",
+    "disconnect": "ማቋረጥ",
+    "toolCount": "{count, plural, =1 {1 መሳሪያ ይገኛል} other {# መሳሪያዎች ይገኛሉ}}",
+    "patLabel": "የግል መዳረሻ ቶክን",
+    "createTokenLink": "ቶክን ፍጠር",
+    "tokenScopeHint": "እነዚህ መሳሪያዎች ያስፈልጋቸውን መዳረሻ ብቻ ያለው ጠቃሚ ቶክን ይጠቀሙ።",
+    "validating": "ግንኙነትን በመፈተን ላይ…",
+    "validationFailed": "ማገናኘት አልተቻለም። አድራሻውን ያረጋግጡ እና በድጋሚ ይሞክሩ።",
+    "authFailed": "አገልጋዩ ቶክኑን አልተቀበለም። ያረጋግጡ እና ይሞክሩ።",
+    "tokenRequired": "ቶክን ያስፈልጋል",
+    "enableServer": "በውይይት ይገኛል",
+    "arbitraryTitle": "ሌሎች MCP አገልጋዮች",
+    "arbitraryToggle": "የማንኛውንም MCP አገልጋይ ፍቀድ",
+    "arbitraryWarning": "MCP አገልጋይ የሚከፈት ማንኛውም ሰው ወደ መሳሪያዎቹ የተላኩ መልእክቶችን ማየት ይችላል። የመታመኑበትን አገልጋይ ብቻ ያገናኙ። የሚፈጸሙ መሳሪያ ጥሪዎች ሁሉ ማጽደቃትዎ አስፈላጊ ነው።",
+    "addServer": "MCP አገልጋይ አክል",
+    "editServer": "MCP አገልጋይ ቀይር",
+    "serverName": "ስም",
+    "serverUrl": "Server URL",
+    "nameRequired": "ስም አስፈላጊ ነው",
+    "urlRequired": "URL አስፈላጊ ነው",
+    "invalidUrl": "የህዝብ https:// አድራሻ ያስገቡ",
+    "namePlaceholder": "የኔ MCP አገልጋይ",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "የመዳረሻ ቶክን (አማራጭ)",
+    "keepTokenPlaceholder": "የአሁኑን ቶክን ለመቀጠል ባዶ ይተዉ",
+    "disconnectedToast": "{name} ተቋርጧል",
+    "save": "አስቀምጥ",
+    "connectWithProvider": "ከ{name} ጋር ያገናኙ",
+    "useTokenInstead": "በቶክን ይጠቀሙ",
+    "oauthWaiting": "ለአፈቃቀም በመጠበቅ ላይ…",
+    "oauthFailed": "መግባት አልተቻለም። ዳግም ይሞክሩ።",
+    "oauthDenied": "አገልጋዩ መዳረሻን ከለከለ።",
+    "oauthTimeout": "መግባት ጊዜው አልፎበታል። ደግመው ይሞክሩ።",
+    "oauthCancelled": "መግባት ተሰርዟል።",
+    "oauthUnavailable": "ከዚህ አገናኝ ጋር መግባት በዚህ ተግባር የለም። በቶክን ይጠቀሙ ወይም አስተዳዳሪዎን ያማኩ የOAuth መተግበሪያ ለማዘጋጀት።",
+    "ownAppToggle": "ራስዎን የOAuth መተግበሪያ ተጠቀሙ",
+    "ownAppHint": "በ{name} መለያዎ (ድርጅትዎ፣ የመስሪያ ቦታዎ ወይም የEnterprise እትም ላይ) የOAuth መተግበሪያ ይመዝገቡ ከታች ያለውን callback URL በመጠቀም፣ ከዚያም መረጃውን እዚህ ያስገቡ። የተገባውን መተግበሪያ ለመጠቀም ዝጉ።",
+    "ownAppCustomHint": "ከታች ራስዎን የOAuth መተግበሪያ መረጃ ማቅረብ ይችላሉ; ለራሱ ይመዝገባ ብለዋት ባዶ ይተዉ።",
+    "ownAppInUse": "በራስዎ የOAuth መተግበሪያ ተገናኝቷል።",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client secret (በመተግበሪያዎ ካለ)",
+    "redirectUriLabel": "እሴት / redirect URL ለመመዝገብ",
+    "reconnect": "እንደገና አገናኝ",
+    "needsReauth": "እንደገና አገናኝ ያስፈልጋል",
+    "disconnectOauthNote": "መቋረጥ በዚህ መሳሪያ ላይ ውስጥ የመዳረሻ ፈቃድን ብቻ ያወጣል። ፈቃዱን በፍጹም ለማሰረዝ በ{name} መለያዎ authorized apps ይቆጣጠሩ።",
+    "authModeLabel": "ማረጋገጫ",
+    "authModeNone": "ምንም የለም",
+    "authModeBearer": "የመዳረሻ ቶክን",
+    "authModeOauth": "ከአገልጋዩ ጋር ይግቡ (OAuth)",
+    "oauthCustomHint": "ከመቀየር በኋላ በpop-up መስኮት ከአገልጋዩ ጋር ይግቡ።",
+    "saveAndSignIn": "አስቀምጥ & ግባ",
+    "oauthCallback": {
+      "title": "አፈቃቀም ተጠናቋል",
+      "missingState": "ለማፈቃቀም የቀረው ነገር የለም",
+      "close": "ይህንን መስኮት ዝግ ወደ መተግበሪያው ተመለሱ።",
+      "closeButton": "መስኮት ዝጋ"
+    },
+    "oauthNoAppConfigured": "በ{name} የመዝገብ መግቢያ በዚህ አውጭ አልተዘጋጀም። በራስዎ OAuth app ማስመዝገብ በመገናኘት ያገኙ።",
+    "adminConnectorsTitle": "ከድርጅትዎ",
+    "adminConnectorsDescription": "አስተዳዳሪዎቻችሁ ያስቀመጡት የተገናኙ መሳሪያዎች። ምን ታየዎት በየደረጃዎ ይሰማዋል።",
+    "managedByOrg": "በድርጅትዎ የተቆጣጠሩ",
+    "connectorOauthNotConfigured": "የዚህ አገናኚ የመስጠት ሂደት አልተጨረሰም። ከአስተዳዳሪዎ ያነጋግሩ።",
+    "yourConnectorsTitle": "የእርስዎ አገናኞች",
+    "addTitle": "አገናኝ ያክሉ",
+    "addDescription": "ለማገናኘት መሳሪያ ይምረጡ። ከመምረጥዎ በኋላ መዳረሻ ትዕዛዞችን ያስወግዱ።",
+    "add": "አክል",
+    "filterLabel": "አገናኞችን ማጣሪያ",
+    "filterPlaceholder": "አገናኞችን ፈልግ",
+    "noMatches": "“{query}” የሚስማማ አገናኞች የሉም።"
+  },
+  "modelSources": {
+    "connectButtonShort": "የሞዴል ምንጭ ያገናኙ",
+    "addAnother": "ሌላ የሞዴል ምንጭ ያክሉ",
+    "edit": "አርትዕ",
+    "disconnect": "{name} አቁም",
+    "disconnectedToast": "{name} ተቋርጧል",
+    "modelCountLabel": "{count} ሞዴሎች",
+    "loadingModels": "ሞዴሎች በመጫን ላይ...",
+    "noModelsAvailable": "ከዚህ ምንጭ ሞዴሎች አይገኙም",
+    "sourceUnreachable": "ወደዚህ ምንጭ ማግኘት አልተቻለም። የአንደኛ ወይም የአገልግሎቱ ችግር ሊኖረው ይችላል።",
+    "retry": "እንደገና ይሞክሩ",
+    "connectFoundryAccount": "Microsoft Azure Foundry Account ያገናኙ",
+    "connectFoundryDescription": "የእርስዎ ፈቃድ ያለውን Azure Foundry መለያ ከሆነ የሞዴል እንቅስቃሴዎችን ያግኙ። የAzure ፈቃድዎ ማንኛውም ጥያቄ ያረጋግጣል፤ የመተግበሪያው የሞዴል ገደቦች አይተገበሩበትም።",
+    "selectModelsDescription": "ከዚህ መለያ የሚታዩትን የሞዴል እንቅስቃሴዎች ይምረጡ።",
+    "editConnection": "ግንኙነት አርታውት",
+    "nameLabel": "ስም",
+    "namePlaceholder": "ለምሳሌ፦ የቡድኔ ሳንድቦክስ",
+    "nameRequired": "የምንጭ ስም አስፈላጊ ነው",
+    "foundryAccountLabel": "Foundry መለያ",
+    "enterManually": "በቀላሉ ያስገቡ",
+    "browseResources": "ምንዛሬዎችን ይመልከቱ",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Resource Group",
+    "accountNameLabel": "የመለያ ስም",
+    "subscriptionRequired": "Subscription ይምረጡ",
+    "accountRequired": "Foundry መለያ ይምረጡ",
+    "accountSelectionRequired": "ከዝርዝሩ መለያ ይምረጡ።",
+    "selectAllRequired": "Subscription፣ resource group እና መለያ ይምረጡ።",
+    "connectionFailed": "ወደዚህ መለያ ማድረስ አልተቻለም። ዝርዝሮቹ ትክክለኛ መሆናቸውን ያረጋግጡና መዳረሻ አለዎት ያረጋግጡ።",
+    "duplicateSource": "ይህ መለያ አሁንም \"{name}\" እንደተገናኙ ነው።",
+    "connectionSuccessModels": "ተገናኝቷል — {count} የሞዴል እንቅስቃሴ(ዎች) ተገኝቷል",
+    "connectionSuccessEmpty": "ተገናኝቷል፣ ግን በዚህ መለያ ምንም የሞዴል እንቅስቃሴ አልተገኘም።",
+    "checkingConnection": "ግንኙነት በመሞከር ላይ...",
+    "next": "ቀጣይ",
+    "back": "ተመለስ",
+    "cancel": "ይቅር",
+    "connect": "አገናኝ",
+    "save": "አስቀምጥ",
+    "scanningResources": "የ Azure ምዝገባዎትን ተደጋጋሚ እየተቃኘ ነው...",
+    "discoveryPartialWarning": "{count, plural, one {# ምዝገባ} other {# ምዝገባዎች}} ማቃኘት አልተቻለም። መለያዎ ካልተገኘ እባክዎ በእጅ ያስገቡ።",
+    "discoveryTruncatedWarning": "ሙሉ በሙሉ ማቃኘት የሚችል ብዙ ምንጮች አሉ። መለያዎ ካልተገኘ በእጅ ያስገቡ።",
+    "noAccountsDiscovered": "በምዝገባዎ ውስጥ የ Foundry መለያዎች አልተገኙም። መንገዱን አትውቁ ከሆነ፣ በእጅ ያስገቡ።",
+    "retryScan": "ማቃኘትን ደጋግመው ይሞክሩ",
+    "searchAccountsPlaceholder": "መለያዎችን ፈልግ...",
+    "modelsSelectedCount": "{selected} ከ {total} ሞዴሎች ተመረጡ",
+    "selectAll": "ሁሉንም ይምረጡ",
+    "deselectAll": "ሁሉንም ምረጥ ይቆዩ",
+    "autoAddLabel": "አዲስ ሞዴሎችን በራስ-ሰር ያክሉ",
+    "autoAddDescription": "ለዚህ መለያ በኋላ የታከሉ የሞዴል ስትንተኞች በራስ ሰር ይታያሉ። ዘርግተኛ የቆዩት ሞዴሎች አይጨመሩም።"
+  },
+  "emissions": {
+    "tier": {
+      "low": "ዝቅተኛ ተጽዕኖ",
+      "moderate": "መካከለኛ ተጽዕኖ",
+      "high": "ከፍተኛ ተጽዕኖ"
+    },
+    "tierTooltip": "የእያንዳንዱ መጠየቂያ የኃይል ተጽዕኖ በሞዴል መጠኑ እንደመጠነ ይገመታል። እነዚህ ግምገማዎች በታተመ አማካይነቶችና ግምቶች v{version} ላይ ያተኩራሉ — ልክ መሆኑን አይደለም።",
+    "typicalRequest": "~{grams} g CO₂e በመካከለኛ ጥያቄ",
+    "typicalRequestTooltip": "በመካከለኛ ጥያቄ (ስለ 1,000 ፕሮምፕት እና 500 ተጨማሪ ቶክኖች) የእያንዳንዱ ጥያቄ መጠነ ግምገማ፣ ከታተመ አማካይነቶችና ግምቶች v{version} ውስጥ የተገኘ። እውነተኛው ተጽዕኖ ከውይይቱ ርዝመት፣ ቅንብሮችና የኣስተናጋጅ አካባቢ ጋር ይለዋጫል።",
+    "activities": {
+      "netflixHd": "የNetflix HD ድርድር",
+      "zoomCall": "የZoom ጥሪ (ካሜራ በቀላሉ)",
+      "webBrowsing": "የድህረገፅ አሳሽ",
+      "spotifyAudio": "የSpotify ድምጽ"
+    },
+    "equivalents": {
+      "title": "≈ ተመሳሳይ ካርቦን",
+      "note": "ከዚህ አገልግሎቶች ባይደርሱ በሰዓት የታተመው አውሬ ካርቦን ይመስላል፤ እነዚህ በግምት ቁጥር ናቸው።"
+    },
+    "duration": {
+      "lessThanSecond": "<1 ሰከንድ",
+      "seconds": "{value} ሰከንድ",
+      "minutes": "{value} ደቂቃ",
+      "hours": "{value} ሰዓት"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "የዚህ ውይይት የተመነ ካርቦን ተጽዕኖ፡ {grams} ግራም CO₂ እኩል። ዝርዝሩን አሳይ።",
+      "ariaLabelToday": "የዚህ ውይይት የተመነ ካርቦን ተጽዕኖ (ዛሬ)፡ {grams} ግራም CO₂ እኩል። ዝርዝሩን አሳይ።",
+      "title": "ይህ ውይይት (ግምት)",
+      "today": "ዛሬ",
+      "total": "አጠቃላይ ጊዜ",
+      "measured": "ከተዘገቡ ቶክን ብዛት የተገነባ",
+      "estimated": "ከአሮጌ መልዕክቶች በኋላ የተቆጠረ",
+      "lastRequest": "ቅርብ ጥያቄ",
+      "disclaimer": "ለእያንዳንዱ ጥያቄ ግምት ከተዘገቡ ወይም ከግምት ቶክን ብዛቶች በመጠቀም፣ በታተመ አማካይ ዋጋና ጥምረቶች v{version} የተደረገ፡፡ አሮጌ መልዕክቶች ከተያዙት ጽሑፍ እና የውይይቱ የአሁኑ ሞዴል በመጠቀም ተቆጥረዋል።  measurement አይደለም።",
+      "visibilityGroup": "የእንፋሎት ቺፕ የታይነት አስተዳደር",
+      "visibilityLabel": "አሳይ:",
+      "visibility": {
+        "always": "ሁልጊዜ",
+        "auto": "ራስ-ሰር",
+        "hidden": "ሰውም አትል"
+      },
+      "visibilityHint": "\"ራስ-ሰር\" ቺፑን ግምቱ ሲቀየር ወይም ሲታገድ ብቻ ያሳያል። ይህን ከዚህ በኋላ Settings › Usage & Impact ውስጥ ማሻሻል ይችላሉ።"
+    }
+  },
+  "table": {
+    "copyTable": "ሰንጠረዡን ቅዳ",
+    "downloadTable": "ሰንጠረዡን አውርድ",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "በ CSV ተላክ",
+    "copyFailed": "ሰንጠረዡን መቅዳት አልተቻለም"
+  },
+  "backup": {
+    "intro": {
+      "title": "ውይዮቶችዎን ደህና ያስቀምጡ",
+      "body": "ውይዮቶችዎ ከመፍጠር በፊት በዚህ መሳሪያ ላይ የተመሰጠኑ ናቸው። ውይዮቶችዎን ማንም ማንበብ አንችልም።",
+      "keyWarning": "የእነዚህ መድረሻ ቁልፍዎ በዚህ መሳሪያ ላይ ተፈጥሯል። እኛ አንያውቅም አልናችሁም፤ ቁልፉን መጥፎ ማሳመጥ ማህደሩን መጥፎ ማለት ነው።",
+      "create": "ቁልፌን ፍጠርና ዝግጁ ውይይት አቅርብ",
+      "decline": "አሁን አይደለም — ውይዮች በዚህ መሳሪያ ላይ ብቻ ይቆዩ"
+    },
+    "ceremony": {
+      "titleCreate": "የመድረሻ ቁልፍዎን ያቅፉ",
+      "titleRotate": "አዲሱን የመድረሻ ቁልፍዎን ያቅፉ",
+      "titleView": "የመድረሻ ቁልፍዎ",
+      "description": "ይህ ቁልፍ የማህደሩን ትክክል በሌላ መሳሪያ ላይ ለመመለስ አንደኛው መንገድ ነው፤ ደህና ያኑረው — እኛ ሊያመልጥ አንችልም።",
+      "copy": "ቅዳ",
+      "copied": "ተቀድቷል!",
+      "download": "Download .txt",
+      "showQr": "QR code አሳይ",
+      "hideQr": "QR code አሰው",
+      "savedCheckbox": "የመድረሻ ቁልፍዬን በደህና አሰቀምጫለሁ",
+      "saveFirstHint": "ከመቀጠልዎ በፊት ቁልፉን ይቅዱ ወይም ያውርዱ።",
+      "continue": "ቀጥል",
+      "done": "ተጠናቋል",
+      "cancel": "አቋርጥ",
+      "cancelConfirmTitle": "የምስክር ኦፕድ አቋርጥ?",
+      "cancelConfirmBody": "ውይዮቶችዎ አይጠበቁም። የተመሰጠነ ባኪ በማቅረብ አማካይ በቅንብር ማዕከል መክፈቱ ይችላሉ።",
+      "cancelConfirmRotateBody": "የመድረሻ ቁልፍዎ ቀይሯል። በቅንብር መተግበሪያ ሁሉ ማየት ይችላሉ።",
+      "cancelConfirmConfirm": "አዎ, አቋርጥ",
+      "cancelConfirmDismiss": "ተመለስ",
+      "loadError": "የመድረሻ ቁልፍዎን በዚህ መሳሪያ ላይ ማከናወን አልተቻለም።"
+    },
+    "file": {
+      "heading": "የውይይት የቦክ መድረሻ ቁልፍ",
+      "warning": "ይህን ቁልፍ ደህና ያኑሩ። በዚህ ቁልፍ ያሉአቸው ማህደሩን ማንበብ ይችላሉ፣ በቁልፉ ሳይኖር ማህደሩ አይመለስም።"
+    },
+    "progress": {
+      "titleCreate": "ማህደሯን በመዘጋጀት ላይ",
+      "titleRotate": "የመድረሻ ቁልፍዎን በመቀየር ላይ",
+      "encrypting": "{count, plural, one {አንዱን ውይይት በመመሰጠንና በማፍቀር ላይ…} other {# ውይዮች በመመሰጠንና በማፍቀር ላይ…}}",
+      "success": "{count, plural, one {መቅፈል ተጠናቋል። አንድ ውይይት ጠበቀ።} other {መቅፈል ተጠናቋል። # ውይዮች ተጠብቀዋል።}}",
+      "error": "ባኪ አልተሳካም። ውይዮቶችዎ በዚህ መሳሪያ ላይ አሉ።",
+      "retry": "እንደገና ይሞክሩ",
+      "close": "ዝጋ",
+      "done": "ተጠናቋል"
+    },
+    "input": {
+      "label": "የመድረሻ ቁልፍ",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "ቁልፎች ኦ፣ አይ፣ ኤል የሚለውን ፊደላት አይያካትቱም።",
+      "checksumError": "ይህ ቁልፍ ትክክል አይመስለኝም — ትዕዛዞትን ተመልከቱ።",
+      "formatError": "ይህ እንደ የመድጋኛ ቁልፍ አይመስልም።",
+      "incomplete": "ቀጥሉ ይተይቡ — መድጋኛ ቁልፍ 56 ፊደላት አሏት።",
+      "valid": "ቁልፉ ትክክል ይመስላል።"
+    },
+    "restore": {
+      "title": "ውይይቶችዎን አንስተው ይመልሱ",
+      "successTitle": "ቦኬን ማልሻ ተመልሷል",
+      "promptBody": "ለመለያዎ የደረሰነው በሚሰናከል ቦኬ ተገኝቷል። እንደገና ለመመለስ መድጋኛ ቁልፎን ያስገቡ።",
+      "submit": "ቦኬውን መልስ",
+      "skip": "ዝለል — በዚህ መአስከት አዲስ ጀምር",
+      "restoring": "ውይይቶችዎን በመክፈትና በመመለስ ላይ…",
+      "successBody": "{count, plural, one {# ውይይት ተመልሷል።} other {# ውይይቶች ተመልሰዋል።}}",
+      "wrongKey": "ቁልፉ ትክክል ነው፣ ግን ይህን ቦኬ ሊክይው አይችልም። ቁልፎን ቀይረውም ከሆነ አዲሱን ያጠቀሙ።",
+      "corrupt": "ይህ ቦኬ ሊነበብ አልተቻለም — ምናልባት ጎድቷል። በዚህ መአስከት አዲስ ጀምሩ ወይም ሌላ ጊዜ ይሞክሩ።",
+      "networkError": "ወደ ቦኬ አገልግሎቱ ማድረስ አልተቻለም። ኮኔክስኑን ያረጋግጡ እና ዳግመኛ ይሞክሩ።",
+      "tryAgain": "ሌላ ቁልፍ ይሞክሩ",
+      "close": "ተጠናቋል"
+    },
+    "enterKey": {
+      "title": "አዲሱን መድጋኛ ቁልፍዎ ያስገቡ",
+      "body": "የመድጋኛ ቁልፎ በሌላ መአስከት ተቀይሯል። ቦኬዎን በዚህ መአስከት ለማቀናበል አዲሱን ቁልፍ ያስገቡ።",
+      "submit": "ይህን ቁልፍ አጠቀም"
+    },
+    "banner": {
+      "keyMismatchTitle": "ቦኬ ቆሟል — መድጋኛ ቁልፎ በሌላ መአስከት ተቀይሯል።",
+      "enterNewKey": "አዲስ ቁልፍ ያስገቡ",
+      "resetBackup": "ቦኬ ዳግመኛ ያቆሙ",
+      "resetConfirmTitle": "ቦኬውን በዚህ መአስከት ቁልፍ ዳግመኛ ይቆሙ?",
+      "resetConfirmBody": "ያለው ቦኬ በዚህ መአስከት ውይይቶች ተቀይሯል፣ በዚህ መአስከት ቁልፍ ተሰናክሏል። ሌሎች መአስከቶች የዚህ መአስከት መድጋኛ ቁልፍዎን ይፈልጋሉ።",
+      "resetConfirmAction": "ቦኬ ዳግመኛ ያቆሙ",
+      "remoteMissingTitle": "ቦኬዎ በአካውንቱ በሰርቨሩ አልቀረም። ቦኬ ቆሟል።",
+      "backUpAgain": "ዳግመኛ ቦኬ ያድርጉ",
+      "dismiss": "አጥፋ"
+    },
+    "rotate": {
+      "confirmTitle": "የመድጋኛ ቁልፎን ቀይር?",
+      "confirmBody": "ቦኬዎት በአዲስ ቁልፍ ዳግመኛ ይተቀመጣል፣ አሮጌው ቁልፍ ማስራት ይቆማል። አዲሱን ቁልፍ ማስቀመጥ እና በሌሎች መአስከቶች ላይ ማስገባት ይኖርቦታል።",
+      "confirmAction": "ቁልፍ ቀይር"
+    },
+    "toast": {
+      "enrollLater": "በማህደር ውስጥ የቦኬ መቆያ ሁሉ ጊዜ ማብራት ይችላሉ።",
+      "keyUpdated": "መድጋኛ ቁልፍ ተዘመነ። ቦኬ ቀጥሏል።",
+      "resetDone": "ቦኬ በዚህ መአስከት ቁልፍ ተመልሷል።",
+      "backupRestarted": "ቦኬ ዳግመኛ ተፈጠረ።",
+      "opFailed": "ያንሳበት አልተሳካም። እባክዎ ደግመው ይሞክሩ።"
+    },
+    "settings": {
+      "statusOn": "ቦኬ ተነስቷል",
+      "statusOff": "ቦኬ ዝግ ነው",
+      "offDescription": "ውይይቶችዎ በዚህ ባልሳን ብቻ ይኖራሉ። ቦኬ እንዲያስቀምጡና በሌሎች መአስከቶች ላይ እንዲያመላለሱ እርስዎን በጥልቅ ቦኬ አንዳት ያድርጉ። ሁሉም ውይይቶች በመአስከትዎ ላይ በአስገዳጅ ጥበብ ይተቀመጣሉ፤ እኛ ማንም ማንበብ አንችልም።",
+      "turnOn": "ቦኬ አብራ",
+      "restoreTitle": "ለመለያዎ ቦኬ አስቀድሞ አለ",
+      "restoreDescription": "እርሱን በዚህ መአስከት ለመመለስ መድጋኛ ቁልፎን ያስገቡ።",
+      "restore": "ቦኬውን መልስ",
+      "lastBackup": "የመጨረሻ ቦኬ፡ {time}",
+      "lastBackupNever": "እስካሁን ምንም ቦኬ አልተጠናቀቀም",
+      "keyFingerprint": "ቁልፍ ····-{tail}",
+      "syncState": {
+        "idle": "ለመማረክ በመጠበቅ ላይ",
+        "syncing": "ቦኬ በማድረግ ላይ…",
+        "ok": "ወቅታዊ ነው",
+        "keyOutOfDate": "ቆሟል — መድጋኛ ቁልፎ በሌላ መአስከት ተቀይሯል",
+        "remoteMissing": "ተወቅሷል — የተቀመጠው በተለያዩ ሰርቨሮች ላይ ተሰርዟል",
+        "error": "የመጨረሻው የተቀመጠው ሙከራ አልተሳካም"
+      },
+      "backUpNow": "አሁን ይቀምጡ",
+      "backUpNowSuccess": "በትክክል ተቀምጧል",
+      "backUpNowFailure": "መቀመጥ አልተሳካም — ውይይቶችዎ በዚህ መሣሪያ ላይ አልተቀየሩም",
+      "viewKey": "የእርስዎን የእርዳታ ቁልፍ ይመልከቱ",
+      "changeKey": "የእርዳታ ቁልፍ ይቀይሩ",
+      "dangerTitle": "አደገኛ ክፍል",
+      "turnOffDelete": "የተቀመጠውን ይጥፉና ያጥቁ",
+      "turnOffConfirmTitle": "መቀመጡን እንዲቆም ይፈልጋሉ?",
+      "turnOffConfirmMessage": "ይህ በሁሉም መሣሪያዎች ላይ የተቀመጠውን ከሰርቨሮቻችን ይሰርዛል፡፡ ውይይቶችዎ በዚህ መሣሪያ ላይ ይቆያሉ። በኋላ በአዲስ የእርዳታ ቁልፍ መቀመጥን መነሳት ይችላሉ።",
+      "turnOffConfirmAction": "ተቀመጡን ይሰርዙ",
+      "turnOffSuccess": "መቀመጡ ተዘግቷ ተሰርዟል",
+      "turnOffFailure": "መቀመጡን ማጥፋት አልተቻለም። እባክዎ እንደገና ይሞክሩ።"
+    }
+  },
+  "memories": {
+    "title": "ማህደራት",
+    "description": "አጠባበቅ የሚጠቀምበትን ጠቋሚ እውነታዎች እንዲያስታውስ እንዲሁም በውይይቶች ላይ እንዲጠቀም ይፍቀዱ — ምሳሌ፣ ሚናዎ, ምርጫዎች, ያለማቋረጥ ፕሮጀክቶች እና ተወላጅ ነገሮች.",
+    "enableToggle": "ማህደራትን አንቃ",
+    "privacyNote": "እውነታዎች በዚህ ብራውዘር ብቻ ይቀመጣሉ፣ በውይይቶችዎም ብቻ ያካተቱ።",
+    "empty": "ማህደራት አልተቀመጡም። የሚታሰበው እውነታ ራሱ ከውይይቶችዎ በቀጥታ ይቀመጣል።",
+    "savedOn": "ተቀመጠበት፡ {date}",
+    "deleteMemory": "ማህደር ይሰርዙ",
+    "clearAll": "ሁሉንም ማህደራት ይነጹ",
+    "clearAllConfirmQuestion": "ሁሉንም ማህደራት ይሰርዙ? ይህ አይታወስም።",
+    "clearAllConfirm": "ሁሉንም ይሰርዙ",
+    "cancel": "ይቅር"
+  },
+  "contextWindow": {
+    "label": "አያያዝ መስክ",
+    "value": "{count} መልእክቶች",
+    "fewer": "ቁጥሩ የተቀናበረ መልእክቶች",
+    "more": "ተጨማሪ መልእክቶች",
+    "description": "ከዚህ ክልል በላይ ያሉት አሮጌ መልእክቶች ይዘረጋሉ እና እንደ አያያዝ ይላካሉ።"
+  },
+  "agentAccess": {
+    "title": "የወኪል መዳረሻ",
+    "description": "የተጠቃሚዎች ማን የተጋራ ፋውንድሪ ወኪሎችን ማጠቀም እንደሚችሉ ይቆጣጠሩ። ህጎች የተጠቃሚዎች የራሳቸውን Azure መድረሻ ፈቃድ ብቻ ይጨምራሉ — ያሎትን Azure መድረሻ ማድረስ ከተከሉት ከቶ ማቅረብ አይችልም።",
+    "backToChat": "ወደ ውይይት",
+    "loading": "ወኪሎችና ህጎች በመጫን ላይ…",
+    "loadError": "የወኪል መዳረሻ መረጃ መጫን አልተቻለም።",
+    "rulesUnavailableWarning": "የመዳረሻ ህጎችን ከማከማቻ መጫን አልተቻለም። የወኪል መጥራት በአሁኑ ጊዜ ታግዷል፣ ህጎቹም ማስተካከል አይቻልም።",
+    "retry": "ደግመው ይሞክሩ",
+    "rulesTab": "የወኪል ህጎች",
+    "localAdminsTab": "አካባቢ አስተዳዳሪዎች",
+    "noAgents": "የሚነገሩ ወኪሎች የሉም።",
+    "sourceLabel": "ምንጭ",
+    "notDiscoverable": "በእርስዎ ሊታወቅ አይችልም",
+    "notDiscoverableHint": "የዚህ ወኪል ቅደም ተከተል አለው፣ ነገር ግን በእርስዎ መፍለጊያ ውስጥ አይደለም — ስሙ ሊቀየረው ይችላል፣ የAzure መዳረሻዎ አይሰካችም፣ የመዳረሻ ህጉም አካባቢዎ ውስጥ አይደለም።",
+    "accessEveryone": "ሁሉም",
+    "accessRestricted": "የተገደበ",
+    "edit": "አስተካክል",
+    "updatedByLine": "መጨረሻ የተቀየረው በ{name} በ{date}",
+    "accessTypeLabel": "ይህን ወኪል ማን ማጠቀም ይችላል",
+    "everyoneDescription": "በAzure መዳረሻቸው ወደዚህ ወኪል ማድረስ የሚችል ሁሉ።",
+    "restrictedDescription": "በታች የተዘረዘሩት ተጠቃሚዎችና ዶሜኖች ብቻ።",
+    "allowDomainsLabel": "ተፈቀዱ ያላቸው ዶሜኖች",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "ተፈቀዱ ያላቸው ተጠቃሚዎች",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "ለመጨመር Enter ይጫኑ",
+    "removeChip": "አስወግድ",
+    "groupsLabel": "ተፈቀዱ ያላቸው ቡድኖች",
+    "groupsPendingConsent": "በቡድን ላይ መግባት የተከለከለ ነው፤ የነጥብ አስተዳዳሪ ስምምነት እየጠበቀ ነው፣ እስካሁን ማስተካከል አይችልም።",
+    "restrictedEmptyWarning": "ተጠቃሚዎች ወይም ዶሜኖች አልተዘረዙም — ማንም ይህንን agent መጠቀም አይችልም።",
+    "save": "አስቀምጥ",
+    "saving": "በማስቀመጥ ላይ…",
+    "cancel": "ደኅንነቱን ያቋርጡ",
+    "saveSuccess": "የመዳረሻ መመሪያ ተቀምጧል።",
+    "deleteSuccess": "የመዳረሻ መመሪያ ተወግዷል — ሁሉም ይህን agent ዳግም መጠቀም ይችላሉ።",
+    "saveError": "ማስቀመጥ አልተቻለም። እባክዎን ደግመው ይሞክሩ።",
+    "conflictError": "ከእርስዎ በማስተካከል ላይ ሳሉ ሌላ ሰው ለውጥ አደረገ። የቅርብ ስሪትን ለመጫን ይመልሱ ከዚያም ዳግመው ይቀይሩ።",
+    "reload": "ይመልሱ",
+    "localAdminsDescription": "የውስጥ አስተዳዳሪዎችን ያመልክቱ፤ ያሉበት agent አያቀማጡ በማድረግ። የውስጥ አስተዳዳሪዎች መዋቅሩ በተመደበባቸው የ agent መመሪያዎች ብቻ ማስተካከል ይችላሉ።",
+    "noLocalAdmins": "የውስጥ አስተዳዳሪዎች አልተዘጋጁም።",
+    "addLocalAdmin": "የውስጥ አስተዳዳሪ ያክሉ",
+    "emailLabel": "ኢሜይል",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "የውስጥ አስተዳዳሪን አስወግድ",
+    "delegatedAgentsLabel": "የተመደቡ agents",
+    "noDelegatedAgents": "ሊመደቡ የሚችሉ agents የሉም።",
+    "unknownAgentKey": "ያልታወቀ agent key",
+    "configSaveSuccess": "የውስጥ አስተዳዳሪዎች ተቀምጠዋል።",
+    "configConflictError": "የውስጥ አስተዳዳሪዎች ዝርዝር ሲቀየር እርስዎ በማስተካከል ላይ ነበሩ። ይመልሱና ደግመው ይሞክሩ።",
+    "addAgent": "ወኪል አክል",
+    "newPromptAgentTitle": "አዲስ ፕሮምፕት ወኪል",
+    "editPromptAgentTitle": "ፕሮምፕት ወኪል አርትዕ",
+    "agentNameLabel": "ስም",
+    "agentNamePlaceholder": "ለምሳሌ ፡ የጉዞ አማካሪ",
+    "agentDescriptionLabel": "መግለጫ",
+    "agentDescriptionPlaceholder": "በሞዴል መምረጫ ላይ ለተጠቃሚዎች የሚታየው",
+    "agentSystemPromptLabel": "የስርዓት ፕሮምፕት",
+    "agentSystemPromptPlaceholder": "ይህ ወኪል እንዴት እንደሚሰራ የሚወስኑ መመሪያዎች",
+    "agentModelLabel": "ሞዴል",
+    "agentModelPlaceholder": "ሞዴል ይምረጡ…",
+    "agentModelUnavailable": "{modelId} (የለም)",
+    "agentModelUnknownError": "የተመረጠው ሞዴል አይገኝም። ሌላ ሞዴል ይምረጡና እንደገና ያስቀምጡ።",
+    "promptAgentBadge": "ፕሮምፕት ወኪል",
+    "editAgent": "ወኪል አርትዕ",
+    "deleteAgent": "ሰርዝ",
+    "deleteAgentConfirm": "ይህን ወኪል ለሁሉም ይሰርዝ? ከሞዴል መምረጫ ይጠፋል፤ ያሉት ውይይቶች ታሪካቸውን ይቀጥላሉ።",
+    "confirmDeleteAgent": "አዎን፣ ሰርዝ",
+    "promptAgentCreateSuccess": "ፕሮምፕት ወኪል ተፈጠረ።",
+    "promptAgentSaveSuccess": "ፕሮምፕት ወኪል ተደምሯል።",
+    "promptAgentDeleteSuccess": "ፕሮምፕት ወኪል ተሰርዟል።",
+    "promptAgentsUnavailableWarning": "ፕሮምፕት ወኪሎችን ከማከማቻ ማግኘት አልተቻለም። አሁን ማርትዕ አይችሉም።",
+    "agentsTab": "ወኪሎች",
+    "connectorsTab": "አገናኞች",
+    "addConnector": "አገናኝ ያክሉ",
+    "noConnectors": "አገናኞች አልተጨመሩም።",
+    "connectorsUnavailableWarning": "የአገናኞች መዝገብን ማግኘት አልተቻለም፣ ስለዚህ ዝርዝሩ ሙሉ ሊሆን አይችልም። ሙሉ ሳይጫን አዲስ አይፈጠሩ።",
+    "editAccess": "መዳረሻ ያርትዑ",
+    "deleteConnector": "አጥፋ",
+    "deleteConnectorConfirm": "ይህን አገናኝ ይሰርዙ? ማንኛውም ሲጠቀመው ወዲያውኑ መዳረሻውን ይከልክላል።",
+    "confirmDeleteConnector": "አገናኝ አጥፋ",
+    "connectorSaveSuccess": "አገናኝ ተቀመጠ።",
+    "connectorCreateSuccess": "አገናኝ ተፈጠረ።",
+    "connectorDeleteSuccess": "አገናኝ ተሰርዟል።",
+    "editConnectorTitle": "አገናኝ ያርትዑ",
+    "newConnectorTitle": "አዲስ አገናኝ",
+    "connectorPresetLabel": "ከአባል አብስት ይጀምሩ",
+    "connectorPresetNone": "ከድንበር መጀመር",
+    "connectorNameLabel": "ስም",
+    "connectorDescriptionLabel": "መግለጫ",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "በURL ውስጥ ያለውን {placeholder} በየትኛውም እሴትዎ ከማስቀመጥዎ በፊት ይቀይሩ።",
+    "connectorTransportLabel": "መጓጓዣ",
+    "connectorAuthLabel": "ማረጋገጫ",
+    "connectorAuthNone": "የለም",
+    "connectorAuthBearer": "ቶክን (እያንዳንዱ ተጠቃሚ የራሱን ይሰጣል)",
+    "connectorAuthOauth": "OAuth መግቢያ",
+    "connectorSealingUnavailable": "OAuth አይገኝም፡ AUTH_SECRET ይህን ማውጣት የለም፣ ከሁሉም አባላት መሰየም የሚለውን የደኅንነት ቁልፍ በመካከል ላይ ማድረግ የለበትም።",
+    "connectorTokenHelpLabel": "ወደ ቶክን መመሪያ መስመር (አማራጭ)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "አንድ ምሥጢር ተቀምጧል። ለመጠቀም ባዶ ይተዉ፣ አዲስ ለመቀየር ያስገቡ።",
+    "connectorClientSecretHint": "ከማከማቻ በፊት ይዝጋል፣ እና በድጋሚ አይታይም።",
+    "connectorScopesLabel": "Scopes (በቦታ የተለየ፣ አማራጭ)"
+  },
+  "localModels": {
+    "title": "የአካባቢ ሞዴሎች",
+    "description": "በዚህ ኮምፒውተር ላይ ከሚሰሩ ሞዴሎች ጋር ውይይት ያድርጉ። መልዕክቶች ቀጥታ ከአሳሽዎ ወደ አካባቢ መተግበሪያው ይሄዳሉ፥ ወደ አገልጋያችን አይደሉም — ስለዚህ ምላሾች፣ የውይይት ርዕሶች እና ማጠቃለያዎች ሁሉ በኮምፒውተርዎ እየቀመጡ ይቀያሉ።",
+    "detect": "የአካባቢ ተኮሳዎች አግኝ",
+    "detecting": "በመፈለግ ላይ…",
+    "experimental": "ጥናታዊ",
+    "portLabel": "ፖርት",
+    "statusUnknown": "አልተፈተነበትም።",
+    "statusChecking": "በማረጋገጥ ላይ…",
+    "statusReady": "{count, plural, =0 {ተገናኝቷል፣ ሞዴሎች አልተጫኑም።} one {ተገናኝቷል — # ሞዴል ዝግጁ ነው።} other {ተገናኝቷል — # ሞዴሎች ዝግጁ ናቸው።}}",
+    "statusNotRunning": "{label} ሊደርስበት አልተቻለም። በዚህ ፖርት እንደሚሰራ እና አሳሽዎ ከዚህ ጣቢያ አካባቢ የአካባቢ መተግበሪያዎችን ማግኘት እንደተፈቀደለት ያረጋግጡ።",
+    "statusHttpError": "{label} ስህተት አስረከበ። ሎጎቹን ያረጋግጡ።",
+    "corsHelp": {
+      "ollama": "Ollama በሂደት ላይ ነው፣ ግን ከዚህ ጣቢያ ጥያቄዎችን ማቅረብ አይፈቅድም። OLLAMA_ORIGINS ወደዚህ ድህረገፅ አድራሻ ያዘጋጁ፣ Ollama እንደገና አስጀምሩ ከዚያም እንደገና ይፈትኑ።",
+      "lmstudio": "LM Studio በሂደት ላይ ነው፣ ግን ከዚህ ጣቢያ ጥያቄዎችን ማቅረብ አይፈቅድም። በአካባቢ አገልጋዩ ቅንብሮች CORS አስተካክሉ፣ ከዚያም እንደገና ይፈትኑ።",
+      "llamacpp": "llama.cpp በሂደት ላይ ነው፣ ግን ከዚህ ጣቢያ ጥያቄዎችን ማቅረብ አይፈቅድም። llama-server በcross-origin ጥያቄዎች እንዲፈቀዱ ያስጀምሩ፣ ከዚያም እንደገና ይፈትኑ።"
+    },
+    "privacyNote": "የአካባቢ ሞዴሎች ፋይል አቀራረብ፣ ምስሎች፣ የድህረ-ገፅ ፍለጋ ወይም አገናኞችን አይደግፉም — እነዚህ ለአገልጋያችን ይፈለጋሉ። መፈተን ሁልጊዜ በዚህ ኮምፒውተር ብቻ ይደርሳል።"
+  },
+  "urlFetch": {
+    "sourceFallback": "የድህረ ገጽ",
+    "fallbackHint": "ደግሞ ገጹን በመክፈት፣ ጽሑፉን ቅዳብ በማድረግ፣ እዚህ በመስቀመጥም ማስገባት ይችላሉ።",
+    "shortExtract": "አጭር ትንሽ እትም ብቻ ተነትቷል — ገጹ ምናልባት በክፍያ ማደሪያ ላይ ነው ወይም መግቢያ ይፈልጋል።",
+    "errors": {
+      "invalidUrl": "ይህ ትክክለኛ የድህረ ገጽ አድራሻ አይመስለኝም።",
+      "ssrfBlocked": "አድራሹ ለደህንነት ምክንያት ማመጣት አይቻልም።",
+      "tooManyRedirects": "ትእዛዝ በብዙ ጊዜ ተልኳል።",
+      "timeout": "መገፃት ረዘመ ጊዜ ወስዷል።",
+      "unreachable": "ወደዚያ ገጽ መድረስ አልተቻለም።",
+      "blocked": "ድህረ ገጹ መጠየቂያውን አልተቀበለም — ግባ መያዝ ወይም ለማድረግ የተከለከለ ሊሆን ይችላል።",
+      "notFound": "ያ ገጽ አልተገኘም።",
+      "upstream": "ድህረ ገጹ ስህተት ተመልሷል።",
+      "pdf": "ያ አገናኝ መረጃ PDF ነው። አውርደው በ attach ቁልፍ ማከል ይችላሉ።",
+      "nonHtml": "ያ አገናኝ እንችለን ማንበብ የምንችለው የድህረ ገጽ አይደለም።",
+      "tooLarge": "ያ ገጽ ለመግመት በጣም ከፍተኛ ነው።",
+      "empty": "በዚያ ገጽ ማንበብ የሚችል የመጽሐፍ ጽሑፍ አልተገኘም።",
+      "generic": "ገጹ ማግኘት አልተቻለም።"
+    },
+    "fetchingFile": "በመቅረብ ላይ {host}…",
+    "attachLink": "አገናኝ አቀርብ",
+    "attachLinkTitle": "የድህረ ገጽ አቀርብ",
+    "attachLinkDescription": "ገጹ ተመድቦ የሚነበብ ጽሑፉ በመልኩ ይቀጠራል።",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Fetch & attach",
+    "attachLinkInvalid": "ይሄ የትክክል የድህረ ገጽ አድራሻ አይመስልም።",
+    "linkBadge": "ከአገናኝ የተዋረደ",
+    "couldNotRetrieve": "ማግኘት አልተቻለም",
+    "doc": {
+      "sourceLabel": "ምንጭ",
+      "retrievedLabel": "የተገኘ",
+      "attemptedLabel": "የተሞከረ",
+      "failureHeading": "የድህረ ገጹ ማግኘት አልተቻለም"
+    },
+    "settingsTitle": "አገናኞች በመልእክቶች ውስጥ",
+    "settingsToggle": "የተጠረጠሩ አገናኞችን ራሱን ያመጣ",
+    "settingsDescription": "ብቻውን አገናኝ በመስቀመጥ ገጹ ተመድቦ ጽሑፉ ይቀጠራል እና አጋዥ ማንበብ ይችላል። ይህን ለመሰናከል አገናኞቹ እንደ ግልጽ ጽሑፍ ይቀሩ — ከ + ሜኑ በመጠቀም ገጽ በእጅ መስቀመጥ ይችላሉ።",
+    "addLink": "አገናኝ አክል"
+  },
+  "cameraAccessError": "ካሜራውን ማግኘት አልተቻለም። የካሜራ ፍቃዶችዎን ያረጋግጡ እና ደግመው ይሞክሩ።",
+  "cameraUnnamedDevice": "ካሜራ",
+  "pastedText": {
+    "fallbackName": "የታተመ ጽሑፍ",
+    "charCount": "{count, number} ቁምፊዎች",
+    "removeChip": "የታተመውን ጽሑፍ “{name}” ያስወግዱ",
+    "blockLabel": "የታተመ ጽሑፍ: {name}",
+    "doc": {
+      "heading": "የታተመ ጽሑፍ",
+      "pastedLabel": "የታተመ"
+    },
+    "settingsTitle": "የትልቁ ማስቀመጥ",
+    "settingsToggle": "ትልቅ ማስቀመጥን አባሪ ያድርጉ",
+    "settingsDescription": "ከታች የቀጠለው ዉስጥ በላይ ጽሑፍ ሲሚቀመጥ፣ እንደ file ያስቀመጣል እንጂ ወደ መልእክት ሳጥን አይክፈልም። ጽሑፉ እንደታተመበት በትክክል ይጠቀማል — ምንም አይቀየም፣ አይመጣም።",
+    "settingsThresholdLabel": "የተሰቀመው በዚህ በላይ ከሆነ አስቀመጥ",
+    "settingsThresholdUnit": "ቁምፊዎች",
+    "settingsThresholdHint": "በ{min, number} እና {max, number} ቁምፊዎች መካከል።"
+  },
+  "structures": {
+    "section": "አዋቂ መዋቅሮች",
+    "sectionSubtitle": "የተቀመጡ የመስኮች መግለጫዎች። እንደ መውጫ መስክ ይጠቀሙበት ወይም እንደ ቀደም የሚቀመጠው ማወዳደር ገበታ።",
+    "loadFromStructure": "መዋቅሩን ጫን",
+    "loadFromStructureTitle": "እነዚህን አምድዎች በተቀመጠ መዋቅር ቀይር",
+    "pickerEmpty": "ምንም የተቀመጠ መዋቅር የለም።",
+    "pickerTitle": "የተቀመጠ መዋቅር ጫን",
+    "saveAsStructure": "እንደ መዋቅር አስቀምጥ",
+    "saveAsStructureTitle": "እነዚህን አምድዎች ወደ መዋቅር ቤት ማከማቻዎ አስቀምጥ",
+    "savedToast": "የተቀመጠ መዋቅር “{name}”",
+    "namePlaceholder": "የመዋቅር ስም",
+    "fieldCount": "{count} መስኮች",
+    "fieldCountOne": "1 መስክ",
+    "downgradedNotice": "{count} መስኮች ወደ ጽሑፍ ቀስተዋል — ገበታዎች በአንድ አንቀሳቃሽ እንዲኖሩ ይፈቅድ፡ {names}",
+    "truncatedNotice": "{count} መስኮች ጠፍተዋል — የገበታው ገደብ {max} አምድ ነው: {names}",
+    "skippedDerivedNotice": "{count} የተከናወነ የአምድ መስክ(ዎች) አልተቀመጡም — ፎርሙላዎች ወደዚህ የገበታ አምድ ይጠቀማሉ፡ {names}",
+    "loadReplacesColumns": "ይህ አሁንዎት ያሉትን አምድዎች በሙሉ ይቀይራል። ያሉ ተሰንጠረዦች በስም የሚመዱ ነገሮች ይቆያሉ።"
   }
 }

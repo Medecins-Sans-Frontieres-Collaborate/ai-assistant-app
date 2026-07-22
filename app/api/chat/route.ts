@@ -3,6 +3,8 @@ import { NextRequest } from 'next/server';
 import { ServiceContainer } from '@/lib/services/ServiceContainer';
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { AgentEnricher } from '@/lib/services/chat/enrichers/AgentEnricher';
+import { ExtractionEnricher } from '@/lib/services/chat/enrichers/ExtractionEnricher';
+import { PromptAgentEnricher } from '@/lib/services/chat/enrichers/PromptAgentEnricher';
 import { RAGEnricher } from '@/lib/services/chat/enrichers/RAGEnricher';
 import { ToolRouterEnricher } from '@/lib/services/chat/enrichers/ToolRouterEnricher';
 import { AgentChatHandler } from '@/lib/services/chat/handlers/AgentChatHandler';
@@ -98,7 +100,6 @@ export async function POST(req: NextRequest): Promise<Response> {
       // `pipedThrough` tracks whether the handler's body is being piped
       // through the writer; if it's not, the catch path aborts the
       // writer so the transform doesn't leak.
-      /* global TransformStream */
       const { readable: streamReadable, writable: streamWritable } =
         new TransformStream<Uint8Array, Uint8Array>();
       const streamWriter = streamWritable.getWriter();
@@ -157,12 +158,18 @@ export async function POST(req: NextRequest): Promise<Response> {
           new ImageProcessor(),
 
           // Feature enrichers
+          // Prompt-agent persona override runs BEFORE RAGEnricher: both key
+          // off botId, and RAGEnricher.shouldRun skips prompt agents.
+          new PromptAgentEnricher(),
           new RAGEnricher(
             env.SEARCH_ENDPOINT!,
             env.SEARCH_INDEX!,
             foundryOpenAIClient,
           ),
           new ToolRouterEnricher(toolRouterService, agentChatService),
+          // Structured-data extraction: composes the JSON-schema response
+          // format when the request carries an `extraction` payload.
+          new ExtractionEnricher(agentChatService),
           new AgentEnricher(),
 
           // Execution handlers (AgentChatHandler runs first, StandardChatHandler as fallback)
@@ -203,6 +210,7 @@ export async function POST(req: NextRequest): Promise<Response> {
                 case ErrorCode.VALIDATION_FAILED:
                   return 400;
                 case ErrorCode.AGENT_UNAVAILABLE:
+                case ErrorCode.MODEL_UNAVAILABLE:
                   return 409;
                 case ErrorCode.REQUEST_TIMEOUT:
                 case ErrorCode.PIPELINE_TIMEOUT:
@@ -339,6 +347,7 @@ export async function POST(req: NextRequest): Promise<Response> {
           case ErrorCode.VALIDATION_FAILED:
             return 400;
           case ErrorCode.AGENT_UNAVAILABLE:
+          case ErrorCode.MODEL_UNAVAILABLE:
             return 409;
           case ErrorCode.REQUEST_TIMEOUT:
           case ErrorCode.PIPELINE_TIMEOUT:

@@ -36,6 +36,15 @@ export default [
         navigator: 'readonly',
         localStorage: 'readonly',
         sessionStorage: 'readonly',
+        BroadcastChannel: 'readonly',
+        MessageEvent: 'readonly',
+        crypto: 'readonly',
+        CryptoKey: 'readonly',
+        indexedDB: 'readonly',
+        IDBDatabase: 'readonly',
+        IDBObjectStore: 'readonly',
+        IDBRequest: 'readonly',
+        IDBTransactionMode: 'readonly',
         Audio: 'readonly',
         console: 'readonly',
         fetch: 'readonly',
@@ -48,6 +57,7 @@ export default [
         URL: 'readonly',
         URLSearchParams: 'readonly',
         ReadableStream: 'readonly',
+        TransformStream: 'readonly',
         TextEncoder: 'readonly',
         TextDecoder: 'readonly',
         // DOM types
@@ -61,12 +71,14 @@ export default [
         HTMLOptionElement: 'readonly',
         HTMLSpanElement: 'readonly',
         HTMLUListElement: 'readonly',
+        HTMLTableElement: 'readonly',
         HTMLVideoElement: 'readonly',
         HTMLCanvasElement: 'readonly',
         HTMLAudioElement: 'readonly',
         SVGSVGElement: 'readonly',
         MouseEvent: 'readonly',
         KeyboardEvent: 'readonly',
+        ClipboardEvent: 'readonly',
         Event: 'readonly',
         EventTarget: 'readonly',
         EventListener: 'readonly',
@@ -77,6 +89,10 @@ export default [
         FileList: 'readonly',
         FileReader: 'readonly',
         DataTransfer: 'readonly',
+        Image: 'readonly',
+        HTMLImageElement: 'readonly',
+        ImageBitmap: 'readonly',
+        CanvasImageSource: 'readonly',
         MediaStream: 'readonly',
         MediaRecorder: 'readonly',
         MediaRecorderOptions: 'readonly',
@@ -96,6 +112,7 @@ export default [
         Storage: 'readonly',
         ScrollBehavior: 'readonly',
         ReadableStreamDefaultController: 'readonly',
+        TransformStreamDefaultController: 'readonly',
         // Browser APIs
         setTimeout: 'readonly',
         clearTimeout: 'readonly',
@@ -112,6 +129,7 @@ export default [
         atob: 'readonly',
         queueMicrotask: 'readonly',
         XMLHttpRequest: 'readonly',
+        createImageBitmap: 'readonly',
         // Node.js globals
         global: 'readonly',
         process: 'readonly',
@@ -162,6 +180,18 @@ export default [
       react: {
         version: 'detect',
       },
+    },
+  },
+  {
+    // `no-undef` can't see TypeScript type space, so every DOM *type* used in
+    // an annotation (BlobCallback, MediaRecorderOptions, …) has to be hand-
+    // added to the globals list above or it errors — a list that silently goes
+    // stale as the DOM lib grows. tsc already resolves these, and CI runs
+    // `tsc --noEmit`, so the rule is pure duplicate work on typed files.
+    // This is the configuration typescript-eslint documents for exactly this.
+    files: ['**/*.{ts,tsx}'],
+    rules: {
+      'no-undef': 'off',
     },
   },
 ];

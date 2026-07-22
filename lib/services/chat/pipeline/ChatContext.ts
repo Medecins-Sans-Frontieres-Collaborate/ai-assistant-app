@@ -1,8 +1,13 @@
 import { Session } from 'next-auth';
 
+import { PromptAgent } from '@/lib/services/agentAccess/types';
 import { ModelSelector } from '@/lib/services/shared';
 
 import { ActiveFile, ApprovalResponse, Message } from '@/types/chat';
+import {
+  ExtractionRequest,
+  ExtractionResponseFormat,
+} from '@/types/extractionRecipe';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { DisplayNamePreference } from '@/types/settings';
@@ -115,6 +120,18 @@ export interface ChatContext {
   /** Additional user context for the AI */
   userContext?: string;
 
+  /**
+   * Best-effort summary of earlier messages dropped by client-side context
+   * windowing (conversation compaction). Rendered into the system prompt.
+   */
+  conversationSummary?: string;
+
+  /**
+   * Long-term user memory snippets (Memories feature). Rendered into the
+   * system prompt.
+   */
+  memories?: string[];
+
   /** Display name preference from General Settings (for deriving name fallback) */
   displayNamePreference?: DisplayNamePreference;
 
@@ -129,12 +146,31 @@ export interface ChatContext {
   agentSourcePath?: string;
 
   /**
+   * ARM ACCOUNT path of the user-added custom model source ("BYO model")
+   * hosting the selected `byom-*` model. Set by the client; the credential
+   * middleware validates it and re-resolves the model under the user's own
+   * ARM OBO token — the value is never trusted as-is.
+   */
+  modelSourcePath?: string;
+
+  /**
    * MCP tool-approval responses to submit alongside (or in lieu of) the
    * user's new message. When present, the Foundry agent handler skips
    * creating a new user-message conversation item and instead posts
    * `mcp_approval_response` items to resume the agent.
    */
   approvalResponses?: ApprovalResponse[];
+
+  /**
+   * Native MCP tool loop (direct SDK paths, NOT the Foundry agent path):
+   * user-configured MCP servers whose tools the model may call this turn,
+   * plus the previous round's pending tool calls and the loop round counter
+   * for the stateless pause/resume protocol. Entries may carry auth tokens —
+   * never log these objects.
+   */
+  mcpServers?: import('@/types/mcp').McpServerRequestEntry[];
+  mcpPendingToolCalls?: import('@/types/mcp').McpPendingToolCall[];
+  mcpLoopRound?: number;
 
   // ========================================
   // FEATURE FLAGS
@@ -145,8 +181,24 @@ export interface ChatContext {
   /** Search mode for tool routing */
   searchMode?: SearchMode;
 
+  /**
+   * Requested hosting region for this conversation (cross-region routing).
+   * Client preference only — resolveChatRegion enforces EU users → EU
+   * server-side regardless of this value.
+   */
+  hostedRegion?: 'US' | 'EU';
+
   /** Whether agent mode is enabled */
   agentMode?: boolean;
+
+  /**
+   * App-defined prompt-agent persona resolved server-side from `botId`
+   * (docs/AGENT_ACCESS_CONTROL.md). Set by createModelSelectionMiddleware
+   * when the agent-access feature is enabled; drives PromptAgentEnricher's
+   * system-prompt override and the credential middleware's access guard.
+   * Never routes into the Foundry execution path (no agentId is ever set).
+   */
+  promptAgent?: PromptAgent;
 
   /** Thread ID for continuing conversations */
   threadId?: string;
@@ -250,6 +302,21 @@ export interface ChatContext {
    * badges visible).
    */
   activeFilesDroppedThisTurn?: string[];
+
+  /**
+   * Structured data extraction request, set by `InputValidator` from the
+   * client's `extraction` payload. Triggers `ExtractionEnricher` to compose
+   * the response format and route URLs through the existing WebSearchTool.
+   */
+  extraction?: ExtractionRequest;
+
+  /**
+   * Strict JSON-Schema response format, written by `ExtractionEnricher` and
+   * consumed by `StandardChatHandler`. When present, the handler issues a
+   * structured-output call (`response_format: { type: 'json_schema', ... }`)
+   * and parses the JSON result into an `ExtractionResultContent` message.
+   */
+  responseFormat?: ExtractionResponseFormat;
 
   /** Execution strategy (standard or agent) */
   executionStrategy?: 'standard' | 'agent';

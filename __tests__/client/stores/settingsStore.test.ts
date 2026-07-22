@@ -593,6 +593,134 @@ You should be concise.`;
     });
   });
 
+  describe('Starred Models/Agents', () => {
+    beforeEach(() => {
+      useSettingsStore.setState({ starredModelIds: [], hiddenModelIds: [] });
+    });
+
+    describe('starModel', () => {
+      it('adds a model/agent id to the starred list', () => {
+        useSettingsStore.getState().starModel('gpt-5.2');
+        useSettingsStore.getState().starModel('org-hr-bot');
+
+        expect(useSettingsStore.getState().starredModelIds).toEqual([
+          'gpt-5.2',
+          'org-hr-bot',
+        ]);
+      });
+
+      it('does not add duplicates', () => {
+        useSettingsStore.getState().starModel('gpt-5.2');
+        useSettingsStore.getState().starModel('gpt-5.2');
+
+        expect(useSettingsStore.getState().starredModelIds).toEqual([
+          'gpt-5.2',
+        ]);
+      });
+
+      it('unhides the model (star ⇒ unhide exclusion)', () => {
+        useSettingsStore.setState({ hiddenModelIds: ['gpt-5.2', 'o3'] });
+
+        useSettingsStore.getState().starModel('gpt-5.2');
+
+        expect(useSettingsStore.getState().hiddenModelIds).toEqual(['o3']);
+        expect(useSettingsStore.getState().starredModelIds).toEqual([
+          'gpt-5.2',
+        ]);
+      });
+    });
+
+    describe('unstarModel', () => {
+      it('removes a model id from the starred list', () => {
+        useSettingsStore.setState({ starredModelIds: ['gpt-5.2', 'o3'] });
+
+        useSettingsStore.getState().unstarModel('gpt-5.2');
+
+        expect(useSettingsStore.getState().starredModelIds).toEqual(['o3']);
+      });
+    });
+
+    describe('hideModel exclusion', () => {
+      it('unstars the model (hide ⇒ unstar)', () => {
+        useSettingsStore.setState({ starredModelIds: ['gpt-5.2', 'o3'] });
+
+        useSettingsStore.getState().hideModel('gpt-5.2');
+
+        expect(useSettingsStore.getState().starredModelIds).toEqual(['o3']);
+        expect(useSettingsStore.getState().hiddenModelIds).toEqual(['gpt-5.2']);
+      });
+    });
+
+    it('resetSettings clears starred models', () => {
+      useSettingsStore.setState({ starredModelIds: ['gpt-5.2'] });
+
+      useSettingsStore.getState().resetSettings();
+
+      expect(useSettingsStore.getState().starredModelIds).toEqual([]);
+    });
+  });
+
+  describe('Token usage tracking', () => {
+    beforeEach(() => {
+      useSettingsStore.setState({
+        tokenUsageStats: {},
+        tokenUsageFirstTrackedAt: null,
+      });
+    });
+
+    const usage = (over = {}) => ({
+      promptTokens: 100,
+      completionTokens: 200,
+      totalTokens: 300,
+      modelId: 'gpt-5.2',
+      region: 'EU' as const,
+      reasoningEffort: undefined,
+      ...over,
+    });
+
+    it('accumulates counts + requests under a model|region|effort key', () => {
+      useSettingsStore.getState().recordTokenUsage(usage());
+      useSettingsStore.getState().recordTokenUsage(usage());
+
+      const stats = useSettingsStore.getState().tokenUsageStats;
+      expect(stats['gpt-5.2|EU|none']).toEqual({
+        promptTokens: 200,
+        completionTokens: 400,
+        requests: 2,
+      });
+    });
+
+    it('separates buckets by region and effort', () => {
+      useSettingsStore.getState().recordTokenUsage(usage({ region: 'US' }));
+      useSettingsStore
+        .getState()
+        .recordTokenUsage(usage({ region: 'EU', reasoningEffort: 'high' }));
+      useSettingsStore.getState().recordTokenUsage(usage({ region: null }));
+
+      const stats = useSettingsStore.getState().tokenUsageStats;
+      expect(Object.keys(stats).sort()).toEqual([
+        'gpt-5.2|EU|high',
+        'gpt-5.2|US|none',
+        'gpt-5.2|default|none',
+      ]);
+    });
+
+    it('stamps firstTrackedAt once and keeps it stable', () => {
+      useSettingsStore.getState().recordTokenUsage(usage());
+      const first = useSettingsStore.getState().tokenUsageFirstTrackedAt;
+      expect(first).toBeTruthy();
+      useSettingsStore.getState().recordTokenUsage(usage());
+      expect(useSettingsStore.getState().tokenUsageFirstTrackedAt).toBe(first);
+    });
+
+    it('resetTokenUsageStats clears stats and timestamp', () => {
+      useSettingsStore.getState().recordTokenUsage(usage());
+      useSettingsStore.getState().resetTokenUsageStats();
+      expect(useSettingsStore.getState().tokenUsageStats).toEqual({});
+      expect(useSettingsStore.getState().tokenUsageFirstTrackedAt).toBeNull();
+    });
+  });
+
   describe('resetSettings', () => {
     it('resets to default values', () => {
       // Set all settings to non-default values
@@ -696,6 +824,123 @@ You should be concise.`;
       expect(state.temperature).toBe(0.5);
       expect(state.systemPrompt).toBe('');
       expect(state.defaultSearchMode).toBe(SearchMode.INTELLIGENT);
+    });
+  });
+  describe('MCP Servers (Connectors)', () => {
+    const github = {
+      id: 'gh1',
+      catalogKey: 'github',
+      name: 'GitHub',
+      url: '',
+      authToken: 'github_pat_abc',
+      enabled: true,
+      createdAt: '2026-07-08T00:00:00.000Z',
+    };
+    const custom = {
+      id: 'c1',
+      name: 'My Server',
+      url: 'https://mcp.example.com',
+      enabled: true,
+      createdAt: '2026-07-08T00:00:00.000Z',
+    };
+
+    beforeEach(() => {
+      useSettingsStore.setState({
+        mcpServers: [],
+        allowArbitraryMcpServers: false,
+        mcpArbitraryFlagEnabled: false,
+      });
+    });
+
+    it('adds servers', () => {
+      useSettingsStore.getState().addMcpServer(github);
+      useSettingsStore.getState().addMcpServer(custom);
+
+      expect(useSettingsStore.getState().mcpServers).toEqual([github, custom]);
+    });
+
+    it('updates a server by id with partial updates', () => {
+      useSettingsStore.setState({ mcpServers: [github, custom] });
+
+      useSettingsStore.getState().updateMcpServer('gh1', { enabled: false });
+
+      const servers = useSettingsStore.getState().mcpServers;
+      expect(servers[0]).toEqual({ ...github, enabled: false });
+      // Token survives an unrelated update.
+      expect(servers[0].authToken).toBe('github_pat_abc');
+      expect(servers[1]).toEqual(custom);
+    });
+
+    it('deletes a server by id', () => {
+      useSettingsStore.setState({ mcpServers: [github, custom] });
+
+      useSettingsStore.getState().deleteMcpServer('c1');
+
+      expect(useSettingsStore.getState().mcpServers).toEqual([github]);
+    });
+
+    it('toggles the arbitrary-servers opt-in and the LD flag mirror', () => {
+      useSettingsStore.getState().setAllowArbitraryMcpServers(true);
+      useSettingsStore.getState().setMcpArbitraryFlagEnabled(true);
+
+      expect(useSettingsStore.getState().allowArbitraryMcpServers).toBe(true);
+      expect(useSettingsStore.getState().mcpArbitraryFlagEnabled).toBe(true);
+    });
+
+    it('resetSettings wipes MCP config including tokens', () => {
+      useSettingsStore.setState({
+        mcpServers: [github],
+        allowArbitraryMcpServers: true,
+      });
+
+      useSettingsStore.getState().resetSettings();
+
+      expect(useSettingsStore.getState().mcpServers).toEqual([]);
+      expect(useSettingsStore.getState().allowArbitraryMcpServers).toBe(false);
+    });
+  });
+
+  describe('Context Window / Memories', () => {
+    beforeEach(() => {
+      useSettingsStore.setState({
+        contextWindowSize: 80,
+        memoriesEnabled: false,
+        memoriesFlagEnabled: false,
+      });
+    });
+
+    it('toggles the memories opt-in and the LD flag mirror', () => {
+      useSettingsStore.getState().setMemoriesEnabled(true);
+      useSettingsStore.getState().setMemoriesFlagEnabled(true);
+
+      expect(useSettingsStore.getState().memoriesEnabled).toBe(true);
+      expect(useSettingsStore.getState().memoriesFlagEnabled).toBe(true);
+    });
+
+    it('sets the context window size within bounds', () => {
+      useSettingsStore.getState().setContextWindowSize(120);
+
+      expect(useSettingsStore.getState().contextWindowSize).toBe(120);
+    });
+
+    it('clamps the context window size to 20..200', () => {
+      useSettingsStore.getState().setContextWindowSize(5);
+      expect(useSettingsStore.getState().contextWindowSize).toBe(20);
+
+      useSettingsStore.getState().setContextWindowSize(999);
+      expect(useSettingsStore.getState().contextWindowSize).toBe(200);
+    });
+
+    it('resetSettings restores the default window and turns memories off', () => {
+      useSettingsStore.setState({
+        contextWindowSize: 150,
+        memoriesEnabled: true,
+      });
+
+      useSettingsStore.getState().resetSettings();
+
+      expect(useSettingsStore.getState().contextWindowSize).toBe(80);
+      expect(useSettingsStore.getState().memoriesEnabled).toBe(false);
     });
   });
 });

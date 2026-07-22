@@ -61,11 +61,21 @@ export class StandardOpenAIHandler extends ModelHandler {
     // Use deployment name if specified, otherwise fall back to model ID
     const modelToUse = this.getModelIdForRequest(modelId, modelConfig);
 
+    // No `user` field. Models on this path are third-party publishers behind
+    // Azure AI Foundry, and their serving containers validate the request body
+    // strictly (Pydantic `extra="forbid"`) — a Mistral managed-compute
+    // deployment 422s on any key outside its schema, `user` included. The
+    // Foundry unified endpoint tolerates it, but which route a deployment
+    // lands on varies per environment, so we can't rely on that.
     const params: any = {
       model: modelToUse,
       messages,
-      user: JSON.stringify(user),
       stream: streamResponse,
+      // Ask the provider to append a terminal usage chunk (empty `choices`,
+      // populated `usage`) so real token counts can be captured for
+      // tracking + emissions estimation. Non-streaming responses carry
+      // `usage` on the completion object without this.
+      ...(streamResponse ? { stream_options: { include_usage: true } } : {}),
     };
 
     // Add temperature if supported (most models do)

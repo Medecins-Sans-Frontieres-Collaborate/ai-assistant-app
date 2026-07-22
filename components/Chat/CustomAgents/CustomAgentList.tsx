@@ -11,6 +11,7 @@ import {
   ClaudeAIIcon,
   DeepSeekIcon,
   MetaIcon,
+  MistralIcon,
   OpenAIIcon,
   XAIIcon,
 } from '@/components/Icons/providers';
@@ -50,6 +51,8 @@ export const CustomAgentList: FC<CustomAgentListProps> = ({
         return <MetaIcon {...iconProps} />;
       case 'anthropic':
         return <ClaudeAIIcon {...iconProps} />;
+      case 'mistral':
+        return <MistralIcon {...iconProps} />;
       default:
         return null;
     }

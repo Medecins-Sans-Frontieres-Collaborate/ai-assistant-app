@@ -17,6 +17,7 @@ import {
   isAssistantMessageGroup,
 } from '@/types/chat';
 import { FolderInterface } from '@/types/folder';
+import { WorkflowState, isConversationWorkflowType } from '@/types/workflow';
 
 import {
   ACTIVE_FILE_ACTIVATION_TOKEN_LIMIT,
@@ -27,6 +28,52 @@ import {
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
+/**
+ * Fire-and-forget cleanup of Azure AI Foundry threads tied to deleted
+ * conversations. Server is best-effort: a network blip must never block
+ * the local state mutation that calls us.
+ */
+function deleteAzureThreads(threadIds: (string | undefined)[]): void {
+  const ids = Array.from(
+    new Set(
+      threadIds.filter(
+        (id): id is string => typeof id === 'string' && id.length > 0,
+      ),
+    ),
+  );
+  if (ids.length === 0) return;
+  void fetch('/api/chat/agents/threads', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ threadIds: ids }),
+  }).catch((err) => {
+    console.warn('[ConversationStore] Thread cleanup request failed', err);
+  });
+}
+
+/**
+ * Backup tombstones are capped so the persisted blob stays bounded; beyond
+ * the cap the OLDEST deletions are evicted (their remote copies then win any
+ * later merge, which is the safe failure mode).
+ */
+const MAX_CONVERSATION_TOMBSTONES = 500;
+
+function withTombstones(
+  existing: Record<string, string>,
+  ids: string[],
+  deletedAt: string,
+): Record<string, string> {
+  if (ids.length === 0) return existing;
+  const next = { ...existing };
+  for (const id of ids) next[id] = deletedAt;
+  const entries = Object.entries(next);
+  if (entries.length <= MAX_CONVERSATION_TOMBSTONES) return next;
+  entries.sort((a, b) => a[1].localeCompare(b[1]));
+  return Object.fromEntries(
+    entries.slice(entries.length - MAX_CONVERSATION_TOMBSTONES),
+  );
+}
+
 interface ConversationStore {
   // State
   conversations: Conversation[];
@@ -34,17 +81,44 @@ interface ConversationStore {
   folders: FolderInterface[];
   searchTerm: string;
   isLoaded: boolean;
+  /**
+   * Deletion tombstones for the encrypted-backup sync: conversation id →
+   * ISO deletedAt. Stamped by deleteConversation/clearAll, cleared per-id
+   * after a sync confirms the deletion reached the remote manifest.
+   */
+  deletedConversations: Record<string, string>;
+  /**
+   * ISO timestamp of the last local folder mutation. Null = no local folder
+   * state to back up (the backup folders blob is then pull-only).
+   */
+  foldersUpdatedAt: string | null;
 
   // Conversation actions
   setConversations: (conversations: Conversation[]) => void;
   addConversation: (conversation: Conversation) => void;
   updateConversation: (id: string, updates: Partial<Conversation>) => void;
+  /**
+   * Updates a workflow conversation's persisted workflow state. Refuses
+   * (warn + no-op) when the updater returns a state whose `kind` does not
+   * match the conversation's `conversationType`. Workflow code must use
+   * this instead of raw updateConversation for state writes.
+   */
+  updateWorkflowState: (
+    id: string,
+    updater: (prev: WorkflowState | undefined) => WorkflowState,
+  ) => void;
   deleteConversation: (id: string) => void;
   selectConversation: (id: string | null) => void;
   setIsLoaded: (isLoaded: boolean) => void;
 
   // Folder actions
-  setFolders: (folders: FolderInterface[]) => void;
+  /**
+   * Replaces the folders array. `updatedAt` overrides the folders
+   * last-modified stamp — the backup sync passes the REMOTE timestamp when
+   * applying pulled folders so the whole-LWW comparison converges instead
+   * of ping-ponging pushes. Defaults to "now" (a local mutation).
+   */
+  setFolders: (folders: FolderInterface[], updatedAt?: string) => void;
   addFolder: (folder: FolderInterface) => void;
   updateFolder: (id: string, name: string) => void;
   deleteFolder: (id: string) => void;
@@ -54,6 +128,9 @@ interface ConversationStore {
 
   // Bulk operations
   clearAll: () => void;
+
+  /** Drops backup tombstones a successful sync has resolved. */
+  clearSyncedTombstones: (ids: string[]) => void;
 
   // Version navigation actions
   setActiveVersion: (
@@ -189,6 +266,8 @@ export const useConversationStore = create<ConversationStore>()(
       folders: [],
       searchTerm: '',
       isLoaded: false,
+      deletedConversations: {},
+      foldersUpdatedAt: null,
 
       // Conversation actions
       setConversations: (conversations) => set({ conversations }),
@@ -202,42 +281,125 @@ export const useConversationStore = create<ConversationStore>()(
 
       updateConversation: (id, updates) =>
         set((state) => ({
-          conversations: state.conversations.map((c) =>
-            c.id === id
-              ? { ...c, ...updates, updatedAt: new Date().toISOString() }
-              : c,
-          ),
+          conversations: state.conversations.map((c) => {
+            if (c.id !== id) return c;
+            let patch = updates;
+            // conversationType is settled by the first message, not by the
+            // first selection: WorkflowTabs lets the user switch modes (and
+            // back to plain chat) freely while the conversation is empty.
+            // Once it has messages the type is fixed, so a stale render or
+            // a rogue caller can't re-type a live conversation.
+            if (
+              c.messages.length > 0 &&
+              'conversationType' in updates &&
+              updates.conversationType !== c.conversationType
+            ) {
+              console.warn(
+                '[ConversationStore] Ignoring attempt to change conversationType of',
+                id,
+              );
+              // workflowState travels with conversationType — dropping only
+              // the type would leave a state whose `kind` disagrees with it.
+              const {
+                conversationType: _ignoredType,
+                workflowState: _ignoredState,
+                ...rest
+              } = updates;
+              patch = rest;
+            }
+            return { ...c, ...patch, updatedAt: new Date().toISOString() };
+          }),
         })),
 
-      deleteConversation: (id) =>
+      updateWorkflowState: (id, updater) =>
+        set((state) => {
+          let changed = false;
+          const conversations = state.conversations.map((c) => {
+            if (c.id !== id) return c;
+            const next = updater(c.workflowState);
+            // Updaters may return the previous state unchanged (same
+            // reference) to signal "nothing to write" — treat as a no-op
+            // so subscribers aren't re-notified and no persistence runs.
+            // Breaks feedback loops like map moveend → write → re-render.
+            if (next === c.workflowState) return c;
+            if (next.kind !== c.conversationType) {
+              console.warn(
+                '[ConversationStore] workflowState kind mismatch for',
+                id,
+                '- expected',
+                c.conversationType,
+                'got',
+                next.kind,
+              );
+              return c;
+            }
+            if (process.env.NODE_ENV !== 'production') {
+              // Soft budget: workflow state must stay small (references and
+              // bounded text, not blobs) to protect the localStorage quota.
+              const size = JSON.stringify(next).length;
+              if (size > 200_000) {
+                console.warn(
+                  `[ConversationStore] workflowState for ${id} is ${size} bytes; keep large payloads in files, not state`,
+                );
+              }
+            }
+            changed = true;
+            return {
+              ...c,
+              workflowState: next,
+              updatedAt: new Date().toISOString(),
+            };
+          });
+          // Same state object = zustand skips notify entirely.
+          return changed ? { conversations } : state;
+        }),
+
+      deleteConversation: (id) => {
+        const target = get().conversations.find((c) => c.id === id);
+        if (target?.threadId) {
+          deleteAzureThreads([target.threadId]);
+        }
         set((state) => ({
           conversations: state.conversations.filter((c) => c.id !== id),
           selectedConversationId:
             state.selectedConversationId === id
               ? null
               : state.selectedConversationId,
-        })),
+          deletedConversations: withTombstones(
+            state.deletedConversations,
+            [id],
+            new Date().toISOString(),
+          ),
+        }));
+      },
 
       selectConversation: (id) => set({ selectedConversationId: id }),
 
       setIsLoaded: (isLoaded) => set({ isLoaded }),
 
       // Folder actions
-      setFolders: (folders) => set({ folders }),
+      setFolders: (folders, updatedAt) =>
+        set({
+          folders,
+          foldersUpdatedAt: updatedAt ?? new Date().toISOString(),
+        }),
 
       addFolder: (folder) =>
         set((state) => ({
           folders: [...state.folders, folder],
+          foldersUpdatedAt: new Date().toISOString(),
         })),
 
       updateFolder: (id, name) =>
         set((state) => ({
           folders: state.folders.map((f) => (f.id === id ? { ...f, name } : f)),
+          foldersUpdatedAt: new Date().toISOString(),
         })),
 
       deleteFolder: (id) =>
         set((state) => ({
           folders: state.folders.filter((f) => f.id !== id),
+          foldersUpdatedAt: new Date().toISOString(),
           // Remove folder from conversations (with updatedAt so the change persists)
           conversations: state.conversations.map((c) =>
             c.folderId === id
@@ -250,12 +412,36 @@ export const useConversationStore = create<ConversationStore>()(
       setSearchTerm: (term) => set({ searchTerm: term }),
 
       // Bulk operations
-      clearAll: () =>
-        set({
+      clearAll: () => {
+        const cleared = get().conversations;
+        deleteAzureThreads(cleared.map((c) => c.threadId));
+        const now = new Date().toISOString();
+        set((state) => ({
           conversations: [],
           selectedConversationId: null,
           folders: [],
           searchTerm: '',
+          deletedConversations: withTombstones(
+            state.deletedConversations,
+            cleared.map((c) => c.id),
+            now,
+          ),
+          foldersUpdatedAt: now,
+        }));
+      },
+
+      clearSyncedTombstones: (ids) =>
+        set((state) => {
+          const next = { ...state.deletedConversations };
+          let changed = false;
+          for (const id of ids) {
+            if (id in next) {
+              delete next[id];
+              changed = true;
+            }
+          }
+          // Same state object = zustand skips notify entirely.
+          return changed ? { deletedConversations: next } : state;
         }),
 
       // Version navigation actions
@@ -665,18 +851,22 @@ export const useConversationStore = create<ConversationStore>()(
     }),
     {
       name: 'conversation-storage',
-      version: 5, // v5: per-conversation localStorage keys for corruption resilience
+      version: 7, // v7: backup tombstones (deletedConversations) + foldersUpdatedAt
       storage: createJSONStorage(() => perConversationStorage),
       partialize: (state) => ({
         conversations: state.conversations,
         selectedConversationId: state.selectedConversationId,
         folders: state.folders,
+        deletedConversations: state.deletedConversations,
+        foldersUpdatedAt: state.foldersUpdatedAt,
       }),
       migrate: (persistedState: unknown, version: number) => {
         const state = persistedState as {
           conversations: Conversation[];
           selectedConversationId: string | null;
           folders: FolderInterface[];
+          deletedConversations?: Record<string, string>;
+          foldersUpdatedAt?: string | null;
         };
 
         // Guard against completely invalid state from corrupted storage
@@ -685,6 +875,8 @@ export const useConversationStore = create<ConversationStore>()(
             conversations: [],
             selectedConversationId: null,
             folders: [],
+            deletedConversations: {},
+            foldersUpdatedAt: null,
           };
         }
 
@@ -725,6 +917,43 @@ export const useConversationStore = create<ConversationStore>()(
             ...conv,
             activeFilesTokensUsed: conv.activeFilesTokensUsed ?? 0,
           }));
+        }
+
+        if (version < 6) {
+          // Conversation workflows: normalize any invalid workflow fields
+          // (defensive against imported or hand-edited conversations).
+          state.conversations = state.conversations.map((conv) => {
+            if (
+              conv.conversationType &&
+              !isConversationWorkflowType(conv.conversationType)
+            ) {
+              const {
+                conversationType: _type,
+                workflowState: _state,
+                ...rest
+              } = conv;
+              return rest as Conversation;
+            }
+            if (
+              conv.workflowState &&
+              conv.workflowState.kind !== conv.conversationType
+            ) {
+              const { workflowState: _state, ...rest } = conv;
+              return rest as Conversation;
+            }
+            return conv;
+          });
+        }
+
+        if (version < 7) {
+          // Encrypted backup: start with no tombstones; pre-existing folders
+          // get a fresh last-modified stamp so the first sync pushes them
+          // (null would leave them pull-only and never backed up).
+          state.deletedConversations = {};
+          state.foldersUpdatedAt =
+            Array.isArray(state.folders) && state.folders.length > 0
+              ? new Date().toISOString()
+              : null;
         }
 
         return state;

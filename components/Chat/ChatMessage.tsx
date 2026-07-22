@@ -6,6 +6,7 @@ import { useChat } from '@/client/hooks/chat/useChat';
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 
 import { MessageContentAnalyzer } from '@/lib/utils/shared/chat/messageContentAnalyzer';
+import { flattenEntriesForAPI } from '@/lib/utils/shared/chat/messageVersioning';
 
 import {
   FileMessageContent,
@@ -20,6 +21,7 @@ import {
 
 import { AssistantMessage } from '@/components/Chat/ChatMessages/AssistantMessage';
 import ChatMessageText from '@/components/Chat/ChatMessages/ChatMessageText';
+import { ExtractionResultRenderer } from '@/components/Chat/ChatMessages/ExtractionResultRenderer';
 import { FileContent } from '@/components/Chat/ChatMessages/FileContent';
 import { ImageContent } from '@/components/Chat/ChatMessages/ImageContent';
 import { UserMessage } from '@/components/Chat/ChatMessages/UserMessage';
@@ -109,9 +111,20 @@ export const ChatMessage: FC<Props> = ({
       messages.splice(findIndex, 1);
     }
 
+    // Deleting inside the summarized region shifts later flat indices left,
+    // desyncing compaction.upToEntryIndex (messages would be skipped forever
+    // and deleted facts would stay baked into the summary). Invalidate the
+    // watermark so the next post-stream refresh rebuilds from scratch.
+    const deletedFlatIndex = flattenEntriesForAPI(
+      selectedConversation.messages.slice(0, findIndex),
+    ).length;
+    const invalidateCompaction =
+      deletedFlatIndex < (selectedConversation.compaction?.upToEntryIndex ?? 0);
+
     updateConversation(selectedConversation.id, {
       ...selectedConversation,
       messages,
+      ...(invalidateCompaction ? { compaction: undefined } : {}),
     });
   };
 
@@ -301,6 +314,36 @@ export const ChatMessage: FC<Props> = ({
         </div>
       );
     }
+  }
+
+  // Render structured-data extraction result (assistant messages only)
+  if (
+    message.content &&
+    typeof message.content === 'object' &&
+    !Array.isArray(message.content) &&
+    (message.content as { type?: string }).type === 'extraction_result'
+  ) {
+    return (
+      <div className="group text-gray-800 dark:text-gray-100">
+        <AssistantMessage
+          content=""
+          message={message}
+          messageIsStreaming={messageIsStreaming}
+          messageIndex={messageIndex}
+          selectedConversation={selectedConversation}
+          onRegenerate={onRegenerate}
+          versionInfo={versionInfo}
+          onPreviousVersion={onPreviousVersion}
+          onNextVersion={onNextVersion}
+        >
+          <ExtractionResultRenderer
+            content={
+              message.content as import('@/types/chat').ExtractionResultContent
+            }
+          />
+        </AssistantMessage>
+      </div>
+    );
   }
 
   // Render text-only messages

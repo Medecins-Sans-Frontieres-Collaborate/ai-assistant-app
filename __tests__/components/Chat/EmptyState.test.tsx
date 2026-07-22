@@ -65,7 +65,10 @@ describe('EmptyState', () => {
     render(<EmptyState />);
 
     const heading = screen.getByRole('heading');
-    expect(heading).toHaveClass('text-2xl');
+    // Steps down on narrow viewports — a long greetingWithName overflowed at
+    // 320-360px at a flat text-2xl.
+    expect(heading).toHaveClass('text-xl');
+    expect(heading).toHaveClass('sm:text-2xl');
     expect(heading).toHaveClass('font-light');
     expect(heading).toHaveClass('bg-gradient-to-r');
     expect(heading).toHaveClass('bg-clip-text');

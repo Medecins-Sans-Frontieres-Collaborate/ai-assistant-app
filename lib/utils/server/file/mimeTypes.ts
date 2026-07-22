@@ -38,6 +38,8 @@ export const MIME_TYPE_MAP: Record<string, string> = {
   pdf: 'application/pdf',
   doc: 'application/msword',
   docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  rtf: 'application/rtf',
+  odt: 'application/vnd.oasis.opendocument.text',
   xls: 'application/vnd.ms-excel',
   xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   ppt: 'application/vnd.ms-powerpoint',
@@ -55,11 +57,27 @@ export const MIME_TYPE_MAP: Record<string, string> = {
   wav: 'audio/wav',
   m4a: 'audio/m4a',
   mpga: 'audio/mpeg',
+  ogg: 'audio/ogg',
+  oga: 'audio/ogg',
+  flac: 'audio/flac',
+  aac: 'audio/aac',
+  opus: 'audio/opus',
+  wma: 'audio/x-ms-wma',
 
   // Video
   mp4: 'video/mp4',
+  m4v: 'video/x-m4v',
   webm: 'video/webm',
   mpeg: 'video/mpeg',
+  mpg: 'video/mpeg',
+  mkv: 'video/x-matroska',
+  mov: 'video/quicktime',
+  avi: 'video/x-msvideo',
+  flv: 'video/x-flv',
+  wmv: 'video/x-ms-wmv',
+  '3gp': 'video/3gpp',
+  // NOTE: no `ts` entry — the extension collides with TypeScript source
+  // files, which must not be content-typed as video/mp2t.
 };
 
 /**

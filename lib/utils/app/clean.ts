@@ -4,9 +4,16 @@ import {
 } from '@/lib/utils/shared/chat/messageVersioning';
 
 import { Conversation, Message } from '@/types/chat';
-import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
+import {
+  OpenAIModel,
+  OpenAIModelID,
+  OpenAIModels,
+  fallbackModelID,
+} from '@/types/openai';
 
 import { DEFAULT_SYSTEM_PROMPT, DEFAULT_TEMPERATURE } from './const';
+
+import { getDefaultModel } from '@/config/models';
 
 // Input is intentionally `unknown[]` — this runs at localStorage hydration
 // time on user-supplied data that may predate any version of the Conversation
@@ -32,8 +39,9 @@ export const cleanConversationHistory = (
         !conversation.model ||
         (conversation.model as OpenAIModel)?.isDisabled
       ) {
-        // TODO: Replace with environmentally set default model so fixing doesn't require code change
-        conversation.model = OpenAIModels[OpenAIModelID.GPT_5_2_CHAT];
+        conversation.model =
+          OpenAIModels[getDefaultModel() as OpenAIModelID] ??
+          OpenAIModels[fallbackModelID];
       }
 
       if (!conversation.prompt) {

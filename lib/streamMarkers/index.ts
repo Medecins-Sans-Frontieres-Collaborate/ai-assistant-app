@@ -23,6 +23,8 @@ export const CONSENT_OUTCOME_OPEN = '<<<CONSENT_OUTCOME>>>';
 export const CONSENT_OUTCOME_CLOSE = '<<<END_CONSENT_OUTCOME>>>';
 export const TOOL_CALL_RECORD_OPEN = '<<<TOOL_CALL_RECORD>>>';
 export const TOOL_CALL_RECORD_CLOSE = '<<<END_TOOL_CALL_RECORD>>>';
+export const WORKFLOW_EVENT_OPEN = '<<<WORKFLOW_EVENT>>>';
+export const WORKFLOW_EVENT_CLOSE = '<<<END_WORKFLOW_EVENT>>>';
 
 // ───────────────────────────────────────────────────────────────────
 // Payload shapes
@@ -58,6 +60,18 @@ export interface ToolCallRecordPayload {
   output: string | null;
   /** Error message if the tool call failed. */
   error: string | null;
+  /**
+   * Failure classification (native MCP loop): 'auth' = the MCP server
+   * rejected our credential — the client flips the connector to
+   * needs-reauth and the UI offers "Reconnect". Absent on success and on
+   * non-auth failures. Additive; older persisted records simply lack it.
+   */
+  error_kind?: 'auth';
+  /**
+   * Native-MCP server id (McpServerConfig.id) so the client can map an
+   * auth failure back to the connector config. Absent on Foundry records.
+   */
+  server_id?: string | null;
   /** Wall-clock duration in milliseconds, if we observed both start + end. */
   duration_ms?: number;
   /** Whether this call required user approval, and if so, how it resolved. */
@@ -78,6 +92,13 @@ export type ConsentRequestPayload =
       kind: 'approval';
       approval_request_id: string;
       server_label?: string | null;
+      /**
+       * McpServerConfig.id of the native-MCP server that owns the tool.
+       * Absent on Foundry-agent approvals (Foundry dispatches those itself);
+       * present on native MCP tool-loop approvals so the client can echo
+       * back `mcpPendingToolCalls` on resume.
+       */
+      server_id?: string | null;
       tool_name?: string | null;
       /**
        * JSON-serialized arguments the tool will be invoked with, as Foundry
@@ -96,6 +117,23 @@ export type ConsentRequestPayload =
 export interface ConsentOutcomePayload {
   approval_request_id: string;
   approve: boolean;
+}
+
+/**
+ * Structured result from a workflow run (conversation workflows:
+ * translation, document, data-analysis, map). Unlike AGENT_ACTIVITY these
+ * are not transient loader text — they carry results (analysis findings,
+ * review-round verdicts, transformed tables, map features) that the
+ * workflow workspace applies to its persisted state.
+ *
+ * `workflow` names the emitting workflow; `type` is a workflow-scoped
+ * event name (e.g. 'analysis', 'review_round', 'features'); `data` is the
+ * event body, typed by the workflow's own module.
+ */
+export interface WorkflowEventPayload {
+  workflow: 'translation' | 'document' | 'data-analysis' | 'map';
+  type: string;
+  data: unknown;
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -122,6 +160,10 @@ export function emitToolCallRecord(payload: ToolCallRecordPayload): string {
   return `\n\n${TOOL_CALL_RECORD_OPEN}${JSON.stringify(payload)}${TOOL_CALL_RECORD_CLOSE}\n\n`;
 }
 
+export function emitWorkflowEvent(payload: WorkflowEventPayload): string {
+  return `\n\n${WORKFLOW_EVENT_OPEN}${JSON.stringify(payload)}${WORKFLOW_EVENT_CLOSE}\n\n`;
+}
+
 // ───────────────────────────────────────────────────────────────────
 // Parse helpers (client-side)
 // ───────────────────────────────────────────────────────────────────
@@ -141,6 +183,9 @@ const CONSENT_OUTCOME_STRIP_RE =
 
 const TOOL_CALL_RECORD_RE =
   /<<<TOOL_CALL_RECORD>>>([\s\S]*?)<<<END_TOOL_CALL_RECORD>>>/g;
+
+const WORKFLOW_EVENT_RE =
+  /<<<WORKFLOW_EVENT>>>([\s\S]*?)<<<END_WORKFLOW_EVENT>>>/g;
 
 /**
  * Pulls the latest `AGENT_ACTIVITY` payload out of the stream content
@@ -271,6 +316,42 @@ export function extractToolCallRecords(content: string): {
   return { records, cleaned };
 }
 
+function isWorkflowEventPayload(value: unknown): value is WorkflowEventPayload {
+  if (!value || typeof value !== 'object') return false;
+  const p = value as { workflow?: unknown; type?: unknown };
+  return (
+    (p.workflow === 'translation' ||
+      p.workflow === 'document' ||
+      p.workflow === 'data-analysis' ||
+      p.workflow === 'map') &&
+    typeof p.type === 'string'
+  );
+}
+
+/**
+ * Pulls every `WORKFLOW_EVENT` payload from content and returns it
+ * stripped. Used for reload of persisted message content; the streaming
+ * hot path consumes these via `scanStreamEvents`.
+ */
+export function extractWorkflowEvents(content: string): {
+  events: WorkflowEventPayload[];
+  cleaned: string;
+} {
+  const events: WorkflowEventPayload[] = [];
+  const cleaned = content.replace(WORKFLOW_EVENT_RE, (_match, json) => {
+    try {
+      const parsed = JSON.parse(json);
+      if (isWorkflowEventPayload(parsed)) {
+        events.push(parsed);
+      }
+    } catch {
+      // ignore malformed payload
+    }
+    return '';
+  });
+  return { events, cleaned };
+}
+
 /**
  * Hides partially-streamed sentinel markers from the rendered text. When
  * the open tag has arrived but the close tag hasn't yet, slice everything
@@ -285,6 +366,7 @@ const MARKER_PAIRS: ReadonlyArray<readonly [string, string]> = [
   [CONSENT_OUTCOME_OPEN, CONSENT_OUTCOME_CLOSE],
   [AGENT_ACTIVITY_OPEN, AGENT_ACTIVITY_CLOSE],
   [TOOL_CALL_RECORD_OPEN, TOOL_CALL_RECORD_CLOSE],
+  [WORKFLOW_EVENT_OPEN, WORKFLOW_EVENT_CLOSE],
 ];
 
 export function stripIncompleteStreamMarkers(content: string): string {
@@ -307,7 +389,8 @@ export type StreamEvent =
   | { type: 'agent_activity'; payload: AgentActivityPayload }
   | { type: 'consent_request'; payload: ConsentRequestPayload }
   | { type: 'consent_outcome'; payload: ConsentOutcomePayload }
-  | { type: 'tool_call_record'; payload: ToolCallRecordPayload };
+  | { type: 'tool_call_record'; payload: ToolCallRecordPayload }
+  | { type: 'workflow_event'; payload: WorkflowEventPayload };
 
 export interface StreamScanResult {
   /** Events consumed in this scan, in arrival order. */
@@ -344,6 +427,11 @@ const MARKERS: readonly MarkerSpec[] = [
     open: TOOL_CALL_RECORD_OPEN,
     close: TOOL_CALL_RECORD_CLOSE,
     type: 'tool_call_record',
+  },
+  {
+    open: WORKFLOW_EVENT_OPEN,
+    close: WORKFLOW_EVENT_CLOSE,
+    type: 'workflow_event',
   },
 ];
 
@@ -452,6 +540,10 @@ function parseEventPayload(spec: MarkerSpec, json: string): StreamEvent | null {
           type: 'tool_call_record',
           payload: parsed as ToolCallRecordPayload,
         };
+      }
+      case 'workflow_event': {
+        if (!isWorkflowEventPayload(parsed)) return null;
+        return { type: 'workflow_event', payload: parsed };
       }
     }
   } catch {

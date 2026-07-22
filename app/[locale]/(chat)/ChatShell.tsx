@@ -9,6 +9,8 @@ import { LocalStorageService } from '@/client/services/storage/localStorageServi
 import { shouldShowStorageWarning } from '@/lib/utils/app/storage/storageMonitor';
 
 import { UpdateBanner } from '@/components/App/UpdateBanner';
+import { BackupModals } from '@/components/Backup/BackupModals';
+import { BackupSyncBanner } from '@/components/Backup/BackupSyncBanner';
 import { MigrationDialog } from '@/components/Migration/MigrationDialog';
 import { AppInitializer } from '@/components/Providers/AppInitializer';
 import { SettingDialog } from '@/components/Settings/SettingDialog';
@@ -79,6 +81,7 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
   return (
     <>
       <UpdateBanner />
+      <BackupSyncBanner />
       <MigrationDialog
         isOpen={showMigrationDialog}
         onComplete={handleMigrationComplete}
@@ -89,11 +92,15 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
         severity={storageThreshold}
       />
       <AppInitializer />
-      <div className="flex h-screen w-screen overflow-hidden">
+      {/* h-dvh, not h-screen: `100vh` is the *large* viewport, so on mobile
+          browsers the bottom of the layout — including the composer — sits
+          under the URL bar. `w-full` rather than `w-screen` because `100vw`
+          includes the scrollbar gutter and overflows horizontally. */}
+      <div className="flex h-dvh w-full overflow-hidden">
         <Sidebar />
 
         <div
-          className={`flex flex-1 transition-all duration-300 ease-in-out ${
+          className={`flex min-w-0 flex-1 transition-all duration-300 ease-in-out ${
             showChatbar ? 'md:ml-[260px]' : 'md:ml-14'
           }`}
         >
@@ -101,6 +108,8 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
         </div>
 
         <SettingDialog />
+        {/* Encrypted-backup modal host + sync triggers (flag-gated inside). */}
+        <BackupModals />
       </div>
     </>
   );

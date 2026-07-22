@@ -57,10 +57,17 @@ export const OrganizationAgentList: FC<OrganizationAgentListProps> = ({
   const t = useTranslations('agents');
   const staticAgents = getOrganizationAgents();
 
-  // Merge static + discovered, deduplicate by name
+  // Merge static + discovered. The name-based dedupe exists solely for
+  // Foundry-discovered agents that duplicate a static organization-agents.json
+  // entry under the same display name. Prompt agents (matchId `org-prompt-…`)
+  // are admin-created personas with their own model ids — a name collision
+  // with a static agent is a different agent, not a duplicate, so they must
+  // never be dropped by this dedupe.
   const staticNames = new Set(staticAgents.map((a) => a.name));
+  const isPromptAgent = (a: FoundryAgentDisplay) =>
+    !!a.matchId?.startsWith('org-prompt-');
   const uniqueDiscovered = discoveredAgents.filter(
-    (a) => !staticNames.has(a.name),
+    (a) => isPromptAgent(a) || !staticNames.has(a.name),
   );
 
   // Model ID a row selects/compares against (static: `org-{id}`, discovered:

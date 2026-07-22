@@ -45,6 +45,36 @@ describe('fileLimits', () => {
       expect(getFileCategory('stream.webm')).toBe('video');
     });
 
+    // Regression for issue #90: .m4v was missing from VIDEO_EXTENSIONS, so a
+    // .m4v with no MIME type fell into 'unknown' and got the 50MB document cap
+    // instead of the 1.5GB video cap — silently rejecting large recordings.
+    it('categorizes .m4v as video (with and without MIME type)', () => {
+      expect(getFileCategory('clip.m4v')).toBe('video');
+      expect(getFileCategory('clip.m4v', 'video/x-m4v')).toBe('video');
+      expect(getFileCategory('clip.m4v', '')).toBe('video');
+    });
+
+    it('categorizes the newly added audio containers as audio', () => {
+      expect(getFileCategory('song.ogg')).toBe('audio');
+      expect(getFileCategory('song.oga')).toBe('audio');
+      expect(getFileCategory('recording.flac')).toBe('audio');
+      expect(getFileCategory('clip.aac')).toBe('audio');
+      expect(getFileCategory('clip.opus')).toBe('audio');
+      expect(getFileCategory('song.wma')).toBe('audio');
+    });
+
+    it('categorizes the newly added video containers as video', () => {
+      expect(getFileCategory('clip.3gp')).toBe('video');
+      expect(getFileCategory('movie.mpg')).toBe('video');
+    });
+
+    // `.ts` is TypeScript, not MPEG-TS, from this app's perspective — it must
+    // never be categorized as video or code uploads inherit the video cap and
+    // A/V routing.
+    it('does NOT categorize .ts as video', () => {
+      expect(getFileCategory('utils.ts')).toBe('unknown');
+    });
+
     it('should detect document files by extension', () => {
       expect(getFileCategory('document.pdf')).toBe('document');
       expect(getFileCategory('file.doc')).toBe('document');
@@ -80,6 +110,8 @@ describe('fileLimits', () => {
       expect(getFileCategory('photo.JPEG')).toBe('image');
       expect(getFileCategory('document.PDF')).toBe('document');
       expect(getFileCategory('song.MP3')).toBe('audio');
+      expect(getFileCategory('clip.M4V')).toBe('video');
+      expect(getFileCategory('clip.OGG')).toBe('audio');
     });
   });
 
@@ -242,6 +274,33 @@ describe('fileLimits', () => {
       expect(validateFileSizeRaw('doc.pdf', 60 * 1024 * 1024).valid).toBe(
         false,
       );
+    });
+
+    // Regression lock for issue #90: an .m4v must use the video cap (1.5GB),
+    // NOT the 50MB document cap that 'unknown' files fall back to. Without
+    // this assertion a future regression that drops .m4v from VIDEO_EXTENSIONS
+    // would silently reject legitimate recordings again.
+    it('applies the video (1.5GB) size cap to .m4v, not the document cap', () => {
+      // A 200MB m4v must be valid (would be rejected under the 50MB doc cap).
+      const result = validateFileSizeRaw('clip.m4v', 200 * 1024 * 1024);
+      expect(result.valid).toBe(true);
+      expect(result.category).toBe('video');
+
+      // And an .m4v over 1.5GB must still be rejected.
+      const tooLarge = validateFileSizeRaw(
+        'clip.m4v',
+        1.6 * 1024 * 1024 * 1024,
+      );
+      expect(tooLarge.valid).toBe(false);
+      expect(tooLarge.category).toBe('video');
+    });
+
+    it('applies the audio (1GB) cap to the newly added audio containers', () => {
+      for (const ext of ['.ogg', '.oga', '.flac', '.aac', '.opus', '.wma']) {
+        const result = validateFileSizeRaw(`song${ext}`, 500 * 1024 * 1024);
+        expect(result.valid, `expected valid for ${ext}`).toBe(true);
+        expect(result.category, `expected audio for ${ext}`).toBe('audio');
+      }
     });
   });
 

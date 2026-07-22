@@ -431,7 +431,22 @@
     "noProjectsFound": "Nu s-au găsit proiecte. Se folosește „default”.",
     "selectAllRequired": "Selectați un abonament, un cont și un proiect.",
     "subscriptionRequired": "Alegeți un abonament",
-    "accountRequired": "Alegeți un cont Foundry"
+    "accountRequired": "Alegeți un cont Foundry",
+    "projectSelectionRequired": "Selectați un proiect din listă.",
+    "scanningResources": "Se scanează abonamentele Azure...",
+    "searchProjectsPlaceholder": "Căutați proiecte...",
+    "noProjectsDiscovered": "Nu au fost găsite proiecte Foundry în abonamentele dumneavoastră. Folosiți introducerea manuală dacă știți calea.",
+    "discoveryPartialWarning": "{count, plural, one {# abonament} other {# abonamente}} nu au putut fi scanate. Folosiți introducerea manuală dacă proiectul lipsește.",
+    "discoveryTruncatedWarning": "Au fost prea multe resurse pentru a fi scanate complet. Folosiți introducerea manuală dacă proiectul lipsește.",
+    "retryScan": "Reîncearcă scanarea",
+    "next": "Următorul",
+    "back": "Înapoi",
+    "selectAgentsDescription": "Alegeți ce agenți din acest proiect să apară în selectorul de modele.",
+    "selectAll": "Selectează tot",
+    "deselectAll": "Deselectează tot",
+    "agentsSelectedCount": "{selected} din {total} agenți selectați",
+    "autoAddLabel": "Adaugă automat agenții noi",
+    "autoAddDescription": "Agenții publicați ulterior în acest proiect vor apărea automat. Agenții debifați rămân excluși."
   },
   "Quick Actions": "Acțiuni rapide",
   "Type / in chat to access your prompts": "Tastați / în chat pentru a accesa solicitările",
@@ -758,7 +773,19 @@
       "listingTools": "Se caută instrumentele disponibile…",
       "analyzingFiles": "Se analizează fișierele dvs.…",
       "searchingKnowledge": "Se caută în baza de cunoștințe…",
-      "cancellingPriorTool": "Se anulează solicitarea anterioară de instrument…"
+      "cancellingPriorTool": "Se anulează solicitarea anterioară de instrument…",
+      "workflow": {
+        "preparingDocument": "Se pregătesc referințele...",
+        "writingDocument": "Se scrie documentul...",
+        "analyzingSource": "Se analizează textul sursă...",
+        "translating": "Se traduce...",
+        "reviewingTranslation": "Runda {round} din {total} de revizuire...",
+        "revisingTranslation": "Se aplică feedback-ul din revizuire...",
+        "extractingRows": "Se extrag rânduri din {source}...",
+        "transformingTable": "Se transformă tabelul...",
+        "findingLocations": "Se identifică locațiile...",
+        "updatingMap": "Se actualizează harta..."
+      }
     },
     "toolSummary": {
       "usedTools": "Folosit {count, plural, one {# instrument} other {# instrumente}}",
@@ -819,7 +846,9 @@
     "listen": "Ascultă",
     "processingAudio": "Se procesează audio...",
     "ttsError": "Eroare la generarea audio. Vă rugăm să încercați din nou.",
-    "unsupportedMessageType": "Eroare la afișarea mesajului: Tip de mesaj neacceptat"
+    "unsupportedMessageType": "Eroare la afișarea mesajului: Tip de mesaj neacceptat",
+    "addLanguageOption": "Adăugați „{name}”...",
+    "sources": "Surse"
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",
@@ -1137,16 +1166,34 @@
     "unsavedChanges": "Modificări nesalvate",
     "unsavedChangesMessage": "Aveți modificări nesalvate. Renunțați la ele?",
     "characterCount": "{current}/{max}",
-    "clearField": "Șterge câmpul",
-    "autosaveNote": "Modificările se salvează automat.",
+    "clearField": "Curăță câmpul",
+    "autosaveNote": "Modificările sunt salvate automat.",
     "responseSection": "Răspuns",
     "voiceSection": "Voce",
     "behaviorSection": "Comportament",
     "resetChatSettings": "Resetează setările conversației",
-    "resetChatSettingsConfirmTitle": "Resetați setările conversației?",
-    "resetChatSettingsConfirmMessage": "Aceasta va restabili valorile implicite pentru toate opțiunile din acest panou: temperatură, instrucțiuni personalizate, Despre tine, răspunsul modelului, viteza de redare, conversie text-vorbire, fișiere active și confirmări. Nu va afecta conversațiile dvs.",
+    "resetChatSettingsConfirmTitle": "Resetezi setările conversației?",
+    "resetChatSettingsConfirmMessage": "Aceasta restabilește setările implicite pentru tot ce este în acest panou: temperatură, instrucțiuni personalizate, Despre tine, răspuns model, viteză streaming, text-to-speech, fișiere active și confirmări. Nu afectează conversațiile tale.",
     "customInstructionsLabel": "Instrucțiuni personalizate*",
-    "defaultTemperatureLabel": "Temperatură implicită*"
+    "defaultTemperatureLabel": "Temperatură implicită*",
+    "Usage & Impact": "Utilizare & Impact",
+    "Connectors": "Conectori",
+    "Backup": "Backup",
+    "Memories": "Memorii",
+    "Agent Access": "Acces agent",
+    "LocalModels": "Modele locale",
+    "suggestRevisions": {
+      "title": "Revizii ale documentului",
+      "toggle": "Sugerează revizii în loc să le aplici",
+      "description": "Când solicitați fluxului de lucru Document să facă o revizie, modificările vor apărea ca sugestii individuale pe care le puteți accepta sau respinge, la fel ca în evaluările de calitate.",
+      "exceptionsTitle": "Aplică direct totuși când:",
+      "exceptionSelection": "Revizuiești o selecție pe care ai evidențiat-o",
+      "exceptionLargeRewrite": "Rescrierea modifică majoritatea documentului",
+      "exceptionReorder": "Secțiunile sunt mutate, nu editate",
+      "thresholdLabel": "Consideră ca rescriere peste",
+      "thresholdUnit": "% din document modificat",
+      "exceptionSelectionAlways": "Revizuirea unei selecții evidențiate se aplică întotdeauna direct — modelul returnează doar fragmentul revizuit, care nu poate fi defalcat sub formă de sugestii pentru întregul document."
+    }
   },
   "notFound": {
     "lostDog": "Câine pierdut"
@@ -1396,33 +1443,78 @@
     },
     "title": "Selectați un model",
     "modelsDescription": "Alegeți un model AI pentru conversație. Fiecare model are puncte forte specifice — selectați unul pentru detalii.",
-    "recommended": "Recomandat"
+    "recommended": "Recomandat",
+    "familyAll": "Toate",
+    "familyFilterLabel": "Filtrați modelele după familie",
+    "searchPlaceholder": "Căutați modele",
+    "searchEmpty": "Niciun model nu corespunde căutării.",
+    "star": "Adăugați la favorite {name}",
+    "unstar": "Eliminați din favorite {name}",
+    "otherFamily": "Altele",
+    "hostedExternally": "Rulează pe infrastructura proprie a furnizorului prin Azure AI Foundry, nu în mediul Azure al MSF.",
+    "hostedIn": {
+      "label": "Găzduit în {regions}",
+      "tooltip": "Regiunea(le) Azure unde acest model este implementat. Conversațiile sunt procesate în regiunea dumneavoastră."
+    },
+    "badges": {
+      "external": "Extern",
+      "externalTooltip": "Rulează pe infrastructura proprie a furnizorului prin Azure AI Foundry, nu în mediul Azure al MSF.",
+      "regionHostedTooltip": "Găzduit în regiunea Azure {region}. Conversațiile cu acest model sunt procesate acolo."
+    },
+    "favorites": "Favorite",
+    "euResidencyNote": "Toate modelele rulează în regiunea Azure din UE.",
+    "hostedRegion": {
+      "label": "Regiune găzduită",
+      "processedIn": "Această conversație este procesată în regiunea Azure {region}.",
+      "euOnlyNote": "{name} este găzduit în regiunea Azure din UE; conversațiile cu acesta sunt procesate acolo."
+    },
+    "version": {
+      "label": "Versiune"
+    },
+    "reasoningModel": "Model de raționament: gândește pas cu pas înainte de a răspunde. Mai lent, dar mai eficient pentru probleme dificile.",
+    "variant": {
+      "label": "Variantă"
+    },
+    "deployment": {
+      "title": "Implementare",
+      "source": "Sursă",
+      "account": "Cont",
+      "location": "Locație",
+      "deployment": "Implementare",
+      "modelVersion": "Versiune model",
+      "publisher": "Editor"
+    }
   },
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Model AI bazat pe GPT-4.1 cu căutare web în timp real prin Bing. Oferă informații actualizate, verificare a faptelor și monitorizare a evenimentelor curente. Ideal pentru cercetări ce necesită informații recente, analiză de știri și verificare a faptelor.",
-      "knowledgeCutoff": "Căutare web în timp real"
+      "knowledgeCutoff": "Căutare web în timp real",
+      "tagline": "Generația anterioară OpenAI"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "Cel mai avansat model OpenAI, excelent în raționament complex, generare de cod și rezolvare de probleme tehnice. Ideal pentru sarcini analitice, provocări de programare, cercetare și explicații detaliate. Permite ajustarea nivelului de raționament și a detaliului răspunsului.",
-      "knowledgeCutoff": "6 aug 2025, 20:00"
+      "knowledgeCutoff": "6 aug 2025, 20:00",
+      "tagline": "Vârf GPT anterior"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Variantă mai rapidă și mai economică a GPT-5, optimizată pentru viteză menținând o calitate ridicată. Perfect pentru sarcini zilnice, întrebări rapide, rutare prin instrumente și aplicații ce necesită timpi de răspuns scurți. Oferă un echilibru excelent între performanță și eficiență.",
-      "knowledgeCutoff": "6 aug 2025, 20:00"
+      "knowledgeCutoff": "6 aug 2025, 20:00",
+      "tagline": "Mai rapid și mai economic"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "Variantă specializată a GPT-5, optimizată pentru interacțiuni conversaționale și inteligență emoțională. Excelează în comunicare empatică, suport pentru sănătatea mintală, scriere creativă, brainstorming și dialog natural. Ideal pentru conversații informale, consiliere sau sarcini care necesită conștientizare emoțională.",
-      "knowledgeCutoff": "1 oct 2025, 20:00"
+      "knowledgeCutoff": "1 oct 2025, 20:00",
+      "tagline": "GPT anterior optimizat pentru chat"
     },
     "o3": {
       "name": "o3",
       "description": "Cel mai avansat model de raționament de la OpenAI, cu capabilități inovatoare de rezolvare a problemelor. Excelează în matematică complexă, raționament științific, provocări de programare și sarcini logice în mai mulți pași. Fereastră extinsă de context de 200K. Permite controlul efortului de raționare.",
-      "knowledgeCutoff": "8 apr. 2025, 20:00"
+      "knowledgeCutoff": "8 apr. 2025, 20:00",
+      "tagline": "Raționament detaliat, pas cu pas"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1432,57 +1524,258 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Specialist în raționament care își arată logica pas cu pas. Excelent pentru probleme de matematică, puzzle-uri logice și înțelegerea conceptelor complexe. Poți vedea cum gândește în timp real.",
-      "knowledgeCutoff": "20 ian. 2025"
+      "knowledgeCutoff": "20 ian. 2025",
+      "tagline": "Arată raționamentul pas cu pas"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Model versatil, deosebit de bun la programare și redactare tehnică. Ideal pentru depanare de cod, scriere de documentație și explicarea conceptelor tehnice. Rapid și de încredere pentru lucrul de dezvoltare.",
-      "knowledgeCutoff": "16 apr. 2025, 00:45"
+      "knowledgeCutoff": "16 apr. 2025, 00:45",
+      "tagline": "Alternativă open-source"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Model versatil de la xAI, cunoscut pentru răspunsuri nuanțate. Ideal pentru discuții deschise, proiecte creative și rezolvarea problemelor complexe.",
-      "knowledgeCutoff": "13 mai 2025, 00:16"
+      "knowledgeCutoff": "13 mai 2025, 00:16",
+      "tagline": "Alternativă xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Cel mai capabil model de la Anthropic, cu abilități excepționale de raționament, programare și creație. Recomandat pentru analize complexe, cercetare și sarcini ce necesită înțelegere aprofundată.",
-      "knowledgeCutoff": "ianuarie 2025"
+      "knowledgeCutoff": "ianuarie 2025",
+      "tagline": "Generație Opus anterioară"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Model Claude echilibrat, cu performanțe excelente în programare, analiză și sarcini creative. Potrivit pentru uz zilnic, cu timp de răspuns rapid.",
-      "knowledgeCutoff": "ianuarie 2025"
+      "knowledgeCutoff": "ianuarie 2025",
+      "tagline": "Sonnet generație anterioară"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Generația anterioară a modelului Claude Opus. Excelent pentru sarcini complexe de programare, analize detaliate și înțelegere nuanțată.",
-      "knowledgeCutoff": "ianuarie 2025"
+      "knowledgeCutoff": "ianuarie 2025",
+      "tagline": "Opus generație anterioară"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Model Claude rapid și economic, optimizat pentru sarcini rapide. Ideal pentru întrebări simple, rezumate și aplicații cu volum mare.",
-      "knowledgeCutoff": "ianuarie 2025"
+      "knowledgeCutoff": "ianuarie 2025",
+      "tagline": "Variantă rapidă Claude"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Cel mai avansat model OpenAI, performant în raționamente complexe, generare de cod și rezolvarea problemelor tehnice. Ideal pentru sarcini analitice, provocări de programare, cercetare și explicații detaliate. Permite ajustarea efortului de raționare și a detaliului răspunsului.",
-      "knowledgeCutoff": "Decembrie 2025"
+      "knowledgeCutoff": "Decembrie 2025",
+      "tagline": "Cod, analiză, cercetare"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Decembrie 2025",
-      "description": "Variantă specializată a GPT-5.2, optimizată pentru interacțiuni conversaționale și inteligență emoțională. Excelează în comunicare empatică, scriere creativă, brainstorming și dialog natural. Ideal pentru conversații informale, consiliere și sarcini care necesită conștientizare emoțională."
+      "description": "Variantă specializată a GPT-5.2, optimizată pentru interacțiuni conversaționale și inteligență emoțională. Excelează în comunicare empatică, scriere creativă, brainstorming și dialog natural. Ideal pentru conversații informale, consiliere și sarcini care necesită conștientizare emoțională.",
+      "tagline": "Conversații, brainstorming"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Cel mai puternic model de la Anthropic. Potrivit pentru texte lungi, cercetare și sarcini care necesită gândire atentă.",
-      "knowledgeCutoff": "feb. 2026"
+      "knowledgeCutoff": "feb. 2026",
+      "tagline": "Scriere și analiză pe larg"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Un model Claude echilibrat. Bun pentru scrieri cotidiene, analiză și programare cu răspunsuri rapide.",
-      "knowledgeCutoff": "feb. 2026"
+      "knowledgeCutoff": "feb. 2026",
+      "tagline": "Claude echilibrat pentru uz zilnic"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Un model open-source de la Meta. Solid pentru redactare, rezumate și întrebări rapide.",
+      "tagline": "Alternativă open-source"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Cel mai nou model de vârf al OpenAI. Performant la redactare, cercetare, programare și rezolvarea problemelor complexe.",
+      "tagline": "Cel mai nou vârf GPT"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Cea mai mică și rapidă variantă GPT. Recomandat pentru sarcini simple și rapide, la cost minim.",
+      "tagline": "Cel mai mic și rapid GPT"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "O variantă GPT conversatională optimizată pentru dialog. Bun pentru conversații informale, brainstorming și discuții de suport.",
+      "tagline": "GPT recent optimizat pentru chat"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Un model GPT multimodal mai vechi. Potrivit pentru redactarea zilnică și întrebări-răspunsuri unde nu este nevoie de cele mai noi capabilități.",
+      "tagline": "GPT multimodal mai vechi"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "O variantă GPT-4.1 mai mică și mai rapidă, pentru sarcini zilnice rapide.",
+      "tagline": "GPT ușor, de generație anterioară"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Cel mai nou și performant model al Anthropic. Excelent pentru scrieri lungi, cercetare, programare și analize detaliate.",
+      "tagline": "Cel mai nou și puternic Claude"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Cel mai nou model open-source DeepSeek. Fiabil pentru redactare generală și întrebări tehnice.",
+      "tagline": "Alternativă open-source"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Modelul de vârf al Mistral. O alternativă europeană pentru redactare, rezumate și întrebări generale.",
+      "tagline": "Model european open-weight"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "O versiune anterioară GPT-5 de top. În continuare performant la redactare, analiză și programare.",
+      "tagline": "Vârf GPT-5 anterior"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "O versiune anterioară GPT-5 optimizată pentru chat. Bun pentru conversații zilnice și brainstorming.",
+      "tagline": "GPT anterior pentru chat"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Cea mai mică variantă GPT-5. Recomandată pentru sarcini simple și rapide, la cost minim.",
+      "tagline": "GPT foarte mic, generație anterioară"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Cea mai mică variantă GPT-4.1. Potrivită pentru sarcini rapide și simple unde contează viteza și costul.",
+      "tagline": "Cel mai mic GPT, generație anterioară"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "O variantă mică și rapidă a GPT-4o. Potrivită pentru sarcini zilnice rapide unde nu este nevoie de cele mai noi capabilități.",
+      "tagline": "GPT multimodal ușor, generație veche"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Un model compact pentru raționament. Bun pentru matematică, logică și probleme pas cu pas, la cost mai mic decât o3.",
+      "tagline": "Raționament rapid și accesibil"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Un model compact anterior pentru raționament. Gestionează probleme de matematică, știință și logică la buget redus.",
+      "tagline": "Raționament compact, pas cu pas"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Cel mai inteligent model al Anthropic, primul din familia Claude 5. Excelent pentru cele mai dificile sarcini de redactare, cercetare și programare.",
+      "tagline": "Model avansat de la Anthropic"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Cel mai nou model Claude echilibrat, primul din familia Claude 5. Performant la scriere zilnică, analiză și programare, cu răspunsuri rapide.",
+      "tagline": "Cel mai nou Claude echilibrat"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Modelul Mistral de dimensiune medie. O alternativă europeană ce echilibrează capabilitățile și viteza pentru lucru zilnic.",
+      "tagline": "Model european echilibrat"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Modelul mic al Mistral. Rapid și ieftin pentru rezumate, ciorne și întrebări simple.",
+      "tagline": "Model european mic și rapid"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Modelul foarte mic al Mistral. Cel mai bun pentru sarcini foarte rapide și simple, la cost minim.",
+      "tagline": "Mistral foarte compact pentru edge"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "O versiune actualizată DeepSeek-R1. Explică raționamentul pas cu pas, cu o profunzime îmbunătățită a argumentației.",
+      "tagline": "Model open reasoning actualizat"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Un model open-source mai ușor de la Meta. Rapid pentru redactare, rezumate și întrebări cotidiene.",
+      "tagline": "Llama open-source eficient"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Un model open-source mai vechi de la Meta. Rămâne solid pentru redactare generală și întrebări-răspunsuri.",
+      "tagline": "Llama open-source mai vechi"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Modelul de vârf al xAI. Bun pentru discuții deschise, analiză și proiecte creative.",
+      "tagline": "Vârf xAI"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Cel mai recent model de vârf al OpenAI. Performant la redactare, cercetare, programare și rezolvare de probleme complexe.",
+      "tagline": "Cel mai recent vârf GPT"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (ultimul)",
+      "description": "Un alias dinamic care indică mereu către cel mai nou model de chat-tuned al OpenAI. Înlocuitorul Azure pentru modelele gpt-*-chat versiuni vechi.",
+      "tagline": "Întotdeauna cel mai nou GPT pentru chat"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "O versiune recentă Opus, între 4.6 și 4.8. Puternic pentru texte lungi, cercetare, programare și analiză detaliată.",
+      "tagline": "Lansare Opus recentă"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Cel mai nou model de raționament al DeepSeek și înlocuitorul Azure pentru linia R1. Prezintă gândirea pas cu pas.",
+      "tagline": "Cel mai nou model de reasoning open"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Varianta rapidă V4 de la DeepSeek și înlocuitorul Azure pentru linia V3. Rapid la redactare generală și întrebări tehnice.",
+      "tagline": "Alternativă open-source rapidă"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Raționament)",
+      "description": "Modelul rapid de raționament al xAI. Gândește pas cu pas și răspunde rapid.",
+      "tagline": "Model xAI rapid pentru reasoning"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Modelul rapid de chat al xAI. Răspunsuri rapide la întrebări zilnice și discuții.",
+      "tagline": "Model xAI rapid pentru chat"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Un model xAI mai ușor. Mai rapid și mai ieftin pentru întrebări scurte și conversații informale.",
+      "tagline": "Model xAI mai ușor"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Vârful de lance al trio-ului GPT-5.6 de la OpenAI. Excelează la redactare, cercetare, programare și rezolvare de probleme complexe.",
+      "tagline": "Cel mai nou nivel vârf GPT"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Nivelul echilibrat din trio-ul GPT-5.6 de la OpenAI. Bun pentru redactare zilnică, analiză și programare cu răspunsuri rapide.",
+      "tagline": "GPT-5.6 echilibrat pentru utilizarea zilnică"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Varianta rapidă și ușoară din trio-ul GPT-5.6 de la OpenAI. Ideal pentru întrebări rapide și sarcini simple la cost redus.",
+      "tagline": "GPT-5.6 ușor și rapid"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Cel mai nou model de dimensiune medie de la Mistral. O alternativă europeană ce echilibrează capabilitățile și viteza pentru activitățile de zi cu zi.",
+      "tagline": "Model european echilibrat"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Model open-weight dezvoltat de Moonshot AI. Performant la sarcini agențiale, programare și documente lungi.",
+      "tagline": "Model agențial open-weight"
     }
   },
   "searchMode": {
@@ -1822,7 +2115,22 @@
     "useDefaultStyle": "Folosiți stilul de scriere implicit",
     "noTonesCreated": "Nu au fost create tonuri încă",
     "createTonesHint": "Creați tonuri în Acțiuni rapide",
-    "translateDocumentTooltip": "Traduceți documente în altă limbă.\n\nFormate acceptate: Word, Excel, PowerPoint, HTML, TXT\nDimensiune maximă: 40MB\n\nSuportă peste 80 de limbi și fișiere de glosar opționale."
+    "translateDocumentTooltip": "Traduceți documente în altă limbă.\n\nFormate acceptate: Word, Excel, PowerPoint, HTML, TXT\nDimensiune maximă: 40MB\n\nSuportă peste 80 de limbi și fișiere de glosar opționale.",
+    "translateTooltip": "Tradu un fragment de text în altă limbă.\n\nPentru fișiere întregi (Word, Excel, PowerPoint, HTML, TXT), folosește în schimb Tradu Documentul.",
+    "cameraTooltip": "Fă o fotografie cu camera dispozitivului și atașeaz-o la mesaj.",
+    "noResults": "Nicio acțiune potrivită",
+    "sectionPinned": "Fixat",
+    "sectionFrequent": "Frecvent folosite",
+    "sectionMore": "Mai multe",
+    "categoryWeb": "Web",
+    "categoryMedia": "Media și fișiere",
+    "categoryTransform": "Transformare",
+    "pin": "Fixați în partea de sus",
+    "unpin": "Detașați",
+    "moveToMore": "Mută la Mai multe",
+    "moveOutOfMore": "Afișează în meniu",
+    "showSources": "Afișează alte surse",
+    "hideSources": "Ascunde alte surse"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Adăugați instrucțiunile personale pentru a personaliza modul în care răspunde AI. Acestea sunt combinate cu liniile directoare de bază care asigură răspunsuri utile, corecte și sigure.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Sfat: Tastați \"/\" pentru a selecta dintre șabloanele de prompt salvate.",
@@ -1933,7 +2241,14 @@
     "learnMore": "Află mai multe",
     "advancedOptions": "Opțiuni avansate",
     "unofficialBadgeLabel": "Neoficial",
-    "unofficialLanguageWarning": "Această limbă nu este suportată oficial. Calitatea traducerii nu a fost verificată. Vă rugăm să aveți rezultatul revizuit de un vorbitor fluent sau nativ înainte de a-l distribui."
+    "unofficialLanguageWarning": "Această limbă nu este suportată oficial. Calitatea traducerii nu a fost verificată. Vă rugăm să aveți rezultatul revizuit de un vorbitor fluent sau nativ înainte de a-l distribui.",
+    "translationSubmitted": "Traducerea a început — PDF-urile sunt procesate în fundal.",
+    "pendingTitle": "Se traduce {filename}...",
+    "pendingHint": "Traducerile PDF rulează în fundal și pot dura câteva minute. Puteți continua lucrul — această cartelă se actualizează când documentul este gata, chiar și după reîncărcare.",
+    "asyncFailed": "Traducerea documentului a eșuat: {error}",
+    "jobNotFound": "lucrarea de traducere nu mai este disponibilă. Vă rugăm să încercați din nou.",
+    "retryPolling": "Verifică din nou",
+    "pollingStalled": "Nu am putut contacta serverul pentru a verifica progresul. Traducerea poate fi în continuare în curs."
   },
   "terms": {
     "officialLanguages": "Versiune oficială:",
@@ -1997,6 +2312,10 @@
       "technicalDetails": "Detalii tehnice",
       "agentCountLabel": "{count} agenți",
       "disconnectedToast": "{name} deconectat"
+    },
+    "emptyState": {
+      "title": "Nu există agenți regionali / organizaționali disponibili",
+      "description": "Conectați un proiect Foundry mai jos pentru a descoperi agenții acestuia."
     }
   },
   "privacy": {
@@ -2107,5 +2426,1309 @@
     "review": "Revizuiește",
     "itemId": "ID: {id}",
     "itemSource": "{date} de la {source}"
+  },
+  "regionOverride": {
+    "warning": "Suprascrierea locației este activă — solicitările dvs. sunt redirecționate către regiunea de date {region}. Aceasta este o suprascriere manuală de test, nu locația dvs. reală.",
+    "clear": "Ștergeți suprascrierea"
+  },
+  "usageImpact": {
+    "empty": "Nu a fost înregistrată încă nicio utilizare. Utilizarea token-urilor și emisiile estimate vor apărea aici după ce veți conversa.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} încărcări smartphone",
+    "requests": "Cereri",
+    "promptTokens": "Token-uri prompt",
+    "completionTokens": "Token-uri completare",
+    "topModels": "După model",
+    "byRegion": "După regiunea de găzduire",
+    "regionDefault": "Implicit",
+    "modelRow": "{requests} cereri · {grams} g",
+    "disclosure": "Estimări bazate pe ipoteze v{version} · din {since} · doar conversație standard (agenții și răspunsurile din baza de cunoștințe nu sunt incluse).",
+    "reset": "Resetează statisticile de utilizare",
+    "estimatedPortion": "Include aproximativ {grams} g CO₂e ({requests} cereri) estimate pentru conversațiile anterioare urmăririi — recalculate pe baza textului stocat al mesajelor, nu a numărului măsurat de tokeni.",
+    "chipTitle": "Insignă emisii",
+    "chipDescription": "Amprenta de carbon estimată a conversației curente, afișată deasupra câmpului de chat.",
+    "chipAlways": "Afișează întotdeauna",
+    "chipAlwaysHint": "Insigna rămâne vizibilă atâta timp cât există o estimare pentru conversație.",
+    "chipAuto": "Afișează la actualizare sau la trecere mouse",
+    "chipAutoHint": "Insigna apare când se modifică estimarea, apoi dispare treptat. La trecerea mouse-ului sau la focalizare, revine vizibilă.",
+    "chipHidden": "Ascunsă",
+    "chipHiddenHint": "Insigna nu este afișată niciodată. Totalurile rămân înregistrate și apar pe această pagină.",
+    "chipAutoHideLabel": "Se estompează după",
+    "chipAutoHideUnit": "secunde",
+    "chipAutoHideHint": "Între {min} și {max} secunde."
+  },
+  "extraction": {
+    "toggleLabel": "Extrage date structurate",
+    "trayLabel": "Extracție",
+    "trayPrefix": "Extrage",
+    "trayInfo": "Extracția returnează până la 3 tabele structurate. Rețetele sunt salvate local.",
+    "autoChip": "Auto — AI propune o structură",
+    "addRecipe": "Adaugă rețetă",
+    "addRecipeTitle": "Adaugă o rețetă la această extracție",
+    "addRecipeFullTitle": "Maximum 3 rețete per extracție",
+    "removeRecipe": "Elimină rețeta: {name}",
+    "remove": "Elimină",
+    "section": "Rețete de extracție",
+    "sectionSubtitle": "Șabloane salvate care transformă text brut, fișiere sau URL-uri în tabele structurate. Selectează până la 3 pentru fiecare rând de extracție.",
+    "newRecipe": "Rețetă nouă",
+    "untitledRecipe": "(Rețetă fără titlu)",
+    "deleteRecipe": "Șterge rețeta",
+    "delete": "Șterge",
+    "deleteConfirm": "Ștergi?",
+    "cancel": "Anulează",
+    "name": "Nume",
+    "namePlaceholder": "ex: Pacienți",
+    "description": "Descriere",
+    "optional": "(opțional)",
+    "descriptionPlaceholder": "Rezumat scurt afișat în selecția de rețete",
+    "instructions": "Instrucțiuni",
+    "instructionsPlaceholder": "Ce ar trebui să caute AI-ul în material?",
+    "fields": "Câmpuri",
+    "field": "câmp",
+    "fieldsPlural": "câmpuri",
+    "fieldName": "Nume câmp",
+    "fieldType": "Tip câmp",
+    "fieldNamePlaceholder": "nume_câmp",
+    "addField": "Adaugă câmp",
+    "removeField": "Elimină câmpul",
+    "toggleDetails": "Comută detalii",
+    "fieldDetailsTitle": "Descriere, valori enum",
+    "fieldDescriptionPlaceholder": "Descriere (ajută AI-ul să găsească acest câmp)",
+    "enumValuesPlaceholder": "Valori permise, separate prin virgulă",
+    "required": "obligatoriu",
+    "suggest": "Sugerează cu AI",
+    "suggesting": "Se sugerează...",
+    "suggestNeedsInstructions": "Adăugați mai întâi instrucțiuni pentru ca AI-ul să știe ce să caute",
+    "searchRecipes": "Caută rețete",
+    "pickerEmpty": "Nicio rețetă încă. Creați una pentru a începe.",
+    "pickerEmptyMatch": "Nicio rețetă potrivită",
+    "editorEmpty": "Nicio rețetă încă. Creați una și AI vă poate ajuta să completați câmpurile.",
+    "noData": "Niciun dată extrasă",
+    "noRecords": "Nu au fost găsite înregistrări {name}",
+    "row": "rând",
+    "rows": "rânduri",
+    "record": "înregistrare",
+    "records": "înregistrări",
+    "complete": "complet",
+    "download": "Descarcă",
+    "preview": "Previzualizare",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} câmpuri",
+    "fieldCountOne": "1 câmp",
+    "andMoreFields": "+ {count} altele",
+    "saveAsRecipe": "Salvează ca rețetă",
+    "savedAsRecipeToast": "Salvat ca rețetă „{name}”",
+    "previewTruncated": "Se afișează primele 3 din {total} rânduri. Pentru toate datele, descărcați fișierul.",
+    "previewEmpty": "Niciun rând de previzualizat",
+    "proposedSchemaTip": "AI a propus această schemă. Salvați-o pentru a o reutiliza data viitoare.",
+    "downloadAriaLabel": "Descarcă {name} ca {format}",
+    "previewAriaLabel": "Comută previzualizarea pentru {name}",
+    "changeFormatAriaLabel": "Schimbă formatul de descărcare pentru {name}",
+    "materialWarningTitle": "Adăugați material pentru extragere",
+    "materialWarningBody": "Scrieți un mesaj mai jos, atașați un fișier sau includeți un URL.",
+    "materialAttach": "Atașează fișier",
+    "willExtractPrefix": "Se va extrage din:",
+    "materialText": "text mesaj",
+    "materialFiles": "{count, plural, one {1 fișier} other {# fișiere}}",
+    "materialActiveFiles": "{count, plural, one {1 fișier activ} other {# fișiere active}}",
+    "dismiss": "Oprește extragerea"
+  },
+  "Connectors": "Conectori",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "Traducere",
+        "description": "Traduceți text cu analiză, glosare și runde de revizuire"
+      },
+      "document": {
+        "label": "Document",
+        "description": "Creați și rafinați un document cu ajutorul asistentului"
+      },
+      "dataAnalysis": {
+        "label": "Analiză de date",
+        "description": "Importați tabele și explorați sau transformați datele"
+      },
+      "map": {
+        "label": "Hartă",
+        "description": "Transformați orice date în locații pe hartă"
+      }
+    },
+    "chooser": {
+      "prompt": "Sau începeți un spațiu de lucru dedicat"
+    },
+    "sidebar": {
+      "newTranslation": "Traducere nouă",
+      "newDocument": "Document nou",
+      "newDataAnalysis": "Analiză de date nouă",
+      "newMap": "Hartă nouă"
+    },
+    "translation": {
+      "chooseLanguage": "Limba țintă",
+      "customLanguageHint": "„{name}” este o limbă adăugată de dvs. — AI-ul va încerca orice limbă, dar calitatea nu este verificată.",
+      "addedByYou": "Adăugat de dvs.",
+      "glossary": "Glosar",
+      "noGlossary": "Niciun glosar",
+      "manageGlossaries": "Glosare",
+      "glossaries": "Glosare",
+      "closeGlossaries": "Închide glosarele",
+      "glossariesEmpty": "Creați un glosar pentru a bloca modul de traducere a unor termeni specifici. Glosarele sunt salvate pe acest dispozitiv și pot fi refolosite în alte traduceri.",
+      "newGlossary": "Glosar nou",
+      "newGlossaryName": "Glosar fără titlu",
+      "glossaryName": "Nume glosar",
+      "deleteGlossary": "Șterge glosarul",
+      "sourceTerm": "Termen sursă",
+      "targetTerm": "Traducere",
+      "note": "Notă",
+      "noteOptional": "Notă (opțional)",
+      "addEntry": "Adaugă termen",
+      "removeEntry": "Elimină {term}",
+      "mode": "Mod traducere",
+      "modeQuick": "Rapid",
+      "modeAgentic": "Revizuit",
+      "modeQuickHint": "O singură trecere, cel mai rapid",
+      "modeAgenticHint": "Analizează textul mai întâi, apoi traduce și efectuează până la 3 runde de revizuire",
+      "translate": "Tradu",
+      "translating": "Se traduce…",
+      "sourceLabel": "Text sursă",
+      "targetLabel": "Traducere",
+      "sourcePlaceholder": "Lipiți sau introduceți textul de tradus ori încărcați un document.",
+      "targetEmpty": "Traducerea va apărea aici.",
+      "uploadDocument": "Încarcă document",
+      "copy": "Copiază",
+      "copied": "Copiat",
+      "tooLong": "Textul depășește {max} caractere. Împărțiți-l în părți sau folosiți traducerea documentului pentru fișiere întregi.",
+      "analysisTitle": "Analiză pre-traducere",
+      "register": "Înregistrează-te",
+      "reviewTitle": "Runde de revizuire",
+      "roundLabel": "Runda {round}",
+      "verdictApprove": "aprobat",
+      "verdictRevise": "revizuit",
+      "railRequest": "Tradu textul sursă în {language}.",
+      "railDoneAgentic": "Gata. Am analizat textul, l-am tradus și am efectuat {rounds} rundă/runde de revizuire. Rezultatul este în workspace.",
+      "railDoneQuick": "Gata. Traducerea se află în workspace.",
+      "railAssessRequest": "Evaluează calitatea traducerii în {language}.",
+      "railAssessDone": "Evaluare finalizată: calificativele sunt în workspace împreună cu {count} sugestie(i) de modificare pentru revizuire.",
+      "roundChanges": "Modificări în runda {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "Acuratețe",
+          "description": "Redă exact sensul sursei — fără erori, omisiuni, adăugiri sau segmente netraduse"
+        },
+        "fluency": {
+          "label": "Fluență",
+          "description": "Gramatica, ortografia, punctuația și coeziunea sună natural în limba țintă"
+        },
+        "terminology": {
+          "label": "Terminologie",
+          "description": "Termenii de domeniu sunt corecți și consecvenți; glosarul este respectat întocmai"
+        },
+        "style": {
+          "label": "Stil",
+          "description": "Registrul, tonul și vocea corespund sursei și sunt consecvente"
+        },
+        "localeConventions": {
+          "label": "Convenții locale",
+          "description": "Datele, numerele, unitățile și punctuația respectă normele locale ale limbii țintă"
+        },
+        "audience": {
+          "label": "Public",
+          "description": "Se potrivește scopului și publicului textului"
+        }
+      },
+      "severity": {
+        "minor": "Minor",
+        "major": "Major"
+      },
+      "assess": "Evaluează calitatea",
+      "assessing": "Se evaluează…",
+      "assessmentTitle": "Evaluarea calității",
+      "criteriaPicker": "Criterii de evaluat",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Modificări sugerate",
+      "noEditsSuggested": "Nu au fost sugerate modificări — traducerea a îndeplinit criteriile selectate.",
+      "acceptEdit": "Acceptă",
+      "rejectEdit": "Respinge",
+      "acceptAll": "Acceptă tot",
+      "rejectAll": "Respinge tot",
+      "editAccepted": "Acceptat",
+      "editRejected": "Respins",
+      "editUnapplicable": "Nu am putut localiza acest fragment în textul curent — nu a fost aplicat",
+      "editTranslation": "Editează",
+      "doneEditing": "Gata",
+      "pasteTranslationPlaceholder": "Scrie sau lipește o traducere pentru editare…",
+      "editingBlockedPendingEdits": "Rezolvați sau respingeți mai întâi modificările sugerate",
+      "pendingCount": "{count} în așteptare",
+      "closeReview": "Închide revizuirea calității",
+      "showReview": "Arată revizuirea",
+      "showReviewPending": "Arată revizuirea ({count} în așteptare)",
+      "undoEdit": "Anulează",
+      "clearResolved": "Curăță rezolvate",
+      "clearResolvedHint": "Eliminați modificările acceptate, respinse și neaplicabile din această listă",
+      "autoClearResolved": "Curăță automat modificările rezolvate",
+      "customCriteria": "Criterii personalizate",
+      "closeCriteria": "Închide criteriile personalizate",
+      "newCriterion": "Criteriu nou",
+      "newCriterionName": "Criteriu fără titlu",
+      "criterionName": "Numele criteriului",
+      "criterionRubric": "Indicații",
+      "criterionRubricPlaceholder": "Descrieți ce trebuie să facă traducerea pentru a îndeplini acest criteriu, ex.: „Redați toate instrucțiunile de dozaj clinic la imperativ, niciodată la infinitiv…”",
+      "criterionRubricHint": "Aceste indicații sunt oferite AI-ului ca atare, împreună cu dimensiunile MQM implicite, la evaluarea unei traduceri.",
+      "criteriaEmpty": "Creați criterii personalizate – de ex. stil intern, preferințe terminologice ale clientului sau convenții regionale – pentru a evalua traducerile dincolo de dimensiunile MQM prestabilite. Salvate pe acest dispozitiv și reutilizabile.",
+      "deleteCriterion": "Ștergeți criteriul",
+      "manageCriteria": "Criterii personalizate",
+      "addCriteria": "Adăugați criterii",
+      "noUsableCriteria": "Selectați cel puțin un criteriu implicit sau adăugați indicații criteriilor personalizate.",
+      "criterionRubricTooLong": "Această rubrică depășește limita cu {over} caractere. Este trimisă cu fiecare evaluare, deci trebuie scurtată înainte ca acest criteriu să poată fi folosit."
+    },
+    "document": {
+      "emptyTitle": "Descrieți documentul dorit",
+      "emptyBody": "Spuneți asistentului ce să scrie — un raport de situație, o scrisoare pentru donatori, proces-verbal de întâlnire. Adăugați mai întâi fișiere de referință dacă doriți să fie citate citate și date din ele.",
+      "generatePlaceholder": "Descrieți documentul de redactat…",
+      "revisePlaceholder": "Descrieți modificările de făcut…",
+      "generate": "Generează",
+      "revise": "Revizuiește",
+      "writing": "Se scrie…",
+      "export": "Exportă",
+      "references": "Referințe",
+      "addReference": "Adaugă fișier",
+      "uploading": "Se încarcă…",
+      "removeReference": "Elimină {name}",
+      "referenceChars": "{chars} caractere de text extras",
+      "referenceEmpty": "Nu s-a putut extrage text din {name}",
+      "uploadFailed": "Încărcarea a eșuat",
+      "untitledDocument": "Document fără titlu",
+      "generatedSummary": "Am redactat documentul în spațiul de lucru. Revizuiți-l și spuneți-mi ce să schimb.",
+      "revisedSummary": "Am revizuit documentul în spațiul de lucru.",
+      "runFailed": "A apărut o problemă: {message}",
+      "uploadBasis": "Porniți de la un document existent",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "Gramatică & ortografie",
+          "description": "Gramatică și ortografie corectă; o singură varietate de engleză (US sau UK) este acceptată — amestecul constituie eroare"
+        },
+        "consistency": {
+          "label": "Consistență",
+          "description": "Terminologia, denumirile, majusculele și formatarea sunt folosite consecvent peste tot"
+        },
+        "clarity": {
+          "label": "Claritate",
+          "description": "Fraze directe, neambigue; structură care ajută cititorul"
+        },
+        "sensitivity": {
+          "label": "Sensibilitate",
+          "description": "Formulare incluzivă, sensibilă la conflict și umanitar (verificare opțională)"
+        },
+        "specAdherence": {
+          "label": "Respectare spec",
+          "description": "Respectă specificațiile documentului atașat: secțiuni obligatorii prezente, în ordine și conforme cu indicațiile"
+        },
+        "toneAdherence": {
+          "label": "Respectare ton",
+          "description": "Respectă regulile de voce și ton atașate"
+        }
+      },
+      "severity": {
+        "minor": "Minor",
+        "major": "Major"
+      },
+      "assess": "Evaluează calitatea",
+      "assessing": "Se evaluează…",
+      "assessmentTitle": "Revizuire calitate",
+      "criteriaPicker": "Criterii de evaluat",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Modificări sugerate",
+      "noEditsSuggested": "Nu au fost sugerate modificări — documentul a trecut criteriile selectate.",
+      "acceptEdit": "Acceptă",
+      "rejectEdit": "Respinge",
+      "acceptAll": "Acceptă toate",
+      "rejectAll": "Respinge toate",
+      "editAccepted": "Acceptat",
+      "editRejected": "Respins",
+      "editUnapplicable": "Nu s-a putut localiza acest pasaj în textul actual — nu s-a aplicat",
+      "editingBlockedPendingEdits": "Rezolvați sau respingeți mai întâi modificările sugerate în așteptare",
+      "pendingCount": "{count} în așteptare",
+      "closeReview": "Închide revizuirea calității",
+      "showReview": "Arată revizuirea",
+      "showReviewPending": "Arată revizuirea ({count} în așteptare)",
+      "railAssessRequest": "Evaluează calitatea documentului pe baza criteriilor selectate.",
+      "railAssessDone": "Evaluare finalizată: notele sunt în spațiul de lucru, cu {count} modificare(i) sugerate pentru revizuire.",
+      "spec": "Specificație document",
+      "noSpec": "Fără specificație",
+      "manageSpecs": "Specificații",
+      "specs": "Specificații document",
+      "closeSpecs": "Închide specificațiile",
+      "specsEmpty": "Creați o specificație pentru a redacta documente într-un format fix — secțiuni obligatorii, ordine și indicații per secțiune (ex: șablon SitRep). Specificațiile sunt salvate pe acest dispozitiv și pot fi reutilizate.",
+      "newSpec": "Specificație nouă",
+      "newSpecName": "Specificație fără titlu",
+      "specName": "Nume specificație",
+      "specDescription": "Descriere (opțional)",
+      "deleteSpec": "Șterge specificația",
+      "sectionHeading": "Titlul secțiunii",
+      "sectionGuidance": "Ghidaj (opțional)",
+      "sectionRequired": "Obligatoriu",
+      "addSection": "Adaugă secțiune",
+      "removeSection": "Elimină secțiune",
+      "generalGuidance": "Ghid general (opțional)",
+      "tone": "Ton",
+      "noTone": "Fără ton",
+      "customCriteria": "Criterii personalizate",
+      "manageCriteria": "Criterii personalizate",
+      "closeCriteria": "Închide criteriile personalizate",
+      "criteriaEmpty": "Creați criterii personalizate — de exemplu, considerații de brand sau limbaj organizațional — pentru a evalua documente și a ghida revizuirile. Salvate pe acest dispozitiv și reutilizabile.",
+      "newCriterion": "Criteriu nou",
+      "newCriterionName": "Criteriu fără titlu",
+      "criterionName": "Numele criteriului",
+      "criterionRubric": "Rubrică",
+      "criterionRubricPlaceholder": "Descrieți ce trebuie să facă documentul pentru a satisface acest criteriu, de exemplu: \"Nu folosiți niciodată superlative despre propria activitate; numiți întotdeauna beneficiarii 'persoane pe care le asistăm'…\"",
+      "criterionRubricHint": "Această rubrică este transmisă AI-ului exact așa cum a fost scrisă, în timpul evaluărilor și revizuirilor.",
+      "deleteCriterion": "Șterge criteriul",
+      "profileTitle": "Profil document",
+      "profileDocType": "Tip",
+      "profileLanguage": "Limbă",
+      "profileAudience": "Public țintă",
+      "profilePurpose": "Scop",
+      "profileRegister": "Registru",
+      "profileTone": "Ton",
+      "profileConventions": "Convenții",
+      "emptyHint": "Începeți să tastați mai jos, descrieți ce să scrieți în caseta de jos sau porniți de la un fișier.",
+      "addSpec": "Adăugați specificație",
+      "addCriteria": "Adăugați criterii",
+      "scopeFullDocument": "Scop: întregul document",
+      "scopeSelection": "Scop: selecție — „{preview}…” ({count} cuvinte)",
+      "clearSelection": "Eliminați selecția (lucrează cu întregul document)",
+      "reviseSelectionPlaceholder": "Descrieți modificările aduse selecției…",
+      "revisedSelectionSummary": "Am revizuit pasajul selectat în spațiul de lucru.",
+      "assessedSelection": "Selecție",
+      "undoEdit": "Anulează",
+      "clearResolved": "Curăță rezolvate",
+      "clearResolvedHint": "Eliminați modificările acceptate, respinse și neaplicabile din această listă",
+      "autoClearResolved": "Curăță automat modificările rezolvate",
+      "import": "Importă",
+      "importReplaceTitle": "Înlocuiți documentul?",
+      "importReplaceBody": "Importarea {name} va înlocui documentul actual. Referințele, specificațiile și tonul vor fi păstrate.",
+      "importReplaceConfirm": "Înlocuiește",
+      "editorMode": "Mod editor",
+      "editorModeRich": "Text îmbogățit",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Rezolvați sugestiile de modificare înainte de a schimba modul editorului.",
+      "suggestChanges": "Sugerează modificări",
+      "suggestChangesHint": "Revizuiește modificările sub formă de sugestii individuale în loc să rescrii documentul imediat.",
+      "suggestChangesSelectionNote": "Reviziile unei selecții sunt aplicate direct — selecția este deja zona pe care ai ales-o.",
+      "suggestedSummary": "Au fost sugerate {count} {count, plural, one {modificare} other {modificări}} pentru revizuire.",
+      "revisionSuggestionSummary": "Solicitarea dvs. de revizuire a generat {count} {count, plural, one {sugestie de modificare} other {sugestii de modificare}}.",
+      "revisionCriterionLabel": "Revizie solicitată",
+      "fallbackSelection": "Aplicat direct — reviziile pentru o selecție nu sunt sugerate.",
+      "fallbackLargeRewrite": "Aplicat direct — rescrierea a modificat prea mult din document pentru a putea fi sugerată ca modificări separate.",
+      "fallbackReorder": "Aplicat direct — secțiunile au fost mutate, ceea ce nu poate fi transformat în sugestii pentru revizuire.",
+      "fallbackUnanchorable": "Aplicat direct — modificările nu au putut fi asociate unor pasaje specifice.",
+      "fallbackNoChanges": "Nu au fost necesare modificări.",
+      "criterionRubricTooLong": "Această rubrică depășește limita cu {over} caractere. Este trimisă cu fiecare evaluare, deci trebuie scurtată înainte ca acest criteriu să poată fi folosit."
+    },
+    "data": {
+      "emptyTitle": "Importați date pentru analiză",
+      "emptyBody": "Importați un fișier CSV, Excel sau JSON sau lipiți direct rândurile. După încărcarea tabelului, îl puteți sorta, extrage mai multe rânduri din documente și transforma cu instrucțiuni în limbaj natural.",
+      "importFile": "Importă fișier",
+      "importing": "Se importă…",
+      "pasteData": "Lipește date",
+      "pastePlaceholder": "Lipiți aici CSV, TSV sau JSON…",
+      "import": "Importă",
+      "addFromSource": "Adaugă din sursă",
+      "extractHint": "Lipiți text sau alegeți un document; rândurile care corespund coloanelor actuale vor fi extrase. Valorile necunoscute rămân goale — nimic nu este inventat.",
+      "extractPlaceholder": "Lipiți un text nestructurat care conține date…",
+      "extractRows": "Extrage rânduri",
+      "extractFromFile": "Dintr-un fișier…",
+      "extracting": "Se extrage…",
+      "pastedSource": "Text lipit",
+      "transform": "Transformă",
+      "transforming": "Se transformă…",
+      "transformPlaceholder": "Descrieți o transformare, de exemplu: \"adaugă o coloană cu cazuri la 1000 de locuitori\"…",
+      "transformCapHint": "Transformările sunt limitate la {max} rânduri. Ștergeți sau filtrați rânduri pentru tabele mai mari.",
+      "undo": "Anulează",
+      "deleteSelected": "Șterge {count}",
+      "deletedRows": "Șterse {count} rânduri",
+      "selectAllRows": "Selectează toate rândurile",
+      "selectRow": "Selectează rândul {row}",
+      "rowCount": "{count} rânduri",
+      "rowCapExceeded": "Ar însemna {count} rânduri; tabelul este limitat la {max}. Împărțiți datele sau exportați-le.",
+      "railExtractRequest": "Extrage rândurile care corespund schemei tabelului din: {source}",
+      "railExtractDone": "S-au adăugat {count} rânduri extrase în tabel.",
+      "railTransformDone": "Tabelul a fost transformat.",
+      "columnProfileFor": "Statistici coloană pentru {column}",
+      "profileMissing": "Lipsă",
+      "profileDistinct": "Distincte",
+      "profileRange": "Interval",
+      "profileMean": "Medie",
+      "profileMedian": "Mediană",
+      "profileTopValues": "Valori principale",
+      "filterColumnFor": "Filtrează {column}",
+      "filterContains": "Conține…",
+      "filterMin": "Minim",
+      "filterMax": "Maxim",
+      "filterClear": "Șterge",
+      "clearFilters": "Șterge filtrele",
+      "showingRows": "Se afișează {shown} din {total} rânduri",
+      "scopeLabel": "Domeniu de lucru",
+      "scopeTable": "Toate ({count})",
+      "scopeFiltered": "Filtrate ({count})",
+      "scopeSelection": "Selectate ({count})",
+      "scopedInstruction": "{instruction} (pe {count} rânduri selectate)",
+      "assess": "Evaluează calitatea",
+      "assessing": "Se evaluează…",
+      "criteria": {
+        "validity": {
+          "label": "Validitate",
+          "description": "Valorile respectă tipul și formatul așteptat al coloanei"
+        },
+        "consistency": {
+          "label": "Consistență",
+          "description": "Aceeași valoare este scrisă la fel peste tot (fără variante 'M' / 'Male', unități amestecate sau diferențe de majuscule/minuscule)"
+        },
+        "duplicates": {
+          "label": "Dubluri",
+          "description": "Rânduri care înregistrează aceeași entitate sau eveniment de două ori"
+        },
+        "plausibility": {
+          "label": "Plausibilitate",
+          "description": "Valori anormale sau imposibile în context"
+        }
+      },
+      "assessmentTitle": "Revizuire calitate date",
+      "pendingCount": "{count} în așteptare",
+      "closeReview": "Închide revizuirea calității",
+      "suggestedEdits": "Soluții sugerate",
+      "noEditsSuggested": "Nu s-au sugerat soluții — datele au trecut criteriile selectate.",
+      "acceptAll": "Acceptă toate",
+      "rejectAll": "Respinge toate",
+      "acceptEdit": "Acceptă",
+      "rejectEdit": "Respinge",
+      "editAccepted": "Aplicat",
+      "editRejected": "Respins",
+      "editUnapplicable": "Celula s-a modificat de la evaluare — neaplicat",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "Criterii de evaluat",
+      "severity": {
+        "minor": "Minor",
+        "major": "Major"
+      },
+      "editLocation": "rând {row} · {column}",
+      "editLocationRow": "rând {row} (șterge)",
+      "showReview": "Afișează revizuirea",
+      "showReviewPending": "Afișează revizuirea ({count} în așteptare)",
+      "assessedFiltered": "Rânduri filtrate",
+      "assessedSelection": "Rânduri selectate",
+      "assessedSample": "eșantion de {shown} din {total}",
+      "railAssessRequest": "Evaluează calitatea tabelului ({count} rânduri) conform criteriilor selectate.",
+      "railAssessDone": "{count} propuneri de corecții pentru calitatea datelor — revizuiți-le în spațiul de lucru.",
+      "insights": "Perspective",
+      "chartKind": "Tip diagramă",
+      "chartBar": "Bară (grupare)",
+      "chartHistogram": "Histogramă",
+      "chartLine": "Linie (în timp)",
+      "groupByColumn": "Grupează după coloană",
+      "dateColumn": "Coloană dată",
+      "valueColumn": "Coloană valori",
+      "aggFn": "Agregare",
+      "aggCount": "Număr",
+      "aggSum": "Sumă",
+      "aggMean": "Medie",
+      "chartTruncated": "Se afișează primele {max} grupuri",
+      "chartNoData": "Nu există valori care pot fi afișate în rândurile curente.",
+      "chartBarAria": "Diagramă de tip bară grupată după {column}",
+      "chartHistogramAria": "Histogramă pentru {column}",
+      "chartLineAria": "Diagramă de tip linie pentru {column} în timp",
+      "editStructure": "Structură",
+      "defineStructure": "Definește structura",
+      "schemaHint": "Definește câmpurile structurii de date. Câmpurile obligatorii determină politica pentru date lipsă la import; modificarea tipului unui câmp convertește valorile existente (celulele neconvertibile devin goale).",
+      "schemaFieldName": "Nume câmp",
+      "schemaFieldType": "Tip câmp",
+      "schemaRequired": "Obligatoriu",
+      "schemaAddField": "Adaugă câmp",
+      "schemaDeleteField": "Șterge câmpul {field}",
+      "schemaApply": "Aplică structura",
+      "schemaCancel": "Anulează",
+      "schemaEdited": "Structura tabelului a fost editată",
+      "schemaCellsConverted": "{count} celule nu au putut fi convertite la noul tip și acum sunt goale.",
+      "missingFieldPolicy": "Date lipsă",
+      "policyStrict": "Strict — respinge rândurile incomplete",
+      "policyFlag": "Semnalizează — importă și marchează",
+      "policyLenient": "Permisiv — importă fără notificare",
+      "droppedIncompleteRows": "Au fost eliminate {count} rânduri cu câmpuri obligatorii lipsă: {fields}",
+      "dismiss": "Respinge",
+      "requiredColumn": "Câmp obligatoriu",
+      "flagMissingRequired": "Câmpul obligatoriu este gol",
+      "flagPendingEdit": "O propunere de corectare este în așteptare pentru această celulă — vezi revizuirea calității",
+      "fromPhoto": "Din fotografie",
+      "fromPhotoHint": "Fotografiază un formular sau tabel pe hârtie — conținutul va fi transformat în date structurate ce pot fi verificate cu fotografia",
+      "readingPhoto": "Se citește fotografia…",
+      "photoBatchName": "{count} fotografii",
+      "railPhotoRequest": "Extrage date structurate din {count} fotografie(i): {name}",
+      "railPhotoDone": "Adăugate {count} înregistrări din fotografie/fotografii. Verificați-le comparând cu fotografia din spațiul de lucru.",
+      "sourcesLabel": "Surse",
+      "openPhotoQc": "Verificați datele cu {name}",
+      "qcRowsFromPhoto": "{count} rânduri",
+      "qcClose": "Închide verificarea fotografiei",
+      "qcZoomIn": "Măriți",
+      "qcZoomOut": "Micșorați",
+      "qcPrevPhoto": "Fotografie anterioară",
+      "qcNextPhoto": "Fotografie următoare",
+      "qcImageLoading": "Se încarcă fotografia…",
+      "qcImageFailed": "Fotografia nu a putut fi încărcată.",
+      "qcImageAlt": "Fotografie sursă: {name}",
+      "qcHint": "Tabelul afișează doar rândurile acestei fotografii — comparați fiecare valoare cu fotografia și editați sau ștergeți rândurile care nu corespund.",
+      "sourceFilterChip": "Rânduri din {name}",
+      "clearSourceFilter": "Afișați din nou toate rândurile",
+      "viewAsRecord": "Vizualizare formular",
+      "viewAsTable": "Vizualizare tabel",
+      "recordEmpty": "Nicio înregistrare încă.",
+      "recordOf": "Înregistrarea {index} din {count}",
+      "recordPrev": "Înregistrarea anterioară",
+      "recordNext": "Înregistrarea următoare",
+      "recordBooleanUnset": "(gol)",
+      "flagsChip": "{count} marcaje",
+      "flagsChipOpenReview": "Deschideți verificarea calității",
+      "flagsChipMissingOnly": "Câmpurile obligatorii sunt goale — completați-le sau ajustați structura",
+      "autoCheck": "Verificare automată a datelor noi",
+      "autoCheckHint": "După extragerea datelor din fotografii sau documente, rulează automat o verificare a calității pentru rândurile noi",
+      "checkingNewRows": "Se verifică rândurile nou adăugate pentru probleme de calitate…",
+      "ingestCheckFailed": "Verificarea automată a calității a eșuat ({message}) — o puteți rula manual cu Evaluează calitatea.",
+      "assessedIngest": "Rânduri nou adăugate",
+      "transpose": "Transpune",
+      "transposeAxisColumn": "Nume",
+      "transposeSuggestion": "Această tabelă pare transpusă: rândurile sunt atribute, iar coloanele sunt elemente. Să inversăm astfel încât fiecare element să fie pe un rând, iar fiecare atribut să devină o coloană tipizată?",
+      "transposedTable": "Rânduri și coloane transpuse",
+      "columns": "Coloane",
+      "columnsHidden": "Coloane ({count} ascunse)",
+      "showAllColumns": "Afișează tot",
+      "chartScatter": "Puncte dispersate (x vs y)",
+      "chartPivot": "Tabel pivot",
+      "xColumn": "Coloana X",
+      "yColumn": "Coloana Y",
+      "splitByColumn": "Împarte după",
+      "splitNone": "Fără împărțire",
+      "pivotValueColumns": "Coloane de valori",
+      "aggMin": "Minim",
+      "aggMax": "Maxim",
+      "aggMedian": "Mediană",
+      "chartSeriesTruncated": "Se afișează primele {max} serii",
+      "chartPointsTruncated": "Se afișează {max} puncte eșantionate",
+      "chartScatterAria": "Grafic de dispersie {x} versus {y}",
+      "pivotTableAria": "Tabel pivot grupat după {column}",
+      "schemaFormula": "Formulă",
+      "schemaFormulaPlaceholder": "ex: [Cazuri] / [Populație] * 1000",
+      "schemaFormulaHint": "Câmp calculat: referiți la alte câmpuri ca [Nume]; suportă + - * / %, paranteze și round, abs, min, max. Valorile se actualizează automat și nu pot fi editate direct.",
+      "schemaFormulaSyntaxError": "Formulă invalidă",
+      "schemaFormulaUnknownRef": "Câmp necunoscut: {ref}",
+      "schemaFormulaArityError": "Număr incorect de argumente pentru {fn}",
+      "schemaFormulaCycleError": "Referință circulară între formule",
+      "derivedColumnTitle": "Calculat: {formula}",
+      "derivedFrom": "Calculat din {formula}",
+      "takePhoto": "Fă o fotografie",
+      "takePhotoHint": "Folosiți camera pentru a fotografia un formular sau un tabel — conținutul acestuia devine date structurate pe care le puteți verifica cu fotografia"
+    },
+    "map": {
+      "emptyTitle": "Afișați datele pe o hartă",
+      "emptyBody": "Lipiți un sitrep, o listă, notițe de întâlnire sau orice text ce conține denumiri de locuri — sau încărcați un document. Locațiile vor fi identificate și mapate cu un grad de încredere; apoi pot fi exportate pentru ArcGIS sau alte instrumente GIS.",
+      "inputPlaceholder": "Lipiți text cu denumiri de locații…",
+      "uploadFile": "Încărcați un fișier",
+      "pastedSource": "Text lipit",
+      "mapIt": "Mapează",
+      "finding": "Se caută locațiile…",
+      "featureCount": "{count} locații",
+      "featureCapExceeded": "Harta este limitată la {max} locații.",
+      "noneFound": "Nu au fost găsite locații în materialul respectiv.",
+      "lowConfidenceNotice": "{count} locație(i) au coordonate cu încredere scăzută — verificați-le înainte de a vă baza pe hartă.",
+      "tilesOffline": "Tile-urile hărții nu sunt disponibile — lista de locații funcționează totuși.",
+      "disclaimer": "Coordonatele sunt estimate de AI pe baza cunoștințelor modelului, nu de un serviciu de geocodare — verificați înainte de utilizare operațională. Tile-urile hărții sunt încărcate de pe un tile server; datele dumneavoastră rămân pe acest dispozitiv.",
+      "flyTo": "Arată {name} pe hartă",
+      "removeFeature": "Eliminați {name}",
+      "expandFeature": "Afișați toate detaliile pentru {name}",
+      "collapseFeature": "Restrângeți detaliile pentru {name}",
+      "detailsParent": "Parte din {parent}",
+      "railRequest": "Mapează locațiile din: {source}",
+      "railSearchRequest": "Caută pe web și mapează locațiile pentru: {query}",
+      "railDone": "S-au mapat {count} locație(i). Revizuiți cele cu încredere scăzută din listă.",
+      "searchToggle": "Mod căutare web",
+      "searchToggleHint": "Caută pe web în loc să lipești text; rezultatele verificate sunt mapate.",
+      "searchPlaceholder": "Caută pe web, ex. „epidemii de holeră Africa de Est 2026”...",
+      "searchAndMap": "Caută și mapează",
+      "searching": "Se caută...",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "Conexiune: {kind}",
+        "unresolved": "{count} conexiune(i) au făcut referire la locuri care nu apar pe hartă și au fost omise."
+      },
+      "confidence": {
+        "high": "Ridicată",
+        "medium": "Medie",
+        "low": "Scăzută"
+      },
+      "prominence": {
+        "primary": "Locație principală",
+        "secondary": "Locație secundară",
+        "mention": "Menționare pasageră"
+      },
+      "prominenceMentionHint": "Materialul face doar o referire trecătoare la acest loc — apare mai mic pe hartă și nu este inclus în încadratura inițială.",
+      "dates": {
+        "since": "din {date}",
+        "range": "{start} – {end}",
+        "ongoing": "În desfășurare"
+      },
+      "filters": {
+        "label": "Filtrează după categorie",
+        "other": "Altele",
+        "clear": "Șterge",
+        "showing": "{shown} din {total} locații",
+        "noneMatch": "Nicio locație nu corespunde filtrelor curente."
+      },
+      "dateFilter": {
+        "label": "Date",
+        "from": "De la",
+        "to": "Până la",
+        "fromAria": "Arată doar evenimentele de la această dată",
+        "toAria": "Arată doar evenimentele până la această dată",
+        "clear": "Șterge datele",
+        "eraChip": "Afișează doar evenimentele din {label}"
+      },
+      "timeline": {
+        "toggle": "Interval de timp",
+        "play": "Redă intervalul de timp",
+        "pause": "Pauză interval de timp",
+        "eras": "Perioade pe cronologie",
+        "jumpTo": "Sari la {label}",
+        "slider": "Poziție pe axa timpului",
+        "showUndated": "Afișează locațiile fără dată",
+        "activeCount": "{count} active",
+        "jump": {
+          "start": "Început",
+          "yearsLater": "{count, plural, one {1 an mai târziu} other {# ani mai târziu}}",
+          "monthsLater": "{count, plural, one {1 lună mai târziu} other {# luni mai târziu}}",
+          "daysLater": "{count, plural, one {1 zi mai târziu} other {# zile mai târziu}}",
+          "appears": "{count, plural, one {1 apariție} other {# apariții}}",
+          "ends": "{count, plural, one {1 sfârșit} other {# sfârșituri}}",
+          "progress": "Data {index} din {total}"
+        },
+        "precision": {
+          "minute": "La minut",
+          "hour": "La oră",
+          "day": "La zi",
+          "month": "Datare la nivel de lună",
+          "year": "Datare la nivel de an",
+          "mixed": "(mixt)"
+        },
+        "pacing": {
+          "toggle": "Ritm redare",
+          "cardDuration": "Afișează fiecare locație timp de",
+          "seconds": "{seconds}s",
+          "maxCards": "Locații afișate pe dată",
+          "hint": "Datele mai aglomerate sunt menținute mai mult automat."
+        }
+      },
+      "granularity": {
+        "site": "Locație",
+        "city": "Oraș/sat",
+        "district": "District",
+        "region": "Regiune",
+        "country": "Țară"
+      },
+      "granularityAreaHint": "O zonă, prezentată ca un cerc de extindere aproximativă în jurul centrului — nu o locație sau o limită precisă.",
+      "containerHint": "Conține alte locații mapate, deci este afișată doar ca contur.",
+      "legend": {
+        "toggle": "Legendă",
+        "title": "Cum se citește harta",
+        "color": "Culoare: încredere coordonate (albastru ridicat, portocaliu mediu, roșu scăzut)",
+        "size": "Dimensiune punct: cât de centrală este locația pentru material",
+        "area": "Cerc întrerupt: extindere aproximativă a unui district, regiuni sau țări",
+        "container": "Contur estompat: o zonă ale cărei conținuturi sunt cartografiate individual",
+        "precisionHalo": "Contur punctat subtire (în timpul unui timelapse): evenimentul este datat doar la lună sau an, deci momentul exact nu este sigur"
+      },
+      "sourceLabel": "Sursă: {name}",
+      "fetchAndMap": "Preia și asociază",
+      "fetchingPage": "Se preia pagina…",
+      "railUrlRequest": "Preluați și asociați locațiile din: {title} ({url})"
+    },
+    "shell": {
+      "showConversation": "Afișează conversația",
+      "hideConversation": "Ascunde conversația",
+      "workspaceTab": "Spațiu de lucru",
+      "conversationTab": "Conversație",
+      "paneTabsLabel": "Panouri flux de lucru",
+      "railEmpty": "Mesajele și progresul asistentului vor apărea aici.",
+      "railInputPlaceholder": "Trimite un mesaj asistentului...",
+      "assistantThinking": "Se gândește...",
+      "sendMessage": "Trimite mesaj",
+      "stopGenerating": "Oprește generarea",
+      "loadingWorkspace": "Se încarcă spațiul de lucru...",
+      "unknownType": "Această conversație folosește un flux de lucru nerecunoscut de această versiune. Istoricul conversației este afișat mai jos.",
+      "untitled": "Conversație nouă",
+      "toggleMenu": "Comută meniul",
+      "model": "Model pentru acest flux de lucru"
+    },
+    "tabs": {
+      "label": "Mod conversație",
+      "chat": "Chat",
+      "chatDescription": "O conversație standard cu asistentul"
+    },
+    "discard": {
+      "title": "Renunțați la această schiță?",
+      "body": "Comutarea la {target} va șterge munca începută în {current}.",
+      "confirm": "Renunță"
+    }
+  },
+  "connectors": {
+    "title": "Conectori",
+    "description": "Conectați instrumente externe prin Model Context Protocol (MCP). Instrumentele conectate devin disponibile pentru modele în chat și fiecare apel de instrument rulează doar după ce îl aprobați.",
+    "localOnlyNote": "Vă autentificați direct cu fiecare furnizor. Cheile de acces sunt criptate și stocate doar pe acest dispozitiv, fiind retransmise prin serverul aplicației la fiecare cerere — niciodată stocate sau logate acolo.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "Căutați depozite, citiți și creați issue-uri și pull request-uri."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "Găsiți, creați și actualizați sarcini și proiecte."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Interogați surse de date publicate, workbook-uri și metrici Pulse."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Căutați și actualizați înregistrări între obiectele Salesforce."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Creați, programați și publicați postări pe rețelele de socializare."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Revizuiți și răspundeți la conversații din inbox-ul social."
+      }
+    },
+    "connect": "Conectați",
+    "connected": "Conectat",
+    "tokenEndsIn": "se termină cu ••••{last4}",
+    "disconnect": "Deconectați",
+    "toolCount": "{count, plural, =1 {1 instrument disponibil} other {# instrumente disponibile}}",
+    "patLabel": "Token de acces personal",
+    "createTokenLink": "Creați un token",
+    "tokenScopeHint": "Folosiți un token cu permisiuni detaliate, doar cu accesul necesar acestor instrumente.",
+    "validating": "Verificare conexiune...",
+    "validationFailed": "Conectarea a eșuat. Verificați adresa și încercați din nou.",
+    "authFailed": "Serverul a respins tokenul. Verificați-l și încercați din nou.",
+    "tokenRequired": "Este necesar un token",
+    "enableServer": "Disponibil în chat",
+    "arbitraryTitle": "Alte servere MCP",
+    "arbitraryToggle": "Permiteți servere MCP arbitrare",
+    "arbitraryWarning": "Oricine gestionează un server MCP poate vedea mesajele trimise către instrumentele acestuia. Conectați doar servere de încredere. Fiecare apel de instrument necesită în continuare aprobarea dvs.",
+    "addServer": "Adăugați server MCP",
+    "editServer": "Editați serverul MCP",
+    "serverName": "Nume",
+    "serverUrl": "URL server",
+    "nameRequired": "Numele este necesar",
+    "urlRequired": "URL-ul este necesar",
+    "invalidUrl": "Introduceți o adresă publică https://",
+    "namePlaceholder": "Serverul meu MCP",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "Token de acces (opțional)",
+    "keepTokenPlaceholder": "Lăsați necompletat pentru a păstra tokenul curent",
+    "disconnectedToast": "{name} deconectat",
+    "save": "Salvați",
+    "connectWithProvider": "Conectați-vă cu {name}",
+    "useTokenInstead": "Utilizați un token de acces în schimb",
+    "oauthWaiting": "Se așteaptă autorizarea…",
+    "oauthFailed": "Autentificarea a eșuat. Încercați din nou.",
+    "oauthDenied": "Accesul a fost refuzat de furnizor.",
+    "oauthTimeout": "Autentificarea a expirat. Încercați din nou.",
+    "oauthCancelled": "Autentificarea a fost anulată.",
+    "oauthUnavailable": "Autentificarea nu este disponibilă pentru acest conector pe această implementare. Folosiți un token de acces sau solicitați administratorului să configureze aplicația OAuth.",
+    "ownAppToggle": "Utilizați propria aplicație OAuth",
+    "ownAppHint": "Înregistrați o aplicație OAuth în contul dvs. {name} (organizația, spațiul de lucru sau instanța enterprise) cu URL-ul de redirect de mai jos, apoi introduceți aici datele de autentificare. Lăsați această opțiune închisă pentru a folosi aplicația implicită.",
+    "ownAppCustomHint": "Opțional, furnizați mai jos datele aplicației OAuth proprii; lăsați câmpurile necompletate pentru înregistrare automată cu serverul.",
+    "ownAppInUse": "Conectat cu aplicația dvs. OAuth.",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client secret (dacă aplicația dvs. are unul)",
+    "redirectUriLabel": "URL de redirect/callback de înregistrat",
+    "reconnect": "Reconectați",
+    "needsReauth": "Necesită reconectare",
+    "disconnectOauthNote": "Deconectarea elimină accesul doar de pe acest dispozitiv. Pentru a revoca complet accesul, gestionați aplicațiile autorizate din contul dvs. {name}.",
+    "authModeLabel": "Autentificare",
+    "authModeNone": "Nicio",
+    "authModeBearer": "Token de acces",
+    "authModeOauth": "Autentificați-vă cu furnizorul (OAuth)",
+    "oauthCustomHint": "Vă veți autentifica cu furnizorul serverului într-o fereastră pop-up după salvare.",
+    "saveAndSignIn": "Salvați și autentificați-vă",
+    "oauthCallback": {
+      "title": "Autorizare finalizată",
+      "missingState": "Nimic de autorizat",
+      "close": "Puteți închide această fereastră și să reveniți la aplicație.",
+      "closeButton": "Închideți fereastra"
+    },
+    "oauthNoAppConfigured": "Autentificarea cu {name} nu este configurată pe această implementare. Conectați-vă înregistrând propria aplicație OAuth.",
+    "adminConnectorsTitle": "De la organizația dumneavoastră",
+    "adminConnectorsDescription": "Conectori instalați de administratorii dvs. Ce conectori vedeți depinde de accesul dumneavoastră.",
+    "managedByOrg": "Administrat de organizația dumneavoastră",
+    "connectorOauthNotConfigured": "Autentificarea nu este finalizată pentru acest conector. Contactați administratorul.",
+    "yourConnectorsTitle": "Conectorii dumneavoastră",
+    "addTitle": "Adăugați un conector",
+    "addDescription": "Alegeți un instrument pentru conectare. Veți configura accesul după selectare.",
+    "add": "Adaugă",
+    "filterLabel": "Filtrați conectorii",
+    "filterPlaceholder": "Căutați conectori",
+    "noMatches": "Niciun conector nu corespunde cu „{query}”."
+  },
+  "modelSources": {
+    "connectButtonShort": "Conectați o sursă de modele",
+    "addAnother": "Adăugați o altă sursă de modele",
+    "edit": "Editare",
+    "disconnect": "Deconectați {name}",
+    "disconnectedToast": "{name} a fost deconectat",
+    "modelCountLabel": "{count} modele",
+    "loadingModels": "Se încarcă modelele...",
+    "noModelsAvailable": "Nu sunt disponibile modele din această sursă",
+    "sourceUnreachable": "Nu s-a putut accesa această sursă. Poate că accesul dvs. s-a modificat sau serviciul nu este disponibil temporar.",
+    "retry": "Reîncercați",
+    "connectFoundryAccount": "Conectați un cont Microsoft Azure Foundry",
+    "connectFoundryDescription": "Descoperiți implementări de modele dintr-un cont Azure Foundry la care aveți acces. Permisiunile dvs. Azure autorizează fiecare solicitare — restricțiile de modele ale aplicației nu se aplică aici.",
+    "selectModelsDescription": "Alegeți care implementări de modele din acest cont apar în selectorul dvs. de modele.",
+    "editConnection": "Editare conexiune",
+    "nameLabel": "Nume",
+    "namePlaceholder": "ex: Sandbox Echipa Mea",
+    "nameRequired": "Este necesar un nume pentru sursă",
+    "foundryAccountLabel": "Cont Foundry",
+    "enterManually": "Introducere manuală",
+    "browseResources": "Răsfoiți resursele",
+    "subscriptionIdLabel": "ID abonament",
+    "resourceGroupLabel": "Grup de resurse",
+    "accountNameLabel": "Nume cont",
+    "subscriptionRequired": "Alegeți un abonament",
+    "accountRequired": "Alegeți un cont Foundry",
+    "accountSelectionRequired": "Selectați un cont din listă.",
+    "selectAllRequired": "Selectați abonament, grup de resurse și cont.",
+    "connectionFailed": "Nu s-a putut accesa acest cont. Verificați dacă datele sunt corecte și dacă aveți acces.",
+    "duplicateSource": "Acest cont este deja conectat ca „{name}”.",
+    "connectionSuccessModels": "Conectat — găsite {count} implementări de model",
+    "connectionSuccessEmpty": "Conectat, dar nu s-au găsit implementări de modele pe acest cont.",
+    "checkingConnection": "Se verifică conexiunea...",
+    "next": "Următorul",
+    "back": "Înapoi",
+    "cancel": "Anulați",
+    "connect": "Conectează",
+    "save": "Salvează",
+    "scanningResources": "Se scanează abonamentele Azure...",
+    "discoveryPartialWarning": "{count, plural, one {# abonament} other {# abonamente}} nu au putut fi scanate. Folosiți introducerea manuală dacă lipsește contul.",
+    "discoveryTruncatedWarning": "Au existat prea multe resurse pentru a fi scanate complet. Folosiți introducerea manuală dacă lipsește contul.",
+    "noAccountsDiscovered": "Nu au fost găsite conturi Foundry în abonamentele dumneavoastră. Folosiți introducerea manuală dacă știți calea.",
+    "retryScan": "Reîncearcă scanarea",
+    "searchAccountsPlaceholder": "Caută conturi...",
+    "modelsSelectedCount": "{selected} din {total} modele selectate",
+    "selectAll": "Selectează tot",
+    "deselectAll": "Deselectează tot",
+    "autoAddLabel": "Adaugă automat modele noi",
+    "autoAddDescription": "Implementările de modele adăugate ulterior în acest cont vor apărea automat. Modelele debifate rămân excluse."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Impact scăzut",
+      "moderate": "Impact moderat",
+      "high": "Impact ridicat"
+    },
+    "tierTooltip": "Impactul energetic relativ per cerere, estimat pe baza dimensiunii modelului. Acestea sunt estimări bazate pe medii publicate și presupuneri v{version} — nu măsurători.",
+    "typicalRequest": "~{grams} g CO₂e per cerere tipică",
+    "typicalRequestTooltip": "Estimare brută per cerere pentru o cerere tipică (aproximativ 1.000 de tokenuri prompt și 500 de tokenuri completare), derivată din medii și presupuneri publicate v{version}. Impactul real variază în funcție de lungimea conversației, setări și regiunea de găzduire.",
+    "activities": {
+      "netflixHd": "Vizionare Netflix HD",
+      "zoomCall": "Apel Zoom (cu cameră pornită)",
+      "webBrowsing": "Navigare web",
+      "spotifyAudio": "Audio Spotify"
+    },
+    "equivalents": {
+      "title": "≈ același carbon ca",
+      "note": "Comparare a emisiilor de carbon cu amprentele publicate pe oră ale acestor servicii — valori aproximative, orientative, ca toate estimările de aici."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} h"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Amprenta estimată de carbon a acestei conversații: {grams} grame echivalent CO₂. Afișează detalii.",
+      "ariaLabelToday": "Amprenta estimată de carbon a acestei conversații astăzi: {grams} grame echivalent CO₂. Afișează detalii.",
+      "title": "Această conversație (estimat)",
+      "today": "Astăzi",
+      "total": "Tot timpul",
+      "measured": "Pe baza numărului raportat de tokeni",
+      "estimated": "Recalculat pentru mesajele vechi",
+      "lastRequest": "Ultima cerere",
+      "disclaimer": "Estimări la nivel de cerere pe baza numărului de tokeni raportați sau aproximați, folosind medii și ipoteze publicate v{version}. Mesajele mai vechi sunt recalculate pe baza textului stocat și a modelului de conversație curent. Nu reprezintă o măsurare.",
+      "visibilityGroup": "Vizibilitate insignă emisii",
+      "visibilityLabel": "Afișează:",
+      "visibility": {
+        "always": "Întotdeauna",
+        "auto": "Automat",
+        "hidden": "Ascunde"
+      },
+      "visibilityHint": "Modul automat afișează insigna când estimarea se actualizează sau la trecerea mouse-ului peste. Poți schimba această opțiune oricând din Setări › Utilizare & Impact."
+    }
+  },
+  "table": {
+    "copyTable": "Copiază tabelul",
+    "downloadTable": "Descarcă tabelul",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Exportat ca CSV",
+    "copyFailed": "Copierea tabelului a eșuat"
+  },
+  "backup": {
+    "intro": {
+      "title": "Salvați conversațiile — în siguranță",
+      "body": "Conversațiile sunt criptate pe acest dispozitiv înainte de a fi încărcate. Noi nu putem citi mesajele dumneavoastră.",
+      "keyWarning": "Cheia de recuperare este generată pe acest dispozitiv. Nu o vedem niciodată și nu o putem recupera — dacă o pierdeți, pierdeți și backupul.",
+      "create": "Creează cheia mea și efectuează backup",
+      "decline": "Nu acum — păstrează conversațiile doar pe acest dispozitiv"
+    },
+    "ceremony": {
+      "titleCreate": "Salvați cheia de recuperare",
+      "titleRotate": "Salvați noua cheie de recuperare",
+      "titleView": "Cheia dumneavoastră de recuperare",
+      "description": "Această cheie este singura modalitate de a restaura backupul pe un alt dispozitiv. Păstrați-o într-un loc sigur — nu o putem recupera pentru dumneavoastră.",
+      "copy": "Copiază",
+      "copied": "Copiat!",
+      "download": "Descarcă .txt",
+      "showQr": "Afișează cod QR",
+      "hideQr": "Ascunde cod QR",
+      "savedCheckbox": "Am salvat cheia de recuperare într-un loc sigur",
+      "saveFirstHint": "Copiați sau descărcați cheia înainte de a continua.",
+      "continue": "Continuă",
+      "done": "Gata",
+      "cancel": "Anulează",
+      "cancelConfirmTitle": "Anulați configurarea backupului?",
+      "cancelConfirmBody": "Conversațiile nu vor fi salvate în backup. Puteți activa oricând backupul criptat din Setări.",
+      "cancelConfirmRotateBody": "Cheia de recuperare a fost deja modificată. O puteți vizualiza oricând în Setări.",
+      "cancelConfirmConfirm": "Da, anulează",
+      "cancelConfirmDismiss": "Înapoi",
+      "loadError": "Nu am putut încărca cheia de recuperare pe acest dispozitiv."
+    },
+    "file": {
+      "heading": "Cheia de recuperare a backupului conversațiilor",
+      "warning": "Păstrați această cheie în siguranță. Oricine o deține poate accesa backupul; fără ea, backupul nu poate fi recuperat."
+    },
+    "progress": {
+      "titleCreate": "Configurare backup",
+      "titleRotate": "Schimbare cheie de recuperare",
+      "encrypting": "{count, plural, one {Se criptează și se salvează # conversație…} other {Se criptează și se salvează # conversații…}}",
+      "success": "{count, plural, one {Backup finalizat. # conversație este protejată.} other {Backup finalizat. # conversații sunt protejate.}}",
+      "error": "Backupul a eșuat. Conversațiile sunt în continuare pe acest dispozitiv.",
+      "retry": "Reîncercați",
+      "close": "Închide",
+      "done": "Gata"
+    },
+    "input": {
+      "label": "Cheie de recuperare",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Cheile nu conțin literele O, I sau L.",
+      "checksumError": "Acea cheie nu pare corectă — verificați dacă există greșeli de tastare.",
+      "formatError": "Aceasta nu pare a fi o cheie de recuperare.",
+      "incomplete": "Continuați să scrieți — o cheie de recuperare are 56 de caractere.",
+      "valid": "Cheia pare validă."
+    },
+    "restore": {
+      "title": "Restaurați conversațiile",
+      "successTitle": "Backup restaurat",
+      "promptBody": "Am găsit un backup criptat pentru contul dumneavoastră. Introduceți cheia de recuperare pentru a-l restaura pe acest dispozitiv.",
+      "submit": "Restaurează backup-ul",
+      "skip": "Omiteți — începeți de la zero pe acest dispozitiv",
+      "restoring": "Se decriptează și se restaurează conversațiile…",
+      "successBody": "{count, plural, one {# conversație restaurată.} other {# conversații restaurate.}}",
+      "wrongKey": "Acea cheie este validă, dar nu deblochează acest backup. Dacă ați schimbat cheia, folosiți-o pe cea mai recentă.",
+      "corrupt": "Acest backup nu a putut fi citit — este posibil să fie deteriorat. Puteți începe de la zero pe acest dispozitiv sau încercați din nou mai târziu.",
+      "networkError": "Nu s-a putut accesa serviciul de backup. Verificați conexiunea și încercați din nou.",
+      "tryAgain": "Încercați altă cheie",
+      "close": "Gata"
+    },
+    "enterKey": {
+      "title": "Introduceți noua cheie de recuperare",
+      "body": "Cheia de recuperare a fost schimbată pe un alt dispozitiv. Introduceți noua cheie pentru a relua backup-urile pe acest dispozitiv.",
+      "submit": "Folosiți această cheie"
+    },
+    "banner": {
+      "keyMismatchTitle": "Backup-urile sunt întrerupte — cheia de recuperare a fost schimbată pe un alt dispozitiv.",
+      "enterNewKey": "Introduceți noua cheie",
+      "resetBackup": "Resetați backup-ul",
+      "resetConfirmTitle": "Resetați backup-ul cu cheia acestui dispozitiv?",
+      "resetConfirmBody": "Backup-ul existent va fi înlocuit cu conversațiile de pe acest dispozitiv, criptate cu cheia acestui dispozitiv. Alte dispozitive vor avea nevoie de cheia de recuperare a acestui dispozitiv.",
+      "resetConfirmAction": "Resetați backup-ul",
+      "remoteMissingTitle": "Backup-ul nu mai există pe server. Backup-urile sunt întrerupte.",
+      "backUpAgain": "Creați din nou backup",
+      "dismiss": "Închideți"
+    },
+    "rotate": {
+      "confirmTitle": "Schimbați cheia de recuperare?",
+      "confirmBody": "Backup-ul va fi re-criptat cu o nouă cheie, iar cheia veche nu va mai funcționa. Trebuie să salvați noua cheie și să o introduceți pe celelalte dispozitive.",
+      "confirmAction": "Schimbați cheia"
+    },
+    "toast": {
+      "enrollLater": "Puteți activa oricând backup-ul criptat din Setări.",
+      "keyUpdated": "Cheia de recuperare a fost actualizată. Backup-urile au fost reluate.",
+      "resetDone": "Backup-ul a fost resetat cu cheia acestui dispozitiv.",
+      "backupRestarted": "Backup-ul a fost creat din nou.",
+      "opFailed": "Ceva nu a funcționat. Vă rugăm să încercați din nou."
+    },
+    "settings": {
+      "statusOn": "Backup-ul este activ",
+      "statusOff": "Backup-ul este inactiv",
+      "offDescription": "Conversațiile dumneavoastră există doar în acest browser. Activați backup-ul criptat pentru a le păstra în siguranță și a le putea restaura pe alte dispozitive. Conversațiile sunt criptate pe dispozitivul dumneavoastră — noi nu le putem citi niciodată.",
+      "turnOn": "Activați backup-ul",
+      "restoreTitle": "Există deja un backup pentru contul dumneavoastră",
+      "restoreDescription": "Introduceți cheia de recuperare pentru a-l restaura pe acest dispozitiv.",
+      "restore": "Restaurează backup-ul",
+      "lastBackup": "Ultimul backup: {time}",
+      "lastBackupNever": "Niciun backup finalizat până acum",
+      "keyFingerprint": "Cheie ····-{tail}",
+      "syncState": {
+        "idle": "Se așteaptă sincronizarea",
+        "syncing": "Se face backup…",
+        "ok": "La zi",
+        "keyOutOfDate": "Pauză — cheia de recuperare a fost schimbată pe un alt dispozitiv",
+        "remoteMissing": "Pauzat — backup-ul a fost eliminat de pe server",
+        "error": "Ultima încercare de backup a eșuat"
+      },
+      "backUpNow": "Efectuează backup acum",
+      "backUpNowSuccess": "Backup finalizat",
+      "backUpNowFailure": "Backup-ul a eșuat — conversațiile de pe acest dispozitiv au rămas neschimbate",
+      "viewKey": "Vezi cheia de recuperare",
+      "changeKey": "Schimbă cheia de recuperare",
+      "dangerTitle": "Zonă periculoasă",
+      "turnOffDelete": "Dezactivează și șterge backup-ul",
+      "turnOffConfirmTitle": "Dezactivați backup-ul?",
+      "turnOffConfirmMessage": "Aceasta va șterge backup-ul de pe serverele noastre pentru toate dispozitivele. Conversațiile rămân pe acest dispozitiv. Puteți reactiva backup-ul mai târziu folosind o nouă cheie de recuperare.",
+      "turnOffConfirmAction": "Șterge backup-ul",
+      "turnOffSuccess": "Backup-ul a fost dezactivat și șters",
+      "turnOffFailure": "Nu s-a putut șterge backup-ul. Vă rugăm să încercați din nou."
+    }
+  },
+  "memories": {
+    "title": "Amintiri",
+    "description": "Permite asistentului să rețină informații durabile pe care le împărtășiți — precum rolul, preferințele și proiectele în desfășurare — și să le utilizeze în conversații.",
+    "enableToggle": "Activează amintirile",
+    "privacyNote": "Informațiile sunt stocate doar în acest browser și sunt incluse în conversațiile dvs. pentru personalizarea răspunsurilor.",
+    "empty": "Nicio amintire încă. Informațiile relevante sunt salvate automat din conversațiile dvs.",
+    "savedOn": "Salvat la {date}",
+    "deleteMemory": "Șterge amintirea",
+    "clearAll": "Șterge toate amintirile",
+    "clearAllConfirmQuestion": "Ștergeți toate amintirile? Această acțiune nu poate fi anulată.",
+    "clearAllConfirm": "Șterge tot",
+    "cancel": "Anulează"
+  },
+  "contextWindow": {
+    "label": "Fereastră de context",
+    "value": "{count} mesaje",
+    "fewer": "Mai puține mesaje",
+    "more": "Mai multe mesaje",
+    "description": "Mesajele mai vechi care depășesc această limită sunt rezumate și trimise ca context."
+  },
+  "agentAccess": {
+    "title": "Acces agent",
+    "description": "Controlați care utilizatori pot folosi agenții Foundry partajați. Regulile doar restricționează suplimentar ceea ce permite deja accesul Azure al utilizatorului — nu se poate acorda acces dacă Azure îl refuză.",
+    "backToChat": "Înapoi la chat",
+    "loading": "Se încarcă agenții și regulile…",
+    "loadError": "Nu s-au putut încărca datele de acces ale agentului.",
+    "rulesUnavailableWarning": "Regulile de acces nu au putut fi încărcate din stocare. Invocarea agentului este momentan blocată și regulile nu pot fi editate.",
+    "retry": "Reîncercați",
+    "rulesTab": "Reguli agent",
+    "localAdminsTab": "Administratori locali",
+    "noAgents": "Nu există agenți de administrat.",
+    "sourceLabel": "Sursă",
+    "notDiscoverable": "Neaccesibil pentru dvs.",
+    "notDiscoverableHint": "Există o regulă pentru acest agent, dar nu apare în lista dvs. de descoperire — este posibil să fi fost redenumit, accesul dvs. Azure să nu ajungă la el sau regula de acces să nu vă includă.",
+    "accessEveryone": "Toți",
+    "accessRestricted": "Restricționat",
+    "edit": "Editează",
+    "updatedByLine": "Ultima actualizare de {user} la {date}",
+    "accessTypeLabel": "Cine poate folosi acest agent",
+    "everyoneDescription": "Oricine are deja acces la acest agent prin Azure.",
+    "restrictedDescription": "Doar utilizatorii și domeniile enumerate mai jos.",
+    "allowDomainsLabel": "Domenii permise",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Utilizatori permisi",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Apăsați Enter pentru a adăuga",
+    "removeChip": "Elimină",
+    "groupsLabel": "Grupuri permise",
+    "groupsPendingConsent": "Accesul pe baza grupului este în așteptarea consimțământului administratorului chiriașului și nu poate fi editat momentan.",
+    "restrictedEmptyWarning": "Nu există utilizatori sau domenii listate — nimeni nu va putea utiliza acest agent.",
+    "save": "Salvează",
+    "saving": "Se salvează…",
+    "cancel": "Anulează",
+    "saveSuccess": "Regula de acces a fost salvată.",
+    "deleteSuccess": "Regula de acces a fost eliminată — toată lumea poate folosi din nou acest agent.",
+    "saveError": "Nu s-a putut salva. Vă rugăm să încercați din nou.",
+    "conflictError": "Altcineva a făcut modificări în timp ce editați. Reîncărcați pentru a încărca cea mai recentă versiune, apoi efectuați din nou modificarea.",
+    "reload": "Reîncărcați",
+    "localAdminsDescription": "Delegați gestionarea regulilor pentru anumiți agenți fără redeploy. Administratorii locali pot edita doar regulile pentru agenții desemnați lor.",
+    "noLocalAdmins": "Nu sunt configurați administratori locali.",
+    "addLocalAdmin": "Adaugă administrator local",
+    "emailLabel": "Email",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Elimină administrator local",
+    "delegatedAgentsLabel": "Agenți delegați",
+    "noDelegatedAgents": "Nu există agenți disponibili pentru delegare.",
+    "unknownAgentKey": "Cheie de agent necunoscută",
+    "configSaveSuccess": "Administratorii locali au fost salvați.",
+    "configConflictError": "Altcineva a modificat lista administratorilor locali în timp ce editați. Reîncărcați și încercați din nou.",
+    "addAgent": "Adaugă agent",
+    "newPromptAgentTitle": "Agent nou de prompt",
+    "editPromptAgentTitle": "Editează agentul de prompt",
+    "agentNameLabel": "Nume",
+    "agentNamePlaceholder": "ex: Consultant de călătorii",
+    "agentDescriptionLabel": "Descriere",
+    "agentDescriptionPlaceholder": "Afișat utilizatorilor în selectorul de modele",
+    "agentSystemPromptLabel": "Prompt de sistem",
+    "agentSystemPromptPlaceholder": "Instrucțiuni care definesc comportamentul acestui agent",
+    "agentModelLabel": "Model",
+    "agentModelPlaceholder": "Selectează un model...",
+    "agentModelUnavailable": "{modelId} (indisponibil)",
+    "agentModelUnknownError": "Modelul selectat nu mai este disponibil. Alegeți alt model și salvați din nou.",
+    "promptAgentBadge": "Agent de prompt",
+    "editAgent": "Editează agentul",
+    "deleteAgent": "Șterge",
+    "deleteAgentConfirm": "Ștergeți acest agent pentru toți utilizatorii? Acesta va dispărea din selectorul de modele; conversațiile existente își păstrează istoricul.",
+    "confirmDeleteAgent": "Da, șterge",
+    "promptAgentCreateSuccess": "Agentul de prompt a fost creat.",
+    "promptAgentSaveSuccess": "Agentul de prompt a fost salvat.",
+    "promptAgentDeleteSuccess": "Agentul de prompt a fost șters.",
+    "promptAgentsUnavailableWarning": "Agenții de prompt nu au putut fi încărcați din stocare. Nu pot fi editați în acest moment.",
+    "agentsTab": "Agenți",
+    "connectorsTab": "Conectori",
+    "addConnector": "Adăugați conector",
+    "noConnectors": "Nu există încă niciun conector.",
+    "connectorsUnavailableWarning": "Nu s-a putut accesa magazinul de conectori, așa că această listă poate fi incompletă. Nu creați un înlocuitor până nu se încarcă.",
+    "editAccess": "Editați accesul",
+    "deleteConnector": "Ștergeți",
+    "deleteConnectorConfirm": "Ștergeți acest conector? Oricine îl folosește va pierde imediat accesul.",
+    "confirmDeleteConnector": "Ștergeți conectorul",
+    "connectorSaveSuccess": "Conectorul a fost salvat.",
+    "connectorCreateSuccess": "Conectorul a fost creat.",
+    "connectorDeleteSuccess": "Conectorul a fost șters.",
+    "editConnectorTitle": "Editați conectorul",
+    "newConnectorTitle": "Conector nou",
+    "connectorPresetLabel": "Pornire de la un template",
+    "connectorPresetNone": "Pornește de la zero",
+    "connectorNameLabel": "Nume",
+    "connectorDescriptionLabel": "Descriere",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "Înlocuiți {placeholder} din URL cu valoarea proprie înainte de a salva.",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Autentificare",
+    "connectorAuthNone": "Nicio",
+    "connectorAuthBearer": "Token (fiecare utilizator furnizează propriul token)",
+    "connectorAuthOauth": "Autentificare OAuth",
+    "connectorSealingUnavailable": "OAuth nu este disponibil: această implementare nu are AUTH_SECRET configurat pentru a cripta secretele clientului.",
+    "connectorTokenHelpLabel": "Link către instrucțiunile pentru token (opțional)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "Secret client OAuth",
+    "connectorClientSecretStored": "Un secret este salvat. Lăsați necompletat pentru a-l păstra sau introduceți unul nou pentru a-l înlocui.",
+    "connectorClientSecretHint": "Este criptat înainte de stocare și nu va mai fi afișat ulterior.",
+    "connectorScopesLabel": "Scope-uri (separate prin spațiu, opțional)"
+  },
+  "localModels": {
+    "title": "Modele locale",
+    "description": "Conversați cu modele care rulează pe acest computer. Mesajele merg direct din browserul dvs. către aplicația locală și nu ajung niciodată pe serverele noastre — astfel, răspunsurile, titlurile și rezumatele conversațiilor rămân pe propriul dispozitiv.",
+    "detect": "Detectează runtime-urile locale",
+    "detecting": "Se detectează…",
+    "experimental": "Experimental",
+    "portLabel": "Port",
+    "statusUnknown": "Nu a fost verificat încă.",
+    "statusChecking": "Se verifică…",
+    "statusReady": "{count, plural, =0 {Conectat, dar niciun model încărcat.} one {Conectat — # model disponibil.} other {Conectat — # modele disponibile.}}",
+    "statusNotRunning": "Nu s-a putut accesa {label}. Verificați dacă rulează pe acest port și dacă browserul permite accesul către aplicațiile locale de pe acest site.",
+    "statusHttpError": "{label} a răspuns cu o eroare. Verificați log-urile sale.",
+    "corsHelp": {
+      "ollama": "Ollama rulează, dar refuză solicitările de pe acest site. Setați OLLAMA_ORIGINS la adresa acestui site, reporniți Ollama și apoi detectați din nou.",
+      "lmstudio": "LM Studio rulează, dar refuză solicitările de pe acest site. Activați CORS în setările serverului local, apoi detectați din nou.",
+      "llamacpp": "llama.cpp rulează, dar refuză solicitările de pe acest site. Porniți llama-server cu permisiunea pentru cereri cross-origin, apoi detectați din nou."
+    },
+    "privacyNote": "Modelele locale nu suportă atașamente de fișiere, imagini, căutare web sau conectori — acestea necesită serverele noastre. Detectarea verifică doar acest computer."
+  },
+  "urlFetch": {
+    "sourceFallback": "Pagină web",
+    "fallbackHint": "Puteți deschide pagina, copia textul și lipi aici în schimb.",
+    "shortExtract": "Doar un scurt extras a putut fi citit — este posibil ca pagina să fie restricționată sau să necesite autentificare.",
+    "errors": {
+      "invalidUrl": "Aceasta nu pare a fi o adresă web validă.",
+      "ssrfBlocked": "Această adresă nu poate fi preluată din motive de securitate.",
+      "tooManyRedirects": "Acest link a redirecționat de prea multe ori.",
+      "timeout": "Pagina a răspuns prea târziu.",
+      "unreachable": "Pagina nu a putut fi accesată.",
+      "blocked": "Site-ul a refuzat cererea — poate necesita autentificare sau blochează cititorii automați.",
+      "notFound": "Pagina nu a fost găsită.",
+      "upstream": "Site-ul a returnat o eroare.",
+      "pdf": "Acest link duce la un PDF. Descarcă fișierul și folosește butonul de atașare pentru a-l adăuga.",
+      "nonHtml": "Acest link nu duce la o pagină web care poate fi citită.",
+      "tooLarge": "Pagina este prea mare pentru a fi preluată.",
+      "empty": "Nu a fost găsit text citibil pe acea pagină.",
+      "generic": "Pagina nu a putut fi preluată."
+    },
+    "fetchingFile": "Se preia {host}…",
+    "attachLink": "Atașează un link",
+    "attachLinkTitle": "Atașează o pagină web",
+    "attachLinkDescription": "Pagina este preluată, iar textul citibil este atașat la mesajul dvs.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Preia & atașează",
+    "attachLinkInvalid": "Acesta nu pare a fi un link web valid.",
+    "linkBadge": "Dintr-un link",
+    "couldNotRetrieve": "Nu a putut fi preluat",
+    "doc": {
+      "sourceLabel": "Sursă",
+      "retrievedLabel": "Preluat",
+      "attemptedLabel": "Încercat",
+      "failureHeading": "Pagina web nu a putut fi preluată"
+    },
+    "settingsTitle": "Linkuri în mesaje",
+    "settingsToggle": "Preia automat linkurile lipite",
+    "settingsDescription": "Când lipești un link separat, pagina este preluată, iar textul ei este atașat pentru ca asistentul să îl poată citi. Dezactivează această opțiune pentru a păstra linkurile doar ca text simplu — poți totuși atașa manual o pagină din meniul +.",
+    "addLink": "Adaugă un link"
+  },
+  "cameraAccessError": "Nu s-a putut accesa camera. Verificați permisiunile camerei și încercați din nou.",
+  "cameraUnnamedDevice": "Cameră",
+  "pastedText": {
+    "fallbackName": "Text lipit",
+    "charCount": "{count, number} caractere",
+    "removeChip": "Șterge textul lipit „{name}”",
+    "blockLabel": "Text lipit: {name}",
+    "doc": {
+      "heading": "Text lipit",
+      "pastedLabel": "Lipit"
+    },
+    "settingsTitle": "Lipituri mari",
+    "settingsToggle": "Transformă un lipit mare în atașament",
+    "settingsDescription": "Dacă lipiți mai mult text decât limita de mai jos, acesta va fi atașat ca fișier, nu introdus în câmpul mesajului. Textul se folosește exact așa cum a fost lipit — nu se preia și nu se modifică nimic.",
+    "settingsThresholdLabel": "Atașează lipituri mai lungi de",
+    "settingsThresholdUnit": "caractere",
+    "settingsThresholdHint": "Între {min, number} și {max, number} caractere."
+  },
+  "structures": {
+    "section": "Structuri",
+    "sectionSubtitle": "Definiții de câmp salvate. Folosiți una ca rețetă de extragere sau ca schemă inițială pentru un tabel de workflow de date.",
+    "loadFromStructure": "Încarcă structură",
+    "loadFromStructureTitle": "Înlocuiește aceste coloane cu o structură salvată",
+    "pickerEmpty": "Nicio structură salvată momentan.",
+    "pickerTitle": "Încarcă o structură salvată",
+    "saveAsStructure": "Salvează ca structură",
+    "saveAsStructureTitle": "Salvează aceste coloane în biblioteca de structuri",
+    "savedToast": "Structura „{name}” a fost salvată",
+    "namePlaceholder": "Nume structură",
+    "fieldCount": "{count} câmpuri",
+    "fieldCountOne": "1 câmp",
+    "downgradedNotice": "{count} câmp(uri) simplificate la text — tabelele conțin o valoare pe celulă: {names}",
+    "truncatedNotice": "{count} câmp(uri) eliminate — limita tabelului este de {max} coloane: {names}",
+    "skippedDerivedNotice": "{count} coloană(e) calculate nesalvate — formulele fac referire la coloanele acestui tabel: {names}",
+    "loadReplacesColumns": "Aceasta va înlocui coloanele curente. Liniile existente păstrează valorile care au același nume de coloană."
   }
 }

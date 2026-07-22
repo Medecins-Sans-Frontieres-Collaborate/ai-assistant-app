@@ -437,7 +437,22 @@
     "noProjectsFound": "Tsy misy tetikasa hita. Mampiasa 'default'.",
     "selectAllRequired": "Misafidiana subscription, kaonty, ary tetikasa.",
     "subscriptionRequired": "Misafidiana famandrihana",
-    "accountRequired": "Misafidiana kaonty Foundry"
+    "accountRequired": "Misafidiana kaonty Foundry",
+    "projectSelectionRequired": "Misafidiana tetikasa ao amin'ny lisitra.",
+    "scanningResources": "Manadihady ny subscriptions Azure-nao...",
+    "searchProjectsPlaceholder": "Mitady tetikasa...",
+    "noProjectsDiscovered": "Tsy nisy tetikasa Foundry hita ao amin'ny subscriptions-nao. Ampiasao ny fidirana an-tanana raha fantatrao ny làlana.",
+    "discoveryPartialWarning": "{count, plural, one {# subscription} other {# subscriptions}} tsy afaka nadinihina. Ampiasao ny fidirana an-tanana raha tsy hita ny tetikasa.",
+    "discoveryTruncatedWarning": "Be loatra ny loharanom-baovao ka tsy afaka nofaranana ny fitsirihana. Ampiasao ny fidirana an-tanana raha tsy hita ny tetikasa.",
+    "retryScan": "Avereno ny fitsirihana",
+    "next": "Manaraka",
+    "back": "Miverina",
+    "selectAgentsDescription": "Safidio ireo agents avy amin'ity tetikasa ity hiseho ao amin'ny safidinao modely.",
+    "selectAll": "Safidio rehetra",
+    "deselectAll": "Esory rehetra",
+    "agentsSelectedCount": "{selected} amin'ny {total} agents no voafantina",
+    "autoAddLabel": "Ampidiro ho azy ireo agents vaovao",
+    "autoAddDescription": "Hiseho ho azy ireo agents navoaka amin'ity tetikasa ity taty aoriana. Hijanona tsy voafantina ireo agent tsy voafantina."
   },
   "Quick Actions": "Hetsika haingana",
   "Type / in chat to access your prompts": "Soraty / ao amin'ny resadresaka hidirana amin'ny toro-hevitrao",
@@ -818,7 +833,19 @@
       "listingTools": "Mitady fitaovana azo ampiasaina...",
       "analyzingFiles": "Manadihady ny rakitrao...",
       "searchingKnowledge": "Mitady ao amin'ny tahiry fahalalana...",
-      "cancellingPriorTool": "Manafoana ny fangatahana fitaovana teo aloha..."
+      "cancellingPriorTool": "Manafoana ny fangatahana fitaovana teo aloha...",
+      "workflow": {
+        "preparingDocument": "Miomana amin'ny reference...",
+        "writingDocument": "Manoratra ny antontan-taratasy...",
+        "analyzingSource": "Manadihady ny lahatsoratra fototra...",
+        "translating": "Mandika...",
+        "reviewingTranslation": "Famerenana amin'ny manodidina faha-{round} amin'ny {total}...",
+        "revisingTranslation": "Manampy ny fanehoan-kevitra avy amin'ny famerenana...",
+        "extractingRows": "Misintona andalana avy amin'ny {source}...",
+        "transformingTable": "Manova ny tabilao...",
+        "findingLocations": "Mamaritra toerana...",
+        "updatingMap": "Manavao ny sarintany..."
+      }
     },
     "toolSummary": {
       "usedTools": "Fitaovana nampiasaina {count, plural, one {#} other {#}}",
@@ -879,7 +906,9 @@
     "listen": "Henoy",
     "processingAudio": "Mikarakara feo...",
     "ttsError": "Nisy hadisoana tamin'ny famoronana feo. Azafady avereno.",
-    "unsupportedMessageType": "Hadisoana tamin'ny fandefasana hafatra: Tsy tohanana ity karazana hafatra ity"
+    "unsupportedMessageType": "Hadisoana tamin'ny fandefasana hafatra: Tsy tohanana ity karazana hafatra ity",
+    "addLanguageOption": "Ampio \"{name}\"…",
+    "sources": "Loharano"
   },
   "transcript": {
     "originalTranscript": "Dikan-teny Tany Am-boalohany",
@@ -1293,15 +1322,33 @@
     "unsavedChangesMessage": "Misy fiovana tsy voavonjy. Foanana ve ireo?",
     "characterCount": "{current}/{max}",
     "clearField": "Fafao ny saha",
-    "autosaveNote": "Mitehirizina ho azy ny fanovàna.",
+    "autosaveNote": "Mitahiry ho azy ny fanovana.",
     "responseSection": "Valiny",
     "voiceSection": "Feo",
     "behaviorSection": "Fitondran-tena",
-    "resetChatSettings": "Avereno amin'ny voalohany ny fanovàna amin'ny chat",
-    "resetChatSettingsConfirmTitle": "Avereno amin'ny voalohany ny fanovàna amin'ny chat?",
-    "resetChatSettingsConfirmMessage": "Averina amin'ny masontsivana fototra eto amin'ity tabilao ity: temperature, toromarika manokana, Momba Anao, valin'ny modely, hafainganam-pandehan'ny streaming, fanovàna lahatsoratra ho feo, rakitra mavitrika, ary fanamafisana. Tsy misy fiantraikany amin'ny resakao izany.",
+    "resetChatSettings": "Avereno amin'ny voalohany ny fikirakirana chat",
+    "resetChatSettingsConfirmTitle": "Averina amin'ny voalohany ny fikirakirana chat?",
+    "resetChatSettingsConfirmMessage": "Hamerina amin'ny masontsivana fototra ho an'ny zava-drehetra eto amin'ity tontonana ity izany: mari-pana, toromarika manokana, Momba Anao, valin'ny modely, hafainganam-pandehan'ny fikorianam-peo, feo ho an'ny soratra, rakitra mavitrika, ary fanamafisana. Tsy misy fiantraikany amin'ny resakao izany.",
     "customInstructionsLabel": "Toromarika manokana*",
-    "defaultTemperatureLabel": "Mari-pana mahazatra*"
+    "defaultTemperatureLabel": "Mari-pana mahazatra*",
+    "Usage & Impact": "Fampiasana sy Fiantraikany",
+    "Connectors": "Mpifandray",
+    "Backup": "Backup",
+    "Memories": "Fitadidiana",
+    "Agent Access": "Fidirana Agent",
+    "LocalModels": "Model eo an-toerana",
+    "suggestRevisions": {
+      "title": "Fanovana antontan-taratasy",
+      "toggle": "Manolora fanitsiana fa tsy manova mivantana",
+      "description": "Rehefa angatahinao hanitsy ny antontan-taratasy ny workflow, dia tonga ho soso-kevitra isanisany ny fanovana azonao ekena na lavina, toy ny amin'ny fanombanana kalitao.",
+      "exceptionsTitle": "Atao mivantana ihany amin'ny toe-javatra:",
+      "exceptionSelection": "Manitsy ampahany nohasongadinao",
+      "exceptionLargeRewrite": "Raha fanoratana vaovao ka ankamaroan'ny antontan-taratasy no niova",
+      "exceptionReorder": "Raha nisy famindrana fizarana fa tsy fanitsiana",
+      "thresholdLabel": "Asio ho fanoratana vaovao raha mihoatra",
+      "thresholdUnit": "% amin'ny antontan-taratasy niova",
+      "exceptionSelectionAlways": "Ny fanitsiana amin'ny santionany voasongona dia mihatra mivantana foana — mamerina ny tapany voahitsy fotsiny ny modely, ka tsy azo zaraina ho soso-kevitra amin'ny tahirin-kevitra manontolo."
+    }
   },
   "emptyState": {
     "greeting": "Afaka manampy inona aho?",
@@ -1447,33 +1494,78 @@
     },
     "title": "Misafidiana modely",
     "modelsDescription": "Safidio ny modely AI amin'ny dininao. Samy manana ny tanjany ny modely tsirairay — mifidiana iray hijerena antsipiriany.",
-    "recommended": "Soso-kevitra"
+    "recommended": "Soso-kevitra",
+    "familyAll": "Rehetra",
+    "familyFilterLabel": "Sivano araka ny fianakaviana ny modely",
+    "searchPlaceholder": "Mitady modely",
+    "searchEmpty": "Tsy misy modely mifanaraka amin'ny fikarohanao.",
+    "star": "Anasongadina an'i {name}",
+    "unstar": "Esorina amin'ny voasongadina i {name}",
+    "otherFamily": "Hafa",
+    "hostedExternally": "Miasa amin'ny fotodrafitrasa an'ny mpanome tolotra amin'ny alalan'ny Azure AI Foundry, fa tsy ao anatin'ny tontolo Azure an'ny MSF.",
+    "hostedIn": {
+      "label": "Toerana fitahirizana: {regions}",
+      "tooltip": "Faritra Azure nametrahana ity modely ity. Eto amin'ny faritra misy anao no handefasana sy hikarakarana ny resaka."
+    },
+    "badges": {
+      "external": "Ivelany",
+      "externalTooltip": "Miasa amin'ny fotodrafitrasan'ny mpanome tolotra amin'ny alalan'ny Azure AI Foundry, fa tsy ao anaty tontolo Azure an'ny MSF.",
+      "regionHostedTooltip": "Mipetraka ao amin'ny faritra Azure {region}. Ao no karakaraina ny resaka amin'ity modely ity."
+    },
+    "favorites": "Ankafizina",
+    "euResidencyNote": "Ny modely rehetra dia miasa amin'ny faritra Azure EU.",
+    "hostedRegion": {
+      "label": "Faritra fampiantranoana",
+      "processedIn": "Ao amin'ny faritra Azure {region} no karakaraina ity resaka ity.",
+      "euOnlyNote": "Ao amin'ny faritra Azure EU i {name} no tsimbinina; ao ihany koa no karakaraina ny resaka miaraka aminy."
+    },
+    "version": {
+      "label": "Dikan-teny"
+    },
+    "reasoningModel": "Modely fandalinana: mieritreritra tsikelikely alohan'ny mamaly. Miadana kokoa, fa tsara amin'ny olana sarotra.",
+    "variant": {
+      "label": "Karazany"
+    },
+    "deployment": {
+      "title": "Fametrahana",
+      "source": "Loharano",
+      "account": "Kaonty",
+      "location": "Toerana",
+      "deployment": "Fametrahana",
+      "modelVersion": "Dikan'ny modely",
+      "publisher": "Mpamoaka"
+    }
   },
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Modely AI ampiasain'ny GPT-4.1 miaraka amin'ny fikarohana aterineto mivantana amin'ny Bing. Manome vaovao vaovao, fanamarinana zava-misy, ary fahafantarana ny zava-mitranga ankehitriny. Tsara indrindra ho an'ny fikarohana mila vaovao vao haingana, famakafakana vaovao, ary fanamarinana zava-misy.",
-      "knowledgeCutoff": "Fikarohana aterineto mivantana"
+      "knowledgeCutoff": "Fikarohana aterineto mivantana",
+      "tagline": "Taranaka teo aloha an'ny OpenAI"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Ny modely mandroso indrindra an'ny OpenAI, mahay amin'ny fisainana sarotra, famoronana kaody, ary famahana olana teknika. Tsara indrindra ho an'ny asa famakafakana, fanamby fandaharana, fikarohana, ary fanazavana amin'ny antsipiriany. Manohana ezaka fisainana sy fitenenana valiny azo amboarina.",
-      "knowledgeCutoff": "Des 2025"
+      "knowledgeCutoff": "Des 2025",
+      "tagline": "Kaody, famakafakana, fikarohana"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Kinova haingana kokoa sy tsy lafo kokoa an'ny GPT-5, natao ho haingana nefa mitazona kalitao ambony. Tonga lafatra ho an'ny asa andavanandro, fangatahana haingana, fitarihana fitaovana, ary rindranasa mila fotoana famaliana haingana. Fifandanjana tsara eo amin'ny fampandehanana sy ny fahombiazana.",
-      "knowledgeCutoff": "Aog 6, 2025 8:00 PM"
+      "knowledgeCutoff": "Aog 6, 2025 8:00 PM",
+      "tagline": "Haingana sy vidiny ambany kokoa"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Des 2025",
-      "description": "Kinam-pahaizana manokana amin'ny GPT-5.2 izay natokana ho an'ny fifanakalozan-dresaka sy faharanitan-tsaina ara-pihetseham-po. Mahavita tsara amin'ny fifandraisana amin-kafaliana, fanoratana mamorona, fanehoan-kevitra, ary dinika voajanahary. Tsara indrindra ho an'ny resaka tsy dia ara-pomba ofisialy, toe-javatra ahitana fanoroana hevitra, ary asa mitaky fahatsiarovan-tena ara-pihetseham-po."
+      "description": "Kinam-pahaizana manokana amin'ny GPT-5.2 izay natokana ho an'ny fifanakalozan-dresaka sy faharanitan-tsaina ara-pihetseham-po. Mahavita tsara amin'ny fifandraisana amin-kafaliana, fanoratana mamorona, fanehoan-kevitra, ary dinika voajanahary. Tsara indrindra ho an'ny resaka tsy dia ara-pomba ofisialy, toe-javatra ahitana fanoroana hevitra, ary asa mitaky fahatsiarovan-tena ara-pihetseham-po.",
+      "tagline": "Resadresaka, fifikiran-kevitra"
     },
     "o3": {
       "name": "o3",
       "description": "Ny modely fisainana mandroso indrindra an'ny OpenAI miaraka amin'ny fahaiza-mamaha olana faran'izay tsara. Mahay amin'ny matematika sarotra, fisainana ara-tsiansa, fanamby kaody, ary asa lojika misy dingana maro. Varavaran-kevi-dehibe 200K lava. Manohana ny fanaraha-maso ny ezaka fisainana.",
-      "knowledgeCutoff": "Apr 8, 2025 8:00 PM"
+      "knowledgeCutoff": "Apr 8, 2025 8:00 PM",
+      "tagline": "Fisainana lalina tsikelikely"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1483,47 +1575,256 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Manampahaizana amin'ny fisainana izay mampiseho ny asany dingana isaky ny dingana. Tonga lafatra ho an'ny olana matematika, fangaro lojika, ary fahatakarana hevitra sarotra. Jereo ny fomba fisainany momba ny olana mivantana.",
-      "knowledgeCutoff": "Jan 20, 2025"
+      "knowledgeCutoff": "Jan 20, 2025",
+      "tagline": "Aseho tsikelikely ny fisainana"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Modely matanjaka amin'ny lafiny rehetra indrindra mahay amin'ny kaody sy fanoratana teknika. Tsara ho an'ny fanamboarana kaody, fanoratana tahirin-kevitra, ary fanazavana hevitra teknika. Haingana sy azo ianteherana ho an'ny asa fampandrosoana.",
-      "knowledgeCutoff": "Apr 16, 2025 12:45 AM"
+      "knowledgeCutoff": "Apr 16, 2025 12:45 AM",
+      "tagline": "Safidy open-source"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Modely maro karazana avy amin'ny xAI fantatra amin'ny valiny amin'ny antsipiriany. Tsara ho an'ny adihevitra misokatra, tetikasa mamorona, ary famahana olana sarotra.",
-      "knowledgeCutoff": "May 13, 2025 12:16 AM"
+      "knowledgeCutoff": "May 13, 2025 12:16 AM",
+      "tagline": "Safidy xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Ny modely mahay indrindra an'ny Anthropic miaraka amin'ny fahaiza-manao fisainana, kaody, ary mamorona miavaka. Tsara indrindra ho an'ny famakafakana sarotra, fikarohana, ary asa mila fahatakarana lalina.",
-      "knowledgeCutoff": "Janoary 2025"
+      "knowledgeCutoff": "Janoary 2025",
+      "tagline": "Taranaka Opus teo aloha"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Modely Claude mirindra manolotra fampandehanana tsara amin'ny kaody, famakafakana, ary asa mamorona. Tsara ho an'ny fampiasana andavanandro miaraka amin'ny fotoana famaliana haingana.",
-      "knowledgeCutoff": "Janoary 2025"
+      "knowledgeCutoff": "Janoary 2025",
+      "tagline": "Sonnet taranaka teo aloha"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Modely Claude Opus taranaka teo aloha. Tsara ho an'ny asa kaody sarotra, famakafakana amin'ny antsipiriany, ary fahatakarana lalina.",
-      "knowledgeCutoff": "Janoary 2025"
+      "knowledgeCutoff": "Janoary 2025",
+      "tagline": "Opus taranaka teo aloha"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Modely Claude haingana sy tsy lafo natao ho an'ny asa haingana. Tsara ho an'ny fangatahana tsotra, famintinana, ary rindranasa be fampiasana.",
-      "knowledgeCutoff": "Janoary 2025"
+      "knowledgeCutoff": "Janoary 2025",
+      "tagline": "Claude Haiku haingana"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Modely matanjaka indrindra an'i Anthropic. Mahasoa amin'ny fanoratana lava, fikarohana, sy asa mitaky fandinihana lalina.",
-      "knowledgeCutoff": "Feb 2026"
+      "knowledgeCutoff": "Feb 2026",
+      "tagline": "Fanoratana sy famakafakana lava"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Modely Claude voalanjalanja. Mahafaka amin'ny fanoratana andavanandro, famakafakana, sy kaody miaraka amin'ny valiny haingana.",
-      "knowledgeCutoff": "Feb 2026"
+      "knowledgeCutoff": "Feb 2026",
+      "tagline": "Claude antonony ho an’ny andavanandro"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Modely loharano misokatra avy amin'i Meta. Mafy orina amin'ny fanoratana, famintinana, ary fanontaniana haingana.",
+      "tagline": "Safidy open-source"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Modely vaovaon'i OpenAI, fanta-daza. Mahery amin'ny fanoratana, fikarohana, kaody, sy famahana olana sarotra.",
+      "tagline": "GPT vaovao indrindra"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "GPT kely indrindra sy haingana indrindra. Tsara ho an'ny asa tsotra sy haingana amin'ny vidiny ambany.",
+      "tagline": "GPT kely indrindra sy haingana indrindra"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "GPT natokana ho amin'ny resaka. Mety amin'ny fifanakalozan-kevitra tsotra, famolavolana hevitra, ary adihevitra manohana.",
+      "tagline": "GPT vaovao natao ho an’ny resaka"
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "GPT-5 tany am-boalohany. Mbola mahavita tsara amin'ny fanoratana, fanadihadiana, ary kaody.",
+      "tagline": "GPT lehibe teo aloha"
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "GPT-5 natokana amin'ny resaka. Tsara amin'ny fifampiresahana andavanandro sy famolavolana hevitra.",
+      "tagline": "GPT resaka teo aloha"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "GPT multimodal taloha. Mety amin'ny fanoratana andavanandro sy Q&A raha tsy ilaina ny fahaiza-manao farany.",
+      "tagline": "GPT multimodal taloha"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "GPT-4.1 madinika sy haingana ho an'ny asa andavanandro haingana.",
+      "tagline": "GPT taranaka teo aloha, maivana"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Modely farany sy mahery indrindra an'i Anthropic. Tsara indrindra amin'ny fanoratana lava, fikarohana, kaody, ary fanadihadiana lalina.",
+      "tagline": "Claude farany sy matanjaka indrindra"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Modely loharano misokatra farany an'i DeepSeek. Azo itokisana amin'ny fanoratana ankapobeny sy fanontaniana ara-teknika.",
+      "tagline": "Safidy open-source"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Modely fototra an'i Mistral. Safidy eropeana amin'ny fanoratana, famintinana, sy fanontaniana ankapobeny.",
+      "tagline": "Modely Eoropeanina misokatra"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Dika teo aloha amin'ny GPT-5 fototra. Mbola mahery amin'ny fanoratana, fanadihadiana, ary kaody.",
+      "tagline": "GPT-5 lehibe teo aloha"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Dika teo aloha amin'ny GPT-5 natokana amin'ny resaka. Tsara amin'ny fifampiresahana andavanandro sy famolavolana hevitra.",
+      "tagline": "GPT resaka teo aloha"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "GPT-5 kely indrindra. Tsara indrindra ho an'ny asa tsotra sy haingana amin'ny vidiny ambany.",
+      "tagline": "GPT taranaka teo aloha, tena kely"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "GPT-4.1 kely indrindra. Ampiasaina tsara amin'ny asa haingana sy tsotra amin'ny filàna hafainganana sy vidiny ambany.",
+      "tagline": "GPT kely indrindra amin’ny taranaka teo aloha"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Dikan-GPT-4o kely sy haingana. Mety amin'ny asa andavanandro haingana tsy mila fahaiza-manao farany.",
+      "tagline": "GPT multimodal taloha, maivana"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Modely famakafakana kely. Mety amin'ny matematika, lojika, ary olana mandeha tsikelikely amin'ny vidiny ambany kokoa noho ny o3.",
+      "tagline": "Fisainana haingana sy tsara vidy"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Modely famakafakana kely teo aloha. Mahavita matematika, siansa, ary lojika amin'ny teti-bola voafetra.",
+      "tagline": "Fisainana tsikelikely, fohy"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Modely hendry indrindra an'i Anthropic, voalohany amin'ny fianakaviana Claude 5. Tsara indrindra amin'ny fanoratana sy asa fikarohana ary kaody sarotra.",
+      "tagline": "Modely laharana voalohany an'i Anthropic"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Claude vaovao sy voalanjalanja, voalohany amin'ny fianakaviana Claude 5. Mahery amin'ny fanoratana, fanadihadiana, sy kaody isan'andro miaraka amin'ny valiny haingana.",
+      "tagline": "Claude vaovao sy antonony"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Modely antonony an'i Mistral. Safidy eropeana mitsivalana eo amin'ny fahaiza-manao sy hafainganana ho an'ny asa andavanandro.",
+      "tagline": "Modely Eoropeanina antonony"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Modely kely an'i Mistral. Haingana sy mora amin'ny famintinana, drafitra, sy fanontaniana tsotra.",
+      "tagline": "Modely Eoropeanina kely sy haingana"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Modely kely indrindra an'i Mistral. Tsara indrindra amin'ny asa tena haingana sy tsotra amin'ny vidiny ambany.",
+      "tagline": "Mistral kely ho an'ny fitaovana sisiny"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Dika vaovao amin'ny DeepSeek-R1. Mampiseho ny fomba fisainany tsikelikely miaraka amin'ny lalim-pamakafakana tsara kokoa.",
+      "tagline": "Modely fisainana misokatra nohavaozina"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Modely loharano misokatra maivana avy amin'i Meta. Haingana amin'ny fanoratana, famintinana, sy fanontaniana andavanandro.",
+      "tagline": "Llama open-source mahomby"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Modela open-source efa nampiasaina taloha avy amin'i Meta. Mbola mahazaka tsara amin'ny fanoratana ankapobeny sy fanontaniana sy valiny.",
+      "tagline": "Llama open-source taloha"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Modela fanta-daza avy amin'ny xAI. Tsara amin'ny adihevitra misokatra, famakafakana, ary tetikasa famoronana.",
+      "tagline": "xAI lehibe indrindra"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Modela vao haingana indrindra avy amin'ny OpenAI. Mahery amin'ny fanoratana, fikarohana, fanaovana kaody, ary famahana olana sarotra.",
+      "tagline": "GPT vaovao indrindra"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (vaovao indrindra)",
+      "description": "Anarana ankapobeny izay manondro foana ny modela chat OpenAI farany. Fanoloan'i Azure amin'ny modela gpt-*-chat efa nesorina.",
+      "tagline": "GPT resaka vaovao foana"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Opus 4.7, modela nivoaka vao haingana eo anelanelan'ny 4.6 sy 4.8. Mahery amin'ny fanoratana lava, fikarohana, kaody, ary famakafakana lalina.",
+      "tagline": "Opus indrindra vao nivoaka"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Modela famakafakana vaovao indrindra avy amin'i DeepSeek sy fanoloan'i Azure ho an'ny tsipika R1. Asehony tsikelikely ny fandehan'ny eritreriny.",
+      "tagline": "Modely fisainana misokatra vaovao indrindra"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Modela V4 haingan'i DeepSeek sy fanoloan'i Azure ho an'ny tsipika V3. Haingana amin'ny fanoratana ankapobeny sy fanontaniana ara-teknika.",
+      "tagline": "Safidy open-source haingana"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "description": "Modela famakafakana haingan'ny xAI. Mamaly haingana amin'ny dingana tsikelikely.",
+      "tagline": "Modely fisainana xAI haingana"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Modela chat haingana avy amin'ny xAI. Mamaly haingana amin'ny fanontaniana sy adihevitra andavanandro.",
+      "tagline": "Modely resaka xAI haingana"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Modela xAI maivana kokoa. Haingana sy mora amin'ny fanontaniana tsotra sy resaka mahazatra.",
+      "tagline": "Modely xAI maivana"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Flagship amin'ny trio GPT-5.6 an'ny OpenAI. Mahay indrindra amin'ny fanoratana, fikarohana, kaody, ary famahana olana sarotra.",
+      "tagline": "Anjaran'ny GPT vaovao indrindra"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Sokajy antonony amin'ny trio GPT-5.6 an'ny OpenAI. Tsara amin'ny fanoratana andavanandro, fandalinana, sy kaody miaraka amin'ny valiny haingana.",
+      "tagline": "GPT-5.6 voalanjalanja ho an'ny andavanandro"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Sokajy maivana sy haingana amin'ny trio GPT-5.6 an'ny OpenAI. Tsara indrindra amin'ny fanontaniana haingana sy asa tsotra amin'ny vidiny ambany.",
+      "tagline": "GPT-5.6 maivana sy haingana"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Modely midina farany an'ny Mistral. Safidy eropeana misy fifandanjana eo amin'ny fahavitan-javatra sy hafainganana ho an'ny asa andavanandro.",
+      "tagline": "Modely Eoropeanina voalanjalanja"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Modely open-weight an'ny Moonshot AI. Mahay amin'ny asa agentic, kaody, ary antontan-taratasy lava.",
+      "tagline": "Modely agentic open-weight"
     }
   },
   "searchMode": {
@@ -1789,7 +2090,22 @@
     "useDefaultStyle": "Ampiasao ny fomba fanoratana tsy miovaova",
     "noTonesCreated": "Tsy mbola misy feo noforonina",
     "createTonesHint": "Mamorona feo ao amin'ny Hetsika Haingana",
-    "translateDocumentTooltip": "Adikao amin'ny fiteny hafa ny antontan-taratasy.\n\nEndrika tohanana: Word, Excel, PowerPoint, HTML, TXT\nHabe ambony indrindra: 40MB\n\nMitsinjara fiteny 80+ miaraka amin’ny rakitra voambolana safidy."
+    "translateDocumentTooltip": "Adikao amin'ny fiteny hafa ny antontan-taratasy.\n\nEndrika tohanana: Word, Excel, PowerPoint, HTML, TXT\nHabe ambony indrindra: 40MB\n\nMitsinjara fiteny 80+ miaraka amin’ny rakitra voambolana safidy.",
+    "translateTooltip": "Dikano amin'ny fiteny hafa ny fehinteny iray.\n\nRaha rakitra manontolo (Word, Excel, PowerPoint, HTML, TXT) dia ampiasao ny Translate Document.",
+    "cameraTooltip": "Alaharo sary amin'ny fakantsarinao ary ampio amin'ny hafatra.",
+    "noResults": "Tsy misy hetsika mitovy",
+    "sectionPinned": "Nampirina",
+    "sectionFrequent": "Ampiasa matetika",
+    "sectionMore": "Bebe kokoa",
+    "categoryWeb": "Web",
+    "categoryMedia": "Media & antontan-taratasy",
+    "categoryTransform": "Transform",
+    "pin": "Apetraka an-tampony",
+    "unpin": "Esorina amin'ny tampony",
+    "moveToMore": "Alefa any amin'ny \"Bebe kokoa\"",
+    "moveOutOfMore": "Asehoy amin'ny sakafo",
+    "showSources": "Asehoy ireo loharano hafa",
+    "hideSources": "Afeno ireo loharano hafa"
   },
   "transcription": {
     "transcribesOnSend": "Mandika rehefa alefa",
@@ -1923,7 +2239,14 @@
     "expiresSoon": "Lany daty ao anatin'ny {days} andro - ampidino haingana",
     "expires": "Azo ampiasaina mandritra ny {days} andro",
     "unofficialBadgeLabel": "Tsy ofisialy",
-    "unofficialLanguageWarning": "Tsy tohanana amin'ny fomba ofisialy ity fiteny ity. Tsy nankatoavina ny kalitaon'ny fandikan-teny. Azafady mba ampanaovy olona mahay na teratany hijery ny vokatra alohan'ny hizara izany."
+    "unofficialLanguageWarning": "Tsy tohanana amin'ny fomba ofisialy ity fiteny ity. Tsy nankatoavina ny kalitaon'ny fandikan-teny. Azafady mba ampanaovy olona mahay na teratany hijery ny vokatra alohan'ny hizara izany.",
+    "translationSubmitted": "Nanomboka ny fandikan-teny — vita anaty ‘background’ ny PDFs.",
+    "pendingTitle": "Mandika an'i {filename}…",
+    "pendingHint": "Atao ao anaty fitsinjarana ny fandikàna PDF, ary mety haharitra minitra vitsivitsy. Azonao tohizana ny asa — havaozina ho azy ity karatra ity rehefa vonona ny antontan-taratasy, na dia avy averina aza.",
+    "asyncFailed": "Nisy tsy mety ny fandikan-teny amin'ny antontan-taratasy: {error}",
+    "jobNotFound": "tsy hita intsony ilay asa fandikan-teny. Andramo indray azafady.",
+    "retryPolling": "Hamarino indray",
+    "pollingStalled": "Tsy afaka nifandray tamin'ny lohamilina izahay hijery ny fandrosoana. Mety mbola mitohy ny fandikan-teny."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -1973,6 +2296,10 @@
       "technicalDetails": "Antsipiriany teknika",
       "agentCountLabel": "Agents {count}",
       "disconnectedToast": "Tapatra ny fifandraisana amin'i {name}"
+    },
+    "emptyState": {
+      "title": "Tsy misy solontena faritra na fikambanana azo ampiasaina",
+      "description": "Ampifandraiso amin'ny tetikasa Foundry etsy ambany raha hijery ny solontenany."
     }
   },
   "privacy": {
@@ -2083,5 +2410,1309 @@
     "review": "Diniho",
     "itemId": "ID: {id}",
     "itemSource": "{date} avy amin'i {source}"
+  },
+  "regionOverride": {
+    "warning": "Miasa ny fametrahana toerana an-tanana — amin'ny faritra angon-drakitra {region} no andefasana ny fangatahanao. Fanovàna amin'ny tanana ho fitsapana io, fa tsy ny tena toeranao.",
+    "clear": "Fafao ny fanovàna"
+  },
+  "usageImpact": {
+    "empty": "Tsy mbola nisy fampiasana voarakitra. Hiseho eto ny fampiasanao token sy tomban’ny entona mivoaka aorian’ny fifanakalozanao.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} famahanana finday",
+    "requests": "Fangatahana",
+    "promptTokens": "Prompt tokens",
+    "completionTokens": "Completion tokens",
+    "topModels": "Arakaraka ny modely",
+    "byRegion": "Araka ny faritra fitehirizana",
+    "regionDefault": "Default",
+    "modelRow": "{requests} fangatahana · {grams} g",
+    "disclosure": "Tombana mifototra amin’ny angon-drakitra sy kajy v{version} · hatramin’ny {since} · chat mahazatra ihany (tsy asiana ny agents sy valin’ny knowledge-base).",
+    "reset": "Averina ny antontan’isa fampiasana",
+    "estimatedPortion": "Ahitana ~{grams} g CO₂e ({requests} fangatahana) tombanana avy amin'ny chat talohan'ny fandraisana an-tsoratra — hajaina amin'ny lahatsoratra voatahiry amin'ny hafatra, fa tsy amin'ny isan'ny token voarefy.",
+    "chipTitle": "Chip emissions",
+    "chipDescription": "Ny vinavina amin'ny dian-kafon'ny karbona amin'ny resaka ankehitriny, aseho etsy ambonin'ny tontolon'ny hafatra.",
+    "chipAlways": "Asehoy foana",
+    "chipAlwaysHint": "Mitohy miseho ny chip raha vao manana vinavina ilay resaka.",
+    "chipAuto": "Asehoy amin'ny fanavaozana na fikasihana",
+    "chipAutoHint": "Miseho ny chip rehefa miova ny vinavina, avy eo manjavona. Raha soratana na tsidihina dia miverina miseho.",
+    "chipHidden": "Afina",
+    "chipHiddenHint": "Tsy aseho mihitsy ny chip. Mbola voarakitra sy aseho amin'ity pejy ity ny fitambaran'izany.",
+    "chipAutoHideLabel": "Manjavona aorian'ny",
+    "chipAutoHideUnit": "segondra",
+    "chipAutoHideHint": "Eo anelanelan'ny {min} sy {max} segondra."
+  },
+  "extraction": {
+    "toggleLabel": "Alaivo ny angona voaendrika",
+    "trayLabel": "Fangalana angona",
+    "trayPrefix": "Alaivo",
+    "trayInfo": "Miverina fitafika voaendrika hatramin'ny 3 amin'ny latabatra. Tehirizina ao an-toerana ny recette.",
+    "autoChip": "Auto — AI no manolotra endrika",
+    "addRecipe": "Ampio recette",
+    "addRecipeTitle": "Ampio recette amin'ity fangalana ity",
+    "addRecipeFullTitle": "Hatramin'ny 3 recette isaky ny fangalana",
+    "removeRecipe": "Esory ny recette: {name}",
+    "remove": "Esory",
+    "section": "Recette fangalana angona",
+    "sectionSubtitle": "Endrika efa voatahiry izay manova lahatsoratra, rakitra, na URL ho lasa latabatra voaendrika. Safidio hatramin'ny 3 isaky ny fangalana.",
+    "newRecipe": "Recette vaovao",
+    "untitledRecipe": "(Recette tsy misy lohateny)",
+    "deleteRecipe": "Fafao ny recette",
+    "delete": "Fafao",
+    "deleteConfirm": "Fafao?",
+    "cancel": "Foano",
+    "name": "Anarana",
+    "namePlaceholder": "oh: Marary",
+    "description": "Famaritana",
+    "optional": "(tsy voatery)",
+    "descriptionPlaceholder": "Topimaso fohy aseho amin'ny mpifantina recette",
+    "instructions": "Toromarika",
+    "instructionsPlaceholder": "Inona no tokony hojerin'ny AI ao amin'ny fitaovana?",
+    "fields": "Saha",
+    "field": "saha",
+    "fieldsPlural": "saha",
+    "fieldName": "Anaran'ny saha",
+    "fieldType": "Karazana saha",
+    "fieldNamePlaceholder": "anaran_saha",
+    "addField": "Ampio saha",
+    "removeField": "Esory saha",
+    "toggleDetails": "Hetsika antsipiriany",
+    "fieldDetailsTitle": "Famaritana, soatoavina enum",
+    "fieldDescriptionPlaceholder": "Famaritana (manampy ny AI hahita an'ity saha ity)",
+    "enumValuesPlaceholder": "Soatoavina azo ekena, misaraka amin'ny comma",
+    "required": "takiana",
+    "suggest": "Manoro hevitra amin'ny AI",
+    "suggesting": "Manoro hevitra…",
+    "suggestNeedsInstructions": "Ampio torolalana aloha mba hahafahan'ny AI mahafantatra izay tadiavina",
+    "searchRecipes": "Mitady recipe",
+    "pickerEmpty": "Tsy misy recipe eto aloha. Mamoròna iray hanombohana.",
+    "pickerEmptyMatch": "Tsy misy recipe mifanaraka",
+    "editorEmpty": "Tsy misy recipe eto aloha. Mamoròna iray dia hanampy hameno saha ny AI.",
+    "noData": "Tsy misy angon-drakitra nalaina",
+    "noRecords": "Tsy nahitana tahiry {name}",
+    "row": "andàlana",
+    "rows": "andàlana",
+    "record": "tahiry",
+    "records": "tahiry",
+    "complete": "vita",
+    "download": "Ampidino",
+    "preview": "Topi-maso",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} saha",
+    "fieldCountOne": "Saha 1",
+    "andMoreFields": "+ {count} hafa",
+    "saveAsRecipe": "Tehirizo ho recipe",
+    "savedAsRecipeToast": "Voatahiry ho recipe \"{name}\"",
+    "previewTruncated": "Aseho ny 3 voalohany amin'ny andàlana {total}. Ampidino raha ilaina ny angona manontolo.",
+    "previewEmpty": "Tsy misy andàlana haseho",
+    "proposedSchemaTip": "AI no nanolotra an'ity schema ity. Tehirizo raha hampiasa azy amin'ny manaraka.",
+    "downloadAriaLabel": "Ampidino {name} amin'ny endrika {format}",
+    "previewAriaLabel": "Ahodina/topi-maso an'i {name}",
+    "changeFormatAriaLabel": "Ovao ny endriky ny fisintomana an'i {name}",
+    "materialWarningTitle": "Ampio fitaovana hojerena",
+    "materialWarningBody": "Soraty eto ambany, ampidiro rakitra, na alefaso URL.",
+    "materialAttach": "Ampidiro rakitra",
+    "willExtractPrefix": "Haka angona amin'ireto:",
+    "materialText": "hafatra soratana",
+    "materialFiles": "{count, plural, one {rakitra 1} other {rakitra #}}",
+    "materialActiveFiles": "{count, plural, one {rakitra miasa 1} other {rakitra miasa #}}",
+    "dismiss": "Atsaharo ny fakana angona"
+  },
+  "Connectors": "Mpifandray",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "Fandikan-teny",
+        "description": "Mandika lahatsoratra miaraka amin'ny fanadihadiana, voambolana ary famerenana imbetsaka"
+      },
+      "document": {
+        "label": "Antontan-taratasy",
+        "description": "Manomboka sy mandrindra antontan-taratasy miaraka amin'ny mpanampy"
+      },
+      "dataAnalysis": {
+        "label": "Fanadihadiana angona",
+        "description": "Ampidiro ny tabilao ary zahao na ovao ny angon-drakitrao"
+      },
+      "map": {
+        "label": "Saritany",
+        "description": "Avadiho ho toerana ao anaty sarintany ny angona rehetra"
+      }
+    },
+    "chooser": {
+      "prompt": "Na manomboha toerana mifantoka"
+    },
+    "sidebar": {
+      "newTranslation": "Fandikan-teny vaovao",
+      "newDocument": "Antontan-taratasy vaovao",
+      "newDataAnalysis": "Fanadihadiana angona vaovao",
+      "newMap": "Saritany vaovao"
+    },
+    "translation": {
+      "chooseLanguage": "Fiteny kendrena",
+      "customLanguageHint": "\"{name}\" dia fiteny nampiana. Hiezaka hanampy amin'ny fiteny rehetra ny AI, saingy tsy voamarina ny kalitao.",
+      "addedByYou": "Nampianao",
+      "glossary": "Voambolana",
+      "noGlossary": "Tsy misy voambolana",
+      "manageGlossaries": "Voambolana",
+      "glossaries": "Voambolana",
+      "closeGlossaries": "Akaro ny voambolana",
+      "glossariesEmpty": "Mamoròna voambolana hanamafisana fa mitovy foana ny dikan-teny amin'ny voambolana manokana. Tehirizina amin'ity fitaovana ity ny voambolana ary azo ampiasaina amin'ny fandikan-teny manaraka.",
+      "newGlossary": "Rakibolana vaovao",
+      "newGlossaryName": "Rakibolana tsy misy lohateny",
+      "glossaryName": "Anaran'ny rakibolana",
+      "deleteGlossary": "Fafao ny rakibolana",
+      "sourceTerm": "Teny fototra",
+      "targetTerm": "Dika",
+      "note": "Fanamarihana",
+      "noteOptional": "Fanamarihana (tsy voatery)",
+      "addEntry": "Ampio teny",
+      "removeEntry": "Esory {term}",
+      "mode": "Fomba fandikana",
+      "modeQuick": "Haingana",
+      "modeAgentic": "Nohamafisina",
+      "modeQuickHint": "Fandikana iray fotsiny, haingana indrindra",
+      "modeAgenticHint": "Mandinika ny lahatsoratra aloha, avy eo mandika sy mampandeha fihodinana fanitsiana hatramin'ny 3",
+      "translate": "Dika",
+      "translating": "Eo am-pandikana...",
+      "sourceLabel": "Lahatsoratra fototra",
+      "targetLabel": "Dika",
+      "sourcePlaceholder": "Adikao na soraty eto ny lahatsoratra tiana adika, na ampidiro taratasy.",
+      "targetEmpty": "Hiseho eto ny dika.",
+      "uploadDocument": "Ampidiro taratasy",
+      "copy": "Adika",
+      "copied": "Voakopy",
+      "tooLong": "Lava loatra ny lahatsoratra mihoatra ny {max} tarehintsoratra. Zarao ho ampahany, na ampiasao ny fandikana antontan-taratasy ho an'ny rakitra manontolo.",
+      "analysisTitle": "Fandinihana alohan'ny fandikana",
+      "register": "Hisoratra anarana",
+      "reviewTitle": "Fihodinana famerenana",
+      "roundLabel": "Fihodinana {round}",
+      "verdictApprove": "nekena",
+      "verdictRevise": "novaina",
+      "railRequest": "Adikao amin'ny {language} ilay lahatsoratra fototra.",
+      "railDoneAgentic": "Vita. Nozaraiko, nadika, ary nampandeha fihodinana famerenana {rounds}. Ao amin'ny workspace ny vokatra.",
+      "railDoneQuick": "Vita. Ao amin'ny workspace ny dika.",
+      "railAssessRequest": "Tombano ny kalitaon'ny fandikana amin'ny {language}.",
+      "railAssessDone": "Vita ny fanombanana: ao amin'ny workspace ny isa, miaraka amin'ny {count} fanitsiana natolotra hodinihina.",
+      "roundChanges": "Fanovana tao amin'ny fihodinana {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "Marina",
+          "description": "Mitovy tanteraka amin'ny hafatra fototra — tsy misy fahadisoana, tsy fahatomombanana, na tsy ampiharina"
+        },
+        "fluency": {
+          "label": "Mahitsy sy mirindra",
+          "description": "Manaraka fitsipika amin'ny fehezanteny, tsipelina, mari-piatoana, sy firindrana amin'ny fiteny kendrena"
+        },
+        "terminology": {
+          "label": "Voambolana",
+          "description": "Voambolana manokana ampiasaina tsara sy marina; arahina tanteraka ny rakibolana"
+        },
+        "style": {
+          "label": "Fomba fanoratra",
+          "description": "Fifandraisana amin'ny loharano, feo, sy tamatam-pitenenana mitovy sy mifanekena"
+        },
+        "localeConventions": {
+          "label": "Fomban-toerana",
+          "description": "Daty, isa, singa, ary mari-piatoana manaraka ny fenitry ny fiteny kendrena"
+        },
+        "audience": {
+          "label": "Mpamaky",
+          "description": "Mety amin'ny tanjona sy mpamaky kendrena amin'ny lahatsoratra"
+        }
+      },
+      "severity": {
+        "minor": "Kely",
+        "major": "Lehibe"
+      },
+      "assess": "Tombanana ny kalitao",
+      "assessing": "Manombana…",
+      "assessmentTitle": "Fanombanana kalitao",
+      "criteriaPicker": "Fepetra hotsaraina",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Soso-kevitra fanitsiana",
+      "noEditsSuggested": "Tsy misy fanitsiana natolotra — tafita tamin’ny fepetra nofidina ny fandikan-teny.",
+      "acceptEdit": "Ekeo",
+      "rejectEdit": "Lavina",
+      "acceptAll": "Ekeo daholo",
+      "rejectAll": "Lavina daholo",
+      "editAccepted": "Ekena",
+      "editRejected": "Nolavina",
+      "editUnapplicable": "Tsy hita amin’ny lahatsoratra amin’izao fotoana izao — tsy nampiharina",
+      "editTranslation": "Hanova",
+      "doneEditing": "Vita",
+      "pasteTranslationPlaceholder": "Soraty na apetaho eto ny fandikan-teny hiasana…",
+      "editingBlockedPendingEdits": "Vahao na lavina aloha ny soso-kevitra fanitsiana mbola miandry",
+      "pendingCount": "{count} mbola miandry",
+      "closeReview": "Akatona ny fanombanana kalitao",
+      "showReview": "Asehoy ny fanombanana",
+      "showReviewPending": "Asehoy ny fanombanana ({count} miandry)",
+      "undoEdit": "Avereno",
+      "clearResolved": "Fafao ny voavaha",
+      "clearResolvedHint": "Esory amin'ny lisitra ireto fanitsiana nekena, nolavina, na tsy mihatra ireto",
+      "autoClearResolved": "Fafao ho azy ny fanitsiana voavaha",
+      "customCriteria": "Fenitra manokana",
+      "closeCriteria": "Akatona ny fenitra manokana",
+      "newCriterion": "Fenitra vaovao",
+      "newCriterionName": "Fenitra tsy misy anarana",
+      "criterionName": "Anaran'ny fenitra",
+      "criterionRubric": "Torolalana",
+      "criterionRubricPlaceholder": "Lazalazao izay tokony hataon'ny fandikana mba hahafenoana ity fenitra ity, ohatra: \"Asongadino amin’ny endrika baiko avokoa ny toro-marika rehetra momba ny fatra ara-pahasalamana, fa tsy amin’ny endrika infinitive mihitsy…\"",
+      "criterionRubricHint": "Ity torolalana ity dia omena mivantana amin'ny AI miaraka amin'ny lafiny MQM nentim-paharazana rehefa manombana fandikana.",
+      "criteriaEmpty": "Mamoròna fenitra manokana — ohatra, fomba fanaon'ny fikambanana, safidy tenin'ny mpanjifa, na fitsipika isam-paritra — mba handrefesana ny fandikana mihoatra ny lafiny MQM efa misy. Tehirizina ao amin'ity fitaovana ity ary azo averina ampiasaina.",
+      "deleteCriterion": "Fafao ny fenitra",
+      "manageCriteria": "Fenitra manokana",
+      "addCriteria": "Ampio fenitra",
+      "noUsableCriteria": "Fidio farafahakeliny fenitra iray efa misy, na omeo torolalana ny fenitrao manokana.",
+      "criterionRubricTooLong": "Mihoatra ny fetra amin'ny tarehintsoratra {over} ity rubric ity. Alefa amin'ny fanombanana tsirairay izany, ka tsy maintsy ahena alohan'ny fampiasana ity fepetra ity."
+    },
+    "document": {
+      "emptyTitle": "Lazao ny antontan-taratasy ilainao",
+      "emptyBody": "Lazao amin’ny mpanampy izay soratana — tatitra momba ny toe-javatra, taratasy ho an’ny mpamatsy vola, tapakila fivoriana. Ampio sokajina aloha raha mila teny nalaina sy zava-misy voalaza ao anatiny.",
+      "generatePlaceholder": "Lazao ny antontan-taratasy hosoratana…",
+      "revisePlaceholder": "Lazao ny fanovana hatao…",
+      "generate": "Tsy amboary",
+      "revise": "Avereno vakina sy amboary",
+      "writing": "Manoratra…",
+      "export": "Aondrana",
+      "references": "Loharano",
+      "addReference": "Ampio rakitra",
+      "uploading": "Ampidirina…",
+      "removeReference": "Esory {name}",
+      "referenceChars": "{chars} tarehintsoratra amin’ny lahatsoratra nalaina",
+      "referenceEmpty": "Tsy nahazo lahatsoratra tamin’ny {name}",
+      "uploadFailed": "Tsy tafiditra ny fampakarana",
+      "untitledDocument": "Antontan-taratasy tsy misy lohateny",
+      "generatedSummary": "Nosoratako tao amin’ny sehatra fiasana ilay antontan-taratasy. Jereo ary lazao izay mila ovaina.",
+      "revisedSummary": "Novaina ilay antontan-taratasy tao amin’ny sehatra fiasana.",
+      "runFailed": "Nisy olana: {message}",
+      "uploadBasis": "Atombohy amin’ny antontan-taratasy efa misy",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "Fitsipi-pitenenana sy fanoratana",
+          "description": "Ara-dalàna ny fitsipi-pitenenana sy fanoratana; ampy ny mitovy tanteraka na US na UK anglisy — fahadisoana ny mifangaro"
+        },
+        "consistency": {
+          "label": "Fifanarahana",
+          "description": "Mitovy hatrany ny famaritana, anarana, fanoratana renisoratra sy endrika"
+        },
+        "clarity": {
+          "label": "Mazava",
+          "description": "Teny mivantana sy tsy mampisafotofoto; rafitra manamora ny famakiana"
+        },
+        "sensitivity": {
+          "label": "Fitandremana",
+          "description": "Teny feno fanajana sy mihevitra ny toe-draharaha sy ny maha-olombelona rehetra (fanamarinana tsy voatery)"
+        },
+        "specAdherence": {
+          "label": "Fanarahana spec",
+          "description": "Manaraka ny toromarika apetraka amin'ny antontan-taratasy: hita daholo, voalamina araka ny tokony ho izy, manaraka ny torolalana"
+        },
+        "toneAdherence": {
+          "label": "Fanarahana feo sy fitaontao",
+          "description": "Manaraka ny fitsipika napetraka ho an’ny feo sy ny fomba fiteny"
+        }
+      },
+      "severity": {
+        "minor": "Kely",
+        "major": "Lehibe"
+      },
+      "assess": "Tombana kalitao",
+      "assessing": "Miatombana…",
+      "assessmentTitle": "Fanombanana kalitao",
+      "criteriaPicker": "Toro-marika ho tombanana",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Fanitsiana atolotra",
+      "noEditsSuggested": "Tsy misy fanitsiana soso-kevitra — nahafeno ny toro-marika voafantina ny antontan-taratasy.",
+      "acceptEdit": "Ekeo",
+      "rejectEdit": "Lavina",
+      "acceptAll": "Ekeo daholo",
+      "rejectAll": "Lavina daholo",
+      "editAccepted": "Ekena",
+      "editRejected": "Nalavina",
+      "editUnapplicable": "Tsy hita amin’ny lahatsoratra ankehitriny ity ampahany ity — tsy napetraka",
+      "editingBlockedPendingEdits": "Ataovy aloha na lavina ny fanitsiana mbola miandry",
+      "pendingCount": "{count} mbola miandry",
+      "closeReview": "Akombony ny fandinihana kalitao",
+      "showReview": "Asehoy ny famerenana",
+      "showReviewPending": "Asehoy ny famerenana ({count} mbola miandry)",
+      "railAssessRequest": "Tombano araka ireo toro-marika voafantina ny kalitaon’ny antontan-taratasy.",
+      "railAssessDone": "Vita ny fanombanana: hita amin'ny workspace ny taha sy ny {count} fanitsiana soso-kevitra tokony hojerena.",
+      "spec": "Spec an’ny antontan-taratasy",
+      "noSpec": "Tsy misy spec",
+      "manageSpecs": "Specs",
+      "specs": "Specs an’ny antontan-taratasy",
+      "closeSpecs": "Akombony ny specs",
+      "specsEmpty": "Mamòna spec mba hisoratra amin'ny endrika raikitra ny antontan-taratasy — fizarana ilaina, filaharana, ary torolalana isaky ny fizarana (ohatra: lasitra SitRep). Tehirizina amin’ity fitaovana ity ny specs ary azo averina ampiasaina.",
+      "newSpec": "Spec vaovao",
+      "newSpecName": "Spec tsy misy anarana",
+      "specName": "Anaran’ny spec",
+      "specDescription": "Famaritana (tsy voatery)",
+      "deleteSpec": "Fafao ny spec",
+      "sectionHeading": "Lohatenin’ny fizarana",
+      "sectionGuidance": "Torolalana (tsy voatery)",
+      "sectionRequired": "Takiana",
+      "addSection": "Ampio fizarana",
+      "removeSection": "Esory ny fizarana",
+      "generalGuidance": "Torolalana ankapobeny (tsy voatery)",
+      "tone": "Fitaontao",
+      "noTone": "Tsy misy fitaontao",
+      "customCriteria": "Toro-marika manokana",
+      "manageCriteria": "Toro-marika manokana",
+      "closeCriteria": "Akombony ny toro-marika manokana",
+      "criteriaEmpty": "Mamoròna fepetra manokana — ohatra, fanajana marika na fiteny ampiasain'ny fikambanana — hanombanana antontan-taratasy sy handrindra fanitsiana. Tehirizina amin'ity fitaovana ity ary azo averina ampiasaina.",
+      "newCriterion": "Fepetra vaovao",
+      "newCriterionName": "Fepetra tsy misy lohateny",
+      "criterionName": "Anaran'ny fepetra",
+      "criterionRubric": "Famaritana",
+      "criterionRubricPlaceholder": "Farito izay tokony hataon'ny antontan-taratasy mba hanaraka ity fepetra ity, ohatra: \"Aza mampiasa fiderana tafahoatra amin'ny asa ataontsika; ataovy foana hoe 'olona ampianay' no iantsoana ny tohanana...\"",
+      "criterionRubricHint": "Ity famaritana ity dia omena mivantana ny AI rehefa manombana sy manitsy.",
+      "deleteCriterion": "Fafao ny fepetra",
+      "profileTitle": "Mombamomba ny antontan-taratasy",
+      "profileDocType": "Karazana",
+      "profileLanguage": "Fiteny",
+      "profileAudience": "Mpihaino",
+      "profilePurpose": "Tanjona",
+      "profileRegister": "Sokajy",
+      "profileTone": "Feo",
+      "profileConventions": "Fitsipika",
+      "emptyHint": "Atombohy manoratra eto ambany, farito izay hosoratana ao anaty boaty, na manomboka amin'ny rakitra.",
+      "addSpec": "Ampio famaritana",
+      "addCriteria": "Ampio fepetra",
+      "scopeFullDocument": "Sehatra: antontan-taratasy iray manontolo",
+      "scopeSelection": "Sehatra: safidy — “{preview}…” ({count} teny)",
+      "clearSelection": "Esory ny safidy (miasa amin'ny antontan-taratasy manontolo)",
+      "reviseSelectionPlaceholder": "Farito izay tiana ovaina amin'ilay safidy...",
+      "revisedSelectionSummary": "Nanafatra ilay faritra voafantina tao amin'ny sehatra fiasana aho.",
+      "assessedSelection": "Safidy",
+      "undoEdit": "Avereno",
+      "clearResolved": "Fafao ny voavaha",
+      "clearResolvedHint": "Esory amin'ny lisitra ireto fanitsiana nekena, nolavina, na tsy mihatra ireto",
+      "autoClearResolved": "Fafao ho azy ny fanitsiana voavaha",
+      "import": "Manafatra",
+      "importReplaceTitle": "Hanoloina ve ny antontan-taratasy?",
+      "importReplaceBody": "Ny fanafarana an'i {name} dia hanolo ny antontan-taratasy ankehitriny. Hitoetra ireo referansa, spec ary feo.",
+      "importReplaceConfirm": "Soloina",
+      "editorMode": "Fomba fanovana",
+      "editorModeRich": "Lahatsoratra manankarena",
+      "editorModeMarkdown": "Markdown",
+      "editorModeHtml": "HTML",
+      "editorModeLockedEdits": "Vahao aloha ny fanovàna naroso talohan'ny hanovana fomba fanovàna.",
+      "suggestChanges": "Manolora fanovana",
+      "suggestChangesHint": "Diniho amin'ny soso-kevitra tsirairay ny fanitsiana fa tsy manitsy mivantana antontan-taratasy.",
+      "suggestChangesSelectionNote": "Napetraka mivantana ny fanitsiana amin'ny ampahany voafantina — efa nofidinao mialoha ny sehatra.",
+      "suggestedSummary": "Soso-kevitra {count} {count, plural, one {fanovana} other {fanovana}} ho dinihina.",
+      "revisionSuggestionSummary": "Ny fangatahanao fanitsiana dia niteraka {count} {count, plural, one {soso-kevitra fanovana} other {soso-kevitra fanovana}}.",
+      "revisionCriterionLabel": "Fanitsiana nangatahana",
+      "fallbackSelection": "Napetraka mivantana — tsy soso-kevitra ny fanovana amin'ny ampahany voafantina.",
+      "fallbackLargeRewrite": "Napetraka mivantana — niova be loatra ny antontan-taratasy ka tsy azo atao soso-kevitra tsirairay.",
+      "fallbackReorder": "Napetraka mivantana — nisy famindrana fizarana fa tsy azo zaraina ho soso-kevitra dinihina.",
+      "fallbackUnanchorable": "Napetraka mivantana — tsy azo nampifanarahana tamin'ny andalan-teny manokana ny fanovana.",
+      "fallbackNoChanges": "Tsy nisy fanovana ilaina.",
+      "criterionRubricTooLong": "Mihoatra ny fetra amin'ny tarehintsoratra {over} ity rubric ity. Alefa amin'ny fanombanana tsirairay izany, ka tsy maintsy ahena alohan'ny fampiasana ity fepetra ity."
+    },
+    "data": {
+      "emptyTitle": "Ampidiro angon-drakitra hojerena",
+      "emptyBody": "Afaka mampiditra CSV, Excel, na rakitra JSON ianao na maka anjara mivantana. Rehefa tafiditra ny tabilao dia afaka mandahatra, maka andalana fanampiny amin'ny antontan-taratasy, ary manova azy amin'ny toromarika mazava.",
+      "importFile": "Ampidiro rakitra",
+      "importing": "Ampidirina...",
+      "pasteData": "Petaho angona",
+      "pastePlaceholder": "Petaho eto ny CSV, TSV, na JSON...",
+      "import": "Ampidiro",
+      "addFromSource": "Ampio avy amin'ny loharano",
+      "extractHint": "Petaho lahatsoratra na fidio rakitra; andalana mifanaraka amin'ny tsanganana dia ho hita. Ny sanda tsy fantatra dia mijanona ho banga — tsy misy zavamorona.",
+      "extractPlaceholder": "Petaho eto ny lahatsoratra misy angona...",
+      "extractRows": "Alaivo andalana",
+      "extractFromFile": "Avy amin'ny rakitra...",
+      "extracting": "Alaovina...",
+      "pastedSource": "Lahatsoratra napetraka",
+      "transform": "Ovay",
+      "transforming": "Ovao...",
+      "transformPlaceholder": "Farito ny fanovana, ohatra: \"ampio tsanganana misy tranga isaky ny 1000 olona\"...",
+      "transformCapHint": "Afa-manao fanovana amin'ny andalana {max} fotsiny. Esory na safidio aloha ireo andalana be loatra.",
+      "undo": "Avereno",
+      "deleteSelected": "Fafao {count}",
+      "deletedRows": "Voafafa {count} andalana",
+      "selectAllRows": "Safidio daholo ny andalana",
+      "selectRow": "Safidio andalana {row}",
+      "rowCount": "Andalana {count}",
+      "rowCapExceeded": "Ho {count} andalana izany; voafetra amin'ny {max} ny tabilao. Zarao ny angona na avoahy raha ilaina.",
+      "railExtractRequest": "Alaivo ireo andalana mifanaraka amin'ny firafitry ny tabilao avy amin'i: {source}",
+      "railExtractDone": "Nampiana andalana {count} tao amin'ny tabilao.",
+      "railTransformDone": "Nohavaozina ny tabilao.",
+      "columnProfileFor": "Antontan'isa amin'ny andalana {column}",
+      "profileMissing": "Tsy hita",
+      "profileDistinct": "Mitokana",
+      "profileRange": "Sakany",
+      "profileMean": "Salany",
+      "profileMedian": "Atsimo",
+      "profileTopValues": "Sandan-doha",
+      "filterColumnFor": "Sivana {column}",
+      "filterContains": "Misy…",
+      "filterMin": "Kely indrindra",
+      "filterMax": "Lehibe indrindra",
+      "filterClear": "Fafao",
+      "clearFilters": "Fafao ny sivana",
+      "showingRows": "Aseho {shown} amin'ny {total} andalana",
+      "scopeLabel": "Faritra iasana",
+      "scopeTable": "Rehetra ({count})",
+      "scopeFiltered": "Voasivana ({count})",
+      "scopeSelection": "Voafantina ({count})",
+      "scopedInstruction": "{instruction} (amin'ny andalana voafetra {count})",
+      "assess": "Tombano ny kalitao",
+      "assessing": "Mitombina…",
+      "criteria": {
+        "validity": {
+          "label": "Fahamarinan-toerana",
+          "description": "Mifanaraka amin'ny karazana sy endrika andrasana ny sanda"
+        },
+        "consistency": {
+          "label": "Fifanarahana",
+          "description": "Soratra mitovy amin'ny fomba mitovy hatrany (tsy misy ‘M’/‘Lehilahy’ na singa mifangaro, na fitovina amin'ny litera)"
+        },
+        "duplicates": {
+          "label": "Dika mitovy",
+          "description": "Andalana mirakitra zava-misy na hetsika mitovy indroa"
+        },
+        "plausibility": {
+          "label": "Azo inoana",
+          "description": "Sandam-pahadisoana na tsy azo atao amin'ny toe-javatra"
+        }
+      },
+      "assessmentTitle": "Fanamarinana kalitaon'ny angona",
+      "pendingCount": "{count} tsy vita",
+      "closeReview": "Akatona ny fanamarinana kalitao",
+      "suggestedEdits": "Fanitsiana atolotra",
+      "noEditsSuggested": "Tsy misy fanitsiana natolotra — tafapetraka amin'ny fepetra nofantenana ny angona.",
+      "acceptAll": "Ekeo daholo",
+      "rejectAll": "Lavina daholo",
+      "acceptEdit": "Ekeo",
+      "rejectEdit": "Lavina",
+      "editAccepted": "Natomboka",
+      "editRejected": "Nolavina",
+      "editUnapplicable": "Niova ny sela hatramin'ny fanombanana — tsy nampiharina",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "Fepetra ho tombanana",
+      "severity": {
+        "minor": "Madinika",
+        "major": "Lehibe"
+      },
+      "editLocation": "andalana {row} · {column}",
+      "editLocationRow": "andalana {row} (esory)",
+      "showReview": "Asehoy ny fanadihadiana",
+      "showReviewPending": "Asehoy ny fanadihadiana ({count} mbola miandry)",
+      "assessedFiltered": "Andalana voasivana",
+      "assessedSelection": "Andalana voafantina",
+      "assessedSample": "santionan'ny {shown} amin'ny {total}",
+      "railAssessRequest": "Tombano ny kalitaon'ny tabilao ({count} andalana) amin'ny masontsivana voafantina.",
+      "railAssessDone": "Soso-kevitra fanitsiana kalitaon-kevitra {count} — jereo ao amin'ny toerana iasana.",
+      "insights": "Hevitra manan-danja",
+      "chartKind": "Karazana tabilao",
+      "chartBar": "Bar (ampifanarahana amin'ny sokajy)",
+      "chartHistogram": "Histograma",
+      "chartLine": "Tsipika (araka ny fotoana)",
+      "groupByColumn": "Amboary amin'ny andalana",
+      "dateColumn": "Andalana daty",
+      "valueColumn": "Andalana sanda",
+      "aggFn": "Fanangonana",
+      "aggCount": "Isa",
+      "aggSum": "Fitambarana",
+      "aggMean": "Antontan'isa antonony",
+      "chartTruncated": "Aseho ny {max} vondrona ambony indrindra",
+      "chartNoData": "Tsy misy sanda azo anaovana tabilao amin'ny andalana ankehitriny.",
+      "chartBarAria": "Tabilao bar voatokana amin'i {column}",
+      "chartHistogramAria": "Histograma an'ny {column}",
+      "chartLineAria": "Tabilao tsipika amin'ny {column} amin'ny fotoana",
+      "editStructure": "Firafitra",
+      "defineStructure": "Farito ny rafitra",
+      "schemaHint": "Farito ny saha amin'ny firafitry ny angon-drakitrao. Ny saha ilaina dia mamaritra ny fitsipika amin'ny angon-drakitra diso amin'ny fanafarana; ny fanovana ny karazana saha dia manova ny sanda efa misy (ny cell tsy voaova dia ho lasa banga).",
+      "schemaFieldName": "Anaran'ny saha",
+      "schemaFieldType": "Karazana saha",
+      "schemaRequired": "Ilaina",
+      "schemaAddField": "Ampio saha",
+      "schemaDeleteField": "Fafao ny saha {field}",
+      "schemaApply": "Ampiharo ny rafitra",
+      "schemaCancel": "Hanafoana",
+      "schemaEdited": "Voavaina ny firafitry ny tabilao",
+      "schemaCellsConverted": "{count} cell tsy afaka naova amin'ny karazany vaovao ary lasa banga.",
+      "missingFieldPolicy": "Angon-drakitra diso",
+      "policyStrict": "Henjana — lavina ny andalana tsy feno",
+      "policyFlag": "Marika — tafiditra sy asiana mari-pamantarana",
+      "policyLenient": "Mora — tafiditra am-pitoniana",
+      "droppedIncompleteRows": "Nalefa ireo andalana {count} tsy manana saha ilaina: {fields}",
+      "dismiss": "Aforeno",
+      "requiredColumn": "Saha ilaina",
+      "flagMissingRequired": "Banga ny saha ilaina",
+      "flagPendingEdit": "Misy soso-kevitra fanitsiana miandry amin'ity cell ity — jereo amin'ny fanadihadiana kalitao",
+      "fromPhoto": "Avy amin'ny sary",
+      "fromPhotoHint": "Alaina sary amin'ny taratasy na tabilao — ny votoatiny dia lasa angon-drakitra voarafitra azonao ampitahana amin'ny sary",
+      "readingPhoto": "Mamaky sary…",
+      "photoBatchName": "Sary {count}",
+      "railPhotoRequest": "Alaivo amin'ny rafitra ny angon-drakitra avy amin'ny sary {count}: {name}",
+      "railPhotoDone": "Nampiana rakitra {count} avy amin'ny sary. Hamarino amin'ny sary eo amin'ny sehatra fiasana.",
+      "sourcesLabel": "Loharano",
+      "openPhotoQc": "Hamarino ny angona amin'i {name}",
+      "qcRowsFromPhoto": "Andalana {count}",
+      "qcClose": "Akombony ny fanamarinana sary",
+      "qcZoomIn": "Ampitomboy",
+      "qcZoomOut": "Ahena",
+      "qcPrevPhoto": "Sary teo aloha",
+      "qcNextPhoto": "Sary manaraka",
+      "qcImageLoading": "Ampidirina ny sary...",
+      "qcImageFailed": "Tsy tafiditra ny sary.",
+      "qcImageAlt": "Sary loharano: {name}",
+      "qcHint": "Ny tabilao dia mampiseho ireo andalana amin'ity sary ity ihany — ampitahao amin'ny sary tsirairay ny sanda, ary ahitsy na fafao izay tsy mifanaraka.",
+      "sourceFilterChip": "Andalana avy amin'i {name}",
+      "clearSourceFilter": "Asehoy indray ny andalana rehetra",
+      "viewAsRecord": "Fijery amin'ny endrika",
+      "viewAsTable": "Fijery tabilao",
+      "recordEmpty": "Tsy mbola misy rakitra.",
+      "recordOf": "Rakitra {index} amin'ny {count}",
+      "recordPrev": "Rakitra teo aloha",
+      "recordNext": "Rakitra manaraka",
+      "recordBooleanUnset": "(foana)",
+      "flagsChip": "Famantarana {count}",
+      "flagsChipOpenReview": "Sokafy ny fanamarinana kalitao",
+      "flagsChipMissingOnly": "Misy laharana tsy feno — fenoy na amboary ny rafitra",
+      "autoCheck": "Fanamarinana mandeha ho azy amin'ny angona vaovao",
+      "autoCheckHint": "Aorian'ny fangalana angona amin'ny sary na antontan-taratasy, dia atao ho azy ny fanamarinana kalitao amin'ireo andalana vaovao",
+      "checkingNewRows": "Tarihina ny fanamarinana amin'ny andalana vao nampiana...",
+      "ingestCheckFailed": "Nisy tsy nety ny fanamarinana kalitao mandeha ho azy ({message}) — azonao atao amin'ny tanana amin'ny Assess quality.",
+      "assessedIngest": "Andalana vao nampiana",
+      "transpose": "Manova laharana sy andalana",
+      "transposeAxisColumn": "Anarana",
+      "transposeSuggestion": "Toa navadika ity tabilao ity: andalana no toetra, tsanganana no zavatra. Hafanao ve izy ka ho zavatra isaky ny andalana, ary ho tsanganana soratana isaky ny toetra?",
+      "transposedTable": "Nafana laharana sy andalana",
+      "columns": "Tsanganana",
+      "columnsHidden": "Tsanganana ({count} afenina)",
+      "showAllColumns": "Asehoy rehetra",
+      "chartScatter": "Fizarana (x vs y)",
+      "chartPivot": "Tabilao Pivot",
+      "xColumn": "Tsanganana X",
+      "yColumn": "Tsanganana Y",
+      "splitByColumn": "Zaraina amin'ny",
+      "splitNone": "Tsy misy fizarana",
+      "pivotValueColumns": "Tsanganana soatoavina",
+      "aggMin": "Faratampony ambany",
+      "aggMax": "Faratampony ambony",
+      "aggMedian": "Elanelam-potoana",
+      "chartSeriesTruncated": "Aseho ny andiana {max} voalohany",
+      "chartPointsTruncated": "Aseho {max} teboka santionany",
+      "chartScatterAria": "Sarintabelan'ny {x} amin'ny {y}",
+      "pivotTableAria": "Tabilao Pivot voalamina amin'ny {column}",
+      "schemaFormula": "Rafitra kajy",
+      "schemaFormulaPlaceholder": "oh: [Tranga] / [Isan'ny mponina] * 1000",
+      "schemaFormulaHint": "Sahan-kajy: ampio taranja amin'ny endrika [Anarana]; ekena ny + - * / %, fononteny, sy round, abs, min, max. Mivoatra ho azy ny soatoavina, tsy azo ovaina mivantana.",
+      "schemaFormulaSyntaxError": "Rafitra tsy manankery",
+      "schemaFormulaUnknownRef": "Saha tsy fantatra: {ref}",
+      "schemaFormulaArityError": "Diso ny isan'ny masontsivana ho an'ny {fn}",
+      "schemaFormulaCycleError": "Fifamerenana manodidina eo amin'ny rafitra kajy",
+      "derivedColumnTitle": "Voakajy: {formula}",
+      "derivedFrom": "Voakajy avy amin'ny {formula}",
+      "takePhoto": "Makà sary",
+      "takePhotoHint": "Ampiasao ny fakantsarinao haka sary taratasy na tabilao — lasa angona voarafitra izay azonao ampitaha amin'ny sary ilay izy."
+    },
+    "map": {
+      "emptyTitle": "Apetrakao anaty sarintany ny angon-drakitrao",
+      "emptyBody": "Adikao eto ny sitrep, lisitra, na fandraisan'naoty amin'ny fivoriana, na lahatsoratra milaza toerana — na mampiakatra antontan-taratasy. Hamarinin'ny modely sy asepirina manaraka ambaratonga fitokisana ny toerana; afaka aondrana amin'ny ArcGIS na fitaovana GIS hafa.",
+      "inputPlaceholder": "Adikao eto ny anaran-toerana...",
+      "uploadFile": "Mampiakatra rakitra",
+      "pastedSource": "Lahatsoratra nafangaro",
+      "mapIt": "Asiana anaty sarintany",
+      "finding": "Tsikaritra ny toerana...",
+      "featureCount": "Toerana {count}",
+      "featureCapExceeded": "Hatramin'ny toerana {max} ihany no hita amin'ny sarintany.",
+      "noneFound": "Tsy nisy toerana hita tao amin'io antontan-kevitra io.",
+      "lowConfidenceNotice": "Toerana {count} no manana laharana ambany amin'ny fahamarinan'ny mari-tany — jereo alohan'ny hampiasana amin'ny fomba ofisialy.",
+      "tilesOffline": "Tsy misy ny sarin-tany — mbola azo jerena ny lisitry ny toerana.",
+      "disclaimer": "Mari-tany atolotry ny AI amin'ny alalan'ny fahalalan'ny modely, fa tsy avy amin'ny geocoding service — jereo alohan'ny hampiasana amin'ny asa. Ny sarintany dia alaina avy amin'ny tile server; mitoetra amin'ity fitaovana ity ny angon-drakitrao.",
+      "flyTo": "Asehoy {name} ao anaty sarintany",
+      "removeFeature": "Esory {name}",
+      "expandFeature": "Asehoy ny antsipiriany feno ho an'i {name}",
+      "collapseFeature": "Afeno ny antsipiriany ho an'i {name}",
+      "detailsParent": "Anisan'ny {parent}",
+      "railRequest": "Ikatona anaty sarintany ireo toerana ao amin'i: {source}",
+      "railSearchRequest": "Karoina amin'ny aterineto sy asiana sarintany ireo toerana ho an'i: {query}",
+      "railDone": "Toerana {count} voasoritra. Jereo amin’ilay lisitra ireo manana fahatokisana ambany.",
+      "searchToggle": "Fomba fikarohana amin’ny web",
+      "searchToggleHint": "Mitadiava amin’ny web fa tsy mandika lahatsoratra; ireo vokatra misimisy dia voasoritra.",
+      "searchPlaceholder": "Mitadiava amin’ny web, oh: \"fipoahan’ny holera Afrika Atsinanana 2026\"…",
+      "searchAndMap": "Mitady & mandrefy amin’ny sarintany",
+      "searching": "Mitady…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "Fifandraisana: {kind}",
+        "unresolved": "{count} fifandraisana no manondro toerana tsy eo amin'ny sarintany ka tsy azo aseho."
+      },
+      "confidence": {
+        "high": "Avo",
+        "medium": "Antonony",
+        "low": "Ambany"
+      },
+      "prominence": {
+        "primary": "Toerana lehibe",
+        "secondary": "Toerana manampy",
+        "mention": "Firesahana fohy"
+      },
+      "prominenceMentionHint": "Voaresaka fotsiny amin’ny fomba fohy ity toerana ity ao amin’ny lahatsoratra — aseho kely kokoa amin’ny sarintany ary tsy ampidirina ao amin’ny fijery voalohany.",
+      "dates": {
+        "since": "hatramin’ny {date}",
+        "range": "{start} – {end}",
+        "ongoing": "Mitohy"
+      },
+      "filters": {
+        "label": "Filtre araka ny sokajy",
+        "other": "Hafa",
+        "clear": "Fafana",
+        "showing": "{shown} amin’ny {total} toerana",
+        "noneMatch": "Tsy misy toerana mifanaraka amin’ny filtre ampiasaina."
+      },
+      "dateFilter": {
+        "label": "Daty",
+        "from": "Manomboka",
+        "to": "Hatramin’ny",
+        "fromAria": "Asehoy ireo zava-nitranga nanomboka izao daty izao ihany",
+        "toAria": "Asehoy ireo zava-nitranga hatramin’izao daty izao ihany",
+        "clear": "Fafana ny daty",
+        "eraChip": "Asehoy ireo zava-nitranga ao amin’i {label} ihany"
+      },
+      "timeline": {
+        "toggle": "Fijery amin’ny fotoana",
+        "play": "Alefaso ny fijery amin’ny fotoana",
+        "pause": "Atsaharo ny fijery amin’ny fotoana",
+        "eras": "Vanim-potoana eo amin’ny kisary fotoana",
+        "jumpTo": "Mandehana any amin’ny {label}",
+        "slider": "Toerana amin’ny kisary fotoana",
+        "showUndated": "Asehoy ireo toerana tsy misy daty",
+        "activeCount": "{count} mavitrika",
+        "jump": {
+          "start": "Fanombohana",
+          "yearsLater": "{count, plural, one {Taona 1 taty aoriana} other {{count} taona taty aoriana}}",
+          "monthsLater": "{count, plural, one {Volana 1 taty aoriana} other {{count} volana taty aoriana}}",
+          "daysLater": "{count, plural, one {Andro 1 taty aoriana} other {{count} andro taty aoriana}}",
+          "appears": "{count, plural, one {1 miseho} other {{count} miseho}}",
+          "ends": "{count, plural, one {1 mifarana} other {{count} mifarana}}",
+          "progress": "Daty faha-{index} amin'ny {total}"
+        },
+        "precision": {
+          "minute": "Hatramin'ny minitra",
+          "hour": "Hatramin'ny ora",
+          "day": "Hatramin'ny andro",
+          "month": "Daty ambara amin'ny volana",
+          "year": "Daty ambara amin'ny taona",
+          "mixed": "(mitambatra)"
+        },
+        "pacing": {
+          "toggle": "Fandehan'ny famerenana",
+          "cardDuration": "Aseho isaky ny toerana",
+          "seconds": "{seconds}s",
+          "maxCards": "Toerana aseho isaky ny daty",
+          "hint": "Raha maro ny hetsika amin'ny daty iray dia alefa ela kokoa ho azy."
+        }
+      },
+      "granularity": {
+        "site": "Toerana",
+        "city": "Tanàna/kagny",
+        "district": "Distrika",
+        "region": "Faritra",
+        "country": "Firenena"
+      },
+      "granularityAreaHint": "Faritra aseho amin’ny boribory manome zoro eo amin’ny afovoany — tsy toerana na sisintany marina izy io.",
+      "containerHint": "Misy toerana hafa ao anatiny no voasoritra, ka miseho amin’ny endrika sisin-tsarintany fotsiny izy io.",
+      "legend": {
+        "toggle": "Fanazavana",
+        "title": "Ahoana ny famakiana ny sarintany",
+        "color": "Loko: fahatokisana ny fandrindrana (manga avo, volomboasary antonony, mena ambany)",
+        "size": "Haben’ny teboka: maha-zavadehibe ilay toerana ao amin’ny lahatsoratra",
+        "area": "Faribolana misy tsipika: manondro ny faritry ny distrika, faritra, na firenena iray",
+        "container": "Sisa ivelany malefaka: faritra izay asiana sarintany tsirairay ny atiny",
+        "precisionHalo": "Boribory mana-batana mipetaka (amin’ny time lapse): daty tsy mazava fa amin’ny volana na taona ihany, ka tsy fantatra tsara ny fotoana"
+      },
+      "sourceLabel": "Loharano: {name}",
+      "fetchAndMap": "Alaina & ametrahana sarintany",
+      "fetchingPage": "Manangona pejy…",
+      "railUrlRequest": "Alaina sy ametrahana sarintany ny toerana avy amin'ny: {title} ({url})"
+    },
+    "shell": {
+      "showConversation": "Asehoy ny resaka",
+      "hideConversation": "Afeno ny resaka",
+      "workspaceTab": "Toerana fiasana",
+      "conversationTab": "Resaka",
+      "paneTabsLabel": "Takelaby Workflow",
+      "railEmpty": "Eto no hisehoan'ny hafatra sy ny fandrosoan'ny Assistant.",
+      "railInputPlaceholder": "Mandefasa hafatra amin'ny Assistant…",
+      "assistantThinking": "Mihevitra…",
+      "sendMessage": "Alefaso ny hafatra",
+      "stopGenerating": "Ajanona ny famoronana",
+      "loadingWorkspace": "Manokatra toerana fiasana…",
+      "unknownType": "Ity resaka ity dia mampiasa workflow izay tsy fantatry ny kinova ampiasaina. Aseho fotsiny ny tantaran'ny resaka etsy ambany.",
+      "untitled": "Resaka vaovao",
+      "toggleMenu": "Atsangano/ahenoy ny sakafo",
+      "model": "Modely amin'ity workflow ity"
+    },
+    "tabs": {
+      "label": "Fomba fifanakalozan-dresaka",
+      "chat": "Chat",
+      "chatDescription": "Fifanakalozan-dresaka mahazatra amin’ny assistant"
+    },
+    "discard": {
+      "title": "Hovonoina ity draft ity?",
+      "body": "Ny fifindrana ho any amin’i {target} dia hanala ny asa natomboka tao amin’i {current}.",
+      "confirm": "Vonoy"
+    }
+  },
+  "connectors": {
+    "title": "Connectors",
+    "description": "Ampifandraiso amin’ny Model Context Protocol (MCP) ny fitaovana ivelany. Afaka ampiasain’ny modely amin’ny resaka ireo fitaovana ireo rehefa ekenao fa alefa ny fangatahana.",
+    "localOnlyNote": "Mifidy miditra mivantana amin'ny mpamatsy tsirairay ianao. Encrypté sy voatahiry eto amin’ity fitaovana ity ihany ny access keys, ary hafindra amin’ny server an’ny app isaky ny fangatahana — tsy voatahiry na voasoratra anaty log mihitsy any.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "Mitady repository, mamaky ary mamorona issues sy pull requests."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "Mitady, mamorona, sy manavao tasks sy projets."
+      },
+      "tableau": {
+        "name": "Tableau",
+        "description": "Manao fangatahana amin'ny loharanom-baovao sy boky asa navoaka, ary Pulse metrics."
+      },
+      "salesforce": {
+        "name": "Salesforce",
+        "description": "Mitady sy manavao ireo rakitra amin'ny Salesforce anao."
+      },
+      "hootsuitePerch": {
+        "name": "Hootsuite Perch",
+        "description": "Manaova dika, fandaharam-potoana, ary mamoaka lahatsoratra amin'ny tambazotra sosialy."
+      },
+      "hootsuiteNest": {
+        "name": "Hootsuite Nest",
+        "description": "Jereo sy valio ny resaka ao amin'ny social inbox."
+      }
+    },
+    "connect": "Ampifandraiso",
+    "connected": "Voafandrika",
+    "tokenEndsIn": "mifarana amin'ny ••••{last4}",
+    "disconnect": "Tapaho ny fifandraisana",
+    "toolCount": "{count, plural, =1 {Fitaovana 1 azo ampiasaina} other {Fitaovana # azo ampiasaina}}",
+    "patLabel": "Personal access token",
+    "createTokenLink": "Mamorona token",
+    "tokenScopeHint": "Ampiasao token manokana mifanaraka amin'ny ilain’ireo fitaovana ireo fotsiny.",
+    "validating": "Manamarina fifandraisana…",
+    "validationFailed": "Tsy afaka mampifandray. Hamarino ny adiresy ary andramo indray.",
+    "authFailed": "Nolavin'ny lohamilina ny token. Hamarino izany ary andramo indray.",
+    "tokenRequired": "Takiana ny token",
+    "enableServer": "Misy ao amin'ny chat",
+    "arbitraryTitle": "Lohamilina MCP hafa",
+    "arbitraryToggle": "Avela ny lohamilina MCP hafa",
+    "arbitraryWarning": "Afaka mahita ny hafatra nalefa amin'ny fitaovana rehetra izay mitantana lohamilina MCP. Ampifandraiso fotsiny ireo lohamilina atokisanao. Mila fanekenao hatrany ny antso amin'ny fitaovana tsirairay.",
+    "addServer": "Ampio lohamilina MCP",
+    "editServer": "Hanova lohamilina MCP",
+    "serverName": "Anarana",
+    "serverUrl": "URL-n'ny lohamilina",
+    "nameRequired": "Takiana ny anarana",
+    "urlRequired": "Takiana ny URL",
+    "invalidUrl": "Ampidiro adiresy https:// ho an'ny daholobe",
+    "namePlaceholder": "Lohamilina MCP-ko",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "Access token (tsy voatery)",
+    "keepTokenPlaceholder": "Avelao banga raha tianao hitazona ny token ankehitriny",
+    "disconnectedToast": "{name} voatapaka ny fifandraisana",
+    "save": "Tehirizo",
+    "connectWithProvider": "Mampifandray amin'i {name}",
+    "useTokenInstead": "Ampiasao ny access token fa tsy izany",
+    "oauthWaiting": "Miandry fankatoavana…",
+    "oauthFailed": "Tsy nahomby ny fidirana. Andramo indray.",
+    "oauthDenied": "Nolavin'ny provider ny fidirana.",
+    "oauthTimeout": "Tapaka fotoana ny fidirana. Andramo indray.",
+    "oauthCancelled": "Nofoanana ny fidirana.",
+    "oauthUnavailable": "Tsy azo tanterahina amin'ity connector amin'ity fametrahana ity ny fidirana amin'ny provider. Ampiasao access token fa tsy izany, na angataho amin'ny mpitantana ny hanamboatra ny OAuth app.",
+    "ownAppToggle": "Ampiasao ny OAuth app manokana",
+    "ownAppHint": "Misorata anarana amin'ny OAuth app ao amin'ny kaonty {name} (fikambanana, toerana iasanao, na sehatra enterprise) miaraka amin'ny callback URL etsy ambany, avy eo apetaho eto ny mombamomba azy. Avelao mihidy io raha hampiasa ilay app efa napetraka.",
+    "ownAppCustomHint": "Afaka manome mombamomba OAuth app manokana etsy ambany ianao; avelao banga raha tianao ny hisoratra ho azy amin'ny lohamilina.",
+    "ownAppInUse": "Mifandray amin'ny OAuth app manokana.",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client secret (raha manana izany ny app-nao)",
+    "redirectUriLabel": "Callback / redirect URL tokony hisoratra",
+    "reconnect": "Ampifandraiso indray",
+    "needsReauth": "Mila ampifandraisina indray",
+    "disconnectOauthNote": "Ny fanapahana fifandraisana dia hanala fidirana amin'ity fitaovana ity ihany. Raha tianao havaozina tanteraka ny fidirana, tantano ny apps nahazo alalana ao amin'ny kaonty {name}.",
+    "authModeLabel": "Fanamarinana",
+    "authModeNone": "Tsy misy",
+    "authModeBearer": "Access token",
+    "authModeOauth": "Hiditra miaraka amin'ny provider (OAuth)",
+    "oauthCustomHint": "Hiditra amin'ny provider an'ny lohamilina ianao amin'ny varavarankely misokatra rehefa avy manavotra.",
+    "saveAndSignIn": "Tehirizo & midira",
+    "oauthCallback": {
+      "title": "Vita ny fankatoavana",
+      "missingState": "Tsy misy azo ankatoavina",
+      "close": "Afaka manakatona ity varavarankely ity sy miverina amin'ny app ianao.",
+      "closeButton": "Akatona ny varavarankely"
+    },
+    "oauthNoAppConfigured": "Tsy voalamina amin'ity fametrahana ity ny fidirana amin'ny alalan'ny {name}. Mifandray amin'ny alalan'ny fisoratana anarana amin'ny OAuth app-nao manokana.",
+    "adminConnectorsTitle": "Avy amin'ny fikambananao",
+    "adminConnectorsDescription": "Ireo connector napetrak'ireo mpitantana. Miankina amin'ny fahazoanao miditra no ahitanao azy.",
+    "managedByOrg": "Tantanin'ny fikambananao",
+    "connectorOauthNotConfigured": "Tsy mbola vita ny fanomanana fidirana amin'ity connector ity. Mifandraisa amin'ny mpitantana anao.",
+    "yourConnectorsTitle": "Ireo connector anao",
+    "addTitle": "Ampio connector",
+    "addDescription": "Misafidiana fitaovana ampifandraisina. Rahefa avy nisafidy ianao vao manamboatra fahazoana miditra.",
+    "add": "Ampio",
+    "filterLabel": "Sivano connector",
+    "filterPlaceholder": "Karohy connector",
+    "noMatches": "Tsy misy connector mifanaraka amin'ny “{query}”."
+  },
+  "modelSources": {
+    "connectButtonShort": "Ampifandraiso ny loharano modely",
+    "addAnother": "Ampio loharano modely iray hafa",
+    "edit": "Hanova",
+    "disconnect": "Tapaho {name}",
+    "disconnectedToast": "Tapatra {name}",
+    "modelCountLabel": "Modely {count}",
+    "loadingModels": "Ampidirina ny modely...",
+    "noModelsAvailable": "Tsy misy modely azo avy amin'ity loharano ity",
+    "sourceUnreachable": "Tsy tratra ny loharano. Mety niova ny fidiranao, na tsy azo idirana vetivety ilay serivisy.",
+    "retry": "Avereno",
+    "connectFoundryAccount": "Ampifandraiso ny kaonty Microsoft Azure Foundry",
+    "connectFoundryDescription": "Ahitsio ny fametrahana modely avy amin'ny kaonty Azure Foundry azonao idirana. Ny alalana Azure anao no manaiky ny fangatahana rehetra — tsy mihatra eto ny fetra napetraky ny app amin'ny modely.",
+    "selectModelsDescription": "Safidio izay fametrahana modely avy amin'ity kaonty ity hiseho ao amin'ny model picker anao.",
+    "editConnection": "Hanova Fifandraisana",
+    "nameLabel": "Anarana",
+    "namePlaceholder": "oh: Sandbox an'ny Ekipako",
+    "nameRequired": "Ilaina ny anaran'ny loharano",
+    "foundryAccountLabel": "Kaonty Foundry",
+    "enterManually": "Ampidiro tanana",
+    "browseResources": "Hijery loharano",
+    "subscriptionIdLabel": "ID Fampidirana",
+    "resourceGroupLabel": "Vondrona Loharano",
+    "accountNameLabel": "Anaran'ny kaonty",
+    "subscriptionRequired": "Misafidiana famandrihana",
+    "accountRequired": "Misafidiana kaonty Foundry",
+    "accountSelectionRequired": "Safidio ny kaonty ao amin'ny lisitra.",
+    "selectAllRequired": "Safidio ny famandrihana, vondrona loharano, ary kaonty.",
+    "connectionFailed": "Tsy tratra ity kaonty ity. Hamarino ny antsipiriany sy fa azonao idirana.",
+    "duplicateSource": "Efa mifandray ho \"{name}\" ity kaonty ity.",
+    "connectionSuccessModels": "Mifandray — {count} fametrahana modely hita",
+    "connectionSuccessEmpty": "Mifandray, nefa tsy misy fametrahana modely hita amin'ity kaonty ity.",
+    "checkingConnection": "Hamarina ny fifandraisana...",
+    "next": "Manaraka",
+    "back": "Miverina",
+    "cancel": "Foano",
+    "connect": "Ampifandraiso",
+    "save": "Tehirizo",
+    "scanningResources": "Manamarina ny Azure subscriptions anao...",
+    "discoveryPartialWarning": "{count, plural, one {# subscription} other {# subscriptions}} tsy afaka nojerena. Ampiasao ny famenoana an-tanana raha tsy hita ny kaontinao.",
+    "discoveryTruncatedWarning": "Betsaka loatra ny loharanon-karena ka tsy voatily tanteraka. Ampiasao ny famenoana an-tanana raha tsy hita ny kaontinao.",
+    "noAccountsDiscovered": "Tsy nisy kaonty Foundry hita tao amin'ny subscriptions-nao. Ampiasao ny famenoana an-tanana raha fantatrao ny lalana.",
+    "retryScan": "Avereno jerena",
+    "searchAccountsPlaceholder": "Karohy ny kaonty...",
+    "modelsSelectedCount": "{selected} amin'ny {total} modely voafantina",
+    "selectAll": "Safidio rehetra",
+    "deselectAll": "Esory ny safidy rehetra",
+    "autoAddLabel": "Ampidirina ho azy ireo modely vaovao",
+    "autoAddDescription": "Ny model deployments ampiditra amin'ity kaonty ity aty aoriana dia hiseho ho azy. Ny modely tsy voamarika dia hijanona tsy tafiditra."
+  },
+  "emissions": {
+    "tier": {
+      "low": "Fiantraikany ambany",
+      "moderate": "Fiantraikany antonony",
+      "high": "Fiantraikany avo"
+    },
+    "tierTooltip": "Fiantraikany ho an'ny angovo tsirairay, kajy miankina amin'ny haben'ny modely. Tohina avy amin'ny tombana ara-tsalantsalany sy fiheverana v{version} — tsy fandrefesana mivantana.",
+    "typicalRequest": "~{grams} g CO₂e isaky ny fangatahana mahazatra",
+    "typicalRequestTooltip": "Tombana ho an'ny fangatahana iray (eo amin'ny 1,000 prompt sy 500 completion tokens), nalaina avy amin'ny salan'isa sy fiheverana ampahibemaso v{version}. Miovaova arakaraka ny halavan'ny resaka, toe-javatra, sy ny faritra fitantanana ny tena fiantraikany.",
+    "activities": {
+      "netflixHd": "Fijery Netflix HD",
+      "zoomCall": "Antso Zoom (miasa ny fakantsary)",
+      "webBrowsing": "Fikarohana amin'ny tranonkala",
+      "spotifyAudio": "Mozika Spotify"
+    },
+    "equivalents": {
+      "title": "≈ mitovy amin'ny entona karbônina avy amin'ny",
+      "note": "Fampitahana amin'ny dikan-karbônina isaky ny ora avy amin'ireto tolotra ireto — isa ampitovina toy ny tombana rehetra eto."
+    },
+    "duration": {
+      "lessThanSecond": "<1 s",
+      "seconds": "{value} s",
+      "minutes": "{value} min",
+      "hours": "{value} ora"
+    },
+    "chip": {
+      "label": "{grams} g CO₂e",
+      "ariaLabel": "Vinavina amin'ny dian-karbônina amin'ity resaka ity: {grams} grama CO₂ mitovy. Asehoy ny antsipiriany.",
+      "ariaLabelToday": "Vinavina amin'ny dian-karbônina amin'ity resaka androany: {grams} grama CO₂ mitovy. Asehoy ny antsipiriany.",
+      "title": "Ity resaka ity (vinavinaina)",
+      "today": "Anio",
+      "total": "Hatramin'izay",
+      "measured": "Avy amin'ny isan'ny token navoaka tatitra",
+      "estimated": "Hajaina amin'ny hafatra taloha",
+      "lastRequest": "Fangatahana farany",
+      "disclaimer": "Fanombanana isaky ny fangatahana avy amin'ny isan'ny token navoaka tatitra na vinavinaina, amin'ny fampiasana salan'isa sy hevi-dalina navoaka ho an'ny vahoaka v{version}. Ny hafatra taloha dia hajaina avy amin'ny lahatsoratra voatahiry sy ny modely amin'izao resaka izao. Tsy fandrefesana marina.",
+      "visibilityGroup": "Fisehoan'ny chip emissions",
+      "visibilityLabel": "Asehoy:",
+      "visibility": {
+        "always": "Foana",
+        "auto": "Auto",
+        "hidden": "Afeno"
+      },
+      "visibilityHint": "Asehon'ny Auto ny chip rehefa misy fanavaozana amin'ny vinavina na rehefa soratana amin'izay ianao. Azonao ovaina indray eto: Settings › Usage & Impact."
+    }
+  },
+  "table": {
+    "copyTable": "Kopia latabatra",
+    "downloadTable": "Ampidino ny latabatra",
+    "copyMarkdown": "Markdown",
+    "copyCsv": "CSV",
+    "copyTsv": "TSV",
+    "formatCsv": "CSV (.csv)",
+    "exportedAsCsv": "Nalefa ho CSV",
+    "copyFailed": "Tsy nahomby ny kopia ny latabatra"
+  },
+  "backup": {
+    "intro": {
+      "title": "Ataovy azo antoka ny resakao — voaaro",
+      "body": "Voaaro amin'ity fitaovana ity ny resakao alohan'ny fampakarana rehetra. Tsy afaka mahita ny resakao mihitsy izahay.",
+      "keyWarning": "Amin'ity fitaovana ity no mamoronana ny fanalahidinao famerenana. Tsy mahita izany izahay ary tsy afaka mamerenana izany ho anao — very ny fanalahidy dia very ny tahiry.",
+      "create": "Mamoròna fanalahidy & manao backup",
+      "decline": "Tsia aloha — avelao eto amin'ity fitaovana ity ihany ny resaka"
+    },
+    "ceremony": {
+      "titleCreate": "Tehirizo ny fanalahidinao famerenana",
+      "titleRotate": "Tehirizo ny fanalahidinao famerenana vaovao",
+      "titleView": "Ny fanalahidinao famerenana",
+      "description": "Ity fanalahidy ity irery ihany no ahafahanao mamerina ny backup amin'ny fitaovana hafa. Tehirizo amin'ny toerana azo antoka — tsy afaka mamerina izany izahay.",
+      "copy": "Kopia",
+      "copied": "Voakopy!",
+      "download": "Ampidino .txt",
+      "showQr": "Asehoy ny QR code",
+      "hideQr": "Afeno ny QR code",
+      "savedCheckbox": "Tehiriziko amin'ny toerana azo antoka ny fanalahidinao famerenana",
+      "saveFirstHint": "Kopia na ampidino alohan'ny hanohizana ny fanalahidy.",
+      "continue": "Tohizo",
+      "done": "Vita",
+      "cancel": "Foano",
+      "cancelConfirmTitle": "Foano ny fanaovana backup?",
+      "cancelConfirmBody": "Tsy hotahirizina ny resakao. Afaka alefa amin'ny fotoana rehetra ao amin'ny Settings ny backup voaaro.",
+      "cancelConfirmRotateBody": "Efa nohavaozina ny fanalahidy famerenanao. Afaka jerenao amin'ny fotoana rehetra ao amin'ny Settings izany.",
+      "cancelConfirmConfirm": "Eny, foano",
+      "cancelConfirmDismiss": "Miverina",
+      "loadError": "Tsy afaka nampiditra ny fanalahidinao famerenana amin'ity fitaovana ity."
+    },
+    "file": {
+      "heading": "Fanalahidin'ny backup chat",
+      "warning": "Tehirizo amin'ny toerana azo antoka io fanalahidy io. Rehefa mahazo io ny olona iray dia afaka mamaky ny backup-nao; tsy misy fanalahidy dia tsy azo averina ny backup."
+    },
+    "progress": {
+      "titleCreate": "Manomana ny backup-nao",
+      "titleRotate": "Manova ny fanalahidinao famerenana",
+      "encrypting": "{count, plural, one {Manakodia sy mitahiry # resaka…} other {Manakodia sy mitahiry # resaka…}}",
+      "success": "{count, plural, one {Vita ny backup. # resaka voaaro.} other {Vita ny backup. # resaka voaaro.}}",
+      "error": "Tsy nahomby ny backup. Mbola eto amin'ity fitaovana ity ny resakao.",
+      "retry": "Avereno indray",
+      "close": "Akatona",
+      "done": "Vita"
+    },
+    "input": {
+      "label": "Fanalahidy famerenana",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Tsy misy O, I na L amin'ny fanalahidy.",
+      "checksumError": "Tsy toa marina io lakile io — tadiavo sao misy diso tsipelina.",
+      "formatError": "Tsy toa lakile fanarenana io.",
+      "incomplete": "Tohizo ny famenoana — 56 litera ny lakile fanarenana.",
+      "valid": "Mahazo ekena io lakile io."
+    },
+    "restore": {
+      "title": "Avereno ny resakao",
+      "successTitle": "Afaka naverina ny backup",
+      "promptBody": "Nahita backup voaaron-tsoratra ho an’ny kaontinao izahay. Ampidiro ny lakile fanarenanao mba hamerina azy amin’ity fitaovana ity.",
+      "submit": "Avereno ny backup",
+      "skip": "Mandrosoa — manomboka vaovao amin’ity fitaovana ity",
+      "restoring": "Manaisotra ny fiarovana sy mamerina ny resakao…",
+      "successBody": "{count, plural, one {# resaka naverina.} other {# resaka naverina.}}",
+      "wrongKey": "Lakile manan-kery io, saingy tsy manokatra io backup io. Raha nanova lakile ianao, ampiasao ny vaovao farany.",
+      "corrupt": "Tsy afaka novakiana io backup io — mety simba ilay izy. Azonao atao ny manomboka vaovao amin’ity fitaovana ity na manandrana indray amin’ny manaraka.",
+      "networkError": "Tsy tafahaona tamin’ny tolotra backup. Zahao ny fifandraisanao ary andramo indray.",
+      "tryAgain": "Andramo lakile hafa",
+      "close": "Vita"
+    },
+    "enterKey": {
+      "title": "Ampidiro ny lakile fanarenana vaovao",
+      "body": "Nisy fiovana ny lakile fanarenanao tamin’ny fitaovana iray hafa. Ampidiro ny lakile vaovao mba hanohizana ny backup amin’ity fitaovana ity.",
+      "submit": "Ampiasao io lakile io"
+    },
+    "banner": {
+      "keyMismatchTitle": "Naatonina ny backup — niova ny lakile fanarenanao tamin’ny fitaovana hafa.",
+      "enterNewKey": "Ampidiro ny lakile vaovao",
+      "resetBackup": "Avereno ny backup",
+      "resetConfirmTitle": "Avereno amin’ny lakile an’ity fitaovana ity ve ny backup?",
+      "resetConfirmBody": "Soloina amin’ny resaka ao amin’ity fitaovana ity ny backup efa misy, harovan’ny lakile-n’ity fitaovana ity. Mila ny lakile fanarenan’ity fitaovana ity ny fitaovana hafa.",
+      "resetConfirmAction": "Avereno ny backup",
+      "remoteMissingTitle": "Tsy eo intsony ny backup-nao ao amin’ny server. Naatonina ny backup.",
+      "backUpAgain": "Ataovy backup indray",
+      "dismiss": "Afohy"
+    },
+    "rotate": {
+      "confirmTitle": "Hanova lakile fanarenana ve?",
+      "confirmBody": "Havaozina amin’ny lakile vaovao ny backup-nao ary tsy mety amin’izay ny lakile taloha. Mila mitahiry sy mampiditra ny lakile vaovao amin'ireo fitaovana hafa ianao.",
+      "confirmAction": "Ovao ny lakile"
+    },
+    "toast": {
+      "enrollLater": "Afaka manokatra backup voaaron-tsoratra amin’ny Settings ianao amin’izay fotoana tianao.",
+      "keyUpdated": "Voahavaozina ny lakile fanarenana. Tafaverina ny backup.",
+      "resetDone": "Voafafa sy naverina amin’ny lakile an’ity fitaovana ity ny backup.",
+      "backupRestarted": "Namorona backup vaovao indray.",
+      "opFailed": "Nisy tsy nety. Azafady andramo indray."
+    },
+    "settings": {
+      "statusOn": "Misy ny backup",
+      "statusOff": "Tsy misy ny backup",
+      "offDescription": "Ao amin’ity navigateur ity ihany ny resakao. Alefaso ny backup voaaron-tsoratra mba hiarovana sy hamerina azy ireo amin’ny fitaovana hafa. Voaara-miafina ny resakao amin’ny fitaovanao — tsy ho azonay vakina izany.",
+      "turnOn": "Alefaso ny backup",
+      "restoreTitle": "Misy backup efa misy ho an’ny kaontinao",
+      "restoreDescription": "Ampidiro ny lakile fanarenanao mba hamerina izany amin’ity fitaovana ity.",
+      "restore": "Avereno ny backup",
+      "lastBackup": "Backup farany: {time}",
+      "lastBackupNever": "Tsy mbola vita ny backup",
+      "keyFingerprint": "Lakile ····-{tail}",
+      "syncState": {
+        "idle": "Miandry hifanaraka",
+        "syncing": "Manao backup…",
+        "ok": "Vaovao foana",
+        "keyOutOfDate": "Naatonina — niova ny lakile fanarenana tamin’ny fitaovana hafa",
+        "remoteMissing": "Naato — voafafa tao amin'ny server ny backup",
+        "error": "Tsy nahomby ny andrana backup farany"
+      },
+      "backUpNow": "Ataovy backup izao",
+      "backUpNowSuccess": "Vita ny backup",
+      "backUpNowFailure": "Tsy nahomby ny backup — tsy nisy niova ny resakao ato amin'ity fitaovana ity",
+      "viewKey": "Jereo ny lakilen'ny recovery",
+      "changeKey": "Ovao ny lakilen'ny recovery",
+      "dangerTitle": "Faritra mampidi-doza",
+      "turnOffDelete": "Vonoy & fafao ny backup",
+      "turnOffConfirmTitle": "Vonoy ve ny backup?",
+      "turnOffConfirmMessage": "Hafafa amin'ny server anay tanteraka amin'ny fitaovana rehetra ny backup-nao. Hitoetra eto amin'ity fitaovana ity ihany ny resakao. Afaka manetsika backup indray ianao amin'ny lakilen'ny recovery vaovao.",
+      "turnOffConfirmAction": "Fafao ny backup",
+      "turnOffSuccess": "Voavono sy voafafa ny backup",
+      "turnOffFailure": "Tsy afaka namafa ny backup. Azafady andramo indray."
+    }
+  },
+  "memories": {
+    "title": "Fahatsiarovana",
+    "description": "Avelao ho tadidin'ny assistant ireo zava-misy maharitra zarainao — toy ny andraikitrao, safidinao, sy tetikasa mandeha — ary ampiasao amin'ny resaka rehetra.",
+    "enableToggle": "Alefaso ny fahatsiarovana",
+    "privacyNote": "Tehirizina ao amin'ity navigateur ity ihany ireo zava-misy ary ampidirina amin'ny resakao hanokana valiny.",
+    "empty": "Tsy mbola misy fahatsiarovana. Tehirizina ho azy avy amin'ny resakao ireo zava-misy tsara tadidina.",
+    "savedOn": "Voatahiry tamin'ny {date}",
+    "deleteMemory": "Fafao ny fahatsiarovana",
+    "clearAll": "Fafao daholo ny fahatsiarovana",
+    "clearAllConfirmQuestion": "Fafao avokoa ny fahatsiarovana? Tsy afaka averina intsony izany.",
+    "clearAllConfirm": "Fafao daholo",
+    "cancel": "Foano"
+  },
+  "contextWindow": {
+    "label": "Varavarankely fitantarana",
+    "value": "{count} hafatra",
+    "fewer": "Hafatra vitsy kokoa",
+    "more": "Hafatra maro kokoa",
+    "description": "Haverenana sy halefa ho famintinana ireo hafatra taloha mihoatra ity fetra ity."
+  },
+  "agentAccess": {
+    "title": "Fidirana amin'ny agent",
+    "description": "Fehezo ireo mpampiasa afaka mampiasa agent Foundry iraisana. Manampy famerana fotsiny ireto fitsipika ireto amin'izay efa azo idiran'ny Azure-n'ny mpampiasa — tsy afaka manome fahazoan-dalana izay lavin'ny Azure izy ireo.",
+    "backToChat": "Miverena amin'ny resaka",
+    "loading": "Eo ampidirana agents sy fitsipika...",
+    "loadError": "Tsy azo ampidirina ny angon-drakitra fidirana amin'ny agent.",
+    "rulesUnavailableWarning": "Tsy voaangona avy amin'ny fitahirizana ireo fitsipika fidirana. Voasakana vonjimaika ny fampiasana agents ary tsy azo ovaina ny fitsipika.",
+    "retry": "Avereno andramana",
+    "rulesTab": "Fitsipika agent",
+    "localAdminsTab": "Administratera eo an-toerana",
+    "noAgents": "Tsy misy agent hotantanana.",
+    "sourceLabel": "Loharano",
+    "notDiscoverable": "Tsy hita ho anao",
+    "notDiscoverableHint": "Misy fitsipika amin'ity agent ity, saingy tsy hita eo amin'ny fahitanao azy — mety hoe novaina anarana, tsy mahatratra azy ny Azure fidirana aminao, na tsy voarakitra ao amin'ny fitsipika fidirana ianao.",
+    "accessEveryone": "Rehetra",
+    "accessRestricted": "Voafetra",
+    "edit": "Ovao",
+    "updatedByLine": "Nohavaozina farany nataon'i {user} tamin'ny {date}",
+    "accessTypeLabel": "Iza no afaka mampiasa ity agent ity",
+    "everyoneDescription": "Izay rehetra efa mahatratra ity agent ity amin'ny alalan'ny Azure fidirany.",
+    "restrictedDescription": "Ireo mpampiasa sy domain voatanisa eto ambany ihany.",
+    "allowDomainsLabel": "Domains azo ampiasaina",
+    "allowDomainsPlaceholder": "example.org",
+    "allowUsersLabel": "Mpampiasa voatokana",
+    "allowUsersPlaceholder": "person@example.org",
+    "chipAddHint": "Tsindrio Enter hanampy",
+    "removeChip": "Esory",
+    "groupsLabel": "Vondrona azo ampiasaina",
+    "groupsPendingConsent": "Miandry faneken'ny admin tenant ny fidirana amin'ny alalan'ny vondrona, ary tsy mbola azo ovaina.",
+    "restrictedEmptyWarning": "Tsy misy mpampiasa na domain voatanisa — tsy hisy afaka hampiasa ity agent ity.",
+    "save": "Tehirizo",
+    "saving": "Eo am-pitehirizana…",
+    "cancel": "Foano",
+    "saveSuccess": "Voatahiry ny fitsipika fidirana.",
+    "deleteSuccess": "Voafafa ny fitsipika fidirana — afaka mampiasa an’ity agent ity indray ny rehetra.",
+    "saveError": "Tsy afaka nitahiry. Azafady avereno andramana.",
+    "conflictError": "Nisy olona hafa nanova raha toa ka nanova ianao. Avereno asiana reload hamaky ny kinova farany, dia avereno ny fanovànao.",
+    "reload": "Avereno",
+    "localAdminsDescription": "Asaivo tantanin'ny admin eo an-toerana ny fitsipika ho an'ny agent manokana tsy mila manamboatra indray. Ny admin eo an-toerana dia afaka manova fitsipika ho an'ireo agent natokana ho azy irery ihany.",
+    "noLocalAdmins": "Tsy misy admin eo an-toerana voafaritra.",
+    "addLocalAdmin": "Ampio admin eo an-toerana",
+    "emailLabel": "Email",
+    "emailPlaceholder": "person@example.org",
+    "removeAdmin": "Esory ny admin eo an-toerana",
+    "delegatedAgentsLabel": "Agent natokana",
+    "noDelegatedAgents": "Tsy misy agent azo natokana.",
+    "unknownAgentKey": "Agent key tsy fantatra",
+    "configSaveSuccess": "Voatahiry ny admin eo an-toerana.",
+    "configConflictError": "Nisy olona hafa nanova ny lisitry ny admin eo an-toerana raha handika ianao. Avereno asiana reload ary andramo indray.",
+    "addAgent": "Ampio agent",
+    "newPromptAgentTitle": "Agent prompt vaovao",
+    "editPromptAgentTitle": "Hanova agent prompt",
+    "agentNameLabel": "Anarana",
+    "agentNamePlaceholder": "oh: Mpiahy dia",
+    "agentDescriptionLabel": "Famaritana",
+    "agentDescriptionPlaceholder": "Asehoy amin'ny mpampiasa ao amin'ny safidin'ny modely",
+    "agentSystemPromptLabel": "Prompt an'ny rafitra",
+    "agentSystemPromptPlaceholder": "Toromarika mamaritra ny fihetsiky ny agent",
+    "agentModelLabel": "Modely",
+    "agentModelPlaceholder": "Safidio ny modely…",
+    "agentModelUnavailable": "{modelId} (tsy azo ampiasaina)",
+    "agentModelUnknownError": "Tsy misy intsony ilay modely voafantina. Misafidiana modely hafa ary tehirizo indray.",
+    "promptAgentBadge": "Agent prompt",
+    "editAgent": "Hanova agent",
+    "deleteAgent": "Fafao",
+    "deleteAgentConfirm": "Hofafana ho an'ny rehetra ve ity agent ity? Tsy hiseho intsony amin'ny safidin'ny modely; mitahiry ny tantarany kosa ireo resaka efa misy.",
+    "confirmDeleteAgent": "Eny, fafao",
+    "promptAgentCreateSuccess": "Agent prompt voaforona.",
+    "promptAgentSaveSuccess": "Agent prompt voatahiry.",
+    "promptAgentDeleteSuccess": "Agent prompt voafafa.",
+    "promptAgentsUnavailableWarning": "Tsy afaka nakarina avy amin'ny fitahirizana ireo agent prompt. Tsy afaka ovaina amin'izao fotoana izao.",
+    "agentsTab": "Mpanampy",
+    "connectorsTab": "Connector",
+    "addConnector": "Ampio connector",
+    "noConnectors": "Tsy mbola misy connector.",
+    "connectorsUnavailableWarning": "Tsy afaka nidirana amin'ny fivarotana connector, mety tsy feno ity lisitra ity. Aza mamerina mamorona raha tsy efa niakatra ilay izy.",
+    "editAccess": "Ovay ny fahazoana miditra",
+    "deleteConnector": "Fafao",
+    "deleteConnectorConfirm": "Fafana ve ity connector ity? Izay mampiasa azy dia tsy ho afaka hiditra avy hatrany.",
+    "confirmDeleteConnector": "Fafao ny connector",
+    "connectorSaveSuccess": "Voavonjy ny connector.",
+    "connectorCreateSuccess": "Vita ny famoronana connector.",
+    "connectorDeleteSuccess": "Voafafa ny connector.",
+    "editConnectorTitle": "Ovay connector",
+    "newConnectorTitle": "Connector vaovao",
+    "connectorPresetLabel": "Atombohy amin'ny kalitao efa misy",
+    "connectorPresetNone": "Atombohy amin'ny rangotra",
+    "connectorNameLabel": "Anarana",
+    "connectorDescriptionLabel": "Famaritana",
+    "connectorUrlLabel": "Server URL",
+    "connectorUrlPlaceholderWarning": "Soloy amin'ny sandanao manokana ny {placeholder} ao amin'ny URL alohan'ny hitahirizana.",
+    "connectorTransportLabel": "Transport",
+    "connectorAuthLabel": "Fanamarinana",
+    "connectorAuthNone": "Tsy misy",
+    "connectorAuthBearer": "Token (tsirairay avy no mametraka azy)",
+    "connectorAuthOauth": "Fidirana amin’ny OAuth",
+    "connectorSealingUnavailable": "Tsy azo ampiasaina ny OAuth: tsy misy AUTH_SECRET namboarina amin'ity deployment ity hiarovana ny tsiambaratelo client.",
+    "connectorTokenHelpLabel": "Rohy mankany amin'ny toromarika token (tsy voatery)",
+    "connectorClientIdLabel": "OAuth client ID",
+    "connectorClientSecretLabel": "OAuth client secret",
+    "connectorClientSecretStored": "Efa voatahiry ny tsiambaratelo. Avelao foana raha tianao hotehirizina, na fenoy vaovao raha tianao hosoloina.",
+    "connectorClientSecretHint": "Alohan'ny hitehirizana dia angonina, sady tsy haseho intsony.",
+    "connectorScopesLabel": "Scopes (avahana amin'ny habaka, tsy voatery)"
+  },
+  "localModels": {
+    "title": "Model eo an-toerana",
+    "description": "Afaka miresaka amin’ny model mandeha amin’ity solosaina ity ianao. Avy hatrany ny hafatra dia mandeha avy any amin’ny navigateur mankany amin’ny application eo an-toerana ary tsy tonga amin’ny server-nay mihitsy — dia mijanona ao amin’ny milinao ihany ny valiny, lohatenin-dresaka, ary famintinana.",
+    "detect": "Fikarohana model eo an-toerana",
+    "detecting": "Mikaroka…",
+    "experimental": "Andrana",
+    "portLabel": "Port",
+    "statusUnknown": "Tsy mbola voamarina.",
+    "statusChecking": "Eo am-panamarinana…",
+    "statusReady": "{count, plural, =0 {Mifandray, fa tsy mbola misy model nampidirina.} one {Mifandray — model 1 misy.} other {Mifandray — model # misy.}}",
+    "statusNotRunning": "Tsy afaka nifandray tamin’i {label}. Hamarino fa mandeha amin’ity port ity izy, ary afaka miditra amin’ny app eo an-toerana avy amin’ity tranonkala ity ny navigateur-nao.",
+    "statusHttpError": "{label} namaly tamin’ny hadisoana. Jereo ny log-ny.",
+    "corsHelp": {
+      "ollama": "Mandeha i Ollama saingy mandà fangatahana avy amin’ity tranonkala ity. Apetraho amin’ny OLLAMA_ORIGINS ny adiresin’ity tranonkala ity, avereno indray i Ollama, dia ataovy indray ny fikarohana.",
+      "lmstudio": "Mandeha i LM Studio saingy mandà fangatahana avy amin’ity tranonkala ity. Alefaso ny CORS ao amin’ny settings an’ny server eo an-toerana, dia ataovy indray ny fikarohana.",
+      "llamacpp": "Mandeha i llama.cpp saingy mandà fangatahana avy amin’ity tranonkala ity. Atomboy miaraka amin’ny cross-origin requests avela ny llama-server, dia ataovy indray ny fikarohana."
+    },
+    "privacyNote": "Tsy manohana rakitra, sary, fikarohana web, na connecteurs ny model eo an-toerana — mila server-nay izany. Fotsiny amin’ity solosaina ity ihany no mijery ny fisiany."
+  },
+  "urlFetch": {
+    "sourceFallback": "Pejy web",
+    "fallbackHint": "Azonao atao ihany koa ny manokatra ilay pejy, mandika ny lahatsoratra, ary mametaka eto.",
+    "shortExtract": "Fintina fohy ihany no azo vakiana — mety voaloa vola ilay pejy na mitaky fidirana.",
+    "errors": {
+      "invalidUrl": "Tsy toa adiresy web manankery izany.",
+      "ssrfBlocked": "Tsy azo alaina io adiresy io noho ny antony fiarovana.",
+      "tooManyRedirects": "Nanao redirect imbetsaka loatra io rohy io.",
+      "timeout": "Ela loatra ny famaliana ilay pejy.",
+      "unreachable": "Tsy azo idirana ilay pejy.",
+      "blocked": "Nolavin'ilay tranonkala ny fangatahana — mety mila fidirana na manakana mpamaky mandeha ho azy.",
+      "notFound": "Tsy hita ilay pejy.",
+      "upstream": "Nivoaka ny hadisoana avy amin'ilay tranonkala.",
+      "pdf": "PDF io rohy io. Sintomy ary ampiasao ny bokotra attach hanampiana azy.",
+      "nonHtml": "Tsy pejy web azonay vakiana io rohy io.",
+      "tooLarge": "Lehibe loatra ilay pejy ka tsy afaka alaina.",
+      "empty": "Tsy nisy lahatsoratra azo vakiana hita tamin'io pejy io.",
+      "generic": "Tsy azony nalaina ilay pejy."
+    },
+    "fetchingFile": "Alaiko {host}…",
+    "attachLink": "Manampia rohy",
+    "attachLinkTitle": "Manampia pejy web",
+    "attachLinkDescription": "Alaina ilay pejy ary ampiarahina amin'ny hafatrao ny lahatsoratra azo vakiana.",
+    "attachLinkPlaceholder": "https://example.com/article",
+    "attachLinkSubmit": "Alao & ampiaro",
+    "attachLinkInvalid": "Tsy toa adiresy web io.",
+    "linkBadge": "Avy amin'ny rohy",
+    "couldNotRetrieve": "Tsy azo nalaina",
+    "doc": {
+      "sourceLabel": "Loharano",
+      "retrievedLabel": "Voaray",
+      "attemptedLabel": "Niezahana nalaina",
+      "failureHeading": "Tsy azo nalaina ilay pejy web"
+    },
+    "settingsTitle": "Rohy ao anaty hafatra",
+    "settingsToggle": "Alao ho azy ny rohy apetraka",
+    "settingsDescription": "Rehefa mametraka rohy misaraka ianao dia alaina ilay pejy ary ny lahatsorany dia ampiarahina amin'ny hafatrao mba ho azon'ny assistant vakiana. Vonoy raha tianao hijanona ho soratra tsotra fotsiny ny rohy. Azonao atao hatrany ny manampy pejy amin'ny tanana amin'ny alalan'ny menu +.",
+    "addLink": "Ampio rohy"
+  },
+  "cameraAccessError": "Tsy afaka miditra amin'ny fakantsary. Hamarino ny fahazoan-dàlana amin'ny fakantsary ary avereno andramana.",
+  "cameraUnnamedDevice": "Fakantsary",
+  "pastedText": {
+    "fallbackName": "Lahatsoratra nampidirina",
+    "charCount": "{count, number} tarehintsoratra",
+    "removeChip": "Esory ny lahatsoratra nampidirina “{name}”",
+    "blockLabel": "Lahatsoratra nampidirina: {name}",
+    "doc": {
+      "heading": "Lahatsoratra nampidirina",
+      "pastedLabel": "Nampidirina"
+    },
+    "settingsTitle": "Lahatsoratra nampidirina be",
+    "settingsToggle": "Ataovy soratra manampy amin'ny fisie ny lahatsoratra be",
+    "settingsDescription": "Raha mihoatra ny fetra eto ambany ny habetsahan'ny lahatsoratra dia ampidirina toy ny fisie izany fa tsy mameno ny boaty hafatra. Mampiasaina araka izay nampidirina ihany ny lahatsoratra — tsy misy azo na ovaina.",
+    "settingsThresholdLabel": "Ampidiro toy ny fisie raha lava noho ny",
+    "settingsThresholdUnit": "tarehintsoratra",
+    "settingsThresholdHint": "Manomboka amin'ny {min, number} ka hatramin'ny {max, number} tarehintsoratra."
+  },
+  "structures": {
+    "section": "Rafitra",
+    "sectionSubtitle": "Famaritana saha voatahiry. Ampiasao ho fitrandrahana, na ho fihodinan-kevitra ho an’ny latabatra workflows data.",
+    "loadFromStructure": "Ampidiro rafitra",
+    "loadFromStructureTitle": "Soloy amin'ny rafitra voatahiry ireto andalana ireto",
+    "pickerEmpty": "Tsy mbola misy rafitra voatahiry.",
+    "pickerTitle": "Ampidiro rafitra voatahiry",
+    "saveAsStructure": "Tehirizo ho rafitra",
+    "saveAsStructureTitle": "Tehirizo ao amin'ny tranombokin'ny rafitrao ireo andalana ireo",
+    "savedToast": "Rafitra voatahiry “{name}”",
+    "namePlaceholder": "Anaran'ny rafitra",
+    "fieldCount": "{count} saha",
+    "fieldCountOne": "1 saha",
+    "downgradedNotice": "{count} saha navadika ho soratra — latabatra dia iray isaky ny sela: {names}",
+    "truncatedNotice": "{count} saha nesorina — ny fetra ambony amin’ny latabatra dia {max} andalana: {names}",
+    "skippedDerivedNotice": "{count} andalana voahevitra tsy voatahiry — ireo formula mifandray amin’ity latabatra ity: {names}",
+    "loadReplacesColumns": "Hisolo ireo andalan-tsarimihetsika amin’izao. Ny laharana efa misy dia mitahiry sanda raha mitovy ny anarany."
   }
 }
