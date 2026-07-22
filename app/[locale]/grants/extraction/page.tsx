@@ -344,6 +344,8 @@ export default function GrantExtractionPage() {
   const [acceptedProposals, setAcceptedProposals] = useState<Set<string>>(
     new Set(),
   );
+  // Likely-match rows (no code in the document)
+  const [includedLikely, setIncludedLikely] = useState<Set<string>>(new Set());
 
   // Extraction prompt editor (per-OC, blob-backed via /api/grants/prompt)
   const [promptOpen, setPromptOpen] = useState(false);
@@ -656,6 +658,7 @@ export default function GrantExtractionPage() {
       });
 
       setCoverageData(data);
+      setIncludedLikely(defaultRowSelection(data.reconciliation));
       setUiState('coverage-check');
     } catch (err) {
       setError(
@@ -677,6 +680,16 @@ export default function GrantExtractionPage() {
     });
   };
   */
+
+  // Default row selection for a fresh coverage result: confirmed code matches
+  // are pre-selected (verified matches forward automatically); amber likely
+  // matches start unselected until a human reviews the document.
+  const defaultRowSelection = (rec: Reconciliation): Set<string> =>
+    new Set(
+      rec.rows
+        .filter((r) => r.align === 'Yes' && r.narrativeFile)
+        .map((r) => r.projectCode),
+    );
 
   // Resolve a narrative filename to its blob path so it can be opened via the
   // document-serve endpoint. Prefers the actual selected-doc blob path; falls
@@ -806,6 +819,23 @@ export default function GrantExtractionPage() {
       for (const p of coverageData.reconciliation.proposals) {
         if (acceptedProposals.has(p.proposedCode))
           codeOverrides[p.file] = p.proposedCode;
+      }
+      // Rows the user selected on the coverage screen: attribute the
+      // allocation code to that row's narrative during extraction.
+      const selectedByFile = new Map<string, string[]>();
+      for (const r of coverageData.reconciliation.rows) {
+        if (
+          r.narrativeFile &&
+          (r.align === 'Yes' || r.recovered) &&
+          includedLikely.has(r.projectCode)
+        ) {
+          const list = selectedByFile.get(r.narrativeFile) || [];
+          list.push(r.projectCode);
+          selectedByFile.set(r.narrativeFile, list);
+        }
+      }
+      for (const [file, codes] of selectedByFile) {
+        if (codes.length === 1) codeOverrides[file] = codes[0];
       }
     }
 
@@ -993,6 +1023,7 @@ export default function GrantExtractionPage() {
     setSearchTerm('');
     setCoverageData(null);
     setAcceptedProposals(new Set());
+    setIncludedLikely(new Set());
   };
 
   const handleRunAgain = () => {
@@ -1000,6 +1031,7 @@ export default function GrantExtractionPage() {
     setProgress(null);
     setCoverageData(null);
     setAcceptedProposals(new Set());
+    setIncludedLikely(new Set());
     setExtractionData(null);
     setEditedRows([]);
     setError(null);
@@ -1682,6 +1714,11 @@ export default function GrantExtractionPage() {
                 <table className="min-w-full text-sm">
                   <thead className="bg-gray-50 dark:bg-gray-900/40">
                     <tr>
+                      <th className="w-8 py-2 pl-2 pr-0">
+                        <span className="sr-only">
+                          Include likely match in extraction
+                        </span>
+                      </th>
                       {[
                         'Allocation List Project Code',
                         'Code in Narratives',
@@ -1705,6 +1742,26 @@ export default function GrantExtractionPage() {
                         key={i}
                         className="border-t border-gray-100 dark:border-gray-700/60"
                       >
+                        <td className="w-8 py-2 pl-2 pr-0 align-middle">
+                          {r.narrativeFile &&
+                            (r.align === 'Yes' || r.recovered) && (
+                              <input
+                                type="checkbox"
+                                checked={includedLikely.has(r.projectCode)}
+                                onChange={() =>
+                                  setIncludedLikely((prev) => {
+                                    const next = new Set(prev);
+                                    if (next.has(r.projectCode))
+                                      next.delete(r.projectCode);
+                                    else next.add(r.projectCode);
+                                    return next;
+                                  })
+                                }
+                                title={`Include ${r.projectCode} from "${r.narrativeFile}" in the extraction results`}
+                                className="h-4 w-4 cursor-pointer rounded-full border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600"
+                              />
+                            )}
+                        </td>
                         <td className="px-3 py-2 font-mono text-gray-900 dark:text-gray-100">
                           {r.projectCode}
                         </td>
@@ -1740,10 +1797,11 @@ export default function GrantExtractionPage() {
                               href={`/api/grants/documents/serve?blobPath=${encodeURIComponent(narrativeBlobPath(r.narrativeFile))}`}
                               target="_blank"
                               rel="noopener noreferrer"
+                              title={`View "${r.narrativeFile}" — the document this ${r.recovered ? 'likely match was suggested' : 'match was found'} in`}
                               className="inline-flex items-center gap-1 whitespace-nowrap font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400"
                             >
                               <IconExternalLink size={14} />
-                              Open PDF
+                              View document
                             </a>
                           ) : (
                             <span className="text-gray-400">—</span>
@@ -1754,6 +1812,22 @@ export default function GrantExtractionPage() {
                   </tbody>
                 </table>
               </div>
+            )}
+
+            {coverageData.reconciliation.rows.some(
+              (r) => r.narrativeFile && (r.align === 'Yes' || r.recovered),
+            ) && (
+              <p className="mb-6 -mt-4 text-xs text-gray-500 dark:text-gray-400">
+                Ticked rows carry their project code and document into the
+                extraction results. Confirmed code matches are pre-selected.
+                Rows marked{' '}
+                <span className="font-medium text-amber-600 dark:text-amber-400">
+                  Likely (review)
+                </span>{' '}
+                have no project code written in their document — open the
+                document to verify the match before ticking. Unticked rows are
+                left for the extractor to resolve on its own.
+              </p>
             )}
 
             {/*
