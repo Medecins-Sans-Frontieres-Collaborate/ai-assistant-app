@@ -3,23 +3,19 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { canAccessGrants } from '@/lib/services/grants/access';
+import { loadExpectedProjects } from '@/lib/services/grants/allocationList';
 import {
   getDeployment,
   getGrantOpenAIClient,
 } from '@/lib/services/grants/grantOpenAIClient';
-import {
-  type SupplementalFileSpec,
-  loadOCConfig,
-} from '@/lib/services/grants/ocConfig';
+import { loadOCConfig } from '@/lib/services/grants/ocConfig';
 import {
   type DocExtract,
-  type ExpectedProject,
   normalizeName,
   reconcile,
 } from '@/lib/services/grants/preprocess';
 import { preprocessProgressPath } from '@/lib/services/grants/preprocessProgress';
 import * as extractText from '@/lib/services/grants/stages/extractText';
-import { loadTable } from '@/lib/services/grants/supplementalTable';
 
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
 
@@ -340,67 +336,6 @@ async function recoverMissingCode(
 }
 
 // ---------------------------------------------------------------------------
-// Expected (code, name) allocation list loader — blob → temp file → table
-// ---------------------------------------------------------------------------
-
-function matchBlobName(
-  blobNames: string[],
-  configFilename: string,
-): string | null {
-  const target = configFilename.toLowerCase();
-  // exact
-  for (const b of blobNames) if (basename(b).toLowerCase() === target) return b;
-  // substring (config name inside blob name)
-  for (const b of blobNames)
-    if (basename(b).toLowerCase().includes(target)) return b;
-  // keyword fallback
-  for (const b of blobNames)
-    if (basename(b).toLowerCase().includes('allocation')) return b;
-  return null;
-}
-
-async function loadExpectedList(params: {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  blobClient: any;
-  oc: string;
-  spec: SupplementalFileSpec;
-  workDir: string;
-}): Promise<ExpectedProject[]> {
-  const { blobClient, oc, spec, workDir } = params;
-
-  let blobNames: string[] = [];
-  try {
-    const blobs = await blobClient.listBlobsDetailed(
-      `grants/${oc}/supplemental/`,
-    );
-    blobNames = blobs.map((b: { name: string }) => b.name);
-  } catch {
-    return [];
-  }
-
-  const blobPath = matchBlobName(blobNames, spec.filename);
-  if (!blobPath) return [];
-
-  const localPath = join(workDir, basename(blobPath));
-  const buffer = (await blobClient.get(blobPath, BlobProperty.BLOB)) as Buffer;
-  await writeFile(localPath, buffer);
-
-  const rows = loadTable(localPath, spec.skiprows || 0);
-  const codeCol = String(spec.columns.code || 'Project Code');
-  const nameCol = String(spec.columns.name || 'Project Name');
-  const countryCol = String(spec.columns.country || 'Country');
-
-  const out: ExpectedProject[] = [];
-  for (const r of rows) {
-    const code = String(r[codeCol] ?? '').trim();
-    const name = String(r[nameCol] ?? '').trim();
-    const country = String(r[countryCol] ?? '').trim();
-    if (code && code.toUpperCase() !== 'NAN') out.push({ code, name, country });
-  }
-  return out;
-}
-
-// ---------------------------------------------------------------------------
 // POST /api/grants/preprocess
 // ---------------------------------------------------------------------------
 
@@ -527,17 +462,14 @@ async function runCoverageCheck(params: {
 
     // 4. Load the expected (code, name) allocation list from the OC's
     //    supplemental files in blob (dedicated category, distinct from
-    //    project_list). If not configured/found, expected is empty.
-    let expected: ExpectedProject[] = [];
-    const allocSpec = ocCfg.supplemental_files?.allocation_list;
-    if (allocSpec) {
-      expected = await loadExpectedList({
-        blobClient,
-        oc,
-        spec: allocSpec,
-        workDir,
-      });
-    }
+    //    project_list). If none is found, expected is empty and the coverage
+    //    check degrades to code-detection-only.
+    const expected = await loadExpectedProjects({
+      blobClient,
+      oc,
+      config: ocCfg,
+      workDir,
+    });
 
     // 5. Reconcile (pure logic).
     prog.phase('Reconciling against allocation list…', 96);
