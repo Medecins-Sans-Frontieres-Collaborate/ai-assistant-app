@@ -239,21 +239,45 @@ export function reconcile(params: {
    *  When several documents contain a code, a real project narrative is preferred
    *  over a coordination summary. */
   coordKeywords?: string[];
+  /** The OC's code prefix (e.g. "ES" for OCBA). Narratives routinely write
+   *  codes without it ("CODE PROJET : BF103" for ESBF103), so when set a code
+   *  is also searched for with the prefix stripped, and a prefix-less code
+   *  reported by the micro-pass is canonicalized before matching. */
+  codePrefix?: string;
 }): Reconciliation {
-  const { expected, docs, multiProject = false, coordKeywords = [] } = params;
+  const {
+    expected,
+    docs,
+    multiProject = false,
+    coordKeywords = [],
+    codePrefix = '',
+  } = params;
+
+  const prefix = normalizeCode(codePrefix);
+  const strippedVariant = (code: string): string => {
+    if (!prefix || !code.startsWith(prefix)) return '';
+    const s = code.slice(prefix.length);
+    return s.length >= 4 && /[A-Z]/.test(s) && /\d/.test(s) ? s : '';
+  };
 
   // Pre-normalize each doc's text once.
   const docNorm = new Map<string, string>();
   for (const d of docs) docNorm.set(d.file, ' ' + normalizeName(d.text) + ' ');
 
-  // Micro-pass code → doc.
+  // Micro-pass code → doc. A prefix-less code from the micro-pass (the model
+  // reports what the document literally says) is additionally indexed under
+  // its canonical prefixed form so it matches the allocation list's codes.
   const docByCode = new Map<string, DocExtract>();
   const foundCodeSet = new Set<string>();
   for (const d of docs) {
-    const c = normalizeCode(d.projectCodeIfPresent);
+    const c = normalizeCode(d.projectCodeIfPresent).replace(/\s+/g, '');
     if (c) {
       foundCodeSet.add(c);
       if (!docByCode.has(c)) docByCode.set(c, d);
+      if (prefix && !c.startsWith(prefix)) {
+        const canonical = prefix + c;
+        if (!docByCode.has(canonical)) docByCode.set(canonical, d);
+      }
     }
   }
 
@@ -277,9 +301,12 @@ export function reconcile(params: {
     const candidates: DocExtract[] = [];
     const microDoc = docByCode.get(code) || null;
     if (microDoc) candidates.push(microDoc);
+    const stripped = strippedVariant(code);
     for (const d of docs) {
       if (candidates.includes(d)) continue;
-      if (codeInText(code, docNorm.get(d.file) || '')) candidates.push(d);
+      const norm = docNorm.get(d.file) || '';
+      if (codeInText(code, norm)) candidates.push(d);
+      else if (stripped && codeInText(stripped, norm)) candidates.push(d);
     }
     const foundDoc =
       candidates.find((d) => !isCoordDoc(d.file)) || candidates[0] || null;
@@ -287,6 +314,23 @@ export function reconcile(params: {
     if (foundDoc) {
       foundCodeSet.add(code);
       matched.push(code);
+      let displayDoc = foundDoc;
+      let codeSeenIn = '';
+      if (isCoordDoc(foundDoc.file)) {
+        const countryToksC = new Set(significantTokens(e.country || ''));
+        const nameToks = significantTokens(e.name).filter(
+          (t) => !countryToksC.has(t),
+        );
+        const projectDoc = docs.find(
+          (d) =>
+            !isCoordDoc(d.file) &&
+            nameToks.some((t) => normalizeName(d.file).includes(t)),
+        );
+        if (projectDoc) {
+          displayDoc = projectDoc;
+          codeSeenIn = foundDoc.file;
+        }
+      }
       // Surface the raw (verbatim) narrative project name whenever we matched the
       // code. For single-project OCs one document = one project, so the micro-pass
       // name IS this project's name — use it directly whether the code was matched
@@ -294,22 +338,27 @@ export function reconcile(params: {
       // overview docs yield only a single micro-pass name for the whole document,
       // so we leave the name blank here and resolve it per-code with a targeted
       // LLM lookup after reconciliation (see the preprocess route).
-      const narrName = multiProject ? '' : foundDoc.rawProjectName;
+      const narrName = multiProject ? '' : displayDoc.rawProjectName;
       const nameAligned = narrName
         ? normalizeName(e.name) === normalizeName(narrName)
         : false;
+      const codeNote = codeSeenIn
+        ? ` (code written in coordination document "${codeSeenIn}", not in the project narrative)`
+        : '';
       rows.push({
         projectCode: e.code,
         projectName: e.name,
         projectCodeInNarrative: code,
         projectNameInNarrative: narrName,
-        narrativeFile: foundDoc.file,
+        narrativeFile: displayDoc.file,
         align: 'Yes',
-        differences: narrName
-          ? nameAligned
-            ? `Code found; allocation name "${e.name}" matches narrative name "${narrName}"`
-            : `Code found; allocation name "${e.name}" vs narrative name "${narrName}"`
-          : `Code ${code} found in narrative "${foundDoc.file}"`,
+        differences:
+          (narrName
+            ? nameAligned
+              ? `Code found; allocation name "${e.name}" matches narrative name "${narrName}"`
+              : `Code found; allocation name "${e.name}" vs narrative name "${narrName}"`
+            : `Code ${code} found in narrative "${displayDoc.file}"`) +
+          codeNote,
         aligned: narrName
           ? nameAligned
             ? 'Code and name match'
@@ -322,18 +371,25 @@ export function reconcile(params: {
     // 3. No code found → content-match the NAME across all narratives.
     missingFromNarratives.push(code);
 
-    let best: { doc: DocExtract; m: ContentMatch } | null = null;
+    let best: { doc: DocExtract; m: ContentMatch; score: number } | null = null;
+    const countryToks = new Set(significantTokens(e.country || ''));
     for (const d of docs) {
       const m = contentMatch(e, d);
       const accept =
         m.coverage >= COVERAGE_THRESHOLD ||
         (m.coverage > 0 && m.countryMatched);
       if (!accept) continue;
-      const score = m.coverage + (m.countryMatched ? 0.15 : 0);
-      const bestScore = best
-        ? best.m.coverage + (best.m.countryMatched ? 0.15 : 0)
-        : -1;
-      if (score > bestScore) best = { doc: d, m };
+      // A matched non-country term appearing in the FILENAME is the strongest
+      // attribution signal (e.g. "bunyakiri" in 2026_E_DRC_Bunyakiri_….docx) —
+      // without it, neighboring projects that mention the same town tie on
+      // content and the wrong document can win on file order.
+      const fileNorm = normalizeName(d.file);
+      const fileAnchor = m.matchedTerms.some(
+        (t) => !countryToks.has(t) && fileNorm.includes(t),
+      );
+      const score =
+        m.coverage + (m.countryMatched ? 0.15 : 0) + (fileAnchor ? 0.3 : 0);
+      if (!best || score > best.score) best = { doc: d, m, score };
     }
 
     if (best) {
