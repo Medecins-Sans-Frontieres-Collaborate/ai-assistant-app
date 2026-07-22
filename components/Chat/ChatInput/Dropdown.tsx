@@ -2,6 +2,7 @@ import {
   IconBraces,
   IconCamera,
   IconCirclePlus,
+  IconClipboardCheck,
   IconFileMusic,
   IconFileText,
   IconLanguage,
@@ -11,6 +12,7 @@ import {
   IconWorld,
 } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
+import { useSession } from 'next-auth/react';
 import React, {
   useCallback,
   useEffect,
@@ -27,6 +29,8 @@ import { useCameraSupport } from '@/client/hooks/ui/useCameraSupport';
 import { useDropdownKeyboardNav } from '@/client/hooks/ui/useDropdownKeyboardNav';
 import useEnhancedOutsideClick from '@/client/hooks/ui/useEnhancedOutsideClick';
 import { useIsMobile } from '@/client/hooks/ui/useIsMobile';
+
+import { canAccessProcurement } from '@/lib/services/rfp/access';
 
 import { normalizeForSearch } from '@/lib/utils/app/localeSearch';
 import { isRTL } from '@/lib/utils/app/rtl';
@@ -171,6 +175,8 @@ const Dropdown: React.FC<DropdownProps> = ({
 
   const t = useTranslations();
   const tUrl = useTranslations('urlFetch');
+  const { data: session } = useSession();
+  const showProcurement = canAccessProcurement(session?.user);
 
   const chatInputImageRef = useRef<{ openFilePicker: () => void }>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -540,10 +546,37 @@ const Dropdown: React.FC<DropdownProps> = ({
             },
           ]
         : []),
+      ...(showProcurement
+        ? [
+            {
+              id: 'procurement',
+              icon: (
+                <IconClipboardCheck
+                  size={18}
+                  className="text-blue-600 flex-shrink-0"
+                />
+              ),
+              label: 'RFP Scorecard',
+              infoTooltip:
+                'Generate vendor scorecards from RFP responses with reviewable scoring rubrics (restricted access).',
+              onClick: () => {
+                window.open(
+                  `/${locale}/procurement/rfp-analysis`,
+                  '_blank',
+                  'noopener,noreferrer',
+                );
+                closeDropdown();
+              },
+              category: 'transform' as const,
+            },
+          ]
+        : []),
     ],
     [
       t,
       tUrl,
+      showProcurement,
+      locale,
       searchMode,
       selectedToneId,
       tones,
