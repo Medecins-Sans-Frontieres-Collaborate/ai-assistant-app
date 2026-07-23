@@ -195,6 +195,10 @@ module.exports = {
         'fade-out': 'fade-out 0.2s ease-out forwards',
         shimmer: 'shimmer 4s linear infinite',
         'shimmer-wave': 'shimmer-wave 2s linear infinite',
+        // Staggered list reveal (interim search headlines): pair with an
+        // inline animationDelay per item; 'both' keeps items hidden until
+        // their delay starts so the list appears to stream in.
+        'headline-in': 'slide-in-from-bottom 0.45s ease-out both',
       },
     },
   },
