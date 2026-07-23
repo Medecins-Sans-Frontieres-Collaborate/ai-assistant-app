@@ -865,7 +865,15 @@
     "addLanguageOption": "Adăugați „{name}”...",
     "sources": "Surse",
     "interpreterBadge": "Rulează cod",
-    "disableCodeInterpreter": "Dezactivează executarea codului"
+    "disableCodeInterpreter": "Dezactivează executarea codului",
+    "interimSearch": {
+      "title": "Titluri găsite — căutarea aprofundată este încă în desfășurare",
+      "hint": "Căutarea aprofundată Bing poate dura până la 90 de secunde. Răspunde acum folosind cele {count} titluri deja găsite sau așteaptă rezultatul combinat.",
+      "summarizeNow": "Rezumă acum din titluri",
+      "sourcesCount": "{count} surse",
+      "showAll": "Afișează toate cele {count} surse",
+      "showFewer": "Afișează mai puține"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",
@@ -1233,7 +1241,9 @@
       "freshness_day": "Ultima zi",
       "freshness_week": "Ultima săptămână",
       "freshness_month": "Ultima lună",
-      "freshness_any": "Oricând"
+      "freshness_any": "Oricând",
+      "providerCombined": "Căutare aprofundată cu titluri rapide (Bing + Google News)",
+      "providerCombinedDescription": "Rulează Bing grounding și Google News împreună: titlurile apar în câteva secunde, în timp ce căutarea aprofundată Bing continuă, iar poți alege să răspunzi imediat din titluri în loc să aștepți căutarea lentă. Când Bing finalizează, ambele seturi de rezultate sunt combinate."
     }
   },
   "notFound": {

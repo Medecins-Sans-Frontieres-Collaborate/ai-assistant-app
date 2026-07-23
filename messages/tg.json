@@ -925,7 +925,15 @@
     "addLanguageOption": "\"{name}\" илова кунед…",
     "sources": "Манбаъҳо",
     "interpreterBadge": "Иҷро кардани рамз",
-    "disableCodeInterpreter": "Иҷрои рамзро ғайрифаъол кунед"
+    "disableCodeInterpreter": "Иҷрои рамзро ғайрифаъол кунед",
+    "interimSearch": {
+      "title": "Сарлавҳаҳо ёфт шуданд — ҷустуҷӯи амиқ ҳоло идома дорад",
+      "hint": "Ҷустуҷӯи амиқи Bing метавонад то 90 сония вақт гирад. Ҳоло аз {count} сарлавҳаҳои ёфташуда ҷавоб диҳед, ё натиҷаи ҷамъшударо интизор шавед.",
+      "summarizeNow": "Айни замон аз сарлавҳаҳо ҷамъбаст кунед",
+      "sourcesCount": "{count} манбаъ",
+      "showAll": "Ҳамаи {count} манбаъро нишон диҳед",
+      "showFewer": "Камтар нишон диҳед"
+    }
   },
   "transcript": {
     "originalTranscript": "Нусхаи аслӣ",
@@ -1388,7 +1396,9 @@
       "freshness_day": "Рӯзи гузашта",
       "freshness_week": "Ҳафтаи гузашта",
       "freshness_month": "Моҳи гузашта",
-      "freshness_any": "Ҳар вақт"
+      "freshness_any": "Ҳар вақт",
+      "providerCombined": "Ҷустуҷӯи амиқ бо сарлавҳаҳои барвақт (Bing + Google News)",
+      "providerCombinedDescription": "Bing grounding ва Google News якҷоя кор мекунанд: сарлавҳаҳо дар чанд сония пайдо мешаванд, дар ҳоле ки ҷустуҷӯи амиқи Bing идома дорад, ва шумо метавонед фавран аз сарлавҳаҳо ҷавоб диҳед ё интизори натиҷаи пурра шавед. Вақте Bing ба охир мерасад, ҳарду маҷмуаи натиҷаҳо якҷо карда мешаванд."
     }
   },
   "emptyState": {

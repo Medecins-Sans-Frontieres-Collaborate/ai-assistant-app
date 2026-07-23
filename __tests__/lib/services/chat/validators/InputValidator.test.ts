@@ -560,3 +560,120 @@ describe('validateChatRequest - interpreterMode', () => {
     ).toThrow();
   });
 });
+
+describe('validateChatRequest - webSearchOptions.provider', () => {
+  const base = {
+    model: { id: 'gpt-5.2', name: 'GPT-5.2' },
+    messages: [{ role: 'user' as const, content: 'hi' }],
+  };
+
+  it('keeps the provider selection (the regression: it used to be stripped)', () => {
+    const validator = new InputValidator();
+    for (const provider of [
+      'auto',
+      'news',
+      'google-news',
+      'gdelt',
+      'bing-agent',
+      'combined',
+    ]) {
+      const result = validator.validateChatRequest({
+        ...base,
+        webSearchOptions: { resultCount: 8, freshness: 'any', provider },
+      });
+      expect(result.webSearchOptions?.provider).toBe(provider);
+    }
+  });
+
+  it('accepts webSearchOptions without a provider (older clients)', () => {
+    const validator = new InputValidator();
+    const result = validator.validateChatRequest({
+      ...base,
+      webSearchOptions: { resultCount: 8, freshness: 'any' },
+    });
+    expect(result.webSearchOptions?.provider).toBeUndefined();
+  });
+
+  it('rejects unknown providers', () => {
+    const validator = new InputValidator();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        webSearchOptions: {
+          resultCount: 8,
+          freshness: 'any',
+          provider: 'altavista',
+        },
+      }),
+    ).toThrow();
+  });
+});
+
+describe('validateChatRequest - precomputedSearchResults', () => {
+  const base = {
+    model: { id: 'gpt-5.2', name: 'GPT-5.2' },
+    messages: [{ role: 'user' as const, content: 'hi' }],
+  };
+  const entry = {
+    title: 'Headline',
+    url: 'https://example.com/a',
+    date: '2026-07-23',
+    sourceName: 'example.com',
+    snippet: 'Snippet text',
+  };
+
+  it('accepts a bounded echo payload', () => {
+    const validator = new InputValidator();
+    const result = validator.validateChatRequest({
+      ...base,
+      precomputedSearchResults: { queries: ['q1', 'q2'], entries: [entry] },
+    });
+    expect(result.precomputedSearchResults?.entries).toHaveLength(1);
+    expect(result.precomputedSearchResults?.queries).toEqual(['q1', 'q2']);
+  });
+
+  it('rejects non-http(s) entry URLs (clickable-citation injection)', () => {
+    const validator = new InputValidator();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        precomputedSearchResults: {
+          queries: ['q'],
+          // eslint-disable-next-line no-script-url
+          entries: [{ ...entry, url: 'javascript:alert(1)' }],
+        },
+      }),
+    ).toThrow();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        precomputedSearchResults: {
+          queries: ['q'],
+          entries: [{ ...entry, sourceUrl: 'data:text/html,x' }],
+        },
+      }),
+    ).toThrow();
+  });
+
+  it('rejects empty entries and oversized lists', () => {
+    const validator = new InputValidator();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        precomputedSearchResults: { queries: ['q'], entries: [] },
+      }),
+    ).toThrow();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        precomputedSearchResults: {
+          queries: ['q'],
+          entries: Array.from({ length: 40 }, (_, i) => ({
+            ...entry,
+            url: `https://example.com/${i}`,
+          })),
+        },
+      }),
+    ).toThrow();
+  });
+});

@@ -48,6 +48,7 @@ import {
 } from '@/components/Chat/ChatMessages/ConsentCard';
 import { DocumentTranslationContent } from '@/components/Chat/ChatMessages/DocumentTranslationContent';
 import { GeneratedFilesPanel } from '@/components/Chat/ChatMessages/GeneratedFilesPanel';
+import { InterimSearchPanel } from '@/components/Chat/ChatMessages/InterimSearchPanel';
 import { ThinkingBlock } from '@/components/Chat/ChatMessages/ThinkingBlock';
 import { ToolCallSummary } from '@/components/Chat/ChatMessages/ToolCallSummary';
 import { TranscriptContent } from '@/components/Chat/ChatMessages/TranscriptContent';
@@ -157,6 +158,10 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
       (s) => s.streamingConsentRequests,
     );
     const streamingToolCalls = useChatStore((s) => s.streamingToolCalls);
+    // Interim headlines from a combined search (Bing leg still running).
+    const streamingInterimSearch = useChatStore(
+      (s) => s.streamingInterimSearch,
+    );
     const [isGeneratingAudio, setIsGeneratingAudio] = useState<boolean>(false);
     const [audioUrl, setAudioUrl] = useState<string | null>(null);
     const [audioSourceLocale, setAudioSourceLocale] = useState<string | null>(
@@ -769,6 +774,20 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                 </>
               );
             })()}
+
+            {/* Interim headlines from a combined search — only on the live
+                placeholder (no persisted content or tool records) and only
+                until the model starts producing output. A thinking block
+                counts as output: the search is over by then, and keeping
+                the panel mounted through the layout change replays its
+                entrance animation. */}
+            {messageIsStreaming &&
+              streamingInterimSearch &&
+              !processedContent.trim() &&
+              !thinking &&
+              !message?.toolCalls?.length && (
+                <InterimSearchPanel interim={streamingInterimSearch} />
+              )}
 
             {/* Citations - shown after content but before action buttons */}
             {citations.length > 0 && <CitationList citations={citations} />}

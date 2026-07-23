@@ -842,7 +842,15 @@
     "addLanguageOption": "Lisää \"{name}\"...",
     "sources": "Lähteet",
     "interpreterBadge": "Suorita koodi",
-    "disableCodeInterpreter": "Poista koodin suoritus käytöstä"
+    "disableCodeInterpreter": "Poista koodin suoritus käytöstä",
+    "interimSearch": {
+      "title": "Otsikoita löydetty — syväetsintä käynnissä",
+      "hint": "Syvä Bing-haku voi kestää jopa 90 sekuntia. Vastaa nyt jo löydetyistä {count} otsikoista tai odota yhdistettyä tulosta.",
+      "summarizeNow": "Tiivistä otsikoista nyt",
+      "sourcesCount": "{count} lähdettä",
+      "showAll": "Näytä kaikki {count} lähdettä",
+      "showFewer": "Näytä vähemmän"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",
@@ -1210,7 +1218,9 @@
       "freshness_day": "Viimeinen vuorokausi",
       "freshness_week": "Viimeinen viikko",
       "freshness_month": "Viimeinen kuukausi",
-      "freshness_any": "Milloin tahansa"
+      "freshness_any": "Milloin tahansa",
+      "providerCombined": "Syväetsintä ja nopeat otsikot (Bing + Google News)",
+      "providerCombinedDescription": "Suorittaa Bing-groundingin ja Google Newsin yhdessä: otsikot näkyvät sekunneissa, kun syvä Bing-haku jatkuu taustalla. Voit halutessasi vastata heti otsikoiden perusteella tai odottaa koko tulosta. Kun Bing valmistuu, tulokset yhdistetään."
     }
   },
   "notFound": {

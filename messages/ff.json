@@ -925,7 +925,15 @@
     "addLanguageOption": "Naatnu \"{name}\"…",
     "sources": "Janngiiji",
     "interpreterBadge": "Hurmin kod",
-    "disableCodeInterpreter": "Daskitin hurmital kod"
+    "disableCodeInterpreter": "Daskitin hurmital kod",
+    "interimSearch": {
+      "title": "Noggalɗi anndit—golle njiytii warataa",
+      "hint": "Golle Bing njiytii ena ɗaɓɓitii lewru 90. Aɗa waawi jooɗnde e {count} noggalɗi anndit fof, walla tun a suɓo mbaɗo ɗum to holli.",
+      "summarizeNow": "Naatnu e noggalɗi jooni",
+      "sourcesCount": "{count} jiitorde",
+      "showAll": "Hollu jiitorde {count} fof",
+      "showFewer": "Hollu tuugol"
+    }
   },
   "transcript": {
     "originalTranscript": "Winnditagol Goongɗinɗo",
@@ -1388,7 +1396,9 @@
       "freshness_day": "Ñalaru",
       "freshness_week": "Ñalal",
       "freshness_month": "Lewru",
-      "freshness_any": "Kisali"
+      "freshness_any": "Kisali",
+      "providerCombined": "Golle njiytii e noggalɗi njiyitoh (Bing + Google News)",
+      "providerCombinedDescription": "Bing e Google News njiytii ndokkude: noggalɗi ndiytii he tini to golle Bing njiytii fof tun warataa, aɗa waawi jokkondirde e noggalɗi ɗum walla suɓo. To Bing warata, goongɗi ɗiɗi woni ton."
     }
   },
   "emptyState": {

@@ -20,7 +20,7 @@ import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { DisplayNamePreference, StreamingSpeedConfig } from '@/types/settings';
 import { Tone } from '@/types/tone';
-import { WebSearchOptions } from '@/types/webSearch';
+import { PrecomputedSearchResults, WebSearchOptions } from '@/types/webSearch';
 
 import { apiClient } from '../api';
 
@@ -161,6 +161,8 @@ export class ChatService {
       threadId?: string;
       searchMode?: SearchMode;
       webSearchOptions?: WebSearchOptions;
+      /** "Summarize from headlines" echo — replaces a fresh search. */
+      precomputedSearchResults?: PrecomputedSearchResults;
       interpreterMode?: InterpreterMode;
       hostedRegion?: 'US' | 'EU';
       forcedAgentType?: string;
@@ -208,6 +210,7 @@ export class ChatService {
       threadId: options?.threadId,
       searchMode: options?.searchMode,
       webSearchOptions: options?.webSearchOptions,
+      precomputedSearchResults: options?.precomputedSearchResults,
       interpreterMode: options?.interpreterMode,
       hostedRegion: options?.hostedRegion,
       forcedAgentType: options?.forcedAgentType,

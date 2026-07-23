@@ -925,7 +925,15 @@
     "addLanguageOption": "Ampio \"{name}\"…",
     "sources": "Loharano",
     "interpreterBadge": "Alefa ny kaody",
-    "disableCodeInterpreter": "Atsaharo ny fanatanterahana kaody"
+    "disableCodeInterpreter": "Atsaharo ny fanatanterahana kaody",
+    "interimSearch": {
+      "title": "Lohateny hita — mbola mandeha ny fikarohana lalina",
+      "hint": "Mety haharitra hatramin’ny 90 segondra ny fikarohana lalina ao amin’ny Bing. Afaka mamaly avy hatrany amin’ny lohateny {count} efa hita ianao, na miandry ny valiny natambatra.",
+      "summarizeNow": "Famintinana avy amin’ny lohateny izao",
+      "sourcesCount": "Loharanom-baovao {count}",
+      "showAll": "Asehoy loharano {count} rehetra",
+      "showFewer": "Asehoy vitsy kokoa"
+    }
   },
   "transcript": {
     "originalTranscript": "Dikan-teny Tany Am-boalohany",
@@ -1388,7 +1396,9 @@
       "freshness_day": "Andro lasa",
       "freshness_week": "Herinandro lasa",
       "freshness_month": "Volana lasa",
-      "freshness_any": "Fotoana rehetra"
+      "freshness_any": "Fotoana rehetra",
+      "providerCombined": "Fikarohana lalina miaraka amin’ny lohateny aloha (Bing + Google News)",
+      "providerCombinedDescription": "Atao miaraka ny Bing grounding sy Google News: miseho ao anatin’ny segondra vitsy ny lohateny, raha mbola mandeha ny fikarohana lalina Bing. Afaka misafidy hamaly avy amin’ny lohateny ianao fa tsy miandry. Rehefa vita ny Bing dia atambatra ny valiny avy amin’ny roa tonta."
     }
   },
   "emptyState": {

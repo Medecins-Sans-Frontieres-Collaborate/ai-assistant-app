@@ -16,6 +16,7 @@ import { Citation } from '@/types/rag';
 import { SearchMode } from '@/types/searchMode';
 import {
   MAX_SEARCH_RESULT_COUNT,
+  PrecomputedSearchResults,
   sanitizeWebSearchOptions,
 } from '@/types/webSearch';
 
@@ -31,10 +32,11 @@ import {
 } from '../tools/CodeInterpreterTool';
 import { WebSearchTool } from '../tools/WebSearchTool';
 import { readCitedSources } from '../tools/citedSourceReader';
+import { buildNewsResult } from '../tools/newsSearch';
 
 import { env } from '@/config/environment';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
-import { emitToolCallRecord } from '@/lib/streamMarkers';
+import { emitSearchInterim, emitToolCallRecord } from '@/lib/streamMarkers';
 
 /**
  * ToolRouterEnricher adds intelligent tool routing capabilities.
@@ -61,8 +63,8 @@ export class ToolRouterEnricher extends BasePipelineStage {
 
   // Fail-fast budget for the search round-trip. The user sees NO answer
   // tokens until pre-routing finishes, so a slow search stalls the whole
-  // answer. Env-tunable (WEB_SEARCH_TIMEOUT_MS, default 45s — Foundry
-  // search agent runs typically need 20-40s); on timeout the turn degrades
+  // answer. Env-tunable (WEB_SEARCH_TIMEOUT_MS, default 120s — Foundry
+  // search agent runs typically need 35-90s); on timeout the turn degrades
   // to a knowledge answer with an honest notice instead of blocking for
   // the full stage budget.
   private static readonly SEARCH_TIMEOUT_MS = env.WEB_SEARCH_TIMEOUT_MS;
@@ -74,7 +76,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
     STAGE_TIMEOUTS.ToolRouterEnricher - 5000;
 
   // "Executed by" label on the search tool record for feed-based providers
-  // (the Bing path shows the agent model id instead).
+  // (the Bing and combined paths show the agent model id instead).
   private static readonly FEED_PROVIDER_LABELS: Partial<
     Record<typeof env.WEB_SEARCH_PROVIDER, string>
   > = {
@@ -245,6 +247,24 @@ export class ToolRouterEnricher extends BasePipelineStage {
       return context;
     }
 
+    // "Summarize from headlines" resend: the client aborted a combined
+    // search mid-Bing and echoed back the interim headlines it already
+    // showed. Those ARE the search result for this turn — no router call,
+    // no fresh search. A forced interpreter still runs afterwards.
+    if (searchRequested && context.precomputedSearchResults?.entries.length) {
+      let workingContext = await this.applyPrecomputedSearchResults(
+        context,
+        context.precomputedSearchResults,
+      );
+      if (forceInterpreter) {
+        workingContext = await this.executeCodeInterpreter(
+          workingContext,
+          rawUserPrompt,
+        );
+      }
+      return workingContext;
+    }
+
     // Forced tools skip the gpt-5.4-nano router call (saves ~1-2s of
     // latency). The classifier only runs for tools still in INTELLIGENT
     // mode; forced decisions are unioned in afterwards.
@@ -325,8 +345,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
     if (toolResponse.tools.includes('web_search') && !followUpSatisfied) {
       const options = sanitizeWebSearchOptions(context.webSearchOptions);
       // User-selected backend wins; 'auto' defers to the deployment
-      // default. Only feed providers are user-selectable, so a Bing run
-      // can only come from the env default.
+      // default (WEB_SEARCH_PROVIDER env).
       const provider =
         options.provider === 'auto'
           ? env.WEB_SEARCH_PROVIDER
@@ -378,7 +397,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
     tuning: {
       resultCount: number;
       freshness: 'day' | 'week' | 'month' | 'any';
-      provider: 'news' | 'gdelt' | 'google-news' | 'bing-agent';
+      provider: 'news' | 'gdelt' | 'google-news' | 'bing-agent' | 'combined';
       deep: boolean;
     },
   ): Promise<ChatContext> {
@@ -394,26 +413,41 @@ export class ToolRouterEnricher extends BasePipelineStage {
 
     const startTime = Date.now();
     // The provider decides what "executed the search" means for the tool
-    // record: the agent model for Bing, the feed(s) themselves otherwise.
-    const useFeedProvider = tuning.provider !== 'bing-agent';
+    // record: the agent model for Bing/combined, the feed(s) themselves
+    // otherwise.
+    const needsAgent =
+      tuning.provider === 'bing-agent' || tuning.provider === 'combined';
     const feedLabel = ToolRouterEnricher.FEED_PROVIDER_LABELS[tuning.provider];
+    // Bing/combined: find a model with agentId (prefer from context,
+    // fallback to the default search agent). Feed providers need neither.
+    const searchModel = needsAgent
+      ? context.model.agentId
+        ? context.model
+        : this.getAgentModelForSearch()
+      : null;
+    const executorLabel =
+      tuning.provider === 'combined'
+        ? searchModel
+          ? `Bing (${searchModel.id}) + Google News`
+          : 'Google News'
+        : needsAgent
+          ? (searchModel?.id ?? 'unavailable')
+          : feedLabel!;
     {
       try {
-        // Bing path only: find a model with agentId (prefer from context,
-        // fallback to the default search agent). Feed providers need neither.
-        const searchModel = useFeedProvider
-          ? undefined
-          : context.model.agentId
-            ? context.model
-            : this.getAgentModelForSearch();
-
-        if (!useFeedProvider && !searchModel) {
+        if (tuning.provider === 'bing-agent' && !searchModel) {
           console.warn(
             '[ToolRouterEnricher] No agent model available for search, skipping',
           );
           return context;
         }
-        const executorLabel = useFeedProvider ? feedLabel! : searchModel!.id;
+        if (tuning.provider === 'combined' && !searchModel) {
+          // The combined tool degrades to the news feed alone when no
+          // agent model exists — worth logging, not worth skipping.
+          console.warn(
+            '[ToolRouterEnricher] Combined search without an agent model; news feed only',
+          );
+        }
 
         // Tell the client what we're doing — showing the ACTUAL query makes
         // the multi-second wait feel purposeful instead of stuck.
@@ -440,6 +474,17 @@ export class ToolRouterEnricher extends BasePipelineStage {
             freshness: tuning.freshness,
             provider: tuning.provider,
             deep: tuning.deep,
+            // Combined provider: stream the fast leg's headlines to the
+            // client while Bing runs — renders the interim list with the
+            // "Summarize from headlines" action.
+            onInterimResults:
+              tuning.provider === 'combined' && context.emitMarker
+                ? (entries) => {
+                    void context.emitMarker!(
+                      emitSearchInterim({ queries: searchQueries, entries }),
+                    );
+                  }
+                : undefined,
             // Progress phases from inside the sub-call (searching → reading
             // sources → …). The generic searchingWeb key is skipped so it
             // never overwrites the query-specific loader above.
@@ -646,12 +691,16 @@ export class ToolRouterEnricher extends BasePipelineStage {
 
         // Persistent record — parity with the code interpreter: users see
         // WHAT was searched, which model ran it, and how long it took, in
-        // the same "Used N tools" strip.
+        // the same "Used N tools" strip. A combined search whose Bing leg
+        // failed says so — the source count alone would overstate coverage.
+        const degradedNote = searchResult.metadata?.bingFailed
+          ? ' (Bing failed — Google News headlines only)'
+          : '';
         await this.emitSearchRecord(
           context,
           queryLabel,
           executorLabel,
-          `${truncatedCitations.length} source${truncatedCitations.length === 1 ? '' : 's'} found`,
+          `${truncatedCitations.length} source${truncatedCitations.length === 1 ? '' : 's'} found${degradedNote}`,
           null,
           Date.now() - startTime,
         );
@@ -678,11 +727,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
         await this.emitSearchRecord(
           context,
           queryLabel,
-          useFeedProvider
-            ? feedLabel!
-            : context.model.agentId
-              ? context.model.id
-              : OpenAIModels[OpenAIModelID.GPT_5_2]?.id,
+          executorLabel,
           null,
           timedOut ? 'Web search timed out' : 'Web search failed',
           Date.now() - startTime,
@@ -831,6 +876,85 @@ export class ToolRouterEnricher extends BasePipelineStage {
       );
       return { context, fetchedCount: 0 };
     }
+  }
+
+  /**
+   * "Summarize from headlines" path: the client echoed back the interim
+   * headlines it received during an aborted combined search. Rebuild the
+   * digest from those entries and merge it exactly like a fresh search
+   * result — no router call, no network. Entries arrived through
+   * InputValidator's bounded schema and originally came from our own
+   * interim emission.
+   */
+  private async applyPrecomputedSearchResults(
+    context: ChatContext,
+    precomputed: PrecomputedSearchResults,
+  ): Promise<ChatContext> {
+    const baseMessages = context.enrichedMessages || context.messages;
+    const startTime = Date.now();
+    const options = sanitizeWebSearchOptions(context.webSearchOptions);
+    const entries = precomputed.entries.slice(0, options.resultCount);
+    const queryLabel = precomputed.queries.join(' | ');
+    console.log(
+      `[ToolRouterEnricher] Summarizing from ${entries.length} echoed headlines (no fresh search)`,
+    );
+
+    const digest = buildNewsResult(
+      entries,
+      precomputed.queries.map((q) => `"${q}"`).join('; '),
+    );
+
+    const existingCitations =
+      context.processedContent?.metadata?.citations || [];
+    const citationOffset = existingCitations.length;
+    // Digest numbering is local [1..n]; shift it when RAG citations
+    // already occupy the low numbers.
+    const digestText =
+      citationOffset > 0
+        ? digest.text.replace(
+            /\[(\d+)\]/g,
+            (_match, n) => `[${Number(n) + citationOffset}]`,
+          )
+        : digest.text;
+
+    const references = digest.citations
+      .map((c, idx) => `[${citationOffset + idx + 1}] ${c.title || c.url}`)
+      .join('\n');
+    const searchContext = `Web Search results:\n\n${digestText}\n\nAvailable sources:\n${references}\n\nIMPORTANT: When referencing these sources in your response, use citation markers in SEPARATE brackets like [1][2][3] - never group them like [1,2,3]. Do NOT include source information (URLs, titles, or dates) in your response text. The citation details will be displayed separately to the user.`;
+
+    const lastMsg = baseMessages[baseMessages.length - 1];
+    const enrichedMessages = [
+      ...baseMessages.slice(0, -1),
+      this.prependContextToMessage(lastMsg, searchContext),
+    ];
+    const mergedCitations = [
+      ...existingCitations,
+      ...digest.citations.map((c, idx) => ({
+        ...c,
+        number: citationOffset + idx + 1,
+      })),
+    ];
+
+    await this.emitSearchRecord(
+      context,
+      queryLabel,
+      'Google News',
+      `${digest.citations.length} source${digest.citations.length === 1 ? '' : 's'} from earlier headlines`,
+      null,
+      Date.now() - startTime,
+    );
+
+    return {
+      ...context,
+      enrichedMessages,
+      processedContent: {
+        ...context.processedContent,
+        metadata: {
+          ...context.processedContent?.metadata,
+          citations: mergedCitations,
+        },
+      },
+    };
   }
 
   /**

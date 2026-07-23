@@ -192,6 +192,14 @@ export interface ChatContext {
   webSearchOptions?: WebSearchOptions;
 
   /**
+   * "Summarize from headlines" resend: interim headlines the client already
+   * received for this message, echoed back to be merged as THE search
+   * result instead of running a fresh search. Validated/bounded by
+   * InputValidator.
+   */
+  precomputedSearchResults?: import('@/types/webSearch').PrecomputedSearchResults;
+
+  /**
    * Code-interpreter mode for tool routing (off / intelligent / always).
    * `always` is the user's "Run code" force toggle. Server-side the feature
    * is additionally gated by env.CODE_INTERPRETER_ENABLED.

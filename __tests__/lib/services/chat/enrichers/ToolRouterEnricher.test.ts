@@ -254,6 +254,75 @@ describe('ToolRouter Enricher', () => {
       });
     });
 
+    describe('precomputedSearchResults (summarize from headlines)', () => {
+      const entries = [
+        {
+          title: 'Fusion record broken',
+          url: 'https://a.example/1',
+          date: '2026-07-23',
+          sourceName: 'a.example',
+          snippet: 'A tokamak sustained plasma for a record time.',
+        },
+        {
+          title: 'Funding round for fusion startup',
+          url: 'https://b.example/2',
+          date: '2026-07-22',
+        },
+      ];
+
+      it('merges echoed headlines as THE search result — no router call, no search', async () => {
+        const context = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          messages: [createTestMessage({ content: 'Latest fusion news?' })],
+          precomputedSearchResults: {
+            queries: ['fusion news'],
+            entries,
+          },
+        });
+
+        const result = await enricher.execute(context);
+
+        expect(mockToolRouterService.determineTool).not.toHaveBeenCalled();
+        expect((enricher as any).webSearchTool.execute).not.toHaveBeenCalled();
+
+        const lastMsg =
+          result.enrichedMessages![result.enrichedMessages!.length - 1];
+        expect(lastMsg.content).toContain('Web Search results');
+        expect(lastMsg.content).toContain('Fusion record broken');
+
+        const citations = result.processedContent?.metadata?.citations;
+        expect(citations).toHaveLength(2);
+        expect(citations![0]).toMatchObject({
+          number: 1,
+          url: 'https://a.example/1',
+        });
+        expect(citations![1]).toMatchObject({
+          number: 2,
+          url: 'https://b.example/2',
+        });
+      });
+
+      it('does nothing with echoed headlines when search is not requested', async () => {
+        mockToolRouterService.determineTool.mockResolvedValue({ tools: [] });
+        const context = createTestChatContext({
+          searchMode: SearchMode.OFF,
+          interpreterMode: InterpreterMode.INTELLIGENT,
+          messages: [createTestMessage({ content: 'Hello' })],
+          precomputedSearchResults: {
+            queries: ['fusion news'],
+            entries,
+          },
+        });
+
+        const result = await enricher.execute(context);
+
+        expect((enricher as any).webSearchTool.execute).not.toHaveBeenCalled();
+        expect(result.processedContent?.metadata?.citations ?? []).toHaveLength(
+          0,
+        );
+      });
+    });
+
     describe('when web search is needed', () => {
       it('should execute web search and add results to enrichedMessages', async () => {
         mockToolRouterService.determineTool.mockResolvedValue({
@@ -276,6 +345,13 @@ describe('ToolRouter Enricher', () => {
           ],
           model: { agentId: 'test-agent-id' },
         });
+        // This test exercises the DEPLOYMENT default (bing-agent env);
+        // the store-level default provider is 'combined', so pin 'auto'.
+        (context as any).webSearchOptions = {
+          resultCount: 8,
+          freshness: 'auto',
+          provider: 'auto',
+        };
 
         const result = await enricher.execute(context);
 
@@ -289,6 +365,7 @@ describe('ToolRouter Enricher', () => {
           freshness: 'any',
           provider: 'bing-agent',
           deep: false,
+          onInterimResults: undefined,
           onActivity: expect.any(Function),
         });
 
@@ -865,6 +942,13 @@ describe('ToolRouter Enricher', () => {
         model: { id: 'Mistral-Large-3' },
         emitMarker,
       });
+      // Exercises the DEPLOYMENT default (google-news env); the store-level
+      // default provider is 'combined', so pin 'auto'.
+      (context as any).webSearchOptions = {
+        resultCount: 8,
+        freshness: 'auto',
+        provider: 'auto',
+      };
 
       const result = await enricher.execute(context);
 
@@ -1172,6 +1256,13 @@ describe('ToolRouter Enricher', () => {
         model: { agentId: 'agent-1', id: 'gpt-5.2' },
         emitMarker,
       });
+      // Model-labeled record = the bing-agent env path; pin 'auto' so the
+      // store-level 'combined' default doesn't reroute it.
+      (context as any).webSearchOptions = {
+        resultCount: 8,
+        freshness: 'auto',
+        provider: 'auto',
+      };
 
       await enricher.execute(context);
 

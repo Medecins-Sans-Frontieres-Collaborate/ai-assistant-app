@@ -834,7 +834,15 @@
     "addLanguageOption": "Tambahkan \"{name}\"…",
     "sources": "Sumber",
     "interpreterBadge": "Jalankan kode",
-    "disableCodeInterpreter": "Nonaktifkan eksekusi kode"
+    "disableCodeInterpreter": "Nonaktifkan eksekusi kode",
+    "interimSearch": {
+      "title": "Judul ditemukan — pencarian mendalam masih berjalan",
+      "hint": "Pencarian mendalam Bing dapat memakan waktu hingga 90 detik. Jawab sekarang dari {count} judul yang sudah ditemukan, atau tunggu hasil yang digabungkan.",
+      "summarizeNow": "Ringkas dari judul sekarang",
+      "sourcesCount": "{count} sumber",
+      "showAll": "Tampilkan semua {count} sumber",
+      "showFewer": "Tampilkan lebih sedikit"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Ciutkan sidebar",
@@ -1202,7 +1210,9 @@
       "freshness_day": "Sehari terakhir",
       "freshness_week": "Seminggu terakhir",
       "freshness_month": "Sebulan terakhir",
-      "freshness_any": "Kapan saja"
+      "freshness_any": "Kapan saja",
+      "providerCombined": "Pencarian mendalam dengan judul awal (Bing + Google News)",
+      "providerCombinedDescription": "Menjalankan Bing grounding dan Google News bersamaan: judul akan muncul dalam hitungan detik sementara pencarian mendalam Bing tetap berjalan, dan Anda dapat memilih menjawab dari judul yang sudah ada tanpa harus menunggu pencarian selesai. Setelah Bing selesai, kedua hasil akan digabungkan."
     }
   },
   "notFound": {

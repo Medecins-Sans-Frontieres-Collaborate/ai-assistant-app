@@ -44,6 +44,14 @@ const mockMessages: Record<string, unknown> = {
     beta: 'Beta',
   },
   chat: {
+    interimSearch: {
+      title: 'Headlines found — deep search still running',
+      hint: 'The deep Bing search can take up to 90 seconds. Answer now from the {count} headlines already found, or wait for the merged result.',
+      summarizeNow: 'Summarize from headlines now',
+      sourcesCount: '{count} sources',
+      showAll: 'Show all {count} sources',
+      showFewer: 'Show fewer',
+    },
     fullSizePreview: 'Full size preview',
     imageContent: 'Image Content',
     thinking: 'Thinking...',
@@ -579,6 +587,9 @@ const mockMessages: Record<string, unknown> = {
       providerBing: 'Bing grounding (via Microsoft)',
       providerBingDescription:
         'Reads full pages for deeper summaries and covers the general web, not just news. However, searches routinely take 30–90 seconds and result quality is often inconsistent from one search to the next.',
+      providerCombined: 'Deep search with early headlines (Bing + Google News)',
+      providerCombinedDescription:
+        'Runs Bing grounding and Google News together: headlines appear within seconds while the deep Bing search keeps working, and you can choose to answer from the headlines right away instead of waiting out the slow search. When Bing finishes, both result sets are merged.',
       sourcesLabel: 'Sources per search',
       sourcesDescription:
         'How many distinct sources a search keeps as citations. Research-style questions may automatically widen this.',

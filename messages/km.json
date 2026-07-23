@@ -925,7 +925,15 @@
     "addLanguageOption": "បន្ថែម \"{name}\"…",
     "sources": "ប្រភព",
     "interpreterBadge": "ដំណើរការ​កូដ",
-    "disableCodeInterpreter": "បិទ​ពន្លឿន​កូដ"
+    "disableCodeInterpreter": "បិទ​ពន្លឿន​កូដ",
+    "interimSearch": {
+      "title": "រកឃើញចំណងជើង — ការស្វែងរកជ្រៅកំពុងដំណើរការ",
+      "hint": "ការស្វែងរកជ្រៅរបស់ Bing អាចចំណាយពេលរហូតដល់ ៩០ វិនាទី។ អ្នកអាចឆ្លើយឥឡូវនេះពីចំណងជើង {count} ដែលបានរកឃើញរួច ឬរងចាំលទ្ធផលបញ្ចូល។",
+      "summarizeNow": "សង្ខេបពីចំណងជើងឥឡូវនេះ",
+      "sourcesCount": "ប្រភព {count}",
+      "showAll": "បង្ហាញប្រភពទាំងអស់ {count}",
+      "showFewer": "បង្ហាញតិច"
+    }
   },
   "transcript": {
     "originalTranscript": "អត្ថបទសម្រង់ដើម",
@@ -1388,7 +1396,9 @@
       "freshness_day": "មួយថ្ងៃចុងក្រោយ",
       "freshness_week": "មួយសប្តាហ៍ចុងក្រោយ",
       "freshness_month": "មួយខែចុងក្រោយ",
-      "freshness_any": "គ្រប់ពេល"
+      "freshness_any": "គ្រប់ពេល",
+      "providerCombined": "ស្វែងរកជ្រៅជាមួយចំណងជើងដើម (Bing + Google News)",
+      "providerCombinedDescription": "ដំណើរការ Bing grounding និង Google News ផ្សំគ្នា៖ ចំណងជើងនឹងបង្ហាញក្នុងពេលបន្តិច ខណៈដែលការស្វែងរកជ្រៅដោយ Bing នៅតែបន្ត អ្នកអាចប្រើចម្លើយពីចំណងជើងភ្លាមៗបាន ដោយមិនចាំបាច់រងចាំការស្វែងរកយូរ។ ពេល Bing ស្រាចប់ លទ្ធផលទាំងពីរនឹងត្រូវបញ្ចូលគ្នា។"
     }
   },
   "emptyState": {

@@ -925,7 +925,15 @@
     "addLanguageOption": "Ajoute \"{name}\"…",
     "sources": "Sous",
     "interpreterBadge": "Kouri kòd",
-    "disableCodeInterpreter": "Dezaktive ekzekisyon kòd"
+    "disableCodeInterpreter": "Dezaktive ekzekisyon kòd",
+    "interimSearch": {
+      "title": "Tit prensipal yo jwenn — rechèch apwofondi ap kontinye",
+      "hint": "Rechèch Bing apwofondi a ka pran jiska 90 segonn. Reponn kounye a ak {count} tit prensipal ki deja jwenn yo, oswa tann rezilta konbine a.",
+      "summarizeNow": "Rezime soti nan tit prensipal yo kounye a",
+      "sourcesCount": "{count} sous",
+      "showAll": "Montre tout {count} sous",
+      "showFewer": "Montre mwens"
+    }
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",
@@ -1388,7 +1396,9 @@
       "freshness_day": "Dènye jou",
       "freshness_week": "Dènye semèn",
       "freshness_month": "Dènye mwa",
-      "freshness_any": "Nenpòt lè"
+      "freshness_any": "Nenpòt lè",
+      "providerCombined": "Rechèch apwofondi ak tit prensipal bonè (Bing + Google News)",
+      "providerCombinedDescription": "Lanser Bing grounding ak Google News ansanm: tit prensipal yo parèt nan kèk segonn pandan rechèch Bing apwofondi ap kontinye, epi ou ka chwazi reponn ak tit prensipal yo imedyatman olye ou tann rechèch la fini. Lè Bing fini, tou de rezilta yo konbine."
     }
   },
   "emptyState": {

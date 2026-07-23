@@ -834,7 +834,15 @@
     "addLanguageOption": "\"{name}\" එකතු කරන්න…",
     "sources": "මූලාශ්‍ර",
     "interpreterBadge": "කේතය ක්‍රියාත්මක කරන්න",
-    "disableCodeInterpreter": "කේත ක්‍රියාත්මක කිරීම අක්‍රිය කරන්න"
+    "disableCodeInterpreter": "කේත ක්‍රියාත්මක කිරීම අක්‍රිය කරන්න",
+    "interimSearch": {
+      "title": "ශීර්ෂ පාඨ සොයාගත්තා — ගැඹුරු සෙවීම තවමත් ක්‍රියාත්මක වේ",
+      "hint": "ගැඹුරු Bing සෙවීම සඳහා අවුරුදු 90ක් දක්වා ගතවිය හැක. දැනටමත් සොයාගත් ශීර්ෂ පාඨ {count} වලින් දැන් පිළිතුරක් ලබාදිය හැක, නැතහොත් ඒවා එකලස්වූ ප්‍රතිඵලය සඳහා රැඳී සිටින්න.",
+      "summarizeNow": "දැනටමත් ඇති ශීර්ෂ පාඨ වලින් සාරාංශය ලබාදෙන්න",
+      "sourcesCount": "{count} මූලාශ්‍ර",
+      "showAll": "සියලුම මූලාශ්‍ර {count} පෙන්වන්න",
+      "showFewer": "පොඩිකර පෙන්වන්න"
+    }
   },
   "sidebar": {
     "collapseSidebar": "පැති තීරුව හකුළන්න",
@@ -1202,7 +1210,9 @@
       "freshness_day": "පසුගිය දවස",
       "freshness_week": "පසුගිය සතිය",
       "freshness_month": "පසුගිය මාසය",
-      "freshness_any": "ඕනෑම කාලයක්"
+      "freshness_any": "ඕනෑම කාලයක්",
+      "providerCombined": "ඉඳහිට ශීර්ෂ පාඨ සමඟ ගැඹුරු සෙවීම (Bing + Google News)",
+      "providerCombinedDescription": "Bing grounding සහ Google News එකටම ක්‍රියාත්මක වේ: ශීර්ෂ පාඨ තත්පර කිහිපයකින් දිස්වන අතර, ගැඹුරු Bing සෙවීම තවදුරටත් ක්‍රියාත්මකව ඇත, ඔබට දැන්ම ශීර්ෂ පාඨ වලින් පිළිතුරු ලබාදිය හැක. Bing සම්පූර්ණ වූ විට ප්‍රතිඵල දෙකම එකට එකලස් වේ."
     }
   },
   "notFound": {

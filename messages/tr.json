@@ -867,7 +867,15 @@
     "addLanguageOption": "\"{name}\" ekle…",
     "sources": "Kaynaklar",
     "interpreterBadge": "Kodu çalıştır",
-    "disableCodeInterpreter": "Kod çalıştırmayı devre dışı bırak"
+    "disableCodeInterpreter": "Kod çalıştırmayı devre dışı bırak",
+    "interimSearch": {
+      "title": "Başlıklar bulundu — derin arama devam ediyor",
+      "hint": "Derin Bing araması 90 saniyeye kadar sürebilir. Şimdi bulunan {count} başlıktan yanıtlayabilir veya birleştirilmiş sonucu bekleyebilirsiniz.",
+      "summarizeNow": "Başlıklardan şimdi özetle",
+      "sourcesCount": "{count} kaynak",
+      "showAll": "Tüm {count} kaynağı göster",
+      "showFewer": "Daha az göster"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",
@@ -1235,7 +1243,9 @@
       "freshness_day": "Son gün",
       "freshness_week": "Son hafta",
       "freshness_month": "Son ay",
-      "freshness_any": "Her zaman"
+      "freshness_any": "Her zaman",
+      "providerCombined": "Erken başlıklarla derin arama (Bing + Google News)",
+      "providerCombinedDescription": "Bing grounding ve Google News'u birlikte çalıştırır: başlıklar birkaç saniye içinde görünürken derin Bing araması devam eder ve yavaş aramayı beklemeden başlıklardan hemen yanıt verebilirsiniz. Bing tamamladığında, iki sonuç kümesi birleştirilir."
     }
   },
   "notFound": {

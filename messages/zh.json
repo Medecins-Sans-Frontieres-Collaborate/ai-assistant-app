@@ -898,7 +898,15 @@
     "addLanguageOption": "添加“{name}”…",
     "sources": "来源",
     "interpreterBadge": "运行代码",
-    "disableCodeInterpreter": "禁用代码执行"
+    "disableCodeInterpreter": "禁用代码执行",
+    "interimSearch": {
+      "title": "已找到头条新闻——深度搜索仍在进行中",
+      "hint": "深度 Bing 搜索最多可能需要 90 秒。您可以立即从已找到的 {count} 条头条中作答，或等待合并结果。",
+      "summarizeNow": "立即根据头条新闻总结",
+      "sourcesCount": "{count} 个来源",
+      "showAll": "显示全部 {count} 个来源",
+      "showFewer": "显示较少"
+    }
   },
   "sidebar": {
     "collapseSidebar": "折叠侧边栏",
@@ -1266,7 +1274,9 @@
       "freshness_day": "近一天",
       "freshness_week": "近一周",
       "freshness_month": "近一月",
-      "freshness_any": "任何时间"
+      "freshness_any": "任何时间",
+      "providerCombined": "深度搜索及早获取头条（Bing + Google 新闻）",
+      "providerCombinedDescription": "同时运行 Bing 支持和 Google 新闻：头条几秒内出现，同时深度 Bing 搜索持续进行，您可选择立即根据头条作答，无需等待慢速搜索。Bing 完成后，所有结果将被合并。"
     }
   },
   "notFound": {

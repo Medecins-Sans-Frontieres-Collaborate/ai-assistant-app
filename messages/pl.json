@@ -864,7 +864,15 @@
     "addLanguageOption": "Dodaj \"{name}\"…",
     "sources": "Źródła",
     "interpreterBadge": "Uruchom kod",
-    "disableCodeInterpreter": "Wyłącz wykonywanie kodu"
+    "disableCodeInterpreter": "Wyłącz wykonywanie kodu",
+    "interimSearch": {
+      "title": "Znaleziono nagłówki — głębokie wyszukiwanie nadal trwa",
+      "hint": "Głębokie wyszukiwanie Bing może potrwać do 90 sekund. Odpowiedz teraz, korzystając z już znalezionych {count} nagłówków, lub poczekaj na połączony wynik.",
+      "summarizeNow": "Podsumuj na podstawie nagłówków",
+      "sourcesCount": "{count} źródeł",
+      "showAll": "Pokaż wszystkie {count} źródeł",
+      "showFewer": "Pokaż mniej"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Zwiń pasek boczny",
@@ -1232,7 +1240,9 @@
       "freshness_day": "Ostatni dzień",
       "freshness_week": "Ostatni tydzień",
       "freshness_month": "Ostatni miesiąc",
-      "freshness_any": "Dowolnie"
+      "freshness_any": "Dowolnie",
+      "providerCombined": "Głębokie wyszukiwanie z wczesnymi nagłówkami (Bing + Google News)",
+      "providerCombinedDescription": "Uruchamia jednocześnie Bing grounding i Google News: nagłówki pojawiają się w ciągu kilku sekund, podczas gdy głębokie wyszukiwanie Bing nadal trwa. Możesz wybrać odpowiedź na podstawie tych nagłówków lub poczekać na całościowy wynik. Po zakończeniu wyszukiwania przez Bing oba zestawy wyników zostaną połączone."
     }
   },
   "notFound": {

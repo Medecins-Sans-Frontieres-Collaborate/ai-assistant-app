@@ -867,7 +867,15 @@
     "addLanguageOption": "Ongeza \"{name}\"…",
     "sources": "Vyanzo",
     "interpreterBadge": "Endesha msimbo",
-    "disableCodeInterpreter": "Zima utekelezaji wa msimbo"
+    "disableCodeInterpreter": "Zima utekelezaji wa msimbo",
+    "interimSearch": {
+      "title": "Vichwa vya habari vimepatikana — utafutaji wa kina bado unaendelea",
+      "hint": "Utafutaji wa kina wa Bing unaweza kuchukua hadi sekunde 90. Jibu sasa kutoka kwa vichwa vya habari {count} vilivyopatikana tayari, au subiri matokeo yaliyowekwa pamoja.",
+      "summarizeNow": "Fupisha kutoka kwa vichwa vya habari sasa",
+      "sourcesCount": "Vyanzo {count}",
+      "showAll": "Onyesha vyanzo vyote {count}",
+      "showFewer": "Onyesha vichache"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",
@@ -1235,7 +1243,9 @@
       "freshness_day": "Siku iliyopita",
       "freshness_week": "Wiki iliyopita",
       "freshness_month": "Mwezi uliopita",
-      "freshness_any": "Wakati wowote"
+      "freshness_any": "Wakati wowote",
+      "providerCombined": "Utafutaji wa kina na vichwa vya habari mapema (Bing + Google News)",
+      "providerCombinedDescription": "Inaendesha Bing Grounding na Google News pamoja: vichwa vya habari vinaonekana ndani ya sekunde chache huku utafutaji wa kina wa Bing ukiendelea, na unaweza kuchagua kujibu kutoka kwa vichwa vya habari mara moja badala ya kusubiri utafutaji mrefu. Bing ikimaliza, seti zote mbili za matokeo zinaunganishwa."
     }
   },
   "notFound": {

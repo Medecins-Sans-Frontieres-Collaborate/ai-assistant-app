@@ -732,10 +732,12 @@ describe('settingsStore migration (v46 → v47)', () => {
       { webSearchOptions: { resultCount: 12, freshness: 'week' } },
       46,
     ) as Record<string, unknown>;
+    // Absent provider backfills to the store default — 'combined' since
+    // combined (Bing + headlines) became the product default.
     expect(result.webSearchOptions).toEqual({
       resultCount: 12,
       freshness: 'week',
-      provider: 'auto',
+      provider: 'combined',
     });
 
     const repaired = migrate(
@@ -745,7 +747,7 @@ describe('settingsStore migration (v46 → v47)', () => {
     expect(repaired.webSearchOptions).toEqual({
       resultCount: 15,
       freshness: 'auto',
-      provider: 'auto',
+      provider: 'combined',
     });
   });
 });
@@ -762,7 +764,7 @@ describe('settingsStore migration (v47 → v48)', () => {
     expect(result.webSearchOptions).toEqual({
       resultCount: 10,
       freshness: 'day',
-      provider: 'auto',
+      provider: 'combined',
     });
   });
 
@@ -795,6 +797,6 @@ describe('settingsStore migration (v47 → v48)', () => {
     ) as Record<string, unknown>;
     expect(
       (repaired.webSearchOptions as Record<string, unknown>).provider,
-    ).toBe('auto');
+    ).toBe('combined');
   });
 });

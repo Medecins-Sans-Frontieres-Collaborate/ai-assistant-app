@@ -810,7 +810,15 @@
     "addLanguageOption": "\"{name}\" ያክሉ…",
     "sources": "ምንጮች",
     "interpreterBadge": "ኮድ አስኬድ",
-    "disableCodeInterpreter": "የኮድ አፈጻጸምን አጥፋ"
+    "disableCodeInterpreter": "የኮድ አፈጻጸምን አጥፋ",
+    "interimSearch": {
+      "title": "የራስጌ ርዕሶች ተገኙ — ጥልቅ ፍለጋ እየቀጠለ ነው",
+      "hint": "ጥልቅ Bing ፍለጋው እስከ 90 ሰከንድ ሊወስድ ይችላል። አሁን ከተገኙት {count} ርዕሶች መሠረት ላይ መልስ ይስጡ፣ ወይም የተዋሃዱትን ውጤት ይጠብቁ።",
+      "summarizeNow": "አሁኑኑ ከርዕሶች ያጠቃልሉ",
+      "sourcesCount": "{count} ምንጮች",
+      "showAll": "ሁሉንም {count} ምንጮች አሳይ",
+      "showFewer": "በቁጥር ቅንጡ"
+    }
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",
@@ -1178,7 +1186,9 @@
       "freshness_day": "ያለፈው ቀን",
       "freshness_week": "ያለፈው ሳምንት",
       "freshness_month": "ያለፈው ወር",
-      "freshness_any": "በማናቸውም ጊዜ"
+      "freshness_any": "በማናቸውም ጊዜ",
+      "providerCombined": "ጥልቅ ፍለጋ ከቀደም የወጡ ርዕሶች ጋር (Bing + Google News)",
+      "providerCombinedDescription": "Bing grounding እና Google News አብራ ያሰራል፡ ርዕሶች በጥቂት ሰከንድ ውስጥ ይታያሉ እና ጥልቅ Bing ፍለጋው ቀጥሎ እየሰራ ነው። ከቀደሙት ርዕሶች መሠረት ላይ አንዲት መልስ ይሰጡ ወይም የረጅም ፍለጋውን ይጠብቁ። Bing የተከናወነ በኋላ የሁለቱ ውጤቶች ተዋሃድ ይቀላቀላሉ።"
     }
   },
   "notFound": {

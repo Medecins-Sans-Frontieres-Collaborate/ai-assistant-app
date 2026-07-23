@@ -832,7 +832,15 @@
     "addLanguageOption": "\"{name}\" toevoegen…",
     "sources": "Bronnen",
     "interpreterBadge": "Code uitvoeren",
-    "disableCodeInterpreter": "Code-uitvoering uitschakelen"
+    "disableCodeInterpreter": "Code-uitvoering uitschakelen",
+    "interimSearch": {
+      "title": "Koppen gevonden — diepe zoekopdracht loopt nog",
+      "hint": "De diepe Bing-zoekopdracht kan tot 90 seconden duren. Beantwoord nu op basis van de {count} reeds gevonden koppen, of wacht op het samengevoegde resultaat.",
+      "summarizeNow": "Nu samenvatten op basis van koppen",
+      "sourcesCount": "{count} bronnen",
+      "showAll": "Toon alle {count} bronnen",
+      "showFewer": "Toon minder"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",
@@ -1200,7 +1208,9 @@
       "freshness_day": "Afgelopen dag",
       "freshness_week": "Afgelopen week",
       "freshness_month": "Afgelopen maand",
-      "freshness_any": "Elke periode"
+      "freshness_any": "Elke periode",
+      "providerCombined": "Diepe zoekopdracht met vroege koppen (Bing + Google News)",
+      "providerCombinedDescription": "Voert Bing-gronding en Google News gelijktijdig uit: koppen verschijnen binnen enkele seconden, terwijl de diepe Bing-zoekopdracht doorloopt, en u kunt direct antwoorden op basis van de koppen zonder te wachten op de langzamere zoekopdracht. Wanneer Bing klaar is, worden beide resultaatsets samengevoegd."
     }
   },
   "notFound": {

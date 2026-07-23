@@ -17,6 +17,8 @@ import { Tone } from '@/types/tone';
 import {
   MAX_SEARCH_RESULT_COUNT,
   MIN_SEARCH_RESULT_COUNT,
+  PrecomputedSearchResults,
+  WEB_SEARCH_PROVIDER_OPTIONS,
   WebSearchOptions,
 } from '@/types/webSearch';
 
@@ -321,6 +323,48 @@ const ChatBodySchema = z
           .min(MIN_SEARCH_RESULT_COUNT)
           .max(MAX_SEARCH_RESULT_COUNT),
         freshness: z.enum(['auto', 'day', 'week', 'month', 'any']),
+        // Optional for backward compatibility (older clients omit it);
+        // sanitizeWebSearchOptions falls back to the store default
+        // (DEFAULT_WEB_SEARCH_OPTIONS.provider) server-side.
+        provider: z
+          .enum(
+            WEB_SEARCH_PROVIDER_OPTIONS as [
+              (typeof WEB_SEARCH_PROVIDER_OPTIONS)[number],
+              ...typeof WEB_SEARCH_PROVIDER_OPTIONS,
+            ],
+          )
+          .optional(),
+      })
+      .optional(),
+    // "Summarize from headlines" resend: the interim headlines the client
+    // already received for THIS message, echoed back so the server merges
+    // them as the search result instead of searching again (stateless
+    // server — same echo pattern as mcpPlan). Bounded: display data only.
+    // URLs are http(s)-only — they end up as clickable citations, so
+    // javascript:/data: schemes must be rejected at the boundary.
+    precomputedSearchResults: z
+      .object({
+        queries: z.array(z.string().max(500)).min(1).max(5),
+        entries: z
+          .array(
+            z.object({
+              title: z.string().max(500),
+              url: z
+                .string()
+                .max(2000)
+                .regex(/^https?:\/\//i, 'Must be an http(s) URL'),
+              date: z.string().max(100),
+              sourceName: z.string().max(200).optional(),
+              sourceUrl: z
+                .string()
+                .max(2000)
+                .regex(/^https?:\/\//i, 'Must be an http(s) URL')
+                .optional(),
+              snippet: z.string().max(1500).optional(),
+            }),
+          )
+          .min(1)
+          .max(MAX_SEARCH_RESULT_COUNT),
       })
       .optional(),
     interpreterMode: z.nativeEnum(InterpreterMode).optional(),
@@ -479,6 +523,7 @@ export class InputValidator {
   public validateChatRequest(body: unknown): ChatBody & {
     searchMode?: SearchMode;
     webSearchOptions?: WebSearchOptions;
+    precomputedSearchResults?: PrecomputedSearchResults;
     interpreterMode?: InterpreterMode;
     threadId?: string;
     forcedAgentType?: string;
@@ -507,6 +552,7 @@ export class InputValidator {
       return result.data as ChatBody & {
         searchMode?: SearchMode;
         webSearchOptions?: WebSearchOptions;
+        precomputedSearchResults?: PrecomputedSearchResults;
         interpreterMode?: InterpreterMode;
         threadId?: string;
         forcedAgentType?: string;

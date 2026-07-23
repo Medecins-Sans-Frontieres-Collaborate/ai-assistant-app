@@ -813,7 +813,15 @@
     "addLanguageOption": "Ajouter « {name} »…",
     "sources": "Sources",
     "interpreterBadge": "Exécuter le code",
-    "disableCodeInterpreter": "Désactiver l'exécution du code"
+    "disableCodeInterpreter": "Désactiver l'exécution du code",
+    "interimSearch": {
+      "title": "Titres trouvés — recherche approfondie en cours",
+      "hint": "La recherche approfondie Bing peut prendre jusqu’à 90 secondes. Répondez dès maintenant à partir des {count} titres déjà trouvés, ou attendez le résultat fusionné.",
+      "summarizeNow": "Résumer à partir des titres maintenant",
+      "sourcesCount": "{count} sources",
+      "showAll": "Afficher toutes les {count} sources",
+      "showFewer": "Afficher moins"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Réduire la barre latérale",
@@ -1235,7 +1243,9 @@
       "freshness_day": "Dernier jour",
       "freshness_week": "Dernière semaine",
       "freshness_month": "Dernier mois",
-      "freshness_any": "N'importe quand"
+      "freshness_any": "N'importe quand",
+      "providerCombined": "Recherche approfondie avec titres rapides (Bing + Google News)",
+      "providerCombinedDescription": "Lance simultanément l’analyse Bing et Google News : des titres apparaissent en quelques secondes pendant que la recherche approfondie Bing continue, et vous pouvez choisir de répondre immédiatement à partir des titres au lieu d'attendre la recherche lente. Lorsque Bing a terminé, les deux ensembles de résultats sont fusionnés."
     }
   },
   "notFound": {

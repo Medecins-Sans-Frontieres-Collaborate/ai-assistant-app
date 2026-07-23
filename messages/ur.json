@@ -868,7 +868,15 @@
     "addLanguageOption": "\"{name}\" شامل کریں…",
     "sources": "ذرائع",
     "interpreterBadge": "کوڈ چلائیں",
-    "disableCodeInterpreter": "کوڈ چلانا غیر فعال کریں"
+    "disableCodeInterpreter": "کوڈ چلانا غیر فعال کریں",
+    "interimSearch": {
+      "title": "سرخیاں مل گئی ہیں — گہری تلاش ابھی جاری ہے",
+      "hint": "گہری Bing تلاش میں 90 سیکنڈ تک لگ سکتے ہیں۔ ابھی {count} ملنے والی سرخیوں سے جواب دیں، یا ملا ہوا نتیجہ آنے کا انتظار کریں۔",
+      "summarizeNow": "ابھی سرخیوں سے خلاصہ کریں",
+      "sourcesCount": "{count} ذرائع",
+      "showAll": "تمام {count} ذرائع دکھائیں",
+      "showFewer": "کم دکھائیں"
+    }
   },
   "sidebar": {
     "collapseSidebar": "سائیڈ بار کو سکیڑیں",
@@ -1236,7 +1244,9 @@
       "freshness_day": "گزشتہ دن",
       "freshness_week": "گزشتہ ہفتہ",
       "freshness_month": "گزشتہ ماہ",
-      "freshness_any": "کسی بھی وقت"
+      "freshness_any": "کسی بھی وقت",
+      "providerCombined": "گہری تلاش ابتدائی سرخیوں کے ساتھ (Bing + Google News)",
+      "providerCombinedDescription": "Bing کی گراؤنڈنگ اور Google News کو ایک ساتھ چلاتا ہے: سرخیاں چند سیکنڈ میں ظاہر ہوتی ہیں جبکہ گہری Bing تلاش جاری رہتی ہے، اور آپ چاہیں تو فوری طور پر سرخیوں سے جواب دے سکتے ہیں بجائے اس کے کہ آہستہ تلاش کا انتظار کیا جائے۔ جب Bing مکمل ہو جائے تو دونوں نتائج ملا دیے جاتے ہیں۔"
     }
   },
   "notFound": {

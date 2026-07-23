@@ -925,7 +925,15 @@
     "addLanguageOption": "\"{name}\" थप्नुहोस्…",
     "sources": "स्रोतहरू",
     "interpreterBadge": "कोड चलाउनुहोस्",
-    "disableCodeInterpreter": "कोड चलाउने सुविधा बन्द गर्नुहोस्"
+    "disableCodeInterpreter": "कोड चलाउने सुविधा बन्द गर्नुहोस्",
+    "interimSearch": {
+      "title": "हेडलाइन्स फेला परे — डीप सर्च अझै चलिरहेको छ",
+      "hint": "डीप Bing सर्चलाई ९० सेकेन्डसम्म लाग्न सक्छ। भर्खरै फेला परेका {count} हेडलाइन्सबाट अहिले नै जवाफ दिनुहोस्, वा संयुक्त नतिजाको पर्खाइ गर्नुहोस्।",
+      "summarizeNow": "हेडलाइन्सबाट अहिले नै सारांश बनाउनुहोस्",
+      "sourcesCount": "{count} स्रोतहरू",
+      "showAll": "सबै {count} स्रोतहरू देखाउनुहोस्",
+      "showFewer": "थोरै मात्र देखाउनुहोस्"
+    }
   },
   "transcript": {
     "originalTranscript": "मूल ट्रान्सक्रिप्ट",
@@ -1388,7 +1396,9 @@
       "freshness_day": "पछिल्लो दिन",
       "freshness_week": "पछिल्लो हप्ता",
       "freshness_month": "पछिल्लो महिना",
-      "freshness_any": "कुनै पनि समय"
+      "freshness_any": "कुनै पनि समय",
+      "providerCombined": "डीप सर्च प्रारम्भिक हेडलाइन्ससहित (Bing + Google News)",
+      "providerCombinedDescription": "Bing ग्राउन्डिङ र Google News एकैसाथ चलाउँछ: हेडलाइन्स केही सेकेन्डमै देखिन्छन् भने डीप Bing सर्च काम गरिरहन्छ, र तपाईंले ढिला सर्चको पर्खाइ नगरी हेडलाइन्सबाट नै तुरुन्तै उत्तर दिन रोज्न सक्नुहुन्छ। Bing सर्च सकिएपछि दुबै नतिजा सेटहरू एकीकृत गरिन्छन्।"
     }
   },
   "emptyState": {

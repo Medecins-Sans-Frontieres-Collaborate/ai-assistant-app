@@ -925,7 +925,15 @@
     "addLanguageOption": "Gbêtî \"{name}\"…",
     "sources": "Ngu nzönî",
     "interpreterBadge": "Ngba kodê",
-    "disableCodeInterpreter": "Kôtrê na kodê"
+    "disableCodeInterpreter": "Kôtrê na kodê",
+    "interimSearch": {
+      "title": "Babûtï tî sô ayeke — Künin na mo ko agere",
+      "hint": "Söködro tî Bing a langa 90 sô elï. Yeke wüngö tî {count} babûtï ti sô ayeke koko, otu ke zu kungo na ködörö mbeti.",
+      "summarizeNow": "Kümbëtï na babûtï sô ayeke",
+      "sourcesCount": "{count} nzönîsï",
+      "showAll": "Hombï nzönîsï {count} kpë",
+      "showFewer": "Hombï tsïna"
+    }
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",
@@ -1388,7 +1396,9 @@
       "freshness_day": "Na dî ti yângâ",
       "freshness_week": "Na sima ni",
       "freshness_month": "Na mô",
-      "freshness_any": "Nsî kõtõ"
+      "freshness_any": "Nsî kõtõ",
+      "providerCombined": "Söködro singbï na babûtï sô ayeke pëpé (Bing + Google News)",
+      "providerCombinedDescription": "Azara Bing na Google News kéké ndö: babûtï sô ayeke mbi yeke gbalarä le sô, kö söködro tî Bing ko yeke kodro. Awa mo göŋö na mbeti tî babûtï sô ayeke, mo mbi yeke zakara. Sô Bing ape, nzönîsï ködörö asambili."
     }
   },
   "emptyState": {

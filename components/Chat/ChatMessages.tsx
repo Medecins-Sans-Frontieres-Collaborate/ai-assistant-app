@@ -15,17 +15,22 @@ import { MemoizedChatMessage } from './MemoizedChatMessage';
 import { useChatStore } from '@/client/stores/chatStore';
 
 /**
- * Shimmer color tier for the loading text, keyed off how long the user has
- * been waiting. The drift (gray → pale blue → pale yellow → pale orange →
- * brown) is a passive "this is taking a while" signal — long tool
- * round-trips (Bing grounding, code interpreter) are legitimate but the
- * color acknowledges the wait instead of pretending everything is instant.
+ * Wave color tier for the loading text, keyed off how long the user has
+ * been waiting. The text itself stays gray; a colored band sweeps through
+ * it once per animation cycle, so the flash reads gray → tier color →
+ * gray. The tier drift (gray → pale blue → yellow → orange → brown) is a
+ * passive "this is taking a while" signal — long tool round-trips (Bing
+ * grounding, code interpreter) are legitimate but the color acknowledges
+ * the wait instead of pretending everything is instant.
  *
- * `activityActive` floors the tier at pale blue: the moment the loader
- * switches from the default "Thinking…" to a tool-specific message, the
- * color flips to blue instantly as part of that change (a gray tool
- * message drifting to blue seconds later reads as jarring). The default
- * "Thinking…" text itself always starts gray. Exported for tests.
+ * Returns arbitrary-property classes that set `--wave-color` (hex values —
+ * gradient stops can't take Tailwind color utilities). Tiers: gray-400,
+ * sky-400, yellow-600, orange-500, amber-800; dark variants one shade
+ * brighter to hold up on the dark background.
+ *
+ * `activityActive` floors the tier at pale blue: a tool-specific message
+ * with a gray wave would understate that work is happening. The default
+ * "Thinking…" text always starts gray. Exported for tests.
  */
 export function getLoadingColorClasses(
   elapsedSeconds: number,
@@ -35,22 +40,22 @@ export function getLoadingColorClasses(
     elapsedSeconds = Math.max(elapsedSeconds, 10);
   }
   if (elapsedSeconds >= 75) {
-    return 'from-amber-800 via-amber-700 to-amber-800 dark:from-amber-600 dark:via-amber-500 dark:to-amber-600';
+    return '[--wave-color:#92400e] dark:[--wave-color:#d97706]';
   }
   if (elapsedSeconds >= 45) {
-    return 'from-orange-500 via-orange-400 to-orange-500 dark:from-orange-400 dark:via-orange-300 dark:to-orange-400';
+    return '[--wave-color:#f97316] dark:[--wave-color:#fb923c]';
   }
   if (elapsedSeconds >= 25) {
-    return 'from-yellow-600 via-yellow-500 to-yellow-600 dark:from-yellow-400 dark:via-yellow-300 dark:to-yellow-400';
+    return '[--wave-color:#ca8a04] dark:[--wave-color:#facc15]';
   }
   if (elapsedSeconds >= 10) {
-    // Deliberately pale — the gray→blue hop is the first shift users see
-    // (and it fires instantly on tool activity), so it should read as a
-    // gentle nudge, not a state change. Dark mode: sky-300 sits at similar
-    // lightness to the gray-400 base text.
-    return 'from-sky-400 via-sky-300 to-sky-400 dark:from-sky-300 dark:via-sky-200 dark:to-sky-300';
+    // sky-400 / sky-300 — deliberately pale; the gray→blue hop is the
+    // first shift users see, so it should read as a gentle nudge.
+    return '[--wave-color:#38bdf8] dark:[--wave-color:#7dd3fc]';
   }
-  return 'from-gray-500 via-gray-400 to-gray-500 dark:from-gray-400 dark:via-gray-300 dark:to-gray-400';
+  // gray-400 / gray-300 — a slightly lighter gray than the base, so the
+  // initial state still shimmers without showing any hue.
+  return '[--wave-color:#9ca3af] dark:[--wave-color:#d1d5db]';
 }
 
 /**
@@ -76,6 +81,20 @@ const AnimatedLoadingText: React.FC<{
   // live in a way a once-per-second tick doesn't.
   const [elapsedTenths, setElapsedTenths] = useState(0);
   const elapsedSeconds = elapsedTenths / 10;
+
+  // Tier changes are deferred to the animation-iteration boundary — the
+  // one frame where the color wave is fully off the text and it reads
+  // solid gray (the shimmer-wave gradient keeps its band away from the
+  // window at 0%/200% background-position). Swapping there means every
+  // threshold passes through gray before the new color sweeps in, instead
+  // of recoloring the wave mid-flight. Worst-case lag is one 2s cycle,
+  // which also covers the tool-activity blue floor.
+  const targetColorClasses = getLoadingColorClasses(
+    elapsedSeconds,
+    hasActivity,
+  );
+  const [appliedColorClasses, setAppliedColorClasses] =
+    useState(targetColorClasses);
 
   useEffect(() => {
     if (text === displayText) return;
@@ -118,12 +137,19 @@ const AnimatedLoadingText: React.FC<{
   return (
     <div className="flex items-baseline gap-2">
       <div
-        className={`text-sm bg-gradient-to-r ${getLoadingColorClasses(elapsedSeconds, hasActivity)} bg-clip-text text-transparent animate-shimmer transition-opacity duration-200 ${
+        className={`text-sm bg-clip-text text-transparent animate-shimmer-wave transition-opacity duration-200 [--wave-base:#6b7280] dark:[--wave-base:#9ca3af] ${appliedColorClasses} ${
           isTransitioning ? 'opacity-0' : 'opacity-100'
         }`}
         style={{
+          // Gray base with a color band centered at 75% of the tile. At
+          // 0%/200% background-position the visible window shows the
+          // 0–50% stretch — solid gray — so the animationiteration swap
+          // below never recolors a visible wave.
+          backgroundImage:
+            'linear-gradient(to right, var(--wave-base) 0%, var(--wave-base) 60%, var(--wave-color) 75%, var(--wave-base) 90%, var(--wave-base) 100%)',
           backgroundSize: '200% 100%',
         }}
+        onAnimationIteration={() => setAppliedColorClasses(targetColorClasses)}
       >
         {displayText}
       </div>
@@ -216,8 +242,11 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
   const streamingToolCallCount = useChatStore(
     (s) => s.streamingToolCalls.length,
   );
+  const hasInterimSearch = useChatStore(
+    (s) => s.streamingInterimSearch !== null,
+  );
   const hasStreamingSideChannel =
-    streamingConsentCount > 0 || streamingToolCallCount > 0;
+    streamingConsentCount > 0 || streamingToolCallCount > 0 || hasInterimSearch;
 
   // During regenerate the new version replaces an existing index; otherwise
   // it appends, so the live card targets messages.length.

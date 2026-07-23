@@ -867,7 +867,15 @@
     "addLanguageOption": "\"{name}\" 추가…",
     "sources": "출처",
     "interpreterBadge": "코드 실행",
-    "disableCodeInterpreter": "코드 실행 비활성화"
+    "disableCodeInterpreter": "코드 실행 비활성화",
+    "interimSearch": {
+      "title": "헤드라인이 검색됨 — 심층 검색 진행 중",
+      "hint": "심층 Bing 검색은 최대 90초가 소요될 수 있습니다. 이미 찾은 {count}개의 헤드라인으로 바로 답변하거나, 통합 결과를 기다릴 수 있습니다.",
+      "summarizeNow": "헤드라인에서 바로 요약",
+      "sourcesCount": "{count}개 소스",
+      "showAll": "{count}개 소스 모두 보기",
+      "showFewer": "간략히 보기"
+    }
   },
   "sidebar": {
     "collapseSidebar": "사이드바 축소",
@@ -1235,7 +1243,9 @@
       "freshness_day": "지난 하루",
       "freshness_week": "지난 일주일",
       "freshness_month": "지난 한 달",
-      "freshness_any": "언제든지"
+      "freshness_any": "언제든지",
+      "providerCombined": "심층 검색 및 빠른 헤드라인 (Bing + Google 뉴스)",
+      "providerCombinedDescription": "Bing 그라운딩과 Google 뉴스를 동시에 실행합니다. 헤드라인은 몇 초 내에 표시되며, 느린 Bing 심층 검색을 기다리지 않고 즉시 답변할 수 있습니다. Bing 검색이 완료되면 두 결과가 통합됩니다."
     }
   },
   "notFound": {

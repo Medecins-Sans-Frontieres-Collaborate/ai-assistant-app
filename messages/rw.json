@@ -925,7 +925,15 @@
     "addLanguageOption": "Ongeraho \"{name}\"…",
     "sources": "Inkomoko",
     "interpreterBadge": "Koresha code",
-    "disableCodeInterpreter": "Hagarika ikoreshwa rya code"
+    "disableCodeInterpreter": "Hagarika ikoreshwa rya code",
+    "interimSearch": {
+      "title": "Amakuru y’ingenzi abonetse — Ubushakashatsi bwimbitse buracyakomeza",
+      "hint": "Ubushakashatsi bwimbitse kuri Bing bushobora gufata kugeza ku masegonda 90. Ushobora gusubiza ubu ukoresheje amakuru {count} y’ingenzi yabonetse, cyangwa ukategereza igisubizo cyuzuye.",
+      "summarizeNow": "Garagaza incamake y’amakuru y’ingenzi ubu",
+      "sourcesCount": "Amasoko {count}",
+      "showAll": "Erekana amasoko {count} yose",
+      "showFewer": "Erekana make"
+    }
   },
   "transcript": {
     "originalTranscript": "Ubwandiko bwa Mbere",
@@ -1388,7 +1396,9 @@
       "freshness_day": "Umunsi ushize",
       "freshness_week": "Icyumweru gishize",
       "freshness_month": "Ukwezi gushize",
-      "freshness_any": "Igihe cyose"
+      "freshness_any": "Igihe cyose",
+      "providerCombined": "Ubushakashatsi bwimbitse hamwe n’amakuru y’ingenzi hakiri kare (Bing + Google News)",
+      "providerCombinedDescription": "Ikoresha Bing na Google News icyarimwe: amakuru y’ingenzi agaragara mu masegonda make mugihe ubushakashatsi bwa Bing bukomeza, kandi ushobora guhitamo gusubiza uhereye ku makuru yabonetse mbere yo gutegereza ubushakashatsi bwihuta. Bing nikirangira, ibisubizo bibiri birahuzwa."
     }
   },
   "emptyState": {

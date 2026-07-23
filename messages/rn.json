@@ -925,7 +925,15 @@
     "addLanguageOption": "Ongeramwo \"{name}\"…",
     "sources": "Inkomoko",
     "interpreterBadge": "Gira isuzuma rya code",
-    "disableCodeInterpreter": "Zimya isuzuma rya code"
+    "disableCodeInterpreter": "Zimya isuzuma rya code",
+    "interimSearch": {
+      "title": "Ibitangazo vyabonetse — gusaka bihambaye birabandanya",
+      "hint": "Gusaka bihambaye ukoresheje Bing birashobora gufata gushika ku masegonda 90. Ushobora kwishura ushigikirije ku bitangazo {count} vyabonetse canke utegereze igisubizo c'ikimwe.",
+      "summarizeNow": "Gira ishusho ukoresheje ibitangazo ubu nyene",
+      "sourcesCount": "{count} vyinshi vyabonywe",
+      "showAll": "Garagaza vyose {count} vyabonywe",
+      "showFewer": "Garagaza bike"
+    }
   },
   "transcript": {
     "originalTranscript": "Inyandiko y'intango",
@@ -1388,7 +1396,9 @@
       "freshness_day": "Ejo haheze",
       "freshness_week": "Indwi iheze",
       "freshness_month": "Ukwezi guheze",
-      "freshness_any": "Igihe ico ari co cose"
+      "freshness_any": "Igihe ico ari co cose",
+      "providerCombined": "Gusaka bihambaye hamwe n'ibitangazo vy'imbere (Bing + Google News)",
+      "providerCombinedDescription": "Ihurika Bing grounding na Google News: ibitangazo bivamwo mu masegonda make mugihe gusaka bihambaye kwa Bing bigikora, kandi ushobora guhitamwo kwishura ushingiye ku bitangazo aho gutegereza igisubizo kirimwo vyose. Bing irangiye, vyose biratunganirizwa hamwe."
     }
   },
   "emptyState": {

@@ -925,7 +925,15 @@
     "addLanguageOption": "Bakisa \"{name}\"…",
     "sources": "Bisika ya nsuka",
     "interpreterBadge": "Tobeta code",
-    "disableCodeInterpreter": "Kokanga kosalela code"
+    "disableCodeInterpreter": "Kokanga kosalela code",
+    "interimSearch": {
+      "title": "Bantando ekutani — koluka ya mingi ezalaki kaka kobeta",
+      "hint": "Koluka mingi na Bing ekoki kozwa tɛ́ɛ 90 seconds. Kangá biyano uta na {count} bantando esilí kokutana, to yango te linda mpo na bilembo ekangamá.",
+      "summarizeNow": "Sala mokuse uta na bantando sik’oyo",
+      "sourcesCount": "{count} bikólo",
+      "showAll": "Lakisa bikólo nyonso {count}",
+      "showFewer": "Lakisa moke"
+    }
   },
   "transcript": {
     "originalTranscript": "Transkripsheni ya ebandeli",
@@ -1388,7 +1396,9 @@
       "freshness_day": "Mokolo oyo eleki",
       "freshness_week": "Semaine oyo eleki",
       "freshness_month": "Sanza oyo eleki",
-      "freshness_any": "Na tango nyonso"
+      "freshness_any": "Na tango nyonso",
+      "providerCombined": "Koluka mingi na bantando ya liboso (Bing + Google News)",
+      "providerCombinedDescription": "Etindaka koluka ya Bing ná Google News na elongo: bantando ekóti na mwa ntango, na ntango yango koluka ya Bing ezali kaka kosala, pe okoki kopesa eyano uta na bantando ya liboso soki olingi. Soki Bing esili, bamerja bikutani."
     }
   },
   "emptyState": {

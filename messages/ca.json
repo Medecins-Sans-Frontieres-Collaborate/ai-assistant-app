@@ -842,7 +842,15 @@
     "addLanguageOption": "Afegeix \"{name}\"…",
     "sources": "Fonts",
     "interpreterBadge": "Executa codi",
-    "disableCodeInterpreter": "Desactiva l'execució de codi"
+    "disableCodeInterpreter": "Desactiva l'execució de codi",
+    "interimSearch": {
+      "title": "Titulars trobats — la cerca profunda continua en marxa",
+      "hint": "La cerca profunda de Bing pot trigar fins a 90 segons. Respon ara amb els {count} titulars ja trobats, o espera el resultat combinat.",
+      "summarizeNow": "Resumir dels titulars ara",
+      "sourcesCount": "{count} fonts",
+      "showAll": "Mostra totes les {count} fonts",
+      "showFewer": "Mostra menys"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",
@@ -1210,7 +1218,9 @@
       "freshness_day": "Darrer dia",
       "freshness_week": "Darrera setmana",
       "freshness_month": "Darrer mes",
-      "freshness_any": "Qualsevol moment"
+      "freshness_any": "Qualsevol moment",
+      "providerCombined": "Cerca profunda amb titulars anticipats (Bing + Google News)",
+      "providerCombinedDescription": "Executa Bing grounding i Google News conjuntament: els titulars apareixen en pocs segons mentre la cerca profunda de Bing segueix treballant, i pots triar respondre amb els titulars immediatament en lloc d'esperar la cerca lenta. Quan Bing finalitza, els dos conjunts de resultats es fusionen."
     }
   },
   "notFound": {

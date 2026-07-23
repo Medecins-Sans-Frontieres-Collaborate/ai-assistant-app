@@ -813,7 +813,15 @@
     "addLanguageOption": "\"{name}\" যোগ করুন…",
     "sources": "উৎসসমূহ",
     "interpreterBadge": "কোড চালান",
-    "disableCodeInterpreter": "কোড কার্যকর করা নিষ্ক্রিয় করুন"
+    "disableCodeInterpreter": "কোড কার্যকর করা নিষ্ক্রিয় করুন",
+    "interimSearch": {
+      "title": "শিরোনাম পাওয়া গেছে — গভীর অনুসন্ধান চলমান",
+      "hint": "গভীর Bing অনুসন্ধান সর্বোচ্চ ৯০ সেকেন্ড সময় নিতে পারে। ইতোমধ্যে পাওয়া {count}টি শিরোনাম থেকে এখনই উত্তর দিন, অথবা চূড়ান্ত ফলাফলের জন্য অপেক্ষা করুন।",
+      "summarizeNow": "এখন শিরোনাম থেকে সারাংশ দিন",
+      "sourcesCount": "{count}টি সোর্স",
+      "showAll": "সব {count}টি সোর্স দেখান",
+      "showFewer": "কম দেখান"
+    }
   },
   "sidebar": {
     "collapseSidebar": "সাইডবার সংকুচিত করুন",
@@ -1235,7 +1243,9 @@
       "freshness_day": "গতকাল",
       "freshness_week": "গত সপ্তাহ",
       "freshness_month": "গত মাস",
-      "freshness_any": "যেকোনো সময়"
+      "freshness_any": "যেকোনো সময়",
+      "providerCombined": "গভীর অনুসন্ধান ও দ্রুত শিরোনাম (Bing + Google News)",
+      "providerCombinedDescription": "Bing grounding এবং Google News একসাথে চালানো হয়: মাত্র কয়েক সেকেন্ডে শিরোনাম দেখা যায়, এই সময়েও গভীর Bing অনুসন্ধান চলতে থাকে, এবং আপনি চাইলে শিরোনাম থেকেই দ্রুত উত্তর দিতে পারেন। Bing শেষ হলে, উভয় ফলাফল একত্রিত হয়।"
     }
   },
   "notFound": {
