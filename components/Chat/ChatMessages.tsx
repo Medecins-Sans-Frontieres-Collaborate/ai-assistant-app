@@ -242,8 +242,11 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
   const streamingToolCallCount = useChatStore(
     (s) => s.streamingToolCalls.length,
   );
+  const hasInterimSearch = useChatStore(
+    (s) => s.streamingInterimSearch !== null,
+  );
   const hasStreamingSideChannel =
-    streamingConsentCount > 0 || streamingToolCallCount > 0;
+    streamingConsentCount > 0 || streamingToolCallCount > 0 || hasInterimSearch;
 
   // During regenerate the new version replaces an existing index; otherwise
   // it appends, so the live card targets messages.length.
