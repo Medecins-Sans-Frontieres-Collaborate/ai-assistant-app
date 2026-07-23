@@ -1014,6 +1014,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         ? []
         : settings.mcpServers
             .filter((s) => s.enabled)
+            // Per-conversation opt-outs from the connector tray.
+            .filter((s) => !conversation.disabledMcpServerIds?.includes(s.id))
             .filter(
               (s) =>
                 s.catalogKey ||
