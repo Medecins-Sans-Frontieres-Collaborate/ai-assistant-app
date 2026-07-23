@@ -11,6 +11,13 @@ import type { SearchInterimPayload } from '@/lib/streamMarkers';
 const MAX_VISIBLE_HEADLINES = 6;
 
 /**
+ * Last line of defense for the anchor below: the marker parser already
+ * rejects non-http(s) URLs, but a hostile/malformed payload reaching this
+ * component must never become a `javascript:`/`data:` href.
+ */
+const isSafeHref = (url: string): boolean => /^https?:\/\//i.test(url);
+
+/**
  * Per-item stagger for the streamed-in reveal. Headlines arrive in one
  * marker, but revealing them one-by-one keeps the long Bing wait (35-90s)
  * visually alive — a few seconds of entrance animation against a
@@ -94,24 +101,35 @@ export const InterimSearchPanel: FC<{ interim: SearchInterimPayload }> = ({
             className="truncate text-xs text-gray-600 dark:text-gray-400 animate-headline-in motion-reduce:animate-none"
             style={{ animationDelay: `${entryDelayMs(idx)}ms` }}
           >
-            <a
-              href={entry.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex max-w-full items-center gap-1 hover:text-gray-900 hover:underline dark:hover:text-gray-200"
-            >
-              <span className="truncate">{entry.title}</span>
-              {entry.sourceName && (
-                <span className="shrink-0 text-gray-400 dark:text-gray-500">
-                  · {entry.sourceName}
-                </span>
-              )}
-              <IconExternalLink
-                size={10}
-                className="shrink-0"
-                aria-hidden="true"
-              />
-            </a>
+            {isSafeHref(entry.url) ? (
+              <a
+                href={entry.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex max-w-full items-center gap-1 hover:text-gray-900 hover:underline dark:hover:text-gray-200"
+              >
+                <span className="truncate">{entry.title}</span>
+                {entry.sourceName && (
+                  <span className="shrink-0 text-gray-400 dark:text-gray-500">
+                    · {entry.sourceName}
+                  </span>
+                )}
+                <IconExternalLink
+                  size={10}
+                  className="shrink-0"
+                  aria-hidden="true"
+                />
+              </a>
+            ) : (
+              <span className="inline-flex max-w-full items-center gap-1">
+                <span className="truncate">{entry.title}</span>
+                {entry.sourceName && (
+                  <span className="shrink-0 text-gray-400 dark:text-gray-500">
+                    · {entry.sourceName}
+                  </span>
+                )}
+              </span>
+            )}
           </li>
         ))}
       </ul>
