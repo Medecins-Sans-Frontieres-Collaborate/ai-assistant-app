@@ -121,8 +121,10 @@ const serverEnvSchema = z.object({
   //  - 'google-news': Google News RSS alone + link decoding.
   //  - 'bing-agent': the Foundry agent with Bing grounding — broader web
   //    coverage but 30-90s round-trips and flaky result quality.
+  //  - 'combined': Bing agent + Google News feed concurrently; headlines
+  //    stream to the client while Bing runs, then the results merge.
   WEB_SEARCH_PROVIDER: z
-    .enum(['news', 'gdelt', 'google-news', 'bing-agent'])
+    .enum(['news', 'gdelt', 'google-news', 'bing-agent', 'combined'])
     .default('news'),
 
   // Web search round-trip budget (ms). Applies to whichever provider runs.
