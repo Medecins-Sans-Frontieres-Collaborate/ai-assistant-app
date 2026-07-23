@@ -29,8 +29,23 @@ describe('WebSearchSettingsPanel', () => {
     ).not.toBeChecked();
     expect(screen.getByRole('radio', { name: /GDELT only/ })).not.toBeChecked();
     expect(
-      screen.getByRole('radio', { name: /Bing grounding/ }),
+      screen.getByRole('radio', { name: /Bing grounding \(via Microsoft\)/ }),
     ).not.toBeChecked();
+    expect(
+      screen.getByRole('radio', { name: /Deep search with early headlines/ }),
+    ).not.toBeChecked();
+  });
+
+  it('writes the combined provider to the settings store', () => {
+    render(<WebSearchSettingsPanel />);
+
+    fireEvent.click(
+      screen.getByRole('radio', { name: /Deep search with early headlines/ }),
+    );
+
+    expect(useSettingsStore.getState().webSearchOptions.provider).toBe(
+      'combined',
+    );
   });
 
   it('warns that Bing grounding is slow and inconsistent', () => {
