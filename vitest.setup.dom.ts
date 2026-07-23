@@ -549,6 +549,40 @@ const mockMessages: Record<string, unknown> = {
     description:
       'Older messages beyond this limit are summarized and sent as context.',
   },
+  settings: {
+    webSearch: {
+      title: 'Web Search',
+      description:
+        'Controls how live web searches run when Search Mode is active. Changes apply immediately.',
+      providerLabel: 'Search provider',
+      providerAuto: 'Automatic (recommended)',
+      providerAutoDescription:
+        'Uses the deployment default — currently the combined news search below.',
+      providerNews: 'Combined news (GDELT + Google News)',
+      providerNewsDescription:
+        'Queries both sources in parallel and merges the results, so either one failing never breaks a search. Best balance of speed, source diversity, and working article links.',
+      providerGoogleNews: 'Google News only',
+      providerGoogleNewsDescription:
+        'Anonymous and fast — only the search query reaches Google (no account or cookies) and results arrive in about a second. Note: it mostly scans headlines and short snippets, not full articles, so answers can stay surface-level.',
+      providerGdelt: 'GDELT only',
+      providerGdeltDescription:
+        'Open research database of world news with direct publisher links, which lets follow-up questions read the full articles. Strictly rate-limited — back-to-back searches may queue for a few seconds.',
+      providerBing: 'Bing grounding (via Microsoft)',
+      providerBingDescription:
+        'Reads full pages for deeper summaries and covers the general web, not just news. However, searches routinely take 30–90 seconds and result quality is often inconsistent from one search to the next.',
+      sourcesLabel: 'Sources per search',
+      sourcesDescription:
+        'How many distinct sources a search keeps as citations. Research-style questions may automatically widen this.',
+      freshnessLabel: 'Preferred recency',
+      freshnessDescription:
+        'How recent results should be. Automatic lets each question decide (breaking news prefers the last day).',
+      freshness_auto: 'Automatic',
+      freshness_day: 'Past day',
+      freshness_week: 'Past week',
+      freshness_month: 'Past month',
+      freshness_any: 'Any time',
+    },
+  },
   usageImpact: {
     empty: 'No usage tracked yet.',
     co2Value: '{grams} g CO2e',
