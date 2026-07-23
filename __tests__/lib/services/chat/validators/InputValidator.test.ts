@@ -632,6 +632,29 @@ describe('validateChatRequest - precomputedSearchResults', () => {
     expect(result.precomputedSearchResults?.queries).toEqual(['q1', 'q2']);
   });
 
+  it('rejects non-http(s) entry URLs (clickable-citation injection)', () => {
+    const validator = new InputValidator();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        precomputedSearchResults: {
+          queries: ['q'],
+          // eslint-disable-next-line no-script-url
+          entries: [{ ...entry, url: 'javascript:alert(1)' }],
+        },
+      }),
+    ).toThrow();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        precomputedSearchResults: {
+          queries: ['q'],
+          entries: [{ ...entry, sourceUrl: 'data:text/html,x' }],
+        },
+      }),
+    ).toThrow();
+  });
+
   it('rejects empty entries and oversized lists', () => {
     const validator = new InputValidator();
     expect(() =>

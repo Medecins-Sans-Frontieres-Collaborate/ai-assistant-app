@@ -508,6 +508,47 @@ describe('emitSearchInterim / search_interim scanning', () => {
     expect(displayDelta).toBe('');
   });
 
+  it('rejects entries with non-http(s) URLs (href/echo-back safety)', () => {
+    const hostile = {
+      queries: ['q'],
+      entries: [
+        {
+          title: 'Click me',
+          // eslint-disable-next-line no-script-url
+          url: 'javascript:alert(1)',
+          date: '2026-07-23',
+        },
+      ],
+    };
+    const { events } = scanStreamEvents(emitSearchInterim(hostile), 0);
+    expect(events).toHaveLength(0);
+
+    const badSourceUrl = {
+      queries: ['q'],
+      entries: [
+        {
+          title: 'Fine title',
+          url: 'https://a.example/1',
+          date: '2026-07-23',
+          sourceUrl: 'data:text/html,x',
+        },
+      ],
+    };
+    expect(
+      scanStreamEvents(emitSearchInterim(badSourceUrl), 0).events,
+    ).toHaveLength(0);
+  });
+
+  it('rejects entries missing required fields (guard matches the type)', () => {
+    const missingDate = {
+      queries: ['q'],
+      entries: [{ title: 'No date', url: 'https://a.example/1' }],
+    };
+    expect(
+      scanStreamEvents(emitSearchInterim(missingDate as never), 0).events,
+    ).toHaveLength(0);
+  });
+
   it('extractLatestSearchInterim returns the latest payload and strips all markers', () => {
     const older = emitSearchInterim({ queries: ['old'], entries: [] });
     const wire = `x${older}y${emitSearchInterim(payload)}z`;
