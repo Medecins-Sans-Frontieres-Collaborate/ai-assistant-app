@@ -174,6 +174,15 @@ export const McpConnectorSchema = z.object({
    */
   oauthClientSecret: SealedSecretSchema.optional(),
   oauthScopes: z.array(z.string()).default([]),
+  /**
+   * OAuth style only — explicit endpoints for providers whose MCP server does
+   * not publish RFC 9728/8414 discovery metadata (NetSuite's are per-account).
+   * Authorization + token URLs come as a pair; the refresh URL is optional and
+   * defaults to the token URL. When absent, discovery runs as before.
+   */
+  oauthAuthorizationUrl: z.string().optional(),
+  oauthTokenUrl: z.string().optional(),
+  oauthRefreshUrl: z.string().optional(),
   createdBy: z.string(),
   createdAt: z.string(),
   updatedBy: z.string(),
