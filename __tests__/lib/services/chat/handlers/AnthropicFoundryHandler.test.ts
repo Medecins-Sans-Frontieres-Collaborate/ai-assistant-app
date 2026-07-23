@@ -440,4 +440,96 @@ describe('AnthropicFoundryHandler', () => {
       expect(result).toBe(mockResponse);
     });
   });
+
+  describe('extended thinking', () => {
+    const thinkingModelConfig: OpenAIModel = {
+      ...mockModelConfig,
+      supportsExtendedThinking: true,
+    };
+    const user = { id: 'u1' } as any;
+
+    it('enables thinking with a budget mapped from reasoning effort', () => {
+      const params = handler.buildStreamingRequestParams(
+        thinkingModelConfig.id,
+        [{ role: 'user', content: 'Hello' }],
+        'prompt',
+        0.5,
+        user,
+        thinkingModelConfig,
+        'medium',
+      );
+
+      expect(params.thinking).toEqual({
+        type: 'enabled',
+        budget_tokens: 4096,
+      });
+      // API constraint: temperature must be 1 with thinking enabled
+      expect(params.temperature).toBe(1);
+      // max_tokens must exceed the budget
+      expect(params.max_tokens).toBeGreaterThan(4096);
+    });
+
+    it('keeps thinking OFF for minimal/unset effort', () => {
+      for (const effort of ['minimal', undefined] as const) {
+        const params = handler.buildStreamingRequestParams(
+          thinkingModelConfig.id,
+          [{ role: 'user', content: 'Hello' }],
+          'prompt',
+          0.5,
+          user,
+          thinkingModelConfig,
+          effort,
+        );
+        expect(params.thinking).toBeUndefined();
+        expect(params.temperature).toBe(0.5);
+      }
+    });
+
+    it('never enables thinking on models without the flag', () => {
+      const params = handler.buildStreamingRequestParams(
+        mockModelConfig.id,
+        [{ role: 'user', content: 'Hello' }],
+        'prompt',
+        0.5,
+        user,
+        mockModelConfig, // no supportsExtendedThinking
+        'high',
+      );
+      expect(params.thinking).toBeUndefined();
+    });
+
+    it('applies thinking on the non-streaming builder too', () => {
+      const params = handler.buildNonStreamingRequestParams(
+        thinkingModelConfig.id,
+        [{ role: 'user', content: 'Hello' }],
+        'prompt',
+        0.5,
+        user,
+        thinkingModelConfig,
+        'high',
+      );
+      expect(params.thinking).toEqual({
+        type: 'enabled',
+        budget_tokens: 8192,
+      });
+    });
+
+    it('strips prior-turn <think> blocks from assistant history', () => {
+      const messages: Message[] = [
+        { role: 'user', content: 'Q1', messageType: MessageType.TEXT },
+        {
+          role: 'assistant',
+          content: '<think>\nold reasoning\n</think>\n\nA1',
+          messageType: MessageType.TEXT,
+        },
+        { role: 'user', content: 'Q2', messageType: MessageType.TEXT },
+      ];
+
+      const result = handler.prepareMessages(messages, thinkingModelConfig);
+
+      expect(result[1]).toEqual({ role: 'assistant', content: 'A1' });
+      // User messages untouched
+      expect(result[0]).toEqual({ role: 'user', content: 'Q1' });
+    });
+  });
 });
