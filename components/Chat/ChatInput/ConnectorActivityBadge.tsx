@@ -18,8 +18,10 @@ import { useSettingsStore } from '@/client/stores/settingsStore';
  * otherwise the active count. Clicking toggles the connector tray, where
  * individual connectors can be switched off or focused.
  *
- * Renders nothing when no connector is enabled (nothing is being sent) —
- * the tray then remains reachable through the `+` menu.
+ * Renders nothing when no connector is active FOR THIS CHAT (nothing is
+ * being sent) — globally enabled servers this conversation opted out of
+ * don't count. The connectors list then remains reachable through the `+`
+ * menu.
  */
 export const ConnectorActivityBadge: React.FC = () => {
   const t = useTranslations('connectorPin');
@@ -29,7 +31,10 @@ export const ConnectorActivityBadge: React.FC = () => {
   const { selectedConversation } = useConversations();
 
   const active = mcpServers.filter(
-    (s) => s.enabled && !(s.authMode === 'oauth' && s.oauth?.needsReauth),
+    (s) =>
+      s.enabled &&
+      !(s.authMode === 'oauth' && s.oauth?.needsReauth) &&
+      !selectedConversation?.disabledMcpServerIds?.includes(s.id),
   );
   if (active.length === 0) return null;
 
