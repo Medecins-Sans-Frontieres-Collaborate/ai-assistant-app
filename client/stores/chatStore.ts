@@ -51,6 +51,7 @@ import {
 } from '@/types/openai';
 import { Citation } from '@/types/rag';
 import { SearchMode } from '@/types/searchMode';
+import { PrecomputedSearchResults } from '@/types/webSearch';
 
 import { useChatInputStore } from './chatInputStore';
 import { useConversationStore } from './conversationStore';
@@ -61,7 +62,10 @@ import { useUIStore } from './uiStore';
 import { ApiError, chatService } from '@/client/services';
 import { getFallbackModel, isModelDisabled } from '@/config/models';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
-import { ConsentRequestPayload } from '@/lib/streamMarkers';
+import {
+  ConsentRequestPayload,
+  SearchInterimPayload,
+} from '@/lib/streamMarkers';
 import { create } from 'zustand';
 
 /** Sentinel key for OAuth resume state when a server has no label. */
@@ -133,6 +137,19 @@ interface ChatStore {
   streamingConsentRequests: ConsentRequestPayload[];
   /** Live tool call records during streaming; rendered as the summary. */
   streamingToolCalls: ToolCallRecord[];
+  /**
+   * Interim headlines from a combined (Bing + news) search — rendered on
+   * the in-progress message with a "Summarize from headlines" action while
+   * the Bing leg is still running.
+   */
+  streamingInterimSearch: SearchInterimPayload | null;
+  /** Search mode of the in-flight turn, kept for headline resends. */
+  streamingSearchMode: SearchMode | undefined;
+  /**
+   * One-shot echo payload for a "Summarize from headlines" resend; consumed
+   * (and cleared) by the next sendChatRequest.
+   */
+  pendingPrecomputedSearchResults: PrecomputedSearchResults | null;
   abortController: AbortController | null;
 
   // Retry-related state
@@ -328,6 +345,13 @@ interface ChatStore {
    * assistant group to append a version to.
    */
   retryFailedRequest: () => Promise<void>;
+  /**
+   * "Summarize from headlines now": aborts the in-flight combined search
+   * (Bing still running) and resends the same user message with the
+   * already-received interim headlines echoed back — the server merges
+   * them as the search result without searching again.
+   */
+  summarizeFromHeadlines: () => Promise<void>;
   dismissModelSwitchPrompt: () => void;
   acceptModelSwitch: (alwaysSwitch?: boolean) => void;
 
@@ -379,6 +403,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   loadingMessageParams: undefined,
   streamingConsentRequests: [],
   streamingToolCalls: [],
+  streamingInterimSearch: null,
+  streamingSearchMode: undefined,
+  pendingPrecomputedSearchResults: null,
   abortController: null,
 
   // Retry-related initial state
@@ -488,6 +515,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       loadingMessageParams: undefined,
       streamingConsentRequests: [],
       streamingToolCalls: [],
+      streamingInterimSearch: null,
+      streamingSearchMode: undefined,
+      pendingPrecomputedSearchResults: null,
       abortController: null,
       // Reset retry state
       isRetrying: false,
@@ -547,6 +577,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
       // Initialize streaming state
       get().initializeStreamingState(conversation.id, loadingMessage);
+      // Remember the turn's search mode so a "Summarize from headlines"
+      // resend can replay it faithfully.
+      set({ streamingSearchMode: searchMode });
 
       // Schedule loading message display (only if response is slow)
       showLoadingTimeout = get().scheduleLoadingMessage(loadingMessage);
@@ -710,6 +743,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       loadingMessageParams: undefined,
       streamingConsentRequests: [],
       streamingToolCalls: [],
+      streamingInterimSearch: null,
       stopRequested: false,
       abortController,
     });
@@ -1094,6 +1128,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         ? 'EU'
         : undefined);
 
+    // One-shot echo for "Summarize from headlines" resends: consume the
+    // pending payload so it can never leak into a later, unrelated send.
+    const { pendingPrecomputedSearchResults } = get();
+    if (pendingPrecomputedSearchResults) {
+      set({ pendingPrecomputedSearchResults: null });
+    }
+
     return await chatService.chat(modelToSend, messagesForAPI, {
       prompt: settings.systemPrompt,
       temperature: settings.temperature,
@@ -1110,6 +1151,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         effectiveSearchMode === SearchMode.ALWAYS
           ? settings.webSearchOptions
           : undefined,
+      precomputedSearchResults: pendingPrecomputedSearchResults ?? undefined,
       interpreterMode: effectiveInterpreterMode,
       hostedRegion,
       tone, // Pass the full tone object
@@ -1267,6 +1309,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       }
       if (result.toolCallsChanged) {
         set({ streamingToolCalls: streamParser.getToolCallRecords?.() ?? [] });
+      }
+      if (result.searchInterimChanged) {
+        set({ streamingInterimSearch: streamParser.getSearchInterim() });
       }
 
       // Clear loading timeout once content arrives
@@ -1522,6 +1567,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       loadingMessageParams: undefined,
       streamingConsentRequests: [],
       streamingToolCalls: [],
+      streamingInterimSearch: null,
+      streamingSearchMode: undefined,
       abortController: null,
       stopRequested: false,
     });
@@ -1540,6 +1587,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         streamingContent: '',
         streamingConversationId: null,
         loadingMessage: null,
+        streamingInterimSearch: null,
         abortController: null,
         stopRequested: false,
         error: null, // Don't show error for user-initiated stops
@@ -1760,6 +1808,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
       // Initialize streaming state
       get().initializeStreamingState(retryConversation.id, loadingMessage);
+      set({ streamingSearchMode: searchMode });
 
       // Schedule loading message display
       showLoadingTimeout = get().scheduleLoadingMessage(loadingMessage);
@@ -1986,6 +2035,75 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     });
 
     await get().sendMessage(userMessage, failedConversation, failedSearchMode);
+  },
+
+  summarizeFromHeadlines: async () => {
+    const {
+      isStreaming,
+      streamingInterimSearch,
+      streamingConversationId,
+      streamingSearchMode,
+      abortController,
+    } = get();
+    if (!isStreaming || !streamingInterimSearch || !streamingConversationId) {
+      return;
+    }
+    const conversation = useConversationStore
+      .getState()
+      .conversations.find((c) => c.id === streamingConversationId);
+    if (!conversation) return;
+
+    // Capture before aborting — the abort teardown clears the streaming
+    // slices (including the interim payload).
+    const payload: PrecomputedSearchResults = {
+      queries: streamingInterimSearch.queries,
+      entries: streamingInterimSearch.entries,
+    };
+    const searchMode = streamingSearchMode ?? SearchMode.INTELLIGENT;
+
+    console.log(
+      '[chatStore] Summarize from headlines: aborting the Bing wait and resending with echoed headlines',
+    );
+    abortController?.abort();
+
+    // Wait for the aborted request's teardown to finish (its catch path
+    // resets the streaming state) so it can't clobber the resend's fresh
+    // state. Bounded — if teardown somehow never lands, bail rather than
+    // fire a second request on top of a live one.
+    const deadline = Date.now() + 5000;
+    while (get().isStreaming && Date.now() < deadline) {
+      await new Promise((resolve) => setTimeout(resolve, 25));
+    }
+    if (get().isStreaming) {
+      console.warn(
+        '[chatStore] Summarize from headlines: stream teardown timed out; not resending',
+      );
+      return;
+    }
+
+    // The aborted turn never finalized an assistant message, so the
+    // conversation still ends with the user message — resend it (same
+    // shape as retryFailedRequest).
+    const flat = flattenEntriesForAPI(conversation.messages);
+    let userMessage: Message | undefined;
+    for (let i = flat.length - 1; i >= 0; i--) {
+      if (flat[i].role === 'user') {
+        userMessage = flat[i];
+        break;
+      }
+    }
+    if (!userMessage) return;
+
+    set({ pendingPrecomputedSearchResults: payload });
+    try {
+      await get().sendMessage(userMessage, conversation, searchMode);
+    } finally {
+      // Normally consumed by sendChatRequest; clear defensively in case
+      // the send failed before reaching it.
+      if (get().pendingPrecomputedSearchResults) {
+        set({ pendingPrecomputedSearchResults: null });
+      }
+    }
   },
 
   dismissModelSwitchPrompt: () => {
