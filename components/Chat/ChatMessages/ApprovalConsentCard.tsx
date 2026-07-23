@@ -12,6 +12,7 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { formatToolArguments } from '@/lib/utils/shared/chat/formatToolArguments';
+import { evaluateToolApprovalRules } from '@/lib/utils/shared/chat/toolApprovalRules';
 import { highlightJsonTokens } from '@/lib/utils/shared/jsonHighlight';
 import { usePlatformModifier } from '@/lib/utils/shared/platform';
 
@@ -19,6 +20,7 @@ import type { ConsentRequest } from './ConsentCard';
 
 import { useChatStore } from '@/client/stores/chatStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 
 interface ApprovalConsentCardProps {
   request: ConsentRequest & { kind: 'approval' };
@@ -68,6 +70,14 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
   );
 
   const modifierLabel = usePlatformModifier();
+  const toolApprovalRules = useSettingsStore((s) => s.toolApprovalRules);
+  // Global (all-chats) policy for this tool. 'reject' beats every approval
+  // source, including the conversation's own alwaysApprove* fields.
+  const globalDecision = evaluateToolApprovalRules(
+    toolApprovalRules,
+    toolName,
+    serverLabel,
+  );
 
   const approvalId = request.approval_request_id;
   const inMemoryDecision =
@@ -111,22 +121,46 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
     setMenuPos({ top: rect.bottom + 4, left: rect.left });
     setMenuOpen(true);
   };
+  // Deny dropdown ("once" / "never, all chats") — same fixed-position
+  // mechanics as the approve menu, for the same overflow reasons.
+  const [denyMenuOpen, setDenyMenuOpen] = useState(false);
+  const denySplitRef = useRef<HTMLDivElement>(null);
+  const denyMenuRef = useRef<HTMLDivElement>(null);
+  const [denyMenuPos, setDenyMenuPos] = useState<{
+    top: number;
+    left: number;
+  } | null>(null);
+  const openDenyMenu = () => {
+    const rect = denySplitRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    setDenyMenuPos({ top: rect.bottom + 4, left: rect.left });
+    setDenyMenuOpen(true);
+  };
   useEffect(() => {
-    if (!menuOpen) return;
+    if (!menuOpen && !denyMenuOpen) return;
     const onDocClick = (e: MouseEvent) => {
       const target = e.target as Node;
       if (
         splitRef.current?.contains(target) ||
-        menuRef.current?.contains(target)
+        menuRef.current?.contains(target) ||
+        denySplitRef.current?.contains(target) ||
+        denyMenuRef.current?.contains(target)
       ) {
         return;
       }
       setMenuOpen(false);
+      setDenyMenuOpen(false);
     };
     const onEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setMenuOpen(false);
+      if (e.key === 'Escape') {
+        setMenuOpen(false);
+        setDenyMenuOpen(false);
+      }
     };
-    const onScroll = () => setMenuOpen(false);
+    const onScroll = () => {
+      setMenuOpen(false);
+      setDenyMenuOpen(false);
+    };
     document.addEventListener('mousedown', onDocClick);
     document.addEventListener('keydown', onEsc);
     window.addEventListener('scroll', onScroll, true);
@@ -137,9 +171,11 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
       window.removeEventListener('scroll', onScroll, true);
       window.removeEventListener('resize', onScroll);
     };
-  }, [menuOpen]);
+  }, [menuOpen, denyMenuOpen]);
 
-  const handleApproveWithScope = (scope: 'once' | 'tool' | 'all') => {
+  const handleApproveWithScope = (
+    scope: 'once' | 'tool' | 'all' | 'everywhere',
+  ) => {
     if (!approvalId || !selectedConversation) return;
     if (scope === 'tool' && toolName) {
       useConversationStore
@@ -149,6 +185,12 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
       useConversationStore
         .getState()
         .setAutoApprove(selectedConversation.id, 'all');
+    } else if (scope === 'everywhere' && toolName) {
+      useSettingsStore.getState().addToolApprovalRule({
+        toolName,
+        serverLabel: serverLabel ?? undefined,
+        action: 'approve',
+      });
     }
     setMenuOpen(false);
     if (approvalState === 'idle') {
@@ -162,13 +204,35 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
     }
   };
 
+  const handleDenyEverywhere = () => {
+    if (!approvalId || !selectedConversation || !toolName) return;
+    useSettingsStore.getState().addToolApprovalRule({
+      toolName,
+      serverLabel: serverLabel ?? undefined,
+      action: 'reject',
+    });
+    setDenyMenuOpen(false);
+    if (approvalState === 'idle') {
+      void submitApproval(
+        approvalId,
+        false,
+        selectedConversation,
+        messageIndex,
+        'manual',
+      );
+    }
+  };
+
   const autoApproveMatch =
-    selectedConversation &&
-    (selectedConversation.alwaysApproveAllTools ||
-      (toolName &&
-        selectedConversation.alwaysApproveTools?.includes(toolName)));
+    globalDecision !== 'reject' &&
+    (globalDecision === 'approve' ||
+      (selectedConversation &&
+        (selectedConversation.alwaysApproveAllTools ||
+          (toolName &&
+            selectedConversation.alwaysApproveTools?.includes(toolName)))));
+  const autoRejectMatch = globalDecision === 'reject';
   useEffect(() => {
-    if (!autoApproveMatch) return;
+    if (!autoApproveMatch && !autoRejectMatch) return;
     if (approvalState !== 'idle') return;
     if (!approvalId || !selectedConversation) return;
     if (failedApprovals.has(approvalId)) return;
@@ -177,13 +241,15 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
     if (isStreaming) return;
     void submitApproval(
       approvalId,
-      true,
+      // Reject rules win: an explicit "never run this" is a safety decision.
+      !autoRejectMatch,
       selectedConversation,
       messageIndex,
-      'auto-approved',
+      autoRejectMatch ? 'auto-denied' : 'auto-approved',
     );
   }, [
     autoApproveMatch,
+    autoRejectMatch,
     approvalState,
     approvalId,
     selectedConversation,
@@ -356,17 +422,74 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
                   >
                     {t('alwaysApproveAllTools')}
                   </button>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => handleApproveWithScope('everywhere')}
+                    disabled={!toolName}
+                    className="flex w-full items-center border-t border-gray-100 px-3 py-1.5 text-left text-gray-800 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700"
+                  >
+                    {t('alwaysApproveEverywhere')}
+                  </button>
                 </div>
               )}
-              <button
-                type="button"
-                onClick={() => handleApprovalClick(false)}
-                disabled={buttonsDisabled}
-                className="inline-flex items-center gap-1 rounded-md border border-gray-300 bg-white px-2.5 py-1 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
-              >
-                <IconX size={14} aria-hidden="true" />
-                {t('denyButton')}
-              </button>
+              <div className="inline-flex isolate" ref={denySplitRef}>
+                <button
+                  type="button"
+                  onClick={() => handleApprovalClick(false)}
+                  disabled={buttonsDisabled}
+                  className="inline-flex items-center gap-1 rounded-l-md border border-gray-300 bg-white px-2.5 py-1 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+                >
+                  <IconX size={14} aria-hidden="true" />
+                  {t('denyButton')}
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    denyMenuOpen ? setDenyMenuOpen(false) : openDenyMenu()
+                  }
+                  disabled={buttonsDisabled}
+                  aria-label={t('denyOptionsLabel')}
+                  aria-haspopup="menu"
+                  aria-expanded={denyMenuOpen}
+                  className="inline-flex items-center rounded-r-md border border-l-0 border-gray-300 bg-white px-1.5 py-1 text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+                >
+                  <IconChevronDown size={14} aria-hidden="true" />
+                </button>
+              </div>
+              {denyMenuOpen && denyMenuPos && (
+                <div
+                  ref={denyMenuRef}
+                  role="menu"
+                  style={{
+                    position: 'fixed',
+                    top: denyMenuPos.top,
+                    left: denyMenuPos.left,
+                  }}
+                  className="z-50 min-w-[14rem] overflow-hidden rounded-md border border-gray-200 bg-white py-1 text-sm shadow-lg dark:border-gray-700 dark:bg-gray-800"
+                >
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      setDenyMenuOpen(false);
+                      handleApprovalClick(false);
+                    }}
+                    className="flex w-full items-center px-3 py-1.5 text-left text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                  >
+                    {t('denyOnce')}
+                  </button>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={handleDenyEverywhere}
+                    disabled={!toolName}
+                    className="flex w-full items-center px-3 py-1.5 text-left text-red-700 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50 dark:text-red-400 dark:hover:bg-red-900/20"
+                  >
+                    {t('neverAllowEverywhere')}
+                  </button>
+                </div>
+              )}
               <span className="text-xs text-gray-400 dark:text-gray-500">
                 {t('keyboardHint', { modifier: modifierLabel })}
               </span>
@@ -395,6 +518,11 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
             <p className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
               <IconX size={14} aria-hidden="true" />
               {t('deniedState')}
+              {autoRejectMatch && (
+                <span className="text-xs text-gray-400 dark:text-gray-500">
+                  {t('deniedByRuleHint')}
+                </span>
+              )}
             </p>
           )}
         </div>
