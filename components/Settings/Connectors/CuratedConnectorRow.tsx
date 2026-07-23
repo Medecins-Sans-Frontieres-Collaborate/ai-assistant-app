@@ -14,6 +14,7 @@ import { useMcpTools } from '@/client/hooks/settings/useMcpTools';
 import { connectMcpOauth } from '@/client/services/mcp/mcpOauth';
 
 import { OwnOauthAppFields } from './OwnOauthAppFields';
+import { ToolCountDisclosure } from './ToolCountDisclosure';
 import { catalogIcon } from './catalogIcons';
 import { validateMcpServer } from './validateMcpServer';
 
@@ -255,10 +256,11 @@ export const CuratedConnectorRow: FC<CuratedConnectorRowProps> = ({
           {config ? (
             <div className="mt-3 space-y-2">
               <div className="flex flex-wrap items-center gap-4">
-                {!isLoadingTools && tools.length > 0 && (
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                    {t('toolCount', { count: tools.length })}
-                  </span>
+                {!isLoadingTools && (
+                  <ToolCountDisclosure
+                    serverLabel={entry.label}
+                    tools={tools}
+                  />
                 )}
                 {needsReauth && canStartOauth && (
                   <button
