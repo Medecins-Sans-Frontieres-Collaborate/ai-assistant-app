@@ -396,6 +396,29 @@ export function extractWorkflowEvents(content: string): {
   return { events, cleaned };
 }
 
+/**
+ * Only http(s) URLs are acceptable in interim entries — they are rendered
+ * into <a href> and echoed back to the server, so `javascript:`/`data:`
+ * schemes must never survive the parse.
+ */
+function isHttpUrl(value: unknown): value is string {
+  return typeof value === 'string' && /^https?:\/\//i.test(value);
+}
+
+/** Full runtime mirror of SearchHeadlineEntry — guard matches the type. */
+function isSearchHeadlineEntry(value: unknown): boolean {
+  if (!value || typeof value !== 'object') return false;
+  const e = value as Record<string, unknown>;
+  return (
+    typeof e.title === 'string' &&
+    isHttpUrl(e.url) &&
+    typeof e.date === 'string' &&
+    (e.sourceName === undefined || typeof e.sourceName === 'string') &&
+    (e.sourceUrl === undefined || isHttpUrl(e.sourceUrl)) &&
+    (e.snippet === undefined || typeof e.snippet === 'string')
+  );
+}
+
 function isSearchInterimPayload(value: unknown): value is SearchInterimPayload {
   if (!value || typeof value !== 'object') return false;
   const p = value as { queries?: unknown; entries?: unknown };
@@ -403,13 +426,7 @@ function isSearchInterimPayload(value: unknown): value is SearchInterimPayload {
     Array.isArray(p.queries) &&
     p.queries.every((q) => typeof q === 'string') &&
     Array.isArray(p.entries) &&
-    p.entries.every(
-      (e) =>
-        e &&
-        typeof e === 'object' &&
-        typeof (e as { title?: unknown }).title === 'string' &&
-        typeof (e as { url?: unknown }).url === 'string',
-    )
+    p.entries.every(isSearchHeadlineEntry)
   );
 }
 
