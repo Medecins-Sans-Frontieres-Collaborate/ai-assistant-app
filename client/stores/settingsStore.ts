@@ -2,6 +2,7 @@
 
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
+import { ToolApprovalRule } from '@/lib/utils/shared/chat/toolApprovalRules';
 import {
   EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
   EMISSIONS_CHIP_VISIBILITY_DEFAULT,
@@ -20,6 +21,7 @@ import {
 } from '@/lib/utils/shared/paste/pastedText';
 import { UserRegion } from '@/lib/utils/shared/region';
 
+import { InterpreterMode, isInterpreterMode } from '@/types/interpreterMode';
 import {
   LOCAL_RUNTIMES,
   LocalRuntime,
@@ -46,6 +48,11 @@ import {
 import { SavedStructure } from '@/types/structure';
 import { Tone } from '@/types/tone';
 import { DEFAULT_TTS_SETTINGS, TTSSettings } from '@/types/tts';
+import {
+  DEFAULT_WEB_SEARCH_OPTIONS,
+  WebSearchOptions,
+  sanitizeWebSearchOptions,
+} from '@/types/webSearch';
 import {
   CustomTranslationLanguage,
   DocumentCustomCriterion,
@@ -224,6 +231,10 @@ interface SettingsStore {
   systemPrompt: string;
   defaultModelId: OpenAIModelID | undefined;
   defaultSearchMode: SearchMode;
+  /** Advanced web-search tuning (source count, freshness preference). */
+  webSearchOptions: WebSearchOptions;
+  /** Default code-interpreter mode for new conversations (mirrors defaultSearchMode). */
+  defaultInterpreterMode: InterpreterMode;
   autoSwitchOnFailure: boolean;
   displayNamePreference: DisplayNamePreference;
   customDisplayName: string;
@@ -263,6 +274,13 @@ interface SettingsStore {
   translationCriteria: TranslationCustomCriterion[];
   /** MCP servers the user connected (Connectors settings section). */
   mcpServers: McpServerConfig[];
+  /**
+   * Global MCP tool approval policy: auto-approve / auto-reject rules that
+   * apply in EVERY conversation (the per-conversation alwaysApprove* fields
+   * layer on top; reject rules beat all approvals). Managed from consent
+   * cards and Settings → Connectors.
+   */
+  toolApprovalRules: ToolApprovalRule[];
   /** User opt-in for adding/sending arbitrary (non-catalog) MCP servers. */
   allowArbitraryMcpServers: boolean;
   /**
@@ -391,6 +409,8 @@ interface SettingsStore {
   setSystemPrompt: (prompt: string) => void;
   setDefaultModelId: (id: OpenAIModelID | undefined) => void;
   setDefaultSearchMode: (mode: SearchMode) => void;
+  setWebSearchOptions: (options: Partial<WebSearchOptions>) => void;
+  setDefaultInterpreterMode: (mode: InterpreterMode) => void;
   setAutoSwitchOnFailure: (enabled: boolean) => void;
   setDisplayNamePreference: (preference: DisplayNamePreference) => void;
   setCustomDisplayName: (name: string) => void;
@@ -476,6 +496,23 @@ interface SettingsStore {
   deleteMcpServer: (id: string) => void;
   setAllowArbitraryMcpServers: (enabled: boolean) => void;
   setMcpArbitraryFlagEnabled: (enabled: boolean) => void;
+  /** Replaces any existing rule for the same tool/server scope. */
+  addToolApprovalRule: (
+    rule: Omit<ToolApprovalRule, 'id' | 'createdAt'>,
+  ) => void;
+  removeToolApprovalRule: (id: string) => void;
+  /**
+   * Sets ONE tool's effective policy for ONE server: clears every rule that
+   * currently applies to that tool on that server (scoped or unscoped —
+   * otherwise a lingering unscoped block would silently override the new
+   * choice), then stores a server-scoped rule; 'ask' stores nothing,
+   * restoring the default prompt-every-time behavior.
+   */
+  setToolApprovalPolicy: (
+    toolName: string,
+    serverLabel: string,
+    policy: 'approve' | 'reject' | 'ask',
+  ) => void;
 
   // Context Window / Memories Actions
   setContextWindowSize: (size: number) => void;
@@ -686,6 +723,8 @@ export const useSettingsStore = create<SettingsStore>()(
       systemPrompt: DEFAULT_SYSTEM_PROMPT,
       defaultModelId: undefined,
       defaultSearchMode: SearchMode.INTELLIGENT, // Privacy-focused intelligent search by default
+      webSearchOptions: DEFAULT_WEB_SEARCH_OPTIONS,
+      defaultInterpreterMode: InterpreterMode.INTELLIGENT, // Code interpreter on by default (auto-routed)
       autoSwitchOnFailure: false,
       displayNamePreference: DEFAULT_DISPLAY_NAME_PREFERENCE,
       customDisplayName: DEFAULT_CUSTOM_DISPLAY_NAME,
@@ -704,6 +743,7 @@ export const useSettingsStore = create<SettingsStore>()(
       documentCriteria: [],
       translationCriteria: [],
       mcpServers: [],
+      toolApprovalRules: [],
       allowArbitraryMcpServers: false,
       mcpArbitraryFlagEnabled: false,
       contextWindowSize: DEFAULT_CONTEXT_WINDOW_SIZE,
@@ -784,6 +824,15 @@ export const useSettingsStore = create<SettingsStore>()(
       setDefaultModelId: (id) => set({ defaultModelId: id }),
 
       setDefaultSearchMode: (mode) => set({ defaultSearchMode: mode }),
+      setWebSearchOptions: (options) =>
+        set((state) => ({
+          webSearchOptions: sanitizeWebSearchOptions({
+            ...state.webSearchOptions,
+            ...options,
+          }),
+        })),
+      setDefaultInterpreterMode: (mode) =>
+        set({ defaultInterpreterMode: mode }),
 
       setAutoSwitchOnFailure: (enabled) =>
         set({ autoSwitchOnFailure: enabled }),
@@ -1041,6 +1090,59 @@ export const useSettingsStore = create<SettingsStore>()(
 
       setAllowArbitraryMcpServers: (enabled) =>
         set({ allowArbitraryMcpServers: enabled }),
+
+      addToolApprovalRule: (rule) =>
+        set((state) => ({
+          toolApprovalRules: [
+            // One rule per (tool, scope): re-adding flips the action instead
+            // of accumulating contradictory rules the evaluator would then
+            // have to referee beyond its reject-wins tiebreak.
+            ...state.toolApprovalRules.filter(
+              (existing) =>
+                existing.toolName !== rule.toolName ||
+                (existing.serverLabel ?? '').trim().toLowerCase() !==
+                  (rule.serverLabel ?? '').trim().toLowerCase(),
+            ),
+            {
+              ...rule,
+              id: crypto.randomUUID(),
+              createdAt: new Date().toISOString(),
+            },
+          ],
+        })),
+
+      removeToolApprovalRule: (id) =>
+        set((state) => ({
+          toolApprovalRules: state.toolApprovalRules.filter(
+            (rule) => rule.id !== id,
+          ),
+        })),
+
+      setToolApprovalPolicy: (toolName, serverLabel, policy) =>
+        set((state) => {
+          const label = serverLabel.trim().toLowerCase();
+          const kept = state.toolApprovalRules.filter(
+            (rule) =>
+              rule.toolName !== toolName ||
+              (!!rule.serverLabel &&
+                rule.serverLabel.trim().toLowerCase() !== label),
+          );
+          return {
+            toolApprovalRules:
+              policy === 'ask'
+                ? kept
+                : [
+                    ...kept,
+                    {
+                      toolName,
+                      serverLabel,
+                      action: policy,
+                      id: crypto.randomUUID(),
+                      createdAt: new Date().toISOString(),
+                    },
+                  ],
+          };
+        }),
 
       setMcpArbitraryFlagEnabled: (enabled) =>
         set({ mcpArbitraryFlagEnabled: enabled }),
@@ -1430,6 +1532,8 @@ export const useSettingsStore = create<SettingsStore>()(
           temperature: DEFAULT_TEMPERATURE,
           systemPrompt: DEFAULT_SYSTEM_PROMPT,
           defaultSearchMode: SearchMode.INTELLIGENT,
+          webSearchOptions: DEFAULT_WEB_SEARCH_OPTIONS,
+          defaultInterpreterMode: InterpreterMode.INTELLIGENT,
           displayNamePreference: DEFAULT_DISPLAY_NAME_PREFERENCE,
           customDisplayName: DEFAULT_CUSTOM_DISPLAY_NAME,
           prompts: [],
@@ -1440,6 +1544,7 @@ export const useSettingsStore = create<SettingsStore>()(
           // Wipes connector tokens too — Reset Settings clears everything,
           // and lingering secrets after a "reset" would be worse.
           mcpServers: [],
+          toolApprovalRules: [],
           allowArbitraryMcpServers: false,
           contextWindowSize: DEFAULT_CONTEXT_WINDOW_SIZE,
           memoriesEnabled: false,
@@ -1485,13 +1590,15 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 44, // Increment this when schema changes to trigger migrations
+      version: 47, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
         systemPrompt: state.systemPrompt,
         defaultModelId: state.defaultModelId,
         defaultSearchMode: state.defaultSearchMode,
+        webSearchOptions: state.webSearchOptions,
+        defaultInterpreterMode: state.defaultInterpreterMode,
         autoSwitchOnFailure: state.autoSwitchOnFailure,
         displayNamePreference: state.displayNamePreference,
         customDisplayName: state.customDisplayName,
@@ -1535,6 +1642,7 @@ export const useSettingsStore = create<SettingsStore>()(
             : undefined,
         })),
         allowArbitraryMcpServers: state.allowArbitraryMcpServers,
+        toolApprovalRules: state.toolApprovalRules,
         contextWindowSize: state.contextWindowSize,
         memoriesEnabled: state.memoriesEnabled,
         hiddenModelIds: state.hiddenModelIds,
@@ -2026,6 +2134,28 @@ export const useSettingsStore = create<SettingsStore>()(
           }
           state.emissionsChipAutoHideMs = clampEmissionsChipAutoHideMs(
             state.emissionsChipAutoHideMs as number,
+          );
+        }
+
+        // Version 44 → 45: Add global MCP tool approval rules.
+        if (version < 45) {
+          if (!Array.isArray(state.toolApprovalRules)) {
+            state.toolApprovalRules = [];
+          }
+        }
+
+        // Version 45 → 46: Add default code-interpreter mode (on by default).
+        if (version < 46) {
+          if (!isInterpreterMode(state.defaultInterpreterMode)) {
+            state.defaultInterpreterMode = InterpreterMode.INTELLIGENT;
+          }
+        }
+
+        // Version 46 → 47: Add advanced web-search options (sanitize repairs
+        // both absent and malformed persisted values).
+        if (version < 47) {
+          state.webSearchOptions = sanitizeWebSearchOptions(
+            state.webSearchOptions,
           );
         }
 
