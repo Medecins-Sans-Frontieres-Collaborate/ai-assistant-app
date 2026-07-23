@@ -29,6 +29,7 @@ export const WebSearchSettingsPanel: FC = () => {
     'google-news',
     'gdelt',
     'bing-agent',
+    'combined',
   ];
   const providerKey: Record<WebSearchProviderOption, string> = {
     auto: 'Auto',
@@ -36,6 +37,7 @@ export const WebSearchSettingsPanel: FC = () => {
     'google-news': 'GoogleNews',
     gdelt: 'Gdelt',
     'bing-agent': 'Bing',
+    combined: 'Combined',
   };
 
   const freshnessValues: WebSearchOptions['freshness'][] = [
