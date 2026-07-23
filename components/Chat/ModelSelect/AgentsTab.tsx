@@ -111,6 +111,8 @@ interface AgentsTabProps {
   isCustomAgent: boolean;
   searchModeEnabled: boolean;
   displaySearchMode: SearchMode;
+  interpreterEnabled: boolean;
+  handleToggleInterpreterMode: () => void;
   agentAvailable: boolean;
   showModelAdvanced: boolean;
   selectedConversation: Conversation | null;
@@ -144,6 +146,8 @@ export const AgentsTab: FC<AgentsTabProps> = ({
   isCustomAgent,
   searchModeEnabled,
   displaySearchMode,
+  interpreterEnabled,
+  handleToggleInterpreterMode,
   agentAvailable,
   showModelAdvanced,
   selectedConversation,
@@ -762,6 +766,8 @@ export const AgentsTab: FC<AgentsTabProps> = ({
                 isCustomAgent={isCustomAgent}
                 searchModeEnabled={searchModeEnabled}
                 displaySearchMode={displaySearchMode}
+                interpreterEnabled={interpreterEnabled}
+                handleToggleInterpreterMode={handleToggleInterpreterMode}
                 agentAvailable={agentAvailable}
                 showModelAdvanced={showModelAdvanced}
                 selectedConversation={selectedConversation}
