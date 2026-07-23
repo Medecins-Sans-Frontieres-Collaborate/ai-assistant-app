@@ -1,6 +1,7 @@
 import { Session } from 'next-auth';
 
 import { DEFAULT_SYSTEM_PROMPT } from '@/lib/utils/app/const';
+import { stripThinking } from '@/lib/utils/app/stream/thinking';
 
 import { ImageMessageContent, Message, TextMessageContent } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
@@ -62,7 +63,14 @@ export class AnthropicFoundryHandler {
         if (typeof msg.content === 'string') {
           return {
             role: msg.role as 'user' | 'assistant',
-            content: msg.content,
+            // Assistant history may carry inline <think> blocks (extended
+            // thinking is streamed to the client in that format). Anthropic
+            // guidance is to NOT send prior-turn thinking back — strip it
+            // so the model doesn't see (and bill for) its own old reasoning.
+            content:
+              msg.role === 'assistant'
+                ? stripThinking(msg.content) || msg.content
+                : msg.content,
           };
         }
 
@@ -140,6 +148,7 @@ export class AnthropicFoundryHandler {
     temperature: number,
     user: Session['user'],
     modelConfig: OpenAIModel,
+    reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high',
   ): Anthropic.MessageCreateParamsNonStreaming {
     const modelToUse = this.getModelIdForRequest(modelId, modelConfig);
     const supportsTemperature = modelConfig?.supportsTemperature !== false;
@@ -157,6 +166,8 @@ export class AnthropicFoundryHandler {
       params.temperature = temperature;
     }
 
+    this.applyExtendedThinking(params, modelConfig, reasoningEffort);
+
     // Add user metadata if available (hash email for privacy compliance)
     if (user?.mail) {
       params.metadata = {
@@ -165,6 +176,42 @@ export class AnthropicFoundryHandler {
     }
 
     return params;
+  }
+
+  /**
+   * Reasoning-effort → extended-thinking budget. The app reuses the SAME
+   * effort control the GPT reasoning models expose; on Claude it maps to
+   * Anthropic's `thinking.budget_tokens`. `minimal` (or unset) keeps
+   * thinking off — extended thinking is opt-in per conversation because it
+   * adds cost and latency to every turn.
+   */
+  private static readonly THINKING_BUDGET_TOKENS: Record<
+    'low' | 'medium' | 'high',
+    number
+  > = {
+    low: 2048,
+    medium: 4096,
+    high: 8192,
+  };
+
+  private applyExtendedThinking(
+    params:
+      | Anthropic.MessageCreateParamsNonStreaming
+      | Anthropic.MessageCreateParamsStreaming,
+    modelConfig: OpenAIModel,
+    reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high',
+  ): void {
+    if (!modelConfig.supportsExtendedThinking) return;
+    if (!reasoningEffort || reasoningEffort === 'minimal') return;
+
+    const budget =
+      AnthropicFoundryHandler.THINKING_BUDGET_TOKENS[reasoningEffort];
+    params.thinking = { type: 'enabled', budget_tokens: budget };
+    // API constraints with thinking enabled: temperature must be 1, and
+    // max_tokens must be strictly greater than budget_tokens (the budget
+    // counts against it).
+    params.temperature = 1;
+    params.max_tokens = Math.max(params.max_tokens, budget + 2048);
   }
 
   /**
@@ -185,6 +232,7 @@ export class AnthropicFoundryHandler {
     temperature: number,
     user: Session['user'],
     modelConfig: OpenAIModel,
+    reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high',
   ): Anthropic.MessageCreateParamsStreaming {
     const modelToUse = this.getModelIdForRequest(modelId, modelConfig);
     const supportsTemperature = modelConfig?.supportsTemperature !== false;
@@ -201,6 +249,8 @@ export class AnthropicFoundryHandler {
     if (supportsTemperature) {
       params.temperature = temperature;
     }
+
+    this.applyExtendedThinking(params, modelConfig, reasoningEffort);
 
     // Add user metadata if available (hash email for privacy compliance)
     if (user?.mail) {
