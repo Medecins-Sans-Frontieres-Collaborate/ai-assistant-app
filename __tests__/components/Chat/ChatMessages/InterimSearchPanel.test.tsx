@@ -87,6 +87,27 @@ describe('InterimSearchPanel', () => {
     expect(screen.getByText('Headline 6')).toBeInTheDocument();
   });
 
+  it('renders a non-http(s) URL as plain text, never as a link', () => {
+    render(
+      <InterimSearchPanel
+        interim={{
+          queries: ['q'],
+          entries: [
+            {
+              title: 'Hostile entry',
+              // eslint-disable-next-line no-script-url
+              url: 'javascript:alert(1)',
+              date: '2026-07-23',
+            },
+          ],
+        }}
+      />,
+    );
+
+    expect(screen.getByText('Hostile entry')).toBeInTheDocument();
+    expect(screen.getByText('Hostile entry').closest('a')).toBeNull();
+  });
+
   it('shows no toggle when everything already fits', () => {
     render(<InterimSearchPanel interim={interim} />);
     expect(
