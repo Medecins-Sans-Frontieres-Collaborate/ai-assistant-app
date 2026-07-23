@@ -6,6 +6,27 @@
  * prefer. (Bing-tool-level `count`/`freshness`/`market` live on the Foundry
  * agent DEFINITION — infra config, not per-request.)
  */
+/**
+ * User-selectable search backend. 'auto' defers to the deployment default
+ * (WEB_SEARCH_PROVIDER env). The feed providers work in every deployment;
+ * 'bing-agent' needs the Foundry search agent — where that infrastructure
+ * is absent, a search on it degrades to a knowledge answer with a notice.
+ */
+export type WebSearchProviderOption =
+  | 'auto'
+  | 'news'
+  | 'google-news'
+  | 'gdelt'
+  | 'bing-agent';
+
+export const WEB_SEARCH_PROVIDER_OPTIONS: WebSearchProviderOption[] = [
+  'auto',
+  'news',
+  'google-news',
+  'gdelt',
+  'bing-agent',
+];
+
 export interface WebSearchOptions {
   /**
    * Maximum distinct sources kept from a search (citation cap). Bounded
@@ -18,6 +39,8 @@ export interface WebSearchOptions {
    * the others force the preference for every search.
    */
   freshness: 'auto' | 'day' | 'week' | 'month' | 'any';
+  /** Which search backend runs the query ('auto' = deployment default). */
+  provider: WebSearchProviderOption;
 }
 
 export const MIN_SEARCH_RESULT_COUNT = 3;
@@ -26,7 +49,17 @@ export const MAX_SEARCH_RESULT_COUNT = 15;
 export const DEFAULT_WEB_SEARCH_OPTIONS: WebSearchOptions = {
   resultCount: 8,
   freshness: 'auto',
+  provider: 'auto',
 };
+
+export function isWebSearchProviderOption(
+  value: unknown,
+): value is WebSearchProviderOption {
+  return (
+    typeof value === 'string' &&
+    (WEB_SEARCH_PROVIDER_OPTIONS as string[]).includes(value)
+  );
+}
 
 export function isWebSearchFreshness(
   value: unknown,
@@ -53,5 +86,8 @@ export function sanitizeWebSearchOptions(value: unknown): WebSearchOptions {
   const freshness = isWebSearchFreshness(raw.freshness)
     ? raw.freshness
     : DEFAULT_WEB_SEARCH_OPTIONS.freshness;
-  return { resultCount, freshness };
+  const provider = isWebSearchProviderOption(raw.provider)
+    ? raw.provider
+    : DEFAULT_WEB_SEARCH_OPTIONS.provider;
+  return { resultCount, freshness, provider };
 }
