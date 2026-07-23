@@ -845,7 +845,13 @@
         "transformingTable": "Kokoma tableau…",
         "findingLocations": "Koyeba bisika…",
         "updatingMap": "Kobongisa carte…"
-      }
+      },
+      "searchingWebFor": "Tozali koluka: “{query}”…",
+      "searchingWebForMultiple": "Tozali koluka masolo {count}: “{query}”…",
+      "readingCitedSources": "Tosomi bandakisa ya masolo {count} oyo ebengamaki liboso…",
+      "planningSteps": "Kosalela makoki…",
+      "planStep": "Etape {current}/{total}: {description}",
+      "planStepRetry": "Etape {current}/{total} (kokoka lisusu): {description}"
     },
     "toolSummary": {
       "usedTools": "Outils esalelamaki: {count, plural, one {# outil} other {# ba outils}}",
@@ -855,7 +861,8 @@
       "statusAutoDenied": "Ebwaki na ndenge automatique",
       "statusFailed": "Eboyaki kosala",
       "statusIncomplete": "Ekosili te",
-      "viaService": "na nzela ya {service}"
+      "viaService": "na nzela ya {service}",
+      "downloadFile": "Télécharger"
     },
     "consent": {
       "authorizeRequired": "Autorisation esengeli",
@@ -897,7 +904,15 @@
       "approvedState": "Ekondimi — agent abandi lisusu",
       "deniedState": "Elambi",
       "submittingApproval": "Kondima mpe kobandisa agent…",
-      "submittingDenial": "Kotinda ekateli ya kolamba…"
+      "submittingDenial": "Kotinda ekateli ya kolamba…",
+      "alwaysApproveEverywhere": "Kondima ntango nyonso ebongiseli oyo — na bisango nyonso",
+      "denyOptionsLabel": "Mopesi ya kokanga",
+      "denyOnce": "Kokanga mbala moko",
+      "neverAllowEverywhere": "Kondima te ebongiseli oyo — na bisango nyonso",
+      "deniedByRuleHint": "Ekokisami na mobeko na yo — Sambisa na Paramètres → Connectors.",
+      "batchPendingHint": "Mposa ya ndenge oyo ezali {count}",
+      "approveAllButton": "Kondima nyonso",
+      "denyAllButton": "Kokanga nyonso"
     },
     "openImage": "Kofungola elilingi",
     "copyMessage": "Kokɔpya nsango",
@@ -908,7 +923,9 @@
     "ttsError": "Kasaleli molangi ya mino esalami malamu te. Meká lisusu.",
     "unsupportedMessageType": "Mbeba kobimisa nsango: Motindo ya nsango oyo esengeli te",
     "addLanguageOption": "Bakisa \"{name}\"…",
-    "sources": "Bisika ya nsuka"
+    "sources": "Bisika ya nsuka",
+    "interpreterBadge": "Tobeta code",
+    "disableCodeInterpreter": "Kokanga kosalela code"
   },
   "transcript": {
     "originalTranscript": "Transkripsheni ya ebandeli",
@@ -1348,6 +1365,30 @@
       "thresholdLabel": "Tala lokola bosakoli soki eleki",
       "thresholdUnit": "% ya mokanda ebongwani",
       "exceptionSelectionAlways": "Kokoma lisusu eteni oyo epesami ndémba esalemi mbala nyonso — modèle ezongisaka kaka eteni oyo abakisi, ekoki te kokabwana lokola toli na mokanda mobimba."
+    },
+    "webSearch": {
+      "title": "Koluka na Web",
+      "description": "Ebetaka ndenge koluka na Web esalaka soki Mode ya koluka ezali. Mabongisi esalemi mbala moko.",
+      "providerLabel": "Mopesi ya koluka",
+      "providerAuto": "Automatique (ekomisami)",
+      "providerAutoDescription": "Ezali kolanda mopesi ya mosala — sikabongo koluka sango esangani na se.",
+      "providerNews": "Masango esangani (GDELT + Google News)",
+      "providerNewsDescription": "Ekoki koluka awa nyonso na mbala moko mpe esangisa baresulta. Soki moko ekokaka te yango ekokanga koluka te. Elongo ya mbangu, ndenge na ndenge ya masolo, mpe bakangi ya makasi ya bandakisa.",
+      "providerGoogleNews": "Google News kaka",
+      "providerGoogleNewsDescription": "Anonymous mpe ya mbangu — kaka motuna ekotambola na Google (komptɛte to cookies te), reponse eya na pasi te. Soki: esalelaka mingi motó ya sango mpe bilembo moke, ekosomaka manso te, yango eyaka kopesa biyano ya libanda.",
+      "providerGdelt": "GDELT kaka",
+      "providerGdeltDescription": "Ba-database ya masango mondial, ekoki kaka kopesa bakangi ya motema sika — motuna ekoki kotia na etando moke.",
+      "providerBing": "Bing grounding (via Microsoft)",
+      "providerBingDescription": "Ezali kotanga ba-page mobimba mpo na kopesa résumé ya kokamwa mpe ekangi Web mobimba, te kaka masango. Kasi koluka ekoki komema ntango ya 30–90 s, mpe bosungi ya result eza lolenge na lolenge lokola koluka nyonso.",
+      "sourcesLabel": "Bakangi na motuna",
+      "sourcesDescription": "Motuna ekosangisa bakangi boni. Ba motuna ya boluki ekoki kosakola yango.",
+      "freshnessLabel": "Ntango eleki",
+      "freshnessDescription": "Bonkama ya resulta esengeli kozala. Automatique esundoli motuna moko (sango ya sika elanda mokolo moko).",
+      "freshness_auto": "Automatique",
+      "freshness_day": "Mokolo oyo eleki",
+      "freshness_week": "Semaine oyo eleki",
+      "freshness_month": "Sanza oyo eleki",
+      "freshness_any": "Na tango nyonso"
     }
   },
   "emptyState": {
@@ -1534,6 +1575,23 @@
       "deployment": "Kopesa na misala",
       "modelVersion": "Versio ya modèle",
       "publisher": "Moteyi"
+    },
+    "interpreterMode": {
+      "title": "Mosaleli ya Code",
+      "subtitle": "Ebetaka code soki esengeli (diagramme, analyse ya ba-donnee)",
+      "learnMore": "Ekoki kosala nini?",
+      "description": "Soki esalemi, assistant akoki kotambwisa Python na sanduku ya libateli mpo na kosalela ba-fichier, kobima résultat, mpe kosala ba-diagramme. Code esalamu, botali, mpe ba-fichier ekotikala elongo na eyano. Salela \"Tobeta Code\" na menu mpo na motindo oyo."
+    },
+    "searchOptions": {
+      "title": "Koluka ya kokamwa",
+      "resultCount": "Bakangi na motuna:",
+      "freshness": "Lingaka resulta na",
+      "freshness_auto": "Auto (na motuna)",
+      "freshness_day": "Mokolo oyo eleki",
+      "freshness_week": "Semaine oyo eleki",
+      "freshness_month": "Sanzi oyo euti koleka",
+      "freshness_any": "Tango nyonso",
+      "hint": "Auto ezali kotinda motuna na tango ebongi (ndakisa, sango esengeli tango ya lelo), mpe mituna ya recherche ekoki kosalela basource mingi koleka ndenge esalemi na ndenge ya suka."
     }
   },
   "models": {
@@ -2105,7 +2163,11 @@
     "moveToMore": "Kobakisa na Mosusu",
     "moveOutOfMore": "Lakisa na menu",
     "showSources": "Lakisa bisika mosusu",
-    "hideSources": "Kunda bisika mosusu"
+    "hideSources": "Kunda bisika mosusu",
+    "aiTools": "Biloko ya AI",
+    "aiToolsTooltip": "Makoki oyo assistant akoki kosalela ntango azali kopesa eyano : recherche ya Internet na tango moke, kosala code, mpe services interconnectées.",
+    "codeInterpreterTooltip": "Kobeta code ya Python na sandbox ya sécurité mpo na message moko na moko.\n\nEzalaki malamu mpo na analyse ya ba données, calculs, mpe kobimisa graphique na fichiers ezali.",
+    "categoryTools": "Biloko ya mosala & bakonekteur"
   },
   "transcription": {
     "transcribesOnSend": "Ekomaka transcription ntango otindi",
@@ -2428,7 +2490,18 @@
     "modelRow": "{requests} basɛngami · {grams} g",
     "disclosure": "Bakonzi ezali kolanda makoki v{version} · banda {since} · kaka na masolo ya pamba (agents mpe biyano na banque ya boyebi ekotaki te).",
     "reset": "Bozongisela stati ya kosalela",
-    "estimatedPortion": "Ekoki na ~{grams} g CO₂e ({requests} basenga) na mikano ya ba chats esalemaki liboso tracking—kolongola lisusu na maloba ebombami, te na mituya ya token emonisami."
+    "estimatedPortion": "Ekoki na ~{grams} g CO₂e ({requests} basenga) na mikano ya ba chats esalemaki liboso tracking—kolongola lisusu na maloba ebombami, te na mituya ya token emonisami.",
+    "chipTitle": "Chip ya émissions",
+    "chipDescription": "Likeko ya motuya ya carbone ya lisolo oyo, ezali likolo ya esika okotaka message.",
+    "chipAlways": "Lakisa ntango nyonso",
+    "chipAlwaysHint": "Chip ezalaka komonana ntango nyonso soki lisolo ezali na estimate.",
+    "chipAuto": "Lakisa na mise à jour to kokoma",
+    "chipAutoHint": "Chip emonana soki estimate ebongwani, sima elongwa polele. Kosala hover to kobenda likebi ekobongisa yango lisusu.",
+    "chipHidden": "Ebombami",
+    "chipHiddenHint": "Chip ekomonana te. Total ezali kaka kosukolama mpe ekomonana awa.",
+    "chipAutoHideLabel": "Ebongwana sima ya",
+    "chipAutoHideUnit": "sekonde",
+    "chipAutoHideHint": "Kati na {min} na {max} sekonde."
   },
   "extraction": {
     "toggleLabel": "Kolongola donnee na forme ya mobongisi",
@@ -3337,7 +3410,15 @@
       "measured": "Kolongola na mituya ya token oyo emonisami",
       "estimated": "Kolongola lisusu na nsima ya sango ya kala",
       "lastRequest": "Senga ya suka",
-      "disclaimer": "Bokeseni na senga moko likoló ya mituya ya token oyo emonisami to esakwami, kosalela pɔsɔndɔ esamaki na makambo basangisi v{version}. Sango ya kala ezali kolongolama lisusu na maloba babombaki mpe modèle ya likita lelo. Ezali te mindele."
+      "disclaimer": "Bokeseni na senga moko likoló ya mituya ya token oyo emonisami to esakwami, kosalela pɔsɔndɔ esamaki na makambo basangisi v{version}. Sango ya kala ezali kolongolama lisusu na maloba babombaki mpe modèle ya likita lelo. Ezali te mindele.",
+      "visibilityGroup": "Komonana ya chip ya émissions",
+      "visibilityLabel": "Lakisa:",
+      "visibility": {
+        "always": "Ntango nyonso",
+        "auto": "Auto",
+        "hidden": "Kobomba"
+      },
+      "visibilityHint": "Auto ekolakisa chip soki ba estimate ebongwani to soki okomiti na yango. Okoki kobongola yango lisusu na Paramètres › Usage & Impact."
     }
   },
   "table": {
@@ -3600,7 +3681,13 @@
     "connectorClientSecretLabel": "Secret ya client OAuth",
     "connectorClientSecretStored": "Secret ezali kokangwa. Tikala na mpamba okoya kobongola te, to tyá ya sika kopesa.",
     "connectorClientSecretHint": "Ekangami liboso ya kokangana, mpe ekomonana lisusu te.",
-    "connectorScopesLabel": "Scopes (kobabola na esika, kopesa te soki olingi)"
+    "connectorScopesLabel": "Scopes (kobabola na esika, kopesa te soki olingi)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (yako sala te soki olingi)",
+    "connectorOauthTokenUrlLabel": "Token URL (yako sala te soki olingi)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (yako sala te soki olingi)",
+    "connectorOauthEndpointsHint": "Tika ba endpoint URL pamba mpo ete systéme ekutisa yango solo. Tyá yango soki mosaleli ezalaka te na makoki ya découverte, lokola NetSuite.",
+    "connectorOauthRefreshUrlHint": "Tika pamba mpo ete ekosalela token URL mpo na kobongisa.",
+    "connectorOauthEndpointsPairWarning": "Authorization URL mpe token URL esengeli kotyama elongo (refresh URL esengeli nyonso mibale)."
   },
   "localModels": {
     "title": "Bamodelo ya esika",
@@ -3695,5 +3782,52 @@
     "truncatedNotice": "{count} bilanga elongwe — tableau ezali na limite ya ba colonnes {max}: {names}",
     "skippedDerivedNotice": "{count} colonnes calculées ebombi te — ba formules ezalanaka na ba colonnes ya tableau oyo: {names}",
     "loadReplacesColumns": "Ekokómisa ba colonnes ya sik’oyo. Ba lignes ya kala ekotikala na bayebani oyo ba nkombo ekokana."
+  },
+  "codeInterpreterDropdown": "Tobeta Code",
+  "connectorPin": {
+    "toggleLabel": "Zala responsable ya biloko ya connector",
+    "menuLabel": "Connectors",
+    "menuLabelCount": "Connectors ({count} banani bazali)",
+    "tooltip": "Tala connectors nini bazali kosala, kanga yango mpo na chat oyo to ndenge nyonso, to pamba na moko.",
+    "toggleServerInChat": "Salela {name} na boyokanisi oyo",
+    "globalToggleTitle": "Pesa {name} mosala to tika yango na bisika nyonso (pe na Settings → Connectors)",
+    "globalOn": "Mosala nyonso",
+    "globalOff": "Mosala pamba",
+    "chatToggleHint": "Ba checkbox ezali mpo na boyokanisi oyo kaka; bouton global ezali na ndenge moko na Settings → Connectors. Connector nyonso ezali kolakisa biloko na yango na message nyonso — ekobakisa ba tokens mpe ekofingisa eyano.",
+    "trayLabel": "Biloko ya connector",
+    "trayTitle": "Biloko ya connector mpo na boyokanisi oyo",
+    "toggleServer": "Pesa {name} mosala",
+    "needsReconnect": "Rekonekte na Settings",
+    "focusAction": "Bakisa motuya",
+    "focusedChip": "Efandi",
+    "pinnedHint": "Biloko ya {name} kaka nde ekosalelama na lisolo oyo.",
+    "staleHint": "Connector oyo ezali kotinda elongi mpe ezalaka te — rekonekte yango na Settings → Connectors, to longola elongi. Mpo na ntango nyonso, biloko nyonso ya mosala ezali kosalelama.",
+    "costHint": "Connector nyonso ya mosala ekobakisa biloko na yango na message nyonso otyaka — ekobakisa ba tokens mpe kobotola ntango. Kanga biloko oyo osalelaka te.",
+    "noEligibleConnectors": "Connectors ezali te. Kokista moko na Settings → Connectors liboso.",
+    "unknownConnector": "Connector elongi",
+    "unpin": "Longola elongi",
+    "dismiss": "Keba",
+    "badgeCount": "{count} biloko",
+    "badgeTooltip": "Biloko ya connector ezali kobomba na message nyonso — ekobakisa tokens mpe ntango ya eyano. Pesa likoki ya kotambwisa."
+  },
+  "toolApprovals": {
+    "title": "Botomboli ya biloko",
+    "description": "Mibeko ezali na lisolo nyonso : kokabela to koboya tool ya connector moko. Okoki kobakisa biloko oyo okomona te sik’oyo.",
+    "actionApprove": "Soki ntango nyonso pesa nzela",
+    "actionReject": "Soki ntango nyonso boya",
+    "scopeServer": "na {name}",
+    "scopeAny": "Connector nyonso",
+    "removeRule": "Longola mobeko mpo na {tool}",
+    "toolNameLabel": "Kombo ya tool",
+    "toolNamePlaceholder": "Kombo ya tool, ndakisa create_issue",
+    "scopeLabel": "Esika ya connector",
+    "actionLabel": "Mosala",
+    "addRule": "Bakisa mobeko",
+    "rejectPrecedenceNote": "Mibeko ya koboya ezali se ekobunda naino nzela — koleka mibeko ya kopesa nzela mpe auto-approval ya lisolo nyonso.",
+    "policyAsk": "Luka koyeba",
+    "policyAllow": "Kokabela",
+    "policyBlock": "Kopekisa",
+    "policyGroupLabel": "Ntina ya kolongola ndingisa mpo na {tool}",
+    "listHint": "Tia ndenge nini mokoki koleka soki mosungi alingi kosala mokoloto nyonso — na lisolo nyonso. Kotuna ezali ya liboso; Kopekisa elongaka tango nyonso."
   }
 }

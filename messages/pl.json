@@ -784,7 +784,13 @@
         "transformingTable": "Przekształcanie tabeli...",
         "findingLocations": "Identyfikacja lokalizacji...",
         "updatingMap": "Aktualizacja mapy..."
-      }
+      },
+      "searchingWebFor": "Wyszukiwanie: „{query}”…",
+      "searchingWebForMultiple": "Wyszukiwanie {count} tematów: „{query}”…",
+      "readingCitedSources": "Czytanie {count} wcześniej cytowanych artykułów…",
+      "planningSteps": "Planowanie kroków…",
+      "planStep": "Krok {current}/{total}: {description}",
+      "planStepRetry": "Krok {current}/{total} (ponów próbę): {description}"
     },
     "toolSummary": {
       "usedTools": "Użyto {count, plural, one {# narzędzie} few {# narzędzia} many {# narzędzi} other {# narzędzi}}",
@@ -794,7 +800,8 @@
       "statusAutoDenied": "Automatycznie odrzucone",
       "statusFailed": "Niepowodzenie",
       "statusIncomplete": "Niekompletne",
-      "viaService": "przez {service}"
+      "viaService": "przez {service}",
+      "downloadFile": "Pobierz"
     },
     "consent": {
       "authorizeRequired": "Wymagana autoryzacja",
@@ -836,7 +843,15 @@
       "approvedState": "Zatwierdzono — agent wznowiony",
       "deniedState": "Odmówiono",
       "submittingApproval": "Zatwierdzanie i wznawianie agenta…",
-      "submittingDenial": "Wysyłanie odmowy…"
+      "submittingDenial": "Wysyłanie odmowy…",
+      "alwaysApproveEverywhere": "Zawsze zatwierdzaj to narzędzie — we wszystkich czatach",
+      "denyOptionsLabel": "Opcje odmowy",
+      "denyOnce": "Odmów jednorazowo",
+      "neverAllowEverywhere": "Nigdy nie zezwalaj na to narzędzie — we wszystkich czatach",
+      "deniedByRuleHint": "Zablokowane przez Twoją regułę — zarządzaj w Ustawieniach → Konektory.",
+      "batchPendingHint": "{count} oczekujących żądań narzędzi",
+      "approveAllButton": "Zatwierdź wszystkie",
+      "denyAllButton": "Odmów wszystkim"
     },
     "openImage": "Otwórz obraz",
     "copyMessage": "Kopiuj wiadomość",
@@ -847,7 +862,9 @@
     "ttsError": "Błąd podczas generowania dźwięku. Spróbuj ponownie.",
     "unsupportedMessageType": "Błąd podczas wyświetlania wiadomości: Nieobsługiwany typ wiadomości",
     "addLanguageOption": "Dodaj \"{name}\"…",
-    "sources": "Źródła"
+    "sources": "Źródła",
+    "interpreterBadge": "Uruchom kod",
+    "disableCodeInterpreter": "Wyłącz wykonywanie kodu"
   },
   "sidebar": {
     "collapseSidebar": "Zwiń pasek boczny",
@@ -1192,6 +1209,30 @@
       "thresholdLabel": "Traktuj jako przepisywanie powyżej",
       "thresholdUnit": "% dokumentu zmienione",
       "exceptionSelectionAlways": "Wprowadzenie poprawek do zaznaczonego fragmentu zawsze działa bezpośrednio — model zwraca tylko poprawiony fragment, którego nie można podzielić na sugestie dotyczące całego dokumentu."
+    },
+    "webSearch": {
+      "title": "Wyszukiwanie w sieci",
+      "description": "Określa, jak działa wyszukiwanie online, gdy aktywny jest Tryb Szukania. Zmiany są stosowane natychmiast.",
+      "providerLabel": "Dostawca wyszukiwania",
+      "providerAuto": "Automatyczny (zalecane)",
+      "providerAutoDescription": "Używa domyślnej konfiguracji — obecnie jest to połączone wyszukiwanie wiadomości poniżej.",
+      "providerNews": "Połączone wiadomości (GDELT + Google News)",
+      "providerNewsDescription": "Wyszukuje w obu źródłach równolegle i łączy wyniki, dzięki czemu awaria jednego nie przerywa wyszukiwania. Najlepszy balans szybkości, różnorodności źródeł i działających linków.",
+      "providerGoogleNews": "Tylko Google News",
+      "providerGoogleNewsDescription": "Anonimowe i szybkie — tylko zapytanie trafia do Google (bez konta i ciasteczek), a wyniki pojawiają się w ok. sekundę. Uwaga: przeszukiwane są głównie nagłówki i krótkie fragmenty, nie całe artykuły, więc odpowiedzi mogą być powierzchowne.",
+      "providerGdelt": "Tylko GDELT",
+      "providerGdeltDescription": "Otwarta baza danych wiadomości światowych z bezpośrednimi linkami do wydawców, co umożliwia czytanie całych artykułów przy pytaniach uzupełniających. Ściśle limitowana — wyszukiwania jedno po drugim mogą być kolejkowane przez kilka sekund.",
+      "providerBing": "Bing grounding (przez Microsoft)",
+      "providerBingDescription": "Odczytuje całe strony, zapewniając głębsze podsumowania i obejmuje ogólną sieć, nie tylko wiadomości. Jednak wyszukiwania zwykle trwają 30–90 sekund, a jakość wyników bywa niestabilna.",
+      "sourcesLabel": "Źródła na wyszukiwanie",
+      "sourcesDescription": "Ile odrębnych źródeł zachować jako cytowane. W pytaniach o charakterze naukowym liczba ta może się automatycznie zwiększyć.",
+      "freshnessLabel": "Preferowana aktualność",
+      "freshnessDescription": "Jak świeże powinny być wyniki. Automatyczne pozwala każdemu pytaniu decydować (wiadomości z ostatniej chwili wybierają ostatni dzień).",
+      "freshness_auto": "Automatycznie",
+      "freshness_day": "Ostatni dzień",
+      "freshness_week": "Ostatni tydzień",
+      "freshness_month": "Ostatni miesiąc",
+      "freshness_any": "Dowolnie"
     }
   },
   "notFound": {
@@ -1483,6 +1524,23 @@
       "deployment": "Wdrożenie",
       "modelVersion": "Wersja modelu",
       "publisher": "Wydawca"
+    },
+    "interpreterMode": {
+      "title": "Interpreter kodu",
+      "subtitle": "Uruchamia kod, gdy to pomaga (wykresy, analiza danych)",
+      "learnMore": "Co potrafi?",
+      "description": "Po włączeniu asystent może uruchamiać Pythona w bezpiecznej, odizolowanej piaskownicy w celu analizy załączonych plików, obliczeń i generowania wykresów. Wykonany kod, jego wynik oraz wygenerowane pliki wyświetlane są z odpowiedzią. Użyj „Uruchom kod” w menu edytora, aby wymusić to dla wiadomości."
+    },
+    "searchOptions": {
+      "title": "Zaawansowane wyszukiwanie",
+      "resultCount": "Źródła na wyszukiwanie:",
+      "freshness": "Preferuj wyniki z",
+      "freshness_auto": "Auto (dla pytania)",
+      "freshness_day": "Ostatni dzień",
+      "freshness_week": "Ostatni tydzień",
+      "freshness_month": "Ostatni miesiąc",
+      "freshness_any": "Dowolny czas",
+      "hint": "Opcja Auto pozwala każdemu pytaniu ustawić własną aktualność (np. wiadomości preferują ostatni dzień), a pytania badawcze mogą korzystać z większej liczby źródeł niż domyślnie."
     }
   },
   "models": {
@@ -2130,7 +2188,11 @@
     "moveToMore": "Przenieś do „Więcej”",
     "moveOutOfMore": "Pokaż w menu",
     "showSources": "Pokaż inne źródła",
-    "hideSources": "Ukryj inne źródła"
+    "hideSources": "Ukryj inne źródła",
+    "aiTools": "Narzędzia AI",
+    "aiToolsTooltip": "Funkcje, z których asystent może korzystać podczas odpowiedzi: wyszukiwanie w internecie na żywo, wykonywanie kodu i połączone usługi.",
+    "codeInterpreterTooltip": "Uruchamiaj kod Pythona w bezpiecznej piaskownicy dla każdej wiadomości.\n\nIdealne do analizy danych, obliczeń i generowania wykresów z załączonych plików.",
+    "categoryTools": "Narzędzia i łączniki"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Dodaj własne instrukcje, aby dostosować sposób, w jaki AI odpowiada. Zostaną one połączone z głównymi wytycznymi, które zapewniają pomocne, dokładne i bezpieczne odpowiedzi.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Porada: wpisz „/”, aby wybrać z zapisanych szablonów podpowiedzi.",
@@ -2444,7 +2506,18 @@
     "modelRow": "{requests} żąd. · {grams} g",
     "disclosure": "Szacunki oparte na założeniach v{version} · od {since} · tylko standardowy chat (odpowiedzi agentów i bazy wiedzy nie są liczone).",
     "reset": "Resetuj statystyki użycia",
-    "estimatedPortion": "Obejmuje około {grams} g CO₂e ({requests} żądań) oszacowane z czatów sprzed uruchomienia śledzenia — wyliczone wstecznie z przechowywanego tekstu wiadomości, a nie zmierzonych liczby tokenów."
+    "estimatedPortion": "Obejmuje około {grams} g CO₂e ({requests} żądań) oszacowane z czatów sprzed uruchomienia śledzenia — wyliczone wstecznie z przechowywanego tekstu wiadomości, a nie zmierzonych liczby tokenów.",
+    "chipTitle": "Wskaźnik emisji",
+    "chipDescription": "Szacowany ślad węglowy obecnej rozmowy, wyświetlany nad polem czatu.",
+    "chipAlways": "Zawsze pokazuj",
+    "chipAlwaysHint": "Wskaźnik pozostaje widoczny, gdy rozmowa posiada szacunkową wartość.",
+    "chipAuto": "Pokaż przy aktualizacji lub najechaniu",
+    "chipAutoHint": "Wskaźnik pojawia się przy zmianie szacowania, a następnie znika. Ponowne najechanie lub skupienie przywraca go.",
+    "chipHidden": "Ukryty",
+    "chipHiddenHint": "Wskaźnik nie jest wyświetlany. Suma nadal jest rejestrowana i widoczna na tej stronie.",
+    "chipAutoHideLabel": "Zanikanie po",
+    "chipAutoHideUnit": "sekundach",
+    "chipAutoHideHint": "Od {min} do {max} sekund."
   },
   "extraction": {
     "toggleLabel": "Wyodrębnij dane strukturalne",
@@ -3353,7 +3426,15 @@
       "measured": "Na podstawie zgłoszonych liczby tokenów",
       "estimated": "Wyliczone wstecznie ze starszych wiadomości",
       "lastRequest": "Ostatnie żądanie",
-      "disclaimer": "Szacunkowe wartości na żądanie na podstawie zgłoszonych lub przybliżonych liczby tokenów, z wykorzystaniem opublikowanych średnich i założeń v{version}. Starsze wiadomości są wyliczane wstecznie na podstawie przechowywanego tekstu i aktualnego modelu konwersacji. Nie jest to pomiar."
+      "disclaimer": "Szacunkowe wartości na żądanie na podstawie zgłoszonych lub przybliżonych liczby tokenów, z wykorzystaniem opublikowanych średnich i założeń v{version}. Starsze wiadomości są wyliczane wstecznie na podstawie przechowywanego tekstu i aktualnego modelu konwersacji. Nie jest to pomiar.",
+      "visibilityGroup": "Widoczność wskaźnika emisji",
+      "visibilityLabel": "Pokaż:",
+      "visibility": {
+        "always": "Zawsze",
+        "auto": "Automatycznie",
+        "hidden": "Ukryj"
+      },
+      "visibilityHint": "Opcja „Automatycznie” pokazuje wskaźnik, gdy szacowanie jest aktualizowane lub po najechaniu kursorem. Możesz to zmienić ponownie w Ustawieniach › Użycie i wpływ."
     }
   },
   "table": {
@@ -3616,7 +3697,13 @@
     "connectorClientSecretLabel": "OAuth client secret",
     "connectorClientSecretStored": "Secret jest zapisany. Pozostaw puste, aby go zachować, lub wprowadź nowy, aby zastąpić.",
     "connectorClientSecretHint": "Szyfrowany przed zapisaniem, nigdy więcej nie będzie pokazany.",
-    "connectorScopesLabel": "Scope'y (oddzielone spacją, opcjonalnie)"
+    "connectorScopesLabel": "Scope'y (oddzielone spacją, opcjonalnie)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (opcjonalnie)",
+    "connectorOauthTokenUrlLabel": "Token URL (opcjonalnie)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (opcjonalnie)",
+    "connectorOauthEndpointsHint": "Pozostaw adresy URL punktów końcowych puste, aby wykryć je automatycznie. Ustaw je dla dostawców, którzy nie obsługują wykrywania, np. NetSuite.",
+    "connectorOauthRefreshUrlHint": "Pozostaw puste, aby odświeżać przez token URL.",
+    "connectorOauthEndpointsPairWarning": "Authorization URL i token URL muszą być ustawione razem (refresh URL wymaga obu)."
   },
   "localModels": {
     "title": "Modele lokalne",
@@ -3711,5 +3798,52 @@
     "truncatedNotice": "{count} pole(ń) usunięto — limit kolumn to {max}: {names}",
     "skippedDerivedNotice": "{count} kolumna(y) obliczana(e) nie zapisano — formuły odnoszą się do kolumn tej tabeli: {names}",
     "loadReplacesColumns": "To zastąpi obecne kolumny. Istniejące wiersze zachowają wartości, jeśli nazwy kolumn się zgadzają."
+  },
+  "codeInterpreterDropdown": "Uruchom kod",
+  "connectorPin": {
+    "toggleLabel": "Zarządzaj narzędziami connectora",
+    "menuLabel": "Connectory",
+    "menuLabelCount": "Connectory ({count} aktywnych)",
+    "tooltip": "Sprawdź, które narzędzia connectorów są aktywne, wyłącz je dla tej rozmowy lub globalnie albo ustaw jeden jako główny.",
+    "toggleServerInChat": "Używaj {name} w tej rozmowie",
+    "globalToggleTitle": "Włącz lub wyłącz {name} globalnie (tak jak w Ustawienia → Connectory)",
+    "globalOn": "Globalnie włączone",
+    "globalOff": "Globalnie wyłączone",
+    "chatToggleHint": "Checkboxy dotyczą tylko tej rozmowy; globalny przycisk odpowiada Ustawieniom → Connectory. Każdy aktywny connector dodaje swoje narzędzia do każdej wiadomości — więcej tokenów i wolniejsze odpowiedzi.",
+    "trayLabel": "Narzędzia connectora",
+    "trayTitle": "Narzędzia connectora dla tej rozmowy",
+    "toggleServer": "Włącz {name}",
+    "needsReconnect": "Połącz ponownie w Ustawieniach",
+    "focusAction": "Ustaw jako główny",
+    "focusedChip": "Główny",
+    "pinnedHint": "W tej rozmowie będą używane tylko narzędzia z {name}.",
+    "staleHint": "Wybrany connector jest rozłączony lub wyłączony — połącz go ponownie w Ustawieniach → Connectory albo usuń skupienie. Do tego momentu będą używane wszystkie aktywne narzędzia.",
+    "costHint": "Każdy aktywny connector dodaje swoje narzędzia do każdej wiadomości — więcej tokenów i wolniejsze odpowiedzi. Wyłącz te, których nie używasz.",
+    "noEligibleConnectors": "Brak skonfigurowanych connectorów. Najpierw dodaj jeden w Ustawienia → Connectory.",
+    "unknownConnector": "Usunięty connector",
+    "unpin": "Usuń skupienie",
+    "dismiss": "Zamknij",
+    "badgeCount": "{count} narzędzi",
+    "badgeTooltip": "Narzędzia connectorów są aktywne przy każdej wiadomości — dodają tokeny i czas odpowiedzi. Kliknij, by zarządzać."
+  },
+  "toolApprovals": {
+    "title": "Zgody na narzędzia",
+    "description": "Reguły obowiązujące w każdej rozmowie: automatyczne zezwalanie lub blokowanie określonych narzędzi connectorów. Możesz dodać narzędzia, o które jeszcze nie poproszono.",
+    "actionApprove": "Zawsze zezwalaj",
+    "actionReject": "Zawsze blokuj",
+    "scopeServer": "na {name}",
+    "scopeAny": "Dowolny connector",
+    "removeRule": "Usuń regułę dla {tool}",
+    "toolNameLabel": "Nazwa narzędzia",
+    "toolNamePlaceholder": "Nazwa narzędzia, np. create_issue",
+    "scopeLabel": "Zakres connectora",
+    "actionLabel": "Akcja",
+    "addRule": "Dodaj regułę",
+    "rejectPrecedenceNote": "Reguły blokujące zawsze mają pierwszeństwo — przed regułami zezwalającymi i każdą automatyczną zgodą dla rozmowy.",
+    "policyAsk": "Pytaj",
+    "policyAllow": "Zezwól",
+    "policyBlock": "Zablokuj",
+    "policyGroupLabel": "Polityka zatwierdzania dla {tool}",
+    "listHint": "Ustaw, co się dzieje, gdy asystent chce uruchomić każde narzędzie — w każdej rozmowie. Domyślne ustawienie to Pytaj; Zablokuj ma zawsze pierwszeństwo."
   }
 }

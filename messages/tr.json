@@ -787,7 +787,13 @@
         "transformingTable": "Tablo dönüştürülüyor…",
         "findingLocations": "Konumlar belirleniyor…",
         "updatingMap": "Harita güncelleniyor…"
-      }
+      },
+      "searchingWebFor": "Aranıyor: “{query}”…",
+      "searchingWebForMultiple": "{count} konu aranıyor: “{query}”…",
+      "readingCitedSources": "{count} önceki atıf yapılan makale okunuyor…",
+      "planningSteps": "Adımlar planlanıyor…",
+      "planStep": "Adım {current}/{total}: {description}",
+      "planStepRetry": "Adım {current}/{total} (tekrar): {description}"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# araç kullanıldı} other {# araç kullanıldı}}",
@@ -797,7 +803,8 @@
       "statusAutoDenied": "Otomatik reddedildi",
       "statusFailed": "Başarısız",
       "statusIncomplete": "Eksik",
-      "viaService": "{service} üzerinden"
+      "viaService": "{service} üzerinden",
+      "downloadFile": "İndir"
     },
     "consent": {
       "authorizeRequired": "Yetkilendirme gerekli",
@@ -839,7 +846,15 @@
       "approvedState": "Onaylandı — ajan devam ediyor",
       "deniedState": "Reddedildi",
       "submittingApproval": "Onaylanıyor ve ajan devam ediyor…",
-      "submittingDenial": "Reddiniz gönderiliyor…"
+      "submittingDenial": "Reddiniz gönderiliyor…",
+      "alwaysApproveEverywhere": "Bu aracı her sohbette daima onayla",
+      "denyOptionsLabel": "Reddetme seçenekleri",
+      "denyOnce": "Bir kez reddet",
+      "neverAllowEverywhere": "Bu aracı hiçbir sohbette asla onaylama",
+      "deniedByRuleHint": "Kuralınız tarafından engellendi — Ayarlar → Bağlayıcılar bölümünden yönetin.",
+      "batchPendingHint": "{count} araç isteği beklemede",
+      "approveAllButton": "Tümünü onayla",
+      "denyAllButton": "Tümünü reddet"
     },
     "openImage": "Görseli aç",
     "copyMessage": "Mesajı kopyala",
@@ -850,7 +865,9 @@
     "ttsError": "Ses oluşturulurken hata oluştu. Lütfen tekrar deneyin.",
     "unsupportedMessageType": "Mesaj görüntülenemedi: Desteklenmeyen mesaj türü",
     "addLanguageOption": "\"{name}\" ekle…",
-    "sources": "Kaynaklar"
+    "sources": "Kaynaklar",
+    "interpreterBadge": "Kodu çalıştır",
+    "disableCodeInterpreter": "Kod çalıştırmayı devre dışı bırak"
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",
@@ -1195,6 +1212,30 @@
       "thresholdLabel": "Şunun üzerindeyse yeniden yazma olarak değerlendir",
       "thresholdUnit": "Değiştirilen belge yüzdesi",
       "exceptionSelectionAlways": "Vurgulanan bir seçimi düzeltmek her zaman doğrudan uygulanır — model yalnızca düzeltilmiş kısmı döndürür ve bu, tüm belgeye karşı öneriler olarak ayrılamaz."
+    },
+    "webSearch": {
+      "title": "Web Arama",
+      "description": "Canlı web aramalarının Arama Modu etkin olduğunda nasıl çalışacağını kontrol eder. Değişiklikler anında uygulanır.",
+      "providerLabel": "Arama sağlayıcısı",
+      "providerAuto": "Otomatik (önerilen)",
+      "providerAutoDescription": "Dağıtım varsayılanını kullanır — şu anda aşağıdaki birleşik haber araması.",
+      "providerNews": "Birleşik haberler (GDELT + Google News)",
+      "providerNewsDescription": "Her iki kaynağı da paralel sorgular ve sonuçları birleştirir; bu nedenle birinin başarısız olması aramayı bozmaz. Hız, kaynak çeşitliliği ve çalışır makale bağlantılarının en iyi dengesi.",
+      "providerGoogleNews": "Sadece Google News",
+      "providerGoogleNewsDescription": "Anonim ve hızlı — sadece arama sorgusu Google’a ulaşır (hesap veya çerez yoktur) ve sonuçlar yaklaşık bir saniyede gelir. Not: Çoğunlukla başlıkları ve kısa özetleri tarar, tam makale değil; dolayısıyla yanıtlar yüzeyde kalabilir.",
+      "providerGdelt": "Sadece GDELT",
+      "providerGdeltDescription": "Tam yayıncı bağlantılarıyla açık dünya haber araştırma veritabanı; takip eden soruların tam makaleyi okumasına olanak tanır. Sıkı kullanım kısıtı var — arka arkaya aramalar birkaç saniye sıraya alınabilir.",
+      "providerBing": "Bing grounding (Microsoft üzerinden)",
+      "providerBingDescription": "Daha derin özetler için tam sayfaları okur ve genel webi kapsar, sadece haberleri değil. Ancak, aramalar genellikle 30–90 saniye sürer ve sonuç kalitesi aramadan aramaya değişkenlik gösterebilir.",
+      "sourcesLabel": "Arama başına kaynak",
+      "sourcesDescription": "Bir aramanın atıf olarak sakladığı farklı kaynak sayısı. Araştırma türü sorularda otomatik olarak artırılabilir.",
+      "freshnessLabel": "Tercih edilen güncellik",
+      "freshnessDescription": "Sonuçlar ne kadar yeni olmalı. Otomatik seçildiğinde her soru karar verir (son dakika haberleri için son gün tercih edilir).",
+      "freshness_auto": "Otomatik",
+      "freshness_day": "Son gün",
+      "freshness_week": "Son hafta",
+      "freshness_month": "Son ay",
+      "freshness_any": "Her zaman"
     }
   },
   "notFound": {
@@ -1384,6 +1425,23 @@
       "deployment": "Dağıtım",
       "modelVersion": "Model sürümü",
       "publisher": "Yayıncı"
+    },
+    "interpreterMode": {
+      "title": "Kod Yorumlayıcısı",
+      "subtitle": "Uygun olduğunda kod çalıştırır (grafikler, veri analizi)",
+      "learnMore": "Neler yapabilir?",
+      "description": "Etkinleştirildiğinde, asistan ekli dosyaları analiz etmek, sonuçları hesaplamak ve grafikler oluşturmak için güvenli, izole bir sandbox'ta Python çalıştırabilir. Çalıştırılan kod, çıktısı ve oluşturulan dosyalar yanıtla birlikte gösterilir. Bir mesaj için zorlamak isterseniz, kompozitör menüsünde \"Kodu Çalıştır\" seçeneğini kullanabilirsiniz."
+    },
+    "searchOptions": {
+      "title": "Gelişmiş arama",
+      "resultCount": "Arama başına kaynak:",
+      "freshness": "Şuradan sonuçları tercih et",
+      "freshness_auto": "Otomatik (soruya göre)",
+      "freshness_day": "Son gün",
+      "freshness_week": "Son hafta",
+      "freshness_month": "Geçen ay",
+      "freshness_any": "Herhangi bir zaman",
+      "hint": "Otomatik ayar, her sorunun kendi güncelliğini belirlemesine olanak tanır (ör. haberler için geçen gün tercih edilir) ve araştırma tarzı sorular varsayılandan daha fazla kaynak kullanabilir."
     }
   },
   "models": {
@@ -2130,7 +2188,11 @@
     "moveToMore": "Daha Fazlaya taşı",
     "moveOutOfMore": "Menüde göster",
     "showSources": "Diğer kaynakları göster",
-    "hideSources": "Diğer kaynakları gizle"
+    "hideSources": "Diğer kaynakları gizle",
+    "aiTools": "Yapay Zeka Araçları",
+    "aiToolsTooltip": "Asistanın cevap verirken kullanabileceği yetenekler: canlı web araması, kod çalıştırma ve bağlı servisler.",
+    "codeInterpreterTooltip": "Her mesaj için güvenli bir sandıkta Python kodu çalıştırır.\n\nEkli dosyalardan veri analizi, hesaplama ve grafik oluşturma için idealdir.",
+    "categoryTools": "Araçlar ve bağlayıcılar"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Yapay zekanın nasıl yanıt vereceğini özelleştirmek için kişisel talimatlarınızı ekleyin. Bunlar, yardımcı, doğru ve güvenli yanıtları garanti altına alan temel davranış yönergeleriyle birleştirilir.",
   "Tip: Type \"/\" to select from saved prompt templates_": "İpucu: Kayıtlı istem şablonlarından seçmek için \"/\" yazın.",
@@ -2444,7 +2506,18 @@
     "modelRow": "{requests} istek · {grams} g",
     "disclosure": "Tahminler varsayımlara dayalıdır v{version} · {since} tarihinden itibaren · yalnızca standart sohbet (ajanlar ve bilgi tabanı cevapları dahil değildir).",
     "reset": "Kullanım istatistiklerini sıfırla",
-    "estimatedPortion": "~{grams} g CO₂e ({requests} istek) içermektedir; izleme öncesindeki sohbetlerden tahmin edilmiştir — saklanan mesaj metninden geriye dönük hesaplanmış, ölçülen token sayılarından değil."
+    "estimatedPortion": "~{grams} g CO₂e ({requests} istek) içermektedir; izleme öncesindeki sohbetlerden tahmin edilmiştir — saklanan mesaj metninden geriye dönük hesaplanmış, ölçülen token sayılarından değil.",
+    "chipTitle": "Emisyon çipi",
+    "chipDescription": "Mevcut sohbetin tahmini karbon ayak izi, sohbet girişinin üstünde gösterilir.",
+    "chipAlways": "Her zaman göster",
+    "chipAlwaysHint": "Sohbetin bir tahmini olduğunda çip sürekli görünür.",
+    "chipAuto": "Güncellemede veya üzerine gelindiğinde göster",
+    "chipAutoHint": "Tahmin değiştiğinde çip görünür, sonra kademeli olarak kaybolur. Üzerine gelmek veya odaklamak çipi tekrar getirir.",
+    "chipHidden": "Gizli",
+    "chipHiddenHint": "Çip hiç gösterilmez. Toplamlar yine de takip edilip bu sayfada görünür.",
+    "chipAutoHideLabel": "Sonrasında kaybol",
+    "chipAutoHideUnit": "saniye",
+    "chipAutoHideHint": "{min} ile {max} saniye arasında."
   },
   "extraction": {
     "toggleLabel": "Yapılandırılmış veriyi çıkar",
@@ -3353,7 +3426,15 @@
       "measured": "Bildirilen token sayılarından",
       "estimated": "Eski mesajlardan geriye dönük hesaplanan",
       "lastRequest": "Son istek",
-      "disclaimer": "İstek başına tahminler, bildirilen veya tahmini token sayılarından, yayınlanmış ortalamalar ve varsayımlar v{version} kullanılarak yapılmıştır. Eski mesajlar, saklanan metin ve konuşmanın mevcut modeli kullanılarak geriye dönük hesaplanır. Bu bir ölçüm değildir."
+      "disclaimer": "İstek başına tahminler, bildirilen veya tahmini token sayılarından, yayınlanmış ortalamalar ve varsayımlar v{version} kullanılarak yapılmıştır. Eski mesajlar, saklanan metin ve konuşmanın mevcut modeli kullanılarak geriye dönük hesaplanır. Bu bir ölçüm değildir.",
+      "visibilityGroup": "Emisyon çipi görünürlüğü",
+      "visibilityLabel": "Göster:",
+      "visibility": {
+        "always": "Her zaman",
+        "auto": "Otomatik",
+        "hidden": "Gizle"
+      },
+      "visibilityHint": "Otomatik, çip güncellendiğinde veya üzerine geldiğinizde gösterir. Bunu Ayarlar › Kullanım ve Etki bölümünden tekrar değiştirebilirsiniz."
     }
   },
   "table": {
@@ -3616,7 +3697,13 @@
     "connectorClientSecretLabel": "OAuth istemci gizli anahtarı",
     "connectorClientSecretStored": "Bir gizli anahtar kaydedildi. Korumak için boş bırakın veya değiştirmek için yeni bir anahtar girin.",
     "connectorClientSecretHint": "Kaydedilmeden önce şifrelenir ve bir daha gösterilmez.",
-    "connectorScopesLabel": "Kapsamlar (boşlukla ayrılmış, isteğe bağlı)"
+    "connectorScopesLabel": "Kapsamlar (boşlukla ayrılmış, isteğe bağlı)",
+    "connectorOauthAuthUrlLabel": "Yetkilendirme URL'si (isteğe bağlı)",
+    "connectorOauthTokenUrlLabel": "Token URL'si (isteğe bağlı)",
+    "connectorOauthRefreshUrlLabel": "Yenileme URL'si (isteğe bağlı)",
+    "connectorOauthEndpointsHint": "Uç nokta URL'lerini otomatik olarak bulmak için boş bırakın. NetSuite gibi otomatik bulmayı desteklemeyen sağlayıcılar için ayarlayın.",
+    "connectorOauthRefreshUrlHint": "Token URL'si ile yenilemek için boş bırakın.",
+    "connectorOauthEndpointsPairWarning": "Yetkilendirme URL'si ve token URL'si birlikte ayarlanmalıdır (yenileme URL'si ikisini de gerektirir)."
   },
   "localModels": {
     "title": "Yerel modeller",
@@ -3711,5 +3798,52 @@
     "truncatedNotice": "{count} alan çıkarıldı — tablo sınırı {max} sütundur: {names}",
     "skippedDerivedNotice": "{count} hesaplanmış sütun kaydedilmedi — formüller bu tablonun sütunlarına referans veriyor: {names}",
     "loadReplacesColumns": "Bu işlem mevcut sütunları değiştirir. Mevcut satırlar, sütun adları eşleşen değerleri korur."
+  },
+  "codeInterpreterDropdown": "Kodu Çalıştır",
+  "connectorPin": {
+    "toggleLabel": "Bağlayıcı araçlarını yönet",
+    "menuLabel": "Bağlayıcılar",
+    "menuLabelCount": "Bağlayıcılar ({count} aktif)",
+    "tooltip": "Hangi bağlayıcı araçlarının aktif olduğunu görün, bu sohbet veya tümü için kapatın ya da birine odaklanın.",
+    "toggleServerInChat": "Bu sohbette {name} kullan",
+    "globalToggleTitle": "{name}'i her yerde aç veya kapat (Ayarlar → Bağlayıcılar ile aynı)",
+    "globalOn": "Genel açık",
+    "globalOff": "Genel kapalı",
+    "chatToggleHint": "Onay kutuları yalnızca bu sohbeti kontrol eder; genel buton Ayarlar → Bağlayıcılar ile aynıdır. Her aktif bağlayıcı, araçlarını her mesaja ekler — daha fazla token ve daha yavaş yanıtlar.",
+    "trayLabel": "Bağlayıcı araçları",
+    "trayTitle": "Bu sohbet için bağlayıcı araçları",
+    "toggleServer": "{name}'i etkinleştir",
+    "needsReconnect": "Ayarlar'da tekrar bağlanın",
+    "focusAction": "Odakla",
+    "focusedChip": "Odaklandı",
+    "pinnedHint": "Bu konuşmada yalnızca {name} araçları kullanılacak.",
+    "staleHint": "Odaklanılan bağlayıcı bağlantısı kesilmiş veya devre dışı — Ayarlar → Bağlayıcılar'da tekrar bağlayın ya da odağı kaldırın. O zamana kadar tüm aktif araçlar kullanılacaktır.",
+    "costHint": "Her aktif bağlayıcı, araçlarını gönderdiğiniz her mesaja ekler — daha fazla token ve daha yavaş yanıt. Kullanmadıklarınızı kapatın.",
+    "noEligibleConnectors": "Hiçbir bağlayıcı yapılandırılmamış. Önce Ayarlar → Bağlayıcılar'dan birini ekleyin.",
+    "unknownConnector": "Kaldırıldı bağlayıcı",
+    "unpin": "Odaklamayı kaldır",
+    "dismiss": "Kapat",
+    "badgeCount": "{count} araç",
+    "badgeTooltip": "Her mesajda bağlayıcı araçları aktif — daha fazla token ve yanıt süresi ekler. Yönetmek için tıklayın."
+  },
+  "toolApprovals": {
+    "title": "Araç onayları",
+    "description": "Her konuşmada geçerli kurallar: belirli bağlayıcı araçlarını otomatik olarak izin ver veya engelle. Henüz istemediğiniz araçları da ekleyebilirsiniz.",
+    "actionApprove": "Her zaman izin ver",
+    "actionReject": "Her zaman engelle",
+    "scopeServer": "{name} üzerinde",
+    "scopeAny": "Herhangi bir bağlayıcı",
+    "removeRule": "{tool} için kuralı kaldır",
+    "toolNameLabel": "Araç adı",
+    "toolNamePlaceholder": "Araç adı, ör. create_issue",
+    "scopeLabel": "Bağlayıcı kapsamı",
+    "actionLabel": "Eylem",
+    "addRule": "Kural ekle",
+    "rejectPrecedenceNote": "Engelleme kuralları her zaman önceliklidir — izin kurallarına ve konuşma başına otomatik onaylara karşı üstün gelir.",
+    "policyAsk": "Sor",
+    "policyAllow": "İzin ver",
+    "policyBlock": "Engelle",
+    "policyGroupLabel": "{tool} için onay politikası",
+    "listHint": "Asistanın her araç çalıştırmak istediğinde ne olacağını belirleyin — her sohbette geçerlidir. Varsayılan seçenek Sor’dur; Engelle her zaman önceliklidir."
   }
 }

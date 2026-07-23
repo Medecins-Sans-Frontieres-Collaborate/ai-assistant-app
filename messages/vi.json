@@ -788,7 +788,13 @@
         "transformingTable": "Đang chuyển đổi bảng…",
         "findingLocations": "Đang xác định vị trí…",
         "updatingMap": "Đang cập nhật bản đồ…"
-      }
+      },
+      "searchingWebFor": "Đang tìm kiếm: “{query}”…",
+      "searchingWebForMultiple": "Đang tìm {count} chủ đề: “{query}”…",
+      "readingCitedSources": "Đang đọc {count} bài báo đã trích dẫn…",
+      "planningSteps": "Đang lên kế hoạch các bước…",
+      "planStep": "Bước {current}/{total}: {description}",
+      "planStepRetry": "Bước {current}/{total} (thử lại): {description}"
     },
     "toolSummary": {
       "usedTools": "Đã sử dụng {count, plural, one {# công cụ} other {# công cụ}}",
@@ -798,7 +804,8 @@
       "statusAutoDenied": "Tự động từ chối",
       "statusFailed": "Thất bại",
       "statusIncomplete": "Chưa hoàn thành",
-      "viaService": "qua {service}"
+      "viaService": "qua {service}",
+      "downloadFile": "Tải xuống"
     },
     "consent": {
       "authorizeRequired": "Yêu cầu xác thực",
@@ -840,7 +847,15 @@
       "approvedState": "Đã chấp thuận — tác vụ được tiếp tục",
       "deniedState": "Đã từ chối",
       "submittingApproval": "Đang chấp thuận và tiếp tục tác vụ…",
-      "submittingDenial": "Đang gửi từ chối của bạn…"
+      "submittingDenial": "Đang gửi từ chối của bạn…",
+      "alwaysApproveEverywhere": "Luôn cho phép công cụ này — ở mọi cuộc trò chuyện",
+      "denyOptionsLabel": "Tùy chọn từ chối",
+      "denyOnce": "Từ chối một lần",
+      "neverAllowEverywhere": "Không bao giờ cho phép công cụ này — ở mọi cuộc trò chuyện",
+      "deniedByRuleHint": "Bị chặn theo quy tắc của bạn — quản lý trong Cài đặt → Kết nối.",
+      "batchPendingHint": "{count} yêu cầu dùng công cụ đang chờ xử lý",
+      "approveAllButton": "Chấp thuận tất cả",
+      "denyAllButton": "Từ chối tất cả"
     },
     "openImage": "Mở hình ảnh",
     "copyMessage": "Sao chép tin nhắn",
@@ -851,7 +866,9 @@
     "ttsError": "Lỗi tạo âm thanh. Vui lòng thử lại.",
     "unsupportedMessageType": "Lỗi hiển thị tin nhắn: Loại tin nhắn không được hỗ trợ",
     "addLanguageOption": "Thêm \"{name}\"…",
-    "sources": "Nguồn"
+    "sources": "Nguồn",
+    "interpreterBadge": "Chạy mã",
+    "disableCodeInterpreter": "Tắt thực thi mã"
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",
@@ -1196,6 +1213,30 @@
       "thresholdLabel": "Xem như viết lại nếu vượt",
       "thresholdUnit": "% tài liệu bị thay đổi",
       "exceptionSelectionAlways": "Việc chỉnh sửa một đoạn được đánh dấu luôn được áp dụng trực tiếp — mô hình chỉ trả về phần trích dẫn đã chỉnh sửa, không thể tách thành các đề xuất so với toàn bộ tài liệu."
+    },
+    "webSearch": {
+      "title": "Tìm kiếm web",
+      "description": "Kiểm soát cách thực hiện tìm kiếm web trực tiếp khi Chế độ Tìm kiếm hoạt động. Thay đổi sẽ áp dụng ngay lập tức.",
+      "providerLabel": "Nhà cung cấp tìm kiếm",
+      "providerAuto": "Tự động (khuyến nghị)",
+      "providerAutoDescription": "Sử dụng mặc định triển khai — hiện là tìm kiếm tin tức tổng hợp bên dưới.",
+      "providerNews": "Tin tức tổng hợp (GDELT + Google News)",
+      "providerNewsDescription": "Truy vấn cả hai nguồn song song và hợp nhất kết quả, nên việc một nguồn bị lỗi sẽ không ảnh hưởng đến kết quả. Đảm bảo cân bằng giữa tốc độ, đa dạng nguồn và liên kết bài viết hoạt động.",
+      "providerGoogleNews": "Chỉ Google News",
+      "providerGoogleNewsDescription": "Ẩn danh và nhanh — chỉ truy vấn tìm kiếm được gửi đến Google (không dùng tài khoản hay cookie) và kết quả đến trong khoảng một giây. Lưu ý: chủ yếu quét tiêu đề và trích đoạn ngắn, không phải toàn bộ bài, nên câu trả lời có thể ở mức khái quát.",
+      "providerGdelt": "Chỉ GDELT",
+      "providerGdeltDescription": "Cơ sở dữ liệu nghiên cứu mở về tin tức thế giới với liên kết trực tiếp đến nhà xuất bản, cho phép câu hỏi tiếp theo đọc toàn bộ bài viết. Hạn chế tốc độ nghiêm ngặt — tìm kiếm liên tiếp có thể phải chờ vài giây.",
+      "providerBing": "Bing grounding (qua Microsoft)",
+      "providerBingDescription": "Đọc toàn bộ trang để tóm tắt sâu hơn và bao phủ nhiều nội dung web, không chỉ tin tức. Tuy nhiên, tìm kiếm thường kéo dài 30–90 giây và chất lượng kết quả không ổn định giữa các lần tìm.",
+      "sourcesLabel": "Nguồn cho mỗi lần tìm kiếm",
+      "sourcesDescription": "Số lượng nguồn khác biệt được giữ lại làm trích dẫn cho mỗi lần tìm kiếm. Câu hỏi kiểu nghiên cứu có thể tự động mở rộng số lượng này.",
+      "freshnessLabel": "Độ mới ưu tiên",
+      "freshnessDescription": "Độ mới của kết quả cần thiết. Tự động cho phép mỗi câu hỏi tự quyết định (tin nóng ưu tiên trong ngày gần nhất).",
+      "freshness_auto": "Tự động",
+      "freshness_day": "Trong ngày qua",
+      "freshness_week": "Trong tuần qua",
+      "freshness_month": "Trong tháng qua",
+      "freshness_any": "Bất kỳ thời gian nào"
     }
   },
   "notFound": {
@@ -1514,6 +1555,23 @@
       "deployment": "Triển khai",
       "modelVersion": "Phiên bản mô hình",
       "publisher": "Nhà phát hành"
+    },
+    "interpreterMode": {
+      "title": "Trình thông dịch mã",
+      "subtitle": "Chạy mã khi phù hợp (biểu đồ, phân tích dữ liệu)",
+      "learnMore": "Có thể làm gì?",
+      "description": "Khi được bật, trợ lý có thể chạy Python trong môi trường an toàn, tách biệt để phân tích tập tin đính kèm, tính toán kết quả và tạo biểu đồ. Mã đã chạy, kết quả và tệp tạo ra sẽ được hiển thị cùng phản hồi. Dùng \"Chạy mã\" trong menu sáng tác để bắt buộc thực thi cho tin nhắn."
+    },
+    "searchOptions": {
+      "title": "Tìm kiếm nâng cao",
+      "resultCount": "Nguồn cho mỗi lần tìm kiếm:",
+      "freshness": "Ưu tiên kết quả từ",
+      "freshness_auto": "Tự động (theo từng câu hỏi)",
+      "freshness_day": "Trong ngày qua",
+      "freshness_week": "Trong tuần qua",
+      "freshness_month": "Tháng trước",
+      "freshness_any": "Bất kỳ lúc nào",
+      "hint": "Tùy chọn Tự động cho phép mỗi câu hỏi đặt mức độ cập nhật riêng (ví dụ: tin tức ưu tiên ngày gần nhất), và các câu hỏi kiểu nghiên cứu có thể sử dụng nhiều nguồn hơn mặc định."
     }
   },
   "models": {
@@ -2161,7 +2219,11 @@
     "moveToMore": "Chuyển vào mục Thêm",
     "moveOutOfMore": "Hiển thị trong menu",
     "showSources": "Hiển thị các nguồn khác",
-    "hideSources": "Ẩn các nguồn khác"
+    "hideSources": "Ẩn các nguồn khác",
+    "aiTools": "Công cụ AI",
+    "aiToolsTooltip": "Các khả năng trợ lý có thể sử dụng khi trả lời: tìm kiếm trực tiếp trên web, thực thi mã, và các dịch vụ kết nối.",
+    "codeInterpreterTooltip": "Chạy mã Python trong môi trường an toàn cho mỗi tin nhắn.\n\nPhù hợp cho phân tích dữ liệu, tính toán, và tạo biểu đồ từ các tệp đính kèm.",
+    "categoryTools": "Công cụ & kết nối"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Thêm hướng dẫn cá nhân của bạn để tùy chỉnh cách AI phản hồi. Các hướng dẫn này sẽ được kết hợp với các quy tắc hành vi cốt lõi nhằm đảm bảo phản hồi hữu ích, chính xác và an toàn.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Mẹo: Gõ \"/\" để chọn từ các mẫu gợi ý đã lưu.",
@@ -2475,7 +2537,18 @@
     "modelRow": "{requests} yc · {grams} g",
     "disclosure": "Ước tính dựa trên các giả định v{version} · từ {since} · chỉ tính chat tiêu chuẩn (không tính câu trả lời của agent và knowledge-base).",
     "reset": "Đặt lại thống kê sử dụng",
-    "estimatedPortion": "Bao gồm khoảng ~{grams} g CO₂e ({requests} yêu cầu) được ước tính từ các cuộc trò chuyện trước khi có theo dõi — tính toán lại từ văn bản tin nhắn lưu trữ, không phải số lượng token đã đo."
+    "estimatedPortion": "Bao gồm khoảng ~{grams} g CO₂e ({requests} yêu cầu) được ước tính từ các cuộc trò chuyện trước khi có theo dõi — tính toán lại từ văn bản tin nhắn lưu trữ, không phải số lượng token đã đo.",
+    "chipTitle": "Chip khí thải",
+    "chipDescription": "Ước tính lượng phát thải carbon của cuộc trò chuyện hiện tại, hiển thị phía trên ô nhập trò chuyện.",
+    "chipAlways": "Luôn hiển thị",
+    "chipAlwaysHint": "Chip luôn hiển thị bất cứ khi nào cuộc trò chuyện có ước tính.",
+    "chipAuto": "Hiển thị khi cập nhật hoặc di chuột",
+    "chipAutoHint": "Chip sẽ xuất hiện khi ước tính thay đổi, sau đó tự động mờ dần. Di chuột hoặc tập trung vào chip sẽ làm hiện lại.",
+    "chipHidden": "Đã ẩn",
+    "chipHiddenHint": "Chip sẽ không bao giờ hiển thị. Tổng số vẫn được ghi nhận và hiển thị tại trang này.",
+    "chipAutoHideLabel": "Tự động mờ sau",
+    "chipAutoHideUnit": "giây",
+    "chipAutoHideHint": "Từ {min} đến {max} giây."
   },
   "extraction": {
     "toggleLabel": "Trích xuất dữ liệu có cấu trúc",
@@ -3384,7 +3457,15 @@
       "measured": "Dựa trên số lượng token đã báo cáo",
       "estimated": "Tính toán lại từ các tin nhắn cũ",
       "lastRequest": "Yêu cầu gần nhất",
-      "disclaimer": "Ước tính cho từng yêu cầu dựa trên số lượng token đã báo cáo hoặc ước lượng, sử dụng các giá trị trung bình và giả định được công bố v{version}. Các tin nhắn cũ được tính toán lại từ văn bản lưu trữ và mô hình hiện tại của cuộc trò chuyện. Không phải số liệu đo lường."
+      "disclaimer": "Ước tính cho từng yêu cầu dựa trên số lượng token đã báo cáo hoặc ước lượng, sử dụng các giá trị trung bình và giả định được công bố v{version}. Các tin nhắn cũ được tính toán lại từ văn bản lưu trữ và mô hình hiện tại của cuộc trò chuyện. Không phải số liệu đo lường.",
+      "visibilityGroup": "Hiển thị chip khí thải",
+      "visibilityLabel": "Hiển thị:",
+      "visibility": {
+        "always": "Luôn luôn",
+        "auto": "Tự động",
+        "hidden": "Ẩn"
+      },
+      "visibilityHint": "Chế độ Tự động sẽ hiển thị chip khi ước tính được cập nhật hoặc khi bạn di chuột vào. Bạn có thể thay đổi lại trong Cài đặt › Sử dụng & Tác động."
     }
   },
   "table": {
@@ -3647,7 +3728,13 @@
     "connectorClientSecretLabel": "OAuth client secret",
     "connectorClientSecretStored": "Đã lưu một secret. Để trống nếu muốn giữ lại, hoặc nhập mới để thay thế.",
     "connectorClientSecretHint": "Được mã hoá trước khi lưu, và sẽ không hiển thị lại.",
-    "connectorScopesLabel": "Scopes (phân cách bằng dấu cách, tuỳ chọn)"
+    "connectorScopesLabel": "Scopes (phân cách bằng dấu cách, tuỳ chọn)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (tuỳ chọn)",
+    "connectorOauthTokenUrlLabel": "Token URL (tuỳ chọn)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (tuỳ chọn)",
+    "connectorOauthEndpointsHint": "Để trống URL endpoint để tự động phát hiện. Chỉ điền khi nhà cung cấp không hỗ trợ phát hiện, như NetSuite.",
+    "connectorOauthRefreshUrlHint": "Để trống để làm mới từ token URL.",
+    "connectorOauthEndpointsPairWarning": "Authorization URL và token URL phải được thiết lập cùng nhau (refresh URL cần cả hai)."
   },
   "localModels": {
     "title": "Mô hình cục bộ",
@@ -3742,5 +3829,52 @@
     "truncatedNotice": "{count} trường bị loại bỏ — số cột tối đa của bảng là {max}: {names}",
     "skippedDerivedNotice": "{count} cột tính toán không được lưu — công thức tham chiếu đến các cột trong bảng này: {names}",
     "loadReplacesColumns": "Hành động này sẽ thay thế các cột hiện tại. Các dòng đã có sẽ giữ lại giá trị nếu tên cột trùng khớp."
+  },
+  "codeInterpreterDropdown": "Chạy mã",
+  "connectorPin": {
+    "toggleLabel": "Quản lý công cụ kết nối",
+    "menuLabel": "Các kết nối",
+    "menuLabelCount": "Các kết nối ({count} đang hoạt động)",
+    "tooltip": "Xem các công cụ kết nối đang hoạt động, tắt chúng cho cuộc trò chuyện này hoặc toàn bộ hệ thống, hoặc chỉ tập trung vào một công cụ.",
+    "toggleServerInChat": "Sử dụng {name} trong cuộc trò chuyện này",
+    "globalToggleTitle": "Bật hoặc tắt {name} trên toàn hệ thống (giống trong Cài đặt → Các kết nối)",
+    "globalOn": "Bật toàn hệ thống",
+    "globalOff": "Tắt toàn hệ thống",
+    "chatToggleHint": "Các hộp kiểm chỉ kiểm soát cuộc trò chuyện này; nút toàn hệ thống tương ứng với Cài đặt → Các kết nối. Mỗi kết nối đang hoạt động sẽ thêm công cụ vào mỗi tin nhắn — nhiều token hơn và phản hồi chậm hơn.",
+    "trayLabel": "Công cụ kết nối",
+    "trayTitle": "Công cụ kết nối cho cuộc trò chuyện này",
+    "toggleServer": "Bật {name}",
+    "needsReconnect": "Kết nối lại trong Cài đặt",
+    "focusAction": "Tập trung",
+    "focusedChip": "Đang tập trung",
+    "pinnedHint": "Chỉ các công cụ từ {name} sẽ được sử dụng trong cuộc trò chuyện này.",
+    "staleHint": "Kết nối đang tập trung đã bị ngắt kết nối hoặc vô hiệu hóa — kết nối lại trong Cài đặt → Các kết nối hoặc gỡ tập trung. Cho đến khi đó, tất cả công cụ đang hoạt động sẽ được sử dụng.",
+    "costHint": "Mỗi kết nối đang hoạt động thêm công cụ của nó vào mỗi tin nhắn bạn gửi — thêm token và tăng thời gian trả lời. Hãy tắt các công cụ không sử dụng.",
+    "noEligibleConnectors": "Chưa cấu hình kết nối nào. Vui lòng kết nối trong Cài đặt → Các kết nối trước.",
+    "unknownConnector": "Kết nối đã bị xoá",
+    "unpin": "Gỡ tập trung",
+    "dismiss": "Đóng",
+    "badgeCount": "{count} công cụ",
+    "badgeTooltip": "Các công cụ kết nối luôn hoạt động trên mọi tin nhắn — chúng tăng token và thời gian trả lời. Bấm để quản lý."
+  },
+  "toolApprovals": {
+    "title": "Phê duyệt công cụ",
+    "description": "Quy tắc áp dụng cho mọi cuộc trò chuyện: tự động cho phép hoặc chặn các công cụ kết nối cụ thể. Bạn có thể thêm công cụ mà mình chưa được hỏi phê duyệt.",
+    "actionApprove": "Luôn cho phép",
+    "actionReject": "Luôn chặn",
+    "scopeServer": "trên {name}",
+    "scopeAny": "Bất kỳ kết nối nào",
+    "removeRule": "Xoá quy tắc cho {tool}",
+    "toolNameLabel": "Tên công cụ",
+    "toolNamePlaceholder": "Tên công cụ, ví dụ: create_issue",
+    "scopeLabel": "Phạm vi kết nối",
+    "actionLabel": "Hành động",
+    "addRule": "Thêm quy tắc",
+    "rejectPrecedenceNote": "Quy tắc chặn luôn được ưu tiên — vượt qua quy tắc cho phép và bất cứ phê duyệt tự động nào trong cuộc trò chuyện.",
+    "policyAsk": "Hỏi",
+    "policyAllow": "Cho phép",
+    "policyBlock": "Chặn",
+    "policyGroupLabel": "Chính sách phê duyệt cho {tool}",
+    "listHint": "Thiết lập hành động khi trợ lý muốn sử dụng từng công cụ — áp dụng cho mọi cuộc hội thoại. Hỏi là mặc định; Chặn luôn ưu tiên."
   }
 }

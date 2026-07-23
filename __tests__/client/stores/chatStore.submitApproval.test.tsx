@@ -47,6 +47,54 @@ function makeConversationWithApproval(approvalId: string): Conversation {
 }
 
 /**
+ * Builds a conversation whose trailing assistant message carries SEVERAL
+ * pending native-MCP approvals (server_id present — the native loop's
+ * signature). Mirrors a multi-tool pause like GitHub's get_me + get_teams.
+ */
+function makeConversationWithNativeApprovals(
+  approvalIds: string[],
+): Conversation {
+  // Real streams persist consent prompts as the message's `consentRequests`
+  // FIELD (via buildAssistantMessage), which is what the batch gate and the
+  // resume path read — content markers alone would not be seen.
+  const consentRequests = approvalIds.map((id) => ({
+    kind: 'approval' as const,
+    approval_request_id: id,
+    server_id: 'srv-1',
+    server_label: 'GitHub',
+    tool_name: `tool_${id}`,
+    tool_arguments: '{}',
+  }));
+  return {
+    id: 'conv-native',
+    name: 'test',
+    messages: [
+      {
+        role: 'user',
+        content: 'do the things',
+        messageType: MessageType.TEXT,
+      },
+      {
+        type: 'assistant_group',
+        activeIndex: 0,
+        versions: [
+          {
+            content: 'on it',
+            messageType: MessageType.TEXT,
+            createdAt: new Date().toISOString(),
+            consentRequests,
+          },
+        ],
+      } as any,
+    ],
+    model: { id: 'gpt-5.2', name: 'GPT' } as any,
+    prompt: '',
+    temperature: 0.5,
+    folderId: null,
+  };
+}
+
+/**
  * Builds a ReadableStream that emits the given chunks as Uint8Array writes
  * and closes. Used to fake the chat response stream.
  */
@@ -211,6 +259,95 @@ describe('chatStore.submitApproval', () => {
 
     release();
     await first;
+  });
+
+  describe('multi-tool native batches', () => {
+    // Regression: the stateless resume echoes EVERY pending call and the
+    // server auto-denies any without an explicit response — so dispatching
+    // on the first decision silently denied its siblings (approving get_me
+    // marked get_teams denied).
+    it('holds the resume until every pending approval is decided, then sends all decisions', async () => {
+      const conv = makeConversationWithNativeApprovals([
+        'mcpr_me',
+        'mcpr_teams',
+      ]);
+      useConversationStore.setState({
+        conversations: [conv],
+        selectedConversationId: conv.id,
+      });
+      const chatSpy = vi
+        .spyOn(chatService, 'chat')
+        .mockResolvedValue(streamFromChunks(['ok']));
+
+      await useChatStore.getState().submitApproval('mcpr_me', true, conv, 1);
+
+      // First decision recorded but NO stream dispatched.
+      expect(chatSpy).not.toHaveBeenCalled();
+      expect(useChatStore.getState().submittedApprovals.get('mcpr_me')).toBe(
+        true,
+      );
+      // …and persisted, so a reload keeps the card decided.
+      const stored = useConversationStore
+        .getState()
+        .conversations.find((c) => c.id === conv.id) as any;
+      expect(stored.messages[1].versions[0].approvalOutcomes?.['mcpr_me']).toBe(
+        true,
+      );
+
+      await useChatStore.getState().submitApproval('mcpr_teams', true, conv, 1);
+
+      // The LAST decision dispatches exactly one resume carrying BOTH.
+      expect(chatSpy).toHaveBeenCalledTimes(1);
+      const options = chatSpy.mock.calls[0][2] as {
+        approvalResponses?: { approval_request_id: string; approve: boolean }[];
+      };
+      expect(options.approvalResponses).toEqual(
+        expect.arrayContaining([
+          { approval_request_id: 'mcpr_me', approve: true },
+          { approval_request_id: 'mcpr_teams', approve: true },
+        ]),
+      );
+      expect(options.approvalResponses).toHaveLength(2);
+    });
+
+    it('carries mixed decisions — an approval never converts a sibling denial (or vice versa)', async () => {
+      const conv = makeConversationWithNativeApprovals(['mcpr_a', 'mcpr_b']);
+      useConversationStore.setState({
+        conversations: [conv],
+        selectedConversationId: conv.id,
+      });
+      const chatSpy = vi
+        .spyOn(chatService, 'chat')
+        .mockResolvedValue(streamFromChunks(['ok']));
+
+      await useChatStore.getState().submitApproval('mcpr_a', false, conv, 1);
+      await useChatStore.getState().submitApproval('mcpr_b', true, conv, 1);
+
+      const options = chatSpy.mock.calls[0][2] as {
+        approvalResponses?: { approval_request_id: string; approve: boolean }[];
+      };
+      expect(options.approvalResponses).toEqual(
+        expect.arrayContaining([
+          { approval_request_id: 'mcpr_a', approve: false },
+          { approval_request_id: 'mcpr_b', approve: true },
+        ]),
+      );
+    });
+
+    it('a single-call native round still dispatches immediately', async () => {
+      const conv = makeConversationWithNativeApprovals(['mcpr_solo']);
+      useConversationStore.setState({
+        conversations: [conv],
+        selectedConversationId: conv.id,
+      });
+      const chatSpy = vi
+        .spyOn(chatService, 'chat')
+        .mockResolvedValue(streamFromChunks(['ok']));
+
+      await useChatStore.getState().submitApproval('mcpr_solo', true, conv, 1);
+
+      expect(chatSpy).toHaveBeenCalledTimes(1);
+    });
   });
 
   it('applies a server-emitted CONSENT_OUTCOME marker to in-memory state', async () => {

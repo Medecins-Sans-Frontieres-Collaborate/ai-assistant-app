@@ -5,6 +5,7 @@ import {
   IconMessage,
   IconUser,
   IconVolume,
+  IconWorldSearch,
 } from '@tabler/icons-react';
 import { FC, useState } from 'react';
 
@@ -24,6 +25,7 @@ import { SuggestRevisionsSetting } from '../SuggestRevisionsSetting';
 import { SystemPrompt } from '../SystemPrompt';
 import { TTSSettingsPanel } from '../TTS/TTSSettingsPanel';
 import { TemperatureSlider } from '../Temperature';
+import { WebSearchSettingsPanel } from '../WebSearchSettingsPanel';
 
 interface ChatSettingsSectionProps {
   state: Settings;
@@ -50,6 +52,7 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
   const [isAdvancedExpanded, setIsAdvancedExpanded] = useState(false);
   const [isAboutYouExpanded, setIsAboutYouExpanded] = useState(false);
   const [isTTSExpanded, setIsTTSExpanded] = useState(false);
+  const [isWebSearchExpanded, setIsWebSearchExpanded] = useState(false);
   const {
     displayNamePreference,
     customDisplayName,
@@ -313,6 +316,37 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
               <div className="mt-4">
                 <SuggestRevisionsSetting />
               </div>
+            </div>
+          )}
+        </div>
+
+        {/* Web Search Section - Collapsible, store-driven (applies
+            immediately, not part of the legacy save/dispatch flow) */}
+        <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+          <button
+            onClick={() => setIsWebSearchExpanded(!isWebSearchExpanded)}
+            className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+          >
+            <div className="flex items-center gap-2">
+              <IconWorldSearch
+                size={18}
+                className="text-gray-500 dark:text-gray-400"
+              />
+              <h3 className="text-sm font-bold text-black dark:text-white">
+                {t('settings.webSearch.title')}
+              </h3>
+            </div>
+            <IconChevronDown
+              size={18}
+              className={`text-gray-500 dark:text-gray-400 transition-transform ${
+                isWebSearchExpanded ? 'rotate-180' : ''
+              }`}
+            />
+          </button>
+
+          {isWebSearchExpanded && (
+            <div className="px-4 pb-4 border-t border-gray-200 dark:border-gray-700 pt-4">
+              <WebSearchSettingsPanel />
             </div>
           )}
         </div>

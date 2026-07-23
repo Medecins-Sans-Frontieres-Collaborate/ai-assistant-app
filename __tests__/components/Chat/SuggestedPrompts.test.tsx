@@ -208,7 +208,10 @@ describe('SuggestedPrompts', () => {
 
     const wrapper = container.firstChild;
     expect(wrapper).toHaveClass('flex');
-    expect(wrapper).toHaveClass('sm:flex-wrap');
+    // Wraps at every width now — the sub-sm horizontal scroller was replaced
+    // by stacking, so there is no longer an `sm:` breakpoint on wrapping.
+    expect(wrapper).toHaveClass('flex-wrap');
+    expect(wrapper).toHaveClass('justify-center');
     expect(wrapper).toHaveClass('sm:gap-3');
   });
 

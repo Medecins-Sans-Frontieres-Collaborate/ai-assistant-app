@@ -845,7 +845,13 @@
         "transformingTable": "N yí tábìlì padà...",
         "findingLocations": "N ráyè mọ ibi...",
         "updatingMap": "N ṣe imudojúìpẹ̀ maapu..."
-      }
+      },
+      "searchingWebFor": "N wa: “{query}”…",
+      "searchingWebForMultiple": "N wa awọn koko {count}: “{query}”…",
+      "readingCitedSources": "N ka awọn àpilẹkọ tí a tọka sí ṣáájú {count}…",
+      "planningSteps": "N gbero awọn igbesẹ…",
+      "planStep": "Igbesẹ {current}/{total}: {description}",
+      "planStepRetry": "Igbesẹ {current}/{total} (tun gbiyanju): {description}"
     },
     "toolSummary": {
       "usedTools": "Lo {count, plural, one {# ohun ìṣàkóso} other {# àwọn ohun ìṣàkóso}}",
@@ -855,7 +861,8 @@
       "statusAutoDenied": "Ti kọ laifọwọ́si",
       "statusFailed": "Kọ̀",
       "statusIncomplete": "Kò pé",
-      "viaService": "pẹ̀lú {service}"
+      "viaService": "pẹ̀lú {service}",
+      "downloadFile": "Gba lati ayelujara"
     },
     "consent": {
       "authorizeRequired": "Ìfọwọ́si pàtàkì",
@@ -897,7 +904,15 @@
       "approvedState": "Ti fọwọsi — aṣoju ti tẹsiwaju",
       "deniedState": "Ti kọ",
       "submittingApproval": "Nfọwọsi ati tuni aṣoju bẹrẹ…",
-      "submittingDenial": "Nfiranṣẹ ikọ rẹ…"
+      "submittingDenial": "Nfiranṣẹ ikọ rẹ…",
+      "alwaysApproveEverywhere": "Fọwọsi irinṣẹ yii nigbagbogbo — ninu gbogbo ibanisọrọ",
+      "denyOptionsLabel": "Awọn aṣayan dideni",
+      "denyOnce": "Deni ẹẹkan",
+      "neverAllowEverywhere": "Maṣe gba irinṣẹ yii laaye — ninu gbogbo ibanisọrọ",
+      "deniedByRuleHint": "Ti dina nipasẹ ofin rẹ — ṣakoso ninu Eto → Connectors.",
+      "batchPendingHint": "Aṣẹ irinṣẹ {count} duro de ìmúlò",
+      "approveAllButton": "Fọwọsi gbogbo",
+      "denyAllButton": "Deni gbogbo"
     },
     "openImage": "Ṣí aworan",
     "copyMessage": "Daakọ ifiranṣẹ",
@@ -908,7 +923,9 @@
     "ttsError": "Asise lakoko iṣejade ohun. Jọwọ gbiyanju lẹẹkansi.",
     "unsupportedMessageType": "Aṣiṣe ṣiṣi ifiranṣẹ: Iru ifiranṣẹ ti a ko ṣe atilẹyin",
     "addLanguageOption": "Ṣàfikún \"{name}\"…",
-    "sources": "Àwọn orísun"
+    "sources": "Àwọn orísun",
+    "interpreterBadge": "Ṣiṣẹ koodu",
+    "disableCodeInterpreter": "Mu ṣiṣe koodu ṣiṣẹ silẹ"
   },
   "transcript": {
     "originalTranscript": "Ìkọsílẹ̀ Àkọ́kọ́",
@@ -1348,6 +1365,30 @@
       "thresholdLabel": "Kà sí àtúnṣe àgbà yìí sáyà",
       "thresholdUnit": "% ti iwe ti a ṣe ayípadà",
       "exceptionSelectionAlways": "Atunṣe apakan ti a yan nigbagbogbo n ṣiṣẹ taara — awoṣe naa yoo da pada nikan apakan ti a ti tunṣe, ti ko le pin si awọn aba fun gbogbo iwe naa."
+    },
+    "webSearch": {
+      "title": "Ìwádìí lórí Ayelujara",
+      "description": "Ṣakoso bi ìlò ayelujara ṣẹṣẹ nṣiṣẹ nigbati Search Mode ba n ṣiṣẹ. Àyípadà yìí máa kàn títí lẹsẹkẹsẹ.",
+      "providerLabel": "Olupese ìwádìí",
+      "providerAuto": "Aifọwọyi (niyanju)",
+      "providerAutoDescription": "N lò àyípadà aiyékuru — ní báyìí ìgbàpọ̀ ìwádìí iroyin ni isalẹ.",
+      "providerNews": "Ìgbàpọ̀ iroyin (GDELT + Google News)",
+      "providerNewsDescription": "N ṣawari mejeeji papọ́, káàkiri abajade, nítorí náà, tí ọkan bá kuna, ìwádìí kò ní dá duro. Ipele to dára jùlọ fun iyara, orisirisi orisun, ati asopọ àpilẹkọ tó n ṣiṣẹ.",
+      "providerGoogleNews": "Google News nikan",
+      "providerGoogleNewsDescription": "Alailorukọ, yarayara — kìkì ìbéèrè ìwádìí ni Google gbà (ko si iroyin tabi cookies), abajade máa dé lẹ́yìn iṣẹju kan. Akọsilẹ: Ó pẹ̀lú akọle àti àfihàn kékèké, kì í ka gbogbo àpilẹkọ, nítorí náà, ìdáhùn le jẹ àkọsílẹ.",
+      "providerGdelt": "GDELT nikan",
+      "providerGdeltDescription": "Ìkànsí ìwádìí ayé gbàgbè ti iroyin olókìkí pèlu asopọ taara si onitumọ àpilẹkọ, n tó fi je ká le ka gbogbo àpilẹkọ. Iwọn lilo to muna — ìwádìí lẹyìn lẹyìn le duro de iṣẹju diẹ.",
+      "providerBing": "Bing grounding (nipa Microsoft)",
+      "providerBingDescription": "N ka oju-ile kikun fun àkótán tó jinlẹ ati bo gbogbo ayelujara, kì í ṣe iroyin nìkan. Ṣugbọn, ìwádìí maa n gba iṣẹju 30–90, ati didara abajade kii ṣọ lati duro mọkan pato laarin ìwádìí.",
+      "sourcesLabel": "Orisun kọọkan fun ìwádìí",
+      "sourcesDescription": "Meloo ni orisun tó yàtọ̀ tí àwádìí kan ní bikosí. Ìbẹ̀rẹ̀ àkọsílẹ ìwádìí le fa eyi pọ̀ laifọwọyi.",
+      "freshnessLabel": "Akoko tí o fẹran",
+      "freshnessDescription": "Bawo ni abajade ṣe yẹ kó sunmọ to? Aifọwọyi jẹ́ ká ọkọọkan ìbéèrè pinnu (àtẹjade tuntun fẹ́ ọjọ́ to kẹhin).",
+      "freshness_auto": "Aifọwọyi",
+      "freshness_day": "Ọjọ to kọja",
+      "freshness_week": "Ọsẹ to kọja",
+      "freshness_month": "Osù to kọja",
+      "freshness_any": "Eyikéyì"
     }
   },
   "emptyState": {
@@ -1534,6 +1575,23 @@
       "deployment": "Ilọṣọkan",
       "modelVersion": "Ẹya àwòrán",
       "publisher": "Olùtẹ̀jáde"
+    },
+    "interpreterMode": {
+      "title": "Atúmọ̀ Koodu",
+      "subtitle": "N ṣiṣẹ koodu nigbati o ba wulo (àwọ̀n àwòrán, itupalẹ data)",
+      "learnMore": "Kí ni ó lè ṣe?",
+      "description": "Nigbati a ba mu ṣiṣẹ, iranwọ le ṣiṣẹ Python ninu sandbox ti o ni aabo fun itupalẹ awọn faili tó so mọ́n, iṣiro abajade, ati ṣe awọn àwòrán. Koodu tí a ṣàgbékalẹ̀, abajade rẹ, ati awọn faili tí a dá, yio han pẹlú idahun. Lo \"Ṣiṣẹ Koodu\" ninu akojọ aṣàyan composer láti fi le lo fun ifiranṣẹ kan."
+    },
+    "searchOptions": {
+      "title": "Ìwádìí tò ti ni ilọsiwaju",
+      "resultCount": "Orisun kọọkan fun ìwádìí:",
+      "freshness": "Fẹ́ abajade láti",
+      "freshness_auto": "Aifọwọyi (pẹ̀lú ìbéèrè)",
+      "freshness_day": "Ọjọ to kọja",
+      "freshness_week": "Ọsẹ to kọja",
+      "freshness_month": "Oṣù to kọja",
+      "freshness_any": "Àkókò kankan",
+      "hint": "‘Auto’ maa jẹ kó ìbéèrè kọọkan yan àkókò tirẹ (àpẹẹrẹ, ìròyìn maa fẹ́ ọjọ́ kan péré), àwọn ìbéèrè ìwádìí le lo oríṣìíríṣìí orísun ju àtọkasi lọ."
     }
   },
   "models": {
@@ -2105,7 +2163,11 @@
     "moveToMore": "Gbé sí Ẹlòmíràn",
     "moveOutOfMore": "Fihàn nínú àkójọ aṣayan",
     "showSources": "Fi awọn orisun miran han",
-    "hideSources": "Tọju awọn orisun miran"
+    "hideSources": "Tọju awọn orisun miran",
+    "aiTools": "Ẹ̀rọ AI",
+    "aiToolsTooltip": "Àwọn àǹfààní tí iranlọwọ le lò nígbà idáhùn: àwárí ayelujara taara, ṣiṣé kóòdù, àti iṣẹ́ tó so pọ̀.",
+    "codeInterpreterTooltip": "Ṣiṣe kóòdù Python nínú ilé tí kó ní ewu fún gbogbo ifiranṣẹ.\n\nÓ dáa fún àyẹ̀wò data, iṣirò, àti ṣíṣe àwọn àwòrán láti inú àwọn fáìlì tó wa lẹ́gbẹ́ẹ.",
+    "categoryTools": "Ọpa & asopọ"
   },
   "transcription": {
     "transcribesOnSend": "Ó ń kọ sí ọ̀rọ̀ nígbà fífiránṣẹ́",
@@ -2428,7 +2490,18 @@
     "modelRow": "{requests} ìbéèrè · {grams} g",
     "disclosure": "Ìṣirò dá lórí àfọ̀mọ́sùn v{version} · látìgbà {since} · ìbáṣepọ̀ àkọ́tún ṣoṣo (àwọn agent àti ìdáhùn knowledge-base kì í ṣe kó).",
     "reset": "Tún àkọsílẹ̀ lilo ṣe",
-    "estimatedPortion": "Ó ní àfọ̀mọ̀ ~{grams} g CO₂e ({requests} ìbéèrè) tí a ṣe àfìmọ̀ látinú ìjíròrò tó ṣẹ̀ṣẹ̀ ṣáájú ìtọ́pa — a tún ṣe àfìmọ̀ padà láti ọrọ ìfiránṣẹ́ tí a fipamọ́, kì í ṣe iye àmi tí a gbéjọro."
+    "estimatedPortion": "Ó ní àfọ̀mọ̀ ~{grams} g CO₂e ({requests} ìbéèrè) tí a ṣe àfìmọ̀ látinú ìjíròrò tó ṣẹ̀ṣẹ̀ ṣáájú ìtọ́pa — a tún ṣe àfìmọ̀ padà láti ọrọ ìfiránṣẹ́ tí a fipamọ́, kì í ṣe iye àmi tí a gbéjọro.",
+    "chipTitle": "Chip àfọwọ́kà",
+    "chipDescription": "Ìṣirò àfọwọ́kà erogba fún ibanisọ̀rọ̀ yìí, tí ó wà lókè apamọ̀ ìrọ̀rùn.",
+    "chipAlways": "Máa fi hàn nígbà gbogbo",
+    "chipAlwaysHint": "Chip máa fi hàn nígbà gbogbo tí àfikún bá wà fún ibanisọ̀rọ̀.",
+    "chipAuto": "Fi hàn nígbà ìmúdájú tabi sí àmì lórí",
+    "chipAutoHint": "Chip yóò hàn nígbà tí àṣeyọrí bá yá, lè dànù lẹ́yìnna. Síi àkíyèsí tàbí fòkúsì rẹ yóò mú ú padà.",
+    "chipHidden": "Pa mọ́",
+    "chipHiddenHint": "A kì yóò fi chip hàn rárá. Àpapọ̀ ṣi n tẹle ati wí lórí ojúewé yìí.",
+    "chipAutoHideLabel": "Dànù lẹ́yìn",
+    "chipAutoHideUnit": "ìṣẹ́jú ààyá",
+    "chipAutoHideHint": "Láàrin {min} sí {max} ìṣẹ́jú ààyá."
   },
   "extraction": {
     "toggleLabel": "Yọ data eto jade",
@@ -3337,7 +3410,15 @@
       "measured": "Láti iye àmi tí a gbéjọro",
       "estimated": "A tún ṣe àfìmọ̀ padà láti àwọn ìfiránṣẹ́ àtijọ́",
       "lastRequest": "Ìbéèrè tó kẹ́yìn",
-      "disclaimer": "Ìṣírò kọọkan da lórí iye àmi tí a gbéjọro tàbí àfojúsùn, pẹ̀lú àdàkọ àti àfojúsùn tí a tẹ̀jáde v{version}. Àwọn ìfiránṣẹ́ àtijọ́ ni a tún ṣe àfìmọ̀ padà láti inu ọrọ tí a fipamọ́ àti àwǹn àpẹrẹ rẹ̀ yìí. Kì í ṣe ìwádìí gangan."
+      "disclaimer": "Ìṣírò kọọkan da lórí iye àmi tí a gbéjọro tàbí àfojúsùn, pẹ̀lú àdàkọ àti àfojúsùn tí a tẹ̀jáde v{version}. Àwọn ìfiránṣẹ́ àtijọ́ ni a tún ṣe àfìmọ̀ padà láti inu ọrọ tí a fipamọ́ àti àwǹn àpẹrẹ rẹ̀ yìí. Kì í ṣe ìwádìí gangan.",
+      "visibilityGroup": "Ìhàn àfihàn chip àfọwọ́kà",
+      "visibilityLabel": "Fi hàn:",
+      "visibility": {
+        "always": "Nígbà gbogbo",
+        "auto": "Laifọwọyi",
+        "hidden": "Pa mọ́"
+      },
+      "visibilityHint": "‘Auto’ máa fi chip hàn nígbà tí àfikún bá ti yẹ̀ wò tàbí tí o bá fi àmì sí lórí rẹ. O le yí e pada yìí ní Eto › Lílò & Ìpapọ̀."
     }
   },
   "table": {
@@ -3600,7 +3681,13 @@
     "connectorClientSecretLabel": "OAuth client secret",
     "connectorClientSecretStored": "Asiri kan ti fipamọ. Fi silẹ bọṣeyii lati pa a mọ, tabi tẹ tuntun lati ropo rẹ.",
     "connectorClientSecretHint": "A fi ẹ̀kọ́ pamọ́ ṣáájú fífi ṣe ìkànsí, a kò ní fi hàn lẹ́ẹ̀kansi mó.",
-    "connectorScopesLabel": "Ṣàkóso (ya sọtọ pẹlu ààrin àyè, àṣàyàn)"
+    "connectorScopesLabel": "Ṣàkóso (ya sọtọ pẹlu ààrin àyè, àṣàyàn)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (àṣayan)",
+    "connectorOauthTokenUrlLabel": "Token URL (àṣayan)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (àṣayan)",
+    "connectorOauthEndpointsHint": "Fi ààyè URL àwọn ìpinnu ṣofo kí a lè ṣawari laifọwọyi. Ṣètò wọn fún àwọn agbanisiṣẹ tí kò ṣe atilẹyin àwárí laifọwọyi, bí NetSuite.",
+    "connectorOauthRefreshUrlHint": "Fi ṣofo kí o máa tọ́jú pọ̀ mọ́ token URL.",
+    "connectorOauthEndpointsPairWarning": "Authorization URL àti token URL gbọ́dọ̀ jẹ pẹ̀lú; refresh URL nilo mejeeji."
   },
   "localModels": {
     "title": "Àwòrán àgbéyẹ̀wò agbègbè",
@@ -3695,5 +3782,52 @@
     "truncatedNotice": "{count} pápá ti foju kọ — àìmọye tó pọju fún tábìlì ni {max} kólọ́mù: {names}",
     "skippedDerivedNotice": "{count} kólọ́mù iṣiro kò fipamọ — fọ́ọ̀mù ṣàbẹwò sí àwọn kólọ́mù tábìlì yìí: {names}",
     "loadReplacesColumns": "Eleyi máa rọpo gbogbo kólọ́mù tó wà nísisì. Àwọn orí laini pẹ̀lú orukọ kólọ́mù tó bára wọn mu yóò dá a tán."
+  },
+  "codeInterpreterDropdown": "Ṣiṣẹ Koodu",
+  "connectorPin": {
+    "toggleLabel": "Ṣàkóso àwọn irinṣẹ́ connector",
+    "menuLabel": "Àwọn connector",
+    "menuLabelCount": "Àwọn connector ({count} n ṣiṣẹ́)",
+    "tooltip": "Wo iru awọn irinṣẹ́ connector tí n ṣiṣẹ́, pa wọ́n nínú ìbànújẹ yìí tàbí gbogbo ibi, tàbí lékè sí ọ̀kan.",
+    "toggleServerInChat": "Lo {name} nínú ìbànújẹ yìí",
+    "globalToggleTitle": "Mú {name} ṣiṣẹ́ tàbí dá a dúró ní gbogbo ibi (bákan náà pẹ̀lú Settings → Connectors)",
+    "globalOn": "Gbogbo ibi ṣiṣẹ́",
+    "globalOff": "Gbogbo ibi pa",
+    "chatToggleHint": "Awọn apoti ẹ̀yà jẹ́ fún ìbànújẹ yìí nìkan; bọtini gbogbogbo máa bá Settings → Connectors mu. Connector kọọkan tí n ṣiṣẹ́ máa kó irinṣẹ́ rẹ sí ifiranṣẹ kọọkan — àwọn token pọ̀ síi, ìdáhùn oriṣiriṣi sì le fi pẹ́.",
+    "trayLabel": "Àwọn irinṣẹ́ connector",
+    "trayTitle": "Àwọn irinṣẹ́ connector fún ìbànújẹ yìí",
+    "toggleServer": "Mú {name} ṣiṣẹ́",
+    "needsReconnect": "Ṣe asopọ tún nílù Settings",
+    "focusAction": "Fojú kàn",
+    "focusedChip": "Ti fojú kàn",
+    "pinnedHint": "Irinṣẹ́ láti {name} nìkan ni yóò lò nínú àjọsọpọ̀ yìí.",
+    "staleHint": "Connector tí a fojú kàn ti balẹ̀ tàbí a ti dá a dúró — ṣàtúnṣepọ̀ ní Settings → Connectors, tàbí yọkúrò ni fojú kàn. Títí di bẹ́ẹ̀, gbogbo irinṣẹ́ tí n ṣiṣẹ́ ni yóò lo.",
+    "costHint": "Connector kọọkan tí n ṣiṣẹ́ máa kó irinṣẹ́ pọ̀ sí ifiranṣẹ rẹ — àwọn token pọ̀ síi, idáhùn sì le fi pẹ́. Pa àwọn tó o kò lò.",
+    "noEligibleConnectors": "Ìbápọ̀ connector kò tíì sọtọ. Ṣe asopọ kan ní Settings → Connectors.",
+    "unknownConnector": "Connector tí a yọkúrò",
+    "unpin": "Yọ fojú kàn kúrò",
+    "dismiss": "Pa pọ̀",
+    "badgeCount": "{count} irinṣẹ́",
+    "badgeTooltip": "Àwọn irinṣẹ́ connector n ṣiṣẹ́ lórí gbogbo ifiranṣẹ — wọ́n kó token àti àkókò idáhùn pọ̀ síi. Tẹ̀ láti ṣàkóso."
+  },
+  "toolApprovals": {
+    "title": "Ìfọwọ́sowọ́pọ̀ irinṣẹ́",
+    "description": "Àwọn òfin tí ó wulo nínú àjọsọpọ̀ kọọkan: laifọwọyi jẹ́ kí irinṣẹ́ kan ṣiṣẹ́ tàbí pa a. O lè fi irinṣẹ́ kun tí o kò tíì ní àfihàn rẹ.",
+    "actionApprove": "Maa jẹ́ kí o ṣiṣẹ́",
+    "actionReject": "Maa pa a.",
+    "scopeServer": "lórí {name}",
+    "scopeAny": "Connector kankan",
+    "removeRule": "Yọ òfin fún {tool}",
+    "toolNameLabel": "Orúkọ irinṣẹ́",
+    "toolNamePlaceholder": "Orúkọ irinṣẹ́, àpẹẹrẹ: create_issue",
+    "scopeLabel": "Ibi connector",
+    "actionLabel": "Ìṣe",
+    "addRule": "Fi òfin kun",
+    "rejectPrecedenceNote": "Ìlànà dídènà maa lókànjú — ju ìlànà fífẹ́ àti gbogbo àfọwọ́sowọ́pọ̀ laifọwọyi tó jẹ per-conversation lọ.",
+    "policyAsk": "Bèrè",
+    "policyAllow": "Ṣe gba laaye",
+    "policyBlock": "Dènà",
+    "policyGroupLabel": "Ètò ìfọwọ́si fún {tool}",
+    "listHint": "Ṣètò ohun tí yóò ṣẹlẹ̀ nígbà tí iranwọ̀ fẹ́ ṣiṣẹ́ kọọkan — ní gbogbo ìjíròrò. Bí a ṣe ń béèrè ni àyànfẹ́; Dènà máa ṣàkóso ní gbogbo igba."
   }
 }

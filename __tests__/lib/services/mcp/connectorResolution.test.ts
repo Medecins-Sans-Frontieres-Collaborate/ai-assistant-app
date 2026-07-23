@@ -182,6 +182,55 @@ describe('createConnectorResolver', () => {
     });
   });
 
+  it('carries admin-stored oauth endpoints onto the resolved server', async () => {
+    serviceMock.getConnectorById.mockReturnValue({
+      ...CONNECTOR,
+      authStyle: 'oauth',
+      oauthAuthorizationUrl:
+        'https://acct123.app.netsuite.com/app/login/oauth2/authorize.nl',
+      oauthTokenUrl:
+        'https://acct123.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token',
+      oauthRefreshUrl:
+        'https://acct123.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token',
+    });
+
+    const resolve = await createConnectorResolver(session);
+
+    expect(resolve(CONNECTOR.id)?.oauthEndpoints).toEqual({
+      authorizationUrl:
+        'https://acct123.app.netsuite.com/app/login/oauth2/authorize.nl',
+      tokenUrl:
+        'https://acct123.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token',
+      refreshUrl:
+        'https://acct123.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token',
+    });
+  });
+
+  it('omits oauthEndpoints entirely when the connector stores none', async () => {
+    serviceMock.getConnectorById.mockReturnValue({
+      ...CONNECTOR,
+      authStyle: 'oauth',
+    });
+
+    const resolve = await createConnectorResolver(session);
+
+    expect(resolve(CONNECTOR.id)).not.toHaveProperty('oauthEndpoints');
+  });
+
+  it('drops half-configured endpoints (hand-edited blob) instead of resolving them', async () => {
+    // Write-time validation enforces the pair; a blob edited underneath the
+    // admin API must not produce a flow with only one explicit endpoint.
+    serviceMock.getConnectorById.mockReturnValue({
+      ...CONNECTOR,
+      authStyle: 'oauth',
+      oauthTokenUrl: 'https://acct123.suitetalk.api.netsuite.com/token',
+    });
+
+    const resolve = await createConnectorResolver(session);
+
+    expect(resolve(CONNECTOR.id)).not.toHaveProperty('oauthEndpoints');
+  });
+
   it('maps the none auth style', async () => {
     serviceMock.getConnectorById.mockReturnValue({
       ...CONNECTOR,

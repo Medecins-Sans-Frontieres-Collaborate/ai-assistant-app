@@ -21,7 +21,7 @@ export interface MenuItem {
   tooltip?: string;
   infoTooltip?: string;
   onClick: () => void;
-  category: 'web' | 'media' | 'transform';
+  category: 'web' | 'media' | 'transform' | 'tools';
   disabled?: boolean;
   toggle?: boolean;
   checked?: boolean;

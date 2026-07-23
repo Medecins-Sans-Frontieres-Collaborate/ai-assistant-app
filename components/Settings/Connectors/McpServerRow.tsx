@@ -7,6 +7,8 @@ import { useTranslations } from 'next-intl';
 
 import { useMcpTools } from '@/client/hooks/settings/useMcpTools';
 
+import { ToolCountDisclosure } from './ToolCountDisclosure';
+
 import {
   McpServerConfig,
   useSettingsStore,
@@ -42,10 +44,8 @@ export const McpServerRow: FC<McpServerRowProps> = ({
           {server.url}
         </p>
         <div className="mt-2 flex flex-wrap items-center gap-4">
-          {!isLoadingTools && tools.length > 0 && (
-            <span className="text-xs text-gray-500 dark:text-gray-400">
-              {t('toolCount', { count: tools.length })}
-            </span>
+          {!isLoadingTools && (
+            <ToolCountDisclosure serverLabel={server.name} tools={tools} />
           )}
           <label className="flex cursor-pointer items-center gap-2">
             <input

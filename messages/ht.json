@@ -845,7 +845,13 @@
         "transformingTable": "Nap transfòme tab la…",
         "findingLocations": "Nap idantifye kote yo…",
         "updatingMap": "Nap mete kat la ajou…"
-      }
+      },
+      "searchingWebFor": "Nap chèche: “{query}”…",
+      "searchingWebForMultiple": "Nap chèche {count} sijè: “{query}”…",
+      "readingCitedSources": "Nap li {count} atik ki te site deja…",
+      "planningSteps": "Nap planifye etap yo…",
+      "planStep": "Etap {current}/{total} : {description}",
+      "planStepRetry": "Etap {current}/{total} (rekòmanse) : {description}"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# zouti itilize} other {# zouti yo itilize}}",
@@ -855,7 +861,8 @@
       "statusAutoDenied": "Otanile",
       "statusFailed": "Echwe",
       "statusIncomplete": "Enkonplè",
-      "viaService": "pa {service}"
+      "viaService": "pa {service}",
+      "downloadFile": "Telechaje"
     },
     "consent": {
       "authorizeRequired": "Otorizasyon obligatwa",
@@ -897,7 +904,15 @@
       "approvedState": "Apwouve — ajan an rekòmanse",
       "deniedState": "Refize",
       "submittingApproval": "Ap apwouve epi rekòmanse ajan an…",
-      "submittingDenial": "Nap voye refi ou..."
+      "submittingDenial": "Nap voye refi ou...",
+      "alwaysApproveEverywhere": "Toujou apwouve zouti sa — nan tout konvèsasyon",
+      "denyOptionsLabel": "Opsyon refi",
+      "denyOnce": "Refize yon sèl fwa",
+      "neverAllowEverywhere": "Pa janm otorize zouti sa — nan tout konvèsasyon",
+      "deniedByRuleHint": "Bloke pa règ ou — jere nan Anviwònman → Konektè.",
+      "batchPendingHint": "{count} demann zouti an atant",
+      "approveAllButton": "Apwouve tout",
+      "denyAllButton": "Refize tout"
     },
     "openImage": "Louvri imaj",
     "copyMessage": "Kopi mesaj",
@@ -908,7 +923,9 @@
     "ttsError": "Erè pandan kreyasyon odyo. Tanpri eseye ankò.",
     "unsupportedMessageType": "Erè pandan afichaj mesaj la: Tip mesaj sa a pa sipòte",
     "addLanguageOption": "Ajoute \"{name}\"…",
-    "sources": "Sous"
+    "sources": "Sous",
+    "interpreterBadge": "Kouri kòd",
+    "disableCodeInterpreter": "Dezaktive ekzekisyon kòd"
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",
@@ -1348,6 +1365,30 @@
       "thresholdLabel": "Konsidere kòm yon reskri pi wo pase",
       "thresholdUnit": "% nan dokiman an chanje",
       "exceptionSelectionAlways": "Lè w ap modifye yon pati mete an avan, chanjman an ap aplike dirèkteman — modèl la retounen sèlman pati ki modifye a, epi ou pap ka konvèti l an kòmantè sou tout dokiman an."
+    },
+    "webSearch": {
+      "title": "Rechèch sou Entènèt",
+      "description": "Kontwole fason rechèch sou Entènèt ap fèt lè Mòd Rechèch aktive. Chanjman yo aplike imedyatman.",
+      "providerLabel": "Founisè rechèch",
+      "providerAuto": "Otomatik (rekòmande)",
+      "providerAutoDescription": "Itilize opsyon defo distribisyon — kounye a rechèch nouvèl konbine anba a.",
+      "providerNews": "Nouvèl konbine (GDELT + Google News)",
+      "providerNewsDescription": "Rechèch de sous yo an paralèl epi mete rezilta yo ansanm. Konsa, si youn echwe, rechèch la pa kase. Pi bon balans ant vitès, divèsite sous ak lyen atik ki mache.",
+      "providerGoogleNews": "Sèlman Google News",
+      "providerGoogleNewsDescription": "Anonim ak rapid — sèlman kesyon rechèch la ale Google (pa gen kont oswa bonbon) e ou jwenn rezilta anviron yon segond. Remake : li plis pran tit ak ti rezime, pa atik konplè, donk repons yo ka rete sipèfisyèl.",
+      "providerGdelt": "Sèlman GDELT",
+      "providerGdeltDescription": "Baz done rechèch ouvè sou nouvèl mondyal ak lyen dirèk bay piblikatè, ki permet kesyon swivi li tout atik yo. Fòk ou tann — rechèch youn dèyè lòt ka pran kèk segond.",
+      "providerBing": "Bing grounding (via Microsoft)",
+      "providerBingDescription": "Li paj antye pou rezime plis an pwofondè epi kouvri tout Entènèt la, pa sèlman nouvèl. Men, rechèch yo souvan pran 30–90 segonn epi kalite rezilta yo varye.",
+      "sourcesLabel": "Sous pa rechèch",
+      "sourcesDescription": "Konbyen sous diferan yon rechèch konsève kòm sitasyon. Kesyon rechèch ka otomatikman elaji sa.",
+      "freshnessLabel": "Dènye nouvèl ou prefere",
+      "freshnessDescription": "Konbyen tan dènye rezilta yo dwe. Otomatik pèmèt chak kesyon deside (nouvèl cho prefere dènye jou a).",
+      "freshness_auto": "Otomatik",
+      "freshness_day": "Dènye jou",
+      "freshness_week": "Dènye semèn",
+      "freshness_month": "Dènye mwa",
+      "freshness_any": "Nenpòt lè"
     }
   },
   "emptyState": {
@@ -1534,6 +1575,23 @@
       "deployment": "Deplwaman",
       "modelVersion": "Vèsyon modèl",
       "publisher": "Piblikatè"
+    },
+    "interpreterMode": {
+      "title": "Entèprèt Kòd",
+      "subtitle": "Kouri kòd lè sa itil (grafik, analiz done)",
+      "learnMore": "Kisa li ka fè?",
+      "description": "Lè aktive, asistan an ka kouri Python nan yon anviwònman sekirize ak izole pou analize fichye ou atache, kalkile rezilta, ak kreye graf. Kòd kouri, rezilta li ak fichye ki pwodwi ap parèt ak repons lan. Sèvi ak \"Kouri kòd\" nan meni konpozè a pou fòse mesaj la itilize li."
+    },
+    "searchOptions": {
+      "title": "Rechèch avanse",
+      "resultCount": "Sous pa rechèch :",
+      "freshness": "Prefere rezilta ki soti nan",
+      "freshness_auto": "Oto (pa kesyon)",
+      "freshness_day": "Dènye jou",
+      "freshness_week": "Dènye semèn",
+      "freshness_month": "Dènye mwa a",
+      "freshness_any": "Nenpòt lè",
+      "hint": "Oto mete recency selon chak kesyon (egzanp nouvèl vle dènye jou a), epi kesyon rechèch ka sèvi ak plis sous pase sa ki default."
     }
   },
   "models": {
@@ -2105,7 +2163,11 @@
     "moveToMore": "Mete nan Plis",
     "moveOutOfMore": "Montre nan meni an",
     "showSources": "Montre lòt sous",
-    "hideSources": "Kache lòt sous"
+    "hideSources": "Kache lòt sous",
+    "aiTools": "Zouti AI",
+    "aiToolsTooltip": "Sa asistans lan ka itilize pandan li reponn: rechèch web an dirèk, ekzekisyon kòd, ak sèvis konekte.",
+    "codeInterpreterTooltip": "Kouri kòd Python nan yon sandbox ki an sekirite pou chak mesaj.\n\nIdeyal pou analiz done, kalkil, ak kreye grafik soti nan fichye atache.",
+    "categoryTools": "Zouti ak konektè"
   },
   "transcription": {
     "transcribesOnSend": "Transkri lè voye",
@@ -2428,7 +2490,18 @@
     "modelRow": "{requests} demann · {grams} g",
     "disclosure": "Estimasyon sou baz sipozisyon v{version} · depi {since} · sèlman pou chat estanda (pa konte ajan ak repons baz konesans).",
     "reset": "Reyajiste estatistik itilizasyon",
-    "estimatedPortion": "Gen ladan apeprè {grams} g CO₂e ({requests} demann) ki estime soti nan konvèsasyon avan siveyans — rekalkile sou tèks mesaj sove, pa sou kantite jèton mezire."
+    "estimatedPortion": "Gen ladan apeprè {grams} g CO₂e ({requests} demann) ki estime soti nan konvèsasyon avan siveyans — rekalkile sou tèks mesaj sove, pa sou kantite jèton mezire.",
+    "chipTitle": "Chip emisyon",
+    "chipDescription": "Estimasyon mak kabòn konvèsasyon aktyèl la, ki montre anlè bwat chat la.",
+    "chipAlways": "Toujou montre",
+    "chipAlwaysHint": "Chip la rete vizib chak fwa konvèsasyon an gen yon estimasyon.",
+    "chipAuto": "Montre lè mete ajou oswa pase sou li",
+    "chipAutoHint": "Chip la parèt lè estimasyon an chanje, epi disparèt apre. Pase sourit sou li oswa klike sou li ap fè li parèt ankò.",
+    "chipHidden": "Kache",
+    "chipHiddenHint": "Chip la pap janm parèt. Total yo toujou ap kontabilize epi parèt sou paj sa a.",
+    "chipAutoHideLabel": "Disparèt apre",
+    "chipAutoHideUnit": "segond",
+    "chipAutoHideHint": "Ant {min} ak {max} segond."
   },
   "extraction": {
     "toggleLabel": "Extra done estriktire",
@@ -3337,7 +3410,15 @@
       "measured": "Soti nan kantite jèton rapòte",
       "estimated": "Rekalkile soti nan ansyen mesaj yo",
       "lastRequest": "Dènye demann lan",
-      "disclaimer": "Estimasyon pa demann yo baze sou kantite jèton rapòte oswa apwoksime, ak mwayèn ak sipozisyon pibliye v{version}. Mesaj ki pi ansyen yo rekalkile soti nan tèks sove ak modèl aktyèl konvèsasyon an. Sa pa yon mezi."
+      "disclaimer": "Estimasyon pa demann yo baze sou kantite jèton rapòte oswa apwoksime, ak mwayèn ak sipozisyon pibliye v{version}. Mesaj ki pi ansyen yo rekalkile soti nan tèks sove ak modèl aktyèl konvèsasyon an. Sa pa yon mezi.",
+      "visibilityGroup": "Vizibilite chip emisyon",
+      "visibilityLabel": "Montre:",
+      "visibility": {
+        "always": "Toujou",
+        "auto": "Otomatik",
+        "hidden": "Kache"
+      },
+      "visibilityHint": "Otomatik ap montre chip la lè estimasyon an ap mete ajou oswa ou pase sourit sou li. Ou ka chanje sa ankò nan Anviwònman › Itilizasyon & Enpak."
     }
   },
   "table": {
@@ -3600,7 +3681,13 @@
     "connectorClientSecretLabel": "OAuth client secret",
     "connectorClientSecretStored": "Yon sekrè deja anrejistre. Kite vid pou kontinye itilize li, oswa mete yon nouvo pou ranplase li.",
     "connectorClientSecretHint": "Ankripte anvan li estoke, epi li pap janm parèt ankò.",
-    "connectorScopesLabel": "Scopes (separe ak espas, opsyonèl)"
+    "connectorScopesLabel": "Scopes (separe ak espas, opsyonèl)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (opsyonèl)",
+    "connectorOauthTokenUrlLabel": "Token URL (opsyonèl)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (opsyonèl)",
+    "connectorOauthEndpointsHint": "Kite URL endpoint yo vid pou dekouvri yo otomatikman. Mete yo pou founisè ki pa sipòte dekouvèt, tankou NetSuite.",
+    "connectorOauthRefreshUrlHint": "Kite vid pou w renouvle ak token URL lan.",
+    "connectorOauthEndpointsPairWarning": "Authorization URL ak token URL dwe mete ansanm (refresh URL mande tou de)."
   },
   "localModels": {
     "title": "Modèl lokal",
@@ -3695,5 +3782,52 @@
     "truncatedNotice": "{count} jaden retire — limit tab la se {max} kolòn: {names}",
     "skippedDerivedNotice": "{count} kolòn kalkile pa sove — fòmil yo depann de kolòn tab sa a: {names}",
     "loadReplacesColumns": "Sa ap ranplase kolòn aktyèl yo. Liy ki egziste ap kenbe valè yo si non kolòn yo koresponn."
+  },
+  "codeInterpreterDropdown": "Kouri kòd",
+  "connectorPin": {
+    "toggleLabel": "Jere zouti konektè yo",
+    "menuLabel": "Konektè yo",
+    "menuLabelCount": "Konektè yo ({count} aktif)",
+    "tooltip": "Gade ki zouti konektè ki aktif, fèmen yo pou chita pale sa a oswa tout kote, oswa konsantre sou youn.",
+    "toggleServerInChat": "Sèvi ak {name} nan chita pale sa a",
+    "globalToggleTitle": "Ouvri oswa fèmen {name} tout kote (menm ak Anviwònman → Konektè yo)",
+    "globalOn": "Louvri tout kote",
+    "globalOff": "Fèmen tout kote",
+    "chatToggleHint": "Tcheke bwat yo kontwole sèlman chita pale sa a; bouton global la mache ak Anviwònman → Konektè yo. Chak konektè aktif ajoute zouti li yo sou chak mesaj — plis tokèn ak repons pi dousman.",
+    "trayLabel": "Zouti konektè yo",
+    "trayTitle": "Zouti konektè pou chita pale sa a",
+    "toggleServer": "Aktive {name}",
+    "needsReconnect": "Reconnecte nan Anviwònman",
+    "focusAction": "Konsantre",
+    "focusedChip": "Konsantre",
+    "pinnedHint": "Se sèlman zouti ki soti nan {name} ki pral itilize nan konvèsasyon sa a.",
+    "staleHint": "Konektè ou te konsantre sou li a koupe oswa dezaktive — reconnecte li nan Anviwònman → Konektè yo, oswa retire konsantre a. Jiska lè sa, tout zouti aktif yo ap itilize.",
+    "costHint": "Chak konektè aktif ajoute zouti li yo sou chak mesaj ou voye — plis tokèn ak repons pral pi dousman. Fèmen sa ou pa bezwen.",
+    "noEligibleConnectors": "Pa gen konektè ki konfigire. Konekte youn nan Anviwònman → Konektè yo anvan.",
+    "unknownConnector": "Konektè retire",
+    "unpin": "Retire konsantre",
+    "dismiss": "Fèmen",
+    "badgeCount": "{count} zouti",
+    "badgeTooltip": "Zouti konektè yo aktif sou chak mesaj — yo ajoute tokèn ak tan repons. Klike pou jere."
+  },
+  "toolApprovals": {
+    "title": "Apwobasyon zouti yo",
+    "description": "Règleman ki aplike nan chak konvèsasyon: otomatikman pèmèt oswa bloke zouti konektè espesifik. Ou ka ajoute zouti ou pa fin wè ankò.",
+    "actionApprove": "Toujou pèmèt",
+    "actionReject": "Toujou bloke",
+    "scopeServer": "sou {name}",
+    "scopeAny": "Nenpòt konektè",
+    "removeRule": "Retire règ pou {tool}",
+    "toolNameLabel": "Non zouti a",
+    "toolNamePlaceholder": "Non zouti a, egzanp create_issue",
+    "scopeLabel": "Sèk konektè a",
+    "actionLabel": "Aksyon",
+    "addRule": "Ajoute règ",
+    "rejectPrecedenceNote": "Règleman bloke yo toujou genyen — sou règleman pèmèt ak sou nenpòt auto-apwobasyon pa konvèsasyon.",
+    "policyAsk": "Mande",
+    "policyAllow": "Otorizasyon",
+    "policyBlock": "Bloke",
+    "policyGroupLabel": "Règleman apwobasyon pou {tool}",
+    "listHint": "Defini ki sa k ap pase lè asistan an vle itilize chak zouti — nan chak konvèsasyon. Mande se opsyon pa defo; Bloke gen toujou priyorite."
   }
 }

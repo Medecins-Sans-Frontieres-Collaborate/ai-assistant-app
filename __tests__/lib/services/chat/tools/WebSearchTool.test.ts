@@ -1,15 +1,32 @@
 import { AgentChatService } from '@/lib/services/chat/AgentChatService';
 import { WebSearchTool } from '@/lib/services/chat/tools/WebSearchTool';
+import {
+  searchNewsFanOut,
+  searchNewsParallel,
+} from '@/lib/services/chat/tools/newsSearch';
 
 import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { env } from '@/config/environment';
+import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
+
+vi.mock('@/lib/services/chat/tools/newsSearch', () => ({
+  searchNewsFanOut: vi.fn(),
+  searchNewsParallel: vi.fn(),
+}));
 
 describe('WebSearchTool', () => {
   let webSearchTool: WebSearchTool;
   let mockAgentChatService: AgentChatService;
 
+  const priorProvider = env.WEB_SEARCH_PROVIDER;
+  afterAll(() => {
+    (env as any).WEB_SEARCH_PROVIDER = priorProvider;
+  });
+
   beforeEach(() => {
+    // These tests exercise the Bing-agent path explicitly.
+    (env as any).WEB_SEARCH_PROVIDER = 'bing-agent';
     // Create mock AgentChatService
     mockAgentChatService = {
       executeWebSearchTool: vi.fn(),
@@ -117,6 +134,75 @@ describe('WebSearchTool', () => {
 
       expect(result.citations).toEqual([]);
       expect(result.text).toBe('Some results');
+    });
+  });
+
+  describe('feed provider routing', () => {
+    beforeEach(() => {
+      vi.mocked(searchNewsFanOut).mockClear();
+      vi.mocked(searchNewsParallel).mockClear();
+    });
+
+    it('fans out across queries via searchNewsFanOut when multiple queries arrive', async () => {
+      (env as any).WEB_SEARCH_PROVIDER = 'news';
+      vi.mocked(searchNewsFanOut).mockResolvedValue({
+        text: 'Merged digest',
+        citations: [
+          { number: 1, title: 'A', url: 'https://a.example', date: '' },
+        ],
+        providersUsed: ['google-news'],
+      });
+
+      const result = await webSearchTool.execute({
+        searchQuery: 'france strikes',
+        searchQueries: ['france strikes', 'germany rail dispute'],
+        user: { email: 'test@example.com' } as any,
+      });
+
+      expect(searchNewsFanOut).toHaveBeenCalledWith(
+        ['france strikes', 'germany rail dispute'],
+        expect.objectContaining({ resultCount: 8 }),
+      );
+      expect(searchNewsParallel).not.toHaveBeenCalled();
+      expect(result.text).toBe('Merged digest');
+    });
+
+    it('uses the normal parallel provider path for a single query', async () => {
+      (env as any).WEB_SEARCH_PROVIDER = 'news';
+      vi.mocked(searchNewsParallel).mockResolvedValue({
+        text: 'Digest',
+        citations: [],
+        providersUsed: [],
+      });
+
+      await webSearchTool.execute({
+        searchQuery: 'india protests',
+        searchQueries: ['india protests'],
+        user: { email: 'test@example.com' } as any,
+      });
+
+      expect(searchNewsFanOut).not.toHaveBeenCalled();
+      expect(searchNewsParallel).toHaveBeenCalled();
+    });
+
+    it('ignores fan-out on the bing-agent path (agent expands queries itself)', async () => {
+      (env as any).WEB_SEARCH_PROVIDER = 'bing-agent';
+      vi.mocked(mockAgentChatService.executeWebSearchTool).mockResolvedValue({
+        text: 'Agent results',
+        citations: [],
+      });
+
+      await webSearchTool.execute({
+        searchQuery: 'primary query',
+        searchQueries: ['primary query', 'secondary query'],
+        model: OpenAIModels[OpenAIModelID.GPT_4_1],
+        user: { email: 'test@example.com' } as any,
+      });
+
+      expect(searchNewsFanOut).not.toHaveBeenCalled();
+      expect(mockAgentChatService.executeWebSearchTool).toHaveBeenCalledWith(
+        expect.objectContaining({ searchQuery: 'primary query' }),
+      );
     });
   });
 

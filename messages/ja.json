@@ -787,7 +787,13 @@
         "transformingTable": "テーブルを変換中...",
         "findingLocations": "ロケーションを特定中...",
         "updatingMap": "地図を更新中..."
-      }
+      },
+      "searchingWebFor": "検索中：「{query}」…",
+      "searchingWebForMultiple": "{count}件のトピックを検索中：「{query}」…",
+      "readingCitedSources": "過去に引用された記事を{count}件読込中…",
+      "planningSteps": "手順を計画中…",
+      "planStep": "ステップ {current}/{total}：{description}",
+      "planStepRetry": "ステップ {current}/{total}（再試行）：{description}"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# 件のツールを使用} other {# 件のツールを使用}}",
@@ -797,7 +803,8 @@
       "statusAutoDenied": "自動却下",
       "statusFailed": "失敗",
       "statusIncomplete": "未完了",
-      "viaService": "{service}経由"
+      "viaService": "{service}経由",
+      "downloadFile": "ダウンロード"
     },
     "consent": {
       "authorizeRequired": "認証が必要です",
@@ -839,7 +846,15 @@
       "approvedState": "承認済み — エージェントを再開しました",
       "deniedState": "拒否しました",
       "submittingApproval": "承認してエージェントを再開しています…",
-      "submittingDenial": "拒否を送信しています…"
+      "submittingDenial": "拒否を送信しています…",
+      "alwaysApproveEverywhere": "このツールをすべてのチャットで常に許可する",
+      "denyOptionsLabel": "拒否オプション",
+      "denyOnce": "1回のみ拒否",
+      "neverAllowEverywhere": "このツールをすべてのチャットで絶対に許可しない",
+      "deniedByRuleHint": "ご自身のルールによりブロックされています ― 設定 → コネクターで管理できます。",
+      "batchPendingHint": "{count}件のツールリクエストが保留中",
+      "approveAllButton": "すべて許可",
+      "denyAllButton": "すべて拒否"
     },
     "openImage": "画像を開く",
     "copyMessage": "メッセージをコピー",
@@ -850,7 +865,9 @@
     "ttsError": "音声の生成中にエラーが発生しました。再試行してください。",
     "unsupportedMessageType": "メッセージの表示エラー：サポートされていないメッセージタイプ",
     "addLanguageOption": "「{name}」を追加…",
-    "sources": "出典"
+    "sources": "出典",
+    "interpreterBadge": "コード実行",
+    "disableCodeInterpreter": "コード実行を無効化"
   },
   "sidebar": {
     "collapseSidebar": "サイドバーを折りたたむ",
@@ -1195,6 +1212,30 @@
       "thresholdLabel": "上記以上の変更をリライトとして扱う",
       "thresholdUnit": "ドキュメントの変更率（%）",
       "exceptionSelectionAlways": "ハイライトされた選択範囲の修正は常に直接適用されます。モデルは修正済みの抜粋のみを返し、ドキュメント全体に対する提案として分割することはできません。"
+    },
+    "webSearch": {
+      "title": "ウェブ検索",
+      "description": "検索モードが有効な時、どのようにライブウェブ検索を実行するかを制御します。変更は即座に適用されます。",
+      "providerLabel": "検索プロバイダー",
+      "providerAuto": "自動（推奨）",
+      "providerAutoDescription": "デプロイ標準を使用します ― 現在は下記のニュース複合検索です。",
+      "providerNews": "ニュース複合（GDELT＋Google News）",
+      "providerNewsDescription": "両方のソースを並行して検索し、結果を統合します。どちらかが失敗しても検索自体は失敗しません。速度、ソース多様性、記事リンクの稼働性のバランスが最良です。",
+      "providerGoogleNews": "Googleニュースのみ",
+      "providerGoogleNewsDescription": "匿名かつ高速 ― 検索クエリのみがGoogleに送信され（アカウントやCookie不要）、約1秒で結果が返ります。注: 主に見出しや短い抜粋のみを検索し、全文記事は対象外のため、回答は表面的になることがあります。",
+      "providerGdelt": "GDELTのみ",
+      "providerGdeltDescription": "世界中のニュースを収集する公開研究データベースで、出版元への直接リンクもあります。追加入力で記事全文も読めますが、厳格にレート制限されており、連続検索では数秒待機する場合があります。",
+      "providerBing": "Bingグラウンディング（Microsoft経由）",
+      "providerBingDescription": "全文ページを読込むことで深い要約が可能で、ニュース以外の一般ウェブも対象です。ただし検索には30〜90秒かかるのが常で、検索ごとに結果品質が大きく異なる場合があります。",
+      "sourcesLabel": "検索ごとのソース数",
+      "sourcesDescription": "1回の検索で引用として保持する異なるソースの数。リサーチ向けの質問では自動で拡張される場合があります。",
+      "freshnessLabel": "希望する掲載時期",
+      "freshnessDescription": "どれほど最近の記事を優先するか。自動設定では質問ごとに判断します（速報は最終日を優先）。",
+      "freshness_auto": "自動",
+      "freshness_day": "過去1日",
+      "freshness_week": "過去1週間",
+      "freshness_month": "過去1か月",
+      "freshness_any": "指定なし"
     }
   },
   "notFound": {
@@ -1384,6 +1425,23 @@
       "deployment": "デプロイメント",
       "modelVersion": "モデルバージョン",
       "publisher": "発行者"
+    },
+    "interpreterMode": {
+      "title": "コードインタープリター",
+      "subtitle": "必要時にコードを実行（グラフ、データ分析）",
+      "learnMore": "何ができるか？",
+      "description": "有効時には、アシスタントが安全で分離されたサンドボックス内でPythonを実行し、添付ファイルの分析、結果の計算、グラフの生成が行えます。実行されたコード、出力、生成ファイルは回答と共に表示されます。メッセージで強制的に「コード実行」したい場合は作成メニューの「コード実行」を使ってください。"
+    },
+    "searchOptions": {
+      "title": "高度な検索",
+      "resultCount": "検索ごとのソース数:",
+      "freshness": "次からの結果を優先",
+      "freshness_auto": "自動（質問ごと）",
+      "freshness_day": "過去1日",
+      "freshness_week": "過去1週間",
+      "freshness_month": "過去1か月",
+      "freshness_any": "期間指定なし",
+      "hint": "自動は各質問の最新性を自動設定します（例：ニュースは過去1日）。リサーチ系の質問では通常より多くの情報源が使われることもあります。"
     }
   },
   "models": {
@@ -2130,7 +2188,11 @@
     "moveToMore": "「その他」に移動",
     "moveOutOfMore": "メニューで表示",
     "showSources": "他のソースを表示",
-    "hideSources": "他のソースを非表示"
+    "hideSources": "他のソースを非表示",
+    "aiTools": "AIツール",
+    "aiToolsTooltip": "アシスタントが利用可能な機能：ウェブ検索、コード実行、連携サービス。",
+    "codeInterpreterTooltip": "各メッセージごとに安全なサンドボックスでPythonコードを実行します。\n\n添付ファイルのデータ分析・計算・グラフ作成などに最適です。",
+    "categoryTools": "ツールとコネクタ"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AIの応答をカスタマイズするための個別指示を追加できます。これらは、役立つ・正確・安全な応答を保証するための基本的なガイドラインと組み合わされます。",
   "Tip: Type \"/\" to select from saved prompt templates_": "ヒント：「/」を入力すると保存されたプロンプトテンプレートから選択できます。",
@@ -2444,7 +2506,18 @@
     "modelRow": "{requests} 回 · {grams} g",
     "disclosure": "推定値は仮定 v{version} に基づく · {since} 以降 · 標準チャットのみ（エージェントやナレッジベースの回答は含まれていません）。",
     "reset": "使用統計のリセット",
-    "estimatedPortion": "トラッキング開始前のチャットから推定された約{grams}g CO₂e（{requests}件）を含みます。これは保存されたメッセージテキストから逆算したもので、トークン数を実測したものではありません。"
+    "estimatedPortion": "トラッキング開始前のチャットから推定された約{grams}g CO₂e（{requests}件）を含みます。これは保存されたメッセージテキストから逆算したもので、トークン数を実測したものではありません。",
+    "chipTitle": "排出量チップ",
+    "chipDescription": "現在の会話の推定カーボンフットプリントを、チャット入力欄の上に表示します。",
+    "chipAlways": "常に表示する",
+    "chipAlwaysHint": "会話に見積りがある場合、チップは常に表示されます。",
+    "chipAuto": "更新時またはホバー時に表示",
+    "chipAutoHint": "見積りが変更されたときにチップが表示され、その後フェードアウトします。ホバーまたはフォーカスで再表示されます。",
+    "chipHidden": "非表示",
+    "chipHiddenHint": "チップは表示されませんが、合計値は引き続き記録され、このページで表示されます。",
+    "chipAutoHideLabel": "フェードアウトまでの時間",
+    "chipAutoHideUnit": "秒",
+    "chipAutoHideHint": "{min}〜{max}秒の間で設定できます。"
   },
   "extraction": {
     "toggleLabel": "構造化データを抽出",
@@ -3353,7 +3426,15 @@
       "measured": "報告されたトークン数に基づく",
       "estimated": "過去のメッセージから逆算",
       "lastRequest": "直近のリクエスト",
-      "disclaimer": "公開されている平均値と仮定（v{version}）を用いて、報告されたまたは推定されたトークン数からリクエストごとの推定値を算出しています。古いメッセージは保存されたテキストと現在の会話モデルから逆算しています。実測値ではありません。"
+      "disclaimer": "公開されている平均値と仮定（v{version}）を用いて、報告されたまたは推定されたトークン数からリクエストごとの推定値を算出しています。古いメッセージは保存されたテキストと現在の会話モデルから逆算しています。実測値ではありません。",
+      "visibilityGroup": "排出量チップの表示設定",
+      "visibilityLabel": "表示:",
+      "visibility": {
+        "always": "常に表示",
+        "auto": "自動",
+        "hidden": "非表示"
+      },
+      "visibilityHint": "「自動」は、見積りが更新されたときやホバーしたときにチップを表示します。設定 › 使用状況と影響 で変更できます。"
     }
   },
   "table": {
@@ -3616,7 +3697,13 @@
     "connectorClientSecretLabel": "OAuthクライアントシークレット",
     "connectorClientSecretStored": "シークレットが保存されています。保持する場合は空欄のままにし、新しいものに変更する場合は入力してください。",
     "connectorClientSecretHint": "保存前に暗号化され、一度も表示されません。",
-    "connectorScopesLabel": "スコープ（スペース区切り、任意）"
+    "connectorScopesLabel": "スコープ（スペース区切り、任意）",
+    "connectorOauthAuthUrlLabel": "認可URL（任意）",
+    "connectorOauthTokenUrlLabel": "トークンURL（任意）",
+    "connectorOauthRefreshUrlLabel": "リフレッシュURL（任意）",
+    "connectorOauthEndpointsHint": "エンドポイントURLを空欄にすると自動検出されます。NetSuiteのような自動検出非対応プロバイダーは手動設定が必要です。",
+    "connectorOauthRefreshUrlHint": "空欄の場合はトークンURLでリフレッシュされます。",
+    "connectorOauthEndpointsPairWarning": "認可URLとトークンURLはセットで設定してください（リフレッシュURLには両方が必要です）。"
   },
   "localModels": {
     "title": "ローカルモデル",
@@ -3711,5 +3798,52 @@
     "truncatedNotice": "{count}項目が削除されました — テーブルの列数上限は{max}列です: {names}",
     "skippedDerivedNotice": "{count}個の計算列は保存されませんでした — 数式がこのテーブルの列を参照しています: {names}",
     "loadReplacesColumns": "これにより現在の列が置き換わります。既存の行は列名が一致する値のみ維持されます。"
+  },
+  "codeInterpreterDropdown": "コード実行",
+  "connectorPin": {
+    "toggleLabel": "コネクターツールを管理",
+    "menuLabel": "コネクター",
+    "menuLabelCount": "コネクター（{count}件有効）",
+    "tooltip": "有効なコネクターツールを確認・無効化したり、このチャットや全体で切替、または特定のみに絞り込めます。",
+    "toggleServerInChat": "このチャットで{name}を使用する",
+    "globalToggleTitle": "全体で{name}をオン・オフ（設定→コネクターと同じ）",
+    "globalOn": "全体でオン",
+    "globalOff": "全体でオフ",
+    "chatToggleHint": "チェックボックスはこのチャット限定の制御です。グローバルボタンは「設定→コネクター」と連動します。有効なコネクターは各メッセージにツールを追加するため、トークンが増え応答が遅くなります。",
+    "trayLabel": "コネクターツール",
+    "trayTitle": "このチャット用コネクターツール",
+    "toggleServer": "{name}を有効にする",
+    "needsReconnect": "設定で再接続",
+    "focusAction": "フォーカス",
+    "focusedChip": "フォーカス中",
+    "pinnedHint": "この会話では{name}のツールのみが利用されます。",
+    "staleHint": "選択中のコネクターが切断または無効になっています。設定→コネクターで再接続するか、選択を解除してください。それまでは有効なすべてのツールが利用されます。",
+    "costHint": "有効なすべてのコネクターが各メッセージごとにツールを追加します。トークン消費と応答が遅くなるため、使用しないものはオフにしてください。",
+    "noEligibleConnectors": "コネクターが設定されていません。まず設定→コネクターで追加してください。",
+    "unknownConnector": "削除済みコネクター",
+    "unpin": "フォーカス解除",
+    "dismiss": "閉じる",
+    "badgeCount": "{count}件のツール",
+    "badgeTooltip": "すべてのメッセージにコネクターツールが有効です。トークン使用量と応答時間が増加します。クリックで管理します。"
+  },
+  "toolApprovals": {
+    "title": "ツール承認",
+    "description": "すべての会話に適用されるルール：特定のコネクターツールの自動許可またはブロック。まだ確認されていないツールも追加できます。",
+    "actionApprove": "常に許可",
+    "actionReject": "常にブロック",
+    "scopeServer": "{name}で",
+    "scopeAny": "任意のコネクター",
+    "removeRule": "{tool}のルールを削除",
+    "toolNameLabel": "ツール名",
+    "toolNamePlaceholder": "ツール名（例：create_issue）",
+    "scopeLabel": "コネクタースコープ",
+    "actionLabel": "操作",
+    "addRule": "ルールを追加",
+    "rejectPrecedenceNote": "ブロックルールは常に優先されます（許可ルールや会話毎の自動許可より優先）。",
+    "policyAsk": "確認する",
+    "policyAllow": "許可",
+    "policyBlock": "ブロック",
+    "policyGroupLabel": "{tool} の承認ポリシー",
+    "listHint": "アシスタントが各ツールを実行しようとした際の挙動を、すべての会話で設定します。デフォルトは「確認」です。「ブロック」が最優先されます。"
   }
 }

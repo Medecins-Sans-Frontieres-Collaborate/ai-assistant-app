@@ -76,6 +76,26 @@ export interface ToolCallRecordPayload {
   duration_ms?: number;
   /** Whether this call required user approval, and if so, how it resolved. */
   approval_request_id?: string | null;
+  /**
+   * Files the tool produced (code interpreter charts/exports). Each file is
+   * already persisted to the user's blob storage under the standard upload
+   * path, so `url` is an app-relative `/api/file/<sha256>.<ext>` reference
+   * the existing file route serves. Additive; other tool records lack it.
+   */
+  generated_files?: GeneratedFileRef[];
+}
+
+/**
+ * One server-generated file attached to a tool-call record. `is_image`
+ * decides render mode client-side: inline preview (via the image base64
+ * endpoint) vs. a download link.
+ */
+export interface GeneratedFileRef {
+  /** App-relative reference URL: `/api/file/<sha256>.<ext>`. */
+  url: string;
+  filename: string;
+  mime_type: string;
+  is_image: boolean;
 }
 
 /**

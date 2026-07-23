@@ -845,7 +845,13 @@
         "transformingTable": "Nana waatna table...",
         "findingLocations": "Nana feynude leydi...",
         "updatingMap": "Nana hesɗita karte..."
-      }
+      },
+      "searchingWebFor": "Nanaaltina: “{query}”...",
+      "searchingWebForMultiple": "Nanaaltina {count} kawrital: “{query}”...",
+      "readingCitedSources": "Nanaantina {count} gefaal e jamfaama...",
+      "planningSteps": "Nanaajoo binndol...",
+      "planStep": "Kere {current}/{total}: {description}",
+      "planStepRetry": "Kere {current}/{total} (ritorni): {description}"
     },
     "toolSummary": {
       "usedTools": "Njoɓɗo {count, plural, one {# nguurndam} other {# nguurndeeji}}",
@@ -855,7 +861,8 @@
       "statusAutoDenied": "Jarrooɗo to soodnde",
       "statusFailed": "Waawiɓaani",
       "statusIncomplete": "Wonnaa cewndo",
-      "viaService": "e {service}"
+      "viaService": "e {service}",
+      "downloadFile": "Aaw"
     },
     "consent": {
       "authorizeRequired": "Ndewenire yettinooɗo",
@@ -897,7 +904,15 @@
       "approvedState": "Teeŋii — agent ummii",
       "deniedState": "Falii",
       "submittingApproval": "Naatnude teeŋngol e ummude agent...",
-      "submittingDenial": "Naatnude falngol maa..."
+      "submittingDenial": "Naatnude falngol maa...",
+      "alwaysApproveEverywhere": "Jama kañum-ɗum ayda e chat kala",
+      "denyOptionsLabel": "Suusde eeri",
+      "denyOnce": "Suus so tati",
+      "neverAllowEverywhere": "Haaay ayda kañum-ɗum e chat kala",
+      "deniedByRuleHint": "Hunnde mum suusii — wallita e Settings → Connectors.",
+      "batchPendingHint": "{count} ñaare hurmiti hurmiti doon ena doole",
+      "approveAllButton": "Ayda fow",
+      "denyAllButton": "Suus fow"
     },
     "openImage": "Uddu njaajeendi",
     "copyMessage": "Natto ndemgol",
@@ -908,7 +923,9 @@
     "ttsError": "Jaɓɓorgo winndito awdiyo. Huumtu e gite.",
     "unsupportedMessageType": "Jaɓɓorgo njettude ndemgol: No waawani ndemgol ngol",
     "addLanguageOption": "Naatnu \"{name}\"…",
-    "sources": "Janngiiji"
+    "sources": "Janngiiji",
+    "interpreterBadge": "Hurmin kod",
+    "disableCodeInterpreter": "Daskitin hurmital kod"
   },
   "transcript": {
     "originalTranscript": "Winnditagol Goongɗinɗo",
@@ -1348,6 +1365,30 @@
       "thresholdLabel": "Yiytu rewtiɗi nden laawol",
       "thresholdUnit": "% dokumeeji waylude",
       "exceptionSelectionAlways": "Gollal caggal kadi nder laawol danndaniima heen—model tottan to ekkita yiltoorde rewtiindi, o waawiida tuima sey a ngollinaama kisal bonan dokkita nder dokkal kissal."
+    },
+    "webSearch": {
+      "title": "Nanaaltan Web",
+      "description": "Doole njoɓdi web nanaaltan so Search Mode ena dawni. Waylita waɗi-sa.",
+      "providerLabel": "Nanaaltoo",
+      "providerAuto": "Otomatik (ɗum woni garma) ",
+      "providerAutoDescription": "Nana tan deployment garma — jooni combinaa nanaaltan jaɓii ɗi.",
+      "providerNews": "Nanaaltan jaɓii (GDELT + Google News)",
+      "providerNewsDescription": "Nanaaltina bannge ɗi e jam, togga natta gal, gooro goo fayi wala aarat nanaaltan. Ammaan ɓurndoo laawol, hay globoo e linke artikil goo arbe.",
+      "providerGoogleNews": "Google News tan",
+      "providerGoogleNewsDescription": "Gooto, keftingol e tuuba — query tan naat Google (waawani kompte wala kekse) tee jaaɓgel ena ijjo e kisal. Jokkondirii: booyi doolee kawrital e bana fota artikil fow, ɗum njaaroo e laawol.",
+      "providerGdelt": "GDELT tan",
+      "providerGdeltDescription": "Geese verkoonde cabbiti bana ceerti maa, e linke banaa bannge, njana sariya so nelda artikil fow. E saama hida dowka minyira — nanaaltal bana yaltina e sekcondi.",
+      "providerBing": "Bing grounding (Microsoft tan)",
+      "providerBingDescription": "Nana haali geese fow ngol hawaade maa web fow, waawani bana kawrital. Amma, nanaaltan doolee 30–90 sekond am, tee lewru nanbanii wala laaɓtu gila kala wakkati.",
+      "sourcesLabel": "Jaɓii kala nanaaltan",
+      "sourcesDescription": "Kawar jaɓii digale tawii jamfaama e nanaaltan. Sariya ceerti waawaani seetinde ndiyam-ɗe.",
+      "freshnessLabel": "Lewru njiyano fahde ",
+      "freshnessDescription": "Lewru njiyano gila hida. Otomatik naani ceerti jagol (jaɓnirgal laalaa waawan njiyano ñaalala).",
+      "freshness_auto": "Otomatik",
+      "freshness_day": "Ñalaru",
+      "freshness_week": "Ñalal",
+      "freshness_month": "Lewru",
+      "freshness_any": "Kisali"
     }
   },
   "emptyState": {
@@ -1534,6 +1575,23 @@
       "deployment": "Hurmitere",
       "modelVersion": "Leemunde model",
       "publisher": "Naatinde"
+    },
+    "interpreterMode": {
+      "title": "Hurmital Kod",
+      "subtitle": "Hurmin kod so ɗum yidi (tabbunde, tuuba data)",
+      "learnMore": "Hol ko mo waawi?",
+      "description": "So a hurmi, assistant waawi hurmin Python e geese suudu, hawta fiilde dow, jiggina jaaɓte, kalla chart makko. Kod hurmiti, jaaɓngol am fiilde huunde, wanniima e jaaɓngol. Huutor \"Hurmin Kod\" e menu composer so yidi okki sabu."
+    },
+    "searchOptions": {
+      "title": "Nanaaltan baɗi",
+      "resultCount": "Jaɓii kala nanaaltan:",
+      "freshness": "Lewru njiyano e",
+      "freshness_auto": "Auto (ko ceerti)",
+      "freshness_day": "Ñalaru",
+      "freshness_week": "Ñalal",
+      "freshness_month": "Lewru jooɗiiɗo",
+      "freshness_any": "Hitaande kala",
+      "hint": "Auto ena heddii goɗɗo laatan waawde waawnde mum (misal, jaɓɓorgo tabital dongila lewru), tee gese holli ka moƴƴude baɗte to gese mum."
     }
   },
   "models": {
@@ -2105,7 +2163,11 @@
     "moveToMore": "Yah teeŋol",
     "moveOutOfMore": "Hollu e wadalkal",
     "showSources": "Hollu suusumji goɗɗi",
-    "hideSources": "Faydu suusumji goɗɗi"
+    "hideSources": "Faydu suusumji goɗɗi",
+    "aiTools": "Kuutorgal AI",
+    "aiToolsTooltip": "Doggal hokketeede ka anndaa: yenndude web, fayde code, e keftingol baɗte.",
+    "codeInterpreterTooltip": "Huumtu code Python ɗum ciɗi goɗɗi moƴƴi.\n\nMoƴƴi e wulnde data, hisaabe e sariyaande graph to fayde fiilde.",
+    "categoryTools": "Jumɗe e mbutukaaji"
   },
   "transcription": {
     "transcribesOnSend": "Ina winndita nde neldaa",
@@ -2428,7 +2490,18 @@
     "modelRow": "{requests} ñaɗɗo · {grams} g",
     "disclosure": "Naatal ɗi accii luungal version {version} · jokkondir {since} · chat tenor (agent e annditorde knowledge-base waawaaniima).",
     "reset": "Fannu jumɗe jokkol",
-    "estimatedPortion": "Nana veŋtani ~{grams} g CO₂e ({requests} njiytorde) hesɗinira e konngol chaten ɓen jokkude ɓuri taggi — hesɗinira e binndi ndiyam, teeŋtinde njoɓdi token ɓe wonani."
+    "estimatedPortion": "Nana veŋtani ~{grams} g CO₂e ({requests} njiytorde) hesɗinira e konngol chaten ɓen jokkude ɓuri taggi — hesɗinira e binndi ndiyam, teeŋtinde njoɓdi token ɓe wonani.",
+    "chipTitle": "Chip walal",
+    "chipDescription": "Jaaɓnirgal mujje makko karbon e doggol e jamma, on refti top chat input.",
+    "chipAlways": "Hollu hoore",
+    "chipAlwaysHint": "Chip maa holli so tawii jaaɓnirgal makko.",
+    "chipAuto": "Hollu e rewteede walla duunde ko",
+    "chipAutoHint": "Chip on woodi so jaaɓnirgal rewtii, ɗum so ina ɓuri. Duunde ko walla fokusi ɗum on artii.",
+    "chipHidden": "Mballu",
+    "chipHiddenHint": "Chip on mballu so wonaa refti. Jaaɓnirgal balɗe hokka ko e hello ngo.",
+    "chipAutoHideLabel": "Sakkito ngam",
+    "chipAutoHideUnit": "hawndu",
+    "chipAutoHideHint": "He {min} e {max} hawndu."
   },
   "extraction": {
     "toggleLabel": "Fowndo ɗiɗi e jamfa",
@@ -3337,7 +3410,15 @@
       "measured": "Teeŋtinirɗe e njoɓdi token ɓe",
       "estimated": "Hesɗinira e ƴeewte yimɓe baɗte",
       "lastRequest": "Njiytorde ɗiɗal",
-      "disclaimer": "Hesɗinɗe kala njiytorde ena POOF njoɓdi token ɓe teeŋtinira walla ƴeewtora, jogi e cakkitiiwol ɓuri jeyɗaal e juumre v{version}. Yimɓe baɗte hesɗinira e binndi ndiyam e model jokkol e jawdi. Teeŋtinirde wonani."
+      "disclaimer": "Hesɗinɗe kala njiytorde ena POOF njoɓdi token ɓe teeŋtinira walla ƴeewtora, jogi e cakkitiiwol ɓuri jeyɗaal e juumre v{version}. Yimɓe baɗte hesɗinira e binndi ndiyam e model jokkol e jawdi. Teeŋtinirde wonani.",
+      "visibilityGroup": "Ñaamngal yaltii chip maaɓɓe",
+      "visibilityLabel": "Hollu:",
+      "visibility": {
+        "always": "Hoore",
+        "auto": "Auto",
+        "hidden": "Mballu"
+      },
+      "visibilityHint": "Auto on holli chip so tawii njoɓɗo rewtii walla so a woodi duunde ko. Aɗa waawi topptude ɗum kadi e Settings › Usage & Impact."
     }
   },
   "table": {
@@ -3600,7 +3681,13 @@
     "connectorClientSecretLabel": "OAuth client secret",
     "connectorClientSecretStored": "Secret ɗiɗi e juulnde. Faatu ngam waawi arnude, walla hobbu mayru am e juulnde.",
     "connectorClientSecretHint": "Suusude e juulnde koo no mbaawi jogii, tee urtaaki woppu.",
-    "connectorScopesLabel": "Scopes (dunde e gese, ko feewi)"
+    "connectorScopesLabel": "Scopes (dunde e gese, ko feewi)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (ko sawndu)",
+    "connectorOauthTokenUrlLabel": "Token URL (ko sawndu)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (ko sawndu)",
+    "connectorOauthEndpointsHint": "Sari url endpoint ñande ndokkude e jamfa. Sakki moƴƴude ka, misal NetSuite.",
+    "connectorOauthRefreshUrlHint": "Sar-ɗaa ñande ka moƴƴude token URL.",
+    "connectorOauthEndpointsPairWarning": "Authorization URL e token URL ena yamndu feewde keertine (refresh URL ena njaɓi ɗe)."
   },
   "localModels": {
     "title": "Moodelji jowte ɗee",
@@ -3695,5 +3782,52 @@
     "truncatedNotice": "{count} colli(i) momtanii — tabel ɓuri kolii e {max} colliiji: {names}",
     "skippedDerivedNotice": "{count} colli kalkuledi alaa safi — formulaaɗi loow colliiji tabel ngal: {names}",
     "loadReplacesColumns": "Mbiddi ɗee waɗi mbaydi colliiji gar. Looji data mooftiri kadi so innde colli makko ni gootel."
+  },
+  "codeInterpreterDropdown": "Hurmin Kod",
+  "connectorPin": {
+    "toggleLabel": "Winndito kuutorgal connector",
+    "menuLabel": "Connectors",
+    "menuLabelCount": "Connectors ({count} active)",
+    "tooltip": "Hollu hoo kuutorgal connector ena hurmito, ndiyam-ɗaa he chat goɗɗo walla nder, walla fotdu ka goɗɗo.",
+    "toggleServerInChat": "Sari {name} he chat nde",
+    "globalToggleTitle": "Weerii {name} kala jaa (so wona Settings → Connectors)",
+    "globalOn": "Kala jaa on",
+    "globalOff": "Kala jaa off",
+    "chatToggleHint": "Checkboxes ko ndiyam chat goɗɗo tan; batte kala jaa ko hombo Settings → Connectors. Connector moƴƴi ena nelda kuutorgol mum he ñaamru kala — token gollu e jawdi laawol.",
+    "trayLabel": "Kuutorgal connector",
+    "trayTitle": "Kuutorgal connector he chat nde",
+    "toggleServer": "Hurmit {name}",
+    "needsReconnect": "Hurmitto ndiyam he Settings",
+    "focusAction": "Foti",
+    "focusedChip": "Fotiinde",
+    "pinnedHint": "Kuutorgol {name} tan ena fayda he ngol ndefte.",
+    "staleHint": "Connector fotiinde ndun alaa ñawdi walla aɗam — hurmitto ka Settings → Connectors, walla duggo foti. So wonaa, kuutorgal moƴƴi ko fayda.",
+    "costHint": "Kala connector moƴƴi ena nelda kuutorgal mum he ñaamru — token gollu e laawol jawdi. Ñaam-ɗaa mo alaa use.",
+    "noEligibleConnectors": "Connector sooma. Hurmit to Settings → Connectors.",
+    "unknownConnector": "Connector Momtinaama",
+    "unpin": "Duggo foti",
+    "dismiss": "Uddu",
+    "badgeCount": "{count} kuutorgal",
+    "badgeTooltip": "Kuutorgal connector ena moƴƴi he ñaamru kala — gaƴnaade token e jawdi. Dobo ndiyam."
+  },
+  "toolApprovals": {
+    "title": "Kuutorgal jaɓɓi",
+    "description": "Laawol kali woni he ndefte kala: jaɓɓa walla balla kuutorgal connector. Waawan galdin kuutorgal yaa higginani.",
+    "actionApprove": "Jaɓɓit kadi",
+    "actionReject": "Balla kadi",
+    "scopeServer": "ka {name}",
+    "scopeAny": "connector kala",
+    "removeRule": "Momtu laawol {tool}",
+    "toolNameLabel": "Innde kuutorgal",
+    "toolNamePlaceholder": "Innde kuutorgal, misal create_issue",
+    "scopeLabel": "Scope connector",
+    "actionLabel": "Teddungal",
+    "addRule": "Galdi laawol",
+    "rejectPrecedenceNote": "Laawol balla ena faama — he laawol jaɓɓi e he auto-approval per conversation.",
+    "policyAsk": "Naatu",
+    "policyAllow": "Jooɗi",
+    "policyBlock": "Daggi",
+    "policyGroupLabel": "Njeɗɗo ngol e teeŋtinol {tool}",
+    "listHint": "Suɓo hol ko yimɓe tawi so matuɗo waɗi yamiro ngal jaaɓtol — e dogon ko jaŋngol. Ñaamaa e korɗo; Daggi ko moɗɗo arɗo."
   }
 }

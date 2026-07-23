@@ -67,6 +67,11 @@ const mockMessages: Record<string, unknown> = {
     failedToOpenDocEditor:
       'Failed to open file in document editor. Please try again.',
     imageAlt: 'Image {number}',
+    consent: {
+      batchPendingHint: '{count} tool requests pending',
+      approveAllButton: 'Approve all',
+      denyAllButton: 'Deny all',
+    },
   },
   fileUpload: {
     attachment: 'attachment',
@@ -172,6 +177,62 @@ const mockMessages: Record<string, unknown> = {
       description: 'Connect a Foundry project below to discover its agents.',
     },
   },
+  connectorPin: {
+    toggleLabel: 'Manage connector tools',
+    menuLabel: 'Connectors',
+    menuLabelCount: 'Connectors ({count} active)',
+    tooltip:
+      'See which connector tools are active, switch them off for this chat or everywhere, or focus on one.',
+    toggleServerInChat: 'Use {name} in this chat',
+    globalToggleTitle:
+      'Turn {name} on or off everywhere (same as Settings → Connectors)',
+    globalOn: 'Global on',
+    globalOff: 'Global off',
+    chatToggleHint:
+      'Checkboxes control this chat only; the global button matches Settings → Connectors. Every active connector adds its tools to each message — more tokens and slower responses.',
+    trayLabel: 'Connector tools',
+    trayTitle: 'Connector tools for this chat',
+    toggleServer: 'Enable {name}',
+    needsReconnect: 'Reconnect in Settings',
+    focusAction: 'Focus',
+    focusedChip: 'Focused',
+    pinnedHint: 'Only tools from {name} will be used in this conversation.',
+    staleHint:
+      'The focused connector is disconnected or disabled — reconnect it in Settings → Connectors, or remove the focus. Until then all active tools are used.',
+    costHint:
+      "Every active connector adds its tools to each message you send — more tokens and slower responses. Switch off what you're not using.",
+    noEligibleConnectors:
+      'No connectors configured. Connect one in Settings → Connectors first.',
+    unknownConnector: 'Removed connector',
+    unpin: 'Remove focus',
+    dismiss: 'Close',
+    badgeCount: '{count} tools',
+    badgeTooltip:
+      'Connector tools are active on every message — they add tokens and response time. Click to manage.',
+  },
+  toolApprovals: {
+    title: 'Tool approvals',
+    description:
+      "Rules that apply in every conversation: automatically allow or block specific connector tools. You can add tools you haven't been prompted for yet.",
+    actionApprove: 'Always allow',
+    actionReject: 'Always block',
+    scopeServer: 'on {name}',
+    scopeAny: 'Any connector',
+    removeRule: 'Remove rule for {tool}',
+    toolNameLabel: 'Tool name',
+    toolNamePlaceholder: 'Tool name, e.g. create_issue',
+    scopeLabel: 'Connector scope',
+    actionLabel: 'Action',
+    addRule: 'Add rule',
+    rejectPrecedenceNote:
+      'Block rules always win — over allow rules and over any per-conversation auto-approval.',
+    policyAsk: 'Ask',
+    policyAllow: 'Allow',
+    policyBlock: 'Block',
+    policyGroupLabel: 'Approval policy for {tool}',
+    listHint:
+      'Set what happens when the assistant wants to run each tool — in every conversation. Ask is the default; Block always wins.',
+  },
   agentAccess: {
     title: 'Access & Connectors',
     description:
@@ -217,6 +278,15 @@ const mockMessages: Record<string, unknown> = {
     connectorClientSecretHint:
       'Encrypted before it is stored, and never shown again.',
     connectorScopesLabel: 'Scopes (space-separated, optional)',
+    connectorOauthAuthUrlLabel: 'Authorization URL (optional)',
+    connectorOauthTokenUrlLabel: 'Token URL (optional)',
+    connectorOauthRefreshUrlLabel: 'Refresh URL (optional)',
+    connectorOauthEndpointsHint:
+      "Leave the endpoint URLs blank to discover them automatically. Set them for providers that don't support discovery, like NetSuite.",
+    connectorOauthRefreshUrlHint:
+      'Leave blank to refresh against the token URL.',
+    connectorOauthEndpointsPairWarning:
+      'Authorization URL and token URL must be set together (the refresh URL needs both).',
     rulesUnavailableWarning:
       'Access rules could not be loaded from storage. Agent invocation is currently blocked and rules cannot be edited.',
     retry: 'Retry',
@@ -488,6 +558,40 @@ const mockMessages: Record<string, unknown> = {
     description:
       'Older messages beyond this limit are summarized and sent as context.',
   },
+  settings: {
+    webSearch: {
+      title: 'Web Search',
+      description:
+        'Controls how live web searches run when Search Mode is active. Changes apply immediately.',
+      providerLabel: 'Search provider',
+      providerAuto: 'Automatic (recommended)',
+      providerAutoDescription:
+        'Uses the deployment default — currently the combined news search below.',
+      providerNews: 'Combined news (GDELT + Google News)',
+      providerNewsDescription:
+        'Queries both sources in parallel and merges the results, so either one failing never breaks a search. Best balance of speed, source diversity, and working article links.',
+      providerGoogleNews: 'Google News only',
+      providerGoogleNewsDescription:
+        'Anonymous and fast — only the search query reaches Google (no account or cookies) and results arrive in about a second. Note: it mostly scans headlines and short snippets, not full articles, so answers can stay surface-level.',
+      providerGdelt: 'GDELT only',
+      providerGdeltDescription:
+        'Open research database of world news with direct publisher links, which lets follow-up questions read the full articles. Strictly rate-limited — back-to-back searches may queue for a few seconds.',
+      providerBing: 'Bing grounding (via Microsoft)',
+      providerBingDescription:
+        'Reads full pages for deeper summaries and covers the general web, not just news. However, searches routinely take 30–90 seconds and result quality is often inconsistent from one search to the next.',
+      sourcesLabel: 'Sources per search',
+      sourcesDescription:
+        'How many distinct sources a search keeps as citations. Research-style questions may automatically widen this.',
+      freshnessLabel: 'Preferred recency',
+      freshnessDescription:
+        'How recent results should be. Automatic lets each question decide (breaking news prefers the last day).',
+      freshness_auto: 'Automatic',
+      freshness_day: 'Past day',
+      freshness_week: 'Past week',
+      freshness_month: 'Past month',
+      freshness_any: 'Any time',
+    },
+  },
   usageImpact: {
     empty: 'No usage tracked yet.',
     co2Value: '{grams} g CO2e',
@@ -542,6 +646,15 @@ const mockMessages: Record<string, unknown> = {
       estimated: 'Back-calculated from older messages',
       lastRequest: 'Last request',
       disclaimer: 'Per-request estimates (assumptions v{version})',
+      visibilityGroup: 'Emissions chip visibility',
+      visibilityLabel: 'Show:',
+      visibility: {
+        always: 'Always',
+        auto: 'Auto',
+        hidden: 'Hide',
+      },
+      visibilityHint:
+        'Auto shows the chip when the estimate updates or you hover it.',
     },
   },
   modelSelect: {

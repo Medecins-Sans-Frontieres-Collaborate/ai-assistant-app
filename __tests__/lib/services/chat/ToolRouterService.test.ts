@@ -71,7 +71,7 @@ describe('ToolRouterService', () => {
 
         expect(result.tools).toEqual(['web_search']);
         expect(result.searchQuery).toBe('What is 2+2?');
-        expect(result.reasoning).toBe('Forced web search mode');
+        expect(result.reasoning).toBe('Forced tool mode');
         expect(mockOpenAIClient.chat.completions.create).not.toHaveBeenCalled();
       });
 
@@ -136,8 +136,141 @@ describe('ToolRouterService', () => {
         );
         // The `reasoning` field was dropped from the schema (saved tokens);
         // the service returns a stable internal reason string instead.
-        expect(result.reasoning).toBe('Web search recommended by AI');
+        expect(result.reasoning).toBe('Tools recommended by AI');
         expect(mockOpenAIClient.chat.completions.create).toHaveBeenCalled();
+      });
+
+      it('maps fan-out queries: primary first, blanks/dupes dropped, capped at 5', async () => {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  needsWebSearch: true,
+                  searchQuery: 'france strikes 2026',
+                  searchRecency: 'week',
+                  searchComprehensive: true,
+                  additionalSearchQueries: [
+                    'germany rail dispute 2026',
+                    '',
+                    'france strikes 2026',
+                    'italy port workers 2026',
+                    'spain farmers 2026',
+                    'portugal teachers 2026',
+                  ],
+                }),
+              },
+            },
+          ],
+        });
+
+        const result = await service.determineTool({
+          messages: [],
+          currentMessage: 'compare the european labor disputes',
+        });
+
+        expect(result.searchQuery).toBe('france strikes 2026');
+        expect(result.searchQueries).toEqual([
+          'france strikes 2026',
+          'germany rail dispute 2026',
+          'italy port workers 2026',
+          'spain farmers 2026',
+          'portugal teachers 2026',
+        ]);
+      });
+
+      it('returns a single-entry query list when no extra aspects exist', async () => {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  needsWebSearch: true,
+                  searchQuery: 'india protests 2026',
+                  searchRecency: 'week',
+                  searchComprehensive: false,
+                  additionalSearchQueries: [],
+                }),
+              },
+            },
+          ],
+        });
+
+        const result = await service.determineTool({
+          messages: [],
+          currentMessage: 'india protests?',
+        });
+
+        expect(result.searchQueries).toEqual(['india protests 2026']);
+      });
+
+      it('classifies follow-ups on prior citations independently of needsWebSearch', async () => {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  needsWebSearch: false,
+                  searchQuery: '',
+                  searchRecency: 'none',
+                  searchComprehensive: false,
+                  searchFollowUp: true,
+                }),
+              },
+            },
+          ],
+        });
+
+        const result = await service.determineTool({
+          messages: [],
+          currentMessage: 'What did the Reuters article say about that?',
+          hasPriorSearchCitations: true,
+        });
+
+        // No fresh search, but the follow-up flag comes back so the
+        // enricher can fetch the cited articles.
+        expect(result.tools).toEqual([]);
+        expect(result.searchFollowUp).toBe(true);
+
+        // The schema only carries searchFollowUp when it was offered.
+        const call =
+          mockOpenAIClient.chat.completions.create.mock.calls.at(-1)![0];
+        expect(
+          call.response_format.json_schema.schema.properties.searchFollowUp,
+        ).toBeDefined();
+        expect(call.messages[0].content).toContain('searchFollowUp');
+      });
+
+      it('never reports searchFollowUp without prior citations offered', async () => {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  needsWebSearch: true,
+                  searchQuery: 'india protests',
+                  searchRecency: 'week',
+                  searchComprehensive: false,
+                  // Hallucinated: the field was not in the schema.
+                  searchFollowUp: true,
+                }),
+              },
+            },
+          ],
+        });
+
+        const result = await service.determineTool({
+          messages: [],
+          currentMessage: 'India protests?',
+          hasPriorSearchCitations: false,
+        });
+
+        expect(result.searchFollowUp).toBe(false);
+        const call =
+          mockOpenAIClient.chat.completions.create.mock.calls.at(-1)![0];
+        expect(
+          call.response_format.json_schema.schema.properties.searchFollowUp,
+        ).toBeUndefined();
       });
 
       it('should determine web search is NOT needed for general knowledge', async () => {
@@ -617,17 +750,41 @@ describe('ToolRouterService', () => {
                 searchQuery: {
                   type: 'string',
                   description:
-                    'Optimized search query if web search is needed, empty string otherwise',
+                    'Concise search-engine query (3-8 keywords, one topic, no question words) if web search is needed, empty string otherwise',
+                },
+                searchRecency: {
+                  type: 'string',
+                  enum: ['day', 'week', 'month', 'none'],
+                  description:
+                    'How recent results must be when searching; "none" when age does not matter',
+                },
+                searchComprehensive: {
+                  type: 'boolean',
+                  description:
+                    'Whether the question wants breadth (many sources) rather than a single fact',
+                },
+                additionalSearchQueries: {
+                  type: 'array',
+                  items: { type: 'string' },
+                  maxItems: 4,
+                  description:
+                    'Usually empty. Extra queries ONLY for clearly separable aspects one query cannot cover (max 4)',
                 },
               },
-              required: ['needsWebSearch', 'searchQuery'],
+              required: [
+                'needsWebSearch',
+                'searchQuery',
+                'searchRecency',
+                'searchComprehensive',
+                'additionalSearchQueries',
+              ],
               additionalProperties: false,
             },
           },
         });
         // Latency-tuning params should be present.
         expect(callArgs[0].reasoning_effort).toBe('minimal');
-        expect(callArgs[0].max_completion_tokens).toBe(80);
+        expect(callArgs[0].max_completion_tokens).toBe(200);
       });
     });
 

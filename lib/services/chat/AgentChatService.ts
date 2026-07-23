@@ -1,5 +1,6 @@
 import { Session } from 'next-auth';
 
+import { parseMetadataFromContent } from '@/lib/utils/app/metadata';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { Message } from '@/types/chat';
@@ -7,6 +8,10 @@ import { OpenAIModel } from '@/types/openai';
 
 import { AIFoundryAgentHandler } from './AIFoundryAgentHandler';
 
+import {
+  scanStreamEvents,
+  stripIncompleteStreamMarkers,
+} from '@/lib/streamMarkers';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 
 /**
@@ -16,6 +21,15 @@ export interface WebSearchToolRequest {
   searchQuery: string;
   model: OpenAIModel;
   user: Session['user'];
+  /** Maximum distinct sources to request (shapes the agent instruction). */
+  resultCount?: number;
+  /** Recency preference ('any'/absent = no preference). */
+  freshness?: 'day' | 'week' | 'month' | 'any';
+  /**
+   * Receives the inner Foundry stream's AGENT_ACTIVITY payloads as they
+   * arrive, so the outer response's loader can show live progress phases.
+   */
+  onActivity?: (key: string, params?: Record<string, string>) => void;
 }
 
 /**
@@ -73,19 +87,40 @@ export class AgentChatService {
       },
       async (span) => {
         try {
-          const { searchQuery, model, user } = request;
+          const { searchQuery, model, user, resultCount, freshness } = request;
 
           console.log(
-            `[AgentChatService] Executing web search for query: "${sanitizeForLog(searchQuery)}"`,
+            `[AgentChatService] Executing web search for query: "${sanitizeForLog(searchQuery)}" (sources: ${resultCount ?? 'default'}, freshness: ${freshness ?? 'any'})`,
           );
 
-          // Force a grounded search; a bare query lets the agent answer from
-          // memory or deflect, returning no Bing results or citations.
+          // Tuning rides the instruction: the Bing tool's own count/freshness
+          // parameters live on the Foundry AGENT DEFINITION (infra config),
+          // so per-request preferences are expressed to the agent's model,
+          // which shapes its search calls and its summary accordingly.
+          const freshnessInstruction =
+            freshness && freshness !== 'any'
+              ? `Strongly prefer results published within the past ${freshness}; note the publication date of key sources. `
+              : '';
+          const breadthInstruction = resultCount
+            ? `Consult and cite up to ${resultCount} distinct, high-quality sources — do not pad with near-duplicates. `
+            : '';
+
+          // The text below is an INFORMATION NEED, not a literal search
+          // string — it may be a raw user prompt (forced mode) or a router-
+          // generated phrase. The agent's model formulates the actual search
+          // queries: short keyword queries, broadened + retried when a
+          // search comes back empty. Pasting a 15-word run-on into the
+          // search tool verbatim is how "no results" happens.
           const searchInstruction =
-            `Perform a live web search now to answer the following query, and cite your sources. ` +
-            `Do not ask for confirmation and do not reply that you need to search — search immediately and report what you find. ` +
+            `Below is the user's information need. Search the live web NOW to satisfy it, and cite your sources. ` +
+            `Do not ask for confirmation and do not reply that you need to search — search immediately and report what you find.\n` +
+            `How to search:\n` +
+            `- Derive 1-3 CONCISE search queries yourself (2-6 keywords each, one topic per query, no question phrasing). Never paste the information need verbatim as a query.\n` +
+            `- If a search returns nothing useful, simplify to fewer, broader terms and search again before giving up.\n` +
+            `- ${breadthInstruction || 'Consult distinct, high-quality sources — do not pad with near-duplicates. '}\n` +
+            (freshnessInstruction ? `- ${freshnessInstruction}\n` : '') +
             `If information is limited or not yet finalized, report the best current information available with its source.\n\n` +
-            `Query: ${searchQuery}`;
+            `Information need: ${searchQuery}`;
 
           const searchMessages: Message[] = [
             {
@@ -111,7 +146,10 @@ export class AgentChatService {
           );
 
           // Parse the streaming response to extract text and citations
-          const { text, citations } = await this.parseAgentResponse(response);
+          const { text, citations } = await this.parseAgentResponse(
+            response,
+            request.onActivity,
+          );
 
           console.log(
             `[AgentChatService] Web search completed: ${text.length} chars, ${citations.length} citations`,
@@ -143,8 +181,18 @@ export class AgentChatService {
 
   /**
    * Parses the streaming agent response to extract text and citations.
+   *
+   * Structured stream markers (AGENT_ACTIVITY etc.) are lifted out with the
+   * forward-only scanner: activity payloads are forwarded to `onActivity`
+   * for live progress, and NO marker wire-format ever reaches the returned
+   * text (which gets merged into a model prompt). The terminal metadata
+   * block is parsed with the shared parser, which also handles blocks split
+   * across network reads — the old per-chunk regex missed those.
    */
-  private async parseAgentResponse(response: Response): Promise<{
+  private async parseAgentResponse(
+    response: Response,
+    onActivity?: (key: string, params?: Record<string, string>) => void,
+  ): Promise<{
     text: string;
     citations: Array<{
       number: number;
@@ -163,80 +211,53 @@ export class AgentChatService {
 
           const reader = response.body.getReader();
           const decoder = new TextDecoder();
-          let fullText = '';
-          let citations: Array<{
-            number: number;
-            title: string;
-            url: string;
-            date: string;
-          }> = [];
+          let raw = '';
+          let cursor = 0;
+          let display = '';
+
+          const consumeScan = () => {
+            const scan = scanStreamEvents(raw, cursor);
+            for (const event of scan.events) {
+              if (event.type === 'agent_activity') {
+                onActivity?.(event.payload.key, event.payload.params);
+              }
+              // Other marker kinds (tool records, consent) are stripped —
+              // they must never leak into prompt text.
+            }
+            display += scan.displayDelta;
+            cursor = scan.nextIndex;
+          };
 
           try {
             while (true) {
               const { done, value } = await reader.read();
               if (done) break;
-
-              const chunk = decoder.decode(value, { stream: true });
-
-              // Check if this chunk contains metadata using the correct format
-              if (chunk.includes('<<<METADATA_START>>>')) {
-                console.log(
-                  '[AgentChatService] Found METADATA_START in chunk, length:',
-                  chunk.length,
-                );
-                // Extract metadata
-                const metadataMatch = chunk.match(
-                  /<<<METADATA_START>>>(.*?)<<<METADATA_END>>>/s,
-                );
-                if (metadataMatch) {
-                  console.log(
-                    '[AgentChatService] Metadata regex matched, raw:',
-                    metadataMatch[1],
-                  );
-                  try {
-                    const metadata = JSON.parse(metadataMatch[1]);
-                    console.log(
-                      '[AgentChatService] Parsed metadata:',
-                      JSON.stringify(metadata, null, 2),
-                    );
-                    if (metadata.citations) {
-                      citations = metadata.citations;
-                      console.log(
-                        '[AgentChatService] Extracted citations count:',
-                        citations.length,
-                      );
-                    } else {
-                      console.log(
-                        '[AgentChatService] No citations field in metadata',
-                      );
-                    }
-                  } catch (e) {
-                    console.error(
-                      '[AgentChatService] Error parsing metadata:',
-                      e,
-                    );
-                  }
-                } else {
-                  console.log(
-                    '[AgentChatService] Metadata regex did not match full pattern',
-                  );
-                }
-
-                // Remove metadata from text
-                fullText += chunk.replace(
-                  /\n\n<<<METADATA_START>>>.*?<<<METADATA_END>>>/gs,
-                  '',
-                );
-              } else {
-                fullText += chunk;
-              }
+              raw += decoder.decode(value, { stream: true });
+              consumeScan();
             }
+            const tail = decoder.decode();
+            if (tail) {
+              raw += tail;
+            }
+            consumeScan();
 
-            span.setAttribute('parse.text_length', fullText.length);
+            // A dangling half-marker at the very end (stream cut mid-tag)
+            // must not leak either.
+            display = stripIncompleteStreamMarkers(display);
+
+            const parsed = parseMetadataFromContent(display);
+            const citations = (parsed.citations ?? []) as Array<{
+              number: number;
+              title: string;
+              url: string;
+              date: string;
+            }>;
+
+            span.setAttribute('parse.text_length', parsed.content.length);
             span.setAttribute('parse.citations_count', citations.length);
             span.setStatus({ code: SpanStatusCode.OK });
 
-            return { text: fullText.trim(), citations };
+            return { text: parsed.content.trim(), citations };
           } finally {
             reader.releaseLock();
           }

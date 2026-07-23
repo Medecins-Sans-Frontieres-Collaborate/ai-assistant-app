@@ -845,7 +845,13 @@
         "transformingTable": "Waxaa la beddelayaa jadwalka…",
         "findingLocations": "Waxaa la aqoonsanayaa goobaha…",
         "updatingMap": "Waxaa la cusbooneysiinayaa khariidada…"
-      }
+      },
+      "searchingWebFor": "Raadinaya: “{query}”…",
+      "searchingWebForMultiple": "Raadinaya {count} mowduuc: “{query}”…",
+      "readingCitedSources": "Akhriyaya {count} maqaal oo la xusay hore…",
+      "planningSteps": "Qorsheynaya talaabooyinka…",
+      "planStep": "Talaabo {current}/{total}: {description}",
+      "planStepRetry": "Talaabo {current}/{total} (isku day mar kale): {description}"
     },
     "toolSummary": {
       "usedTools": "Waxaa la isticmaalay {count, plural, one {# qalab} other {# qalabyo}}",
@@ -855,7 +861,8 @@
       "statusAutoDenied": "Si toos ah loo diiday",
       "statusFailed": "Fashil",
       "statusIncomplete": "Dhameys la'aan",
-      "viaService": "iyadoo loo marayo {service}"
+      "viaService": "iyadoo loo marayo {service}",
+      "downloadFile": "Soo dejiso"
     },
     "consent": {
       "authorizeRequired": "Oggolaansho ayaa loo baahan yahay",
@@ -897,7 +904,15 @@
       "approvedState": "La ogolaaday — wakiilka waa la bilaabay",
       "deniedState": "La diiday",
       "submittingApproval": "Waa la ogolaynayaa oo wakiilka la sii wadayaa…",
-      "submittingDenial": "Diidmadaada waa la dirayaa…"
+      "submittingDenial": "Diidmadaada waa la dirayaa…",
+      "alwaysApproveEverywhere": "Had iyo jeer ogolow aaladdan — dhammaan sheekaysiga",
+      "denyOptionsLabel": "Xulashooyinka diidmada",
+      "denyOnce": "Hal mar diid",
+      "neverAllowEverywhere": "Waligaa ha ogolaan aaladdan — dhammaan sheekaysiga",
+      "deniedByRuleHint": "Waxa xannibay xeerkaaga — maamul Dejinta → Xiriiriyeyaasha.",
+      "batchPendingHint": "{count} codsi aalad ah ayaa sugaya",
+      "approveAllButton": "Ogolow dhammaan",
+      "denyAllButton": "Diid dhammaan"
     },
     "openImage": "Fur sawirka",
     "copyMessage": "Nuqul fariinta",
@@ -908,7 +923,9 @@
     "ttsError": "Khalad abuurista codka. Fadlan isku day mar kale.",
     "unsupportedMessageType": "Khalad soo bandhigista fariinta: Nooca fariinta lama taageero",
     "addLanguageOption": "Ku dar \"{name}\"…",
-    "sources": "Xigashooyin"
+    "sources": "Xigashooyin",
+    "interpreterBadge": "Orod koodhka",
+    "disableCodeInterpreter": "Dami fulinta koodhka"
   },
   "transcript": {
     "originalTranscript": "Qoraalka Aslka ah",
@@ -1348,6 +1365,30 @@
       "thresholdLabel": "U tixgeli dib-u-qoris haddii ka sarre maro",
       "thresholdUnit": "% dukumentiga la beddelay",
       "exceptionSelectionAlways": "Hagaajinta xulashada la iftiimiyay mar walba si toos ah ayay u saameysaa — moodeelku wuxuu soo celiyaa oo keliya qaybta la saxay, taas oo aan loo kala jari karin soojeedimo ka dhan ah dukumentiga oo dhan."
+    },
+    "webSearch": {
+      "title": "Raadinta Webka",
+      "description": "Waxay xakameysaa sida loo sameeyo raadinta webka marka Habka Raadinta uu shaqeynayo. Isbedeladu si degdeg ah ayay u dhaqan-galaan.",
+      "providerLabel": "Bixiyaha raadinta",
+      "providerAuto": "Si toos ah (lagu taliyay)",
+      "providerAutoDescription": "Waxa uu isticmaalaa dejinta caadiga ah — hadda waa raadinta warka ee la isku daray ee hoos ku xusan.",
+      "providerNews": "Warka la isku daray (GDELT + Google News)",
+      "providerNewsDescription": "Waxay baartaa labadaba si isku mar ah waxayna isku darsataa natiijooyinka, midkood haduu shaqayn waayo raadintu way socotaa. Waa dheelitirka ugu fiican ee xawaare, il-dhowr iyo xiriiryo maqaal oo shaqaynaya.",
+      "providerGoogleNews": "Google News oo kaliya",
+      "providerGoogleNewsDescription": "Si qarsoodi ah oo dhaqsiyo leh — kaliya su’aasha raadintu waxay gaartaa Google (xisaab ama cookies ma jiraan) natiijooyinkuna waxay yimaadaan ku dhowaad ilbiriqsiyo. Fiiro gaar ah: badanaa waxa kaliya la baarayaa ciiwaanada iyo xigashooyin gaagaaban, maqaalada oo dhan ma aha, sidaas darteed jawaabaha waxa weydiintu ay noqon kartaa mid dusha sare ah.",
+      "providerGdelt": "GDELT oo kaliya",
+      "providerGdeltDescription": "Baaritaan furan oo xog ururin ah oo warka aduunka leh ulana socda toos ah warbixinta soo saareyaasha, taasoo u suurtogelisa in la akhriyo maqaalada oo dhan. Xaddidan — raadino xiriir ah waxay gali karaan saf doo dhan dhowr ilbiriqsi.",
+      "providerBing": "Bing grounding (Microsoft)",
+      "providerBingDescription": "Waxay akhridaa bogagga oo dhan si ay u soo saarto nuxurka qoto dheer waxayna dabooshaa webka guud, kaliya war ma aha. Si kastaba ha ahaatee, raadintu waxay qaadan kartaa 30–90 ilbiriqsi waxayna tayada natiijooyinku isbedeli kartaa marba marka ka dambaysa.",
+      "sourcesLabel": "Ilo raadis kasta",
+      "sourcesDescription": "Imisa ilo oo kala duwan ayuu raadin hayaa sida tixraac ahaan. Su'aalaha nooca cilmi-baarista si toos ah ayaa loo balaadhin karaa.",
+      "freshnessLabel": "Mudada la door-bidayo",
+      "freshnessDescription": "Intee ayey ku dhaw yihiin natiijooyinku. Si toos ah wuxuu su’aal kasta go'aansadaa (warka degdega ah wuxuu doorbidaa 24 saacadood ee la soo dhaafay).",
+      "freshness_auto": "Si toos ah",
+      "freshness_day": "Maalintii la soo dhaafay",
+      "freshness_week": "Toddobaadkii la soo dhaafay",
+      "freshness_month": "Bishii la soo dhaafay",
+      "freshness_any": "Waqti kasta"
     }
   },
   "emptyState": {
@@ -1534,6 +1575,23 @@
       "deployment": "Dejin",
       "modelVersion": "Nooca modelka",
       "publisher": "Daabace"
+    },
+    "interpreterMode": {
+      "title": "Code Interpreter",
+      "subtitle": "Wuxuu ordiyaa koodhka marka loo baahdo (jaantusyo, falanqayn xog)",
+      "learnMore": "Muxuu qaban karaa?",
+      "description": "Marka la hawlgeliyo, kaaliyaha wuu ordi karaa Python gudaha sandbox ammaan ah oo go'doon ah si uu u falanqeeyo faylasha la lifaaqay, u xisaabiyo natiijooyin, u sameeyo jaantusyo. Koodhka la fuliyay, natiijadiisa, iyo faylasha la sameeyay waxa lagu tusaa jawaabta. Adeegso \"Orod Koodhka\" liiska qoraaga si aad ugu qasbato fariin."
+    },
+    "searchOptions": {
+      "title": "Raadin horumarsan",
+      "resultCount": "Ilo raadis kasta:",
+      "freshness": "Doorbid natiijooyinka laga helay",
+      "freshness_auto": "Si toos ah (su’aal kasta)",
+      "freshness_day": "Maalintii la soo dhaafay",
+      "freshness_week": "Toddobaadkii la soo dhaafay",
+      "freshness_month": "Bishii la soo dhaafay",
+      "freshness_any": "Wakhti kasta",
+      "hint": "Auto waxay su'aal kasta u ogolaanaysaa inay dejiso waqtiga la doonayo (tusaale, wararka waxay mudnaanta siinayaan maalinta la soo dhaafay), su'aalaha cilmi-baarista ayaa laga yaabaa inay adeegsadaan ilo ka badan kuwa caadiga ah."
     }
   },
   "models": {
@@ -2105,7 +2163,11 @@
     "moveToMore": "U raaricinta 'Inta kale'",
     "moveOutOfMore": "Ku soo bandhig menu-ga",
     "showSources": "Tus ilo kale",
-    "hideSources": "Qari ilo kale"
+    "hideSources": "Qari ilo kale",
+    "aiTools": "AI Tools",
+    "aiToolsTooltip": "Awoodaha kaaliyaha uu adeegsan karo marka uu ka jawaabayo: raadinta webka tooska ah, fulinta koodhka, iyo adeegyo ku xiran.",
+    "codeInterpreterTooltip": "Orod koodh Python ah meel ammaan ah fariin kastaba.\n\nKu habboon falanqaynta xogta, xisaabinta, iyo sawir-garayn laga sameeyo faylasha ku lifaaqan.",
+    "categoryTools": "Qalabka & xirmooyinka"
   },
   "transcription": {
     "transcribesOnSend": "Wuxuu qoraa marka la diro",
@@ -2428,7 +2490,18 @@
     "modelRow": "{requests} codsi · {grams} g",
     "disclosure": "Qiyaasaha waxa lagu salaynayaa maldahan v{version} · wixii ka bilaabmay {since} · kaliya sheekada caadiga ah (awoodaha agent-yada iyo jawaabaha knowledge-base laguma darin).",
     "reset": "Tirtir tirakoobka isticmaalka",
-    "estimatedPortion": "Waxay ka mid yihiin ku dhawaad ~{grams} g CO₂e ({requests} codsi) oo laga qiyaasay doodaha ka horreeyay raad-raaca — lagu xisaabiyay qoraalka fariimaha la keydiyay, balse aan lagu tirin token."
+    "estimatedPortion": "Waxay ka mid yihiin ku dhawaad ~{grams} g CO₂e ({requests} codsi) oo laga qiyaasay doodaha ka horreeyay raad-raaca — lagu xisaabiyay qoraalka fariimaha la keydiyay, balse aan lagu tirin token.",
+    "chipTitle": "Emissions chip",
+    "chipDescription": "Qiyaasta raad-carbon ee wada sheekaysigan hadda, oo lagu muujiyey kore ee meesha qoraalka sheekada.",
+    "chipAlways": "Had iyo jeer muuji",
+    "chipAlwaysHint": "Chip-ku wuu muuqanayaa mar kasta oo wada sheekaysigu leeyahay qiyaas.",
+    "chipAuto": "Muuji marka la cusbooneysiiyo ama la dul istaago",
+    "chipAutoHint": "Chip-ka wuxuu soo muuqdaa marka qiyaastu isbeddesho, markaas ayuu libdhi doonaa. Dul istaagista ama diiradda saaridu waxay keenaysaa inuu soo noqdo.",
+    "chipHidden": "La qariyey",
+    "chipHiddenHint": "Chip-ka marna lama muujiyo. Wadarta wali waa laga raadin karaa oo waxay ka muuqanaysaa boggan.",
+    "chipAutoHideLabel": "Libdho kadib",
+    "chipAutoHideUnit": "ilbiriqsi",
+    "chipAutoHideHint": "U dhaxaysa {min} iyo {max} ilbiriqsi."
   },
   "extraction": {
     "toggleLabel": "Ka saar xog habaysan",
@@ -3337,7 +3410,15 @@
       "measured": "Laga soo xigtay tirinta token-ka la soo sheegay",
       "estimated": "Laga xisaabiyay fariimaha hore",
       "lastRequest": "Codsigii ugu dambeeyay",
-      "disclaimer": "Qiyaasaha codsi kasta waxaa lagu salaynayaa tirada token-ka ee la soo sheegay ama lagu qiyaasay, iyadoo la adeegsanayo celcelisyo la daabacay iyo mala'awaal v{version}. Fariimaha hore waxaa lagu xisaabiyay qoraalka la keydiyay iyo moodeelka hadda socda ee wadahadalka. Kani maaha qiyaas toos ah."
+      "disclaimer": "Qiyaasaha codsi kasta waxaa lagu salaynayaa tirada token-ka ee la soo sheegay ama lagu qiyaasay, iyadoo la adeegsanayo celcelisyo la daabacay iyo mala'awaal v{version}. Fariimaha hore waxaa lagu xisaabiyay qoraalka la keydiyay iyo moodeelka hadda socda ee wadahadalka. Kani maaha qiyaas toos ah.",
+      "visibilityGroup": "Muuqaalka Emissions chip",
+      "visibilityLabel": "Muuji:",
+      "visibility": {
+        "always": "Had iyo jeer",
+        "auto": "Toos",
+        "hidden": "Qari"
+      },
+      "visibilityHint": "Toos wuxuu muujiyaa chip-ka marka qiyaasta la cusbooneysiiyo ama aad dul istaagto. Waxaad tan markale ka beddeli kartaa Dejinta › Isticmaalka & Saameynta."
     }
   },
   "table": {
@@ -3600,7 +3681,13 @@
     "connectorClientSecretLabel": "OAuth client secret",
     "connectorClientSecretStored": "Sir ayaa la keydiyay. Haddii aad rabto inaad sii hayso, uga tag madhan; mid cusub gal si aad u bedesho.",
     "connectorClientSecretHint": "Waa la sirgaxaa ka hor inta aan la keydin, mar dambe laguma tuso.",
-    "connectorScopesLabel": "Xuduudaha (far kala soocan, ikhtiyaari)"
+    "connectorScopesLabel": "Xuduudaha (far kala soocan, ikhtiyaari)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (ikhtiyaari)",
+    "connectorOauthTokenUrlLabel": "Token URL (ikhtiyaari)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (ikhtiyaari)",
+    "connectorOauthEndpointsHint": "Haddii aad banneysid URLs-ka endpoint, si toos ah ayaa loo heli doonaa. Ku qor markii aad adeegsaneyso adeeg bixiyeyaal aan taageerin ogaanshaha otomaatiga ah, sida NetSuite.",
+    "connectorOauthRefreshUrlHint": "Ka tag madhan si loogu cusbooneysiiyo adoo adeegsanaya token URL.",
+    "connectorOauthEndpointsPairWarning": "Authorization URL iyo Token URL waa in la wada dejiyaa (Refresh URL waxay u baahan tahay labadaba)."
   },
   "localModels": {
     "title": "Moodallo maxalli ah",
@@ -3695,5 +3782,52 @@
     "truncatedNotice": "{count} beer(ood) ayaa la saaray—xadka miiska waa {max} tiir: {names}",
     "skippedDerivedNotice": "{count} tiir xisaabeed lama keydin—xisaabaha waxay tixraacayaan tiirarkan miiska: {names}",
     "loadReplacesColumns": "Tani waxay beddelaysaa tiirarka hadda jira. Safafka hore wey sii hayaan qiimaha tiirarka magacyadoodu is le'eg yihiin."
+  },
+  "codeInterpreterDropdown": "Orod Koodhka",
+  "connectorPin": {
+    "toggleLabel": "Maamul qalabka isku xira",
+    "menuLabel": "Connectors",
+    "menuLabelCount": "Connectors ({count} firfircoon)",
+    "tooltip": "Eeg qalabka isku xira ee firfircoon, dami wada sheekadan ama meel kasta, ama diirada saar mid kaliya.",
+    "toggleServerInChat": "Isticmaal {name} wada sheekadan",
+    "globalToggleTitle": "Dami ama shid {name} meel kasta (la mid ah Settings → Connectors)",
+    "globalOn": "Global on",
+    "globalOff": "Global off",
+    "chatToggleHint": "Check-box-yadu waxay maamulaan wada sheekadan oo kaliya; badhanka guud wuxuu la siman yahay Settings → Connectors. Qalab kasta oo firfircoon wuxuu ku darayaa qalabkiisa fariin kasta — tokens badan iyo jawaabo gaabis ah.",
+    "trayLabel": "Qalabka isku xira",
+    "trayTitle": "Qalabka isku xira ee wada sheekadan",
+    "toggleServer": "Fur {name}",
+    "needsReconnect": "Ku xidh markale Settings",
+    "focusAction": "Diiradda saar",
+    "focusedChip": "La diiradda saaray",
+    "pinnedHint": "Kaliya qalabka {name} ayaa wada sheekadan lagu isticmaali doonaa.",
+    "staleHint": "Isku xiraha diiradda la saarayo wuu xiran yahay ama waa la naafoobay — ku xidh ama ka saar diiradda Settings → Connectors. Ilaa taas laga gaadhayo, dhammaan qalabka firfircoon waa la isticmaali doonaa.",
+    "costHint": "Qalab kasta oo firfircoon wuxuu ku daraa fariin kasta — tokens badan iyo jawaabo gaabis ah. Dami wixii aadan isticmaalayn.",
+    "noEligibleConnectors": "Ma jiro wax isku xire la dejiyey. Ku xidh mid Settings → Connectors marka hore.",
+    "unknownConnector": "Isku xire la saaray",
+    "unpin": "Ka saar diiradda",
+    "dismiss": "Xidh",
+    "badgeCount": "{count} qalab",
+    "badgeTooltip": "Qalabka isku xira wuu firfircoon yahay fariin kasta — waxay kordhiyaan tokens iyo waqtiga jawaabta. Guji si aad u maamusho."
+  },
+  "toolApprovals": {
+    "title": "Oggolaanshaha qalabka",
+    "description": "Xeerarka wada sheekaysi kasta khuseeya: si otomaatig ah u ogolow ama u xayir qalab isku xira oo gaar ah. Waxaad ku dari kartaa qalab aan laguu xulmin weli.",
+    "actionApprove": "Had iyo jeer ogolow",
+    "actionReject": "Had iyo jeer xayir",
+    "scopeServer": "on {name}",
+    "scopeAny": "Isku xire kasta",
+    "removeRule": "Ka saar xeerka {tool}",
+    "toolNameLabel": "Magaca qalabka",
+    "toolNamePlaceholder": "Magaca qalabka, tusaale create_issue",
+    "scopeLabel": "Baaxadda isku xirka",
+    "actionLabel": "Ficil",
+    "addRule": "Ku dar xeer",
+    "rejectPrecedenceNote": "Xeerarka xayiraadda mar walba way ka horreeyaan — way ka sarreeyaan kuwa ogolaanshaha iyo xitaa oggolaanshaha tooska ah ee wada sheekaysiga.",
+    "policyAsk": "Weydii",
+    "policyAllow": "Ogolyahay",
+    "policyBlock": "Xannib",
+    "policyGroupLabel": "Xeerka oggolaanshaha ee {tool}",
+    "listHint": "Deji waxa dhacaya marka caawiyaha uu doonayo inuu adeegsado qalab kasta — wada sheekeysiga kasta. Weydi is weydiintu waa kan asalka ah; Xannibaaddu had iyo jeer way shaqeysaa."
   }
 }

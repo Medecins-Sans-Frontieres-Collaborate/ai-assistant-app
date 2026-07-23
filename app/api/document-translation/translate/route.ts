@@ -38,6 +38,7 @@ import {
   MAX_DOCUMENT_SIZE,
   MAX_GLOSSARY_SIZE,
   TRANSLATION_EXPIRY_DAYS,
+  TRANSLATION_STAGING_CONTAINER,
   generateTranslatedFilename,
   getDocumentContentType,
   requiresAsyncTranslation,
@@ -160,11 +161,16 @@ export async function POST(request: NextRequest) {
     const translationService = new DocumentTranslationService();
 
     // PDFs can't go through the synchronous document:translate endpoint —
-    // they take the ASYNC batch path: upload the original, submit a
-    // storageType:'File' batch that writes straight to the standard
-    // translated-blob path, hand back a jobId, and let the client poll
-    // /api/document-translation/status/{jobId}. Everything downstream
-    // (content route, reference format) is shared with the sync path.
+    // they take the ASYNC batch path via the dedicated STAGING storage
+    // account: upload the original to user storage (for display/download)
+    // AND to staging, submit a storageType:'File' batch against short-lived
+    // staging SAS URLs, hand back a jobId, and let the client poll
+    // /api/document-translation/status/{jobId}. The status route copies the
+    // finished translation from staging into the standard translated-blob
+    // path in user storage, so everything downstream (content route,
+    // reference format) is shared with the sync path. The Translator service
+    // only ever touches the staging account — the firewalled user-data
+    // accounts are never exposed to it.
     if (requiresAsyncTranslation(document.name)) {
       const jobId = uuidv4();
       const fileExtension = sanitizeBlobExtension(
@@ -186,18 +192,35 @@ export async function POST(request: NextRequest) {
         session.user,
       );
 
+      // Scratch storage the Translator can reach (SAS-gated, auto-purged
+      // by a 1-day lifecycle rule). Per-region like user storage, so EU
+      // documents stage in the EU account.
+      const stagingStorage = new AzureBlobStorage(
+        getEnvVariable({
+          name: 'AZURE_BLOB_STORAGE_STAGING_NAME',
+          user: session.user,
+        }),
+        TRANSLATION_STAGING_CONTAINER,
+        session.user,
+      );
+
       const originalBlobPath = `${session.user.id}/translations/${jobId}_original.${fileExtension}`;
       const blobPath = `${session.user.id}/translations/${jobId}.${fileExtension}`;
       const contentType = getDocumentContentType(document.name);
+      // User storage copy — serves the original-file download immediately.
       await blobStorage.upload(originalBlobPath, documentBuffer, {
         blobHTTPHeaders: {
           blobContentType: contentType,
           blobContentDisposition: `attachment; filename="${encodeURIComponent(document.name)}"`,
         },
       });
+      // Staging copy — what the Translator actually reads.
+      await stagingStorage.upload(originalBlobPath, documentBuffer, {
+        blobHTTPHeaders: { blobContentType: contentType },
+      });
 
-      // Optional glossary rides along as a read-SAS blob.
-      let glossarySasUrl: string | undefined;
+      // Optional glossary stages alongside the source (read SAS).
+      let glossaryUrl: string | undefined;
       let glossaryFormat: string | undefined;
       if (glossaryBuffer && glossary) {
         const glossaryExt = sanitizeBlobExtension(
@@ -205,8 +228,8 @@ export async function POST(request: NextRequest) {
           'csv',
         );
         const glossaryBlobPath = `${session.user.id}/translations/${jobId}_glossary.${glossaryExt}`;
-        await blobStorage.upload(glossaryBlobPath, glossaryBuffer, {});
-        glossarySasUrl = await blobStorage.generateContainerScopedSasUrl(
+        await stagingStorage.upload(glossaryBlobPath, glossaryBuffer, {});
+        glossaryUrl = await stagingStorage.generateContainerScopedSasUrl(
           glossaryBlobPath,
           4,
           'rl',
@@ -214,33 +237,33 @@ export async function POST(request: NextRequest) {
         glossaryFormat = glossaryExt === 'tsv' ? 'tsv' : glossaryExt;
       }
 
-      // Container-scoped SAS on blob URLs — the exact shape Document
+      // Container-scoped SAS on staging blob URLs — the exact shape Document
       // Translation requires (its target validation needs `list`, which a
       // blob SAS cannot carry; MS samples sign sr=c with sp=rl / sp=wl).
       // Source: read+list. Target: write+list on a blob that does not exist
-      // yet — Azure writes it on completion, at exactly the path the
-      // existing content route serves. Short expiry: jobs finish in minutes.
-      const sourceSasUrl = await blobStorage.generateContainerScopedSasUrl(
+      // yet — Azure writes it on completion; the status route copies it into
+      // user storage at the same path. Short expiry: jobs finish in minutes.
+      const sourceUrl = await stagingStorage.generateContainerScopedSasUrl(
         originalBlobPath,
         4,
         'rl',
       );
-      const targetSasUrl = await blobStorage.generateContainerScopedSasUrl(
+      const targetUrl = await stagingStorage.generateContainerScopedSasUrl(
         blobPath,
         4,
         'wl',
       );
 
       const operationId = await translationService.submitBatchTranslation({
-        sourceSasUrl,
-        targetSasUrl,
+        sourceUrl,
+        targetUrl,
         targetLanguage,
         sourceLanguage: sourceLanguage || undefined,
-        glossarySasUrl,
+        glossaryUrl,
         glossaryFormat,
       });
 
-      createTranslationJob({
+      await createTranslationJob(blobStorage, {
         jobId,
         userId: session.user.id,
         operationId,
@@ -363,7 +386,9 @@ export async function POST(request: NextRequest) {
     return successResponse(reference);
   } catch (error) {
     const errorMessage = ctx.getErrorMessage(error);
-    console.error('[DocumentTranslation] Translation failed:', errorMessage);
+    // Full error object server-side — Azure SDK errors hide the useful
+    // parts (code, statusCode, request URL) outside .message.
+    console.error('[DocumentTranslation] Translation failed:', error);
 
     // Log error (targetLanguage and sourceLanguage are available from outer scope)
     void ctx.logger.logTranslationError({
@@ -372,14 +397,19 @@ export async function POST(request: NextRequest) {
       targetLanguage: targetLanguage || undefined,
       contentLength: document?.size,
       isDocumentTranslation: true,
-      errorCode: errorMessage.includes('AZURE_TRANSLATOR_ENDPOINT')
-        ? 'SERVICE_NOT_CONFIGURED'
-        : 'TRANSLATION_FAILED',
+      errorCode:
+        errorMessage.includes('AZURE_TRANSLATOR_ENDPOINT') ||
+        errorMessage.includes('AZURE_BLOB_STORAGE_STAGING_NAME')
+          ? 'SERVICE_NOT_CONFIGURED'
+          : 'TRANSLATION_FAILED',
       errorMessage,
     });
 
     // Check for specific error types
-    if (errorMessage.includes('AZURE_TRANSLATOR_ENDPOINT')) {
+    if (
+      errorMessage.includes('AZURE_TRANSLATOR_ENDPOINT') ||
+      errorMessage.includes('AZURE_BLOB_STORAGE_STAGING_NAME')
+    ) {
       return errorResponse(
         'Document translation service is not configured. Please contact your administrator.',
         500,

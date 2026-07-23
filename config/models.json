@@ -28,6 +28,7 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "deprecated",
       "retirementDate": "2026-10-14"
     },
@@ -62,8 +63,10 @@
       "supportsVerbosity": true,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2026-12-12"
+      "retirementDate": "2026-12-12",
+      "supportsResponsesApi": true
     },
     "gpt-5-mini": {
       "id": "gpt-5-mini",
@@ -92,8 +95,10 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2027-02-06"
+      "retirementDate": "2027-02-06",
+      "supportsResponsesApi": true
     },
     "gpt-5.2-chat": {
       "id": "gpt-5.2-chat",
@@ -119,6 +124,7 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "retired",
       "retirementDate": "2026-06-29",
       "retirementReplacement": "gpt-chat-latest"
@@ -151,8 +157,10 @@
       "supportsMinimalReasoning": false,
       "supportsVerbosity": false,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2026-10-16"
+      "retirementDate": "2026-10-16",
+      "supportsResponsesApi": true
     },
     "Llama-4-Maverick-17B-128E-Instruct-FP8": {
       "id": "Llama-4-Maverick-17B-128E-Instruct-FP8",
@@ -285,12 +293,15 @@
       "sdk": "anthropic-foundry",
       "supportsTemperature": true,
       "deploymentName": "claude-opus-4-6",
-      "supportsReasoningEffort": false,
+      "supportsReasoningEffort": true,
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
       "lifecycle": "preview",
-      "retirementDate": "2027-02-02"
+      "retirementDate": "2027-02-02",
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "reasoningEffort": "minimal"
     },
     "claude-sonnet-4-6": {
       "id": "claude-sonnet-4-6",
@@ -316,12 +327,15 @@
       "sdk": "anthropic-foundry",
       "supportsTemperature": true,
       "deploymentName": "claude-sonnet-4-6",
-      "supportsReasoningEffort": false,
+      "supportsReasoningEffort": true,
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
       "lifecycle": "preview",
-      "retirementDate": "2027-02-10"
+      "retirementDate": "2027-02-10",
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "reasoningEffort": "minimal"
     },
     "claude-opus-4-1": {
       "id": "claude-opus-4-1",
@@ -346,12 +360,15 @@
       "sdk": "anthropic-foundry",
       "supportsTemperature": true,
       "deploymentName": "claude-opus-4-1",
-      "supportsReasoningEffort": false,
+      "supportsReasoningEffort": true,
       "supportsVerbosity": false,
       "supportsTools": true,
       "lifecycle": "preview",
       "retirementDate": "2026-08-05",
-      "retirementReplacement": "claude-opus-4-8"
+      "retirementReplacement": "claude-opus-4-8",
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "reasoningEffort": "minimal"
     },
     "claude-haiku-4-5": {
       "id": "claude-haiku-4-5",
@@ -377,12 +394,15 @@
       "sdk": "anthropic-foundry",
       "supportsTemperature": true,
       "deploymentName": "claude-haiku-4-5",
-      "supportsReasoningEffort": false,
+      "supportsReasoningEffort": true,
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
       "lifecycle": "preview",
-      "retirementDate": "2026-10-19"
+      "retirementDate": "2026-10-19",
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "reasoningEffort": "minimal"
     },
     "gpt-5.4": {
       "id": "gpt-5.4",
@@ -412,8 +432,10 @@
       "supportsVerbosity": true,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2027-03-05"
+      "retirementDate": "2027-03-05",
+      "supportsResponsesApi": true
     },
     "gpt-5.4-nano": {
       "id": "gpt-5.4-nano",
@@ -442,8 +464,10 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2027-03-18"
+      "retirementDate": "2027-03-18",
+      "supportsResponsesApi": true
     },
     "gpt-5.3-chat": {
       "id": "gpt-5.3-chat",
@@ -465,6 +489,7 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "retired",
       "retirementDate": "2026-06-29",
       "retirementReplacement": "gpt-chat-latest"
@@ -498,8 +523,10 @@
       "supportsVerbosity": true,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2027-02-06"
+      "retirementDate": "2027-02-06",
+      "supportsResponsesApi": true
     },
     "gpt-5-chat": {
       "id": "gpt-5-chat",
@@ -522,6 +549,7 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "retired",
       "retirementDate": "2026-06-29",
       "retirementReplacement": "gpt-chat-latest"
@@ -551,6 +579,7 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "deprecated",
       "retirementDate": "2026-10-01",
       "retirementReplacement": "gpt-5.1"
@@ -580,6 +609,7 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "deprecated",
       "retirementDate": "2026-10-14"
     },
@@ -606,10 +636,13 @@
       "sdk": "anthropic-foundry",
       "supportsTemperature": true,
       "deploymentName": "claude-opus-4-8",
-      "supportsReasoningEffort": false,
+      "supportsReasoningEffort": true,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "reasoningEffort": "minimal"
     },
     "claude-sonnet-4-5": {
       "id": "claude-sonnet-4-5",
@@ -633,12 +666,15 @@
       "sdk": "anthropic-foundry",
       "supportsTemperature": true,
       "deploymentName": "claude-sonnet-4-5",
-      "supportsReasoningEffort": false,
+      "supportsReasoningEffort": true,
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
       "lifecycle": "preview",
-      "retirementDate": "2026-10-19"
+      "retirementDate": "2026-10-19",
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "reasoningEffort": "minimal"
     },
     "DeepSeek-V3.2": {
       "id": "DeepSeek-V3.2",
@@ -720,8 +756,10 @@
       "supportsVerbosity": true,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2027-05-15"
+      "retirementDate": "2027-05-15",
+      "supportsResponsesApi": true
     },
     "gpt-5.1-chat": {
       "id": "gpt-5.1-chat",
@@ -744,6 +782,7 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "retired",
       "retirementDate": "2026-06-29",
       "retirementReplacement": "gpt-chat-latest"
@@ -776,8 +815,10 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2027-02-06"
+      "retirementDate": "2027-02-06",
+      "supportsResponsesApi": true
     },
     "gpt-4.1-nano": {
       "id": "gpt-4.1-nano",
@@ -804,6 +845,7 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "deprecated",
       "retirementDate": "2026-10-14"
     },
@@ -832,6 +874,7 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "deprecated",
       "retirementDate": "2026-10-01",
       "retirementReplacement": "gpt-4.1-mini"
@@ -864,8 +907,10 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "deprecated",
-      "retirementDate": "2026-10-16"
+      "retirementDate": "2026-10-16",
+      "supportsResponsesApi": true
     },
     "o3-mini": {
       "id": "o3-mini",
@@ -895,9 +940,11 @@
       "supportsMinimalReasoning": false,
       "supportsVerbosity": false,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "deprecated",
       "retirementDate": "2026-10-01",
-      "retirementReplacement": "o4-mini"
+      "retirementReplacement": "o4-mini",
+      "supportsResponsesApi": true
     },
     "claude-fable-5": {
       "id": "claude-fable-5",
@@ -915,10 +962,13 @@
       "sdk": "anthropic-foundry",
       "supportsTemperature": true,
       "deploymentName": "claude-fable-5",
-      "supportsReasoningEffort": false,
+      "supportsReasoningEffort": true,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "reasoningEffort": "minimal"
     },
     "claude-sonnet-5": {
       "id": "claude-sonnet-5",
@@ -942,10 +992,13 @@
       "sdk": "anthropic-foundry",
       "supportsTemperature": true,
       "deploymentName": "claude-sonnet-5",
-      "supportsReasoningEffort": false,
+      "supportsReasoningEffort": true,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "reasoningEffort": "minimal"
     },
     "claude-opus-4-5": {
       "id": "claude-opus-4-5",
@@ -970,12 +1023,15 @@
       "sdk": "anthropic-foundry",
       "supportsTemperature": true,
       "deploymentName": "claude-opus-4-5",
-      "supportsReasoningEffort": false,
+      "supportsReasoningEffort": true,
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
       "lifecycle": "preview",
-      "retirementDate": "2026-10-19"
+      "retirementDate": "2026-10-19",
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "reasoningEffort": "minimal"
     },
     "mistral-medium-2505": {
       "id": "mistral-medium-2505",
@@ -1183,8 +1239,10 @@
       "supportsVerbosity": true,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2027-04-23"
+      "retirementDate": "2027-04-23",
+      "supportsResponsesApi": true
     },
     "gpt-chat-latest": {
       "id": "gpt-chat-latest",
@@ -1206,6 +1264,7 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "preview",
       "retirementDate": "2026-08-28"
     },
@@ -1231,12 +1290,15 @@
       "sdk": "anthropic-foundry",
       "supportsTemperature": true,
       "deploymentName": "claude-opus-4-7",
-      "supportsReasoningEffort": false,
+      "supportsReasoningEffort": true,
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
       "lifecycle": "preview",
-      "retirementDate": "2027-04-06"
+      "retirementDate": "2027-04-06",
+      "supportsExtendedThinking": true,
+      "supportsMinimalReasoning": true,
+      "reasoningEffort": "minimal"
     },
     "DeepSeek-V4-Pro": {
       "id": "DeepSeek-V4-Pro",
@@ -1322,8 +1384,10 @@
       "supportsVerbosity": true,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2027-07-09"
+      "retirementDate": "2027-07-09",
+      "supportsResponsesApi": true
     },
     "gpt-5.6-terra": {
       "id": "gpt-5.6-terra",
@@ -1351,8 +1415,10 @@
       "supportsVerbosity": true,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2027-07-09"
+      "retirementDate": "2027-07-09",
+      "supportsResponsesApi": true
     },
     "gpt-5.6-luna": {
       "id": "gpt-5.6-luna",
@@ -1381,8 +1447,10 @@
       "supportsVerbosity": false,
       "supportsVision": true,
       "supportsTools": true,
+      "supportsCodeInterpreter": true,
       "lifecycle": "ga",
-      "retirementDate": "2027-07-09"
+      "retirementDate": "2027-07-09",
+      "supportsResponsesApi": true
     },
     "mistral-medium-3-5": {
       "id": "mistral-medium-3-5",

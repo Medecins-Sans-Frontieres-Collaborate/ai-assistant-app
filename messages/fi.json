@@ -762,7 +762,13 @@
         "transformingTable": "Muunnetaan taulukkoa...",
         "findingLocations": "Tunnistetaan sijainteja...",
         "updatingMap": "Päivitetään karttaa..."
-      }
+      },
+      "searchingWebFor": "Haetaan: “{query}”…",
+      "searchingWebForMultiple": "Haetaan {count} aihetta: “{query}”…",
+      "readingCitedSources": "Luetaan {count} aiemmin viitattua artikkelia…",
+      "planningSteps": "Suunnitellaan vaiheita…",
+      "planStep": "Vaihe {current}/{total}: {description}",
+      "planStepRetry": "Vaihe {current}/{total} (yritys uudelleen): {description}"
     },
     "toolSummary": {
       "usedTools": "Käytetty {count, plural, one {# työkalu} other {# työkalua}}",
@@ -772,7 +778,8 @@
       "statusAutoDenied": "Hylätty automaattisesti",
       "statusFailed": "Epäonnistui",
       "statusIncomplete": "Keskeneräinen",
-      "viaService": "palvelun {service} kautta"
+      "viaService": "palvelun {service} kautta",
+      "downloadFile": "Lataa"
     },
     "consent": {
       "authorizeRequired": "Valtuutus vaaditaan",
@@ -814,7 +821,15 @@
       "approvedState": "Hyväksytty — agentti jatkaa",
       "deniedState": "Hylätty",
       "submittingApproval": "Hyväksytään ja jatketaan agentin toimintaa…",
-      "submittingDenial": "Lähetetään hylkäys…"
+      "submittingDenial": "Lähetetään hylkäys…",
+      "alwaysApproveEverywhere": "Hyväksy tämä työkalu aina – jokaisessa keskustelussa",
+      "denyOptionsLabel": "Hylkää vaihtoehdot",
+      "denyOnce": "Hylkää kerran",
+      "neverAllowEverywhere": "Älä koskaan salli tätä työkalua – missään keskustelussa",
+      "deniedByRuleHint": "Estetty sääntösi vuoksi — hallitse asetuksista → Yhdistäjät.",
+      "batchPendingHint": "{count} työkalupyyntöä odottaa",
+      "approveAllButton": "Hyväksy kaikki",
+      "denyAllButton": "Hylkää kaikki"
     },
     "openImage": "Avaa kuva",
     "copyMessage": "Kopioi viesti",
@@ -825,7 +840,9 @@
     "ttsError": "Virhe ääntä luodessa. Yritä uudelleen.",
     "unsupportedMessageType": "Virhe viestin näyttämisessä: Ei-tuettu viestityyppi",
     "addLanguageOption": "Lisää \"{name}\"...",
-    "sources": "Lähteet"
+    "sources": "Lähteet",
+    "interpreterBadge": "Suorita koodi",
+    "disableCodeInterpreter": "Poista koodin suoritus käytöstä"
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",
@@ -1170,6 +1187,30 @@
       "thresholdLabel": "Käsittele uudelleenkirjoituksena yli",
       "thresholdUnit": "% asiakirjasta muuttunut",
       "exceptionSelectionAlways": "Korjattaessa korostettua valintaa muutos toteutetaan aina suoraan — malli palauttaa vain korjatun otteen, eikä sitä voida esittää ehdotuksina koko dokumenttia vastaan."
+    },
+    "webSearch": {
+      "title": "Verkkohaku",
+      "description": "Määrittää, miten live-verkkohaku toimii, kun hakutila on aktiivinen. Muutokset tulevat voimaan heti.",
+      "providerLabel": "Hakupalvelu",
+      "providerAuto": "Automaattinen (suositeltu)",
+      "providerAutoDescription": "Käyttää käyttöönoton oletusta — tällä hetkellä yhdistetty uutishaku alla.",
+      "providerNews": "Yhdistetyt uutiset (GDELT + Google News)",
+      "providerNewsDescription": "Kysely molempiin lähteisiin rinnakkain ja tulosten yhdistäminen, joten yhden epäonnistuminen ei estä hakua. Paras tasapaino nopeuden, lähteiden monipuolisuuden ja toimivien artikkelilinkkien välillä.",
+      "providerGoogleNews": "Vain Google News",
+      "providerGoogleNewsDescription": "Anonyymi ja nopea — vain hakukysely välitetään Googleen (ei tiliä tai evästeitä) ja tulokset tulevat noin sekunnissa. Huom: etsii lähinnä otsikoita ja lyhyitä katkelmia, ei koko artikkeleita, joten vastaukset voivat jäädä pintatasolle.",
+      "providerGdelt": "Vain GDELT",
+      "providerGdeltDescription": "Avoin tutkimustietokanta maailman uutisista suorin julkaisijalinkeillä. Jatkokysymykset voivat lukea koko artikkelin. Tiukasti rajoitettu – peräkkäiset haut voivat jonoutua muutamaksi sekunniksi.",
+      "providerBing": "Bing-tietopohja (Microsoftin kautta)",
+      "providerBingDescription": "Lukee kokonaiset sivut syvempää yhteenvedon laatua varten ja kattaa koko verkon, ei pelkkiä uutisia. Kuitenkin haut kestävät usein 30–90 sekuntia ja hakutulosten laatu vaihtelee hausta toiseen.",
+      "sourcesLabel": "Lähteet per haku",
+      "sourcesDescription": "Kuinka monta eri lähdettä säilytetään viitteinä haussa. Tutkimustyyppisissä kysymyksissä määrää voidaan laajentaa automaattisesti.",
+      "freshnessLabel": "Toivottu ajankohtaisuus",
+      "freshnessDescription": "Kuinka tuoreiden tulosten pitäisi olla. Automaattinen antaa jokaisen kysymyksen päättää (uutiset suosivat viimeistä vuorokautta).",
+      "freshness_auto": "Automaattinen",
+      "freshness_day": "Viimeinen vuorokausi",
+      "freshness_week": "Viimeinen viikko",
+      "freshness_month": "Viimeinen kuukausi",
+      "freshness_any": "Milloin tahansa"
     }
   },
   "notFound": {
@@ -1483,6 +1524,23 @@
       "deployment": "Käyttöönotto",
       "modelVersion": "Mallin versio",
       "publisher": "Julkaisija"
+    },
+    "interpreterMode": {
+      "title": "Koodin tulkki",
+      "subtitle": "Suorittaa koodia tarvittaessa (kuviot, data-analyysi)",
+      "learnMore": "Mitä se osaa?",
+      "description": "Kun tämä on käytössä, avustaja voi suorittaa Python-ohjelmia turvallisessa, eristetyssä ympäristössä liitettyjen tiedostojen analysointiin, tulosten laskemiseen ja kuvaajien tuottamiseen. Suoritettu koodi, sen tulos ja luodut tiedostot näytetään vastauksen yhteydessä. Käytä \"Suorita koodi\" -toimintoa kirjoittajavalikossa pakottaaksesi tämän viestiin."
+    },
+    "searchOptions": {
+      "title": "Edistynyt haku",
+      "resultCount": "Lähteet per haku:",
+      "freshness": "Suosi tuloksia ajalta",
+      "freshness_auto": "Auto (kysymyksen mukaan)",
+      "freshness_day": "Viimeinen vuorokausi",
+      "freshness_week": "Viimeinen viikko",
+      "freshness_month": "Viimeisin kuukausi",
+      "freshness_any": "Milloin tahansa",
+      "hint": "Auto antaa jokaiselle kysymykselle oman ajankohtaisuutensa (esim. uutiset suosivat viimeisintä päivää), ja tutkimustyyppisissä kysymyksissä voidaan käyttää oletusta enemmän lähteitä."
     }
   },
   "models": {
@@ -2130,7 +2188,11 @@
     "moveToMore": "Siirrä kohtaan Lisää",
     "moveOutOfMore": "Näytä valikossa",
     "showSources": "Näytä muut lähteet",
-    "hideSources": "Piilota muut lähteet"
+    "hideSources": "Piilota muut lähteet",
+    "aiTools": "AI-työkalut",
+    "aiToolsTooltip": "Toiminnot, joita avustaja voi käyttää vastatessaan: reaaliaikainen verkkohaku, koodin suoritus ja yhdistetyt palvelut.",
+    "codeInterpreterTooltip": "Suorita Python-koodia turvallisessa hiekkalaatikossa jokaiselle viestille.\n\nSopii hyvin datan analysointiin, laskentoihin ja kaavioiden luomiseen liitetyistä tiedostoista.",
+    "categoryTools": "Työkalut ja liitännät"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Lisää omat ohjeesi räätälöidäksesi, miten tekoäly vastaa. Nämä yhdistetään ydinkäyttäytymissääntöihin, jotka takaavat hyödylliset, tarkat ja turvalliset vastaukset.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Vinkki: Kirjoita \"/\" valitaksesi tallennetuista kehotepohjista.",
@@ -2444,7 +2506,18 @@
     "modelRow": "{requests} pyyntöä · {grams} g",
     "disclosure": "Arviot perustuvat oletuksiin v{version} · alkaen {since} · vain tavallinen chat (agenttien ja tietopankkivastausten käyttöä ei lasketa).",
     "reset": "Nollaa käyttötilastot",
-    "estimatedPortion": "Sisältää noin {grams} g CO₂e ({requests} pyyntöä), jotka on arvioitu keskusteluista ennen seurannan aloittamista — takaisinlaskettu tallennetusta viestitekstistä, ei mitatuista tokenmääristä."
+    "estimatedPortion": "Sisältää noin {grams} g CO₂e ({requests} pyyntöä), jotka on arvioitu keskusteluista ennen seurannan aloittamista — takaisinlaskettu tallennetusta viestitekstistä, ei mitatuista tokenmääristä.",
+    "chipTitle": "Päästösiru",
+    "chipDescription": "Käynnissä olevan keskustelun arvioitu hiilijalanjälki, näytetään chatin syötekentän yläpuolella.",
+    "chipAlways": "Näytä aina",
+    "chipAlwaysHint": "Siru pysyy näkyvissä aina, kun keskustelulla on arvio.",
+    "chipAuto": "Näytä päivityksessä tai hiiren ollessa päällä",
+    "chipAutoHint": "Siru ilmestyy, kun arvio muuttuu, ja häviää hetken kuluttua. Hiiren vieminen sen päälle tai siihen keskittyminen tuo sen takaisin näkyviin.",
+    "chipHidden": "Piilotettu",
+    "chipHiddenHint": "Siru ei näy koskaan. Kokonaismäärät ovat silti seurattavissa ja näkyvät tällä sivulla.",
+    "chipAutoHideLabel": "Häivytä pois jälkeen",
+    "chipAutoHideUnit": "sekuntia",
+    "chipAutoHideHint": "{min}–{max} sekuntia."
   },
   "extraction": {
     "toggleLabel": "Luo jäsenneltyä dataa",
@@ -3353,7 +3426,15 @@
       "measured": "Ilmoitettujen tokenimäärien perusteella",
       "estimated": "Takaisinlaskettu vanhoista viesteistä",
       "lastRequest": "Viimeisin pyyntö",
-      "disclaimer": "Kohtaiset arviot raportoituista tai arvioiduista tokenmääristä, käyttäen julkaistuja keskiarvoja ja oletuksia v{version}. Vanhemmat viestit on takaisinlaskettu tallennetusta tekstistä ja keskustelun nykyisestä mallista. Ei ole mittaus."
+      "disclaimer": "Kohtaiset arviot raportoituista tai arvioiduista tokenmääristä, käyttäen julkaistuja keskiarvoja ja oletuksia v{version}. Vanhemmat viestit on takaisinlaskettu tallennetusta tekstistä ja keskustelun nykyisestä mallista. Ei ole mittaus.",
+      "visibilityGroup": "Päästösirun näkyvyys",
+      "visibilityLabel": "Näytä:",
+      "visibility": {
+        "always": "Aina",
+        "auto": "Automaattisesti",
+        "hidden": "Piilota"
+      },
+      "visibilityHint": "Automaattinen näyttää sirun, kun arvio päivittyy tai viet hiiren sen päälle. Voit muuttaa tätä asetuksissa kohdasta Käyttö ja vaikutus."
     }
   },
   "table": {
@@ -3616,7 +3697,13 @@
     "connectorClientSecretLabel": "OAuth client secret",
     "connectorClientSecretStored": "Salaisuus tallennettu. Jätä tyhjäksi säilyttääksesi nykyisen, tai syötä uusi korvataksesi sen.",
     "connectorClientSecretHint": "Salataan ennen tallennusta, eikä näytetä uudestaan.",
-    "connectorScopesLabel": "Scope-arvot (välilyönnillä eroteltuna, vapaaehtoinen)"
+    "connectorScopesLabel": "Scope-arvot (välilyönnillä eroteltuna, vapaaehtoinen)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (valinnainen)",
+    "connectorOauthTokenUrlLabel": "Token URL (valinnainen)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (valinnainen)",
+    "connectorOauthEndpointsHint": "Jätä päätepisteiden URL-osoitteet tyhjiksi, jotta ne löytyvät automaattisesti. Aseta ne palveluntarjoajille, jotka eivät tue automaattista hakua, kuten NetSuite.",
+    "connectorOauthRefreshUrlHint": "Jätä tyhjäksi, jos haluat päivittää token-URL:n kautta.",
+    "connectorOauthEndpointsPairWarning": "Authorization URL ja token URL on määritettävä yhdessä (refresh URL tarvitsee molemmat)."
   },
   "localModels": {
     "title": "Paikalliset mallit",
@@ -3711,5 +3798,52 @@
     "truncatedNotice": "{count} kenttä(ä) jätetty pois — taulukon maksimi on {max} saraketta: {names}",
     "skippedDerivedNotice": "{count} laskettua saraketta ei tallennettu — kaavat viittaavat tämän taulukon sarakkeisiin: {names}",
     "loadReplacesColumns": "Tämä korvaa nykyiset sarakkeet. Olemassa olevat rivit säilyttävät niiden arvot, joiden sarake nimet täsmäävät."
+  },
+  "codeInterpreterDropdown": "Suorita koodi",
+  "connectorPin": {
+    "toggleLabel": "Hallinnoi liitintyökaluja",
+    "menuLabel": "Liittimet",
+    "menuLabelCount": "Liittimet ({count} aktiivista)",
+    "tooltip": "Näe mitkä liitintyökalut ovat aktiivisia, kytke pois käytöstä tässä keskustelussa tai kaikkialla, tai keskity yhteen.",
+    "toggleServerInChat": "Käytä {name} tässä keskustelussa",
+    "globalToggleTitle": "Ota {name} käyttöön tai pois käytöstä kaikissa keskusteluissa (vastaa Asetukset → Liittimet)",
+    "globalOn": "Käytössä kaikissa",
+    "globalOff": "Ei käytössä",
+    "chatToggleHint": "Valintaruudut koskevat vain tätä keskustelua; globaali-painike vastaa Asetukset → Liittimet. Jokainen aktiivinen liitin lisää omat työkalunsa jokaiseen viestiin — enemmän tokeneita ja hitaampi vastaus.",
+    "trayLabel": "Liitintyökalut",
+    "trayTitle": "Tämän keskustelun liitintyökalut",
+    "toggleServer": "Ota {name} käyttöön",
+    "needsReconnect": "Yhdistä uudelleen asetuksissa",
+    "focusAction": "Keskity",
+    "focusedChip": "Keskitetty",
+    "pinnedHint": "Vain {name}:n työkalut ovat käytössä tässä keskustelussa.",
+    "staleHint": "Keskitetty liitin ei ole yhdistettynä tai käytössä — yhdistä se uudelleen kohdassa Asetukset → Liittimet tai poista keskitys. Siihen asti kaikki aktiiviset työkalut ovat käytössä.",
+    "costHint": "Jokainen aktiivinen liitin lisää työkalunsa jokaiseen viestiin — enemmän tokeneita ja hitaampi vastaus. Kytke pois käytöstä ne, joita et käytä.",
+    "noEligibleConnectors": "Yhtään liitintä ei ole määritetty. Kytke liitin käyttöön kohdassa Asetukset → Liittimet.",
+    "unknownConnector": "Poistettu liitin",
+    "unpin": "Poista keskitys",
+    "dismiss": "Sulje",
+    "badgeCount": "{count} työkalua",
+    "badgeTooltip": "Liitintyökalut ovat aktiivisina jokaisessa viestissä — ne lisäävät tokeneita ja vastausaikaa. Klikkaa hallitaksesi."
+  },
+  "toolApprovals": {
+    "title": "Työkalujen hyväksynnät",
+    "description": "Säännöt, jotka koskevat kaikkia keskusteluja: sallitaan tai estetään tietyt liitintyökalut automaattisesti. Voit lisätä myös työkaluja, joita sinulta ei vielä ole kysytty.",
+    "actionApprove": "Salli aina",
+    "actionReject": "Estä aina",
+    "scopeServer": "palvelussa {name}",
+    "scopeAny": "Mikä tahansa liitin",
+    "removeRule": "Poista sääntö työkalulta {tool}",
+    "toolNameLabel": "Työkalun nimi",
+    "toolNamePlaceholder": "Työkalun nimi, esim. create_issue",
+    "scopeLabel": "Liittimen rajaus",
+    "actionLabel": "Toiminto",
+    "addRule": "Lisää sääntö",
+    "rejectPrecedenceNote": "Estosäännöt voittavat aina — myös sallimissääntöjen ja keskustelukohtaisten automaattihyväksyntöjen yli.",
+    "policyAsk": "Kysy",
+    "policyAllow": "Salli",
+    "policyBlock": "Estä",
+    "policyGroupLabel": "Hyväksyntäkäytäntö työkalulle {tool}",
+    "listHint": "Määritä, mitä tapahtuu, kun avustaja haluaa käyttää kutakin työkalua jokaisessa keskustelussa. Kysy on oletus; Estä menee aina etusijalle."
   }
 }

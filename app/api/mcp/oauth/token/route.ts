@@ -8,6 +8,7 @@ import {
   resolveOauthContext,
 } from '@/lib/services/mcp/mcpOauthDiscovery';
 import { guardedFetch } from '@/lib/services/mcp/mcpUrlGuard';
+import { withOauthErrorNormalization } from '@/lib/services/mcp/oauthResponseNormalization';
 import { RateLimiter } from '@/lib/services/shared/RateLimiter';
 
 import {
@@ -99,7 +100,11 @@ export async function POST(request: NextRequest) {
       resolveConnector: await createConnectorResolver(session),
     });
     const metadata = context.metadata as AuthorizationServerMetadata;
-    const fetchFn = context.resolved.trusted ? undefined : guardedFetch();
+    // Always wrapped: GitHub reports token failures as 200-with-error-body,
+    // which the SDK would otherwise mangle into an opaque ZodError.
+    const fetchFn = withOauthErrorNormalization(
+      context.resolved.trusted ? undefined : guardedFetch(),
+    );
     // Static (pre-registered) clients: the browser only ever holds the
     // clientId — the SECRET lives in env and is injected here, server-side.
     // Any browser-sent secret is ignored for a recognized static clientId.
@@ -136,7 +141,15 @@ export async function POST(request: NextRequest) {
             fetchFn,
           })
         : await refreshAuthorization(context.authorizationServerUrl, {
-            metadata,
+            // A connector may store a refresh URL distinct from its token URL
+            // (Azure-style templates expose all three); the SDK only knows
+            // token_endpoint, so substitute it for the refresh grant.
+            metadata: context.refreshTokenEndpoint
+              ? ({
+                  ...metadata,
+                  token_endpoint: context.refreshTokenEndpoint,
+                } as AuthorizationServerMetadata)
+              : metadata,
             clientInformation,
             refreshToken: grant.refreshToken,
             ...(context.resource
@@ -161,7 +174,15 @@ export async function POST(request: NextRequest) {
       error instanceof Error ? `${error.name}: ${error.message}` : error,
     );
     // invalid_grant gets a stable code so the client wipes tokens + reauths.
-    if (/invalid_grant/i.test(message)) {
+    // bad_verification_code is GitHub's spelling of the same condition; its
+    // description text is matched too because the SDK surfaces unknown error
+    // codes as their description only ("The code passed is incorrect or
+    // expired.").
+    if (
+      /invalid_grant|bad_verification_code|code passed is incorrect or expired/i.test(
+        message,
+      )
+    ) {
       return errorResponse(
         'The authorization is no longer valid',
         400,

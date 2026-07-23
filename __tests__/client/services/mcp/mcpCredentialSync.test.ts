@@ -36,7 +36,18 @@ function mockVaultKeyFetch() {
   ) as never;
 }
 
-const flushAsync = () => new Promise((r) => setTimeout(r, 10));
+/**
+ * Write-through is fire-and-forget: the store subscriber can't be async, so it
+ * kicks off `void setServerSecrets(...)` and returns. There is no promise to
+ * await, so these assertions have to poll.
+ *
+ * This used to be a fixed 10ms sleep, which passed locally and failed on
+ * loaded CI runners — the vault write simply hadn't landed yet. Polling keeps
+ * the fast path fast (first attempt usually succeeds) while tolerating a slow
+ * machine, and still fails properly if the write never happens.
+ */
+const expectEventually = (assertion: () => Promise<void> | void) =>
+  vi.waitFor(assertion, { timeout: 2000, interval: 10 });
 
 const githubRedacted = {
   id: 'github',
@@ -77,10 +88,11 @@ describe('mcpCredentialSync', () => {
     });
 
     unsubscribe = await initMcpCredentialSync();
-    await flushAsync();
 
-    expect(await getServerSecrets('github')).toEqual({
-      authToken: 'legacy_plaintext_pat',
+    await expectEventually(async () => {
+      expect(await getServerSecrets('github')).toEqual({
+        authToken: 'legacy_plaintext_pat',
+      });
     });
   });
 
@@ -92,15 +104,17 @@ describe('mcpCredentialSync', () => {
     useSettingsStore.getState().updateMcpServer('github', {
       authToken: 'github_pat_new',
     });
-    await flushAsync();
-    expect(await getServerSecrets('github')).toEqual({
-      authToken: 'github_pat_new',
+    await expectEventually(async () => {
+      expect(await getServerSecrets('github')).toEqual({
+        authToken: 'github_pat_new',
+      });
     });
 
     // Disconnect (server removed)
     useSettingsStore.getState().deleteMcpServer('github');
-    await flushAsync();
-    expect(await getServerSecrets('github')).toBeNull();
+    await expectEventually(async () => {
+      expect(await getServerSecrets('github')).toBeNull();
+    });
   });
 
   it('cleans up vault records for servers that no longer exist', async () => {
@@ -108,9 +122,10 @@ describe('mcpCredentialSync', () => {
     useSettingsStore.setState({ mcpServers: [] });
 
     unsubscribe = await initMcpCredentialSync();
-    await flushAsync();
 
-    expect(await getServerSecrets('ghost')).toBeNull();
+    await expectEventually(async () => {
+      expect(await getServerSecrets('ghost')).toBeNull();
+    });
   });
 
   it('degrades gracefully when the vault key endpoint is unavailable', async () => {

@@ -8,10 +8,12 @@ import {
   ExtractionRequest,
   ExtractionResponseFormat,
 } from '@/types/extractionRecipe';
+import { InterpreterMode } from '@/types/interpreterMode';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { DisplayNamePreference } from '@/types/settings';
 import { Tone } from '@/types/tone';
+import { WebSearchOptions } from '@/types/webSearch';
 
 import { TokenCredential } from '@azure/identity';
 
@@ -171,6 +173,8 @@ export interface ChatContext {
   mcpServers?: import('@/types/mcp').McpServerRequestEntry[];
   mcpPendingToolCalls?: import('@/types/mcp').McpPendingToolCall[];
   mcpLoopRound?: number;
+  /** Turn plan echoed by the client on approval resume. */
+  mcpPlan?: import('@/types/mcp').McpPlan;
 
   // ========================================
   // FEATURE FLAGS
@@ -180,6 +184,32 @@ export interface ChatContext {
 
   /** Search mode for tool routing */
   searchMode?: SearchMode;
+
+  /**
+   * User-tunable search options (source count, freshness preference).
+   * Validated/bounded by InputValidator; absent = defaults.
+   */
+  webSearchOptions?: WebSearchOptions;
+
+  /**
+   * Code-interpreter mode for tool routing (off / intelligent / always).
+   * `always` is the user's "Run code" force toggle. Server-side the feature
+   * is additionally gated by env.CODE_INTERPRETER_ENABLED.
+   */
+  interpreterMode?: InterpreterMode;
+
+  /**
+   * Set by ToolRouterEnricher when the PICKED model can run the
+   * code_interpreter tool natively on the Responses path (Phase 2): the
+   * enricher skips the sub-tool round-trip and StandardChatService attaches
+   * the tool in-turn instead. `inputFiles` are the raw attachment bytes —
+   * never log this object.
+   */
+  nativeCodeInterpreter?: {
+    /** InterpreterMode.ALWAYS — the model is instructed to actually run code. */
+    forced: boolean;
+    inputFiles: import('../tools/CodeInterpreterTool').CodeInterpreterInputFile[];
+  };
 
   /**
    * Requested hosting region for this conversation (cross-region routing).
@@ -248,7 +278,20 @@ export interface ChatContext {
    * AGENT_ACTIVITY marker into the response stream. The route handler
    * installs this when it sets up the streaming response.
    */
-  emitActivity?: (translationKey: string) => Promise<void>;
+  emitActivity?: (
+    translationKey: string,
+    params?: Record<string, string>,
+  ) => Promise<void>;
+
+  /**
+   * Optional async helper to write a RAW pre-encoded stream marker (e.g. a
+   * TOOL_CALL_RECORD from `lib/streamMarkers`) into the response stream.
+   * Same transport as emitActivity; installed by the route handler. Used by
+   * enrichers that complete a tool run BEFORE the model stream starts (code
+   * interpreter) so the record reaches the client on the same channel the
+   * MCP tool loop uses.
+   */
+  emitMarker?: (marker: string) => Promise<void>;
 
   // ========================================
   // PIPELINE STATE (Modified by stages)
@@ -349,6 +392,14 @@ export interface ChatContext {
  * Decides whether a request should execute via the Foundry-agent code path
  * (vs. the standard handler path). Centralized so the routing rule is
  * consistent across enrichers + the final handler dispatch.
+ *
+ * Files/images intentionally force the STANDARD path: the Foundry agent
+ * handler flattens attachments to placeholder text ("[Image attached]"),
+ * losing their content. This is NOT a capability gap for tools anymore —
+ * the standard path runs web search and the code interpreter via
+ * ToolRouterEnricher, and the interpreter receives the raw attached files.
+ * Revisit for Phase 2 (native in-turn code interpreter) once the agent
+ * path can carry real file payloads.
  */
 export function shouldExecuteAsAgent(
   context: Pick<ChatContext, 'agentMode' | 'model' | 'hasFiles' | 'hasImages'>,

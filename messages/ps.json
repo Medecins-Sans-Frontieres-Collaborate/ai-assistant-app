@@ -845,7 +845,13 @@
         "transformingTable": "جدول بدلېږي...",
         "findingLocations": "ځایونه پېژندل کېږي...",
         "updatingMap": "نقشه نوي کېږي..."
-      }
+      },
+      "searchingWebFor": "پلټنه روانه ده: \"{query}\"...",
+      "searchingWebForMultiple": "د {count} موضوعاتو پلټنه: \"{query}\"...",
+      "readingCitedSources": "د {count} مخکینیو حواله شوو مقالو لوستل...",
+      "planningSteps": "د ګامونو پلان جوړول...",
+      "planStep": "ګام {current}/{total}: {description}",
+      "planStepRetry": "ګام {current}/{total} (بیا هڅه): {description}"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# وسیله کارول شوې} other {# وسایل کارول شوي}}",
@@ -855,7 +861,8 @@
       "statusAutoDenied": "په اوتومات ډول رد شو",
       "statusFailed": "ناکام شو",
       "statusIncomplete": "نیمګړی",
-      "viaService": "د {service} له لارې"
+      "viaService": "د {service} له لارې",
+      "downloadFile": "ډاونلوډ"
     },
     "consent": {
       "authorizeRequired": "اجازه ورکول اړین دي",
@@ -897,7 +904,15 @@
       "approvedState": "منظور شو — اجنټ بیا پیل شو",
       "deniedState": "رد شو",
       "submittingApproval": "منظورېږي او اجنټ بیا پیلېږي…",
-      "submittingDenial": "ستاسې ردول استول کېږي…"
+      "submittingDenial": "ستاسې ردول استول کېږي…",
+      "alwaysApproveEverywhere": "دا وسیله تل ومنئ — په ټولو خبرو کې",
+      "denyOptionsLabel": "د رد کولو اختیارونه",
+      "denyOnce": "یوه ځل رد کړئ",
+      "neverAllowEverywhere": "دا وسیله هیڅکله مه منئ — په ټولو خبرو کې",
+      "deniedByRuleHint": "ستاسو په قاعده بند شوی — تنظیماتو → Connectors کې مدیریت کړئ.",
+      "batchPendingHint": "{count} د وسایلو غوښتنې پاتې دي",
+      "approveAllButton": "ټول ومنئ",
+      "denyAllButton": "ټول رد کړئ"
     },
     "openImage": "انځور پرانیستل",
     "copyMessage": "پیغام کاپي کړئ",
@@ -908,7 +923,9 @@
     "ttsError": "د غږ جوړولو تېروتنه. مهرباني وکړئ بیا هڅه وکړئ.",
     "unsupportedMessageType": "د پیغام ښودلو تېروتنه: نه ملاتړېدونکی ډول",
     "addLanguageOption": "\"{name}\" اضافه کړئ...",
-    "sources": "سرچینې"
+    "sources": "سرچینې",
+    "interpreterBadge": "کوډ وچلوئ",
+    "disableCodeInterpreter": "د کوډ اجرا کول غیر فعال کړئ"
   },
   "transcript": {
     "originalTranscript": "اصلي لیک",
@@ -1348,6 +1365,30 @@
       "thresholdLabel": "پورته د جای لیک په توګه واخلي",
       "thresholdUnit": "٪ د سند بدل شوی",
       "exceptionSelectionAlways": "د ټینګار شوي انتخاب اصلاح کول تل مستقیم تطبیق کېږي — ماډل یواځې اصلاح شوی برخه بېرته ورکوي، چې د ټول سند لپاره وړاندیزونو ته نه شي وېشل کېدای."
+    },
+    "webSearch": {
+      "title": "ویب پلټنه",
+      "description": "کنټرولوي چې ژوندي ویب پلټنې څنګه پرمخ ځي کله چې د پلټنې حالت فعال وي. بدلونونه سمدستي پلي کېږي.",
+      "providerLabel": "د پلټنې عرضه کوونکی",
+      "providerAuto": "اتوماتیک (سپارښتنه شوي)",
+      "providerAutoDescription": "د خپرونې اصلي حالت کاروي — دا مهال ګډ خبرونه پلټنه ده.",
+      "providerNews": "ګډ خبرونه (GDELT + Google News)",
+      "providerNewsDescription": "دواړه سرچینې موازي پوښتي او پایلې سره یوځای کوي، نو که یوه ناکامه شي، پلټنه نه درېدلې. د چټکۍ، سرچینې تنوع، او فعالو لینکونو ترټولو ښه توازن.",
+      "providerGoogleNews": "یوازې Google News",
+      "providerGoogleNewsDescription": "بې نومه او چټکه — یوازې د پلټنې پوښتنه Google ته لیږل کېږي (نه حساب نه کوکیز)، او نتیجه شاوخوا یوه ثانیه کې راځي. یادونه: دا اکثراً سرلیکونه او لنډې فقری ګوري، بشپړې مقالې نه، نو ځوابونه هم سطحې وي.",
+      "providerGdelt": "یوازې GDELT",
+      "providerGdeltDescription": "د نړیوالو خبرونو پرانیستې څېړنیز ډیټابیس، له خپرونکي سره مستقیم لینکونه لري، چې تعقیبي پوښتنې بشپړې مقالې ولولای شي. کلک محدودیت لري — پرله پسې پلټنې څو ثانیې انتظار کېدای شي.",
+      "providerBing": "Bing grounding (د Microsoft له لارې)",
+      "providerBingDescription": "بشپړې پاڼې لولي د ژورو لنډیزونو لپاره او ټولعام ویب پوښي، یوازې خبرونه نه. خو پلټنې اکثره ۳۰–۹۰ ثانیې وخت نیسي او د پایلو کیفیت یو له بله فرق لري.",
+      "sourcesLabel": "هرې پلټنې ته سرچینې",
+      "sourcesDescription": "پلټنه به څومره بېلابېلې سرچینې د حوالې په توګه وساتي. د څېړنې پوښتنې کیدای شي دا اوتومات پراخې کړي.",
+      "freshnessLabel": "د تازه والي ترجیح",
+      "freshnessDescription": "پایلې څومره تازه وي. اتومات پر هره پوښتنه پرېږدي (بیړنۍ خبرونه تېرې ورځې ته ترجیح ورکوي).",
+      "freshness_auto": "اتوماتیک",
+      "freshness_day": "تېره ورځ",
+      "freshness_week": "تیره اونۍ",
+      "freshness_month": "تیره میاشت",
+      "freshness_any": "هر وخت"
     }
   },
   "emptyState": {
@@ -1534,6 +1575,23 @@
       "deployment": "استقرار",
       "modelVersion": "د ماډل نسخه",
       "publisher": "خپرونکی"
+    },
+    "interpreterMode": {
+      "title": "د کوډ ژباړن",
+      "subtitle": "کوډ چلوي کله چې ګټه ولري (نقشې، ډیټا شننه)",
+      "learnMore": "دا څه کولی شي؟",
+      "description": "کله چې فعال وي، همکار کولی شي Python په خوندي او جلا چاپېریال کې وچلوي، ضمیمه فایلونه وڅېړي، نتایج حساب کړي او نقشې جوړې کړي. اجرا شوی کوډ، پایلې او جوړ شوي فایلونه له ځواب سره ښکاري. د پیغام لپاره جبري کارولو لپاره د \"Run Code\" څخه استفاده وکړئ."
+    },
+    "searchOptions": {
+      "title": "پرمختللې پلټنه",
+      "resultCount": "هرې پلټنې ته سرچینې:",
+      "freshness": "د کوم وخت پایلو ته ترجیح",
+      "freshness_auto": "اتومات (پر پوښتنه)",
+      "freshness_day": "تېره ورځ",
+      "freshness_week": "تیره اونۍ",
+      "freshness_month": "تېر میاشت",
+      "freshness_any": "هر وخت",
+      "hint": "Auto به هرې پوښتنې ته خپله نیټه وټاکي (لکه خبرونه د تېرې ورځې له منځه غوره ګڼي) او څېړنيزې پوښتنې کیدای شي له ډېرو سرچینو نه کار واخلي."
     }
   },
   "models": {
@@ -2105,7 +2163,11 @@
     "moveToMore": "نور ته ولیږدول",
     "moveOutOfMore": "په مینو کې ښکاره کړئ",
     "showSources": "نورې سرچینې وښایاست",
-    "hideSources": "نورې سرچینې پټې کړئ"
+    "hideSources": "نورې سرچینې پټې کړئ",
+    "aiTools": "AI وسیلې",
+    "aiToolsTooltip": "هغه وړتیاوې چې مرستندوی یې کارولای شي: ژوندی ویب لټون، کوډ چلول، او تړلي خدمتونه.",
+    "codeInterpreterTooltip": "Python کوډ په خوندي sandbox کې د هر پیغام لپاره وچلوي.\n\nد معلوماتو شننې، حسابونو او له ضمیمه شوو فایلونو نه د جدول جوړولو لپاره غوره ده.",
+    "categoryTools": "وسايل او وصلوونکي"
   },
   "transcription": {
     "transcribesOnSend": "په استولو سره ټرانسکرېپشن کېږي",
@@ -2428,7 +2490,18 @@
     "modelRow": "{requests} ځله · {grams} ګرامه",
     "disclosure": "اټکلونه د فرضیو پر بنسټ v{version} · له {since} راهیسې · یوازې معیاري چټ (ایجنټونه او د پوهې-بنسټ ځوابونه نه شمېرل کېږي).",
     "reset": "د کارونې احصائیې بیا تنظیم کړئ",
-    "estimatedPortion": "شاوخوا ~{grams} g CO₂e ({requests} غوښتنې) پکې شامل دي چې له خبرو اترو نه اټکل شوي چې د ثبت له پیل مخکې دي—له ذخیره شوي پیغامونو نه شاته حساب شوي، د ټوکن شمېرې نه دي اندازه شوي."
+    "estimatedPortion": "شاوخوا ~{grams} g CO₂e ({requests} غوښتنې) پکې شامل دي چې له خبرو اترو نه اټکل شوي چې د ثبت له پیل مخکې دي—له ذخیره شوي پیغامونو نه شاته حساب شوي، د ټوکن شمېرې نه دي اندازه شوي.",
+    "chipTitle": "د اخراجاتو چپ",
+    "chipDescription": "د روانې خبرې اټکلي کاربن اثر، چې د چټ پيغام لیکلو بکس پورته ښکاري.",
+    "chipAlways": "تل ښکاره کړئ",
+    "chipAlwaysHint": "چپ هر وخت چې خبرې اټکل ولري، ښکاره پاتې کېږي.",
+    "chipAuto": "یوازې تازه کېدو یا ماوس پورته کې ښکاره کړئ",
+    "chipAutoHint": "چپ هغه وخت ښکاري کله چې اټکل بدل شي، او وروسته ورو ورو پټیږي. کله چې ورباندې کرسر یا تمرکز وکړئ، بېرته راښکاره کېږي.",
+    "chipHidden": "پټ شوی",
+    "chipHiddenHint": "چپ هېڅکله نه ښکاري. ټولیز شمېرې لا هم ثبتېږي او په دې پاڼه کې ښکاري.",
+    "chipAutoHideLabel": "ورو ورو پټ شي وروسته له",
+    "chipAutoHideUnit": "ثانیې",
+    "chipAutoHideHint": "د {min} او {max} ثانیو ترمنځ."
   },
   "extraction": {
     "toggleLabel": "جوړښت لرونکي معلومات راوباسئ",
@@ -3337,7 +3410,15 @@
       "measured": "د راپور شویو ټوکن شمېرې پراساس",
       "estimated": "له زړو پیغامونو نه شاته حساب شوی",
       "lastRequest": "وروستی غوښتنه",
-      "disclaimer": "د هرې غوښتنې اټکلي شمېرې د راپور شویو یا نږدې شویو ټوکن شمېرې پراساس، د خپرو شویو اوسطونو او فرضیاتو v{version} مطابق. زاړه پیغامونه له ذخیره شوي متن څخه د اوسني ماډل پراساس شاته حساب شوي. دا اندازه نه ده."
+      "disclaimer": "د هرې غوښتنې اټکلي شمېرې د راپور شویو یا نږدې شویو ټوکن شمېرې پراساس، د خپرو شویو اوسطونو او فرضیاتو v{version} مطابق. زاړه پیغامونه له ذخیره شوي متن څخه د اوسني ماډل پراساس شاته حساب شوي. دا اندازه نه ده.",
+      "visibilityGroup": "د اخراجاتو چپ لید",
+      "visibilityLabel": "وښایئ:",
+      "visibility": {
+        "always": "تل",
+        "auto": "اتومات",
+        "hidden": "پټ کړئ"
+      },
+      "visibilityHint": "اتومات چپ هغه وخت ښيي کله چې اټکل نوي شي یا تاسو ورباندې کرسر یوسئ. دا تنظیم کول بېرته Settings › Usage & Impact کې بدلولی شئ."
     }
   },
   "table": {
@@ -3600,7 +3681,13 @@
     "connectorClientSecretLabel": "د OAuth پیرودونکي پټنوم",
     "connectorClientSecretStored": "پټنوم خوندي شوی دی. که وغواړئ همدا وساتئ، تش پرېږدئ؛ که نوي غواړئ، نوی ولیکئ.",
     "connectorClientSecretHint": "د ذخیره کولو مخکې کوډ (Encrypted) کیږي، او بیا به نه ښکاري.",
-    "connectorScopesLabel": "Scopes (جلا جلا له ځای سره، اختیاري)"
+    "connectorScopesLabel": "Scopes (جلا جلا له ځای سره، اختیاري)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (اختیاري)",
+    "connectorOauthTokenUrlLabel": "Token URL (اختیاري)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (اختیاري)",
+    "connectorOauthEndpointsHint": "د endpoint URLونه تش پرېږدئ څو اتومات وموندل شي. یوازې هغه چمتو کونکو لپاره یې وټاکئ چې اتومات موندنه نه لري، لکه NetSuite.",
+    "connectorOauthRefreshUrlHint": "تش پرېږدئ څو د token URL له لارې تازه شي.",
+    "connectorOauthEndpointsPairWarning": "Authorization URL او token URL باید یو ځای وټاکل شي (refresh URL دواړه ته اړتیا لري)."
   },
   "localModels": {
     "title": "محلي ماډلونه",
@@ -3695,5 +3782,52 @@
     "truncatedNotice": "{count} ساحې لیرې شوې ـ د جدول حد {max} ستنه دی: {names}",
     "skippedDerivedNotice": "{count} محاسبه شوي ستنې خوندي نشوې ـ فارمولاوې د جدول ستنو ته راجع دي: {names}",
     "loadReplacesColumns": "اوسني ستنې به بدل شي. پخوانۍ قطارونه یوازې هغه ارزښتونه ساتي چې د ستنې نومونه یې برابر وي."
+  },
+  "codeInterpreterDropdown": "کوډ وچلوئ",
+  "connectorPin": {
+    "toggleLabel": "د connector وسیلې اداره کړئ",
+    "menuLabel": "Connectors",
+    "menuLabelCount": "Connectors ({count} فعال)",
+    "tooltip": "وګورئ کوم connector وسیلې فعاله دي، دا چټ یا ټول ځای کې یې بند کړئ یا یوازې یوه ته پام وکړئ.",
+    "toggleServerInChat": "{name} پدې چټ کې وکاروئ",
+    "globalToggleTitle": "{name} هرځای آن یا آف کړئ (څرګندونې → Connectors ته ورته)",
+    "globalOn": "عمومي فعال",
+    "globalOff": "عمومي بند",
+    "chatToggleHint": "Checkboxes یوازې دا چټ کنټرولوي؛ عمومي تڼۍ د تنظیماتو → Connectors سره ورته ده. هر فعال connector خپلې وسیلې هر پیغام ته زیاتوي — دا نور tokens او ورو ځوابونه رامنځته کوي.",
+    "trayLabel": "د connector وسیلې",
+    "trayTitle": "د دې چټ لپاره د connector وسیلې",
+    "toggleServer": "{name} فعال کړئ",
+    "needsReconnect": "په تنظیماتو کې بیا وصل کړئ",
+    "focusAction": "پاملرنه",
+    "focusedChip": "پاملرنه شوې",
+    "pinnedHint": "یوازې د {name} وسیلې به پدې خبرو کې کارول کیږي.",
+    "staleHint": "متمرکز connector غیر فعال یا قطع دی — په تنظیماتو → Connectors کې بیا وصل یا پاملرنه لرې کړئ. تر هغه هر فعاله وسیله کارول کیږي.",
+    "costHint": "هر فعال connector خپلې وسیلې هر پیغام ته زیاتوي — دا نور tokens او ورو ځوابونه رامنځته کوي. هغه چې نه کاروئ بند کړئ.",
+    "noEligibleConnectors": "هیڅ connector نه دی تنظیم شوی. لومړی په تنظیماتو → Connectors کې یو وصل کړئ.",
+    "unknownConnector": "لیرې شوی connector",
+    "unpin": "پاملرنه لرې کړئ",
+    "dismiss": "بند کړئ",
+    "badgeCount": "{count} وسیلې",
+    "badgeTooltip": "د connector وسیلې هر پیغام کې فعالې دي — دا tokens او ځواب وخت زیاتوي. تنظیم ته کلیک وکړئ."
+  },
+  "toolApprovals": {
+    "title": "د وسیلو تایید",
+    "description": "هرې خبرې ته پلي کیدونکي اصول: ځانګړې connector وسیلې په اوتومات ډول ومنئ یا بند کړئ. تاسو کولی شئ وسایل هم اضافه کړئ چې تر اوسه مو پوښتنه نه ده شوې.",
+    "actionApprove": "تل اجازه ورکړئ",
+    "actionReject": "تل بند کړئ",
+    "scopeServer": "پر {name}",
+    "scopeAny": "هر connector",
+    "removeRule": "د {tool} لپاره قاعده لرې کړئ",
+    "toolNameLabel": "د وسیلې نوم",
+    "toolNamePlaceholder": "د وسیلې نوم، لکه create_issue",
+    "scopeLabel": "د connector حدود",
+    "actionLabel": "عملیه",
+    "addRule": "قاعده اضافه کړئ",
+    "rejectPrecedenceNote": "د بندولو اصول تل لومړیتوب لري — نسبت د منلو اصولو او هرې خبرې له خودکار تایید نه.",
+    "policyAsk": "وپوښتئ",
+    "policyAllow": "اجازه ورکړئ",
+    "policyBlock": "بند کړئ",
+    "policyGroupLabel": "د {tool} لپاره د تصویب پالیسي",
+    "listHint": "وټاکئ چې کله اسسټنټ غواړي هر وسیله وچلوي، د هرې خبرې اترې په جریان کې به څه پیښیږي. \"پوښتنه\" اصلي حالت دی؛ \"بند کړئ\" تل لوړ اولویت لري."
   }
 }

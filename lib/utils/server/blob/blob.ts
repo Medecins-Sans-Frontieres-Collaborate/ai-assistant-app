@@ -509,9 +509,11 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
    * `sp=rl` (source) / `sp=wl` (target) on blob URLs.
    *
    * SCOPE CAVEAT: unlike generateSasUrl, this grants the permissions on the
-   * WHOLE container, not one blob. It must only ever be handed to trusted
-   * Azure services (the Translator batch API) inside a server-to-server
-   * request body — never to a browser — and expiry should stay short.
+   * WHOLE container, not one blob. It must only ever be issued against the
+   * dedicated translation STAGING account (never the user-data accounts),
+   * and only handed to trusted Azure services (the Translator batch API)
+   * inside a server-to-server request body — never to a browser — with a
+   * short expiry.
    *
    * @param blobName - Blob path the URL points at (SAS itself is container-wide)
    * @param expiryHours - Keep short; translation jobs finish in minutes

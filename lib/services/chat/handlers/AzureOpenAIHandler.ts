@@ -214,7 +214,10 @@ export class AzureOpenAIHandler extends ModelHandler {
     const params: any = {
       model: modelId,
       messages,
-      user: JSON.stringify(user),
+      // Opaque stable identifier only. This field is for provider-side abuse
+      // monitoring — never send profile fields (name, mail, jobTitle, …), which
+      // would leak PII to the model provider on every request.
+      user: user.id,
       stream: streamResponse,
       // Ask the provider to append a terminal usage chunk (empty `choices`,
       // populated `usage`) so real token counts can be captured for

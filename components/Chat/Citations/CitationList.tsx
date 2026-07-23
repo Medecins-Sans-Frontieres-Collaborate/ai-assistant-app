@@ -23,7 +23,75 @@ interface CitationListProps {
   citations: Citation[];
 }
 
-export const CitationList: FC<{ citations: Citation[] }> = ({ citations }) => {
+/**
+ * Session-lifetime cache of resolved redirect links, shared across all
+ * citation lists so re-renders and revisits never re-ask the server.
+ */
+const resolvedLinkCache = new Map<string, string>();
+
+const GOOGLE_NEWS_LINK_RE =
+  /^https:\/\/news\.google\.com\/(?:rss\/)?articles\//;
+
+/**
+ * Deferred link upgrading: Google News search responses stream immediately
+ * with redirect links; this hook swaps in the real publisher URLs a moment
+ * later via the authed resolve endpoint. Purely cosmetic-progressive — the
+ * redirect links work regardless, and failures change nothing.
+ */
+function useResolvedCitationLinks(citations: Citation[]): Citation[] {
+  const [resolvedVersion, setResolvedVersion] = useState(0);
+
+  const unresolvedKey = citations
+    .map((c) => c.url)
+    .filter((u) => GOOGLE_NEWS_LINK_RE.test(u) && !resolvedLinkCache.has(u))
+    .join('|');
+
+  useEffect(() => {
+    if (!unresolvedKey) return;
+    const links = unresolvedKey.split('|').slice(0, 15);
+    let cancelled = false;
+
+    fetch('/api/search/resolve-links', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ links }),
+    })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data: { resolved?: Record<string, string> } | null) => {
+        if (cancelled || !data?.resolved) return;
+        const entries = Object.entries(data.resolved);
+        if (entries.length === 0) return;
+        for (const [link, url] of entries) {
+          resolvedLinkCache.set(link, url);
+        }
+        setResolvedVersion((v) => v + 1);
+      })
+      .catch(() => {
+        // Best-effort: redirect links keep working.
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [unresolvedKey]);
+
+  return useMemo(
+    () =>
+      citations.map((citation) =>
+        resolvedLinkCache.has(citation.url)
+          ? { ...citation, url: resolvedLinkCache.get(citation.url)! }
+          : citation,
+      ),
+    // resolvedVersion invalidates the memo when new resolutions land.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [citations, resolvedVersion],
+  );
+}
+
+export const CitationList: FC<{ citations: Citation[] }> = ({
+  citations: rawCitations,
+}) => {
+  const citations = useResolvedCitationLinks(rawCitations);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [viewMode, setViewMode] = useState<'cards' | 'list'>('cards');
@@ -33,26 +101,30 @@ export const CitationList: FC<{ citations: Citation[] }> = ({ citations }) => {
   >(null);
   const scrollIntervalRef = useRef<number | null>(null);
 
-  // Deduplicate citations by URL or title
-  const uniqueCitations = citations.reduce((acc: Citation[], current) => {
-    const isDuplicate = acc.some(
-      (item) =>
-        (item.url && current.url && item.url === current.url) ||
-        (item.title && current.title && item.title === current.title),
-    );
+  // Deduplicate citations by URL or title. Entries without a URL are
+  // dropped up front — they can't render as a source card, and counting
+  // them makes the header disagree with the visible rows.
+  const uniqueCitations = citations
+    .filter((c) => !!c.url)
+    .reduce((acc: Citation[], current) => {
+      const isDuplicate = acc.some(
+        (item) =>
+          (item.url && current.url && item.url === current.url) ||
+          (item.title && current.title && item.title === current.title),
+      );
 
-    if (!isDuplicate) {
-      acc.push(current);
-    }
-    return acc;
-  }, []);
+      if (!isDuplicate) {
+        acc.push(current);
+      }
+      return acc;
+    }, []);
 
   // Extract unique domains for header favicon display
   const uniqueDomainCitations = useMemo(() => {
     const seen = new Set<string>();
     return uniqueCitations.filter((c) => {
       try {
-        const domain = new URL(c.url).hostname;
+        const domain = new URL(c.sourceUrl || c.url).hostname;
         if (seen.has(domain)) return false;
         seen.add(domain);
         return true;
@@ -213,7 +285,8 @@ export const CitationList: FC<{ citations: Citation[] }> = ({ citations }) => {
         {visibleFavicons.length > 0 && (
           <div className="flex items-center gap-1 ml-3 pl-3 border-l border-gray-300 dark:border-gray-600">
             {visibleFavicons.map((citation) => {
-              const hostname = new URL(citation.url).hostname;
+              const hostname = new URL(citation.sourceUrl || citation.url)
+                .hostname;
               const displayDomain = hostname.replace(/^www\./, '');
               return (
                 // eslint-disable-next-line @next/next/no-img-element

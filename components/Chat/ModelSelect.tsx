@@ -30,6 +30,7 @@ import {
 } from '@/lib/utils/app/modelSeries';
 
 import { Conversation } from '@/types/chat';
+import { InterpreterMode } from '@/types/interpreterMode';
 import { LOCAL_RUNTIMES, LOCAL_RUNTIME_DEFAULTS } from '@/types/localRuntime';
 import {
   OpenAIModel,
@@ -60,6 +61,7 @@ import { ModelStatusBadge } from './ModelSelect/ModelStatusBadge';
 import { SHOW_RECOMMENDED_TAG } from './ModelSelect/showRecommendedTag';
 import { ModelSourceForm } from './ModelSources/ModelSourceForm';
 
+import { useChatInputStore } from '@/client/stores/chatInputStore';
 import {
   AgentSource,
   ModelSource,
@@ -106,8 +108,14 @@ export const ModelSelect: FC<ModelSelectProps> = ({
   const { exploreBots, enableClaudeModels, enableBYOModels } = useFlags();
   const { selectedConversation, updateConversation, conversations } =
     useConversations();
-  const { models, defaultModelId, setDefaultModelId, setDefaultSearchMode } =
-    useSettings();
+  const {
+    models,
+    defaultModelId,
+    setDefaultModelId,
+    setDefaultSearchMode,
+    defaultInterpreterMode,
+    setDefaultInterpreterMode,
+  } = useSettings();
 
   // Feature flag: Control organization bots visibility via LaunchDarkly
   // Default to true if LaunchDarkly is not configured (for local development)
@@ -452,6 +460,11 @@ export const ModelSelect: FC<ModelSelectProps> = ({
     selectedConversation?.defaultSearchMode ?? SearchMode.INTELLIGENT;
   const searchModeEnabled = currentSearchMode !== SearchMode.OFF;
 
+  // Interpreter mode: conversation override, else the settings default.
+  const currentInterpreterMode =
+    selectedConversation?.defaultInterpreterMode ?? defaultInterpreterMode;
+  const interpreterEnabled = currentInterpreterMode !== InterpreterMode.OFF;
+
   // For non-agent models, if AGENT mode is somehow set, display as INTELLIGENT in UI
   const displaySearchMode =
     currentSearchMode === SearchMode.AGENT && !agentAvailable
@@ -584,6 +597,33 @@ export const ModelSelect: FC<ModelSelectProps> = ({
       scopedToConversation,
     ],
   );
+
+  const handleToggleInterpreterMode = useCallback(() => {
+    if (!selectedConversation) return;
+
+    const newMode = interpreterEnabled
+      ? InterpreterMode.OFF
+      : InterpreterMode.INTELLIGENT;
+
+    console.log(
+      `[ModelSelect] Toggling Interpreter Mode: ${currentInterpreterMode} → ${newMode}`,
+    );
+
+    // Update current conversation + live composer state
+    updateConversation(selectedConversation.id, {
+      defaultInterpreterMode: newMode,
+    });
+    useChatInputStore.getState().setInterpreterMode(newMode);
+
+    // Set as default interpreter mode for future conversations
+    setDefaultInterpreterMode(newMode);
+  }, [
+    selectedConversation,
+    interpreterEnabled,
+    currentInterpreterMode,
+    updateConversation,
+    setDefaultInterpreterMode,
+  ]);
 
   const handleToggleSearchMode = useCallback(() => {
     if (!selectedConversation) return;
@@ -1385,6 +1425,8 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                   isCustomAgent={isCustomAgent}
                   searchModeEnabled={searchModeEnabled}
                   displaySearchMode={displaySearchMode}
+                  interpreterEnabled={interpreterEnabled}
+                  handleToggleInterpreterMode={handleToggleInterpreterMode}
                   agentAvailable={agentAvailable}
                   showModelAdvanced={showModelAdvanced}
                   selectedConversation={selectedConversation}
@@ -1432,6 +1474,8 @@ export const ModelSelect: FC<ModelSelectProps> = ({
           isCustomAgent={isCustomAgent}
           searchModeEnabled={searchModeEnabled}
           displaySearchMode={displaySearchMode}
+          interpreterEnabled={interpreterEnabled}
+          handleToggleInterpreterMode={handleToggleInterpreterMode}
           agentAvailable={agentAvailable}
           showModelAdvanced={showModelAdvanced}
           selectedConversation={selectedConversation}

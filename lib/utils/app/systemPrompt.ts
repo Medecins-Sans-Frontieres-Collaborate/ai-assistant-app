@@ -46,10 +46,10 @@ If asked about the AI Assistant's features, privacy, or usage guidelines, provid
   - Audio/video transcription with optional translation
   - File uploads
   - Camera (useful on mobile devices)
-- We do not currently natively integrate with other tools or services, even M365 services, that access user data. Any operations here require the user to copy and paste the content into the application.
+- Unless a "Connected Tools (MCP)" section appears later in this prompt, we do not natively integrate with other tools or services, even M365 services, that access user data — any such operations require the user to copy and paste the content into the application. When that section IS present, the connectors it lists are genuinely available to you in this conversation.
 - Users can use voice inputs rather than typing. Clicking the record icon will start this, but they have to click again to stop when done.
 - Every assistant response has a Download button in its action bar (below the message, next to Copy, Regenerate, and Open as Document). It exports the response as Markdown, HTML, Word (.docx), Plain Text, or PDF.
-- You cannot attach, send, or generate files yourself. When a user asks you to "send", "email", "download", "export", or "save" a response as a file, direct them to the Download button rather than promising a file, and do not ask for more information to "create" the download — the export happens entirely in the UI from content you have already written.
+- Whether you can GENERATE files yourself depends on the Code Interpreter — follow the "Files & Exports" or "Code Execution & File Generation" section later in this prompt.
 
 ## Communication
 
@@ -202,7 +202,59 @@ export interface SystemPromptOptions {
   conversationSummary?: string;
   /** Long-term user memory snippets (Memories feature) */
   memories?: string[];
+  /**
+   * Whether the code interpreter is active for this conversation
+   * (interpreterMode on + env gate). Adds a capabilities section so models
+   * offer file generation/analysis instead of claiming they can't produce
+   * files — e.g. exporting earlier conversation content as a spreadsheet.
+   */
+  codeInterpreterAvailable?: boolean;
+  /**
+   * Whether automatic web search is active for this conversation
+   * (searchMode INTELLIGENT/ALWAYS). Adds a section telling models how to
+   * behave WITH injected results (ground + cite) and WITHOUT them (no live
+   * data this turn — don't fabricate currency or claim to have browsed).
+   */
+  webSearchActive?: boolean;
 }
+
+/**
+ * Capabilities section rendered when automatic web search is active.
+ * Covers both conditions a turn can be in — results injected vs. a normal
+ * response with no live data. Exported for prompt-overriding paths.
+ */
+export const WEB_SEARCH_PROMPT_SECTION =
+  '## Web Search\n' +
+  'Live web search runs automatically before your turn when the question needs current information.\n' +
+  '- When the user message contains a "Web Search results:" block: ground your answer in those results and cite sources with separate bracketed markers like [1][2] (never [1, 2]). Do not repeat source URLs, titles, or dates in your text — citations are displayed to the user separately.\n' +
+  '- When there is NO such block: no live search ran for this turn. Answer from your knowledge, do not fabricate current facts or claim to have browsed the web, and note when time-sensitive information may be out of date. The user can force a search with the "Web Search" toggle in the composer.';
+
+/**
+ * Capabilities section rendered when the code interpreter is active.
+ * Exported so prompt-overriding paths (org-agent prompts) can re-append it.
+ */
+export const CODE_INTERPRETER_PROMPT_SECTION =
+  '## Code Execution & File Generation\n' +
+  'A sandboxed Python code interpreter is available in this conversation. It can:\n' +
+  '- Analyze attached files (CSV, Excel, JSON, documents, images) with real code, not estimation\n' +
+  '- Run calculations, statistics, and simulations, and generate charts\n' +
+  '- CREATE downloadable files (.xlsx, .csv, .docx, .png, …) — including from content earlier in this conversation, e.g. exporting discussed data as a spreadsheet or turning notes into a document\n' +
+  'Generated files are automatically shown to the user with previews and download links. ' +
+  'When the user asks for output "as a file", a spreadsheet, a document, or a chart, FAVOR producing a real file via code execution over pasting content as markdown or pointing at the Download button (the Download button remains fine for exporting the response text itself). ' +
+  'Refer to generated files by filename only — never invent links.';
+
+/**
+ * File-output guidance rendered when the code interpreter is NOT active:
+ * the assistant cannot generate files, so downloads happen via the UI —
+ * and the user can enable the Code Interpreter for real file generation.
+ * Mutually exclusive with CODE_INTERPRETER_PROMPT_SECTION (which favors
+ * genuine file creation); keeping both static would be contradictory.
+ */
+export const NO_FILE_GENERATION_PROMPT_SECTION =
+  '## Files & Exports\n' +
+  'You cannot attach, send, or generate files yourself in this conversation (the Code Interpreter is off). ' +
+  'When a user asks you to "send", "email", "download", "export", or "save" a response as a file, direct them to the Download button in the response action bar (Markdown, HTML, Word (.docx), Plain Text, or PDF) rather than promising a file — the export happens entirely in the UI from content you have already written, so do not ask for more information to "create" it. ' +
+  'If they want a genuinely generated file (e.g. an .xlsx spreadsheet, a .csv export, or a chart image), let them know they can enable the Code Interpreter in the model settings panel.';
 
 /**
  * Renders the '## Earlier Conversation Summary' and '## User Memories'
@@ -300,6 +352,21 @@ function buildDynamicContext(options: SystemPromptOptions): string {
       }
       parts.push(userSection);
     }
+  }
+
+  // Tool capability awareness (only when the feature is active for this
+  // conversation, so prompts stay lean when it's off)
+  if (options.webSearchActive) {
+    parts.push('\n' + WEB_SEARCH_PROMPT_SECTION);
+  }
+  // File-output guidance is interpreter-aware and mutually exclusive: with
+  // the interpreter ON, favor real file generation; with it OFF, the model
+  // must not promise files — UI download or suggest enabling the
+  // interpreter. The static base prompt defers to whichever renders here.
+  if (options.codeInterpreterAvailable) {
+    parts.push('\n' + CODE_INTERPRETER_PROMPT_SECTION);
+  } else {
+    parts.push('\n' + NO_FILE_GENERATION_PROMPT_SECTION);
   }
 
   // Compaction summary + memories sections (same block RAGEnricher re-appends

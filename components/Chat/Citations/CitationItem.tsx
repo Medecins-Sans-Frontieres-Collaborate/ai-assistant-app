@@ -24,7 +24,13 @@ export const CitationItem: React.FC<{ citation: Citation }> = ({
     }
   };
 
-  const { hostname, cleanDomain } = processUrl(citation.url);
+  // Prefer the true publisher for the domain display: aggregator links
+  // (news.google.com fallbacks) would otherwise make every card look like
+  // the same source and hide source diversity.
+  const { hostname, cleanDomain } = processUrl(
+    citation.sourceUrl || citation.url,
+  );
+  const displayName = citation.sourceName || cleanDomain;
 
   return (
     <div className="relative bg-gray-200 dark:bg-surface-dark-base rounded-lg transition-all duration-300 overflow-hidden text-xs border-2 border-transparent hover:border-blue-500 hover:shadow-lg h-[132px] w-48 p-2">
@@ -60,7 +66,7 @@ export const CitationItem: React.FC<{ citation: Citation }> = ({
               className="mr-1 my-0 p-0 align-middle"
             />
           </div>
-          <span className="truncate">{cleanDomain}</span>
+          <span className="truncate">{displayName}</span>
           <span>|</span>
           <span>{citation.number}</span>
         </div>

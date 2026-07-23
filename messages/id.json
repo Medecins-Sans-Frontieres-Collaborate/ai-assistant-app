@@ -754,7 +754,13 @@
         "transformingTable": "Mengubah tabel…",
         "findingLocations": "Mengidentifikasi lokasi…",
         "updatingMap": "Memperbarui peta…"
-      }
+      },
+      "searchingWebFor": "Mencari: “{query}”…",
+      "searchingWebForMultiple": "Mencari {count} topik: “{query}”…",
+      "readingCitedSources": "Membaca {count} artikel yang sudah dikutip…",
+      "planningSteps": "Merencanakan langkah…",
+      "planStep": "Langkah {current}/{total}: {description}",
+      "planStepRetry": "Langkah {current}/{total} (coba lagi): {description}"
     },
     "toolSummary": {
       "usedTools": "Digunakan {count, plural, one {# alat} other {# alat}}",
@@ -764,7 +770,8 @@
       "statusAutoDenied": "Ditolak otomatis",
       "statusFailed": "Gagal",
       "statusIncomplete": "Belum lengkap",
-      "viaService": "melalui {service}"
+      "viaService": "melalui {service}",
+      "downloadFile": "Unduh"
     },
     "consent": {
       "authorizeRequired": "Otorisasi diperlukan",
@@ -806,7 +813,15 @@
       "approvedState": "Disetujui — agen dilanjutkan",
       "deniedState": "Ditolak",
       "submittingApproval": "Menyetujui dan melanjutkan agen…",
-      "submittingDenial": "Mengirim penolakan Anda…"
+      "submittingDenial": "Mengirim penolakan Anda…",
+      "alwaysApproveEverywhere": "Selalu izinkan alat ini — di setiap percakapan",
+      "denyOptionsLabel": "Opsi penolakan",
+      "denyOnce": "Tolak sekali",
+      "neverAllowEverywhere": "Jangan pernah izinkan alat ini — di setiap percakapan",
+      "deniedByRuleHint": "Diblokir oleh aturan Anda — kelola di Pengaturan → Konektor.",
+      "batchPendingHint": "{count} permintaan alat tertunda",
+      "approveAllButton": "Izinkan semua",
+      "denyAllButton": "Tolak semua"
     },
     "openImage": "Buka gambar",
     "copyMessage": "Salin pesan",
@@ -817,7 +832,9 @@
     "ttsError": "Terjadi kesalahan saat membuat audio. Silakan coba lagi.",
     "unsupportedMessageType": "Galat saat menampilkan pesan: Jenis pesan tidak didukung",
     "addLanguageOption": "Tambahkan \"{name}\"…",
-    "sources": "Sumber"
+    "sources": "Sumber",
+    "interpreterBadge": "Jalankan kode",
+    "disableCodeInterpreter": "Nonaktifkan eksekusi kode"
   },
   "sidebar": {
     "collapseSidebar": "Ciutkan sidebar",
@@ -1162,6 +1179,30 @@
       "thresholdLabel": "Anggap sebagai penulisan ulang di atas",
       "thresholdUnit": "% dokumen yang diubah",
       "exceptionSelectionAlways": "Merevisi bagian yang disorot akan selalu diterapkan secara langsung — model hanya mengembalikan kutipan yang telah direvisi, yang tidak dapat dipecah menjadi saran untuk seluruh dokumen."
+    },
+    "webSearch": {
+      "title": "Pencarian Web",
+      "description": "Mengontrol bagaimana pencarian web langsung dijalankan ketika Mode Pencarian aktif. Perubahan berlaku seketika.",
+      "providerLabel": "Penyedia pencarian",
+      "providerAuto": "Otomatis (disarankan)",
+      "providerAutoDescription": "Menggunakan pengaturan default — saat ini menggabungkan pencarian berita di bawah ini.",
+      "providerNews": "Berita gabungan (GDELT + Google News)",
+      "providerNewsDescription": "Mencari kedua sumber secara paralel dan menggabungkan hasilnya, jadi jika satu gagal pencarian tetap berjalan. Keseimbangan terbaik antara kecepatan, keragaman sumber, dan tautan artikel yang berfungsi.",
+      "providerGoogleNews": "Hanya Google News",
+      "providerGoogleNewsDescription": "Anonim dan cepat — hanya query pencarian yang dikirim ke Google (tanpa akun atau cookie) dan hasil tiba dalam sekitar satu detik. Catatan: umumnya hanya memindai judul dan kutipan singkat, bukan artikel penuh, jadi jawaban dapat tetap permukaan.",
+      "providerGdelt": "Hanya GDELT",
+      "providerGdeltDescription": "Basis data penelitian terbuka untuk berita global dengan tautan langsung ke penerbit, memungkinkan pertanyaan lanjutan membaca artikel lengkap. Sangat dibatasi — pencarian beruntun bisa mengantre beberapa detik.",
+      "providerBing": "Bing grounding (via Microsoft)",
+      "providerBingDescription": "Membaca halaman penuh untuk ringkasan lebih dalam dan mencakup seluruh web, bukan hanya berita. Namun, pencarian biasanya memakan waktu 30–90 detik dan kualitas hasil sering tidak konsisten antar pencarian.",
+      "sourcesLabel": "Sumber per pencarian",
+      "sourcesDescription": "Jumlah sumber berbeda yang disimpan sebagai kutipan dalam satu pencarian. Pertanyaan gaya riset dapat memperluas ini secara otomatis.",
+      "freshnessLabel": "Kebaruan yang diutamakan",
+      "freshnessDescription": "Berapa lama hasil sebaiknya. Otomatis membiarkan setiap pertanyaan menentukan sendiri (berita terbaru biasanya hari terakhir).",
+      "freshness_auto": "Otomatis",
+      "freshness_day": "Sehari terakhir",
+      "freshness_week": "Seminggu terakhir",
+      "freshness_month": "Sebulan terakhir",
+      "freshness_any": "Kapan saja"
     }
   },
   "notFound": {
@@ -1475,6 +1516,23 @@
       "deployment": "Deployment",
       "modelVersion": "Versi model",
       "publisher": "Penerbit"
+    },
+    "interpreterMode": {
+      "title": "Interpreter Kode",
+      "subtitle": "Menjalankan kode saat diperlukan (grafik, analisis data)",
+      "learnMore": "Apa yang dapat dilakukan?",
+      "description": "Jika diaktifkan, asisten dapat menjalankan Python di sandbox yang aman dan terisolasi untuk menganalisis file terlampir, menghitung hasil, dan membuat grafik. Kode yang dieksekusi, keluarannya, dan file yang dihasilkan akan ditampilkan bersama respons. Gunakan \"Jalankan Kode\" di menu komposer untuk memaksanya pada sebuah pesan."
+    },
+    "searchOptions": {
+      "title": "Pencarian lanjutan",
+      "resultCount": "Sumber per pencarian:",
+      "freshness": "Utamakan hasil dari",
+      "freshness_auto": "Otomatis (per pertanyaan)",
+      "freshness_day": "Sehari terakhir",
+      "freshness_week": "Seminggu terakhir",
+      "freshness_month": "Sebulan terakhir",
+      "freshness_any": "Kapan saja",
+      "hint": "Otomatis memungkinkan setiap pertanyaan menentukan masa berlaku sendiri (misalnya berita memilih hari terakhir), dan pertanyaan bergaya riset dapat menggunakan lebih banyak sumber daripada standar."
     }
   },
   "models": {
@@ -2130,7 +2188,11 @@
     "moveToMore": "Pindahkan ke Lainnya",
     "moveOutOfMore": "Tampilkan di menu",
     "showSources": "Tampilkan sumber lain",
-    "hideSources": "Sembunyikan sumber lain"
+    "hideSources": "Sembunyikan sumber lain",
+    "aiTools": "Alat AI",
+    "aiToolsTooltip": "Kemampuan yang dapat digunakan asisten saat menjawab: pencarian web langsung, eksekusi kode, dan layanan terhubung.",
+    "codeInterpreterTooltip": "Jalankan kode Python di sandbox yang aman untuk setiap pesan.\n\nSangat cocok untuk analisis data, perhitungan, dan pembuatan grafik dari file terlampir.",
+    "categoryTools": "Alat & konektor"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Tambahkan instruksi pribadi Anda untuk menyesuaikan respons AI. Instruksi ini akan digabungkan dengan pedoman utama untuk memastikan respons yang bermanfaat, akurat, dan aman.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tip: Ketik \"/\" untuk memilih dari template prompt yang tersimpan.",
@@ -2444,7 +2506,18 @@
     "modelRow": "{requests} permintaan · {grams} g",
     "disclosure": "Estimasi berdasarkan asumsi v{version} · sejak {since} · hanya chat standar (jawaban agen dan basis pengetahuan tidak dihitung).",
     "reset": "Atur ulang statistik penggunaan",
-    "estimatedPortion": "Mencakup ~{grams} g CO₂e ({requests} permintaan) yang diestimasi dari percakapan sebelum pelacakan — dihitung ulang dari teks pesan yang disimpan, bukan dari jumlah token yang diukur."
+    "estimatedPortion": "Mencakup ~{grams} g CO₂e ({requests} permintaan) yang diestimasi dari percakapan sebelum pelacakan — dihitung ulang dari teks pesan yang disimpan, bukan dari jumlah token yang diukur.",
+    "chipTitle": "Chip emisi",
+    "chipDescription": "Perkiraan jejak karbon dari percakapan saat ini, ditampilkan di atas kolom input chat.",
+    "chipAlways": "Selalu tampilkan",
+    "chipAlwaysHint": "Chip akan selalu terlihat selama terdapat estimasi dalam percakapan.",
+    "chipAuto": "Tampilkan saat diperbarui atau diarahkan",
+    "chipAutoHint": "Chip muncul saat estimasi berubah, lalu perlahan menghilang. Mengarahkan kursor atau memilih chip akan menampilkannya kembali.",
+    "chipHidden": "Tersembunyi",
+    "chipHiddenHint": "Chip tidak pernah ditampilkan. Total tetap dicatat dan muncul di halaman ini.",
+    "chipAutoHideLabel": "Menghilang setelah",
+    "chipAutoHideUnit": "detik",
+    "chipAutoHideHint": "Antara {min} dan {max} detik."
   },
   "extraction": {
     "toggleLabel": "Ekstrak data terstruktur",
@@ -3353,7 +3426,15 @@
       "measured": "Dari jumlah token yang dilaporkan",
       "estimated": "Dihitung ulang dari pesan lama",
       "lastRequest": "Permintaan terakhir",
-      "disclaimer": "Perkiraan per permintaan dari jumlah token yang dilaporkan atau diperkirakan, menggunakan rata-rata dan asumsi terpublikasi v{version}. Pesan lama dihitung ulang dari teks yang disimpan dan model percakapan saat ini. Bukan pengukuran."
+      "disclaimer": "Perkiraan per permintaan dari jumlah token yang dilaporkan atau diperkirakan, menggunakan rata-rata dan asumsi terpublikasi v{version}. Pesan lama dihitung ulang dari teks yang disimpan dan model percakapan saat ini. Bukan pengukuran.",
+      "visibilityGroup": "Visibilitas chip emisi",
+      "visibilityLabel": "Tampilkan:",
+      "visibility": {
+        "always": "Selalu",
+        "auto": "Otomatis",
+        "hidden": "Sembunyikan"
+      },
+      "visibilityHint": "Otomatis akan menampilkan chip saat estimasi diperbarui atau saat Anda mengarahkan kursor. Ubah pengaturan ini kembali di Pengaturan › Penggunaan & Dampak."
     }
   },
   "table": {
@@ -3616,7 +3697,13 @@
     "connectorClientSecretLabel": "OAuth client secret",
     "connectorClientSecretStored": "Secret sudah tersimpan. Biarkan kosong untuk mempertahankan, atau isi yang baru untuk menggantinya.",
     "connectorClientSecretHint": "Dienkripsi sebelum disimpan dan tidak pernah ditampilkan lagi.",
-    "connectorScopesLabel": "Scopes (dipisahkan spasi, opsional)"
+    "connectorScopesLabel": "Scopes (dipisahkan spasi, opsional)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (opsional)",
+    "connectorOauthTokenUrlLabel": "Token URL (opsional)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (opsional)",
+    "connectorOauthEndpointsHint": "Kosongkan URL endpoint untuk menemukan secara otomatis. Atur URL untuk penyedia yang tidak mendukung penemuan otomatis, seperti NetSuite.",
+    "connectorOauthRefreshUrlHint": "Biarkan kosong untuk refresh melalui token URL.",
+    "connectorOauthEndpointsPairWarning": "Authorization URL dan token URL harus diisi bersamaan (refresh URL memerlukan keduanya)."
   },
   "localModels": {
     "title": "Model lokal",
@@ -3711,5 +3798,52 @@
     "truncatedNotice": "{count} kolom dihapus — batas kolom tabel adalah {max}: {names}",
     "skippedDerivedNotice": "{count} kolom terhitung tidak disimpan — rumus merujuk kolom pada tabel ini: {names}",
     "loadReplacesColumns": "Ini akan menggantikan kolom yang ada. Baris yang ada tetap menyimpan nilai dengan nama kolom yang sama."
+  },
+  "codeInterpreterDropdown": "Jalankan Kode",
+  "connectorPin": {
+    "toggleLabel": "Kelola alat konektor",
+    "menuLabel": "Konektor",
+    "menuLabelCount": "Konektor ({count} aktif)",
+    "tooltip": "Lihat alat konektor mana yang aktif, nonaktifkan untuk obrolan ini atau untuk semua, atau fokus pada satu alat.",
+    "toggleServerInChat": "Gunakan {name} di obrolan ini",
+    "globalToggleTitle": "Aktifkan atau nonaktifkan {name} di semua tempat (sama dengan Pengaturan → Konektor)",
+    "globalOn": "Global aktif",
+    "globalOff": "Global nonaktif",
+    "chatToggleHint": "Centang hanya untuk obrolan ini; tombol global sama dengan Pengaturan → Konektor. Setiap konektor aktif menambahkan alat ke setiap pesan — lebih banyak token dan respons lebih lambat.",
+    "trayLabel": "Alat konektor",
+    "trayTitle": "Alat konektor untuk obrolan ini",
+    "toggleServer": "Aktifkan {name}",
+    "needsReconnect": "Hubungkan ulang di Pengaturan",
+    "focusAction": "Fokus",
+    "focusedChip": "Difokuskan",
+    "pinnedHint": "Hanya alat dari {name} yang akan digunakan dalam percakapan ini.",
+    "staleHint": "Konektor yang difokuskan terputus atau nonaktif — hubungkan ulang di Pengaturan → Konektor, atau hapus fokusnya. Selama itu, semua alat yang aktif akan digunakan.",
+    "costHint": "Setiap konektor aktif menambahkan alat ke setiap pesan yang Anda kirim — lebih banyak token dan respons lebih lambat. Matikan yang tidak digunakan.",
+    "noEligibleConnectors": "Tidak ada konektor yang dikonfigurasi. Silakan sambungkan di Pengaturan → Konektor terlebih dahulu.",
+    "unknownConnector": "Konektor dihapus",
+    "unpin": "Hapus fokus",
+    "dismiss": "Tutup",
+    "badgeCount": "{count} alat",
+    "badgeTooltip": "Alat konektor aktif di setiap pesan — menambah token dan waktu respons. Klik untuk mengelola."
+  },
+  "toolApprovals": {
+    "title": "Persetujuan alat",
+    "description": "Aturan yang berlaku di setiap percakapan: secara otomatis mengizinkan atau memblokir alat konektor tertentu. Anda dapat menambahkan alat yang belum pernah diminta.",
+    "actionApprove": "Selalu izinkan",
+    "actionReject": "Selalu blokir",
+    "scopeServer": "di {name}",
+    "scopeAny": "Konektor apa saja",
+    "removeRule": "Hapus aturan untuk {tool}",
+    "toolNameLabel": "Nama alat",
+    "toolNamePlaceholder": "Nama alat, misal create_issue",
+    "scopeLabel": "Ruang lingkup konektor",
+    "actionLabel": "Aksi",
+    "addRule": "Tambah aturan",
+    "rejectPrecedenceNote": "Aturan blokir selalu menang — dibanding aturan izinkan maupun auto-approval per percakapan.",
+    "policyAsk": "Tanya",
+    "policyAllow": "Izinkan",
+    "policyBlock": "Blokir",
+    "policyGroupLabel": "Kebijakan persetujuan untuk {tool}",
+    "listHint": "Atur tindakan saat asisten ingin menjalankan setiap alat — di setiap percakapan. Tanya adalah default; Blokir selalu diutamakan."
   }
 }

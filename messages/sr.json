@@ -845,7 +845,13 @@
         "transformingTable": "Transformacija tabele...",
         "findingLocations": "Identifikacija lokacija...",
         "updatingMap": "Ažuriranje mape..."
-      }
+      },
+      "searchingWebFor": "Pretraga: „{query}”…",
+      "searchingWebForMultiple": "Pretraga {count} tema: „{query}”…",
+      "readingCitedSources": "Čitam {count} prethodno citiranih članaka…",
+      "planningSteps": "Planiranje koraka…",
+      "planStep": "Korak {current}/{total}: {description}",
+      "planStepRetry": "Korak {current}/{total} (ponovo): {description}"
     },
     "toolSummary": {
       "usedTools": "Korišćen{count, plural, one {# alat} other {# alata}}",
@@ -855,7 +861,8 @@
       "statusAutoDenied": "Automatski odbijeno",
       "statusFailed": "Neuspešno",
       "statusIncomplete": "Nedovršeno",
-      "viaService": "preko {service}"
+      "viaService": "preko {service}",
+      "downloadFile": "Preuzmi"
     },
     "consent": {
       "authorizeRequired": "Potrebna autorizacija",
@@ -897,7 +904,15 @@
       "approvedState": "Odobreno — agent nastavljen",
       "deniedState": "Odbijeno",
       "submittingApproval": "Odobravanje i nastavak rada agenta…",
-      "submittingDenial": "Šaljem odbijanje…"
+      "submittingDenial": "Šaljem odbijanje…",
+      "alwaysApproveEverywhere": "Uvek odobri ovaj alat — u svakom razgovoru",
+      "denyOptionsLabel": "Opcije odbijanja",
+      "denyOnce": "Odbij jednom",
+      "neverAllowEverywhere": "Nikada ne dozvoli ovaj alat — u svakom razgovoru",
+      "deniedByRuleHint": "Blokirano vašim pravilom — upravljajte u Podešavanjima → Konektori.",
+      "batchPendingHint": "{count} zahteva za alat čeka odobrenje",
+      "approveAllButton": "Odobri sve",
+      "denyAllButton": "Odbij sve"
     },
     "openImage": "Otvori sliku",
     "copyMessage": "Kopiraj poruku",
@@ -908,7 +923,9 @@
     "ttsError": "Greška pri generisanju zvuka. Pokušajte ponovo.",
     "unsupportedMessageType": "Greška pri prikazu poruke: Nepodržan tip poruke",
     "addLanguageOption": "Dodaj \"{name}\"…",
-    "sources": "Izvori"
+    "sources": "Izvori",
+    "interpreterBadge": "Pokreni kod",
+    "disableCodeInterpreter": "Onemogući izvršavanje koda"
   },
   "transcript": {
     "originalTranscript": "Оригинални транскрипт",
@@ -1348,6 +1365,30 @@
       "thresholdLabel": "Smatraj prepravkom iznad",
       "thresholdUnit": "% dokumenta izmenjeno",
       "exceptionSelectionAlways": "Izmena označenog dela uvek se primenjuje direktno — model vraća samo izmenjeni isečak, koji ne može biti podeljen na predloge u odnosu na ceo dokument."
+    },
+    "webSearch": {
+      "title": "Pretraga veba",
+      "description": "Kontroliše kako se izvode pretrage uživo dok je režim pretrage aktivan. Promene se primenjuju odmah.",
+      "providerLabel": "Provajder pretrage",
+      "providerAuto": "Automatski (preporučeno)",
+      "providerAutoDescription": "Koristi podrazumevanu opciju — trenutno kombinovanu pretragu vesti ispod.",
+      "providerNews": "Kombinovane vesti (GDELT + Google News)",
+      "providerNewsDescription": "Ispituje oba izvora paralelno i spaja rezultate, tako da neuspeh jednog ne prekida pretragu. Najbolji balans brzine, raznovrsnosti izvora i ispravnih linkova ka člancima.",
+      "providerGoogleNews": "Samo Google News",
+      "providerGoogleNewsDescription": "Anonimno i brzo — samo upit za pretragu stiže Google-u (bez naloga i kolačića), a rezultati stižu za otprilike sekundu. Napomena: uglavnom pretražuje naslove i kratke izvode, ne pune članke, pa su odgovori često površinski.",
+      "providerGdelt": "Samo GDELT",
+      "providerGdeltDescription": "Otvorena baza podataka o svetskim vestima sa direktnim linkovima na izdavače, što omogućava pristup punim člancima za dodatna pitanja. Strogo ograničen broj pretraga — više uzastopnih pretraga može sačekati nekoliko sekundi.",
+      "providerBing": "Bing grounding (preko Microsoft-a)",
+      "providerBingDescription": "Čita cele stranice radi dubljeg sažetka i obuhvata celokupan veb, ne samo vesti. Ipak, pretrage obično traju 30–90 sekundi i kvalitet rezultata može varirati između upita.",
+      "sourcesLabel": "Izvori po pretrazi",
+      "sourcesDescription": "Koliko različitih izvora pretraga koristi kao citate. Pitanja istraživačkog tipa mogu automatski proširiti ovaj broj.",
+      "freshnessLabel": "Željenost aktuelnosti",
+      "freshnessDescription": "Koliko rezultati treba da budu sveži. Automatski dopušta svakom pitanju da odluči (za vanredne vesti bira poslednji dan).",
+      "freshness_auto": "Automatski",
+      "freshness_day": "Poslednji dan",
+      "freshness_week": "Poslednja nedelja",
+      "freshness_month": "Poslednji mesec",
+      "freshness_any": "Bilo kada"
     }
   },
   "emptyState": {
@@ -1534,6 +1575,23 @@
       "deployment": "Implementacija",
       "modelVersion": "Verzija modela",
       "publisher": "Izdavač"
+    },
+    "interpreterMode": {
+      "title": "Interpreter koda",
+      "subtitle": "Pokreće kod kada je korisno (grafikoni, analiza podataka)",
+      "learnMore": "Šta može da uradi?",
+      "description": "Kada je omogućeno, asistent može pokretati Python u bezbednom, izolovanom okruženju radi analize priloženih fajlova, izračunavanja rezultata i prikaza grafikona. Izvršeni kod, njegov izlaz i generisani fajlovi prikazuju se uz odgovor. Koristite \"Pokreni kod\" u meniju za sastavljanje da to primenite za poruku."
+    },
+    "searchOptions": {
+      "title": "Napredna pretraga",
+      "resultCount": "Izvori po pretrazi:",
+      "freshness": "Dajte prednost rezultatima iz",
+      "freshness_auto": "Auto (po pitanju)",
+      "freshness_day": "Poslednji dan",
+      "freshness_week": "Poslednja nedelja",
+      "freshness_month": "Poslednji mesec",
+      "freshness_any": "Bilo kada",
+      "hint": "Opcija 'Auto' omogućava svakom pitanju da odredi željenu svežinu (npr. vesti preferiraju poslednji dan), dok istraživačka pitanja mogu koristiti više izvora od podrazumevanog."
     }
   },
   "models": {
@@ -2105,7 +2163,11 @@
     "moveToMore": "Premesti u Više",
     "moveOutOfMore": "Prikaži u meniju",
     "showSources": "Prikaži druge izvore",
-    "hideSources": "Sakrij druge izvore"
+    "hideSources": "Sakrij druge izvore",
+    "aiTools": "AI alati",
+    "aiToolsTooltip": "Mogućnosti koje asistent može koristiti tokom odgovaranja: pretraga interneta uživo, izvršavanje koda i povezane usluge.",
+    "codeInterpreterTooltip": "Pokrenite Python kod u sigurnom okruženju za svaku poruku.\n\nOdlično za analizu podataka, proračune i generisanje grafikona iz priloženih fajlova.",
+    "categoryTools": "Alati i konektori"
   },
   "transcription": {
     "transcribesOnSend": "Транскрибује при слању",
@@ -2428,7 +2490,18 @@
     "modelRow": "{requests} zahteva · {grams} g",
     "disclosure": "Procene se zasnivaju na pretpostavkama v{version} · od {since} · samo standardni čet (agenti i odgovori iz baze znanja nisu uračunati).",
     "reset": "Resetuj statistiku upotrebe",
-    "estimatedPortion": "Uključuje ~{grams} g CO₂e ({requests} zahteva) procenjenih iz razgovora pre početka praćenja — povratno izračunato iz sačuvanog teksta poruka, a ne izmerenog broja tokena."
+    "estimatedPortion": "Uključuje ~{grams} g CO₂e ({requests} zahteva) procenjenih iz razgovora pre početka praćenja — povratno izračunato iz sačuvanog teksta poruka, a ne izmerenog broja tokena.",
+    "chipTitle": "Oznaka emisija",
+    "chipDescription": "Procena ugljeničkog otiska za trenutni razgovor, prikazana iznad polja za unos poruke.",
+    "chipAlways": "Uvek prikaži",
+    "chipAlwaysHint": "Oznaka je uvek vidljiva kada postoji procena u razgovoru.",
+    "chipAuto": "Prikaži pri promeni ili prelasku mišem",
+    "chipAutoHint": "Oznaka se pojavljuje kada se procena promeni, zatim nestaje. Prelazak mišem ili fokus vraća njen prikaz.",
+    "chipHidden": "Skriveno",
+    "chipHiddenHint": "Oznaka nikada nije prikazana. Zbirni podaci se i dalje prate i prikazuju na ovoj stranici.",
+    "chipAutoHideLabel": "Nestani nakon",
+    "chipAutoHideUnit": "sekundi",
+    "chipAutoHideHint": "Između {min} i {max} sekundi."
   },
   "extraction": {
     "toggleLabel": "Ekstrahuj strukturirane podatke",
@@ -3337,7 +3410,15 @@
       "measured": "Na osnovu prijavljenog broja tokena",
       "estimated": "Povratno izračunato iz starijih poruka",
       "lastRequest": "Poslednji zahtev",
-      "disclaimer": "Procene po zahtevu na osnovu prijavljenog ili aproksimiranog broja tokena, koristeći objavljene proseke i pretpostavke v{version}. Starije poruke su povratno izračunate iz sačuvanog teksta i trenutnog modela razgovora. Nije merenje."
+      "disclaimer": "Procene po zahtevu na osnovu prijavljenog ili aproksimiranog broja tokena, koristeći objavljene proseke i pretpostavke v{version}. Starije poruke su povratno izračunate iz sačuvanog teksta i trenutnog modela razgovora. Nije merenje.",
+      "visibilityGroup": "Vidljivost oznake emisija",
+      "visibilityLabel": "Prikaži:",
+      "visibility": {
+        "always": "Uvek",
+        "auto": "Automatski",
+        "hidden": "Sakrij"
+      },
+      "visibilityHint": "Automatski prikazuje oznaku kada se procena osveži ili pređete mišem preko nje. Ovo možete ponovo promeniti u Podešavanja › Upotreba i uticaj."
     }
   },
   "table": {
@@ -3600,7 +3681,13 @@
     "connectorClientSecretLabel": "OAuth client secret",
     "connectorClientSecretStored": "Tajna je sačuvana. Ostavite prazno za zadržavanje, ili unesite novu za zamenu.",
     "connectorClientSecretHint": "Enkriptovano pre čuvanja i nikad više prikazano.",
-    "connectorScopesLabel": "Opseg (razdvojeno razmakom, opcionalno)"
+    "connectorScopesLabel": "Opseg (razdvojeno razmakom, opcionalno)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (opciono)",
+    "connectorOauthTokenUrlLabel": "Token URL (opciono)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (opciono)",
+    "connectorOauthEndpointsHint": "Ostavite URL-ove krajnjih tačaka praznim za automatsko otkrivanje. Postavite ih za provajdere koji ne podržavaju automatsko otkrivanje, kao što je NetSuite.",
+    "connectorOauthRefreshUrlHint": "Ostavite prazno da bi se osvežavanje izvršilo preko token URL-a.",
+    "connectorOauthEndpointsPairWarning": "Authorization URL i token URL moraju biti podešeni zajedno (refresh URL zahteva oba)."
   },
   "localModels": {
     "title": "Lokalni modeli",
@@ -3695,5 +3782,52 @@
     "truncatedNotice": "{count} polje(a) izostavljeno — ograničenje tabele je {max} kolona: {names}",
     "skippedDerivedNotice": "{count} izračunata kolona nije sačuvana — formule upućuju na kolone ove tabele: {names}",
     "loadReplacesColumns": "Ovo zamenjuje trenutne kolone. Postojeći redovi zadržavaju vrednosti čija se imena kolona poklapaju."
+  },
+  "codeInterpreterDropdown": "Pokreni kod",
+  "connectorPin": {
+    "toggleLabel": "Upravljanje konektor alatima",
+    "menuLabel": "Konektori",
+    "menuLabelCount": "Konektori ({count} aktivno)",
+    "tooltip": "Pogledajte koji su konektori aktivni, isključite ih za ovaj čet ili globalno, ili fokusirajte na jedan.",
+    "toggleServerInChat": "Koristi {name} u ovom četu",
+    "globalToggleTitle": "Uključivanje/isključivanje {name} svuda (isto kao Podešavanja → Konektori)",
+    "globalOn": "Globalno uključeno",
+    "globalOff": "Globalno isključeno",
+    "chatToggleHint": "Ove kućice važe samo za ovaj čet; globalno dugme je kao Podešavanja → Konektori. Svaki aktivan konektor dodaje svoje alate svakoj poruci — više tokena i sporiji odgovori.",
+    "trayLabel": "Alati konektora",
+    "trayTitle": "Alati konektora za ovaj čet",
+    "toggleServer": "Omogući {name}",
+    "needsReconnect": "Ponovo povežite u Podešavanjima",
+    "focusAction": "Fokusiraj",
+    "focusedChip": "Fokusirano",
+    "pinnedHint": "Samo alati iz {name} će biti korišćeni u ovom razgovoru.",
+    "staleHint": "Fokusirani konektor je isključen ili nepovezan — ponovo ga povežite u Podešavanja → Konektori, ili uklonite fokus. Dok to ne uradite, koriste se svi aktivni alati.",
+    "costHint": "Svaki aktivan konektor dodaje svoje alate svakoj vašoj poruci — više tokena i sporiji odgovori. Isključite ono što ne koristite.",
+    "noEligibleConnectors": "Nema podešenih konektora. Prvo povežite jedan u Podešavanja → Konektori.",
+    "unknownConnector": "Uklonjen konektor",
+    "unpin": "Ukloni fokus",
+    "dismiss": "Zatvori",
+    "badgeCount": "{count} alata",
+    "badgeTooltip": "Alati konektora su aktivni za svaku poruku — dodaju tokene i vreme odgovora. Kliknite za upravljanje."
+  },
+  "toolApprovals": {
+    "title": "Odobravanja alata",
+    "description": "Pravila koja važe u svakom razgovoru: automatski dozvolite ili blokirajte određene konektor alate. Možete dodati alate za koje još niste bili upitani.",
+    "actionApprove": "Uvek dozvoli",
+    "actionReject": "Uvek blokiraj",
+    "scopeServer": "na {name}",
+    "scopeAny": "Bilo koji konektor",
+    "removeRule": "Ukloni pravilo za {tool}",
+    "toolNameLabel": "Naziv alata",
+    "toolNamePlaceholder": "Naziv alata, npr. create_issue",
+    "scopeLabel": "Opseg konektora",
+    "actionLabel": "Akcija",
+    "addRule": "Dodaj pravilo",
+    "rejectPrecedenceNote": "Pravila blokiranja uvek imaju prednost — ispred pravila odobravanja i automatskog odobravanja po razgovoru.",
+    "policyAsk": "Pitaj",
+    "policyAllow": "Dozvoli",
+    "policyBlock": "Blokiraj",
+    "policyGroupLabel": "Pravila odobravanja za {tool}",
+    "listHint": "Podesite šta se dešava kada asistent želi da pokrene svaki alat — u svakom razgovoru. Traži je podrazumevano; Blokiraj uvek ima prednost."
   }
 }

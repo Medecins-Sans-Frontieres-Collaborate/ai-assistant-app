@@ -17,6 +17,7 @@ import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
 import { buildConversationContextSections } from '@/lib/utils/app/systemPrompt';
 import { getCompactionBoundary } from '@/lib/utils/shared/chat/conversationCompaction';
 import { findMessageIndexForApprovalId } from '@/lib/utils/shared/chat/findMessageIndexForApprovalId';
+import { applyMcpPin } from '@/lib/utils/shared/chat/mcpPin';
 import { MessageContentAnalyzer } from '@/lib/utils/shared/chat/messageContentAnalyzer';
 import {
   createMessageGroup,
@@ -25,7 +26,10 @@ import {
   messageToVersion,
 } from '@/lib/utils/shared/chat/messageVersioning';
 import { windowMessagesForAPI } from '@/lib/utils/shared/chat/messageWindowing';
-import { StreamParser } from '@/lib/utils/shared/chat/streamParser';
+import {
+  StreamInterruptedError,
+  StreamParser,
+} from '@/lib/utils/shared/chat/streamParser';
 import { isModelSelectableInRegion } from '@/lib/utils/shared/modelRegion';
 
 import { AgentType } from '@/types/agent';
@@ -894,6 +898,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           argumentsJson: c.tool_arguments ?? '{}',
         }))
       : undefined;
+    // Plan echo: the turn plan persisted on the same message that carries
+    // the pending consents — progress and retry state survive the pause.
+    const mcpPlan =
+      isMcpResume && lastFlatMessage?.mcpPlan
+        ? lastFlatMessage.mcpPlan
+        : undefined;
     // Round counter for the server's loop cap. Each consent round appends one
     // assistant message, so the trailing-assistant run length approximates
     // the round index (validator clamps at 10 anyway).
@@ -977,24 +987,47 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const effectiveSearchMode =
       isAgentInvocation && !orgAgentSearchAllowed ? undefined : searchMode;
 
+    // Interpreter mode rides the same org-agent gate as search: static org
+    // agents only run code when their config opts in (allowCodeInterpreter,
+    // re-checked server-side); prompt-agent personas behave like plain
+    // models. Read from the chat-input store (per-conversation, like
+    // extraction) rather than threaded through call signatures.
+    const interpreterMode = useChatInputStore.getState().interpreterMode;
+    const orgAgentInterpreterAllowed = isPromptAgentPersona
+      ? true
+      : isOrganizationAgent && conversation.model.id.startsWith('org-')
+        ? getOrganizationAgentById(conversation.model.id.slice('org-'.length))
+            ?.allowCodeInterpreter === true
+        : false;
+    const effectiveInterpreterMode =
+      isAgentInvocation && !orgAgentInterpreterAllowed
+        ? undefined
+        : interpreterMode;
+
     // Native MCP servers for this turn. Skipped for agent invocations (the
     // Foundry runtime does its own tool orchestration). Curated entries need
     // a token to be useful; arbitrary entries additionally require BOTH the
     // user opt-in and the LaunchDarkly flag mirror — flipping the flag off
     // stops arbitrary servers from being SENT, not just shown.
-    const mcpCandidates = isAgentInvocation
-      ? []
-      : settings.mcpServers
-          .filter((s) => s.enabled)
-          .filter(
-            (s) =>
-              s.catalogKey ||
-              // Connectors are server-resolved and access-checked; the
-              // arbitrary-URL flag does not apply to them.
-              s.connectorId ||
-              (settings.allowArbitraryMcpServers &&
-                settings.mcpArbitraryFlagEnabled),
-          );
+    const mcpCandidates = applyMcpPin(
+      isAgentInvocation
+        ? []
+        : settings.mcpServers
+            .filter((s) => s.enabled)
+            // Per-conversation opt-outs from the connector tray.
+            .filter((s) => !conversation.disabledMcpServerIds?.includes(s.id))
+            .filter(
+              (s) =>
+                s.catalogKey ||
+                // Connectors are server-resolved and access-checked; the
+                // arbitrary-URL flag does not apply to them.
+                s.connectorId ||
+                (settings.allowArbitraryMcpServers &&
+                  settings.mcpArbitraryFlagEnabled),
+            ),
+      // A pinned connector focuses the turn: only its tools are declared.
+      conversation.pinnedMcpServerId,
+    );
     // Per-server auth: oauth servers refresh through the proxy first (single-
     // flight) and are EXCLUDED when no live access token exists (needsReauth);
     // bearer/header servers need their token; 'none' servers go bare.
@@ -1071,6 +1104,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         conversation.reasoningEffort || modelToSend.reasoningEffort,
       verbosity: conversation.verbosity || modelToSend.verbosity,
       searchMode: effectiveSearchMode,
+      // Advanced search tuning only travels when search can actually run.
+      webSearchOptions:
+        effectiveSearchMode === SearchMode.INTELLIGENT ||
+        effectiveSearchMode === SearchMode.ALWAYS
+          ? settings.webSearchOptions
+          : undefined,
+      interpreterMode: effectiveInterpreterMode,
       hostedRegion,
       tone, // Pass the full tone object
       signal: abortController?.signal, // Pass abort signal
@@ -1089,6 +1129,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       mcpServers: mcpServersToSend.length ? mcpServersToSend : undefined,
       mcpPendingToolCalls,
       mcpLoopRound,
+      mcpPlan,
       extraction,
       conversationSummary,
       memories: memoryTexts.length > 0 ? memoryTexts : undefined,
@@ -1293,6 +1334,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           },
         });
       }
+    }
+
+    // A cleanly-ended stream can still report failure in-band (terminal
+    // `streamError` metadata — e.g. the MCP tool loop crashing mid-round).
+    // Raised AFTER the needs-reauth pass above so connector state still
+    // updates; the callers' error paths surface it with whatever partial
+    // tool records / consent cards are in the streaming slices.
+    const streamError = streamParser.getStreamError?.();
+    if (streamError) {
+      throw new StreamInterruptedError(streamError.message, streamError.code);
     }
 
     return {
@@ -1513,10 +1564,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // conversation the user deliberately kept on their own machine off to
     // Azure. A local failure must surface as a local failure.
     const { isRetrying } = get();
+    // Server-reported mid-stream failures (streamError metadata) are not
+    // silently retried on a fallback model: the stream was already underway
+    // — tool calls may have run — and the user has been staring at a
+    // loader; surface the failure with its partial context immediately.
+    const isStreamInterrupted = error instanceof StreamInterruptedError;
     const isNonRetryableClientError =
-      error instanceof ApiError &&
-      error.isClientError() &&
-      error.status !== 429;
+      (error instanceof ApiError &&
+        error.isClientError() &&
+        error.status !== 429) ||
+      isStreamInterrupted;
     const modelId = conversation?.model?.id ?? '';
     const isNonFallbackModel =
       conversation?.model?.isOrganizationAgent ||
@@ -1597,13 +1654,19 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       errorMessage = error.message;
     }
 
-    // Reword opaque "network error"-style messages when we have partial
-    // state — most useful for mid-stream agent failures (Foundry tool
-    // timeouts, upstream connectors going down). The card below carries the
-    // tool details.
-    if (hasPartialState && /network error|fetch failed/i.test(errorMessage)) {
-      errorMessage =
-        'The agent stopped responding before finishing. Some tool calls may have completed — see the partial result.';
+    // Browser network-failure strings are not for humans: Firefox throws
+    // NS_ERROR_* codes (e.g. NS_ERROR_NET_PARTIAL_TRANSFER when the server
+    // aborts mid-stream), Chrome says "Failed to fetch", Safari "Load
+    // failed". Reword them all; with partial state, point at the partial
+    // result instead.
+    const isOpaqueNetworkError =
+      /network ?error|fetch failed|failed to fetch|load failed|NS_ERROR|error in body stream/i.test(
+        errorMessage,
+      );
+    if (isOpaqueNetworkError) {
+      errorMessage = hasPartialState
+        ? 'The agent stopped responding before finishing. Some tool calls may have completed — see the partial result.'
+        : 'The connection was interrupted before the response finished. Check your connection and try again.';
     }
 
     // Persist the partial assistant message so the tool summary survives
@@ -1978,6 +2041,74 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     sourceMessageIndex,
     source,
   ) => {
+    // ── MULTI-TOOL BATCH GATE (native MCP only) ──────────────────────────
+    // A native consent round can pause on SEVERAL pending calls at once, and
+    // the stateless resume must carry a decision for every one of them — the
+    // server auto-denies any call without an explicit response. Dispatching
+    // on the first click would therefore silently deny the siblings
+    // (approve get_me → get_teams auto-denied). So decisions are recorded
+    // one at a time WITHOUT resuming, and the LAST undecided approval
+    // dispatches the whole batch. Foundry approvals (no server_id) keep
+    // per-approval dispatch — their thread holds state server-side.
+    const sourceIdx =
+      sourceMessageIndex ??
+      findMessageIndexForApprovalId(conversation, approvalRequestId) ??
+      undefined;
+    const sourceDisplay =
+      sourceIdx !== undefined && conversation.messages[sourceIdx]
+        ? entryToDisplayMessage(conversation.messages[sourceIdx])
+        : undefined;
+    const batchConsents = (sourceDisplay?.consentRequests ?? []).filter(
+      (c) => c.kind === 'approval' && !!c.server_id && !!c.approval_request_id,
+    );
+    const isNativeBatch = batchConsents.some(
+      (c) => c.approval_request_id === approvalRequestId,
+    );
+    if (isNativeBatch) {
+      const persisted = sourceDisplay?.approvalOutcomes ?? {};
+      const undecidedSiblings = batchConsents.filter(
+        (c) =>
+          c.approval_request_id !== approvalRequestId &&
+          !get().submittedApprovals.has(c.approval_request_id!) &&
+          !(c.approval_request_id! in persisted),
+      );
+      if (undecidedSiblings.length > 0) {
+        // Interim decision: record + persist so the card flips, but hold the
+        // resume until the batch is complete. Idempotent per id.
+        let recorded = false;
+        set((state) => {
+          if (
+            state.submittedApprovals.has(approvalRequestId) ||
+            state.submittingApprovals.has(approvalRequestId)
+          ) {
+            return state;
+          }
+          recorded = true;
+          const submitted = new Map(state.submittedApprovals);
+          submitted.set(approvalRequestId, approve);
+          return {
+            submittedApprovals: submitted,
+            failedApprovals: setWithout(
+              state.failedApprovals,
+              approvalRequestId,
+            ),
+          };
+        });
+        if (recorded && sourceIdx !== undefined) {
+          useConversationStore
+            .getState()
+            .recordApprovalOutcome(
+              conversation.id,
+              sourceIdx,
+              approvalRequestId,
+              approve,
+              source,
+            );
+        }
+        return;
+      }
+    }
+
     // Atomic check-and-lock. An approval submit starts a brand-new stream
     // (initializeStreamingState + sendChatRequest), so only ONE may run at a
     // time: if a chat is already streaming, or another approval is mid-flight,
@@ -2046,9 +2177,28 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       get().initializeStreamingState(conversation.id, loadingMessage);
       showLoadingTimeout = get().scheduleLoadingMessage(loadingMessage);
 
-      const stream = await get().sendChatRequest(conversation, undefined, [
-        { approval_request_id: approvalRequestId, approve },
-      ]);
+      // Native batch: every pending call gets its recorded decision (this
+      // click supplied the last one). Anything unrecorded — impossible via
+      // the gate above, but a hand-edited blob could get here — falls to
+      // an explicit deny rather than the server's silent auto-deny sweep.
+      const { submittedApprovals: decided } = get();
+      const approvalResponses = isNativeBatch
+        ? batchConsents.map((c) => ({
+            approval_request_id: c.approval_request_id!,
+            approve:
+              c.approval_request_id === approvalRequestId
+                ? approve
+                : (decided.get(c.approval_request_id!) ??
+                  sourceDisplay?.approvalOutcomes?.[c.approval_request_id!] ??
+                  false),
+          }))
+        : [{ approval_request_id: approvalRequestId, approve }];
+
+      const stream = await get().sendChatRequest(
+        conversation,
+        undefined,
+        approvalResponses,
+      );
 
       const streamParser = new StreamParser();
       const {

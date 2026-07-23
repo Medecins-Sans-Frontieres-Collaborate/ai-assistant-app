@@ -762,7 +762,13 @@
         "transformingTable": "S'està transformant la taula...",
         "findingLocations": "S'estan identificant ubicacions...",
         "updatingMap": "S'està actualitzant el mapa..."
-      }
+      },
+      "searchingWebFor": "Cercant: “{query}”…",
+      "searchingWebForMultiple": "Cercant {count} temes: “{query}”…",
+      "readingCitedSources": "Llegint {count} articles citats anteriorment…",
+      "planningSteps": "Planificant els passos…",
+      "planStep": "Pas {current}/{total}: {description}",
+      "planStepRetry": "Pas {current}/{total} (reintent): {description}"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# eina utilitzada} other {# eines utilitzades}}",
@@ -772,7 +778,8 @@
       "statusAutoDenied": "Denegat automàticament",
       "statusFailed": "Fallida",
       "statusIncomplete": "Incomplet",
-      "viaService": "via {service}"
+      "viaService": "via {service}",
+      "downloadFile": "Descarrega"
     },
     "consent": {
       "authorizeRequired": "Cal autorització",
@@ -814,7 +821,15 @@
       "approvedState": "Aprovat — agent reprès",
       "deniedState": "Denegat",
       "submittingApproval": "Aprovant i reprenent l'agent…",
-      "submittingDenial": "Enviant la seva denegació…"
+      "submittingDenial": "Enviant la seva denegació…",
+      "alwaysApproveEverywhere": "Aprova sempre aquesta eina — a tots els xats",
+      "denyOptionsLabel": "Opcions de denegació",
+      "denyOnce": "Denega un cop",
+      "neverAllowEverywhere": "No permetis mai aquesta eina — a tots els xats",
+      "deniedByRuleHint": "Bloquejat per la teva norma — gestiona-ho a Configuració → Connectors.",
+      "batchPendingHint": "{count} sol·licituds d'eina pendents",
+      "approveAllButton": "Aprova-ho tot",
+      "denyAllButton": "Denega-ho tot"
     },
     "openImage": "Obre la imatge",
     "copyMessage": "Copia el missatge",
@@ -825,7 +840,9 @@
     "ttsError": "Error en generar l'àudio. Torni-ho a provar.",
     "unsupportedMessageType": "Error en mostrar el missatge: tipus de missatge no compatible",
     "addLanguageOption": "Afegeix \"{name}\"…",
-    "sources": "Fonts"
+    "sources": "Fonts",
+    "interpreterBadge": "Executa codi",
+    "disableCodeInterpreter": "Desactiva l'execució de codi"
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",
@@ -1170,6 +1187,30 @@
       "thresholdLabel": "Considera com a reescriptura quan superi",
       "thresholdUnit": "% del document canviat",
       "exceptionSelectionAlways": "Revisar una selecció ressaltada s'aplica sempre directament: el model retorna només el fragment revisat, que no es pot dividir en suggeriments per al document complet."
+    },
+    "webSearch": {
+      "title": "Cerca web",
+      "description": "Controla com s'executen les cerques web en temps real quan el mode Cerca està actiu. Els canvis s'apliquen immediatament.",
+      "providerLabel": "Proveïdor de cerca",
+      "providerAuto": "Automàtic (recomanat)",
+      "providerAutoDescription": "Utilitza la configuració per defecte — actualment la cerca de notícies combinada a sota.",
+      "providerNews": "Notícies combinades (GDELT + Google News)",
+      "providerNewsDescription": "Consulta ambdues fonts en paral·lel i fusiona els resultats, de manera que si una falla l'altra cobreix la cerca. Òptim equilibri entre rapidesa, diversitat de fonts i enllaços a articles funcionals.",
+      "providerGoogleNews": "Només Google News",
+      "providerGoogleNewsDescription": "Anònim i ràpid — només la consulta arriba a Google (sense compte ni galetes) i els resultats es reben en un segon aproximadament. Nota: principalment examina titulars i fragments curts, no articles complets, així que les respostes poden ser superficials.",
+      "providerGdelt": "Només GDELT",
+      "providerGdeltDescription": "Base de dades oberta de notícies mundials amb enllaços directes a l'editor, cosa que permet llegir els articles sencers en preguntes de seguiment. Té restriccions d'ús — cerques consecutives poden quedar en cua uns segons.",
+      "providerBing": "Bing grounding (via Microsoft)",
+      "providerBingDescription": "Llegeix pàgines senceres per obtenir resums més profuns i cobreix la web general, no només notícies. No obstant això, les cerques solen trigar de 30 a 90 segons i la qualitat dels resultats sovint és variable.",
+      "sourcesLabel": "Fonts per cerca",
+      "sourcesDescription": "Quantes fonts diferents es mantenen com a citacions. Preguntes d'estil recerca poden ampliar-ho automàticament.",
+      "freshnessLabel": "Antiguitat preferida",
+      "freshnessDescription": "Quina antiguitat han de tenir els resultats. Automàtic deixa que cada pregunta decideixi (notícies d'última hora prefereixen el darrer dia).",
+      "freshness_auto": "Automàtic",
+      "freshness_day": "Darrer dia",
+      "freshness_week": "Darrera setmana",
+      "freshness_month": "Darrer mes",
+      "freshness_any": "Qualsevol moment"
     }
   },
   "notFound": {
@@ -1483,6 +1524,23 @@
       "deployment": "Desplegament",
       "modelVersion": "Versió del model",
       "publisher": "Editor"
+    },
+    "interpreterMode": {
+      "title": "Intèrpret de codi",
+      "subtitle": "Executa codi quan és útil (gràfics, anàlisi de dades)",
+      "learnMore": "Què pot fer?",
+      "description": "Quan està activat, l'assistent pot executar Python en un entorn segur i aïllat per analitzar fitxers adjunts, calcular resultats i generar gràfics. El codi executat, la seva sortida i els fitxers generats es mostren amb la resposta. Utilitza \"Executa codi\" al menú del redactor per forçar-lo en un missatge."
+    },
+    "searchOptions": {
+      "title": "Cerca avançada",
+      "resultCount": "Fonts per cerca:",
+      "freshness": "Preferir resultats de",
+      "freshness_auto": "Auto (per pregunta)",
+      "freshness_day": "Darrer dia",
+      "freshness_week": "Darrera setmana",
+      "freshness_month": "Últim mes",
+      "freshness_any": "Qualsevol moment",
+      "hint": "Auto permet que cada pregunta defineixi la seva pròpia recència (p. ex., les notícies prefereixen el darrer dia) i les preguntes d'investigació poden utilitzar més fonts que per defecte."
     }
   },
   "models": {
@@ -2130,7 +2188,11 @@
     "moveToMore": "Mou a Més",
     "moveOutOfMore": "Mostra al menú",
     "showSources": "Mostra altres fonts",
-    "hideSources": "Amaga altres fonts"
+    "hideSources": "Amaga altres fonts",
+    "aiTools": "Eines d'IA",
+    "aiToolsTooltip": "Capacitats que l'assistent pot utilitzar mentre respon: cerca web en temps real, execució de codi i serveis connectats.",
+    "codeInterpreterTooltip": "Executa codi Python en una sandbox segura per a cada missatge.\n\nIdeal per a l'anàlisi de dades, càlculs i generació de gràfics a partir d'arxius adjunts.",
+    "categoryTools": "Eines i connectors"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Afegeix les teves instruccions personals per personalitzar com respon la IA. Aquestes es combinen amb les directrius bàsiques de comportament que garanteixen respostes útils, precises i segures.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Consell: Escriu \"/\" per seleccionar d'entre les plantilles de prompt desades.",
@@ -2444,7 +2506,18 @@
     "modelRow": "{requests} sol·lic. · {grams} g",
     "disclosure": "Estimacions basades en suposicions v{version} · des de {since} · només xat estàndard (no es compten respostes d'agents ni de base de coneixement).",
     "reset": "Reinicia les estadístiques d’ús",
-    "estimatedPortion": "Inclou aproximadament {grams} g CO₂e ({requests} sol·licituds) estimats de xats anteriors al seguiment — recalculat a partir del text dels missatges emmagatzemats, no de recompte de tokens mesurat."
+    "estimatedPortion": "Inclou aproximadament {grams} g CO₂e ({requests} sol·licituds) estimats de xats anteriors al seguiment — recalculat a partir del text dels missatges emmagatzemats, no de recompte de tokens mesurat.",
+    "chipTitle": "Xip d’emissions",
+    "chipDescription": "L’estimació de la petjada de carboni de la conversa actual, mostrada sobre el camp d’entrada del xat.",
+    "chipAlways": "Mostra sempre",
+    "chipAlwaysHint": "El xip roman visible sempre que la conversa tingui una estimació.",
+    "chipAuto": "Mostra en actualitzar-se o en passar-hi el cursor",
+    "chipAutoHint": "El xip apareix quan s’actualitza l’estimació i després s’esvaeix. Passar-hi el cursor o enfocar-lo el fa reaparèixer.",
+    "chipHidden": "Ocult",
+    "chipHiddenHint": "El xip no es mostra mai. Els totals encara es registren i apareixen en aquesta pàgina.",
+    "chipAutoHideLabel": "Esvaeix després de",
+    "chipAutoHideUnit": "segons",
+    "chipAutoHideHint": "Entre {min} i {max} segons."
   },
   "extraction": {
     "toggleLabel": "Extreu dades estructurades",
@@ -3353,7 +3426,15 @@
       "measured": "A partir del recompte de tokens informat",
       "estimated": "Recalculat a partir de missatges antics",
       "lastRequest": "Darrera sol·licitud",
-      "disclaimer": "Estimacions per sol·licitud a partir de recompte de tokens informat o aproximat, utilitzant mitjanes i suposicions publicades v{version}. Els missatges antics es recalculen a partir del text emmagatzemat i el model actual de la conversa. No és una mesura."
+      "disclaimer": "Estimacions per sol·licitud a partir de recompte de tokens informat o aproximat, utilitzant mitjanes i suposicions publicades v{version}. Els missatges antics es recalculen a partir del text emmagatzemat i el model actual de la conversa. No és una mesura.",
+      "visibilityGroup": "Visibilitat del xip d’emissions",
+      "visibilityLabel": "Mostra:",
+      "visibility": {
+        "always": "Sempre",
+        "auto": "Automàtic",
+        "hidden": "Amaga"
+      },
+      "visibilityHint": "El mode automàtic mostra el xip quan s’actualitza l’estimació o en passar-hi el cursor. Pots canviar això de nou a Configuració › Ús i Impacte."
     }
   },
   "table": {
@@ -3616,7 +3697,13 @@
     "connectorClientSecretLabel": "Secret de client OAuth",
     "connectorClientSecretStored": "Hi ha un secret desat. Deixeu-ho en blanc per mantenir-lo, o introduïu-ne un de nou per substituir-lo.",
     "connectorClientSecretHint": "Es xifra abans de desar-se, i no es mostra mai més.",
-    "connectorScopesLabel": "Scopes (separats per espais, opcional)"
+    "connectorScopesLabel": "Scopes (separats per espais, opcional)",
+    "connectorOauthAuthUrlLabel": "URL d'autorització (opcional)",
+    "connectorOauthTokenUrlLabel": "URL del token (opcional)",
+    "connectorOauthRefreshUrlLabel": "URL d'actualització (opcional)",
+    "connectorOauthEndpointsHint": "Deixeu els URLs dels endpoints en blanc per descobrir-los automàticament. Configureu-los per a proveïdors que no permeten la descoberta automàtica, com NetSuite.",
+    "connectorOauthRefreshUrlHint": "Deixeu-ho en blanc per actualitzar contra el token URL.",
+    "connectorOauthEndpointsPairWarning": "Els URLs d'autorització i de token s'han de configurar junts (el d'actualització requereix tots dos)."
   },
   "localModels": {
     "title": "Models locals",
@@ -3711,5 +3798,52 @@
     "truncatedNotice": "{count} camp(s) eliminats — el límit de columnes és {max}: {names}",
     "skippedDerivedNotice": "{count} columna/es calculada/es no desades — les fórmules fan referència a columnes d’aquesta taula: {names}",
     "loadReplacesColumns": "Això substituirà les columnes actuals. Les files existents mantenen els valors dels noms de columna que coincideixen."
+  },
+  "codeInterpreterDropdown": "Executa codi",
+  "connectorPin": {
+    "toggleLabel": "Gestiona les eines de connectors",
+    "menuLabel": "Connectors",
+    "menuLabelCount": "Connectors ({count} actius)",
+    "tooltip": "Vegeu quines eines de connector estan actives, desactiveu-les per a aquest xat o globalment, o centreu-vos en una.",
+    "toggleServerInChat": "Utilitza {name} en aquest xat",
+    "globalToggleTitle": "Activa o desactiva {name} arreu (igual que Configuració → Connectors)",
+    "globalOn": "Globalment actiu",
+    "globalOff": "Globalment inactiu",
+    "chatToggleHint": "Les caselles només controlen aquest xat; el botó global correspon a Configuració → Connectors. Cada connector actiu afegeix les seves eines a cada missatge — més tokens i respostes més lentes.",
+    "trayLabel": "Eines de connector",
+    "trayTitle": "Eines de connector per a aquest xat",
+    "toggleServer": "Activa {name}",
+    "needsReconnect": "Torneu a connectar a Configuració",
+    "focusAction": "Centra",
+    "focusedChip": "Centrat",
+    "pinnedHint": "Només s’utilitzaran eines de {name} en aquesta conversa.",
+    "staleHint": "El connector centrat està desconnectat o desactivat — torneu-lo a connectar a Configuració → Connectors o elimineu el focus. Fins llavors, s'utilitzaran totes les eines actives.",
+    "costHint": "Cada connector actiu afegeix les seves eines a cada missatge que envieu — més tokens i respostes més lentes. Desactiveu els que no feu servir.",
+    "noEligibleConnectors": "No hi ha connectors configurats. Connecteu-ne un a Configuració → Connectors primer.",
+    "unknownConnector": "Connector eliminat",
+    "unpin": "Elimina el focus",
+    "dismiss": "Tanca",
+    "badgeCount": "{count} eines",
+    "badgeTooltip": "Les eines de connectors estan actives a cada missatge — hi afegeixen tokens i temps de resposta. Feu clic per gestionar-les."
+  },
+  "toolApprovals": {
+    "title": "Aprovacions d’eines",
+    "description": "Regles aplicables a totes les converses: permet o bloqueja automàticament eines de connector específiques. Pots afegir eines que encara no se t’hagin sol·licitat.",
+    "actionApprove": "Permet sempre",
+    "actionReject": "Bloqueja sempre",
+    "scopeServer": "a {name}",
+    "scopeAny": "Qualsevol connector",
+    "removeRule": "Elimina la regla per a {tool}",
+    "toolNameLabel": "Nom de l’eina",
+    "toolNamePlaceholder": "Nom de l’eina, p. ex. create_issue",
+    "scopeLabel": "Abast del connector",
+    "actionLabel": "Acció",
+    "addRule": "Afegeix regla",
+    "rejectPrecedenceNote": "Les regles de bloqueig sempre prevalen — sobre les de permís i sobre qualsevol autoaprovació per conversa.",
+    "policyAsk": "Pregunta",
+    "policyAllow": "Permetre",
+    "policyBlock": "Bloquejar",
+    "policyGroupLabel": "Política d'aprovació per a {tool}",
+    "listHint": "Decidiu què passa quan l'assistent vol utilitzar cada eina — en totes les converses. Per defecte és Preguntar; Bloquejar sempre té prioritat."
   }
 }

@@ -1,5 +1,7 @@
 import { Session } from 'next-auth';
 
+import { stripThinking } from '@/lib/utils/app/stream/thinking';
+
 import { Message } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
 
@@ -49,6 +51,15 @@ export class DeepSeekHandler extends ModelHandler {
     // Deep copy messages to avoid mutation
     const messagesToUse = messages.map(
       (msg, index): OpenAI.Chat.Completions.ChatCompletionMessageParam => {
+        // R1 reasoning from earlier turns persists as inline <think> blocks
+        // in assistant content. DeepSeek's guidance is to NOT feed prior
+        // reasoning back — strip it from history.
+        if (msg.role === 'assistant' && typeof msg.content === 'string') {
+          return {
+            role: msg.role,
+            content: stripThinking(msg.content) || msg.content,
+          };
+        }
         // Don't modify messages until we find the first user message
         if (!modifiedSystemPrompt || msg.role !== 'user') {
           return { role: msg.role, content: msg.content as any };
@@ -106,10 +117,11 @@ export class DeepSeekHandler extends ModelHandler {
     // Use deployment name if specified (e.g., "DeepSeek-R1")
     const modelToUse = this.getModelIdForRequest(modelId, modelConfig);
 
+    // No `user` field — see StandardOpenAIHandler. Third-party serving
+    // containers behind Foundry reject unknown body keys.
     const params: any = {
       model: modelToUse,
       messages,
-      user: JSON.stringify(user),
       stream: streamResponse,
       // Ask the provider to append a terminal usage chunk (empty `choices`,
       // populated `usage`) so real token counts can be captured for

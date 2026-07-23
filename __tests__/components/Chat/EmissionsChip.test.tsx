@@ -1,4 +1,6 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+
+import { EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS } from '@/lib/utils/shared/emissions';
 
 import { AssistantMessageGroup, Conversation, Message } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
@@ -6,7 +8,7 @@ import { OpenAIModel } from '@/types/openai';
 import { EmissionsChip } from '@/components/Chat/EmissionsChip';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockFlags: Record<string, unknown> = {};
 vi.mock('launchdarkly-react-client-sdk', () => ({
@@ -77,7 +79,12 @@ const conversation = (
 describe('EmissionsChip', () => {
   beforeEach(() => {
     delete mockFlags.showUsageImpact;
-    useSettingsStore.setState({ models: [] });
+    // Visibility is persisted, so it leaks between tests unless reset.
+    useSettingsStore.setState({
+      models: [],
+      emissionsChipVisibility: 'always',
+      emissionsChipAutoHideMs: EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
+    });
   });
 
   it('renders a grams total for a conversation with untracked turns', () => {
@@ -97,9 +104,7 @@ describe('EmissionsChip', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  // The showUsageImpact gate is currently commented out in EmissionsChip
-  // (local testing). Re-enable this test together with the gate.
-  it.skip('renders nothing when the flag is explicitly off', () => {
+  it('renders nothing when the flag is explicitly off', () => {
     mockFlags.showUsageImpact = false;
     const { container } = render(
       <EmissionsChip conversation={conversation([user(100), assistant(50)])} />,
@@ -227,5 +232,121 @@ describe('EmissionsChip', () => {
     expect(
       screen.queryByText('Back-calculated from older messages'),
     ).not.toBeInTheDocument();
+  });
+
+  describe('visibility modes', () => {
+    const populated = () => conversation([user(100), assistant(50)]);
+    const chip = () =>
+      screen.getByRole('button', { name: /carbon footprint/i });
+    /* The fade lives on the wrapper; the button opts out of pointer events so
+       the wrapper stays the hover target that brings the chip back. */
+    const wrapper = () => chip().parentElement as HTMLElement;
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('renders nothing when set to hidden', () => {
+      useSettingsStore.setState({ emissionsChipVisibility: 'hidden' });
+      const { container } = render(
+        <EmissionsChip conversation={populated()} />,
+      );
+      expect(container).toBeEmptyDOMElement();
+    });
+
+    it('stays opaque in always mode regardless of elapsed time', () => {
+      vi.useFakeTimers();
+      render(<EmissionsChip conversation={populated()} />);
+      act(() => {
+        vi.advanceTimersByTime(EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS * 3);
+      });
+      expect(wrapper().className).toContain('opacity-100');
+      expect(chip().className).not.toContain('pointer-events-none');
+    });
+
+    it('fades out in auto mode once the configured delay elapses', () => {
+      vi.useFakeTimers();
+      useSettingsStore.setState({
+        emissionsChipVisibility: 'auto',
+        emissionsChipAutoHideMs: 2000,
+      });
+      render(<EmissionsChip conversation={populated()} />);
+
+      // Visible immediately: mounting with an estimate counts as an update.
+      expect(wrapper().className).toContain('opacity-100');
+
+      act(() => {
+        vi.advanceTimersByTime(2000);
+      });
+      expect(wrapper().className).toContain('opacity-0');
+      // Faded chip must not be a click target for content beneath it.
+      expect(chip().className).toContain('pointer-events-none');
+    });
+
+    it('returns on hover after fading out in auto mode', () => {
+      vi.useFakeTimers();
+      useSettingsStore.setState({
+        emissionsChipVisibility: 'auto',
+        emissionsChipAutoHideMs: 2000,
+      });
+      render(<EmissionsChip conversation={populated()} />);
+      act(() => {
+        vi.advanceTimersByTime(2000);
+      });
+      expect(wrapper().className).toContain('opacity-0');
+
+      fireEvent.mouseEnter(wrapper());
+      expect(wrapper().className).toContain('opacity-100');
+
+      fireEvent.mouseLeave(wrapper());
+      expect(wrapper().className).toContain('opacity-0');
+    });
+
+    it('returns on keyboard focus without opening the popover', () => {
+      vi.useFakeTimers();
+      useSettingsStore.setState({
+        emissionsChipVisibility: 'auto',
+        emissionsChipAutoHideMs: 2000,
+      });
+      render(<EmissionsChip conversation={populated()} />);
+      act(() => {
+        vi.advanceTimersByTime(2000);
+      });
+
+      fireEvent.focus(chip());
+      expect(wrapper().className).toContain('opacity-100');
+      // Tabbing past a control should not spring the panel open.
+      expect(
+        screen.queryByText('This conversation (estimated)'),
+      ).not.toBeInTheDocument();
+    });
+
+    it('switches mode from the popover footer', () => {
+      render(<EmissionsChip conversation={populated()} />);
+      fireEvent.click(chip());
+
+      fireEvent.click(screen.getByRole('button', { name: 'Auto' }));
+      expect(useSettingsStore.getState().emissionsChipVisibility).toBe('auto');
+
+      fireEvent.click(screen.getByRole('button', { name: 'Hide' }));
+      expect(useSettingsStore.getState().emissionsChipVisibility).toBe(
+        'hidden',
+      );
+    });
+
+    it('marks the active mode as pressed', () => {
+      useSettingsStore.setState({ emissionsChipVisibility: 'auto' });
+      render(<EmissionsChip conversation={populated()} />);
+      fireEvent.click(chip());
+
+      expect(screen.getByRole('button', { name: 'Auto' })).toHaveAttribute(
+        'aria-pressed',
+        'true',
+      );
+      expect(screen.getByRole('button', { name: 'Always' })).toHaveAttribute(
+        'aria-pressed',
+        'false',
+      );
+    });
   });
 });

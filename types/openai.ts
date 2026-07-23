@@ -58,6 +58,28 @@ export interface OpenAIModel {
    * models without it silently skip MCP even when servers are configured.
    */
   supportsTools?: boolean;
+  /**
+   * Whether this model can run the Responses-API `code_interpreter` tool
+   * natively (Phase 2 inline execution). Absent = false. Phase 1's sub-tool
+   * round-trip works for EVERY model regardless of this flag — the flag only
+   * marks models that could execute in-turn without the round-trip.
+   */
+  supportsCodeInterpreter?: boolean;
+  /**
+   * Anthropic extended thinking (visible reasoning). When set, the shared
+   * reasoning-effort control maps to a `thinking.budget_tokens` tier in the
+   * Anthropic handler ('minimal' or unset = thinking off).
+   */
+  supportsExtendedThinking?: boolean;
+  /**
+   * Azure OpenAI Responses API support. Flagged models route their plain
+   * streaming/non-streaming chat through `responses.create` (reasoning
+   * summaries become visible thinking); unflagged models — and every MCP,
+   * extraction, and fallback-chain turn — stay on chat.completions. Any
+   * Responses-path failure degrades to chat.completions at runtime, so the
+   * flag is a routing preference, not a hard capability gate.
+   */
+  supportsResponsesApi?: boolean;
   deploymentName?: string; // Azure AI Foundry deployment name (for third-party models)
 
   /**
@@ -386,6 +408,9 @@ const openAIModelSchema = z.object({
   supportsTemperature: z.boolean().optional(),
   supportsVision: z.boolean().optional(),
   supportsTools: z.boolean().optional(),
+  supportsCodeInterpreter: z.boolean().optional(),
+  supportsExtendedThinking: z.boolean().optional(),
+  supportsResponsesApi: z.boolean().optional(),
   deploymentName: z.string().optional(),
   modelSource: z.string().optional(),
   isCustomSourceModel: z.boolean().optional(),

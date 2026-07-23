@@ -107,8 +107,8 @@ export function EmptyState({ userName, user, interactive }: EmptyStateProps) {
     : t('greeting');
 
   return (
-    <div className="flex items-center justify-center">
-      <h1 className="text-2xl font-light bg-gradient-to-r rtl:bg-gradient-to-l from-[#F73837] from-0% via-rose-500 via-15% to-rose-900 to-100% dark:from-[#F73837] dark:from-0% dark:via-[#FF8A89] dark:via-15% dark:to-gray-400 dark:to-100% bg-clip-text text-transparent">
+    <div className="flex items-center justify-center px-2 text-center">
+      <h1 className="text-xl sm:text-2xl font-light break-words bg-gradient-to-r rtl:bg-gradient-to-l from-[#F73837] from-0% via-rose-500 via-15% to-rose-900 to-100% dark:from-[#F73837] dark:from-0% dark:via-[#FF8A89] dark:via-15% dark:to-gray-400 dark:to-100% bg-clip-text text-transparent">
         {isInteractive ? (
           <span
             ref={greetingRef}

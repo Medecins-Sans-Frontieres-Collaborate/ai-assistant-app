@@ -1,27 +1,54 @@
-import { Message, ToolRouterRequest } from '@/types/chat';
+import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
+
+import { getUserIdFromSession } from '@/lib/utils/app/user/session';
+import { BlobProperty } from '@/lib/utils/server/blob/blob';
+import { getContentType } from '@/lib/utils/server/file/mimeTypes';
+
+import {
+  FileMessageContent,
+  ImageMessageContent,
+  Message,
+  ToolRouterResponse,
+} from '@/types/chat';
+import { InterpreterMode } from '@/types/interpreterMode';
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
+import { Citation } from '@/types/rag';
 import { SearchMode } from '@/types/searchMode';
+import {
+  MAX_SEARCH_RESULT_COUNT,
+  sanitizeWebSearchOptions,
+} from '@/types/webSearch';
 
 import { AgentChatService } from '../AgentChatService';
 import { ToolRouterService } from '../ToolRouterService';
 import { ChatContext, shouldExecuteAsAgent } from '../pipeline/ChatContext';
 import { STAGE_TIMEOUTS } from '../pipeline/ChatPipeline';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
+import {
+  CodeInterpreterInputFile,
+  CodeInterpreterResult,
+  CodeInterpreterTool,
+} from '../tools/CodeInterpreterTool';
 import { WebSearchTool } from '../tools/WebSearchTool';
+import { readCitedSources } from '../tools/citedSourceReader';
 
+import { env } from '@/config/environment';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
+import { emitToolCallRecord } from '@/lib/streamMarkers';
 
 /**
  * ToolRouterEnricher adds intelligent tool routing capabilities.
  *
  * Responsibilities:
- * - Determines if web search is needed (INTELLIGENT mode)
- * - Forces web search (ALWAYS mode)
- * - Executes search as a tool
- * - Adds search results to messages
+ * - Determines if web search / code execution is needed (INTELLIGENT modes)
+ * - Forces web search (SearchMode.ALWAYS) and/or code execution
+ *   (InterpreterMode.ALWAYS)
+ * - Executes search and the code interpreter as tools
+ * - Adds tool results to messages; emits the interpreter's TOOL_CALL_RECORD
+ *   (code + output + generated files) onto the response stream
  *
  * Modifies context:
- * - context.enrichedMessages (adds search results)
+ * - context.enrichedMessages (adds tool results)
  *
  * Note: This enricher runs AFTER content processing, so it can work with:
  * - Raw text queries
@@ -32,14 +59,33 @@ import { getOrganizationAgentById } from '@/lib/organizationAgents';
 export class ToolRouterEnricher extends BasePipelineStage {
   readonly name = 'ToolRouterEnricher';
 
-  // Derived to sit just under this stage's pipeline budget so a slow search
-  // degrades via the catch below instead of being killed silently by the stage
-  // timeout. Tied to STAGE_TIMEOUTS so the two can't drift apart.
-  private static readonly SEARCH_TIMEOUT_MS =
+  // Fail-fast budget for the search round-trip. The user sees NO answer
+  // tokens until pre-routing finishes, so a slow search stalls the whole
+  // answer. Env-tunable (WEB_SEARCH_TIMEOUT_MS, default 45s — Foundry
+  // search agent runs typically need 20-40s); on timeout the turn degrades
+  // to a knowledge answer with an honest notice instead of blocking for
+  // the full stage budget.
+  private static readonly SEARCH_TIMEOUT_MS = env.WEB_SEARCH_TIMEOUT_MS;
+
+  // Code execution legitimately runs long (package imports, real data
+  // crunching) — keep a generous budget, just under the stage timeout so
+  // failures degrade via our catch instead of being killed silently.
+  private static readonly INTERPRETER_TIMEOUT_MS =
     STAGE_TIMEOUTS.ToolRouterEnricher - 5000;
+
+  // "Executed by" label on the search tool record for feed-based providers
+  // (the Bing path shows the agent model id instead).
+  private static readonly FEED_PROVIDER_LABELS: Partial<
+    Record<typeof env.WEB_SEARCH_PROVIDER, string>
+  > = {
+    news: 'GDELT + Google News',
+    gdelt: 'GDELT',
+    'google-news': 'Google News',
+  };
 
   private toolRouterService: ToolRouterService;
   private webSearchTool: WebSearchTool;
+  private codeInterpreterTool: CodeInterpreterTool;
 
   constructor(
     toolRouterService: ToolRouterService,
@@ -48,30 +94,63 @@ export class ToolRouterEnricher extends BasePipelineStage {
     super();
     this.toolRouterService = toolRouterService;
     this.webSearchTool = new WebSearchTool(agentChatService);
+    this.codeInterpreterTool = new CodeInterpreterTool();
+  }
+
+  /**
+   * Whether web search is requested for this turn (mode + org-agent gate).
+   * Prompt agents also arrive via botId but ride the standard execution
+   * path — tools must behave exactly as for a plain model, so they take the
+   * standard mode check instead of the static org-agent gate (mirrors
+   * RAGEnricher's `!context.promptAgent` guard).
+   */
+  private searchRequested(context: ChatContext): boolean {
+    const modeActive =
+      context.searchMode === SearchMode.INTELLIGENT ||
+      context.searchMode === SearchMode.ALWAYS;
+    if (!modeActive) return false;
+    if (context.botId && !context.promptAgent) {
+      const agent = getOrganizationAgentById(context.botId);
+      return !!agent?.allowWebSearch;
+    }
+    return true;
+  }
+
+  /**
+   * Whether the PICKED model can run code_interpreter natively in-turn on
+   * the Responses path (Phase 2). MCP turns are excluded — they execute on
+   * chat.completions, which has no server-side tools — and fall back to the
+   * sub-tool round-trip like any other incapable configuration.
+   */
+  private nativeInterpreterCapable(context: ChatContext): boolean {
+    return (
+      context.model?.supportsCodeInterpreter === true &&
+      context.model?.supportsResponsesApi === true &&
+      context.model?.sdk === 'azure-openai' &&
+      !context.model?.isCustomSourceModel &&
+      !context.mcpServers?.length
+    );
+  }
+
+  /**
+   * Whether code execution is requested for this turn (env kill switch +
+   * mode + org-agent gate).
+   */
+  private interpreterRequested(context: ChatContext): boolean {
+    if (!env.CODE_INTERPRETER_ENABLED) return false;
+    const modeActive =
+      context.interpreterMode === InterpreterMode.INTELLIGENT ||
+      context.interpreterMode === InterpreterMode.ALWAYS;
+    if (!modeActive) return false;
+    if (context.botId && !context.promptAgent) {
+      const agent = getOrganizationAgentById(context.botId);
+      return !!agent?.allowCodeInterpreter;
+    }
+    return true;
   }
 
   shouldRun(context: ChatContext): boolean {
-    // Check if org agent allows web search. Prompt agents also arrive via
-    // botId but ride the standard execution path — web search must behave
-    // exactly as for a plain model, so they take the standard search-mode
-    // check below instead of the static org-agent gate (mirrors
-    // RAGEnricher's `!context.promptAgent` guard).
-    if (context.botId && !context.promptAgent) {
-      const agent = getOrganizationAgentById(context.botId);
-      if (agent?.allowWebSearch) {
-        return (
-          context.searchMode === SearchMode.INTELLIGENT ||
-          context.searchMode === SearchMode.ALWAYS
-        );
-      }
-      return false; // Org agent without allowWebSearch - no web search
-    }
-
-    // Standard search mode check for non-org-agent models
-    return (
-      context.searchMode === SearchMode.INTELLIGENT ||
-      context.searchMode === SearchMode.ALWAYS
-    );
+    return this.searchRequested(context) || this.interpreterRequested(context);
   }
 
   protected async executeStage(context: ChatContext): Promise<ChatContext> {
@@ -123,80 +202,252 @@ export class ToolRouterEnricher extends BasePipelineStage {
       }
     }
 
+    const searchRequested = this.searchRequested(context);
+    const interpreterRequestedAny = this.interpreterRequested(context);
+
+    // Phase 2 routing: a natively-capable picked model runs the tool
+    // IN-TURN on the Responses path — no round-trip, no pre-classification
+    // (the model itself decides when to execute). The enricher only stages
+    // the raw attachment bytes and flags the turn; incapable models keep
+    // the Phase 1 sub-tool round-trip below.
+    const nativeInterpreter =
+      interpreterRequestedAny && this.nativeInterpreterCapable(context);
+    if (nativeInterpreter) {
+      console.log(
+        '[ToolRouterEnricher] Native code interpreter — deferring to the Responses path',
+      );
+      context = {
+        ...context,
+        nativeCodeInterpreter: {
+          forced: context.interpreterMode === InterpreterMode.ALWAYS,
+          inputFiles: await this.collectInterpreterInputFiles(context),
+        },
+      };
+    }
+    const interpreterRequested = interpreterRequestedAny && !nativeInterpreter;
+
+    const forceWebSearch =
+      searchRequested && context.searchMode === SearchMode.ALWAYS;
+    const forceInterpreter =
+      interpreterRequested &&
+      context.interpreterMode === InterpreterMode.ALWAYS;
+
     // Skip routing when the chat is going to run as a Foundry agent —
     // agents have their own `web_search_call` tool and decide for themselves
     // when to use it. Pre-routing duplicates work and adds ~5s of latency
-    // per request. Predicate is shared with AgentEnricher to prevent the
+    // per request. Forced modes override: the user explicitly asked for the
+    // tool this turn. Predicate is shared with AgentEnricher to prevent the
     // two enrichers from drifting apart.
-    const forceWebSearch = context.searchMode === SearchMode.ALWAYS;
-    if (shouldExecuteAsAgent(context) && !forceWebSearch) {
+    if (shouldExecuteAsAgent(context) && !forceWebSearch && !forceInterpreter) {
       console.log(
         '[ToolRouterEnricher] Skipping pre-routing — agent will decide via its own tools',
       );
       return context;
     }
 
-    // When the user explicitly chose ALWAYS search (SearchMode.ALWAYS), we
-    // already know the decision — skip the gpt-5.4-nano router call (saves
-    // ~1-2s of latency on every forced search). Synthesize a minimal
-    // response that satisfies the downstream "execute web_search" branch.
-    let toolResponse;
-    if (forceWebSearch) {
-      console.log(
-        '[ToolRouterEnricher] forceWebSearch=true; skipping router decision',
-      );
-      toolResponse = {
-        tools: ['web_search' as const],
-        // Use the raw user prompt (no merged file/transcript context) so
-        // the search backend gets a clean query. The search tool's own
-        // model can refine it further if needed.
-        searchQuery: rawUserPrompt,
-      };
-    } else {
-      // Determine which tools are needed via the mini-model router.
-      const toolRouterRequest: ToolRouterRequest = {
+    // Forced tools skip the gpt-5.4-nano router call (saves ~1-2s of
+    // latency). The classifier only runs for tools still in INTELLIGENT
+    // mode; forced decisions are unioned in afterwards.
+    const undecidedSearch = searchRequested && !forceWebSearch;
+    const undecidedInterpreter = interpreterRequested && !forceInterpreter;
+    // Citations from the most recent searched turn: follow-up questions
+    // about that data are answered by re-fetching THOSE articles rather
+    // than searching fresh (same sources, full depth).
+    const priorCitations = searchRequested
+      ? ToolRouterEnricher.latestCitations(baseMessages)
+      : [];
+    let decided: ToolRouterResponse = { tools: [] };
+    if (undecidedSearch || undecidedInterpreter) {
+      decided = await this.toolRouterService.determineTool({
         messages: baseMessages,
         currentMessage,
-        forceWebSearch,
-      };
-      toolResponse =
-        await this.toolRouterService.determineTool(toolRouterRequest);
+        forceWebSearch: false,
+        considerCodeExecution: undecidedInterpreter,
+        hasPriorSearchCitations: undecidedSearch && priorCitations.length > 0,
+      });
+    } else {
+      console.log(
+        '[ToolRouterEnricher] All requested tools forced; skipping router decision',
+      );
     }
 
-    // If no tools needed, return unchanged context
-    if (toolResponse.tools.length === 0) {
+    const tools = new Set(
+      decided.tools.filter(
+        (t) =>
+          (t === 'web_search' && undecidedSearch) ||
+          (t === 'code_interpreter' && undecidedInterpreter),
+      ),
+    );
+    if (forceWebSearch) tools.add('web_search');
+    if (forceInterpreter) tools.add('code_interpreter');
+
+    // Use the raw user prompt (no merged file/transcript context) for
+    // forced runs so the tool backend gets a clean query/task. The tool's
+    // own model can refine it further if needed.
+    const toolResponse: ToolRouterResponse = {
+      tools: [...tools],
+      searchQuery: forceWebSearch ? rawUserPrompt : decided.searchQuery,
+      searchQueries: forceWebSearch ? undefined : decided.searchQueries,
+      // Dynamic tuning only comes from the classifier; forced searches have
+      // no router read and fall back to the user's configured options.
+      searchRecency: decided.searchRecency,
+      searchComprehensive: decided.searchComprehensive,
+      searchFollowUp: decided.searchFollowUp,
+      codeTask: forceInterpreter ? rawUserPrompt : decided.codeTask,
+    };
+
+    // If no tools needed, return unchanged context. A follow-up on cited
+    // sources counts as work even when no fresh search is warranted.
+    const followUpRequested =
+      toolResponse.searchFollowUp === true && priorCitations.length > 0;
+    if (toolResponse.tools.length === 0 && !followUpRequested) {
       return context;
     }
 
-    // Execute web search if needed
-    if (toolResponse.tools.includes('web_search')) {
-      console.log(
-        `[ToolRouterEnricher] Executing web search: "${toolResponse.searchQuery}"`,
+    let workingContext = context;
+
+    // Follow-up on previously cited sources: fetch THOSE articles' content
+    // first. When it yields text, it REPLACES a fresh search — the user is
+    // asking about data already on the table, and a new search could return
+    // entirely different sources.
+    let followUpSatisfied = false;
+    if (followUpRequested) {
+      const { context: followUpContext, fetchedCount } =
+        await this.executeCitedSourceFollowUp(workingContext, priorCitations);
+      workingContext = followUpContext;
+      followUpSatisfied = fetchedCount > 0;
+    }
+
+    // Execute web search if needed. Effective tuning = the user's settings
+    // (bounded server-side) plus the router's per-message signals: with
+    // freshness 'auto' the router's recency read applies, and research-style
+    // questions widen the source cap beyond the configured default.
+    if (toolResponse.tools.includes('web_search') && !followUpSatisfied) {
+      const options = sanitizeWebSearchOptions(context.webSearchOptions);
+      // User-selected backend wins; 'auto' defers to the deployment
+      // default. Only feed providers are user-selectable, so a Bing run
+      // can only come from the env default.
+      const provider =
+        options.provider === 'auto'
+          ? env.WEB_SEARCH_PROVIDER
+          : options.provider;
+      const freshness =
+        options.freshness === 'auto'
+          ? (toolResponse.searchRecency ?? 'any')
+          : options.freshness;
+      const resultCount = toolResponse.searchComprehensive
+        ? Math.min(MAX_SEARCH_RESULT_COUNT, Math.max(options.resultCount, 12))
+        : options.resultCount;
+
+      workingContext = await this.executeWebSearch(
+        workingContext,
+        toolResponse.searchQueries?.length
+          ? toolResponse.searchQueries
+          : [toolResponse.searchQuery || currentMessage],
+        {
+          resultCount,
+          freshness,
+          provider,
+          // Research-style questions justify waiting on every news feed;
+          // single-fact lookups answer from the fastest one.
+          deep: toolResponse.searchComprehensive === true,
+        },
       );
+    }
 
+    // Execute the code interpreter if needed. Runs AFTER search so its
+    // merged context (executed results) sits closest to the user's message.
+    if (toolResponse.tools.includes('code_interpreter')) {
+      workingContext = await this.executeCodeInterpreter(
+        workingContext,
+        toolResponse.codeTask || rawUserPrompt,
+      );
+    }
+
+    return workingContext;
+  }
+
+  /**
+   * Runs the web-search tool and merges results into the last user message.
+   * Returns the context unchanged when search is unavailable; on failure
+   * merges a failure notice instead so the model levels with the user.
+   */
+  private async executeWebSearch(
+    context: ChatContext,
+    searchQueries: string[],
+    tuning: {
+      resultCount: number;
+      freshness: 'day' | 'week' | 'month' | 'any';
+      provider: 'news' | 'gdelt' | 'google-news' | 'bing-agent';
+      deep: boolean;
+    },
+  ): Promise<ChatContext> {
+    const baseMessages = context.enrichedMessages || context.messages;
+    // Primary query drives the Bing path and single-query providers; the
+    // full list fans out across parallel Google News legs. Record/notice
+    // strings show every query so multi-aspect runs stay legible.
+    const searchQuery = searchQueries[0];
+    const queryLabel = searchQueries.join(' | ');
+    console.log(
+      `[ToolRouterEnricher] Executing web search via ${tuning.provider}: "${queryLabel}" (queries: ${searchQueries.length}, sources: ${tuning.resultCount}, freshness: ${tuning.freshness})`,
+    );
+
+    const startTime = Date.now();
+    // The provider decides what "executed the search" means for the tool
+    // record: the agent model for Bing, the feed(s) themselves otherwise.
+    const useFeedProvider = tuning.provider !== 'bing-agent';
+    const feedLabel = ToolRouterEnricher.FEED_PROVIDER_LABELS[tuning.provider];
+    {
       try {
-        // Find a model with agentId for search (prefer from context, fallback to any)
-        const searchModel = context.model.agentId
-          ? context.model
-          : this.getAgentModelForSearch();
+        // Bing path only: find a model with agentId (prefer from context,
+        // fallback to the default search agent). Feed providers need neither.
+        const searchModel = useFeedProvider
+          ? undefined
+          : context.model.agentId
+            ? context.model
+            : this.getAgentModelForSearch();
 
-        if (!searchModel) {
+        if (!useFeedProvider && !searchModel) {
           console.warn(
             '[ToolRouterEnricher] No agent model available for search, skipping',
           );
           return context;
         }
+        const executorLabel = useFeedProvider ? feedLabel! : searchModel!.id;
 
-        // Tell the client what we're doing — web search round-trips through
-        // a Foundry agent and can take several seconds.
-        await context.emitActivity?.('chat.activity.searchingWeb');
+        // Tell the client what we're doing — showing the ACTUAL query makes
+        // the multi-second wait feel purposeful instead of stuck.
+        await context.emitActivity?.(
+          searchQueries.length > 1
+            ? 'chat.activity.searchingWebForMultiple'
+            : 'chat.activity.searchingWebFor',
+          searchQueries.length > 1
+            ? {
+                count: String(searchQueries.length),
+                query: ToolRouterEnricher.truncate(searchQuery, 40),
+              }
+            : { query: ToolRouterEnricher.truncate(searchQuery, 60) },
+        );
 
         let searchTimer: ReturnType<typeof setTimeout> | undefined;
         const searchResult = await Promise.race([
           this.webSearchTool.execute({
-            searchQuery: toolResponse.searchQuery || currentMessage,
-            model: searchModel,
+            searchQuery,
+            searchQueries,
+            model: searchModel ?? undefined,
             user: context.user,
+            resultCount: tuning.resultCount,
+            freshness: tuning.freshness,
+            provider: tuning.provider,
+            deep: tuning.deep,
+            // Progress phases from inside the sub-call (searching → reading
+            // sources → …). The generic searchingWeb key is skipped so it
+            // never overwrites the query-specific loader above.
+            onActivity: (key, params) => {
+              if (key !== 'chat.activity.searchingWeb') {
+                void context.emitActivity?.(key, params);
+              }
+            },
           }),
           new Promise<never>((_, reject) => {
             searchTimer = setTimeout(() => {
@@ -217,6 +468,40 @@ export class ToolRouterEnricher extends BasePipelineStage {
           JSON.stringify(searchResult.citations, null, 2),
         );
 
+        // Zero citations = the search found nothing usable (this branch also
+        // catches WebSearchTool's swallowed-error path, which returns an
+        // error note with an empty citations array). Merging a "Web Search
+        // results" block around nothing makes the model waffle — instead,
+        // tell it plainly to answer from knowledge with ONE honest caveat,
+        // and record the empty outcome so the user sees why.
+        if ((searchResult.citations?.length ?? 0) === 0) {
+          console.warn(
+            '[ToolRouterEnricher] Search returned no sources; answering from model knowledge',
+          );
+          await this.emitSearchRecord(
+            context,
+            queryLabel,
+            executorLabel,
+            '0 sources found',
+            null,
+            Date.now() - startTime,
+          );
+
+          const emptyNotice =
+            `Note: a live web search ran for this request but found no useful sources. ` +
+            `Mention that ONCE, briefly. Then answer the user's ACTUAL question confidently from your own knowledge, as specifically as you can. ` +
+            `If you do not have specific knowledge of the event or fact being asked about, say so in one sentence and suggest narrowing the question — ` +
+            `do NOT pad the answer with generic background, and do not apologize repeatedly or speculate about why the search failed.`;
+          const lastMsg = baseMessages[baseMessages.length - 1];
+          return {
+            ...context,
+            enrichedMessages: [
+              ...baseMessages.slice(0, -1),
+              this.prependContextToMessage(lastMsg, emptyNotice),
+            ],
+          };
+        }
+
         // Get existing RAG citations to calculate correct numbering
         const existingCitations =
           context.processedContent?.metadata?.citations || [];
@@ -226,34 +511,88 @@ export class ToolRouterEnricher extends BasePipelineStage {
         // this, a long search summary (10KB+) and a citations array of 20+
         // entries balloon the input prompt — slower synthesis, more cost,
         // and harder for the model to attend to the actual user question.
-        // The agent's own search tool already summarises; this is a final
-        // guard. Numbers are conservative: 8KB of text + 8 citations is
-        // plenty for a typical question while preventing pathological
-        // cases.
-        const MAX_SEARCH_TEXT_CHARS = 8000;
-        const MAX_SEARCH_CITATIONS = 8;
+        // The citation cap is the user's configured source count (router-
+        // widened for research questions); the text budget scales with it
+        // so deeper searches keep proportionally more summary.
+        const MAX_SEARCH_CITATIONS = tuning.resultCount;
+        const MAX_SEARCH_TEXT_CHARS = Math.min(
+          16000,
+          4000 + MAX_SEARCH_CITATIONS * 800,
+        );
         const rawSearchText =
           searchResult.text.length > MAX_SEARCH_TEXT_CHARS
             ? searchResult.text.slice(0, MAX_SEARCH_TEXT_CHARS) +
               '\n\n[…search results truncated for length]'
             : searchResult.text;
-        const truncatedCitations = (searchResult.citations ?? []).slice(
-          0,
-          MAX_SEARCH_CITATIONS,
+
+        // Normalize the sub-tool's citations before numbering, and REMAP
+        // every [N] reference in the summary text to the FINAL numbering so
+        // the text refs and the source list can never disagree (the failure
+        // mode: text citing [1][3][5] while the sources panel showed
+        // [2][4][6] phantom pairs from the agent's marker/annotation split):
+        //  - drop URL-less label-only entries (unusable as sources)
+        //  - dedupe by URL (both duplicate numbers remap to one entry)
+        //  - cap at MAX_SEARCH_CITATIONS (refs past the cap are stripped)
+        const cleanedCitations: NonNullable<typeof searchResult.citations> = [];
+        const renumbering = new Map<number, number>();
+        // URL-less entries are inline-marker phantoms whose real source is
+        // the NEXT url-bearing entry (the agent emits marker → annotation
+        // in pairs) — their numbers remap to that entry so text refs like
+        // [1][3][5] resolve instead of being stripped.
+        let pendingPhantomNumbers: number[] = [];
+        for (const citation of searchResult.citations ?? []) {
+          if (!citation.url) {
+            pendingPhantomNumbers.push(citation.number);
+            continue;
+          }
+          const existingIdx = cleanedCitations.findIndex(
+            (c) => c.url === citation.url,
+          );
+          let mappedNumber: number | undefined;
+          if (existingIdx >= 0) {
+            mappedNumber = citationOffset + existingIdx + 1;
+          } else if (cleanedCitations.length < MAX_SEARCH_CITATIONS) {
+            cleanedCitations.push(citation);
+            mappedNumber = citationOffset + cleanedCitations.length;
+          }
+          // Beyond the cap: no mapping — the references are stripped below
+          // (the surrounding sentence still reads correctly without them).
+          if (mappedNumber !== undefined) {
+            renumbering.set(citation.number, mappedNumber);
+            for (const phantom of pendingPhantomNumbers) {
+              renumbering.set(phantom, mappedNumber);
+            }
+          }
+          pendingPhantomNumbers = [];
+        }
+        const truncatedCitations = cleanedCitations;
+        const truncatedSearchText = rawSearchText.replace(
+          /\[(\d+)\]/g,
+          (_match, n) => {
+            const mapped = renumbering.get(Number(n));
+            return mapped !== undefined ? `[${mapped}]` : '';
+          },
         );
-        // Strip orphaned citation references from the search text when the
-        // citations array was truncated. Without this, the model can see
-        // "[12]" in the body but only have [1]–[8] available in the source
-        // list — it then hallucinates or attributes content to a citation
-        // we dropped. Walk every [N] reference in the text and rewrite
-        // anything past MAX_SEARCH_CITATIONS to remove the bracket entirely
-        // (the surrounding sentence still reads correctly without it).
-        const truncatedSearchText =
-          (searchResult.citations?.length ?? 0) > MAX_SEARCH_CITATIONS
-            ? rawSearchText.replace(/\[(\d+)\]/g, (match, n) =>
-                Number(n) > MAX_SEARCH_CITATIONS ? '' : match,
-              )
-            : rawSearchText;
+
+        // All citations were URL-less phantoms — same outcome as an empty
+        // search: answer from knowledge with one honest caveat.
+        if (truncatedCitations.length === 0) {
+          console.warn(
+            '[ToolRouterEnricher] Search citations were all unusable; answering from model knowledge',
+          );
+          const emptyNotice =
+            `Note: a live web search ran for this request but found no useful sources. ` +
+            `Mention that ONCE, briefly. Then answer the user's ACTUAL question confidently from your own knowledge, as specifically as you can — ` +
+            `do NOT pad the answer with generic background.`;
+          const lastMsgEmpty = baseMessages[baseMessages.length - 1];
+          return {
+            ...context,
+            enrichedMessages: [
+              ...baseMessages.slice(0, -1),
+              this.prependContextToMessage(lastMsgEmpty, emptyNotice),
+            ],
+          };
+        }
 
         // Build search context to prepend to the last user message
         // We merge search results INTO the user message instead of using a separate
@@ -305,6 +644,18 @@ export class ToolRouterEnricher extends BasePipelineStage {
           mergedCitations.length,
         );
 
+        // Persistent record — parity with the code interpreter: users see
+        // WHAT was searched, which model ran it, and how long it took, in
+        // the same "Used N tools" strip.
+        await this.emitSearchRecord(
+          context,
+          queryLabel,
+          executorLabel,
+          `${truncatedCitations.length} source${truncatedCitations.length === 1 ? '' : 's'} found`,
+          null,
+          Date.now() - startTime,
+        );
+
         return {
           ...context,
           enrichedMessages,
@@ -323,11 +674,28 @@ export class ToolRouterEnricher extends BasePipelineStage {
           `[ToolRouterEnricher] Web search ${timedOut ? 'timed out' : 'failed'}:`,
           error,
         );
-        // Still answer, but tell the model the search didn't return.
+
+        await this.emitSearchRecord(
+          context,
+          queryLabel,
+          useFeedProvider
+            ? feedLabel!
+            : context.model.agentId
+              ? context.model.id
+              : OpenAIModels[OpenAIModelID.GPT_5_2]?.id,
+          null,
+          timedOut ? 'Web search timed out' : 'Web search failed',
+          Date.now() - startTime,
+        );
+
+        // Still answer, but tell the model the search didn't return —
+        // and forbid the generic-background filler that makes these
+        // answers feel valueless.
         const failureNotice =
-          `Note: a web search was attempted to answer this but it ${timedOut ? 'timed out' : 'failed'}, so no live results are available. ` +
-          `Answer from your own knowledge and clearly tell the user you could not retrieve up-to-date web results, ` +
-          `so anything time-sensitive may be out of date.`;
+          `Note: a live web search was attempted for this request but it ${timedOut ? 'timed out' : 'failed'}, so no live results are available. ` +
+          `Mention that ONCE, briefly. Then answer the user's ACTUAL question from your knowledge as specifically as you can. ` +
+          `If you do not have specific knowledge of the event or fact being asked about, say so in one sentence and suggest retrying the search or narrowing the question — ` +
+          `do NOT pad the answer with generic background loosely related to the topic.`;
 
         const lastMsg = baseMessages[baseMessages.length - 1];
         const enrichedLastMessage = this.prependContextToMessage(
@@ -341,8 +709,418 @@ export class ToolRouterEnricher extends BasePipelineStage {
         };
       }
     }
+  }
 
-    return context;
+  /**
+   * Most recent assistant turn's citations — the sources a follow-up
+   * question would be referring to.
+   */
+  private static latestCitations(messages: Message[]): Citation[] {
+    for (let i = messages.length - 1; i >= 0; i--) {
+      const msg = messages[i];
+      if (msg.role === 'assistant' && (msg.citations?.length ?? 0) > 0) {
+        return msg.citations!;
+      }
+    }
+    return [];
+  }
+
+  /**
+   * Follow-up path: fetch the previously cited articles' full content and
+   * merge it into the prompt the same way search results merge — same
+   * sources the user already saw, but with real article text instead of
+   * headlines. Returns fetchedCount so the caller can decide whether a
+   * fresh search is still needed as a fallback.
+   */
+  private async executeCitedSourceFollowUp(
+    context: ChatContext,
+    priorCitations: Citation[],
+  ): Promise<{ context: ChatContext; fetchedCount: number }> {
+    const baseMessages = context.enrichedMessages || context.messages;
+    const startTime = Date.now();
+    console.log(
+      `[ToolRouterEnricher] Follow-up on ${priorCitations.length} previously cited sources`,
+    );
+    await context.emitActivity?.('chat.activity.readingCitedSources', {
+      count: String(Math.min(priorCitations.length, 5)),
+    });
+
+    try {
+      const digest = await readCitedSources(priorCitations);
+      if (digest.fetchedCount === 0) {
+        console.warn(
+          '[ToolRouterEnricher] No cited articles were readable; falling back',
+        );
+        await this.emitSearchRecord(
+          context,
+          'Re-read previously cited articles',
+          'Cited sources',
+          '0 articles readable',
+          null,
+          Date.now() - startTime,
+        );
+        return { context, fetchedCount: 0 };
+      }
+
+      const existingCitations =
+        context.processedContent?.metadata?.citations || [];
+      const citationOffset = existingCitations.length;
+      // Digest numbering is local [1..n]; shift it when RAG citations
+      // already occupy the low numbers.
+      const digestText =
+        citationOffset > 0
+          ? digest.text.replace(
+              /\[(\d+)\]/g,
+              (_match, n) => `[${Number(n) + citationOffset}]`,
+            )
+          : digest.text;
+
+      const references = digest.citations
+        .map((c, idx) => `[${citationOffset + idx + 1}] ${c.title || c.url}`)
+        .join('\n');
+      const followUpBlock = `${digestText}\n\nAvailable sources:\n${references}\n\nIMPORTANT: When referencing these sources in your response, use citation markers in SEPARATE brackets like [1][2][3] - never group them like [1,2,3]. Do NOT include source information (URLs, titles, or dates) in your response text. The citation details will be displayed separately to the user.`;
+
+      const lastMsg = baseMessages[baseMessages.length - 1];
+      const enrichedMessages = [
+        ...baseMessages.slice(0, -1),
+        this.prependContextToMessage(lastMsg, followUpBlock),
+      ];
+      const mergedCitations = [
+        ...existingCitations,
+        ...digest.citations.map((c, idx) => ({
+          ...c,
+          number: citationOffset + idx + 1,
+        })),
+      ];
+
+      await this.emitSearchRecord(
+        context,
+        'Re-read previously cited articles',
+        'Cited sources',
+        `${digest.fetchedCount} of ${digest.attemptedCount} articles read`,
+        null,
+        Date.now() - startTime,
+      );
+
+      return {
+        context: {
+          ...context,
+          enrichedMessages,
+          processedContent: {
+            ...context.processedContent,
+            metadata: {
+              ...context.processedContent?.metadata,
+              citations: mergedCitations,
+            },
+          },
+        },
+        fetchedCount: digest.fetchedCount,
+      };
+    } catch (error) {
+      console.error(
+        '[ToolRouterEnricher] Cited-source follow-up failed:',
+        error,
+      );
+      await this.emitSearchRecord(
+        context,
+        'Re-read previously cited articles',
+        'Cited sources',
+        null,
+        'Article fetch failed',
+        Date.now() - startTime,
+      );
+      return { context, fetchedCount: 0 };
+    }
+  }
+
+  /**
+   * Emits the web search's persistent TOOL_CALL_RECORD (same channel and
+   * shape the code interpreter uses). The full result text lives in the
+   * merged prompt + citations — the record carries the query and a short
+   * outcome so the tool strip stays scannable.
+   */
+  private async emitSearchRecord(
+    context: ChatContext,
+    query: string,
+    executingModelId: string | undefined,
+    outcome: string | null,
+    error: string | null,
+    durationMs: number,
+  ): Promise<void> {
+    if (!context.emitMarker) return;
+
+    const MAX_QUERY_CHARS = 500;
+    await context.emitMarker(
+      emitToolCallRecord({
+        id: `web-search-${Date.now()}`,
+        name: 'web_search',
+        server_label: executingModelId
+          ? `Web Search (${executingModelId})`
+          : 'Web Search',
+        arguments: JSON.stringify({
+          query: ToolRouterEnricher.truncate(query, MAX_QUERY_CHARS),
+        }),
+        status: error ? 'failed' : 'completed',
+        output: outcome,
+        error,
+        duration_ms: durationMs,
+      }),
+    );
+  }
+
+  /**
+   * Runs the code interpreter for `task` and merges the executed results
+   * into the last user message. Emits a TOOL_CALL_RECORD (code, output,
+   * generated files) onto the response stream so the client renders the
+   * run below the assistant message. Failures degrade to a merged notice —
+   * the chat itself never fails because the sandbox did.
+   */
+  private async executeCodeInterpreter(
+    context: ChatContext,
+    task: string,
+  ): Promise<ChatContext> {
+    const baseMessages = context.enrichedMessages || context.messages;
+    const startTime = Date.now();
+    console.log('[ToolRouterEnricher] Executing code interpreter');
+
+    // Interpreter runs take multiple seconds — keep the loader honest.
+    await context.emitActivity?.('chat.activity.runningCode');
+
+    try {
+      const inputFiles = await this.collectInterpreterInputFiles(context);
+
+      let interpreterTimer: ReturnType<typeof setTimeout> | undefined;
+      const result = await Promise.race([
+        this.codeInterpreterTool.execute({
+          task,
+          session: context.session,
+          inputFiles,
+        }),
+        new Promise<never>((_, reject) => {
+          interpreterTimer = setTimeout(() => {
+            const err = new Error('Code interpreter timed out');
+            (err as { isInterpreterTimeout?: boolean }).isInterpreterTimeout =
+              true;
+            reject(err);
+          }, ToolRouterEnricher.INTERPRETER_TIMEOUT_MS);
+        }),
+      ]).finally(() => {
+        if (interpreterTimer) clearTimeout(interpreterTimer);
+      });
+
+      console.log(
+        `[ToolRouterEnricher] Code interpreter completed: ${result.codeRuns.length} runs, ${result.generatedFiles.length} generated files, ${result.text.length} chars`,
+      );
+
+      await this.emitInterpreterRecord(
+        context,
+        result,
+        null,
+        Date.now() - startTime,
+      );
+
+      const lastMsg = baseMessages[baseMessages.length - 1];
+      const enrichedLastMessage = this.prependContextToMessage(
+        lastMsg,
+        this.buildInterpreterContext(result),
+      );
+      return {
+        ...context,
+        enrichedMessages: [...baseMessages.slice(0, -1), enrichedLastMessage],
+      };
+    } catch (error) {
+      const timedOut =
+        (error as { isInterpreterTimeout?: boolean })?.isInterpreterTimeout ===
+        true;
+      console.error(
+        `[ToolRouterEnricher] Code interpreter ${timedOut ? 'timed out' : 'failed'}:`,
+        error,
+      );
+
+      await this.emitInterpreterRecord(
+        context,
+        null,
+        timedOut ? 'Code execution timed out' : 'Code execution failed',
+        Date.now() - startTime,
+      );
+
+      // Still answer, but tell the model the code didn't run.
+      const failureNotice =
+        `Note: sandboxed code execution was attempted for this request but it ${timedOut ? 'timed out' : 'failed'}, so no executed results are available. ` +
+        `Answer as best you can without them and clearly tell the user the code could not be run.`;
+      const lastMsg = baseMessages[baseMessages.length - 1];
+      const enrichedLastMessage = this.prependContextToMessage(
+        lastMsg,
+        failureNotice,
+      );
+      return {
+        ...context,
+        enrichedMessages: [...baseMessages.slice(0, -1), enrichedLastMessage],
+      };
+    }
+  }
+
+  /**
+   * Emits the interpreter's persistent TOOL_CALL_RECORD onto the response
+   * stream (same channel the MCP tool loop uses, so the client's existing
+   * parser/persistence/rendering applies). No-op when the route didn't
+   * install emitMarker (e.g. non-streaming tests).
+   */
+  private async emitInterpreterRecord(
+    context: ChatContext,
+    result: CodeInterpreterResult | null,
+    error: string | null,
+    durationMs: number,
+  ): Promise<void> {
+    if (!context.emitMarker) return;
+
+    const MAX_CODE_CHARS = 6000;
+    const MAX_OUTPUT_CHARS = 4000;
+    const code = (result?.codeRuns ?? [])
+      .map((r) => r.code)
+      .filter(Boolean)
+      .join('\n\n# --- next execution ---\n\n');
+    const logs = (result?.codeRuns ?? [])
+      .map((r) => r.logs)
+      .filter(Boolean)
+      .join('\n');
+    const output = [logs, result?.text].filter(Boolean).join('\n\n');
+
+    await context.emitMarker(
+      emitToolCallRecord({
+        id: `code-interpreter-${Date.now()}`,
+        name: 'code_interpreter',
+        // Surface WHICH model executed the code: the round-trip runs on the
+        // interpreter sub-tool model, not the conversation's picked model
+        // (renders as "via Code Interpreter (gpt-5.2)" in the tool summary).
+        server_label: `Code Interpreter (${env.CODE_INTERPRETER_MODEL})`,
+        arguments: code
+          ? JSON.stringify({
+              code: ToolRouterEnricher.truncate(code, MAX_CODE_CHARS),
+            })
+          : null,
+        status: error ? 'failed' : 'completed',
+        output: output
+          ? ToolRouterEnricher.truncate(output, MAX_OUTPUT_CHARS)
+          : null,
+        error,
+        duration_ms: durationMs,
+        ...(result?.generatedFiles?.length
+          ? { generated_files: result.generatedFiles }
+          : {}),
+      }),
+    );
+  }
+
+  /**
+   * Builds the context block merged into the last user message so the
+   * PICKED model can answer from the executed results (the round-trip that
+   * lets models without native code execution still benefit — criterion:
+   * route to a capable model, then continue with the picked one).
+   */
+  private buildInterpreterContext(result: CodeInterpreterResult): string {
+    const MAX_TEXT_CHARS = 8000;
+    const text = ToolRouterEnricher.truncate(result.text, MAX_TEXT_CHARS);
+    const fileList = result.generatedFiles.length
+      ? `\n\nGenerated files: ${result.generatedFiles
+          .map((f) => f.filename)
+          .join(
+            ', ',
+          )}. These are already displayed to the user with previews/download links — refer to them by filename and do NOT fabricate links or re-print their contents.`
+      : '';
+    return (
+      `Code execution results (a sandboxed Python interpreter ran for this request; ` +
+      `the executed code and its raw output are shown to the user separately, so do not repeat the code unless asked):\n\n` +
+      `${text}${fileList}`
+    );
+  }
+
+  /**
+   * Loads the RAW bytes of the last user message's attachments from blob
+   * storage for the sandbox. Raw bytes matter: the interpreter must parse
+   * the actual CSV/XLSX, not the text summary the file pipeline produced.
+   * Reads from `context.messages` (not enrichedMessages) because
+   * processors may have rewritten attachment entries there.
+   */
+  private async collectInterpreterInputFiles(
+    context: ChatContext,
+  ): Promise<CodeInterpreterInputFile[]> {
+    const MAX_FILES = 4;
+    const MAX_TOTAL_BYTES = 20 * 1024 * 1024;
+
+    const lastMessage = context.messages[context.messages.length - 1];
+    if (!Array.isArray(lastMessage?.content)) return [];
+
+    const refs: Array<{
+      id: string;
+      filename: string;
+      location: 'files' | 'images';
+    }> = [];
+    for (const item of lastMessage.content) {
+      if (refs.length >= MAX_FILES) break;
+      if (item.type === 'file_url') {
+        const f = item as FileMessageContent;
+        const id = f.url?.split('/').pop()?.split('?')[0];
+        if (id) {
+          refs.push({
+            id,
+            filename: f.originalFilename || id,
+            location: 'files',
+          });
+        }
+      } else if (item.type === 'image_url') {
+        const img = item as ImageMessageContent;
+        const url = img.image_url?.url ?? '';
+        // Only blob-backed references; data URLs are legacy and rare.
+        if (url.startsWith('/api/file/')) {
+          const id = url.split('/').pop()?.split('?')[0];
+          if (id) refs.push({ id, filename: id, location: 'images' });
+        }
+      }
+    }
+    if (refs.length === 0) return [];
+
+    const userId = getUserIdFromSession(context.session);
+    const blobStorageClient = createBlobStorageClient(context.session);
+    const files: CodeInterpreterInputFile[] = [];
+    let totalBytes = 0;
+
+    for (const ref of refs) {
+      try {
+        const data = (await blobStorageClient.get(
+          `${userId}/uploads/${ref.location}/${ref.id}`,
+          BlobProperty.BLOB,
+        )) as Buffer;
+        if (!Buffer.isBuffer(data)) continue;
+        totalBytes += data.length;
+        if (totalBytes > MAX_TOTAL_BYTES) {
+          console.warn(
+            '[ToolRouterEnricher] Interpreter input size budget reached; skipping remaining attachments',
+          );
+          break;
+        }
+        const extension = ref.filename.split('.').pop() ?? '';
+        files.push({
+          filename: ref.filename,
+          data,
+          mimeType: getContentType(extension),
+        });
+      } catch (err) {
+        // A missing blob must not sink the run — the interpreter still gets
+        // the task plus whatever attachments DID load.
+        console.warn(
+          `[ToolRouterEnricher] Could not load attachment for interpreter: ${ref.filename}:`,
+          err instanceof Error ? err.message : err,
+        );
+      }
+    }
+    return files;
+  }
+
+  private static truncate(text: string, maxChars: number): string {
+    return text.length > maxChars
+      ? `${text.slice(0, maxChars)}\n\n[…truncated for length]`
+      : text;
   }
 
   /**

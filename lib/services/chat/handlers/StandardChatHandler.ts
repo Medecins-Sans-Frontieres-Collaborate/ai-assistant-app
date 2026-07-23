@@ -397,8 +397,15 @@ export class StandardChatHandler extends BasePipelineStage {
               : undefined,
             mcpPendingToolCalls: context.mcpPendingToolCalls,
             mcpLoopRound: context.mcpLoopRound,
+            mcpPlan: context.mcpPlan,
             approvalResponses: context.approvalResponses,
             customSource,
+            // Phase 2 native code interpreter (Responses path) — staged by
+            // ToolRouterEnricher for capable models. Session rides along for
+            // generated-file persistence to the user's blob storage.
+            nativeCodeInterpreter: context.nativeCodeInterpreter
+              ? { ...context.nativeCodeInterpreter, session: context.session }
+              : undefined,
           });
 
           // If we have active file cache updates, token consumption, or

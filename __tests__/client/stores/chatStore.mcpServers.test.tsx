@@ -87,6 +87,24 @@ describe('chatStore MCP wiring', () => {
     ]);
   });
 
+  it('excludes servers the conversation opted out of (per-chat disable)', async () => {
+    const secondServer = {
+      ...githubServer,
+      id: 'gitlab',
+      catalogKey: 'gitlab',
+      name: 'GitLab',
+    };
+    useSettingsStore.setState({ mcpServers: [githubServer, secondServer] });
+
+    await useChatStore
+      .getState()
+      .sendChatRequest(makeConversation({ disabledMcpServerIds: ['github'] }));
+
+    expect(sentOptions().mcpServers).toEqual([
+      expect.objectContaining({ id: 'gitlab' }),
+    ]);
+  });
+
   it('drops arbitrary servers unless BOTH the user toggle and LD flag mirror are on', async () => {
     useSettingsStore.setState({ mcpServers: [arbitraryServer] });
 

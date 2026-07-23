@@ -762,7 +762,13 @@
         "transformingTable": "ממיר את הטבלה...",
         "findingLocations": "מזהה מיקומים...",
         "updatingMap": "מעדכן את המפה..."
-      }
+      },
+      "searchingWebFor": "מחפש: “{query}”…",
+      "searchingWebForMultiple": "מחפש {count} נושאים: “{query}”…",
+      "readingCitedSources": "קורא {count} מאמרים שצוטטו קודם…",
+      "planningSteps": "מתכנן שלבים…",
+      "planStep": "שלב {current}/{total}: {description}",
+      "planStepRetry": "שלב {current}/{total} (ניסיון חוזר): {description}"
     },
     "toolSummary": {
       "usedTools": "השתמש ב־{count, plural, one {# כלי} other {# כלים}}",
@@ -772,7 +778,8 @@
       "statusAutoDenied": "נדחה אוטומטית",
       "statusFailed": "נכשל",
       "statusIncomplete": "לא הושלם",
-      "viaService": "דרך {service}"
+      "viaService": "דרך {service}",
+      "downloadFile": "הורד"
     },
     "consent": {
       "authorizeRequired": "נדרשת הרשאה",
@@ -814,7 +821,15 @@
       "approvedState": "אושר — הסוכן הופעל מחדש",
       "deniedState": "נדחה",
       "submittingApproval": "מאשר ומפעיל את הסוכן…",
-      "submittingDenial": "שולח את הדחייה שלך…"
+      "submittingDenial": "שולח את הדחייה שלך…",
+      "alwaysApproveEverywhere": "אשר תמיד כלי זה — בכל שיחה",
+      "denyOptionsLabel": "אפשרויות סירוב",
+      "denyOnce": "סירוב חד-פעמי",
+      "neverAllowEverywhere": "לעולם אל תאשר כלי זה — בכל שיחה",
+      "deniedByRuleHint": "נחסם לפי הכלל שלך — ניהול דרך הגדרות → מחברים.",
+      "batchPendingHint": "{count} בקשות לכלי ממתינות",
+      "approveAllButton": "אשר הכל",
+      "denyAllButton": "סרב להכל"
     },
     "openImage": "פתח תמונה",
     "copyMessage": "העתק הודעה",
@@ -825,7 +840,9 @@
     "ttsError": "שגיאה ביצירת שמע. נא לנסות שוב.",
     "unsupportedMessageType": "שגיאה בהצגת ההודעה: סוג הודעה לא נתמך",
     "addLanguageOption": "הוסף \"{name}\"…",
-    "sources": "מקורות"
+    "sources": "מקורות",
+    "interpreterBadge": "הרץ קוד",
+    "disableCodeInterpreter": "השבת הרצת קוד"
   },
   "sidebar": {
     "collapseSidebar": "כיווץ סרגל צד",
@@ -1170,6 +1187,30 @@
       "thresholdLabel": "התייחס לעריכה כוללת מעל",
       "thresholdUnit": "% מהמסמך שונה",
       "exceptionSelectionAlways": "עריכת קטע מסומן תמיד מתבצעת ישירות — המודל מחזיר רק את הקטע הערוך, ואי אפשר להציג הצעות עבור כל המסמך."
+    },
+    "webSearch": {
+      "title": "חיפוש ברשת",
+      "description": "קובע כיצד חיפושים ברשת מתבצעים כאשר מצב חיפוש פעיל. השינויים נכנסים לתוקף מיידית.",
+      "providerLabel": "ספק חיפוש",
+      "providerAuto": "אוטומטי (מומלץ)",
+      "providerAutoDescription": "משתמש בברירת המחדל של הפריסה — כעת החיפוש המשולב למטה.",
+      "providerNews": "חדשות משולבות (GDELT + Google News)",
+      "providerNewsDescription": "מחפש בשני המקורות במקביל וממזג את התוצאות — כישלון של אחד מהם לא מפריע לחיפוש. האיזון הטוב ביותר בין מהירות, גיוון מקורות וקישורים פעילים.",
+      "providerGoogleNews": "רק Google News",
+      "providerGoogleNewsDescription": "אנונימי ומהיר — רק שאילתת החיפוש מגיעה ל-Google (ללא חשבון או עוגיות) והתוצאות חוזרות כעבור שנייה בערך. שים לב: זה סורק בעיקר כותרות ותקצירים קצרים, לא מאמרים מלאים, כך שהתשובות לרוב שטחיות.",
+      "providerGdelt": "רק GDELT",
+      "providerGdeltDescription": "מאגר מחקר פתוח של חדשות עולמיות עם קישורים ישירים למפרסמים, כך שניתן לקרוא מאמרים מלאים בשאלות המשך. יש הגבלה מחמירה — חיפושים עוקבים עלולים להמתין כמה שניות.",
+      "providerBing": "Bing grounding (באמצעות Microsoft)",
+      "providerBingDescription": "קורא עמודים מלאים לסיכומים מעמיקים ומכסה את כלל הרשת, לא רק חדשות. עם זאת, חיפושים נמשכים לרוב 30–90 שניות ואיכות התוצאות משתנה מחיפוש לחיפוש.",
+      "sourcesLabel": "מקורות לכל חיפוש",
+      "sourcesDescription": "כמה מקורות ייחודיים נשמרים בכל חיפוש לציטוטים. שאלות בסגנון מחקרי עשויות להרחיב זאת אוטומטית.",
+      "freshnessLabel": "העדפת עדכניות",
+      "freshnessDescription": "עד כמה צריכות להיות התוצאות עדכניות. אוטומטי מאפשר לכל שאלה להחליט (חדשות מתעדפות את היממה האחרונה).",
+      "freshness_auto": "אוטומטי",
+      "freshness_day": "יממה אחרונה",
+      "freshness_week": "שבוע אחרון",
+      "freshness_month": "חודש אחרון",
+      "freshness_any": "בכל זמן"
     }
   },
   "notFound": {
@@ -1483,6 +1524,23 @@
       "deployment": "פריסה",
       "modelVersion": "גרסת מודל",
       "publisher": "מפרסם"
+    },
+    "interpreterMode": {
+      "title": "מפענח קוד",
+      "subtitle": "מריץ קוד כשזה מועיל (גרפים, ניתוח נתונים)",
+      "learnMore": "מה הוא יודע לעשות?",
+      "description": "כאשר מופעל, הסייעת יכולה להריץ קוד Python בסביבת עבודה מבודדת ובטוחה לניתוח קבצים מצורפים, חישוב תוצאות ויצירת גרפים. הקוד, הפלט והקבצים הנוצרים יוצגו עם התגובה. השתמש ב-\"הרץ קוד\" בתפריט החיבור כדי להפעיל זאת להודעה."
+    },
+    "searchOptions": {
+      "title": "חיפוש מתקדם",
+      "resultCount": "מקורות לכל חיפוש:",
+      "freshness": "העדף תוצאות מ",
+      "freshness_auto": "אוטומטי (לפי שאלה)",
+      "freshness_day": "יממה אחרונה",
+      "freshness_week": "שבוע אחרון",
+      "freshness_month": "חודש אחרון",
+      "freshness_any": "כל זמן",
+      "hint": "בחירה אוטומטית מאפשרת לכל שאלה לקבוע את עדכניות התשובה (לדוג' חדשות יעדיפו את היום האחרון), ושאלות בסגנון מחקר עשויות להשתמש ביותר מקורות מהברירת מחדל."
     }
   },
   "models": {
@@ -2130,7 +2188,11 @@
     "moveToMore": "העבר ל'עוד'",
     "moveOutOfMore": "הצג בתפריט",
     "showSources": "הצג מקורות נוספים",
-    "hideSources": "הסתר מקורות נוספים"
+    "hideSources": "הסתר מקורות נוספים",
+    "aiTools": "כלי AI",
+    "aiToolsTooltip": "יכולות שהעוזר יכול להשתמש בהן כאשר עונה: חיפוש אינטרנט חי, הרצת קוד, ושירותים מחוברים.",
+    "codeInterpreterTooltip": "הרץ קוד Python בסביבה מאובטחת לכל הודעה.\n\nמעולה לניתוח נתונים, חישובים ויצירת גרפים מקבצים מצורפים.",
+    "categoryTools": "כלים ומחברים"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "הוסיפו הוראות אישיות כדי להתאים את תגובת הבינה המלאכותית. הוראות אלו משולבות עם הנחיות ליבה שמבטיחות תגובות מועילות, מדויקות ובטוחות.",
   "Tip: Type \"/\" to select from saved prompt templates_": "עצה: הקלידו \"/\" כדי לבחור מהתבניות השמורות.",
@@ -2444,7 +2506,18 @@
     "modelRow": "{requests} בק׳ · {grams} גר'",
     "disclosure": "ההערכות מבוססות על הנחות v{version} · מאז {since} · רק צ'אט רגיל (תשובות סוכנים ומסד ידע לא נספרות).",
     "reset": "איפוס סטטיסטיקת שימוש",
-    "estimatedPortion": "כולל כ־{grams} גרם CO₂e ({requests} בקשות) שמוערכים מצ'אטים שנעשו לפני תחילת המעקב — מחושב מחדש מתוך טקסט ההודעות השמורות, לא מספירות טוקנים מדויקות."
+    "estimatedPortion": "כולל כ־{grams} גרם CO₂e ({requests} בקשות) שמוערכים מצ'אטים שנעשו לפני תחילת המעקב — מחושב מחדש מתוך טקסט ההודעות השמורות, לא מספירות טוקנים מדויקות.",
+    "chipTitle": "רכיב פליטת פחמן",
+    "chipDescription": "הערכת טביעת הרגל הפחמנית של השיחה הנוכחית, מוצגת מעל שדה ההזנה לשיחה.",
+    "chipAlways": "הצג תמיד",
+    "chipAlwaysHint": "הרכיב נשאר גלוי בכל פעם שיש לשיחה הערכה.",
+    "chipAuto": "הצג בעת עדכון או ריחוף",
+    "chipAutoHint": "הרכיב מופיע כאשר ההערכה משתנה, ולאחר מכן נעלם בהדרגה. ריחוף או התמקדות בו תציג אותו שוב.",
+    "chipHidden": "מוסתר",
+    "chipHiddenHint": "הרכיב לא מוצג לעולם. הסיכומים עדיין נשמרים ומוצגים בדף זה.",
+    "chipAutoHideLabel": "העלם לאחר",
+    "chipAutoHideUnit": "שניות",
+    "chipAutoHideHint": "בין ‎{min}‎ ל-‎{max}‎ שניות."
   },
   "extraction": {
     "toggleLabel": "חלץ נתונים מובְנָים",
@@ -3353,7 +3426,15 @@
       "measured": "לפי ספירת טוקנים מדווחת",
       "estimated": "חושב מחדש מהודעות ישנות",
       "lastRequest": "הבקשה האחרונה",
-      "disclaimer": "הערכות לכל בקשה מבוססות על ספירת טוקנים מדווחת או מקורבת, תוך שימוש בממוצעים וסטיות פורסמו בגרסה v{version}. הודעות ישנות מחושבות מחדש מתוך הטקסט השמור ומן המודל הנוכחי של השיחה. לא מדידה בפועל."
+      "disclaimer": "הערכות לכל בקשה מבוססות על ספירת טוקנים מדווחת או מקורבת, תוך שימוש בממוצעים וסטיות פורסמו בגרסה v{version}. הודעות ישנות מחושבות מחדש מתוך הטקסט השמור ומן המודל הנוכחי של השיחה. לא מדידה בפועל.",
+      "visibilityGroup": "נראות רכיב פליטת פחמן",
+      "visibilityLabel": "הצג:",
+      "visibility": {
+        "always": "תמיד",
+        "auto": "אוטומטי",
+        "hidden": "הסתר"
+      },
+      "visibilityHint": "באופן אוטומטי הרכיב יוצג כשההערכה מתעדכנת או כאשר מרחפים מעליו. ניתן לשנות זאת שוב בהגדרות › שימוש והשפעה."
     }
   },
   "table": {
@@ -3616,7 +3697,13 @@
     "connectorClientSecretLabel": "OAuth client secret",
     "connectorClientSecretStored": "קיים סוד שמור. השאירו ריק כדי לשמור אותו, או הזינו חדש להחלפה.",
     "connectorClientSecretHint": "מוצפן לפני השמירה, ולא יוצג שוב.",
-    "connectorScopesLabel": "Scopes (מופרדים ברווחים, אופציונלי)"
+    "connectorScopesLabel": "Scopes (מופרדים ברווחים, אופציונלי)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (אופציונלי)",
+    "connectorOauthTokenUrlLabel": "Token URL (אופציונלי)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (אופציונלי)",
+    "connectorOauthEndpointsHint": "השאר את כתובות ה-URL של נקודות הקצה ריקות כדי לגלות אותן אוטומטית. יש להגדיר אותן לספקים שאינם תומכים בזיהוי אוטומטי, כמו NetSuite.",
+    "connectorOauthRefreshUrlHint": "השאר ריק כדי לרענן מול כתובת ה-Token URL.",
+    "connectorOauthEndpointsPairWarning": "יש להגדיר Authorization URL ו-Token URL יחד (ה-Refresh URL דורש את שניהם)."
   },
   "localModels": {
     "title": "מודלים מקומיים",
@@ -3711,5 +3798,52 @@
     "truncatedNotice": "{count} שדה/ות הושמטו — מגבלת הטבלה היא {max} עמודות: {names}",
     "skippedDerivedNotice": "{count} עמודת חישוב לא נשמרו — נוסחאות מתייחסות לעמודות הטבלה הזו: {names}",
     "loadReplacesColumns": "פעולה זו מחליפה את העמודות הנוכחיות. שורות קיימות ישמרו ערכים של עמודות בעלי שם תואם."
+  },
+  "codeInterpreterDropdown": "הרץ קוד",
+  "connectorPin": {
+    "toggleLabel": "ניהול כלי מחברים",
+    "menuLabel": "מחברים",
+    "menuLabelCount": "מחברים ({count} פעילים)",
+    "tooltip": "צפה אילו כלי מחברים פעילים, כבה אותם לשיחה זו או בכלל, או התמקד באחד מהם.",
+    "toggleServerInChat": "השתמש ב-{name} בשיחה זו",
+    "globalToggleTitle": "הפעל או כבה את {name} בכל מקום (כמו בהגדרות → מחברים)",
+    "globalOn": "פועל גלובלית",
+    "globalOff": "כבוי גלובלית",
+    "chatToggleHint": "תיבות הסימון משפיעות רק על שיחה זו; הכפתור הגלובלי מתאים להגדרות → מחברים. כל מחבר פעיל מוסיף את הכלים שלו לכל הודעה — יותר טוקנים ותשובות איטיות יותר.",
+    "trayLabel": "כלי מחבר",
+    "trayTitle": "כלי מחבר לשיחה זו",
+    "toggleServer": "הפעל את {name}",
+    "needsReconnect": "התחבר מחדש בהגדרות",
+    "focusAction": "התמקד",
+    "focusedChip": "ממוקד",
+    "pinnedHint": "רק כלים מתוך {name} ישמשו בשיחה זו.",
+    "staleHint": "המחבר הממוקד מנותק או כבוי — התחבר מחדש בהגדרות → מחברים, או הסר את המיקוד. עד אז, כל הכלים הפעילים ישמשו.",
+    "costHint": "כל מחבר פעיל מוסיף את כליו לכל הודעה — זה מוסיף טוקנים ומאיט את התגובה. כבה כל מה שאינך משתמש בו.",
+    "noEligibleConnectors": "לא מוגדרים מחברים. חבר אחד תחילה בהגדרות → מחברים.",
+    "unknownConnector": "מחבר הוסר",
+    "unpin": "הסר מיקוד",
+    "dismiss": "סגור",
+    "badgeCount": "{count} כלים",
+    "badgeTooltip": "כלי מחבר פעילים בכל הודעה — הם מוסיפים טוקנים וזמן תגובה. לחץ לניהול."
+  },
+  "toolApprovals": {
+    "title": "אישורי כלים",
+    "description": "חוקים החלים בכל שיחה: אפשר או חסום אוטומטית כלים מסוימים של מחברים. ניתן להוסיף כלים שטרם קיבלת עליהם שאלה.",
+    "actionApprove": "תמיד אפשר",
+    "actionReject": "תמיד חסום",
+    "scopeServer": "ב-{name}",
+    "scopeAny": "כל מחבר",
+    "removeRule": "הסר כלל עבור {tool}",
+    "toolNameLabel": "שם הכלי",
+    "toolNamePlaceholder": "שם הכלי, לדוג' create_issue",
+    "scopeLabel": "טווח מחבר",
+    "actionLabel": "פעולה",
+    "addRule": "הוסף כלל",
+    "rejectPrecedenceNote": "כללי חסימה תמיד גוברים — על כללי אפשרה וגם על כל אישור אוטומטי פר שיחה.",
+    "policyAsk": "שאל",
+    "policyAllow": "הרשה",
+    "policyBlock": "חסום",
+    "policyGroupLabel": "מדיניות אישור עבור {tool}",
+    "listHint": "הגדר מה יקרה כאשר העוזר מבקש להפעיל כל כלי — בכל שיחה. ברירת המחדל היא שאל; חסום תמיד גובר."
   }
 }

@@ -787,7 +787,13 @@
         "transformingTable": "Transformace tabulky…",
         "findingLocations": "Identifikace míst…",
         "updatingMap": "Aktualizace mapy…"
-      }
+      },
+      "searchingWebFor": "Vyhledávám: „{query}“…",
+      "searchingWebForMultiple": "Vyhledávám {count} témat: „{query}“…",
+      "readingCitedSources": "Čtu {count} dříve citovaných článků…",
+      "planningSteps": "Plánuji kroky…",
+      "planStep": "Krok {current}/{total}: {description}",
+      "planStepRetry": "Krok {current}/{total} (opakování): {description}"
     },
     "toolSummary": {
       "usedTools": "Použito {count, plural, one {# nástroj} few {# nástroje} other {# nástrojů}}",
@@ -797,7 +803,8 @@
       "statusAutoDenied": "Automaticky zamítnuto",
       "statusFailed": "Selhalo",
       "statusIncomplete": "Nedokončeno",
-      "viaService": "přes {service}"
+      "viaService": "přes {service}",
+      "downloadFile": "Stáhnout"
     },
     "consent": {
       "authorizeRequired": "Vyžadováno ověření",
@@ -839,7 +846,15 @@
       "approvedState": "Schváleno — agent pokračuje",
       "deniedState": "Zamítnuto",
       "submittingApproval": "Schvaluji a pokračuji v práci agenta…",
-      "submittingDenial": "Odesílám vaše zamítnutí…"
+      "submittingDenial": "Odesílám vaše zamítnutí…",
+      "alwaysApproveEverywhere": "Vždy schválit tento nástroj — ve všech chatech",
+      "denyOptionsLabel": "Možnosti odmítnutí",
+      "denyOnce": "Odmítnout jednou",
+      "neverAllowEverywhere": "Nikdy nepovolovat tento nástroj — ve všech chatech",
+      "deniedByRuleHint": "Blokováno vaším pravidlem — spravujte v Nastavení → Konektory.",
+      "batchPendingHint": "{count} žádostí o nástroj čeká na schválení",
+      "approveAllButton": "Schválit vše",
+      "denyAllButton": "Odmítnout vše"
     },
     "openImage": "Otevřít obrázek",
     "copyMessage": "Kopírovat zprávu",
@@ -850,7 +865,9 @@
     "ttsError": "Chyba při generování zvuku. Zkuste to prosím znovu.",
     "unsupportedMessageType": "Chyba při zobrazení zprávy: Nepodporovaný typ zprávy",
     "addLanguageOption": "Přidat „{name}“…",
-    "sources": "Zdroje"
+    "sources": "Zdroje",
+    "interpreterBadge": "Spustit kód",
+    "disableCodeInterpreter": "Zakázat spouštění kódu"
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",
@@ -1195,6 +1212,30 @@
       "thresholdLabel": "Považovat za přepis, pokud přesáhne",
       "thresholdUnit": "% změněného dokumentu",
       "exceptionSelectionAlways": "Úprava zvýrazněného výběru se vždy použije okamžitě — model vrací pouze upravený úryvek, který nelze rozdělit na návrhy vůči celému dokumentu."
+    },
+    "webSearch": {
+      "title": "Vyhledávání na webu",
+      "description": "Ovládá, jak jsou prováděna živá webová vyhledávání, když je aktivní režim Vyhledávání. Změny se projeví okamžitě.",
+      "providerLabel": "Poskytovatel vyhledávání",
+      "providerAuto": "Automaticky (doporučeno)",
+      "providerAutoDescription": "Používá výchozí nasazení — aktuálně kombinované vyhledávání zpráv níže.",
+      "providerNews": "Kombinované zprávy (GDELT + Google News)",
+      "providerNewsDescription": "Dotazuje oba zdroje paralelně a slučuje výsledky, takže selhání jednoho nikdy neznemožní vyhledávání. Nejlepší rovnováha rychlosti, rozmanitosti zdrojů a funkčních odkazů na články.",
+      "providerGoogleNews": "Pouze Google News",
+      "providerGoogleNewsDescription": "Anonymní a rychlé — pouze vyhledávací dotaz jde na Google (bez účtu nebo cookies) a výsledky dorazí asi za sekundu. Pozn.: většinou prohledává jen titulky a krátké úryvky, ne celé články, odpovědi tedy mohou být povrchnější.",
+      "providerGdelt": "Pouze GDELT",
+      "providerGdeltDescription": "Otevřená výzkumná databáze světových zpráv s přímými odkazy na vydavatele, což umožňuje přečíst celé články v následných otázkách. Přísně omezeno tempem — po sobě jdoucí vyhledávání se mohou chvíli zařazovat do fronty.",
+      "providerBing": "Bing grounding (přes Microsoft)",
+      "providerBingDescription": "Čte celé stránky pro detailnější shrnutí a pokrývá celý web, nejen zpravodajství. Vyhledávání však obvykle trvá 30–90 sekund a kvalita výsledků bývá kolísavá.",
+      "sourcesLabel": "Zdroje na vyhledávání",
+      "sourcesDescription": "Kolik různých zdrojů si vyhledávání uchová jako citace. U výzkumných dotazů se toto může automaticky rozšířit.",
+      "freshnessLabel": "Preferovaná aktuálnost",
+      "freshnessDescription": "Jak aktuální by měly být výsledky. Automaticky umožňuje rozhodnutí dle otázky (pro mimořádné zprávy přednost posledního dne).",
+      "freshness_auto": "Automaticky",
+      "freshness_day": "Poslední den",
+      "freshness_week": "Poslední týden",
+      "freshness_month": "Poslední měsíc",
+      "freshness_any": "Kdykoli"
     }
   },
   "notFound": {
@@ -1384,6 +1425,23 @@
       "deployment": "Nasazení",
       "modelVersion": "Verze modelu",
       "publisher": "Vydavatel"
+    },
+    "interpreterMode": {
+      "title": "Interpret kódu",
+      "subtitle": "Spouští kód, když to pomůže (grafy, analýza dat)",
+      "learnMore": "Co umí?",
+      "description": "Pokud je povoleno, může asistent spouštět Python v bezpečné, oddělené pískovišti pro analýzu přiložených souborů, výpočty a generování grafů. Provedený kód, jeho výstupy a vytvořené soubory jsou zobrazeny s odpovědí. Pro vynucení spuštění pro zprávu použijte možnost \"Spustit kód\" v nabídce editoru."
+    },
+    "searchOptions": {
+      "title": "Pokročilé vyhledávání",
+      "resultCount": "Zdroje na vyhledávání:",
+      "freshness": "Preferovat výsledky z",
+      "freshness_auto": "Automaticky (dle otázky)",
+      "freshness_day": "Poslední den",
+      "freshness_week": "Poslední týden",
+      "freshness_month": "Poslední měsíc",
+      "freshness_any": "Kdykoli",
+      "hint": "Automaticky umožní každé otázce nastavit vlastní aktuálnost (např. zprávy preferují poslední den) a výzkumné otázky mohou použít více zdrojů než výchozí nastavení."
     }
   },
   "models": {
@@ -2031,7 +2089,11 @@
     "moveToMore": "Přesunout do Více",
     "moveOutOfMore": "Zobrazit v menu",
     "showSources": "Zobrazit další zdroje",
-    "hideSources": "Skrýt další zdroje"
+    "hideSources": "Skrýt další zdroje",
+    "aiTools": "AI nástroje",
+    "aiToolsTooltip": "Funkce, které asistent může využít při odpovídání: živé vyhledávání na webu, spouštění kódu a propojené služby.",
+    "codeInterpreterTooltip": "Spuštění Python kódu v zabezpečeném sandboxu pro každou zprávu.\n\nVhodné pro analýzu dat, výpočty a generování grafů z přiložených souborů.",
+    "categoryTools": "Nástroje a konektory"
   },
   "transcription": {
     "addInstructions": "Přidat pokyny",
@@ -2444,7 +2506,18 @@
     "modelRow": "{requests} pož. · {grams} g",
     "disclosure": "Odhady založené na předpokladech v{version} · od {since} · pouze standardní chat (odpovědi agentů a znalostní báze nejsou započítány).",
     "reset": "Resetovat statistiky využití",
-    "estimatedPortion": "Zahrnuje přibližně {grams} g CO₂e ({requests} požadavků) odhadnutých z chatů před zavedením sledování — zpětně vypočítáno z uložených zpráv, nikoli z měřených počtů tokenů."
+    "estimatedPortion": "Zahrnuje přibližně {grams} g CO₂e ({requests} požadavků) odhadnutých z chatů před zavedením sledování — zpětně vypočítáno z uložených zpráv, nikoli z měřených počtů tokenů.",
+    "chipTitle": "Emisní čip",
+    "chipDescription": "Odhadovaná uhlíková stopa aktuální konverzace, zobrazená nad vstupním polem chatu.",
+    "chipAlways": "Zobrazovat vždy",
+    "chipAlwaysHint": "Čip zůstává viditelný, pokud má konverzace odhad.",
+    "chipAuto": "Zobrazit při aktualizaci nebo najetí",
+    "chipAutoHint": "Čip se objeví, když se odhad změní, poté zmizí. Při najetí myší nebo kliknutí se opět zobrazí.",
+    "chipHidden": "Skryto",
+    "chipHiddenHint": "Čip se nikdy nezobrazuje. Součty jsou stále sledovány a zobrazeny na této stránce.",
+    "chipAutoHideLabel": "Vyprší po",
+    "chipAutoHideUnit": "sekundách",
+    "chipAutoHideHint": "Mezi {min} a {max} sekundami."
   },
   "extraction": {
     "toggleLabel": "Extrahovat strukturovaná data",
@@ -3353,7 +3426,15 @@
       "measured": "Z hlášených počtů tokenů",
       "estimated": "Zpětně vypočítáno ze starších zpráv",
       "lastRequest": "Poslední požadavek",
-      "disclaimer": "Odhady na požadavek z hlášených nebo přibližných počtů tokenů, s využitím zveřejněných průměrů a předpokladů v{version}. Starší zprávy jsou zpětně dopočítány z uloženého textu a aktuálního modelu konverzace. Nejde o měření."
+      "disclaimer": "Odhady na požadavek z hlášených nebo přibližných počtů tokenů, s využitím zveřejněných průměrů a předpokladů v{version}. Starší zprávy jsou zpětně dopočítány z uloženého textu a aktuálního modelu konverzace. Nejde o měření.",
+      "visibilityGroup": "Viditelnost emisního čipu",
+      "visibilityLabel": "Zobrazit:",
+      "visibility": {
+        "always": "Vždy",
+        "auto": "Automaticky",
+        "hidden": "Skrýt"
+      },
+      "visibilityHint": "Při volbě Automaticky se čip zobrazí, když se odhad aktualizuje nebo na něj najedete myší. Toto nastavení můžete kdykoli změnit v Nastavení › Využití a dopad."
     }
   },
   "table": {
@@ -3616,7 +3697,13 @@
     "connectorClientSecretLabel": "OAuth client secret",
     "connectorClientSecretStored": "Tajemství je uloženo. Nechte prázdné pro zachování, nebo zadejte nové pro nahrazení.",
     "connectorClientSecretHint": "Před uložením je zašifrováno a již nebude zobrazeno.",
-    "connectorScopesLabel": "Scopes (oddělené mezerou, volitelné)"
+    "connectorScopesLabel": "Scopes (oddělené mezerou, volitelné)",
+    "connectorOauthAuthUrlLabel": "Autorizační URL (volitelné)",
+    "connectorOauthTokenUrlLabel": "Token URL (volitelné)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (volitelné)",
+    "connectorOauthEndpointsHint": "Pokud necháte URL endpointů prázdné, budou zjištěny automaticky. Nastavte je pro poskytovatele, kteří automatické zjišťování nepodporují, například NetSuite.",
+    "connectorOauthRefreshUrlHint": "Nechte prázdné, pokud chcete obnovit proti token URL.",
+    "connectorOauthEndpointsPairWarning": "Autorizační URL a token URL musí být nastaveny společně (refresh URL vyžaduje obě)."
   },
   "localModels": {
     "title": "Lokální modely",
@@ -3711,5 +3798,52 @@
     "truncatedNotice": "{count} pole/polí vynecháno — limit tabulky je {max} sloupců: {names}",
     "skippedDerivedNotice": "{count} odvozených sloupců nebylo uloženo — vzorce odkazují na sloupce této tabulky: {names}",
     "loadReplacesColumns": "Tímto nahradíte aktuální sloupce. Stávající řádky si ponechají hodnoty se stejným názvem sloupce."
+  },
+  "codeInterpreterDropdown": "Spustit kód",
+  "connectorPin": {
+    "toggleLabel": "Spravovat nástroje konektoru",
+    "menuLabel": "Konektory",
+    "menuLabelCount": "Konektory ({count} aktivní)",
+    "tooltip": "Zobrazte aktivní nástroje konektoru, vypněte je pro tento chat nebo všude, nebo zaměřte na jeden.",
+    "toggleServerInChat": "Použít {name} v tomto chatu",
+    "globalToggleTitle": "Zapnout nebo vypnout {name} všude (stejné jako Nastavení → Konektory)",
+    "globalOn": "Globálně zapnuto",
+    "globalOff": "Globálně vypnuto",
+    "chatToggleHint": "Zaškrtávací políčka se týkají jen tohoto chatu; globální tlačítko odpovídá Nastavení → Konektory. Každý aktivní konektor přidává své nástroje do každé zprávy — více tokenů a pomalejší odpovědi.",
+    "trayLabel": "Nástroje konektoru",
+    "trayTitle": "Nástroje konektoru pro tento chat",
+    "toggleServer": "Povolit {name}",
+    "needsReconnect": "Znovu připojte v Nastavení",
+    "focusAction": "Zaměřit",
+    "focusedChip": "Zaměřeno",
+    "pinnedHint": "V tomto rozhovoru budou použity pouze nástroje z {name}.",
+    "staleHint": "Zaměřený konektor je odpojen nebo zakázán — znovu jej připojte v Nastavení → Konektory, nebo zrušte zaměření. Do té doby budou použity všechny aktivní nástroje.",
+    "costHint": "Každý aktivní konektor přidává své nástroje do každé zprávy — více tokenů a pomalejší odpovědi. Vypněte ty, které nepoužíváte.",
+    "noEligibleConnectors": "Žádné konektory nejsou nastaveny. Nejprve připojte konektor v Nastavení → Konektory.",
+    "unknownConnector": "Odebraný konektor",
+    "unpin": "Zrušit zaměření",
+    "dismiss": "Zavřít",
+    "badgeCount": "{count} nástrojů",
+    "badgeTooltip": "Nástroje konektoru jsou aktivní v každé zprávě — přidávají tokeny a dobu odezvy. Klikněte pro správu."
+  },
+  "toolApprovals": {
+    "title": "Schvalování nástrojů",
+    "description": "Pravidla platná ve všech konverzacích: automaticky povolit nebo blokovat konkrétní nástroje konektoru. Můžete přidat i nástroje, na které jste ještě nebyli dotázáni.",
+    "actionApprove": "Vždy povolit",
+    "actionReject": "Vždy blokovat",
+    "scopeServer": "na {name}",
+    "scopeAny": "Jakýkoli konektor",
+    "removeRule": "Odebrat pravidlo pro {tool}",
+    "toolNameLabel": "Název nástroje",
+    "toolNamePlaceholder": "Název nástroje, např. create_issue",
+    "scopeLabel": "Rozsah konektoru",
+    "actionLabel": "Akce",
+    "addRule": "Přidat pravidlo",
+    "rejectPrecedenceNote": "Pravidla blokování vždy vítězí — nad pravidly povolení i nad jakýmkoli automatickým schválením pro danou konverzaci.",
+    "policyAsk": "Zeptat se",
+    "policyAllow": "Povolit",
+    "policyBlock": "Blokovat",
+    "policyGroupLabel": "Schvalovací politika pro {tool}",
+    "listHint": "Nastavte, co se má stát, když asistent chce použít každý nástroj – v každé konverzaci. Výchozí je Dotázat se; Blokovat má vždy přednost."
   }
 }

@@ -110,6 +110,7 @@ export const Sidebar = memo(function Sidebar() {
     temperature,
     systemPrompt,
     defaultSearchMode,
+    defaultInterpreterMode,
   } = useSettings();
 
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
@@ -285,6 +286,7 @@ export const Sidebar = memo(function Sidebar() {
       temperature: temperature || 0.5,
       folderId: null,
       defaultSearchMode: searchMode, // Use model-appropriate search mode
+      defaultInterpreterMode, // Settings default (INTELLIGENT unless the user turned it off)
       bot: botId || undefined, // Set bot ID for RAG-enabled organization agents
     };
 
@@ -547,7 +549,11 @@ export const Sidebar = memo(function Sidebar() {
 
       {/* Sidebar - hidden on mobile by default, overlay when open */}
       <div
-        className={`fixed left-0 top-0 z-50 h-full flex flex-col border-r border-gray-300 bg-white dark:border-gray-700 dark:bg-surface-dark-base transition-all duration-300 ease-in-out w-[260px] ${
+        // h-dvh, not h-full: a `position: fixed` element resolves `height:
+        // 100%` against the initial containing block (the large viewport), so
+        // the drawer ran under the mobile URL bar. w-[min(...)] keeps a
+        // tappable strip of backdrop on 320px screens.
+        className={`fixed left-0 top-0 z-50 h-dvh flex flex-col border-r border-gray-300 bg-white dark:border-gray-700 dark:bg-surface-dark-base transition-all duration-300 ease-in-out w-[min(260px,85vw)] ${
           showChatbar
             ? 'translate-x-0 overflow-hidden'
             : '-translate-x-full md:translate-x-0 md:w-14 overflow-visible'

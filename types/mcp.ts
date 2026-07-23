@@ -68,3 +68,34 @@ export interface McpToolSummary {
   name: string;
   description?: string;
 }
+
+/** Bounds for McpPlan payloads (validated on the echo path). */
+export const MAX_PLAN_STEPS = 6;
+export const MAX_PLAN_STEP_DESCRIPTION_CHARS = 300;
+export const MAX_PLAN_STEP_TOOLS = 10;
+
+/**
+ * One step of the turn plan the server produced before entering the tool
+ * loop. `description` is user-facing (written in the user's language) and
+ * drives the loader text ("Step 2/3: search open PRs…").
+ */
+export interface McpPlanStep {
+  description: string;
+  /** Raw MCP tool names (unprefixed) recommended for this step. */
+  tools: string[];
+  /** Whether this step already consumed its single empty-result retry. */
+  retried?: boolean;
+}
+
+/**
+ * The turn plan for a native-MCP conversation turn. Like
+ * `McpPendingToolCall`, this round-trips through the client across approval
+ * pauses (the server is stateless) and is therefore user-tamperable — which
+ * is acceptable: it only steers the user's own tool loop. The server
+ * re-validates shape and bounds on every echo.
+ */
+export interface McpPlan {
+  steps: McpPlanStep[];
+  /** 0-based index of the step currently in progress. */
+  currentStep: number;
+}

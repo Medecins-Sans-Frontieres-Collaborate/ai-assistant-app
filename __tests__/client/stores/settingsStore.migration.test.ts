@@ -1,7 +1,15 @@
 import {
+  EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
+  EMISSIONS_CHIP_AUTOHIDE_MIN_MS,
+  EMISSIONS_CHIP_VISIBILITY_DEFAULT,
+} from '@/lib/utils/shared/emissions';
+import {
   DEFAULT_MAP_TIMELAPSE,
   MAX_CARDS_MAX,
 } from '@/lib/utils/shared/geo/timelapsePacing';
+
+import { InterpreterMode } from '@/types/interpreterMode';
+import { DEFAULT_WEB_SEARCH_OPTIONS } from '@/types/webSearch';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { describe, expect, it } from 'vitest';
@@ -636,5 +644,157 @@ describe('settingsStore migration (v40 → v41)', () => {
 
     expect(result.savedStructures).toEqual([]);
     expect(result).not.toHaveProperty('extractionRecipes');
+  });
+});
+
+/**
+ * v43 → v44 adds the per-user emissions chip visibility setting. It defaults
+ * to `always` — the behavior existing users already have — so the migration is
+ * a no-op for them. Both fields round-trip through localStorage, so a stale or
+ * hand-edited value must be repaired rather than trusted at the render path.
+ */
+describe('settingsStore migration (v43 → v44)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills emissions chip defaults when migrating from v43', () => {
+    const result = migrate({}, 43) as Record<string, unknown>;
+
+    expect(result.emissionsChipVisibility).toBe(
+      EMISSIONS_CHIP_VISIBILITY_DEFAULT,
+    );
+    expect(result.emissionsChipAutoHideMs).toBe(
+      EMISSIONS_CHIP_AUTOHIDE_DEFAULT_MS,
+    );
+  });
+
+  it('preserves a deliberate choice', () => {
+    const result = migrate(
+      { emissionsChipVisibility: 'auto', emissionsChipAutoHideMs: 8000 },
+      43,
+    ) as Record<string, unknown>;
+
+    expect(result.emissionsChipVisibility).toBe('auto');
+    expect(result.emissionsChipAutoHideMs).toBe(8000);
+  });
+
+  it('repairs an unrecognized mode and clamps an out-of-range delay', () => {
+    const result = migrate(
+      { emissionsChipVisibility: 'sometimes', emissionsChipAutoHideMs: 10 },
+      43,
+    ) as Record<string, unknown>;
+
+    expect(result.emissionsChipVisibility).toBe(
+      EMISSIONS_CHIP_VISIBILITY_DEFAULT,
+    );
+    expect(result.emissionsChipAutoHideMs).toBe(EMISSIONS_CHIP_AUTOHIDE_MIN_MS);
+  });
+});
+
+describe('settingsStore migration (v45 → v46)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills defaultInterpreterMode to INTELLIGENT (default enabled)', () => {
+    const result = migrate({}, 45) as Record<string, unknown>;
+
+    expect(result.defaultInterpreterMode).toBe(InterpreterMode.INTELLIGENT);
+  });
+
+  it('preserves a deliberate OFF choice on re-migration', () => {
+    const result = migrate(
+      { defaultInterpreterMode: InterpreterMode.OFF },
+      45,
+    ) as Record<string, unknown>;
+
+    expect(result.defaultInterpreterMode).toBe(InterpreterMode.OFF);
+  });
+
+  it('repairs an unrecognized value', () => {
+    const result = migrate({ defaultInterpreterMode: 'turbo' }, 45) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.defaultInterpreterMode).toBe(InterpreterMode.INTELLIGENT);
+  });
+});
+
+describe('settingsStore migration (v46 → v47)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills default web-search options', () => {
+    const result = migrate({}, 46) as Record<string, unknown>;
+
+    expect(result.webSearchOptions).toEqual(DEFAULT_WEB_SEARCH_OPTIONS);
+  });
+
+  it('preserves valid persisted options and clamps invalid ones', () => {
+    const result = migrate(
+      { webSearchOptions: { resultCount: 12, freshness: 'week' } },
+      46,
+    ) as Record<string, unknown>;
+    expect(result.webSearchOptions).toEqual({
+      resultCount: 12,
+      freshness: 'week',
+      provider: 'auto',
+    });
+
+    const repaired = migrate(
+      { webSearchOptions: { resultCount: 99, freshness: 'yesteryear' } },
+      46,
+    ) as Record<string, unknown>;
+    expect(repaired.webSearchOptions).toEqual({
+      resultCount: 15,
+      freshness: 'auto',
+      provider: 'auto',
+    });
+  });
+});
+
+describe('settingsStore migration (v47 → v48)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills the provider field on existing options', () => {
+    const result = migrate(
+      { webSearchOptions: { resultCount: 10, freshness: 'day' } },
+      47,
+    ) as Record<string, unknown>;
+
+    expect(result.webSearchOptions).toEqual({
+      resultCount: 10,
+      freshness: 'day',
+      provider: 'auto',
+    });
+  });
+
+  it('keeps a valid persisted provider and repairs an invalid one', () => {
+    for (const valid of ['google-news', 'bing-agent']) {
+      const kept = migrate(
+        {
+          webSearchOptions: {
+            resultCount: 8,
+            freshness: 'auto',
+            provider: valid,
+          },
+        },
+        47,
+      ) as Record<string, unknown>;
+      expect((kept.webSearchOptions as Record<string, unknown>).provider).toBe(
+        valid,
+      );
+    }
+
+    const repaired = migrate(
+      {
+        webSearchOptions: {
+          resultCount: 8,
+          freshness: 'auto',
+          provider: 'altavista',
+        },
+      },
+      47,
+    ) as Record<string, unknown>;
+    expect(
+      (repaired.webSearchOptions as Record<string, unknown>).provider,
+    ).toBe('auto');
   });
 });

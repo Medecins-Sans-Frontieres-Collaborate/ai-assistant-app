@@ -845,7 +845,13 @@
         "transformingTable": "Ana sauya tebur...",
         "findingLocations": "Ana gano wurare...",
         "updatingMap": "Ana sabunta taswira..."
-      }
+      },
+      "searchingWebFor": "Ana bincike: “{query}”…",
+      "searchingWebForMultiple": "Ana bincika {count} batutuwa: “{query}”…",
+      "readingCitedSources": "Ana karanta {count} makaloli da aka ambata a baya…",
+      "planningSteps": "Ana tsara matakai…",
+      "planStep": "Mataki na {current}/{total}: {description}",
+      "planStepRetry": "Mataki na {current}/{total} (kokarin sakewa): {description}"
     },
     "toolSummary": {
       "usedTools": "An yi amfani da {count, plural, one {# kayan aiki} other {# kayan aiki}}",
@@ -855,7 +861,8 @@
       "statusAutoDenied": "An ƙi da kai tsaye",
       "statusFailed": "Ta kasa",
       "statusIncomplete": "Bai cika ba",
-      "viaService": "ta {service}"
+      "viaService": "ta {service}",
+      "downloadFile": "Zazzage"
     },
     "consent": {
       "authorizeRequired": "Ana buƙatar izini",
@@ -897,7 +904,15 @@
       "approvedState": "An amince — wakili ya ci gaba",
       "deniedState": "An ki",
       "submittingApproval": "Ana amincewa da ci gaba da wakili…",
-      "submittingDenial": "Ana aikawa da ƙin amincewa…"
+      "submittingDenial": "Ana aikawa da ƙin amincewa…",
+      "alwaysApproveEverywhere": "A kullum amince da wannan kayan aiki — a kowane tattaunawa",
+      "denyOptionsLabel": "Zaɓuɓɓukan ƙi",
+      "denyOnce": "Ƙi sau ɗaya",
+      "neverAllowEverywhere": "Kada a taba amince da wannan kayan aiki — a kowane tattaunawa",
+      "deniedByRuleHint": "An toshe ta hanyar dokarka — sarrafa a Saituna → Haɗa-haɗa.",
+      "batchPendingHint": "Akwai buƙatun kayan aiki {count} da ke jiran izini",
+      "approveAllButton": "Amince duka",
+      "denyAllButton": "Ƙi duka"
     },
     "openImage": "Buɗe hoto",
     "copyMessage": "Kwafi saƙo",
@@ -908,7 +923,9 @@
     "ttsError": "Kuskure wurin ƙirƙirar sauti. Da fatan za a sake gwadawa.",
     "unsupportedMessageType": "Kuskure wurin nuna saƙo: Nau'in saƙo baya dacewa",
     "addLanguageOption": "Ƙara \"{name}\"…",
-    "sources": "Tushen bayanai"
+    "sources": "Tushen bayanai",
+    "interpreterBadge": "Gudanar da lamba",
+    "disableCodeInterpreter": "Kashe gudanar da lamba"
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",
@@ -1348,6 +1365,30 @@
       "thresholdLabel": "Dauka a matsayin sake rubutu idan ya wuce sama",
       "thresholdUnit": "% na takarda da aka canza",
       "exceptionSelectionAlways": "Gyaran abin da aka haskaka kai tsaye yana aiki — samfurin zai dawo da ɓangaren da aka gyara kawai, kuma ba zai iya riƙa ba da shawarwari a kan dukan takarda ba."
+    },
+    "webSearch": {
+      "title": "Bincike a Intanet",
+      "description": "Yana sarrafa yadda bincike kai tsaye ke tafiya idan yanayin Bincike yana aiki. Sauye-sauyen suna aiki nan da nan.",
+      "providerLabel": "Mai samar da bincike",
+      "providerAuto": "Ta atomatik (ana ba da shawara)",
+      "providerAutoDescription": "Yana amfani da tsohon tsarin aiwatarwa — a yanzu haɗin bincike labarai da ke ƙasa.",
+      "providerNews": "Haɗa labarai (GDELT + Google News)",
+      "providerNewsDescription": "Yana tambaya daga kowanne tushe a lokaci guda kuma yana haɗa sakamako, don haka rashin nasarar ɗaya ba zai katse bincike ba. Mafi daidaito ga saurin aiki, bambance-bambancen tushe da haɗin makala masu aiki.",
+      "providerGoogleNews": "Google News kawai",
+      "providerGoogleNewsDescription": "A asirce kuma da sauri — tambayar bincike kaɗai ke isa Google (ba asusu ko cookies) kuma sakamako na zuwa cikin kusan dakika guda. Lura: mafi yawa yana duba babban take da gajarce-gajarce, ba cikakkun makaloli ba, don haka amsoshi na iya zama saman-saman.",
+      "providerGdelt": "GDELT kawai",
+      "providerGdeltDescription": "Bayanan bincike a bude na labaran duniya tare da haɗin kai tsaye zuwa mai wallafa, wanda ke ba da damar karanta duka makala. Ana iyakance yawan amfani sosai — bincike mai dauke-da-dauke na iya kasancewa a jere na ‘yan dakika.",
+      "providerBing": "Bing grounding (ta Microsoft)",
+      "providerBingDescription": "Yana karanta cikakkun shafuka don fassarar zurfi kuma yana rufe duka intanet, ba labarai kaɗai ba. Amma bincike yakan ɗauki dakika 30–90 kuma ingancin sakamako na iya bambanta.",
+      "sourcesLabel": "Tushe kowane bincike",
+      "sourcesDescription": "Adadin tushe daban-daban da bincike ke rike dasu a matsayin ambato. Tambayoyin binciken kimiyya na iya faɗaɗa wannan ta atomatik.",
+      "freshnessLabel": "Sabon sakamako da ake so",
+      "freshnessDescription": "Yaushe sakamakon yakamata ya kasance. Ta atomatik yana bawa kowanne tambaya damar yanke (labaran gaggawa na fi son na rana daya da ta wuce).",
+      "freshness_auto": "Ta atomatik",
+      "freshness_day": "Rana da ta gabata",
+      "freshness_week": "Makon da ya wuce",
+      "freshness_month": "Watan da ya wuce",
+      "freshness_any": "Kowane lokaci"
     }
   },
   "emptyState": {
@@ -1534,6 +1575,23 @@
       "deployment": "Tura aiki",
       "modelVersion": "Nau’in samfurin",
       "publisher": "Maɗaukaki"
+    },
+    "interpreterMode": {
+      "title": "Mai Fassara Lamba",
+      "subtitle": "Yana gudanar da lamba idan zai taimaka (zane-zane, nazarin bayanai)",
+      "learnMore": "Me zai iya yi?",
+      "description": "Idan an kunna, mataimakin zai iya gudanar da Python a cikin tsarewar aminci da ke killace don nazarin fayiloli da aka makala, lissafin sakamako, da ƙirƙirar zane-zane. Ana nuna lamban da aka gudanar, sakamakonsa, da fayilolin da aka samar tare da amsa. Yi amfani da \"Gudanar da Lamba\" a menu mai rubutu don tilastawa a sako."
+    },
+    "searchOptions": {
+      "title": "Bincike mai zurfi",
+      "resultCount": "Tushe kowane bincike:",
+      "freshness": "Fi son sakamako daga",
+      "freshness_auto": "Auto (kowace tambaya)",
+      "freshness_day": "Rana da ta gabata",
+      "freshness_week": "Makon da ya wuce",
+      "freshness_month": "Watan da ya gabata",
+      "freshness_any": "Kowane lokaci",
+      "hint": "Auto yana bari kowace tambaya ta daidaita lokacinta (misali, labarai suna fi so rana daya ta gabata), kuma tambayoyin bincike na iya amfani da ƙarin tushe fiye da tsoho."
     }
   },
   "models": {
@@ -2105,7 +2163,11 @@
     "moveToMore": "Matsa zuwa Ƙari",
     "moveOutOfMore": "Nuna a menu",
     "showSources": "Nuna sauran tushe",
-    "hideSources": "Boye sauran tushe"
+    "hideSources": "Boye sauran tushe",
+    "aiTools": "Kayan aikin AI",
+    "aiToolsTooltip": "Irin damar da mataimaki zai iya amfani da su yayin amsawa: binciken yanar gizo kai tsaye, gudanar da lambar code, da haɗin kai da wasu ayyuka.",
+    "codeInterpreterTooltip": "Gudanar da lambar Python a cikin sandbox mai tsaro a kowane saƙo.\n\nYana da kyau don nazarin bayanai, ƙididdiga, da ƙirƙirar jadawali daga fayilolin da aka makala.",
+    "categoryTools": "Kayan aiki & mahaɗa"
   },
   "transcription": {
     "transcribesOnSend": "Zai fassara zuwa rubutu lokacin aikawa",
@@ -2428,7 +2490,18 @@
     "modelRow": "{requests} buk. · {grams} g",
     "disclosure": "Kiyasin ya dogara ne da hasashe v{version} · tun daga {since} · hira ta al'ada kawai (ba a lissafa amsoshin ‘agents’ da kundin sani ba).",
     "reset": "Sake saiti kididdigar amfani",
-    "estimatedPortion": "Ya haɗa da ~{grams} g CO₂e ({requests} buƙatu) da aka kimanta daga tattaunawa kafin fara bin diddigi — an sake lissafawa daga rubutun saƙonni da aka adana, ba daga adadin token da aka auna ba."
+    "estimatedPortion": "Ya haɗa da ~{grams} g CO₂e ({requests} buƙatu) da aka kimanta daga tattaunawa kafin fara bin diddigi — an sake lissafawa daga rubutun saƙonni da aka adana, ba daga adadin token da aka auna ba.",
+    "chipTitle": "Gunkin fitar da hayaƙi",
+    "chipDescription": "An kimanta adadin hayaƙin carbon na wannan tattaunawa, ana nunawa a sama da shigar da saƙo.",
+    "chipAlways": "Kullum nuna",
+    "chipAlwaysHint": "Gunkin yana bayyana duk lokacin da tattaunawa tana da hasashe.",
+    "chipAuto": "Nuna idan an sabunta ko ka matsa sama",
+    "chipAutoHint": "Gunkin zai bayyana idan hasashen ya canza, sai ya ɓace da lokaci. Idan ka matsa ko fita zai dawo.",
+    "chipHidden": "An ɓoye",
+    "chipHiddenHint": "Gunkin ba zai bayyana ba. Za a ci gaba da lissafa jimlolin kuma zai bayyana a wannan shafi.",
+    "chipAutoHideLabel": "Ya ɓace bayan",
+    "chipAutoHideUnit": "daƙiƙu",
+    "chipAutoHideHint": "Tsakanin {min} da {max} daƙiƙu."
   },
   "extraction": {
     "toggleLabel": "Ciro bayani tsari",
@@ -3337,7 +3410,15 @@
       "measured": "Daga adadin token da aka ruwaito",
       "estimated": "An sake lissafawa daga tsoffin saƙonni",
       "lastRequest": "Bukata ta ƙarshe",
-      "disclaimer": "Kimantawa na kowane bukata daga adadin token da aka ruwaito ko kimanta, ana amfani da matsakaici da ƙa’idoji da aka wallafa v{version}. Tsoffin saƙonni an sake lissafawa su daga rubutun da aka adana da kuma nau'in samfurin tattaunawar yanzu. Ba auna ko gwadawa ba ne."
+      "disclaimer": "Kimantawa na kowane bukata daga adadin token da aka ruwaito ko kimanta, ana amfani da matsakaici da ƙa’idoji da aka wallafa v{version}. Tsoffin saƙonni an sake lissafawa su daga rubutun da aka adana da kuma nau'in samfurin tattaunawar yanzu. Ba auna ko gwadawa ba ne.",
+      "visibilityGroup": "Bayyanar gunkin fitar da hayaƙi",
+      "visibilityLabel": "Nuna:",
+      "visibility": {
+        "always": "Kullum",
+        "auto": "Ta atomatik",
+        "hidden": "Boye"
+      },
+      "visibilityHint": "Ta atomatik zai nuna gunkin idan an sabunta hasashe ko ka matsa sama da shi. Za ka iya canza wannan daga Saituna › Amfani & Tasiri."
     }
   },
   "table": {
@@ -3600,7 +3681,13 @@
     "connectorClientSecretLabel": "OAuth client secret",
     "connectorClientSecretStored": "An adana wani sirri. Bar fili don ka barshi, ko shigar da sabon sirri don maye gurbinsa.",
     "connectorClientSecretHint": "Ana ƙare shi kafin a adana, kuma ba za a sake nuna shi ba.",
-    "connectorScopesLabel": "Scopes (a raba da tazara, zaɓi)"
+    "connectorScopesLabel": "Scopes (a raba da tazara, zaɓi)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (na zaɓi)",
+    "connectorOauthTokenUrlLabel": "Token URL (na zaɓi)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (na zaɓi)",
+    "connectorOauthEndpointsHint": "Bar URLs na endpoint a blank don gano su ta atomatik. Saita su don masu samar da ba su goyon bayan gano kai tsaye ba, kamar NetSuite.",
+    "connectorOauthRefreshUrlHint": "Bar a blank don sabunta ta amfani da token URL.",
+    "connectorOauthEndpointsPairWarning": "Dole ne a saita Authorization URL da Token URL tare (refresh URL na bukatar duka biyun)."
   },
   "localModels": {
     "title": "Samfuran cikin gida",
@@ -3695,5 +3782,52 @@
     "truncatedNotice": "An watsar da {count} filaye — iyakar tebur {max} ginshikai: {names}",
     "skippedDerivedNotice": "An kasa adana {count} ginshikan lissafi — ana amfani da ma’adanin ginshikan wannan tebur: {names}",
     "loadReplacesColumns": "Wannan zai maye gurbin ginshikai na yanzu. Rukunin da ke akwai za su ci gaba da riƙe ƙimar da sunayen ginshikan su suka dace."
+  },
+  "codeInterpreterDropdown": "Gudanar da Lamba",
+  "connectorPin": {
+    "toggleLabel": "Gudanar da kayan aikin connector",
+    "menuLabel": "Connectors",
+    "menuLabelCount": "Connectors ({count} masu aiki)",
+    "tooltip": "Duba wane kayan aikin connector ke aiki, kashe su don wannan tattaunawa ko ko’ina, ko maida hankali a kan guda ɗaya.",
+    "toggleServerInChat": "Yi amfani da {name} a wannan tattaunawa",
+    "globalToggleTitle": "Kunno ko kashe {name} a ko’ina (daidai da Saituna → Connectors)",
+    "globalOn": "A kunna ko’ina",
+    "globalOff": "A kashe ko’ina",
+    "chatToggleHint": "Checkboxes suna sarrafa wannan tattaunawa kawai; maballin duniya yana daidaita da Saituna → Connectors. Kowanne connector da ke aiki yana ƙara kayan aikinsa a kowanne saƙo — ƙarin token da jinkirin amsa.",
+    "trayLabel": "Kayan aikin connector",
+    "trayTitle": "Kayan aikin connector don wannan tattaunawa",
+    "toggleServer": " kunna {name}",
+    "needsReconnect": "Sake haɗawa a Saituna",
+    "focusAction": "Mayar da hankali",
+    "focusedChip": "An mayar da hankali",
+    "pinnedHint": "Kawai kayan aikin daga {name} za a yi amfani da su a wannan tattaunawa.",
+    "staleHint": "Connector da aka mayar da hankali ya cire haɗi ko an musanya — sake haɗawa da shi a Saituna → Connectors, ko cire mayar da hankali. Har zuwa lokacin, duk kayan aikin da ke aiki za su kasance ana amfani da su.",
+    "costHint": "Kowane connector mai aiki yana ƙara kayan aikinsa ga duk saƙonnin da ka tura — ƙarin token da jinkirin amsa. Kashe wadanda ba ka amfani da su.",
+    "noEligibleConnectors": "Babu connector da aka saita. Saita ɗaya a Saituna → Connectors da farko.",
+    "unknownConnector": "Connector da aka cire",
+    "unpin": "Cire mayar da hankali",
+    "dismiss": "Rufe",
+    "badgeCount": "{count} kayan aiki",
+    "badgeTooltip": "Kayan aikin connector suna aiki a kowane saƙo — suna ƙara token da lokaci na amsa. Danna don sarrafawa."
+  },
+  "toolApprovals": {
+    "title": "Amincewa da kayan aiki",
+    "description": "Dokokin da suke amfani a kowace tattaunawa: bari ko hana wasu kayan aikin connector ta atomatik. Za ka iya ƙara kayan aiki da ba ka yet samu buƙatar amsa ba.",
+    "actionApprove": "Kullum amince",
+    "actionReject": "Kullum hana",
+    "scopeServer": "a {name}",
+    "scopeAny": "Duk connector",
+    "removeRule": "Cire doka ga {tool}",
+    "toolNameLabel": "Sunan kayan aiki",
+    "toolNamePlaceholder": "Sunan kayan aiki, misali create_issue",
+    "scopeLabel": "Matsayin connector",
+    "actionLabel": "Aiki",
+    "addRule": "Ƙara doka",
+    "rejectPrecedenceNote": "Dokokin hana aiki sun fi tasiri – akan dokokin amincewa da kuma kowanne amincewa ta atomatik da aka saita a cikin tattaunawa guda.",
+    "policyAsk": "Tambayi",
+    "policyAllow": "Bada izini",
+    "policyBlock": "Toshe",
+    "policyGroupLabel": "Dokar amincewa don {tool}",
+    "listHint": "Saita abin da zai faru idan mataimaki yana so ya kunna kowanne kayan aiki — a kowace tattaunawa. Tambaya shine tsoho; Toshe zai fi ko yaushe."
   }
 }

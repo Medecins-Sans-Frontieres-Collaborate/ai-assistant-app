@@ -171,6 +171,11 @@ export interface MessageToolArtifacts {
    */
   toolCalls?: ToolCallRecord[];
   /**
+   * MCP turn plan captured from the stream. Echoed back to the (stateless)
+   * server on approval resume so plan progress survives the pause.
+   */
+  mcpPlan?: import('./mcp').McpPlan;
+  /**
    * Persisted consent / OAuth prompts emitted during this turn. Saved so a turn
    * that contained only a consent card (no assistant text) still renders its
    * card after the stream finalizes and on conversation reload.
@@ -347,6 +352,11 @@ export interface ChatBody {
   /** 0-based MCP tool-loop round counter; the server caps it (see loop). */
   mcpLoopRound?: number;
   /**
+   * MCP turn plan echoed back on approval resume so plan progress survives
+   * the stateless pause (same protocol as mcpPendingToolCalls).
+   */
+  mcpPlan?: import('./mcp').McpPlan;
+  /**
    * Structured data extraction payload. Up to 3 recipes; the chat pipeline
    * picks this up via `ExtractionEnricher` and issues a strict JSON-schema
    * call (`StandardChatHandler` honours `context.responseFormat`).
@@ -391,6 +401,7 @@ export interface Conversation {
   reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high'; // For GPT-5 and o3 models
   verbosity?: 'low' | 'medium' | 'high'; // For GPT-5 models
   defaultSearchMode?: import('./searchMode').SearchMode; // Default search mode for this conversation
+  defaultInterpreterMode?: import('./interpreterMode').InterpreterMode; // Default code-interpreter mode for this conversation
   /**
    * Which region's hosted instance this conversation chats with. Set from
    * the details panel (US users, dually-hosted models) or implicitly when a
@@ -398,6 +409,21 @@ export interface Conversation {
    * server forces EU regardless.
    */
   hostedRegion?: 'US' | 'EU';
+  /**
+   * McpServerConfig.id of a connector this conversation is FOCUSED on: when
+   * set (and the server is still enabled), only that connector's tools are
+   * declared to the model — other connected servers are omitted for the
+   * turn. Cleared from the chip in the chat input. A stale id (server
+   * removed/disabled) is ignored rather than blocking the chat.
+   */
+  pinnedMcpServerId?: string;
+  /**
+   * McpServerConfig.ids switched off FOR THIS CONVERSATION in the connector
+   * tray. Purely subtractive on top of the global enabled set — a server
+   * disabled globally stays off regardless, and re-enabling globally does
+   * not resurrect it in chats that opted out. Unknown/stale ids are inert.
+   */
+  disabledMcpServerIds?: string[];
   // Active file context (optional; initialized via migration)
   activeFiles?: ActiveFile[];
   activeFilesTokenBudget?: number;
@@ -524,11 +550,41 @@ export interface FilePreview {
 }
 
 // Tool Router Types
-export type ToolType = 'web_search';
+export type ToolType = 'web_search' | 'code_interpreter';
 
 export interface ToolRouterResponse {
   tools: ToolType[];
   searchQuery?: string;
+  /**
+   * Full ordered query list for multi-aspect questions (first entry ===
+   * searchQuery). Usually length 1 — the router is instructed to prefer a
+   * single query and only split genuinely separable information needs.
+   * Hard-capped at 5.
+   */
+  searchQueries?: string[];
+  /**
+   * Recency the query implies ('day' for breaking news, 'week'/'month' for
+   * recent developments). Only meaningful when tools includes 'web_search'
+   * and the user's freshness setting is 'auto'.
+   */
+  searchRecency?: 'day' | 'week' | 'month';
+  /**
+   * True for research-style questions that benefit from MORE sources than
+   * the configured default (comparisons, surveys, "give me an overview").
+   */
+  searchComprehensive?: boolean;
+  /**
+   * True when the user is asking a follow-up about search results already
+   * cited earlier in the conversation — the enricher then re-fetches those
+   * cited articles for their full text instead of (or before) running a
+   * fresh search. Only produced when the request offered prior citations.
+   */
+  searchFollowUp?: boolean;
+  /**
+   * What the interpreter should do, phrased as a self-contained task.
+   * Present when tools includes 'code_interpreter'.
+   */
+  codeTask?: string;
   reasoning?: string; // Optional reasoning for debugging
 }
 
@@ -536,6 +592,19 @@ export interface ToolRouterRequest {
   messages: Message[];
   currentMessage: string;
   forceWebSearch?: boolean; // When true, always use web search (search mode enabled)
+  forceCodeInterpreter?: boolean; // When true, always run the code interpreter (InterpreterMode.ALWAYS)
+  /**
+   * Whether the router should even CONSIDER code execution. False when
+   * interpreterMode is OFF (or the feature is env-disabled) so the
+   * classifier prompt/schema stay identical to the pre-interpreter shape.
+   */
+  considerCodeExecution?: boolean;
+  /**
+   * Whether earlier assistant turns carry web-search citations the user
+   * could be following up on. Gates the searchFollowUp classification so
+   * the prompt/schema stay unchanged for citation-less conversations.
+   */
+  hasPriorSearchCitations?: boolean;
 }
 
 // Persistent File Context types

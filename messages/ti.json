@@ -845,7 +845,13 @@
         "transformingTable": "ጣውላ ኣብ ሕጂ ዝቀንዖ...",
         "findingLocations": "ቦታታት ምርኣይ...",
         "updatingMap": "ካርታ ምሕዳስ..."
-      }
+      },
+      "searchingWebFor": "እቲ ድሕሪት ተኣውቲ: “{query}”…",
+      "searchingWebForMultiple": "{count} ርእስታት ተኣውቲ: “{query}”…",
+      "readingCitedSources": "{count} ብፅፃእ ዝተጠራረሱ መጽናዕቲታት ተንቢብ…",
+      "planningSteps": "እተደረደዉ ኩዑዳት ትንባብ…",
+      "planStep": "ኩዕሶ {current}/{total}: {description}",
+      "planStepRetry": "ኩዕሶ {current}/{total} (እካል ናይ ኣርኢቶ): {description}"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# መሳርሒ} other {# መሳርሒታት} } ተጠቒሙ",
@@ -855,7 +861,8 @@
       "statusAutoDenied": "ብሓራዊ ተኣገደ",
       "statusFailed": "ኣይተሳነን",
       "statusIncomplete": "ዘይተፈጸመ",
-      "viaService": "ብ {service}"
+      "viaService": "ብ {service}",
+      "downloadFile": "ኣውርድ"
     },
     "consent": {
       "authorizeRequired": "ሓገዝ ፍቓድ የድልየኒ",
@@ -897,7 +904,15 @@
       "approvedState": "ድምር ኣጽዊዑ — agent ዳግመኛ ጀመረ",
       "deniedState": "ኣተቕሎ",
       "submittingApproval": "ኣጽዊዖ እናተወሃበ ዳግመኛ agent ክመለስ…",
-      "submittingDenial": "ምስልኣኻ ናይ ኣተቕል ምልኣይ…"
+      "submittingDenial": "ምስልኣኻ ናይ ኣተቕል ምልኣይ…",
+      "alwaysApproveEverywhere": "እዚ ኣገልግሎት ኣብ ኩሎም ቻታት ምዃኑ ምፅዳቕ",
+      "denyOptionsLabel": "ኣልቦ ኣማራጺታት",
+      "denyOnce": "ኣብ አንዲኡ ምኽዳእ",
+      "neverAllowEverywhere": "እዚ ኣገልግሎት ኣብ ኩሎም ቻታት ኣይፍቀመን",
+      "deniedByRuleHint": "ብህግየ ተዓግድካ፡ ኣብ ትካኺታት → ኮነክተሮት ውስኽ ኣስተዳድድ።",
+      "batchPendingHint": "{count} ዝተጠየቑ ጥያቄታት ኣገልግሎታት ምጽእ ኣሎ",
+      "approveAllButton": "ኩሉ ኣጽደቕ",
+      "denyAllButton": "ኩሉ ኣልቦ"
     },
     "openImage": "ስእሊ ክፈት",
     "copyMessage": "መልእኽቲ ቅድሚ",
@@ -908,7 +923,9 @@
     "ttsError": "ስህተት ኣብ ምፍጣር ድምጺ። እቲ ግዜ ደገ ፈትኑ።",
     "unsupportedMessageType": "ስህተት ኣብ ምርሕያብ መልእኽቲ፡ ዘይተደገፀ ዓይነት መልእኽቲ",
     "addLanguageOption": "\"{name}\" ኩናት ኣእቱ...",
-    "sources": "ምንጮታት"
+    "sources": "ምንጮታት",
+    "interpreterBadge": "ኮድ ኣምራ",
+    "disableCodeInterpreter": "ኮድ ምፅሓፍ ምስጢር"
   },
   "transcript": {
     "originalTranscript": "ኦሪጂናል ጽሕፈት",
@@ -1348,6 +1365,30 @@
       "thresholdLabel": "ካብዚ ላዕሊ ንድሕሪት ተካእሏ ትቅበል",
       "thresholdUnit": "% ናይ ማህደር ዝተቐየረ",
       "exceptionSelectionAlways": "ናይቲ ተኣርኣዩ ምረጽ ዝተገልጸ ግዚ፡ ምትኽል ብድሕሪት ይተግበሩ። ኣብዚ ኩነታት ሞዴሉ ብብልጽግና ዝተስተረኽተ ክፋን ኢሎ ይመልሳ፣ ዚኾነስ ብኣይኑ ምኽንያቱ ብኣብዛ ድሑረት ውሑድ ሰብ ሰብ መኽንያቱ ኣይኽእልን።"
+    },
+    "webSearch": {
+      "title": "ድሕሪት ተኣውቲ",
+      "description": "ናይ ቁጽሪ እታ ድሕሪት ተኣውቲ ኣብ ትኽክል ግዝኣቶ ምፅሓፍ። ለውጢ ብዝተኸሰፈ እዩ ዝግበር።",
+      "providerLabel": "ተኣዎማዊ ተኣውቲ ተምሪ",
+      "providerAuto": "አውቶማቲካዊ (ዝመኽኣኸአ)",
+      "providerAutoDescription": "ናይ ምፅሃፍ ቋንቋ መንገዲ — ሕጂ ብዛዕባ ዚተመዝገበ ዜና ድሕሪት ተኣውቲ እዩ።",
+      "providerNews": "ተፃዕኖ ዜና (GDELT + Google News)",
+      "providerNewsDescription": "ኩሎም ዝተምሓየሩ ኣብ ትካኺ ኣሞንካን፡ ኣብ ዓይኒ፡ ንሓደ ዝኸውን ዘይህበ እንከሎ ውድብ ምሃን ዘይደኣ ኣይከውንን። መልእኽቲ ቁጽሪ፡ ውህብነት ተዳላዊ ምዃኑን፡ ንዲሓ መጽናዕቲ ምምራሕን።",
+      "providerGoogleNews": "Google News ብሓይሊ ውን",
+      "providerGoogleNewsDescription": "አንክያንን ብሕጋዊነትን—ኣብ Google ዝብጽሕ ፈጹም ጥያቐ እዩ (ኣካውንት ወይ ኩኪስ የለን) ከምኡ ውጽኢት ብሰንደቕ ዝመጽእ። ሓበሬታ ዝተሓበረ ናይ መርካብን ሞኒኖን ዝቕጸለዩ እዩ፣ ዝሓትኖ ኣብ ሎሚ ብመደብ ሓበሬታ ዝቕጽል እዩ።",
+      "providerGdelt": "GDELT ብሓይሊ ውን",
+      "providerGdeltDescription": "ክፋል፡ ናይ ዓለም ዜና መረጋግጺ ቻቓት ብተወሳኺ መምህርት፡ ብዝተቋቐም ዘለዉ ናይ ሓተታ ገፆታት፣ እንታይ ዝደኣኑ የቕሕን ሓበሬታ ተንቢብ ክቕርብ ይኽእሉ። ብዝሓልወ ውድብ፡ ተደጊሙ ቀጽሊ ድሕሪት ተኣውቲ እቶም ጥቕሉ።",
+      "providerBing": "Bing grounding (በMicrosoft)",
+      "providerBingDescription": "ኩሉ ገጾታት ብብዝሕ ኮብሎም ግን ዝሓተሙ አይጅምርኡን፡ ዓይኒ ዓይኑ እንተኾይኑ ምምላእ በዓል 30–90 ሰከንዶም ዘይደቀኑ ውጽኢት ይርከባ።",
+      "sourcesLabel": "ምንጪታት ንድሕሪት ተኣውቲ",
+      "sourcesDescription": "ብእንታይ መንጪ ዝተፈላለዎ ምንጪታት ናይ ኣውታት ይሰርሕ። ናይ ምምርሕ ጥያቄታት ብሕደራ ኣብ ፍደል ይጽበራ።",
+      "freshnessLabel": "ዓድማ ዘለዎ ሓደጋ",
+      "freshnessDescription": "ብእንታይ ኣዳም ድሕሪት ተኣውቲ ክውጽእ ከለዉ። አውቶማቲካዊ ፈሊኻ ኽፈትን፡ ብምስከረ ስለምስጥራይ እታ ዛሬ ብኣይኒ ይቀዳም።",
+      "freshness_auto": "አውቶማቲካዊ",
+      "freshness_day": "ኣብ ሕሉፍ መዓልቲ",
+      "freshness_week": "ኣብ ሓደ ሰሙና",
+      "freshness_month": "ኣብ ወርሒ",
+      "freshness_any": "ኣብኩሉ ጊዜ"
     }
   },
   "emptyState": {
@@ -1534,6 +1575,23 @@
       "deployment": "ምምዕባል",
       "modelVersion": "ቅድሚ ምንዳን ፋንታ",
       "publisher": "ታሪኛ"
+    },
+    "interpreterMode": {
+      "title": "ኮድ ትርጉም ኣምራ",
+      "subtitle": "ኮድ ኣምራ እዩ ዝማሓየሉ (ቻርታት፣ ቀዳማይ መለኪያ ዳታ)",
+      "learnMore": "እንታይ ዝግበር ይኽእል?",
+      "description": "እዚ ስሓቑ እንተተኻይዱ፡ እቲ ኣስታኺ ናይ Python ኮድ ኣብ ውሕጥ ፈተና ሳንድቦክስ ብምምልካእ ዝሓደረ ፋይሎታት፡ ውጽኢት ምቍጻልን፡ ቻርታት ምፍጣርን ይኽእል። ዝተኸውነ ኮድን ውጽኢቱን፡ ተፈጠሩ ፋይሎታትን ምስ መልሲ ካብ ተሓደስ ይታያ። ናይ “ኮድ ኣምራ” ዝብሎ ምንታይ ተንደፍን ኣብ መልእኽቲ ዘሎ ምስከፍል እዩ።"
+    },
+    "searchOptions": {
+      "title": "ምርካብ ተኣውቲ",
+      "resultCount": "ምንጪታት ንድሕሪት ተኣውቲ፡",
+      "freshness": "ዋላ ውጽኢት ኣብ",
+      "freshness_auto": "አውቶ (ንኣንዳንድ ጥያቄ)",
+      "freshness_day": "ኣብ ሕሉፍ መዓልቲ",
+      "freshness_week": "ኣብ ሓደ ሰሙና",
+      "freshness_month": "ኣባህሪ ወርሒ",
+      "freshness_any": "ኩሉ ዘመን",
+      "hint": "Auto ክሳብ ኣብ እያ ሕቶ ናይቶ ሓዱሽነት መደብ ይመርጽ (ለኣብ ዜና ብዝሓላ መዓልቲ ይሓፍል), ንምምሕዳር ምስ መሰረታዊ መደብ ዝተለወጠ ብዝበለ ምንጪታት ይጠቕም።"
     }
   },
   "models": {
@@ -2105,7 +2163,11 @@
     "moveToMore": "ናብ ተወሳኺ ኣካይዱ",
     "moveOutOfMore": "ኣብ መኑ ርኣዮ",
     "showSources": "ተሓውቶ ምንጮታት ኣርኣዩ",
-    "hideSources": "ተሓውቶ ምንጮታት ኣሰውሩ"
+    "hideSources": "ተሓውቶ ምንጮታት ኣሰውሩ",
+    "aiTools": "AI መዕዛውቲ",
+    "aiToolsTooltip": "ኣብ ምልማሉ ቀሊል ክትጠቐምዎ ዝኽእል ተቋማት: ብዝኽእል ድሕሪ መለለዪ ናይ web ምድላው, ኮድ ኣፈጻጸምን ብሰርቪስታት ምትሕሳስን።",
+    "codeInterpreterTooltip": "ኣብ ናይ ዕላማ ስርዓት ሓላፍነት ዝበለ Python ኮድ ኣፈጻጸም ናይቶም መልሲታት ንኣብ ንእሽቶ መልእኽቲ።\n\nብዙሕ ኣብ ትንታነ ባህሪ, ምሕሳብን ብማዕበል ፋይል መመዝገብ ፍቓድ አለዎ።",
+    "categoryTools": "መሳርሒታት እና አገናኞታት"
   },
   "transcription": {
     "transcribesOnSend": "ኣብ ምልኣኽ ይጸሓፍ",
@@ -2428,7 +2490,18 @@
     "modelRow": "{requests} ጥያቄ · {grams} ግራም",
     "disclosure": "ቅድመሓሳቡ ብምስማማዕ ናይ v{version} · ካብ {since} · ምድላይ መዓልቲ ሓሳብ ብቐዳይ (ኣገንትን ናይ ዕውታት ቋንቋ መልሲ ኣይተቆጸረን)።",
     "reset": "ናይ ኣጠቓቕማ ውህኖታት ኣቐምጥ",
-    "estimatedPortion": "ዝኾነ ~{grams} g CO₂e ({requests} መጠየታት) ካብ ዝንብር tracking ስር chats ተቅሚኡ፣ ካብ ተዓቐኑ ዞባ መልእኽቲ ጽሑፋት፣ ኣይተሳንዕ token ቁጽሪታት እዩ።"
+    "estimatedPortion": "ዝኾነ ~{grams} g CO₂e ({requests} መጠየታት) ካብ ዝንብር tracking ስር chats ተቅሚኡ፣ ካብ ተዓቐኑ ዞባ መልእኽቲ ጽሑፋት፣ ኣይተሳንዕ token ቁጽሪታት እዩ።",
+    "chipTitle": "ምርት ቻይፕ",
+    "chipDescription": "ግምቲ ካርቦን እግሪ ኣብዚ ባህሪ ዓውደ-ቃለ-መጠይቂ ብምስራሕ ክትተረከብ ብይቕረና፡ ኣብ ላዕሊ ዝኾነ ቃለ-መጠይቅ ግበታ እዩ የተረኸበ።",
+    "chipAlways": "ሁሉግዜ ኣትረኣዩ",
+    "chipAlwaysHint": "ዝተገመተ ንባዕሉ ዝርከብ ግደፍካ ቻይፑ የተረከበ ይብቃ።",
+    "chipAuto": "ብሓደስ፡ ወይ ስትራይ የተረከበ",
+    "chipAutoHint": "ቻይፑ ምስ ግምቲ ተሓዲሰ እዩ የተረከበ፡ ኣብ ቀጥዐ ይዕፀይ። ስትራይ ወይ ዝምርኣዩ ምቅላል እንተ ስለሃቡ ይተመሃል።",
+    "chipHidden": "ዝተሰውረ",
+    "chipHiddenHint": "ቻይፑ ክኸውን ኣይተረከበን። ጠቕላላ መዓልቲ ግምቲ መዝግቡ ይቕፀልና፡ ኣብዚ ገጽ ይርከብ።",
+    "chipAutoHideLabel": "ካብ ዝተሓደሰ መዓልቲ ዕፀይ",
+    "chipAutoHideUnit": "ሰከንድ",
+    "chipAutoHideHint": "ካብ {min} ናብ {max} ሰከንድ ውስጢ።"
   },
   "extraction": {
     "toggleLabel": "ውክልናዊ ዳታ ምልባስ",
@@ -3337,7 +3410,15 @@
       "measured": "ካብ ተዘግዐ token ቁጽሪታት",
       "estimated": "ካብ ድሓን መልእኽቲ ተቃለልካ ተስተኸለ",
       "lastRequest": "መደበር ሓሳብ መጠየቢ",
-      "disclaimer": "ንእዋናውነት መጠየቢ ብተዘግዐ ወይ ብተቑሚ token ቁጽሪታት፣ ብተታቕፉ ኣብ ጥቕሚ እናቋሠር ዝተሰብሰበ ቁጽሪ ምኻነካ ብመንገዲ v{version}. ሓደን መልእኽቲ ካብ ተዓቐኑ ጽሑፋትን ናይ ዘሎ ሞዴል ውድብ ብተቃለልካ ይፈልጠሉ። መወፅኦ ኣይኮነን።"
+      "disclaimer": "ንእዋናውነት መጠየቢ ብተዘግዐ ወይ ብተቑሚ token ቁጽሪታት፣ ብተታቕፉ ኣብ ጥቕሚ እናቋሠር ዝተሰብሰበ ቁጽሪ ምኻነካ ብመንገዲ v{version}. ሓደን መልእኽቲ ካብ ተዓቐኑ ጽሑፋትን ናይ ዘሎ ሞዴል ውድብ ብተቃለልካ ይፈልጠሉ። መወፅኦ ኣይኮነን።",
+      "visibilityGroup": "ምርት ቻይፕ ኣብ ዕይታ",
+      "visibilityLabel": "ምርኣዩ:",
+      "visibility": {
+        "always": "ሁሉግዜ",
+        "auto": "ብሓላፍነት",
+        "hidden": "ኣይትረኣይ"
+      },
+      "visibilityHint": "\"ብሓላፍነት\" ቻይፑ ኣብ እቲ ግምት ካብ ሓደስነቱ ወይ ካብ ስትራይ ምስ ትቕለል እዩ የርከቡ። እዚ ኣብ ቅንጡ፡ Usage & Impact ውሽጢ ቀይርዎ።"
     }
   },
   "table": {
@@ -3600,7 +3681,13 @@
     "connectorClientSecretLabel": "OAuth client secret",
     "connectorClientSecretStored": "ሽሓ ተኣቲቱ። ንምግባር ትምታምዶ ይፍጸም፡ ወይ ሓድሽ ኣእትዎ ንምቕያር።",
     "connectorClientSecretHint": "ስእንካ ክበሃል፡ ድሕሪኡ ኣይትተቐርበን።",
-    "connectorScopesLabel": "Scopes (ብ ቦታ ዝተፋለየ፡ ኦፕሽናል)"
+    "connectorScopesLabel": "Scopes (ብ ቦታ ዝተፋለየ፡ ኦፕሽናል)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (ኮይኑ ኣይፈቀደን)",
+    "connectorOauthTokenUrlLabel": "Token URL (ኮይኑ ኣይፈቀደን)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (ኮይኑ ኣይፈቀደን)",
+    "connectorOauthEndpointsHint": "ኣብ endpoint URL ባዶ ውድኣ፡ ብሓላፊ ኣይታሃድስን ዘይትኽእሉ ኣብርህ ከነ NetSuite ዘሎ ኣብ ኣንቀሳቓሲ ኣትኸውን።",
+    "connectorOauthRefreshUrlHint": "ባዶ ዝቀመጠ ማለት ኣብ token URL ይበሓቸ።",
+    "connectorOauthEndpointsPairWarning": "Authorization URL ንኸተ token URL ክንህቡ ይኽእል የለን (refresh URL ናይምክንያቱ ንሉቶም ምውሳኽ ይስፈን።)"
   },
   "localModels": {
     "title": "ኣካባቢ ሞዴልታት",
@@ -3695,5 +3782,52 @@
     "truncatedNotice": "{count} መስኮታት ተኣንቦጸሉ — ውሑድ ናይ ታብል ኣብ {max} ኮለምናት ይወሰን፡ {names}",
     "skippedDerivedNotice": "{count} ዝተማሃዩ ኮለምናት ኣይተኣቐቡን — ፎርሙላታት ናይ ታብል ኮለምናት ይመልከቱ፡ {names}",
     "loadReplacesColumns": "እዚ ዝረከበካዮ ቀይር። ዝኾኑ መርዓታት እንዳ ዝሓዘዎም ኮለምናት ሽም ይቐብሉ።"
+  },
+  "codeInterpreterDropdown": "ኮድ ኣምራ",
+  "connectorPin": {
+    "toggleLabel": "አስተዳደር መዕዛዎታት connector",
+    "menuLabel": "Connectors",
+    "menuLabelCount": "Connectors ({count} ንቃል)",
+    "tooltip": "ንእሽቶ ተግባራት connector ክፈልጦም ይኽእሉ፣ ምግባርን ፣ ኣመሓይሽን ወይ ኣብ ቀሊል ነቲ ዓይነት ኣተሓሰቦም።",
+    "toggleServerInChat": "{name} ኣብዚ ቆይታ ተጠቀም",
+    "globalToggleTitle": "{name} ኣብኩሉ ክተመሃያሽ ወይ ኣይመሃይስን (ተመሃይሶ ኣማራጺ Settings → Connectors እዩ)",
+    "globalOn": "ናይ ዓለም ሓደ ክንህብ",
+    "globalOff": "ናይ ዓለም ውፅኢት",
+    "chatToggleHint": "Checkbox ግንዛብ ዚ ቆይታታት ብሓደ ይገዛዘብ፤ ዓለም ውሽጢ ባህላዊ መደብ ከም Settings → Connectors እዩ። ንእሽቶ ተግባራት ናይ ዝበለ ኮኔክተር ተጨማሪ ኣይተሓድሶን — ብብዓቲ token ነቀንየሉ እናይ ክብድ መልሲ ምዃኑ።",
+    "trayLabel": "መዕዛውቲ connector",
+    "trayTitle": "መዕዛውቲ connector ንዚ ቆይታ",
+    "toggleServer": "{name} ኣስተባበር",
+    "needsReconnect": "ኣብ Settings ድገም ተቐይር",
+    "focusAction": "በዓቲ እዩ",
+    "focusedChip": "ተቖሊሉ",
+    "pinnedHint": "ኣብዚ ቆይታ ብ{name} ዝኾኑ መዕዛውቲ ምኽንያት ብሓደ ይጠቀሙ።",
+    "staleHint": "ዝተቖሊሉ connector ተቋሩ ወይ ዝተዓጸወ እዩ — ኣብ Settings → Connectors ድገም እዚ ምኽንያት ወይ ባዶ ምጽፋፀር። ክሳብ ካብዚ ቀዳም ንእሽቶ ተግባራት ይስተሓሐዱ።",
+    "costHint": "ንእሽቶ ክኸውን connectors ዝተሓድሶ መዕዛውቲ ኣብ ናይ ተላእኽቲ መልእኽቲ ይስተሓሐዱ፣ ብብዓቲ token ናይ ክብድ መልሲ ምዃኑ። ምንታይ ዘይጠቐሙ ኣጥፉ።",
+    "noEligibleConnectors": "ፍሉጥ ምትዕም ዘይተዘጋጅ connector የለን። ኣብ Settings → Connectors ኣንቀሳቕሱ።",
+    "unknownConnector": "ናይተወጡ connector",
+    "unpin": "ባዶ ውድአ",
+    "dismiss": "ዝግ",
+    "badgeCount": "{count} መዕዛውቲ",
+    "badgeTooltip": "ናይ connector መዕዛውቲ ኣብ ክልተ መልእኽቲ ምስልታት — token ንዝበለ ክብድ መልሲ ይኸውኑ። ልካው ንምኽታት።"
+  },
+  "toolApprovals": {
+    "title": "ኣጽዋሒት መዕዛውቲ",
+    "description": "ህጋት ኣብ ኩሉ ቆይታ ዝምልከት: ብኣብቲ ሰንካኻ መዕዛውቲ ተወሳኺዎ ወይ ዝሓደጉ ተቋማት connector ዝምላእ። ድማ መዕዛውቲ ከይምገብረኩም ቀደምኩም ክትወስኑ ትኽእሉ።",
+    "actionApprove": "ኩሉ ጊዜ ኣፅድቕ",
+    "actionReject": "ኩሉ ጊዜ ኣልቦ",
+    "scopeServer": "ኣብ {name}",
+    "scopeAny": "ኣዳሉ connector",
+    "removeRule": "ህግ ምውጣእ ን {tool}",
+    "toolNameLabel": "ሽም መዕዛውቲ",
+    "toolNamePlaceholder": "ሽም መዕዛውቲ፣ ለመማለት create_issue",
+    "scopeLabel": "ክበብ ኮኔክተር",
+    "actionLabel": "ተግባር",
+    "addRule": "ህግ ኣእቱ",
+    "rejectPrecedenceNote": "ሕጋት ምልቓል እዩ በቁልፉ — ካብ ሕጋት መፍቓዲ እና ካብ ኣብ ዝበለ ቆይታ እንዳተኣፅዑ ይላዩ።",
+    "policyAsk": "ሕቶ",
+    "policyAllow": "ፍቀድ",
+    "policyBlock": "ኣግዳስ",
+    "policyGroupLabel": "ፖሊሲ ማፅደቅ ን{tool}",
+    "listHint": "ኣብ ኩሉ ውይይት assistant ከም ዝፈልጠን እቲ tool ንተኸውን እንታይ ይሆን ትካል፡፡ ኣማዚን ብቑዕ እዩ፤ ኣግዳስ ሓርበኛ እዩ።"
   }
 }
