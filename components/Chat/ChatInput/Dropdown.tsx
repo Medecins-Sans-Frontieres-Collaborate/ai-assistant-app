@@ -9,6 +9,7 @@ import {
   IconLink,
   IconPaperclip,
   IconPlugConnected,
+  IconSparkles,
   IconVolume,
   IconWorld,
 } from '@tabler/icons-react';
@@ -433,9 +434,50 @@ const Dropdown: React.FC<DropdownProps> = ({
   // camera: red). Color is always paired with an icon shape and a label so it
   // is never the only distinguishing factor.
   //
+  // Chat-active connectors (globally enabled minus this conversation's
+  // opt-outs) — shown as a count on the Connectors row.
+  const activeConnectorCount = useMemo(
+    () =>
+      mcpServers.filter(
+        (s) =>
+          s.enabled &&
+          !selectedConversation?.disabledMcpServerIds?.includes(s.id),
+      ).length,
+    [mcpServers, selectedConversation?.disabledMcpServerIds],
+  );
+  // The Connectors entry appears whenever anything is CONFIGURED — even
+  // all-disabled, so a disabled connector can be re-enabled from here
+  // instead of a trip to Settings.
+  const showConnectors = mcpServers.length > 0;
+  const hasAiToolChildren =
+    !hideWebSearch || !hideCodeInterpreter || showConnectors;
+
   // Define menu items - memoized to avoid ref access issues during render.
   const menuItems: MenuItem[] = useMemo(
     () => [
+      // Capability toggles (what the AI can DO this turn) nest under one
+      // parent, mirroring the attach → file/link pattern. Pinning or
+      // frequent use of a child auto-promotes it back to a top-level row.
+      ...(hasAiToolChildren
+        ? [
+            {
+              id: 'aiTools',
+              icon: (
+                <IconSparkles
+                  size={18}
+                  className="text-blue-500 flex-shrink-0"
+                />
+              ),
+              label: t('dropdown.aiTools'),
+              infoTooltip: t('dropdown.aiToolsTooltip'),
+              // Expands in place; the row has no action of its own.
+              onClick: () => {
+                toggleParentExpanded('aiTools');
+              },
+              category: 'web' as const,
+            },
+          ]
+        : []),
       // Foundry / restricted org agents hide the web-search toggle entirely.
       ...(hideWebSearch
         ? []
@@ -454,6 +496,7 @@ const Dropdown: React.FC<DropdownProps> = ({
               category: 'web' as const,
               toggle: true,
               checked: searchMode === SearchMode.ALWAYS,
+              parentId: 'aiTools',
             },
           ]),
       // Force code execution on the next messages (InterpreterMode.ALWAYS).
@@ -477,12 +520,13 @@ const Dropdown: React.FC<DropdownProps> = ({
               category: 'web' as const,
               toggle: true,
               checked: interpreterMode === InterpreterMode.ALWAYS,
+              parentId: 'aiTools',
             },
           ]),
-      // Connector focus: pin one connected MCP server to the conversation so
-      // only ITS tools are declared to the model. Hidden when nothing is
-      // connected — there would be nothing to focus on.
-      ...(mcpServers.some((s) => s.enabled)
+      // Connectors: opens the tray with per-chat + global switches and the
+      // focus pin. Present whenever any server is configured (even all
+      // disabled) so re-enabling never requires Settings.
+      ...(showConnectors
         ? [
             {
               id: 'focusConnector',
@@ -492,25 +536,19 @@ const Dropdown: React.FC<DropdownProps> = ({
                   className="text-cyan-600 flex-shrink-0"
                 />
               ),
-              label: t('connectorPin.toggleLabel'),
+              label:
+                activeConnectorCount > 0
+                  ? t('connectorPin.menuLabelCount', {
+                      count: activeConnectorCount,
+                    })
+                  : t('connectorPin.menuLabel'),
               infoTooltip: t('connectorPin.tooltip'),
               onClick: () => {
-                if (selectedConversation?.pinnedMcpServerId) {
-                  // Toggling off removes the pin, not just the tray.
-                  updateConversation(selectedConversation.id, {
-                    pinnedMcpServerId: undefined,
-                  });
-                  setConnectorPinTrayOpen(false);
-                } else {
-                  setConnectorPinTrayOpen(!connectorPinTrayOpen);
-                }
+                setConnectorPinTrayOpen(!connectorPinTrayOpen);
                 closeDropdown();
               },
               category: 'web' as const,
-              toggle: true,
-              checked:
-                !!selectedConversation?.pinnedMcpServerId ||
-                connectorPinTrayOpen,
+              parentId: 'aiTools',
             },
           ]
         : []),
@@ -653,15 +691,15 @@ const Dropdown: React.FC<DropdownProps> = ({
       hasCameraSupport,
       hideWebSearch,
       hideCodeInterpreter,
+      hasAiToolChildren,
+      showConnectors,
+      activeConnectorCount,
       isExtractionEnabled,
       extractionMode,
       setExtractionMode,
-      mcpServers,
       connectorPinTrayOpen,
       setConnectorPinTrayOpen,
-      selectedConversation?.pinnedMcpServerId,
-      selectedConversation?.id,
-      updateConversation,
+      toggleParentExpanded,
       closeDropdown,
       setIsToneOpen,
       setIsTranslateOpen,
