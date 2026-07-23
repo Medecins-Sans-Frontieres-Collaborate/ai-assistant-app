@@ -67,6 +67,11 @@ const mockMessages: Record<string, unknown> = {
     failedToOpenDocEditor:
       'Failed to open file in document editor. Please try again.',
     imageAlt: 'Image {number}',
+    consent: {
+      batchPendingHint: '{count} tool requests pending',
+      approveAllButton: 'Approve all',
+      denyAllButton: 'Deny all',
+    },
   },
   fileUpload: {
     attachment: 'attachment',
@@ -172,6 +177,53 @@ const mockMessages: Record<string, unknown> = {
       description: 'Connect a Foundry project below to discover its agents.',
     },
   },
+  connectorPin: {
+    toggleLabel: 'Manage connector tools',
+    tooltip:
+      'See which connector tools are active, switch them off, or focus on one.',
+    trayLabel: 'Connector tools',
+    trayTitle: 'Connector tools for this chat',
+    toggleServer: 'Enable {name}',
+    needsReconnect: 'Reconnect in Settings',
+    focusAction: 'Focus',
+    focusedChip: 'Focused',
+    pinnedHint: 'Only tools from {name} will be used in this conversation.',
+    staleHint:
+      'The focused connector is disconnected or disabled — reconnect it in Settings → Connectors, or remove the focus. Until then all active tools are used.',
+    costHint:
+      "Every active connector adds its tools to each message you send — more tokens and slower responses. Switch off what you're not using.",
+    noEligibleConnectors:
+      'No connectors configured. Connect one in Settings → Connectors first.',
+    unknownConnector: 'Removed connector',
+    unpin: 'Remove focus',
+    dismiss: 'Close',
+    badgeCount: '{count} tools',
+    badgeTooltip:
+      'Connector tools are active on every message — they add tokens and response time. Click to manage.',
+  },
+  toolApprovals: {
+    title: 'Tool approvals',
+    description:
+      "Rules that apply in every conversation: automatically allow or block specific connector tools. You can add tools you haven't been prompted for yet.",
+    actionApprove: 'Always allow',
+    actionReject: 'Always block',
+    scopeServer: 'on {name}',
+    scopeAny: 'Any connector',
+    removeRule: 'Remove rule for {tool}',
+    toolNameLabel: 'Tool name',
+    toolNamePlaceholder: 'Tool name, e.g. create_issue',
+    scopeLabel: 'Connector scope',
+    actionLabel: 'Action',
+    addRule: 'Add rule',
+    rejectPrecedenceNote:
+      'Block rules always win — over allow rules and over any per-conversation auto-approval.',
+    policyAsk: 'Ask',
+    policyAllow: 'Allow',
+    policyBlock: 'Block',
+    policyGroupLabel: 'Approval policy for {tool}',
+    listHint:
+      'Set what happens when the assistant wants to run each tool — in every conversation. Ask is the default; Block always wins.',
+  },
   agentAccess: {
     title: 'Access & Connectors',
     description:
@@ -217,6 +269,15 @@ const mockMessages: Record<string, unknown> = {
     connectorClientSecretHint:
       'Encrypted before it is stored, and never shown again.',
     connectorScopesLabel: 'Scopes (space-separated, optional)',
+    connectorOauthAuthUrlLabel: 'Authorization URL (optional)',
+    connectorOauthTokenUrlLabel: 'Token URL (optional)',
+    connectorOauthRefreshUrlLabel: 'Refresh URL (optional)',
+    connectorOauthEndpointsHint:
+      "Leave the endpoint URLs blank to discover them automatically. Set them for providers that don't support discovery, like NetSuite.",
+    connectorOauthRefreshUrlHint:
+      'Leave blank to refresh against the token URL.',
+    connectorOauthEndpointsPairWarning:
+      'Authorization URL and token URL must be set together (the refresh URL needs both).',
     rulesUnavailableWarning:
       'Access rules could not be loaded from storage. Agent invocation is currently blocked and rules cannot be edited.',
     retry: 'Retry',
