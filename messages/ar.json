@@ -813,7 +813,15 @@
     "addLanguageOption": "إضافة \"{name}\"...",
     "sources": "المصادر",
     "interpreterBadge": "تشغيل الكود",
-    "disableCodeInterpreter": "تعطيل تنفيذ الكود"
+    "disableCodeInterpreter": "تعطيل تنفيذ الكود",
+    "interimSearch": {
+      "title": "تم العثور على عناوين — البحث المتعمق لا يزال جارياً",
+      "hint": "قد يستغرق البحث المتعمق في Bing حتى 90 ثانية. يمكنك الإجابة الآن من بين {count} عنوان تم العثور عليها بالفعل، أو الانتظار حتى تظهر النتيجة المدمجة.",
+      "summarizeNow": "لخّص من العناوين الآن",
+      "sourcesCount": "{count} مصدر",
+      "showAll": "عرض جميع {count} مصدر",
+      "showFewer": "عرض أقل"
+    }
   },
   "sidebar": {
     "collapseSidebar": "طي الشريط الجانبي",
@@ -1181,7 +1189,9 @@
       "freshness_day": "اليوم الماضي",
       "freshness_week": "الأسبوع الماضي",
       "freshness_month": "الشهر الماضي",
-      "freshness_any": "أي وقت"
+      "freshness_any": "أي وقت",
+      "providerCombined": "بحث متعمق مع عناوين مبكرة (Bing + Google News)",
+      "providerCombinedDescription": "يعمل على تشغيل Bing Grounding وGoogle News معاً: تظهر العناوين خلال ثوانٍ بينما يستمر البحث المتعمق على Bing، ويمكنك اختيار الإجابة من العناوين مباشرةً بدلاً من الانتظار. عند انتهاء Bing، يتم دمج مجموعتي النتائج."
     }
   },
   "notFound": {

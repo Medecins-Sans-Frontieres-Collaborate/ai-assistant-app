@@ -925,7 +925,15 @@
     "addLanguageOption": "\"{name}\" ኩናት ኣእቱ...",
     "sources": "ምንጮታት",
     "interpreterBadge": "ኮድ ኣምራ",
-    "disableCodeInterpreter": "ኮድ ምፅሓፍ ምስጢር"
+    "disableCodeInterpreter": "ኮድ ምፅሓፍ ምስጢር",
+    "interimSearch": {
+      "title": "ሓባራት ተረኸቡ — ዝቐጽል ጥርጣር እያ ኣሎ",
+      "hint": "ዝቐረበ ዝሓለፈ ጥርጣር Bing ክሳብ 90 ሰከንድ ይወልድ ይኽእል። ኣሎኹም {count} ሓባራት ኩዚ ኣለዉ ካብኡ ምስማማዕ ትክእሉ ወይ ናይ ትኽክለኛ ውጽኢት ይጸናሑ ተጸበዩ።",
+      "summarizeNow": "ሓጺርነት ካብ ሓባራት ምስማማዕ",
+      "sourcesCount": "{count} መግለጺ",
+      "showAll": "ኩሉ {count} መግለጺ ርኣዩ",
+      "showFewer": "ንእሽቶ ርኣዩ"
+    }
   },
   "transcript": {
     "originalTranscript": "ኦሪጂናል ጽሕፈት",
@@ -1388,7 +1396,9 @@
       "freshness_day": "ኣብ ሕሉፍ መዓልቲ",
       "freshness_week": "ኣብ ሓደ ሰሙና",
       "freshness_month": "ኣብ ወርሒ",
-      "freshness_any": "ኣብኩሉ ጊዜ"
+      "freshness_any": "ኣብኩሉ ጊዜ",
+      "providerCombined": "ዝቐረበ ጥርጣር ምስ ቅድመ ሓባራት (Bing + Google News)",
+      "providerCombinedDescription": "Bing grounding ንእትትዕ ከምኡውን Google News ኣብ ትሕቲ በሃብ፡ ሓባራት ብግዚኡ ይቀመጡ እዮም ዘለዉ እና Bing ብዝቐጸሉ ጥርጣር እያ ኣተወ። ንሓባራት ካብቲ ቅድመ ዝተረኸቡ ብልጽው ትመልሱ ይኽእሉ ወይ ዝዝለለ መልሲ ትጸበዩ ትኽእሉ። Bing እንተኻፈለ ክሳቡ ሓደ ውጽኢት ይተዋሃቦ።"
     }
   },
   "emptyState": {

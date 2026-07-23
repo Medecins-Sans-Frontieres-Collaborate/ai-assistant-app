@@ -792,7 +792,15 @@
     "addLanguageOption": "افزودن «{name}»…",
     "sources": "منابع",
     "interpreterBadge": "اجرای کد",
-    "disableCodeInterpreter": "غیرفعال کردن اجرای کد"
+    "disableCodeInterpreter": "غیرفعال کردن اجرای کد",
+    "interimSearch": {
+      "title": "تیترها پیدا شدند — جستجوی عمیق همچنان در حال اجراست",
+      "hint": "جستجوی عمیق Bing ممکن است تا ۹۰ ثانیه طول بکشد. اکنون با استفاده از {count} تیتر پیدا شده پاسخ دهید یا منتظر نتیجه ادغام‌شده بمانید.",
+      "summarizeNow": "اکنون از تیترها خلاصه‌سازی کن",
+      "sourcesCount": "{count} منبع",
+      "showAll": "نمایش همه {count} منبع",
+      "showFewer": "نمایش کمتر"
+    }
   },
   "sidebar": {
     "collapseSidebar": "بستن نوار کناری",
@@ -1160,7 +1168,9 @@
       "freshness_day": "روز گذشته",
       "freshness_week": "هفته گذشته",
       "freshness_month": "ماه گذشته",
-      "freshness_any": "هر زمان"
+      "freshness_any": "هر زمان",
+      "providerCombined": "جستجوی عمیق با تیترهای اولیه (Bing + Google News)",
+      "providerCombinedDescription": "جستجوی Bing و Google News به طور همزمان اجرا می‌شود: تیترها ظرف چند ثانیه نمایش داده می‌شوند، در حالی که جستجوی عمیق Bing همچنان ادامه دارد و می‌توانید بلافاصله از تیترها پاسخ دهید بدون اینکه منتظر جستجوی طولانی بمانید. پس از اتمام Bing، نتایج هر دو ادغام می‌شوند."
     }
   },
   "notFound": {

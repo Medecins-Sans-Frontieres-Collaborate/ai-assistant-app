@@ -925,7 +925,15 @@
     "addLanguageOption": "Ƙara \"{name}\"…",
     "sources": "Tushen bayanai",
     "interpreterBadge": "Gudanar da lamba",
-    "disableCodeInterpreter": "Kashe gudanar da lamba"
+    "disableCodeInterpreter": "Kashe gudanar da lamba",
+    "interimSearch": {
+      "title": "An samo kanun labarai — bincike mai zurfi yana ci gaba",
+      "hint": "Bincike mai zurfi na Bing zai iya ɗaukar har zuwa daƙiƙa 90. Amsa yanzu daga cikin kanun labarai {count} da aka riga aka samo, ko jira sakamakon da aka haɗa.",
+      "summarizeNow": "Takaita daga kanun labarai yanzu",
+      "sourcesCount": "Madauki {count}",
+      "showAll": "Nuna duk madauki {count}",
+      "showFewer": "Nuna kaɗan"
+    }
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",
@@ -1388,7 +1396,9 @@
       "freshness_day": "Rana da ta gabata",
       "freshness_week": "Makon da ya wuce",
       "freshness_month": "Watan da ya wuce",
-      "freshness_any": "Kowane lokaci"
+      "freshness_any": "Kowane lokaci",
+      "providerCombined": "Bincike mai zurfi da kanun labarai na farko (Bing + Google News)",
+      "providerCombinedDescription": "Yana gudanar da Bing grounding da Google News tare: kanun labarai suna bayyana cikin daƙiƙu yayin da bincike mai zurfi na Bing ke ci gaba. Kuna iya zaɓar amsa daga kanun labarai cikin gaggawa maimakon jiran binciken mai jinkiri. Idan Bing ya gama, ana haɗa sakamakon biyu."
     }
   },
   "emptyState": {

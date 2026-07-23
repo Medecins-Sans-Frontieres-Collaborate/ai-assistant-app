@@ -842,7 +842,15 @@
     "addLanguageOption": "הוסף \"{name}\"…",
     "sources": "מקורות",
     "interpreterBadge": "הרץ קוד",
-    "disableCodeInterpreter": "השבת הרצת קוד"
+    "disableCodeInterpreter": "השבת הרצת קוד",
+    "interimSearch": {
+      "title": "נמצאו כותרות — חיפוש מעמיק עדיין מתבצע",
+      "hint": "החיפוש המעמיק ב-Bing עשוי להימשך עד 90 שניות. ניתן להשיב כעת מתוך {count} הכותרות שכבר נמצאו, או להמתין לתוצאה המשולבת.",
+      "summarizeNow": "סכם מתוך כותרות כעת",
+      "sourcesCount": "{count} מקורות",
+      "showAll": "הצג את כל {count} המקורות",
+      "showFewer": "הצג פחות"
+    }
   },
   "sidebar": {
     "collapseSidebar": "כיווץ סרגל צד",
@@ -1210,7 +1218,9 @@
       "freshness_day": "יממה אחרונה",
       "freshness_week": "שבוע אחרון",
       "freshness_month": "חודש אחרון",
-      "freshness_any": "בכל זמן"
+      "freshness_any": "בכל זמן",
+      "providerCombined": "חיפוש מעמיק עם כותרות מוקדמות (Bing + Google News)",
+      "providerCombinedDescription": "מפעיל חיפוש Bing ו-Google News יחד: כותרות מופיעות תוך שניות בזמן שהחיפוש המעמיק ב-Bing ממשיך, ותוכלו לבחור להשיב מהכותרות מיד במקום להמתין לחיפוש האיטי. כאשר Bing מסיים, שתי קבוצות התוצאות מאוחדות."
     }
   },
   "notFound": {

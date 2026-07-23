@@ -788,7 +788,15 @@
     "addLanguageOption": "Aggiungi \"{name}\"…",
     "sources": "Fonti",
     "interpreterBadge": "Esegui codice",
-    "disableCodeInterpreter": "Disattiva esecuzione codice"
+    "disableCodeInterpreter": "Disattiva esecuzione codice",
+    "interimSearch": {
+      "title": "Titoli trovati — ricerca approfondita ancora in corso",
+      "hint": "La ricerca approfondita su Bing può richiedere fino a 90 secondi. Rispondi ora utilizzando i {count} titoli già trovati oppure attendi il risultato finale unificato.",
+      "summarizeNow": "Riepiloga dai titoli ora",
+      "sourcesCount": "{count} fonti",
+      "showAll": "Mostra tutte le {count} fonti",
+      "showFewer": "Mostra meno"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Comprimi barra laterale",
@@ -1210,7 +1218,9 @@
       "freshness_day": "Ultimo giorno",
       "freshness_week": "Ultima settimana",
       "freshness_month": "Ultimo mese",
-      "freshness_any": "Qualsiasi momento"
+      "freshness_any": "Qualsiasi momento",
+      "providerCombined": "Ricerca approfondita con titoli iniziali (Bing + Google News)",
+      "providerCombinedDescription": "Esegue Bing grounding e Google News insieme: i titoli appaiono entro pochi secondi mentre la ricerca approfondita Bing continua e puoi scegliere di rispondere subito dai titoli invece di attendere la ricerca completa. Quando Bing termina, entrambi i set di risultati vengono unificati."
     }
   },
   "notFound": {

@@ -925,7 +925,15 @@
     "addLanguageOption": "\"{name}\" اضافه کړئ...",
     "sources": "سرچینې",
     "interpreterBadge": "کوډ وچلوئ",
-    "disableCodeInterpreter": "د کوډ اجرا کول غیر فعال کړئ"
+    "disableCodeInterpreter": "د کوډ اجرا کول غیر فعال کړئ",
+    "interimSearch": {
+      "title": "سرلیکونه موندل شوي — ژوره لټون لا روانه ده",
+      "hint": "ژور Bing لټون تر ۹۰ ثانیو پورې وخت نیولی شي. اوس د {count} موندل شویو سرلیکونو پر بنسټ ځواب ورکړئ، یا د یوځای شوې پایلې لپاره انتظار وکړئ.",
+      "summarizeNow": "اوس د سرلیکونو لنډیز وکړئ",
+      "sourcesCount": "{count} سرچېنې",
+      "showAll": "ټولې {count} سرچېنې وښایئ",
+      "showFewer": "کمې وښایئ"
+    }
   },
   "transcript": {
     "originalTranscript": "اصلي لیک",
@@ -1388,7 +1396,9 @@
       "freshness_day": "تېره ورځ",
       "freshness_week": "تیره اونۍ",
       "freshness_month": "تیره میاشت",
-      "freshness_any": "هر وخت"
+      "freshness_any": "هر وخت",
+      "providerCombined": "ژور لټون د لومړنیو سرلیکونو سره (Bing + Google News)",
+      "providerCombinedDescription": "Bing grounding او Google News یو ځای چلوئ: سرلیکونه په څو ثانیو کې ښکاري، پداسې حال کې چې ژور Bing لټون دوام لري، او تاسو کولی شئ سمدلاسه د سرلیکونو څخه ځواب ورکړئ، پرځای یې چې اوږده لټون ته منتظر پاتې شئ. کله چې Bing بشپړ شي، دواړه پایلې یوځای کېږي."
     }
   },
   "emptyState": {

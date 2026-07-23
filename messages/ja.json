@@ -867,7 +867,15 @@
     "addLanguageOption": "「{name}」を追加…",
     "sources": "出典",
     "interpreterBadge": "コード実行",
-    "disableCodeInterpreter": "コード実行を無効化"
+    "disableCodeInterpreter": "コード実行を無効化",
+    "interimSearch": {
+      "title": "見出しが見つかりました — 詳細検索は進行中です",
+      "hint": "詳細なBing検索には最大90秒かかることがあります。すでに見つかった{count}件の見出しから今すぐ回答するか、統合結果をお待ちください。",
+      "summarizeNow": "今すぐ見出しから要約する",
+      "sourcesCount": "{count}件の情報源",
+      "showAll": "すべての{count}件の情報源を表示",
+      "showFewer": "表示を減らす"
+    }
   },
   "sidebar": {
     "collapseSidebar": "サイドバーを折りたたむ",
@@ -1235,7 +1243,9 @@
       "freshness_day": "過去1日",
       "freshness_week": "過去1週間",
       "freshness_month": "過去1か月",
-      "freshness_any": "指定なし"
+      "freshness_any": "指定なし",
+      "providerCombined": "早期見出し付きディープ検索（Bing + Googleニュース）",
+      "providerCombinedDescription": "BingのグラウンディングとGoogleニュースを同時に実行します：数秒で見出しが表示され、その間もBingの詳細検索が継続します。見出しからすぐに回答することも、詳細検索の完了を待つこともできます。Bingの検索が終了した後、両方の結果が統合されます。"
     }
   },
   "notFound": {

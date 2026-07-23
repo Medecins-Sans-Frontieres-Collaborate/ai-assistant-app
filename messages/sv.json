@@ -867,7 +867,15 @@
     "addLanguageOption": "Lägg till \"{name}\"…",
     "sources": "Källor",
     "interpreterBadge": "Kör kod",
-    "disableCodeInterpreter": "Inaktivera kodkörning"
+    "disableCodeInterpreter": "Inaktivera kodkörning",
+    "interimSearch": {
+      "title": "Rubriker hittade – djupsökning pågår fortfarande",
+      "hint": "Den djupa Bing-sökningen kan ta upp till 90 sekunder. Svara nu utifrån de {count} rubriker som redan hittats, eller vänta på det sammanslagna resultatet.",
+      "summarizeNow": "Sammanfatta från rubriker nu",
+      "sourcesCount": "{count} källor",
+      "showAll": "Visa alla {count} källor",
+      "showFewer": "Visa färre"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",
@@ -1235,7 +1243,9 @@
       "freshness_day": "Senaste dygnet",
       "freshness_week": "Senaste veckan",
       "freshness_month": "Senaste månaden",
-      "freshness_any": "När som helst"
+      "freshness_any": "När som helst",
+      "providerCombined": "Djupsökning med tidiga rubriker (Bing + Google News)",
+      "providerCombinedDescription": "Använder Bing grounding och Google News tillsammans: rubriker visas inom några sekunder medan den djupa Bing-sökningen fortsätter, och du kan välja att svara direkt utifrån rubrikerna istället för att vänta på den långsamma sökningen. När Bing är klar slås båda resultat ihop."
     }
   },
   "notFound": {

@@ -925,7 +925,15 @@
     "addLanguageOption": "Ṣàfikún \"{name}\"…",
     "sources": "Àwọn orísun",
     "interpreterBadge": "Ṣiṣẹ koodu",
-    "disableCodeInterpreter": "Mu ṣiṣe koodu ṣiṣẹ silẹ"
+    "disableCodeInterpreter": "Mu ṣiṣe koodu ṣiṣẹ silẹ",
+    "interimSearch": {
+      "title": "Àkọ́lé tí a rí — àwárí jinlẹ̀ ṣi ń lọ",
+      "hint": "Àwárí Bing jinlẹ̀ lè gba tó ìsẹ́jú 90. Dáhùn báyìí láti inú àkọ́lé {count} tí a ti rí, tàbí dúró de abajade àpapọ̀.",
+      "summarizeNow": "Ṣàkótán láti inú àwọn àkọ́lé nísinsin yìí",
+      "sourcesCount": "Àwòkọ́ṣe {count}",
+      "showAll": "Fi gbogbo àwòkọ́ṣe {count} hàn",
+      "showFewer": "Fi díẹ̀ síi hàn"
+    }
   },
   "transcript": {
     "originalTranscript": "Ìkọsílẹ̀ Àkọ́kọ́",
@@ -1388,7 +1396,9 @@
       "freshness_day": "Ọjọ to kọja",
       "freshness_week": "Ọsẹ to kọja",
       "freshness_month": "Osù to kọja",
-      "freshness_any": "Eyikéyì"
+      "freshness_any": "Eyikéyì",
+      "providerCombined": "Àwárí jinlẹ̀ pẹ̀lú àkọ́lé tẹ́lẹ̀ (Bing + Google News)",
+      "providerCombinedDescription": "O n ṣiṣẹ́ Bing grounding àti Google News pọ̀: àwọn àkọ́lé máa hàn lọ́sẹ̀kẹsẹ̀ nígbà tí àwárí Bing jinlẹ̀ ṣi ń ṣiṣẹ́, o sì lè yan láti dáhùn láti inú àwọn àkọ́lé lẹ́sẹ̀kẹsẹ̀ dipo kíkà àwárí pẹ́. Nígbà tí Bing bá parí, wọn máa darapọ̀ abajade méjèèjì pọ̀."
     }
   },
   "emptyState": {

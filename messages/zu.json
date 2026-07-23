@@ -925,7 +925,15 @@
     "addLanguageOption": "Engeza \"{name}\"...",
     "sources": "Imithombo",
     "interpreterBadge": "Sebenzisa ikhodi",
-    "disableCodeInterpreter": "Khubaza ukusebenza kwekhodi"
+    "disableCodeInterpreter": "Khubaza ukusebenza kwekhodi",
+    "interimSearch": {
+      "title": "Izihloko ezitholakele — usesho olujulile lusaqhubeka",
+      "hint": "Usesho olujulile lwe-Bing lungathatha kufika kumasekhondi angu-90. Phendula manje kusuka ezihlokweni ezi-{count} ezitholakele, noma ulinde umphumela ohlanganisiwe.",
+      "summarizeNow": "Fingqa ezihlokweni manje",
+      "sourcesCount": "{count} imithombo",
+      "showAll": "Bonisa yonke imithombo engu-{count}",
+      "showFewer": "Bonisa okumbalwa"
+    }
   },
   "transcript": {
     "originalTranscript": "Okubhaliwe Kokuqala",
@@ -1388,7 +1396,9 @@
       "freshness_day": "Usuku olwedlule",
       "freshness_week": "Iviki elidlule",
       "freshness_month": "Inyanga edlule",
-      "freshness_any": "Nganoma yisiphi isikhathi"
+      "freshness_any": "Nganoma yisiphi isikhathi",
+      "providerCombined": "Usesho olujulile nezihloko zokuqala (Bing + Google News)",
+      "providerCombinedDescription": "Isebenzisa i-Bing grounding kanye ne-Google News ngesikhathi esisodwa: izihloko zivele kungakapheli mzuzwana usesho olujulile lwe-Bing luqhubeka, futhi ungakhetha ukuphendula ezihlokweni ngokushesha kunokulinda. Uma i-Bing isiqedile, imiphumela yomibili iyahlanganiswa."
     }
   },
   "emptyState": {

@@ -867,7 +867,15 @@
     "addLanguageOption": "Přidat „{name}“…",
     "sources": "Zdroje",
     "interpreterBadge": "Spustit kód",
-    "disableCodeInterpreter": "Zakázat spouštění kódu"
+    "disableCodeInterpreter": "Zakázat spouštění kódu",
+    "interimSearch": {
+      "title": "Nalezeny titulky — podrobný průzkum stále probíhá",
+      "hint": "Hloubkový Bing vyhledávač může trvat až 90 sekund. Odpovězte nyní z již nalezených {count} titulků, nebo počkejte na sloučený výsledek.",
+      "summarizeNow": "Shrnout z titulků nyní",
+      "sourcesCount": "{count} zdrojů",
+      "showAll": "Zobrazit všech {count} zdrojů",
+      "showFewer": "Zobrazit méně"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",
@@ -1235,7 +1243,9 @@
       "freshness_day": "Poslední den",
       "freshness_week": "Poslední týden",
       "freshness_month": "Poslední měsíc",
-      "freshness_any": "Kdykoli"
+      "freshness_any": "Kdykoli",
+      "providerCombined": "Hloubkové hledání s rychlými titulky (Bing + Google News)",
+      "providerCombinedDescription": "Spouští Bing grounding a Google News současně: titulky se objeví během několika sekund, zatímco hloubkové vyhledávání Bing dále pracuje, a můžete se rozhodnout odpovědět rovnou z titulků místo čekání na pomalejší hledání. Když Bing dokončí, oba výsledky se sloučí."
     }
   },
   "notFound": {

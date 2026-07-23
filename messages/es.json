@@ -813,7 +813,15 @@
     "addLanguageOption": "Agregar \"{name}\"…",
     "sources": "Fuentes",
     "interpreterBadge": "Ejecutar código",
-    "disableCodeInterpreter": "Desactivar ejecución de código"
+    "disableCodeInterpreter": "Desactivar ejecución de código",
+    "interimSearch": {
+      "title": "Titulares encontrados: búsqueda profunda en curso",
+      "hint": "La búsqueda profunda en Bing puede tardar hasta 90 segundos. Responda ahora con los {count} titulares ya encontrados o espere al resultado combinado.",
+      "summarizeNow": "Resumir ahora a partir de los titulares",
+      "sourcesCount": "{count} fuentes",
+      "showAll": "Mostrar las {count} fuentes",
+      "showFewer": "Mostrar menos"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Contraer barra lateral",
@@ -1235,7 +1243,9 @@
       "freshness_day": "Último día",
       "freshness_week": "Última semana",
       "freshness_month": "Último mes",
-      "freshness_any": "Cualquier fecha"
+      "freshness_any": "Cualquier fecha",
+      "providerCombined": "Búsqueda profunda con titulares tempranos (Bing + Google News)",
+      "providerCombinedDescription": "Ejecuta Bing grounding y Google News juntos: los titulares aparecen en segundos mientras la búsqueda profunda de Bing sigue en curso, y puede elegir responder desde los titulares de inmediato en vez de esperar la búsqueda completa. Cuando Bing termina, ambos conjuntos de resultados se combinan."
     }
   },
   "notFound": {

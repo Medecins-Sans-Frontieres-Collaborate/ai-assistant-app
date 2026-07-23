@@ -813,7 +813,15 @@
     "addLanguageOption": "Adicionar \"{name}\"…",
     "sources": "Fontes",
     "interpreterBadge": "Executar código",
-    "disableCodeInterpreter": "Desativar execução de código"
+    "disableCodeInterpreter": "Desativar execução de código",
+    "interimSearch": {
+      "title": "Manchetes encontradas — busca profunda ainda em andamento",
+      "hint": "A busca profunda no Bing pode levar até 90 segundos. Responda agora a partir das {count} manchetes já encontradas ou aguarde o resultado consolidado.",
+      "summarizeNow": "Resumir a partir das manchetes agora",
+      "sourcesCount": "{count} fontes",
+      "showAll": "Mostrar todas as {count} fontes",
+      "showFewer": "Mostrar menos"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Recolher barra lateral",
@@ -1235,7 +1243,9 @@
       "freshness_day": "Último dia",
       "freshness_week": "Última semana",
       "freshness_month": "Último mês",
-      "freshness_any": "Qualquer período"
+      "freshness_any": "Qualquer período",
+      "providerCombined": "Busca profunda com manchetes antecipadas (Bing + Google News)",
+      "providerCombinedDescription": "Executa Bing grounding e Google News juntos: manchetes aparecem em segundos enquanto a busca profunda do Bing continua, permitindo responder pelas manchetes imediatamente sem precisar esperar a busca demorada. Quando o Bing termina, ambos os conjuntos de resultados são unificados."
     }
   },
   "notFound": {

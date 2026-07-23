@@ -868,7 +868,15 @@
     "addLanguageOption": "Thêm \"{name}\"…",
     "sources": "Nguồn",
     "interpreterBadge": "Chạy mã",
-    "disableCodeInterpreter": "Tắt thực thi mã"
+    "disableCodeInterpreter": "Tắt thực thi mã",
+    "interimSearch": {
+      "title": "Đã tìm thấy tiêu đề — tìm kiếm sâu vẫn đang chạy",
+      "hint": "Tìm kiếm sâu với Bing có thể mất đến 90 giây. Bạn có thể trả lời ngay từ {count} tiêu đề đã tìm thấy, hoặc chờ kết quả đã hợp nhất.",
+      "summarizeNow": "Tóm tắt từ các tiêu đề ngay",
+      "sourcesCount": "{count} nguồn",
+      "showAll": "Hiển thị tất cả {count} nguồn",
+      "showFewer": "Hiển thị ít hơn"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",
@@ -1236,7 +1244,9 @@
       "freshness_day": "Trong ngày qua",
       "freshness_week": "Trong tuần qua",
       "freshness_month": "Trong tháng qua",
-      "freshness_any": "Bất kỳ thời gian nào"
+      "freshness_any": "Bất kỳ thời gian nào",
+      "providerCombined": "Tìm kiếm sâu với tiêu đề sớm (Bing + Google News)",
+      "providerCombinedDescription": "Chạy Bing grounding và Google News cùng lúc: tiêu đề hiển thị sau vài giây trong khi tìm kiếm sâu với Bing vẫn tiếp tục, và bạn có thể chọn trả lời ngay từ các tiêu đề thay vì đợi tìm kiếm lâu. Khi Bing hoàn thành, hai bộ kết quả sẽ được hợp nhất."
     }
   },
   "notFound": {

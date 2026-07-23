@@ -925,7 +925,15 @@
     "addLanguageOption": "Dodaj \"{name}\"…",
     "sources": "Izvori",
     "interpreterBadge": "Pokreni kod",
-    "disableCodeInterpreter": "Onemogući izvršavanje koda"
+    "disableCodeInterpreter": "Onemogući izvršavanje koda",
+    "interimSearch": {
+      "title": "Pronađeni naslovi — dubinsko pretraga je još u toku",
+      "hint": "Dubinsko Bing pretraga može trajati do 90 sekundi. Odgovorite sada na osnovu već pronađenih {count} naslova ili sačekajte objedinjeni rezultat.",
+      "summarizeNow": "Sažmi iz trenutno pronađenih naslova",
+      "sourcesCount": "{count} izvora",
+      "showAll": "Prikaži svih {count} izvora",
+      "showFewer": "Prikaži manje"
+    }
   },
   "transcript": {
     "originalTranscript": "Оригинални транскрипт",
@@ -1388,7 +1396,9 @@
       "freshness_day": "Poslednji dan",
       "freshness_week": "Poslednja nedelja",
       "freshness_month": "Poslednji mesec",
-      "freshness_any": "Bilo kada"
+      "freshness_any": "Bilo kada",
+      "providerCombined": "Dubinsko pretraga sa ranim naslovima (Bing + Google News)",
+      "providerCombinedDescription": "Pokreće Bing grounding i Google News zajedno: naslovi se pojavljuju za nekoliko sekundi dok dubinska Bing pretraga i dalje traje, i možete odmah odgovoriti na osnovu naslova umesto da čekate sporiju pretragu. Kada Bing završi, oba skupa rezultata se spajaju."
     }
   },
   "emptyState": {

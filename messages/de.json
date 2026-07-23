@@ -813,7 +813,15 @@
     "addLanguageOption": "„{name}“ hinzufügen…",
     "sources": "Quellen",
     "interpreterBadge": "Code ausführen",
-    "disableCodeInterpreter": "Codeausführung deaktivieren"
+    "disableCodeInterpreter": "Codeausführung deaktivieren",
+    "interimSearch": {
+      "title": "Gefundene Schlagzeilen — Tiefensuche läuft noch",
+      "hint": "Die tiefe Bing-Suche kann bis zu 90 Sekunden dauern. Antworten Sie jetzt anhand der bereits gefundenen {count} Schlagzeilen oder warten Sie auf das zusammengeführte Ergebnis.",
+      "summarizeNow": "Jetzt aus Schlagzeilen zusammenfassen",
+      "sourcesCount": "{count} Quellen",
+      "showAll": "Alle {count} Quellen anzeigen",
+      "showFewer": "Weniger anzeigen"
+    }
   },
   "sidebar": {
     "collapseSidebar": "Seitenleiste einklappen",
@@ -1235,7 +1243,9 @@
       "freshness_day": "Letzter Tag",
       "freshness_week": "Letzte Woche",
       "freshness_month": "Letzter Monat",
-      "freshness_any": "Jeder Zeitpunkt"
+      "freshness_any": "Jeder Zeitpunkt",
+      "providerCombined": "Tiefensuche mit frühen Schlagzeilen (Bing + Google News)",
+      "providerCombinedDescription": "Führt Bing Grounding und Google News gemeinsam aus: Schlagzeilen erscheinen innerhalb von Sekunden, während die tiefgehende Bing-Suche weiterläuft. Sie können sofort aus den Schlagzeilen antworten oder auf die vollständigen Ergebnisse warten. Nach Abschluss werden beide Ergebnismengen zusammengeführt."
     }
   },
   "emptyState": {

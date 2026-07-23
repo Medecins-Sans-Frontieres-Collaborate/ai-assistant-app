@@ -925,7 +925,15 @@
     "addLanguageOption": "\"{name}\" زیاد بکە…",
     "sources": "سەرچاوەکان",
     "interpreterBadge": "کۆدەکە بەکاربهێنە",
-    "disableCodeInterpreter": "بەکارھێنانی کۆد ناچالاک بکە"
+    "disableCodeInterpreter": "بەکارھێنانی کۆد ناچالاک بکە",
+    "interimSearch": {
+      "title": "سەرلاکێن دۆزرابوون — گەڕانی ژەری ھەنووکە جارێدە دەچێت",
+      "hint": "گەڕانی ژەری Bing دەتوانێت ھەتا ٩٠ چرکە بکات. ئێستا دەتوانیت وەڵام بدەیت لەسەر {count} سەرلاکێن دۆزرابوو، یان چاوەڕوانی ئەنجامی یەکگرتوو ببە.",
+      "summarizeNow": "ئێستا پوختە بکە لە سەرلاکەکان",
+      "sourcesCount": "{count} سەرچاوە",
+      "showAll": "هەموو {count} سەرچاوە ڕابنێ",
+      "showFewer": "کەمتر پیشان بدە"
+    }
   },
   "transcript": {
     "originalTranscript": "Transkrîpta Eslî",
@@ -1388,7 +1396,9 @@
       "freshness_day": "رۆژی رابردوو",
       "freshness_week": "هەفتەی رابردوو",
       "freshness_month": "مانگی رابردوو",
-      "freshness_any": "هەر کاتێک"
+      "freshness_any": "هەر کاتێک",
+      "providerCombined": "گەڕانی ژەری بە سەرلاکێن زوو (Bing + Google News)",
+      "providerCombinedDescription": "Bing grounding و Google News هاور دەپەرێنن: سەرلاکەکان لە هەندێک چرکە دا دەرئەکەون هەروەها گەڕانی ژەری Bing دەوام دەبێت، و دەتوانیت بەپێی ئەو سەرلاکە یەکەمە وەڵام بدەیت بەھوی چاوەڕوانی گەڕانی کەمخراپ نەبیت. کە Bing تەواو دەبێت، ئەنجامەکان یەکدەکرێن."
     }
   },
   "emptyState": {

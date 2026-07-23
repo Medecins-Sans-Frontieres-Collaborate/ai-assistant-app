@@ -867,7 +867,15 @@
     "addLanguageOption": "\"{name}\" जोड़ें…",
     "sources": "स्रोत",
     "interpreterBadge": "कोड चलाएँ",
-    "disableCodeInterpreter": "कोड निष्पादन अक्षम करें"
+    "disableCodeInterpreter": "कोड निष्पादन अक्षम करें",
+    "interimSearch": {
+      "title": "मुख्य समाचार मिले — गहन खोज जारी है",
+      "hint": "गहन Bing खोज में 90 सेकंड तक लग सकते हैं। अभी तक मिले {count} मुख्य समाचार से उत्तर दें, या संयुक्त परिणाम की प्रतीक्षा करें।",
+      "summarizeNow": "अब मुख्य समाचारों से संक्षिप्त करें",
+      "sourcesCount": "{count} स्रोत",
+      "showAll": "सभी {count} स्रोत दिखाएं",
+      "showFewer": "कम दिखाएं"
+    }
   },
   "sidebar": {
     "collapseSidebar": "साइडबार संक्षिप्त करें",
@@ -1235,7 +1243,9 @@
       "freshness_day": "पिछला दिन",
       "freshness_week": "पिछला हफ्ता",
       "freshness_month": "पिछला माह",
-      "freshness_any": "किसी भी समय"
+      "freshness_any": "किसी भी समय",
+      "providerCombined": "गहन खोज प्रारंभिक मुख्य समाचारों के साथ (Bing + Google News)",
+      "providerCombinedDescription": "Bing ग्राउंडिंग और Google News एक साथ चलती है: कुछ सेकंड में मुख्य समाचार दिखाई देते हैं, जबकि गहन Bing खोज चालू रहती है। आप चाहे तो तुरंत मुख्य समाचारों से उत्तर चुन सकते हैं, या धीमी खोज के समाप्त होने की प्रतीक्षा कर सकते हैं। Bing पूरी होने पर दोनों परिणाम मिल जाते हैं।"
     }
   },
   "notFound": {

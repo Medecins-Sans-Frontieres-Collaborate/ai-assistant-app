@@ -925,7 +925,15 @@
     "addLanguageOption": "Ku dar \"{name}\"…",
     "sources": "Xigashooyin",
     "interpreterBadge": "Orod koodhka",
-    "disableCodeInterpreter": "Dami fulinta koodhka"
+    "disableCodeInterpreter": "Dami fulinta koodhka",
+    "interimSearch": {
+      "title": "Cinwaanada waa la helay — raadinta qoto dheer wali way socotaa",
+      "hint": "Raadinta qoto dheer ee Bing waxay qaadan kartaa ilaa 90 ilbiriqsi. Ka jawaab hadda {count} cinwaan ee hadda la helay, ama sug natiijada la isku daray.",
+      "summarizeNow": "Soo koob cinwaanada hadda",
+      "sourcesCount": "{count} ilo",
+      "showAll": "Muuji dhammaan {count} ilo",
+      "showFewer": "Muuji wax ka yar"
+    }
   },
   "transcript": {
     "originalTranscript": "Qoraalka Aslka ah",
@@ -1388,7 +1396,9 @@
       "freshness_day": "Maalintii la soo dhaafay",
       "freshness_week": "Toddobaadkii la soo dhaafay",
       "freshness_month": "Bishii la soo dhaafay",
-      "freshness_any": "Waqti kasta"
+      "freshness_any": "Waqti kasta",
+      "providerCombined": "Raadin qoto dheer oo leh cinwaan hore (Bing + Google News)",
+      "providerCombinedDescription": "Waxay isku xireysaa Bing iyo Google News: cinwaanada waxay soo muuqanayaan dhowr ilbiriqsi gudaheed iyadoo raadinta qoto dheer ee Bing ay sii socoto, waana aad ka jawaabi kartaa cinwaanada isla markiiba halkii aad sugi lahayd raadinta gaabiska ah. Marka Bing ay dhamaato, natiijooyinka labaduba waa la isku daraa."
     }
   },
   "emptyState": {

@@ -784,7 +784,15 @@
     "addLanguageOption": "เพิ่ม \"{name}\"…",
     "sources": "แหล่งที่มา",
     "interpreterBadge": "รันโค้ด",
-    "disableCodeInterpreter": "ปิดการรันโค้ด"
+    "disableCodeInterpreter": "ปิดการรันโค้ด",
+    "interimSearch": {
+      "title": "พบพาดหัวข่าวแล้ว — กำลังค้นหาเชิงลึกต่อไป",
+      "hint": "การค้นหาเชิงลึกของ Bing อาจใช้เวลาสูงสุด 90 วินาที ตอบตอนนี้จาก {count} พาดหัวข่าวที่พบแล้ว หรือรอผลลัพธ์ที่รวมทุกอย่าง",
+      "summarizeNow": "สรุปจากพาดหัวข่าวทันที",
+      "sourcesCount": "{count} แหล่งที่มา",
+      "showAll": "แสดงแหล่งที่มาทั้งหมด {count} รายการ",
+      "showFewer": "แสดงน้อยลง"
+    }
   },
   "sidebar": {
     "collapseSidebar": "ยุบแถบด้านข้าง",
@@ -1152,7 +1160,9 @@
       "freshness_day": "ภายใน 1 วัน",
       "freshness_week": "ภายใน 1 สัปดาห์",
       "freshness_month": "ภายใน 1 เดือน",
-      "freshness_any": "ทุกเวลา"
+      "freshness_any": "ทุกเวลา",
+      "providerCombined": "ค้นหาเชิงลึกพร้อมพาดหัวข่าวแรกเริ่ม (Bing + Google News)",
+      "providerCombinedDescription": "ดำเนินการ Bing grounding และ Google News พร้อมกัน: พาดหัวข่าวจะปรากฏในไม่กี่วินาทีขณะที่การค้นหาเชิงลึกของ Bing ยังทำงานอยู่ โดยเลือกตอบจากพาดหัวข่าวได้ทันทีโดยไม่ต้องรอการค้นหาที่ช้า เมื่อ Bing เสร็จ ผลลัพธ์ทั้งสองชุดจะถูกรวมกัน"
     }
   },
   "notFound": {

@@ -925,7 +925,15 @@
     "addLanguageOption": "Onjezani \"{name}\"…",
     "sources": "Zotengera",
     "interpreterBadge": "Yendetsani code",
-    "disableCodeInterpreter": "Letsani kuyendetsa code"
+    "disableCodeInterpreter": "Letsani kuyendetsa code",
+    "interimSearch": {
+      "title": "Mutuwu apezeka — kusaka kozama kukupitilira",
+      "hint": "Kusaka kozama kwa Bing kungatenge mpaka mphindi 90. Muyankhe tsopano kuchokera ku {count} mitu yomwe yapezeka kale, kapena dikirani zotsatira zomwe zingaphatikizidwe.",
+      "summarizeNow": "Fotokozani kuchokera pa mitu tsopano",
+      "sourcesCount": "{count} gwero",
+      "showAll": "Onetsani {count} gwero zonse",
+      "showFewer": "Onetsani zochepa"
+    }
   },
   "transcript": {
     "originalTranscript": "Zolemba Zoyambirira",
@@ -1388,7 +1396,9 @@
       "freshness_day": "Tsiku laposachedwa",
       "freshness_week": "Sabata yatha",
       "freshness_month": "Mwezi watha",
-      "freshness_any": "Nthawi iliyonse"
+      "freshness_any": "Nthawi iliyonse",
+      "providerCombined": "Kusaka kozama ndi mitu yoyamba (Bing + Google News)",
+      "providerCombinedDescription": "Imagwiritsa ntchito Bing grounding ndi Google News limodzi: mitu imawonekera mkati mwa masekondi pamene kusaka kwa Bing kukupitilira, ndipo mutha kusankha kuyankha kuchokera pa mitu yapezeka nthawi yomweyo osadikira kusaka kutha. Bing akamaliza, zotsatira zonse zimaphatikizidwa."
     }
   },
   "emptyState": {
