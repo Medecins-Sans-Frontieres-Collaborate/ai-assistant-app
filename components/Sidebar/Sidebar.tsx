@@ -110,6 +110,7 @@ export const Sidebar = memo(function Sidebar() {
     temperature,
     systemPrompt,
     defaultSearchMode,
+    defaultInterpreterMode,
   } = useSettings();
 
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
@@ -285,6 +286,7 @@ export const Sidebar = memo(function Sidebar() {
       temperature: temperature || 0.5,
       folderId: null,
       defaultSearchMode: searchMode, // Use model-appropriate search mode
+      defaultInterpreterMode, // Settings default (INTELLIGENT unless the user turned it off)
       bot: botId || undefined, // Set bot ID for RAG-enabled organization agents
     };
 
