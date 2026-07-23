@@ -735,6 +735,7 @@ describe('settingsStore migration (v46 → v47)', () => {
     expect(result.webSearchOptions).toEqual({
       resultCount: 12,
       freshness: 'week',
+      provider: 'auto',
     });
 
     const repaired = migrate(
@@ -744,6 +745,56 @@ describe('settingsStore migration (v46 → v47)', () => {
     expect(repaired.webSearchOptions).toEqual({
       resultCount: 15,
       freshness: 'auto',
+      provider: 'auto',
     });
+  });
+});
+
+describe('settingsStore migration (v47 → v48)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills the provider field on existing options', () => {
+    const result = migrate(
+      { webSearchOptions: { resultCount: 10, freshness: 'day' } },
+      47,
+    ) as Record<string, unknown>;
+
+    expect(result.webSearchOptions).toEqual({
+      resultCount: 10,
+      freshness: 'day',
+      provider: 'auto',
+    });
+  });
+
+  it('keeps a valid persisted provider and repairs an invalid one', () => {
+    for (const valid of ['google-news', 'bing-agent']) {
+      const kept = migrate(
+        {
+          webSearchOptions: {
+            resultCount: 8,
+            freshness: 'auto',
+            provider: valid,
+          },
+        },
+        47,
+      ) as Record<string, unknown>;
+      expect((kept.webSearchOptions as Record<string, unknown>).provider).toBe(
+        valid,
+      );
+    }
+
+    const repaired = migrate(
+      {
+        webSearchOptions: {
+          resultCount: 8,
+          freshness: 'auto',
+          provider: 'altavista',
+        },
+      },
+      47,
+    ) as Record<string, unknown>;
+    expect(
+      (repaired.webSearchOptions as Record<string, unknown>).provider,
+    ).toBe('auto');
   });
 });
