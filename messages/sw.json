@@ -787,7 +787,13 @@
         "transformingTable": "Inabadilisha jedwali...",
         "findingLocations": "Inatambua maeneo...",
         "updatingMap": "Inasasisha ramani..."
-      }
+      },
+      "searchingWebFor": "Inatafuta: “{query}”…",
+      "searchingWebForMultiple": "Inatafuta mada {count}: “{query}”…",
+      "readingCitedSources": "Inasoma makala {count} zilizotajwa awali…",
+      "planningSteps": "Inapanga hatua…",
+      "planStep": "Hatua {current}/{total}: {description}",
+      "planStepRetry": "Hatua {current}/{total} (rudia): {description}"
     },
     "toolSummary": {
       "usedTools": "Imetumika {count, plural, one {# zana} other {# zana}}",
@@ -797,7 +803,8 @@
       "statusAutoDenied": "Imekataliwa moja kwa moja",
       "statusFailed": "Imeshindwa",
       "statusIncomplete": "Haijakamilika",
-      "viaService": "kupitia {service}"
+      "viaService": "kupitia {service}",
+      "downloadFile": "Pakua"
     },
     "consent": {
       "authorizeRequired": "Uidhinishaji unahitajika",
@@ -839,7 +846,15 @@
       "approvedState": "Imekubaliwa — wakala ameendelea",
       "deniedState": "Imekataliwa",
       "submittingApproval": "Inakubali na kuendeleza wakala…",
-      "submittingDenial": "Inatuma kukataa kwako…"
+      "submittingDenial": "Inatuma kukataa kwako…",
+      "alwaysApproveEverywhere": "Kuruhusu chombo hiki kila mara — kwenye kila gumzo",
+      "denyOptionsLabel": "Chaguzi za kukataa",
+      "denyOnce": "Kataa mara moja",
+      "neverAllowEverywhere": "Usiruhusu chombo hiki kamwe — kwenye kila gumzo",
+      "deniedByRuleHint": "Imefungwa na kanuni yako — dhibiti kwenye Mipangilio → Viunganishi.",
+      "batchPendingHint": "Maombi ya zana {count} yanangojea",
+      "approveAllButton": "Idhinisha zote",
+      "denyAllButton": "Kataa zote"
     },
     "openImage": "Fungua picha",
     "copyMessage": "Nakili ujumbe",
@@ -850,7 +865,9 @@
     "ttsError": "Hitilafu kutengeneza sauti. Tafadhali jaribu tena.",
     "unsupportedMessageType": "Hitilafu kuonesha ujumbe: Aina ya ujumbe haitambuliwi",
     "addLanguageOption": "Ongeza \"{name}\"…",
-    "sources": "Vyanzo"
+    "sources": "Vyanzo",
+    "interpreterBadge": "Endesha msimbo",
+    "disableCodeInterpreter": "Zima utekelezaji wa msimbo"
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",
@@ -1195,6 +1212,30 @@
       "thresholdLabel": "Chukulia kama uandishi upya ukizidi",
       "thresholdUnit": "% ya hati iliyobadilishwa",
       "exceptionSelectionAlways": "Kufanyia marekebisho sehemu iliyochaguliwa kunatumika moja kwa moja kila wakati — modeli hurudisha tu sehemu iliyorekebishwa, ambayo haiwezi kugawanywa kama mapendekezo dhidi ya hati nzima."
+    },
+    "webSearch": {
+      "title": "Utafutaji Wavuti",
+      "description": "Dhibiti jinsi utafutaji wa wavuti unavyoendeshwa ukiwa kwenye Njia ya Utafutaji. Mabadiliko hutekelezwa mara moja.",
+      "providerLabel": "Mtoa huduma wa utafutaji",
+      "providerAuto": "Otomatiki (inapendekezwa)",
+      "providerAutoDescription": "Inatumia chaguo-msingi cha usanidi — kwa sasa ni utafutaji wa habari uliochanganywa hapa chini.",
+      "providerNews": "Habari zilizochanganywa (GDELT + Google News)",
+      "providerNewsDescription": "Inauliza vyanzo vyote kwa wakati mmoja na kuunganisha matokeo, hivyo hata moja likishindwa utafutaji haukatiki. Mizani bora ya kasi, utofauti wa vyanzo, na viungo vinavyofanya kazi vya makala.",
+      "providerGoogleNews": "Google News pekee",
+      "providerGoogleNewsDescription": "Bila jina na haraka — swali la utafutaji tu linakwenda Google (hakuna akaunti wala vidakuzi) na matokeo hupatikana kwa takriban sekunde moja. Kumbuka: Huangalia zaidi vichwa vya habari na vipande vifupi, si makala kamili, hivyo majibu yanaweza kubaki juu juu.",
+      "providerGdelt": "GDELT pekee",
+      "providerGdeltDescription": "Hifadhidata wazi ya habari za dunia yenye viungo vya moja kwa moja vya wachapishaji, hivyo maswali ya ziada yanaweza kusoma makala kamili. Ina kikomo kikali cha kiwango — utafutaji unaofuata unaweza kusubiri sekunde chache.",
+      "providerBing": "Bing grounding (kupitia Microsoft)",
+      "providerBingDescription": "Husoma kurasa kamili kwa muhtasari wa undani na hufikia wavuti yote, si habari tu. Hata hivyo, utafutaji mara nyingi huchukua sekunde 30–90 na ubora wa matokeo hubadilika.",
+      "sourcesLabel": "Vyanzo kwa kila utafutaji",
+      "sourcesDescription": "Idadi ya vyanzo vya kipekee vinavyotumika kama marejeo. Maswali ya kisomi yanaweza kupanua hili otomatiki.",
+      "freshnessLabel": "Upya unaopendekezwa",
+      "freshnessDescription": "Matokeo yawe ya hivi karibuni kiasi gani. Otomatiki huacha kila swali litoe uamuzi (habari mpya hupendelea siku ya mwisho).",
+      "freshness_auto": "Otomatiki",
+      "freshness_day": "Siku iliyopita",
+      "freshness_week": "Wiki iliyopita",
+      "freshness_month": "Mwezi uliopita",
+      "freshness_any": "Wakati wowote"
     }
   },
   "notFound": {
@@ -1384,6 +1425,23 @@
       "deployment": "Utekelezaji",
       "modelVersion": "Toleo la modeli",
       "publisher": "Mchapishaji"
+    },
+    "interpreterMode": {
+      "title": "Mfasiri Msimbo",
+      "subtitle": "Inaendesha misimbo inaposaidia (chati, uchambuzi wa data)",
+      "learnMore": "Inaweza kufanya nini?",
+      "description": "Ikifaa, msaidizi anaweza kuendesha Python kwenye mazingira salama yaliyojitenga kuchambua mafaili yaliyoambatanishwa, kuhesabu matokeo na kutoa chati. Msimbo ulioendeshwa, matokeo yake, na mafaili yaliyotengenezwa huonyeshwa na majibu. Tumia \"Endesha Msimbo\" kwenye menyu ya uandishi kulazimisha kwa ujumbe."
+    },
+    "searchOptions": {
+      "title": "Utafutaji wa juu",
+      "resultCount": "Vyanzo kwa kila utafutaji:",
+      "freshness": "Pendelea matokeo kutoka",
+      "freshness_auto": "Oto (kulingana na swali)",
+      "freshness_day": "Siku iliyopita",
+      "freshness_week": "Wiki iliyopita",
+      "freshness_month": "Mwezi uliopita",
+      "freshness_any": "Wakati wowote",
+      "hint": "Chaguo la Auto huacha kila swali lichague ukaribu wake (mfano, habari hutumia siku iliyopita), na maswali ya utafiti yanaweza kutumia vyanzo vingi kuliko kiwango cha kawaida."
     }
   },
   "models": {
@@ -2130,7 +2188,11 @@
     "moveToMore": "Hamisha kwenye Zaidi",
     "moveOutOfMore": "Onyesha kwenye menyu",
     "showSources": "Onyesha vyanzo vingine",
-    "hideSources": "Ficha vyanzo vingine"
+    "hideSources": "Ficha vyanzo vingine",
+    "aiTools": "Vifaa vya AI",
+    "aiToolsTooltip": "Uwezo ambao msaidizi anaweza kutumia anapojibu: utafutaji mtandaoni moja kwa moja, utekelezaji wa msimbo, na huduma zilizounganishwa.",
+    "codeInterpreterTooltip": "Kimbiza msimbo wa Python kwenye mazingira salama kwa kila ujumbe.\n\nInafaa kwa uchambuzi wa data, makadirio, na kuunda chati kutoka kwa mafaili yaliyoambatanishwa.",
+    "categoryTools": "Vifaa na viunganishi"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Ongeza maelekezo yako binafsi kubinafsisha jinsi AI inavyojibu. Haya yanaunganishwa na miongozo ya msingi ili kuhakikisha majibu ni ya msaada, sahihi na salama.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Dokezo: Andika \"/\" kuchagua kutoka kwenye templeti za maelekezo zilizohifadhiwa.",
@@ -3635,7 +3697,13 @@
     "connectorClientSecretLabel": "OAuth client secret",
     "connectorClientSecretStored": "Siri imehifadhiwa. Acha tupu kuihifadhi, au andika mpya kuibadilisha.",
     "connectorClientSecretHint": "Imesimbwa kabla ya kuhifadhiwa, na haitatazama tena.",
-    "connectorScopesLabel": "Scopes (mbalimbali kwa nafasi, hiari)"
+    "connectorScopesLabel": "Scopes (mbalimbali kwa nafasi, hiari)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (hiari)",
+    "connectorOauthTokenUrlLabel": "Token URL (hiari)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (hiari)",
+    "connectorOauthEndpointsHint": "Acha URL za endpoint zikiwa wazi ili zigunduliwe kiotomatiki. Weka kwa watoa huduma wasiounga mkono ugunduzi, kama NetSuite.",
+    "connectorOauthRefreshUrlHint": "Acha tupu ili kusasisha dhidi ya token URL.",
+    "connectorOauthEndpointsPairWarning": "Authorization URL na token URL lazima ziwekwe pamoja (refresh URL inahitaji zote mbili)."
   },
   "localModels": {
     "title": "Miundo ya ndani",
@@ -3730,5 +3798,52 @@
     "truncatedNotice": "Sehemu {count} zimeondolewa — kikomo cha jedwali ni safu {max}: {names}",
     "skippedDerivedNotice": "Safu {count} zilizokokotoa hazijahifadhiwa — fomula zinarejelea safu za jedwali hili: {names}",
     "loadReplacesColumns": "Hii inabadilisha safu zilizopo. Safu mlalo zilizopo zitaendelea kuwa na thamani pale majina ya safu yanapolingana."
+  },
+  "codeInterpreterDropdown": "Endesha Msimbo",
+  "connectorPin": {
+    "toggleLabel": "Dhibiti vifaa vya kiunganishi",
+    "menuLabel": "Viunganishi",
+    "menuLabelCount": "Viunganishi ({count} vinafanya kazi)",
+    "tooltip": "Angalia ni vifaa gani vya kiunganishi vinafanya kazi, zima kwa gumzo hili au kote, au angazia kimoja.",
+    "toggleServerInChat": "Tumia {name} kwenye gumzo hili",
+    "globalToggleTitle": "Washa au zima {name} kila mahali (kama vile Mipangilio → Viunganishi)",
+    "globalOn": "Global imewashwa",
+    "globalOff": "Global imezimwa",
+    "chatToggleHint": "Viboksi vinadhibiti gumzo hili pekee; kitufe cha global kinalingana na Mipangilio → Viunganishi. Kila kiunganishi kinachofanya kazi kinaongeza vifaa vyake kwa kila ujumbe — tokeni zaidi na majibu polepole.",
+    "trayLabel": "Vifaa vya kiunganishi",
+    "trayTitle": "Vifaa vya kiunganishi kwa gumzo hili",
+    "toggleServer": "Washa {name}",
+    "needsReconnect": "Unganisha tena kwenye Mipangilio",
+    "focusAction": "Angazia",
+    "focusedChip": "Kimelengwa",
+    "pinnedHint": "Vifaa kutoka {name} pekee vitatumika kwenye mazungumzo haya.",
+    "staleHint": "Kiunganishi kilicholengwa kimekatika au kimezimwa — ung'ganisha tena kwenye Mipangilio → Viunganishi, au ondoka kwenye angazia. Hadi hapo, vifaa vyote vinavyofanya kazi vitatumika.",
+    "costHint": "Kila kiunganishi kinachofanya kazi kinaongeza vifaa vyake kwa kila ujumbe unaotuma — tokeni zaidi na majibu polepole. Zima ambavyo hutumii.",
+    "noEligibleConnectors": "Hakuna viunganishi vilivyowekwa. Ongeza kimoja kwanza kupitia Mipangilio → Viunganishi.",
+    "unknownConnector": "Kiunganishi kimeondolewa",
+    "unpin": "Ondoa angazia",
+    "dismiss": "Funga",
+    "badgeCount": "{count} vifaa",
+    "badgeTooltip": "Vifaa vya kiunganishi vinafanya kazi kwenye kila ujumbe — vinaongeza tokeni na muda wa majibu. Bofya kudhibiti."
+  },
+  "toolApprovals": {
+    "title": "Idhini za vifaa",
+    "description": "Sheria zinazotumika katika kila mazungumzo: ruhusu kiotomatiki au zuia vifaa maalum vya kiunganishi. Unaweza kuongeza vifaa ambavyo bado hujaombwa.",
+    "actionApprove": "Ruhusu daima",
+    "actionReject": "Zuia daima",
+    "scopeServer": "kwenye {name}",
+    "scopeAny": "Kiunganishi chochote",
+    "removeRule": "Ondoa sheria kwa {tool}",
+    "toolNameLabel": "Jina la kifaa",
+    "toolNamePlaceholder": "Jina la kifaa, k.m. create_issue",
+    "scopeLabel": "Wigo wa kiunganishi",
+    "actionLabel": "Kitendo",
+    "addRule": "Ongeza sheria",
+    "rejectPrecedenceNote": "Sheria za kuzuia zinasimama — juu ya ruhusa na juu ya idhini zozote za kiotomatiki za mazungumzo.",
+    "policyAsk": "Uliza",
+    "policyAllow": "Ruhusu",
+    "policyBlock": "Zuia",
+    "policyGroupLabel": "Sera ya idhini kwa {tool}",
+    "listHint": "Weka kitakachotokea msaidizi anapotaka kutumia kila zana — katika kila mazungumzo. Uliza ndio chaguo msingi; Zuia hushinda kila wakati."
   }
 }

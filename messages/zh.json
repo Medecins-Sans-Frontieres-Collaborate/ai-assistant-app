@@ -818,7 +818,13 @@
         "transformingTable": "正在转换表格...",
         "findingLocations": "正在识别地点...",
         "updatingMap": "正在更新地图..."
-      }
+      },
+      "searchingWebFor": "正在搜索：“{query}”…",
+      "searchingWebForMultiple": "正在搜索 {count} 个主题：“{query}”…",
+      "readingCitedSources": "正在阅读 {count} 篇已引用的文章…",
+      "planningSteps": "正在规划步骤…",
+      "planStep": "步骤 {current}/{total}：{description}",
+      "planStepRetry": "步骤 {current}/{total}（重试）：{description}"
     },
     "toolSummary": {
       "usedTools": "已用 {count, plural, one {# 个工具} other {# 个工具}}",
@@ -828,7 +834,8 @@
       "statusAutoDenied": "自动拒绝",
       "statusFailed": "失败",
       "statusIncomplete": "未完成",
-      "viaService": "通过 {service}"
+      "viaService": "通过 {service}",
+      "downloadFile": "下载"
     },
     "consent": {
       "authorizeRequired": "需要授权",
@@ -870,7 +877,15 @@
       "approvedState": "已批准 — 代理已恢复",
       "deniedState": "已拒绝",
       "submittingApproval": "正在批准并恢复代理…",
-      "submittingDenial": "正在发送您的拒绝…"
+      "submittingDenial": "正在发送您的拒绝…",
+      "alwaysApproveEverywhere": "始终允许此工具 — 适用于所有对话",
+      "denyOptionsLabel": "拒绝选项",
+      "denyOnce": "仅拒绝一次",
+      "neverAllowEverywhere": "在所有对话中均不允许此工具",
+      "deniedByRuleHint": "已被您的规则阻止 — 请在设置 → 连接器中管理。",
+      "batchPendingHint": "有 {count} 个工具请求待处理",
+      "approveAllButton": "全部允许",
+      "denyAllButton": "全部拒绝"
     },
     "openImage": "打开图片",
     "copyMessage": "复制消息",
@@ -881,7 +896,9 @@
     "ttsError": "生成音频时出错。请重试。",
     "unsupportedMessageType": "消息渲染错误：不支持的消息类型",
     "addLanguageOption": "添加“{name}”…",
-    "sources": "来源"
+    "sources": "来源",
+    "interpreterBadge": "运行代码",
+    "disableCodeInterpreter": "禁用代码执行"
   },
   "sidebar": {
     "collapseSidebar": "折叠侧边栏",
@@ -1226,6 +1243,30 @@
       "thresholdLabel": "若超过此比例视为重写",
       "thresholdUnit": "文档更改百分比",
       "exceptionSelectionAlways": "修改高亮选区时总是直接应用——模型只返回修改后的片段，无法将其拆分为针对整个文档的建议。"
+    },
+    "webSearch": {
+      "title": "网页搜索",
+      "description": "控制在搜索模式激活时如何进行实时网页搜索。更改将立即生效。",
+      "providerLabel": "搜索提供方",
+      "providerAuto": "自动（推荐）",
+      "providerAutoDescription": "使用部署默认设置 —— 目前为下方的综合新闻搜索。",
+      "providerNews": "综合新闻（GDELT + Google News）",
+      "providerNewsDescription": "同时查询两个来源并合并结果，一方失败不会影响整体。速度、来源多样性和文章链接可用性均衡最佳。",
+      "providerGoogleNews": "仅限 Google News",
+      "providerGoogleNewsDescription": "匿名且快速 —— 仅搜索请求传递至 Google（无需账号或 Cookie），结果约 1 秒内返回。注意：多为标题和简短摘要，非完整文章，答案多为表层信息。",
+      "providerGdelt": "仅限 GDELT",
+      "providerGdeltDescription": "开放的全球新闻研究数据库，带有直接发布方链接，可使后续问题查阅全文。强制速率限制——连续搜索可能会排队数秒。",
+      "providerBing": "Bing grounding（通过 Microsoft）",
+      "providerBingDescription": "可读取完整页面以生成更深入摘要，涵盖整个网络而不仅限于新闻。但搜索通常需要 30–90 秒且每次结果质量不一。",
+      "sourcesLabel": "每次搜索来源数",
+      "sourcesDescription": "每次搜索保留作为引用的不同来源数量。研究类问题可能会自动增大此数值。",
+      "freshnessLabel": "优先时效",
+      "freshnessDescription": "结果需要多新。自动模式根据每个问题决定（突发新闻优先当天资料）。",
+      "freshness_auto": "自动",
+      "freshness_day": "近一天",
+      "freshness_week": "近一周",
+      "freshness_month": "近一月",
+      "freshness_any": "任何时间"
     }
   },
   "notFound": {
@@ -1415,6 +1456,23 @@
       "deployment": "部署",
       "modelVersion": "模型版本",
       "publisher": "发布者"
+    },
+    "interpreterMode": {
+      "title": "代码解释器",
+      "subtitle": "在有帮助时运行代码（图表，数据分析）",
+      "learnMore": "它可以做什么？",
+      "description": "启用后，助手可在安全、隔离的沙箱环境中运行 Python，以分析附件、计算结果、生成图表。代码执行、输出和生成的文件将和回复一起展示。在编辑菜单中选择“运行代码”可强制某条消息使用此功能。"
+    },
+    "searchOptions": {
+      "title": "高级搜索",
+      "resultCount": "每次搜索来源数：",
+      "freshness": "优先选择来自",
+      "freshness_auto": "自动（每个问题）",
+      "freshness_day": "近一天",
+      "freshness_week": "近一周",
+      "freshness_month": "最近一个月",
+      "freshness_any": "任意时间",
+      "hint": "自动可根据每个问题设置时效性（如新闻优先选择最近一天），研究类问题可比默认使用更多来源。"
     }
   },
   "models": {
@@ -2062,7 +2120,11 @@
     "moveToMore": "移至更多",
     "moveOutOfMore": "在菜单中显示",
     "showSources": "显示其他来源",
-    "hideSources": "隐藏其他来源"
+    "hideSources": "隐藏其他来源",
+    "aiTools": "AI 工具",
+    "aiToolsTooltip": "在回答时助手可用的功能：实时网页搜索、代码执行和连接服务。",
+    "codeInterpreterTooltip": "在安全沙盒环境中为每条消息运行 Python 代码。\n\n适用于数据分析、计算和从附件生成图表。",
+    "categoryTools": "工具与连接器"
   },
   "transcription": {
     "addInstructions": "添加说明",
@@ -3666,7 +3728,13 @@
     "connectorClientSecretLabel": "OAuth 客户端密钥",
     "connectorClientSecretStored": "密钥已存储。保留为空继续使用现有密钥，或输入新密钥以替换。",
     "connectorClientSecretHint": "存储前会加密，且不会再次显示。",
-    "connectorScopesLabel": "Scopes（以空格分隔，可选）"
+    "connectorScopesLabel": "Scopes（以空格分隔，可选）",
+    "connectorOauthAuthUrlLabel": "授权 URL（可选）",
+    "connectorOauthTokenUrlLabel": "Token URL（可选）",
+    "connectorOauthRefreshUrlLabel": "刷新 URL（可选）",
+    "connectorOauthEndpointsHint": "如需自动发现端点 URL，请留空。不支持自动发现的提供商（如 NetSuite）需手动设置。",
+    "connectorOauthRefreshUrlHint": "留空时将通过 token URL 刷新。",
+    "connectorOauthEndpointsPairWarning": "授权 URL 和 token URL 必须同时设置（刷新 URL 需要二者）。"
   },
   "localModels": {
     "title": "本地模型",
@@ -3761,5 +3829,52 @@
     "truncatedNotice": "{count} 个字段已移除——表格列数上限为 {max}：{names}",
     "skippedDerivedNotice": "{count} 个计算列未保存——公式使用了本表的列：{names}",
     "loadReplacesColumns": "这将替换当前列。已有行会保留列名相同的值。"
+  },
+  "codeInterpreterDropdown": "运行代码",
+  "connectorPin": {
+    "toggleLabel": "管理连接器工具",
+    "menuLabel": "连接器",
+    "menuLabelCount": "连接器（{count} 个激活）",
+    "tooltip": "查看当前激活的连接器工具，可为此对话或所有对话关闭，也可聚焦某一个。",
+    "toggleServerInChat": "在本对话中使用 {name}",
+    "globalToggleTitle": "在各处启用或禁用 {name}（相当于“设置”→“连接器”）",
+    "globalOn": "全局开启",
+    "globalOff": "全局关闭",
+    "chatToggleHint": "复选框仅控制当前对话，全局按钮与“设置 → 连接器”一致。每个激活的连接器会将其工具添加到每条消息中，造成更多 token 并减慢响应速度。",
+    "trayLabel": "连接器工具",
+    "trayTitle": "本对话的连接器工具",
+    "toggleServer": "启用 {name}",
+    "needsReconnect": "请在设置中重新连接",
+    "focusAction": "聚焦",
+    "focusedChip": "已聚焦",
+    "pinnedHint": "本次会话将仅使用 {name} 的工具。",
+    "staleHint": "聚焦的连接器已断开或被禁用 — 请在“设置 → 连接器”中重新连接，或移除聚焦。在此之前，所有激活的工具将被使用。",
+    "costHint": "每个激活的连接器都会为你发送的每条消息添加工具，消耗更多 token 且响应变慢。请关闭未使用的。",
+    "noEligibleConnectors": "未配置连接器。请先在“设置 → 连接器”中添加。",
+    "unknownConnector": "已移除的连接器",
+    "unpin": "取消聚焦",
+    "dismiss": "关闭",
+    "badgeCount": "{count} 个工具",
+    "badgeTooltip": "连接器工具对每条消息均激活，会消耗 token 并增加响应时间。点击以管理。"
+  },
+  "toolApprovals": {
+    "title": "工具准入",
+    "description": "适用于每次会话的规则：自动允许或阻止特定连接器工具。你也可以添加尚未提示过的工具。",
+    "actionApprove": "始终允许",
+    "actionReject": "始终阻止",
+    "scopeServer": "在 {name}",
+    "scopeAny": "任意连接器",
+    "removeRule": "移除 {tool} 的规则",
+    "toolNameLabel": "工具名称",
+    "toolNamePlaceholder": "工具名称，例如 create_issue",
+    "scopeLabel": "连接器范围",
+    "actionLabel": "动作",
+    "addRule": "添加规则",
+    "rejectPrecedenceNote": "阻止规则总是优先于允许规则和会话级的自动准入。",
+    "policyAsk": "询问",
+    "policyAllow": "允许",
+    "policyBlock": "阻止",
+    "policyGroupLabel": "{tool} 的审批策略",
+    "listHint": "设置助手在每次对话中想要运行每个工具时的处理方式。默认是“询问”；“阻止”优先生效。"
   }
 }

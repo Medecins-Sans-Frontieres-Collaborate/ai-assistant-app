@@ -845,7 +845,13 @@
         "transformingTable": "កំពុងបម្លែងតារាង...",
         "findingLocations": "កំពុងកំណត់ទីតាំង...",
         "updatingMap": "កំពុងបន្ទាន់សម័យផែនទី..."
-      }
+      },
+      "searchingWebFor": "កំពុងស្វែងរក៖ “{query}”…",
+      "searchingWebForMultiple": "កំពុងស្វែងរកប្រធានបទ {count} ៖ “{query}”…",
+      "readingCitedSources": "កំពុងអានអត្ថបទ {count} ដែលបានយោងមុននេះ…",
+      "planningSteps": "កំពុងដាក់ផែនការ…",
+      "planStep": "ជំហានទី {current}/{total}: {description}",
+      "planStepRetry": "ជំហានទី {current}/{total} (សាកល្បងម្តងទៀត): {description}"
     },
     "toolSummary": {
       "usedTools": "បានប្រើ {count, plural, one {# ឧបករណ៍} other {# ឧបករណ៍}}",
@@ -855,7 +861,8 @@
       "statusAutoDenied": "បដិសេធស្វ័យប្រវត្តិ",
       "statusFailed": "បរាជ័យ",
       "statusIncomplete": "មិនទាន់ពេញលេញ",
-      "viaService": "តាមរយៈ {service}"
+      "viaService": "តាមរយៈ {service}",
+      "downloadFile": "ទាញយក"
     },
     "consent": {
       "authorizeRequired": "ត្រូវការការអនុញ្ញាត",
@@ -897,7 +904,15 @@
       "approvedState": "បានអនុម័ត — agent បន្តដំណើរការ",
       "deniedState": "បានបដិសេធ",
       "submittingApproval": "កំពុងអនុម័ត និងបន្ត agent...",
-      "submittingDenial": "កំពុងបញ្ជូនការបដិសេធ​របស់​អ្នក..."
+      "submittingDenial": "កំពុងបញ្ជូនការបដិសេធ​របស់​អ្នក...",
+      "alwaysApproveEverywhere": "អនុញ្ញាតឧបករណ៍នេះជានិច្ច—ក្នុងការជជែកទាំងអស់",
+      "denyOptionsLabel": "ជម្រើសបដិសេធ",
+      "denyOnce": "បដិសេធម្តង",
+      "neverAllowEverywhere": "មិនអនុញ្ញាតឧបករណ៍នេះទេ—ក្នុងការជជែកទាំងអស់",
+      "deniedByRuleHint": "ត្រូវបានទប់ស្កាត់ដោយច្បាប់របស់អ្នក — គ្រប់គ្រងក្នុង ការកំណត់ → កម្មវិធីភ្ជាប់។",
+      "batchPendingHint": "សំណើរឧបករណ៍ {count} កំពុងរង់ចាំ",
+      "approveAllButton": "អនុញ្ញាតទាំងអស់",
+      "denyAllButton": "បដិសេធទាំងអស់"
     },
     "openImage": "បើក​រូបភាព",
     "copyMessage": "ចម្លង​សារ",
@@ -908,7 +923,9 @@
     "ttsError": "កំហុសក្នុងការបង្កើតសំឡេង។ សូមសាកល្បងម្ដងទៀត។",
     "unsupportedMessageType": "កំហុសក្នុងការបង្ហាញសារ៖ ប្រភេទសារមិនគាំទ្រ",
     "addLanguageOption": "បន្ថែម \"{name}\"…",
-    "sources": "ប្រភព"
+    "sources": "ប្រភព",
+    "interpreterBadge": "ដំណើរការ​កូដ",
+    "disableCodeInterpreter": "បិទ​ពន្លឿន​កូដ"
   },
   "transcript": {
     "originalTranscript": "អត្ថបទសម្រង់ដើម",
@@ -1348,6 +1365,30 @@
       "thresholdLabel": "ចាត់ទុកថា​កែសម្រួលឡើងវិញខាងលើ",
       "thresholdUnit": "% នៃឯកសារដែលត្រូវបានផ្លាស់ប្តូរ",
       "exceptionSelectionAlways": "ការកែសម្រួលជ្រើសរឹតដែលបានបន្លិចនឹងអនុវត្តដោយផ្ទាល់ជានិច្ច — ម៉ូឌែលនឹងត្រឡប់តែបទពិសោធន៍ដែលបានកែសម្រួលប៉ុណ្ណោះ ហើយមិនអាចបំបែកជាការផ្តល់យោបល់លើឯកសារទាំងមូលបានទេ។"
+    },
+    "webSearch": {
+      "title": "ការស្វែងរកតាមបណ្តាញ",
+      "description": "ត្រួតពិនិត្យពីរបៀបស្វែងរកតាមបណ្តាញពេលដែលរបៀបស្វែងរកដំណើរការ។ ការផ្លាស់ប្តូរជាកម្រិតភ្លាមៗ។",
+      "providerLabel": "អ្នកផ្ដល់សេវាស្វែងរក",
+      "providerAuto": "ស្វ័យប្រវត្តិ (ផ្ដល់អនុសាសន៍)",
+      "providerAutoDescription": "ប្រើការកំណត់លំនាំដើម — គឺស្វែងរកព័ត៌មានជាសកលដូចខាងក្រោម។",
+      "providerNews": "ព័ត៌មានរួម (GDELT + Google News)",
+      "providerNewsDescription": "សួរទៅកាន់ប្រភពទាំងពីរនេះជាបន្ទាប់បន្សំ និងបញ្ចូលលទ្ធផលឲ្យជាមួយគ្នា ដូច្នេះប្រសិនបើប្រភពណាមួយបរាជ័យ ការស្វែងរកក៏មិនខូច។ សមំណុលល្អរវាងល្បឿន បំណប់ប្រភព និងតំណអត្ថបទ។",
+      "providerGoogleNews": "Google News ប៉ុណ្ណោះ",
+      "providerGoogleNewsDescription": "អនាមិក និងលឿន — មានតែសំណួរស្វែងរកប៉ុណ្ណោះដែលទៅដល់ Google (គ្មានគណនី ឬខូគី) ហើយលទ្ធផលមកដល់ប្រហែលមួយវិនាទី។ ចំណាំ៖ វាស្ទើរតែស្វែងរកតែចំណងជើង និងអត្ថបទខ្លី មិនមែនអត្ថបទពេញលេញទេ ដូចនេះចម្លើយអាចនៅលើផ្ទៃ។",
+      "providerGdelt": "GDELT ប៉ុណ្ណោះ",
+      "providerGdeltDescription": "មូលដ្ឋានទិន្នន័យស្រាវជ្រាវព័ត៌មានពិភពលោក ដោយមានតំណផ្ទាល់ទៅកាន់អ្នកផ្សព្វផ្សាយ អនុញ្ញាតឲ្យសំណួរបន្ថែមអានអត្ថបទពេញ។ មានកំនត់ចំនួនខ្ពស់—ការស្វែងរកជាបន្តបន្ទាប់អាចត្រូវរង់ចាំបន្តិច។",
+      "providerBing": "Bing grounding (តាមរយៈ Microsoft)",
+      "providerBingDescription": "អានទំព័រពេញ ដើម្បីចងក្រងសង្ខេបជ្រាលជ្រៅ និងគ្របដណ្តប់តំបន់បណ្ដាញទូទៅ មិនត្រឹមតែព័ត៌មានទេ។ ប៉ុន្តែការស្វែងរកច្រើន ប្រើពេល 30–90 វិនាទី ហើយគុណភាពលទ្ធផលអាចមិនស្ថិតស្ថេរពីការស្វែងរកទៅមួយទៀត។",
+      "sourcesLabel": "ប្រភពក្នុងមួយស្វែងរក",
+      "sourcesDescription": "ប៉ុន្មានប្រភពផ្សេងគ្នាក្នុងមួយស្វែងរកដែលយកសម្រាប់យោង។ សំណួរស្រាវជ្រាវអាចពង្រីកវាជាស្វ័យប្រវត្តិ។",
+      "freshnessLabel": "បំណងថាមពល",
+      "freshnessDescription": "លទ្ធផលថ្មីប៉ុណ្ណាទើបបង្ហាញ។ ស្វ័យប្រវត្តិឲ្យសំណួរអាចសម្រេច (ព័ត៌មានបន្ទាន់គិតត្រឹមមួយថ្ងៃចុងក្រោយ)។",
+      "freshness_auto": "ស្វ័យប្រវត្តិ",
+      "freshness_day": "មួយថ្ងៃចុងក្រោយ",
+      "freshness_week": "មួយសប្តាហ៍ចុងក្រោយ",
+      "freshness_month": "មួយខែចុងក្រោយ",
+      "freshness_any": "គ្រប់ពេល"
     }
   },
   "emptyState": {
@@ -1534,6 +1575,23 @@
       "deployment": "ការតាំងពង្រីក",
       "modelVersion": "កំណែម៉ូឌែល",
       "publisher": "អ្នកបោះផ្សាយ"
+    },
+    "interpreterMode": {
+      "title": "កម្មវិធីបកប្រែកូដ",
+      "subtitle": "ដំណើរការកូដពេលចាំបាច់ (គំនូសតារាង វិភាគទិន្នន័យ)",
+      "learnMore": "វាអាចធ្វើអ្វីបានខ្លះ?",
+      "description": "នៅពេលបើក អ្នកជំនួយការអាចដំណើរការ Python ក្នុង sandbox ដាច់ដោយឡែកសុវត្ថិភាព ដើម្បីវិភាគឯកសារភ្ជាប់ គណនាលទ្ធផល និងបង្កើតគំនូសតារាង។ កូដ ឬផលិតផលដែលបានដំណើរការ និងឯកសារបានបង្ហាញជាមួយចម្លើយ។ ប្រើ \"ដំណើរការកូដ\" នៅក្នុងម៉ឺនុយសរសេរ ដើម្បីបង្វឿនវាសម្រាប់សារមួយ។"
+    },
+    "searchOptions": {
+      "title": "ជម្រើសស្វែងរកកម្រិតខ្ពស់",
+      "resultCount": "ប្រភពក្នុងមួយស្វែងរក:",
+      "freshness": "លទ្ធផលដែលចង់បានពី",
+      "freshness_auto": "ស្វ័យប្រវត្តិ (តាមសំណួរ)",
+      "freshness_day": "មួយថ្ងៃចុងក្រោយ",
+      "freshness_week": "មួយសប្តាហ៍ចុងក្រោយ",
+      "freshness_month": "ខែមុន",
+      "freshness_any": "គ្រប់ពេលវេលា",
+      "hint": "លក្ខណៈស្វ័យប្រវត្តិ អនុញ្ញាតឲ្យសំណួរ​នីមួយៗកំណត់ភាពថ្មីរបស់ខ្លួន (ឧ. ព័ត៌មានរើសតែថ្ងៃម្សិលមិញ) និងសំណួរបែបស្រាវជ្រាវអាចប្រើប្រភពច្រើនជាងលំនាំដើម។"
     }
   },
   "models": {
@@ -2105,7 +2163,11 @@
     "moveToMore": "បិទទៅបន្ថែម",
     "moveOutOfMore": "បង្ហាញក្នុងមេនុយ",
     "showSources": "បង្ហាញប្រភពផ្សេងទៀត",
-    "hideSources": "បិទបាំងប្រភពផ្សេងទៀត"
+    "hideSources": "បិទបាំងប្រភពផ្សេងទៀត",
+    "aiTools": "ឧបករណ៍ AI",
+    "aiToolsTooltip": "សមត្ថភាពដែលជំនួយការអាចប្រើនៅពេលឆ្លើយ៖ ស្វែងរកតាមវេបសាយដោយផ្ទាល់ រត់កូដ និងសេវាមួយផ្សេងៗ។",
+    "codeInterpreterTooltip": "រត់កូដ Python ក្នុង sandbox ដែលមានសុវត្ថិភាពសម្រាប់សារ​នីមួយៗ។\n\nល្អសម្រាប់វិភាគទិន្នន័យ គណនា និងបង្កើតគំនូសតាងពីឯកសារភ្ជាប់។",
+    "categoryTools": "ឧបករណ៍ និងកម្មវិធីតភ្ជាប់"
   },
   "transcription": {
     "transcribesOnSend": "បម្លែងអក្សរចេញត្រូវបានអនុវត្តពេលបញ្ជូន",
@@ -3619,7 +3681,13 @@
     "connectorClientSecretLabel": "OAuth client secret",
     "connectorClientSecretStored": "សម្ងាត់ត្រូវបានរក្សាទុក។ ទុកឲ្យទទេដើម្បីរក្សាទុកវា ឬបញ្ចូលថ្មីដើម្បីជំនួស។",
     "connectorClientSecretHint": "បានអ៊ិនគ្រីបមុនពេលរក្សាទុក ហើយមិនមានការបង្ហាញវិញ។",
-    "connectorScopesLabel": "Scopes (បំបែកដោយសញ្ញាខណ្ឌ ច្រើនជាជម្រើស)"
+    "connectorScopesLabel": "Scopes (បំបែកដោយសញ្ញាខណ្ឌ ច្រើនជាជម្រើស)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (ស្រេចចិត្ត)",
+    "connectorOauthTokenUrlLabel": "Token URL (ស្រេចចិត្ត)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (ស្រេចចិត្ត)",
+    "connectorOauthEndpointsHint": "ដាក់ឲ្យទទេអាសយដ្ឋាន endpoint URLs ដើម្បីស្វែងរកដោយស្វ័យប្រវត្តិ។ កំណត់បើអ្នកផ្តល់សេវាដូចជា NetSuite មិនគាំទ្រស្វែងរក។",
+    "connectorOauthRefreshUrlHint": "ទុកឲ្យទទេ ដើម្បីធ្វើបច្ចុប្បន្នភាពទៅ Token URL។",
+    "connectorOauthEndpointsPairWarning": "ត្រូវកំណត់ Authorization URL និង Token URL ជាគូ (Refresh URL ត្រូវការទាំងពីរ)។"
   },
   "localModels": {
     "title": "ម៉ូឌែលក្នុងតំបន់",
@@ -3714,5 +3782,52 @@
     "truncatedNotice": "{count} វាលត្រូវបានដកចេញ — កំហិតតារាងគឺ {max} ជួរឈរ៖ {names}",
     "skippedDerivedNotice": "{count} ជួរឈរកដែលគណនា មិនបានរក្សាទុក — រូបមន្តយោងទៅកាន់ជួរឈរតារាងនេះ៖ {names}",
     "loadReplacesColumns": "វានឹងជំនួសជួរឈរបច្ចុប្បន្ន។ ជួរដេកដែលមានឈ្មោះជួរឈរត្រូវនឹងរក្សាតម្លៃ។"
+  },
+  "codeInterpreterDropdown": "ដំណើរការ​កូដ",
+  "connectorPin": {
+    "toggleLabel": "គ្រប់គ្រងឧបករណ៍ connector",
+    "menuLabel": "Connectors",
+    "menuLabelCount": "Connectors ({count} កំពុងដំណើរការ)",
+    "tooltip": "មើលឧបករណ៍ connector ដែលកំពុងដំណើរការ បិទសម្រាប់ជជែកនេះ ឬគ្រប់ទីកន្លែង ឬផ្ដោតតែមួយ។",
+    "toggleServerInChat": "ប្រើ {name} ក្នុងជជែកនេះ",
+    "globalToggleTitle": "បើកឬបិទ {name} គ្រប់ទីកន្លែង (ដូចគ្នានឹងការកំណត់ → Connectors)",
+    "globalOn": "បើកគ្រប់ទីកន្លែង",
+    "globalOff": "បិទគ្រប់ទីកន្លែង",
+    "chatToggleHint": "ប្រអប់ពិនិត្យគ្រប់គ្រងសម្រាប់ជជែកនេះប៉ុណ្ណោះ; ប៊ូតុងសកលត្រូវនឹង Setting → Connectors។ Connector ដែលើកលែងនីមួយៗ នឹងបន្ថែមឧបករណ៍ទៅសារ — ប្រើ tokens ច្រើន និងឆ្លើយយឺត។",
+    "trayLabel": "ឧបករណ៍ connector",
+    "trayTitle": "ឧបករណ៍ connector សម្រាប់ជជែកនេះ",
+    "toggleServer": "បើក {name}",
+    "needsReconnect": "ភ្ជាប់ឡើងវិញក្នុង Settings",
+    "focusAction": "ផ្ដោត",
+    "focusedChip": "កំពុងផ្ដោត",
+    "pinnedHint": "តែឧបករណ៍ពី {name} ប៉ុណ្ណោះនឹងត្រូវប្រើក្នុងជជែកនេះ។",
+    "staleHint": "Connector ដែលផ្ដោត ត្រូវបានផ្ដាច់ឬបិទ — ភ្ជាប់ឡើងវិញនៅ Settings → Connectors ឬដកផ្តោតចេញ។ នៅពេលនោះឧបករណ៍ដែលកំពុងដំណើរការទាំងអស់នឹងត្រូវប្រើ។",
+    "costHint": "គ្រប់ connector ដែលដំណើរការបន្ថែមឧបករណ៍ទៅក្នុងសារ — ប្រើ tokens ច្រើន និងឆ្លើយយឺត។ សូមបិទអ្វីដែលមិនប្រើ។",
+    "noEligibleConnectors": "មិនមាន connector ដែលកំណត់ទេ។ សូមភ្ជាប់នៅ Settings → Connectors មុន។",
+    "unknownConnector": "Connector យកចេញ",
+    "unpin": "ដកផ្តោត",
+    "dismiss": "បិទ",
+    "badgeCount": "{count} ឧបករណ៍",
+    "badgeTooltip": "ឧបករណ៍ connector មានសកម្មលើគ្រប់សារ — បន្ថែម tokens និងពេលឆ្លើយ។ ចុចដើម្បីគ្រប់គ្រង។"
+  },
+  "toolApprovals": {
+    "title": "អនុម័តឧបករណ៍",
+    "description": "ច្បាប់ដែលអនុវត្តនៅគ្រប់ជជែក៖ អនុញ្ញាតស្វ័យប្រវត្ដិ ឬទប់ស្កាត់ឧបករណ៍ connector មួយចំនួន។ អ្នកអាចបន្ថែមឧបករណ៍ដែលមិនទាន់បានស្នើបង្ហាញ។",
+    "actionApprove": "អនុញ្ញាតជានិច្ច",
+    "actionReject": "ទប់ស្កាត់ជានិច្ច",
+    "scopeServer": "លើ {name}",
+    "scopeAny": "Connector ណាមួយ",
+    "removeRule": "ដកច្បាប់សម្រាប់ {tool}",
+    "toolNameLabel": "ឈ្មោះឧបករណ៍",
+    "toolNamePlaceholder": "ឈ្មោះឧបករណ៍ ឧ. create_issue",
+    "scopeLabel": "វិសាលភាព Connector",
+    "actionLabel": "សកម្មភាព",
+    "addRule": "បន្ថែមច្បាប់",
+    "rejectPrecedenceNote": "ច្បាប់ទប់ស្កាត់មានអាទិភាពជានិច្ច — លើសពីអនុញ្ញាត និងស្វ័យអនុម័តក្នុងជជែក។",
+    "policyAsk": "សួរ",
+    "policyAllow": "អនុញ្ញាត",
+    "policyBlock": "បិទ",
+    "policyGroupLabel": "គោលនយោបាយអនុម័តសម្រាប់ {tool}",
+    "listHint": "កំណត់អោយអ្វីកើតឡើងនៅពេលជំនួយការចង់ប្រើឧបករណ៍នីមួយៗ — ក្នុងសំណោះអាគគ្នា។ \"សួរ\" គឺជាលំនាំដើម; \"បិទ\" តែងតែមានអាទិភាព។"
   }
 }

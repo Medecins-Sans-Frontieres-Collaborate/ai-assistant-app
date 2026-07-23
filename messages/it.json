@@ -708,7 +708,13 @@
         "transformingTable": "Trasformazione della tabella…",
         "findingLocations": "Identificazione posizioni…",
         "updatingMap": "Aggiornamento mappa…"
-      }
+      },
+      "searchingWebFor": "Ricerca in corso: “{query}”…",
+      "searchingWebForMultiple": "Ricerca di {count} argomenti: “{query}”…",
+      "readingCitedSources": "Lettura di {count} articoli precedentemente citati…",
+      "planningSteps": "Pianificazione dei passaggi…",
+      "planStep": "Passaggio {current}/{total}: {description}",
+      "planStepRetry": "Passaggio {current}/{total} (ripetizione): {description}"
     },
     "toolSummary": {
       "usedTools": "Usati {count, plural, one {# strumento} other {# strumenti}}",
@@ -718,7 +724,8 @@
       "statusAutoDenied": "Negato automaticamente",
       "statusFailed": "Non riuscito",
       "statusIncomplete": "Incompleto",
-      "viaService": "tramite {service}"
+      "viaService": "tramite {service}",
+      "downloadFile": "Scarica"
     },
     "consent": {
       "authorizeRequired": "Autorizzazione richiesta",
@@ -760,7 +767,15 @@
       "approvedState": "Approvato — agente ripreso",
       "deniedState": "Negato",
       "submittingApproval": "Approvazione e ripresa dell'agente…",
-      "submittingDenial": "Invio della negazione…"
+      "submittingDenial": "Invio della negazione…",
+      "alwaysApproveEverywhere": "Approva sempre questo strumento — in ogni chat",
+      "denyOptionsLabel": "Opzioni di rifiuto",
+      "denyOnce": "Rifiuta una volta",
+      "neverAllowEverywhere": "Non consentire mai questo strumento — in ogni chat",
+      "deniedByRuleHint": "Bloccato dalla tua regola — gestisci in Impostazioni → Connettori.",
+      "batchPendingHint": "{count} richieste di strumenti in sospeso",
+      "approveAllButton": "Approva tutte",
+      "denyAllButton": "Rifiuta tutte"
     },
     "openImage": "Apri immagine",
     "copyMessage": "Copia messaggio",
@@ -771,7 +786,9 @@
     "ttsError": "Errore nella generazione dell'audio. Riprova.",
     "unsupportedMessageType": "Errore nella visualizzazione del messaggio: tipo non supportato",
     "addLanguageOption": "Aggiungi \"{name}\"…",
-    "sources": "Fonti"
+    "sources": "Fonti",
+    "interpreterBadge": "Esegui codice",
+    "disableCodeInterpreter": "Disattiva esecuzione codice"
   },
   "sidebar": {
     "collapseSidebar": "Comprimi barra laterale",
@@ -1170,6 +1187,30 @@
       "thresholdLabel": "Considera come riscrittura oltre",
       "thresholdUnit": "% del documento modificato",
       "exceptionSelectionAlways": "La revisione di una selezione evidenziata si applica sempre direttamente: il modello restituisce solo il brano rivisto, che non può essere suddiviso in suggerimenti rispetto all'intero documento."
+    },
+    "webSearch": {
+      "title": "Ricerca web",
+      "description": "Controlla come vengono eseguite le ricerche web dal vivo quando la Modalità ricerca è attiva. Le modifiche si applicano immediatamente.",
+      "providerLabel": "Provider di ricerca",
+      "providerAuto": "Automatico (consigliato)",
+      "providerAutoDescription": "Usa il valore predefinito del deployment — attualmente la ricerca combinata di notizie qui sotto.",
+      "providerNews": "Notizie combinate (GDELT + Google News)",
+      "providerNewsDescription": "Interroga entrambe le fonti in parallelo e unisce i risultati, quindi anche se una fallisce la ricerca non si interrompe. Miglior bilanciamento tra velocità, varietà delle fonti e link agli articoli funzionanti.",
+      "providerGoogleNews": "Solo Google News",
+      "providerGoogleNewsDescription": "Anonimo e veloce — solo la query arriva a Google (nessun account o cookie) e i risultati arrivano in circa un secondo. Nota: analizza principalmente titoli e brevi estratti, non gli articoli completi, quindi le risposte possono restare superficiali.",
+      "providerGdelt": "Solo GDELT",
+      "providerGdeltDescription": "Database di ricerca aperto sulle notizie mondiali con link diretti agli editori, che permette di leggere gli articoli completi per domande di approfondimento. Limite di frequenza severo — ricerche consecutive possono essere messe in coda per alcuni secondi.",
+      "providerBing": "Bing grounding (tramite Microsoft)",
+      "providerBingDescription": "Legge l’intera pagina per riassunti approfonditi e copre il web generale, non solo le notizie. Tuttavia, le ricerche richiedono di norma 30–90 secondi e la qualità dei risultati può variare tra una ricerca e l’altra.",
+      "sourcesLabel": "Fonti per ricerca",
+      "sourcesDescription": "Quante fonti distinte vengono mantenute come citazioni. Le domande di tipo ricerca possono ampliare automaticamente questo valore.",
+      "freshnessLabel": "Recenza preferita",
+      "freshnessDescription": "Quanto devono essere recenti i risultati. Automatico lascia decidere alla domanda (le breaking news privilegiano l’ultimo giorno).",
+      "freshness_auto": "Automatico",
+      "freshness_day": "Ultimo giorno",
+      "freshness_week": "Ultima settimana",
+      "freshness_month": "Ultimo mese",
+      "freshness_any": "Qualsiasi momento"
     }
   },
   "notFound": {
@@ -1483,6 +1524,23 @@
       "deployment": "Distribuzione",
       "modelVersion": "Versione modello",
       "publisher": "Editore"
+    },
+    "interpreterMode": {
+      "title": "Code Interpreter",
+      "subtitle": "Esegue codice quando utile (grafici, analisi dati)",
+      "learnMore": "Cosa può fare?",
+      "description": "Se abilitato, l’assistente può eseguire Python in una sandbox sicura e isolata per analizzare file allegati, calcolare risultati e generare grafici. Il codice eseguito, l’output e i file generati vengono mostrati insieme alla risposta. Usa \"Esegui codice\" nel menu del compositore per forzare l’esecuzione per un messaggio."
+    },
+    "searchOptions": {
+      "title": "Ricerca avanzata",
+      "resultCount": "Fonti per ricerca:",
+      "freshness": "Preferisci risultati da",
+      "freshness_auto": "Auto (per domanda)",
+      "freshness_day": "Ultimo giorno",
+      "freshness_week": "Ultima settimana",
+      "freshness_month": "Ultimo mese",
+      "freshness_any": "Qualsiasi momento",
+      "hint": "La modalità Automatica consente a ciascuna domanda di impostare la propria priorità di aggiornamento (ad esempio, le notizie preferiscono l’ultimo giorno) e le domande di tipo ricerca possono usare più fonti rispetto al predefinito."
     }
   },
   "models": {
@@ -2130,7 +2188,11 @@
     "moveToMore": "Sposta in Altro",
     "moveOutOfMore": "Mostra nel menu",
     "showSources": "Mostra altre fonti",
-    "hideSources": "Nascondi altre fonti"
+    "hideSources": "Nascondi altre fonti",
+    "aiTools": "Strumenti AI",
+    "aiToolsTooltip": "Funzionalità che l’assistente può utilizzare durante le risposte: ricerca web in tempo reale, esecuzione di codice e servizi collegati.",
+    "codeInterpreterTooltip": "Esegui codice Python in un ambiente sicuro per ogni messaggio.\n\nIdeale per analisi dati, calcoli e generazione di grafici da file allegati.",
+    "categoryTools": "Strumenti e connettori"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Aggiungi le tue istruzioni personali per personalizzare le risposte dell’IA. Queste si uniscono alle linee guida principali per garantire risposte utili, accurate e sicure.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Suggerimento: digita \"/\" per selezionare tra i modelli di prompt salvati.",
@@ -3635,7 +3697,13 @@
     "connectorClientSecretLabel": "OAuth client secret",
     "connectorClientSecretStored": "Un secret è memorizzato. Lascia vuoto per mantenerlo o inserisci uno nuovo per sostituirlo.",
     "connectorClientSecretHint": "Criptato prima della memorizzazione e non viene più mostrato.",
-    "connectorScopesLabel": "Scope (separati da spazio, opzionale)"
+    "connectorScopesLabel": "Scope (separati da spazio, opzionale)",
+    "connectorOauthAuthUrlLabel": "URL di autorizzazione (opzionale)",
+    "connectorOauthTokenUrlLabel": "URL token (opzionale)",
+    "connectorOauthRefreshUrlLabel": "URL di refresh (opzionale)",
+    "connectorOauthEndpointsHint": "Lascia vuoti gli URL degli endpoint per rilevarli automaticamente. Impostali solo per i provider che non supportano la rilevazione automatica, come NetSuite.",
+    "connectorOauthRefreshUrlHint": "Lascia vuoto per effettuare il refresh tramite il token URL.",
+    "connectorOauthEndpointsPairWarning": "URL di autorizzazione e URL token devono essere impostati insieme (l’URL di refresh richiede entrambi)."
   },
   "localModels": {
     "title": "Modelli locali",
@@ -3730,5 +3798,52 @@
     "truncatedNotice": "{count} campo/campi rimossi — il limite della tabella è di {max} colonne: {names}",
     "skippedDerivedNotice": "{count} colonna/e calcolata/e non salvate — le formule fanno riferimento alle colonne di questa tabella: {names}",
     "loadReplacesColumns": "Questa operazione sostituisce le colonne attuali. Le righe esistenti mantengono i valori i cui nomi di colonna corrispondono."
+  },
+  "codeInterpreterDropdown": "Esegui codice",
+  "connectorPin": {
+    "toggleLabel": "Gestisci strumenti connector",
+    "menuLabel": "Connector",
+    "menuLabelCount": "Connector ({count} attivi)",
+    "tooltip": "Vedi quali strumenti connector sono attivi, disattivali per questa chat o ovunque, oppure concentrati su uno.",
+    "toggleServerInChat": "Usa {name} in questa chat",
+    "globalToggleTitle": "Attiva o disattiva {name} ovunque (come in Impostazioni → Connector)",
+    "globalOn": "Globale attivo",
+    "globalOff": "Globale disattivo",
+    "chatToggleHint": "Le caselle di controllo regolano solo questa chat; il pulsante globale corrisponde a Impostazioni → Connector. Ogni connector attivo aggiunge i suoi strumenti a ciascun messaggio — più token e risposte più lente.",
+    "trayLabel": "Strumenti connector",
+    "trayTitle": "Strumenti connector per questa chat",
+    "toggleServer": "Abilita {name}",
+    "needsReconnect": "Riconnetti in Impostazioni",
+    "focusAction": "Concentra",
+    "focusedChip": "In evidenza",
+    "pinnedHint": "Solo gli strumenti di {name} verranno usati in questa conversazione.",
+    "staleHint": "Il connector in evidenza è disconnesso o disabilitato — riconnettilo in Impostazioni → Connector o rimuovi l’evidenza. Fino ad allora, verranno usati tutti gli strumenti attivi.",
+    "costHint": "Ogni connector attivo aggiunge i suoi strumenti a ogni messaggio inviato — più token e risposte più lente. Disattiva quelli che non usi.",
+    "noEligibleConnectors": "Nessun connector configurato. Configurane uno in Impostazioni → Connector prima.",
+    "unknownConnector": "Connector rimosso",
+    "unpin": "Rimuovi concentrazione",
+    "dismiss": "Chiudi",
+    "badgeCount": "{count} strumenti",
+    "badgeTooltip": "Gli strumenti connector sono attivi su ogni messaggio — aggiungono token e tempo di risposta. Clicca per gestire."
+  },
+  "toolApprovals": {
+    "title": "Approvazione strumenti",
+    "description": "Regole che si applicano in ogni conversazione: consenti o blocca automaticamente specifici strumenti connector. Puoi aggiungere strumenti di cui non è ancora stato chiesto l’uso.",
+    "actionApprove": "Consenti sempre",
+    "actionReject": "Blocca sempre",
+    "scopeServer": "su {name}",
+    "scopeAny": "Qualsiasi connector",
+    "removeRule": "Rimuovi regola per {tool}",
+    "toolNameLabel": "Nome strumento",
+    "toolNamePlaceholder": "Nome strumento, es. create_issue",
+    "scopeLabel": "Ambito connector",
+    "actionLabel": "Azione",
+    "addRule": "Aggiungi regola",
+    "rejectPrecedenceNote": "Le regole di blocco hanno sempre la precedenza — su quelle di consenso e su ogni approvazione automatica per conversazione.",
+    "policyAsk": "Chiedi",
+    "policyAllow": "Consenti",
+    "policyBlock": "Blocca",
+    "policyGroupLabel": "Politica di approvazione per {tool}",
+    "listHint": "Imposta cosa succede quando l’assistente vuole utilizzare ciascuno strumento, in ogni conversazione. La modalità Chiedi è predefinita; Blocca ha sempre la precedenza."
   }
 }

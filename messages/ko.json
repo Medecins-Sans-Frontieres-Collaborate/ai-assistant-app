@@ -787,7 +787,13 @@
         "transformingTable": "테이블 변환 중…",
         "findingLocations": "위치 식별 중…",
         "updatingMap": "지도 업데이트 중…"
-      }
+      },
+      "searchingWebFor": "검색 중: “{query}”…",
+      "searchingWebForMultiple": "{count}개 주제 검색 중: “{query}”…",
+      "readingCitedSources": "이전에 인용된 기사 {count}개 읽는 중…",
+      "planningSteps": "단계 계획 중…",
+      "planStep": "단계 {current}/{total}: {description}",
+      "planStepRetry": "단계 {current}/{total} (재시도): {description}"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {#개 도구 사용} other {#개 도구 사용}}",
@@ -797,7 +803,8 @@
       "statusAutoDenied": "자동 거부됨",
       "statusFailed": "실패",
       "statusIncomplete": "미완료",
-      "viaService": "{service}를 통해"
+      "viaService": "{service}를 통해",
+      "downloadFile": "다운로드"
     },
     "consent": {
       "authorizeRequired": "인증 필요",
@@ -839,7 +846,15 @@
       "approvedState": "승인됨 — 에이전트가 재개되었습니다",
       "deniedState": "거부됨",
       "submittingApproval": "승인 후 에이전트 재개 중…",
-      "submittingDenial": "거부 내용을 보내는 중…"
+      "submittingDenial": "거부 내용을 보내는 중…",
+      "alwaysApproveEverywhere": "모든 대화에서 이 도구 항상 허용",
+      "denyOptionsLabel": "거부 옵션",
+      "denyOnce": "한 번만 거부",
+      "neverAllowEverywhere": "모든 대화에서 이 도구 절대 허용 안 함",
+      "deniedByRuleHint": "규칙에 의해 차단됨 — 설정 → 커넥터에서 관리하세요.",
+      "batchPendingHint": "{count}개의 도구 요청 대기 중",
+      "approveAllButton": "모두 허용",
+      "denyAllButton": "모두 거부"
     },
     "openImage": "이미지 열기",
     "copyMessage": "메시지 복사",
@@ -850,7 +865,9 @@
     "ttsError": "오디오 생성 오류가 발생했습니다. 다시 시도해 주세요.",
     "unsupportedMessageType": "메시지 렌더링 오류: 지원되지 않는 메시지 유형",
     "addLanguageOption": "\"{name}\" 추가…",
-    "sources": "출처"
+    "sources": "출처",
+    "interpreterBadge": "코드 실행",
+    "disableCodeInterpreter": "코드 실행 비활성화"
   },
   "sidebar": {
     "collapseSidebar": "사이드바 축소",
@@ -1195,6 +1212,30 @@
       "thresholdLabel": "이 이상이면 재작성으로 간주",
       "thresholdUnit": "문서 변경 비율(%)",
       "exceptionSelectionAlways": "강조된 선택 영역을 수정하면 항상 직접 적용됩니다. 모델은 수정된 발췌 부분만 반환하며, 전체 문서에 대한 제안 사항으로 분리할 수 없습니다."
+    },
+    "webSearch": {
+      "title": "웹 검색",
+      "description": "검색 모드 활성화 시 실시간 웹 검색 실행 방식을 관리합니다. 변경 사항은 즉시 적용됩니다.",
+      "providerLabel": "검색 제공자",
+      "providerAuto": "자동 (권장)",
+      "providerAutoDescription": "배포 기본값 사용 — 현재는 아래 결합 뉴스 검색입니다.",
+      "providerNews": "결합 뉴스 (GDELT + Google News)",
+      "providerNewsDescription": "양쪽 소스를 병렬로 조회하고 결과를 통합하여 한쪽이 실패해도 검색이 중단되지 않습니다. 속도, 다양성, 작동 링크의 균형이 가장 좋습니다.",
+      "providerGoogleNews": "Google News만",
+      "providerGoogleNewsDescription": "익명·빠름 — 검색어만 Google에 전달(계정·쿠키 없음), 약 1초 내 결과 도착. 참고: 전체 기사 대신 주로 제목·요약만 검색하므로 답변이 표면적일 수 있습니다.",
+      "providerGdelt": "GDELT만",
+      "providerGdeltDescription": "세계 뉴스 오픈 연구 DB로, 발행처 직접 링크 제공 및 추가 질문 시 전체 기사 열람 가능. 엄격한 속도 제한 — 연속 검색 시 몇 초 대기할 수 있습니다.",
+      "providerBing": "Bing 그라운딩 (Microsoft 제공)",
+      "providerBingDescription": "전체 페이지를 읽어 더 깊은 요약 제공, 일반 웹까지 커버(뉴스 한정 아님). 단, 검색에 30~90초 소요되며 결과 품질이 일정하지 않을 수 있습니다.",
+      "sourcesLabel": "검색당 소스 수",
+      "sourcesDescription": "검색 시 인용으로 유지할 서로 다른 소스 수. 연구형 질문은 자동으로 더 넓힐 수 있습니다.",
+      "freshnessLabel": "선호 최신성",
+      "freshnessDescription": "검색 결과가 얼마나 최근이어야 하는지 설정합니다. '자동'은 질문별로 결정(긴급 뉴스는 하루 이내 우선).",
+      "freshness_auto": "자동",
+      "freshness_day": "지난 하루",
+      "freshness_week": "지난 일주일",
+      "freshness_month": "지난 한 달",
+      "freshness_any": "언제든지"
     }
   },
   "notFound": {
@@ -1384,6 +1425,23 @@
       "deployment": "배포",
       "modelVersion": "모델 버전",
       "publisher": "게시자"
+    },
+    "interpreterMode": {
+      "title": "코드 인터프리터",
+      "subtitle": "필요할 때 코드 실행 (차트, 데이터 분석)",
+      "learnMore": "무엇을 할 수 있나요?",
+      "description": "활성화 시, Python을 보안 격리 샌드박스에서 실행하여 첨부 파일 분석·결과 계산·차트 생성이 가능합니다. 실행된 코드, 출력 내용, 생성 파일이 답변과 함께 표시됩니다. 메시지에 강제로 실행하려면 작성 메뉴에서 \"코드 실행\"을 사용하세요."
+    },
+    "searchOptions": {
+      "title": "고급 검색",
+      "resultCount": "검색당 소스 수:",
+      "freshness": "이 시점 이후 결과 우선",
+      "freshness_auto": "자동 (질문별)",
+      "freshness_day": "지난 하루",
+      "freshness_week": "지난 일주일",
+      "freshness_month": "지난 한 달",
+      "freshness_any": "모든 시간",
+      "hint": "자동을 선택하면 각 질문마다 최신성 기준이 결정됩니다(예: 뉴스는 지난 하루 선호). 연구형 질문은 기본값보다 더 많은 자료를 활용할 수 있습니다."
     }
   },
   "models": {
@@ -2130,7 +2188,11 @@
     "moveToMore": "더 보기로 이동",
     "moveOutOfMore": "메뉴에 표시",
     "showSources": "다른 소스 보기",
-    "hideSources": "다른 소스 숨기기"
+    "hideSources": "다른 소스 숨기기",
+    "aiTools": "AI 도구",
+    "aiToolsTooltip": "어시스턴트가 답변 시 사용할 수 있는 기능: 실시간 웹 검색, 코드 실행, 연결된 서비스 등.",
+    "codeInterpreterTooltip": "안전한 샌드박스에서 각 메시지마다 Python 코드를 실행합니다.\n\n첨부 파일로 데이터 분석, 계산, 차트 생성 시 유용합니다.",
+    "categoryTools": "도구 및 커넥터"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI의 응답 방식을 맞춤화하려면 개인 지침을 추가하세요. 이는 유용하고 정확하며 안전한 응답을 보장하는 기본 행동 지침과 함께 적용됩니다.",
   "Tip: Type \"/\" to select from saved prompt templates_": "팁: \"/\"를 입력하면 저장된 프롬프트 템플릿을 선택할 수 있습니다.",
@@ -3635,7 +3697,13 @@
     "connectorClientSecretLabel": "OAuth 클라이언트 시크릿",
     "connectorClientSecretStored": "시크릿이 저장되어 있습니다. 유지하려면 비워두고, 변경하려면 새 값을 입력하세요.",
     "connectorClientSecretHint": "저장 전에 암호화되며, 다시 표시되지 않습니다.",
-    "connectorScopesLabel": "스코프(공백으로 구분, 선택 사항)"
+    "connectorScopesLabel": "스코프(공백으로 구분, 선택 사항)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (선택 사항)",
+    "connectorOauthTokenUrlLabel": "Token URL (선택 사항)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (선택 사항)",
+    "connectorOauthEndpointsHint": "엔드포인트 URL을 비워두면 자동으로 검색합니다. NetSuite와 같이 검색을 지원하지 않는 공급자일 경우 직접 입력하세요.",
+    "connectorOauthRefreshUrlHint": "비워두면 token URL로 갱신합니다.",
+    "connectorOauthEndpointsPairWarning": "Authorization URL과 token URL은 함께 입력해야 합니다(Refresh URL도 두 값 모두 필요)."
   },
   "localModels": {
     "title": "로컬 모델",
@@ -3730,5 +3798,52 @@
     "truncatedNotice": "{count}개 필드가 제외됨 — 테이블 한도는 {max}개 컬럼입니다: {names}",
     "skippedDerivedNotice": "{count}개 계산 컬럼이 저장되지 않았습니다 — 수식이 이 테이블의 컬럼을 참조합니다: {names}",
     "loadReplacesColumns": "현재 컬럼을 대체합니다. 기존 행은 컬럼명이 일치하는 값만 유지됩니다."
+  },
+  "codeInterpreterDropdown": "코드 실행",
+  "connectorPin": {
+    "toggleLabel": "커넥터 도구 관리",
+    "menuLabel": "커넥터",
+    "menuLabelCount": "커넥터({count}개 활성화됨)",
+    "tooltip": "활성화된 커넥터 도구를 확인하고, 이 채팅이나 전체에서 비활성화하거나, 하나에 집중할 수 있습니다.",
+    "toggleServerInChat": "이 채팅에서 {name} 사용",
+    "globalToggleTitle": "모든 곳에서 {name} 켜기/끄기(설정 → 커넥터와 동일)",
+    "globalOn": "전역 켜짐",
+    "globalOff": "전역 꺼짐",
+    "chatToggleHint": "체크박스는 이 채팅에만 적용됩니다. 전역 버튼은 설정 → 커넥터와 동일하게 동작합니다. 활성화된 모든 커넥터는 각 메시지에 도구를 추가하므로 토큰 사용량이 늘고 답변이 느려질 수 있습니다.",
+    "trayLabel": "커넥터 도구",
+    "trayTitle": "이 채팅의 커넥터 도구",
+    "toggleServer": "{name} 활성화",
+    "needsReconnect": "설정에서 다시 연결",
+    "focusAction": "집중",
+    "focusedChip": "집중됨",
+    "pinnedHint": "이 대화에서는 {name}의 도구만 사용됩니다.",
+    "staleHint": "집중된 커넥터가 연결 해제 또는 비활성화됨 — 설정 → 커넥터에서 다시 연결하거나 집중을 해제하세요. 그 전까지는 모든 활성 도구가 사용됩니다.",
+    "costHint": "활성화된 모든 커넥터는 메시지마다 도구를 추가하므로 토큰이 더 들고 답변이 느려집니다. 사용하지 않는 도구는 꺼두세요.",
+    "noEligibleConnectors": "설정 → 커넥터에서 먼저 커넥터를 연결하세요.",
+    "unknownConnector": "삭제된 커넥터",
+    "unpin": "집중 해제",
+    "dismiss": "닫기",
+    "badgeCount": "{count}개 도구",
+    "badgeTooltip": "모든 메시지에 커넥터 도구가 활성화되어 있어 토큰과 응답 시간이 늘어납니다. 클릭해서 관리하세요."
+  },
+  "toolApprovals": {
+    "title": "도구 승인",
+    "description": "모든 대화에 적용되는 규칙입니다: 특정 커넥터 도구에 대해 자동 허용 또는 차단할 수 있습니다. 아직 허용 요청을 받지 않은 도구도 추가할 수 있습니다.",
+    "actionApprove": "항상 허용",
+    "actionReject": "항상 차단",
+    "scopeServer": "{name}에서",
+    "scopeAny": "모든 커넥터",
+    "removeRule": "{tool}에 대한 규칙 삭제",
+    "toolNameLabel": "도구 이름",
+    "toolNamePlaceholder": "도구 이름 예: create_issue",
+    "scopeLabel": "커넥터 범위",
+    "actionLabel": "동작",
+    "addRule": "규칙 추가",
+    "rejectPrecedenceNote": "차단 규칙이 항상 우선 적용됩니다 — 허용 규칙이나 대화별 자동 승인보다 우선입니다.",
+    "policyAsk": "질문",
+    "policyAllow": "허용",
+    "policyBlock": "차단",
+    "policyGroupLabel": "{tool}에 대한 승인 정책",
+    "listHint": "어시스턴트가 각 도구를 실행하려 할 때마다 어떻게 처리할지 설정합니다. 기본값은 '묻기'이며, '차단'이 항상 우선합니다."
   }
 }

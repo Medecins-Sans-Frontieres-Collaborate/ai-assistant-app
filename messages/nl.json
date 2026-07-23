@@ -752,7 +752,13 @@
         "transformingTable": "Tabel transformeren…",
         "findingLocations": "Locaties identificeren…",
         "updatingMap": "Kaart bijwerken…"
-      }
+      },
+      "searchingWebFor": "Zoeken: “{query}”…",
+      "searchingWebForMultiple": "Zoeken naar {count} onderwerpen: “{query}”…",
+      "readingCitedSources": "Leest {count} eerder geciteerde artikelen…",
+      "planningSteps": "Stappen plannen…",
+      "planStep": "Stap {current}/{total}: {description}",
+      "planStepRetry": "Stap {current}/{total} (opnieuw): {description}"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# tool gebruikt} other {# tools gebruikt}}",
@@ -762,7 +768,8 @@
       "statusAutoDenied": "Automatisch geweigerd",
       "statusFailed": "Mislukt",
       "statusIncomplete": "Onvolledig",
-      "viaService": "via {service}"
+      "viaService": "via {service}",
+      "downloadFile": "Downloaden"
     },
     "consent": {
       "authorizeRequired": "Autorisatie vereist",
@@ -804,7 +811,15 @@
       "approvedState": "Goedgekeurd — agent hervat",
       "deniedState": "Geweigerd",
       "submittingApproval": "Goedkeuren en agent hervatten…",
-      "submittingDenial": "Uw weigering wordt verzonden…"
+      "submittingDenial": "Uw weigering wordt verzonden…",
+      "alwaysApproveEverywhere": "Deze tool altijd goedkeuren — in elke chat",
+      "denyOptionsLabel": "Weigeropties",
+      "denyOnce": "Eén keer weigeren",
+      "neverAllowEverywhere": "Deze tool nooit toestaan — in elke chat",
+      "deniedByRuleHint": "Geblokkeerd door uw regel — beheren via Instellingen → Connectors.",
+      "batchPendingHint": "{count} toolverzoeken in behandeling",
+      "approveAllButton": "Alles goedkeuren",
+      "denyAllButton": "Alles weigeren"
     },
     "openImage": "Afbeelding openen",
     "copyMessage": "Bericht kopiëren",
@@ -815,7 +830,9 @@
     "ttsError": "Fout bij het genereren van audio. Probeer het opnieuw.",
     "unsupportedMessageType": "Fout bij weergeven bericht: Niet-ondersteund berichttype",
     "addLanguageOption": "\"{name}\" toevoegen…",
-    "sources": "Bronnen"
+    "sources": "Bronnen",
+    "interpreterBadge": "Code uitvoeren",
+    "disableCodeInterpreter": "Code-uitvoering uitschakelen"
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",
@@ -1160,6 +1177,30 @@
       "thresholdLabel": "Behandel als herschrijving boven",
       "thresholdUnit": "% van het document gewijzigd",
       "exceptionSelectionAlways": "Het reviseren van een gemarkeerde selectie wordt altijd direct toegepast — het model geeft alleen het aangepaste fragment terug, wat niet kan worden opgesplitst in suggesties voor het hele document."
+    },
+    "webSearch": {
+      "title": "Webzoekopdracht",
+      "description": "Bepaalt hoe live webzoekopdrachten verlopen wanneer de zoekmodus aan staat. Wijzigingen worden direct toegepast.",
+      "providerLabel": "Zoekprovider",
+      "providerAuto": "Automatisch (aanbevolen)",
+      "providerAutoDescription": "Gebruikt de standaard van de deployment — momenteel de gecombineerde nieuwszoekopdracht hieronder.",
+      "providerNews": "Gecombineerd nieuws (GDELT + Google News)",
+      "providerNewsDescription": "Vraagt beide bronnen parallel op en combineert de resultaten, zodat een fout in één bron nooit de zoekopdracht onderbreekt. Beste balans tussen snelheid, brondiversiteit en werkende artikel-links.",
+      "providerGoogleNews": "Alleen Google News",
+      "providerGoogleNewsDescription": "Anoniem en snel — alleen de zoekopdracht gaat naar Google (geen account of cookies) en resultaten komen meestal binnen een seconde. Let op: hoofdzakelijk op basis van koppen en korte fragmenten, niet volledige artikelen, dus antwoorden zijn vaak oppervlakkig.",
+      "providerGdelt": "Alleen GDELT",
+      "providerGdeltDescription": "Open onderzoeksdatabase voor wereldwijd nieuws met directe uitgeverslinks, waardoor vervolgvragen het volledige artikel kunnen lezen. Strikt geratelimiteerd — opeenvolgende zoekopdrachten kunnen enkele seconden in de wachtrij staan.",
+      "providerBing": "Bing grounding (via Microsoft)",
+      "providerBingDescription": "Leest volledige pagina’s voor diepere samenvattingen en doorzoekt het hele web, niet alleen nieuws. Zoekopdrachten duren echter vaak 30–90 seconden en de resultaten zijn soms wisselend van kwaliteit.",
+      "sourcesLabel": "Bronnen per zoekopdracht",
+      "sourcesDescription": "Hoeveel verschillende bronnen per zoekopdracht als citaat worden bewaard. Bij onderzoeks-achtige vragen kan dit automatisch uitgebreid worden.",
+      "freshnessLabel": "Voorkeursactualiteit",
+      "freshnessDescription": "Hoe recent de resultaten moeten zijn. Automatisch laat elke vraag zelf bepalen (breaking news kiest de laatste dag).",
+      "freshness_auto": "Automatisch",
+      "freshness_day": "Afgelopen dag",
+      "freshness_week": "Afgelopen week",
+      "freshness_month": "Afgelopen maand",
+      "freshness_any": "Elke periode"
     }
   },
   "notFound": {
@@ -1425,6 +1466,23 @@
       "deployment": "Implementatie",
       "modelVersion": "Modelversie",
       "publisher": "Publisher"
+    },
+    "interpreterMode": {
+      "title": "Code Interpreter",
+      "subtitle": "Voert code uit als dat helpt (grafieken, data-analyse)",
+      "learnMore": "Wat kan deze functie?",
+      "description": "Indien ingeschakeld kan de assistent Python uitvoeren in een veilige, geïsoleerde omgeving om bijgevoegde bestanden te analyseren, resultaten te berekenen en grafieken te genereren. Uitgevoerde code, de uitvoer en gemaakte bestanden worden getoond bij het antwoord. Gebruik \"Code uitvoeren\" in het compositiemenu om dit voor een bericht af te dwingen."
+    },
+    "searchOptions": {
+      "title": "Geavanceerd zoeken",
+      "resultCount": "Bronnen per zoekopdracht:",
+      "freshness": "Geef de voorkeur aan resultaten van",
+      "freshness_auto": "Auto (per vraag)",
+      "freshness_day": "Afgelopen dag",
+      "freshness_week": "Afgelopen week",
+      "freshness_month": "Afgelopen maand",
+      "freshness_any": "Altijd",
+      "hint": "Automatisch laat elke vraag zijn eigen actualiteit bepalen (bijv. nieuws geeft de voorkeur aan de afgelopen dag), en onderzoeksvragen kunnen meer bronnen gebruiken dan standaard."
     }
   },
   "models": {
@@ -2130,7 +2188,11 @@
     "moveToMore": "Verplaatsen naar 'Meer'",
     "moveOutOfMore": "Tonen in menu",
     "showSources": "Andere bronnen weergeven",
-    "hideSources": "Andere bronnen verbergen"
+    "hideSources": "Andere bronnen verbergen",
+    "aiTools": "AI-tools",
+    "aiToolsTooltip": "Mogelijkheden die de assistent kan gebruiken tijdens antwoorden: live webzoekopdrachten, code-uitvoering en verbonden services.",
+    "codeInterpreterTooltip": "Voer Python-code uit in een beveiligde sandbox voor elk bericht.\n\nIdeaal voor data-analyse, berekeningen en het genereren van grafieken uit bijlagen.",
+    "categoryTools": "Tools & connectors"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Voeg uw persoonlijke instructies toe om aan te passen hoe de AI reageert. Deze worden gecombineerd met de basisrichtlijnen om behulpzame, nauwkeurige en veilige antwoorden te garanderen.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tip: Typ \"/\" om te kiezen uit opgeslagen promptsjablonen.",
@@ -3635,7 +3697,13 @@
     "connectorClientSecretLabel": "OAuth client secret",
     "connectorClientSecretStored": "Een geheim is opgeslagen. Laat leeg om het te behouden, of voer een nieuwe in om te vervangen.",
     "connectorClientSecretHint": "Versleuteld opgeslagen en nooit opnieuw weergegeven.",
-    "connectorScopesLabel": "Scopes (gescheiden door spaties, optioneel)"
+    "connectorScopesLabel": "Scopes (gescheiden door spaties, optioneel)",
+    "connectorOauthAuthUrlLabel": "Autorisatie-URL (optioneel)",
+    "connectorOauthTokenUrlLabel": "Token-URL (optioneel)",
+    "connectorOauthRefreshUrlLabel": "Vernieuwings-URL (optioneel)",
+    "connectorOauthEndpointsHint": "Laat de endpoint-URL's leeg om deze automatisch te laten ontdekken. Stel ze in voor providers die geen discovery ondersteunen, zoals NetSuite.",
+    "connectorOauthRefreshUrlHint": "Laat leeg om te vernieuwen via de token-URL.",
+    "connectorOauthEndpointsPairWarning": "Autorisatie-URL en token-URL moeten samen worden ingesteld (de vernieuwings-URL vereist beide)."
   },
   "localModels": {
     "title": "Lokale modellen",
@@ -3730,5 +3798,52 @@
     "truncatedNotice": "{count} veld(en) verwijderd — de tabel heeft maximaal {max} kolommen: {names}",
     "skippedDerivedNotice": "{count} berekende kolom(men) niet opgeslagen — formules verwijzen naar kolommen van deze tabel: {names}",
     "loadReplacesColumns": "Dit vervangt de huidige kolommen. Bestaande rijen behouden waarden met overeenkomstige kolomnamen."
+  },
+  "codeInterpreterDropdown": "Code uitvoeren",
+  "connectorPin": {
+    "toggleLabel": "Connector-tools beheren",
+    "menuLabel": "Connectors",
+    "menuLabelCount": "Connectors ({count} actief)",
+    "tooltip": "Zie welke connector-tools actief zijn, schakel ze uit voor dit gesprek of overal, of focus op één.",
+    "toggleServerInChat": "Gebruik {name} in deze chat",
+    "globalToggleTitle": "Schakel {name} overal in of uit (zelfde als Instellingen → Connectors)",
+    "globalOn": "Globaal aan",
+    "globalOff": "Globaal uit",
+    "chatToggleHint": "Selectievakjes regelen alleen dit gesprek; de globale knop volgt Instellingen → Connectors. Elke actieve connector voegt zijn tools toe aan elk bericht — meer tokens en tragere antwoorden.",
+    "trayLabel": "Connector-tools",
+    "trayTitle": "Connector-tools voor deze chat",
+    "toggleServer": "{name} inschakelen",
+    "needsReconnect": "Opnieuw verbinden in Instellingen",
+    "focusAction": "Focus",
+    "focusedChip": "Gefocust",
+    "pinnedHint": "Alleen tools van {name} worden gebruikt in dit gesprek.",
+    "staleHint": "De gefocuste connector is ontkoppeld of uitgeschakeld — verbind opnieuw in Instellingen → Connectors, of verwijder de focus. Tot die tijd worden alle actieve tools gebruikt.",
+    "costHint": "Elke actieve connector voegt zijn tools toe aan elk verzonden bericht — meer tokens en tragere antwoorden. Zet uit wat u niet gebruikt.",
+    "noEligibleConnectors": "Geen connectors geconfigureerd. Stel er eerst één in via Instellingen → Connectors.",
+    "unknownConnector": "Verwijderde connector",
+    "unpin": "Focus verwijderen",
+    "dismiss": "Sluiten",
+    "badgeCount": "{count} tools",
+    "badgeTooltip": "Connector-tools zijn actief bij elk bericht — ze voegen tokens en responstijd toe. Klik om te beheren."
+  },
+  "toolApprovals": {
+    "title": "Tooltoestemmingen",
+    "description": "Regels die gelden in elk gesprek: automatisch specifieke connector-tools toestaan of blokkeren. U kunt tools toevoegen waarvan u nog geen verzoek heeft gehad.",
+    "actionApprove": "Altijd toestaan",
+    "actionReject": "Altijd blokkeren",
+    "scopeServer": "op {name}",
+    "scopeAny": "Elke connector",
+    "removeRule": "Regel voor {tool} verwijderen",
+    "toolNameLabel": "Toolnaam",
+    "toolNamePlaceholder": "Toolnaam, bijvoorbeeld create_issue",
+    "scopeLabel": "Connector-bereik",
+    "actionLabel": "Actie",
+    "addRule": "Regel toevoegen",
+    "rejectPrecedenceNote": "Blokkeerregels hebben altijd voorrang — boven toestaan-regels en boven elke automatische per-gesprek toestemming.",
+    "policyAsk": "Vragen",
+    "policyAllow": "Toestaan",
+    "policyBlock": "Blokkeren",
+    "policyGroupLabel": "Goedkeuringsbeleid voor {tool}",
+    "listHint": "Stel in wat er gebeurt wanneer de assistent elk hulpmiddel wil gebruiken — in elk gesprek. Vragen is de standaard; Blokkeren is altijd leidend."
   }
 }

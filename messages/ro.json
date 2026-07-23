@@ -785,7 +785,13 @@
         "transformingTable": "Se transformă tabelul...",
         "findingLocations": "Se identifică locațiile...",
         "updatingMap": "Se actualizează harta..."
-      }
+      },
+      "searchingWebFor": "Se caută: „{query}”…",
+      "searchingWebForMultiple": "Se caută {count} subiecte: „{query}”…",
+      "readingCitedSources": "Se citesc {count} articole citate anterior…",
+      "planningSteps": "Se planifică pașii…",
+      "planStep": "Pasul {current}/{total}: {description}",
+      "planStepRetry": "Pasul {current}/{total} (reîncercare): {description}"
     },
     "toolSummary": {
       "usedTools": "Folosit {count, plural, one {# instrument} other {# instrumente}}",
@@ -795,7 +801,8 @@
       "statusAutoDenied": "Respins automat",
       "statusFailed": "Eșuat",
       "statusIncomplete": "Incomplet",
-      "viaService": "prin {service}"
+      "viaService": "prin {service}",
+      "downloadFile": "Descarcă"
     },
     "consent": {
       "authorizeRequired": "Este necesară autorizarea",
@@ -837,7 +844,15 @@
       "approvedState": "Aprobat — agentul a fost reluat",
       "deniedState": "Refuzat",
       "submittingApproval": "Se aprobă și se reia agentul…",
-      "submittingDenial": "Se trimite refuzul…"
+      "submittingDenial": "Se trimite refuzul…",
+      "alwaysApproveEverywhere": "Aprobă întotdeauna acest instrument — în orice conversație",
+      "denyOptionsLabel": "Opțiuni de respingere",
+      "denyOnce": "Respinge o dată",
+      "neverAllowEverywhere": "Nu permite niciodată acest instrument — în orice conversație",
+      "deniedByRuleHint": "Blocat de regula dvs. — gestionați în Setări → Conectori.",
+      "batchPendingHint": "{count} cereri de instrumente în așteptare",
+      "approveAllButton": "Aprobă tot",
+      "denyAllButton": "Respinge tot"
     },
     "openImage": "Deschide imaginea",
     "copyMessage": "Copiază mesajul",
@@ -848,7 +863,9 @@
     "ttsError": "Eroare la generarea audio. Vă rugăm să încercați din nou.",
     "unsupportedMessageType": "Eroare la afișarea mesajului: Tip de mesaj neacceptat",
     "addLanguageOption": "Adăugați „{name}”...",
-    "sources": "Surse"
+    "sources": "Surse",
+    "interpreterBadge": "Rulează cod",
+    "disableCodeInterpreter": "Dezactivează executarea codului"
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",
@@ -1193,6 +1210,30 @@
       "thresholdLabel": "Consideră ca rescriere peste",
       "thresholdUnit": "% din document modificat",
       "exceptionSelectionAlways": "Revizuirea unei selecții evidențiate se aplică întotdeauna direct — modelul returnează doar fragmentul revizuit, care nu poate fi defalcat sub formă de sugestii pentru întregul document."
+    },
+    "webSearch": {
+      "title": "Căutare web",
+      "description": "Controlează modul în care se realizează căutările live pe web când Modul Căutare este activ. Schimbările se aplică imediat.",
+      "providerLabel": "Furnizor de căutare",
+      "providerAuto": "Automat (recomandat)",
+      "providerAutoDescription": "Folosește setarea implicită de implementare — momentan căutarea combinată de știri de mai jos.",
+      "providerNews": "Știri combinate (GDELT + Google News)",
+      "providerNewsDescription": "Interoghează ambele surse în paralel și combină rezultatele, astfel încât o eșuare nu oprește căutarea. Cel mai bun echilibru între viteză, diversitate de surse și linkuri funcționale către articole.",
+      "providerGoogleNews": "Doar Google News",
+      "providerGoogleNewsDescription": "Anonim și rapid — doar interogarea ajunge la Google (fără cont sau cookie-uri) și rezultatele apar într-o secundă. Notă: scanează în principal titlurile și fragmente scurte, nu articolele complete, așadar răspunsurile pot rămâne la suprafață.",
+      "providerGdelt": "Doar GDELT",
+      "providerGdeltDescription": "Bază de date deschisă de știri globale, cu linkuri directe către editori, ceea ce permite întrebărilor suplimentare să acceseze articolele complete. Limitare strictă a ratei — căutările succesive pot fi puse în coadă câteva secunde.",
+      "providerBing": "Bing grounding (prin Microsoft)",
+      "providerBingDescription": "Citește pagini întregi pentru rezumate detaliate și acoperă web-ul general, nu doar știrile. Totuși, căutările durează frecvent 30–90 de secunde și calitatea poate varia mult de la o căutare la alta.",
+      "sourcesLabel": "Surse pe căutare",
+      "sourcesDescription": "Câte surse distincte păstrează o căutare ca referințe. Întrebările de tip cercetare pot mări automat această limită.",
+      "freshnessLabel": "Recență preferată",
+      "freshnessDescription": "Cât de recente ar trebui să fie rezultatele. Automat lasă fiecare întrebare să decidă (știrile recente preferă ultima zi).",
+      "freshness_auto": "Automat",
+      "freshness_day": "Ultima zi",
+      "freshness_week": "Ultima săptămână",
+      "freshness_month": "Ultima lună",
+      "freshness_any": "Oricând"
     }
   },
   "notFound": {
@@ -1483,6 +1524,23 @@
       "deployment": "Implementare",
       "modelVersion": "Versiune model",
       "publisher": "Editor"
+    },
+    "interpreterMode": {
+      "title": "Interpreter de cod",
+      "subtitle": "Execută cod când ajută (diagrame, analiză de date)",
+      "learnMore": "Ce poate face?",
+      "description": "Când este activată, asistentul poate rula Python într-un sandbox securizat și izolat pentru a analiza fișierele atașate, a calcula rezultate și a genera grafice. Codul executat, rezultatul său și fișierele generate sunt afișate împreună cu răspunsul. Folosiți „Rulează codul” în meniul compozitorului pentru a forța această acțiune pentru un mesaj."
+    },
+    "searchOptions": {
+      "title": "Căutare avansată",
+      "resultCount": "Surse pe căutare:",
+      "freshness": "Preferă rezultate din",
+      "freshness_auto": "Auto (pe întrebare)",
+      "freshness_day": "Ultima zi",
+      "freshness_week": "Ultima săptămână",
+      "freshness_month": "Ultima lună",
+      "freshness_any": "Oricând",
+      "hint": "Auto permite fiecărei întrebări să stabilească propria actualitate (de exemplu, știrile preferă ultima zi), iar întrebările de tip cercetare pot folosi mai multe surse decât implicit."
     }
   },
   "models": {
@@ -2130,7 +2188,11 @@
     "moveToMore": "Mută la Mai multe",
     "moveOutOfMore": "Afișează în meniu",
     "showSources": "Afișează alte surse",
-    "hideSources": "Ascunde alte surse"
+    "hideSources": "Ascunde alte surse",
+    "aiTools": "Instrumente AI",
+    "aiToolsTooltip": "Capabilități pe care asistentul le poate folosi la răspuns: căutare web live, execuție de cod și servicii conectate.",
+    "codeInterpreterTooltip": "Rulează cod Python într-un sandbox securizat pentru fiecare mesaj.\n\nIdeal pentru analiză de date, calcule și generare de grafice din fișiere atașate.",
+    "categoryTools": "Instrumente și conectori"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Adăugați instrucțiunile personale pentru a personaliza modul în care răspunde AI. Acestea sunt combinate cu liniile directoare de bază care asigură răspunsuri utile, corecte și sigure.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Sfat: Tastați \"/\" pentru a selecta dintre șabloanele de prompt salvate.",
@@ -3635,7 +3697,13 @@
     "connectorClientSecretLabel": "Secret client OAuth",
     "connectorClientSecretStored": "Un secret este salvat. Lăsați necompletat pentru a-l păstra sau introduceți unul nou pentru a-l înlocui.",
     "connectorClientSecretHint": "Este criptat înainte de stocare și nu va mai fi afișat ulterior.",
-    "connectorScopesLabel": "Scope-uri (separate prin spațiu, opțional)"
+    "connectorScopesLabel": "Scope-uri (separate prin spațiu, opțional)",
+    "connectorOauthAuthUrlLabel": "URL de autorizare (opțional)",
+    "connectorOauthTokenUrlLabel": "URL token (opțional)",
+    "connectorOauthRefreshUrlLabel": "URL refresh (opțional)",
+    "connectorOauthEndpointsHint": "Lăsați URL-urile endpoint-urilor necompletate pentru a le descoperi automat. Setați-le pentru furnizorii care nu suportă descoperirea, precum NetSuite.",
+    "connectorOauthRefreshUrlHint": "Lăsați necompletat pentru a folosi token URL la refresh.",
+    "connectorOauthEndpointsPairWarning": "URL de autorizare și URL token trebuie setate împreună (URL-ul de refresh are nevoie de ambele)."
   },
   "localModels": {
     "title": "Modele locale",
@@ -3730,5 +3798,52 @@
     "truncatedNotice": "{count} câmp(uri) eliminate — limita tabelului este de {max} coloane: {names}",
     "skippedDerivedNotice": "{count} coloană(e) calculate nesalvate — formulele fac referire la coloanele acestui tabel: {names}",
     "loadReplacesColumns": "Aceasta va înlocui coloanele curente. Liniile existente păstrează valorile care au același nume de coloană."
+  },
+  "codeInterpreterDropdown": "Rulează codul",
+  "connectorPin": {
+    "toggleLabel": "Gestionează instrumente de conector",
+    "menuLabel": "Conectori",
+    "menuLabelCount": "Conectori ({count} activi)",
+    "tooltip": "Vezi ce instrumente de conector sunt active, dezactivează-le pentru acest chat sau peste tot, sau concentrează-te pe unul.",
+    "toggleServerInChat": "Folosește {name} în acest chat",
+    "globalToggleTitle": "Activează sau dezactivează {name} peste tot (la fel ca în Setări → Conectori)",
+    "globalOn": "Activ global",
+    "globalOff": "Inactiv global",
+    "chatToggleHint": "Bifele controlează doar acest chat; butonul global reflectă Setări → Conectori. Fiecare conector activ adaugă instrumentele lui la fiecare mesaj — mai multe tokenuri și răspunsuri mai lente.",
+    "trayLabel": "Instrumente conector",
+    "trayTitle": "Instrumente conector pentru acest chat",
+    "toggleServer": "Activează {name}",
+    "needsReconnect": "Reconectează în Setări",
+    "focusAction": "Concentrează",
+    "focusedChip": "Concentrat",
+    "pinnedHint": "Numai instrumentele din {name} vor fi folosite în această conversație.",
+    "staleHint": "Conectorul concentrat este deconectat sau dezactivat — reconectează-l din Setări → Conectori sau elimină concentrarea. Până atunci, toate instrumentele active vor fi folosite.",
+    "costHint": "Fiecare conector activ adaugă instrumentele sale fiecărui mesaj trimis — mai multe tokenuri și răspunsuri mai lente. Dezactivează ce nu folosești.",
+    "noEligibleConnectors": "Niciun conector configurat. Conectează unul în Setări → Conectori întâi.",
+    "unknownConnector": "Conector eliminat",
+    "unpin": "Elimină concentrarea",
+    "dismiss": "Închide",
+    "badgeCount": "{count} instrumente",
+    "badgeTooltip": "Instrumentele de conector sunt active la fiecare mesaj — adaugă tokenuri și timp de răspuns. Click pentru gestionare."
+  },
+  "toolApprovals": {
+    "title": "Aprobări pentru instrumente",
+    "description": "Reguli care se aplică în orice conversație: permiteți sau blocați automat anumite instrumente de conector. Poți adăuga instrumente pentru care nu ai fost încă întrebat.",
+    "actionApprove": "Permite întotdeauna",
+    "actionReject": "Blochează întotdeauna",
+    "scopeServer": "pe {name}",
+    "scopeAny": "Orice conector",
+    "removeRule": "Elimină regula pentru {tool}",
+    "toolNameLabel": "Nume instrument",
+    "toolNamePlaceholder": "Nume instrument, ex. create_issue",
+    "scopeLabel": "Sferă conector",
+    "actionLabel": "Acțiune",
+    "addRule": "Adaugă regulă",
+    "rejectPrecedenceNote": "Regulile de blocare câștigă întotdeauna — față de regulile de permitere și orice aprobare automată la nivel de conversație.",
+    "policyAsk": "Întreabă",
+    "policyAllow": "Permite",
+    "policyBlock": "Blochează",
+    "policyGroupLabel": "Politica de aprobare pentru {tool}",
+    "listHint": "Setați ce se întâmplă când asistentul dorește să folosească fiecare instrument — în fiecare conversație. Opțiunea implicită este Întreabă; Blocarea are întotdeauna prioritate."
   }
 }

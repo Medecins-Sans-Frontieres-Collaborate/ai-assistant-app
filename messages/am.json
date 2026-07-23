@@ -730,7 +730,13 @@
         "transformingTable": "ሰንጠረዡን በመቀየር ላይ...",
         "findingLocations": "ቦታዎችን በመለየት ላይ...",
         "updatingMap": "ካርታውን በማዘመን ላይ..."
-      }
+      },
+      "searchingWebFor": "በመፈለግ ላይ: “{query}”…",
+      "searchingWebForMultiple": "{count} ጉዳዮችን በመፈለግ ላይ: “{query}”…",
+      "readingCitedSources": "{count} ቀደም ብለው ተጠቀመ የነበሩትን ጽሑፎች በማንበብ ላይ…",
+      "planningSteps": "ደረጃዎችን በመያዝ ላይ…",
+      "planStep": "እሴት {current}/{total}: {description}",
+      "planStepRetry": "እሴት {current}/{total} (እንደገና ሙከራ): {description}"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# መሳሪያ} other {# መሳሪያዎች}} ተጠቅመዋል",
@@ -740,7 +746,8 @@
       "statusAutoDenied": "በራሱ ተጠውኗል",
       "statusFailed": "አልተሳካም",
       "statusIncomplete": "አልተሟሟል",
-      "viaService": "በ{service} አገልግሎት"
+      "viaService": "በ{service} አገልግሎት",
+      "downloadFile": "አውርድ"
     },
     "consent": {
       "authorizeRequired": "ፍቃድ ያስፈልጋል",
@@ -782,7 +789,15 @@
       "approvedState": "ተፈቅዷል — ወኪሉ ቀጥሏል",
       "deniedState": "አልተፈቀደም",
       "submittingApproval": "በማጽደቅና ወኪሉን በመቀጠል ላይ…",
-      "submittingDenial": "የማትፈቅድዎን መልእክት በመላክ ላይ…"
+      "submittingDenial": "የማትፈቅድዎን መልእክት በመላክ ላይ…",
+      "alwaysApproveEverywhere": "ይሁን ሁሉም ቻቶች ላይ ይህን መሳሪያ ሁልጊዜ ይፍቀዱ",
+      "denyOptionsLabel": "እንቢ ምርጫዎች",
+      "denyOnce": "አንድ ጊዜ እንቢ በሉ",
+      "neverAllowEverywhere": "ይህን መሳሪያ በማናቸውም ቻት ላይ ተይዞ አይፈቀድ",
+      "deniedByRuleHint": "በየእርስዎ መስክ ተደግፏል — በቅንብሮች → Connector-ዎች ውስጥ ያቀናብሩ።",
+      "batchPendingHint": "{count} የመሳሪያ ጥያቄዎች በትዕዛዝ ላይ",
+      "approveAllButton": "ሁሉንም ይፍቀዱ",
+      "denyAllButton": "ሁሉንም አይፈቀዱ"
     },
     "openImage": "ምስሉን ክፈት",
     "copyMessage": "መልእክት ቅዳ",
@@ -793,7 +808,9 @@
     "ttsError": "ድምጽ ለመፍጠር ስህተት አጋጥሟል። እባክዎ ደግመው ይሞክሩ።",
     "unsupportedMessageType": "መልእክቱን ማሳየት ላይ ስህተት፡ የማይደገፍ ዓይነት",
     "addLanguageOption": "\"{name}\" ያክሉ…",
-    "sources": "ምንጮች"
+    "sources": "ምንጮች",
+    "interpreterBadge": "ኮድ አስኬድ",
+    "disableCodeInterpreter": "የኮድ አፈጻጸምን አጥፋ"
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",
@@ -1138,6 +1155,30 @@
       "thresholdLabel": "ከዚህ በላይ እንደ እንደገና ጻፍ ይቆጠራል",
       "thresholdUnit": "የዶክዩመንቱ የተቀየረው %",
       "exceptionSelectionAlways": "የታነሰውን ክፍል ማሻሻያ ስለሚደረግ ቀጥሎ ይተገበራል — ሞዴሉ የተሻሻለውን ክፍል ብቻ ይመልሳል፣ ይህም ማሻሻያውን ለሙሉ ሰነድ አካባቢ ወደ ጥናት ማድረግ አይቻልም።"
+    },
+    "webSearch": {
+      "title": "የድህረ ገፅ ፍለጋ",
+      "description": "የቀጥታ ድህረ ገፅ ፍለጋ ሲነቃ ፍለጋው እንዴት እንደሚከናወን ይቆጣጠራል። ለውጦቹ ወዲያውኑ ይሰሩ።",
+      "providerLabel": "የፍለጋ አቅራቢ",
+      "providerAuto": "በራሱ (የተፈለገ)",
+      "providerAutoDescription": "የመጠቀሚያውን ማስጀመሪያ ይጠቀማል — አሁን በታች የተዋሃደ የዜና ፍለጋ።",
+      "providerNews": "የተዋሃደ ዜና (GDELT + Google News)",
+      "providerNewsDescription": "ሁለቱንም ምንጮች በተመሳሳይ ጊዜ ይመርመራል እና ውጤቷን ያካትታል። አንዱ ቢቃለስ ፍለጋው አይቋረጥም። የፍጠነኝነት፣ የምንጭ በልዩነት፣ እና የስራ መገኛ ግንኙነት መስመር በተሻለ ሚዛን ነው።",
+      "providerGoogleNews": "ብቻውን Google News",
+      "providerGoogleNewsDescription": "አስተማማኝና ፈጣን — ፈለጉት ጥያቄ ብቻ Google ደርሶ ውጤት ወደሚያንከባከብ በደቂቃ ውስጥ ይመጣል (መለያ ወይም cookies የለም)። ማስታወሻ፡ በጣም በራስጌዎቹ ዋና ርዕሶችና አነስተኛ መግለጫዎች ይቆራረጣል፤ ሙሉ ጽሑፎች አይደሉም። ስለዚህ የተሰጡት መልሶች በፍጹም ደረጃ ላይ ሊቆዩ ይችላሉ።",
+      "providerGdelt": "ብቻውን GDELT",
+      "providerGdeltDescription": "የዓለም ዜናዎች የፍላጎት መረጃ ቋት፣ በተከፋፈለ አውታረ መረብ ጋር። ይህም የሚሚነበበውን ጥያቄ ሙሉ ጽሑፎች እንዲነቡ ይከትላል። ቀልጣፋ የሆነ ውጤት ግድብ አለው — ተከታይ ፍለጋዎች ለጥቂት ሰከንዶች ይጠበቃሉ።",
+      "providerBing": "Bing grounding (በMicrosoft)",
+      "providerBingDescription": "ሙሉ ገፆችን በትምህርት ያንብባል፣ ሰፊ ማጠቃለያዎች ይሰጣሉ። ዜና ብቻ ሳይሆን አጠቃላይ ድህረ ገፅንም ይሸፍናል። ግን፣ ፍለጋዎች ተደጋጋሚ በ30–90 ሰከንድ ይወርዳሉና የውጤት ጥራት ከፍ በሚል ተመሳሳይ አይደለም።",
+      "sourcesLabel": "ምንጮች በአንድ ፍለጋ",
+      "sourcesDescription": "ስንት ልዩ ምንጮች እንደ አናሳ ይቀርፉ እንደሆነ። ከምርምር የተነሳ ጥያቄዎች ይህንን ራሱ ሊያስፋፋ ይችላል።",
+      "freshnessLabel": "የቀረበትን ጊዜ ይመረጡ",
+      "freshnessDescription": "የውጤት አዲስነት ምን ያህል እንደሚሆኑ። \"Automatic\" ሲመረጥ እያንዳንዱ ጥያቄ ራሱን ይወስናል (በቅርቡ የወጣው ዜና ከተለመደው ቀን ይበልጣል)።",
+      "freshness_auto": "በራሱ",
+      "freshness_day": "ያለፈው ቀን",
+      "freshness_week": "ያለፈው ሳምንት",
+      "freshness_month": "ያለፈው ወር",
+      "freshness_any": "በማናቸውም ጊዜ"
     }
   },
   "notFound": {
@@ -1381,6 +1422,23 @@
       "deployment": "መሰራተኛ",
       "modelVersion": "የሞዴል እትም",
       "publisher": "አሳታሚ"
+    },
+    "interpreterMode": {
+      "title": "የኮድ አስተርጓሚ",
+      "subtitle": "ኮድ ከተስተካከለ ጊዜ መሳሪያ (ሰንደቅ፣ ውሂብ ትንተና)",
+      "learnMore": "ምን ማድረግ ይችላል?",
+      "description": "ሲችል፣ አገልጋዩ Python በደህና ተለይተው በተሰጡ ፋይሎች ትንተና ማድረግ፣ ውጤቶችን ማስላትና ሰንደቆችን ማበረታቻ ይችላል። የተፈጸመው ኮድ፣ ውጤቱና የተሰሩ ፋይሎች ከጥያቄዎች ጋር ይታያሉ። እንዲገባ \"Run Code\" የሚለውን ቃል በመጻፍ በመቀናበሪያው ማውጫ ውስጥ ይጠቀሙ።"
+    },
+    "searchOptions": {
+      "title": "የጥልቅ ፍለጋ",
+      "resultCount": "ምንጮች በአንድ ፍለጋ:",
+      "freshness": "ውጤቶችን ከማንበብ ይምረጡ",
+      "freshness_auto": "በራሱ (በጥያቄ)",
+      "freshness_day": "ያለፈው ቀን",
+      "freshness_week": "ያለፈው ሳምንት",
+      "freshness_month": "የወቅቱ ወር",
+      "freshness_any": "ማንኛውም ጊዜ",
+      "hint": "አንዱ በራሱ ጥያቄ ላይ የወቅቱን አይነት ያወስናል (ለምሳሌ ዜና በቀኑ ላይ ይሻላል), የጥናት አይነት ጥያቄዎች ምናልባት ከመደበኛው የበለጠ ምንጮችን ይጠቀማሉ።"
     }
   },
   "models": {
@@ -2031,7 +2089,11 @@
     "moveToMore": "ወደ 'ተጨማሪ' አንቀሳቅስ",
     "moveOutOfMore": "በምናሌ አሳይ",
     "showSources": "ሌሎች ምንጮችን አሳይ",
-    "hideSources": "ሌሎች ምንጮችን ደብቅ"
+    "hideSources": "ሌሎች ምንጮችን ደብቅ",
+    "aiTools": "AI መሳሪያዎች",
+    "aiToolsTooltip": "አጋሩ በመስጠት የሚጠቀሙት ችሎታዎች፡ live web search, code execution, እና የተገናኘ አገልግሎቶች።",
+    "codeInterpreterTooltip": "ነጻነት ያለው ሲንዳቦክስ ውስጥ ለእያንዳንዱ መልእክት Python code አስኬድ።\n\nለውሂብ ትንተና፣ ስሌትና ከተያያዙ ፋይሎች ጋር ግብዓቶች ማቀናበር በጣም ይጠቅማል።",
+    "categoryTools": "መሳሪያዎች እና የማገናኛ አባላት"
   },
   "transcription": {
     "transcribesOnSend": "በመላክ ጊዜ ይቀዳል",
@@ -3635,7 +3697,13 @@
     "connectorClientSecretLabel": "OAuth client secret",
     "connectorClientSecretStored": "አንድ ምሥጢር ተቀምጧል። ለመጠቀም ባዶ ይተዉ፣ አዲስ ለመቀየር ያስገቡ።",
     "connectorClientSecretHint": "ከማከማቻ በፊት ይዝጋል፣ እና በድጋሚ አይታይም።",
-    "connectorScopesLabel": "Scopes (በቦታ የተለየ፣ አማራጭ)"
+    "connectorScopesLabel": "Scopes (በቦታ የተለየ፣ አማራጭ)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (አማራጭ)",
+    "connectorOauthTokenUrlLabel": "Token URL (አማራጭ)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (አማራጭ)",
+    "connectorOauthEndpointsHint": "አስመለከተው የ endpoint URL ቦታዎችን ባዶ ይተዉ፤ በራሱ ይፈልጋል። Discovery የማይደግፉ ጥቅሎችን (እንደ NetSuite) በራስዎ ያስገቡ።",
+    "connectorOauthRefreshUrlHint": "ባዶ ይተዉ በ token URL ይታደስ።",
+    "connectorOauthEndpointsPairWarning": "Authorization URL እና token URL አብሮ መሙላት አለባቸው (የ refresh URL ሁለቱንም ይፈልጋል።)"
   },
   "localModels": {
     "title": "የአካባቢ ሞዴሎች",
@@ -3730,5 +3798,52 @@
     "truncatedNotice": "{count} መስኮች ጠፍተዋል — የገበታው ገደብ {max} አምድ ነው: {names}",
     "skippedDerivedNotice": "{count} የተከናወነ የአምድ መስክ(ዎች) አልተቀመጡም — ፎርሙላዎች ወደዚህ የገበታ አምድ ይጠቀማሉ፡ {names}",
     "loadReplacesColumns": "ይህ አሁንዎት ያሉትን አምድዎች በሙሉ ይቀይራል። ያሉ ተሰንጠረዦች በስም የሚመዱ ነገሮች ይቆያሉ።"
+  },
+  "codeInterpreterDropdown": "ኮድ አስኪድ",
+  "connectorPin": {
+    "toggleLabel": "የ connector መሳሪያዎችን ያቆጣጡ",
+    "menuLabel": "Connectors",
+    "menuLabelCount": "Connectors ({count} በስራ ላይ)",
+    "tooltip": "የተቻሉ አካባቢ መሣሪያዎችን ይመልከቱ፣ ለዚህ ውይይት ወይም በሁሉም ያጠፉት፣ ወይም በአንዱ ላይ የትኩረት ይስጡ።",
+    "toggleServerInChat": "በዚህ ውይይት {name} ይጠቀሙ",
+    "globalToggleTitle": "{name} በሁሉም ቦታ ላይ አቅርቡ ወይም ያጥፉ (ከማስተካከያዎች → Connectors ጋር ተመሳሳይ)",
+    "globalOn": "በሁሉም ቦታ ብልጥፋ",
+    "globalOff": "በሁሉም ቦታ ዝግ",
+    "chatToggleHint": "Checkbox የዚህን ውይይት ብቻ ይቆጣጠራል፤ global ቁልፍ Settings → Connectors ጋር ይዛመዳል። በስራ ላይ ያሉ ሁሉም connectors መሳሪያዎቻቸውን ከመልእክት ጋር ይጨምራሉ፦ ተጨማሪ tokens እና የሚዘግይ በሆነ ምላሽ።",
+    "trayLabel": "የ connector መሳሪያዎች",
+    "trayTitle": "የዚህ ውይይት የ connector መሳሪያዎች",
+    "toggleServer": "{name} አቅርብ",
+    "needsReconnect": "በማስተካከያ ድጋሜ ይያዙ",
+    "focusAction": "ትኩረት",
+    "focusedChip": "ትኩረታዊ",
+    "pinnedHint": "በዚህ ውይይት በ {name} የሚገኙት መሳሪያዎች ብቻ ይጠቀማሉ።",
+    "staleHint": "የታየው የ connector ትኩረት ተቋርጧል ወይም ተሰናክሏል - ተመልሷት Settings → Connectors ውስጥ ይግቡ፣ ወይም ትኩረት ያስወግዱ። እስከዚያ ድረስ ሁሉም አቅም ያላቸው መሳሪያዎች ይጠቀመዋል።",
+    "costHint": "ከመልእክት ጋር በሡስ የሚሰሩ ሁሉም connectors መሳሪያዎቻቸውን ይጨምራሉ፦ ተጨማሪ tokens እና ዘግየኛ ምላሽ። የማትጠቀሙበትን ይጠፉት።",
+    "noEligibleConnectors": "Connector አልተዘጋጁም። መጀመሪያ በማስተካከያ → Connectors ውስጥ አንዱን ያገናኙ።",
+    "unknownConnector": "የተወገደ connector",
+    "unpin": "ትኩረት ያስወግዱ",
+    "dismiss": "ዝጋ",
+    "badgeCount": "{count} መሳሪያዎች",
+    "badgeTooltip": "የ connector መሳሪያዎች በእያንዳንዱ መልእክት እየሰሩ ናቸው — tokens እና ምላሽ ሰአት ይጨምማሉ። ለአናቸው ያቆጣጡ።"
+  },
+  "toolApprovals": {
+    "title": "የመሳሪያ እወቃቀር",
+    "description": "በሁሉም ውይይት ላይ የሚተገቡ ደንቦች፤ አንዳንድ connector መሳሪያዎችን ራስ-ሰር ፈቀድ ወይም አግድ። አልተጠየቁም ብለው ያላውቁትንም መሳሪያዎች ማክረው ይችላሉ።",
+    "actionApprove": "ሁልጊዜ ፈቅድ",
+    "actionReject": "ሁልጊዜ አከልክል",
+    "scopeServer": "በ{name} ላይ",
+    "scopeAny": "ማንኛውም connector",
+    "removeRule": "ለ{tool} ደንብ ያስወግዱ",
+    "toolNameLabel": "የመሳሪያ ስም",
+    "toolNamePlaceholder": "የመሳሪያ ስም፣ ለምሳሌ create_issue",
+    "scopeLabel": "የ connector ቅርፀት",
+    "actionLabel": "እርምጃ",
+    "addRule": "ደንብ ያክሉ",
+    "rejectPrecedenceNote": "የመከልከያ ደንቦች ሁሌም ሸክላዎቹን ይቆጣጠራሉ—በፍቀድ እና በወንድም መሰረት ላይ እንኳ።",
+    "policyAsk": "ጠይቅ",
+    "policyAllow": "ፈቀድ",
+    "policyBlock": "አግድ",
+    "policyGroupLabel": "የ {tool} ማጽደቅ ፖሊሲ",
+    "listHint": "እገዛው አንዳንድ መሳሪያዎችን ለመከፈት ሲፈልግ ምን እንደሚሆን በእያንዳንዱ ውይይት ውስጥ ያዘጋጁ። ተጠይቅ የነበረው በነባሪ ነው፤ አግድ ሁሌም በጣም ይቆማል።"
   }
 }

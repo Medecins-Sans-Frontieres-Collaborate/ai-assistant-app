@@ -733,7 +733,13 @@
         "transformingTable": "Transformation du tableau…",
         "findingLocations": "Identification des emplacements…",
         "updatingMap": "Mise à jour de la carte…"
-      }
+      },
+      "searchingWebFor": "Recherche : « {query} »…",
+      "searchingWebForMultiple": "Recherche de {count} sujets : « {query} »…",
+      "readingCitedSources": "Lecture de {count} articles cités précédemment…",
+      "planningSteps": "Planification des étapes…",
+      "planStep": "Étape {current}/{total} : {description}",
+      "planStepRetry": "Étape {current}/{total} (réessai) : {description}"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# outil utilisé} other {# outils utilisés}}",
@@ -743,7 +749,8 @@
       "statusAutoDenied": "Refusé automatiquement",
       "statusFailed": "Échec",
       "statusIncomplete": "Incomplet",
-      "viaService": "via {service}"
+      "viaService": "via {service}",
+      "downloadFile": "Télécharger"
     },
     "consent": {
       "authorizeRequired": "Autorisation requise",
@@ -785,7 +792,15 @@
       "approvedState": "Approuvé — agent repris",
       "deniedState": "Refusé",
       "submittingApproval": "Approbation et reprise de l’agent…",
-      "submittingDenial": "Envoi de votre refus…"
+      "submittingDenial": "Envoi de votre refus…",
+      "alwaysApproveEverywhere": "Toujours approuver cet outil — dans toutes les discussions",
+      "denyOptionsLabel": "Options de refus",
+      "denyOnce": "Refuser une fois",
+      "neverAllowEverywhere": "Ne jamais autoriser cet outil — dans toutes les discussions",
+      "deniedByRuleHint": "Bloqué par votre règle — gérez dans Paramètres → Connecteurs.",
+      "batchPendingHint": "{count} demandes d'outil en attente",
+      "approveAllButton": "Tout approuver",
+      "denyAllButton": "Tout refuser"
     },
     "openImage": "Ouvrir l’image",
     "copyMessage": "Copier le message",
@@ -796,7 +811,9 @@
     "ttsError": "Erreur lors de la génération de l’audio. Veuillez réessayer.",
     "unsupportedMessageType": "Erreur d’affichage du message : type de message non pris en charge",
     "addLanguageOption": "Ajouter « {name} »…",
-    "sources": "Sources"
+    "sources": "Sources",
+    "interpreterBadge": "Exécuter le code",
+    "disableCodeInterpreter": "Désactiver l'exécution du code"
   },
   "sidebar": {
     "collapseSidebar": "Réduire la barre latérale",
@@ -1195,6 +1212,30 @@
       "thresholdLabel": "Considérer comme une réécriture au-dessus de",
       "thresholdUnit": "% du document modifié",
       "exceptionSelectionAlways": "La révision d'une sélection surlignée s'applique toujours directement : le modèle renvoie seulement l'extrait révisé, qui ne peut pas être transformé en suggestions pour l'ensemble du document."
+    },
+    "webSearch": {
+      "title": "Recherche Web",
+      "description": "Détermine comment les recherches web en direct sont effectuées lorsque le mode Recherche est actif. Les modifications sont appliquées immédiatement.",
+      "providerLabel": "Fournisseur de recherche",
+      "providerAuto": "Automatique (recommandé)",
+      "providerAutoDescription": "Utilise le paramètre par défaut du déploiement — actuellement, la recherche d’actualités combinée ci-dessous.",
+      "providerNews": "Actualités combinées (GDELT + Google News)",
+      "providerNewsDescription": "Interroge les deux sources en parallèle et fusionne les résultats, ainsi la défaillance de l'une ne bloque jamais la recherche. Meilleur équilibre entre rapidité, diversité des sources et liens d'articles fonctionnels.",
+      "providerGoogleNews": "Google News uniquement",
+      "providerGoogleNewsDescription": "Anonyme et rapide : seule la requête de recherche est envoyée à Google (pas de compte ni cookie) et les résultats arrivent en environ une seconde. Remarque : cela analyse principalement les titres et extraits, pas les articles entiers, donc les réponses peuvent rester superficielles.",
+      "providerGdelt": "GDELT uniquement",
+      "providerGdeltDescription": "Base de données ouverte de recherches sur l’actualité mondiale, avec des liens directs éditeurs permettant de lire les articles entiers. Limite stricte de requêtes : les recherches successives peuvent être mises en file d’attente pendant quelques secondes.",
+      "providerBing": "Bing grounding (via Microsoft)",
+      "providerBingDescription": "Analyse des pages complètes pour des résumés approfondis et couvre l’ensemble du web, pas seulement les actualités. Cependant, les recherches prennent généralement 30 à 90 secondes et la qualité des résultats varie souvent d’une recherche à l’autre.",
+      "sourcesLabel": "Sources par recherche",
+      "sourcesDescription": "Nombre de sources différentes conservées comme citations lors d'une recherche. Les questions de type académique peuvent élargir cela automatiquement.",
+      "freshnessLabel": "Récence préférée",
+      "freshnessDescription": "Niveau de fraîcheur des résultats. Automatique laisse chaque question décider (l’actualité privilégie généralement la dernière journée).",
+      "freshness_auto": "Automatique",
+      "freshness_day": "Dernier jour",
+      "freshness_week": "Dernière semaine",
+      "freshness_month": "Dernier mois",
+      "freshness_any": "N'importe quand"
     }
   },
   "notFound": {
@@ -1384,6 +1425,23 @@
       "deployment": "Déploiement",
       "modelVersion": "Version du modèle",
       "publisher": "Éditeur"
+    },
+    "interpreterMode": {
+      "title": "Interpréteur de code",
+      "subtitle": "Exécute du code si utile (graphiques, analyses de données)",
+      "learnMore": "Que peut-il faire ?",
+      "description": "Lorsque cette option est activée, l'assistant peut exécuter du code Python dans un environnement sécurisé et isolé pour analyser les fichiers joints, calculer des résultats et générer des graphiques. Le code exécuté, ses sorties et les fichiers générés sont affichés avec la réponse. Utilisez « Exécuter le code » dans le menu du compositeur pour l’imposer à un message."
+    },
+    "searchOptions": {
+      "title": "Recherche avancée",
+      "resultCount": "Sources par recherche :",
+      "freshness": "Privilégier les résultats de",
+      "freshness_auto": "Auto (selon la question)",
+      "freshness_day": "Dernier jour",
+      "freshness_week": "Dernière semaine",
+      "freshness_month": "Dernier mois",
+      "freshness_any": "N'importe quand",
+      "hint": "Le mode auto laisse chaque question définir sa propre actualité (par ex. les actualités privilégient le dernier jour), et les questions de type recherche peuvent utiliser plus de sources que la valeur par défaut."
     }
   },
   "models": {
@@ -2031,7 +2089,11 @@
     "moveToMore": "Déplacer vers Plus",
     "moveOutOfMore": "Afficher dans le menu",
     "showSources": "Afficher d'autres sources",
-    "hideSources": "Masquer d'autres sources"
+    "hideSources": "Masquer d'autres sources",
+    "aiTools": "Outils IA",
+    "aiToolsTooltip": "Fonctionnalités que l’assistant peut utiliser lors des réponses : recherche web en direct, exécution de code et services connectés.",
+    "codeInterpreterTooltip": "Exécutez du code Python dans un environnement sécurisé pour chaque message.\n\nIdéal pour l’analyse de données, les calculs et la génération de graphiques à partir de fichiers joints.",
+    "categoryTools": "Outils et connecteurs"
   },
   "transcription": {
     "addInstructions": "Ajouter des instructions",
@@ -3635,7 +3697,13 @@
     "connectorClientSecretLabel": "Secret client OAuth",
     "connectorClientSecretStored": "Un secret est enregistré. Laissez vide pour le conserver, ou saisissez-en un nouveau pour le remplacer.",
     "connectorClientSecretHint": "Chiffré avant d'être stocké et jamais affiché à nouveau.",
-    "connectorScopesLabel": "Scopes (séparés par des espaces, optionnel)"
+    "connectorScopesLabel": "Scopes (séparés par des espaces, optionnel)",
+    "connectorOauthAuthUrlLabel": "URL d’autorisation (optionnel)",
+    "connectorOauthTokenUrlLabel": "URL du jeton (optionnel)",
+    "connectorOauthRefreshUrlLabel": "URL de rafraîchissement (optionnel)",
+    "connectorOauthEndpointsHint": "Laissez les URL des points de terminaison vides pour une découverte automatique. Spécifiez-les pour les fournisseurs qui ne la prennent pas en charge, comme NetSuite.",
+    "connectorOauthRefreshUrlHint": "Laissez vide pour rafraîchir via l’URL du jeton.",
+    "connectorOauthEndpointsPairWarning": "L’URL d’autorisation et l’URL du jeton doivent être définies ensemble (l’URL de rafraîchissement requiert les deux)."
   },
   "localModels": {
     "title": "Modèles locaux",
@@ -3730,5 +3798,52 @@
     "truncatedNotice": "{count} champ(s) supprimé(s) — la limite du tableau est de {max} colonnes : {names}",
     "skippedDerivedNotice": "{count} colonne(s) calculée(s) non enregistrée(s) — les formules font référence aux colonnes de cette table : {names}",
     "loadReplacesColumns": "Cela remplace les colonnes actuelles. Les lignes existantes conservent les valeurs dont les noms de colonne correspondent."
+  },
+  "codeInterpreterDropdown": "Exécuter le code",
+  "connectorPin": {
+    "toggleLabel": "Gérer les outils de connecteur",
+    "menuLabel": "Connecteurs",
+    "menuLabelCount": "Connecteurs ({count} actifs)",
+    "tooltip": "Voir quels outils de connecteur sont actifs, les désactiver pour cette discussion ou partout, ou se concentrer sur un seul.",
+    "toggleServerInChat": "Utiliser {name} dans cette conversation",
+    "globalToggleTitle": "Activer ou désactiver {name} partout (équivaut à Paramètres → Connecteurs)",
+    "globalOn": "Global : activé",
+    "globalOff": "Global : désactivé",
+    "chatToggleHint": "Les cases à cocher ne concernent que cette conversation ; le bouton global correspond à Paramètres → Connecteurs. Chaque connecteur actif ajoute ses outils à chaque message : plus de jetons et des réponses plus lentes.",
+    "trayLabel": "Outils de connecteur",
+    "trayTitle": "Outils de connecteur pour cette discussion",
+    "toggleServer": "Activer {name}",
+    "needsReconnect": "Reconnectez dans les Paramètres",
+    "focusAction": "Se concentrer",
+    "focusedChip": "Concentré",
+    "pinnedHint": "Seuls les outils de {name} seront utilisés dans cette conversation.",
+    "staleHint": "Le connecteur sélectionné est déconnecté ou désactivé — reconnectez-le dans Paramètres → Connecteurs, ou retirez le focus. D’ici là, tous les outils actifs sont utilisés.",
+    "costHint": "Chaque connecteur actif ajoute ses outils à chaque message envoyé : plus de jetons et des réponses plus lentes. Désactivez ceux que vous n’utilisez pas.",
+    "noEligibleConnectors": "Aucun connecteur configuré. Connectez-en un dans Paramètres → Connecteurs.",
+    "unknownConnector": "Connecteur supprimé",
+    "unpin": "Retirer le focus",
+    "dismiss": "Fermer",
+    "badgeCount": "{count} outils",
+    "badgeTooltip": "Les outils de connecteur sont actifs sur chaque message : ils ajoutent des jetons et du temps de réponse. Cliquez pour gérer."
+  },
+  "toolApprovals": {
+    "title": "Approbations d’outils",
+    "description": "Règles applicables à chaque conversation : autorise ou bloque automatiquement certains outils de connecteur. Vous pouvez ajouter des outils pour lesquels vous n’avez pas encore été sollicité.",
+    "actionApprove": "Toujours autoriser",
+    "actionReject": "Toujours bloquer",
+    "scopeServer": "sur {name}",
+    "scopeAny": "Tout connecteur",
+    "removeRule": "Supprimer la règle pour {tool}",
+    "toolNameLabel": "Nom de l’outil",
+    "toolNamePlaceholder": "Nom de l’outil, ex : create_issue",
+    "scopeLabel": "Portée du connecteur",
+    "actionLabel": "Action",
+    "addRule": "Ajouter une règle",
+    "rejectPrecedenceNote": "Les règles de blocage priment toujours — sur les règles d’autorisation et toute approbation automatique par conversation.",
+    "policyAsk": "Demander",
+    "policyAllow": "Autoriser",
+    "policyBlock": "Bloquer",
+    "policyGroupLabel": "Politique d’approbation pour {tool}",
+    "listHint": "Définissez ce qui se passe lorsque l’assistant souhaite utiliser chaque outil — dans chaque conversation. Demander est le choix par défaut ; Bloquer prévaut toujours."
   }
 }
