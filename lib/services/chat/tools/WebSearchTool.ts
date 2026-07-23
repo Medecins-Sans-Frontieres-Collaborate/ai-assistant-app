@@ -1,5 +1,9 @@
 import { AgentChatService } from '../AgentChatService';
 import { Tool, ToolResult, WebSearchToolParams } from './Tool';
+import { searchGoogleNews } from './googleNewsSearch';
+import { searchNewsFanOut, searchNewsParallel } from './newsSearch';
+
+import { env } from '@/config/environment';
 
 /**
  * WebSearchTool
@@ -30,12 +34,68 @@ export class WebSearchTool implements Tool {
    */
   async execute(params: WebSearchToolParams): Promise<ToolResult> {
     try {
-      console.log(`[WebSearchTool] Executing search: "${params.searchQuery}"`);
+      console.log(
+        `[WebSearchTool] Executing search via ${env.WEB_SEARCH_PROVIDER}: "${params.searchQuery}"`,
+      );
 
+      // Feed-based providers: no LLM round-trip. 'news' (default) fans out
+      // to GDELT + Google News in parallel so each backs the other up. The
+      // Bing agent path below stays available via WEB_SEARCH_PROVIDER.
+      if (env.WEB_SEARCH_PROVIDER !== 'bing-agent') {
+        const feedOptions = {
+          resultCount: params.resultCount ?? 8,
+          freshness: params.freshness ?? 'any',
+        } as const;
+        // Multi-aspect fan-out: one Google News leg per query, in
+        // parallel (GDELT excluded — its rate-limit queue would serialize
+        // the legs; see searchNewsFanOut).
+        const fanOutQueries =
+          (params.searchQueries?.length ?? 0) > 1
+            ? params.searchQueries!.slice(0, 5)
+            : null;
+        if (fanOutQueries) {
+          const fanned = await searchNewsFanOut(fanOutQueries, feedOptions);
+          console.log(
+            `[WebSearchTool] Fan-out across ${fanOutQueries.length} queries: ${fanned.citations.length} merged citations`,
+          );
+          return { text: fanned.text, citations: fanned.citations };
+        }
+        if (env.WEB_SEARCH_PROVIDER === 'google-news') {
+          const newsResults = await searchGoogleNews(
+            params.searchQuery,
+            feedOptions,
+          );
+          return { text: newsResults.text, citations: newsResults.citations };
+        }
+        const newsResults = await searchNewsParallel(
+          params.searchQuery,
+          feedOptions,
+          {
+            sources:
+              env.WEB_SEARCH_PROVIDER === 'gdelt'
+                ? ['gdelt']
+                : ['gdelt', 'google-news'],
+            deep: params.deep ?? false,
+          },
+        );
+        console.log(
+          `[WebSearchTool] News providers used: ${
+            newsResults.providersUsed.join(', ') || 'none'
+          }`,
+        );
+        return { text: newsResults.text, citations: newsResults.citations };
+      }
+
+      if (!params.model) {
+        throw new Error('Bing-agent search requires an agent-backed model');
+      }
       const searchResults = await this.agentChatService.executeWebSearchTool({
         searchQuery: params.searchQuery,
         model: params.model,
         user: params.user,
+        resultCount: params.resultCount,
+        freshness: params.freshness,
+        onActivity: params.onActivity,
       });
 
       console.log(
