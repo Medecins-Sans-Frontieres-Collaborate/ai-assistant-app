@@ -16,8 +16,14 @@ export interface McpToolDefinition {
   inputSchema: Record<string, unknown>;
 }
 
-interface CacheEntry {
+/** One server's cached listing: its tools plus initialize `instructions`. */
+export interface McpServerListing {
   tools: McpToolDefinition[];
+  /** Server-declared usage guidance from the initialize handshake. */
+  instructions?: string;
+}
+
+interface CacheEntry extends McpServerListing {
   expiresAt: number;
 }
 
@@ -37,17 +43,17 @@ export function toolCacheKey(
   return `${userId}|${url}|${tokenHash}`;
 }
 
-export function getCachedTools(key: string): McpToolDefinition[] | undefined {
+export function getCachedTools(key: string): McpServerListing | undefined {
   const entry = cache.get(key);
   if (!entry) return undefined;
   if (entry.expiresAt < Date.now()) {
     cache.delete(key);
     return undefined;
   }
-  return entry.tools;
+  return { tools: entry.tools, instructions: entry.instructions };
 }
 
-export function setCachedTools(key: string, tools: McpToolDefinition[]): void {
+export function setCachedTools(key: string, listing: McpServerListing): void {
   // Sweep expired entries opportunistically; hard-cap total size.
   if (cache.size >= MAX_ENTRIES) {
     const now = Date.now();
@@ -60,7 +66,7 @@ export function setCachedTools(key: string, tools: McpToolDefinition[]): void {
       if (first !== undefined) cache.delete(first);
     }
   }
-  cache.set(key, { tools, expiresAt: Date.now() + TTL_MS });
+  cache.set(key, { ...listing, expiresAt: Date.now() + TTL_MS });
 }
 
 /** Test hook. */
