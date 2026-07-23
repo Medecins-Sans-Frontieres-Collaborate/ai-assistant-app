@@ -61,6 +61,13 @@ export function createAzureOpenAIStreamProcessor(
       let allContent = '';
       let controllerClosed = false;
       let capturedUsage: OpenAI.Completions.CompletionUsage | undefined;
+      // Reasoning models served with a separate `reasoning_content` delta
+      // field (DeepSeek-R1 on Foundry). We re-emit it inline wrapped in
+      // <think> tags — the client already parses those into the collapsible
+      // ThinkingBlock (and R1 variants that emit literal <think> tags in
+      // `content` flow through unchanged on the same path).
+      let allReasoning = '';
+      let reasoningOpen = false;
 
       (async function () {
         try {
@@ -88,7 +95,29 @@ export function createAzureOpenAIStreamProcessor(
               capturedUsage = chunk.usage;
             }
 
+            // Separate reasoning channel (not part of `content`). Streamed
+            // to the client immediately so the thinking is visible live.
+            const reasoningChunk = (
+              chunk?.choices?.[0]?.delta as
+                | { reasoning_content?: string }
+                | undefined
+            )?.reasoning_content;
+            if (reasoningChunk) {
+              if (!reasoningOpen) {
+                reasoningOpen = true;
+                controller.enqueue(encoder.encode('<think>\n'));
+              }
+              allReasoning += reasoningChunk;
+              controller.enqueue(encoder.encode(reasoningChunk));
+            }
+
             if (chunk?.choices?.[0]?.delta?.content) {
+              // Reasoning always precedes the answer — close the think
+              // block the moment real content starts.
+              if (reasoningOpen) {
+                reasoningOpen = false;
+                controller.enqueue(encoder.encode('\n</think>\n\n'));
+              }
               const contentChunk = chunk.choices[0].delta.content;
               allContent += contentChunk;
 
@@ -104,8 +133,18 @@ export function createAzureOpenAIStreamProcessor(
           }
 
           if (!controllerClosed) {
+            // A reasoning-only stream (aborted before any answer text)
+            // must still close its think block or the client renders the
+            // open tag as body text forever.
+            if (reasoningOpen) {
+              reasoningOpen = false;
+              controller.enqueue(encoder.encode('\n</think>\n\n'));
+            }
+
             // Parse thinking content from the accumulated content
-            const { thinking, content } = parseThinkingContent(allContent);
+            const { thinking: inlineThinking, content } =
+              parseThinkingContent(allContent);
+            const thinking = allReasoning.trim() || inlineThinking;
 
             // Get citations if available
             let citations: Citation[] | undefined;
