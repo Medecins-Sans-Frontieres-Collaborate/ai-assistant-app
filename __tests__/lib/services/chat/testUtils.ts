@@ -84,6 +84,7 @@ export interface TestChatContextOptions {
   // Feature flags
   botId?: string;
   searchMode?: SearchMode;
+  precomputedSearchResults?: import('@/types/webSearch').PrecomputedSearchResults;
   interpreterMode?: InterpreterMode;
   threadId?: string;
   agentMode?: boolean;
@@ -141,6 +142,7 @@ export function createTestChatContext(
     // Features
     botId: options.botId,
     searchMode: options.searchMode,
+    precomputedSearchResults: options.precomputedSearchResults,
     interpreterMode: options.interpreterMode,
     emitMarker: options.emitMarker,
     threadId: options.threadId,
