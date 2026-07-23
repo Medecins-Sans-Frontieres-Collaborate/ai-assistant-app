@@ -91,6 +91,7 @@ export async function connectMcpOauth(
   const discovery = await proxyPost<{
     authorizationEndpoint: string | null;
     scopesSupported: string[];
+    requestScopes?: string[];
     resource: string | null;
   }>('/api/mcp/oauth/discover', { server: wireEntry(entry) });
   if (!discovery.authorizationEndpoint) {
@@ -139,6 +140,12 @@ export async function connectMcpOauth(
       },
       redirectUrl,
       state,
+      // Configured scopes only (never the server's full advertised list —
+      // that would over-request). NetSuite REQUIRES a scope that matches its
+      // integration record; providers with a sensible default get none.
+      ...(discovery.requestScopes?.length
+        ? { scope: discovery.requestScopes.join(' ') }
+        : {}),
       ...(discovery.resource ? { resource: new URL(discovery.resource) } : {}),
     },
   );
