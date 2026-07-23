@@ -137,7 +137,7 @@ const AnimatedLoadingText: React.FC<{
   return (
     <div className="flex items-baseline gap-2">
       <div
-        className={`text-sm bg-clip-text text-transparent animate-shimmer-wave transition-opacity duration-200 [--wave-base:#6b7280] dark:[--wave-base:#9ca3af] ${appliedColorClasses} ${
+        className={`text-sm bg-clip-text text-transparent animate-shimmer-wave motion-reduce:animate-none transition-opacity duration-200 [--wave-base:#6b7280] dark:[--wave-base:#9ca3af] ${appliedColorClasses} ${
           isTransitioning ? 'opacity-0' : 'opacity-100'
         }`}
         style={{
