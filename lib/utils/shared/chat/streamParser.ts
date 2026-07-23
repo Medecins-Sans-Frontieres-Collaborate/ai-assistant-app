@@ -22,7 +22,25 @@ import {
   ConsentRequestPayload,
   ToolCallRecordPayload,
   scanStreamEvents,
+  stripIncompleteStreamMarkers,
 } from '@/lib/streamMarkers';
+
+/**
+ * A stream that ENDED CLEANLY but carried a server-reported failure in its
+ * terminal metadata (`streamError`). Distinct from a network-level abort:
+ * the server chose to finish the response, so partial tool records and
+ * consent state are intact — the store surfaces the failure with that
+ * context and must NOT silently retry on a fallback model.
+ */
+export class StreamInterruptedError extends Error {
+  constructor(
+    message: string,
+    public readonly code?: string,
+  ) {
+    super(message);
+    this.name = 'StreamInterruptedError';
+  }
+}
 
 /**
  * Parses streaming chat responses. Forward-only: each chunk scans only
@@ -43,6 +61,7 @@ export class StreamParser {
   private displayText: string = '';
   private extractedCitations: Citation[] = [];
   private extractedThreadId?: string;
+  private extractedThinking?: string;
   private extractedTranscript?: TranscriptMetadata;
   private extractedPendingTranscriptions?: PendingTranscriptionInfo[];
   private extractedFileCacheUpdates?: StreamMetadata['fileCacheUpdates'];
@@ -50,6 +69,8 @@ export class StreamParser {
   private extractedActiveFilesDropped?: string[];
   private extractedUsage?: TokenUsageMetadata;
   private extractedExtractionResult?: ExtractionResultContent;
+  private extractedStreamError?: { message: string; code?: string };
+  private extractedMcpPlan?: import('@/types/mcp').McpPlan;
   private hasReceivedContent: boolean = false;
   private prevDisplayText: string = '';
   private prevCitationsStr: string = '[]';
@@ -190,6 +211,11 @@ export class StreamParser {
       this.extractedThreadId = parsed.threadId;
     }
 
+    // Capture reasoning/thinking from the terminal metadata block (only once)
+    if (parsed.thinking && !this.extractedThinking) {
+      this.extractedThinking = parsed.thinking;
+    }
+
     // Update transcript if found (only once)
     if (parsed.transcript && !this.extractedTranscript) {
       this.extractedTranscript = parsed.transcript;
@@ -222,6 +248,16 @@ export class StreamParser {
     // Capture per-request token usage if present (terminal metadata block)
     if (parsed.usage && this.extractedUsage == null) {
       this.extractedUsage = parsed.usage;
+    }
+
+    // Capture a server-reported mid-stream failure (terminal metadata).
+    if (parsed.streamError && !this.extractedStreamError) {
+      this.extractedStreamError = parsed.streamError;
+    }
+
+    // Capture the MCP turn plan (echoed back on approval resume).
+    if (parsed.mcpPlan && !this.extractedMcpPlan) {
+      this.extractedMcpPlan = parsed.mcpPlan;
     }
 
     // Capture structured-extraction result if present. When set, this
@@ -274,7 +310,17 @@ export class StreamParser {
     }
 
     // Handle non-streaming JSON responses (like o3)
-    let finalText = this.prevDisplayText || this.text;
+    let finalText = this.prevDisplayText;
+    if (!finalText.trim()) {
+      // Raw-accumulator fallback, needed for non-streaming JSON bodies. It
+      // must never surface wire format: a stream that carried ONLY markers
+      // and/or a metadata block (e.g. a tool-loop failure reported after
+      // activity markers) has an empty display text, not raw sentinels.
+      const parsed = parseMetadataFromContent(this.text);
+      finalText = stripIncompleteStreamMarkers(
+        scanStreamEvents(parsed.content, 0).displayDelta,
+      ).trim();
+    }
     if (finalText.trim().startsWith('{') && finalText.trim().endsWith('}')) {
       try {
         const jsonResponse = JSON.parse(finalText);
@@ -284,6 +330,14 @@ export class StreamParser {
         // Non-streaming bodies carry usage inline instead of via metadata
         if (jsonResponse.usage && this.extractedUsage == null) {
           this.extractedUsage = jsonResponse.usage as TokenUsageMetadata;
+        }
+        // Non-streaming Anthropic bodies carry thinking inline too
+        if (
+          typeof jsonResponse.thinking === 'string' &&
+          jsonResponse.thinking &&
+          !this.extractedThinking
+        ) {
+          this.extractedThinking = jsonResponse.thinking;
         }
       } catch (e) {
         // Not JSON or parsing failed, use text as-is
@@ -316,7 +370,17 @@ export class StreamParser {
           ? this.extractedCitations
           : undefined,
       transcript: this.extractedTranscript,
+      thinking: this.extractedThinking,
+      mcpPlan: this.extractedMcpPlan,
     };
+  }
+
+  /**
+   * The MCP turn plan from the terminal metadata block, for the client to
+   * persist on the message and echo back on approval resume.
+   */
+  getMcpPlan(): import('@/types/mcp').McpPlan | undefined {
+    return this.extractedMcpPlan;
   }
 
   /**
@@ -338,6 +402,14 @@ export class StreamParser {
    */
   getThreadId(): string | undefined {
     return this.extractedThreadId;
+  }
+
+  /**
+   * Reasoning/thinking text reported via the terminal metadata block (or
+   * inline `thinking` on non-streaming JSON bodies via finalize()).
+   */
+  getThinking(): string | undefined {
+    return this.extractedThinking;
   }
 
   /**
@@ -385,6 +457,15 @@ export class StreamParser {
   }
 
   /**
+   * Server-reported mid-stream failure, if the stream ended cleanly with a
+   * `streamError` metadata block. Callers surface it as an error state even
+   * though the HTTP stream itself completed.
+   */
+  getStreamError(): { message: string; code?: string } | undefined {
+    return this.extractedStreamError;
+  }
+
+  /**
    * Check if any content has been received
    */
   getHasReceivedContent(): boolean {
@@ -408,6 +489,7 @@ export class StreamParser {
       error: r.error,
       duration_ms: r.duration_ms,
       approval_request_id: r.approval_request_id,
+      ...(r.generated_files ? { generated_files: r.generated_files } : {}),
     }));
   }
 }
