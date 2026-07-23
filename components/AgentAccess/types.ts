@@ -101,6 +101,9 @@ export interface AdminConnectorView {
   tokenHelpUrl?: string;
   oauthClientId?: string;
   oauthScopes: string[];
+  oauthAuthorizationUrl?: string;
+  oauthTokenUrl?: string;
+  oauthRefreshUrl?: string;
   hasClientSecret: boolean;
   createdBy: string;
   createdAt: string;
