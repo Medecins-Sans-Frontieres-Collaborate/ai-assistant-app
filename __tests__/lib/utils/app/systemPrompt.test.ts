@@ -402,4 +402,62 @@ describe('systemPrompt', () => {
       expect(result).toContain('- Real memory');
     });
   });
+
+  describe('tool capability sections', () => {
+    it('includes the code interpreter section only when available', () => {
+      const withCI = buildSystemPrompt({ codeInterpreterAvailable: true });
+      expect(withCI).toContain('## Code Execution & File Generation');
+      expect(withCI).toContain('CREATE downloadable files');
+
+      const without = buildSystemPrompt({});
+      expect(without).not.toContain('## Code Execution & File Generation');
+    });
+
+    it('file-output guidance is interpreter-aware and never contradictory', () => {
+      // Interpreter OFF: cannot generate files → UI download or suggest
+      // enabling the interpreter.
+      const off = buildSystemPrompt({});
+      expect(off).toContain('## Files & Exports');
+      expect(off).toContain('cannot attach, send, or generate files');
+      expect(off).toContain('Download button');
+      expect(off).toContain('enable the Code Interpreter');
+
+      // Interpreter ON: favor real file generation; the "cannot generate
+      // files" prohibition must be GONE.
+      const on = buildSystemPrompt({ codeInterpreterAvailable: true });
+      expect(on).not.toContain('cannot attach, send, or generate files');
+      expect(on).not.toContain('## Files & Exports');
+      expect(on).toContain('FAVOR producing a real file via code execution');
+
+      // The static base defers to the dynamic section in both cases.
+      for (const prompt of [off, on]) {
+        expect(prompt).toContain(
+          'depends on the Code Interpreter — follow the',
+        );
+      }
+    });
+
+    it('includes the web search section only when active', () => {
+      const withSearch = buildSystemPrompt({ webSearchActive: true });
+      expect(withSearch).toContain('## Web Search');
+      // Covers BOTH turn conditions: results injected vs. none this turn
+      expect(withSearch).toContain('"Web Search results:" block');
+      expect(withSearch).toContain('NO such block');
+      expect(withSearch).toContain('do not fabricate current facts');
+
+      const without = buildSystemPrompt({});
+      expect(without).not.toContain('## Web Search');
+    });
+
+    it('renders both sections together when both tools are active', () => {
+      const result = buildSystemPrompt({
+        webSearchActive: true,
+        codeInterpreterAvailable: true,
+      });
+      const searchIdx = result.indexOf('## Web Search');
+      const ciIdx = result.indexOf('## Code Execution & File Generation');
+      expect(searchIdx).toBeGreaterThan(-1);
+      expect(ciIdx).toBeGreaterThan(searchIdx);
+    });
+  });
 });
