@@ -62,13 +62,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   }
 
   const resolvedList = await resolveLinksSerially(validLinks);
-  const resolved: Record<string, string> = {};
-  validLinks.forEach((link, idx) => {
-    // Only report actual upgrades; unresolved links stay client-side as-is.
-    if (resolvedList[idx] && resolvedList[idx] !== link) {
-      resolved[link] = resolvedList[idx];
-    }
-  });
+  // Only report actual upgrades; unresolved links stay client-side as-is.
+  // Built via fromEntries (not key assignment) so the request-derived link
+  // strings can never act as special property names (proto pollution).
+  const resolved: Record<string, string> = Object.fromEntries(
+    validLinks
+      .map((link, idx) => [link, resolvedList[idx]] as const)
+      .filter(([link, target]) => target && target !== link),
+  );
 
   return NextResponse.json({ resolved });
 }
