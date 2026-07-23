@@ -179,8 +179,17 @@ const mockMessages: Record<string, unknown> = {
   },
   connectorPin: {
     toggleLabel: 'Manage connector tools',
+    menuLabel: 'Connectors',
+    menuLabelCount: 'Connectors ({count} active)',
     tooltip:
-      'See which connector tools are active, switch them off, or focus on one.',
+      'See which connector tools are active, switch them off for this chat or everywhere, or focus on one.',
+    toggleServerInChat: 'Use {name} in this chat',
+    globalToggleTitle:
+      'Turn {name} on or off everywhere (same as Settings → Connectors)',
+    globalOn: 'Global on',
+    globalOff: 'Global off',
+    chatToggleHint:
+      'Checkboxes control this chat only; the global button matches Settings → Connectors. Every active connector adds its tools to each message — more tokens and slower responses.',
     trayLabel: 'Connector tools',
     trayTitle: 'Connector tools for this chat',
     toggleServer: 'Enable {name}',
