@@ -20,6 +20,7 @@ import {
   AgentActivityPayload,
   ConsentOutcomePayload,
   ConsentRequestPayload,
+  SearchInterimPayload,
   ToolCallRecordPayload,
   scanStreamEvents,
   stripIncompleteStreamMarkers,
@@ -83,6 +84,8 @@ export class StreamParser {
   // Consent prompts in arrival order, deduped by oauth url / approval id.
   private consentRequests: ConsentRequestPayload[] = [];
   private seenConsentKeys: Set<string> = new Set();
+  // Interim headlines from a combined search (latest emission wins).
+  private latestSearchInterim: SearchInterimPayload | null = null;
 
   constructor(private decoder = createStreamDecoder()) {}
 
@@ -107,6 +110,8 @@ export class StreamParser {
     /** Whether the consent-card or tool-call lists changed this chunk. */
     consentChanged: boolean;
     toolCallsChanged: boolean;
+    /** Whether interim search headlines arrived/changed this chunk. */
+    searchInterimChanged: boolean;
   } {
     const chunk = this.decoder.decode(value, options);
     this.text += chunk;
@@ -145,6 +150,7 @@ export class StreamParser {
     const newOutcomes: ConsentOutcomePayload[] = [];
     let consentChanged = false;
     let toolCallsChanged = false;
+    let searchInterimChanged = false;
     for (const event of scan.events) {
       switch (event.type) {
         case 'agent_activity':
@@ -174,6 +180,11 @@ export class StreamParser {
         case 'tool_call_record': {
           this.toolCallRecords.set(event.payload.id, event.payload);
           toolCallsChanged = true;
+          break;
+        }
+        case 'search_interim': {
+          this.latestSearchInterim = event.payload;
+          searchInterimChanged = true;
           break;
         }
       }
@@ -292,12 +303,18 @@ export class StreamParser {
       actionParams: this.latestActivity?.params,
       consentChanged,
       toolCallsChanged,
+      searchInterimChanged,
     };
   }
 
   /** Consent prompts seen so far, in arrival order. */
   getConsentRequests(): ConsentRequestPayload[] {
     return this.consentRequests;
+  }
+
+  /** Latest interim headlines from a combined search, if any arrived. */
+  getSearchInterim(): SearchInterimPayload | null {
+    return this.latestSearchInterim;
   }
 
   /**
