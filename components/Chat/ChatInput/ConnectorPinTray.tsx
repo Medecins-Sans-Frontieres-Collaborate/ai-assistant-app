@@ -12,9 +12,16 @@ import { useSettingsStore } from '@/client/stores/settingsStore';
 
 /**
  * Inline connector tray above the composer: one row per configured MCP
- * server with an enable/disable toggle (global — mirrors Settings →
- * Connectors) and a per-conversation FOCUS action (only the focused
- * connector's tools are declared to the model; see `applyMcpPin`).
+ * server with a PER-CONVERSATION on/off switch, a global on/off action
+ * (mirrors Settings → Connectors), and a per-conversation FOCUS action
+ * (only the focused connector's tools are declared to the model; see
+ * `applyMcpPin`).
+ *
+ * The per-chat switch is subtractive: it writes the server's id into the
+ * conversation's `disabledMcpServerIds`, leaving the global config alone —
+ * so "not in this chat" no longer means "off everywhere". A globally
+ * disabled server shows its chat switch dimmed with a "global off" action
+ * to bring it back without a trip to Settings.
  *
  * Opened from the `+` menu or the connector badge; also forced open while a
  * focus pin is set so the pin is never invisible state. The footer spells
@@ -34,16 +41,27 @@ export const ConnectorPinTray: FC = () => {
 
   if (!selectedConversation) return null;
   const pinnedId = selectedConversation.pinnedMcpServerId;
+  const chatDisabledIds = selectedConversation.disabledMcpServerIds ?? [];
   const pinnedServer = pinnedId
     ? mcpServers.find((s) => s.id === pinnedId)
     : undefined;
   const pinnedUsable =
     !!pinnedServer?.enabled &&
+    !chatDisabledIds.includes(pinnedServer.id) &&
     !(pinnedServer.authMode === 'oauth' && pinnedServer.oauth?.needsReauth);
 
   const setPin = (serverId: string | undefined) => {
     updateConversation(selectedConversation.id, {
       pinnedMcpServerId: serverId,
+    });
+  };
+
+  const setChatEnabled = (serverId: string, enabled: boolean) => {
+    const next = enabled
+      ? chatDisabledIds.filter((id) => id !== serverId)
+      : [...chatDisabledIds, serverId];
+    updateConversation(selectedConversation.id, {
+      disabledMcpServerIds: next,
     });
   };
 
@@ -85,22 +103,30 @@ export const ConnectorPinTray: FC = () => {
             const needsReauth =
               server.authMode === 'oauth' && !!server.oauth?.needsReauth;
             const isPinned = server.id === pinnedId;
-            const focusable = server.enabled && !needsReauth;
+            const chatEnabled =
+              server.enabled && !chatDisabledIds.includes(server.id);
+            const focusable = chatEnabled && !needsReauth;
             return (
               <li key={server.id} className="flex items-center gap-2">
-                <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-2">
+                {/* Per-chat switch: only meaningful while globally enabled */}
+                <label
+                  className={`flex min-w-0 flex-1 items-center gap-2 ${
+                    server.enabled ? 'cursor-pointer' : 'cursor-default'
+                  }`}
+                >
                   <input
                     type="checkbox"
-                    checked={server.enabled}
-                    onChange={() =>
-                      updateMcpServer(server.id, { enabled: !server.enabled })
-                    }
-                    aria-label={t('toggleServer', { name: server.name })}
-                    className="h-3.5 w-3.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800"
+                    checked={chatEnabled}
+                    disabled={!server.enabled}
+                    onChange={() => setChatEnabled(server.id, !chatEnabled)}
+                    aria-label={t('toggleServerInChat', {
+                      name: server.name,
+                    })}
+                    className="h-3.5 w-3.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-40 dark:border-gray-600 dark:bg-gray-800"
                   />
                   <span
                     className={`truncate text-xs ${
-                      server.enabled
+                      chatEnabled
                         ? 'text-gray-800 dark:text-gray-200'
                         : 'text-gray-400 dark:text-gray-500'
                     }`}
@@ -113,6 +139,22 @@ export const ConnectorPinTray: FC = () => {
                     {t('needsReconnect')}
                   </span>
                 )}
+                {/* Global on/off: mirrors Settings → Connectors, so a
+                    globally-off server can be brought back right here. */}
+                <button
+                  type="button"
+                  onClick={() =>
+                    updateMcpServer(server.id, { enabled: !server.enabled })
+                  }
+                  title={t('globalToggleTitle', { name: server.name })}
+                  className={`flex-shrink-0 rounded-md px-1.5 py-0.5 text-[11px] transition-colors ${
+                    server.enabled
+                      ? 'text-gray-400 dark:text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700'
+                      : 'text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 dark:hover:bg-amber-900/40'
+                  }`}
+                >
+                  {server.enabled ? t('globalOn') : t('globalOff')}
+                </button>
                 {isPinned ? (
                   <button
                     type="button"
@@ -147,7 +189,7 @@ export const ConnectorPinTray: FC = () => {
                 name: pinnedServer?.name ?? t('unknownConnector'),
               })
             : t('staleHint')
-          : t('costHint')}
+          : t('chatToggleHint')}
       </p>
     </div>
   );
