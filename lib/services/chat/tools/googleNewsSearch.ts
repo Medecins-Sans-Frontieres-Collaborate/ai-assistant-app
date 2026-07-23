@@ -125,6 +125,23 @@ export function parseGoogleNewsRss(xml: string): GoogleNewsItem[] {
 }
 
 /**
+ * True when the link's HOST is news.google.com — an actual URL-parse
+ * hostname comparison, not a substring test (which would also match
+ * `evil.com/news.google.com` and trip CodeQL's incomplete-sanitization
+ * check). Unparseable strings are simply "not a Google News link".
+ */
+function isGoogleNewsHost(link: string): boolean {
+  try {
+    return new URL(link).hostname === 'news.google.com';
+  } catch {
+    return false;
+  }
+}
+
+/** Article ids are URL-safe base64; anything else never leaves the app. */
+const ARTICLE_ID_RE = /^[A-Za-z0-9_-]+$/;
+
+/**
  * Pre-2024 decoder: `articles/<id>` ids starting with CBMi/CBM are base64
  * protobuf with the target URL embedded as readable bytes. Local, instant.
  */
@@ -139,7 +156,8 @@ export function decodeLegacyGoogleNewsUrl(link: string): string | null {
     if (!urlMatch) return null;
     const url = urlMatch[0];
     if (!/^https?:\/\/[^/]+\.[a-z]{2,}/i.test(url)) return null;
-    if (url.includes('news.google.com')) return null;
+    // A "resolved" URL that is itself a Google News link is no resolution.
+    if (isGoogleNewsHost(url)) return null;
     return url;
   } catch {
     return null;
@@ -170,6 +188,10 @@ async function decodeViaBatchExecute(link: string): Promise<string | null> {
   const idMatch = link.match(/\/(?:articles|rss\/articles)\/([^/?]+)/);
   if (!idMatch) return null;
   const articleId = idMatch[1];
+  // Hard charset gate on the only user-influenced fragment that reaches a
+  // fetch URL: the host is fixed to news.google.com, and a URL-safe-base64
+  // id cannot traverse paths, smuggle query strings, or change the origin.
+  if (!ARTICLE_ID_RE.test(articleId)) return null;
 
   const pageResponse = await fetchWithBudget(
     `https://news.google.com/articles/${articleId}`,
@@ -214,7 +236,7 @@ async function decodeViaBatchExecute(link: string): Promise<string | null> {
  * with a hard budget; the google link itself is the always-valid fallback.
  */
 export async function resolveGoogleNewsLink(link: string): Promise<string> {
-  if (!link.includes('news.google.com')) return link;
+  if (!isGoogleNewsHost(link)) return link;
   const legacy = decodeLegacyGoogleNewsUrl(link);
   if (legacy) return legacy;
   try {
@@ -251,7 +273,7 @@ export async function resolveLinksSerially(links: string[]): Promise<string[]> {
       continue;
     }
     // Local decode is free — always attempt it.
-    const legacy = link.includes('news.google.com')
+    const legacy = isGoogleNewsHost(link)
       ? decodeLegacyGoogleNewsUrl(link)
       : link;
     if (legacy) {
