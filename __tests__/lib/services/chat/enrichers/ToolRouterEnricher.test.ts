@@ -345,6 +345,13 @@ describe('ToolRouter Enricher', () => {
           ],
           model: { agentId: 'test-agent-id' },
         });
+        // This test exercises the DEPLOYMENT default (bing-agent env);
+        // the store-level default provider is 'combined', so pin 'auto'.
+        (context as any).webSearchOptions = {
+          resultCount: 8,
+          freshness: 'auto',
+          provider: 'auto',
+        };
 
         const result = await enricher.execute(context);
 
@@ -358,6 +365,7 @@ describe('ToolRouter Enricher', () => {
           freshness: 'any',
           provider: 'bing-agent',
           deep: false,
+          onInterimResults: undefined,
           onActivity: expect.any(Function),
         });
 
@@ -934,6 +942,13 @@ describe('ToolRouter Enricher', () => {
         model: { id: 'Mistral-Large-3' },
         emitMarker,
       });
+      // Exercises the DEPLOYMENT default (google-news env); the store-level
+      // default provider is 'combined', so pin 'auto'.
+      (context as any).webSearchOptions = {
+        resultCount: 8,
+        freshness: 'auto',
+        provider: 'auto',
+      };
 
       const result = await enricher.execute(context);
 
@@ -1241,6 +1256,13 @@ describe('ToolRouter Enricher', () => {
         model: { agentId: 'agent-1', id: 'gpt-5.2' },
         emitMarker,
       });
+      // Model-labeled record = the bing-agent env path; pin 'auto' so the
+      // store-level 'combined' default doesn't reroute it.
+      (context as any).webSearchOptions = {
+        resultCount: 8,
+        freshness: 'auto',
+        provider: 'auto',
+      };
 
       await enricher.execute(context);
 
