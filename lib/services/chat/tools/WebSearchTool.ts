@@ -33,15 +33,18 @@ export class WebSearchTool implements Tool {
    * @returns Search results with text and citations
    */
   async execute(params: WebSearchToolParams): Promise<ToolResult> {
+    // Caller-resolved provider (user setting) wins; the env default covers
+    // callers that don't resolve one.
+    const provider = params.provider ?? env.WEB_SEARCH_PROVIDER;
     try {
       console.log(
-        `[WebSearchTool] Executing search via ${env.WEB_SEARCH_PROVIDER}: "${params.searchQuery}"`,
+        `[WebSearchTool] Executing search via ${provider}: "${params.searchQuery}"`,
       );
 
       // Feed-based providers: no LLM round-trip. 'news' (default) fans out
       // to GDELT + Google News in parallel so each backs the other up. The
       // Bing agent path below stays available via WEB_SEARCH_PROVIDER.
-      if (env.WEB_SEARCH_PROVIDER !== 'bing-agent') {
+      if (provider !== 'bing-agent') {
         const feedOptions = {
           resultCount: params.resultCount ?? 8,
           freshness: params.freshness ?? 'any',
@@ -60,7 +63,7 @@ export class WebSearchTool implements Tool {
           );
           return { text: fanned.text, citations: fanned.citations };
         }
-        if (env.WEB_SEARCH_PROVIDER === 'google-news') {
+        if (provider === 'google-news') {
           const newsResults = await searchGoogleNews(
             params.searchQuery,
             feedOptions,
@@ -72,9 +75,7 @@ export class WebSearchTool implements Tool {
           feedOptions,
           {
             sources:
-              env.WEB_SEARCH_PROVIDER === 'gdelt'
-                ? ['gdelt']
-                : ['gdelt', 'google-news'],
+              provider === 'gdelt' ? ['gdelt'] : ['gdelt', 'google-news'],
             deep: params.deep ?? false,
           },
         );

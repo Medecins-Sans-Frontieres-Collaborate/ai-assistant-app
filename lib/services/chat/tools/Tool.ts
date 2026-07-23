@@ -50,6 +50,11 @@ export interface WebSearchToolParams {
   /** Recency the agent should prefer ('any' = no preference). */
   freshness?: 'day' | 'week' | 'month' | 'any';
   /**
+   * Resolved search backend for this request (user setting or deployment
+   * default). Falls back to the WEB_SEARCH_PROVIDER env when absent.
+   */
+  provider?: 'news' | 'gdelt' | 'google-news' | 'bing-agent';
+  /**
    * Router's read of the information need (searchComprehensive). Deep
    * (research-style) searches wait on every news feed for maximum source
    * coverage; surface lookups answer from the fastest feed and use the
