@@ -22,6 +22,15 @@ export interface McpConnectorPreset {
   authStyle: 'none' | 'bearer' | 'oauth';
   description: string;
   tokenHelpUrl?: string;
+  /**
+   * OAuth endpoint templates for providers without RFC 8414 discovery. Same
+   * {placeholder} token as urlTemplate; all prefill-only.
+   */
+  oauthAuthorizationUrlTemplate?: string;
+  oauthTokenUrlTemplate?: string;
+  oauthRefreshUrlTemplate?: string;
+  /** OAuth scopes the provider requires on the authorization request. */
+  oauthScopes?: string[];
   /** Shown in the editor: what the admin has to set up at the vendor first. */
   setupHint: string;
 }
@@ -39,9 +48,23 @@ export const MCP_CONNECTOR_PRESETS: McpConnectorPreset[] = [
     // OAuth 2.0 authorization code + PKCE against a NetSuite integration
     // record. Administrator roles are blocked by NetSuite itself.
     authStyle: 'oauth',
+    // NetSuite publishes no OAuth discovery metadata, and its endpoints embed
+    // the account id — spelled out here (mirroring Azure's connector template).
+    // https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_162730264820.html
+    oauthAuthorizationUrlTemplate:
+      'https://{accountid}.app.netsuite.com/app/login/oauth2/authorize.nl',
+    oauthTokenUrlTemplate:
+      'https://{accountid}.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token',
+    // NetSuite refreshes against the same token endpoint.
+    oauthRefreshUrlTemplate:
+      'https://{accountid}.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token',
+    // REQUIRED: NetSuite rejects an authorize call ("Invalid login attempt")
+    // whose scope is absent or not a subset of the integration record's
+    // enabled scopes. 'mcp' = the AI Connector Service scope.
+    oauthScopes: ['mcp'],
     description: 'Query and update NetSuite records.',
     setupHint:
-      'Create an integration record in NetSuite with OAuth 2.0 enabled, then paste its client id and secret below.',
+      "Create an integration record in NetSuite with OAuth 2.0 enabled and this app's callback URL (<app origin>/mcp-oauth-callback) as its redirect URI — NetSuite requires an EXACT match, trailing slash included. Paste the record's client id and secret below. Users must sign in with a non-Administrator role.",
   },
   {
     key: 'matomo',
