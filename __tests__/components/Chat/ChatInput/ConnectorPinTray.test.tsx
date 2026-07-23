@@ -61,16 +61,58 @@ describe('ConnectorPinTray', () => {
     expect(within(rowFor('Disabled')).getByRole('checkbox')).not.toBeChecked();
   });
 
-  it('toggling a row flips the server in settings', () => {
+  it('the row checkbox disables the server for THIS chat only', () => {
     setServers([{ id: 's1', name: 'GitHub', enabled: true, authMode: 'none' }]);
     render(<ConnectorPinTray />);
 
     fireEvent.click(within(rowFor('GitHub')).getByRole('checkbox'));
 
+    // Global config untouched; the opt-out lands on the conversation.
     expect(
       useSettingsStore.getState().mcpServers.find((s) => s.id === 's1')
         ?.enabled,
-    ).toBe(false);
+    ).toBe(true);
+    expect(updateConversation).toHaveBeenCalledWith('conv-1', {
+      disabledMcpServerIds: ['s1'],
+    });
+  });
+
+  it('re-checking removes the per-chat opt-out', () => {
+    setServers([{ id: 's1', name: 'GitHub', enabled: true, authMode: 'none' }]);
+    selectedConversation = { id: 'conv-1', disabledMcpServerIds: ['s1'] };
+    render(<ConnectorPinTray />);
+
+    const checkbox = within(rowFor('GitHub')).getByRole('checkbox');
+    expect(checkbox).not.toBeChecked();
+    fireEvent.click(checkbox);
+
+    expect(updateConversation).toHaveBeenCalledWith('conv-1', {
+      disabledMcpServerIds: [],
+    });
+  });
+
+  it('the global button flips the server everywhere and revives a disabled one', () => {
+    setServers([
+      { id: 's1', name: 'GitHub', enabled: false, authMode: 'none' },
+    ]);
+    render(<ConnectorPinTray />);
+
+    // Chat checkbox is inert while globally off.
+    expect(within(rowFor('GitHub')).getByRole('checkbox')).toBeDisabled();
+
+    fireEvent.click(within(rowFor('GitHub')).getByText('Global off'));
+    expect(
+      useSettingsStore.getState().mcpServers.find((s) => s.id === 's1')
+        ?.enabled,
+    ).toBe(true);
+  });
+
+  it('a chat-disabled server is not focusable', () => {
+    setServers([{ id: 's1', name: 'GitHub', enabled: true, authMode: 'none' }]);
+    selectedConversation = { id: 'conv-1', disabledMcpServerIds: ['s1'] };
+    render(<ConnectorPinTray />);
+
+    expect(within(rowFor('GitHub')).queryByText('Focus')).toBeNull();
   });
 
   it('focuses a usable server from its row', () => {
