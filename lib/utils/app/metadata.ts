@@ -78,6 +78,20 @@ export interface StreamMetadata {
    * renders it as a download card instead of a text body.
    */
   extractionResult?: ExtractionResultContent;
+  /**
+   * MCP turn plan (steps + progress + retry state). Rides the terminal
+   * block so the client can echo it back on approval resume — the tool
+   * loop is stateless server-side.
+   */
+  mcpPlan?: import('@/types/mcp').McpPlan;
+  /**
+   * Mid-stream failure, reported IN-BAND so the stream can end cleanly.
+   * Aborting the response instead (controller.error) kills the socket and
+   * surfaces browser-side as an opaque network error (Firefox:
+   * NS_ERROR_NET_PARTIAL_TRANSFER) that the UI can only guess at. `message`
+   * must be client-safe — provider error details stay in server logs.
+   */
+  streamError?: { message: string; code?: string };
 }
 
 /**
@@ -96,6 +110,8 @@ export interface ParsedMetadata {
   activeFilesDropped?: string[];
   usage?: TokenUsageMetadata;
   extractionResult?: ExtractionResultContent;
+  streamError?: { message: string; code?: string };
+  mcpPlan?: import('@/types/mcp').McpPlan;
   extractionMethod: 'metadata' | 'none';
   /**
    * Character index in the input string where the terminal
@@ -174,6 +190,8 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
   let activeFilesDropped: string[] | undefined;
   let usage: TokenUsageMetadata | undefined;
   let extractionResult: ExtractionResultContent | undefined;
+  let streamError: ParsedMetadata['streamError'];
+  let mcpPlan: ParsedMetadata['mcpPlan'];
   let extractionMethod: ParsedMetadata['extractionMethod'] = 'none';
   let metadataStartIndex: number | null = null;
 
@@ -230,6 +248,20 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
         if (parsedData.usage) {
           usage = parsedData.usage;
         }
+        if (parsedData.mcpPlan && Array.isArray(parsedData.mcpPlan.steps)) {
+          mcpPlan = parsedData.mcpPlan;
+        }
+        if (
+          parsedData.streamError &&
+          typeof parsedData.streamError.message === 'string'
+        ) {
+          streamError = {
+            message: parsedData.streamError.message,
+            ...(typeof parsedData.streamError.code === 'string'
+              ? { code: parsedData.streamError.code }
+              : {}),
+          };
+        }
         const anyData = parsedData as unknown as {
           extractionResult?: unknown;
         };
@@ -265,6 +297,8 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
     activeFilesDropped,
     usage,
     extractionResult,
+    streamError,
+    mcpPlan,
     extractionMethod,
     metadataStartIndex,
   };
@@ -294,6 +328,8 @@ export function appendMetadataToStream(
   if (metadata.pendingTranscriptions)
     cleanMetadata.pendingTranscriptions = metadata.pendingTranscriptions;
   if (metadata.usage) cleanMetadata.usage = metadata.usage;
+  if (metadata.streamError) cleanMetadata.streamError = metadata.streamError;
+  if (metadata.mcpPlan) cleanMetadata.mcpPlan = metadata.mcpPlan;
 
   // Only append if we have actual metadata
   if (Object.keys(cleanMetadata).length > 0) {
