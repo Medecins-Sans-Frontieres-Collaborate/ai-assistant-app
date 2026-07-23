@@ -214,6 +214,32 @@ describe('ConnectorActivityBadge', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
+  it('auto-hides when every connector is opted out for this chat', () => {
+    setServers([
+      { id: 's1', name: 'GitHub', enabled: true, authMode: 'none' },
+      { id: 's2', name: 'NetSuite', enabled: true, authMode: 'none' },
+    ]);
+    selectedConversation = {
+      id: 'conv-1',
+      disabledMcpServerIds: ['s1', 's2'],
+    };
+    const { container } = render(<ConnectorActivityBadge />);
+
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it('counts only chat-active connectors', () => {
+    setServers([
+      { id: 's1', name: 'GitHub', enabled: true, authMode: 'none' },
+      { id: 's2', name: 'NetSuite', enabled: true, authMode: 'none' },
+    ]);
+    selectedConversation = { id: 'conv-1', disabledMcpServerIds: ['s1'] };
+    render(<ConnectorActivityBadge />);
+
+    // Only NetSuite is active for this chat → its name, not "2 tools".
+    expect(screen.getByText('NetSuite')).toBeInTheDocument();
+  });
+
   it('shows the active count and opens the tray on click', () => {
     setServers([
       { id: 's1', name: 'GitHub', enabled: true, authMode: 'oauth' },
