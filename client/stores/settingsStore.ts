@@ -1590,7 +1590,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 47, // Increment this when schema changes to trigger migrations
+      version: 48, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -2153,7 +2153,8 @@ export const useSettingsStore = create<SettingsStore>()(
 
         // Version 46 → 47: Add advanced web-search options (sanitize repairs
         // both absent and malformed persisted values).
-        if (version < 47) {
+        // Version 47 → 48: Add the search provider option (same repair).
+        if (version < 48) {
           state.webSearchOptions = sanitizeWebSearchOptions(
             state.webSearchOptions,
           );
