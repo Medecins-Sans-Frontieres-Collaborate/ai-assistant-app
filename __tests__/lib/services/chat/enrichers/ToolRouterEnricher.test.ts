@@ -302,6 +302,47 @@ describe('ToolRouter Enricher', () => {
         });
       });
 
+      it('shifts only line-start citation markers when RAG citations occupy the low numbers', async () => {
+        const context = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          messages: [createTestMessage({ content: 'budget question' })],
+          processedContent: {
+            metadata: {
+              citations: [
+                {
+                  number: 1,
+                  title: 'RAG doc',
+                  url: 'https://rag.example',
+                  date: '',
+                },
+              ],
+            },
+          },
+          precomputedSearchResults: {
+            queries: ['budget'],
+            entries: [
+              {
+                title: 'Report cites [3] agencies',
+                url: 'https://a.example/1',
+                date: '2026-07-23',
+                snippet: 'Audit found [2] discrepancies.',
+              },
+            ],
+          },
+        });
+
+        const result = await enricher.execute(context);
+        const merged = String(
+          result.enrichedMessages![result.enrichedMessages!.length - 1].content,
+        );
+
+        // The line-start digest marker shifts past the RAG citation…
+        expect(merged).toContain('[2] Report cites [3] agencies');
+        // …while bracketed numbers INSIDE title/snippet stay untouched.
+        expect(merged).toContain('Audit found [2] discrepancies.');
+        expect(result.processedContent?.metadata?.citations).toHaveLength(2);
+      });
+
       it('does nothing with echoed headlines when search is not requested', async () => {
         mockToolRouterService.determineTool.mockResolvedValue({ tools: [] });
         const context = createTestChatContext({

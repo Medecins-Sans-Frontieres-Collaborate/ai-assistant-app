@@ -639,7 +639,6 @@ describe('validateChatRequest - precomputedSearchResults', () => {
         ...base,
         precomputedSearchResults: {
           queries: ['q'],
-          // eslint-disable-next-line no-script-url
           entries: [{ ...entry, url: 'javascript:alert(1)' }],
         },
       }),

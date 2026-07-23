@@ -514,7 +514,6 @@ describe('emitSearchInterim / search_interim scanning', () => {
       entries: [
         {
           title: 'Click me',
-          // eslint-disable-next-line no-script-url
           url: 'javascript:alert(1)',
           date: '2026-07-23',
         },
