@@ -324,6 +324,13 @@ export class ToolRouterEnricher extends BasePipelineStage {
     // questions widen the source cap beyond the configured default.
     if (toolResponse.tools.includes('web_search') && !followUpSatisfied) {
       const options = sanitizeWebSearchOptions(context.webSearchOptions);
+      // User-selected backend wins; 'auto' defers to the deployment
+      // default. Only feed providers are user-selectable, so a Bing run
+      // can only come from the env default.
+      const provider =
+        options.provider === 'auto'
+          ? env.WEB_SEARCH_PROVIDER
+          : options.provider;
       const freshness =
         options.freshness === 'auto'
           ? (toolResponse.searchRecency ?? 'any')
@@ -340,6 +347,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
         {
           resultCount,
           freshness,
+          provider,
           // Research-style questions justify waiting on every news feed;
           // single-fact lookups answer from the fastest one.
           deep: toolResponse.searchComprehensive === true,
@@ -370,6 +378,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
     tuning: {
       resultCount: number;
       freshness: 'day' | 'week' | 'month' | 'any';
+      provider: 'news' | 'gdelt' | 'google-news' | 'bing-agent';
       deep: boolean;
     },
   ): Promise<ChatContext> {
@@ -380,15 +389,14 @@ export class ToolRouterEnricher extends BasePipelineStage {
     const searchQuery = searchQueries[0];
     const queryLabel = searchQueries.join(' | ');
     console.log(
-      `[ToolRouterEnricher] Executing web search: "${queryLabel}" (queries: ${searchQueries.length}, sources: ${tuning.resultCount}, freshness: ${tuning.freshness})`,
+      `[ToolRouterEnricher] Executing web search via ${tuning.provider}: "${queryLabel}" (queries: ${searchQueries.length}, sources: ${tuning.resultCount}, freshness: ${tuning.freshness})`,
     );
 
     const startTime = Date.now();
     // The provider decides what "executed the search" means for the tool
     // record: the agent model for Bing, the feed(s) themselves otherwise.
-    const useFeedProvider = env.WEB_SEARCH_PROVIDER !== 'bing-agent';
-    const feedLabel =
-      ToolRouterEnricher.FEED_PROVIDER_LABELS[env.WEB_SEARCH_PROVIDER];
+    const useFeedProvider = tuning.provider !== 'bing-agent';
+    const feedLabel = ToolRouterEnricher.FEED_PROVIDER_LABELS[tuning.provider];
     {
       try {
         // Bing path only: find a model with agentId (prefer from context,
@@ -430,6 +438,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
             user: context.user,
             resultCount: tuning.resultCount,
             freshness: tuning.freshness,
+            provider: tuning.provider,
             deep: tuning.deep,
             // Progress phases from inside the sub-call (searching → reading
             // sources → …). The generic searchingWeb key is skipped so it
