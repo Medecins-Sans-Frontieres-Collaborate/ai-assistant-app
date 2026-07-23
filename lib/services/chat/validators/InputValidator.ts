@@ -5,9 +5,20 @@ import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { ChatBody, Message } from '@/types/chat';
 import { ErrorCode, PipelineError } from '@/types/errors';
 import { ExtractionRequest } from '@/types/extractionRecipe';
+import { InterpreterMode } from '@/types/interpreterMode';
+import {
+  MAX_PLAN_STEPS,
+  MAX_PLAN_STEP_DESCRIPTION_CHARS,
+  MAX_PLAN_STEP_TOOLS,
+} from '@/types/mcp';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { Tone } from '@/types/tone';
+import {
+  MAX_SEARCH_RESULT_COUNT,
+  MIN_SEARCH_RESULT_COUNT,
+  WebSearchOptions,
+} from '@/types/webSearch';
 
 import { z } from 'zod';
 
@@ -302,6 +313,37 @@ const ChatBodySchema = z
     verbosity: z.enum(['low', 'medium', 'high']).optional(),
     botId: z.string().max(100, 'Bot ID too long').optional(),
     searchMode: z.nativeEnum(SearchMode).optional(),
+    webSearchOptions: z
+      .object({
+        resultCount: z
+          .number()
+          .int()
+          .min(MIN_SEARCH_RESULT_COUNT)
+          .max(MAX_SEARCH_RESULT_COUNT),
+        freshness: z.enum(['auto', 'day', 'week', 'month', 'any']),
+      })
+      .optional(),
+    interpreterMode: z.nativeEnum(InterpreterMode).optional(),
+    // MCP turn plan echoed on approval resume (stateless server). Bounded
+    // here; StandardChatService re-sanitizes before use.
+    mcpPlan: z
+      .object({
+        steps: z
+          .array(
+            z.object({
+              description: z.string().max(MAX_PLAN_STEP_DESCRIPTION_CHARS),
+              tools: z.array(z.string().max(128)).max(MAX_PLAN_STEP_TOOLS),
+              retried: z.boolean().optional(),
+            }),
+          )
+          .max(MAX_PLAN_STEPS),
+        currentStep: z
+          .number()
+          .int()
+          .min(0)
+          .max(MAX_PLAN_STEPS - 1),
+      })
+      .optional(),
     // Which region's hosted instance to chat with (cross-region routing).
     // Validated as a strict enum; the server additionally forces EU users to
     // EU in resolveChatRegion regardless of this value.
@@ -436,6 +478,8 @@ export class InputValidator {
    */
   public validateChatRequest(body: unknown): ChatBody & {
     searchMode?: SearchMode;
+    webSearchOptions?: WebSearchOptions;
+    interpreterMode?: InterpreterMode;
     threadId?: string;
     forcedAgentType?: string;
     tone?: Tone;
@@ -462,6 +506,8 @@ export class InputValidator {
       // Cast to include key property (it's auto-generated in the actual request)
       return result.data as ChatBody & {
         searchMode?: SearchMode;
+        webSearchOptions?: WebSearchOptions;
+        interpreterMode?: InterpreterMode;
         threadId?: string;
         forcedAgentType?: string;
         extraction?: ExtractionRequest;
