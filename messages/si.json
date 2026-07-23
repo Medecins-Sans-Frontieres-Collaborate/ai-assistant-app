@@ -754,7 +754,13 @@
         "transformingTable": "වගුව පරිවර්තනය කරමින්…",
         "findingLocations": "ස්ථාන හඳුනාගෙන…",
         "updatingMap": "සිතියම යාවත්කාලීන කරමින්…"
-      }
+      },
+      "searchingWebFor": "සොයමින්: “{query}”…",
+      "searchingWebForMultiple": "{count} මාතෘකා සෙවීම: “{query}”…",
+      "readingCitedSources": "පැවැති ආශ්‍රිත ලිපි {count}ක් කියවමින්…",
+      "planningSteps": "පියවර සැලසුම් කරමින්…",
+      "planStep": "පියවර {current}/{total}: {description}",
+      "planStepRetry": "පියවර {current}/{total} (නැවත උත්සාහය): {description}"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {මෙවලමක් භාවිතා විය} other {මෙවලම් # ක් භාවිතා විය}}",
@@ -764,7 +770,8 @@
       "statusAutoDenied": "දෙයි පදනම්ව ප්‍රතික්ෂේප විය",
       "statusFailed": "අසාර්ථක විය",
       "statusIncomplete": "අසම්පූර්ණයි",
-      "viaService": "{service} හරහා"
+      "viaService": "{service} හරහා",
+      "downloadFile": "බාගන්න"
     },
     "consent": {
       "authorizeRequired": "අනුවැදි වීම අවශ්‍යයි",
@@ -806,7 +813,15 @@
       "approvedState": "අනුමත විය — නියෝජිතයා නැවත ක්‍රියාත්මක විය",
       "deniedState": "ප්‍රතික්ෂේප විය",
       "submittingApproval": "අනුමැතිය ලබාදී නියෝජිතයා නැවත ක්‍රියාත්මක කරමින්...",
-      "submittingDenial": "ඔබගේ ප්‍රතික්ෂේපය යොමු කරමින්..."
+      "submittingDenial": "ඔබගේ ප්‍රතික්ෂේපය යොමු කරමින්...",
+      "alwaysApproveEverywhere": "මෙම මෙවලම සෑම චැට් එකකම සෑමවිටම අනුමත කරන්න",
+      "denyOptionsLabel": "ප්‍රතික්ෂේප විකල්ප",
+      "denyOnce": "එවරක් ප්‍රතික්ෂේප කරන්න",
+      "neverAllowEverywhere": "මෙම මෙවලම සෑම චැට් එකකම කිසිදු අවස්ථාවක අනුමත නොකරන්න",
+      "deniedByRuleHint": "ඔබේ නියමය අනුව අවහිර කර ඇත — සැකසුම් → Connectors හි කළමනාකරණය කරන්න.",
+      "batchPendingHint": "{count} මෙවලම් ඉල්ලීම් රැදී ඇතිව ඇත",
+      "approveAllButton": "සියල්ල අනුමත කරන්න",
+      "denyAllButton": "සියල්ල ප්‍රතික්ෂේප කරන්න"
     },
     "openImage": "පින්තූරය විවෘත කරන්න",
     "copyMessage": "පණිවිඩය පිටපත් කරන්න",
@@ -817,7 +832,9 @@
     "ttsError": "ධවනි සකස් කිරීමේ දෝෂයක්. කරුණාකර නැවත උත්සාහ කරන්න.",
     "unsupportedMessageType": "පණිවිඩය ප්‍රදර්ශනයේ දෝෂය: සහය නොදක්වන පණිවිඩ වර්ගය",
     "addLanguageOption": "\"{name}\" එකතු කරන්න…",
-    "sources": "මූලාශ්‍ර"
+    "sources": "මූලාශ්‍ර",
+    "interpreterBadge": "කේතය ක්‍රියාත්මක කරන්න",
+    "disableCodeInterpreter": "කේත ක්‍රියාත්මක කිරීම අක්‍රිය කරන්න"
   },
   "sidebar": {
     "collapseSidebar": "පැති තීරුව හකුළන්න",
@@ -1162,6 +1179,30 @@
       "thresholdLabel": "ඉහත පිළිබඳව පුනරලියක් ලෙස සලකා බලන්න",
       "thresholdUnit": "ලේඛනයේ වෙනස් වූ ප්‍රතිශතය",
       "exceptionSelectionAlways": "තෝරාගෙන ඇතත් කළ හැකි සංශෝධනයන් සෘජුවම අදාළ වේ — ආකෘතිය මඟින් ලබා දෙනු ලබන්නේ සංශෝධිත උපුටා ලැබූ කොටස පමණි, එය සම්පූර්ණ ලේඛනයට යෝජනා ලෙස බෙදිය නොහැකිය."
+    },
+    "webSearch": {
+      "title": "වෙබ් පිරික්සුම",
+      "description": "Search Mode සක්‍රීය වරුළු වෙබ් සෙවීම් ක්‍රියා පාලනය කරයි. වෙනස්කම් වහාම ආරම්භ වේ.",
+      "providerLabel": "සෙවුම් සමුදා",
+      "providerAuto": "ස්වයංක්‍රීය (නිර්දේශිතය)",
+      "providerAutoDescription": "Ddeployment default භාවිතා කරයි — දැනට පහත එක්සත් පුවත් සෙවුම.",
+      "providerNews": "එකට කළ පුවත් (GDELT + Google News)",
+      "providerNewsDescription": "මේ සියලුම ආශ්‍රය එකවර සෙවීලා ප්‍රතිඵල එකට එක්කරයි. සෑම ආශ්‍රයෙන් එකක් අසමත් වුවද සෙවීම වැරදිය නොහැක. වේගය, ආශ්‍ර උපරිම වර්ගීකරණය, සහ වැඩි ලිපි සබැඳි සඳහා හොඳම තත්ත්වය.",
+      "providerGoogleNews": "Google News පමණි",
+      "providerGoogleNewsDescription": "නිර්නාමික හා වේගවත් — සෙවුම් විමසුම පමණක් Google වෙත යන අතර (ගිණුමක් හෝ cookies නැත) සහ ප්‍රතිඵල තත්පර 1ක් ඇතුළත ලැබේ. සටහන්: බොහෝවිට මාතෘකා හා කෙටි උපුටා දැක්වීම් පමණක් පිරික්සයි, සම්පූර්ණ ලිපි නොවේ, ඒ නිසා පිළිතුර පෙරළඹ නැවත අඩංගු විය හැක.",
+      "providerGdelt": "GDELT පමණි",
+      "providerGdeltDescription": "ලෝක පුවත් සඳහා විවුර්ත පර්යේෂණ දත්ත ගබඩාව. සෘජු ප්‍රකාශක සබැඳි සමඟ, පසුව ඉල්ලීම් සම්පූර්ණ ලිපි කියවිය හැක. දැකුම්කළුම අනුපාත සීමා ඇත — අඛණ්ඩ සෙවුම් සෑම විටම තත්පර කිහිපයකට රැඳී සිටිය හැක.",
+      "providerBing": "Bing grounding (Microsoft හරහා)",
+      "providerBingDescription": "ගැඹුරු සාරාංශ සඳහා සම්පූර්ණ පිටු කියවයි සහ පොදු වෙබ් ආවරණය කරයි, පුවත් පමණක් නොව. නමුත්, සෙවුම් බොහෝවිට තත්පර 30–90 ක් ගනු ලබන අතර ප්‍රතිඵල තත්ත්වය සෑම විටම ස්ථිර නොවේ.",
+      "sourcesLabel": "එක් සෙව්වකට ආශ්‍රයන්",
+      "sourcesDescription": "සෙවුමක් මගින් සනාථ තැන්පත් කිරීම සඳහා ගබඩා කරනු ලබන නිදර්ශනාත්මක ආශ්‍රයන් ගණන. පර්යේෂණාත්මක ප්‍රශ්න ඔබකින් ලාභ ලබා ගත හැක.",
+      "freshnessLabel": "වඩා කැමති නව්‍යතාව",
+      "freshnessDescription": "ප්‍රතිඵල ඉතා මෑත විය යුතු වන්නේ කෙසේදැයි. ස්වයංක්‍රීයය ක්‍රමය එක් එක් ප්‍රශ්නයට අනුව තීරණය කරයි (අළුත් පුවත් දවසේ ප්‍රමුඛතාවය ලබාගනී).",
+      "freshness_auto": "ස්වයංක්‍රීය",
+      "freshness_day": "පසුගිය දවස",
+      "freshness_week": "පසුගිය සතිය",
+      "freshness_month": "පසුගිය මාසය",
+      "freshness_any": "ඕනෑම කාලයක්"
     }
   },
   "notFound": {
@@ -1483,6 +1524,23 @@
       "deployment": "උත්සන්න කිරීම",
       "modelVersion": "මාදිලි අනුවාදය",
       "publisher": "ප්‍රකාශකයා"
+    },
+    "interpreterMode": {
+      "title": "කේත විභාගකරු",
+      "subtitle": "රූප සටහන්, දත්ත විශ්ලේෂණය සඳහා අවශ්‍ය විට කේතය ක්‍රියාත්මක කරයි",
+      "learnMore": "මෙය කළ හැක්කේ කුමක්ද?",
+      "description": "සක්‍රීය කළ විට, උපකාරකයාට ආරක්ෂිතව, වෙන් වී ඇති Sandbox එකක Python ක්‍රියාත්මක කල හැක, අමුණා ඇති ගොනු විශ්ලේෂණය කිරීමට, ප්‍රතිඵල ගණනය කිරීමට හා චාට් ඇඳීමට. ක්‍රියාවට නංවන ලද කේතය, එහි ප්‍රතිදානය, සහ ජනන ගොනු පිළිතුර සමඟ පෙන්වයි. පණිවිඩකට විශේෂයෙන් ක්‍රියාත්මක කිරීමට \"Run Code\" යන්නේ Composer මෙනුව භාවිතා කරන්න."
+    },
+    "searchOptions": {
+      "title": "උසස් සෙවීම",
+      "resultCount": "එක් සෙව්වකට ආශ්‍රයන්:",
+      "freshness": "කූට ප්‍රතිඵල වලින් කැමතිම",
+      "freshness_auto": "ස්වයංක්‍රීය (ප්‍රශ්නය අනුව)",
+      "freshness_day": "පසුගිය දවස",
+      "freshness_week": "පසුගිය සතිය",
+      "freshness_month": "පසුගිය මාසයේ",
+      "freshness_any": "ඕනෑම වේලාවක",
+      "hint": "ස්වයංක්‍රීයව, අපේක්ෂා කරන ප්‍රශ්නයට අනුව නවීනතාවය සකසයි (උදා: පුවත් සඳහා පසුගිය දිනය තෝරාගන්නා අතර, පර්යේෂණ ප්‍රශ්නවලින් පෙරනිමි තරම් වඩා වැඩි මූලාශ්‍ර භාවිත කළ හැකියි)."
     }
   },
   "models": {
@@ -2130,7 +2188,11 @@
     "moveToMore": "\"තවත්\" වෙත ගෙන යන්න",
     "moveOutOfMore": "මෙනුවේ පෙන්වන්න",
     "showSources": "වෙනත් මූලාශ්‍ර පෙන්වන්න",
-    "hideSources": "වෙනත් මූලාශ්‍ර සඟවන්න"
+    "hideSources": "වෙනත් මූලාශ්‍ර සඟවන්න",
+    "aiTools": "AI මෙවලම්",
+    "aiToolsTooltip": "උත්තර ලබාදීමට සහාය ලබාදෙන හැකියාවන්: සජීවි වෙබ් සෙවුම්, කේත ක්‍රියාත්මක කිරීම සහ සම්බන්ධිත සේවා.",
+    "codeInterpreterTooltip": "එදා ඕනෑම පණිවිඩයක Python කේතයක් ආරක්ෂිත sandbox එකක ක්‍රියාත්මක කරන්න.\n\nඇමුණුම් කළ ගොනු වලින් දත්ත විශ්ලේෂණය, ගණනය සහ ආකෘති නිර්මාණය සඳහා සුදුසුය.",
+    "categoryTools": "මෙවලම් සහ සම්බන්ධක"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI එකේ ප්‍රතිචාර ගැලපෙන්න ඔබගේ පුද්ගලික උපදෙස් එක් කරන්න. මෙවා උදව්कारी, නිවැරදි සහ නිසි ආරක්ෂාවක් ඇති ප්‍රතිචාර ගෙදීමට වන මූලික හැසිරීම් මාර්ගෝපදේශ සමඟ ඒකාබද්ධ වේ.",
   "Tip: Type \"/\" to select from saved prompt templates_": "ඉඟිය: සුරක්ෂිත උත්ප්‍රේරණ සැදීම් තෝරා ගැනීමට \"/\" ටයිප් කරන්න.",
@@ -3635,7 +3697,13 @@
     "connectorClientSecretLabel": "OAuth client secret",
     "connectorClientSecretStored": "රහසක් සුරැකී ඇත. එය තබා ගැනීමට හිස්ව තබන්න, නැතහොත් නව එකක් ඇතුළත් කර පැරණිය ප්‍රතිස්ථාපනය කරන්න.",
     "connectorClientSecretHint": "සුරැකුමට පෙර සංකේතනය කරයි, සහ නැවත කඩිනමින් පෙන්නවන්නේ නෑ.",
-    "connectorScopesLabel": "Scopes (බිම්තරින් වෙන් කර ඇත, විකල්ප)"
+    "connectorScopesLabel": "Scopes (බිම්තරින් වෙන් කර ඇත, විකල්ප)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (විකල්පයයි)",
+    "connectorOauthTokenUrlLabel": "Token URL (විකල්පයයි)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (විකල්පයයි)",
+    "connectorOauthEndpointsHint": "අවසන් ලිපිනයන් හිස්ව තබන්නේ නම් ඒවා ස්වයංක්‍රීයව අනාවරණය වේ. NetSuite වැනි අනාවරණය සහය නොදක්වන සපයන්නන් සඳහා පමණක් සකසන්න.",
+    "connectorOauthRefreshUrlHint": "Token URL වෙත අලුත් කිරීමට හිස්ව තබන්න.",
+    "connectorOauthEndpointsPairWarning": "Authorization URL සහ Token URL දෙකම එක්ව සකස් කළ යුතුයි (Refresh URL එකට ඒ දෙකද අවශ්‍යයි)."
   },
   "localModels": {
     "title": "ප්‍රාදේශීය ආදර්ශ",
@@ -3730,5 +3798,52 @@
     "truncatedNotice": "ක්ෂේත්‍ර {count}ක් ඉවත් කරන ලදි — වගුවේ සීමාව තීරු {max}කි: {names}",
     "skippedDerivedNotice": "ගණනය කරන ලද තීරු {count}ක් සුරක්ෂිත කර නැත — නිර්වචන සූත්‍රයන් මෙම වගුවේ තීරු වලට යොමු වේ: {names}",
     "loadReplacesColumns": "මෙය වත්මන් තීරු ප්‍රතිස්ථාපනය කරයි. පවතින පේළි සංසදන තීරු නම් වල අගයන් රඳවා ගනී."
+  },
+  "codeInterpreterDropdown": "කේතය ක්‍රියාත්මක කරන්න",
+  "connectorPin": {
+    "toggleLabel": "සම්බන්ධක මෙවලම් පාලනය කරන්න",
+    "menuLabel": "සම්බන්ධකයන්",
+    "menuLabelCount": "සම්බන්ධකයන් ({count} ක් සක්‍රියයි)",
+    "tooltip": "සක්‍රිය සම්බන්ධක මෙවලම් බලන්න, මේ සංවාදයට හෝ සෑම තැනකටම ඒවා අක්‍රිය කරන්න, නැතහොත් එකකට අවධානය යොමු කරන්න.",
+    "toggleServerInChat": "මේ සංවාදයේ {name} භාවිත කරන්න",
+    "globalToggleTitle": "සෑම තැනකම {name} සක්‍රිය හෝ අක්‍රිය කරන්න (Settings → Connectors වලට සමානයි)",
+    "globalOn": "සම්පූර්ණයෙන් සක්‍රිය",
+    "globalOff": "සම්පූර්ණයෙන් අක්‍රිය",
+    "chatToggleHint": "චෙක් බොක්ස් ක්‍රියාත්මක වන්නේ මෙයෙම සංවාදයට පමණි; සමස්ථ බොත්තම Settings → Connectors පරිදි ක්‍රියා කරයි. සක්‍රිය සම්බන්ධකයක් එක් වාරයකට ඒගේ මෙවලම් එකතු කරයි — අමතර token සහ ප්‍රතිචාර වේලාව වැඩි විය හැක.",
+    "trayLabel": "සම්බන්ධක මෙවලම්",
+    "trayTitle": "මේ සංවාදයට සම්බන්ධක මෙවලම්",
+    "toggleServer": "{name} සක්‍රිය කරන්න",
+    "needsReconnect": "Settings හි නැවත සබැඳීමට අවශ්‍යයි",
+    "focusAction": "අවධානය",
+    "focusedChip": "අවධානය යොමු කළා",
+    "pinnedHint": "මෙම සංවාදයේදී {name} වල මෙවලම් පමණක් භාවිතා කරයි.",
+    "staleHint": "අවධානය යොමු කළ සම්බන්ධකය සම්බන්ධ නොවීම හෝ අක්‍රිය වීම — Settings → Connectors හි නැවත සම්බන්ධ කරන්න, නැතහොත් අවධානය ඉවත් කරන්න. ඒ දක්වා සියලු සක්‍රිය මෙවලම් භාවිත වේ.",
+    "costHint": "සියලු සක්‍රිය සම්බන්ධක මෙවලම් ඔබගේ සෑම පණිවිඩයකටම එකතු වේ — වැඩි token හා ප්‍රතිචාර වේලාව. භාවිත නොකරන දේ අක්‍රිය කරන්න.",
+    "noEligibleConnectors": "සම්බන්ධකයන් සකසා නොමැත. පළමුව Settings → Connectors හි සම්බන්ධකයක් සම්බන්ධ කරන්න.",
+    "unknownConnector": "ඉවත් කළ සම්බන්ධකය",
+    "unpin": "අවධානය ඉවත් කරන්න",
+    "dismiss": "වසන්න",
+    "badgeCount": "මෙවලම් {count} ක්",
+    "badgeTooltip": "සම්බන්ධක මෙවලම් සෑම පණිවිඩයකම සක්‍රියයි — ඒවා token හා ප්‍රතිචාර වේලාව වැඩිකරයි. කළමනාකරණයට ක්ලික් කරන්න."
+  },
+  "toolApprovals": {
+    "title": "මෙවලම් අනුමැති",
+    "description": "සෑම සංවාදයකටම යෙදුනු නීති: විශේෂ සම්බන්ධක මෙවලම් ස්වයංක්‍රීයව අනුමත කරන්න හෝ අවහිර කරන්න. ඔබට තවම ඉල්ලීමක් ලැබී නැති මෙවලම්ද එකතු කළ හැකියි.",
+    "actionApprove": "හැමවිටම අනුමත කරන්න",
+    "actionReject": "හැමවිටම අවහිර කරන්න",
+    "scopeServer": "{name} මත",
+    "scopeAny": "ඕනෑම සම්බන්ධකයක්",
+    "removeRule": "{tool} සඳහා නීතිය ඉවත් කරන්න",
+    "toolNameLabel": "මෙවලම් නම",
+    "toolNamePlaceholder": "මෙවලම් නම, උදා: create_issue",
+    "scopeLabel": "සම්බන්ධක පරාසය",
+    "actionLabel": "ක්‍රියාව",
+    "addRule": "නීතිය එකතු කරන්න",
+    "rejectPrecedenceNote": "අවහිර නීති සැමවිටම ඉහළ යයි — අනුමත නීති වලටත්, සංවාද සඳහා ස්වයංක්‍රීය අනුමැතිය වලටත් ඉහළයි.",
+    "policyAsk": "ඉල්ලන්න",
+    "policyAllow": "අනුමත කරන්න",
+    "policyBlock": "අත්හිටුවන්න",
+    "policyGroupLabel": "{tool} සඳහා අනුමැතිය ප්‍රතිපත්තිය",
+    "listHint": "ඉස්සරහට සංග්‍රහයක් නිවැරැදිව ක්‍රියාත්මක කිරීමට උදව්කරුට එක් එක් මෙවලම ක්‍රියාත්මක කිරීමට අවශ්‍ය වූ විට යහපත් කටයුතු සකසන්න — සියලු කථාබස් වලටත්. ‘ඉල්ලීම’ මුල් පෙළයි; ‘අත්හිටුවීම’ සෑම විටම ප්‍රභල වේ."
   }
 }

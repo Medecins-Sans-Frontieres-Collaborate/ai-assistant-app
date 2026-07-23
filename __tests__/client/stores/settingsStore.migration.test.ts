@@ -8,6 +8,9 @@ import {
   MAX_CARDS_MAX,
 } from '@/lib/utils/shared/geo/timelapsePacing';
 
+import { InterpreterMode } from '@/types/interpreterMode';
+import { DEFAULT_WEB_SEARCH_OPTIONS } from '@/types/webSearch';
+
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { describe, expect, it } from 'vitest';
 
@@ -684,5 +687,114 @@ describe('settingsStore migration (v43 → v44)', () => {
       EMISSIONS_CHIP_VISIBILITY_DEFAULT,
     );
     expect(result.emissionsChipAutoHideMs).toBe(EMISSIONS_CHIP_AUTOHIDE_MIN_MS);
+  });
+});
+
+describe('settingsStore migration (v45 → v46)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills defaultInterpreterMode to INTELLIGENT (default enabled)', () => {
+    const result = migrate({}, 45) as Record<string, unknown>;
+
+    expect(result.defaultInterpreterMode).toBe(InterpreterMode.INTELLIGENT);
+  });
+
+  it('preserves a deliberate OFF choice on re-migration', () => {
+    const result = migrate(
+      { defaultInterpreterMode: InterpreterMode.OFF },
+      45,
+    ) as Record<string, unknown>;
+
+    expect(result.defaultInterpreterMode).toBe(InterpreterMode.OFF);
+  });
+
+  it('repairs an unrecognized value', () => {
+    const result = migrate({ defaultInterpreterMode: 'turbo' }, 45) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.defaultInterpreterMode).toBe(InterpreterMode.INTELLIGENT);
+  });
+});
+
+describe('settingsStore migration (v46 → v47)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills default web-search options', () => {
+    const result = migrate({}, 46) as Record<string, unknown>;
+
+    expect(result.webSearchOptions).toEqual(DEFAULT_WEB_SEARCH_OPTIONS);
+  });
+
+  it('preserves valid persisted options and clamps invalid ones', () => {
+    const result = migrate(
+      { webSearchOptions: { resultCount: 12, freshness: 'week' } },
+      46,
+    ) as Record<string, unknown>;
+    expect(result.webSearchOptions).toEqual({
+      resultCount: 12,
+      freshness: 'week',
+      provider: 'auto',
+    });
+
+    const repaired = migrate(
+      { webSearchOptions: { resultCount: 99, freshness: 'yesteryear' } },
+      46,
+    ) as Record<string, unknown>;
+    expect(repaired.webSearchOptions).toEqual({
+      resultCount: 15,
+      freshness: 'auto',
+      provider: 'auto',
+    });
+  });
+});
+
+describe('settingsStore migration (v47 → v48)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills the provider field on existing options', () => {
+    const result = migrate(
+      { webSearchOptions: { resultCount: 10, freshness: 'day' } },
+      47,
+    ) as Record<string, unknown>;
+
+    expect(result.webSearchOptions).toEqual({
+      resultCount: 10,
+      freshness: 'day',
+      provider: 'auto',
+    });
+  });
+
+  it('keeps a valid persisted provider and repairs an invalid one', () => {
+    for (const valid of ['google-news', 'bing-agent']) {
+      const kept = migrate(
+        {
+          webSearchOptions: {
+            resultCount: 8,
+            freshness: 'auto',
+            provider: valid,
+          },
+        },
+        47,
+      ) as Record<string, unknown>;
+      expect((kept.webSearchOptions as Record<string, unknown>).provider).toBe(
+        valid,
+      );
+    }
+
+    const repaired = migrate(
+      {
+        webSearchOptions: {
+          resultCount: 8,
+          freshness: 'auto',
+          provider: 'altavista',
+        },
+      },
+      47,
+    ) as Record<string, unknown>;
+    expect(
+      (repaired.webSearchOptions as Record<string, unknown>).provider,
+    ).toBe('auto');
   });
 });

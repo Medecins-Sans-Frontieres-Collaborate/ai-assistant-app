@@ -26,6 +26,13 @@ import {
  * its token_endpoint at 169.254.169.254 must be rejected. Any drift toward
  * accepting client-supplied endpoints turns the proxy into an SSRF /
  * credential relay — do not add such parameters.
+ *
+ * The one non-discovery source of endpoints is an admin-authored connector
+ * record (resolved.oauthEndpoints): ADMIN-stored, write-time validated, and
+ * resolved server-side through the same access-checked path as the connector
+ * URL itself — never taken from the request. Needed for providers that
+ * publish no discovery metadata at all (NetSuite's endpoints are
+ * per-account). Those endpoints are re-validated here too.
  */
 
 /** Minimal slice of RFC 8414 authorization-server metadata we rely on. */
@@ -43,6 +50,12 @@ export interface McpOauthContext {
   metadata: McpAuthServerMetadata;
   /** RFC 9728 resource indicator, when the server publishes one. */
   resource?: string;
+  /**
+   * Distinct refresh endpoint, only for connectors that store one. The token
+   * route substitutes it for metadata.token_endpoint on refresh_token grants;
+   * absent means refresh uses the token endpoint (the OAuth 2.0 norm).
+   */
+  refreshTokenEndpoint?: string;
 }
 
 export interface ResolveOauthContextOptions {
@@ -133,6 +146,37 @@ export async function resolveOauthContext(
       400,
       'MCP_SERVER_REJECTED',
     );
+  }
+
+  // Admin-stored endpoints replace discovery outright: providers that need
+  // them publish no metadata to discover, and mixing the two sources would
+  // make it ambiguous which one is authoritative. No cache involvement —
+  // building this context is pure, and caching would serve a 5-min-stale
+  // copy of endpoints an admin may have just corrected.
+  if (resolved.oauthEndpoints) {
+    const { authorizationUrl, tokenUrl, refreshUrl } = resolved.oauthEndpoints;
+    // Same bar as discovered endpoints: write-time validation protects the
+    // stored record, this protects the request path even if a blob was
+    // hand-edited underneath the admin API.
+    await validateDiscoveredEndpoint(
+      'authorization_endpoint',
+      authorizationUrl,
+    );
+    await validateDiscoveredEndpoint('token_endpoint', tokenUrl);
+    await validateDiscoveredEndpoint('refresh token_endpoint', refreshUrl);
+    return {
+      resolved,
+      // Fallback base only — the SDK uses metadata.token_endpoint verbatim
+      // whenever it is set, which it always is here.
+      authorizationServerUrl: new URL(tokenUrl).origin,
+      metadata: {
+        authorization_endpoint: authorizationUrl,
+        token_endpoint: tokenUrl,
+      },
+      ...(refreshUrl && refreshUrl !== tokenUrl
+        ? { refreshTokenEndpoint: refreshUrl }
+        : {}),
+    };
   }
 
   const cached = cache.get(resolved.url);

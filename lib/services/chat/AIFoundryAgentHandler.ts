@@ -20,6 +20,7 @@ import { ErrorCode, PipelineError } from '@/types/errors';
 import { OpenAIModel } from '@/types/openai';
 
 import { MetricsService } from '../observability/MetricsService';
+import { CitationRegistry } from './citationRegistry';
 import {
   activityKeyForEvent,
   mcpCallItemToRecord,
@@ -446,54 +447,14 @@ export class AIFoundryAgentHandler {
                 }
                 sawMeaningfulOutput = true;
               }
-              const citations: Array<{
-                number: number;
-                title: string;
-                url: string;
-                date: string;
-              }> = [];
               // Single unified numbering shared by inline `【n:m†…】` markers
               // (rewritten to `[N]` in the visible text) AND `url_citation`
-              // annotations (the source list). Using one counter + one map
-              // keyed by citation identity guarantees the visible `[N]` always
-              // resolves to an entry in `citations[]` and that the two paths
-              // never collide on the same number.
-              let nextCitationNumber = 1;
-              const citationNumbers = new Map<string, number>();
-
-              /**
-               * Assigns (or reuses) a citation number for `key` and ensures a
-               * matching `citations[]` entry exists. When a later event learns a
-               * better title/url for an already-numbered citation (e.g. an
-               * annotation arrives after a short-form inline marker), it
-               * backfills the existing entry rather than creating a duplicate.
-               */
-              const registerCitation = (
-                key: string,
-                title: string,
-                url: string,
-              ): number => {
-                const existing = citationNumbers.get(key);
-                if (existing !== undefined) {
-                  const entry = citations.find((c) => c.number === existing);
-                  if (entry) {
-                    if (url && !entry.url) entry.url = url;
-                    if (title && entry.title === `Source ${existing}`) {
-                      entry.title = title;
-                    }
-                  }
-                  return existing;
-                }
-                const number = nextCitationNumber++;
-                citationNumbers.set(key, number);
-                citations.push({
-                  number,
-                  title: title || `Source ${number}`,
-                  url,
-                  date: '',
-                });
-                return number;
-              };
+              // annotations (the source list). The registry pairs a
+              // short-form marker (label only, no URL) with the annotation
+              // that follows it, so the visible `[N]` always resolves to a
+              // REAL entry in `citations[]` — see CitationRegistry.
+              const citationRegistry = new CitationRegistry();
+              const citations = citationRegistry.entries;
 
               // Buffers text across chunks to handle citation markers
               // that arrive split.
@@ -533,7 +494,11 @@ export class AIFoundryAgentHandler {
                         // otherwise fall back to the raw marker so identical
                         // short-form markers still dedupe.
                         const key = url || match;
-                        const number = registerCitation(key, title, url);
+                        const number = citationRegistry.registerMarker(
+                          key,
+                          title,
+                          url,
+                        );
                         return `[${number}]`;
                       },
                     );
@@ -568,10 +533,9 @@ export class AIFoundryAgentHandler {
                       annotation.annotation?.type === 'url_citation' &&
                       annotation.annotation?.url
                     ) {
-                      registerCitation(
+                      citationRegistry.registerAnnotation(
                         annotation.annotation.url,
                         annotation.annotation.title || '',
-                        annotation.annotation.url,
                       );
                     }
                   } else if (

@@ -89,6 +89,14 @@ const connectorFieldsSchema = z
      */
     oauthClientSecret: z.string().max(2000).optional(),
     oauthScopes: z.array(z.string().trim().min(1).max(200)).max(50).default([]),
+    /**
+     * Explicit OAuth endpoints for providers without RFC 8414 discovery
+     * (NetSuite). Authorization + token come as a pair; refresh is optional
+     * and defaults to the token URL at use time.
+     */
+    oauthAuthorizationUrl: z.string().trim().max(2000).optional(),
+    oauthTokenUrl: z.string().trim().max(2000).optional(),
+    oauthRefreshUrl: z.string().trim().max(2000).optional(),
   })
   .strict();
 
@@ -135,6 +143,13 @@ function validateConnectorFields(
     if (fields.oauthScopes.length > 0) {
       return 'oauthScopes is only valid for the oauth auth style';
     }
+    if (
+      fields.oauthAuthorizationUrl ||
+      fields.oauthTokenUrl ||
+      fields.oauthRefreshUrl
+    ) {
+      return 'OAuth endpoint URLs are only valid for the oauth auth style';
+    }
     return null;
   }
 
@@ -144,6 +159,27 @@ function validateConnectorFields(
   }
   if (!fields.oauthClientId?.trim()) {
     return 'oauthClientId is required for the oauth auth style';
+  }
+  // Explicit endpoints: authorization + token are a pair (a flow needs both,
+  // and mixing one explicit endpoint with discovery would be incoherent);
+  // refresh rides on top of the pair. Same write-time bar as the server URL —
+  // these are fetched from the app's network position via the OAuth proxy.
+  const hasAuthUrl = !!fields.oauthAuthorizationUrl;
+  const hasTokenUrl = !!fields.oauthTokenUrl;
+  if (hasAuthUrl !== hasTokenUrl) {
+    return 'oauthAuthorizationUrl and oauthTokenUrl must be provided together';
+  }
+  if (fields.oauthRefreshUrl && !hasTokenUrl) {
+    return 'oauthRefreshUrl requires oauthAuthorizationUrl and oauthTokenUrl';
+  }
+  for (const [label, value] of [
+    ['oauthAuthorizationUrl', fields.oauthAuthorizationUrl],
+    ['oauthTokenUrl', fields.oauthTokenUrl],
+    ['oauthRefreshUrl', fields.oauthRefreshUrl],
+  ] as const) {
+    if (value && !isHttpsPublicShapedUrl(value)) {
+      return `${label} must be an https URL pointing at a public host`;
+    }
   }
   // On create the secret must be supplied outright; on update, omitting it
   // means "keep the stored one", which the caller verifies actually exists.
@@ -351,6 +387,9 @@ export async function POST(request: NextRequest) {
           ? sealConnectorSecret(id, parsed.data.oauthClientSecret)
           : undefined,
       oauthScopes: parsed.data.oauthScopes,
+      oauthAuthorizationUrl: parsed.data.oauthAuthorizationUrl,
+      oauthTokenUrl: parsed.data.oauthTokenUrl,
+      oauthRefreshUrl: parsed.data.oauthRefreshUrl,
       createdBy: userMail,
       createdAt: now,
       updatedBy: userMail,
@@ -530,6 +569,11 @@ export async function PUT(request: NextRequest) {
           : undefined,
       oauthClientSecret: sealedSecret,
       oauthScopes: parsed.data.oauthScopes,
+      // Absent on the wire = absent on the record (unlike the secret, these
+      // are round-tripped to the editor, so omission IS the admin's intent).
+      oauthAuthorizationUrl: parsed.data.oauthAuthorizationUrl,
+      oauthTokenUrl: parsed.data.oauthTokenUrl,
+      oauthRefreshUrl: parsed.data.oauthRefreshUrl,
       updatedBy: userMail,
       updatedAt: now,
     };

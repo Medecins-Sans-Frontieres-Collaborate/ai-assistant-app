@@ -25,11 +25,13 @@ import {
   successResponse,
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
-import { AzureBlobStorage } from '@/lib/utils/server/blob/blob';
+import { AzureBlobStorage, BlobProperty } from '@/lib/utils/server/blob/blob';
 
 import {
   DocumentTranslationReference,
   TRANSLATION_EXPIRY_DAYS,
+  TRANSLATION_STAGING_CONTAINER,
+  getDocumentContentType,
 } from '@/types/documentTranslation';
 
 import { auth } from '@/auth';
@@ -50,13 +52,28 @@ export async function GET(
     return badRequestResponse('Invalid job id', 'INVALID_JOB_ID');
   }
 
-  // Missing and not-owned are indistinguishable — prevents enumeration.
-  const job = getTranslationJobForUser(jobId, session.user.id);
-  if (!job) {
-    return notFoundResponse('Translation job not found');
-  }
-
   try {
+    const blobStorage = new AzureBlobStorage(
+      getEnvVariable({ name: 'AZURE_BLOB_STORAGE_NAME', user: session.user }),
+      getEnvVariable({
+        name: 'AZURE_BLOB_STORAGE_CONTAINER',
+        throwErrorOnFail: false,
+        defaultValue: env.AZURE_BLOB_STORAGE_IMAGE_CONTAINER ?? '',
+        user: session.user,
+      }),
+      session.user,
+    );
+
+    // Missing and not-owned are indistinguishable — prevents enumeration.
+    const job = await getTranslationJobForUser(
+      blobStorage,
+      jobId,
+      session.user.id,
+    );
+    if (!job) {
+      return notFoundResponse('Translation job');
+    }
+
     const translationService = new DocumentTranslationService();
     const batch = await translationService.getBatchTranslationStatus(
       job.operationId,
@@ -70,21 +87,47 @@ export async function GET(
     }
 
     if (batch.status === 'Succeeded') {
-      // Azure can report success momentarily before the target blob is
-      // visible; keep the client polling until the download would work.
-      const blobStorage = new AzureBlobStorage(
-        getEnvVariable({ name: 'AZURE_BLOB_STORAGE_NAME', user: session.user }),
-        getEnvVariable({
-          name: 'AZURE_BLOB_STORAGE_CONTAINER',
-          throwErrorOnFail: false,
-          defaultValue: env.AZURE_BLOB_STORAGE_IMAGE_CONTAINER ?? '',
-          user: session.user,
-        }),
-        session.user,
-      );
       const blobPath = `${session.user.id}/translations/${job.jobId}.${job.ext}`;
+
+      // The translated blob lands in the STAGING account; copy it into user
+      // storage at the standard path the content route serves, then clean
+      // up the scratch blobs. Idempotent across polls and replicas — once
+      // the user-storage blob exists, later polls short-circuit.
       if (!(await blobStorage.blobExists(blobPath))) {
-        return successResponse({ status: 'Running' as const });
+        const stagingStorage = new AzureBlobStorage(
+          getEnvVariable({
+            name: 'AZURE_BLOB_STORAGE_STAGING_NAME',
+            user: session.user,
+          }),
+          TRANSLATION_STAGING_CONTAINER,
+          session.user,
+        );
+
+        if (!(await stagingStorage.blobExists(blobPath))) {
+          // Azure can report success momentarily before the target blob is
+          // visible; keep the client polling until the download would work.
+          return successResponse({ status: 'Running' as const });
+        }
+
+        const translated = (await stagingStorage.get(
+          blobPath,
+          BlobProperty.BLOB,
+        )) as Buffer;
+        await blobStorage.upload(blobPath, translated, {
+          blobHTTPHeaders: {
+            blobContentType: getDocumentContentType(job.filename),
+            blobContentDisposition: `attachment; filename="${encodeURIComponent(job.translatedFilename)}"`,
+          },
+        });
+
+        // Best-effort scratch cleanup — the staging account's 1-day
+        // lifecycle rule catches anything this misses (e.g. glossaries).
+        void Promise.allSettled([
+          stagingStorage.deleteIfExists(blobPath),
+          stagingStorage.deleteIfExists(
+            `${session.user.id}/translations/${job.jobId}_original.${job.ext}`,
+          ),
+        ]);
       }
 
       const expiresAt = new Date(

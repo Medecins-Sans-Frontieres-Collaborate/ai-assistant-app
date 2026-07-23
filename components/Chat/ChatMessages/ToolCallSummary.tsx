@@ -122,9 +122,21 @@ const ToolCallRow: FC<ToolCallRowProps> = ({ call, source }) => {
           ? t('statusAutoDenied')
           : t('statusApproved');
 
-  const prettyArgs = formatToolArguments(call.arguments);
+  // Code-interpreter records carry Python source in arguments ({ code })
+  // and generated files. Render the code as code (not highlighted JSON)
+  // and always show generated files — they're the deliverable, so they
+  // must be visible without expanding the row.
+  const isCodeInterpreter = call.name === 'code_interpreter';
+  const interpreterCode = isCodeInterpreter
+    ? parseInterpreterCode(call.arguments)
+    : null;
 
-  const hasDetails = !!prettyArgs || !!call.output || !!call.error;
+  const prettyArgs = isCodeInterpreter
+    ? null
+    : formatToolArguments(call.arguments);
+
+  const hasDetails =
+    !!prettyArgs || !!interpreterCode || !!call.output || !!call.error;
 
   return (
     <li className="text-xs">
@@ -164,6 +176,11 @@ const ToolCallRow: FC<ToolCallRowProps> = ({ call, source }) => {
               </code>
             </pre>
           )}
+          {interpreterCode && (
+            <pre className="max-h-64 max-w-full overflow-auto rounded border border-gray-200 bg-gray-50 px-2 py-1 text-[0.7rem] leading-snug text-gray-700 dark:border-gray-700/60 dark:bg-gray-900/60 dark:text-gray-300">
+              <code className="font-mono">{interpreterCode}</code>
+            </pre>
+          )}
           {call.output && (
             <pre className="max-h-32 max-w-full overflow-auto rounded border border-emerald-200/60 bg-emerald-50 px-2 py-1 text-[0.7rem] leading-snug text-emerald-900 dark:border-emerald-700/40 dark:bg-emerald-900/15 dark:text-emerald-100">
               {call.output}
@@ -176,9 +193,24 @@ const ToolCallRow: FC<ToolCallRowProps> = ({ call, source }) => {
           )}
         </div>
       )}
+
+      {/* Generated files intentionally do NOT render here — they are the
+          run's deliverable and render prominently on the message itself
+          via GeneratedFilesPanel. */}
     </li>
   );
 };
+
+/** Extracts the Python source from a code-interpreter record's arguments. */
+function parseInterpreterCode(args: string | null): string | null {
+  if (!args) return null;
+  try {
+    const parsed = JSON.parse(args) as { code?: unknown };
+    return typeof parsed.code === 'string' && parsed.code ? parsed.code : null;
+  } catch {
+    return null;
+  }
+}
 
 function formatDuration(ms: number): string {
   if (ms < 1000) return `${ms}ms`;

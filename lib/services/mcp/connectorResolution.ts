@@ -90,6 +90,17 @@ export async function createConnectorResolver(
       url: connector.url,
       transport: connector.transport,
       auth: toCatalogAuth(connector),
+      // Both-or-neither is enforced at write time; the guard here keeps a
+      // hand-edited blob from producing a half-configured OAuth flow.
+      ...(connector.oauthAuthorizationUrl && connector.oauthTokenUrl
+        ? {
+            oauthEndpoints: {
+              authorizationUrl: connector.oauthAuthorizationUrl,
+              tokenUrl: connector.oauthTokenUrl,
+              refreshUrl: connector.oauthRefreshUrl,
+            },
+          }
+        : {}),
       // Admin-authored and URL-validated at write time (https + public-shaped
       // host), so the per-request DNS guard is skipped exactly as for catalog
       // entries.

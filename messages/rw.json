@@ -845,7 +845,13 @@
         "transformingTable": "Turimo guhindura urutonde...",
         "findingLocations": "Turimo kumenya aho ibintu biri...",
         "updatingMap": "Turimo kuvugurura ishusho..."
-      }
+      },
+      "searchingWebFor": "Iri gushakisha: “{query}”…",
+      "searchingWebForMultiple": "Iri gushakisha insanganyamatsiko {count}: “{query}”…",
+      "readingCitedSources": "Iri gusoma inyandiko zavuzweho mbere {count}…",
+      "planningSteps": "Iri gutegura intambwe…",
+      "planStep": "Intambwe {current}/{total}: {description}",
+      "planStepRetry": "Intambwe {current}/{total} (gusubiramo): {description}"
     },
     "toolSummary": {
       "usedTools": "Hakozweho {count, plural, one {igikoresho 1} other {ibikoresho #}}",
@@ -855,7 +861,8 @@
       "statusAutoDenied": "Byanzwe mu buryo bwikora",
       "statusFailed": "Ntibyakoze",
       "statusIncomplete": "Ntibyuzuye",
-      "viaService": "binyuze kuri {service}"
+      "viaService": "binyuze kuri {service}",
+      "downloadFile": "Kuramo"
     },
     "consent": {
       "authorizeRequired": "Ubusabe bwo kwemerera burakenewe",
@@ -897,7 +904,15 @@
       "approvedState": "Byemejwe — agent yakomeje",
       "deniedState": "Byanzwe",
       "submittingApproval": "Kwemeza no gukomeza agent...",
-      "submittingDenial": "Kohereza uko wanze..."
+      "submittingDenial": "Kohereza uko wanze...",
+      "alwaysApproveEverywhere": "Emera buri gihe iki gikoresho — kuri buri kiganiro",
+      "denyOptionsLabel": "Amahitamo yo kwanga",
+      "denyOnce": "Hanga rimwe",
+      "neverAllowEverywhere": "Ntuzigere wemera iki gikoresho — kuri buri kiganiro",
+      "deniedByRuleHint": "Byabujijwe n'amategeko yawe — byemeze muri Settings → Connectors.",
+      "batchPendingHint": "Gusaba ibikoresho {count} birategereje",
+      "approveAllButton": "Emera byose",
+      "denyAllButton": "Hanga byose"
     },
     "openImage": "Fungura ifoto",
     "copyMessage": "Gusubiramo ubutumwa",
@@ -908,7 +923,9 @@
     "ttsError": "Habayeho ikosa mu gutunganya amajwi. Ongera ugerageze.",
     "unsupportedMessageType": "Ikosa mu kugaragaza ubutumwa: Ubwoko bw'ubutumwa butemerewe",
     "addLanguageOption": "Ongeraho \"{name}\"…",
-    "sources": "Inkomoko"
+    "sources": "Inkomoko",
+    "interpreterBadge": "Koresha code",
+    "disableCodeInterpreter": "Hagarika ikoreshwa rya code"
   },
   "transcript": {
     "originalTranscript": "Ubwandiko bwa Mbere",
@@ -1348,6 +1365,30 @@
       "thresholdLabel": "Fata nk'ihindurwa nini haruguru",
       "thresholdUnit": "% by'inyandiko byahindutse",
       "exceptionSelectionAlways": "Guhindura igice cyatoranijwe kiriho ibara bihita bisabwa ako kanya — icyitegererezo gitanga igice gihinduwe gusa, kandi ntigishobora kubyazwa izindi nama kuri documant irimo yose."
+    },
+    "webSearch": {
+      "title": "Gushakisha kuri Internet",
+      "description": "Igenzura uburyo ubushakisha kuri internet bukora iyo Search Mode ikoreshejwe. Impinduka zikoreshwa ako kanya.",
+      "providerLabel": "Uwatanzweho ubushakisha",
+      "providerAuto": "Byikora (birasabwa)",
+      "providerAutoDescription": "Ikoresha defaults ya deployment — ubu gikoresha combined news search iri hasi.",
+      "providerNews": "Amakuru avanze (GDELT + Google News)",
+      "providerNewsDescription": "Yohereza ibisabwa ku masoko yombi icyarimwe, igashyira hamwe ibisubizo; iyo isoko imwe itakoze, ubushakisha ntibuhagarara. Bitanga umuvuduko, itandukaniro ry’amasoko n’ihuriro rya links ryiza.",
+      "providerGoogleNews": "Google News gusa",
+      "providerGoogleNewsDescription": "Byihuse kandi nta makuru y’imenyekana — gusa ikibazo cyo gushakisha kigerera kuri Google (nta konti cyangwa cookies) kandi ibisubizo biboneka mu kanya gato. Icyitonderwa: ahanini bigenzura vingingo n'agace gato, ntibisome inkingi yose, niyo mpamvu ibisubizo bishobora kuguma hejuru.",
+      "providerGdelt": "GDELT gusa",
+      "providerGdeltDescription": "Ububiko rusange bushakisha amakuru yo ku isi hamwe na links zijya ku banyamakuru, byemerera ibibazo bikurikira gusoma inkuru yose. Hariho umupaka ukomeye — gushakisha gukurikirana gushobora gutegereza amasegonda make.",
+      "providerBing": "Bing grounding (binyuze muri Microsoft)",
+      "providerBingDescription": "Isoma impapuro zose kugira ngo itange incamake irambuye kandi igasakara kuri internet hose, si ku makuru gusa. Ariko, gushakisha bimara amasegonda 30–90, kandi ubuziranenge bw’ibisubizo buratandukanye.",
+      "sourcesLabel": "Amasoko kuri buri bushakisha",
+      "sourcesDescription": "Ni amasoko angahe atandukanye ubushakisha buzagaragaza nk’ahakomotse amakuru. Ibibazo byo mu bushakashatsi bishobora kongera aya masoko byikora.",
+      "freshnessLabel": "Igihe uhitamo gishya",
+      "freshnessDescription": "Ni igihe ikihe ibisubizo bikwiye kuba bishya. Automatic ibireka buri kibazo kigahitamo (amakuru mashya aha agaciro umunsi uheruka).",
+      "freshness_auto": "Byikora",
+      "freshness_day": "Umunsi ushize",
+      "freshness_week": "Icyumweru gishize",
+      "freshness_month": "Ukwezi gushize",
+      "freshness_any": "Igihe cyose"
     }
   },
   "emptyState": {
@@ -1534,6 +1575,23 @@
       "deployment": "Kohereza",
       "modelVersion": "Verisiyo ya model",
       "publisher": "Yashyizweho na"
+    },
+    "interpreterMode": {
+      "title": "Code Interpreter",
+      "subtitle": "Irakoresha code iyo bikenewe (imbonerahamwe, isesengura ry’amakuru)",
+      "learnMore": "Ibishoboye gukora ni ibihe?",
+      "description": "Iyo iriho, umufasha ashobora gukoresha Python mu buryo bwizewe kandi bwitandukanije ngo asesengure amadosiye yanditseho, abare ibisubizo, kandi akore imbonerahamwe. Code yakozwe, ibisubizo byayo, n'amadosiye yakozwe bigaragazwa hamwe n’igisubizo. Koresha \"Run Code\" muri menu ya composer kugirango wihate ubutumwa runaka."
+    },
+    "searchOptions": {
+      "title": "Gushakisha byimbitse",
+      "resultCount": "Amasoko kuri buri bushakisha:",
+      "freshness": "Hitamo ibisubizo bigeze vuba",
+      "freshness_auto": "Byikora (kuri buri kibazo)",
+      "freshness_day": "Umunsi ushize",
+      "freshness_week": "Icyumweru gishize",
+      "freshness_month": "Ukwezi gushize",
+      "freshness_any": "Igihe icyo ari cyo cyose",
+      "hint": "Auto ireka buri kibazo kigenwe igihe cyacyo gishya (nko mu makuru hakoreshwa umunsi ushize), naho ibibazo by’ubushakashatsi bishobora gukoresha amasoko menshi kurenza ibisanzwe."
     }
   },
   "models": {
@@ -2105,7 +2163,11 @@
     "moveToMore": "Jyana mu Bindi",
     "moveOutOfMore": "Erekana muri menu",
     "showSources": "Erekana andi masoko",
-    "hideSources": "Hisha andi masoko"
+    "hideSources": "Hisha andi masoko",
+    "aiTools": "Ibikoresho bya AI",
+    "aiToolsTooltip": "Ubushobozi umufasha ashobora gukoresha mu gusubiza: gushakisha kuri internet, gukoresha code, n’ubundi buryo buhuza serivisi.",
+    "codeInterpreterTooltip": "Koresha code ya Python ahantu hizewe kuri buri butumwa.\n\nByiza mu isesengura ry’amakuru, imibare, no gukora imbonerahamwe bivuye ku mafayile wunzeho.",
+    "categoryTools": "Ibikoresho & connectors"
   },
   "transcription": {
     "transcribesOnSend": "Kwandika iyo byoherejwe",
@@ -3619,7 +3681,13 @@
     "connectorClientSecretLabel": "Ibanga rya OAuth client",
     "connectorClientSecretStored": "Ibanga ryabitswe. Birekere ubusa niba ushaka kurigumisha, cyangwa andikemo irishya usimbure irihari.",
     "connectorClientSecretHint": "Rirakinzwe mbere yo kubikwa, kandi ntirizongera kugaragara.",
-    "connectorScopesLabel": "Scopes (zatandukanyijwe n'utudomo, si ngombwa)"
+    "connectorScopesLabel": "Scopes (zatandukanyijwe n'utudomo, si ngombwa)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (si ngombwa)",
+    "connectorOauthTokenUrlLabel": "Token URL (si ngombwa)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (si ngombwa)",
+    "connectorOauthEndpointsHint": "Reka aho ushyiramo endpoint URLs ubisize ubusa kugira ngo biboneke ku buryo bwikora. Shyiramo kuri ba rutahizamu batabifitiye ubushobozi, nko kuri NetSuite.",
+    "connectorOauthRefreshUrlHint": "Reka ubusa kugira ngo usubire kuri token URL.",
+    "connectorOauthEndpointsPairWarning": "Authorization URL na token URL bigomba gushyirwaho icya rimwe (Refresh URL ikeneye byombi)."
   },
   "localModels": {
     "title": "Imiterere ziri kuri mudasobwa",
@@ -3714,5 +3782,52 @@
     "truncatedNotice": "Imirima {count} yasizwe — umubare ntarengwa w’imbonerahamwe ni ibisate {max}: {names}",
     "skippedDerivedNotice": "Kolone {count} zibazwe ntizabitswe — formula zireba ibisate by’iyi mbonerahamwe: {names}",
     "loadReplacesColumns": "Ibi bisimbuza ibisate biriho ubu. Imirongo irabika ibintu aho amazina y’ibisate ahuye."
+  },
+  "codeInterpreterDropdown": "Koresha Code",
+  "connectorPin": {
+    "toggleLabel": "Genzura ibikoresho bya connector",
+    "menuLabel": "Connectors",
+    "menuLabelCount": "Connectors ({count} biri gukora)",
+    "tooltip": "Reba ibikoresho bya connector bikora, bigireho impinduka muri ubu butumwa cyangwa hose, cyangwa uhe agaciro kamwe.",
+    "toggleServerInChat": "Koresha {name} muri iki kiganiro",
+    "globalToggleTitle": "Hindura {name} kugikora cyangwa kudakora hose (nk'uko biri muri Settings → Connectors)",
+    "globalOn": "Kiri gukora hose",
+    "globalOff": "Ntikiri gukora hose",
+    "chatToggleHint": "Checkboxes igenzura iki kiganiro gusa; buto yo kuri global ijyana na Settings → Connectors. Buri connector iri gukora yongeramo ibikoresho byayo kuri buri butumwa — ikoreshwa rya tokens riba rirenze kandi ibisubizo bitinda.",
+    "trayLabel": "Ibikoresho bya connector",
+    "trayTitle": "Ibikoresho bya connector muri iki kiganiro",
+    "toggleServer": "Koresha {name}",
+    "needsReconnect": "Saba kongera guhuza muri Settings",
+    "focusAction": "Ha agaciro",
+    "focusedChip": "Bihanzweho",
+    "pinnedHint": "Muri iki kiganiro hazakoreshwa gusa ibikoresho bya {name}.",
+    "staleHint": "Connector wahanzweho ntabwo ukoreshwa cyangwa urahagaritswe — wongere uhuze muri Settings → Connectors, cyangwa ukuraho agaciro. Mbere y'aho ibikoresho byose bikora bizakoreshwa.",
+    "costHint": "Buri connector iri gukora yongeramo ibikoresho kuri buri butumwa — ikoreshwa rya tokens riyongera kandi ibisubizo bitinda. Zahura ibyo utari gukoresha.",
+    "noEligibleConnectors": "Nta connectors ziteguwe. Banza ushyiremo imwe muri Settings → Connectors.",
+    "unknownConnector": "Connector yakuweho",
+    "unpin": "Kura agaciro",
+    "dismiss": "Funga",
+    "badgeCount": "Ibikoresho {count}",
+    "badgeTooltip": "Ibikoresho bya connector bikora kuri buri butumwa — byongeraho tokens n’igihe cyo gusubiza. Kanda kugira ngo ubigenzure."
+  },
+  "toolApprovals": {
+    "title": "Ukwemerera ibikoresho",
+    "description": "Amabwiriza akurikizwa muri buri kiganiro: byikora wemera cyangwa uzitira ibikoresho bya connector byihariye. Ushobora kongeramo ibikoresho utarabwirwa.",
+    "actionApprove": "Horeka burigihe",
+    "actionReject": "Zitira burigihe",
+    "scopeServer": "kuri {name}",
+    "scopeAny": "Connector iyo ari yo yose",
+    "removeRule": "Kura itegeko kuri {tool}",
+    "toolNameLabel": "Izina ry'igikoresho",
+    "toolNamePlaceholder": "Izina ry'igikoresho, nko kwandika create_issue",
+    "scopeLabel": "Ubusugire bwa connector",
+    "actionLabel": "Igikorwa",
+    "addRule": "Kongeraho itegeko",
+    "rejectPrecedenceNote": "Amategeko yo kuzitira ahora atsinda — kuburira ku mategeko yo kwemera no ku yandi yo kwemera ku kiganiro runaka.",
+    "policyAsk": "Baza",
+    "policyAllow": "Emerera",
+    "policyBlock": "Funga",
+    "policyGroupLabel": "Politiki yo kwemeza kuri {tool}",
+    "listHint": "Shyiraho icyo gukora igihe umufasha ashaka gukoresha buri gikoresho—muri buri biganiro. Gusaba ni byo bisanzwe; Gufunga bihora bitsinda."
   }
 }

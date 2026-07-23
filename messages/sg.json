@@ -845,7 +845,13 @@
         "transformingTable": "Bûta tî tabele...",
         "findingLocations": "Gbîê sâka ya...",
         "updatingMap": "Kêmbê karte..."
-      }
+      },
+      "searchingWebFor": "Yâko na: “{query}”…",
+      "searchingWebForMultiple": "Yâko na {count} mbênî: “{query}”…",
+      "readingCitedSources": "Sô yângâ {count} makôda so bî tî sôngbê…",
+      "planningSteps": "Sôlô lâpê…",
+      "planStep": "Lâpê {current}/{total}: {description}",
+      "planStepRetry": "Lâpê {current}/{total} (ngbangba): {description}"
     },
     "toolSummary": {
       "usedTools": "Tool {count, plural, one {# ya kötï} other {# ya kötï}}",
@@ -855,7 +861,8 @@
       "statusAutoDenied": "A pè a bongi na ngu",
       "statusFailed": "A kûngö",
       "statusIncomplete": "A hunga nzönî",
-      "viaService": "na {service}"
+      "viaService": "na {service}",
+      "downloadFile": "Kûtî yângâ"
     },
     "consent": {
       "authorizeRequired": "Besi yeke autorisation",
@@ -897,7 +904,15 @@
       "approvedState": "Mbeti küè — agent a mbïchi",
       "deniedState": "Sé",
       "submittingApproval": "A küè na mbeti ti agent…",
-      "submittingDenial": "A zîngbä sé mo…"
+      "submittingDenial": "A zîngbä sé mo…",
+      "alwaysApproveEverywhere": "Kâ mângâ tool ûko na — na mbeti chat kõtõ",
+      "denyOptionsLabel": "Kété na yângâ",
+      "denyOnce": "Kété na mbîngbi",
+      "neverAllowEverywhere": "Kângâ bata tool ûko na — na mbeti chat kõtõ",
+      "deniedByRuleHint": "Mbârï ti yângâ mo sô kété — kêtê na Settings → Connectors.",
+      "batchPendingHint": "{count} sorô ti tool gbângbâ sô ngbênî",
+      "approveAllButton": "Mângâ kõtõ",
+      "denyAllButton": "Kété kõtõ"
     },
     "openImage": "Fungbä lo tö",
     "copyMessage": "Kopi mesajï",
@@ -908,7 +923,9 @@
     "ttsError": "Faut ti kûê audio. Bï nga tîngbïngö.",
     "unsupportedMessageType": "Faut ti vë mesajï: Tîpi mesajï so a sô ndöka",
     "addLanguageOption": "Gbêtî \"{name}\"…",
-    "sources": "Ngu nzönî"
+    "sources": "Ngu nzönî",
+    "interpreterBadge": "Ngba kodê",
+    "disableCodeInterpreter": "Kôtrê na kodê"
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",
@@ -1348,6 +1365,30 @@
       "thresholdLabel": "Zia ti yê na kodörö mbênî sô lo",
       "thresholdUnit": "% tî mbênî document a kodörö",
       "exceptionSelectionAlways": "Sô i la yeke mouso ti loo mo kotïngö ti zîa, sô lo bagu ti yeke kundïngi awa — modelï na tîla na mo sô i la kodro, na kodro sô mbi tîla na mouso kpako ni doküma na."
+    },
+    "webSearch": {
+      "title": "Yâko na Web",
+      "description": "Sônge ti sôlô lâ yâko na Web sô le ti Search Mode. Mâkêtê akpâ sô lôgo sô.",
+      "providerLabel": "Motô ti yâko na",
+      "providerAuto": "Auto (tî hîngâ)",
+      "providerAutoDescription": "Gba sôkôla yâ, motô sô dîko — sô kombî ti yâko na news na tî sô.",
+      "providerNews": "Kombî ti news (GDELT + Google News)",
+      "providerNewsDescription": "Yâko na kodro abalê, a kombini vûngö na mô, sô oko da bâ singa, yâko na hângâ bâ zo. Mâkêtê na ndö ti lingbi, nganza ti zo pêpe, mo na lônî yângâ ti ngbângâ.",
+      "providerGoogleNews": "Google News pêpe",
+      "providerGoogleNewsDescription": "A yâko na boyo na lïngbi — motô ti yâko ti Google pêpe, (motô mbûngu wala cookies) na vûngö zo bâ na likôla. Mâkêtê: mo na yâko fetê-gbêtî na snippets, wala makôda na yângâ pê, mà vûngö bâ bâlïngô ti yângâ na.",
+      "providerGdelt": "GDELT pêpe",
+      "providerGdeltDescription": "Ndimi tî yâko na news tî mbûngö tî lakôda, sô yângâ makôda na tî publisher, mo lôngo sô yânga ti ngbângâ na yângâ makôda pê. Ngö mbâlè ti rate — yâko na sô na sôpê a drî sèkônda tî kôngô.",
+      "providerBing": "Bing grounding (via Microsoft)",
+      "providerBingDescription": "A lâ makôda pê na lôngo bê ti yânga, a yâko na Web mû, wala news pê. Mâkêtê: yâko na sô tî Bing bâ sèkônda 30-90 na, bâ ndö zo bâ ndö bâ zo.",
+      "sourcesLabel": "Mbênî sô tî yâko na",
+      "sourcesDescription": "Mbênî ti lôngo ti yâko na mo sô nî na tî makôda. Yâko na tî mângô tî ndimi mo bâ ndâ ti lôngo na yâkôndo bâ.",
+      "freshnessLabel": "Sêse ti tî sô yâko",
+      "freshnessDescription": "Sêse ti vûngö mo lâ bû tî yâko. Auto a fâku question kûè (Breaking news mo bû na dî ti yângâ).",
+      "freshness_auto": "Auto",
+      "freshness_day": "Na dî ti yângâ",
+      "freshness_week": "Na sima ni",
+      "freshness_month": "Na mô",
+      "freshness_any": "Nsî kõtõ"
     }
   },
   "emptyState": {
@@ -1534,6 +1575,23 @@
       "deployment": "Fa mbi resa",
       "modelVersion": "Version ti model",
       "publisher": "Mbênî"
+    },
+    "interpreterMode": {
+      "title": "Code Interpreter",
+      "subtitle": "A gba kodê sô ayeke (charts, data analysis)",
+      "learnMore": "Mo na ayeke nani?",
+      "description": "Sô a yâko, assistant a kêtê Python na sandbox tî sô tî bêngê yângâ, sô zê na vûngö na a lôrô charts. Kodê mo gbâ, a vûngö, na mbênî mo bâ yângâ dê sènti na sî. Gbalê \"Run Code\" na menu tî composer sô ayê na sô kêtê na message."
+    },
+    "searchOptions": {
+      "title": "Yâko ti pâsi",
+      "resultCount": "Mbênî sô tî yâko:",
+      "freshness": "Pê tî lôndo vûngö ti",
+      "freshness_auto": "Auto (tî question)",
+      "freshness_day": "Na dî ti yângâ",
+      "freshness_week": "Na sima ni",
+      "freshness_month": "Mbeni mo na mbonga a yeke",
+      "freshness_any": "Gbegbegbe na tango",
+      "hint": "Auto ape na sé kété na lo na za ïrï kûê (mbeti iya, na balë ti 24h ïrï zo zo), na kêtê ti kêtê na gorô na yeke hinga mingi mbi bala so."
     }
   },
   "models": {
@@ -2105,7 +2163,11 @@
     "moveToMore": "Gbenî na döko",
     "moveOutOfMore": "Wüsa na menü",
     "showSources": "Hûngu mbi sôso fi",
-    "hideSources": "Sûku mbi sôso fi"
+    "hideSources": "Sûku mbi sôso fi",
+    "aiTools": "AI tool-s",
+    "aiToolsTooltip": "Matô na assistant na kîri: pépé web na sôko, code execution, na connected services.",
+    "codeInterpreterTooltip": "Sâ Python code na sandbox gbênî mo môbé na mbênî.\n\nFunga ti analyse data, calcul, na sâ diagram na fichier na yeke.",
+    "categoryTools": "Mbênî & yâ na yôngo"
   },
   "transcription": {
     "transcribesOnSend": "Transcribes on send",
@@ -3619,7 +3681,13 @@
     "connectorClientSecretLabel": "OAuth client secret",
     "connectorClientSecretStored": "Sekre yeke na dépôt. Kûê oko sô o kûê na tètê, wala kêtê mbênî sô o kwe na lo.",
     "connectorClientSecretHint": "A lingbi na sekre mû, lo ala lê na ndondo mo hana.",
-    "connectorScopesLabel": "Scopes (tî pato bako, ayeke)"
+    "connectorScopesLabel": "Scopes (tî pato bako, ayeke)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (bala gbêngö na hû nî)",
+    "connectorOauthTokenUrlLabel": "Token URL (bala gbêngö na hû nî)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (bala gbêngö na hû nî)",
+    "connectorOauthEndpointsHint": "Tika endpoint URL so dada; system na yeke a sôko na mo ndé. Té hinga-li so biani discovery so, biani NetSuite.",
+    "connectorOauthRefreshUrlHint": "Tika mo so dada, refresh na token URL.",
+    "connectorOauthEndpointsPairWarning": "Authorization URL na token URL zo kîri na nzönî (refresh URL zo kîri kuê 2 nî)."
   },
   "localModels": {
     "title": "Model ti gbë na mbongo",
@@ -3714,5 +3782,52 @@
     "truncatedNotice": "{count} champ mo ti lê — limit tî table yeke na {max} kolône: {names}",
     "skippedDerivedNotice": "{count} kolône tî calcul ayeke oko — formula ti referê kolône tî table: {names}",
     "loadReplacesColumns": "Lo kûê kolône ti bûngbi na sanduku. Rôw tî yeke na valeur sô kolône yeke na ngbângo ôko."
+  },
+  "codeInterpreterDropdown": "Ngba kodê",
+  "connectorPin": {
+    "toggleLabel": "Géré matô connector",
+    "menuLabel": "Connectors",
+    "menuLabelCount": "Connectors ({count} na vî)",
+    "tooltip": "Gé na matô connector so yeke, pate mo so na zî na yeke chat dô na partou, wala zî masa.",
+    "toggleServerInChat": "Gbêtî {name} na chat nî",
+    "globalToggleTitle": "Gbêtî {name} wala kawé na partou (yembé na Settings → Connectors)",
+    "globalOn": "Yeke na partou",
+    "globalOff": "Kawé na partou",
+    "chatToggleHint": "Checkbox so yeke contrôlé chat nî pâta; global bouton so ape na Settings → Connectors. Connector na vî zo sôko matô ti yeke mesenji — zo hinga token na réponse ti zo séka.",
+    "trayLabel": "Matô connector",
+    "trayTitle": "Matô connector ti chat nî",
+    "toggleServer": "Gbêtî {name}",
+    "needsReconnect": "Finda sangö na Settings",
+    "focusAction": "Sôko fa",
+    "focusedChip": "Fa yeke",
+    "pinnedHint": "Matô ti {name} pâta zo yeke na swâ nî.",
+    "staleHint": "Connector so fa na yeke awè na disconnect, wala kawé — finda sangö na Settings → Connectors, wala tiiré fa. Haka asô ködörö matô ti vî na yeke.",
+    "costHint": "Connector ti vî zo sôko matô na mesenji ti mo — zo hinga token na réponse zo séka. Kawé lo na mo yinga yinga.",
+    "noEligibleConnectors": "Connector ndon a configurer. Configurer yeke na Settings → Connectors biani.",
+    "unknownConnector": "Connector so gîî",
+    "unpin": "Tiiré fa",
+    "dismiss": "Fâ",
+    "badgeCount": "{count} matô",
+    "badgeTooltip": "Matô connector yeke na mesenji kété — zo hinga token na réponse zo séka. Klikè ape a gérer."
+  },
+  "toolApprovals": {
+    "title": "Lî ti matô yeke",
+    "description": "Réglement so na swâ kété: auto yeke wala kawé matô connector mô mû. Pé na yeke matô so mo tîngi na kûê.",
+    "actionApprove": "Yeke na kété",
+    "actionReject": "Kawé na kété",
+    "scopeServer": "na {name}",
+    "scopeAny": "Gbê connector",
+    "removeRule": "Tiiré règlement na {tool}",
+    "toolNameLabel": "Zîngö ti matô",
+    "toolNamePlaceholder": "Zîngö ti matô, bi create_issue",
+    "scopeLabel": "Gbê connector",
+    "actionLabel": "Action",
+    "addRule": "Sôko règlement",
+    "rejectPrecedenceNote": "Règle na kawé zo mûso — zo dure na règle na yeke, na kõ auto-approval ti swâ.",
+    "policyAsk": "Kërè",
+    "policyAllow": "Küe",
+    "policyBlock": "Ko",
+    "policyGroupLabel": "Likodro mo herë-ti {tool}",
+    "listHint": "Sôko lo apë angu ti assistant mo yeke hûnda tool yeke se na kêtê tî sôsô. \"Ask\" é likohola; \"Block\" ndö tî dua."
   }
 }

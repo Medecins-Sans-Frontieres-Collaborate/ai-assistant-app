@@ -46,6 +46,15 @@ export interface McpCatalogEntry {
    * because the click could only ever end in OAUTH_DCR_UNSUPPORTED.
    */
   supportsDynamicRegistration?: boolean;
+  /**
+   * OAuth scopes to request on the authorization call whenever this entry
+   * connects via OAuth (style 'oauth' or alsoSupportsOauth). Absent = no
+   * scope parameter, which for many vendors means their default grant —
+   * for GitHub that is READ-ONLY PUBLIC access, so entries whose tools need
+   * more must spell their scopes out here. Users who connected before a
+   * scope change keep their old grant until they reconnect.
+   */
+  oauthScopes?: string[];
   /** Where the user creates a token (bearer/header styles only). */
   tokenHelpUrl?: string;
   tokenPlaceholder?: string;
@@ -64,6 +73,14 @@ export const MCP_CATALOG: Record<string, McpCatalogEntry> = {
     // affordance in the UI, PAT the fallback.
     auth: { style: 'bearer' },
     alsoSupportsOauth: true,
+    // Without a scope parameter a GitHub OAuth token sees PUBLIC data only —
+    // private issues/repos silently come back empty. Classic OAuth scopes
+    // have no read-only private option: `repo` (read AND write) is the only
+    // way to reach private repos/issues/PRs; read-only granularity would
+    // require a GitHub App instead of an OAuth app. NOTE: private ORG repos
+    // additionally need the OAuth app approved under the org's third-party
+    // access policy.
+    oauthScopes: ['repo', 'read:org', 'read:user'],
     tokenHelpUrl: 'https://github.com/settings/personal-access-tokens',
     tokenPlaceholder: 'github_pat_…',
     nameKey: 'connectors.catalog.github.name',
@@ -149,6 +166,17 @@ export interface ResolvedMcpServer {
   /** True for catalog entries — these skip the DNS-level SSRF checks. */
   trusted: boolean;
   authToken?: string;
+  /**
+   * Admin-stored OAuth endpoints (connectors only) — used INSTEAD of RFC
+   * 9728/8414 discovery for providers that publish no metadata (NetSuite).
+   * Server-resolved from the connector record, never client-supplied.
+   */
+  oauthEndpoints?: {
+    authorizationUrl: string;
+    tokenUrl: string;
+    /** Defaults to tokenUrl when absent. */
+    refreshUrl?: string;
+  };
 }
 
 export interface ResolveMcpServersOptions {

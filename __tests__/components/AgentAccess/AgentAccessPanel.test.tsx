@@ -961,6 +961,63 @@ describe('AgentAccessPanel', () => {
       expect(call.headers['If-Match']).toBe('"etag-conn-1"');
     });
 
+    it('prefills the OAuth endpoint URLs from the NetSuite template', async () => {
+      await openConnectorsTab();
+      fireEvent.click(await screen.findByText('Add connector'));
+
+      fireEvent.change(screen.getByLabelText('Start from a template'), {
+        target: { value: 'netsuite' },
+      });
+
+      expect(screen.getByLabelText('Authorization URL (optional)')).toHaveValue(
+        'https://{accountid}.app.netsuite.com/app/login/oauth2/authorize.nl',
+      );
+      expect(screen.getByLabelText('Token URL (optional)')).toHaveValue(
+        'https://{accountid}.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token',
+      );
+      expect(screen.getByLabelText('Refresh URL (optional)')).toHaveValue(
+        'https://{accountid}.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token',
+      );
+      // The {accountid} placeholders block saving until replaced.
+      expect(screen.getByText('Save')).toBeDisabled();
+    });
+
+    it('blocks saving when only one of the endpoint pair is set', async () => {
+      connectorsResponse = [netsuiteConnector];
+      await openConnectorsTab();
+      fireEvent.click(await screen.findByText('Edit'));
+
+      fireEvent.change(screen.getByLabelText('Authorization URL (optional)'), {
+        target: { value: 'https://acct123.app.netsuite.com/authorize' },
+      });
+
+      expect(screen.getByText(/must be set together/)).toBeInTheDocument();
+      expect(screen.getByText('Save')).toBeDisabled();
+    });
+
+    it('sends the endpoint URLs on save and omits blank ones', async () => {
+      connectorsResponse = [netsuiteConnector];
+      await openConnectorsTab();
+      fireEvent.click(await screen.findByText('Edit'));
+
+      fireEvent.change(screen.getByLabelText('Authorization URL (optional)'), {
+        target: { value: 'https://acct123.app.netsuite.com/authorize' },
+      });
+      fireEvent.change(screen.getByLabelText('Token URL (optional)'), {
+        target: { value: 'https://acct123.suitetalk.api.netsuite.com/token' },
+      });
+      fireEvent.click(screen.getByText('Save'));
+
+      await waitFor(() => expect(connectorWriteCalls).toHaveLength(1));
+      expect(connectorWriteCalls[0].body).toMatchObject({
+        oauthAuthorizationUrl: 'https://acct123.app.netsuite.com/authorize',
+        oauthTokenUrl: 'https://acct123.suitetalk.api.netsuite.com/token',
+      });
+      // A blank refresh URL is omitted (server treats absence as "use the
+      // token URL"), never sent as an empty string.
+      expect(connectorWriteCalls[0].body).not.toHaveProperty('oauthRefreshUrl');
+    });
+
     it('blocks saving while the URL still contains a template placeholder', async () => {
       await openConnectorsTab();
       fireEvent.click(await screen.findByText('Add connector'));

@@ -787,7 +787,13 @@
         "transformingTable": "Omvandlar tabellen...",
         "findingLocations": "Identifierar platser...",
         "updatingMap": "Uppdaterar kartan..."
-      }
+      },
+      "searchingWebFor": "Söker: “{query}”…",
+      "searchingWebForMultiple": "Söker {count} ämnen: “{query}”…",
+      "readingCitedSources": "Läser {count} tidigare citerade artiklar…",
+      "planningSteps": "Planerar steg…",
+      "planStep": "Steg {current}/{total}: {description}",
+      "planStepRetry": "Steg {current}/{total} (försök igen): {description}"
     },
     "toolSummary": {
       "usedTools": "Använt {count, plural, one {# verktyg} other {# verktyg}}",
@@ -797,7 +803,8 @@
       "statusAutoDenied": "Automatiskt nekad",
       "statusFailed": "Misslyckades",
       "statusIncomplete": "Ofullständig",
-      "viaService": "via {service}"
+      "viaService": "via {service}",
+      "downloadFile": "Ladda ner"
     },
     "consent": {
       "authorizeRequired": "Behörighet krävs",
@@ -839,7 +846,15 @@
       "approvedState": "Godkänt — agenten fortsätter",
       "deniedState": "Nekad",
       "submittingApproval": "Godkänner och återupptar agenten…",
-      "submittingDenial": "Skickar din nekning…"
+      "submittingDenial": "Skickar din nekning…",
+      "alwaysApproveEverywhere": "Godkänn alltid det här verktyget — i varje chat",
+      "denyOptionsLabel": "Avvisa alternativ",
+      "denyOnce": "Avvisa en gång",
+      "neverAllowEverywhere": "Tillåt aldrig det här verktyget — i varje chat",
+      "deniedByRuleHint": "Blockerat av din regel — hantera i Inställningar → Anslutningar.",
+      "batchPendingHint": "{count} verktygsförfrågningar väntar",
+      "approveAllButton": "Godkänn alla",
+      "denyAllButton": "Avvisa alla"
     },
     "openImage": "Öppna bild",
     "copyMessage": "Kopiera meddelande",
@@ -850,7 +865,9 @@
     "ttsError": "Fel vid generering av ljud. Försök igen.",
     "unsupportedMessageType": "Fel vid visning av meddelande: Ej stödd meddelandetyp",
     "addLanguageOption": "Lägg till \"{name}\"…",
-    "sources": "Källor"
+    "sources": "Källor",
+    "interpreterBadge": "Kör kod",
+    "disableCodeInterpreter": "Inaktivera kodkörning"
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",
@@ -1195,6 +1212,30 @@
       "thresholdLabel": "Betrakta som omskrivning vid",
       "thresholdUnit": "% av dokumentet ändrat",
       "exceptionSelectionAlways": "När du reviderar ett markerat urval tillämpas ändringen alltid direkt — modellen returnerar endast det reviderade utdraget, vilket inte kan delas upp i förslag för hela dokumentet."
+    },
+    "webSearch": {
+      "title": "Webbsökning",
+      "description": "Styr hur direktsökningar på webben utförs när sökläge är aktivt. Ändringar gäller omedelbart.",
+      "providerLabel": "Sökleverantör",
+      "providerAuto": "Automatisk (rekommenderas)",
+      "providerAutoDescription": "Använder standard för distributionen — för närvarande den kombinerade nyhetssökningen nedan.",
+      "providerNews": "Kombinerade nyheter (GDELT + Google News)",
+      "providerNewsDescription": "Frågar båda källorna parallellt och sammanfogar resultaten, så att misslyckande i en inte bryter sökningen. Bästa balansen mellan snabbhet, källmångfald och fungerande artikel-länkar.",
+      "providerGoogleNews": "Endast Google News",
+      "providerGoogleNewsDescription": "Anonymt och snabbt — endast sökfrågan skickas till Google (inget konto eller cookies) och resultatet kommer på cirka en sekund. Obs: Skannar mestadels rubriker och korta utdrag, inte hela artiklar, så svaren kan bli väldigt övergripande.",
+      "providerGdelt": "Endast GDELT",
+      "providerGdeltDescription": "Öppen forskningsdatabas över världsnyheter med direkta publicistlänkar, vilket gör att följdfrågor kan läsa hela artiklar. Strikt begränsad hastighet — upprepade sökningar kan köas några sekunder.",
+      "providerBing": "Bing grounding (via Microsoft)",
+      "providerBingDescription": "Läser hela sidor för djupare sammanfattningar och täcker hela webben, inte bara nyheter. Dock tar sökningar ofta 30–90 sekunder och resultatkvaliteten varierar ofta mellan sökningarna.",
+      "sourcesLabel": "Källor per sökning",
+      "sourcesDescription": "Hur många unika källor en sökning behåller som citeringar. Forskningsliknande frågor kan automatiskt utöka detta.",
+      "freshnessLabel": "Föredragen aktualitet",
+      "freshnessDescription": "Hur aktuella resultaten ska vara. Automatisk låter varje fråga avgöra (nyheter väljer senaste dygnet).",
+      "freshness_auto": "Automatisk",
+      "freshness_day": "Senaste dygnet",
+      "freshness_week": "Senaste veckan",
+      "freshness_month": "Senaste månaden",
+      "freshness_any": "När som helst"
     }
   },
   "notFound": {
@@ -1384,6 +1425,23 @@
       "deployment": "Distribution",
       "modelVersion": "Modellversion",
       "publisher": "Publicerare"
+    },
+    "interpreterMode": {
+      "title": "Kodtolk",
+      "subtitle": "Kör kod vid behov (diagram, dataanalys)",
+      "learnMore": "Vad kan den göra?",
+      "description": "När aktiverad kan assistenten köra Python i en säker, isolerad sandlåda för att analysera bifogade filer, räkna ut resultat och generera diagram. Utförd kod, dess utdata och genererade filer visas med svaret. Använd \"Kör kod\" i skrivmenyn för att tvinga fram detta för ett meddelande."
+    },
+    "searchOptions": {
+      "title": "Avancerad sökning",
+      "resultCount": "Källor per sökning:",
+      "freshness": "Föredra resultat från",
+      "freshness_auto": "Auto (per fråga)",
+      "freshness_day": "Senaste dygnet",
+      "freshness_week": "Senaste veckan",
+      "freshness_month": "Senaste månaden",
+      "freshness_any": "När som helst",
+      "hint": "Auto låter varje fråga välja aktuellhet själv (t.ex. nyheter föredrar senaste dagen), och frågor av forskningskaraktär kan använda fler källor än standard."
     }
   },
   "models": {
@@ -2130,7 +2188,11 @@
     "moveToMore": "Flytta till Fler",
     "moveOutOfMore": "Visa i menyn",
     "showSources": "Visa andra källor",
-    "hideSources": "Dölj andra källor"
+    "hideSources": "Dölj andra källor",
+    "aiTools": "AI-verktyg",
+    "aiToolsTooltip": "Funktioner assistenten kan använda vid svar: live webbsökning, kodkörning och anslutna tjänster.",
+    "codeInterpreterTooltip": "Kör Python-kod i en säker sandlåda för varje meddelande.\n\nPerfekt för dataanalys, beräkningar och diagram från bifogade filer.",
+    "categoryTools": "Verktyg & kopplingar"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Lägg till dina egna instruktioner för att anpassa hur AI:n svarar. Dessa kombineras med grundläggande riktlinjer som säkerställer hjälpsamma, korrekta och säkra svar.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tips: Skriv \"/\" för att välja bland sparade promptmallar.",
@@ -3635,7 +3697,13 @@
     "connectorClientSecretLabel": "OAuth Client Secret",
     "connectorClientSecretStored": "En hemlighet är sparad. Lämna tomt för att behålla den, eller ange en ny för att ersätta.",
     "connectorClientSecretHint": "Krypteras innan den sparas och visas aldrig igen.",
-    "connectorScopesLabel": "Scopes (mellanslag-separerade, valfritt)"
+    "connectorScopesLabel": "Scopes (mellanslag-separerade, valfritt)",
+    "connectorOauthAuthUrlLabel": "Authorization URL (valfritt)",
+    "connectorOauthTokenUrlLabel": "Token URL (valfritt)",
+    "connectorOauthRefreshUrlLabel": "Refresh URL (valfritt)",
+    "connectorOauthEndpointsHint": "Lämna endpoint-URL:erna tomma för automatisk upptäckt. Ange dem för leverantörer som inte stöder detta, som NetSuite.",
+    "connectorOauthRefreshUrlHint": "Lämna tomt för att uppdatera mot token-URL.",
+    "connectorOauthEndpointsPairWarning": "Authorization URL och token URL måste anges tillsammans (refresh URL kräver båda)."
   },
   "localModels": {
     "title": "Lokala modeller",
@@ -3730,5 +3798,52 @@
     "truncatedNotice": "{count} fält borttagna — tabellgränsen är {max} kolumner: {names}",
     "skippedDerivedNotice": "{count} beräknade kolumner sparades inte — formler refererar till denna tabells kolumner: {names}",
     "loadReplacesColumns": "Detta ersätter nuvarande kolumner. Befintliga rader behåller värden vars kolumnnamn matchar."
+  },
+  "codeInterpreterDropdown": "Kör kod",
+  "connectorPin": {
+    "toggleLabel": "Hantera connector-verktyg",
+    "menuLabel": "Connectorer",
+    "menuLabelCount": "Connectorer ({count} aktiva)",
+    "tooltip": "Se vilka connector-verktyg som är aktiva, stäng av dem för denna chatt eller överallt, eller fokusera på ett.",
+    "toggleServerInChat": "Använd {name} i denna chatt",
+    "globalToggleTitle": "Slå på eller av {name} överallt (samma som Inställningar → Connectorer)",
+    "globalOn": "Globalt på",
+    "globalOff": "Globalt av",
+    "chatToggleHint": "Kryssrutorna styr endast denna chatt; global-knappen motsvarar Inställningar → Connectorer. Varje aktiv connector lägger till sina verktyg i varje meddelande — fler tokens och långsammare svar.",
+    "trayLabel": "Connector-verktyg",
+    "trayTitle": "Connector-verktyg för denna chatt",
+    "toggleServer": "Aktivera {name}",
+    "needsReconnect": "Återanslut i Inställningar",
+    "focusAction": "Fokusera",
+    "focusedChip": "Fokuserad",
+    "pinnedHint": "Endast verktyg från {name} kommer att användas i denna konversation.",
+    "staleHint": "Den fokuserade connectorn är frånkopplad eller inaktiverad — återanslut den i Inställningar → Connectorer, eller ta bort fokus. Tills dess används alla aktiva verktyg.",
+    "costHint": "Varje aktiv connector lägger till sina verktyg i varje meddelande du skickar — fler tokens och långsammare svar. Stäng av det du inte använder.",
+    "noEligibleConnectors": "Inga connectorer konfigurerade. Lägg till en i Inställningar → Connectorer först.",
+    "unknownConnector": "Borttagen connector",
+    "unpin": "Ta bort fokus",
+    "dismiss": "Stäng",
+    "badgeCount": "{count} verktyg",
+    "badgeTooltip": "Connector-verktyg är aktiva för varje meddelande — de ökar antal tokens och svarstid. Klicka för att hantera."
+  },
+  "toolApprovals": {
+    "title": "Verktygsgodkännanden",
+    "description": "Regler som gäller i varje konversation: tillåt automatiskt eller blockera specifika connector-verktyg. Du kan lägga till verktyg som du ännu inte fått fråga om.",
+    "actionApprove": "Tillåt alltid",
+    "actionReject": "Blockera alltid",
+    "scopeServer": "på {name}",
+    "scopeAny": "Valfri connector",
+    "removeRule": "Ta bort regel för {tool}",
+    "toolNameLabel": "Verktygsnamn",
+    "toolNamePlaceholder": "Verktygsnamn, t.ex. create_issue",
+    "scopeLabel": "Connector-omfång",
+    "actionLabel": "Åtgärd",
+    "addRule": "Lägg till regel",
+    "rejectPrecedenceNote": "Blockeringsregler gäller alltid — före tillåt-regler och automatisk tillåtelse för enskilda konversationer.",
+    "policyAsk": "Fråga",
+    "policyAllow": "Tillåt",
+    "policyBlock": "Blockera",
+    "policyGroupLabel": "Godkännandepolicy för {tool}",
+    "listHint": "Ange vad som händer när assistenten vill använda varje verktyg – i alla konversationer. Fråga är standard; Blockera har alltid företräde."
   }
 }

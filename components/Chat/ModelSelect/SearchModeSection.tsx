@@ -1,17 +1,27 @@
 import {
+  IconAdjustmentsHorizontal,
   IconAlertTriangle,
+  IconChevronDown,
+  IconChevronRight,
   IconInfoCircle,
   IconShieldCheck,
   IconWorld,
 } from '@tabler/icons-react';
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
+import {
+  MAX_SEARCH_RESULT_COUNT,
+  MIN_SEARCH_RESULT_COUNT,
+  WebSearchOptions,
+} from '@/types/webSearch';
 
 import { AzureAIIcon } from '@/components/Icons/providers';
+
+import { useSettingsStore } from '@/client/stores/settingsStore';
 
 interface SearchModeSectionProps {
   searchModeEnabled: boolean;
@@ -183,6 +193,104 @@ export const SearchModeSection: FC<SearchModeSectionProps> = ({
               </div>
             </div>
           )}
+
+          <AdvancedSearchOptions />
+        </div>
+      )}
+    </div>
+  );
+};
+
+/**
+ * Advanced tuning for the app-controlled layer of the search round-trip:
+ * how many sources are kept and what recency the search agent prefers.
+ * 'auto' freshness lets the per-message router decide (e.g. "latest news"
+ * → past day); research-style questions may exceed the source count on
+ * their own. Persisted globally (settingsStore), not per conversation.
+ *
+ * Collapsed by default — most users never touch these, and the controls
+ * made the section visually busy. The disclosure row is the only thing
+ * that renders until asked for.
+ */
+const AdvancedSearchOptions: FC = () => {
+  const t = useTranslations();
+  const [isOpen, setIsOpen] = useState(false);
+  const webSearchOptions = useSettingsStore((s) => s.webSearchOptions);
+  const setWebSearchOptions = useSettingsStore((s) => s.setWebSearchOptions);
+
+  const freshnessValues: WebSearchOptions['freshness'][] = [
+    'auto',
+    'day',
+    'week',
+    'month',
+    'any',
+  ];
+
+  return (
+    <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+      <button
+        type="button"
+        onClick={() => setIsOpen((v) => !v)}
+        aria-expanded={isOpen}
+        className="flex w-full items-center gap-2 text-xs font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+      >
+        {isOpen ? (
+          <IconChevronDown size={14} aria-hidden="true" />
+        ) : (
+          <IconChevronRight size={14} aria-hidden="true" />
+        )}
+        <IconAdjustmentsHorizontal size={14} aria-hidden="true" />
+        {t('modelSelect.searchOptions.title')}
+      </button>
+
+      {!isOpen ? null : (
+        <div className="mt-3 space-y-3">
+          <label className="flex items-center justify-between gap-3 text-xs text-gray-600 dark:text-gray-400">
+            <span className="flex-1">
+              {t('modelSelect.searchOptions.resultCount')}
+              <span className="ml-1 font-medium text-gray-900 dark:text-gray-100">
+                {webSearchOptions.resultCount}
+              </span>
+            </span>
+            <input
+              type="range"
+              min={MIN_SEARCH_RESULT_COUNT}
+              max={MAX_SEARCH_RESULT_COUNT}
+              step={1}
+              value={webSearchOptions.resultCount}
+              onChange={(e) =>
+                setWebSearchOptions({ resultCount: Number(e.target.value) })
+              }
+              className="w-32 accent-blue-600"
+              aria-label={t('modelSelect.searchOptions.resultCount')}
+            />
+          </label>
+
+          <label className="flex items-center justify-between gap-3 text-xs text-gray-600 dark:text-gray-400">
+            <span className="flex-1">
+              {t('modelSelect.searchOptions.freshness')}
+            </span>
+            <select
+              value={webSearchOptions.freshness}
+              onChange={(e) =>
+                setWebSearchOptions({
+                  freshness: e.target.value as WebSearchOptions['freshness'],
+                })
+              }
+              className="rounded-md border border-gray-300 bg-white px-2 py-1 text-xs text-gray-900 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
+              aria-label={t('modelSelect.searchOptions.freshness')}
+            >
+              {freshnessValues.map((value) => (
+                <option key={value} value={value}>
+                  {t(`modelSelect.searchOptions.freshness_${value}`)}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <p className="text-[0.7rem] leading-snug text-gray-500 dark:text-gray-400">
+            {t('modelSelect.searchOptions.hint')}
+          </p>
         </div>
       )}
     </div>

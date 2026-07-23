@@ -11,6 +11,7 @@ import { DEFAULT_MODEL, DEFAULT_SYSTEM_PROMPT } from '@/lib/utils/app/const';
 
 import { Message, MessageType } from '@/types/chat';
 import { ErrorCode, ErrorSeverity, PipelineError } from '@/types/errors';
+import { InterpreterMode } from '@/types/interpreterMode';
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 
@@ -83,9 +84,11 @@ export interface TestChatContextOptions {
   // Feature flags
   botId?: string;
   searchMode?: SearchMode;
+  interpreterMode?: InterpreterMode;
   threadId?: string;
   agentMode?: boolean;
   executionStrategy?: 'standard' | 'agent';
+  emitMarker?: (marker: string) => Promise<void>;
 
   // Processed data
   processedContent?: any;
@@ -138,6 +141,8 @@ export function createTestChatContext(
     // Features
     botId: options.botId,
     searchMode: options.searchMode,
+    interpreterMode: options.interpreterMode,
+    emitMarker: options.emitMarker,
     threadId: options.threadId,
     agentMode: options.agentMode ?? false,
     executionStrategy: options.executionStrategy,

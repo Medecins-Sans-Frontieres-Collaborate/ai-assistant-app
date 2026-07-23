@@ -15,6 +15,7 @@ import { ConnectorBrowser } from '../Connectors/ConnectorBrowser';
 import { CuratedConnectorRow } from '../Connectors/CuratedConnectorRow';
 import { McpServerForm } from '../Connectors/McpServerForm';
 import { McpServerRow } from '../Connectors/McpServerRow';
+import { ToolApprovalRulesManager } from '../Connectors/ToolApprovalRulesManager';
 
 import {
   McpServerConfig,
@@ -192,6 +193,11 @@ export const ConnectorsSection: FC = () => {
           ) : null;
         }}
       />
+
+      {/* Global tool approval policy — only meaningful once something is
+          connected, but rules for not-yet-seen tools are the point, so it
+          shows whenever ANY connector exists. */}
+      {mcpServers.length > 0 && <ToolApprovalRulesManager />}
 
       {/* Arbitrary servers — only when the LD flag allows it at all */}
       {arbitraryFlagOn && (

@@ -169,25 +169,29 @@ export class DocumentTranslationService {
   /**
    * Submits an ASYNCHRONOUS (batch) translation for a single document.
    *
-   * Used for formats the synchronous endpoint doesn't handle (PDF). With
-   * `storageType: 'File'` the batch translates one blob into one blob, so no
-   * dedicated source/target containers are needed: the source is the
-   * already-uploaded original (read SAS) and the target is the standard
-   * translated-blob path the sync flow uses (write SAS) — meaning the
-   * existing /api/document-translation/content download route serves batch
-   * results unchanged. NOTE: the target blob must not exist yet; Azure
-   * writes it on completion.
+   * Used for formats the synchronous endpoint doesn't handle (PDF) — the
+   * batch API is the only one that supports PDF, and its contract is blob
+   * URLs only (the document cannot be inlined). With `storageType: 'File'`
+   * the batch translates one blob into one blob.
+   *
+   * URLs must point at the dedicated translation STAGING storage account
+   * with short-lived container-scoped SAS tokens. The staging account is
+   * network-reachable by the Translator service (SAS-gated, auto-purged);
+   * the firewalled user-data accounts are NEVER exposed to the Translator —
+   * the app copies the finished translation back into user storage when the
+   * job succeeds (status route). NOTE: the target blob must not exist yet;
+   * Azure writes it on completion.
    *
    * @returns The batch operation id (from the Operation-Location header)
    * @see https://learn.microsoft.com/en-us/azure/ai-services/translator/document-translation/reference/rest-api-guide
    */
   async submitBatchTranslation(options: {
-    sourceSasUrl: string;
-    targetSasUrl: string;
+    sourceUrl: string;
+    targetUrl: string;
     targetLanguage: string;
     sourceLanguage?: string;
     category?: string;
-    glossarySasUrl?: string;
+    glossaryUrl?: string;
     glossaryFormat?: string;
   }): Promise<string> {
     const token = await this.tokenProvider();
@@ -199,21 +203,21 @@ export class DocumentTranslationService {
         {
           storageType: 'File',
           source: {
-            sourceUrl: options.sourceSasUrl,
+            sourceUrl: options.sourceUrl,
             ...(options.sourceLanguage
               ? { language: options.sourceLanguage }
               : {}),
           },
           targets: [
             {
-              targetUrl: options.targetSasUrl,
+              targetUrl: options.targetUrl,
               language: options.targetLanguage,
               ...(options.category ? { category: options.category } : {}),
-              ...(options.glossarySasUrl
+              ...(options.glossaryUrl
                 ? {
                     glossaries: [
                       {
-                        glossaryUrl: options.glossarySasUrl,
+                        glossaryUrl: options.glossaryUrl,
                         format: options.glossaryFormat ?? 'csv',
                       },
                     ],

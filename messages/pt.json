@@ -733,7 +733,13 @@
         "transformingTable": "Transformando a tabela…",
         "findingLocations": "Identificando localizações…",
         "updatingMap": "Atualizando o mapa…"
-      }
+      },
+      "searchingWebFor": "Pesquisando: “{query}”…",
+      "searchingWebForMultiple": "Pesquisando {count} tópicos: “{query}”…",
+      "readingCitedSources": "Lendo {count} artigos citados anteriormente…",
+      "planningSteps": "Planejando etapas…",
+      "planStep": "Etapa {current}/{total}: {description}",
+      "planStepRetry": "Etapa {current}/{total} (nova tentativa): {description}"
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# ferramenta utilizada} other {# ferramentas utilizadas}}",
@@ -743,7 +749,8 @@
       "statusAutoDenied": "Negada automaticamente",
       "statusFailed": "Falha",
       "statusIncomplete": "Incompleto",
-      "viaService": "via {service}"
+      "viaService": "via {service}",
+      "downloadFile": "Baixar"
     },
     "consent": {
       "authorizeRequired": "Autorização necessária",
@@ -785,7 +792,15 @@
       "approvedState": "Aprovado — agente retomado",
       "deniedState": "Negado",
       "submittingApproval": "Aprovando e retomando o agente…",
-      "submittingDenial": "Enviando sua negação…"
+      "submittingDenial": "Enviando sua negação…",
+      "alwaysApproveEverywhere": "Sempre aprovar esta ferramenta — em todos os chats",
+      "denyOptionsLabel": "Opções de recusa",
+      "denyOnce": "Recusar uma vez",
+      "neverAllowEverywhere": "Nunca permitir esta ferramenta — em todos os chats",
+      "deniedByRuleHint": "Bloqueado por sua regra — gerencie em Configurações → Conectores.",
+      "batchPendingHint": "{count} solicitações de ferramenta pendentes",
+      "approveAllButton": "Aprovar todas",
+      "denyAllButton": "Recusar todas"
     },
     "openImage": "Abrir imagem",
     "copyMessage": "Copiar mensagem",
@@ -796,7 +811,9 @@
     "ttsError": "Erro ao gerar áudio. Por favor, tente novamente.",
     "unsupportedMessageType": "Erro ao exibir mensagem: Tipo de mensagem não suportado",
     "addLanguageOption": "Adicionar \"{name}\"…",
-    "sources": "Fontes"
+    "sources": "Fontes",
+    "interpreterBadge": "Executar código",
+    "disableCodeInterpreter": "Desativar execução de código"
   },
   "sidebar": {
     "collapseSidebar": "Recolher barra lateral",
@@ -1195,6 +1212,30 @@
       "thresholdLabel": "Considerar como reescrita acima de",
       "thresholdUnit": "% do documento alterado",
       "exceptionSelectionAlways": "Revisar uma seleção destacada sempre se aplica diretamente — o modelo retorna apenas o trecho revisado, que não pode ser convertido em sugestões para todo o documento."
+    },
+    "webSearch": {
+      "title": "Pesquisa na Web",
+      "description": "Controla como as pesquisas ao vivo na web são realizadas quando o Modo de Pesquisa está ativo. As alterações são aplicadas imediatamente.",
+      "providerLabel": "Provedor de pesquisa",
+      "providerAuto": "Automático (recomendado)",
+      "providerAutoDescription": "Usa o padrão da implantação — atualmente a pesquisa de notícias combinada abaixo.",
+      "providerNews": "Notícias combinadas (GDELT + Google News)",
+      "providerNewsDescription": "Consulta as duas fontes em paralelo e combina os resultados, então uma falha nunca interrompe a pesquisa. Melhor equilíbrio entre velocidade, diversidade de fontes e links de artigos funcionais.",
+      "providerGoogleNews": "Apenas Google News",
+      "providerGoogleNewsDescription": "Anônimo e rápido — somente a consulta de pesquisa chega ao Google (sem conta ou cookies) e os resultados chegam em cerca de um segundo. Observação: geralmente analisa títulos e pequenos trechos, não artigos completos, então as respostas podem ser superficiais.",
+      "providerGdelt": "Apenas GDELT",
+      "providerGdeltDescription": "Banco de dados aberto de notícias mundiais com links diretos para os editores, permitindo que perguntas de acompanhamento leiam os artigos completos. Limite estrito de uso — pesquisas seguidas podem aguardar alguns segundos.",
+      "providerBing": "Bing grounding (via Microsoft)",
+      "providerBingDescription": "Lê páginas inteiras para resumos mais detalhados e cobre toda a web, não apenas notícias. Porém, as pesquisas costumam levar de 30 a 90 segundos e a qualidade dos resultados pode variar de uma pesquisa para outra.",
+      "sourcesLabel": "Fontes por pesquisa",
+      "sourcesDescription": "Quantas fontes distintas uma pesquisa mantém como citações. Perguntas em estilo de pesquisa podem aumentar isso automaticamente.",
+      "freshnessLabel": "Recência preferida",
+      "freshnessDescription": "Quão recentes devem ser os resultados. Automático permite que cada pergunta decida (notícias urgentes preferem o último dia).",
+      "freshness_auto": "Automático",
+      "freshness_day": "Último dia",
+      "freshness_week": "Última semana",
+      "freshness_month": "Último mês",
+      "freshness_any": "Qualquer período"
     }
   },
   "notFound": {
@@ -1384,6 +1425,23 @@
       "deployment": "Implantação",
       "modelVersion": "Versão do modelo",
       "publisher": "Publicador"
+    },
+    "interpreterMode": {
+      "title": "Interpretador de Código",
+      "subtitle": "Executa código quando necessário (gráficos, análise de dados)",
+      "learnMore": "O que ele pode fazer?",
+      "description": "Quando ativado, o assistente pode executar Python em um ambiente seguro e isolado para analisar arquivos anexos, calcular resultados e gerar gráficos. O código executado, sua saída e arquivos gerados são exibidos com a resposta. Use \"Executar Código\" no menu do compositor para forçar em uma mensagem."
+    },
+    "searchOptions": {
+      "title": "Pesquisa avançada",
+      "resultCount": "Fontes por pesquisa:",
+      "freshness": "Preferir resultados de",
+      "freshness_auto": "Auto (por pergunta)",
+      "freshness_day": "Último dia",
+      "freshness_week": "Última semana",
+      "freshness_month": "Último mês",
+      "freshness_any": "Qualquer período",
+      "hint": "Auto permite que cada pergunta defina sua própria atualidade (por exemplo, notícias preferem o último dia), e perguntas de pesquisa podem usar mais fontes do que o padrão."
     }
   },
   "models": {
@@ -2031,7 +2089,11 @@
     "moveToMore": "Mover para Mais",
     "moveOutOfMore": "Mostrar no menu",
     "showSources": "Mostrar outras fontes",
-    "hideSources": "Ocultar outras fontes"
+    "hideSources": "Ocultar outras fontes",
+    "aiTools": "Ferramentas de IA",
+    "aiToolsTooltip": "Funcionalidades que o assistente pode utilizar ao responder: busca web ao vivo, execução de código e serviços conectados.",
+    "codeInterpreterTooltip": "Execute código Python em um ambiente seguro para cada mensagem.\n\nIdeal para análise de dados, cálculos e criação de gráficos a partir de arquivos anexados.",
+    "categoryTools": "Ferramentas e conectores"
   },
   "transcription": {
     "transcribesOnSend": "Transcreve ao enviar",
@@ -3635,7 +3697,13 @@
     "connectorClientSecretLabel": "Segredo do cliente OAuth",
     "connectorClientSecretStored": "Um segredo está armazenado. Deixe em branco para manter ou digite um novo para substituir.",
     "connectorClientSecretHint": "Criptografado antes de ser armazenado e nunca exibido novamente.",
-    "connectorScopesLabel": "Escopos (separados por espaço, opcional)"
+    "connectorScopesLabel": "Escopos (separados por espaço, opcional)",
+    "connectorOauthAuthUrlLabel": "URL de autorização (opcional)",
+    "connectorOauthTokenUrlLabel": "URL do token (opcional)",
+    "connectorOauthRefreshUrlLabel": "URL de atualização (opcional)",
+    "connectorOauthEndpointsHint": "Deixe as URLs dos endpoints em branco para descobrir automaticamente. Preencha apenas para provedores que não suportam descoberta, como o NetSuite.",
+    "connectorOauthRefreshUrlHint": "Deixe em branco para atualizar usando o token URL.",
+    "connectorOauthEndpointsPairWarning": "A URL de autorização e a URL do token devem ser configuradas juntas (a de atualização exige ambas)."
   },
   "localModels": {
     "title": "Modelos locais",
@@ -3730,5 +3798,52 @@
     "truncatedNotice": "{count} campo(s) descartado(s) — o limite da tabela é {max} colunas: {names}",
     "skippedDerivedNotice": "{count} coluna(s) calculada(s) não salva(s) — fórmulas referenciam colunas desta tabela: {names}",
     "loadReplacesColumns": "Isso substituirá as colunas atuais. As linhas existentes mantêm valores cujos nomes das colunas coincidirem."
+  },
+  "codeInterpreterDropdown": "Executar Código",
+  "connectorPin": {
+    "toggleLabel": "Gerenciar ferramentas de conector",
+    "menuLabel": "Conectores",
+    "menuLabelCount": "Conectores ({count} ativos)",
+    "tooltip": "Veja quais ferramentas de conector estão ativas, desligue para este chat ou globalmente, ou foque em uma.",
+    "toggleServerInChat": "Usar {name} neste chat",
+    "globalToggleTitle": "Ativar ou desativar {name} em todos os locais (igual a Configurações → Conectores)",
+    "globalOn": "Global ligado",
+    "globalOff": "Global desligado",
+    "chatToggleHint": "As caixas controlam apenas este chat; o botão global segue as Configurações → Conectores. Cada conector ativo adiciona suas ferramentas a cada mensagem — mais tokens e respostas mais lentas.",
+    "trayLabel": "Ferramentas de conector",
+    "trayTitle": "Ferramentas de conector neste chat",
+    "toggleServer": "Ativar {name}",
+    "needsReconnect": "Reconectar em Configurações",
+    "focusAction": "Focar",
+    "focusedChip": "Focado",
+    "pinnedHint": "Apenas ferramentas de {name} serão usadas nesta conversa.",
+    "staleHint": "O conector focado está desconectado ou desativado — reconecte em Configurações → Conectores ou remova o foco. Até lá, todas as ferramentas ativas serão usadas.",
+    "costHint": "Cada conector ativo adiciona suas ferramentas a cada mensagem que você enviar — mais tokens e respostas mais lentas. Desative o que não estiver usando.",
+    "noEligibleConnectors": "Nenhum conector configurado. Adicione um em Configurações → Conectores primeiro.",
+    "unknownConnector": "Conector removido",
+    "unpin": "Remover foco",
+    "dismiss": "Fechar",
+    "badgeCount": "{count} ferramentas",
+    "badgeTooltip": "As ferramentas de conector estão ativas em todas as mensagens — aumentam tokens e tempo de resposta. Clique para gerenciar."
+  },
+  "toolApprovals": {
+    "title": "Aprovações de ferramentas",
+    "description": "Regras que valem em toda conversa: permita ou bloqueie automaticamente ferramentas específicas de conector. Você pode adicionar ferramentas ainda não solicitadas.",
+    "actionApprove": "Sempre permitir",
+    "actionReject": "Sempre bloquear",
+    "scopeServer": "no {name}",
+    "scopeAny": "Qualquer conector",
+    "removeRule": "Remover regra para {tool}",
+    "toolNameLabel": "Nome da ferramenta",
+    "toolNamePlaceholder": "Nome da ferramenta, ex: create_issue",
+    "scopeLabel": "Escopo do conector",
+    "actionLabel": "Ação",
+    "addRule": "Adicionar regra",
+    "rejectPrecedenceNote": "Regras de bloqueio sempre prevalecem — sobre as de permissão e sobre autoaprovação por conversa.",
+    "policyAsk": "Perguntar",
+    "policyAllow": "Permitir",
+    "policyBlock": "Bloquear",
+    "policyGroupLabel": "Política de aprovação para {tool}",
+    "listHint": "Defina o que acontece quando o assistente quiser usar cada ferramenta — em todas as conversas. Perguntar é o padrão; Bloquear sempre prevalece."
   }
 }

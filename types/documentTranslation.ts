@@ -86,6 +86,15 @@ export const GLOSSARY_CONTENT_TYPES: Record<string, string> = {
 /** Number of days before translated document expires in blob storage */
 export const TRANSLATION_EXPIRY_DAYS = 7;
 
+/**
+ * Container in the dedicated translation STAGING storage account
+ * (AZURE_BLOB_STORAGE_STAGING_NAME / _EU). Scratch space the Azure
+ * Translator batch service reads/writes via short-lived SAS; blobs are
+ * auto-purged by the account's 1-day lifecycle rule. User-data storage
+ * accounts are never exposed to the Translator.
+ */
+export const TRANSLATION_STAGING_CONTAINER = 'doc-translation-staging';
+
 /** Maximum document size for synchronous translation (40MB per Azure docs) */
 export const MAX_DOCUMENT_SIZE = 40 * 1024 * 1024;
 

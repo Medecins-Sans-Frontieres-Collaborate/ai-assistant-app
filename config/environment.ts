@@ -113,6 +113,34 @@ const serverEnvSchema = z.object({
   SEARCH_ENDPOINT_API_KEY: z.string().optional(), // Legacy: Used by OpenAI data_sources feature in documentSummary.ts
   ALLOW_INDEX_DOWNTIME: booleanString(false),
 
+  // Web search backend:
+  //  - 'news': GDELT + Google News RSS queried IN PARALLEL and merged —
+  //    each feed is the other's backup, so one failing/empty source never
+  //    sinks the search. Seconds-fast, no LLM round-trip. Default.
+  //  - 'gdelt': GDELT DOC API alone — keyless, real publisher URLs.
+  //  - 'google-news': Google News RSS alone + link decoding.
+  //  - 'bing-agent': the Foundry agent with Bing grounding — broader web
+  //    coverage but 30-90s round-trips and flaky result quality.
+  WEB_SEARCH_PROVIDER: z
+    .enum(['news', 'gdelt', 'google-news', 'bing-agent'])
+    .default('news'),
+
+  // Web search round-trip budget (ms). Applies to whichever provider runs.
+  // Bing grounding via the Foundry search agent is simply slow (observed
+  // >45s regularly; nothing app-side can speed it up) — the wait is made
+  // legible instead: live query loader, elapsed timer, and a color ramp
+  // that drifts warmer over time. On timeout the turn degrades to a
+  // knowledge answer with an honest notice.
+  WEB_SEARCH_TIMEOUT_MS: z.coerce.number().int().min(5000).default(120000),
+
+  // Code interpreter (sandboxed Python via Foundry Responses API).
+  // Kill switch: default ON so interpreter is available out of the box;
+  // set false to disable the feature server-side regardless of client mode.
+  CODE_INTERPRETER_ENABLED: booleanString(true),
+  // Deployment that backs the interpreter sub-tool round-trip (must support
+  // the Responses-API code_interpreter tool in the project's region).
+  CODE_INTERPRETER_MODEL: z.string().default('gpt-5.2'),
+
   // MCP (Model Context Protocol) connectors
   // Server-side gate for ARBITRARY (non-catalog) MCP server URLs — defense in
   // depth behind the client-side toggle + LaunchDarkly flag. Curated catalog

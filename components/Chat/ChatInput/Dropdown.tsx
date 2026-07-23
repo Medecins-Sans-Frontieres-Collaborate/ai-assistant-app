@@ -2,11 +2,14 @@ import {
   IconBraces,
   IconCamera,
   IconCirclePlus,
+  IconCode,
   IconFileMusic,
   IconFileText,
   IconLanguage,
   IconLink,
   IconPaperclip,
+  IconPlugConnected,
+  IconSparkles,
   IconVolume,
   IconWorld,
 } from '@tabler/icons-react';
@@ -40,6 +43,7 @@ import {
   DocumentTranslationPendingReference,
   DocumentTranslationReference,
 } from '@/types/documentTranslation';
+import { InterpreterMode } from '@/types/interpreterMode';
 import { SearchMode } from '@/types/searchMode';
 import { Tone } from '@/types/tone';
 
@@ -103,10 +107,19 @@ const Dropdown: React.FC<DropdownProps> = ({
   const textFieldValue = useChatInputStore((state) => state.textFieldValue);
   const searchMode = useChatInputStore((state) => state.searchMode);
   const setSearchMode = useChatInputStore((state) => state.setSearchMode);
+  const interpreterMode = useChatInputStore((state) => state.interpreterMode);
+  const setInterpreterMode = useChatInputStore(
+    (state) => state.setInterpreterMode,
+  );
   const extractionMode = useChatInputStore((state) => state.extractionMode);
   const setExtractionMode = useChatInputStore(
     (state) => state.setExtractionMode,
   );
+  const setConnectorPinTrayOpen = useChatInputStore(
+    (state) => state.setConnectorPinTrayOpen,
+  );
+  const mcpServers = useSettingsStore((state) => state.mcpServers);
+  const updateMcpServer = useSettingsStore((state) => state.updateMcpServer);
   // Structured-data extraction is gated by a LaunchDarkly flag (fail-open).
   // Off in prod until go-ahead; when disabled the toggle is omitted so users
   // can't turn extraction on. See docs/LAUNCHDARKLY_FLAGS.md.
@@ -368,6 +381,22 @@ const Dropdown: React.FC<DropdownProps> = ({
     }
   }, [searchMode, setSearchMode, selectedConversation?.defaultSearchMode]);
 
+  // Helper function to toggle interpreter force mode (mirrors search: the
+  // toggle flips ALWAYS on, and off returns to the conversation's default)
+  const toggleInterpreterMode = useCallback(() => {
+    if (interpreterMode === InterpreterMode.ALWAYS) {
+      setInterpreterMode(
+        selectedConversation?.defaultInterpreterMode ?? InterpreterMode.OFF,
+      );
+    } else {
+      setInterpreterMode(InterpreterMode.ALWAYS);
+    }
+  }, [
+    interpreterMode,
+    setInterpreterMode,
+    selectedConversation?.defaultInterpreterMode,
+  ]);
+
   // Foundry agents and org agents with allowWebSearch:false manage their own
   // search behavior — hide the toggle so it can't contradict the agent.
   const hideWebSearch = useMemo(() => {
@@ -382,6 +411,20 @@ const Dropdown: React.FC<DropdownProps> = ({
     return agent.allowWebSearch === false;
   }, [selectedConversation?.model?.id]);
 
+  // Same rule for the code-interpreter toggle: hidden for Foundry agents
+  // (they orchestrate their own tools) and org agents that don't opt in.
+  const hideCodeInterpreter = useMemo(() => {
+    const modelId = selectedConversation?.model?.id;
+    if (!modelId) return false;
+    if (modelId.startsWith('foundry-')) return true;
+    const orgAgentId = getOrganizationAgentIdFromModelId(modelId);
+    if (!orgAgentId) return false;
+    const agent = getOrganizationAgentById(orgAgentId);
+    if (!agent) return false;
+    if (agent.type === 'foundry') return true;
+    return agent.allowCodeInterpreter !== true;
+  }, [selectedConversation?.model?.id]);
+
   // Per-item icon color is a deliberate carve-out: this menu is scanned often
   // and the hue helps locate actions at a glance. Each color matches its
   // canonical use elsewhere in the app (search/extract: signal-blue,
@@ -389,9 +432,77 @@ const Dropdown: React.FC<DropdownProps> = ({
   // camera: red). Color is always paired with an icon shape and a label so it
   // is never the only distinguishing factor.
   //
+  // Chat-active connectors (globally enabled minus this conversation's
+  // opt-outs) — shown as a count on the Connectors row.
+  const chatDisabledIds = useMemo(
+    () => selectedConversation?.disabledMcpServerIds ?? [],
+    [selectedConversation?.disabledMcpServerIds],
+  );
+  const activeConnectorCount = useMemo(
+    () =>
+      mcpServers.filter((s) => s.enabled && !chatDisabledIds.includes(s.id))
+        .length,
+    [mcpServers, chatDisabledIds],
+  );
+  // The Connectors entry appears whenever anything is CONFIGURED — even
+  // all-disabled, so a disabled connector can be re-enabled from here
+  // instead of a trip to Settings.
+  const showConnectors = mcpServers.length > 0;
+  const hasAiToolChildren = !hideWebSearch || !hideCodeInterpreter;
+
+  // One click always flips whether the server runs in THIS chat: a
+  // globally-off server is switched on everywhere (plus cleared from the
+  // chat opt-outs); an on one just toggles the per-chat opt-out.
+  const toggleConnectorForChat = useCallback(
+    (serverId: string) => {
+      if (!selectedConversation) return;
+      const server = mcpServers.find((s) => s.id === serverId);
+      if (!server) return;
+      const disabled = selectedConversation.disabledMcpServerIds ?? [];
+      if (!server.enabled) {
+        updateMcpServer(serverId, { enabled: true });
+        if (disabled.includes(serverId)) {
+          updateConversation(selectedConversation.id, {
+            disabledMcpServerIds: disabled.filter((id) => id !== serverId),
+          });
+        }
+        return;
+      }
+      updateConversation(selectedConversation.id, {
+        disabledMcpServerIds: disabled.includes(serverId)
+          ? disabled.filter((id) => id !== serverId)
+          : [...disabled, serverId],
+      });
+    },
+    [selectedConversation, mcpServers, updateMcpServer, updateConversation],
+  );
+
   // Define menu items - memoized to avoid ref access issues during render.
   const menuItems: MenuItem[] = useMemo(
     () => [
+      // Capability toggles (what the AI can DO this turn) nest under one
+      // parent, mirroring the attach → file/link pattern. Pinning or
+      // frequent use of a child auto-promotes it back to a top-level row.
+      ...(hasAiToolChildren
+        ? [
+            {
+              id: 'aiTools',
+              icon: (
+                <IconSparkles
+                  size={18}
+                  className="text-blue-500 flex-shrink-0"
+                />
+              ),
+              label: t('dropdown.aiTools'),
+              infoTooltip: t('dropdown.aiToolsTooltip'),
+              // Expands in place; the row has no action of its own.
+              onClick: () => {
+                toggleParentExpanded('aiTools');
+              },
+              category: 'tools' as const,
+            },
+          ]
+        : []),
       // Foundry / restricted org agents hide the web-search toggle entirely.
       ...(hideWebSearch
         ? []
@@ -407,11 +518,113 @@ const Dropdown: React.FC<DropdownProps> = ({
                 toggleSearchMode();
                 closeDropdown();
               },
-              category: 'web' as const,
+              category: 'tools' as const,
               toggle: true,
               checked: searchMode === SearchMode.ALWAYS,
+              parentId: 'aiTools',
             },
           ]),
+      // Force code execution on the next messages (InterpreterMode.ALWAYS).
+      ...(hideCodeInterpreter
+        ? []
+        : [
+            {
+              id: 'codeInterpreter',
+              icon: (
+                <IconCode
+                  size={18}
+                  className="text-emerald-600 flex-shrink-0"
+                />
+              ),
+              label: t('codeInterpreterDropdown'),
+              infoTooltip: t('dropdown.codeInterpreterTooltip'),
+              onClick: () => {
+                toggleInterpreterMode();
+                closeDropdown();
+              },
+              category: 'tools' as const,
+              toggle: true,
+              checked: interpreterMode === InterpreterMode.ALWAYS,
+              parentId: 'aiTools',
+            },
+          ]),
+      // Connectors: its own expandable parent listing every CONFIGURED
+      // server (even all-disabled, so re-enabling never requires Settings).
+      // Each child toggles that server's active status for this chat; the
+      // trailing row opens the tray for focus pins and global switches.
+      ...(showConnectors
+        ? [
+            {
+              id: 'focusConnector',
+              icon: (
+                <IconPlugConnected
+                  size={18}
+                  className="text-cyan-600 flex-shrink-0"
+                />
+              ),
+              label:
+                activeConnectorCount > 0
+                  ? t('connectorPin.menuLabelCount', {
+                      count: activeConnectorCount,
+                    })
+                  : t('connectorPin.menuLabel'),
+              infoTooltip: t('connectorPin.tooltip'),
+              onClick: () => {
+                toggleParentExpanded('focusConnector');
+              },
+              category: 'tools' as const,
+            },
+            ...mcpServers.map((server) => {
+              const needsReauth =
+                server.authMode === 'oauth' && !!server.oauth?.needsReauth;
+              return {
+                id: `connector-${server.id}`,
+                icon: (
+                  <IconPlugConnected
+                    size={18}
+                    className={`flex-shrink-0 ${
+                      needsReauth ? 'text-amber-500' : 'text-cyan-600'
+                    }`}
+                  />
+                ),
+                label: server.name,
+                infoTooltip: needsReauth
+                  ? t('connectorPin.needsReconnect')
+                  : t('connectorPin.toggleServerInChat', {
+                      name: server.name,
+                    }),
+                // Stays open — toggling several connectors in a row is the
+                // expected gesture.
+                onClick: () => {
+                  toggleConnectorForChat(server.id);
+                },
+                category: 'tools' as const,
+                toggle: true,
+                checked: server.enabled && !chatDisabledIds.includes(server.id),
+                disabled: needsReauth,
+                parentId: 'focusConnector',
+              };
+            }),
+            {
+              id: 'connector-manage',
+              icon: (
+                <IconPlugConnected
+                  size={18}
+                  className="text-gray-500 flex-shrink-0"
+                />
+              ),
+              label: t('connectorPin.toggleLabel'),
+              infoTooltip: t('connectorPin.tooltip'),
+              onClick: () => {
+                setConnectorPinTrayOpen(true);
+                closeDropdown();
+              },
+              category: 'tools' as const,
+              opensDialog: true,
+              parentId: 'focusConnector',
+            },
+          ]
+        : []),
       {
         id: 'tone',
         icon: (
@@ -431,7 +644,9 @@ const Dropdown: React.FC<DropdownProps> = ({
           setIsToneOpen(true);
           closeDropdown();
         },
-        category: 'web',
+        // Tone shapes the response style — it lives with the other
+        // response-shaping actions, not the capability toggles.
+        category: 'transform',
         disabled: tones.length === 0,
         opensDialog: true,
       },
@@ -545,13 +760,23 @@ const Dropdown: React.FC<DropdownProps> = ({
       t,
       tUrl,
       searchMode,
+      interpreterMode,
       selectedToneId,
       tones,
       hasCameraSupport,
       hideWebSearch,
+      hideCodeInterpreter,
+      hasAiToolChildren,
+      showConnectors,
+      activeConnectorCount,
+      mcpServers,
+      chatDisabledIds,
+      toggleConnectorForChat,
       isExtractionEnabled,
       extractionMode,
       setExtractionMode,
+      setConnectorPinTrayOpen,
+      toggleParentExpanded,
       closeDropdown,
       setIsToneOpen,
       setIsTranslateOpen,
@@ -560,6 +785,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       handleTranscribeClick,
       handleDocumentTranslateClick,
       toggleSearchMode,
+      toggleInterpreterMode,
     ],
   );
 
@@ -703,6 +929,13 @@ const Dropdown: React.FC<DropdownProps> = ({
         key: 'transform',
         label: t('dropdown.categoryTransform'),
         items: byCategory('transform'),
+      },
+      // Capability toggles + connectors sit LAST among the regular
+      // sections, directly above "More".
+      {
+        key: 'tools',
+        label: t('dropdown.categoryTools'),
+        items: byCategory('tools'),
       },
       { key: 'more', label: t('dropdown.sectionMore'), items: hiddenItems },
     ].filter((section) => section.items.length > 0);

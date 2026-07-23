@@ -27,9 +27,19 @@ const mockEnv = vi.hoisted(() => ({
   MCP_OAUTH_ASANA_CLIENT_SECRET: undefined as string | undefined,
 }));
 
+// Access-checked connector resolution is unit-tested in
+// connectorResolution.test.ts; here it just needs to hand back a resolved
+// server (default: none). Catalog entries never consult it.
+const mockConnectorResolver = vi.hoisted(() =>
+  vi.fn<(id: string) => unknown>(() => null),
+);
+
 vi.mock('@/auth', () => ({ auth: mockAuth }));
 vi.mock('@/config/environment', () => ({ env: mockEnv }));
 vi.mock('node:dns/promises', () => ({ lookup: mockLookup }));
+vi.mock('@/lib/services/mcp/connectorResolution', () => ({
+  createConnectorResolver: vi.fn(async () => mockConnectorResolver),
+}));
 vi.mock('@modelcontextprotocol/sdk/client/auth.js', () => ({
   discoverOAuthServerInfo: mockDiscoverInfo,
   registerClient: mockRegisterClient,
@@ -364,6 +374,139 @@ describe('/api/mcp/oauth/*', () => {
     expect(mockExchange.mock.calls[0][1].clientInformation).toEqual({
       client_id: 'users-own-app-id',
       client_secret: 'users-own-app-secret',
+    });
+  });
+
+  describe('connector with admin-stored endpoints (NetSuite shape)', () => {
+    const AUTH_URL =
+      'https://acct.app.netsuite.com/app/login/oauth2/authorize.nl';
+    const TOKEN_URL =
+      'https://acct.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token';
+    const netsuiteEntry = {
+      id: 'ns1',
+      name: 'NetSuite',
+      connectorId: 'connector-abc123def456',
+    };
+
+    const resolvedNetsuite = (refreshUrl?: string) => ({
+      id: 'connector-abc123def456',
+      label: 'NetSuite',
+      url: 'https://acct.suitetalk.api.netsuite.com/services/mcp/v1/all',
+      transport: 'streamable-http' as const,
+      auth: { style: 'oauth' as const, scopes: ['mcp'] },
+      trusted: true,
+      oauthEndpoints: {
+        authorizationUrl: AUTH_URL,
+        tokenUrl: TOKEN_URL,
+        refreshUrl,
+      },
+    });
+
+    it('discover serves the stored endpoints and configured scopes without network discovery', async () => {
+      mockConnectorResolver.mockReturnValue(resolvedNetsuite());
+
+      const res = await discoverPOST(
+        createMockRequest({ method: 'POST', body: { server: netsuiteEntry } }),
+      );
+      const json = await parseJsonResponse(res);
+
+      expect(res.status).toBe(200);
+      expect(json.data.authorizationEndpoint).toBe(AUTH_URL);
+      // The browser puts exactly these on the authorize request — NetSuite
+      // rejects a scope-less authorize call with "Invalid login attempt".
+      expect(json.data.requestScopes).toEqual(['mcp']);
+      expect(mockDiscoverInfo).not.toHaveBeenCalled();
+    });
+
+    it('token exchange runs against the stored token endpoint', async () => {
+      mockConnectorResolver.mockReturnValue(resolvedNetsuite());
+      mockExchange.mockResolvedValue({
+        access_token: 'at',
+        token_type: 'Bearer',
+      });
+
+      const res = await tokenPOST(
+        createMockRequest({
+          method: 'POST',
+          body: {
+            server: netsuiteEntry,
+            grant: {
+              type: 'authorization_code',
+              code: 'code-1',
+              codeVerifier: 'v',
+              clientId: 'ns-client-id',
+            },
+          },
+        }),
+      );
+
+      expect(res.status).toBe(200);
+      expect(mockDiscoverInfo).not.toHaveBeenCalled();
+      expect(mockExchange.mock.calls[0][1].metadata.token_endpoint).toBe(
+        TOKEN_URL,
+      );
+    });
+
+    it('refresh substitutes a distinct stored refresh URL for the token endpoint', async () => {
+      mockConnectorResolver.mockReturnValue(
+        resolvedNetsuite('https://acct.suitetalk.api.netsuite.com/refresh'),
+      );
+      mockRefresh.mockResolvedValue({
+        access_token: 'at2',
+        token_type: 'Bearer',
+      });
+
+      const res = await tokenPOST(
+        createMockRequest({
+          method: 'POST',
+          body: {
+            server: netsuiteEntry,
+            grant: {
+              type: 'refresh_token',
+              refreshToken: 'rt',
+              clientId: 'ns-client-id',
+            },
+          },
+        }),
+      );
+
+      expect(res.status).toBe(200);
+      expect(mockRefresh.mock.calls[0][1].metadata.token_endpoint).toBe(
+        'https://acct.suitetalk.api.netsuite.com/refresh',
+      );
+    });
+
+    it('catalog servers without configured scopes report none (no behavior change)', async () => {
+      const res = await discoverPOST(
+        createMockRequest({ method: 'POST', body: { server: asanaServer } }),
+      );
+      const json = await parseJsonResponse(res);
+
+      expect(json.data.requestScopes).toEqual([]);
+    });
+
+    it("serves GitHub's catalog oauthScopes — a scope-less GitHub token sees public data only", async () => {
+      mockDiscoverInfo.mockResolvedValue({
+        authorizationServerUrl: 'https://github.com/login/oauth',
+        authorizationServerMetadata: {
+          authorization_endpoint: 'https://github.com/login/oauth/authorize',
+          token_endpoint: 'https://github.com/login/oauth/access_token',
+        },
+      });
+
+      const res = await discoverPOST(
+        createMockRequest({
+          method: 'POST',
+          body: { server: { id: 'gh', name: 'GitHub', catalogKey: 'github' } },
+        }),
+      );
+      const json = await parseJsonResponse(res);
+
+      expect(json.data.requestScopes).toEqual([
+        'repo',
+        'read:org',
+        'read:user',
+      ]);
     });
   });
 

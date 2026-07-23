@@ -5,6 +5,7 @@ import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 
 import { ErrorCode, PipelineError } from '@/types/errors';
+import { InterpreterMode } from '@/types/interpreterMode';
 
 import { describe, expect, it } from 'vitest';
 
@@ -524,6 +525,38 @@ describe('validateChatRequest - hostedRegion', () => {
         ...base,
         hostedRegion: 'https://evil.example',
       }),
+    ).toThrow();
+  });
+});
+
+describe('validateChatRequest - interpreterMode', () => {
+  const base = {
+    model: { id: 'gpt-5.2', name: 'GPT-5.2' },
+    messages: [{ role: 'user' as const, content: 'hi' }],
+  };
+
+  it('accepts every InterpreterMode value', () => {
+    const validator = new InputValidator();
+    for (const mode of Object.values(InterpreterMode)) {
+      expect(
+        validator.validateChatRequest({ ...base, interpreterMode: mode })
+          .interpreterMode,
+      ).toBe(mode);
+    }
+  });
+
+  it('is optional', () => {
+    const validator = new InputValidator();
+    expect(validator.validateChatRequest(base).interpreterMode).toBeUndefined();
+  });
+
+  it('rejects values outside the enum', () => {
+    const validator = new InputValidator();
+    expect(() =>
+      validator.validateChatRequest({ ...base, interpreterMode: 'turbo' }),
+    ).toThrow();
+    expect(() =>
+      validator.validateChatRequest({ ...base, interpreterMode: 'agent' }),
     ).toThrow();
   });
 });

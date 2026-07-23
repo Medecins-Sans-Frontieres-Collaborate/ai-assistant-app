@@ -41,11 +41,13 @@ import { MessageTranslationState } from '@/types/translation';
 import { TTSSettings } from '@/types/tts';
 
 import AudioPlayer from '@/components/Chat/AudioPlayer';
+import { ApprovalBatchActions } from '@/components/Chat/ChatMessages/ApprovalBatchActions';
 import {
   ConsentCard,
   ConsentRequest,
 } from '@/components/Chat/ChatMessages/ConsentCard';
 import { DocumentTranslationContent } from '@/components/Chat/ChatMessages/DocumentTranslationContent';
+import { GeneratedFilesPanel } from '@/components/Chat/ChatMessages/GeneratedFilesPanel';
 import { ThinkingBlock } from '@/components/Chat/ChatMessages/ThinkingBlock';
 import { ToolCallSummary } from '@/components/Chat/ChatMessages/ToolCallSummary';
 import { TranscriptContent } from '@/components/Chat/ChatMessages/TranscriptContent';
@@ -144,6 +146,9 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
     const [processedContent, setProcessedContent] = useState('');
     const [citations, setCitations] = useState<Citation[]>([]);
     const [thinking, setThinking] = useState<string>('');
+    // True while the stream is inside an unclosed think block (reasoning
+    // still arriving) — drives the ThinkingBlock's live shimmer state.
+    const [thinkingLive, setThinkingLive] = useState<boolean>(false);
     const [consentRequests, setConsentRequests] = useState<ConsentRequest[]>(
       [],
     );
@@ -226,9 +231,17 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
 
     // Process content once per change - simplified logic
     useEffect(() => {
-      // Parse thinking content from the raw content
-      const { thinking: inlineThinking, content: contentWithoutThinking } =
-        parseThinkingContent(content);
+      // Parse thinking content from the raw content. While streaming, an
+      // UNCLOSED <think> block means the model is mid-reasoning — route it
+      // into the ThinkingBlock (with the live shimmer) instead of letting
+      // raw reasoning text leak into the message body.
+      const {
+        thinking: inlineThinking,
+        content: contentWithoutThinking,
+        thinkingInProgress,
+      } = parseThinkingContent(content, {
+        includeUnclosed: messageIsStreaming,
+      });
 
       let mainContent = contentWithoutThinking;
       let citationsData: Citation[] = [];
@@ -346,6 +359,7 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
 
       setProcessedContent(mainContent);
       setThinking(finalThinking);
+      setThinkingLive(!!thinkingInProgress);
       setCitations(citationsData);
       setConsentRequests(parsedConsents);
     }, [
@@ -598,11 +612,16 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
             className="flex flex-col"
             style={{ width: '100%', maxWidth: '100%', minWidth: 0 }}
           >
-            {/* Thinking block - displayed before main content */}
+            {/* Thinking block - displayed before main content. Shimmers
+                while the reasoning is still arriving (unclosed think block
+                or no answer text yet), so users can tell live reasoning
+                apart from the final response below it. */}
             {thinking && (
               <ThinkingBlock
                 thinking={thinking}
-                isStreaming={messageIsStreaming && !processedContent}
+                isStreaming={
+                  messageIsStreaming && (thinkingLive || !processedContent)
+                }
               />
             )}
 
@@ -687,34 +706,46 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
 
             {/* Prefer persisted; fall back to live stream; legacy regex
                 extraction is the last resort. */}
-            {(message?.consentRequests && message.consentRequests.length > 0
-              ? (message.consentRequests as ConsentRequest[])
-              : messageIsStreaming
-                ? (streamingConsentRequests as ConsentRequest[])
-                : consentRequests
-            ).map((req, i) => {
-              const persistedOutcome =
-                req.kind === 'approval' && req.approval_request_id
-                  ? message?.approvalOutcomes?.[req.approval_request_id]
-                  : undefined;
-              const persistedSource =
-                req.kind === 'approval' && req.approval_request_id
-                  ? message?.approvalSources?.[req.approval_request_id]
-                  : undefined;
+            {(() => {
+              const activeConsents =
+                message?.consentRequests && message.consentRequests.length > 0
+                  ? (message.consentRequests as ConsentRequest[])
+                  : messageIsStreaming
+                    ? (streamingConsentRequests as ConsentRequest[])
+                    : consentRequests;
               return (
-                <ConsentCard
-                  key={
-                    req.kind === 'oauth'
-                      ? `oauth:${req.consent_url ?? i}`
-                      : `approval:${req.approval_request_id ?? i}`
-                  }
-                  request={req}
-                  messageIndex={messageIndex}
-                  persistedOutcome={persistedOutcome}
-                  persistedSource={persistedSource}
-                />
+                <>
+                  <ApprovalBatchActions
+                    requests={activeConsents}
+                    messageIndex={messageIndex}
+                    approvalOutcomes={message?.approvalOutcomes}
+                  />
+                  {activeConsents.map((req, i) => {
+                    const persistedOutcome =
+                      req.kind === 'approval' && req.approval_request_id
+                        ? message?.approvalOutcomes?.[req.approval_request_id]
+                        : undefined;
+                    const persistedSource =
+                      req.kind === 'approval' && req.approval_request_id
+                        ? message?.approvalSources?.[req.approval_request_id]
+                        : undefined;
+                    return (
+                      <ConsentCard
+                        key={
+                          req.kind === 'oauth'
+                            ? `oauth:${req.consent_url ?? i}`
+                            : `approval:${req.approval_request_id ?? i}`
+                        }
+                        request={req}
+                        messageIndex={messageIndex}
+                        persistedOutcome={persistedOutcome}
+                        persistedSource={persistedSource}
+                      />
+                    );
+                  })}
+                </>
               );
-            })}
+            })()}
 
             {/* MCP tool usage summary — prefer persisted, live if mid-stream. */}
             {(() => {
@@ -726,10 +757,16 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                     : message?.toolCalls;
               if (!liveCalls || liveCalls.length === 0) return null;
               return (
-                <ToolCallSummary
-                  toolCalls={liveCalls}
-                  approvalSources={message?.approvalSources}
-                />
+                <>
+                  {/* Code-interpreter deliverables (charts, exports) render
+                      prominently on the message — never only inside the
+                      collapsed tool strip. */}
+                  <GeneratedFilesPanel toolCalls={liveCalls} />
+                  <ToolCallSummary
+                    toolCalls={liveCalls}
+                    approvalSources={message?.approvalSources}
+                  />
+                </>
               );
             })()}
 

@@ -1,7 +1,10 @@
 import { Session } from 'next-auth';
 
 import { runAnthropicMcpToolLoop } from '@/lib/services/mcp/AnthropicMcpToolLoopService';
+import { planMcpSteps } from '@/lib/services/mcp/McpPlannerService';
 import { runMcpToolLoop } from '@/lib/services/mcp/McpToolLoopService';
+import { sanitizeMcpPlan } from '@/lib/services/mcp/mcpPlan';
+import { appendMcpSystemContext } from '@/lib/services/mcp/mcpSystemContext';
 import { getAzureMonitorLogger } from '@/lib/services/observability';
 import { MetricsService } from '@/lib/services/observability/MetricsService';
 
@@ -12,6 +15,7 @@ import {
 } from '@/lib/utils/app/metadata';
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
 import { createAnthropicStreamProcessor } from '@/lib/utils/app/stream/anthropicStreamProcessor';
+import { createResponsesStreamProcessor } from '@/lib/utils/app/stream/responsesStreamProcessor';
 import {
   UsageContext,
   createAzureOpenAIStreamProcessor,
@@ -28,7 +32,7 @@ import { UserRegion } from '@/lib/utils/shared/region';
 
 import { ApprovalResponse, Message } from '@/types/chat';
 import { ExtractionResponseFormat } from '@/types/extractionRecipe';
-import { McpPendingToolCall } from '@/types/mcp';
+import { McpPendingToolCall, McpPlan } from '@/types/mcp';
 import { OpenAIModel, getModelSizeClass } from '@/types/openai';
 import { Citation } from '@/types/rag';
 import { Tone } from '@/types/tone';
@@ -36,7 +40,13 @@ import { Tone } from '@/types/tone';
 import { ModelSelector, StreamingService, ToneService } from '../shared';
 import { AnthropicFoundryHandler } from './handlers/AnthropicFoundryHandler';
 import { HandlerFactory } from './handlers/HandlerFactory';
+import { ResponsesApiHandler } from './handlers/ResponsesApiHandler';
+import {
+  CodeInterpreterInputFile,
+  persistContainerFiles,
+} from './tools/CodeInterpreterTool';
 
+import { env } from '@/config/environment';
 import { ResolvedMcpServer } from '@/config/mcpCatalog';
 import { getFallbackModel, isDeploymentNotFoundError } from '@/config/models';
 import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
@@ -92,6 +102,8 @@ export interface StandardChatRequest {
   mcpServers?: ResolvedMcpServer[];
   mcpPendingToolCalls?: McpPendingToolCall[];
   mcpLoopRound?: number;
+  /** Turn plan echoed by the client on approval resume (re-sanitized here). */
+  mcpPlan?: McpPlan;
   approvalResponses?: ApprovalResponse[];
   /**
    * Custom-source (byom) routing. When present, the service builds a
@@ -101,6 +113,17 @@ export interface StandardChatRequest {
    * (the endpoint is explicit — the user's own resource).
    */
   customSource?: CustomSourceRouting;
+  /**
+   * Native code interpreter for the Responses path (Phase 2): attach the
+   * `code_interpreter` tool in-turn instead of the enricher round-trip.
+   * `inputFiles` are raw attachment bytes; `session` scopes generated-file
+   * persistence to the user's blob storage. Never log this object.
+   */
+  nativeCodeInterpreter?: {
+    forced: boolean;
+    inputFiles: CodeInterpreterInputFile[];
+    session: Session;
+  };
 }
 
 /** Region-pinned clients supplied by the container (all optional — see ServiceContainer). */
@@ -449,6 +472,18 @@ export class StandardChatService {
     // models only — the same gate the OpenAI-family branch below applies).
     // Non-stream or non-supportsTools Claude falls through to the plain
     // Anthropic path with MCP silently ignored.
+    // Turn-planning inputs for MCP loops: the last user message's text (for
+    // the planner) and the client-echoed plan (approval resume), defensively
+    // re-sanitized — it round-trips through the browser.
+    const mcpUserMessageText = this.lastUserMessageText(messagesToSend);
+    const mcpExistingPlan = request.mcpPlan
+      ? (sanitizeMcpPlan(request.mcpPlan) ?? undefined)
+      : undefined;
+    const mcpPlanner = (
+      userMessage: string,
+      serversWithTools: Parameters<typeof planMcpSteps>[2],
+    ) => planMcpSteps(this.openAIClient, userMessage, serversWithTools);
+
     if (
       HandlerFactory.isAnthropicModel(modelConfig) &&
       request.mcpServers?.length &&
@@ -458,11 +493,18 @@ export class StandardChatService {
       return this.handleAnthropicMcpChat(
         messagesToSend,
         modelConfig,
-        enhancedPrompt,
+        // Tell the model its connectors are real and how the tool loop
+        // behaves (approval pauses, denials, round budget).
+        appendMcpSystemContext(enhancedPrompt, request.mcpServers),
         temperature,
         request,
         clients.anthropicFoundryClient,
         chatRegion,
+        {
+          planner: mcpPlanner,
+          existingPlan: mcpExistingPlan,
+          userMessageText: mcpUserMessageText,
+        },
       );
     }
 
@@ -480,6 +522,7 @@ export class StandardChatService {
         clients.anthropicFoundryClient,
         chatRegion,
         request.botId,
+        request.reasoningEffort,
       );
     }
 
@@ -497,7 +540,9 @@ export class StandardChatService {
       );
       const preparedMessages = handler.prepareMessages(
         messagesToSend,
-        enhancedPrompt,
+        // Tell the model its connectors are real and how the tool loop
+        // behaves (approval pauses, denials, round budget).
+        appendMcpSystemContext(enhancedPrompt, request.mcpServers),
         modelConfig,
       );
       const mcpEffort = modelConfig.supportsReasoningEffort
@@ -526,6 +571,9 @@ export class StandardChatService {
         loopRound: request.mcpLoopRound ?? 0,
         userId: request.user?.id ?? request.user?.mail ?? 'unknown',
         citations: request.citations,
+        planner: mcpPlanner,
+        existingPlan: mcpExistingPlan,
+        userMessageText: mcpUserMessageText,
         usage: {
           modelId: modelConfig.id,
           region: chatRegion,
@@ -540,6 +588,36 @@ export class StandardChatService {
             ),
         },
       });
+    }
+
+    // Responses API path — flagged azure-openai models (GPT reasoning
+    // family). Exposes reasoning summaries as visible thinking, which
+    // chat.completions never returns. Custom-source (byom) requests stay on
+    // chat.completions (their per-request clients aren't validated for the
+    // Responses surface). Failures before the stream starts degrade to the
+    // chat.completions path below — the flag is a preference, never a wall.
+    if (
+      modelConfig.supportsResponsesApi &&
+      modelConfig.sdk === 'azure-openai' &&
+      !customSource
+    ) {
+      try {
+        return await this.handleResponsesApiChat(
+          messagesToSend,
+          modelConfig,
+          enhancedPrompt,
+          temperature,
+          stream,
+          request,
+          clients.azureOpenAIClient ?? this.azureOpenAIClient,
+          chatRegion,
+        );
+      } catch (error) {
+        console.warn(
+          `[StandardChatService] Responses API failed for ${sanitizeForLog(modelConfig.id)}; falling back to chat.completions:`,
+          error instanceof Error ? error.message : error,
+        );
+      }
     }
 
     // Select a handler (OpenAI-compatible) and execute. If the model's
@@ -685,6 +763,126 @@ export class StandardChatService {
   }
 
   /**
+   * Plain chat over the Azure OpenAI Responses API (flagged models).
+   * Reasoning summaries stream live as inline <think> text; usage and
+   * citations ride the same terminal metadata block as chat.completions.
+   * Throws on pre-stream failures so the caller can degrade to the
+   * chat.completions path.
+   */
+  private async handleResponsesApiChat(
+    messages: Message[],
+    modelConfig: OpenAIModel,
+    systemPrompt: string,
+    temperature: number,
+    stream: boolean,
+    request: StandardChatRequest,
+    client: AzureOpenAI,
+    chatRegion: UserRegion | null,
+  ): Promise<Response> {
+    const handler = new ResponsesApiHandler(client);
+    const input = handler.prepareInput(messages);
+    const appliedEffort = modelConfig.supportsReasoningEffort
+      ? request.reasoningEffort
+      : undefined;
+
+    // Native code interpreter (Phase 2): upload the raw attachments and
+    // attach the tool in-turn. env gate re-checked here — the client toggle
+    // alone must never enable execution. Streaming only: the non-streaming
+    // path has no post-stream hook to persist container files, so it keeps
+    // plain chat (the enricher round-trip covers non-streaming turns).
+    const nativeCI =
+      request.nativeCodeInterpreter && env.CODE_INTERPRETER_ENABLED && stream
+        ? request.nativeCodeInterpreter
+        : undefined;
+    const ciFileIds = nativeCI
+      ? await handler.uploadInputFiles(nativeCI.inputFiles)
+      : [];
+
+    const params = handler.buildRequestParams(
+      modelConfig,
+      input,
+      systemPrompt,
+      temperature,
+      stream,
+      appliedEffort,
+      modelConfig.supportsVerbosity ? request.verbosity : undefined,
+      nativeCI ? { fileIds: ciFileIds, forced: nativeCI.forced } : undefined,
+    );
+
+    console.log(
+      `[StandardChatService] Using ResponsesApiHandler for model: ${sanitizeForLog(modelConfig.id)} (effort: ${appliedEffort ?? 'default'}, codeInterpreter: ${nativeCI ? 'native' : 'off'})`,
+    );
+
+    if (stream) {
+      const events = await handler.executeStreaming(params);
+      const processedStream = createResponsesStreamProcessor(
+        events,
+        request.transcript,
+        request.citations,
+        request.pendingTranscriptions,
+        {
+          modelId: modelConfig.id,
+          region: chatRegion,
+          reasoningEffort: appliedEffort,
+          onUsage: (usage) =>
+            this.recordUsage(
+              usage,
+              modelConfig,
+              request.user,
+              true,
+              request.botId,
+            ),
+        },
+        nativeCI
+          ? {
+              persistFiles: async (citations) => {
+                try {
+                  return await persistContainerFiles(
+                    client as unknown as OpenAI,
+                    citations,
+                    nativeCI.session,
+                  );
+                } finally {
+                  // Inputs were copied into the container; clean up the
+                  // Foundry file-storage originals once the run is done.
+                  void handler.deleteInputFiles(ciFileIds);
+                }
+              },
+            }
+          : undefined,
+      );
+      return new Response(processedStream, {
+        headers: STREAMING_RESPONSE_HEADERS,
+      });
+    }
+
+    const completion = await handler.executeNonStreaming(params);
+    const thinking = handler.extractReasoningSummary(completion);
+
+    let usage: TokenUsageMetadata | undefined;
+    if (completion.usage) {
+      usage = {
+        promptTokens: completion.usage.input_tokens ?? 0,
+        completionTokens: completion.usage.output_tokens ?? 0,
+        totalTokens: completion.usage.total_tokens ?? 0,
+        modelId: modelConfig.id,
+        region: chatRegion,
+        reasoningEffort: appliedEffort,
+      };
+      this.recordUsage(usage, modelConfig, request.user, false, request.botId);
+    }
+
+    return new Response(
+      JSON.stringify({
+        text: completion.output_text,
+        ...(thinking ? { thinking } : {}),
+        ...(usage ? { usage } : {}),
+      }),
+      { headers: { 'Content-Type': 'application/json' } },
+    );
+  }
+
+  /**
    * Handles chat requests for Anthropic Claude models.
    * Uses the Anthropic Messages API which has a different structure than OpenAI.
    */
@@ -702,6 +900,11 @@ export class StandardChatService {
     request: StandardChatRequest,
     anthropicClient: AnthropicFoundry | undefined,
     chatRegion: UserRegion | null,
+    planning?: {
+      planner: Parameters<typeof runAnthropicMcpToolLoop>[0]['planner'];
+      existingPlan?: McpPlan;
+      userMessageText?: string;
+    },
   ): Promise<Response> {
     const client = anthropicClient ?? this.anthropicFoundryClient;
     if (!client) {
@@ -740,6 +943,9 @@ export class StandardChatService {
       loopRound: request.mcpLoopRound ?? 0,
       userId: request.user?.id ?? request.user?.mail ?? 'unknown',
       citations: request.citations,
+      planner: planning?.planner,
+      existingPlan: planning?.existingPlan,
+      userMessageText: planning?.userMessageText,
       usage: {
         modelId: modelConfig.id,
         region: chatRegion,
@@ -755,6 +961,24 @@ export class StandardChatService {
     });
   }
 
+  /** Text of the last user message, for the MCP turn planner. */
+  private lastUserMessageText(messages: Message[]): string | undefined {
+    for (let i = messages.length - 1; i >= 0; i--) {
+      const message = messages[i];
+      if (message.role !== 'user') continue;
+      if (typeof message.content === 'string') return message.content;
+      if (Array.isArray(message.content)) {
+        const text = message.content
+          .map((c) => (c.type === 'text' && 'text' in c ? c.text : ''))
+          .filter(Boolean)
+          .join('\n');
+        return text || undefined;
+      }
+      return undefined;
+    }
+    return undefined;
+  }
+
   private async handleAnthropicChat(
     messages: Message[],
     modelConfig: OpenAIModel,
@@ -767,6 +991,7 @@ export class StandardChatService {
     anthropicClient?: AnthropicFoundry,
     chatRegion: UserRegion | null = null,
     botId?: string,
+    reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high',
   ): Promise<Response> {
     const client = anthropicClient ?? this.anthropicFoundryClient;
     // Validate Anthropic client is configured
@@ -800,14 +1025,16 @@ export class StandardChatService {
         temperature,
         user,
         modelConfig,
+        reasoningEffort,
       );
 
       // Execute streaming request
       const response = await handler.executeStreamingRequest(requestParams);
 
       // Process the stream with Anthropic-specific processor. Claude models
-      // don't use the fallback chain, so modelConfig IS the served model;
-      // Anthropic has no tunable reasoning_effort parameter here.
+      // don't use the fallback chain, so modelConfig IS the served model.
+      // reasoningEffort here reflects the extended-thinking budget tier the
+      // handler applied (undefined/minimal = thinking off).
       const processedStream = createAnthropicStreamProcessor(
         response,
         undefined, // stopConversationRef
@@ -816,6 +1043,12 @@ export class StandardChatService {
         {
           modelId: modelConfig.id,
           region: chatRegion,
+          reasoningEffort:
+            modelConfig.supportsExtendedThinking &&
+            reasoningEffort &&
+            reasoningEffort !== 'minimal'
+              ? reasoningEffort
+              : undefined,
           onUsage: (usage) =>
             this.recordUsage(usage, modelConfig, user, true, botId),
         },
@@ -833,6 +1066,7 @@ export class StandardChatService {
         temperature,
         user,
         modelConfig,
+        reasoningEffort,
       );
 
       // Execute non-streaming request

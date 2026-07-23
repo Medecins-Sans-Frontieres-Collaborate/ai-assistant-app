@@ -30,12 +30,14 @@ import { isAllowedFoundryHost } from '@/lib/utils/shared/foundryHostAllowlist';
 
 import { ChatBody } from '@/types/chat';
 import { ErrorCode, PipelineError } from '@/types/errors';
+import { InterpreterMode } from '@/types/interpreterMode';
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 
 import { ChatContext } from './ChatContext';
 
 import { auth, getAccessTokenForOBO } from '@/auth';
+import { env } from '@/config/environment';
 import { TokenCredential } from '@azure/identity';
 
 /**
@@ -154,6 +156,8 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       verbosity,
       botId,
       searchMode,
+      webSearchOptions,
+      interpreterMode,
       hostedRegion,
       threadId,
       forcedAgentType,
@@ -170,6 +174,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       mcpServers,
       mcpPendingToolCalls,
       mcpLoopRound,
+      mcpPlan,
       extraction,
       conversationSummary,
       memories,
@@ -215,12 +220,15 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       mcpServers,
       mcpPendingToolCalls,
       mcpLoopRound,
+      mcpPlan,
       temperature,
       stream,
       reasoningEffort,
       verbosity,
       botId,
       searchMode,
+      webSearchOptions,
+      interpreterMode,
       hostedRegion,
       threadId,
       forcedAgentType,
@@ -285,6 +293,20 @@ export const createSystemPromptMiddleware = (
     userPrompt: context.rawUserPrompt,
     conversationSummary: context.conversationSummary,
     memories: context.memories,
+    // Capability awareness: with the interpreter on, models should OFFER
+    // code execution and file generation (e.g. "export this conversation's
+    // data as a spreadsheet") instead of claiming they can't produce files.
+    codeInterpreterAvailable:
+      env.CODE_INTERPRETER_ENABLED &&
+      (context.interpreterMode === InterpreterMode.INTELLIGENT ||
+        context.interpreterMode === InterpreterMode.ALWAYS),
+    // Parallel section for auto web search: how to answer WITH injected
+    // results (ground + cite) vs. a normal turn WITHOUT them (no live
+    // data — don't fabricate currency). AGENT mode is excluded: those
+    // turns execute on the Foundry agent path with its own instructions.
+    webSearchActive:
+      context.searchMode === SearchMode.INTELLIGENT ||
+      context.searchMode === SearchMode.ALWAYS,
   };
 
   // Add user info if enabled and user is available

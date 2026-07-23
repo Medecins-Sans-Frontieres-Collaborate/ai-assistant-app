@@ -1,17 +1,20 @@
 /**
- * File-based job records for ASYNC (batch) document translation.
+ * Blob-backed job records for ASYNC (batch) document translation.
  *
- * Mirrors lib/services/transcription/chunkedJobStore.ts: JSON files in
- * /tmp/document-translation-jobs/ so records survive route invocations and
- * hot reloads (single-replica only — the accepted pattern here).
+ * Records live in blob storage next to the translation blobs themselves
+ * (`{userId}/translations/jobs/{jobId}.json`), so any replica can serve a
+ * status poll — the live container app runs min_replicas = 2, which is
+ * exactly what broke the previous /tmp-file store (polls hitting a replica
+ * other than the one that accepted the submit returned NOT_FOUND).
  *
- * Unlike transcription there is NO background worker: Azure runs the batch;
- * this store only maps our jobId → the Azure operation id + metadata, and
- * scopes reads to the owning user. Live status always comes from Azure at
- * poll time (documentTranslationService.getBatchTranslationStatus).
+ * There is NO background worker: Azure runs the batch; this store only maps
+ * our jobId → the Azure operation id + metadata, and scopes reads to the
+ * owning user. Live status always comes from Azure at poll time
+ * (documentTranslationService.getBatchTranslationStatus). Records are
+ * cleaned up by the storage account's lifecycle management policy along with
+ * the translation blobs they describe.
  */
-import * as fs from 'fs';
-import * as path from 'path';
+import { BlobProperty, BlobStorage } from '@/lib/utils/server/blob/blob';
 
 export interface TranslationJob {
   /** Our job id — also the blob-path key for original/translated files. */
@@ -30,80 +33,53 @@ export interface TranslationJob {
   createdAt: number;
 }
 
-const JOB_STORE_DIR = '/tmp/document-translation-jobs';
-
-/**
- * Keep records long enough for a client that reloads mid-translation to
- * resume polling (batch PDFs can take many minutes; blobs live 7 days —
- * 24h of job-record retention comfortably covers any realistic poll resume).
- */
-const JOB_RETENTION_MS = 24 * 60 * 60 * 1000;
-
-/** UUID job ids only — prevents path traversal into the store dir. */
+/** UUID job ids only — prevents path traversal into the jobs prefix. */
 export const TRANSLATION_JOB_ID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-function jobPath(jobId: string): string {
+/**
+ * The `jobs/` segment keeps records out of the way of the translation blobs
+ * (`{userId}/translations/{jobId}.{ext}`), which the content route serves.
+ */
+function jobBlobPath(userId: string, jobId: string): string {
   if (!TRANSLATION_JOB_ID_REGEX.test(jobId)) {
     throw new Error('Invalid translation job id');
   }
-  return path.join(JOB_STORE_DIR, `${jobId}.json`);
+  return `${userId}/translations/jobs/${jobId}.json`;
 }
 
-function ensureDir(): void {
-  fs.mkdirSync(JOB_STORE_DIR, { recursive: true, mode: 0o700 });
-}
-
-export function createTranslationJob(job: TranslationJob): void {
-  ensureDir();
-  const target = jobPath(job.jobId);
-  // tmp-then-rename for atomic writes (chunkedJobStore pattern).
-  const tmp = `${target}.tmp`;
-  fs.writeFileSync(tmp, JSON.stringify(job), { mode: 0o600 });
-  fs.renameSync(tmp, target);
-  sweepExpiredJobs();
+export async function createTranslationJob(
+  storage: BlobStorage,
+  job: TranslationJob,
+): Promise<void> {
+  await storage.upload(
+    jobBlobPath(job.userId, job.jobId),
+    JSON.stringify(job),
+    {
+      blobHTTPHeaders: { blobContentType: 'application/json' },
+    },
+  );
 }
 
 /**
  * Reads a job scoped to its owner. Returns undefined for missing jobs AND
  * ownership mismatches (indistinguishable — prevents job-id enumeration).
+ * The path is already user-scoped; the userId check is defense in depth.
  */
-export function getTranslationJobForUser(
+export async function getTranslationJobForUser(
+  storage: BlobStorage,
   jobId: string,
   userId: string,
-): TranslationJob | undefined {
+): Promise<TranslationJob | undefined> {
   if (!TRANSLATION_JOB_ID_REGEX.test(jobId)) return undefined;
   try {
-    const raw = fs.readFileSync(jobPath(jobId), 'utf8');
-    const job = JSON.parse(raw) as TranslationJob;
+    const raw = await storage.get(
+      jobBlobPath(userId, jobId),
+      BlobProperty.BLOB,
+    );
+    const job = JSON.parse(raw.toString()) as TranslationJob;
     return job.userId === userId ? job : undefined;
   } catch {
     return undefined;
-  }
-}
-
-export function deleteTranslationJob(jobId: string): void {
-  try {
-    fs.unlinkSync(jobPath(jobId));
-  } catch {
-    // Already gone — fine.
-  }
-}
-
-/** Opportunistic cleanup of expired records (runs on each create). */
-function sweepExpiredJobs(): void {
-  try {
-    const cutoff = Date.now() - JOB_RETENTION_MS;
-    for (const entry of fs.readdirSync(JOB_STORE_DIR)) {
-      if (!entry.endsWith('.json')) continue;
-      const full = path.join(JOB_STORE_DIR, entry);
-      try {
-        if (fs.statSync(full).mtimeMs < cutoff) fs.unlinkSync(full);
-      } catch {
-        // Raced with another sweep — fine.
-      }
-    }
-  } catch {
-    // Store dir missing — nothing to sweep.
   }
 }

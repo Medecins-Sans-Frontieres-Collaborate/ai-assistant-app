@@ -3,7 +3,7 @@ import { AnthropicFoundryHandler } from '@/lib/services/chat/handlers/AnthropicF
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
 
 import { ApprovalResponse } from '@/types/chat';
-import { McpPendingToolCall } from '@/types/mcp';
+import { McpPendingToolCall, McpPlan } from '@/types/mcp';
 import { Citation } from '@/types/rag';
 
 import {
@@ -15,6 +15,7 @@ import { createAnthropicToolUseAccumulator } from './anthropicToolUseAccumulator
 import {
   AssembledRound,
   ServerWithTools,
+  ToolLoopCoreOptions,
   ToolLoopProviderStrategy,
   runToolLoopCore,
 } from './toolLoopCore';
@@ -52,12 +53,25 @@ export interface AnthropicMcpToolLoopOptions {
     region: 'US' | 'EU' | null;
     onUsage: (usage: TokenUsageMetadata) => void;
   };
+  /** Turn planning (see ToolLoopCoreOptions). */
+  planner?: ToolLoopCoreOptions<Anthropic.MessageParam>['planner'];
+  existingPlan?: McpPlan;
+  userMessageText?: string;
 }
 
 function buildAnthropicStrategy(
   options: AnthropicMcpToolLoopOptions,
 ): ToolLoopProviderStrategy<Anthropic.MessageParam> {
+  // Connector-provided usage notes (sanitized by the core). Anthropic keeps
+  // the system prompt out of the transcript, so the addendum is folded into
+  // params.system on every round rather than into a message.
+  let systemAddendum = '';
+
   return {
+    applySystemAddendum(addendum) {
+      systemAddendum = addendum;
+    },
+
     reconstructTranscript(messages, pending) {
       return reconstructAnthropicTranscript(messages, pending);
     },
@@ -76,6 +90,14 @@ function buildAnthropicStrategy(
       write,
     ): Promise<AssembledRound> {
       const params = options.buildParams(messages);
+      if (systemAddendum) {
+        params.system =
+          typeof params.system === 'string'
+            ? `${params.system}\n\n${systemAddendum}`
+            : params.system === undefined
+              ? systemAddendum
+              : [...params.system, { type: 'text', text: systemAddendum }];
+      }
       const anthropicTools = serversWithTools.flatMap(({ server, tools }) =>
         mcpToolsToAnthropicTools(server.id, tools),
       );
@@ -127,5 +149,8 @@ export async function runAnthropicMcpToolLoop(
     userId: options.userId,
     citations: options.citations,
     usage: options.usage,
+    planner: options.planner,
+    existingPlan: options.existingPlan,
+    userMessageText: options.userMessageText,
   });
 }

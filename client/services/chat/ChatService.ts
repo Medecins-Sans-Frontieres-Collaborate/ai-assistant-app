@@ -10,11 +10,17 @@ import {
   Message,
 } from '@/types/chat';
 import { ExtractionRequest } from '@/types/extractionRecipe';
-import { McpPendingToolCall, McpServerRequestEntry } from '@/types/mcp';
+import { InterpreterMode } from '@/types/interpreterMode';
+import {
+  McpPendingToolCall,
+  McpPlan,
+  McpServerRequestEntry,
+} from '@/types/mcp';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { DisplayNamePreference, StreamingSpeedConfig } from '@/types/settings';
 import { Tone } from '@/types/tone';
+import { WebSearchOptions } from '@/types/webSearch';
 
 import { apiClient } from '../api';
 
@@ -154,6 +160,8 @@ export class ChatService {
       botId?: string;
       threadId?: string;
       searchMode?: SearchMode;
+      webSearchOptions?: WebSearchOptions;
+      interpreterMode?: InterpreterMode;
       hostedRegion?: 'US' | 'EU';
       forcedAgentType?: string;
       isEditorOpen?: boolean;
@@ -176,6 +184,8 @@ export class ChatService {
       mcpServers?: McpServerRequestEntry[];
       mcpPendingToolCalls?: McpPendingToolCall[];
       mcpLoopRound?: number;
+      /** MCP turn plan echoed on approval resume (see types/mcp.ts). */
+      mcpPlan?: McpPlan;
       /** Structured-data extraction payload (see types/extractionRecipe.ts). */
       extraction?: ExtractionRequest;
       /** Summary of earlier windowed-out messages (see ChatBody). */
@@ -197,6 +207,8 @@ export class ChatService {
       botId: options?.botId,
       threadId: options?.threadId,
       searchMode: options?.searchMode,
+      webSearchOptions: options?.webSearchOptions,
+      interpreterMode: options?.interpreterMode,
       hostedRegion: options?.hostedRegion,
       forcedAgentType: options?.forcedAgentType,
       isEditorOpen: options?.isEditorOpen,
@@ -216,6 +228,7 @@ export class ChatService {
       mcpServers: options?.mcpServers,
       mcpPendingToolCalls: options?.mcpPendingToolCalls,
       mcpLoopRound: options?.mcpLoopRound,
+      mcpPlan: options?.mcpPlan,
       extraction: options?.extraction,
       conversationSummary: options?.conversationSummary,
       memories: options?.memories,
