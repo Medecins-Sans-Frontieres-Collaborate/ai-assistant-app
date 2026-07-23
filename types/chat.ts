@@ -417,6 +417,13 @@ export interface Conversation {
    * removed/disabled) is ignored rather than blocking the chat.
    */
   pinnedMcpServerId?: string;
+  /**
+   * McpServerConfig.ids switched off FOR THIS CONVERSATION in the connector
+   * tray. Purely subtractive on top of the global enabled set — a server
+   * disabled globally stays off regardless, and re-enabling globally does
+   * not resurrect it in chats that opted out. Unknown/stale ids are inert.
+   */
+  disabledMcpServerIds?: string[];
   // Active file context (optional; initialized via migration)
   activeFiles?: ActiveFile[];
   activeFilesTokenBudget?: number;
