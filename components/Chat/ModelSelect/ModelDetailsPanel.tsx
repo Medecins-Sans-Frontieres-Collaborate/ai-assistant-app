@@ -11,6 +11,7 @@ import { AdvancedOptionsSection } from './AdvancedOptionsSection';
 import { CustomAgentInfo } from './CustomAgentInfo';
 import { DeploymentDetailsSection } from './DeploymentDetailsSection';
 import { HostedRegionSection } from './HostedRegionSection';
+import { InterpreterModeSection } from './InterpreterModeSection';
 import { ModelHeader } from './ModelHeader';
 import { RecentSourcesSection } from './RecentSourcesSection';
 import { SearchModeSection } from './SearchModeSection';
@@ -25,6 +26,8 @@ interface ModelDetailsPanelProps {
   isCustomAgent: boolean;
   searchModeEnabled: boolean;
   displaySearchMode: SearchMode;
+  interpreterEnabled: boolean;
+  handleToggleInterpreterMode: () => void;
   agentAvailable: boolean;
   showModelAdvanced: boolean;
   selectedConversation: Conversation | null;
@@ -57,6 +60,8 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
   isCustomAgent,
   searchModeEnabled,
   displaySearchMode,
+  interpreterEnabled,
+  handleToggleInterpreterMode,
   agentAvailable,
   showModelAdvanced,
   selectedConversation,
@@ -200,6 +205,21 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
             modelConfig={modelConfig}
             handleToggleSearchMode={handleToggleSearchMode}
             handleSetSearchMode={handleSetSearchMode}
+          />
+        )}
+
+      {/* Code interpreter default on/off. Same visibility rule as search:
+          Foundry agents orchestrate their own tools, and org agents must
+          opt in via allowCodeInterpreter. */}
+      {!(
+        organizationAgent &&
+        (organizationAgent.type === 'foundry' ||
+          organizationAgent.allowCodeInterpreter !== true)
+      ) &&
+        !selectedModel?.id?.startsWith('foundry-') && (
+          <InterpreterModeSection
+            interpreterEnabled={interpreterEnabled}
+            handleToggleInterpreterMode={handleToggleInterpreterMode}
           />
         )}
 
