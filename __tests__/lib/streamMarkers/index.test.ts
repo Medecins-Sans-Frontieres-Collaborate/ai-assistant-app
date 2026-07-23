@@ -5,15 +5,19 @@ import {
   CONSENT_OUTCOME_OPEN,
   CONSENT_REQUEST_CLOSE,
   CONSENT_REQUEST_OPEN,
+  SEARCH_INTERIM_CLOSE,
+  SEARCH_INTERIM_OPEN,
   TOOL_CALL_RECORD_CLOSE,
   TOOL_CALL_RECORD_OPEN,
   emitAgentActivity,
   emitConsentOutcome,
   emitConsentRequest,
+  emitSearchInterim,
   emitToolCallRecord,
   extractConsentOutcomes,
   extractConsentRequests,
   extractLatestAgentActivity,
+  extractLatestSearchInterim,
   extractToolCallRecords,
   scanStreamEvents,
   stripIncompleteStreamMarkers,
@@ -456,5 +460,65 @@ describe('scanStreamEvents — markers split across chunk boundaries', () => {
 
     expect(events).toHaveLength(0);
     expect(display).toBe('a <<<x b');
+  });
+});
+
+describe('emitSearchInterim / search_interim scanning', () => {
+  const payload = {
+    queries: ['fusion energy', 'tokamak record'],
+    entries: [
+      {
+        title: 'Headline one',
+        url: 'https://a.example/1',
+        date: '2026-07-23',
+        sourceName: 'a.example',
+        snippet: 'Snippet',
+      },
+      { title: 'Headline two', url: 'https://b.example/2', date: '2026-07-23' },
+    ],
+  };
+
+  it('round-trips through scanStreamEvents without leaking into display', () => {
+    const wire = `before${emitSearchInterim(payload)}after`;
+    const { events, displayDelta } = scanStreamEvents(wire, 0);
+
+    expect(events).toHaveLength(1);
+    expect(events[0]).toEqual({ type: 'search_interim', payload });
+    expect(displayDelta.replace(/\n/g, '')).toBe('beforeafter');
+  });
+
+  it('recovers the event when the marker is split across chunks', () => {
+    const wire = emitSearchInterim(payload);
+    const idx = wire.indexOf('Headline one');
+    const first = wire.slice(0, idx);
+    const second = wire.slice(idx);
+
+    const scan1 = scanStreamEvents(first, 0);
+    expect(scan1.events).toHaveLength(0);
+    const scan2 = scanStreamEvents(first + second, scan1.nextIndex);
+    expect(scan2.events).toHaveLength(1);
+    expect(scan2.events[0].type).toBe('search_interim');
+  });
+
+  it('drops malformed payloads (missing entries) without leaking text', () => {
+    const wire = `${SEARCH_INTERIM_OPEN}{"queries":["q"]}${SEARCH_INTERIM_CLOSE}`;
+    const { events, displayDelta } = scanStreamEvents(wire, 0);
+
+    expect(events).toHaveLength(0);
+    expect(displayDelta).toBe('');
+  });
+
+  it('extractLatestSearchInterim returns the latest payload and strips all markers', () => {
+    const older = emitSearchInterim({ queries: ['old'], entries: [] });
+    const wire = `x${older}y${emitSearchInterim(payload)}z`;
+    const { latest, cleaned } = extractLatestSearchInterim(wire);
+
+    expect(latest).toEqual(payload);
+    expect(cleaned).toBe('xyz');
+  });
+
+  it('stripIncompleteStreamMarkers hides a half-arrived interim marker', () => {
+    const wire = `text ${SEARCH_INTERIM_OPEN}{"queries":["q"`;
+    expect(stripIncompleteStreamMarkers(wire)).toBe('text ');
   });
 });
