@@ -2,11 +2,13 @@ import {
   IconBraces,
   IconCamera,
   IconCirclePlus,
+  IconCode,
   IconFileMusic,
   IconFileText,
   IconLanguage,
   IconLink,
   IconPaperclip,
+  IconPlugConnected,
   IconVolume,
   IconWorld,
 } from '@tabler/icons-react';
@@ -40,6 +42,7 @@ import {
   DocumentTranslationPendingReference,
   DocumentTranslationReference,
 } from '@/types/documentTranslation';
+import { InterpreterMode } from '@/types/interpreterMode';
 import { SearchMode } from '@/types/searchMode';
 import { Tone } from '@/types/tone';
 
@@ -103,10 +106,21 @@ const Dropdown: React.FC<DropdownProps> = ({
   const textFieldValue = useChatInputStore((state) => state.textFieldValue);
   const searchMode = useChatInputStore((state) => state.searchMode);
   const setSearchMode = useChatInputStore((state) => state.setSearchMode);
+  const interpreterMode = useChatInputStore((state) => state.interpreterMode);
+  const setInterpreterMode = useChatInputStore(
+    (state) => state.setInterpreterMode,
+  );
   const extractionMode = useChatInputStore((state) => state.extractionMode);
   const setExtractionMode = useChatInputStore(
     (state) => state.setExtractionMode,
   );
+  const connectorPinTrayOpen = useChatInputStore(
+    (state) => state.connectorPinTrayOpen,
+  );
+  const setConnectorPinTrayOpen = useChatInputStore(
+    (state) => state.setConnectorPinTrayOpen,
+  );
+  const mcpServers = useSettingsStore((state) => state.mcpServers);
   // Structured-data extraction is gated by a LaunchDarkly flag (fail-open).
   // Off in prod until go-ahead; when disabled the toggle is omitted so users
   // can't turn extraction on. See docs/LAUNCHDARKLY_FLAGS.md.
@@ -368,6 +382,22 @@ const Dropdown: React.FC<DropdownProps> = ({
     }
   }, [searchMode, setSearchMode, selectedConversation?.defaultSearchMode]);
 
+  // Helper function to toggle interpreter force mode (mirrors search: the
+  // toggle flips ALWAYS on, and off returns to the conversation's default)
+  const toggleInterpreterMode = useCallback(() => {
+    if (interpreterMode === InterpreterMode.ALWAYS) {
+      setInterpreterMode(
+        selectedConversation?.defaultInterpreterMode ?? InterpreterMode.OFF,
+      );
+    } else {
+      setInterpreterMode(InterpreterMode.ALWAYS);
+    }
+  }, [
+    interpreterMode,
+    setInterpreterMode,
+    selectedConversation?.defaultInterpreterMode,
+  ]);
+
   // Foundry agents and org agents with allowWebSearch:false manage their own
   // search behavior — hide the toggle so it can't contradict the agent.
   const hideWebSearch = useMemo(() => {
@@ -380,6 +410,20 @@ const Dropdown: React.FC<DropdownProps> = ({
     if (!agent) return false;
     if (agent.type === 'foundry') return true;
     return agent.allowWebSearch === false;
+  }, [selectedConversation?.model?.id]);
+
+  // Same rule for the code-interpreter toggle: hidden for Foundry agents
+  // (they orchestrate their own tools) and org agents that don't opt in.
+  const hideCodeInterpreter = useMemo(() => {
+    const modelId = selectedConversation?.model?.id;
+    if (!modelId) return false;
+    if (modelId.startsWith('foundry-')) return true;
+    const orgAgentId = getOrganizationAgentIdFromModelId(modelId);
+    if (!orgAgentId) return false;
+    const agent = getOrganizationAgentById(orgAgentId);
+    if (!agent) return false;
+    if (agent.type === 'foundry') return true;
+    return agent.allowCodeInterpreter !== true;
   }, [selectedConversation?.model?.id]);
 
   // Per-item icon color is a deliberate carve-out: this menu is scanned often
@@ -412,6 +456,64 @@ const Dropdown: React.FC<DropdownProps> = ({
               checked: searchMode === SearchMode.ALWAYS,
             },
           ]),
+      // Force code execution on the next messages (InterpreterMode.ALWAYS).
+      ...(hideCodeInterpreter
+        ? []
+        : [
+            {
+              id: 'codeInterpreter',
+              icon: (
+                <IconCode
+                  size={18}
+                  className="text-emerald-600 flex-shrink-0"
+                />
+              ),
+              label: t('codeInterpreterDropdown'),
+              infoTooltip: t('dropdown.codeInterpreterTooltip'),
+              onClick: () => {
+                toggleInterpreterMode();
+                closeDropdown();
+              },
+              category: 'web' as const,
+              toggle: true,
+              checked: interpreterMode === InterpreterMode.ALWAYS,
+            },
+          ]),
+      // Connector focus: pin one connected MCP server to the conversation so
+      // only ITS tools are declared to the model. Hidden when nothing is
+      // connected — there would be nothing to focus on.
+      ...(mcpServers.some((s) => s.enabled)
+        ? [
+            {
+              id: 'focusConnector',
+              icon: (
+                <IconPlugConnected
+                  size={18}
+                  className="text-cyan-600 flex-shrink-0"
+                />
+              ),
+              label: t('connectorPin.toggleLabel'),
+              infoTooltip: t('connectorPin.tooltip'),
+              onClick: () => {
+                if (selectedConversation?.pinnedMcpServerId) {
+                  // Toggling off removes the pin, not just the tray.
+                  updateConversation(selectedConversation.id, {
+                    pinnedMcpServerId: undefined,
+                  });
+                  setConnectorPinTrayOpen(false);
+                } else {
+                  setConnectorPinTrayOpen(!connectorPinTrayOpen);
+                }
+                closeDropdown();
+              },
+              category: 'web' as const,
+              toggle: true,
+              checked:
+                !!selectedConversation?.pinnedMcpServerId ||
+                connectorPinTrayOpen,
+            },
+          ]
+        : []),
       {
         id: 'tone',
         icon: (
@@ -545,13 +647,21 @@ const Dropdown: React.FC<DropdownProps> = ({
       t,
       tUrl,
       searchMode,
+      interpreterMode,
       selectedToneId,
       tones,
       hasCameraSupport,
       hideWebSearch,
+      hideCodeInterpreter,
       isExtractionEnabled,
       extractionMode,
       setExtractionMode,
+      mcpServers,
+      connectorPinTrayOpen,
+      setConnectorPinTrayOpen,
+      selectedConversation?.pinnedMcpServerId,
+      selectedConversation?.id,
+      updateConversation,
       closeDropdown,
       setIsToneOpen,
       setIsTranslateOpen,
@@ -560,6 +670,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       handleTranscribeClick,
       handleDocumentTranslateClick,
       toggleSearchMode,
+      toggleInterpreterMode,
     ],
   );
 
