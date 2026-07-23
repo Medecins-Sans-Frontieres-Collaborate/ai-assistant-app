@@ -142,7 +142,7 @@ export function createAzureOpenAIStreamProcessor(
             }
 
             // Parse thinking content from the accumulated content
-            const { thinking: inlineThinking, content } =
+            const { thinking: inlineThinking } =
               parseThinkingContent(allContent);
             const thinking = allReasoning.trim() || inlineThinking;
 
