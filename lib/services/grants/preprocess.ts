@@ -308,29 +308,40 @@ export function reconcile(params: {
       if (codeInText(code, norm)) candidates.push(d);
       else if (stripped && codeInText(stripped, norm)) candidates.push(d);
     }
-    const foundDoc =
-      candidates.find((d) => !isCoordDoc(d.file)) || candidates[0] || null;
+    const nonCoordDoc = candidates.find((d) => !isCoordDoc(d.file)) || null;
+    const coordOnlyDoc = nonCoordDoc ? null : candidates[0] || null;
 
-    if (foundDoc) {
-      foundCodeSet.add(code);
-      matched.push(code);
-      let displayDoc = foundDoc;
-      let codeSeenIn = '';
-      if (isCoordDoc(foundDoc.file)) {
-        const countryToksC = new Set(significantTokens(e.country || ''));
-        const nameToks = significantTokens(e.name).filter(
-          (t) => !countryToksC.has(t),
-        );
-        const projectDoc = docs.find(
+    // A code seen ONLY in coordination/overview documents does not prove the
+    // project narrative was uploaded — coordination docs routinely tabulate the
+    // whole project list (e.g. "SD410" in the Darfur coordination office doc
+    // while the Rokero narrative itself carries no code). Accept the match only
+    // when the project's own narrative can be identified by a name-anchor in a
+    // filename; otherwise the row honestly reports Not Found instead of
+    // linking a coordination document.
+    let foundDoc = nonCoordDoc;
+    let displayDoc = nonCoordDoc;
+    let codeSeenIn = '';
+    if (!nonCoordDoc && coordOnlyDoc) {
+      const countryToksC = new Set(significantTokens(e.country || ''));
+      const nameToks = significantTokens(e.name).filter(
+        (t) => !countryToksC.has(t),
+      );
+      const projectDoc =
+        docs.find(
           (d) =>
             !isCoordDoc(d.file) &&
             nameToks.some((t) => normalizeName(d.file).includes(t)),
-        );
-        if (projectDoc) {
-          displayDoc = projectDoc;
-          codeSeenIn = foundDoc.file;
-        }
+        ) || null;
+      if (projectDoc) {
+        foundDoc = coordOnlyDoc;
+        displayDoc = projectDoc;
+        codeSeenIn = coordOnlyDoc.file;
       }
+    }
+
+    if (foundDoc && displayDoc) {
+      foundCodeSet.add(code);
+      matched.push(code);
       // Surface the raw (verbatim) narrative project name whenever we matched the
       // code. For single-project OCs one document = one project, so the micro-pass
       // name IS this project's name — use it directly whether the code was matched
@@ -420,8 +431,11 @@ export function reconcile(params: {
       align: 'No',
       // Automated match suggestions are paused while the matching logic is
       // reworked, so the note simply states that nothing was found rather than
-      // proposing a potential narrative.
-      differences: 'No matching project code or name found in the narratives',
+      // proposing a potential narrative. When the code was seen only in a
+      // coordination/overview doc, say so
+      differences: coordOnlyDoc
+        ? `Project code ${code} is only referenced in the coordination/overview document "${coordOnlyDoc.file}" — no project narrative contains the code or a matching name`
+        : 'No matching project code or name found in the narratives',
       aligned: '',
     });
   }
