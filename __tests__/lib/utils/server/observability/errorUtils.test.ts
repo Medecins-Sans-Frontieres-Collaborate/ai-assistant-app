@@ -40,7 +40,25 @@ describe('errorUtils', () => {
 
     it('handles empty string errors', () => {
       expect(getErrorMessage('')).toBe('');
-      expect(getErrorMessage(new Error(''))).toBe('');
+    });
+
+    it('never returns an empty string for an Error instance', () => {
+      // A blank-message plain Error falls back rather than surfacing ''.
+      expect(getErrorMessage(new Error(''))).toBe('Unknown error');
+    });
+
+    it('surfaces code/statusCode from blank-message Azure-style RestErrors', () => {
+      const restError = new Error('') as Error & {
+        code: string;
+        statusCode: number;
+      };
+      restError.name = 'RestError';
+      restError.code = 'AuthorizationPermissionMismatch';
+      restError.statusCode = 403;
+
+      expect(getErrorMessage(restError)).toBe(
+        'RestError AuthorizationPermissionMismatch HTTP 403',
+      );
     });
   });
 

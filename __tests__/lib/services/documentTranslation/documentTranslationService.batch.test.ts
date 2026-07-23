@@ -32,8 +32,8 @@ describe('DocumentTranslationService (batch)', () => {
       globalThis.fetch = fetchSpy as never;
 
       const operationId = await service.submitBatchTranslation({
-        sourceSasUrl: 'https://blob.example.com/src?sig=source-sas',
-        targetSasUrl: 'https://blob.example.com/dst?sig=target-sas',
+        sourceUrl: 'https://blob.example.com/src?sig=source-sas',
+        targetUrl: 'https://blob.example.com/dst?sig=target-sas',
         targetLanguage: 'fr',
         sourceLanguage: 'en',
       });
@@ -67,10 +67,10 @@ describe('DocumentTranslationService (batch)', () => {
       globalThis.fetch = fetchSpy as never;
 
       await service.submitBatchTranslation({
-        sourceSasUrl: 'https://blob.example.com/src?sas',
-        targetSasUrl: 'https://blob.example.com/dst?sas',
+        sourceUrl: 'https://blob.example.com/src?sas',
+        targetUrl: 'https://blob.example.com/dst?sas',
         targetLanguage: 'fr',
-        glossarySasUrl: 'https://blob.example.com/glossary.csv?sas',
+        glossaryUrl: 'https://blob.example.com/glossary.csv?sas',
       });
 
       const body = JSON.parse(String(fetchSpy.mock.calls[0][1]?.body));
@@ -95,8 +95,8 @@ describe('DocumentTranslationService (batch)', () => {
 
       await expect(
         service.submitBatchTranslation({
-          sourceSasUrl: 'https://blob.example.com/src?sas',
-          targetSasUrl: 'https://blob.example.com/dst?sas',
+          sourceUrl: 'https://blob.example.com/src?sas',
+          targetUrl: 'https://blob.example.com/dst?sas',
           targetLanguage: 'fr',
         }),
       ).rejects.toThrow('Target blob already exists');
@@ -109,8 +109,8 @@ describe('DocumentTranslationService (batch)', () => {
 
       await expect(
         service.submitBatchTranslation({
-          sourceSasUrl: 'https://blob.example.com/src?sas',
-          targetSasUrl: 'https://blob.example.com/dst?sas',
+          sourceUrl: 'https://blob.example.com/src?sas',
+          targetUrl: 'https://blob.example.com/dst?sas',
           targetLanguage: 'fr',
         }),
       ).rejects.toThrow(/Operation-Location/);
