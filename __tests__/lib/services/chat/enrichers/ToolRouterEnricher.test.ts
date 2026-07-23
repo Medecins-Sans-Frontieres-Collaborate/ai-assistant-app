@@ -287,6 +287,7 @@ describe('ToolRouter Enricher', () => {
           user: context.user,
           resultCount: 8,
           freshness: 'any',
+          provider: 'bing-agent',
           deep: false,
           onActivity: expect.any(Function),
         });
@@ -878,6 +879,64 @@ describe('ToolRouter Enricher', () => {
           .replace(/<<<END_TOOL_CALL_RECORD>>>[\s\S]*/, ''),
       );
       expect(record.server_label).toBe('Web Search (Google News)');
+    });
+  });
+
+  describe('user-selected search provider', () => {
+    it('overrides the deployment default and labels the record accordingly', async () => {
+      // env default is bing-agent (beforeEach), but the user picked
+      // google-news in Settings → the feed path runs, no agent model needed.
+      (enricher as any).webSearchTool.execute.mockResolvedValue({
+        text: 'Digest.',
+        citations: [{ number: 1, title: 'A', url: 'https://a.example' }],
+      });
+      const emitMarker = vi.fn().mockResolvedValue(undefined);
+      const context = createTestChatContext({
+        searchMode: SearchMode.ALWAYS,
+        messages: [createTestMessage({ content: 'india protests' })],
+        model: { id: 'Mistral-Large-3' },
+        emitMarker,
+      });
+      (context as any).webSearchOptions = {
+        resultCount: 8,
+        freshness: 'auto',
+        provider: 'google-news',
+      };
+
+      await enricher.execute(context);
+
+      expect((enricher as any).webSearchTool.execute).toHaveBeenCalledWith(
+        expect.objectContaining({ provider: 'google-news' }),
+      );
+      const record = JSON.parse(
+        (emitMarker.mock.calls[0][0] as string)
+          .replace(/[\s\S]*<<<TOOL_CALL_RECORD>>>/, '')
+          .replace(/<<<END_TOOL_CALL_RECORD>>>[\s\S]*/, ''),
+      );
+      expect(record.server_label).toBe('Web Search (Google News)');
+    });
+
+    it("'auto' keeps the deployment default (bing-agent path here)", async () => {
+      (enricher as any).webSearchTool.execute.mockResolvedValue({
+        text: 'Results.',
+        citations: [{ number: 1, title: 'A', url: 'https://a.example' }],
+      });
+      const context = createTestChatContext({
+        searchMode: SearchMode.ALWAYS,
+        messages: [createTestMessage({ content: 'india protests' })],
+        model: { agentId: 'agent-1', id: 'gpt-5.2' },
+      });
+      (context as any).webSearchOptions = {
+        resultCount: 8,
+        freshness: 'auto',
+        provider: 'auto',
+      };
+
+      await enricher.execute(context);
+
+      expect((enricher as any).webSearchTool.execute).toHaveBeenCalledWith(
+        expect.objectContaining({ provider: 'bing-agent' }),
+      );
     });
   });
 
