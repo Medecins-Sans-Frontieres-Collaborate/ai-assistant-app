@@ -15,16 +15,19 @@
  */
 import {
   StoredAgentAccessRule,
+  StoredGuide,
   StoredMcpConnector,
   StoredPromptAgent,
   createAgentAccessBlobStorage,
   listAllConnectors,
+  listAllGuides,
   listAllPromptAgents,
   listAllRules,
   readConfig,
 } from '@/lib/services/agentAccess/accessRulesStore';
 import {
   AgentAccessConfig,
+  Guide,
   McpConnector,
   PromptAgent,
 } from '@/lib/services/agentAccess/types';
@@ -77,6 +80,8 @@ export interface AgentAccessSnapshot {
   promptAgents: PromptAgent[];
   /** Admin MCP connectors; empty when the feature is off or never loaded. */
   connectors: McpConnector[];
+  /** Admin workflow guides; empty when the feature is off or never loaded. */
+  guides: Guide[];
   /** Enabled + no last-known-good ruleset (cold start + storage outage). */
   rulesUnavailable: boolean;
   /** Epoch ms of the last successful refresh; null when never loaded. */
@@ -115,6 +120,8 @@ interface LoadedState {
   promptAgentsById: Map<string, PromptAgent>;
   connectors: McpConnector[];
   connectorsById: Map<string, McpConnector>;
+  guides: Guide[];
+  guidesById: Map<string, Guide>;
 }
 
 export class AgentAccessService {
@@ -197,6 +204,7 @@ export class AgentAccessService {
       configEtag: this.state?.configEtag ?? null,
       promptAgents: this.state?.promptAgents ?? [],
       connectors: this.state?.connectors ?? [],
+      guides: this.state?.guides ?? [],
       rulesUnavailable: this.isEnabled() && this.state === null,
       fetchedAt: this.state ? this.fetchedAt : null,
     };
@@ -231,6 +239,24 @@ export class AgentAccessService {
   getConnectorById(id: string): McpConnector | null {
     if (!this.isEnabled()) return null;
     return this.state?.connectorsById.get(id) ?? null;
+  }
+
+  /** Admin workflow guides from the cached snapshot — callers ensureFresh() first. */
+  getGuides(): Guide[] {
+    if (!this.isEnabled()) return [];
+    return this.state?.guides ?? [];
+  }
+
+  /**
+   * Single guide by immutable id; null when unknown (or feature off).
+   *
+   * Same contract as getConnectorById: a guide that cannot be loaded has no
+   * body, and inventing one is not an option — so feature-off returns null
+   * and assess requests referencing the id fail closed.
+   */
+  getGuideById(id: string): Guide | null {
+    if (!this.isEnabled()) return null;
+    return this.state?.guidesById.get(id) ?? null;
   }
 
   /**
@@ -403,6 +429,29 @@ export class AgentAccessService {
         );
       }
 
+      // Guides: same isolated-failure contract as personas and connectors.
+      // A listing failure leaves guides ABSENT — an absent guide rejects the
+      // assess request that references it rather than injecting an unknown
+      // body, so failing to load is failing closed and need not mark the
+      // snapshot unavailable.
+      let guides: Guide[] = this.state?.guides ?? [];
+      let guidesById: Map<string, Guide> = this.state?.guidesById ?? new Map();
+      try {
+        const storedGuides = await listAllGuides(storage);
+        guides = storedGuides.map((stored: StoredGuide) => stored.guide);
+        guidesById = new Map<string, Guide>(
+          guides.map((guide) => [guide.id, guide]),
+        );
+      } catch (error) {
+        console.error(
+          `[agent-access] guide listing failed (${
+            this.state
+              ? 'keeping last-known-good guides'
+              : 'no guides until a load succeeds'
+          }; rules snapshot unaffected): ${sanitizeForLog(error)}`,
+        );
+      }
+
       // Keeping the fetched state is always safe — it is never older than
       // what it replaces — but freshness is only stamped when no
       // invalidate() landed while this refresh was in flight. Otherwise
@@ -418,6 +467,8 @@ export class AgentAccessService {
         promptAgentsById,
         connectors,
         connectorsById,
+        guides,
+        guidesById,
       };
       this.lastRefreshFailureAt = 0;
       this.fetchedAt = this.epoch === epochAtEntry ? Date.now() : 0;
