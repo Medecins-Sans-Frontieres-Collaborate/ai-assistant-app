@@ -299,7 +299,14 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       description: c.rubric,
     }));
     return [...builtins, ...custom];
-  }, [attachedSpec, attachedTone, documentCriteria, t]);
+  }, [
+    attachedSpec,
+    attachedTone,
+    state?.specGuideId,
+    state?.toneGuideId,
+    documentCriteria,
+    t,
+  ]);
 
   const resolveCriterionLabel = useCallback(
     (id: string) => {
