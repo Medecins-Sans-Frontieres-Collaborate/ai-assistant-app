@@ -223,12 +223,17 @@ describe('/api/agent-access/guides', () => {
       ).toBe(400);
     });
 
-    it.each(['structure', 'tone'])(
+    it.each([
+      ['structure', { sections: [{ heading: 'Summary', required: true }] }],
+      ['tone', { voiceRules: 'Write plainly.' }],
+    ] as const)(
       'rejects a %s guide offered to the translation workflow',
-      async (kind) => {
+      async (kind, payload) => {
+        const { body: _body, ...base } = validBody;
         const response = await POST(
           postRequest({
-            ...validBody,
+            ...base,
+            ...payload,
             kind,
             workflows: ['document', 'translation'],
           }),
@@ -239,15 +244,72 @@ describe('/api/agent-access/guides', () => {
       },
     );
 
-    it.each(['structure', 'tone'])(
-      'accepts a document-only %s guide',
-      async (kind) => {
-        const response = await POST(
-          postRequest({ ...validBody, kind, workflows: ['document'] }),
-        );
-        expect(response.status).toBe(200);
-      },
-    );
+    it.each([
+      ['structure', { sections: [{ heading: 'Summary', required: true }] }],
+      ['tone', { voiceRules: 'Write plainly.' }],
+    ] as const)('accepts a document-only %s guide', async (kind, payload) => {
+      const { body: _body, ...base } = validBody;
+      const response = await POST(
+        postRequest({ ...base, ...payload, kind, workflows: ['document'] }),
+      );
+      expect(response.status).toBe(200);
+    });
+
+    it('rejects cross-kind payload fields (strict discriminated union)', async () => {
+      // A tone guide carrying a markdown body must 400, not silently store
+      // dead weight the permissive read schema would keep forever.
+      const { body: _body, ...base } = validBody;
+      expect(
+        (
+          await POST(
+            postRequest({
+              ...base,
+              kind: 'tone',
+              voiceRules: 'Write plainly.',
+              body: '# Style rules',
+            }),
+          )
+        ).status,
+      ).toBe(400);
+      // A structure guide requires sections — a body alone is not a payload.
+      expect(
+        (
+          await POST(
+            postRequest({ ...base, kind: 'structure', body: '# Sections' }),
+          )
+        ).status,
+      ).toBe(400);
+    });
+
+    it('requires at least one entry for terminology and caps the list', async () => {
+      const { body: _body, ...base } = validBody;
+      expect(
+        (await POST(postRequest({ ...base, kind: 'terminology', entries: [] })))
+          .status,
+      ).toBe(400);
+      const tooMany = Array.from({ length: 201 }, (_, i) => ({
+        source: `term-${i}`,
+        target: `translation-${i}`,
+      }));
+      expect(
+        (
+          await POST(
+            postRequest({ ...base, kind: 'terminology', entries: tooMany }),
+          )
+        ).status,
+      ).toBe(400);
+      expect(
+        (
+          await POST(
+            postRequest({
+              ...base,
+              kind: 'terminology',
+              entries: [{ source: 'IDP', target: 'personne déplacée' }],
+            }),
+          )
+        ).status,
+      ).toBe(200);
+    });
   });
 
   describe('POST', () => {
@@ -332,6 +394,21 @@ describe('/api/agent-access/guides', () => {
       vi.mocked(writeGuide).mockRejectedValue(new AgentAccessConflictError());
       const conflict = await PUT(putRequest({ ...validBody, id: GUIDE_ID }));
       expect(conflict.status).toBe(409);
+    });
+
+    it('rejects a kind change (the payload shape hangs off it)', async () => {
+      const { body: _body, ...base } = validBody;
+      const response = await PUT(
+        putRequest({
+          ...base,
+          kind: 'tone',
+          voiceRules: 'Write plainly.',
+          id: GUIDE_ID,
+        }),
+      );
+      const parsed = await parseJsonResponse(response);
+      expect(response.status).toBe(400);
+      expect(parsed.error).toContain('kind cannot be changed');
     });
 
     it('403s a local admin without this guide key', async () => {
