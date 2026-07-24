@@ -4,7 +4,9 @@ import {
 } from '@/lib/services/agentAccess/AgentAccessService';
 import {
   StoredAgentAccessRule,
+  StoredGuide,
   StoredPromptAgent,
+  listAllGuides,
   listAllPromptAgents,
   listAllRules,
   readConfig,
@@ -12,9 +14,12 @@ import {
 import {
   AgentAccessRule,
   AgentAccessType,
+  GUIDE_SOURCE,
+  Guide,
   PROMPT_AGENT_SOURCE,
   PromptAgent,
   canonicalAgentKey,
+  guideBlobPath,
   promptAgentBlobPath,
   ruleBlobPath,
 } from '@/lib/services/agentAccess/types';
@@ -32,11 +37,13 @@ vi.mock('@/lib/services/agentAccess/accessRulesStore', () => ({
   listAllRules: vi.fn(),
   readConfig: vi.fn(),
   listAllPromptAgents: vi.fn(),
+  listAllGuides: vi.fn(),
 }));
 
 const mockListAllRules = vi.mocked(listAllRules);
 const mockReadConfig = vi.mocked(readConfig);
 const mockListAllPromptAgents = vi.mocked(listAllPromptAgents);
+const mockListAllGuides = vi.mocked(listAllGuides);
 
 const SOURCE_A = '/subscriptions/sub/projects/project-a';
 const SOURCE_B = '/subscriptions/sub/projects/project-b';
@@ -89,6 +96,29 @@ function storedPromptAgent(id: string, name = 'Helper'): StoredPromptAgent {
   };
 }
 
+function storedGuide(id: string, name = 'Style Guide'): StoredGuide {
+  const guide: Guide = {
+    version: 1,
+    id,
+    kind: 'style',
+    name,
+    description: '',
+    languages: [],
+    body: '# Rules',
+    workflows: ['document'],
+    createdBy: 'admin@example.com',
+    createdAt: '2026-07-23T00:00:00.000Z',
+    updatedBy: 'admin@example.com',
+    updatedAt: '2026-07-23T00:00:00.000Z',
+  };
+  return {
+    canonicalKey: canonicalAgentKey(GUIDE_SOURCE, id),
+    blobPath: guideBlobPath(id),
+    guide,
+    etag: '"etag-g"',
+  };
+}
+
 function getService(): AgentAccessService {
   return AgentAccessService.getInstance();
 }
@@ -113,6 +143,7 @@ describe('AgentAccessService', () => {
     mockListAllRules.mockResolvedValue([]);
     mockReadConfig.mockResolvedValue(null);
     mockListAllPromptAgents.mockResolvedValue([]);
+    mockListAllGuides.mockResolvedValue([]);
   });
 
   afterEach(() => {
@@ -770,6 +801,63 @@ describe('AgentAccessService', () => {
 
       expect(mockListAllPromptAgents).toHaveBeenCalledTimes(2);
       expect(service.getPromptAgentById('prompt-aaa111')).toEqual(stored.agent);
+    });
+  });
+
+  describe('guides', () => {
+    it('exposes loaded guides via getGuides, getGuideById, and the snapshot', async () => {
+      const storedA = storedGuide('guide-aaa111aaa111', 'French Style');
+      const storedB = storedGuide('guide-bbb222bbb222', 'Terminology');
+      mockListAllGuides.mockResolvedValue([storedA, storedB]);
+      const service = getService();
+      await service.ensureFresh();
+
+      expect(service.getGuides()).toEqual([storedA.guide, storedB.guide]);
+      expect(service.getGuideById('guide-aaa111aaa111')).toEqual(storedA.guide);
+      expect(service.getGuideById('guide-unknown')).toBeNull();
+      expect(service.getSnapshot().guides).toEqual([
+        storedA.guide,
+        storedB.guide,
+      ]);
+    });
+
+    it('returns empty/null when the feature is off and never touches storage', async () => {
+      mockEnv.AGENT_ACCESS_CONTROL_ENABLED = false;
+      const service = getService();
+      await service.ensureFresh();
+
+      expect(service.getGuides()).toEqual([]);
+      expect(service.getGuideById('guide-aaa111aaa111')).toBeNull();
+      expect(service.getSnapshot().guides).toEqual([]);
+      expect(mockListAllGuides).not.toHaveBeenCalled();
+    });
+
+    it('keeps last-known-good guides while the rules snapshot still refreshes when only the guide listing fails', async () => {
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const stored = storedGuide('guide-aaa111aaa111');
+      mockListAllGuides.mockResolvedValue([stored]);
+      const service = await freshServiceWith([]);
+      expect(service.getGuides()).toEqual([stored.guide]);
+
+      // A NEW restriction lands while the guide listing is broken: the rule
+      // must still propagate, the guide half keeps last-known-good, and the
+      // snapshot is never marked unavailable (an absent guide fails closed
+      // at the assess route on its own).
+      mockListAllRules.mockResolvedValue([
+        storedRule(SOURCE_A, 'finance-bot', {
+          type: 'restricted',
+          allowUsers: ['user@example.com'],
+        }),
+      ]);
+      mockListAllGuides.mockRejectedValue(new Error('storage outage'));
+      service.invalidate();
+      await service.ensureFresh();
+
+      expect(service.getGuideById('guide-aaa111aaa111')).toEqual(stored.guide);
+      expect(service.getSnapshot().rulesUnavailable).toBe(false);
+      expect(errorSpy).toHaveBeenCalledWith(
+        expect.stringContaining('keeping last-known-good guides'),
+      );
     });
   });
 
