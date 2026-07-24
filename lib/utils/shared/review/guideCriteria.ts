@@ -25,13 +25,29 @@ export function guideIdFromCriterionId(criterionId: string): string {
 }
 
 /**
- * One guide body can be ~15× a custom rubric, so the count is capped tighter
- * than MAX_CRITERIA: 3 × GUIDE_TOKEN_BUDGET matches the existing 12k-token
- * reference budget in the document generate route.
+ * One guide body can be ~50× a custom rubric, so the count is capped tighter
+ * than MAX_CRITERIA — 3 maximal bodies (× GUIDE_TOKEN_BUDGET each) is the
+ * most prompt the assessment call is allowed to spend on guides.
  */
 export const MAX_GUIDES_PER_ASSESSMENT = 3;
-export const MAX_GUIDE_BODY_CHARS = 30_000;
+/** style/compliance `body` — long-form office standards can run far past
+ * what fits a form field, so the cap is storage sanity, not a prompt budget
+ * (GUIDE_TOKEN_BUDGET governs injection). */
+export const MAX_GUIDE_BODY_CHARS = 100_000;
+/** tone `voiceRules`/`examples` individually — voice profiles stay compact. */
+export const MAX_GUIDE_VOICE_CHARS = 30_000;
 export const MAX_GUIDE_NAME_CHARS = 100;
+
+/** Structure-guide caps — MAX_GUIDE_SECTIONS aligns MAX_SPEC_SECTIONS. */
+export const MAX_GUIDE_SECTIONS = 30;
+export const MAX_GUIDE_SECTION_HEADING_CHARS = 200;
+export const MAX_GUIDE_SECTION_GUIDANCE_CHARS = 500;
+export const MAX_GUIDE_GENERAL_GUIDANCE_CHARS = 5_000;
+
+/** Terminology-guide caps — MAX_GUIDE_ENTRIES aligns MAX_GLOSSARY_ENTRIES. */
+export const MAX_GUIDE_ENTRIES = 200;
+export const MAX_GUIDE_TERM_CHARS = 120;
+export const MAX_GUIDE_TERM_NOTE_CHARS = 300;
 
 /**
  * The kinds that behave as assessment criteria. The other two ('structure',
