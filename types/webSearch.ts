@@ -15,6 +15,9 @@
  * headlines surface as soon as the feed answers, the Bing summary joins
  * when the agent finishes (35-90s), and the two are merged. Where the
  * Foundry agent is absent it degrades to the feed result alone.
+ * 'bing-responses' is the native web_search tool on the Azure OpenAI
+ * Responses API — the same Bing grounding as 'bing-agent' but a direct
+ * model call instead of a Foundry agent run (A/B latency candidate).
  */
 export type WebSearchProviderOption =
   | 'auto'
@@ -22,6 +25,7 @@ export type WebSearchProviderOption =
   | 'google-news'
   | 'gdelt'
   | 'bing-agent'
+  | 'bing-responses'
   | 'combined';
 
 export const WEB_SEARCH_PROVIDER_OPTIONS: WebSearchProviderOption[] = [
@@ -30,6 +34,7 @@ export const WEB_SEARCH_PROVIDER_OPTIONS: WebSearchProviderOption[] = [
   'google-news',
   'gdelt',
   'bing-agent',
+  'bing-responses',
   'combined',
 ];
 
