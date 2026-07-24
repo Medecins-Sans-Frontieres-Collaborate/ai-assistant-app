@@ -528,6 +528,7 @@ export function TranslationWorkspace({
     sourceText,
     selectedCriteria,
     translationCriteria,
+    translationGuides,
     hasUnresolvedEdits,
     activeGlossary,
     conversation?.model?.id,
@@ -991,6 +992,20 @@ export function TranslationWorkspace({
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-t border-gray-200 px-3 py-2 dark:border-gray-700">
               <CriteriaPicker
                 criteria={criteriaItems}
+                selected={selectedCriteria}
+                onToggle={(id) =>
+                  setSelectedCriteria((prev) => {
+                    const next = new Set(prev);
+                    if (next.has(id)) next.delete(id);
+                    else next.add(id);
+                    return next;
+                  })
+                }
+                i18nNamespace="workflows.translation"
+                disabled={assessing || isRunning}
+              />
+              <GuidePicker
+                guides={translationGuides}
                 selected={selectedCriteria}
                 onToggle={(id) =>
                   setSelectedCriteria((prev) => {
