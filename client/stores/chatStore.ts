@@ -1472,13 +1472,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           //
           // Generate AI title async (fire and forget - updates when ready)
           const conversationId = conversation.id;
-          const modelId = conversation.model.id;
           const messageGroups = [
             ...conversation.messages,
             createMessageGroup(assistantMessage),
           ];
 
-          generateConversationTitle(messageGroups, modelId)
+          generateConversationTitle(messageGroups)
             .then((result) => {
               if (!result?.title) return;
               // Re-read before writing: the user may have renamed the
