@@ -26,6 +26,7 @@ import {
 import { normalizeEventRange } from '@/lib/utils/shared/date/eventRange';
 import { NamedConnection } from '@/lib/utils/shared/geo/connections';
 import { isValidCoordinate } from '@/lib/utils/shared/geo/geojson';
+import { MAP_MAX_FEATURES } from '@/lib/utils/shared/geo/mapLimits';
 
 import { auth } from '@/auth';
 import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
@@ -33,7 +34,7 @@ import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
 export const maxDuration = 300;
 
 const DIGEST_TOKEN_BUDGET = 24_000;
-const MAX_FEATURES = 2_000;
+const MAX_FEATURES = MAP_MAX_FEATURES;
 const MAX_MESSAGES = 12;
 const MAX_MESSAGE_CHARS = 1_000;
 
