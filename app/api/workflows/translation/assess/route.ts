@@ -1,6 +1,10 @@
 import { NextRequest } from 'next/server';
 
-import { resolveGuideCriteria } from '@/lib/services/workflows/shared/guideResolution';
+import { mergeGlossaryEntries } from '@/lib/services/workflows/shared/glossaryPrompts';
+import {
+  resolveGuideCriteria,
+  resolveSlotGuide,
+} from '@/lib/services/workflows/shared/guideResolution';
 import { resolveWorkflowModelId } from '@/lib/services/workflows/shared/workflowModels';
 import { runTranslationAssessment } from '@/lib/services/workflows/translation/translationOrchestrator';
 
@@ -39,6 +43,9 @@ interface TranslationAssessRequest {
   criteria: string[];
   customCriteria?: CustomCriterionDefinition[];
   glossaryEntries?: GlossaryEntry[];
+  /** Admin terminology guide whose entries merge with (and win over) the
+   * local glossary — same attachment the translate route accepts. */
+  glossaryGuideId?: string;
   modelId?: string;
 }
 
@@ -106,14 +113,31 @@ export async function POST(req: NextRequest) {
     return badRequestResponse(guideResolution.error);
   }
 
-  const glossaryEntries: GlossaryEntry[] = Array.isArray(body.glossaryEntries)
-    ? body.glossaryEntries
-        .filter(
-          (e): e is GlossaryEntry =>
-            !!e && typeof e.source === 'string' && typeof e.target === 'string',
-        )
-        .slice(0, MAX_GLOSSARY_ENTRIES)
+  const localEntries: GlossaryEntry[] = Array.isArray(body.glossaryEntries)
+    ? body.glossaryEntries.filter(
+        (e): e is GlossaryEntry =>
+          !!e && typeof e.source === 'string' && typeof e.target === 'string',
+      )
     : [];
+  // Same merge as the translate route: guide entries first, guide wins on
+  // duplicate source terms.
+  let guideEntries: GlossaryEntry[] = [];
+  if (typeof body.glossaryGuideId === 'string' && body.glossaryGuideId) {
+    const resolved = await resolveSlotGuide({
+      userMail: session.user?.mail ?? undefined,
+      guideId: body.glossaryGuideId,
+      expectedKind: 'terminology',
+      workflow: 'translation',
+    });
+    if ('error' in resolved) return badRequestResponse(resolved.error);
+    if (resolved.guide.payload.kind === 'terminology') {
+      guideEntries = resolved.guide.payload.entries;
+    }
+  }
+  const glossaryEntries = mergeGlossaryEntries(
+    guideEntries,
+    localEntries,
+  ).slice(0, MAX_GLOSSARY_ENTRIES);
 
   try {
     const result = await runTranslationAssessment({
