@@ -5,6 +5,7 @@ import {
   searchNewsFanOut,
   searchNewsParallel,
 } from '@/lib/services/chat/tools/newsSearch';
+import { executeResponsesWebSearch } from '@/lib/services/chat/tools/responsesWebSearch';
 
 import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 
@@ -20,6 +21,10 @@ vi.mock('@/lib/services/chat/tools/newsSearch', async (importOriginal) => ({
   searchNewsFanOut: vi.fn(),
   searchNewsParallel: vi.fn(),
   fetchGoogleNewsHeadlines: vi.fn(),
+}));
+
+vi.mock('@/lib/services/chat/tools/responsesWebSearch', () => ({
+  executeResponsesWebSearch: vi.fn(),
 }));
 
 describe('WebSearchTool', () => {
@@ -232,6 +237,55 @@ describe('WebSearchTool', () => {
       expect(mockAgentChatService.executeWebSearchTool).toHaveBeenCalledWith(
         expect.objectContaining({ searchQuery: 'primary query' }),
       );
+    });
+  });
+
+  describe('bing-responses provider (Responses API web_search)', () => {
+    it('dispatches to the Responses executor with the tuning params, no model needed', async () => {
+      vi.mocked(executeResponsesWebSearch).mockResolvedValue({
+        text: 'Grounded digest.[1]',
+        citations: [
+          { number: 1, title: 'Source', url: 'https://a.example', date: '' },
+        ],
+      });
+
+      const result = await webSearchTool.execute({
+        searchQuery: 'renewable energy trends',
+        provider: 'bing-responses',
+        resultCount: 10,
+        freshness: 'week',
+        deep: true,
+        // No `model` — this path must not require an agent-backed model.
+        user: { email: 'test@example.com' } as any,
+      });
+
+      expect(executeResponsesWebSearch).toHaveBeenCalledWith({
+        searchQuery: 'renewable energy trends',
+        resultCount: 10,
+        freshness: 'week',
+        deep: true,
+      });
+      expect(mockAgentChatService.executeWebSearchTool).not.toHaveBeenCalled();
+      expect(searchNewsFanOut).not.toHaveBeenCalled();
+      expect(searchNewsParallel).not.toHaveBeenCalled();
+      expect(result.text).toBe('Grounded digest.[1]');
+      expect(result.citations).toHaveLength(1);
+    });
+
+    it('degrades to the issue note when the executor fails', async () => {
+      vi.mocked(executeResponsesWebSearch).mockRejectedValue(
+        new Error('web_search tool blocked'),
+      );
+
+      const result = await webSearchTool.execute({
+        searchQuery: 'anything',
+        provider: 'bing-responses',
+        user: { email: 'test@example.com' } as any,
+      });
+
+      expect(result.text).toContain('Web search encountered an issue');
+      expect(result.text).toContain('web_search tool blocked');
+      expect(result.citations).toEqual([]);
     });
   });
 
