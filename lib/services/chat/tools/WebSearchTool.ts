@@ -8,6 +8,7 @@ import {
   searchNewsFanOut,
   searchNewsParallel,
 } from './newsSearch';
+import { executeResponsesWebSearch } from './responsesWebSearch';
 
 import { env } from '@/config/environment';
 
@@ -51,6 +52,22 @@ export class WebSearchTool implements Tool {
       // surface via onInterimResults while the agent runs, then merge.
       if (provider === 'combined') {
         return await this.executeCombined(params);
+      }
+
+      // Responses-API native web_search: a single model call with the
+      // built-in Bing tool — same web coverage as 'bing-agent' without the
+      // Foundry agent round-trip. No agent-backed model required.
+      if (provider === 'bing-responses') {
+        const result = await executeResponsesWebSearch({
+          searchQuery: params.searchQuery,
+          resultCount: params.resultCount,
+          freshness: params.freshness,
+          deep: params.deep,
+        });
+        console.log(
+          `[WebSearchTool] Responses web_search completed: ${result.text.length} chars, ${result.citations?.length ?? 0} citations`,
+        );
+        return result;
       }
 
       // Feed-based providers: no LLM round-trip. 'news' (default) fans out

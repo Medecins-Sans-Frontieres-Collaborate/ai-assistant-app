@@ -53,7 +53,13 @@ export interface WebSearchToolParams {
    * Resolved search backend for this request (user setting or deployment
    * default). Falls back to the WEB_SEARCH_PROVIDER env when absent.
    */
-  provider?: 'news' | 'gdelt' | 'google-news' | 'bing-agent' | 'combined';
+  provider?:
+    | 'news'
+    | 'gdelt'
+    | 'google-news'
+    | 'bing-agent'
+    | 'bing-responses'
+    | 'combined';
   /**
    * Combined provider only: fires once with the fast leg's (Google News)
    * headlines while the Bing agent is still running, so the caller can
