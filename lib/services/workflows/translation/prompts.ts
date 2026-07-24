@@ -1,11 +1,15 @@
-import { GlossaryEntry } from '@/types/workflow';
-
 /**
  * Prompt builders for the agentic translation workflow. The translation
  * base prompt mirrors the proven markdown-preserving rules of
  * `app/api/chat/translate/route.ts` (which stays untouched — it serves the
  * per-message translate feature).
  */
+import { buildGlossaryBlock } from '../shared/glossaryPrompts';
+
+// Re-exported for the orchestrator and existing call sites; the
+// implementation moved to shared/glossaryPrompts.ts so admin terminology
+// guides render through the same block.
+export { buildGlossaryBlock };
 
 export const TRANSLATION_BASE_RULES = `You are an expert multilingual translator. Translate accurately while preserving:
 
@@ -17,39 +21,6 @@ export const TRANSLATION_BASE_RULES = `You are an expert multilingual translator
 
 URLs, email addresses, and numbers stay unchanged (adapt number/date formats to target-language conventions where appropriate).
 Output ONLY the translation — no preamble, no commentary.`;
-
-/** Caps to keep the glossary block inside a sane prompt budget. */
-const MAX_GLOSSARY_ENTRIES = 200;
-
-/**
- * Renders the glossary entries that actually occur in the source text as a
- * mandatory-terminology block. Filtering keeps irrelevant entries from
- * diluting the prompt; matching is case-insensitive whole-string contains.
- */
-export function buildGlossaryBlock(
-  entries: GlossaryEntry[],
-  sourceText: string,
-): string {
-  const haystack = sourceText.toLowerCase();
-  const relevant = entries
-    .filter((e) => e.source && e.target)
-    .filter((e) => haystack.includes(e.source.toLowerCase()))
-    .slice(0, MAX_GLOSSARY_ENTRIES);
-  if (relevant.length === 0) return '';
-
-  const rows = relevant
-    .map(
-      (e) => `| ${e.source} | ${e.target} |${e.note ? ` ${e.note} |` : ' |'}`,
-    )
-    .join('\n');
-  return `
-
-MANDATORY TERMINOLOGY — translate these terms exactly as specified:
-
-| Source term | Required translation | Note |
-|---|---|---|
-${rows}`;
-}
 
 export function buildAnalysisSystemPrompt(): string {
   return `You are a translation reviewer preparing a briefing for a translator. Identify what will be difficult about translating the given text: tricky terms, ambiguous passages, and the register to preserve. Be concise and concrete; skip anything unremarkable.`;
