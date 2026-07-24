@@ -27,7 +27,6 @@ import {
   GUIDE_SOURCE,
   Guide,
   GuideHistoryEntry,
-  GuideKindSchema,
   GuideWorkflowSchema,
   canonicalAgentKey,
 } from '@/lib/services/agentAccess/types';
@@ -44,7 +43,15 @@ import {
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 import {
   MAX_GUIDE_BODY_CHARS,
+  MAX_GUIDE_ENTRIES,
+  MAX_GUIDE_GENERAL_GUIDANCE_CHARS,
   MAX_GUIDE_NAME_CHARS,
+  MAX_GUIDE_SECTIONS,
+  MAX_GUIDE_SECTION_GUIDANCE_CHARS,
+  MAX_GUIDE_SECTION_HEADING_CHARS,
+  MAX_GUIDE_TERM_CHARS,
+  MAX_GUIDE_TERM_NOTE_CHARS,
+  MAX_GUIDE_VOICE_CHARS,
 } from '@/lib/utils/shared/review/guideCriteria';
 
 import { auth } from '@/auth';
@@ -66,25 +73,138 @@ import { z } from 'zod';
  */
 
 /**
- * WRITE-side schema — stricter than the shared read schema in types.ts (which
- * must keep accepting every already-persisted blob). The body is deliberately
- * NOT trimmed: it is markdown and leading/trailing whitespace can be
+ * WRITE-side schema — stricter than the shared permissive read schema in
+ * types.ts, and kind-DISCRIMINATED where the read schema is flat: each kind
+ * accepts exactly its own payload fields (`.strict()` rejects the rest, so a
+ * `body` on a tone guide is a 400, not silently-stored dead weight).
+ * Long-form text fields (body/voiceRules/examples/guidance) are deliberately
+ * NOT trimmed: they are markdown and leading/trailing whitespace can be
  * meaningful (code fences, list indentation).
  */
-const guideFieldsSchema = z
-  .object({
-    name: z.string().trim().min(1).max(MAX_GUIDE_NAME_CHARS),
-    description: z.string().trim().max(300).default(''),
-    kind: GuideKindSchema,
-    languages: z.array(z.string().trim().min(1).max(80)).max(20).default([]),
-    body: z.string().min(1).max(MAX_GUIDE_BODY_CHARS),
-    workflows: z.array(GuideWorkflowSchema).min(1).max(2),
-  })
-  .strict();
+const guideBaseFields = {
+  name: z.string().trim().min(1).max(MAX_GUIDE_NAME_CHARS),
+  description: z.string().trim().max(300).default(''),
+  languages: z.array(z.string().trim().min(1).max(80)).max(20).default([]),
+  workflows: z.array(GuideWorkflowSchema).min(1).max(2),
+};
 
-const putBodySchema = guideFieldsSchema.extend({
-  id: z.string().trim().min(1).max(100),
-});
+const bodyKindFields = {
+  ...guideBaseFields,
+  body: z.string().min(1).max(MAX_GUIDE_BODY_CHARS),
+};
+
+const guideFieldsSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('style'), ...bodyKindFields }).strict(),
+  z.object({ kind: z.literal('compliance'), ...bodyKindFields }).strict(),
+  z
+    .object({
+      kind: z.literal('tone'),
+      ...guideBaseFields,
+      voiceRules: z.string().min(1).max(MAX_GUIDE_VOICE_CHARS),
+      examples: z.string().max(MAX_GUIDE_VOICE_CHARS).optional(),
+    })
+    .strict(),
+  z
+    .object({
+      kind: z.literal('structure'),
+      ...guideBaseFields,
+      sections: z
+        .array(
+          z
+            .object({
+              heading: z
+                .string()
+                .trim()
+                .min(1)
+                .max(MAX_GUIDE_SECTION_HEADING_CHARS),
+              guidance: z
+                .string()
+                .max(MAX_GUIDE_SECTION_GUIDANCE_CHARS)
+                .optional(),
+              required: z.boolean(),
+            })
+            .strict(),
+        )
+        .min(1)
+        .max(MAX_GUIDE_SECTIONS),
+      generalGuidance: z
+        .string()
+        .max(MAX_GUIDE_GENERAL_GUIDANCE_CHARS)
+        .optional(),
+    })
+    .strict(),
+  z
+    .object({
+      kind: z.literal('terminology'),
+      ...guideBaseFields,
+      entries: z
+        .array(
+          z
+            .object({
+              source: z.string().trim().min(1).max(MAX_GUIDE_TERM_CHARS),
+              target: z.string().trim().min(1).max(MAX_GUIDE_TERM_CHARS),
+              note: z.string().max(MAX_GUIDE_TERM_NOTE_CHARS).optional(),
+            })
+            .strict(),
+        )
+        .min(1)
+        .max(MAX_GUIDE_ENTRIES),
+    })
+    .strict(),
+]);
+
+type GuideFields = z.infer<typeof guideFieldsSchema>;
+
+/**
+ * PUT bodies are `{ id } + kind variant`. The variants are `.strict()`, so
+ * `id` is peeled off first and the remainder goes through the same
+ * discriminated union as POST — one validation source for both verbs.
+ */
+const putIdSchema = z
+  .object({ id: z.string().trim().min(1).max(100) })
+  .passthrough();
+
+function parsePutBody(
+  body: unknown,
+):
+  | { success: true; id: string; fields: GuideFields }
+  | { success: false; issues: string } {
+  const idParsed = putIdSchema.safeParse(body);
+  if (!idParsed.success) {
+    return { success: false, issues: 'id' };
+  }
+  const { id, ...rest } = idParsed.data;
+  const fieldsParsed = guideFieldsSchema.safeParse(rest);
+  if (!fieldsParsed.success) {
+    return {
+      success: false,
+      issues: fieldsParsed.error.issues.map((i) => i.path.join('.')).join(', '),
+    };
+  }
+  return { success: true, id, fields: fieldsParsed.data };
+}
+
+/**
+ * The active kind's payload fields, and ONLY those — used by both POST and
+ * PUT so a record can never carry another kind's leftovers (the permissive
+ * read schema would keep them forever).
+ */
+function payloadFieldsOf(fields: GuideFields): Partial<Guide> {
+  switch (fields.kind) {
+    case 'style':
+    case 'compliance':
+      return { body: fields.body };
+    case 'tone':
+      return { voiceRules: fields.voiceRules, examples: fields.examples };
+    case 'structure':
+      return {
+        sections: fields.sections,
+        generalGuidance: fields.generalGuidance,
+      };
+    case 'terminology':
+      return { entries: fields.entries };
+  }
+}
 
 /**
  * Ids are server-generated, so a client-supplied one only ever needs to be
@@ -289,7 +409,7 @@ export async function POST(request: NextRequest) {
       name: parsed.data.name,
       description: parsed.data.description,
       languages: parsed.data.languages,
-      body: parsed.data.body,
+      ...payloadFieldsOf(parsed.data),
       workflows: normalizeWorkflows(parsed.data.workflows),
       createdBy: userMail,
       createdAt: now,
@@ -375,19 +495,16 @@ export async function PUT(request: NextRequest) {
   } catch {
     return badRequestResponse('Invalid JSON body');
   }
-  const parsed = putBodySchema.safeParse(body);
+  const parsed = parsePutBody(body);
   if (!parsed.success) {
-    return badRequestResponse(
-      'Invalid guide body',
-      parsed.error.issues.map((i) => i.path.join('.')).join(', '),
-    );
+    return badRequestResponse('Invalid guide body', parsed.issues);
   }
-  const fieldError = validateGuideFields(parsed.data);
+  const fieldError = validateGuideFields(parsed.fields);
   if (fieldError) {
     return badRequestResponse(fieldError);
   }
 
-  if (!GUIDE_ID_PATTERN.test(parsed.data.id)) {
+  if (!GUIDE_ID_PATTERN.test(parsed.id)) {
     return badRequestResponse('id is not a valid guide id');
   }
 
@@ -396,7 +513,7 @@ export async function PUT(request: NextRequest) {
     return badRequestResponse('If-Match must be a quoted strong ETag');
   }
 
-  const canonicalKey = canonicalAgentKey(GUIDE_SOURCE, parsed.data.id);
+  const canonicalKey = canonicalAgentKey(GUIDE_SOURCE, parsed.id);
 
   try {
     await service.ensureFresh();
@@ -410,24 +527,33 @@ export async function PUT(request: NextRequest) {
 
     // Updates are keyed on the body id — ids are immutable and
     // server-generated, so a PUT can never mint a new record.
-    const existing = await readGuide(
-      createAgentAccessBlobStorage(),
-      parsed.data.id,
-    );
+    const existing = await readGuide(createAgentAccessBlobStorage(), parsed.id);
     if (existing === null) {
       return notFoundResponse('Guide');
     }
 
+    // The kind is part of the record's identity: access-rule preambles,
+    // slot eligibility, and the payload shape all hang off it. Changing it
+    // in place would orphan the old payload — delete and recreate instead.
+    if (parsed.fields.kind !== existing.guide.kind) {
+      return badRequestResponse('kind cannot be changed');
+    }
+
     const now = new Date().toISOString();
-    // Spread preserves id/createdBy/createdAt from the stored record.
+    // Constructed explicitly — NEVER spread over existing.guide: the
+    // permissive read schema would keep any stale cross-kind payload fields
+    // forever. Only id/createdBy/createdAt survive from the stored record.
     const guide: Guide = {
-      ...existing.guide,
-      kind: parsed.data.kind,
-      name: parsed.data.name,
-      description: parsed.data.description,
-      languages: parsed.data.languages,
-      body: parsed.data.body,
-      workflows: normalizeWorkflows(parsed.data.workflows),
+      version: 1,
+      id: existing.guide.id,
+      kind: existing.guide.kind,
+      name: parsed.fields.name,
+      description: parsed.fields.description,
+      languages: parsed.fields.languages,
+      ...payloadFieldsOf(parsed.fields),
+      workflows: normalizeWorkflows(parsed.fields.workflows),
+      createdBy: existing.guide.createdBy,
+      createdAt: existing.guide.createdAt,
       updatedBy: userMail,
       updatedAt: now,
     };
