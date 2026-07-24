@@ -12,7 +12,7 @@
  */
 export const GUIDE_CRITERION_PREFIX = 'guide:';
 
-export function isGuideCriterionId(value: unknown): value is string {
+export function isGuideCriterionId(value: unknown): boolean {
   return typeof value === 'string' && value.startsWith(GUIDE_CRITERION_PREFIX);
 }
 
