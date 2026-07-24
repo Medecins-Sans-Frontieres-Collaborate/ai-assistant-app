@@ -3,7 +3,8 @@
  * and document workflows. Built per-request so the criterion enums list
  * ONLY the requested subset — including 'custom:<uuid>' ids, which drop
  * straight into the enum (the server validates them against the caller's
- * submitted definitions; the server itself is stateless).
+ * submitted definitions; the server itself is stateless), and 'guide:<id>'
+ * ids for admin guides (resolved and access-checked server-side).
  */
 export function buildAssessmentSchema(
   criterionIds: readonly string[],
