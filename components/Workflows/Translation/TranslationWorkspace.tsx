@@ -278,12 +278,21 @@ export function TranslationWorkspace({
     [translationCriteria, t],
   );
 
-  // Admin guides usable in the translation workflow (criterion kinds only —
-  // structure/tone kinds are document-only by the admin write schema).
+  // Admin guides usable in the translation workflow. Terminology guides
+  // appear twice by design: as review criteria in the GuidePicker AND as an
+  // organization-glossary attachment for generation (the "criterion +
+  // generation" model).
   const { guides } = useAvailableGuides();
   const translationGuides = useMemo(
     () => guides.filter((g) => g.workflows.includes('translation')),
     [guides],
+  );
+  const terminologyGuides = useMemo(
+    () => translationGuides.filter((g) => g.kind === 'terminology'),
+    [translationGuides],
+  );
+  const attachedTerminologyGuide = terminologyGuides.find(
+    (g) => g.id === state?.glossaryGuideId,
   );
 
   /**
@@ -368,6 +377,7 @@ export function TranslationWorkspace({
           targetLanguage: targetLanguage.label,
           mode: state.mode,
           glossaryEntries: activeGlossary?.entries ?? [],
+          glossaryGuideId: state.glossaryGuideId,
           modelId: conversation?.model?.id,
         },
         onText: (fullText) => setTargetDraft(fullText),
@@ -478,6 +488,7 @@ export function TranslationWorkspace({
         criteria,
         customCriteria: customDefs,
         glossaryEntries: activeGlossary?.entries ?? [],
+        glossaryGuideId: state.glossaryGuideId,
         modelId: conversation?.model?.id,
       });
       // Snapshot custom labels so this assessment still reads correctly
@@ -753,6 +764,38 @@ export function TranslationWorkspace({
             </option>
           ))}
         </select>
+
+        {/* Organization terminology guide — attachable ALONGSIDE the local
+            glossary (entries merge server-side; the guide's win on duplicate
+            source terms). */}
+        {(terminologyGuides.length > 0 || state.glossaryGuideId) && (
+          <select
+            value={state.glossaryGuideId ?? ''}
+            onChange={(e) =>
+              patchState({ glossaryGuideId: e.target.value || undefined })
+            }
+            disabled={isRunning}
+            aria-label={t('translation.organizationTerminology')}
+            className="min-h-[36px] rounded-lg border border-gray-300 bg-transparent px-2 py-1.5 text-sm text-gray-700 disabled:opacity-50 dark:border-gray-700 dark:bg-surface-dark dark:text-gray-300"
+          >
+            <option value="">
+              {t('translation.noOrganizationTerminology')}
+            </option>
+            {terminologyGuides.map((guide) => (
+              <option key={guide.id} value={guide.id}>
+                {guide.name}
+              </option>
+            ))}
+            {/* A stored guide no longer visible (deleted or access revoked)
+                stays selectable-but-disabled so the user can SEE the stale
+                attachment and clear it — the server would 400 anyway. */}
+            {state.glossaryGuideId && !attachedTerminologyGuide && (
+              <option value={state.glossaryGuideId} disabled>
+                {t('translation.terminologyGuideUnavailable')}
+              </option>
+            )}
+          </select>
+        )}
 
         <button
           type="button"
