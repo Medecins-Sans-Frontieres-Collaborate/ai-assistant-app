@@ -15,6 +15,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useAvailableGuides } from '@/client/hooks/settings/useAvailableGuides';
 import { useAutoFocusComposer } from '@/client/hooks/ui/useAutoFocusComposer';
 import { usePasteComposer } from '@/client/hooks/ui/usePasteComposer';
 import { useEditPreview } from '@/client/hooks/workflows/useEditPreview';
@@ -30,6 +31,10 @@ import {
   sortLanguageOptionsByLabel,
 } from '@/lib/utils/app/languagePickerHelpers';
 import { isCustomCriterionId } from '@/lib/utils/shared/review/customCriteria';
+import {
+  guideCriterionId,
+  isGuideCriterionId,
+} from '@/lib/utils/shared/review/guideCriteria';
 import {
   hasResolvedEdits,
   invertPatch,
@@ -61,6 +66,7 @@ import { AnnotatedText } from '../Shared/Review/AnnotatedText';
 import { AssessmentPanel } from '../Shared/Review/AssessmentPanel';
 import { CriteriaManager } from '../Shared/Review/CriteriaManager';
 import { CriteriaPicker } from '../Shared/Review/CriteriaPicker';
+import { GuidePicker } from '../Shared/Review/GuidePicker';
 import { WorkflowWorkspaceProps } from '../registry';
 import { AnalysisPanel } from './AnalysisPanel';
 import { GlossaryManager } from './GlossaryManager';
@@ -272,6 +278,14 @@ export function TranslationWorkspace({
     [translationCriteria, t],
   );
 
+  // Admin guides usable in the translation workflow (criterion kinds only —
+  // structure/tone kinds are document-only by the admin write schema).
+  const { guides } = useAvailableGuides();
+  const translationGuides = useMemo(
+    () => guides.filter((g) => g.workflows.includes('translation')),
+    [guides],
+  );
+
   /**
    * Custom ids can't be localized, and a criterion may have been renamed or
    * deleted since the assessment ran — so fall back through the label
@@ -279,6 +293,13 @@ export function TranslationWorkspace({
    */
   const resolveCriterionLabel = useCallback(
     (id: string) => {
+      if (isGuideCriterionId(id)) {
+        return (
+          assessment?.labels?.[id] ??
+          translationGuides.find((g) => guideCriterionId(g.id) === id)?.name ??
+          id
+        );
+      }
       if (!isCustomCriterionId(id)) {
         return t(`translation.criteria.${id}.label`);
       }
@@ -288,7 +309,7 @@ export function TranslationWorkspace({
         id
       );
     },
-    [assessment?.labels, translationCriteria, t],
+    [assessment?.labels, translationCriteria, translationGuides, t],
   );
 
   const handleUpload = async (files: FileList | null) => {
@@ -463,6 +484,11 @@ export function TranslationWorkspace({
       // after the criterion is renamed or deleted.
       const labels: Record<string, string> = {};
       for (const def of customDefs) labels[def.id] = def.name;
+      // Guide names snapshot for the same reason (rename/revoke/delete).
+      for (const g of translationGuides) {
+        const id = guideCriterionId(g.id);
+        if (criteria.includes(id)) labels[id] = g.name;
+      }
       patchState({
         assessment: {
           id: uuidv4(),
