@@ -364,6 +364,13 @@ export interface DocumentWorkflowState {
   specId?: string;
   /** Attached voice/tone (settingsStore.tones). */
   toneId?: string;
+  /**
+   * Admin structure guide filling the spec slot (server-resolved by id).
+   * Mutually exclusive with specId — the slot has one occupant.
+   */
+  specGuideId?: string;
+  /** Admin tone guide filling the tone slot; exclusive with toneId. */
+  toneGuideId?: string;
   /** Pinned spelling variety; absent = 'auto' (detected, mixing flagged). */
   spellingVariety?: 'auto' | 'US' | 'UK';
   /**
