@@ -176,15 +176,12 @@ describe('nameWorkflowConversation', () => {
       expect(stored().name).toBe('My own title');
     });
 
-    it('passes the conversation model to the titler', () => {
+    it('calls the titler with synthetic entries only', () => {
       nameWorkflowConversation('w1', {
         sample: 'text',
         workflow: 'Map',
       });
-      expect(generateConversationTitle).toHaveBeenCalledWith(
-        expect.any(Array),
-        'gpt-4',
-      );
+      expect(generateConversationTitle).toHaveBeenCalledWith(expect.any(Array));
     });
 
     it('survives a titler rejection', async () => {
