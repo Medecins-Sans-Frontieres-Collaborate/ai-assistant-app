@@ -182,6 +182,12 @@ export interface TranslationWorkflowState {
   targetLanguage?: TranslationTargetLanguage;
   /** References a glossary in settingsStore; the entries travel per-request. */
   glossaryId?: string;
+  /**
+   * Admin terminology guide attached for generation + assessment. Entries
+   * resolve server-side by id and merge with (winning over) the local
+   * glossary's.
+   */
+  glossaryGuideId?: string;
   mode: 'quick' | 'agentic';
   analysis?: TranslationAnalysis;
   rounds: TranslationReviewRound[];
@@ -650,7 +656,9 @@ export interface MapSourceRecord {
   addedAt: string;
   featureCount: number;
   /** How the material arrived. Absent on records saved before this field. */
-  kind?: 'text' | 'file' | 'search' | 'chat' | 'url';
+  kind?: 'text' | 'file' | 'search' | 'chat' | 'url' | 'dataset';
+  /** Admin dataset this source snapshot came from, for kind 'dataset'. */
+  datasetId?: string;
   /** The web search query, for kind 'search'. */
   query?: string;
   /** Final page URL after redirects, for kind 'url'. */
