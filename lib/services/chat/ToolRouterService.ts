@@ -71,6 +71,13 @@ export class ToolRouterService {
           // Use an efficient model to determine if web search is needed
           // This uses the standard OpenAI client which can route to any model
           try {
+            // Anchor the router in real time: without this the model's
+            // training-era sense of "now" leaks stale years into generated
+            // queries (e.g. appending "2024 2025" to a 2026 question).
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const currentDate = now.toISOString().slice(0, 10);
+
             const codeExecutionPromptSection = considerCodeExecution
               ? `
 
@@ -105,12 +112,14 @@ This conversation already contains web-search results with cited articles. ALSO 
 
             const systemPrompt = `You are a tool router that determines if web search is needed.
 
+Today's date is ${currentDate}. The current year is ${currentYear}.
+
 Analyze the user's message in the context of the conversation and determine if it requires current, real-time information from the web.
 
 Web search is needed for:
 - Current events, news, recent developments
 - Real-time data (weather, stock prices, scores)
-- Recent information (released after 2024)
+- Recent information (released after ${currentYear - 1})
 - Specific facts that change frequently
 - Comparisons requiring current data
 
@@ -123,7 +132,8 @@ Web search is NOT needed for:
 - Questions about uploaded files or images
 
 IMPORTANT: Always provide searchQuery in your response:
-- If needsWebSearch is true, provide a CONCISE search-engine query: 3-8 keywords, ONE topic, no question words ("what", "where", "why"), no filler ("current updates", "reasons", "dates"). Bad: "latest protests in India what are they about where are they happening dates reasons current updates". Good: "India protests 2026"
+- If needsWebSearch is true, provide a CONCISE search-engine query: 3-8 keywords, ONE topic, no question words ("what", "where", "why"), no filler ("current updates", "reasons", "dates"). Bad: "latest protests in India what are they about where are they happening dates reasons current updates". Good: "India protests ${currentYear}"
+- Years in queries: do NOT append a year by default. Append the current year (${currentYear}) ONLY when the question implies recency (news, "latest", ongoing events). Use a past year ONLY when the user explicitly asks about that period. Never append speculative, future, or multiple years.
 - If needsWebSearch is false, provide an empty string
 
 Also tune the search when needsWebSearch is true:

@@ -397,7 +397,13 @@ export class ToolRouterEnricher extends BasePipelineStage {
     tuning: {
       resultCount: number;
       freshness: 'day' | 'week' | 'month' | 'any';
-      provider: 'news' | 'gdelt' | 'google-news' | 'bing-agent' | 'combined';
+      provider:
+        | 'news'
+        | 'gdelt'
+        | 'google-news'
+        | 'bing-agent'
+        | 'bing-responses'
+        | 'combined';
       deep: boolean;
     },
   ): Promise<ChatContext> {
@@ -426,13 +432,16 @@ export class ToolRouterEnricher extends BasePipelineStage {
         : this.getAgentModelForSearch()
       : null;
     const executorLabel =
-      tuning.provider === 'combined'
-        ? searchModel
-          ? `Bing (${searchModel.id}) + Google News`
-          : 'Google News'
-        : needsAgent
-          ? (searchModel?.id ?? 'unavailable')
-          : feedLabel!;
+      tuning.provider === 'bing-responses'
+        ? // Direct Responses-API call: no Foundry agent, no feed label.
+          `Bing web_search (${env.WEB_SEARCH_RESPONSES_MODEL})`
+        : tuning.provider === 'combined'
+          ? searchModel
+            ? `Bing (${searchModel.id}) + Google News`
+            : 'Google News'
+          : needsAgent
+            ? (searchModel?.id ?? 'unavailable')
+            : feedLabel!;
     {
       try {
         if (tuning.provider === 'bing-agent' && !searchModel) {
@@ -480,9 +489,17 @@ export class ToolRouterEnricher extends BasePipelineStage {
             onInterimResults:
               tuning.provider === 'combined' && context.emitMarker
                 ? (entries) => {
-                    void context.emitMarker!(
+                    // Best-effort side channel: a rejected emit (client
+                    // gone, stream closed) must neither surface as an
+                    // unhandled rejection nor affect the search itself.
+                    context.emitMarker!(
                       emitSearchInterim({ queries: searchQueries, entries }),
-                    );
+                    ).catch((error) => {
+                      console.warn(
+                        '[ToolRouterEnricher] Interim headlines emit failed (ignored):',
+                        error instanceof Error ? error.message : error,
+                      );
+                    });
                   }
                 : undefined,
             // Progress phases from inside the sub-call (searching → reading
@@ -908,11 +925,13 @@ export class ToolRouterEnricher extends BasePipelineStage {
       context.processedContent?.metadata?.citations || [];
     const citationOffset = existingCitations.length;
     // Digest numbering is local [1..n]; shift it when RAG citations
-    // already occupy the low numbers.
+    // already occupy the low numbers. Anchored to line starts — that is
+    // where buildNewsResult puts its markers — so bracketed numbers
+    // INSIDE headline titles/snippets are never rewritten.
     const digestText =
       citationOffset > 0
         ? digest.text.replace(
-            /\[(\d+)\]/g,
+            /^\[(\d+)\]/gm,
             (_match, n) => `[${Number(n) + citationOffset}]`,
           )
         : digest.text;

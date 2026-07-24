@@ -13,15 +13,22 @@ import {
 } from '@/client/hooks/settings/useAgentAccessAdmin';
 
 import { ConnectorEditor } from './ConnectorEditor';
+import { GuideEditor } from './GuideEditor';
 import { LocalAdminsSection } from './LocalAdminsSection';
 import { PromptAgentEditor } from './PromptAgentEditor';
 import { RuleEditor } from './RuleEditor';
 import {
   AdminConnectorsResponse,
+  AdminGuidesResponse,
+  AdminMapDatasetsResponse,
   AdminPromptAgentsResponse,
   AdminRulesResponse,
   AdminStoredConnector,
+  AdminStoredDatasetMeta,
+  AdminStoredGuide,
   AgentsApiResponse,
+  CLIENT_GUIDE_SOURCE,
+  CLIENT_MAP_DATASET_SOURCE,
   CLIENT_MCP_CONNECTOR_SOURCE,
   CLIENT_PROMPT_AGENT_SOURCE,
   MergedAgentRow,
@@ -31,7 +38,7 @@ import {
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { Link } from '@/lib/navigation';
 
-type PanelTab = 'agents' | 'connectors' | 'localAdmins';
+type PanelTab = 'agents' | 'connectors' | 'guides' | 'datasets' | 'localAdmins';
 
 /**
  * Admin panel for app-layer ACCESS CONTROL — agents and MCP connectors alike
@@ -121,6 +128,32 @@ export const AgentAccessPanel: FC = () => {
     refetchOnWindowFocus: false,
   });
 
+  const guidesQuery = useQuery<AdminGuidesResponse>({
+    queryKey: ['agent-access-guides'],
+    queryFn: async () => {
+      const response = await fetch('/api/agent-access/guides');
+      if (!response.ok) {
+        throw new Error(`Failed to fetch guides: ${response.status}`);
+      }
+      return unwrapApiData<AdminGuidesResponse>(await response.json());
+    },
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
+  const datasetsQuery = useQuery<AdminMapDatasetsResponse>({
+    queryKey: ['agent-access-map-datasets'],
+    queryFn: async () => {
+      const response = await fetch('/api/agent-access/map-datasets');
+      if (!response.ok) {
+        throw new Error(`Failed to fetch datasets: ${response.status}`);
+      }
+      return unwrapApiData<AdminMapDatasetsResponse>(await response.json());
+    },
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
   const [activeTab, setActiveTab] = useState<PanelTab>('agents');
   const [isCreatingConnector, setIsCreatingConnector] = useState(false);
   const [editingConnectorId, setEditingConnectorId] = useState<string | null>(
@@ -133,6 +166,26 @@ export const AgentAccessPanel: FC = () => {
     string | null
   >(null);
   const [isDeletingConnector, setIsDeletingConnector] = useState(false);
+  const [isCreatingDataset, setIsCreatingDataset] = useState(false);
+  const [newDatasetName, setNewDatasetName] = useState('');
+  const [newDatasetDescription, setNewDatasetDescription] = useState('');
+  const [isSavingDataset, setIsSavingDataset] = useState(false);
+  const [editingDatasetRuleKey, setEditingDatasetRuleKey] = useState<
+    string | null
+  >(null);
+  const [confirmDeleteDatasetId, setConfirmDeleteDatasetId] = useState<
+    string | null
+  >(null);
+  const [isDeletingDataset, setIsDeletingDataset] = useState(false);
+  const [isCreatingGuide, setIsCreatingGuide] = useState(false);
+  const [editingGuideId, setEditingGuideId] = useState<string | null>(null);
+  const [editingGuideRuleKey, setEditingGuideRuleKey] = useState<string | null>(
+    null,
+  );
+  const [confirmDeleteGuideId, setConfirmDeleteGuideId] = useState<
+    string | null
+  >(null);
+  const [isDeletingGuide, setIsDeletingGuide] = useState(false);
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [isCreatingAgent, setIsCreatingAgent] = useState(false);
   const [editingAgentKey, setEditingAgentKey] = useState<string | null>(null);
@@ -247,6 +300,192 @@ export const AgentAccessPanel: FC = () => {
       }))
       .sort((a, b) => a.row.displayName.localeCompare(b.row.displayName));
   }, [connectorsQuery.data, rulesQuery.data]);
+
+  /**
+   * Guide rows reuse MergedAgentRow for the same reason connectors do: the
+   * RuleEditor works unchanged over the `guide::<id>` canonical key.
+   * `discoverable` is always true — the admin guides listing IS the
+   * discovery for guides.
+   */
+  const guideRows = useMemo(() => {
+    const rulesByKey = new Map(
+      (rulesQuery.data?.rules ?? []).map((r) => [r.canonicalKey, r]),
+    );
+    return (guidesQuery.data?.guides ?? [])
+      .map((entry: AdminStoredGuide) => ({
+        row: {
+          canonicalKey: entry.canonicalKey,
+          source: CLIENT_GUIDE_SOURCE,
+          agentName: entry.guide.id,
+          displayName: entry.guide.name,
+          discoverable: true,
+          stored: rulesByKey.get(entry.canonicalKey) ?? null,
+          promptAgent: null,
+        } satisfies MergedAgentRow,
+        entry,
+      }))
+      .sort((a, b) => a.row.displayName.localeCompare(b.row.displayName));
+  }, [guidesQuery.data, rulesQuery.data]);
+
+  /**
+   * Dataset rows reuse MergedAgentRow for the same reason the other entities
+   * do: the RuleEditor works unchanged over the `map-dataset::<id>` key.
+   */
+  const datasetRows = useMemo(() => {
+    const rulesByKey = new Map(
+      (rulesQuery.data?.rules ?? []).map((r) => [r.canonicalKey, r]),
+    );
+    return (datasetsQuery.data?.datasets ?? [])
+      .map((entry: AdminStoredDatasetMeta) => ({
+        row: {
+          canonicalKey: entry.canonicalKey,
+          source: CLIENT_MAP_DATASET_SOURCE,
+          agentName: entry.meta.id,
+          displayName: entry.meta.name,
+          discoverable: true,
+          stored: rulesByKey.get(entry.canonicalKey) ?? null,
+          promptAgent: null,
+        } satisfies MergedAgentRow,
+        entry,
+      }))
+      .sort((a, b) => a.row.displayName.localeCompare(b.row.displayName));
+  }, [datasetsQuery.data, rulesQuery.data]);
+
+  const invalidateDatasetData = async () => {
+    await Promise.all([
+      queryClient.invalidateQueries({
+        queryKey: ['agent-access-map-datasets'],
+      }),
+      queryClient.invalidateQueries({ queryKey: ['agent-access-rules'] }),
+      queryClient.invalidateQueries({ queryKey: ['available-map-datasets'] }),
+      queryClient.invalidateQueries({ queryKey: ['agent-access-config'] }),
+      queryClient.invalidateQueries({ queryKey: ['agent-access-me'] }),
+    ]);
+  };
+
+  const handleCreateDataset = async () => {
+    if (!newDatasetName.trim()) return;
+    setIsSavingDataset(true);
+    try {
+      const response = await fetch('/api/agent-access/map-datasets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: newDatasetName.trim(),
+          description: newDatasetDescription.trim(),
+        }),
+      });
+      const parsed = (await response.json().catch(() => ({}))) as {
+        error?: unknown;
+        data?: { dataset?: { id: string } };
+      };
+      if (!response.ok || !parsed.data?.dataset?.id) {
+        toast.error(
+          typeof parsed.error === 'string' ? parsed.error : t('saveError'),
+        );
+        return;
+      }
+      setIsCreatingDataset(false);
+      setNewDatasetName('');
+      setNewDatasetDescription('');
+      await invalidateDatasetData();
+      toast.success(t('datasetCreateSuccess'));
+    } catch {
+      toast.error(t('saveError'));
+    } finally {
+      setIsSavingDataset(false);
+    }
+  };
+
+  const handleDeleteDataset = async (entry: AdminStoredDatasetMeta) => {
+    setIsDeletingDataset(true);
+    try {
+      // The listing carries no ETags (CAS anchors the data blob), so fetch
+      // a fresh one right before the conditional delete.
+      const current = await fetch(
+        `/api/agent-access/map-datasets/${entry.meta.id}`,
+      );
+      if (current.status === 404) {
+        // Already gone — the desired end state holds.
+        setConfirmDeleteDatasetId(null);
+        await invalidateDatasetData();
+        return;
+      }
+      const parsed = (await current.json().catch(() => ({}))) as {
+        data?: { etag?: string };
+      };
+      const etag = parsed.data?.etag;
+      if (!current.ok || !etag) {
+        toast.error(t('saveError'));
+        return;
+      }
+      const response = await fetch(
+        `/api/agent-access/map-datasets/${entry.meta.id}`,
+        { method: 'DELETE', headers: { 'If-Match': etag } },
+      );
+      if (!response.ok && response.status !== 404) {
+        toast.error(t('saveError'));
+        return;
+      }
+      toast.success(t('datasetDeleteSuccess'));
+      setConfirmDeleteDatasetId(null);
+      await invalidateDatasetData();
+    } catch {
+      toast.error(t('saveError'));
+    } finally {
+      setIsDeletingDataset(false);
+    }
+  };
+
+  /**
+   * A guide mutation touches the admin listing, the rules that scope it, the
+   * user-facing guide list, and — because a local admin's create
+   * auto-delegates — the config map and the admin's own /me status.
+   */
+  const invalidateGuideData = async () => {
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ['agent-access-guides'] }),
+      queryClient.invalidateQueries({ queryKey: ['agent-access-rules'] }),
+      queryClient.invalidateQueries({ queryKey: ['available-guides'] }),
+      queryClient.invalidateQueries({ queryKey: ['agent-access-config'] }),
+      queryClient.invalidateQueries({ queryKey: ['agent-access-me'] }),
+    ]);
+  };
+
+  const handleGuideSaved = async () => {
+    setIsCreatingGuide(false);
+    setEditingGuideId(null);
+    await invalidateGuideData();
+  };
+
+  const handleGuideConflictReload = async () => {
+    setIsCreatingGuide(false);
+    setEditingGuideId(null);
+    await queryClient.invalidateQueries({ queryKey: ['agent-access-guides'] });
+  };
+
+  const handleDeleteGuide = async (entry: AdminStoredGuide) => {
+    setIsDeletingGuide(true);
+    try {
+      const params = new URLSearchParams({ id: entry.guide.id });
+      const response = await fetch(
+        `/api/agent-access/guides?${params.toString()}`,
+        { method: 'DELETE', headers: { 'If-Match': entry.etag } },
+      );
+      // 404 = another admin already deleted it; the desired end state holds.
+      if (!response.ok && response.status !== 404) {
+        toast.error(t('saveError'));
+        return;
+      }
+      toast.success(t('guideDeleteSuccess'));
+      setConfirmDeleteGuideId(null);
+      await invalidateGuideData();
+    } catch {
+      toast.error(t('saveError'));
+    } finally {
+      setIsDeletingGuide(false);
+    }
+  };
 
   /**
    * A connector mutation touches the admin listing, the rules that scope it,
@@ -444,7 +683,15 @@ export const AgentAccessPanel: FC = () => {
         {/* Tabs. Agents and connectors are open to every admin; the
             delegation map stays global-admin only. */}
         <div className="mb-6 flex gap-1 border-b border-gray-200 dark:border-gray-700">
-          {(['agents', 'connectors', 'localAdmins'] as const)
+          {(
+            [
+              'agents',
+              'connectors',
+              'guides',
+              'datasets',
+              'localAdmins',
+            ] as const
+          )
             .filter((tab) => tab !== 'localAdmins' || isGlobalAdmin)
             .map((tab) => (
               <button
@@ -461,13 +708,440 @@ export const AgentAccessPanel: FC = () => {
                   ? t('agentsTab')
                   : tab === 'connectors'
                     ? t('connectorsTab')
-                    : t('localAdminsTab')}
+                    : tab === 'guides'
+                      ? t('guidesTab')
+                      : tab === 'datasets'
+                        ? t('datasetsTab')
+                        : t('localAdminsTab')}
               </button>
             ))}
         </div>
 
         {activeTab === 'localAdmins' && isGlobalAdmin ? (
           <LocalAdminsSection rows={rows} />
+        ) : activeTab === 'datasets' ? (
+          datasetsQuery.isLoading ? (
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              {t('loading')}
+            </p>
+          ) : datasetsQuery.error ||
+            datasetsQuery.data?.datasetsUnavailable === true ? (
+            <div className="text-sm text-red-600 dark:text-red-400">
+              <p>
+                {datasetsQuery.data?.datasetsUnavailable
+                  ? t('datasetsUnavailableWarning')
+                  : t('loadError')}
+              </p>
+              <button
+                type="button"
+                className="mt-2 rounded-md border border-gray-300 dark:border-gray-600 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                onClick={() => void datasetsQuery.refetch()}
+              >
+                {t('retry')}
+              </button>
+            </div>
+          ) : (
+            <>
+              <button
+                type="button"
+                aria-expanded={isCreatingDataset}
+                className="mb-4 flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-gray-700 px-3 py-1.5 text-sm font-medium text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                onClick={() => setIsCreatingDataset((creating) => !creating)}
+              >
+                <IconPlus size={16} />
+                {t('addDataset')}
+              </button>
+
+              {isCreatingDataset && (
+                <div className="mb-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 p-4">
+                  <div className="space-y-3">
+                    <input
+                      className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-sm text-black dark:text-white"
+                      value={newDatasetName}
+                      onChange={(e) => setNewDatasetName(e.target.value)}
+                      placeholder={t('datasetNamePlaceholder')}
+                      aria-label={t('datasetNameLabel')}
+                    />
+                    <input
+                      className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-sm text-black dark:text-white"
+                      value={newDatasetDescription}
+                      onChange={(e) => setNewDatasetDescription(e.target.value)}
+                      placeholder={t('datasetDescriptionLabel')}
+                      aria-label={t('datasetDescriptionLabel')}
+                    />
+                  </div>
+                  <div className="mt-3 flex gap-2">
+                    <button
+                      type="button"
+                      className="rounded-md bg-blue-600 px-3 py-1 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+                      onClick={() => void handleCreateDataset()}
+                      disabled={!newDatasetName.trim() || isSavingDataset}
+                    >
+                      {t('createDataset')}
+                    </button>
+                    <button
+                      type="button"
+                      className="rounded-md px-3 py-1 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+                      onClick={() => setIsCreatingDataset(false)}
+                      disabled={isSavingDataset}
+                    >
+                      {t('cancel')}
+                    </button>
+                  </div>
+                  <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    {t('datasetCreateHint')}
+                  </p>
+                </div>
+              )}
+
+              {datasetRows.length === 0 ? (
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  {t('noDatasets')}
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                  {datasetRows.map(({ row, entry }) => {
+                    const isRestricted =
+                      row.stored?.rule.access.type === 'restricted';
+                    return (
+                      <li
+                        key={row.canonicalKey}
+                        className="rounded-lg border border-gray-200 dark:border-gray-700 p-3"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="min-w-0 flex-1">
+                            <span className="truncate text-sm font-medium text-black dark:text-white">
+                              {row.displayName}
+                            </span>
+                            {entry.meta.description && (
+                              <p className="truncate text-xs text-gray-500 dark:text-gray-400">
+                                {entry.meta.description}
+                              </p>
+                            )}
+                          </div>
+                          <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                            {t('datasetFeatureCount', {
+                              count: String(entry.meta.featureCount),
+                            })}
+                          </span>
+                          <span
+                            className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
+                              isRestricted
+                                ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                                : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                            }`}
+                          >
+                            {isRestricted
+                              ? t('accessRestricted')
+                              : t('accessEveryone')}
+                          </span>
+                          <button
+                            type="button"
+                            className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                            onClick={() =>
+                              setEditingDatasetRuleKey(
+                                editingDatasetRuleKey === row.canonicalKey
+                                  ? null
+                                  : row.canonicalKey,
+                              )
+                            }
+                          >
+                            {editingDatasetRuleKey === row.canonicalKey
+                              ? t('cancel')
+                              : t('editAccess')}
+                          </button>
+                          <Link
+                            href={`/admin/map-datasets/${entry.meta.id}`}
+                            className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                          >
+                            {t('openDatasetEditor')}
+                          </Link>
+                          <button
+                            type="button"
+                            className="shrink-0 rounded-md border border-red-200 dark:border-red-900 px-3 py-1 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                            onClick={() =>
+                              setConfirmDeleteDatasetId(
+                                confirmDeleteDatasetId === entry.meta.id
+                                  ? null
+                                  : entry.meta.id,
+                              )
+                            }
+                          >
+                            {t('deleteDataset')}
+                          </button>
+                        </div>
+
+                        <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+                          {t('updatedByLine', {
+                            user: entry.meta.updatedBy,
+                            date: entry.meta.updatedAt,
+                          })}
+                        </p>
+
+                        {editingDatasetRuleKey === row.canonicalKey && (
+                          <RuleEditor
+                            key={`${row.canonicalKey}:${row.stored?.etag ?? 'none'}`}
+                            row={row}
+                            onSaved={async () => {
+                              setEditingDatasetRuleKey(null);
+                              await invalidateDatasetData();
+                            }}
+                            onCancel={() => setEditingDatasetRuleKey(null)}
+                            onConflictReload={async () => {
+                              setEditingDatasetRuleKey(null);
+                              await refetchRules();
+                            }}
+                          />
+                        )}
+
+                        {confirmDeleteDatasetId === entry.meta.id && (
+                          <div className="mt-2 rounded-md border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/20 p-3 text-sm text-red-800 dark:text-red-300">
+                            <p>{t('deleteDatasetConfirm')}</p>
+                            <div className="mt-2 flex gap-2">
+                              <button
+                                type="button"
+                                className="rounded-md bg-red-600 px-3 py-1 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
+                                onClick={() => void handleDeleteDataset(entry)}
+                                disabled={isDeletingDataset}
+                              >
+                                {t('confirmDeleteDataset')}
+                              </button>
+                              <button
+                                type="button"
+                                className="rounded-md px-3 py-1 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+                                onClick={() => setConfirmDeleteDatasetId(null)}
+                                disabled={isDeletingDataset}
+                              >
+                                {t('cancel')}
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </>
+          )
+        ) : activeTab === 'guides' ? (
+          guidesQuery.isLoading ? (
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              {t('loading')}
+            </p>
+          ) : guidesQuery.error ||
+            guidesQuery.data?.guidesUnavailable === true ? (
+            <div className="text-sm text-red-600 dark:text-red-400">
+              {/* An outage returns an empty list; rendering it as "no guides
+                  exist" would invite an admin to recreate one. */}
+              <p>
+                {guidesQuery.data?.guidesUnavailable
+                  ? t('guidesUnavailableWarning')
+                  : t('loadError')}
+              </p>
+              <button
+                type="button"
+                className="mt-2 rounded-md border border-gray-300 dark:border-gray-600 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                onClick={() => void guidesQuery.refetch()}
+              >
+                {t('retry')}
+              </button>
+            </div>
+          ) : (
+            <>
+              <button
+                type="button"
+                aria-expanded={isCreatingGuide}
+                className="mb-4 flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-gray-700 px-3 py-1.5 text-sm font-medium text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                onClick={() => setIsCreatingGuide((creating) => !creating)}
+              >
+                <IconPlus size={16} />
+                {t('addGuide')}
+              </button>
+
+              {isCreatingGuide && (
+                <div className="mb-4">
+                  <GuideEditor
+                    existing={null}
+                    onSaved={handleGuideSaved}
+                    onCancel={() => setIsCreatingGuide(false)}
+                    onConflictReload={handleGuideConflictReload}
+                  />
+                </div>
+              )}
+
+              {guideRows.length === 0 ? (
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  {t('noGuides')}
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                  {guideRows.map(({ row, entry }) => {
+                    const isRestricted =
+                      row.stored?.rule.access.type === 'restricted';
+                    return (
+                      <li
+                        key={row.canonicalKey}
+                        className="rounded-lg border border-gray-200 dark:border-gray-700 p-3"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="min-w-0 flex-1">
+                            <span className="truncate text-sm font-medium text-black dark:text-white">
+                              {row.displayName}
+                            </span>
+                            {entry.guide.description && (
+                              <p className="truncate text-xs text-gray-500 dark:text-gray-400">
+                                {entry.guide.description}
+                              </p>
+                            )}
+                          </div>
+                          <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                            {t(`guideKind_${entry.guide.kind}`)}
+                          </span>
+                          {/* Payload summary — differentiates the structured
+                              kinds at a glance. */}
+                          {entry.guide.sections !== undefined && (
+                            <span className="shrink-0 text-xs text-gray-500 dark:text-gray-400">
+                              {t('guideSectionCount', {
+                                count: String(entry.guide.sections.length),
+                              })}
+                            </span>
+                          )}
+                          {entry.guide.entries !== undefined && (
+                            <span className="shrink-0 text-xs text-gray-500 dark:text-gray-400">
+                              {t('guideEntryCount', {
+                                count: String(entry.guide.entries.length),
+                              })}
+                            </span>
+                          )}
+                          <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                            {entry.guide.workflows
+                              .map((w) =>
+                                w === 'document'
+                                  ? t('guideWorkflowDocument')
+                                  : t('guideWorkflowTranslation'),
+                              )
+                              .join(' · ')}
+                          </span>
+                          <span
+                            className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
+                              isRestricted
+                                ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                                : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                            }`}
+                          >
+                            {isRestricted
+                              ? t('accessRestricted')
+                              : t('accessEveryone')}
+                          </span>
+                          <button
+                            type="button"
+                            className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                            onClick={() =>
+                              setEditingGuideRuleKey(
+                                editingGuideRuleKey === row.canonicalKey
+                                  ? null
+                                  : row.canonicalKey,
+                              )
+                            }
+                          >
+                            {editingGuideRuleKey === row.canonicalKey
+                              ? t('cancel')
+                              : t('editAccess')}
+                          </button>
+                          <button
+                            type="button"
+                            className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                            onClick={() =>
+                              setEditingGuideId(
+                                editingGuideId === entry.guide.id
+                                  ? null
+                                  : entry.guide.id,
+                              )
+                            }
+                          >
+                            {editingGuideId === entry.guide.id
+                              ? t('cancel')
+                              : t('edit')}
+                          </button>
+                          <button
+                            type="button"
+                            className="shrink-0 rounded-md border border-red-200 dark:border-red-900 px-3 py-1 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                            onClick={() =>
+                              setConfirmDeleteGuideId(
+                                confirmDeleteGuideId === entry.guide.id
+                                  ? null
+                                  : entry.guide.id,
+                              )
+                            }
+                          >
+                            {t('deleteGuide')}
+                          </button>
+                        </div>
+
+                        <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+                          {t('updatedByLine', {
+                            user: entry.guide.updatedBy,
+                            date: entry.guide.updatedAt,
+                          })}
+                        </p>
+
+                        {editingGuideRuleKey === row.canonicalKey && (
+                          <RuleEditor
+                            key={`${row.canonicalKey}:${row.stored?.etag ?? 'none'}`}
+                            row={row}
+                            onSaved={async () => {
+                              setEditingGuideRuleKey(null);
+                              await invalidateGuideData();
+                            }}
+                            onCancel={() => setEditingGuideRuleKey(null)}
+                            onConflictReload={async () => {
+                              setEditingGuideRuleKey(null);
+                              await refetchRules();
+                            }}
+                          />
+                        )}
+
+                        {editingGuideId === entry.guide.id && (
+                          <GuideEditor
+                            key={`${entry.guide.id}:${entry.etag}`}
+                            existing={entry}
+                            onSaved={handleGuideSaved}
+                            onCancel={() => setEditingGuideId(null)}
+                            onConflictReload={handleGuideConflictReload}
+                          />
+                        )}
+
+                        {confirmDeleteGuideId === entry.guide.id && (
+                          <div className="mt-2 rounded-md border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/20 p-3 text-sm text-red-800 dark:text-red-300">
+                            <p>{t('deleteGuideConfirm')}</p>
+                            <div className="mt-2 flex gap-2">
+                              <button
+                                type="button"
+                                className="rounded-md bg-red-600 px-3 py-1 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
+                                onClick={() => handleDeleteGuide(entry)}
+                                disabled={isDeletingGuide}
+                              >
+                                {t('confirmDeleteGuide')}
+                              </button>
+                              <button
+                                type="button"
+                                className="rounded-md px-3 py-1 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+                                onClick={() => setConfirmDeleteGuideId(null)}
+                                disabled={isDeletingGuide}
+                              >
+                                {t('cancel')}
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </>
+          )
         ) : activeTab === 'connectors' ? (
           connectorsQuery.isLoading ? (
             <p className="text-sm text-gray-500 dark:text-gray-400">

@@ -753,7 +753,7 @@ export const Sidebar = memo(function Sidebar() {
 
         {/* Content */}
         <div
-          className={`flex-1 overflow-y-auto transition-all duration-300 ${showChatbar ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+          className={`flex-1 overflow-y-auto hover-scrollbar transition-all duration-300 ${showChatbar ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         >
           {displayConversations.length === 0 ? (
             <div className="p-4 text-center text-sm text-gray-500">

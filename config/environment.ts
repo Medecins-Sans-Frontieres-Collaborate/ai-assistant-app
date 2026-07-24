@@ -123,8 +123,18 @@ const serverEnvSchema = z.object({
   //    coverage but 30-90s round-trips and flaky result quality.
   //  - 'combined': Bing agent + Google News feed concurrently; headlines
   //    stream to the client while Bing runs, then the results merge.
+  //  - 'bing-responses': the native web_search tool on the Azure OpenAI
+  //    Responses API — same Bing grounding as 'bing-agent' but a direct
+  //    model call instead of a Foundry agent run.
   WEB_SEARCH_PROVIDER: z
-    .enum(['news', 'gdelt', 'google-news', 'bing-agent', 'combined'])
+    .enum([
+      'news',
+      'gdelt',
+      'google-news',
+      'bing-agent',
+      'bing-responses',
+      'combined',
+    ])
     .default('news'),
 
   // Web search round-trip budget (ms). Applies to whichever provider runs.
@@ -142,6 +152,12 @@ const serverEnvSchema = z.object({
   // Deployment that backs the interpreter sub-tool round-trip (must support
   // the Responses-API code_interpreter tool in the project's region).
   CODE_INTERPRETER_MODEL: z.string().default('gpt-5.2'),
+
+  // Deployment used by the 'bing-responses' web-search provider (Responses
+  // API native web_search tool). Must be a Responses-capable deployment in
+  // the default Foundry project, with the web_search tool enabled on the
+  // subscription.
+  WEB_SEARCH_RESPONSES_MODEL: z.string().default('gpt-5.2'),
 
   // MCP (Model Context Protocol) connectors
   // Server-side gate for ARBITRARY (non-catalog) MCP server URLs — defense in

@@ -13,6 +13,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import type { ExportFormat } from '@/client/hooks/document/exportFormats';
+import { useAvailableGuides } from '@/client/hooks/settings/useAvailableGuides';
 import { useAutoFocusComposer } from '@/client/hooks/ui/useAutoFocusComposer';
 import { usePasteComposer } from '@/client/hooks/ui/usePasteComposer';
 import { useEditPreview } from '@/client/hooks/workflows/useEditPreview';
@@ -46,6 +47,10 @@ import {
   applyEditsInOrder,
 } from '@/lib/utils/shared/review/editApplication';
 import {
+  guideCriterionId,
+  isGuideCriterionKind,
+} from '@/lib/utils/shared/review/guideCriteria';
+import {
   hasResolvedEdits,
   invertPatch,
   withoutResolvedEdits,
@@ -72,6 +77,7 @@ import { AssessmentPanel } from '../Shared/Review/AssessmentPanel';
 import { CriteriaManager } from '../Shared/Review/CriteriaManager';
 import { CriteriaPicker } from '../Shared/Review/CriteriaPicker';
 import { EditQuickActions } from '../Shared/Review/EditQuickActions';
+import { GuidePicker } from '../Shared/Review/GuidePicker';
 import { WorkflowWorkspaceProps } from '../registry';
 import { DocumentProfilePanel } from './DocumentProfilePanel';
 import { ReferencePanel } from './ReferencePanel';
@@ -224,6 +230,30 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const attachedTone = tones.find((tone) => tone.id === state?.toneId);
   const isBusy = isRunning || assessing || uploadingBasis;
 
+  // Admin guides: criterion kinds join the criteria picker as `guide:` ids;
+  // structure/tone kinds fill the spec/tone slots (server-resolved by id).
+  const { guides } = useAvailableGuides();
+  const documentGuides = useMemo(
+    () => guides.filter((g) => g.workflows.includes('document')),
+    [guides],
+  );
+  const criterionGuides = useMemo(
+    () => documentGuides.filter((g) => isGuideCriterionKind(g.kind)),
+    [documentGuides],
+  );
+  const structureGuides = useMemo(
+    () => documentGuides.filter((g) => g.kind === 'structure'),
+    [documentGuides],
+  );
+  const toneGuides = useMemo(
+    () => documentGuides.filter((g) => g.kind === 'tone'),
+    [documentGuides],
+  );
+  const attachedStructureGuide = structureGuides.find(
+    (g) => g.id === state?.specGuideId,
+  );
+  const attachedToneGuide = toneGuides.find((g) => g.id === state?.toneGuideId);
+
   // Stray typing and pasting land in the instruction composer. Unlike the
   // bulk-paste fields, a wall of text here is almost always material the
   // instruction refers to rather than the instruction itself, so it is held
@@ -256,8 +286,8 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
 
   const criteriaItems = useMemo(() => {
     const builtins = availableDocumentCriteria({
-      hasSpec: !!attachedSpec,
-      hasTone: !!attachedTone,
+      hasSpec: !!attachedSpec || !!state?.specGuideId,
+      hasTone: !!attachedTone || !!state?.toneGuideId,
     }).map((c) => ({
       id: c.id as string,
       label: t(`document.criteria.${c.labelKey}.label`),
@@ -269,7 +299,14 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       description: c.rubric,
     }));
     return [...builtins, ...custom];
-  }, [attachedSpec, attachedTone, documentCriteria, t]);
+  }, [
+    attachedSpec,
+    attachedTone,
+    state?.specGuideId,
+    state?.toneGuideId,
+    documentCriteria,
+    t,
+  ]);
 
   const resolveCriterionLabel = useCallback(
     (id: string) => {
@@ -282,9 +319,11 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       if (isCustomCriterionId(id)) {
         return documentCriteria.find((c) => c.id === id)?.name ?? id;
       }
+      const guide = criterionGuides.find((g) => guideCriterionId(g.id) === id);
+      if (guide) return guide.name;
       return t(`document.criteria.${id}.label`);
     },
-    [assessment?.labels, documentCriteria, t],
+    [assessment?.labels, documentCriteria, criterionGuides, t],
   );
 
   const appendRailMessages = useCallback(
@@ -333,9 +372,20 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             examples: attachedTone.examples,
           }
         : undefined,
+      // Slot guides travel as ids — the server resolves (and re-checks
+      // access on) the bodies.
+      specGuideId: state?.specGuideId,
+      toneGuideId: state?.toneGuideId,
       qualityGuidance,
     };
-  }, [selectedCriteria, documentCriteria, attachedSpec, attachedTone]);
+  }, [
+    selectedCriteria,
+    documentCriteria,
+    attachedSpec,
+    attachedTone,
+    state?.specGuideId,
+    state?.toneGuideId,
+  ]);
 
   const handleRun = useCallback(async () => {
     // Held pastes are part of the instruction, so a chip alone is enough to
@@ -586,8 +636,12 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         state.profile && state.profile.contentHash === hash
           ? state.profile
           : undefined;
-      // Only criteria that are currently available (spec/tone gating).
-      const availableIds = new Set(criteriaItems.map((c) => c.id));
+      // Only criteria that are currently available (spec/tone gating). Guide
+      // criteria live in their own picker, so their ids join the set here.
+      const availableIds = new Set([
+        ...criteriaItems.map((c) => c.id),
+        ...criterionGuides.map((g) => guideCriterionId(g.id)),
+      ]);
       const criteria = [...selectedCriteria].filter((id) =>
         availableIds.has(id),
       );
@@ -605,12 +659,24 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         customCriteria: customDefs,
         spec: criteria.includes('specAdherence') ? attachedSpec : undefined,
         tone: criteria.includes('toneAdherence') ? constraints.tone : undefined,
+        specGuideId: criteria.includes('specAdherence')
+          ? state.specGuideId
+          : undefined,
+        toneGuideId: criteria.includes('toneAdherence')
+          ? state.toneGuideId
+          : undefined,
         profile: freshProfile,
         modelId: conversation?.model?.id,
       });
 
       const labels: Record<string, string> = {};
       for (const def of customDefs) labels[def.id] = def.name;
+      // Guide names snapshot like custom names so ratings/edits keep their
+      // labels after a guide is renamed, revoked, or deleted.
+      for (const g of criterionGuides) {
+        const id = guideCriterionId(g.id);
+        if (criteria.includes(id)) labels[id] = g.name;
+      }
 
       updateWorkflowState(conversationId, (prev) => ({
         ...(prev as DocumentWorkflowState),
@@ -655,6 +721,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     selection,
     docHtml,
     criteriaItems,
+    criterionGuides,
     documentCriteria,
     attachedSpec,
     buildWritingConstraints,
@@ -1048,17 +1115,24 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     [conversationId, updateWorkflowState],
   );
 
+  // Slot selects mix local records and admin guides in one list; guide
+  // options carry a `guide:` prefix. Exactly one occupant per slot — picking
+  // either clears the other (the server rejects both together).
   const attachSpec = useCallback(
-    (specId: string) => {
+    (value: string) => {
+      const isGuide = value.startsWith('guide:');
+      const specId = isGuide ? undefined : value || undefined;
+      const specGuideId = isGuide ? value.slice('guide:'.length) : undefined;
       updateWorkflowState(conversationId, (prev) => ({
         ...(prev as DocumentWorkflowState),
-        specId: specId || undefined,
+        specId,
+        specGuideId,
         updatedAt: new Date().toISOString(),
       }));
       // Conditional criterion follows the attachment (default ON).
       setSelectedCriteria((prev) => {
         const next = new Set(prev);
-        if (specId) next.add('specAdherence');
+        if (value) next.add('specAdherence');
         else next.delete('specAdherence');
         return next;
       });
@@ -1067,15 +1141,19 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   );
 
   const attachTone = useCallback(
-    (toneId: string) => {
+    (value: string) => {
+      const isGuide = value.startsWith('guide:');
+      const toneId = isGuide ? undefined : value || undefined;
+      const toneGuideId = isGuide ? value.slice('guide:'.length) : undefined;
       updateWorkflowState(conversationId, (prev) => ({
         ...(prev as DocumentWorkflowState),
-        toneId: toneId || undefined,
+        toneId,
+        toneGuideId,
         updatedAt: new Date().toISOString(),
       }));
       setSelectedCriteria((prev) => {
         const next = new Set(prev);
-        if (toneId) next.add('toneAdherence');
+        if (value) next.add('toneAdherence');
         else next.delete('toneAdherence');
         return next;
       });
@@ -1092,9 +1170,14 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     <div className="flex flex-wrap items-center gap-2 border-b border-gray-200 px-3 py-1.5 dark:border-gray-700">
       {/* Pickers render only when there is something to pick; the manage
           buttons are the add paths. */}
-      {documentSpecs.length > 0 && (
+      {(documentSpecs.length > 0 ||
+        structureGuides.length > 0 ||
+        state.specGuideId) && (
         <select
-          value={state.specId ?? ''}
+          value={
+            state.specId ??
+            (state.specGuideId ? `guide:${state.specGuideId}` : '')
+          }
           onChange={(e) => attachSpec(e.target.value)}
           disabled={isBusy || hasUnresolvedEdits}
           aria-label={t('document.spec')}
@@ -1106,6 +1189,23 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
               {spec.name}
             </option>
           ))}
+          {structureGuides.length > 0 && (
+            <optgroup label={t('document.guidesOptgroup')}>
+              {structureGuides.map((guide) => (
+                <option key={guide.id} value={`guide:${guide.id}`}>
+                  {guide.name}
+                </option>
+              ))}
+            </optgroup>
+          )}
+          {/* A stored guide no longer in the visible list (deleted or access
+              revoked) stays selectable-but-disabled so the user can SEE the
+              stale attachment and clear it — the server would 400 anyway. */}
+          {state.specGuideId && !attachedStructureGuide && (
+            <option value={`guide:${state.specGuideId}`} disabled>
+              {t('document.guideUnavailable')}
+            </option>
+          )}
         </select>
       )}
       <button
@@ -1122,9 +1222,12 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           : t('document.addSpec')}
       </button>
 
-      {tones.length > 0 && (
+      {(tones.length > 0 || toneGuides.length > 0 || state.toneGuideId) && (
         <select
-          value={state.toneId ?? ''}
+          value={
+            state.toneId ??
+            (state.toneGuideId ? `guide:${state.toneGuideId}` : '')
+          }
           onChange={(e) => attachTone(e.target.value)}
           disabled={isBusy || hasUnresolvedEdits}
           aria-label={t('document.tone')}
@@ -1136,6 +1239,20 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
               {tone.name}
             </option>
           ))}
+          {toneGuides.length > 0 && (
+            <optgroup label={t('document.guidesOptgroup')}>
+              {toneGuides.map((guide) => (
+                <option key={guide.id} value={`guide:${guide.id}`}>
+                  {guide.name}
+                </option>
+              ))}
+            </optgroup>
+          )}
+          {state.toneGuideId && !attachedToneGuide && (
+            <option value={`guide:${state.toneGuideId}`} disabled>
+              {t('document.guideUnavailable')}
+            </option>
+          )}
         </select>
       )}
 
@@ -1448,6 +1565,20 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             {hasDocument && scopeChip}
             <CriteriaPicker
               criteria={criteriaItems}
+              selected={selectedCriteria}
+              onToggle={(id) =>
+                setSelectedCriteria((prev) => {
+                  const next = new Set(prev);
+                  if (next.has(id)) next.delete(id);
+                  else next.add(id);
+                  return next;
+                })
+              }
+              i18nNamespace="workflows.document"
+              disabled={isBusy}
+            />
+            <GuidePicker
+              guides={criterionGuides}
               selected={selectedCriteria}
               onToggle={(id) =>
                 setSelectedCriteria((prev) => {

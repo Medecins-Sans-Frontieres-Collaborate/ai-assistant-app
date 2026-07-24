@@ -788,6 +788,50 @@ describe('ToolRouterService', () => {
       });
     });
 
+    describe('system prompt date anchoring', () => {
+      it('injects the current date and year, with no hardcoded stale years', async () => {
+        // Regression: the prompt used to hardcode "released after 2024" and
+        // give a year-suffixed example, so the router appended training-era
+        // years ("XYZ 2024 2025") to queries regardless of the actual date.
+        vi.useFakeTimers();
+        vi.setSystemTime(new Date('2026-07-23T12:00:00Z'));
+        try {
+          mockOpenAIClient.chat.completions.create.mockResolvedValue({
+            choices: [
+              {
+                message: {
+                  content: JSON.stringify({
+                    needsWebSearch: false,
+                    searchQuery: '',
+                    searchRecency: 'none',
+                    searchComprehensive: false,
+                    additionalSearchQueries: [],
+                  }),
+                },
+              },
+            ],
+          });
+
+          await service.determineTool({
+            messages: [],
+            currentMessage: 'hello',
+          });
+
+          const systemPrompt =
+            mockOpenAIClient.chat.completions.create.mock.calls[0][0]
+              .messages[0].content;
+          expect(systemPrompt).toContain("Today's date is 2026-07-23");
+          expect(systemPrompt).toContain('current year is 2026');
+          expect(systemPrompt).toContain('released after 2025');
+          expect(systemPrompt).not.toContain('released after 2024');
+          expect(systemPrompt).toContain('India protests 2026');
+          expect(systemPrompt).toContain('do NOT append a year by default');
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+    });
+
     describe('real-world scenarios', () => {
       it('should recognize need for real-time stock price data', async () => {
         const mockResponse = {

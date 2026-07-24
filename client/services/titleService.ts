@@ -15,15 +15,14 @@ export interface TitleGenerationResult {
 }
 
 /**
- * Generates an AI-powered title for a conversation.
+ * Generates an AI-powered title for a conversation. The server always titles
+ * with a fixed cheap model, so the conversation's own model is not sent.
  *
  * @param entries - The conversation entries (messages)
- * @param modelId - The model ID to use for generation context
  * @returns The generated title, or null if generation failed
  */
 export async function generateConversationTitle(
   entries: ConversationEntry[],
-  modelId: string,
 ): Promise<TitleGenerationResult | null> {
   try {
     // Convert conversation entries to flat messages for API (title only needs a
@@ -44,7 +43,6 @@ export async function generateConversationTitle(
       },
       body: JSON.stringify({
         messages,
-        modelId,
       }),
     });
 
@@ -57,6 +55,12 @@ export async function generateConversationTitle(
     }
 
     const result = await response.json();
+    // The server returns a null title when generation failed (best-effort
+    // endpoint). Report that as a failed generation so callers keep their
+    // local fallback name.
+    if (!result?.title) {
+      return null;
+    }
     return {
       title: result.title,
       fullTitle: result.fullTitle,

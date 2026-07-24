@@ -46,11 +46,26 @@ system/agent-access/rules/<sha256(canonicalKey)>.json    # one rule file per age
 system/agent-access/history/<sha256(canonicalKey)>/<iso-ts>.json  # immutable audit copies
 system/agent-access/prompt-agents/<id>.json              # app-defined prompt agents (see below)
 system/agent-access/connectors/<id>.json                 # admin-authored MCP connectors (see below)
+system/agent-access/guides/<id>.json                     # admin workflow guides (style/terminology/…)
+system/agent-access/map-datasets/meta/<id>.json          # map dataset listing records (~500B)
+system/agent-access/map-datasets/data/<id>.json          # map dataset payloads (up to ~1MB)
 ```
 
 `connectors/` is a sibling of `rules/` for exactly the same reason as `prompt-agents/`, and shares
 the skip-with-a-loud-error listing posture: one malformed connector blob must never take down the
-ruleset that gates every Foundry invocation.
+ruleset that gates every Foundry invocation. `guides/` follows the same pattern.
+
+**Map datasets deviate from the other entities in three documented ways.** (1) They are SPLIT into a
+meta blob (listings) and a data blob (payload): a dataset can hold 2,000 map features (~1MB), and
+both the ≤60s snapshot refresh and the admin listing download every blob under a prefix they read —
+so datasets NEVER enter the `AgentAccessService` snapshot at all. Listings read `meta/` only; loads
+read `data/` directly per request (an explicit user/admin action). Access needs nothing in the
+snapshot because rules are entity-agnostic — a `map-dataset::<id>` rule rides the ordinary
+fail-closed rules listing. (2) The CAS anchor is the DATA blob: its ETag is the If-Match token; the
+meta blob is a derived projection rewritten unconditionally after each successful data write (a
+failed meta write is logged loudly and self-heals on the next save — listings stale, loads
+truthful). (3) History entries carry the META only — a ~1MB verbatim payload copy per save would be
+a second store, not an audit trail.
 
 `prompt-agents/` is deliberately a **sibling** of `rules/`, never nested under it: the rules listing
 is fail-closed (any schema-invalid blob under `rules/` fails the whole ruleset load and denies all

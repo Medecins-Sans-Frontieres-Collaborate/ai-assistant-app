@@ -3,6 +3,8 @@ import { Session } from 'next-auth';
 import {
   AGENT_ACCESS_CONFIG_PATH,
   AGENT_ACCESS_CONNECTORS_PREFIX,
+  AGENT_ACCESS_GUIDES_PREFIX,
+  AGENT_ACCESS_MAP_DATASET_META_PREFIX,
   AGENT_ACCESS_PROMPT_AGENTS_PREFIX,
   AGENT_ACCESS_RULES_PREFIX,
   AgentAccessConfig,
@@ -11,7 +13,19 @@ import {
   AgentAccessHistoryEntrySchema,
   AgentAccessRule,
   AgentAccessRuleSchema,
+  GUIDE_SOURCE,
+  Guide,
+  GuideHistoryEntry,
+  GuideHistoryEntrySchema,
+  GuideSchema,
+  MAP_DATASET_SOURCE,
   MCP_CONNECTOR_SOURCE,
+  MapDataset,
+  MapDatasetHistoryEntry,
+  MapDatasetHistoryEntrySchema,
+  MapDatasetMeta,
+  MapDatasetMetaSchema,
+  MapDatasetSchema,
   McpConnector,
   McpConnectorHistoryEntry,
   McpConnectorHistoryEntrySchema,
@@ -23,7 +37,11 @@ import {
   PromptAgentSchema,
   canonicalAgentKey,
   connectorBlobPath,
+  guideBlobPath,
   historyBlobPath,
+  mapDatasetDataBlobPath,
+  mapDatasetMeta,
+  mapDatasetMetaBlobPath,
   promptAgentBlobPath,
   ruleBlobPath,
 } from '@/lib/services/agentAccess/types';
@@ -104,6 +122,33 @@ export interface StoredMcpConnector {
 
 export interface McpConnectorReadResult {
   connector: McpConnector;
+  etag: string;
+}
+
+export interface StoredGuide {
+  /** `guide::<id>` — flows through delegation and rules unchanged. */
+  canonicalKey: string;
+  blobPath: string;
+  guide: Guide;
+  /** Raw (quoted) Azure ETag — echoed to admin clients for If-Match CAS. */
+  etag: string;
+}
+
+export interface GuideReadResult {
+  guide: Guide;
+  etag: string;
+}
+
+export interface StoredMapDatasetMeta {
+  /** `map-dataset::<id>` — flows through delegation and rules unchanged. */
+  canonicalKey: string;
+  blobPath: string;
+  meta: MapDatasetMeta;
+}
+
+export interface MapDatasetReadResult {
+  dataset: MapDataset;
+  /** DATA-blob ETag — the CAS anchor for every dataset write. */
   etag: string;
 }
 
@@ -692,6 +737,376 @@ export async function writeConnectorHistoryEntry(
           conditions: { ifNoneMatch: '*' },
         }),
       { label: 'agentAccess.writeConnectorHistoryEntry' },
+    );
+  } catch (error) {
+    if (statusCodeOf(error) === 412) return;
+    throw error;
+  }
+}
+
+/**
+ * Lists every admin-authored workflow guide. Malformed blobs are SKIPPED with
+ * a loud log, never thrown — identical rationale to listAllPromptAgents: one
+ * corrupt guide must not take down the rules snapshot that refresh() loads
+ * alongside it. A skipped guide fails SAFE: its access data lives in the
+ * (fail-closed) rules listing, not here, and a guide with no loadable body
+ * simply cannot be invoked. Storage-level errors still throw.
+ */
+export async function listAllGuides(
+  storage: BlobStorage,
+): Promise<StoredGuide[]> {
+  const names = await storage.listBlobs(AGENT_ACCESS_GUIDES_PREFIX);
+  const results = await Promise.all(
+    names.map(async (name): Promise<StoredGuide | null> => {
+      // 404 → deleted between list and get; skip silently.
+      const downloaded = await downloadBlob(storage, name);
+      if (downloaded === null) return null;
+
+      let json: unknown;
+      try {
+        json = JSON.parse(downloaded.buffer.toString('utf8'));
+      } catch {
+        console.error(
+          `[agent-access] SKIPPING guide blob with invalid JSON (broken guide degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
+        );
+        return null;
+      }
+      const parsed = GuideSchema.safeParse(json);
+      if (!parsed.success) {
+        console.error(
+          `[agent-access] SKIPPING malformed guide blob (broken guide degrades alone; rules snapshot unaffected) ${sanitizeForLog(name)}: ${sanitizeForLog(parsed.error.message)}`,
+        );
+        return null;
+      }
+      if (guideBlobPath(parsed.data.id) !== name) {
+        // A stray blob must not shadow (or masquerade as) another id's guide —
+        // that would let one land at a trusted id's prompt body.
+        console.error(
+          `[agent-access] SKIPPING guide blob whose name does not match its content's id (broken guide degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
+        );
+        return null;
+      }
+      return {
+        canonicalKey: canonicalAgentKey(GUIDE_SOURCE, parsed.data.id),
+        blobPath: name,
+        guide: parsed.data,
+        etag: downloaded.etag,
+      };
+    }),
+  );
+  return results.filter((r): r is StoredGuide => r !== null);
+}
+
+/** Reads a single guide by id. Returns null when none exists. */
+export async function readGuide(
+  storage: BlobStorage,
+  id: string,
+): Promise<GuideReadResult | null> {
+  const result = await downloadBlob(storage, guideBlobPath(id));
+  if (result === null) return null;
+  const parsed = GuideSchema.safeParse(
+    JSON.parse(result.buffer.toString('utf8')),
+  );
+  if (!parsed.success) {
+    throw new Error(
+      `Malformed guide blob for id ${id}: ${parsed.error.message}`,
+    );
+  }
+  return { guide: parsed.data, etag: result.etag };
+}
+
+/**
+ * Compare-and-swap guide write. The blob path is derived from the record's
+ * own id, so a guide can never land at another id's path.
+ * `ifMatchEtag` set → update (`If-Match`); null → creation only
+ * (`If-None-Match: *`). 412 → {@link AgentAccessConflictError}.
+ * Returns the new ETag.
+ */
+export async function writeGuide(
+  storage: BlobStorage,
+  guide: Guide,
+  ifMatchEtag: string | null,
+): Promise<string> {
+  const parsed = GuideSchema.parse(guide);
+  return uploadJson(
+    storage,
+    guideBlobPath(parsed.id),
+    parsed,
+    ifMatchEtag,
+    'agentAccess.writeGuide',
+  );
+}
+
+/**
+ * Conditional guide delete (`If-Match`). Returns false when the blob was
+ * already absent (idempotent); 412 → {@link AgentAccessConflictError}.
+ */
+export async function deleteGuide(
+  storage: BlobStorage,
+  id: string,
+  ifMatchEtag: string,
+): Promise<boolean> {
+  const client = storage.getBlockBlobClient(guideBlobPath(id));
+  try {
+    await withAzureRetry(
+      () => client.delete({ conditions: { ifMatch: ifMatchEtag } }),
+      { label: 'agentAccess.deleteGuide' },
+    );
+    return true;
+  } catch (error) {
+    const status = statusCodeOf(error);
+    if (status === 404) return false;
+    if (status === 412) throw new AgentAccessConflictError();
+    throw error;
+  }
+}
+
+/**
+ * Appends an immutable guide history entry (`If-None-Match: *`) at
+ * `historyBlobPath(canonicalKey)` — same audit namespace as rules. A 412
+ * means an earlier attempt (or a retry) already landed this exact entry —
+ * treated as idempotent success. Callers wrap this best-effort: a history
+ * failure must never fail the mutation (mirror appendHistoryBestEffort).
+ */
+export async function writeGuideHistoryEntry(
+  storage: BlobStorage,
+  entry: GuideHistoryEntry,
+): Promise<void> {
+  const parsed = GuideHistoryEntrySchema.parse(entry);
+  const client = storage.getBlockBlobClient(
+    historyBlobPath(parsed.canonicalKey, parsed.updatedAt),
+  );
+  const content = Buffer.from(JSON.stringify(parsed), 'utf8');
+  try {
+    await withAzureRetry(
+      () =>
+        client.upload(content, content.length, {
+          blobHTTPHeaders: { blobContentType: 'application/json' },
+          conditions: { ifNoneMatch: '*' },
+        }),
+      { label: 'agentAccess.writeGuideHistoryEntry' },
+    );
+  } catch (error) {
+    if (statusCodeOf(error) === 412) return;
+    throw error;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Map datasets (split meta/data blobs)                                */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Unconditional JSON upload for DERIVED blobs (dataset meta). The CAS
+ * discipline lives on the data blob; the meta is a projection of it and is
+ * simply overwritten after every successful data write.
+ */
+async function uploadJsonUnconditional(
+  storage: BlobStorage,
+  blobPath: string,
+  payload: unknown,
+  label: string,
+): Promise<void> {
+  const client = storage.getBlockBlobClient(blobPath);
+  const content = Buffer.from(JSON.stringify(payload), 'utf8');
+  await withAzureRetry(
+    () =>
+      client.upload(content, content.length, {
+        blobHTTPHeaders: { blobContentType: 'application/json' },
+      }),
+    { label },
+  );
+}
+
+/**
+ * Lists dataset META blobs only — the ~1MB data blobs are never touched by
+ * listings (that is the point of the split). Malformed metas are SKIPPED
+ * with a loud log (same soft-skip rationale as listAllPromptAgents); a
+ * skipped dataset fails SAFE — it disappears from listings and its load
+ * endpoint still serves the truthful data blob to those who know the id
+ * (subject to the fail-closed rules, which live elsewhere).
+ */
+export async function listAllMapDatasetMetas(
+  storage: BlobStorage,
+): Promise<StoredMapDatasetMeta[]> {
+  const names = await storage.listBlobs(AGENT_ACCESS_MAP_DATASET_META_PREFIX);
+  const results = await Promise.all(
+    names.map(async (name): Promise<StoredMapDatasetMeta | null> => {
+      // 404 → deleted between list and get; skip silently.
+      const downloaded = await downloadBlob(storage, name);
+      if (downloaded === null) return null;
+
+      let json: unknown;
+      try {
+        json = JSON.parse(downloaded.buffer.toString('utf8'));
+      } catch {
+        console.error(
+          `[agent-access] SKIPPING map-dataset meta blob with invalid JSON (broken dataset degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
+        );
+        return null;
+      }
+      const parsed = MapDatasetMetaSchema.safeParse(json);
+      if (!parsed.success) {
+        console.error(
+          `[agent-access] SKIPPING malformed map-dataset meta blob (broken dataset degrades alone; rules snapshot unaffected) ${sanitizeForLog(name)}: ${sanitizeForLog(parsed.error.message)}`,
+        );
+        return null;
+      }
+      if (mapDatasetMetaBlobPath(parsed.data.id) !== name) {
+        // A stray blob must not shadow (or masquerade as) another id's
+        // dataset in listings.
+        console.error(
+          `[agent-access] SKIPPING map-dataset meta blob whose name does not match its content's id (broken dataset degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
+        );
+        return null;
+      }
+      return {
+        canonicalKey: canonicalAgentKey(MAP_DATASET_SOURCE, parsed.data.id),
+        blobPath: name,
+        meta: parsed.data,
+      };
+    }),
+  );
+  return results.filter((r): r is StoredMapDatasetMeta => r !== null);
+}
+
+/** Reads one dataset META. Returns null when none exists. */
+export async function readMapDatasetMeta(
+  storage: BlobStorage,
+  id: string,
+): Promise<MapDatasetMeta | null> {
+  const result = await downloadBlob(storage, mapDatasetMetaBlobPath(id));
+  if (result === null) return null;
+  const parsed = MapDatasetMetaSchema.safeParse(
+    JSON.parse(result.buffer.toString('utf8')),
+  );
+  if (!parsed.success) {
+    throw new Error(
+      `Malformed map-dataset meta blob for id ${id}: ${parsed.error.message}`,
+    );
+  }
+  return parsed.data;
+}
+
+/**
+ * Reads one dataset's full DATA blob. Returns null when none exists. The
+ * returned etag is the data blob's — the If-Match token for every write.
+ */
+export async function readMapDataset(
+  storage: BlobStorage,
+  id: string,
+): Promise<MapDatasetReadResult | null> {
+  const result = await downloadBlob(storage, mapDatasetDataBlobPath(id));
+  if (result === null) return null;
+  const parsed = MapDatasetSchema.safeParse(
+    JSON.parse(result.buffer.toString('utf8')),
+  );
+  if (!parsed.success) {
+    throw new Error(
+      `Malformed map-dataset data blob for id ${id}: ${parsed.error.message}`,
+    );
+  }
+  return { dataset: parsed.data, etag: result.etag };
+}
+
+/**
+ * Compare-and-swap dataset write: the DATA blob is written under the CAS
+ * condition (`ifMatchEtag` set → update; null → creation only; 412 →
+ * {@link AgentAccessConflictError}), then the derived META is rewritten
+ * UNCONDITIONALLY. A meta failure is logged loudly but never thrown — the
+ * data write already landed, listings go stale-not-wrong, and the next
+ * successful save repairs the meta. Returns the new data ETag.
+ */
+export async function writeMapDataset(
+  storage: BlobStorage,
+  dataset: MapDataset,
+  ifMatchEtag: string | null,
+): Promise<string> {
+  const parsed = MapDatasetSchema.parse(dataset);
+  const etag = await uploadJson(
+    storage,
+    mapDatasetDataBlobPath(parsed.id),
+    parsed,
+    ifMatchEtag,
+    'agentAccess.writeMapDatasetData',
+  );
+  try {
+    await uploadJsonUnconditional(
+      storage,
+      mapDatasetMetaBlobPath(parsed.id),
+      mapDatasetMeta(parsed),
+      'agentAccess.writeMapDatasetMeta',
+    );
+  } catch (error) {
+    console.error(
+      `[agent-access] map-dataset META write failed for id=${sanitizeForLog(parsed.id)} (listing will be stale until the next save; the data blob is current): ${sanitizeForLog(error)}`,
+    );
+  }
+  return etag;
+}
+
+/**
+ * Conditional dataset delete: DATA blob under If-Match first (412 →
+ * {@link AgentAccessConflictError}), then META best-effort. Returns false
+ * when the data blob was already absent — but the META delete still runs so
+ * a re-issued DELETE cleans up an orphaned listing entry (self-healing).
+ */
+export async function deleteMapDataset(
+  storage: BlobStorage,
+  id: string,
+  ifMatchEtag: string,
+): Promise<boolean> {
+  let dataDeleted = true;
+  const dataClient = storage.getBlockBlobClient(mapDatasetDataBlobPath(id));
+  try {
+    await withAzureRetry(
+      () => dataClient.delete({ conditions: { ifMatch: ifMatchEtag } }),
+      { label: 'agentAccess.deleteMapDatasetData' },
+    );
+  } catch (error) {
+    const status = statusCodeOf(error);
+    if (status === 412) throw new AgentAccessConflictError();
+    if (status !== 404) throw error;
+    dataDeleted = false;
+  }
+  const metaClient = storage.getBlockBlobClient(mapDatasetMetaBlobPath(id));
+  try {
+    await withAzureRetry(() => metaClient.delete(), {
+      label: 'agentAccess.deleteMapDatasetMeta',
+    });
+  } catch (error) {
+    if (statusCodeOf(error) !== 404) {
+      console.error(
+        `[agent-access] map-dataset META delete failed for id=${sanitizeForLog(id)} (orphaned listing entry; re-run the delete to clean it): ${sanitizeForLog(error)}`,
+      );
+    }
+  }
+  return dataDeleted;
+}
+
+/**
+ * Appends an immutable dataset history entry (`If-None-Match: *`) at
+ * `historyBlobPath(canonicalKey)`. Carries META only (see the schema
+ * comment). 412 = an earlier attempt already landed this entry — idempotent
+ * success. Callers wrap best-effort.
+ */
+export async function writeMapDatasetHistoryEntry(
+  storage: BlobStorage,
+  entry: MapDatasetHistoryEntry,
+): Promise<void> {
+  const parsed = MapDatasetHistoryEntrySchema.parse(entry);
+  const client = storage.getBlockBlobClient(
+    historyBlobPath(parsed.canonicalKey, parsed.updatedAt),
+  );
+  const content = Buffer.from(JSON.stringify(parsed), 'utf8');
+  try {
+    await withAzureRetry(
+      () =>
+        client.upload(content, content.length, {
+          blobHTTPHeaders: { blobContentType: 'application/json' },
+          conditions: { ifNoneMatch: '*' },
+        }),
+      { label: 'agentAccess.writeMapDatasetHistoryEntry' },
     );
   } catch (error) {
     if (statusCodeOf(error) === 412) return;

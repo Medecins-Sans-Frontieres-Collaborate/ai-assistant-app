@@ -35,6 +35,9 @@ describe('WebSearchSettingsPanel', () => {
     expect(
       screen.getByRole('radio', { name: /Bing grounding \(via Microsoft\)/ }),
     ).not.toBeChecked();
+    expect(
+      screen.getByRole('radio', { name: /Bing fast search/ }),
+    ).not.toBeChecked();
   });
 
   it('writes the combined provider to the settings store', () => {
@@ -74,6 +77,19 @@ describe('WebSearchSettingsPanel', () => {
     );
     expect(
       screen.getByRole('radio', { name: /Google News only/ }),
+    ).toBeChecked();
+  });
+
+  it('writes the bing-responses provider to the settings store', () => {
+    render(<WebSearchSettingsPanel />);
+
+    fireEvent.click(screen.getByRole('radio', { name: /Bing fast search/ }));
+
+    expect(useSettingsStore.getState().webSearchOptions.provider).toBe(
+      'bing-responses',
+    );
+    expect(
+      screen.getByRole('radio', { name: /Bing fast search/ }),
     ).toBeChecked();
   });
 

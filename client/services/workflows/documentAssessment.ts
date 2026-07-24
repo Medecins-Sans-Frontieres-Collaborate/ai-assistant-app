@@ -16,6 +16,10 @@ export interface AssessDocumentInput {
   customCriteria?: Array<{ id: string; name: string; rubric: string }>;
   spec?: DocumentSpec;
   tone?: { name: string; voiceRules: string; examples?: string };
+  /** Admin structure guide filling the spec slot (server-resolved by id). */
+  specGuideId?: string;
+  /** Admin tone guide filling the tone slot (server-resolved by id). */
+  toneGuideId?: string;
   profile?: DocumentProfile;
   modelId?: string;
   signal?: AbortSignal;
