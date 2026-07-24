@@ -769,7 +769,7 @@ describe('settingsStore migration (v47 → v48)', () => {
   });
 
   it('keeps a valid persisted provider and repairs an invalid one', () => {
-    for (const valid of ['google-news', 'bing-agent']) {
+    for (const valid of ['google-news', 'bing-agent', 'bing-responses']) {
       const kept = migrate(
         {
           webSearchOptions: {
