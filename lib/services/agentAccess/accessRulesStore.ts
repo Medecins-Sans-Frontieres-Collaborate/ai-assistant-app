@@ -3,6 +3,7 @@ import { Session } from 'next-auth';
 import {
   AGENT_ACCESS_CONFIG_PATH,
   AGENT_ACCESS_CONNECTORS_PREFIX,
+  AGENT_ACCESS_GUIDES_PREFIX,
   AGENT_ACCESS_PROMPT_AGENTS_PREFIX,
   AGENT_ACCESS_RULES_PREFIX,
   AgentAccessConfig,
@@ -11,6 +12,11 @@ import {
   AgentAccessHistoryEntrySchema,
   AgentAccessRule,
   AgentAccessRuleSchema,
+  GUIDE_SOURCE,
+  Guide,
+  GuideHistoryEntry,
+  GuideHistoryEntrySchema,
+  GuideSchema,
   MCP_CONNECTOR_SOURCE,
   McpConnector,
   McpConnectorHistoryEntry,
@@ -23,6 +29,7 @@ import {
   PromptAgentSchema,
   canonicalAgentKey,
   connectorBlobPath,
+  guideBlobPath,
   historyBlobPath,
   promptAgentBlobPath,
   ruleBlobPath,
@@ -104,6 +111,20 @@ export interface StoredMcpConnector {
 
 export interface McpConnectorReadResult {
   connector: McpConnector;
+  etag: string;
+}
+
+export interface StoredGuide {
+  /** `guide::<id>` — flows through delegation and rules unchanged. */
+  canonicalKey: string;
+  blobPath: string;
+  guide: Guide;
+  /** Raw (quoted) Azure ETag — echoed to admin clients for If-Match CAS. */
+  etag: string;
+}
+
+export interface GuideReadResult {
+  guide: Guide;
   etag: string;
 }
 
@@ -692,6 +713,154 @@ export async function writeConnectorHistoryEntry(
           conditions: { ifNoneMatch: '*' },
         }),
       { label: 'agentAccess.writeConnectorHistoryEntry' },
+    );
+  } catch (error) {
+    if (statusCodeOf(error) === 412) return;
+    throw error;
+  }
+}
+
+/**
+ * Lists every admin-authored workflow guide. Malformed blobs are SKIPPED with
+ * a loud log, never thrown — identical rationale to listAllPromptAgents: one
+ * corrupt guide must not take down the rules snapshot that refresh() loads
+ * alongside it. A skipped guide fails SAFE: its access data lives in the
+ * (fail-closed) rules listing, not here, and a guide with no loadable body
+ * simply cannot be invoked. Storage-level errors still throw.
+ */
+export async function listAllGuides(
+  storage: BlobStorage,
+): Promise<StoredGuide[]> {
+  const names = await storage.listBlobs(AGENT_ACCESS_GUIDES_PREFIX);
+  const results = await Promise.all(
+    names.map(async (name): Promise<StoredGuide | null> => {
+      // 404 → deleted between list and get; skip silently.
+      const downloaded = await downloadBlob(storage, name);
+      if (downloaded === null) return null;
+
+      let json: unknown;
+      try {
+        json = JSON.parse(downloaded.buffer.toString('utf8'));
+      } catch {
+        console.error(
+          `[agent-access] SKIPPING guide blob with invalid JSON (broken guide degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
+        );
+        return null;
+      }
+      const parsed = GuideSchema.safeParse(json);
+      if (!parsed.success) {
+        console.error(
+          `[agent-access] SKIPPING malformed guide blob (broken guide degrades alone; rules snapshot unaffected) ${sanitizeForLog(name)}: ${sanitizeForLog(parsed.error.message)}`,
+        );
+        return null;
+      }
+      if (guideBlobPath(parsed.data.id) !== name) {
+        // A stray blob must not shadow (or masquerade as) another id's guide —
+        // that would let one land at a trusted id's prompt body.
+        console.error(
+          `[agent-access] SKIPPING guide blob whose name does not match its content's id (broken guide degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
+        );
+        return null;
+      }
+      return {
+        canonicalKey: canonicalAgentKey(GUIDE_SOURCE, parsed.data.id),
+        blobPath: name,
+        guide: parsed.data,
+        etag: downloaded.etag,
+      };
+    }),
+  );
+  return results.filter((r): r is StoredGuide => r !== null);
+}
+
+/** Reads a single guide by id. Returns null when none exists. */
+export async function readGuide(
+  storage: BlobStorage,
+  id: string,
+): Promise<GuideReadResult | null> {
+  const result = await downloadBlob(storage, guideBlobPath(id));
+  if (result === null) return null;
+  const parsed = GuideSchema.safeParse(
+    JSON.parse(result.buffer.toString('utf8')),
+  );
+  if (!parsed.success) {
+    throw new Error(
+      `Malformed guide blob for id ${id}: ${parsed.error.message}`,
+    );
+  }
+  return { guide: parsed.data, etag: result.etag };
+}
+
+/**
+ * Compare-and-swap guide write. The blob path is derived from the record's
+ * own id, so a guide can never land at another id's path.
+ * `ifMatchEtag` set → update (`If-Match`); null → creation only
+ * (`If-None-Match: *`). 412 → {@link AgentAccessConflictError}.
+ * Returns the new ETag.
+ */
+export async function writeGuide(
+  storage: BlobStorage,
+  guide: Guide,
+  ifMatchEtag: string | null,
+): Promise<string> {
+  const parsed = GuideSchema.parse(guide);
+  return uploadJson(
+    storage,
+    guideBlobPath(parsed.id),
+    parsed,
+    ifMatchEtag,
+    'agentAccess.writeGuide',
+  );
+}
+
+/**
+ * Conditional guide delete (`If-Match`). Returns false when the blob was
+ * already absent (idempotent); 412 → {@link AgentAccessConflictError}.
+ */
+export async function deleteGuide(
+  storage: BlobStorage,
+  id: string,
+  ifMatchEtag: string,
+): Promise<boolean> {
+  const client = storage.getBlockBlobClient(guideBlobPath(id));
+  try {
+    await withAzureRetry(
+      () => client.delete({ conditions: { ifMatch: ifMatchEtag } }),
+      { label: 'agentAccess.deleteGuide' },
+    );
+    return true;
+  } catch (error) {
+    const status = statusCodeOf(error);
+    if (status === 404) return false;
+    if (status === 412) throw new AgentAccessConflictError();
+    throw error;
+  }
+}
+
+/**
+ * Appends an immutable guide history entry (`If-None-Match: *`) at
+ * `historyBlobPath(canonicalKey)` — same audit namespace as rules. A 412
+ * means an earlier attempt (or a retry) already landed this exact entry —
+ * treated as idempotent success. Callers wrap this best-effort: a history
+ * failure must never fail the mutation (mirror appendHistoryBestEffort).
+ */
+export async function writeGuideHistoryEntry(
+  storage: BlobStorage,
+  entry: GuideHistoryEntry,
+): Promise<void> {
+  const parsed = GuideHistoryEntrySchema.parse(entry);
+  const client = storage.getBlockBlobClient(
+    historyBlobPath(parsed.canonicalKey, parsed.updatedAt),
+  );
+  const content = Buffer.from(JSON.stringify(parsed), 'utf8');
+  try {
+    await withAzureRetry(
+      () =>
+        client.upload(content, content.length, {
+          blobHTTPHeaders: { blobContentType: 'application/json' },
+          conditions: { ifNoneMatch: '*' },
+        }),
+      { label: 'agentAccess.writeGuideHistoryEntry' },
     );
   } catch (error) {
     if (statusCodeOf(error) === 412) return;
