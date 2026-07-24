@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import { Conversation } from '@/types/chat';
@@ -9,6 +10,18 @@ import { useConversationStore } from '@/client/stores/conversationStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import '@testing-library/jest-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+/** The workspace fetches admin guides via React Query (useAvailableGuides). */
+function renderWorkspace(conversationId: string) {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+  return render(
+    <QueryClientProvider client={queryClient}>
+      <DocumentWorkspace conversationId={conversationId} />
+    </QueryClientProvider>,
+  );
+}
 
 /** The markdown the model "returns" for the revise run. */
 let modelOutput = '';
