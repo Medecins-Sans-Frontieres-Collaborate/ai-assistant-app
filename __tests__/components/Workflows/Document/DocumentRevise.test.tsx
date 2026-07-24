@@ -102,7 +102,7 @@ describe('Document workflow — revise as suggestions', () => {
   it('leaves the document untouched and queues suggestions', async () => {
     modelOutput = DOC_MARKDOWN.replace('twelve', 'fifteen');
 
-    render(<DocumentWorkspace conversationId="doc-1" />);
+    renderWorkspace('doc-1');
     await waitFor(() =>
       expect(document.querySelector('.ProseMirror')).toBeTruthy(),
     );
@@ -126,7 +126,7 @@ describe('Document workflow — revise as suggestions', () => {
     useSettingsStore.setState({ suggestRevisions: false });
     modelOutput = DOC_MARKDOWN.replace('twelve', 'fifteen');
 
-    render(<DocumentWorkspace conversationId="doc-1" />);
+    renderWorkspace('doc-1');
     await waitFor(() =>
       expect(document.querySelector('.ProseMirror')).toBeTruthy(),
     );
