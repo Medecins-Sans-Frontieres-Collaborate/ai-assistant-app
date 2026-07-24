@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server';
 
+import { resolveGuideCriteria } from '@/lib/services/workflows/shared/guideResolution';
 import { resolveWorkflowModelId } from '@/lib/services/workflows/shared/workflowModels';
 import { runTranslationAssessment } from '@/lib/services/workflows/translation/translationOrchestrator';
 
@@ -14,6 +15,10 @@ import {
   collectCustomCriteria,
   isCustomCriterionId,
 } from '@/lib/utils/shared/review/customCriteria';
+import {
+  MAX_GUIDES_PER_ASSESSMENT,
+  isGuideCriterionId,
+} from '@/lib/utils/shared/review/guideCriteria';
 import { isTranslationBuiltinCriterionId } from '@/lib/utils/shared/translation/qualityCriteria';
 
 import { GlossaryEntry } from '@/types/workflow';
@@ -84,7 +89,21 @@ export async function POST(req: NextRequest) {
   for (const id of criterionIds) {
     if (isTranslationBuiltinCriterionId(id)) continue;
     if (isCustomCriterionId(id) && customById.has(id)) continue;
+    // Guide ids are resolved (and access-checked) server-side below.
+    if (isGuideCriterionId(id)) continue;
     return badRequestResponse('Unknown criterion');
+  }
+  const guideCriterionIds = criterionIds.filter(isGuideCriterionId);
+  if (guideCriterionIds.length > MAX_GUIDES_PER_ASSESSMENT) {
+    return badRequestResponse('Too many guides selected');
+  }
+  const guideResolution = await resolveGuideCriteria({
+    userMail: session.user?.mail ?? undefined,
+    workflow: 'translation',
+    criterionIds: guideCriterionIds,
+  });
+  if ('error' in guideResolution) {
+    return badRequestResponse(guideResolution.error);
   }
 
   const glossaryEntries: GlossaryEntry[] = Array.isArray(body.glossaryEntries)
@@ -105,6 +124,7 @@ export async function POST(req: NextRequest) {
       targetLanguage,
       criterionIds,
       customById,
+      guides: guideResolution.guides,
       glossaryEntries,
       modelId: resolveWorkflowModelId(body.modelId),
     });
