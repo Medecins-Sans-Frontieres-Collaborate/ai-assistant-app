@@ -13,8 +13,8 @@ import {
   buildToneBlock,
 } from '@/lib/services/workflows/document/prompts';
 import {
-  buildStructureGuideBlock,
-  buildToneGuideBlock,
+  structureGuideToSpec,
+  toneGuideToToneInput,
 } from '@/lib/services/workflows/shared/guidePrompts';
 import { resolveSlotGuide } from '@/lib/services/workflows/shared/guideResolution';
 import { truncateToTokenBudget } from '@/lib/services/workflows/shared/textBudget';
@@ -126,31 +126,29 @@ export async function POST(req: NextRequest) {
   // the stream opens so a stale/revoked reference is a clean 400, not a
   // mid-stream failure.
   const userMail = session.user?.mail ?? undefined;
-  let structureGuideBlock = '';
+  // Slot guides convert to the REAL DocumentSpec/ToneInput shapes and flow
+  // through the same buildSpecBlock/buildToneBlock as local attachments.
+  let guideSpec: import('@/types/workflow').DocumentSpec | undefined;
   if (typeof body.specGuideId === 'string' && body.specGuideId) {
     const resolved = await resolveSlotGuide({
       userMail,
       guideId: body.specGuideId,
       expectedKind: 'structure',
+      workflow: 'document',
     });
     if ('error' in resolved) return badRequestResponse(resolved.error);
-    structureGuideBlock = buildStructureGuideBlock(
-      resolved.guide.name,
-      resolved.guide.body,
-    );
+    guideSpec = structureGuideToSpec(resolved.guide) ?? undefined;
   }
-  let toneGuideBlock = '';
+  let guideTone: ToneInput | undefined;
   if (typeof body.toneGuideId === 'string' && body.toneGuideId) {
     const resolved = await resolveSlotGuide({
       userMail,
       guideId: body.toneGuideId,
       expectedKind: 'tone',
+      workflow: 'document',
     });
     if ('error' in resolved) return badRequestResponse(resolved.error);
-    toneGuideBlock = buildToneGuideBlock(
-      resolved.guide.name,
-      resolved.guide.body,
-    );
+    guideTone = toneGuideToToneInput(resolved.guide) ?? undefined;
   }
 
   const { stream, writer } = createWorkflowStream();
@@ -182,13 +180,15 @@ export async function POST(req: NextRequest) {
         body.spec.sections.length <= MAX_SPEC_SECTIONS
       ) {
         extraBlocks += buildSpecBlock(body.spec);
-      } else if (structureGuideBlock) {
-        extraBlocks += structureGuideBlock;
+      } else if (guideSpec) {
+        // Guide-derived specs are capped at write time (≤ MAX_GUIDE_SECTIONS
+        // = MAX_SPEC_SECTIONS), so no re-check here.
+        extraBlocks += buildSpecBlock(guideSpec);
       }
       if (body.tone?.voiceRules) {
         extraBlocks += buildToneBlock(body.tone);
-      } else if (toneGuideBlock) {
-        extraBlocks += toneGuideBlock;
+      } else if (guideTone) {
+        extraBlocks += buildToneBlock(guideTone);
       }
       const guidance = Array.isArray(body.qualityGuidance)
         ? body.qualityGuidance
