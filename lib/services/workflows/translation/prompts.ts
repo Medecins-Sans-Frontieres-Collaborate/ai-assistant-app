@@ -125,6 +125,8 @@ ${translation}
 export function buildAssessmentSystemPrompt(
   rubricLines: string[],
   glossaryBlock: string,
+  /** Admin-guide bodies for requested `guide:` criteria (pre-budgeted). */
+  extraBlocks = '',
 ): string {
   return `You are a professional translation quality assessor using MQM-derived criteria. Rate the translation against the source on EACH requested criterion (1 = unusable, 2 = major rework needed, 3 = usable with fixes, 4 = good, 5 = publication-ready) and propose concrete fixes.
 
@@ -136,7 +138,7 @@ Rules for proposed edits:
 - Never propose overlapping edits.
 - At most 20 edits; prioritize by severity.
 - An empty edits list is the correct answer when nothing needs fixing.
-- Rate every requested criterion even when proposing no edits for it.${glossaryBlock}`;
+- Rate every requested criterion even when proposing no edits for it.${glossaryBlock}${extraBlocks}`;
 }
 
 export function buildAssessmentUserPrompt(
