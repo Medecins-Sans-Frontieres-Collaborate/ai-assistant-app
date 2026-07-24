@@ -74,7 +74,9 @@ export const GuideEditor: FC<GuideEditorProps> = ({
 
   const documentOnly = DOCUMENT_ONLY_KINDS.has(kind);
   // Mirrors the server's cross-field rule: structure/tone ⇒ document only.
-  const effectiveWorkflows = documentOnly ? (['document'] as const) : workflows;
+  const effectiveWorkflows: Array<'document' | 'translation'> = documentOnly
+    ? ['document']
+    : workflows;
 
   const changeKind = (next: GuideKind) => {
     setKind(next);
@@ -114,7 +116,7 @@ export const GuideEditor: FC<GuideEditorProps> = ({
           kind,
           languages,
           body,
-          workflows: [...effectiveWorkflows],
+          workflows: effectiveWorkflows,
         }),
       });
       if (response.status === 409) {
@@ -258,7 +260,7 @@ export const GuideEditor: FC<GuideEditorProps> = ({
             onChange={setLanguages}
             placeholder={t('guideLanguagesPlaceholder')}
             addHint={t('guideLanguagesHint')}
-            removeLabel={t('remove')}
+            removeLabel={t('removeChip')}
           />
         </div>
 
