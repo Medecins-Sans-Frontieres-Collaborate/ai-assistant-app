@@ -2,7 +2,12 @@ import {
   AgentAccessService,
   emitAccessAudit,
 } from '@/lib/services/agentAccess/AgentAccessService';
-import { GUIDE_SOURCE, GuideKind } from '@/lib/services/agentAccess/types';
+import {
+  GUIDE_SOURCE,
+  GuideKind,
+  GuidePayload,
+  guidePayload,
+} from '@/lib/services/agentAccess/types';
 
 import {
   guideCriterionId,
@@ -14,19 +19,30 @@ import { truncateToTokenBudget } from './textBudget';
 
 /**
  * Server-side resolution of admin-guide references in workflow requests.
- * Clients send only guide ids; the bodies come from the AgentAccessService
- * snapshot (≤60s stale, PRIMARY-region storage touched only on refresh) and
- * are token-budgeted here before they reach any prompt.
+ * Clients send only guide ids; the payloads come from the AgentAccessService
+ * snapshot (≤60s stale, PRIMARY-region storage touched only on refresh).
+ * Style/compliance bodies are token-budgeted here before they reach any
+ * prompt; structured payloads (tone/structure/terminology) are bounded by
+ * their write-side caps instead — truncating mid-structure would corrupt
+ * them (terminology additionally gets a char budget at render time).
  *
  * FAIL-CLOSED CONTRACT: every failure mode — unknown id, access denied,
- * rules unavailable, wrong workflow, wrong kind, feature disabled — aborts
- * with the SAME generic error. Discovery already 404s denied guides
- * identically to missing ones; distinguishing them here would reopen that
- * existence oracle at the invocation path.
+ * rules unavailable, wrong workflow, wrong kind, feature disabled, and a
+ * record whose payload is incoherent for its kind (guidePayload → null,
+ * e.g. legacy body-only structured guides) — aborts with the SAME generic
+ * error. Discovery already 404s denied guides identically to missing ones;
+ * distinguishing them here would reopen that existence oracle at the
+ * invocation path.
  */
 
-/** Per guide; 3 guides × 4k matches the 12k-token reference budget. */
-export const GUIDE_TOKEN_BUDGET = 4_000;
+/**
+ * Per style/compliance body. Sized so a maximal MAX_GUIDE_BODY_CHARS guide
+ * (~100k chars ≈ 25k tokens of typical prose) injects whole rather than
+ * being silently gutted; the truncation marker still guards token-dense
+ * content. Worst case — MAX_GUIDES_PER_ASSESSMENT maximal guides plus a
+ * 60k-char document — stays inside current workflow-model context windows.
+ */
+export const GUIDE_TOKEN_BUDGET = 26_000;
 
 export const GUIDE_UNAVAILABLE_MESSAGE = 'Guide is not available';
 
@@ -36,8 +52,8 @@ export interface ResolvedGuide {
   criterionId: string;
   name: string;
   kind: GuideKind;
-  /** Token-budgeted body, ready for prompt injection. */
-  body: string;
+  /** Kind-discriminated payload; bodies arrive already token-budgeted. */
+  payload: GuidePayload;
   truncated: boolean;
 }
 
@@ -73,7 +89,19 @@ async function resolveOne(options: {
   if (decision.decision !== 'allow') return FAILED;
   if (!guide.workflows.includes(workflow)) return FAILED;
 
-  const budgeted = await truncateToTokenBudget(guide.body, GUIDE_TOKEN_BUDGET);
+  let payload = guidePayload(guide);
+  if (payload === null) return FAILED;
+
+  let truncated = false;
+  if (payload.kind === 'style' || payload.kind === 'compliance') {
+    const budgeted = await truncateToTokenBudget(
+      payload.body,
+      GUIDE_TOKEN_BUDGET,
+    );
+    payload = { kind: payload.kind, body: budgeted.text };
+    truncated = budgeted.truncated;
+  }
+
   return {
     ok: true,
     value: {
@@ -81,8 +109,8 @@ async function resolveOne(options: {
       criterionId: guideCriterionId(guide.id),
       name: guide.name,
       kind: guide.kind,
-      body: budgeted.text,
-      truncated: budgeted.truncated,
+      payload,
+      truncated,
     },
   };
 }
@@ -127,14 +155,16 @@ export async function resolveGuideCriteria(options: {
 }
 
 /**
- * Resolves a structure/tone guide referenced by the document workflow's
- * spec/tone slot fields. Document-only by construction (the admin write
- * schema pins these kinds to the document workflow).
+ * Resolves a slot/attachment guide referenced by id: structure/tone guides
+ * fill the document workflow's spec/tone slots, terminology guides attach to
+ * translation generation as an organization glossary. Same fail-closed
+ * contract as criterion resolution.
  */
 export async function resolveSlotGuide(options: {
   userMail: string | undefined;
   guideId: string;
-  expectedKind: 'structure' | 'tone';
+  expectedKind: 'structure' | 'tone' | 'terminology';
+  workflow: 'document' | 'translation';
 }): Promise<{ guide: ResolvedGuide } | { error: string }> {
   const service = AgentAccessService.getInstance();
   if (!service.isEnabled()) return { error: GUIDE_UNAVAILABLE_MESSAGE };
@@ -144,7 +174,7 @@ export async function resolveSlotGuide(options: {
     service,
     userMail: options.userMail,
     guideId: options.guideId,
-    workflow: 'document',
+    workflow: options.workflow,
   });
   if (!resolved.ok) return { error: resolved.error };
   if (resolved.value.kind !== options.expectedKind) {
