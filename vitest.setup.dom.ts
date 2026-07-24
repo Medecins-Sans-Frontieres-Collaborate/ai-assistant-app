@@ -587,6 +587,9 @@ const mockMessages: Record<string, unknown> = {
       providerBing: 'Bing grounding (via Microsoft)',
       providerBingDescription:
         'Reads full pages for deeper summaries and covers the general web, not just news. However, searches routinely take 30–90 seconds and result quality is often inconsistent from one search to the next.',
+      providerBingResponses: 'Bing fast search (Azure OpenAI)',
+      providerBingResponsesDescription:
+        'The same Bing web coverage as Bing grounding, run as a single direct model call instead of a Foundry agent — typically much faster. New option under evaluation against Bing grounding.',
       providerCombined: 'Deep search with early headlines (Bing + Google News)',
       providerCombinedDescription:
         'Runs Bing grounding and Google News together: headlines appear within seconds while the deep Bing search keeps working, and you can choose to answer from the headlines right away instead of waiting out the slow search. When Bing finishes, both result sets are merged.',
