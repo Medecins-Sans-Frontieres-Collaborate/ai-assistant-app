@@ -397,7 +397,13 @@ export class ToolRouterEnricher extends BasePipelineStage {
     tuning: {
       resultCount: number;
       freshness: 'day' | 'week' | 'month' | 'any';
-      provider: 'news' | 'gdelt' | 'google-news' | 'bing-agent' | 'combined';
+      provider:
+        | 'news'
+        | 'gdelt'
+        | 'google-news'
+        | 'bing-agent'
+        | 'bing-responses'
+        | 'combined';
       deep: boolean;
     },
   ): Promise<ChatContext> {
@@ -426,13 +432,16 @@ export class ToolRouterEnricher extends BasePipelineStage {
         : this.getAgentModelForSearch()
       : null;
     const executorLabel =
-      tuning.provider === 'combined'
-        ? searchModel
-          ? `Bing (${searchModel.id}) + Google News`
-          : 'Google News'
-        : needsAgent
-          ? (searchModel?.id ?? 'unavailable')
-          : feedLabel!;
+      tuning.provider === 'bing-responses'
+        ? // Direct Responses-API call: no Foundry agent, no feed label.
+          `Bing web_search (${env.WEB_SEARCH_RESPONSES_MODEL})`
+        : tuning.provider === 'combined'
+          ? searchModel
+            ? `Bing (${searchModel.id}) + Google News`
+            : 'Google News'
+          : needsAgent
+            ? (searchModel?.id ?? 'unavailable')
+            : feedLabel!;
     {
       try {
         if (tuning.provider === 'bing-agent' && !searchModel) {
