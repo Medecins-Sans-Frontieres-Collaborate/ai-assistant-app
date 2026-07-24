@@ -1041,6 +1041,45 @@ describe('ToolRouter Enricher', () => {
       expect(record.server_label).toBe('Web Search (Google News)');
     });
 
+    it('bing-responses runs without an agent model and labels the record with the deployment', async () => {
+      (enricher as any).webSearchTool.execute.mockResolvedValue({
+        text: 'Grounded digest.[1]',
+        citations: [{ number: 1, title: 'A', url: 'https://a.example' }],
+      });
+      const emitMarker = vi.fn().mockResolvedValue(undefined);
+      const context = createTestChatContext({
+        searchMode: SearchMode.ALWAYS,
+        messages: [createTestMessage({ content: 'india protests' })],
+        // No agentId anywhere — the Responses path needs no Foundry agent.
+        model: { id: 'Mistral-Large-3' },
+        emitMarker,
+      });
+      (context as any).webSearchOptions = {
+        resultCount: 8,
+        freshness: 'auto',
+        provider: 'bing-responses',
+      };
+
+      const result = await enricher.execute(context);
+
+      expect((enricher as any).webSearchTool.execute).toHaveBeenCalledWith(
+        expect.objectContaining({
+          provider: 'bing-responses',
+          searchQuery: 'india protests',
+        }),
+      );
+      expect(result.processedContent?.metadata?.citations).toHaveLength(1);
+
+      const record = JSON.parse(
+        (emitMarker.mock.calls[0][0] as string)
+          .replace(/[\s\S]*<<<TOOL_CALL_RECORD>>>/, '')
+          .replace(/<<<END_TOOL_CALL_RECORD>>>[\s\S]*/, ''),
+      );
+      expect(record.server_label).toBe(
+        `Web Search (Bing web_search (${env.WEB_SEARCH_RESPONSES_MODEL}))`,
+      );
+    });
+
     it("'auto' keeps the deployment default (bing-agent path here)", async () => {
       (enricher as any).webSearchTool.execute.mockResolvedValue({
         text: 'Results.',
