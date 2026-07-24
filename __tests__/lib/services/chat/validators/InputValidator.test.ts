@@ -575,6 +575,7 @@ describe('validateChatRequest - webSearchOptions.provider', () => {
       'google-news',
       'gdelt',
       'bing-agent',
+      'bing-responses',
       'combined',
     ]) {
       const result = validator.validateChatRequest({
