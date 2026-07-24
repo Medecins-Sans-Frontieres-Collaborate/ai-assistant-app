@@ -95,7 +95,7 @@ describe('document assess — admin guide resolution', () => {
     });
   });
 
-  it('resolves a guide criterion server-side and passes it to the orchestrator', async () => {
+  it('resolves a guide criterion server-side and passes its payload to the orchestrator', async () => {
     const response = await post(assessBody());
 
     expect(response.status).toBe(200);
@@ -107,7 +107,33 @@ describe('document assess — admin guide resolution', () => {
             id: GUIDE_ID,
             criterionId: GUIDE_CRITERION,
             kind: 'style',
-            body: '# Style rules',
+            payload: { kind: 'style', body: '# Style rules' },
+          }),
+        ],
+      }),
+    );
+  });
+
+  it('resolves a terminology criterion with its entries', async () => {
+    serviceGetGuideById.mockReturnValue(
+      makeGuide({
+        kind: 'terminology',
+        body: undefined,
+        entries: [{ source: 'IDP', target: 'personne déplacée' }],
+      }),
+    );
+
+    const response = await post(assessBody());
+
+    expect(response.status).toBe(200);
+    expect(mockRunAssessment).toHaveBeenCalledWith(
+      expect.objectContaining({
+        guides: [
+          expect.objectContaining({
+            payload: {
+              kind: 'terminology',
+              entries: [{ source: 'IDP', target: 'personne déplacée' }],
+            },
           }),
         ],
       }),
@@ -143,7 +169,20 @@ describe('document assess — admin guide resolution', () => {
     [
       'slot kind used as a criterion',
       () =>
-        serviceGetGuideById.mockReturnValue(makeGuide({ kind: 'structure' })),
+        serviceGetGuideById.mockReturnValue(
+          makeGuide({
+            kind: 'structure',
+            body: undefined,
+            sections: [{ heading: 'Summary', required: true }],
+          }),
+        ),
+    ],
+    [
+      'legacy body-only structured guide (clean break)',
+      () =>
+        serviceGetGuideById.mockReturnValue(
+          makeGuide({ kind: 'tone', body: '# Old freeform tone guide' }),
+        ),
     ],
   ])('fails closed with one generic message on %s', async (_label, arrange) => {
     arrange();
@@ -174,8 +213,15 @@ describe('document assess — admin guide resolution', () => {
   });
 
   describe('spec/tone slot guides', () => {
-    it('accepts a structure guide in place of a spec for specAdherence', async () => {
-      serviceGetGuideById.mockReturnValue(makeGuide({ kind: 'structure' }));
+    it('converts a structure guide to a real spec for specAdherence', async () => {
+      serviceGetGuideById.mockReturnValue(
+        makeGuide({
+          kind: 'structure',
+          body: undefined,
+          sections: [{ heading: 'Summary', guidance: 'Brief', required: true }],
+          generalGuidance: 'Keep it short.',
+        }),
+      );
 
       const response = await post(
         assessBody({
@@ -185,9 +231,46 @@ describe('document assess — admin guide resolution', () => {
       );
 
       expect(response.status).toBe(200);
+      // The orchestrator receives a DocumentSpec-shaped `spec` — the same
+      // path a locally-attached spec takes; no separate guide option exists.
       expect(mockRunAssessment).toHaveBeenCalledWith(
         expect.objectContaining({
-          structureGuide: expect.objectContaining({ kind: 'structure' }),
+          spec: expect.objectContaining({
+            name: 'Nairobi French Style Guide',
+            sections: [
+              { heading: 'Summary', guidance: 'Brief', required: true },
+            ],
+            generalGuidance: 'Keep it short.',
+          }),
+        }),
+      );
+    });
+
+    it('converts a tone guide to a real ToneInput for toneAdherence', async () => {
+      serviceGetGuideById.mockReturnValue(
+        makeGuide({
+          kind: 'tone',
+          body: undefined,
+          voiceRules: 'Write plainly.',
+          examples: 'Before/after.',
+        }),
+      );
+
+      const response = await post(
+        assessBody({
+          criteria: ['toneAdherence'],
+          toneGuideId: GUIDE_ID,
+        }),
+      );
+
+      expect(response.status).toBe(200);
+      expect(mockRunAssessment).toHaveBeenCalledWith(
+        expect.objectContaining({
+          tone: {
+            name: 'Nairobi French Style Guide',
+            voiceRules: 'Write plainly.',
+            examples: 'Before/after.',
+          },
         }),
       );
     });
