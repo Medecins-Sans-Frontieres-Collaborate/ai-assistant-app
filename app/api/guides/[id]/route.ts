@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 
 import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessService';
-import { GUIDE_SOURCE } from '@/lib/services/agentAccess/types';
+import { GUIDE_SOURCE, guidePayload } from '@/lib/services/agentAccess/types';
 
 import {
   badRequestResponse,
@@ -50,6 +50,13 @@ export async function GET(
     // Fail closed on 'unavailable' too — same contract as the listing.
     if (decision.decision !== 'allow') return notFoundResponse('Guide');
 
+    // An incoherent record (legacy body-only structured guide) answers the
+    // same 404 as missing/denied: it cannot be invoked, so exposing it to
+    // the viewer would only advertise something assess will reject.
+    const payload = guidePayload(guide);
+    if (payload === null) return notFoundResponse('Guide');
+    const { kind: _payloadKind, ...payloadFields } = payload;
+
     return successResponse({
       guide: {
         id: guide.id,
@@ -58,7 +65,7 @@ export async function GET(
         description: guide.description,
         languages: guide.languages,
         workflows: guide.workflows,
-        body: guide.body,
+        ...payloadFields,
         updatedAt: guide.updatedAt,
       },
     });
