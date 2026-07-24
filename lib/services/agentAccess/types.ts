@@ -17,6 +17,8 @@ export const AGENT_ACCESS_CONFIG_PATH = `${AGENT_ACCESS_PREFIX}config.json`;
 export const AGENT_ACCESS_PROMPT_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}prompt-agents/`;
 export const AGENT_ACCESS_CONNECTORS_PREFIX = `${AGENT_ACCESS_PREFIX}connectors/`;
 export const AGENT_ACCESS_GUIDES_PREFIX = `${AGENT_ACCESS_PREFIX}guides/`;
+export const AGENT_ACCESS_MAP_DATASET_META_PREFIX = `${AGENT_ACCESS_PREFIX}map-datasets/meta/`;
+export const AGENT_ACCESS_MAP_DATASET_DATA_PREFIX = `${AGENT_ACCESS_PREFIX}map-datasets/data/`;
 
 /**
  * Pseudo-source for app-defined prompt agents in canonical keys
@@ -40,6 +42,14 @@ export const MCP_CONNECTOR_SOURCE = 'mcp-connector';
  * local-admin delegation, and history machinery for free.
  */
 export const GUIDE_SOURCE = 'guide';
+
+/**
+ * Pseudo-source for admin-curated map datasets in canonical keys
+ * (`map-dataset::<id>`). Same rationale as PROMPT_AGENT_SOURCE: reusing the
+ * canonical-key namespace means datasets get the existing rule matching,
+ * local-admin delegation, and history machinery for free.
+ */
+export const MAP_DATASET_SOURCE = 'map-dataset';
 
 export const AgentAccessTypeSchema = z.enum(['public', 'restricted']);
 export type AgentAccessType = z.infer<typeof AgentAccessTypeSchema>;
@@ -229,16 +239,38 @@ export const GuideWorkflowSchema = z.enum(['document', 'translation']);
 export type GuideWorkflow = z.infer<typeof GuideWorkflowSchema>;
 
 /**
- * An admin-authored workflow guide: a long-form rubric/prompt (office style
- * guide, terminology glossary, compliance checklist, document structure, tone
- * profile) that users apply in the document/translation quality review.
- * Resolved server-side by id, so the body is NOT subject to the client-sent
- * custom-criterion rubric cap — it is token-budgeted at prompt injection
- * instead. Visibility uses the same access rules as agents (keyed
- * `guide::<id>`), never an embedded allow-list.
+ * Structurally matches DocumentSpecSection (types/workflow.ts) — the shape
+ * buildSpecBlock consumes. Declared here (not imported as a schema) so this
+ * module stays self-contained; the guidePayload() return type asserts the
+ * structural match at compile time.
+ */
+export const GuideSpecSectionSchema = z.object({
+  heading: z.string().min(1),
+  guidance: z.string().optional(),
+  required: z.boolean(),
+});
+
+/** Structurally matches GlossaryEntry (types/workflow.ts). */
+export const GuideGlossaryEntrySchema = z.object({
+  source: z.string().min(1),
+  target: z.string().min(1),
+  note: z.string().optional(),
+});
+
+/**
+ * An admin-authored workflow guide: office style guide, terminology
+ * glossary, compliance checklist, document structure spec, or tone profile,
+ * applied in the document/translation workflows. Resolved server-side by id,
+ * so the payload is NOT subject to the client-sent custom-criterion rubric
+ * cap. Visibility uses the same access rules as agents (keyed `guide::<id>`),
+ * never an embedded allow-list.
  *
- * Read-side permissive per the schema-evolution rule: new fields must be
- * optional/defaulted so previously-stored blobs keep parsing.
+ * The payload is kind-discriminated but stored FLAT with every field
+ * optional: read-side permissive per the schema-evolution rule (previously-
+ * stored blobs keep parsing), with {@link guidePayload} as the narrowing
+ * gate — an incoherent record (e.g. a legacy body-only tone guide) narrows
+ * to null and callers fail closed. The admin write route enforces the strict
+ * per-kind shape.
  */
 export const GuideSchema = z.object({
   version: z.literal(1),
@@ -249,8 +281,16 @@ export const GuideSchema = z.object({
   description: z.string().default(''),
   /** Advisory picker metadata (e.g. ['French']); never evaluated. */
   languages: z.array(z.string()).default([]),
-  /** Markdown; token-budgeted at injection, not capped by rubric limits. */
-  body: z.string().min(1),
+  /** style/compliance: markdown rubric, token-budgeted at injection. */
+  body: z.string().optional(),
+  /** tone: voice rules + optional examples (ToneInput shape). */
+  voiceRules: z.string().optional(),
+  examples: z.string().optional(),
+  /** structure: document spec sections + optional general guidance. */
+  sections: z.array(GuideSpecSectionSchema).optional(),
+  generalGuidance: z.string().optional(),
+  /** terminology: mandatory glossary entries. */
+  entries: z.array(GuideGlossaryEntrySchema).optional(),
   /** structure/tone kinds are document-only (translation has no spec/tone slots). */
   workflows: z.array(GuideWorkflowSchema).default(['document']),
   createdBy: z.string(),
@@ -259,6 +299,56 @@ export const GuideSchema = z.object({
   updatedAt: z.string(),
 });
 export type Guide = z.infer<typeof GuideSchema>;
+
+export type GuideSpecSection = z.infer<typeof GuideSpecSectionSchema>;
+export type GuideGlossaryEntry = z.infer<typeof GuideGlossaryEntrySchema>;
+
+/**
+ * The kind-discriminated view of a guide's payload. Prompt builders consume
+ * this, never the flat record, so a wrong-kind field can't leak into a
+ * prompt.
+ */
+export type GuidePayload =
+  | { kind: 'style' | 'compliance'; body: string }
+  | { kind: 'tone'; voiceRules: string; examples?: string }
+  | {
+      kind: 'structure';
+      sections: GuideSpecSection[];
+      generalGuidance?: string;
+    }
+  | { kind: 'terminology'; entries: GuideGlossaryEntry[] };
+
+/**
+ * Narrows a stored guide to its kind's payload. Returns null when the record
+ * lacks its kind's required fields — legacy body-only structured-kind guides
+ * (pre-structured-payload dev data) land here, and every caller fails closed
+ * on null exactly as it would for an unknown guide.
+ */
+export function guidePayload(guide: Guide): GuidePayload | null {
+  switch (guide.kind) {
+    case 'style':
+    case 'compliance':
+      if (!guide.body) return null;
+      return { kind: guide.kind, body: guide.body };
+    case 'tone':
+      if (!guide.voiceRules) return null;
+      return {
+        kind: 'tone',
+        voiceRules: guide.voiceRules,
+        examples: guide.examples,
+      };
+    case 'structure':
+      if (!guide.sections || guide.sections.length === 0) return null;
+      return {
+        kind: 'structure',
+        sections: guide.sections,
+        generalGuidance: guide.generalGuidance,
+      };
+    case 'terminology':
+      if (!guide.entries || guide.entries.length === 0) return null;
+      return { kind: 'terminology', entries: guide.entries };
+  }
+}
 
 /**
  * Immutable audit copy written alongside every successful guide write
@@ -274,6 +364,146 @@ export const GuideHistoryEntrySchema = z.object({
   updatedAt: z.string(),
 });
 export type GuideHistoryEntry = z.infer<typeof GuideHistoryEntrySchema>;
+
+/* ------------------------------------------------------------------ */
+/* Map datasets                                                        */
+/* ------------------------------------------------------------------ */
+
+export const MapDatasetEventRangeSchema = z.object({
+  start: z.string().min(1),
+  end: z.string().min(1).nullable(),
+  precision: z.enum(['minute', 'hour', 'day', 'month', 'year']),
+  ongoing: z.boolean().optional(),
+});
+
+/** Structurally matches MapFeature (types/workflow.ts) minus nothing — the
+ * dataset stores workspace-shaped features verbatim, ids stable within the
+ * dataset (loads remap them). */
+export const MapDatasetFeatureSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(1),
+  description: z.string().default(''),
+  lat: z.number(),
+  lon: z.number(),
+  confidence: z.enum(['high', 'medium', 'low']),
+  confidenceReason: z.string().default(''),
+  category: z.string().default(''),
+  event: MapDatasetEventRangeSchema.optional(),
+  prominence: z.enum(['primary', 'secondary', 'mention']).optional(),
+  granularity: z
+    .enum(['site', 'city', 'district', 'region', 'country'])
+    .optional(),
+  countryCode: z.string().optional(),
+  parentName: z.string().optional(),
+  approxRadiusKm: z.number().optional(),
+  sourceId: z.string().optional(),
+});
+
+export const MapDatasetConnectionSchema = z.object({
+  id: z.string().min(1),
+  fromId: z.string().min(1),
+  toId: z.string().min(1),
+  kind: z.string().default(''),
+  description: z.string().default(''),
+  sourceId: z.string().optional(),
+});
+
+/** Generation provenance (which runs produced the features). */
+export const MapDatasetSourceRecordSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(1),
+  addedAt: z.string(),
+  featureCount: z.number().int().nonnegative(),
+  kind: z.enum(['text', 'file', 'search', 'url']).optional(),
+  query: z.string().optional(),
+  url: z.string().optional(),
+});
+
+/**
+ * An admin-curated map dataset — the DATA blob. Unlike every other
+ * agent-access entity this can reach ~1MB (2,000 features), so datasets
+ * deliberately NEVER enter the AgentAccessService snapshot: listings read
+ * the derived META blobs and loads read this blob directly. Access rides
+ * the ordinary rules (keyed `map-dataset::<id>`), which the snapshot
+ * already carries entity-agnostically.
+ *
+ * Read-side permissive per the schema-evolution rule.
+ */
+export const MapDatasetSchema = z.object({
+  version: z.literal(1),
+  /** Server-generated `mapds-<hex>`; immutable — canonical keys hang off it. */
+  id: z.string().min(1),
+  name: z.string().min(1),
+  description: z.string().default(''),
+  tags: z.array(z.string()).default([]),
+  features: z.array(MapDatasetFeatureSchema).default([]),
+  connections: z.array(MapDatasetConnectionSchema).default([]),
+  sources: z.array(MapDatasetSourceRecordSchema).default([]),
+  createdBy: z.string(),
+  createdAt: z.string(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type MapDataset = z.infer<typeof MapDatasetSchema>;
+export type MapDatasetFeature = z.infer<typeof MapDatasetFeatureSchema>;
+export type MapDatasetConnection = z.infer<typeof MapDatasetConnectionSchema>;
+export type MapDatasetSourceRecord = z.infer<
+  typeof MapDatasetSourceRecordSchema
+>;
+
+/**
+ * Derived listing record (META blob) — rewritten after every successful data
+ * write. May lag the data blob briefly if a meta write fails (logged loudly;
+ * self-heals on the next save): listings can be stale, loads are truth.
+ */
+export const MapDatasetMetaSchema = z.object({
+  version: z.literal(1),
+  id: z.string().min(1),
+  name: z.string().min(1),
+  description: z.string().default(''),
+  tags: z.array(z.string()).default([]),
+  featureCount: z.number().int().nonnegative(),
+  connectionCount: z.number().int().nonnegative(),
+  createdBy: z.string(),
+  createdAt: z.string(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type MapDatasetMeta = z.infer<typeof MapDatasetMetaSchema>;
+
+/** Derives the META record from a dataset. */
+export function mapDatasetMeta(dataset: MapDataset): MapDatasetMeta {
+  return {
+    version: 1,
+    id: dataset.id,
+    name: dataset.name,
+    description: dataset.description,
+    tags: dataset.tags,
+    featureCount: dataset.features.length,
+    connectionCount: dataset.connections.length,
+    createdBy: dataset.createdBy,
+    createdAt: dataset.createdAt,
+    updatedBy: dataset.updatedBy,
+    updatedAt: dataset.updatedAt,
+  };
+}
+
+/**
+ * Immutable audit copy per dataset write. Carries the META only — a
+ * deliberate deviation from the other entities: a ~1MB verbatim payload per
+ * save would turn the audit trail into a second store.
+ */
+export const MapDatasetHistoryEntrySchema = z.object({
+  version: z.literal(1),
+  canonicalKey: z.string().min(1),
+  action: z.enum(['upsert', 'delete']),
+  meta: MapDatasetMetaSchema.nullable(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type MapDatasetHistoryEntry = z.infer<
+  typeof MapDatasetHistoryEntrySchema
+>;
 
 /**
  * ARM resource paths are case-insensitive to Azure but compared as raw
@@ -322,4 +552,18 @@ export function connectorBlobPath(id: string): string {
  */
 export function guideBlobPath(id: string): string {
   return `${AGENT_ACCESS_GUIDES_PREFIX}${id}.json`;
+}
+
+/**
+ * `system/agent-access/map-datasets/meta/<id>.json` and
+ * `.../map-datasets/data/<id>.json` — SIBLINGS of rules/ for the same
+ * reason as the other entities (listAllRules is fail-closed). Split because
+ * the data blob can be ~1MB: listings read meta only; loads read data.
+ */
+export function mapDatasetMetaBlobPath(id: string): string {
+  return `${AGENT_ACCESS_MAP_DATASET_META_PREFIX}${id}.json`;
+}
+
+export function mapDatasetDataBlobPath(id: string): string {
+  return `${AGENT_ACCESS_MAP_DATASET_DATA_PREFIX}${id}.json`;
 }
