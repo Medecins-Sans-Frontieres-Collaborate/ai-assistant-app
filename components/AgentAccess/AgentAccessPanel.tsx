@@ -572,6 +572,208 @@ export const AgentAccessPanel: FC = () => {
 
         {activeTab === 'localAdmins' && isGlobalAdmin ? (
           <LocalAdminsSection rows={rows} />
+        ) : activeTab === 'guides' ? (
+          guidesQuery.isLoading ? (
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              {t('loading')}
+            </p>
+          ) : guidesQuery.error ||
+            guidesQuery.data?.guidesUnavailable === true ? (
+            <div className="text-sm text-red-600 dark:text-red-400">
+              {/* An outage returns an empty list; rendering it as "no guides
+                  exist" would invite an admin to recreate one. */}
+              <p>
+                {guidesQuery.data?.guidesUnavailable
+                  ? t('guidesUnavailableWarning')
+                  : t('loadError')}
+              </p>
+              <button
+                type="button"
+                className="mt-2 rounded-md border border-gray-300 dark:border-gray-600 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                onClick={() => void guidesQuery.refetch()}
+              >
+                {t('retry')}
+              </button>
+            </div>
+          ) : (
+            <>
+              <button
+                type="button"
+                aria-expanded={isCreatingGuide}
+                className="mb-4 flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-gray-700 px-3 py-1.5 text-sm font-medium text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                onClick={() => setIsCreatingGuide((creating) => !creating)}
+              >
+                <IconPlus size={16} />
+                {t('addGuide')}
+              </button>
+
+              {isCreatingGuide && (
+                <div className="mb-4">
+                  <GuideEditor
+                    existing={null}
+                    onSaved={handleGuideSaved}
+                    onCancel={() => setIsCreatingGuide(false)}
+                    onConflictReload={handleGuideConflictReload}
+                  />
+                </div>
+              )}
+
+              {guideRows.length === 0 ? (
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  {t('noGuides')}
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                  {guideRows.map(({ row, entry }) => {
+                    const isRestricted =
+                      row.stored?.rule.access.type === 'restricted';
+                    return (
+                      <li
+                        key={row.canonicalKey}
+                        className="rounded-lg border border-gray-200 dark:border-gray-700 p-3"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="min-w-0 flex-1">
+                            <span className="truncate text-sm font-medium text-black dark:text-white">
+                              {row.displayName}
+                            </span>
+                            {entry.guide.description && (
+                              <p className="truncate text-xs text-gray-500 dark:text-gray-400">
+                                {entry.guide.description}
+                              </p>
+                            )}
+                          </div>
+                          <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                            {t(`guideKind_${entry.guide.kind}`)}
+                          </span>
+                          <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                            {entry.guide.workflows
+                              .map((w) =>
+                                w === 'document'
+                                  ? t('guideWorkflowDocument')
+                                  : t('guideWorkflowTranslation'),
+                              )
+                              .join(' · ')}
+                          </span>
+                          <span
+                            className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
+                              isRestricted
+                                ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                                : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                            }`}
+                          >
+                            {isRestricted
+                              ? t('accessRestricted')
+                              : t('accessEveryone')}
+                          </span>
+                          <button
+                            type="button"
+                            className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                            onClick={() =>
+                              setEditingGuideRuleKey(
+                                editingGuideRuleKey === row.canonicalKey
+                                  ? null
+                                  : row.canonicalKey,
+                              )
+                            }
+                          >
+                            {editingGuideRuleKey === row.canonicalKey
+                              ? t('cancel')
+                              : t('editAccess')}
+                          </button>
+                          <button
+                            type="button"
+                            className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                            onClick={() =>
+                              setEditingGuideId(
+                                editingGuideId === entry.guide.id
+                                  ? null
+                                  : entry.guide.id,
+                              )
+                            }
+                          >
+                            {editingGuideId === entry.guide.id
+                              ? t('cancel')
+                              : t('edit')}
+                          </button>
+                          <button
+                            type="button"
+                            className="shrink-0 rounded-md border border-red-200 dark:border-red-900 px-3 py-1 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                            onClick={() =>
+                              setConfirmDeleteGuideId(
+                                confirmDeleteGuideId === entry.guide.id
+                                  ? null
+                                  : entry.guide.id,
+                              )
+                            }
+                          >
+                            {t('deleteGuide')}
+                          </button>
+                        </div>
+
+                        <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+                          {t('updatedByLine', {
+                            user: entry.guide.updatedBy,
+                            date: entry.guide.updatedAt,
+                          })}
+                        </p>
+
+                        {editingGuideRuleKey === row.canonicalKey && (
+                          <RuleEditor
+                            key={`${row.canonicalKey}:${row.stored?.etag ?? 'none'}`}
+                            row={row}
+                            onSaved={async () => {
+                              setEditingGuideRuleKey(null);
+                              await invalidateGuideData();
+                            }}
+                            onCancel={() => setEditingGuideRuleKey(null)}
+                            onConflictReload={async () => {
+                              setEditingGuideRuleKey(null);
+                              await refetchRules();
+                            }}
+                          />
+                        )}
+
+                        {editingGuideId === entry.guide.id && (
+                          <GuideEditor
+                            key={`${entry.guide.id}:${entry.etag}`}
+                            existing={entry}
+                            onSaved={handleGuideSaved}
+                            onCancel={() => setEditingGuideId(null)}
+                            onConflictReload={handleGuideConflictReload}
+                          />
+                        )}
+
+                        {confirmDeleteGuideId === entry.guide.id && (
+                          <div className="mt-2 rounded-md border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/20 p-3 text-sm text-red-800 dark:text-red-300">
+                            <p>{t('deleteGuideConfirm')}</p>
+                            <div className="mt-2 flex gap-2">
+                              <button
+                                type="button"
+                                className="rounded-md bg-red-600 px-3 py-1 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
+                                onClick={() => handleDeleteGuide(entry)}
+                                disabled={isDeletingGuide}
+                              >
+                                {t('confirmDeleteGuide')}
+                              </button>
+                              <button
+                                type="button"
+                                className="rounded-md px-3 py-1 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+                                onClick={() => setConfirmDeleteGuideId(null)}
+                                disabled={isDeletingGuide}
+                              >
+                                {t('cancel')}
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </>
+          )
         ) : activeTab === 'connectors' ? (
           connectorsQuery.isLoading ? (
             <p className="text-sm text-gray-500 dark:text-gray-400">
