@@ -21,26 +21,42 @@ interface GuidePickerProps {
   disabled?: boolean;
 }
 
-interface GuideBodyResponse {
-  success: boolean;
-  data?: { guide: { body: string } };
+/** Kind-discriminated payload fields served by GET /api/guides/[id]. */
+interface GuideDetail {
+  kind: 'style' | 'terminology' | 'compliance' | 'structure' | 'tone';
+  body?: string;
+  voiceRules?: string;
+  examples?: string;
+  sections?: Array<{ heading: string; guidance?: string; required: boolean }>;
+  generalGuidance?: string;
+  entries?: Array<{ source: string; target: string; note?: string }>;
 }
 
+interface GuideDetailResponse {
+  success: boolean;
+  data?: { guide: GuideDetail };
+}
+
+const proseClass =
+  'max-h-48 overflow-y-auto whitespace-pre-wrap rounded-md bg-gray-50 px-2 py-1.5 font-sans text-xs text-gray-700 dark:bg-surface-dark dark:text-gray-300';
+
 /**
- * Read-only body viewer, fetched lazily on first expand. Users may always
- * read the criteria they are being reviewed against — the body just never
- * travels with the assess request (the server resolves it by id).
+ * Read-only payload viewer, fetched lazily on first expand and rendered per
+ * kind. Users may always read the criteria they are being reviewed against —
+ * the payload just never travels with the assess request (the server
+ * resolves it by id).
  */
 function GuideBody({ guideId }: { guideId: string }) {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['guide-body', guideId],
-    queryFn: async (): Promise<string> => {
+    queryFn: async (): Promise<GuideDetail> => {
       const response = await fetch(`/api/guides/${guideId}`);
       if (!response.ok) {
         throw new Error(`Failed to load guide: ${response.status}`);
       }
-      const json: GuideBodyResponse = await response.json();
-      return json.data?.guide.body ?? '';
+      const json: GuideDetailResponse = await response.json();
+      if (!json.data?.guide) throw new Error('Malformed guide response');
+      return json.data.guide;
     },
     staleTime: 60_000,
     retry: 1,
@@ -53,18 +69,87 @@ function GuideBody({ guideId }: { guideId: string }) {
       <p className="px-2 py-1 text-xs text-gray-500 dark:text-gray-400">…</p>
     );
   }
-  if (isError) {
+  if (isError || !data) {
     return (
       <p className="px-2 py-1 text-xs text-red-700 dark:text-red-400">
         {t('guideBodyFailed')}
       </p>
     );
   }
-  return (
-    <pre className="max-h-48 overflow-y-auto whitespace-pre-wrap rounded-md bg-gray-50 px-2 py-1.5 font-sans text-xs text-gray-700 dark:bg-surface-dark dark:text-gray-300">
-      {data}
-    </pre>
-  );
+
+  if (data.kind === 'tone') {
+    return (
+      <div className={proseClass}>
+        {data.voiceRules}
+        {data.examples ? (
+          <>
+            {'\n\n'}
+            <span className="font-medium">{t('guideExamples')}</span>
+            {'\n'}
+            {data.examples}
+          </>
+        ) : null}
+      </div>
+    );
+  }
+  if (data.kind === 'structure') {
+    return (
+      <div className={proseClass}>
+        <ol className="list-decimal space-y-0.5 ps-4">
+          {(data.sections ?? []).map((section, index) => (
+            <li key={index}>
+              {section.heading}
+              <span className="text-gray-500 dark:text-gray-400">
+                {' '}
+                (
+                {section.required
+                  ? t('guideSectionRequired')
+                  : t('guideSectionOptional')}
+                )
+              </span>
+              {section.guidance ? ` — ${section.guidance}` : ''}
+            </li>
+          ))}
+        </ol>
+        {data.generalGuidance ? `\n${data.generalGuidance}` : null}
+      </div>
+    );
+  }
+  if (data.kind === 'terminology') {
+    return (
+      <div className="max-h-48 overflow-y-auto rounded-md bg-gray-50 px-2 py-1.5 dark:bg-surface-dark">
+        <table className="w-full text-xs text-gray-700 dark:text-gray-300">
+          <thead>
+            <tr className="text-start text-gray-500 dark:text-gray-400">
+              <th className="pb-1 pe-2 text-start font-medium">
+                {t('guideSourceTerm')}
+              </th>
+              <th className="pb-1 pe-2 text-start font-medium">
+                {t('guideTargetTerm')}
+              </th>
+              <th className="pb-1 text-start font-medium">{t('guideNote')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {(data.entries ?? []).map((entry, index) => (
+              <tr
+                key={`${entry.source}-${index}`}
+                className="border-t border-gray-100 dark:border-gray-800"
+              >
+                <td className="py-1 pe-2">{entry.source}</td>
+                <td className="py-1 pe-2">{entry.target}</td>
+                <td className="py-1 text-gray-500 dark:text-gray-400">
+                  {entry.note}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+  // style / compliance: markdown body.
+  return <pre className={proseClass}>{data.body}</pre>;
 }
 
 /**
