@@ -99,6 +99,11 @@ export async function resolveGuideCriteria(options: {
   /** Only the `guide:` ids, already extracted by the route. */
   criterionIds: string[];
 }): Promise<{ guides: ResolvedGuide[] } | { error: string }> {
+  // Nothing requested → nothing to resolve. MUST precede the feature check:
+  // assessments that use no guides run fine on deployments where the
+  // agent-access subsystem is disabled.
+  if (options.criterionIds.length === 0) return { guides: [] };
+
   const service = AgentAccessService.getInstance();
   // Feature off → guides cannot exist, so any reference to one fails.
   if (!service.isEnabled()) return { error: GUIDE_UNAVAILABLE_MESSAGE };
