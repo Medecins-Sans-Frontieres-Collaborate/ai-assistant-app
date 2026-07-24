@@ -2,6 +2,8 @@ import type {
   AgentAccessConfig,
   AgentAccessRule,
   Guide,
+  MapDataset,
+  MapDatasetMeta,
   PromptAgent,
 } from '@/lib/services/agentAccess/types';
 
@@ -153,6 +155,33 @@ export interface AdminGuidesResponse {
   /** Same outage contract as rulesUnavailable — empty ≠ "none exist". */
   guidesUnavailable?: boolean;
   fetchedAt?: number | null;
+}
+
+/**
+ * Client mirror of MAP_DATASET_SOURCE (value import forbidden here — see
+ * the module comment above). The pseudo-source half of every dataset's
+ * canonical key.
+ */
+export const CLIENT_MAP_DATASET_SOURCE = 'map-dataset';
+
+/** One dataset META row as served by GET /api/agent-access/map-datasets. */
+export interface AdminStoredDatasetMeta {
+  canonicalKey: string;
+  meta: MapDatasetMeta;
+}
+
+export interface AdminMapDatasetsResponse {
+  datasets: AdminStoredDatasetMeta[];
+  /** Same outage contract as rulesUnavailable — empty ≠ "none exist". */
+  datasetsUnavailable?: boolean;
+  fetchedAt?: number | null;
+}
+
+/** GET/PUT /api/agent-access/map-datasets/[id] payload (data-blob etag). */
+export interface AdminMapDatasetResponse {
+  dataset: MapDataset;
+  etag: string;
+  canonicalKey: string;
 }
 
 /**
