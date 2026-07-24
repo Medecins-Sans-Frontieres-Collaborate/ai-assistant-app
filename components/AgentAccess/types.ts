@@ -1,6 +1,7 @@
 import type {
   AgentAccessConfig,
   AgentAccessRule,
+  Guide,
   PromptAgent,
 } from '@/lib/services/agentAccess/types';
 
@@ -127,6 +128,30 @@ export interface AdminConnectorsResponse {
    * rather than offering a choice the server will reject with 503.
    */
   secretSealingAvailable?: boolean;
+  fetchedAt?: number | null;
+}
+
+/**
+ * Client mirror of GUIDE_SOURCE (value import forbidden here — see the
+ * module comment above). The pseudo-source half of every guide's canonical
+ * key.
+ */
+export const CLIENT_GUIDE_SOURCE = 'guide';
+
+/**
+ * A guide as served by GET /api/agent-access/guides (full record including
+ * body; the etag feeds the If-Match CAS on PUT/DELETE).
+ */
+export interface AdminStoredGuide {
+  canonicalKey: string;
+  guide: Guide;
+  etag: string;
+}
+
+export interface AdminGuidesResponse {
+  guides: AdminStoredGuide[];
+  /** Same outage contract as rulesUnavailable — empty ≠ "none exist". */
+  guidesUnavailable?: boolean;
   fetchedAt?: number | null;
 }
 
