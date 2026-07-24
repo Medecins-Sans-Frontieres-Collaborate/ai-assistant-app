@@ -5,6 +5,10 @@ import {
   runDocumentProfile,
 } from '@/lib/services/workflows/document/documentOrchestrator';
 import {
+  structureGuideToSpec,
+  toneGuideToToneInput,
+} from '@/lib/services/workflows/shared/guidePrompts';
+import {
   resolveGuideCriteria,
   resolveSlotGuide,
 } from '@/lib/services/workflows/shared/guideResolution';
@@ -196,25 +200,29 @@ export async function POST(req: NextRequest) {
   if ('error' in guideResolution) {
     return badRequestResponse(guideResolution.error);
   }
-  let structureGuide;
+  // Slot guides convert to the REAL DocumentSpec/ToneInput shapes here, so
+  // the orchestrator has exactly one spec path and one tone path.
+  let spec = body.spec;
   if (typeof body.specGuideId === 'string' && body.specGuideId) {
     const resolved = await resolveSlotGuide({
       userMail,
       guideId: body.specGuideId,
       expectedKind: 'structure',
+      workflow: 'document',
     });
     if ('error' in resolved) return badRequestResponse(resolved.error);
-    structureGuide = resolved.guide;
+    spec = structureGuideToSpec(resolved.guide) ?? undefined;
   }
-  let toneGuide;
+  let tone = body.tone;
   if (typeof body.toneGuideId === 'string' && body.toneGuideId) {
     const resolved = await resolveSlotGuide({
       userMail,
       guideId: body.toneGuideId,
       expectedKind: 'tone',
+      workflow: 'document',
     });
     if ('error' in resolved) return badRequestResponse(resolved.error);
-    toneGuide = resolved.guide;
+    tone = toneGuideToToneInput(resolved.guide) ?? undefined;
   }
 
   const modelId = resolveWorkflowModelId(body.modelId);
@@ -246,10 +254,8 @@ export async function POST(req: NextRequest) {
       criterionIds,
       customById,
       guides: guideResolution.guides,
-      spec: body.spec,
-      tone: body.tone,
-      structureGuide,
-      toneGuide,
+      spec,
+      tone,
       language: profile.language,
       conventionNotes: profile.conventionNotes,
       modelId,
