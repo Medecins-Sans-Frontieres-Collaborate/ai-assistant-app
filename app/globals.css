@@ -105,6 +105,40 @@
   display: none; /* Chrome, Safari and Opera */
 }
 
+/* Firefox ignores ::-webkit-scrollbar, so on OSes with classic (non-overlay)
+   scrollbars it falls back to the full-width native ones. Match the thin
+   webkit styling above via the standard properties, scoped to Firefox so
+   Chromium keeps its ::-webkit-scrollbar styling. */
+@supports (-moz-appearance: none) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+}
+
+/* Scrollbar that stays invisible until the container is hovered or holds
+   focus. The gutter is still reserved (classic scrollbars on Windows always
+   occupy space), only the thumb is hidden — so no layout shift on hover.
+   Setting scrollbar-color disables ::-webkit-scrollbar styling in Chromium;
+   the webkit rules below only serve Safari, which lacks scrollbar-color. */
+.hover-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+.hover-scrollbar:hover,
+.hover-scrollbar:focus-within,
+.hover-scrollbar:active {
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+.hover-scrollbar::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+.hover-scrollbar:hover::-webkit-scrollbar-thumb,
+.hover-scrollbar:focus-within::-webkit-scrollbar-thumb,
+.hover-scrollbar:active::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+}
+
 html,
 body {
   background: #171717;
