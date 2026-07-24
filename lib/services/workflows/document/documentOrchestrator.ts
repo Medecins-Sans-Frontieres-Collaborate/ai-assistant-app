@@ -7,6 +7,13 @@ import {
 } from '@/types/workflow';
 
 import { buildAssessmentSchema } from '../shared/assessmentSchema';
+import {
+  GuidePromptInput,
+  buildGuideCriterionBlocks,
+  buildStructureGuideBlock,
+  buildToneGuideBlock,
+  guideRubricLine,
+} from '../shared/guidePrompts';
 import { callStructured, createAzureClient } from '../shared/workflowLlm';
 import {
   ToneInput,
@@ -61,12 +68,18 @@ export interface DocumentAssessmentOptions {
   docMarkdown: string;
   /** Scope the assessment to this excerpt (verbatim substring). */
   selection?: string;
-  /** Built-in ids and/or 'custom:<uuid>' ids. */
+  /** Built-in ids, 'custom:<uuid>' ids, and/or 'guide:<id>' ids. */
   criterionIds: string[];
   /** Definitions for the custom ids (validated by the route). */
   customById: Map<string, { name: string; rubric: string }>;
+  /** Resolved criterion-kind guides for the 'guide:' ids (route-resolved). */
+  guides?: GuidePromptInput[];
   spec?: DocumentSpec;
   tone?: ToneInput;
+  /** Admin structure guide filling the spec slot (exclusive with spec). */
+  structureGuide?: GuidePromptInput;
+  /** Admin tone guide filling the tone slot (exclusive with tone). */
+  toneGuide?: GuidePromptInput;
   /** Profile-detected language/conventions, fed back as context. */
   language?: string;
   conventionNotes?: string;
@@ -90,20 +103,40 @@ const MAX_ASSESSMENT_EDITS = 20;
 export async function runDocumentAssessment(
   options: DocumentAssessmentOptions,
 ): Promise<DocumentAssessmentResult> {
+  const guidesByCriterionId = new Map(
+    (options.guides ?? []).map((g) => [g.criterionId, g]),
+  );
   const rubricLines = options.criterionIds.map((id) => {
     const builtin = DOCUMENT_QUALITY_CRITERIA.find((c) => c.id === id);
     if (builtin) return builtin.promptDescription;
+    const guide = guidesByCriterionId.get(id);
+    if (guide) return guideRubricLine(guide);
     const custom = options.customById.get(id);
     return `${custom?.name ?? id}: ${custom?.rubric ?? ''}`;
   });
+
+  const specBlock = options.spec
+    ? buildSpecBlock(options.spec)
+    : options.structureGuide
+      ? buildStructureGuideBlock(
+          options.structureGuide.name,
+          options.structureGuide.body,
+        )
+      : undefined;
+  const toneBlock = options.tone
+    ? buildToneBlock(options.tone)
+    : options.toneGuide
+      ? buildToneGuideBlock(options.toneGuide.name, options.toneGuide.body)
+      : undefined;
 
   const client = createAzureClient();
   const result = await callStructured<LlmDocAssessment>({
     client,
     model: options.modelId,
     system: buildDocAssessmentSystemPrompt(rubricLines, {
-      specBlock: options.spec ? buildSpecBlock(options.spec) : undefined,
-      toneBlock: options.tone ? buildToneBlock(options.tone) : undefined,
+      specBlock,
+      toneBlock,
+      guideBlocks: buildGuideCriterionBlocks(options.guides ?? []),
       language: options.language,
       conventionNotes: options.conventionNotes,
       hasSelection: !!options.selection,
