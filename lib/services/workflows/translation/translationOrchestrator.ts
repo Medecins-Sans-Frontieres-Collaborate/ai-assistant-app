@@ -247,7 +247,7 @@ export async function runTranslationAssessment(
     system: buildAssessmentSystemPrompt(
       rubric,
       glossaryBlock,
-      buildGuideCriterionBlocks(options.guides ?? []),
+      buildGuideCriterionBlocks(options.guides ?? [], options.sourceText),
     ),
     user: buildAssessmentUserPrompt(
       options.sourceText,
