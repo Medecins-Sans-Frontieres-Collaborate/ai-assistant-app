@@ -16,6 +16,7 @@ export const AGENT_ACCESS_HISTORY_PREFIX = `${AGENT_ACCESS_PREFIX}history/`;
 export const AGENT_ACCESS_CONFIG_PATH = `${AGENT_ACCESS_PREFIX}config.json`;
 export const AGENT_ACCESS_PROMPT_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}prompt-agents/`;
 export const AGENT_ACCESS_CONNECTORS_PREFIX = `${AGENT_ACCESS_PREFIX}connectors/`;
+export const AGENT_ACCESS_GUIDES_PREFIX = `${AGENT_ACCESS_PREFIX}guides/`;
 
 /**
  * Pseudo-source for app-defined prompt agents in canonical keys
@@ -31,6 +32,14 @@ export const PROMPT_AGENT_SOURCE = 'prompt-agent';
  * local-admin delegation, and history machinery for free.
  */
 export const MCP_CONNECTOR_SOURCE = 'mcp-connector';
+
+/**
+ * Pseudo-source for admin-authored workflow guides in canonical keys
+ * (`guide::<id>`). Same rationale as PROMPT_AGENT_SOURCE: reusing the
+ * canonical-key namespace means guides get the existing rule matching,
+ * local-admin delegation, and history machinery for free.
+ */
+export const GUIDE_SOURCE = 'guide';
 
 export const AgentAccessTypeSchema = z.enum(['public', 'restricted']);
 export type AgentAccessType = z.infer<typeof AgentAccessTypeSchema>;
@@ -207,6 +216,65 @@ export type McpConnectorHistoryEntry = z.infer<
   typeof McpConnectorHistoryEntrySchema
 >;
 
+export const GuideKindSchema = z.enum([
+  'style',
+  'terminology',
+  'compliance',
+  'structure',
+  'tone',
+]);
+export type GuideKind = z.infer<typeof GuideKindSchema>;
+
+export const GuideWorkflowSchema = z.enum(['document', 'translation']);
+export type GuideWorkflow = z.infer<typeof GuideWorkflowSchema>;
+
+/**
+ * An admin-authored workflow guide: a long-form rubric/prompt (office style
+ * guide, terminology glossary, compliance checklist, document structure, tone
+ * profile) that users apply in the document/translation quality review.
+ * Resolved server-side by id, so the body is NOT subject to the client-sent
+ * custom-criterion rubric cap — it is token-budgeted at prompt injection
+ * instead. Visibility uses the same access rules as agents (keyed
+ * `guide::<id>`), never an embedded allow-list.
+ *
+ * Read-side permissive per the schema-evolution rule: new fields must be
+ * optional/defaulted so previously-stored blobs keep parsing.
+ */
+export const GuideSchema = z.object({
+  version: z.literal(1),
+  /** Server-generated `guide-<hex>`; immutable — canonical keys hang off it. */
+  id: z.string().min(1),
+  kind: GuideKindSchema,
+  name: z.string().min(1),
+  description: z.string().default(''),
+  /** Advisory picker metadata (e.g. ['French']); never evaluated. */
+  languages: z.array(z.string()).default([]),
+  /** Markdown; token-budgeted at injection, not capped by rubric limits. */
+  body: z.string().min(1),
+  /** structure/tone kinds are document-only (translation has no spec/tone slots). */
+  workflows: z.array(GuideWorkflowSchema).default(['document']),
+  createdBy: z.string(),
+  createdAt: z.string(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type Guide = z.infer<typeof GuideSchema>;
+
+/**
+ * Immutable audit copy written alongside every successful guide write
+ * (including deletes, which record a null-guide tombstone).
+ */
+export const GuideHistoryEntrySchema = z.object({
+  version: z.literal(1),
+  canonicalKey: z.string().min(1),
+  action: z.enum(['upsert', 'delete']),
+  /** The full record as written, or null for a delete tombstone. */
+  guide: GuideSchema.nullable(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type GuideHistoryEntry = z.infer<typeof GuideHistoryEntrySchema>;
+
 /**
  * ARM resource paths are case-insensitive to Azure but compared as raw
  * strings elsewhere in the app — rule matching MUST canonicalize both halves
@@ -245,4 +313,13 @@ export function promptAgentBlobPath(id: string): string {
  */
 export function connectorBlobPath(id: string): string {
   return `${AGENT_ACCESS_CONNECTORS_PREFIX}${id}.json`;
+}
+
+/**
+ * `system/agent-access/guides/<id>.json` — a SIBLING of rules/ for the same
+ * reason as prompt-agents/ and connectors/: listAllRules is fail-closed, so
+ * an alien blob under rules/ would brick every Foundry invocation.
+ */
+export function guideBlobPath(id: string): string {
+  return `${AGENT_ACCESS_GUIDES_PREFIX}${id}.json`;
 }
