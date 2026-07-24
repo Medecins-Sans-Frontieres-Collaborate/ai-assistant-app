@@ -13,15 +13,19 @@ import {
 } from '@/client/hooks/settings/useAgentAccessAdmin';
 
 import { ConnectorEditor } from './ConnectorEditor';
+import { GuideEditor } from './GuideEditor';
 import { LocalAdminsSection } from './LocalAdminsSection';
 import { PromptAgentEditor } from './PromptAgentEditor';
 import { RuleEditor } from './RuleEditor';
 import {
   AdminConnectorsResponse,
+  AdminGuidesResponse,
   AdminPromptAgentsResponse,
   AdminRulesResponse,
   AdminStoredConnector,
+  AdminStoredGuide,
   AgentsApiResponse,
+  CLIENT_GUIDE_SOURCE,
   CLIENT_MCP_CONNECTOR_SOURCE,
   CLIENT_PROMPT_AGENT_SOURCE,
   MergedAgentRow,
@@ -31,7 +35,7 @@ import {
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { Link } from '@/lib/navigation';
 
-type PanelTab = 'agents' | 'connectors' | 'localAdmins';
+type PanelTab = 'agents' | 'connectors' | 'guides' | 'localAdmins';
 
 /**
  * Admin panel for app-layer ACCESS CONTROL — agents and MCP connectors alike
@@ -121,6 +125,19 @@ export const AgentAccessPanel: FC = () => {
     refetchOnWindowFocus: false,
   });
 
+  const guidesQuery = useQuery<AdminGuidesResponse>({
+    queryKey: ['agent-access-guides'],
+    queryFn: async () => {
+      const response = await fetch('/api/agent-access/guides');
+      if (!response.ok) {
+        throw new Error(`Failed to fetch guides: ${response.status}`);
+      }
+      return unwrapApiData<AdminGuidesResponse>(await response.json());
+    },
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
   const [activeTab, setActiveTab] = useState<PanelTab>('agents');
   const [isCreatingConnector, setIsCreatingConnector] = useState(false);
   const [editingConnectorId, setEditingConnectorId] = useState<string | null>(
@@ -133,6 +150,15 @@ export const AgentAccessPanel: FC = () => {
     string | null
   >(null);
   const [isDeletingConnector, setIsDeletingConnector] = useState(false);
+  const [isCreatingGuide, setIsCreatingGuide] = useState(false);
+  const [editingGuideId, setEditingGuideId] = useState<string | null>(null);
+  const [editingGuideRuleKey, setEditingGuideRuleKey] = useState<string | null>(
+    null,
+  );
+  const [confirmDeleteGuideId, setConfirmDeleteGuideId] = useState<
+    string | null
+  >(null);
+  const [isDeletingGuide, setIsDeletingGuide] = useState(false);
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [isCreatingAgent, setIsCreatingAgent] = useState(false);
   const [editingAgentKey, setEditingAgentKey] = useState<string | null>(null);
@@ -247,6 +273,82 @@ export const AgentAccessPanel: FC = () => {
       }))
       .sort((a, b) => a.row.displayName.localeCompare(b.row.displayName));
   }, [connectorsQuery.data, rulesQuery.data]);
+
+  /**
+   * Guide rows reuse MergedAgentRow for the same reason connectors do: the
+   * RuleEditor works unchanged over the `guide::<id>` canonical key.
+   * `discoverable` is always true — the admin guides listing IS the
+   * discovery for guides.
+   */
+  const guideRows = useMemo(() => {
+    const rulesByKey = new Map(
+      (rulesQuery.data?.rules ?? []).map((r) => [r.canonicalKey, r]),
+    );
+    return (guidesQuery.data?.guides ?? [])
+      .map((entry: AdminStoredGuide) => ({
+        row: {
+          canonicalKey: entry.canonicalKey,
+          source: CLIENT_GUIDE_SOURCE,
+          agentName: entry.guide.id,
+          displayName: entry.guide.name,
+          discoverable: true,
+          stored: rulesByKey.get(entry.canonicalKey) ?? null,
+          promptAgent: null,
+        } satisfies MergedAgentRow,
+        entry,
+      }))
+      .sort((a, b) => a.row.displayName.localeCompare(b.row.displayName));
+  }, [guidesQuery.data, rulesQuery.data]);
+
+  /**
+   * A guide mutation touches the admin listing, the rules that scope it, the
+   * user-facing guide list, and — because a local admin's create
+   * auto-delegates — the config map and the admin's own /me status.
+   */
+  const invalidateGuideData = async () => {
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ['agent-access-guides'] }),
+      queryClient.invalidateQueries({ queryKey: ['agent-access-rules'] }),
+      queryClient.invalidateQueries({ queryKey: ['available-guides'] }),
+      queryClient.invalidateQueries({ queryKey: ['agent-access-config'] }),
+      queryClient.invalidateQueries({ queryKey: ['agent-access-me'] }),
+    ]);
+  };
+
+  const handleGuideSaved = async () => {
+    setIsCreatingGuide(false);
+    setEditingGuideId(null);
+    await invalidateGuideData();
+  };
+
+  const handleGuideConflictReload = async () => {
+    setIsCreatingGuide(false);
+    setEditingGuideId(null);
+    await queryClient.invalidateQueries({ queryKey: ['agent-access-guides'] });
+  };
+
+  const handleDeleteGuide = async (entry: AdminStoredGuide) => {
+    setIsDeletingGuide(true);
+    try {
+      const params = new URLSearchParams({ id: entry.guide.id });
+      const response = await fetch(
+        `/api/agent-access/guides?${params.toString()}`,
+        { method: 'DELETE', headers: { 'If-Match': entry.etag } },
+      );
+      // 404 = another admin already deleted it; the desired end state holds.
+      if (!response.ok && response.status !== 404) {
+        toast.error(t('saveError'));
+        return;
+      }
+      toast.success(t('guideDeleteSuccess'));
+      setConfirmDeleteGuideId(null);
+      await invalidateGuideData();
+    } catch {
+      toast.error(t('saveError'));
+    } finally {
+      setIsDeletingGuide(false);
+    }
+  };
 
   /**
    * A connector mutation touches the admin listing, the rules that scope it,
@@ -444,7 +546,7 @@ export const AgentAccessPanel: FC = () => {
         {/* Tabs. Agents and connectors are open to every admin; the
             delegation map stays global-admin only. */}
         <div className="mb-6 flex gap-1 border-b border-gray-200 dark:border-gray-700">
-          {(['agents', 'connectors', 'localAdmins'] as const)
+          {(['agents', 'connectors', 'guides', 'localAdmins'] as const)
             .filter((tab) => tab !== 'localAdmins' || isGlobalAdmin)
             .map((tab) => (
               <button
@@ -461,7 +563,9 @@ export const AgentAccessPanel: FC = () => {
                   ? t('agentsTab')
                   : tab === 'connectors'
                     ? t('connectorsTab')
-                    : t('localAdminsTab')}
+                    : tab === 'guides'
+                      ? t('guidesTab')
+                      : t('localAdminsTab')}
               </button>
             ))}
         </div>
