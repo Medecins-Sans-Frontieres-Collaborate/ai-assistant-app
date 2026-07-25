@@ -1,4 +1,5 @@
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
+import { consumeToolBudget } from '@/lib/services/limits/toolBudget';
 
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
@@ -407,6 +408,17 @@ export class ToolRouterEnricher extends BasePipelineStage {
       deep: boolean;
     },
   ): Promise<ChatContext> {
+    // Usage limit (docs/LIMITS.md). DEGRADE, DO NOT ABORT: by the time an
+    // enricher runs, the streaming Response has already been returned and the
+    // HTTP status is committed to 200. Killing the turn because an optional
+    // accelerator ran out of budget would surface as an opaque failure AND
+    // waste the tokens already spent — so the search is skipped, the user is
+    // told, and the model answers from what it has.
+    if (!(await consumeToolBudget(context, 'feature.webSearch.callsPerDay'))) {
+      await context.emitActivity?.('chat.activity.webSearchLimitReached');
+      return context;
+    }
+
     const baseMessages = context.enrichedMessages || context.messages;
     // Primary query drives the Bing path and single-query providers; the
     // full list fans out across parallel Google News legs. Record/notice
@@ -1022,6 +1034,14 @@ export class ToolRouterEnricher extends BasePipelineStage {
     context: ChatContext,
     task: string,
   ): Promise<ChatContext> {
+    // Same degrade-don't-abort contract as web search above.
+    if (
+      !(await consumeToolBudget(context, 'feature.codeInterpreter.runsPerDay'))
+    ) {
+      await context.emitActivity?.('chat.activity.codeInterpreterLimitReached');
+      return context;
+    }
+
     const baseMessages = context.enrichedMessages || context.messages;
     const startTime = Date.now();
     console.log('[ToolRouterEnricher] Executing code interpreter');
