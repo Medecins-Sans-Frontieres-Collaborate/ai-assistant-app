@@ -397,6 +397,9 @@ export class StandardChatHandler extends BasePipelineStage {
               : undefined,
             mcpPendingToolCalls: context.mcpPendingToolCalls,
             mcpLoopRound: context.mcpLoopRound,
+            mcpMaxRounds:
+              context.limits?.ceilings['feature.mcp.roundsPerRequest'],
+            blockedModelIds: context.limits?.blockedModelIds,
             mcpPlan: context.mcpPlan,
             approvalResponses: context.approvalResponses,
             customSource,
