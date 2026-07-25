@@ -36,6 +36,13 @@ export async function register() {
       await import('@/lib/services/agentAccess/startupWarnings')
     ).logAccessControlStartupWarnings();
 
+    // Same rationale for usage limits, plus one they have and access control
+    // does not: observe mode is silent by design, so a policy that is enabled
+    // but not enforcing has no symptom at all unless we announce it.
+    await (
+      await import('@/lib/services/limits/startupWarnings')
+    ).logLimitsStartupWarnings();
+
     // Skip OpenTelemetry in development unless explicitly enabled.
     // OTel's request body cloning conflicts with routes that read request.text().
     // Set ENABLE_OTEL=true to enable telemetry in development for testing.
