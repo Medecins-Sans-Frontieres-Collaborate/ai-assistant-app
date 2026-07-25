@@ -394,6 +394,18 @@ export interface ChatContext {
     resetTime: number;
     retryAfter?: number;
   };
+
+  /**
+   * Admin-configured usage limits already resolved for this caller and this
+   * model (docs/LIMITS.md). Populated once by createLimitsMiddleware so
+   * downstream enrichers and the MCP tool loop consult the SAME decision
+   * rather than re-resolving — re-resolution mid-request could see a
+   * different policy snapshot after a 60s TTL boundary.
+   *
+   * Undefined when the feature is disabled: every consumer must treat that
+   * as "no limits", never as "blocked".
+   */
+  limits?: import('@/lib/services/limits/context').ChatLimits;
 }
 
 /**
