@@ -247,10 +247,21 @@ export function isDeploymentNotFoundError(error: unknown): boolean {
  */
 export function getFallbackModel(
   excludeModelIds: string[],
+  /**
+   * Models this specific CALLER may not use, from admin usage limits
+   * (docs/LIMITS.md). Without this the fallback chain would route around a
+   * per-user model restriction: a model blocked for this caller is still a
+   * valid global fallback target, and recordUsage debits the SERVED model —
+   * so the limit check and the debit could end up pointing at different
+   * models. Absent/empty preserves the previous behaviour exactly.
+   */
+  blockedModelIds: readonly string[] = [],
 ): OpenAIModel | null {
+  const blocked = new Set(blockedModelIds.map((id) => id.toLowerCase()));
   for (const modelId of getFallbackChain()) {
     if (excludeModelIds.includes(modelId)) continue;
     if (isModelDisabled(modelId)) continue;
+    if (blocked.has(modelId.toLowerCase())) continue;
 
     const model = OpenAIModels[modelId as OpenAIModelID];
     if (model && !model.isDisabled) {
