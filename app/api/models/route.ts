@@ -1,6 +1,10 @@
+import { Session } from 'next-auth';
 import { NextRequest } from 'next/server';
 
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
+import { currentPolicy } from '@/lib/services/limits/enforcement';
+import { buildPrincipal } from '@/lib/services/limits/principal';
+import { isBlocked, resolveLimit } from '@/lib/services/limits/resolver';
 import { ModelDiscoveryService } from '@/lib/services/models/ModelDiscoveryService';
 import {
   RegionalDeployments,
@@ -17,8 +21,46 @@ import { ModelListSource, OpenAIModel, OpenAIModels } from '@/types/openai';
 
 import { auth } from '@/auth';
 import { env } from '@/config/environment';
+import { getLimitDefinition } from '@/config/limits';
 import { getCurrentEnvironment, getStaticModelList } from '@/config/models';
 import { DefaultAzureCredential } from '@azure/identity';
+
+/**
+ * Drops models this caller is blocked from by admin usage limits
+ * (docs/LIMITS.md), so a restricted model never appears in the picker.
+ *
+ * UX ONLY — createLimitsMiddleware re-checks on every send, which is the
+ * actual control. Applied to EVERY response branch: this route fails open by
+ * design, and filtering only the happy path would leak the restricted model
+ * exactly when discovery is degraded.
+ *
+ * Fails open itself: if the policy cannot be resolved the full list is
+ * served, matching how the rest of this route behaves.
+ */
+async function filterBlockedModels(
+  session: Session,
+  models: OpenAIModel[],
+): Promise<OpenAIModel[]> {
+  try {
+    const policy = await currentPolicy();
+    if (!policy) return models;
+    const principal = buildPrincipal(session);
+    const def = getLimitDefinition('model.allowed');
+    if (!def) return models;
+    return models.filter(
+      (model) =>
+        !isBlocked(
+          resolveLimit(def, policy, principal, model.id, model.series),
+        ),
+    );
+  } catch (error) {
+    console.error(
+      '[/api/models] Limit filtering failed; serving unfiltered list:',
+      error instanceof Error ? error.message : error,
+    );
+    return models;
+  }
+}
 
 /**
  * GET /api/models
@@ -67,7 +109,7 @@ export async function GET(request: NextRequest) {
         }; serving static list`,
       );
       return successResponse({
-        models: STATIC_MODELS,
+        models: await filterBlockedModels(session, STATIC_MODELS),
         source: 'static-no-region',
       });
     }
@@ -145,7 +187,10 @@ export async function GET(request: NextRequest) {
         `[/api/models] Returning ${models.length} model(s) from ${source} across ${regional.length} region(s)`,
       );
     }
-    return successResponse({ models, source });
+    return successResponse({
+      models: await filterBlockedModels(session, models),
+      source,
+    });
   } catch (error) {
     // Fail open: a discovery/RBAC/token error must not leave the user without
     // models. Mirror the agents route's graceful degradation.
@@ -153,6 +198,9 @@ export async function GET(request: NextRequest) {
       '[/api/models] Discovery failed, falling back to static list:',
       error instanceof Error ? error.message : error,
     );
-    return successResponse({ models: STATIC_MODELS, source: 'fallback' });
+    return successResponse({
+      models: await filterBlockedModels(session, STATIC_MODELS),
+      source: 'fallback',
+    });
   }
 }
