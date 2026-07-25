@@ -800,3 +800,41 @@ describe('settingsStore migration (v47 → v48)', () => {
     ).toBe('combined');
   });
 });
+
+/**
+ * v48 → v49: the pause-capture toggle for Memories. Negative polarity is
+ * deliberate — an absent or malformed key repairs to "not paused", which is
+ * how the feature behaved before the toggle existed.
+ */
+describe('settingsStore migration (v48 → v49)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills memoryCapturePaused=false when migrating from v48', () => {
+    const result = migrate({ memoriesEnabled: true }, 48) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.memoryCapturePaused).toBe(false);
+    // The opt-in itself must survive untouched.
+    expect(result.memoriesEnabled).toBe(true);
+  });
+
+  it('preserves an explicit pause on a current-version store', () => {
+    const result = migrate({ memoryCapturePaused: true }, 49) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.memoryCapturePaused).toBe(true);
+  });
+
+  it('repairs a non-boolean value', () => {
+    const result = migrate({ memoryCapturePaused: 'yes' }, 48) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.memoryCapturePaused).toBe(false);
+  });
+});
