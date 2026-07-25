@@ -343,8 +343,31 @@ export async function POST(req: NextRequest): Promise<Response> {
 function getStatusCodeForPipelineError(code: ErrorCode): number {
   switch (code) {
     case ErrorCode.AUTH_FAILED:
-    case ErrorCode.RATE_LIMIT_EXCEEDED:
       return 401;
+    case ErrorCode.RATE_LIMIT_EXCEEDED:
+      // 429. This was 401 until 2026-07-25 — it shared a fall-through case
+      // with AUTH_FAILED above, which told a user who was merely
+      // sending too fast that their session had expired and they should sign
+      // in again (ApiError.getUserMessage() renders any 401/403 as
+      // "Authentication required") — a wrong and unactionable message.
+      //
+      // NOTE the client must NOT fallback-retry this: the burst limiter in
+      // RateLimiter is keyed on userId, not model, so every fallback model
+      // hits the identical limit. chatStore excludes it by ERROR CODE rather
+      // than by status, because a 429 from Azure (a model's TPM limit) is
+      // genuinely worth retrying on another model — the two must stay
+      // distinguishable.
+      return 429;
+    case ErrorCode.RATE_LIMIT_QUOTA_EXCEEDED:
+      // 403, NOT 429: the two carry different advice. 429 means "you are
+      // going too fast, retry in seconds"; an admin usage limit means "you
+      // are out of budget until the period resets, or an administrator has
+      // to change the policy". Retrying shortly does not help, so the status
+      // should not suggest it.
+      //
+      // Retry safety no longer rests on the status: chatStore excludes both
+      // rate-limit codes from fallback retry by CODE (see isRateLimitError).
+      return 403;
     case ErrorCode.VALIDATION_FAILED:
       return 400;
     case ErrorCode.AGENT_UNAVAILABLE:
