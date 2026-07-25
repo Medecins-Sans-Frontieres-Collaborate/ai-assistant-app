@@ -273,6 +273,98 @@ describe('ToolRouterService', () => {
         ).toBeUndefined();
       });
 
+      it('instructs the model to default to no-search when the user provided their own content', async () => {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  needsWebSearch: false,
+                  searchQuery: '',
+                  searchRecency: 'none',
+                  searchComprehensive: false,
+                }),
+              },
+            },
+          ],
+        });
+
+        const result = await service.determineTool({
+          messages: [],
+          currentMessage:
+            'Summarize this article about the 2026 election\n\n[File: article.pdf]\n...',
+          hasUserProvidedContent: true,
+        });
+
+        expect(result.tools).toEqual([]);
+        const call =
+          mockOpenAIClient.chat.completions.create.mock.calls.at(-1)![0];
+        const systemPrompt = call.messages[0].content;
+        expect(systemPrompt).toContain(
+          'The user supplied their own source material this turn',
+        );
+        expect(systemPrompt).toContain('Default to needsWebSearch=false');
+        expect(systemPrompt).toContain('EXPLICITLY asks to search the web');
+      });
+
+      it('still searches provided-content turns when the model reports an explicit request', async () => {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  needsWebSearch: true,
+                  searchQuery: 'fusion energy milestones 2026',
+                  searchRecency: 'week',
+                  searchComprehensive: false,
+                  additionalSearchQueries: [],
+                }),
+              },
+            },
+          ],
+        });
+
+        const result = await service.determineTool({
+          messages: [],
+          currentMessage:
+            'Search the web for recent fusion news and compare it with this paper\n\n[File: paper.pdf]\n...',
+          hasUserProvidedContent: true,
+        });
+
+        // The instruction is a default, not a hard gate — an explicit
+        // in-message search request still routes to web_search.
+        expect(result.tools).toEqual(['web_search']);
+        expect(result.searchQuery).toBe('fusion energy milestones 2026');
+      });
+
+      it('omits the provided-content instruction when the flag is not set', async () => {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  needsWebSearch: false,
+                  searchQuery: '',
+                  searchRecency: 'none',
+                  searchComprehensive: false,
+                }),
+              },
+            },
+          ],
+        });
+
+        await service.determineTool({
+          messages: [],
+          currentMessage: 'What is a monad?',
+        });
+
+        const call =
+          mockOpenAIClient.chat.completions.create.mock.calls.at(-1)![0];
+        expect(call.messages[0].content).not.toContain(
+          'supplied their own source material',
+        );
+      });
+
       it('should determine web search is NOT needed for general knowledge', async () => {
         const mockResponse = {
           choices: [
