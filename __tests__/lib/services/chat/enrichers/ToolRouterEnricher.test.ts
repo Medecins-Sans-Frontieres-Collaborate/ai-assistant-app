@@ -707,6 +707,91 @@ describe('ToolRouter Enricher', () => {
         );
       });
     });
+
+    describe('user-provided content signal (search dilution guard)', () => {
+      beforeEach(() => {
+        mockToolRouterService.determineTool.mockResolvedValue({
+          tools: [],
+          reasoning: 'No search needed',
+        });
+      });
+
+      it('flags turns with uploaded files', async () => {
+        const context = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          messages: [createTestMessage({ content: 'Review this document' })],
+          hasFiles: true,
+        });
+
+        await enricher.execute(context);
+
+        expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
+          expect.objectContaining({ hasUserProvidedContent: true }),
+        );
+      });
+
+      it('flags turns with processed file content', async () => {
+        const context = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          messages: [createTestMessage({ content: 'Summarize' })],
+          processedContent: {
+            fileSummaries: [{ filename: 'doc.pdf', summary: 'A summary' }],
+          },
+        });
+
+        await enricher.execute(context);
+
+        expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
+          expect.objectContaining({ hasUserProvidedContent: true }),
+        );
+      });
+
+      it('flags turns whose prompt is a large pasted text block', async () => {
+        const pastedBlock = `Please clean up this text:\n\n${'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '.repeat(20)}`;
+        const context = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          messages: [createTestMessage({ content: pastedBlock })],
+        });
+
+        await enricher.execute(context);
+
+        expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
+          expect.objectContaining({ hasUserProvidedContent: true }),
+        );
+      });
+
+      it('does not flag a short typed question', async () => {
+        const context = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          messages: [
+            createTestMessage({ content: 'What happened in the news today?' }),
+          ],
+        });
+
+        await enricher.execute(context);
+
+        expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
+          expect.objectContaining({ hasUserProvidedContent: false }),
+        );
+      });
+
+      it('ALWAYS mode still forces search without consulting the classifier, files or not', async () => {
+        (enricher as any).webSearchTool.execute.mockResolvedValue({
+          text: 'Result.',
+          citations: [],
+        });
+        const context = createTestChatContext({
+          searchMode: SearchMode.ALWAYS,
+          messages: [createTestMessage({ content: 'Check this file' })],
+          hasFiles: true,
+        });
+
+        await enricher.execute(context);
+
+        expect(mockToolRouterService.determineTool).not.toHaveBeenCalled();
+        expect((enricher as any).webSearchTool.execute).toHaveBeenCalled();
+      });
+    });
   });
 
   describe('web search tuning (options + dynamic router signals)', () => {
