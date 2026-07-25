@@ -96,8 +96,16 @@ interface ToolCallRowProps {
 const ToolCallRow: FC<ToolCallRowProps> = ({ call, source }) => {
   const t = useTranslations('chat.toolSummary');
   const failed = call.status === 'failed';
+  // Code-interpreter records carry Python source in arguments ({ code })
+  // and generated files. Render the code as code (not highlighted JSON)
+  // and always show generated files — they're the deliverable, so they
+  // must be visible without expanding the row.
+  const isCodeInterpreter = call.name === 'code_interpreter';
   // Failed rows open by default so the error text shows without a click.
-  const [detailsOpen, setDetailsOpen] = useState(failed);
+  // Code-interpreter rows too: the executed code is the transparency
+  // record for any calculation, so expanding the strip must reveal it
+  // without a second click per row.
+  const [detailsOpen, setDetailsOpen] = useState(failed || isCodeInterpreter);
   const incomplete = call.status === 'incomplete';
   const succeeded = call.status === 'completed';
 
@@ -122,11 +130,6 @@ const ToolCallRow: FC<ToolCallRowProps> = ({ call, source }) => {
           ? t('statusAutoDenied')
           : t('statusApproved');
 
-  // Code-interpreter records carry Python source in arguments ({ code })
-  // and generated files. Render the code as code (not highlighted JSON)
-  // and always show generated files — they're the deliverable, so they
-  // must be visible without expanding the row.
-  const isCodeInterpreter = call.name === 'code_interpreter';
   const interpreterCode = isCodeInterpreter
     ? parseInterpreterCode(call.arguments)
     : null;
@@ -177,14 +180,26 @@ const ToolCallRow: FC<ToolCallRowProps> = ({ call, source }) => {
             </pre>
           )}
           {interpreterCode && (
-            <pre className="max-h-64 max-w-full overflow-auto rounded border border-gray-200 bg-gray-50 px-2 py-1 text-[0.7rem] leading-snug text-gray-700 dark:border-gray-700/60 dark:bg-gray-900/60 dark:text-gray-300">
-              <code className="font-mono">{interpreterCode}</code>
-            </pre>
+            <div>
+              <div className="mb-0.5 text-[0.65rem] font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                {t('executedCode')}
+              </div>
+              <pre className="max-h-64 max-w-full overflow-auto rounded border border-gray-200 bg-gray-50 px-2 py-1 text-[0.7rem] leading-snug text-gray-700 dark:border-gray-700/60 dark:bg-gray-900/60 dark:text-gray-300">
+                <code className="font-mono">{interpreterCode}</code>
+              </pre>
+            </div>
           )}
           {call.output && (
-            <pre className="max-h-32 max-w-full overflow-auto rounded border border-emerald-200/60 bg-emerald-50 px-2 py-1 text-[0.7rem] leading-snug text-emerald-900 dark:border-emerald-700/40 dark:bg-emerald-900/15 dark:text-emerald-100">
-              {call.output}
-            </pre>
+            <div>
+              {isCodeInterpreter && (
+                <div className="mb-0.5 text-[0.65rem] font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                  {t('codeOutput')}
+                </div>
+              )}
+              <pre className="max-h-32 max-w-full overflow-auto rounded border border-emerald-200/60 bg-emerald-50 px-2 py-1 text-[0.7rem] leading-snug text-emerald-900 dark:border-emerald-700/40 dark:bg-emerald-900/15 dark:text-emerald-100">
+                {call.output}
+              </pre>
+            </div>
           )}
           {call.error && (
             <pre className="max-h-32 max-w-full overflow-auto rounded border border-red-200/60 bg-red-50 px-2 py-1 text-[0.7rem] leading-snug text-red-900 dark:border-red-700/40 dark:bg-red-900/15 dark:text-red-100">
