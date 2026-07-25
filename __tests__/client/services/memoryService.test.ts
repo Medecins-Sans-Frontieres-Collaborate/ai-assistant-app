@@ -12,7 +12,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mutable settings snapshot so tests can flip the gates mid-flight.
 const mocks = vi.hoisted(() => ({
-  settings: { memoriesEnabled: true, memoriesFlagEnabled: true },
+  settings: {
+    memoriesEnabled: true,
+    memoriesFlagEnabled: true,
+    memoryCapturePaused: false,
+  },
 }));
 
 vi.mock('@/client/stores/settingsStore', () => ({
@@ -47,6 +51,7 @@ describe('extractMemories', () => {
     useMemoryStore.setState({ memories: [] });
     mocks.settings.memoriesEnabled = true;
     mocks.settings.memoriesFlagEnabled = true;
+    mocks.settings.memoryCapturePaused = false;
     vi.stubGlobal(
       'fetch',
       vi.fn(
@@ -88,6 +93,33 @@ describe('extractMemories', () => {
     await pending;
 
     expect(useMemoryStore.getState().memories).toEqual([]);
+  });
+
+  it('drops the result when capture is paused while the fetch is in flight', async () => {
+    const pending = extractMemories(conversation, flatMessages);
+    // User ticks "Pause saving new memories" during the round trip.
+    mocks.settings.memoryCapturePaused = true;
+    resolveFetch(okResponse(addBerlinOp));
+    await pending;
+
+    expect(useMemoryStore.getState().memories).toEqual([]);
+  });
+
+  it('marks hand-written memories as locked in the request', async () => {
+    useMemoryStore.getState().addMemory('I wrote this', undefined, 'user');
+    useMemoryStore.getState().addMemory('extracted fact', 'conv-1');
+
+    const pending = extractMemories(conversation, flatMessages);
+    resolveFetch(okResponse([]));
+    await pending;
+
+    const body = JSON.parse(
+      (vi.mocked(fetch).mock.calls[0][1] as RequestInit).body as string,
+    );
+    expect(body.existingMemories).toEqual([
+      { id: expect.any(String), text: 'I wrote this', locked: true },
+      { id: expect.any(String), text: 'extracted fact' },
+    ]);
   });
 
   it('drops the result when clearMemories ran while the fetch was in flight', async () => {
