@@ -1,13 +1,13 @@
 'use client';
 
-import { MemoryEntry, MemoryOperation } from '@/types/memory';
+import { MemoryEntry, MemoryOperation, MemoryOrigin } from '@/types/memory';
 
 import { v4 as uuidv4 } from 'uuid';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 // Re-exported so the extraction service can import store + type together.
-export type { MemoryOperation } from '@/types/memory';
+export type { MemoryOperation, MemoryOrigin } from '@/types/memory';
 
 /**
  * Dedicated persisted store for the Memories feature (cross-conversation
@@ -18,10 +18,20 @@ export type { MemoryOperation } from '@/types/memory';
  * enumerates stores explicitly, so a new store is excluded by default).
  */
 
-/** Hard cap on stored memories; exceeding it drops the oldest by updatedAt. */
-const MAX_MEMORIES = 100;
+/**
+ * Hard cap on stored memories. Automatic adds exceeding it drop the oldest by
+ * updatedAt; manual adds are refused instead, so a hand-written memory can
+ * never silently push out another one the user chose to keep.
+ */
+export const MAX_MEMORIES = 100;
 /** Matches the server-side per-memory cap (ChatBodySchema: 600 chars). */
 export const MAX_MEMORY_TEXT_LENGTH = 600;
+
+/**
+ * Outcome of an add attempt. Only the manual path can see 'duplicate' or
+ * 'at-capacity' — they exist so the settings UI can explain the refusal.
+ */
+export type AddMemoryResult = 'added' | 'empty' | 'duplicate' | 'at-capacity';
 
 interface MemoryStore {
   // Persisted state
@@ -36,14 +46,33 @@ interface MemoryStore {
   clearGeneration: number;
 
   // Actions
-  addMemory: (text: string, sourceConversationId?: string) => void;
-  updateMemory: (id: string, text: string) => void;
+  /**
+   * Adds an entry. `origin: 'user'` marks it hand-written — that path also
+   * refuses exact duplicates and refuses to write at MAX_MEMORIES, while the
+   * default 'auto' path keeps evicting the oldest to make room.
+   */
+  addMemory: (
+    text: string,
+    sourceConversationId?: string,
+    origin?: MemoryOrigin,
+  ) => AddMemoryResult;
+  /**
+   * Rewrites an entry's text. Passing `origin: 'user'` promotes the entry to
+   * hand-edited (protecting it from extraction); omitting it leaves the
+   * existing origin alone, which is what applyOperations wants.
+   */
+  updateMemory: (id: string, text: string, origin?: MemoryOrigin) => void;
   deleteMemory: (id: string) => void;
   clearMemories: () => void;
   /**
    * Applies extraction-endpoint operations in order. Malformed ops (missing
    * id/text) and updates targeting unknown ids are silently ignored — the
    * model output is best-effort, never trusted to be well-formed.
+   *
+   * Hand-written entries (origin 'user') are skipped by update and delete
+   * ops. The request marks them locked so the model should not target them
+   * at all; enforcing it here too means the guarantee does not depend on the
+   * model behaving.
    */
   applyOperations: (
     ops: MemoryOperation[],
@@ -54,7 +83,7 @@ interface MemoryStore {
 // Interior whitespace is collapsed so a memory can never span multiple
 // lines — multi-line text could forge markdown sections once rendered as a
 // bullet inside the system prompt.
-const normalizeText = (text: string): string =>
+export const normalizeMemoryText = (text: string): string =>
   text.replace(/\s+/g, ' ').trim().slice(0, MAX_MEMORY_TEXT_LENGTH);
 
 /** Enforces MAX_MEMORIES, dropping the oldest by updatedAt (order kept). */
@@ -79,30 +108,52 @@ export const useMemoryStore = create<MemoryStore>()(
       clearGeneration: 0,
 
       // Actions
-      addMemory: (text, sourceConversationId) =>
-        set((state) => {
-          const trimmed = normalizeText(text);
-          if (!trimmed) return state;
-          const now = new Date().toISOString();
-          const entry: MemoryEntry = {
-            id: uuidv4(),
-            text: trimmed,
-            createdAt: now,
-            updatedAt: now,
-            ...(sourceConversationId ? { sourceConversationId } : {}),
-          };
-          return { memories: capMemories([...state.memories, entry]) };
-        }),
+      addMemory: (text, sourceConversationId, origin = 'auto') => {
+        const trimmed = normalizeMemoryText(text);
+        if (!trimmed) return 'empty';
 
-      updateMemory: (id, text) =>
+        // Both refusals are manual-path only: the extractor is told to update
+        // rather than duplicate and is expected to run at the cap forever, so
+        // rejecting its adds would just drop facts on the floor.
+        if (origin === 'user') {
+          const existing = get().memories;
+          if (
+            existing.some((m) => m.text.toLowerCase() === trimmed.toLowerCase())
+          ) {
+            return 'duplicate';
+          }
+          if (existing.length >= MAX_MEMORIES) return 'at-capacity';
+        }
+
+        const now = new Date().toISOString();
+        const entry: MemoryEntry = {
+          id: uuidv4(),
+          text: trimmed,
+          createdAt: now,
+          updatedAt: now,
+          ...(sourceConversationId ? { sourceConversationId } : {}),
+          ...(origin === 'user' ? { origin } : {}),
+        };
+        set((state) => ({
+          memories: capMemories([...state.memories, entry]),
+        }));
+        return 'added';
+      },
+
+      updateMemory: (id, text, origin) =>
         set((state) => {
-          const trimmed = normalizeText(text);
+          const trimmed = normalizeMemoryText(text);
           if (!trimmed) return state;
           if (!state.memories.some((m) => m.id === id)) return state;
           return {
             memories: state.memories.map((m) =>
               m.id === id
-                ? { ...m, text: trimmed, updatedAt: new Date().toISOString() }
+                ? {
+                    ...m,
+                    text: trimmed,
+                    updatedAt: new Date().toISOString(),
+                    ...(origin ? { origin } : {}),
+                  }
                 : m,
             ),
           };
@@ -121,13 +172,20 @@ export const useMemoryStore = create<MemoryStore>()(
 
       applyOperations: (ops, sourceConversationId) => {
         const { addMemory, updateMemory, deleteMemory } = get();
+        // Snapshot before the loop: ops can only ever add new entries, never
+        // promote an existing one to protected.
+        const protectedIds = new Set(
+          get()
+            .memories.filter((m) => m.origin === 'user')
+            .map((m) => m.id),
+        );
         for (const op of ops) {
           if (op.op === 'add' && op.text) {
             addMemory(op.text, sourceConversationId);
           } else if (op.op === 'update' && op.id && op.text) {
-            updateMemory(op.id, op.text);
+            if (!protectedIds.has(op.id)) updateMemory(op.id, op.text);
           } else if (op.op === 'delete' && op.id) {
-            deleteMemory(op.id);
+            if (!protectedIds.has(op.id)) deleteMemory(op.id);
           }
         }
       },
@@ -182,6 +240,10 @@ export const useMemoryStore = create<MemoryStore>()(
                   createdAt,
                   updatedAt:
                     typeof m.updatedAt === 'string' ? m.updatedAt : createdAt,
+                  // Anything but the exact 'user' marker collapses to
+                  // undefined (= 'auto'), so a junk value can't quietly
+                  // exempt an entry from extraction.
+                  origin: m.origin === 'user' ? ('user' as const) : undefined,
                 };
               });
           }

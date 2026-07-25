@@ -904,6 +904,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
     // Memories require BOTH the user opt-in and the LD flag mirror —
     // flipping the flag off stops memories from being SENT, not just shown.
+    // memoryCapturePaused is deliberately NOT checked here: pausing stops new
+    // memories being learned, it does not stop the saved ones being used.
     // Same Foundry approval-resume exclusion as the summary. Select the 60
     // most recently UPDATED (the store array is insertion-ordered and
     // updateMemory edits in place, so a tail slice would drop freshly
@@ -1528,7 +1530,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           contextWindowSize,
         );
       }
-      if (settings.memoriesEnabled && settings.memoriesFlagEnabled) {
+      // memoryCapturePaused gates capture ONLY — see the injection block
+      // above, which deliberately keeps sending what is already saved.
+      if (
+        settings.memoriesEnabled &&
+        settings.memoriesFlagEnabled &&
+        !settings.memoryCapturePaused
+      ) {
         void extractMemories(finalConversation, flat);
       }
     }
