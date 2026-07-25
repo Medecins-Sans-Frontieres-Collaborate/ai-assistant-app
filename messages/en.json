@@ -881,7 +881,9 @@
       "statusFailed": "Failed",
       "statusIncomplete": "Incomplete",
       "viaService": "via {service}",
-      "downloadFile": "Download"
+      "downloadFile": "Download",
+      "executedCode": "Executed code",
+      "codeOutput": "Output"
     },
     "consent": {
       "authorizeRequired": "Authorization required",

@@ -44,6 +44,19 @@ const mockMessages: Record<string, unknown> = {
     beta: 'Beta',
   },
   chat: {
+    toolSummary: {
+      usedTools: 'Used {count} tools',
+      failedCount: '{count} failed',
+      statusApproved: 'Approved',
+      statusAutoApproved: 'Auto-approved',
+      statusAutoDenied: 'Auto-denied',
+      statusFailed: 'Failed',
+      statusIncomplete: 'Incomplete',
+      viaService: 'via {service}',
+      downloadFile: 'Download',
+      executedCode: 'Executed code',
+      codeOutput: 'Output',
+    },
     interimSearch: {
       title: 'Headlines found — deep search still running',
       hint: 'The deep Bing search can take up to 90 seconds. Answer now from the {count} headlines already found, or wait for the merged result.',
