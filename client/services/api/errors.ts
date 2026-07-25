@@ -28,9 +28,30 @@ export class ApiError extends Error {
 
   /**
    * Checks if error is an authentication error (401/403).
+   *
+   * ⚠ Status alone is NOT sufficient to conclude "sign in again" — a rate
+   * limit and a usage-limit denial are also 429/403. Use
+   * {@link isRateLimitError} to exclude those before telling a user their
+   * session expired; {@link getUserMessage} already does.
    */
   public isAuthError(): boolean {
     return this.status === 401 || this.status === 403;
+  }
+
+  /**
+   * A rate-limit or admin usage-limit denial, identified by the server's
+   * error CODE rather than its status.
+   *
+   * Code, not status, because the two cannot be told apart by number: an
+   * app-level burst limit and a model's Azure TPM limit are both 429, and a
+   * usage-limit denial shares 403 with a genuine authorization failure. The
+   * code is the only thing that distinguishes them.
+   */
+  public isRateLimitError(): boolean {
+    const code = this.response?.code;
+    return (
+      code === 'RATE_LIMIT_EXCEEDED' || code === 'RATE_LIMIT_QUOTA_EXCEEDED'
+    );
   }
 
   /**
@@ -63,6 +84,15 @@ export class ApiError extends Error {
    * Returns a user-friendly error message.
    */
   public getUserMessage(): string {
+    // BEFORE the auth check: a rate limit (429) and a usage-limit denial
+    // (403) would otherwise be rendered as "Please sign in", which is both
+    // wrong and unactionable — and it would discard the server's message,
+    // which is the only place the wait time or the limit that was hit is
+    // stated.
+    if (this.isRateLimitError()) {
+      return this.message || 'Usage limit reached. Please try again later.';
+    }
+
     if (this.isAuthError()) {
       return 'Authentication required. Please sign in.';
     }
