@@ -16,7 +16,7 @@ import { ComponentType } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { useAgentAccessAdmin } from '@/client/hooks/settings/useAgentAccessAdmin';
+import { useAdminAreas } from '@/client/hooks/settings/useAdminAreas';
 
 import { SettingsSection } from './types';
 
@@ -85,8 +85,14 @@ export function useSettingsNav(): SettingsNavItem[] {
   // the flag is the feature's kill switch — it must never default on.
   const isLocalModelsEnabled = localModels === true;
 
-  // Visibility only — the admin page's server component is the real gate.
-  const { isAdmin: isAgentAccessAdmin } = useAgentAccessAdmin();
+  // ONE entry for every admin area. Visibility only — each admin page's
+  // server component is the real gate.
+  //
+  // Resolved server-side rather than from useAgentAccessAdmin: that hook's
+  // query is disabled when AGENT_ACCESS_CONTROL_ENABLED is false, so a
+  // deployment running usage limits WITHOUT agent access used to show a global
+  // admin no admin entry at all.
+  const { isAdmin: hasAnyAdminArea } = useAdminAreas();
 
   const section = (
     id: SettingsSection,
@@ -134,12 +140,12 @@ export function useSettingsNav(): SettingsNavItem[] {
           ),
         ]
       : []),
-    ...(isAgentAccessAdmin
+    ...(hasAnyAdminArea
       ? [
           {
             kind: 'link' as const,
-            href: '/admin/agent-access',
-            label: t('settings.Agent Access'),
+            href: '/admin',
+            label: t('settings.Admin'),
             icon: IconUserShield,
           },
         ]
