@@ -550,13 +550,30 @@ const mockMessages: Record<string, unknown> = {
     privacyNote:
       'Facts are stored only in this browser and included in your chats to personalize replies.',
     empty:
-      'No memories yet. Facts worth remembering are saved automatically from your conversations.',
+      'No memories yet. Add one above, or let the assistant save facts from your conversations.',
     savedOn: 'Saved {date}',
     deleteMemory: 'Delete memory',
     clearAll: 'Clear all memories',
     clearAllConfirmQuestion: 'Delete all memories? This cannot be undone.',
     clearAllConfirm: 'Delete all',
     cancel: 'Cancel',
+    pauseToggle: 'Pause saving new memories',
+    pauseNote:
+      'Memories you already have keep personalizing your chats — nothing new is saved until you resume.',
+    addLabel: 'Add a memory',
+    addPlaceholder:
+      'Something the assistant should remember, e.g. "Prefers concise answers"',
+    addMemory: 'Add memory',
+    editMemory: 'Edit memory',
+    saveMemory: 'Save',
+    addedByYou: 'Added by you',
+    storedCount: '{count} of {max} memories saved',
+    charCount: '{count}/{max} characters',
+    noLineBreaksHint:
+      'Line breaks are removed — a memory is stored as one line.',
+    duplicate: 'That memory is already saved.',
+    atCapacity:
+      "You've reached the {max}-memory limit. Delete one to add another.",
   },
   contextWindow: {
     label: 'Context window',
