@@ -124,6 +124,12 @@ export interface ToolLoopCoreOptions<TMessage> {
   pendingToolCalls?: McpPendingToolCall[];
   approvalResponses?: ApprovalResponse[];
   loopRound: number;
+  /**
+   * Admin-configured cap from `feature.mcp.roundsPerRequest` (docs/LIMITS.md).
+   * Absent → the compiled MAX_TOOL_ROUNDS, so behaviour is unchanged when
+   * usage limits are disabled or unconfigured.
+   */
+  maxRounds?: number;
   userId: string;
   citations?: Citation[];
   usage: {
@@ -462,7 +468,7 @@ export async function runToolLoopCore<TMessage>(
         const round = await options.strategy.runModelRound(
           messages,
           serversWithTools,
-          options.loopRound < MAX_TOOL_ROUNDS,
+          options.loopRound < (options.maxRounds ?? MAX_TOOL_ROUNDS),
           write,
         );
 
