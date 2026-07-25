@@ -1,4 +1,5 @@
 import { FileProcessingService } from '@/lib/services/chat';
+import { guardTranscriptionMinutes } from '@/lib/services/limits/transcriptionBudget';
 import { getAzureMonitorLogger } from '@/lib/services/observability';
 
 import { FILE_SIZE_LIMITS, WHISPER_MAX_SIZE } from '@/lib/utils/app/const';
@@ -349,6 +350,26 @@ export class FileProcessor extends BasePipelineStage {
                     // message stays generic.
                     throw new Error(
                       `File "${filename}" (${audioSizeMB}MB) is too large to transcribe.`,
+                    );
+                  }
+
+                  // Usage limit: transcription minutes per day
+                  // (`feature.transcription.minutesPerDay`, docs/LIMITS.md).
+                  // Measured BEFORE any transcription work, using the existing
+                  // ffprobe helper — duration is the honest unit here, since a
+                  // 5-minute lossless file and a 5-minute compressed one cost
+                  // the same to transcribe but differ wildly in bytes.
+                  //
+                  // Rounded UP to whole minutes: a limit of 60 must not be
+                  // circumvented by 120 requests of 30 seconds each.
+                  const transcriptionGuard = await guardTranscriptionMinutes(
+                    context.session,
+                    fileToTranscribe,
+                  );
+                  if (!transcriptionGuard.allowed) {
+                    throw new Error(
+                      transcriptionGuard.message ??
+                        `Transcription limit reached. "${filename}" was not transcribed.`,
                     );
                   }
 
