@@ -316,14 +316,21 @@ const fetchMock = vi.fn(async (input: string | URL, init?: RequestInit) => {
   throw new Error(`Unexpected fetch: ${method} ${url}`);
 });
 
-function renderPanel() {
+/**
+ * Sections are routes now rather than internal tab state, so a test opens one
+ * by rendering it directly instead of clicking a tab strip that no longer
+ * exists. Defaults to 'agents', which is what the old no-arg calls rendered.
+ */
+function renderPanel(
+  section: React.ComponentProps<typeof AgentAccessPanel>['section'] = 'agents',
+) {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   });
   return render(
     <QueryClientProvider client={queryClient}>
       <AgentAccessEnabledContext.Provider value={true}>
-        <AgentAccessPanel />
+        <AgentAccessPanel section={section} />
       </AgentAccessEnabledContext.Provider>
     </QueryClientProvider>,
   );
@@ -845,9 +852,7 @@ describe('AgentAccessPanel', () => {
   it('lists the prompt agent in the local-admin delegation checkboxes', async () => {
     agentsResponse = [...discoveredAgents, promptAgentDiscoveryEntry];
     promptAgentsResponse = [storedPromptAgent];
-    renderPanel();
-
-    fireEvent.click(await screen.findByText('Local admins'));
+    renderPanel('localAdmins');
 
     // The section renders one card per configured local admin; the merged
     // rows — including the prompt agent — feed its delegation checkboxes.
@@ -885,8 +890,7 @@ describe('AgentAccessPanel', () => {
     };
 
     const openConnectorsTab = async () => {
-      renderPanel();
-      fireEvent.click(await screen.findByText('Connectors'));
+      renderPanel('connectors');
     };
 
     it('lists connectors with their URL and access state', async () => {
