@@ -28,18 +28,18 @@ vi.mock('@/lib/navigation', () => ({
   ),
 }));
 
-// Mutable admin status; the real hook needs a QueryClientProvider (and the
-// AgentAccessEnabledContext — its flag-off no-fetch behavior is covered in
-// __tests__/components/AgentAccess/useAgentAccessAdmin.test.tsx).
+// Mutable admin status; the real hook needs a QueryClientProvider. The nav now
+// reads admin-ness from useAdminAreas, which resolves the agent-access and
+// usage-limits env flags INDEPENDENTLY server-side — deriving it from
+// useAgentAccessAdmin used to hide the entry on any deployment running limits
+// with agent access off.
 const mockAgentAccess = { isAdmin: false };
-vi.mock('@/client/hooks/settings/useAgentAccessAdmin', () => ({
-  useAgentAccessAdmin: () => ({
-    me: null,
+vi.mock('@/client/hooks/settings/useAdminAreas', () => ({
+  useAdminAreas: () => ({
+    areas: mockAgentAccess.isAdmin ? ['agents'] : [],
     isAdmin: mockAgentAccess.isAdmin,
-    isGlobalAdmin: mockAgentAccess.isAdmin,
+    configUnavailable: false,
     isLoading: false,
-    error: null,
-    refetch: vi.fn(),
   }),
 }));
 
@@ -65,14 +65,15 @@ describe('SettingsSidebar — backup nav item gating', () => {
     mockAgentAccess.isAdmin = false;
   });
 
-  it('hides the Agent Access link for non-admins and shows it for admins', () => {
+  it('hides the Admin link for non-admins and shows it for admins', () => {
     renderSidebar();
-    expect(screen.queryByText('settings.Agent Access')).not.toBeInTheDocument();
+    expect(screen.queryByText('settings.Admin')).not.toBeInTheDocument();
 
     mockAgentAccess.isAdmin = true;
     renderSidebar();
-    const link = screen.getByText('settings.Agent Access').closest('a');
-    expect(link).toHaveAttribute('href', '/admin/agent-access');
+    // ONE entry for every admin area now, pointing at the unified shell.
+    const link = screen.getByText('settings.Admin').closest('a');
+    expect(link).toHaveAttribute('href', '/admin');
   });
 
   it('hides Backup when the flag is absent (fail-closed), unlike the fail-open Usage & Impact', () => {
