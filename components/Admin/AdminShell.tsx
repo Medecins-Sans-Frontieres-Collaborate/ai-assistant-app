@@ -1,10 +1,16 @@
 'use client';
 
-import { IconArrowLeft, IconUserShield } from '@tabler/icons-react';
+import {
+  IconArrowLeft,
+  IconSettings,
+  IconUserShield,
+} from '@tabler/icons-react';
 import { FC, ReactNode } from 'react';
 
 import { useTranslations } from 'next-intl';
 import { useSelectedLayoutSegments } from 'next/navigation';
+
+import { useUI } from '@/client/hooks/ui/useUI';
 
 import { AdminAreaId } from '@/lib/services/admin/adminAreas';
 
@@ -37,6 +43,10 @@ interface AdminShellProps {
 export const AdminShell: FC<AdminShellProps> = ({ areas, children }) => {
   const t = useTranslations();
   const segments = useSelectedLayoutSegments();
+  // Admin renders without the chat sidebar (ChatShell skips it on /admin),
+  // so the gear below is the only way to reach Settings from here — the
+  // modal host stays mounted in ChatShell and opens over the admin page.
+  const { setIsSettingsOpen } = useUI();
 
   if (segments.length >= 2) {
     return <div className="flex min-w-0 flex-1">{children}</div>;
@@ -60,6 +70,15 @@ export const AdminShell: FC<AdminShellProps> = ({ areas, children }) => {
         <span className="text-sm font-semibold text-black dark:text-white">
           {t('admin.title')}
         </span>
+        <button
+          type="button"
+          onClick={() => setIsSettingsOpen(true)}
+          aria-label={t('admin.openSettings')}
+          title={t('admin.openSettings')}
+          className="ml-auto rounded-md p-1.5 text-gray-500 transition-colors hover:bg-gray-100 hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+        >
+          <IconSettings size={18} aria-hidden="true" />
+        </button>
       </header>
 
       <AdminAreaNav areas={areas} variant="pills" />
