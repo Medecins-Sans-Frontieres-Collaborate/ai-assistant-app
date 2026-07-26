@@ -43,6 +43,11 @@ const mockMessages: Record<string, unknown> = {
     search: 'Search',
     beta: 'Beta',
   },
+  admin: {
+    title: 'Admin',
+    openSettings: 'Open settings',
+    areaNavLabel: 'Admin areas',
+  },
   chat: {
     toolSummary: {
       usedTools: 'Used {count} tools',

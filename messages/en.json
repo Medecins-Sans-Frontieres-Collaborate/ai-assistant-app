@@ -3752,6 +3752,7 @@
   },
   "admin": {
     "title": "Admin",
+    "openSettings": "Open settings",
     "areaNavLabel": "Admin areas",
     "group": {
       "access": "Access",
