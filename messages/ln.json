@@ -862,7 +862,9 @@
       "statusFailed": "Eboyaki kosala",
       "statusIncomplete": "Ekosili te",
       "viaService": "na nzela ya {service}",
-      "downloadFile": "Télécharger"
+      "downloadFile": "Télécharger",
+      "executedCode": "Kɔ́dɛ esalaki",
+      "codeOutput": "Ebimeli"
     },
     "consent": {
       "authorizeRequired": "Autorisation esengeli",
@@ -1401,7 +1403,9 @@
       "providerCombinedDescription": "Etindaka koluka ya Bing ná Google News na elongo: bantando ekóti na mwa ntango, na ntango yango koluka ya Bing ezali kaka kosala, pe okoki kopesa eyano uta na bantando ya liboso soki olingi. Soki Bing esili, bamerja bikutani.",
       "providerBingResponses": "Bing mbangu mbangu (Azure OpenAI)",
       "providerBingResponsesDescription": "Kokakata internet ya Bing ndenge moko na Bing grounding, kasi esalemi lokola libenga moko ya modele esika ya agent ya Foundry — esalaka mbangu mingi koleka. Options ya sika oyo ezali kotestama na Bing grounding."
-    }
+    },
+    "Admin": "Admin",
+    "Usage Limits": "Mbongwana ya kosalela"
   },
   "emptyState": {
     "greeting": "Ndenge nini nakoki kosalisa yo?",
@@ -3615,7 +3619,20 @@
     "clearAll": "Kolongola bamemwá nyonso",
     "clearAllConfirmQuestion": "Koboma bamemwá nyonso? Okoki te kozongisa.",
     "clearAllConfirm": "Supprimer nyonso",
-    "cancel": "Kokata"
+    "cancel": "Kokata",
+    "pauseToggle": "Tika kobomba makanisi ya sika",
+    "pauseNote": "Makanisi oyo ozalaki na yango ekokoba kotinda bisolo na yo — eloko ya sika ekobombama te kino ozongisi yango.",
+    "addLabel": "Tia elaka moko",
+    "addPlaceholder": "Eloko assistant asengeli kokanisa, ndakisa: \"Apreferer biyano ya mokuse\"",
+    "addMemory": "Tia elaka",
+    "editMemory": "Kokoma elaka",
+    "saveMemory": "Bomba",
+    "addedByYou": "Obakisaki",
+    "storedCount": "{count} na {max} makanisi ebombami",
+    "charCount": "{count}/{max} balɛtrɛ",
+    "noLineBreaksHint": "Kobwakami ezali te — elaka ezozala na molayi moko.",
+    "duplicate": "Elaka yango ebombama liboso.",
+    "atCapacity": "Okomi na ndelo ya makanisi {max}. Longola moko mpo obakisa mosusu."
   },
   "contextWindow": {
     "label": "Fenêtre ya contexte",
@@ -4002,5 +4019,160 @@
     "fieldEventEnd": "Esili",
     "fieldEventPrecision": "Kobimisa solo",
     "fieldEventOngoing": "Ezali kokoba"
+  },
+  "admin": {
+    "title": "Admin",
+    "areaNavLabel": "Bisetoliko ya admin",
+    "group": {
+      "access": "Kopesa nzela",
+      "usage": "Kosalela",
+      "administration": "Botambwisami"
+    },
+    "areaDescription": {
+      "agents": "Kokamba nani akoki kosalela agent moko na moko.",
+      "connectors": "Basangisi ya organisation mpe nani akoki kosalela yango.",
+      "guides": "Mitindo ya ekomeli, maloba ya mosala mpe mabongisi ya bosembo.",
+      "mapDatasets": "Datasets oyo basalaki mpo ebengama na map workflow.",
+      "localAdmins": "Pesa batu mosusu mokumba ya kobongola mibeko ya kopesa nzela."
+    }
+  },
+  "limits": {
+    "title": "Mbongwana ya kosalela",
+    "description": "Yekola ndelo ya ndenge nyonso ya modele mpe makambo bato bakoki kosalela. Nyonso ezali libre soki otyi ndelo awa te.",
+    "back": "Zonga na chat",
+    "loading": "Ezozala...",
+    "retry": "Kokosa lisusu",
+    "policyUnavailable": "Tokokaki te kotanga ndelo na stockage. Oyo ezali TE 'eloko esalamaki te' — ko kanisa banda ndelo ekangami te. Kosa lisusu, mpe tala ba server logs soki elongi te.",
+    "save": "Bomba",
+    "saving": "Ekobombama...",
+    "saved": "Mbongwana ebombami.",
+    "saveFailed": "Tokokaki te kobomba ndelo.",
+    "conflict": "Admin mosusu abongoli ndelo nsima ozalaki kobongola. Bambongoli na yo ebombami te — version ya sika ebongwani.",
+    "unsavedChanges": "Bambongoli ebombami te",
+    "modeLabel": "Mode",
+    "modeObserve": "Kotalela (koma kaka)",
+    "modeEnforce": "Kopesa mibeko (kanga ebima)",
+    "failModeLabel": "Soki stockage ekoki te kokutana",
+    "failOpen": "Leka (bima polele)",
+    "failClosed": "Kanga (bima na kokanga)",
+    "timezoneLabel": "Esika ya tango ya periyɔde",
+    "countByom": "Koconta kosalela ya compte ya moko na moko ya modele",
+    "countAuxiliary": "Koconta mikolo ya libombami (bititre, mikuse, makanisi)",
+    "observeNotice": "Mode ya kotalela ezali: eloko moko te ekokangami. Ndelo nyonso oyo ekokaki kokanga moto, ekomami na server log, mpo okoka kotalela mibeko na oyo bato basalelaka liboso ya kopesa yango mibeko.",
+    "propagationNotice": "Bambongoli ekoki kozwa kino sekondi 60 mpo ekoma na ba server nyonso.",
+    "tab": {
+      "defaults": "Mingambo ya mokili mobimba",
+      "overrides": "Kobongola"
+    },
+    "tabsLabel": "Biteni ya mingambo",
+    "category": {
+      "chat": "Lisolo",
+      "models": "Bamodeli",
+      "tools": "Mikapo",
+      "files": "Bafichiers",
+      "speech": "Lokasa ya maloba",
+      "documents": "Bapidapi"
+    },
+    "label": {
+      "modelAllowed": "Modeli ezalaka",
+      "modelRequestsPerDay": "Nsango na modeli",
+      "chatMessagesPerDay": "Nsango na mokolo",
+      "chatTokensPerDay": "Token na mokolo",
+      "chatTokensPerMonth": "Token na sanza",
+      "webSearchEnabled": "Kotinda boluka na Internet",
+      "codeInterpreterEnabled": "Code Interpreter",
+      "mcpEnabled": "Mikangisi (MCP)",
+      "ttsCharactersPerRequest": "Alphabets na motángo moko",
+      "uploadMegabytesPerFile": "Buleméga byte na fichier moko",
+      "mcpRoundsPerRequest": "Mikapo na nsango moko",
+      "ttsCharactersPerDay": "Alphabets ya kotángama na mokolo",
+      "transcriptionMinutesPerDay": "Minuta ya transcription na mokolo",
+      "translationJobsPerDay": "Botámboli bapidapi na mokolo",
+      "webSearchCallsPerDay": "Boluka na Internet na mokolo",
+      "codeInterpreterRunsPerDay": "Bitamboli ya Code Interpreter na mokolo",
+      "uploadFilesPerDay": "Bafichiers bamatelami na mokolo"
+    },
+    "valueModeLabel": "Motindo ya mingambo",
+    "valueAmountLabel": "Motango ya mingambo",
+    "modeInherit": "Epetolami te — komemela",
+    "modeUnlimited": "Te na ndelo",
+    "modeAllowed": "Ekoki",
+    "modeLimited": "Pamba na",
+    "modeBlocked": "Ekangami",
+    "blockedChip": "Ekangami",
+    "hardCeilingHint": "Ekoki te koleka {value}",
+    "hardCeilingToggle": "Ndelo makasi — kobongola moko ekoki te koleka oyo",
+    "unit": {
+      "requests": "basɛngami",
+      "tokens": "token",
+      "calls": "bitindami",
+      "runs": "bitamboli",
+      "characters": "alphabets",
+      "megabytes": "MB",
+      "minutes": "minuta",
+      "jobs": "misala",
+      "rounds": "bitúka",
+      "boolean": ""
+    },
+    "window": {
+      "day": "mokolo",
+      "month": "sanza"
+    },
+    "scope": {
+      "user": "Batu ya sipesifi",
+      "domain": "Domain ya email",
+      "attribute": "Departema / kompanyi / biro",
+      "group": "Groupé (esalemi nanu te)"
+    },
+    "targetsLabel": {
+      "user": "Adrese ya email",
+      "domain": "Domaine",
+      "attribute": "Attribut",
+      "group": "ID ya groupé"
+    },
+    "targetsPlaceholder": {
+      "user": "name@example.org",
+      "domain": "example.org",
+      "attribute": "departema:health",
+      "group": "ID ya eloko groupé ya Entra"
+    },
+    "chipAddHint": "Tia mosusu…",
+    "removeChip": "Longola",
+    "groupsPendingConsent": "Bisaleli ya groupé eyebami mpe ebombami kasi elandi te nanu: boyokani ya membre ya groupé epesamaki te na application kino admin ya tenant andimi. Salela \"Departema / kompanyi / biro\" mpo na ekoki oyo ebandaka lelo.",
+    "overrideLabelPlaceholder": "Mpo na nini ekoki oyo ezali",
+    "overrideLabelLabel": "Nkombo ya ekoki",
+    "overrideScopeLabel": "Ekoki mpo na",
+    "overrideEnabled": "Esalemi",
+    "removeOverride": "Longola ekoki",
+    "addOverride": "Tia ekoki",
+    "noOverrides": "Ekoki ezali te. Bato nyonso bazwi ba paramètre oyo etali nyonso likolo.",
+    "nav": "Limit ya kosalela",
+    "descriptionByKey": {
+      "modelAllowed": "Soki modèle oyo ekoki kosalelama mbala nyonso.",
+      "modelRequestsPerDay": "Nsango na mokolo moko mpo na modèle to famille moko.",
+      "chatMessagesPerDay": "Nsuka ya nsango na mokolo moko mpo na ba modèle nyonso.",
+      "chatTokensPerDay": "Eteni — limite ekoki koleka mpo na molai ya eyano ezali kokelama.",
+      "chatTokensPerMonth": "Eteni — tala note na limite ya ba tokens ya mokolo.",
+      "webSearchEnabled": "Soki nsango ekoki koluka na Internet.",
+      "codeInterpreterEnabled": "Soki nsango ekoki kosala code.",
+      "mcpEnabled": "Soki ba connectors (MCP tools) ekoki kosalelama.",
+      "ttsCharactersPerRequest": "Lolemo moke koleka oyo ekoki komitana na lisolo moko.",
+      "uploadMegabytesPerFile": "Ndakisa ya fichier moko eleki nyonso ekoki ko-upload.",
+      "mcpRoundsPerRequest": "Mbala boni message moko ekoki kobengana ba tool.",
+      "ttsCharactersPerDay": "Bamilaki nyonso oyo ebétami na maloba na mokolo moko.",
+      "transcriptionMinutesPerDay": "Minute nyonso ya audio mpe vidéo oyo ebongolami na mokolo.",
+      "translationJobsPerDay": "Misala ya kobongola ndakisa na mokolo moko.",
+      "webSearchCallsPerDay": "Bilukiluki ya Web na mokolo moko. Soki limite eleki, eyano epesamaka ata kozanga koluka te.",
+      "codeInterpreterRunsPerDay": "Bilakisa ya code interpreter na mokolo moko. Soki limite eleki, nsango epesamaka ata kozanga kosala code.",
+      "uploadFilesPerDay": "Bafichier ba-upload na mokolo moko."
+    },
+    "scopeFamily": "Famille",
+    "scopeModel": "Modèle",
+    "families": "Ba famille ya modèle",
+    "modelsGroup": "Ba modèle nyonso",
+    "addScopedLimit": "Tia limite mpo na famille to modèle…",
+    "removeScopedLimit": "Longola limite oyo",
+    "unknownQualifier": "ezali te na catalogue na yo lelo",
+    "unknownQualifierHint": "Modèle to famille oyo ezalaka te na region to ring oyo. Limite ezali kaka mpe ekosalema wapi esalemi."
   }
 }

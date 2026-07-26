@@ -771,7 +771,9 @@
       "statusFailed": "Gagal",
       "statusIncomplete": "Belum lengkap",
       "viaService": "melalui {service}",
-      "downloadFile": "Unduh"
+      "downloadFile": "Unduh",
+      "executedCode": "Kode yang dijalankan",
+      "codeOutput": "Output"
     },
     "consent": {
       "authorizeRequired": "Otorisasi diperlukan",
@@ -1215,7 +1217,9 @@
       "providerCombinedDescription": "Menjalankan Bing grounding dan Google News bersamaan: judul akan muncul dalam hitungan detik sementara pencarian mendalam Bing tetap berjalan, dan Anda dapat memilih menjawab dari judul yang sudah ada tanpa harus menunggu pencarian selesai. Setelah Bing selesai, kedua hasil akan digabungkan.",
       "providerBingResponses": "Pencarian cepat Bing (Azure OpenAI)",
       "providerBingResponsesDescription": "Cakupan web Bing yang sama seperti Bing grounding, dijalankan sebagai satu pemanggilan model langsung, bukan agen Foundry — biasanya jauh lebih cepat. Opsi baru sedang dievaluasi dibandingkan Bing grounding."
-    }
+    },
+    "Admin": "Admin",
+    "Usage Limits": "Batas penggunaan"
   },
   "notFound": {
     "lostDog": "Anjing hilang"
@@ -3631,7 +3635,20 @@
     "clearAll": "Hapus semua memori",
     "clearAllConfirmQuestion": "Hapus semua memori? Tindakan ini tidak dapat dibatalkan.",
     "clearAllConfirm": "Hapus semua",
-    "cancel": "Batal"
+    "cancel": "Batal",
+    "pauseToggle": "Jeda penyimpanan memori baru",
+    "pauseNote": "Memori yang sudah ada tetap mempersonalisasi percakapan Anda — tidak ada yang baru disimpan hingga Anda melanjutkan.",
+    "addLabel": "Tambah memori",
+    "addPlaceholder": "Hal yang harus diingat asisten, misalnya \"Menyukai jawaban singkat\"",
+    "addMemory": "Tambah memori",
+    "editMemory": "Edit memori",
+    "saveMemory": "Simpan",
+    "addedByYou": "Ditambahkan oleh Anda",
+    "storedCount": "{count} dari {max} memori tersimpan",
+    "charCount": "{count}/{max} karakter",
+    "noLineBreaksHint": "Garis baru dihapus — satu memori disimpan dalam satu baris.",
+    "duplicate": "Memori tersebut sudah tersimpan.",
+    "atCapacity": "Anda telah mencapai batas {max} memori. Hapus satu untuk menambah lainnya."
   },
   "contextWindow": {
     "label": "Jendela konteks",
@@ -4018,5 +4035,160 @@
     "fieldEventEnd": "Selesai",
     "fieldEventPrecision": "Presisi",
     "fieldEventOngoing": "Sedang berlangsung"
+  },
+  "admin": {
+    "title": "Admin",
+    "areaNavLabel": "Area admin",
+    "group": {
+      "access": "Akses",
+      "usage": "Penggunaan",
+      "administration": "Administrasi"
+    },
+    "areaDescription": {
+      "agents": "Kendalikan siapa yang dapat menggunakan setiap agen bersama.",
+      "connectors": "Konektor organisasi dan siapa saja yang dapat menggunakannya.",
+      "guides": "Panduan gaya, terminologi, dan kepatuhan.",
+      "mapDatasets": "Dataset terkurasi yang tersedia untuk alur kerja peta.",
+      "localAdmins": "Delegasikan pengeditan aturan akses ke orang lain."
+    }
+  },
+  "limits": {
+    "title": "Batas penggunaan",
+    "description": "Batasi seberapa banyak model dan fitur yang dapat digunakan setiap orang. Semuanya tanpa batas kecuali Anda mengatur di sini.",
+    "back": "Kembali ke chat",
+    "loading": "Memuat…",
+    "retry": "Coba lagi",
+    "policyUnavailable": "Tidak dapat membaca kebijakan batas dari penyimpanan. Ini BUKAN berarti \"tidak ada yang dikonfigurasi\" — jangan berasumsi batas tidak aktif. Silakan coba lagi dan periksa log server jika tetap terjadi.",
+    "save": "Simpan",
+    "saving": "Menyimpan…",
+    "saved": "Batas berhasil disimpan.",
+    "saveFailed": "Tidak dapat menyimpan kebijakan batas.",
+    "conflict": "Admin lain mengubah kebijakan batas saat Anda mengedit. Perubahan Anda tidak disimpan — versi terbaru telah dimuat ulang.",
+    "unsavedChanges": "Perubahan belum disimpan",
+    "modeLabel": "Mode",
+    "modeObserve": "Observasi (catat saja)",
+    "modeEnforce": "Terapkan (blokir)",
+    "failModeLabel": "Jika penyimpanan tidak dapat diakses",
+    "failOpen": "Izinkan (fail open)",
+    "failClosed": "Blokir (fail closed)",
+    "timezoneLabel": "Zona waktu periode",
+    "countByom": "Hitung penggunaan akun model milik pengguna",
+    "countAuxiliary": "Hitung panggilan latar (judul, ringkasan, memori)",
+    "observeNotice": "Mode observasi aktif: tidak ada yang diblokir. Setiap batas yang seharusnya memblokir seseorang akan dicatat di log server, jadi Anda dapat memeriksa kebijakan dengan penggunaan nyata sebelum menerapkannya.",
+    "propagationNotice": "Perubahan butuh waktu hingga 60 detik untuk sampai ke setiap server.",
+    "tab": {
+      "defaults": "Default global",
+      "overrides": "Penyesuaian"
+    },
+    "tabsLabel": "Bagian batas",
+    "category": {
+      "chat": "Chat",
+      "models": "Model",
+      "tools": "Alat",
+      "files": "Berkas",
+      "speech": "Suara",
+      "documents": "Dokumen"
+    },
+    "label": {
+      "modelAllowed": "Model tersedia",
+      "modelRequestsPerDay": "Pesan per model",
+      "chatMessagesPerDay": "Pesan per hari",
+      "chatTokensPerDay": "Token per hari",
+      "chatTokensPerMonth": "Token per bulan",
+      "webSearchEnabled": "Pencarian web",
+      "codeInterpreterEnabled": "Code interpreter",
+      "mcpEnabled": "Connector (MCP)",
+      "ttsCharactersPerRequest": "Karakter per baca suara",
+      "uploadMegabytesPerFile": "Ukuran unggah per berkas",
+      "mcpRoundsPerRequest": "Putaran alat per pesan",
+      "ttsCharactersPerDay": "Karakter baca suara per hari",
+      "transcriptionMinutesPerDay": "Menit transkripsi per hari",
+      "translationJobsPerDay": "Terjemahan dokumen per hari",
+      "webSearchCallsPerDay": "Pencarian web per hari",
+      "codeInterpreterRunsPerDay": "Jalankan code interpreter per hari",
+      "uploadFilesPerDay": "Unggah berkas per hari"
+    },
+    "valueModeLabel": "Jenis batas",
+    "valueAmountLabel": "Jumlah batas",
+    "modeInherit": "Tidak disetel — ikut default",
+    "modeUnlimited": "Tanpa batas",
+    "modeAllowed": "Diizinkan",
+    "modeLimited": "Dibatasi hingga",
+    "modeBlocked": "Diblokir",
+    "blockedChip": "Diblokir",
+    "hardCeilingHint": "Tidak dapat melebihi {value}",
+    "hardCeilingToggle": "Batas keras — penyesuaian tidak boleh melebihi ini",
+    "unit": {
+      "requests": "permintaan",
+      "tokens": "token",
+      "calls": "panggilan",
+      "runs": "jalankan",
+      "characters": "karakter",
+      "megabytes": "MB",
+      "minutes": "menit",
+      "jobs": "pekerjaan",
+      "rounds": "putaran",
+      "boolean": ""
+    },
+    "window": {
+      "day": "hari",
+      "month": "bulan"
+    },
+    "scope": {
+      "user": "Orang tertentu",
+      "domain": "Domain email",
+      "attribute": "Departemen / perusahaan / kantor",
+      "group": "Grup (belum aktif)"
+    },
+    "targetsLabel": {
+      "user": "Alamat email",
+      "domain": "Domain",
+      "attribute": "Atribut",
+      "group": "ID Grup"
+    },
+    "targetsPlaceholder": {
+      "user": "name@example.org",
+      "domain": "example.org",
+      "attribute": "department:health",
+      "group": "Entra group object ID"
+    },
+    "chipAddHint": "Tambah lagi…",
+    "removeChip": "Hapus",
+    "groupsPendingConsent": "Penggantian grup telah disimpan tetapi belum berlaku: keanggotaan grup belum tersedia di aplikasi sampai admin tenant memberikan persetujuan. Gunakan \"Departemen / perusahaan / kantor\" untuk penggantian yang berlaku hari ini.",
+    "overrideLabelPlaceholder": "Untuk apa penggantian ini",
+    "overrideLabelLabel": "Nama penggantian",
+    "overrideScopeLabel": "Berlaku untuk",
+    "overrideEnabled": "Aktif",
+    "removeOverride": "Hapus penggantian",
+    "addOverride": "Tambah penggantian",
+    "noOverrides": "Tidak ada penggantian. Semua orang mengikuti pengaturan default global di atas.",
+    "nav": "Batas penggunaan",
+    "descriptionByKey": {
+      "modelAllowed": "Apakah model ini dapat digunakan sama sekali.",
+      "modelRequestsPerDay": "Pesan per hari untuk model atau keluarga model tertentu.",
+      "chatMessagesPerDay": "Total pesan per hari di semua model.",
+      "chatTokensPerDay": "Perkiraan — batas bisa terlampaui jika balasan yang sedang dibuat melebihi batas.",
+      "chatTokensPerMonth": "Perkiraan — lihat catatan tentang batas token harian.",
+      "webSearchEnabled": "Apakah pesan dapat mencari di web.",
+      "codeInterpreterEnabled": "Apakah pesan dapat menjalankan kode.",
+      "mcpEnabled": "Apakah konektor (alat MCP) dapat digunakan.",
+      "ttsCharactersPerRequest": "Bagian terpanjang yang dapat dibacakan dalam satu permintaan.",
+      "uploadMegabytesPerFile": "Ukuran maksimum satu file yang dapat diunggah.",
+      "mcpRoundsPerRequest": "Berapa banyak pemanggilan alat yang dapat dirangkai dalam satu pesan.",
+      "ttsCharactersPerDay": "Total karakter yang dibacakan per hari.",
+      "transcriptionMinutesPerDay": "Total menit audio dan video yang ditranskripsi per hari.",
+      "translationJobsPerDay": "Pekerjaan terjemahan dokumen yang dimulai per hari.",
+      "webSearchCallsPerDay": "Pencarian web per hari. Jika melewati batas, pesan dijawab tanpa pencarian, bukan gagal.",
+      "codeInterpreterRunsPerDay": "Menjalankan code interpreter per hari. Jika melewati batas, pesan dijawab tanpa menjalankan kode.",
+      "uploadFilesPerDay": "File yang diunggah per hari."
+    },
+    "scopeFamily": "Keluarga",
+    "scopeModel": "Model",
+    "families": "Keluarga model",
+    "modelsGroup": "Model spesifik",
+    "addScopedLimit": "Tambahkan batas untuk keluarga atau model…",
+    "removeScopedLimit": "Hapus batas ini",
+    "unknownQualifier": "tidak ada di katalog Anda saat ini",
+    "unknownQualifierHint": "Model atau keluarga ini tidak tersedia di wilayah atau ring ini. Batas disimpan dan akan diterapkan di mana saja model ini ada."
   }
 }

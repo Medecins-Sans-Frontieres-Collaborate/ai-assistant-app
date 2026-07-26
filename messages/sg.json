@@ -862,7 +862,9 @@
       "statusFailed": "A kûngö",
       "statusIncomplete": "A hunga nzönî",
       "viaService": "na {service}",
-      "downloadFile": "Kûtî yângâ"
+      "downloadFile": "Kûtî yângâ",
+      "executedCode": "Kôdï tî yé yângo",
+      "codeOutput": "Palê tî kôdï"
     },
     "consent": {
       "authorizeRequired": "Besi yeke autorisation",
@@ -1401,7 +1403,9 @@
       "providerCombinedDescription": "Azara Bing na Google News kéké ndö: babûtï sô ayeke mbi yeke gbalarä le sô, kö söködro tî Bing ko yeke kodro. Awa mo göŋö na mbeti tî babûtï sô ayeke, mo mbi yeke zakara. Sô Bing ape, nzönîsï ködörö asambili.",
       "providerBingResponses": "Bing keresë na gbaba (Azure OpenAI)",
       "providerBingResponsesDescription": "Bing sara internet gbate nî yeke na Bing grounding, mo ködörö na mô na mô sôko, a yeke pi kûê. Bê ti yeke gbalê na Bing grounding mo tî tîngö."
-    }
+    },
+    "Admin": "Gambalï",
+    "Usage Limits": "Limitî tî nîngu"
   },
   "emptyState": {
     "greeting": "Mbi lingbi tî sâra yê?",
@@ -3615,7 +3619,20 @@
     "clearAll": "Kûlî meme nyoso",
     "clearAllConfirmQuestion": "Kûlî meme nyoso? Lo pê apida mo.",
     "clearAllConfirm": "Kûlî nyoso",
-    "cancel": "Kangû"
+    "cancel": "Kangû",
+    "pauseToggle": "Kûtï sô tî gwêtê sôkô tî memoire",
+    "pauseNote": "Memoires sô a alî tî mû alî sô tî tîngbî tî yê mû chat na — pia tî mû tända mo ko êtî so yeke gwêtê",
+    "addLabel": "Gbekë memoire",
+    "addPlaceholder": "Na tî assistant ayeke gbêtï, tia: \"Ayeke yê terê sôka sô\"",
+    "addMemory": "Gbekë memoire",
+    "editMemory": "Rendrï memoire",
+    "saveMemory": "Sûkï",
+    "addedByYou": "Mo yeke gbêtï",
+    "storedCount": "{count} na {max} memoire yeke sûkï",
+    "charCount": "{count}/{max} karakterê",
+    "noLineBreaksHint": "Karo tî ligne apê kôdö — memoire yeke sûkï na ligne môtî sêka.",
+    "duplicate": "Memoire ûsu ayeke sûkï.",
+    "atCapacity": "Mo a wakë na limitî memoire {max}. Sûkï di môkô azo tî gbekë môzï."
   },
   "contextWindow": {
     "label": "Fenêtre tî contexte",
@@ -4002,5 +4019,160 @@
     "fieldEventEnd": "Bênî",
     "fieldEventPrecision": "Kombere",
     "fieldEventOngoing": "Pe a banga"
+  },
+  "admin": {
+    "title": "Gambalï",
+    "areaNavLabel": "Gambalï sô",
+    "group": {
+      "access": "Gbèndé",
+      "usage": "Nîngu",
+      "administration": "Gambalï"
+    },
+    "areaDescription": {
+      "agents": "Kpêtï mo ayeke nîngu agent tî nzönî.",
+      "connectors": "Connector tî organisation na mo ayeke nîngu yângö.",
+      "guides": "Style, têrminologie na guides tî conformité.",
+      "mapDatasets": "Datasets sô ndurü tî workflow tî map.",
+      "localAdmins": "Tènè bina mo azanë tî yeke changer règle tî accès."
+    }
+  },
+  "limits": {
+    "title": "Limitî tî nîngu",
+    "description": "Tènè bina kapere tî model na feature mo ayeke nîngu. Tout sô tî butunga à la limite si mo ayeke tî ndurü limitî ape.",
+    "back": "Zä mbênî na chat",
+    "loading": "Yeke charge...",
+    "retry": "Bêtï na ndurû",
+    "policyUnavailable": "Limitî policy ape na storage. Ala CODÖ na \"rien nîngbï\" — mbênî na ndurü tî limit ape. Bêtï ndurü na tî kpê sï log tî server sô ayéké tâmbula.",
+    "save": "Sûkï",
+    "saving": "Yeke sûkï...",
+    "saved": "Limitî sûkï.",
+    "saveFailed": "Limitî policy ayeke sûkï tî mô.",
+    "conflict": "Gambalï môzï ayeke changer limitî policy sô mo ayeke rendrï. Changements sô tî mo ayeke sûkï — version môzï ayeke charge na.",
+    "unsavedChanges": "Changema sô ayeke sûkï tî mô",
+    "modeLabel": "Mode",
+    "modeObserve": "Observe (log sûkï môkô)",
+    "modeEnforce": "Enforce (kêtï)",
+    "failModeLabel": "Na storage a yeke tî ndurü",
+    "failOpen": "Bêtï (fail open)",
+    "failClosed": "Kêtï (fail closed)",
+    "timezoneLabel": "Periode timezone",
+    "countByom": "Gbêtï usage tî compte model tî utilisateur",
+    "countAuxiliary": "Gbêtï na background calls (titres, résumé, memoire)",
+    "observeNotice": "Observe mode a yâ: rien ayeke kêtï. Limitî sô yeke kêtï mo yeke sûkï na log tî server, bina mo ayeke kpë limitî na usage avant tî enforce.",
+    "propagationNotice": "Changema yeke kpëtë 60 secondes tî yanga na server kété.",
+    "tab": {
+      "defaults": "Nzoni ya mbi",
+      "overrides": "Kété ti mbéni"
+    },
+    "tabsLabel": "Pöngö na nzoni",
+    "category": {
+      "chat": "Chat",
+      "models": "Models",
+      "tools": "Tools",
+      "files": "Files",
+      "speech": "Speech",
+      "documents": "Doküman"
+    },
+    "label": {
+      "modelAllowed": "Model ali ti köte",
+      "modelRequestsPerDay": "Ndinga na model na mbo",
+      "chatMessagesPerDay": "Ndinga na mbo",
+      "chatTokensPerDay": "Tokens na mbo",
+      "chatTokensPerMonth": "Tokens na linga",
+      "webSearchEnabled": "Web search",
+      "codeInterpreterEnabled": "Code interpreter",
+      "mcpEnabled": "Connectors (MCP)",
+      "ttsCharactersPerRequest": "Mbëtï na likundu ngangu gbegbe",
+      "uploadMegabytesPerFile": "Limburu Mb na dosié yeke",
+      "mcpRoundsPerRequest": "Tokombere ya tool ti ndinga yeke",
+      "ttsCharactersPerDay": "Mbëtï na likundu na mbo",
+      "transcriptionMinutesPerDay": "Mbela na transcription na mbo",
+      "translationJobsPerDay": "Doküman ti ke sôso na mbo",
+      "webSearchCallsPerDay": "Web search na mbo",
+      "codeInterpreterRunsPerDay": "Code interpreter runs na mbo",
+      "uploadFilesPerDay": "Fa dosié na mbo"
+    },
+    "valueModeLabel": "Zoni tî nzoni",
+    "valueAmountLabel": "Zöngö tî nzoni",
+    "modeInherit": "Mbênî ti kpängö— sôngö wa na mbi",
+    "modeUnlimited": "Têngö tî nzoni",
+    "modeAllowed": "Ali ti köte",
+    "modeLimited": "Wândë asë so",
+    "modeBlocked": "Wëndï",
+    "blockedChip": "Wëndï",
+    "hardCeilingHint": "Apö asë da yeke {value}",
+    "hardCeilingToggle": "Apö asë da — mbênî ti kété apö da na lo",
+    "unit": {
+      "requests": "ndinga",
+      "tokens": "token",
+      "calls": "kobâ",
+      "runs": "runs",
+      "characters": "mbëtï",
+      "megabytes": "MB",
+      "minutes": "mbela",
+      "jobs": "tirï",
+      "rounds": "tokombere",
+      "boolean": ""
+    },
+    "window": {
+      "day": "mbo",
+      "month": "linga"
+    },
+    "scope": {
+      "user": "Bodë mbï gbe-gbe",
+      "domain": "Domain tî email",
+      "attribute": "Département / kompanyi / biro",
+      "group": "Groupe (apé siriri)"
+    },
+    "targetsLabel": {
+      "user": "Adresê email",
+      "domain": "Domain",
+      "attribute": "Attribut",
+      "group": "ID ti groupe"
+    },
+    "targetsPlaceholder": {
+      "user": "name@example.org",
+      "domain": "example.org",
+      "attribute": "department:health",
+      "group": "ID ti groupe Entra"
+    },
+    "chipAddHint": "Sôkô ndoyi…",
+    "removeChip": "Kötï",
+    "groupsPendingConsent": "Mo tî groupe zo, so ale ti sara, mbênî, so yeke si tî app, so admin ti tenant ayeke mba. Ködörö \"Département / kompanyi / biro\" tî ayeke so yeke sôkô siriri lo tî ôko zawoko.",
+    "overrideLabelPlaceholder": "Mbênî moto ayeke ayeke vabé",
+    "overrideLabelLabel": "Ngbere ti mbênî",
+    "overrideScopeLabel": "Ayeke na",
+    "overrideEnabled": "Ayeke",
+    "removeOverride": "Kötï mbênî",
+    "addOverride": "Sôkô mbênî",
+    "noOverrides": "Ala mbênî. Bê ti yeke mbi ayeke siriri mo fadere.",
+    "nav": "Gbé ti ayeke",
+    "descriptionByKey": {
+      "modelAllowed": "Sô mo modèle ara ayeke bale.",
+      "modelRequestsPerDay": "Ngbêtî bala na modèle mo sôkô ôko.",
+      "chatMessagesPerDay": "Ngbêtî bala na zo modèles ôko tî ôko.",
+      "chatTokensPerDay": "Gbê tî si—gbê ayeke fetirï ga ndokua lengü tî kodro zo bale.",
+      "chatTokensPerMonth": "Gbê tî si—kumara na gbê ti bala na sôkô ôko.",
+      "webSearchEnabled": "Sô bala ayeke leka web.",
+      "codeInterpreterEnabled": "Sô bala ayeke sulû code.",
+      "mcpEnabled": "Sô MCP tools ayeke bale.",
+      "ttsCharactersPerRequest": "Mbênî texte mo bale tî yeke sô nongô na bale ôko.",
+      "uploadMegabytesPerFile": "Fichier mo bale so ayeke fata.",
+      "mcpRoundsPerRequest": "Ngbêtî ti tool mo bale tî ayeke kêtï na message ôko.",
+      "ttsCharactersPerDay": "Ngbêtî ti texte mo nongö tî ôko.",
+      "transcriptionMinutesPerDay": "Ngbêtî minute ti odiyo na vidéo mo transcribe ôko.",
+      "translationJobsPerDay": "Ngbêtî ti translation tî document ôko.",
+      "webSearchCallsPerDay": "Recherche web ôko. Sô gbê ayeke, message ayeke sïla kpê sï nga web.",
+      "codeInterpreterRunsPerDay": "Code interpreter bala ôko. Sô gbê ayeke, message ayeke sï nga code.",
+      "uploadFilesPerDay": "Ngbêtî ti fichier mo lata ôko."
+    },
+    "scopeFamily": "Famili",
+    "scopeModel": "Modèle",
+    "families": "Famili ti modèles",
+    "modelsGroup": "Modèles mo sorô",
+    "addScopedLimit": "Sôkô ayeke na famili wa modèle…",
+    "removeScopedLimit": "Kötï ayeke mo tene",
+    "unknownQualifier": "apéli na catalog ti mo na yeke",
+    "unknownQualifierHint": "Modèle wa famili ara ayeke apéli na zone wa ring ara. Gbê ayeke kâfa, ayeke bale na sô ayeke dusa."
   }
 }

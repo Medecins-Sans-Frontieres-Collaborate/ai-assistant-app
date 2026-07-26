@@ -750,7 +750,9 @@
       "statusFailed": "ব্যর্থ",
       "statusIncomplete": "অসম্পূর্ণ",
       "viaService": "{service} এর মাধ্যমে",
-      "downloadFile": "ডাউনলোড"
+      "downloadFile": "ডাউনলোড",
+      "executedCode": "কোড চালানো হয়েছে",
+      "codeOutput": "আউটপুট"
     },
     "consent": {
       "authorizeRequired": "অনুমোদন প্রয়োজন",
@@ -1248,7 +1250,9 @@
       "providerCombinedDescription": "Bing grounding এবং Google News একসাথে চালানো হয়: মাত্র কয়েক সেকেন্ডে শিরোনাম দেখা যায়, এই সময়েও গভীর Bing অনুসন্ধান চলতে থাকে, এবং আপনি চাইলে শিরোনাম থেকেই দ্রুত উত্তর দিতে পারেন। Bing শেষ হলে, উভয় ফলাফল একত্রিত হয়।",
       "providerBingResponses": "Bing দ্রুত অনুসন্ধান (Azure OpenAI)",
       "providerBingResponsesDescription": "একই Bing ওয়েব কভারেজ যেমন Bing grounding, তবে একটি সরাসরি মডেল কল হিসেবে চালানো হয় — সাধারণত অনেক দ্রুত। নতুন অপশন, Bing grounding এর সাথে তুলনা করে দেখা হচ্ছে।"
-    }
+    },
+    "Admin": "অ্যাডমিন",
+    "Usage Limits": "ব্যবহারের সীমা"
   },
   "notFound": {
     "lostDog": "হারানো কুকুর"
@@ -3631,7 +3635,20 @@
     "clearAll": "সব মেমোরি মুছে দিন",
     "clearAllConfirmQuestion": "সব মেমোরি মুছে দেবেন? এটি আর ফেরানো যাবে না।",
     "clearAllConfirm": "সব মুছে দিন",
-    "cancel": "বাতিল"
+    "cancel": "বাতিল",
+    "pauseToggle": "নতুন মেমোরি সেভ করা সাময়িকভাবে বন্ধ করুন",
+    "pauseNote": "আপনার আগে থেকে থাকা মেমোরিগুলো চ্যাট পার্সোনালাইজ করতে থাকবে — আপনি আবার চালু না করা পর্যন্ত নতুন কিছু সেভ হবে না।",
+    "addLabel": "মেমোরি যোগ করুন",
+    "addPlaceholder": "সহকারীর মনে রাখা উচিত এমন কিছু, যেমন \"সংক্ষিপ্ত উত্তর পছন্দ করেন\"",
+    "addMemory": "মেমোরি যোগ করুন",
+    "editMemory": "মেমোরি সম্পাদনা করুন",
+    "saveMemory": "সংরক্ষণ করুন",
+    "addedByYou": "আপনি যোগ করেছেন",
+    "storedCount": "{count} / {max}টি মেমোরি সংরক্ষিত",
+    "charCount": "{count}/{max} অক্ষর",
+    "noLineBreaksHint": "লাইন ব্রেক সরিয়ে ফেলা হয়েছে — একটি মেমোরি এক লাইনে সংরক্ষিত হবে।",
+    "duplicate": "এই মেমোরিটি আগে থেকেই সংরক্ষিত আছে।",
+    "atCapacity": "আপনি {max}-টি মেমোরি সীমায় পৌঁছেছেন। নতুন যোগ করতে হলে একটি মুছুন।"
   },
   "contextWindow": {
     "label": "কনটেক্সট উইন্ডো",
@@ -4018,5 +4035,160 @@
     "fieldEventEnd": "শেষ",
     "fieldEventPrecision": "নির্ভুলতা",
     "fieldEventOngoing": "চলমান"
+  },
+  "admin": {
+    "title": "অ্যাডমিন",
+    "areaNavLabel": "অ্যাডমিন এলাকা",
+    "group": {
+      "access": "অ্যাক্সেস",
+      "usage": "ব্যবহার",
+      "administration": "প্রশাসন"
+    },
+    "areaDescription": {
+      "agents": "কে কোন শেয়ার্ড এজেন্ট ব্যবহার করতে পারবে তা নিয়ন্ত্রণ করুন।",
+      "connectors": "সংস্থার সংযোগকারীগুলোর তথ্য ও কে ব্যবহার করতে পারবে।",
+      "guides": "স্টাইল, শব্দচয়ন ও কমপ্লায়েন্স নির্দেশিকা।",
+      "mapDatasets": "নির্বাচিত ডেটাসেটগুলো ম্যাপ ওয়ার্কফ্লোর জন্য উপলব্ধ।",
+      "localAdmins": "অন্যদের অ্যাক্সেস নিয়ম সম্পাদনার অনুমতি দিন।"
+    }
+  },
+  "limits": {
+    "title": "ব্যবহারের সীমা",
+    "description": "প্রতিটি মডেল ও ফিচার কতটা ব্যবহার করা যাবে তা নির্ধারণ করুন। এখানে সীমা না দিলে সবকিছু আনলিমিটেড।",
+    "back": "চ্যাটে ফিরে যান",
+    "loading": "লোড হচ্ছে…",
+    "retry": "পুনরায় চেষ্টা করুন",
+    "policyUnavailable": "স্টোরেজ থেকে সীমার নীতিমালা পড়া যায়নি। এটি \"কিছু কনফিগার হয়নি\"-এর মতো নয় — সীমা বন্ধ আছে ধরে নেবেন না। পুনরায় চেষ্টা করুন, সমস্যা অব্যাহত থাকলে সার্ভার লগ দেখুন।",
+    "save": "সংরক্ষণ করুন",
+    "saving": "সংরক্ষণ করা হচ্ছে…",
+    "saved": "সীমা সংরক্ষণ হয়েছে।",
+    "saveFailed": "সীমার নীতিমালা সংরক্ষণ করা যায়নি।",
+    "conflict": "আপনি সম্পাদনা করার সময় অন্য কোনো অ্যাডমিন সীমার নীতিমালা পরিবর্তন করেছেন। আপনার পরিবর্তন সংরক্ষিত হয়নি — সর্বশেষ সংস্করণ পুনরায় লোড হয়েছে।",
+    "unsavedChanges": "অসংরক্ষিত পরিবর্তন",
+    "modeLabel": "মোড",
+    "modeObserve": "পর্যবেক্ষণ (শুধু লগ হবে)",
+    "modeEnforce": "বাধ্যতামূলক (ব্লক)",
+    "failModeLabel": "স্টোরেজে প্রবেশ করা না গেলে",
+    "failOpen": "অনুমতি দিন (ফেইল ওপেন)",
+    "failClosed": "ব্লক করুন (ফেইল ক্লোজড)",
+    "timezoneLabel": "সময়ের টাইমজোন",
+    "countByom": "ব্যবহারকারীর নিজস্ব মডেল অ্যাকাউন্টের ব্যবহার গণনা করুন",
+    "countAuxiliary": "পটভূমির কল (শিরোনাম, সারসংক্ষেপ, মেমোরি) গণনা করুন",
+    "observeNotice": "পর্যবেক্ষণ মোড চালু আছে: কিছুই ব্যাহত হবে না। যেসব সীমা কারও জন্য বাধা হতো, সেগুলো সার্ভার লগে লেখা হবে, যাতে আপনি নীতি কার্যকর করার আগে বাস্তব ব্যবহারের সঙ্গে তুলনা করতে পারেন।",
+    "propagationNotice": "সব সার্ভারে পরিবর্তন পৌঁছাতে সর্বোচ্চ ৬০ সেকেন্ড লাগতে পারে।",
+    "tab": {
+      "defaults": "গ্লোবাল ডিফল্টস",
+      "overrides": "ওভাররাইডস"
+    },
+    "tabsLabel": "লিমিটস বিভাগ",
+    "category": {
+      "chat": "চ্যাট",
+      "models": "মডেলসমূহ",
+      "tools": "টুলস",
+      "files": "ফাইলসমূহ",
+      "speech": "স্পিচ",
+      "documents": "ডকুমেন্টসমূহ"
+    },
+    "label": {
+      "modelAllowed": "মডেল উপলব্ধ",
+      "modelRequestsPerDay": "প্রতি মডেল বার্তা",
+      "chatMessagesPerDay": "প্রতিদিন বার্তা",
+      "chatTokensPerDay": "প্রতিদিন টোকেন",
+      "chatTokensPerMonth": "প্রতি মাস টোকেন",
+      "webSearchEnabled": "ওয়েব সার্চ",
+      "codeInterpreterEnabled": "কোড ইন্টারপ্রেটার",
+      "mcpEnabled": "কনেক্টরস (MCP)",
+      "ttsCharactersPerRequest": "প্রতি রিড-আলাউড অক্ষর সংখ্যা",
+      "uploadMegabytesPerFile": "প্রতি ফাইল আপলোড সাইজ",
+      "mcpRoundsPerRequest": "প্রতি বার্তা টুল রাউন্ড",
+      "ttsCharactersPerDay": "প্রতিদিন রিড-আলাউড অক্ষর",
+      "transcriptionMinutesPerDay": "প্রতিদিন ট্রান্সক্রিপশন মিনিট",
+      "translationJobsPerDay": "প্রতিদিন ডকুমেন্ট অনুবাদ",
+      "webSearchCallsPerDay": "প্রতিদিন ওয়েব সার্চ",
+      "codeInterpreterRunsPerDay": "প্রতিদিন কোড ইন্টারপ্রেটার রান",
+      "uploadFilesPerDay": "প্রতিদিন ফাইল আপলোড"
+    },
+    "valueModeLabel": "লিমিট ধরণ",
+    "valueAmountLabel": "লিমিট পরিমাণ",
+    "modeInherit": "সেট নয় — ইনহেরিটেড",
+    "modeUnlimited": "অসীম",
+    "modeAllowed": "অনুমোদিত",
+    "modeLimited": "সীমাবদ্ধ",
+    "modeBlocked": "ব্লকড",
+    "blockedChip": "ব্লকড",
+    "hardCeilingHint": "{value} অতিক্রম করা যাবে না",
+    "hardCeilingToggle": "হার্ড সিলিং — কোনো ওভাররাইড এটি অতিক্রম করতে পারবে না",
+    "unit": {
+      "requests": "অনুরোধ",
+      "tokens": "টোকেন",
+      "calls": "কল",
+      "runs": "রান",
+      "characters": "অক্ষর",
+      "megabytes": "MB",
+      "minutes": "মিনিট",
+      "jobs": "জব",
+      "rounds": "রাউন্ড",
+      "boolean": ""
+    },
+    "window": {
+      "day": "দিন",
+      "month": "মাস"
+    },
+    "scope": {
+      "user": "নির্দিষ্ট ব্যক্তি",
+      "domain": "ইমেইল ডোমেইন",
+      "attribute": "বিভাগ / কোম্পানি / অফিস",
+      "group": "গ্রুপ (এখনও সক্রিয় নয়)"
+    },
+    "targetsLabel": {
+      "user": "ইমেইল ঠিকানাসমূহ",
+      "domain": "ডোমেইনসমূহ",
+      "attribute": "অ্যাট্রিবিউটসমূহ",
+      "group": "গ্রুপ আইডি"
+    },
+    "targetsPlaceholder": {
+      "user": "name@example.org",
+      "domain": "example.org",
+      "attribute": "department:health",
+      "group": "Entra গ্রুপ অবজেক্ট আইডি"
+    },
+    "chipAddHint": "আরও যোগ করুন…",
+    "removeChip": "সরান",
+    "groupsPendingConsent": "গ্রুপ ওভাররাইড সংরক্ষিত হয়েছে, কিন্তু এখনও কার্যকর নয়: টেন্যান্ট অ্যাডমিন কনসেন্ট না দেওয়া পর্যন্ত অ্যাপ্লিকেশনে গ্রুপ সদস্যপদ উপলব্ধ হবে না। আজই কার্যকর হওয়া ওভাররাইডের জন্য \"বিভাগ / কোম্পানি / অফিস\" ব্যবহার করুন।",
+    "overrideLabelPlaceholder": "এই ওভাররাইডের উদ্দেশ্য কী",
+    "overrideLabelLabel": "ওভাররাইডের নাম",
+    "overrideScopeLabel": "প্রযোজ্য ক্ষেত্র",
+    "overrideEnabled": "সক্রিয়",
+    "removeOverride": "ওভাররাইড সরান",
+    "addOverride": "নতুন ওভাররাইড যোগ করুন",
+    "noOverrides": "কোনো ওভাররাইড নেই। উপরের গ্লোবাল ডিফল্ট সবার জন্য প্রযোজ্য।",
+    "nav": "ব্যবহারের সীমা",
+    "descriptionByKey": {
+      "modelAllowed": "এই মডেলটি ব্যবহার করা যাবে কি না।",
+      "modelRequestsPerDay": "বিশেষ কোনো মডেল বা মডেল পরিবারের জন্য প্রতিদিনের বার্তা সংখ্যা।",
+      "chatMessagesPerDay": "সব মডেল মিলিয়ে দৈনিক সর্বমোট বার্তা সংখ্যা।",
+      "chatTokensPerDay": "আনুমানিক — সদ্য তৈরি হওয়া উত্তরের দৈর্ঘ্যের কারণে সীমা কিছুটা অতিক্রম হতে পারে।",
+      "chatTokensPerMonth": "আনুমানিক — দৈনিক টোকেন সীমার নোট দেখুন।",
+      "webSearchEnabled": "বার্তাগুলোর ওয়েব সার্চ করার অনুমতি আছে কি না।",
+      "codeInterpreterEnabled": "বার্তাগুলো কোড চালাতে পারবে কি না।",
+      "mcpEnabled": "কানেক্টর (MCP tools) ব্যবহার করা যাবে কি না।",
+      "ttsCharactersPerRequest": "একটি অনুরোধে সর্বাধিক যতো বড় টেক্সট পড়ে শোনানো যাবে।",
+      "uploadMegabytesPerFile": "একক ফাইলের সর্বাধিক আকার যা আপলোড করা যাবে।",
+      "mcpRoundsPerRequest": "একটি বার্তায় সর্বাধিক কতটি টুল কল চেইন করা যাবে।",
+      "ttsCharactersPerDay": "দৈনিক সর্বমোট পড়ে শোনানো অক্ষর সংখ্যা।",
+      "transcriptionMinutesPerDay": "প্রতিদিন অডিও ও ভিডিও ট্রান্সক্রিপশনের মোট মিনিট।",
+      "translationJobsPerDay": "প্রতিদিন শুরু হওয়া ডকুমেন্ট অনুবাদ কাজের সংখ্যা।",
+      "webSearchCallsPerDay": "প্রতিদিনের ওয়েব সার্চ সংখ্যা। সীমা অতিক্রম হলে সার্চ ছাড়াই উত্তর দেয়া হবে, ব্যর্থ হবে না।",
+      "codeInterpreterRunsPerDay": "প্রতিদিনের কোড ইন্টারপ্রেটার রান সংখ্যা। সীমা অতিক্রম হলে কোড না চালিয়ে উত্তর দেয়া হবে।",
+      "uploadFilesPerDay": "প্রতিদিন আপলোড করা ফাইলের সংখ্যা।"
+    },
+    "scopeFamily": "পরিবার",
+    "scopeModel": "মডেল",
+    "families": "মডেল পরিবারসমূহ",
+    "modelsGroup": "নির্দিষ্ট মডেলসমূহ",
+    "addScopedLimit": "কোনো পরিবার বা মডেলের জন্য সীমা যোগ করুন…",
+    "removeScopedLimit": "এই সীমা সরান",
+    "unknownQualifier": "বর্তমান ক্যাটালগে নেই",
+    "unknownQualifierHint": "এই মডেল বা পরিবার এই রিজিওন বা রিং-এ পাওয়া যায় না। সীমাটি রাখা হয়েছে এবং যেখানে বিদ্যমান, সেখানে তা প্রযোজ্য হবে।"
   }
 }

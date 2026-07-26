@@ -804,7 +804,9 @@
       "statusFailed": "असफल",
       "statusIncomplete": "अपूर्ण",
       "viaService": "{service} के माध्यम से",
-      "downloadFile": "डाउनलोड करें"
+      "downloadFile": "डाउनलोड करें",
+      "executedCode": "कोड निष्पादित किया गया",
+      "codeOutput": "आउटपुट"
     },
     "consent": {
       "authorizeRequired": "अनुमति आवश्यक",
@@ -1248,7 +1250,9 @@
       "providerCombinedDescription": "Bing ग्राउंडिंग और Google News एक साथ चलती है: कुछ सेकंड में मुख्य समाचार दिखाई देते हैं, जबकि गहन Bing खोज चालू रहती है। आप चाहे तो तुरंत मुख्य समाचारों से उत्तर चुन सकते हैं, या धीमी खोज के समाप्त होने की प्रतीक्षा कर सकते हैं। Bing पूरी होने पर दोनों परिणाम मिल जाते हैं।",
       "providerBingResponses": "Bing तेज़ खोज (Azure OpenAI)",
       "providerBingResponsesDescription": "Bing grounding के समान ही Bing वेब कवरेज, लेकिन Foundry एजेंट की बजाय एक सीधा मॉडल कॉल — आमतौर पर और भी तेज़। Bing grounding के मुकाबले में एक नया विकल्प।"
-    }
+    },
+    "Admin": "एडमिन",
+    "Usage Limits": "उपयोग सीमा"
   },
   "notFound": {
     "lostDog": "खोया हुआ कुत्ता"
@@ -3631,7 +3635,20 @@
     "clearAll": "सभी स्मृतियाँ साफ़ करें",
     "clearAllConfirmQuestion": "सभी स्मृतियाँ हटाएं? यह वापस नहीं हो सकता।",
     "clearAllConfirm": "सभी हटाएं",
-    "cancel": "रद्द करें"
+    "cancel": "रद्द करें",
+    "pauseToggle": "नई मेमोरी सेव करना रोकें",
+    "pauseNote": "पहले से जो मेमोरी हैं, वे आपकी चैट को निजीकरण करती रहेंगी — जब तक आप फिर से शुरू नहीं करते, कोई नई मेमोरी सेव नहीं होगी।",
+    "addLabel": "मेमोरी जोड़ें",
+    "addPlaceholder": "कुछ जिसे असिस्टेंट को याद रखना चाहिए, जैसे: \"संक्षिप्त उत्तर पसंद हैं\"",
+    "addMemory": "मेमोरी जोड़ें",
+    "editMemory": "मेमोरी संपादित करें",
+    "saveMemory": "सहेजें",
+    "addedByYou": "आप द्वारा जोड़ी गई",
+    "storedCount": "{max} में से {count} मेमोरी सेव हुई",
+    "charCount": "{count}/{max} अक्षर",
+    "noLineBreaksHint": "लाइन ब्रेक हटा दिए जाते हैं — एक मेमोरी एक ही लाइन में सेव होती है।",
+    "duplicate": "यह मेमोरी पहले से सेव है।",
+    "atCapacity": "आप {max} मेमोरी की सीमा पर पहुँच गए हैं। नई जोड़ने के लिए एक हटाएँ।"
   },
   "contextWindow": {
     "label": "संदर्भ विंडो",
@@ -4018,5 +4035,160 @@
     "fieldEventEnd": "समाप्ति",
     "fieldEventPrecision": "सटीकता",
     "fieldEventOngoing": "चालू"
+  },
+  "admin": {
+    "title": "एडमिन",
+    "areaNavLabel": "एडमिन क्षेत्र",
+    "group": {
+      "access": "पहुंच",
+      "usage": "उपयोग",
+      "administration": "प्रशासन"
+    },
+    "areaDescription": {
+      "agents": "नियंत्रण करें कि हर साझा एजेंट का उपयोग कौन कर सकता है।",
+      "connectors": "संगठन के कनेक्टर और उनका उपयोग करने वाले लोग।",
+      "guides": "शैली, शब्दावली और अनुपालन गाइड्स।",
+      "mapDatasets": "मैप वर्कफ़्लो के लिए उपलब्ध चुने हुए डेटासेट।",
+      "localAdmins": "अन्य लोगों को एक्सेस-नियम संपादन प्रत्यायोजित करें।"
+    }
+  },
+  "limits": {
+    "title": "उपयोग सीमा",
+    "description": "यहाँ सीमा निर्धारित करें कि प्रत्येक मॉडल और फीचर का कितनी मात्रा में उपयोग हो सकता है। जब तक यहाँ सीमा नहीं सेट की जाती, सबकुछ असीमित है।",
+    "back": "चैट पर वापस जाएँ",
+    "loading": "लोड हो रहा है…",
+    "retry": "पुनः प्रयास करें",
+    "policyUnavailable": "स्टोरेज से सीमा नीति नहीं पढ़ी जा सकी। यह \"कुछ भी कॉन्फ़िगर नहीं है\" से अलग है — यह न मानें कि सीमा बंद है। फिर से प्रयास करें, और समस्या बनी रहे तो सर्वर लॉग देखें।",
+    "save": "सहेजें",
+    "saving": "सहेजा जा रहा है…",
+    "saved": "सीमाएँ सहेजी गईं।",
+    "saveFailed": "सीमा नीति सहेज नहीं सके।",
+    "conflict": "किसी अन्य एडमिन ने आपके संपादन के दौरान सीमा नीति बदल दी। आपके बदलाव सहेजे नहीं गए — नवीनतम संस्करण फिर से लोड किया गया है।",
+    "unsavedChanges": "असहेजे गए बदलाव",
+    "modeLabel": "मोड",
+    "modeObserve": "देखें (सिर्फ लॉग करें)",
+    "modeEnforce": "प्रवर्तित करें (ब्लॉक करें)",
+    "failModeLabel": "अगर स्टोरेज तक पहुँच नहीं है",
+    "failOpen": "अनुमति दें (फेल ओपन)",
+    "failClosed": "ब्लॉक करें (फेल क्लोज़्ड)",
+    "timezoneLabel": "अवधि का टाइमज़ोन",
+    "countByom": "यूज़र्स के अपने मॉडल अकाउंट के उपयोग को गिनें",
+    "countAuxiliary": "पृष्ठभूमि कॉल (शीर्षक, सारांश, मेमोरी) गिनें",
+    "observeNotice": "अब ऑब्जर्व मोड चालू है: कुछ भी ब्लॉक नहीं किया गया। हर वह सीमा जो किसी को ब्लॉक करती, उसे सर्वर लॉग में दर्ज किया गया है, ताकि लागू करने से पहले आप नीति को वास्तविक उपयोग के साथ देख सकें।",
+    "propagationNotice": "हर सर्वर में बदलाव पहुँचने में 60 सेकंड तक लग सकते हैं।",
+    "tab": {
+      "defaults": "वैश्विक डिफ़ॉल्ट",
+      "overrides": "ओवरराइड"
+    },
+    "tabsLabel": "सीमा अनुभाग",
+    "category": {
+      "chat": "चैट",
+      "models": "मॉडल",
+      "tools": "टूल्स",
+      "files": "फ़ाइलें",
+      "speech": "स्पीच",
+      "documents": "दस्तावेज़"
+    },
+    "label": {
+      "modelAllowed": "मॉडल उपलब्ध",
+      "modelRequestsPerDay": "प्रति मॉडल संदेश",
+      "chatMessagesPerDay": "प्रतिदिन संदेश",
+      "chatTokensPerDay": "प्रतिदिन टोकन",
+      "chatTokensPerMonth": "प्रतिमाह टोकन",
+      "webSearchEnabled": "वेब खोज",
+      "codeInterpreterEnabled": "कोड इंटरप्रेटर",
+      "mcpEnabled": "कनेक्टर्स (MCP)",
+      "ttsCharactersPerRequest": "प्रति पढ़कर सुनाने में अक्षर",
+      "uploadMegabytesPerFile": "प्रति फ़ाइल अपलोड आकार",
+      "mcpRoundsPerRequest": "प्रति संदेश टूल राउंड्स",
+      "ttsCharactersPerDay": "प्रतिदिन पढ़कर सुनाने के अक्षर",
+      "transcriptionMinutesPerDay": "प्रतिदिन ट्रांसक्रिप्शन मिनट",
+      "translationJobsPerDay": "प्रतिदिन दस्तावेज़ अनुवाद",
+      "webSearchCallsPerDay": "प्रतिदिन वेब खोजें",
+      "codeInterpreterRunsPerDay": "प्रतिदिन कोड इंटरप्रेटर रन",
+      "uploadFilesPerDay": "प्रतिदिन फ़ाइल अपलोड"
+    },
+    "valueModeLabel": "सीमा प्रकार",
+    "valueAmountLabel": "सीमा राशि",
+    "modeInherit": "नियत नहीं — इनहेरिट",
+    "modeUnlimited": "असीमित",
+    "modeAllowed": "अनुमत",
+    "modeLimited": "सीमित",
+    "modeBlocked": "अवरुद्ध",
+    "blockedChip": "अवरुद्ध",
+    "hardCeilingHint": "{value} से अधिक नहीं हो सकता",
+    "hardCeilingToggle": "कठोर सीमा — कोई भी ओवरराइड इससे अधिक नहीं हो सकता",
+    "unit": {
+      "requests": "रिक्वेस्ट",
+      "tokens": "टोकन",
+      "calls": "कॉल्स",
+      "runs": "रन",
+      "characters": "अक्षर",
+      "megabytes": "MB",
+      "minutes": "मिनट",
+      "jobs": "जॉब्स",
+      "rounds": "राउंड्स",
+      "boolean": ""
+    },
+    "window": {
+      "day": "दिन",
+      "month": "माह"
+    },
+    "scope": {
+      "user": "विशिष्ट व्यक्ति",
+      "domain": "ईमेल डोमेन",
+      "attribute": "विभाग / कंपनी / कार्यालय",
+      "group": "समूह (अभी सक्रिय नहीं है)"
+    },
+    "targetsLabel": {
+      "user": "ईमेल पते",
+      "domain": "डोमेन",
+      "attribute": "गुण",
+      "group": "समूह आईडी"
+    },
+    "targetsPlaceholder": {
+      "user": "name@example.org",
+      "domain": "example.org",
+      "attribute": "department:health",
+      "group": "Entra समूह ऑब्जेक्ट आईडी"
+    },
+    "chipAddHint": "एक और जोड़ें…",
+    "removeChip": "हटाएँ",
+    "groupsPendingConsent": "समूह ओवरराइड सहेजे गए हैं लेकिन अभी लागू नहीं होते: समूह सदस्यता ऐप को तब तक उपलब्ध नहीं है जब तक टेनेंट एडमिन की सहमति नहीं मिलती। ओवरराइड के लिए \"विभाग / कंपनी / कार्यालय\" का उपयोग करें, जिससे परिवर्तन आज ही प्रभावी होगा।",
+    "overrideLabelPlaceholder": "यह ओवरराइड किसके लिए है",
+    "overrideLabelLabel": "ओवरराइड नाम",
+    "overrideScopeLabel": "लागू होता है",
+    "overrideEnabled": "सक्रिय",
+    "removeOverride": "ओवरराइड हटाएँ",
+    "addOverride": "ओवरराइड जोड़ें",
+    "noOverrides": "कोई ओवरराइड नहीं। सभी को ऊपर दिए गए ग्लोबल डिफ़ॉल्ट मिलेंगे।",
+    "nav": "उपयोग सीमा",
+    "descriptionByKey": {
+      "modelAllowed": "क्या इस मॉडल का उपयोग बिल्कुल किया जा सकता है।",
+      "modelRequestsPerDay": "किसी विशेष मॉडल या मॉडल परिवार के लिए प्रति दिन संदेशों की संख्या।",
+      "chatMessagesPerDay": "प्रत्येक मॉडल में कुल प्रतिदिन संदेश।",
+      "chatTokensPerDay": "अनुमानित — उत्तर की लंबाई के कारण सीमा पार हो सकती है।",
+      "chatTokensPerMonth": "अनुमानित — दैनिक टोकन सीमा पर टिप्पणी देखें।",
+      "webSearchEnabled": "क्या संदेश वेब खोज सकते हैं।",
+      "codeInterpreterEnabled": "क्या संदेश कोड चला सकते हैं।",
+      "mcpEnabled": "क्या कनेक्टर्स (MCP टूल्स) का उपयोग किया जा सकता है।",
+      "ttsCharactersPerRequest": "एक अनुरोध में अधिकतम टेक्स्ट जिसे पढ़ा जा सकता है।",
+      "uploadMegabytesPerFile": "सबसे बड़ा एकल फ़ाइल जिसे अपलोड किया जा सकता है।",
+      "mcpRoundsPerRequest": "एक संदेश में कितने टूल कॉल जोड़े जा सकते हैं।",
+      "ttsCharactersPerDay": "प्रतिदिन पढ़े गए कुल अक्षर।",
+      "transcriptionMinutesPerDay": "प्रतिदिन ट्रांसक्राइब किए गए कुल ऑडियो और वीडियो मिनट्स।",
+      "translationJobsPerDay": "प्रतिदिन शुरू किए गए डॉक्युमेंट ट्रांसलेशन कार्य।",
+      "webSearchCallsPerDay": "प्रति दिन वेब सर्च। सीमा के ऊपर, संदेश बिना सर्च किए उत्तरित किए जाएंगे, विफल नहीं होंगे।",
+      "codeInterpreterRunsPerDay": "प्रति दिन कोड इंटरप्रेटर रन। सीमा के ऊपर, संदेश कोड चलाए बिना उत्तर दिए जाएंगे।",
+      "uploadFilesPerDay": "प्रति दिन अपलोड की गई फाइलें।"
+    },
+    "scopeFamily": "परिवार",
+    "scopeModel": "मॉडल",
+    "families": "मॉडल परिवार",
+    "modelsGroup": "विशिष्ट मॉडल",
+    "addScopedLimit": "परिवार या मॉडल के लिए सीमा जोड़ें…",
+    "removeScopedLimit": "यह सीमा हटाएँ",
+    "unknownQualifier": "आपकी वर्तमान सूची में नहीं",
+    "unknownQualifierHint": "यह मॉडल या परिवार इस क्षेत्र या रिंग में उपलब्ध नहीं है। सीमा को संरक्षित किया गया है और जहां उपलब्ध है वहां लागू होती है।"
   }
 }

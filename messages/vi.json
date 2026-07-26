@@ -805,7 +805,9 @@
       "statusFailed": "Thất bại",
       "statusIncomplete": "Chưa hoàn thành",
       "viaService": "qua {service}",
-      "downloadFile": "Tải xuống"
+      "downloadFile": "Tải xuống",
+      "executedCode": "Đã thực thi mã",
+      "codeOutput": "Kết quả"
     },
     "consent": {
       "authorizeRequired": "Yêu cầu xác thực",
@@ -1249,7 +1251,9 @@
       "providerCombinedDescription": "Chạy Bing grounding và Google News cùng lúc: tiêu đề hiển thị sau vài giây trong khi tìm kiếm sâu với Bing vẫn tiếp tục, và bạn có thể chọn trả lời ngay từ các tiêu đề thay vì đợi tìm kiếm lâu. Khi Bing hoàn thành, hai bộ kết quả sẽ được hợp nhất.",
       "providerBingResponses": "Tìm kiếm nhanh Bing (Azure OpenAI)",
       "providerBingResponsesDescription": "Cùng phạm vi tra cứu web Bing như Bing grounding, thực hiện theo dạng gọi trực tiếp một lần thay vì qua Foundry agent — thường nhanh hơn nhiều. Tùy chọn mới đang được đánh giá so với Bing grounding."
-    }
+    },
+    "Admin": "Quản trị",
+    "Usage Limits": "Giới hạn sử dụng"
   },
   "notFound": {
     "lostDog": "Chó bị lạc"
@@ -3662,7 +3666,20 @@
     "clearAll": "Xóa tất cả ký ức",
     "clearAllConfirmQuestion": "Xóa tất cả ký ức? Hành động này không thể hoàn tác.",
     "clearAllConfirm": "Xóa tất cả",
-    "cancel": "Hủy"
+    "cancel": "Hủy",
+    "pauseToggle": "Tạm dừng lưu kỷ niệm mới",
+    "pauseNote": "Những kỷ niệm đã có vẫn được dùng để cá nhân hóa cuộc trò chuyện — không lưu thêm gì mới cho đến khi bạn tiếp tục.",
+    "addLabel": "Thêm một kỷ niệm",
+    "addPlaceholder": "Điều mà trợ lý nên nhớ, ví dụ: \"Ưu tiên câu trả lời ngắn gọn\"",
+    "addMemory": "Thêm kỷ niệm",
+    "editMemory": "Chỉnh sửa kỷ niệm",
+    "saveMemory": "Lưu",
+    "addedByYou": "Bạn đã thêm",
+    "storedCount": "Đã lưu {count}/{max} kỷ niệm",
+    "charCount": "{count}/{max} ký tự",
+    "noLineBreaksHint": "Dấu xuống dòng sẽ bị xóa — một kỷ niệm được lưu thành một dòng.",
+    "duplicate": "Kỷ niệm này đã được lưu.",
+    "atCapacity": "Bạn đã đạt giới hạn {max} kỷ niệm. Xóa một cái để thêm cái khác."
   },
   "contextWindow": {
     "label": "Cửa sổ ngữ cảnh",
@@ -4049,5 +4066,160 @@
     "fieldEventEnd": "Kết thúc",
     "fieldEventPrecision": "Độ chính xác",
     "fieldEventOngoing": "Đang diễn ra"
+  },
+  "admin": {
+    "title": "Quản trị",
+    "areaNavLabel": "Các khu vực quản trị",
+    "group": {
+      "access": "Truy cập",
+      "usage": "Sử dụng",
+      "administration": "Quản lý"
+    },
+    "areaDescription": {
+      "agents": "Kiểm soát ai có thể sử dụng từng tác nhân dùng chung.",
+      "connectors": "Các connector của tổ chức và người được phép sử dụng.",
+      "guides": "Hướng dẫn về phong cách, thuật ngữ và tuân thủ.",
+      "mapDatasets": "Các bộ dữ liệu đã chọn sẵn cho quy trình bản đồ.",
+      "localAdmins": "Phân quyền chỉnh sửa quy tắc truy cập cho người khác."
+    }
+  },
+  "limits": {
+    "title": "Giới hạn sử dụng",
+    "description": "Giới hạn mức sử dụng cho từng mô hình và tính năng. Mọi thứ đều không giới hạn cho đến khi bạn thiết lập ở đây.",
+    "back": "Quay lại trò chuyện",
+    "loading": "Đang tải…",
+    "retry": "Thử lại",
+    "policyUnavailable": "Không thể đọc chính sách giới hạn từ kho lưu trữ. Đây KHÔNG phải là \"chưa cấu hình gì\" — đừng cho rằng giới hạn đã tắt. Hãy thử lại và kiểm tra nhật ký máy chủ nếu vẫn xảy ra.",
+    "save": "Lưu",
+    "saving": "Đang lưu…",
+    "saved": "Đã lưu giới hạn.",
+    "saveFailed": "Không thể lưu chính sách giới hạn.",
+    "conflict": "Một quản trị viên khác đã thay đổi chính sách giới hạn trong khi bạn chỉnh sửa. Thay đổi của bạn chưa được lưu — phiên bản mới nhất đã được tải lại.",
+    "unsavedChanges": "Có thay đổi chưa lưu",
+    "modeLabel": "Chế độ",
+    "modeObserve": "Quan sát (chỉ ghi log)",
+    "modeEnforce": "Áp dụng (chặn)",
+    "failModeLabel": "Nếu không truy cập được kho lưu trữ",
+    "failOpen": "Cho phép (fail open)",
+    "failClosed": "Chặn (fail closed)",
+    "timezoneLabel": "Múi giờ của kỳ hạn",
+    "countByom": "Tính mức sử dụng từ tài khoản mô hình riêng của người dùng",
+    "countAuxiliary": "Tính cả những thao tác nền (tiêu đề, tóm tắt, kỷ niệm)",
+    "observeNotice": "Đang bật chế độ quan sát: Không tính chặn. Mỗi giới hạn lẽ ra sẽ ngăn người dùng sẽ được ghi vào nhật ký máy chủ, giúp bạn kiểm tra trước khi áp dụng.",
+    "propagationNotice": "Các thay đổi mất đến 60 giây để đến tất cả máy chủ.",
+    "tab": {
+      "defaults": "Mặc định toàn cầu",
+      "overrides": "Ghi đè"
+    },
+    "tabsLabel": "Các mục giới hạn",
+    "category": {
+      "chat": "Trò chuyện",
+      "models": "Mô hình",
+      "tools": "Công cụ",
+      "files": "Tệp",
+      "speech": "Giọng nói",
+      "documents": "Tài liệu"
+    },
+    "label": {
+      "modelAllowed": "Mô hình khả dụng",
+      "modelRequestsPerDay": "Tin nhắn mỗi mô hình",
+      "chatMessagesPerDay": "Tin nhắn mỗi ngày",
+      "chatTokensPerDay": "Token mỗi ngày",
+      "chatTokensPerMonth": "Token mỗi tháng",
+      "webSearchEnabled": "Tìm kiếm web",
+      "codeInterpreterEnabled": "Trình thông dịch mã",
+      "mcpEnabled": "Kết nối (MCP)",
+      "ttsCharactersPerRequest": "Ký tự mỗi lượt đọc",
+      "uploadMegabytesPerFile": "Dung lượng tải lên mỗi tệp",
+      "mcpRoundsPerRequest": "Lượt công cụ mỗi tin nhắn",
+      "ttsCharactersPerDay": "Ký tự đọc mỗi ngày",
+      "transcriptionMinutesPerDay": "Phút chuyển giọng mỗi ngày",
+      "translationJobsPerDay": "Bản dịch tài liệu mỗi ngày",
+      "webSearchCallsPerDay": "Lượt tìm kiếm web mỗi ngày",
+      "codeInterpreterRunsPerDay": "Chạy trình thông dịch mã mỗi ngày",
+      "uploadFilesPerDay": "Tệp tải lên mỗi ngày"
+    },
+    "valueModeLabel": "Loại giới hạn",
+    "valueAmountLabel": "Giá trị giới hạn",
+    "modeInherit": "Chưa đặt — kế thừa",
+    "modeUnlimited": "Không giới hạn",
+    "modeAllowed": "Được phép",
+    "modeLimited": "Giới hạn ở",
+    "modeBlocked": "Bị chặn",
+    "blockedChip": "Bị chặn",
+    "hardCeilingHint": "Không vượt quá {value}",
+    "hardCeilingToggle": "Giới hạn cứng — không ghi đè nào vượt được mức này",
+    "unit": {
+      "requests": "yêu cầu",
+      "tokens": "token",
+      "calls": "lượt gọi",
+      "runs": "lượt chạy",
+      "characters": "ký tự",
+      "megabytes": "MB",
+      "minutes": "phút",
+      "jobs": "lượt",
+      "rounds": "lượt",
+      "boolean": ""
+    },
+    "window": {
+      "day": "ngày",
+      "month": "tháng"
+    },
+    "scope": {
+      "user": "Người cụ thể",
+      "domain": "Tên miền email",
+      "attribute": "Phòng ban / công ty / văn phòng",
+      "group": "Nhóm (chưa hoạt động)"
+    },
+    "targetsLabel": {
+      "user": "Địa chỉ email",
+      "domain": "Tên miền",
+      "attribute": "Thuộc tính",
+      "group": "ID nhóm"
+    },
+    "targetsPlaceholder": {
+      "user": "name@example.org",
+      "domain": "example.org",
+      "attribute": "department:health",
+      "group": "ID đối tượng nhóm Entra"
+    },
+    "chipAddHint": "Thêm mục khác…",
+    "removeChip": "Xóa",
+    "groupsPendingConsent": "Các ghi đè nhóm đã được lưu nhưng chưa áp dụng: thành viên nhóm chưa khả dụng cho ứng dụng cho đến khi quản trị viên đồng ý. Sử dụng \"Phòng ban / công ty / văn phòng\" để ghi đè có hiệu lực ngay hôm nay.",
+    "overrideLabelPlaceholder": "Mục đích của ghi đè này",
+    "overrideLabelLabel": "Tên ghi đè",
+    "overrideScopeLabel": "Áp dụng cho",
+    "overrideEnabled": "Đã bật",
+    "removeOverride": "Xóa ghi đè",
+    "addOverride": "Thêm ghi đè",
+    "noOverrides": "Không có ghi đè. Tất cả đều nhận mặc định toàn cầu bên trên.",
+    "nav": "Giới hạn sử dụng",
+    "descriptionByKey": {
+      "modelAllowed": "Mô hình này có thể được sử dụng hay không.",
+      "modelRequestsPerDay": "Số tin nhắn mỗi ngày cho một mô hình hoặc một nhóm mô hình cụ thể.",
+      "chatMessagesPerDay": "Tổng số tin nhắn mỗi ngày trên tất cả mô hình.",
+      "chatTokensPerDay": "Ước tính — giới hạn có thể bị vượt quá nếu câu trả lời đang được tạo.",
+      "chatTokensPerMonth": "Ước tính — xem ghi chú về giới hạn token hàng ngày.",
+      "webSearchEnabled": "Cho phép tin nhắn tìm kiếm trên web hay không.",
+      "codeInterpreterEnabled": "Cho phép tin nhắn chạy mã hay không.",
+      "mcpEnabled": "Có thể sử dụng các connector (công cụ MCP) hay không.",
+      "ttsCharactersPerRequest": "Đoạn dài nhất có thể đọc to trong một lần yêu cầu.",
+      "uploadMegabytesPerFile": "Tệp đơn lớn nhất có thể tải lên.",
+      "mcpRoundsPerRequest": "Một tin nhắn có thể gọi chuỗi bao nhiêu công cụ.",
+      "ttsCharactersPerDay": "Tổng số ký tự được đọc to mỗi ngày.",
+      "transcriptionMinutesPerDay": "Tổng phút âm thanh và video được chuyển lời mỗi ngày.",
+      "translationJobsPerDay": "Số lượt dịch tài liệu bắt đầu mỗi ngày.",
+      "webSearchCallsPerDay": "Số lượt tìm kiếm web mỗi ngày. Khi vượt quá, tin nhắn sẽ được trả lời mà không tìm kiếm thay vì thất bại.",
+      "codeInterpreterRunsPerDay": "Số lượt chạy trình biên dịch mã mỗi ngày. Khi vượt quá, tin nhắn sẽ được trả lời mà không chạy mã.",
+      "uploadFilesPerDay": "Số tệp tải lên mỗi ngày."
+    },
+    "scopeFamily": "Nhóm",
+    "scopeModel": "Mô hình",
+    "families": "Các nhóm mô hình",
+    "modelsGroup": "Các mô hình cụ thể",
+    "addScopedLimit": "Thêm giới hạn cho nhóm hoặc mô hình…",
+    "removeScopedLimit": "Xóa giới hạn này",
+    "unknownQualifier": "không có trong danh mục hiện tại của bạn",
+    "unknownQualifierHint": "Mô hình hoặc nhóm này không khả dụng ở khu vực hoặc ring này. Giới hạn vẫn giữ nguyên và áp dụng ở nơi có sẵn."
   }
 }

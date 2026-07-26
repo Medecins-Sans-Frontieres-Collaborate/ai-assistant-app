@@ -862,7 +862,9 @@
       "statusFailed": "Waawiɓaani",
       "statusIncomplete": "Wonnaa cewndo",
       "viaService": "e {service}",
-      "downloadFile": "Aaw"
+      "downloadFile": "Aaw",
+      "executedCode": "Kaɗoode kodu",
+      "codeOutput": "Reynge"
     },
     "consent": {
       "authorizeRequired": "Ndewenire yettinooɗo",
@@ -1401,7 +1403,9 @@
       "providerCombinedDescription": "Bing e Google News njiytii ndokkude: noggalɗi ndiytii he tini to golle Bing njiytii fof tun warataa, aɗa waawi jokkondirde e noggalɗi ɗum walla suɓo. To Bing warata, goongɗi ɗiɗi woni ton.",
       "providerBingResponses": "Bing seedhi gese (Azure OpenAI)",
       "providerBingResponsesDescription": "Bing web cover gese am goonga Bing grounding, tawi ko modeli gooto laawol yamirde haa e Foundry agent — ko ñande majju. Njiɗɗo cuɓoraa e fow Bing grounding."
-    }
+    },
+    "Admin": "Maɗifaama",
+    "Usage Limits": "Doggol hoore nguum"
   },
   "emptyState": {
     "greeting": "Hol no mbaaw-mi wallitde?",
@@ -3615,7 +3619,20 @@
     "clearAll": "Sudet pat-ɗeeji fofu",
     "clearAllConfirmQuestion": "Momtu pat-ɗeeji fofu? So wonaa waawde woppude.",
     "clearAllConfirm": "Momtu fofu",
-    "cancel": "Haaytu"
+    "cancel": "Haaytu",
+    "pauseToggle": "Tarfi rewtaade hollitaaji kesol",
+    "pauseNote": "Hollitaaji maa rewataa heɓi yamiraade hoore caŋol maa — hay huunde so wonaa yamiraade so baɗa tarfi.",
+    "addLabel": "Muytu hollitaaji",
+    "addPlaceholder": "Hol ko maɗifaama waawi hollita, mesal: \"Nana suɓo jawdi e yamiraaji\"",
+    "addMemory": "Muytu hollitaaji",
+    "editMemory": "Toppit hollitaaji",
+    "saveMemory": "Danndu",
+    "addedByYou": "A yeewtinoo",
+    "storedCount": "{count} e {max} hollitaaji danndani",
+    "charCount": "{count}/{max} binndol",
+    "noLineBreaksHint": "Wuttaaji binndi kaamɗi — hollitaaji danndani ko binndol goɗɗo.",
+    "duplicate": "Hollitaaji jaati danndani.",
+    "atCapacity": "A jannginoo doggol hollitaaji {max}. Momtu ɗuum, kono muytoo goɗɗo."
   },
   "contextWindow": {
     "label": "Window kontekt",
@@ -4002,5 +4019,160 @@
     "fieldEventEnd": "Ñaama",
     "fieldEventPrecision": "Ɓantare",
     "fieldEventOngoing": "Moƴƴi ɗoo"
+  },
+  "admin": {
+    "title": "Maɗifaama",
+    "areaNavLabel": "Laawol maɗifaama",
+    "group": {
+      "access": "Huutorde",
+      "usage": "Nguum",
+      "administration": "Maɗifaama"
+    },
+    "areaDescription": {
+      "agents": "Huutor e hol ko hombo waawi ummoraade agent daygol.",
+      "connectors": "Konnektorgol e hol ko hombo waawi ummoraade.",
+      "guides": "Doole, mbindi e toroo mabbe e ɗaɓɓugol.",
+      "mapDatasets": "Rewle data boosu ɗee heɓan laawol feccere.",
+      "localAdmins": "Yetoo heɓtol wannga kanko mo woni e yeeso doggol huutorde."
+    }
+  },
+  "limits": {
+    "title": "Doggol hoore nguum",
+    "description": "Doggol loonde ko ɓurnde mo feewi model e mbotore. Ko fow mbaydi doggol so tigi a hiɗi doggol fii ɗuum.",
+    "back": "Fotti caŋol",
+    "loading": "Nana feewi…",
+    "retry": "Fuɗɗi",
+    "policyUnavailable": "Okkiima fotiima waawude taggi doggol hoore nguum e kisa. Ɗuum anndaa wonan «kisa baayi» — kadi kadi waawaa anndude doggol nguum sabu. Fuɗɗi, tee yiɗi log server so sabu fo wuurmi.",
+    "save": "Danndu",
+    "saving": "Nana dannda…",
+    "saved": "Doggol danndani.",
+    "saveFailed": "Waawiɓo danndaade doggol hoore nguum.",
+    "conflict": "Maɗifaama goɗɗo toppini taggi doggol hoore nguum ka aɗa toppi. Yettoyaaji maa danndaani — jaati version woodani ɗum.",
+    "unsavedChanges": "Yettondannde danndaaka",
+    "modeLabel": "Haalude",
+    "modeObserve": "Lawa (kiisi tan)",
+    "modeEnforce": "Taggi (tara)",
+    "failModeLabel": "So kisa waawaa woodude",
+    "failOpen": "Jokku (taraa laade)",
+    "failClosed": "Tara (taraa mum)",
+    "timezoneLabel": "Waktu doggol",
+    "countByom": "Limo nguum e account model on moƴƴi piyam joom",
+    "countAuxiliary": "Limo wootere caŋol (toonde, summare, hollitaaji)",
+    "observeNotice": "Mode lawa tan: Hay juumre taraaka. Doggol mo taraani ɗuum loowi e log server, feewii a anndu politiki e nguum kofit.",
+    "propagationNotice": "Soortoore ndiyam naataani 60 sengo be server fow.",
+    "tab": {
+      "defaults": "Pular mbayɗe hoore mum",
+      "overrides": "Nguuyde ley"
+    },
+    "tabsLabel": "Cuɗɗe gannugol",
+    "category": {
+      "chat": "Galɗe",
+      "models": "Mbaydi",
+      "tools": "Teŋɗi",
+      "files": "Fiilde",
+      "speech": "Haala",
+      "documents": "Dogumente"
+    },
+    "label": {
+      "modelAllowed": "Mbaydi don woni",
+      "modelRequestsPerDay": "Golle per mbaydi",
+      "chatMessagesPerDay": "Galɗe kala ñalnde",
+      "chatTokensPerDay": "Token kala ñalnde",
+      "chatTokensPerMonth": "Token kala lewru",
+      "webSearchEnabled": "Yiylo web",
+      "codeInterpreterEnabled": "Code interpreter",
+      "mcpEnabled": "Connectors (MCP)",
+      "ttsCharactersPerRequest": "Binndol kala naanande",
+      "uploadMegabytesPerFile": "Ceer upload kala fiilde",
+      "mcpRoundsPerRequest": "Rewte tool kala galɗe",
+      "ttsCharactersPerDay": "Binndol kala ñalnde (haaletinnde)",
+      "transcriptionMinutesPerDay": "Minutaji transcription kala ñalnde",
+      "translationJobsPerDay": "Tarbi dogumente kala ñalnde",
+      "webSearchCallsPerDay": "Yiylo web kala ñalnde",
+      "codeInterpreterRunsPerDay": "Code interpreter runs kala ñalnde",
+      "uploadFilesPerDay": "Upload fiilde kala ñalnde"
+    },
+    "valueModeLabel": "Noone gannugol",
+    "valueAmountLabel": "Sari gannugol",
+    "modeInherit": "Ɓurtiima — naatata hoore mum",
+    "modeUnlimited": "Ekkilaa",
+    "modeAllowed": "Dentintaa",
+    "modeLimited": "Cuɗi e",
+    "modeBlocked": "Danni",
+    "blockedChip": "Danni",
+    "hardCeilingHint": "Kada topir {value}",
+    "hardCeilingToggle": "Dalil mbaydi — hakkunde nguu ngalu yeevantaa",
+    "unit": {
+      "requests": "gollooji",
+      "tokens": "token",
+      "calls": "kaalii",
+      "runs": "duunde",
+      "characters": "binndol",
+      "megabytes": "MB",
+      "minutes": "minutaji",
+      "jobs": "golleji",
+      "rounds": "rewte",
+      "boolean": ""
+    },
+    "window": {
+      "day": "ñalnde",
+      "month": "lewru"
+    },
+    "scope": {
+      "user": "Jeytagi jokkol",
+      "domain": "Domain email",
+      "attribute": "Doole / kompani / biro",
+      "group": "Gorpu (tonndon umminude)"
+    },
+    "targetsLabel": {
+      "user": "Aadeesol email",
+      "domain": "Domeen",
+      "attribute": "Mbaawtal",
+      "group": "ID gorpu"
+    },
+    "targetsPlaceholder": {
+      "user": "name@example.org",
+      "domain": "example.org",
+      "attribute": "doole:cuɓoraaɗi",
+      "group": "Entra ID gorpu object"
+    },
+    "chipAddHint": "Ɓeydu fof woɗnde...",
+    "removeChip": "Momtu",
+    "groupsPendingConsent": "Gorpu woɗnde liikitaali ɗee henanee, kono ummiima: dimoore gorpu tigiiko feewaani jalduuɗo baawo admin tenant tawii tawa. Naatu \"Doole / kompani / biro\" udditaade tawa-jokkondirde ndee.",
+    "overrideLabelPlaceholder": "Ko hol awa woɗnde udditi",
+    "overrideLabelLabel": "Innde udditaade",
+    "overrideScopeLabel": "Nana jooɗa",
+    "overrideEnabled": "Jokkuuɗo",
+    "removeOverride": "Momtu udditaade",
+    "addOverride": "Ɓeydu udditaade",
+    "noOverrides": "Ummora udditaade. Fofen jogii dooleeji daawal ɗee.",
+    "nav": "Hakkunde useere",
+    "descriptionByKey": {
+      "modelAllowed": "So ko moodeeji ena waawi usaade walla a'a.",
+      "modelRequestsPerDay": "Tawtiiɓe nde yowitirii goɗɗum walla sarɗi moodel.",
+      "chatMessagesPerDay": "Tawtiiɓe kala lewru ngal boɗɗe moodelen.",
+      "chatTokensPerDay": "Kulennde – janngol kadi heɓa waawataa, so tawtiiɓe ngal waɗi haala jaanginde.",
+      "chatTokensPerMonth": "Kulennde – hokkodir golle ɗee lewru ngal.",
+      "webSearchEnabled": "So ko tawtiiɓe ena waawi yiɗde web.",
+      "codeInterpreterEnabled": "So ko tawtiiɓe ena waawi run code.",
+      "mcpEnabled": "So MCP toolen ena waawi usaade.",
+      "ttsCharactersPerRequest": "Doggi maaɗi jaangiri e wiyaade e goɗɗum.",
+      "uploadMegabytesPerFile": "Binnde ɗiɗi fow wawan laawol laawitorde.",
+      "mcpRoundsPerRequest": "Hitaande MCP waltiido e goɗɗum.",
+      "ttsCharactersPerDay": "Doggi fow jaangiri e wiyaade lewru ngal.",
+      "transcriptionMinutesPerDay": "Yiyde suɓo e bidde goɗɗum lewru ngal.",
+      "translationJobsPerDay": "Golle karalla binndi per lewru.",
+      "webSearchCallsPerDay": "Yiɗde web lewru ngal. Hokkunde hakunde, tawtiiɓe kenanee a wonaa yiɗde web.",
+      "codeInterpreterRunsPerDay": "Run code interpreter per lewru. Hokkunde hakunde, tawtiiɓe kenanee a wonaa run code.",
+      "uploadFilesPerDay": "Binndol lawtitorde lewru gala."
+    },
+    "scopeFamily": "Sarɗi",
+    "scopeModel": "Moodel",
+    "families": "Sarɗi moodelen",
+    "modelsGroup": "Moodelen goɗɗe",
+    "addScopedLimit": "Ɓeydu hakkunde sarɗi walla moodel...",
+    "removeScopedLimit": "Momtu hakkunde ndee",
+    "unknownQualifier": "soyaataa e katalog maa",
+    "unknownQualifierHint": "Moodel walla sarɗi ndee waawataa usaade e gese ndee. Hakkunde hinndee cuɓir o jokkondir so e jamfa o gese."
   }
 }

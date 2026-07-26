@@ -750,7 +750,9 @@
       "statusFailed": "Fehlgeschlagen",
       "statusIncomplete": "Unvollständig",
       "viaService": "über {service}",
-      "downloadFile": "Herunterladen"
+      "downloadFile": "Herunterladen",
+      "executedCode": "Ausgeführter Code",
+      "codeOutput": "Ausgabe"
     },
     "consent": {
       "authorizeRequired": "Autorisierung erforderlich",
@@ -1248,7 +1250,9 @@
       "providerCombinedDescription": "Führt Bing Grounding und Google News gemeinsam aus: Schlagzeilen erscheinen innerhalb von Sekunden, während die tiefgehende Bing-Suche weiterläuft. Sie können sofort aus den Schlagzeilen antworten oder auf die vollständigen Ergebnisse warten. Nach Abschluss werden beide Ergebnismengen zusammengeführt.",
       "providerBingResponses": "Bing-Schnellsuche (Azure OpenAI)",
       "providerBingResponsesDescription": "Gleiche Bing-Webabdeckung wie Bing Grounding, jedoch als einzelner direkter Modellaufruf statt als Foundry-Agent – in der Regel deutlich schneller. Neue Option wird im Vergleich zu Bing Grounding getestet."
-    }
+    },
+    "Admin": "Admin",
+    "Usage Limits": "Nutzungsbegrenzungen"
   },
   "emptyState": {
     "greeting": "Wie kann ich helfen?",
@@ -3631,7 +3635,20 @@
     "clearAll": "Alle Erinnerungen löschen",
     "clearAllConfirmQuestion": "Alle Erinnerungen löschen? Dies kann nicht rückgängig gemacht werden.",
     "clearAllConfirm": "Alle löschen",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "pauseToggle": "Speichern neuer Erinnerungen pausieren",
+    "pauseNote": "Bereits gespeicherte Erinnerungen personalisieren weiterhin Ihre Chats – neue werden erst gespeichert, wenn Sie fortsetzen.",
+    "addLabel": "Erinnerung hinzufügen",
+    "addPlaceholder": "Etwas, das der Assistent sich merken soll, z.B. \"Bevorzugt kurze Antworten\"",
+    "addMemory": "Erinnerung hinzufügen",
+    "editMemory": "Erinnerung bearbeiten",
+    "saveMemory": "Speichern",
+    "addedByYou": "Von Ihnen hinzugefügt",
+    "storedCount": "{count} von {max} Erinnerungen gespeichert",
+    "charCount": "{count}/{max} Zeichen",
+    "noLineBreaksHint": "Zeilenumbrüche werden entfernt – eine Erinnerung wird als eine Zeile gespeichert.",
+    "duplicate": "Diese Erinnerung ist bereits gespeichert.",
+    "atCapacity": "Sie haben das Limit von {max} Erinnerungen erreicht. Löschen Sie eine, um eine weitere hinzuzufügen."
   },
   "contextWindow": {
     "label": "Kontextfenster",
@@ -4018,5 +4035,160 @@
     "fieldEventEnd": "Ende",
     "fieldEventPrecision": "Genauigkeit",
     "fieldEventOngoing": "Laufend"
+  },
+  "admin": {
+    "title": "Admin",
+    "areaNavLabel": "Admin-Bereiche",
+    "group": {
+      "access": "Zugriff",
+      "usage": "Nutzung",
+      "administration": "Verwaltung"
+    },
+    "areaDescription": {
+      "agents": "Steuern Sie, wer welche gemeinsamen Agenten verwenden kann.",
+      "connectors": "Organisations-Connectoren und wer sie verwenden darf.",
+      "guides": "Style-, Terminologie- und Compliance-Guides.",
+      "mapDatasets": "Kuratierten Datensätze, die für den Karten-Workflow verfügbar sind.",
+      "localAdmins": "Berechtigung für die Bearbeitung von Zugriffsregeln an andere delegieren."
+    }
+  },
+  "limits": {
+    "title": "Nutzungsbegrenzungen",
+    "description": "Legen Sie fest, wie viel von jedem Modell und jeder Funktion genutzt werden darf. Alles ist unbegrenzt, außer Sie setzen hier ein Limit.",
+    "back": "Zurück zum Chat",
+    "loading": "Laden…",
+    "retry": "Wiederholen",
+    "policyUnavailable": "Die Limit-Richtlinie konnte nicht aus dem Speicher gelesen werden. Das ist NICHT gleichbedeutend mit \"nichts konfiguriert\" – gehen Sie nicht davon aus, dass keine Begrenzung aktiv ist. Versuchen Sie es erneut und prüfen Sie die Server-Logs, falls das Problem bleibt.",
+    "save": "Speichern",
+    "saving": "Wird gespeichert…",
+    "saved": "Limits gespeichert.",
+    "saveFailed": "Die Limit-Richtlinie konnte nicht gespeichert werden.",
+    "conflict": "Ein anderer Admin hat die Limits geändert, während Sie editiert haben. Ihre Änderungen wurden nicht gespeichert – die neueste Version wurde geladen.",
+    "unsavedChanges": "Nicht gespeicherte Änderungen",
+    "modeLabel": "Modus",
+    "modeObserve": "Beobachten (nur protokollieren)",
+    "modeEnforce": "Durchsetzen (blockieren)",
+    "failModeLabel": "Wenn Speicher nicht erreichbar ist",
+    "failOpen": "Erlauben (fail open)",
+    "failClosed": "Blockieren (fail closed)",
+    "timezoneLabel": "Zeitzone für Zeitraum",
+    "countByom": "Nutzung eigener Modellkonten berücksichtigen",
+    "countAuxiliary": "Hintergrundaufrufe mitzählen (Titel, Zusammenfassungen, Erinnerungen)",
+    "observeNotice": "Der Beobachten-Modus ist aktiv: Es wird nichts blockiert. Jeder Grenzwert, der jemanden blockiert hätte, wird stattdessen ins Server-Log geschrieben. So können Sie die Richtlinie vor dem Aktivieren testen.",
+    "propagationNotice": "Änderungen erreichen innerhalb von bis zu 60 Sekunden alle Server.",
+    "tab": {
+      "defaults": "Globale Standardwerte",
+      "overrides": "Überschreibungen"
+    },
+    "tabsLabel": "Limitabschnitte",
+    "category": {
+      "chat": "Chat",
+      "models": "Modelle",
+      "tools": "Tools",
+      "files": "Dateien",
+      "speech": "Sprache",
+      "documents": "Dokumente"
+    },
+    "label": {
+      "modelAllowed": "Modell verfügbar",
+      "modelRequestsPerDay": "Nachrichten pro Modell",
+      "chatMessagesPerDay": "Nachrichten pro Tag",
+      "chatTokensPerDay": "Tokens pro Tag",
+      "chatTokensPerMonth": "Tokens pro Monat",
+      "webSearchEnabled": "Websuche",
+      "codeInterpreterEnabled": "Code-Interpreter",
+      "mcpEnabled": "Connectors (MCP)",
+      "ttsCharactersPerRequest": "Zeichen pro Vorlesen",
+      "uploadMegabytesPerFile": "Upload-Größe pro Datei",
+      "mcpRoundsPerRequest": "Tool-Runden pro Nachricht",
+      "ttsCharactersPerDay": "Vorlesezeichen pro Tag",
+      "transcriptionMinutesPerDay": "Transkriptionsminuten pro Tag",
+      "translationJobsPerDay": "Dokumentenübersetzungen pro Tag",
+      "webSearchCallsPerDay": "Websuchen pro Tag",
+      "codeInterpreterRunsPerDay": "Code-Interpreter-Läufe pro Tag",
+      "uploadFilesPerDay": "Datei-Uploads pro Tag"
+    },
+    "valueModeLabel": "Limit-Typ",
+    "valueAmountLabel": "Limit-Anzahl",
+    "modeInherit": "Nicht gesetzt – wird übernommen",
+    "modeUnlimited": "Unbegrenzt",
+    "modeAllowed": "Zugelassen",
+    "modeLimited": "Begrenzt auf",
+    "modeBlocked": "Blockiert",
+    "blockedChip": "Blockiert",
+    "hardCeilingHint": "Darf {value} nicht überschreiten",
+    "hardCeilingToggle": "Hartes Limit – keine Überschreibung darf dies überschreiten",
+    "unit": {
+      "requests": "Anfragen",
+      "tokens": "Tokens",
+      "calls": "Aufrufe",
+      "runs": "Läufe",
+      "characters": "Zeichen",
+      "megabytes": "MB",
+      "minutes": "Minuten",
+      "jobs": "Jobs",
+      "rounds": "Runden",
+      "boolean": ""
+    },
+    "window": {
+      "day": "Tag",
+      "month": "Monat"
+    },
+    "scope": {
+      "user": "Bestimmte Personen",
+      "domain": "E-Mail-Domain",
+      "attribute": "Abteilung / Unternehmen / Büro",
+      "group": "Gruppe (noch nicht aktiv)"
+    },
+    "targetsLabel": {
+      "user": "E-Mail-Adressen",
+      "domain": "Domains",
+      "attribute": "Attribute",
+      "group": "Gruppen-IDs"
+    },
+    "targetsPlaceholder": {
+      "user": "name@example.org",
+      "domain": "example.org",
+      "attribute": "department:health",
+      "group": "Entra-Gruppenobjekt-ID"
+    },
+    "chipAddHint": "Weitere hinzufügen…",
+    "removeChip": "Entfernen",
+    "groupsPendingConsent": "Gruppenüberschreibungen sind gespeichert, gelten aber noch nicht: Die Gruppenmitgliedschaft steht der App erst zur Verfügung, wenn der Tenant-Administrator zugestimmt hat. Verwenden Sie „Abteilung / Unternehmen / Büro” für eine Überschreibung, die sofort wirksam ist.",
+    "overrideLabelPlaceholder": "Wofür diese Überschreibung ist",
+    "overrideLabelLabel": "Name der Überschreibung",
+    "overrideScopeLabel": "Gilt für",
+    "overrideEnabled": "Aktiviert",
+    "removeOverride": "Überschreibung entfernen",
+    "addOverride": "Überschreibung hinzufügen",
+    "noOverrides": "Keine Überschreibungen. Alle erhalten die oben genannten globalen Standardwerte.",
+    "nav": "Nutzungsbeschränkungen",
+    "descriptionByKey": {
+      "modelAllowed": "Ob dieses Modell überhaupt verwendet werden kann.",
+      "modelRequestsPerDay": "Nachrichten pro Tag für ein bestimmtes Modell oder eine Modelfamilie.",
+      "chatMessagesPerDay": "Gesamte Nachrichten pro Tag über alle Modelle hinweg.",
+      "chatTokensPerDay": "Ungefähr — das Limit kann durch die Länge einer bereits generierten Antwort überschritten werden.",
+      "chatTokensPerMonth": "Ungefähr — siehe Hinweis zum täglichen Token-Limit.",
+      "webSearchEnabled": "Ob Nachrichten das Web durchsuchen können.",
+      "codeInterpreterEnabled": "Ob Nachrichten Code ausführen können.",
+      "mcpEnabled": "Ob Connectoren (MCP-Tools) verwendet werden können.",
+      "ttsCharactersPerRequest": "Längster Abschnitt, der in einer Anfrage vorgelesen werden kann.",
+      "uploadMegabytesPerFile": "Größte einzelne Datei, die hochgeladen werden kann.",
+      "mcpRoundsPerRequest": "Wie viele Toolaufrufe eine Nachricht verketten darf.",
+      "ttsCharactersPerDay": "Gesamtanzahl der pro Tag vorgelesenen Zeichen.",
+      "transcriptionMinutesPerDay": "Gesamte Audio- und Videominuten pro Tag transkribiert.",
+      "translationJobsPerDay": "Gestartete Dokumentübersetzungen pro Tag.",
+      "webSearchCallsPerDay": "Durchgeführte Websuchen pro Tag. Bei Überschreitung werden Nachrichten ohne Suchfunktion beantwortet statt fehlzuschlagen.",
+      "codeInterpreterRunsPerDay": "Code-Interpreter-Läufe pro Tag. Bei Überschreitung werden Nachrichten ohne Code-Ausführung beantwortet.",
+      "uploadFilesPerDay": "Hochgeladene Dateien pro Tag."
+    },
+    "scopeFamily": "Familie",
+    "scopeModel": "Modell",
+    "families": "Modellfamilien",
+    "modelsGroup": "Spezifische Modelle",
+    "addScopedLimit": "Limit für eine Familie oder ein Modell hinzufügen…",
+    "removeScopedLimit": "Dieses Limit entfernen",
+    "unknownQualifier": "nicht in Ihrem aktuellen Katalog",
+    "unknownQualifierHint": "Dieses Modell oder diese Familie ist in dieser Region oder diesem Ring nicht verfügbar. Das Limit bleibt bestehen und gilt überall dort, wo es verfügbar ist."
   }
 }

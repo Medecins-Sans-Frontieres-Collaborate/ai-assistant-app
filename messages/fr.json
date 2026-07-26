@@ -750,7 +750,9 @@
       "statusFailed": "Échec",
       "statusIncomplete": "Incomplet",
       "viaService": "via {service}",
-      "downloadFile": "Télécharger"
+      "downloadFile": "Télécharger",
+      "executedCode": "Code exécuté",
+      "codeOutput": "Sortie"
     },
     "consent": {
       "authorizeRequired": "Autorisation requise",
@@ -1248,7 +1250,9 @@
       "providerCombinedDescription": "Lance simultanément l’analyse Bing et Google News : des titres apparaissent en quelques secondes pendant que la recherche approfondie Bing continue, et vous pouvez choisir de répondre immédiatement à partir des titres au lieu d'attendre la recherche lente. Lorsque Bing a terminé, les deux ensembles de résultats sont fusionnés.",
       "providerBingResponses": "Recherche Bing rapide (Azure OpenAI)",
       "providerBingResponsesDescription": "La même couverture web Bing que Bing grounding, lancée en un seul appel direct au modèle au lieu d'un agent Foundry — généralement beaucoup plus rapide. Nouvelle option en cours d'évaluation par rapport à Bing grounding."
-    }
+    },
+    "Admin": "Admin",
+    "Usage Limits": "Limites d'utilisation"
   },
   "notFound": {
     "lostDog": "Chien perdu"
@@ -3631,7 +3635,20 @@
     "clearAll": "Effacer toutes les mémoires",
     "clearAllConfirmQuestion": "Supprimer toutes les mémoires ? Cette action est irréversible.",
     "clearAllConfirm": "Tout supprimer",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "pauseToggle": "Suspendre l’enregistrement de nouvelles mémoires",
+    "pauseNote": "Les mémoires déjà enregistrées continuent de personnaliser vos discussions — aucune nouvelle mémoire n’est enregistrée tant que vous n’avez pas repris.",
+    "addLabel": "Ajouter une mémoire",
+    "addPlaceholder": "Quelque chose que l’assistant doit retenir, ex. : « Préfère des réponses concises »",
+    "addMemory": "Ajouter la mémoire",
+    "editMemory": "Modifier la mémoire",
+    "saveMemory": "Enregistrer",
+    "addedByYou": "Ajouté par vous",
+    "storedCount": "{count} sur {max} mémoires enregistrées",
+    "charCount": "{count}/{max} caractères",
+    "noLineBreaksHint": "Les sauts de ligne sont supprimés — une mémoire est stockée sur une seule ligne.",
+    "duplicate": "Cette mémoire est déjà enregistrée.",
+    "atCapacity": "Vous avez atteint la limite de {max} mémoires. Supprimez-en une pour en ajouter une autre."
   },
   "contextWindow": {
     "label": "Fenêtre de contexte",
@@ -4018,5 +4035,160 @@
     "fieldEventEnd": "Fin",
     "fieldEventPrecision": "Précision",
     "fieldEventOngoing": "En cours"
+  },
+  "admin": {
+    "title": "Admin",
+    "areaNavLabel": "Zones d’administration",
+    "group": {
+      "access": "Accès",
+      "usage": "Utilisation",
+      "administration": "Administration"
+    },
+    "areaDescription": {
+      "agents": "Contrôlez qui peut utiliser chaque agent partagé.",
+      "connectors": "Connecteurs d’organisation et personnes autorisées à les utiliser.",
+      "guides": "Guides de style, de terminologie et de conformité.",
+      "mapDatasets": "Jeux de données sélectionnés disponibles pour le flux cartographique.",
+      "localAdmins": "Déléguer l’édition des règles d’accès à d’autres personnes."
+    }
+  },
+  "limits": {
+    "title": "Limites d’utilisation",
+    "description": "Définissez la quantité utilisable de chaque modèle et fonctionnalité. Tout est illimité, sauf si vous fixez une limite ici.",
+    "back": "Retour au chat",
+    "loading": "Chargement…",
+    "retry": "Réessayer",
+    "policyUnavailable": "Impossible de lire la politique de limites depuis le stockage. Ce n’est PAS équivalent à « aucune configuration » : ne supposez pas que les limites sont désactivées. Réessayez et vérifiez les journaux serveur si le problème persiste.",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "saved": "Limites enregistrées.",
+    "saveFailed": "Impossible d’enregistrer la politique de limites.",
+    "conflict": "Un autre administrateur a modifié la politique de limites pendant votre édition. Vos modifications n’ont pas été enregistrées — la dernière version a été rechargée.",
+    "unsavedChanges": "Modifications non enregistrées",
+    "modeLabel": "Mode",
+    "modeObserve": "Observer (journaliser uniquement)",
+    "modeEnforce": "Appliquer (bloquer)",
+    "failModeLabel": "Si le stockage est inaccessible",
+    "failOpen": "Autoriser (échec ouvert)",
+    "failClosed": "Bloquer (échec fermé)",
+    "timezoneLabel": "Fuseau horaire de la période",
+    "countByom": "Compter l’utilisation des comptes de modèles propres aux utilisateurs",
+    "countAuxiliary": "Compter les appels en arrière-plan (titres, résumés, mémoires)",
+    "observeNotice": "Le mode Observation est activé : rien n’est bloqué. Toute limite qui aurait bloqué quelqu’un est inscrite dans le journal du serveur afin que vous puissiez vérifier la politique sur l’usage réel avant de l’appliquer.",
+    "propagationNotice": "Les modifications mettent jusqu’à 60 secondes pour atteindre tous les serveurs.",
+    "tab": {
+      "defaults": "Paramètres globaux par défaut",
+      "overrides": "Dérogations"
+    },
+    "tabsLabel": "Sections des limites",
+    "category": {
+      "chat": "Chat",
+      "models": "Modèles",
+      "tools": "Outils",
+      "files": "Fichiers",
+      "speech": "Synthèse vocale",
+      "documents": "Documents"
+    },
+    "label": {
+      "modelAllowed": "Modèle disponible",
+      "modelRequestsPerDay": "Messages par modèle",
+      "chatMessagesPerDay": "Messages par jour",
+      "chatTokensPerDay": "Jetons par jour",
+      "chatTokensPerMonth": "Jetons par mois",
+      "webSearchEnabled": "Recherche web",
+      "codeInterpreterEnabled": "Interpréteur de code",
+      "mcpEnabled": "Connecteurs (MCP)",
+      "ttsCharactersPerRequest": "Caractères par lecture",
+      "uploadMegabytesPerFile": "Taille de fichier à téléverser",
+      "mcpRoundsPerRequest": "Itérations d’outil par message",
+      "ttsCharactersPerDay": "Caractères lus par jour",
+      "transcriptionMinutesPerDay": "Minutes de transcription par jour",
+      "translationJobsPerDay": "Traductions de documents par jour",
+      "webSearchCallsPerDay": "Recherches web par jour",
+      "codeInterpreterRunsPerDay": "Exécutions de l’interpréteur de code par jour",
+      "uploadFilesPerDay": "Fichiers téléversés par jour"
+    },
+    "valueModeLabel": "Type de limite",
+    "valueAmountLabel": "Quantité limite",
+    "modeInherit": "Non défini — hérite",
+    "modeUnlimited": "Illimité",
+    "modeAllowed": "Autorisé",
+    "modeLimited": "Limité à",
+    "modeBlocked": "Bloqué",
+    "blockedChip": "Bloqué",
+    "hardCeilingHint": "Ne peut pas dépasser {value}",
+    "hardCeilingToggle": "Plafond strict — aucune dérogation ne peut dépasser cette valeur",
+    "unit": {
+      "requests": "demandes",
+      "tokens": "jetons",
+      "calls": "appels",
+      "runs": "exécutions",
+      "characters": "caractères",
+      "megabytes": "Mo",
+      "minutes": "minutes",
+      "jobs": "tâches",
+      "rounds": "itérations",
+      "boolean": ""
+    },
+    "window": {
+      "day": "jour",
+      "month": "mois"
+    },
+    "scope": {
+      "user": "Personnes spécifiques",
+      "domain": "Domaine e-mail",
+      "attribute": "Département / entreprise / bureau",
+      "group": "Groupe (pas encore actif)"
+    },
+    "targetsLabel": {
+      "user": "Adresses e-mail",
+      "domain": "Domaines",
+      "attribute": "Attributs",
+      "group": "ID de groupes"
+    },
+    "targetsPlaceholder": {
+      "user": "nom@exemple.org",
+      "domain": "exemple.org",
+      "attribute": "departement:santé",
+      "group": "ID d’objet de groupe Entra"
+    },
+    "chipAddHint": "Ajouter un autre…",
+    "removeChip": "Supprimer",
+    "groupsPendingConsent": "Les remplacements de groupe sont enregistrés mais ne s'appliquent pas encore : l'app n'a pas accès à l'appartenance aux groupes tant que le consentement de l'administrateur du locataire n'est pas accordé. Utilisez « Département / entreprise / bureau » pour un remplacement effectif dès aujourd'hui.",
+    "overrideLabelPlaceholder": "À quoi sert ce remplacement",
+    "overrideLabelLabel": "Nom du remplacement",
+    "overrideScopeLabel": "S'applique à",
+    "overrideEnabled": "Activé",
+    "removeOverride": "Supprimer le remplacement",
+    "addOverride": "Ajouter un remplacement",
+    "noOverrides": "Aucun remplacement. Tous bénéficient des paramètres par défaut global ci-dessus.",
+    "nav": "Limites d’utilisation",
+    "descriptionByKey": {
+      "modelAllowed": "Indique si ce modèle peut être utilisé.",
+      "modelRequestsPerDay": "Messages par jour pour un modèle ou une famille de modèles spécifique.",
+      "chatMessagesPerDay": "Nombre total de messages par jour, tous modèles confondus.",
+      "chatTokensPerDay": "Approximatif — une limite peut être dépassée en raison de la longueur d'une réponse déjà en cours de génération.",
+      "chatTokensPerMonth": "Approximatif — voir la note sur la limite quotidienne de jetons.",
+      "webSearchEnabled": "Indique si les messages peuvent effectuer des recherches sur le web.",
+      "codeInterpreterEnabled": "Indique si les messages peuvent exécuter du code.",
+      "mcpEnabled": "Indique si les connecteurs (outils MCP) peuvent être utilisés.",
+      "ttsCharactersPerRequest": "Passage le plus long pouvant être lu à voix haute en une seule demande.",
+      "uploadMegabytesPerFile": "Plus gros fichier unique pouvant être téléversé.",
+      "mcpRoundsPerRequest": "Nombre d'appels d'outil qu'un message peut enchaîner.",
+      "ttsCharactersPerDay": "Nombre total de caractères lus à voix haute par jour.",
+      "transcriptionMinutesPerDay": "Total de minutes audio et vidéo transcrites par jour.",
+      "translationJobsPerDay": "Traductions de documents lancées par jour.",
+      "webSearchCallsPerDay": "Recherches web par jour. Au-delà de la limite, les messages sont traités sans recherche plutôt qu'en échec.",
+      "codeInterpreterRunsPerDay": "Exécutions de l'interpréteur de code par jour. Au-delà de la limite, les messages sont traités sans exécution de code.",
+      "uploadFilesPerDay": "Fichiers téléversés par jour."
+    },
+    "scopeFamily": "Famille",
+    "scopeModel": "Modèle",
+    "families": "Familles de modèles",
+    "modelsGroup": "Modèles spécifiques",
+    "addScopedLimit": "Ajouter une limite pour une famille ou un modèle…",
+    "removeScopedLimit": "Supprimer cette limite",
+    "unknownQualifier": "non présent dans votre catalogue actuel",
+    "unknownQualifierHint": "Ce modèle ou cette famille n'est pas disponible dans cette région ou ce cercle. La limite est conservée et s'applique là où il est disponible."
   }
 }

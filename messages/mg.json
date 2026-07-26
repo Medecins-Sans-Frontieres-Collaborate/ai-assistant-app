@@ -862,7 +862,9 @@
       "statusFailed": "Tsy nety",
       "statusIncomplete": "Tsy feno",
       "viaService": "amin'ny alalan'i {service}",
-      "downloadFile": "Sintomy"
+      "downloadFile": "Sintomy",
+      "executedCode": "Kaody nampiharina",
+      "codeOutput": "Vokatra"
     },
     "consent": {
       "authorizeRequired": "Tsy maintsy alalana",
@@ -1401,7 +1403,9 @@
       "providerCombinedDescription": "Atao miaraka ny Bing grounding sy Google News: miseho ao anatin’ny segondra vitsy ny lohateny, raha mbola mandeha ny fikarohana lalina Bing. Afaka misafidy hamaly avy amin’ny lohateny ianao fa tsy miandry. Rehefa vita ny Bing dia atambatra ny valiny avy amin’ny roa tonta.",
       "providerBingResponses": "Bing fikarohana haingana (Azure OpenAI)",
       "providerBingResponsesDescription": "Mampiasa fikarohana tranonkala Bing mitovy amin'ny Bing grounding, fa mitranga amin'ny antso modely tokana fa tsy amin'ny Foundry agent — mazàna haingana kokoa. Safidy vaovao an-dalàna hodinihina amin'ny Bing grounding."
-    }
+    },
+    "Admin": "Admin",
+    "Usage Limits": "Fetra fampiasana"
   },
   "emptyState": {
     "greeting": "Afaka manampy inona aho?",
@@ -3615,7 +3619,20 @@
     "clearAll": "Fafao daholo ny fahatsiarovana",
     "clearAllConfirmQuestion": "Fafao avokoa ny fahatsiarovana? Tsy afaka averina intsony izany.",
     "clearAllConfirm": "Fafao daholo",
-    "cancel": "Foano"
+    "cancel": "Foano",
+    "pauseToggle": "Atsaharo vetivety ny fitahirizana fahatsiarovana vaovao",
+    "pauseNote": "Ny fahatsiarovana efa anananao ihany no ampiasaina hanokana ny resaka — tsy misy vaovao tahirizina raha tsy tohizanao.",
+    "addLabel": "Ampio fahatsiarovana",
+    "addPlaceholder": "Zavatra tokony hotsarovan'ny assistant, ohatra: \"Mila valiny fohy\"",
+    "addMemory": "Ampio fahatsiarovana",
+    "editMemory": "Hanova fahatsiarovana",
+    "saveMemory": "Tehirizo",
+    "addedByYou": "Ianao no nampiditra",
+    "storedCount": "{count} amin'ny {max} fahatsiarovana voatahiry",
+    "charCount": "{count}/{max} tarehintsoratra",
+    "noLineBreaksHint": "Esorina ny tsipika vaovao — andalana iray ihany ny fahatsiarovana voatahiry.",
+    "duplicate": "Efa voatahiry io fahatsiarovana io.",
+    "atCapacity": "Efa tonga amin’ny fetra {max} amin'ny fahatsiarovana ianao. Fafao ny iray raha te hanampy hafa."
   },
   "contextWindow": {
     "label": "Varavarankely fitantarana",
@@ -4002,5 +4019,160 @@
     "fieldEventEnd": "Fiafaran'ny hetsika",
     "fieldEventPrecision": "Marim-pototra",
     "fieldEventOngoing": "Mitohy"
+  },
+  "admin": {
+    "title": "Admin",
+    "areaNavLabel": "Faritra Admin",
+    "group": {
+      "access": "Fidirana",
+      "usage": "Fampiasana",
+      "administration": "Fitantanana"
+    },
+    "areaDescription": {
+      "agents": "Hamarino hoe iza no afaka mampiasa agent iraisana tsirairay.",
+      "connectors": "Connectors sy iza no afaka mampiasa azy ao amin'ny fikambanana.",
+      "guides": "Torolalana momba ny fomba, voambolana ary fitoviana.",
+      "mapDatasets": "Dataset voafantina azo ampiasaina amin'ny workflow mikasika ny sarintany.",
+      "localAdmins": "Manome alalana hanova fitsipika amin’ny hafa."
+    }
+  },
+  "limits": {
+    "title": "Fetra fampiasana",
+    "description": "Atoka fetra ny fampiasana modely sy endri-javatra tsirairay. Tsy misy fetra afa-tsy apetrakao eto.",
+    "back": "Miverina amin'ny chat",
+    "loading": "Mampiditra…",
+    "retry": "Avereno",
+    "policyUnavailable": "Tsy afaka namaky ny politika fetra avy amin'ny fitahirizana. Tsy midika \"tsy misy napetraka\" izany — aza jerena ho toy ny tsy misy fetra. Avereno, ary jereo ny log an'ny server raha mitohy.",
+    "save": "Tehirizo",
+    "saving": "Mitahiry…",
+    "saved": "Voatahiry ny fetra.",
+    "saveFailed": "Tsy afaka nitahiry ny politika fetra.",
+    "conflict": "Admin hafa no nanova ny politika fetra raha mbola nanova ianao. Tsy voatahiry ny fiovanao — efa navaina amin’ny dikan-dalàna farany.",
+    "unsavedChanges": "Fiovana tsy voatahiry",
+    "modeLabel": "Fomba fiasa",
+    "modeObserve": "Mijery ihany (log fotsiny)",
+    "modeEnforce": "Manery (sakana)",
+    "failModeLabel": "Raha tsy takatra ny fitahirizana",
+    "failOpen": "Avelao (fail open)",
+    "failClosed": "Sakana (fail closed)",
+    "timezoneLabel": "Toerana ora (timezone) amin'ny fe-potoana",
+    "countByom": "Isao ny fampiasan'ireo kaonty modely manokan'ny mpampiasa",
+    "countAuxiliary": "Isao ny antso amin'ny lafiny (lohateny, famintinana, fahatsiarovana)",
+    "observeNotice": "Mode fanairana ihany no mandeha: tsy misy voasakana. Ny fetra rehetra tokony ho nanakana dia voasoratra ao amin'ny server log, ahafahanao manamarina ny politika alohan'ny hampihatra azy.",
+    "propagationNotice": "Mety haharitra hatramin'ny 60 segondra vao tonga amin'ny server rehetra ny fiovana.",
+    "tab": {
+      "defaults": "Fikirakirana ankapobeny",
+      "overrides": "Manova"
+    },
+    "tabsLabel": "Fizarana fetra",
+    "category": {
+      "chat": "Resaka",
+      "models": "Modely",
+      "tools": "Fitaovana",
+      "files": "Rakitra",
+      "speech": "Kabary",
+      "documents": "Taratasy"
+    },
+    "label": {
+      "modelAllowed": "Modely azo ampiasaina",
+      "modelRequestsPerDay": "Hafatra isaky ny modely",
+      "chatMessagesPerDay": "Hafatra isan'andro",
+      "chatTokensPerDay": "Tôkina isan'andro",
+      "chatTokensPerMonth": "Tôkina isam-bolana",
+      "webSearchEnabled": "Fikarohana web",
+      "codeInterpreterEnabled": "Code interpreter",
+      "mcpEnabled": "Connectors (MCP)",
+      "ttsCharactersPerRequest": "Tarehintsoratra isaky ny famakiana feo",
+      "uploadMegabytesPerFile": "Haben’ny rakitra isaky ny fandefasana",
+      "mcpRoundsPerRequest": "Tondro fitaovana isaky ny hafatra",
+      "ttsCharactersPerDay": "Tarehintsoratra famakiana feo isan'andro",
+      "transcriptionMinutesPerDay": "Minitra transcription isan'andro",
+      "translationJobsPerDay": "Taratasy adika isan'andro",
+      "webSearchCallsPerDay": "Fikarohana web isan'andro",
+      "codeInterpreterRunsPerDay": "Code interpreter mihodina isan'andro",
+      "uploadFilesPerDay": "Rakitra alefa isan'andro"
+    },
+    "valueModeLabel": "Karazan'ny fetra",
+    "valueAmountLabel": "Habetsahan'ny fetra",
+    "modeInherit": "Tsy napetraka — mandova",
+    "modeUnlimited": "Tsy voafetra",
+    "modeAllowed": "Azo atao",
+    "modeLimited": "Voafetra ho",
+    "modeBlocked": "Voasakana",
+    "blockedChip": "Voasakana",
+    "hardCeilingHint": "Tsy afaka mihoatra an'i {value}",
+    "hardCeilingToggle": "Fetra ambony — tsy misy fanitsiana ambony azo mihoatra an’io",
+    "unit": {
+      "requests": "fangatahana",
+      "tokens": "tôkina",
+      "calls": "antso",
+      "runs": "fanatanterahana",
+      "characters": "tarehintsoratra",
+      "megabytes": "MB",
+      "minutes": "minitra",
+      "jobs": "asa",
+      "rounds": "dingana",
+      "boolean": ""
+    },
+    "window": {
+      "day": "andro",
+      "month": "volana"
+    },
+    "scope": {
+      "user": "Olona manokana",
+      "domain": "Domain’ny mailaka",
+      "attribute": "Departemanta / orinasa / birao",
+      "group": "Vondrona (tsy miasa amin’izao fotoana izao)"
+    },
+    "targetsLabel": {
+      "user": "Adiresy mailaka",
+      "domain": "Domains",
+      "attribute": "Toetra",
+      "group": "ID-n'ny vondrona"
+    },
+    "targetsPlaceholder": {
+      "user": "anarana@example.org",
+      "domain": "example.org",
+      "attribute": "departemanta: fahasalamana",
+      "group": "ID-n'ny entana vondrona Entra"
+    },
+    "chipAddHint": "Ampio iray hafa…",
+    "removeChip": "Esory",
+    "groupsPendingConsent": "Vita voavonjy ny fanoloana vondrona fa mbola tsy mihatra: tsy mbola azon'ny app ampiasaina ny maha-mpikambana amin’ny vondrona raha tsy mahazo fankatoavan'ny mpitantana tenant. Ampiasao ny \"Departemanta / orinasa / birao\" raha mila fanoloana mihatra avy hatrany.",
+    "overrideLabelPlaceholder": "Antony hanoloana",
+    "overrideLabelLabel": "Anaran’ny fanoloana",
+    "overrideScopeLabel": "Mihatra amin’ny",
+    "overrideEnabled": "Ampandeha",
+    "removeOverride": "Esory ny fanoloana",
+    "addOverride": "Ampio fanoloana",
+    "noOverrides": "Tsy misy fanoloana. Ny rehetra dia mahazo ny fikirakirana maneran-tany etsy ambony.",
+    "nav": "Fetra fampiasana",
+    "descriptionByKey": {
+      "modelAllowed": "Afaka ampiasaina ve ity modely ity.",
+      "modelRequestsPerDay": "Hafatra isan’andro ho an'ny modely na fianakaviana manokana.",
+      "chatMessagesPerDay": "Isan'ny hafatra manontolo isan’andro amin’ny modely rehetra.",
+      "chatTokensPerDay": "Vinavinaina — mety hihoatra ny fetra raha lava ny valiny vao karakaraina.",
+      "chatTokensPerMonth": "Vinavinaina — jereo ny fanamarihana eto amin’ny fetra isan’andro amin’ny token.",
+      "webSearchEnabled": "Afaka mikaroka amin’ny aterineto ve ny hafatra.",
+      "codeInterpreterEnabled": "Afaka manatanteraka kaody ve ny hafatra.",
+      "mcpEnabled": "Afaka ampiasaina ve ny connecteurs (MCP tools).",
+      "ttsCharactersPerRequest": "Lahatsoratra lava indrindra azo averina amin’ny feo amin’ny fangatahana iray.",
+      "uploadMegabytesPerFile": "Raketa tokana lehibe indrindra azo alefa.",
+      "mcpRoundsPerRequest": "Firy ny fitsidihana fitaovana azo ampifandray amin’ny hafatra iray.",
+      "ttsCharactersPerDay": "Isan’ny tarehintsoratra averina amin’ny feo isan'andro.",
+      "transcriptionMinutesPerDay": "Isan'ny minitra raki-peo sy lahatsary nadika ho soratra isan’andro.",
+      "translationJobsPerDay": "Asa fandikana antontan-taratasy natomboka isan’andro.",
+      "webSearchCallsPerDay": "Fikarohana amin'ny aterineto isan'andro. Raha mihoatra ny fetra, dia valiana ny hafatra tsy misy fikarohana fa tsy diso.",
+      "codeInterpreterRunsPerDay": "Fampandehanana code interpreter isan’andro. Raha mihoatra ny fetra, dia valiana ny hafatra tsy manao kaody.",
+      "uploadFilesPerDay": "Rakitra alefa isan’andro."
+    },
+    "scopeFamily": "Fianakaviana",
+    "scopeModel": "Modely",
+    "families": "Fianakavian'ny modely",
+    "modelsGroup": "Modely manokana",
+    "addScopedLimit": "Ampio fetra amin'ny fianakaviana na modely…",
+    "removeScopedLimit": "Esory ity fetra ity",
+    "unknownQualifier": "tsy anatin'ny katalaoginao amin’izao fotoana izao",
+    "unknownQualifierHint": "Tsy hita amin’ity faritra na ring ity ity modely na fianakaviana ity. Mitohy mihatra sy tehirizina ny fetra amin’izay misy azy."
   }
 }

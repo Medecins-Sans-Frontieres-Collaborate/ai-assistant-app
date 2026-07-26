@@ -721,7 +721,9 @@
       "statusFailed": "ล้มเหลว",
       "statusIncomplete": "ไม่สมบูรณ์",
       "viaService": "ผ่าน {service}",
-      "downloadFile": "ดาวน์โหลด"
+      "downloadFile": "ดาวน์โหลด",
+      "executedCode": "โค้ดที่ถูกเรียกใช้งาน",
+      "codeOutput": "ผลลัพธ์"
     },
     "consent": {
       "authorizeRequired": "ต้องได้รับอนุญาต",
@@ -1165,7 +1167,9 @@
       "providerCombinedDescription": "ดำเนินการ Bing grounding และ Google News พร้อมกัน: พาดหัวข่าวจะปรากฏในไม่กี่วินาทีขณะที่การค้นหาเชิงลึกของ Bing ยังทำงานอยู่ โดยเลือกตอบจากพาดหัวข่าวได้ทันทีโดยไม่ต้องรอการค้นหาที่ช้า เมื่อ Bing เสร็จ ผลลัพธ์ทั้งสองชุดจะถูกรวมกัน",
       "providerBingResponses": "Bing ค้นหาเร็ว (Azure OpenAI)",
       "providerBingResponsesDescription": "มีการครอบคลุมเว็บ Bing เช่นเดียวกับ Bing grounding ดำเนินการแบบเรียกโมเดลตรงเพียงครั้งเดียว แทนที่จะใช้ Foundry agent — โดยปกติเห็นผลเร็วกว่า ขณะนี้กำลังประเมินทางเลือกใหม่นี้เทียบกับ Bing grounding"
-    }
+    },
+    "Admin": "ผู้ดูแลระบบ",
+    "Usage Limits": "ขีดจำกัดการใช้งาน"
   },
   "notFound": {
     "lostDog": "สุนัขหาย"
@@ -3631,7 +3635,20 @@
     "clearAll": "ลบความทรงจำทั้งหมด",
     "clearAllConfirmQuestion": "ลบความทรงจำทั้งหมดหรือไม่? การกระทำนี้จะไม่สามารถย้อนกลับได้",
     "clearAllConfirm": "ลบทั้งหมด",
-    "cancel": "ยกเลิก"
+    "cancel": "ยกเลิก",
+    "pauseToggle": "หยุดบันทึกความจำใหม่",
+    "pauseNote": "ความจำที่คุณมีอยู่แล้วจะยังคงปรับแต่งแชทของคุณ – จะไม่มีการบันทึกข้อมูลใหม่จนกว่าคุณจะเริ่มอีกครั้ง",
+    "addLabel": "เพิ่มความจำ",
+    "addPlaceholder": "สิ่งที่ผู้ช่วยควรจำ เช่น \"ชอบคำตอบแบบสั้น\"",
+    "addMemory": "เพิ่มความจำ",
+    "editMemory": "แก้ไขความจำ",
+    "saveMemory": "บันทึก",
+    "addedByYou": "คุณเป็นผู้เพิ่ม",
+    "storedCount": "บันทึกความจำแล้ว {count} จาก {max} รายการ",
+    "charCount": "{count}/{max} ตัวอักษร",
+    "noLineBreaksHint": "จะลบการขึ้นบรรทัดใหม่ — ความจำจะถูกจัดเก็บเป็นหนึ่งบรรทัดเท่านั้น",
+    "duplicate": "ความจำนี้ได้ถูกบันทึกไว้แล้ว",
+    "atCapacity": "คุณถึงขีดจำกัด {max} ความจำแล้ว โปรดลบหนึ่งรายการเพื่อเพิ่มใหม่"
   },
   "contextWindow": {
     "label": "หน้าต่างบริบท",
@@ -4018,5 +4035,160 @@
     "fieldEventEnd": "สิ้นสุด",
     "fieldEventPrecision": "ความแม่นยำ",
     "fieldEventOngoing": "ดำเนินการอยู่"
+  },
+  "admin": {
+    "title": "ผู้ดูแลระบบ",
+    "areaNavLabel": "พื้นที่ผู้ดูแลระบบ",
+    "group": {
+      "access": "การเข้าถึง",
+      "usage": "การใช้งาน",
+      "administration": "การจัดการ"
+    },
+    "areaDescription": {
+      "agents": "ควบคุมว่าใครสามารถใช้ตัวแทนที่แชร์แต่ละตัวได้",
+      "connectors": "ตัวเชื่อมต่อขององค์กรและผู้ที่สามารถใช้งานได้",
+      "guides": "คู่มือสไตล์ คำศัพท์ และการปฏิบัติตาม",
+      "mapDatasets": "ชุดข้อมูลที่คัดสรรสำหรับใช้งานในเวิร์กโฟลว์แผนที่",
+      "localAdmins": "มอบหมายสิทธิ์แก้ไขกฎการเข้าถึงให้ผู้อื่น"
+    }
+  },
+  "limits": {
+    "title": "ขีดจำกัดการใช้งาน",
+    "description": "กำหนดปริมาณการใช้งานของแต่ละโมเดลและฟีเจอร์ ทุกอย่างจะไม่ถูกจำกัดเว้นแต่จะตั้งค่าที่นี่",
+    "back": "กลับไปที่แชท",
+    "loading": "กำลังโหลด…",
+    "retry": "ลองใหม่",
+    "policyUnavailable": "ไม่สามารถอ่านนโยบายขีดจำกัดจากที่จัดเก็บได้ นี่ **ไม่ใช่** กรณี \"ยังไม่ได้ตั้งค่า\" — อย่าสันนิษฐานว่าปิดขีดจำกัดแล้ว กรุณาลองอีกครั้ง และตรวจสอบบันทึกเซิร์ฟเวอร์หากยังเกิดปัญหา",
+    "save": "บันทึก",
+    "saving": "กำลังบันทึก…",
+    "saved": "บันทึกขีดจำกัดแล้ว",
+    "saveFailed": "ไม่สามารถบันทึกนโยบายขีดจำกัดได้",
+    "conflict": "มีผู้ดูแลระบบคนอื่นเปลี่ยนนโยบายขีดจำกัดระหว่างที่คุณกำลังแก้ไข การเปลี่ยนแปลงของคุณไม่ได้รับการบันทึก — ได้รีโหลดเวอร์ชันล่าสุดแล้ว",
+    "unsavedChanges": "การเปลี่ยนแปลงที่ยังไม่ได้บันทึก",
+    "modeLabel": "โหมด",
+    "modeObserve": "สังเกต (บันทึกเท่านั้น)",
+    "modeEnforce": "บังคับใช้ (บล็อก)",
+    "failModeLabel": "หากไม่สามารถเชื่อมต่อที่จัดเก็บได้",
+    "failOpen": "อนุญาต (fail open)",
+    "failClosed": "บล็อก (fail closed)",
+    "timezoneLabel": "เขตเวลา",
+    "countByom": "นับการใช้งานบัญชีโมเดลของผู้ใช้เอง",
+    "countAuxiliary": "นับการเรียกใช้งานเบื้องหลัง (ชื่อเรื่อง สรุป ความจำ)",
+    "observeNotice": "กำลังใช้โหมดสังเกต: จะไม่มีการบล็อกการใช้งานใดๆ ข้อจำกัดที่ควรจะบล็อกจะถูกบันทึกใน log ของเซิร์ฟเวอร์เท่านั้น เพื่อให้สามารถตรวจสอบนโยบายก่อนจะบังคับใช้จริง",
+    "propagationNotice": "การเปลี่ยนแปลงจะใช้เวลาสูงสุด 60 วินาทีจึงจะมีผลกับทุกเซิร์ฟเวอร์",
+    "tab": {
+      "defaults": "ค่าเริ่มต้นทั่วโลก",
+      "overrides": "การแทนที่"
+    },
+    "tabsLabel": "ส่วนข้อจำกัด",
+    "category": {
+      "chat": "แชท",
+      "models": "โมเดล",
+      "tools": "เครื่องมือ",
+      "files": "ไฟล์",
+      "speech": "เสียงพูด",
+      "documents": "เอกสาร"
+    },
+    "label": {
+      "modelAllowed": "มีโมเดลให้ใช้",
+      "modelRequestsPerDay": "ข้อความต่อโมเดล",
+      "chatMessagesPerDay": "ข้อความต่อวัน",
+      "chatTokensPerDay": "โทเคนต่อวัน",
+      "chatTokensPerMonth": "โทเคนต่อเดือน",
+      "webSearchEnabled": "ค้นหาเว็บ",
+      "codeInterpreterEnabled": "Code interpreter",
+      "mcpEnabled": "Connectors (MCP)",
+      "ttsCharactersPerRequest": "ตัวอักษรต่อการอ่านออกเสียง",
+      "uploadMegabytesPerFile": "ขนาดอัปโหลดต่อไฟล์",
+      "mcpRoundsPerRequest": "รอบเครื่องมือต่อข้อความ",
+      "ttsCharactersPerDay": "ตัวอักษรที่อ่านออกเสียงต่อวัน",
+      "transcriptionMinutesPerDay": "นาทีถอดความต่อวัน",
+      "translationJobsPerDay": "เอกสารแปลต่อวัน",
+      "webSearchCallsPerDay": "ค้นหาเว็บต่อวัน",
+      "codeInterpreterRunsPerDay": "การรัน code interpreter ต่อวัน",
+      "uploadFilesPerDay": "อัปโหลดไฟล์ต่อวัน"
+    },
+    "valueModeLabel": "ประเภทข้อจำกัด",
+    "valueAmountLabel": "ปริมาณข้อจำกัด",
+    "modeInherit": "ไม่ได้ตั้งค่า — ใช้ค่าที่รับมา",
+    "modeUnlimited": "ไม่จำกัด",
+    "modeAllowed": "อนุญาต",
+    "modeLimited": "จำกัดที่",
+    "modeBlocked": "ถูกบล็อก",
+    "blockedChip": "ถูกบล็อก",
+    "hardCeilingHint": "ต้องไม่เกิน {value}",
+    "hardCeilingToggle": "เพดานสูงสุด — การแทนที่ไม่สามารถเกินค่านี้ได้",
+    "unit": {
+      "requests": "คำขอ",
+      "tokens": "โทเคน",
+      "calls": "ครั้ง",
+      "runs": "รอบ",
+      "characters": "ตัวอักษร",
+      "megabytes": "MB",
+      "minutes": "นาที",
+      "jobs": "งาน",
+      "rounds": "รอบ",
+      "boolean": ""
+    },
+    "window": {
+      "day": "วัน",
+      "month": "เดือน"
+    },
+    "scope": {
+      "user": "บุคคลเฉพาะเจาะจง",
+      "domain": "โดเมนอีเมล",
+      "attribute": "แผนก / บริษัท / สำนักงาน",
+      "group": "กลุ่ม (ยังไม่เปิดใช้งาน)"
+    },
+    "targetsLabel": {
+      "user": "ที่อยู่อีเมล",
+      "domain": "โดเมน",
+      "attribute": "แอตทริบิวต์",
+      "group": "รหัสกลุ่ม"
+    },
+    "targetsPlaceholder": {
+      "user": "name@example.org",
+      "domain": "example.org",
+      "attribute": "department:health",
+      "group": "Entra group object ID"
+    },
+    "chipAddHint": "เพิ่มอีก...",
+    "removeChip": "ลบ",
+    "groupsPendingConsent": "การแทนที่กลุ่มถูกบันทึกแล้วแต่ยังไม่ถูกนำไปใช้: สมาชิกกลุ่มจะไม่สามารถใช้งานในแอปนี้จนกว่าผู้ดูแลผู้เช่าจะให้สิทธิ์ยินยอม ใช้ \"แผนก / บริษัท / สำนักงาน\" เพื่อให้แทนที่มีผลทันที",
+    "overrideLabelPlaceholder": "สำหรับอะไรการแทนที่นี้",
+    "overrideLabelLabel": "ชื่อการแทนที่",
+    "overrideScopeLabel": "ใช้กับ",
+    "overrideEnabled": "เปิดใช้งาน",
+    "removeOverride": "ลบการแทนที่",
+    "addOverride": "เพิ่มการแทนที่",
+    "noOverrides": "ไม่มีการแทนที่ ทุกคนจะได้รับค่าเริ่มต้นที่แสดงด้านบน",
+    "nav": "ขีดจำกัดการใช้งาน",
+    "descriptionByKey": {
+      "modelAllowed": "สามารถใช้โมเดลนี้ได้หรือไม่",
+      "modelRequestsPerDay": "จำนวนข้อความต่อวันสำหรับโมเดลหรือตระกูลโมเดลที่ระบุ",
+      "chatMessagesPerDay": "จำนวนข้อความทั้งหมดต่อวันสำหรับทุกโมเดล",
+      "chatTokensPerDay": "โดยประมาณ — ขีดจำกัดอาจถูกเกินได้ตามความยาวของข้อความตอบที่กำลังสร้าง",
+      "chatTokensPerMonth": "โดยประมาณ — ดูหมายเหตุเกี่ยวกับขีดจำกัดโทเคนต่อวัน",
+      "webSearchEnabled": "อนุญาตให้ค้นหาข้อมูลในเว็บได้หรือไม่",
+      "codeInterpreterEnabled": "อนุญาตให้ข้อความรันโค้ดได้หรือไม่",
+      "mcpEnabled": "สามารถใช้คอนเนคเตอร์ (MCP tools) ได้หรือไม่",
+      "ttsCharactersPerRequest": "ข้อความที่ยาวที่สุดที่อ่านออกเสียงได้ต่อหนึ่งคำขอ",
+      "uploadMegabytesPerFile": "ไฟล์เดี่ยวที่สามารถอัปโหลดได้ใหญ่ที่สุด",
+      "mcpRoundsPerRequest": "ในหนึ่งข้อความสามารถเรียกใช้เครื่องมือได้กี่ครั้ง",
+      "ttsCharactersPerDay": "จำนวนอักขระที่อ่านออกเสียงได้ต่อวันทั้งหมด",
+      "transcriptionMinutesPerDay": "จำนวนนาทีเสียงและวิดีโอที่ถอดความต่อวัน",
+      "translationJobsPerDay": "งานแปลเอกสารที่เริ่มต่อวัน",
+      "webSearchCallsPerDay": "จำนวนครั้งค้นหาบนเว็บต่อวัน หากเกินขีดจำกัด ระบบจะตอบกลับโดยไม่ค้นหาแทนที่จะล้มเหลว",
+      "codeInterpreterRunsPerDay": "จำนวนครั้งรันตัวแปลโค้ดต่อวัน หากเกินขีดจำกัด ระบบจะตอบกลับโดยไม่รันโค้ด",
+      "uploadFilesPerDay": "ไฟล์ที่อัปโหลดต่อวัน"
+    },
+    "scopeFamily": "ตระกูล",
+    "scopeModel": "โมเดล",
+    "families": "ตระกูลโมเดล",
+    "modelsGroup": "โมเดลเฉพาะ",
+    "addScopedLimit": "เพิ่มขีดจำกัดสำหรับตระกูลหรือโมเดล...",
+    "removeScopedLimit": "ลบขีดจำกัดนี้",
+    "unknownQualifier": "ไม่มีในแค็ตตาล็อกของคุณขณะนี้",
+    "unknownQualifierHint": "โมเดลหรือตระกูลนี้ใช้งานไม่ได้ในภูมิภาคหรือวงแหวนนี้ ขีดจำกัดนี้จะเก็บไว้และจะนำไปใช้ในที่ที่มี"
   }
 }

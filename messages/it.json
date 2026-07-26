@@ -725,7 +725,9 @@
       "statusFailed": "Non riuscito",
       "statusIncomplete": "Incompleto",
       "viaService": "tramite {service}",
-      "downloadFile": "Scarica"
+      "downloadFile": "Scarica",
+      "executedCode": "Codice eseguito",
+      "codeOutput": "Output"
     },
     "consent": {
       "authorizeRequired": "Autorizzazione richiesta",
@@ -1223,7 +1225,9 @@
       "providerCombinedDescription": "Esegue Bing grounding e Google News insieme: i titoli appaiono entro pochi secondi mentre la ricerca approfondita Bing continua e puoi scegliere di rispondere subito dai titoli invece di attendere la ricerca completa. Quando Bing termina, entrambi i set di risultati vengono unificati.",
       "providerBingResponses": "Ricerca veloce Bing (Azure OpenAI)",
       "providerBingResponsesDescription": "La stessa copertura web di Bing grounding, eseguita come una singola chiamata diretta al modello invece che da un agente Foundry — tipicamente molto più veloce. Nuova opzione in fase di valutazione rispetto a Bing grounding."
-    }
+    },
+    "Admin": "Admin",
+    "Usage Limits": "Limiti di utilizzo"
   },
   "notFound": {
     "lostDog": "Cane smarrito"
@@ -3631,7 +3635,20 @@
     "clearAll": "Elimina tutte le memorie",
     "clearAllConfirmQuestion": "Eliminare tutte le memorie? Questa operazione non può essere annullata.",
     "clearAllConfirm": "Elimina tutto",
-    "cancel": "Annulla"
+    "cancel": "Annulla",
+    "pauseToggle": "Metti in pausa il salvataggio di nuove memorie",
+    "pauseNote": "Le memorie già presenti continuano a personalizzare le tue chat; niente di nuovo verrà salvato finché non riprendi.",
+    "addLabel": "Aggiungi una memoria",
+    "addPlaceholder": "Qualcosa che l’assistente dovrebbe ricordare, es. \"Preferisce risposte concise\"",
+    "addMemory": "Aggiungi memoria",
+    "editMemory": "Modifica memoria",
+    "saveMemory": "Salva",
+    "addedByYou": "Aggiunto da te",
+    "storedCount": "{count} su {max} memorie salvate",
+    "charCount": "{count}/{max} caratteri",
+    "noLineBreaksHint": "Le interruzioni di riga vengono eliminate — una memoria è archiviata su una singola riga.",
+    "duplicate": "Questa memoria è già stata salvata.",
+    "atCapacity": "Hai raggiunto il limite di {max} memorie. Elimina una memoria per aggiungerne un'altra."
   },
   "contextWindow": {
     "label": "Finestra di contesto",
@@ -4018,5 +4035,160 @@
     "fieldEventEnd": "Fine",
     "fieldEventPrecision": "Precisione",
     "fieldEventOngoing": "In corso"
+  },
+  "admin": {
+    "title": "Admin",
+    "areaNavLabel": "Aree di amministrazione",
+    "group": {
+      "access": "Accesso",
+      "usage": "Utilizzo",
+      "administration": "Amministrazione"
+    },
+    "areaDescription": {
+      "agents": "Controlla chi può usare ogni agente condiviso.",
+      "connectors": "Connettori dell’organizzazione e chi può usarli.",
+      "guides": "Guide di stile, terminologia e conformità.",
+      "mapDatasets": "Set di dati curati disponibili per il flusso delle mappe.",
+      "localAdmins": "Delega la modifica delle regole di accesso ad altre persone."
+    }
+  },
+  "limits": {
+    "title": "Limiti di utilizzo",
+    "description": "Limita quanto ogni modello e funzione può essere utilizzato dagli utenti. Tutto è illimitato finché non imposti qui un limite.",
+    "back": "Torna alla chat",
+    "loading": "Caricamento…",
+    "retry": "Riprova",
+    "policyUnavailable": "Impossibile leggere la policy dei limiti dalla memoria. Questo NON significa \"niente configurato\" — non dare per scontato che i limiti siano disattivati. Riprova e controlla i log del server se il problema persiste.",
+    "save": "Salva",
+    "saving": "Salvataggio…",
+    "saved": "Limiti salvati.",
+    "saveFailed": "Impossibile salvare la policy dei limiti.",
+    "conflict": "Un altro admin ha modificato la policy dei limiti mentre stavi modificando. Le tue modifiche non sono state salvate — è stata ricaricata la versione più recente.",
+    "unsavedChanges": "Modifiche non salvate",
+    "modeLabel": "Modalità",
+    "modeObserve": "Osserva (solo log)",
+    "modeEnforce": "Applica (blocca)",
+    "failModeLabel": "Se l’archiviazione non è raggiungibile",
+    "failOpen": "Consenti (fail open)",
+    "failClosed": "Blocca (fail closed)",
+    "timezoneLabel": "Fuso orario del periodo",
+    "countByom": "Conta l’utilizzo degli account modello degli utenti",
+    "countAuxiliary": "Conta chiamate in background (titoli, sommari, memorie)",
+    "observeNotice": "La modalità Osserva è attiva: non viene bloccato nulla. Ogni limite che avrebbe bloccato qualcuno viene registrato nel log del server; in questo modo puoi verificare la policy rispetto all’utilizzo reale prima di applicarla.",
+    "propagationNotice": "Le modifiche possono richiedere fino a 60 secondi per raggiungere tutti i server.",
+    "tab": {
+      "defaults": "Impostazioni globali predefinite",
+      "overrides": "Eccezioni"
+    },
+    "tabsLabel": "Sezioni limiti",
+    "category": {
+      "chat": "Chat",
+      "models": "Modelli",
+      "tools": "Strumenti",
+      "files": "File",
+      "speech": "Voce",
+      "documents": "Documenti"
+    },
+    "label": {
+      "modelAllowed": "Modello disponibile",
+      "modelRequestsPerDay": "Messaggi per modello",
+      "chatMessagesPerDay": "Messaggi al giorno",
+      "chatTokensPerDay": "Token al giorno",
+      "chatTokensPerMonth": "Token al mese",
+      "webSearchEnabled": "Ricerca web",
+      "codeInterpreterEnabled": "Interprete di codice",
+      "mcpEnabled": "Connettori (MCP)",
+      "ttsCharactersPerRequest": "Caratteri per lettura vocale",
+      "uploadMegabytesPerFile": "Dimensione upload per file",
+      "mcpRoundsPerRequest": "Round dello strumento per messaggio",
+      "ttsCharactersPerDay": "Caratteri letti al giorno",
+      "transcriptionMinutesPerDay": "Minuti di trascrizione al giorno",
+      "translationJobsPerDay": "Traduzioni documenti al giorno",
+      "webSearchCallsPerDay": "Ricerche web al giorno",
+      "codeInterpreterRunsPerDay": "Esecuzioni interprete di codice al giorno",
+      "uploadFilesPerDay": "Caricamenti file al giorno"
+    },
+    "valueModeLabel": "Tipo di limite",
+    "valueAmountLabel": "Quantità limite",
+    "modeInherit": "Non impostato — eredita",
+    "modeUnlimited": "Illimitato",
+    "modeAllowed": "Consentito",
+    "modeLimited": "Limitato a",
+    "modeBlocked": "Bloccato",
+    "blockedChip": "Bloccato",
+    "hardCeilingHint": "Non può superare {value}",
+    "hardCeilingToggle": "Limite massimo — nessuna eccezione può superarlo",
+    "unit": {
+      "requests": "richieste",
+      "tokens": "token",
+      "calls": "chiamate",
+      "runs": "esecuzioni",
+      "characters": "caratteri",
+      "megabytes": "MB",
+      "minutes": "minuti",
+      "jobs": "operazioni",
+      "rounds": "round",
+      "boolean": ""
+    },
+    "window": {
+      "day": "giorno",
+      "month": "mese"
+    },
+    "scope": {
+      "user": "Persone specifiche",
+      "domain": "Dominio e-mail",
+      "attribute": "Dipartimento / azienda / ufficio",
+      "group": "Gruppo (non ancora attivo)"
+    },
+    "targetsLabel": {
+      "user": "Indirizzi email",
+      "domain": "Domini",
+      "attribute": "Attributi",
+      "group": "ID gruppo"
+    },
+    "targetsPlaceholder": {
+      "user": "nome@example.org",
+      "domain": "example.org",
+      "attribute": "department:health",
+      "group": "ID oggetto gruppo Entra"
+    },
+    "chipAddHint": "Aggiungi un altro…",
+    "removeChip": "Rimuovi",
+    "groupsPendingConsent": "Le sostituzioni di gruppo sono salvate ma non ancora applicate: la membership di gruppo non è disponibile per l’app finché l’amministratore della tenant non concede il consenso. Usa \"Dipartimento / azienda / ufficio\" per una sostituzione attiva da subito.",
+    "overrideLabelPlaceholder": "A cosa serve questa sostituzione",
+    "overrideLabelLabel": "Nome della sostituzione",
+    "overrideScopeLabel": "Si applica a",
+    "overrideEnabled": "Abilitato",
+    "removeOverride": "Rimuovi sostituzione",
+    "addOverride": "Aggiungi sostituzione",
+    "noOverrides": "Nessuna sostituzione. Tutti ricevono i valori predefiniti globali sopra riportati.",
+    "nav": "Limiti di utilizzo",
+    "descriptionByKey": {
+      "modelAllowed": "Se questo modello può essere utilizzato.",
+      "modelRequestsPerDay": "Messaggi al giorno per uno specifico modello o famiglia di modelli.",
+      "chatMessagesPerDay": "Messaggi totali al giorno su tutti i modelli.",
+      "chatTokensPerDay": "Approssimativo — il limite può essere superato dalla lunghezza di una risposta già in generazione.",
+      "chatTokensPerMonth": "Approssimativo — vedi nota sul limite giornaliero di token.",
+      "webSearchEnabled": "Se i messaggi possono effettuare ricerche sul web.",
+      "codeInterpreterEnabled": "Se i messaggi possono eseguire codice.",
+      "mcpEnabled": "Se è possibile utilizzare i connettori (strumenti MCP).",
+      "ttsCharactersPerRequest": "Passaggio più lungo che può essere letto ad alta voce in una richiesta.",
+      "uploadMegabytesPerFile": "Dimensione massima di un singolo file caricabile.",
+      "mcpRoundsPerRequest": "Numero di chiamate di strumenti possibili in un singolo messaggio.",
+      "ttsCharactersPerDay": "Caratteri totali letti ad alta voce al giorno.",
+      "transcriptionMinutesPerDay": "Minuti totali di audio e video trascritti al giorno.",
+      "translationJobsPerDay": "Traduzioni di documenti avviate al giorno.",
+      "webSearchCallsPerDay": "Ricerche web al giorno. Oltre il limite, le risposte vengono fornite senza ricerca invece che bloccarsi.",
+      "codeInterpreterRunsPerDay": "Esecuzioni dell’interprete di codice al giorno. Oltre il limite, le risposte sono fornite senza eseguire codice.",
+      "uploadFilesPerDay": "File caricati al giorno."
+    },
+    "scopeFamily": "Famiglia",
+    "scopeModel": "Modello",
+    "families": "Famiglie di modelli",
+    "modelsGroup": "Modelli specifici",
+    "addScopedLimit": "Aggiungi un limite per una famiglia o modello…",
+    "removeScopedLimit": "Rimuovi questo limite",
+    "unknownQualifier": "non presente nell’attuale catalogo",
+    "unknownQualifierHint": "Questo modello o famiglia non è disponibile in questa regione o anello. Il limite viene mantenuto e resta valido dove disponibile."
   }
 }

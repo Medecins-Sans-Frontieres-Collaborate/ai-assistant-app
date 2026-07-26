@@ -771,7 +771,9 @@
       "statusFailed": "අසාර්ථක විය",
       "statusIncomplete": "අසම්පූර්ණයි",
       "viaService": "{service} හරහා",
-      "downloadFile": "බාගන්න"
+      "downloadFile": "බාගන්න",
+      "executedCode": "ක්‍රියත්මක කළ කේතය",
+      "codeOutput": "ප්‍රතිපළ"
     },
     "consent": {
       "authorizeRequired": "අනුවැදි වීම අවශ්‍යයි",
@@ -1215,7 +1217,9 @@
       "providerCombinedDescription": "Bing grounding සහ Google News එකටම ක්‍රියාත්මක වේ: ශීර්ෂ පාඨ තත්පර කිහිපයකින් දිස්වන අතර, ගැඹුරු Bing සෙවීම තවදුරටත් ක්‍රියාත්මකව ඇත, ඔබට දැන්ම ශීර්ෂ පාඨ වලින් පිළිතුරු ලබාදිය හැක. Bing සම්පූර්ණ වූ විට ප්‍රතිඵල දෙකම එකට එකලස් වේ.",
       "providerBingResponses": "Bing වේගවත් සෙවීම (Azure OpenAI)",
       "providerBingResponsesDescription": "Bing grounding වලට සමාන Bing වෙබ් ආවරණය, Foundry agent එකකට වෙනුවට තනි සෘජු මාදිලියකින් ධාවනය වේ — සාමාන්‍යයෙන් ඉතා වේගවත්. Bing grounding සමඟ සසඳමින් නව විකල්පයක්."
-    }
+    },
+    "Admin": "පරිපාලක",
+    "Usage Limits": "භාවිත සීමා"
   },
   "notFound": {
     "lostDog": "අහිමි වූ බල්ලා"
@@ -3631,7 +3635,20 @@
     "clearAll": "සියලු මතක ඉවත් කරන්න",
     "clearAllConfirmQuestion": "සියලු මතක ඉවත් කරන්නද? මෙය ආපසු හැරවිය නොහැක.",
     "clearAllConfirm": "සියල්ල ඉවත් කරන්න",
-    "cancel": "අවලංගු කරන්න"
+    "cancel": "අවලංගු කරන්න",
+    "pauseToggle": "අලුතින් මතක සුරැකීම නවතන්න",
+    "pauseNote": "ඔබ දැනටමත් ඇති මතක ඔබේ සංවාද පරිචයගත කරමින් පවතින අතර — අලුත් දේ කිසිවක් නැවත සුරකින්නේ නැත, ඔබ නැවත සක්‍රීය කරන තුරු.",
+    "addLabel": "මතකයක් එක් කරන්න",
+    "addPlaceholder": "ආධාරකය මතක තබා ගත යුතු දේ, උදා. \"සාරාංශවත් පිළිතුරු කැමතියි\"",
+    "addMemory": "මතකය එක් කරන්න",
+    "editMemory": "මතකය සකසන්න",
+    "saveMemory": "සුරකින්න",
+    "addedByYou": "ඔබ විසින් එක් කරන ලදී",
+    "storedCount": "මතක {count} න් {max} ක් සුරකි ඇත",
+    "charCount": "අකුරු {count}/{max}",
+    "noLineBreaksHint": "පේළි ඉවත් කරයි — මතකය එක් පේළියක් ලෙස සුරකින්න.",
+    "duplicate": "ඒ මතකය දැනටමත් සුරැකී ඇත.",
+    "atCapacity": "ඔබ {max} මතක සීමාවට ළඟාව ඇත. නව මතකයක් එක් කිරීමට එකක් ඉවත් කරන්න."
   },
   "contextWindow": {
     "label": "ප්‍රසංග කවුළුව",
@@ -4018,5 +4035,160 @@
     "fieldEventEnd": "අවසානය",
     "fieldEventPrecision": "නිවැරදිතාවය",
     "fieldEventOngoing": "දිගහැරෙන"
+  },
+  "admin": {
+    "title": "පරිපාලක",
+    "areaNavLabel": "පරිපාලන ප්‍රදේශ",
+    "group": {
+      "access": "ප්‍රවාහය",
+      "usage": "භාවිතය",
+      "administration": "පරිපාලනය"
+    },
+    "areaDescription": {
+      "agents": "එක් එක් හවුල් නියෝජිත භාවිත කළ හැකි පුද්ගලයින් පාලනය කරන්න.",
+      "connectors": "සංග්‍රහක සම්බන්ධීකාරක හා භාවිත කළ හැකි පුද්ගලයින්.",
+      "guides": "විලාසය, පදනම සහ අනුකූලත්ව මාර්ගෝපදේශ.",
+      "mapDatasets": "සිතියම් වැඩිදියුණු කිරීම සඳහා යොදාගත හැකි තෝරාගත් දත්ත සමූහ.",
+      "localAdmins": "වෙනත් පුද්ගලයින් වෙත ප්‍රවේශ නීති සංස්කරණය පැවරීම."
+    }
+  },
+  "limits": {
+    "title": "භාවිත සීමා",
+    "description": "මෝඩල සහ ලක්ෂණ සඳහා පුද්ගලයන්ට භාවිත කළ හැකි ප්‍රමාණය සීමා කරන්න. මෙහි සීමාවක් සකස් කර නැත්නම් සියල්ල අසීමිතය.",
+    "back": "සංවාදයට ආපසු",
+    "loading": "පූරණය වෙමින්...",
+    "retry": "නැවත උත්සාහ කරන්න",
+    "policyUnavailable": "සීමා ප්‍රතිපත්තිය ගබඩායෙන් කියවිය නොහැක. මෙය \"කිසිවක් සකස් කර නොමැත\" යන තත්වයට සමාන නොවේ — සීමා අක්‍රීයයි ලෙස සලකන්න එපා. නැවත උත්සාහ කරන්න, සහ අනතුරුව තවදුරටත් පවතින විට සේවාදායක සටහන් පරීක්ෂා කරන්න.",
+    "save": "සුරකින්න",
+    "saving": "සුරැකෙමින්...",
+    "saved": "සීමා සුරකි ඇත.",
+    "saveFailed": "සීමා ප්‍රතිපත්තිය සුරකින්න නොහැකි විය.",
+    "conflict": "ඔබ සංස්කරණය කරන අතරතුර අනෙකුත් පරිපාලකයෙකු විසින් සීමා ප්‍රතිපත්තිය වෙනස් කර ඇත. ඔබේ වෙනස්කම් සුරැකිය නොහැකි විය — නවතම අනුවාදය ලබාගන්නා ලදි.",
+    "unsavedChanges": "සුරැක but not yet saved වූ වෙනස්කම්",
+    "modeLabel": "ප්‍රකාරය",
+    "modeObserve": "නිරීක්ෂණය (ලඝු-කිරීම පමණි)",
+    "modeEnforce": "ඉටු කිරීම (අවහිර කරන්න)",
+    "failModeLabel": "ගබඩාය ලඟා නොවන්නේ නම්",
+    "failOpen": "ඉඩ දෙන්න (fail open)",
+    "failClosed": "අවහිර කරන්න (fail closed)",
+    "timezoneLabel": "කාලප්‍රදේශය",
+    "countByom": "පරිශීලකයින්ගේම මෝඩල් ගිණුම් භාවිතය ගණන් කරන්න",
+    "countAuxiliary": "පසුබැසි ඇමතිම් ගණන් කරන්න (ශීර්ෂ, සාරාංශ, මතක)",
+    "observeNotice": "නිරීක්ෂණ ප්‍රකාරය සක්‍රීයයි: කිසිවක් අවහිර නොවේ. අවහිර කළ යුතු සීමාවක් සේවාදායක ලඝු සටහනට ලියන අතර, ප්‍රතිපත්තිය ඉටු කිරීමට පෙර සැබෑ භාවිතය සමඟ පරීක්ෂා කළ හැක.",
+    "propagationNotice": "වෙනස්කම් සියළුම සේවාදායක වෙත පතුරන්න සෙකන්ඩ් 60ක් පුරා ගත විය හැක.",
+    "tab": {
+      "defaults": "සම්පූර්ණ පෙරනිම්",
+      "overrides": "අභිලාෂණ"
+    },
+    "tabsLabel": "සීමා කොටස්",
+    "category": {
+      "chat": "කතාබස්",
+      "models": "ආදර්ශ",
+      "tools": "මෙවලම්",
+      "files": "ගොනු",
+      "speech": "කථනය",
+      "documents": "ලේඛන"
+    },
+    "label": {
+      "modelAllowed": "ආදර්ශ ලබාගෙන හැකි",
+      "modelRequestsPerDay": "ආදර්ශයක් සඳහා දිනකට පණිවිඩ",
+      "chatMessagesPerDay": "දිනකට පණිවිඩ",
+      "chatTokensPerDay": "දිනකට ටෝකන",
+      "chatTokensPerMonth": "මාසික ටෝකන",
+      "webSearchEnabled": "වෙබ් සෙවුම්",
+      "codeInterpreterEnabled": "Code interpreter",
+      "mcpEnabled": "Connectors (MCP)",
+      "ttsCharactersPerRequest": "එක් නරඹීමකට අකුරු",
+      "uploadMegabytesPerFile": "එක් ගොනුවකට උඩුගත විශාලත්වය",
+      "mcpRoundsPerRequest": "එක් පණිවිඩයකට මෙවලම් වට",
+      "ttsCharactersPerDay": "දිනකට අකුරු නරඹන්න",
+      "transcriptionMinutesPerDay": "දිනකට අනුවාදන මිනිත්තු",
+      "translationJobsPerDay": "දිනකට ලේඛන පරිවර්තන",
+      "webSearchCallsPerDay": "දිනකට වෙබ් සෙවුම්",
+      "codeInterpreterRunsPerDay": "දිනකට Code interpreter ක්‍රියා",
+      "uploadFilesPerDay": "දිනකට ගොනු උඩුගත කිරීම්"
+    },
+    "valueModeLabel": "සීමා වර්ගය",
+    "valueAmountLabel": "සීමාවේ ප්‍රමාණය",
+    "modeInherit": "සැකසී නැත — උරුම කරයි",
+    "modeUnlimited": "සීමාවක් නැත",
+    "modeAllowed": "ඉඩදෙන ලදි",
+    "modeLimited": "සීමා කර ඇත",
+    "modeBlocked": "ථාබිතයි",
+    "blockedChip": "ථාබිතයි",
+    "hardCeilingHint": "{value} යෙදිය නොහැක",
+    "hardCeilingToggle": "දෘඩ ඉස්සර— කිසිදු අභිලාෂණය මෙය ඉක්මවායිය නොහැක",
+    "unit": {
+      "requests": "ඉල්ලීම්",
+      "tokens": "ටෝකන",
+      "calls": "ඇමතුම්",
+      "runs": "ක්‍රියා",
+      "characters": "අකුරු",
+      "megabytes": "MB",
+      "minutes": "මිනිත්තු",
+      "jobs": "කාර්යයන්",
+      "rounds": "වට",
+      "boolean": ""
+    },
+    "window": {
+      "day": "දවස",
+      "month": "මාසය"
+    },
+    "scope": {
+      "user": "නිශ්චිත පුද්ගලයින්",
+      "domain": "ඊමේල් ඩොමේනය",
+      "attribute": "දෙපාර්තමේන්තුව / සමාගම / කාර්යාලය",
+      "group": "කාණ්ඩය (තවම ක්‍රියාත්මක නොවේ)"
+    },
+    "targetsLabel": {
+      "user": "ඊමේල් ලිපින",
+      "domain": "ඩොමේන",
+      "attribute": "ගුණාංග",
+      "group": "කාණ්ඩ හැඳුනුම් අංක"
+    },
+    "targetsPlaceholder": {
+      "user": "name@example.org",
+      "domain": "example.org",
+      "attribute": "department:health",
+      "group": "Entra group object ID"
+    },
+    "chipAddHint": "තවත් එකක් එක් කරන්න…",
+    "removeChip": "ඉවත් කරන්න",
+    "groupsPendingConsent": "කාණ්ඩ අවලංගු කිරීම් සුරකි ඇතත් තවම ක්‍රියාත්මක නොවේ: කාණ්ඩ සාමාජිකත්වය යෙදුමට ලබා ගැනීමට අදාල තැන්දු පාලනයෙන් අනුමැතිය අවශ්‍යය. අදම ක්‍රියාත්මක වන අවලංගු කිරීමකට \"දෙපාර්තමේන්තුව / සමාගම / කාර්යාලය\" භාවිත කරන්න.",
+    "overrideLabelPlaceholder": "මෙම අවලංගු කිරීම සඳහා හෙටයි",
+    "overrideLabelLabel": "අවලංගු කිරීමේ නාමය",
+    "overrideScopeLabel": "යෙදෙන්නේ",
+    "overrideEnabled": "සක්‍රීයයි",
+    "removeOverride": "අවලංගු කිරීම ඉවත් කරන්න",
+    "addOverride": "අවලංගු කිරීම එක් කරන්න",
+    "noOverrides": "අවලංගු කිරීම් නොමැත. ඉහත ගෝලීය පෙරනිම් සැමට අදාළ වේ.",
+    "nav": "ඉස්සෙල්වීම් සීමා",
+    "descriptionByKey": {
+      "modelAllowed": "මෙම ආදර්ශය පාවිච්චි කළ හැකිද යන්න.",
+      "modelRequestsPerDay": "විශේෂිත ආදර්ශයක් හෝ ආදර්ශ පවුලක් සඳහා දිනකට පණිවිඩ සංඛ්‍යාව.",
+      "chatMessagesPerDay": "සෑම ආදර්ශයකම දිනකට මුළු පණිවිඩ ගණන.",
+      "chatTokensPerDay": "ඇස්ථිර — පිළිතුරක් තවම ජනสร้าง වෙමින් පවතින විට සීමාව ඉක්මවා යා හැක.",
+      "chatTokensPerMonth": "ඇස්ථිර — දිනපතා ටෝකන් සීමාව පිළිබඳ සටහන ලබා බලන්න.",
+      "webSearchEnabled": "පණිවිඩ වෙබ් සෙවීම කළ හැකිද යන්න.",
+      "codeInterpreterEnabled": "පණිවිඩ කේතය ධාවනය කළ හැකිද යන්න.",
+      "mcpEnabled": "සම්බන්ධකරන (MCP මෙවලම්) භාවිත කළ හැකිද යන්න.",
+      "ttsCharactersPerRequest": "එක් ඉල්ලීමකදී උච්චාරණය කළ හැකි දිගම උපුටාව.",
+      "uploadMegabytesPerFile": "උඩුගත කළ හැකි විශාලතම ගොනුව.",
+      "mcpRoundsPerRequest": "එක් පණිවිඩයක මගින් සම්බන්ධ කළ හැකි මෙවලම් සංඛ්‍යාව.",
+      "ttsCharactersPerDay": "දිනකට උච්චාරණය කළ මුළු අක්ෂර ගණන.",
+      "transcriptionMinutesPerDay": "දිනකට ලියවීම සඳහා පරිවර්තනය කරන මුළු ශ්‍රව්‍ය හා දෘශ්‍ය මිනිත්තු.",
+      "translationJobsPerDay": "දිනකට ආරම්භ කරන ලියවිලි පරිවර්තන වැඩ.",
+      "webSearchCallsPerDay": "දිනකට වෙබ් සෙවුම්. සීමාව ඉක්මවයි නම්, සෙවීමකින් තොරව පිළිතුරු ලබාදේ.",
+      "codeInterpreterRunsPerDay": "කේත අර්ථකරු සක්‍රිය කිරීම් දිනකට. සීමාව ඉක්මවන්නේ නම්, කේතය ධාවනය නොකර පිළිතුරු ලබාදේ.",
+      "uploadFilesPerDay": "දිනකට උඩුගත කළ ගොනු සංඛ්‍යාව."
+    },
+    "scopeFamily": "පවුල",
+    "scopeModel": "මාදිලිය",
+    "families": "මාදිලි පවුල්",
+    "modelsGroup": "විශේෂාංගිත ආදර්ශ",
+    "addScopedLimit": "පවුලක් හෝ ආදර්ශයකට සීමාවක් එකතු කරන්න…",
+    "removeScopedLimit": "මෙම සීමාව ඉවත් කරන්න",
+    "unknownQualifier": "ඔබගේ වත්මන් කැටලොගයේ නොමැත",
+    "unknownQualifierHint": "මෙම ආදර්ශය හෝ පවුල මෙම ප්‍රදේශයේ හෝ රිංග් එකේ නොමැත. සීමාව තවද සුරකින අතර ඒ රිජියනයෙහි නොමැති නමුත් තිබෙන තැන් වල තවද ක්‍රියාත්මක වේ."
   }
 }

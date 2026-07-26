@@ -862,7 +862,9 @@
       "statusFailed": "Echwe",
       "statusIncomplete": "Enkonplè",
       "viaService": "pa {service}",
-      "downloadFile": "Telechaje"
+      "downloadFile": "Telechaje",
+      "executedCode": "Kòd egzekite",
+      "codeOutput": "Rezilta"
     },
     "consent": {
       "authorizeRequired": "Otorizasyon obligatwa",
@@ -1401,7 +1403,9 @@
       "providerCombinedDescription": "Lanser Bing grounding ak Google News ansanm: tit prensipal yo parèt nan kèk segonn pandan rechèch Bing apwofondi ap kontinye, epi ou ka chwazi reponn ak tit prensipal yo imedyatman olye ou tann rechèch la fini. Lè Bing fini, tou de rezilta yo konbine.",
       "providerBingResponses": "Rechèch rapid Bing (Azure OpenAI)",
       "providerBingResponsesDescription": "Mennen menm kouvèti entènèt Bing tankou Bing grounding, men fèt kòm yon sèl apèl dirèk olye yon ajan Foundry — anjeneral pi rapid. Nouvo opsyon sa ap evalye kont Bing grounding."
-    }
+    },
+    "Admin": "Admin",
+    "Usage Limits": "Limit itilizasyon"
   },
   "emptyState": {
     "greeting": "Kijan mwen ka ede ou?",
@@ -3615,7 +3619,20 @@
     "clearAll": "Efase tout memwa",
     "clearAllConfirmQuestion": "Efase tout memwa? Aksyon sa a pap ka anile.",
     "clearAllConfirm": "Efase tout",
-    "cancel": "Anile"
+    "cancel": "Anile",
+    "pauseToggle": "Paze sove nouvo memwa yo",
+    "pauseNote": "Memwa ou deja genyen ap kontinye pèsonalize konvèsasyon ou — anyen nouvo pap anrejistre jiskaske ou rekòmanse.",
+    "addLabel": "Ajoute yon memwa",
+    "addPlaceholder": "Yon bagay asistan an ta dwe sonje, egzanp: \"Prefere repons kout\"",
+    "addMemory": "Ajoute memwa",
+    "editMemory": "Modifye memwa",
+    "saveMemory": "Sove",
+    "addedByYou": "Ou menm ki te ajoute",
+    "storedCount": "{count} sou {max} memwa sove",
+    "charCount": "{count}/{max} karaktè",
+    "noLineBreaksHint": "Soti yo retire — yo sere memwa a sou yon sèl liy.",
+    "duplicate": "Memwa sa deja sove.",
+    "atCapacity": "Ou rive limit {max} memwa. Efase youn pou ajoute yon lòt."
   },
   "contextWindow": {
     "label": "Fenèt kontèks",
@@ -4002,5 +4019,160 @@
     "fieldEventEnd": "Fini",
     "fieldEventPrecision": "Presizyon",
     "fieldEventOngoing": "An kour"
+  },
+  "admin": {
+    "title": "Admin",
+    "areaNavLabel": "Zòn admin",
+    "group": {
+      "access": "Aksè",
+      "usage": "Itilizasyon",
+      "administration": "Administrasyon"
+    },
+    "areaDescription": {
+      "agents": "Kontwole kilès ki ka itilize chak ajan pataje.",
+      "connectors": "Konektè òganizasyon ak kilès ki ka itilize yo.",
+      "guides": "Gid stil, tèm ak konformite.",
+      "mapDatasets": "Bazdone prepare pou workflow kat la.",
+      "localAdmins": "Delege edisyon règ aksè bay lòt moun."
+    }
+  },
+  "limits": {
+    "title": "Limit itilizasyon",
+    "description": "Mete limit sou kantite chak modèl ak fonksyon moun ka itilize. Tout bagay san limit sof si ou mete limit isit la.",
+    "back": "Retounen nan chat",
+    "loading": "Chaje…",
+    "retry": "Rekòmanse",
+    "policyUnavailable": "Nou pa kapab li politik limit lan nan depo a. Sa PA vle di \"pa gen anyen ki konfigire\" — pa sipoze limit pa aktive. Eseye ankò, epi tcheke log sèvè a si pwoblèm nan kontinye.",
+    "save": "Sove",
+    "saving": "Ap sove…",
+    "saved": "Limit yo sove.",
+    "saveFailed": "Nou pa t ka sove politik limit lan.",
+    "conflict": "Yon lòt admin modifye politik limit lan pandan ou t ap edite. Chanjman ou yo pa sove — dènye vèsyon an chaje ankò.",
+    "unsavedChanges": "Chanjman ki pa sove",
+    "modeLabel": "Mòd",
+    "modeObserve": "Obsève (log sèlman)",
+    "modeEnforce": "Egzekite (bloke)",
+    "failModeLabel": "Si depo a pa disponib",
+    "failOpen": "Pèmèt (fail open)",
+    "failClosed": "Bloke (fail closed)",
+    "timezoneLabel": "Fize zòn orè peryòd la",
+    "countByom": "Konte itilizasyon kont modèl pwòp itilizatè yo",
+    "countAuxiliary": "Konte apèl an bakgrawnd (tit, rezime, memwa)",
+    "observeNotice": "Mòd obsèvasyon aktive : pa gen anyen ki bloke. Tout limit ki ta bloke yon moun ap ekri nan log sèvè a, konsa ou kapab verifye politik la anvan ou egzekite li reyèlman.",
+    "propagationNotice": "Chanjman yo ka pran jiska 60 segond pou rive sou tout sèvè yo.",
+    "tab": {
+      "defaults": "Definisyon global yo",
+      "overrides": "Eksepsyon yo"
+    },
+    "tabsLabel": "Seksyon limit yo",
+    "category": {
+      "chat": "Chat",
+      "models": "Modèl yo",
+      "tools": "Zouti",
+      "files": "Fichye yo",
+      "speech": "Vwa",
+      "documents": "Dokiman yo"
+    },
+    "label": {
+      "modelAllowed": "Modèl disponib",
+      "modelRequestsPerDay": "Mesaj pa modèl",
+      "chatMessagesPerDay": "Mesaj pa jou",
+      "chatTokensPerDay": "Token pa jou",
+      "chatTokensPerMonth": "Token pa mwa",
+      "webSearchEnabled": "Rechèch entènèt",
+      "codeInterpreterEnabled": "Entèprèt kòd",
+      "mcpEnabled": "Konektè (MCP)",
+      "ttsCharactersPerRequest": "Karaktè pa lekti anwo",
+      "uploadMegabytesPerFile": "Gwosè chajman pa fichye",
+      "mcpRoundsPerRequest": "Ronn zouti pa mesaj",
+      "ttsCharactersPerDay": "Karaktè lekti anwo pa jou",
+      "transcriptionMinutesPerDay": "Minit transkripsyon pa jou",
+      "translationJobsPerDay": "Tradiksyon dokiman pa jou",
+      "webSearchCallsPerDay": "Rechèch entènèt pa jou",
+      "codeInterpreterRunsPerDay": "Egzekisyon entèprèt kòd pa jou",
+      "uploadFilesPerDay": "Chajman fichye pa jou"
+    },
+    "valueModeLabel": "Kalite limit",
+    "valueAmountLabel": "Montan limit",
+    "modeInherit": "Pa defini — erit",
+    "modeUnlimited": "San limit",
+    "modeAllowed": "Otorize",
+    "modeLimited": "Limite a",
+    "modeBlocked": "Bloke",
+    "blockedChip": "Bloke",
+    "hardCeilingHint": "Pa ka depase {value}",
+    "hardCeilingToggle": "Plafon definitif — pa gen okenn eksepsyon ki ka depase sa",
+    "unit": {
+      "requests": "demann",
+      "tokens": "token",
+      "calls": "apèl",
+      "runs": "egzekisyon",
+      "characters": "karaktè",
+      "megabytes": "MB",
+      "minutes": "minit",
+      "jobs": "travay",
+      "rounds": "ronn",
+      "boolean": ""
+    },
+    "window": {
+      "day": "jou",
+      "month": "mwa"
+    },
+    "scope": {
+      "user": "Moun espesifik",
+      "domain": "Domen imel",
+      "attribute": "Depatman / konpayi / biwo",
+      "group": "Gwoup (pa aktif ankò)"
+    },
+    "targetsLabel": {
+      "user": "Adrès imel",
+      "domain": "Domèn",
+      "attribute": "Atribi",
+      "group": "ID gwoup yo"
+    },
+    "targetsPlaceholder": {
+      "user": "non@example.org",
+      "domain": "example.org",
+      "attribute": "depatman:sante",
+      "group": "ID objè gwoup Entra"
+    },
+    "chipAddHint": "Ajoute yon lòt…",
+    "removeChip": "Retire",
+    "groupsPendingConsent": "Chanjman sou gwoup yo sove men poko aplike : manm gwoup la pa disponib pou aplikasyon an jiskaske administratè tèm lan bay konsantman li. Sèvi ak \"Depatman / konpayi / biwo\" pou yon chanjman ki pran efè jodi a.",
+    "overrideLabelPlaceholder": "Pou ki sa w ap itilize chanjman sa a",
+    "overrideLabelLabel": "Non chanjman an",
+    "overrideScopeLabel": "Aplike pou",
+    "overrideEnabled": "Aktive",
+    "removeOverride": "Retire chanjman an",
+    "addOverride": "Ajoute chanjman",
+    "noOverrides": "Pa gen okenn chanjman. Tout moun resevwa valè pa defo mondyal yo pi wo a.",
+    "nav": "Limit itilizasyon",
+    "descriptionByKey": {
+      "modelAllowed": "Si modèl sa ka itilize ditou.",
+      "modelRequestsPerDay": "Mesaj pa jou pou yon modèl oswa fanmi modèl espesifik.",
+      "chatMessagesPerDay": "Total mesaj pa jou sou tout modèl yo.",
+      "chatTokensPerDay": "Aproksimatif — yon limit ka depase selon longè repons k ap pwodwi a.",
+      "chatTokensPerMonth": "Aproksimatif — gade nòt sou limit token pou chak jou a.",
+      "webSearchEnabled": "Si mesaj yo ka fè rechèch sou entènèt la.",
+      "codeInterpreterEnabled": "Si mesaj yo ka kouri kòd.",
+      "mcpEnabled": "Si konektè (zouti MCP) kapab itilize.",
+      "ttsCharactersPerRequest": "Tekst ki pi long ki ka li a wotaw nan yon demann.",
+      "uploadMegabytesPerFile": "Pi gwo fichye sèl ki ka telechaje.",
+      "mcpRoundsPerRequest": "Konbyen apèl zouti yon sèl mesaj ka chane.",
+      "ttsCharactersPerDay": "Total karaktè li a wotaw pa jou.",
+      "transcriptionMinutesPerDay": "Total minit odyo ak videyo transkri pa jou.",
+      "translationJobsPerDay": "Travay tradiksyon dokiman inisye pa jou.",
+      "webSearchCallsPerDay": "Rechèch entènèt pa jou. Si travèse limit la, mesaj yo reponn san rechèch olye yo echwe.",
+      "codeInterpreterRunsPerDay": "Egzekisyon code interpreter pa jou. Si travèse limit la, mesaj yo reponn san kouri kòd.",
+      "uploadFilesPerDay": "Fichye telechaje pa jou."
+    },
+    "scopeFamily": "Fanmi",
+    "scopeModel": "Modèl",
+    "families": "Fanmi modèl yo",
+    "modelsGroup": "Modèl espesifik yo",
+    "addScopedLimit": "Ajoute yon limit pou yon fanmi oswa modèl…",
+    "removeScopedLimit": "Retire limit sa a",
+    "unknownQualifier": "pa nan katalòg aktyèl ou",
+    "unknownQualifierHint": "Modèl oswa fanmi sa a pa disponib nan rejyon oswa gwoup sa a. Nou toujou kenbe limit la epi li ap aplike kote li egziste."
   }
 }

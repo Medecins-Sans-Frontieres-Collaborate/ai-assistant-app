@@ -862,7 +862,9 @@
       "statusFailed": "Neuspešno",
       "statusIncomplete": "Nedovršeno",
       "viaService": "preko {service}",
-      "downloadFile": "Preuzmi"
+      "downloadFile": "Preuzmi",
+      "executedCode": "Izvršeni kod",
+      "codeOutput": "Izlaz"
     },
     "consent": {
       "authorizeRequired": "Potrebna autorizacija",
@@ -1401,7 +1403,9 @@
       "providerCombinedDescription": "Pokreće Bing grounding i Google News zajedno: naslovi se pojavljuju za nekoliko sekundi dok dubinska Bing pretraga i dalje traje, i možete odmah odgovoriti na osnovu naslova umesto da čekate sporiju pretragu. Kada Bing završi, oba skupa rezultata se spajaju.",
       "providerBingResponses": "Brza Bing pretraga (Azure OpenAI)",
       "providerBingResponsesDescription": "Ista Bing web pokrivenost kao Bing grounding, ali radi kao jedan direktan poziv modela umesto Foundry agenta — obično mnogo brže. Nova opcija na evaluaciji u odnosu na Bing grounding."
-    }
+    },
+    "Admin": "Admin",
+    "Usage Limits": "Ograničenja upotrebe"
   },
   "emptyState": {
     "greeting": "Како могу да помогнем?",
@@ -3615,7 +3619,20 @@
     "clearAll": "Obriši sva sećanja",
     "clearAllConfirmQuestion": "Obrisati sva sećanja? Ovo se ne može poništiti.",
     "clearAllConfirm": "Obriši sve",
-    "cancel": "Otkaži"
+    "cancel": "Otkaži",
+    "pauseToggle": "Pauziraj čuvanje novih memorija",
+    "pauseNote": "Memorije koje već imate nastavljaju da personalizuju vaše razgovore — ništa novo neće biti sačuvano dok ne nastavite.",
+    "addLabel": "Dodaj memoriju",
+    "addPlaceholder": "Nešto što asistent treba da zapamti, npr. \"Preferira sažete odgovore\"",
+    "addMemory": "Dodaj memoriju",
+    "editMemory": "Izmeni memoriju",
+    "saveMemory": "Sačuvaj",
+    "addedByYou": "Dodali ste vi",
+    "storedCount": "Sačuvano {count} od {max} memorija",
+    "charCount": "{count}/{max} karaktera",
+    "noLineBreaksHint": "Prelomi reda se uklanjaju — memorija se čuva kao jedan red.",
+    "duplicate": "Ta memorija je već sačuvana.",
+    "atCapacity": "Dostigli ste ograničenje od {max} memorija. Obrišite jednu da biste dodali novu."
   },
   "contextWindow": {
     "label": "Prozor konteksta",
@@ -4002,5 +4019,160 @@
     "fieldEventEnd": "Kraj",
     "fieldEventPrecision": "Preciznost",
     "fieldEventOngoing": "U toku"
+  },
+  "admin": {
+    "title": "Admin",
+    "areaNavLabel": "Admin zone",
+    "group": {
+      "access": "Pristup",
+      "usage": "Upotreba",
+      "administration": "Administracija"
+    },
+    "areaDescription": {
+      "agents": "Kontrolišite ko može da koristi svakog deljenog agenta.",
+      "connectors": "Organizacioni konektori i ko može da ih koristi.",
+      "guides": "Vodiči za stil, terminologiju i usklađenost.",
+      "mapDatasets": "Kreirane baze podataka dostupne za rad sa mapom.",
+      "localAdmins": "Delegirajte uređivanje pravila pristupa drugim osobama."
+    }
+  },
+  "limits": {
+    "title": "Ograničenja upotrebe",
+    "description": "Ograničite koliko svako može da koristi određeni model i funkciju. Sve je neograničeno dok ovde ne postavite ograničenje.",
+    "back": "Nazad na razgovor",
+    "loading": "Učitavanje…",
+    "retry": "Pokušaj ponovo",
+    "policyUnavailable": "Nije moguće učitati politiku ograničenja iz skladišta. Ovo NIJE isto što i \"ništa nije podešeno\" — nemojte pretpostavljati da su ograničenja isključena. Pokušajte ponovo i proverite server logove ako problem ostane.",
+    "save": "Sačuvaj",
+    "saving": "Čuvanje…",
+    "saved": "Ograničenja sačuvana.",
+    "saveFailed": "Nije moguće sačuvati politiku ograničenja.",
+    "conflict": "Drugi administrator je promenio politiku ograničenja dok ste vi uređivali. Vaše izmene nisu sačuvane — učitana je najnovija verzija.",
+    "unsavedChanges": "Nesačuvane promene",
+    "modeLabel": "Režim",
+    "modeObserve": "Posmatraj (samo log)",
+    "modeEnforce": "Primeni (blokiraj)",
+    "failModeLabel": "Ako skladište nije dostupno",
+    "failOpen": "Dozvoli (fail open)",
+    "failClosed": "Blokiraj (fail closed)",
+    "timezoneLabel": "Period vremenske zone",
+    "countByom": "Evidentiraj upotrebu korisničkih model računa",
+    "countAuxiliary": "Evidentiraj pozadinske pozive (naslovi, rezimei, memorije)",
+    "observeNotice": "Režim posmatranja je uključen: ništa nije blokirano. Svako ograničenje koje bi nekoga blokiralo zabeleženo je u logu servera, tako da možete proveriti politiku prema stvarnom korišćenju pre nego što je primenite.",
+    "propagationNotice": "Promene mogu potrajati do 60 sekundi da stignu do svakog servera.",
+    "tab": {
+      "defaults": "Globalna podešavanja",
+      "overrides": "Prečice"
+    },
+    "tabsLabel": "Odeljci ograničenja",
+    "category": {
+      "chat": "Ćaskanje",
+      "models": "Modeli",
+      "tools": "Alati",
+      "files": "Fajlovi",
+      "speech": "Govor",
+      "documents": "Dokumenti"
+    },
+    "label": {
+      "modelAllowed": "Model dostupan",
+      "modelRequestsPerDay": "Poruke po modelu",
+      "chatMessagesPerDay": "Poruka dnevno",
+      "chatTokensPerDay": "Tokena dnevno",
+      "chatTokensPerMonth": "Tokena mesečno",
+      "webSearchEnabled": "Pretraga veba",
+      "codeInterpreterEnabled": "Tumač koda",
+      "mcpEnabled": "Konektori (MCP)",
+      "ttsCharactersPerRequest": "Karaktera po čitanju naglas",
+      "uploadMegabytesPerFile": "Veličina prenosa po fajlu",
+      "mcpRoundsPerRequest": "Krugova alata po poruci",
+      "ttsCharactersPerDay": "Karaktera za čitanje naglas dnevno",
+      "transcriptionMinutesPerDay": "Minuta transkripcije dnevno",
+      "translationJobsPerDay": "Prevoda dokumenata dnevno",
+      "webSearchCallsPerDay": "Pretraga veba dnevno",
+      "codeInterpreterRunsPerDay": "Pokretanja tumača koda dnevno",
+      "uploadFilesPerDay": "Prenosa fajlova dnevno"
+    },
+    "valueModeLabel": "Tip ograničenja",
+    "valueAmountLabel": "Vrednost ograničenja",
+    "modeInherit": "Nije postavljeno — naslediti",
+    "modeUnlimited": "Neograničeno",
+    "modeAllowed": "Dozvoljeno",
+    "modeLimited": "Ograničeno na",
+    "modeBlocked": "Blokirano",
+    "blockedChip": "Blokirano",
+    "hardCeilingHint": "Ne može premašiti {value}",
+    "hardCeilingToggle": "Čvrsta granica — nijedno prekoračenje ne može biti veće od ovoga",
+    "unit": {
+      "requests": "zahteva",
+      "tokens": "tokena",
+      "calls": "poziva",
+      "runs": "pokretanja",
+      "characters": "karaktera",
+      "megabytes": "MB",
+      "minutes": "minuta",
+      "jobs": "poslova",
+      "rounds": "krugova",
+      "boolean": ""
+    },
+    "window": {
+      "day": "dan",
+      "month": "mesec"
+    },
+    "scope": {
+      "user": "Određene osobe",
+      "domain": "Domen e-pošte",
+      "attribute": "Odeljenje / kompanija / kancelarija",
+      "group": "Grupa (još nije aktivna)"
+    },
+    "targetsLabel": {
+      "user": "Email adrese",
+      "domain": "Domeni",
+      "attribute": "Atributi",
+      "group": "ID-ovi grupa"
+    },
+    "targetsPlaceholder": {
+      "user": "ime@primer.org",
+      "domain": "primer.org",
+      "attribute": "department:health",
+      "group": "Entra ID objekta grupe"
+    },
+    "chipAddHint": "Dodajte još…",
+    "removeChip": "Ukloni",
+    "groupsPendingConsent": "Preklapanja za grupu su sačuvana, ali još nisu aktivna: članstvo u grupi nije dostupno aplikaciji dok administrator stanara ne da dozvolu. Koristite \"Odeljenje / kompanija / kancelarija\" za preklapanje koje važi odmah.",
+    "overrideLabelPlaceholder": "Za šta se koristi ovo preklapanje",
+    "overrideLabelLabel": "Naziv preklapanja",
+    "overrideScopeLabel": "Važi za",
+    "overrideEnabled": "Omogućeno",
+    "removeOverride": "Ukloni preklapanje",
+    "addOverride": "Dodaj preklapanje",
+    "noOverrides": "Nema preklapanja. Svi dobijaju globalne podrazumevane vrednosti iznad.",
+    "nav": "Ograničenja korišćenja",
+    "descriptionByKey": {
+      "modelAllowed": "Da li se ovaj model uopšte može koristiti.",
+      "modelRequestsPerDay": "Poruka dnevno za određeni model ili porodicu modela.",
+      "chatMessagesPerDay": "Ukupan broj poruka dnevno za sve modele.",
+      "chatTokensPerDay": "Približno — ograničenje može biti premašeno dužinom već generisanog odgovora.",
+      "chatTokensPerMonth": "Približno — pogledajte napomenu o dnevnom ograničenju tokena.",
+      "webSearchEnabled": "Da li poruke mogu pretraživati veb.",
+      "codeInterpreterEnabled": "Da li poruke mogu izvršavati kod.",
+      "mcpEnabled": "Da li se konektori (MCP alati) mogu koristiti.",
+      "ttsCharactersPerRequest": "Najduži odlomak koji može biti pročitan naglas u jednom zahtevu.",
+      "uploadMegabytesPerFile": "Najveći pojedinačni fajl koji se može otpremiti.",
+      "mcpRoundsPerRequest": "Koliko alatki može jedan zahtev da poveže u lancu.",
+      "ttsCharactersPerDay": "Ukupno karaktera pročitanih naglas dnevno.",
+      "transcriptionMinutesPerDay": "Ukupno audio i video minuta transkribovanih dnevno.",
+      "translationJobsPerDay": "Pokrenuti prevodi dokumenata dnevno.",
+      "webSearchCallsPerDay": "Pretrage veba dnevno. Kada se prekorači, odgovori se šalju bez pretrage, umesto greške.",
+      "codeInterpreterRunsPerDay": "Pokretanja tumača za kod dnevno. Kada se prekorači, odgovori se šalju bez pokretanja koda.",
+      "uploadFilesPerDay": "Otpremanje fajlova dnevno."
+    },
+    "scopeFamily": "Porodica",
+    "scopeModel": "Model",
+    "families": "Porodice modela",
+    "modelsGroup": "Specifični modeli",
+    "addScopedLimit": "Dodajte ograničenje za porodicu ili model…",
+    "removeScopedLimit": "Ukloni ovo ograničenje",
+    "unknownQualifier": "nije u vašem trenutnom katalogu",
+    "unknownQualifierHint": "Ovaj model ili porodica nije dostupna u ovom regionu ili prstenu. Ograničenje se čuva i primenjuje gde god postoji."
   }
 }

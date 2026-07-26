@@ -862,7 +862,9 @@
       "statusFailed": "ኣይተሳነን",
       "statusIncomplete": "ዘይተፈጸመ",
       "viaService": "ብ {service}",
-      "downloadFile": "ኣውርድ"
+      "downloadFile": "ኣውርድ",
+      "executedCode": "ኮድ ተኽይዱ",
+      "codeOutput": "ውጽኢት"
     },
     "consent": {
       "authorizeRequired": "ሓገዝ ፍቓድ የድልየኒ",
@@ -1401,7 +1403,9 @@
       "providerCombinedDescription": "Bing grounding ንእትትዕ ከምኡውን Google News ኣብ ትሕቲ በሃብ፡ ሓባራት ብግዚኡ ይቀመጡ እዮም ዘለዉ እና Bing ብዝቐጸሉ ጥርጣር እያ ኣተወ። ንሓባራት ካብቲ ቅድመ ዝተረኸቡ ብልጽው ትመልሱ ይኽእሉ ወይ ዝዝለለ መልሲ ትጸበዩ ትኽእሉ። Bing እንተኻፈለ ክሳቡ ሓደ ውጽኢት ይተዋሃቦ።",
       "providerBingResponses": "Bing ፈጣን መፈለጊ (Azure OpenAI)",
       "providerBingResponsesDescription": "ኩሉ ኣብ Bing grounding ዝተሰማማዐ መርበብ Bing ፍለጋ እዩ፡ ሓደ ብቐንየለይ ኣብ ሞዴል ብባህሪ ዝፈጸመ እንተዘይ Foundry agent — ብምኽንያት ብዙሕ ብፍጡይ እዩ። ሓድሽ መንገዲ ኣብ መርመራ ብ Bing grounding ዝኣሰርሐ።"
-    }
+    },
+    "Admin": "ኣድሚን",
+    "Usage Limits": "ውሳኔ ድንበር ኣጠቃቕያ"
   },
   "emptyState": {
     "greeting": "ብኸመይ ክሕግዝ?",
@@ -3615,7 +3619,20 @@
     "clearAll": "ኩሉ ኣሳሳብታት ኣንጻጽሉ",
     "clearAllConfirmQuestion": "ኩሉ ኣሳሳብታት ሰርዩ? እዚ ኣይተመለሰን።",
     "clearAllConfirm": "ኩሉ ሰርዩ",
-    "cancel": "ሰርዝ"
+    "cancel": "ሰርዝ",
+    "pauseToggle": "ሓድሽ ውልቀ-ትምኒት ምቆም",
+    "pauseNote": "ዝሕተትኻዮ ውልቀ-ትምኒታት ኣብ ቆራጥ ዝነበሩ ግን ሓድሽ ነገር ድሕሪ ኣብ ውልቀ-ትምኒት ክዕበየሉ ኣይኮነን እሞ ትምህርቲ ብደሓን ወይ ከማዊ ክእረፍ ኢኻ።",
+    "addLabel": "ውልቀ-ትምኒት ወስኺ",
+    "addPlaceholder": "ናይ ሓገዝ ውልቀ-ትምኒት ክእዎ፣ ኣብ ምሳሌ፡ \"ንሓላፍነት መልሲ ይቕደም\"",
+    "addMemory": "ውልቀ-ትምኒት ወስኺ",
+    "editMemory": "ውልቀ-ትምኒት ኣርትዖ",
+    "saveMemory": "ኣስመምዕ",
+    "addedByYou": "ብኣንትኻ የውልቀ-ትምኒት",
+    "storedCount": "{count} ካብ {max} ውልቀ-ትምኒታት ተሰርሑ",
+    "charCount": "{count}/{max} ፊደላት",
+    "noLineBreaksHint": "ዳሕነታት መስመር ይወጽኡ፣ ናይ ቁልፊ መስመር እዩ ውልቀ-ትምኒት ዝተዘገበ።",
+    "duplicate": "ዚ ውልቀ-ትምኒት ኣብዚ ተሰርሖ ተዳሊዩ እዩ።",
+    "atCapacity": "ወዲኡ {max} ውልቀ-ትምኒት ድንበር ብምስርሓ ተላእኩ። ውልቀ-ትምኒት አንዲ ኣጥፍኡ ሓደ ደጊሙ ወስኹ።"
   },
   "contextWindow": {
     "label": "ዓውደ-ትሕዝቶ",
@@ -4002,5 +4019,160 @@
     "fieldEventEnd": "መወዳእታ",
     "fieldEventPrecision": "ትኽክልነት",
     "fieldEventOngoing": "ኣብ ቀጻሊ ሂወት"
+  },
+  "admin": {
+    "title": "ኣድሚን",
+    "areaNavLabel": "ኣድሚን ኣካቢታት",
+    "group": {
+      "access": "ዓቅም",
+      "usage": "ኣጠቃቕያ",
+      "administration": "ኣድሚንስትሬሽን"
+    },
+    "areaDescription": {
+      "agents": "ካብ ዚኾነ የተካፋል ኤደንት መን ይጥቀም ይኽእል ከይትተንክሩ።",
+      "connectors": "ንማህበራዊ ቦታታት ኮነክተርን ከመይ ሰባት ይጥቀማዎም ከይትንክሩ።",
+      "guides": "ዘብላዕ ኣብ ኣዘጋጅነት፣ ቃላትን ትምክህታትን መሳርሒ መግበሪ መልክን።",
+      "mapDatasets": "ናይ ብቕጽል ተሰፊሑ ዳታ ተቃራኒታት ናብ workflow ካድ ትረኽቦም ኢዮም።",
+      "localAdmins": "ሕገ-ኤርትኤ-መደብ ማስተኻኸል ካብ ነገር ንሰባት ሪአይታ።"
+    }
+  },
+  "limits": {
+    "title": "ድንበሮታት ኣጠቃቕያ",
+    "description": "ክንደይ ምሳኻ እያ ናይ ሓደ-ሞዴልን ባህሪን ሰባት ኩናት ይብሉ። ምንባር ምዕባለ ህግደፍ የለን ካብዚ ዝኾነ ካብ ቆራጥ ድንበር ትመዝግቡ።",
+    "back": "ብድሓን ደገም ናብ ቻት",
+    "loading": "በመጽናት...",
+    "retry": "ደጊሙ",
+    "policyUnavailable": "ድንበር ፖሊሲ ካብ ማዕከን ክትኣክብሉ አልተኻኽልን። እዚ ካብ “ምንታን የተዘጋጀን” ተለዋዋጭ እዩ — ድንበሮታት ዝተውክሉ ይቐጽሉ ኣይትግበሩ። ደጊሙ ሞኽሩ፡ እንተቐጺሉ ካብ ሰርቨር ባይ ፍተሻ ይረክቡ።",
+    "save": "ኣስመምዕ",
+    "saving": "ኣምጺኡ...",
+    "saved": "ድንበሮታት ተሰርሑ።",
+    "saveFailed": "ድንበር ፖሊሲ ንምምዝጋብ አልተኻኽልን።",
+    "conflict": "ኣንዳንድ ኣድሚን ናይ ድንበር ፖሊሲ ዘለኹሞ ከይተዛወረ። ዝኻን ምልፅ ኣይተዓቀበን — ናይ ቅድሚ ጊዜ ስርዓት ተድልዩ።",
+    "unsavedChanges": "ዘይተዓቀቡ ለውጦታት",
+    "modeLabel": "ወቅታዊ ደረጃ",
+    "modeObserve": "ምርኣይ (log ብትክዕ)",
+    "modeEnforce": "ምግባር (ንገብር)",
+    "failModeLabel": "ኣብ ማዕከን ብምስዳብ ኣይኽእልን እንተሆነ",
+    "failOpen": "ምፅዳቕ (fail open)",
+    "failClosed": "ምኣግልጋል (fail closed)",
+    "timezoneLabel": "ወቕታዊ ክልል ክፍሊ",
+    "countByom": "ናይ ተጠቃሚ ሞዴል ኣካውንት ኣጠቃቕያታት ብሒበጥ",
+    "countAuxiliary": "ናይ በዓቒሉ ጥራይ (titles, summaries, memories) ኣጠቃቕያ ብሒበጥ",
+    "observeNotice": "ምርኣይ ዘለዎ መደብ፡ ንጥግበሩ ዝተኸለኹ ኣይትኣጽእን። ዘሖሉ ዝተኸለኹ ናይ ድንበር ዝተፈናገሰ ሰብ ኣብ ሰርቨር log ይቕይር። ድንበሩ ንምትግባር ብኽንደይ ምግባሩ ቁልፊ ብግበሩ።",
+    "propagationNotice": "ለውጦታት ናብ ኩሉ ሰርቨር ክስትርሑ እምበር ኣብ 60 ካውንያ ይወስዱ።",
+    "tab": {
+      "defaults": "ዓለምለኸ ነቲኡኹላሊት",
+      "overrides": "መድረሻታት"
+    },
+    "tabsLabel": "መድረባት ክፋላት",
+    "category": {
+      "chat": "ቻት",
+      "models": "መደባት",
+      "tools": "መሳርያታት",
+      "files": "ፋይልታት",
+      "speech": "ኣቀዳም ቃላት",
+      "documents": "መደብቲ"
+    },
+    "label": {
+      "modelAllowed": "መደበ ተዓቂቡ እዩ",
+      "modelRequestsPerDay": "መልእኽቲ ናይ መደበ",
+      "chatMessagesPerDay": "መልእኽቲ ናይ ኣዓል",
+      "chatTokensPerDay": "ቶከናት ናይ ኣዓል",
+      "chatTokensPerMonth": "ቶከናት ናይ ወርሒ",
+      "webSearchEnabled": "ፍለጥ ወብ",
+      "codeInterpreterEnabled": "ኮድ interpreter",
+      "mcpEnabled": "Connectors (MCP)",
+      "ttsCharactersPerRequest": "ሃላባት ናይ ኣንብባ ኣይተፈተነ",
+      "uploadMegabytesPerFile": "ዓበይቲ መጠን ናይ ፋይል",
+      "mcpRoundsPerRequest": "ወርድ መሳርያ ናይ መልእኽቲ",
+      "ttsCharactersPerDay": "ሃላባት ኣንብባ ናይ ኣዓል",
+      "transcriptionMinutesPerDay": "ደቒቓት ቅጽሪ ቃል ናይ ኣዓል",
+      "translationJobsPerDay": "መተርጎም ዝተፈጸሙ ናይ መደብቲ ቀን",
+      "webSearchCallsPerDay": "ፍለጥ ወብ ናይ ኣዓል",
+      "codeInterpreterRunsPerDay": "ኣገባብን ኮድ interpreter ናይ ኣዓል",
+      "uploadFilesPerDay": "መልእኽቲ ፋይልታት ናይ ኣዓል"
+    },
+    "valueModeLabel": "ዓይነት መድረ",
+    "valueAmountLabel": "መጠን መድረ",
+    "modeInherit": "ኣይተወሰነን — ኣብ ዋና እዩ",
+    "modeUnlimited": "ውሑድ የለን",
+    "modeAllowed": "ተፈቐደ",
+    "modeLimited": "ክሳብ ዚሕየዝ",
+    "modeBlocked": "ተዓጊዙ",
+    "blockedChip": "ተዓጊዙ",
+    "hardCeilingHint": "ካብ {value} ዝበለጸ ኣይክእልን",
+    "hardCeilingToggle": "ክዋነ መወዳእታ — ኣይኮነን መስውኡ ክበልጹ",
+    "unit": {
+      "requests": "መልእኽቲ",
+      "tokens": "ቶከናት",
+      "calls": "ቁልፉታት",
+      "runs": "መሪጻ",
+      "characters": "ሃላባት",
+      "megabytes": "MB",
+      "minutes": "ደቒቓት",
+      "jobs": "ስራሕታት",
+      "rounds": "ወርድ",
+      "boolean": ""
+    },
+    "window": {
+      "day": "ኣዓል",
+      "month": "ወርሒ"
+    },
+    "scope": {
+      "user": "ሰባት ብተወሳኺ",
+      "domain": "ዶመይን ኢመይል",
+      "attribute": "ጽሓፈት / ኩባንያ / ቢሮ",
+      "group": "ቡድን (ኣይተኣኸፈንን እቲ ግዜ)"
+    },
+    "targetsLabel": {
+      "user": "ኢመይል ኣድረሶች",
+      "domain": "ዶሜይናታት",
+      "attribute": "መግለጺታት",
+      "group": "መለኪያ ቡድን"
+    },
+    "targetsPlaceholder": {
+      "user": "name@example.org",
+      "domain": "example.org",
+      "attribute": "department:health",
+      "group": "Entra group object ID"
+    },
+    "chipAddHint": "ኣዳምጡ…",
+    "removeChip": "ኣኽፋል",
+    "groupsPendingConsent": "ናይ ቡድን ምሕዳር ተዓቒቑ እዮም፡ ግን ንሕደራት ኣይተፈጸመን፡ ናይ ቡድን ኣባልነት ክህን ንኣፕ ክእደን ግን ፈቐደ ናይ ተናንት ኣመሓዳሪ ከይተሃበ ኣይከኣልን። ብተገቢ እንዳትኸፍ ዛሬ ይግበር ዘለዎ ምሕዳር ን\"ጽሓፈት / ኩባንያ / ቢሮ\" ተጠቀም።",
+    "overrideLabelPlaceholder": "ምንታይ እዩ እዚ ምዕዳር",
+    "overrideLabelLabel": "ሽም ምዕዳር",
+    "overrideScopeLabel": "ምንታይ ይተግበሩ",
+    "overrideEnabled": "ዝኣኽሎ",
+    "removeOverride": "ምዕዳር ኣኽፋል",
+    "addOverride": "ምዕዳር ኣኣክፍ",
+    "noOverrides": "ምዕዳራት የለን። ኩሉ ብልሙድ ናይ ሓለፋ-ኣብ ላዕሊ ይሰሪሑ።",
+    "nav": "ውሳነ ኣጠቓቕማ",
+    "descriptionByKey": {
+      "modelAllowed": "ዝሓለፉ እንዲኾነ ዘኽእል እንተሎ ኾይኑ።",
+      "modelRequestsPerDay": "መልእኽቲታት ንመደብ ኣይነት ሞዴል ወይ ናይ ሞዴል ቤት በዓል መዓልቲ።",
+      "chatMessagesPerDay": "ኩሉ መልእኽቲ ፈላሚ ከምዚ በዓል ሞዴል ንዓይነት ብዛዕባ እተሰርሑ መዓልቲ።",
+      "chatTokensPerDay": "በመጠን ቅሉስ እዩ — ውሳኔ ክኸውን ይኽእል ብመጠን ምላሽ ዝፍጠስ እኳ የውን።",
+      "chatTokensPerMonth": "በመጠን ቅሉስ እዩ — ማስተዋወቲ ናይ መዓልቲ ቶከን ውሳኔ ኣረፍ።",
+      "webSearchEnabled": "ክሰተው ኣብ ድሕሪ እንተኾነ ዝኽእል መልእኽቲ።",
+      "codeInterpreterEnabled": "መልእኽት ኮድ ክመጽእ እንተኾነ ዝፈቀደ።",
+      "mcpEnabled": "ኮኔክተር (MCP tools) ክጥቀም እንተኾነ።",
+      "ttsCharactersPerRequest": "ኣብ ሓንቲ ጥያቄ ዝበጽሖ ዝኽእል ካብ ጸብጻብ ዝኾነ።",
+      "uploadMegabytesPerFile": "ኣብ ሓንቲ ፋይል ዝብጽሑ ዝኽእል ሓበሬታ።",
+      "mcpRoundsPerRequest": "ኣብ ሓንቲ መልእኽቲ ክዝርከብ ዝኽእል ግምጃታት MCP ፡ ብግንዛቤ።",
+      "ttsCharactersPerDay": "ክሳዕ መዓልቲ ዝነበበ ባዕላ ባዕሉ ፊደላት።",
+      "transcriptionMinutesPerDay": "ኣብ ሓሙሽተ መዓልቲ ጽሑፍ ዝርግጸሉ ደቂ ድምጺን ቪዲዩን ደቒቓታት።",
+      "translationJobsPerDay": "ዕላማት ትርጉም ቓልቲ ዕቲ መዓልቲ ዝጀመሩ።",
+      "webSearchCallsPerDay": "መዓልታዊ ድሕሪ ምድላው ብዛዕባ ዕለት። ብውሳኔ መልእኽቲ ተመሊሱ ድሕሪ ምድላው ኣይጸዓኖም።",
+      "codeInterpreterRunsPerDay": "ኮድ ተግባር ንመልእኽቲ ብመዓልቲ። ብውሳኔ መልእኽቲ ኮድ ዘይኮድ ይመልስ።",
+      "uploadFilesPerDay": "ውሂብ ኣብ ሓንቲ መዓልቲ ዝብጽሑ ፋይላት።"
+    },
+    "scopeFamily": "ህይወታዊ ቤት",
+    "scopeModel": "ሞዴል",
+    "families": "መደብ ሞዴላት",
+    "modelsGroup": "ዝተወሰኑ ሞዴላት",
+    "addScopedLimit": "ውሳነ ብቤት ወይ ሞዴል ያኣኽፉ…",
+    "removeScopedLimit": "እዚ ውሳነ ኣኽፋል",
+    "unknownQualifier": "ኣብ ኣለሃቦ መዝገብካ የለን",
+    "unknownQualifierHint": "እዚ ሞዴል ወይ ቤት ኣብዚ ኣካባቢ ወይ ሪንግ የለን። ውሳነ እንታይሊን ኾይኑ፡ ኣብ ምድላው ዝኾነ ይሕፃፍ።"
   }
 }

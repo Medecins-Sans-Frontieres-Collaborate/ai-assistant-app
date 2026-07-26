@@ -779,7 +779,9 @@
       "statusFailed": "נכשל",
       "statusIncomplete": "לא הושלם",
       "viaService": "דרך {service}",
-      "downloadFile": "הורד"
+      "downloadFile": "הורד",
+      "executedCode": "קוד שהורץ",
+      "codeOutput": "פלט"
     },
     "consent": {
       "authorizeRequired": "נדרשת הרשאה",
@@ -1223,7 +1225,9 @@
       "providerCombinedDescription": "מפעיל חיפוש Bing ו-Google News יחד: כותרות מופיעות תוך שניות בזמן שהחיפוש המעמיק ב-Bing ממשיך, ותוכלו לבחור להשיב מהכותרות מיד במקום להמתין לחיפוש האיטי. כאשר Bing מסיים, שתי קבוצות התוצאות מאוחדות.",
       "providerBingResponses": "חיפוש מהיר ב-Bing (Azure OpenAI)",
       "providerBingResponsesDescription": "אותו כיסוי אינטרנט של Bing כפי שב-Bing grounding, אך מופעל כקריאה ישירה יחידה למודל ולא כסוכן Foundry — בדרך כלל מהיר יותר. אפשרות חדשה שנבדקת מול Bing grounding."
-    }
+    },
+    "Admin": "מנהל",
+    "Usage Limits": "מגבלות שימוש"
   },
   "notFound": {
     "lostDog": "כלב אבוד"
@@ -3631,7 +3635,20 @@
     "clearAll": "נקה את כל הזיכרונות",
     "clearAllConfirmQuestion": "למחוק את כל הזיכרונות? לא ניתן לשחזר פעולה זו.",
     "clearAllConfirm": "מחק הכול",
-    "cancel": "ביטול"
+    "cancel": "ביטול",
+    "pauseToggle": "השהה שמירת זיכרונות חדשים",
+    "pauseNote": "הזיכרונות שכבר קיימים ממשיכים להתאים אישית את הצ'אט — לא יישמרו זיכרונות חדשים עד שתמשיך.",
+    "addLabel": "הוסף זיכרון",
+    "addPlaceholder": "משהו שהעוזר צריך לזכור, לדוג' \"מעדיף תשובות תמציתיות\"",
+    "addMemory": "הוסף זיכרון",
+    "editMemory": "ערוך זיכרון",
+    "saveMemory": "שמור",
+    "addedByYou": "נוסף על ידך",
+    "storedCount": "{count} מתוך {max} זיכרונות נשמרו",
+    "charCount": "{count}/{max} תווים",
+    "noLineBreaksHint": "מעברי שורה מוסרים — זיכרון נשמר כשורה אחת.",
+    "duplicate": "הזיכרון הזה כבר נשמר.",
+    "atCapacity": "הגעת למגבלת {max} הזיכרונות. מחק אחד כדי להוסיף חדש."
   },
   "contextWindow": {
     "label": "חלון הקשר",
@@ -4018,5 +4035,160 @@
     "fieldEventEnd": "סיום",
     "fieldEventPrecision": "דיוק",
     "fieldEventOngoing": "מתמשך"
+  },
+  "admin": {
+    "title": "מנהל",
+    "areaNavLabel": "אזורים ניהוליים",
+    "group": {
+      "access": "גישה",
+      "usage": "שימוש",
+      "administration": "ניהול"
+    },
+    "areaDescription": {
+      "agents": "קבע מי יכול להשתמש בכל סוכן משותף.",
+      "connectors": "מחברי הארגון ומי יכול להשתמש בהם.",
+      "guides": "מדריכי סגנון, מינוחים וציות.",
+      "mapDatasets": "סטי נתונים מוכנים זמינים לתהליך המפות.",
+      "localAdmins": "העבר עריכת כללי גישה לאחרים."
+    }
+  },
+  "limits": {
+    "title": "מגבלות שימוש",
+    "description": "הגבל את כמות השימוש בכל מודל ותכונה. ברירת מחדל: ללא הגבלה, אלא אם כן הגדרת כאן מגבלה.",
+    "back": "חזרה לצ'אט",
+    "loading": "טוען…",
+    "retry": "נסה שוב",
+    "policyUnavailable": "לא ניתן לקרוא את מדיניות המגבלות מהאחסון. זה לא אומר שאין הגדרות — אין להניח שמגבלות כבויות. נסה שוב ובדוק את יומני השרת אם התקלה נמשכת.",
+    "save": "שמור",
+    "saving": "שומר…",
+    "saved": "המגבלות נשמרו.",
+    "saveFailed": "לא ניתן היה לשמור את מדיניות המגבלות.",
+    "conflict": "מנהל אחר שינה את מדיניות המגבלות בזמן העריכה. השינויים שלך לא נשמרו — הגרסה העדכנית נטענה מחדש.",
+    "unsavedChanges": "שינויים שלא נשמרו",
+    "modeLabel": "מצב",
+    "modeObserve": "מעקב (רק ביומן)",
+    "modeEnforce": "אכיפה (חסום)",
+    "failModeLabel": "אם לא ניתן לגשת לאחסון",
+    "failOpen": "אפשר (Fail Open)",
+    "failClosed": "חסום (Fail Closed)",
+    "timezoneLabel": "אזור זמן לתקופה",
+    "countByom": "חשב שימוש בחשבונות מודל אישיים של משתמשים",
+    "countAuxiliary": "חשב שיחות רקע (כותרות, תקצירים, זיכרונות)",
+    "observeNotice": "מצב מעקב פעיל: שום דבר לא נחסם. כל מגבלה שהייתה אמורה לחסום מישהו נכתבת ליומן השרת בלבד, כדי שתוכל לבדוק את המדיניות מול השימוש בפועל לפני אכיפה.",
+    "propagationNotice": "השינויים עשויים לקחת עד 60 שניות להגיע לכל השרתים.",
+    "tab": {
+      "defaults": "ברירות מחדל גלובליות",
+      "overrides": "עקיפות"
+    },
+    "tabsLabel": "סעיפי הגבלות",
+    "category": {
+      "chat": "צ'אט",
+      "models": "מודלים",
+      "tools": "כלים",
+      "files": "קבצים",
+      "speech": "דיבור",
+      "documents": "מסמכים"
+    },
+    "label": {
+      "modelAllowed": "מודל זמין",
+      "modelRequestsPerDay": "הודעות לכל מודל",
+      "chatMessagesPerDay": "הודעות ביום",
+      "chatTokensPerDay": "טוקנים ביום",
+      "chatTokensPerMonth": "טוקנים בחודש",
+      "webSearchEnabled": "חיפוש ברשת",
+      "codeInterpreterEnabled": "Code interpreter",
+      "mcpEnabled": "Connectors (MCP)",
+      "ttsCharactersPerRequest": "תווים לכל קריאה בקול רם",
+      "uploadMegabytesPerFile": "גודל העלאה לכל קובץ",
+      "mcpRoundsPerRequest": "סבבי כלי לכל הודעה",
+      "ttsCharactersPerDay": "תווים בקריאה בקול רם ביום",
+      "transcriptionMinutesPerDay": "דקות תמלול ביום",
+      "translationJobsPerDay": "תרגומי מסמכים ביום",
+      "webSearchCallsPerDay": "חיפושי רשת ביום",
+      "codeInterpreterRunsPerDay": "הרצות Code interpreter ביום",
+      "uploadFilesPerDay": "העלאות קבצים ביום"
+    },
+    "valueModeLabel": "סוג הגבלה",
+    "valueAmountLabel": "כמות הגבלה",
+    "modeInherit": "לא הוגדר — ירושה",
+    "modeUnlimited": "ללא הגבלה",
+    "modeAllowed": "מותר",
+    "modeLimited": "מוגבל ל־",
+    "modeBlocked": "חסום",
+    "blockedChip": "חסום",
+    "hardCeilingHint": "לא ניתן לחרוג מ־{value}",
+    "hardCeilingToggle": "תקרה קשיחה — אין לעקוף הגבלה זו",
+    "unit": {
+      "requests": "בקשות",
+      "tokens": "טוקנים",
+      "calls": "קריאות",
+      "runs": "הרצות",
+      "characters": "תווים",
+      "megabytes": "MB",
+      "minutes": "דקות",
+      "jobs": "משימות",
+      "rounds": "סבבים",
+      "boolean": ""
+    },
+    "window": {
+      "day": "יום",
+      "month": "חודש"
+    },
+    "scope": {
+      "user": "אנשים מסוימים",
+      "domain": "דומיין דוא\"ל",
+      "attribute": "מחלקה / חברה / משרד",
+      "group": "קבוצה (עדיין לא פעיל)"
+    },
+    "targetsLabel": {
+      "user": "כתובות דוא\"ל",
+      "domain": "דומיינים",
+      "attribute": "מאפיינים",
+      "group": "מזהי קבוצה"
+    },
+    "targetsPlaceholder": {
+      "user": "name@example.org",
+      "domain": "example.org",
+      "attribute": "department:health",
+      "group": "Entra group object ID"
+    },
+    "chipAddHint": "הוסף נוסף…",
+    "removeChip": "הסר",
+    "groupsPendingConsent": "עקיפות קבוצה נשמרו אך עדיין לא חלות: חברות בקבוצה אינה זמינה לאפליקציה עד לקבלת אישור ממנהל הדייר. השתמש ב\"מחלקה / חברה / משרד\" לעקיפה הנכנסת לתוקף היום.",
+    "overrideLabelPlaceholder": "מה מטרת עקיפה זו",
+    "overrideLabelLabel": "שם העקיפה",
+    "overrideScopeLabel": "חל על",
+    "overrideEnabled": "מופעל",
+    "removeOverride": "הסר עקיפה",
+    "addOverride": "הוסף עקיפה",
+    "noOverrides": "אין עקיפות. כולם מקבלים את ברירות המחדל הגלובליות שלמעלה.",
+    "nav": "מגבלות שימוש",
+    "descriptionByKey": {
+      "modelAllowed": "האם ניתן להשתמש במודל זה בכלל.",
+      "modelRequestsPerDay": "הודעות ביום למודל מסוים או משפחת מודלים.",
+      "chatMessagesPerDay": "סך כל ההודעות ביום לכל המודלים.",
+      "chatTokensPerDay": "משוער — ניתן לעבור את המגבלה בהתאם לאורך התשובה שנכתבת.",
+      "chatTokensPerMonth": "משוער — ראו את ההערה על מגבלת הטוקנים היומית.",
+      "webSearchEnabled": "האם ניתן לחפש באינטרנט מההודעות.",
+      "codeInterpreterEnabled": "האם ניתן להריץ קוד מההודעות.",
+      "mcpEnabled": "האם ניתן להשתמש בקונקטורים (MCP tools).",
+      "ttsCharactersPerRequest": "הקטע הארוך ביותר שניתן להקריא בבקשה אחת.",
+      "uploadMegabytesPerFile": "הקובץ הבודד הגדול ביותר שניתן להעלות.",
+      "mcpRoundsPerRequest": "כמה קריאות לכלים הודעה אחת יכולה לשרשר.",
+      "ttsCharactersPerDay": "סה\"כ תווים מוקראים ליום.",
+      "transcriptionMinutesPerDay": "סה\"כ דקות שמע ווידאו המתומללות ביום.",
+      "translationJobsPerDay": "מספר עבודות תרגום מסמכים שמתחילות ביום.",
+      "webSearchCallsPerDay": "חיפושי אינטרנט ביום. מעבר למגבלה, ההודעות ייענו ללא חיפוש ולא ייכשלו.",
+      "codeInterpreterRunsPerDay": "הרצות מתורגמן קוד ביום. מעבר למגבלה, ההודעות ייענו ללא הרצת קוד.",
+      "uploadFilesPerDay": "קבצים שהועלו ביום."
+    },
+    "scopeFamily": "משפחה",
+    "scopeModel": "מודל",
+    "families": "משפחות מודלים",
+    "modelsGroup": "מודלים מסוימים",
+    "addScopedLimit": "הוספת מגבלה למשפחה או מודל…",
+    "removeScopedLimit": "הסר מגבלה זו",
+    "unknownQualifier": "לא בקטלוג שלך כרגע",
+    "unknownQualifierHint": "מודל או משפחה זו אינם זמינים באזור או בטבעת זו. המגבלה נשמרת וממשיכה לחול בכל מקום בו כן קיימת."
   }
 }

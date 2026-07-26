@@ -750,7 +750,9 @@
       "statusFailed": "فشل",
       "statusIncomplete": "غير مكتمل",
       "viaService": "عبر {service}",
-      "downloadFile": "تنزيل"
+      "downloadFile": "تنزيل",
+      "executedCode": "تم تنفيذ الكود",
+      "codeOutput": "الناتج"
     },
     "consent": {
       "authorizeRequired": "مطلوب التفويض",
@@ -1194,7 +1196,9 @@
       "providerCombinedDescription": "يعمل على تشغيل Bing Grounding وGoogle News معاً: تظهر العناوين خلال ثوانٍ بينما يستمر البحث المتعمق على Bing، ويمكنك اختيار الإجابة من العناوين مباشرةً بدلاً من الانتظار. عند انتهاء Bing، يتم دمج مجموعتي النتائج.",
       "providerBingResponses": "بحث Bing السريع (Azure OpenAI)",
       "providerBingResponsesDescription": "تغطية ويب Bing نفسها مثل Bing grounding، لكن يتم التشغيل كطلب مباشر واحد للنموذج بدلاً من وكيل Foundry — عادةً أسرع بكثير. خيار جديد قيد التقييم بالمقارنة مع Bing grounding."
-    }
+    },
+    "Admin": "المسؤول",
+    "Usage Limits": "حدود الاستخدام"
   },
   "notFound": {
     "lostDog": "كلب ضائع"
@@ -3631,7 +3635,20 @@
     "clearAll": "حذف جميع الذكريات",
     "clearAllConfirmQuestion": "حذف جميع الذكريات؟ لا يمكن التراجع عن ذلك.",
     "clearAllConfirm": "حذف الكل",
-    "cancel": "إلغاء"
+    "cancel": "إلغاء",
+    "pauseToggle": "إيقاف حفظ الذكريات الجديدة مؤقتًا",
+    "pauseNote": "الذكريات التي لديك بالفعل ستستمر بتخصيص محادثاتك — لن يتم حفظ أي جديد حتى تستأنف.",
+    "addLabel": "إضافة ذكرى",
+    "addPlaceholder": "شيء يجب أن يتذكره المساعد، مثال: \"يفضل الإجابات المختصرة\"",
+    "addMemory": "إضافة ذكرى",
+    "editMemory": "تعديل الذكرى",
+    "saveMemory": "حفظ",
+    "addedByYou": "تمت الإضافة بواسطتك",
+    "storedCount": "تم حفظ {count} من {max} ذكرى",
+    "charCount": "{count}/{max} حرف",
+    "noLineBreaksHint": "يتم حذف الفواصل الأسطرية — تُخزن الذكرى كسطر واحد.",
+    "duplicate": "تم حفظ هذه الذكرى بالفعل.",
+    "atCapacity": "لقد وصلت إلى الحد الأقصى للذكريات ({max}). احذف واحدة لإضافة أخرى."
   },
   "contextWindow": {
     "label": "نافذة السياق",
@@ -4018,5 +4035,160 @@
     "fieldEventEnd": "النهاية",
     "fieldEventPrecision": "الدقة",
     "fieldEventOngoing": "جارٍ"
+  },
+  "admin": {
+    "title": "المسؤول",
+    "areaNavLabel": "مناطق الإدارة",
+    "group": {
+      "access": "الوصول",
+      "usage": "الاستخدام",
+      "administration": "الإدارة"
+    },
+    "areaDescription": {
+      "agents": "التحكم في من يستطيع استخدام كل وكيل مشترك.",
+      "connectors": "موصلات المنظمة ومن يمكنه استخدامها.",
+      "guides": "أدلة الأسلوب والمصطلحات والامتثال.",
+      "mapDatasets": "مجموعات البيانات المنسقة المتاحة لسير عمل الخرائط.",
+      "localAdmins": "تفويض تحرير قواعد الوصول لأشخاص آخرين."
+    }
+  },
+  "limits": {
+    "title": "حدود الاستخدام",
+    "description": "حدد مقدار استخدام كل نموذج وميزة لكل شخص. كل شيء غير محدود ما لم تضع حدًا هنا.",
+    "back": "العودة إلى المحادثة",
+    "loading": "جارٍ التحميل…",
+    "retry": "إعادة المحاولة",
+    "policyUnavailable": "تعذر قراءة سياسة الحدود من وحدة التخزين. هذا ليس مثل \"عدم وجود إعدادات\" — لا تفترض أن الحدود معطلة. أعد المحاولة، وتحقق من سجلات الخادم إذا استمر الأمر.",
+    "save": "حفظ",
+    "saving": "جارٍ الحفظ…",
+    "saved": "تم حفظ الحدود.",
+    "saveFailed": "تعذر حفظ سياسة الحدود.",
+    "conflict": "قام مسؤول آخر بتغيير سياسة الحدود أثناء التعديل. لم يتم حفظ تغييراتك — تم إعادة تحميل أحدث نسخة.",
+    "unsavedChanges": "تغييرات غير محفوظة",
+    "modeLabel": "الوضع",
+    "modeObserve": "مراقبة (تسجيل فقط)",
+    "modeEnforce": "تطبيق (حظر)",
+    "failModeLabel": "إذا كان التخزين غير متاح",
+    "failOpen": "السماح (فتح عند الفشل)",
+    "failClosed": "الحظر (إغلاق عند الفشل)",
+    "timezoneLabel": "منطقة التوقيت للفترة",
+    "countByom": "عد استخدام حسابات النماذج الخاصة بالمستخدمين",
+    "countAuxiliary": "عد المكالمات الخلفية (العناوين، الملخصات، الذكريات)",
+    "observeNotice": "وضع المراقبة مفعل: لا يتم حظر أي شيء. كل حد كان سيؤدي للحظر يتم تسجيله في سجل الخادم فقط، حتى يمكنك اختبار السياسة مع الاستخدام الفعلي قبل تطبيقها.",
+    "propagationNotice": "قد تستغرق التغييرات ما يصل إلى 60 ثانية حتى تصل لكل خادم.",
+    "tab": {
+      "defaults": "الإعدادات الافتراضية العامة",
+      "overrides": "تجاوزات"
+    },
+    "tabsLabel": "أقسام الحدود",
+    "category": {
+      "chat": "الدردشة",
+      "models": "النماذج",
+      "tools": "الأدوات",
+      "files": "الملفات",
+      "speech": "الصوت",
+      "documents": "المستندات"
+    },
+    "label": {
+      "modelAllowed": "النموذج متاح",
+      "modelRequestsPerDay": "الرسائل لكل نموذج",
+      "chatMessagesPerDay": "الرسائل في اليوم",
+      "chatTokensPerDay": "الرموز في اليوم",
+      "chatTokensPerMonth": "الرموز في الشهر",
+      "webSearchEnabled": "بحث الإنترنت",
+      "codeInterpreterEnabled": "مفسر الشيفرة",
+      "mcpEnabled": "الموصلات (MCP)",
+      "ttsCharactersPerRequest": "عدد الأحرف لكل قراءة",
+      "uploadMegabytesPerFile": "حجم التحميل لكل ملف",
+      "mcpRoundsPerRequest": "جولات الأداة لكل رسالة",
+      "ttsCharactersPerDay": "عدد أحرف القراءة في اليوم",
+      "transcriptionMinutesPerDay": "دقائق النسخ في اليوم",
+      "translationJobsPerDay": "ترجمات المستندات في اليوم",
+      "webSearchCallsPerDay": "عدد عمليات بحث الإنترنت في اليوم",
+      "codeInterpreterRunsPerDay": "تشغيلات مفسر الشيفرة في اليوم",
+      "uploadFilesPerDay": "عدد الملفات المرفوعة في اليوم"
+    },
+    "valueModeLabel": "نوع الحد",
+    "valueAmountLabel": "قيمة الحد",
+    "modeInherit": "غير محدد — وراثة",
+    "modeUnlimited": "غير محدود",
+    "modeAllowed": "مسموح",
+    "modeLimited": "محدود بـ",
+    "modeBlocked": "محظور",
+    "blockedChip": "محظور",
+    "hardCeilingHint": "لا يمكن تجاوز {value}",
+    "hardCeilingToggle": "حد أقصى — لا يمكن لأي تجاوز تخطيه",
+    "unit": {
+      "requests": "طلبات",
+      "tokens": "رموز",
+      "calls": "عمليات",
+      "runs": "تشغيلات",
+      "characters": "أحرف",
+      "megabytes": "MB",
+      "minutes": "دقائق",
+      "jobs": "مهام",
+      "rounds": "جولات",
+      "boolean": ""
+    },
+    "window": {
+      "day": "يوم",
+      "month": "شهر"
+    },
+    "scope": {
+      "user": "أشخاص محددون",
+      "domain": "نطاق البريد الإلكتروني",
+      "attribute": "القسم / الشركة / المكتب",
+      "group": "المجموعة (غير مفعّلة بعد)"
+    },
+    "targetsLabel": {
+      "user": "عناوين البريد الإلكتروني",
+      "domain": "النطاقات",
+      "attribute": "السمات",
+      "group": "معرّفات المجموعات"
+    },
+    "targetsPlaceholder": {
+      "user": "name@example.org",
+      "domain": "example.org",
+      "attribute": "department:health",
+      "group": "معرّف كائن مجموعة Entra"
+    },
+    "chipAddHint": "إضافة أخرى…",
+    "removeChip": "إزالة",
+    "groupsPendingConsent": "تم حفظ تجاوزات المجموعة ولكنها لم تُطبق بعد: عضوية المجموعة غير متوفرة للتطبيق حتى يمنح مسؤول المستأجر الموافقة. استخدم \"القسم / الشركة / المكتب\" لتجاوز يسري اليوم.",
+    "overrideLabelPlaceholder": "الغرض من هذا التجاوز",
+    "overrideLabelLabel": "اسم التجاوز",
+    "overrideScopeLabel": "ينطبق على",
+    "overrideEnabled": "مفعّل",
+    "removeOverride": "إزالة التجاوز",
+    "addOverride": "إضافة تجاوز",
+    "noOverrides": "لا توجد تجاوزات. جميع المستخدمين يحصلون على الإعدادات الافتراضية العامة أعلاه.",
+    "nav": "حدود الاستخدام",
+    "descriptionByKey": {
+      "modelAllowed": "إمكانية استخدام هذا النموذج.",
+      "modelRequestsPerDay": "الرسائل في اليوم لنموذج معين أو عائلة نماذج معينة.",
+      "chatMessagesPerDay": "إجمالي الرسائل في اليوم عبر جميع النماذج.",
+      "chatTokensPerDay": "تقريبي — يمكن تجاوز الحد حسب طول الرد الجاري إنشاؤه.",
+      "chatTokensPerMonth": "تقريبي — راجع الملاحظة حول الحد اليومي للرموز.",
+      "webSearchEnabled": "إمكانية البحث في الويب عبر الرسائل.",
+      "codeInterpreterEnabled": "إمكانية تشغيل الشيفرة عبر الرسائل.",
+      "mcpEnabled": "إمكانية استخدام الموصلات (أدوات MCP).",
+      "ttsCharactersPerRequest": "أطول نص يمكن قراءته صوتياً في طلب واحد.",
+      "uploadMegabytesPerFile": "أكبر ملف مفرد يمكن تحميله.",
+      "mcpRoundsPerRequest": "عدد مرات استدعاء الأدوات في رسالة واحدة.",
+      "ttsCharactersPerDay": "إجمالي الأحرف المقروءة صوتياً يومياً.",
+      "transcriptionMinutesPerDay": "إجمالي دقائق الصوت والفيديو التي يتم نسخها يومياً.",
+      "translationJobsPerDay": "مهام ترجمة المستندات التي تبدأ يومياً.",
+      "webSearchCallsPerDay": "عمليات البحث في الويب يومياً. بعد تجاوز الحد، تتم الإجابة دون البحث بدلاً من الفشل.",
+      "codeInterpreterRunsPerDay": "تشغيل مفسر الشيفرة يومياً. بعد تجاوز الحد، تتم الإجابة دون تشغيل الشيفرة.",
+      "uploadFilesPerDay": "عدد الملفات التي يتم تحميلها يومياً."
+    },
+    "scopeFamily": "العائلة",
+    "scopeModel": "النموذج",
+    "families": "عائلات النماذج",
+    "modelsGroup": "نماذج محددة",
+    "addScopedLimit": "إضافة حد لعائلة أو نموذج…",
+    "removeScopedLimit": "إزالة هذا الحد",
+    "unknownQualifier": "غير موجود في الكتالوج الحالي",
+    "unknownQualifierHint": "هذا النموذج أو العائلة غير متوفر في هذه المنطقة أو الحلقة. يُحفظ الحد ويظل مطبقاً حيثما وُجد."
   }
 }

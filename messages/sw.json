@@ -804,7 +804,9 @@
       "statusFailed": "Imeshindwa",
       "statusIncomplete": "Haijakamilika",
       "viaService": "kupitia {service}",
-      "downloadFile": "Pakua"
+      "downloadFile": "Pakua",
+      "executedCode": "Msimbo ulioendeshwa",
+      "codeOutput": "Matokeo"
     },
     "consent": {
       "authorizeRequired": "Uidhinishaji unahitajika",
@@ -1248,7 +1250,9 @@
       "providerCombinedDescription": "Inaendesha Bing Grounding na Google News pamoja: vichwa vya habari vinaonekana ndani ya sekunde chache huku utafutaji wa kina wa Bing ukiendelea, na unaweza kuchagua kujibu kutoka kwa vichwa vya habari mara moja badala ya kusubiri utafutaji mrefu. Bing ikimaliza, seti zote mbili za matokeo zinaunganishwa.",
       "providerBingResponses": "Utafutaji wa haraka wa Bing (Azure OpenAI)",
       "providerBingResponsesDescription": "Mlipuko uleule wa Bing kama Bing grounding, inaendeshwa kama mwito mmoja kwa mfano moja kwa moja badala ya wakala wa Foundry — kawaida ni haraka zaidi. Chaguo jipya linafanyiwa tathmini ikilinganishwa na Bing grounding."
-    }
+    },
+    "Admin": "Msimamizi",
+    "Usage Limits": "Mipaka ya matumizi"
   },
   "notFound": {
     "lostDog": "Mbwa aliyepotea"
@@ -3631,7 +3635,20 @@
     "clearAll": "Futa kumbukumbu zote",
     "clearAllConfirmQuestion": "Ufute kumbukumbu zote? Hii haiwezi kutenduliwa.",
     "clearAllConfirm": "Futa zote",
-    "cancel": "Ghairi"
+    "cancel": "Ghairi",
+    "pauseToggle": "Sitisha kuhifadhi kumbukumbu mpya",
+    "pauseNote": "Kumbukumbu ulizonazo tayari zinaendelea kubinafsisha gumzo lako — hakuna upya utakao hifadhiwa hadi uanze tena.",
+    "addLabel": "Ongeza kumbukumbu",
+    "addPlaceholder": "Jambo ambalo msaidizi anapaswa kukumbuka, mfano \"Anapendelea majibu mafupi\"",
+    "addMemory": "Ongeza kumbukumbu",
+    "editMemory": "Hariri kumbukumbu",
+    "saveMemory": "Hifadhi",
+    "addedByYou": "Umeongeza wewe",
+    "storedCount": "{count} kati ya {max} kumbukumbu zimehifadhiwa",
+    "charCount": "{count}/{max} herufi",
+    "noLineBreaksHint": "Mstari mpya umeondolewa — kumbukumbu huhifadhiwa kama mstari mmoja.",
+    "duplicate": "Kumbukumbu hiyo tayari imehifadhiwa.",
+    "atCapacity": "Umefikia ukomo wa kumbukumbu {max}. Futa moja ili kuongeza nyingine."
   },
   "contextWindow": {
     "label": "Dirisha la muktadha",
@@ -4018,5 +4035,160 @@
     "fieldEventEnd": "Mwisho",
     "fieldEventPrecision": "Uhakika",
     "fieldEventOngoing": "Inaendelea"
+  },
+  "admin": {
+    "title": "Msimamizi",
+    "areaNavLabel": "Eneo la usimamizi",
+    "group": {
+      "access": "Upatikanaji",
+      "usage": "Matumizi",
+      "administration": "Utawala"
+    },
+    "areaDescription": {
+      "agents": "Dhibiti nani anaweza kutumia kila wakala wa pamoja.",
+      "connectors": "Viunganishi vya shirika na nani anaweza kuvitumia.",
+      "guides": "Mwongozo wa mtindo, istilahi na ufuatiliaji wa sheria.",
+      "mapDatasets": "Seti za data zilizochaguliwa zinazopatikana kwa mtiririko wa ramani.",
+      "localAdmins": "Tawanya uhariri wa kanuni za upatikanaji kwa watu wengine."
+    }
+  },
+  "limits": {
+    "title": "Mipaka ya matumizi",
+    "description": "Weka kikomo cha matumizi ya kila mfano na kipengele. Kila kitu hakina mipaka isipokuwa utaweka kikomo hapa.",
+    "back": "Rudi kwenye gumzo",
+    "loading": "Inapakia…",
+    "retry": "Jaribu tena",
+    "policyUnavailable": "Imeshindikana kusoma sera ya mipaka kutoka kwenye hifadhi. Hii SIO sawa na \"hakuna kitu kimepangwa\"—usidhani mipaka imezimwa. Jaribu tena, na kagua logi za seva ikiwa tatizo litaendelea.",
+    "save": "Hifadhi",
+    "saving": "Inahifadhi…",
+    "saved": "Mipaka imehifadhiwa.",
+    "saveFailed": "Imeshindikana kuhifadhi sera ya mipaka.",
+    "conflict": "Msimamizi mwingine amebadilisha sera ya mipaka wakati ulikuwa unahariri. Mabadiliko yako hayajahifadhiwa — toleo la mwisho limeloadiwa upya.",
+    "unsavedChanges": "Mabadiliko ambayo hayajahifadhiwa",
+    "modeLabel": "Hali",
+    "modeObserve": "Angalia (andika tu)",
+    "modeEnforce": "Tekeleza (zuia)",
+    "failModeLabel": "Ikiwa hifadhi haipatikani",
+    "failOpen": "Ruhusu (fail open)",
+    "failClosed": "Zuia (fail closed)",
+    "timezoneLabel": "Eneo la muda wa kipindi",
+    "countByom": "Hesabu matumizi ya akaunti za watumiaji wa mifano yao",
+    "countAuxiliary": "Hesabu simu za msingi (vichwa, muhtasari, kumbukumbu)",
+    "observeNotice": "Hali ya Angalia iko wazi: hakuna kinachozuiwa. Kila kikomo ambacho kingemzuia mtu kitarekodiwa kwenye logi ya seva badala yake, hivyo unaweza angalia sera na matumizi halisi kabla ya kutekeleza.",
+    "propagationNotice": "Mabadiliko huchukua hadi sekunde 60 kufikia kila seva.",
+    "tab": {
+      "defaults": "Mipangilio ya kimataifa",
+      "overrides": "Vipengele vilivyozidiwa"
+    },
+    "tabsLabel": "Sehemu za mipaka",
+    "category": {
+      "chat": "Majadiliano",
+      "models": "Mifano",
+      "tools": "Vyombo",
+      "files": "Faili",
+      "speech": "Hotuba",
+      "documents": "Nyaraka"
+    },
+    "label": {
+      "modelAllowed": "Mfano unapatikana",
+      "modelRequestsPerDay": "Ujumbe kwa kila mfano",
+      "chatMessagesPerDay": "Ujumbe kwa siku",
+      "chatTokensPerDay": "Tokeni kwa siku",
+      "chatTokensPerMonth": "Tokeni kwa mwezi",
+      "webSearchEnabled": "Utafutaji wa wavuti",
+      "codeInterpreterEnabled": "Mfasiri wa msimbo",
+      "mcpEnabled": "Viunganishi (MCP)",
+      "ttsCharactersPerRequest": "Herufi kwa kila usomaji",
+      "uploadMegabytesPerFile": "Ukubwa wa kupakia kwa kila faili",
+      "mcpRoundsPerRequest": "Mizunguko ya chombo kwa ujumbe",
+      "ttsCharactersPerDay": "Herufi za kusomwa kwa siku",
+      "transcriptionMinutesPerDay": "Dakika za kunakili kwa siku",
+      "translationJobsPerDay": "Tafsiri za nyaraka kwa siku",
+      "webSearchCallsPerDay": "Utafutaji wa wavuti kwa siku",
+      "codeInterpreterRunsPerDay": "Uendeshaji wa mfasiri kwa siku",
+      "uploadFilesPerDay": "Upakiaji faili kwa siku"
+    },
+    "valueModeLabel": "Aina ya kikomo",
+    "valueAmountLabel": "Kiwango cha kikomo",
+    "modeInherit": "Haijawekwa — rithi",
+    "modeUnlimited": "Hakuna kikomo",
+    "modeAllowed": "Kimeruhusiwa",
+    "modeLimited": "Kimewekewa kikomo",
+    "modeBlocked": "Kimezuiwa",
+    "blockedChip": "Kimezuiwa",
+    "hardCeilingHint": "Haiwezi kuzidi {value}",
+    "hardCeilingToggle": "Kikomo cha juu kabisa — hakuna kipengele kitaweza kuzidi hiki",
+    "unit": {
+      "requests": "maombi",
+      "tokens": "tokeni",
+      "calls": "mara",
+      "runs": "uendeshaji",
+      "characters": "herufi",
+      "megabytes": "MB",
+      "minutes": "dakika",
+      "jobs": "kazi",
+      "rounds": "mizunguko",
+      "boolean": ""
+    },
+    "window": {
+      "day": "siku",
+      "month": "mwezi"
+    },
+    "scope": {
+      "user": "Watu maalum",
+      "domain": "Eneo la barua pepe",
+      "attribute": "Idara / kampuni / ofisi",
+      "group": "Kikundi (bado haijaanza kutumika)"
+    },
+    "targetsLabel": {
+      "user": "Anwani za barua pepe",
+      "domain": "Domaini",
+      "attribute": "Sifa",
+      "group": "Nambari za kitambulisho cha kikundi"
+    },
+    "targetsPlaceholder": {
+      "user": "jina@example.org",
+      "domain": "example.org",
+      "attribute": "idara:afya",
+      "group": "Kitambulisho cha Entra group object"
+    },
+    "chipAddHint": "Ongeza nyingine…",
+    "removeChip": "Ondoa",
+    "groupsPendingConsent": "Manunuzi ya kikundi yamehifadhiwa lakini bado hayatumiki: uanachama wa kikundi haupatikani kwenye programu hadi msimamizi wa tenant atoe idhini. Tumia \"Idara / kampuni / ofisi\" kwa override itakayofanya kazi leo.",
+    "overrideLabelPlaceholder": "Sababu ya override hii",
+    "overrideLabelLabel": "Jina la override",
+    "overrideScopeLabel": "Inatumika kwa",
+    "overrideEnabled": "Imewashwa",
+    "removeOverride": "Ondoa override",
+    "addOverride": "Ongeza override",
+    "noOverrides": "Hakuna override. Kila mtu atapata mipangilio ya msingi hapo juu.",
+    "nav": "Vikomo vya matumizi",
+    "descriptionByKey": {
+      "modelAllowed": "Iwapo mfano huu unaweza kutumika kabisa.",
+      "modelRequestsPerDay": "Ujumbe kwa siku kwa mfano fulani au familia ya mfano.",
+      "chatMessagesPerDay": "Jumla ya ujumbe kwa siku kwenye kila mfano.",
+      "chatTokensPerDay": "Makadirio — kikomo kinaweza kuzidishwa na urefu wa jibu lililotengenezwa tayari.",
+      "chatTokensPerMonth": "Makadirio — angalia maelezo kuhusu kikomo cha tokeni za kila siku.",
+      "webSearchEnabled": "Iwapo ujumbe unaweza kutafuta mtandaoni.",
+      "codeInterpreterEnabled": "Iwapo ujumbe unaweza kuendesha msimbo.",
+      "mcpEnabled": "Iwapo viunganishi (MCP tools) vinaweza kutumika.",
+      "ttsCharactersPerRequest": "Sehemu ndefu zaidi inayoweza kusomwa kwa sauti kwa ombi moja.",
+      "uploadMegabytesPerFile": "Faili kubwa zaidi inayoweza kupakiwa.",
+      "mcpRoundsPerRequest": "Idadi ya miito ya zana ambayo ujumbe mmoja unaweza kuunganisha.",
+      "ttsCharactersPerDay": "Jumla ya herufi zinazosomeka kwa sauti kwa siku.",
+      "transcriptionMinutesPerDay": "Jumla ya dakika za sauti na video zinazonakiliwa kwa siku.",
+      "translationJobsPerDay": "Kazi za utafsiri wa hati zilizoanzishwa kwa siku.",
+      "webSearchCallsPerDay": "Utafutaji wa mtandaoni kwa siku. Ikizidi kikomo, ujumbe utajibiwa bila kutafuta badala ya kufeli.",
+      "codeInterpreterRunsPerDay": "Uendeshaji wa code interpreter kwa siku. Ikizidi kikomo, ujumbe utajibiwa bila kuendesha msimbo.",
+      "uploadFilesPerDay": "Faili zinazopakiwa kwa siku."
+    },
+    "scopeFamily": "Familia",
+    "scopeModel": "Mfano",
+    "families": "Familia za modeli",
+    "modelsGroup": "Modeli maalum",
+    "addScopedLimit": "Ongeza kikomo kwa familia au mfano…",
+    "removeScopedLimit": "Ondoa kikomo hiki",
+    "unknownQualifier": "haipo kwenye orodha yako ya sasa",
+    "unknownQualifierHint": "Modeli hii au familia haipatikani katika eneo au duara hili. Kikomo kimehifadhiwa na bado kitafanya kazi mahali popote kinapopatikana."
   }
 }

@@ -862,7 +862,9 @@
       "statusFailed": "ناکام شو",
       "statusIncomplete": "نیمګړی",
       "viaService": "د {service} له لارې",
-      "downloadFile": "ډاونلوډ"
+      "downloadFile": "ډاونلوډ",
+      "executedCode": "کوډ اجرا شو",
+      "codeOutput": "وتیجه"
     },
     "consent": {
       "authorizeRequired": "اجازه ورکول اړین دي",
@@ -1401,7 +1403,9 @@
       "providerCombinedDescription": "Bing grounding او Google News یو ځای چلوئ: سرلیکونه په څو ثانیو کې ښکاري، پداسې حال کې چې ژور Bing لټون دوام لري، او تاسو کولی شئ سمدلاسه د سرلیکونو څخه ځواب ورکړئ، پرځای یې چې اوږده لټون ته منتظر پاتې شئ. کله چې Bing بشپړ شي، دواړه پایلې یوځای کېږي.",
       "providerBingResponses": "Bing چټک لټون (Azure OpenAI)",
       "providerBingResponsesDescription": "هماغه Bing ویب پوښښ لکه Bing grounding، چې د Foundry ایجنټ پرځای د یوه مستقیم ماډل زنګ په توګه روانېږي — عموماً ډېر چټک دی. نوې انتخاب چې له Bing grounding سره پرتله کېږي."
-    }
+    },
+    "Admin": "ادمین",
+    "Usage Limits": "د کارونې محدودیتونه"
   },
   "emptyState": {
     "greeting": "څنګه مرسته کولی شم؟",
@@ -3615,7 +3619,20 @@
     "clearAll": "ټول یادښتونه پاک کړئ",
     "clearAllConfirmQuestion": "ټول یادښتونه حذف کړئ؟ دا به نه بېرته راګرځول کېږي.",
     "clearAllConfirm": "ټول حذف کړئ",
-    "cancel": "لغوه کړئ"
+    "cancel": "لغوه کړئ",
+    "pauseToggle": "د نویو یادونو ذخیره کول وځنډوئ",
+    "pauseNote": "ستاسو شته یادونه لا هم ستاسې چټونه شخصي کوي — تر بیا پیل پورې نوې یادونه نه ساتل کېږي.",
+    "addLabel": "یوه یادونه اضافه کړئ",
+    "addPlaceholder": "یو څه چې مرسته کوونکی باید یاد وساتي، لکه \"لنډ ځوابونه غوره کوي\"",
+    "addMemory": "یادونه اضافه کړئ",
+    "editMemory": "یادونه ایډیټ کړئ",
+    "saveMemory": "ذخیره کړئ",
+    "addedByYou": "ستاس لخوا اضافه شوې",
+    "storedCount": "{count} له {max} یادونو ذخیره شوي",
+    "charCount": "{count}/{max} توري",
+    "noLineBreaksHint": "کرښې لرې شوي — یادونه په یوه کرښه کې ساتل کېږي.",
+    "duplicate": "دغه یادونه مخکې ذخیره شوې.",
+    "atCapacity": "تاسو د {max}ـیادونو حد ته رسېدلي یاست. د بل یادولو لپاره یوه پاکه کړئ."
   },
   "contextWindow": {
     "label": "د متن کړکۍ",
@@ -4002,5 +4019,160 @@
     "fieldEventEnd": "پای",
     "fieldEventPrecision": "دقت",
     "fieldEventOngoing": "جاري"
+  },
+  "admin": {
+    "title": "ادمین",
+    "areaNavLabel": "د اډمین سیمې",
+    "group": {
+      "access": "لاس‌رسی",
+      "usage": "استعمال",
+      "administration": "اداره"
+    },
+    "areaDescription": {
+      "agents": "کنټرول کړئ چې هر شریک ایجنټ څوک کارولی شي.",
+      "connectors": "د سازمان کنیکټرونه او چا ته اجازه لري چې وکاروي.",
+      "guides": "د سبک، اصطلاحاتو او اطاعت لارښودونه.",
+      "mapDatasets": "د نقشه چارو لپاره آماده ډیټاسټونه.",
+      "localAdmins": "د لاس‌رسي قوانین نورو کسانو ته وسپارئ."
+    }
+  },
+  "limits": {
+    "title": "د کارونې محدودیتونه",
+    "description": "وټاکئ چې خلک د هر ماډل او فیچر څخه څومره استفاده کولی شي. هر څه نامحدود دي تر څو چې دلته حد ونه ټاکئ.",
+    "back": "بېرته چټ ته",
+    "loading": "درلودل...",
+    "retry": "بیا هڅه وکړئ",
+    "policyUnavailable": "د محدودیت پالېسي له ذخیره نشوه لوستل کېدای. دا له \"هیڅ تنظیم نشته\" سره توپیر لري — فکر مه کوئ چې محدودیتونه بند دي. بیا هڅه وکړئ او که دوام یې وکړ، د سرور لاګونه وګورئ.",
+    "save": "ذخیره کړئ",
+    "saving": "درخیره کېږي...",
+    "saved": "محدودیتونه ذخیره شول.",
+    "saveFailed": "محدودیت پالېسي ونه شوه ذخیره.",
+    "conflict": "بل اډمین ستاسو د ایډیټ پر مهال پالېسي بدله کړې. ستاسو بدلونونه ذخیره نه شول — وروستۍ نسخه بېرته پورته شوه.",
+    "unsavedChanges": "نه‌ذخیره شوي بدلونونه",
+    "modeLabel": "حالت",
+    "modeObserve": "یوازې څارنه (لوګ ته لیکل)",
+    "modeEnforce": "پلي کول (بلاک)",
+    "failModeLabel": "که ذخیره رسېدلې نشي",
+    "failOpen": "اجازه ورکړئ (fail open)",
+    "failClosed": "بلاک کړئ (fail closed)",
+    "timezoneLabel": "د دورې سیمه‌ییز وخت",
+    "countByom": "د کاروونکي د خپل ماډل اکاونټ کارونه وشمېره",
+    "countAuxiliary": "د شالید تلیفونونه وشمېره (سرلیکونه، لنډیزونه، یادونه)",
+    "observeNotice": "د څارنې حالت فعاله دی: هیڅ نه بلاکېږي. هر محدودیت چې باید څوک یې بلاک کړی وای، پر سرور لوګ کې ثبتېږي، تر څو تاسې مخکې له پلي کولو واقعي کارونې ته کتلای شئ.",
+    "propagationNotice": "بدلونونو ته تر ټولو سرورونو پورې رسېدو ته تر ۶۰ ثانیو وخت نیسي.",
+    "tab": {
+      "defaults": "عمومي تلواليز",
+      "overrides": "بَدلونې"
+    },
+    "tabsLabel": "منځپانګې برخې",
+    "category": {
+      "chat": "چټ",
+      "models": "ماډلونه",
+      "tools": "اوزارونه",
+      "files": "فایلونه",
+      "speech": "وینا",
+      "documents": "اسناد"
+    },
+    "label": {
+      "modelAllowed": "ماډل شته",
+      "modelRequestsPerDay": "پیغامونه هر ماډل ته",
+      "chatMessagesPerDay": "پیغامونه په ورځ کې",
+      "chatTokensPerDay": "ټوکونه په ورځ کې",
+      "chatTokensPerMonth": "ټوکونه په میاشت کې",
+      "webSearchEnabled": "ویب لټون",
+      "codeInterpreterEnabled": "کوډ شنونکی",
+      "mcpEnabled": "کنیکټرونه (MCP)",
+      "ttsCharactersPerRequest": "حروف هر غږییز لوست ته",
+      "uploadMegabytesPerFile": "هر فایل اپلوډ اندازه",
+      "mcpRoundsPerRequest": "اوزار ګردشونه هر پیغام ته",
+      "ttsCharactersPerDay": "د غږییز لوست حروف ورځني",
+      "transcriptionMinutesPerDay": "د ثبت متن دقیقې هره ورځ",
+      "translationJobsPerDay": "د سند ژباړې په ورځ کې",
+      "webSearchCallsPerDay": "ویب لټونونه په ورځ کې",
+      "codeInterpreterRunsPerDay": "کوډ شنونکی اجراوې په ورځ کې",
+      "uploadFilesPerDay": "فایل اپلوډونه په ورځ کې"
+    },
+    "valueModeLabel": "د محدویت ډول",
+    "valueAmountLabel": "د محدویت اندازه",
+    "modeInherit": "تعیین شوی نه دی — وراثت",
+    "modeUnlimited": "بې حده",
+    "modeAllowed": "اجازه لري",
+    "modeLimited": "محدود شوی تر",
+    "modeBlocked": "بند",
+    "blockedChip": "بند",
+    "hardCeilingHint": "له {value} زیات نشي کېدای",
+    "hardCeilingToggle": "سخت حد — هیڅ بدلون تر دې زیات نشي کېدای",
+    "unit": {
+      "requests": "درخواستونه",
+      "tokens": "ټوکونه",
+      "calls": "غوښتنې",
+      "runs": "اجراوې",
+      "characters": "حروف",
+      "megabytes": "MB",
+      "minutes": "دقیقې",
+      "jobs": "کارونه",
+      "rounds": "گردشونه",
+      "boolean": ""
+    },
+    "window": {
+      "day": "ورځ",
+      "month": "میاشت"
+    },
+    "scope": {
+      "user": "ځینې ځانګړي کسان",
+      "domain": "ایمیل ډومېن",
+      "attribute": "څانګه / شرکت / دفتر",
+      "group": "ډله (تر اوسه فعاله نه ده)"
+    },
+    "targetsLabel": {
+      "user": "بریښنالیک پتې",
+      "domain": "ډومینونه",
+      "attribute": "توضیحات",
+      "group": "د ډلې پېژندنې شمېرې"
+    },
+    "targetsPlaceholder": {
+      "user": "name@example.org",
+      "domain": "example.org",
+      "attribute": "department:health",
+      "group": "د Entra ډلې شی‌ء ID"
+    },
+    "chipAddHint": "بل ورزیات کړئ…",
+    "removeChip": "لرې کړئ",
+    "groupsPendingConsent": "د ډلو سرته راوړنې ثبت شوي خو لا نه دي پلي شوي: د ډلې غړیتوب اپلیکیشن ته تر هغې نه ښکاري، تر څو چې د تڼټ مدیر اجازه ورنه کړي. د نن لپاره مؤثرې سرته راوړنې لپاره \"څانګه / شرکت / دفتر\" وکاروئ.",
+    "overrideLabelPlaceholder": "دا سرته راوړنه د څه لپاره ده",
+    "overrideLabelLabel": "د سرته راوړنې نوم",
+    "overrideScopeLabel": "پرتله کېږي",
+    "overrideEnabled": "فعال",
+    "removeOverride": "سرته راوړنه لرې کړئ",
+    "addOverride": "سرته راوړنه زیاته کړئ",
+    "noOverrides": "هیڅ سرته راوړنه نشته. ټول پورته نړیوال تپوسونه لري.",
+    "nav": "د استفادې محدودیتونه",
+    "descriptionByKey": {
+      "modelAllowed": "دا ماډل هېڅ استعمالېدای شي که نه.",
+      "modelRequestsPerDay": "د یوې ځانګړې ماډل یا ماډل کورنۍ لپاره پیغامونه هره ورځ.",
+      "chatMessagesPerDay": "ټول پیغامونه هره ورځ د ټولو ماډلونو لپاره.",
+      "chatTokensPerDay": "اټکلي حد — کېدای شي د ځواب اوږدوالی له حده زیات شي.",
+      "chatTokensPerMonth": "اټکلي حد — د ورځني ټوکن حد یادونه وګورئ.",
+      "webSearchEnabled": "پیغامونه کولای شي ویب کې لټون وکړي که نه.",
+      "codeInterpreterEnabled": "پیغامونه کولای شي کوډ وچلوي که نه.",
+      "mcpEnabled": "کنکټرونه (د MCP وسیلې) کارول کېدای شي که نه.",
+      "ttsCharactersPerRequest": "تر ټولو اوږد متن چې په یوه غوښتنه کې غږېدلی شي.",
+      "uploadMegabytesPerFile": "تر ټولو لوی فایل چې پورته کېدای شي.",
+      "mcpRoundsPerRequest": "په یوه پیغام کې څو وسیلې غږول کېدای شي.",
+      "ttsCharactersPerDay": "په ورځ کې ټول غږېدلي توري.",
+      "transcriptionMinutesPerDay": "په ورځ کې ټول اورېدلي یا ویډیو دقیقې چې نقل شوې وي.",
+      "translationJobsPerDay": "په ورځ کې د اسنادو ژباړې نوې دندې.",
+      "webSearchCallsPerDay": "د ویب پلټنې هره ورځ. که له حده زیاته شي، پیغامونه بې لټونه ځوابېږي.",
+      "codeInterpreterRunsPerDay": "په ورځ کې د کوډ شنونکي ځغلولو شمېر. له حد وروسته، پیغام کوډ نه چلوي.",
+      "uploadFilesPerDay": "په ورځ کې پورته شوي فایلونه."
+    },
+    "scopeFamily": "کورنۍ",
+    "scopeModel": "ماډل",
+    "families": "د ماډل کورنۍ",
+    "modelsGroup": "ځانګړي ماډلونه",
+    "addScopedLimit": "د یوې کورنۍ یا ماډل لپاره محدودیت ورزیات کړئ…",
+    "removeScopedLimit": "دا محدودیت لرې کړئ",
+    "unknownQualifier": "ستاسو په اوسني کتلاګ کې نشته",
+    "unknownQualifierHint": "دا ماډل یا کورنۍ په دې سیمه یا حلقه کې نشته. محدودیت ساتل کېږي او هرچېرې چې موجود وي پلي کېږي."
   }
 }

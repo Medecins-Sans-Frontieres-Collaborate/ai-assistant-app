@@ -750,7 +750,9 @@
       "statusFailed": "Fallida",
       "statusIncomplete": "Incompleta",
       "viaService": "vía {service}",
-      "downloadFile": "Descargar"
+      "downloadFile": "Descargar",
+      "executedCode": "Código ejecutado",
+      "codeOutput": "Salida"
     },
     "consent": {
       "authorizeRequired": "Se requiere autorización",
@@ -1248,7 +1250,9 @@
       "providerCombinedDescription": "Ejecuta Bing grounding y Google News juntos: los titulares aparecen en segundos mientras la búsqueda profunda de Bing sigue en curso, y puede elegir responder desde los titulares de inmediato en vez de esperar la búsqueda completa. Cuando Bing termina, ambos conjuntos de resultados se combinan.",
       "providerBingResponses": "Búsqueda rápida de Bing (Azure OpenAI)",
       "providerBingResponsesDescription": "La misma cobertura web de Bing que Bing grounding, pero ejecutada como una sola llamada directa al modelo en lugar de un agente Foundry — normalmente mucho más rápido. Nueva opción en evaluación frente a Bing grounding."
-    }
+    },
+    "Admin": "Administrador",
+    "Usage Limits": "Límites de uso"
   },
   "notFound": {
     "lostDog": "Perro perdido"
@@ -3631,7 +3635,20 @@
     "clearAll": "Borrar todas las memorias",
     "clearAllConfirmQuestion": "¿Borrar todas las memorias? Esto no se puede deshacer.",
     "clearAllConfirm": "Eliminar todo",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "pauseToggle": "Pausar guardado de nuevas memorias",
+    "pauseNote": "Las memorias que ya tienes siguen personalizando tus chats; no se guardará nada nuevo hasta que reanudes.",
+    "addLabel": "Agregar una memoria",
+    "addPlaceholder": "Algo que el asistente deba recordar, p. ej., \"Prefiere respuestas concisas\"",
+    "addMemory": "Agregar memoria",
+    "editMemory": "Editar memoria",
+    "saveMemory": "Guardar",
+    "addedByYou": "Agregado por ti",
+    "storedCount": "{count} de {max} memorias guardadas",
+    "charCount": "{count}/{max} caracteres",
+    "noLineBreaksHint": "Los saltos de línea se eliminan: una memoria se guarda en una sola línea.",
+    "duplicate": "Esa memoria ya está guardada.",
+    "atCapacity": "Has alcanzado el límite de {max} memorias. Elimina una para agregar otra."
   },
   "contextWindow": {
     "label": "Ventana de contexto",
@@ -4018,5 +4035,160 @@
     "fieldEventEnd": "Fin",
     "fieldEventPrecision": "Precisión",
     "fieldEventOngoing": "En curso"
+  },
+  "admin": {
+    "title": "Administrador",
+    "areaNavLabel": "Áreas de administración",
+    "group": {
+      "access": "Acceso",
+      "usage": "Uso",
+      "administration": "Administración"
+    },
+    "areaDescription": {
+      "agents": "Controla quién puede usar cada agente compartido.",
+      "connectors": "Conectores de la organización y quién puede usarlos.",
+      "guides": "Guías de estilo, terminología y cumplimiento.",
+      "mapDatasets": "Conjuntos de datos seleccionados disponibles para el flujo de trabajo de mapas.",
+      "localAdmins": "Delegar la edición de reglas de acceso a otras personas."
+    }
+  },
+  "limits": {
+    "title": "Límites de uso",
+    "description": "Establece cuánto puede usar cada persona de cada modelo y función. Todo es ilimitado a menos que pongas un límite aquí.",
+    "back": "Volver al chat",
+    "loading": "Cargando…",
+    "retry": "Reintentar",
+    "policyUnavailable": "No se pudo leer la política de límites desde el almacenamiento. Esto NO es lo mismo que \"nada configurado\"; no asumas que los límites están desactivados. Reintenta y revisa los registros del servidor si el problema persiste.",
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "saved": "Límites guardados.",
+    "saveFailed": "No se pudo guardar la política de límites.",
+    "conflict": "Otro administrador cambió la política de límites mientras editabas. Tus cambios no se guardaron; se ha recargado la última versión.",
+    "unsavedChanges": "Cambios no guardados",
+    "modeLabel": "Modo",
+    "modeObserve": "Observar (solo registro)",
+    "modeEnforce": "Aplicar (bloquear)",
+    "failModeLabel": "Si el almacenamiento no está disponible",
+    "failOpen": "Permitir (fallo abierto)",
+    "failClosed": "Bloquear (fallo cerrado)",
+    "timezoneLabel": "Zona horaria del período",
+    "countByom": "Contar uso de cuentas propias de modelo de los usuarios",
+    "countAuxiliary": "Contar llamadas en segundo plano (títulos, resúmenes, memorias)",
+    "observeNotice": "Modo observar activado: nada se bloquea. Cada límite que habría bloqueado a alguien queda registrado en el log del servidor, para que puedas verificar la política según el uso real antes de aplicarla.",
+    "propagationNotice": "Los cambios pueden tardar hasta 60 segundos en llegar a cada servidor.",
+    "tab": {
+      "defaults": "Valores globales predeterminados",
+      "overrides": "Anulaciones"
+    },
+    "tabsLabel": "Secciones de límites",
+    "category": {
+      "chat": "Chat",
+      "models": "Modelos",
+      "tools": "Herramientas",
+      "files": "Archivos",
+      "speech": "Voz",
+      "documents": "Documentos"
+    },
+    "label": {
+      "modelAllowed": "Modelo disponible",
+      "modelRequestsPerDay": "Mensajes por modelo",
+      "chatMessagesPerDay": "Mensajes por día",
+      "chatTokensPerDay": "Tokens por día",
+      "chatTokensPerMonth": "Tokens por mes",
+      "webSearchEnabled": "Búsqueda web",
+      "codeInterpreterEnabled": "Intérprete de código",
+      "mcpEnabled": "Conectores (MCP)",
+      "ttsCharactersPerRequest": "Caracteres por lectura en voz alta",
+      "uploadMegabytesPerFile": "Tamaño de carga por archivo",
+      "mcpRoundsPerRequest": "Rondas de herramienta por mensaje",
+      "ttsCharactersPerDay": "Caracteres en voz alta por día",
+      "transcriptionMinutesPerDay": "Minutos de transcripción por día",
+      "translationJobsPerDay": "Traducciones de documentos por día",
+      "webSearchCallsPerDay": "Búsquedas web por día",
+      "codeInterpreterRunsPerDay": "Ejecuciones de intérprete de código por día",
+      "uploadFilesPerDay": "Cargas de archivos por día"
+    },
+    "valueModeLabel": "Tipo de límite",
+    "valueAmountLabel": "Cantidad límite",
+    "modeInherit": "No establecido — hereda",
+    "modeUnlimited": "Ilimitado",
+    "modeAllowed": "Permitido",
+    "modeLimited": "Limitado a",
+    "modeBlocked": "Bloqueado",
+    "blockedChip": "Bloqueado",
+    "hardCeilingHint": "No puede exceder {value}",
+    "hardCeilingToggle": "Límite máximo — ninguna anulación puede superar esto",
+    "unit": {
+      "requests": "solicitudes",
+      "tokens": "tokens",
+      "calls": "llamadas",
+      "runs": "ejecuciones",
+      "characters": "caracteres",
+      "megabytes": "MB",
+      "minutes": "minutos",
+      "jobs": "tareas",
+      "rounds": "rondas",
+      "boolean": ""
+    },
+    "window": {
+      "day": "día",
+      "month": "mes"
+    },
+    "scope": {
+      "user": "Personas específicas",
+      "domain": "Dominio de correo electrónico",
+      "attribute": "Departamento / empresa / oficina",
+      "group": "Grupo (aún no activo)"
+    },
+    "targetsLabel": {
+      "user": "Direcciones de correo electrónico",
+      "domain": "Dominios",
+      "attribute": "Atributos",
+      "group": "IDs de grupo"
+    },
+    "targetsPlaceholder": {
+      "user": "nombre@ejemplo.org",
+      "domain": "ejemplo.org",
+      "attribute": "departamento:salud",
+      "group": "ID de objeto de grupo Entra"
+    },
+    "chipAddHint": "Agregar otro…",
+    "removeChip": "Eliminar",
+    "groupsPendingConsent": "Las anulaciones de grupo se han guardado pero aún no se aplican: la membresía de grupo no está disponible para la aplicación hasta que el administrador del tenant otorgue el consentimiento. Use \"Departamento / empresa / oficina\" para una anulación que surta efecto hoy.",
+    "overrideLabelPlaceholder": "Para qué es esta anulación",
+    "overrideLabelLabel": "Nombre de la anulación",
+    "overrideScopeLabel": "Se aplica a",
+    "overrideEnabled": "Activada",
+    "removeOverride": "Eliminar anulación",
+    "addOverride": "Agregar anulación",
+    "noOverrides": "Sin anulaciones. Todos obtienen los valores predeterminados globales arriba.",
+    "nav": "Límites de uso",
+    "descriptionByKey": {
+      "modelAllowed": "Si este modelo se puede usar o no.",
+      "modelRequestsPerDay": "Mensajes por día para un modelo o familia específica.",
+      "chatMessagesPerDay": "Total de mensajes por día en todos los modelos.",
+      "chatTokensPerDay": "Aproximado: se puede exceder el límite por la longitud de una respuesta que ya se está generando.",
+      "chatTokensPerMonth": "Aproximado: consulte la nota sobre el límite diario de tokens.",
+      "webSearchEnabled": "Si los mensajes pueden buscar en la web.",
+      "codeInterpreterEnabled": "Si los mensajes pueden ejecutar código.",
+      "mcpEnabled": "Si se pueden usar conectores (herramientas MCP).",
+      "ttsCharactersPerRequest": "El texto más largo que se puede leer en voz alta en una sola solicitud.",
+      "uploadMegabytesPerFile": "El archivo individual más grande que se puede cargar.",
+      "mcpRoundsPerRequest": "Cuántas llamadas de herramienta puede encadenar un mensaje.",
+      "ttsCharactersPerDay": "Total de caracteres leídos en voz alta por día.",
+      "transcriptionMinutesPerDay": "Total de minutos transcritos de audio y video por día.",
+      "translationJobsPerDay": "Trabajos de traducción de documentos iniciados por día.",
+      "webSearchCallsPerDay": "Búsquedas web por día. Si se supera el límite, los mensajes se responden sin buscar en lugar de fallar.",
+      "codeInterpreterRunsPerDay": "Ejecuciones del intérprete de código por día. Si se supera el límite, los mensajes se responden sin ejecutar el código.",
+      "uploadFilesPerDay": "Archivos cargados por día."
+    },
+    "scopeFamily": "Familia",
+    "scopeModel": "Modelo",
+    "families": "Familias de modelos",
+    "modelsGroup": "Modelos específicos",
+    "addScopedLimit": "Agregar un límite para una familia o modelo…",
+    "removeScopedLimit": "Eliminar este límite",
+    "unknownQualifier": "no está en su catálogo actual",
+    "unknownQualifierHint": "Este modelo o familia no está disponible en esta región o anillo. El límite se mantiene y sigue aplicándose donde sí exista."
   }
 }

@@ -769,7 +769,9 @@
       "statusFailed": "Mislukt",
       "statusIncomplete": "Onvolledig",
       "viaService": "via {service}",
-      "downloadFile": "Downloaden"
+      "downloadFile": "Downloaden",
+      "executedCode": "Uitgevoerde code",
+      "codeOutput": "Uitvoer"
     },
     "consent": {
       "authorizeRequired": "Autorisatie vereist",
@@ -1213,7 +1215,9 @@
       "providerCombinedDescription": "Voert Bing-gronding en Google News gelijktijdig uit: koppen verschijnen binnen enkele seconden, terwijl de diepe Bing-zoekopdracht doorloopt, en u kunt direct antwoorden op basis van de koppen zonder te wachten op de langzamere zoekopdracht. Wanneer Bing klaar is, worden beide resultaatsets samengevoegd.",
       "providerBingResponses": "Bing snelle zoekopdracht (Azure OpenAI)",
       "providerBingResponsesDescription": "Dezelfde Bing-webdekking als Bing-grounding, uitgevoerd als één directe modelaanroep in plaats van via een Foundry-agent — doorgaans veel sneller. Nieuwe optie die momenteel wordt geëvalueerd naast Bing-grounding."
-    }
+    },
+    "Admin": "Beheer",
+    "Usage Limits": "Gebruiksbeperkingen"
   },
   "notFound": {
     "lostDog": "Verloren hond"
@@ -3631,7 +3635,20 @@
     "clearAll": "Alle herinneringen wissen",
     "clearAllConfirmQuestion": "Alle herinneringen verwijderen? Dit kan niet ongedaan worden gemaakt.",
     "clearAllConfirm": "Alles verwijderen",
-    "cancel": "Annuleren"
+    "cancel": "Annuleren",
+    "pauseToggle": "Opslaan van nieuwe herinneringen pauzeren",
+    "pauseNote": "Bestaande herinneringen blijven je chats personaliseren — er wordt niets nieuws opgeslagen tot je hervat.",
+    "addLabel": "Herinnering toevoegen",
+    "addPlaceholder": "Iets dat de assistent moet onthouden, bijvoorbeeld \"Geeft de voorkeur aan beknopte antwoorden\"",
+    "addMemory": "Herinnering toevoegen",
+    "editMemory": "Herinnering bewerken",
+    "saveMemory": "Opslaan",
+    "addedByYou": "Toegevoegd door jou",
+    "storedCount": "{count} van {max} herinneringen opgeslagen",
+    "charCount": "{count}/{max} tekens",
+    "noLineBreaksHint": "Regelafbrekingen worden verwijderd — een herinnering wordt als één regel opgeslagen.",
+    "duplicate": "Die herinnering is al opgeslagen.",
+    "atCapacity": "Je hebt de limiet van {max} herinneringen bereikt. Verwijder er een om een nieuwe toe te voegen."
   },
   "contextWindow": {
     "label": "Contextvenster",
@@ -4018,5 +4035,160 @@
     "fieldEventEnd": "Einde",
     "fieldEventPrecision": "Nauwkeurigheid",
     "fieldEventOngoing": "Lopend"
+  },
+  "admin": {
+    "title": "Beheer",
+    "areaNavLabel": "Beheergebieden",
+    "group": {
+      "access": "Toegang",
+      "usage": "Gebruik",
+      "administration": "Administratie"
+    },
+    "areaDescription": {
+      "agents": "Bepaal wie elke gedeelde agent kan gebruiken.",
+      "connectors": "Connectoren van de organisatie en wie ze mag gebruiken.",
+      "guides": "Stijl-, terminologie- en complianceregels.",
+      "mapDatasets": "Geselecteerde datasets beschikbaar voor de kaartworkflow.",
+      "localAdmins": "Toegang tot bewerkingsregels delegeren aan anderen."
+    }
+  },
+  "limits": {
+    "title": "Gebruiksbeperkingen",
+    "description": "Beperk hoeveel elk model en elke functie gebruikt kan worden. Alles is onbeperkt, tenzij je hier een limiet instelt.",
+    "back": "Terug naar chat",
+    "loading": "Laden…",
+    "retry": "Opnieuw proberen",
+    "policyUnavailable": "Het limietbeleid kon niet uit opslag worden gelezen. Dit is NIET hetzelfde als 'niets ingesteld' — ga er niet van uit dat de beperkingen uit staan. Probeer opnieuw en controleer de serverlogs als het probleem blijft bestaan.",
+    "save": "Opslaan",
+    "saving": "Bezig met opslaan…",
+    "saved": "Beperkingen opgeslagen.",
+    "saveFailed": "Beleid voor beperkingen kon niet worden opgeslagen.",
+    "conflict": "Een andere beheerder heeft het beperkingenbeleid gewijzigd terwijl je bezig was. Je wijzigingen zijn niet opgeslagen — de laatste versie is opnieuw geladen.",
+    "unsavedChanges": "Niet-opgeslagen wijzigingen",
+    "modeLabel": "Modus",
+    "modeObserve": "Observeren (alleen loggen)",
+    "modeEnforce": "Handhaven (blokkeren)",
+    "failModeLabel": "Als opslag niet bereikbaar is",
+    "failOpen": "Toestaan (fail open)",
+    "failClosed": "Blokkeren (fail closed)",
+    "timezoneLabel": "Periode-tijdzone",
+    "countByom": "Gebruik van persoonlijke modelaccounts van gebruikers meetellen",
+    "countAuxiliary": "Achtergrondoproepen meetellen (titels, samenvattingen, herinneringen)",
+    "observeNotice": "Observeren-modus is actief: er wordt niets geblokkeerd. Elke limiet die iemand zou blokkeren, wordt in de serverlog vastgelegd, zodat je het beleid kunt controleren voordat je het afdwingt.",
+    "propagationNotice": "Het kan tot 60 seconden duren voordat wijzigingen op elke server zijn doorgevoerd.",
+    "tab": {
+      "defaults": "Globale standaardwaarden",
+      "overrides": "Overschrijvingen"
+    },
+    "tabsLabel": "Limietsecties",
+    "category": {
+      "chat": "Chat",
+      "models": "Modellen",
+      "tools": "Tools",
+      "files": "Bestanden",
+      "speech": "Spraak",
+      "documents": "Documenten"
+    },
+    "label": {
+      "modelAllowed": "Model beschikbaar",
+      "modelRequestsPerDay": "Berichten per model",
+      "chatMessagesPerDay": "Berichten per dag",
+      "chatTokensPerDay": "Tokens per dag",
+      "chatTokensPerMonth": "Tokens per maand",
+      "webSearchEnabled": "Webzoekopdracht",
+      "codeInterpreterEnabled": "Code-interpreter",
+      "mcpEnabled": "Connectors (MCP)",
+      "ttsCharactersPerRequest": "Tekens per voorleesactie",
+      "uploadMegabytesPerFile": "Uploadgrootte per bestand",
+      "mcpRoundsPerRequest": "Toolrondes per bericht",
+      "ttsCharactersPerDay": "Voorleestekens per dag",
+      "transcriptionMinutesPerDay": "Transcriptieminuten per dag",
+      "translationJobsPerDay": "Documentvertalingen per dag",
+      "webSearchCallsPerDay": "Webzoekopdrachten per dag",
+      "codeInterpreterRunsPerDay": "Code-interpreteruitvoeringen per dag",
+      "uploadFilesPerDay": "Bestandsuploads per dag"
+    },
+    "valueModeLabel": "Limiettype",
+    "valueAmountLabel": "Limietbedrag",
+    "modeInherit": "Niet ingesteld — overnemen",
+    "modeUnlimited": "Onbeperkt",
+    "modeAllowed": "Toegestaan",
+    "modeLimited": "Beperkt tot",
+    "modeBlocked": "Geblokkeerd",
+    "blockedChip": "Geblokkeerd",
+    "hardCeilingHint": "Mag {value} niet overschrijden",
+    "hardCeilingToggle": "Harde limiet — geen overschrijving mag dit overschrijden",
+    "unit": {
+      "requests": "verzoeken",
+      "tokens": "tokens",
+      "calls": "oproepen",
+      "runs": "uitvoeringen",
+      "characters": "tekens",
+      "megabytes": "MB",
+      "minutes": "minuten",
+      "jobs": "taken",
+      "rounds": "rondes",
+      "boolean": ""
+    },
+    "window": {
+      "day": "dag",
+      "month": "maand"
+    },
+    "scope": {
+      "user": "Specifieke personen",
+      "domain": "E-maildomein",
+      "attribute": "Afdeling / bedrijf / kantoor",
+      "group": "Groep (nog niet actief)"
+    },
+    "targetsLabel": {
+      "user": "E-mailadressen",
+      "domain": "Domeinen",
+      "attribute": "Attributen",
+      "group": "Groep-ID's"
+    },
+    "targetsPlaceholder": {
+      "user": "naam@example.org",
+      "domain": "example.org",
+      "attribute": "afdeling:gezondheid",
+      "group": "Entra groep object-ID"
+    },
+    "chipAddHint": "Nog één toevoegen…",
+    "removeChip": "Verwijderen",
+    "groupsPendingConsent": "Groep-overschrijvingen zijn opgeslagen maar nog niet actief: groepslidmaatschap is pas beschikbaar nadat tenantbeheerder toestemming heeft gegeven. Gebruik \"Afdeling / bedrijf / kantoor\" voor een overschrijving die vandaag al geldt.",
+    "overrideLabelPlaceholder": "Waarvoor deze overschrijving is",
+    "overrideLabelLabel": "Naam van overschrijving",
+    "overrideScopeLabel": "Van toepassing op",
+    "overrideEnabled": "Ingeschakeld",
+    "removeOverride": "Overschrijving verwijderen",
+    "addOverride": "Overschrijving toevoegen",
+    "noOverrides": "Geen overschrijvingen. Iedereen krijgt de globale standaardwaarden hierboven.",
+    "nav": "Gebruiksbeperkingen",
+    "descriptionByKey": {
+      "modelAllowed": "Of dit model überhaupt gebruikt kan worden.",
+      "modelRequestsPerDay": "Berichten per dag voor een specifiek model of modellengroep.",
+      "chatMessagesPerDay": "Totaal aantal berichten per dag voor alle modellen.",
+      "chatTokensPerDay": "Bij benadering — een limiet kan worden overschreden met de lengte van een antwoord dat al wordt gegenereerd.",
+      "chatTokensPerMonth": "Bij benadering — zie de opmerking bij de dagelijkse tokenlimiet.",
+      "webSearchEnabled": "Of berichten op internet mogen zoeken.",
+      "codeInterpreterEnabled": "Of berichten code mogen uitvoeren.",
+      "mcpEnabled": "Of connectors (MCP-tools) gebruikt kunnen worden.",
+      "ttsCharactersPerRequest": "Langste passage die per verzoek mag worden voorgelezen.",
+      "uploadMegabytesPerFile": "Grootste afzonderlijke bestand dat geüpload kan worden.",
+      "mcpRoundsPerRequest": "Hoeveel toolcalls één bericht mag koppelen.",
+      "ttsCharactersPerDay": "Totaal aantal voorgelezen tekens per dag.",
+      "transcriptionMinutesPerDay": "Totaal aantal getranscribeerde audio- en videominuten per dag.",
+      "translationJobsPerDay": "Vertaalopdrachten voor documenten gestart per dag.",
+      "webSearchCallsPerDay": "Zoekopdrachten op internet per dag. Wordt de limiet overschreden, dan worden berichten beantwoord zonder te zoeken in plaats van te mislukken.",
+      "codeInterpreterRunsPerDay": "Uitvoeringen van code-interpreter per dag. Wordt de limiet overschreden, dan worden berichten beantwoord zonder code uit te voeren.",
+      "uploadFilesPerDay": "Bestanden geüpload per dag."
+    },
+    "scopeFamily": "Familie",
+    "scopeModel": "Model",
+    "families": "Modelfamilies",
+    "modelsGroup": "Specifieke modellen",
+    "addScopedLimit": "Beperking toevoegen voor een familie of model…",
+    "removeScopedLimit": "Deze beperking verwijderen",
+    "unknownQualifier": "niet in uw huidige catalogus",
+    "unknownQualifierHint": "Dit model of deze familie is niet beschikbaar in deze regio of ring. De beperking blijft behouden en geldt overal waar deze wel beschikbaar is."
   }
 }
