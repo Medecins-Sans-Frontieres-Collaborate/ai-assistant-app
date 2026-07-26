@@ -4050,7 +4050,8 @@
       "guides": "Ghiduri de stil, terminologie și conformitate.",
       "mapDatasets": "Seturi de date selectate disponibile pentru fluxul de lucru pe hartă.",
       "localAdmins": "Deleagă editarea regulilor de acces altor persoane."
-    }
+    },
+    "openSettings": "Deschide setările"
   },
   "limits": {
     "title": "Limite de utilizare",
@@ -4189,6 +4190,56 @@
     "addScopedLimit": "Adaugă o limită pentru o familie sau un model…",
     "removeScopedLimit": "Elimină această limită",
     "unknownQualifier": "nu este în catalogul curent",
-    "unknownQualifierHint": "Acest model sau familie nu este disponibil(ă) în această regiune sau ring. Limita este păstrată și se aplică acolo unde există."
+    "unknownQualifierHint": "Acest model sau familie nu este disponibil(ă) în această regiune sau ring. Limita este păstrată și se aplică acolo unde există.",
+    "group": {
+      "chat": "Activitate chat",
+      "models": "Modele",
+      "webSearch": "Căutare web",
+      "codeInterpreter": "Interpret de cod",
+      "mcp": "Conectori (MCP)",
+      "readAloud": "Citire cu voce tare",
+      "transcription": "Transcriere",
+      "uploads": "Încărcări de fișiere",
+      "translation": "Traducere documente"
+    },
+    "gateOffDimNote": "Nu se aplică atunci când {feature} este dezactivată. Valoarea se păstrează și devine din nou activă dacă funcția este reactivată.",
+    "gateOffConsequence": {
+      "webSearch": "Dezactivat: mesajele care încearcă să caute pe web sunt respinse cu o notificare că un administrator a dezactivat funcția.",
+      "codeInterpreter": "Dezactivat: mesajele care încearcă să ruleze cod sunt respinse cu o notificare că un administrator a dezactivat funcția.",
+      "mcp": "Dezactivat: mesajele care utilizează conectori sunt respinse cu o notificare că un administrator a dezactivat funcția."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Blocarea căutărilor astfel este silențioasă: conversațiile continuă, iar căutarea este pur și simplu sărită. Pentru a respinge cu un mesaj explicit, dezactivați Căutare web mai sus.",
+      "codeInterpreter": "Blocarea execuțiilor astfel este silențioasă: conversațiile continuă, iar rularea codului este pur și simplu sărită. Pentru a respinge cu un mesaj explicit, dezactivați Interpret de cod mai sus.",
+      "mcp": "Zero runde oprește silențios instrumentele de conectori, fără a întrerupe conversațiile. Pentru a respinge cu un mesaj explicit, dezactivați Conectori mai sus."
+    },
+    "overrideGateOffNote": "{feature} este momentan dezactivată pentru aceste persoane (aici sau prin setarea globală implicită), deci această limitare nu are efect decât dacă funcția este reactivată.",
+    "untitledOverride": "Supra-scriere fără titlu",
+    "expandOverride": "Extinde supra-scrierea",
+    "collapseOverride": "Restrânge supra-scrierea",
+    "overrideDisabledChip": "Dezactivat",
+    "targetsCount": "{count, plural, one {# țintă} other {# ținte}}",
+    "limitsCount": "{count, plural, one {# limită setată} other {# limite setate}}",
+    "addLimitLabel": "Adaugă o limită la această supra-scriere",
+    "addLimitPlaceholder": "Adaugă o limită…",
+    "unrecognizedEntries": "Salvat de o versiune mai nouă a aplicației — păstrat ca atare, editabil acolo:",
+    "priorityLabel": "Prioritate",
+    "priorityHint": "Când două supra-scrieri de același tip se aplică aceleiași persoane, câștigă cea cu prioritate mai mare.",
+    "previewTitle": "Verificați limitele efective ale unei persoane",
+    "previewDescription": "Vedeți ce primește efectiv cineva și ce supra-scriere stabilește fiecare valoare.",
+    "previewEmailLabel": "Adresă de e-mail pentru verificare",
+    "previewEmailPlaceholder": "nume@example.org",
+    "previewRun": "Verifică",
+    "previewLoading": "Se procesează…",
+    "previewFailed": "Nu s-au putut determina limitele acestei persoane.",
+    "previewForbidden": "Numai administratorii globali pot verifica limitele altor persoane.",
+    "previewSourceCatalog": "Implicit încorporat",
+    "previewSourceGlobal": "Implicit global",
+    "previewSourceOverride": "Supra-scriere: {label}",
+    "previewNotEvaluated": "Supra-scrierile de departament/companie/birou și grup nu pot fi evaluate aici — depind de autentificarea persoanei.",
+    "previewUnsaved": "Se afișează ultima politică salvată. Salvați modificările pentru a le previzualiza.",
+    "previewColumnLimit": "Limită",
+    "previewColumnValue": "Valoare",
+    "previewColumnSource": "Setată de"
   }
 }

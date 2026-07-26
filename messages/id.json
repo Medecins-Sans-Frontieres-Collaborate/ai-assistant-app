@@ -4050,7 +4050,8 @@
       "guides": "Panduan gaya, terminologi, dan kepatuhan.",
       "mapDatasets": "Dataset terkurasi yang tersedia untuk alur kerja peta.",
       "localAdmins": "Delegasikan pengeditan aturan akses ke orang lain."
-    }
+    },
+    "openSettings": "Buka pengaturan"
   },
   "limits": {
     "title": "Batas penggunaan",
@@ -4189,6 +4190,56 @@
     "addScopedLimit": "Tambahkan batas untuk keluarga atau model…",
     "removeScopedLimit": "Hapus batas ini",
     "unknownQualifier": "tidak ada di katalog Anda saat ini",
-    "unknownQualifierHint": "Model atau keluarga ini tidak tersedia di wilayah atau ring ini. Batas disimpan dan akan diterapkan di mana saja model ini ada."
+    "unknownQualifierHint": "Model atau keluarga ini tidak tersedia di wilayah atau ring ini. Batas disimpan dan akan diterapkan di mana saja model ini ada.",
+    "group": {
+      "chat": "Aktivitas chat",
+      "models": "Model",
+      "webSearch": "Pencarian web",
+      "codeInterpreter": "Interpreter kode",
+      "mcp": "Konektor (MCP)",
+      "readAloud": "Baca keras",
+      "transcription": "Transkripsi",
+      "uploads": "Unggah file",
+      "translation": "Terjemahan dokumen"
+    },
+    "gateOffDimNote": "Tidak berlaku saat {feature} dinonaktifkan. Nilai tetap disimpan dan akan berlaku kembali jika fitur diaktifkan lagi.",
+    "gateOffConsequence": {
+      "webSearch": "Dinonaktifkan: pesan yang mencoba mencari di web akan ditolak dengan pesan bahwa fitur telah dinonaktifkan oleh administrator.",
+      "codeInterpreter": "Dinonaktifkan: pesan yang mencoba menjalankan kode akan ditolak dengan pesan bahwa fitur telah dinonaktifkan oleh administrator.",
+      "mcp": "Dinonaktifkan: pesan yang menggunakan konektor akan ditolak dengan pesan bahwa fitur telah dinonaktifkan oleh administrator."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Pemblokiran pencarian seperti ini berlangsung diam-diam: chat tetap berjalan dan pencarian hanya dilewati. Untuk menolak dengan pesan secara eksplisit, nonaktifkan Pencarian web di atas.",
+      "codeInterpreter": "Pemblokiran seperti ini berlangsung diam-diam: chat tetap berjalan dan eksekusi kode hanya dilewati. Untuk menolak dengan pesan secara eksplisit, nonaktifkan Interpreter kode di atas.",
+      "mcp": "Nol putaran secara diam-diam menghentikan alat konektor agar tidak pernah berjalan sementara chat tetap berjalan. Untuk menolak dengan pesan secara eksplisit, nonaktifkan Konektor di atas."
+    },
+    "overrideGateOffNote": "{feature} saat ini dinonaktifkan untuk orang-orang ini (di sini atau melalui pengaturan global), sehingga batas ini tidak berpengaruh kecuali fitur diaktifkan kembali.",
+    "untitledOverride": "Override tanpa judul",
+    "expandOverride": "Perluas override",
+    "collapseOverride": "Tutup override",
+    "overrideDisabledChip": "Dinonaktifkan",
+    "targetsCount": "{count, plural, one {# target} other {# target}}",
+    "limitsCount": "{count, plural, one {# batas ditetapkan} other {# batas ditetapkan}}",
+    "addLimitLabel": "Tambahkan batas pada override ini",
+    "addLimitPlaceholder": "Tambah batas…",
+    "unrecognizedEntries": "Disimpan oleh versi aplikasi yang lebih baru — tetap seperti aslinya, bisa diedit di sana:",
+    "priorityLabel": "Prioritas",
+    "priorityHint": "Jika dua override sejenis berlaku untuk orang yang sama, yang prioritasnya lebih tinggi akan diterapkan.",
+    "previewTitle": "Periksa batas efektif seseorang",
+    "previewDescription": "Lihat apa yang sebenarnya diterima seseorang dan override mana yang menetapkan setiap nilai.",
+    "previewEmailLabel": "Alamat email untuk diperiksa",
+    "previewEmailPlaceholder": "name@example.org",
+    "previewRun": "Periksa",
+    "previewLoading": "Memproses…",
+    "previewFailed": "Tidak dapat memeriksa batas orang ini.",
+    "previewForbidden": "Hanya admin global yang dapat memeriksa batas orang lain.",
+    "previewSourceCatalog": "Bawaan",
+    "previewSourceGlobal": "Bawaan global",
+    "previewSourceOverride": "Override: {label}",
+    "previewNotEvaluated": "Override departemen/perusahaan/kantor dan grup tidak bisa dievaluasi di sini — tergantung pada login masing-masing orang.",
+    "previewUnsaved": "Menampilkan kebijakan terakhir yang disimpan. Simpan perubahan Anda untuk melihat pratinjau.",
+    "previewColumnLimit": "Batas",
+    "previewColumnValue": "Nilai",
+    "previewColumnSource": "Ditentukan oleh"
   }
 }

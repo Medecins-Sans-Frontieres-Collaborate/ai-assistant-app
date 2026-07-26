@@ -4050,7 +4050,8 @@
       "guides": "スタイル、用語、コンプライアンスのガイド。",
       "mapDatasets": "マップワークフローで利用できる精選データセット。",
       "localAdmins": "アクセスルール編集権限を他のユーザーに委任します。"
-    }
+    },
+    "openSettings": "設定を開く"
   },
   "limits": {
     "title": "利用制限",
@@ -4189,6 +4190,56 @@
     "addScopedLimit": "ファミリーまたはモデルの制限を追加…",
     "removeScopedLimit": "この制限を削除",
     "unknownQualifier": "現在のカタログにありません",
-    "unknownQualifierHint": "このモデルやファミリーはこのリージョンまたはリングで利用できません。制限は保存され、利用可能な箇所で適用されます。"
+    "unknownQualifierHint": "このモデルやファミリーはこのリージョンまたはリングで利用できません。制限は保存され、利用可能な箇所で適用されます。",
+    "group": {
+      "chat": "チャット活動",
+      "models": "モデル",
+      "webSearch": "ウェブ検索",
+      "codeInterpreter": "コードインタープリター",
+      "mcp": "コネクター (MCP)",
+      "readAloud": "読み上げ",
+      "transcription": "文字起こし",
+      "uploads": "ファイルアップロード",
+      "translation": "ドキュメント翻訳"
+    },
+    "gateOffDimNote": "{feature} がオフの間は適用されません。値は保持され、機能が再度オンになると有効になります。",
+    "gateOffConsequence": {
+      "webSearch": "オフ：ウェブ検索を試みるメッセージは、管理者によって機能が無効にされた旨のメッセージで拒否されます。",
+      "codeInterpreter": "オフ：コード実行を試みるメッセージは、管理者によって機能が無効にされた旨のメッセージで拒否されます。",
+      "mcp": "オフ：コネクターを使用するメッセージは、管理者によって機能が無効にされた旨のメッセージで拒否されます。"
+    },
+    "capBlockedConsequence": {
+      "webSearch": "この方法で検索をブロックすると、通知はありません。チャットは継続され、検索のみスキップされます。明確なメッセージで拒否したい場合は、上記でウェブ検索をオフにしてください。",
+      "codeInterpreter": "この方法で実行をブロックすると、通知はありません。チャットは継続され、コード実行のみスキップされます。明確なメッセージで拒否したい場合は、上記でコードインタープリターをオフにしてください。",
+      "mcp": "ゼロ回にすると通知なしでコネクターツールの実行が完全に停止され、チャットは継続します。明確なメッセージで拒否したい場合は、上記でコネクターをオフにしてください。"
+    },
+    "overrideGateOffNote": "{feature} は現在これらのユーザーに対して（ここまたはグローバルデフォルトで）オフになっているため、この制限は、機能が再度オンにならない限り影響しません。",
+    "untitledOverride": "無題のオーバーライド",
+    "expandOverride": "オーバーライドを展開",
+    "collapseOverride": "オーバーライドを折りたたむ",
+    "overrideDisabledChip": "無効",
+    "targetsCount": "{count, plural, one {# 件の対象} other {# 件の対象}}",
+    "limitsCount": "{count, plural, one {# 件の制限} other {# 件の制限}}",
+    "addLimitLabel": "このオーバーライドに制限を追加",
+    "addLimitPlaceholder": "制限を追加…",
+    "unrecognizedEntries": "新しいバージョンのアプリで保存されました — そのまま保持され、そちらで編集可能です：",
+    "priorityLabel": "優先度",
+    "priorityHint": "同じ種類のオーバーライドが同一人物に一致した場合、優先度が高い方が適用されます。",
+    "previewTitle": "ユーザーごとの有効な制限を確認",
+    "previewDescription": "実際に誰が何を取得し、どのオーバーライドで設定されているかを確認できます。",
+    "previewEmailLabel": "確認するメールアドレス",
+    "previewEmailPlaceholder": "name@example.org",
+    "previewRun": "確認",
+    "previewLoading": "確認中…",
+    "previewFailed": "このユーザーの制限を確認できませんでした。",
+    "previewForbidden": "他のユーザーの制限を確認できるのはグローバル管理者のみです。",
+    "previewSourceCatalog": "組み込みデフォルト",
+    "previewSourceGlobal": "グローバルデフォルト",
+    "previewSourceOverride": "オーバーライド: {label}",
+    "previewNotEvaluated": "部署／会社／オフィスおよびグループのオーバーライドはここでは評価できません。これらはユーザー本人のサインインに依存します。",
+    "previewUnsaved": "最後に保存されたポリシーを表示しています。変更を保存してからプレビューしてください。",
+    "previewColumnLimit": "制限",
+    "previewColumnValue": "値",
+    "previewColumnSource": "設定元"
   }
 }

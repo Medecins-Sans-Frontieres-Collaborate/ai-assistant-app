@@ -4034,7 +4034,8 @@
       "guides": "Mitindo ya ekomeli, maloba ya mosala mpe mabongisi ya bosembo.",
       "mapDatasets": "Datasets oyo basalaki mpo ebengama na map workflow.",
       "localAdmins": "Pesa batu mosusu mokumba ya kobongola mibeko ya kopesa nzela."
-    }
+    },
+    "openSettings": "Fungola malamu misala ya malamu"
   },
   "limits": {
     "title": "Mbongwana ya kosalela",
@@ -4173,6 +4174,56 @@
     "addScopedLimit": "Tia limite mpo na famille to modèle…",
     "removeScopedLimit": "Longola limite oyo",
     "unknownQualifier": "ezali te na catalogue na yo lelo",
-    "unknownQualifierHint": "Modèle to famille oyo ezalaka te na region to ring oyo. Limite ezali kaka mpe ekosalema wapi esalemi."
+    "unknownQualifierHint": "Modèle to famille oyo ezalaka te na region to ring oyo. Limite ezali kaka mpe ekosalema wapi esalemi.",
+    "group": {
+      "chat": "Misala ya kosolola",
+      "models": "Bamodeli",
+      "webSearch": "Kofunda na Web",
+      "codeInterpreter": "Mosakanisi ya code",
+      "mcp": "Bakoneteke (MCP)",
+      "readAloud": "Kotalela na mongongo",
+      "transcription": "Kokoma oyo elobami",
+      "uploads": "Kotelema ba-fichier",
+      "translation": "Kokoma ndakisa ya mokanda"
+    },
+    "gateOffDimNote": "Ekomi na mosala te ntango {feature} efandi. Motuya ezali kopesama mpe ekosala lisusu soki {feature} ezongi.",
+    "gateOffConsequence": {
+      "webSearch": "Ekangami: mesaje oyo eboyi kofunda na web ekosila na sango elobi mokonzi abimisi mosala oyo.",
+      "codeInterpreter": "Ekangami: mesaje oyo eboyi kosala code ekosila na sango elobi mokonzi abimisi mosala oyo.",
+      "mcp": "Ekangami: mesaje oyo eboyi na bakoneteke ekosila na sango elobi mokonzi abimisi mosala oyo."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Kokanga baposololi boye ezali kimya: kosolola ekobanda, kofunda ekotikama kaka. Soki olingi koboya na sango polele, zongisa kofunda na web na likolo.",
+      "codeInterpreter": "Kokanga kosala code boye ezali kimya: kosolola ekobanda, kosala code ekotikama kaka. Soki olingi koboya na sango polele, zongisa Code interpreter na likolo.",
+      "mcp": "Zéro rondes epekisi bakoneteke na kimya ntango kosolola ekobanda. Soki olingi koboya na sango polele, zongisa Connectors na likolo."
+    },
+    "overrideGateOffNote": "{feature} ekangami mpo na bato oyo (awa to na défaut ya boumeli), yango ndenge oyo esili kosala tii soki eloko moko ezongisi mosala.",
+    "untitledOverride": "Override oyo ezangi kombo",
+    "expandOverride": "Bongola override",
+    "collapseOverride": "Kongolola override",
+    "overrideDisabledChip": "Ekangami",
+    "targetsCount": "{count, plural, one {# mokano} other {# bamakano}}",
+    "limitsCount": "{count, plural, one {# limite esalami} other {# ba limites esalami}}",
+    "addLimitLabel": "Tia limite na override oyo",
+    "addLimitPlaceholder": "Tia limite…",
+    "unrecognizedEntries": "Ebombami na version ya sika ya application — elongi kaka, esengeli kolongola kuna:",
+    "priorityLabel": "Priorité",
+    "priorityHint": "Soki ba override mibale ya lolenge moko ekotani na moto moko, oyo ezali na priorité ya likolo nde elongi.",
+    "previewTitle": "Talela ba limite ya ndenge esalemi na moto",
+    "previewDescription": "Talá oyo moto azwi pe nani atia motuya na moko na moko.",
+    "previewEmailLabel": "Adrese email ya kotalela",
+    "previewEmailPlaceholder": "kombo@example.org",
+    "previewRun": "Talela",
+    "previewLoading": "Kozongisela…",
+    "previewFailed": "Tokokaki te koyeba ba limite ya moto oyo.",
+    "previewForbidden": "Ba admin ya monde mobimba se nde bakoki kotalela ba limite ya bato mosusu.",
+    "previewSourceCatalog": "Défaut oyo etangamaki na application",
+    "previewSourceGlobal": "Défaut ya monde mobimba",
+    "previewSourceOverride": "Override: {label}",
+    "previewNotEvaluated": "Département/kompani/ofisi pe ba override ya groupe ekoki te kotangama awa — esengi kobanda na ko-connexion ya moto.",
+    "previewUnsaved": "Epesami polele politiki ya suka. Bomba mbongwana na yo mpo otalela yango.",
+    "previewColumnLimit": "Limite",
+    "previewColumnValue": "Motuya",
+    "previewColumnSource": "Asali"
   }
 }

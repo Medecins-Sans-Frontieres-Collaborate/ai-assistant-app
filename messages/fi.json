@@ -4050,7 +4050,8 @@
       "guides": "Tyyli-, termistö- ja vaatimustenmukaisuusohjeet.",
       "mapDatasets": "Karttatyönkulkuun käytettävissä olevat valikoidut tietoaineistot.",
       "localAdmins": "Valtuuta muut henkilöt muokkaamaan käyttöoikeussääntöjä."
-    }
+    },
+    "openSettings": "Avaa asetukset"
   },
   "limits": {
     "title": "Käyttörajoitukset",
@@ -4189,6 +4190,56 @@
     "addScopedLimit": "Lisää rajoitus perheelle tai mallille…",
     "removeScopedLimit": "Poista tämä rajoitus",
     "unknownQualifier": "ei nykyisessä katalogissasi",
-    "unknownQualifierHint": "Tämä malli tai perhe ei ole saatavilla tällä alueella tai ringissä. Rajoitus säilyy ja on voimassa siellä, missä se on käytettävissä."
+    "unknownQualifierHint": "Tämä malli tai perhe ei ole saatavilla tällä alueella tai ringissä. Rajoitus säilyy ja on voimassa siellä, missä se on käytettävissä.",
+    "group": {
+      "chat": "Keskusteluaktiivisuus",
+      "models": "Mallit",
+      "webSearch": "Verkkohaku",
+      "codeInterpreter": "Koodintulkki",
+      "mcp": "Liitännäiset (MCP)",
+      "readAloud": "Lue ääneen",
+      "transcription": "Puhtaaksikirjoitus",
+      "uploads": "Tiedostojen lataukset",
+      "translation": "Asiakirjojen käännös"
+    },
+    "gateOffDimNote": "Ei koske, kun {feature} on pois päältä. Arvo säilyy ja tulee voimaan uudelleen, jos ominaisuus otetaan käyttöön.",
+    "gateOffConsequence": {
+      "webSearch": "Pois päältä: Viestit, jotka yrittävät hakea verkosta, estetään viestillä, että ylläpitäjä on poistanut ominaisuuden käytöstä.",
+      "codeInterpreter": "Pois päältä: Viestit, jotka yrittävät suorittaa koodia, estetään viestillä, että ylläpitäjä on poistanut ominaisuuden käytöstä.",
+      "mcp": "Pois päältä: Viestit, jotka käyttävät liitännäisiä, estetään viestillä, että ylläpitäjä on poistanut ominaisuuden käytöstä."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Hakujen esto tällä tavalla on hiljainen: keskustelu jatkuu ja haku jätetään yksinkertaisesti väliin. Jos haluat kieltää viestillä, kytke Verkkohaku yllä pois päältä.",
+      "codeInterpreter": "Ajotoimintojen esto tällä tavalla on hiljainen: keskustelu jatkuu ja koodin suoritus ohitetaan. Jos haluat kieltää viestillä, kytke Koodintulkki yllä pois päältä.",
+      "mcp": "Nolla kierrosta estää liitännäistyökalujen käytön hiljaisesti keskustelun jatkuessa. Jos haluat kieltää viestillä, kytke Liitännäiset yllä pois päältä."
+    },
+    "overrideGateOffNote": "{feature} on tällä hetkellä pois päältä näille käyttäjille (täällä tai yleisten oletusasetusten mukaan), joten tämä rajoitus ei vaikuta ennen kuin ominaisuus otetaan uudelleen käyttöön.",
+    "untitledOverride": "Nimetön poikkeus",
+    "expandOverride": "Laajenna poikkeus",
+    "collapseOverride": "Supista poikkeus",
+    "overrideDisabledChip": "Ei käytössä",
+    "targetsCount": "{count, plural, one {# kohde} other {# kohdetta}}",
+    "limitsCount": "{count, plural, one {# rajoitus asetettu} other {# rajoitusta asetettu}}",
+    "addLimitLabel": "Lisää rajoitus tähän poikkeukseen",
+    "addLimitPlaceholder": "Lisää rajoitus…",
+    "unrecognizedEntries": "Tallennettu sovelluksen uudemmalla versiolla — säilytetty sellaisenaan, muokattavissa siellä:",
+    "priorityLabel": "Prioriteetti",
+    "priorityHint": "Kun kaksi samanlaista poikkeusta koskee samaa henkilöä, suuremmalla prioriteetilla oleva voittaa.",
+    "previewTitle": "Tarkista henkilön voimassa olevat rajoitukset",
+    "previewDescription": "Katso, mitä asetuksia henkilölle lopulta tulee ja mikä poikkeus asettaa kunkin arvon.",
+    "previewEmailLabel": "Tarkistettava sähköpostiosoite",
+    "previewEmailPlaceholder": "nimi@example.org",
+    "previewRun": "Tarkista",
+    "previewLoading": "Selvitetään…",
+    "previewFailed": "Tämän henkilön rajoituksia ei voitu selvittää.",
+    "previewForbidden": "Vain pääylläpitäjät voivat esikatsella muiden käyttäjien rajoituksia.",
+    "previewSourceCatalog": "Sisäänrakennettu oletus",
+    "previewSourceGlobal": "Yleinen oletus",
+    "previewSourceOverride": "Poikkeus: {label}",
+    "previewNotEvaluated": "Osasto-, yritys- ja ryhmäpoikkeuksia ei voi arvioida tässä – ne riippuvat käyttäjän omasta kirjautumisesta.",
+    "previewUnsaved": "Näytetään viimeksi tallennettu käytäntö. Tallenna muutokset esikatsellaksesi niitä.",
+    "previewColumnLimit": "Rajoitus",
+    "previewColumnValue": "Arvo",
+    "previewColumnSource": "Asettanut"
   }
 }

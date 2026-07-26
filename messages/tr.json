@@ -4050,7 +4050,8 @@
       "guides": "Stil, terminoloji ve uyum rehberleri.",
       "mapDatasets": "Harita iş akışı için kullanılabilir seçili veri setleri.",
       "localAdmins": "Erişim kurallarını düzenleme yetkisini başkalarına devredin."
-    }
+    },
+    "openSettings": "Ayarları aç"
   },
   "limits": {
     "title": "Kullanım sınırları",
@@ -4189,6 +4190,56 @@
     "addScopedLimit": "Bir aile ya da modele limit ekle…",
     "removeScopedLimit": "Bu limiti kaldır",
     "unknownQualifier": "mevcut kataloğunuzda yok",
-    "unknownQualifierHint": "Bu model veya aile bu bölgede veya halkada mevcut değil. Limit kaydedilir ve bulunabildiği yerlerde geçerli olmaya devam eder."
+    "unknownQualifierHint": "Bu model veya aile bu bölgede veya halkada mevcut değil. Limit kaydedilir ve bulunabildiği yerlerde geçerli olmaya devam eder.",
+    "group": {
+      "chat": "Sohbet etkinliği",
+      "models": "Modeller",
+      "webSearch": "Web araması",
+      "codeInterpreter": "Kod yorumlayıcısı",
+      "mcp": "Bağlayıcılar (MCP)",
+      "readAloud": "Sesli oku",
+      "transcription": "Transkripsiyon",
+      "uploads": "Dosya yüklemeleri",
+      "translation": "Belge çevirisi"
+    },
+    "gateOffDimNote": "{feature} kapalıyken geçerli değildir. Değer saklanır ve özellik tekrar açılırsa geçerli olur.",
+    "gateOffConsequence": {
+      "webSearch": "Kapalı: web araması yapmaya çalışan mesajlar, bir yöneticinin özelliği devre dışı bıraktığına dair bir mesaj ile reddedilir.",
+      "codeInterpreter": "Kapalı: kod çalıştırmaya çalışan mesajlar, bir yöneticinin özelliği devre dışı bıraktığına dair bir mesaj ile reddedilir.",
+      "mcp": "Kapalı: bağlayıcı kullanan mesajlar, bir yöneticinin özelliği devre dışı bıraktığına dair bir mesaj ile reddedilir."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Bu şekilde aramaları engellemek sessizdir: sohbet devam eder, arama sadece atlanır. Açık bir mesajla reddetmek için yukarıdan Web aramayı kapatın.",
+      "codeInterpreter": "Bu şekilde kod çalıştırmaları engellemek sessizdir: sohbet devam eder, kod çalıştırma sadece atlanır. Açık bir mesajla reddetmek için yukarıdan Kod yorumlayıcıyı kapatın.",
+      "mcp": "Sıfır hak tanımlandığında, bağlayıcı araçlarının çalışması sessizce durdurulur ve sohbet devam eder. Açık bir mesajla reddetmek için yukarıdan Bağlayıcıları kapatın."
+    },
+    "overrideGateOffNote": "{feature} şu anda bu kişiler için kapalı (burada veya genel varsayılanla). Yani bu sınır, özellik tekrar açılmadıkça etkili olmaz.",
+    "untitledOverride": "Başlıksız geçersiz kılma",
+    "expandOverride": "Geçersiz kılmayı genişlet",
+    "collapseOverride": "Geçersiz kılmayı daralt",
+    "overrideDisabledChip": "Devre dışı",
+    "targetsCount": "{count, plural, one {# hedef} other {# hedef} }",
+    "limitsCount": "{count, plural, one {# sınır ayarı} other {# sınır ayarı} }",
+    "addLimitLabel": "Bu geçersiz kılmaya bir sınır ekle",
+    "addLimitPlaceholder": "Sınır ekle…",
+    "unrecognizedEntries": "Uygulamanın daha yeni bir sürümüyle kaydedildi — olduğu gibi saklanır, orada düzenlenebilir:",
+    "priorityLabel": "Öncelik",
+    "priorityHint": "Aynı türde iki geçersiz kılma aynı kişiye uygulanırsa, daha yüksek önceliğe sahip olan geçerli olur.",
+    "previewTitle": "Bir kişinin geçerli sınırlarını kontrol et",
+    "previewDescription": "Birinin gerçekten hangi sınırları aldığını ve her değerin hangi geçersiz kılmayla ayarlandığını görün.",
+    "previewEmailLabel": "Kontrol edilecek e-posta adresi",
+    "previewEmailPlaceholder": "name@example.org",
+    "previewRun": "Kontrol et",
+    "previewLoading": "Çözülüyor…",
+    "previewFailed": "Bu kişinin sınırları çözülemedi.",
+    "previewForbidden": "Sadece küresel yöneticiler başkalarının sınırlarını önizleyebilir.",
+    "previewSourceCatalog": "Yerleşik varsayılan",
+    "previewSourceGlobal": "Küresel varsayılan",
+    "previewSourceOverride": "Geçersiz kılma: {label}",
+    "previewNotEvaluated": "Departman/şirket/ofis ve grup geçersiz kılmaları burada değerlendirilemez — kişinin kendi oturum açmasına bağlıdır.",
+    "previewUnsaved": "Son kaydedilen politika gösteriliyor. Değişiklikleri önizlemek için kaydedin.",
+    "previewColumnLimit": "Sınır",
+    "previewColumnValue": "Değer",
+    "previewColumnSource": "Ayarlayan"
   }
 }

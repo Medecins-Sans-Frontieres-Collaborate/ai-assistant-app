@@ -4034,7 +4034,8 @@
       "guides": "Ìtọ́sọ́nà ara, itumọ̀ ọrọ̀ àti ìbámu.",
       "mapDatasets": "Àwọn àkójọpọ̀ data tí a ti yàn fún iṣẹ́ map.",
       "localAdmins": "Fi ètò irọrun àṣẹ sí ọwọ́ àwọn mìíràn."
-    }
+    },
+    "openSettings": "Ṣí eto"
   },
   "limits": {
     "title": "Ìdìpọ̀ ìlò",
@@ -4173,6 +4174,56 @@
     "addScopedLimit": "Fi ààlà kun fún ìdílé tàbí àpẹẹrẹ kan…",
     "removeScopedLimit": "Yọ ààlà yìí",
     "unknownQualifier": "kò wà nínú aràtà rẹ̀",
-    "unknownQualifierHint": "Àpẹẹrẹ yìí tàbí ìdílé rẹ̀ kò wà ní agbègbè tàbí orí ring yìí. Ààlà náà ti wa nìkan, ó sì ṣi ṣiṣẹ́ níbi tó bá wà."
+    "unknownQualifierHint": "Àpẹẹrẹ yìí tàbí ìdílé rẹ̀ kò wà ní agbègbè tàbí orí ring yìí. Ààlà náà ti wa nìkan, ó sì ṣi ṣiṣẹ́ níbi tó bá wà.",
+    "group": {
+      "chat": "Iṣẹ ibanisọrọ",
+      "models": "Àwòrán",
+      "webSearch": "Ìwádìí lori Ayelujara",
+      "codeInterpreter": "Itumọ kóòdù",
+      "mcp": "Connectors (MCP)",
+      "readAloud": "Kà síta",
+      "transcription": "Ìtúmọ̀ ọrọ",
+      "uploads": "Ìkó tó fáìlì",
+      "translation": "Ìtumọ̀ iwe"
+    },
+    "gateOffDimNote": "Kò kan sílẹ̀ nigba ti {feature} bá tii pẹ. Iye naa wa láàyè títí ti àyípadà bá tún sọ {feature} di ṣiṣẹ.",
+    "gateOffConsequence": {
+      "webSearch": "Ti a ti pa: àwọn ifiranṣẹ tó gbìyànjú láti wa lórí Ayelujara ni a máa kọ, a sì fi ifiranṣẹ hàn pé alákóso ti pa eroja naa.",
+      "codeInterpreter": "Ti a ti pa: àwọn ifiranṣẹ tó gbìyànjú láti ṣiṣẹ kóòdù ni a máa kọ, a sì fi ifiranṣẹ hàn pé alákóso ti pa eroja naa.",
+      "mcp": "Ti a ti pa: àwọn ifiranṣẹ tó nlo connectors ni a máa kọ, a sì fi ifiranṣẹ hàn pé alákóso ti pa eroja naa."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Dídènà ìwádìí yìí kò ní fi ifiranṣẹ hàn: ibanisọrọ máa tesiwaju, a kan yá ìwádìí kúrò. Láti dákẹ́ pẹ̀lú ifiranṣẹ, pa Ìwádìí Ayelujara lókè.",
+      "codeInterpreter": "Dídènà ṣiṣe yìí kò ní fi ifiranṣẹ hàn: ibanisọrọ máa tesiwaju, a kan yá ṣiṣe kóòdù kúrò. Láti dákẹ́ pẹ̀lú ifiranṣẹ, pa Itumọ kóòdù lókè.",
+      "mcp": "Uso odo (zero rounds) yóò dá iṣẹ́ connector dúró pátápátá bí ibanisọ́rọ̀ ṣe ń tẹ̀síwájú. Láti dákẹ́ pẹ̀lú ifiranṣẹ, pa Connectors lókè."
+    },
+    "overrideGateOffNote": "{feature} ti wa ni pípà fún àwọn ènìyàn yìí (níbí tàbi nipa aiyépọ̀), nítorí náà fifi iye le lori kò ní ipa ayafi kí a tún mu eroja naa ṣiṣẹ.",
+    "untitledOverride": "Àfikún tí kò ní orúkọ",
+    "expandOverride": "Fà á síta",
+    "collapseOverride": "dì mọ́ra",
+    "overrideDisabledChip": "Ti pa",
+    "targetsCount": "{count, plural, one {# àfojúsùn} other {# àfojúsùn}",
+    "limitsCount": "{count, plural, one {# ìlàákàyè tó dá} other {# àwọn ìlàákàyè tó dá}",
+    "addLimitLabel": "Fi ìlàákàyè kun àfikún yìí",
+    "addLimitPlaceholder": "Fi ìlàákàyè kun...",
+    "unrecognizedEntries": "Fipamọ́ láti inú ẹ̀dá tuntun app – a fi bí ṣùgbón ó le satúnṣe nibẹ:",
+    "priorityLabel": "Pataki",
+    "priorityHint": "Tí àfikún méjì tó jọ bá jẹ́ ti ènìyàn kan, àfikún tó jẹ́ pé ó ní pataki to ga ló máa ṣiṣẹ.",
+    "previewTitle": "Ṣàyẹ̀wò ìlàákàyè ti ènìyàn kan ní gan-an",
+    "previewDescription": "Wo ohun tí ènìyàn kàn gba àti àfikún wo tó n ṣètò kọọkan.",
+    "previewEmailLabel": "Àdírẹ́sì imeeli láti ṣàyẹ̀wò",
+    "previewEmailPlaceholder": "name@example.org",
+    "previewRun": "Ṣàyẹ̀wò",
+    "previewLoading": "Ìmọ̀lẹ̀ nkọja...",
+    "previewFailed": "Ko le ṣàlàyé ìlàákàyè ènìyàn yìí.",
+    "previewForbidden": "Ìjọba àgbáyé nikan ni ó le ṣàyẹ̀wò ìlàákàyè àwọn elomiran.",
+    "previewSourceCatalog": "Aiyédẹ̀tọ̀ tó wà inú rẹ",
+    "previewSourceGlobal": "Aiyédẹ̀tọ̀ àgbáyé",
+    "previewSourceOverride": "Àfikún: {label}",
+    "previewNotEvaluated": "Àfikún ẹ̀ka/ṣọ́ọ̀ṣì/ilé-iṣẹ́ àti ẹgbẹ́ kò le ṣe àyẹ̀wò níbí – ó dá lórí agbawèrèmẹ́sìn ènìyàn kọọkan.",
+    "previewUnsaved": "Ìlànà tó kẹ́hìn ni a fi hàn. Fipamọ́ àtúnṣe rẹ kí ó le fọwọsi wọn.",
+    "previewColumnLimit": "Ìlàákàyè",
+    "previewColumnValue": "Iye",
+    "previewColumnSource": "Ènìyàn tó ṣètò"
   }
 }

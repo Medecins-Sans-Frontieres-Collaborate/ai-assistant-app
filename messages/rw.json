@@ -4034,7 +4034,8 @@
       "guides": "Amabwiriza y'imikoreshereze, terminology n'ubuziranenge.",
       "mapDatasets": "Datasets zatunganyijwe zishobora gukoreshwa muri map workflow.",
       "localAdmins": "Shyikiriza abandi uburenganzira bwo guhindura amategeko yo kwinjira."
-    }
+    },
+    "openSettings": "Fungura imyanya"
   },
   "limits": {
     "title": "Imipaka yo gukoresha",
@@ -4173,6 +4174,56 @@
     "addScopedLimit": "Ongeraho igipimo ku muryango cyangwa kuri model…",
     "removeScopedLimit": "Kuraho iki gipimo",
     "unknownQualifier": "ntibiri muri catalog yawe",
-    "unknownQualifierHint": "Uyu model cyangwa umuryango ntuboneka muri aka karere cyangwa ring. Igipimo kirahari kandi kizakoreshwa aho kiboneka hose."
+    "unknownQualifierHint": "Uyu model cyangwa umuryango ntuboneka muri aka karere cyangwa ring. Igipimo kirahari kandi kizakoreshwa aho kiboneka hose.",
+    "group": {
+      "chat": "Imikorere ya chat",
+      "models": "Models",
+      "webSearch": "Gushakisha kuri web",
+      "codeInterpreter": "Code interpreter",
+      "mcp": "Connectors (MCP)",
+      "readAloud": "Gusomera hejuru",
+      "transcription": "Guhindura ijwi mu nyandiko",
+      "uploads": "Kohereza amadosiye",
+      "translation": "Guhindura inyandiko"
+    },
+    "gateOffDimNote": "Ntibikoreshwa igihe {feature} izimye. Agaciro karasigara, kazongera gukoreshwa niba {feature} yongeye gufungurwa.",
+    "gateOffConsequence": {
+      "webSearch": "Yazimye: ubutumwa bugerageza gushakisha kuri web burangwa n'ubutumwa ko umuyobozi yakuyeho iyi serivisi.",
+      "codeInterpreter": "Yazimye: ubutumwa bugerageza gukoresha code burangwa n'ubutumwa ko umuyobozi yakuyeho iyi serivisi.",
+      "mcp": "Yazimye: ubutumwa bukoresha connectors burangwa n'ubutumwa ko umuyobozi yakuyeho iyi serivisi."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Gufunga gushakisha mu buryo butuje: ibiganiro birakomeza, gushakisha ntibigire icyo bikorwa. Niba ushaka kwanga bigaragara, zima Web search hejuru.",
+      "codeInterpreter": "Guhagarika code mu buryo butuje: ibiganiro birakomeza, gukoresha code ntibigire icyo bikorwa. Niba ushaka kwanga bigaragara, zima Code interpreter hejuru.",
+      "mcp": "Zero rounds iheza tools za connector mu buryo butuje mu gihe ibiganiro bikomeza. Niba ushaka kwanga bigaragara, zima Connectors hejuru."
+    },
+    "overrideGateOffNote": "{feature} yazimye kuri aba bantu (aha cyangwa ku rwego rusange), bityo iri gabanya ntirigira ingaruka keretse iyo {feature} yongeye gufungurwa.",
+    "untitledOverride": "Override idafite izina",
+    "expandOverride": "Gura override",
+    "collapseOverride": "Funga override",
+    "overrideDisabledChip": "Byafunzwe",
+    "targetsCount": "{count, plural, one {# igikorwa} other {# ibikorwa}}",
+    "limitsCount": "{count, plural, one {# limiti yashyizweho} other {# limiti zashyizweho}}",
+    "addLimitLabel": "Ongeraho limiti kuri iyi override",
+    "addLimitPlaceholder": "Ongeraho limiti…",
+    "unrecognizedEntries": "Byabitswe n’indi version nshya ya app — bigumye uko byari biri, ushobora kubihindura aho:",
+    "priorityLabel": "Ibyihutirwa",
+    "priorityHint": "Iyo overrides ebyiri zimwe zigera ku muntu umwe, iyihabwa uburemere bwinshi niyo ikora.",
+    "previewTitle": "Reba imipaka iriho kuri uyu muntu",
+    "previewDescription": "Reba ibyo umuntu ahabwa n’aho buri gaciro kashyiriweho.",
+    "previewEmailLabel": "Imeli uyikeneye kureba",
+    "previewEmailPlaceholder": "name@example.org",
+    "previewRun": "Genzura",
+    "previewLoading": "Birimo gusuzumwa…",
+    "previewFailed": "Ntibyashobotse kubona imipaka ya uyu muntu.",
+    "previewForbidden": "Abayobozi rusange bonyine bemerewe kugenzura imipaka y’abandi.",
+    "previewSourceCatalog": "Default isanzwe",
+    "previewSourceGlobal": "Default rusange",
+    "previewSourceOverride": "Override: {label}",
+    "previewNotEvaluated": "Overrides z’ishami/ikigo/ofisi n’itsinda ntizishobora kwigwa hano — zishingira ku kwinjira kwa nyirazo.",
+    "previewUnsaved": "Urimo kubona politiki iheruka kubikwa. Bika impinduka kugira ngo uzibone.",
+    "previewColumnLimit": "Limiti",
+    "previewColumnValue": "Agaciro",
+    "previewColumnSource": "Byashyizweho na"
   }
 }

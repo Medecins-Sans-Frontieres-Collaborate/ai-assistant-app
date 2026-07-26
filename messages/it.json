@@ -4050,7 +4050,8 @@
       "guides": "Guide di stile, terminologia e conformità.",
       "mapDatasets": "Set di dati curati disponibili per il flusso delle mappe.",
       "localAdmins": "Delega la modifica delle regole di accesso ad altre persone."
-    }
+    },
+    "openSettings": "Apri impostazioni"
   },
   "limits": {
     "title": "Limiti di utilizzo",
@@ -4189,6 +4190,56 @@
     "addScopedLimit": "Aggiungi un limite per una famiglia o modello…",
     "removeScopedLimit": "Rimuovi questo limite",
     "unknownQualifier": "non presente nell’attuale catalogo",
-    "unknownQualifierHint": "Questo modello o famiglia non è disponibile in questa regione o anello. Il limite viene mantenuto e resta valido dove disponibile."
+    "unknownQualifierHint": "Questo modello o famiglia non è disponibile in questa regione o anello. Il limite viene mantenuto e resta valido dove disponibile.",
+    "group": {
+      "chat": "Attività chat",
+      "models": "Modelli",
+      "webSearch": "Ricerca web",
+      "codeInterpreter": "Interprete codice",
+      "mcp": "Connettori (MCP)",
+      "readAloud": "Lettura ad alta voce",
+      "transcription": "Trascrizione",
+      "uploads": "Caricamento file",
+      "translation": "Traduzione documenti"
+    },
+    "gateOffDimNote": "Non si applica quando {feature} è disattivata. Il valore viene mantenuto e si applicherà di nuovo se la funzionalità viene riattivata.",
+    "gateOffConsequence": {
+      "webSearch": "Disattivata: i messaggi che tentano di effettuare ricerche web vengono rifiutati, con un messaggio che segnala che un amministratore ha disabilitato la funzionalità.",
+      "codeInterpreter": "Disattivata: i messaggi che tentano di eseguire codice vengono rifiutati, con un messaggio che segnala che un amministratore ha disabilitato la funzionalità.",
+      "mcp": "Disattivata: i messaggi che usano i connettori vengono rifiutati, con un messaggio che segnala che un amministratore ha disabilitato la funzionalità."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Il blocco delle ricerche in questo modo è silenzioso: le chat continuano e la ricerca viene semplicemente saltata. Per rifiutare con un messaggio esplicito, disattivare Ricerca web qui sopra.",
+      "codeInterpreter": "Il blocco delle esecuzioni in questo modo è silenzioso: le chat continuano e l'esecuzione viene semplicemente saltata. Per rifiutare con un messaggio esplicito, disattivare Interprete codice qui sopra.",
+      "mcp": "Zero turni interrompe silenziosamente l'uso dei connettori mentre le chat continuano. Per rifiutare con un messaggio esplicito, disattivare Connettori qui sopra."
+    },
+    "overrideGateOffNote": "{feature} è attualmente disattivata per queste persone (qui o tramite l'impostazione globale predefinita), quindi questo limite non ha effetto a meno che la funzionalità non venga riattivata.",
+    "untitledOverride": "Sovrascrittura senza titolo",
+    "expandOverride": "Espandi sovrascrittura",
+    "collapseOverride": "Comprimi sovrascrittura",
+    "overrideDisabledChip": "Disabilitato",
+    "targetsCount": "{count, plural, one {# destinatario} other {# destinatari}}",
+    "limitsCount": "{count, plural, one {# limite impostato} other {# limiti impostati}}",
+    "addLimitLabel": "Aggiungi un limite a questa sovrascrittura",
+    "addLimitPlaceholder": "Aggiungi un limite…",
+    "unrecognizedEntries": "Salvato da una versione più recente dell'app — mantenuto così com'è, modificabile lì:",
+    "priorityLabel": "Priorità",
+    "priorityHint": "Se due sovrascritture dello stesso tipo corrispondono alla stessa persona, prevale quella con priorità maggiore.",
+    "previewTitle": "Verifica i limiti effettivi di una persona",
+    "previewDescription": "Vedi cosa ottiene realmente una persona e quale sovrascrittura imposta ogni valore.",
+    "previewEmailLabel": "Indirizzo email da verificare",
+    "previewEmailPlaceholder": "nome@example.org",
+    "previewRun": "Verifica",
+    "previewLoading": "Risoluzione in corso…",
+    "previewFailed": "Impossibile determinare i limiti di questa persona.",
+    "previewForbidden": "Solo gli amministratori globali possono visualizzare i limiti di altre persone.",
+    "previewSourceCatalog": "Predefinito integrato",
+    "previewSourceGlobal": "Predefinito globale",
+    "previewSourceOverride": "Sovrascrittura: {label}",
+    "previewNotEvaluated": "Le sovrascritture per dipartimento/azienda/ufficio e gruppo non possono essere valutate qui: dipendono dall’accesso personale.",
+    "previewUnsaved": "Visualizzazione delle ultime regole salvate. Salva le modifiche per visualizzare l’anteprima.",
+    "previewColumnLimit": "Limite",
+    "previewColumnValue": "Valore",
+    "previewColumnSource": "Impostato da"
   }
 }

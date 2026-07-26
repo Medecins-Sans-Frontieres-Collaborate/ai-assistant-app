@@ -4034,7 +4034,8 @@
       "guides": "Vodiči za stil, terminologiju i usklađenost.",
       "mapDatasets": "Kreirane baze podataka dostupne za rad sa mapom.",
       "localAdmins": "Delegirajte uređivanje pravila pristupa drugim osobama."
-    }
+    },
+    "openSettings": "Otvori podešavanja"
   },
   "limits": {
     "title": "Ograničenja upotrebe",
@@ -4173,6 +4174,56 @@
     "addScopedLimit": "Dodajte ograničenje za porodicu ili model…",
     "removeScopedLimit": "Ukloni ovo ograničenje",
     "unknownQualifier": "nije u vašem trenutnom katalogu",
-    "unknownQualifierHint": "Ovaj model ili porodica nije dostupna u ovom regionu ili prstenu. Ograničenje se čuva i primenjuje gde god postoji."
+    "unknownQualifierHint": "Ovaj model ili porodica nije dostupna u ovom regionu ili prstenu. Ograničenje se čuva i primenjuje gde god postoji.",
+    "group": {
+      "chat": "Aktivnost četa",
+      "models": "Modeli",
+      "webSearch": "Pretraga veba",
+      "codeInterpreter": "Tumač koda",
+      "mcp": "Konektori (MCP)",
+      "readAloud": "Čitanje naglas",
+      "transcription": "Transkripcija",
+      "uploads": "Otpremanje fajlova",
+      "translation": "Prevod dokumenata"
+    },
+    "gateOffDimNote": "Ne primenjuje se dok je {feature} isključen. Vrednost se čuva i ponovo važi kada se funkcija uključi.",
+    "gateOffConsequence": {
+      "webSearch": "Isključeno: poruke koje pokušavaju pretragu veba biće odbijene uz poruku da je administrator onemogućio ovu funkciju.",
+      "codeInterpreter": "Isključeno: poruke koje pokušavaju pokretanje koda biće odbijene uz poruku da je administrator onemogućio ovu funkciju.",
+      "mcp": "Isključeno: poruke koje koriste konektore biće odbijene uz poruku da je administrator onemogućio ovu funkciju."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Blokiranje pretraga na ovaj način je tiho: čat se nastavlja, pretraga se jednostavno preskače. Ako želite eksplicitnu poruku o odbijanju, isključite Pretragu veba iznad.",
+      "codeInterpreter": "Blokiranje izvršavanja koda na ovaj način je tiho: čat se nastavlja, izvršavanje koda se jednostavno preskače. Ako želite eksplicitnu poruku o odbijanju, isključite Tumača koda iznad.",
+      "mcp": "Nula rundi tiho sprečava pokretanje alata konektora dok se čat nastavlja. Ako želite eksplicitnu poruku o odbijanju, isključite Konektore iznad."
+    },
+    "overrideGateOffNote": "{feature} je trenutno isključen za ove korisnike (ovde ili po podrazumevanim globalnim podešavanjima), tako da ova ograničenja nemaju efekat osim ako se funkcija ponovo ne uključi.",
+    "untitledOverride": "Neimenovano izuzimanje",
+    "expandOverride": "Proširi izuzimanje",
+    "collapseOverride": "Sažmi izuzimanje",
+    "overrideDisabledChip": "Onemogućeno",
+    "targetsCount": "{count, plural, one {# cilj} other {# ciljeva}}",
+    "limitsCount": "{count, plural, one {# podešeno ograničenje} other {# podešenih ograničenja}}",
+    "addLimitLabel": "Dodajte ograničenje ovom izuzimanju",
+    "addLimitPlaceholder": "Dodajte ograničenje…",
+    "unrecognizedEntries": "Sačuvano pomoću novije verzije aplikacije — ostavljeno bez izmene, izmenite tamo:",
+    "priorityLabel": "Prioritet",
+    "priorityHint": "Kada se na istog korisnika odnose dva izuzimanja istog tipa, važi ono sa višim prioritetom.",
+    "previewTitle": "Proverite efektivna ograničenja osobe",
+    "previewDescription": "Pogledajte šta korisnik zapravo dobija i koje izuzimanje postavlja svaku vrednost.",
+    "previewEmailLabel": "Email adresa za proveru",
+    "previewEmailPlaceholder": "ime@primer.org",
+    "previewRun": "Proveri",
+    "previewLoading": "Učitavanje…",
+    "previewFailed": "Ne mogu da pronađem ograničenja za ovu osobu.",
+    "previewForbidden": "Samo globalni administratori mogu pregledati ograničenja drugih korisnika.",
+    "previewSourceCatalog": "Ugrađeni podrazumevani",
+    "previewSourceGlobal": "Globalni podrazumevani",
+    "previewSourceOverride": "Izuzimanje: {label}",
+    "previewNotEvaluated": "Izuzimanja po departmanu/kompaniji/kancelariji i grupi ne mogu se proveriti ovde — zavise od samog prijavljivanja korisnika.",
+    "previewUnsaved": "Prikazuje se poslednja sačuvana politika. Sačuvajte izmene da biste ih pregledali.",
+    "previewColumnLimit": "Ograničenje",
+    "previewColumnValue": "Vrednost",
+    "previewColumnSource": "Postavlja"
   }
 }

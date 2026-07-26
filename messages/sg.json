@@ -4034,7 +4034,8 @@
       "guides": "Style, têrminologie na guides tî conformité.",
       "mapDatasets": "Datasets sô ndurü tî workflow tî map.",
       "localAdmins": "Tènè bina mo azanë tî yeke changer règle tî accès."
-    }
+    },
+    "openSettings": "Fungbi tî settings"
   },
   "limits": {
     "title": "Limitî tî nîngu",
@@ -4173,6 +4174,56 @@
     "addScopedLimit": "Sôkô ayeke na famili wa modèle…",
     "removeScopedLimit": "Kötï ayeke mo tene",
     "unknownQualifier": "apéli na catalog ti mo na yeke",
-    "unknownQualifierHint": "Modèle wa famili ara ayeke apéli na zone wa ring ara. Gbê ayeke kâfa, ayeke bale na sô ayeke dusa."
+    "unknownQualifierHint": "Modèle wa famili ara ayeke apéli na zone wa ring ara. Gbê ayeke kâfa, ayeke bale na sô ayeke dusa.",
+    "group": {
+      "chat": "Gbalï ya chat",
+      "models": "Modèle",
+      "webSearch": "Kêtê na Internet",
+      "codeInterpreter": "Code interpreter",
+      "mcp": "Connectors (MCP)",
+      "readAloud": "Lïkö ngö ndö",
+      "transcription": "Transcription",
+      "uploads": "Ködörö téni fayuru",
+      "translation": "Küè fayuru"
+    },
+    "gateOffDimNote": "I ti yéké kwa sô {feature} azanï ku. Valeur ayeke tene, na sô a yéké pusu, a yeke tene ködre.",
+    "gateOffConsequence": {
+      "webSearch": "Azanï: sô mo yê kêtê na Internet, mo apê mara na yeke tî chef ayeke pöpö tî feature na.",
+      "codeInterpreter": "Azanï: sô mo yê kodoro code, mo apê mara na yeke tî chef ayeke pöpö tî feature na.",
+      "mcp": "Azanï: sô mo yê si tî connectors, mo apê mara na yeke tî chef ayeke pöpö tî feature na."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Sô mo bô kêtê na zo tî na ndö, a yéké fèngö: chat ayeke süre, kêtê ayeke balê. Sô yê mara ayeke pöpö, fungbi Web search sô ta.",
+      "codeInterpreter": "Sô mo bô kodoro na ndö, a yéké fèngö: chat ayeke süre, kodoro ayeke balê. Sô yê mara ayeke pöpö, fungbi Code interpreter sô ta.",
+      "mcp": "Zéro rounds ayeke gïrïngö connectors na kodoro, chat ayeke süre. Sô yê mara ayeke pöpö, fungbi Connectors sô ta."
+    },
+    "overrideGateOffNote": "{feature} azanï ti awa sô tî bandê (wuli kûè na default global), donc cette limite apê tene wâhû tî sô mo pusu feature na.",
+    "untitledOverride": "Override sô ara na titel",
+    "expandOverride": "Diko override",
+    "collapseOverride": "Külûnge override",
+    "overrideDisabledChip": "Azanï",
+    "targetsCount": "{count, plural, one {# cible} other {# cibles}}",
+    "limitsCount": "{count, plural, one {# limite} other {# limites}}",
+    "addLimitLabel": "Tombî limite na override na wa",
+    "addLimitPlaceholder": "Tombî limite...",
+    "unrecognizedEntries": "Gä tivü na version tî app tî tîrï — mo yèkè sèngö na ndö, mo yeke kodoro wa na ï tîrï:",
+    "priorityLabel": "Priorité",
+    "priorityHint": "Sô deux override pekü tî doki awè to, priorité sô yéké na mbi wu na.",
+    "previewTitle": "Kêtê limite tî zo",
+    "previewDescription": "Lê sô zo yê tî ndö na override sô yeke kodoro yéké bwa ba.",
+    "previewEmailLabel": "Adrès email sô mo yê kêtê",
+    "previewEmailPlaceholder": "name@example.org",
+    "previewRun": "Kêtê",
+    "previewLoading": "Yeke kêtê...",
+    "previewFailed": "Apê kêtê limite tî zo na.",
+    "previewForbidden": "Admins global na mo sô yê kêtê limite tî bandê.",
+    "previewSourceCatalog": "Default tî app",
+    "previewSourceGlobal": "Default global",
+    "previewSourceOverride": "Override: {label}",
+    "previewNotEvaluated": "Département/société/bureau na override groupe apê kêtê na ndö — mo yéké sô tî singi zo yeke akpi.",
+    "previewUnsaved": "Ayeke lê policy tî sô yèkê sèngö. Sèngö mbïtï tî mo sô la tî kêtê na wa.",
+    "previewColumnLimit": "Limite",
+    "previewColumnValue": "Valeur",
+    "previewColumnSource": "Kodoro na"
   }
 }

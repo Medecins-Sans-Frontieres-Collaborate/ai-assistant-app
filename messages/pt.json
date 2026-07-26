@@ -4050,7 +4050,8 @@
       "guides": "Guias de estilo, terminologia e conformidade.",
       "mapDatasets": "Conjuntos de dados selecionados disponíveis para o fluxo de mapas.",
       "localAdmins": "Delegar edição de regras de acesso para outras pessoas."
-    }
+    },
+    "openSettings": "Abrir configurações"
   },
   "limits": {
     "title": "Limites de uso",
@@ -4189,6 +4190,56 @@
     "addScopedLimit": "Adicionar um limite para uma família ou modelo…",
     "removeScopedLimit": "Remover este limite",
     "unknownQualifier": "não está no seu catálogo atual",
-    "unknownQualifierHint": "Este modelo ou família não está disponível nesta região ou anel. O limite é mantido e ainda se aplica onde for existente."
+    "unknownQualifierHint": "Este modelo ou família não está disponível nesta região ou anel. O limite é mantido e ainda se aplica onde for existente.",
+    "group": {
+      "chat": "Atividade do chat",
+      "models": "Modelos",
+      "webSearch": "Busca na web",
+      "codeInterpreter": "Interpretador de código",
+      "mcp": "Conectores (MCP)",
+      "readAloud": "Leitura em voz alta",
+      "transcription": "Transcrição",
+      "uploads": "Envio de arquivos",
+      "translation": "Tradução de documentos"
+    },
+    "gateOffDimNote": "Não se aplica enquanto {feature} estiver desativado. O valor é mantido e voltará a valer se o recurso for reativado.",
+    "gateOffConsequence": {
+      "webSearch": "Desativado: mensagens que tentam buscar na web serão recusadas com um aviso de que um administrador desativou o recurso.",
+      "codeInterpreter": "Desativado: mensagens que tentam executar código serão recusadas com um aviso de que um administrador desativou o recurso.",
+      "mcp": "Desativado: mensagens que usam conectores serão recusadas com um aviso de que um administrador desativou o recurso."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Bloquear buscas desta forma é silencioso: os chats continuam e a busca é simplesmente ignorada. Para recusar com uma mensagem explícita, desative a busca na web acima.",
+      "codeInterpreter": "Bloquear execuções deste modo é silencioso: os chats continuam e a execução do código é simplesmente ignorada. Para recusar com uma mensagem explícita, desative o interpretador de código acima.",
+      "mcp": "Zerar as rodadas impede silenciosamente que ferramentas de conectores sejam executadas, enquanto o chat continua. Para recusar com uma mensagem explícita, desative os conectores acima."
+    },
+    "overrideGateOffNote": "{feature} está atualmente desativado para estas pessoas (aqui ou pelo padrão global), então este limite não tem efeito a menos que o recurso seja reativado.",
+    "untitledOverride": "Substituição sem título",
+    "expandOverride": "Expandir substituição",
+    "collapseOverride": "Recolher substituição",
+    "overrideDisabledChip": "Desativado",
+    "targetsCount": "{count, plural, one {# alvo} other {# alvos}}",
+    "limitsCount": "{count, plural, one {# limite definido} other {# limites definidos}}",
+    "addLimitLabel": "Adicionar um limite a esta substituição",
+    "addLimitPlaceholder": "Adicionar um limite…",
+    "unrecognizedEntries": "Salvo por uma versão mais recente do aplicativo — mantido como está, editável lá:",
+    "priorityLabel": "Prioridade",
+    "priorityHint": "Quando duas substituições do mesmo tipo corresponderem à mesma pessoa, vence a de maior prioridade.",
+    "previewTitle": "Verificar os limites efetivos de uma pessoa",
+    "previewDescription": "Veja quais limites de fato se aplicam a alguém e qual substituição define cada valor.",
+    "previewEmailLabel": "E-mail para verificar",
+    "previewEmailPlaceholder": "nome@exemplo.org",
+    "previewRun": "Verificar",
+    "previewLoading": "Resolvendo…",
+    "previewFailed": "Não foi possível resolver os limites dessa pessoa.",
+    "previewForbidden": "Apenas administradores globais podem visualizar os limites de outras pessoas.",
+    "previewSourceCatalog": "Padrão do sistema",
+    "previewSourceGlobal": "Padrão global",
+    "previewSourceOverride": "Substituição: {label}",
+    "previewNotEvaluated": "Substituições de departamento, empresa, escritório e grupo não podem ser avaliadas aqui — dependem do login da própria pessoa.",
+    "previewUnsaved": "Exibindo a última política salva. Salve suas alterações para visualizá-las.",
+    "previewColumnLimit": "Limite",
+    "previewColumnValue": "Valor",
+    "previewColumnSource": "Definido por"
   }
 }

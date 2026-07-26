@@ -4034,7 +4034,8 @@
       "guides": "Hagayaasha qaabka, eray-bixinta, iyo waafaqsanaanta.",
       "mapDatasets": "Xogaha la diyaariyay ee loo heli karo howsha khariidada.",
       "localAdmins": "U wareeji dadka kale tafatirka xeerarka helitaanka."
-    }
+    },
+    "openSettings": "Fur dejinta"
   },
   "limits": {
     "title": "Xadid isticmaalka",
@@ -4173,6 +4174,56 @@
     "addScopedLimit": "Kudar xadid qoys ama moodel…",
     "removeScopedLimit": "Ka saar xadidan",
     "unknownQualifier": "ma aha liiskaaga hadda",
-    "unknownQualifierHint": "Moodelkan ama qoyskiisa lama heli karo gobolka ama ringigan. Xadka wuu sii jirayaa meel kasta oo lagu heli karo."
+    "unknownQualifierHint": "Moodelkan ama qoyskiisa lama heli karo gobolka ama ringigan. Xadka wuu sii jirayaa meel kasta oo lagu heli karo.",
+    "group": {
+      "chat": "Hawlgalka wada sheekaysiga",
+      "models": "Moodooyinka",
+      "webSearch": "Raadinta webka",
+      "codeInterpreter": "Fasiraadda koodhka",
+      "mcp": "Xiriiriyeyaasha (MCP)",
+      "readAloud": "Akhri cod",
+      "transcription": "Qoraal u beddelid",
+      "uploads": "Fayl gelin",
+      "translation": "Tafsiirka dukumiintiyada"
+    },
+    "gateOffDimNote": "Lama dabaqayo marka {feature} la damiyo. Qiimaha waa la hayaa waxayna dhaqan galaysaa haddii la hawlgeliyo dib.",
+    "gateOffConsequence": {
+      "webSearch": "La damiyay: fariimaha isku dayaya raadinta webka waa la diidayaa iyadoo lagu wargalinayo in maamulaha uu curyaamiyay astaanta.",
+      "codeInterpreter": "La damiyay: fariimaha isku dayaya in ay koodh ordiyaan waa la diidayaa iyadoo lagu wargalinayo in maamulaha uu curyaamiyay astaanta.",
+      "mcp": "La damiyay: fariimaha isticmaala xiriiriyeyaasha waa la diidayaa iyadoo lagu wargalinayo in maamulaha uu curyaamiyay astaanta."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Iskuxirnaanta raadinta sidaan waa aamusan tahay: wada sheekaysigu wuu socdaa raadintana si fudud ayaa loo dhaafayaa. Si aad ugu diido farriin cad, dami Raadinta Webka kor.",
+      "codeInterpreter": "Orodka laga xannibo sidan waa aamusan yahay: sheekadu way socotaa waxaana si fudud loo dhaafaa orodka koodhka. Si aad ugu diido farriin cad, dami Fasiraadda Koodhka kor.",
+      "mcp": "Eber wareeg waxay aamusan u joojisaa in xiriiiriye kastaa ordo iyadoo sheekadu socoto. Si aad ugu diido farriin cad, dami Xiriiriyeyaasha kor."
+    },
+    "overrideGateOffNote": "{feature} hadda waa la damiyay dadkaas (halkan ama asalka guud ahaan), sidaas darteed xaddidkan ma saamaynayo ilaa la hawlgeliyo astaanta.",
+    "untitledOverride": "Ku badal aan cinwaan lahayn",
+    "expandOverride": "Ballaarso badalista",
+    "collapseOverride": "Yarayn badalista",
+    "overrideDisabledChip": "Naafaysan",
+    "targetsCount": "{count, plural, one {# bartilmaameed} other {# bartilmaameedyo}}",
+    "limitsCount": "{count, plural, one {# xaddidan la dhigay} other {# xaddido la dhigay}}",
+    "addLimitLabel": "Ku dar xadidan badalkan",
+    "addLimitPlaceholder": "Ku dar xadidan...",
+    "unrecognizedEntries": "Waxaa lagu keydiyay nooc cusub oo app-ka ah — sida ay tahay ayaa loo hayaa, halkaasna waa la bedeli karaa:",
+    "priorityLabel": "Mudnaanta",
+    "priorityHint": "Haddii laba badal oo isku nooc ahi ay ku beegaan qof kaliya, midka mudnaanta sare leh ayaa guulaysanaya.",
+    "previewTitle": "Hubi xaddidaadyada qofka",
+    "previewDescription": "Eeg waxa qofka si dhab ah u helayo iyo badalkasta cidda dejisay.",
+    "previewEmailLabel": "Cinwaanka iimaylka ee la hubinayo",
+    "previewEmailPlaceholder": "magac@example.org",
+    "previewRun": "Hubi",
+    "previewLoading": "Waxa la hubinayaa...",
+    "previewFailed": "Xaddidaadyada qofkan lama heli karo.",
+    "previewForbidden": "Kaliya maamulayaasha guud ayaa hubin kara xaddidaadyada dadka kale.",
+    "previewSourceCatalog": "Asalka ku jira barnaamijka",
+    "previewSourceGlobal": "Asalka guud",
+    "previewSourceOverride": "Badal: {label}",
+    "previewNotEvaluated": "Badallada waaxda/shirkadda/xafiiska iyo kooxda lagama ogaan karo halkan — waxay ku xirantahay galitaanka qofka laftiisa.",
+    "previewUnsaved": "Waxa la soo bandhigayaa siyaasaddii ugu dambaysay ee la keydiyay. Keydi isbedelada si aad u aragto.",
+    "previewColumnLimit": "Xadidan",
+    "previewColumnValue": "Qiimaha",
+    "previewColumnSource": "Waxaa dejiyay"
   }
 }

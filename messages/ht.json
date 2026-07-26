@@ -4034,7 +4034,8 @@
       "guides": "Gid stil, tèm ak konformite.",
       "mapDatasets": "Bazdone prepare pou workflow kat la.",
       "localAdmins": "Delege edisyon règ aksè bay lòt moun."
-    }
+    },
+    "openSettings": "Louvri anviwònman yo"
   },
   "limits": {
     "title": "Limit itilizasyon",
@@ -4173,6 +4174,56 @@
     "addScopedLimit": "Ajoute yon limit pou yon fanmi oswa modèl…",
     "removeScopedLimit": "Retire limit sa a",
     "unknownQualifier": "pa nan katalòg aktyèl ou",
-    "unknownQualifierHint": "Modèl oswa fanmi sa a pa disponib nan rejyon oswa gwoup sa a. Nou toujou kenbe limit la epi li ap aplike kote li egziste."
+    "unknownQualifierHint": "Modèl oswa fanmi sa a pa disponib nan rejyon oswa gwoup sa a. Nou toujou kenbe limit la epi li ap aplike kote li egziste.",
+    "group": {
+      "chat": "Aktivite chat",
+      "models": "Modèl",
+      "webSearch": "Rechèch sou entènèt",
+      "codeInterpreter": "Entèprèt kòd",
+      "mcp": "Konektè (MCP)",
+      "readAloud": "Li byen fò",
+      "transcription": "Transkripsyon",
+      "uploads": "Telechajman fichye",
+      "translation": "Tradiksyon dokiman"
+    },
+    "gateOffDimNote": "Pa aplike pandan {feature} etenn. Valè a konsève epi li ap tounen efikas si w relimen fonksyon an.",
+    "gateOffConsequence": {
+      "webSearch": "Etann: mesaj ki eseye fè rechèch sou entènèt refize epi resevwa yon mesaj ki di yon administratè dezaktive fonksyon an.",
+      "codeInterpreter": "Etann: mesaj ki ap eseye egzekite kòd refize epi resevwa yon mesaj ki di yon administratè dezaktive fonksyon an.",
+      "mcp": "Etann: mesaj ki itilize konektè yo refize epi resevwa yon mesaj ki di yon administratè dezaktive fonksyon an."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Bloke rechèch konsa fèt an silans : chat ap kontinye e rechèch la jis pa fèt. Si ou vle refize avèk yon mesaj klè, etenn Rechèch sou entènèt pi wo a.",
+      "codeInterpreter": "Bloke egzekisyon konsa fèt an silans : chat ap kontinye epi kòd la jis pa egzekite. Si ou vle refize ak yon mesaj klè, etenn Entèprèt kòd pi wo a.",
+      "mcp": "Zewo toun fè zouti konektè yo sispann fonksyone an silans pandan chat ap kontinye. Si ou vle refize ak yon mesaj klè, etenn Konektè yo pi wo a."
+    },
+    "overrideGateOffNote": "{feature} aktyèlman etenn pou moun sa yo (isit la oswa atravè default global la), kidonk limit sa pa gen efè sof si fonksyon an relimen.",
+    "untitledOverride": "Override san tit",
+    "expandOverride": "Elaji override",
+    "collapseOverride": "Redwi override",
+    "overrideDisabledChip": "Dezaktive",
+    "targetsCount": "{count, plural, one {# sib} other {# sib yo}}",
+    "limitsCount": "{count, plural, one {# limit fikse} other {# limit fikse}}",
+    "addLimitLabel": "Ajoute yon limit nan override sa a",
+    "addLimitPlaceholder": "Ajoute yon limit…",
+    "unrecognizedEntries": "Sove pa yon nouvo vèsyon aplikasyon an — konsève jan li ye, ka modifye ladan l:",
+    "priorityLabel": "Priyorite",
+    "priorityHint": "Lè gen de override menm kalite, pou menm moun, sa ki gen priyorite pi wo ap genyen.",
+    "previewTitle": "Verifye limit aktyèl yon moun",
+    "previewDescription": "Wè sa yon moun ka jwenn vrèman epi kiyès override ki mete chak valè.",
+    "previewEmailLabel": "Adrès imèl pou verifye",
+    "previewEmailPlaceholder": "non@example.org",
+    "previewRun": "Verifye",
+    "previewLoading": "Ap chèche…",
+    "previewFailed": "Pa kapab jwenn limit moun sa.",
+    "previewForbidden": "Se sèlman administratè global ki ka verifye limit lòt moun.",
+    "previewSourceCatalog": "Default entegre",
+    "previewSourceGlobal": "Default global",
+    "previewSourceOverride": "Override: {label}",
+    "previewNotEvaluated": "Override depatman/konpayi/birò ak gwoup pa ka verifye isit la—yo depann de koneksyon moun nan.",
+    "previewUnsaved": "Montre dènye politik ki anrejistre. Sove chanjman ou yo pou verifye yo.",
+    "previewColumnLimit": "Limit",
+    "previewColumnValue": "Valè",
+    "previewColumnSource": "Fikse pa"
   }
 }

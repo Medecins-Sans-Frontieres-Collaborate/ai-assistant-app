@@ -4034,7 +4034,8 @@
       "guides": "Imitwarariko, amajambo n’amabwirizwa ajanye no kubahiriza.",
       "mapDatasets": "Datasets zahisemwo zizokoreshwa mu mashusho y'ikarata.",
       "localAdmins": "Shingira abandi amabanga yo guhindura amategeko y’ukwinjira."
-    }
+    },
+    "openSettings": "Fungura ivyo gushiraho"
   },
   "limits": {
     "title": "Ingingo ngenderwako z'ikoreshwa",
@@ -4173,6 +4174,56 @@
     "addScopedLimit": "Shiraho urubibe kuri family canke model…",
     "removeScopedLimit": "Kuraho uru rubibe",
     "unknownQualifier": "ntiri muri catalog yawe",
-    "unknownQualifierHint": "Iyi model canke umuhari ntiboneka muri kano karere canke mu ring iyi. Urubibe rwarabitswe kandi rizokora aho biboneka hose."
+    "unknownQualifierHint": "Iyi model canke umuhari ntiboneka muri kano karere canke mu ring iyi. Urubibe rwarabitswe kandi rizokora aho biboneka hose.",
+    "group": {
+      "chat": "Ibikorwa vya chat",
+      "models": "Models",
+      "webSearch": "Gushakisha kuri web",
+      "codeInterpreter": "Code interpreter",
+      "mcp": "Connectors (MCP)",
+      "readAloud": "Gusoma n'ijwi",
+      "transcription": "Transcription",
+      "uploads": "Gushira dosiye",
+      "translation": "Guhindura inyandiko"
+    },
+    "gateOffDimNote": "Ntibikora igihe {feature} izimije. Agaciro karagumaho kandi kazosubira gukora igihe ico kintu kijeze kwugururwa.",
+    "gateOffConsequence": {
+      "webSearch": "Izimijwe: ubutumwa bushatse gushakisha kuri web burahakanwa, hatangwa ubutumwa buvuga ko umuyobozi yazimije ico kintu.",
+      "codeInterpreter": "Izimijwe: ubutumwa bushatse gukoresha code burahakanwa, hatangwa ubutumwa buvuga ko umuyobozi yazimije ico kintu.",
+      "mcp": "Izimijwe: ubutumwa bukoresha connectors burahakanwa, hatangwa ubutumwa buvuga ko umuyobozi yazimije ico kintu."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Guhagarika gushakisha uku biracecekera: chat irabandanya kandi ubushakashatsi burasimburwa. Kugira bigerweko n'ubutumwa busobanutse, zima Web search hejuru.",
+      "codeInterpreter": "Guhagarika gukora code uku biracecekera: chat irabandanya kandi code ntikora. Kugira uhabwe ubutumwa busobanutse, zima Code interpreter hejuru.",
+      "mcp": "Zero rounds biracecekera bihagarika connectors gukora na chat ikabandanya. Kukaba wotanga ubutumwa busobanutse, zima Connectors hejuru."
+    },
+    "overrideGateOffNote": "{feature} izimije kuri aba bantu (aha canke kw'isanzwe), bivuze ko aka gafata ntaco kakoze atari uko ca kintu kijeze kwugururwa.",
+    "untitledOverride": "Override itagira izina",
+    "expandOverride": "Yagura override",
+    "collapseOverride": "Kugabanura override",
+    "overrideDisabledChip": "Yazimijwe",
+    "targetsCount": "{count, plural, one {# igikorwa} other {# ibikorwa}}",
+    "limitsCount": "{count, plural, one {# limite yashizweho} other {# limites zashizweho}}",
+    "addLimitLabel": "Shirako limite kuri iyi override",
+    "addLimitPlaceholder": "Shirako limite…",
+    "unrecognizedEntries": "Vyabitswe n'iyindi version nshasha ya application — vyarateguwe, birashobora guhindurwa hariya:",
+    "priorityLabel": "Igena nyamukuru",
+    "priorityHint": "Iyo hari overrides zibiri zisa kuri umuntu umwe, irifise igena nyamukuru riruta irindi niryo rikora.",
+    "previewTitle": "Raba ingene limites z'umuntu zihagaze",
+    "previewDescription": "Raba ivyo umuntu aronka vy'ukuri hamwe na override yashinze agaciro kumwekumwe.",
+    "previewEmailLabel": "Aderesi email yo gucungura",
+    "previewEmailPlaceholder": "name@example.org",
+    "previewRun": "Ratire",
+    "previewLoading": "Biriko birakemurwa…",
+    "previewFailed": "Ntivyashobotse kumenya limites z'uyu muntu.",
+    "previewForbidden": "Ni abasanzwe aribo bashobora kuraba limites z'abandi.",
+    "previewSourceCatalog": "Default y'ivyubatswe",
+    "previewSourceGlobal": "Default rusangi",
+    "previewSourceOverride": "Override: {label}",
+    "previewNotEvaluated": "Overrides za department/compagnie/office na groupe ntizishobora gusuzumwa hano — biterwa n'ukwinjira kwa nyene konti.",
+    "previewUnsaved": "Uraheza kubona ivya nyuma vyabitswe. Bika impinduka zawe kugira uzirabe.",
+    "previewColumnLimit": "Limite",
+    "previewColumnValue": "Agaciro",
+    "previewColumnSource": "Byatewe na"
   }
 }

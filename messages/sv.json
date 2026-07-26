@@ -4050,7 +4050,8 @@
       "guides": "Stil-, terminologi- och regelefterlevnadsguider.",
       "mapDatasets": "Kurerade dataset tillgängliga för kartarbetsflödet.",
       "localAdmins": "Delegera redigering av åtkomstregler till andra personer."
-    }
+    },
+    "openSettings": "Öppna inställningar"
   },
   "limits": {
     "title": "Användningsgränser",
@@ -4189,6 +4190,56 @@
     "addScopedLimit": "Lägg till en gräns för en familj eller modell…",
     "removeScopedLimit": "Ta bort denna gräns",
     "unknownQualifier": "finns inte i din nuvarande katalog",
-    "unknownQualifierHint": "Denna modell eller familj är inte tillgänglig i denna region eller ring. Gränsen sparas och gäller där den finns."
+    "unknownQualifierHint": "Denna modell eller familj är inte tillgänglig i denna region eller ring. Gränsen sparas och gäller där den finns.",
+    "group": {
+      "chat": "Chattaktivitet",
+      "models": "Modeller",
+      "webSearch": "Webbsökning",
+      "codeInterpreter": "Kodtolk",
+      "mcp": "Kopplingar (MCP)",
+      "readAloud": "Läs upp",
+      "transcription": "Transkribering",
+      "uploads": "Filuppladdningar",
+      "translation": "Dokumentöversättning"
+    },
+    "gateOffDimNote": "Gäller inte när {feature} är avstängd. Värdet sparas och gäller igen om funktionen slås på.",
+    "gateOffConsequence": {
+      "webSearch": "Avstängd: Meddelanden som försöker söka på webben nekas med ett meddelande om att en administratör har inaktiverat funktionen.",
+      "codeInterpreter": "Avstängd: Meddelanden som försöker köra kod nekas med ett meddelande om att en administratör har inaktiverat funktionen.",
+      "mcp": "Avstängd: Meddelanden som använder kopplingar nekas med ett meddelande om att en administratör har inaktiverat funktionen."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Blockering av sökningar på detta sätt sker tyst: chatten fortsätter och sökningen hoppas över. För att neka med ett tydligt meddelande, stäng av Webbsökning ovan.",
+      "codeInterpreter": "Blockering av körningar på detta sätt sker tyst: chatten fortsätter och kodkörningen hoppas över. För att neka med ett tydligt meddelande, stäng av Kodtolk ovan.",
+      "mcp": "Noll omgångar stoppar tyst kopplingsverktyg från att köra, medan chatten fortsätter. För att neka med ett tydligt meddelande, stäng av Kopplingar ovan."
+    },
+    "overrideGateOffNote": "{feature} är för närvarande avstängd för dessa personer (här eller via global standard), så denna begränsning har ingen effekt om inte funktionen aktiveras igen.",
+    "untitledOverride": "Namnlös åsidosättning",
+    "expandOverride": "Visa åsidosättning",
+    "collapseOverride": "Dölj åsidosättning",
+    "overrideDisabledChip": "Inaktiverad",
+    "targetsCount": "{count, plural, one {# mål} other {# mål}}",
+    "limitsCount": "{count, plural, one {# begränsning satt} other {# begränsningar satta}}",
+    "addLimitLabel": "Lägg till en begränsning för denna åsidosättning",
+    "addLimitPlaceholder": "Lägg till en begränsning…",
+    "unrecognizedEntries": "Sparad av en nyare version av appen – behålls oförändrad, kan redigeras där:",
+    "priorityLabel": "Prioritet",
+    "priorityHint": "När två åsidosättningar av samma typ matchar samma person gäller den med högst prioritet.",
+    "previewTitle": "Kontrollera en persons gällande begränsningar",
+    "previewDescription": "Se vilka inställningar någon faktiskt har och vilken åsidosättning som anger varje värde.",
+    "previewEmailLabel": "E-postadress att kontrollera",
+    "previewEmailPlaceholder": "namn@exempel.org",
+    "previewRun": "Kontrollera",
+    "previewLoading": "Läser in…",
+    "previewFailed": "Kunde inte hämta denna persons begränsningar.",
+    "previewForbidden": "Endast globala administratörer kan förhandsgranska andras begränsningar.",
+    "previewSourceCatalog": "Inbyggd standard",
+    "previewSourceGlobal": "Global standard",
+    "previewSourceOverride": "Åsidosättning: {label}",
+    "previewNotEvaluated": "Avdelnings-, företags- och gruppåsidosättningar kan inte utvärderas här – de beror på personens egen inloggning.",
+    "previewUnsaved": "Visar den senast sparade policyn. Spara dina ändringar för att förhandsgranska dem.",
+    "previewColumnLimit": "Begränsning",
+    "previewColumnValue": "Värde",
+    "previewColumnSource": "Anges av"
   }
 }

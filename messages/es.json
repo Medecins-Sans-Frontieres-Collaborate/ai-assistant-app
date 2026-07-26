@@ -4050,7 +4050,8 @@
       "guides": "Guías de estilo, terminología y cumplimiento.",
       "mapDatasets": "Conjuntos de datos seleccionados disponibles para el flujo de trabajo de mapas.",
       "localAdmins": "Delegar la edición de reglas de acceso a otras personas."
-    }
+    },
+    "openSettings": "Abrir ajustes"
   },
   "limits": {
     "title": "Límites de uso",
@@ -4189,6 +4190,56 @@
     "addScopedLimit": "Agregar un límite para una familia o modelo…",
     "removeScopedLimit": "Eliminar este límite",
     "unknownQualifier": "no está en su catálogo actual",
-    "unknownQualifierHint": "Este modelo o familia no está disponible en esta región o anillo. El límite se mantiene y sigue aplicándose donde sí exista."
+    "unknownQualifierHint": "Este modelo o familia no está disponible en esta región o anillo. El límite se mantiene y sigue aplicándose donde sí exista.",
+    "group": {
+      "chat": "Actividad de chat",
+      "models": "Modelos",
+      "webSearch": "Búsqueda web",
+      "codeInterpreter": "Intérprete de código",
+      "mcp": "Conectores (MCP)",
+      "readAloud": "Leer en voz alta",
+      "transcription": "Transcripción",
+      "uploads": "Subida de archivos",
+      "translation": "Traducción de documentos"
+    },
+    "gateOffDimNote": "No aplica mientras {feature} esté desactivado. El valor se mantiene y vuelve a aplicarse si la función se activa nuevamente.",
+    "gateOffConsequence": {
+      "webSearch": "Desactivado: los mensajes que intentan buscar en la web son rechazados con un mensaje que indica que un administrador desactivó la función.",
+      "codeInterpreter": "Desactivado: los mensajes que intentan ejecutar código son rechazados con un mensaje que indica que un administrador desactivó la función.",
+      "mcp": "Desactivado: los mensajes que usan conectores son rechazados con un mensaje que indica que un administrador desactivó la función."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Este bloqueo es silencioso: los chats continúan y la búsqueda simplemente se omite. Para rechazar con un mensaje explícito, desactive la Búsqueda web arriba.",
+      "codeInterpreter": "Este bloqueo es silencioso: los chats continúan y la ejecución de código simplemente se omite. Para rechazar con un mensaje explícito, desactive el Intérprete de código arriba.",
+      "mcp": "Cero rondas detiene silenciosamente las herramientas de conector mientras los chats continúan. Para rechazar con un mensaje explícito, desactive los Conectores arriba."
+    },
+    "overrideGateOffNote": "{feature} está actualmente desactivado para estas personas (aquí o por la configuración global), por lo que este límite no tiene efecto a menos que se vuelva a activar la función.",
+    "untitledOverride": "Anulación sin título",
+    "expandOverride": "Expandir anulación",
+    "collapseOverride": "Contraer anulación",
+    "overrideDisabledChip": "Desactivado",
+    "targetsCount": "{count, plural, one {# objetivo} other {# objetivos}}",
+    "limitsCount": "{count, plural, one {# límite establecido} other {# límites establecidos}}",
+    "addLimitLabel": "Agregar un límite a esta anulación",
+    "addLimitPlaceholder": "Agregar un límite…",
+    "unrecognizedEntries": "Guardado por una versión más reciente de la aplicación — se mantiene igual, editable allí:",
+    "priorityLabel": "Prioridad",
+    "priorityHint": "Cuando dos anulaciones del mismo tipo coinciden con la misma persona, prevalece la de mayor prioridad.",
+    "previewTitle": "Verifica los límites efectivos de una persona",
+    "previewDescription": "Vea qué límites aplica una persona y qué anulación establece cada valor.",
+    "previewEmailLabel": "Dirección de correo a verificar",
+    "previewEmailPlaceholder": "nombre@ejemplo.org",
+    "previewRun": "Verificar",
+    "previewLoading": "Resuelviendo…",
+    "previewFailed": "No se pudieron resolver los límites de esta persona.",
+    "previewForbidden": "Solo los administradores globales pueden ver los límites de otras personas.",
+    "previewSourceCatalog": "Predeterminado de la aplicación",
+    "previewSourceGlobal": "Predeterminado global",
+    "previewSourceOverride": "Anulación: {label}",
+    "previewNotEvaluated": "No se pueden evaluar aquí las anulaciones por departamento/empresa/oficina y grupo: dependen del propio inicio de sesión de la persona.",
+    "previewUnsaved": "Mostrando la última política guardada. Guarde los cambios para ver la vista previa.",
+    "previewColumnLimit": "Límite",
+    "previewColumnValue": "Valor",
+    "previewColumnSource": "Establecido por"
   }
 }

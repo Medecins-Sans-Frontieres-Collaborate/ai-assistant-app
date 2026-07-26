@@ -4050,7 +4050,8 @@
       "guides": "Pokyny ke stylu, terminologii a souladu.",
       "mapDatasets": "Kurátorované datasety dostupné ve workflow mapy.",
       "localAdmins": "Delegujte úpravu přístupových pravidel dalším osobám."
-    }
+    },
+    "openSettings": "Otevřít nastavení"
   },
   "limits": {
     "title": "Limity používání",
@@ -4189,6 +4190,56 @@
     "addScopedLimit": "Přidat limit pro rodinu nebo model…",
     "removeScopedLimit": "Odebrat tento limit",
     "unknownQualifier": "není ve vašem aktuálním katalogu",
-    "unknownQualifierHint": "Tento model nebo rodina není dostupná v tomto regionu nebo okruhu. Limit je zachován a platí tam, kde je dostupný."
+    "unknownQualifierHint": "Tento model nebo rodina není dostupná v tomto regionu nebo okruhu. Limit je zachován a platí tam, kde je dostupný.",
+    "group": {
+      "chat": "Aktivita v chatu",
+      "models": "Modely",
+      "webSearch": "Vyhledávání na webu",
+      "codeInterpreter": "Interpret kódu",
+      "mcp": "Konektory (MCP)",
+      "readAloud": "Čtení nahlas",
+      "transcription": "Přepis",
+      "uploads": "Nahrávání souborů",
+      "translation": "Překlad dokumentů"
+    },
+    "gateOffDimNote": "Nevztahuje se, pokud je funkce {feature} vypnutá. Hodnota zůstane zachována a znovu se projeví, pokud bude funkce opět zapnuta.",
+    "gateOffConsequence": {
+      "webSearch": "Vypnuto: zprávy snažící se vyhledávat na webu budou odmítnuty a uživatel bude informován, že tuto funkci deaktivoval administrátor.",
+      "codeInterpreter": "Vypnuto: zprávy snažící se spustit kód budou odmítnuty a uživatel bude informován, že tuto funkci deaktivoval administrátor.",
+      "mcp": "Vypnuto: zprávy využívající konektory budou odmítnuty a uživatel bude informován, že tuto funkci deaktivoval administrátor."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Blokování vyhledávání tímto způsobem je tiché: chat pokračuje a vyhledávání je jednoduše přeskočeno. Pokud si přejete místo toho zobrazit výslovnou zprávu, vypněte Vyhledávání na webu výše.",
+      "codeInterpreter": "Blokování spuštění kódu tímto způsobem je tiché: chat pokračuje a spuštění kódu je jednoduše přeskočeno. Pokud si přejete místo toho zobrazit výslovnou zprávu, vypněte Interpret kódu výše.",
+      "mcp": "Nulový počet tichým způsobem zabrání spouštění konektorových nástrojů, chaty pokračují. Pokud si přejete místo toho zobrazit výslovnou zprávu, vypněte Konektory výše."
+    },
+    "overrideGateOffNote": "{feature} je momentálně pro tyto osoby vypnuta (zde nebo globálním nastavením), takže toto omezení nebude fungovat, pokud nebude funkce opět zapnuta.",
+    "untitledOverride": "Nepojmenované přepsání",
+    "expandOverride": "Rozbalit přepsání",
+    "collapseOverride": "Sbalit přepsání",
+    "overrideDisabledChip": "Vypnuto",
+    "targetsCount": "{count, plural, one {# cíl} other {# cíle}}",
+    "limitsCount": "{count, plural, one {# omezení nastaveno} other {# omezení nastavena}}",
+    "addLimitLabel": "Přidat omezení k tomuto přepsání",
+    "addLimitPlaceholder": "Přidat omezení…",
+    "unrecognizedEntries": "Uloženo novější verzí aplikace — ponecháno beze změny, upravitelné tam:",
+    "priorityLabel": "Priorita",
+    "priorityHint": "Pokud se na stejnou osobu vztahují dvě přepsání stejného typu, vyhraje vyšší priorita.",
+    "previewTitle": "Zkontrolovat účinná omezení osoby",
+    "previewDescription": "Zjistěte, jaká omezení někdo skutečně má a které přepsání která nastavení určují.",
+    "previewEmailLabel": "E-mailová adresa ke kontrole",
+    "previewEmailPlaceholder": "jmeno@example.org",
+    "previewRun": "Zkontrolovat",
+    "previewLoading": "Probíhá načítání…",
+    "previewFailed": "Nepodařilo se zjistit omezení této osoby.",
+    "previewForbidden": "Pouze globální administrátoři mohou zobrazit omezení ostatních osob.",
+    "previewSourceCatalog": "Vestavěné výchozí",
+    "previewSourceGlobal": "Globální výchozí",
+    "previewSourceOverride": "Přepsání: {label}",
+    "previewNotEvaluated": "Oddělení/společnost/kancelář a skupinová přepsání zde nelze vyhodnotit — závisí na přihlášení uživatele.",
+    "previewUnsaved": "Zobrazuje se naposledy uložené nastavení. Pro náhled změn je nejprve uložte.",
+    "previewColumnLimit": "Omezení",
+    "previewColumnValue": "Hodnota",
+    "previewColumnSource": "Nastavil(a)"
   }
 }

@@ -4050,7 +4050,8 @@
       "guides": "Przewodniki dotyczące stylu, terminologii i zgodności.",
       "mapDatasets": "Wyselekcjonowane zestawy danych dostępne w procesie mapowania.",
       "localAdmins": "Deleguj edycję reguł dostępu innym osobom."
-    }
+    },
+    "openSettings": "Otwórz ustawienia"
   },
   "limits": {
     "title": "Limity wykorzystania",
@@ -4189,6 +4190,56 @@
     "addScopedLimit": "Dodaj limit dla rodziny lub modelu…",
     "removeScopedLimit": "Usuń ten limit",
     "unknownQualifier": "nie znajduje się w bieżącym katalogu",
-    "unknownQualifierHint": "Ten model lub rodzina nie jest dostępny w tym regionie lub pierścieniu. Limit zostaje utrzymany i będzie obowiązywał tam, gdzie dana jednostka istnieje."
+    "unknownQualifierHint": "Ten model lub rodzina nie jest dostępny w tym regionie lub pierścieniu. Limit zostaje utrzymany i będzie obowiązywał tam, gdzie dana jednostka istnieje.",
+    "group": {
+      "chat": "Aktywność czatu",
+      "models": "Modele",
+      "webSearch": "Wyszukiwanie w sieci",
+      "codeInterpreter": "Interpreter kodu",
+      "mcp": "Łączniki (MCP)",
+      "readAloud": "Odczytywanie na głos",
+      "transcription": "Transkrypcja",
+      "uploads": "Przesyłanie plików",
+      "translation": "Tłumaczenie dokumentów"
+    },
+    "gateOffDimNote": "Nie dotyczy, gdy {feature} jest wyłączona. Wartość zostaje zachowana i będzie ponownie aktywna po włączeniu funkcji.",
+    "gateOffConsequence": {
+      "webSearch": "Wyłączone: wiadomości próbujące wyszukać w sieci są odrzucane z informacją, że administrator wyłączył tę funkcję.",
+      "codeInterpreter": "Wyłączone: wiadomości próbujące uruchomić kod są odrzucane z informacją, że administrator wyłączył tę funkcję.",
+      "mcp": "Wyłączone: wiadomości używające łączników są odrzucane z informacją, że administrator wyłączył tę funkcję."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Blokowanie wyszukiwania w ten sposób jest ciche: czaty trwają, a wyszukiwanie jest pomijane. Aby odrzucać z wyraźnym komunikatem, wyłącz wyszukiwanie w sieci powyżej.",
+      "codeInterpreter": "Blokowanie uruchamiania kodu w ten sposób jest ciche: czaty trwają, a uruchomienie kodu jest pomijane. Aby odrzucać z wyraźnym komunikatem, wyłącz interpreter kodu powyżej.",
+      "mcp": "Zera cicho blokują działanie łączników przy kontynuacji czatu. Aby odrzucać z wyraźnym komunikatem, wyłącz łączniki powyżej."
+    },
+    "overrideGateOffNote": "{feature} jest obecnie wyłączona dla tych osób (tutaj lub przez globalne ustawienia domyślne), więc ten limit nie ma zastosowania, dopóki funkcja nie zostanie ponownie włączona.",
+    "untitledOverride": "Nienazwane zastąpienie",
+    "expandOverride": "Rozwiń zastąpienie",
+    "collapseOverride": "Zwiń zastąpienie",
+    "overrideDisabledChip": "Wyłączone",
+    "targetsCount": "{count, plural, one {# odbiorca} other {# odbiorców}}",
+    "limitsCount": "{count, plural, one {# limit} other {# limity}}",
+    "addLimitLabel": "Dodaj limit do tego zastąpienia",
+    "addLimitPlaceholder": "Dodaj limit…",
+    "unrecognizedEntries": "Zapisane przez nowszą wersję aplikacji — zachowane bez zmian, edytowalne tam:",
+    "priorityLabel": "Priorytet",
+    "priorityHint": "Gdy dwa zastąpienia tego samego typu dotyczą tej samej osoby, wygrywa to o wyższym priorytecie.",
+    "previewTitle": "Sprawdź faktyczne limity osoby",
+    "previewDescription": "Zobacz, jakie limity faktycznie obowiązują oraz które zastąpienie ustawia każdą wartość.",
+    "previewEmailLabel": "Adres e-mail do sprawdzenia",
+    "previewEmailPlaceholder": "name@example.org",
+    "previewRun": "Sprawdź",
+    "previewLoading": "Sprawdzanie…",
+    "previewFailed": "Nie udało się odczytać limitów tej osoby.",
+    "previewForbidden": "Tylko globalni administratorzy mogą podglądać limity innych osób.",
+    "previewSourceCatalog": "Domyślne (wbudowane)",
+    "previewSourceGlobal": "Globalne domyślne",
+    "previewSourceOverride": "Zastąpienie: {label}",
+    "previewNotEvaluated": "Zastąpienia dla działu/firmy/biura i grup nie są oceniane tutaj — zależą od logowania danej osoby.",
+    "previewUnsaved": "Wyświetlana jest ostatnia zapisana polityka. Zapisz zmiany, aby zobaczyć podgląd.",
+    "previewColumnLimit": "Limit",
+    "previewColumnValue": "Wartość",
+    "previewColumnSource": "Ustawione przez"
   }
 }

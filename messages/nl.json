@@ -4050,7 +4050,8 @@
       "guides": "Stijl-, terminologie- en complianceregels.",
       "mapDatasets": "Geselecteerde datasets beschikbaar voor de kaartworkflow.",
       "localAdmins": "Toegang tot bewerkingsregels delegeren aan anderen."
-    }
+    },
+    "openSettings": "Instellingen openen"
   },
   "limits": {
     "title": "Gebruiksbeperkingen",
@@ -4189,6 +4190,56 @@
     "addScopedLimit": "Beperking toevoegen voor een familie of model…",
     "removeScopedLimit": "Deze beperking verwijderen",
     "unknownQualifier": "niet in uw huidige catalogus",
-    "unknownQualifierHint": "Dit model of deze familie is niet beschikbaar in deze regio of ring. De beperking blijft behouden en geldt overal waar deze wel beschikbaar is."
+    "unknownQualifierHint": "Dit model of deze familie is niet beschikbaar in deze regio of ring. De beperking blijft behouden en geldt overal waar deze wel beschikbaar is.",
+    "group": {
+      "chat": "Chatactiviteit",
+      "models": "Modellen",
+      "webSearch": "Webzoekopdracht",
+      "codeInterpreter": "Code-interpreter",
+      "mcp": "Connectoren (MCP)",
+      "readAloud": "Voorlezen",
+      "transcription": "Transcriptie",
+      "uploads": "Bestandsuploads",
+      "translation": "Documentvertaling"
+    },
+    "gateOffDimNote": "Niet van toepassing zolang {feature} is uitgeschakeld. De waarde blijft behouden en werkt weer zodra de functie weer wordt ingeschakeld.",
+    "gateOffConsequence": {
+      "webSearch": "Uitgeschakeld: berichten die proberen te zoeken op het web worden geweigerd met een melding dat een beheerder deze functie heeft uitgeschakeld.",
+      "codeInterpreter": "Uitgeschakeld: berichten die proberen code uit te voeren worden geweigerd met een melding dat een beheerder deze functie heeft uitgeschakeld.",
+      "mcp": "Uitgeschakeld: berichten die connectoren gebruiken worden geweigerd met een melding dat een beheerder deze functie heeft uitgeschakeld."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Het blokkeren van zoekopdrachten op deze manier gebeurt stilzwijgend: chats gaan door en de zoekopdracht wordt eenvoudig overgeslagen. Wil je een expliciete melding, schakel dan Webzoekopdracht hierboven uit.",
+      "codeInterpreter": "Het blokkeren van uitvoeringen op deze manier gebeurt stilzwijgend: chats gaan door en de code-uitvoering wordt eenvoudig overgeslagen. Wil je een expliciete melding, schakel dan Code-interpreter hierboven uit.",
+      "mcp": "Nul rondes stopt connector-tools ongemerkt, terwijl chats doorgaan. Wil je een expliciete melding, schakel dan Connectoren hierboven uit."
+    },
+    "overrideGateOffNote": "{feature} is momenteel uitgeschakeld voor deze personen (hier of via de globale standaardinstelling), dus deze limiet heeft geen effect tenzij de functie weer wordt ingeschakeld.",
+    "untitledOverride": "Naamloze override",
+    "expandOverride": "Override uitvouwen",
+    "collapseOverride": "Override samenvouwen",
+    "overrideDisabledChip": "Uitgeschakeld",
+    "targetsCount": "{count, plural, one {# doel} other {# doelen}}",
+    "limitsCount": "{count, plural, one {# limiet ingesteld} other {# limieten ingesteld}}",
+    "addLimitLabel": "Voeg een limiet toe aan deze override",
+    "addLimitPlaceholder": "Limiet toevoegen…",
+    "unrecognizedEntries": "Opgeslagen door een nieuwere versie van de app — ongewijzigd gelaten, daar aanpasbaar:",
+    "priorityLabel": "Prioriteit",
+    "priorityHint": "Als twee overrides van hetzelfde type overeenkomen met dezelfde persoon, geldt de hoogste prioriteit.",
+    "previewTitle": "Controleer de geldende limieten voor een persoon",
+    "previewDescription": "Zie welke limiet iemand krijgt en door welke override elke waarde wordt ingesteld.",
+    "previewEmailLabel": "E-mailadres om te controleren",
+    "previewEmailPlaceholder": "naam@voorbeeld.org",
+    "previewRun": "Controleren",
+    "previewLoading": "Bezig met ophalen…",
+    "previewFailed": "De limieten van deze persoon konden niet worden opgehaald.",
+    "previewForbidden": "Alleen globale beheerders kunnen de limieten van anderen inzien.",
+    "previewSourceCatalog": "Standaard ingebouwd",
+    "previewSourceGlobal": "Globale standaard",
+    "previewSourceOverride": "Override: {label}",
+    "previewNotEvaluated": "Afdelings-, bedrijfs- en groepsoverrides kunnen hier niet worden beoordeeld — deze hangen af van de eigen aanmelding van de persoon.",
+    "previewUnsaved": "Toont het laatst opgeslagen beleid. Sla uw wijzigingen op om ze hier te zien.",
+    "previewColumnLimit": "Limiet",
+    "previewColumnValue": "Waarde",
+    "previewColumnSource": "Ingesteld door"
   }
 }

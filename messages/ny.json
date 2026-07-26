@@ -4034,7 +4034,8 @@
       "guides": "Maukadaulo osamalira ma style, mawu ndi malamulo.",
       "mapDatasets": "Ma dataset osankhidwa omwe akupezeka pa map workflow.",
       "localAdmins": "Perekani mwayi wosintha malamulo a kupeza kwa anthu ena."
-    }
+    },
+    "openSettings": "Tsegulani makonda"
   },
   "limits": {
     "title": "Malire ogwiritsa ntchito",
@@ -4173,6 +4174,56 @@
     "addScopedLimit": "Onjezerani malire pa banja kapena mtundu…",
     "removeScopedLimit": "Chotsani malire awa",
     "unknownQualifier": "sili mu katalogi yanu yapano",
-    "unknownQualifierHint": "Mtundu wochulikawu kapena banja silikupezeka m'chigawo ichi kapena ring. Malire akusungidwa ndipo akugwirabe ntchito kulikonse komwe aliko."
+    "unknownQualifierHint": "Mtundu wochulikawu kapena banja silikupezeka m'chigawo ichi kapena ring. Malire akusungidwa ndipo akugwirabe ntchito kulikonse komwe aliko.",
+    "group": {
+      "chat": "Zochitika za macheza",
+      "models": "Mitundu",
+      "webSearch": "Kusaka pa intaneti",
+      "codeInterpreter": "Code interpreter",
+      "mcp": "Connectors (MCP)",
+      "readAloud": "Werengani molankhula",
+      "transcription": "Kumasulira mawu",
+      "uploads": "Kukweza mafayilo",
+      "translation": "Kumasulira zikalata"
+    },
+    "gateOffDimNote": "Sizikugwira ntchito nthawi yomwe {feature} yatsekedwa. Mtengo ukuupulumutsa ndipo ugwiranso ntchito ngati {feature} yatsegulidwanso.",
+    "gateOffConsequence": {
+      "webSearch": "Yatsekedwa: uthenga woyesa kusaka pa intaneti umakanidwa ndi uthenga wosonyeza kuti woyang'anira watseka ntchitoyi.",
+      "codeInterpreter": "Yatsekedwa: uthenga woyesa kuyendetsa code umakanidwa ndi uthenga wosonyeza kuti woyang'anira watseka ntchitoyi.",
+      "mcp": "Yatsekedwa: uthenga wogwiritsa ntchito connectors umakanidwa ndi uthenga wosonyeza kuti woyang'anira watseka ntchitoyi."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Kuletsa kusaka pa njira iyi kumakhala chete: macheza akupitiriza ndipo kusakako kumadutsidwa basi. Kuti mukane mwachindunji, tsekani kusaka pa intaneti pamwambapa.",
+      "codeInterpreter": "Kuletsa kuyendetsa code pa njira iyi kumakhala chete: macheza akupitiriza ndipo code sitiyendetsedwa. Kuti mukane mwachindunji, tsekani Code interpreter pamwambapa.",
+      "mcp": "Zero rounds zimasiya ntchito ya connector munthu asanadikire ndipo macheza akupitiriza. Kuti mukane mwachindunji, tsekani Connectors pamwambapa."
+    },
+    "overrideGateOffNote": "{feature} ili yatsekedwa kwa anthu awa (pano kapena monga default yapadziko lonse), choncho malirewa alibe ntchito pokhapokha ngati {feature} itatsegulidwa kachiwiri.",
+    "untitledOverride": "Override yopanda dzina",
+    "expandOverride": "Talikitsani override",
+    "collapseOverride": "Panikizani override",
+    "overrideDisabledChip": "Yatsekedwa",
+    "targetsCount": "{count, plural, one {# cholinga} other {# zolinga}}",
+    "limitsCount": "{count, plural, one {# malire asankhidwa} other {# malire asankhidwa}}",
+    "addLimitLabel": "Onjezerani malire pa override iyi",
+    "addLimitPlaceholder": "Onjezerani malire…",
+    "unrecognizedEntries": "Zasungidwa ndi mtundu watsopano wa pulogalamu — zasungidwa momwe zilili, zosintha komweko:",
+    "priorityLabel": "Kuyamba patsogolo",
+    "priorityHint": "Ngati ma override awiri amtundu womwewo agwirizana ndi munthu mmodzi, amene ali ndi kuyamba patsogolo apambana.",
+    "previewTitle": "Onani malire omwe munthu ali nawo",
+    "previewDescription": "Onani zomwe munthu akulandira komanso override yomwe yasankha mtengo uliwonse.",
+    "previewEmailLabel": "Imelo ya munthu wofufuzira",
+    "previewEmailPlaceholder": "name@example.org",
+    "previewRun": "Onani",
+    "previewLoading": "Kukonza…",
+    "previewFailed": "Sizingatheke kupeza malire a munthuyu.",
+    "previewForbidden": "Ma admin a dziko lonse okha ndi omwe angawone malire a ena.",
+    "previewSourceCatalog": "Default yomangidwa mkati",
+    "previewSourceGlobal": "Default ya dziko lonse",
+    "previewSourceOverride": "Override: {label}",
+    "previewNotEvaluated": "Ma override a dipatimenti/ kampani /ofesi komanso gulu sangathe kuwerengedwera pano — zimadalira chidziwitso cha kulowa kwa munthuyo.",
+    "previewUnsaved": "Mukuwonetsa ndondomeko yomaliza yosungidwa. Sungani zosintha zanu kuti muwone.",
+    "previewColumnLimit": "Malire",
+    "previewColumnValue": "Mtengo",
+    "previewColumnSource": "Zakhazikitsidwa ndi"
   }
 }

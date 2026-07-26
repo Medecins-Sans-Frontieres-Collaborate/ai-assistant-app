@@ -4034,7 +4034,8 @@
       "guides": "ዘብላዕ ኣብ ኣዘጋጅነት፣ ቃላትን ትምክህታትን መሳርሒ መግበሪ መልክን።",
       "mapDatasets": "ናይ ብቕጽል ተሰፊሑ ዳታ ተቃራኒታት ናብ workflow ካድ ትረኽቦም ኢዮም።",
       "localAdmins": "ሕገ-ኤርትኤ-መደብ ማስተኻኸል ካብ ነገር ንሰባት ሪአይታ።"
-    }
+    },
+    "openSettings": "ቅንጥታት ክፈት"
   },
   "limits": {
     "title": "ድንበሮታት ኣጠቃቕያ",
@@ -4173,6 +4174,56 @@
     "addScopedLimit": "ውሳነ ብቤት ወይ ሞዴል ያኣኽፉ…",
     "removeScopedLimit": "እዚ ውሳነ ኣኽፋል",
     "unknownQualifier": "ኣብ ኣለሃቦ መዝገብካ የለን",
-    "unknownQualifierHint": "እዚ ሞዴል ወይ ቤት ኣብዚ ኣካባቢ ወይ ሪንግ የለን። ውሳነ እንታይሊን ኾይኑ፡ ኣብ ምድላው ዝኾነ ይሕፃፍ።"
+    "unknownQualifierHint": "እዚ ሞዴል ወይ ቤት ኣብዚ ኣካባቢ ወይ ሪንግ የለን። ውሳነ እንታይሊን ኾይኑ፡ ኣብ ምድላው ዝኾነ ይሕፃፍ።",
+    "group": {
+      "chat": "ውይይት ንግር",
+      "models": "ሞዴልታት",
+      "webSearch": "ድሕሪ አውድ ፍለጋ",
+      "codeInterpreter": "Code interpreter",
+      "mcp": "Connectors (MCP)",
+      "readAloud": "ንድሕሪት ኣንብብ",
+      "transcription": "ጽሑፍ ምቅዳም",
+      "uploads": "ፋይል ምውዳእ",
+      "translation": "ሰነድ ትርጉም"
+    },
+    "gateOffDimNote": "ኣብ እዚ ግዜ {feature} ምትባል የይግበርን። ዝርከበ ዋጋ ንምሉእ ምትፋል ይቕበር።",
+    "gateOffConsequence": {
+      "webSearch": "ተዘግዮ፡ መልእኽቲ ዝደሊ ድሕሪ አውድ ፍለጋ ይስደድ እናተላእኩ፡ ብመምሕዳር እቲ ባህሪ ተሰናእተ ተብሎ ይርብሓ።",
+      "codeInterpreter": "ተዘግዮ፡ መልእኽቲ ዝደሊ ኮድ ክረክቡ ይስደድ እናተላእኩ፡ ብመምሕዳር እቲ ባህሪ ተሰናእተ ተብሎ ይርብሓ።",
+      "mcp": "ተዘግዮ፡ መልእኽቲ ዝጥቀም connectors ይስደድ እናተላእኩ፡ ብመምሕዳር እቲ ባህሪ ተሰናእተ ተብሎ ይርብሓ።"
+    },
+    "capBlockedConsequence": {
+      "webSearch": "እቲ ፍለጋ ብእዚ መንገዲ ተዘግዮ ብምዝልኣና ይወድድ። ውይይት ይቀጽል እዩ፡ ፍለጋ ግን ይኣተው። ግልጽ መልእኽቲ ምምቃን ብምፍጻም፡ ድሕሪ አውድ ፍለጋ ኣብ ላዕሊ ዝተመዘገበ ዝብል ኣጥፊ።",
+      "codeInterpreter": "ኮድ ምብካን ብዚ መንገዲ ብጸጋም ይትበጽሖ። ውይይት ይቀጽል ኮድ ግን ይበጽሖ። ግልጽ መልእኽቲ ምቃን ደሊኻ ድሕሪ code interpreter ኣብ ላዕሊ ዝተመዘገበ ኣጥፊ።",
+      "mcp": "ዜሮ ቦታታት connectors ብዝጸጋም አብዚ መንገዲ ይቡህን። ውይይት ይቀጽል ኮይኑ። ግልጽ መልእኽቲ ምምቃን ብምፍጻም፡ Connectors ኣብ ላዕሊ ኣጥፊ።"
+    },
+    "overrideGateOffNote": "{feature} ለእዚኦም ሰባት ሕጂ (ኣብዚ ወይ ብኣጠቓቕሙ ዝፈጸመ ብትሕትና) ዝተዘገደ ክሆን እዩ፡ እዚ ውግእ ምውፃእ የብሉን ማለት እንተኾነ ምንም ጥንታዊ ስርዓት እንተነበረ እቲ ባህሪ ይሓለፈ።",
+    "untitledOverride": "ቃል ኣይተወሰነን ውግእ",
+    "expandOverride": "ውግእ ዘርፍ",
+    "collapseOverride": "ውግእ ክፋል",
+    "overrideDisabledChip": "ተሰናእተ",
+    "targetsCount": "{count, plural, one {# ዕላማ} other {# ዕላማታት}}",
+    "limitsCount": "{count, plural, one {# ውሕደት ተወሲኑ} other {# ውሕደታት ተወሲኑ}}",
+    "addLimitLabel": "ብዚ ውግእ ውሕደት ደምስስ",
+    "addLimitPlaceholder": "ውሕደት ደምስስ…",
+    "unrecognizedEntries": "ብሓደ ዕድሚ ናይ መተግበሪ ብዝተፈጥረ ሓድሽ ቅጥዒ ተቐሚጡ — ኣብዚ ቅድሚ ክቕየሩ ይችሉ፡",
+    "priorityLabel": "ቅድመት",
+    "priorityHint": "ውግእ ናይ ማዕረ ነገር ካብ ሓደ ሰብ ዝሰማማዕ እንተኾይኑ፡ ኣላዋ ቅድመት ዝበሃል ይነባር።",
+    "previewTitle": "ናይ ሰብ ምስናይ ውሕደታት ረኣዩ",
+    "previewDescription": "ሰብ እቲ ብእቲ ዝተሓገዘ ከመይ ይርከብን እዚ እዛ ዝወሰነ ውግእ መን እዩ ዝሑተ።",
+    "previewEmailLabel": "ኢመይል ኣድራሻ ምፍታን ዝደሊ",
+    "previewEmailPlaceholder": "name@example.org",
+    "previewRun": "ፈትን",
+    "previewLoading": "ምርካብ…",
+    "previewFailed": "ናይኡ ሰብ ውሕደታት አይከወን ነቲ።",
+    "previewForbidden": "ንዓኻ ኣብ ኣብዚ የእተሰርሕ ከም ጠቓሚ ናይ ኣብ ባዕልኻ ውሕደታት መንገብ ትኽእል።",
+    "previewSourceCatalog": "ብዝተሸማገረ ነባሪ ዝሓወተ",
+    "previewSourceGlobal": "ናይ ትሕቲ ደረጃ ነባሪ",
+    "previewSourceOverride": "ውግእ፡ {label}",
+    "previewNotEvaluated": "ናይ ውሳኔ ቦታ/ኩባንያ/ጽሕፈት ንፀታታትን ናይ ቡድን ውግእታት ኣብዚ ኣይኽእሉን– ምስ ሰብ ዝኸድኦ ምእካብ ይደፍም።",
+    "previewUnsaved": "ናይ መወሰኸ ስርዓት እዚ ኣብቲ ዝሓወተ ክግቦም ክረእዮም ይኽእሉ።",
+    "previewColumnLimit": "ውሕደት",
+    "previewColumnValue": "ዋጋ",
+    "previewColumnSource": "ዝወሰነ"
   }
 }

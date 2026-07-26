@@ -4050,7 +4050,8 @@
       "guides": "Style-, Terminologie- und Compliance-Guides.",
       "mapDatasets": "Kuratierten Datensätze, die für den Karten-Workflow verfügbar sind.",
       "localAdmins": "Berechtigung für die Bearbeitung von Zugriffsregeln an andere delegieren."
-    }
+    },
+    "openSettings": "Einstellungen öffnen"
   },
   "limits": {
     "title": "Nutzungsbegrenzungen",
@@ -4189,6 +4190,56 @@
     "addScopedLimit": "Limit für eine Familie oder ein Modell hinzufügen…",
     "removeScopedLimit": "Dieses Limit entfernen",
     "unknownQualifier": "nicht in Ihrem aktuellen Katalog",
-    "unknownQualifierHint": "Dieses Modell oder diese Familie ist in dieser Region oder diesem Ring nicht verfügbar. Das Limit bleibt bestehen und gilt überall dort, wo es verfügbar ist."
+    "unknownQualifierHint": "Dieses Modell oder diese Familie ist in dieser Region oder diesem Ring nicht verfügbar. Das Limit bleibt bestehen und gilt überall dort, wo es verfügbar ist.",
+    "group": {
+      "chat": "Chat-Aktivität",
+      "models": "Modelle",
+      "webSearch": "Websuche",
+      "codeInterpreter": "Code-Interpreter",
+      "mcp": "Connectors (MCP)",
+      "readAloud": "Vorlesen",
+      "transcription": "Transkription",
+      "uploads": "Datei-Uploads",
+      "translation": "Dokumentenübersetzung"
+    },
+    "gateOffDimNote": "Gilt nicht, solange {feature} deaktiviert ist. Der Wert bleibt bestehen und wird wieder aktiviert, wenn die Funktion eingeschaltet wird.",
+    "gateOffConsequence": {
+      "webSearch": "Deaktiviert: Nachrichten mit Websuche werden abgelehnt und eine Meldung erscheint, dass ein Administrator die Funktion deaktiviert hat.",
+      "codeInterpreter": "Deaktiviert: Nachrichten mit Code-Ausführung werden abgelehnt und eine Meldung erscheint, dass ein Administrator die Funktion deaktiviert hat.",
+      "mcp": "Deaktiviert: Nachrichten mit Connectors werden abgelehnt und eine Meldung erscheint, dass ein Administrator die Funktion deaktiviert hat."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Die Blockierung erfolgt stillschweigend: Chats laufen weiter und die Suche wird einfach übersprungen. Um stattdessen explizit abzulehnen, schalten Sie Websuche oben aus.",
+      "codeInterpreter": "Die Blockierung erfolgt stillschweigend: Chats laufen weiter und die Code-Ausführung wird einfach übersprungen. Um stattdessen explizit abzulehnen, schalten Sie Code-Interpreter oben aus.",
+      "mcp": "Null Runden verhindern stillschweigend, dass Connector-Tools ausgeführt werden, während Chats weiterlaufen. Um stattdessen explizit abzulehnen, schalten Sie Connectors oben aus."
+    },
+    "overrideGateOffNote": "{feature} ist für diese Personen derzeit deaktiviert (hier oder durch die globale Voreinstellung), daher hat dieses Limit keine Wirkung, solange die Funktion nicht wieder aktiviert wird.",
+    "untitledOverride": "Unbenanntes Override",
+    "expandOverride": "Override erweitern",
+    "collapseOverride": "Override reduzieren",
+    "overrideDisabledChip": "Deaktiviert",
+    "targetsCount": "{count, plural, one {# Ziel} other {# Ziele}}",
+    "limitsCount": "{count, plural, one {# Limit gesetzt} other {# Limits gesetzt}}",
+    "addLimitLabel": "Dieses Override mit einem Limit versehen",
+    "addLimitPlaceholder": "Limit hinzufügen…",
+    "unrecognizedEntries": "Von einer neueren App-Version gespeichert – bleibt unverändert, dort bearbeitbar:",
+    "priorityLabel": "Priorität",
+    "priorityHint": "Wenn zwei Overrides gleicher Art auf dieselbe Person zutreffen, gilt das mit höherer Priorität.",
+    "previewTitle": "Effektive Limits einer Person prüfen",
+    "previewDescription": "Anzeigen, was jemand tatsächlich erhält und welches Override jeden Wert setzt.",
+    "previewEmailLabel": "Zu prüfende E-Mail-Adresse",
+    "previewEmailPlaceholder": "name@example.org",
+    "previewRun": "Prüfen",
+    "previewLoading": "Wird überprüft…",
+    "previewFailed": "Die Limits dieser Person konnten nicht ermittelt werden.",
+    "previewForbidden": "Nur globale Admins können die Limits anderer Personen einsehen.",
+    "previewSourceCatalog": "Integrierte Standardeinstellung",
+    "previewSourceGlobal": "Globale Standardeinstellung",
+    "previewSourceOverride": "Override: {label}",
+    "previewNotEvaluated": "Abteilungs-/Firmen-/Büro- und Gruppen-Overrides können hier nicht bewertet werden – diese hängen von der eigenen Anmeldung der Person ab.",
+    "previewUnsaved": "Die zuletzt gespeicherte Richtlinie wird angezeigt. Speichern Sie Ihre Änderungen, um die Vorschau zu sehen.",
+    "previewColumnLimit": "Limit",
+    "previewColumnValue": "Wert",
+    "previewColumnSource": "Festgelegt von"
   }
 }

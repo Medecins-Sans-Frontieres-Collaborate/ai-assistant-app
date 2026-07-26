@@ -4034,7 +4034,8 @@
       "guides": "Torolalana momba ny fomba, voambolana ary fitoviana.",
       "mapDatasets": "Dataset voafantina azo ampiasaina amin'ny workflow mikasika ny sarintany.",
       "localAdmins": "Manome alalana hanova fitsipika amin’ny hafa."
-    }
+    },
+    "openSettings": "Sokafy ny fikirakirana"
   },
   "limits": {
     "title": "Fetra fampiasana",
@@ -4173,6 +4174,56 @@
     "addScopedLimit": "Ampio fetra amin'ny fianakaviana na modely…",
     "removeScopedLimit": "Esory ity fetra ity",
     "unknownQualifier": "tsy anatin'ny katalaoginao amin’izao fotoana izao",
-    "unknownQualifierHint": "Tsy hita amin’ity faritra na ring ity ity modely na fianakaviana ity. Mitohy mihatra sy tehirizina ny fetra amin’izay misy azy."
+    "unknownQualifierHint": "Tsy hita amin’ity faritra na ring ity ity modely na fianakaviana ity. Mitohy mihatra sy tehirizina ny fetra amin’izay misy azy.",
+    "group": {
+      "chat": "Asa amin'ny chat",
+      "models": "Modely",
+      "webSearch": "Fikarohana amin'ny web",
+      "codeInterpreter": "Mpandika kaody",
+      "mcp": "Connectors (MCP)",
+      "readAloud": "Vakio mafy",
+      "transcription": "Fitopisiana",
+      "uploads": "Fampakarana rakitra",
+      "translation": "Fandikan-taratasy"
+    },
+    "gateOffDimNote": "Tsy mihatra raha {feature} no voafafa. Ajanona ny sanda ary hiverina mihatra raha ampodiana indray ilay fiasa.",
+    "gateOffConsequence": {
+      "webSearch": "Voafafa: hafatra mitady hitady amin'ny web dia lavina amin'ny hafatra milaza fa nesorin'ny mpandrindra ilay fiasa.",
+      "codeInterpreter": "Voafafa: hafatra manandrana mihazakazaka kaody dia lavina amin'ny hafatra milaza fa nesorin'ny mpandrindra ilay fiasa.",
+      "mcp": "Voafafa: hafatra mampiasa connectors dia lavina amin'ny hafatra milaza fa nesorin'ny mpandrindra ilay fiasa."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Mangina ny fanakanana toy izao: mitohy ny chat ary tsy tanterahina fotsiny ny fikarohana. Raha tianao halavina mivantana amin'ny hafatra, dia vonoy ny Web search etsy ambony.",
+      "codeInterpreter": "Mangina ny fanakanana toy izao: mitohy ny chat ary tsy tanterahina fotsiny ny fihodinan'ny kaody. Raha tianao halavina mivantana amin'ny hafatra, vonoy ny Code interpreter etsy ambony.",
+      "mcp": "Manakana tanteraka tsy hiasa mihitsy ny connector raha mbola mitohy ny chat. Raha tianao halavina amin'ny hafatra, vonoy ny Connectors etsy ambony."
+    },
+    "overrideGateOffNote": "Voafafa amin'izao fotoana izao ho an'ireto olona ireto (eto na amin'ny dikan-teny maneran-tany), ka tsy misy fiantraikany ity fetra ity raha tsy averina ilay fiasa.",
+    "untitledOverride": "Override tsy misy lohateny",
+    "expandOverride": "Ahitsio override",
+    "collapseOverride": "Afenoy override",
+    "overrideDisabledChip": "Voafafa",
+    "targetsCount": "{count, plural, one {# kendrena} other {# kendrena}}",
+    "limitsCount": "{count, plural, one {# fetra napetraka} other {# fetra napetraka}}",
+    "addLimitLabel": "Ampio fetra amin'ity override ity",
+    "addLimitPlaceholder": "Ampio fetra…",
+    "unrecognizedEntries": "Voatahiry amin'ny kinova farany amin'ny app — avela ho toy izany, azo ovaina any:",
+    "priorityLabel": "Laharana laharam-pahamehana",
+    "priorityHint": "Raha fitoviana amin'ny olona iray no misy, izay manana laharam-pahamehana ambony no mandresy.",
+    "previewTitle": "Jereo ny fetra mihatra amin'ny olona iray",
+    "previewDescription": "Jereo izay tena azon'ny olona iray sy ny override nametraka izany.",
+    "previewEmailLabel": "Adiresy mailaka hojerena",
+    "previewEmailPlaceholder": "anaran'olona@example.org",
+    "previewRun": "Jereo",
+    "previewLoading": "Miandry…",
+    "previewFailed": "Tsy afaka nijery ny fetra ho an'ity olona ity.",
+    "previewForbidden": "Ireo global admins ihany no mahazo mijery fetra an'ny olona hafa.",
+    "previewSourceCatalog": "Default ao anatiny",
+    "previewSourceGlobal": "Default maneran-tany",
+    "previewSourceOverride": "Override: {label}",
+    "previewNotEvaluated": "Tsy azo zahana eto ny override ho an'ny departemanta/kaompania/biraon'ny vondrona — miankina amin'ilay olona miditra.",
+    "previewUnsaved": "Asehoy ny politika farany voatahiry. Tehirizo aloha ny fanovana vao ahitana azy eto.",
+    "previewColumnLimit": "Fetra",
+    "previewColumnValue": "Sanda",
+    "previewColumnSource": "Nataon'i"
   }
 }

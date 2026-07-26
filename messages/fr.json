@@ -4050,7 +4050,8 @@
       "guides": "Guides de style, de terminologie et de conformité.",
       "mapDatasets": "Jeux de données sélectionnés disponibles pour le flux cartographique.",
       "localAdmins": "Déléguer l’édition des règles d’accès à d’autres personnes."
-    }
+    },
+    "openSettings": "Ouvrir les paramètres"
   },
   "limits": {
     "title": "Limites d’utilisation",
@@ -4189,6 +4190,56 @@
     "addScopedLimit": "Ajouter une limite pour une famille ou un modèle…",
     "removeScopedLimit": "Supprimer cette limite",
     "unknownQualifier": "non présent dans votre catalogue actuel",
-    "unknownQualifierHint": "Ce modèle ou cette famille n'est pas disponible dans cette région ou ce cercle. La limite est conservée et s'applique là où il est disponible."
+    "unknownQualifierHint": "Ce modèle ou cette famille n'est pas disponible dans cette région ou ce cercle. La limite est conservée et s'applique là où il est disponible.",
+    "group": {
+      "chat": "Activité de chat",
+      "models": "Modèles",
+      "webSearch": "Recherche web",
+      "codeInterpreter": "Interpréteur de code",
+      "mcp": "Connecteurs (MCP)",
+      "readAloud": "Lecture à voix haute",
+      "transcription": "Transcription",
+      "uploads": "Téléversements de fichiers",
+      "translation": "Traduction de documents"
+    },
+    "gateOffDimNote": "Non applicable tant que {feature} est désactivé. La valeur est conservée et sera à nouveau appliquée si la fonctionnalité est réactivée.",
+    "gateOffConsequence": {
+      "webSearch": "Désactivé : les messages qui essaient de faire une recherche web sont refusés avec un message indiquant qu’un administrateur a désactivé la fonctionnalité.",
+      "codeInterpreter": "Désactivé : les messages qui essaient d’exécuter du code sont refusés avec un message indiquant qu’un administrateur a désactivé la fonctionnalité.",
+      "mcp": "Désactivé : les messages utilisant des connecteurs sont refusés avec un message indiquant qu’un administrateur a désactivé la fonctionnalité."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Le blocage de cette façon est silencieux : les chats continuent et la recherche est simplement ignorée. Pour refuser avec un message explicite, désactivez la recherche web ci-dessus.",
+      "codeInterpreter": "Le blocage de cette façon est silencieux : les chats continuent et l’exécution de code est simplement ignorée. Pour refuser avec un message explicite, désactivez l’interpréteur de code ci-dessus.",
+      "mcp": "Aucun passage empêche silencieusement l’exécution des outils de connecteurs pendant que les chats se poursuivent. Pour refuser avec un message explicite, désactivez les connecteurs ci-dessus."
+    },
+    "overrideGateOffNote": "{feature} est actuellement désactivé pour ces personnes (ici ou par défaut global), donc cette limite n’a aucun effet tant que la fonctionnalité n’est pas réactivée.",
+    "untitledOverride": "Priorisation sans titre",
+    "expandOverride": "Développer la priorisation",
+    "collapseOverride": "Réduire la priorisation",
+    "overrideDisabledChip": "Désactivé",
+    "targetsCount": "{count, plural, one {# cible} other {# cibles}}",
+    "limitsCount": "{count, plural, one {# limite définie} other {# limites définies}}",
+    "addLimitLabel": "Ajouter une limite à cette priorisation",
+    "addLimitPlaceholder": "Ajouter une limite…",
+    "unrecognizedEntries": "Enregistré par une version plus récente de l’application — conservé tel quel, modifiable là-bas :",
+    "priorityLabel": "Priorité",
+    "priorityHint": "Si deux priorisations du même type correspondent à la même personne, la priorité la plus haute l’emporte.",
+    "previewTitle": "Vérifiez les limites effectives d'une personne",
+    "previewDescription": "Voyez ce qu'une personne reçoit réellement et quelle priorisation définit chaque valeur.",
+    "previewEmailLabel": "Adresse email à vérifier",
+    "previewEmailPlaceholder": "nom@example.org",
+    "previewRun": "Vérifier",
+    "previewLoading": "Analyse en cours…",
+    "previewFailed": "Impossible de déterminer les limites de cette personne.",
+    "previewForbidden": "Seuls les administrateurs globaux peuvent prévisualiser les limites d’autres personnes.",
+    "previewSourceCatalog": "Paramètre par défaut intégré",
+    "previewSourceGlobal": "Paramètre global par défaut",
+    "previewSourceOverride": "Priorisation : {label}",
+    "previewNotEvaluated": "Les priorisations par département, entreprise/bureau ou groupe ne peuvent pas être évaluées ici — elles dépendent de la propre connexion de la personne.",
+    "previewUnsaved": "Affichage de la dernière politique enregistrée. Enregistrez vos modifications pour les prévisualiser.",
+    "previewColumnLimit": "Limite",
+    "previewColumnValue": "Valeur",
+    "previewColumnSource": "Défini par"
   }
 }

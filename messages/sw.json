@@ -4050,7 +4050,8 @@
       "guides": "Mwongozo wa mtindo, istilahi na ufuatiliaji wa sheria.",
       "mapDatasets": "Seti za data zilizochaguliwa zinazopatikana kwa mtiririko wa ramani.",
       "localAdmins": "Tawanya uhariri wa kanuni za upatikanaji kwa watu wengine."
-    }
+    },
+    "openSettings": "Fungua mipangilio"
   },
   "limits": {
     "title": "Mipaka ya matumizi",
@@ -4189,6 +4190,56 @@
     "addScopedLimit": "Ongeza kikomo kwa familia au mfano…",
     "removeScopedLimit": "Ondoa kikomo hiki",
     "unknownQualifier": "haipo kwenye orodha yako ya sasa",
-    "unknownQualifierHint": "Modeli hii au familia haipatikani katika eneo au duara hili. Kikomo kimehifadhiwa na bado kitafanya kazi mahali popote kinapopatikana."
+    "unknownQualifierHint": "Modeli hii au familia haipatikani katika eneo au duara hili. Kikomo kimehifadhiwa na bado kitafanya kazi mahali popote kinapopatikana.",
+    "group": {
+      "chat": "Shughuli za gumzo",
+      "models": "Miundo",
+      "webSearch": "Utafutaji wavuti",
+      "codeInterpreter": "Mtafsiri wa msimbo",
+      "mcp": "Viunganishi (MCP)",
+      "readAloud": "Soma kwa sauti",
+      "transcription": "Transkripseni",
+      "uploads": "Upakiaji wa faili",
+      "translation": "Tafsiri ya hati"
+    },
+    "gateOffDimNote": "Haitumiki wakati {feature} imezimwa. Thamani itaendelea kuwepo na itatumika tena ikiwa kipengele kikiwashwa tena.",
+    "gateOffConsequence": {
+      "webSearch": "Kimezimwa: ujumbe unaojaribu kutafuta wavuti unakataliwa na ujumbe unaosema msimamizi amezima kipengele.",
+      "codeInterpreter": "Kimezimwa: ujumbe unaojaribu kuendesha msimbo unakataliwa na ujumbe unaosema msimamizi amezima kipengele.",
+      "mcp": "Kimezimwa: ujumbe unaotumia viunganishi unakataliwa na ujumbe unaosema msimamizi amezima kipengele."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Kuzuia utafutaji kwa njia hii hakutoonyeshwa: gumzo linaendelea na utafutaji unarukwa tu. Kutoa ujumbe wa wazi badala yake, zima Utafutaji wavuti hapo juu.",
+      "codeInterpreter": "Kuzuia uendeshaji kwa njia hii hakutoonyeshwa: gumzo linaendelea na uendeshaji wa msimbo unarukwa tu. Kutoa ujumbe wa wazi badala yake, zima Mtafsiri wa msimbo hapo juu.",
+      "mcp": "Raundi sifuri inazuia kimya kimya zana za viunganishi zisiwahi kufanya kazi huku gumzo likiendelea. Kutoa ujumbe wa wazi badala yake, zima Viunganishi hapo juu."
+    },
+    "overrideGateOffNote": "{feature} hivi sasa imezimwa kwa watu hawa (hapa au kwa msingi wa kimataifa), hivyo kikomo hiki hakitafanya kazi isipokuwa kipengele kikiwashwa tena.",
+    "untitledOverride": "Batilisho bila jina",
+    "expandOverride": "Panua batilisho",
+    "collapseOverride": "Fupisha batilisho",
+    "overrideDisabledChip": "Kimezimwa",
+    "targetsCount": "{count, plural, one {# lengwa} other {# malengwa}}",
+    "limitsCount": "{count, plural, one {# kikomo kimewekwa} other {# vikomo vimewekwa}}",
+    "addLimitLabel": "Ongeza kikomo kwa batilisho hili",
+    "addLimitPlaceholder": "Ongeza kikomo…",
+    "unrecognizedEntries": "Imehifadhiwa na toleo jipya la programu — imeachwa kama ilivyo, inaweza kurekebishwa huko:",
+    "priorityLabel": "Kipaumbele",
+    "priorityHint": "Wakati batilisho mbili za aina moja zinaendana na mtu huyo huyo, ile yenye kipaumbele cha juu hushinda.",
+    "previewTitle": "Angalia vikomo vinavyomuhusu mtu",
+    "previewDescription": "Ona mtu anachopata hasa na batilisho gani limeseti kila thamani.",
+    "previewEmailLabel": "Anwani ya barua pepe ya kukagua",
+    "previewEmailPlaceholder": "jina@mfano.org",
+    "previewRun": "Kagua",
+    "previewLoading": "Inashughulikia…",
+    "previewFailed": "Haikuwezekana kupata vikomo vya mtu huyu.",
+    "previewForbidden": "Ni wasanidi wa kimataifa pekee wanaoweza kuona vikomo vya watu wengine.",
+    "previewSourceCatalog": "Chaguo-msingi ya ndani",
+    "previewSourceGlobal": "Chaguo-msingi ya kimataifa",
+    "previewSourceOverride": "Batilisho: {label}",
+    "previewNotEvaluated": "Batilisho za idara/kampuni/ofisi na kundi haziwezi kutathminiwa hapa — zinategemea mtu mwenyewe kuingia.",
+    "previewUnsaved": "Inaonyesha sera iliyohifadhiwa mwisho. Hifadhi mabadiliko yako ili uone hakikisho.",
+    "previewColumnLimit": "Kikomo",
+    "previewColumnValue": "Thamani",
+    "previewColumnSource": "Imesetiwa na"
   }
 }

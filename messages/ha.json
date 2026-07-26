@@ -4034,7 +4034,8 @@
       "guides": "Jagorar salo, sharuɗɗa, da bin doka.",
       "mapDatasets": "An zaɓi bayanan da ake da su don aikin taswira.",
       "localAdmins": "Ba wa wasu damar gyara ƙa’idojin izini."
-    }
+    },
+    "openSettings": "Buɗe saituna"
   },
   "limits": {
     "title": "Iyakar amfani",
@@ -4173,6 +4174,56 @@
     "addScopedLimit": "Ƙara iyaka ga dangi ko samfuri…",
     "removeScopedLimit": "Cire wannan iyaka",
     "unknownQualifier": "ba cikin kundin ku yanzu ba",
-    "unknownQualifierHint": "Wannan samfur ko dangi ba a samunsa a wannan yankin ko tsari ba. Za a ci gaba da rike iyaka inda yake aiki."
+    "unknownQualifierHint": "Wannan samfur ko dangi ba a samunsa a wannan yankin ko tsari ba. Za a ci gaba da rike iyaka inda yake aiki.",
+    "group": {
+      "chat": "Ayyukan hira",
+      "models": "Samfura",
+      "webSearch": "Bincike a yanar gizo",
+      "codeInterpreter": "Fassara lamba",
+      "mcp": "Haɗin kai (MCP)",
+      "readAloud": "Karanta da ƙara",
+      "transcription": "Tranƙwal",
+      "uploads": "Ajiyar fayiloli",
+      "translation": "Fassarar takardu"
+    },
+    "gateOffDimNote": "Ba ya aiki yayin da {feature} a kashe. Ana adana ƙimar kuma zata fara aiki idan an kunna fasalin.",
+    "gateOffConsequence": {
+      "webSearch": "An kashe: saƙonnin da ke ƙoƙarin bincike a yanar gizo za a ƙi karɓa tare da saƙon cewa mai gudanarwa ya kashe fasalin.",
+      "codeInterpreter": "An kashe: saƙonnin da ke ƙoƙarin gudanar da lamba za a ƙi karɓa tare da saƙon cewa mai gudanarwa ya kashe fasalin.",
+      "mcp": "An kashe: saƙonnin da ke amfani da haɗin kai za a ƙi karɓa da saƙon cewa mai gudanarwa ya kashe fasalin."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Katange bincike ta wannan hanya babu wani gargadi: hira za ta ci gaba kuma za a tsallake binciken. Idan kana son a ƙi da saƙo na musamman, kashe bincike a yanar gizo a sama.",
+      "codeInterpreter": "Katange gudanar da lamba ta wannan hanya ba tare da bayani ba: hira za ta ci gaba kuma za a tsallake gudanarwar lamba. Idan kana son a ƙi da saƙo na musamman, kashe Fassara lamba a sama.",
+      "mcp": "Sifili na tasha yana hana kayan haɗin kai gudanarwa ba tare da gargadi ba yayin da hira ke ci gaba. Idan kana son a ƙi da saƙo, kashe Haɗin kai a sama."
+    },
+    "overrideGateOffNote": "{feature} a halin yanzu an kashe wa waɗannan mutane (an nan ko ta tsohon saitin duniya), don haka wannan matsayi ba zai yi tasiri ba sai an sake kunna fasalin.",
+    "untitledOverride": "Babu suna a override",
+    "expandOverride": "Faɗaɗa override",
+    "collapseOverride": "Rufe override",
+    "overrideDisabledChip": "An kashe",
+    "targetsCount": "{count, plural, one {# buri} other {# burare}}",
+    "limitsCount": "{count, plural, one {# iyaka an saita} other {# iyakoki an saita}}",
+    "addLimitLabel": "Sa iyaka a wannan override",
+    "addLimitPlaceholder": "Ƙara iyaka…",
+    "unrecognizedEntries": "An adana daga sabon sigar app — ana barinsa kamar yadda yake, a gyara can:",
+    "priorityLabel": "Mahimmanci",
+    "priorityHint": "Idan overrides guda biyu iri ɗaya sun dace da mutum ɗaya, mafi mahimmanci ne zai yi aiki.",
+    "previewTitle": "Duba iyakokin mutum",
+    "previewDescription": "Duba abin da wani ke samu da wanda override ya saita kowanne ƙima.",
+    "previewEmailLabel": "Adireshin imel don dubawa",
+    "previewEmailPlaceholder": "name@example.org",
+    "previewRun": "Duba",
+    "previewLoading": "Ana duba…",
+    "previewFailed": "Ba a iya gano iyakan wannan mutum ba.",
+    "previewForbidden": "Sai manyan masu gudanarwa na duniya ne za su iya duba iyakan wasu.",
+    "previewSourceCatalog": "Tsoho mai ɗauke da kanta",
+    "previewSourceGlobal": "Tsohon saitin duniya",
+    "previewSourceOverride": "Override: {label}",
+    "previewNotEvaluated": "Cannot duba overrides na sashen/kamfani/ofis da na rukuni anan — suna dogara da shigar mutum na kansa.",
+    "previewUnsaved": "Ana nuna manufar da aka ajiye karshe. Ajiye canjinkanku don duba su.",
+    "previewColumnLimit": "Iyaka",
+    "previewColumnValue": "Ƙima",
+    "previewColumnSource": "Wanda ya saita"
   }
 }

@@ -4034,7 +4034,8 @@
       "guides": "Imihlahlandlela yokusetshenziswa, amagama nezindinganiso.",
       "mapDatasets": "Amasethi edatha akhethiweyo atholakalayo emsebenzini wemephu.",
       "localAdmins": "Nikeza abanye abantu ilungelo lokuhlela imithetho yokufinyelela."
-    }
+    },
+    "openSettings": "Vula izilungiselelo"
   },
   "limits": {
     "title": "Imikhawulo yokusetshenziswa",
@@ -4173,6 +4174,56 @@
     "addScopedLimit": "Engeza umkhawulo womndeni noma imodeli…",
     "removeScopedLimit": "Susa lo mkhawulo",
     "unknownQualifier": "akusikho kukhathalogi yakho",
-    "unknownQualifierHint": "Le modeli noma umndeni awutholakali kulesi sifunda noma indandatho. Umkhawulo uyagcinwa futhi usebenza noma yikuphi lapho khona."
+    "unknownQualifierHint": "Le modeli noma umndeni awutholakali kulesi sifunda noma indandatho. Umkhawulo uyagcinwa futhi usebenza noma yikuphi lapho khona.",
+    "group": {
+      "chat": "Umsebenzi wezingxoxo",
+      "models": "Amamodeli",
+      "webSearch": "Ukusesha kuwebhu",
+      "codeInterpreter": "Umhumushi wekhodi",
+      "mcp": "Izixhumi (MCP)",
+      "readAloud": "Funda ngokuzwakalayo",
+      "transcription": "Ukuhumusha",
+      "uploads": "Ukulayishwa kwamafayela",
+      "translation": "Ukuhumusha kwemibhalo"
+    },
+    "gateOffDimNote": "Akusebenza uma i-{feature} icishiwe. Inani ligcinwa futhi lizosebenza futhi uma {feature} ivulwa kabusha.",
+    "gateOffConsequence": {
+      "webSearch": "Icishiwe: imilayezo ezama ukusesha kuwebhu iyenqatshwa ngesaziso sokuthi umphathi ucishile lo msebenzi.",
+      "codeInterpreter": "Icishiwe: imilayezo ezama ukusebenzisa ikhodi iyenqatshwa ngesaziso sokuthi umphathi ucishile lo msebenzi.",
+      "mcp": "Icishiwe: imilayezo esebenzisa izixhumi iyenqatshwa ngesaziso sokuthi umphathi ucishile lo msebenzi."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Ukuvimba ukusesha kule ndlela kunokuthula: izingxoxo ziyaqhubeka bese ukusesha kuyashiywa. Ukuze kunqatshwe ngenxusa elicacile, cima i-Web search ngenhla.",
+      "codeInterpreter": "Ukuvimba ukusebenza kwekhodi kule ndlela kunokuthula: izingxoxo ziyaqhubeka bese ukusebenza kwekhodi kuyashiywa. Ukuze kunqatshwe ngenxusa elicacile, cima i-Code interpreter ngenhla.",
+      "mcp": "Izinga elingu-zero limisa amathuluzi esixhumi mathupha ngesikhathi izingxoxo ziqhubeka. Ukuze kunqatshwe ngenxusa elicacile, cima i-Connectors ngenhla."
+    },
+    "overrideGateOffNote": "{feature} icishiwe okwamanje kulaba bantu (lapha noma ngenxa yokusethwa okujwayelekile), ngakho lesi simiso asisebenzi ngaphandle kokuthi {feature} ivulwe kabusha.",
+    "untitledOverride": "Okuvimbelayo okungelona igama",
+    "expandOverride": "Yandisa okuvimbelayo",
+    "collapseOverride": "Nciphisa okuvimbelayo",
+    "overrideDisabledChip": "Ikhutshiwe",
+    "targetsCount": "{count, plural, one {# umgomo} other {# imigomo}}",
+    "limitsCount": "{count, plural, one {# umkhawulo usethwe} other {# imikhawulo isethwe}}",
+    "addLimitLabel": "Faka umkhawulo kule mvume",
+    "addLimitPlaceholder": "Faka umkhawulo…",
+    "unrecognizedEntries": "Kugcinwe uhlelo lohlelo olusha — kugcinwe njengoba kunjalo, lungahle luhleliwe lapho:",
+    "priorityLabel": "Okuqala",
+    "priorityHint": "Uma okunye okufanayo kusebenze kumuntu oyedwa, okuboniswe njengokubaluleke kakhulu kuyawina.",
+    "previewTitle": "Hlola imikhawulo yomuntu",
+    "previewDescription": "Bona okutholakala ngempela kumuntu nomthelela walokhu kuvimba.",
+    "previewEmailLabel": "Ikheli le-imeyili okufanele lihlolwe",
+    "previewEmailPlaceholder": "name@example.org",
+    "previewRun": "Hlola",
+    "previewLoading": "Kuyaxazululwa…",
+    "previewFailed": "Akukwazekanga ukuthola imikhawulo yalomuntu.",
+    "previewForbidden": "Kubavunyelwe kuphela abaphathi abakhulu ukubuka imikhawulo yabanye.",
+    "previewSourceCatalog": "Okuziyelayelayo kuqala",
+    "previewSourceGlobal": "Okumisiwe emhlabeni wonke",
+    "previewSourceOverride": "Okuphambili: {label}",
+    "previewNotEvaluated": "Ukuvinjelwa kwedipatimende/inkampani/ihhovisi namaqembu akukwazi ukuhlolwa lapha — kuncike ekungeneni komuntu mathupha.",
+    "previewUnsaved": "Kubukwa inqubomgomo egcinwe okokugcina. Londoloza izinguquko zakho ukuze uzibuke.",
+    "previewColumnLimit": "Umkhawulo",
+    "previewColumnValue": "Inani",
+    "previewColumnSource": "Kumiswe ngu-"
   }
 }

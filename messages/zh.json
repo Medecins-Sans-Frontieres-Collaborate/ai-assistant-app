@@ -4081,7 +4081,8 @@
       "guides": "风格、术语与合规指南。",
       "mapDatasets": "地图工作流可用的精选数据集。",
       "localAdmins": "将访问规则编辑权限委托给他人。"
-    }
+    },
+    "openSettings": "打开设置"
   },
   "limits": {
     "title": "使用限制",
@@ -4220,6 +4221,56 @@
     "addScopedLimit": "为系列或模型添加限制…",
     "removeScopedLimit": "移除此限制",
     "unknownQualifier": "当前目录中不存在",
-    "unknownQualifierHint": "该模型或系列在此区域或渠道不可用。限制仍会保留，并在可用的地方生效。"
+    "unknownQualifierHint": "该模型或系列在此区域或渠道不可用。限制仍会保留，并在可用的地方生效。",
+    "group": {
+      "chat": "聊天活动",
+      "models": "模型",
+      "webSearch": "网页搜索",
+      "codeInterpreter": "代码解释器",
+      "mcp": "连接器（MCP）",
+      "readAloud": "朗读",
+      "transcription": "转录",
+      "uploads": "文件上传",
+      "translation": "文档翻译"
+    },
+    "gateOffDimNote": "当{feature}已关闭时不适用。数值将被保留，若功能重新开启则生效。",
+    "gateOffConsequence": {
+      "webSearch": "已关闭：尝试进行网页搜索的消息将被拒绝，并显示管理员已禁用该功能的信息。",
+      "codeInterpreter": "已关闭：尝试运行代码的消息将被拒绝，并显示管理员已禁用该功能的信息。",
+      "mcp": "已关闭：使用连接器的消息将被拒绝，并显示管理员已禁用该功能的信息。"
+    },
+    "capBlockedConsequence": {
+      "webSearch": "通过此方式屏蔽搜索是静默处理：聊天继续，仅跳过搜索。若需明确拒绝，请在上方关闭网页搜索。",
+      "codeInterpreter": "通过此方式屏蔽运行是静默处理：聊天继续，仅跳过代码运行。若需明确拒绝，请在上方关闭代码解释器。",
+      "mcp": "将轮数设为零会静默阻止连接器工具运行，聊天继续。若需明确拒绝，请在上方关闭连接器。"
+    },
+    "overrideGateOffNote": "{feature} 当前对这些用户已关闭（在此或按全局默认），因此此限制除非功能重新开启，否则无效。",
+    "untitledOverride": "未命名覆盖",
+    "expandOverride": "展开覆盖",
+    "collapseOverride": "收起覆盖",
+    "overrideDisabledChip": "已禁用",
+    "targetsCount": "{count, plural, one {# 个目标} other {# 个目标}}",
+    "limitsCount": "{count, plural, one {# 个限制集} other {# 个限制集}}",
+    "addLimitLabel": "为此覆盖添加限制",
+    "addLimitPlaceholder": "添加限制…",
+    "unrecognizedEntries": "由新版本应用保存——原样保留，可于新版本编辑：",
+    "priorityLabel": "优先级",
+    "priorityHint": "如有同类覆盖同时匹配同一人，则优先级高者生效。",
+    "previewTitle": "查看个人的实际限制",
+    "previewDescription": "查看某人实际获得的权限及相应的覆盖来源。",
+    "previewEmailLabel": "要查询的邮箱地址",
+    "previewEmailPlaceholder": "name@example.org",
+    "previewRun": "查询",
+    "previewLoading": "正在解析…",
+    "previewFailed": "无法解析此人的限制。",
+    "previewForbidden": "只有全局管理员可以预览他人的限制。",
+    "previewSourceCatalog": "内置默认",
+    "previewSourceGlobal": "全局默认",
+    "previewSourceOverride": "覆盖：{label}",
+    "previewNotEvaluated": "部门/公司/办公室及分组的覆盖无法在此评估——取决于本人登录信息。",
+    "previewUnsaved": "显示最后保存的策略。如需预览更改，请先保存。",
+    "previewColumnLimit": "限制项",
+    "previewColumnValue": "数值",
+    "previewColumnSource": "赋值方式"
   }
 }

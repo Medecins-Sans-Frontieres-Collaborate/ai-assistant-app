@@ -4050,7 +4050,8 @@
       "guides": "Guies d'estil, terminologia i compliment.",
       "mapDatasets": "Jocs de dades seleccionats disponibles pel flux de mapes.",
       "localAdmins": "Delegar l’edició de normes d’accés a altres persones."
-    }
+    },
+    "openSettings": "Obre la configuració"
   },
   "limits": {
     "title": "Límits d'ús",
@@ -4189,6 +4190,56 @@
     "addScopedLimit": "Afegeix un límit per a una família o model…",
     "removeScopedLimit": "Elimina aquest límit",
     "unknownQualifier": "no està al teu catàleg actual",
-    "unknownQualifierHint": "Aquest model o família no està disponible en aquesta regió o anell. El límit es manté i s'aplica allà on estigui disponible."
+    "unknownQualifierHint": "Aquest model o família no està disponible en aquesta regió o anell. El límit es manté i s'aplica allà on estigui disponible.",
+    "group": {
+      "chat": "Activitat de xat",
+      "models": "Models",
+      "webSearch": "Cerca web",
+      "codeInterpreter": "Intèrpret de codi",
+      "mcp": "Connectors (MCP)",
+      "readAloud": "Lectura en veu alta",
+      "transcription": "Transcripció",
+      "uploads": "Pujada de fitxers",
+      "translation": "Traducció de documents"
+    },
+    "gateOffDimNote": "No s'aplica mentre {feature} estigui desactivat. El valor es conserva i tornarà a tenir efecte si es torna a activar la funció.",
+    "gateOffConsequence": {
+      "webSearch": "Desactivat: es rebutgen els missatges que intenten cercar al web amb un avís que diu que un administrador ha desactivat la funció.",
+      "codeInterpreter": "Desactivat: es rebutgen els missatges que intenten executar codi amb un avís que diu que un administrador ha desactivat la funció.",
+      "mcp": "Desactivat: es rebutgen els missatges que utilitzen connectors amb un avís que diu que un administrador ha desactivat la funció."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "El bloqueig de cerques d'aquesta manera és silenciós: el xat continua i la cerca simplement s'omet. Si prefereixes rebutjar amb un missatge explícit, desactiva la Cerca web més amunt.",
+      "codeInterpreter": "El bloqueig d'execucions d'aquesta manera és silenciós: el xat continua i l'execució de codi simplement s'omet. Si prefereixes rebutjar amb un missatge explícit, desactiva l'Intèrpret de codi més amunt.",
+      "mcp": "Zero rondes fa que les eines de connectors no s'executin mai mentre el xat continua de manera silenciosa. Si prefereixes rebutjar amb un missatge explícit, desactiva els Connectors més amunt."
+    },
+    "overrideGateOffNote": "{feature} està actualment desactivat per a aquestes persones (aquí o per la configuració global), així que aquest límit no farà efecte tret que la funció es torni a activar.",
+    "untitledOverride": "Desviació sense títol",
+    "expandOverride": "Expandeix la desviació",
+    "collapseOverride": "Redueix la desviació",
+    "overrideDisabledChip": "Desactivat",
+    "targetsCount": "{count, plural, one {# destinatari} other {# destinataris}}",
+    "limitsCount": "{count, plural, one {# límit establert} other {# límits establerts}}",
+    "addLimitLabel": "Afegeix un límit a aquesta desviació",
+    "addLimitPlaceholder": "Afegeix un límit…",
+    "unrecognizedEntries": "Desat per una versió més nova de l'aplicació — es manté tal com està, s'ha d'editar allà:",
+    "priorityLabel": "Prioritat",
+    "priorityHint": "Quan dues desviacions del mateix tipus coincideixen per a la mateixa persona, guanya la de prioritat més alta.",
+    "previewTitle": "Consulta els límits efectius d'una persona",
+    "previewDescription": "Consulta què rep realment algú i quina desviació estableix cada valor.",
+    "previewEmailLabel": "Correu electrònic a consultar",
+    "previewEmailPlaceholder": "nom@example.org",
+    "previewRun": "Consulta",
+    "previewLoading": "S'està resolent…",
+    "previewFailed": "No s'han pogut resoldre els límits d'aquesta persona.",
+    "previewForbidden": "Només els administradors globals poden previsualitzar els límits d'altres persones.",
+    "previewSourceCatalog": "Predeterminat integrat",
+    "previewSourceGlobal": "Predeterminat global",
+    "previewSourceOverride": "Desviació: {label}",
+    "previewNotEvaluated": "Les desviacions per departament/empresa/oficina i grup no es poden avaluar aquí — depenen de l'inici de sessió de la persona.",
+    "previewUnsaved": "Es mostra la darrera política desada. Desa els canvis per previsualitzar-los.",
+    "previewColumnLimit": "Límit",
+    "previewColumnValue": "Valor",
+    "previewColumnSource": "Establert per"
   }
 }

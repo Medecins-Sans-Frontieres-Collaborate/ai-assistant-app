@@ -4050,7 +4050,8 @@
       "guides": "የዘዴ፣ ቃላት አጠቃቀም እና የጥራት መመሪያዎች።",
       "mapDatasets": "ለካርታ ስራ ከተመረጡ ዳታሴቶች ዝግጁ ናቸው።",
       "localAdmins": "የመዳረሻ ደንብ ማስተካከያን ለሌሎች ሰዎች ውስጥ ይልፉ።"
-    }
+    },
+    "openSettings": "ማቀናበሪያዎችን ክፈት"
   },
   "limits": {
     "title": "የአጠቃቀም ገደቦች",
@@ -4189,6 +4190,56 @@
     "addScopedLimit": "ለቤተሰብ ወይም ለሞዴል ገደብ ያክሉ…",
     "removeScopedLimit": "ይህን ገደብ ያስወግዱ",
     "unknownQualifier": "በዚህ አሁን በሚጠቀሙበት ካታሎግ ውስጥ አይቀርም",
-    "unknownQualifierHint": "ይህ ሞዴል ወይም ቤተሰብ በዚህ ክልል ወይም ring ውስጥ አልተገኘም። ገደቡ አሁንም እ.ኤ.አ የተቻለ በሚኖረው ቦታ ይቀጥላል።"
+    "unknownQualifierHint": "ይህ ሞዴል ወይም ቤተሰብ በዚህ ክልል ወይም ring ውስጥ አልተገኘም። ገደቡ አሁንም እ.ኤ.አ የተቻለ በሚኖረው ቦታ ይቀጥላል።",
+    "group": {
+      "chat": "የቻት እንቅስቃሴ",
+      "models": "ሞዴሎች",
+      "webSearch": "የድህረገፅ ፍለጋ",
+      "codeInterpreter": "ኮድ ትርጉም አድራጊ",
+      "mcp": "ኮኔክተሮች (MCP)",
+      "readAloud": "ድምፅ በማንበብ",
+      "transcription": "የድምፅ ቅድሚያ",
+      "uploads": "የፋይል መጫኛዎች",
+      "translation": "የሰነድ ትርጉም"
+    },
+    "gateOffDimNote": "{feature} ከተጠፋ ሳለ አይተገበምም። ዋጋው ይጠበቃል እና ባለፈው እንደተቀመጠ ይቆያል ፣ ባግማት ሲነሳ ድጋሚ ይተገበራል።",
+    "gateOffConsequence": {
+      "webSearch": "ተጠፍቷል፡ የድህረገፅ ፍለጋ ለማድረግ የተሞከሩ መልእክቶች ባህሪያዊ ተአምራት ተሰናብተዋል ብሎ በአስተዳዳሪ መስከት ይከለካሉ።",
+      "codeInterpreter": "ተጠፍቷል፡ ኮድ ለማስኬድ የተሞከሩ መልእክቶች በአስተዳዳሪ ተሰናብተዋል ብሎ መልእክት ይቀርባቸዋል።",
+      "mcp": "ተጠፍቷል፡ ኮኔክተሮች ለማጠቀም የተሞከሩ መልእክቶች በአስተዳዳሪ ተሰናብተዋል ብሎ መልእክት ይቀርባቸዋል።"
+    },
+    "capBlockedConsequence": {
+      "webSearch": "በዚህ መንገድ ፍለጋዎችን መከለከል ዝም ብሎ ነው፡ ቻቶች ይቀጥላሉ፣ ፍለጉ ብቻ ይቀርባል። እስቲ በግልጽ መልእክት መከለከል ከፈለጉ፣ ከላይ የድህረገፅ ፍለጋ ይጠፉ።",
+      "codeInterpreter": "በዚህ መንገድ ኮድ ማስኬድን መከለከል ዝም ብሎ ነው፡ ቻቶች ይቀጥላሉ እና የኮድ አከፋፈል ይቀይራል። በግልጽ መልእክት መከለከል ከፈለጉ፣ ከላይ ኮድ ትርጉም አድራጊ ይጠፉ።",
+      "mcp": "ዜሮ ዙሮች ምንም ጊዜ ኮኔክተሩ መሳሪያዎች እንዳይሰሩ በዝም ብሎ ይቆማል። በግልጽ መልእክት መከለከል ከፈለጉ፣ ኮኔክተሮችን ከላይ ይጠፉ።"
+    },
+    "overrideGateOffNote": "{feature} በአሁኑ ሰዓት ለእነዚህ ሰዎች (ከዚህ ወይም በጠቅላላ ነባሪ መቼ) ተዘግቷል፣ ስለዚህ ይህ ገደብ እስካንዳንዱ አይተገበምዋቸውም እስከ አንዱ መመለሱ ድረስ።",
+    "untitledOverride": "ስም የሌለው መቀየሪያ",
+    "expandOverride": "መቀየሪያ አሰፋ",
+    "collapseOverride": "መቀየሪያ አጠብቅ",
+    "overrideDisabledChip": "ተሰናብቷል",
+    "targetsCount": "{count, plural, one {# ግባች} other {# ግቦች}}",
+    "limitsCount": "{count, plural, one {# ገደብ ተያይዟል} other {# ገደቦች ተያይዛሉ}}",
+    "addLimitLabel": "በዚህ መቀየሪያ ገደብ ያክሉ",
+    "addLimitPlaceholder": "ገደብ ያክሉ…",
+    "unrecognizedEntries": "በአዲስ ስሪት የተቀመጡ — እነዚህን ወደዚያ ሄደው ይማሩ፡",
+    "priorityLabel": "ቅደም ተከተል",
+    "priorityHint": "ተመሳሳይ በደረጃ ሁለት መቀየሪያዎች ሲያመሳሰሉ ከፍተኛው ቅደም ተከተል ይሸናፋል።",
+    "previewTitle": "የሰዎችን ተግባራዊ ገደቦች ይመልከቱ",
+    "previewDescription": "ሰው ትክክል የሚቀበለውን እና ያንን የሚያወጣውን መቀየርያ ይመልከቱ።",
+    "previewEmailLabel": "የኢሜይል አድራሻ ለመፈተን",
+    "previewEmailPlaceholder": "name@example.org",
+    "previewRun": "ይፈትኑ",
+    "previewLoading": "በማስተካከል…",
+    "previewFailed": "የዚህ ሰው ገደቦች ማግኘት አልተቻለም።",
+    "previewForbidden": "መቀየሪያ ያየ የሕብረት አስተዳዳሪዎች ብቻ የሰዎችን ገደቦች ማረጋገጥ ይችላሉ።",
+    "previewSourceCatalog": "የተካተተው ነባሪ",
+    "previewSourceGlobal": "የአለም አቀፍ ነባሪ",
+    "previewSourceOverride": "መቀየሪያ፡ {label}",
+    "previewNotEvaluated": "የዳፓርትመንት/ኩባንያ/ቢሮ እና የቡድን መቀየሪያዎች እዚህ ላይ ሊወገዱ አይችሉም — በሰዉ የግል ወረዳ መንካት ይገባዋል።",
+    "previewUnsaved": "መጨረሻ የተቀመጠውን ፖሊሲ እየተሳየ ነው። ለመኖር ለዚያ ለውጦት ይቀመጡ።",
+    "previewColumnLimit": "ገደብ",
+    "previewColumnValue": "ዋጋ",
+    "previewColumnSource": "የተመደበው"
   }
 }

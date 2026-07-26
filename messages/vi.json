@@ -4081,7 +4081,8 @@
       "guides": "Hướng dẫn về phong cách, thuật ngữ và tuân thủ.",
       "mapDatasets": "Các bộ dữ liệu đã chọn sẵn cho quy trình bản đồ.",
       "localAdmins": "Phân quyền chỉnh sửa quy tắc truy cập cho người khác."
-    }
+    },
+    "openSettings": "Mở cài đặt"
   },
   "limits": {
     "title": "Giới hạn sử dụng",
@@ -4220,6 +4221,56 @@
     "addScopedLimit": "Thêm giới hạn cho nhóm hoặc mô hình…",
     "removeScopedLimit": "Xóa giới hạn này",
     "unknownQualifier": "không có trong danh mục hiện tại của bạn",
-    "unknownQualifierHint": "Mô hình hoặc nhóm này không khả dụng ở khu vực hoặc ring này. Giới hạn vẫn giữ nguyên và áp dụng ở nơi có sẵn."
+    "unknownQualifierHint": "Mô hình hoặc nhóm này không khả dụng ở khu vực hoặc ring này. Giới hạn vẫn giữ nguyên và áp dụng ở nơi có sẵn.",
+    "group": {
+      "chat": "Hoạt động trò chuyện",
+      "models": "Mô hình",
+      "webSearch": "Tìm kiếm web",
+      "codeInterpreter": "Trình thông dịch mã",
+      "mcp": "Kết nối (MCP)",
+      "readAloud": "Đọc to",
+      "transcription": "Chép văn bản",
+      "uploads": "Tải tệp lên",
+      "translation": "Dịch tài liệu"
+    },
+    "gateOffDimNote": "Không áp dụng khi {feature} đang tắt. Giá trị này được giữ nguyên và sẽ có hiệu lực trở lại nếu bật tính năng này.",
+    "gateOffConsequence": {
+      "webSearch": "Khi tắt: các tin nhắn cố gắng tìm kiếm trên web sẽ bị từ chối kèm thông báo quản trị viên đã vô hiệu hóa tính năng này.",
+      "codeInterpreter": "Khi tắt: các tin nhắn cố gắng chạy mã sẽ bị từ chối kèm thông báo quản trị viên đã vô hiệu hóa tính năng này.",
+      "mcp": "Khi tắt: các tin nhắn sử dụng kết nối sẽ bị từ chối kèm thông báo quản trị viên đã vô hiệu hóa tính năng này."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Việc chặn tìm kiếm theo cách này sẽ không thông báo: trò chuyện vẫn tiếp tục, tìm kiếm chỉ bị bỏ qua. Để từ chối kèm thông báo, hãy tắt Tìm kiếm web ở trên.",
+      "codeInterpreter": "Việc chặn chạy mã theo cách này sẽ không thông báo: trò chuyện vẫn tiếp tục, việc chạy mã chỉ bị bỏ qua. Để từ chối kèm thông báo, hãy tắt Trình thông dịch mã ở trên.",
+      "mcp": "Đặt về 0 lần khiến công cụ kết nối luôn dừng yên mà không có thông báo, trò chuyện vẫn tiếp tục. Để từ chối kèm thông báo, hãy tắt Kết nối ở trên."
+    },
+    "overrideGateOffNote": "{feature} hiện đang bị tắt cho những người này (ở đây hoặc theo mặc định chung), do đó giới hạn này sẽ không có hiệu lực trừ khi tính năng được bật lại.",
+    "untitledOverride": "Ghi đè chưa đặt tên",
+    "expandOverride": "Mở rộng ghi đè",
+    "collapseOverride": "Thu gọn ghi đè",
+    "overrideDisabledChip": "Đã tắt",
+    "targetsCount": "{count, plural, one {# đối tượng} other {# đối tượng}}",
+    "limitsCount": "{count, plural, one {# giới hạn} other {# giới hạn}}",
+    "addLimitLabel": "Thêm giới hạn vào ghi đè này",
+    "addLimitPlaceholder": "Thêm giới hạn…",
+    "unrecognizedEntries": "Được lưu bởi phiên bản ứng dụng mới hơn — giữ nguyên, chỉnh sửa tại đó:",
+    "priorityLabel": "Độ ưu tiên",
+    "priorityHint": "Khi hai ghi đè cùng loại áp dụng cho một người, ghi đè có ưu tiên cao hơn sẽ được sử dụng.",
+    "previewTitle": "Kiểm tra giới hạn thực tế của một người",
+    "previewDescription": "Xem thực tế ai sẽ nhận gì và ghi đè nào đặt từng giá trị.",
+    "previewEmailLabel": "Địa chỉ email để kiểm tra",
+    "previewEmailPlaceholder": "name@example.org",
+    "previewRun": "Kiểm tra",
+    "previewLoading": "Đang kiểm tra…",
+    "previewFailed": "Không thể kiểm tra giới hạn của người này.",
+    "previewForbidden": "Chỉ quản trị viên toàn hệ thống mới được xem trước giới hạn của người khác.",
+    "previewSourceCatalog": "Giá trị mặc định tích hợp",
+    "previewSourceGlobal": "Giá trị mặc định toàn hệ thống",
+    "previewSourceOverride": "Ghi đè: {label}",
+    "previewNotEvaluated": "Không thể kiểm tra ghi đè theo phòng ban/công ty/văn phòng và nhóm tại đây — cần đăng nhập tài khoản của người đó.",
+    "previewUnsaved": "Đang hiển thị chính sách vừa lưu gần nhất. Hãy lưu các thay đổi để kiểm tra chúng.",
+    "previewColumnLimit": "Giới hạn",
+    "previewColumnValue": "Giá trị",
+    "previewColumnSource": "Thiết lập bởi"
   }
 }

@@ -4034,7 +4034,8 @@
       "guides": "Doole, mbindi e toroo mabbe e ɗaɓɓugol.",
       "mapDatasets": "Rewle data boosu ɗee heɓan laawol feccere.",
       "localAdmins": "Yetoo heɓtol wannga kanko mo woni e yeeso doggol huutorde."
-    }
+    },
+    "openSettings": "Hollu teeltorde"
   },
   "limits": {
     "title": "Doggol hoore nguum",
@@ -4173,6 +4174,56 @@
     "addScopedLimit": "Ɓeydu hakkunde sarɗi walla moodel...",
     "removeScopedLimit": "Momtu hakkunde ndee",
     "unknownQualifier": "soyaataa e katalog maa",
-    "unknownQualifierHint": "Moodel walla sarɗi ndee waawataa usaade e gese ndee. Hakkunde hinndee cuɓir o jokkondir so e jamfa o gese."
+    "unknownQualifierHint": "Moodel walla sarɗi ndee waawataa usaade e gese ndee. Hakkunde hinndee cuɓir o jokkondir so e jamfa o gese.",
+    "group": {
+      "chat": "Haala cuɓoraaɗe",
+      "models": "Moode",
+      "webSearch": "Yiyde Web",
+      "codeInterpreter": "Faccitaare code",
+      "mcp": "Connectors (MCP)",
+      "readAloud": "Nana dabbita innde",
+      "transcription": "Nana yaroo",
+      "uploads": "Nana dawal fayli",
+      "translation": "Tarjamdere dokumii"
+    },
+    "gateOffDimNote": "Ko waawi jannginde so {feature} ko cuɓii. Ndimaagu maa ngolli, tee so cuɓitirde ɗoo hono, mbaɗo e hoore mum.",
+    "gateOffConsequence": {
+      "webSearch": "Sanii cuɓii: ñiiɓe mbaɗataa yiyde Web, tuma woni topirde en, nde jeyaa admin miniri feature ɗi.",
+      "codeInterpreter": "Sanii cuɓii: ñiiɓe mbaɗataa hulnde code, ndema sandi hol ko admin miniri feature ɗi.",
+      "mcp": "Sanii cuɓii: ñiiɓe mbaɗataa huutora connectors, ndema sandi hol ko admin miniri feature ɗi."
+    },
+    "capBlockedConsequence": {
+      "webSearch": "Jokka yiyde e ɗoo sappo: haala cuɓoraaɗe nanndataa, tee yiyde nanndatee. So ina ndeenndoraa e sandi, cuɓ Web search to foore.",
+      "codeInterpreter": "Jokka hulnde e ɗoo sappo: haala cuɓoraaɗe nanndataa, tee hulnde code nanndatee. So ina ndeenndoraa e sandi, cuɓ Code interpreter to foore.",
+      "mcp": "Jokkitorde tool ceɗɗo nanndora connectors, haala cuɓoraaɗe nanndataa. So ina sandi e feccere, cuɓ Connectors to foore."
+    },
+    "overrideGateOffNote": "{feature} cuɓii lesdi ɗi waɗi (e heɓo walla jokke e default), ndimaagu ɗii lowi so feccere cuɓitirde e hoore mum.",
+    "untitledOverride": "Sokle feccere hooli",
+    "expandOverride": "Bullit feccere",
+    "collapseOverride": "Siifti feccere",
+    "overrideDisabledChip": "Cuɓii",
+    "targetsCount": "{count, plural, one {# cuɓiraaɗo} other {# cuɓiraaɓe}}",
+    "limitsCount": "{count, plural, one {# teelte suɓa} other {# teelte ɓe suɓa}}",
+    "addLimitLabel": "Tambah teelte e feccere ɗii",
+    "addLimitPlaceholder": "Tambah teelte…",
+    "unrecognizedEntries": "Danndito e njoɓdi mum ñaami—tuuttore haɗi, jokkude e ɗoo:",
+    "priorityLabel": "Moƴƴere",
+    "priorityHint": "So feccere ɓiɗɗi ndawri e kisa, moƴƴere nokkuɗo laabi.",
+    "previewTitle": "Finno teelte kuure hoore jeyaa",
+    "previewDescription": "Hollu ne ɗum mo waɗa, haa hol teelte ɗi soodita kisa.",
+    "previewEmailLabel": "Caggal imeel ma finni",
+    "previewEmailPlaceholder": "name@example.org",
+    "previewRun": "Finni",
+    "previewLoading": "Danndinde…",
+    "previewFailed": "Haa waawaani moƴƴude teelte hoore kuure ɗii.",
+    "previewForbidden": "Kesol admin dow lesdi waawa finndude teelte hoore ɓe.",
+    "previewSourceCatalog": "Default e jamfaare",
+    "previewSourceGlobal": "Default lesdi",
+    "previewSourceOverride": "Feccere: {label}",
+    "previewNotEvaluated": "Override departement/kompanii/birni e grup ɓe waawaani njuulude e ɗoo—ko kuure ndiyan signin mum laaɓi.",
+    "previewUnsaved": "Nana hollu yamiro jokkondirde kisa. Danndu cawre maa jokkude ɓe finnoo.",
+    "previewColumnLimit": "Teelte",
+    "previewColumnValue": "Fiilde",
+    "previewColumnSource": "Soodi juutere"
   }
 }
