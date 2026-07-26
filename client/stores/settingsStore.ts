@@ -300,6 +300,14 @@ interface SettingsStore {
   /** User opt-in for cross-conversation Memories (default off). */
   memoriesEnabled: boolean;
   /**
+   * Pauses automatic memory CAPTURE while leaving injection untouched: the
+   * memories already saved keep reaching the system prompt, but no new ones
+   * are extracted. Negative polarity is deliberate — an undefined value
+   * (skipped or partial migration) is falsy and so means "behave as before",
+   * never "silently stop capturing".
+   */
+  memoryCapturePaused: boolean;
+  /**
    * Runtime-only mirror of the LaunchDarkly `enableMemories` flag, set by
    * AppInitializer so vanilla stores (chatStore) can gate without hook
    * access (same pattern as mcpArbitraryFlagEnabled). Fail-closed: defaults
@@ -518,6 +526,7 @@ interface SettingsStore {
   setContextWindowSize: (size: number) => void;
   setMemoriesEnabled: (enabled: boolean) => void;
   setMemoriesFlagEnabled: (enabled: boolean) => void;
+  setMemoryCapturePaused: (paused: boolean) => void;
 
   // Saved Structure Actions
   setSavedStructures: (structures: SavedStructure[]) => void;
@@ -749,6 +758,7 @@ export const useSettingsStore = create<SettingsStore>()(
       contextWindowSize: DEFAULT_CONTEXT_WINDOW_SIZE,
       memoriesEnabled: false,
       memoriesFlagEnabled: false,
+      memoryCapturePaused: false,
       hiddenModelIds: [],
       starredModelIds: [],
       tokenUsageStats: {},
@@ -1161,6 +1171,8 @@ export const useSettingsStore = create<SettingsStore>()(
       setMemoriesFlagEnabled: (enabled) =>
         set({ memoriesFlagEnabled: enabled }),
 
+      setMemoryCapturePaused: (paused) => set({ memoryCapturePaused: paused }),
+
       // Hidden Model/Agent Actions. Hiding unstars: a model can't be both
       // surfaced in "Your models" and hidden from the picker.
       hideModel: (id) =>
@@ -1548,6 +1560,7 @@ export const useSettingsStore = create<SettingsStore>()(
           allowArbitraryMcpServers: false,
           contextWindowSize: DEFAULT_CONTEXT_WINDOW_SIZE,
           memoriesEnabled: false,
+          memoryCapturePaused: false,
           hiddenModelIds: [],
           starredModelIds: [],
           tokenUsageStats: {},
@@ -1590,7 +1603,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 48, // Increment this when schema changes to trigger migrations
+      version: 49, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1645,6 +1658,7 @@ export const useSettingsStore = create<SettingsStore>()(
         toolApprovalRules: state.toolApprovalRules,
         contextWindowSize: state.contextWindowSize,
         memoriesEnabled: state.memoriesEnabled,
+        memoryCapturePaused: state.memoryCapturePaused,
         hiddenModelIds: state.hiddenModelIds,
         starredModelIds: state.starredModelIds,
         tokenUsageStats: state.tokenUsageStats,
@@ -2158,6 +2172,14 @@ export const useSettingsStore = create<SettingsStore>()(
           state.webSearchOptions = sanitizeWebSearchOptions(
             state.webSearchOptions,
           );
+        }
+
+        // Version 48 → 49: Pause-capture toggle for Memories. Backfill to
+        // not-paused so an existing opt-in keeps capturing as it did.
+        if (version < 49) {
+          if (typeof state.memoryCapturePaused !== 'boolean') {
+            state.memoryCapturePaused = false;
+          }
         }
 
         return state;

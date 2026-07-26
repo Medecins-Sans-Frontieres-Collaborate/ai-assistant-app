@@ -17,6 +17,8 @@ import { SettingDialog } from '@/components/Settings/SettingDialog';
 import { Sidebar } from '@/components/Sidebar/Sidebar';
 import { StorageWarningDialog } from '@/components/Storage/StorageWarningDialog';
 
+import { usePathname } from '@/lib/navigation';
+
 /**
  * Check if migration dialog should be shown.
  * Returns true if legacy data exists and user hasn't skipped migration.
@@ -39,6 +41,13 @@ function shouldShowMigrationDialog(): boolean {
  */
 export function ChatShell({ children }: { children: React.ReactNode }) {
   const { showChatbar } = useUI();
+  // Admin is a full-page surface like the help center: the conversation
+  // sidebar is not interactable there and only confuses the UI, so it is
+  // not rendered and the content takes the full viewport. Admin stays
+  // inside this shell (rather than its own route group) so the settings
+  // modal host below remains mounted — AdminShell's gear opens it directly.
+  const pathname = usePathname();
+  const isAdminRoute = pathname === '/admin' || pathname.startsWith('/admin/');
   // Use lazy initialization to check for legacy data on first render
   const [showMigrationDialog, setShowMigrationDialog] = useState(
     shouldShowMigrationDialog,
@@ -97,12 +106,16 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
           under the URL bar. `w-full` rather than `w-screen` because `100vw`
           includes the scrollbar gutter and overflows horizontally. */}
       <div className="flex h-dvh w-full overflow-hidden">
-        <Sidebar />
+        {!isAdminRoute && <Sidebar />}
 
         <div
-          className={`flex min-w-0 flex-1 transition-all duration-300 ease-in-out ${
-            showChatbar ? 'md:ml-[260px]' : 'md:ml-14'
-          }`}
+          className={
+            isAdminRoute
+              ? 'flex min-w-0 flex-1'
+              : `flex min-w-0 flex-1 transition-all duration-300 ease-in-out ${
+                  showChatbar ? 'md:ml-[260px]' : 'md:ml-14'
+                }`
+          }
         >
           {children}
         </div>

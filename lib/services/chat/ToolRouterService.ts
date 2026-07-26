@@ -32,6 +32,8 @@ export class ToolRouterService {
         attributes: {
           'tool_router.force_web_search': request.forceWebSearch || false,
           'tool_router.message_length': request.currentMessage.length,
+          'tool_router.has_user_provided_content':
+            request.hasUserProvidedContent || false,
         },
       },
       async (span) => {
@@ -41,6 +43,7 @@ export class ToolRouterService {
             forceWebSearch,
             forceCodeInterpreter,
             hasPriorSearchCitations,
+            hasUserProvidedContent,
           } = request;
           const considerCodeExecution =
             request.considerCodeExecution || forceCodeInterpreter;
@@ -101,6 +104,12 @@ IMPORTANT: Always provide codeTask in your response:
 - If needsCodeExecution is false, provide an empty string`
               : '';
 
+            const providedContentPromptSection = hasUserProvidedContent
+              ? `
+
+CRITICAL: The user supplied their own source material this turn (uploaded files and/or a large pasted text block) that they want processed. Default to needsWebSearch=false — pulling in web results would dilute the sources they provided. Set needsWebSearch=true ONLY when the message EXPLICITLY asks to search the web or bring in external/up-to-date information (e.g. "search for...", "look this up online", "find recent news about...", "compare this with current data"). Summarizing, analyzing, translating, rewriting, extracting from, or answering questions about the provided material is NOT a search request, even when that material mentions current events.`
+              : '';
+
             const followUpPromptSection = hasPriorSearchCitations
               ? `
 
@@ -129,7 +138,7 @@ Web search is NOT needed for:
 - Mathematical calculations
 - Creative writing, brainstorming
 - Personal advice, opinions
-- Questions about uploaded files or images
+- Questions about uploaded files or images${providedContentPromptSection}
 
 IMPORTANT: Always provide searchQuery in your response:
 - If needsWebSearch is true, provide a CONCISE search-engine query: 3-8 keywords, ONE topic, no question words ("what", "where", "why"), no filler ("current updates", "reasons", "dates"). Bad: "latest protests in India what are they about where are they happening dates reasons current updates". Good: "India protests ${currentYear}"

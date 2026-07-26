@@ -32,6 +32,12 @@ import {
   PromptAgent,
 } from '@/lib/services/agentAccess/types';
 import { canonicalAgentKey } from '@/lib/services/agentAccess/types';
+import {
+  Principal,
+  domainOfMail,
+  matchesPrincipal,
+  normalizeMail,
+} from '@/lib/services/shared/principalMatching';
 
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
@@ -329,16 +335,22 @@ export class AgentAccessService {
       // Missing Graph mail → deny for restricted agents (semantics #2).
       return { decision: 'deny', reason: 'no-user-mail' };
     }
-    const mail = userMail.trim().toLowerCase();
-    if (access.allowUsers.some((u) => u.trim().toLowerCase() === mail)) {
+    // Targeting semantics are shared with usage limits (see
+    // lib/services/shared/principalMatching.ts) so the two features can never
+    // disagree about what "this user matches this rule" means. Only the two
+    // scopes this rule shape carries are consulted; `attributes`/`groupIds`
+    // stay empty because access rules do not express those targets.
+    const principal: Principal = {
+      userId: '',
+      mail: normalizeMail(userMail),
+      domain: domainOfMail(userMail),
+      attributes: [],
+      groupIds: [],
+    };
+    if (matchesPrincipal(principal, 'user', access.allowUsers)) {
       return { decision: 'allow', reason: 'allow-user' };
     }
-    const atIndex = mail.lastIndexOf('@');
-    const domain = atIndex >= 0 ? mail.slice(atIndex + 1) : '';
-    if (
-      domain &&
-      access.allowDomains.some((d) => d.trim().toLowerCase() === domain)
-    ) {
+    if (matchesPrincipal(principal, 'domain', access.allowDomains)) {
       return { decision: 'allow', reason: 'allow-domain' };
     }
     return { decision: 'deny', reason: 'not-allowed' };

@@ -12,6 +12,25 @@ import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
 import { createAppIdentityCredential } from '@/lib/services/auth/appIdentityCredential';
 import { createFoundryTokenCredential } from '@/lib/services/auth/foundryCredential';
 import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
+import { LimitsService } from '@/lib/services/limits/LimitsService';
+import {
+  LimitCheckResult,
+  applyMode,
+  checkGate,
+  currentPolicy,
+  denialMessage,
+  effectiveCeiling,
+  meteredCells,
+} from '@/lib/services/limits/enforcement';
+import { resetAt } from '@/lib/services/limits/periods';
+import { buildPrincipal } from '@/lib/services/limits/principal';
+import {
+  ResolvedLimit,
+  isBlocked,
+  resolveLimit,
+} from '@/lib/services/limits/resolver';
+import { checkTokenBudget } from '@/lib/services/limits/tokenDebit';
+import { reserve } from '@/lib/services/limits/usageStore';
 import { resolveCustomSourceModel } from '@/lib/services/models/customModelSources';
 import { ModelSelector, RateLimiter } from '@/lib/services/shared';
 
@@ -38,6 +57,8 @@ import { ChatContext } from './ChatContext';
 
 import { auth, getAccessTokenForOBO } from '@/auth';
 import { env } from '@/config/environment';
+import { getLimitDefinition } from '@/config/limits';
+import { getFallbackChain } from '@/config/models';
 import { TokenCredential } from '@azure/identity';
 
 /**
@@ -954,6 +975,238 @@ export const createModelSelectionMiddleware = async (
 };
 
 /**
+ * Resolves admin-configured usage limits for this caller and REJECTS the
+ * request when one is exceeded (docs/LIMITS.md).
+ *
+ * ⚠ MUST run LAST in buildChatContext, after createCredentialMiddleware.
+ * Three reasons, all load-bearing:
+ *  1. `modelId`/`model` are final here — including byom and prompt-agent
+ *     swaps — so a per-model limit is checked against the model that will
+ *     actually be served, not the one the client asked for.
+ *  2. `searchMode` / `interpreterMode` / `mcpServers` are populated, so the
+ *     feature gates can see what this request will actually do.
+ *  3. Nothing after it in buildChatContext can throw (only metrics init and
+ *     a console.log follow), so a counter reservation can never be stranded
+ *     by a later stage failing. The chat route's catch block receives only
+ *     the error and never the context, so a compensating release() called
+ *     from there would be unreachable — running last removes the need for one.
+ *
+ * Fails OPEN on any internal error: a quota is a cost control, and a storage
+ * blip must not become a chat outage. Denials are surfaced as
+ * RATE_LIMIT_QUOTA_EXCEEDED, which the route maps to 403 (NOT 429 — see the
+ * comment there).
+ */
+export async function createLimitsMiddleware(
+  context: ChatContext,
+): Promise<Partial<ChatContext>> {
+  try {
+    const policy = await currentPolicy();
+    if (policy === null && !LimitsService.getInstance().isEnabled()) {
+      return {};
+    }
+
+    const principal = buildPrincipal({ user: context.user } as Session);
+    const modelId = context.modelId;
+    const series = context.model?.series;
+
+    // byom models run against the USER'S OWN Foundry account under their own
+    // OBO token and cost the org nothing, so per-model caps are skipped
+    // unless an admin opts in.
+    const byomExempt =
+      !policy?.countByomUsage && (modelId?.startsWith('byom-') ?? false);
+
+    const gates: Array<[string, boolean]> = [
+      ['feature.webSearch.enabled', isSearchActive(context.searchMode)],
+      [
+        'feature.codeInterpreter.enabled',
+        context.interpreterMode !== undefined &&
+          context.interpreterMode !== InterpreterMode.OFF,
+      ],
+      ['feature.mcp.enabled', (context.mcpServers?.length ?? 0) > 0],
+    ];
+
+    // Model availability first: it is the limit an admin is most likely to
+    // have set, and the clearest thing to tell a user.
+    if (!byomExempt) {
+      const modelGate = checkGate(
+        policy,
+        principal,
+        'model.allowed',
+        modelId,
+        series,
+      );
+      throwIfDenied(modelGate, context);
+    }
+
+    for (const [limitKey, active] of gates) {
+      if (!active) continue;
+      throwIfDenied(checkGate(policy, principal, limitKey), context);
+    }
+
+    // ── Counters. `chat.messagesPerDay`, `model:<id>.requests` and
+    //    `family:<series>.requests` are CONJUNCTIVE — all must pass — and are
+    //    debited in ONE compare-and-swap so a request can never consume one
+    //    budget without the other.
+    //
+    //    An MCP tool-loop continuation is the same logical message as the turn
+    //    that started it, so only round 0 is counted; otherwise a single
+    //    question costs a user five messages.
+    const isToolLoopContinuation = (context.mcpLoopRound ?? 0) > 0;
+    if (!isToolLoopContinuation) {
+      const cells = [
+        ...meteredCells(policy, principal, 'chat.messagesPerDay'),
+        ...(byomExempt
+          ? []
+          : meteredCells(policy, principal, 'model.requests', modelId, series)),
+      ];
+      if (cells.length > 0) {
+        const reservation = await reserve(
+          principal.userId,
+          'day',
+          cells.map((cell) => ({
+            cell: counterCellName(cell),
+            cost: 1,
+            limit: cell.value as number,
+            limitKey: cell.limitKey,
+            source: cell.source,
+            ...(cell.modelId ? { modelId: cell.modelId } : {}),
+            ...(cell.series ? { series: cell.series } : {}),
+          })),
+          {
+            timezone: policy?.timezone ?? 'UTC',
+            failMode: policy?.failMode ?? 'open',
+          },
+        );
+        if (!reservation.allowed && reservation.denial) {
+          throwIfDenied(
+            applyMode(policy, principal, {
+              limitKey: reservation.denial.limitKey,
+              limit: reservation.denial.limit,
+              used: reservation.denial.used,
+              resetAt: reservation.denial.resetAt,
+              source: (reservation.denial.source ??
+                'global') as ResolvedLimit['source'],
+              ...(reservation.denial.modelId
+                ? { modelId: reservation.denial.modelId }
+                : {}),
+              ...(reservation.denial.series
+                ? { series: reservation.denial.series }
+                : {}),
+            }),
+            context,
+          );
+        }
+      }
+    }
+
+    // Pre-flight token budget: read-only, and only reaches storage when a
+    // token limit is actually configured for this principal. Soft by nature —
+    // see lib/services/limits/tokenDebit.ts.
+    if (!isToolLoopContinuation) {
+      const overBudget = await checkTokenBudget(context.user);
+      if (overBudget) {
+        throwIfDenied(
+          applyMode(policy, principal, {
+            limitKey: overBudget.limitKey,
+            limit: overBudget.limit,
+            used: overBudget.used,
+            resetAt: resetAt(
+              overBudget.limitKey === 'chat.tokensPerMonth' ? 'month' : 'day',
+              policy?.timezone ?? 'UTC',
+            ),
+            source: 'global',
+          }),
+          context,
+        );
+      }
+    }
+
+    // Ceilings downstream code CLAMPS to rather than rejecting on.
+    const ceilings: Record<string, number> = {};
+    for (const key of ['feature.mcp.roundsPerRequest']) {
+      const value = effectiveCeiling(policy, principal, key);
+      if (value !== undefined) ceilings[key] = value;
+    }
+
+    // Precompute which fallback targets this caller is blocked from, so a
+    // DeploymentNotFound retry cannot silently reroute to a model an admin
+    // denied them. Pure resolution — no storage, no per-model round trip.
+    const blockedModelIds = policy
+      ? getFallbackChain().filter((id) =>
+          isBlocked(
+            resolveLimit(
+              getLimitDefinition('model.allowed')!,
+              policy,
+              principal,
+              id,
+            ),
+          ),
+        )
+      : [];
+
+    return {
+      limits: {
+        policy,
+        principal,
+        ceilings,
+        blockedModelIds,
+        ...(byomExempt ? { byomExempt } : {}),
+      },
+    };
+  } catch (error) {
+    if (error instanceof PipelineError) throw error;
+    // FAIL OPEN — see the module docblock in LimitsService.
+    console.error(
+      `[limits] middleware FAIL-OPEN (request allowed): ${sanitizeForLog(error)}`,
+    );
+    return {};
+  }
+}
+
+/**
+ * The counter cell a resolved limit debits. Per-model limits are counted
+ * separately per model id and per series (`model:gpt-5.2.requests`,
+ * `family:gpt.requests`) so a family cap can act as an envelope over its
+ * members; everything else uses the bare limit key.
+ */
+function counterCellName(cell: ResolvedLimit): string {
+  const suffix = cell.limitKey.split('.').pop();
+  if (cell.modelId) return `model:${cell.modelId.toLowerCase()}.${suffix}`;
+  if (cell.series) return `family:${cell.series.toLowerCase()}.${suffix}`;
+  return cell.limitKey;
+}
+
+function isSearchActive(searchMode: SearchMode | undefined): boolean {
+  return searchMode !== undefined && searchMode !== SearchMode.OFF;
+}
+
+/**
+ * Converts a denial into the pipeline error the route renders. Observe mode
+ * never reaches here with `allowed: false`, so the mode switch stays in one
+ * place (applyMode) rather than being re-implemented per call site.
+ */
+function throwIfDenied(result: LimitCheckResult, context: ChatContext): void {
+  if (result.allowed || !result.denial) return;
+  const { denial } = result;
+  // The MESSAGE is what the user reads (ApiError.getUserMessage surfaces it
+  // verbatim for rate-limit codes); the METADATA is for support and the
+  // client's error card. The internal limit key stays out of the sentence.
+  throw PipelineError.critical(
+    ErrorCode.RATE_LIMIT_QUOTA_EXCEEDED,
+    denialMessage(denial),
+    {
+      limitKey: denial.limitKey,
+      limit: denial.limit,
+      ...(denial.used !== undefined ? { used: denial.used } : {}),
+      ...(denial.resetAt ? { resetAt: denial.resetAt } : {}),
+      ...(denial.modelId ? { modelId: denial.modelId } : {}),
+      ...(denial.series ? { series: denial.series } : {}),
+      requestModelId: context.modelId,
+    },
+  );
+}
+
+/**
  * Builds the initial ChatContext from a NextRequest.
  * Applies all standard middleware and returns a fully initialized context.
  */
@@ -990,6 +1243,13 @@ export async function buildChatContext(req: NextRequest): Promise<ChatContext> {
   context = {
     ...context,
     ...(await createCredentialMiddleware(context, req)),
+  };
+
+  // Usage limits LAST: the model is final, the feature flags are populated,
+  // and nothing after this can throw. See createLimitsMiddleware.
+  context = {
+    ...context,
+    ...(await createLimitsMiddleware(context)),
   };
 
   // Initialize metrics

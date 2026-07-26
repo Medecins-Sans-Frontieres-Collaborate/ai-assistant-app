@@ -1,6 +1,6 @@
 'use client';
 
-import { IconArrowLeft, IconPlus, IconUserShield } from '@tabler/icons-react';
+import { IconPlus } from '@tabler/icons-react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { FC, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -41,6 +41,18 @@ import { Link } from '@/lib/navigation';
 type PanelTab = 'agents' | 'connectors' | 'guides' | 'datasets' | 'localAdmins';
 
 /**
+ * Per-area headings. Reuses the tab labels, which are already translated into
+ * all 53 locales — renaming them breaks both these headings and the area rail.
+ */
+const SECTION_HEADING_KEY: Record<PanelTab, string> = {
+  agents: 'agentsTab',
+  connectors: 'connectorsTab',
+  guides: 'guidesTab',
+  datasets: 'datasetsTab',
+  localAdmins: 'localAdminsTab',
+};
+
+/**
  * Admin panel for app-layer ACCESS CONTROL — agents and MCP connectors alike
  * (docs/AGENT_ACCESS_CONTROL.md "Admin UI"). Both hang off the same
  * canonical-key namespace, so both use the same rules, the same local-admin
@@ -53,7 +65,17 @@ type PanelTab = 'agents' | 'connectors' | 'guides' | 'datasets' | 'localAdmins';
  * their delegated canonical keys. The server component gates access — this
  * client is presentation only.
  */
-export const AgentAccessPanel: FC = () => {
+interface AgentAccessPanelProps {
+  /**
+   * Which section to render. Formerly internal tab state; now supplied by the
+   * route, so each section is deep-linkable and carries its own server gate.
+   * The component is otherwise unchanged — its queries, row memos and cache
+   * invalidations all stay in one place.
+   */
+  section: PanelTab;
+}
+
+export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
   const t = useTranslations('agentAccess');
   const queryClient = useQueryClient();
   const {
@@ -154,7 +176,7 @@ export const AgentAccessPanel: FC = () => {
     refetchOnWindowFocus: false,
   });
 
-  const [activeTab, setActiveTab] = useState<PanelTab>('agents');
+  const activeTab = section;
   const [isCreatingConnector, setIsCreatingConnector] = useState(false);
   const [editingConnectorId, setEditingConnectorId] = useState<string | null>(
     null,
@@ -660,62 +682,17 @@ export const AgentAccessPanel: FC = () => {
   };
 
   return (
-    <div className="flex-1 overflow-y-auto bg-white dark:bg-surface-dark-base">
-      <div className="mx-auto max-w-4xl p-6">
-        <Link
-          href="/"
-          className="mb-4 flex w-fit items-center gap-1.5 text-sm text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white"
-        >
-          <IconArrowLeft size={16} />
-          {t('backToChat')}
-        </Link>
-
-        <div className="mb-2 flex items-center gap-2">
-          <IconUserShield size={24} className="text-black dark:text-white" />
-          <h1 className="text-xl font-bold text-black dark:text-white">
-            {t('title')}
-          </h1>
-        </div>
+    // Body only: AdminShell owns the page plane, the back link, the product
+    // title and the area switcher. A wrapper here would nest two scroll
+    // containers and duplicate the header on every area.
+    <>
+      <div>
+        <h1 className="mb-2 text-xl font-bold text-black dark:text-white">
+          {t(SECTION_HEADING_KEY[section] as never)}
+        </h1>
         <p className="mb-6 text-sm text-gray-600 dark:text-gray-400">
           {t('description')}
         </p>
-
-        {/* Tabs. Agents and connectors are open to every admin; the
-            delegation map stays global-admin only. */}
-        <div className="mb-6 flex gap-1 border-b border-gray-200 dark:border-gray-700">
-          {(
-            [
-              'agents',
-              'connectors',
-              'guides',
-              'datasets',
-              'localAdmins',
-            ] as const
-          )
-            .filter((tab) => tab !== 'localAdmins' || isGlobalAdmin)
-            .map((tab) => (
-              <button
-                key={tab}
-                type="button"
-                className={`border-b-2 px-3 py-2 text-sm font-medium ${
-                  activeTab === tab
-                    ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
-                    : 'border-transparent text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white'
-                }`}
-                onClick={() => setActiveTab(tab)}
-              >
-                {tab === 'agents'
-                  ? t('agentsTab')
-                  : tab === 'connectors'
-                    ? t('connectorsTab')
-                    : tab === 'guides'
-                      ? t('guidesTab')
-                      : tab === 'datasets'
-                        ? t('datasetsTab')
-                        : t('localAdminsTab')}
-              </button>
-            ))}
-        </div>
 
         {activeTab === 'localAdmins' && isGlobalAdmin ? (
           <LocalAdminsSection rows={rows} />
@@ -1573,6 +1550,6 @@ export const AgentAccessPanel: FC = () => {
           </>
         )}
       </div>
-    </div>
+    </>
   );
 };

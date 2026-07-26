@@ -19,6 +19,7 @@ import { NextRequest } from 'next/server';
 
 import { DocumentTranslationService } from '@/lib/services/documentTranslation/documentTranslationService';
 import { createTranslationJob } from '@/lib/services/documentTranslation/translationJobStore';
+import { guardLimit } from '@/lib/services/limits/routeGuard';
 
 import { getEnvVariable } from '@/lib/utils/app/env';
 import {
@@ -101,6 +102,16 @@ export async function POST(request: NextRequest) {
       `Unsupported document format. Supported formats: .txt, .html, .docx, .xlsx, .pptx, .pdf, .msg, .xliff, .csv, .tsv, .mhtml`,
       'UNSUPPORTED_FORMAT',
     );
+  }
+
+  // Usage limit: document translations per day (docs/LIMITS.md). Checked
+  // alongside the existing size gate, before any staging-account work.
+  const translationGuard = await guardLimit(
+    session,
+    'feature.translation.jobsPerDay',
+  );
+  if (!translationGuard.allowed && translationGuard.response) {
+    return translationGuard.response;
   }
 
   // Validate document size

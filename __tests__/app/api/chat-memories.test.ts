@@ -217,6 +217,25 @@ describe('/api/chat/memories', () => {
       );
     });
 
+    it('marks locked memories so the model leaves them alone', async () => {
+      await POST(
+        createMemoriesRequest({
+          body: {
+            messages: [{ role: 'user', content: 'hi' }],
+            existingMemories: [
+              { id: 'mem-1', text: 'Prefers French', locked: true },
+              // Anything but a literal true is not a lock.
+              { id: 'mem-2', text: 'Lives in Lyon', locked: 'yes' },
+            ],
+          },
+        }),
+      );
+
+      const userMessage = mockCreate.mock.calls[0][0].messages[1].content;
+      expect(userMessage).toContain('[mem-1] (locked) Prefers French');
+      expect(userMessage).toContain('[mem-2] Lives in Lyon');
+    });
+
     it('drops malformed operations returned by the model', async () => {
       mockCreate.mockResolvedValue({
         choices: [

@@ -1,4 +1,5 @@
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
+import { consumeToolBudget } from '@/lib/services/limits/toolBudget';
 
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
@@ -155,6 +156,35 @@ export class ToolRouterEnricher extends BasePipelineStage {
     return this.searchRequested(context) || this.interpreterRequested(context);
   }
 
+  /** Typed prompts this long are almost certainly pasted-in material. */
+  private static readonly PASTED_CONTENT_MIN_CHARS = 1000;
+
+  /**
+   * Whether the user supplied their own source material this turn —
+   * uploaded files/images/audio on the current message, processed file
+   * content, or a text block large enough that it was clearly pasted, not
+   * typed. The router classifier then defaults to NOT searching so web
+   * results don't dilute the provided sources; only an explicit in-message
+   * search request (or SearchMode.ALWAYS, which never reaches the
+   * classifier) overrides that.
+   */
+  private hasUserProvidedContent(
+    context: ChatContext,
+    rawUserPrompt: string,
+  ): boolean {
+    if (context.hasFiles || context.hasImages || context.hasAudio) return true;
+    const processed = context.processedContent;
+    if (
+      processed &&
+      ((processed.fileSummaries?.length ?? 0) > 0 ||
+        (processed.inlineFiles?.length ?? 0) > 0 ||
+        (processed.transcripts?.length ?? 0) > 0)
+    ) {
+      return true;
+    }
+    return rawUserPrompt.length >= ToolRouterEnricher.PASTED_CONTENT_MIN_CHARS;
+  }
+
   protected async executeStage(context: ChatContext): Promise<ChatContext> {
     // Start with current messages (may already be enriched by RAG)
     const baseMessages = context.enrichedMessages || context.messages;
@@ -284,6 +314,9 @@ export class ToolRouterEnricher extends BasePipelineStage {
         forceWebSearch: false,
         considerCodeExecution: undecidedInterpreter,
         hasPriorSearchCitations: undecidedSearch && priorCitations.length > 0,
+        hasUserProvidedContent:
+          undecidedSearch &&
+          this.hasUserProvidedContent(context, rawUserPrompt),
       });
     } else {
       console.log(
@@ -407,6 +440,17 @@ export class ToolRouterEnricher extends BasePipelineStage {
       deep: boolean;
     },
   ): Promise<ChatContext> {
+    // Usage limit (docs/LIMITS.md). DEGRADE, DO NOT ABORT: by the time an
+    // enricher runs, the streaming Response has already been returned and the
+    // HTTP status is committed to 200. Killing the turn because an optional
+    // accelerator ran out of budget would surface as an opaque failure AND
+    // waste the tokens already spent — so the search is skipped, the user is
+    // told, and the model answers from what it has.
+    if (!(await consumeToolBudget(context, 'feature.webSearch.callsPerDay'))) {
+      await context.emitActivity?.('chat.activity.webSearchLimitReached');
+      return context;
+    }
+
     const baseMessages = context.enrichedMessages || context.messages;
     // Primary query drives the Bing path and single-query providers; the
     // full list fans out across parallel Google News legs. Record/notice
@@ -1022,6 +1066,14 @@ export class ToolRouterEnricher extends BasePipelineStage {
     context: ChatContext,
     task: string,
   ): Promise<ChatContext> {
+    // Same degrade-don't-abort contract as web search above.
+    if (
+      !(await consumeToolBudget(context, 'feature.codeInterpreter.runsPerDay'))
+    ) {
+      await context.emitActivity?.('chat.activity.codeInterpreterLimitReached');
+      return context;
+    }
+
     const baseMessages = context.enrichedMessages || context.messages;
     const startTime = Date.now();
     console.log('[ToolRouterEnricher] Executing code interpreter');

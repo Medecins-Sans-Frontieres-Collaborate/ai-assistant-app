@@ -605,6 +605,15 @@ export interface ToolRouterRequest {
    * the prompt/schema stay unchanged for citation-less conversations.
    */
   hasPriorSearchCitations?: boolean;
+  /**
+   * Whether the user supplied their own source material this turn
+   * (uploaded files/images/audio or a large pasted text block). The
+   * classifier then defaults to needsWebSearch=false — web results would
+   * dilute the provided sources — unless the message explicitly asks for
+   * a search. SearchMode.ALWAYS bypasses the classifier entirely and is
+   * unaffected.
+   */
+  hasUserProvidedContent?: boolean;
 }
 
 // Persistent File Context types

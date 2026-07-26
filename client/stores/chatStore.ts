@@ -904,6 +904,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
     // Memories require BOTH the user opt-in and the LD flag mirror —
     // flipping the flag off stops memories from being SENT, not just shown.
+    // memoryCapturePaused is deliberately NOT checked here: pausing stops new
+    // memories being learned, it does not stop the saved ones being used.
     // Same Foundry approval-resume exclusion as the summary. Select the 60
     // most recently UPDATED (the store array is insertion-ordered and
     // updateMemory edits in place, so a tail slice would drop freshly
@@ -1528,7 +1530,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           contextWindowSize,
         );
       }
-      if (settings.memoriesEnabled && settings.memoriesFlagEnabled) {
+      // memoryCapturePaused gates capture ONLY — see the injection block
+      // above, which deliberately keeps sending what is already saved.
+      if (
+        settings.memoriesEnabled &&
+        settings.memoriesFlagEnabled &&
+        !settings.memoryCapturePaused
+      ) {
         void extractMemories(finalConversation, flat);
       }
     }
@@ -1616,10 +1624,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // — tool calls may have run — and the user has been staring at a
     // loader; surface the failure with its partial context immediately.
     const isStreamInterrupted = error instanceof StreamInterruptedError;
+    // The 429 exemption exists for MODEL-level rate limits (an Azure TPM
+    // ceiling), which another model genuinely can absorb. Our own per-USER
+    // limits — the burst limiter and admin usage limits — are keyed on the
+    // user, so every fallback model hits them identically: retrying the chain
+    // just fires N doomed requests and delays the message the user needs to
+    // see. Identified by error code, since status cannot tell them apart.
     const isNonRetryableClientError =
       (error instanceof ApiError &&
         error.isClientError() &&
-        error.status !== 429) ||
+        (error.status !== 429 || error.isRateLimitError())) ||
       isStreamInterrupted;
     const modelId = conversation?.model?.id ?? '';
     const isNonFallbackModel =
@@ -1965,11 +1979,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       }
 
       // Try the next model in the fallback chain, unless this failure would
-      // hit every model the same way (4xx other than rate limiting)
+      // hit every model the same way (4xx other than rate limiting). A
+      // per-user rate/usage limit is exactly such a failure despite being a
+      // 429 — see the matching check in the send path.
       const isNonRetryableClientError =
         retryError instanceof ApiError &&
         retryError.isClientError() &&
-        retryError.status !== 429;
+        (retryError.status !== 429 || retryError.isRateLimitError());
       const nextAttemptedIds = [...attemptedModelIds, fallbackModel.id];
 
       if (!isNonRetryableClientError && getFallbackModel(nextAttemptedIds)) {

@@ -333,7 +333,9 @@ describe('/api/chat - Integration Tests', () => {
       // Third request should be rate limited
       const response = await POST(createChatRequest(requestBody));
 
-      expect(response.status).toBe(401); // Will be 401 since it's treated as critical auth error
+      // 429, not 401: a burst-limited user has not lost their session, and
+      // rendering this as "please sign in" told them to fix the wrong thing.
+      expect(response.status).toBe(429);
       const data = await parseJsonResponse(response);
       expect(data.code).toBe(ErrorCode.RATE_LIMIT_EXCEEDED);
       expect(data.message).toContain('Rate limit exceeded');

@@ -47,6 +47,8 @@ export interface McpToolLoopOptions {
   pendingToolCalls?: McpPendingToolCall[];
   approvalResponses?: ApprovalResponse[];
   loopRound: number;
+  /** Admin-configured round cap (docs/LIMITS.md); absent → MAX_TOOL_ROUNDS. */
+  maxRounds?: number;
   userId: string;
   citations?: Citation[];
   usage: {
@@ -157,6 +159,7 @@ export async function runMcpToolLoop(
     pendingToolCalls: options.pendingToolCalls,
     approvalResponses: options.approvalResponses,
     loopRound: options.loopRound,
+    maxRounds: options.maxRounds,
     userId: options.userId,
     citations: options.citations,
     usage: options.usage,

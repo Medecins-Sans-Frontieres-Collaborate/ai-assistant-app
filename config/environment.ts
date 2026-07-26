@@ -197,6 +197,16 @@ const serverEnvSchema = z.object({
   // lowercased + trimmed). Bootstrap mechanism — changing it needs a redeploy.
   AGENT_ACCESS_ADMINS: z.string().optional(),
 
+  // Usage limits (docs/LIMITS.md)
+  // Master gate for enforcement + admin API + UI. Break-glass for a
+  // policy-blob outage: set to "false" and redeploy.
+  //
+  // Deliberately its OWN gate rather than reusing AGENT_ACCESS_CONTROL_ENABLED:
+  // break-glassing access control during a rules-blob outage must not also
+  // silently remove every spend cap. The admin roster IS shared — limits are
+  // authored by the same AGENT_ACCESS_ADMINS global admins.
+  LIMITS_ENABLED: booleanString(false),
+
   // Application Configuration
   // Optional explicit override; when unset the default model resolves
   // dynamically to the latest ring-enabled standard GPT (config/models.ts).

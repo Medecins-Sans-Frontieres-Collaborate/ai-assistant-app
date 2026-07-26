@@ -1,5 +1,6 @@
 import { Session } from 'next-auth';
 
+import { debitTokenUsage } from '@/lib/services/limits/tokenDebit';
 import { runAnthropicMcpToolLoop } from '@/lib/services/mcp/AnthropicMcpToolLoopService';
 import { planMcpSteps } from '@/lib/services/mcp/McpPlannerService';
 import { runMcpToolLoop } from '@/lib/services/mcp/McpToolLoopService';
@@ -102,6 +103,17 @@ export interface StandardChatRequest {
   mcpServers?: ResolvedMcpServer[];
   mcpPendingToolCalls?: McpPendingToolCall[];
   mcpLoopRound?: number;
+  /**
+   * Admin-configured cap from `feature.mcp.roundsPerRequest` (docs/LIMITS.md),
+   * resolved once in createLimitsMiddleware. Absent → the compiled default.
+   */
+  mcpMaxRounds?: number;
+  /**
+   * Models this caller is blocked from by admin usage limits
+   * (docs/LIMITS.md). Excluded from the DeploymentNotFound fallback chain so
+   * a per-user model restriction cannot be routed around.
+   */
+  blockedModelIds?: string[];
   /** Turn plan echoed by the client on approval resume (re-sanitized here). */
   mcpPlan?: McpPlan;
   approvalResponses?: ApprovalResponse[];
@@ -283,6 +295,21 @@ export class StandardChatService {
         },
         { user, model: usage.modelId, operation: 'chat', botId },
       );
+      // Token quota debit (`chat.tokensPerDay` / `chat.tokensPerMonth`,
+      // docs/LIMITS.md).
+      //
+      // ⚠ SOFT BY CONSTRUCTION, and the admin UI says so. A completion's
+      // length is unknowable before it is generated, so a token limit is a
+      // pre-flight READ-ONLY check plus this after-the-fact debit. A user at
+      // 99% of their budget can still start a request that generates 20k
+      // tokens: overshoot is bounded by the size of the completions already in
+      // flight — typically one response — but it is not zero. This is inherent
+      // to token accounting on any infrastructure, not a property of the blob
+      // counter.
+      //
+      // Fire-and-forget, like every other sink here: a counter write must
+      // never delay or break a response that has already been generated.
+      void debitTokenUsage(user, usage.totalTokens);
     } catch (error) {
       console.error(
         '[StandardChatService] Failed to record token usage:',
@@ -569,6 +596,7 @@ export class StandardChatService {
         pendingToolCalls: request.mcpPendingToolCalls,
         approvalResponses: request.approvalResponses,
         loopRound: request.mcpLoopRound ?? 0,
+        maxRounds: request.mcpMaxRounds,
         userId: request.user?.id ?? request.user?.mail ?? 'unknown',
         citations: request.citations,
         planner: mcpPlanner,
@@ -673,7 +701,10 @@ export class StandardChatService {
         // user's own account must surface, not silently reroute to app models.
         if (customSource || !isDeploymentNotFoundError(error)) throw error;
 
-        const fallback = getFallbackModel(attemptedModelIds);
+        const fallback = getFallbackModel(
+          attemptedModelIds,
+          request.blockedModelIds,
+        );
         if (!fallback) {
           console.error(
             `[StandardChatService] Deployment for ${sanitizeForLog(activeConfig.id)} not found and fallback chain exhausted; surfacing error.`,
@@ -941,6 +972,7 @@ export class StandardChatService {
       pendingToolCalls: request.mcpPendingToolCalls,
       approvalResponses: request.approvalResponses,
       loopRound: request.mcpLoopRound ?? 0,
+      maxRounds: request.mcpMaxRounds,
       userId: request.user?.id ?? request.user?.mail ?? 'unknown',
       citations: request.citations,
       planner: planning?.planner,
