@@ -1,7 +1,7 @@
 'use client';
 
 import { IconAlertTriangle, IconPlus } from '@tabler/icons-react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { FC, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -19,14 +19,15 @@ import {
 import { AdminTabs } from '@/components/Admin/AdminTabs';
 import {
   ADMIN_BANNER_ERROR,
+  ADMIN_BANNER_WARN,
   ADMIN_BTN_PRIMARY,
   ADMIN_BTN_RETRY,
   ADMIN_BTN_SECONDARY,
   ADMIN_CARD,
   ADMIN_CHECKBOX,
   ADMIN_FIELD,
-  ADMIN_MUTED,
 } from '@/components/Admin/adminClasses';
+import { EffectiveLimitsPreview } from '@/components/Limits/EffectiveLimitsPreview';
 import { GlobalDefaultsSection } from '@/components/Limits/GlobalDefaultsSection';
 import { OverrideEditor } from '@/components/Limits/OverrideEditor';
 import { PolicyResponse, emptyOverride } from '@/components/Limits/types';
@@ -64,11 +65,17 @@ const EMPTY_DRAFT: Draft = {
  */
 export const LimitsPanel: FC = () => {
   const t = useTranslations('limits');
+  const queryClient = useQueryClient();
   const [tab, setTab] = useState<PanelTab>('defaults');
   const [draft, setDraft] = useState<Draft>(EMPTY_DRAFT);
   const [etag, setEtag] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
+  // Overrides created this session render expanded (a new override must
+  // never be a mystery card); loaded ones start as one-line summaries.
+  const [newOverrideIds, setNewOverrideIds] = useState<Set<string>>(
+    () => new Set(),
+  );
 
   const policyQuery = useQuery<PolicyResponse>({
     queryKey: ['limits-policy'],
@@ -130,6 +137,9 @@ export const LimitsPanel: FC = () => {
         return;
       }
       toast.success(t('saved'));
+      // The effective-limits preview resolves against the SAVED policy;
+      // stale results must not outlive the save that changed it.
+      await queryClient.invalidateQueries({ queryKey: ['limits-preview'] });
       await policyQuery.refetch();
     } catch {
       toast.error(t('saveFailed'));
@@ -209,7 +219,7 @@ export const LimitsPanel: FC = () => {
                   {t('timezoneLabel')}
                   <input
                     type="text"
-                    className="w-44 rounded-lg border border-gray-300 bg-white px-2 py-1 text-sm dark:border-gray-600 dark:bg-gray-800"
+                    className={`w-44 ${ADMIN_FIELD}`}
                     value={draft.timezone}
                     onChange={(e) => patch({ timezone: e.target.value })}
                   />
@@ -219,6 +229,7 @@ export const LimitsPanel: FC = () => {
                 <label className="flex items-center gap-1.5 text-sm text-black dark:text-white">
                   <input
                     type="checkbox"
+                    className={ADMIN_CHECKBOX}
                     checked={draft.countByomUsage}
                     onChange={(e) =>
                       patch({ countByomUsage: e.target.checked })
@@ -229,6 +240,7 @@ export const LimitsPanel: FC = () => {
                 <label className="flex items-center gap-1.5 text-sm text-black dark:text-white">
                   <input
                     type="checkbox"
+                    className={ADMIN_CHECKBOX}
                     checked={draft.countAuxiliaryUsage}
                     onChange={(e) =>
                       patch({ countAuxiliaryUsage: e.target.checked })
@@ -238,7 +250,7 @@ export const LimitsPanel: FC = () => {
                 </label>
               </div>
               {draft.mode === 'observe' && (
-                <p className="mt-3 text-xs text-amber-700 dark:text-amber-300">
+                <p className={`mt-3 ${ADMIN_BANNER_WARN}`}>
                   {t('observeNotice')}
                 </p>
               )}
@@ -271,6 +283,10 @@ export const LimitsPanel: FC = () => {
                 />
               ) : (
                 <div className="space-y-4">
+                  <EffectiveLimitsPreview
+                    overrides={draft.overrides}
+                    dirty={dirty}
+                  />
                   {draft.overrides.length === 0 && (
                     <p className="text-sm text-gray-500 dark:text-gray-400">
                       {t('noOverrides')}
@@ -295,16 +311,20 @@ export const LimitsPanel: FC = () => {
                         })
                       }
                       disabled={saving}
+                      globalDefaults={draft.defaults}
+                      defaultExpanded={newOverrideIds.has(override.id)}
                     />
                   ))}
                   <button
                     type="button"
                     className={ADMIN_BTN_SECONDARY}
-                    onClick={() =>
+                    onClick={() => {
+                      const created = emptyOverride('user');
+                      setNewOverrideIds((ids) => new Set([...ids, created.id]));
                       patch({
-                        overrides: [...draft.overrides, emptyOverride('user')],
-                      })
-                    }
+                        overrides: [...draft.overrides, created],
+                      });
+                    }}
                     disabled={saving}
                   >
                     <IconPlus size={16} />
