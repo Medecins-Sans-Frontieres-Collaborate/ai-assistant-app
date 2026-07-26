@@ -18,6 +18,7 @@ import {
   ADMIN_MUTED,
 } from '@/components/Admin/adminClasses';
 import { LimitValueInput } from '@/components/Limits/LimitValueInput';
+import { seedValueFor } from '@/components/Limits/limitGroups';
 import { EntryDraft, draftKey, parseDraftKey } from '@/components/Limits/types';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
@@ -77,8 +78,8 @@ export const ScopedLimitRows: FC<ScopedLimitRowsProps> = ({
         ? draftKey(def.key, undefined, value)
         : draftKey(def.key, value, undefined);
     if (draft[key] !== undefined) return; // already present
-    // Never null — see the docblock.
-    onChange(key, def.unit === 'boolean' ? false : 100);
+    // Never null — see the docblock; seedValueFor owns the rule.
+    onChange(key, seedValueFor(def));
     setPending('');
   };
 
