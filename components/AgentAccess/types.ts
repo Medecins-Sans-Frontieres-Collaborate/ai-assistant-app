@@ -2,6 +2,7 @@ import type {
   AgentAccessConfig,
   AgentAccessRule,
   Guide,
+  M365Agent,
   MapDataset,
   MapDatasetMeta,
   PromptAgent,
@@ -52,8 +53,11 @@ export interface DiscoveredAgentSummary {
   agentName: string;
   source?: string;
   description?: string;
-  /** 'prompt' = app-defined prompt agent; absent/'foundry' = Foundry agent. */
-  type?: 'foundry' | 'prompt';
+  /**
+   * 'prompt' = app-defined prompt agent; 'm365' = M365 file-backed agent;
+   * absent/'foundry' = Foundry agent.
+   */
+  type?: 'foundry' | 'prompt' | 'm365';
 }
 
 export interface AgentsApiResponse {
@@ -80,6 +84,32 @@ export interface AdminPromptAgentsResponse {
   promptAgentsUnavailable?: boolean;
   /** Epoch ms of the served snapshot; null while promptAgentsUnavailable. */
   fetchedAt?: number | null;
+}
+
+/**
+ * Client mirror of M365_AGENT_SOURCE (value import forbidden here — see the
+ * module comment above). The pseudo-source half of every M365 agent's
+ * canonical key.
+ */
+export const CLIENT_M365_AGENT_SOURCE = 'm365-agent';
+
+/**
+ * One M365 agent as served by GET /api/agent-access/m365-agents (the etag
+ * feeds the If-Match CAS on PUT/DELETE).
+ */
+export interface AdminStoredM365Agent {
+  canonicalKey: string;
+  agent: M365Agent;
+  etag: string;
+}
+
+export interface AdminM365AgentsResponse {
+  m365Agents: AdminStoredM365Agent[];
+  /** Same outage contract as promptAgentsUnavailable. */
+  m365AgentsUnavailable?: boolean;
+  fetchedAt?: number | null;
+  /** Server's env-configured per-agent document cap (M365_AGENT_MAX_DOCUMENTS). */
+  maxDocuments?: number;
 }
 
 /**

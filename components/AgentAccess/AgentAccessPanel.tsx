@@ -15,6 +15,7 @@ import {
 import { ConnectorEditor } from './ConnectorEditor';
 import { GuideEditor } from './GuideEditor';
 import { LocalAdminsSection } from './LocalAdminsSection';
+import { M365AgentsSection } from './M365AgentsSection';
 import { PromptAgentEditor } from './PromptAgentEditor';
 import { RuleEditor } from './RuleEditor';
 import {
@@ -1547,6 +1548,17 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                 })}
               </ul>
             )}
+
+            {/* M365 file-backed agents — self-contained block (own query,
+                editor, index action); rules are shared so the access pill
+                and RuleEditor stay CAS-consistent with the rest of the
+                panel. Renders nothing when the m365Agents flag is off. */}
+            <M365AgentsSection
+              rules={rulesQuery.data?.rules ?? []}
+              onDataChanged={() => {
+                void invalidatePromptAgentData();
+              }}
+            />
           </>
         )}
       </div>
