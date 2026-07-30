@@ -4,6 +4,7 @@ import { ServiceContainer } from '@/lib/services/ServiceContainer';
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { AgentEnricher } from '@/lib/services/chat/enrichers/AgentEnricher';
 import { ExtractionEnricher } from '@/lib/services/chat/enrichers/ExtractionEnricher';
+import { M365AgentEnricher } from '@/lib/services/chat/enrichers/M365AgentEnricher';
 import { PromptAgentEnricher } from '@/lib/services/chat/enrichers/PromptAgentEnricher';
 import { RAGEnricher } from '@/lib/services/chat/enrichers/RAGEnricher';
 import { ToolRouterEnricher } from '@/lib/services/chat/enrichers/ToolRouterEnricher';
@@ -169,6 +170,9 @@ export async function POST(req: NextRequest): Promise<Response> {
       // Prompt-agent persona override runs BEFORE RAGEnricher: both key
       // off botId, and RAGEnricher.shouldRun skips prompt agents.
       new PromptAgentEnricher(),
+      // M365 file-backed agent retrieval — mutually exclusive with
+      // RAGEnricher (both key off botId; each skips the other's kind).
+      new M365AgentEnricher(foundryOpenAIClient),
       new RAGEnricher(
         env.SEARCH_ENDPOINT!,
         env.SEARCH_INDEX!,
