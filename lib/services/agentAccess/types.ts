@@ -19,6 +19,7 @@ export const AGENT_ACCESS_CONNECTORS_PREFIX = `${AGENT_ACCESS_PREFIX}connectors/
 export const AGENT_ACCESS_GUIDES_PREFIX = `${AGENT_ACCESS_PREFIX}guides/`;
 export const AGENT_ACCESS_MAP_DATASET_META_PREFIX = `${AGENT_ACCESS_PREFIX}map-datasets/meta/`;
 export const AGENT_ACCESS_MAP_DATASET_DATA_PREFIX = `${AGENT_ACCESS_PREFIX}map-datasets/data/`;
+export const AGENT_ACCESS_M365_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}m365-agents/`;
 
 /**
  * Pseudo-source for app-defined prompt agents in canonical keys
@@ -50,6 +51,14 @@ export const GUIDE_SOURCE = 'guide';
  * local-admin delegation, and history machinery for free.
  */
 export const MAP_DATASET_SOURCE = 'map-dataset';
+
+/**
+ * Pseudo-source for M365 file-backed RAG agents in canonical keys
+ * (`m365-agent::<id>`). Same rationale as PROMPT_AGENT_SOURCE: reusing the
+ * canonical-key namespace means these agents get the existing rule matching,
+ * local-admin delegation, and history machinery for free.
+ */
+export const M365_AGENT_SOURCE = 'm365-agent';
 
 export const AgentAccessTypeSchema = z.enum(['public', 'restricted']);
 export type AgentAccessType = z.infer<typeof AgentAccessTypeSchema>;
@@ -143,6 +152,76 @@ export const PromptAgentHistoryEntrySchema = z.object({
 export type PromptAgentHistoryEntry = z.infer<
   typeof PromptAgentHistoryEntrySchema
 >;
+
+/**
+ * One OneDrive/SharePoint source backing an M365 agent. Read-side permissive
+ * per the schema-evolution rule.
+ */
+export const M365AgentSourceSchema = z.object({
+  /** Stable app-side id (`src-<hex>`); survives re-indexing. */
+  sourceId: z.string().min(1),
+  driveId: z.string().min(1),
+  itemId: z.string().min(1),
+  kind: z.enum(['file', 'folder']).default('file'),
+  title: z.string().min(1),
+  /** Doubles as the request-access link for users who can't open the file. */
+  webUrl: z.string().default(''),
+  /** Shown in the "ask for access" hint. */
+  ownerDisplay: z.string().optional(),
+  status: z
+    .enum(['pending', 'indexing', 'indexed', 'error', 'missing'])
+    .default('pending'),
+  lastIndexedAt: z.string().optional(),
+  /** Chunks currently in the search index for this source. */
+  indexedChunks: z.number().optional(),
+  error: z.string().optional(),
+});
+export type M365AgentSource = z.infer<typeof M365AgentSourceSchema>;
+
+/**
+ * An M365 file-backed RAG agent (docs/M365_SECOND_PASS_AGENTS_DESIGN.md):
+ * OneDrive/SharePoint files indexed into the shared m365-agents search index
+ * and answered over at chat time, with retrieval trimmed per requesting user
+ * to the sources their own Graph token can open. Read-side permissive per
+ * the schema-evolution rule.
+ */
+export const M365AgentSchema = z.object({
+  version: z.literal(1),
+  /** Server-generated `m365-<hex>`; immutable — canonical keys hang off it. */
+  id: z.string().min(1),
+  name: z.string().min(1),
+  description: z.string().default(''),
+  systemPrompt: z.string().default(''),
+  /** null → ride getDefaultModel() at request time. */
+  chatModelId: z.string().nullable().default(null),
+  /**
+   * Embedding deployment used for ingestion AND query embedding — never
+   * user-overridable (query vectors must match the indexed vectors).
+   */
+  embeddingModelId: z.string().default(''),
+  ragConfig: z.object({ topK: z.number().default(10) }).default({ topK: 10 }),
+  sources: z.array(M365AgentSourceSchema).default([]),
+  createdBy: z.string(),
+  createdAt: z.string(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type M365Agent = z.infer<typeof M365AgentSchema>;
+
+/**
+ * Immutable audit copy written alongside every successful m365-agent write
+ * (including deletes, which record a null tombstone).
+ */
+export const M365AgentHistoryEntrySchema = z.object({
+  version: z.literal(1),
+  canonicalKey: z.string().min(1),
+  action: z.enum(['upsert', 'delete']),
+  /** The full record as written, or null for a delete tombstone. */
+  m365Agent: M365AgentSchema.nullable(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type M365AgentHistoryEntry = z.infer<typeof M365AgentHistoryEntrySchema>;
 
 /**
  * An OAuth client secret sealed by connectorSecretCrypto. Declared HERE
@@ -566,4 +645,13 @@ export function mapDatasetMetaBlobPath(id: string): string {
 
 export function mapDatasetDataBlobPath(id: string): string {
   return `${AGENT_ACCESS_MAP_DATASET_DATA_PREFIX}${id}.json`;
+}
+
+/**
+ * `system/agent-access/m365-agents/<id>.json` — a SIBLING of rules/ for the
+ * same reason as the other entities: listAllRules is fail-closed, so an
+ * alien blob under rules/ would brick every Foundry invocation.
+ */
+export function m365AgentBlobPath(id: string): string {
+  return `${AGENT_ACCESS_M365_AGENTS_PREFIX}${id}.json`;
 }

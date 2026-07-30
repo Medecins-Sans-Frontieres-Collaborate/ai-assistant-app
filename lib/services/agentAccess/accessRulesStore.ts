@@ -10,6 +10,7 @@ import {
   AGENT_ACCESS_CONFIG_PATH,
   AGENT_ACCESS_CONNECTORS_PREFIX,
   AGENT_ACCESS_GUIDES_PREFIX,
+  AGENT_ACCESS_M365_AGENTS_PREFIX,
   AGENT_ACCESS_MAP_DATASET_META_PREFIX,
   AGENT_ACCESS_PROMPT_AGENTS_PREFIX,
   AGENT_ACCESS_RULES_PREFIX,
@@ -24,6 +25,11 @@ import {
   GuideHistoryEntry,
   GuideHistoryEntrySchema,
   GuideSchema,
+  M365Agent,
+  M365AgentHistoryEntry,
+  M365AgentHistoryEntrySchema,
+  M365AgentSchema,
+  M365_AGENT_SOURCE,
   MAP_DATASET_SOURCE,
   MCP_CONNECTOR_SOURCE,
   MapDataset,
@@ -45,6 +51,7 @@ import {
   connectorBlobPath,
   guideBlobPath,
   historyBlobPath,
+  m365AgentBlobPath,
   mapDatasetDataBlobPath,
   mapDatasetMeta,
   mapDatasetMetaBlobPath,
@@ -99,6 +106,20 @@ export interface StoredPromptAgent {
 
 export interface PromptAgentReadResult {
   agent: PromptAgent;
+  etag: string;
+}
+
+export interface StoredM365Agent {
+  /** `m365-agent::<id>` — flows through delegation and rules unchanged. */
+  canonicalKey: string;
+  blobPath: string;
+  m365Agent: M365Agent;
+  /** Raw (quoted) Azure ETag — echoed to admin clients for If-Match CAS. */
+  etag: string;
+}
+
+export interface M365AgentReadResult {
+  m365Agent: M365Agent;
   etag: string;
 }
 
@@ -505,6 +526,151 @@ export async function writePromptAgentHistoryEntry(
           conditions: { ifNoneMatch: '*' },
         }),
       { label: 'agentAccess.writePromptAgentHistoryEntry' },
+    );
+  } catch (error) {
+    if (statusCodeOf(error) === 412) return;
+    throw error;
+  }
+}
+
+/**
+ * Lists every M365 file-backed agent. Malformed blobs are SKIPPED with a
+ * loud log, never thrown — identical rationale to listAllPromptAgents: one
+ * corrupt agent must not take down the rules snapshot that refresh() loads
+ * alongside it. Storage-level errors still throw.
+ */
+export async function listAllM365Agents(
+  storage: BlobStorage,
+): Promise<StoredM365Agent[]> {
+  const names = await storage.listBlobs(AGENT_ACCESS_M365_AGENTS_PREFIX);
+  const results = await Promise.all(
+    names.map(async (name): Promise<StoredM365Agent | null> => {
+      // 404 → deleted between list and get; skip silently.
+      const downloaded = await downloadBlob(storage, name);
+      if (downloaded === null) return null;
+
+      let json: unknown;
+      try {
+        json = JSON.parse(downloaded.buffer.toString('utf8'));
+      } catch {
+        console.error(
+          `[agent-access] SKIPPING m365-agent blob with invalid JSON (broken agent degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
+        );
+        return null;
+      }
+      const parsed = M365AgentSchema.safeParse(json);
+      if (!parsed.success) {
+        console.error(
+          `[agent-access] SKIPPING malformed m365-agent blob (broken agent degrades alone; rules snapshot unaffected) ${sanitizeForLog(name)}: ${sanitizeForLog(parsed.error.message)}`,
+        );
+        return null;
+      }
+      if (m365AgentBlobPath(parsed.data.id) !== name) {
+        // A stray blob must not shadow (or masquerade as) another id's agent.
+        console.error(
+          `[agent-access] SKIPPING m365-agent blob whose name does not match its content's id (broken agent degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
+        );
+        return null;
+      }
+      return {
+        canonicalKey: canonicalAgentKey(M365_AGENT_SOURCE, parsed.data.id),
+        blobPath: name,
+        m365Agent: parsed.data,
+        etag: downloaded.etag,
+      };
+    }),
+  );
+  return results.filter((r): r is StoredM365Agent => r !== null);
+}
+
+/** Reads a single M365 agent by id. Returns null when none exists. */
+export async function readM365Agent(
+  storage: BlobStorage,
+  id: string,
+): Promise<M365AgentReadResult | null> {
+  const result = await downloadBlob(storage, m365AgentBlobPath(id));
+  if (result === null) return null;
+  const parsed = M365AgentSchema.safeParse(
+    JSON.parse(result.buffer.toString('utf8')),
+  );
+  if (!parsed.success) {
+    throw new Error(
+      `Malformed m365 agent blob for id ${id}: ${parsed.error.message}`,
+    );
+  }
+  return { m365Agent: parsed.data, etag: result.etag };
+}
+
+/**
+ * Compare-and-swap M365-agent write. The blob path is derived from the
+ * record's own id, so an agent can never land at another id's path.
+ * `ifMatchEtag` set → update (`If-Match`); null → creation only
+ * (`If-None-Match: *`). 412 → {@link AgentAccessConflictError}.
+ * Returns the new ETag.
+ */
+export async function writeM365Agent(
+  storage: BlobStorage,
+  agent: M365Agent,
+  ifMatchEtag: string | null,
+): Promise<string> {
+  const parsed = M365AgentSchema.parse(agent);
+  return uploadJson(
+    storage,
+    m365AgentBlobPath(parsed.id),
+    parsed,
+    ifMatchEtag,
+    'agentAccess.writeM365Agent',
+  );
+}
+
+/**
+ * Conditional M365-agent delete (`If-Match`). Returns false when the blob
+ * was already absent (idempotent); 412 → {@link AgentAccessConflictError}.
+ */
+export async function deleteM365Agent(
+  storage: BlobStorage,
+  id: string,
+  ifMatchEtag: string,
+): Promise<boolean> {
+  const client = storage.getBlockBlobClient(m365AgentBlobPath(id));
+  try {
+    await withAzureRetry(
+      () => client.delete({ conditions: { ifMatch: ifMatchEtag } }),
+      { label: 'agentAccess.deleteM365Agent' },
+    );
+    return true;
+  } catch (error) {
+    const status = statusCodeOf(error);
+    if (status === 404) return false;
+    if (status === 412) throw new AgentAccessConflictError();
+    throw error;
+  }
+}
+
+/**
+ * Appends an immutable M365-agent history entry (`If-None-Match: *`) at
+ * `historyBlobPath(canonicalKey)` — same audit namespace as rules. A 412
+ * means an earlier attempt (or a retry) already landed this exact entry —
+ * treated as idempotent success. Callers wrap this best-effort: a history
+ * failure must never fail the mutation.
+ */
+export async function writeM365AgentHistoryEntry(
+  storage: BlobStorage,
+  entry: M365AgentHistoryEntry,
+): Promise<void> {
+  const parsed = M365AgentHistoryEntrySchema.parse(entry);
+  const client = storage.getBlockBlobClient(
+    historyBlobPath(parsed.canonicalKey, parsed.updatedAt),
+  );
+  const content = Buffer.from(JSON.stringify(parsed), 'utf8');
+  try {
+    await withAzureRetry(
+      () =>
+        client.upload(content, content.length, {
+          blobHTTPHeaders: { blobContentType: 'application/json' },
+          conditions: { ifNoneMatch: '*' },
+        }),
+      { label: 'agentAccess.writeM365AgentHistoryEntry' },
     );
   } catch (error) {
     if (statusCodeOf(error) === 412) return;
