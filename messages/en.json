@@ -1425,7 +1425,8 @@
       "thresholdLabel": "Treat one change as unreviewable above",
       "thresholdUnit": "% of the document",
       "exceptionSelectionAlways": "Revising a highlighted selection always applies directly — the model returns only the revised excerpt, which cannot be broken into suggestions against the whole document."
-    }
+    },
+    "Connections": "Connections"
   },
   "workflows": {
     "types": {
@@ -3632,7 +3633,7 @@
     "addConnector": "Add connector",
     "noConnectors": "No connectors yet.",
     "connectorsUnavailableWarning": "Couldn't reach the connector store, so this list may be incomplete. Don't create a replacement until it loads.",
-    "editAccess": "Edit access",
+    "editAccess": "Access",
     "deleteConnector": "Delete",
     "deleteConnectorConfirm": "Delete this connector? Anyone using it will lose access immediately.",
     "confirmDeleteConnector": "Delete connector",
@@ -3748,7 +3749,38 @@
     "deleteDataset": "Delete",
     "deleteDatasetConfirm": "Delete this dataset? It disappears from the map picker immediately. Maps that already loaded it keep their copies.",
     "confirmDeleteDataset": "Delete dataset",
-    "datasetDeleteSuccess": "Dataset deleted."
+    "datasetDeleteSuccess": "Dataset deleted.",
+    "m365AgentsHeading": "Microsoft 365 agents",
+    "m365AgentsDescription": "Agents grounded on OneDrive/SharePoint files. Every user can see an allowed agent, but answers only ever draw on files that user can already open — others are prompted to request access.",
+    "addM365Agent": "Add M365 agent",
+    "noM365Agents": "No Microsoft 365 agents yet.",
+    "m365AgentBadge": "M365 files",
+    "m365AgentSourceSummary": "{count} sources · {pending} not indexed",
+    "m365AgentIndex": "Index",
+    "m365AgentIndexHint": "Download, process and index the sources now, using your Microsoft 365 access. Can take a few minutes.",
+    "m365AgentIndexSuccess": "Indexing finished — check per-source status.",
+    "m365AgentIndexFailed": "Indexing failed — please try again.",
+    "m365AgentDeleteSuccess": "Agent deleted (indexed content purged).",
+    "m365AgentDeleteConfirm": "Delete this agent and its indexed content?",
+    "m365AgentsUnavailableWarning": "The M365 agent list is temporarily unavailable — existing agents are not shown, but they still exist.",
+    "editM365AgentTitle": "Edit M365 agent",
+    "newM365AgentTitle": "New M365 agent",
+    "m365AgentSystemPromptPlaceholder": "Optional system prompt (how the agent should answer)…",
+    "m365AgentDefaultModel": "Default model (tracks catalog upgrades)",
+    "m365AgentSources": "Sources",
+    "m365AgentAddSource": "Add from OneDrive/SharePoint",
+    "m365AgentNoSources": "Pick at least one file or folder. At most {max} documents per agent.",
+    "m365AgentRemoveSource": "Remove source",
+    "m365AgentTooManySources": "At most {max} sources per agent.",
+    "m365AgentSaveSuccess": "Agent saved. Run Index to (re)process its sources.",
+    "m365AgentCreateSuccess": "Agent created. Run Index to process its sources.",
+    "m365SourceStatus": {
+      "pending": "not indexed",
+      "indexing": "indexing…",
+      "indexed": "indexed",
+      "error": "error",
+      "missing": "missing"
+    }
   },
   "admin": {
     "title": "Admin",
@@ -4207,5 +4239,112 @@
     "truncatedNotice": "{count} field(s) dropped — the table limit is {max} columns: {names}",
     "skippedDerivedNotice": "{count} calculated column(s) not saved — formulas refer to this table's columns: {names}",
     "loadReplacesColumns": "This replaces the current columns. Existing rows keep values whose column names match."
+  },
+  "m365": {
+    "connections": {
+      "title": "Connections",
+      "description": "Connect external accounts so the assistant can work with your own content. Everything is delegated: the assistant only ever acts as you, on content you can already access.",
+      "microsoft365": "Microsoft 365",
+      "microsoft365Description": "Attach files from OneDrive and SharePoint, import emails, and save exports back to OneDrive.",
+      "delegatedNote": "Uses your own Microsoft account permissions. Nothing is shared with anyone else, and you can disconnect at any time.",
+      "connect": "Connect",
+      "disconnect": "Disconnect",
+      "featureStatus": "Feature availability",
+      "checking": "Checking…",
+      "recheck": "Re-check",
+      "statusGranted": "Available",
+      "statusPending": "Pending admin approval",
+      "statusError": "Unavailable",
+      "statusLoadFailed": "Could not check Microsoft 365 availability",
+      "consentPendingHint": "Some features are still waiting for your organization’s admin approval. They will light up automatically once approval is granted — no action needed from you.",
+      "features": {
+        "files": "OneDrive files",
+        "sharepoint": "SharePoint (read)",
+        "sharepointWrite": "SharePoint (save)",
+        "mail": "Email import"
+      }
+    },
+    "attach": {
+      "menuLabel": "Attach from OneDrive / SharePoint",
+      "menuTooltip": "Browse or search your OneDrive and SharePoint files and attach one to the conversation",
+      "fetching": "Fetching {name}…",
+      "fetchingMail": "Importing {subject}…"
+    },
+    "picker": {
+      "title": "Attach from OneDrive / SharePoint",
+      "tabs": {
+        "onedrive": "My files",
+        "recent": "Recent",
+        "shared": "Shared with me",
+        "sharepoint": "SharePoint"
+      },
+      "searchPlaceholder": "Search files…",
+      "searchSitesPlaceholder": "Search SharePoint sites…",
+      "search": "Search",
+      "searchResults": "Search results",
+      "loading": "Loading…",
+      "empty": "Nothing here",
+      "sitesHint": "Search for a SharePoint site to browse its document libraries.",
+      "errors": {
+        "consentMissing": "This feature is waiting for your organization’s admin approval.",
+        "notConnected": "Your Microsoft 365 session is unavailable. Try signing out and back in.",
+        "network": "Network error — please try again.",
+        "generic": "Something went wrong — please try again."
+      },
+      "pickTitle": "Pick a source from OneDrive / SharePoint",
+      "addFolder": "Add"
+    },
+    "mail": {
+      "menuLabel": "Import email…",
+      "menuTooltip": "Search your mailbox and import a message or a whole thread as an attachment",
+      "title": "Import email",
+      "searchPlaceholder": "Search your mailbox…",
+      "search": "Search",
+      "loading": "Loading…",
+      "empty": "No messages found",
+      "message": "Message",
+      "thread": "Thread",
+      "importMessage": "Import this message",
+      "importThread": "Import the whole thread",
+      "attachmentsNotImported": "Email file attachments are not imported — only the message text. Save an attachment and upload it here if you need it.",
+      "errors": {
+        "consentMissing": "Email import is waiting for your organization’s admin approval.",
+        "notConnected": "Your Microsoft 365 session is unavailable. Try signing out and back in.",
+        "network": "Network error — please try again.",
+        "generic": "Something went wrong — please try again."
+      }
+    },
+    "save": {
+      "sectionLabel": "Save to OneDrive",
+      "saving": "Saving to OneDrive…",
+      "saved": "Saved {name} to OneDrive.",
+      "open": "Open",
+      "failed": "Could not save to OneDrive — please try again.",
+      "consentMissing": "Saving to OneDrive is waiting for your organization’s admin approval."
+    },
+    "doc": {
+      "failureHeading": "Content could not be imported",
+      "sourceLabel": "Source",
+      "attemptedLabel": "Attempted",
+      "failureHint": "You can download the file or copy the content manually and attach it here instead."
+    },
+    "errors": {
+      "consentMissing": "This Microsoft 365 feature is waiting for your organization’s admin approval.",
+      "notConnected": "Your Microsoft 365 session is unavailable. Try signing out and back in.",
+      "fileTooLarge": "The file is larger than the upload limit for its type.",
+      "notFound": "The item could not be found — it may have been moved or deleted.",
+      "forbidden": "You don’t have access to this item.",
+      "network": "Network error — please try again.",
+      "generic": "The import failed — please try again."
+    },
+    "agentAccess": {
+      "connectFirst": "This agent answers from Microsoft 365 files. Connect Microsoft 365 in Settings → Connections to use it.",
+      "noSourcesAccessible": "You don't have access to any of this agent's source files.",
+      "partialAccess": "You don't have access to {denied} of this agent's {total} sources. Answers won't include them.",
+      "ownedBy": "owned by {owner}",
+      "requestAccess": "Request access",
+      "noneHint": "Open a file to request access from its owner; the agent will work once access is granted.",
+      "partialHint": "Open a file to request access — answers will include it automatically once granted."
+    }
   }
 }
