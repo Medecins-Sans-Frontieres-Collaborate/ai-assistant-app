@@ -7,6 +7,7 @@ import {
 } from '@/lib/services/agentAccess/AgentAccessService';
 import {
   M365_AGENT_SOURCE,
+  ORG_AGENT_SOURCE,
   PROMPT_AGENT_SOURCE,
 } from '@/lib/services/agentAccess/types';
 import { AgentDiscoveryService } from '@/lib/services/agents/AgentDiscoveryService';
@@ -711,6 +712,56 @@ export const createCredentialMiddleware = async (
     }
   }
 
+  // Admin-authored org RAG agents: the same layer-1 guard as prompt agents.
+  // Keyed on the RECORD existing for this botId (server-generated `orgr-`
+  // ids or overrides of static config ids) — static agents with no admin
+  // record keep their historical rule-free path. The cold-start fail-closed
+  // arm applies to `orgr-` ids only: a static-id botId whose override
+  // cannot be verified degrades to the static config entry, exactly like a
+  // deployment where the record never existed (blocking there would take
+  // every static agent down with a storage outage).
+  if (accessService.isEnabled() && context.botId) {
+    await accessService.ensureFresh();
+    const orgRecord = accessService.getOrgAgentById(context.botId);
+    if (
+      !orgRecord &&
+      context.botId.startsWith('orgr-') &&
+      accessService.getSnapshot().rulesUnavailable
+    ) {
+      emitAccessAudit({
+        userMail: context.user?.mail,
+        agentName: context.botId,
+        source: ORG_AGENT_SOURCE,
+        decision: 'unavailable',
+        reason: 'rules-unavailable',
+      });
+      console.error(
+        '[CredentialMiddleware] Agent access unavailable (rules-unavailable) for org-agent invocation; blocking',
+      );
+      throw agentAccessDenied('unavailable', 'rules-unavailable');
+    }
+    if (orgRecord) {
+      const decision = accessService.evaluateAccess({
+        userMail: context.user?.mail,
+        source: ORG_AGENT_SOURCE,
+        agentName: orgRecord.id,
+      });
+      emitAccessAudit({
+        userMail: context.user?.mail,
+        agentName: orgRecord.id,
+        source: ORG_AGENT_SOURCE,
+        decision: decision.decision,
+        reason: decision.reason,
+      });
+      if (decision.decision !== 'allow') {
+        console.error(
+          `[CredentialMiddleware] Agent access ${decision.decision} (${decision.reason}) for org-agent invocation; blocking`,
+        );
+        throw agentAccessDenied(decision.decision, decision.reason);
+      }
+    }
+  }
+
   // Custom-source (byom) models: gate on the top-level validated
   // modelSourcePath + the byom- id prefix — never on flags inside the parsed
   // model object (InputValidator strips them from the client body).
@@ -1094,6 +1145,48 @@ export const createModelSelectionMiddleware = async (
       }
       console.log(
         `[ModelSelectionMiddleware] Resolved m365 agent ${sanitizeForLog(m365Agent.id)} → model ${sanitizeForLog(selection.modelId ?? modelId)}`,
+      );
+    }
+  }
+
+  // Admin-authored org RAG agent resolution — same shape as the prompt/m365
+  // branches, keyed on an admin RECORD existing for this botId (`orgr-` ids
+  // or overrides of static config ids). Static agents WITHOUT a record keep
+  // their historical behavior (client-side baseModelId cosmetics riding the
+  // DeploymentNotFound fallback); with a record, the admin-chosen base model
+  // (or the catalog default) actually executes. This puts overridden static
+  // botIds on the access-service path — deliberate: an override cannot be
+  // honored without consulting the store.
+  if (
+    context.botId &&
+    !context.botId.startsWith('prompt-') &&
+    !context.botId.startsWith('m365-') &&
+    modelId === `org-${context.botId}` &&
+    accessService.isEnabled()
+  ) {
+    await accessService.ensureFresh();
+    const orgRecord = accessService.getOrgAgentById(context.botId);
+    if (
+      orgRecord &&
+      orgRecord.enabled &&
+      orgRecord.validation.status === 'ok'
+    ) {
+      // Same Foundry-misroute protection as prompt agents.
+      selection.agentMode = false;
+      const chosenId = orgRecord.baseModelId ?? getDefaultModel();
+      const configured = OpenAIModels[chosenId as OpenAIModelID] as
+        | OpenAIModel
+        | undefined;
+      if (configured) {
+        selection.modelId = configured.id;
+        selection.model = configured;
+      } else {
+        console.error(
+          `[ModelSelectionMiddleware] Org agent ${sanitizeForLog(orgRecord.id)} references unknown model '${sanitizeForLog(chosenId)}'; keeping default model behavior`,
+        );
+      }
+      console.log(
+        `[ModelSelectionMiddleware] Resolved org agent ${sanitizeForLog(orgRecord.id)} → model ${sanitizeForLog(selection.modelId ?? modelId)}`,
       );
     }
   }
