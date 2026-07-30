@@ -69,8 +69,8 @@ interface DiscoveredAgent {
   agentName: string;
   /** Agent version pinned by the Application's deployment */
   agentVersion?: string;
-  /** Source type — 'foundry' for ARM-discovered agents, 'prompt' for app-defined prompt agents */
-  type: 'foundry' | 'prompt' | 'm365';
+  /** Source type — 'foundry' for ARM-discovered agents, 'prompt' for app-defined prompt agents, 'org' for admin-authored org RAG agents */
+  type: 'foundry' | 'prompt' | 'm365' | 'org';
   /** ARM resource path this agent was discovered from */
   source?: string;
   /** Foundry project endpoint for invoking this agent */
@@ -85,6 +85,15 @@ interface DiscoveredAgent {
   category?: string;
   /** Maintainer info (from ui-maintained-by tag) */
   maintainedBy?: string;
+  /** Org RAG agents only — whether the web-search toggle is allowed. */
+  allowWebSearch?: boolean;
+  /** Org RAG agents only — whether the code-interpreter toggle is allowed. */
+  allowCodeInterpreter?: boolean;
+  /**
+   * Org RAG agents only — true when this id names a static config agent
+   * this record overrides; the client replaces the bundled entry.
+   */
+  overridesStatic?: boolean;
 }
 
 interface CachedAgentList {
