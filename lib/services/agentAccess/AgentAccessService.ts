@@ -16,11 +16,13 @@
 import {
   StoredAgentAccessRule,
   StoredGuide,
+  StoredM365Agent,
   StoredMcpConnector,
   StoredPromptAgent,
   createAgentAccessBlobStorage,
   listAllConnectors,
   listAllGuides,
+  listAllM365Agents,
   listAllPromptAgents,
   listAllRules,
   readConfig,
@@ -28,6 +30,7 @@ import {
 import {
   AgentAccessConfig,
   Guide,
+  M365Agent,
   McpConnector,
   PromptAgent,
 } from '@/lib/services/agentAccess/types';
@@ -88,6 +91,8 @@ export interface AgentAccessSnapshot {
   connectors: McpConnector[];
   /** Admin workflow guides; empty when the feature is off or never loaded. */
   guides: Guide[];
+  /** M365 file-backed agents; empty when the feature is off or never loaded. */
+  m365Agents: M365Agent[];
   /** Enabled + no last-known-good ruleset (cold start + storage outage). */
   rulesUnavailable: boolean;
   /** Epoch ms of the last successful refresh; null when never loaded. */
@@ -128,6 +133,8 @@ interface LoadedState {
   connectorsById: Map<string, McpConnector>;
   guides: Guide[];
   guidesById: Map<string, Guide>;
+  m365Agents: M365Agent[];
+  m365AgentsById: Map<string, M365Agent>;
 }
 
 export class AgentAccessService {
@@ -211,6 +218,7 @@ export class AgentAccessService {
       promptAgents: this.state?.promptAgents ?? [],
       connectors: this.state?.connectors ?? [],
       guides: this.state?.guides ?? [],
+      m365Agents: this.state?.m365Agents ?? [],
       rulesUnavailable: this.isEnabled() && this.state === null,
       fetchedAt: this.state ? this.fetchedAt : null,
     };
@@ -263,6 +271,25 @@ export class AgentAccessService {
   getGuideById(id: string): Guide | null {
     if (!this.isEnabled()) return null;
     return this.state?.guidesById.get(id) ?? null;
+  }
+
+  /** M365 agents from the cached snapshot — callers ensureFresh() first. */
+  getM365Agents(): M365Agent[] {
+    if (!this.isEnabled()) return [];
+    return this.state?.m365Agents ?? [];
+  }
+
+  /**
+   * Single M365 agent by immutable id; null when unknown (or feature off).
+   *
+   * Same contract as getConnectorById: an agent that cannot be loaded has no
+   * sources or index filter, and inventing one is not an option — so
+   * feature-off returns null and invocations referencing the id fall through
+   * to vanilla chat (the credential guard has already run at that point).
+   */
+  getM365AgentById(id: string): M365Agent | null {
+    if (!this.isEnabled()) return null;
+    return this.state?.m365AgentsById.get(id) ?? null;
   }
 
   /**
@@ -464,6 +491,32 @@ export class AgentAccessService {
         );
       }
 
+      // M365 agents: same isolated-failure contract as personas, connectors
+      // and guides. A listing failure leaves the agents ABSENT — an absent
+      // agent falls through to vanilla chat rather than exposing indexed
+      // content, so failing to load is failing closed and need not mark the
+      // snapshot unavailable.
+      let m365Agents: M365Agent[] = this.state?.m365Agents ?? [];
+      let m365AgentsById: Map<string, M365Agent> =
+        this.state?.m365AgentsById ?? new Map();
+      try {
+        const storedM365Agents = await listAllM365Agents(storage);
+        m365Agents = storedM365Agents.map(
+          (stored: StoredM365Agent) => stored.m365Agent,
+        );
+        m365AgentsById = new Map<string, M365Agent>(
+          m365Agents.map((agent) => [agent.id, agent]),
+        );
+      } catch (error) {
+        console.error(
+          `[agent-access] m365-agent listing failed (${
+            this.state
+              ? 'keeping last-known-good agents'
+              : 'no m365 agents until a load succeeds'
+          }; rules snapshot unaffected): ${sanitizeForLog(error)}`,
+        );
+      }
+
       // Keeping the fetched state is always safe — it is never older than
       // what it replaces — but freshness is only stamped when no
       // invalidate() landed while this refresh was in flight. Otherwise
@@ -481,6 +534,8 @@ export class AgentAccessService {
         connectorsById,
         guides,
         guidesById,
+        m365Agents,
+        m365AgentsById,
       };
       this.lastRefreshFailureAt = 0;
       this.fetchedAt = this.epoch === epochAtEntry ? Date.now() : 0;
