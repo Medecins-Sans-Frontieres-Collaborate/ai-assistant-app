@@ -18,11 +18,13 @@ import {
   StoredGuide,
   StoredM365Agent,
   StoredMcpConnector,
+  StoredOrgRagAgent,
   StoredPromptAgent,
   createAgentAccessBlobStorage,
   listAllConnectors,
   listAllGuides,
   listAllM365Agents,
+  listAllOrgAgents,
   listAllPromptAgents,
   listAllRules,
   readConfig,
@@ -32,6 +34,7 @@ import {
   Guide,
   M365Agent,
   McpConnector,
+  OrgRagAgent,
   PromptAgent,
 } from '@/lib/services/agentAccess/types';
 import { canonicalAgentKey } from '@/lib/services/agentAccess/types';
@@ -93,6 +96,8 @@ export interface AgentAccessSnapshot {
   guides: Guide[];
   /** M365 file-backed agents; empty when the feature is off or never loaded. */
   m365Agents: M365Agent[];
+  /** Admin org RAG agents; empty when the feature is off or never loaded. */
+  orgAgents: OrgRagAgent[];
   /** Enabled + no last-known-good ruleset (cold start + storage outage). */
   rulesUnavailable: boolean;
   /** Epoch ms of the last successful refresh; null when never loaded. */
@@ -135,6 +140,8 @@ interface LoadedState {
   guidesById: Map<string, Guide>;
   m365Agents: M365Agent[];
   m365AgentsById: Map<string, M365Agent>;
+  orgAgents: OrgRagAgent[];
+  orgAgentsById: Map<string, OrgRagAgent>;
 }
 
 export class AgentAccessService {
@@ -219,6 +226,7 @@ export class AgentAccessService {
       connectors: this.state?.connectors ?? [],
       guides: this.state?.guides ?? [],
       m365Agents: this.state?.m365Agents ?? [],
+      orgAgents: this.state?.orgAgents ?? [],
       rulesUnavailable: this.isEnabled() && this.state === null,
       fetchedAt: this.state ? this.fetchedAt : null,
     };
@@ -290,6 +298,22 @@ export class AgentAccessService {
   getM365AgentById(id: string): M365Agent | null {
     if (!this.isEnabled()) return null;
     return this.state?.m365AgentsById.get(id) ?? null;
+  }
+
+  /** Admin org RAG agents from the cached snapshot — callers ensureFresh() first. */
+  getOrgAgents(): OrgRagAgent[] {
+    if (!this.isEnabled()) return [];
+    return this.state?.orgAgents ?? [];
+  }
+
+  /**
+   * Single admin org RAG agent by immutable id; null when unknown (or
+   * feature off). Feature-off null is safe: the registry then falls back to
+   * the static config entry (or nothing), never to a half-loaded record.
+   */
+  getOrgAgentById(id: string): OrgRagAgent | null {
+    if (!this.isEnabled()) return null;
+    return this.state?.orgAgentsById.get(id) ?? null;
   }
 
   /**
@@ -517,6 +541,32 @@ export class AgentAccessService {
         );
       }
 
+      // Org RAG agents: same isolated-failure contract as the entities
+      // above. A listing failure leaves the admin records ABSENT — the
+      // registry then serves the static config file (last-known-good by
+      // definition) or nothing, so failing to load is failing safe and need
+      // not mark the snapshot unavailable.
+      let orgAgents: OrgRagAgent[] = this.state?.orgAgents ?? [];
+      let orgAgentsById: Map<string, OrgRagAgent> =
+        this.state?.orgAgentsById ?? new Map();
+      try {
+        const storedOrgAgents = await listAllOrgAgents(storage);
+        orgAgents = storedOrgAgents.map(
+          (stored: StoredOrgRagAgent) => stored.orgAgent,
+        );
+        orgAgentsById = new Map<string, OrgRagAgent>(
+          orgAgents.map((agent) => [agent.id, agent]),
+        );
+      } catch (error) {
+        console.error(
+          `[agent-access] org-agent listing failed (${
+            this.state
+              ? 'keeping last-known-good agents'
+              : 'no org agents until a load succeeds'
+          }; rules snapshot unaffected): ${sanitizeForLog(error)}`,
+        );
+      }
+
       // Keeping the fetched state is always safe — it is never older than
       // what it replaces — but freshness is only stamped when no
       // invalidate() landed while this refresh was in flight. Otherwise
@@ -536,6 +586,8 @@ export class AgentAccessService {
         guidesById,
         m365Agents,
         m365AgentsById,
+        orgAgents,
+        orgAgentsById,
       };
       this.lastRefreshFailureAt = 0;
       this.fetchedAt = this.epoch === epochAtEntry ? Date.now() : 0;
