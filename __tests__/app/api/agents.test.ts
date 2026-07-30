@@ -48,6 +48,9 @@ vi.mock('@/lib/services/agentAccess/AgentAccessService', () => ({
       ensureFresh: accessEnsureFresh,
       evaluateAccess: accessEvaluate,
       getPromptAgents: accessGetPromptAgents,
+      // M365 file-backed agents ride the same discovery merge; these tests
+      // exercise the prompt/Foundry paths, so the list is empty.
+      getM365Agents: () => [],
     }),
   },
 }));
