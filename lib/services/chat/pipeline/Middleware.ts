@@ -5,7 +5,10 @@ import {
   AgentAccessService,
   emitAccessAudit,
 } from '@/lib/services/agentAccess/AgentAccessService';
-import { PROMPT_AGENT_SOURCE } from '@/lib/services/agentAccess/types';
+import {
+  M365_AGENT_SOURCE,
+  PROMPT_AGENT_SOURCE,
+} from '@/lib/services/agentAccess/types';
 import { AgentDiscoveryService } from '@/lib/services/agents/AgentDiscoveryService';
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
 import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
@@ -31,6 +34,8 @@ import {
 } from '@/lib/services/limits/resolver';
 import { checkTokenBudget } from '@/lib/services/limits/tokenDebit';
 import { reserve } from '@/lib/services/limits/usageStore';
+import { checkAgentSourceAccess } from '@/lib/services/m365/agentSourceAccess';
+import { M365Error } from '@/lib/services/m365/graphApi';
 import { resolveCustomSourceModel } from '@/lib/services/models/customModelSources';
 import { ModelSelector, RateLimiter } from '@/lib/services/shared';
 
@@ -58,7 +63,7 @@ import { ChatContext } from './ChatContext';
 import { auth, getAccessTokenForOBO } from '@/auth';
 import { env } from '@/config/environment';
 import { getLimitDefinition } from '@/config/limits';
-import { getFallbackChain } from '@/config/models';
+import { getDefaultModel, getFallbackChain } from '@/config/models';
 import { TokenCredential } from '@azure/identity';
 
 /**
@@ -628,6 +633,84 @@ export const createCredentialMiddleware = async (
     }
   }
 
+  // M365 file-backed agents: the same layer-1 guard as prompt agents, PLUS
+  // the layer-2 content trim (docs/M365_SECOND_PASS_AGENTS_DESIGN.md): the
+  // requesting user's OWN Graph token must open at least one of the agent's
+  // sources, and retrieval downstream is hard-filtered to that subset via
+  // context.m365AccessibleSourceIds. This runs in middleware (not the
+  // enricher) because middleware can reject the request — the pipeline
+  // swallows stage errors — and the model must never be called for a user
+  // with zero accessible sources.
+  if (
+    accessService.isEnabled() &&
+    (context.m365Agent || context.botId?.startsWith('m365-'))
+  ) {
+    await accessService.ensureFresh();
+    const m365Agent =
+      context.m365Agent ??
+      (context.botId ? accessService.getM365AgentById(context.botId) : null);
+    if (!m365Agent && accessService.getSnapshot().rulesUnavailable) {
+      emitAccessAudit({
+        userMail: context.user?.mail,
+        agentName: context.botId!,
+        source: M365_AGENT_SOURCE,
+        decision: 'unavailable',
+        reason: 'rules-unavailable',
+      });
+      console.error(
+        '[CredentialMiddleware] Agent access unavailable (rules-unavailable) for m365-agent invocation; blocking',
+      );
+      throw agentAccessDenied('unavailable', 'rules-unavailable');
+    }
+    if (m365Agent) {
+      const decision = accessService.evaluateAccess({
+        userMail: context.user?.mail,
+        source: M365_AGENT_SOURCE,
+        agentName: m365Agent.id,
+      });
+      emitAccessAudit({
+        userMail: context.user?.mail,
+        agentName: m365Agent.id,
+        source: M365_AGENT_SOURCE,
+        decision: decision.decision,
+        reason: decision.reason,
+      });
+      if (decision.decision !== 'allow') {
+        console.error(
+          `[CredentialMiddleware] Agent access ${decision.decision} (${decision.reason}) for m365-agent invocation; blocking`,
+        );
+        throw agentAccessDenied(decision.decision, decision.reason);
+      }
+
+      // Layer 2 — trim to the sources the user's own token can open. Audit
+      // records counts only, never file names or content.
+      try {
+        const access = await checkAgentSourceAccess(
+          req,
+          context.user?.id ?? context.session?.user?.id ?? 'unknown',
+          m365Agent,
+        );
+        console.log(
+          `[agent-access-audit] m365-layer2 agent=${sanitizeForLog(m365Agent.id)} accessible=${access.accessibleSourceIds.length}/${m365Agent.sources.length}`,
+        );
+        if (access.accessibleSourceIds.length === 0) {
+          throw agentAccessDenied('deny', 'm365-no-file-access');
+        }
+        return {
+          m365AccessibleSourceIds: access.accessibleSourceIds,
+        };
+      } catch (error) {
+        if (error instanceof M365Error) {
+          // No usable Graph session (not connected / consent pending):
+          // fail closed with the unavailable copy — the preflight endpoint
+          // gives the client the actionable connect/request-access UX.
+          throw agentAccessDenied('unavailable', `m365-${error.kind}`);
+        }
+        throw error;
+      }
+    }
+  }
+
   // Custom-source (byom) models: gate on the top-level validated
   // modelSourcePath + the byom- id prefix — never on flags inside the parsed
   // model object (InputValidator strips them from the client body).
@@ -967,6 +1050,50 @@ export const createModelSelectionMiddleware = async (
       }
       console.log(
         `[ModelSelectionMiddleware] Resolved prompt agent ${sanitizeForLog(promptAgent.id)} → model ${sanitizeForLog(selection.modelId ?? modelId)}`,
+      );
+    }
+  }
+
+  // M365 file-backed agent resolution — same shape and same guards as the
+  // prompt-agent branch above (a request is one or the other; both key on
+  // `org-<botId>`). Differences: `chatModelId: null` means "ride the
+  // default" (the agent tracks catalog upgrades), and the RAG retrieval
+  // happens later in M365AgentEnricher rather than via a system prompt.
+  if (
+    context.botId?.startsWith('m365-') &&
+    modelId === `org-${context.botId}` &&
+    accessService.isEnabled()
+  ) {
+    await accessService.ensureFresh();
+    const m365Agent = accessService.getM365AgentById(context.botId);
+    if (m365Agent) {
+      selection.m365Agent = m365Agent;
+      // Same Foundry-misroute protection as prompt agents.
+      selection.agentMode = false;
+      if (m365Agent.chatModelId) {
+        const configured = OpenAIModels[
+          m365Agent.chatModelId as OpenAIModelID
+        ] as OpenAIModel | undefined;
+        if (configured) {
+          selection.modelId = configured.id;
+          selection.model = configured;
+        } else {
+          console.error(
+            `[ModelSelectionMiddleware] M365 agent ${sanitizeForLog(m365Agent.id)} references unknown model '${sanitizeForLog(m365Agent.chatModelId)}'; keeping default model behavior`,
+          );
+        }
+      } else {
+        const defaultId = getDefaultModel();
+        const fallback = OpenAIModels[defaultId as OpenAIModelID] as
+          | OpenAIModel
+          | undefined;
+        if (fallback) {
+          selection.modelId = fallback.id;
+          selection.model = fallback;
+        }
+      }
+      console.log(
+        `[ModelSelectionMiddleware] Resolved m365 agent ${sanitizeForLog(m365Agent.id)} → model ${sanitizeForLog(selection.modelId ?? modelId)}`,
       );
     }
   }
