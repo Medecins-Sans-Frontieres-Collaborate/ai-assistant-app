@@ -61,6 +61,23 @@ export async function htmlToPlainText(html: string): Promise<string> {
   return temp.textContent || temp.innerText || '';
 }
 
+function pdfOptions(fileName: string) {
+  return {
+    margin: 10,
+    filename: fileName,
+    image: { type: 'jpeg' as const, quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' as const },
+    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] as const },
+  };
+}
+
+// Trailing padding keeps the last line of content off the page-slice
+// boundary; without it html2pdf's rasterizer can crop the final glyph row.
+function wrapForPdf(html: string): string {
+  return `<div style="padding-bottom:24mm">${html}</div>`;
+}
+
 /**
  * Export HTML as PDF (simple wrapper using html2pdf.js)
  */
@@ -71,25 +88,41 @@ export async function exportToPDF(
   try {
     // Dynamically import html2pdf only when needed (client-side only)
     const html2pdf = (await import('html2pdf.js')).default;
-
-    // Trailing padding keeps the last line of content off the page-slice
-    // boundary; without it html2pdf's rasterizer can crop the final glyph row.
-    const wrapped = `<div style="padding-bottom:24mm">${html}</div>`;
-
-    const options = {
-      margin: 10,
-      filename: fileName,
-      image: { type: 'jpeg' as const, quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' as const },
-      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] as const },
-    };
-
-    await html2pdf().set(options).from(wrapped).save();
+    await html2pdf().set(pdfOptions(fileName)).from(wrapForPdf(html)).save();
   } catch (error) {
     console.error('Error exporting to PDF:', error);
     throw new Error('Failed to export PDF. Please try again.');
   }
+}
+
+/**
+ * Render HTML to a PDF Blob without triggering a download — for callers that
+ * send the bytes somewhere (e.g. Save to OneDrive) instead of to disk.
+ */
+export async function renderPdfBlob(html: string): Promise<Blob> {
+  const html2pdf = (await import('html2pdf.js')).default;
+  return (await html2pdf()
+    .set(pdfOptions('document.pdf'))
+    .from(wrapForPdf(html))
+    .outputPdf('blob')) as Blob;
+}
+
+/**
+ * Convert HTML to a DOCX Blob via the server-side converter.
+ */
+export async function fetchDocxBlob(html: string): Promise<Blob> {
+  const response = await fetch('/api/export/docx', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ html }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to convert to DOCX');
+  }
+  return response.blob();
 }
 
 /**
@@ -100,20 +133,7 @@ export async function exportToDOCX(
   fileName: string,
 ): Promise<void> {
   try {
-    const response = await fetch('/api/export/docx', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ html }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to convert to DOCX');
-    }
-
-    // Get the DOCX blob from response
-    const blob = await response.blob();
+    const blob = await fetchDocxBlob(html);
 
     // Download the DOCX file
     const url = URL.createObjectURL(blob);
