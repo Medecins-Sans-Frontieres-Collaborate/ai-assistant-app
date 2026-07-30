@@ -193,11 +193,22 @@ export const AgentsTab: FC<AgentsTabProps> = ({
   // scheme (they have no Foundry source path).
   const officePathSet = new Set(officePaths);
   const promptAgents = foundryAgents.filter((a) => a.type === 'prompt');
+  // M365 file-backed agents render alongside prompt agents (org-managed,
+  // `org-<id>` ids, no Foundry source path).
+  const m365Agents = foundryAgents.filter((a) => a.type === 'm365');
+  const appManagedAgents = [...promptAgents, ...m365Agents];
   const regionalAgents = foundryAgents.filter(
-    (a) => a.type !== 'prompt' && (!a.source || a.source === regionalPath),
+    (a) =>
+      a.type !== 'prompt' &&
+      a.type !== 'm365' &&
+      (!a.source || a.source === regionalPath),
   );
   const officeFoundryAgents = foundryAgents.filter(
-    (a) => a.type !== 'prompt' && a.source && officePathSet.has(a.source),
+    (a) =>
+      a.type !== 'prompt' &&
+      a.type !== 'm365' &&
+      a.source &&
+      officePathSet.has(a.source),
   );
   const getSourceAgents = (sourcePath: string) =>
     foundryAgents.filter((a) => a.source === sourcePath);
@@ -209,7 +220,7 @@ export const AgentsTab: FC<AgentsTabProps> = ({
     isBotsEnabled &&
     (organizationAgents.length > 0 ||
       regionalAgents.length > 0 ||
-      promptAgents.length > 0);
+      appManagedAgents.length > 0);
   const hasOfficeSection =
     isBotsEnabled && officeName != null && officeFoundryAgents.length > 0;
 
@@ -243,9 +254,9 @@ export const AgentsTab: FC<AgentsTabProps> = ({
       }
     };
     organizationAgents.forEach((a) => consider(`org-${a.id}`, a.name));
-    promptAgents.forEach((a) => consider(`org-${a.id}`, a.name));
+    appManagedAgents.forEach((a) => consider(`org-${a.id}`, a.name));
     foundryAgents
-      .filter((a) => a.type !== 'prompt')
+      .filter((a) => a.type !== 'prompt' && a.type !== 'm365')
       .forEach((a) => consider(foundryModelId(a), a.name));
     return Array.from(byId.values());
   })();
@@ -266,7 +277,7 @@ export const AgentsTab: FC<AgentsTabProps> = ({
   // never route through the Foundry execution path).
   const selectedPromptAgent =
     !selectedStaticOrgAgent && selectedModelId?.startsWith('org-')
-      ? promptAgents.find((a) => `org-${a.id}` === selectedModelId)
+      ? appManagedAgents.find((a) => `org-${a.id}` === selectedModelId)
       : undefined;
 
   // For Foundry-discovered agents, synthesize a minimal OrganizationAgent so the
@@ -371,7 +382,7 @@ export const AgentsTab: FC<AgentsTabProps> = ({
                     color: a.color,
                     matchId: foundryModelId(a),
                   })),
-                  ...promptAgents.map((a) => ({
+                  ...appManagedAgents.map((a) => ({
                     id: a.id,
                     name: a.name,
                     description: a.description,
