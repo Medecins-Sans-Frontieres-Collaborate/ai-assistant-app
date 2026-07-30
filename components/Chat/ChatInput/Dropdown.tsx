@@ -417,30 +417,41 @@ const Dropdown: React.FC<DropdownProps> = ({
   // Foundry agents and org agents with allowWebSearch:false manage their own
   // search behavior — hide the toggle so it can't contradict the agent.
   const hideWebSearch = useMemo(() => {
-    const modelId = selectedConversation?.model?.id;
+    const model = selectedConversation?.model;
+    const modelId = model?.id;
     if (!modelId) return false;
     if (modelId.startsWith('foundry-')) return true;
     const orgAgentId = getOrganizationAgentIdFromModelId(modelId);
     if (!orgAgentId) return false;
+    // Admin-authored org RAG agents carry their gates on the model object
+    // (they're absent from — or fresher than — the static registry).
+    if (typeof model?.allowWebSearch === 'boolean') {
+      return !model.allowWebSearch;
+    }
     const agent = getOrganizationAgentById(orgAgentId);
     if (!agent) return false;
     if (agent.type === 'foundry') return true;
     return agent.allowWebSearch === false;
-  }, [selectedConversation?.model?.id]);
+  }, [selectedConversation?.model]);
 
   // Same rule for the code-interpreter toggle: hidden for Foundry agents
   // (they orchestrate their own tools) and org agents that don't opt in.
   const hideCodeInterpreter = useMemo(() => {
-    const modelId = selectedConversation?.model?.id;
+    const model = selectedConversation?.model;
+    const modelId = model?.id;
     if (!modelId) return false;
     if (modelId.startsWith('foundry-')) return true;
     const orgAgentId = getOrganizationAgentIdFromModelId(modelId);
     if (!orgAgentId) return false;
+    // Same model-object-first rule as hideWebSearch.
+    if (typeof model?.allowCodeInterpreter === 'boolean') {
+      return !model.allowCodeInterpreter;
+    }
     const agent = getOrganizationAgentById(orgAgentId);
     if (!agent) return false;
     if (agent.type === 'foundry') return true;
     return agent.allowCodeInterpreter !== true;
-  }, [selectedConversation?.model?.id]);
+  }, [selectedConversation?.model]);
 
   // Per-item icon color is a deliberate carve-out: this menu is scanned often
   // and the hue helps locate actions at a glance. Each color matches its
