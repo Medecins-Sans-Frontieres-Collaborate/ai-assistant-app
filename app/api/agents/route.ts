@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessService';
-import { PROMPT_AGENT_SOURCE } from '@/lib/services/agentAccess/types';
+import {
+  M365_AGENT_SOURCE,
+  PROMPT_AGENT_SOURCE,
+} from '@/lib/services/agentAccess/types';
 import {
   AgentDiscoveryService,
   DiscoveredAgent,
@@ -69,6 +72,39 @@ async function getVisiblePromptAgentEntries(
   }
   return entries;
 }
+
+/**
+ * M365 file-backed agents, filtered by the same layer-1 rules. Deliberately
+ * visibility-only: users who cannot open the base files still SEE the agent
+ * (requirement 1 of the design) — the preflight endpoint + chat-time trim
+ * handle layer 2.
+ */
+async function getVisibleM365AgentEntries(
+  userMail: string | undefined,
+): Promise<DiscoveredAgent[]> {
+  const accessService = AgentAccessService.getInstance();
+  if (!accessService.isEnabled()) return [];
+  await accessService.ensureFresh();
+  const entries: DiscoveredAgent[] = [];
+  for (const m365Agent of accessService.getM365Agents()) {
+    const { decision } = accessService.evaluateAccess({
+      userMail,
+      source: M365_AGENT_SOURCE,
+      agentName: m365Agent.id,
+    });
+    if (decision !== 'deny') {
+      entries.push({
+        id: m365Agent.id,
+        name: m365Agent.name,
+        description: m365Agent.description,
+        agentName: m365Agent.id,
+        source: M365_AGENT_SOURCE,
+        type: 'm365',
+      });
+    }
+  }
+  return entries;
+}
 export async function GET(request: NextRequest) {
   const session = await auth();
 
@@ -113,10 +149,13 @@ export async function GET(request: NextRequest) {
     const promptAgentEntries = await getVisiblePromptAgentEntries(
       session.user.mail,
     );
+    const m365AgentEntries = await getVisibleM365AgentEntries(
+      session.user.mail,
+    );
 
     if (allPaths.length === 0) {
       return NextResponse.json({
-        agents: promptAgentEntries,
+        agents: [...promptAgentEntries, ...m365AgentEntries],
         regionalPath: null,
         officePaths: [],
       });
@@ -160,7 +199,7 @@ export async function GET(request: NextRequest) {
           `[/api/agents] OBO failed for ${session.user.mail ?? 'unknown'}: ${errMsg}`,
         );
         return NextResponse.json({
-          agents: promptAgentEntries,
+          agents: [...promptAgentEntries, ...m365AgentEntries],
           regionalPath,
           officePaths,
         });
@@ -273,7 +312,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({
-      agents: [...visibleAgents, ...promptAgentEntries],
+      agents: [...visibleAgents, ...promptAgentEntries, ...m365AgentEntries],
       regionalPath,
       officePaths,
     });
