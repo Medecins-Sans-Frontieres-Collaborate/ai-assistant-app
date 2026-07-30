@@ -1,5 +1,6 @@
 import {
   IconBraces,
+  IconBrandOnedrive,
   IconCamera,
   IconCirclePlus,
   IconCode,
@@ -7,6 +8,7 @@ import {
   IconFileText,
   IconLanguage,
   IconLink,
+  IconMailDown,
   IconPaperclip,
   IconPlugConnected,
   IconSparkles,
@@ -30,6 +32,7 @@ import { useCameraSupport } from '@/client/hooks/ui/useCameraSupport';
 import { useDropdownKeyboardNav } from '@/client/hooks/ui/useDropdownKeyboardNav';
 import useEnhancedOutsideClick from '@/client/hooks/ui/useEnhancedOutsideClick';
 import { useIsMobile } from '@/client/hooks/ui/useIsMobile';
+import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
 import { normalizeForSearch } from '@/lib/utils/app/localeSearch';
 import { isRTL } from '@/lib/utils/app/rtl';
@@ -62,6 +65,8 @@ import Modal from '@/components/UI/Modal';
 import { DropdownCategoryGroup } from './DropdownCategoryGroup';
 import { DropdownMenuItem, MenuItem } from './DropdownMenuItem';
 import { DropdownMoreSection } from './DropdownMoreSection';
+import M365FilePickerModal from './M365FilePickerModal';
+import M365MailImportModal from './M365MailImportModal';
 import UrlAttachModal from './UrlAttachModal';
 
 import { useChatInputStore } from '@/client/stores/chatInputStore';
@@ -125,6 +130,15 @@ const Dropdown: React.FC<DropdownProps> = ({
   // can't turn extraction on. See docs/LAUNCHDARKLY_FLAGS.md.
   const { structuredDataExtraction } = useFlags();
   const isExtractionEnabled = structuredDataExtraction !== false;
+  // M365 entries are flag-gated (fail-closed, localhost escape hatch — see
+  // useM365Enabled) AND require the per-user connect opt-in from Settings →
+  // Connections — nothing appears from signing in alone
+  // (docs/M365_FIRST_PASS_DESIGN.md).
+  const m365Connected = useSettingsStore((state) => state.m365Connected);
+  const { filesEnabled: m365FilesFlag, mailEnabled: m365MailFlag } =
+    useM365Enabled();
+  const isM365FilesEnabled = m365FilesFlag && m365Connected;
+  const isM365MailEnabled = m365MailFlag && m365Connected;
   const setTranscriptionStatus = useChatInputStore(
     (state) => state.setTranscriptionStatus,
   );
@@ -159,6 +173,8 @@ const Dropdown: React.FC<DropdownProps> = ({
   // Parent rows whose nested sources are currently revealed (e.g. `attach`).
   const [expandedParentIds, setExpandedParentIds] = useState<string[]>([]);
   const [urlModalOpen, setUrlModalOpen] = useState(false);
+  const [m365PickerOpen, setM365PickerOpen] = useState(false);
+  const [m365MailOpen, setM365MailOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -184,6 +200,7 @@ const Dropdown: React.FC<DropdownProps> = ({
 
   const t = useTranslations();
   const tUrl = useTranslations('urlFetch');
+  const tM365 = useTranslations('m365');
 
   const chatInputImageRef = useRef<{ openFilePicker: () => void }>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -683,6 +700,51 @@ const Dropdown: React.FC<DropdownProps> = ({
         // it. The modal lives outside the menu, so closing the menu is safe.
         parentId: 'attach',
       },
+      ...(isM365FilesEnabled
+        ? [
+            {
+              id: 'attach-m365',
+              icon: (
+                <IconBrandOnedrive
+                  size={18}
+                  className="flex-shrink-0 text-blue-500"
+                />
+              ),
+              label: tM365('attach.menuLabel'),
+              infoTooltip: tM365('attach.menuTooltip'),
+              onClick: () => {
+                setM365PickerOpen(true);
+                closeDropdown();
+              },
+              category: 'media' as const,
+              opensDialog: true,
+              // Another alternate source for `attach`, like attach-link.
+              parentId: 'attach',
+            },
+          ]
+        : []),
+      ...(isM365MailEnabled
+        ? [
+            {
+              id: 'attach-m365-mail',
+              icon: (
+                <IconMailDown
+                  size={18}
+                  className="flex-shrink-0 text-sky-600"
+                />
+              ),
+              label: tM365('mail.menuLabel'),
+              infoTooltip: tM365('mail.menuTooltip'),
+              onClick: () => {
+                setM365MailOpen(true);
+                closeDropdown();
+              },
+              category: 'media' as const,
+              opensDialog: true,
+              parentId: 'attach',
+            },
+          ]
+        : []),
       {
         id: 'transcribe',
         icon: (
@@ -759,6 +821,9 @@ const Dropdown: React.FC<DropdownProps> = ({
     [
       t,
       tUrl,
+      tM365,
+      isM365FilesEnabled,
+      isM365MailEnabled,
       searchMode,
       interpreterMode,
       selectedToneId,
@@ -1324,6 +1389,16 @@ const Dropdown: React.FC<DropdownProps> = ({
       <UrlAttachModal
         isOpen={urlModalOpen}
         onClose={() => setUrlModalOpen(false)}
+      />
+
+      <M365FilePickerModal
+        isOpen={m365PickerOpen}
+        onClose={() => setM365PickerOpen(false)}
+      />
+
+      <M365MailImportModal
+        isOpen={m365MailOpen}
+        onClose={() => setM365MailOpen(false)}
       />
 
       {/* Hidden file input for all file types: images, documents, data, code, audio, and video */}
