@@ -703,6 +703,15 @@ interface SettingsStore {
   ) => void;
   setSuggestRevisionsLargeRewriteRatio: (ratio: number) => void;
 
+  /**
+   * Per-user Microsoft 365 opt-in. M365 features (attach from OneDrive/
+   * SharePoint, email import, save to OneDrive) stay hidden until the user
+   * explicitly connects in Settings → Connections — nothing is enabled by
+   * virtue of signing in (docs/M365_GRAPH_PERMISSIONS_REQUEST.md).
+   */
+  m365Connected: boolean;
+  setM365Connected: (connected: boolean) => void;
+
   // Reset
   resetSettings: () => void;
 }
@@ -819,6 +828,7 @@ export const useSettingsStore = create<SettingsStore>()(
       confirmStopFromButton: true,
       confirmStopFromKeyboard: true,
       autoClearResolvedEdits: false,
+      m365Connected: false,
       suggestRevisions: true,
       suggestRevisionsExceptions: {
         largeRewrites: true,
@@ -1520,6 +1530,7 @@ export const useSettingsStore = create<SettingsStore>()(
         set({ autoClearResolvedEdits: enabled }),
 
       setSuggestRevisions: (enabled) => set({ suggestRevisions: enabled }),
+      setM365Connected: (connected) => set({ m365Connected: connected }),
 
       setSuggestRevisionsException: (key, enabled) =>
         set((state) => ({
@@ -1599,11 +1610,12 @@ export const useSettingsStore = create<SettingsStore>()(
             structuralReorders: false,
           },
           suggestRevisionsLargeRewriteRatio: DEFAULT_LARGE_REWRITE_RATIO,
+          m365Connected: false,
         }),
     }),
     {
       name: 'settings-storage',
-      version: 49, // Increment this when schema changes to trigger migrations
+      version: 50, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1695,6 +1707,7 @@ export const useSettingsStore = create<SettingsStore>()(
         confirmStopFromKeyboard: state.confirmStopFromKeyboard,
         autoClearResolvedEdits: state.autoClearResolvedEdits,
         suggestRevisions: state.suggestRevisions,
+        m365Connected: state.m365Connected,
         suggestRevisionsExceptions: state.suggestRevisionsExceptions,
         suggestRevisionsLargeRewriteRatio:
           state.suggestRevisionsLargeRewriteRatio,
@@ -2179,6 +2192,14 @@ export const useSettingsStore = create<SettingsStore>()(
         if (version < 49) {
           if (typeof state.memoryCapturePaused !== 'boolean') {
             state.memoryCapturePaused = false;
+          }
+        }
+
+        // Version 49 → 50: Microsoft 365 opt-in. Backfill to disconnected —
+        // M365 access is explicit per-user opt-in, never a default.
+        if (version < 50) {
+          if (typeof state.m365Connected !== 'boolean') {
+            state.m365Connected = false;
           }
         }
 
