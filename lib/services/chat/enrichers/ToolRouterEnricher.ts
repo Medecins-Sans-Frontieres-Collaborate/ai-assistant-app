@@ -1,5 +1,6 @@
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { consumeToolBudget } from '@/lib/services/limits/toolBudget';
+import { peekOrgAgentById } from '@/lib/services/orgAgents/orgAgentRegistry';
 
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
@@ -36,7 +37,6 @@ import { readCitedSources } from '../tools/citedSourceReader';
 import { buildNewsResult } from '../tools/newsSearch';
 
 import { env } from '@/config/environment';
-import { getOrganizationAgentById } from '@/lib/organizationAgents';
 import { emitSearchInterim, emitToolCallRecord } from '@/lib/streamMarkers';
 
 /**
@@ -113,7 +113,9 @@ export class ToolRouterEnricher extends BasePipelineStage {
       context.searchMode === SearchMode.ALWAYS;
     if (!modeActive) return false;
     if (context.botId && !context.promptAgent && !context.m365Agent) {
-      const agent = getOrganizationAgentById(context.botId);
+      // Sync snapshot peek (shouldRun cannot await): admin records win over
+      // the static config; a cold snapshot denies — fail closed.
+      const agent = peekOrgAgentById(context.botId);
       return !!agent?.allowWebSearch;
     }
     return true;
@@ -146,7 +148,8 @@ export class ToolRouterEnricher extends BasePipelineStage {
       context.interpreterMode === InterpreterMode.ALWAYS;
     if (!modeActive) return false;
     if (context.botId && !context.promptAgent && !context.m365Agent) {
-      const agent = getOrganizationAgentById(context.botId);
+      // Same sync snapshot peek as searchRequested (fail closed when cold).
+      const agent = peekOrgAgentById(context.botId);
       return !!agent?.allowCodeInterpreter;
     }
     return true;
