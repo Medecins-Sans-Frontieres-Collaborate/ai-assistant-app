@@ -5,6 +5,7 @@ import type {
   M365Agent,
   MapDataset,
   MapDatasetMeta,
+  OrgRagAgent,
   PromptAgent,
 } from '@/lib/services/agentAccess/types';
 
@@ -110,6 +111,34 @@ export interface AdminM365AgentsResponse {
   fetchedAt?: number | null;
   /** Server's env-configured per-agent document cap (M365_AGENT_MAX_DOCUMENTS). */
   maxDocuments?: number;
+}
+
+/**
+ * Client mirror of ORG_AGENT_SOURCE (value import forbidden here — see the
+ * module comment above). The pseudo-source half of every org RAG agent's
+ * canonical key.
+ */
+export const CLIENT_ORG_AGENT_SOURCE = 'org-agent';
+
+/**
+ * One org RAG agent as served by GET /api/agent-access/org-agents (the etag
+ * feeds the If-Match CAS on PUT/DELETE).
+ */
+export interface AdminStoredOrgAgent {
+  canonicalKey: string;
+  agent: OrgRagAgent;
+  etag: string;
+}
+
+export interface AdminOrgAgentsResponse {
+  orgAgents: AdminStoredOrgAgent[];
+  /** Same outage contract as promptAgentsUnavailable. */
+  orgAgentsUnavailable?: boolean;
+  fetchedAt?: number | null;
+  /** Static config agent ids offered as override targets. */
+  staticAgentIds?: string[];
+  /** Creation is global-admin only; the server reports whether to offer it. */
+  canCreate?: boolean;
 }
 
 /**
