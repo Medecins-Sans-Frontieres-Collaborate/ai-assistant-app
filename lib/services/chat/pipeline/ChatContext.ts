@@ -1,6 +1,6 @@
 import { Session } from 'next-auth';
 
-import { PromptAgent } from '@/lib/services/agentAccess/types';
+import { M365Agent, PromptAgent } from '@/lib/services/agentAccess/types';
 import { ModelSelector } from '@/lib/services/shared';
 
 import { ActiveFile, ApprovalResponse, Message } from '@/types/chat';
@@ -237,6 +237,22 @@ export interface ChatContext {
    * Never routes into the Foundry execution path (no agentId is ever set).
    */
   promptAgent?: PromptAgent;
+
+  /**
+   * M365 file-backed RAG agent resolved server-side from `botId`
+   * (docs/M365_SECOND_PASS_AGENTS_DESIGN.md). Set by
+   * createModelSelectionMiddleware; drives M365AgentEnricher's retrieval and
+   * the credential middleware's two-layer access guard. Never routes into
+   * the Foundry execution path.
+   */
+  m365Agent?: M365Agent;
+
+  /**
+   * Layer-2 trim result: the agent's source ids the REQUESTING USER'S own
+   * Graph token can open, verified by the credential middleware. Retrieval
+   * is hard-filtered to this subset — never read sources outside it.
+   */
+  m365AccessibleSourceIds?: string[];
 
   /** Thread ID for continuing conversations */
   threadId?: string;

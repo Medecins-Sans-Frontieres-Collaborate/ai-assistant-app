@@ -29,7 +29,10 @@ type MessageContent =
 export const STAGE_TIMEOUTS: Record<string, number> = {
   FileProcessor: 180000, // 180s (3 min) for large file download + extraction + processing
   ImageProcessor: 5000, // 5s for image validation
-  RAGEnricher: 10000, // 10s for knowledge base search
+  RAGEnricher: 10000,
+  // Reformulation LLM + query embedding + hybrid search over the shared
+  // m365-agents index.
+  M365AgentEnricher: 20000, // 10s for knowledge base search
   ToolRouterEnricher: 180000, // 180s for web search (reasoning agent + Bing grounding + result processing can run long)
   AgentEnricher: 5000, // 5s for agent selection
   StandardChatHandler: 90000, // 90s for LLM response (reasoning models can take longer)
