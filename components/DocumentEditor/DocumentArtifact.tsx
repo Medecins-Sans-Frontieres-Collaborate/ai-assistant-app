@@ -13,6 +13,10 @@ import { useTranslations } from 'next-intl';
 
 import { ExportFormat } from '@/client/hooks/document/exportFormats';
 import { useDocumentExport } from '@/client/hooks/document/useDocumentExport';
+import {
+  useM365Save,
+  useM365SaveAvailable,
+} from '@/client/hooks/document/useM365Save';
 import { useTheme } from '@/client/hooks/ui/useTheme';
 
 import { DropdownPortal } from '@/components/UI/DropdownPortal';
@@ -42,6 +46,8 @@ export default function DocumentArtifact({
   const { fileName, modifiedCode, setFileName, setIsEditorOpen } =
     useArtifactStore();
   const exportAs = useDocumentExport();
+  const saveToOneDrive = useM365Save();
+  const oneDriveAvailable = useM365SaveAvailable();
 
   const [isEditing, setIsEditing] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
@@ -60,6 +66,11 @@ export default function DocumentArtifact({
   const handleExport = async (format: ExportFormat) => {
     setShowExportMenu(false);
     await exportAs(format, modifiedCode, getBaseFileName());
+  };
+
+  const handleSaveToOneDrive = async (format: ExportFormat) => {
+    setShowExportMenu(false);
+    await saveToOneDrive(format, modifiedCode, getBaseFileName());
   };
 
   return (
@@ -124,7 +135,12 @@ export default function DocumentArtifact({
             onClose={() => setShowExportMenu(false)}
             align="right"
           >
-            <ExportFormatMenu onSelect={handleExport} />
+            <ExportFormatMenu
+              onSelect={handleExport}
+              onSaveToOneDrive={
+                oneDriveAvailable ? handleSaveToOneDrive : undefined
+              }
+            />
           </DropdownPortal>
 
           <div className="w-px h-5 bg-neutral-300 dark:bg-neutral-700 mx-1" />
