@@ -20,6 +20,7 @@ export const AGENT_ACCESS_GUIDES_PREFIX = `${AGENT_ACCESS_PREFIX}guides/`;
 export const AGENT_ACCESS_MAP_DATASET_META_PREFIX = `${AGENT_ACCESS_PREFIX}map-datasets/meta/`;
 export const AGENT_ACCESS_MAP_DATASET_DATA_PREFIX = `${AGENT_ACCESS_PREFIX}map-datasets/data/`;
 export const AGENT_ACCESS_M365_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}m365-agents/`;
+export const AGENT_ACCESS_ORG_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}org-agents/`;
 
 /**
  * Pseudo-source for app-defined prompt agents in canonical keys
@@ -59,6 +60,14 @@ export const MAP_DATASET_SOURCE = 'map-dataset';
  * local-admin delegation, and history machinery for free.
  */
 export const M365_AGENT_SOURCE = 'm365-agent';
+
+/**
+ * Pseudo-source for admin-authored organization RAG agents in canonical keys
+ * (`org-agent::<id>`). Same rationale as PROMPT_AGENT_SOURCE: reusing the
+ * canonical-key namespace means these agents get the existing rule matching,
+ * local-admin delegation, and history machinery for free.
+ */
+export const ORG_AGENT_SOURCE = 'org-agent';
 
 export const AgentAccessTypeSchema = z.enum(['public', 'restricted']);
 export type AgentAccessType = z.infer<typeof AgentAccessTypeSchema>;
@@ -222,6 +231,90 @@ export const M365AgentHistoryEntrySchema = z.object({
   updatedAt: z.string(),
 });
 export type M365AgentHistoryEntry = z.infer<typeof M365AgentHistoryEntrySchema>;
+
+/**
+ * Azure AI Search index names: 2–128 chars, lowercase letters / digits /
+ * dashes, no leading/trailing dash. Also keeps the name URL-path-safe for
+ * the REST calls that embed it.
+ */
+export const SEARCH_INDEX_NAME_REGEX =
+  /^[a-z0-9](?:[a-z0-9-]{0,126}[a-z0-9])?$/;
+
+/**
+ * Outcome of the save-time Azure AI Search validation for an org RAG agent.
+ * `status: 'ok'` is a serving prerequisite — the registry never serves an
+ * agent whose index failed its contract check, so a typo'd or restructured
+ * index can never surface as a silently-broken knowledge agent.
+ */
+export const OrgAgentValidationSchema = z.object({
+  status: z.enum(['ok', 'failed']),
+  checkedAt: z.string(),
+  /** Documents in the index at check time; 0 usually means "still staging". */
+  documentCount: z.number().int().nonnegative().optional(),
+  error: z.string().optional(),
+});
+export type OrgAgentValidation = z.infer<typeof OrgAgentValidationSchema>;
+
+/**
+ * An admin-authored organization RAG agent: the blob-store counterpart of a
+ * config/organization-agents.json entry (type 'rag'), pointing at an
+ * existing Azure AI Search index on the org search endpoint. The registry
+ * (lib/services/orgAgents/orgAgentRegistry.ts) merges these records over the
+ * static file — a record whose id matches a static agent OVERRIDES it
+ * (including `enabled: false` to retire a file agent without a deploy);
+ * other ids are server-generated `orgr-<hex>`. Read-side permissive per the
+ * schema-evolution rule.
+ */
+export const OrgRagAgentSchema = z.object({
+  version: z.literal(1),
+  /** `orgr-<hex>` (server-generated) or a static config id (override). */
+  id: z.string().min(1),
+  name: z.string().min(1),
+  description: z.string().default(''),
+  /** Tabler icon name; unknown names fall back to IconRobot client-side. */
+  icon: z.string().default('IconHexagon'),
+  color: z.string().default('#4190f2'),
+  category: z.string().default(''),
+  maintainedBy: z.string().default(''),
+  systemPrompt: z.string().default(''),
+  /** Attribution links shown in the agent details panel. */
+  sources: z
+    .array(z.object({ name: z.string().min(1), url: z.string().default('') }))
+    .default([]),
+  /** Index on SEARCH_ENDPOINT backing retrieval — the validation anchor. */
+  searchIndex: z.string().regex(SEARCH_INDEX_NAME_REGEX),
+  /** Empty → `${searchIndex}-semantic-configuration` (ragService default). */
+  semanticConfig: z.string().default(''),
+  topK: z.number().int().default(10),
+  /** null → ride the catalog default at request time. */
+  baseModelId: z.string().nullable().default(null),
+  allowWebSearch: z.boolean().default(false),
+  allowCodeInterpreter: z.boolean().default(false),
+  enabled: z.boolean().default(true),
+  validation: OrgAgentValidationSchema,
+  createdBy: z.string(),
+  createdAt: z.string(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type OrgRagAgent = z.infer<typeof OrgRagAgentSchema>;
+
+/**
+ * Immutable audit copy written alongside every successful org-agent write
+ * (including deletes, which record a null tombstone).
+ */
+export const OrgRagAgentHistoryEntrySchema = z.object({
+  version: z.literal(1),
+  canonicalKey: z.string().min(1),
+  action: z.enum(['upsert', 'delete']),
+  /** The full record as written, or null for a delete tombstone. */
+  orgAgent: OrgRagAgentSchema.nullable(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type OrgRagAgentHistoryEntry = z.infer<
+  typeof OrgRagAgentHistoryEntrySchema
+>;
 
 /**
  * An OAuth client secret sealed by connectorSecretCrypto. Declared HERE
@@ -654,4 +747,13 @@ export function mapDatasetDataBlobPath(id: string): string {
  */
 export function m365AgentBlobPath(id: string): string {
   return `${AGENT_ACCESS_M365_AGENTS_PREFIX}${id}.json`;
+}
+
+/**
+ * `system/agent-access/org-agents/<id>.json` — a SIBLING of rules/ for the
+ * same reason as the other entities: listAllRules is fail-closed, so an
+ * alien blob under rules/ would brick every Foundry invocation.
+ */
+export function orgAgentBlobPath(id: string): string {
+  return `${AGENT_ACCESS_ORG_AGENTS_PREFIX}${id}.json`;
 }
