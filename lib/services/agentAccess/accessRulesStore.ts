@@ -12,6 +12,7 @@ import {
   AGENT_ACCESS_GUIDES_PREFIX,
   AGENT_ACCESS_M365_AGENTS_PREFIX,
   AGENT_ACCESS_MAP_DATASET_META_PREFIX,
+  AGENT_ACCESS_ORG_AGENTS_PREFIX,
   AGENT_ACCESS_PROMPT_AGENTS_PREFIX,
   AGENT_ACCESS_RULES_PREFIX,
   AgentAccessConfig,
@@ -42,6 +43,11 @@ import {
   McpConnectorHistoryEntry,
   McpConnectorHistoryEntrySchema,
   McpConnectorSchema,
+  ORG_AGENT_SOURCE,
+  OrgRagAgent,
+  OrgRagAgentHistoryEntry,
+  OrgRagAgentHistoryEntrySchema,
+  OrgRagAgentSchema,
   PROMPT_AGENT_SOURCE,
   PromptAgent,
   PromptAgentHistoryEntry,
@@ -55,6 +61,7 @@ import {
   mapDatasetDataBlobPath,
   mapDatasetMeta,
   mapDatasetMetaBlobPath,
+  orgAgentBlobPath,
   promptAgentBlobPath,
   ruleBlobPath,
 } from '@/lib/services/agentAccess/types';
@@ -120,6 +127,20 @@ export interface StoredM365Agent {
 
 export interface M365AgentReadResult {
   m365Agent: M365Agent;
+  etag: string;
+}
+
+export interface StoredOrgRagAgent {
+  /** `org-agent::<id>` — flows through delegation and rules unchanged. */
+  canonicalKey: string;
+  blobPath: string;
+  orgAgent: OrgRagAgent;
+  /** Raw (quoted) Azure ETag — echoed to admin clients for If-Match CAS. */
+  etag: string;
+}
+
+export interface OrgRagAgentReadResult {
+  orgAgent: OrgRagAgent;
   etag: string;
 }
 
@@ -671,6 +692,153 @@ export async function writeM365AgentHistoryEntry(
           conditions: { ifNoneMatch: '*' },
         }),
       { label: 'agentAccess.writeM365AgentHistoryEntry' },
+    );
+  } catch (error) {
+    if (statusCodeOf(error) === 412) return;
+    throw error;
+  }
+}
+
+/**
+ * Lists every admin-authored org RAG agent. Malformed blobs are SKIPPED with
+ * a loud log, never thrown — identical rationale to listAllPromptAgents: one
+ * corrupt agent must not take down the rules snapshot that refresh() loads
+ * alongside it. A skipped record fails SAFE — the registry falls back to the
+ * static config entry (or nothing) rather than serving a half-parsed agent.
+ * Storage-level errors still throw.
+ */
+export async function listAllOrgAgents(
+  storage: BlobStorage,
+): Promise<StoredOrgRagAgent[]> {
+  const names = await storage.listBlobs(AGENT_ACCESS_ORG_AGENTS_PREFIX);
+  const results = await Promise.all(
+    names.map(async (name): Promise<StoredOrgRagAgent | null> => {
+      // 404 → deleted between list and get; skip silently.
+      const downloaded = await downloadBlob(storage, name);
+      if (downloaded === null) return null;
+
+      let json: unknown;
+      try {
+        json = JSON.parse(downloaded.buffer.toString('utf8'));
+      } catch {
+        console.error(
+          `[agent-access] SKIPPING org-agent blob with invalid JSON (broken agent degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
+        );
+        return null;
+      }
+      const parsed = OrgRagAgentSchema.safeParse(json);
+      if (!parsed.success) {
+        console.error(
+          `[agent-access] SKIPPING malformed org-agent blob (broken agent degrades alone; rules snapshot unaffected) ${sanitizeForLog(name)}: ${sanitizeForLog(parsed.error.message)}`,
+        );
+        return null;
+      }
+      if (orgAgentBlobPath(parsed.data.id) !== name) {
+        // A stray blob must not shadow (or masquerade as) another id's agent.
+        console.error(
+          `[agent-access] SKIPPING org-agent blob whose name does not match its content's id (broken agent degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
+        );
+        return null;
+      }
+      return {
+        canonicalKey: canonicalAgentKey(ORG_AGENT_SOURCE, parsed.data.id),
+        blobPath: name,
+        orgAgent: parsed.data,
+        etag: downloaded.etag,
+      };
+    }),
+  );
+  return results.filter((r): r is StoredOrgRagAgent => r !== null);
+}
+
+/** Reads a single org RAG agent by id. Returns null when none exists. */
+export async function readOrgAgent(
+  storage: BlobStorage,
+  id: string,
+): Promise<OrgRagAgentReadResult | null> {
+  const result = await downloadBlob(storage, orgAgentBlobPath(id));
+  if (result === null) return null;
+  const parsed = OrgRagAgentSchema.safeParse(
+    JSON.parse(result.buffer.toString('utf8')),
+  );
+  if (!parsed.success) {
+    throw new Error(
+      `Malformed org agent blob for id ${id}: ${parsed.error.message}`,
+    );
+  }
+  return { orgAgent: parsed.data, etag: result.etag };
+}
+
+/**
+ * Compare-and-swap org-agent write. The blob path is derived from the
+ * record's own id, so an agent can never land at another id's path.
+ * `ifMatchEtag` set → update (`If-Match`); null → creation only
+ * (`If-None-Match: *`). 412 → {@link AgentAccessConflictError}.
+ * Returns the new ETag.
+ */
+export async function writeOrgAgent(
+  storage: BlobStorage,
+  agent: OrgRagAgent,
+  ifMatchEtag: string | null,
+): Promise<string> {
+  const parsed = OrgRagAgentSchema.parse(agent);
+  return uploadJson(
+    storage,
+    orgAgentBlobPath(parsed.id),
+    parsed,
+    ifMatchEtag,
+    'agentAccess.writeOrgAgent',
+  );
+}
+
+/**
+ * Conditional org-agent delete (`If-Match`). Returns false when the blob
+ * was already absent (idempotent); 412 → {@link AgentAccessConflictError}.
+ */
+export async function deleteOrgAgent(
+  storage: BlobStorage,
+  id: string,
+  ifMatchEtag: string,
+): Promise<boolean> {
+  const client = storage.getBlockBlobClient(orgAgentBlobPath(id));
+  try {
+    await withAzureRetry(
+      () => client.delete({ conditions: { ifMatch: ifMatchEtag } }),
+      { label: 'agentAccess.deleteOrgAgent' },
+    );
+    return true;
+  } catch (error) {
+    const status = statusCodeOf(error);
+    if (status === 404) return false;
+    if (status === 412) throw new AgentAccessConflictError();
+    throw error;
+  }
+}
+
+/**
+ * Appends an immutable org-agent history entry (`If-None-Match: *`) at
+ * `historyBlobPath(canonicalKey)` — same audit namespace as rules. A 412
+ * means an earlier attempt (or a retry) already landed this exact entry —
+ * treated as idempotent success. Callers wrap this best-effort: a history
+ * failure must never fail the mutation.
+ */
+export async function writeOrgAgentHistoryEntry(
+  storage: BlobStorage,
+  entry: OrgRagAgentHistoryEntry,
+): Promise<void> {
+  const parsed = OrgRagAgentHistoryEntrySchema.parse(entry);
+  const client = storage.getBlockBlobClient(
+    historyBlobPath(parsed.canonicalKey, parsed.updatedAt),
+  );
+  const content = Buffer.from(JSON.stringify(parsed), 'utf8');
+  try {
+    await withAzureRetry(
+      () =>
+        client.upload(content, content.length, {
+          blobHTTPHeaders: { blobContentType: 'application/json' },
+          conditions: { ifNoneMatch: '*' },
+        }),
+      { label: 'agentAccess.writeOrgAgentHistoryEntry' },
     );
   } catch (error) {
     if (statusCodeOf(error) === 412) return;
