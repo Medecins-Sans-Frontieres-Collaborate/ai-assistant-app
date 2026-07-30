@@ -382,8 +382,23 @@ export const ModelSelect: FC<ModelSelectProps> = ({
         isOrganizationAgent: true,
       }));
 
+    // M365 file-backed agents (type: 'm365') ride the same org- convention
+    // as prompt agents: the server resolves retrieval + chat model from
+    // botId, and agentId must stay unset (no Foundry promotion).
+    const m365AgentModels = visibleFoundryAgents
+      .filter((agent) => agent.type === 'm365')
+      .map((agent) => ({
+        ...OpenAIModels[OpenAIModelID.GPT_4_1],
+        id: `org-${agent.id}`,
+        name: agent.name,
+        description: agent.description,
+        modelType: undefined,
+        agentId: undefined,
+        isOrganizationAgent: true,
+      }));
+
     const discoveredFoundryAgents = visibleFoundryAgents.filter(
-      (agent) => agent.type !== 'prompt',
+      (agent) => agent.type !== 'prompt' && agent.type !== 'm365',
     );
 
     // Dynamically discovered Foundry agents from ARM API (RBAC-filtered per user).
@@ -416,7 +431,12 @@ export const ModelSelect: FC<ModelSelectProps> = ({
       (m) => !m.agentId || !dynamicAgentNames.has(m.agentId),
     );
 
-    return [...deduplicatedStatic, ...dynamicModels, ...promptAgentModels];
+    return [
+      ...deduplicatedStatic,
+      ...dynamicModels,
+      ...promptAgentModels,
+      ...m365AgentModels,
+    ];
   }, [isBotsEnabled, foundryAgents, customAgentSources]);
 
   // Combine base models, organization/discovered agents, and custom-source models

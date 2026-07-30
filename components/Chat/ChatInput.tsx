@@ -70,6 +70,7 @@ import { InterpreterModeBadge } from '@/components/Chat/ChatInput/InterpreterMod
 import { MessageTextarea } from '@/components/Chat/ChatInput/MessageTextarea';
 import { SearchModeBadge } from '@/components/Chat/ChatInput/SearchModeBadge';
 import { ToneBadge } from '@/components/Chat/ChatInput/ToneBadge';
+import { M365AgentAccessBanner } from '@/components/Chat/M365AgentAccessBanner';
 
 import { PromptList } from './ChatInput/PromptList';
 import { VariableModal } from './ChatInput/VariableModal';
@@ -598,6 +599,10 @@ export const ChatInput = ({
         {(selectedConversation?.pinnedMcpServerId || connectorPinTrayOpen) && (
           <ConnectorPinTray />
         )}
+
+        {/* M365 agent source-access preflight (renders only when an M365
+            file-backed agent is selected AND some sources are denied) */}
+        <M365AgentAccessBanner botId={selectedConversation?.bot} />
 
         <div className="items-center pt-4">
           <div className="flex justify-center items-center space-x-2 px-2 md:px-4">
