@@ -112,7 +112,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
       context.searchMode === SearchMode.INTELLIGENT ||
       context.searchMode === SearchMode.ALWAYS;
     if (!modeActive) return false;
-    if (context.botId && !context.promptAgent) {
+    if (context.botId && !context.promptAgent && !context.m365Agent) {
       const agent = getOrganizationAgentById(context.botId);
       return !!agent?.allowWebSearch;
     }
@@ -145,7 +145,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
       context.interpreterMode === InterpreterMode.INTELLIGENT ||
       context.interpreterMode === InterpreterMode.ALWAYS;
     if (!modeActive) return false;
-    if (context.botId && !context.promptAgent) {
+    if (context.botId && !context.promptAgent && !context.m365Agent) {
       const agent = getOrganizationAgentById(context.botId);
       return !!agent?.allowCodeInterpreter;
     }
