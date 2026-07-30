@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessService';
 import {
   M365_AGENT_SOURCE,
+  ORG_AGENT_SOURCE,
   PROMPT_AGENT_SOURCE,
 } from '@/lib/services/agentAccess/types';
 import {
@@ -12,10 +13,15 @@ import {
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
 import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
 import { createAppIdentityCredential } from '@/lib/services/auth/appIdentityCredential';
+import {
+  getServeableAdminOrgAgents,
+  getSuppressedStaticAgentIds,
+} from '@/lib/services/orgAgents/orgAgentRegistry';
 
 import { isValidFoundryResourcePath } from '@/lib/utils/shared/armPath';
 
 import { auth, getAccessTokenForOBO } from '@/auth';
+import { getOrganizationAgents } from '@/lib/organizationAgents';
 
 /**
  * GET /api/agents
@@ -105,6 +111,46 @@ async function getVisibleM365AgentEntries(
   }
   return entries;
 }
+/**
+ * Admin-authored org RAG agents (serveable records only — enabled +
+ * validation ok), filtered by the same layer-1 rules as the other
+ * app-managed kinds. Carries the display metadata the static config file
+ * would otherwise provide, plus the tool-toggle flags the client gates on.
+ */
+async function getVisibleOrgAgentEntries(
+  userMail: string | undefined,
+): Promise<DiscoveredAgent[]> {
+  const accessService = AgentAccessService.getInstance();
+  if (!accessService.isEnabled()) return [];
+  const staticIds = new Set(getOrganizationAgents().map((agent) => agent.id));
+  const entries: DiscoveredAgent[] = [];
+  for (const orgAgent of await getServeableAdminOrgAgents()) {
+    const { decision } = accessService.evaluateAccess({
+      userMail,
+      source: ORG_AGENT_SOURCE,
+      agentName: orgAgent.id,
+    });
+    if (decision !== 'deny') {
+      entries.push({
+        id: orgAgent.id,
+        name: orgAgent.name,
+        description: orgAgent.description,
+        agentName: orgAgent.id,
+        source: ORG_AGENT_SOURCE,
+        type: 'org',
+        icon: orgAgent.icon,
+        color: orgAgent.color,
+        ...(orgAgent.category && { category: orgAgent.category }),
+        ...(orgAgent.maintainedBy && { maintainedBy: orgAgent.maintainedBy }),
+        allowWebSearch: orgAgent.allowWebSearch,
+        allowCodeInterpreter: orgAgent.allowCodeInterpreter,
+        overridesStatic: staticIds.has(orgAgent.id),
+      });
+    }
+  }
+  return entries;
+}
+
 export async function GET(request: NextRequest) {
   const session = await auth();
 
@@ -152,10 +198,20 @@ export async function GET(request: NextRequest) {
     const m365AgentEntries = await getVisibleM365AgentEntries(
       session.user.mail,
     );
+    const orgAgentEntries = await getVisibleOrgAgentEntries(session.user.mail);
+    // Static config ids that admin records currently override or disable —
+    // the client trims the bundled list with this, so a file agent can be
+    // retired or replaced without a deploy.
+    const suppressedOrgAgentIds = await getSuppressedStaticAgentIds();
 
     if (allPaths.length === 0) {
       return NextResponse.json({
-        agents: [...promptAgentEntries, ...m365AgentEntries],
+        agents: [
+          ...promptAgentEntries,
+          ...m365AgentEntries,
+          ...orgAgentEntries,
+        ],
+        suppressedOrgAgentIds,
         regionalPath: null,
         officePaths: [],
       });
@@ -199,7 +255,12 @@ export async function GET(request: NextRequest) {
           `[/api/agents] OBO failed for ${session.user.mail ?? 'unknown'}: ${errMsg}`,
         );
         return NextResponse.json({
-          agents: [...promptAgentEntries, ...m365AgentEntries],
+          agents: [
+            ...promptAgentEntries,
+            ...m365AgentEntries,
+            ...orgAgentEntries,
+          ],
+          suppressedOrgAgentIds,
           regionalPath,
           officePaths,
         });
@@ -312,7 +373,13 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({
-      agents: [...visibleAgents, ...promptAgentEntries, ...m365AgentEntries],
+      agents: [
+        ...visibleAgents,
+        ...promptAgentEntries,
+        ...m365AgentEntries,
+        ...orgAgentEntries,
+      ],
+      suppressedOrgAgentIds,
       regionalPath,
       officePaths,
     });
@@ -320,6 +387,7 @@ export async function GET(request: NextRequest) {
     console.error('[/api/agents] Error discovering agents:', error);
     return NextResponse.json({
       agents: [],
+      suppressedOrgAgentIds: [],
       regionalPath: null,
       officePaths: [],
     });
