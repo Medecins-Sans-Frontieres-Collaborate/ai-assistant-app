@@ -7,6 +7,10 @@ import { useTranslations } from 'next-intl';
 
 import { ExportFormat } from '@/client/hooks/document/exportFormats';
 import { useDocumentExport } from '@/client/hooks/document/useDocumentExport';
+import {
+  useM365Save,
+  useM365SaveAvailable,
+} from '@/client/hooks/document/useM365Save';
 
 import { appendCitationsToMarkdown } from '@/lib/utils/app/export/citationExport';
 import { markdownToHtml } from '@/lib/utils/shared/document/formatConverter';
@@ -55,6 +59,8 @@ export const MessageDownloadMenu: FC<MessageDownloadMenuProps> = ({
 }) => {
   const t = useTranslations();
   const exportAs = useDocumentExport();
+  const saveToOneDrive = useM365Save();
+  const oneDriveAvailable = useM365SaveAvailable();
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [showMenu, setShowMenu] = useState(false);
 
@@ -63,8 +69,7 @@ export const MessageDownloadMenu: FC<MessageDownloadMenuProps> = ({
     [fileName, content],
   );
 
-  const handleDownload = async (format: ExportFormat) => {
-    setShowMenu(false);
+  const prepare = (format: ExportFormat) => {
     // Citations live outside the message body, so append them as a Sources
     // section before export — otherwise inline [n] markers reference nothing.
     const exportContent = appendCitationsToMarkdown(
@@ -76,7 +81,19 @@ export const MessageDownloadMenu: FC<MessageDownloadMenuProps> = ({
     // we pass an empty `html` and let the hook write the markdown source
     // directly — keeping the empty-content check in one place (the hook).
     const html = format === 'md' ? '' : markdownToHtml(exportContent);
+    return { exportContent, html };
+  };
+
+  const handleDownload = async (format: ExportFormat) => {
+    setShowMenu(false);
+    const { exportContent, html } = prepare(format);
     await exportAs(format, html, resolvedFileName, exportContent);
+  };
+
+  const handleSaveToOneDrive = async (format: ExportFormat) => {
+    setShowMenu(false);
+    const { exportContent, html } = prepare(format);
+    await saveToOneDrive(format, html, resolvedFileName, exportContent);
   };
 
   const triggerClass = disabled
@@ -109,7 +126,12 @@ export const MessageDownloadMenu: FC<MessageDownloadMenuProps> = ({
         onClose={() => setShowMenu(false)}
         align="right"
       >
-        <ExportFormatMenu onSelect={handleDownload} />
+        <ExportFormatMenu
+          onSelect={handleDownload}
+          onSaveToOneDrive={
+            oneDriveAvailable ? handleSaveToOneDrive : undefined
+          }
+        />
       </DropdownPortal>
     </>
   );
