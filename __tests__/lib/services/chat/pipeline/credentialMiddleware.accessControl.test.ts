@@ -70,6 +70,10 @@ vi.mock('@/lib/services/agentAccess/AgentAccessService', () => ({
       evaluateAccess: accessEvaluate,
       getPromptAgentById: accessGetPromptAgentById,
       getSnapshot: accessGetSnapshot,
+      // The m365/org guards run alongside the prompt guard; these tests
+      // exercise prompt/Foundry paths, so both resolve to nothing.
+      getM365AgentById: () => null,
+      getOrgAgentById: () => null,
     }),
   },
   emitAccessAudit,
@@ -617,10 +621,10 @@ describe('createCredentialMiddleware — agent access invocation guard', () => {
       expect(emitAccessAudit).not.toHaveBeenCalled();
     });
 
-    it('static rag botId (non-prompt-agent) never touches the access service at all', async () => {
-      // Ids are server-generated `prompt-<hex>`, so a non-prefixed botId
-      // (static RAG chat) must not even pay the ensureFresh() refresh —
-      // keeps storage retries off the static-RAG hot path during outages.
+    it('static rag botId (non-prompt-agent) passes through when no admin record exists', async () => {
+      // Since admin org-agent overrides landed, EVERY botId consults the
+      // access snapshot (an override cannot be honored without it) — but a
+      // static botId with no record evaluates no rules and passes through.
       const result = await createCredentialMiddleware(
         makePromptAgentContext({
           promptAgent: undefined,
@@ -630,7 +634,6 @@ describe('createCredentialMiddleware — agent access invocation guard', () => {
       );
 
       expect(result).toEqual({});
-      expect(accessEnsureFresh).not.toHaveBeenCalled();
       expect(accessGetPromptAgentById).not.toHaveBeenCalled();
       expect(accessEvaluate).not.toHaveBeenCalled();
     });
