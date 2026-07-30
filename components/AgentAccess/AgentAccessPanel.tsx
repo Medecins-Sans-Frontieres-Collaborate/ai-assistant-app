@@ -16,6 +16,7 @@ import { ConnectorEditor } from './ConnectorEditor';
 import { GuideEditor } from './GuideEditor';
 import { LocalAdminsSection } from './LocalAdminsSection';
 import { M365AgentsSection } from './M365AgentsSection';
+import { OrgAgentsSection } from './OrgAgentsSection';
 import { PromptAgentEditor } from './PromptAgentEditor';
 import { RuleEditor } from './RuleEditor';
 import {
@@ -1554,6 +1555,17 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                 and RuleEditor stay CAS-consistent with the rest of the
                 panel. Renders nothing when the m365Agents flag is off. */}
             <M365AgentsSection
+              rules={rulesQuery.data?.rules ?? []}
+              onDataChanged={() => {
+                void invalidatePromptAgentData();
+              }}
+            />
+
+            {/* Organization RAG agents — blob-store counterpart of
+                config/organization-agents.json (create/override/disable
+                without a deploy; every save validated against the live
+                search index). Same shared-rules wiring as the M365 block. */}
+            <OrgAgentsSection
               rules={rulesQuery.data?.rules ?? []}
               onDataChanged={() => {
                 void invalidatePromptAgentData();
