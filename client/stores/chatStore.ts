@@ -1013,11 +1013,17 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // otherwise strip searchMode for them.
     const isPromptAgentPersona =
       conversation.model.id.startsWith('org-prompt-');
+    // Admin-authored org RAG agents are not in the static registry; their
+    // gates ride the model object (set by ModelSelect from /api/agents).
+    // When the model carries a boolean it wins — for overrides of static
+    // ids it is fresher than the bundled config.
     const orgAgentSearchAllowed = isPromptAgentPersona
       ? true
       : isOrganizationAgent && conversation.model.id.startsWith('org-')
-        ? getOrganizationAgentById(conversation.model.id.slice('org-'.length))
-            ?.allowWebSearch === true
+        ? typeof conversation.model.allowWebSearch === 'boolean'
+          ? conversation.model.allowWebSearch
+          : getOrganizationAgentById(conversation.model.id.slice('org-'.length))
+              ?.allowWebSearch === true
         : false;
     const isAgentInvocation = isOrganizationAgent || isCustomAgent;
     const effectiveSearchMode =
@@ -1032,8 +1038,10 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const orgAgentInterpreterAllowed = isPromptAgentPersona
       ? true
       : isOrganizationAgent && conversation.model.id.startsWith('org-')
-        ? getOrganizationAgentById(conversation.model.id.slice('org-'.length))
-            ?.allowCodeInterpreter === true
+        ? typeof conversation.model.allowCodeInterpreter === 'boolean'
+          ? conversation.model.allowCodeInterpreter
+          : getOrganizationAgentById(conversation.model.id.slice('org-'.length))
+              ?.allowCodeInterpreter === true
         : false;
     const effectiveInterpreterMode =
       isAgentInvocation && !orgAgentInterpreterAllowed
