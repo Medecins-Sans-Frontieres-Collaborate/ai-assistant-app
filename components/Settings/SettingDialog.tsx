@@ -20,6 +20,7 @@ import { MigrationDialog } from '../Migration/MigrationDialog';
 import { MobileSettingsHeader } from './MobileSettingsHeader';
 import { BackupSection } from './Sections/BackupSection';
 import { ChatSettingsSection } from './Sections/ChatSettingsSection';
+import { ConnectionsSection } from './Sections/ConnectionsSection';
 import { ConnectorsSection } from './Sections/ConnectorsSection';
 import { DataManagementSection } from './Sections/DataManagementSection';
 import { GeneralSection } from './Sections/GeneralSection';
@@ -332,6 +333,10 @@ export function SettingDialog() {
 
                 {activeSection === SettingsSection.CONNECTORS && (
                   <ConnectorsSection />
+                )}
+
+                {activeSection === SettingsSection.CONNECTIONS && (
+                  <ConnectionsSection />
                 )}
 
                 {activeSection === SettingsSection.USAGE_IMPACT && (

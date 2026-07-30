@@ -1,5 +1,6 @@
 import {
   IconBrain,
+  IconCloud,
   IconDatabase,
   IconDeviceDesktop,
   IconDeviceMobile,
@@ -17,6 +18,7 @@ import { ComponentType } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { useAdminAreas } from '@/client/hooks/settings/useAdminAreas';
+import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
 import { SettingsSection } from './types';
 
@@ -68,6 +70,8 @@ export function useSettingsNav(): SettingsNavItem[] {
     enableMemories,
     localModels,
   } = useFlags();
+  const { filesEnabled: m365FilesEnabled, mailEnabled: m365MailEnabled } =
+    useM365Enabled();
 
   // Fail-open: undefined (LD unconfigured/unserved) → shown. Flip to false in
   // LaunchDarkly to hide the section.
@@ -84,6 +88,10 @@ export function useSettingsNav(): SettingsNavItem[] {
   // control (Chrome's Local Network Access permission, enterprise policy), so
   // the flag is the feature's kill switch — it must never default on.
   const isLocalModelsEnabled = localModels === true;
+  // Fail-closed with a localhost escape hatch (see useM365Enabled). Either
+  // capability shows the Connections section (the section itself explains
+  // what's available).
+  const isConnectionsEnabled = m365FilesEnabled || m365MailEnabled;
 
   // ONE entry for every admin area. Visibility only — each admin page's
   // server component is the real gate.
@@ -113,6 +121,15 @@ export function useSettingsNav(): SettingsNavItem[] {
             SettingsSection.CONNECTORS,
             t('settings.Connectors'),
             IconPlugConnected,
+          ),
+        ]
+      : []),
+    ...(isConnectionsEnabled
+      ? [
+          section(
+            SettingsSection.CONNECTIONS,
+            t('settings.Connections'),
+            IconCloud,
           ),
         ]
       : []),
