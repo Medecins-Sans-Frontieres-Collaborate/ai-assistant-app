@@ -112,6 +112,17 @@ const serverEnvSchema = z.object({
   SEARCH_INDEXER: z.string().optional(),
   SEARCH_ENDPOINT_API_KEY: z.string().optional(), // Legacy: Used by OpenAI data_sources feature in documentSummary.ts
   ALLOW_INDEX_DOWNTIME: booleanString(false),
+  // M365 file-backed agents (docs/M365_SECOND_PASS_AGENTS_DESIGN.md).
+  // Endpoint defaults to SEARCH_ENDPOINT; override to pin the shared
+  // m365-agents index to a specific region's Search service (residency
+  // decision: an agent whose audience spans US+EU is hosted in EU).
+  M365_AGENTS_SEARCH_ENDPOINT: z.string().url().optional(),
+  M365_AGENTS_SEARCH_INDEX: z.string().default('m365-agents'),
+  // Documents per M365 agent (after folder expansion). Layer-2 probes run
+  // as Graph $batch calls (20/request), so the ceiling is indexing wall
+  // time and per-user probe latency, not probe fan-out. 200 is a hard
+  // sanity bound — the synchronous index route has a 300s budget.
+  M365_AGENT_MAX_DOCUMENTS: z.coerce.number().int().min(1).max(200).default(50),
 
   // Web search backend:
   //  - 'news': GDELT + Google News RSS queried IN PARALLEL and merged —
