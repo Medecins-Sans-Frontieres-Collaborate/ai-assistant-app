@@ -29,7 +29,10 @@ import {
   SEARCH_INDEX_NAME_REGEX,
   canonicalAgentKey,
 } from '@/lib/services/agentAccess/types';
-import { validateOrgAgentIndex } from '@/lib/services/orgAgents/orgAgentSearchValidation';
+import {
+  clearIndexServeableCache,
+  validateOrgAgentIndex,
+} from '@/lib/services/orgAgents/orgAgentSearchValidation';
 
 import {
   badRequestResponse,
@@ -315,6 +318,8 @@ export async function POST(request: NextRequest) {
       null,
     );
     service.invalidate();
+    // A fresh save-time validation supersedes any cached serve-time recheck.
+    clearIndexServeableCache();
     auditAdminWrite('org-agent-upsert', canonicalKey, userMail);
 
     await appendHistoryBestEffort({
@@ -411,6 +416,8 @@ export async function PUT(request: NextRequest) {
 
     const etag = await writeOrgAgent(storage, agent, ifMatchEtag);
     service.invalidate();
+    // A fresh save-time validation supersedes any cached serve-time recheck.
+    clearIndexServeableCache();
     auditAdminWrite('org-agent-upsert', canonicalKey, userMail);
 
     await appendHistoryBestEffort({
@@ -461,6 +468,13 @@ export async function DELETE(request: NextRequest) {
       return forbiddenResponse('Not authorized for this agent key');
     }
 
+    // Deliberately leaves any access RULE for this key in place (all entity
+    // deletes do). For the other entities that is dead data — their ids are
+    // random hex and never reused — but org-agent OVERRIDES reuse static
+    // config ids, so a rule survives a delete/recreate cycle and re-applies
+    // to the new record. Fail-closed by construction: a restriction can
+    // only ever be dropped by an explicit rule delete, never as a side
+    // effect of recycling the agent record.
     const deleted = await deleteOrgAgent(
       createAgentAccessBlobStorage(),
       id,
