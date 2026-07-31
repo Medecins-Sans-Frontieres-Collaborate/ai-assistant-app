@@ -33,7 +33,11 @@ export const STAGE_TIMEOUTS: Record<string, number> = {
   // Reformulation LLM + query embedding + hybrid search over the shared
   // m365-agents index.
   M365AgentEnricher: 20000, // 10s for knowledge base search
-  ToolRouterEnricher: 180000, // 180s for web search (reasoning agent + Bing grounding + result processing can run long)
+  // Web search (reasoning agent + Bing grounding) and the document-trim
+  // pipeline (LLM edit plan + sandbox execution + one bounded corrective
+  // pass) both run long; 240s leaves the route's 300s ceiling room for
+  // FileProcessor extraction and time-to-first-byte of the model answer.
+  ToolRouterEnricher: 240000,
   AgentEnricher: 5000, // 5s for agent selection
   StandardChatHandler: 90000, // 90s for LLM response (reasoning models can take longer)
   AgentChatHandler: 120000, // 120s for agent execution
