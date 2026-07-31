@@ -659,7 +659,7 @@ describe('ToolRouter Enricher', () => {
         expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
           expect.objectContaining({
             currentMessage: expect.stringContaining(
-              '[Document summary: doc1.pdf]',
+              '[Document summary excerpt: doc1.pdf]',
             ),
           }),
         );
@@ -694,7 +694,9 @@ describe('ToolRouter Enricher', () => {
 
         expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
           expect.objectContaining({
-            currentMessage: expect.stringContaining('[Audio/Video: audio.mp3]'),
+            currentMessage: expect.stringContaining(
+              '[Audio/Video excerpt: audio.mp3]',
+            ),
           }),
         );
 
@@ -702,6 +704,74 @@ describe('ToolRouter Enricher', () => {
           expect.objectContaining({
             currentMessage: expect.stringContaining(
               'This is the audio transcript',
+            ),
+          }),
+        );
+      });
+
+      it('appends an attachment manifest for current-turn and prior-turn files', async () => {
+        // Regression: follow-up turns ("now actually do it") carry no
+        // attachment on the last message; without the prior-turns manifest
+        // line the router cannot know a transformable file exists and
+        // classifies document-transformation requests as pure text tasks.
+        mockToolRouterService.determineTool.mockResolvedValue({
+          tools: [],
+          reasoning: 'No search needed',
+        });
+
+        const context = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          messages: [
+            createTestMessage({
+              content: [
+                { type: 'text', text: 'please trim this to 6k words' },
+                {
+                  type: 'file_url',
+                  url: '/api/file/abc123.docx',
+                  originalFilename: 'manuscript.docx',
+                },
+              ] as Message['content'],
+            }),
+            createTestMessage({
+              role: 'assistant',
+              content: 'Here is how I would trim it…',
+            }),
+            createTestMessage({ content: 'please do it' }),
+          ],
+        });
+
+        await enricher.execute(context);
+
+        expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
+          expect.objectContaining({
+            currentMessage: expect.stringContaining(
+              '[Files uploaded earlier in this conversation: manuscript.docx]',
+            ),
+          }),
+        );
+
+        const currentTurnContext = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          messages: [
+            createTestMessage({
+              content: [
+                { type: 'text', text: 'please trim this to 6k words' },
+                {
+                  type: 'file_url',
+                  url: '/api/file/abc123.docx',
+                  originalFilename: 'manuscript.docx',
+                },
+              ] as Message['content'],
+            }),
+          ],
+        });
+
+        await enricher.execute(currentTurnContext);
+
+        expect(mockToolRouterService.determineTool).toHaveBeenLastCalledWith(
+          expect.objectContaining({
+            currentMessage: expect.stringContaining(
+              '[Files attached to the current message: manuscript.docx]',
             ),
           }),
         );
