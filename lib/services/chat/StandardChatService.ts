@@ -22,6 +22,7 @@ import {
   createAzureOpenAIStreamProcessor,
 } from '@/lib/utils/app/stream/streamProcessor';
 import { getMessagesToSend } from '@/lib/utils/server/chat/chat';
+import { devTrace } from '@/lib/utils/server/debug/devTrace';
 import {
   perfLog,
   sanitizeForLog,
@@ -629,24 +630,73 @@ export class StandardChatService {
       modelConfig.sdk === 'azure-openai' &&
       !customSource
     ) {
-      try {
-        return await this.handleResponsesApiChat(
-          messagesToSend,
-          modelConfig,
-          enhancedPrompt,
-          temperature,
-          stream,
-          request,
-          clients.azureOpenAIClient ?? this.azureOpenAIClient,
-          chatRegion,
-        );
-      } catch (error) {
-        console.warn(
-          `[StandardChatService] Responses API failed for ${sanitizeForLog(modelConfig.id)}; falling back to chat.completions:`,
-          error instanceof Error ? error.message : error,
-        );
+      // A missing deployment (catalog model not deployed on this endpoint)
+      // must not silently cost the turn its native code interpreter: retry
+      // the RESPONSES path on the fallback chain so the sandbox tool
+      // survives the model switch. Only when no Responses-capable fallback
+      // remains does the turn degrade to chat.completions below.
+      let responsesConfig: OpenAIModel = modelConfig;
+      const responsesAttempted: string[] = [];
+      for (;;) {
+        responsesAttempted.push(responsesConfig.id);
+        try {
+          return await this.handleResponsesApiChat(
+            messagesToSend,
+            responsesConfig,
+            enhancedPrompt,
+            temperature,
+            stream,
+            request,
+            clients.azureOpenAIClient ?? this.azureOpenAIClient,
+            chatRegion,
+          );
+        } catch (error) {
+          const message =
+            error instanceof Error ? error.message : String(error);
+          if (isDeploymentNotFoundError(error)) {
+            const fallback = getFallbackModel(
+              responsesAttempted,
+              request.blockedModelIds,
+            );
+            if (
+              fallback?.supportsResponsesApi &&
+              fallback.sdk === 'azure-openai'
+            ) {
+              console.warn(
+                `[StandardChatService] Responses deployment for ${sanitizeForLog(responsesConfig.id)} not found; retrying Responses path on ${sanitizeForLog(fallback.id)}.`,
+              );
+              // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+              devTrace('responses-deployment-fallback', {
+                from: responsesConfig.id,
+                to: fallback.id,
+              });
+              responsesConfig = fallback;
+              continue;
+            }
+          }
+          console.warn(
+            `[StandardChatService] Responses API failed for ${sanitizeForLog(responsesConfig.id)}; falling back to chat.completions:`,
+            message,
+          );
+          // TEMP DEBUG (see devTrace.ts) — DELETE before merge. A silent
+          // drop to chat.completions also silently drops the interpreter.
+          devTrace('responses-path-fallback', {
+            model: responsesConfig.id,
+            error: message.slice(0, 300),
+          });
+          break;
+        }
       }
     }
+
+    // A turn that staged the native interpreter but degraded to
+    // chat.completions has NO execution tool — while the system prompt's
+    // interpreter section still advertises file generation. Withdraw the
+    // claim explicitly, or the model narrates having "created" files it
+    // cannot possibly produce.
+    const effectiveSystemPrompt = request.nativeCodeInterpreter
+      ? `${enhancedPrompt}\n\nIMPORTANT: Code execution and file generation are NOT available for this response. Do not claim to have run code or created/saved any files. If the request requires producing a file, say that file generation is temporarily unavailable and provide the content inline instead.`
+      : enhancedPrompt;
 
     // Select a handler (OpenAI-compatible) and execute. If the model's
     // deployment is missing in the endpoint this request was routed to
@@ -676,7 +726,7 @@ export class StandardChatService {
       // Prepare messages + params using handler-specific logic
       const preparedMessages = handler.prepareMessages(
         messagesToSend,
-        enhancedPrompt,
+        effectiveSystemPrompt,
         activeConfig,
       );
       const requestParams = handler.buildRequestParams(
@@ -829,6 +879,15 @@ export class StandardChatService {
       ? await handler.uploadInputFiles(nativeCI.inputFiles)
       : [];
 
+    // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+    devTrace('native-ci', {
+      requested: !!request.nativeCodeInterpreter,
+      active: !!nativeCI,
+      inputFiles: nativeCI?.inputFiles.map((f) => f.filename) ?? [],
+      uploadedFileIds: ciFileIds.length,
+      forced: nativeCI?.forced ?? false,
+    });
+
     const params = handler.buildRequestParams(
       modelConfig,
       input,
@@ -837,7 +896,13 @@ export class StandardChatService {
       stream,
       appliedEffort,
       modelConfig.supportsVerbosity ? request.verbosity : undefined,
-      nativeCI ? { fileIds: ciFileIds, forced: nativeCI.forced } : undefined,
+      nativeCI
+        ? {
+            fileIds: ciFileIds,
+            filenames: nativeCI.inputFiles.map((f) => f.filename),
+            forced: nativeCI.forced,
+          }
+        : undefined,
     );
 
     console.log(
@@ -845,7 +910,15 @@ export class StandardChatService {
     );
 
     if (stream) {
-      const events = await handler.executeStreaming(params);
+      let events: Awaited<ReturnType<typeof handler.executeStreaming>>;
+      try {
+        events = await handler.executeStreaming(params);
+      } catch (error) {
+        // The uploads outlive a failed create call — clean up before the
+        // caller retries on a fallback deployment (which re-uploads).
+        if (ciFileIds.length > 0) void handler.deleteInputFiles(ciFileIds);
+        throw error;
+      }
       const processedStream = createResponsesStreamProcessor(
         events,
         request.transcript,
