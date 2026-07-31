@@ -585,6 +585,13 @@ export interface ToolRouterResponse {
    * Present when tools includes 'code_interpreter'.
    */
   codeTask?: string;
+  /**
+   * True when the classifier call itself failed and the empty tools list is
+   * a FALLBACK, not a decision. Callers surface this to the user — a dead
+   * router (expired credential, schema rejection) must not be
+   * indistinguishable from "no tools needed".
+   */
+  degraded?: boolean;
   reasoning?: string; // Optional reasoning for debugging
 }
 
