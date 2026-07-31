@@ -4,7 +4,10 @@ import { peekOrgAgentById } from '@/lib/services/orgAgents/orgAgentRegistry';
 
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
+import { devTrace } from '@/lib/utils/server/debug/devTrace';
+import { loadDocument } from '@/lib/utils/server/file/fileHandling';
 import { getContentType } from '@/lib/utils/server/file/mimeTypes';
+import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import {
   FileMessageContent,
@@ -34,6 +37,13 @@ import {
 } from '../tools/CodeInterpreterTool';
 import { WebSearchTool } from '../tools/WebSearchTool';
 import { readCitedSources } from '../tools/citedSourceReader';
+import { runDocumentTrim } from '../tools/documentTrim/DocumentTrimPipeline';
+import {
+  TrimTarget,
+  TrimmableDocument,
+  detectTrimRequest,
+  pickTrimmableDocument,
+} from '../tools/documentTrim/trimDetector';
 import { buildNewsResult } from '../tools/newsSearch';
 
 import { env } from '@/config/environment';
@@ -268,6 +278,37 @@ export class ToolRouterEnricher extends BasePipelineStage {
     const searchRequested = this.searchRequested(context);
     const interpreterRequestedAny = this.interpreterRequested(context);
 
+    // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+    devTrace('tool-router-enricher', {
+      searchRequested,
+      interpreterRequestedAny,
+      interpreterMode: context.interpreterMode ?? null,
+      interpreterEnvEnabled: env.CODE_INTERPRETER_ENABLED,
+      attachmentManifest,
+    });
+
+    // Dedicated deterministic path: an explicit length-target transformation
+    // of an attached document ("trim this to 6k words", "cut it in half")
+    // NEVER rides model discretion — not the native deferral (models given
+    // the sandbox often narrate instead of executing) and not the nano
+    // classifier. Runs before the agent skip below on purpose, mirroring the
+    // forced-tool precedent: the user's request names the tool's job
+    // explicitly. Permission gates (env kill switch, InterpreterMode,
+    // org-agent opt-in) still apply via interpreterRequestedAny.
+    if (interpreterRequestedAny) {
+      const trimTarget = detectTrimRequest(rawUserPrompt);
+      const trimDocument = trimTarget
+        ? pickTrimmableDocument(attachmentManifest)
+        : null;
+      if (trimTarget && trimDocument) {
+        return await this.executeDocumentTrim(
+          context,
+          trimTarget,
+          trimDocument,
+        );
+      }
+    }
+
     // Phase 2 routing: a natively-capable picked model runs the tool
     // IN-TURN on the Responses path — no round-trip, no pre-classification
     // (the model itself decides when to execute). The enricher only stages
@@ -354,6 +395,26 @@ export class ToolRouterEnricher extends BasePipelineStage {
         '[ToolRouterEnricher] All requested tools forced; skipping router decision',
       );
     }
+
+    // A dead classifier (expired credential, schema rejection, outage) must
+    // be VISIBLE: without this marker, "router errored and fell back" and
+    // "router decided no tools" produce byte-identical streams, and users
+    // debug the wrong thing. The turn still proceeds without tools.
+    if (decided.degraded) {
+      await context.emitActivity?.('chat.activity.toolRoutingUnavailable');
+    }
+
+    // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+    devTrace('tool-router-decision', {
+      undecidedSearch,
+      undecidedInterpreter,
+      forceWebSearch,
+      forceInterpreter,
+      nativeInterpreter,
+      decidedTools: decided.tools,
+      degraded: decided.degraded ?? false,
+      codeTask: decided.codeTask?.slice(0, 200) ?? null,
+    });
 
     const tools = new Set(
       decided.tools.filter(
@@ -1093,6 +1154,152 @@ export class ToolRouterEnricher extends BasePipelineStage {
    * run below the assistant message. Failures degrade to a merged notice —
    * the chat itself never fails because the sandbox did.
    */
+  /**
+   * Dedicated deterministic length-transformation path: Stage-1 LLM edit
+   * plan → Stage-2 mechanical sandbox execution on the ORIGINAL bytes.
+   * Shares the interpreter's budget, record, and context-merge plumbing so
+   * rendering (GeneratedFilesPanel, tool strip) is unchanged.
+   */
+  private async executeDocumentTrim(
+    context: ChatContext,
+    target: TrimTarget,
+    document: TrimmableDocument,
+  ): Promise<ChatContext> {
+    // Same degrade-don't-abort contract (and the same daily budget) as the
+    // general interpreter path.
+    if (
+      !(await consumeToolBudget(context, 'feature.codeInterpreter.runsPerDay'))
+    ) {
+      await context.emitActivity?.('chat.activity.codeInterpreterLimitReached');
+      return context;
+    }
+
+    const baseMessages = context.enrichedMessages || context.messages;
+    const startTime = Date.now();
+    console.log(
+      `[ToolRouterEnricher] Executing document trim for ${sanitizeForLog(document.filename)}`,
+    );
+    // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+    devTrace('trim-start', { filename: document.filename, target });
+
+    try {
+      const inputFiles = await this.collectInterpreterInputFiles(context);
+      const documentFile = inputFiles.find(
+        (f) => f.filename.toLowerCase() === document.filename.toLowerCase(),
+      );
+      if (!documentFile) {
+        throw new Error(`Attachment bytes not found for ${document.filename}`);
+      }
+
+      const extractedText = await this.resolveExtractedText(
+        context,
+        documentFile,
+      );
+
+      let trimTimer: ReturnType<typeof setTimeout> | undefined;
+      const result = await Promise.race([
+        runDocumentTrim({
+          document: documentFile,
+          format: document.format,
+          extractedText,
+          target,
+          session: context.session,
+          interpreterTool: this.codeInterpreterTool,
+          // Slightly under the outer race below so the pipeline's own
+          // deadline handling (retry containment, recovery) always wins.
+          budgetMs: ToolRouterEnricher.INTERPRETER_TIMEOUT_MS - 5000,
+          onActivity: (key, params) => {
+            void context.emitActivity?.(key, params);
+          },
+        }),
+        new Promise<never>((_, reject) => {
+          trimTimer = setTimeout(() => {
+            reject(new Error('Document trim timed out'));
+          }, ToolRouterEnricher.INTERPRETER_TIMEOUT_MS);
+        }),
+      ]).finally(() => {
+        if (trimTimer) clearTimeout(trimTimer);
+      });
+
+      // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+      devTrace('trim-done', {
+        countBefore: result.countBefore,
+        countAfter: result.countAfter,
+        target: result.targetCount,
+        unit: result.unit,
+        retried: result.retried,
+        generatedFiles: result.generatedFiles.map((f) => f.filename),
+      });
+
+      await this.emitInterpreterRecord(
+        context,
+        result,
+        null,
+        Date.now() - startTime,
+      );
+
+      const lastMsg = baseMessages[baseMessages.length - 1];
+      const enrichedLastMessage = this.prependContextToMessage(
+        lastMsg,
+        this.buildInterpreterContext(result),
+      );
+      return {
+        ...context,
+        enrichedMessages: [...baseMessages.slice(0, -1), enrichedLastMessage],
+      };
+    } catch (error) {
+      console.error('[ToolRouterEnricher] Document trim failed:', error);
+      // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+      devTrace('trim-failed', {
+        error: error instanceof Error ? error.message : String(error),
+      });
+
+      await this.emitInterpreterRecord(
+        context,
+        null,
+        'Document trim failed',
+        Date.now() - startTime,
+      );
+
+      // Honest failure: the picked model must not invent a download.
+      const failureNotice =
+        `Note: an automatic length reduction of "${document.filename}" was attempted for this request but it FAILED — no trimmed file exists. ` +
+        `Tell the user plainly that the document could not be trimmed this time, do not claim any file was produced, and offer to retry.`;
+      const lastMsg = baseMessages[baseMessages.length - 1];
+      const enrichedLastMessage = this.prependContextToMessage(
+        lastMsg,
+        failureNotice,
+      );
+      return {
+        ...context,
+        enrichedMessages: [...baseMessages.slice(0, -1), enrichedLastMessage],
+      };
+    }
+  }
+
+  /**
+   * Planning input for the trim pipeline: the already-extracted inline text
+   * when FileProcessor produced it this turn, else a fresh extraction from
+   * the raw bytes (follow-up turns, or files that went the summarize path —
+   * a relevance summary cannot anchor verbatim edit operations).
+   */
+  private async resolveExtractedText(
+    context: ChatContext,
+    documentFile: CodeInterpreterInputFile,
+  ): Promise<string> {
+    const inline = context.processedContent?.inlineFiles?.find(
+      (f) => f.filename.toLowerCase() === documentFile.filename.toLowerCase(),
+    );
+    if (inline?.content) return inline.content;
+
+    const file = new File(
+      [new Uint8Array(documentFile.data)],
+      documentFile.filename,
+      {},
+    );
+    return await loadDocument(file);
+  }
+
   private async executeCodeInterpreter(
     context: ChatContext,
     task: string,
@@ -1108,6 +1315,8 @@ export class ToolRouterEnricher extends BasePipelineStage {
     const baseMessages = context.enrichedMessages || context.messages;
     const startTime = Date.now();
     console.log('[ToolRouterEnricher] Executing code interpreter');
+    // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+    devTrace('interpreter-start', { task: task.slice(0, 200) });
 
     // Interpreter runs take multiple seconds — keep the loader honest. (The
     // client adds its own live elapsed counter to any chat.activity.* text,
@@ -1139,6 +1348,12 @@ export class ToolRouterEnricher extends BasePipelineStage {
       console.log(
         `[ToolRouterEnricher] Code interpreter completed: ${result.codeRuns.length} runs, ${result.generatedFiles.length} generated files, ${result.text.length} chars`,
       );
+      // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+      devTrace('interpreter-done', {
+        codeRuns: result.codeRuns.length,
+        generatedFiles: result.generatedFiles.map((f) => f.filename),
+        textChars: result.text.length,
+      });
 
       await this.emitInterpreterRecord(
         context,
@@ -1164,6 +1379,11 @@ export class ToolRouterEnricher extends BasePipelineStage {
         `[ToolRouterEnricher] Code interpreter ${timedOut ? 'timed out' : 'failed'}:`,
         error,
       );
+      // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+      devTrace('interpreter-failed', {
+        timedOut,
+        error: error instanceof Error ? error.message : String(error),
+      });
 
       await this.emitInterpreterRecord(
         context,
