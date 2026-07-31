@@ -27,6 +27,13 @@ export interface CodeInterpreterToolParams {
   task: string;
   session: Session;
   inputFiles?: CodeInterpreterInputFile[];
+  /**
+   * Use `task` verbatim as the ENTIRE instruction (plus the attached-file
+   * list) instead of wrapping it in the generic run-code preamble. For
+   * callers that compose their own deterministic contract, e.g. the
+   * document-trim pipeline's mechanical plan-application script.
+   */
+  verbatimTask?: boolean;
 }
 
 /** One sandbox execution round (a single `code_interpreter_call` item). */
@@ -43,6 +50,12 @@ export interface CodeInterpreterResult {
   codeRuns: CodeRun[];
   /** Files the sandbox produced, already persisted to the user's blob storage. */
   generatedFiles: GeneratedFileRef[];
+  /**
+   * Container ids of the sandbox sessions that ran. Lets callers list
+   * container files directly when the model produced a file but failed to
+   * cite it (containers expire ~30 min idle — use promptly).
+   */
+  containerIds: string[];
   durationMs: number;
 }
 
@@ -140,6 +153,35 @@ export async function persistContainerFiles(
 }
 
 /**
+ * Foundry project client exposing the OpenAI Responses surface (files,
+ * responses, containers). Shared by CodeInterpreterTool and callers that
+ * need direct container access (e.g. the document-trim pipeline's
+ * uncited-output-file fallback).
+ */
+export async function createFoundryOpenAIClient(): Promise<OpenAI> {
+  const aiProjects = await import('@azure/ai-projects');
+  const { DefaultAzureCredential } = await import('@azure/identity');
+
+  const endpoint = env.AZURE_AI_FOUNDRY_ENDPOINT;
+  if (!endpoint) {
+    throw new Error(
+      'Code interpreter requires AZURE_AI_FOUNDRY_ENDPOINT to be configured',
+    );
+  }
+  if (!isAllowedFoundryHost(endpoint)) {
+    throw new Error(
+      `Refusing to invoke Foundry against disallowed host: ${endpoint}`,
+    );
+  }
+
+  const project = new aiProjects.AIProjectClient(
+    endpoint,
+    new DefaultAzureCredential(),
+  );
+  return (await project.getOpenAIClient()) as unknown as OpenAI;
+}
+
+/**
  * CodeInterpreterTool
  *
  * Runs a task in Azure AI Foundry's sandboxed Python environment via the
@@ -190,9 +232,11 @@ export class CodeInterpreterTool {
               params.task,
               inputFileIds,
               params.inputFiles ?? [],
+              params.verbatimTask === true,
             );
 
-            const { text, codeRuns, citations } = this.parseOutput(response);
+            const { text, codeRuns, citations, containerIds } =
+              this.parseOutput(response);
             const generatedFiles = await this.persistGeneratedFiles(
               openAIClient,
               citations,
@@ -207,7 +251,7 @@ export class CodeInterpreterTool {
             );
             span.setStatus({ code: SpanStatusCode.OK });
 
-            return { text, codeRuns, generatedFiles, durationMs };
+            return { text, codeRuns, generatedFiles, containerIds, durationMs };
           } finally {
             // Input files were copied into the sandbox container; the
             // originals in Foundry file storage are no longer needed.
@@ -228,28 +272,7 @@ export class CodeInterpreterTool {
   }
 
   private async createClient(): Promise<OpenAI> {
-    const aiProjects = await import('@azure/ai-projects');
-    const { DefaultAzureCredential } = await import('@azure/identity');
-
-    const endpoint = env.AZURE_AI_FOUNDRY_ENDPOINT;
-    if (!endpoint) {
-      throw new Error(
-        'Code interpreter requires AZURE_AI_FOUNDRY_ENDPOINT to be configured',
-      );
-    }
-    if (!isAllowedFoundryHost(endpoint)) {
-      throw new Error(
-        `Refusing to invoke Foundry against disallowed host: ${endpoint}`,
-      );
-    }
-
-    const project = new aiProjects.AIProjectClient(
-      endpoint,
-      new DefaultAzureCredential(),
-    );
-    // The Foundry project exposes the OpenAI Responses surface (files,
-    // responses, containers) through this client.
-    return (await project.getOpenAIClient()) as unknown as OpenAI;
+    return createFoundryOpenAIClient();
   }
 
   private async uploadInputFiles(
@@ -294,6 +317,7 @@ export class CodeInterpreterTool {
     task: string,
     fileIds: string[],
     inputFiles: CodeInterpreterInputFile[],
+    verbatimTask: boolean,
   ): Promise<OpenAI.Responses.Response> {
     const fileList = inputFiles.length
       ? `\n\nAttached files (available in the sandbox working directory):\n${inputFiles
@@ -303,15 +327,17 @@ export class CodeInterpreterTool {
 
     // Mirrors WebSearchTool's forced-search instruction: without it the
     // model may answer from knowledge and never touch the sandbox, which
-    // defeats a forced "Run code" request.
-    const instruction =
-      `Use the code interpreter to complete the following task. Write and execute Python code — do not answer from knowledge alone. ` +
-      `When the task involves data, actually load and process it. When a chart or output file is the natural result, save it as a file. ` +
-      `When the task transforms an attached file (shortening, rewriting, reformatting, translating, cleaning), save the result as a NEW ` +
-      `file in the SAME format as the input — e.g. .docx in → .docx out via python-docx, .xlsx via openpyxl — unless the task explicitly ` +
-      `names a different output format. Do not deliver the transformed content as chat text when the input was a file. ` +
-      `Report your findings concisely; the numbers and files you produce are the deliverable.\n\n` +
-      `Task: ${task}${fileList}`;
+    // defeats a forced "Run code" request. Verbatim callers bring their own
+    // complete contract and skip the generic preamble.
+    const instruction = verbatimTask
+      ? `${task}${fileList}`
+      : `Use the code interpreter to complete the following task. Write and execute Python code — do not answer from knowledge alone. ` +
+        `When the task involves data, actually load and process it. When a chart or output file is the natural result, save it as a file. ` +
+        `When the task transforms an attached file (shortening, rewriting, reformatting, translating, cleaning), save the result as a NEW ` +
+        `file in the SAME format as the input — e.g. .docx in → .docx out via python-docx, .xlsx via openpyxl — unless the task explicitly ` +
+        `names a different output format. Do not deliver the transformed content as chat text when the input was a file. ` +
+        `Report your findings concisely; the numbers and files you produce are the deliverable.\n\n` +
+        `Task: ${task}${fileList}`;
 
     return await client.responses.create({
       model: env.CODE_INTERPRETER_MODEL,
@@ -336,6 +362,7 @@ export class CodeInterpreterTool {
       fileId: string;
       filename: string;
     }>;
+    containerIds: string[];
   } {
     const codeRuns: CodeRun[] = [];
     const citations: Array<{
@@ -343,6 +370,7 @@ export class CodeInterpreterTool {
       fileId: string;
       filename: string;
     }> = [];
+    const containerIds: string[] = [];
     const textParts: string[] = [];
 
     for (const item of response.output ?? []) {
@@ -356,6 +384,9 @@ export class CodeInterpreterTool {
           logs: logs || null,
           status: item.status,
         });
+        if (item.container_id && !containerIds.includes(item.container_id)) {
+          containerIds.push(item.container_id);
+        }
       } else if (item.type === 'message') {
         for (const content of item.content ?? []) {
           if (content.type !== 'output_text') continue;
@@ -373,7 +404,12 @@ export class CodeInterpreterTool {
       }
     }
 
-    return { text: textParts.join('\n').trim(), codeRuns, citations };
+    return {
+      text: textParts.join('\n').trim(),
+      codeRuns,
+      citations,
+      containerIds,
+    };
   }
 
   /**
