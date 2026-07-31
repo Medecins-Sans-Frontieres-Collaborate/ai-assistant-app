@@ -851,6 +851,8 @@
       "readingCitedSources": "Reading {count} previously cited articles…",
       "searchingFiles": "Searching files…",
       "runningCode": "Running code…",
+      "readingDocument": "Reading {filename}…",
+      "condensingDocument": "Condensing {filename}: {percent}%…",
       "generatingImage": "Generating image…",
       "listingTools": "Looking up available tools…",
       "planningSteps": "Planning steps…",
@@ -859,6 +861,8 @@
       "analyzingFiles": "Analyzing your files…",
       "searchingKnowledge": "Searching the knowledge base…",
       "cancellingPriorTool": "Cancelling previous tool request…",
+      "webSearchLimitReached": "Daily web search limit reached — answering without search…",
+      "codeInterpreterLimitReached": "Daily code execution limit reached — answering without running code…",
       "workflow": {
         "preparingDocument": "Preparing references…",
         "writingDocument": "Writing the document…",
