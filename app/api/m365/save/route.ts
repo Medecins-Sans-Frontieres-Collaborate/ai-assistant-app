@@ -1,12 +1,19 @@
 /**
- * Save an app-produced file to the user's OneDrive.
+ * Save an app-produced file to the user's OneDrive or a SharePoint library.
  *
- * POST /api/m365/save  (multipart: file, fileName)
+ * POST /api/m365/save  (multipart: file, fileName[, driveId[, parentId]])
  *
  * Always a direct, user-initiated action (the "Save to OneDrive" menu item)
- * — never triggered from model output. v1 target is the fixed app folder
- * `/Apps/AI Assistant/`; a folder/SharePoint picker is a follow-up
- * (`Sites.ReadWrite.All` is granted but unused here).
+ * — never triggered from model output. Without a target the file lands in
+ * the fixed app folder `/Apps/AI Assistant/`; with a driveId (plus optional
+ * parentId folder) it goes to any drive the user can write to. Delegated
+ * `Files.ReadWrite.All` suffices for SharePoint library writes too — Sites
+ * scopes are only needed for site discovery (`Sites.Read.All`), not here.
+ *
+ * Targets use Graph's id+path colon addressing
+ * (`/drives/{d}/items/{parent}:/{name}:`) — creating a NEW file under an
+ * id-addressed parent requires it; a pure id PUT can only overwrite an
+ * existing item.
  *
  * ≤4MB uploads use the single-shot content PUT; larger files go through an
  * upload session in 5MB chunks (Graph requires 320KiB multiples). Conflicts
@@ -17,6 +24,7 @@ import { NextRequest } from 'next/server';
 import {
   M365Error,
   graphJson,
+  isValidGraphId,
   m365ErrorResponse,
 } from '@/lib/services/m365/graphApi';
 
@@ -44,6 +52,11 @@ interface SavedItem {
   webUrl?: string;
 }
 
+interface SaveTarget {
+  driveId: string;
+  parentId?: string;
+}
+
 function sanitizeFileName(name: string): string {
   const cleaned = name
     .replace(/[\\/:*?"<>|#%]/g, '-')
@@ -54,7 +67,15 @@ function sanitizeFileName(name: string): string {
   return cleaned || 'export';
 }
 
-function itemPath(fileName: string): string {
+function itemPath(fileName: string, target?: SaveTarget): string {
+  if (target) {
+    const drive = `/drives/${encodeURIComponent(target.driveId)}`;
+    // parentId targets a folder; without one the drive root (a SharePoint
+    // document-library root) is the destination.
+    return target.parentId
+      ? `${drive}/items/${encodeURIComponent(target.parentId)}:/${encodeURIComponent(fileName)}:`
+      : `${drive}/root:/${encodeURIComponent(fileName)}:`;
+  }
   const encodedFolder = APP_FOLDER.split('/').map(encodeURIComponent).join('/');
   return `/me/drive/root:/${encodedFolder}/${encodeURIComponent(fileName)}:`;
 }
@@ -64,11 +85,12 @@ async function uploadLarge(
   fileName: string,
   bytes: Uint8Array,
   contentType: string,
+  target?: SaveTarget,
 ): Promise<SavedItem> {
   const sessionData = await graphJson<{ uploadUrl?: string }>(
     req,
     SCOPES,
-    `${itemPath(fileName)}/createUploadSession`,
+    `${itemPath(fileName, target)}/createUploadSession`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -123,16 +145,37 @@ export async function POST(req: NextRequest) {
   }
   const file = form.get('file');
   const rawName = form.get('fileName');
+  const driveId = form.get('driveId');
+  const parentId = form.get('parentId');
   if (!(file instanceof Blob)) {
     return badRequestResponse('Missing file');
   }
   if (typeof rawName !== 'string' || !rawName.trim()) {
     return badRequestResponse('Missing fileName');
   }
+  if (
+    driveId !== null &&
+    (typeof driveId !== 'string' || !isValidGraphId(driveId))
+  ) {
+    return badRequestResponse('Invalid driveId');
+  }
+  if (
+    parentId !== null &&
+    (typeof parentId !== 'string' || !isValidGraphId(parentId))
+  ) {
+    return badRequestResponse('Invalid parentId');
+  }
+  if (parentId !== null && driveId === null) {
+    return badRequestResponse('parentId requires driveId');
+  }
   if (file.size > MAX_SAVE_BYTES) {
     return payloadTooLargeResponse('50MB');
   }
 
+  const target: SaveTarget | undefined =
+    typeof driveId === 'string'
+      ? { driveId, ...(typeof parentId === 'string' && { parentId }) }
+      : undefined;
   const fileName = sanitizeFileName(rawName);
   const contentType = file.type || 'application/octet-stream';
 
@@ -142,7 +185,7 @@ export async function POST(req: NextRequest) {
       const response = await graphJson<SavedItem>(
         req,
         SCOPES,
-        `${itemPath(fileName)}/content?@microsoft.graph.conflictBehavior=rename`,
+        `${itemPath(fileName, target)}/content?@microsoft.graph.conflictBehavior=rename`,
         {
           method: 'PUT',
           headers: { 'Content-Type': contentType },
@@ -156,13 +199,16 @@ export async function POST(req: NextRequest) {
         fileName,
         new Uint8Array(await file.arrayBuffer()),
         contentType,
+        target,
       );
     }
 
+    // Explicit destinations omit `folder` — the client already holds the
+    // human-readable label for the folder it picked.
     return successResponse({
       name: item.name ?? fileName,
       webUrl: item.webUrl,
-      folder: APP_FOLDER,
+      ...(!target && { folder: APP_FOLDER }),
     });
   } catch (error) {
     return m365ErrorResponse(error);
