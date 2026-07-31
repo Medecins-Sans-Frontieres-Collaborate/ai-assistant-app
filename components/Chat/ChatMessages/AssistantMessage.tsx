@@ -49,6 +49,7 @@ import {
 import { DocumentTranslationContent } from '@/components/Chat/ChatMessages/DocumentTranslationContent';
 import { GeneratedFilesPanel } from '@/components/Chat/ChatMessages/GeneratedFilesPanel';
 import { InterimSearchPanel } from '@/components/Chat/ChatMessages/InterimSearchPanel';
+import { MessageDownloadMenu } from '@/components/Chat/ChatMessages/MessageDownloadMenu';
 import { ThinkingBlock } from '@/components/Chat/ChatMessages/ThinkingBlock';
 import { ToolCallSummary } from '@/components/Chat/ChatMessages/ToolCallSummary';
 import { TranscriptContent } from '@/components/Chat/ChatMessages/TranscriptContent';
@@ -962,6 +963,14 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                   >
                     <IconFileText size={18} />
                   </button>
+
+                  {/* Download / export button */}
+                  <MessageDownloadMenu
+                    content={displayedContent}
+                    citations={citations}
+                    disabled={hasEmbeddedContent}
+                    disabledTitle={t('chat.actionsDisabledForEmbed')}
+                  />
                 </div>
               </div>
             )}
