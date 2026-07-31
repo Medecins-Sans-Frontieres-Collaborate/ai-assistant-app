@@ -41,7 +41,6 @@ import { runDocumentTrim } from '../tools/documentTrim/DocumentTrimPipeline';
 import {
   TrimTarget,
   TrimmableDocument,
-  detectTrimRequest,
   pickTrimmableDocument,
 } from '../tools/documentTrim/trimDetector';
 import { buildNewsResult } from '../tools/newsSearch';
@@ -287,25 +286,38 @@ export class ToolRouterEnricher extends BasePipelineStage {
       attachmentManifest,
     });
 
-    // Dedicated deterministic path: an explicit length-target transformation
-    // of an attached document ("trim this to 6k words", "cut it in half")
-    // NEVER rides model discretion — not the native deferral (models given
-    // the sandbox often narrate instead of executing) and not the nano
-    // classifier. Runs before the agent skip below on purpose, mirroring the
-    // forced-tool precedent: the user's request names the tool's job
-    // explicitly. Permission gates (env kill switch, InterpreterMode,
-    // org-agent opt-in) still apply via interpreterRequestedAny.
+    // Dedicated document-trim path. The trigger is split by nature:
+    // FACTUAL precondition (a trimmable document is attached — language-
+    // independent) is checked deterministically; INTENT ("did the user ask
+    // to reduce it to a target length?") is classified by a dedicated nano
+    // LLM call, because users write in any of the app's 33 languages and
+    // keyword matching cannot be multilingual. Once triggered, EXECUTION is
+    // fully deterministic (plan → mechanical sandbox application) — no
+    // model decides whether to run. Sits before the native deferral and the
+    // agent skip on purpose: a classified trim request names the tool's job
+    // explicitly, mirroring the forced-tool precedent. Permission gates
+    // (env kill switch, InterpreterMode, org-agent opt-in) still apply via
+    // interpreterRequestedAny.
     if (interpreterRequestedAny) {
-      const trimTarget = detectTrimRequest(rawUserPrompt);
-      const trimDocument = trimTarget
-        ? pickTrimmableDocument(attachmentManifest)
-        : null;
-      if (trimTarget && trimDocument) {
-        return await this.executeDocumentTrim(
-          context,
-          trimTarget,
-          trimDocument,
-        );
+      const trimDocument = pickTrimmableDocument(attachmentManifest);
+      if (trimDocument) {
+        const trimTarget = await this.toolRouterService.classifyDocumentTrim({
+          messages: baseMessages,
+          currentMessage,
+          documentFilename: trimDocument.filename,
+        });
+        // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+        devTrace('trim-intent', {
+          filename: trimDocument.filename,
+          target: trimTarget,
+        });
+        if (trimTarget) {
+          return await this.executeDocumentTrim(
+            context,
+            trimTarget,
+            trimDocument,
+          );
+        }
       }
     }
 
