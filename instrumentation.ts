@@ -43,6 +43,21 @@ export async function register() {
       await import('@/lib/services/limits/startupWarnings')
     ).logLimitsStartupWarnings();
 
+    // Rehearse the static org RAG agents' search index against the retrieval
+    // contract (admin-authored agents are validated on save; the file-based
+    // ones have no other admission gate). Fire-and-forget: one Search
+    // round-trip that must never block or fail boot.
+    try {
+      void (
+        await import('@/lib/services/orgAgents/startupIndexCheck')
+      ).logStaticOrgAgentIndexWarnings();
+    } catch (err) {
+      console.warn(
+        '[Instrumentation] Static org-agent index check skipped:',
+        err,
+      );
+    }
+
     // Skip OpenTelemetry in development unless explicitly enabled.
     // OTel's request body cloning conflicts with routes that read request.text().
     // Set ENABLE_OTEL=true to enable telemetry in development for testing.
