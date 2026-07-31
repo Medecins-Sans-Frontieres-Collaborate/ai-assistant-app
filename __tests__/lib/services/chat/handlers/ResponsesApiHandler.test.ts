@@ -166,8 +166,10 @@ describe('ResponsesApiHandler', () => {
           container: { type: 'auto', file_ids: ['file_1', 'file_2'] },
         },
       ]);
-      // Not forced: instructions carry only the system prompt
-      expect(params.instructions).toBe('p');
+      // Not forced: no Run-code directive, but mounted files DO carry the
+      // same-format output instruction (docx in → docx out).
+      expect(params.instructions).not.toContain('use the code interpreter');
+      expect(params.instructions).toContain('SAME format as the input');
     });
 
     it('appends the Run-code instruction when forced', () => {
