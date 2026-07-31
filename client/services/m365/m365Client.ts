@@ -6,10 +6,14 @@
 import type {
   M365DriveEntry,
   M365DriveInfo,
-  M365MailEnvelope,
+  M365DrivePage,
+  M365DriveSort,
+  M365MailFilter,
   M365MailImportResult,
+  M365MailPage,
   M365SaveResult,
   M365SiteEntry,
+  M365SortDir,
   M365Status,
 } from '@/types/m365';
 
@@ -27,7 +31,10 @@ async function requestJson<T>(url: string, init?: RequestInit): Promise<T> {
   let response: Response;
   try {
     response = await fetch(url, init);
-  } catch {
+  } catch (error) {
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      throw error; // caller cancelled — never a user-facing error
+    }
     throw new M365ClientError('Network error', 'NETWORK');
   }
   const body = await response.json().catch(() => null);
@@ -46,18 +53,42 @@ export async function fetchM365Status(): Promise<M365Status> {
 
 export type DriveView = 'children' | 'recent' | 'shared' | 'search';
 
-export async function listDrive(
+/** Search-as-you-type tuning shared by the M365 picker and mail modals. */
+export const M365_SEARCH_DEBOUNCE_MS = 300;
+export const M365_SEARCH_MIN_CHARS = 2;
+
+export interface ListDriveOptions {
+  driveId?: string;
+  itemId?: string;
+  q?: string;
+  sort?: M365DriveSort; // children view only; ignored by other views
+  dir?: M365SortDir;
+  pageToken?: string; // opaque M365DrivePage.nextToken echo
+  signal?: AbortSignal; // cancels the underlying fetch
+}
+
+export async function listDrivePage(
   view: DriveView,
-  options: { driveId?: string; itemId?: string; q?: string } = {},
-): Promise<M365DriveEntry[]> {
+  options: ListDriveOptions = {},
+): Promise<M365DrivePage> {
   const params = new URLSearchParams({ view });
   if (options.driveId) params.set('driveId', options.driveId);
   if (options.itemId) params.set('itemId', options.itemId);
   if (options.q) params.set('q', options.q);
-  const data = await requestJson<{ entries: M365DriveEntry[] }>(
+  if (options.sort) params.set('sort', options.sort);
+  if (options.dir) params.set('dir', options.dir);
+  if (options.pageToken) params.set('pageToken', options.pageToken);
+  return requestJson<M365DrivePage>(
     `/api/m365/drive?${params.toString()}`,
+    options.signal ? { signal: options.signal } : undefined,
   );
-  return data.entries;
+}
+
+export async function listDrive(
+  view: DriveView,
+  options: ListDriveOptions = {},
+): Promise<M365DriveEntry[]> {
+  return (await listDrivePage(view, options)).entries;
 }
 
 export async function searchSites(query: string): Promise<M365SiteEntry[]> {
@@ -108,12 +139,33 @@ export async function downloadDriveItem(
   };
 }
 
-export async function listMail(query?: string): Promise<M365MailEnvelope[]> {
-  const suffix = query ? `?q=${encodeURIComponent(query)}` : '';
-  const data = await requestJson<{ envelopes: M365MailEnvelope[] }>(
-    `/api/m365/mail${suffix}`,
+export interface ListMailOptions {
+  /** Free-text mailbox search; when set, results are relevance-ordered by Graph. */
+  q?: string;
+  /** Server-side filters (AND-combined). The server ignores these when `q` is set — Graph cannot combine $search with $filter — so callers must filter search results client-side. */
+  filters?: M365MailFilter[];
+  /** Opaque continuation token from a previous M365MailPage.nextToken; when set, q/filters are ignored (the token encodes the original query). */
+  pageToken?: string;
+  /** Cancels the underlying fetch. */
+  signal?: AbortSignal;
+}
+
+export async function listMail(
+  options: ListMailOptions = {},
+): Promise<M365MailPage> {
+  const params = new URLSearchParams();
+  if (options.pageToken) {
+    params.set('pageToken', options.pageToken);
+  } else {
+    if (options.q) params.set('q', options.q);
+    if (options.filters?.length)
+      params.set('filters', options.filters.join(','));
+  }
+  const qs = params.toString();
+  return requestJson<M365MailPage>(
+    `/api/m365/mail${qs ? `?${qs}` : ''}`,
+    options.signal ? { signal: options.signal } : undefined,
   );
-  return data.envelopes;
 }
 
 export async function fetchMailImport(
@@ -129,13 +181,24 @@ export async function fetchMailImport(
   );
 }
 
+export interface M365SaveTarget {
+  driveId: string;
+  /** Omit to target the drive root (SharePoint library root). */
+  parentId?: string;
+}
+
 export async function saveToOneDrive(
   blob: Blob,
   fileName: string,
+  target?: M365SaveTarget,
 ): Promise<M365SaveResult> {
   const form = new FormData();
   form.append('file', blob);
   form.append('fileName', fileName);
+  if (target) {
+    form.append('driveId', target.driveId);
+    if (target.parentId) form.append('parentId', target.parentId);
+  }
   return requestJson<M365SaveResult>('/api/m365/save', {
     method: 'POST',
     body: form,
