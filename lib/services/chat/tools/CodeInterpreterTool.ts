@@ -307,6 +307,9 @@ export class CodeInterpreterTool {
     const instruction =
       `Use the code interpreter to complete the following task. Write and execute Python code — do not answer from knowledge alone. ` +
       `When the task involves data, actually load and process it. When a chart or output file is the natural result, save it as a file. ` +
+      `When the task transforms an attached file (shortening, rewriting, reformatting, translating, cleaning), save the result as a NEW ` +
+      `file in the SAME format as the input — e.g. .docx in → .docx out via python-docx, .xlsx via openpyxl — unless the task explicitly ` +
+      `names a different output format. Do not deliver the transformed content as chat text when the input was a file. ` +
       `Report your findings concisely; the numbers and files you produce are the deliverable.\n\n` +
       `Task: ${task}${fileList}`;
 
