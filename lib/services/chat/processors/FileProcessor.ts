@@ -513,6 +513,12 @@ export class FileProcessor extends BasePipelineStage {
                   `[FileProcessor] Processing document: ${sanitizeForLog(filename)}`,
                 );
 
+                // Extraction of a multi-MB document takes seconds — tell the
+                // client what is happening instead of a generic "Thinking…".
+                void context.emitActivity?.('chat.activity.readingDocument', {
+                  filename: FileProcessor.truncateName(filename),
+                });
+
                 const docFile = new File(
                   [new Uint8Array(fileBuffer)],
                   filename,
@@ -547,6 +553,17 @@ export class FileProcessor extends BasePipelineStage {
                     `[FileProcessor] Large file (${text.length} chars > ${chunkSize} chunk size), summarizing: ${sanitizeForLog(filename)}`,
                   );
 
+                  // A large document means dozens of sequential summarization
+                  // batches (minutes of otherwise-silent wall clock). Emit a
+                  // starting marker now and per-batch progress below.
+                  void context.emitActivity?.(
+                    'chat.activity.condensingDocument',
+                    {
+                      filename: FileProcessor.truncateName(filename),
+                      percent: '0',
+                    },
+                  );
+
                   // Process with parseAndQueryFileOpenAI, passing pre-extracted text
                   // Note: We get the summary as a string (non-streaming for pipeline)
                   // Note: Images are NOT passed here - they remain in the message for the final chat
@@ -569,6 +586,20 @@ export class FileProcessor extends BasePipelineStage {
                     // Images will be included in the final message content by StandardChatHandler
                     images: undefined,
                     preExtractedText: text,
+                    onProgress: (processed, total) => {
+                      void context.emitActivity?.(
+                        'chat.activity.condensingDocument',
+                        {
+                          filename: FileProcessor.truncateName(filename),
+                          percent: String(
+                            Math.min(
+                              100,
+                              Math.round((processed / total) * 100),
+                            ),
+                          ),
+                        },
+                      );
+                    },
                   });
                   console.log(
                     `[Perf] FileProcessor.parseAndQueryFileOpenAI "${sanitizeForLog(filename)}": ${(performance.now() - perfSummaryStart).toFixed(1)}ms`,
@@ -721,5 +752,11 @@ export class FileProcessor extends BasePipelineStage {
         }
       },
     );
+  }
+
+  /** Keeps filenames loader-friendly: the marker renders in a one-line pill. */
+  private static truncateName(filename: string): string {
+    const MAX = 40;
+    return filename.length > MAX ? `${filename.slice(0, MAX - 1)}…` : filename;
   }
 }
