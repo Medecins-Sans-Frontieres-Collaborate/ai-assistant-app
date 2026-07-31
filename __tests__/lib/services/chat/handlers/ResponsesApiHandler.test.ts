@@ -167,9 +167,12 @@ describe('ResponsesApiHandler', () => {
         },
       ]);
       // Not forced: no Run-code directive, but mounted files DO carry the
-      // same-format output instruction (docx in → docx out).
-      expect(params.instructions).not.toContain('use the code interpreter');
+      // execute-don't-advise + same-format output instruction.
+      expect(params.instructions).not.toContain(
+        'The user has enabled "Run code"',
+      );
       expect(params.instructions).toContain('SAME format as the input');
+      expect(params.instructions).toContain('actually perform the task now');
     });
 
     it('appends the Run-code instruction when forced', () => {
