@@ -577,18 +577,35 @@ export class StandardChatHandler extends BasePipelineStage {
     const processedTextParts: string[] = [];
 
     if (fileSummaries && fileSummaries.length > 0) {
+      // The preamble matters: without it, models given only a condensed
+      // summary respond by asking the user to "upload the file" they already
+      // uploaded — the raw text simply cannot travel in the context window.
       processedTextParts.push(
-        fileSummaries
-          .map((f) => `[Document summary: ${f.filename}]\n${f.summary}`)
-          .join('\n\n'),
+        'The user has ALREADY uploaded the following file(s). The full text was ' +
+          'extracted server-side and condensed into the summaries below because ' +
+          'it exceeds the context window — the raw file cannot be passed to you. ' +
+          'Never ask the user to upload, paste, or re-send the file. Work from ' +
+          'these summaries, and if the task genuinely requires the full verbatim ' +
+          'text, say that limitation explicitly while still doing your best with ' +
+          'what is here.\n\n' +
+          fileSummaries
+            .map((f) => `[Document summary: ${f.filename}]\n${f.summary}`)
+            .join('\n\n'),
       );
     }
 
     if (inlineFiles && inlineFiles.length > 0) {
+      // Same rationale as the summaries preamble: bare fenced text reads as
+      // "the user pasted this", and models respond by asking for the file
+      // to be uploaded — which the user already did.
       processedTextParts.push(
-        inlineFiles
-          .map((f) => '```' + f.filename + '\n' + f.content + '\n```')
-          .join('\n\n'),
+        'The user has ALREADY uploaded the following file(s); the fenced ' +
+          'blocks below are their full extracted text. Never ask the user to ' +
+          'upload, paste, or re-send these files — work directly from this ' +
+          'content.\n\n' +
+          inlineFiles
+            .map((f) => '```' + f.filename + '\n' + f.content + '\n```')
+            .join('\n\n'),
       );
     }
 

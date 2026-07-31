@@ -126,10 +126,22 @@ export class ResponsesApiHandler {
           `save charts or output files when they are the natural result.`
         : '';
 
+    // Applies whenever sandbox input files are mounted (forced or routed):
+    // a transformed document must come back as a file in the input's
+    // format, not pasted into the chat as markdown.
+    const fileFormatInstruction =
+      codeInterpreter && codeInterpreter.fileIds.length > 0
+        ? `\n\nWhen the task transforms an attached file (shortening, rewriting, reformatting, translating, cleaning), save the result ` +
+          `as a NEW file in the SAME format as the input — e.g. .docx in → .docx out via python-docx, .xlsx via openpyxl — unless the ` +
+          `user explicitly asks for a different output format. Do not deliver the transformed content as chat text when the input was a file.`
+        : '';
+
     const params: OpenAI.Responses.ResponseCreateParams = {
       model: modelConfig.deploymentName ?? modelConfig.id,
       input,
-      instructions: `${systemPrompt}${forcedInstruction}` || undefined,
+      instructions:
+        `${systemPrompt}${forcedInstruction}${fileFormatInstruction}` ||
+        undefined,
       stream,
       // Stateless: conversation history travels in full on every request;
       // never retain it server-side.
