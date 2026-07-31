@@ -59,7 +59,7 @@ export const MessageDownloadMenu: FC<MessageDownloadMenuProps> = ({
 }) => {
   const t = useTranslations();
   const exportAs = useDocumentExport();
-  const saveToOneDrive = useM365Save();
+  const { save: saveToOneDrive, dialog: m365SaveDialog } = useM365Save();
   const oneDriveAvailable = useM365SaveAvailable();
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [showMenu, setShowMenu] = useState(false);
@@ -133,6 +133,8 @@ export const MessageDownloadMenu: FC<MessageDownloadMenuProps> = ({
           }
         />
       </DropdownPortal>
+
+      {m365SaveDialog}
     </>
   );
 };
