@@ -46,7 +46,7 @@ export default function DocumentArtifact({
   const { fileName, modifiedCode, setFileName, setIsEditorOpen } =
     useArtifactStore();
   const exportAs = useDocumentExport();
-  const saveToOneDrive = useM365Save();
+  const { save: saveToOneDrive, dialog: m365SaveDialog } = useM365Save();
   const oneDriveAvailable = useM365SaveAvailable();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -142,6 +142,8 @@ export default function DocumentArtifact({
               }
             />
           </DropdownPortal>
+
+          {m365SaveDialog}
 
           <div className="w-px h-5 bg-neutral-300 dark:bg-neutral-700 mx-1" />
 
