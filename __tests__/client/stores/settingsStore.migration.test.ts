@@ -838,3 +838,48 @@ describe('settingsStore migration (v48 → v49)', () => {
     expect(result.memoryCapturePaused).toBe(false);
   });
 });
+
+/**
+ * v50 → v51: the remembered "Save to OneDrive" destination. Backfill to the
+ * defaults these users already have — default app folder (null), dialog shown.
+ */
+describe('settingsStore migration (v50 → v51)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills m365SaveDestination=null and m365SaveSkipPicker=false when migrating from v50', () => {
+    const result = migrate({ m365Connected: true }, 50) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365SaveDestination).toBeNull();
+    expect(result.m365SaveSkipPicker).toBe(false);
+    // The connection opt-in itself must survive untouched.
+    expect(result.m365Connected).toBe(true);
+  });
+
+  it('preserves a remembered destination on a current-version store', () => {
+    const destination = {
+      driveId: 'd1',
+      itemId: 'i1',
+      name: 'Reports',
+      pathLabel: 'OneDrive › Reports',
+    };
+    const result = migrate(
+      { m365SaveDestination: destination, m365SaveSkipPicker: true },
+      51,
+    ) as Record<string, unknown>;
+
+    expect(result.m365SaveDestination).toEqual(destination);
+    expect(result.m365SaveSkipPicker).toBe(true);
+  });
+
+  it('repairs a non-boolean skip-picker value', () => {
+    const result = migrate({ m365SaveSkipPicker: 'yes' }, 50) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365SaveSkipPicker).toBe(false);
+  });
+});
