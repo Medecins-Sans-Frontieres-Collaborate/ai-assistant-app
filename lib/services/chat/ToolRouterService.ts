@@ -1,3 +1,5 @@
+import { devTrace } from '@/lib/utils/server/debug/devTrace';
+
 import {
   Message,
   ToolRouterRequest,
@@ -360,11 +362,14 @@ Also tune the search when needsWebSearch is true:
             console.error(
               `[ToolRouterService] Falling back to no-tools (web_search disabled). Cause: ${errMessage}`,
             );
+            // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+            devTrace('tool-router-error', { error: errMessage.slice(0, 300) });
             span.recordException(error as Error);
             span.setAttribute('tool_router.fallback', 'error');
             span.setAttribute('tool_router.fallback_reason', errMessage);
             return {
               tools: [],
+              degraded: true,
               reasoning: 'Error determining tools, proceeding without search',
             };
           }
