@@ -149,6 +149,85 @@ export function ragContractProblems(
   return problems;
 }
 
+/* ------------------------------------------------------------------ */
+/* Serve-time recheck (cached)                                         */
+/* ------------------------------------------------------------------ */
+
+const SERVEABLE_CHECK_TTL_MS = 5 * 60 * 1000;
+const serveableCache = new Map<
+  string,
+  { serveable: boolean; expires: number }
+>();
+
+/** Test hook / post-save invalidation (a fresh validation supersedes it). */
+export function clearIndexServeableCache(): void {
+  serveableCache.clear();
+}
+
+/**
+ * Definition-only recheck between saves: does the index still exist and
+ * satisfy the contract? Used by the registry so an index deleted or
+ * restructured AFTER a successful save flips its agents out of discovery
+ * within ~5 minutes instead of degrading silently at chat time.
+ *
+ * Fails OPEN on probe errors (network blip, auth hiccup): save-time
+ * validation is the admission gate; this recheck only exists to catch
+ * positively-observed breakage, and a Search outage must not un-list every
+ * admin agent.
+ */
+export async function checkIndexServeableCached(
+  indexName: string,
+  semanticConfig: string,
+): Promise<boolean> {
+  const key = `${indexName}::${semanticConfig}`;
+  const cached = serveableCache.get(key);
+  if (cached && Date.now() < cached.expires) return cached.serveable;
+
+  let serveable = true;
+  try {
+    const headers = await searchAuthHeader();
+    const response = await fetch(
+      `${orgSearchEndpoint()}/indexes/${encodeURIComponent(indexName)}?api-version=${SEARCH_API_VERSION}`,
+      { headers },
+    );
+    if (response.status === 404) {
+      serveable = false;
+    } else if (response.ok) {
+      const definition = (await response.json()) as Parameters<
+        typeof ragContractProblems
+      >[0];
+      serveable =
+        ragContractProblems(definition, indexName, semanticConfig).length === 0;
+    }
+    // Other statuses: inconclusive — fail open.
+  } catch {
+    // Probe error: inconclusive — fail open.
+  }
+  serveableCache.set(key, {
+    serveable,
+    expires: Date.now() + SERVEABLE_CHECK_TTL_MS,
+  });
+  if (!serveable) {
+    console.warn(
+      `[org-agents] index '${sanitizeForLog(indexName)}' no longer satisfies the retrieval contract — its agents are not served (recheck in ${SERVEABLE_CHECK_TTL_MS / 60000}min)`,
+    );
+  }
+  return serveable;
+}
+
+/**
+ * Synchronous cache peek for sync call sites (tool gates). Unknown or
+ * expired → true (the async path is the one that populates the cache).
+ */
+export function peekIndexServeable(
+  indexName: string,
+  semanticConfig: string,
+): boolean {
+  const cached = serveableCache.get(`${indexName}::${semanticConfig}`);
+  if (!cached || Date.now() >= cached.expires) return true;
+  return cached.serveable;
+}
+
 function failed(error: string): OrgAgentValidation {
   return {
     status: 'failed',
