@@ -37,6 +37,7 @@ const mockAdminAuth = vi.hoisted(() => ({
 }));
 const mockValidation = vi.hoisted(() => ({
   validateOrgAgentIndex: vi.fn(),
+  clearIndexServeableCache: vi.fn(),
 }));
 
 vi.mock('@/auth', () => ({ auth: mockAuth }));
