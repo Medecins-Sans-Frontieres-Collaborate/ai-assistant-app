@@ -924,6 +924,127 @@ describe('ToolRouterService', () => {
       });
     });
 
+    describe('classifyDocumentTrim', () => {
+      function mockClassification(payload: unknown) {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [{ message: { content: JSON.stringify(payload) } }],
+        });
+      }
+
+      const baseRequest = {
+        messages: [
+          {
+            role: 'user',
+            content: 'réduis ce document à 6000 mots',
+            messageType: MessageType.TEXT,
+          } as Message,
+        ],
+        currentMessage:
+          'réduis ce document à 6000 mots\n\n[Files attached to the current message: manuscript.docx]',
+        documentFilename: 'manuscript.docx',
+      };
+
+      it('maps a word-count classification to an absolute target', async () => {
+        mockClassification({
+          isLengthReductionRequest: true,
+          targetValue: 6000,
+          targetUnit: 'words',
+        });
+
+        const target = await service.classifyDocumentTrim(baseRequest);
+
+        expect(target).toEqual({
+          kind: 'absolute',
+          unit: 'words',
+          target: 6000,
+          approx: false,
+        });
+        // The classifier receives the enriched currentMessage as the last
+        // message and the filename in the system prompt — meaning-based,
+        // works in any language.
+        const call = mockOpenAIClient.chat.completions.create.mock.calls[0][0];
+        expect(call.messages[0].content).toContain('manuscript.docx');
+        expect(call.messages[0].content).toContain('ANY language');
+        expect(call.messages[call.messages.length - 1].content).toBe(
+          baseRequest.currentMessage,
+        );
+        expect(call.response_format.json_schema.name).toBe(
+          'document_trim_classification',
+        );
+      });
+
+      it('maps pages to approximate words', async () => {
+        mockClassification({
+          isLengthReductionRequest: true,
+          targetValue: 5,
+          targetUnit: 'pages',
+        });
+        expect(await service.classifyDocumentTrim(baseRequest)).toEqual({
+          kind: 'absolute',
+          unit: 'words',
+          target: 2500,
+          approx: true,
+        });
+      });
+
+      it('maps percent_to_keep to a ratio target', async () => {
+        mockClassification({
+          isLengthReductionRequest: true,
+          targetValue: 50,
+          targetUnit: 'percent_to_keep',
+        });
+        expect(await service.classifyDocumentTrim(baseRequest)).toEqual({
+          kind: 'ratio',
+          keep: 0.5,
+          approx: true,
+        });
+      });
+
+      it.each([
+        [
+          'not a reduction request',
+          {
+            isLengthReductionRequest: false,
+            targetValue: 0,
+            targetUnit: 'none',
+          },
+        ],
+        [
+          'zero target',
+          {
+            isLengthReductionRequest: true,
+            targetValue: 0,
+            targetUnit: 'words',
+          },
+        ],
+        [
+          'percent >= 100',
+          {
+            isLengthReductionRequest: true,
+            targetValue: 120,
+            targetUnit: 'percent_to_keep',
+          },
+        ],
+      ])('returns null for %s', async (_label, payload) => {
+        mockClassification(payload);
+        expect(await service.classifyDocumentTrim(baseRequest)).toBeNull();
+      });
+
+      it('returns null (degrades) when the call fails', async () => {
+        mockOpenAIClient.chat.completions.create.mockRejectedValue(
+          new Error('API error'),
+        );
+        expect(await service.classifyDocumentTrim(baseRequest)).toBeNull();
+      });
+
+      it('returns null on malformed classifier output', async () => {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [{ message: { content: 'not json' } }],
+        });
+        expect(await service.classifyDocumentTrim(baseRequest)).toBeNull();
+      });
+    });
+
     describe('classifier input construction', () => {
       it('sends the enriched currentMessage as the last message, not the raw text', async () => {
         // Regression: the enricher builds `currentMessage` with file
