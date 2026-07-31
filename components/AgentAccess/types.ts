@@ -130,6 +130,28 @@ export interface AdminStoredOrgAgent {
   etag: string;
 }
 
+/**
+ * One audit entry from GET /api/agent-access/history. The envelope fields
+ * are entity-agnostic; the per-entity payload (orgAgent, promptAgent, …)
+ * rides along verbatim — consumers narrow to the field they expect.
+ */
+export interface AdminHistoryEntry {
+  version: 1;
+  canonicalKey: string;
+  action: 'upsert' | 'delete';
+  updatedBy: string;
+  updatedAt: string;
+  /** Present on org-agent entries: the full record as written (null = delete tombstone). */
+  orgAgent?: OrgRagAgent | null;
+}
+
+export interface AdminHistoryResponse {
+  canonicalKey: string;
+  entries: AdminHistoryEntry[];
+  /** True when older entries were cut off at the server's cap. */
+  truncated?: boolean;
+}
+
 export interface AdminOrgAgentsResponse {
   orgAgents: AdminStoredOrgAgent[];
   /** Same outage contract as promptAgentsUnavailable. */
