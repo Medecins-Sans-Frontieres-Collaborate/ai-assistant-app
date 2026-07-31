@@ -27,6 +27,7 @@ import { OpenAIModels } from '@/types/openai';
 
 import M365FilePickerModal from '@/components/Chat/ChatInput/M365FilePickerModal';
 
+import { ConflictDiff, ConflictDiffRow } from './ConflictDiff';
 import { RuleEditor } from './RuleEditor';
 import {
   AdminM365AgentsResponse,
@@ -37,6 +38,8 @@ import {
 } from './types';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
+
+type M365AgentRecord = AdminStoredM365Agent['agent'];
 
 const AGENT_MODEL_ID_PREFIXES = ['foundry-', 'org-', 'custom-', 'byom-'];
 /**
@@ -108,7 +111,17 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
   );
   const [pickerOpen, setPickerOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [isConflict, setIsConflict] = useState(false);
+  /**
+   * 409 state: the record that won the race (null = deleted meanwhile).
+   * The admin's draft stays in the form; ConflictDiff offers the choice.
+   */
+  const [conflict, setConflict] = useState<{
+    latest: AdminStoredM365Agent | null;
+  } | null>(null);
+  /** The If-Match token — rebased onto the winner's etag on "keep mine". */
+  const [saveEtag, setSaveEtag] = useState<string | null>(
+    existing?.etag ?? null,
+  );
   const [saveError, setSaveError] = useState(false);
 
   const selectableModels = useMemo(
@@ -149,17 +162,86 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
   };
 
   const canSave =
-    name.trim().length > 0 && sources.length > 0 && !isSaving && !isConflict;
+    name.trim().length > 0 &&
+    sources.length > 0 &&
+    !isSaving &&
+    conflict === null;
 
-  const handleSave = async () => {
+  const sourcesSummary = (list: { title: string }[]) =>
+    list.map((s) => s.title).join(', ');
+
+  const conflictRows = (latest: M365AgentRecord): ConflictDiffRow[] => {
+    const yours: Record<string, string> = {
+      [t('agentNamePlaceholder')]: name.trim(),
+      [t('agentDescriptionPlaceholder')]: description.trim(),
+      [t('m365AgentSystemPromptPlaceholder')]: systemPrompt.trim(),
+      [t('agentModelLabel')]: chatModelId || '',
+      [t('m365AgentSources')]: sourcesSummary(sources),
+    };
+    const theirs: Record<string, string> = {
+      [t('agentNamePlaceholder')]: latest.name,
+      [t('agentDescriptionPlaceholder')]: latest.description,
+      [t('m365AgentSystemPromptPlaceholder')]: latest.systemPrompt,
+      [t('agentModelLabel')]: latest.chatModelId ?? '',
+      [t('m365AgentSources')]: sourcesSummary(latest.sources),
+    };
+    return Object.keys(yours)
+      .filter((label) => yours[label] !== theirs[label])
+      .map((label) => ({ label, yours: yours[label], theirs: theirs[label] }));
+  };
+
+  /** Loads the winning record's values into the form (take-theirs). */
+  const adoptRecord = (latest: AdminStoredM365Agent) => {
+    setName(latest.agent.name);
+    setDescription(latest.agent.description);
+    setSystemPrompt(latest.agent.systemPrompt);
+    setChatModelId(latest.agent.chatModelId ?? '');
+    setSources(
+      latest.agent.sources.map((source) => ({
+        driveId: source.driveId,
+        itemId: source.itemId,
+        kind: source.kind,
+        title: source.title,
+        webUrl: source.webUrl,
+        persisted: source,
+      })),
+    );
+  };
+
+  /**
+   * On 409 (or a stale-target 404), fetch the record that won the race so
+   * the conflict UI can show a yours/theirs diff — the draft is KEPT.
+   */
+  const loadConflictState = async () => {
+    try {
+      const response = await fetch('/api/agent-access/m365-agents');
+      if (response.ok) {
+        const data = unwrapApiData<AdminM365AgentsResponse>(
+          await response.json(),
+        );
+        const latest =
+          data?.m365Agents.find(
+            (record) => record.agent.id === existing?.agent.id,
+          ) ?? null;
+        setConflict({ latest });
+        return;
+      }
+    } catch {
+      // Fall through to the etag-less conflict state below.
+    }
+    setConflict({ latest: null });
+  };
+
+  const handleSave = async (etagOverride?: string) => {
     setIsSaving(true);
     setSaveError(false);
     try {
+      const ifMatch = etagOverride ?? saveEtag;
       const response = await fetch('/api/agent-access/m365-agents', {
         method: existing ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',
-          ...(existing ? { 'If-Match': existing.etag } : {}),
+          ...(existing && ifMatch ? { 'If-Match': ifMatch } : {}),
         },
         body: JSON.stringify({
           ...(existing ? { id: existing.agent.id } : {}),
@@ -178,7 +260,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
         }),
       });
       if (response.status === 409 || (existing && response.status === 404)) {
-        setIsConflict(true);
+        await loadConflictState();
         return;
       }
       if (!response.ok) {
@@ -304,18 +386,39 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
           )}
         </div>
 
-        {isConflict && (
-          <div className="rounded-md bg-amber-50 p-2 text-sm text-amber-800 dark:bg-amber-900/20 dark:text-amber-300">
-            {t('conflictError')}{' '}
-            <button
-              type="button"
-              onClick={onConflictReload}
-              className="font-medium underline"
-            >
-              {t('reload')}
-            </button>
-          </div>
-        )}
+        {conflict &&
+          (conflict.latest ? (
+            <ConflictDiff
+              rows={conflictRows(conflict.latest.agent)}
+              updatedBy={conflict.latest.agent.updatedBy}
+              updatedAt={conflict.latest.agent.updatedAt}
+              onKeepMine={() => {
+                const latestEtag = conflict.latest!.etag;
+                setSaveEtag(latestEtag);
+                setConflict(null);
+                void handleSave(latestEtag);
+              }}
+              onTakeTheirs={() => {
+                adoptRecord(conflict.latest!);
+                setSaveEtag(conflict.latest!.etag);
+                setConflict(null);
+              }}
+            />
+          ) : (
+            // The record vanished (deleted by another admin, or the reload
+            // itself failed) — the draft stays visible for copy-out, but a
+            // blind re-save has no target; reload is the only safe exit.
+            <div className="rounded-md bg-amber-50 p-2 text-sm text-amber-800 dark:bg-amber-900/20 dark:text-amber-300">
+              {t('conflictRecordGone')}{' '}
+              <button
+                type="button"
+                onClick={onConflictReload}
+                className="font-medium underline"
+              >
+                {t('reload')}
+              </button>
+            </div>
+          ))}
         {saveError && (
           <p className="text-sm text-red-700 dark:text-red-400">
             {t('saveError')}
