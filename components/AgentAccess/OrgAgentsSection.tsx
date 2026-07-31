@@ -1,7 +1,14 @@
 'use client';
 
-import { IconDatabase, IconPlus, IconTrash, IconX } from '@tabler/icons-react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  IconDatabase,
+  IconHistory,
+  IconPlus,
+  IconRefresh,
+  IconTrash,
+  IconX,
+} from '@tabler/icons-react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { FC, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -9,12 +16,16 @@ import { useTranslations } from 'next-intl';
 
 import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
 
+import type { OrgRagAgent } from '@/lib/services/agentAccess/types';
+
 import { isModelSelectableInRegion } from '@/lib/utils/shared/modelRegion';
 
 import { OpenAIModels } from '@/types/openai';
 
+import { ConflictDiff, ConflictDiffRow } from './ConflictDiff';
 import { RuleEditor } from './RuleEditor';
 import {
+  AdminHistoryResponse,
   AdminOrgAgentsResponse,
   AdminStoredOrgAgent,
   AdminStoredRule,
@@ -42,6 +53,13 @@ interface OrgAgentEditorProps {
   indexesLoading: boolean;
   /** Static config ids offered as override targets (create only). */
   staticAgentIds: string[];
+  /**
+   * Historical record to prefill the form with (restore flow) — the admin
+   * reviews and Saves, which runs the normal validated CAS PUT against
+   * `existing`'s etag. Takes precedence over `existing.agent` for initial
+   * values only.
+   */
+  prefill?: OrgRagAgent | null;
   onSaved: () => void;
   onCancel: () => void;
   onConflictReload: () => void;
@@ -59,6 +77,7 @@ const OrgAgentEditor: FC<OrgAgentEditorProps> = ({
   indexNames,
   indexesLoading,
   staticAgentIds,
+  prefill,
   onSaved,
   onCancel,
   onConflictReload,
@@ -67,42 +86,46 @@ const OrgAgentEditor: FC<OrgAgentEditorProps> = ({
   const models = useSettingsStore((s) => s.models);
   const userRegion = useSettingsStore((s) => s.userRegion);
 
-  const [name, setName] = useState(existing?.agent.name ?? '');
-  const [description, setDescription] = useState(
-    existing?.agent.description ?? '',
-  );
-  const [icon, setIcon] = useState(existing?.agent.icon ?? 'IconHexagon');
-  const [color, setColor] = useState(existing?.agent.color ?? '#4190f2');
-  const [category, setCategory] = useState(existing?.agent.category ?? '');
-  const [maintainedBy, setMaintainedBy] = useState(
-    existing?.agent.maintainedBy ?? '',
-  );
-  const [systemPrompt, setSystemPrompt] = useState(
-    existing?.agent.systemPrompt ?? '',
-  );
-  const [searchIndex, setSearchIndex] = useState(
-    existing?.agent.searchIndex ?? '',
-  );
+  // Restore flow: initial values come from the historical record while the
+  // SAVE still targets `existing`'s current etag (review-then-save).
+  const initial = prefill ?? existing?.agent;
+
+  const [name, setName] = useState(initial?.name ?? '');
+  const [description, setDescription] = useState(initial?.description ?? '');
+  const [icon, setIcon] = useState(initial?.icon ?? 'IconHexagon');
+  const [color, setColor] = useState(initial?.color ?? '#4190f2');
+  const [category, setCategory] = useState(initial?.category ?? '');
+  const [maintainedBy, setMaintainedBy] = useState(initial?.maintainedBy ?? '');
+  const [systemPrompt, setSystemPrompt] = useState(initial?.systemPrompt ?? '');
+  const [searchIndex, setSearchIndex] = useState(initial?.searchIndex ?? '');
   const [semanticConfig, setSemanticConfig] = useState(
-    existing?.agent.semanticConfig ?? '',
+    initial?.semanticConfig ?? '',
   );
-  const [topK, setTopK] = useState(existing?.agent.topK ?? 10);
-  const [baseModelId, setBaseModelId] = useState(
-    existing?.agent.baseModelId ?? '',
-  );
+  const [topK, setTopK] = useState(initial?.topK ?? 10);
+  const [baseModelId, setBaseModelId] = useState(initial?.baseModelId ?? '');
   const [allowWebSearch, setAllowWebSearch] = useState(
-    existing?.agent.allowWebSearch ?? false,
+    initial?.allowWebSearch ?? false,
   );
   const [allowCodeInterpreter, setAllowCodeInterpreter] = useState(
-    existing?.agent.allowCodeInterpreter ?? false,
+    initial?.allowCodeInterpreter ?? false,
   );
-  const [enabled, setEnabled] = useState(existing?.agent.enabled ?? true);
+  const [enabled, setEnabled] = useState(initial?.enabled ?? true);
   const [overrideId, setOverrideId] = useState('');
   const [sources, setSources] = useState<EditorSource[]>(
-    existing?.agent.sources ?? [],
+    initial?.sources ?? [],
   );
   const [isSaving, setIsSaving] = useState(false);
-  const [isConflict, setIsConflict] = useState(false);
+  /**
+   * 409 state: the record that won the race (null = deleted meanwhile).
+   * The admin's draft stays in the form; ConflictDiff offers the choice.
+   */
+  const [conflict, setConflict] = useState<{
+    latest: AdminStoredOrgAgent | null;
+  } | null>(null);
+  /** The If-Match token — rebased onto the winner's etag on "keep mine". */
+  const [saveEtag, setSaveEtag] = useState<string | null>(
+    existing?.etag ?? null,
+  );
   const [saveError, setSaveError] = useState(false);
 
   const selectableModels = useMemo(
@@ -120,17 +143,112 @@ const OrgAgentEditor: FC<OrgAgentEditorProps> = ({
     name.trim().length > 0 &&
     searchIndex.trim().length > 0 &&
     !isSaving &&
-    !isConflict;
+    conflict === null;
 
-  const handleSave = async () => {
+  /** Draft snapshot for the yours/theirs conflict comparison. */
+  const draftValues = (): Record<string, string> => ({
+    [t('agentNamePlaceholder')]: name.trim(),
+    [t('agentDescriptionPlaceholder')]: description.trim(),
+    [t('orgAgentIconPlaceholder')]: icon.trim(),
+    [t('orgAgentColorLabel')]: color,
+    [t('orgAgentCategoryPlaceholder')]: category.trim(),
+    [t('orgAgentMaintainedByPlaceholder')]: maintainedBy.trim(),
+    [t('orgAgentSystemPromptPlaceholder')]: systemPrompt.trim(),
+    [t('orgAgentIndexLabel')]: searchIndex.trim(),
+    [t('orgAgentSemanticPlaceholder')]: semanticConfig.trim(),
+    [t('orgAgentTopKLabel')]: String(topK),
+    [t('agentModelLabel')]: baseModelId || '',
+    [t('orgAgentAllowWebSearch')]: String(allowWebSearch),
+    [t('orgAgentAllowCodeInterpreter')]: String(allowCodeInterpreter),
+    [t('orgAgentEnabled')]: String(enabled),
+    [t('orgAgentSourcesLabel')]: sources
+      .filter((s) => s.name.trim().length > 0)
+      .map((s) => `${s.name.trim()} ${s.url.trim()}`.trim())
+      .join(', '),
+  });
+
+  const recordValues = (agent: OrgRagAgent): Record<string, string> => ({
+    [t('agentNamePlaceholder')]: agent.name,
+    [t('agentDescriptionPlaceholder')]: agent.description,
+    [t('orgAgentIconPlaceholder')]: agent.icon,
+    [t('orgAgentColorLabel')]: agent.color,
+    [t('orgAgentCategoryPlaceholder')]: agent.category,
+    [t('orgAgentMaintainedByPlaceholder')]: agent.maintainedBy,
+    [t('orgAgentSystemPromptPlaceholder')]: agent.systemPrompt,
+    [t('orgAgentIndexLabel')]: agent.searchIndex,
+    [t('orgAgentSemanticPlaceholder')]: agent.semanticConfig,
+    [t('orgAgentTopKLabel')]: String(agent.topK),
+    [t('agentModelLabel')]: agent.baseModelId ?? '',
+    [t('orgAgentAllowWebSearch')]: String(agent.allowWebSearch),
+    [t('orgAgentAllowCodeInterpreter')]: String(agent.allowCodeInterpreter),
+    [t('orgAgentEnabled')]: String(agent.enabled),
+    [t('orgAgentSourcesLabel')]: agent.sources
+      .map((s) => `${s.name} ${s.url}`.trim())
+      .join(', '),
+  });
+
+  const conflictRows = (latest: OrgRagAgent): ConflictDiffRow[] => {
+    const yours = draftValues();
+    const theirs = recordValues(latest);
+    return Object.keys(yours)
+      .filter((label) => yours[label] !== theirs[label])
+      .map((label) => ({ label, yours: yours[label], theirs: theirs[label] }));
+  };
+
+  /** Loads the winning record's values into the form (take-theirs). */
+  const adoptRecord = (latest: AdminStoredOrgAgent) => {
+    const agent = latest.agent;
+    setName(agent.name);
+    setDescription(agent.description);
+    setIcon(agent.icon);
+    setColor(agent.color);
+    setCategory(agent.category);
+    setMaintainedBy(agent.maintainedBy);
+    setSystemPrompt(agent.systemPrompt);
+    setSearchIndex(agent.searchIndex);
+    setSemanticConfig(agent.semanticConfig);
+    setTopK(agent.topK);
+    setBaseModelId(agent.baseModelId ?? '');
+    setAllowWebSearch(agent.allowWebSearch);
+    setAllowCodeInterpreter(agent.allowCodeInterpreter);
+    setEnabled(agent.enabled);
+    setSources(agent.sources.map((s) => ({ name: s.name, url: s.url })));
+  };
+
+  /**
+   * On 409 (or a stale-target 404), fetch the record that won the race so
+   * the conflict UI can show a yours/theirs diff — the draft is KEPT.
+   */
+  const loadConflictState = async () => {
+    try {
+      const response = await fetch('/api/agent-access/org-agents');
+      if (response.ok) {
+        const data = unwrapApiData<AdminOrgAgentsResponse>(
+          await response.json(),
+        );
+        const latest =
+          data?.orgAgents.find(
+            (record) => record.agent.id === existing?.agent.id,
+          ) ?? null;
+        setConflict({ latest });
+        return;
+      }
+    } catch {
+      // Fall through to the etag-less conflict state below.
+    }
+    setConflict({ latest: null });
+  };
+
+  const handleSave = async (etagOverride?: string) => {
     setIsSaving(true);
     setSaveError(false);
     try {
+      const ifMatch = etagOverride ?? saveEtag;
       const response = await fetch('/api/agent-access/org-agents', {
         method: existing ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',
-          ...(existing ? { 'If-Match': existing.etag } : {}),
+          ...(existing && ifMatch ? { 'If-Match': ifMatch } : {}),
         },
         body: JSON.stringify({
           ...(existing ? { id: existing.agent.id } : {}),
@@ -155,7 +273,7 @@ const OrgAgentEditor: FC<OrgAgentEditorProps> = ({
         }),
       });
       if (response.status === 409 || (existing && response.status === 404)) {
-        setIsConflict(true);
+        await loadConflictState();
         return;
       }
       if (!response.ok) {
@@ -427,18 +545,39 @@ const OrgAgentEditor: FC<OrgAgentEditorProps> = ({
           </label>
         </div>
 
-        {isConflict && (
-          <div className="rounded-md bg-amber-50 p-2 text-sm text-amber-800 dark:bg-amber-900/20 dark:text-amber-300">
-            {t('conflictError')}{' '}
-            <button
-              type="button"
-              onClick={onConflictReload}
-              className="font-medium underline"
-            >
-              {t('reload')}
-            </button>
-          </div>
-        )}
+        {conflict &&
+          (conflict.latest ? (
+            <ConflictDiff
+              rows={conflictRows(conflict.latest.agent)}
+              updatedBy={conflict.latest.agent.updatedBy}
+              updatedAt={conflict.latest.agent.updatedAt}
+              onKeepMine={() => {
+                const latestEtag = conflict.latest!.etag;
+                setSaveEtag(latestEtag);
+                setConflict(null);
+                void handleSave(latestEtag);
+              }}
+              onTakeTheirs={() => {
+                adoptRecord(conflict.latest!);
+                setSaveEtag(conflict.latest!.etag);
+                setConflict(null);
+              }}
+            />
+          ) : (
+            // The record vanished (deleted by another admin, or the reload
+            // itself failed) — the draft stays visible for copy-out, but a
+            // blind re-save has no target; reload is the only safe exit.
+            <div className="rounded-md bg-amber-50 p-2 text-sm text-amber-800 dark:bg-amber-900/20 dark:text-amber-300">
+              {t('conflictRecordGone')}{' '}
+              <button
+                type="button"
+                onClick={onConflictReload}
+                className="font-medium underline"
+              >
+                {t('reload')}
+              </button>
+            </div>
+          ))}
         {saveError && (
           <p className="text-sm text-red-700 dark:text-red-400">
             {t('saveError')}
@@ -467,6 +606,117 @@ const OrgAgentEditor: FC<OrgAgentEditorProps> = ({
   );
 };
 
+interface OrgAgentHistoryPanelProps {
+  canonicalKey: string;
+  /** updatedAt of the live record — its history entry is tagged "current". */
+  currentUpdatedAt: string;
+  onRestore: (agent: OrgRagAgent) => void;
+}
+
+/**
+ * The immutable audit trail for one agent, newest first. "Load into editor"
+ * prefills the edit form with the historical values — the admin reviews and
+ * Saves, which runs the normal validated CAS PUT (and is itself audited).
+ */
+const OrgAgentHistoryPanel: FC<OrgAgentHistoryPanelProps> = ({
+  canonicalKey,
+  currentUpdatedAt,
+  onRestore,
+}) => {
+  const t = useTranslations('agentAccess');
+  const historyQuery = useQuery<AdminHistoryResponse>({
+    queryKey: ['agent-access-history', canonicalKey],
+    queryFn: async () => {
+      const response = await fetch(
+        `/api/agent-access/history?key=${encodeURIComponent(canonicalKey)}`,
+      );
+      if (!response.ok) {
+        throw new Error(`Failed to fetch history: ${response.status}`);
+      }
+      return unwrapApiData<AdminHistoryResponse>(await response.json());
+    },
+    staleTime: 30_000,
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+
+  if (historyQuery.isLoading) {
+    return (
+      <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+        {t('historyLoading')}
+      </p>
+    );
+  }
+  if (historyQuery.isError) {
+    return (
+      <p className="mt-2 text-xs text-red-700 dark:text-red-400">
+        {t('historyLoadFailed')}
+      </p>
+    );
+  }
+
+  const entries = historyQuery.data?.entries ?? [];
+  if (entries.length === 0) {
+    return (
+      <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+        {t('historyEmpty')}
+      </p>
+    );
+  }
+
+  return (
+    <div className="mt-2 rounded-lg border border-gray-200 p-2 dark:border-gray-700">
+      <ul className="max-h-64 space-y-1 overflow-y-auto">
+        {entries.map((entry) => {
+          const isCurrent = entry.updatedAt === currentUpdatedAt;
+          return (
+            <li
+              key={entry.updatedAt}
+              className="flex items-center gap-2 rounded-md px-2 py-1 text-xs text-gray-700 dark:text-gray-300"
+            >
+              <span className="shrink-0 tabular-nums text-gray-500 dark:text-gray-400">
+                {new Date(entry.updatedAt).toLocaleString()}
+              </span>
+              <span className="min-w-0 flex-1 truncate">{entry.updatedBy}</span>
+              <span
+                className={`shrink-0 rounded-full px-2 py-0.5 ${
+                  entry.action === 'delete'
+                    ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                    : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
+                }`}
+              >
+                {entry.action === 'delete'
+                  ? t('historyActionDelete')
+                  : t('historyActionUpsert')}
+              </span>
+              {isCurrent ? (
+                <span className="shrink-0 rounded-full bg-blue-100 px-2 py-0.5 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                  {t('historyCurrent')}
+                </span>
+              ) : (
+                entry.orgAgent && (
+                  <button
+                    type="button"
+                    onClick={() => onRestore(entry.orgAgent!)}
+                    className="shrink-0 rounded-md border border-gray-200 px-2 py-0.5 text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                  >
+                    {t('historyRestore')}
+                  </button>
+                )
+              )}
+            </li>
+          );
+        })}
+      </ul>
+      {historyQuery.data?.truncated && (
+        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+          {t('historyTruncated')}
+        </p>
+      )}
+    </div>
+  );
+};
+
 interface OrgAgentsSectionProps {
   /** Rules from the panel's rules query — reused for the access pill/editor. */
   rules: AdminStoredRule[];
@@ -490,6 +740,12 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingRuleKey, setEditingRuleKey] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const [historyKey, setHistoryKey] = useState<string | null>(null);
+  /** Restore flow: historical values to prefill the open editor with. */
+  const [restorePrefill, setRestorePrefill] = useState<{
+    id: string;
+    agent: OrgRagAgent;
+  } | null>(null);
 
   const agentsQuery = useQuery<AdminOrgAgentsResponse>({
     queryKey: ['agent-access-org-agents'],
@@ -531,6 +787,40 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
     () => new Map(rules.map((rule) => [rule.canonicalKey, rule])),
     [rules],
   );
+
+  // Re-runs the index validation without editing (e.g. after a staged
+  // index finished building) and persists the outcome on the record.
+  const revalidateMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const response = await fetch('/api/agent-access/org-agents/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      if (!response.ok) {
+        throw new Error(`Revalidation failed (${response.status})`);
+      }
+      return unwrapApiData<{
+        agent?: { validation?: { status?: string; error?: string } };
+      }>(await response.json());
+    },
+    onSuccess: (data) => {
+      const validation = data?.agent?.validation;
+      if (validation?.status === 'ok') {
+        toast.success(t('orgAgentRevalidateOk'));
+      } else {
+        toast.error(
+          t('orgAgentSavedButInvalid', { error: validation?.error ?? '' }),
+          { duration: 8000 },
+        );
+      }
+      invalidate();
+    },
+    onError: () => {
+      toast.error(t('saveError'));
+      invalidate();
+    },
+  });
 
   const handleDelete = async (entry: AdminStoredOrgAgent) => {
     setConfirmDeleteId(null);
@@ -678,14 +968,45 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                   </button>
                   <button
                     type="button"
-                    onClick={() =>
+                    onClick={() => {
+                      setRestorePrefill(null);
                       setEditingId(
                         editingId === entry.agent.id ? null : entry.agent.id,
-                      )
-                    }
+                      );
+                    }}
                     className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
                   >
                     {t('editAgent')}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={revalidateMutation.isPending}
+                    onClick={() => revalidateMutation.mutate(entry.agent.id)}
+                    className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                    title={t('orgAgentRevalidateHint')}
+                  >
+                    <IconRefresh
+                      size={14}
+                      className={
+                        revalidateMutation.isPending ? 'animate-spin' : ''
+                      }
+                    />
+                    {t('orgAgentRevalidate')}
+                  </button>
+                  <button
+                    type="button"
+                    aria-label={t('historyTitle')}
+                    title={t('historyTitle')}
+                    onClick={() =>
+                      setHistoryKey(
+                        historyKey === entry.canonicalKey
+                          ? null
+                          : entry.canonicalKey,
+                      )
+                    }
+                    className="shrink-0 rounded-md border border-gray-200 p-1.5 text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                  >
+                    <IconHistory size={15} />
                   </button>
                   <button
                     type="button"
@@ -754,20 +1075,48 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                   </div>
                 )}
 
+                {historyKey === entry.canonicalKey && (
+                  <OrgAgentHistoryPanel
+                    canonicalKey={entry.canonicalKey}
+                    currentUpdatedAt={entry.agent.updatedAt}
+                    onRestore={(agent) => {
+                      setRestorePrefill({ id: entry.agent.id, agent });
+                      setEditingId(entry.agent.id);
+                    }}
+                  />
+                )}
+
                 {editingId === entry.agent.id && (
                   <OrgAgentEditor
-                    key={`${entry.agent.id}:${entry.etag}`}
+                    key={`${entry.agent.id}:${entry.etag}:${
+                      restorePrefill?.id === entry.agent.id
+                        ? restorePrefill.agent.updatedAt
+                        : 'live'
+                    }`}
                     existing={entry}
                     indexNames={indexNames}
                     indexesLoading={indexesQuery.isLoading}
                     staticAgentIds={staticAgentIds}
+                    prefill={
+                      restorePrefill?.id === entry.agent.id
+                        ? restorePrefill.agent
+                        : null
+                    }
                     onSaved={() => {
                       setEditingId(null);
+                      setRestorePrefill(null);
                       invalidate();
+                      void queryClient.invalidateQueries({
+                        queryKey: ['agent-access-history'],
+                      });
                     }}
-                    onCancel={() => setEditingId(null)}
+                    onCancel={() => {
+                      setEditingId(null);
+                      setRestorePrefill(null);
+                    }}
                     onConflictReload={() => {
                       setEditingId(null);
+                      setRestorePrefill(null);
                       invalidate();
                     }}
                   />
