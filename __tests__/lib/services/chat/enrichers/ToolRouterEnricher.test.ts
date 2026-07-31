@@ -53,6 +53,9 @@ describe('ToolRouter Enricher', () => {
     // Mock ToolRouterService
     mockToolRouterService = {
       determineTool: vi.fn(),
+      // Factual trim gate passes → intent classifier consulted; null =
+      // "not a trim request", turn proceeds with normal routing.
+      classifyDocumentTrim: vi.fn().mockResolvedValue(null),
     };
 
     // Mock AgentChatService
@@ -1860,8 +1863,16 @@ describe('ToolRouter Enricher', () => {
       return context;
     }
 
+    const wordsTarget = {
+      kind: 'absolute',
+      unit: 'words',
+      target: 6000,
+      approx: false,
+    };
+
     beforeEach(() => {
       runDocumentTrimMock.mockResolvedValue(trimResult);
+      mockToolRouterService.classifyDocumentTrim.mockResolvedValue(wordsTarget);
       // Bytes for the attachment: stub the private collector so no blob
       // client is needed.
       (enricher as any).collectInterpreterInputFiles = vi
@@ -1874,14 +1885,14 @@ describe('ToolRouter Enricher', () => {
     it('runs the pipeline, bypassing the router and the native deferral', async () => {
       const result = await enricher.execute(trimContext());
 
+      // Intent came from the multilingual classifier, scoped to the
+      // factually-attached document.
+      expect(mockToolRouterService.classifyDocumentTrim).toHaveBeenCalledWith(
+        expect.objectContaining({ documentFilename: 'manuscript.docx' }),
+      );
       expect(runDocumentTrimMock).toHaveBeenCalledTimes(1);
       const call = runDocumentTrimMock.mock.calls[0][0];
-      expect(call.target).toEqual({
-        kind: 'absolute',
-        unit: 'words',
-        target: 6000,
-        approx: false,
-      });
+      expect(call.target).toEqual(wordsTarget);
       expect(call.format).toBe('docx');
       expect(call.document.filename).toBe('manuscript.docx');
       // Planning input came from the already-extracted inline text.
@@ -1935,7 +1946,7 @@ describe('ToolRouter Enricher', () => {
       expect(result.enrichedMessages).toBeUndefined();
     });
 
-    it('falls through to normal routing when no trimmable document exists', async () => {
+    it('never consults the intent classifier without a trimmable document (factual gate)', async () => {
       mockToolRouterService.determineTool.mockResolvedValue({ tools: [] });
       const context = trimContext({
         searchMode: SearchMode.INTELLIGENT,
@@ -1958,6 +1969,22 @@ describe('ToolRouter Enricher', () => {
 
       await enricher.execute(context);
 
+      expect(mockToolRouterService.classifyDocumentTrim).not.toHaveBeenCalled();
+      expect(runDocumentTrimMock).not.toHaveBeenCalled();
+      expect(mockToolRouterService.determineTool).toHaveBeenCalled();
+    });
+
+    it('falls through to normal routing when the classifier says not a trim', async () => {
+      mockToolRouterService.classifyDocumentTrim.mockResolvedValue(null);
+      mockToolRouterService.determineTool.mockResolvedValue({ tools: [] });
+      const context = trimContext({
+        searchMode: SearchMode.INTELLIGENT,
+        model: { sdk: 'openai' },
+      });
+
+      await enricher.execute(context);
+
+      expect(mockToolRouterService.classifyDocumentTrim).toHaveBeenCalled();
       expect(runDocumentTrimMock).not.toHaveBeenCalled();
       expect(mockToolRouterService.determineTool).toHaveBeenCalled();
     });
