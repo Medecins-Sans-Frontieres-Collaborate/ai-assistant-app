@@ -924,6 +924,55 @@ describe('ToolRouterService', () => {
       });
     });
 
+    describe('classifier input construction', () => {
+      it('sends the enriched currentMessage as the last message, not the raw text', async () => {
+        // Regression: the enricher builds `currentMessage` with file
+        // excerpts and the attachment manifest, but the classifier call used
+        // to map the raw conversation messages instead — so the router LLM
+        // saw "trim this to 6k words" with no evidence a file existed and
+        // classified document-transformation requests as pure text tasks.
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  needsWebSearch: false,
+                  searchQuery: '',
+                  searchRecency: 'none',
+                  searchComprehensive: false,
+                  additionalSearchQueries: [],
+                  needsCodeExecution: true,
+                  codeTask: 'Trim manuscript.docx to 6000 words',
+                }),
+              },
+            },
+          ],
+        });
+
+        const enriched =
+          'please trim this to 6k words\n\n' +
+          '[File excerpt: manuscript.docx]\nSome text…\n\n' +
+          '[Files attached to the current message: manuscript.docx]';
+        const result = await service.determineTool({
+          messages: [
+            {
+              role: 'user',
+              content: 'please trim this to 6k words',
+              messageType: MessageType.TEXT,
+            } as Message,
+          ],
+          currentMessage: enriched,
+          considerCodeExecution: true,
+        });
+
+        const sentMessages =
+          mockOpenAIClient.chat.completions.create.mock.calls[0][0].messages;
+        expect(sentMessages[sentMessages.length - 1].content).toBe(enriched);
+        expect(result.tools).toContain('code_interpreter');
+        expect(result.codeTask).toBe('Trim manuscript.docx to 6000 words');
+      });
+    });
+
     describe('real-world scenarios', () => {
       it('should recognize need for real-time stock price data', async () => {
         const mockResponse = {
