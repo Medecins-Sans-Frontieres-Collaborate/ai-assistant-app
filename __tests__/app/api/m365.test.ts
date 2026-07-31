@@ -4,6 +4,11 @@
  */
 import { NextRequest } from 'next/server';
 
+import {
+  decodeGraphPageToken,
+  encodeGraphNextLink,
+} from '@/lib/services/m365/graphPageToken';
+
 import { parseJsonResponse } from './helpers';
 
 import { GET as driveGET } from '@/app/api/m365/drive/route';
@@ -104,7 +109,7 @@ describe('GET /api/m365/drive', () => {
     expect(orphanItem.status).toBe(400);
   });
 
-  it('lists root children folders-first', async () => {
+  it('lists root children in strict Graph wire order', async () => {
     grantToken();
     fetchMock.mockResolvedValue(
       graphJsonResponse({
@@ -129,9 +134,10 @@ describe('GET /api/m365/drive', () => {
     );
     const body = await parseJsonResponse(response);
     expect(response.status).toBe(200);
+    // No folders-first regrouping — server order must survive pagination.
     expect(body.data.entries.map((e: { name: string }) => e.name)).toEqual([
-      'Alpha',
       'zeta.txt',
+      'Alpha',
     ]);
     expect(fetchMock.mock.calls[0][0]).toContain('/me/drive/root/children');
   });
@@ -274,6 +280,164 @@ describe('GET /api/m365/mail', () => {
     );
     expect(response.status).toBe(400);
   });
+
+  it('leads the browse $filter with the receivedDateTime guard clause', async () => {
+    grantToken();
+    fetchMock.mockResolvedValue(graphJsonResponse({ value: [] }));
+    const response = await mailGET(
+      new NextRequest(
+        'http://localhost/api/m365/mail?filters=unread,hasAttachments',
+      ),
+    );
+    expect(response.status).toBe(200);
+    const url = fetchMock.mock.calls[0][0] as string;
+    expect(url).toContain('/me/mailFolders/inbox/messages');
+    expect(url).toContain('$orderby=receivedDateTime desc');
+    expect(url).toContain(
+      '$filter=receivedDateTime ge 1900-01-01T00:00:00Z' +
+        ' and isRead eq false and hasAttachments eq true',
+    );
+  });
+
+  it('omits $filter when no chips are selected', async () => {
+    grantToken();
+    fetchMock.mockResolvedValue(graphJsonResponse({ value: [] }));
+    await mailGET(new NextRequest('http://localhost/api/m365/mail'));
+    expect(fetchMock.mock.calls[0][0]).not.toContain('$filter');
+  });
+
+  it('rejects unknown filter values (flagged is deferred)', async () => {
+    grantToken();
+    for (const filters of ['flagged', 'unread,bogus']) {
+      const response = await mailGET(
+        new NextRequest(`http://localhost/api/m365/mail?filters=${filters}`),
+      );
+      expect(response.status).toBe(400);
+    }
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('ignores filters in search mode — no $filter/$orderby with $search', async () => {
+    grantToken();
+    fetchMock.mockResolvedValue(graphJsonResponse({ value: [] }));
+    const response = await mailGET(
+      new NextRequest('http://localhost/api/m365/mail?q=budget&filters=unread'),
+    );
+    expect(response.status).toBe(200);
+    const url = fetchMock.mock.calls[0][0] as string;
+    expect(url).toContain('$search=');
+    expect(url).not.toContain('$filter');
+    expect(url).not.toContain('$orderby');
+  });
+
+  it('normalizes the extended envelope fields', async () => {
+    grantToken();
+    const recipients = Array.from({ length: 12 }, (_, i) => ({
+      emailAddress: { name: `Person ${i}`, address: `p${i}@x.org` },
+    }));
+    fetchMock.mockResolvedValue(
+      graphJsonResponse({
+        value: [
+          {
+            id: 'm1',
+            subject: 'Hello',
+            from: { emailAddress: { name: 'Ana Diaz', address: 'ana@x.org' } },
+            bodyPreview: 'hi',
+            hasAttachments: true,
+            isRead: false,
+            flag: { flagStatus: 'flagged' },
+            importance: 'high',
+            toRecipients: recipients,
+            ccRecipients: [{ emailAddress: { address: 'cc@x.org' } }],
+          },
+          {
+            id: 'm2',
+            subject: 'Bare',
+            from: { emailAddress: { address: 'b@x.org' } },
+            bodyPreview: '',
+            hasAttachments: false,
+          },
+        ],
+      }),
+    );
+    const response = await mailGET(
+      new NextRequest('http://localhost/api/m365/mail'),
+    );
+    const body = await parseJsonResponse(response);
+    const [rich, bare] = body.data.envelopes;
+    expect(rich.fromName).toBe('Ana Diaz');
+    expect(rich.fromAddress).toBe('ana@x.org');
+    expect(rich.isRead).toBe(false);
+    expect(rich.isFlagged).toBe(true);
+    expect(rich.importance).toBe('high');
+    expect(rich.to.endsWith(' …')).toBe(true);
+    expect(rich.to).toContain('Person 9 <p9@x.org>');
+    expect(rich.to).not.toContain('Person 10');
+    expect(rich.cc).toBe('cc@x.org');
+    // Missing optional fields stay absent, not defaulted.
+    expect(bare).not.toHaveProperty('isRead');
+    expect(bare).not.toHaveProperty('isFlagged');
+    expect(bare).not.toHaveProperty('importance');
+    expect(bare).not.toHaveProperty('to');
+    expect(bare).not.toHaveProperty('cc');
+  });
+
+  it('returns nextToken exactly when Graph returns @odata.nextLink', async () => {
+    grantToken();
+    const nextLink =
+      'https://graph.microsoft.com/v1.0/me/mailFolders/inbox/messages?$skip=25';
+    fetchMock
+      .mockResolvedValueOnce(
+        graphJsonResponse({ value: [], '@odata.nextLink': nextLink }),
+      )
+      .mockResolvedValueOnce(graphJsonResponse({ value: [] }));
+    const withNext = await parseJsonResponse(
+      await mailGET(new NextRequest('http://localhost/api/m365/mail')),
+    );
+    expect(decodeGraphPageToken(withNext.data.nextToken)).toBe(nextLink);
+    const withoutNext = await parseJsonResponse(
+      await mailGET(new NextRequest('http://localhost/api/m365/mail')),
+    );
+    expect(withoutNext.data).not.toHaveProperty('nextToken');
+  });
+
+  it('replays a valid pageToken verbatim, ignoring q/filters', async () => {
+    grantToken();
+    const nextLink =
+      'https://graph.microsoft.com/v1.0/me/messages?$search=%22x%22&$skiptoken=abc';
+    const token = encodeGraphNextLink(nextLink);
+    fetchMock.mockResolvedValue(graphJsonResponse({ value: [] }));
+    const response = await mailGET(
+      new NextRequest(
+        `http://localhost/api/m365/mail?pageToken=${token}&q=ignored&filters=unread`,
+      ),
+    );
+    expect(response.status).toBe(200);
+    expect(fetchMock.mock.calls[0][0]).toBe(nextLink);
+  });
+
+  it('rejects page tokens that do not decode to a Graph /v1.0 URL', async () => {
+    grantToken();
+    const asToken = (url: string) =>
+      Buffer.from(url, 'utf8').toString('base64url');
+    const badTokens = [
+      asToken('http://graph.microsoft.com/v1.0/me/messages'),
+      asToken('https://evil.com/v1.0/me/messages'),
+      asToken('https://graph.microsoft.com.evil.com/v1.0/me/messages'),
+      asToken('https://graph.microsoft.com/beta/me/messages'),
+      asToken(`https://graph.microsoft.com/v1.0/${'a'.repeat(8000)}`),
+      'not$base64url!',
+    ];
+    for (const token of badTokens) {
+      const response = await mailGET(
+        new NextRequest(
+          `http://localhost/api/m365/mail?pageToken=${encodeURIComponent(token)}`,
+        ),
+      );
+      expect(response.status).toBe(400);
+    }
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
 });
 
 describe('POST /api/m365/save', () => {
@@ -314,10 +478,101 @@ describe('POST /api/m365/save', () => {
     const body = await parseJsonResponse(response);
     expect(response.status).toBe(200);
     expect(body.data.webUrl).toContain('my-report.md');
+    // Default app-folder saves keep the folder label for the client.
+    expect(body.data.folder).toBe('Apps/AI Assistant');
     const url = fetchMock.mock.calls[0][0] as string;
     expect(url).toContain('/me/drive/root:/Apps/AI%20Assistant/');
     expect(url).toContain('my-report.md');
     expect(url).toContain('conflictBehavior=rename');
     expect(fetchMock.mock.calls[0][1]?.method).toBe('PUT');
+  });
+
+  function targetForm(fields: Record<string, string>): FormData {
+    const form = new FormData();
+    form.append('file', new Blob(['# hi'], { type: 'text/markdown' }));
+    form.append('fileName', 'report.md');
+    for (const [key, value] of Object.entries(fields)) {
+      form.append(key, value);
+    }
+    return form;
+  }
+
+  it('targets a folder via id+path colon addressing and omits folder in the response', async () => {
+    grantToken();
+    fetchMock.mockResolvedValue(
+      graphJsonResponse({ id: 'new1', name: 'report 1.md' }),
+    );
+    const response = await savePOST(
+      saveRequest(targetForm({ driveId: 'd1', parentId: 'p1' })),
+    );
+    const body = await parseJsonResponse(response);
+    expect(response.status).toBe(200);
+    // Server-returned name reflects a conflict-rename.
+    expect(body.data.name).toBe('report 1.md');
+    expect(body.data).not.toHaveProperty('folder');
+    const url = fetchMock.mock.calls[0][0] as string;
+    expect(url).toContain('/drives/d1/items/p1:/report.md:/content');
+    expect(url).toContain('conflictBehavior=rename');
+  });
+
+  it('targets the drive root when only driveId is given', async () => {
+    grantToken();
+    fetchMock.mockResolvedValue(graphJsonResponse({ name: 'report.md' }));
+    const response = await savePOST(saveRequest(targetForm({ driveId: 'd1' })));
+    expect(response.status).toBe(200);
+    expect(fetchMock.mock.calls[0][0] as string).toContain(
+      '/drives/d1/root:/report.md:/content',
+    );
+  });
+
+  it('rejects parentId without driveId and malformed ids', async () => {
+    grantToken();
+    for (const fields of [
+      { parentId: 'p1' },
+      { driveId: 'a/b' },
+      { driveId: 'd1', parentId: 'a b' },
+    ]) {
+      const response = await savePOST(saveRequest(targetForm(fields)));
+      expect(response.status).toBe(400);
+    }
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('creates the upload session on the targeted path for large files', async () => {
+    grantToken();
+    fetchMock
+      .mockResolvedValueOnce(
+        graphJsonResponse({ uploadUrl: 'https://upload.example/session' }),
+      )
+      .mockResolvedValue(graphJsonResponse({ name: 'big.md' }));
+    const form = targetForm({ driveId: 'd1', parentId: 'p1' });
+    form.set('file', new Blob([new Uint8Array(5 * 1024 * 1024)]));
+    form.set('fileName', 'big.md');
+    const response = await savePOST(saveRequest(form));
+    expect(response.status).toBe(200);
+    const sessionUrl = fetchMock.mock.calls[0][0] as string;
+    expect(sessionUrl).toContain(
+      '/drives/d1/items/p1:/big.md:/createUploadSession',
+    );
+    expect(fetchMock.mock.calls[0][1]?.body).toContain(
+      '"@microsoft.graph.conflictBehavior":"rename"',
+    );
+  });
+
+  it('maps a stale target to M365_NOT_FOUND / M365_FORBIDDEN', async () => {
+    grantToken();
+    fetchMock.mockResolvedValueOnce(graphJsonResponse({}, 404));
+    const missing = await savePOST(
+      saveRequest(targetForm({ driveId: 'd1', parentId: 'gone' })),
+    );
+    expect(missing.status).toBe(404);
+    expect((await parseJsonResponse(missing)).code).toBe('M365_NOT_FOUND');
+
+    fetchMock.mockResolvedValueOnce(graphJsonResponse({}, 403));
+    const forbidden = await savePOST(
+      saveRequest(targetForm({ driveId: 'd1', parentId: 'p1' })),
+    );
+    expect(forbidden.status).toBe(403);
+    expect((await parseJsonResponse(forbidden)).code).toBe('M365_FORBIDDEN');
   });
 });
