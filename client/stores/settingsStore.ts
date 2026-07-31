@@ -28,6 +28,7 @@ import {
   LocalRuntimeStatus,
   isValidPort,
 } from '@/types/localRuntime';
+import type { M365SaveDestination } from '@/types/m365';
 import {
   DEFAULT_MODEL_ORDER,
   ModelListSource,
@@ -712,6 +713,16 @@ interface SettingsStore {
   m365Connected: boolean;
   setM365Connected: (connected: boolean) => void;
 
+  /**
+   * Remembered "Save to OneDrive" folder. null = the default app folder
+   * (Apps/AI Assistant). When skip-picker is on, saves go straight to the
+   * remembered destination without showing the dialog.
+   */
+  m365SaveDestination: M365SaveDestination | null;
+  m365SaveSkipPicker: boolean;
+  setM365SaveDestination: (destination: M365SaveDestination | null) => void;
+  setM365SaveSkipPicker: (skip: boolean) => void;
+
   // Reset
   resetSettings: () => void;
 }
@@ -829,6 +840,8 @@ export const useSettingsStore = create<SettingsStore>()(
       confirmStopFromKeyboard: true,
       autoClearResolvedEdits: false,
       m365Connected: false,
+      m365SaveDestination: null,
+      m365SaveSkipPicker: false,
       suggestRevisions: true,
       suggestRevisionsExceptions: {
         largeRewrites: true,
@@ -1530,7 +1543,22 @@ export const useSettingsStore = create<SettingsStore>()(
         set({ autoClearResolvedEdits: enabled }),
 
       setSuggestRevisions: (enabled) => set({ suggestRevisions: enabled }),
-      setM365Connected: (connected) => set({ m365Connected: connected }),
+      setM365Connected: (connected) =>
+        set(
+          connected
+            ? { m365Connected: true }
+            : {
+                // Disconnecting drops the remembered save folder too — a stale
+                // drive id must not leak into the next connection.
+                m365Connected: false,
+                m365SaveDestination: null,
+                m365SaveSkipPicker: false,
+              },
+        ),
+
+      setM365SaveDestination: (destination) =>
+        set({ m365SaveDestination: destination }),
+      setM365SaveSkipPicker: (skip) => set({ m365SaveSkipPicker: skip }),
 
       setSuggestRevisionsException: (key, enabled) =>
         set((state) => ({
@@ -1611,11 +1639,13 @@ export const useSettingsStore = create<SettingsStore>()(
           },
           suggestRevisionsLargeRewriteRatio: DEFAULT_LARGE_REWRITE_RATIO,
           m365Connected: false,
+          m365SaveDestination: null,
+          m365SaveSkipPicker: false,
         }),
     }),
     {
       name: 'settings-storage',
-      version: 50, // Increment this when schema changes to trigger migrations
+      version: 51, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1708,6 +1738,8 @@ export const useSettingsStore = create<SettingsStore>()(
         autoClearResolvedEdits: state.autoClearResolvedEdits,
         suggestRevisions: state.suggestRevisions,
         m365Connected: state.m365Connected,
+        m365SaveDestination: state.m365SaveDestination,
+        m365SaveSkipPicker: state.m365SaveSkipPicker,
         suggestRevisionsExceptions: state.suggestRevisionsExceptions,
         suggestRevisionsLargeRewriteRatio:
           state.suggestRevisionsLargeRewriteRatio,
@@ -2200,6 +2232,18 @@ export const useSettingsStore = create<SettingsStore>()(
         if (version < 50) {
           if (typeof state.m365Connected !== 'boolean') {
             state.m365Connected = false;
+          }
+        }
+
+        // Version 50 → 51: Remembered "Save to OneDrive" destination.
+        // Backfill to the defaults (default app folder, dialog shown) —
+        // matching the behavior these users already have.
+        if (version < 51) {
+          if (state.m365SaveDestination === undefined) {
+            state.m365SaveDestination = null;
+          }
+          if (typeof state.m365SaveSkipPicker !== 'boolean') {
+            state.m365SaveSkipPicker = false;
           }
         }
 
