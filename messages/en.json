@@ -4358,7 +4358,23 @@
         "generic": "Something went wrong — please try again."
       },
       "pickTitle": "Pick a source from OneDrive / SharePoint",
-      "addFolder": "Add"
+      "addFolder": "Add",
+      "loadMore": "Load more",
+      "loadingMore": "Loading more…",
+      "loadMoreFailed": "Couldn’t load more items.",
+      "retry": "Retry",
+      "searchMinChars": "Type at least 2 characters to search",
+      "noResults": "No matches for “{query}”",
+      "emptyFolder": "This folder is empty",
+      "sort": {
+        "label": "Sort by",
+        "name": "Name",
+        "modified": "Modified",
+        "size": "Size"
+      },
+      "folderTitle": "Choose a folder",
+      "selectFolder": "Select",
+      "selectCurrentFolder": "Save to this folder"
     },
     "mail": {
       "menuLabel": "Import email…",
@@ -4373,6 +4389,33 @@
       "importMessage": "Import this message",
       "importThread": "Import the whole thread",
       "attachmentsNotImported": "Email file attachments are not imported — only the message text. Save an attachment and upload it here if you need it.",
+      "filters": {
+        "unread": "Unread",
+        "hasAttachments": "Has files"
+      },
+      "filtersLocalHint": "Filters apply to the search results loaded so far",
+      "groups": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "thisWeek": "This week",
+        "earlier": "Earlier"
+      },
+      "loadingMore": "Loading more…",
+      "loadMoreError": "Couldn’t load more messages.",
+      "loadMoreMatches": "Load more results",
+      "retry": "Retry",
+      "openInOutlook": "Open in Outlook",
+      "toLabel": "To:",
+      "ccLabel": "Cc:",
+      "unread": "Unread",
+      "flagged": "Flagged",
+      "importanceHigh": "High importance",
+      "hasAttachmentsBadge": "Has attachments",
+      "emptySearch": "No messages match your search",
+      "emptyFiltered": "No messages match these filters",
+      "showDetails": "Show details",
+      "hideDetails": "Hide details",
+      "clearSearch": "Clear search",
       "errors": {
         "consentMissing": "Email import is waiting for your organization’s admin approval.",
         "notConnected": "Your Microsoft 365 session is unavailable. Try signing out and back in.",
@@ -4386,7 +4429,21 @@
       "saved": "Saved {name} to OneDrive.",
       "open": "Open",
       "failed": "Could not save to OneDrive — please try again.",
-      "consentMissing": "Saving to OneDrive is waiting for your organization’s admin approval."
+      "consentMissing": "Saving to OneDrive is waiting for your organization’s admin approval.",
+      "dialogTitle": "Save to OneDrive",
+      "fileNameLabel": "File name",
+      "fileNameRequired": "Enter a file name.",
+      "destinationLabel": "Destination",
+      "changeFolder": "Change…",
+      "defaultFolderName": "AI Assistant",
+      "defaultFolderPath": "OneDrive › Apps › AI Assistant",
+      "rememberFolder": "Always save to this folder without asking",
+      "saveButton": "Save",
+      "cancel": "Cancel",
+      "savedTo": "Saved {name} to {folder}.",
+      "chooseFolder": "Choose folder",
+      "destinationMissing": "Your saved folder can no longer be found. Pick a new destination.",
+      "destinationForbidden": "You no longer have access to your saved folder. Pick a new destination."
     },
     "doc": {
       "failureHeading": "Content could not be imported",
