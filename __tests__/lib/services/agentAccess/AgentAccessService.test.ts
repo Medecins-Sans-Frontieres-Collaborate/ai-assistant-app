@@ -6,10 +6,12 @@ import {
   StoredAgentAccessRule,
   StoredGuide,
   StoredPromptAgent,
+  bumpGeneration,
   listAllGuides,
   listAllPromptAgents,
   listAllRules,
   readConfig,
+  readGenerationEtag,
 } from '@/lib/services/agentAccess/accessRulesStore';
 import {
   AgentAccessRule,
@@ -38,12 +40,16 @@ vi.mock('@/lib/services/agentAccess/accessRulesStore', () => ({
   readConfig: vi.fn(),
   listAllPromptAgents: vi.fn(),
   listAllGuides: vi.fn(),
+  readGenerationEtag: vi.fn(),
+  bumpGeneration: vi.fn(),
 }));
 
 const mockListAllRules = vi.mocked(listAllRules);
 const mockReadConfig = vi.mocked(readConfig);
 const mockListAllPromptAgents = vi.mocked(listAllPromptAgents);
 const mockListAllGuides = vi.mocked(listAllGuides);
+const mockReadGenerationEtag = vi.mocked(readGenerationEtag);
+const mockBumpGeneration = vi.mocked(bumpGeneration);
 
 const SOURCE_A = '/subscriptions/sub/projects/project-a';
 const SOURCE_B = '/subscriptions/sub/projects/project-b';
@@ -144,6 +150,8 @@ describe('AgentAccessService', () => {
     mockReadConfig.mockResolvedValue(null);
     mockListAllPromptAgents.mockResolvedValue([]);
     mockListAllGuides.mockResolvedValue([]);
+    mockReadGenerationEtag.mockResolvedValue(null);
+    mockBumpGeneration.mockResolvedValue(undefined);
   });
 
   afterEach(() => {
@@ -442,6 +450,63 @@ describe('AgentAccessService', () => {
       expect(service.getSnapshot().rulesUnavailable).toBe(false);
       expect(errorSpy).toHaveBeenCalledWith(
         expect.stringContaining('serving last-known-good'),
+      );
+    });
+
+    it('generation sentinel: refetches inside the TTL when the etag moved', async () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-07-17T12:00:00.000Z'));
+      mockReadGenerationEtag.mockResolvedValue('"g1"');
+      const service = await freshServiceWith([]);
+      expect(mockListAllRules).toHaveBeenCalledTimes(1);
+
+      // Unchanged sentinel: warm snapshot keeps serving, no listing refetch.
+      vi.advanceTimersByTime(6_000);
+      await service.ensureFresh();
+      expect(mockListAllRules).toHaveBeenCalledTimes(1);
+
+      // Another replica wrote (etag moved): refetch well inside the TTL.
+      mockReadGenerationEtag.mockResolvedValue('"g2"');
+      vi.advanceTimersByTime(6_000);
+      await service.ensureFresh();
+      expect(mockListAllRules).toHaveBeenCalledTimes(2);
+    });
+
+    it('generation sentinel: probes at most once per interval', async () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-07-17T12:00:00.000Z'));
+      mockReadGenerationEtag.mockResolvedValue('"g1"');
+      const service = await freshServiceWith([]);
+      const probesAfterLoad = mockReadGenerationEtag.mock.calls.length;
+
+      vi.advanceTimersByTime(6_000);
+      await service.ensureFresh(); // one probe
+      await service.ensureFresh(); // throttled — no second probe
+      expect(mockReadGenerationEtag).toHaveBeenCalledTimes(probesAfterLoad + 1);
+      expect(mockListAllRules).toHaveBeenCalledTimes(1);
+    });
+
+    it('generation sentinel: a failing probe degrades to the plain TTL bound', async () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-07-17T12:00:00.000Z'));
+      mockReadGenerationEtag.mockResolvedValue('"g1"');
+      const service = await freshServiceWith([]);
+      mockReadGenerationEtag.mockRejectedValue(new Error('storage blip'));
+
+      vi.advanceTimersByTime(6_000);
+      await service.ensureFresh();
+      expect(mockListAllRules).toHaveBeenCalledTimes(1); // no refetch, no throw
+
+      vi.advanceTimersByTime(56_000); // past the 60s TTL backstop
+      await service.ensureFresh();
+      expect(mockListAllRules).toHaveBeenCalledTimes(2);
+    });
+
+    it('invalidate() bumps the sentinel best-effort', async () => {
+      const service = await freshServiceWith([]);
+      service.invalidate();
+      await vi.waitFor(() =>
+        expect(mockBumpGeneration).toHaveBeenCalledTimes(1),
       );
     });
 
