@@ -14,6 +14,8 @@ export const AGENT_ACCESS_PREFIX = 'system/agent-access/';
 export const AGENT_ACCESS_RULES_PREFIX = `${AGENT_ACCESS_PREFIX}rules/`;
 export const AGENT_ACCESS_HISTORY_PREFIX = `${AGENT_ACCESS_PREFIX}history/`;
 export const AGENT_ACCESS_CONFIG_PATH = `${AGENT_ACCESS_PREFIX}config.json`;
+/** Cross-replica invalidation sentinel — see bumpGeneration in the store. */
+export const AGENT_ACCESS_GENERATION_PATH = `${AGENT_ACCESS_PREFIX}generation.json`;
 export const AGENT_ACCESS_PROMPT_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}prompt-agents/`;
 export const AGENT_ACCESS_CONNECTORS_PREFIX = `${AGENT_ACCESS_PREFIX}connectors/`;
 export const AGENT_ACCESS_GUIDES_PREFIX = `${AGENT_ACCESS_PREFIX}guides/`;
@@ -698,6 +700,26 @@ export function historyBlobPath(
 ): string {
   return `${AGENT_ACCESS_HISTORY_PREFIX}${Hasher.sha256(canonicalKey)}/${isoTimestamp}.json`;
 }
+
+/** Listing prefix for one canonical key's history entries. */
+export function historyListPrefix(canonicalKey: string): string {
+  return `${AGENT_ACCESS_HISTORY_PREFIX}${Hasher.sha256(canonicalKey)}/`;
+}
+
+/**
+ * The entity-agnostic slice every history entry shares. The full payload
+ * rides along verbatim (entries are written per-entity — rule, promptAgent,
+ * m365Agent, orgAgent, connector, guide, or meta fields), so a generic
+ * history listing can serve any entity without knowing its shape.
+ */
+export const HistoryEntryEnvelopeSchema = z.looseObject({
+  version: z.literal(1),
+  canonicalKey: z.string().min(1),
+  action: z.enum(['upsert', 'delete']),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type HistoryEntryEnvelope = z.infer<typeof HistoryEntryEnvelopeSchema>;
 
 /**
  * `system/agent-access/prompt-agents/<id>.json` — a SIBLING of rules/, never
