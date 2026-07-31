@@ -202,31 +202,47 @@ export class ToolRouterEnricher extends BasePipelineStage {
     // tokens and confuses the search backend.
     const rawUserPrompt = currentMessage;
 
-    // IMPORTANT: Include processed file summaries and transcripts in the analysis
-    // This ensures the tool router can see the full context when deciding if web search is needed
+    // Include processed file EXCERPTS and an attachment manifest in the
+    // routing input. Excerpts (not full content): the classifier only needs
+    // to know what the material is about — feeding a whole manuscript
+    // buried the user's 8-word request under ~20k tokens, which both cost
+    // real money per turn and made the nano model miss the intent. The
+    // manifest is what lets it resolve "this"/"the document" to an uploaded
+    // file (including files attached on EARLIER turns) when classifying
+    // file-transformation requests.
+    const EXCERPT_CHARS = 1500;
     if (context.processedContent) {
       const additionalContext: string[] = [];
 
-      // Add file summaries
+      // Add file summary excerpts
       if (context.processedContent.fileSummaries) {
         const summaries = context.processedContent.fileSummaries
-          .map((f) => `[Document summary: ${f.filename}]\n${f.summary}`)
+          .map(
+            (f) =>
+              `[Document summary excerpt: ${f.filename}]\n${ToolRouterEnricher.truncate(f.summary, EXCERPT_CHARS)}`,
+          )
           .join('\n\n');
         additionalContext.push(summaries);
       }
 
-      // Add inline file content
+      // Add inline file content excerpts
       if (context.processedContent.inlineFiles) {
         const inlineText = context.processedContent.inlineFiles
-          .map((f) => `[File: ${f.filename}]\n${f.content}`)
+          .map(
+            (f) =>
+              `[File excerpt: ${f.filename}]\n${ToolRouterEnricher.truncate(f.content, EXCERPT_CHARS)}`,
+          )
           .join('\n\n');
         additionalContext.push(inlineText);
       }
 
-      // Add transcripts
+      // Add transcript excerpts
       if (context.processedContent.transcripts) {
         const transcripts = context.processedContent.transcripts
-          .map((t) => `[Audio/Video: ${t.filename}]\n${t.transcript}`)
+          .map(
+            (t) =>
+              `[Audio/Video excerpt: ${t.filename}]\n${ToolRouterEnricher.truncate(t.transcript, EXCERPT_CHARS)}`,
+          )
           .join('\n\n');
         additionalContext.push(transcripts);
       }
@@ -235,6 +251,18 @@ export class ToolRouterEnricher extends BasePipelineStage {
       if (additionalContext.length > 0) {
         currentMessage = `${currentMessage}\n\n${additionalContext.join('\n\n')}`;
       }
+    }
+
+    // Attachment manifest — filenames only, split by recency. Follow-up
+    // turns ("now actually do it") carry no attachments on the last message,
+    // so without the prior-turns line the router has no way to know a
+    // transformable file exists in the conversation at all.
+    const attachmentManifest = this.collectAttachmentManifest(context);
+    if (attachmentManifest.currentTurn.length > 0) {
+      currentMessage += `\n\n[Files attached to the current message: ${attachmentManifest.currentTurn.join(', ')}]`;
+    }
+    if (attachmentManifest.priorTurns.length > 0) {
+      currentMessage += `\n\n[Files uploaded earlier in this conversation: ${attachmentManifest.priorTurns.join(', ')}]`;
     }
 
     const searchRequested = this.searchRequested(context);
@@ -1081,7 +1109,9 @@ export class ToolRouterEnricher extends BasePipelineStage {
     const startTime = Date.now();
     console.log('[ToolRouterEnricher] Executing code interpreter');
 
-    // Interpreter runs take multiple seconds — keep the loader honest.
+    // Interpreter runs take multiple seconds — keep the loader honest. (The
+    // client adds its own live elapsed counter to any chat.activity.* text,
+    // so one marker is enough for the whole non-streaming sandbox call.)
     await context.emitActivity?.('chat.activity.runningCode');
 
     try {
@@ -1234,11 +1264,48 @@ export class ToolRouterEnricher extends BasePipelineStage {
   }
 
   /**
-   * Loads the RAW bytes of the last user message's attachments from blob
-   * storage for the sandbox. Raw bytes matter: the interpreter must parse
-   * the actual CSV/XLSX, not the text summary the file pipeline produced.
-   * Reads from `context.messages` (not enrichedMessages) because
-   * processors may have rewritten attachment entries there.
+   * Filenames of `file_url` attachments across the conversation, split into
+   * the current (last) message vs. earlier turns. Router input only — lets
+   * the classifier resolve "this document" on follow-up turns where the
+   * last message itself carries no attachment.
+   */
+  private collectAttachmentManifest(context: ChatContext): {
+    currentTurn: string[];
+    priorTurns: string[];
+  } {
+    const namesOf = (content: Message['content']): string[] =>
+      Array.isArray(content)
+        ? content.flatMap((c) => {
+            if (c.type !== 'file_url') return [];
+            const f = c as FileMessageContent;
+            return [
+              f.originalFilename || f.url?.split('/').pop() || 'uploaded file',
+            ];
+          })
+        : [];
+
+    const messages = context.messages;
+    const currentTurn = namesOf(messages[messages.length - 1]?.content);
+    const priorTurns: string[] = [];
+    for (let i = messages.length - 2; i >= 0; i--) {
+      for (const name of namesOf(messages[i]?.content)) {
+        if (!priorTurns.includes(name) && !currentTurn.includes(name)) {
+          priorTurns.push(name);
+        }
+      }
+    }
+    return { currentTurn, priorTurns };
+  }
+
+  /**
+   * Loads the RAW bytes of the conversation's most recent attachments from
+   * blob storage for the sandbox. Raw bytes matter: the interpreter must
+   * parse the actual CSV/XLSX, not the text summary the file pipeline
+   * produced. Walks backwards from the last message because interpreter
+   * tasks are often follow-ups ("now trim it to 6k words") on a message
+   * that carries no attachment itself. Reads from `context.messages` (not
+   * enrichedMessages) because processors may have rewritten attachment
+   * entries there.
    */
   private async collectInterpreterInputFiles(
     context: ChatContext,
@@ -1246,33 +1313,38 @@ export class ToolRouterEnricher extends BasePipelineStage {
     const MAX_FILES = 4;
     const MAX_TOTAL_BYTES = 20 * 1024 * 1024;
 
-    const lastMessage = context.messages[context.messages.length - 1];
-    if (!Array.isArray(lastMessage?.content)) return [];
-
     const refs: Array<{
       id: string;
       filename: string;
       location: 'files' | 'images';
     }> = [];
-    for (const item of lastMessage.content) {
-      if (refs.length >= MAX_FILES) break;
-      if (item.type === 'file_url') {
-        const f = item as FileMessageContent;
-        const id = f.url?.split('/').pop()?.split('?')[0];
-        if (id) {
-          refs.push({
-            id,
-            filename: f.originalFilename || id,
-            location: 'files',
-          });
-        }
-      } else if (item.type === 'image_url') {
-        const img = item as ImageMessageContent;
-        const url = img.image_url?.url ?? '';
-        // Only blob-backed references; data URLs are legacy and rare.
-        if (url.startsWith('/api/file/')) {
-          const id = url.split('/').pop()?.split('?')[0];
-          if (id) refs.push({ id, filename: id, location: 'images' });
+    for (
+      let messageIndex = context.messages.length - 1;
+      messageIndex >= 0 && refs.length === 0;
+      messageIndex--
+    ) {
+      const message = context.messages[messageIndex];
+      if (!Array.isArray(message?.content)) continue;
+      for (const item of message.content) {
+        if (refs.length >= MAX_FILES) break;
+        if (item.type === 'file_url') {
+          const f = item as FileMessageContent;
+          const id = f.url?.split('/').pop()?.split('?')[0];
+          if (id) {
+            refs.push({
+              id,
+              filename: f.originalFilename || id,
+              location: 'files',
+            });
+          }
+        } else if (item.type === 'image_url') {
+          const img = item as ImageMessageContent;
+          const url = img.image_url?.url ?? '';
+          // Only blob-backed references; data URLs are legacy and rare.
+          if (url.startsWith('/api/file/')) {
+            const id = url.split('/').pop()?.split('?')[0];
+            if (id) refs.push({ id, filename: id, location: 'images' });
+          }
         }
       }
     }
