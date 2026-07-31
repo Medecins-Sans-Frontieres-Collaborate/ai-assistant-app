@@ -23,6 +23,15 @@ vi.mock('@/lib/services/agentAccess/AgentAccessService', () => ({
   AgentAccessService: { getInstance: () => mockService },
 }));
 
+const mockServeCheck = vi.hoisted(() => ({
+  checkIndexServeableCached: vi.fn(),
+  peekIndexServeable: vi.fn(),
+}));
+
+vi.mock('@/lib/services/orgAgents/orgAgentSearchValidation', () => ({
+  ...mockServeCheck,
+}));
+
 const staticAgent = {
   id: 'msf_communications',
   name: 'MSF Communications',
@@ -75,6 +84,8 @@ beforeEach(() => {
   mockService.ensureFresh.mockResolvedValue(undefined);
   mockService.getOrgAgents.mockReturnValue([]);
   mockService.getOrgAgentById.mockReturnValue(null);
+  mockServeCheck.checkIndexServeableCached.mockResolvedValue(true);
+  mockServeCheck.peekIndexServeable.mockReturnValue(true);
 });
 
 describe('resolveOrgAgentById', () => {
@@ -133,6 +144,21 @@ describe('resolveOrgAgentById', () => {
         validation: { status: 'failed', checkedAt: 'x', error: 'broken' },
       }),
     );
+    expect(await resolveOrgAgentById('orgr-abcdefabcdef')).toBeNull();
+  });
+
+  it('treats a failed serve-time index recheck like failed validation', async () => {
+    // Save-time validation passed, but the index vanished afterwards: the
+    // cached recheck reports false and the record stops serving (override →
+    // static fallback; new agent → nothing).
+    mockServeCheck.checkIndexServeableCached.mockResolvedValue(false);
+    mockService.getOrgAgentById.mockReturnValue(
+      record({ id: 'msf_communications', name: 'Comms v2' }),
+    );
+    const agent = await resolveOrgAgentById('msf_communications');
+    expect(agent?.description).toBe('static entry');
+
+    mockService.getOrgAgentById.mockReturnValue(record());
     expect(await resolveOrgAgentById('orgr-abcdefabcdef')).toBeNull();
   });
 });
