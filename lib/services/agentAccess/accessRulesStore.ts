@@ -6,9 +6,11 @@ import {
   statusCodeOf,
   uploadJson,
 } from '@/lib/services/agentAccess/blobCas';
+import { defineBlobEntity } from '@/lib/services/agentAccess/blobEntityStore';
 import {
   AGENT_ACCESS_CONFIG_PATH,
   AGENT_ACCESS_CONNECTORS_PREFIX,
+  AGENT_ACCESS_GENERATION_PATH,
   AGENT_ACCESS_GUIDES_PREFIX,
   AGENT_ACCESS_M365_AGENTS_PREFIX,
   AGENT_ACCESS_MAP_DATASET_META_PREFIX,
@@ -26,6 +28,8 @@ import {
   GuideHistoryEntry,
   GuideHistoryEntrySchema,
   GuideSchema,
+  HistoryEntryEnvelope,
+  HistoryEntryEnvelopeSchema,
   M365Agent,
   M365AgentHistoryEntry,
   M365AgentHistoryEntrySchema,
@@ -57,6 +61,7 @@ import {
   connectorBlobPath,
   guideBlobPath,
   historyBlobPath,
+  historyListPrefix,
   m365AgentBlobPath,
   mapDatasetDataBlobPath,
   mapDatasetMeta,
@@ -81,6 +86,21 @@ import { env } from '@/config/environment';
  * full CAS discipline. They are shared with the usage-limits store.
  * `AgentAccessConflictError` is re-exported here so existing importers of
  * this module are unaffected.
+ *
+ * Three tiers of entity live here:
+ *
+ * 1. RULES + CONFIG — bespoke, below. The rules listing is FAIL-CLOSED
+ *    (see {@link listAllRules}) and rule blob paths derive from a
+ *    content-hash of the canonical key, both of which the generic factory
+ *    deliberately does not model.
+ * 2. The five UNIFORM entities (prompt agents, M365 agents, org RAG
+ *    agents, MCP connectors, guides) — built from
+ *    {@link defineBlobEntity} (./blobEntityStore.ts), which owns the
+ *    shared soft-skip/CAS/history semantics. The per-entity functions
+ *    below are thin wrappers preserving the historical names and result
+ *    field names, so callers and tests are unchanged.
+ * 3. MAP DATASETS — bespoke split meta/data blobs at the bottom (listings
+ *    read the ~1KB meta; loads read the ~1MB data).
  */
 export { AgentAccessConflictError };
 
@@ -253,6 +273,9 @@ export async function writeConfig(
  * ruleset on warm replicas (restriction preserved) and hits the documented
  * fail-closed 'unavailable' path on cold start. The ONLY silent skip is a
  * 404 — the blob was deleted between list and get, a benign race.
+ *
+ * This inversion of the soft-skip trade-off is why rules are NOT built from
+ * defineBlobEntity (./blobEntityStore.ts) like the sibling entities.
  */
 export async function listAllRules(
   storage: BlobStorage,
@@ -401,26 +424,58 @@ export async function writeHistoryEntry(
 }
 
 /**
- * Lists and parses every prompt-agent blob under the prompt-agents prefix.
- *
- * DELIBERATELY SOFTER than {@link listAllRules}: a malformed blob (bad JSON,
- * schema failure, or a blob whose name does not match its content's
- * id-derived path — i.e. hand-placed) is SKIPPED with a loud console.error
- * instead of failing the whole listing. A dropped persona fails SAFE — it
- * disappears from discovery and its botId falls through to vanilla chat —
- * whereas a dropped rule would fail OPEN, which is why listAllRules throws.
- * Throwing here would couple one corrupt persona blob to the entire rules
- * snapshot (refresh() loads both) and, on cold start, brick every Foundry
- * invocation — exactly the blast radius the sibling `prompt-agents/` prefix
- * exists to contain. Storage-level errors (list/download failures) still
- * throw; a 404 (deleted between list and get) stays a silent skip.
+ * Cross-replica invalidation sentinel. A tiny blob bumped UNCONDITIONALLY
+ * (fire-and-forget, best-effort) after every successful admin write;
+ * replicas probe its ETag between full refreshes and refetch immediately
+ * when it changed. The sentinel only ACCELERATES propagation — the snapshot
+ * TTL remains the correctness backstop, so a failed bump costs latency
+ * (≤TTL, exactly today's bound), never correctness.
  */
-export async function listAllPromptAgents(
+export async function readGenerationEtag(
   storage: BlobStorage,
-): Promise<StoredPromptAgent[]> {
-  const names = await storage.listBlobs(AGENT_ACCESS_PROMPT_AGENTS_PREFIX);
+): Promise<string | null> {
+  const result = await downloadBlob(storage, AGENT_ACCESS_GENERATION_PATH);
+  return result?.etag ?? null;
+}
+
+export async function bumpGeneration(storage: BlobStorage): Promise<void> {
+  const client = storage.getBlockBlobClient(AGENT_ACCESS_GENERATION_PATH);
+  const content = Buffer.from(
+    JSON.stringify({ bumpedAt: new Date().toISOString() }),
+    'utf8',
+  );
+  await withAzureRetry(
+    () =>
+      client.upload(content, content.length, {
+        blobHTTPHeaders: { blobContentType: 'application/json' },
+      }),
+    { label: 'agentAccess.bumpGeneration' },
+  );
+}
+
+export interface StoredHistoryEntry {
+  blobPath: string;
+  entry: HistoryEntryEnvelope;
+}
+
+/**
+ * Lists one canonical key's immutable history entries, NEWEST FIRST.
+ * Entity-agnostic: entries are validated against the shared envelope
+ * (canonicalKey/action/updatedBy/updatedAt) and the per-entity payload
+ * passes through verbatim for the admin history viewer / restore flow.
+ * Malformed blobs are SKIPPED with a loud log — history is an audit
+ * convenience, and one corrupt entry must not hide the rest. An entry
+ * whose embedded canonicalKey does not hash to this listing's prefix is
+ * skipped too (hand-placed blobs must not masquerade as another key's
+ * audit trail).
+ */
+export async function listHistoryEntries(
+  storage: BlobStorage,
+  canonicalKey: string,
+): Promise<StoredHistoryEntry[]> {
+  const names = await storage.listBlobs(historyListPrefix(canonicalKey));
   const results = await Promise.all(
-    names.map(async (name): Promise<StoredPromptAgent | null> => {
+    names.map(async (name): Promise<StoredHistoryEntry | null> => {
       // 404 → deleted between list and get; skip silently.
       const downloaded = await downloadBlob(storage, name);
       if (downloaded === null) return null;
@@ -430,33 +485,109 @@ export async function listAllPromptAgents(
         json = JSON.parse(downloaded.buffer.toString('utf8'));
       } catch {
         console.error(
-          `[agent-access] SKIPPING prompt-agent blob with invalid JSON (broken persona degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
+          `[agent-access] SKIPPING history blob with invalid JSON: ${sanitizeForLog(name)}`,
         );
         return null;
       }
-      const parsed = PromptAgentSchema.safeParse(json);
+      const parsed = HistoryEntryEnvelopeSchema.safeParse(json);
       if (!parsed.success) {
         console.error(
-          `[agent-access] SKIPPING malformed prompt-agent blob (broken persona degrades alone; rules snapshot unaffected) ${sanitizeForLog(name)}: ${sanitizeForLog(parsed.error.message)}`,
+          `[agent-access] SKIPPING malformed history blob ${sanitizeForLog(name)}: ${sanitizeForLog(parsed.error.message)}`,
         );
         return null;
       }
-      if (promptAgentBlobPath(parsed.data.id) !== name) {
-        // A stray blob must not shadow (or masquerade as) another id's agent.
+      if (parsed.data.canonicalKey !== canonicalKey) {
         console.error(
-          `[agent-access] SKIPPING prompt-agent blob whose name does not match its content's id (broken persona degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
+          `[agent-access] SKIPPING history blob whose content's canonicalKey does not match the listing key: ${sanitizeForLog(name)}`,
         );
         return null;
       }
-      return {
-        canonicalKey: canonicalAgentKey(PROMPT_AGENT_SOURCE, parsed.data.id),
-        blobPath: name,
-        agent: parsed.data,
-        etag: downloaded.etag,
-      };
+      return { blobPath: name, entry: parsed.data };
     }),
   );
-  return results.filter((r): r is StoredPromptAgent => r !== null);
+  return results
+    .filter((r): r is StoredHistoryEntry => r !== null)
+    .sort((a, b) => b.entry.updatedAt.localeCompare(a.entry.updatedAt));
+}
+
+/* ------------------------------------------------------------------ */
+/* Uniform entities (defineBlobEntity — see ./blobEntityStore.ts for   */
+/* the shared soft-skip / CAS / history semantics)                     */
+/* ------------------------------------------------------------------ */
+
+const promptAgentEntity = defineBlobEntity<
+  PromptAgent,
+  PromptAgentHistoryEntry
+>({
+  logNoun: 'prompt-agent',
+  errorNoun: 'prompt agent',
+  source: PROMPT_AGENT_SOURCE,
+  listPrefix: AGENT_ACCESS_PROMPT_AGENTS_PREFIX,
+  blobPath: promptAgentBlobPath,
+  schema: PromptAgentSchema,
+  historySchema: PromptAgentHistoryEntrySchema,
+  labelBase: 'PromptAgent',
+});
+
+const m365AgentEntity = defineBlobEntity<M365Agent, M365AgentHistoryEntry>({
+  logNoun: 'm365-agent',
+  errorNoun: 'm365 agent',
+  source: M365_AGENT_SOURCE,
+  listPrefix: AGENT_ACCESS_M365_AGENTS_PREFIX,
+  blobPath: m365AgentBlobPath,
+  schema: M365AgentSchema,
+  historySchema: M365AgentHistoryEntrySchema,
+  labelBase: 'M365Agent',
+});
+
+const orgAgentEntity = defineBlobEntity<OrgRagAgent, OrgRagAgentHistoryEntry>({
+  logNoun: 'org-agent',
+  errorNoun: 'org agent',
+  source: ORG_AGENT_SOURCE,
+  listPrefix: AGENT_ACCESS_ORG_AGENTS_PREFIX,
+  blobPath: orgAgentBlobPath,
+  schema: OrgRagAgentSchema,
+  historySchema: OrgRagAgentHistoryEntrySchema,
+  labelBase: 'OrgAgent',
+});
+
+const connectorEntity = defineBlobEntity<
+  McpConnector,
+  McpConnectorHistoryEntry
+>({
+  logNoun: 'connector',
+  errorNoun: 'connector',
+  source: MCP_CONNECTOR_SOURCE,
+  listPrefix: AGENT_ACCESS_CONNECTORS_PREFIX,
+  blobPath: connectorBlobPath,
+  schema: McpConnectorSchema,
+  historySchema: McpConnectorHistoryEntrySchema,
+  labelBase: 'Connector',
+});
+
+const guideEntity = defineBlobEntity<Guide, GuideHistoryEntry>({
+  logNoun: 'guide',
+  errorNoun: 'guide',
+  source: GUIDE_SOURCE,
+  listPrefix: AGENT_ACCESS_GUIDES_PREFIX,
+  blobPath: guideBlobPath,
+  schema: GuideSchema,
+  historySchema: GuideHistoryEntrySchema,
+  labelBase: 'Guide',
+});
+
+/* --- Prompt agents ------------------------------------------------- */
+
+export async function listAllPromptAgents(
+  storage: BlobStorage,
+): Promise<StoredPromptAgent[]> {
+  const entries = await promptAgentEntity.listAll(storage);
+  return entries.map(({ canonicalKey, blobPath, record, etag }) => ({
+    canonicalKey,
+    blobPath,
+    agent: record,
+    etag,
+  }));
 }
 
 /** Reads a single prompt agent by id. Returns null when none exists. */
@@ -464,144 +595,45 @@ export async function readPromptAgent(
   storage: BlobStorage,
   id: string,
 ): Promise<PromptAgentReadResult | null> {
-  const result = await downloadBlob(storage, promptAgentBlobPath(id));
-  if (result === null) return null;
-  const parsed = PromptAgentSchema.safeParse(
-    JSON.parse(result.buffer.toString('utf8')),
-  );
-  if (!parsed.success) {
-    throw new Error(
-      `Malformed prompt agent blob for id ${id}: ${parsed.error.message}`,
-    );
-  }
-  return { agent: parsed.data, etag: result.etag };
+  const result = await promptAgentEntity.read(storage, id);
+  return result && { agent: result.record, etag: result.etag };
 }
 
-/**
- * Compare-and-swap prompt-agent write. The blob path is derived from the
- * record's own id, so an agent can never land at another id's path.
- * `ifMatchEtag` set → update (`If-Match`); null → creation only
- * (`If-None-Match: *`). 412 → {@link AgentAccessConflictError}.
- * Returns the new ETag.
- */
-export async function writePromptAgent(
+export function writePromptAgent(
   storage: BlobStorage,
   agent: PromptAgent,
   ifMatchEtag: string | null,
 ): Promise<string> {
-  const parsed = PromptAgentSchema.parse(agent);
-  return uploadJson(
-    storage,
-    promptAgentBlobPath(parsed.id),
-    parsed,
-    ifMatchEtag,
-    'agentAccess.writePromptAgent',
-  );
+  return promptAgentEntity.write(storage, agent, ifMatchEtag);
 }
 
-/**
- * Conditional prompt-agent delete (`If-Match`). Returns false when the blob
- * was already absent (idempotent); 412 → {@link AgentAccessConflictError}.
- */
-export async function deletePromptAgent(
+export function deletePromptAgent(
   storage: BlobStorage,
   id: string,
   ifMatchEtag: string,
 ): Promise<boolean> {
-  const client = storage.getBlockBlobClient(promptAgentBlobPath(id));
-  try {
-    await withAzureRetry(
-      () => client.delete({ conditions: { ifMatch: ifMatchEtag } }),
-      { label: 'agentAccess.deletePromptAgent' },
-    );
-    return true;
-  } catch (error) {
-    const status = statusCodeOf(error);
-    if (status === 404) return false;
-    if (status === 412) throw new AgentAccessConflictError();
-    throw error;
-  }
+  return promptAgentEntity.remove(storage, id, ifMatchEtag);
 }
 
-/**
- * Appends an immutable prompt-agent history entry (`If-None-Match: *`) at
- * `historyBlobPath(canonicalKey)` — same audit namespace as rules. A 412
- * means an earlier attempt (or a retry) already landed this exact entry —
- * treated as idempotent success. Callers wrap this best-effort: a history
- * failure must never fail the mutation (mirror appendHistoryBestEffort).
- */
-export async function writePromptAgentHistoryEntry(
+export function writePromptAgentHistoryEntry(
   storage: BlobStorage,
   entry: PromptAgentHistoryEntry,
 ): Promise<void> {
-  const parsed = PromptAgentHistoryEntrySchema.parse(entry);
-  const client = storage.getBlockBlobClient(
-    historyBlobPath(parsed.canonicalKey, parsed.updatedAt),
-  );
-  const content = Buffer.from(JSON.stringify(parsed), 'utf8');
-  try {
-    await withAzureRetry(
-      () =>
-        client.upload(content, content.length, {
-          blobHTTPHeaders: { blobContentType: 'application/json' },
-          conditions: { ifNoneMatch: '*' },
-        }),
-      { label: 'agentAccess.writePromptAgentHistoryEntry' },
-    );
-  } catch (error) {
-    if (statusCodeOf(error) === 412) return;
-    throw error;
-  }
+  return promptAgentEntity.writeHistory(storage, entry);
 }
 
-/**
- * Lists every M365 file-backed agent. Malformed blobs are SKIPPED with a
- * loud log, never thrown — identical rationale to listAllPromptAgents: one
- * corrupt agent must not take down the rules snapshot that refresh() loads
- * alongside it. Storage-level errors still throw.
- */
+/* --- M365 file-backed agents --------------------------------------- */
+
 export async function listAllM365Agents(
   storage: BlobStorage,
 ): Promise<StoredM365Agent[]> {
-  const names = await storage.listBlobs(AGENT_ACCESS_M365_AGENTS_PREFIX);
-  const results = await Promise.all(
-    names.map(async (name): Promise<StoredM365Agent | null> => {
-      // 404 → deleted between list and get; skip silently.
-      const downloaded = await downloadBlob(storage, name);
-      if (downloaded === null) return null;
-
-      let json: unknown;
-      try {
-        json = JSON.parse(downloaded.buffer.toString('utf8'));
-      } catch {
-        console.error(
-          `[agent-access] SKIPPING m365-agent blob with invalid JSON (broken agent degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
-        );
-        return null;
-      }
-      const parsed = M365AgentSchema.safeParse(json);
-      if (!parsed.success) {
-        console.error(
-          `[agent-access] SKIPPING malformed m365-agent blob (broken agent degrades alone; rules snapshot unaffected) ${sanitizeForLog(name)}: ${sanitizeForLog(parsed.error.message)}`,
-        );
-        return null;
-      }
-      if (m365AgentBlobPath(parsed.data.id) !== name) {
-        // A stray blob must not shadow (or masquerade as) another id's agent.
-        console.error(
-          `[agent-access] SKIPPING m365-agent blob whose name does not match its content's id (broken agent degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
-        );
-        return null;
-      }
-      return {
-        canonicalKey: canonicalAgentKey(M365_AGENT_SOURCE, parsed.data.id),
-        blobPath: name,
-        m365Agent: parsed.data,
-        etag: downloaded.etag,
-      };
-    }),
-  );
-  return results.filter((r): r is StoredM365Agent => r !== null);
+  const entries = await m365AgentEntity.listAll(storage);
+  return entries.map(({ canonicalKey, blobPath, record, etag }) => ({
+    canonicalKey,
+    blobPath,
+    m365Agent: record,
+    etag,
+  }));
 }
 
 /** Reads a single M365 agent by id. Returns null when none exists. */
@@ -609,146 +641,45 @@ export async function readM365Agent(
   storage: BlobStorage,
   id: string,
 ): Promise<M365AgentReadResult | null> {
-  const result = await downloadBlob(storage, m365AgentBlobPath(id));
-  if (result === null) return null;
-  const parsed = M365AgentSchema.safeParse(
-    JSON.parse(result.buffer.toString('utf8')),
-  );
-  if (!parsed.success) {
-    throw new Error(
-      `Malformed m365 agent blob for id ${id}: ${parsed.error.message}`,
-    );
-  }
-  return { m365Agent: parsed.data, etag: result.etag };
+  const result = await m365AgentEntity.read(storage, id);
+  return result && { m365Agent: result.record, etag: result.etag };
 }
 
-/**
- * Compare-and-swap M365-agent write. The blob path is derived from the
- * record's own id, so an agent can never land at another id's path.
- * `ifMatchEtag` set → update (`If-Match`); null → creation only
- * (`If-None-Match: *`). 412 → {@link AgentAccessConflictError}.
- * Returns the new ETag.
- */
-export async function writeM365Agent(
+export function writeM365Agent(
   storage: BlobStorage,
   agent: M365Agent,
   ifMatchEtag: string | null,
 ): Promise<string> {
-  const parsed = M365AgentSchema.parse(agent);
-  return uploadJson(
-    storage,
-    m365AgentBlobPath(parsed.id),
-    parsed,
-    ifMatchEtag,
-    'agentAccess.writeM365Agent',
-  );
+  return m365AgentEntity.write(storage, agent, ifMatchEtag);
 }
 
-/**
- * Conditional M365-agent delete (`If-Match`). Returns false when the blob
- * was already absent (idempotent); 412 → {@link AgentAccessConflictError}.
- */
-export async function deleteM365Agent(
+export function deleteM365Agent(
   storage: BlobStorage,
   id: string,
   ifMatchEtag: string,
 ): Promise<boolean> {
-  const client = storage.getBlockBlobClient(m365AgentBlobPath(id));
-  try {
-    await withAzureRetry(
-      () => client.delete({ conditions: { ifMatch: ifMatchEtag } }),
-      { label: 'agentAccess.deleteM365Agent' },
-    );
-    return true;
-  } catch (error) {
-    const status = statusCodeOf(error);
-    if (status === 404) return false;
-    if (status === 412) throw new AgentAccessConflictError();
-    throw error;
-  }
+  return m365AgentEntity.remove(storage, id, ifMatchEtag);
 }
 
-/**
- * Appends an immutable M365-agent history entry (`If-None-Match: *`) at
- * `historyBlobPath(canonicalKey)` — same audit namespace as rules. A 412
- * means an earlier attempt (or a retry) already landed this exact entry —
- * treated as idempotent success. Callers wrap this best-effort: a history
- * failure must never fail the mutation.
- */
-export async function writeM365AgentHistoryEntry(
+export function writeM365AgentHistoryEntry(
   storage: BlobStorage,
   entry: M365AgentHistoryEntry,
 ): Promise<void> {
-  const parsed = M365AgentHistoryEntrySchema.parse(entry);
-  const client = storage.getBlockBlobClient(
-    historyBlobPath(parsed.canonicalKey, parsed.updatedAt),
-  );
-  const content = Buffer.from(JSON.stringify(parsed), 'utf8');
-  try {
-    await withAzureRetry(
-      () =>
-        client.upload(content, content.length, {
-          blobHTTPHeaders: { blobContentType: 'application/json' },
-          conditions: { ifNoneMatch: '*' },
-        }),
-      { label: 'agentAccess.writeM365AgentHistoryEntry' },
-    );
-  } catch (error) {
-    if (statusCodeOf(error) === 412) return;
-    throw error;
-  }
+  return m365AgentEntity.writeHistory(storage, entry);
 }
 
-/**
- * Lists every admin-authored org RAG agent. Malformed blobs are SKIPPED with
- * a loud log, never thrown — identical rationale to listAllPromptAgents: one
- * corrupt agent must not take down the rules snapshot that refresh() loads
- * alongside it. A skipped record fails SAFE — the registry falls back to the
- * static config entry (or nothing) rather than serving a half-parsed agent.
- * Storage-level errors still throw.
- */
+/* --- Org RAG agents ------------------------------------------------- */
+
 export async function listAllOrgAgents(
   storage: BlobStorage,
 ): Promise<StoredOrgRagAgent[]> {
-  const names = await storage.listBlobs(AGENT_ACCESS_ORG_AGENTS_PREFIX);
-  const results = await Promise.all(
-    names.map(async (name): Promise<StoredOrgRagAgent | null> => {
-      // 404 → deleted between list and get; skip silently.
-      const downloaded = await downloadBlob(storage, name);
-      if (downloaded === null) return null;
-
-      let json: unknown;
-      try {
-        json = JSON.parse(downloaded.buffer.toString('utf8'));
-      } catch {
-        console.error(
-          `[agent-access] SKIPPING org-agent blob with invalid JSON (broken agent degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
-        );
-        return null;
-      }
-      const parsed = OrgRagAgentSchema.safeParse(json);
-      if (!parsed.success) {
-        console.error(
-          `[agent-access] SKIPPING malformed org-agent blob (broken agent degrades alone; rules snapshot unaffected) ${sanitizeForLog(name)}: ${sanitizeForLog(parsed.error.message)}`,
-        );
-        return null;
-      }
-      if (orgAgentBlobPath(parsed.data.id) !== name) {
-        // A stray blob must not shadow (or masquerade as) another id's agent.
-        console.error(
-          `[agent-access] SKIPPING org-agent blob whose name does not match its content's id (broken agent degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
-        );
-        return null;
-      }
-      return {
-        canonicalKey: canonicalAgentKey(ORG_AGENT_SOURCE, parsed.data.id),
-        blobPath: name,
-        orgAgent: parsed.data,
-        etag: downloaded.etag,
-      };
-    }),
-  );
-  return results.filter((r): r is StoredOrgRagAgent => r !== null);
+  const entries = await orgAgentEntity.listAll(storage);
+  return entries.map(({ canonicalKey, blobPath, record, etag }) => ({
+    canonicalKey,
+    blobPath,
+    orgAgent: record,
+    etag,
+  }));
 }
 
 /** Reads a single org RAG agent by id. Returns null when none exists. */
@@ -756,145 +687,45 @@ export async function readOrgAgent(
   storage: BlobStorage,
   id: string,
 ): Promise<OrgRagAgentReadResult | null> {
-  const result = await downloadBlob(storage, orgAgentBlobPath(id));
-  if (result === null) return null;
-  const parsed = OrgRagAgentSchema.safeParse(
-    JSON.parse(result.buffer.toString('utf8')),
-  );
-  if (!parsed.success) {
-    throw new Error(
-      `Malformed org agent blob for id ${id}: ${parsed.error.message}`,
-    );
-  }
-  return { orgAgent: parsed.data, etag: result.etag };
+  const result = await orgAgentEntity.read(storage, id);
+  return result && { orgAgent: result.record, etag: result.etag };
 }
 
-/**
- * Compare-and-swap org-agent write. The blob path is derived from the
- * record's own id, so an agent can never land at another id's path.
- * `ifMatchEtag` set → update (`If-Match`); null → creation only
- * (`If-None-Match: *`). 412 → {@link AgentAccessConflictError}.
- * Returns the new ETag.
- */
-export async function writeOrgAgent(
+export function writeOrgAgent(
   storage: BlobStorage,
   agent: OrgRagAgent,
   ifMatchEtag: string | null,
 ): Promise<string> {
-  const parsed = OrgRagAgentSchema.parse(agent);
-  return uploadJson(
-    storage,
-    orgAgentBlobPath(parsed.id),
-    parsed,
-    ifMatchEtag,
-    'agentAccess.writeOrgAgent',
-  );
+  return orgAgentEntity.write(storage, agent, ifMatchEtag);
 }
 
-/**
- * Conditional org-agent delete (`If-Match`). Returns false when the blob
- * was already absent (idempotent); 412 → {@link AgentAccessConflictError}.
- */
-export async function deleteOrgAgent(
+export function deleteOrgAgent(
   storage: BlobStorage,
   id: string,
   ifMatchEtag: string,
 ): Promise<boolean> {
-  const client = storage.getBlockBlobClient(orgAgentBlobPath(id));
-  try {
-    await withAzureRetry(
-      () => client.delete({ conditions: { ifMatch: ifMatchEtag } }),
-      { label: 'agentAccess.deleteOrgAgent' },
-    );
-    return true;
-  } catch (error) {
-    const status = statusCodeOf(error);
-    if (status === 404) return false;
-    if (status === 412) throw new AgentAccessConflictError();
-    throw error;
-  }
+  return orgAgentEntity.remove(storage, id, ifMatchEtag);
 }
 
-/**
- * Appends an immutable org-agent history entry (`If-None-Match: *`) at
- * `historyBlobPath(canonicalKey)` — same audit namespace as rules. A 412
- * means an earlier attempt (or a retry) already landed this exact entry —
- * treated as idempotent success. Callers wrap this best-effort: a history
- * failure must never fail the mutation.
- */
-export async function writeOrgAgentHistoryEntry(
+export function writeOrgAgentHistoryEntry(
   storage: BlobStorage,
   entry: OrgRagAgentHistoryEntry,
 ): Promise<void> {
-  const parsed = OrgRagAgentHistoryEntrySchema.parse(entry);
-  const client = storage.getBlockBlobClient(
-    historyBlobPath(parsed.canonicalKey, parsed.updatedAt),
-  );
-  const content = Buffer.from(JSON.stringify(parsed), 'utf8');
-  try {
-    await withAzureRetry(
-      () =>
-        client.upload(content, content.length, {
-          blobHTTPHeaders: { blobContentType: 'application/json' },
-          conditions: { ifNoneMatch: '*' },
-        }),
-      { label: 'agentAccess.writeOrgAgentHistoryEntry' },
-    );
-  } catch (error) {
-    if (statusCodeOf(error) === 412) return;
-    throw error;
-  }
+  return orgAgentEntity.writeHistory(storage, entry);
 }
 
-/**
- * Lists every admin-authored MCP connector. Malformed blobs are SKIPPED with a
- * loud log, never thrown — identical rationale to listAllPromptAgents: one
- * corrupt connector must not take down the rules snapshot that refresh()
- * loads alongside it. Storage-level errors still throw.
- */
+/* --- MCP connectors ------------------------------------------------- */
+
 export async function listAllConnectors(
   storage: BlobStorage,
 ): Promise<StoredMcpConnector[]> {
-  const names = await storage.listBlobs(AGENT_ACCESS_CONNECTORS_PREFIX);
-  const results = await Promise.all(
-    names.map(async (name): Promise<StoredMcpConnector | null> => {
-      // 404 → deleted between list and get; skip silently.
-      const downloaded = await downloadBlob(storage, name);
-      if (downloaded === null) return null;
-
-      let json: unknown;
-      try {
-        json = JSON.parse(downloaded.buffer.toString('utf8'));
-      } catch {
-        console.error(
-          `[agent-access] SKIPPING connector blob with invalid JSON (broken connector degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
-        );
-        return null;
-      }
-      const parsed = McpConnectorSchema.safeParse(json);
-      if (!parsed.success) {
-        console.error(
-          `[agent-access] SKIPPING malformed connector blob (broken connector degrades alone; rules snapshot unaffected) ${sanitizeForLog(name)}: ${sanitizeForLog(parsed.error.message)}`,
-        );
-        return null;
-      }
-      if (connectorBlobPath(parsed.data.id) !== name) {
-        // A stray blob must not shadow (or masquerade as) another id's
-        // connector — that would let one land at a trusted id's URL.
-        console.error(
-          `[agent-access] SKIPPING connector blob whose name does not match its content's id (broken connector degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
-        );
-        return null;
-      }
-      return {
-        canonicalKey: canonicalAgentKey(MCP_CONNECTOR_SOURCE, parsed.data.id),
-        blobPath: name,
-        connector: parsed.data,
-        etag: downloaded.etag,
-      };
-    }),
-  );
-  return results.filter((r): r is StoredMcpConnector => r !== null);
+  const entries = await connectorEntity.listAll(storage);
+  return entries.map(({ canonicalKey, blobPath, record, etag }) => ({
+    canonicalKey,
+    blobPath,
+    connector: record,
+    etag,
+  }));
 }
 
 /** Reads a single connector by id. Returns null when none exists. */
@@ -902,151 +733,51 @@ export async function readConnector(
   storage: BlobStorage,
   id: string,
 ): Promise<McpConnectorReadResult | null> {
-  const result = await downloadBlob(storage, connectorBlobPath(id));
-  if (result === null) return null;
-  const parsed = McpConnectorSchema.safeParse(
-    JSON.parse(result.buffer.toString('utf8')),
-  );
-  if (!parsed.success) {
-    throw new Error(
-      `Malformed connector blob for id ${id}: ${parsed.error.message}`,
-    );
-  }
-  return { connector: parsed.data, etag: result.etag };
+  const result = await connectorEntity.read(storage, id);
+  return result && { connector: result.record, etag: result.etag };
 }
 
 /**
- * Compare-and-swap connector write. The blob path is derived from the
- * record's own id, so a connector can never land at another id's path — which
- * also keeps the sealed client secret's AAD binding meaningful.
- * `ifMatchEtag` set → update (`If-Match`); null → creation only
- * (`If-None-Match: *`). 412 → {@link AgentAccessConflictError}.
- * Returns the new ETag.
+ * Compare-and-swap connector write. Deriving the path from the record's own
+ * id also keeps the sealed client secret's AAD binding meaningful. The
+ * history entry carries the connector verbatim INCLUDING its sealed secret —
+ * sealed, so the audit trail never holds plaintext.
  */
-export async function writeConnector(
+export function writeConnector(
   storage: BlobStorage,
   connector: McpConnector,
   ifMatchEtag: string | null,
 ): Promise<string> {
-  const parsed = McpConnectorSchema.parse(connector);
-  return uploadJson(
-    storage,
-    connectorBlobPath(parsed.id),
-    parsed,
-    ifMatchEtag,
-    'agentAccess.writeConnector',
-  );
+  return connectorEntity.write(storage, connector, ifMatchEtag);
 }
 
-/**
- * Conditional connector delete (`If-Match`). Returns false when the blob was
- * already absent (idempotent); 412 → {@link AgentAccessConflictError}.
- */
-export async function deleteConnector(
+export function deleteConnector(
   storage: BlobStorage,
   id: string,
   ifMatchEtag: string,
 ): Promise<boolean> {
-  const client = storage.getBlockBlobClient(connectorBlobPath(id));
-  try {
-    await withAzureRetry(
-      () => client.delete({ conditions: { ifMatch: ifMatchEtag } }),
-      { label: 'agentAccess.deleteConnector' },
-    );
-    return true;
-  } catch (error) {
-    const status = statusCodeOf(error);
-    if (status === 404) return false;
-    if (status === 412) throw new AgentAccessConflictError();
-    throw error;
-  }
+  return connectorEntity.remove(storage, id, ifMatchEtag);
 }
 
-/**
- * Appends an immutable connector history entry (`If-None-Match: *`) at
- * `historyBlobPath(canonicalKey)` — same audit namespace as rules. A 412
- * means an earlier attempt (or a retry) already landed this exact entry —
- * treated as idempotent success. Callers wrap this best-effort: a history
- * failure must never fail the mutation (mirror appendHistoryBestEffort).
- *
- * The persisted entry carries the connector verbatim, INCLUDING its sealed
- * client secret — sealed, so the audit trail never holds plaintext.
- */
-export async function writeConnectorHistoryEntry(
+export function writeConnectorHistoryEntry(
   storage: BlobStorage,
   entry: McpConnectorHistoryEntry,
 ): Promise<void> {
-  const parsed = McpConnectorHistoryEntrySchema.parse(entry);
-  const client = storage.getBlockBlobClient(
-    historyBlobPath(parsed.canonicalKey, parsed.updatedAt),
-  );
-  const content = Buffer.from(JSON.stringify(parsed), 'utf8');
-  try {
-    await withAzureRetry(
-      () =>
-        client.upload(content, content.length, {
-          blobHTTPHeaders: { blobContentType: 'application/json' },
-          conditions: { ifNoneMatch: '*' },
-        }),
-      { label: 'agentAccess.writeConnectorHistoryEntry' },
-    );
-  } catch (error) {
-    if (statusCodeOf(error) === 412) return;
-    throw error;
-  }
+  return connectorEntity.writeHistory(storage, entry);
 }
 
-/**
- * Lists every admin-authored workflow guide. Malformed blobs are SKIPPED with
- * a loud log, never thrown — identical rationale to listAllPromptAgents: one
- * corrupt guide must not take down the rules snapshot that refresh() loads
- * alongside it. A skipped guide fails SAFE: its access data lives in the
- * (fail-closed) rules listing, not here, and a guide with no loadable body
- * simply cannot be invoked. Storage-level errors still throw.
- */
+/* --- Workflow guides ------------------------------------------------ */
+
 export async function listAllGuides(
   storage: BlobStorage,
 ): Promise<StoredGuide[]> {
-  const names = await storage.listBlobs(AGENT_ACCESS_GUIDES_PREFIX);
-  const results = await Promise.all(
-    names.map(async (name): Promise<StoredGuide | null> => {
-      // 404 → deleted between list and get; skip silently.
-      const downloaded = await downloadBlob(storage, name);
-      if (downloaded === null) return null;
-
-      let json: unknown;
-      try {
-        json = JSON.parse(downloaded.buffer.toString('utf8'));
-      } catch {
-        console.error(
-          `[agent-access] SKIPPING guide blob with invalid JSON (broken guide degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
-        );
-        return null;
-      }
-      const parsed = GuideSchema.safeParse(json);
-      if (!parsed.success) {
-        console.error(
-          `[agent-access] SKIPPING malformed guide blob (broken guide degrades alone; rules snapshot unaffected) ${sanitizeForLog(name)}: ${sanitizeForLog(parsed.error.message)}`,
-        );
-        return null;
-      }
-      if (guideBlobPath(parsed.data.id) !== name) {
-        // A stray blob must not shadow (or masquerade as) another id's guide —
-        // that would let one land at a trusted id's prompt body.
-        console.error(
-          `[agent-access] SKIPPING guide blob whose name does not match its content's id (broken guide degrades alone; rules snapshot unaffected): ${sanitizeForLog(name)}`,
-        );
-        return null;
-      }
-      return {
-        canonicalKey: canonicalAgentKey(GUIDE_SOURCE, parsed.data.id),
-        blobPath: name,
-        guide: parsed.data,
-        etag: downloaded.etag,
-      };
-    }),
-  );
-  return results.filter((r): r is StoredGuide => r !== null);
+  const entries = await guideEntity.listAll(storage);
+  return entries.map(({ canonicalKey, blobPath, record, etag }) => ({
+    canonicalKey,
+    blobPath,
+    guide: record,
+    etag,
+  }));
 }
 
 /** Reads a single guide by id. Returns null when none exists. */
@@ -1054,94 +785,31 @@ export async function readGuide(
   storage: BlobStorage,
   id: string,
 ): Promise<GuideReadResult | null> {
-  const result = await downloadBlob(storage, guideBlobPath(id));
-  if (result === null) return null;
-  const parsed = GuideSchema.safeParse(
-    JSON.parse(result.buffer.toString('utf8')),
-  );
-  if (!parsed.success) {
-    throw new Error(
-      `Malformed guide blob for id ${id}: ${parsed.error.message}`,
-    );
-  }
-  return { guide: parsed.data, etag: result.etag };
+  const result = await guideEntity.read(storage, id);
+  return result && { guide: result.record, etag: result.etag };
 }
 
-/**
- * Compare-and-swap guide write. The blob path is derived from the record's
- * own id, so a guide can never land at another id's path.
- * `ifMatchEtag` set → update (`If-Match`); null → creation only
- * (`If-None-Match: *`). 412 → {@link AgentAccessConflictError}.
- * Returns the new ETag.
- */
-export async function writeGuide(
+export function writeGuide(
   storage: BlobStorage,
   guide: Guide,
   ifMatchEtag: string | null,
 ): Promise<string> {
-  const parsed = GuideSchema.parse(guide);
-  return uploadJson(
-    storage,
-    guideBlobPath(parsed.id),
-    parsed,
-    ifMatchEtag,
-    'agentAccess.writeGuide',
-  );
+  return guideEntity.write(storage, guide, ifMatchEtag);
 }
 
-/**
- * Conditional guide delete (`If-Match`). Returns false when the blob was
- * already absent (idempotent); 412 → {@link AgentAccessConflictError}.
- */
-export async function deleteGuide(
+export function deleteGuide(
   storage: BlobStorage,
   id: string,
   ifMatchEtag: string,
 ): Promise<boolean> {
-  const client = storage.getBlockBlobClient(guideBlobPath(id));
-  try {
-    await withAzureRetry(
-      () => client.delete({ conditions: { ifMatch: ifMatchEtag } }),
-      { label: 'agentAccess.deleteGuide' },
-    );
-    return true;
-  } catch (error) {
-    const status = statusCodeOf(error);
-    if (status === 404) return false;
-    if (status === 412) throw new AgentAccessConflictError();
-    throw error;
-  }
+  return guideEntity.remove(storage, id, ifMatchEtag);
 }
 
-/**
- * Appends an immutable guide history entry (`If-None-Match: *`) at
- * `historyBlobPath(canonicalKey)` — same audit namespace as rules. A 412
- * means an earlier attempt (or a retry) already landed this exact entry —
- * treated as idempotent success. Callers wrap this best-effort: a history
- * failure must never fail the mutation (mirror appendHistoryBestEffort).
- */
-export async function writeGuideHistoryEntry(
+export function writeGuideHistoryEntry(
   storage: BlobStorage,
   entry: GuideHistoryEntry,
 ): Promise<void> {
-  const parsed = GuideHistoryEntrySchema.parse(entry);
-  const client = storage.getBlockBlobClient(
-    historyBlobPath(parsed.canonicalKey, parsed.updatedAt),
-  );
-  const content = Buffer.from(JSON.stringify(parsed), 'utf8');
-  try {
-    await withAzureRetry(
-      () =>
-        client.upload(content, content.length, {
-          blobHTTPHeaders: { blobContentType: 'application/json' },
-          conditions: { ifNoneMatch: '*' },
-        }),
-      { label: 'agentAccess.writeGuideHistoryEntry' },
-    );
-  } catch (error) {
-    if (statusCodeOf(error) === 412) return;
-    throw error;
-  }
+  return guideEntity.writeHistory(storage, entry);
 }
 
 /* ------------------------------------------------------------------ */
@@ -1173,7 +841,7 @@ async function uploadJsonUnconditional(
 /**
  * Lists dataset META blobs only — the ~1MB data blobs are never touched by
  * listings (that is the point of the split). Malformed metas are SKIPPED
- * with a loud log (same soft-skip rationale as listAllPromptAgents); a
+ * with a loud log (same soft-skip rationale as the uniform entities); a
  * skipped dataset fails SAFE — it disappears from listings and its load
  * endpoint still serves the truthful data blob to those who know the id
  * (subject to the fail-closed rules, which live elsewhere).

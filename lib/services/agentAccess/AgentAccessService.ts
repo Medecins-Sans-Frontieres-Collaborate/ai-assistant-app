@@ -20,6 +20,7 @@ import {
   StoredMcpConnector,
   StoredOrgRagAgent,
   StoredPromptAgent,
+  bumpGeneration,
   createAgentAccessBlobStorage,
   listAllConnectors,
   listAllGuides,
@@ -28,6 +29,7 @@ import {
   listAllPromptAgents,
   listAllRules,
   readConfig,
+  readGenerationEtag,
 } from '@/lib/services/agentAccess/accessRulesStore';
 import {
   AgentAccessConfig,
@@ -58,6 +60,15 @@ const RULES_CACHE_TTL_MS = 60_000;
  * keeps retrying eagerly since it fails closed until a load succeeds.
  */
 const REFRESH_FAILURE_COOLDOWN_MS = 5_000;
+/**
+ * How often a warm replica probes the generation sentinel's ETag between
+ * full refreshes. A changed sentinel (another replica served an admin
+ * write) triggers an immediate refetch, so cross-replica propagation drops
+ * from ≤RULES_CACHE_TTL_MS to roughly this interval. The probe is a single
+ * tiny-blob read; on any probe failure (or a deployment whose sentinel was
+ * never written) behavior degrades to exactly the pre-sentinel TTL bound.
+ */
+const GENERATION_PROBE_INTERVAL_MS = 5_000;
 
 export type AccessDecisionKind = 'allow' | 'deny' | 'unavailable';
 
@@ -161,6 +172,11 @@ export class AgentAccessService {
   /** Epoch ms of the last failed refresh; 0 when none (or cleared). */
   private lastRefreshFailureAt = 0;
   private refreshInFlight: Promise<void> | null = null;
+  /** Sentinel ETag observed at the last full refresh; null = never read. */
+  private lastGenerationEtag: string | null = null;
+  /** Epoch ms of the last sentinel probe (throttles to the probe interval). */
+  private generationProbedAt = 0;
+  private generationProbeInFlight: Promise<boolean> | null = null;
   /** Dedupes the allowGroups scaffold warning to one line per key per process. */
   private warnedGroupKeys = new Set<string>();
 
@@ -183,7 +199,19 @@ export class AgentAccessService {
    */
   async ensureFresh(): Promise<void> {
     if (!this.isEnabled()) return;
-    if (this.state && Date.now() - this.fetchedAt < RULES_CACHE_TTL_MS) return;
+    if (this.state && Date.now() - this.fetchedAt < RULES_CACHE_TTL_MS) {
+      // Warm snapshot: probe the generation sentinel (throttled) so another
+      // replica's admin write is picked up in ~GENERATION_PROBE_INTERVAL_MS
+      // instead of waiting out the TTL. An unchanged (or unreadable)
+      // sentinel keeps serving the warm snapshot — the TTL stays the
+      // correctness backstop either way.
+      if (Date.now() - this.generationProbedAt < GENERATION_PROBE_INTERVAL_MS) {
+        return;
+      }
+      const changed = await this.probeGenerationChanged();
+      if (!changed) return;
+      this.fetchedAt = 0; // fall through to a full refresh below
+    }
     if (
       this.state &&
       this.lastRefreshFailureAt !== 0 &&
@@ -214,6 +242,53 @@ export class AgentAccessService {
     this.epoch += 1;
     this.fetchedAt = 0;
     this.lastRefreshFailureAt = 0;
+    // Fire-and-forget sentinel bump so OTHER replicas pick this write up at
+    // the probe interval instead of the full TTL. Best-effort by design: a
+    // failed bump costs cross-replica latency (≤TTL — exactly the
+    // pre-sentinel bound), never correctness, and must not fail or slow the
+    // admin write that triggered it.
+    void this.bumpGenerationBestEffort();
+  }
+
+  private async bumpGenerationBestEffort(): Promise<void> {
+    try {
+      await bumpGeneration(this.getStorage());
+    } catch (error) {
+      console.error(
+        `[agent-access] generation sentinel bump failed (other replicas fall back to the ${RULES_CACHE_TTL_MS / 1000}s TTL): ${sanitizeForLog(error)}`,
+      );
+    }
+  }
+
+  /**
+   * Reads the sentinel ETag (single-flight) and reports whether it moved
+   * since the last full refresh. Errors and a missing sentinel report
+   * `false` — the TTL backstop then governs, exactly as before the
+   * sentinel existed.
+   */
+  private async probeGenerationChanged(): Promise<boolean> {
+    if (!this.generationProbeInFlight) {
+      this.generationProbeInFlight = (async () => {
+        try {
+          const etag = await readGenerationEtag(this.getStorage());
+          this.generationProbedAt = Date.now();
+          if (etag === null) return false;
+          if (this.lastGenerationEtag === null) {
+            // Older snapshot predates sentinel tracking: adopt the current
+            // value as the baseline rather than treating it as a change.
+            this.lastGenerationEtag = etag;
+            return false;
+          }
+          return etag !== this.lastGenerationEtag;
+        } catch {
+          this.generationProbedAt = Date.now();
+          return false;
+        }
+      })().finally(() => {
+        this.generationProbeInFlight = null;
+      });
+    }
+    return this.generationProbeInFlight;
   }
 
   /** Cached snapshot for the admin API (rules + etags + config). */
@@ -418,6 +493,21 @@ export class AgentAccessService {
     const epochAtEntry = this.epoch;
     try {
       const storage = this.getStorage();
+      // The sentinel ETag read is ISSUED before the listings (awaited at the
+      // end): a bump landing after this point differs from the stamped
+      // value, so the next probe refetches — the same never-lose-a-write
+      // reasoning as the epoch check on fetchedAt below. Best-effort: a
+      // failed read keeps the previous baseline and the TTL backstop
+      // governs.
+      let generationEtagPromise: Promise<string | null>;
+      try {
+        generationEtagPromise = readGenerationEtag(storage).then(
+          (etag) => etag,
+          () => this.lastGenerationEtag,
+        );
+      } catch {
+        generationEtagPromise = Promise.resolve(this.lastGenerationEtag);
+      }
       // Rules and config load in one transaction: that pair is kept/replaced
       // atomically, so a failure in either keeps last-known-good for both
       // (never a mixed-age rules/config pair). Prompt agents load in a
@@ -589,6 +679,7 @@ export class AgentAccessService {
         orgAgents,
         orgAgentsById,
       };
+      this.lastGenerationEtag = await generationEtagPromise;
       this.lastRefreshFailureAt = 0;
       this.fetchedAt = this.epoch === epochAtEntry ? Date.now() : 0;
     } catch (error) {
