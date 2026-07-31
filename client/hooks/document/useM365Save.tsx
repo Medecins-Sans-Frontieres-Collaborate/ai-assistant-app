@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { ReactElement, useCallback, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
@@ -8,6 +8,7 @@ import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
 import {
   M365ClientError,
+  M365SaveTarget,
   saveToOneDrive,
 } from '@/client/services/m365/m365Client';
 
@@ -18,6 +19,10 @@ import {
   renderPdfBlob,
   sanitizeHtmlForExport,
 } from '@/lib/utils/shared/document/exportUtils';
+
+import type { M365SaveDestination } from '@/types/m365';
+
+import M365SaveDestinationModal from '@/components/Chat/ChatInput/M365SaveDestinationModal';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 
@@ -33,7 +38,26 @@ export function useM365SaveAvailable(): boolean {
   return filesEnabled && m365Connected;
 }
 
-async function buildBlob(
+/** One deferred save: everything needed to build and upload the export. */
+export interface M365SavePayload {
+  format: ExportFormat;
+  html: string;
+  baseFileName: string;
+  markdownSource?: string;
+}
+
+export interface M365SaveController {
+  save: (
+    format: ExportFormat,
+    html: string,
+    baseFileName: string,
+    markdownSource?: string,
+  ) => Promise<void>;
+  /** Render this near the call site — the destination dialog lives here. */
+  dialog: ReactElement | null;
+}
+
+export async function buildBlob(
   format: ExportFormat,
   html: string,
   markdownSource?: string,
@@ -61,52 +85,144 @@ async function buildBlob(
 }
 
 /**
- * Saves an export to the user's OneDrive (`/Apps/AI Assistant/`), mirroring
- * `useDocumentExport`'s signature so both actions share call sites. Always
- * user-initiated via the export menu; failures toast with specific copy for
- * a pending tenant consent.
+ * The default app folder is the ABSENCE of a destination (null), which maps
+ * to no target at all — the server then writes to `/Apps/AI Assistant/`.
+ * A destination with a null itemId targets the drive root (a SharePoint
+ * document-library root), so parentId is omitted.
  */
-export function useM365Save(): (
-  format: ExportFormat,
-  html: string,
-  baseFileName: string,
-  markdownSource?: string,
-) => Promise<void> {
-  const t = useTranslations('m365.save');
+export function destinationToTarget(
+  destination: M365SaveDestination | null,
+): M365SaveTarget | undefined {
+  if (!destination) return undefined;
+  return {
+    driveId: destination.driveId,
+    ...(destination.itemId && { parentId: destination.itemId }),
+  };
+}
 
-  return useCallback(
-    async (format, html, baseFileName, markdownSource) => {
+/** Success toast shared by the auto-save path and the destination dialog. */
+export function showSavedToast(options: {
+  message: string;
+  openLabel: string;
+  webUrl?: string;
+  toastId?: string;
+}): void {
+  toast.success(
+    options.webUrl ? (
+      <span>
+        {options.message}{' '}
+        <a
+          href={options.webUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="font-medium text-blue-600 underline dark:text-blue-400"
+        >
+          {options.openLabel}
+        </a>
+      </span>
+    ) : (
+      options.message
+    ),
+    { id: options.toastId, duration: 6000 },
+  );
+}
+
+/**
+ * Controller for "Save to OneDrive", mirroring `useDocumentExport`'s save
+ * signature so both actions share call sites. By default `save` opens the
+ * destination dialog (rendered via `dialog`); once the user has opted into
+ * "always save here", it uploads straight to the remembered destination and
+ * only toasts. Always user-initiated via the export menu.
+ */
+export function useM365Save(): M365SaveController {
+  const t = useTranslations('m365.save');
+  const [payload, setPayload] = useState<M365SavePayload | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const save = useCallback(
+    async (
+      format: ExportFormat,
+      html: string,
+      baseFileName: string,
+      markdownSource?: string,
+    ) => {
+      const pending: M365SavePayload = {
+        format,
+        html,
+        baseFileName,
+        markdownSource,
+      };
+      const { m365SaveSkipPicker, m365SaveDestination } =
+        useSettingsStore.getState();
+      if (!m365SaveSkipPicker) {
+        setPayload(pending);
+        setDialogOpen(true);
+        return;
+      }
       const toastId = toast.loading(t('saving'));
       try {
         const blob = await buildBlob(format, html, markdownSource);
-        const result = await saveToOneDrive(blob, `${baseFileName}.${format}`);
-        toast.success(
-          result.webUrl ? (
+        const result = await saveToOneDrive(
+          blob,
+          `${baseFileName}.${format}`,
+          destinationToTarget(m365SaveDestination),
+        );
+        showSavedToast({
+          message: t('savedTo', {
+            name: result.name,
+            folder: m365SaveDestination?.pathLabel ?? t('defaultFolderPath'),
+          }),
+          openLabel: t('open'),
+          webUrl: result.webUrl,
+          toastId,
+        });
+      } catch (error) {
+        const code = error instanceof M365ClientError ? error.code : undefined;
+        // A remembered folder can go stale (deleted → 404, access revoked →
+        // 403); both recover by re-picking a destination for the same file.
+        if (code === 'M365_NOT_FOUND' || code === 'M365_FORBIDDEN') {
+          const key =
+            code === 'M365_NOT_FOUND'
+              ? 'destinationMissing'
+              : 'destinationForbidden';
+          toast.error(
             <span>
-              {t('saved', { name: result.name })}{' '}
-              <a
-                href={result.webUrl}
-                target="_blank"
-                rel="noreferrer"
+              {t(key)}{' '}
+              <button
+                type="button"
+                onClick={() => {
+                  toast.dismiss(toastId);
+                  setPayload(pending);
+                  setDialogOpen(true);
+                }}
                 className="font-medium text-blue-600 underline dark:text-blue-400"
               >
-                {t('open')}
-              </a>
-            </span>
-          ) : (
-            t('saved', { name: result.name })
-          ),
-          { id: toastId, duration: 6000 },
+                {t('chooseFolder')}
+              </button>
+            </span>,
+            { id: toastId, duration: 8000 },
+          );
+          return;
+        }
+        toast.error(
+          t(code === 'M365_CONSENT_MISSING' ? 'consentMissing' : 'failed'),
+          { id: toastId },
         );
-      } catch (error) {
-        const key =
-          error instanceof M365ClientError &&
-          error.code === 'M365_CONSENT_MISSING'
-            ? 'consentMissing'
-            : 'failed';
-        toast.error(t(key), { id: toastId });
       }
     },
     [t],
   );
+
+  const dialog = useMemo(
+    () => (
+      <M365SaveDestinationModal
+        isOpen={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        payload={payload}
+      />
+    ),
+    [dialogOpen, payload],
+  );
+
+  return useMemo(() => ({ save, dialog }), [save, dialog]);
 }
