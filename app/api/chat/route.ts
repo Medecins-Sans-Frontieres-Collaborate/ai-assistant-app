@@ -15,6 +15,7 @@ import { FileProcessor } from '@/lib/services/chat/processors/FileProcessor';
 import { ImageProcessor } from '@/lib/services/chat/processors/ImageProcessor';
 import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
 
+import { devTrace } from '@/lib/utils/server/debug/devTrace';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { ErrorCode, PipelineError } from '@/types/errors';
@@ -141,6 +142,16 @@ export async function POST(req: NextRequest): Promise<Response> {
       searchMode: context.searchMode, // Show actual value instead of boolean
       interpreterMode: context.interpreterMode,
       hasAgent: context.agentMode,
+    });
+    // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+    devTrace('context-built', {
+      model: context.modelId,
+      hasFiles: context.hasFiles,
+      searchMode: context.searchMode ?? null,
+      interpreterMode: context.interpreterMode ?? null,
+      agentMode: context.agentMode ?? null,
+      botId: context.botId ?? null,
+      messageCount: context.messages?.length,
     });
 
     // 2. Get services from container (singleton, reused across requests)
