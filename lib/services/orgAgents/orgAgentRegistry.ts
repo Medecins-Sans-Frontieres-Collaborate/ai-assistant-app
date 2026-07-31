@@ -19,6 +19,10 @@
  */
 import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessService';
 import { OrgRagAgent } from '@/lib/services/agentAccess/types';
+import {
+  checkIndexServeableCached,
+  peekIndexServeable,
+} from '@/lib/services/orgAgents/orgAgentSearchValidation';
 
 import { OrganizationAgent } from '@/types/organizationAgent';
 
@@ -57,6 +61,16 @@ function isServeable(record: OrgRagAgent): boolean {
 }
 
 /**
+ * Full serveability: the persisted save-time validation PLUS the cached
+ * serve-time recheck (an index deleted after the save flips the agent out
+ * within ~5 minutes; probe errors fail open — see the validation module).
+ */
+async function isServeableNow(record: OrgRagAgent): Promise<boolean> {
+  if (!isServeable(record)) return false;
+  return checkIndexServeableCached(record.searchIndex, record.semanticConfig);
+}
+
+/**
  * Resolves one org agent by id (conversation.bot / botId), admin records
  * first. Async because the access-control snapshot may need a refresh; when
  * the agent-access feature is disabled this degrades to the static lookup.
@@ -69,20 +83,21 @@ export async function resolveOrgAgentById(
     await service.ensureFresh();
     const record = service.getOrgAgentById(id);
     if (record) {
-      if (isServeable(record)) return toOrganizationAgent(record);
       if (!record.enabled) {
         // Explicit admin intent: the agent (including an overridden static
         // entry) is retired — never fall back to the file.
         return null;
       }
-      // Validation failed: serve the static entry when this record overrides
+      if (await isServeableNow(record)) return toOrganizationAgent(record);
+      // Validation failed (at save time, or the serve-time recheck caught a
+      // vanished index): serve the static entry when this record overrides
       // one (the file config predates the broken override); otherwise
       // nothing. RAGEnricher treats null as "no agent" and degrades.
       console.warn(
-        `[org-agents] record '${id}' has failed validation; ${
+        `[org-agents] record '${id}' is not serveable (failed validation or index recheck); ${
           getOrganizationAgentById(id)
             ? 'serving the static config entry instead'
-            : 'agent is not serveable'
+            : 'no fallback exists'
         }`,
       );
     }
@@ -102,7 +117,12 @@ export function peekOrgAgentById(id: string): OrganizationAgent | null {
   if (service.isEnabled()) {
     const record = service.getOrgAgentById(id);
     if (record) {
-      if (isServeable(record)) return toOrganizationAgent(record);
+      if (
+        isServeable(record) &&
+        peekIndexServeable(record.searchIndex, record.semanticConfig)
+      ) {
+        return toOrganizationAgent(record);
+      }
       if (!record.enabled) return null;
     }
   }
@@ -117,7 +137,9 @@ export async function getServeableAdminOrgAgents(): Promise<OrgRagAgent[]> {
   const service = AgentAccessService.getInstance();
   if (!service.isEnabled()) return [];
   await service.ensureFresh();
-  return service.getOrgAgents().filter(isServeable);
+  const candidates = service.getOrgAgents().filter(isServeable);
+  const flags = await Promise.all(candidates.map(isServeableNow));
+  return candidates.filter((_, index) => flags[index]);
 }
 
 /**
@@ -131,11 +153,15 @@ export async function getSuppressedStaticAgentIds(): Promise<string[]> {
   if (!service.isEnabled()) return [];
   await service.ensureFresh();
   const staticIds = new Set(getOrganizationAgents().map((agent) => agent.id));
-  return service
+  const overrides = service
     .getOrgAgents()
-    .filter(
-      (record) =>
-        staticIds.has(record.id) && (isServeable(record) || !record.enabled),
-    )
+    .filter((record) => staticIds.has(record.id));
+  const suppressed = await Promise.all(
+    overrides.map(
+      async (record) => !record.enabled || (await isServeableNow(record)),
+    ),
+  );
+  return overrides
+    .filter((_, index) => suppressed[index])
     .map((record) => record.id);
 }
