@@ -17,6 +17,7 @@ import { loadDocument } from '@/lib/utils/server/file/fileHandling';
 import { validateBufferSignature } from '@/lib/utils/server/file/fileValidation';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
+import { Message, TextMessageContent } from '@/types/chat';
 import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 
 import { getChunkedTranscriptionService } from '../../transcription/chunkedTranscriptionService';
@@ -66,7 +67,14 @@ export class FileProcessor extends BasePipelineStage {
   }
 
   shouldRun(context: ChatContext): boolean {
-    return context.hasFiles;
+    // Also runs on follow-up turns whose LAST message has no attachment but
+    // an earlier user message does — otherwise the document context
+    // evaporates after the upload turn and the model asks the user to
+    // re-upload a file it was just discussing.
+    return (
+      context.hasFiles ||
+      FileProcessor.findLatestDocumentMessage(context.messages) !== null
+    );
   }
 
   protected async executeStage(context: ChatContext): Promise<ChatContext> {
@@ -89,7 +97,25 @@ export class FileProcessor extends BasePipelineStage {
           const perfStart = performance.now();
           const lastMessage = context.messages[context.messages.length - 1];
 
-          if (!Array.isArray(lastMessage.content)) {
+          // Upload turns carry attachments on the last message; follow-up
+          // turns ("now actually do it") do not — fall back to the most
+          // recent user message with document attachments so file context
+          // survives the whole conversation. Walk-back deliberately skips
+          // audio/video below: re-transcribing on every follow-up would be
+          // prohibitively expensive, and finished transcripts already live
+          // in the conversation text.
+          const sourceMessage = context.hasFiles
+            ? lastMessage
+            : FileProcessor.findLatestDocumentMessage(context.messages);
+          if (!sourceMessage) {
+            console.log(
+              '[FileProcessor] No message with attachments found; skipping',
+            );
+            return context;
+          }
+          const isWalkBack = sourceMessage !== lastMessage;
+
+          if (!Array.isArray(sourceMessage.content)) {
             throw new Error('Expected array content for file processing');
           }
 
@@ -122,10 +148,16 @@ export class FileProcessor extends BasePipelineStage {
           }> = [];
           let prompt = '';
 
-          for (const section of lastMessage.content) {
+          for (const section of sourceMessage.content) {
             if (section.type === 'text') {
               prompt = section.text;
             } else if (section.type === 'file_url') {
+              if (
+                isWalkBack &&
+                isAudioVideoFile(section.originalFilename || section.url)
+              ) {
+                continue;
+              }
               files.push({
                 url: section.url,
                 originalFilename: section.originalFilename,
@@ -133,11 +165,26 @@ export class FileProcessor extends BasePipelineStage {
                 transcriptionPrompt: section.transcriptionPrompt,
               });
             } else if (section.type === 'image_url') {
-              images.push({
-                url: section.image_url.url,
-                detail: section.image_url.detail || 'auto',
-              });
+              // Prior-turn images stay ImageProcessor/last-message territory.
+              if (!isWalkBack) {
+                images.push({
+                  url: section.image_url.url,
+                  detail: section.image_url.detail || 'auto',
+                });
+              }
             }
+          }
+
+          // The guiding prompt must be the CURRENT request ("please do it"),
+          // not whatever accompanied the original upload.
+          if (isWalkBack) {
+            prompt = FileProcessor.extractPromptText(lastMessage) || prompt;
+          }
+
+          if (isWalkBack && files.length > 0) {
+            console.log(
+              `[FileProcessor] Follow-up turn: re-processing ${files.length} attachment(s) from an earlier message`,
+            );
           }
 
           console.log(
@@ -758,5 +805,31 @@ export class FileProcessor extends BasePipelineStage {
   private static truncateName(filename: string): string {
     const MAX = 40;
     return filename.length > MAX ? `${filename.slice(0, MAX - 1)}…` : filename;
+  }
+
+  /** Most recent user message carrying a document (file_url) attachment. */
+  private static findLatestDocumentMessage(
+    messages: Message[],
+  ): Message | null {
+    for (let i = messages.length - 1; i >= 0; i--) {
+      const message = messages[i];
+      if (message.role !== 'user' || !Array.isArray(message.content)) continue;
+      if (message.content.some((section) => section.type === 'file_url')) {
+        return message;
+      }
+    }
+    return null;
+  }
+
+  /** Text of a message whose content may be a string or a parts array. */
+  private static extractPromptText(message: Message): string {
+    if (typeof message.content === 'string') return message.content;
+    if (Array.isArray(message.content)) {
+      const text = message.content.find(
+        (section) => section.type === 'text',
+      ) as TextMessageContent | undefined;
+      return text?.text ?? '';
+    }
+    return '';
   }
 }
