@@ -86,21 +86,24 @@ export class ToolRouterService {
 
 You ALSO determine if sandboxed code execution (Python) would materially improve the answer.
 
+The user message may be followed by bracketed context lines: file/summary/transcript EXCERPTS, and an attachment manifest ("[Files attached to the current message: …]" / "[Files uploaded earlier in this conversation: …]"). When the user says "this", "the document", or "the file", they mean those attached files — including ones uploaded on an earlier turn. The sandbox receives the real files, so a task on a previously uploaded file is fully executable.
+
 Code execution is needed for:
 - Data analysis over attached files or pasted tabular data (CSV, Excel, JSON)
 - Chart / plot / visualization generation
 - Non-trivial calculations, statistics, simulations, or numeric verification
 - File transformations (parse, filter, aggregate, convert, export)
 - Producing downloadable files (Excel, CSV, Word, charts) from data or content in the conversation — e.g. "export this as a spreadsheet", "make a document out of these notes"
+- Editing an ATTACHED document into a new version of itself — shortening or trimming it to a target length (words, characters, or pages), restructuring, reformatting, or converting it — the deliverable is a new file in the original format
 
 Code execution is NOT needed for:
 - Writing code examples or tutorials for the user to run themselves
 - Explaining concepts, debugging by inspection, code review
 - Simple arithmetic a model can do reliably
-- Pure text tasks (writing, translation, summarization)
+- Pure text tasks answered directly in chat (writing, translating, or summarizing pasted text). But when the request is to shorten, rewrite, translate, or reformat an ATTACHED FILE, that is a file transformation and DOES need code execution — regardless of whether the target is expressed in words, characters, or pages
 
 IMPORTANT: Always provide codeTask in your response:
-- If needsCodeExecution is true, provide a self-contained task description (what to compute/produce, referencing attached files by name)
+- If needsCodeExecution is true, provide a self-contained task description (what to compute/produce, referencing attached files by their exact names from the manifest — current-turn OR earlier-turn)
 - If needsCodeExecution is false, provide an empty string`
               : '';
 
@@ -154,15 +157,24 @@ Also tune the search when needsWebSearch is true:
             // Take last 3 message pairs (6 messages max) to keep it efficient
             const recentMessages = this.getRecentMessages(request.messages, 6);
 
-            // Build messages array with conversation context
+            // Build messages array with conversation context. The LAST
+            // message is replaced by `currentMessage`: the enricher-built
+            // routing input carrying what the raw message text cannot —
+            // file/summary excerpts and the attachment manifest. Without
+            // that substitution the classifier sees "trim this to 6k words"
+            // with no evidence any file exists, and can only classify it as
+            // a pure text task.
+            const lastIndex = recentMessages.length - 1;
             const conversationMessages = [
               { role: 'system' as const, content: systemPrompt },
-              ...recentMessages.map((msg) => ({
+              ...recentMessages.map((msg, index) => ({
                 role: msg.role as 'user' | 'assistant' | 'system',
                 content:
-                  typeof msg.content === 'string'
-                    ? msg.content
-                    : this.extractTextContent(msg.content),
+                  index === lastIndex
+                    ? request.currentMessage
+                    : typeof msg.content === 'string'
+                      ? msg.content
+                      : this.extractTextContent(msg.content),
               })),
             ];
 
