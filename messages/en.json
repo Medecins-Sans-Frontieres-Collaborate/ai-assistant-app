@@ -851,6 +851,10 @@
       "readingCitedSources": "Reading {count} previously cited articles…",
       "searchingFiles": "Searching files…",
       "runningCode": "Running code…",
+      "trimPlanning": "Planning what to cut ({target} {unit} target)…",
+      "trimApplying": "Applying edits to the document…",
+      "trimVerifying": "Verifying the new length…",
+      "trimRetrying": "Adjusting — first pass landed at {actual}…",
       "readingDocument": "Reading {filename}…",
       "condensingDocument": "Condensing {filename}: {percent}%…",
       "generatingImage": "Generating image…",
@@ -861,6 +865,7 @@
       "analyzingFiles": "Analyzing your files…",
       "searchingKnowledge": "Searching the knowledge base…",
       "cancellingPriorTool": "Cancelling previous tool request…",
+      "toolRoutingUnavailable": "Tool routing unavailable — answering without tools…",
       "webSearchLimitReached": "Daily web search limit reached — answering without search…",
       "codeInterpreterLimitReached": "Daily code execution limit reached — answering without running code…",
       "workflow": {
