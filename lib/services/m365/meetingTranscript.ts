@@ -10,12 +10,13 @@
  * (TranscriptViewer, summarization prompts) expects. Cue timing metadata is
  * dropped; meeting Q&A cares about who said what, not millisecond offsets.
  */
+import { htmlToPlainTextFragment } from '@/lib/utils/shared/html/stripTags';
 
 const VOICE_SPAN_REGEX = /<v(?:\.[^ >]*)?\s+([^>]*)>([\s\S]*?)<\/v>/g;
 const TIMING_LINE_REGEX = /-->/;
 
 function stripTags(text: string): string {
-  return text.replace(/<[^>]+>/g, '').trim();
+  return htmlToPlainTextFragment(text).trim();
 }
 
 export interface MeetingTranscriptResult {

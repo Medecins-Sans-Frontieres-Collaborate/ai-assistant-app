@@ -194,6 +194,17 @@ interface GraphMessageShape {
  * has no usable drive id, so the remote wins wherever present.
  */
 /**
+ * SharePoint Online hosts are always a single tenant label:
+ * `tenant.sharepoint.com`, personal sites `tenant-my.sharepoint.com`.
+ * Anchored rather than `endsWith` so a lookalike host
+ * (`sharepoint.com.evil.example`) can never borrow the label — these feed a
+ * DISPLAY string only, but a source label that lies about provenance is
+ * exactly the kind of thing a phishing link wants.
+ */
+const PERSONAL_SHAREPOINT_HOST = /^[a-z0-9-]+-my\.sharepoint\.com$/;
+const SHAREPOINT_HOST = /^[a-z0-9-]+\.sharepoint\.com$/;
+
+/**
  * "https://msfusa.sharepoint.com/sites/HR/Shared Documents/x.docx" → "HR";
  * personal OneDrive hosts → "OneDrive"; other hosts → hostname. Pure URL
  * slug parsing — site DISPLAY names would need per-site Graph lookups.
@@ -204,10 +215,10 @@ function driveSourceLabel(webUrl: string | undefined): string | undefined {
     const url = new URL(webUrl);
     const host = url.hostname.toLowerCase();
     const segments = url.pathname.split('/').filter(Boolean);
-    if (host.endsWith('-my.sharepoint.com') || segments[0] === 'personal') {
+    if (PERSONAL_SHAREPOINT_HOST.test(host) || segments[0] === 'personal') {
       return 'OneDrive';
     }
-    if (host.endsWith('.sharepoint.com')) {
+    if (SHAREPOINT_HOST.test(host)) {
       if ((segments[0] === 'sites' || segments[0] === 'teams') && segments[1]) {
         return decodeURIComponent(segments[1]);
       }
