@@ -1446,7 +1446,10 @@
       "thresholdUnit": "% of the document",
       "exceptionSelectionAlways": "Revising a highlighted selection always applies directly — the model returns only the revised excerpt, which cannot be broken into suggestions against the whole document."
     },
-    "Connections": "Connections"
+    "Connections": "Connections",
+    "DataBackup": "Data & Backup",
+    "Export & Import": "Export & Import",
+    "exportImportDescription": "Download your chats, folders, and prompts as a file, or restore them from a previous export."
   },
   "workflows": {
     "types": {
