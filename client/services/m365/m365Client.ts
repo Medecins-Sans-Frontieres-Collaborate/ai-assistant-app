@@ -361,6 +361,34 @@ export interface M365SaveTarget {
   parentId?: string;
 }
 
+export interface M365ShareResult {
+  /** Present for organization-link shares. */
+  link?: string;
+  scope: 'organization' | 'people';
+  granted?: number;
+}
+
+/**
+ * Creates view-only sharing on an item the user owns (see
+ * /api/m365/share): an organization link when `emails` is absent, else
+ * read grants for those specific people.
+ */
+export async function shareDriveItem(
+  driveId: string,
+  itemId: string,
+  emails?: string[],
+): Promise<M365ShareResult> {
+  return requestJson<M365ShareResult>('/api/m365/share', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      driveId,
+      itemId,
+      ...(emails?.length && { emails }),
+    }),
+  });
+}
+
 export async function saveToOneDrive(
   blob: Blob,
   fileName: string,
