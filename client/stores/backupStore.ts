@@ -23,6 +23,13 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 
 export type BackupEnrollmentStatus = 'unset' | 'enrolled' | 'declined';
 
+/**
+ * How blobs are stored at the backend. 'plain' (readable JSON) is an
+ * explicit, warned opt-in and is only valid for the onedrive backend —
+ * app storage must never hold readable chat content.
+ */
+export type BackupEncryptionMode = 'encrypted' | 'plain';
+
 /** Result of refreshRemoteStatus; null when the fetch failed (unknown). */
 export interface RemoteBackupStatus {
   exists: boolean;
@@ -42,6 +49,9 @@ interface BackupStore {
    * in the switch flow.
    */
   storageBackend: BackupBackend;
+  /** Explicit user choice made? Lets the UI default new setups to OneDrive. */
+  storageChosen: boolean;
+  encryptionMode: BackupEncryptionMode;
   /** Fingerprint of the key this device holds (16 hex chars), null pre-enroll. */
   localKeyId: string | null;
   /** Key epoch this device last synced under. Starts at 1. */
@@ -66,6 +76,13 @@ interface BackupStore {
   setEnrolled: (keyId: string, epoch: number) => void;
   /** Flips the storage backend and invalidates the backend-scoped sync point. */
   setStorageBackend: (backend: BackupBackend) => void;
+  /**
+   * Default-preference nudge (new setups → OneDrive): same backend flip but
+   * does NOT mark the choice as user-made, so availability changes can keep
+   * adapting until the user actually picks.
+   */
+  applyDefaultStorageBackend: (backend: BackupBackend) => void;
+  setEncryptionMode: (mode: BackupEncryptionMode) => void;
   setDeclined: () => void;
   /** Forgets enrollment + sync point (disable / "turn off locally" flows). */
   clearEnrollment: () => void;
@@ -87,6 +104,8 @@ export const useBackupStore = create<BackupStore>()(
       // Persisted state
       enrollmentStatus: 'unset',
       storageBackend: 'app',
+      storageChosen: false,
+      encryptionMode: 'encrypted',
       localKeyId: null,
       localKeyEpoch: 1,
       lastSyncedVersion: null,
@@ -117,12 +136,32 @@ export const useBackupStore = create<BackupStore>()(
       // callers that already pushed to the target (switch flow) re-record
       // the fresh sync point right after.
       setStorageBackend: (backend) =>
+        set((state) => ({
+          storageBackend: backend,
+          storageChosen: true,
+          // Plain mode never travels to app storage.
+          encryptionMode:
+            backend === 'app' ? 'encrypted' : state.encryptionMode,
+          remoteExists: null,
+          remoteKeyId: null,
+          remoteKeyEpoch: null,
+        })),
+
+      applyDefaultStorageBackend: (backend) =>
         set({
           storageBackend: backend,
           remoteExists: null,
           remoteKeyId: null,
           remoteKeyEpoch: null,
         }),
+
+      setEncryptionMode: (mode) =>
+        set((state) =>
+          // Guard, not just UI: 'plain' is onedrive-only.
+          mode === 'plain' && state.storageBackend !== 'onedrive'
+            ? state
+            : { ...state, encryptionMode: mode },
+        ),
 
       clearEnrollment: () =>
         set({
@@ -193,11 +232,13 @@ export const useBackupStore = create<BackupStore>()(
     }),
     {
       name: 'backup-storage',
-      version: 2,
+      version: 3,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         enrollmentStatus: state.enrollmentStatus,
         storageBackend: state.storageBackend,
+        storageChosen: state.storageChosen,
+        encryptionMode: state.encryptionMode,
         localKeyId: state.localKeyId,
         localKeyEpoch: state.localKeyEpoch,
         lastSyncedVersion: state.lastSyncedVersion,
@@ -212,6 +253,8 @@ export const useBackupStore = create<BackupStore>()(
           return {
             enrollmentStatus: 'unset',
             storageBackend: 'app',
+            storageChosen: false,
+            encryptionMode: 'encrypted',
             localKeyId: null,
             localKeyEpoch: 1,
             lastSyncedVersion: null,
@@ -226,6 +269,17 @@ export const useBackupStore = create<BackupStore>()(
           state.storageBackend !== 'onedrive'
         ) {
           state.storageBackend = 'app';
+        }
+        // v2 → v3: earlier states predate the OneDrive default + plain mode;
+        // an existing backend value counts as a made choice.
+        if (typeof state.storageChosen !== 'boolean') {
+          state.storageChosen = state.enrollmentStatus === 'enrolled';
+        }
+        if (
+          state.encryptionMode !== 'encrypted' &&
+          state.encryptionMode !== 'plain'
+        ) {
+          state.encryptionMode = 'encrypted';
         }
         return state;
       },
