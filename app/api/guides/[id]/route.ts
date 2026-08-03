@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 
 import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessService';
 import { GUIDE_SOURCE, guidePayload } from '@/lib/services/agentAccess/types';
+import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 
 import {
   badRequestResponse,
@@ -23,7 +24,7 @@ const GUIDE_ID_PATTERN = /^guide-[a-f0-9]{12}$/;
  * exist — anything else is an existence oracle for restricted guides.
  */
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const session = await auth();
@@ -31,6 +32,10 @@ export async function GET(
 
   const service = AgentAccessService.getInstance();
   if (!service.isEnabled()) return notFoundResponse('Guide');
+
+  // Group-membership warm-up MUST precede the evaluateAccess check below —
+  // group-scoped rules read the cache synchronously. Never throws.
+  await resolveUserGroupIds(request, session);
 
   const { id } = await params;
   if (!GUIDE_ID_PATTERN.test(id)) {
