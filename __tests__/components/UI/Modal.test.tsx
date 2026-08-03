@@ -241,4 +241,22 @@ describe('Modal', () => {
     const contentDiv = document.body.querySelector('.modal-content');
     expect(contentDiv).toHaveClass('custom-content-class');
   });
+
+  it('marks its portal root as a settings portal so stacked dialogs do not close settings', () => {
+    // The settings dialog closes on any mousedown outside its own DOM tree.
+    // Modals portal to document.body, so without this attribute clicking a
+    // confirm button inside a modal opened FROM settings closed the whole
+    // settings dialog before the button's handler could run.
+    render(
+      <Modal isOpen={true} onClose={vi.fn()}>
+        <div>Content</div>
+      </Modal>,
+    );
+
+    const portalRoot = document.body.querySelector('[data-settings-portal]');
+    expect(portalRoot).not.toBeNull();
+    expect(portalRoot).toContainElement(
+      document.body.querySelector('.modal-content') as HTMLElement,
+    );
+  });
 });
