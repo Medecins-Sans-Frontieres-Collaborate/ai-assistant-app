@@ -12,17 +12,21 @@ import {
   mintGraphToken,
 } from '@/lib/services/m365/graphApi';
 
+import { env } from '@/config/environment';
+
 /**
  * OneDrive-backed storage for the E2E-encrypted chat backup — the Graph
  * counterpart of `backupBlobStore`. Identity comes from the delegated Graph
  * token (the user's own drive), so unlike the blob store no userId prefix is
  * needed. Layout, mirroring the app-storage blob layout, under the fixed
- * app folder:
+ * app folder — namespaced per deployment (see resolveDriveNamespace):
  *
- *   `Apps/AI Assistant/Backup/manifest.json`       — plaintext manifest,
- *                                                    eTag compare-and-swap
- *   `Apps/AI Assistant/Backup/conv/{id}.{rev}.bin` — immutable ciphertext
- *   `Apps/AI Assistant/Backup/folders.{rev}.bin`   — immutable ciphertext
+ *   `Apps/AI Assistant/Backup/<host>/manifest.json`       — plaintext
+ *                                        manifest, eTag compare-and-swap
+ *   `Apps/AI Assistant/Backup/<host>/conv/{id}.{rev}.bin` — immutable
+ *                                                           ciphertext
+ *   `Apps/AI Assistant/Backup/<host>/folders.{rev}.bin`   — immutable
+ *                                                           ciphertext
  *
  * The same envelope encryption applies as for app storage — OneDrive only
  * ever sees opaque ciphertext plus the manifest (ids, revs, timestamps,
@@ -46,6 +50,42 @@ const SCOPES = ['Files.ReadWrite.All'];
 /** Kept alongside /api/m365/save's `Apps/AI Assistant` app folder. */
 export const DRIVE_BACKUP_FOLDER = 'Apps/AI Assistant/Backup';
 
+/**
+ * Deployment namespace: ONE user OneDrive is shared by every deployment of
+ * this app (localhost/dev/beta/prod) — unlike app storage, where each
+ * environment brings its own storage account. Without a per-deployment
+ * subfolder their backups would fight over one manifest (different keys and
+ * epochs → permanent key-mismatch churn). The canonical configured origin
+ * (NEXTAUTH_URL — "the origin users actually browse") wins so host aliases
+ * of one deployment still share a backup; the request host is the fallback
+ * for setups without it (local dev). The value only ever names a folder in
+ * the USER'S OWN drive, so a forged Host can at worst mislabel the
+ * forger's own backup — the strict charset is about path hygiene.
+ */
+export function resolveDriveNamespace(
+  requestHost: string | null,
+  configuredUrl: string | undefined = env.NEXTAUTH_URL,
+): string {
+  let host: string | null = null;
+  if (configuredUrl) {
+    try {
+      host = new URL(configuredUrl).hostname;
+    } catch {
+      host = null;
+    }
+  }
+  if (!host) host = requestHost;
+  const cleaned = (host ?? '').toLowerCase();
+  if (
+    !/^[a-z0-9.-]{1,100}$/.test(cleaned) ||
+    cleaned === '.' ||
+    cleaned === '..'
+  ) {
+    return 'default';
+  }
+  return cleaned;
+}
+
 /** Graph simple content PUT cap; larger bodies need an upload session. */
 const SIMPLE_UPLOAD_MAX = 4 * 1024 * 1024;
 // 16 × 320KiB — Graph upload-session fragments must be 320KiB multiples.
@@ -66,8 +106,12 @@ interface DriveItemShape {
   '@microsoft.graph.downloadUrl'?: string;
 }
 
-function encodedFolderPath(): string {
-  return DRIVE_BACKUP_FOLDER.split('/').map(encodeURIComponent).join('/');
+function encodedFolderPath(req: NextRequest): string {
+  const namespace = resolveDriveNamespace(req.nextUrl.hostname || null);
+  return `${DRIVE_BACKUP_FOLDER}/${namespace}`
+    .split('/')
+    .map(encodeURIComponent)
+    .join('/');
 }
 
 /** `conv/{id}.{rev}.bin` — relative to the backup folder; inputs validated. */
@@ -88,10 +132,10 @@ export function driveFoldersPath(rev: string): string {
   return `folders.${rev}.bin`;
 }
 
-/** `/me/drive/root:/Apps/AI Assistant/Backup/<relPath>:` item addressing. */
-function itemUrl(relPath: string, suffix = ''): string {
+/** `/me/drive/root:/Apps/AI Assistant/Backup/<namespace>/<relPath>:`. */
+function itemUrl(req: NextRequest, relPath: string, suffix = ''): string {
   const encoded = relPath.split('/').map(encodeURIComponent).join('/');
-  return `${GRAPH_V1}/me/drive/root:/${encodedFolderPath()}/${encoded}:${suffix}`;
+  return `${GRAPH_V1}/me/drive/root:/${encodedFolderPath(req)}/${encoded}:${suffix}`;
 }
 
 /**
@@ -147,7 +191,7 @@ async function downloadItem(
   req: NextRequest,
   relPath: string,
 ): Promise<{ buffer: Buffer; etag: string } | null> {
-  const metaResponse = await driveFetch(req, itemUrl(relPath), {
+  const metaResponse = await driveFetch(req, itemUrl(req, relPath), {
     method: 'GET',
   });
   if (metaResponse.status === 404) return null;
@@ -209,14 +253,18 @@ export async function writeDriveManifest(
   const suffix = ifMatchEtag
     ? '/content'
     : '/content?@microsoft.graph.conflictBehavior=fail';
-  const response = await driveFetch(req, itemUrl('manifest.json', suffix), {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(ifMatchEtag ? { 'If-Match': ifMatchEtag } : {}),
+  const response = await driveFetch(
+    req,
+    itemUrl(req, 'manifest.json', suffix),
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(ifMatchEtag ? { 'If-Match': ifMatchEtag } : {}),
+      },
+      body,
     },
-    body,
-  });
+  );
   if (response.status === 412 || response.status === 409) {
     throw new BackupConflictError();
   }
@@ -267,7 +315,7 @@ export async function writeDriveImmutableBlob(
   if (content.length <= SIMPLE_UPLOAD_MAX) {
     const response = await driveFetch(
       req,
-      itemUrl(relPath, '/content?@microsoft.graph.conflictBehavior=fail'),
+      itemUrl(req, relPath, '/content?@microsoft.graph.conflictBehavior=fail'),
       {
         method: 'PUT',
         headers: { 'Content-Type': 'application/octet-stream' },
@@ -283,7 +331,7 @@ export async function writeDriveImmutableBlob(
 
   const sessionResponse = await driveFetch(
     req,
-    itemUrl(relPath, '/createUploadSession'),
+    itemUrl(req, relPath, '/createUploadSession'),
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -317,7 +365,7 @@ export async function deleteDriveBlob(
   req: NextRequest,
   relPath: string,
 ): Promise<boolean> {
-  const response = await driveFetch(req, itemUrl(relPath), {
+  const response = await driveFetch(req, itemUrl(req, relPath), {
     method: 'DELETE',
   });
   if (response.status === 404) return false;
@@ -334,7 +382,7 @@ export async function deleteDriveBlob(
  * the user's own drive, the user's own retention.
  */
 export async function deleteDriveBackup(req: NextRequest): Promise<number> {
-  const url = `${GRAPH_V1}/me/drive/root:/${encodedFolderPath()}:`;
+  const url = `${GRAPH_V1}/me/drive/root:/${encodedFolderPath(req)}:`;
   const response = await driveFetch(req, url, { method: 'DELETE' });
   if (response.status === 404) return 0;
   if (!response.ok && response.status !== 204) {
