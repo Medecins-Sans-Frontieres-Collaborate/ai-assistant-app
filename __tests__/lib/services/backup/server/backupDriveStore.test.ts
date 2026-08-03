@@ -9,6 +9,7 @@ import {
   driveFoldersPath,
   readDriveBlob,
   readDriveManifest,
+  resolveDriveNamespace,
   writeDriveImmutableBlob,
   writeDriveManifest,
 } from '@/lib/services/backup/server/backupDriveStore';
@@ -23,6 +24,13 @@ vi.mock('@/auth', () => ({
   auth: vi.fn(),
   getGraphAccessToken: vi.fn(),
 }));
+
+// Pin the deployment namespace to the request host ('localhost' here) —
+// a NEXTAUTH_URL in the developer's shell must not change test paths.
+vi.mock('@/config/environment', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/config/environment')>();
+  return { ...actual, env: { ...actual.env, NEXTAUTH_URL: undefined } };
+});
 
 vi.mock('@/lib/services/m365/graphApi', async (importOriginal) => {
   const actual =
@@ -101,7 +109,7 @@ describe('readDriveManifest', () => {
     expect(result).toEqual({ manifest, etag: '"{ABC},1"' });
     // Metadata call is authorized; the pre-authed downloadUrl fetch is not.
     expect(fetchMock.mock.calls[0][0]).toContain(
-      '/me/drive/root:/Apps/AI%20Assistant/Backup/manifest.json:',
+      '/me/drive/root:/Apps/AI%20Assistant/Backup/localhost/manifest.json:',
     );
     expect(fetchMock.mock.calls[1][0]).toBe('https://download.example/m');
     expect(fetchMock.mock.calls[1][1]).toBeUndefined();
@@ -243,8 +251,34 @@ describe('readDriveBlob / deletes', () => {
     fetchMock.mockResolvedValueOnce(new Response(null, { status: 204 }));
     await deleteDriveBackup(req());
     expect(fetchMock.mock.calls[0][0]).toMatch(
-      /\/me\/drive\/root:\/Apps\/AI%20Assistant\/Backup:$/,
+      /\/me\/drive\/root:\/Apps\/AI%20Assistant\/Backup\/localhost:$/,
     );
     expect(fetchMock.mock.calls[0][1].method).toBe('DELETE');
+  });
+});
+
+describe('resolveDriveNamespace', () => {
+  it('prefers the configured canonical origin over the request host', () => {
+    expect(
+      resolveDriveNamespace('beta-alias.example', 'https://Assistant.MSF.org'),
+    ).toBe('assistant.msf.org');
+  });
+
+  it('falls back to the request host when no origin is configured', () => {
+    expect(resolveDriveNamespace('localhost', undefined)).toBe('localhost');
+    expect(resolveDriveNamespace('Dev.Example.ORG', undefined)).toBe(
+      'dev.example.org',
+    );
+  });
+
+  it("returns 'default' for unusable values (path hygiene)", () => {
+    expect(resolveDriveNamespace(null, undefined)).toBe('default');
+    expect(resolveDriveNamespace('', undefined)).toBe('default');
+    expect(resolveDriveNamespace('..', undefined)).toBe('default');
+    expect(resolveDriveNamespace('bad/host', undefined)).toBe('default');
+    expect(resolveDriveNamespace('host with spaces', undefined)).toBe(
+      'default',
+    );
+    expect(resolveDriveNamespace('h', 'not a url')).toBe('h');
   });
 });
