@@ -1,5 +1,6 @@
 'use client';
 
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -7,6 +8,7 @@ import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useCreateReducer } from '@/client/hooks/ui/useCreateReducer';
 import { useUI } from '@/client/hooks/ui/useUI';
+import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
 import { exportData, importData } from '@/lib/utils/app/export/importExport';
 import { getSettings, saveSettings } from '@/lib/utils/app/settings';
@@ -74,6 +76,14 @@ export function SettingDialog() {
     SettingsSection.GENERAL,
   );
   const [isMobileView, setIsMobileView] = useState<boolean>(false);
+  // Merged-pane gating (mirrors useSettingsNav's polarity exactly): the
+  // Connections pane shows whichever blocks are allowed; Data & Backup
+  // embeds the cloud-backup controls only when served `true` (fail-closed).
+  const { mcpConnectors, enableEncryptedBackups } = useFlags();
+  const mcpConnectorsEnabled = mcpConnectors !== false;
+  const encryptedBackupsEnabled = enableEncryptedBackups === true;
+  const { filesEnabled: m365Files, mailEnabled: m365Mail } = useM365Enabled();
+  const m365ConnectionsEnabled = m365Files || m365Mail;
   const [showMigrationDialog, setShowMigrationDialog] = useState(false);
 
   // Load settings and storage on client side only
@@ -331,19 +341,19 @@ export function SettingDialog() {
                   />
                 )}
 
-                {activeSection === SettingsSection.CONNECTORS && (
-                  <ConnectorsSection />
-                )}
-
+                {/* One pane for everything the user connects: the M365
+                    account block and the MCP connectors block, each behind
+                    its own flag (the nav entry shows when either allows). */}
                 {activeSection === SettingsSection.CONNECTIONS && (
-                  <ConnectionsSection />
+                  <>
+                    {m365ConnectionsEnabled && <ConnectionsSection />}
+                    {mcpConnectorsEnabled && <ConnectorsSection />}
+                  </>
                 )}
 
                 {activeSection === SettingsSection.USAGE_IMPACT && (
                   <UsageImpactSection />
                 )}
-
-                {activeSection === SettingsSection.BACKUP && <BackupSection />}
 
                 {activeSection === SettingsSection.MEMORIES && (
                   <MemoriesSection />
@@ -353,24 +363,29 @@ export function SettingDialog() {
                   <LocalModelsSection />
                 )}
 
+                {/* "Data & Backup": the cloud-backup controls sit on top of
+                    the local-data tools when the flag allows, so one pane
+                    owns every answer to "where is my data". */}
                 {activeSection === SettingsSection.DATA_MANAGEMENT && (
-                  <DataManagementSection
-                    handleClearConversations={handleClearConversations}
-                    handleImportConversations={handleImportConversations}
-                    handleExportData={handleExportData}
-                    handleReset={handleReset}
-                    onClose={() => setIsSettingsOpen(false)}
-                    checkStorage={checkStorage}
-                    onOpenMigration={() => setShowMigrationDialog(true)}
-                  />
-                )}
-
-                {activeSection === SettingsSection.MOBILE_APP && (
-                  <MobileAppSection />
+                  <>
+                    {encryptedBackupsEnabled && <BackupSection />}
+                    <DataManagementSection
+                      handleClearConversations={handleClearConversations}
+                      handleImportConversations={handleImportConversations}
+                      handleExportData={handleExportData}
+                      handleReset={handleReset}
+                      onClose={() => setIsSettingsOpen(false)}
+                      checkStorage={checkStorage}
+                      onOpenMigration={() => setShowMigrationDialog(true)}
+                    />
+                  </>
                 )}
 
                 {activeSection === SettingsSection.HELP_SUPPORT && (
-                  <HelpSupportSection />
+                  <>
+                    <HelpSupportSection />
+                    <MobileAppSection />
+                  </>
                 )}
               </div>
             </div>
