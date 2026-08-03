@@ -278,3 +278,77 @@ describe('chatStore MCP wiring', () => {
     expect(sentOptions().mcpServers).toBeUndefined();
   });
 });
+
+describe('chatStore builtin M365 toolset entry', () => {
+  let chatSpy: ReturnType<typeof vi.spyOn>;
+
+  const m365On = {
+    mcpServers: [] as never[],
+    allowArbitraryMcpServers: false,
+    mcpArbitraryFlagEnabled: false,
+    m365ToolsFlagEnabled: true,
+    m365Connected: true,
+    m365ToolsUserEnabled: true,
+  };
+  const builtinEntry = {
+    id: 'builtin-m365',
+    name: 'Microsoft 365',
+    builtin: true,
+  };
+
+  beforeEach(() => {
+    vi.restoreAllMocks();
+    useSettingsStore.setState({ ...m365On });
+    chatSpy = vi
+      .spyOn(chatService, 'chat')
+      .mockResolvedValue(new ReadableStream());
+  });
+
+  const sentOptions = () => chatSpy.mock.calls[0][2] as Record<string, unknown>;
+
+  it('appends the builtin marker entry when flag + connection + toggle allow', async () => {
+    await useChatStore.getState().sendChatRequest(makeConversation());
+    expect(sentOptions().mcpServers).toEqual([builtinEntry]);
+  });
+
+  it.each([
+    ['flag mirror off', { m365ToolsFlagEnabled: false }],
+    ['M365 not connected', { m365Connected: false }],
+    ['global toolset toggle off', { m365ToolsUserEnabled: false }],
+  ])('omits the entry when %s', async (_label, override) => {
+    useSettingsStore.setState(override);
+    await useChatStore.getState().sendChatRequest(makeConversation());
+    expect(sentOptions().mcpServers).toBeUndefined();
+  });
+
+  it('omits the entry when the conversation opted out per-chat', async () => {
+    await useChatStore
+      .getState()
+      .sendChatRequest(
+        makeConversation({ disabledMcpServerIds: ['builtin-m365'] }),
+      );
+    expect(sentOptions().mcpServers).toBeUndefined();
+  });
+
+  it('rides alongside normal servers and honors a builtin focus pin', async () => {
+    useSettingsStore.setState({ mcpServers: [githubServer] });
+
+    await useChatStore
+      .getState()
+      .sendChatRequest(makeConversation({ pinnedMcpServerId: 'builtin-m365' }));
+
+    // The pin narrows the COMBINED list to just the builtin entry.
+    expect(sentOptions().mcpServers).toEqual([builtinEntry]);
+  });
+
+  it('a pin on a normal server excludes the builtin entry too', async () => {
+    useSettingsStore.setState({ mcpServers: [githubServer] });
+
+    await useChatStore
+      .getState()
+      .sendChatRequest(makeConversation({ pinnedMcpServerId: 'github' }));
+
+    const sent = sentOptions().mcpServers as Array<{ id: string }>;
+    expect(sent.map((s) => s.id)).toEqual(['github']);
+  });
+});

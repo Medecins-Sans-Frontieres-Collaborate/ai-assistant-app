@@ -883,3 +883,40 @@ describe('settingsStore migration (v50 → v51)', () => {
     expect(result.m365SaveSkipPicker).toBe(false);
   });
 });
+
+/**
+ * v53 → v54: the playbook suggestion chips toggle (sixth pass). Backfilled
+ * ON — the chips are precondition-gated and dismissible, and the LD flag
+ * still gates the feature — but an explicit off must survive.
+ */
+describe('settingsStore migration (v53 → v54)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills m365PlaybookChipsEnabled=true when migrating from v53', () => {
+    const result = migrate({ m365Connected: true }, 53) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365PlaybookChipsEnabled).toBe(true);
+    expect(result.m365Connected).toBe(true);
+  });
+
+  it('preserves an explicit opt-out on a current-version store', () => {
+    const result = migrate({ m365PlaybookChipsEnabled: false }, 54) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365PlaybookChipsEnabled).toBe(false);
+  });
+
+  it('repairs a non-boolean value', () => {
+    const result = migrate({ m365PlaybookChipsEnabled: 'yes' }, 53) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365PlaybookChipsEnabled).toBe(true);
+  });
+});
