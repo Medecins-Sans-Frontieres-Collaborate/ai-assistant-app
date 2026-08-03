@@ -67,6 +67,7 @@ import { ConnectorPinTray } from '@/components/Chat/ChatInput/ConnectorPinTray';
 import { ExtractionTray } from '@/components/Chat/ChatInput/ExtractionTray';
 import { InputControlsBar } from '@/components/Chat/ChatInput/InputControlsBar';
 import { InterpreterModeBadge } from '@/components/Chat/ChatInput/InterpreterModeBadge';
+import { M365PlaybookChips } from '@/components/Chat/ChatInput/M365PlaybookChips';
 import { MessageTextarea } from '@/components/Chat/ChatInput/MessageTextarea';
 import { SearchModeBadge } from '@/components/Chat/ChatInput/SearchModeBadge';
 import { ToneBadge } from '@/components/Chat/ChatInput/ToneBadge';
@@ -603,6 +604,10 @@ export const ChatInput = ({
         {/* M365 agent source-access preflight (renders only when an M365
             file-backed agent is selected AND some sources are denied) */}
         <M365AgentAccessBanner botId={selectedConversation?.bot} />
+
+        {/* Playbook suggestions — self-gating (flag, user toggle and each
+            playbook's precondition are all checked inside). */}
+        <M365PlaybookChips />
 
         <div className="items-center pt-4">
           <div className="flex justify-center items-center space-x-2 px-2 md:px-4">
