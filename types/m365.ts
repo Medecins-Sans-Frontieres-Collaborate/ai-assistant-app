@@ -15,6 +15,16 @@ export interface M365DriveEntry {
   mimeType?: string;
   webUrl?: string;
   lastModified?: string;
+  /** Search results only: how this entry matched (name = filename hit). */
+  match?: 'name' | 'content';
+  /** Human-readable containing-folder path ("Projects/Kenya"), when known. */
+  parentPath?: string;
+  /**
+   * Where the item lives — "OneDrive" or the SharePoint site slug
+   * ("MSF-USA-HR") — derived from webUrl. Distinguishes same-named files
+   * across sites in mixed listings (search, recent, shared).
+   */
+  sourceLabel?: string;
 }
 
 export type M365DriveSort = 'name' | 'lastModified' | 'size';
@@ -92,7 +102,16 @@ export type M365FeatureKey =
   | 'files'
   | 'sharepoint'
   | 'sharepointWrite'
-  | 'mail';
+  | 'mail'
+  | 'mailDrafts'
+  | 'calendar'
+  | 'people'
+  | 'orgDirectory'
+  | 'tasks'
+  | 'meetings'
+  | 'teamsChats'
+  | 'teamsChannels'
+  | 'groups';
 
 export interface M365Status {
   features: Record<M365FeatureKey, M365FeatureStatus>;
@@ -123,9 +142,44 @@ export interface M365SaveDestination {
 export interface M365SaveResult {
   name: string;
   webUrl?: string;
+  /** Remote eTag after the write — doc-sync stores it as lastSyncedETag. */
+  eTag?: string;
   /**
    * Present only for default app-folder saves (the "Apps/AI Assistant" path).
    * Explicit-destination saves omit it — the client already holds the label.
    */
   folder?: string;
+}
+
+export interface M365MeetingEntry {
+  /** Calendar event id (not the online-meeting id — resolve via joinWebUrl). */
+  eventId: string;
+  subject: string;
+  joinWebUrl: string;
+  start?: string;
+  organizer?: string;
+}
+
+export interface M365MeetingArtifact {
+  id: string;
+  created?: string;
+}
+
+export interface M365MeetingResources {
+  meetingId: string;
+  organizer?: string;
+  transcripts: M365MeetingArtifact[];
+  recordings: M365MeetingArtifact[];
+}
+
+export interface M365MeetingTranscript {
+  transcript: string;
+  speakers: string[];
+  fileName: string;
+}
+
+export interface M365TeamEntry {
+  /** The team's M365 group object id. */
+  groupId: string;
+  name: string;
 }
