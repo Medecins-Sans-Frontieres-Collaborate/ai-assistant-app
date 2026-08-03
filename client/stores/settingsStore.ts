@@ -714,6 +714,39 @@ interface SettingsStore {
   setM365Connected: (connected: boolean) => void;
 
   /**
+   * Global user toggle for the builtin Microsoft 365 toolset (the connector
+   * tray's virtual row). Default ON: connecting M365 is itself the opt-in,
+   * this is the "off everywhere" switch. Persisted.
+   */
+  m365ToolsUserEnabled: boolean;
+  setM365ToolsUserEnabled: (enabled: boolean) => void;
+  /**
+   * Shared mailbox SMTP addresses the user says they can read (fifth pass
+   * tier 3). Graph cannot enumerate these; the user maintains the list in
+   * Settings → Connections and mail tools only ever target addresses on
+   * it. Persisted.
+   */
+  m365SharedMailboxes: string[];
+  setM365SharedMailboxes: (mailboxes: string[]) => void;
+  /**
+   * Whether playbook suggestion chips may appear above the composer (sixth
+   * pass, docs/M365_SIXTH_PASS_CROSS_SERVICE_WORKFLOWS.md). Default ON:
+   * chips only render when a precondition already holds and each one is
+   * dismissible, but proactive suggestions can read as pushy — this is the
+   * per-user off switch. The menu entries are unaffected. Persisted.
+   */
+  m365PlaybookChipsEnabled: boolean;
+  setM365PlaybookChipsEnabled: (enabled: boolean) => void;
+  /**
+   * Runtime-only mirror of the LaunchDarkly `m365Tools` gate, set by
+   * AppInitializer so chatStore (vanilla, no hook access) can gate what
+   * gets SENT (same pattern as mcpArbitraryFlagEnabled). Fail-closed:
+   * defaults to false. NOT persisted.
+   */
+  m365ToolsFlagEnabled: boolean;
+  setM365ToolsFlagEnabled: (enabled: boolean) => void;
+
+  /**
    * Remembered "Save to OneDrive" folder. null = the default app folder
    * (Apps/AI Assistant). When skip-picker is on, saves go straight to the
    * remembered destination without showing the dialog.
@@ -840,6 +873,10 @@ export const useSettingsStore = create<SettingsStore>()(
       confirmStopFromKeyboard: true,
       autoClearResolvedEdits: false,
       m365Connected: false,
+      m365ToolsUserEnabled: true,
+      m365SharedMailboxes: [],
+      m365PlaybookChipsEnabled: true,
+      m365ToolsFlagEnabled: false,
       m365SaveDestination: null,
       m365SaveSkipPicker: false,
       suggestRevisions: true,
@@ -1549,12 +1586,31 @@ export const useSettingsStore = create<SettingsStore>()(
             ? { m365Connected: true }
             : {
                 // Disconnecting drops the remembered save folder too — a stale
-                // drive id must not leak into the next connection.
+                // drive id must not leak into the next connection. Shared
+                // mailboxes go with it: the list is meaningless without a
+                // connected account.
                 m365Connected: false,
                 m365SaveDestination: null,
                 m365SaveSkipPicker: false,
+                m365SharedMailboxes: [],
               },
         ),
+
+      setM365ToolsUserEnabled: (enabled) =>
+        set({ m365ToolsUserEnabled: enabled }),
+      setM365SharedMailboxes: (mailboxes) =>
+        set({
+          m365SharedMailboxes: mailboxes
+            .map((mailbox) => mailbox.trim().toLowerCase())
+            .filter((mailbox, index, all) =>
+              mailbox.includes('@') ? all.indexOf(mailbox) === index : false,
+            )
+            .slice(0, 10),
+        }),
+      setM365PlaybookChipsEnabled: (enabled) =>
+        set({ m365PlaybookChipsEnabled: enabled }),
+      setM365ToolsFlagEnabled: (enabled) =>
+        set({ m365ToolsFlagEnabled: enabled }),
 
       setM365SaveDestination: (destination) =>
         set({ m365SaveDestination: destination }),
@@ -1641,11 +1697,12 @@ export const useSettingsStore = create<SettingsStore>()(
           m365Connected: false,
           m365SaveDestination: null,
           m365SaveSkipPicker: false,
+          m365PlaybookChipsEnabled: true,
         }),
     }),
     {
       name: 'settings-storage',
-      version: 51, // Increment this when schema changes to trigger migrations
+      version: 54, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1738,6 +1795,11 @@ export const useSettingsStore = create<SettingsStore>()(
         autoClearResolvedEdits: state.autoClearResolvedEdits,
         suggestRevisions: state.suggestRevisions,
         m365Connected: state.m365Connected,
+        // m365ToolsFlagEnabled is deliberately NOT persisted (LD mirror,
+        // same rationale as mcpArbitraryFlagEnabled above).
+        m365ToolsUserEnabled: state.m365ToolsUserEnabled,
+        m365SharedMailboxes: state.m365SharedMailboxes,
+        m365PlaybookChipsEnabled: state.m365PlaybookChipsEnabled,
         m365SaveDestination: state.m365SaveDestination,
         m365SaveSkipPicker: state.m365SaveSkipPicker,
         suggestRevisionsExceptions: state.suggestRevisionsExceptions,
@@ -2244,6 +2306,31 @@ export const useSettingsStore = create<SettingsStore>()(
           }
           if (typeof state.m365SaveSkipPicker !== 'boolean') {
             state.m365SaveSkipPicker = false;
+          }
+        }
+
+        // Version 51 → 52: Global toggle for the builtin M365 toolset.
+        // Backfill to ON — connecting M365 is the opt-in; this is only the
+        // "off everywhere" switch, and the LD flag still gates everything.
+        if (version < 52) {
+          if (typeof state.m365ToolsUserEnabled !== 'boolean') {
+            state.m365ToolsUserEnabled = true;
+          }
+        }
+
+        // Version 52 → 53: shared mailbox address list (fifth pass tier 3).
+        if (version < 53) {
+          if (!Array.isArray(state.m365SharedMailboxes)) {
+            state.m365SharedMailboxes = [];
+          }
+        }
+
+        // Version 53 → 54: playbook suggestion chips (sixth pass). Backfill
+        // to ON — the chips are precondition-gated and dismissible, and the
+        // LD flag still gates the whole feature.
+        if (version < 54) {
+          if (typeof state.m365PlaybookChipsEnabled !== 'boolean') {
+            state.m365PlaybookChipsEnabled = true;
           }
         }
 

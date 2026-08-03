@@ -10,6 +10,10 @@ import { updateConversationCompaction } from '@/client/services/compactionServic
 import { ensureFreshOauthToken } from '@/client/services/mcp/mcpOauth';
 import { extractMemories } from '@/client/services/memoryService';
 import { generateConversationTitle } from '@/client/services/titleService';
+import {
+  M365_BUILTIN_SERVER_ID,
+  M365_BUILTIN_SERVER_LABEL,
+} from '@/lib/services/m365/tools/toolCatalog';
 import { isLocalModel } from '@/lib/services/models/localModels';
 
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
@@ -201,6 +205,16 @@ interface ChatStore {
   /** Approval ids that errored or were aborted. Prevents the auto-approve
    *  effect from retrying the same id indefinitely after a failure. */
   failedApprovals: Set<string>;
+  /**
+   * Map of MCP approval_request_id → argument JSON the user edited on the
+   * consent card (sixth pass: per-item toggles on a `tasks_create` batch).
+   * The native resume is stateless — the server executes the `argumentsJson`
+   * the CLIENT echoes back in `mcpPendingToolCalls` — so a per-item edit is
+   * expressed purely as an override applied when that payload is assembled.
+   * Entries are consumed (dropped) once their resume succeeds; a failed
+   * resume keeps them so the card's retry resends the same edited batch.
+   */
+  approvalArgumentOverrides: Map<string, string>;
 
   /**
    * Per-server "Continue in flight" markers, keyed by server label
@@ -269,6 +283,11 @@ interface ChatStore {
    * `alwaysApprove*` match — so the tool usage summary can label
    * auto-approved calls accordingly and the consent card can suppress
    * its display when the user never had a choice.
+   *
+   * `modifiedArgumentsJson` lets the card narrow what an approval actually
+   * runs (batch consent cards with items unchecked). It replaces the pending
+   * call's arguments in the resume payload; other pending calls are
+   * untouched. Ignored for denials — a denied call never executes.
    */
   submitApproval: (
     approvalRequestId: string,
@@ -276,6 +295,7 @@ interface ChatStore {
     conversation: Conversation,
     sourceMessageIndex?: number,
     source?: 'manual' | 'auto-approved' | 'auto-denied',
+    modifiedArgumentsJson?: string,
   ) => Promise<void>;
   processStream: (
     stream: ReadableStream<Uint8Array>,
@@ -430,6 +450,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   submittedApprovals: new Map<string, boolean>(),
   submittingApprovals: new Set<string>(),
   failedApprovals: new Set<string>(),
+  approvalArgumentOverrides: new Map<string, string>(),
   pendingOAuthResume: {},
 
   setPendingOAuthResume: (info) =>
@@ -926,12 +947,19 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
     // Echo the whole pending batch back (not just the answered ones): the
     // server auto-denies unanswered calls, mirroring the Foundry behavior.
+    // Card-side argument edits (per-item batch toggles) are applied here and
+    // only here: the stateless loop executes exactly the argumentsJson we
+    // echo, so an override narrows the call without any server change.
+    const argumentOverrides = get().approvalArgumentOverrides;
     const mcpPendingToolCalls = isMcpResume
       ? mcpPendingConsents.map((c) => ({
           id: c.approval_request_id!,
           serverId: c.server_id!,
           toolName: c.tool_name ?? '',
-          argumentsJson: c.tool_arguments ?? '{}',
+          argumentsJson:
+            argumentOverrides.get(c.approval_request_id!) ??
+            c.tool_arguments ??
+            '{}',
         }))
       : undefined;
     // Plan echo: the turn plan persisted on the same message that carries
@@ -1053,29 +1081,25 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // a token to be useful; arbitrary entries additionally require BOTH the
     // user opt-in and the LaunchDarkly flag mirror — flipping the flag off
     // stops arbitrary servers from being SENT, not just shown.
-    const mcpCandidates = applyMcpPin(
-      isAgentInvocation
-        ? []
-        : settings.mcpServers
-            .filter((s) => s.enabled)
-            // Per-conversation opt-outs from the connector tray.
-            .filter((s) => !conversation.disabledMcpServerIds?.includes(s.id))
-            .filter(
-              (s) =>
-                s.catalogKey ||
-                // Connectors are server-resolved and access-checked; the
-                // arbitrary-URL flag does not apply to them.
-                s.connectorId ||
-                (settings.allowArbitraryMcpServers &&
-                  settings.mcpArbitraryFlagEnabled),
-            ),
-      // A pinned connector focuses the turn: only its tools are declared.
-      conversation.pinnedMcpServerId,
-    );
+    const mcpCandidates = isAgentInvocation
+      ? []
+      : settings.mcpServers
+          .filter((s) => s.enabled)
+          // Per-conversation opt-outs from the connector tray.
+          .filter((s) => !conversation.disabledMcpServerIds?.includes(s.id))
+          .filter(
+            (s) =>
+              s.catalogKey ||
+              // Connectors are server-resolved and access-checked; the
+              // arbitrary-URL flag does not apply to them.
+              s.connectorId ||
+              (settings.allowArbitraryMcpServers &&
+                settings.mcpArbitraryFlagEnabled),
+          );
     // Per-server auth: oauth servers refresh through the proxy first (single-
     // flight) and are EXCLUDED when no live access token exists (needsReauth);
     // bearer/header servers need their token; 'none' servers go bare.
-    const mcpServersToSend = (
+    const networkMcpEntries = (
       await Promise.all(
         mcpCandidates.map(async (s) => {
           let effectiveToken: string | undefined;
@@ -1101,6 +1125,33 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         }),
       )
     ).filter((s): s is NonNullable<typeof s> => s !== null);
+
+    // Builtin Microsoft 365 toolset: a url-less, token-less marker entry the
+    // server resolves in-process. Gated on the LD flag mirror, the per-user
+    // M365 connection, the global toolset toggle, and the per-chat opt-out —
+    // and skipped for agent invocations like every other MCP entry.
+    const m365ToolsActive =
+      !isAgentInvocation &&
+      settings.m365ToolsFlagEnabled &&
+      settings.m365Connected &&
+      settings.m365ToolsUserEnabled &&
+      !conversation.disabledMcpServerIds?.includes(M365_BUILTIN_SERVER_ID);
+    // The focus pin applies to the COMBINED list, so pinning the M365 row
+    // (or any connector) narrows the turn to just that server's tools.
+    const mcpServersToSend = applyMcpPin(
+      m365ToolsActive
+        ? [
+            ...networkMcpEntries,
+            {
+              id: M365_BUILTIN_SERVER_ID,
+              name: M365_BUILTIN_SERVER_LABEL,
+              builtin: true,
+            },
+          ]
+        : networkMcpEntries,
+      // A pinned connector focuses the turn: only its tools are declared.
+      conversation.pinnedMcpServerId,
+    );
 
     // Resolve extraction payload from the chat-input store + the persisted
     // recipes. Extraction mode is ephemeral (per-conversation) and recipes
@@ -1182,6 +1233,19 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       mcpPendingToolCalls,
       mcpLoopRound,
       mcpPlan,
+      // Fifth pass: screen overrides ride the conversation (explicit UI
+      // action on a flagged record); shared mailboxes ride settings. Sent
+      // only when the builtin M365 server is in play.
+      m365MailScreenOverrides:
+        mcpServersToSend.some((entry) => 'builtin' in entry && entry.builtin) &&
+        conversation.m365MailScreenOverrides?.length
+          ? conversation.m365MailScreenOverrides.slice(0, 20)
+          : undefined,
+      m365SharedMailboxes:
+        mcpServersToSend.some((entry) => 'builtin' in entry && entry.builtin) &&
+        settings.m365SharedMailboxes?.length
+          ? settings.m365SharedMailboxes
+          : undefined,
       extraction,
       conversationSummary,
       memories: memoryTexts.length > 0 ? memoryTexts : undefined,
@@ -2181,7 +2245,19 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     conversation,
     sourceMessageIndex,
     source,
+    modifiedArgumentsJson,
   ) => {
+    // Record the card's argument edit BEFORE the batch gate: the deciding
+    // click may only be an interim decision (early return below), and the
+    // sibling click that finally dispatches must still find this override.
+    if (approve && modifiedArgumentsJson !== undefined) {
+      set((state) => {
+        const next = new Map(state.approvalArgumentOverrides);
+        next.set(approvalRequestId, modifiedArgumentsJson);
+        return { approvalArgumentOverrides: next };
+      });
+    }
+
     // ── MULTI-TOOL BATCH GATE (native MCP only) ──────────────────────────
     // A native consent round can pause on SEVERAL pending calls at once, and
     // the stateless resume must carry a decision for every one of them — the
@@ -2283,15 +2359,23 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // outcome on the source message, and tear down streaming state. Shared by
     // the success path and the "duplicate (already recorded)" path.
     const finalizeSubmitted = () => {
+      // Ids whose pending calls this resume consumed — their argument
+      // overrides have been sent and must not leak into a later round.
+      const dispatchedIds = isNativeBatch
+        ? batchConsents.map((c) => c.approval_request_id!)
+        : [approvalRequestId];
       set((state) => {
         const submitted = new Map(state.submittedApprovals);
         submitted.set(approvalRequestId, approve);
         const submitting = new Set(state.submittingApprovals);
         submitting.delete(approvalRequestId);
+        const overrides = new Map(state.approvalArgumentOverrides);
+        for (const id of dispatchedIds) overrides.delete(id);
         return {
           submittedApprovals: submitted,
           submittingApprovals: submitting,
           failedApprovals: setWithout(state.failedApprovals, approvalRequestId),
+          approvalArgumentOverrides: overrides,
         };
       });
       if (sourceMessageIndex !== undefined) {
