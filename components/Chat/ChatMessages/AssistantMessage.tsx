@@ -6,6 +6,7 @@ import {
   IconListCheck,
   IconLoader2,
   IconRefresh,
+  IconShare2,
   IconVolume,
   IconVolumeOff,
 } from '@tabler/icons-react';
@@ -62,6 +63,7 @@ import { TranscriptContent } from '@/components/Chat/ChatMessages/TranscriptCont
 import { TranslationDropdown } from '@/components/Chat/ChatMessages/TranslationDropdown';
 import { VersionNavigation } from '@/components/Chat/ChatMessages/VersionNavigation';
 import { CitationList } from '@/components/Chat/Citations/CitationList';
+import ShareToOneDriveModal from '@/components/Chat/ShareToOneDriveModal';
 import { TTSContextMenu } from '@/components/Chat/TTS/TTSContextMenu';
 import { StreamdownWithCodeButtons } from '@/components/Markdown/StreamdownWithCodeButtons';
 
@@ -181,9 +183,11 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
 
     // §4 output tie-in: action items → Microsoft To Do (user-confirmed
     // batch). Flag + connect opt-in, and only when the text has list items.
-    const { meetingsEnabled: m365MeetingsFlag } = useM365Enabled();
+    const { meetingsEnabled: m365MeetingsFlag, sharingEnabled } =
+      useM365Enabled();
     const m365Connected = useSettingsStore((s) => s.m365Connected);
     const [showTodoModal, setShowTodoModal] = useState(false);
+    const [showShareModal, setShowShareModal] = useState(false);
 
     // TTS context menu state
     const [ttsContextMenu, setTTSContextMenu] = useState<{
@@ -1003,6 +1007,17 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                     disabledTitle={t('chat.actionsDisabledForEmbed')}
                   />
 
+                  {/* Share this message to OneDrive */}
+                  {sharingEnabled && m365Connected && !hasEmbeddedContent && (
+                    <button
+                      onClick={() => setShowShareModal(true)}
+                      className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors"
+                      title={t('share.title')}
+                    >
+                      <IconShare2 size={18} />
+                    </button>
+                  )}
+
                   {/* Create To Do tasks (§4) */}
                   {m365MeetingsFlag &&
                     m365Connected &&
@@ -1042,6 +1057,15 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                   downloadFilename={audioDownloadFilename}
                 />
               </>
+            )}
+
+            {showShareModal && (
+              <ShareToOneDriveModal
+                isOpen={showShareModal}
+                onClose={() => setShowShareModal(false)}
+                conversation={selectedConversation}
+                messageContent={displayedContent}
+              />
             )}
 
             {/* To Do batch-confirm modal (§4) */}

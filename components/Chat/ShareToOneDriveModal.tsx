@@ -89,7 +89,10 @@ export const ShareToOneDriveModal: FC<ShareToOneDriveModalProps> = ({
   const [copied, setCopied] = useState(false);
 
   // Reset per open — a share dialog must never leak the previous share's
-  // filters, recipients, or result into the next one.
+  // filters, recipients, or result into the next one. Deliberately keyed on
+  // isOpen ALONE: `t` (new closure every render) or a parent-recreated
+  // conversation object in the deps would re-fire this mid-interaction and
+  // silently collapse the user's in-progress choices.
   useEffect(() => {
     if (!isOpen) return;
     setTitle(conversation?.name?.trim() || t('defaultTitle'));
@@ -102,7 +105,8 @@ export const ShareToOneDriveModal: FC<ShareToOneDriveModalProps> = ({
     setIsSharing(false);
     setOutcome(null);
     setCopied(false);
-  }, [isOpen, conversation, t]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   const handleShare = async () => {
     if (isSharing) return;
