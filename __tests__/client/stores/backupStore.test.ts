@@ -6,6 +6,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 const PERSISTED_DEFAULTS = {
   enrollmentStatus: 'unset' as const,
   storageBackend: 'app' as const,
+  storageChosen: false,
+  encryptionMode: 'encrypted' as const,
   localKeyId: null,
   localKeyEpoch: 1,
   lastSyncedVersion: null,
