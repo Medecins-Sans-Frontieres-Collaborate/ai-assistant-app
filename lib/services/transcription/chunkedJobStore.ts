@@ -1,13 +1,29 @@
 /**
- * File-based job state storage for chunked transcription.
+ * Blob-backed job state storage for chunked transcription.
  *
- * Stores the state of async chunked transcription jobs as JSON files
- * in /tmp/chunked-transcription-jobs/. This ensures persistence across
- * Next.js API route invocations (unlike in-memory storage which can be
- * lost due to hot reloading or serverless function restarts).
+ * Records live at `{userId}/transcription-jobs/{jobId}.json` in the user-data
+ * container (same convention as translationJobStore's
+ * `{userId}/translations/jobs/`), so any replica can serve a status poll and
+ * job state survives restarts — the previous /tmp JSON store lost both.
  *
- * Jobs are tracked from submission through completion.
+ * Every function takes the caller's session-scoped {@link BlobStorage}
+ * (createBlobStorageClient resolves the user's REGIONAL storage account, so
+ * there is no process-global client to reach for) — which also makes the
+ * store fully fakeable in tests.
+ *
+ * Concurrency: mutations are compare-and-swap (ETag `ifMatch` on update,
+ * `ifNoneMatch: '*'` on create) with bounded re-read-and-reapply on 412.
+ * This replaces the old fs advisory lock and preserves the same invariant:
+ * terminal states (succeeded/failed/cancelled) can never be overwritten by a
+ * late progress write, even across replicas.
+ *
+ * NOTE: the ffmpeg chunk files themselves are still local disk — the
+ * processing loop must complete on the replica that started it. Only the job
+ * STATE is multi-replica-safe.
  */
+import { withAzureRetry } from '@/lib/utils/server/azure/retry';
+import { BlobStorage } from '@/lib/utils/server/blob/blob';
+
 import { TranscriptionErrorClass } from '@/types/transcription';
 
 import * as fs from 'fs';
@@ -44,7 +60,7 @@ export interface ChunkedJob {
    * non-failure states.
    */
   errorClass?: TranscriptionErrorClass;
-  /** Paths to chunk files (for cleanup) */
+  /** Paths to chunk files (for cleanup; local to the starting replica) */
   chunkPaths: string[];
   /** Original filename for display */
   filename: string;
@@ -54,26 +70,6 @@ export interface ChunkedJob {
   updatedAt: number;
 }
 
-/** Directory for storing job JSON files */
-const JOB_STORE_DIR = '/tmp/chunked-transcription-jobs';
-
-/**
- * How long to keep completed/failed jobs before cleanup.
- *
- * Must exceed the client's maximum polling window
- * (MAX_TRANSCRIPTION_TIMEOUT_MS in useTranscriptionPolling.ts, currently 2h),
- * otherwise a client that reconnects late polls a 404 and a completed
- * transcript is silently lost. 3h = client ceiling + 1h slack.
- */
-const JOB_RETENTION_MS = 3 * 60 * 60 * 1000;
-
-/**
- * Validates that a job ID contains only safe characters.
- * Prevents path traversal attacks.
- *
- * @param jobId - The job ID to validate
- * @throws Error if the job ID format is invalid
- */
 /** UUID format for transcription job IDs. Shared across every route. */
 export const JOB_ID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -81,189 +77,194 @@ export const JOB_ID_REGEX =
 /** User-visible error text recorded on a cancelled chunked job. */
 export const JOB_CANCELLED_MESSAGE = 'Cancelled by user';
 
-function validateJobId(jobId: string): void {
-  // Job IDs must be UUIDs. Strict format blocks path traversal and
-  // any accidental filesystem-unsafe characters.
+/** Error text recorded when a stale in-flight job is lazily failed. */
+export const JOB_INTERRUPTED_MESSAGE = 'Job interrupted by server restart';
+
+/**
+ * An active (pending/processing) job whose updatedAt is older than this is
+ * treated as dead at poll time: the processing loop bumps updatedAt on every
+ * chunk completion, and the client's per-chunk polling budget is 2 minutes
+ * (PER_CHUNK_TIMEOUT_MS in client/hooks/transcription/useTranscriptionPolling.ts)
+ * — 5 minutes of silence means the loop's process is gone (restart/crash),
+ * because no single chunk legitimately takes that long without a progress
+ * write. This lazy check replaces the old startup-time
+ * markInterruptedJobsFailed sweep, which needed a session-less global listing
+ * and was wrong under multiple replicas (one replica's restart must not fail
+ * jobs still running on another).
+ */
+export const STALE_JOB_MS = 5 * 60 * 1000;
+
+/**
+ * How long to keep job records before lazy deletion on read.
+ *
+ * Must exceed the client's maximum polling window
+ * (MAX_TRANSCRIPTION_TIMEOUT_MS in useTranscriptionPolling.ts, currently 2h),
+ * otherwise a client that reconnects late polls a 404 and a completed
+ * transcript is silently lost. 24h gives ample slack.
+ *
+ * Deletion is lazy (on read) rather than delegated to a container lifecycle
+ * policy so the behavior doesn't depend on infra configuration being present
+ * in every environment; records are tiny JSON, so anything never re-read and
+ * therefore never deleted costs effectively nothing.
+ */
+const JOB_RETENTION_MS = 24 * 60 * 60 * 1000;
+
+/** Bounded CAS retries: re-read and re-apply on 412, then give up. */
+const CAS_MAX_ATTEMPTS = 4;
+
+/**
+ * Builds the blob path for a job record. jobId is regex-enforced on every
+ * path build — a non-UUID id can never reach the blob name.
+ */
+function jobBlobPath(userId: string, jobId: string): string {
   if (!JOB_ID_REGEX.test(jobId)) {
     throw new Error('Invalid job ID format');
   }
+  return `${userId}/transcription-jobs/${jobId}.json`;
 }
 
-/**
- * Ensures the job store directory exists with secure permissions.
- * Directory is created with mode 0o700 (owner read/write/execute only).
- */
-function ensureStoreDir(): void {
-  if (!fs.existsSync(JOB_STORE_DIR)) {
-    fs.mkdirSync(JOB_STORE_DIR, { recursive: true, mode: 0o700 });
-  }
+/** Azure SDK errors carry the HTTP status as `statusCode` or `status`. */
+function statusCodeOf(error: unknown): number | undefined {
+  if (!error || typeof error !== 'object') return undefined;
+  const e = error as { statusCode?: unknown; status?: unknown };
+  if (typeof e.statusCode === 'number') return e.statusCode;
+  if (typeof e.status === 'number') return e.status;
+  return undefined;
 }
 
-/**
- * Gets the file path for a job's JSON file.
- * Validates jobId to prevent path traversal attacks.
- *
- * @param jobId - The job ID
- * @returns The full path to the job's JSON file
- * @throws Error if jobId format is invalid or escapes the store directory
- */
-function getJobFilePath(jobId: string): string {
-  validateJobId(jobId);
-  // Redundant with the UUID check above, but this resolve + prefix check is
-  // the containment proof static analysis (CodeQL js/path-injection)
-  // recognizes — a regex test alone is not an accepted barrier.
-  const filePath = path.resolve(JOB_STORE_DIR, `${jobId}.json`);
-  if (!filePath.startsWith(JOB_STORE_DIR + path.sep)) {
-    throw new Error('Invalid job ID format');
-  }
-  return filePath;
-}
-
-/**
- * Saves a job to the file system with secure permissions.
- * Files are created with mode 0o600 (owner read/write only).
- *
- * Uses a tmp-then-rename pattern so concurrent readers never observe
- * a partially written file. `rename` is atomic on the same filesystem.
- */
-function saveJob(job: ChunkedJob): void {
-  ensureStoreDir();
-  const filePath = getJobFilePath(job.jobId);
-  // PID + timestamp + small random suffix — the random chunk covers the
-  // otherwise-possible collision of two writes for the same job in the same
-  // millisecond inside the same process.
-  const randomSuffix = Math.random().toString(36).slice(2, 10);
-  const tmpPath = `${filePath}.${process.pid}.${Date.now()}.${randomSuffix}.tmp`;
-  fs.writeFileSync(tmpPath, JSON.stringify(job, null, 2), {
-    encoding: 'utf-8',
-    mode: 0o600,
+function streamToBuffer(
+  readableStream: NodeJS.ReadableStream,
+): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    const chunks: Buffer[] = [];
+    readableStream.on('data', (data) => {
+      chunks.push(data instanceof Buffer ? data : Buffer.from(data));
+    });
+    readableStream.on('end', () => resolve(Buffer.concat(chunks)));
+    readableStream.on('error', reject);
   });
-  fs.renameSync(tmpPath, filePath);
 }
 
-/** How long a held lock may live before another writer treats it as stale. */
-const LOCK_STALE_MS = 2_000;
-/** Sleep between lock-acquisition attempts. */
-const LOCK_RETRY_DELAY_MS = 5;
-/** Give up acquiring the lock after this long and fall back to lock-free. */
-const LOCK_MAX_WAIT_MS = 250;
-
-// Atomics.wait needs a SharedArrayBuffer-backed view; this one exists solely
-// to implement a synchronous sleep without spinning the CPU.
-const lockSleepBuffer = new Int32Array(new SharedArrayBuffer(4));
-
-function sleepSync(ms: number): void {
-  Atomics.wait(lockSleepBuffer, 0, 0, ms);
+/** Downloads a job record with its ETag. Returns null (not throws) on 404. */
+async function readJobBlob(
+  storage: BlobStorage,
+  blobPath: string,
+): Promise<{ job: ChunkedJob; etag: string } | null> {
+  const client = storage.getBlockBlobClient(blobPath);
+  try {
+    return await withAzureRetry(
+      async () => {
+        const response = await client.download();
+        if (!response.readableStreamBody) {
+          throw new Error(`No readable stream for blob ${blobPath}`);
+        }
+        const buffer = await streamToBuffer(response.readableStreamBody);
+        return {
+          job: JSON.parse(buffer.toString('utf8')) as ChunkedJob,
+          etag: response.etag ?? '',
+        };
+      },
+      { label: 'chunkedJobStore.read' },
+    );
+  } catch (error) {
+    if (statusCodeOf(error) === 404) return null;
+    throw error;
+  }
 }
 
 /**
- * Acquires a per-job advisory lock (a lock directory next to the job file).
+ * Conditional JSON write. `ifMatchEtag` null → creation only
+ * (`If-None-Match: *`). A 412 propagates to the caller — `withAzureRetry`
+ * only retries 5xx/network, so precondition failures surface immediately.
  *
- * Within one Node process the store's synchronous read-modify-write calls
- * already can't interleave; this lock guards the cross-process case (e.g.
- * a cluster-mode deployment that violates the documented single-replica
- * assumption) so a cancel can't be silently clobbered by a concurrent
- * progress write. Locks held longer than LOCK_STALE_MS are assumed to come
- * from a crashed process and are broken.
- *
- * @returns A release function, or null if the lock could not be acquired
- *   within LOCK_MAX_WAIT_MS (callers proceed lock-free rather than failing).
+ * Deliberately bypasses `AzureBlobStorage.upload()`: its same-byte-length
+ * dedupe silently drops writes whose new content matches the stored length —
+ * fatal for progress JSON where `"completedChunks":1` → `"completedChunks":2`
+ * is exactly that case — and it carries no ETag conditions.
  */
-function acquireJobLock(jobId: string): (() => void) | null {
-  validateJobId(jobId);
-  ensureStoreDir();
-  const lockDir = path.join(JOB_STORE_DIR, `${jobId}.lock`);
-  const deadline = Date.now() + LOCK_MAX_WAIT_MS;
-
-  for (;;) {
-    try {
-      fs.mkdirSync(lockDir);
-      return () => {
-        try {
-          fs.rmdirSync(lockDir);
-        } catch {
-          // Already removed (e.g. broken as stale by another writer).
-        }
-      };
-    } catch {
-      // Lock exists — break it if stale, otherwise wait and retry.
-      try {
-        const lockAge = Date.now() - fs.statSync(lockDir).mtimeMs;
-        if (lockAge > LOCK_STALE_MS) {
-          try {
-            fs.rmdirSync(lockDir);
-          } catch {
-            // Another writer broke it first.
-          }
-          continue;
-        }
-      } catch {
-        // Lock vanished between mkdir and stat — retry immediately.
-        continue;
-      }
-      if (Date.now() >= deadline) {
-        console.warn(
-          `[ChunkedJobStore] Could not acquire lock for job ${jobId} within ${LOCK_MAX_WAIT_MS}ms; proceeding without it`,
-        );
-        return null;
-      }
-      sleepSync(LOCK_RETRY_DELAY_MS);
-    }
-  }
+async function writeJobBlob(
+  storage: BlobStorage,
+  blobPath: string,
+  job: ChunkedJob,
+  ifMatchEtag: string | null,
+): Promise<void> {
+  const client = storage.getBlockBlobClient(blobPath);
+  const content = Buffer.from(JSON.stringify(job), 'utf8');
+  await withAzureRetry(
+    () =>
+      client.upload(content, content.length, {
+        blobHTTPHeaders: { blobContentType: 'application/json' },
+        conditions: ifMatchEtag
+          ? { ifMatch: ifMatchEtag }
+          : { ifNoneMatch: '*' },
+      }),
+    { label: 'chunkedJobStore.write' },
+  );
 }
 
 /**
  * Reads the job, applies `apply` only while the job is still active
- * (pending/processing), and persists the result — all under the per-job
- * advisory lock so the freshest state is what gets checked and written.
+ * (pending/processing), and persists the result with an ETag-conditional
+ * write. On 412 (another writer — possibly on another replica — won the
+ * race) the whole read-check-apply-write cycle reruns against the fresh
+ * state, bounded by CAS_MAX_ATTEMPTS.
  *
  * This is the single write path for status transitions: terminal states
  * (succeeded/failed/cancelled) can never be overwritten by a late progress
- * update or a racing completion.
+ * update or a racing completion — the post-412 re-read re-checks the status
+ * before reapplying.
  *
  * @returns true if the mutation was applied; false if the job was already
  *   terminal and the call was a no-op.
  * @throws Error when no job record exists for `jobId`.
  */
-function mutateActiveJob(
+async function mutateActiveJob(
+  storage: BlobStorage,
   jobId: string,
+  userId: string,
   apply: (job: ChunkedJob) => void,
-): boolean {
-  const release = acquireJobLock(jobId);
-  try {
-    const job = getJob(jobId);
-    if (!job) {
+): Promise<boolean> {
+  const blobPath = jobBlobPath(userId, jobId);
+  let lastError: unknown;
+  for (let attempt = 1; attempt <= CAS_MAX_ATTEMPTS; attempt++) {
+    const record = await readJobBlob(storage, blobPath);
+    if (!record) {
       throw new Error(`Job ${jobId} not found`);
     }
+    const job = record.job;
     if (job.status !== 'pending' && job.status !== 'processing') {
       return false;
     }
     apply(job);
     job.updatedAt = Date.now();
-    saveJob(job);
-    return true;
-  } finally {
-    release?.();
+    try {
+      await writeJobBlob(storage, blobPath, job, record.etag);
+      return true;
+    } catch (error) {
+      lastError = error;
+      if (statusCodeOf(error) !== 412) {
+        throw error;
+      }
+    }
   }
+  throw lastError instanceof Error
+    ? lastError
+    : new Error(`Job ${jobId} mutation lost ${CAS_MAX_ATTEMPTS} CAS races`);
 }
 
 /**
- * Creates a new chunked transcription job.
- *
- * @param jobId - Unique job identifier
- * @param userId - ID of the user who owns this job
- * @param totalChunks - Total number of chunks to process
- * @param chunkPaths - Paths to the chunk files
- * @param filename - Original filename for display
- * @param originalAudioPath - Path to original extracted audio (for cleanup)
+ * Creates a new chunked transcription job. `If-None-Match: *` — jobIds are
+ * fresh UUIDs, so an existing blob at this path means a caller bug, not a
+ * race to resolve.
  */
-export function createJob(
+export async function createJob(
+  storage: BlobStorage,
   jobId: string,
   userId: string,
   totalChunks: number,
   chunkPaths: string[],
   filename: string,
-): void {
+): Promise<void> {
   const now = Date.now();
 
   const job: ChunkedJob = {
@@ -279,34 +280,34 @@ export function createJob(
     updatedAt: now,
   };
 
-  saveJob(job);
+  await writeJobBlob(storage, jobBlobPath(userId, jobId), job, null);
 
   console.log(
     `[ChunkedJobStore] Created job ${jobId}: ${totalChunks} chunks for "${filename}"`,
   );
-
-  // Schedule cleanup of stale jobs
-  scheduleCleanup();
 }
 
 /**
- * Updates job progress.
+ * Updates job progress. Also bumps updatedAt (via mutateActiveJob), which is
+ * what keeps an in-flight job from tripping the STALE_JOB_MS check at poll
+ * time — the processing loop calls this after every chunk completion.
  *
- * @param jobId - Job identifier
  * @param completedChunks - Number of chunks completed so far
  * @param currentChunk - 0-based index of the chunk currently being processed
  *   (i.e., the chunk that has just been started, not yet completed)
  * @throws Error when no job record exists for `jobId`.
  */
-export function updateProgress(
+export async function updateProgress(
+  storage: BlobStorage,
   jobId: string,
+  userId: string,
   completedChunks: number,
   currentChunk?: number,
-): void {
+): Promise<void> {
   // mutateActiveJob bails if the job is already terminal — a background
   // chunk that finishes after the user cancelled (or after a failure was
   // recorded) must not clobber the terminal status back to 'processing'.
-  const applied = mutateActiveJob(jobId, (job) => {
+  const applied = await mutateActiveJob(storage, jobId, userId, (job) => {
     job.status = 'processing';
     job.completedChunks = completedChunks;
     if (currentChunk !== undefined) {
@@ -324,16 +325,19 @@ export function updateProgress(
 /**
  * Marks a job as successfully completed.
  *
- * @param jobId - Job identifier
- * @param transcript - Combined transcript text
  * @throws Error when no job record exists for `jobId`.
  */
-export function completeJob(jobId: string, transcript: string): void {
+export async function completeJob(
+  storage: BlobStorage,
+  jobId: string,
+  userId: string,
+  transcript: string,
+): Promise<void> {
   // Preserve terminal status. If the user cancelled while the final chunks
   // were in flight, the combined-transcript write must not flip the job
   // back to 'succeeded'. The transcript is discarded by design — cancelled
   // means the user doesn't want it.
-  const applied = mutateActiveJob(jobId, (job) => {
+  const applied = await mutateActiveJob(storage, jobId, userId, (job) => {
     job.status = 'succeeded';
     job.completedChunks = job.totalChunks;
     job.transcript = transcript;
@@ -349,22 +353,23 @@ export function completeJob(jobId: string, transcript: string): void {
 /**
  * Marks a job as failed.
  *
- * @param jobId - Job identifier
  * @param error - Human-readable error message
  * @param errorClass - Optional classification so clients can branch on
  *   recovery UX (e.g. auto-retry vs re-auth vs permanent).
  * @throws Error when no job record exists for `jobId`.
  */
-export function failJob(
+export async function failJob(
+  storage: BlobStorage,
   jobId: string,
+  userId: string,
   error: string,
   errorClass?: TranscriptionErrorClass,
-): void {
+): Promise<void> {
   // Preserve terminal status. A background chunk that errors after the user
   // cancelled (or after a different branch already recorded success/failure)
   // must not flip the stored outcome — cancelled must stay cancelled, a
   // succeeded job must not revert to failed.
-  const applied = mutateActiveJob(jobId, (job) => {
+  const applied = await mutateActiveJob(storage, jobId, userId, (job) => {
     job.status = 'failed';
     job.error = error;
     job.errorClass = errorClass;
@@ -378,59 +383,156 @@ export function failJob(
 }
 
 /**
- * Gets a job by ID.
+ * Marks a job as cancelled by the user. Cooperative — the background chunk
+ * processor re-reads job status between chunks and aborts when it sees this.
  *
- * @param jobId - Job identifier
- * @returns The job, or undefined if not found
+ * @throws Error when no job record exists for `jobId`.
  */
-export function getJob(jobId: string): ChunkedJob | undefined {
-  // getJobFilePath also validates (and throws); this local guard makes the
-  // path provably traversal-safe at the fs call sites below and turns a
-  // malformed id into the same "not found" result as a missing job.
+export async function cancelJob(
+  storage: BlobStorage,
+  jobId: string,
+  userId: string,
+): Promise<void> {
+  // mutateActiveJob no-ops (returns false) when the job is already terminal.
+  const applied = await mutateActiveJob(storage, jobId, userId, (job) => {
+    job.status = 'cancelled';
+    job.error = JOB_CANCELLED_MESSAGE;
+  });
+
+  if (applied) {
+    console.log(`[ChunkedJobStore] Job ${jobId} cancelled by user`);
+  }
+}
+
+/**
+ * Shared read path: regex guard, 404 → undefined, and lazy retention.
+ * Records past JOB_RETENTION_MS are treated as gone and deleted best-effort
+ * (lazy retention — there is no active sweep).
+ */
+async function loadJob(
+  storage: BlobStorage,
+  jobId: string,
+  userId: string,
+): Promise<{ job: ChunkedJob; etag: string; blobPath: string } | undefined> {
+  // Malformed ids read as "not found" rather than throwing, matching how
+  // routes treat unknown jobs.
   if (!JOB_ID_REGEX.test(jobId)) {
     return undefined;
   }
-  const filePath = getJobFilePath(jobId);
+  const blobPath = jobBlobPath(userId, jobId);
 
+  let record: { job: ChunkedJob; etag: string } | null;
   try {
-    if (!fs.existsSync(filePath)) {
-      return undefined;
-    }
-    const data = fs.readFileSync(filePath, 'utf-8');
-    return JSON.parse(data) as ChunkedJob;
+    record = await readJobBlob(storage, blobPath);
   } catch (error) {
     console.warn('[ChunkedJobStore] Error reading job %s:', jobId, error);
     return undefined;
   }
+  if (!record) {
+    return undefined;
+  }
+
+  if (Date.now() - record.job.createdAt > JOB_RETENTION_MS) {
+    // Best-effort: a failed delete just means the next read retries it.
+    try {
+      await storage.deleteIfExists(blobPath);
+    } catch (error) {
+      console.warn(
+        `[ChunkedJobStore] Could not delete expired job ${jobId}:`,
+        error,
+      );
+    }
+    return undefined;
+  }
+
+  return { ...record, blobPath };
 }
 
 /**
- * Gets a job by ID, but only if it belongs to the given user.
- * Returns undefined on mismatch so callers can't distinguish
- * "not yours" from "not found" (prevents enumeration).
+ * Gets a job by ID as stored — no staleness transform (the processing loop
+ * uses this between chunks and must not see its own slow-but-alive job
+ * spuriously flipped to failed; only the poll path applies STALE_JOB_MS).
+ *
+ * @returns The job, or undefined if not found / malformed id / expired.
  */
-export function getJobForUser(
+export async function getJob(
+  storage: BlobStorage,
   jobId: string,
   userId: string,
-): ChunkedJob | undefined {
-  const job = getJob(jobId);
-  if (!job || job.userId !== userId) {
+): Promise<ChunkedJob | undefined> {
+  return (await loadJob(storage, jobId, userId))?.job;
+}
+
+/**
+ * Gets a job by ID, but only if it belongs to the given user. Returns
+ * undefined on mismatch so callers can't distinguish "not yours" from "not
+ * found" (prevents enumeration). The blob path is already user-scoped; the
+ * userId field check is defense in depth.
+ *
+ * This is the status-poll read path, so the STALE_JOB_MS check lives here:
+ * an active job whose loop has stopped writing progress is returned as
+ * failed (transient, "interrupted by server restart"), and that
+ * transformation is persisted best-effort with a SINGLE conditional write
+ * pinned to the ETag just read — no CAS retry loop, deliberately: a 412 here
+ * means someone else wrote the job after our read (most likely the loop is
+ * alive after all and just recorded progress), so re-applying the failure
+ * against fresh state would kill a healthy job. The next poll re-evaluates.
+ */
+export async function getJobForUser(
+  storage: BlobStorage,
+  jobId: string,
+  userId: string,
+): Promise<ChunkedJob | undefined> {
+  const loaded = await loadJob(storage, jobId, userId);
+  if (!loaded || loaded.job.userId !== userId) {
     return undefined;
   }
+  const { job, etag, blobPath } = loaded;
+
+  const isActive = job.status === 'pending' || job.status === 'processing';
+  if (isActive && Date.now() - job.updatedAt > STALE_JOB_MS) {
+    const failed: ChunkedJob = {
+      ...job,
+      status: 'failed',
+      error: JOB_INTERRUPTED_MESSAGE,
+      // Transient so clients render "please try again" instead of treating
+      // a restart as a permanent failure.
+      errorClass: 'transient',
+      updatedAt: Date.now(),
+    };
+    try {
+      await writeJobBlob(storage, blobPath, failed, etag);
+      console.log(
+        `[ChunkedJobStore] Job ${jobId} marked failed after ` +
+          `${STALE_JOB_MS}ms without progress (interrupted loop)`,
+      );
+    } catch (error) {
+      if (statusCodeOf(error) !== 412) {
+        console.warn(
+          `[ChunkedJobStore] Could not persist stale-job failure for ${jobId}:`,
+          error,
+        );
+      }
+    }
+    // The caller sees the transformed job either way — persistence is
+    // best-effort, the poll response is not.
+    return failed;
+  }
+
   return job;
 }
 
 /**
- * Deletes a job from the store.
- *
- * @param jobId - Job identifier
+ * Deletes a job record. Best-effort — idempotent via deleteIfExists.
  */
-export function deleteJob(jobId: string): void {
-  const filePath = getJobFilePath(jobId);
-
+export async function deleteJob(
+  storage: BlobStorage,
+  jobId: string,
+  userId: string,
+): Promise<void> {
+  const blobPath = jobBlobPath(userId, jobId);
   try {
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
+    if (await storage.deleteIfExists(blobPath)) {
       console.log(`[ChunkedJobStore] Deleted job ${jobId}`);
     }
   } catch (error) {
@@ -438,118 +540,16 @@ export function deleteJob(jobId: string): void {
   }
 }
 
-/**
- * Lists all jobs (for debugging/monitoring).
- */
-export function listJobs(): ChunkedJob[] {
-  ensureStoreDir();
-
-  const jobs: ChunkedJob[] = [];
-
-  try {
-    const files = fs.readdirSync(JOB_STORE_DIR);
-
-    for (const file of files) {
-      if (!file.endsWith('.json')) continue;
-
-      const filePath = path.join(JOB_STORE_DIR, file);
-      try {
-        const data = fs.readFileSync(filePath, 'utf-8');
-        const job = JSON.parse(data) as ChunkedJob;
-        jobs.push(job);
-      } catch {
-        // Skip invalid files
-      }
-    }
-  } catch {
-    // Directory might not exist yet
-  }
-
-  return jobs;
-}
-
-/**
- * Gets the number of active (non-completed) jobs.
- */
-export function getActiveJobCount(): number {
-  const jobs = listJobs();
-  return jobs.filter(
-    (job) => job.status === 'pending' || job.status === 'processing',
-  ).length;
-}
-
-/** Root directory holding per-job chunk subdirectories. */
+/** Root directory holding per-job chunk subdirectories (local disk). */
 const CHUNK_DIR_ROOT = path.join(os.tmpdir(), 'chunked-transcription');
 
 /**
- * Best-effort removal of a job's on-disk chunk artifacts: the chunk files
- * themselves plus any per-job directory under the chunked-transcription
- * tmpdir root. Never throws — artifact cleanup must not block status
- * reconciliation.
- */
-function cleanupJobArtifacts(job: ChunkedJob): void {
-  for (const chunkPath of job.chunkPaths) {
-    try {
-      fs.unlinkSync(chunkPath);
-    } catch {
-      // Already gone or unreadable — nothing useful to do.
-    }
-  }
-  const parents = new Set(job.chunkPaths.map((p) => path.dirname(p)));
-  for (const parent of parents) {
-    if (parent.startsWith(CHUNK_DIR_ROOT + path.sep)) {
-      try {
-        fs.rmSync(parent, { recursive: true, force: true });
-      } catch {
-        // Best-effort.
-      }
-    }
-  }
-}
-
-/**
- * Marks any job that was mid-flight (pending or processing) when the server
- * was last stopped as failed with a recognizable reason, and removes the
- * job's chunk files — they can never be consumed once the in-process
- * pipeline that produced them is gone. Intended to be called once at server
- * startup so clients polling such jobs see a clean failure rather than a
- * permanent 404.
- *
- * @returns The job IDs that were marked failed.
- */
-export function markInterruptedJobsFailed(): string[] {
-  const marked: string[] = [];
-  const jobs = listJobs();
-  for (const job of jobs) {
-    if (job.status !== 'pending' && job.status !== 'processing') continue;
-    try {
-      // Classify as transient so clients render a "please try again" message
-      // instead of treating a restart as a permanent failure.
-      failJob(job.jobId, 'Job interrupted by server restart', 'transient');
-      marked.push(job.jobId);
-    } catch (err) {
-      console.warn(
-        `[ChunkedJobStore] Could not mark interrupted job ${job.jobId}:`,
-        err,
-      );
-    }
-    // Even if the status write failed, the chunks are unusable — reclaim
-    // the disk either way.
-    cleanupJobArtifacts(job);
-  }
-  if (marked.length > 0) {
-    console.log(
-      `[ChunkedJobStore] Marked ${marked.length} interrupted job(s) as failed on startup`,
-    );
-  }
-  return marked;
-}
-
-/**
- * Removes per-job chunk directories whose job record no longer exists or is
- * already terminal. Safe to run at startup (no job can be actively writing
- * chunks yet) — covers dirs orphaned by crashes that predate their job
- * record, and dirs whose record was already removed by retention cleanup.
+ * Removes all per-job chunk directories on THIS replica's local disk.
+ * Intended for server startup only: chunk files are produced and consumed by
+ * an in-process pipeline, so after a restart every dir under the root is by
+ * definition orphaned — the loop that would have consumed it died with the
+ * previous process. (Job records live in blob storage and are reconciled
+ * lazily at poll time via STALE_JOB_MS, not here.)
  *
  * @returns The directory names that were removed.
  */
@@ -564,15 +564,8 @@ export function sweepOrphanedChunkDirs(): string[] {
     return removed;
   }
 
-  const liveJobIds = new Set(
-    listJobs()
-      .filter((job) => job.status === 'pending' || job.status === 'processing')
-      .map((job) => job.jobId),
-  );
-
   for (const entry of entries) {
     if (!entry.isDirectory()) continue;
-    if (liveJobIds.has(entry.name)) continue;
     try {
       fs.rmSync(path.join(CHUNK_DIR_ROOT, entry.name), {
         recursive: true,
@@ -593,86 +586,4 @@ export function sweepOrphanedChunkDirs(): string[] {
     );
   }
   return removed;
-}
-
-/**
- * Marks a job as cancelled by the user. Cooperative — the background chunk
- * processor polls job status between batches and aborts when it sees this.
- *
- * @throws Error when no job record exists for `jobId`.
- */
-export function cancelJob(jobId: string): void {
-  // mutateActiveJob no-ops (returns false) when the job is already terminal.
-  const applied = mutateActiveJob(jobId, (job) => {
-    job.status = 'cancelled';
-    job.error = JOB_CANCELLED_MESSAGE;
-  });
-
-  if (applied) {
-    console.log(`[ChunkedJobStore] Job ${jobId} cancelled by user`);
-  }
-}
-
-// Cleanup timer reference
-let cleanupTimer: NodeJS.Timeout | null = null;
-
-/**
- * Schedules cleanup of stale completed/failed jobs.
- * Runs every 10 minutes if there are jobs in the store.
- */
-function scheduleCleanup(): void {
-  if (cleanupTimer) {
-    return; // Already scheduled
-  }
-
-  cleanupTimer = setTimeout(
-    () => {
-      cleanupTimer = null;
-      runCleanup();
-
-      // Reschedule if there are still jobs
-      const jobs = listJobs();
-      if (jobs.length > 0) {
-        scheduleCleanup();
-      }
-    },
-    10 * 60 * 1000,
-  ); // 10 minutes
-  // Don't block Node from exiting just because the cleanup timer is pending.
-  cleanupTimer.unref?.();
-}
-
-/**
- * Removes stale completed/failed jobs from the store.
- */
-function runCleanup(): void {
-  const now = Date.now();
-  let cleaned = 0;
-
-  const jobs = listJobs();
-
-  for (const job of jobs) {
-    // Only clean up jobs in a terminal state.
-    if (
-      job.status !== 'succeeded' &&
-      job.status !== 'failed' &&
-      job.status !== 'cancelled'
-    ) {
-      continue;
-    }
-
-    // Check if job is old enough to clean up
-    const age = now - job.updatedAt;
-    if (age > JOB_RETENTION_MS) {
-      deleteJob(job.jobId);
-      cleaned++;
-    }
-  }
-
-  if (cleaned > 0) {
-    const remaining = listJobs().length;
-    console.log(
-      `[ChunkedJobStore] Cleanup: removed ${cleaned} stale jobs, ${remaining} remaining`,
-    );
-  }
 }
