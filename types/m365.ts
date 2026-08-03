@@ -149,6 +149,9 @@ export interface M365SaveResult {
    * Explicit-destination saves omit it — the client already holds the label.
    */
   folder?: string;
+  /** Graph item reference for follow-up calls (doc-sync binding, sharing). */
+  itemId?: string;
+  driveId?: string;
 }
 
 export interface M365MeetingEntry {
