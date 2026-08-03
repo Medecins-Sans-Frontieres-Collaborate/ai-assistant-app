@@ -47,7 +47,12 @@ export interface UseBackupSyncResult {
 
 /** Bridges stores + keystore + crypto + API client into the engine's deps. */
 function buildSyncDeps(keys: BackupKeys): SyncDeps {
-  const api = createBackupApiClient();
+  // Read the backend per run, not per hook mount — a settings-page switch
+  // must redirect the very next debounced sync.
+  const api = createBackupApiClient(
+    undefined,
+    useBackupStore.getState().storageBackend,
+  );
 
   // Capture the manifest's folders timestamp on every fetch: pulled folders
   // must be stamped with the REMOTE updatedAt — stamping "now" would win the
