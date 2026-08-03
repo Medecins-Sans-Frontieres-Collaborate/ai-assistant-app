@@ -173,7 +173,7 @@ interface GraphDriveItem {
   lastModifiedDateTime?: string;
   folder?: { childCount?: number };
   file?: { mimeType?: string };
-  parentReference?: { driveId?: string };
+  parentReference?: { driveId?: string; path?: string };
   remoteItem?: GraphDriveItem;
 }
 
@@ -193,6 +193,41 @@ interface GraphMessageShape {
  * `sharedWithMe` carry the real location under `remoteItem`; the outer item
  * has no usable drive id, so the remote wins wherever present.
  */
+/**
+ * "https://msfusa.sharepoint.com/sites/HR/Shared Documents/x.docx" → "HR";
+ * personal OneDrive hosts → "OneDrive"; other hosts → hostname. Pure URL
+ * slug parsing — site DISPLAY names would need per-site Graph lookups.
+ */
+function driveSourceLabel(webUrl: string | undefined): string | undefined {
+  if (!webUrl) return undefined;
+  try {
+    const url = new URL(webUrl);
+    const host = url.hostname.toLowerCase();
+    const segments = url.pathname.split('/').filter(Boolean);
+    if (host.endsWith('-my.sharepoint.com') || segments[0] === 'personal') {
+      return 'OneDrive';
+    }
+    if (host.endsWith('.sharepoint.com')) {
+      if ((segments[0] === 'sites' || segments[0] === 'teams') && segments[1]) {
+        return decodeURIComponent(segments[1]);
+      }
+      return host.replace(/\.sharepoint\.com$/, '');
+    }
+    return host;
+  } catch {
+    return undefined;
+  }
+}
+
+/** "/drives/x/root:/Projects/Kenya" | "/drive/root:/Projects" → "Projects/Kenya". */
+function prettyParentPath(path: string | undefined): string | undefined {
+  if (!path) return undefined;
+  const idx = path.indexOf('root:');
+  const tail = idx >= 0 ? path.slice(idx + 5) : path;
+  const cleaned = decodeURIComponent(tail).replace(/^\//, '');
+  return cleaned || undefined;
+}
+
 export function normalizeDriveItem(
   item: GraphDriveItem | null | undefined,
 ): M365DriveEntry | null {
@@ -217,6 +252,12 @@ export function normalizeDriveItem(
     }),
     ...(target.lastModifiedDateTime && {
       lastModified: target.lastModifiedDateTime,
+    }),
+    ...(prettyParentPath(target.parentReference?.path) && {
+      parentPath: prettyParentPath(target.parentReference?.path),
+    }),
+    ...(driveSourceLabel(target.webUrl ?? item.webUrl) && {
+      sourceLabel: driveSourceLabel(target.webUrl ?? item.webUrl),
     }),
   };
 }
