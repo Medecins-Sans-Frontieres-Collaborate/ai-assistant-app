@@ -129,8 +129,10 @@ export async function GET(request: NextRequest) {
   if (ctx instanceof NextResponse) return ctx;
 
   try {
-    const storage = createBlobStorageClient(ctx.session);
-    const buffer = await readBlob(storage, ctx.blobPath);
+    const buffer =
+      ctx.backend === 'onedrive'
+        ? await readDriveBlob(request, ctx.blobPath)
+        : await readBlob(createBlobStorageClient(ctx.session), ctx.blobPath);
     if (buffer === null) {
       return errorResponse(
         'Backup blob not found',
@@ -156,8 +158,12 @@ export async function DELETE(request: NextRequest) {
   if (ctx instanceof NextResponse) return ctx;
 
   try {
-    const storage = createBlobStorageClient(ctx.session);
-    const deleted = await storage.deleteIfExists(ctx.blobPath);
+    const deleted =
+      ctx.backend === 'onedrive'
+        ? await deleteDriveBlob(request, ctx.blobPath)
+        : await createBlobStorageClient(ctx.session).deleteIfExists(
+            ctx.blobPath,
+          );
     return successResponse({ deleted });
   } catch (error) {
     return storageErrorResponse('DELETE', error);
