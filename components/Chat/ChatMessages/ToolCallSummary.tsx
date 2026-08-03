@@ -9,13 +9,47 @@ import {
   IconTool,
 } from '@tabler/icons-react';
 import { FC, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
+
+import { M365_BUILTIN_SERVER_ID } from '@/lib/services/m365/tools/toolCatalog';
 
 import { formatToolArguments } from '@/lib/utils/shared/chat/formatToolArguments';
 import { highlightJsonTokens } from '@/lib/utils/shared/jsonHighlight';
 
 import type { ToolCallRecord } from '@/types/chat';
+
+import { useConversationStore } from '@/client/stores/conversationStore';
+
+/** The tier-1 withheld sentinel (mailReadTools renders it verbatim). */
+const MAIL_WITHHELD_SENTINEL = 'WITHHELD: flagged by the phishing screen';
+
+/**
+ * The override affordance only works where a single message id is
+ * recoverable from the call arguments (mail_get_message /
+ * mail_create_reply_draft targets). Thread/search flags surface as text;
+ * the model can be asked to fetch the specific message, whose record then
+ * carries the affordance.
+ */
+function flaggedMailMessageId(call: ToolCallRecord): string | null {
+  if (call.server_id !== M365_BUILTIN_SERVER_ID) return null;
+  if (!call.name.startsWith('mail_')) return null;
+  const haystack = `${call.output ?? ''}\n${call.error ?? ''}`;
+  if (
+    !haystack.includes(MAIL_WITHHELD_SENTINEL) &&
+    !haystack.includes('flagged by the phishing screen')
+  ) {
+    return null;
+  }
+  try {
+    const args = JSON.parse(call.arguments ?? '{}') as Record<string, unknown>;
+    const id = args.messageId;
+    return typeof id === 'string' && id.length > 0 ? id : null;
+  } catch {
+    return null;
+  }
+}
 
 interface ToolCallSummaryProps {
   toolCalls: ToolCallRecord[];
@@ -206,6 +240,7 @@ const ToolCallRow: FC<ToolCallRowProps> = ({ call, source }) => {
               {call.error}
             </pre>
           )}
+          <FlaggedMailOverride call={call} />
         </div>
       )}
 
@@ -213,6 +248,55 @@ const ToolCallRow: FC<ToolCallRowProps> = ({ call, source }) => {
           run's deliverable and render prominently on the message itself
           via GeneratedFilesPanel. */}
     </li>
+  );
+};
+
+/**
+ * Explicit, user-only override for a phishing-flagged mail body (fifth
+ * pass): persists the message id on the conversation, from where it rides
+ * every subsequent request payload — the executor honors ONLY that field,
+ * so an injected email can never self-unlock.
+ */
+const FlaggedMailOverride: FC<{ call: ToolCallRecord }> = ({ call }) => {
+  const t = useTranslations('chat.toolSummary');
+  const selectedConversationId = useConversationStore(
+    (s) => s.selectedConversationId,
+  );
+  const conversation = useConversationStore((s) =>
+    s.conversations.find((c) => c.id === selectedConversationId),
+  );
+  const updateConversation = useConversationStore((s) => s.updateConversation);
+
+  const messageId = flaggedMailMessageId(call);
+  if (!messageId || !conversation) return null;
+
+  const overridden =
+    conversation.m365MailScreenOverrides?.includes(messageId) ?? false;
+
+  if (overridden) {
+    return (
+      <p className="text-[0.7rem] text-amber-700 dark:text-amber-400">
+        {t('mailFlagOverridden')}
+      </p>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        updateConversation(conversation.id, {
+          m365MailScreenOverrides: [
+            ...(conversation.m365MailScreenOverrides ?? []),
+            messageId,
+          ].slice(0, 20),
+        });
+        toast(t('mailFlagOverrideToast'), { duration: 6000 });
+      }}
+      className="rounded-md border border-amber-300 px-2 py-0.5 text-[0.7rem] text-amber-800 hover:bg-amber-50 dark:border-amber-700 dark:text-amber-300 dark:hover:bg-amber-900/20"
+    >
+      {t('mailFlagShowAnyway')}
+    </button>
   );
 };
 
