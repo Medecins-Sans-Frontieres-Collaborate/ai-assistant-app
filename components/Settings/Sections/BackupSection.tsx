@@ -1,9 +1,11 @@
 'use client';
 
 import {
+  IconBrandOnedrive,
   IconCloudUpload,
   IconEye,
   IconKey,
+  IconServer,
   IconShieldLock,
   IconTrash,
 } from '@tabler/icons-react';
@@ -13,14 +15,24 @@ import toast from 'react-hot-toast';
 import { useFormatter, useTranslations } from 'next-intl';
 
 import { useBackupSync } from '@/client/hooks/backup/useBackupSync';
+import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
-import { clearMasterKey } from '@/client/services/backup/keystore';
-import { createBackupApiClient } from '@/lib/services/backup/backupApiClient';
-import type { BackupManifest, SyncStatus } from '@/lib/services/backup/types';
+import {
+  clearMasterKey,
+  getBackupKeys,
+} from '@/client/services/backup/keystore';
+import type { BackupBackend, SyncStatus } from '@/lib/services/backup/types';
+
+import {
+  disableBackupAt,
+  switchBackupBackend,
+} from '@/lib/utils/app/backup/backupOps';
+import { getConversationDataSize } from '@/lib/utils/app/storage/perConversationStorage';
 
 import { ConfirmDialog } from '@/components/UI/ConfirmDialog';
 
 import { useBackupStore } from '@/client/stores/backupStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import { useUIStore } from '@/client/stores/uiStore';
 
 /** SyncStatus values → camelCase i18n key suffixes under backup.settings.syncState. */
@@ -44,16 +56,83 @@ export const BackupSection: FC = () => {
   const localKeyId = useBackupStore((s) => s.localKeyId);
   const remoteExists = useBackupStore((s) => s.remoteExists);
   const lastSyncError = useBackupStore((s) => s.lastSyncError);
+  const storageBackend = useBackupStore((s) => s.storageBackend);
   const setBackupModalView = useUIStore((s) => s.setBackupModalView);
+
+  const { backupEnabled: oneDriveBackupEnabled } = useM365Enabled();
+  const m365Connected = useSettingsStore((s) => s.m365Connected);
 
   const { status, lastBackupAt, syncNow } = useBackupSync();
 
   const [showDisableConfirm, setShowDisableConfirm] = useState(false);
   const [isDisabling, setIsDisabling] = useState(false);
   const [isBackingUp, setIsBackingUp] = useState(false);
+  const [pendingSwitch, setPendingSwitch] = useState<BackupBackend | null>(
+    null,
+  );
+  const [isSwitching, setIsSwitching] = useState(false);
 
   const enrolled = enrollmentStatus === 'enrolled';
   const keyTail = localKeyId ? localKeyId.slice(-4).toUpperCase() : null;
+  // OneDrive as a DESTINATION needs flag + connection; an enrollment already
+  // pointing at OneDrive keeps its controls even if the flag later flips
+  // (the user must always be able to move back or turn off).
+  const showStorageChoice =
+    (oneDriveBackupEnabled && m365Connected) || storageBackend === 'onedrive';
+
+  const backendLabel = (backend: BackupBackend): string =>
+    backend === 'onedrive'
+      ? t('backup.settings.storageOneDrive')
+      : t('backup.settings.storageApp');
+
+  const localSizeLabel = (): string => {
+    const bytes = getConversationDataSize();
+    return bytes >= 1024 * 1024
+      ? `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+      : `${Math.max(1, Math.round(bytes / 1024))} KB`;
+  };
+
+  const handleChooseBackend = (target: BackupBackend) => {
+    if (target === storageBackend || isSwitching) return;
+    if (!enrolled) {
+      // Nothing to migrate — just point future enrolls/restores at the
+      // chosen location and refresh what exists there.
+      useBackupStore.getState().setStorageBackend(target);
+      void useBackupStore.getState().refreshRemoteStatus();
+      return;
+    }
+    setPendingSwitch(target);
+  };
+
+  const handleConfirmSwitch = async () => {
+    const target = pendingSwitch;
+    setPendingSwitch(null);
+    if (target === null) return;
+    setIsSwitching(true);
+    try {
+      const keys = await getBackupKeys();
+      if (!keys) {
+        toast.error(t('backup.settings.storageSwitchFailure'));
+        return;
+      }
+      const result = await switchBackupBackend(target, keys);
+      if (result.cleanupFailed) {
+        toast(t('backup.settings.storageSwitchCleanupWarning'), {
+          icon: '⚠️',
+        });
+      } else {
+        toast.success(
+          t('backup.settings.storageSwitchSuccess', {
+            count: result.pushed,
+          }),
+        );
+      }
+    } catch {
+      toast.error(t('backup.settings.storageSwitchFailure'));
+    } finally {
+      setIsSwitching(false);
+    }
+  };
 
   const handleBackUpNow = async () => {
     setIsBackingUp(true);
@@ -73,25 +152,19 @@ export const BackupSection: FC = () => {
     setShowDisableConfirm(false);
     setIsDisabling(true);
     try {
-      const api = createBackupApiClient();
-      await api.deleteBackup();
-      const { remoteKeyEpoch, localKeyEpoch, clearEnrollment } =
+      // Pull-merge first so conversations another device pushed land locally
+      // before the remote copy is destroyed. Best-effort: local data is the
+      // working copy either way, and turn-off must not be blocked by a
+      // broken remote.
+      await syncNow();
+      const { remoteKeyEpoch, localKeyEpoch, storageBackend, clearEnrollment } =
         useBackupStore.getState();
       // Disable is a key-state change: other devices must find a tombstone
       // with a bumped epoch, not a bare 404 (which reads as "never existed").
-      const tombstone: BackupManifest = {
-        schemaVersion: 1,
-        keyId: null,
-        epoch: Math.max(remoteKeyEpoch ?? 0, localKeyEpoch) + 1,
-        // The prefix wipe above removed the old manifest, so this write is a
-        // fresh create — the server requires version 1 with no If-Match.
-        version: 1,
-        updatedAt: new Date().toISOString(),
-        disabled: true,
-        folders: null,
-        conversations: {},
-      };
-      await api.putManifest(tombstone, { ifMatchEtag: null });
+      await disableBackupAt(
+        storageBackend,
+        Math.max(remoteKeyEpoch ?? 0, localKeyEpoch),
+      );
       await clearMasterKey();
       clearEnrollment();
       // Refresh the cached remote snapshot so the off-state doesn't offer a
@@ -151,6 +224,73 @@ export const BackupSection: FC = () => {
             </p>
           )}
         </div>
+
+        {/* Storage location — app storage vs the user's OneDrive app folder.
+            The working copy always stays in this browser's storage; this
+            only decides where the encrypted mirror lives. */}
+        {showStorageChoice && (
+          <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+            <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+              {t('backup.settings.storageLocationTitle')}
+            </p>
+            <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+              {t('backup.settings.storageLocationDescription', {
+                size: localSizeLabel(),
+              })}
+            </p>
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+              {(['app', 'onedrive'] as const).map((backend) => {
+                const active = storageBackend === backend;
+                return (
+                  <button
+                    key={backend}
+                    type="button"
+                    onClick={() => handleChooseBackend(backend)}
+                    disabled={isSwitching}
+                    aria-pressed={active}
+                    className={`flex items-start gap-2.5 rounded-lg border p-3 text-left transition-colors ${
+                      active
+                        ? 'border-blue-500 bg-blue-50 dark:border-blue-400 dark:bg-blue-950/30'
+                        : 'border-gray-300 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-800'
+                    } disabled:cursor-default`}
+                  >
+                    {backend === 'onedrive' ? (
+                      <IconBrandOnedrive
+                        size={20}
+                        className="mt-0.5 shrink-0 text-gray-600 dark:text-gray-300"
+                      />
+                    ) : (
+                      <IconServer
+                        size={20}
+                        className="mt-0.5 shrink-0 text-gray-600 dark:text-gray-300"
+                      />
+                    )}
+                    <span>
+                      <span className="block text-sm font-medium text-gray-900 dark:text-gray-100">
+                        {backendLabel(backend)}
+                        {active && (
+                          <span className="ml-1.5 text-xs font-normal text-blue-600 dark:text-blue-400">
+                            {t('backup.settings.storageActive')}
+                          </span>
+                        )}
+                      </span>
+                      <span className="mt-0.5 block text-xs text-gray-500 dark:text-gray-400">
+                        {backend === 'onedrive'
+                          ? t('backup.settings.storageOneDriveDescription')
+                          : t('backup.settings.storageAppDescription')}
+                      </span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+            {isSwitching && (
+              <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                {t('backup.settings.storageSwitching')}
+              </p>
+            )}
+          </div>
+        )}
 
         {!enrolled && (
           <div className="space-y-4">
@@ -240,11 +380,27 @@ export const BackupSection: FC = () => {
       <ConfirmDialog
         isOpen={showDisableConfirm}
         title={t('backup.settings.turnOffConfirmTitle')}
-        message={t('backup.settings.turnOffConfirmMessage')}
+        message={`${t('backup.settings.turnOffConfirmMessage')} ${t(
+          'backup.settings.turnOffLocalNote',
+          { size: localSizeLabel() },
+        )}`}
         confirmLabel={t('backup.settings.turnOffConfirmAction')}
         confirmVariant="danger"
         onConfirm={handleDisableAndDelete}
         onCancel={() => setShowDisableConfirm(false)}
+      />
+
+      <ConfirmDialog
+        isOpen={pendingSwitch !== null}
+        title={t('backup.settings.storageSwitchConfirmTitle', {
+          target: pendingSwitch ? backendLabel(pendingSwitch) : '',
+        })}
+        message={t('backup.settings.storageSwitchConfirmMessage', {
+          target: pendingSwitch ? backendLabel(pendingSwitch) : '',
+        })}
+        confirmLabel={t('backup.settings.storageSwitchAction')}
+        onConfirm={handleConfirmSwitch}
+        onCancel={() => setPendingSwitch(null)}
       />
     </div>
   );
