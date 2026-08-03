@@ -352,6 +352,16 @@ export interface ChatBody {
   /** 0-based MCP tool-loop round counter; the server caps it (see loop). */
   mcpLoopRound?: number;
   /**
+   * Message ids whose phishing-screen flag the user explicitly overrode
+   * ("show it anyway") via the flagged tool-record UI. Persisted in
+   * conversation state client-side and echoed on each request; the M365
+   * mail tools honor ONLY this payload field, never a tool argument. Caps:
+   * 20 ids x 512 chars, Graph-id charset (enforced in InputValidator).
+   */
+  m365MailScreenOverrides?: string[];
+  /** Shared mailbox addresses the user configured (fifth pass tier 3). */
+  m365SharedMailboxes?: string[];
+  /**
    * MCP turn plan echoed back on approval resume so plan progress survives
    * the stateless pause (same protocol as mcpPendingToolCalls).
    */
@@ -424,6 +434,12 @@ export interface Conversation {
    * not resurrect it in chats that opted out. Unknown/stale ids are inert.
    */
   disabledMcpServerIds?: string[];
+  /**
+   * Message ids whose phishing-screen flag the user explicitly overrode via
+   * the tool-record affordance (fifth pass). Sent with every request so the
+   * mail tools can label-and-show those bodies; never model-writable.
+   */
+  m365MailScreenOverrides?: string[];
   // Active file context (optional; initialized via migration)
   activeFiles?: ActiveFile[];
   activeFilesTokenBudget?: number;
