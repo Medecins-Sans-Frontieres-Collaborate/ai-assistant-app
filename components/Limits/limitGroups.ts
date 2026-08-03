@@ -76,7 +76,13 @@ export const LIMIT_GROUPS: readonly LimitGroup[] = [
   {
     id: 'mcp',
     gateKey: 'feature.mcp.enabled',
-    memberKeys: ['feature.mcp.roundsPerRequest'],
+    memberKeys: [
+      'feature.mcp.roundsPerRequest',
+      'feature.m365.toolCallsPerDay',
+      'feature.m365.mail.readsPerDay',
+      'feature.m365.mail.draftsPerDay',
+      'feature.m365.mail.deepScansPerDay',
+    ],
     consequenceKey: 'mcp',
   },
   {
