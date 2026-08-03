@@ -37,6 +37,7 @@ import { checkTokenBudget } from '@/lib/services/limits/tokenDebit';
 import { reserve } from '@/lib/services/limits/usageStore';
 import { checkAgentSourceAccess } from '@/lib/services/m365/agentSourceAccess';
 import { M365Error } from '@/lib/services/m365/graphApi';
+import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 import { resolveCustomSourceModel } from '@/lib/services/models/customModelSources';
 import { ModelSelector, RateLimiter } from '@/lib/services/shared';
 
@@ -203,6 +204,8 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       mcpPendingToolCalls,
       mcpLoopRound,
       mcpPlan,
+      m365MailScreenOverrides,
+      m365SharedMailboxes,
       extraction,
       conversationSummary,
       memories,
@@ -249,6 +252,10 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       mcpPendingToolCalls,
       mcpLoopRound,
       mcpPlan,
+      // Explicit UI action ids for flagged mail (validated shape/caps in
+      // InputValidator) — consumed by the builtin M365 executor only.
+      m365MailScreenOverrides,
+      m365SharedMailboxes,
       temperature,
       stream,
       reasoningEffort,
@@ -1436,6 +1443,16 @@ export async function buildChatContext(req: NextRequest): Promise<ChatContext> {
     authMiddleware,
     requestParsingMiddleware,
   ]);
+
+  // Keep the raw request on the context: request-bound in-process tools
+  // (builtin M365 executor) mint delegated Graph tokens from it.
+  context.request = req;
+
+  // Group-membership warm-up MUST precede createCredentialMiddleware and
+  // createLimitsMiddleware: both evaluate group-scoped rules via sync cache
+  // reads (getCachedGroupIdsForMail / getCachedGroupIdsForUser). Never
+  // throws; a no-op while the 10-minute TTL holds.
+  await resolveUserGroupIds(req, context.session ?? null);
 
   // Apply middleware that depends on previous middleware
   context = {
