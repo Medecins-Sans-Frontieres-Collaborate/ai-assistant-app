@@ -2,6 +2,7 @@
 
 import { createBackupApiClient } from '@/lib/services/backup/backupApiClient';
 import type {
+  BackupBackend,
   PersistedSyncPoint,
   SyncStatus,
 } from '@/lib/services/backup/types';
@@ -34,6 +35,13 @@ export interface RemoteBackupStatus {
 interface BackupStore {
   // Persisted state
   enrollmentStatus: BackupEnrollmentStatus;
+  /**
+   * Where the encrypted mirror lives ('app' storage or the user's
+   * OneDrive). Device-scoped like the rest of enrollment: the sync point
+   * below is only meaningful against this backend, and both flip together
+   * in the switch flow.
+   */
+  storageBackend: BackupBackend;
   /** Fingerprint of the key this device holds (16 hex chars), null pre-enroll. */
   localKeyId: string | null;
   /** Key epoch this device last synced under. Starts at 1. */
@@ -56,6 +64,8 @@ interface BackupStore {
 
   // Actions
   setEnrolled: (keyId: string, epoch: number) => void;
+  /** Flips the storage backend and invalidates the backend-scoped sync point. */
+  setStorageBackend: (backend: BackupBackend) => void;
   setDeclined: () => void;
   /** Forgets enrollment + sync point (disable / "turn off locally" flows). */
   clearEnrollment: () => void;
@@ -73,9 +83,10 @@ interface BackupStore {
 
 export const useBackupStore = create<BackupStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       // Persisted state
       enrollmentStatus: 'unset',
+      storageBackend: 'app',
       localKeyId: null,
       localKeyEpoch: 1,
       lastSyncedVersion: null,
@@ -101,6 +112,17 @@ export const useBackupStore = create<BackupStore>()(
         }),
 
       setDeclined: () => set({ enrollmentStatus: 'declined' }),
+
+      // The old backend's version/etag mean nothing against the new one;
+      // callers that already pushed to the target (switch flow) re-record
+      // the fresh sync point right after.
+      setStorageBackend: (backend) =>
+        set({
+          storageBackend: backend,
+          remoteExists: null,
+          remoteKeyId: null,
+          remoteKeyEpoch: null,
+        }),
 
       clearEnrollment: () =>
         set({
@@ -143,7 +165,10 @@ export const useBackupStore = create<BackupStore>()(
       refreshRemoteStatus: async () => {
         let fetched;
         try {
-          fetched = await createBackupApiClient().getManifest();
+          fetched = await createBackupApiClient(
+            undefined,
+            get().storageBackend,
+          ).getManifest();
         } catch {
           return null; // unknown — keep the cached runtime snapshot
         }
@@ -168,10 +193,11 @@ export const useBackupStore = create<BackupStore>()(
     }),
     {
       name: 'backup-storage',
-      version: 1,
+      version: 2,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         enrollmentStatus: state.enrollmentStatus,
+        storageBackend: state.storageBackend,
         localKeyId: state.localKeyId,
         localKeyEpoch: state.localKeyEpoch,
         lastSyncedVersion: state.lastSyncedVersion,
@@ -185,6 +211,7 @@ export const useBackupStore = create<BackupStore>()(
         if (!state || typeof state !== 'object') {
           return {
             enrollmentStatus: 'unset',
+            storageBackend: 'app',
             localKeyId: null,
             localKeyEpoch: 1,
             lastSyncedVersion: null,
@@ -192,6 +219,13 @@ export const useBackupStore = create<BackupStore>()(
             lastBackupAt: null,
             lastSyncError: null,
           };
+        }
+        // v1 → v2: pre-OneDrive enrollments are app-storage by definition.
+        if (
+          state.storageBackend !== 'app' &&
+          state.storageBackend !== 'onedrive'
+        ) {
+          state.storageBackend = 'app';
         }
         return state;
       },

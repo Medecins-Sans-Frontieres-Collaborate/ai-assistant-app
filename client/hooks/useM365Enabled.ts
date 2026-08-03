@@ -29,6 +29,8 @@ export function useM365Enabled(): {
   toolsEnabled: boolean;
   /** Sixth pass: curated cross-service playbooks (chips + menu entries). */
   playbooksEnabled: boolean;
+  /** Encrypted-backup storage in the user's OneDrive app folder. */
+  backupEnabled: boolean;
 } {
   const {
     m365Files,
@@ -40,6 +42,7 @@ export function useM365Enabled(): {
     m365Meetings,
     m365Tools,
     m365Playbooks,
+    m365Backup,
   } = useFlags();
   const isLocalhost =
     typeof window !== 'undefined' &&
@@ -55,5 +58,6 @@ export function useM365Enabled(): {
     meetingsEnabled: m365Meetings === true || isLocalhost,
     toolsEnabled: m365Tools === true || isLocalhost,
     playbooksEnabled: m365Playbooks === true || isLocalhost,
+    backupEnabled: m365Backup === true || isLocalhost,
   };
 }
