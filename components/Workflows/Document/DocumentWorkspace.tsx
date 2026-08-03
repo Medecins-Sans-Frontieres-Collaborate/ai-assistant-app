@@ -1,25 +1,42 @@
 'use client';
 
 import {
+  IconBrandOnedrive,
   IconClipboardCheck,
   IconDownload,
   IconFileImport,
+  IconLoader2,
   IconPlayerStopFilled,
   IconSparkles,
   IconX,
 } from '@tabler/icons-react';
 import { useCallback, useMemo, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import type { ExportFormat } from '@/client/hooks/document/exportFormats';
+import {
+  buildBlob,
+  destinationToTarget,
+} from '@/client/hooks/document/useM365Save';
 import { useAvailableGuides } from '@/client/hooks/settings/useAvailableGuides';
 import { useAutoFocusComposer } from '@/client/hooks/ui/useAutoFocusComposer';
 import { usePasteComposer } from '@/client/hooks/ui/usePasteComposer';
+import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 import { useEditPreview } from '@/client/hooks/workflows/useEditPreview';
+import {
+  M365BindingFormat,
+  useM365DocSync,
+} from '@/client/hooks/workflows/useM365DocSync';
 import { usePastedTextChips } from '@/client/hooks/workflows/usePastedTextChips';
 import { useWorkflowStream } from '@/client/hooks/workflows/useWorkflowStream';
 
+import {
+  downloadDriveItem,
+  getDriveItemMeta,
+  saveToOneDrive,
+} from '@/client/services/m365/m365Client';
 import { assessDocument } from '@/client/services/workflows/documentAssessment';
 import { uploadAndExtractText } from '@/client/services/workflows/fileTextExtraction';
 import { nameWorkflowConversation } from '@/client/services/workflows/workflowTitle';
@@ -62,15 +79,22 @@ import {
 import { stringHash } from '@/lib/utils/shared/stringHash';
 
 import { Message, MessageType } from '@/types/chat';
+import type {
+  M365DriveEntry,
+  M365SaveDestination,
+  M365SaveResult,
+} from '@/types/m365';
 import {
   DocumentReference,
   DocumentWorkflowState,
   ReviewEditStatus,
 } from '@/types/workflow';
 
+import M365FilePickerModal from '@/components/Chat/ChatInput/M365FilePickerModal';
 import { ConfirmDialog } from '@/components/UI/ConfirmDialog';
 import { DropdownPortal } from '@/components/UI/DropdownPortal';
 import { ExportFormatMenu } from '@/components/UI/ExportFormatMenu';
+import Modal from '@/components/UI/Modal';
 
 import { PastedTextChips } from '../Shared/PastedTextChips';
 import { AssessmentPanel } from '../Shared/Review/AssessmentPanel';
@@ -121,6 +145,33 @@ function extractTitle(markdown: string): string {
   const match = markdown.match(/^#\s+(.+)$/m);
   return match ? match[1].trim() : '';
 }
+
+/** Extensions the OneDrive open path accepts (mirrors acceptExtensions). */
+function m365FormatForName(name: string): M365BindingFormat {
+  const ext = name.split('.').pop()?.toLowerCase();
+  if (ext === 'docx') return 'docx';
+  if (ext === 'md' || ext === 'markdown') return 'md';
+  if (ext === 'html' || ext === 'htm') return 'html';
+  return 'txt';
+}
+
+function formatRelativeTime(iso: string, locale: string): string {
+  const diffMs = Date.parse(iso) - Date.now();
+  if (Number.isNaN(diffMs)) return '';
+  const abs = Math.abs(diffMs);
+  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
+  if (abs < 60_000) return rtf.format(Math.round(diffMs / 1000), 'second');
+  if (abs < 3_600_000) return rtf.format(Math.round(diffMs / 60_000), 'minute');
+  if (abs < 86_400_000)
+    return rtf.format(Math.round(diffMs / 3_600_000), 'hour');
+  return rtf.format(Math.round(diffMs / 86_400_000), 'day');
+}
+
+/** The save route returns binding ids beyond the frozen M365SaveResult. */
+type M365SaveResultWithIds = M365SaveResult & {
+  itemId?: string;
+  driveId?: string;
+};
 
 export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const t = useTranslations('workflows');
@@ -176,6 +227,15 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const [uploadingBasis, setUploadingBasis] = useState(false);
   /** File awaiting the "replace the current document?" confirmation. */
   const [pendingImport, setPendingImport] = useState<File | null>(null);
+  /** Which M365 picker is open: file pick (open) or folder pick (save-as). */
+  const [m365PickerMode, setM365PickerMode] = useState<
+    'open' | 'saveAs' | null
+  >(null);
+  /** OneDrive entry awaiting the "replace the current document?" confirm. */
+  const [pendingM365Open, setPendingM365Open] = useState<M365DriveEntry | null>(
+    null,
+  );
+  const [m365Busy, setM365Busy] = useState(false);
   const [selectedCriteria, setSelectedCriteria] = useState<Set<string>>(
     () =>
       new Set(
@@ -228,7 +288,63 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const preview = useEditPreview(pendingIds);
   const attachedSpec = documentSpecs.find((s) => s.id === state?.specId);
   const attachedTone = tones.find((tone) => tone.id === state?.toneId);
-  const isBusy = isRunning || assessing || uploadingBasis;
+  const isBusy = isRunning || assessing || uploadingBasis || m365Busy;
+
+  /* --------------- OneDrive binding & two-way sync (§2) ---------------- */
+
+  const tSync = useTranslations('m365.docSync');
+  const locale = useLocale();
+  const { docSyncEnabled } = useM365Enabled();
+  const m365Connected = useSettingsStore((s) => s.m365Connected);
+  const docSyncAvailable = docSyncEnabled && m365Connected;
+
+  const exportForBinding = useCallback(
+    (format: M365BindingFormat) => buildBlob(format, docHtml),
+    [docHtml],
+  );
+
+  /** Remote bytes → docHtml, via the same extraction/conversion path as a
+   * local import. Returns the html written (the sync engine's clean
+   * snapshot). Replacing the document invalidates a prior assessment. */
+  const applyRemote = useCallback(
+    async (content: string | ArrayBuffer, format: M365BindingFormat) => {
+      let text: string;
+      if (typeof content === 'string') {
+        text = content;
+      } else {
+        const file = new File([content], `document.${format}`, {
+          type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        });
+        const extracted = await uploadAndExtractText(file);
+        text = extracted.text;
+      }
+      const html = await autoConvertToHtml(text, `document.${format}`);
+      const title = extractTitle(htmlToMarkdown(html));
+      updateWorkflowState(conversationId, (prev) => ({
+        ...(prev as DocumentWorkflowState),
+        docHtml: html,
+        ...(title && { title }),
+        assessment: undefined,
+        updatedAt: new Date().toISOString(),
+      }));
+      return html;
+    },
+    [conversationId, updateWorkflowState],
+  );
+
+  const docSync = useM365DocSync({
+    conversationId,
+    // Without the flag + connection the engine must be inert — no polling,
+    // no pushes — even if a persisted binding exists on the state.
+    state: docSyncAvailable ? state : undefined,
+    // Pushes hold while a run/assessment/upload is in flight or review
+    // edits are pending — docHtml is not settled human input yet.
+    blocked: isBusy || hasUnresolvedEdits,
+    exportForBinding,
+    applyRemote,
+  });
+  const binding = docSyncAvailable ? state?.m365Binding : undefined;
+  const syncConflict = docSync.conflict;
 
   // Admin guides: criterion kinds join the criteria picker as `guide:` ids;
   // structure/tone kinds fill the spec/tone slots (server-resolved by id).
@@ -259,7 +375,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   // instruction refers to rather than the instruction itself, so it is held
   // beside the composer and folded back in at run time.
   const instructionRef = useRef<HTMLTextAreaElement>(null);
-  const composerBlocked = isBusy || hasUnresolvedEdits;
+  const composerBlocked = isBusy || hasUnresolvedEdits || syncConflict;
   const {
     chips,
     hasChips,
@@ -394,6 +510,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       (!instruction.trim() && !hasChips) ||
       isBusy ||
       hasUnresolvedEdits ||
+      syncConflict ||
       !state
     ) {
       return;
@@ -590,6 +707,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     clearChips,
     isBusy,
     hasUnresolvedEdits,
+    syncConflict,
     state,
     hasDocument,
     docHtml,
@@ -609,7 +727,9 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
 
   const handleEditorChange = useCallback(
     (html: string) => {
-      if (isRunning || hasUnresolvedEdits) return;
+      // syncConflict freezes editing exactly like pending review edits do —
+      // the document must hold still while the user resolves the conflict.
+      if (isRunning || hasUnresolvedEdits || syncConflict) return;
       updateWorkflowState(conversationId, (prev) => {
         const p = prev as DocumentWorkflowState;
         // An empty Tiptap document serializes to `<p></p>`, not `''`. Writing
@@ -621,11 +741,17 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         return { ...p, docHtml: next, updatedAt: new Date().toISOString() };
       });
     },
-    [conversationId, isRunning, hasUnresolvedEdits, updateWorkflowState],
+    [
+      conversationId,
+      isRunning,
+      hasUnresolvedEdits,
+      syncConflict,
+      updateWorkflowState,
+    ],
   );
 
   const handleAssess = useCallback(async () => {
-    if (!state || isBusy || hasUnresolvedEdits) return;
+    if (!state || isBusy || hasUnresolvedEdits || syncConflict) return;
     if (!hasDocument || selectedCriteria.size === 0) return;
     setAssessError(null);
     setAssessing(true);
@@ -716,6 +842,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     state,
     isBusy,
     hasUnresolvedEdits,
+    syncConflict,
     hasDocument,
     selectedCriteria,
     selection,
@@ -980,6 +1107,114 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     transfer.items.add(file);
     void handleUploadBasis(transfer.files);
   }, [pendingImport, handleUploadBasis]);
+
+  /** Downloads a picked drive item, makes it the document, and binds it.
+   * autoPush starts off — pushing back is a separate opt-in. */
+  const openFromM365 = useCallback(
+    async (entry: M365DriveEntry) => {
+      setM365Busy(true);
+      try {
+        const format = m365FormatForName(entry.name);
+        const meta = await getDriveItemMeta(entry.driveId, entry.itemId);
+        const { blob, name, webUrl } = await downloadDriveItem(
+          entry.driveId,
+          entry.itemId,
+        );
+        const content =
+          format === 'docx' ? await blob.arrayBuffer() : await blob.text();
+        await applyRemote(content, format);
+        const fileName = name || entry.name;
+        updateWorkflowState(conversationId, (prev) => ({
+          ...(prev as DocumentWorkflowState),
+          m365Binding: {
+            driveId: entry.driveId,
+            itemId: entry.itemId,
+            fileName,
+            webUrl: webUrl ?? meta.webUrl ?? entry.webUrl ?? '',
+            format,
+            lastSyncedETag: meta.eTag ?? '',
+            lastSyncedAt: new Date().toISOString(),
+            autoPush: false,
+          },
+          updatedAt: new Date().toISOString(),
+        }));
+        nameWorkflowConversation(conversationId, {
+          label: fileName.replace(/\.[^.]+$/, ''),
+          workflow: 'Document',
+        });
+      } catch {
+        toast.error(tSync('loadFailed'));
+      } finally {
+        setM365Busy(false);
+      }
+    },
+    [applyRemote, conversationId, updateWorkflowState, tSync],
+  );
+
+  /** Open entry point: an existing document is replaced only after the same
+   * confirmation the local import path uses. */
+  const requestM365Open = useCallback(
+    (entry: M365DriveEntry) => {
+      setM365PickerMode(null);
+      if (hasDocument) {
+        setPendingM365Open(entry);
+        return;
+      }
+      void openFromM365(entry);
+    },
+    [hasDocument, openFromM365],
+  );
+
+  /** Exports the current document into the picked folder and binds the
+   * created file. Format follows the source-editing mode (default md). */
+  const saveAsToM365 = useCallback(
+    async (destination: M365SaveDestination) => {
+      setM365PickerMode(null);
+      if (!state || !hasDocument) return;
+      const format: M365BindingFormat =
+        state.editorMode === 'html' ? 'html' : 'md';
+      const baseName =
+        (state.title || 'document')
+          .replace(/[\\/:*?"<>|#%]/g, '-')
+          .replace(/\s+/g, ' ')
+          .trim() || 'document';
+      const fileName = `${baseName}.${format}`;
+      setM365Busy(true);
+      try {
+        const blob = await buildBlob(format, docHtml);
+        const result = (await saveToOneDrive(
+          blob,
+          fileName,
+          destinationToTarget(destination),
+        )) as M365SaveResultWithIds;
+        const itemId = result.itemId;
+        const bindingDriveId = result.driveId ?? destination.driveId;
+        if (itemId && bindingDriveId) {
+          updateWorkflowState(conversationId, (prev) => ({
+            ...(prev as DocumentWorkflowState),
+            m365Binding: {
+              driveId: bindingDriveId,
+              itemId,
+              // The server-returned name reflects a conflict-rename.
+              fileName: result.name || fileName,
+              webUrl: result.webUrl ?? '',
+              format,
+              lastSyncedETag: result.eTag ?? '',
+              lastSyncedAt: new Date().toISOString(),
+              autoPush: false,
+            },
+            updatedAt: new Date().toISOString(),
+          }));
+        }
+        toast.success(tSync('bindingSaved'));
+      } catch {
+        toast.error(tSync('pushFailed'));
+      } finally {
+        setM365Busy(false);
+      }
+    },
+    [state, hasDocument, docHtml, conversationId, updateWorkflowState, tSync],
+  );
 
   const handleExport = useCallback(
     async (format: ExportFormat) => {
@@ -1358,7 +1593,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             }
           }}
           rows={2}
-          disabled={isBusy || hasUnresolvedEdits}
+          disabled={composerBlocked}
           title={
             hasUnresolvedEdits
               ? t('document.editingBlockedPendingEdits')
@@ -1386,9 +1621,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           <button
             type="button"
             onClick={() => void handleRun()}
-            disabled={
-              (!instruction.trim() && !hasChips) || isBusy || hasUnresolvedEdits
-            }
+            disabled={(!instruction.trim() && !hasChips) || composerBlocked}
             className="flex min-h-[36px] shrink-0 items-center gap-1.5 rounded-lg bg-gray-300 px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-400 disabled:pointer-events-none disabled:opacity-30 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-elevated"
           >
             <IconSparkles size={15} aria-hidden />
@@ -1459,6 +1692,31 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             <IconFileImport size={15} aria-hidden />
             {uploadingBasis ? t('document.uploading') : t('document.import')}
           </button>
+          {docSyncAvailable && (
+            <>
+              <button
+                type="button"
+                onClick={() => setM365PickerMode('open')}
+                disabled={isBusy || syncConflict}
+                aria-label={tSync('openFromOneDrive')}
+                title={tSync('openFromOneDrive')}
+                className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-300 dark:hover:bg-surface-dark-elevated"
+              >
+                <IconBrandOnedrive size={15} aria-hidden />
+                <span className="hidden md:inline">
+                  {tSync('openFromOneDrive')}
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setM365PickerMode('saveAs')}
+                disabled={!hasDocument || isBusy || syncConflict}
+                className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-300 dark:hover:bg-surface-dark-elevated"
+              >
+                {tSync('saveAsToOneDrive')}
+              </button>
+            </>
+          )}
           <div className="relative">
             <button
               ref={exportButtonRef}
@@ -1483,6 +1741,86 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         </div>
       </div>
       {controlsStrip}
+      {docSyncAvailable && binding && (
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-gray-200 px-3 py-1.5 text-xs dark:border-gray-700">
+          <IconBrandOnedrive
+            size={14}
+            className="shrink-0 text-blue-600 dark:text-blue-400"
+            aria-hidden
+          />
+          {binding.webUrl ? (
+            <a
+              href={binding.webUrl}
+              target="_blank"
+              rel="noreferrer"
+              title={tSync('openInOneDrive')}
+              className="max-w-[40%] truncate font-medium text-gray-700 underline dark:text-gray-300"
+            >
+              {tSync('boundTo', { name: binding.fileName })}
+            </a>
+          ) : (
+            <span className="max-w-[40%] truncate font-medium text-gray-700 dark:text-gray-300">
+              {tSync('boundTo', { name: binding.fileName })}
+            </span>
+          )}
+          {docSync.pushing ? (
+            <span
+              className="flex items-center gap-1 text-gray-500 dark:text-gray-400"
+              role="status"
+            >
+              <IconLoader2 size={12} className="animate-spin" aria-hidden />
+              {tSync('pushing')}
+            </span>
+          ) : (
+            <span className="text-gray-500 dark:text-gray-400">
+              {tSync('lastSynced', {
+                time: formatRelativeTime(binding.lastSyncedAt, locale),
+              })}
+            </span>
+          )}
+          <label
+            className="inline-flex items-center gap-1.5 text-gray-600 dark:text-gray-400"
+            title={tSync('autoPushHint')}
+          >
+            <input
+              type="checkbox"
+              checked={binding.autoPush}
+              onChange={(e) => docSync.setAutoPush(e.target.checked)}
+              className="h-3.5 w-3.5 accent-gray-600 dark:accent-gray-400"
+            />
+            {tSync('autoPush')}
+          </label>
+          <button
+            type="button"
+            onClick={docSync.unbind}
+            title={tSync('unbindHint')}
+            className="rounded-md px-1.5 py-0.5 text-gray-500 hover:bg-gray-100 hover:text-gray-800 dark:text-gray-400 dark:hover:bg-surface-dark-elevated dark:hover:text-gray-200"
+          >
+            {tSync('unbind')}
+          </button>
+          {docSync.remoteChanged && (
+            <span
+              className="flex items-center gap-2 text-amber-700 dark:text-amber-400"
+              role="status"
+            >
+              {tSync('remoteChanged')}
+              <button
+                type="button"
+                onClick={() => void docSync.reloadRemote()}
+                disabled={docSync.resolving}
+                className="font-medium underline disabled:opacity-50"
+              >
+                {tSync('reload')}
+              </button>
+            </span>
+          )}
+          {binding.format === 'docx' && (
+            <p className="w-full text-[11px] text-gray-500 dark:text-gray-400">
+              {tSync('docxFidelityCaveat')}
+            </p>
+          )}
+        </div>
+      )}
       <ReferencePanel
         references={state.references}
         onAdd={addReference}
@@ -1526,7 +1864,7 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
               <SourceEditor
                 value={sourceDraft?.text ?? ''}
                 onChange={handleSourceChange}
-                editable={!isRunning && !assessing}
+                editable={!isRunning && !assessing && !syncConflict}
                 label={
                   sourceMode === 'markdown'
                     ? t('document.editorModeMarkdown')
@@ -1538,7 +1876,12 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
                 ref={editorRef}
                 contentHtml={editorHtml}
                 onChange={handleEditorChange}
-                editable={!isRunning && !assessing && !hasUnresolvedEdits}
+                editable={
+                  !isRunning &&
+                  !assessing &&
+                  !hasUnresolvedEdits &&
+                  !syncConflict
+                }
                 onSelectionUpdate={setSelection}
                 previewEdits={previewEdits}
                 activeEditId={preview.activeId}
@@ -1612,7 +1955,10 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
                 type="button"
                 onClick={() => void handleAssess()}
                 disabled={
-                  isBusy || hasUnresolvedEdits || selectedCriteria.size === 0
+                  isBusy ||
+                  hasUnresolvedEdits ||
+                  syncConflict ||
+                  selectedCriteria.size === 0
                 }
                 title={
                   hasUnresolvedEdits
@@ -1708,6 +2054,93 @@ export function DocumentWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           if (basisInputRef.current) basisInputRef.current.value = '';
         }}
       />
+
+      {/* OneDrive pickers open from toolbar buttons only — never while
+          another modal is up, so no hide/restore dance is needed here. */}
+      {docSyncAvailable && (
+        <M365FilePickerModal
+          isOpen={m365PickerMode !== null}
+          onClose={() => setM365PickerMode(null)}
+          {...(m365PickerMode === 'saveAs'
+            ? {
+                onPickFolder: (destination: M365SaveDestination) =>
+                  void saveAsToM365(destination),
+              }
+            : {
+                onPick: requestM365Open,
+                acceptExtensions: ['docx', 'md', 'html', 'htm', 'txt'],
+              })}
+        />
+      )}
+      <ConfirmDialog
+        isOpen={pendingM365Open !== null}
+        title={t('document.importReplaceTitle')}
+        message={t('document.importReplaceBody', {
+          name: pendingM365Open?.name ?? '',
+        })}
+        confirmLabel={t('document.importReplaceConfirm')}
+        confirmVariant="danger"
+        onConfirm={() => {
+          const entry = pendingM365Open;
+          setPendingM365Open(null);
+          if (entry) void openFromM365(entry);
+        }}
+        onCancel={() => setPendingM365Open(null)}
+      />
+
+      {/* Conflict resolution — explicit, no merge (v1). Editing stays frozen
+          until one of the three choices lands. */}
+      <Modal
+        isOpen={syncConflict}
+        onClose={() => undefined}
+        title={tSync('conflictTitle')}
+        icon={<IconBrandOnedrive size={20} />}
+        size="md"
+        preventOutsideClick
+        preventEscapeKey
+        showCloseButton={false}
+      >
+        <div className="flex flex-col gap-4">
+          <p className="text-sm text-gray-700 dark:text-gray-300">
+            {tSync('conflictBody')}
+          </p>
+          <div className="flex flex-col gap-2">
+            <button
+              type="button"
+              onClick={() => void docSync.resolveKeepMine()}
+              disabled={docSync.resolving}
+              className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {tSync('keepMine')}
+            </button>
+            <button
+              type="button"
+              onClick={() => void docSync.resolveTakeTheirs()}
+              disabled={docSync.resolving}
+              className="rounded-lg border border-neutral-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
+            >
+              {tSync('takeTheirs')}
+            </button>
+            <button
+              type="button"
+              onClick={() => void docSync.resolveKeepBoth()}
+              disabled={docSync.resolving}
+              className="rounded-lg border border-neutral-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
+            >
+              {tSync('keepBoth')}
+            </button>
+          </div>
+          {docSync.resolving && (
+            <p
+              className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400"
+              role="status"
+            >
+              <IconLoader2 size={12} className="animate-spin" aria-hidden />
+              {tSync('pushing')}
+            </p>
+          )}
+        </div>
+      </Modal>
     </div>
   );
 }
