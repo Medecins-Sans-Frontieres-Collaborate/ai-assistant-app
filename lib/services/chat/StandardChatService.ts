@@ -1,6 +1,7 @@
 import { Session } from 'next-auth';
 
 import { debitTokenUsage } from '@/lib/services/limits/tokenDebit';
+import type { M365BuiltinExecutor } from '@/lib/services/m365/tools/executor';
 import { runAnthropicMcpToolLoop } from '@/lib/services/mcp/AnthropicMcpToolLoopService';
 import { planMcpSteps } from '@/lib/services/mcp/McpPlannerService';
 import { runMcpToolLoop } from '@/lib/services/mcp/McpToolLoopService';
@@ -104,6 +105,12 @@ export interface StandardChatRequest {
   mcpServers?: ResolvedMcpServer[];
   mcpPendingToolCalls?: McpPendingToolCall[];
   mcpLoopRound?: number;
+  /**
+   * In-process executor for `provenance: 'builtin'` entries in mcpServers
+   * (the M365 toolset). Built by StandardChatHandler, request-bound — never
+   * cached across requests.
+   */
+  builtinExecutor?: M365BuiltinExecutor;
   /**
    * Admin-configured cap from `feature.mcp.roundsPerRequest` (docs/LIMITS.md),
    * resolved once in createLimitsMiddleware. Absent → the compiled default.
@@ -594,6 +601,7 @@ export class StandardChatService {
             request.verbosity,
           ) as OpenAI.Chat.Completions.ChatCompletionCreateParamsStreaming,
         servers: request.mcpServers,
+        builtinExecutor: request.builtinExecutor,
         pendingToolCalls: request.mcpPendingToolCalls,
         approvalResponses: request.approvalResponses,
         loopRound: request.mcpLoopRound ?? 0,
@@ -1042,6 +1050,7 @@ export class StandardChatService {
           modelConfig,
         ),
       servers: request.mcpServers ?? [],
+      builtinExecutor: request.builtinExecutor,
       pendingToolCalls: request.mcpPendingToolCalls,
       approvalResponses: request.approvalResponses,
       loopRound: request.mcpLoopRound ?? 0,
