@@ -40,6 +40,7 @@ import {
   PromptAgent,
 } from '@/lib/services/agentAccess/types';
 import { canonicalAgentKey } from '@/lib/services/agentAccess/types';
+import { getCachedGroupIdsForMail } from '@/lib/services/m365/groupMembership';
 import {
   Principal,
   domainOfMail,
@@ -177,8 +178,6 @@ export class AgentAccessService {
   /** Epoch ms of the last sentinel probe (throttles to the probe interval). */
   private generationProbedAt = 0;
   private generationProbeInFlight: Promise<boolean> | null = null;
-  /** Dedupes the allowGroups scaffold warning to one line per key per process. */
-  private warnedGroupKeys = new Set<string>();
 
   static getInstance(): AgentAccessService {
     if (!AgentAccessService.instance) {
@@ -444,16 +443,6 @@ export class AgentAccessService {
     userMail: string | undefined,
   ): AgentAccessDecision {
     const access = stored.rule.access;
-    if (
-      access.allowGroups.length > 0 &&
-      !this.warnedGroupKeys.has(stored.canonicalKey)
-    ) {
-      this.warnedGroupKeys.add(stored.canonicalKey);
-      console.warn(
-        `[agent-access] rule ${sanitizeForLog(stored.canonicalKey)} has allowGroups, ` +
-          'which are NOT evaluated in v1 and grant nothing',
-      );
-    }
     if (access.type === 'public') {
       return { decision: 'allow', reason: 'public' };
     }
@@ -463,21 +452,25 @@ export class AgentAccessService {
     }
     // Targeting semantics are shared with usage limits (see
     // lib/services/shared/principalMatching.ts) so the two features can never
-    // disagree about what "this user matches this rule" means. Only the two
-    // scopes this rule shape carries are consulted; `attributes`/`groupIds`
-    // stay empty because access rules do not express those targets.
+    // disagree about what "this user matches this rule" means. Group ids
+    // come from the process-level membership cache (warmed per request by
+    // the calling route) — cold cache means no group grants, never an
+    // error, matching the pre-§5 posture.
     const principal: Principal = {
       userId: '',
       mail: normalizeMail(userMail),
       domain: domainOfMail(userMail),
       attributes: [],
-      groupIds: [],
+      groupIds: getCachedGroupIdsForMail(userMail),
     };
     if (matchesPrincipal(principal, 'user', access.allowUsers)) {
       return { decision: 'allow', reason: 'allow-user' };
     }
     if (matchesPrincipal(principal, 'domain', access.allowDomains)) {
       return { decision: 'allow', reason: 'allow-domain' };
+    }
+    if (matchesPrincipal(principal, 'group', access.allowGroups)) {
+      return { decision: 'allow', reason: 'allow-group' };
     }
     return { decision: 'deny', reason: 'not-allowed' };
   }
