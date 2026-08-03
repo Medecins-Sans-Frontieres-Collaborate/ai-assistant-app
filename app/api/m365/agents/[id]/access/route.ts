@@ -17,6 +17,7 @@ import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessServic
 import { M365_AGENT_SOURCE } from '@/lib/services/agentAccess/types';
 import { checkAgentSourceAccess } from '@/lib/services/m365/agentSourceAccess';
 import { M365Error } from '@/lib/services/m365/graphApi';
+import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 
 import {
   errorResponse,
@@ -38,6 +39,10 @@ export async function GET(
 
   const session = await auth();
   if (!session?.user?.id) return unauthorizedResponse();
+
+  // Group-membership warm-up MUST precede the layer-1 evaluateAccess check
+  // below — group-scoped rules read the cache synchronously. Never throws.
+  await resolveUserGroupIds(request, session);
 
   const { id } = await params;
   if (!M365_AGENT_ID_PATTERN.test(id)) return notFoundResponse('Agent');
