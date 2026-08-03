@@ -164,7 +164,7 @@ async function appendHistoryBestEffort(
     await writeOrgAgentHistoryEntry(createAgentAccessBlobStorage(), entry);
   } catch (error) {
     console.error(
-      `[agent-access-admin] HISTORY WRITE FAILED for key=${sanitizeForLog(entry.canonicalKey)} action=${entry.action}: ${sanitizeForLog(error)}`,
+      `[agent-access-admin] HISTORY WRITE FAILED for key=${sanitizeForLog(entry.canonicalKey)} action=${sanitizeForLog(entry.action)}: ${sanitizeForLog(error)}`,
     );
   }
 }
