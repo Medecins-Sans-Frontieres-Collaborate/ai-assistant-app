@@ -8,12 +8,17 @@
  * `buildBackupSyncDeps` mirrors the hook's wiring exactly (including the
  * remote folders-timestamp capture that prevents LWW ping-pong).
  */
+import { getBackupKeys } from '@/client/services/backup/keystore';
 import { createSyncCrypto } from '@/client/services/backup/syncCrypto';
 import {
   BackupApiError,
   createBackupApiClient,
 } from '@/lib/services/backup/backupApiClient';
 import { conversationUpdatedAt, toMillis } from '@/lib/services/backup/merge';
+import {
+  PLAIN_BACKUP_KEY_ID,
+  createPlainSyncCrypto,
+} from '@/lib/services/backup/plainCrypto';
 import {
   newRev,
   runSync,
@@ -39,12 +44,38 @@ function selectedBackend(): BackupBackend {
 }
 
 /**
+ * What the sync crypto derives from: real keys, or the literal 'plain' for
+ * the unencrypted OneDrive mode (readable JSON, no keystore involved).
+ */
+export type BackupCryptoSource = BackupKeys | 'plain';
+
+function cryptoFor(source: BackupCryptoSource, epoch: number) {
+  return source === 'plain'
+    ? createPlainSyncCrypto(epoch)
+    : createSyncCrypto(source, epoch);
+}
+
+function keyIdOf(source: BackupCryptoSource): string {
+  return source === 'plain' ? PLAIN_BACKUP_KEY_ID : source.keyId;
+}
+
+/**
+ * The crypto source for the device's CURRENT mode: 'plain' when the
+ * unencrypted OneDrive mode is active, else the keystore keys (null when
+ * the keystore is empty — the banner flow owns that state).
+ */
+export async function resolveCryptoSource(): Promise<BackupCryptoSource | null> {
+  if (useBackupStore.getState().encryptionMode === 'plain') return 'plain';
+  return await getBackupKeys();
+}
+
+/**
  * Bridges stores + crypto + API client into the engine's SyncDeps.
  * `backend` overrides the device's selected backend (switch flow only —
  * the pre-migration pull must still run against the OLD backend).
  */
 export function buildBackupSyncDeps(
-  keys: BackupKeys,
+  keys: BackupCryptoSource,
   backend: BackupBackend = selectedBackend(),
 ): SyncDeps {
   const api = createBackupApiClient(undefined, backend);
@@ -64,7 +95,7 @@ export function buildBackupSyncDeps(
 
   return {
     api: trackingApi,
-    crypto: createSyncCrypto(keys, useBackupStore.getState().localKeyEpoch),
+    crypto: cryptoFor(keys, useBackupStore.getState().localKeyEpoch),
     getLocalState: () => {
       const state = useConversationStore.getState();
       return {
@@ -169,7 +200,7 @@ export interface PushFullBackupResult {
  * status and keystore writes stay with the caller (ordering differs per flow).
  */
 export async function pushFullBackup(
-  keys: BackupKeys,
+  keys: BackupCryptoSource,
   options: PushFullBackupOptions = {},
 ): Promise<PushFullBackupResult> {
   // Never interleave a full-corpus rewrite with a debounced incremental sync
@@ -186,7 +217,7 @@ export async function pushFullBackup(
     if (
       remote !== null &&
       !remote.disabled &&
-      remote.keyId !== keys.keyId &&
+      remote.keyId !== keyIdOf(keys) &&
       !options.overwriteLive
     ) {
       throw new Error(
@@ -195,7 +226,7 @@ export async function pushFullBackup(
     }
 
     const epoch = (remote?.epoch ?? 0) + 1;
-    const crypto = createSyncCrypto(keys, epoch);
+    const crypto = cryptoFor(keys, epoch);
     const local = useConversationStore.getState();
     const now = new Date().toISOString();
 
@@ -233,7 +264,7 @@ export async function pushFullBackup(
 
     const manifest: BackupManifest = {
       schemaVersion: 1,
-      keyId: keys.keyId,
+      keyId: keyIdOf(keys),
       epoch,
       version: (remote?.version ?? 0) + 1,
       updatedAt: now,
@@ -256,7 +287,7 @@ export async function pushFullBackup(
         syncedAt: new Date().toISOString(),
       });
       return {
-        keyId: keys.keyId,
+        keyId: keyIdOf(keys),
         epoch,
         version: manifest.version,
         etag,
@@ -332,7 +363,7 @@ export interface SwitchBackendResult {
  */
 export async function switchBackupBackend(
   target: BackupBackend,
-  keys: BackupKeys,
+  keys: BackupCryptoSource,
 ): Promise<SwitchBackendResult> {
   const store = useBackupStore.getState();
   const source = store.storageBackend;
