@@ -31,6 +31,8 @@ export function useM365Enabled(): {
   playbooksEnabled: boolean;
   /** Encrypted-backup storage in the user's OneDrive app folder. */
   backupEnabled: boolean;
+  /** Share conversations/messages as readable OneDrive docs w/ Graph permissions. */
+  sharingEnabled: boolean;
 } {
   const {
     m365Files,
@@ -43,6 +45,7 @@ export function useM365Enabled(): {
     m365Tools,
     m365Playbooks,
     m365Backup,
+    m365Sharing,
   } = useFlags();
   const isLocalhost =
     typeof window !== 'undefined' &&
@@ -59,5 +62,6 @@ export function useM365Enabled(): {
     toolsEnabled: m365Tools === true || isLocalhost,
     playbooksEnabled: m365Playbooks === true || isLocalhost,
     backupEnabled: m365Backup === true || isLocalhost,
+    sharingEnabled: m365Sharing === true || isLocalhost,
   };
 }
