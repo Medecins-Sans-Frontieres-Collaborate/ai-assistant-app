@@ -13,6 +13,7 @@ import {
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
 import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
 import { createAppIdentityCredential } from '@/lib/services/auth/appIdentityCredential';
+import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 import {
   getServeableAdminOrgAgents,
   getSuppressedStaticAgentIds,
@@ -157,6 +158,10 @@ export async function GET(request: NextRequest) {
   if (!session?.user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+
+  // Group-membership warm-up MUST precede the evaluateAccess filtering
+  // below — group-scoped rules read the cache synchronously. Never throws.
+  await resolveUserGroupIds(request, session);
 
   try {
     // Office-scoped discovery returns three buckets:
