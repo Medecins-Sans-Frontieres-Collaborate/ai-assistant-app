@@ -13,7 +13,17 @@
 import { htmlToPlainTextFragment } from '@/lib/utils/shared/html/stripTags';
 
 const VOICE_SPAN_REGEX = /<v(?:\.[^ >]*)?\s+([^>]*)>([\s\S]*?)<\/v>/g;
-const TIMING_LINE_REGEX = /-->/;
+/**
+ * A WebVTT cue-timing line: `00:00:03.120 --> 00:00:06.000` (hours
+ * optional, trailing cue settings allowed). Deliberately precise rather
+ * than a bare `-->` test: prose is spoken in these meetings, and a cue
+ * whose TEXT contains "-->" ("the arrow --> points right") was previously
+ * mistaken for a timing line and dropped. Being specific also stops
+ * CodeQL's js/bad-tag-filter heuristic reading a bare `-->` as a
+ * half-written HTML-comment filter.
+ */
+const TIMING_LINE_REGEX =
+  /^\s*(?:\d{2,}:)?\d{2}:\d{2}[.,]\d{3}\s+-->\s+(?:\d{2,}:)?\d{2}:\d{2}[.,]\d{3}/;
 
 function stripTags(text: string): string {
   return htmlToPlainTextFragment(text).trim();
