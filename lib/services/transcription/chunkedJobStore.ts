@@ -23,6 +23,7 @@
  */
 import { withAzureRetry } from '@/lib/utils/server/azure/retry';
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
+import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { TranscriptionErrorClass } from '@/types/transcription';
 
@@ -503,13 +504,18 @@ export async function getJobForUser(
     try {
       await writeJobBlob(storage, blobPath, failed, etag);
       console.log(
-        `[ChunkedJobStore] Job ${jobId} marked failed after ` +
+        `[ChunkedJobStore] Job ${sanitizeForLog(jobId)} marked failed after ` +
           `${STALE_JOB_MS}ms without progress (interrupted loop)`,
       );
     } catch (error) {
       if (statusCodeOf(error) !== 412) {
+        // The message is a CONSTANT: interpolating jobId here would put
+        // caller data in console's format-string position, where a `%s`
+        // would consume the `error` argument (sanitizeForLog strips control
+        // characters but deliberately leaves `%` alone).
         console.warn(
-          `[ChunkedJobStore] Could not persist stale-job failure for ${jobId}:`,
+          '[ChunkedJobStore] Could not persist stale-job failure for job:',
+          sanitizeForLog(jobId),
           error,
         );
       }

@@ -24,6 +24,8 @@ import {
   peekIndexServeable,
 } from '@/lib/services/orgAgents/orgAgentSearchValidation';
 
+import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+
 import { OrganizationAgent } from '@/types/organizationAgent';
 
 import {
@@ -94,7 +96,7 @@ export async function resolveOrgAgentById(
       // one (the file config predates the broken override); otherwise
       // nothing. RAGEnricher treats null as "no agent" and degrades.
       console.warn(
-        `[org-agents] record '${id}' is not serveable (failed validation or index recheck); ${
+        `[org-agents] record '${sanitizeForLog(id)}' is not serveable (failed validation or index recheck); ${
           getOrganizationAgentById(id)
             ? 'serving the static config entry instead'
             : 'no fallback exists'
