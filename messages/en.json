@@ -4674,5 +4674,35 @@
       "chipsSettingHint": "Show playbook suggestions above the message box when they apply (e.g. after importing a meeting transcript).",
       "dismissChip": "Dismiss {title}"
     }
+  },
+  "share": {
+    "title": "Share to OneDrive",
+    "defaultTitle": "Conversation",
+    "introConversation": "Creates a readable copy of this conversation in your OneDrive with a view link for people in your organization.",
+    "introMessage": "Creates a readable copy of this response in your OneDrive with a view link for people in your organization.",
+    "attachmentsNote": "Attached files aren't included.",
+    "documentTitle": "Document name",
+    "customize": "Customize",
+    "assistantOnly": "Only AI responses",
+    "lastMessagesPre": "Only the last",
+    "lastMessagesPost": "messages",
+    "recipients": "Share with specific people instead",
+    "recipientsPlaceholder": "name@org.example, name2@org.example",
+    "recipientsHint": "Leave empty to create a link for anyone in your organization. With emails, only those people get view access.",
+    "invalidRecipients": "These don't look like email addresses: {list}",
+    "nothingToShare": "There's nothing to share with these filters.",
+    "roleUser": "You",
+    "roleAssistant": "Assistant",
+    "shareAction": "Share",
+    "sharing": "Sharing…",
+    "sharedAsLink": "\"{name}\" is in your OneDrive. Anyone in your organization with this link can view it.",
+    "sharedWithPeople": "\"{name}\" is in your OneDrive and shared with {count} people (view only).",
+    "copyLink": "Copy link",
+    "copied": "Copied",
+    "done": "Done",
+    "cancel": "Cancel",
+    "consentMissing": "Your organization hasn't approved OneDrive access yet.",
+    "blockedByPolicy": "Sharing was blocked by your organization's policy.",
+    "failed": "Couldn't share — nothing was created."
   }
 }
