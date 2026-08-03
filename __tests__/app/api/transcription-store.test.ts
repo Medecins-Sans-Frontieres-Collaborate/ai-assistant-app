@@ -22,11 +22,8 @@ vi.mock('@/config/environment', () => ({
   },
 }));
 
-const mockGetJob = vi.fn();
-const mockGetJobForUser = vi.fn();
+// Job records are user-scoped blobs now; this route only needs the id guard.
 vi.mock('@/lib/services/transcription/chunkedJobStore', () => ({
-  getJob: (...args: unknown[]) => mockGetJob(...args),
-  getJobForUser: (...args: unknown[]) => mockGetJobForUser(...args),
   JOB_ID_REGEX:
     /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
 }));
@@ -51,8 +48,6 @@ describe('/api/transcription/store', () => {
     vi.mocked(AzureBlobStorage).mockImplementation(function (this: any) {
       return mockBlobStorage as any;
     } as any);
-    mockGetJob.mockReturnValue(undefined);
-    mockGetJobForUser.mockReturnValue(undefined);
   });
 
   const makeReq = (body: unknown) =>
@@ -89,20 +84,11 @@ describe('/api/transcription/store', () => {
     expect(data.details).toBe('TRANSCRIPT_TOO_LARGE');
   });
 
-  it('returns 404 when the jobId matches a chunked job the user does not own', async () => {
-    // Known chunked job exists, but not for this user.
-    mockGetJob.mockReturnValue({ jobId: validJobId, userId: 'someone-else' });
-    mockGetJobForUser.mockReturnValue(undefined);
-
-    const res = await POST(
-      makeReq({ jobId: validJobId, transcript: 'hi', filename: 'a.mp3' }),
-    );
-    expect(res.status).toBe(404);
-  });
-
-  it('accepts batch-style unknown jobIds (no local chunked record)', async () => {
-    mockGetJob.mockReturnValue(undefined);
-
+  it('stores the transcript under the caller-prefixed blob path', async () => {
+    // No job-record ownership gate anymore: chunked job records are scoped
+    // to `${userId}/transcription-jobs/`, so a foreign jobId is
+    // unaddressable, and this user-prefixed transcript path is the write
+    // boundary for every jobId (chunked or batch).
     const res = await POST(
       makeReq({ jobId: validJobId, transcript: 'hi', filename: 'a.mp3' }),
     );
@@ -112,15 +98,5 @@ describe('/api/transcription/store', () => {
       'hi',
       expect.anything(),
     );
-  });
-
-  it('accepts a valid chunked job owned by the user', async () => {
-    mockGetJob.mockReturnValue({ jobId: validJobId, userId });
-    mockGetJobForUser.mockReturnValue({ jobId: validJobId, userId });
-
-    const res = await POST(
-      makeReq({ jobId: validJobId, transcript: 'hi', filename: 'a.mp3' }),
-    );
-    expect(res.status).toBe(200);
   });
 });
