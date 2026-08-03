@@ -7,6 +7,11 @@
  */
 import { M365_TOOL_SPECS } from '@/lib/services/m365/tools/toolCatalog';
 
+import {
+  stripHtmlNoise,
+  stripHtmlTags,
+} from '@/lib/utils/shared/html/stripTags';
+
 /**
  * Single-sources each tool's minted scope set from the catalog so the
  * implementations cannot drift from the listing contract.
@@ -61,10 +66,11 @@ const NAMED_ENTITIES: Record<string, string> = {
 
 /** Tag-strips Graph HTML bodies (chat/channel messages) into plain text. */
 export function stripHtml(html: string): string {
-  return html
-    .replace(/<br\s*\/?>/gi, ' ')
-    .replace(/<\/(p|div|li|tr)>/gi, ' ')
-    .replace(/<[^>]*>/g, '')
+  return stripHtmlTags(
+    stripHtmlNoise(html)
+      .replace(/<br\s*\/?>/gi, ' ')
+      .replace(/<\/(p|div|li|tr)>/gi, ' '),
+  )
     .replace(/&#(\d+);/g, (_, code: string) =>
       String.fromCodePoint(Number(code)),
     )

@@ -30,6 +30,8 @@
 import { Session } from 'next-auth';
 import { NextRequest } from 'next/server';
 
+import { htmlToPlainTextFragment } from '@/lib/utils/shared/html/stripTags';
+
 export interface MailScreenInput {
   messageId: string;
   from?: string;
@@ -232,7 +234,7 @@ function linkSignals(bodyText: string): Signal[] {
     /<a\s[^>]*href\s*=\s*["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi;
   const markdownAnchor = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g;
   for (const match of bodyText.matchAll(htmlAnchor)) {
-    anchors.push({ href: match[1], text: match[2].replace(/<[^>]*>/g, '') });
+    anchors.push({ href: match[1], text: htmlToPlainTextFragment(match[2]) });
   }
   for (const match of bodyText.matchAll(markdownAnchor)) {
     anchors.push({ href: match[2], text: match[1] });

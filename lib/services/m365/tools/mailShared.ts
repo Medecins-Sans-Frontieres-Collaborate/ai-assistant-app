@@ -17,6 +17,11 @@ import {
   truncateText,
 } from '@/lib/services/m365/tools/shared';
 
+import {
+  stripHtmlNoise,
+  stripHtmlTags,
+} from '@/lib/utils/shared/html/stripTags';
+
 /** Envelope fields for list-shaped mail responses — never `body`. */
 export const MAIL_ENVELOPE_SELECT =
   '$select=id,conversationId,subject,from,toRecipients,receivedDateTime,' +
@@ -91,12 +96,11 @@ const NAMED_ENTITIES: Record<string, string> = {
  * text-body Prefer header.
  */
 export function mailHtmlToText(html: string): string {
-  return html
-    .replace(/<(style|script)[\s\S]*?<\/\1>/gi, ' ')
-    .replace(/<!--[\s\S]*?-->/g, ' ')
-    .replace(/<br\s*\/?>/gi, '\n')
-    .replace(/<\/(p|div|li|tr|h[1-6]|blockquote)>/gi, '\n')
-    .replace(/<[^>]*>/g, '')
+  return stripHtmlTags(
+    stripHtmlNoise(html)
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<\/(p|div|li|tr|h[1-6]|blockquote)>/gi, '\n'),
+  )
     .replace(/&#(\d+);/g, (_, code: string) =>
       String.fromCodePoint(Number(code)),
     )
