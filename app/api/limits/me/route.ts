@@ -5,6 +5,7 @@ import { LimitsService } from '@/lib/services/limits/LimitsService';
 import { buildPrincipal } from '@/lib/services/limits/principal';
 import { resolveAllLimits } from '@/lib/services/limits/resolver';
 import { LimitsPolicy } from '@/lib/services/limits/types';
+import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 import {
   Principal,
   domainOfMail,
@@ -92,6 +93,9 @@ export async function GET(request: NextRequest) {
         mail,
         domain: domainOfMail(as),
         attributes: [],
+        // Documented limitation: an arbitrary previewed mail's group
+        // membership cannot be resolved with the CALLER's delegated Graph
+        // token, so group overrides stay in `notEvaluated` below.
         groupIds: [],
       };
       return successResponse({
@@ -101,12 +105,17 @@ export async function GET(request: NextRequest) {
         mode: policy?.mode ?? 'observe',
         policyUnavailable,
         // Layers this preview cannot evaluate, stated rather than implied:
-        // attributes are session-derived, and group membership is not on the
-        // session at all pending Entra consent.
+        // attributes are session-derived, and group membership can only be
+        // resolved with the TARGET user's own delegated token.
         notEvaluated: ['attribute', 'group'],
         limits: collectLimits(policy, preview, true),
       });
     }
+
+    // Group-membership warm-up MUST precede buildPrincipal — it reads the
+    // cache synchronously, and "my limits" must reflect group overrides.
+    // Never throws.
+    await resolveUserGroupIds(request, session);
 
     return successResponse({
       enabled: true,

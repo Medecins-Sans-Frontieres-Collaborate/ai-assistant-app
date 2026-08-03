@@ -29,7 +29,14 @@ export const ToolCountDisclosure: FC<{
   /** Label the stream markers will echo (catalog label / connector name). */
   serverLabel: string;
   tools: McpToolSummary[];
-}> = ({ serverLabel, tools }) => {
+  /**
+   * Tools whose consent semantics are fixed (M365 alwaysConfirm writes):
+   * rendered with a locked "Always asks" chip instead of the policy
+   * selector — an Allow rule would be recorded but ignored at the card,
+   * which is exactly the confusion this lock prevents.
+   */
+  lockedToolNames?: ReadonlySet<string>;
+}> = ({ serverLabel, tools, lockedToolNames }) => {
   const t = useTranslations('connectors');
   const tPolicy = useTranslations('toolApprovals');
   const rules = useSettingsStore((s) => s.toolApprovalRules);
@@ -73,6 +80,7 @@ export const ToolCountDisclosure: FC<{
                 serverLabel,
               );
               const active = decision ?? 'ask';
+              const locked = lockedToolNames?.has(tool.name) ?? false;
               return (
                 <li
                   key={tool.name}
@@ -91,35 +99,41 @@ export const ToolCountDisclosure: FC<{
                       </p>
                     )}
                   </div>
-                  <div
-                    className="inline-flex shrink-0 overflow-hidden rounded-md border border-gray-200 dark:border-gray-700"
-                    role="group"
-                    aria-label={tPolicy('policyGroupLabel', {
-                      tool: tool.name,
-                    })}
-                  >
-                    {policies.map((policy) => (
-                      <button
-                        key={policy.key}
-                        type="button"
-                        onClick={() =>
-                          setPolicy(tool.name, serverLabel, policy.key)
-                        }
-                        aria-pressed={active === policy.key}
-                        className={`px-2 py-0.5 text-xs transition-colors ${
-                          active === policy.key
-                            ? policy.key === 'reject'
-                              ? 'bg-red-100 font-medium text-red-800 dark:bg-red-900/40 dark:text-red-300'
-                              : policy.key === 'approve'
-                                ? 'bg-green-100 font-medium text-green-800 dark:bg-green-900/40 dark:text-green-300'
-                                : 'bg-gray-200 font-medium text-gray-900 dark:bg-gray-600 dark:text-gray-100'
-                            : 'text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'
-                        }`}
-                      >
-                        {policy.label}
-                      </button>
-                    ))}
-                  </div>
+                  {locked ? (
+                    <span className="shrink-0 rounded-md border border-amber-300 px-2 py-0.5 text-xs text-amber-800 dark:border-amber-700 dark:text-amber-300">
+                      {tPolicy('alwaysAsks')}
+                    </span>
+                  ) : (
+                    <div
+                      className="inline-flex shrink-0 overflow-hidden rounded-md border border-gray-200 dark:border-gray-700"
+                      role="group"
+                      aria-label={tPolicy('policyGroupLabel', {
+                        tool: tool.name,
+                      })}
+                    >
+                      {policies.map((policy) => (
+                        <button
+                          key={policy.key}
+                          type="button"
+                          onClick={() =>
+                            setPolicy(tool.name, serverLabel, policy.key)
+                          }
+                          aria-pressed={active === policy.key}
+                          className={`px-2 py-0.5 text-xs transition-colors ${
+                            active === policy.key
+                              ? policy.key === 'reject'
+                                ? 'bg-red-100 font-medium text-red-800 dark:bg-red-900/40 dark:text-red-300'
+                                : policy.key === 'approve'
+                                  ? 'bg-green-100 font-medium text-green-800 dark:bg-green-900/40 dark:text-green-300'
+                                  : 'bg-gray-200 font-medium text-gray-900 dark:bg-gray-600 dark:text-gray-100'
+                              : 'text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'
+                          }`}
+                        >
+                          {policy.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </li>
               );
             })}

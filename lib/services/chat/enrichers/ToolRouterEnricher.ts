@@ -1,9 +1,13 @@
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { consumeToolBudget } from '@/lib/services/limits/toolBudget';
+import { peekOrgAgentById } from '@/lib/services/orgAgents/orgAgentRegistry';
 
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
+import { devTrace } from '@/lib/utils/server/debug/devTrace';
+import { loadDocument } from '@/lib/utils/server/file/fileHandling';
 import { getContentType } from '@/lib/utils/server/file/mimeTypes';
+import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import {
   FileMessageContent,
@@ -33,10 +37,15 @@ import {
 } from '../tools/CodeInterpreterTool';
 import { WebSearchTool } from '../tools/WebSearchTool';
 import { readCitedSources } from '../tools/citedSourceReader';
+import { runDocumentTrim } from '../tools/documentTrim/DocumentTrimPipeline';
+import {
+  TrimTarget,
+  TrimmableDocument,
+  pickTrimmableDocument,
+} from '../tools/documentTrim/trimDetector';
 import { buildNewsResult } from '../tools/newsSearch';
 
 import { env } from '@/config/environment';
-import { getOrganizationAgentById } from '@/lib/organizationAgents';
 import { emitSearchInterim, emitToolCallRecord } from '@/lib/streamMarkers';
 
 /**
@@ -112,8 +121,10 @@ export class ToolRouterEnricher extends BasePipelineStage {
       context.searchMode === SearchMode.INTELLIGENT ||
       context.searchMode === SearchMode.ALWAYS;
     if (!modeActive) return false;
-    if (context.botId && !context.promptAgent) {
-      const agent = getOrganizationAgentById(context.botId);
+    if (context.botId && !context.promptAgent && !context.m365Agent) {
+      // Sync snapshot peek (shouldRun cannot await): admin records win over
+      // the static config; a cold snapshot denies — fail closed.
+      const agent = peekOrgAgentById(context.botId);
       return !!agent?.allowWebSearch;
     }
     return true;
@@ -131,7 +142,9 @@ export class ToolRouterEnricher extends BasePipelineStage {
       context.model?.supportsResponsesApi === true &&
       context.model?.sdk === 'azure-openai' &&
       !context.model?.isCustomSourceModel &&
-      !context.mcpServers?.length
+      // Only REAL (network) MCP servers force the chat.completions loop —
+      // the builtin M365 toolset must not disable the native interpreter.
+      !context.mcpServers?.some((entry) => !entry.builtin)
     );
   }
 
@@ -145,8 +158,9 @@ export class ToolRouterEnricher extends BasePipelineStage {
       context.interpreterMode === InterpreterMode.INTELLIGENT ||
       context.interpreterMode === InterpreterMode.ALWAYS;
     if (!modeActive) return false;
-    if (context.botId && !context.promptAgent) {
-      const agent = getOrganizationAgentById(context.botId);
+    if (context.botId && !context.promptAgent && !context.m365Agent) {
+      // Same sync snapshot peek as searchRequested (fail closed when cold).
+      const agent = peekOrgAgentById(context.botId);
       return !!agent?.allowCodeInterpreter;
     }
     return true;
@@ -199,31 +213,47 @@ export class ToolRouterEnricher extends BasePipelineStage {
     // tokens and confuses the search backend.
     const rawUserPrompt = currentMessage;
 
-    // IMPORTANT: Include processed file summaries and transcripts in the analysis
-    // This ensures the tool router can see the full context when deciding if web search is needed
+    // Include processed file EXCERPTS and an attachment manifest in the
+    // routing input. Excerpts (not full content): the classifier only needs
+    // to know what the material is about — feeding a whole manuscript
+    // buried the user's 8-word request under ~20k tokens, which both cost
+    // real money per turn and made the nano model miss the intent. The
+    // manifest is what lets it resolve "this"/"the document" to an uploaded
+    // file (including files attached on EARLIER turns) when classifying
+    // file-transformation requests.
+    const EXCERPT_CHARS = 1500;
     if (context.processedContent) {
       const additionalContext: string[] = [];
 
-      // Add file summaries
+      // Add file summary excerpts
       if (context.processedContent.fileSummaries) {
         const summaries = context.processedContent.fileSummaries
-          .map((f) => `[Document summary: ${f.filename}]\n${f.summary}`)
+          .map(
+            (f) =>
+              `[Document summary excerpt: ${f.filename}]\n${ToolRouterEnricher.truncate(f.summary, EXCERPT_CHARS)}`,
+          )
           .join('\n\n');
         additionalContext.push(summaries);
       }
 
-      // Add inline file content
+      // Add inline file content excerpts
       if (context.processedContent.inlineFiles) {
         const inlineText = context.processedContent.inlineFiles
-          .map((f) => `[File: ${f.filename}]\n${f.content}`)
+          .map(
+            (f) =>
+              `[File excerpt: ${f.filename}]\n${ToolRouterEnricher.truncate(f.content, EXCERPT_CHARS)}`,
+          )
           .join('\n\n');
         additionalContext.push(inlineText);
       }
 
-      // Add transcripts
+      // Add transcript excerpts
       if (context.processedContent.transcripts) {
         const transcripts = context.processedContent.transcripts
-          .map((t) => `[Audio/Video: ${t.filename}]\n${t.transcript}`)
+          .map(
+            (t) =>
+              `[Audio/Video excerpt: ${t.filename}]\n${ToolRouterEnricher.truncate(t.transcript, EXCERPT_CHARS)}`,
+          )
           .join('\n\n');
         additionalContext.push(transcripts);
       }
@@ -234,8 +264,64 @@ export class ToolRouterEnricher extends BasePipelineStage {
       }
     }
 
+    // Attachment manifest — filenames only, split by recency. Follow-up
+    // turns ("now actually do it") carry no attachments on the last message,
+    // so without the prior-turns line the router has no way to know a
+    // transformable file exists in the conversation at all.
+    const attachmentManifest = this.collectAttachmentManifest(context);
+    if (attachmentManifest.currentTurn.length > 0) {
+      currentMessage += `\n\n[Files attached to the current message: ${attachmentManifest.currentTurn.join(', ')}]`;
+    }
+    if (attachmentManifest.priorTurns.length > 0) {
+      currentMessage += `\n\n[Files uploaded earlier in this conversation: ${attachmentManifest.priorTurns.join(', ')}]`;
+    }
+
     const searchRequested = this.searchRequested(context);
     const interpreterRequestedAny = this.interpreterRequested(context);
+
+    // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+    devTrace('tool-router-enricher', {
+      searchRequested,
+      interpreterRequestedAny,
+      interpreterMode: context.interpreterMode ?? null,
+      interpreterEnvEnabled: env.CODE_INTERPRETER_ENABLED,
+      attachmentManifest,
+    });
+
+    // Dedicated document-trim path. The trigger is split by nature:
+    // FACTUAL precondition (a trimmable document is attached — language-
+    // independent) is checked deterministically; INTENT ("did the user ask
+    // to reduce it to a target length?") is classified by a dedicated nano
+    // LLM call, because users write in any of the app's 33 languages and
+    // keyword matching cannot be multilingual. Once triggered, EXECUTION is
+    // fully deterministic (plan → mechanical sandbox application) — no
+    // model decides whether to run. Sits before the native deferral and the
+    // agent skip on purpose: a classified trim request names the tool's job
+    // explicitly, mirroring the forced-tool precedent. Permission gates
+    // (env kill switch, InterpreterMode, org-agent opt-in) still apply via
+    // interpreterRequestedAny.
+    if (interpreterRequestedAny) {
+      const trimDocument = pickTrimmableDocument(attachmentManifest);
+      if (trimDocument) {
+        const trimTarget = await this.toolRouterService.classifyDocumentTrim({
+          messages: baseMessages,
+          currentMessage,
+          documentFilename: trimDocument.filename,
+        });
+        // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+        devTrace('trim-intent', {
+          filename: trimDocument.filename,
+          target: trimTarget,
+        });
+        if (trimTarget) {
+          return await this.executeDocumentTrim(
+            context,
+            trimTarget,
+            trimDocument,
+          );
+        }
+      }
+    }
 
     // Phase 2 routing: a natively-capable picked model runs the tool
     // IN-TURN on the Responses path — no round-trip, no pre-classification
@@ -323,6 +409,26 @@ export class ToolRouterEnricher extends BasePipelineStage {
         '[ToolRouterEnricher] All requested tools forced; skipping router decision',
       );
     }
+
+    // A dead classifier (expired credential, schema rejection, outage) must
+    // be VISIBLE: without this marker, "router errored and fell back" and
+    // "router decided no tools" produce byte-identical streams, and users
+    // debug the wrong thing. The turn still proceeds without tools.
+    if (decided.degraded) {
+      await context.emitActivity?.('chat.activity.toolRoutingUnavailable');
+    }
+
+    // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+    devTrace('tool-router-decision', {
+      undecidedSearch,
+      undecidedInterpreter,
+      forceWebSearch,
+      forceInterpreter,
+      nativeInterpreter,
+      decidedTools: decided.tools,
+      degraded: decided.degraded ?? false,
+      codeTask: decided.codeTask?.slice(0, 200) ?? null,
+    });
 
     const tools = new Set(
       decided.tools.filter(
@@ -1062,6 +1168,152 @@ export class ToolRouterEnricher extends BasePipelineStage {
    * run below the assistant message. Failures degrade to a merged notice —
    * the chat itself never fails because the sandbox did.
    */
+  /**
+   * Dedicated deterministic length-transformation path: Stage-1 LLM edit
+   * plan → Stage-2 mechanical sandbox execution on the ORIGINAL bytes.
+   * Shares the interpreter's budget, record, and context-merge plumbing so
+   * rendering (GeneratedFilesPanel, tool strip) is unchanged.
+   */
+  private async executeDocumentTrim(
+    context: ChatContext,
+    target: TrimTarget,
+    document: TrimmableDocument,
+  ): Promise<ChatContext> {
+    // Same degrade-don't-abort contract (and the same daily budget) as the
+    // general interpreter path.
+    if (
+      !(await consumeToolBudget(context, 'feature.codeInterpreter.runsPerDay'))
+    ) {
+      await context.emitActivity?.('chat.activity.codeInterpreterLimitReached');
+      return context;
+    }
+
+    const baseMessages = context.enrichedMessages || context.messages;
+    const startTime = Date.now();
+    console.log(
+      `[ToolRouterEnricher] Executing document trim for ${sanitizeForLog(document.filename)}`,
+    );
+    // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+    devTrace('trim-start', { filename: document.filename, target });
+
+    try {
+      const inputFiles = await this.collectInterpreterInputFiles(context);
+      const documentFile = inputFiles.find(
+        (f) => f.filename.toLowerCase() === document.filename.toLowerCase(),
+      );
+      if (!documentFile) {
+        throw new Error(`Attachment bytes not found for ${document.filename}`);
+      }
+
+      const extractedText = await this.resolveExtractedText(
+        context,
+        documentFile,
+      );
+
+      let trimTimer: ReturnType<typeof setTimeout> | undefined;
+      const result = await Promise.race([
+        runDocumentTrim({
+          document: documentFile,
+          format: document.format,
+          extractedText,
+          target,
+          session: context.session,
+          interpreterTool: this.codeInterpreterTool,
+          // Slightly under the outer race below so the pipeline's own
+          // deadline handling (retry containment, recovery) always wins.
+          budgetMs: ToolRouterEnricher.INTERPRETER_TIMEOUT_MS - 5000,
+          onActivity: (key, params) => {
+            void context.emitActivity?.(key, params);
+          },
+        }),
+        new Promise<never>((_, reject) => {
+          trimTimer = setTimeout(() => {
+            reject(new Error('Document trim timed out'));
+          }, ToolRouterEnricher.INTERPRETER_TIMEOUT_MS);
+        }),
+      ]).finally(() => {
+        if (trimTimer) clearTimeout(trimTimer);
+      });
+
+      // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+      devTrace('trim-done', {
+        countBefore: result.countBefore,
+        countAfter: result.countAfter,
+        target: result.targetCount,
+        unit: result.unit,
+        retried: result.retried,
+        generatedFiles: result.generatedFiles.map((f) => f.filename),
+      });
+
+      await this.emitInterpreterRecord(
+        context,
+        result,
+        null,
+        Date.now() - startTime,
+      );
+
+      const lastMsg = baseMessages[baseMessages.length - 1];
+      const enrichedLastMessage = this.prependContextToMessage(
+        lastMsg,
+        this.buildInterpreterContext(result),
+      );
+      return {
+        ...context,
+        enrichedMessages: [...baseMessages.slice(0, -1), enrichedLastMessage],
+      };
+    } catch (error) {
+      console.error('[ToolRouterEnricher] Document trim failed:', error);
+      // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+      devTrace('trim-failed', {
+        error: error instanceof Error ? error.message : String(error),
+      });
+
+      await this.emitInterpreterRecord(
+        context,
+        null,
+        'Document trim failed',
+        Date.now() - startTime,
+      );
+
+      // Honest failure: the picked model must not invent a download.
+      const failureNotice =
+        `Note: an automatic length reduction of "${document.filename}" was attempted for this request but it FAILED — no trimmed file exists. ` +
+        `Tell the user plainly that the document could not be trimmed this time, do not claim any file was produced, and offer to retry.`;
+      const lastMsg = baseMessages[baseMessages.length - 1];
+      const enrichedLastMessage = this.prependContextToMessage(
+        lastMsg,
+        failureNotice,
+      );
+      return {
+        ...context,
+        enrichedMessages: [...baseMessages.slice(0, -1), enrichedLastMessage],
+      };
+    }
+  }
+
+  /**
+   * Planning input for the trim pipeline: the already-extracted inline text
+   * when FileProcessor produced it this turn, else a fresh extraction from
+   * the raw bytes (follow-up turns, or files that went the summarize path —
+   * a relevance summary cannot anchor verbatim edit operations).
+   */
+  private async resolveExtractedText(
+    context: ChatContext,
+    documentFile: CodeInterpreterInputFile,
+  ): Promise<string> {
+    const inline = context.processedContent?.inlineFiles?.find(
+      (f) => f.filename.toLowerCase() === documentFile.filename.toLowerCase(),
+    );
+    if (inline?.content) return inline.content;
+
+    const file = new File(
+      [new Uint8Array(documentFile.data)],
+      documentFile.filename,
+      {},
+    );
+    return await loadDocument(file);
+  }
+
   private async executeCodeInterpreter(
     context: ChatContext,
     task: string,
@@ -1077,8 +1329,12 @@ export class ToolRouterEnricher extends BasePipelineStage {
     const baseMessages = context.enrichedMessages || context.messages;
     const startTime = Date.now();
     console.log('[ToolRouterEnricher] Executing code interpreter');
+    // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+    devTrace('interpreter-start', { task: task.slice(0, 200) });
 
-    // Interpreter runs take multiple seconds — keep the loader honest.
+    // Interpreter runs take multiple seconds — keep the loader honest. (The
+    // client adds its own live elapsed counter to any chat.activity.* text,
+    // so one marker is enough for the whole non-streaming sandbox call.)
     await context.emitActivity?.('chat.activity.runningCode');
 
     try {
@@ -1106,6 +1362,12 @@ export class ToolRouterEnricher extends BasePipelineStage {
       console.log(
         `[ToolRouterEnricher] Code interpreter completed: ${result.codeRuns.length} runs, ${result.generatedFiles.length} generated files, ${result.text.length} chars`,
       );
+      // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+      devTrace('interpreter-done', {
+        codeRuns: result.codeRuns.length,
+        generatedFiles: result.generatedFiles.map((f) => f.filename),
+        textChars: result.text.length,
+      });
 
       await this.emitInterpreterRecord(
         context,
@@ -1131,6 +1393,11 @@ export class ToolRouterEnricher extends BasePipelineStage {
         `[ToolRouterEnricher] Code interpreter ${timedOut ? 'timed out' : 'failed'}:`,
         error,
       );
+      // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+      devTrace('interpreter-failed', {
+        timedOut,
+        error: error instanceof Error ? error.message : String(error),
+      });
 
       await this.emitInterpreterRecord(
         context,
@@ -1231,11 +1498,48 @@ export class ToolRouterEnricher extends BasePipelineStage {
   }
 
   /**
-   * Loads the RAW bytes of the last user message's attachments from blob
-   * storage for the sandbox. Raw bytes matter: the interpreter must parse
-   * the actual CSV/XLSX, not the text summary the file pipeline produced.
-   * Reads from `context.messages` (not enrichedMessages) because
-   * processors may have rewritten attachment entries there.
+   * Filenames of `file_url` attachments across the conversation, split into
+   * the current (last) message vs. earlier turns. Router input only — lets
+   * the classifier resolve "this document" on follow-up turns where the
+   * last message itself carries no attachment.
+   */
+  private collectAttachmentManifest(context: ChatContext): {
+    currentTurn: string[];
+    priorTurns: string[];
+  } {
+    const namesOf = (content: Message['content']): string[] =>
+      Array.isArray(content)
+        ? content.flatMap((c) => {
+            if (c.type !== 'file_url') return [];
+            const f = c as FileMessageContent;
+            return [
+              f.originalFilename || f.url?.split('/').pop() || 'uploaded file',
+            ];
+          })
+        : [];
+
+    const messages = context.messages;
+    const currentTurn = namesOf(messages[messages.length - 1]?.content);
+    const priorTurns: string[] = [];
+    for (let i = messages.length - 2; i >= 0; i--) {
+      for (const name of namesOf(messages[i]?.content)) {
+        if (!priorTurns.includes(name) && !currentTurn.includes(name)) {
+          priorTurns.push(name);
+        }
+      }
+    }
+    return { currentTurn, priorTurns };
+  }
+
+  /**
+   * Loads the RAW bytes of the conversation's most recent attachments from
+   * blob storage for the sandbox. Raw bytes matter: the interpreter must
+   * parse the actual CSV/XLSX, not the text summary the file pipeline
+   * produced. Walks backwards from the last message because interpreter
+   * tasks are often follow-ups ("now trim it to 6k words") on a message
+   * that carries no attachment itself. Reads from `context.messages` (not
+   * enrichedMessages) because processors may have rewritten attachment
+   * entries there.
    */
   private async collectInterpreterInputFiles(
     context: ChatContext,
@@ -1243,33 +1547,38 @@ export class ToolRouterEnricher extends BasePipelineStage {
     const MAX_FILES = 4;
     const MAX_TOTAL_BYTES = 20 * 1024 * 1024;
 
-    const lastMessage = context.messages[context.messages.length - 1];
-    if (!Array.isArray(lastMessage?.content)) return [];
-
     const refs: Array<{
       id: string;
       filename: string;
       location: 'files' | 'images';
     }> = [];
-    for (const item of lastMessage.content) {
-      if (refs.length >= MAX_FILES) break;
-      if (item.type === 'file_url') {
-        const f = item as FileMessageContent;
-        const id = f.url?.split('/').pop()?.split('?')[0];
-        if (id) {
-          refs.push({
-            id,
-            filename: f.originalFilename || id,
-            location: 'files',
-          });
-        }
-      } else if (item.type === 'image_url') {
-        const img = item as ImageMessageContent;
-        const url = img.image_url?.url ?? '';
-        // Only blob-backed references; data URLs are legacy and rare.
-        if (url.startsWith('/api/file/')) {
-          const id = url.split('/').pop()?.split('?')[0];
-          if (id) refs.push({ id, filename: id, location: 'images' });
+    for (
+      let messageIndex = context.messages.length - 1;
+      messageIndex >= 0 && refs.length === 0;
+      messageIndex--
+    ) {
+      const message = context.messages[messageIndex];
+      if (!Array.isArray(message?.content)) continue;
+      for (const item of message.content) {
+        if (refs.length >= MAX_FILES) break;
+        if (item.type === 'file_url') {
+          const f = item as FileMessageContent;
+          const id = f.url?.split('/').pop()?.split('?')[0];
+          if (id) {
+            refs.push({
+              id,
+              filename: f.originalFilename || id,
+              location: 'files',
+            });
+          }
+        } else if (item.type === 'image_url') {
+          const img = item as ImageMessageContent;
+          const url = img.image_url?.url ?? '';
+          // Only blob-backed references; data URLs are legacy and rare.
+          if (url.startsWith('/api/file/')) {
+            const id = url.split('/').pop()?.split('?')[0];
+            if (id) refs.push({ id, filename: id, location: 'images' });
+          }
         }
       }
     }

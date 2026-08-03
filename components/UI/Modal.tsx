@@ -113,6 +113,13 @@ const Modal: React.FC<ModalProps> = ({
   const modalContent = (
     <div
       className={`fixed inset-0 ${zIndexClass} flex ${verticalAlign === 'top' ? 'items-start pt-16' : 'items-center'} justify-center overflow-y-auto`}
+      // Modals portal to document.body, so to the settings dialog's
+      // close-on-outside-mousedown handler every click in here reads as
+      // "outside" — which closed settings (unmounting this modal and its
+      // handlers) the moment a confirm button was pressed. A modal stacked
+      // above settings was necessarily opened FROM settings; interacting
+      // with it must never close the dialog underneath.
+      data-settings-portal
     >
       {/* Backdrop/overlay */}
       <div

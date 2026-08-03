@@ -8,7 +8,7 @@
  * switch, the audit line, or the fail-open behaviour.
  */
 import { Session } from 'next-auth';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 import {
   applyMode,
@@ -21,6 +21,7 @@ import { periodKindForWindow } from '@/lib/services/limits/periods';
 import { buildPrincipal } from '@/lib/services/limits/principal';
 import { ResolvedLimit } from '@/lib/services/limits/resolver';
 import { CounterRequest, reserve } from '@/lib/services/limits/usageStore';
+import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 
 import { errorResponse } from '@/lib/utils/server/api/apiResponse';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
@@ -39,6 +40,13 @@ export interface GuardOptions {
    * in one call.
    */
   ceilingKey?: string;
+  /**
+   * When provided, the Entra group-membership cache is warmed before the
+   * principal is built, so group-scoped overrides apply on this request
+   * (third pass §5). Omitting it keeps user/domain/attribute targeting
+   * intact — groups just resolve from whatever the cache already holds.
+   */
+  req?: NextRequest;
 }
 
 export interface GuardResult {
@@ -64,6 +72,9 @@ export async function guardLimit(
 ): Promise<GuardResult> {
   const amount = options.amount ?? 1;
   try {
+    if (options.req) {
+      await resolveUserGroupIds(options.req, session);
+    }
     const policy = await currentPolicy();
     const principal = buildPrincipal(session);
     if (!principal.userId) return ALLOWED;

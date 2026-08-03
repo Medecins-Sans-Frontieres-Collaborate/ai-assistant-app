@@ -924,6 +924,176 @@ describe('ToolRouterService', () => {
       });
     });
 
+    describe('classifyDocumentTrim', () => {
+      function mockClassification(payload: unknown) {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [{ message: { content: JSON.stringify(payload) } }],
+        });
+      }
+
+      const baseRequest = {
+        messages: [
+          {
+            role: 'user',
+            content: 'réduis ce document à 6000 mots',
+            messageType: MessageType.TEXT,
+          } as Message,
+        ],
+        currentMessage:
+          'réduis ce document à 6000 mots\n\n[Files attached to the current message: manuscript.docx]',
+        documentFilename: 'manuscript.docx',
+      };
+
+      it('maps a word-count classification to an absolute target', async () => {
+        mockClassification({
+          isLengthReductionRequest: true,
+          targetValue: 6000,
+          targetUnit: 'words',
+        });
+
+        const target = await service.classifyDocumentTrim(baseRequest);
+
+        expect(target).toEqual({
+          kind: 'absolute',
+          unit: 'words',
+          target: 6000,
+          approx: false,
+        });
+        // The classifier receives the enriched currentMessage as the last
+        // message and the filename in the system prompt — meaning-based,
+        // works in any language.
+        const call = mockOpenAIClient.chat.completions.create.mock.calls[0][0];
+        expect(call.messages[0].content).toContain('manuscript.docx');
+        expect(call.messages[0].content).toContain('ANY language');
+        expect(call.messages[call.messages.length - 1].content).toBe(
+          baseRequest.currentMessage,
+        );
+        expect(call.response_format.json_schema.name).toBe(
+          'document_trim_classification',
+        );
+      });
+
+      it('maps pages to approximate words', async () => {
+        mockClassification({
+          isLengthReductionRequest: true,
+          targetValue: 5,
+          targetUnit: 'pages',
+        });
+        expect(await service.classifyDocumentTrim(baseRequest)).toEqual({
+          kind: 'absolute',
+          unit: 'words',
+          target: 2500,
+          approx: true,
+        });
+      });
+
+      it('maps percent_to_keep to a ratio target', async () => {
+        mockClassification({
+          isLengthReductionRequest: true,
+          targetValue: 50,
+          targetUnit: 'percent_to_keep',
+        });
+        expect(await service.classifyDocumentTrim(baseRequest)).toEqual({
+          kind: 'ratio',
+          keep: 0.5,
+          approx: true,
+        });
+      });
+
+      it.each([
+        [
+          'not a reduction request',
+          {
+            isLengthReductionRequest: false,
+            targetValue: 0,
+            targetUnit: 'none',
+          },
+        ],
+        [
+          'zero target',
+          {
+            isLengthReductionRequest: true,
+            targetValue: 0,
+            targetUnit: 'words',
+          },
+        ],
+        [
+          'percent >= 100',
+          {
+            isLengthReductionRequest: true,
+            targetValue: 120,
+            targetUnit: 'percent_to_keep',
+          },
+        ],
+      ])('returns null for %s', async (_label, payload) => {
+        mockClassification(payload);
+        expect(await service.classifyDocumentTrim(baseRequest)).toBeNull();
+      });
+
+      it('returns null (degrades) when the call fails', async () => {
+        mockOpenAIClient.chat.completions.create.mockRejectedValue(
+          new Error('API error'),
+        );
+        expect(await service.classifyDocumentTrim(baseRequest)).toBeNull();
+      });
+
+      it('returns null on malformed classifier output', async () => {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [{ message: { content: 'not json' } }],
+        });
+        expect(await service.classifyDocumentTrim(baseRequest)).toBeNull();
+      });
+    });
+
+    describe('classifier input construction', () => {
+      it('sends the enriched currentMessage as the last message, not the raw text', async () => {
+        // Regression: the enricher builds `currentMessage` with file
+        // excerpts and the attachment manifest, but the classifier call used
+        // to map the raw conversation messages instead — so the router LLM
+        // saw "trim this to 6k words" with no evidence a file existed and
+        // classified document-transformation requests as pure text tasks.
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  needsWebSearch: false,
+                  searchQuery: '',
+                  searchRecency: 'none',
+                  searchComprehensive: false,
+                  additionalSearchQueries: [],
+                  needsCodeExecution: true,
+                  codeTask: 'Trim manuscript.docx to 6000 words',
+                }),
+              },
+            },
+          ],
+        });
+
+        const enriched =
+          'please trim this to 6k words\n\n' +
+          '[File excerpt: manuscript.docx]\nSome text…\n\n' +
+          '[Files attached to the current message: manuscript.docx]';
+        const result = await service.determineTool({
+          messages: [
+            {
+              role: 'user',
+              content: 'please trim this to 6k words',
+              messageType: MessageType.TEXT,
+            } as Message,
+          ],
+          currentMessage: enriched,
+          considerCodeExecution: true,
+        });
+
+        const sentMessages =
+          mockOpenAIClient.chat.completions.create.mock.calls[0][0].messages;
+        expect(sentMessages[sentMessages.length - 1].content).toBe(enriched);
+        expect(result.tools).toContain('code_interpreter');
+        expect(result.codeTask).toBe('Trim manuscript.docx to 6000 words');
+      });
+    });
+
     describe('real-world scenarios', () => {
       it('should recognize need for real-time stock price data', async () => {
         const mockResponse = {

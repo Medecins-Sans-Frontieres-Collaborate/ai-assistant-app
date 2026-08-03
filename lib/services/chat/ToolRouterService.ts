@@ -1,3 +1,5 @@
+import { devTrace } from '@/lib/utils/server/debug/devTrace';
+
 import {
   Message,
   ToolRouterRequest,
@@ -5,8 +7,40 @@ import {
   ToolType,
 } from '@/types/chat';
 
+import { TrimTarget, WORDS_PER_PAGE } from './tools/documentTrim/trimDetector';
+
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 import { OpenAI } from 'openai';
+
+/** Classifier output for the document-trim intent (strict schema). */
+interface TrimClassification {
+  isLengthReductionRequest: boolean;
+  targetValue: number;
+  targetUnit: 'words' | 'characters' | 'pages' | 'percent_to_keep' | 'none';
+}
+
+const TRIM_CLASSIFY_SCHEMA = {
+  type: 'object',
+  properties: {
+    isLengthReductionRequest: {
+      type: 'boolean',
+      description:
+        'True ONLY when the last user message asks to reduce/shorten the attached document to an explicit target length.',
+    },
+    targetValue: {
+      type: 'number',
+      description:
+        'The numeric target (word/character/page count, or percent of the original to KEEP). 0 when not a length-reduction request.',
+    },
+    targetUnit: {
+      type: 'string',
+      enum: ['words', 'characters', 'pages', 'percent_to_keep', 'none'],
+      description: '"none" when not a length-reduction request.',
+    },
+  },
+  required: ['isLengthReductionRequest', 'targetValue', 'targetUnit'],
+  additionalProperties: false,
+} as const;
 
 /**
  * ToolRouterService
@@ -18,6 +52,127 @@ export class ToolRouterService {
   private tracer = trace.getTracer('tool-router-service');
 
   constructor(private openAIClient: OpenAI) {}
+
+  /**
+   * Multilingual intent classification for the dedicated document-trim
+   * pipeline. Called ONLY when the factual precondition holds (a trimmable
+   * document is attached to the conversation) — the classifier answers the
+   * language-dependent half: did the user ask to reduce that document to a
+   * target length, and what is the target? Users write in any of the app's
+   * 33 languages, so this is deliberately an LLM call, not a keyword match.
+   *
+   * Returns a resolved TrimTarget, or null (not a trim request, or the
+   * classifier failed — the turn then degrades to normal routing).
+   */
+  async classifyDocumentTrim(request: {
+    messages: Message[];
+    currentMessage: string;
+    documentFilename: string;
+  }): Promise<TrimTarget | null> {
+    try {
+      const recentMessages = this.getRecentMessages(request.messages, 6);
+      const lastIndex = recentMessages.length - 1;
+
+      const systemPrompt = `You classify whether the user's LAST message asks to REDUCE an attached document to a target length. The attached document is: ${request.documentFilename}
+
+Users write in ANY language — classify by MEANING, never by keywords.
+
+isLengthReductionRequest is true ONLY when the message asks to shorten/trim/condense the attached document AND gives an explicit target:
+- a count of words, characters, or pages ("à 6000 mots", "auf 3000 Wörter kürzen", "reducir a 5 páginas"), or
+- a fraction/percentage of the original ("cut it in half" → 50 percent_to_keep; "reduce by 30%" → 70 percent_to_keep; "देखें आधा कर दो" → 50 percent_to_keep).
+Follow-up phrasings count when the conversation shows a pending trim request ("please do it", "vas-y").
+
+It is FALSE for: summarizing, critiquing, translating, expanding, formatting, questions about the document, or length mentions that are not reduction targets ("the doc is 6000 words — fix the typos").
+
+When true: set targetValue and targetUnit. When false: targetValue 0, targetUnit "none".`;
+
+      const response = await this.openAIClient.chat.completions.create({
+        model: 'gpt-5.4-nano',
+        messages: [
+          { role: 'system' as const, content: systemPrompt },
+          ...recentMessages.map((msg, index) => ({
+            role: msg.role as 'user' | 'assistant' | 'system',
+            content:
+              index === lastIndex
+                ? request.currentMessage
+                : typeof msg.content === 'string'
+                  ? msg.content
+                  : this.extractTextContent(msg.content),
+          })),
+        ],
+        reasoning_effort: 'minimal',
+        max_completion_tokens: 60,
+        response_format: {
+          type: 'json_schema',
+          json_schema: {
+            name: 'document_trim_classification',
+            strict: true,
+            schema: TRIM_CLASSIFY_SCHEMA as unknown as Record<string, unknown>,
+          },
+        },
+      });
+
+      const raw = response.choices[0]?.message?.content;
+      if (!raw) return null;
+      const parsed = JSON.parse(raw) as TrimClassification;
+      return ToolRouterService.toTrimTarget(parsed);
+    } catch (error) {
+      // Degrade to normal routing — a dead classifier must not block chat.
+      console.error(
+        '[ToolRouterService] Document-trim classification failed:',
+        error instanceof Error ? error.message : error,
+      );
+      // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+      devTrace('trim-classify-error', {
+        error: error instanceof Error ? error.message.slice(0, 200) : 'unknown',
+      });
+      return null;
+    }
+  }
+
+  /** Deterministic unit mapping — arithmetic stays out of the model. */
+  private static toTrimTarget(
+    classification: TrimClassification,
+  ): TrimTarget | null {
+    const { isLengthReductionRequest, targetValue, targetUnit } =
+      classification;
+    if (
+      !isLengthReductionRequest ||
+      targetUnit === 'none' ||
+      !Number.isFinite(targetValue) ||
+      targetValue <= 0
+    ) {
+      return null;
+    }
+    switch (targetUnit) {
+      case 'words':
+        return {
+          kind: 'absolute',
+          unit: 'words',
+          target: Math.round(targetValue),
+          approx: false,
+        };
+      case 'characters':
+        return {
+          kind: 'absolute',
+          unit: 'characters',
+          target: Math.round(targetValue),
+          approx: false,
+        };
+      case 'pages':
+        return {
+          kind: 'absolute',
+          unit: 'words',
+          target: Math.round(targetValue * WORDS_PER_PAGE),
+          approx: true,
+        };
+      case 'percent_to_keep':
+        if (targetValue >= 100) return null;
+        return { kind: 'ratio', keep: targetValue / 100, approx: true };
+      default:
+        return null;
+    }
+  }
 
   /**
    * Determines which tools are needed for the current message.
@@ -86,21 +241,24 @@ export class ToolRouterService {
 
 You ALSO determine if sandboxed code execution (Python) would materially improve the answer.
 
+The user message may be followed by bracketed context lines: file/summary/transcript EXCERPTS, and an attachment manifest ("[Files attached to the current message: …]" / "[Files uploaded earlier in this conversation: …]"). When the user says "this", "the document", or "the file", they mean those attached files — including ones uploaded on an earlier turn. The sandbox receives the real files, so a task on a previously uploaded file is fully executable.
+
 Code execution is needed for:
 - Data analysis over attached files or pasted tabular data (CSV, Excel, JSON)
 - Chart / plot / visualization generation
 - Non-trivial calculations, statistics, simulations, or numeric verification
 - File transformations (parse, filter, aggregate, convert, export)
 - Producing downloadable files (Excel, CSV, Word, charts) from data or content in the conversation — e.g. "export this as a spreadsheet", "make a document out of these notes"
+- Editing an ATTACHED document into a new version of itself — shortening or trimming it to a target length (words, characters, or pages), restructuring, reformatting, or converting it — the deliverable is a new file in the original format
 
 Code execution is NOT needed for:
 - Writing code examples or tutorials for the user to run themselves
 - Explaining concepts, debugging by inspection, code review
 - Simple arithmetic a model can do reliably
-- Pure text tasks (writing, translation, summarization)
+- Pure text tasks answered directly in chat (writing, translating, or summarizing pasted text). But when the request is to shorten, rewrite, translate, or reformat an ATTACHED FILE, that is a file transformation and DOES need code execution — regardless of whether the target is expressed in words, characters, or pages
 
 IMPORTANT: Always provide codeTask in your response:
-- If needsCodeExecution is true, provide a self-contained task description (what to compute/produce, referencing attached files by name)
+- If needsCodeExecution is true, provide a self-contained task description (what to compute/produce, referencing attached files by their exact names from the manifest — current-turn OR earlier-turn)
 - If needsCodeExecution is false, provide an empty string`
               : '';
 
@@ -154,15 +312,24 @@ Also tune the search when needsWebSearch is true:
             // Take last 3 message pairs (6 messages max) to keep it efficient
             const recentMessages = this.getRecentMessages(request.messages, 6);
 
-            // Build messages array with conversation context
+            // Build messages array with conversation context. The LAST
+            // message is replaced by `currentMessage`: the enricher-built
+            // routing input carrying what the raw message text cannot —
+            // file/summary excerpts and the attachment manifest. Without
+            // that substitution the classifier sees "trim this to 6k words"
+            // with no evidence any file exists, and can only classify it as
+            // a pure text task.
+            const lastIndex = recentMessages.length - 1;
             const conversationMessages = [
               { role: 'system' as const, content: systemPrompt },
-              ...recentMessages.map((msg) => ({
+              ...recentMessages.map((msg, index) => ({
                 role: msg.role as 'user' | 'assistant' | 'system',
                 content:
-                  typeof msg.content === 'string'
-                    ? msg.content
-                    : this.extractTextContent(msg.content),
+                  index === lastIndex
+                    ? request.currentMessage
+                    : typeof msg.content === 'string'
+                      ? msg.content
+                      : this.extractTextContent(msg.content),
               })),
             ];
 
@@ -348,11 +515,14 @@ Also tune the search when needsWebSearch is true:
             console.error(
               `[ToolRouterService] Falling back to no-tools (web_search disabled). Cause: ${errMessage}`,
             );
+            // TEMP DEBUG (see devTrace.ts) — DELETE before merge.
+            devTrace('tool-router-error', { error: errMessage.slice(0, 300) });
             span.recordException(error as Error);
             span.setAttribute('tool_router.fallback', 'error');
             span.setAttribute('tool_router.fallback_reason', errMessage);
             return {
               tools: [],
+              degraded: true,
               reasoning: 'Error determining tools, proceeding without search',
             };
           }

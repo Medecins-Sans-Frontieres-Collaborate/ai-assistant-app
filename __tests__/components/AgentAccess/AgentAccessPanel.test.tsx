@@ -173,6 +173,7 @@ function jsonResponse(status: number, body: unknown) {
   };
 }
 
+let groupSearchResponse: { id: string; name: string }[] = [];
 let connectorsResponse: AdminStoredConnector[] = [];
 let connectorsUnavailable = false;
 let secretSealingAvailable = true;
@@ -313,6 +314,12 @@ const fetchMock = vi.fn(async (input: string | URL, init?: RequestInit) => {
     // /api/agents responds without the {success, data} envelope.
     return jsonResponse(200, { agents: agentsResponse });
   }
+  if (url.startsWith('/api/m365/groups')) {
+    return jsonResponse(200, {
+      success: true,
+      data: { groups: groupSearchResponse },
+    });
+  }
   throw new Error(`Unexpected fetch: ${method} ${url}`);
 });
 
@@ -362,6 +369,7 @@ describe('AgentAccessPanel', () => {
     agentDeleteStatus = 200;
     agentDeleteCalls = [];
     agentSaveErrorBody = {};
+    groupSearchResponse = [];
     connectorsResponse = [];
     connectorsUnavailable = false;
     secretSealingAvailable = true;
@@ -412,7 +420,7 @@ describe('AgentAccessPanel', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('restricted editor shows domain/user chip inputs and a disabled Groups section', async () => {
+  it('restricted editor shows domain/user chip inputs and an editable Groups section', async () => {
     renderPanel();
     const row = await openEditorFor('Sales Agent');
 
@@ -424,18 +432,50 @@ describe('AgentAccessPanel', () => {
       within(row).getByPlaceholderText('person@example.org'),
     ).toBeInTheDocument();
 
-    // Groups: rendered but disabled, with the pending-consent note. The
-    // groups chip input is the only disabled textbox in the editor.
+    // Groups: live since third pass §5 — search input + id chip input, no
+    // disabled scaffold left.
     expect(within(row).getByText('Allowed groups')).toBeInTheDocument();
     expect(
-      within(row).getByText(
-        "Group-based access is pending tenant admin consent and can't be edited yet.",
-      ),
+      within(row).getByPlaceholderText('Search groups by name…'),
+    ).toBeInTheDocument();
+    expect(
+      within(row).getByPlaceholderText('Entra group object ID'),
     ).toBeInTheDocument();
     const disabledInputs = within(row)
       .getAllByRole('textbox')
       .filter((el) => (el as HTMLInputElement).disabled);
-    expect(disabledInputs).toHaveLength(1);
+    expect(disabledInputs).toHaveLength(0);
+  });
+
+  it('group typeahead adds an id chip with a name caption, and the id persists on save', async () => {
+    groupSearchResponse = [
+      { id: 'aaaabbbb-cccc-dddd-eeee-ffff00001111', name: 'Field Comms' },
+    ];
+    renderPanel();
+    const row = await openEditorFor('Sales Agent');
+
+    fireEvent.change(
+      within(row).getByPlaceholderText('Search groups by name…'),
+      { target: { value: 'field' } },
+    );
+    // Past the 300ms debounce: the result row shows name + id.
+    fireEvent.click(await within(row).findByText('Field Comms'));
+
+    // The chip is the raw OBJECT ID (the persisted value); the caption maps
+    // it to the display name for the admin.
+    expect(
+      within(row).getByText('aaaabbbb-cccc-dddd-eeee-ffff00001111'),
+    ).toBeInTheDocument();
+    expect(
+      within(row).getByText(/Field Comms \(aaaabbbb…\)/),
+    ).toBeInTheDocument();
+
+    fireEvent.click(within(row).getByText('Save'));
+    await waitFor(() => expect(putCalls).toHaveLength(1));
+    expect(
+      (putCalls[0].body as { access: { allowGroups: string[] } }).access
+        .allowGroups,
+    ).toEqual(['aaaabbbb-cccc-dddd-eeee-ffff00001111']);
   });
 
   it('local admins only see their delegated canonical keys', async () => {

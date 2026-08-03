@@ -11,19 +11,21 @@ export async function register() {
   // Only run on Node.js runtime (not Edge)
   // Edge Runtime doesn't support OpenTelemetry NodeSDK
   if (process.env.NEXT_RUNTIME === 'nodejs') {
-    // Reconcile chunked transcription jobs that were mid-flight when the
-    // previous process exited. Without this, clients polling such jobs see a
-    // permanent 404 with no indication the job was lost to a restart. Also
-    // reclaim disk: interrupted jobs' chunk files and any orphaned per-job
-    // chunk directories can never be consumed again.
+    // Reclaim local disk from chunked transcription: ffmpeg chunk dirs under
+    // /tmp/chunked-transcription/ are produced and consumed by an in-process
+    // pipeline, so after a restart every one of them is orphaned. Job STATE
+    // needs no startup reconciliation anymore — it lives in blob storage and
+    // interrupted jobs are lazily failed at poll time (STALE_JOB_MS in
+    // chunkedJobStore), which is also the only approach that is correct with
+    // multiple replicas (this replica restarting must not fail jobs still
+    // running elsewhere).
     try {
-      const { markInterruptedJobsFailed, sweepOrphanedChunkDirs } =
+      const { sweepOrphanedChunkDirs } =
         await import('@/lib/services/transcription/chunkedJobStore');
-      markInterruptedJobsFailed();
       sweepOrphanedChunkDirs();
     } catch (err) {
       console.warn(
-        '[Instrumentation] Could not reconcile interrupted transcription jobs:',
+        '[Instrumentation] Could not sweep orphaned transcription chunk dirs:',
         err,
       );
     }
@@ -42,6 +44,21 @@ export async function register() {
     await (
       await import('@/lib/services/limits/startupWarnings')
     ).logLimitsStartupWarnings();
+
+    // Rehearse the static org RAG agents' search index against the retrieval
+    // contract (admin-authored agents are validated on save; the file-based
+    // ones have no other admission gate). Fire-and-forget: one Search
+    // round-trip that must never block or fail boot.
+    try {
+      void (
+        await import('@/lib/services/orgAgents/startupIndexCheck')
+      ).logStaticOrgAgentIndexWarnings();
+    } catch (err) {
+      console.warn(
+        '[Instrumentation] Static org-agent index check skipped:',
+        err,
+      );
+    }
 
     // Skip OpenTelemetry in development unless explicitly enabled.
     // OTel's request body cloning conflicts with routes that read request.text().

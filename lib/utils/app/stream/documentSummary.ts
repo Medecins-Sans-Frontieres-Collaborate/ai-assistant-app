@@ -182,6 +182,12 @@ interface ParseAndQueryFilterOpenAIArguments {
   images?: ImageMessageContent[];
   /** Pre-extracted text content to avoid double extraction when caller already loaded the document */
   preExtractedText?: string;
+  /**
+   * Batch-level progress callback (chunks attempted so far, total chunks).
+   * Large documents mean dozens of sequential LLM batches — callers use this
+   * to keep the client's loader honest instead of silent for minutes.
+   */
+  onProgress?: (processedChunks: number, totalChunks: number) => void;
 }
 
 /**
@@ -281,6 +287,7 @@ export async function parseAndQueryFileOpenAI({
   stream = true,
   images = [],
   preExtractedText,
+  onProgress,
 }: ParseAndQueryFilterOpenAIArguments): Promise<ReadableStream | string> {
   console.log(
     '[parseAndQueryFileOpenAI] Starting with file:',
@@ -352,6 +359,8 @@ export async function parseAndQueryFileOpenAI({
 
   let combinedSummary: string = '';
   let processedChunkCount = 0;
+  const totalChunks = chunks.length;
+  let attemptedChunkCount = 0;
 
   while (chunks.length > 0) {
     const currentChunks = chunks.splice(0, chunkConfig.batchSize);
@@ -382,6 +391,10 @@ export async function parseAndQueryFileOpenAI({
 
     const validSummaries = summaries.filter((summary) => summary !== null);
     processedChunkCount += validSummaries.length;
+    // Progress counts attempts (not successes) so a failed chunk still moves
+    // the loader instead of stalling it.
+    attemptedChunkCount += currentChunks.length;
+    onProgress?.(attemptedChunkCount, totalChunks);
 
     let batchSummary = '';
     for (const summary of validSummaries) {

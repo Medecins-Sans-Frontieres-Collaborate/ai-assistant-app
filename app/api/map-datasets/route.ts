@@ -1,9 +1,12 @@
+import { NextRequest } from 'next/server';
+
 import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessService';
 import {
   createAgentAccessBlobStorage,
   listAllMapDatasetMetas,
 } from '@/lib/services/agentAccess/accessRulesStore';
 import { MAP_DATASET_SOURCE } from '@/lib/services/agentAccess/types';
+import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 
 import {
   handleApiError,
@@ -26,7 +29,7 @@ import { auth } from '@/auth';
  * Returns an empty list rather than a 403 when the feature is off or the
  * user is entitled to nothing: "no datasets" is a normal state.
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   const session = await auth();
   if (!session?.user) return unauthorizedResponse();
 
@@ -34,6 +37,10 @@ export async function GET() {
   if (!service.isEnabled()) {
     return successResponse({ datasets: [] });
   }
+
+  // Group-membership warm-up MUST precede the evaluateAccess filter below —
+  // group-scoped rules read the cache synchronously. Never throws.
+  await resolveUserGroupIds(request, session);
 
   try {
     await service.ensureFresh();

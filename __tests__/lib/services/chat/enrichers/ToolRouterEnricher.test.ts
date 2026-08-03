@@ -23,6 +23,16 @@ vi.mock('@/lib/services/chat/tools/citedSourceReader', () => ({
   readCitedSources: vi.fn(),
 }));
 
+const runDocumentTrimMock = vi.fn();
+vi.mock('@/lib/services/chat/tools/documentTrim/DocumentTrimPipeline', () => ({
+  runDocumentTrim: (...args: unknown[]) => runDocumentTrimMock(...args),
+}));
+
+const consumeToolBudgetMock = vi.fn();
+vi.mock('@/lib/services/limits/toolBudget', () => ({
+  consumeToolBudget: (...args: unknown[]) => consumeToolBudgetMock(...args),
+}));
+
 describe('ToolRouter Enricher', () => {
   let enricher: ToolRouterEnricher;
   let mockToolRouterService: any;
@@ -35,6 +45,7 @@ describe('ToolRouter Enricher', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    consumeToolBudgetMock.mockResolvedValue(true);
     // Most search expectations here encode the Bing-agent path (agent model
     // requirement, model-labeled records); google-news has its own describe.
     (env as any).WEB_SEARCH_PROVIDER = 'bing-agent';
@@ -42,6 +53,9 @@ describe('ToolRouter Enricher', () => {
     // Mock ToolRouterService
     mockToolRouterService = {
       determineTool: vi.fn(),
+      // Factual trim gate passes → intent classifier consulted; null =
+      // "not a trim request", turn proceeds with normal routing.
+      classifyDocumentTrim: vi.fn().mockResolvedValue(null),
     };
 
     // Mock AgentChatService
@@ -659,7 +673,7 @@ describe('ToolRouter Enricher', () => {
         expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
           expect.objectContaining({
             currentMessage: expect.stringContaining(
-              '[Document summary: doc1.pdf]',
+              '[Document summary excerpt: doc1.pdf]',
             ),
           }),
         );
@@ -694,7 +708,9 @@ describe('ToolRouter Enricher', () => {
 
         expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
           expect.objectContaining({
-            currentMessage: expect.stringContaining('[Audio/Video: audio.mp3]'),
+            currentMessage: expect.stringContaining(
+              '[Audio/Video excerpt: audio.mp3]',
+            ),
           }),
         );
 
@@ -702,6 +718,74 @@ describe('ToolRouter Enricher', () => {
           expect.objectContaining({
             currentMessage: expect.stringContaining(
               'This is the audio transcript',
+            ),
+          }),
+        );
+      });
+
+      it('appends an attachment manifest for current-turn and prior-turn files', async () => {
+        // Regression: follow-up turns ("now actually do it") carry no
+        // attachment on the last message; without the prior-turns manifest
+        // line the router cannot know a transformable file exists and
+        // classifies document-transformation requests as pure text tasks.
+        mockToolRouterService.determineTool.mockResolvedValue({
+          tools: [],
+          reasoning: 'No search needed',
+        });
+
+        const context = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          messages: [
+            createTestMessage({
+              content: [
+                { type: 'text', text: 'please trim this to 6k words' },
+                {
+                  type: 'file_url',
+                  url: '/api/file/abc123.docx',
+                  originalFilename: 'manuscript.docx',
+                },
+              ] as Message['content'],
+            }),
+            createTestMessage({
+              role: 'assistant',
+              content: 'Here is how I would trim it…',
+            }),
+            createTestMessage({ content: 'please do it' }),
+          ],
+        });
+
+        await enricher.execute(context);
+
+        expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
+          expect.objectContaining({
+            currentMessage: expect.stringContaining(
+              '[Files uploaded earlier in this conversation: manuscript.docx]',
+            ),
+          }),
+        );
+
+        const currentTurnContext = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          messages: [
+            createTestMessage({
+              content: [
+                { type: 'text', text: 'please trim this to 6k words' },
+                {
+                  type: 'file_url',
+                  url: '/api/file/abc123.docx',
+                  originalFilename: 'manuscript.docx',
+                },
+              ] as Message['content'],
+            }),
+          ],
+        });
+
+        await enricher.execute(currentTurnContext);
+
+        expect(mockToolRouterService.determineTool).toHaveBeenLastCalledWith(
+          expect.objectContaining({
+            currentMessage: expect.stringContaining(
+              '[Files attached to the current message: manuscript.docx]',
             ),
           }),
         );
@@ -1721,6 +1805,216 @@ describe('ToolRouter Enricher', () => {
         );
         expect(mockInterpreterExecute).not.toHaveBeenCalled();
       });
+    });
+  });
+
+  describe('document trim dedicated path', () => {
+    const trimMessage = (): Message =>
+      createTestMessage({
+        content: [
+          { type: 'text', text: 'please trim this to 6k words' },
+          {
+            type: 'file_url',
+            url: '/api/file/abc123.docx',
+            originalFilename: 'manuscript.docx',
+          },
+        ] as Message['content'],
+      });
+
+    const trimResult = {
+      text: 'Document trimmed: manuscript.docx (18000 words) → manuscript_trimmed_6000words.docx (6100 words); target 6000 words.',
+      codeRuns: [],
+      generatedFiles: [
+        {
+          url: '/api/file/out.docx',
+          filename: 'manuscript_trimmed_6000words.docx',
+          mime_type: 'application/octet-stream',
+          is_image: false,
+        },
+      ],
+      containerIds: [],
+      durationMs: 1000,
+      unit: 'words',
+      targetCount: 6000,
+      countBefore: 18000,
+      countAfter: 6100,
+      retried: false,
+    };
+
+    function trimContext(overrides: Record<string, unknown> = {}) {
+      const context = createTestChatContext({
+        searchMode: SearchMode.OFF,
+        interpreterMode: InterpreterMode.INTELLIGENT,
+        messages: [trimMessage()],
+        // Natively capable model — the trim path must STILL win over the
+        // native deferral (model discretion is the bug this path removes).
+        model: {
+          supportsCodeInterpreter: true,
+          supportsResponsesApi: true,
+          sdk: 'azure-openai',
+        },
+        processedContent: {
+          inlineFiles: [
+            { filename: 'manuscript.docx', content: 'word '.repeat(100) },
+          ],
+        },
+        ...overrides,
+      });
+      return context;
+    }
+
+    const wordsTarget = {
+      kind: 'absolute',
+      unit: 'words',
+      target: 6000,
+      approx: false,
+    };
+
+    beforeEach(() => {
+      runDocumentTrimMock.mockResolvedValue(trimResult);
+      mockToolRouterService.classifyDocumentTrim.mockResolvedValue(wordsTarget);
+      // Bytes for the attachment: stub the private collector so no blob
+      // client is needed.
+      (enricher as any).collectInterpreterInputFiles = vi
+        .fn()
+        .mockResolvedValue([
+          { filename: 'manuscript.docx', data: Buffer.from('bytes') },
+        ]);
+    });
+
+    it('runs the pipeline, bypassing the router and the native deferral', async () => {
+      const result = await enricher.execute(trimContext());
+
+      // Intent came from the multilingual classifier, scoped to the
+      // factually-attached document.
+      expect(mockToolRouterService.classifyDocumentTrim).toHaveBeenCalledWith(
+        expect.objectContaining({ documentFilename: 'manuscript.docx' }),
+      );
+      expect(runDocumentTrimMock).toHaveBeenCalledTimes(1);
+      const call = runDocumentTrimMock.mock.calls[0][0];
+      expect(call.target).toEqual(wordsTarget);
+      expect(call.format).toBe('docx');
+      expect(call.document.filename).toBe('manuscript.docx');
+      // Planning input came from the already-extracted inline text.
+      expect(call.extractedText).toContain('word');
+
+      expect(mockToolRouterService.determineTool).not.toHaveBeenCalled();
+      expect(result.nativeCodeInterpreter).toBeUndefined();
+
+      const lastMessage =
+        result.enrichedMessages![result.enrichedMessages!.length - 1];
+      const text = Array.isArray(lastMessage.content)
+        ? (
+            lastMessage.content.find((c) => c.type === 'text') as {
+              text: string;
+            }
+          ).text
+        : (lastMessage.content as string);
+      expect(text).toContain('Document trimmed');
+    });
+
+    it('fires on follow-up turns via prior-turn attachments', async () => {
+      const context = trimContext({
+        messages: [
+          trimMessage(),
+          createTestMessage({
+            role: 'assistant',
+            content: 'Here is how I would trim it…',
+          }),
+          createTestMessage({ content: 'please cut it down to 6000 words' }),
+        ],
+      });
+
+      await enricher.execute(context);
+
+      expect(runDocumentTrimMock).toHaveBeenCalledTimes(1);
+      expect(mockToolRouterService.determineTool).not.toHaveBeenCalled();
+    });
+
+    it('degrades to the limit marker when the daily budget is exhausted', async () => {
+      consumeToolBudgetMock.mockResolvedValue(false);
+      const emitActivity = vi.fn().mockResolvedValue(undefined);
+      const context = trimContext();
+      context.emitActivity = emitActivity;
+
+      const result = await enricher.execute(context);
+
+      expect(runDocumentTrimMock).not.toHaveBeenCalled();
+      expect(emitActivity).toHaveBeenCalledWith(
+        'chat.activity.codeInterpreterLimitReached',
+      );
+      expect(result.enrichedMessages).toBeUndefined();
+    });
+
+    it('never consults the intent classifier without a trimmable document (factual gate)', async () => {
+      mockToolRouterService.determineTool.mockResolvedValue({ tools: [] });
+      const context = trimContext({
+        searchMode: SearchMode.INTELLIGENT,
+        // PDF only — not trimmable; native model would defer, but search
+        // INTELLIGENT still consults the router.
+        messages: [
+          createTestMessage({
+            content: [
+              { type: 'text', text: 'please trim this to 6k words' },
+              {
+                type: 'file_url',
+                url: '/api/file/abc.pdf',
+                originalFilename: 'report.pdf',
+              },
+            ] as Message['content'],
+          }),
+        ],
+        model: { sdk: 'openai' },
+      });
+
+      await enricher.execute(context);
+
+      expect(mockToolRouterService.classifyDocumentTrim).not.toHaveBeenCalled();
+      expect(runDocumentTrimMock).not.toHaveBeenCalled();
+      expect(mockToolRouterService.determineTool).toHaveBeenCalled();
+    });
+
+    it('falls through to normal routing when the classifier says not a trim', async () => {
+      mockToolRouterService.classifyDocumentTrim.mockResolvedValue(null);
+      mockToolRouterService.determineTool.mockResolvedValue({ tools: [] });
+      const context = trimContext({
+        searchMode: SearchMode.INTELLIGENT,
+        model: { sdk: 'openai' },
+      });
+
+      await enricher.execute(context);
+
+      expect(mockToolRouterService.classifyDocumentTrim).toHaveBeenCalled();
+      expect(runDocumentTrimMock).not.toHaveBeenCalled();
+      expect(mockToolRouterService.determineTool).toHaveBeenCalled();
+    });
+
+    it('merges an honest failure notice and a failed record when the pipeline throws', async () => {
+      runDocumentTrimMock.mockRejectedValue(new Error('sandbox exploded'));
+      const emitMarker = vi.fn().mockResolvedValue(undefined);
+      const context = trimContext();
+      context.emitMarker = emitMarker;
+
+      const result = await enricher.execute(context);
+
+      const record = JSON.parse(
+        (emitMarker.mock.calls[0][0] as string)
+          .replace(/^[\s\S]*?<<<TOOL_CALL_RECORD>>>/, '')
+          .replace(/<<<END_TOOL_CALL_RECORD>>>[\s\S]*$/, ''),
+      );
+      expect(record.status).toBe('failed');
+
+      const lastMessage =
+        result.enrichedMessages![result.enrichedMessages!.length - 1];
+      const text = Array.isArray(lastMessage.content)
+        ? (
+            lastMessage.content.find((c) => c.type === 'text') as {
+              text: string;
+            }
+          ).text
+        : (lastMessage.content as string);
+      expect(text).toContain('FAILED');
+      expect(text).toContain('do not claim any file was produced');
     });
   });
 });

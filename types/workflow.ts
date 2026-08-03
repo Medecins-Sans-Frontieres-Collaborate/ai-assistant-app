@@ -359,6 +359,24 @@ export interface DocumentRevisionRecord {
   at: string;
 }
 
+/**
+ * Binding of a document workflow to a OneDrive/SharePoint file for two-way
+ * sync (docs/M365_THIRD_PASS_FEATURES_DESIGN.md §2). All sync is
+ * client-driven — delegated tokens only exist while the user is present.
+ */
+export interface M365DocumentBinding {
+  driveId: string;
+  itemId: string;
+  fileName: string;
+  webUrl: string;
+  format: 'docx' | 'md' | 'html' | 'txt';
+  /** Remote eTag at last successful sync — the If-Match guard for pushes. */
+  lastSyncedETag: string;
+  lastSyncedAt: string;
+  /** Push local edits automatically (debounced); opt-in per binding. */
+  autoPush: boolean;
+}
+
 export interface DocumentWorkflowState {
   kind: 'document';
   title: string;
@@ -387,6 +405,12 @@ export interface DocumentWorkflowState {
    * every mode; these are views onto it.
    */
   editorMode?: 'markdown' | 'html';
+  /**
+   * OneDrive/SharePoint sync binding. ABSENT (not null/defaulted) on
+   * unbound documents — like `editorMode`, a fresh document must still
+   * deep-equal `createInitialWorkflowState('document')`.
+   */
+  m365Binding?: M365DocumentBinding;
   profile?: DocumentProfile;
   assessment?: DocumentAssessment;
   updatedAt: string;

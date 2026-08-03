@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server';
 
+import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 import { mergeGlossaryEntries } from '@/lib/services/workflows/shared/glossaryPrompts';
 import { resolveSlotGuide } from '@/lib/services/workflows/shared/guideResolution';
 import { createWorkflowStream } from '@/lib/services/workflows/shared/workflowLlm';
@@ -49,6 +50,10 @@ interface TranslationWorkflowRequest {
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session) return unauthorizedResponse();
+
+  // Group-membership warm-up MUST precede resolveSlotGuide below — guide
+  // access rules with group scope read the cache synchronously. Never throws.
+  await resolveUserGroupIds(req, session);
 
   let body: TranslationWorkflowRequest;
   try {

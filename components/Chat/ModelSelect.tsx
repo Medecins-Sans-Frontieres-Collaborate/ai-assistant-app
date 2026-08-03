@@ -124,6 +124,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({
   // Dynamically discovered Foundry agents (RBAC-filtered per user)
   const {
     foundryAgents,
+    suppressedOrgAgentIds,
     regionalPath,
     officePaths,
     isLoadingFoundryAgents,
@@ -345,8 +346,14 @@ export const ModelSelect: FC<ModelSelectProps> = ({
         );
 
     // Static agents from organization-agents.json (RAG agents + any static
-    // Foundry agents) are org-managed, so they're skipped when the flag is off.
-    const staticAgents = isBotsEnabled ? getOrganizationAgents() : [];
+    // Foundry agents) are org-managed, so they're skipped when the flag is
+    // off. Entries the server reports as admin-overridden or admin-disabled
+    // are dropped here — the admin record (served below with type 'org')
+    // replaces them, or nothing does (a no-deploy retire).
+    const suppressedIds = new Set(suppressedOrgAgentIds);
+    const staticAgents = isBotsEnabled
+      ? getOrganizationAgents().filter((a) => !suppressedIds.has(a.id))
+      : [];
     const staticModels = staticAgents.map((agent) => {
       const baseModelId =
         (agent.baseModelId as OpenAIModelID) || OpenAIModelID.GPT_4_1;
@@ -382,8 +389,46 @@ export const ModelSelect: FC<ModelSelectProps> = ({
         isOrganizationAgent: true,
       }));
 
+    // M365 file-backed agents (type: 'm365') ride the same org- convention
+    // as prompt agents: the server resolves retrieval + chat model from
+    // botId, and agentId must stay unset (no Foundry promotion).
+    const m365AgentModels = visibleFoundryAgents
+      .filter((agent) => agent.type === 'm365')
+      .map((agent) => ({
+        ...OpenAIModels[OpenAIModelID.GPT_4_1],
+        id: `org-${agent.id}`,
+        name: agent.name,
+        description: agent.description,
+        modelType: undefined,
+        agentId: undefined,
+        isOrganizationAgent: true,
+      }));
+
+    // Admin-authored org RAG agents (type: 'org') ride the same org- id
+    // convention as static RAG agents — conversation.bot carries the agent
+    // id and the server resolves retrieval, system prompt, and chat model
+    // from it. Unlike prompt/m365 agents they carry their tool-toggle gates
+    // on the model object (the client-side gates can't find them in the
+    // static config). agentId must stay unset (no Foundry promotion).
+    const orgAdminAgentModels = visibleFoundryAgents
+      .filter((agent) => agent.type === 'org')
+      .map((agent) => ({
+        ...OpenAIModels[OpenAIModelID.GPT_4_1],
+        id: `org-${agent.id}`,
+        name: agent.name,
+        description: agent.description,
+        modelType: undefined,
+        agentId: undefined,
+        isOrganizationAgent: true,
+        allowWebSearch: agent.allowWebSearch === true,
+        allowCodeInterpreter: agent.allowCodeInterpreter === true,
+      }));
+
     const discoveredFoundryAgents = visibleFoundryAgents.filter(
-      (agent) => agent.type !== 'prompt',
+      (agent) =>
+        agent.type !== 'prompt' &&
+        agent.type !== 'm365' &&
+        agent.type !== 'org',
     );
 
     // Dynamically discovered Foundry agents from ARM API (RBAC-filtered per user).
@@ -416,8 +461,14 @@ export const ModelSelect: FC<ModelSelectProps> = ({
       (m) => !m.agentId || !dynamicAgentNames.has(m.agentId),
     );
 
-    return [...deduplicatedStatic, ...dynamicModels, ...promptAgentModels];
-  }, [isBotsEnabled, foundryAgents, customAgentSources]);
+    return [
+      ...deduplicatedStatic,
+      ...dynamicModels,
+      ...promptAgentModels,
+      ...m365AgentModels,
+      ...orgAdminAgentModels,
+    ];
+  }, [isBotsEnabled, foundryAgents, customAgentSources, suppressedOrgAgentIds]);
 
   // Combine base models, organization/discovered agents, and custom-source models
   // baseModels and customSourceModels are already filtered; agents are
@@ -1453,6 +1504,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({
           handleModelSelect={handleModelSelect}
           organizationAgentModels={organizationAgentModels}
           foundryAgents={foundryAgents}
+          suppressedOrgAgentIds={suppressedOrgAgentIds}
           regionalPath={regionalPath}
           officePaths={officePaths}
           selectedModelId={selectedModelId}

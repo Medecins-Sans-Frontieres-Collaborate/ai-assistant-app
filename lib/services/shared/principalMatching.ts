@@ -6,13 +6,12 @@
  *
  * Pure and dependency-free: no node builtins, so client code may import it.
  *
- * ⚠ GROUPS ARE NOT EVALUATED. `Principal.groupIds` is always `[]` today —
- * Entra group membership is not on the session (auth.ts requests
- * `openid User.Read User.ReadBasic.all offline_access`, and there is no
- * `/me/memberOf` call anywhere), pending tenant consent. Group targets are
- * persisted and round-tripped so nothing is lost, but they grant and deny
- * nothing. See docs/M365_GRAPH_PERMISSIONS_REQUEST.md. The moment
- * `groupIds` is populated, both features light up through this function.
+ * Groups ARE evaluated as of third pass §5: `Principal.groupIds` is
+ * populated from the delegated-Graph membership cache
+ * (lib/services/m365/groupMembership.ts, `/me/getMemberGroups` with
+ * Group.Read.All, 10-min TTL, warmed per request by routes). A cold or
+ * failed cache yields `[]` — group targets then grant nothing for that
+ * request, never an error, so user/domain matching is unaffected.
  */
 
 /** Scopes an override/rule target list can be interpreted against. */
@@ -31,7 +30,7 @@ export interface Principal {
   domain?: string;
   /** `department:<v>` | `company:<v>` | `office:<v>`, lowercased. */
   attributes: string[];
-  /** Entra group object ids. ALWAYS empty today — see the module header. */
+  /** Entra group object ids from the membership cache — see module header. */
   groupIds: string[];
 }
 

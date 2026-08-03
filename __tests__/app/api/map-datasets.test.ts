@@ -122,13 +122,17 @@ describe('/api/map-datasets (user routes)', () => {
   describe('list', () => {
     it('returns an empty list (not 404) when the feature is disabled', async () => {
       serviceIsEnabled.mockReturnValue(false);
-      const body = await parseJsonResponse(await GET());
+      const body = await parseJsonResponse(
+        await GET(new NextRequest('http://localhost/api/map-datasets')),
+      );
       expect(body.data.datasets).toEqual([]);
       expect(vi.mocked(listAllMapDatasetMetas)).not.toHaveBeenCalled();
     });
 
     it('filters by access and serves metadata only', async () => {
-      const body = await parseJsonResponse(await GET());
+      const body = await parseJsonResponse(
+        await GET(new NextRequest('http://localhost/api/map-datasets')),
+      );
       expect(body.data.datasets).toHaveLength(1);
       expect(body.data.datasets[0]).toEqual({
         id: DATASET_ID,
@@ -144,7 +148,9 @@ describe('/api/map-datasets (user routes)', () => {
         decision: 'deny',
         reason: 'not-allowed',
       });
-      const denied = await parseJsonResponse(await GET());
+      const denied = await parseJsonResponse(
+        await GET(new NextRequest('http://localhost/api/map-datasets')),
+      );
       expect(denied.data.datasets).toEqual([]);
     });
 
@@ -153,7 +159,9 @@ describe('/api/map-datasets (user routes)', () => {
         decision: 'unavailable',
         reason: 'rules-unavailable',
       });
-      const body = await parseJsonResponse(await GET());
+      const body = await parseJsonResponse(
+        await GET(new NextRequest('http://localhost/api/map-datasets')),
+      );
       expect(body.data.datasets).toEqual([]);
     });
   });

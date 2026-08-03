@@ -16,22 +16,31 @@
 import {
   StoredAgentAccessRule,
   StoredGuide,
+  StoredM365Agent,
   StoredMcpConnector,
+  StoredOrgRagAgent,
   StoredPromptAgent,
+  bumpGeneration,
   createAgentAccessBlobStorage,
   listAllConnectors,
   listAllGuides,
+  listAllM365Agents,
+  listAllOrgAgents,
   listAllPromptAgents,
   listAllRules,
   readConfig,
+  readGenerationEtag,
 } from '@/lib/services/agentAccess/accessRulesStore';
 import {
   AgentAccessConfig,
   Guide,
+  M365Agent,
   McpConnector,
+  OrgRagAgent,
   PromptAgent,
 } from '@/lib/services/agentAccess/types';
 import { canonicalAgentKey } from '@/lib/services/agentAccess/types';
+import { getCachedGroupIdsForMail } from '@/lib/services/m365/groupMembership';
 import {
   Principal,
   domainOfMail,
@@ -52,6 +61,15 @@ const RULES_CACHE_TTL_MS = 60_000;
  * keeps retrying eagerly since it fails closed until a load succeeds.
  */
 const REFRESH_FAILURE_COOLDOWN_MS = 5_000;
+/**
+ * How often a warm replica probes the generation sentinel's ETag between
+ * full refreshes. A changed sentinel (another replica served an admin
+ * write) triggers an immediate refetch, so cross-replica propagation drops
+ * from ≤RULES_CACHE_TTL_MS to roughly this interval. The probe is a single
+ * tiny-blob read; on any probe failure (or a deployment whose sentinel was
+ * never written) behavior degrades to exactly the pre-sentinel TTL bound.
+ */
+const GENERATION_PROBE_INTERVAL_MS = 5_000;
 
 export type AccessDecisionKind = 'allow' | 'deny' | 'unavailable';
 
@@ -88,6 +106,10 @@ export interface AgentAccessSnapshot {
   connectors: McpConnector[];
   /** Admin workflow guides; empty when the feature is off or never loaded. */
   guides: Guide[];
+  /** M365 file-backed agents; empty when the feature is off or never loaded. */
+  m365Agents: M365Agent[];
+  /** Admin org RAG agents; empty when the feature is off or never loaded. */
+  orgAgents: OrgRagAgent[];
   /** Enabled + no last-known-good ruleset (cold start + storage outage). */
   rulesUnavailable: boolean;
   /** Epoch ms of the last successful refresh; null when never loaded. */
@@ -128,6 +150,10 @@ interface LoadedState {
   connectorsById: Map<string, McpConnector>;
   guides: Guide[];
   guidesById: Map<string, Guide>;
+  m365Agents: M365Agent[];
+  m365AgentsById: Map<string, M365Agent>;
+  orgAgents: OrgRagAgent[];
+  orgAgentsById: Map<string, OrgRagAgent>;
 }
 
 export class AgentAccessService {
@@ -147,8 +173,11 @@ export class AgentAccessService {
   /** Epoch ms of the last failed refresh; 0 when none (or cleared). */
   private lastRefreshFailureAt = 0;
   private refreshInFlight: Promise<void> | null = null;
-  /** Dedupes the allowGroups scaffold warning to one line per key per process. */
-  private warnedGroupKeys = new Set<string>();
+  /** Sentinel ETag observed at the last full refresh; null = never read. */
+  private lastGenerationEtag: string | null = null;
+  /** Epoch ms of the last sentinel probe (throttles to the probe interval). */
+  private generationProbedAt = 0;
+  private generationProbeInFlight: Promise<boolean> | null = null;
 
   static getInstance(): AgentAccessService {
     if (!AgentAccessService.instance) {
@@ -169,7 +198,19 @@ export class AgentAccessService {
    */
   async ensureFresh(): Promise<void> {
     if (!this.isEnabled()) return;
-    if (this.state && Date.now() - this.fetchedAt < RULES_CACHE_TTL_MS) return;
+    if (this.state && Date.now() - this.fetchedAt < RULES_CACHE_TTL_MS) {
+      // Warm snapshot: probe the generation sentinel (throttled) so another
+      // replica's admin write is picked up in ~GENERATION_PROBE_INTERVAL_MS
+      // instead of waiting out the TTL. An unchanged (or unreadable)
+      // sentinel keeps serving the warm snapshot — the TTL stays the
+      // correctness backstop either way.
+      if (Date.now() - this.generationProbedAt < GENERATION_PROBE_INTERVAL_MS) {
+        return;
+      }
+      const changed = await this.probeGenerationChanged();
+      if (!changed) return;
+      this.fetchedAt = 0; // fall through to a full refresh below
+    }
     if (
       this.state &&
       this.lastRefreshFailureAt !== 0 &&
@@ -200,6 +241,53 @@ export class AgentAccessService {
     this.epoch += 1;
     this.fetchedAt = 0;
     this.lastRefreshFailureAt = 0;
+    // Fire-and-forget sentinel bump so OTHER replicas pick this write up at
+    // the probe interval instead of the full TTL. Best-effort by design: a
+    // failed bump costs cross-replica latency (≤TTL — exactly the
+    // pre-sentinel bound), never correctness, and must not fail or slow the
+    // admin write that triggered it.
+    void this.bumpGenerationBestEffort();
+  }
+
+  private async bumpGenerationBestEffort(): Promise<void> {
+    try {
+      await bumpGeneration(this.getStorage());
+    } catch (error) {
+      console.error(
+        `[agent-access] generation sentinel bump failed (other replicas fall back to the ${RULES_CACHE_TTL_MS / 1000}s TTL): ${sanitizeForLog(error)}`,
+      );
+    }
+  }
+
+  /**
+   * Reads the sentinel ETag (single-flight) and reports whether it moved
+   * since the last full refresh. Errors and a missing sentinel report
+   * `false` — the TTL backstop then governs, exactly as before the
+   * sentinel existed.
+   */
+  private async probeGenerationChanged(): Promise<boolean> {
+    if (!this.generationProbeInFlight) {
+      this.generationProbeInFlight = (async () => {
+        try {
+          const etag = await readGenerationEtag(this.getStorage());
+          this.generationProbedAt = Date.now();
+          if (etag === null) return false;
+          if (this.lastGenerationEtag === null) {
+            // Older snapshot predates sentinel tracking: adopt the current
+            // value as the baseline rather than treating it as a change.
+            this.lastGenerationEtag = etag;
+            return false;
+          }
+          return etag !== this.lastGenerationEtag;
+        } catch {
+          this.generationProbedAt = Date.now();
+          return false;
+        }
+      })().finally(() => {
+        this.generationProbeInFlight = null;
+      });
+    }
+    return this.generationProbeInFlight;
   }
 
   /** Cached snapshot for the admin API (rules + etags + config). */
@@ -211,6 +299,8 @@ export class AgentAccessService {
       promptAgents: this.state?.promptAgents ?? [],
       connectors: this.state?.connectors ?? [],
       guides: this.state?.guides ?? [],
+      m365Agents: this.state?.m365Agents ?? [],
+      orgAgents: this.state?.orgAgents ?? [],
       rulesUnavailable: this.isEnabled() && this.state === null,
       fetchedAt: this.state ? this.fetchedAt : null,
     };
@@ -263,6 +353,41 @@ export class AgentAccessService {
   getGuideById(id: string): Guide | null {
     if (!this.isEnabled()) return null;
     return this.state?.guidesById.get(id) ?? null;
+  }
+
+  /** M365 agents from the cached snapshot — callers ensureFresh() first. */
+  getM365Agents(): M365Agent[] {
+    if (!this.isEnabled()) return [];
+    return this.state?.m365Agents ?? [];
+  }
+
+  /**
+   * Single M365 agent by immutable id; null when unknown (or feature off).
+   *
+   * Same contract as getConnectorById: an agent that cannot be loaded has no
+   * sources or index filter, and inventing one is not an option — so
+   * feature-off returns null and invocations referencing the id fall through
+   * to vanilla chat (the credential guard has already run at that point).
+   */
+  getM365AgentById(id: string): M365Agent | null {
+    if (!this.isEnabled()) return null;
+    return this.state?.m365AgentsById.get(id) ?? null;
+  }
+
+  /** Admin org RAG agents from the cached snapshot — callers ensureFresh() first. */
+  getOrgAgents(): OrgRagAgent[] {
+    if (!this.isEnabled()) return [];
+    return this.state?.orgAgents ?? [];
+  }
+
+  /**
+   * Single admin org RAG agent by immutable id; null when unknown (or
+   * feature off). Feature-off null is safe: the registry then falls back to
+   * the static config entry (or nothing), never to a half-loaded record.
+   */
+  getOrgAgentById(id: string): OrgRagAgent | null {
+    if (!this.isEnabled()) return null;
+    return this.state?.orgAgentsById.get(id) ?? null;
   }
 
   /**
@@ -318,16 +443,6 @@ export class AgentAccessService {
     userMail: string | undefined,
   ): AgentAccessDecision {
     const access = stored.rule.access;
-    if (
-      access.allowGroups.length > 0 &&
-      !this.warnedGroupKeys.has(stored.canonicalKey)
-    ) {
-      this.warnedGroupKeys.add(stored.canonicalKey);
-      console.warn(
-        `[agent-access] rule ${sanitizeForLog(stored.canonicalKey)} has allowGroups, ` +
-          'which are NOT evaluated in v1 and grant nothing',
-      );
-    }
     if (access.type === 'public') {
       return { decision: 'allow', reason: 'public' };
     }
@@ -337,21 +452,25 @@ export class AgentAccessService {
     }
     // Targeting semantics are shared with usage limits (see
     // lib/services/shared/principalMatching.ts) so the two features can never
-    // disagree about what "this user matches this rule" means. Only the two
-    // scopes this rule shape carries are consulted; `attributes`/`groupIds`
-    // stay empty because access rules do not express those targets.
+    // disagree about what "this user matches this rule" means. Group ids
+    // come from the process-level membership cache (warmed per request by
+    // the calling route) — cold cache means no group grants, never an
+    // error, matching the pre-§5 posture.
     const principal: Principal = {
       userId: '',
       mail: normalizeMail(userMail),
       domain: domainOfMail(userMail),
       attributes: [],
-      groupIds: [],
+      groupIds: getCachedGroupIdsForMail(userMail),
     };
     if (matchesPrincipal(principal, 'user', access.allowUsers)) {
       return { decision: 'allow', reason: 'allow-user' };
     }
     if (matchesPrincipal(principal, 'domain', access.allowDomains)) {
       return { decision: 'allow', reason: 'allow-domain' };
+    }
+    if (matchesPrincipal(principal, 'group', access.allowGroups)) {
+      return { decision: 'allow', reason: 'allow-group' };
     }
     return { decision: 'deny', reason: 'not-allowed' };
   }
@@ -367,6 +486,21 @@ export class AgentAccessService {
     const epochAtEntry = this.epoch;
     try {
       const storage = this.getStorage();
+      // The sentinel ETag read is ISSUED before the listings (awaited at the
+      // end): a bump landing after this point differs from the stamped
+      // value, so the next probe refetches — the same never-lose-a-write
+      // reasoning as the epoch check on fetchedAt below. Best-effort: a
+      // failed read keeps the previous baseline and the TTL backstop
+      // governs.
+      let generationEtagPromise: Promise<string | null>;
+      try {
+        generationEtagPromise = readGenerationEtag(storage).then(
+          (etag) => etag,
+          () => this.lastGenerationEtag,
+        );
+      } catch {
+        generationEtagPromise = Promise.resolve(this.lastGenerationEtag);
+      }
       // Rules and config load in one transaction: that pair is kept/replaced
       // atomically, so a failure in either keeps last-known-good for both
       // (never a mixed-age rules/config pair). Prompt agents load in a
@@ -464,6 +598,58 @@ export class AgentAccessService {
         );
       }
 
+      // M365 agents: same isolated-failure contract as personas, connectors
+      // and guides. A listing failure leaves the agents ABSENT — an absent
+      // agent falls through to vanilla chat rather than exposing indexed
+      // content, so failing to load is failing closed and need not mark the
+      // snapshot unavailable.
+      let m365Agents: M365Agent[] = this.state?.m365Agents ?? [];
+      let m365AgentsById: Map<string, M365Agent> =
+        this.state?.m365AgentsById ?? new Map();
+      try {
+        const storedM365Agents = await listAllM365Agents(storage);
+        m365Agents = storedM365Agents.map(
+          (stored: StoredM365Agent) => stored.m365Agent,
+        );
+        m365AgentsById = new Map<string, M365Agent>(
+          m365Agents.map((agent) => [agent.id, agent]),
+        );
+      } catch (error) {
+        console.error(
+          `[agent-access] m365-agent listing failed (${
+            this.state
+              ? 'keeping last-known-good agents'
+              : 'no m365 agents until a load succeeds'
+          }; rules snapshot unaffected): ${sanitizeForLog(error)}`,
+        );
+      }
+
+      // Org RAG agents: same isolated-failure contract as the entities
+      // above. A listing failure leaves the admin records ABSENT — the
+      // registry then serves the static config file (last-known-good by
+      // definition) or nothing, so failing to load is failing safe and need
+      // not mark the snapshot unavailable.
+      let orgAgents: OrgRagAgent[] = this.state?.orgAgents ?? [];
+      let orgAgentsById: Map<string, OrgRagAgent> =
+        this.state?.orgAgentsById ?? new Map();
+      try {
+        const storedOrgAgents = await listAllOrgAgents(storage);
+        orgAgents = storedOrgAgents.map(
+          (stored: StoredOrgRagAgent) => stored.orgAgent,
+        );
+        orgAgentsById = new Map<string, OrgRagAgent>(
+          orgAgents.map((agent) => [agent.id, agent]),
+        );
+      } catch (error) {
+        console.error(
+          `[agent-access] org-agent listing failed (${
+            this.state
+              ? 'keeping last-known-good agents'
+              : 'no org agents until a load succeeds'
+          }; rules snapshot unaffected): ${sanitizeForLog(error)}`,
+        );
+      }
+
       // Keeping the fetched state is always safe — it is never older than
       // what it replaces — but freshness is only stamped when no
       // invalidate() landed while this refresh was in flight. Otherwise
@@ -481,7 +667,12 @@ export class AgentAccessService {
         connectorsById,
         guides,
         guidesById,
+        m365Agents,
+        m365AgentsById,
+        orgAgents,
+        orgAgentsById,
       };
+      this.lastGenerationEtag = await generationEtagPromise;
       this.lastRefreshFailureAt = 0;
       this.fetchedAt = this.epoch === epochAtEntry ? Date.now() : 0;
     } catch (error) {

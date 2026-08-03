@@ -1,3 +1,5 @@
+import { NextRequest } from 'next/server';
+
 import type { McpConnector } from '@/lib/services/agentAccess/types';
 
 import { parseJsonResponse } from './helpers';
@@ -55,13 +57,18 @@ describe('GET /api/mcp/connectors', () => {
   it('401s an unauthenticated caller', async () => {
     mockAuth.mockResolvedValue(null);
 
-    expect((await GET()).status).toBe(401);
+    expect(
+      (await GET(new NextRequest('http://localhost/api/mcp/connectors')))
+        .status,
+    ).toBe(401);
   });
 
   it('returns an empty list when the feature is disabled', async () => {
     serviceMock.isEnabled.mockReturnValue(false);
 
-    const body = await parseJsonResponse(await GET());
+    const body = await parseJsonResponse(
+      await GET(new NextRequest('http://localhost/api/mcp/connectors')),
+    );
 
     expect(body.data.connectors).toEqual([]);
     expect(serviceMock.ensureFresh).not.toHaveBeenCalled();
@@ -76,7 +83,9 @@ describe('GET /api/mcp/connectors', () => {
       }),
     ]);
 
-    const body = await parseJsonResponse(await GET());
+    const body = await parseJsonResponse(
+      await GET(new NextRequest('http://localhost/api/mcp/connectors')),
+    );
     const serialized = JSON.stringify(body);
 
     expect(serialized).not.toContain('suitetalk.api.netsuite.com');
@@ -97,7 +106,9 @@ describe('GET /api/mcp/connectors', () => {
           : { decision: 'deny', reason: 'not-allowed' },
     );
 
-    const body = await parseJsonResponse(await GET());
+    const body = await parseJsonResponse(
+      await GET(new NextRequest('http://localhost/api/mcp/connectors')),
+    );
 
     expect(body.data.connectors).toHaveLength(1);
     expect(body.data.connectors[0].id).toBe(allowed.id);
@@ -112,7 +123,9 @@ describe('GET /api/mcp/connectors', () => {
       reason: 'rules-unavailable',
     });
 
-    const body = await parseJsonResponse(await GET());
+    const body = await parseJsonResponse(
+      await GET(new NextRequest('http://localhost/api/mcp/connectors')),
+    );
 
     expect(body.data.connectors).toEqual([]);
   });
@@ -122,7 +135,9 @@ describe('GET /api/mcp/connectors', () => {
       makeConnector({ authStyle: 'oauth' }),
     ]);
 
-    const body = await parseJsonResponse(await GET());
+    const body = await parseJsonResponse(
+      await GET(new NextRequest('http://localhost/api/mcp/connectors')),
+    );
 
     expect(body.data.connectors[0].oauthAppConfigured).toBe(false);
   });
@@ -132,7 +147,9 @@ describe('GET /api/mcp/connectors', () => {
       makeConnector({ tokenHelpUrl: 'https://help.example.com/tokens' }),
     ]);
 
-    const body = await parseJsonResponse(await GET());
+    const body = await parseJsonResponse(
+      await GET(new NextRequest('http://localhost/api/mcp/connectors')),
+    );
 
     expect(body.data.connectors[0]).toMatchObject({
       name: 'Contoso NetSuite',

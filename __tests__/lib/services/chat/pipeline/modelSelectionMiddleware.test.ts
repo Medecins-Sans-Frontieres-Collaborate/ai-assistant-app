@@ -25,6 +25,10 @@ vi.mock('@/lib/services/agentAccess/AgentAccessService', () => ({
       isEnabled: accessIsEnabled,
       ensureFresh: accessEnsureFresh,
       getPromptAgentById: accessGetPromptAgentById,
+      // These tests exercise the prompt/Foundry paths; the m365/org agent
+      // branches key on their own id shapes and resolve to nothing here.
+      getM365AgentById: () => null,
+      getOrgAgentById: () => null,
     }),
   },
   emitAccessAudit: vi.fn(),
@@ -227,9 +231,11 @@ describe('createModelSelectionMiddleware — prompt-agent resolution', () => {
     });
   });
 
-  it('static RAG botId (no prompt- prefix) never touches the access service', async () => {
-    // Cheap prefix check keeps static RAG chats off the AgentAccessService
-    // hot path entirely (no ensureFresh — matters during storage outages).
+  it('static RAG botId (no prompt- prefix) keeps its model when no admin record overrides it', async () => {
+    // Since admin org-agent overrides landed, static botIds DO consult the
+    // access snapshot (an override cannot be honored without it) — but the
+    // prompt-agent resolver stays untouched, and with no record the model
+    // selection is unchanged.
     const result = await createModelSelectionMiddleware(
       makeContext({
         model: {
@@ -241,7 +247,6 @@ describe('createModelSelectionMiddleware — prompt-agent resolution', () => {
       }),
     );
 
-    expect(accessEnsureFresh).not.toHaveBeenCalled();
     expect(accessGetPromptAgentById).not.toHaveBeenCalled();
     expect(result.promptAgent).toBeUndefined();
     expect(result.modelId).toBe('org-msf_communications');

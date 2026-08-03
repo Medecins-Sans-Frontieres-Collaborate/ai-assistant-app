@@ -48,6 +48,10 @@ vi.mock('@/lib/services/agentAccess/AgentAccessService', () => ({
       ensureFresh: accessEnsureFresh,
       evaluateAccess: accessEvaluate,
       getPromptAgents: accessGetPromptAgents,
+      // M365 file-backed and org RAG agents ride the same discovery merge;
+      // these tests exercise the prompt/Foundry paths, so both are empty.
+      getM365Agents: () => [],
+      getOrgAgents: () => [],
     }),
   },
 }));
@@ -257,6 +261,7 @@ describe('GET /api/agents — access-control discovery filter', () => {
             type: 'prompt',
           },
         ],
+        suppressedOrgAgentIds: [],
         regionalPath: null,
         officePaths: [],
       });

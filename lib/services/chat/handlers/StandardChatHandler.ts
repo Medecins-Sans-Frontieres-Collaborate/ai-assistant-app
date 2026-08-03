@@ -1,4 +1,7 @@
 import { ServiceContainer } from '@/lib/services/ServiceContainer';
+import { consumeToolBudget } from '@/lib/services/limits/toolBudget';
+import type { M365BuiltinExecutor } from '@/lib/services/m365/tools/executor';
+import { createM365ToolExecutor } from '@/lib/services/m365/tools/executor';
 import { createConnectorResolver } from '@/lib/services/mcp/connectorResolution';
 import { isHttpsPublicShapedUrl } from '@/lib/services/mcp/mcpUrlGuard';
 import {
@@ -30,6 +33,10 @@ import {
 import { StandardChatService } from '../StandardChatService';
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
+import {
+  buildBuiltinM365Server,
+  partitionBuiltinMcpEntries,
+} from './builtinM365Server';
 
 import { env } from '@/config/environment';
 import { resolveMcpServers } from '@/config/mcpCatalog';
@@ -337,8 +344,15 @@ export class StandardChatHandler extends BasePipelineStage {
           // client-sent url is ignored), custom entries require the env gate
           // and must pass the SSRF shape check. Invalid entries drop
           // silently — chat never fails because a connector is misconfigured.
-          const resolvedMcpServers = context.mcpServers?.length
-            ? resolveMcpServers(context.mcpServers, {
+          // The builtin M365 marker entry is partitioned OUT first — it must
+          // never reach resolveMcpServers' custom-URL branch. The server
+          // constructs its synthetic entry itself (url-less, trusted,
+          // provenance 'builtin') and builds the request-bound executor the
+          // tool loop dispatches to in-process.
+          const { builtinRequested, rest: networkMcpEntries } =
+            partitionBuiltinMcpEntries(context.mcpServers);
+          const resolvedMcpServers = networkMcpEntries.length
+            ? resolveMcpServers(networkMcpEntries, {
                 allowCustom: env.MCP_CUSTOM_SERVERS_ENABLED,
                 isAllowedCustomUrl: isHttpsPublicShapedUrl,
                 // Admin connectors are access-controlled, so entitlement is
@@ -349,7 +363,38 @@ export class StandardChatHandler extends BasePipelineStage {
                   context.session,
                 ),
               })
-            : undefined;
+            : [];
+
+          let builtinExecutor: M365BuiltinExecutor | undefined;
+          if (builtinRequested && context.session) {
+            if (!context.request) {
+              // Contexts built without the raw request (tests, non-standard
+              // entry points) cannot mint delegated Graph tokens — degrade
+              // by skipping the builtin server rather than failing the chat.
+              console.warn(
+                '[StandardChatHandler] builtin-m365 requested but no request on context; skipping M365 tools',
+              );
+            } else {
+              builtinExecutor = createM365ToolExecutor(
+                context.request,
+                context.session,
+                {
+                  // Per-key: mail tools draw from their own reads/drafts/
+                  // deep-scans budgets (fifth pass); everything else from
+                  // the generic key.
+                  consumeBudget: (limitKey) =>
+                    consumeToolBudget(context, limitKey),
+                  // Phishing-screen overrides come from the validated
+                  // request payload ONLY (explicit UI action on a flagged
+                  // result) — the mail tools never honor tool arguments
+                  // for this.
+                  screenOverrideIds: context.m365MailScreenOverrides,
+                  sharedMailboxes: context.m365SharedMailboxes,
+                },
+              );
+              resolvedMcpServers.push(buildBuiltinM365Server());
+            }
+          }
 
           // Custom-source (byom) routing: only the credential middleware can
           // set isCustomSourceModel (InputValidator strips it from the client
@@ -392,9 +437,10 @@ export class StandardChatHandler extends BasePipelineStage {
             pendingTranscriptions:
               context.processedContent?.pendingTranscriptions,
             streamingSpeed: context.streamingSpeed,
-            mcpServers: resolvedMcpServers?.length
+            mcpServers: resolvedMcpServers.length
               ? resolvedMcpServers
               : undefined,
+            builtinExecutor,
             mcpPendingToolCalls: context.mcpPendingToolCalls,
             mcpLoopRound: context.mcpLoopRound,
             mcpMaxRounds:
@@ -577,18 +623,35 @@ export class StandardChatHandler extends BasePipelineStage {
     const processedTextParts: string[] = [];
 
     if (fileSummaries && fileSummaries.length > 0) {
+      // The preamble matters: without it, models given only a condensed
+      // summary respond by asking the user to "upload the file" they already
+      // uploaded — the raw text simply cannot travel in the context window.
       processedTextParts.push(
-        fileSummaries
-          .map((f) => `[Document summary: ${f.filename}]\n${f.summary}`)
-          .join('\n\n'),
+        'The user has ALREADY uploaded the following file(s). The full text was ' +
+          'extracted server-side and condensed into the summaries below because ' +
+          'it exceeds the context window — the raw file cannot be passed to you. ' +
+          'Never ask the user to upload, paste, or re-send the file. Work from ' +
+          'these summaries, and if the task genuinely requires the full verbatim ' +
+          'text, say that limitation explicitly while still doing your best with ' +
+          'what is here.\n\n' +
+          fileSummaries
+            .map((f) => `[Document summary: ${f.filename}]\n${f.summary}`)
+            .join('\n\n'),
       );
     }
 
     if (inlineFiles && inlineFiles.length > 0) {
+      // Same rationale as the summaries preamble: bare fenced text reads as
+      // "the user pasted this", and models respond by asking for the file
+      // to be uploaded — which the user already did.
       processedTextParts.push(
-        inlineFiles
-          .map((f) => '```' + f.filename + '\n' + f.content + '\n```')
-          .join('\n\n'),
+        'The user has ALREADY uploaded the following file(s); the fenced ' +
+          'blocks below are their full extracted text. Never ask the user to ' +
+          'upload, paste, or re-send these files — work directly from this ' +
+          'content.\n\n' +
+          inlineFiles
+            .map((f) => '```' + f.filename + '\n' + f.content + '\n```')
+            .join('\n\n'),
       );
     }
 

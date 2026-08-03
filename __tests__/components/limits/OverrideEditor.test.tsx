@@ -131,14 +131,31 @@ describe('OverrideEditor', () => {
     expect(screen.getByText('future.unknownThing')).toBeInTheDocument();
   });
 
-  it('renders the pending-consent notice for the group scope and disables its targets', () => {
-    renderEditor(makeOverride({ scope: 'group', targets: [] }));
-    expect(screen.getByText('groupsPendingConsent')).toBeInTheDocument();
+  it('renders the group search picker with editable id chips for the group scope', () => {
+    renderEditor(
+      makeOverride({
+        scope: 'group',
+        targets: ['11111111-2222-3333-4444-555555555555'],
+      }),
+    );
+    const search = screen.getByLabelText('groupSearchPlaceholder');
+    expect(search).toBeInTheDocument();
+    expect(search).not.toBeDisabled();
+    // Stored ids render as chips and stay removable (not the v1 disabled
+    // scaffold).
+    expect(
+      screen.getByText('11111111-2222-3333-4444-555555555555'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByLabelText('removeChip 11111111-2222-3333-4444-555555555555'),
+    ).toBeInTheDocument();
   });
 
-  it('does not show the pending-consent notice for an attribute override', () => {
+  it('does not show the group search for an attribute override', () => {
     renderEditor(makeOverride({ scope: 'attribute' }));
-    expect(screen.queryByText('groupsPendingConsent')).not.toBeInTheDocument();
+    expect(
+      screen.queryByLabelText('groupSearchPlaceholder'),
+    ).not.toBeInTheDocument();
   });
 
   describe('configured-only rendering', () => {

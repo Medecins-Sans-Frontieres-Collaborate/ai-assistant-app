@@ -1,6 +1,7 @@
 import {
   buildNextManifest,
   computeLocalChanges,
+  conversationUpdatedAt,
   mergeManifest,
 } from '@/lib/services/backup/merge';
 import type {
@@ -437,5 +438,35 @@ describe('buildNextManifest', () => {
         now: T3,
       }),
     ).toThrow(/missing upload/);
+  });
+});
+
+describe('conversationUpdatedAt', () => {
+  it('prefers updatedAt, then createdAt', () => {
+    expect(
+      conversationUpdatedAt({
+        id: 'a',
+        updatedAt: T2,
+        createdAt: T1,
+      } as Conversation),
+    ).toBe(T2);
+    expect(
+      conversationUpdatedAt({ id: 'a', createdAt: T1 } as Conversation),
+    ).toBe(T1);
+  });
+
+  it('falls back to a VALID epoch timestamp for legacy conversations', () => {
+    // An empty string here fails the server's manifest validation and one
+    // legacy conversation would 400 every backup write for the whole corpus.
+    const value = conversationUpdatedAt({ id: 'legacy' } as Conversation);
+    expect(value).toBe('1970-01-01T00:00:00.000Z');
+    // Empty-string fields (not just absent ones) get the same fallback.
+    expect(
+      conversationUpdatedAt({
+        id: 'a',
+        updatedAt: '',
+        createdAt: '',
+      } as Conversation),
+    ).toBe('1970-01-01T00:00:00.000Z');
   });
 });

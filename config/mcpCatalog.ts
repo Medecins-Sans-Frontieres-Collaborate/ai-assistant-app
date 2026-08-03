@@ -165,6 +165,13 @@ export interface ResolvedMcpServer {
   auth: McpCatalogAuth;
   /** True for catalog entries — these skip the DNS-level SSRF checks. */
   trusted: boolean;
+  /**
+   * 'builtin' = first-party in-process toolset (no MCP connection is ever
+   * opened; the tool loop dispatches to the builtin executor instead).
+   * Absent = a normal network-backed MCP server. Only ever set server-side —
+   * resolveMcpServers never produces it from client entries.
+   */
+  provenance?: 'builtin';
   authToken?: string;
   /**
    * Admin-stored OAuth endpoints (connectors only) — used INSTEAD of RFC

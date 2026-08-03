@@ -9,6 +9,17 @@ import { createTestChatContext } from '../testUtils';
 
 import { describe, expect, it, vi } from 'vitest';
 
+// Passthrough spy on the M365 executor factory: the mail-screen override
+// threading test asserts the payload field reaches the executor OPTIONS,
+// which the real factory keeps private.
+const createM365ToolExecutorSpy = vi.hoisted(() => vi.fn());
+vi.mock('@/lib/services/m365/tools/executor', async (importOriginal) => {
+  const actual =
+    await importOriginal<typeof import('@/lib/services/m365/tools/executor')>();
+  createM365ToolExecutorSpy.mockImplementation(actual.createM365ToolExecutor);
+  return { ...actual, createM365ToolExecutor: createM365ToolExecutorSpy };
+});
+
 // buildFinalMessages/executeStage are private/protected; expose them via a
 // narrow cast for unit tests.
 type HandlerInternals = {
@@ -256,5 +267,101 @@ describe('StandardChatHandler — custom-source (byom) glue', () => {
     expect(handleChat).toHaveBeenCalledWith(
       expect.objectContaining({ customSource: undefined }),
     );
+  });
+});
+
+describe('StandardChatHandler — builtin M365 server seam', () => {
+  // Same seam as the byom tests: REAL executeStage, mocked service.
+  function createM365Setup() {
+    const handleChat = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ text: 'ok' }), {
+        headers: { 'Content-Type': 'application/json' },
+      }),
+    );
+    const handler = new StandardChatHandler({
+      handleChat,
+    } as unknown as StandardChatService) as unknown as HandlerInternals;
+    return { handler, handleChat };
+  }
+
+  const builtinEntry = {
+    id: 'builtin-m365',
+    name: 'Microsoft 365',
+    builtin: true,
+  };
+
+  function m365Context(overrides: Partial<ChatContext> = {}): ChatContext {
+    return {
+      ...createTestChatContext({ stream: false }),
+      mcpServers: [builtinEntry],
+      request: {} as ChatContext['request'],
+      ...overrides,
+    };
+  }
+
+  it('builds the synthetic builtin server + executor when session and request are present', async () => {
+    const { handler, handleChat } = createM365Setup();
+
+    await handler.executeStage(m365Context());
+
+    expect(handleChat).toHaveBeenCalledTimes(1);
+    const request = handleChat.mock.calls[0][0];
+    expect(request.mcpServers).toEqual([
+      {
+        id: 'builtin-m365',
+        label: 'Microsoft 365',
+        url: '',
+        transport: 'streamable-http',
+        auth: { style: 'none' },
+        trusted: true,
+        provenance: 'builtin',
+      },
+    ]);
+    expect(request.builtinExecutor).toBeDefined();
+    expect(typeof request.builtinExecutor.listTools).toBe('function');
+    expect(typeof request.builtinExecutor.callTool).toBe('function');
+  });
+
+  it('skips the builtin server (no throw) when the context has no request', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const { handler, handleChat } = createM365Setup();
+
+    await handler.executeStage(m365Context({ request: undefined }));
+
+    const request = handleChat.mock.calls[0][0];
+    expect(request.mcpServers).toBeUndefined();
+    expect(request.builtinExecutor).toBeUndefined();
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('builtin-m365'));
+    warn.mockRestore();
+  });
+
+  it('threads payload m365MailScreenOverrides into the executor as screenOverrideIds', async () => {
+    const { handler } = createM365Setup();
+
+    await handler.executeStage(
+      m365Context({ m365MailScreenOverrides: ['AAMkAGI2-flagged=1'] }),
+    );
+
+    expect(createM365ToolExecutorSpy).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.anything(),
+      expect.objectContaining({
+        screenOverrideIds: ['AAMkAGI2-flagged=1'],
+      }),
+    );
+  });
+
+  it('ignores a builtin entry with an unknown id', async () => {
+    const { handler, handleChat } = createM365Setup();
+
+    await handler.executeStage(
+      m365Context({
+        mcpServers: [{ id: 'builtin-other', name: 'Nope', builtin: true }],
+      }),
+    );
+
+    const request = handleChat.mock.calls[0][0];
+    expect(request.mcpServers).toBeUndefined();
+    expect(request.builtinExecutor).toBeUndefined();
   });
 });

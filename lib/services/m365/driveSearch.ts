@@ -1,0 +1,106 @@
+/**
+ * Drive-search ranking + the dedicated filename query.
+ *
+ * The structural problem this solves: Graph's drive `search(q=)` scores
+ * filename and CONTENT matches on one opaque relevance scale, so in a big
+ * drive a literal filename match can sit past any bounded window of
+ * content matches — no post-hoc re-ranking can promote what never entered
+ * the window. The fix is a parallel Microsoft Search API query
+ * (`filename:{q}*` KQL, driveItem entity) that can ONLY return name
+ * matches; its hits are merged in front of the content search, making
+ * "the file is literally named that" a guarantee instead of a probability.
+ *
+ * Ranking within the merged window is tiered by name-match quality, with
+ * RECENCY (lastModified desc) as the within-tier order — Graph's opaque
+ * relevance is what made content matches feel random.
+ */
+import { NextRequest } from 'next/server';
+
+import { isNameMatch } from '@/lib/services/m365/driveSearchRanking';
+import { graphJson, normalizeDriveItem } from '@/lib/services/m365/graphApi';
+
+import type { M365DriveEntry } from '@/types/m365';
+
+export {
+  isNameMatch,
+  mergeSearchResults,
+  nameMatchTier,
+  rankSearchEntries,
+} from '@/lib/services/m365/driveSearchRanking';
+
+const FILENAME_QUERY_SIZE = 25;
+
+// ---------------------------------------------------------------------------
+// Filename query (Microsoft Search API)
+// ---------------------------------------------------------------------------
+
+interface SearchHit {
+  resource?: {
+    id?: string;
+    name?: string;
+    size?: number;
+    webUrl?: string;
+    lastModifiedDateTime?: string;
+    file?: { mimeType?: string };
+    folder?: { childCount?: number };
+    parentReference?: { driveId?: string; path?: string };
+  };
+}
+
+interface SearchQueryResponse {
+  value?: {
+    hitsContainers?: { hits?: SearchHit[] }[];
+  }[];
+}
+
+/** KQL string literal: strip quotes (they would change query semantics). */
+function kqlTerm(query: string): string {
+  return query.replace(/["']/g, '').trim();
+}
+
+/**
+ * Filename-only search across the user's reachable drives. Best-effort by
+ * design: any failure returns [] so the content search still answers —
+ * the caller must never let this path block results. Only used for
+ * unscoped (whole-OneDrive) searches; drive-scoped pickers keep the plain
+ * search, whose smaller corpus doesn't have the flooding problem.
+ */
+export async function searchDriveByFilename(
+  req: NextRequest,
+  scopes: string[],
+  query: string,
+): Promise<M365DriveEntry[]> {
+  const term = kqlTerm(query);
+  if (!term) return [];
+  try {
+    const data = await graphJson<SearchQueryResponse>(
+      req,
+      scopes,
+      '/search/query',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          requests: [
+            {
+              entityTypes: ['driveItem'],
+              query: { queryString: `filename:${term}*` },
+              size: FILENAME_QUERY_SIZE,
+            },
+          ],
+        }),
+      },
+    );
+    const hits = data.value?.[0]?.hitsContainers?.[0]?.hits ?? [];
+    return (
+      hits
+        .map((hit) => normalizeDriveItem(hit.resource as never))
+        .filter((entry): entry is M365DriveEntry => entry !== null)
+        // The index can lag or fuzz — keep only entries our own tiering
+        // agrees are name matches, so the "Name matches" section stays honest.
+        .filter((entry) => isNameMatch(entry.name, query))
+    );
+  } catch {
+    return [];
+  }
+}

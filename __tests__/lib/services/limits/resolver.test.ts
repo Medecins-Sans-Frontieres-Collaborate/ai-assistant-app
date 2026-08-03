@@ -485,8 +485,14 @@ describe('resolveAllLimits', () => {
   it('resolves every catalog key and defaults almost everything to unlimited', () => {
     const all = resolveAllLimits(null, principal());
     const limited = Object.values(all).filter((r) => !isUnlimited(r));
-    // Only the keys that encode behaviour the app ALREADY has today.
+    // Only the keys that encode behaviour the app ALREADY has today —
+    // plus feature.m365.toolCallsPerDay, whose non-null default cannot
+    // change existing behaviour because the toolset ships flag-gated dark.
     expect(limited.map((r) => r.limitKey).sort()).toEqual([
+      'feature.m365.mail.deepScansPerDay',
+      'feature.m365.mail.draftsPerDay',
+      'feature.m365.mail.readsPerDay',
+      'feature.m365.toolCallsPerDay',
       'feature.mcp.roundsPerRequest',
       'feature.upload.megabytesPerFile',
     ]);

@@ -166,8 +166,13 @@ describe('ResponsesApiHandler', () => {
           container: { type: 'auto', file_ids: ['file_1', 'file_2'] },
         },
       ]);
-      // Not forced: instructions carry only the system prompt
-      expect(params.instructions).toBe('p');
+      // Not forced: no Run-code directive, but mounted files DO carry the
+      // execute-don't-advise + same-format output instruction.
+      expect(params.instructions).not.toContain(
+        'The user has enabled "Run code"',
+      );
+      expect(params.instructions).toContain('SAME format as the input');
+      expect(params.instructions).toContain('actually perform the task now');
     });
 
     it('appends the Run-code instruction when forced', () => {

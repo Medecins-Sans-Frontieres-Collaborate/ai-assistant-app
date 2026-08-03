@@ -2,8 +2,10 @@ import type {
   AgentAccessConfig,
   AgentAccessRule,
   Guide,
+  M365Agent,
   MapDataset,
   MapDatasetMeta,
+  OrgRagAgent,
   PromptAgent,
 } from '@/lib/services/agentAccess/types';
 
@@ -52,8 +54,11 @@ export interface DiscoveredAgentSummary {
   agentName: string;
   source?: string;
   description?: string;
-  /** 'prompt' = app-defined prompt agent; absent/'foundry' = Foundry agent. */
-  type?: 'foundry' | 'prompt';
+  /**
+   * 'prompt' = app-defined prompt agent; 'm365' = M365 file-backed agent;
+   * absent/'foundry' = Foundry agent.
+   */
+  type?: 'foundry' | 'prompt' | 'm365';
 }
 
 export interface AgentsApiResponse {
@@ -80,6 +85,82 @@ export interface AdminPromptAgentsResponse {
   promptAgentsUnavailable?: boolean;
   /** Epoch ms of the served snapshot; null while promptAgentsUnavailable. */
   fetchedAt?: number | null;
+}
+
+/**
+ * Client mirror of M365_AGENT_SOURCE (value import forbidden here — see the
+ * module comment above). The pseudo-source half of every M365 agent's
+ * canonical key.
+ */
+export const CLIENT_M365_AGENT_SOURCE = 'm365-agent';
+
+/**
+ * One M365 agent as served by GET /api/agent-access/m365-agents (the etag
+ * feeds the If-Match CAS on PUT/DELETE).
+ */
+export interface AdminStoredM365Agent {
+  canonicalKey: string;
+  agent: M365Agent;
+  etag: string;
+}
+
+export interface AdminM365AgentsResponse {
+  m365Agents: AdminStoredM365Agent[];
+  /** Same outage contract as promptAgentsUnavailable. */
+  m365AgentsUnavailable?: boolean;
+  fetchedAt?: number | null;
+  /** Server's env-configured per-agent document cap (M365_AGENT_MAX_DOCUMENTS). */
+  maxDocuments?: number;
+}
+
+/**
+ * Client mirror of ORG_AGENT_SOURCE (value import forbidden here — see the
+ * module comment above). The pseudo-source half of every org RAG agent's
+ * canonical key.
+ */
+export const CLIENT_ORG_AGENT_SOURCE = 'org-agent';
+
+/**
+ * One org RAG agent as served by GET /api/agent-access/org-agents (the etag
+ * feeds the If-Match CAS on PUT/DELETE).
+ */
+export interface AdminStoredOrgAgent {
+  canonicalKey: string;
+  agent: OrgRagAgent;
+  etag: string;
+}
+
+/**
+ * One audit entry from GET /api/agent-access/history. The envelope fields
+ * are entity-agnostic; the per-entity payload (orgAgent, promptAgent, …)
+ * rides along verbatim — consumers narrow to the field they expect.
+ */
+export interface AdminHistoryEntry {
+  version: 1;
+  canonicalKey: string;
+  action: 'upsert' | 'delete';
+  updatedBy: string;
+  updatedAt: string;
+  /** Present on org-agent entries: the full record as written (null = delete tombstone). */
+  orgAgent?: OrgRagAgent | null;
+}
+
+export interface AdminHistoryResponse {
+  canonicalKey: string;
+  entries: AdminHistoryEntry[];
+  /** True when older entries were cut off at the server's cap. */
+  truncated?: boolean;
+}
+
+export interface AdminOrgAgentsResponse {
+  orgAgents: AdminStoredOrgAgent[];
+  /** Same outage contract as promptAgentsUnavailable. */
+  orgAgentsUnavailable?: boolean;
+  fetchedAt?: number | null;
+  /** Static config agent ids offered as override targets. */
+  staticAgentIds?: string[];
+  /** Creation is global-admin only; the server reports whether to offer it. */
+  canCreate?: boolean;
 }
 
 /**

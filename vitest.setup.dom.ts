@@ -30,6 +30,8 @@ vi.mock('katex/dist/katex.min.css', () => ({}));
 // Mock next-intl for component tests with common translations.
 // This provides a global mock that looks up translations from a messages object.
 const mockMessages: Record<string, unknown> = {
+  // Root-namespace key (messages/en.json has a top-level "close").
+  close: 'Close',
   common: {
     cancel: 'Cancel',
     undo: 'Undo',
@@ -97,6 +99,25 @@ const mockMessages: Record<string, unknown> = {
       batchPendingHint: '{count} tool requests pending',
       approveAllButton: 'Approve all',
       denyAllButton: 'Deny all',
+      runToolTitle: 'Run <code>{tool}</code>?',
+      runToolGeneric: 'Run this tool?',
+      viaService: 'via {service}',
+      approveButton: 'Approve',
+      approveOptionsLabel: 'Approve options',
+      approveOnce: 'Approve once',
+      alwaysApproveThisTool: 'Always approve this tool',
+      alwaysApproveAllTools: 'Always approve all tools',
+      alwaysApproveEverywhere: 'Always approve this tool — in every chat',
+      denyButton: 'Deny',
+      denyOptionsLabel: 'Deny options',
+      denyOnce: 'Deny once',
+      neverAllowEverywhere: 'Never allow this tool — in every chat',
+      deniedByRuleHint:
+        'Blocked by your rule — manage in Settings → Connectors.',
+      keyboardHint: '{modifier}+⏎ approve · esc deny',
+      submittingState: 'Submitting your decision',
+      approvedState: 'Approved — agent resumed',
+      deniedState: 'Denied',
     },
   },
   fileUpload: {
@@ -236,6 +257,48 @@ const mockMessages: Record<string, unknown> = {
     badgeTooltip:
       'Connector tools are active on every message — they add tokens and response time. Click to manage.',
   },
+  m365: {
+    tools: {
+      alwaysConfirmNote:
+        'This action always asks for confirmation — it can’t be auto-approved.',
+      batchToggleHint:
+        'Uncheck items you don’t want — only checked items are created.',
+      batchAllUnchecked:
+        'Nothing selected — approving would create nothing. Deny instead if you want none.',
+      consentCard: {
+        listLine: 'List: {name}',
+        to: 'To',
+        cc: 'Cc',
+        bcc: 'Bcc',
+        external: 'External',
+        replyAllCallout:
+          'Reply-all — this reply goes to everyone on the original message.',
+        subject: 'Subject',
+        fileLine: 'Attach file: {name}',
+        draftLine: 'Draft: {id}',
+      },
+    },
+    playbooks: {
+      dismissChip: 'Dismiss {title}',
+      chipLabel: 'Playbook: {title}',
+      menuLabel: 'Microsoft 365 playbooks',
+      menuTooltip:
+        'Curated multi-step chains over your calendar, mail and tasks — they gather first, propose, and only write after you agree',
+      meetingFollowThrough: {
+        title: 'Meeting follow-through',
+        description:
+          'Summary, action items, follow-up draft and (if needed) the next meeting — from this transcript',
+      },
+      morningTriage: {
+        title: 'Morning triage',
+        description:
+          'What came in, what’s waiting on you, and today’s calendar — one briefing',
+      },
+      chipsSettingLabel: 'Suggest Microsoft 365 playbooks',
+      chipsSettingHint:
+        'Show playbook suggestions above the message box when they apply (e.g. after importing a meeting transcript).',
+    },
+  },
   toolApprovals: {
     title: 'Tool approvals',
     description:
@@ -338,10 +401,15 @@ const mockMessages: Record<string, unknown> = {
     chipAddHint: 'Press Enter to add',
     removeChip: 'Remove',
     groupsLabel: 'Allowed groups',
-    groupsPendingConsent:
-      "Group-based access is pending tenant admin consent and can't be edited yet.",
+    groupsPlaceholder: 'Entra group object ID',
+    groupSearchPlaceholder: 'Search groups by name…',
+    groupSearchNoResults: 'No groups match that name.',
+    groupSearchError:
+      'Group search failed. You can still paste a group object ID below.',
+    groupSearchHint:
+      "Type at least 2 characters to search your organization's groups, or paste a group object ID directly. Access follows the member list in Microsoft Entra.",
     restrictedEmptyWarning:
-      'No users or domains are listed — nobody will be able to use this agent.',
+      'No users, domains, or groups are listed — nobody will be able to use this agent.',
     save: 'Save',
     saving: 'Saving…',
     cancel: 'Cancel',

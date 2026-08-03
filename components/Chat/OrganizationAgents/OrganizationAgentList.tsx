@@ -35,6 +35,8 @@ interface OrganizationAgentListProps {
   discoveredAgents?: FoundryAgentDisplay[];
   /** Model IDs hidden by the user — filtered out of this list. */
   hiddenIds?: Set<string>;
+  /** Static config agent ids overridden or disabled by admin records. */
+  suppressedStaticIds?: string[];
   /** Hide an agent (trash icon). Receives the row's model ID and display name. */
   onHide?: (modelId: string, name: string) => void;
   /** Accessible label for the hide (trash) button. */
@@ -51,23 +53,31 @@ export const OrganizationAgentList: FC<OrganizationAgentListProps> = ({
   selectedAgentId,
   discoveredAgents = [],
   hiddenIds,
+  suppressedStaticIds = [],
   onHide,
   hideLabel,
 }) => {
   const t = useTranslations('agents');
-  const staticAgents = getOrganizationAgents();
+  // Static entries the server reports as admin-overridden or admin-disabled
+  // drop out; the admin record arrives via discoveredAgents (or not at all).
+  const suppressedIdSet = new Set(suppressedStaticIds);
+  const staticAgents = getOrganizationAgents().filter(
+    (a) => !suppressedIdSet.has(a.id),
+  );
 
   // Merge static + discovered. The name-based dedupe exists solely for
   // Foundry-discovered agents that duplicate a static organization-agents.json
   // entry under the same display name. Prompt agents (matchId `org-prompt-…`)
-  // are admin-created personas with their own model ids — a name collision
-  // with a static agent is a different agent, not a duplicate, so they must
-  // never be dropped by this dedupe.
+  // and admin-authored org RAG agents (matchId `org-orgr-…`) are
+  // admin-created records with their own model ids — a name collision with a
+  // static agent is a different agent, not a duplicate, so they must never
+  // be dropped by this dedupe.
   const staticNames = new Set(staticAgents.map((a) => a.name));
-  const isPromptAgent = (a: FoundryAgentDisplay) =>
-    !!a.matchId?.startsWith('org-prompt-');
+  const isAdminManagedAgent = (a: FoundryAgentDisplay) =>
+    !!a.matchId?.startsWith('org-prompt-') ||
+    !!a.matchId?.startsWith('org-orgr-');
   const uniqueDiscovered = discoveredAgents.filter(
-    (a) => isPromptAgent(a) || !staticNames.has(a.name),
+    (a) => isAdminManagedAgent(a) || !staticNames.has(a.name),
   );
 
   // Model ID a row selects/compares against (static: `org-{id}`, discovered:

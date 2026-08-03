@@ -540,14 +540,22 @@ export function Chat({
       isFoundryAgent ||
       selectedConversation?.model?.isOrganizationAgent;
 
-    // Foundry agents without a static config get a minimal placeholder so the
-    // topbar can render (no web search, no specific icon).
-    if (isFoundryAgent && !orgAgent) {
+    // Foundry agents — and admin-authored org RAG agents, which are not in
+    // the static registry — get a minimal placeholder so the topbar can
+    // render. Foundry agents never expose web search here; org admin agents
+    // carry their gate on the model object; prompt/m365 agents keep
+    // `undefined` (the topbar only hides search on an explicit false).
+    if (isOrgAgent && !orgAgent) {
+      const modelSearchFlag = selectedConversation?.model?.allowWebSearch;
       return {
         orgAgent: {
           icon: undefined,
           color: undefined,
-          allowWebSearch: false,
+          allowWebSearch: isFoundryAgent
+            ? false
+            : typeof modelSearchFlag === 'boolean'
+              ? modelSearchFlag
+              : undefined,
           name: selectedConversation?.model?.name || '',
         },
         isOrgAgent: true,
@@ -560,6 +568,7 @@ export function Chat({
     selectedConversation?.model?.id,
     selectedConversation?.model?.name,
     selectedConversation?.model?.isOrganizationAgent,
+    selectedConversation?.model?.allowWebSearch,
   ]);
 
   // Show loading screen until session and data are fully loaded

@@ -5,7 +5,11 @@ import {
   AgentAccessService,
   emitAccessAudit,
 } from '@/lib/services/agentAccess/AgentAccessService';
-import { PROMPT_AGENT_SOURCE } from '@/lib/services/agentAccess/types';
+import {
+  M365_AGENT_SOURCE,
+  ORG_AGENT_SOURCE,
+  PROMPT_AGENT_SOURCE,
+} from '@/lib/services/agentAccess/types';
 import { AgentDiscoveryService } from '@/lib/services/agents/AgentDiscoveryService';
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
 import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
@@ -31,6 +35,9 @@ import {
 } from '@/lib/services/limits/resolver';
 import { checkTokenBudget } from '@/lib/services/limits/tokenDebit';
 import { reserve } from '@/lib/services/limits/usageStore';
+import { checkAgentSourceAccess } from '@/lib/services/m365/agentSourceAccess';
+import { M365Error } from '@/lib/services/m365/graphApi';
+import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 import { resolveCustomSourceModel } from '@/lib/services/models/customModelSources';
 import { ModelSelector, RateLimiter } from '@/lib/services/shared';
 
@@ -58,7 +65,7 @@ import { ChatContext } from './ChatContext';
 import { auth, getAccessTokenForOBO } from '@/auth';
 import { env } from '@/config/environment';
 import { getLimitDefinition } from '@/config/limits';
-import { getFallbackChain } from '@/config/models';
+import { getDefaultModel, getFallbackChain } from '@/config/models';
 import { TokenCredential } from '@azure/identity';
 
 /**
@@ -197,6 +204,8 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       mcpPendingToolCalls,
       mcpLoopRound,
       mcpPlan,
+      m365MailScreenOverrides,
+      m365SharedMailboxes,
       extraction,
       conversationSummary,
       memories,
@@ -243,6 +252,10 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       mcpPendingToolCalls,
       mcpLoopRound,
       mcpPlan,
+      // Explicit UI action ids for flagged mail (validated shape/caps in
+      // InputValidator) — consumed by the builtin M365 executor only.
+      m365MailScreenOverrides,
+      m365SharedMailboxes,
       temperature,
       stream,
       reasoningEffort,
@@ -628,6 +641,134 @@ export const createCredentialMiddleware = async (
     }
   }
 
+  // M365 file-backed agents: the same layer-1 guard as prompt agents, PLUS
+  // the layer-2 content trim (docs/M365_SECOND_PASS_AGENTS_DESIGN.md): the
+  // requesting user's OWN Graph token must open at least one of the agent's
+  // sources, and retrieval downstream is hard-filtered to that subset via
+  // context.m365AccessibleSourceIds. This runs in middleware (not the
+  // enricher) because middleware can reject the request — the pipeline
+  // swallows stage errors — and the model must never be called for a user
+  // with zero accessible sources.
+  if (
+    accessService.isEnabled() &&
+    (context.m365Agent || context.botId?.startsWith('m365-'))
+  ) {
+    await accessService.ensureFresh();
+    const m365Agent =
+      context.m365Agent ??
+      (context.botId ? accessService.getM365AgentById(context.botId) : null);
+    if (!m365Agent && accessService.getSnapshot().rulesUnavailable) {
+      emitAccessAudit({
+        userMail: context.user?.mail,
+        agentName: context.botId!,
+        source: M365_AGENT_SOURCE,
+        decision: 'unavailable',
+        reason: 'rules-unavailable',
+      });
+      console.error(
+        '[CredentialMiddleware] Agent access unavailable (rules-unavailable) for m365-agent invocation; blocking',
+      );
+      throw agentAccessDenied('unavailable', 'rules-unavailable');
+    }
+    if (m365Agent) {
+      const decision = accessService.evaluateAccess({
+        userMail: context.user?.mail,
+        source: M365_AGENT_SOURCE,
+        agentName: m365Agent.id,
+      });
+      emitAccessAudit({
+        userMail: context.user?.mail,
+        agentName: m365Agent.id,
+        source: M365_AGENT_SOURCE,
+        decision: decision.decision,
+        reason: decision.reason,
+      });
+      if (decision.decision !== 'allow') {
+        console.error(
+          `[CredentialMiddleware] Agent access ${decision.decision} (${decision.reason}) for m365-agent invocation; blocking`,
+        );
+        throw agentAccessDenied(decision.decision, decision.reason);
+      }
+
+      // Layer 2 — trim to the sources the user's own token can open. Audit
+      // records counts only, never file names or content.
+      try {
+        const access = await checkAgentSourceAccess(
+          req,
+          context.user?.id ?? context.session?.user?.id ?? 'unknown',
+          m365Agent,
+        );
+        console.log(
+          `[agent-access-audit] m365-layer2 agent=${sanitizeForLog(m365Agent.id)} accessible=${access.accessibleSourceIds.length}/${m365Agent.sources.length}`,
+        );
+        if (access.accessibleSourceIds.length === 0) {
+          throw agentAccessDenied('deny', 'm365-no-file-access');
+        }
+        return {
+          m365AccessibleSourceIds: access.accessibleSourceIds,
+        };
+      } catch (error) {
+        if (error instanceof M365Error) {
+          // No usable Graph session (not connected / consent pending):
+          // fail closed with the unavailable copy — the preflight endpoint
+          // gives the client the actionable connect/request-access UX.
+          throw agentAccessDenied('unavailable', `m365-${error.kind}`);
+        }
+        throw error;
+      }
+    }
+  }
+
+  // Admin-authored org RAG agents: the same layer-1 guard as prompt agents.
+  // Keyed on the RECORD existing for this botId (server-generated `orgr-`
+  // ids or overrides of static config ids) — static agents with no admin
+  // record keep their historical rule-free path. The cold-start fail-closed
+  // arm applies to `orgr-` ids only: a static-id botId whose override
+  // cannot be verified degrades to the static config entry, exactly like a
+  // deployment where the record never existed (blocking there would take
+  // every static agent down with a storage outage).
+  if (accessService.isEnabled() && context.botId) {
+    await accessService.ensureFresh();
+    const orgRecord = accessService.getOrgAgentById(context.botId);
+    if (
+      !orgRecord &&
+      context.botId.startsWith('orgr-') &&
+      accessService.getSnapshot().rulesUnavailable
+    ) {
+      emitAccessAudit({
+        userMail: context.user?.mail,
+        agentName: context.botId,
+        source: ORG_AGENT_SOURCE,
+        decision: 'unavailable',
+        reason: 'rules-unavailable',
+      });
+      console.error(
+        '[CredentialMiddleware] Agent access unavailable (rules-unavailable) for org-agent invocation; blocking',
+      );
+      throw agentAccessDenied('unavailable', 'rules-unavailable');
+    }
+    if (orgRecord) {
+      const decision = accessService.evaluateAccess({
+        userMail: context.user?.mail,
+        source: ORG_AGENT_SOURCE,
+        agentName: orgRecord.id,
+      });
+      emitAccessAudit({
+        userMail: context.user?.mail,
+        agentName: orgRecord.id,
+        source: ORG_AGENT_SOURCE,
+        decision: decision.decision,
+        reason: decision.reason,
+      });
+      if (decision.decision !== 'allow') {
+        console.error(
+          `[CredentialMiddleware] Agent access ${decision.decision} (${decision.reason}) for org-agent invocation; blocking`,
+        );
+        throw agentAccessDenied(decision.decision, decision.reason);
+      }
+    }
+  }
+
   // Custom-source (byom) models: gate on the top-level validated
   // modelSourcePath + the byom- id prefix — never on flags inside the parsed
   // model object (InputValidator strips them from the client body).
@@ -971,6 +1112,92 @@ export const createModelSelectionMiddleware = async (
     }
   }
 
+  // M365 file-backed agent resolution — same shape and same guards as the
+  // prompt-agent branch above (a request is one or the other; both key on
+  // `org-<botId>`). Differences: `chatModelId: null` means "ride the
+  // default" (the agent tracks catalog upgrades), and the RAG retrieval
+  // happens later in M365AgentEnricher rather than via a system prompt.
+  if (
+    context.botId?.startsWith('m365-') &&
+    modelId === `org-${context.botId}` &&
+    accessService.isEnabled()
+  ) {
+    await accessService.ensureFresh();
+    const m365Agent = accessService.getM365AgentById(context.botId);
+    if (m365Agent) {
+      selection.m365Agent = m365Agent;
+      // Same Foundry-misroute protection as prompt agents.
+      selection.agentMode = false;
+      if (m365Agent.chatModelId) {
+        const configured = OpenAIModels[
+          m365Agent.chatModelId as OpenAIModelID
+        ] as OpenAIModel | undefined;
+        if (configured) {
+          selection.modelId = configured.id;
+          selection.model = configured;
+        } else {
+          console.error(
+            `[ModelSelectionMiddleware] M365 agent ${sanitizeForLog(m365Agent.id)} references unknown model '${sanitizeForLog(m365Agent.chatModelId)}'; keeping default model behavior`,
+          );
+        }
+      } else {
+        const defaultId = getDefaultModel();
+        const fallback = OpenAIModels[defaultId as OpenAIModelID] as
+          | OpenAIModel
+          | undefined;
+        if (fallback) {
+          selection.modelId = fallback.id;
+          selection.model = fallback;
+        }
+      }
+      console.log(
+        `[ModelSelectionMiddleware] Resolved m365 agent ${sanitizeForLog(m365Agent.id)} → model ${sanitizeForLog(selection.modelId ?? modelId)}`,
+      );
+    }
+  }
+
+  // Admin-authored org RAG agent resolution — same shape as the prompt/m365
+  // branches, keyed on an admin RECORD existing for this botId (`orgr-` ids
+  // or overrides of static config ids). Static agents WITHOUT a record keep
+  // their historical behavior (client-side baseModelId cosmetics riding the
+  // DeploymentNotFound fallback); with a record, the admin-chosen base model
+  // (or the catalog default) actually executes. This puts overridden static
+  // botIds on the access-service path — deliberate: an override cannot be
+  // honored without consulting the store.
+  if (
+    context.botId &&
+    !context.botId.startsWith('prompt-') &&
+    !context.botId.startsWith('m365-') &&
+    modelId === `org-${context.botId}` &&
+    accessService.isEnabled()
+  ) {
+    await accessService.ensureFresh();
+    const orgRecord = accessService.getOrgAgentById(context.botId);
+    if (
+      orgRecord &&
+      orgRecord.enabled &&
+      orgRecord.validation.status === 'ok'
+    ) {
+      // Same Foundry-misroute protection as prompt agents.
+      selection.agentMode = false;
+      const chosenId = orgRecord.baseModelId ?? getDefaultModel();
+      const configured = OpenAIModels[chosenId as OpenAIModelID] as
+        | OpenAIModel
+        | undefined;
+      if (configured) {
+        selection.modelId = configured.id;
+        selection.model = configured;
+      } else {
+        console.error(
+          `[ModelSelectionMiddleware] Org agent ${sanitizeForLog(orgRecord.id)} references unknown model '${sanitizeForLog(chosenId)}'; keeping default model behavior`,
+        );
+      }
+      console.log(
+        `[ModelSelectionMiddleware] Resolved org agent ${sanitizeForLog(orgRecord.id)} → model ${sanitizeForLog(selection.modelId ?? modelId)}`,
+      );
+    }
+  }
+
   return selection;
 };
 
@@ -1216,6 +1443,16 @@ export async function buildChatContext(req: NextRequest): Promise<ChatContext> {
     authMiddleware,
     requestParsingMiddleware,
   ]);
+
+  // Keep the raw request on the context: request-bound in-process tools
+  // (builtin M365 executor) mint delegated Graph tokens from it.
+  context.request = req;
+
+  // Group-membership warm-up MUST precede createCredentialMiddleware and
+  // createLimitsMiddleware: both evaluate group-scoped rules via sync cache
+  // reads (getCachedGroupIdsForMail / getCachedGroupIdsForUser). Never
+  // throws; a no-op while the 10-minute TTL holds.
+  await resolveUserGroupIds(req, context.session ?? null);
 
   // Apply middleware that depends on previous middleware
   context = {

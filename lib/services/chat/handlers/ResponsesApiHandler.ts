@@ -18,6 +18,8 @@ import { toFile } from 'openai';
 export interface ResponsesCodeInterpreterOptions {
   /** Uploaded Foundry file ids to mount into the sandbox container. */
   fileIds: string[];
+  /** Original filenames of the mounted files (for the instructions). */
+  filenames?: string[];
   /** InterpreterMode.ALWAYS — instruct the model to actually execute. */
   forced: boolean;
 }
@@ -126,10 +128,33 @@ export class ResponsesApiHandler {
           `save charts or output files when they are the natural result.`
         : '';
 
+    // Applies whenever sandbox input files are mounted (forced or not).
+    // Two jobs: (1) the model must know the sandbox has the REAL files and
+    // must actually execute transformation tasks — without this, a capable
+    // chat model given the document's extracted text inline will answer
+    // with advice/a plan instead of performing the task; (2) a transformed
+    // document must come back as a file in the input's format, not pasted
+    // into the chat as markdown.
+    const mountedList = codeInterpreter?.filenames?.length
+      ? ` Mounted files: ${codeInterpreter.filenames.join(', ')}.`
+      : '';
+    const fileFormatInstruction =
+      codeInterpreter && codeInterpreter.fileIds.length > 0
+        ? `\n\nA Python code interpreter is available with the user's uploaded file(s) mounted in its working directory.${mountedList} ` +
+          `When the request asks you to TRANSFORM an attached file — shorten or trim it to a target length (words, characters, or pages), rewrite, ` +
+          `reformat, translate, or clean it — or to produce any downloadable artifact, you MUST use the code interpreter and actually perform the ` +
+          `task now. Do NOT respond with a plan, recommendations, or a description of how you would do it. ` +
+          `Save the result as a NEW file in the SAME format as the input — e.g. .docx in → .docx out via python-docx, .xlsx via openpyxl — unless ` +
+          `the user explicitly asks for a different output format, and do not deliver the transformed content as chat text. ` +
+          `For questions ABOUT the file's content that need no new file, answer directly without running code.`
+        : '';
+
     const params: OpenAI.Responses.ResponseCreateParams = {
       model: modelConfig.deploymentName ?? modelConfig.id,
       input,
-      instructions: `${systemPrompt}${forcedInstruction}` || undefined,
+      instructions:
+        `${systemPrompt}${forcedInstruction}${fileFormatInstruction}` ||
+        undefined,
       stream,
       // Stateless: conversation history travels in full on every request;
       // never retain it server-side.

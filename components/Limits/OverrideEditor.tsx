@@ -16,7 +16,6 @@ import {
 } from '@/lib/services/limits/types';
 
 import {
-  ADMIN_BANNER_WARN,
   ADMIN_BTN_ICON_DANGER,
   ADMIN_CARD,
   ADMIN_CHECKBOX,
@@ -27,6 +26,7 @@ import {
   ADMIN_MUTED,
 } from '@/components/Admin/adminClasses';
 import { ChipListInput } from '@/components/AgentAccess/ChipListInput';
+import { GroupSearchPicker } from '@/components/AgentAccess/GroupSearchPicker';
 import { normalizeDomainEntry } from '@/components/AgentAccess/RuleEditor';
 import { LimitRow } from '@/components/Limits/LimitRow';
 import {
@@ -77,11 +77,10 @@ const SCOPES: OverrideScope[] = ['user', 'domain', 'attribute', 'group'];
  * feature, like the defaults tab) plus an add-limit picker — not all 17
  * catalog rows. "Not set — inherit" removes an entry and therefore its row.
  *
- * The `group` scope is rendered DISABLED with pending-consent copy, matching
- * the treatment `RuleEditor` already gives `allowGroups`: Entra group
- * membership is not on the session, so a group override would grant and deny
- * nothing. Stored group targets are preserved untouched on save so nothing is
- * lost when consent lands.
+ * The `group` scope targets Entra group OBJECT IDS, edited through the same
+ * `GroupSearchPicker` as `RuleEditor`'s allowGroups (typeahead adds id
+ * chips; ids may also be pasted directly) — matched at evaluation time
+ * against the user's cached transitive membership (third pass §5).
  */
 export const OverrideEditor: FC<OverrideEditorProps> = ({
   override,
@@ -282,27 +281,39 @@ export const OverrideEditor: FC<OverrideEditorProps> = ({
           </div>
           <p className={`-mt-2 mb-3 ${ADMIN_HINT}`}>{t('priorityHint')}</p>
 
-          {isGroupScope && (
-            <p className={`mb-2 ${ADMIN_BANNER_WARN}`}>
-              {t('groupsPendingConsent')}
-            </p>
-          )}
-
           <div className="mb-3">
             <label className={ADMIN_LABEL}>
               {t(`targetsLabel.${override.scope}` as never)}
             </label>
-            <ChipListInput
-              values={override.targets}
-              onChange={(targets) => update({ targets })}
-              normalize={
-                override.scope === 'domain' ? normalizeDomainEntry : undefined
-              }
-              placeholder={t(`targetsPlaceholder.${override.scope}` as never)}
-              addHint={t('chipAddHint')}
-              removeLabel={t('removeChip')}
-              disabled={disabled || isGroupScope}
-            />
+            {isGroupScope ? (
+              <GroupSearchPicker
+                values={override.targets}
+                onChange={(targets) => update({ targets })}
+                labels={{
+                  searchPlaceholder: t('groupSearchPlaceholder'),
+                  searchHint: t('groupSearchHint'),
+                  noResults: t('groupSearchNoResults'),
+                  searchError: t('groupSearchError'),
+                  chipPlaceholder: t('targetsPlaceholder.group'),
+                  addHint: t('chipAddHint'),
+                  removeLabel: t('removeChip'),
+                  flagOffHint: t('groupsFlagOff'),
+                }}
+                disabled={disabled}
+              />
+            ) : (
+              <ChipListInput
+                values={override.targets}
+                onChange={(targets) => update({ targets })}
+                normalize={
+                  override.scope === 'domain' ? normalizeDomainEntry : undefined
+                }
+                placeholder={t(`targetsPlaceholder.${override.scope}` as never)}
+                addHint={t('chipAddHint')}
+                removeLabel={t('removeChip')}
+                disabled={disabled}
+              />
+            )}
           </div>
 
           <div className="space-y-3">

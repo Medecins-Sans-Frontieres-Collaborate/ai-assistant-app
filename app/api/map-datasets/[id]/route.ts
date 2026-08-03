@@ -6,6 +6,7 @@ import {
   readMapDataset,
 } from '@/lib/services/agentAccess/accessRulesStore';
 import { MAP_DATASET_SOURCE } from '@/lib/services/agentAccess/types';
+import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 
 import {
   badRequestResponse,
@@ -29,7 +30,7 @@ const MAP_DATASET_ID_PATTERN = /^mapds-[a-f0-9]{12}$/;
  * exist — anything else is an existence oracle for restricted datasets.
  */
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const session = await auth();
@@ -37,6 +38,10 @@ export async function GET(
 
   const service = AgentAccessService.getInstance();
   if (!service.isEnabled()) return notFoundResponse('Dataset');
+
+  // Group-membership warm-up MUST precede the evaluateAccess check below —
+  // group-scoped rules read the cache synchronously. Never throws.
+  await resolveUserGroupIds(request, session);
 
   const { id } = await params;
   if (!MAP_DATASET_ID_PATTERN.test(id)) {
