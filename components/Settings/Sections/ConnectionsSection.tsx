@@ -38,6 +38,15 @@ const FEATURE_LABEL_KEYS: Record<M365FeatureKey, string> = {
   sharepoint: 'features.sharepoint',
   sharepointWrite: 'features.sharepointWrite',
   mail: 'features.mail',
+  mailDrafts: 'features.mailDrafts',
+  calendar: 'features.calendar',
+  people: 'features.people',
+  orgDirectory: 'features.orgDirectory',
+  tasks: 'features.tasks',
+  meetings: 'features.meetings',
+  teamsChats: 'features.teamsChats',
+  teamsChannels: 'features.teamsChannels',
+  groups: 'features.groups',
 };
 
 const StatusBadge: FC<{ status: M365FeatureStatus }> = ({ status }) => {
@@ -65,9 +74,25 @@ const StatusBadge: FC<{ status: M365FeatureStatus }> = ({ status }) => {
 
 export const ConnectionsSection: FC = () => {
   const t = useTranslations('m365.connections');
+  const tPlaybooks = useTranslations('m365.playbooks');
   const m365Connected = useSettingsStore((s) => s.m365Connected);
   const setM365Connected = useSettingsStore((s) => s.setM365Connected);
-  const { filesEnabled, mailEnabled } = useM365Enabled();
+  const {
+    filesEnabled,
+    mailEnabled,
+    toolsEnabled,
+    playbooksEnabled,
+    meetingsEnabled,
+  } = useM365Enabled();
+  const playbookChipsEnabled = useSettingsStore(
+    (s) => s.m365PlaybookChipsEnabled,
+  );
+  const setPlaybookChipsEnabled = useSettingsStore(
+    (s) => s.setM365PlaybookChipsEnabled,
+  );
+  const sharedMailboxes = useSettingsStore((s) => s.m365SharedMailboxes);
+  const setSharedMailboxes = useSettingsStore((s) => s.setM365SharedMailboxes);
+  const [mailboxDraft, setMailboxDraft] = useState('');
 
   const [status, setStatus] = useState<M365Status | null>(null);
   const [loading, setLoading] = useState(false);
@@ -97,6 +122,21 @@ export const ConnectionsSection: FC = () => {
       ? (['files', 'sharepoint', 'sharepointWrite'] as M365FeatureKey[])
       : []),
     ...(mailEnabled ? (['mail'] as M365FeatureKey[]) : []),
+    // The toolset spans mail drafts + calendar/people/tasks/Teams; meetings
+    // ride their own flag; groups power access rules regardless of flags.
+    ...(toolsEnabled
+      ? ([
+          'mailDrafts',
+          'calendar',
+          'people',
+          'orgDirectory',
+          'tasks',
+          'teamsChats',
+          'teamsChannels',
+        ] as M365FeatureKey[])
+      : []),
+    ...(meetingsEnabled ? (['meetings'] as M365FeatureKey[]) : []),
+    'groups',
   ];
 
   return (
@@ -126,6 +166,11 @@ export const ConnectionsSection: FC = () => {
               </p>
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-500">
                 {t('delegatedNote')}
+              </p>
+              {/* Third-pass open question 1: the grant carries write-level
+                  calendar scope though meeting listing only reads. */}
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-500">
+                {t('calendarScopeNote')}
               </p>
             </div>
           </div>
@@ -186,6 +231,92 @@ export const ConnectionsSection: FC = () => {
                   {t('consentPendingHint')}
                 </p>
               )}
+          </div>
+        )}
+
+        {/* Shared mailboxes (fifth pass tier 3): Graph cannot enumerate
+            them, so the user maintains the list; mail tools only ever
+            target addresses on it. */}
+        {toolsEnabled && m365Connected && (
+          <div className="mt-4 border-t border-neutral-200 pt-4 dark:border-neutral-700">
+            <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+              {t('sharedMailboxes')}
+            </div>
+            <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+              {t('sharedMailboxesHint')}
+            </p>
+            <form
+              className="mt-2 flex gap-2"
+              onSubmit={(event) => {
+                event.preventDefault();
+                const address = mailboxDraft.trim().toLowerCase();
+                if (!address.includes('@')) return;
+                setSharedMailboxes([...sharedMailboxes, address]);
+                setMailboxDraft('');
+              }}
+            >
+              <input
+                type="email"
+                value={mailboxDraft}
+                onChange={(e) => setMailboxDraft(e.target.value)}
+                placeholder={t('sharedMailboxPlaceholder')}
+                className="min-w-0 flex-1 rounded-lg border border-gray-300 bg-gray-50 px-2 py-1.5 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-600 focus:outline-none dark:border-gray-700 dark:bg-surface-dark-elevated dark:text-gray-100 dark:placeholder-gray-400"
+              />
+              <button
+                type="submit"
+                disabled={!mailboxDraft.trim().includes('@')}
+                className="rounded-lg border border-neutral-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-40 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
+              >
+                {t('addSharedMailbox')}
+              </button>
+            </form>
+            {sharedMailboxes.length > 0 && (
+              <ul className="mt-2 flex flex-wrap gap-1.5">
+                {sharedMailboxes.map((address) => (
+                  <li
+                    key={address}
+                    className="flex items-center gap-1 rounded-full border border-neutral-300 px-2 py-0.5 text-xs text-gray-700 dark:border-neutral-600 dark:text-gray-300"
+                  >
+                    {address}
+                    <button
+                      type="button"
+                      aria-label={t('removeSharedMailbox', { address })}
+                      onClick={() =>
+                        setSharedMailboxes(
+                          sharedMailboxes.filter((a) => a !== address),
+                        )
+                      }
+                      className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                    >
+                      ×
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+
+        {/* Playbook chips (sixth pass): proactive suggestions can read as
+            pushy, so they get a per-user off switch. Menu entries stay. */}
+        {playbooksEnabled && m365Connected && (
+          <div className="mt-4 border-t border-neutral-200 pt-4 dark:border-neutral-700">
+            <label className="flex items-start gap-3">
+              <input
+                type="checkbox"
+                checked={playbookChipsEnabled}
+                onChange={(e) => setPlaybookChipsEnabled(e.target.checked)}
+                className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800"
+              />
+              <span>
+                <span className="block text-sm font-medium text-gray-900 dark:text-gray-100">
+                  {tPlaybooks('chipsSettingLabel')}
+                </span>
+                <span className="mt-0.5 block text-xs text-gray-500 dark:text-gray-400">
+                  {tPlaybooks('chipsSettingHint')}
+                </span>
+              </span>
+            </label>
           </div>
         )}
       </div>
