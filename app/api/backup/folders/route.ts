@@ -8,8 +8,17 @@ import {
   writeImmutableBlob,
 } from '@/lib/services/backup/server/backupBlobStore';
 import {
+  deleteDriveBlob,
+  driveFoldersPath,
+  readDriveBlob,
+  writeDriveImmutableBlob,
+} from '@/lib/services/backup/server/backupDriveStore';
+import {
+  BackupBackendId,
+  driveErrorResponse,
   rateLimitedResponse,
   readBoundedBody,
+  resolveBackupBackend,
 } from '@/lib/services/backup/server/routeHelpers';
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { RateLimiter } from '@/lib/services/shared/RateLimiter';
@@ -41,6 +50,8 @@ const limiter = RateLimiter.createScoped(60, 1);
 interface BlobRequestContext {
   session: Session;
   userId: string;
+  backend: BackupBackendId;
+  /** App-storage blob path (app backend) / drive-relative path (onedrive). */
   blobPath: string;
 }
 
@@ -56,16 +67,30 @@ async function resolveContext(
   if (!limit.allowed) {
     return rateLimitedResponse(limit);
   }
+  const backend = resolveBackupBackend(request);
+  if (backend === null) {
+    return badRequestResponse('Invalid backend parameter');
+  }
 
   const rev = new URL(request.url).searchParams.get('rev');
   if (!rev || !isValidRev(rev)) {
     return badRequestResponse('Invalid or missing rev parameter');
   }
 
-  return { session, userId, blobPath: foldersBlobPath(userId, rev) };
+  return {
+    session,
+    userId,
+    backend,
+    blobPath:
+      backend === 'onedrive'
+        ? driveFoldersPath(rev)
+        : foldersBlobPath(userId, rev),
+  };
 }
 
 function storageErrorResponse(scope: string, error: unknown): NextResponse {
+  const driveResponse = driveErrorResponse(error);
+  if (driveResponse) return driveResponse;
   const { errorClass, status, message } = classifyStorageError(error);
   console.error(
     `[BackupFoldersRoute] ${scope} failed (class=${errorClass}, status=${status}):`,
@@ -87,8 +112,12 @@ export async function PUT(request: NextRequest) {
   }
 
   try {
-    const storage = createBlobStorageClient(ctx.session);
-    await writeImmutableBlob(storage, ctx.blobPath, body);
+    if (ctx.backend === 'onedrive') {
+      await writeDriveImmutableBlob(request, ctx.blobPath, body);
+    } else {
+      const storage = createBlobStorageClient(ctx.session);
+      await writeImmutableBlob(storage, ctx.blobPath, body);
+    }
     return successResponse({ size: body.byteLength });
   } catch (error) {
     return storageErrorResponse('PUT', error);
