@@ -265,6 +265,58 @@ export const LIMIT_DEFINITIONS: readonly LimitDefinition[] = [
     labelKey: 'webSearchCallsPerDay',
   },
   {
+    key: 'feature.m365.toolCallsPerDay',
+    kind: 'counter',
+    unit: 'calls',
+    window: 'day',
+    perModel: false,
+    // Aggregate across all M365 tools. Non-null default: the toolset is new
+    // (flag-gated), so a cap cannot change behaviour any user already has.
+    defaultValue: 200,
+    category: 'tools',
+    // The key literal lives in the executor (per-spec budgetKey default);
+    // the handler passes keys through generically.
+    enforcedAt: 'lib/services/m365/tools/executor.ts callTool',
+    labelKey: 'm365ToolCallsPerDay',
+  },
+  {
+    key: 'feature.m365.mail.readsPerDay',
+    kind: 'counter',
+    unit: 'calls',
+    window: 'day',
+    perModel: false,
+    // Generous: search + get + thread combined (fifth pass tier 1).
+    defaultValue: 300,
+    category: 'tools',
+    enforcedAt: 'lib/services/m365/tools/toolCatalog.ts budgetKey',
+    labelKey: 'm365MailReadsPerDay',
+  },
+  {
+    key: 'feature.m365.mail.draftsPerDay',
+    kind: 'counter',
+    unit: 'calls',
+    window: 'day',
+    perModel: false,
+    // Deliberately tight: every draft is a confirmed mailbox write, and the
+    // cap is the volume-abuse backstop behind the per-draft consent card.
+    defaultValue: 25,
+    category: 'tools',
+    enforcedAt: 'lib/services/m365/tools/toolCatalog.ts budgetKey',
+    labelKey: 'm365MailDraftsPerDay',
+  },
+  {
+    key: 'feature.m365.mail.deepScansPerDay',
+    kind: 'counter',
+    unit: 'calls',
+    window: 'day',
+    perModel: false,
+    // One composite = one unit regardless of internal fan-out.
+    defaultValue: 20,
+    category: 'tools',
+    enforcedAt: 'lib/services/m365/tools/toolCatalog.ts budgetKey',
+    labelKey: 'm365MailDeepScansPerDay',
+  },
+  {
     key: 'feature.codeInterpreter.runsPerDay',
     kind: 'counter',
     unit: 'runs',
