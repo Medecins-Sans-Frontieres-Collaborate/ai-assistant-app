@@ -11,10 +11,14 @@ import type {
   M365MailFilter,
   M365MailImportResult,
   M365MailPage,
+  M365MeetingEntry,
+  M365MeetingResources,
+  M365MeetingTranscript,
   M365SaveResult,
   M365SiteEntry,
   M365SortDir,
   M365Status,
+  M365TeamEntry,
 } from '@/types/m365';
 
 export class M365ClientError extends Error {
@@ -98,6 +102,33 @@ export async function searchSites(query: string): Promise<M365SiteEntry[]> {
   return data.sites;
 }
 
+export interface M365GroupEntry {
+  /** Entra group object id — the value access rules and overrides persist. */
+  id: string;
+  name: string;
+}
+
+/** Typeahead search for the admin group pickers (Group.Read.All delegated). */
+export async function searchEntraGroups(
+  query: string,
+): Promise<M365GroupEntry[]> {
+  const data = await requestJson<{ groups: M365GroupEntry[] }>(
+    `/api/m365/groups?q=${encodeURIComponent(query)}`,
+  );
+  return data.groups;
+}
+
+/** Fresh display names for stored group ids — resolved on editor open. */
+export async function lookupEntraGroups(
+  ids: string[],
+): Promise<M365GroupEntry[]> {
+  if (ids.length === 0) return [];
+  const data = await requestJson<{ groups: M365GroupEntry[] }>(
+    `/api/m365/groups?ids=${encodeURIComponent(ids.join(','))}`,
+  );
+  return data.groups;
+}
+
 export async function listSiteDrives(siteId: string): Promise<M365DriveInfo[]> {
   const data = await requestJson<{ drives: M365DriveInfo[] }>(
     `/api/m365/sites?siteId=${encodeURIComponent(siteId)}`,
@@ -148,6 +179,149 @@ export interface ListMailOptions {
   pageToken?: string;
   /** Cancels the underlying fetch. */
   signal?: AbortSignal;
+}
+
+export async function listMeetings(): Promise<M365MeetingEntry[]> {
+  const data = await requestJson<{ meetings: M365MeetingEntry[] }>(
+    '/api/m365/meetings',
+  );
+  return data.meetings;
+}
+
+export async function resolveMeeting(
+  joinWebUrl: string,
+): Promise<M365MeetingResources> {
+  return requestJson<M365MeetingResources>(
+    `/api/m365/meetings?joinWebUrl=${encodeURIComponent(joinWebUrl)}`,
+  );
+}
+
+export async function fetchMeetingTranscript(
+  meetingId: string,
+  transcriptId: string,
+  context: { subject?: string; start?: string } = {},
+): Promise<M365MeetingTranscript> {
+  const params = new URLSearchParams({ meetingId, transcriptId });
+  if (context.subject) params.set('subject', context.subject);
+  if (context.start) params.set('start', context.start);
+  return requestJson<M365MeetingTranscript>(
+    `/api/m365/meetings?${params.toString()}`,
+  );
+}
+
+/** Tier 2: server-side recording import into upload storage (§3 pipeline). */
+export async function importMeetingRecording(
+  meetingId: string,
+  recordingId: string,
+  fileName: string,
+): Promise<M365ImportedUploadRef> {
+  return requestJson<M365ImportedUploadRef>('/api/m365/meetings/recording', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ meetingId, recordingId, fileName }),
+  });
+}
+
+/** Creates a user-confirmed batch of tasks in the "AI Assistant" To Do list. */
+export async function createTodoTasks(
+  tasks: string[],
+): Promise<{ created: number; listName: string }> {
+  return requestJson<{ created: number; listName: string }>('/api/m365/todo', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ tasks }),
+  });
+}
+
+export async function listJoinedTeams(): Promise<M365TeamEntry[]> {
+  const data = await requestJson<{ teams: M365TeamEntry[] }>('/api/m365/teams');
+  return data.teams;
+}
+
+/** A team's default document library (its M365 group drive). */
+export async function getTeamDrive(
+  groupId: string,
+): Promise<{ driveId: string; name: string }> {
+  const data = await requestJson<{ drive: { driveId: string; name: string } }>(
+    `/api/m365/teams?groupId=${encodeURIComponent(groupId)}`,
+  );
+  return data.drive;
+}
+
+export interface M365DriveItemMeta {
+  name: string;
+  eTag?: string;
+  webUrl?: string;
+  lastModified?: string;
+  size?: number;
+}
+
+/** Lightweight metadata read — the doc-sync pull poll ($select=eTag&co). */
+export async function getDriveItemMeta(
+  driveId: string,
+  itemId: string,
+  options: { signal?: AbortSignal } = {},
+): Promise<M365DriveItemMeta> {
+  const params = new URLSearchParams({ driveId, itemId });
+  return requestJson<M365DriveItemMeta>(
+    `/api/m365/drive/item?${params.toString()}`,
+    { signal: options.signal },
+  );
+}
+
+export interface M365UpdateContentResult {
+  name: string;
+  eTag?: string;
+  webUrl?: string;
+}
+
+/**
+ * Overwrites an EXISTING drive item's content, guarded by If-Match — a
+ * remote edit since `ifMatch` surfaces as M365ClientError code
+ * M365_CONFLICT, never a blind overwrite. Doc-sync push path.
+ */
+export async function updateDriveItemContent(
+  blob: Blob,
+  fileName: string,
+  target: { driveId: string; itemId: string; ifMatch?: string },
+): Promise<M365UpdateContentResult> {
+  const form = new FormData();
+  form.append('file', blob);
+  form.append('fileName', fileName);
+  form.append('driveId', target.driveId);
+  form.append('itemId', target.itemId);
+  if (target.ifMatch) form.append('ifMatch', target.ifMatch);
+  return requestJson<M365UpdateContentResult>('/api/m365/save', {
+    method: 'POST',
+    body: form,
+  });
+}
+
+export interface M365ImportedUploadRef {
+  /** `/api/file/{blobFilename}` — same reference shape as a local upload. */
+  uri: string;
+  name: string;
+  size: number;
+  mimeType: string;
+  category: 'image' | 'audio' | 'video' | 'document' | 'unknown';
+  eTag?: string;
+  webUrl?: string;
+}
+
+/**
+ * Imports a drive item server-side straight into upload storage — bytes
+ * never pass through the browser. Use for large media (transcription) and
+ * anywhere the file is consumed server-side anyway.
+ */
+export async function importDriveItemToStorage(
+  driveId: string,
+  itemId: string,
+): Promise<M365ImportedUploadRef> {
+  return requestJson<M365ImportedUploadRef>('/api/m365/import/storage', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ driveId, itemId }),
+  });
 }
 
 export async function listMail(
