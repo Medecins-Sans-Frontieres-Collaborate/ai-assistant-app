@@ -42,6 +42,8 @@ vi.mock('@/client/services/m365/m365Client', () => {
     listDrive: vi.fn(),
     searchSites: vi.fn(),
     listSiteDrives: vi.fn(),
+    listJoinedTeams: vi.fn(),
+    getTeamDrive: vi.fn(),
   };
 });
 
@@ -215,6 +217,111 @@ describe('M365FilePickerModal sort pills', () => {
       expect(listDrivePageMock).toHaveBeenLastCalledWith('recent'),
     );
     expect(screen.queryByText('sort.name')).not.toBeInTheDocument();
+  });
+});
+
+describe('M365FilePickerModal search sections', () => {
+  it('groups server results by match kind and surfaces cached local hits', async () => {
+    const { recordDriveEntries, clearDriveNameCache } =
+      await import('@/client/services/m365/driveNameCache');
+    clearDriveNameCache();
+    // Cached from an earlier session view; not in the server response.
+    recordDriveEntries([
+      {
+        driveId: 'd1',
+        itemId: 'local1',
+        name: 'geo-local.pptx',
+        isFolder: false,
+      },
+      // Also in server results — must dedupe out of the local section.
+      { driveId: 'd1', itemId: 'x', name: 'geo.pptx', isFolder: false },
+    ]);
+    vi.useFakeTimers();
+    renderPicker();
+    await act(async () => {});
+
+    listDrivePageMock.mockResolvedValue(
+      page([
+        {
+          ...entry('x', 'geo.pptx'),
+          match: 'name' as const,
+          sourceLabel: 'HR',
+          parentPath: 'Policies/2026',
+        },
+        { ...entry('y', 'minutes.docx'), match: 'content' as const },
+      ]),
+    );
+    fireEvent.change(screen.getByPlaceholderText('searchPlaceholder'), {
+      target: { value: 'geo' },
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(300);
+    });
+
+    expect(screen.getByText('sections.fromRecent')).toBeInTheDocument();
+    // Source + path line distinguishes same-named files across sites.
+    expect(screen.getByText('HR › Policies/2026')).toBeInTheDocument();
+    expect(screen.getByText('geo-local.pptx')).toBeInTheDocument();
+    expect(screen.getByText('sections.nameMatches')).toBeInTheDocument();
+    expect(screen.getByText('sections.contentMatches')).toBeInTheDocument();
+    // Dedupe: geo.pptx renders once (server section), not in local hits.
+    expect(screen.getAllByText('geo.pptx')).toHaveLength(1);
+    clearDriveNameCache();
+  });
+});
+
+describe('M365FilePickerModal file-type filter', () => {
+  it('disables non-matching files, keeps matching files and folders live', async () => {
+    const onPick = vi.fn();
+    listDrivePageMock.mockResolvedValueOnce(
+      page([
+        entry('a', 'notes.docx'),
+        entry('b', 'clip.mp4'),
+        entry('c', 'Folder', true),
+      ]),
+    );
+    render(
+      <M365FilePickerModal
+        isOpen
+        onClose={vi.fn()}
+        onPick={onPick}
+        acceptExtensions={['mp4', 'mp3']}
+      />,
+    );
+    await screen.findByText('clip.mp4');
+    expect(screen.getByText('notes.docx').closest('button')).toBeDisabled();
+    expect(screen.getByText('clip.mp4').closest('button')).toBeEnabled();
+    expect(screen.getByText('Folder').closest('button')).toBeEnabled();
+
+    fireEvent.click(screen.getByText('clip.mp4'));
+    expect(onPick).toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'clip.mp4' }),
+    );
+  });
+});
+
+describe('M365FilePickerModal teams tab', () => {
+  it('lists joined teams and browses the picked team drive', async () => {
+    const { listJoinedTeams, getTeamDrive } =
+      await import('@/client/services/m365/m365Client');
+    vi.mocked(listJoinedTeams).mockResolvedValue([
+      { groupId: 'g1', name: 'Logistics' },
+    ]);
+    vi.mocked(getTeamDrive).mockResolvedValue({
+      driveId: 'teamdrive-1',
+      name: 'Documents',
+    });
+    listDrivePageMock.mockResolvedValue(page([entry('a', 'plan.xlsx')]));
+    renderPicker();
+    fireEvent.click(await screen.findByText('tabs.teams'));
+    fireEvent.click(await screen.findByText('Logistics'));
+    await screen.findByText('plan.xlsx');
+    expect(listDrivePageMock).toHaveBeenLastCalledWith('children', {
+      driveId: 'teamdrive-1',
+      itemId: undefined,
+      sort: 'name',
+      dir: 'asc',
+    });
   });
 });
 

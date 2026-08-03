@@ -390,3 +390,56 @@ describe('mail row helpers', () => {
     expect(avatarColorClass('ana@x.org')).toMatch(/^bg-/);
   });
 });
+
+describe('M365MailImportModal expanded actions', () => {
+  it('expands via the text region and offers full-size context actions', async () => {
+    const { useChatInputStore } =
+      await import('@/client/stores/chatInputStore');
+    useChatInputStore.getState().setTextFieldValue(() => '');
+    listMailMock.mockResolvedValue({
+      envelopes: [
+        envelope({ id: 'm1', conversationId: 'c1', to: 'you@x.org' }),
+      ],
+    });
+    await renderModal();
+    await screen.findByText('Subject m1');
+
+    // The sender/subject region toggles expansion.
+    fireEvent.click(screen.getByText('Subject m1'));
+    expect(screen.getByText('actions.summarize')).toBeInTheDocument();
+    expect(screen.getByText('actions.draftReply')).toBeInTheDocument();
+    // Full-size import buttons render in the expanded panel too.
+    expect(screen.getByText('message')).toBeInTheDocument();
+    expect(screen.getByText('thread')).toBeInTheDocument();
+
+    // Summarize: attaches the THREAD (conversationId present) and fills
+    // the composer without sending.
+    fireEvent.click(screen.getByText('actions.summarize'));
+    expect(attachMail).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 'm1' }),
+      'thread',
+    );
+    expect(useChatInputStore.getState().textFieldValue).toBe(
+      'prompts.summarize',
+    );
+  });
+
+  it('draft reply attaches the single message and carries the id in the prompt', async () => {
+    const { useChatInputStore } =
+      await import('@/client/stores/chatInputStore');
+    useChatInputStore.getState().setTextFieldValue(() => '');
+    listMailMock.mockResolvedValue({
+      envelopes: [envelope({ id: 'm2', conversationId: 'c2' })],
+    });
+    await renderModal();
+    fireEvent.click(await screen.findByText('Subject m2'));
+    fireEvent.click(screen.getByText('actions.draftReply'));
+    expect(attachMail).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 'm2' }),
+      'message',
+    );
+    expect(useChatInputStore.getState().textFieldValue).toContain(
+      'prompts.draftReply',
+    );
+  });
+});
