@@ -3553,7 +3553,22 @@
       "turnOffConfirmMessage": "This deletes your backup from our servers for all devices. Chats on this device stay. You can turn backup on again later with a new recovery key.",
       "turnOffConfirmAction": "Delete backup",
       "turnOffSuccess": "Backup turned off and deleted",
-      "turnOffFailure": "Couldn't delete the backup. Please try again."
+      "turnOffFailure": "Couldn't delete the backup. Please try again.",
+      "storageLocationTitle": "Backup storage location",
+      "storageLocationDescription": "Where your encrypted backup is stored. Your chats (~{size}) always keep a working copy in this browser either way.",
+      "storageApp": "App storage",
+      "storageAppDescription": "Encrypted backup in this app's own cloud storage.",
+      "storageOneDrive": "My OneDrive",
+      "storageOneDriveDescription": "Encrypted backup in Apps/AI Assistant/Backup in your OneDrive. Only you can read it.",
+      "storageActive": "(current)",
+      "storageSwitching": "Moving your backup… keep this page open.",
+      "storageSwitchConfirmTitle": "Move backup to {target}?",
+      "storageSwitchConfirmMessage": "Your chats will be re-encrypted and uploaded to {target}, and the backup at the current location will be deleted. Any backup already at {target} is replaced. Chats on this device are not affected.",
+      "storageSwitchAction": "Move backup",
+      "storageSwitchSuccess": "Backup moved ({count} chats)",
+      "storageSwitchFailure": "Couldn't move the backup — nothing was changed.",
+      "storageSwitchCleanupWarning": "Backup moved, but the copy at the old location could not be removed. You can delete it manually.",
+      "turnOffLocalNote": "Your chats (~{size}) will remain only in this browser's storage."
     }
   },
   "memories": {
