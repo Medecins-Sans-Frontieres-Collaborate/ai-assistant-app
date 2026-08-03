@@ -7,6 +7,7 @@ import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { getContentType } from '@/lib/utils/server/file/mimeTypes';
 import { validateOrSanitizeImageBytes } from '@/lib/utils/server/file/svgSanitization';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+import { rewriteSandboxLinks } from '@/lib/utils/shared/chat/sandboxLinks';
 import { isAllowedFoundryHost } from '@/lib/utils/shared/foundryHostAllowlist';
 
 import { env } from '@/config/environment';
@@ -405,7 +406,11 @@ export class CodeInterpreterTool {
     }
 
     return {
-      text: textParts.join('\n').trim(),
+      // The interpreter model links its outputs as `sandbox:/mnt/data/…`,
+      // which nothing outside the container can resolve. Degrade those to
+      // plain text here so the picked model never sees (and never echoes)
+      // a link that renders as "[blocked]" client-side.
+      text: rewriteSandboxLinks(textParts.join('\n').trim()),
       codeRuns,
       citations,
       containerIds,
