@@ -1,3 +1,4 @@
+import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { FileProcessingService } from '@/lib/services/chat';
 import { guardTranscriptionMinutes } from '@/lib/services/limits/transcriptionBudget';
 import { getAzureMonitorLogger } from '@/lib/services/observability';
@@ -484,9 +485,12 @@ export class FileProcessor extends BasePipelineStage {
                       `[FileProcessor] Starting chunked transcription job...`,
                     );
 
-                    // Start chunked transcription job (returns immediately)
+                    // Start chunked transcription job (returns immediately).
+                    // Job state lives in the user's regional storage account,
+                    // so the store client must be session-scoped.
                     const { jobId, totalChunks } =
                       await chunkedService.startJob(
+                        createBlobStorageClient(context.session),
                         fileToTranscribe,
                         filename,
                         context.user.id,
