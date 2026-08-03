@@ -151,6 +151,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const ttsGuard = await guardLimit(session, 'feature.tts.charactersPerDay', {
       amount: text.length,
       ceilingKey: 'feature.tts.charactersPerRequest',
+      req: request,
     });
     if (!ttsGuard.allowed && ttsGuard.response) {
       return ttsGuard.response;
