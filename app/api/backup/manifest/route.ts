@@ -9,8 +9,14 @@ import {
   writeManifest,
 } from '@/lib/services/backup/server/backupBlobStore';
 import {
+  readDriveManifest,
+  writeDriveManifest,
+} from '@/lib/services/backup/server/backupDriveStore';
+import {
+  driveErrorResponse,
   rateLimitedResponse,
   readBoundedBody,
+  resolveBackupBackend,
 } from '@/lib/services/backup/server/routeHelpers';
 import { BackupManifest } from '@/lib/services/backup/types';
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
@@ -167,7 +173,7 @@ function validateManifestShape(
   return { ok: true, manifest: body as BackupManifest };
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const session = await auth();
   if (!session?.user) return unauthorizedResponse();
   const userId = getUserIdFromSession(session);
@@ -177,10 +183,16 @@ export async function GET() {
   if (!limit.allowed) {
     return rateLimitedResponse(limit);
   }
+  const backend = resolveBackupBackend(request);
+  if (backend === null) {
+    return badRequestResponse('Invalid backend parameter');
+  }
 
   try {
-    const storage = createBlobStorageClient(session);
-    const result = await readManifest(storage, userId);
+    const result =
+      backend === 'onedrive'
+        ? await readDriveManifest(request)
+        : await readManifest(createBlobStorageClient(session), userId);
     if (result === null) {
       return errorResponse(
         'Backup not found',
@@ -191,6 +203,8 @@ export async function GET() {
     }
     return successResponse({ manifest: result.manifest, etag: result.etag });
   } catch (error) {
+    const driveResponse = driveErrorResponse(error);
+    if (driveResponse) return driveResponse;
     const { errorClass, status, message } = classifyStorageError(error);
     console.error(
       `[BackupManifestRoute] GET failed (class=${errorClass}, status=${status}):`,
@@ -223,6 +237,11 @@ export async function PUT(request: NextRequest) {
     return badRequestResponse('Manifest must be valid JSON');
   }
 
+  const backend = resolveBackupBackend(request);
+  if (backend === null) {
+    return badRequestResponse('Invalid backend parameter');
+  }
+
   const validation = validateManifestShape(parsed);
   if (!validation.ok) {
     return badRequestResponse(validation.error);
@@ -238,7 +257,10 @@ export async function PUT(request: NextRequest) {
 
   try {
     const storage = createBlobStorageClient(session);
-    const existing = await readManifest(storage, userId);
+    const existing =
+      backend === 'onedrive'
+        ? await readDriveManifest(request)
+        : await readManifest(storage, userId);
 
     if (existing !== null) {
       if (!ifMatchEtag) {
@@ -279,12 +301,19 @@ export async function PUT(request: NextRequest) {
       return badRequestResponse('Initial manifest version must be 1');
     }
 
-    const etag = await writeManifest(
-      storage,
-      userId,
-      incoming,
-      existing === null ? null : ifMatchEtag,
-    );
+    const etag =
+      backend === 'onedrive'
+        ? await writeDriveManifest(
+            request,
+            incoming,
+            existing === null ? null : ifMatchEtag,
+          )
+        : await writeManifest(
+            storage,
+            userId,
+            incoming,
+            existing === null ? null : ifMatchEtag,
+          );
     return successResponse({ etag, version: incoming.version });
   } catch (error) {
     if (error instanceof BackupConflictError) {
@@ -295,6 +324,8 @@ export async function PUT(request: NextRequest) {
         'BACKUP_VERSION_CONFLICT',
       );
     }
+    const driveResponse = driveErrorResponse(error);
+    if (driveResponse) return driveResponse;
     const { errorClass, status, message } = classifyStorageError(error);
     console.error(
       `[BackupManifestRoute] PUT failed (class=${errorClass}, status=${status}):`,
