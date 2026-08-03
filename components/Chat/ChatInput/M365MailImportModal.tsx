@@ -7,7 +7,9 @@ import {
   IconMailOpened,
   IconMessages,
   IconPaperclip,
+  IconPencil,
   IconSearch,
+  IconSparkles,
   IconX,
 } from '@tabler/icons-react';
 import {
@@ -34,6 +36,8 @@ import {
 import type { M365MailEnvelope, M365MailFilter } from '@/types/m365';
 
 import Modal from '@/components/UI/Modal';
+
+import { useChatInputStore } from '@/client/stores/chatInputStore';
 
 interface M365MailImportModalProps {
   isOpen: boolean;
@@ -172,12 +176,24 @@ export function avatarColorClass(key: string): string {
 const COMPACT_BUTTON_CLASSES =
   'rounded-md border border-neutral-300 p-1 text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700';
 
+const EXPANDED_BUTTON_CLASSES =
+  'flex items-center gap-1.5 rounded-md border border-neutral-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700';
+
 const MailRow: FC<{
   envelope: M365MailEnvelope;
   expanded: boolean;
   onToggleExpand: () => void;
   onImport: (mode: 'message' | 'thread') => void;
-}> = ({ envelope, expanded, onToggleExpand, onImport }) => {
+  onSummarize: () => void;
+  onDraftReply: () => void;
+}> = ({
+  envelope,
+  expanded,
+  onToggleExpand,
+  onImport,
+  onSummarize,
+  onDraftReply,
+}) => {
   const t = useTranslations('m365.mail');
   const locale = useLocale();
   const unread = envelope.isRead === false;
@@ -200,7 +216,12 @@ const MailRow: FC<{
           )}
         </div>
 
-        <div className="min-w-0">
+        <button
+          type="button"
+          onClick={onToggleExpand}
+          aria-expanded={expanded}
+          className="min-w-0 cursor-pointer text-left"
+        >
           <div className="flex items-center gap-1.5">
             <span
               className={`truncate text-sm ${
@@ -242,7 +263,7 @@ const MailRow: FC<{
               {envelope.preview}
             </div>
           )}
-        </div>
+        </button>
 
         <div className="flex flex-col items-end gap-1">
           <div className="flex items-center gap-1">
@@ -334,6 +355,46 @@ const MailRow: FC<{
               {t('openInOutlook')}
             </a>
           )}
+          {/* The expanded state is the action surface: full-size labeled
+              buttons (the collapsed row keeps compact icons only). */}
+          <div className="flex flex-wrap gap-1.5 pt-1.5">
+            <button
+              type="button"
+              onClick={() => onImport('message')}
+              className={EXPANDED_BUTTON_CLASSES}
+            >
+              <IconMailOpened size={15} />
+              {t('message')}
+            </button>
+            {envelope.conversationId && (
+              <button
+                type="button"
+                onClick={() => onImport('thread')}
+                className={EXPANDED_BUTTON_CLASSES}
+              >
+                <IconMessages size={15} />
+                {t('thread')}
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={onSummarize}
+              title={t('actions.summarizeHint')}
+              className={EXPANDED_BUTTON_CLASSES}
+            >
+              <IconSparkles size={15} />
+              {t('actions.summarize')}
+            </button>
+            <button
+              type="button"
+              onClick={onDraftReply}
+              title={t('actions.draftReplyHint')}
+              className={EXPANDED_BUTTON_CLASSES}
+            >
+              <IconPencil size={15} />
+              {t('actions.draftReply')}
+            </button>
+          </div>
         </div>
       )}
     </li>
@@ -532,6 +593,42 @@ const M365MailImportBody: FC<{ onClose: () => void }> = ({ onClose }) => {
     onClose();
   };
 
+  /**
+   * Context actions: attach the mail AND pre-fill the composer with the
+   * matching prompt — never auto-sent, same posture as playbooks. The
+   * draft-reply prompt carries the message id so the reply tool (when the
+   * toolset is on) can target the real thread.
+   */
+  const importWithPrompt = (
+    envelope: M365MailEnvelope,
+    mode: 'message' | 'thread',
+    prompt: string,
+  ) => {
+    void attachMail(envelope, mode);
+    useChatInputStore
+      .getState()
+      .setTextFieldValue((prev) =>
+        prev.trim() ? `${prev}\n\n${prompt}` : prompt,
+      );
+    onClose();
+  };
+
+  const summarizeMail = (envelope: M365MailEnvelope) => {
+    importWithPrompt(
+      envelope,
+      envelope.conversationId ? 'thread' : 'message',
+      t('prompts.summarize'),
+    );
+  };
+
+  const draftReply = (envelope: M365MailEnvelope) => {
+    importWithPrompt(
+      envelope,
+      'message',
+      t('prompts.draftReply', { id: envelope.id }),
+    );
+  };
+
   const emptyKey =
     searchMode && envelopes.length > 0
       ? 'emptyFiltered'
@@ -659,6 +756,8 @@ const M365MailImportBody: FC<{ onClose: () => void }> = ({ onClose }) => {
                       )
                     }
                     onImport={(mode) => importMail(envelope, mode)}
+                    onSummarize={() => summarizeMail(envelope)}
+                    onDraftReply={() => draftReply(envelope)}
                   />
                 </Fragment>
               ))}

@@ -6,6 +6,7 @@ import {
   IconFolder,
   IconLoader2,
   IconSearch,
+  IconUsersGroup,
 } from '@tabler/icons-react';
 import {
   FC,
@@ -22,11 +23,17 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useM365Attachment } from '@/client/hooks/chat/useM365Attachment';
 
 import {
+  queryDriveNameCache,
+  recordDriveEntries,
+} from '@/client/services/m365/driveNameCache';
+import {
   DriveView,
   M365ClientError,
   M365_SEARCH_DEBOUNCE_MS,
   M365_SEARCH_MIN_CHARS,
+  getTeamDrive,
   listDrivePage,
+  listJoinedTeams,
   listSiteDrives,
   searchSites,
 } from '@/client/services/m365/m365Client';
@@ -38,6 +45,7 @@ import type {
   M365SaveDestination,
   M365SiteEntry,
   M365SortDir,
+  M365TeamEntry,
 } from '@/types/m365';
 
 import M365FileTypeIcon from '@/components/Chat/ChatInput/M365FileTypeIcon';
@@ -62,9 +70,16 @@ interface M365FilePickerModalProps {
    * navigate only).
    */
   onPickFolder?: (destination: M365SaveDestination) => void;
+  /**
+   * Per-consumer file-type filter (third-pass shared foundation): lowercase
+   * extensions without the dot. Non-matching files stay visible for
+   * orientation but render disabled; folders always navigate. Ignored in
+   * folder mode.
+   */
+  acceptExtensions?: string[];
 }
 
-type PickerTab = 'onedrive' | 'recent' | 'shared' | 'sharepoint';
+type PickerTab = 'onedrive' | 'recent' | 'shared' | 'sharepoint' | 'teams';
 
 /** One drill-down step: a folder (OneDrive), or a site/library (SharePoint). */
 interface Crumb {
@@ -79,11 +94,17 @@ interface EntryPage {
   nextToken: string | null;
 }
 
-const TABS: PickerTab[] = ['onedrive', 'recent', 'shared', 'sharepoint'];
+const TABS: PickerTab[] = [
+  'onedrive',
+  'recent',
+  'shared',
+  'sharepoint',
+  'teams',
+];
 
 // Folder mode drops recent (files-only in Graph, unreliable $orderby) and
 // shared (writes there depend on the sharer's permissions — deferred).
-const FOLDER_TABS: PickerTab[] = ['onedrive', 'sharepoint'];
+const FOLDER_TABS: PickerTab[] = ['onedrive', 'sharepoint', 'teams'];
 
 const SEARCH_DEBOUNCE_MS = M365_SEARCH_DEBOUNCE_MS;
 const SEARCH_MIN_CHARS = M365_SEARCH_MIN_CHARS;
@@ -151,7 +172,8 @@ const M365FilePickerBody: FC<{
   onClose: () => void;
   onPick?: (entry: M365DriveEntry) => void;
   onPickFolder?: (destination: M365SaveDestination) => void;
-}> = ({ onClose, onPick: onPickProp, onPickFolder }) => {
+  acceptExtensions?: string[];
+}> = ({ onClose, onPick: onPickProp, onPickFolder, acceptExtensions }) => {
   const t = useTranslations('m365.picker');
   const folderMode = Boolean(onPickFolder);
   // onPickFolder wins over onPick — the modes are mutually exclusive.
@@ -164,6 +186,7 @@ const M365FilePickerBody: FC<{
   const [entries, setEntries] = useState<M365DriveEntry[]>([]);
   const [nextToken, setNextToken] = useState<string | null>(null);
   const [sites, setSites] = useState<M365SiteEntry[]>([]);
+  const [teams, setTeams] = useState<M365TeamEntry[]>([]);
   const [libraries, setLibraries] = useState<M365DriveInfo[]>([]);
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState<EntryPage | null>(null);
@@ -229,6 +252,7 @@ const M365FilePickerBody: FC<{
       if (tab === 'recent' || tab === 'shared') {
         const page = await listDrivePage(tab);
         if (seq !== listSeqRef.current) return;
+        recordDriveEntries(page.entries);
         setEntries(page.entries);
         setNextToken(page.nextToken ?? null);
       } else if (tab === 'onedrive') {
@@ -239,6 +263,22 @@ const M365FilePickerBody: FC<{
           dir,
         });
         if (seq !== listSeqRef.current) return;
+        recordDriveEntries(page.entries);
+        setEntries(page.entries);
+        setNextToken(page.nextToken ?? null);
+      } else if (tab === 'teams' && crumbs.length === 0) {
+        const found = await listJoinedTeams();
+        if (seq !== listSeqRef.current) return;
+        setTeams(found);
+      } else if (tab === 'teams' && crumbs[0]?.driveId) {
+        const page = await listDrivePage('children', {
+          driveId: crumbs[0].driveId,
+          itemId: lastCrumb?.itemId,
+          sort,
+          dir,
+        });
+        if (seq !== listSeqRef.current) return;
+        recordDriveEntries(page.entries);
         setEntries(page.entries);
         setNextToken(page.nextToken ?? null);
       } else if (sharePointPhase === 'libraries' && crumbs[0]?.siteId) {
@@ -253,6 +293,7 @@ const M365FilePickerBody: FC<{
           dir,
         });
         if (seq !== listSeqRef.current) return;
+        recordDriveEntries(page.entries);
         setEntries(page.entries);
         setNextToken(page.nextToken ?? null);
       }
@@ -267,6 +308,14 @@ const M365FilePickerBody: FC<{
   useEffect(() => {
     void load();
   }, [load]);
+
+  // Warm the session name index with recent files so search-as-you-type has
+  // instant local matches from the first keystroke of the first search.
+  useEffect(() => {
+    void listDrivePage('recent')
+      .then((page) => recordDriveEntries(page.entries))
+      .catch(() => undefined);
+  }, []);
 
   const loadMore = useCallback(async () => {
     const inSearch = searchResults !== null;
@@ -354,13 +403,19 @@ const M365FilePickerBody: FC<{
         } else {
           const page = await listDrivePage('search', {
             q,
-            driveId: tab === 'sharepoint' ? crumbs[1]?.driveId : undefined,
+            driveId:
+              tab === 'sharepoint'
+                ? crumbs[1]?.driveId
+                : tab === 'teams'
+                  ? crumbs[0]?.driveId
+                  : undefined,
             signal: controller.signal,
           });
           if (seq !== searchSeqRef.current) return;
           // The search listing replaces the browse listing; drop any browse
           // page append still in flight.
           listSeqRef.current += 1;
+          recordDriveEntries(page.entries);
           setSearchResults({
             entries: page.entries,
             nextToken: page.nextToken ?? null,
@@ -383,7 +438,8 @@ const M365FilePickerBody: FC<{
   // own; the library-list phase is short enough not to need one either.
   const showSearchBox =
     tab === 'onedrive' ||
-    (tab === 'sharepoint' && sharePointPhase !== 'libraries');
+    (tab === 'sharepoint' && sharePointPhase !== 'libraries') ||
+    (tab === 'teams' && crumbs.length > 0);
 
   // Debounced search-as-you-type; below the minimum length any in-flight
   // search is cancelled and the browse listing returns.
@@ -473,8 +529,30 @@ const M365FilePickerBody: FC<{
     ]);
   };
 
+  const openTeam = (team: M365TeamEntry) => {
+    cancelSearch();
+    setQuery('');
+    setLoading(true);
+    const seq = listSeqRef.current;
+    getTeamDrive(team.groupId)
+      .then((drive) => {
+        if (seq !== listSeqRef.current) return;
+        // The crumb carries the resolved drive; load() then browses its root.
+        setCrumbs([{ label: team.name, driveId: drive.driveId }]);
+      })
+      .catch((error) => {
+        if (seq !== listSeqRef.current) return;
+        setLoading(false);
+        setErrorKey(errorMessageKey(error));
+      });
+  };
+
   const rootLabel =
-    tab === 'sharepoint' ? t('tabs.sharepoint') : t('tabs.onedrive');
+    tab === 'sharepoint'
+      ? t('tabs.sharepoint')
+      : tab === 'teams'
+        ? t('tabs.teams')
+        : t('tabs.onedrive');
 
   const pickFolderEntry = (entry: M365DriveEntry) => {
     onPickFolder?.({
@@ -514,16 +592,69 @@ const M365FilePickerBody: FC<{
         name: lastCrumb?.label ?? '',
         pathLabel: crumbPath,
       };
+    } else if (tab === 'teams' && crumbs[0]?.driveId) {
+      // A team-drive root is addressable the same way as a SharePoint
+      // library root (/drives/{d}/root:).
+      currentDestination = {
+        driveId: crumbs[0].driveId,
+        itemId: lastCrumb?.itemId ?? null,
+        name: lastCrumb?.label ?? '',
+        pathLabel: crumbPath,
+      };
     }
   }
 
   const showSortPills =
     !searchActive &&
     (tab === 'onedrive' ||
-      (tab === 'sharepoint' && sharePointPhase === 'browse'));
+      (tab === 'sharepoint' && sharePointPhase === 'browse') ||
+      (tab === 'teams' && crumbs.length > 0));
 
   const listedEntries = searchActive ? searchResults.entries : entries;
   const trimmedQuery = query.trim();
+
+  // Search mode is sectioned: instant local hits (session cache) while the
+  // server answers, then guaranteed name matches, then content matches.
+  const searchMode = searchActive || searching;
+  const serverKeys = useMemo(
+    () =>
+      new Set(
+        (searchActive ? searchResults.entries : []).map(
+          (e) => `${e.driveId}/${e.itemId}`,
+        ),
+      ),
+    [searchActive, searchResults],
+  );
+  const localHits = useMemo(
+    () =>
+      searchMode && trimmedQuery.length >= SEARCH_MIN_CHARS
+        ? queryDriveNameCache(trimmedQuery).filter(
+            (e) => !serverKeys.has(`${e.driveId}/${e.itemId}`),
+          )
+        : [],
+    [searchMode, trimmedQuery, serverKeys],
+  );
+  const nameMatches = searchActive
+    ? searchResults.entries.filter((e) => e.match === 'name')
+    : [];
+  const contentMatches = searchActive
+    ? searchResults.entries.filter((e) => e.match !== 'name')
+    : [];
+
+  // Shared-foundation file-type filter: folders always navigate; files
+  // outside the accepted set stay visible for orientation but are inert.
+  const acceptSet = useMemo(
+    () =>
+      acceptExtensions && !folderMode
+        ? new Set(acceptExtensions.map((ext) => ext.toLowerCase()))
+        : null,
+    [acceptExtensions, folderMode],
+  );
+  const isAccepted = (entry: M365DriveEntry): boolean => {
+    if (!acceptSet || entry.isFolder) return true;
+    const dot = entry.name.lastIndexOf('.');
+    return dot > 0 && acceptSet.has(entry.name.slice(dot + 1).toLowerCase());
+  };
 
   return (
     <div className="flex h-[420px] flex-col gap-3">
@@ -613,7 +744,7 @@ const M365FilePickerBody: FC<{
             }}
             className="hover:text-blue-600 hover:underline dark:hover:text-blue-400"
           >
-            {tab === 'sharepoint' ? t('tabs.sharepoint') : t('tabs.onedrive')}
+            {rootLabel}
           </button>
           {crumbs.map((crumb, index) => (
             <span
@@ -689,6 +820,30 @@ const M365FilePickerBody: FC<{
           <div className="flex h-full items-center justify-center px-6 text-center text-sm text-amber-700 dark:text-amber-400">
             {t(errorKey)}
           </div>
+        ) : tab === 'teams' && crumbs.length === 0 ? (
+          teams.length === 0 ? (
+            <div className="flex h-full items-center justify-center px-6 text-center text-sm text-gray-500 dark:text-gray-400">
+              {t('teamsEmpty')}
+            </div>
+          ) : (
+            <ul>
+              {teams.map((team) => (
+                <li key={team.groupId}>
+                  <button
+                    type="button"
+                    onClick={() => openTeam(team)}
+                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-neutral-700/50"
+                  >
+                    <IconUsersGroup
+                      size={18}
+                      className="flex-shrink-0 text-violet-500"
+                    />
+                    <span className="truncate">{team.name}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )
         ) : tab === 'sharepoint' && sharePointPhase === 'sites' ? (
           sites.length === 0 ? (
             <div className="flex h-full items-center justify-center px-6 text-center text-sm text-gray-500 dark:text-gray-400">
@@ -742,7 +897,7 @@ const M365FilePickerBody: FC<{
               </li>
             ))}
           </ul>
-        ) : listedEntries.length === 0 ? (
+        ) : listedEntries.length === 0 && localHits.length === 0 ? (
           searchActive ? (
             <div className="flex h-full flex-col items-center justify-center gap-2 px-6 text-center text-sm text-gray-500 dark:text-gray-400">
               <IconSearch size={24} className="text-gray-400" />
@@ -757,69 +912,108 @@ const M365FilePickerBody: FC<{
           )
         ) : (
           <ul>
-            {listedEntries.map((entry) => (
-              <li key={`${entry.driveId}-${entry.itemId}`}>
-                <div className="flex items-center">
-                  {/* Folder mode keeps file rows visible for orientation but
-                      inert — only folders can be navigated or selected. */}
-                  <button
-                    type="button"
-                    disabled={folderMode && !entry.isFolder}
-                    onClick={() =>
-                      entry.isFolder
-                        ? openFolder(entry)
-                        : folderMode
-                          ? undefined
-                          : pickFile(entry)
-                    }
-                    className={`flex min-w-0 flex-1 items-center gap-2 px-3 py-2 text-left text-sm text-gray-800 dark:text-gray-200 ${
-                      folderMode && !entry.isFolder
-                        ? 'cursor-default opacity-50'
-                        : 'hover:bg-gray-100 dark:hover:bg-neutral-700/50'
-                    }`}
-                  >
-                    <M365FileTypeIcon entry={entry} size={18} />
-                    <span
-                      className="min-w-0 flex-1 truncate"
-                      title={entry.name}
-                    >
-                      {entry.name}
-                    </span>
-                    <span className="hidden w-24 flex-shrink-0 text-right text-xs text-gray-400 sm:inline">
-                      {entry.lastModified
-                        ? dateFormatter.format(new Date(entry.lastModified))
-                        : ''}
-                    </span>
-                    <span className="w-16 flex-shrink-0 text-right text-xs text-gray-400">
-                      {entry.isFolder
-                        ? (entry.childCount ?? '')
-                        : formatSize(entry.size)}
-                    </span>
-                  </button>
-                  {onPick && entry.isFolder && (
+            {(() => {
+              const renderRow = (entry: M365DriveEntry) => (
+                <li key={`${entry.driveId}-${entry.itemId}`}>
+                  <div className="flex items-center">
+                    {/* Folder mode and type-filtered pickers keep file rows
+                      visible for orientation but inert — only folders (and
+                      accepted files) respond. */}
                     <button
                       type="button"
-                      onClick={() => pickFile(entry)}
-                      className="mr-2 flex-shrink-0 rounded-md border border-neutral-300 px-2 py-0.5 text-xs text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
+                      disabled={
+                        (folderMode || !isAccepted(entry)) && !entry.isFolder
+                      }
+                      title={
+                        !entry.isFolder && !isAccepted(entry)
+                          ? t('unsupportedType')
+                          : undefined
+                      }
+                      onClick={() =>
+                        entry.isFolder
+                          ? openFolder(entry)
+                          : folderMode || !isAccepted(entry)
+                            ? undefined
+                            : pickFile(entry)
+                      }
+                      className={`flex min-w-0 flex-1 items-center gap-2 px-3 py-2 text-left text-sm text-gray-800 dark:text-gray-200 ${
+                        (folderMode || !isAccepted(entry)) && !entry.isFolder
+                          ? 'cursor-default opacity-50'
+                          : 'hover:bg-gray-100 dark:hover:bg-neutral-700/50'
+                      }`}
                     >
-                      {t('addFolder')}
+                      <M365FileTypeIcon entry={entry} size={18} />
+                      <span className="min-w-0 flex-1" title={entry.name}>
+                        <span className="block truncate">{entry.name}</span>
+                        {/* Mixed-source listings (search spans every site;
+                          recent/shared mix drives) show WHERE the item
+                          lives — same-named files across sites are
+                          indistinguishable otherwise. */}
+                        {(searchMode || tab === 'recent' || tab === 'shared') &&
+                          (entry.sourceLabel || entry.parentPath) && (
+                            <span className="block truncate text-[11px] text-gray-400 dark:text-gray-500">
+                              {[entry.sourceLabel, entry.parentPath]
+                                .filter(Boolean)
+                                .join(' › ')}
+                            </span>
+                          )}
+                      </span>
+                      <span className="hidden w-24 flex-shrink-0 text-right text-xs text-gray-400 sm:inline">
+                        {entry.lastModified
+                          ? dateFormatter.format(new Date(entry.lastModified))
+                          : ''}
+                      </span>
+                      <span className="w-16 flex-shrink-0 text-right text-xs text-gray-400">
+                        {entry.isFolder
+                          ? (entry.childCount ?? '')
+                          : formatSize(entry.size)}
+                      </span>
                     </button>
-                  )}
-                  {/* Browse rows only: a search hit's breadcrumb is unknown,
+                    {onPick && entry.isFolder && (
+                      <button
+                        type="button"
+                        onClick={() => pickFile(entry)}
+                        className="mr-2 flex-shrink-0 rounded-md border border-neutral-300 px-2 py-0.5 text-xs text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
+                      >
+                        {t('addFolder')}
+                      </button>
+                    )}
+                    {/* Browse rows only: a search hit's breadcrumb is unknown,
                       so selecting from search means navigating in first and
                       using the footer bar (honest pathLabel). */}
-                  {folderMode && entry.isFolder && !searchActive && (
-                    <button
-                      type="button"
-                      onClick={() => pickFolderEntry(entry)}
-                      className="mr-2 flex-shrink-0 rounded-md border border-neutral-300 px-2 py-0.5 text-xs text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
-                    >
-                      {t('selectFolder')}
-                    </button>
-                  )}
-                </div>
-              </li>
-            ))}
+                    {folderMode && entry.isFolder && !searchActive && (
+                      <button
+                        type="button"
+                        onClick={() => pickFolderEntry(entry)}
+                        className="mr-2 flex-shrink-0 rounded-md border border-neutral-300 px-2 py-0.5 text-xs text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
+                      >
+                        {t('selectFolder')}
+                      </button>
+                    )}
+                  </div>
+                </li>
+              );
+              if (!searchActive) {
+                return listedEntries.map(renderRow);
+              }
+              const section = (labelKey: string, group: M365DriveEntry[]) =>
+                group.length === 0
+                  ? null
+                  : [
+                      <li
+                        key={`header-${labelKey}`}
+                        className="sticky top-0 z-10 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:bg-neutral-900 dark:text-gray-400"
+                      >
+                        {t(labelKey)}
+                      </li>,
+                      ...group.map(renderRow),
+                    ];
+              return [
+                section('sections.fromRecent', localHits),
+                section('sections.nameMatches', nameMatches),
+                section('sections.contentMatches', contentMatches),
+              ];
+            })()}
             {loadMoreFailed ? (
               <li className="flex items-center justify-center gap-2 px-3 py-2 text-xs text-amber-700 dark:text-amber-400">
                 <span>{t('loadMoreFailed')}</span>
@@ -887,6 +1081,7 @@ const M365FilePickerModal: FC<M365FilePickerModalProps> = ({
   onClose,
   onPick,
   onPickFolder,
+  acceptExtensions,
 }) => {
   const t = useTranslations('m365.picker');
 
@@ -906,6 +1101,7 @@ const M365FilePickerModal: FC<M365FilePickerModalProps> = ({
           onClose={onClose}
           onPick={onPick}
           onPickFolder={onPickFolder}
+          acceptExtensions={acceptExtensions}
         />
       )}
     </Modal>
