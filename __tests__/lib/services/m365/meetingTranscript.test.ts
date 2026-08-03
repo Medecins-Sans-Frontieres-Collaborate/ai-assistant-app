@@ -27,6 +27,22 @@ describe('parseVttTranscript', () => {
     expect(result.cueCount).toBe(3);
   });
 
+  it('keeps spoken prose that merely contains "-->"', () => {
+    // A bare /-->/ test treated this cue TEXT as a timing line and dropped
+    // it (and mis-set the in-cue flag for what followed).
+    const result = parseVttTranscript(`WEBVTT
+
+00:00:01.000 --> 00:00:02.000
+<v Ada Lovelace>The arrow --> points right.</v>
+
+00:00:02.500 --> 00:00:03.000
+<v Ada Lovelace>Second line survives.</v>
+`);
+    expect(result.text).toContain('The arrow --> points right.');
+    expect(result.text).toContain('Second line survives.');
+    expect(result.cueCount).toBe(2);
+  });
+
   it('handles cues without voice spans', () => {
     const plain = `WEBVTT
 
