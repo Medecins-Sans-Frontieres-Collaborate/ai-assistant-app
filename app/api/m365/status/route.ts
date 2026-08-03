@@ -24,6 +24,23 @@ const FEATURE_SCOPES: Record<M365FeatureKey, string[]> = {
   sharepoint: ['Sites.Read.All'],
   sharepointWrite: ['Sites.ReadWrite.All'],
   mail: ['Mail.Read'],
+  mailDrafts: ['Mail.ReadWrite'],
+  calendar: ['Calendars.ReadWrite'],
+  people: ['People.Read', 'Contacts.Read'],
+  orgDirectory: ['User.Read.All'],
+  tasks: ['Tasks.ReadWrite'],
+  meetings: [
+    'OnlineMeetings.Read',
+    'OnlineMeetingTranscript.Read.All',
+    'OnlineMeetingRecording.Read.All',
+  ],
+  teamsChats: ['Chat.Read'],
+  teamsChannels: [
+    'ChannelMessage.Read.All',
+    'Team.ReadBasic.All',
+    'Channel.ReadBasic.All',
+  ],
+  groups: ['Group.Read.All'],
 };
 
 export async function GET(req: NextRequest) {

@@ -17,6 +17,10 @@
 import { NextRequest } from 'next/server';
 
 import {
+  mergeSearchResults,
+  searchDriveByFilename,
+} from '@/lib/services/m365/driveSearch';
+import {
   M365DriveEntry,
   M365Error,
   graphJson,
@@ -81,36 +85,6 @@ function normalizeEntries(data: GraphPage): M365DriveEntry[] {
 function pageNextToken(data: GraphPage): string | undefined {
   const nextLink = data['@odata.nextLink'];
   return nextLink ? encodeGraphNextLink(nextLink) : undefined;
-}
-
-/**
- * Graph search is relevance-ranked and can bury exact filename matches past
- * the first page. Partition into filename tiers — exact, exact without the
- * final extension, prefix, substring, content-only — preserving Graph's
- * relevance order within each tier.
- */
-function rankSearchEntries(
-  entries: M365DriveEntry[],
-  query: string,
-): M365DriveEntry[] {
-  const q = query.toLowerCase();
-  const tiers: M365DriveEntry[][] = [[], [], [], [], []];
-  for (const entry of entries) {
-    const name = entry.name.toLowerCase();
-    const stem = name.replace(/\.[^.]*$/, '');
-    const tier =
-      name === q
-        ? 0
-        : stem === q
-          ? 1
-          : name.startsWith(q)
-            ? 2
-            : name.includes(q)
-              ? 3
-              : 4;
-    tiers[tier].push(entry);
-  }
-  return tiers.flat();
 }
 
 function pageResponse(entries: M365DriveEntry[], nextToken?: string) {
@@ -226,11 +200,21 @@ export async function GET(req: NextRequest) {
         const base = driveId
           ? `/drives/${encodeURIComponent(driveId)}/root`
           : '/me/drive/root';
-        const first = await graphJson<GraphPage>(
-          req,
-          SCOPES,
-          `${base}/search(q='${escaped}')?$top=${PAGE_SIZE}&${ITEM_SELECT}`,
-        );
+        // Unscoped searches also run the dedicated filename query in
+        // parallel — the only way a literal name match is GUARANTEED to
+        // surface (content-relevance flooding can push it past any bounded
+        // window of search(q=)). Drive-scoped pickers skip it: their
+        // corpora are small and /search/query cannot scope to one drive.
+        const [nameHits, first] = await Promise.all([
+          driveId
+            ? Promise.resolve([] as M365DriveEntry[])
+            : searchDriveByFilename(req, SCOPES, query),
+          graphJson<GraphPage>(
+            req,
+            SCOPES,
+            `${base}/search(q='${escaped}')?$top=${PAGE_SIZE}&${ITEM_SELECT}`,
+          ),
+        ]);
         let window = normalizeEntries(first);
         let lastPage = first;
         const firstNextLink = first['@odata.nextLink'];
@@ -242,7 +226,7 @@ export async function GET(req: NextRequest) {
           lastPage = second;
         }
         return pageResponse(
-          rankSearchEntries(window, query),
+          mergeSearchResults(nameHits, window, query),
           pageNextToken(lastPage),
         );
       }
