@@ -204,33 +204,48 @@ describe('GET /api/m365/drive search re-ranking', () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it('orders exact > exact-sans-extension > prefix > substring > content, stable within tiers', async () => {
-    fetchMock.mockResolvedValue(
-      graphJsonResponse({
-        value: [
-          driveItem('c1', 'quarterly-report.docx'),
-          driveItem('s1', 'my-geo-notes.txt'),
-          driveItem('p1', 'geography.docx'),
-          driveItem('c2', 'summary.pdf'),
-          driveItem('e1', 'geo.pptx'),
-          driveItem('x1', 'geo', true),
-          driveItem('p2', 'geothermal', true),
-        ],
-      }),
+  it('orders exact > stem > token-match > substring > content, stable within tiers', async () => {
+    // Fresh Response per call: the route now issues a parallel
+    // /search/query filename lookup alongside the content search.
+    fetchMock.mockImplementation((url: string | URL) =>
+      String(url).includes('/search/query')
+        ? graphJsonResponse({ value: [] })
+        : graphJsonResponse({
+            value: [
+              driveItem('c1', 'quarterly-report.docx'),
+              driveItem('s1', 'my-geo-notes.txt'),
+              driveItem('p1', 'geography.docx'),
+              driveItem('c2', 'summary.pdf'),
+              driveItem('e1', 'geo.pptx'),
+              driveItem('x1', 'geo', true),
+              driveItem('p2', 'geothermal', true),
+            ],
+          }),
     );
     const response = await driveGET(driveRequest('view=search&q=geo'));
     const body = await parseJsonResponse(response);
     expect(response.status).toBe(200);
     expect(body.data.entries.map((e: { name: string }) => e.name)).toEqual([
-      // A literal exact match outranks a stem match even when Graph ranks
-      // the stem match higher.
+      // Exact > stem; then the token tier ("geo" matches a whole filename
+      // token in my-geo-notes, and prefixes geography/geothermal) in stable
+      // input order; content-only matches last.
       'geo',
       'geo.pptx',
+      'my-geo-notes.txt',
       'geography.docx',
       'geothermal',
-      'my-geo-notes.txt',
       'quarterly-report.docx',
       'summary.pdf',
+    ]);
+    // Sectioning metadata for the picker: name vs content match kinds.
+    expect(body.data.entries.map((e: { match?: string }) => e.match)).toEqual([
+      'name',
+      'name',
+      'name',
+      'name',
+      'name',
+      'content',
+      'content',
     ]);
   });
 
@@ -239,24 +254,30 @@ describe('GET /api/m365/drive search re-ranking', () => {
       'https://graph.microsoft.com/v1.0/me/drive/root/search?$skiptoken=p2';
     const page2Link =
       'https://graph.microsoft.com/v1.0/me/drive/root/search?$skiptoken=p3';
-    fetchMock
-      .mockResolvedValueOnce(
-        graphJsonResponse({
-          value: [driveItem('c1', 'notes.txt')],
-          '@odata.nextLink': page1Link,
-        }),
-      )
-      .mockResolvedValueOnce(
-        graphJsonResponse({
-          value: [driveItem('e1', 'geo.pptx')],
-          '@odata.nextLink': page2Link,
-        }),
-      );
+    let contentCall = 0;
+    fetchMock.mockImplementation((url: string | URL) => {
+      if (String(url).includes('/search/query')) {
+        return graphJsonResponse({ value: [] });
+      }
+      contentCall += 1;
+      return contentCall === 1
+        ? graphJsonResponse({
+            value: [driveItem('c1', 'notes.txt')],
+            '@odata.nextLink': page1Link,
+          })
+        : graphJsonResponse({
+            value: [driveItem('e1', 'geo.pptx')],
+            '@odata.nextLink': page2Link,
+          });
+    });
     const response = await driveGET(driveRequest('view=search&q=geo'));
     const body = await parseJsonResponse(response);
     expect(response.status).toBe(200);
-    expect(fetchMock).toHaveBeenCalledTimes(2);
-    expect(fetchMock.mock.calls[1][0]).toBe(page1Link);
+    const contentUrls = fetchMock.mock.calls
+      .map((call) => String(call[0]))
+      .filter((url) => !url.includes('/search/query'));
+    expect(contentUrls).toHaveLength(2);
+    expect(contentUrls[1]).toBe(page1Link);
     // Whole merged window is returned, re-ranked across both pages.
     expect(body.data.entries.map((e: { name: string }) => e.name)).toEqual([
       'geo.pptx',

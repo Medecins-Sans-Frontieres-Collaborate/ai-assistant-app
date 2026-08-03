@@ -79,11 +79,21 @@ describe('GET /api/m365/status', () => {
     );
     const body = await parseJsonResponse(response);
     expect(response.status).toBe(200);
-    expect(body.data.features).toEqual({
+    expect(body.data.features).toMatchObject({
       files: 'granted',
       sharepoint: 'granted',
       sharepointWrite: 'error',
       mail: 'consent_missing',
+      // Fourth/fifth-pass feature areas probe the same way.
+      mailDrafts: 'granted',
+      calendar: 'granted',
+      people: 'granted',
+      orgDirectory: 'granted',
+      tasks: 'granted',
+      meetings: 'granted',
+      teamsChats: 'granted',
+      teamsChannels: 'granted',
+      groups: 'granted',
     });
   });
 });
