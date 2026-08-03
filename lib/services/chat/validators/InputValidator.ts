@@ -445,6 +445,12 @@ const ChatBodySchema = z
             id: z.string().regex(/^[a-zA-Z0-9_-]{1,64}$/),
             name: z.string().min(1).max(100),
             catalogKey: z.string().max(64).optional(),
+            // Admin-connector entries (server-resolved + access-checked, like
+            // catalogKey). Mirrors app/api/mcp/tools/route.ts.
+            connectorId: z.string().max(64).optional(),
+            // First-party builtin toolset marker (builtin-m365) — the server
+            // constructs the synthetic entry itself; no url/token ride along.
+            builtin: z.boolean().optional(),
             url: z
               .string()
               .max(2048)
@@ -482,6 +488,22 @@ const ChatBodySchema = z
       .max(10)
       .optional(),
     mcpLoopRound: z.number().int().min(0).max(10).optional(),
+    // Mail-screen override ids (fifth-pass hostile-mail hardening): message
+    // ids the user explicitly revealed via the flagged-result UI control.
+    // The M365 executor honors ONLY this payload field — never a tool
+    // argument — so an injected email cannot self-unlock. Charset mirrors
+    // graphApi's GRAPH_ID_REGEX (not imported: graphApi statically pulls
+    // next-auth, which must stay out of this module graph).
+    m365MailScreenOverrides: z
+      .array(z.string().regex(/^[A-Za-z0-9!$_.,=-]{1,512}$/))
+      .max(20)
+      .optional(),
+    // Shared mailbox addresses the user configured (Settings → Connections).
+    // The mail tools only ever target addresses on this list.
+    m365SharedMailboxes: z
+      .array(z.string().email().max(320))
+      .max(10)
+      .optional(),
     isEditorOpen: z.boolean().optional(),
     activeFiles: z.array(ActiveFileSchema).max(50).optional(),
     activeFilesTokensUsed: z.number().int().min(0).optional(),
