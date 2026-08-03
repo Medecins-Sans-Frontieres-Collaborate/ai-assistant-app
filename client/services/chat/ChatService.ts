@@ -194,6 +194,10 @@ export class ChatService {
       conversationSummary?: string;
       /** Long-term user memory snippets (see ChatBody). */
       memories?: string[];
+      /** Phishing-screen override message ids (see ChatBody). */
+      m365MailScreenOverrides?: string[];
+      /** Configured shared mailbox addresses (see ChatBody). */
+      m365SharedMailboxes?: string[];
     },
   ): Promise<ReadableStream<Uint8Array>> {
     const messagesWithPlaceholders = await prepareMessagesForAPI(messages);
@@ -235,6 +239,8 @@ export class ChatService {
       extraction: options?.extraction,
       conversationSummary: options?.conversationSummary,
       memories: options?.memories,
+      m365MailScreenOverrides: options?.m365MailScreenOverrides,
+      m365SharedMailboxes: options?.m365SharedMailboxes,
     };
 
     const { body, report } = trimBodyToByteBudget(rawBody);
