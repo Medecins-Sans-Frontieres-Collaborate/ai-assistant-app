@@ -176,6 +176,26 @@ export interface ChatContext {
   /** Turn plan echoed by the client on approval resume. */
   mcpPlan?: import('@/types/mcp').McpPlan;
 
+  /**
+   * Phishing-screen override ids from the request payload (explicit UI
+   * action on a flagged mail result). Threaded into the builtin M365
+   * executor as screenOverrideIds; the mail tools honor ONLY this field,
+   * never a tool argument.
+   */
+  m365MailScreenOverrides?: string[];
+
+  /** Shared mailbox addresses from the payload (fifth pass tier 3). */
+  m365SharedMailboxes?: string[];
+
+  /**
+   * The incoming NextRequest, stored by buildChatContext. Needed by
+   * request-bound in-process tools (the builtin M365 executor mints
+   * delegated Graph tokens from the request's auth cookies). Optional so
+   * tests can build contexts without one; consumers must degrade when
+   * absent.
+   */
+  request?: import('next/server').NextRequest;
+
   // ========================================
   // FEATURE FLAGS
   // ========================================
