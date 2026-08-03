@@ -5,6 +5,8 @@ import { useSession } from 'next-auth/react';
 import { useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 
+import { useM365Enabled } from '@/client/hooks/useM365Enabled';
+
 import { initMcpCredentialSync } from '@/client/services/mcp/mcpCredentialSync';
 
 import { STORAGE_QUOTA_EXCEEDED_EVENT } from '@/lib/utils/app/storage/perConversationStorage';
@@ -81,6 +83,15 @@ export function AppInitializer() {
   useEffect(() => {
     useSettingsStore.getState().setLocalModelsFlagEnabled(localModels === true);
   }, [localModels]);
+
+  // Mirror the builtin M365 toolset gate the same way — chatStore gates the
+  // send-path builtin-m365 entry on it. Uses useM365Enabled (not the raw
+  // flag) so the send gate and the tray/badge UI can never disagree: both
+  // are fail-closed with the same documented localhost escape hatch.
+  const { toolsEnabled: m365ToolsEnabled } = useM365Enabled();
+  useEffect(() => {
+    useSettingsStore.getState().setM365ToolsFlagEnabled(m365ToolsEnabled);
+  }, [m365ToolsEnabled]);
 
   // MCP credential vault: once authenticated, merge encrypted credentials
   // into the in-memory store and start the write-through sync (the persisted
