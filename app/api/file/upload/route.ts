@@ -310,7 +310,13 @@ export async function POST(request: NextRequest) {
     const uploadMegabytes = await effectiveUploadMegabytes(session);
 
     // Files-per-day counter, checked after auth and before any buffering.
-    const uploadGuard = await guardLimit(session, 'feature.upload.filesPerDay');
+    const uploadGuard = await guardLimit(
+      session,
+      'feature.upload.filesPerDay',
+      {
+        req: request,
+      },
+    );
     if (!uploadGuard.allowed && uploadGuard.response) {
       return uploadGuard.response;
     }
