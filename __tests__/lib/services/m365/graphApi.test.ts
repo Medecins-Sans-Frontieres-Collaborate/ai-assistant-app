@@ -75,6 +75,38 @@ describe('isValidGraphId', () => {
 });
 
 describe('normalizeDriveItem', () => {
+  it('derives sourceLabel from webUrl (site slug / OneDrive / host)', () => {
+    const base = {
+      id: 'i1',
+      name: 'handbook.docx',
+      parentReference: { driveId: 'd1' },
+    };
+    expect(
+      normalizeDriveItem({
+        ...base,
+        webUrl:
+          'https://msfusa.sharepoint.com/sites/HR/Shared%20Documents/handbook.docx',
+      } as never)?.sourceLabel,
+    ).toBe('HR');
+    expect(
+      normalizeDriveItem({
+        ...base,
+        webUrl:
+          'https://msfusa-my.sharepoint.com/personal/blaze_msf_org/Documents/handbook.docx',
+      } as never)?.sourceLabel,
+    ).toBe('OneDrive');
+    expect(
+      normalizeDriveItem({
+        ...base,
+        webUrl:
+          'https://msfes.sharepoint.com/teams/Logistica/Docs/handbook.docx',
+      } as never)?.sourceLabel,
+    ).toBe('Logistica');
+    expect(
+      normalizeDriveItem({ ...base } as never)?.sourceLabel,
+    ).toBeUndefined();
+  });
+
   it('normalizes an ordinary item', () => {
     expect(
       normalizeDriveItem({
@@ -94,6 +126,7 @@ describe('normalizeDriveItem', () => {
       size: 1234,
       mimeType: 'application/vnd.openxmlformats',
       webUrl: 'https://contoso.sharepoint.com/report.docx',
+      sourceLabel: 'contoso',
       lastModified: '2026-07-01T00:00:00Z',
     });
   });
