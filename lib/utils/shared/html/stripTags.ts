@@ -27,7 +27,13 @@ const COMMENT_RE = /<!--[\s\S]*?(?:--!?>|$)/g;
 /** `<script>`/`<style>` elements WITH their contents; unterminated → to end. */
 const SCRIPT_STYLE_RE = /<(script|style)\b[\s\S]*?(?:<\/\1\s*>|$)/gi;
 
-const TAG_RE = /<[^>]*>/g;
+/**
+ * Only a `<` followed by a name start, `/`, `!` or `?` begins markup for a
+ * browser. Requiring that (the original `/<[^>]*>/` did not) keeps prose
+ * like "if x < y and y > z" — common in mail bodies — from being eaten as
+ * a bogus tag, without letting any real tag through.
+ */
+const TAG_RE = /<[a-zA-Z/!?][^>]*>/g;
 
 /**
  * A trailing `<tag…` with no closing `>`. Requires a letter (or `/`) right
