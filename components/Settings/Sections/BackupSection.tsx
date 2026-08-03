@@ -64,26 +64,36 @@ export const BackupSection: FC = () => {
 
   const { status, lastBackupAt, syncNow } = useBackupSync();
 
-  const [showDisableConfirm, setShowDisableConfirm] = useState(false);
-  const [isDisabling, setIsDisabling] = useState(false);
   const [isBackingUp, setIsBackingUp] = useState(false);
-  const [pendingSwitch, setPendingSwitch] = useState<BackupBackend | null>(
+  const [pendingChoice, setPendingChoice] = useState<StorageChoice | null>(
     null,
   );
-  const [isSwitching, setIsSwitching] = useState(false);
+  // The storage option currently being migrated to (drives the per-option
+  // spinner). One operation at a time.
+  const [busyTarget, setBusyTarget] = useState<StorageChoice | null>(null);
 
   const enrolled = enrollmentStatus === 'enrolled';
   const keyTail = localKeyId ? localKeyId.slice(-4).toUpperCase() : null;
+  // Not enrolled = chats live only in this browser.
+  const activeChoice: StorageChoice = enrolled ? storageBackend : 'local';
   // OneDrive as a DESTINATION needs flag + connection; an enrollment already
   // pointing at OneDrive keeps its controls even if the flag later flips
   // (the user must always be able to move back or turn off).
-  const showStorageChoice =
-    (oneDriveBackupEnabled && m365Connected) || storageBackend === 'onedrive';
+  const storageChoices: StorageChoice[] = [
+    'local',
+    'app',
+    ...((oneDriveBackupEnabled && m365Connected) ||
+    storageBackend === 'onedrive'
+      ? (['onedrive'] as const)
+      : []),
+  ];
 
-  const backendLabel = (backend: BackupBackend): string =>
-    backend === 'onedrive'
+  const choiceLabel = (choice: StorageChoice): string =>
+    choice === 'onedrive'
       ? t('backup.settings.storageOneDrive')
-      : t('backup.settings.storageApp');
+      : choice === 'app'
+        ? t('backup.settings.storageApp')
+        : t('backup.settings.storageLocal');
 
   const localSizeLabel = (): string => {
     const bytes = getConversationDataSize();
@@ -92,24 +102,64 @@ export const BackupSection: FC = () => {
       : `${Math.max(1, Math.round(bytes / 1024))} KB`;
   };
 
-  const handleChooseBackend = (target: BackupBackend) => {
-    if (target === storageBackend || isSwitching) return;
-    if (!enrolled) {
-      // Nothing to migrate — just point future enrolls/restores at the
-      // chosen location and refresh what exists there.
-      useBackupStore.getState().setStorageBackend(target);
-      void useBackupStore.getState().refreshRemoteStatus();
+  const handleChooseStorage = async (choice: StorageChoice) => {
+    if (choice === activeChoice || busyTarget !== null) return;
+    if (enrolled) {
+      setPendingChoice(choice);
       return;
     }
-    setPendingSwitch(target);
+    // Not enrolled: the choice is a cloud destination. Point the preference
+    // there and hand over to the enroll flow (or the restore row, when a
+    // backup already exists at that location).
+    const store = useBackupStore.getState();
+    store.setStorageBackend(choice as BackupBackend);
+    const remote = await store.refreshRemoteStatus();
+    if (remote?.exists !== true) {
+      setBackupModalView('enroll-intro');
+    }
   };
 
-  const handleConfirmSwitch = async () => {
-    const target = pendingSwitch;
-    setPendingSwitch(null);
+  /**
+   * Migration to local-only: pull everything down first, THEN remove the
+   * cloud copy. Aborts (nothing changed) when the pull can't confirm this
+   * device holds the full corpus — deleting a remote that another device
+   * may have advanced would be silent data loss, not "keeping chats local".
+   */
+  const switchToLocalOnly = async (): Promise<void> => {
+    const pulled = await syncNow();
+    if (
+      pulled === null ||
+      (pulled.status !== 'ok' && pulled.status !== 'remote-missing')
+    ) {
+      toast.error(t('backup.settings.storageLocalSyncFailed'));
+      return;
+    }
+    const { remoteKeyEpoch, localKeyEpoch, clearEnrollment } =
+      useBackupStore.getState();
+    // Disable is a key-state change: other devices must find a tombstone
+    // with a bumped epoch, not a bare 404 (which reads as "never existed").
+    await disableBackupAt(
+      storageBackend,
+      Math.max(remoteKeyEpoch ?? 0, localKeyEpoch),
+    );
+    await clearMasterKey();
+    clearEnrollment();
+    // Refresh the cached remote snapshot so the off-state doesn't offer a
+    // restore of the backup we just deleted.
+    void useBackupStore.getState().refreshRemoteStatus();
+    toast.success(t('backup.settings.storageLocalSuccess'));
+  };
+
+  const handleConfirmChoice = async () => {
+    const target = pendingChoice;
+    setPendingChoice(null);
     if (target === null) return;
-    setIsSwitching(true);
+    setBusyTarget(target);
     try {
+      if (target === 'local') {
+        await switchToLocalOnly();
+        return;
+      }
       const keys = await getBackupKeys();
       if (!keys) {
         toast.error(t('backup.settings.storageSwitchFailure'));
@@ -128,9 +178,13 @@ export const BackupSection: FC = () => {
         );
       }
     } catch {
-      toast.error(t('backup.settings.storageSwitchFailure'));
+      toast.error(
+        target === 'local'
+          ? t('backup.settings.storageLocalFailure')
+          : t('backup.settings.storageSwitchFailure'),
+      );
     } finally {
-      setIsSwitching(false);
+      setBusyTarget(null);
     }
   };
 
