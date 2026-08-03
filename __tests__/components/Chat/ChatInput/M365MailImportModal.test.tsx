@@ -1,5 +1,6 @@
 import {
   act,
+  configure,
   fireEvent,
   render,
   screen,
@@ -89,6 +90,12 @@ async function enterSearch(query: string) {
     ),
   );
 }
+
+// Every CI failure of this file has been a findBy/waitFor expiring at
+// exactly the 1s default on a saturated runner (the suite passes locally,
+// alone and under full load). The polling utilities still resolve as soon
+// as the condition holds — this only widens the worst-case allowance.
+configure({ asyncUtilTimeout: 5000 });
 
 beforeEach(() => {
   vi.clearAllMocks();

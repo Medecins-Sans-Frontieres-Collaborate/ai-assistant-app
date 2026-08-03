@@ -170,7 +170,8 @@ describe('writeDriveImmutableBlob', () => {
       Buffer.from([1, 2, 3]),
     );
     const [url, init] = fetchMock.mock.calls[0];
-    expect(url).toContain(`conv%2Fconv1.${REV}.bin`.replace('%2F', '/'));
+    // Path segments are encoded individually, so the separator stays literal.
+    expect(url).toContain(`/conv/conv1.${REV}.bin`);
     expect(url).toContain('conflictBehavior=fail');
     expect(init.method).toBe('PUT');
   });
