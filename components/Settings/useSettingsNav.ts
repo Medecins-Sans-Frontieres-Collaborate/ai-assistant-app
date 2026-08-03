@@ -1,15 +1,12 @@
 import {
   IconBrain,
-  IconCloud,
   IconDatabase,
   IconDeviceDesktop,
-  IconDeviceMobile,
   IconHelp,
   IconLeaf,
   IconMessage,
   IconPlugConnected,
   IconSettings,
-  IconShieldLock,
   IconUserShield,
 } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
@@ -115,21 +112,15 @@ export function useSettingsNav(): SettingsNavItem[] {
       t('settings.Chat Settings'),
       IconMessage,
     ),
-    ...(isConnectorsEnabled
-      ? [
-          section(
-            SettingsSection.CONNECTORS,
-            t('settings.Connectors'),
-            IconPlugConnected,
-          ),
-        ]
-      : []),
-    ...(isConnectionsEnabled
+    // ONE entry for everything the user connects to the app: Microsoft 365
+    // and MCP connectors were near-synonym siblings ("Connections" vs
+    // "Connectors"); the pane shows whichever blocks the flags allow.
+    ...(isConnectorsEnabled || isConnectionsEnabled
       ? [
           section(
             SettingsSection.CONNECTIONS,
             t('settings.Connections'),
-            IconCloud,
+            IconPlugConnected,
           ),
         ]
       : []),
@@ -141,9 +132,6 @@ export function useSettingsNav(): SettingsNavItem[] {
             IconLeaf,
           ),
         ]
-      : []),
-    ...(isBackupEnabled
-      ? [section(SettingsSection.BACKUP, t('settings.Backup'), IconShieldLock)]
       : []),
     ...(isMemoriesEnabled
       ? [section(SettingsSection.MEMORIES, t('settings.Memories'), IconBrain)]
@@ -167,16 +155,16 @@ export function useSettingsNav(): SettingsNavItem[] {
           },
         ]
       : []),
+    // Cloud backup lives INSIDE this pane when its flag allows — the label
+    // widens so users looking for "backup" find the right (only) place.
     section(
       SettingsSection.DATA_MANAGEMENT,
-      t('settings.Data Management'),
+      isBackupEnabled
+        ? t('settings.DataBackup')
+        : t('settings.Data Management'),
       IconDatabase,
     ),
-    section(
-      SettingsSection.MOBILE_APP,
-      t('settings.Mobile App'),
-      IconDeviceMobile,
-    ),
+    // Help & Support hosts the Mobile App card as a subsection.
     section(
       SettingsSection.HELP_SUPPORT,
       t('settings.Help & Support'),
