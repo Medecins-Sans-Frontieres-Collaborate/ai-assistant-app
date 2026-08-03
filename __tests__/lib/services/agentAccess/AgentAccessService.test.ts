@@ -28,6 +28,16 @@ import {
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+// groupMembership (§5) pulls in graphApi → @/auth; keep it out of node tests.
+vi.mock('@/auth', () => ({ getGraphAccessToken: vi.fn() }));
+
+// Group evaluation reads the membership cache synchronously; the mock lets
+// tests model warm and cold cache states without Graph.
+const cachedGroupsMock = vi.hoisted(() => vi.fn<() => string[]>(() => []));
+vi.mock('@/lib/services/m365/groupMembership', () => ({
+  getCachedGroupIdsForMail: cachedGroupsMock,
+}));
+
 const mockEnv = vi.hoisted(() => ({
   AGENT_ACCESS_CONTROL_ENABLED: true,
 }));
@@ -926,34 +936,44 @@ describe('AgentAccessService', () => {
     });
   });
 
-  describe('allowGroups scaffold', () => {
-    it('grants nothing and warns once per rule', async () => {
-      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-      const service = await freshServiceWith([
-        storedRule(SOURCE_A, 'finance-bot', {
-          type: 'restricted',
-          allowGroups: ['engineering-group-id'],
-        }),
-      ]);
-      const input = {
-        userMail: 'user@example.com',
-        source: SOURCE_A,
-        agentName: 'finance-bot',
-      };
+  describe('allowGroups evaluation (§5)', () => {
+    const groupRule = () =>
+      storedRule(SOURCE_A, 'finance-bot', {
+        type: 'restricted',
+        allowGroups: ['engineering-group-id'],
+      });
+    const input = {
+      userMail: 'user@example.com',
+      source: SOURCE_A,
+      agentName: 'finance-bot',
+    };
 
-      // Groups are persisted but never evaluated in v1 — no grant.
+    it('denies when the membership cache is cold or the user lacks the group', async () => {
+      cachedGroupsMock.mockReturnValue([]);
+      const service = await freshServiceWith([groupRule()]);
       expect(service.evaluateAccess(input)).toEqual({
         decision: 'deny',
         reason: 'not-allowed',
       });
-      expect(warnSpy).toHaveBeenCalledTimes(1);
-      expect(warnSpy).toHaveBeenCalledWith(
-        expect.stringContaining('allowGroups'),
-      );
 
-      // Warning is deduped per canonical key.
-      service.evaluateAccess(input);
-      expect(warnSpy).toHaveBeenCalledTimes(1);
+      cachedGroupsMock.mockReturnValue(['some-other-group']);
+      expect(service.evaluateAccess(input)).toEqual({
+        decision: 'deny',
+        reason: 'not-allowed',
+      });
+    });
+
+    it('allows a cached member of a listed group', async () => {
+      cachedGroupsMock.mockReturnValue([
+        'unrelated-group',
+        'engineering-group-id',
+      ]);
+      const service = await freshServiceWith([groupRule()]);
+      expect(service.evaluateAccess(input)).toEqual({
+        decision: 'allow',
+        reason: 'allow-group',
+      });
+      expect(cachedGroupsMock).toHaveBeenCalledWith('user@example.com');
     });
   });
 
