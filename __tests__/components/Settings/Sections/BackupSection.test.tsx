@@ -6,6 +6,7 @@ import type { SyncResult, SyncStatus } from '@/lib/services/backup/types';
 import { BackupSection } from '@/components/Settings/Sections/BackupSection';
 
 import { useBackupStore } from '@/client/stores/backupStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import { useUIStore } from '@/client/stores/uiStore';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -18,10 +19,13 @@ const mocks = vi.hoisted(() => ({
   },
   toastSuccess: vi.fn(),
   toastError: vi.fn(),
+  toastPlain: vi.fn(),
   deleteBackup: vi.fn<() => Promise<void>>(),
   putManifest: vi.fn<() => Promise<{ etag: string }>>(),
   getManifest: vi.fn<() => Promise<unknown>>(),
   clearMasterKey: vi.fn<() => Promise<void>>(),
+  getBackupKeys: vi.fn<() => Promise<unknown>>(),
+  switchBackupBackend: vi.fn<() => Promise<unknown>>(),
 }));
 
 // The hook owns trigger wiring + session gating — the section only needs its
@@ -31,7 +35,12 @@ vi.mock('@/client/hooks/backup/useBackupSync', () => ({
 }));
 
 vi.mock('react-hot-toast', () => ({
-  default: { success: mocks.toastSuccess, error: mocks.toastError },
+  // Callable default (bare toast(...) is the warning variant) with the
+  // success/error methods attached, mirroring the real API surface.
+  default: Object.assign(mocks.toastPlain, {
+    success: mocks.toastSuccess,
+    error: mocks.toastError,
+  }),
 }));
 
 vi.mock('@/lib/services/backup/backupApiClient', () => ({
@@ -44,7 +53,16 @@ vi.mock('@/lib/services/backup/backupApiClient', () => ({
 
 vi.mock('@/client/services/backup/keystore', () => ({
   clearMasterKey: mocks.clearMasterKey,
+  getBackupKeys: mocks.getBackupKeys,
 }));
+
+// Keep disableBackupAt real (the turn-off tests observe its api calls);
+// the switch orchestration has its own unit suite (backupOps.switch.test).
+vi.mock('@/lib/utils/app/backup/backupOps', async (importOriginal) => {
+  const actual =
+    await importOriginal<typeof import('@/lib/utils/app/backup/backupOps')>();
+  return { ...actual, switchBackupBackend: mocks.switchBackupBackend };
+});
 
 // Override the global setup mock so interpolated params are observable:
 // t('a.b', {x: 1}) renders as "a.b|1".
@@ -91,7 +109,14 @@ describe('BackupSection', () => {
     mocks.putManifest.mockResolvedValue({ etag: 'etag-1' });
     mocks.getManifest.mockResolvedValue(null);
     mocks.clearMasterKey.mockResolvedValue(undefined);
+    mocks.getBackupKeys.mockResolvedValue({ keyId: '00aabbccddeef789' });
+    mocks.switchBackupBackend.mockResolvedValue({
+      pushed: 2,
+      cleanupFailed: false,
+    });
+    useSettingsStore.setState({ m365Connected: false });
     useBackupStore.setState({
+      storageBackend: 'app',
       enrollmentStatus: 'unset',
       localKeyId: null,
       localKeyEpoch: 1,
@@ -317,6 +342,96 @@ describe('BackupSection', () => {
       expect(mocks.putManifest).not.toHaveBeenCalled();
       expect(mocks.clearMasterKey).not.toHaveBeenCalled();
       expect(useBackupStore.getState().enrollmentStatus).toBe('enrolled');
+    });
+  });
+
+  describe('storage location', () => {
+    it('hides the storage card without an M365 connection (app backend)', () => {
+      setEnrolled();
+      render(<BackupSection />);
+      expect(
+        screen.queryByText('backup.settings.storageLocationTitle'),
+      ).not.toBeInTheDocument();
+    });
+
+    it('shows both options when M365 is connected', () => {
+      useSettingsStore.setState({ m365Connected: true });
+      setEnrolled();
+      render(<BackupSection />);
+      expect(
+        screen.getByText('backup.settings.storageLocationTitle'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText('backup.settings.storageApp'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText('backup.settings.storageOneDrive'),
+      ).toBeInTheDocument();
+    });
+
+    it('keeps the card visible on the onedrive backend even if M365 disconnects', () => {
+      useBackupStore.setState({ storageBackend: 'onedrive' });
+      setEnrolled();
+      render(<BackupSection />);
+      expect(
+        screen.getByText('backup.settings.storageLocationTitle'),
+      ).toBeInTheDocument();
+    });
+
+    it('when not enrolled, choosing a backend just flips the preference', () => {
+      useSettingsStore.setState({ m365Connected: true });
+      render(<BackupSection />);
+
+      fireEvent.click(screen.getByText('backup.settings.storageOneDrive'));
+
+      expect(useBackupStore.getState().storageBackend).toBe('onedrive');
+      expect(mocks.switchBackupBackend).not.toHaveBeenCalled();
+    });
+
+    it('when enrolled, switching asks for confirmation then migrates', async () => {
+      useSettingsStore.setState({ m365Connected: true });
+      setEnrolled();
+      render(<BackupSection />);
+
+      fireEvent.click(screen.getByText('backup.settings.storageOneDrive'));
+      // Preference unchanged until the migration actually succeeds.
+      expect(useBackupStore.getState().storageBackend).toBe('app');
+
+      fireEvent.click(screen.getByText('backup.settings.storageSwitchAction'));
+
+      await waitFor(() =>
+        expect(mocks.switchBackupBackend).toHaveBeenCalledWith(
+          'onedrive',
+          expect.objectContaining({ keyId: '00aabbccddeef789' }),
+        ),
+      );
+      await waitFor(() =>
+        expect(mocks.toastSuccess).toHaveBeenCalledWith(
+          'backup.settings.storageSwitchSuccess|2',
+        ),
+      );
+    });
+
+    it('surfaces a cleanup warning when the old location could not be wiped', async () => {
+      useSettingsStore.setState({ m365Connected: true });
+      setEnrolled();
+      mocks.switchBackupBackend.mockResolvedValue({
+        pushed: 2,
+        cleanupFailed: true,
+      });
+      render(<BackupSection />);
+
+      fireEvent.click(screen.getByText('backup.settings.storageOneDrive'));
+      fireEvent.click(screen.getByText('backup.settings.storageSwitchAction'));
+
+      await waitFor(() =>
+        expect(mocks.toastPlain).toHaveBeenCalledWith(
+          'backup.settings.storageSwitchCleanupWarning',
+          expect.anything(),
+        ),
+      );
+      expect(mocks.toastSuccess).not.toHaveBeenCalled();
+      expect(mocks.toastError).not.toHaveBeenCalled();
     });
   });
 });
