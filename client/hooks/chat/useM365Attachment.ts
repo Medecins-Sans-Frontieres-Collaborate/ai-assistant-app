@@ -2,20 +2,24 @@ import { useCallback } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useM365Enabled } from '@/client/hooks/useM365Enabled';
+
 import {
   M365ClientError,
   downloadDriveItem,
   fetchMailImport,
+  importDriveItemToStorage,
 } from '@/client/services/m365/m365Client';
 import {
   buildFailureDocument,
   makeTextFile,
 } from '@/client/services/url/urlAttachment';
 
-import type { FilePreview } from '@/types/chat';
+import type { FileMessageContent, FilePreview } from '@/types/chat';
 import type { M365DriveEntry, M365MailEnvelope } from '@/types/m365';
 
 import { useChatInputStore } from '@/client/stores/chatInputStore';
+import { getFileCategory } from '@/lib/constants/fileLimits';
 
 /**
  * Attaches OneDrive/SharePoint files and Outlook messages to the chat by
@@ -49,6 +53,116 @@ function errorKey(error: unknown): string {
 
 export function useM365Attachment() {
   const t = useTranslations('m365');
+  // §3 third pass: audio/video imports go server-side (Graph → blob) so a
+  // 500MB SharePoint MP4 never round-trips through the browser.
+  const { transcriptionEnabled } = useM365Enabled();
+
+  /**
+   * Registers a file that already lives in upload storage — the same three
+   * store writes `onFileUpload` performs after a successful local upload
+   * (file field value, submit type, completed tile).
+   */
+  const registerImportedUpload = useCallback(
+    (imported: {
+      uri: string;
+      name: string;
+      mimeType: string;
+      webUrl?: string;
+    }) => {
+      const store = useChatInputStore.getState();
+      const fileMessage: FileMessageContent = {
+        type: 'file_url',
+        url: imported.uri,
+        originalFilename: imported.name,
+      };
+      store.setFileFieldValue((prevValue) => {
+        if (prevValue && Array.isArray(prevValue)) {
+          return [...prevValue, fileMessage];
+        }
+        if (prevValue) return [prevValue, fileMessage];
+        return [fileMessage];
+      });
+      store.setSubmitType((prevType) => {
+        if (prevType === 'IMAGE' || prevType === 'MULTI_FILE') {
+          return 'MULTI_FILE';
+        }
+        return 'FILE';
+      });
+      const tile: FilePreview = {
+        name: imported.name,
+        type: imported.mimeType,
+        status: 'completed',
+        previewUrl: '',
+        uploadedUrl: imported.uri,
+        ...(imported.webUrl && { sourceUrl: imported.webUrl }),
+      };
+      store.setFilePreviews((prev) => [...prev, tile]);
+    },
+    [],
+  );
+
+  /** Server-side import path: pending tile → blob import → completed tile. */
+  const attachDriveItemViaStorage = useCallback(
+    async (entry: M365DriveEntry): Promise<void> => {
+      const store = useChatInputStore.getState();
+      const sourceKey =
+        entry.webUrl ?? `m365://${entry.driveId}/${entry.itemId}`;
+      if (store.filePreviews.some((p) => p.sourceUrl === sourceKey)) return;
+
+      const placeholderName = t('attach.fetching', { name: entry.name });
+      const placeholder: FilePreview = {
+        name: placeholderName,
+        type: 'text/markdown',
+        status: 'pending',
+        previewUrl: '',
+        sourceUrl: sourceKey,
+      };
+      store.setFilePreviews((prev) => [...prev, placeholder]);
+
+      try {
+        const imported = await importDriveItemToStorage(
+          entry.driveId,
+          entry.itemId,
+        );
+        useChatInputStore
+          .getState()
+          .setFilePreviews((prev) =>
+            prev.filter((p) => p.name !== placeholderName),
+          );
+        registerImportedUpload(imported);
+      } catch (error) {
+        // Same invariant as the browser path: the failure becomes an
+        // explanatory attachment, never a silent drop.
+        const sourceError = t(errorKey(error));
+        const file = makeTextFile(
+          `${entry.name}-unavailable.md`,
+          buildFailureDocument(sourceKey, {
+            heading: t('doc.failureHeading'),
+            sourceLabel: t('doc.sourceLabel'),
+            attemptedLabel: t('doc.attemptedLabel'),
+            reason: sourceError,
+            hint: t('doc.failureHint'),
+          }),
+        );
+        useChatInputStore
+          .getState()
+          .setFilePreviews((prev) =>
+            prev.filter((p) => p.name !== placeholderName),
+          );
+        await useChatInputStore.getState().handleFileUpload([file]);
+        useChatInputStore
+          .getState()
+          .setFilePreviews((prev) =>
+            prev.map((p) =>
+              p.name === file.name
+                ? { ...p, sourceUrl: sourceKey, sourceError }
+                : p,
+            ),
+          );
+      }
+    },
+    [registerImportedUpload, t],
+  );
 
   const runAttachment = useCallback(
     async (
@@ -117,6 +231,17 @@ export function useM365Attachment() {
 
   const attachDriveItem = useCallback(
     async (entry: M365DriveEntry): Promise<void> => {
+      // Audio/video routes server-side when §3 is on — the transcription
+      // pipeline reads from upload storage anyway, so the bytes should
+      // never pass through the browser.
+      const category = getFileCategory(entry.name, entry.mimeType);
+      if (
+        transcriptionEnabled &&
+        (category === 'audio' || category === 'video')
+      ) {
+        await attachDriveItemViaStorage(entry);
+        return;
+      }
       const sourceKey =
         entry.webUrl ?? `m365://${entry.driveId}/${entry.itemId}`;
       await runAttachment(
@@ -134,7 +259,7 @@ export function useM365Attachment() {
         `${entry.name}-unavailable.md`,
       );
     },
-    [runAttachment, t],
+    [runAttachment, t, transcriptionEnabled, attachDriveItemViaStorage],
   );
 
   const attachMail = useCallback(
@@ -167,5 +292,10 @@ export function useM365Attachment() {
     [runAttachment, t],
   );
 
-  return { attachDriveItem, attachMail };
+  return {
+    attachDriveItem,
+    attachMail,
+    /** §4: register a server-imported upload (e.g. meeting recording). */
+    attachImportedUpload: registerImportedUpload,
+  };
 }
