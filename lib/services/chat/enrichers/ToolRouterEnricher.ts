@@ -142,7 +142,9 @@ export class ToolRouterEnricher extends BasePipelineStage {
       context.model?.supportsResponsesApi === true &&
       context.model?.sdk === 'azure-openai' &&
       !context.model?.isCustomSourceModel &&
-      !context.mcpServers?.length
+      // Only REAL (network) MCP servers force the chat.completions loop —
+      // the builtin M365 toolset must not disable the native interpreter.
+      !context.mcpServers?.some((entry) => !entry.builtin)
     );
   }
 
