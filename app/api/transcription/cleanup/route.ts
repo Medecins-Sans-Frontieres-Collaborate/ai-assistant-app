@@ -9,6 +9,7 @@
  */
 import { NextRequest } from 'next/server';
 
+import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import {
   deleteBatchJobRecord,
   userOwnsBatchJob,
@@ -100,8 +101,14 @@ export async function POST(request: NextRequest) {
   if (jobId) {
     // If this jobId matches a known chunked job owned by the user, also
     // remove the local chunk files so aborted/timed-out jobs don't leave
-    // their chunks behind in tmpdir.
-    const ownedChunkedJob = getJobForUser(jobId, session.user.id);
+    // their chunks behind in tmpdir. chunkPaths are local to the replica
+    // that started the job — on any other replica cleanupChunks harmlessly
+    // finds nothing to delete.
+    const ownedChunkedJob = await getJobForUser(
+      createBlobStorageClient(session),
+      jobId,
+      session.user.id,
+    );
     if (ownedChunkedJob && ownedChunkedJob.chunkPaths.length > 0) {
       try {
         await cleanupChunks(ownedChunkedJob.chunkPaths);
