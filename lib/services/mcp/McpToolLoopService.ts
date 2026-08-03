@@ -61,6 +61,8 @@ export interface McpToolLoopOptions {
   planner?: ToolLoopCoreOptions<OpenAIMessage>['planner'];
   existingPlan?: McpPlan;
   userMessageText?: string;
+  /** In-process executor for builtin-provenance servers (see ToolLoopCoreOptions). */
+  builtinExecutor?: ToolLoopCoreOptions<OpenAIMessage>['builtinExecutor'];
 }
 
 type OpenAIMessage = OpenAI.Chat.Completions.ChatCompletionMessageParam;
@@ -166,5 +168,6 @@ export async function runMcpToolLoop(
     planner: options.planner,
     existingPlan: options.existingPlan,
     userMessageText: options.userMessageText,
+    builtinExecutor: options.builtinExecutor,
   });
 }

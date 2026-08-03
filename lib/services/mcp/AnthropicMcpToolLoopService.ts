@@ -59,6 +59,8 @@ export interface AnthropicMcpToolLoopOptions {
   planner?: ToolLoopCoreOptions<Anthropic.MessageParam>['planner'];
   existingPlan?: McpPlan;
   userMessageText?: string;
+  /** In-process executor for builtin-provenance servers (see ToolLoopCoreOptions). */
+  builtinExecutor?: ToolLoopCoreOptions<Anthropic.MessageParam>['builtinExecutor'];
 }
 
 function buildAnthropicStrategy(
@@ -155,5 +157,6 @@ export async function runAnthropicMcpToolLoop(
     planner: options.planner,
     existingPlan: options.existingPlan,
     userMessageText: options.userMessageText,
+    builtinExecutor: options.builtinExecutor,
   });
 }
