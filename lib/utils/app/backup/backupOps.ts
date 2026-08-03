@@ -14,9 +14,14 @@ import {
   createBackupApiClient,
 } from '@/lib/services/backup/backupApiClient';
 import { conversationUpdatedAt, toMillis } from '@/lib/services/backup/merge';
-import { newRev, waitForSyncIdle } from '@/lib/services/backup/syncEngine';
+import {
+  newRev,
+  runSync,
+  waitForSyncIdle,
+} from '@/lib/services/backup/syncEngine';
 import type {
   BackupApi,
+  BackupBackend,
   BackupManifest,
   BackupManifestEntry,
   RemoteApplyPayload,
@@ -28,9 +33,21 @@ import type { BackupKeys } from '@/lib/utils/shared/backupCrypto/keyDerivation';
 import { useBackupStore } from '@/client/stores/backupStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
 
-/** Bridges stores + crypto + API client into the engine's SyncDeps. */
-export function buildBackupSyncDeps(keys: BackupKeys): SyncDeps {
-  const api = createBackupApiClient();
+/** The device's selected storage backend (app storage vs OneDrive). */
+function selectedBackend(): BackupBackend {
+  return useBackupStore.getState().storageBackend;
+}
+
+/**
+ * Bridges stores + crypto + API client into the engine's SyncDeps.
+ * `backend` overrides the device's selected backend (switch flow only —
+ * the pre-migration pull must still run against the OLD backend).
+ */
+export function buildBackupSyncDeps(
+  keys: BackupKeys,
+  backend: BackupBackend = selectedBackend(),
+): SyncDeps {
+  const api = createBackupApiClient(undefined, backend);
 
   // Capture the manifest's folders timestamp on every fetch: pulled folders
   // must be stamped with the REMOTE updatedAt — stamping "now" would win the
@@ -129,6 +146,8 @@ export interface PushFullBackupOptions {
    * aborts the push so an enroll flow can never silently clobber a backup.
    */
   overwriteLive?: boolean;
+  /** Target backend; defaults to the device's selected one. */
+  backend?: BackupBackend;
 }
 
 export interface PushFullBackupResult {
@@ -156,7 +175,10 @@ export async function pushFullBackup(
   // Never interleave a full-corpus rewrite with a debounced incremental sync
   // from this device — wait for the engine to go idle first.
   await waitForSyncIdle();
-  const api = createBackupApiClient();
+  const api = createBackupApiClient(
+    undefined,
+    options.backend ?? selectedBackend(),
+  );
   let fetched = await api.getManifest();
 
   for (let attempt = 0; attempt < MAX_CAS_ATTEMPTS; attempt++) {
@@ -255,4 +277,89 @@ export async function pushFullBackup(
   }
 
   throw new Error('pushFullBackup: version conflict persisted after retries');
+}
+
+/**
+ * Wipes the backup at `backend` and writes a disabled tombstone manifest so
+ * other devices see "disabled", not "never existed". Shared by the settings
+ * "Turn off & delete" flow and backend switching (old-location cleanup).
+ */
+export async function disableBackupAt(
+  backend: BackupBackend,
+  epochBase: number,
+): Promise<void> {
+  const api = createBackupApiClient(undefined, backend);
+  await api.deleteBackup();
+  const tombstone: BackupManifest = {
+    schemaVersion: 1,
+    keyId: null,
+    epoch: epochBase + 1,
+    // The wipe above removed the old manifest, so this write is a fresh
+    // create — the server requires version 1 with no If-Match.
+    version: 1,
+    updatedAt: new Date().toISOString(),
+    disabled: true,
+    folders: null,
+    conversations: {},
+  };
+  await api.putManifest(tombstone, { ifMatchEtag: null });
+}
+
+export interface SwitchBackendResult {
+  /** Conversations pushed to the new backend. */
+  pushed: number;
+  /**
+   * Old-location cleanup failed — an encrypted copy (or a live manifest
+   * other devices could still sync against) may remain there. The switch
+   * itself succeeded; callers surface this as a warning, not a failure.
+   */
+  cleanupFailed: boolean;
+}
+
+/**
+ * Moves the encrypted backup between storage backends:
+ *   1. pull-merge against the CURRENT backend so the migration pushes a
+ *      complete corpus (a remote-only conversation from another device must
+ *      not be dropped by the move);
+ *   2. full-corpus push to the target (replacing whatever lives there —
+ *      the settings confirm dialog owns that warning);
+ *   3. flip the device's selected backend (the push already recorded the
+ *      target sync point);
+ *   4. best-effort wipe + disabled tombstone at the old location.
+ *
+ * Throws when the pre-sync or the target push fails — the device then stays
+ * on its current backend with nothing lost.
+ */
+export async function switchBackupBackend(
+  target: BackupBackend,
+  keys: BackupKeys,
+): Promise<SwitchBackendResult> {
+  const store = useBackupStore.getState();
+  const source = store.storageBackend;
+  if (source === target) return { pushed: 0, cleanupFailed: false };
+
+  const pre = await runSync(buildBackupSyncDeps(keys, source));
+  if (pre.status !== 'ok' && pre.status !== 'remote-missing') {
+    throw new Error(pre.error ?? `pre-switch sync failed (${pre.status})`);
+  }
+  // Capture the source epoch BEFORE the target push adopts the target's —
+  // the old-location tombstone must outrank the old manifest, not the new.
+  const sourceEpoch = useBackupStore.getState().localKeyEpoch;
+
+  const pushed = await pushFullBackup(keys, {
+    backend: target,
+    overwriteLive: true,
+  });
+  useBackupStore.getState().setStorageBackend(target);
+
+  let cleanupFailed = false;
+  try {
+    await disableBackupAt(source, sourceEpoch);
+  } catch (error) {
+    console.error('[backupOps] Old-backend cleanup failed:', error);
+    cleanupFailed = true;
+  }
+
+  void useBackupStore.getState().refreshRemoteStatus();
+  return { pushed: pushed.pushed, cleanupFailed };
 }
