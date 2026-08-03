@@ -240,7 +240,8 @@ async function uploadFragments(
         'Content-Type': 'application/octet-stream',
         'Content-Range': `bytes ${offset}-${end - 1}/${bytes.length}`,
       },
-      body: bytes.subarray(offset, end),
+      // Fresh copy — a Buffer view over a shared pool isn't a valid BodyInit.
+      body: new Uint8Array(bytes.subarray(offset, end)),
     });
     if (!response.ok) {
       throw new M365Error(
@@ -270,7 +271,7 @@ export async function writeDriveImmutableBlob(
       {
         method: 'PUT',
         headers: { 'Content-Type': 'application/octet-stream' },
-        body: content,
+        body: new Uint8Array(content),
       },
     );
     if (response.status === 409) return; // already landed — idempotent
