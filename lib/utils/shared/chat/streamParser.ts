@@ -31,12 +31,20 @@ import {
  * terminal metadata (`streamError`). Distinct from a network-level abort:
  * the server chose to finish the response, so partial tool records and
  * consent state are intact — the store surfaces the failure with that
- * context and must NOT silently retry on a fallback model.
+ * context and must NOT silently retry on a fallback model, UNLESS the
+ * server set `retry` (the partial is a broken promise, e.g. a missing
+ * generated file — retrying is strictly better than keeping it).
  */
 export class StreamInterruptedError extends Error {
   constructor(
     message: string,
     public readonly code?: string,
+    /**
+     * Server marked the partial output as not worth keeping (e.g. it
+     * promises a generated file that was never delivered) — the store
+     * SHOULD auto-retry on the fallback chain for this one.
+     */
+    public readonly retry: boolean = false,
   ) {
     super(message);
     this.name = 'StreamInterruptedError';
@@ -70,7 +78,11 @@ export class StreamParser {
   private extractedActiveFilesDropped?: string[];
   private extractedUsage?: TokenUsageMetadata;
   private extractedExtractionResult?: ExtractionResultContent;
-  private extractedStreamError?: { message: string; code?: string };
+  private extractedStreamError?: {
+    message: string;
+    code?: string;
+    retry?: boolean;
+  };
   private extractedMcpPlan?: import('@/types/mcp').McpPlan;
   private hasReceivedContent: boolean = false;
   private prevDisplayText: string = '';
@@ -478,7 +490,9 @@ export class StreamParser {
    * `streamError` metadata block. Callers surface it as an error state even
    * though the HTTP stream itself completed.
    */
-  getStreamError(): { message: string; code?: string } | undefined {
+  getStreamError():
+    | { message: string; code?: string; retry?: boolean }
+    | undefined {
     return this.extractedStreamError;
   }
 
