@@ -603,6 +603,12 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
             const pendingSources = entry.agent.sources.filter(
               (s) => s.status !== 'indexed',
             ).length;
+            // "Indexed" with zero chunks means extraction found no text
+            // (e.g. a scanned PDF without a text layer) — a silently empty
+            // agent unless surfaced here.
+            const emptySources = entry.agent.sources.filter(
+              (s) => s.status === 'indexed' && (s.indexedChunks ?? 0) === 0,
+            ).length;
             return (
               <li
                 key={entry.canonicalKey}
@@ -624,6 +630,13 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                         pending: pendingSources,
                       })}
                     </p>
+                    {emptySources > 0 && (
+                      <p className="text-xs text-amber-700 dark:text-amber-400">
+                        {t('m365AgentEmptySourcesWarning', {
+                          count: emptySources,
+                        })}
+                      </p>
+                    )}
                   </div>
                   <span
                     className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
