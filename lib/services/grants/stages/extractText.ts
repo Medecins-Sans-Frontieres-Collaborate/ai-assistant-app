@@ -9,10 +9,8 @@ import {
   existsSync,
   mkdirSync,
   readFileSync,
-  unlinkSync,
   writeFileSync,
 } from 'fs';
-import { tmpdir } from 'os';
 import { basename, extname, join } from 'path';
 
 /**
@@ -49,50 +47,9 @@ function contentHash(filePath: string): string {
   return hash.digest('hex');
 }
 
-function contentHashBytes(data: Buffer): string {
-  return createHash('sha256').update(data).digest('hex');
-}
-
 function safeStem(filename: string): string {
   const stem = filename.replace(/\.[^.]+$/, '');
   return stem.replace(/[^a-zA-Z0-9_-]/g, '_');
-}
-
-function isUrl(value: string): boolean {
-  try {
-    const url = new URL(value);
-    return url.protocol === 'http:' || url.protocol === 'https:';
-  } catch {
-    return false;
-  }
-}
-
-function guessExtension(urlOrPath: string): string {
-  try {
-    const url = new URL(urlOrPath);
-    const ext = extname(url.pathname).toLowerCase();
-    if (['.pdf', '.docx', '.doc', '.txt'].includes(ext)) return ext;
-  } catch {
-    const ext = extname(urlOrPath).toLowerCase();
-    if (['.pdf', '.docx', '.doc', '.txt'].includes(ext)) return ext;
-  }
-  return '.pdf';
-}
-
-async function downloadToTempFile(
-  url: string,
-  suffix: string = '.pdf',
-): Promise<string> {
-  const tmpPath = join(
-    tmpdir(),
-    `grant-doc-${Date.now()}-${Math.random().toString(36).slice(2)}${suffix}`,
-  );
-  const resp = await fetch(url);
-  if (!resp.ok)
-    throw new Error(`Download failed: ${resp.status} ${resp.statusText}`);
-  const buffer = Buffer.from(await resp.arrayBuffer());
-  writeFileSync(tmpPath, buffer);
-  return tmpPath;
 }
 
 /**
@@ -241,35 +198,23 @@ export async function run(params: {
 
   progress.stageStart('extract_text', documents.length);
 
-  const resultMap: ExtractTextResult = {};
+  const resultMap = new Map<string, string>();
   const failed: string[] = [];
   const total = documents.length;
   let completed = 0;
   const limit = pLimit(2);
 
   const processDoc = async (doc: string, idx: number): Promise<void> => {
-    const docIsUrl = isUrl(doc);
-    let tmpFile: string | null = null;
+    // `doc` is always a local file path downloaded by the caller from our own
+    // blob storage; remote URLs are deliberately not supported here.
+    const docPath = doc;
+    const filename = basename(docPath);
+    // Filenames originate from user-supplied blob paths — JSON.stringify them
+    // in log lines so embedded newlines/control chars cannot forge log entries.
+    const logName = JSON.stringify(filename);
 
     try {
-      let docPath: string;
-      let filename: string;
-
-      if (docIsUrl) {
-        const ext = guessExtension(doc);
-        const urlPath = new URL(doc).pathname;
-        filename = basename(urlPath) || `document_${idx + 1}${ext}`;
-        console.log(
-          `  [${idx + 1}/${total}] ${filename}: downloading from URL...`,
-        );
-        tmpFile = await downloadToTempFile(doc, ext);
-        docPath = tmpFile;
-      } else {
-        docPath = doc;
-        filename = basename(doc);
-      }
-
-      const safe = safeStem(docIsUrl ? filename : basename(docPath));
+      const safe = safeStem(filename);
       const outPath = join(outDir, `${safe}.txt`);
 
       // Compute content hash
@@ -280,9 +225,9 @@ export async function run(params: {
         const cachedFile = join(cacheDir, `${hash}.txt`);
         if (existsSync(cachedFile)) {
           copyFileSync(cachedFile, outPath);
-          resultMap[filename] = outPath;
+          resultMap.set(filename, outPath);
           console.log(
-            `  [${idx + 1}/${total}] ${filename}: cached (${hash.slice(0, 12)}...)`,
+            `  [${idx + 1}/${total}] ${logName}: cached (${hash.slice(0, 12)}...)`,
           );
           return;
         }
@@ -290,13 +235,13 @@ export async function run(params: {
 
       // Extract text
       console.log(
-        `  [${idx + 1}/${total}] ${filename}: extracting (${extname(docPath)})...`,
+        `  [${idx + 1}/${total}] ${logName}: extracting (${extname(docPath)})...`,
       );
       const text = await extractText(docPath);
       writeFileSync(outPath, text, 'utf-8');
       const charCount = text.length;
       console.log(
-        `  [${idx + 1}/${total}] ${filename}: ${charCount.toLocaleString()} chars extracted`,
+        `  [${idx + 1}/${total}] ${logName}: ${charCount.toLocaleString()} chars extracted`,
       );
 
       // Persist to cache
@@ -305,23 +250,16 @@ export async function run(params: {
         copyFileSync(outPath, cachedFile);
       }
 
-      resultMap[filename] = outPath;
+      resultMap.set(filename, outPath);
     } catch (err) {
       // A single bad/corrupt/unsupported/oversized document (e.g. Document
       // Intelligence rejects it with "Invalid request") must NOT abort the whole
       // batch — log it, skip it, and let the rest of the documents through.
-      failed.push(basename(doc));
+      failed.push(filename);
       console.error(
-        `  [${idx + 1}/${total}] ${basename(doc)}: extraction FAILED — skipped (${err instanceof Error ? err.message : String(err)})`,
+        `  [${idx + 1}/${total}] ${logName}: extraction FAILED — skipped (${JSON.stringify(err instanceof Error ? err.message : String(err))})`,
       );
     } finally {
-      if (tmpFile && existsSync(tmpFile)) {
-        try {
-          unlinkSync(tmpFile);
-        } catch {
-          /* ignore */
-        }
-      }
       completed++;
       progress.tick(completed, total);
     }
@@ -335,8 +273,8 @@ export async function run(params: {
   console.log(
     `  Text extraction complete: ${total - failed.length}/${total} document(s) processed` +
       (failed.length
-        ? `; ${failed.length} skipped (extraction failed): ${failed.join(', ')}`
+        ? `; ${failed.length} skipped (extraction failed): ${failed.map((f) => JSON.stringify(f)).join(', ')}`
         : '.'),
   );
-  return resultMap;
+  return Object.fromEntries(resultMap);
 }
