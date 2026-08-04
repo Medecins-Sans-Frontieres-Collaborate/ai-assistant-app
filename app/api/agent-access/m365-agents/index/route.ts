@@ -30,6 +30,7 @@ import {
   canonicalAgentKey,
 } from '@/lib/services/agentAccess/types';
 import {
+  AgentIndexRun,
   SourceIndexOutcome,
   indexAgentSources,
 } from '@/lib/services/m365/agentIndexService';
@@ -54,11 +55,18 @@ const M365_AGENT_ID_PATTERN = /^m365-[a-f0-9]{12}$/;
 function applyOutcomes(
   agent: M365Agent,
   outcomes: SourceIndexOutcome[],
+  embeddingDeployment: string,
   now: string,
 ): M365Agent {
   const bySourceId = new Map(outcomes.map((o) => [o.sourceId, o]));
   return {
     ...agent,
+    // Stamp what this run actually embedded with — retrieval embeds
+    // queries with this value, and it must match the index's vectors.
+    // On a PARTIAL run a failed source may retain chunks from the previous
+    // deployment; its error status is loud in the admin UI and the next
+    // successful re-index converges it.
+    embeddingModelId: embeddingDeployment,
     sources: agent.sources.map((source) => {
       const outcome = bySourceId.get(source.sourceId);
       if (!outcome) return source;
@@ -114,20 +122,26 @@ export async function POST(request: NextRequest) {
     // The long part: download → extract → chunk → embed → upload, with the
     // caller's Graph token. Consent gaps / disconnected sessions surface as
     // typed M365 errors, not generic 500s.
-    let outcomes: SourceIndexOutcome[];
+    let run: AgentIndexRun;
     try {
-      outcomes = await indexAgentSources(request, existing.m365Agent);
+      run = await indexAgentSources(request, existing.m365Agent);
     } catch (error) {
       if (error instanceof M365Error) return m365ErrorResponse(error);
       throw error;
     }
+    const { outcomes, embeddingDeployment } = run;
 
     // Persist outcomes onto the LATEST record (an admin may have edited the
     // agent while indexing ran; statuses attach by stable sourceId).
     const now = new Date().toISOString();
     const latest = await readM365Agent(storage, id);
     if (!latest) return notFoundResponse('M365 agent');
-    const updated = applyOutcomes(latest.m365Agent, outcomes, now);
+    const updated = applyOutcomes(
+      latest.m365Agent,
+      outcomes,
+      embeddingDeployment,
+      now,
+    );
     let etag: string;
     try {
       etag = await writeM365Agent(storage, updated, latest.etag);
