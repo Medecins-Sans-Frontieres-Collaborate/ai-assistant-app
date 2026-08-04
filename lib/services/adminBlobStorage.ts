@@ -37,19 +37,64 @@ const SYSTEM_USER: Session['user'] = {
   displayName: 'admin-storage',
 };
 
-/** Resolved admin storage location (exported for health checks/diagnostics). */
+/**
+ * Resolved admin storage location (exported for health checks/diagnostics).
+ * Reflects the EFFECTIVE location: when the dev fallback (below) is active,
+ * this is the legacy account actually being served, with the denied
+ * configured account reported in `devFallbackFrom`.
+ */
 export function resolveAdminStorageLocation(): {
   accountName: string | undefined;
   containerName: string;
+  devFallbackFrom?: string;
 } {
+  const configured =
+    env.AZURE_BLOB_STORAGE_ADMIN_NAME ??
+    env.AZURE_BLOB_STORAGE_NAME_EU ??
+    env.AZURE_BLOB_STORAGE_NAME;
   return {
-    accountName:
-      env.AZURE_BLOB_STORAGE_ADMIN_NAME ??
-      env.AZURE_BLOB_STORAGE_NAME_EU ??
-      env.AZURE_BLOB_STORAGE_NAME,
+    accountName: devLegacyFallbackAccount ?? configured,
     containerName:
       env.AZURE_BLOB_STORAGE_ADMIN_CONTAINER ?? DEFAULT_ADMIN_CONTAINER,
+    ...(devLegacyFallbackAccount && configured !== devLegacyFallbackAccount
+      ? { devFallbackFrom: configured }
+      : {}),
   };
+}
+
+/**
+ * Data-plane authorization failure (the caller's identity lacks an RBAC
+ * role on the account) — distinct from transient/network errors, which
+ * should NOT trigger the dev fallback below.
+ */
+function isAuthorizationError(err: unknown): boolean {
+  if ((err as { statusCode?: number })?.statusCode === 403) return true;
+  const message = err instanceof Error ? err.message : String(err);
+  return message.includes('not authorized to perform this operation');
+}
+
+/**
+ * Non-production resilience: when the resolved admin account denies access
+ * (typical mid-migration state — the RBAC grant hasn't been applied yet)
+ * and a DIFFERENT legacy primary account is configured, subsequent factory
+ * calls serve the admin container on the legacy account instead of leaving
+ * every admin surface broken. Never engages in production: silently writing
+ * admin data outside the EU account would violate residency and mask a
+ * misconfiguration that must be fixed in infra.
+ */
+let devLegacyFallbackAccount: string | null = null;
+
+function maybeActivateDevFallback(deniedAccount: string): void {
+  if (process.env.NODE_ENV === 'production') return;
+  if (devLegacyFallbackAccount) return;
+  const legacy = env.AZURE_BLOB_STORAGE_NAME;
+  if (!legacy || legacy === deniedAccount) return;
+  devLegacyFallbackAccount = legacy;
+  console.warn(
+    `[adminBlobStorage] DEV FALLBACK ACTIVE: '${sanitizeForLog(deniedAccount)}' denied access — serving admin data from legacy account '${sanitizeForLog(legacy)}' instead. ` +
+      `Requests made before this point may have failed; reload. To use '${sanitizeForLog(deniedAccount)}', grant your identity 'Storage Blob Data Contributor' on it, ` +
+      `or pin AZURE_BLOB_STORAGE_ADMIN_NAME explicitly.`,
+  );
 }
 
 /**
@@ -61,16 +106,27 @@ export function resolveAdminStorageLocation(): {
  */
 const ensuredContainers = new Map<string, Promise<boolean>>();
 
-function ensureOnce(storage: AzureBlobStorage, key: string): void {
+function ensureOnce(
+  storage: AzureBlobStorage,
+  accountName: string,
+  containerName: string,
+): void {
+  const key = `${accountName}/${containerName}`;
   if (ensuredContainers.has(key)) return;
   const attempt = storage
     .ensureContainerExists()
     .then(() => true)
     .catch((err) => {
+      const authFailure = isAuthorizationError(err);
       console.warn(
         `[adminBlobStorage] Failed to ensure admin container ${sanitizeForLog(key)}:`,
         err instanceof Error ? err.message : err,
+        authFailure
+          ? `— the running identity lacks a data-plane role (needs 'Storage Blob Data Contributor' on '${sanitizeForLog(accountName)}'). ` +
+              'Override the account with AZURE_BLOB_STORAGE_ADMIN_NAME if this environment should use a different one.'
+          : '',
       );
+      if (authFailure) maybeActivateDevFallback(accountName);
       ensuredContainers.delete(key);
       return false;
     });
@@ -90,6 +146,12 @@ export function createAdminBlobStorage(): BlobStorage {
     );
   }
   const storage = new AzureBlobStorage(accountName, containerName, SYSTEM_USER);
-  ensureOnce(storage, `${accountName}/${containerName}`);
+  ensureOnce(storage, accountName, containerName);
   return storage;
+}
+
+/** Test hook. */
+export function __resetAdminStorageStateForTests(): void {
+  devLegacyFallbackAccount = null;
+  ensuredContainers.clear();
 }
