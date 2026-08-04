@@ -12,9 +12,10 @@
  * requires re-index).
  *
  * One shared index (`m365-agents` by default) holds every agent's chunks,
- * partitioned by `agent_id` and `source_id` filters. Retrieval is ALWAYS
- * filtered to the sources the requesting user's own token can open (layer-2
- * trim — see agentSourceAccess.ts); there is no unfiltered read path.
+ * partitioned by `agent_id`, `source_id`, and `item_id` filters. Retrieval
+ * is ALWAYS filtered to what the requesting user's own token can open
+ * (layer-2 trim — see agentSourceAccess.ts): by source for file sources,
+ * per child file for folder sources. There is no unfiltered read path.
  */
 import { NextRequest } from 'next/server';
 
@@ -49,11 +50,23 @@ export interface M365AgentIndexDoc {
   chunk_id: string;
   agent_id: string;
   source_id: string;
+  /** Sanitized Graph drive-item id — the per-file trim unit for folder sources. */
+  item_id: string;
   chunk: string;
   title: string;
   url: string;
   date: string;
   text_vector: number[];
+}
+
+/**
+ * Normalizes a Graph id for use in index keys and search.in filter lists.
+ * Applied identically at ingestion and query time so values always compare
+ * equal; strips the list delimiter (',') and quote characters as a side
+ * effect, making the sanitized value filter-safe.
+ */
+export function sanitizeGraphId(id: string): string {
+  return id.replace(/[^A-Za-z0-9_=-]/g, '');
 }
 
 export function m365AgentsSearchEndpoint(): string {
@@ -120,6 +133,7 @@ async function createOrUpdateIndex(): Promise<void> {
       },
       { name: 'agent_id', type: 'Edm.String', filterable: true },
       { name: 'source_id', type: 'Edm.String', filterable: true },
+      { name: 'item_id', type: 'Edm.String', filterable: true },
       { name: 'chunk', type: 'Edm.String', searchable: true },
       { name: 'title', type: 'Edm.String', searchable: true },
       { name: 'url', type: 'Edm.String' },
@@ -368,14 +382,23 @@ async function downloadAndExtract(
   return loadDocument(file);
 }
 
+/**
+ * OData string-literal escaping (single quotes double). Ids are
+ * server-generated today, but the stored schema tolerates arbitrary
+ * strings — never let a quote widen a filter on the SHARED index.
+ */
+function odataEscape(value: string): string {
+  return value.replace(/'/g, "''");
+}
+
 async function deleteSourceDocuments(
   client: SearchClient<M365AgentIndexDoc>,
   agentId: string,
   sourceId?: string,
 ): Promise<void> {
   const filter = sourceId
-    ? `agent_id eq '${agentId}' and source_id eq '${sourceId}'`
-    : `agent_id eq '${agentId}'`;
+    ? `agent_id eq '${odataEscape(agentId)}' and source_id eq '${odataEscape(sourceId)}'`
+    : `agent_id eq '${odataEscape(agentId)}'`;
   // Collect keys page by page, then delete. Bounded: ≤10 documents ×
   // ≤300 chunks per agent.
   for (;;) {
@@ -487,12 +510,21 @@ export async function indexAgentSources(
       for (const doc of docs) {
         const text = await downloadAndExtract(req, doc);
         const chunks = chunkText(text);
+        if (chunks.length === 0) {
+          // Surfaced to admins via the zero-chunk warning in the agents
+          // list; logged here with the item for diagnosis.
+          console.warn(
+            `[m365-agents] extraction yielded no text for agent ${sanitizeForLog(agent.id)} item ${sanitizeForLog(doc.itemId)} (scanned/image-only file?)`,
+          );
+        }
         const vectors = await embedTexts(chunks, deployment);
+        const itemId = sanitizeGraphId(doc.itemId);
         chunks.forEach((chunk, index) => {
           uploadDocs.push({
-            chunk_id: `${agent.id}_${doc.sourceId}_${doc.itemId.replace(/[^A-Za-z0-9_=-]/g, '')}_${index}`,
+            chunk_id: `${agent.id}_${doc.sourceId}_${itemId}_${index}`,
             agent_id: agent.id,
             source_id: doc.sourceId,
+            item_id: itemId,
             chunk,
             title: doc.title,
             url: doc.webUrl,
@@ -552,27 +584,69 @@ export interface M365AgentSearchDoc {
 
 /**
  * Hybrid vector+semantic retrieval over the agent's chunks, HARD-FILTERED
- * to the sources the requesting user's own token can open. Never call this
- * with an unverified `accessibleSourceIds` — the filter IS the layer-2
+ * to what the requesting user's own token can open. File-kind sources are
+ * trimmed by source_id; folder-kind sources are trimmed PER CHILD FILE via
+ * item_id (`accessibleFolderItemIds` from agentSourceAccess) — a
+ * folder-level verdict alone would leak item-restricted children. Never
+ * call this with unverified access lists — the filter IS the layer-2
  * enforcement.
  */
+/**
+ * Builds the layer-2 access filter, or null when nothing may be read.
+ * Exported for tests — this string IS the enforcement boundary.
+ */
+export function buildM365AccessFilter(
+  agent: M365Agent,
+  accessibleSourceIds: string[],
+  accessibleFolderItemIds: string[],
+): string | null {
+  if (accessibleSourceIds.length === 0) return null;
+
+  const kindBySourceId = new Map(
+    agent.sources.map((source) => [source.sourceId, source.kind]),
+  );
+  const fileSourceList = accessibleSourceIds
+    .filter((id) => kindBySourceId.get(id) !== 'folder')
+    .map((id) => id.replace(/[^A-Za-z0-9_-]/g, ''))
+    .join(',');
+  const folderItemList = accessibleFolderItemIds
+    .map((id) => sanitizeGraphId(id))
+    .filter((id) => id.length > 0)
+    .join(',');
+
+  const accessClauses: string[] = [];
+  if (fileSourceList) {
+    accessClauses.push(`search.in(source_id, '${fileSourceList}', ',')`);
+  }
+  if (folderItemList) {
+    accessClauses.push(`search.in(item_id, '${folderItemList}', ',')`);
+  }
+  // Accessible sources but no matchable clause (e.g. accessible folders
+  // whose visible children resolved to none): nothing may be read.
+  if (accessClauses.length === 0) return null;
+
+  return `agent_id eq '${odataEscape(agent.id)}' and (${accessClauses.join(' or ')})`;
+}
+
 export async function searchM365Agent(
   query: string,
   agent: M365Agent,
   accessibleSourceIds: string[],
+  accessibleFolderItemIds: string[] = [],
 ): Promise<M365AgentSearchDoc[]> {
-  if (accessibleSourceIds.length === 0) return [];
+  const filter = buildM365AccessFilter(
+    agent,
+    accessibleSourceIds,
+    accessibleFolderItemIds,
+  );
+  if (filter === null) return [];
+
   await ensureM365AgentsIndex();
   const client = getSearchClient();
   const [vector] = await embedTexts([query], embeddingDeploymentFor(agent));
   const topK = agent.ragConfig?.topK ?? 10;
   const fetchCount = Math.min(topK * 2, 20);
   const indexName = env.M365_AGENTS_SEARCH_INDEX;
-
-  const sourceList = accessibleSourceIds
-    .map((id) => id.replace(/[^A-Za-z0-9_-]/g, ''))
-    .join(',');
-  const filter = `agent_id eq '${agent.id}' and search.in(source_id, '${sourceList}', ',')`;
 
   const results = await client.search(query, {
     filter,
