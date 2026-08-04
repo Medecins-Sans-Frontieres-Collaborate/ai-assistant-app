@@ -134,6 +134,28 @@ describe('ChatStore - fallback chain', () => {
       expect(state.isStreaming).toBe(false);
     });
 
+    it('DOES auto-retry a mid-stream failure the server flagged with retry (broken promise partial)', () => {
+      // `retry: true` means the partial output is not worth keeping — e.g.
+      // the text cites a generated file that was never delivered. Keeping
+      // it would show the user a download that doesn't exist, so the store
+      // walks the fallback chain like any transient failure.
+      const retrySpy = vi.fn().mockResolvedValue(undefined);
+      useChatStore.setState({ retryWithFallbackModel: retrySpy });
+
+      useChatStore
+        .getState()
+        .handleSendError(
+          new StreamInterruptedError(
+            'The generated file could not be retrieved from the sandbox.',
+            'GENERATED_FILES_UNAVAILABLE',
+            true,
+          ),
+          makeConversation(OpenAIModelID.GPT_5_2_CHAT),
+        );
+
+      expect(retrySpy).toHaveBeenCalledTimes(1);
+    });
+
     it('rewords opaque browser network errors instead of showing them raw', () => {
       // Firefox surfaces a server-side mid-stream abort as
       // NS_ERROR_NET_PARTIAL_TRANSFER; Chrome as "Failed to fetch". Neither
