@@ -4,6 +4,7 @@ import {
   IconBrandOnedrive,
   IconChevronRight,
   IconFolder,
+  IconHome,
   IconLoader2,
   IconSearch,
   IconUsersGroup,
@@ -11,6 +12,7 @@ import {
 import {
   FC,
   FormEvent,
+  KeyboardEvent as ReactKeyboardEvent,
   useCallback,
   useEffect,
   useMemo,
@@ -42,6 +44,9 @@ import type {
   M365DriveEntry,
   M365DriveInfo,
   M365DriveSort,
+  M365PickerCrumb,
+  M365PickerLocation,
+  M365PickerTab,
   M365SaveDestination,
   M365SiteEntry,
   M365SortDir,
@@ -50,6 +55,8 @@ import type {
 
 import M365FileTypeIcon from '@/components/Chat/ChatInput/M365FileTypeIcon';
 import Modal from '@/components/UI/Modal';
+
+import { useSettingsStore } from '@/client/stores/settingsStore';
 
 interface M365FilePickerModalProps {
   isOpen: boolean;
@@ -79,15 +86,10 @@ interface M365FilePickerModalProps {
   acceptExtensions?: string[];
 }
 
-type PickerTab = 'onedrive' | 'recent' | 'shared' | 'sharepoint' | 'teams';
+type PickerTab = M365PickerTab;
 
 /** One drill-down step: a folder (OneDrive), or a site/library (SharePoint). */
-interface Crumb {
-  label: string;
-  siteId?: string;
-  driveId?: string;
-  itemId?: string;
-}
+type Crumb = M365PickerCrumb;
 
 interface EntryPage {
   entries: M365DriveEntry[];
@@ -161,6 +163,13 @@ function appendDeduped(
   return fresh.length > 0 ? [...prev, ...fresh] : prev;
 }
 
+/** Breadcrumb labels for path strings, with "…" standing in for elided gaps. */
+function crumbLabels(crumbs: Crumb[]): string[] {
+  return crumbs.flatMap((crumb) =>
+    crumb.elided ? ['…', crumb.label] : [crumb.label],
+  );
+}
+
 /**
  * Browse/search OneDrive ("my files", recent, shared with me) and SharePoint
  * site libraries; picking a file hands it to `useM365Attachment`, which pulls
@@ -178,11 +187,27 @@ const M365FilePickerBody: FC<{
   const folderMode = Boolean(onPickFolder);
   // onPickFolder wins over onPick — the modes are mutually exclusive.
   const onPick = folderMode ? undefined : onPickProp;
+  // Plain attach-to-chat mode: the only mode with location memory and
+  // multi-select. Source-collection (onPick) and save-destination pickers
+  // start fresh at the root, and folder mode has its own remembered
+  // destination.
+  const attachMode = !folderMode && !onPick;
   const locale = useLocale();
   const { attachDriveItem } = useM365Attachment();
 
-  const [tab, setTab] = useState<PickerTab>('onedrive');
-  const [crumbs, setCrumbs] = useState<Crumb[]>([]);
+  // Read once per opening (the body mounts fresh each time); navigation
+  // writes it back below. Sanitized so a shape from another build falls
+  // back to the root instead of wedging the picker.
+  const [initialLocation] = useState<M365PickerLocation | null>(() => {
+    if (!attachMode) return null;
+    const stored = useSettingsStore.getState().m365PickerLocation;
+    if (!stored || !TABS.includes(stored.tab) || !Array.isArray(stored.crumbs))
+      return null;
+    return stored;
+  });
+
+  const [tab, setTab] = useState<PickerTab>(initialLocation?.tab ?? 'onedrive');
+  const [crumbs, setCrumbs] = useState<Crumb[]>(initialLocation?.crumbs ?? []);
   const [entries, setEntries] = useState<M365DriveEntry[]>([]);
   const [nextToken, setNextToken] = useState<string | null>(null);
   const [sites, setSites] = useState<M365SiteEntry[]>([]);
@@ -196,8 +221,26 @@ const M365FilePickerBody: FC<{
   const [loadMoreFailed, setLoadMoreFailed] = useState(false);
   const [errorKey, setErrorKey] = useState<string | null>(null);
   const [searchErrorKey, setSearchErrorKey] = useState<string | null>(null);
-  const [sort, setSort] = useState<M365DriveSort>('name');
-  const [dir, setDir] = useState<M365SortDir>('asc');
+  const [sort, setSort] = useState<M365DriveSort>(
+    initialLocation && SORT_FIELDS.includes(initialLocation.sort)
+      ? initialLocation.sort
+      : 'name',
+  );
+  const [dir, setDir] = useState<M365SortDir>(
+    initialLocation?.dir === 'desc' ? 'desc' : 'asc',
+  );
+  // Attach-mode selection for batch attach; keyed by driveId/itemId and kept
+  // across navigation and tab switches so a batch can span folders.
+  const [selected, setSelected] = useState<Map<string, M365DriveEntry>>(
+    () => new Map(),
+  );
+
+  // True until the restored location loads once; a failure then falls back
+  // to the tab root instead of surfacing an error for a navigation the
+  // user didn't just make.
+  const restorePendingRef = useRef(
+    initialLocation !== null && initialLocation.crumbs.length > 0,
+  );
 
   // Only the latest search may write state; aborts cancel superseded fetches.
   const searchSeqRef = useRef(0);
@@ -297,8 +340,18 @@ const M365FilePickerBody: FC<{
         setEntries(page.entries);
         setNextToken(page.nextToken ?? null);
       }
+      if (seq === listSeqRef.current) restorePendingRef.current = false;
     } catch (error) {
       if (seq !== listSeqRef.current) return;
+      if (restorePendingRef.current) {
+        // Fail-open restore: the remembered folder is gone or no longer
+        // accessible. Reset to the tab root (which reloads) instead of
+        // showing an error for a folder the user didn't just click; the
+        // persist effect below then drops the stale location.
+        restorePendingRef.current = false;
+        setCrumbs([]);
+        return;
+      }
       setErrorKey(errorMessageKey(error));
     } finally {
       if (seq === listSeqRef.current) setLoading(false);
@@ -308,6 +361,16 @@ const M365FilePickerBody: FC<{
   useEffect(() => {
     void load();
   }, [load]);
+
+  // Location memory (attach mode only): persisted on every navigation
+  // change. Searching never touches tab/crumbs/sort, so the remembered
+  // location stays at the pre-search browse spot by construction.
+  useEffect(() => {
+    if (!attachMode) return;
+    useSettingsStore
+      .getState()
+      .setM365PickerLocation({ tab, crumbs, sort, dir });
+  }, [attachMode, tab, crumbs, sort, dir]);
 
   // Warm the session name index with recent files so search-as-you-type has
   // instant local matches from the first keystroke of the first search.
@@ -515,18 +578,79 @@ const M365FilePickerBody: FC<{
     onClose();
   };
 
+  const entryKey = (entry: M365DriveEntry) =>
+    `${entry.driveId}/${entry.itemId}`;
+
+  const toggleSelected = (entry: M365DriveEntry) => {
+    setSelected((prev) => {
+      const next = new Map(prev);
+      const key = entryKey(entry);
+      if (next.has(key)) next.delete(key);
+      else next.set(key, entry);
+      return next;
+    });
+  };
+
+  const attachSelected = () => {
+    // Each attach continues in the background on its own attachment tile.
+    selected.forEach((entry) => void attachDriveItem(entry));
+    onClose();
+  };
+
+  /**
+   * Roving arrow-key focus over the list's enabled row buttons. Returns
+   * whether focus moved, so callers only preventDefault when it did.
+   */
+  const focusListButton = (offset: 1 | -1): boolean => {
+    const root = listRef.current;
+    if (!root) return false;
+    const buttons = Array.from(
+      root.querySelectorAll<HTMLButtonElement>('button:not(:disabled)'),
+    );
+    if (buttons.length === 0) return false;
+    const index = buttons.indexOf(document.activeElement as HTMLButtonElement);
+    const next =
+      index === -1
+        ? buttons[0]
+        : buttons[Math.min(Math.max(index + offset, 0), buttons.length - 1)];
+    next.focus();
+    return true;
+  };
+
+  const handleListKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+    if (focusListButton(event.key === 'ArrowDown' ? 1 : -1)) {
+      event.preventDefault();
+    }
+  };
+
   const openFolder = (entry: M365DriveEntry) => {
+    // Local cache hits render while a search is still in flight, so "came
+    // from search" must cover the searching window too, not just results.
+    const fromSearch = searchResults !== null || searching;
     cancelSearch();
     setSearchResults(null);
     setQuery('');
-    setCrumbs((prev) => [
-      ...prev,
-      {
-        label: entry.name,
-        driveId: entry.driveId,
-        itemId: entry.itemId,
-      },
-    ]);
+    const crumb: Crumb = {
+      label: entry.name,
+      driveId: entry.driveId,
+      itemId: entry.itemId,
+    };
+    if (fromSearch) {
+      // A search hit's real path is unknown (results span the whole drive),
+      // so appending it to the browsed trail would fabricate a path. Keep
+      // only the crumbs that scoped the search — SharePoint: site+library,
+      // Teams: the team — and mark the gap elided (rendered as "…").
+      const scope =
+        tab === 'sharepoint'
+          ? crumbs.slice(0, 2)
+          : tab === 'teams'
+            ? crumbs.slice(0, 1)
+            : [];
+      setCrumbs([...scope, { ...crumb, elided: true }]);
+    } else {
+      setCrumbs((prev) => [...prev, crumb]);
+    }
   };
 
   const openTeam = (team: M365TeamEntry) => {
@@ -559,9 +683,7 @@ const M365FilePickerBody: FC<{
       driveId: entry.driveId,
       itemId: entry.itemId,
       name: entry.name,
-      pathLabel: [rootLabel, ...crumbs.map((c) => c.label), entry.name].join(
-        ' › ',
-      ),
+      pathLabel: [rootLabel, ...crumbLabels(crumbs), entry.name].join(' › '),
     });
     onClose();
   };
@@ -573,7 +695,7 @@ const M365FilePickerBody: FC<{
   // targets the library root via /drives/{d}/root:).
   let currentDestination: M365SaveDestination | null = null;
   if (folderMode) {
-    const crumbPath = [rootLabel, ...crumbs.map((c) => c.label)].join(' › ');
+    const crumbPath = [rootLabel, ...crumbLabels(crumbs)].join(' › ');
     if (tab === 'onedrive' && lastCrumb?.driveId && lastCrumb.itemId) {
       currentDestination = {
         driveId: lastCrumb.driveId,
@@ -702,6 +824,9 @@ const M365FilePickerBody: FC<{
                   // input leaves Escape-to-close to the Modal.
                   event.stopPropagation();
                   setQuery('');
+                } else if (event.key === 'ArrowDown') {
+                  // Jump from the query straight into the result list.
+                  if (focusListButton(1)) event.preventDefault();
                 }
               }}
               placeholder={
@@ -742,8 +867,9 @@ const M365FilePickerBody: FC<{
               setQuery('');
               setSearchResults(null);
             }}
-            className="hover:text-blue-600 hover:underline dark:hover:text-blue-400"
+            className="flex items-center gap-1 hover:text-blue-600 hover:underline dark:hover:text-blue-400"
           >
+            <IconHome size={12} />
             {rootLabel}
           </button>
           {crumbs.map((crumb, index) => (
@@ -752,6 +878,14 @@ const M365FilePickerBody: FC<{
               className="flex items-center gap-1"
             >
               <IconChevronRight size={12} />
+              {/* Folders opened from search have no known path; an inert
+                  "…" marks the gap instead of fabricating one. */}
+              {crumb.elided && (
+                <>
+                  <span title={t('pathUnknown')}>…</span>
+                  <IconChevronRight size={12} />
+                </>
+              )}
               <button
                 type="button"
                 onClick={() => setCrumbs((prev) => prev.slice(0, index + 1))}
@@ -810,6 +944,7 @@ const M365FilePickerBody: FC<{
       {/* Content */}
       <div
         ref={listRef}
+        onKeyDown={handleListKeyDown}
         className="min-h-0 flex-1 overflow-y-auto rounded-lg border border-neutral-200 dark:border-neutral-700"
       >
         {loading ? (
@@ -916,6 +1051,20 @@ const M365FilePickerBody: FC<{
               const renderRow = (entry: M365DriveEntry) => (
                 <li key={`${entry.driveId}-${entry.itemId}`}>
                   <div className="flex items-center">
+                    {/* Attach mode gets a selection column: a checkbox for
+                      files, an empty spacer for folders so icons align. */}
+                    {attachMode &&
+                      (!entry.isFolder && isAccepted(entry) ? (
+                        <input
+                          type="checkbox"
+                          checked={selected.has(entryKey(entry))}
+                          onChange={() => toggleSelected(entry)}
+                          aria-label={t('selectEntry', { name: entry.name })}
+                          className="ml-3 h-4 w-4 flex-shrink-0 accent-blue-600"
+                        />
+                      ) : (
+                        <span className="ml-3 h-4 w-4 flex-shrink-0" />
+                      ))}
                     {/* Folder mode and type-filtered pickers keep file rows
                       visible for orientation but inert — only folders (and
                       accepted files) respond. */}
@@ -929,13 +1078,16 @@ const M365FilePickerBody: FC<{
                           ? t('unsupportedType')
                           : undefined
                       }
-                      onClick={() =>
-                        entry.isFolder
-                          ? openFolder(entry)
-                          : folderMode || !isAccepted(entry)
-                            ? undefined
-                            : pickFile(entry)
-                      }
+                      onClick={() => {
+                        if (entry.isFolder) return openFolder(entry);
+                        if (folderMode || !isAccepted(entry)) return;
+                        // With a selection in progress, row clicks grow the
+                        // selection instead of instantly attaching — no
+                        // accidental single-file attach mid-batch.
+                        if (attachMode && selected.size > 0)
+                          return toggleSelected(entry);
+                        pickFile(entry);
+                      }}
                       className={`flex min-w-0 flex-1 items-center gap-2 px-3 py-2 text-left text-sm text-gray-800 dark:text-gray-200 ${
                         (folderMode || !isAccepted(entry)) && !entry.isFolder
                           ? 'cursor-default opacity-50'
@@ -1048,6 +1200,31 @@ const M365FilePickerBody: FC<{
         )}
       </div>
 
+      {/* Attach-mode selection footer: appears once anything is checked.
+          Selection survives navigation and tab switches, so a batch can be
+          gathered from several folders before attaching. */}
+      {attachMode && selected.size > 0 && (
+        <div className="flex items-center gap-2 rounded-lg border border-neutral-200 bg-gray-50 px-3 py-2 dark:border-neutral-700 dark:bg-neutral-800">
+          <span className="min-w-0 flex-1 truncate text-xs text-gray-600 dark:text-gray-400">
+            {t('selectedCount', { count: selected.size })}
+          </span>
+          <button
+            type="button"
+            onClick={() => setSelected(new Map())}
+            className="flex-shrink-0 rounded-md border border-neutral-300 px-2 py-1 text-xs text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
+          >
+            {t('clearSelection')}
+          </button>
+          <button
+            type="button"
+            onClick={attachSelected}
+            className="flex-shrink-0 rounded-md bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700"
+          >
+            {t('attachSelected', { count: selected.size })}
+          </button>
+        </div>
+      )}
+
       {/* Folder-mode footer: outside the scroll container so it never
           competes with the load-more sentinel. Selects the folder being
           browsed; disabled wherever no addressable target exists (OneDrive
@@ -1056,7 +1233,7 @@ const M365FilePickerBody: FC<{
         <div className="flex items-center gap-2 rounded-lg border border-neutral-200 bg-gray-50 px-3 py-2 dark:border-neutral-700 dark:bg-neutral-800">
           <IconFolder size={18} className="flex-shrink-0 text-amber-500" />
           <span className="min-w-0 flex-1 truncate text-xs text-gray-600 dark:text-gray-400">
-            {[rootLabel, ...crumbs.map((c) => c.label)].join(' › ')}
+            {[rootLabel, ...crumbLabels(crumbs)].join(' › ')}
           </span>
           <button
             type="button"
