@@ -15,6 +15,7 @@ import { OpenAI } from 'openai';
 /** Classifier output for the document-trim intent (strict schema). */
 interface TrimClassification {
   isLengthReductionRequest: boolean;
+  targetIsAttachedDocument: boolean;
   targetValue: number;
   targetUnit: 'words' | 'characters' | 'pages' | 'percent_to_keep' | 'none';
 }
@@ -25,7 +26,12 @@ const TRIM_CLASSIFY_SCHEMA = {
     isLengthReductionRequest: {
       type: 'boolean',
       description:
-        'True ONLY when the last user message asks to reduce/shorten the attached document to an explicit target length.',
+        'True ONLY when the last user message asks to reduce/shorten something to an explicit target length.',
+    },
+    targetIsAttachedDocument: {
+      type: 'boolean',
+      description:
+        'True when the thing being shortened is the attached document file itself. False when it is text written or pasted directly into the conversation (a draft the user typed, a previous assistant reply, quoted text).',
     },
     targetValue: {
       type: 'number',
@@ -38,7 +44,12 @@ const TRIM_CLASSIFY_SCHEMA = {
       description: '"none" when not a length-reduction request.',
     },
   },
-  required: ['isLengthReductionRequest', 'targetValue', 'targetUnit'],
+  required: [
+    'isLengthReductionRequest',
+    'targetIsAttachedDocument',
+    'targetValue',
+    'targetUnit',
+  ],
   additionalProperties: false,
 } as const;
 
@@ -77,12 +88,14 @@ export class ToolRouterService {
 
 Users write in ANY language — classify by MEANING, never by keywords.
 
-isLengthReductionRequest is true ONLY when the message asks to shorten/trim/condense the attached document AND gives an explicit target:
+isLengthReductionRequest is true ONLY when the message asks to shorten/trim/condense something AND gives an explicit target:
 - a count of words, characters, or pages ("à 6000 mots", "auf 3000 Wörter kürzen", "reducir a 5 páginas"), or
 - a fraction/percentage of the original ("cut it in half" → 50 percent_to_keep; "reduce by 30%" → 70 percent_to_keep; "देखें आधा कर दो" → 50 percent_to_keep).
 Follow-up phrasings count when the conversation shows a pending trim request ("please do it", "vas-y").
 
 It is FALSE for: summarizing, critiquing, translating, expanding, formatting, questions about the document, or length mentions that are not reduction targets ("the doc is 6000 words — fix the typos").
+
+targetIsAttachedDocument identifies WHAT is being shortened. It is true only when the request refers to the attached document file (${request.documentFilename}). It is FALSE when the user wants to shorten text that lives in the conversation itself — a draft they typed or pasted into the chat, a previous assistant answer, a quoted passage — even if a file was uploaded earlier in the conversation. When the last messages revolve around conversation text rather than the file, the file is not the target.
 
 When true: set targetValue and targetUnit. When false: targetValue 0, targetUnit "none".`;
 
@@ -134,10 +147,19 @@ When true: set targetValue and targetUnit. When false: targetValue 0, targetUnit
   private static toTrimTarget(
     classification: TrimClassification,
   ): TrimTarget | null {
-    const { isLengthReductionRequest, targetValue, targetUnit } =
-      classification;
+    const {
+      isLengthReductionRequest,
+      targetIsAttachedDocument,
+      targetValue,
+      targetUnit,
+    } = classification;
+    // Both halves must hold: a length target alone is not enough — the
+    // pipeline exists to preserve FILE formatting, so shortening text that
+    // lives in the chat (a pasted draft, a prior answer) must stay a normal
+    // chat turn even while a trimmable file sits earlier in the conversation.
     if (
       !isLengthReductionRequest ||
+      !targetIsAttachedDocument ||
       targetUnit === 'none' ||
       !Number.isFinite(targetValue) ||
       targetValue <= 0
