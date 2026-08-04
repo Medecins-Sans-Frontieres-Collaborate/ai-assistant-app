@@ -32,6 +32,16 @@ function hashUserEmail(email: string): string {
  */
 export class AnthropicFoundryHandler {
   private client: AnthropicFoundry;
+  /**
+   * Text of in-array system messages captured by the latest prepareMessages
+   * call. Enrichers (RAG, M365 agents, file summaries) inject retrieved
+   * context as system-role messages; Anthropic only accepts user/assistant
+   * roles in `messages`, so this content must ride the `system` parameter —
+   * dropping it severs agents from their sources while citations still
+   * render. Handler instances are per-request, so this never crosses
+   * requests; MCP loop rounds reuse the instance and keep the context.
+   */
+  private systemContextFromMessages = '';
 
   constructor(client: AnthropicFoundry) {
     this.client = client;
@@ -44,9 +54,40 @@ export class AnthropicFoundryHandler {
     return this.client;
   }
 
+  /** The system param: base prompt plus captured in-array system content. */
+  private composeSystem(systemPrompt: string): string {
+    const base = systemPrompt || DEFAULT_SYSTEM_PROMPT;
+    return this.systemContextFromMessages
+      ? `${base}\n\n${this.systemContextFromMessages}`
+      : base;
+  }
+
+  /** Flattens a message's content to plain text (text parts only). */
+  private flattenToText(content: Message['content']): string {
+    if (typeof content === 'string') return content;
+    if (Array.isArray(content)) {
+      return content
+        .filter((c) => c.type === 'text' && 'text' in c)
+        .map((c) => (c as TextMessageContent).text)
+        .join('\n');
+    }
+    if (
+      content &&
+      typeof content === 'object' &&
+      'type' in content &&
+      content.type === 'text'
+    ) {
+      return (content as TextMessageContent).text;
+    }
+    return '';
+  }
+
   /**
    * Convert OpenAI-style messages to Anthropic format.
-   * Anthropic uses a separate system parameter and doesn't support 'system' role in messages.
+   * Anthropic uses a separate system parameter and doesn't support 'system'
+   * role in messages — in-array system messages (enricher-injected context)
+   * are captured here and appended to the system parameter by the
+   * buildRequestParams methods.
    *
    * @param messages - Messages in OpenAI format
    * @param modelConfig - Model configuration (unused but kept for consistency with other handlers)
@@ -56,8 +97,13 @@ export class AnthropicFoundryHandler {
     messages: Message[],
     modelConfig: OpenAIModel,
   ): Anthropic.MessageParam[] {
+    this.systemContextFromMessages = messages
+      .filter((msg) => msg.role === 'system')
+      .map((msg) => this.flattenToText(msg.content))
+      .filter(Boolean)
+      .join('\n\n');
     return messages
-      .filter((msg) => msg.role !== 'system') // System is handled separately
+      .filter((msg) => msg.role !== 'system') // System rides the system param
       .map((msg): Anthropic.MessageParam => {
         // Handle string content
         if (typeof msg.content === 'string') {
@@ -156,7 +202,7 @@ export class AnthropicFoundryHandler {
     const params: Anthropic.MessageCreateParamsNonStreaming = {
       model: modelToUse,
       messages,
-      system: systemPrompt || DEFAULT_SYSTEM_PROMPT,
+      system: this.composeSystem(systemPrompt),
       max_tokens: modelConfig.tokenLimit,
       stream: false,
     };
@@ -240,7 +286,7 @@ export class AnthropicFoundryHandler {
     const params: Anthropic.MessageCreateParamsStreaming = {
       model: modelToUse,
       messages,
-      system: systemPrompt || DEFAULT_SYSTEM_PROMPT,
+      system: this.composeSystem(systemPrompt),
       max_tokens: modelConfig.tokenLimit,
       stream: true,
     };
