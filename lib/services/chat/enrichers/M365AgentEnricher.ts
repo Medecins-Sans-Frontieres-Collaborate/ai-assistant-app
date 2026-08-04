@@ -107,7 +107,12 @@ export class M365AgentEnricher extends BasePipelineStage {
     try {
       const query = await this.reformulateQuery(context.messages);
       const searchDocs = query
-        ? await searchM365Agent(query, agent, accessibleSourceIds)
+        ? await searchM365Agent(
+            query,
+            agent,
+            accessibleSourceIds,
+            context.m365AccessibleFolderItemIds ?? [],
+          )
         : [];
 
       if (searchDocs.length > 0) {
