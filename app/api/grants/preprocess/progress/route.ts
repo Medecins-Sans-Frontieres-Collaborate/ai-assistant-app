@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { canAccessGrants } from '@/lib/services/grants/access';
 import { preprocessProgressPath } from '@/lib/services/grants/preprocessProgress';
+import { isValidRunId } from '@/lib/services/grants/runPaths';
 
 import { auth } from '@/auth';
 import { readFileSync } from 'fs';
@@ -24,8 +25,11 @@ export async function GET(request: NextRequest) {
   }
 
   const runId = new URL(request.url).searchParams.get('runId');
-  if (!runId) {
-    return NextResponse.json({ error: 'Missing runId' }, { status: 400 });
+  if (!runId || !isValidRunId(runId)) {
+    return NextResponse.json(
+      { error: 'Missing or invalid runId' },
+      { status: 400 },
+    );
   }
 
   try {

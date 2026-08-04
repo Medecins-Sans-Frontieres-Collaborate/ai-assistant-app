@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { canAccessGrants } from '@/lib/services/grants/access';
-import { loadOCConfig } from '@/lib/services/grants/ocConfig';
+import { loadOCConfig, resolveOC } from '@/lib/services/grants/ocConfig';
 import {
   deletePromptOverride,
   loadPromptOverride,
@@ -39,20 +39,14 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    const oc = request.nextUrl.searchParams.get('oc');
+    const oc = resolveOC(request.nextUrl.searchParams.get('oc'));
     if (!oc) {
       return NextResponse.json(
-        { error: 'Missing required query parameter: oc' },
+        { error: 'Missing or unknown query parameter: oc' },
         { status: 400 },
       );
     }
-
-    let ocCfg;
-    try {
-      ocCfg = loadOCConfig(oc);
-    } catch {
-      return NextResponse.json({ error: `Unknown OC: ${oc}` }, { status: 400 });
-    }
+    const ocCfg = loadOCConfig(oc);
 
     const yearParam = request.nextUrl.searchParams.get('year');
     const year = yearParam ? Number(yearParam) : currentYear();
@@ -103,7 +97,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body: PromptPutBody = await request.json();
-    const oc = body.oc;
+    const oc = resolveOC(body.oc);
     const prompt = body.prompt;
 
     if (!oc || typeof prompt !== 'string') {
@@ -123,11 +117,6 @@ export async function PUT(request: NextRequest) {
         { error: `Prompt exceeds ${MAX_PROMPT_LENGTH} characters` },
         { status: 400 },
       );
-    }
-    try {
-      loadOCConfig(oc);
-    } catch {
-      return NextResponse.json({ error: `Unknown OC: ${oc}` }, { status: 400 });
     }
 
     const updatedBy =
@@ -169,10 +158,10 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    const oc = request.nextUrl.searchParams.get('oc');
+    const oc = resolveOC(request.nextUrl.searchParams.get('oc'));
     if (!oc) {
       return NextResponse.json(
-        { error: 'Missing required query parameter: oc' },
+        { error: 'Missing or unknown query parameter: oc' },
         { status: 400 },
       );
     }

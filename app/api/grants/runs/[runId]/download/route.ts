@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { canAccessGrants } from '@/lib/services/grants/access';
-import { grantRunDir } from '@/lib/services/grants/runPaths';
+import { grantRunDir, isValidRunId } from '@/lib/services/grants/runPaths';
 
 import { auth } from '@/auth';
 import { constants } from 'fs';
@@ -165,6 +165,9 @@ export async function GET(
     }
 
     const { runId } = await params;
+    if (!isValidRunId(runId)) {
+      return NextResponse.json({ error: 'Invalid runId' }, { status: 400 });
+    }
 
     // 2. Determine which file to serve
     const { searchParams } = new URL(request.url);

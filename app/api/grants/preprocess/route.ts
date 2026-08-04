@@ -8,13 +8,19 @@ import {
   getDeployment,
   getGrantOpenAIClient,
 } from '@/lib/services/grants/grantOpenAIClient';
-import { loadOCConfig } from '@/lib/services/grants/ocConfig';
+import { loadOCConfig, resolveOC } from '@/lib/services/grants/ocConfig';
 import {
   type DocExtract,
   normalizeName,
   reconcile,
 } from '@/lib/services/grants/preprocess';
 import { preprocessProgressPath } from '@/lib/services/grants/preprocessProgress';
+import {
+  grantPreprocessDir,
+  isValidRunId,
+  safeChildName,
+  safeJoin,
+} from '@/lib/services/grants/runPaths';
 import * as extractText from '@/lib/services/grants/stages/extractText';
 
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
@@ -22,8 +28,7 @@ import { BlobProperty } from '@/lib/utils/server/blob/blob';
 import { auth } from '@/auth';
 import { writeFileSync } from 'fs';
 import { mkdir, rm, writeFile } from 'fs/promises';
-import { tmpdir } from 'os';
-import { basename, join } from 'path';
+import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
 interface PreprocessRequestBody {
@@ -201,7 +206,7 @@ async function lookupProjectNameForCode(
 ): Promise<string> {
   // The clean project name often appears in a project list/table further down the
   // document, not at the codes first mention (which is frequently a budget line
-  // or a context sentence). Gather a window around EVERY occurrence of the code,
+  // or a context sentence). Gather a window around every occurrence of the code,
   // plus the document head for context, so the model can see the actual name.
   const radius = 1800;
   // Locate the code whitespace-tolerantly.
@@ -359,17 +364,22 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
   }
 
-  const { oc, documentBlobPaths } = body;
+  const { documentBlobPaths } = body;
+  // Canonical OC from the static allowlist — never the raw request string.
+  const oc = resolveOC(body.oc);
   if (!oc || !documentBlobPaths || documentBlobPaths.length === 0) {
     return NextResponse.json(
       {
         error:
-          'Missing required fields: oc and documentBlobPaths (non-empty array)',
+          'Missing required fields: OC and documentBlobPaths (non-empty array)',
       },
       { status: 400 },
     );
   }
 
+  if (body.runId !== undefined && !isValidRunId(body.runId)) {
+    return NextResponse.json({ error: 'Invalid runId' }, { status: 400 });
+  }
   const runId = body.runId || uuidv4();
 
   // Run the coverage check in the background and report progress + the final
@@ -395,7 +405,7 @@ async function runCoverageCheck(params: {
   runId: string;
 }): Promise<void> {
   const { session, oc, documentBlobPaths, runId } = params;
-  const workDir = join(tmpdir(), `grant-preprocess-${runId}`);
+  const workDir = grantPreprocessDir(runId);
   const prog = new PreprocessProgress(runId);
 
   try {
@@ -408,8 +418,8 @@ async function runCoverageCheck(params: {
     // 1. Download selected narratives to a temp work dir.
     const localDocPaths: string[] = [];
     for (const blobPath of documentBlobPaths) {
-      const fileName = basename(blobPath);
-      const localPath = join(workDir, fileName);
+      const fileName = safeChildName(blobPath);
+      const localPath = safeJoin(workDir, fileName);
       const buffer = (await blobClient.get(
         blobPath,
         BlobProperty.BLOB,
@@ -730,7 +740,11 @@ async function runCoverageCheck(params: {
       reconciliation,
     });
   } catch (error) {
-    console.error(`[Grants Preprocess ${runId}] error:`, error);
+    console.error(
+      '[Grants Preprocess] run failed:',
+      runId,
+      JSON.stringify(error instanceof Error ? error.message : String(error)),
+    );
     prog.fail(error instanceof Error ? error.message : 'Internal server error');
   } finally {
     try {

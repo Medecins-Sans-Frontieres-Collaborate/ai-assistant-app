@@ -2,15 +2,20 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { canAccessGrants } from '@/lib/services/grants/access';
+import { resolveOC } from '@/lib/services/grants/ocConfig';
 import { runPipeline } from '@/lib/services/grants/pipeline';
 import { loadPromptOverride } from '@/lib/services/grants/promptStore';
-import { grantRunDir } from '@/lib/services/grants/runPaths';
+import {
+  grantRunDir,
+  safeChildName,
+  safeJoin,
+} from '@/lib/services/grants/runPaths';
 
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
 
 import { auth } from '@/auth';
 import { mkdir, writeFile } from 'fs/promises';
-import { basename, join } from 'path';
+import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
 interface ExtractRequestBody {
@@ -19,10 +24,7 @@ interface ExtractRequestBody {
   supplementalBlobPaths?: Record<string, string>;
   selectedColumns?: string[];
   year?: number;
-  /** Source-filename → project-code, confirmed in the pre-processing coverage check. */
   codeOverrides?: Record<string, string>;
-  /** Unsaved per-OC prompt edits to use for this run only (takes precedence over
-   *  any saved override). */
   promptOverride?: string;
 }
 
@@ -34,7 +36,7 @@ interface ExtractRequestBody {
  *
  * Request JSON:
  * {
- *   oc: string;                                    // Operating company identifier
+ *   oc: string;                                     //OC identifier
  *   documentBlobPaths: string[];                    // Blob paths to grant documents
  *   supplementalBlobPaths?: Record<string, string>; // Optional supplemental files (name -> blob path)
  *   selectedColumns?: string[];
@@ -62,7 +64,6 @@ export async function POST(request: NextRequest) {
     // 2. Parse request body
     const body: ExtractRequestBody = await request.json();
     const {
-      oc,
       documentBlobPaths,
       supplementalBlobPaths,
       selectedColumns,
@@ -71,11 +72,14 @@ export async function POST(request: NextRequest) {
       promptOverride,
     } = body;
 
+    // Resolve the client-supplied OC name against the static allowlist; the
+    // canonical value (never the request string) is used everywhere below.
+    const oc = resolveOC(body.oc);
     if (!oc || !documentBlobPaths || documentBlobPaths.length === 0) {
       return NextResponse.json(
         {
           error:
-            'Missing required fields: oc and documentBlobPaths (non-empty array)',
+            'Missing required fields: oc (known oc) and documentBlobPaths (non-empty array)',
         },
         { status: 400 },
       );
@@ -96,10 +100,12 @@ export async function POST(request: NextRequest) {
     const downloadedDocPaths: string[] = [];
 
     for (const blobPath of documentBlobPaths) {
-      const fileName = basename(blobPath);
-      const localPath = join(documentsDir, fileName);
+      const fileName = safeChildName(blobPath);
+      const localPath = safeJoin(documentsDir, fileName);
 
-      console.log(`[${runId}] Downloading document: ${blobPath}`);
+      console.log(
+        `[${runId}] Downloading document: ${JSON.stringify(blobPath)}`,
+      );
       const buffer = (await blobClient.get(
         blobPath,
         BlobProperty.BLOB,
@@ -107,7 +113,7 @@ export async function POST(request: NextRequest) {
       await writeFile(localPath, buffer);
       downloadedDocPaths.push(localPath);
       console.log(
-        `[${runId}] Saved document: ${fileName} (${buffer.length} bytes)`,
+        `[${runId}] Saved document: ${JSON.stringify(fileName)} (${buffer.length} bytes)`,
       );
     }
 
@@ -117,11 +123,11 @@ export async function POST(request: NextRequest) {
       Object.keys(supplementalBlobPaths).length > 0
     ) {
       for (const [name, blobPath] of Object.entries(supplementalBlobPaths)) {
-        const fileName = basename(blobPath);
-        const localPath = join(supplementalDir, fileName);
+        const fileName = safeChildName(blobPath);
+        const localPath = safeJoin(supplementalDir, fileName);
 
         console.log(
-          `[${runId}] Downloading supplemental file: ${name} -> ${blobPath}`,
+          `[${runId}] Downloading supplemental file: ${JSON.stringify(name)} -> ${JSON.stringify(blobPath)}`,
         );
         const buffer = (await blobClient.get(
           blobPath,
@@ -129,7 +135,7 @@ export async function POST(request: NextRequest) {
         )) as Buffer;
         await writeFile(localPath, buffer);
         console.log(
-          `[${runId}] Saved supplemental: ${fileName} (${buffer.length} bytes)`,
+          `[${runId}] Saved supplemental: ${JSON.stringify(fileName)} (${buffer.length} bytes)`,
         );
       }
     }
@@ -173,7 +179,7 @@ export async function POST(request: NextRequest) {
       if (saved) resolvedPromptOverride = saved.prompt;
     }
 
-    // 8. Run pipeline in background (don't await — return immediately)
+    // 8. Run pipeline in background
     runPipeline({
       oc,
       documents: downloadedDocPaths,
@@ -184,11 +190,14 @@ export async function POST(request: NextRequest) {
       progressFile: progressPath,
       runId,
       maxWorkers: 3,
-      year: year || new Date().getFullYear(),
+      year: Number(year) || new Date().getFullYear(),
       codeOverrides: codeOverrides || {},
       promptOverride: resolvedPromptOverride,
     }).catch((err) => {
-      console.error(`[${runId}] Pipeline failed:`, err);
+      console.error(
+        `[${runId}] Pipeline failed:`,
+        JSON.stringify(err instanceof Error ? err.message : String(err)),
+      );
     });
 
     // 9. Return response

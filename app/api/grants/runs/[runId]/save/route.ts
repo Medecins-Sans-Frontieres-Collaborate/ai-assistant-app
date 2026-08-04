@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { canAccessGrants } from '@/lib/services/grants/access';
 import { revalidateRows } from '@/lib/services/grants/revalidate';
-import { grantRunDir } from '@/lib/services/grants/runPaths';
+import { grantRunDir, isValidRunId } from '@/lib/services/grants/runPaths';
 
 import { auth } from '@/auth';
 import { constants } from 'fs';
@@ -72,6 +72,9 @@ export async function POST(
     }
 
     const { runId } = await params;
+    if (!isValidRunId(runId)) {
+      return NextResponse.json({ error: 'Invalid runId' }, { status: 400 });
+    }
 
     // 2. Verify run exists
     const workDir = grantRunDir(runId);

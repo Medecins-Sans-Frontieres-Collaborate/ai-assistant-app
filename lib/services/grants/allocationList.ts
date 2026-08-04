@@ -24,6 +24,8 @@ import {
 
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
 
+import { safeChildName, safeJoin } from './runPaths';
+
 import { writeFile } from 'fs/promises';
 import { basename, join } from 'path';
 
@@ -122,7 +124,7 @@ export async function loadExpectedProjects(params: {
     console.error(
       `[grants] ${oc}: FAILED to list grants/${oc}/supplemental/ — coverage will ` +
         `report "no allocation list" but the real cause is a storage error:`,
-      err instanceof Error ? err.message : err,
+      JSON.stringify(err instanceof Error ? err.message : String(err)),
     );
     return [];
   }
@@ -136,7 +138,7 @@ export async function loadExpectedProjects(params: {
     return [];
   }
 
-  const localPath = join(workDir, basename(blobPath));
+  const localPath = safeJoin(workDir, safeChildName(blobPath));
   const buffer = (await blobClient.get(blobPath, BlobProperty.BLOB)) as Buffer;
   await writeFile(localPath, buffer);
 
@@ -161,15 +163,15 @@ export async function loadExpectedProjects(params: {
 
   if (!codeCol) {
     console.warn(
-      `[grants] ${oc}: allocation list "${basename(blobPath)}" has no recognizable ` +
+      `[grants] ${oc}: allocation list ${JSON.stringify(basename(blobPath))} has no recognizable ` +
         `project-code column. Expected "${spec.columns.code}"; header row reads: ` +
-        `${headers.join(', ') || '(empty)'}`,
+        `${JSON.stringify(headers.join(', ') || '(empty)')}`,
     );
     return [];
   }
   console.log(
-    `[grants] ${oc}: allocation list "${basename(blobPath)}" columns → ` +
-      `code: "${codeCol}", name: "${nameCol ?? '(none)'}", country: "${countryCol ?? '(none)'}"`,
+    `[grants] ${oc}: allocation list ${JSON.stringify(basename(blobPath))} columns → ` +
+      `code: ${JSON.stringify(codeCol)}, name: ${JSON.stringify(nameCol ?? '(none)')}, country: ${JSON.stringify(countryCol ?? '(none)')}`,
   );
 
   const out: ExpectedProject[] = [];
