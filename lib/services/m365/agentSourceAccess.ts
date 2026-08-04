@@ -11,6 +11,8 @@
  *
  * Probes run as Graph JSON $batch calls (20 sub-requests per call), so an
  * agent at the 50-document default costs 3 round-trips per user per TTL.
+ * Folder sources additionally get one security-trimmed children listing per
+ * accessible folder, yielding the per-item trim for their chunks.
  * Verdicts are cached per user+agent for a short TTL (per-process, like the
  * access-rules snapshot): max staleness after a permission revocation in
  * SharePoint is CACHE_TTL_MS.
@@ -30,6 +32,8 @@ const CACHE_TTL_MS = 5 * 60_000;
 const MAX_CACHE_ENTRIES = 2000;
 /** Graph JSON batching allows at most 20 sub-requests per call. */
 const GRAPH_BATCH_SIZE = 20;
+/** Matches the indexing-side folder expansion page (agentIndexService). */
+const FOLDER_CHILD_PAGE = 200;
 
 export interface SourceAccessResult {
   sourceId: string;
@@ -39,6 +43,13 @@ export interface SourceAccessResult {
 export interface AgentSourceAccess {
   /** Sources the user's own token can currently open. */
   accessibleSourceIds: string[];
+  /**
+   * Child FILE item ids the user can see inside accessible folder sources.
+   * Folder chunks are trimmed per-item with this list — a folder-level
+   * verdict alone would leak children with tighter item-level permissions
+   * (broken inheritance) to anyone who can open the folder.
+   */
+  accessibleFolderItemIds: string[];
   results: SourceAccessResult[];
 }
 
@@ -106,6 +117,40 @@ async function probeSources(
 }
 
 /**
+ * Resolves the child files the USER'S OWN token can see inside each
+ * accessible folder source. Graph children listings are security-trimmed,
+ * so an item-restricted child simply doesn't appear for a user without
+ * access. A failed listing fails CLOSED for that folder only.
+ */
+async function resolveAccessibleFolderItems(
+  req: NextRequest,
+  folders: M365AgentSource[],
+): Promise<string[]> {
+  const itemIds: string[] = [];
+  for (const folder of folders) {
+    try {
+      const children = await graphJson<{
+        value?: { id?: string; folder?: unknown }[];
+      }>(
+        req,
+        GRAPH_SCOPES,
+        `/drives/${encodeURIComponent(folder.driveId)}/items/${encodeURIComponent(folder.itemId)}/children` +
+          `?$select=id,folder&$top=${FOLDER_CHILD_PAGE}`,
+      );
+      for (const child of children.value ?? []) {
+        if (!child.id || child.folder) continue;
+        itemIds.push(child.id);
+      }
+    } catch (error) {
+      console.warn(
+        `[m365-agents] folder child listing failed for source ${sanitizeForLog(folder.sourceId)}; failing closed for this folder: ${sanitizeForLog(error)}`,
+      );
+    }
+  }
+  return itemIds;
+}
+
+/**
  * Checks every source of the agent with the requesting user's token.
  * Throws M365Error('not_connected'|'consent_missing') when the user has no
  * usable Graph session — callers surface the connect flow instead of a
@@ -130,10 +175,19 @@ export async function checkAgentSourceAccess(
     }),
   );
 
+  const accessibleFolderItemIds = await resolveAccessibleFolderItems(
+    req,
+    agent.sources.filter(
+      (source) =>
+        source.kind === 'folder' && (verdicts.get(source.sourceId) ?? false),
+    ),
+  );
+
   const access: AgentSourceAccess = {
     accessibleSourceIds: results
       .filter((r) => r.accessible)
       .map((r) => r.sourceId),
+    accessibleFolderItemIds,
     results,
   };
 
