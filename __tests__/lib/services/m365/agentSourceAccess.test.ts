@@ -121,6 +121,61 @@ describe('checkAgentSourceAccess ($batch probes)', () => {
     ).rejects.toMatchObject({ kind: 'consent_missing' });
   });
 
+  it('lists security-trimmed children for accessible folder sources only', async () => {
+    const agent = makeAgent(3);
+    agent.sources[1] = { ...agent.sources[1], kind: 'folder' as const };
+    agent.sources[2] = { ...agent.sources[2], kind: 'folder' as const };
+    fetchMock.mockImplementation((url: string, init?: RequestInit) => {
+      if (url.includes('/children')) {
+        // Only the accessible folder (item1) may be listed.
+        expect(url).toContain('item1');
+        return Promise.resolve(
+          new Response(
+            JSON.stringify({
+              value: [
+                { id: 'childFile1' },
+                { id: 'childFolder', folder: {} },
+                { id: 'childFile2' },
+              ],
+            }),
+            { status: 200, headers: { 'Content-Type': 'application/json' } },
+          ),
+        );
+      }
+      // Batch probe: file + first folder accessible, second folder denied.
+      return batchResponse((i) => (i === 2 ? 403 : 200))(url, init);
+    });
+
+    const access = await checkAgentSourceAccess(req, 'u1', agent);
+    expect(access.accessibleSourceIds).toEqual(['src-0', 'src-1']);
+    // Child files only — subfolders don't carry chunks of their own.
+    expect(access.accessibleFolderItemIds).toEqual([
+      'childFile1',
+      'childFile2',
+    ]);
+    const childrenCalls = fetchMock.mock.calls.filter((call) =>
+      String(call[0]).includes('/children'),
+    );
+    expect(childrenCalls).toHaveLength(1);
+  });
+
+  it('fails closed for a folder whose children listing fails', async () => {
+    const agent = makeAgent(2);
+    agent.sources[1] = { ...agent.sources[1], kind: 'folder' as const };
+    fetchMock.mockImplementation((url: string, init?: RequestInit) => {
+      if (url.includes('/children')) {
+        return Promise.resolve(new Response('boom', { status: 500 }));
+      }
+      return batchResponse(() => 200)(url, init);
+    });
+
+    const access = await checkAgentSourceAccess(req, 'u1', agent);
+    // The folder source stays "accessible" (probe passed) but contributes
+    // no readable items — retrieval for it yields nothing.
+    expect(access.accessibleSourceIds).toEqual(['src-0', 'src-1']);
+    expect(access.accessibleFolderItemIds).toEqual([]);
+  });
+
   it('fails closed for sources missing from the batch response', async () => {
     fetchMock.mockImplementation((url: string, init?: RequestInit) => {
       const body = JSON.parse(String(init?.body));
