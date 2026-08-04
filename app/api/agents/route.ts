@@ -85,6 +85,11 @@ async function getVisiblePromptAgentEntries(
  * visibility-only: users who cannot open the base files still SEE the agent
  * (requirement 1 of the design) — the preflight endpoint + chat-time trim
  * handle layer 2.
+ *
+ * Never-indexed agents are the exception: with no successfully indexed
+ * source there is nothing to retrieve for ANY user, so every chat can only
+ * answer "I can't access anything". They stay out of discovery until an
+ * index run succeeds; the admin page still lists them.
  */
 async function getVisibleM365AgentEntries(
   userMail: string | undefined,
@@ -94,6 +99,14 @@ async function getVisibleM365AgentEntries(
   await accessService.ensureFresh();
   const entries: DiscoveredAgent[] = [];
   for (const m365Agent of accessService.getM365Agents()) {
+    // `indexedChunks` is stamped by the index route; undefined means a
+    // legacy record whose run predates the field — status 'indexed' is the
+    // only signal there, so treat it as content-bearing.
+    const hasIndexedContent = m365Agent.sources.some(
+      (source) =>
+        source.status === 'indexed' && (source.indexedChunks ?? 1) > 0,
+    );
+    if (!hasIndexedContent) continue;
     const { decision } = accessService.evaluateAccess({
       userMail,
       source: M365_AGENT_SOURCE,
