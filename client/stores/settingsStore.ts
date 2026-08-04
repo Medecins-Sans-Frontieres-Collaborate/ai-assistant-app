@@ -28,7 +28,7 @@ import {
   LocalRuntimeStatus,
   isValidPort,
 } from '@/types/localRuntime';
-import type { M365SaveDestination } from '@/types/m365';
+import type { M365PickerLocation, M365SaveDestination } from '@/types/m365';
 import {
   DEFAULT_MODEL_ORDER,
   ModelListSource,
@@ -756,6 +756,14 @@ interface SettingsStore {
   setM365SaveDestination: (destination: M365SaveDestination | null) => void;
   setM365SaveSkipPicker: (skip: boolean) => void;
 
+  /**
+   * Last browsed location in the attach-from-OneDrive picker. null = open
+   * at the OneDrive root. Written by the picker on navigation only (never
+   * on search) and dropped fail-open when the folder no longer loads.
+   */
+  m365PickerLocation: M365PickerLocation | null;
+  setM365PickerLocation: (location: M365PickerLocation | null) => void;
+
   // Reset
   resetSettings: () => void;
 }
@@ -879,6 +887,7 @@ export const useSettingsStore = create<SettingsStore>()(
       m365ToolsFlagEnabled: false,
       m365SaveDestination: null,
       m365SaveSkipPicker: false,
+      m365PickerLocation: null,
       suggestRevisions: true,
       suggestRevisionsExceptions: {
         largeRewrites: true,
@@ -1592,6 +1601,7 @@ export const useSettingsStore = create<SettingsStore>()(
                 m365Connected: false,
                 m365SaveDestination: null,
                 m365SaveSkipPicker: false,
+                m365PickerLocation: null,
                 m365SharedMailboxes: [],
               },
         ),
@@ -1615,6 +1625,8 @@ export const useSettingsStore = create<SettingsStore>()(
       setM365SaveDestination: (destination) =>
         set({ m365SaveDestination: destination }),
       setM365SaveSkipPicker: (skip) => set({ m365SaveSkipPicker: skip }),
+      setM365PickerLocation: (location) =>
+        set({ m365PickerLocation: location }),
 
       setSuggestRevisionsException: (key, enabled) =>
         set((state) => ({
@@ -1697,12 +1709,13 @@ export const useSettingsStore = create<SettingsStore>()(
           m365Connected: false,
           m365SaveDestination: null,
           m365SaveSkipPicker: false,
+          m365PickerLocation: null,
           m365PlaybookChipsEnabled: true,
         }),
     }),
     {
       name: 'settings-storage',
-      version: 54, // Increment this when schema changes to trigger migrations
+      version: 55, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1802,6 +1815,7 @@ export const useSettingsStore = create<SettingsStore>()(
         m365PlaybookChipsEnabled: state.m365PlaybookChipsEnabled,
         m365SaveDestination: state.m365SaveDestination,
         m365SaveSkipPicker: state.m365SaveSkipPicker,
+        m365PickerLocation: state.m365PickerLocation,
         suggestRevisionsExceptions: state.suggestRevisionsExceptions,
         suggestRevisionsLargeRewriteRatio:
           state.suggestRevisionsLargeRewriteRatio,
@@ -2331,6 +2345,14 @@ export const useSettingsStore = create<SettingsStore>()(
         if (version < 54) {
           if (typeof state.m365PlaybookChipsEnabled !== 'boolean') {
             state.m365PlaybookChipsEnabled = true;
+          }
+        }
+
+        // Version 54 → 55: remembered attach-picker location. Backfill to
+        // null — open at the OneDrive root, as these users always have.
+        if (version < 55) {
+          if (state.m365PickerLocation === undefined) {
+            state.m365PickerLocation = null;
           }
         }
 
