@@ -56,6 +56,8 @@ export interface M365AgentIndexDoc {
   title: string;
   url: string;
   date: string;
+  /** Human-readable position in the source document ("p. 12"), when known. */
+  locator: string;
   text_vector: number[];
 }
 
@@ -134,6 +136,7 @@ async function createOrUpdateIndex(): Promise<void> {
       { name: 'agent_id', type: 'Edm.String', filterable: true },
       { name: 'source_id', type: 'Edm.String', filterable: true },
       { name: 'item_id', type: 'Edm.String', filterable: true },
+      { name: 'locator', type: 'Edm.String' },
       { name: 'chunk', type: 'Edm.String', searchable: true },
       { name: 'title', type: 'Edm.String', searchable: true },
       { name: 'url', type: 'Edm.String' },
@@ -207,6 +210,47 @@ async function createOrUpdateIndex(): Promise<void> {
 // Chunking + embedding
 // ---------------------------------------------------------------------------
 
+interface ChunkSpan {
+  start: number;
+  end: number;
+}
+
+/**
+ * Core overlap-aware character chunker over an ALREADY-normalized string.
+ * Returns spans (offsets into `text`) so callers can attribute chunks to
+ * document locations; prefers to break at a paragraph or sentence boundary
+ * near the target size so chunks stay readable.
+ */
+function chunkSpans(
+  text: string,
+  chunkChars: number,
+  overlap: number,
+): ChunkSpan[] {
+  if (!text.trim()) return [];
+  if (text.length <= chunkChars) return [{ start: 0, end: text.length }];
+
+  const spans: ChunkSpan[] = [];
+  let start = 0;
+  while (start < text.length && spans.length < MAX_CHUNKS_PER_DOCUMENT) {
+    let end = Math.min(start + chunkChars, text.length);
+    if (end < text.length) {
+      // Look for a natural boundary in the last 20% of the window.
+      const windowStart = start + Math.floor(chunkChars * 0.8);
+      const slice = text.slice(windowStart, end);
+      const paragraphBreak = slice.lastIndexOf('\n\n');
+      const sentenceBreak = slice.lastIndexOf('. ');
+      const breakAt = paragraphBreak >= 0 ? paragraphBreak : sentenceBreak;
+      if (breakAt >= 0) {
+        end = windowStart + breakAt + (paragraphBreak >= 0 ? 2 : 1);
+      }
+    }
+    spans.push({ start, end });
+    if (end >= text.length) break;
+    start = Math.max(end - overlap, start + 1);
+  }
+  return spans;
+}
+
 /**
  * Overlap-aware character chunker. Prefers to break at a paragraph or
  * sentence boundary near the target size so chunks stay readable.
@@ -217,29 +261,109 @@ export function chunkText(
   overlap: number = CHUNK_OVERLAP,
 ): string[] {
   const cleaned = text.replace(/\r\n/g, '\n').trim();
-  if (!cleaned) return [];
-  if (cleaned.length <= chunkChars) return [cleaned];
+  return chunkSpans(cleaned, chunkChars, overlap)
+    .map((span) => cleaned.slice(span.start, span.end).trim())
+    .filter((c) => c.length > 0);
+}
 
-  const chunks: string[] = [];
-  let start = 0;
-  while (start < cleaned.length && chunks.length < MAX_CHUNKS_PER_DOCUMENT) {
-    let end = Math.min(start + chunkChars, cleaned.length);
-    if (end < cleaned.length) {
-      // Look for a natural boundary in the last 20% of the window.
-      const windowStart = start + Math.floor(chunkChars * 0.8);
-      const slice = cleaned.slice(windowStart, end);
-      const paragraphBreak = slice.lastIndexOf('\n\n');
-      const sentenceBreak = slice.lastIndexOf('. ');
-      const breakAt = paragraphBreak >= 0 ? paragraphBreak : sentenceBreak;
-      if (breakAt >= 0) {
-        end = windowStart + breakAt + (paragraphBreak >= 0 ? 2 : 1);
-      }
+export interface LocatedChunk {
+  chunk: string;
+  /** Human-readable position in the source, e.g. "p. 12" / "pp. 12–13". */
+  locator?: string;
+}
+
+/** A page's starting offset within the marker-stripped text. */
+interface PageStart {
+  offset: number;
+  page: number;
+}
+
+/**
+ * Strips page markers from extracted text while recording where each page
+ * begins. Two marker dialects, matching the two PDF extractors upstream
+ * (fileHandling.ts): pdfjs joins pages with "--- Page N ---" lines;
+ * pdftotext separates them with form feeds. Text without markers (DOCX and
+ * friends are flowing formats) yields no page map — chunks simply carry no
+ * locator.
+ */
+function stripPageMarkers(text: string): {
+  stripped: string;
+  pageStarts: PageStart[];
+} {
+  const pdfjsMarker = /^--- Page (\d+) ---$\n?/gm;
+  if (pdfjsMarker.test(text)) {
+    const pageStarts: PageStart[] = [];
+    let stripped = '';
+    let lastIndex = 0;
+    pdfjsMarker.lastIndex = 0;
+    for (const match of text.matchAll(pdfjsMarker)) {
+      stripped += text.slice(lastIndex, match.index);
+      pageStarts.push({
+        offset: stripped.length,
+        page: Number(match[1]),
+      });
+      lastIndex = match.index + match[0].length;
     }
-    chunks.push(cleaned.slice(start, end).trim());
-    if (end >= cleaned.length) break;
-    start = Math.max(end - overlap, start + 1);
+    stripped += text.slice(lastIndex);
+    return { stripped, pageStarts };
   }
-  return chunks.filter((c) => c.length > 0);
+
+  if (text.includes('\f')) {
+    const parts = text.split('\f');
+    const pageStarts: PageStart[] = [];
+    let stripped = '';
+    parts.forEach((part, index) => {
+      pageStarts.push({ offset: stripped.length, page: index + 1 });
+      stripped += part;
+      // Keep a paragraph boundary where the page break was, so the
+      // chunker still prefers breaking there.
+      if (index < parts.length - 1) stripped += '\n\n';
+    });
+    return { stripped, pageStarts };
+  }
+
+  return { stripped: text, pageStarts: [] };
+}
+
+function locatorForSpan(
+  span: ChunkSpan,
+  pageStarts: PageStart[],
+): string | undefined {
+  if (pageStarts.length < 2) return undefined;
+  let first: number | undefined;
+  let last: number | undefined;
+  for (let i = 0; i < pageStarts.length; i++) {
+    const pageStart = pageStarts[i].offset;
+    const pageEnd =
+      i + 1 < pageStarts.length ? pageStarts[i + 1].offset : Infinity;
+    if (pageStart < span.end && pageEnd > span.start) {
+      first = first ?? pageStarts[i].page;
+      last = pageStarts[i].page;
+    }
+  }
+  if (first === undefined || last === undefined) return undefined;
+  return first === last ? `p. ${first}` : `pp. ${first}–${last}`;
+}
+
+/**
+ * Chunks an extracted document, attributing each chunk to the page range
+ * it came from when the extraction preserved page structure. NOTE: no
+ * global trim — offsets must stay aligned with the page map; individual
+ * chunks are trimmed on slice.
+ */
+export function chunkDocument(
+  text: string,
+  chunkChars: number = CHUNK_CHARS,
+  overlap: number = CHUNK_OVERLAP,
+): LocatedChunk[] {
+  const normalized = text.replace(/\r\n/g, '\n');
+  const { stripped, pageStarts } = stripPageMarkers(normalized);
+  return chunkSpans(stripped, chunkChars, overlap)
+    .map((span) => ({
+      chunk: stripped.slice(span.start, span.end).trim(),
+      locator: locatorForSpan(span, pageStarts),
+    }))
+    .filter((c) => c.chunk.length > 0);
 }
 
 /** Embeds texts with the agent's deployment (batched). */
@@ -251,10 +375,28 @@ export async function embedTexts(
   const vectors: number[][] = [];
   for (let i = 0; i < texts.length; i += EMBED_BATCH_SIZE) {
     const batch = texts.slice(i, i + EMBED_BATCH_SIZE);
-    const response = await client.embeddings.create({
-      model: deployment,
-      input: batch,
-    });
+    let response;
+    try {
+      response = await client.embeddings.create({
+        model: deployment,
+        input: batch,
+      });
+    } catch (error) {
+      // A bare Azure 404 here reads as a mystery; name the deployment so
+      // the per-source error (and admin UI) says what to fix. The agent's
+      // embeddingModelId is stamped from OPENAI_EMBEDDING_DEPLOYMENT at
+      // creation, so a stale env value bakes into the record.
+      if (
+        error instanceof Error &&
+        error.message.includes('deployment for this resource does not exist')
+      ) {
+        throw new Error(
+          `Embedding deployment '${deployment}' does not exist on this account. ` +
+            `Fix OPENAI_EMBEDDING_DEPLOYMENT (and recreate the agent — the value is stamped at creation).`,
+        );
+      }
+      throw error;
+    }
     for (const item of response.data) {
       vectors.push(item.embedding);
     }
@@ -264,6 +406,85 @@ export async function embedTexts(
 
 export function embeddingDeploymentFor(agent: M365Agent): string {
   return agent.embeddingModelId || env.OPENAI_EMBEDDING_DEPLOYMENT;
+}
+
+/**
+ * Common Azure OpenAI embedding deployment names, probed as a last resort
+ * when neither the env-configured nor the agent's stamped deployment
+ * exists on this account (environments name their deployments
+ * inconsistently — e.g. live EU 'text-embedding' vs dev
+ * 'text-embedding-3-small').
+ */
+const FALLBACK_EMBEDDING_DEPLOYMENTS = [
+  'text-embedding',
+  'text-embedding-3-small',
+  'text-embedding-ada-002',
+];
+
+/** Successful probes cache per-process; failures re-probe (cheap, rare). */
+const embeddingProbeSuccesses = new Set<string>();
+
+/**
+ * A deployment is usable only if it exists AND returns vectors matching
+ * the index schema's dimensions — text-embedding-3-large at its native
+ * 3072 must be rejected here, not silently corrupt the index.
+ */
+async function probeEmbeddingDeployment(deployment: string): Promise<boolean> {
+  if (embeddingProbeSuccesses.has(deployment)) return true;
+  try {
+    const client = ServiceContainer.getInstance().getAzureOpenAIClient();
+    const response = await client.embeddings.create({
+      model: deployment,
+      input: ['ping'],
+    });
+    const usable = response.data[0]?.embedding?.length === EMBEDDING_DIMENSIONS;
+    if (usable) embeddingProbeSuccesses.add(deployment);
+    return usable;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Index-time embedding deployment resolution. The env value is preferred —
+ * a (re-)index run adopts it whenever it works, healing records stamped
+ * with a name this environment doesn't have — then the agent's stamped
+ * value, then common fallbacks. The caller MUST persist the resolved value
+ * onto the agent record (embeddingModelId): queries embed with the stamped
+ * deployment, and mixing deployments between ingestion and retrieval
+ * silently breaks vector similarity.
+ */
+export async function resolveEmbeddingDeployment(
+  agent: M365Agent,
+): Promise<string> {
+  const candidates = [
+    ...new Set(
+      [
+        env.OPENAI_EMBEDDING_DEPLOYMENT,
+        agent.embeddingModelId,
+        ...FALLBACK_EMBEDDING_DEPLOYMENTS,
+      ].filter((c): c is string => !!c),
+    ),
+  ];
+  for (const candidate of candidates) {
+    if (await probeEmbeddingDeployment(candidate)) {
+      if (candidate !== candidates[0]) {
+        console.warn(
+          `[m365-agents] embedding deployment fallback: using '${sanitizeForLog(candidate)}' (preferred '${sanitizeForLog(candidates[0])}' unavailable)`,
+        );
+      }
+      return candidate;
+    }
+  }
+  throw new Error(
+    `No usable embedding deployment on this account (need ${EMBEDDING_DIMENSIONS}-dim output); tried: ${candidates.join(', ')}. ` +
+      'Set OPENAI_EMBEDDING_DEPLOYMENT to a deployed embedding model.',
+  );
+}
+
+/** Test hook. */
+export function __clearEmbeddingProbeCacheForTests(): void {
+  embeddingProbeSuccesses.clear();
 }
 
 // ---------------------------------------------------------------------------
@@ -486,19 +707,30 @@ async function mapWithConcurrency<T, R>(
   return results;
 }
 
+export interface AgentIndexRun {
+  outcomes: SourceIndexOutcome[];
+  /**
+   * The deployment every chunk in this run was embedded with. The caller
+   * MUST stamp it onto the agent record (embeddingModelId) — retrieval
+   * embeds queries with the stamped value, and it has to match the index.
+   */
+  embeddingDeployment: string;
+}
+
 /**
  * Indexes every source of an agent using the CALLING USER'S Graph token
  * (creation/refresh runs only while someone with file access is present —
  * there is no offline token access, by design). Returns per-source
- * outcomes in source order; the caller persists them onto the agent record.
+ * outcomes in source order; the caller persists them (and the resolved
+ * embedding deployment) onto the agent record.
  */
 export async function indexAgentSources(
   req: NextRequest,
   agent: M365Agent,
-): Promise<SourceIndexOutcome[]> {
+): Promise<AgentIndexRun> {
   await ensureM365AgentsIndex();
   const client = getSearchClient();
-  const deployment = embeddingDeploymentFor(agent);
+  const deployment = await resolveEmbeddingDeployment(agent);
   const documentsBySource = await resolveDocuments(req, agent);
 
   const indexOneSource = async (
@@ -509,7 +741,7 @@ export async function indexAgentSources(
       const uploadDocs: M365AgentIndexDoc[] = [];
       for (const doc of docs) {
         const text = await downloadAndExtract(req, doc);
-        const chunks = chunkText(text);
+        const chunks = chunkDocument(text);
         if (chunks.length === 0) {
           // Surfaced to admins via the zero-chunk warning in the agents
           // list; logged here with the item for diagnosis.
@@ -517,7 +749,10 @@ export async function indexAgentSources(
             `[m365-agents] extraction yielded no text for agent ${sanitizeForLog(agent.id)} item ${sanitizeForLog(doc.itemId)} (scanned/image-only file?)`,
           );
         }
-        const vectors = await embedTexts(chunks, deployment);
+        const vectors = await embedTexts(
+          chunks.map((c) => c.chunk),
+          deployment,
+        );
         const itemId = sanitizeGraphId(doc.itemId);
         chunks.forEach((chunk, index) => {
           uploadDocs.push({
@@ -525,7 +760,8 @@ export async function indexAgentSources(
             agent_id: agent.id,
             source_id: doc.sourceId,
             item_id: itemId,
-            chunk,
+            locator: chunk.locator ?? '',
+            chunk: chunk.chunk,
             title: doc.title,
             url: doc.webUrl,
             date: doc.lastModified,
@@ -563,11 +799,12 @@ export async function indexAgentSources(
     }
   };
 
-  return mapWithConcurrency(
+  const outcomes = await mapWithConcurrency(
     agent.sources,
     SOURCE_INDEX_CONCURRENCY,
     indexOneSource,
   );
+  return { outcomes, embeddingDeployment: deployment };
 }
 
 // ---------------------------------------------------------------------------
@@ -580,6 +817,14 @@ export interface M365AgentSearchDoc {
   title: string;
   date: string;
   url: string;
+  /** "p. 12" / "pp. 12–13" when the source had page structure; else ''. */
+  locator: string;
+  /**
+   * Verbatim passage from this chunk, chosen by the semantic ranker as
+   * most relevant to the query (extractive caption — never generated).
+   * Falls back to the chunk's opening sentences.
+   */
+  quote: string;
 }
 
 /**
@@ -650,11 +895,14 @@ export async function searchM365Agent(
 
   const results = await client.search(query, {
     filter,
-    select: ['chunk', 'chunk_id', 'title', 'date', 'url'],
+    select: ['chunk', 'chunk_id', 'title', 'date', 'url', 'locator'],
     top: fetchCount,
     queryType: 'semantic',
     semanticSearchOptions: {
       configurationName: `${indexName}-semantic-configuration`,
+      // Extractive captions feed citation quotes: verbatim passages chosen
+      // by the ranker, so the evidence shown to users is never generated.
+      captions: { captionType: 'extractive' },
     },
     vectorSearchOptions: {
       queries: [
@@ -674,14 +922,34 @@ export async function searchM365Agent(
     const doc = result.document;
     if (seen.has(doc.chunk_id)) continue;
     seen.add(doc.chunk_id);
+    // Captions carry <em> highlight markup in `highlights`; `text` is the
+    // clean verbatim passage.
+    const caption = result.captions?.[0]?.text?.trim();
     docs.push({
       chunk: doc.chunk,
       chunk_id: doc.chunk_id,
       title: doc.title,
       date: doc.date,
       url: doc.url,
+      // Pre-locator chunks have no field value; normalize to ''.
+      locator: doc.locator ?? '',
+      quote: caption || chunkOpening(doc.chunk),
     });
     if (docs.length >= topK) break;
   }
   return docs;
+}
+
+/**
+ * Fallback citation quote when the ranker returns no caption: the chunk's
+ * opening, cut at a sentence boundary near 200 chars.
+ */
+function chunkOpening(chunk: string): string {
+  const head = chunk.slice(0, 300);
+  if (head.length < 300) return head.trim();
+  const sentenceEnd = head.slice(120).search(/[.!?]\s/);
+  if (sentenceEnd >= 0) {
+    return head.slice(0, 120 + sentenceEnd + 1).trim();
+  }
+  return `${head.slice(0, 200).trim()}…`;
 }
