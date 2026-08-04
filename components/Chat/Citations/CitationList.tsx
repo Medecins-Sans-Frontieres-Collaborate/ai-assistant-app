@@ -103,18 +103,27 @@ export const CitationList: FC<{ citations: Citation[] }> = ({
 
   // Deduplicate citations by URL or title. Entries without a URL are
   // dropped up front — they can't render as a source card, and counting
-  // them makes the header disagree with the visible rows.
+  // them makes the header disagree with the visible rows. Duplicates merge
+  // their locators onto the kept card (several chunks of one document →
+  // one card listing every cited page).
   const uniqueCitations = citations
     .filter((c) => !!c.url)
     .reduce((acc: Citation[], current) => {
-      const isDuplicate = acc.some(
+      const existing = acc.find(
         (item) =>
           (item.url && current.url && item.url === current.url) ||
           (item.title && current.title && item.title === current.title),
       );
 
-      if (!isDuplicate) {
-        acc.push(current);
+      if (!existing) {
+        acc.push({ ...current });
+      } else if (
+        current.locator &&
+        !(existing.locator ?? '').split(', ').includes(current.locator)
+      ) {
+        existing.locator = existing.locator
+          ? `${existing.locator}, ${current.locator}`
+          : current.locator;
       }
       return acc;
     }, []);
@@ -341,7 +350,7 @@ export const CitationList: FC<{ citations: Citation[] }> = ({
         className={`overflow-hidden transition-all duration-300 ease-in-out ${
           isExpanded
             ? viewMode === 'cards'
-              ? 'max-h-[200px] opacity-100'
+              ? 'max-h-[240px] opacity-100'
               : 'max-h-[400px] opacity-100'
             : 'max-h-0 opacity-0'
         }`}
