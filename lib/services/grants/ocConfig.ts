@@ -1,10 +1,4 @@
-/**
- * Per-OC (Operating Company) configuration.
- *
- * The JSON configs are imported statically (rather than read from disk via
- * process.cwd() at runtime) so the bundler embeds them into the current
- * build.".
- */
+// Per-OC configurations.
 import ocaConfig from './oc-configs/oca.json';
 import ocbConfig from './oc-configs/ocb.json';
 import ocbaConfig from './oc-configs/ocba.json';
@@ -23,6 +17,19 @@ const RAW_CONFIGS: Record<string, Record<string, unknown>> = {
   ocp: ocpConfig,
   waca: wacaConfig,
 };
+
+/** The set of OC identifiers */
+export const OC_NAMES: readonly string[] = Object.keys(RAW_CONFIGS);
+
+/**
+ * Resolve a client-supplied OC name to its canonical config key, or null if
+ * unknown. The returned string is one of the static OC_NAMES literals.
+ */
+export function resolveOC(ocName: unknown): string | null {
+  if (typeof ocName !== 'string') return null;
+  const lower = ocName.toLowerCase();
+  return OC_NAMES.find((name) => name === lower) ?? null;
+}
 
 export interface SupplementalFileSpec {
   filename: string;
