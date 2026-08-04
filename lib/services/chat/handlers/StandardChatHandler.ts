@@ -457,8 +457,9 @@ export class StandardChatHandler extends BasePipelineStage {
               : undefined,
           });
 
-          // If we have active file cache updates, token consumption, or
-          // dropped files this turn, append as metadata at end of stream.
+          // If we have active file cache updates, token consumption,
+          // dropped files, or claim-quote verification chunks this turn,
+          // append as metadata at end of stream.
           let finalResponse = response;
           const hasFileUpdates =
             (context.activeFilesCacheUpdates?.length ?? 0) > 0;
@@ -466,9 +467,17 @@ export class StandardChatHandler extends BasePipelineStage {
             (context.activeFilesTokensConsumedThisTurn ?? 0) > 0;
           const hasDroppedFiles =
             (context.activeFilesDroppedThisTurn?.length ?? 0) > 0;
+          const citationQuoteSources = context.processedContent?.metadata
+            ?.citationQuoteSources as Record<string, string> | undefined;
+          const hasQuoteSources =
+            !!citationQuoteSources &&
+            Object.keys(citationQuoteSources).length > 0;
           if (
             context.stream &&
-            (hasFileUpdates || hasTokensConsumed || hasDroppedFiles) &&
+            (hasFileUpdates ||
+              hasTokensConsumed ||
+              hasDroppedFiles ||
+              hasQuoteSources) &&
             response.body
           ) {
             const encoder = new TextEncoder();
@@ -504,6 +513,13 @@ export class StandardChatHandler extends BasePipelineStage {
                   if (hasDroppedFiles) {
                     metadataPayload.activeFilesDropped =
                       context.activeFilesDroppedThisTurn;
+                  }
+
+                  if (hasQuoteSources) {
+                    // Verification corpus for model claim quotes — the
+                    // client checks each quoted passage is a verbatim
+                    // substring of the cited chunk, then discards this.
+                    metadataPayload.citationQuoteSources = citationQuoteSources;
                   }
 
                   const metadata = `\n\n<<<METADATA_START>>>${JSON.stringify(metadataPayload)}<<<METADATA_END>>>`;
