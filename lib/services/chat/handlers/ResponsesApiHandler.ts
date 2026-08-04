@@ -41,16 +41,25 @@ export class ResponsesApiHandler {
   constructor(private client: AzureOpenAI) {}
 
   /**
-   * Converts app messages to Responses-API input items. The system prompt
-   * travels separately via `instructions`, so system messages are dropped
-   * here. Assistant history is flattened to text with prior-turn <think>
-   * blocks stripped (reasoning must not be fed back).
+   * Converts app messages to Responses-API input items. The base system
+   * prompt travels separately via `instructions`, but in-array system
+   * messages are NOT redundant with it: enrichers (RAG, M365 agents, file
+   * summaries) inject retrieved context as system-role messages, so they
+   * must survive as ordered input items. Assistant history is flattened to
+   * text with prior-turn <think> blocks stripped (reasoning must not be
+   * fed back).
    */
   prepareInput(messages: Message[]): OpenAI.Responses.ResponseInput {
     const input: OpenAI.Responses.ResponseInput = [];
 
     for (const msg of messages) {
-      if (msg.role === 'system') continue;
+      if (msg.role === 'system') {
+        const text = this.flattenToText(msg.content);
+        if (text) {
+          input.push({ role: 'system', content: text });
+        }
+        continue;
+      }
 
       if (msg.role === 'assistant') {
         const text = this.flattenToText(msg.content);
