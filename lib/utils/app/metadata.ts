@@ -90,8 +90,11 @@ export interface StreamMetadata {
    * surfaces browser-side as an opaque network error (Firefox:
    * NS_ERROR_NET_PARTIAL_TRANSFER) that the UI can only guess at. `message`
    * must be client-safe — provider error details stay in server logs.
+   * `retry: true` marks the partial output as not worth keeping (e.g. it
+   * promises a generated file that doesn't exist) — the client SHOULD
+   * auto-retry on the fallback chain instead of surfacing the partial.
    */
-  streamError?: { message: string; code?: string };
+  streamError?: { message: string; code?: string; retry?: boolean };
 }
 
 /**
@@ -110,7 +113,7 @@ export interface ParsedMetadata {
   activeFilesDropped?: string[];
   usage?: TokenUsageMetadata;
   extractionResult?: ExtractionResultContent;
-  streamError?: { message: string; code?: string };
+  streamError?: { message: string; code?: string; retry?: boolean };
   mcpPlan?: import('@/types/mcp').McpPlan;
   extractionMethod: 'metadata' | 'none';
   /**
@@ -260,6 +263,7 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
             ...(typeof parsedData.streamError.code === 'string'
               ? { code: parsedData.streamError.code }
               : {}),
+            ...(parsedData.streamError.retry === true ? { retry: true } : {}),
           };
         }
         const anyData = parsedData as unknown as {
