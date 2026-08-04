@@ -87,6 +87,23 @@ function clampContextWindowSize(size: number | undefined): number {
   );
 }
 
+/**
+ * Fallback-resolution context from the client's live state: the discovery-
+ * served model list (so the fallback never targets an undeployed model),
+ * the user's configured default model (tried first — the most predictable
+ * substitute), and the user's region. Every chatStore fallback lookup goes
+ * through this so the chain tracks the dynamic model system instead of the
+ * static catalog.
+ */
+function dynamicFallbackOpts() {
+  const settings = useSettingsStore.getState();
+  return {
+    availableModels: settings.models.length > 0 ? settings.models : undefined,
+    preferredDefaultId: settings.defaultModelId || null,
+    userRegion: settings.userRegion ?? null,
+  };
+}
+
 /** Returns a new Set without `item`, or the same set when `item` isn't present
  *  (so an unchanged value keeps its reference and avoids a needless re-render). */
 function setWithout<T>(set: Set<T>, item: T): Set<T> {
@@ -365,6 +382,14 @@ interface ChatStore {
    * assistant group to append a version to.
    */
   retryFailedRequest: () => Promise<void>;
+  /**
+   * User-initiated retry of the failed turn on the next fallback-chain
+   * model. Unlike the automatic fallback (network/5xx failures only),
+   * this is offered in the error UI for EVERY recoverable failure —
+   * including server-reported mid-stream ones, where switching model is a
+   * deliberate user choice rather than a silent substitution.
+   */
+  retryFailedWithFallbackModel: () => Promise<void>;
   /**
    * "Summarize from headlines now": aborts the in-flight combined search
    * (Bing still running) and resends the same user message with the
@@ -851,14 +876,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       console.warn(
         `[chatStore] Model "${conversation.model.id}" no longer exists, using fallback model`,
       );
-      // Try settings default, then the fallback chain
-      const fallbackId = settings.defaultModelId || fallbackModelID;
+      // The user's default leads (via preferredDefaultId), then the dynamic
+      // chain over the served list; the static ultimate fallback only
+      // matters when the live list is empty AND the chain resolves nothing.
       const rescuedModel =
-        OpenAIModels[fallbackId] ?? getFallbackModel([conversation.model.id]);
+        getFallbackModel([conversation.model.id], [], dynamicFallbackOpts()) ??
+        OpenAIModels[fallbackModelID];
 
       if (!rescuedModel) {
         throw new Error(
-          `No valid model available. Requested: ${conversation.model.id}, Fallback: ${fallbackId}`,
+          `No valid model available. Requested: ${conversation.model.id}`,
         );
       }
       latestModelConfig = rescuedModel;
@@ -1462,7 +1489,11 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // tool records / consent cards are in the streaming slices.
     const streamError = streamParser.getStreamError?.();
     if (streamError) {
-      throw new StreamInterruptedError(streamError.message, streamError.code);
+      throw new StreamInterruptedError(
+        streamError.message,
+        streamError.code,
+        streamError.retry === true,
+      );
     }
 
     return {
@@ -1695,7 +1726,11 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // silently retried on a fallback model: the stream was already underway
     // — tool calls may have run — and the user has been staring at a
     // loader; surface the failure with its partial context immediately.
-    const isStreamInterrupted = error instanceof StreamInterruptedError;
+    // EXCEPT when the server flagged `retry`: the partial is a broken
+    // promise (a generated file that doesn't exist, or no content at all),
+    // so a fallback retry is forced — keeping it would be worse.
+    const isStreamInterrupted =
+      error instanceof StreamInterruptedError && !error.retry;
     // The 429 exemption exists for MODEL-level rate limits (an Azure TPM
     // ceiling), which another model genuinely can absorb. Our own per-USER
     // limits — the burst limiter and admin usage limits — are keyed on the
@@ -1716,7 +1751,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       modelId.startsWith('custom-') ||
       isLocalModel(conversation?.model);
     const nextFallbackModel = conversation
-      ? getFallbackModel([conversation.model.id])
+      ? getFallbackModel([conversation.model.id], [], dynamicFallbackOpts())
       : null;
 
     if (
@@ -1842,7 +1877,11 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     searchMode?: SearchMode,
     attemptedModelIds: string[] = [conversation.model.id],
   ) => {
-    const fallbackModel = getFallbackModel(attemptedModelIds);
+    const fallbackModel = getFallbackModel(
+      attemptedModelIds,
+      [],
+      dynamicFallbackOpts(),
+    );
     if (!fallbackModel) {
       console.error(
         '[chatStore] Fallback chain exhausted, attempted:',
@@ -2060,7 +2099,10 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         (retryError.status !== 429 || retryError.isRateLimitError());
       const nextAttemptedIds = [...attemptedModelIds, fallbackModel.id];
 
-      if (!isNonRetryableClientError && getFallbackModel(nextAttemptedIds)) {
+      if (
+        !isNonRetryableClientError &&
+        getFallbackModel(nextAttemptedIds, [], dynamicFallbackOpts())
+      ) {
         toast.dismiss(toastId);
         return get().retryWithFallbackModel(
           conversation,
@@ -2096,6 +2138,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         originalModelId: null,
       });
     }
+  },
+
+  retryFailedWithFallbackModel: async () => {
+    const { failedConversation, failedSearchMode } = get();
+    if (!failedConversation) return;
+    set({
+      error: null,
+      errorIsRecoverable: true,
+    });
+    await get().retryWithFallbackModel(failedConversation, failedSearchMode);
   },
 
   retryFailedRequest: async () => {
