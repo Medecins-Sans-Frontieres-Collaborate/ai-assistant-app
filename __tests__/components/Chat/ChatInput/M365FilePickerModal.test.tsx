@@ -9,6 +9,7 @@ import {
   render,
   screen,
   waitFor,
+  within,
 } from '@testing-library/react';
 
 import { listDrivePage } from '@/client/services/m365/m365Client';
@@ -17,11 +18,16 @@ import type { M365DriveEntry, M365DrivePage } from '@/types/m365';
 
 import M365FilePickerModal from '@/components/Chat/ChatInput/M365FilePickerModal';
 
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import '@testing-library/jest-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+const { attachDriveItemMock } = vi.hoisted(() => ({
+  attachDriveItemMock: vi.fn(),
+}));
+
 vi.mock('@/client/hooks/chat/useM365Attachment', () => ({
-  useM365Attachment: () => ({ attachDriveItem: vi.fn() }),
+  useM365Attachment: () => ({ attachDriveItem: attachDriveItemMock }),
 }));
 
 vi.mock('@/client/services/m365/m365Client', () => {
@@ -68,6 +74,9 @@ function renderPicker() {
 beforeEach(() => {
   vi.clearAllMocks();
   listDrivePageMock.mockResolvedValue(page([]));
+  // The picker persists its location into the real store singleton; reset it
+  // so one test's navigation can't become the next test's starting point.
+  useSettingsStore.getState().setM365PickerLocation(null);
 });
 
 afterEach(() => {
@@ -421,5 +430,164 @@ describe('M365FilePickerModal folder mode', () => {
     });
     expect(screen.getByText('Found')).toBeInTheDocument();
     expect(screen.queryByText('selectFolder')).not.toBeInTheDocument();
+  });
+});
+
+describe('M365FilePickerModal location memory', () => {
+  it('opens at the remembered location with its sort and breadcrumb', async () => {
+    useSettingsStore.getState().setM365PickerLocation({
+      tab: 'onedrive',
+      crumbs: [{ label: 'Bravo', driveId: 'd1', itemId: 'b' }],
+      sort: 'lastModified',
+      dir: 'desc',
+    });
+    listDrivePageMock.mockResolvedValue(page([entry('a', 'deep.txt')]));
+    renderPicker();
+    await screen.findByText('deep.txt');
+    expect(listDrivePageMock).toHaveBeenCalledWith('children', {
+      driveId: 'd1',
+      itemId: 'b',
+      sort: 'lastModified',
+      dir: 'desc',
+    });
+    // Restored crumbs render, so the way back home is visible immediately.
+    const breadcrumbs = screen.getByRole('navigation');
+    expect(within(breadcrumbs).getByText('Bravo')).toBeInTheDocument();
+    expect(within(breadcrumbs).getByText('tabs.onedrive')).toBeInTheDocument();
+  });
+
+  it('falls back to the root when the remembered folder no longer loads', async () => {
+    useSettingsStore.getState().setM365PickerLocation({
+      tab: 'onedrive',
+      crumbs: [{ label: 'Gone', driveId: 'd1', itemId: 'gone' }],
+      sort: 'name',
+      dir: 'asc',
+    });
+    listDrivePageMock.mockImplementation(async (view, opts) => {
+      if (view === 'children' && opts?.itemId === 'gone')
+        throw new Error('itemNotFound');
+      return page([entry('r', 'root.txt')]);
+    });
+    renderPicker();
+    await screen.findByText('root.txt');
+    // Fail-open: no error surfaces, and the stale location is dropped.
+    expect(screen.queryByText('errors.generic')).not.toBeInTheDocument();
+    expect(useSettingsStore.getState().m365PickerLocation).toMatchObject({
+      crumbs: [],
+    });
+  });
+
+  it('writes location on navigation but never on search, and rebases search-hit folders with an elided gap', async () => {
+    vi.useFakeTimers();
+    listDrivePageMock.mockResolvedValue(page([entry('b', 'Bravo', true)]));
+    renderPicker();
+    await act(async () => {});
+
+    fireEvent.click(screen.getByRole('button', { name: 'Bravo' }));
+    await act(async () => {});
+    expect(useSettingsStore.getState().m365PickerLocation).toMatchObject({
+      tab: 'onedrive',
+      crumbs: [{ label: 'Bravo', driveId: 'd1', itemId: 'b' }],
+    });
+
+    listDrivePageMock.mockResolvedValue(page([entry('f', 'Found', true)]));
+    fireEvent.change(screen.getByPlaceholderText('searchPlaceholder'), {
+      target: { value: 'fo' },
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(300);
+    });
+    expect(screen.getByText('Found')).toBeInTheDocument();
+    // Searching didn't move the remembered location.
+    expect(useSettingsStore.getState().m365PickerLocation).toMatchObject({
+      crumbs: [{ label: 'Bravo' }],
+    });
+
+    // A search hit's real path is unknown: the trail rebases on the hit
+    // with an inert "…" marking the gap instead of a fabricated path.
+    fireEvent.click(screen.getByText('Found'));
+    await act(async () => {});
+    expect(screen.getByText('…')).toBeInTheDocument();
+    expect(screen.queryByText('Bravo')).not.toBeInTheDocument();
+    expect(useSettingsStore.getState().m365PickerLocation).toMatchObject({
+      crumbs: [{ label: 'Found', elided: true }],
+    });
+  });
+});
+
+describe('M365FilePickerModal multi-select', () => {
+  it('batches checked files into one Attach and closes once', async () => {
+    const onClose = vi.fn();
+    listDrivePageMock.mockResolvedValue(
+      page([
+        entry('a', 'alpha.txt'),
+        entry('c', 'charlie.txt'),
+        entry('b', 'Bravo', true),
+      ]),
+    );
+    render(<M365FilePickerModal isOpen onClose={onClose} />);
+    await screen.findByText('alpha.txt');
+    // Files get checkboxes; the folder gets an alignment spacer only.
+    expect(screen.getAllByRole('checkbox')).toHaveLength(2);
+
+    fireEvent.click(screen.getAllByRole('checkbox')[0]);
+    expect(screen.getByText('attachSelected')).toBeInTheDocument();
+
+    // With a selection active, row clicks grow it instead of instant-attaching.
+    fireEvent.click(screen.getByText('charlie.txt'));
+    expect(attachDriveItemMock).not.toHaveBeenCalled();
+    expect(onClose).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByText('attachSelected'));
+    expect(attachDriveItemMock).toHaveBeenCalledTimes(2);
+    expect(attachDriveItemMock).toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'alpha.txt' }),
+    );
+    expect(attachDriveItemMock).toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'charlie.txt' }),
+    );
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('still instantly attaches a row click when nothing is selected', async () => {
+    const onClose = vi.fn();
+    listDrivePageMock.mockResolvedValue(page([entry('a', 'alpha.txt')]));
+    render(<M365FilePickerModal isOpen onClose={onClose} />);
+    await screen.findByText('alpha.txt');
+    fireEvent.click(screen.getByText('alpha.txt'));
+    expect(attachDriveItemMock).toHaveBeenCalledTimes(1);
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  it('offers no checkboxes outside attach mode', async () => {
+    listDrivePageMock.mockResolvedValue(page([entry('a', 'alpha.txt')]));
+    render(<M365FilePickerModal isOpen onClose={vi.fn()} onPick={vi.fn()} />);
+    await screen.findByText('alpha.txt');
+    expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+  });
+});
+
+describe('M365FilePickerModal keyboard navigation', () => {
+  it('ArrowDown moves focus from the search box into and through the list', async () => {
+    listDrivePageMock.mockResolvedValue(
+      page([entry('a', 'alpha.txt'), entry('c', 'charlie.txt')]),
+    );
+    renderPicker();
+    await screen.findByText('alpha.txt');
+
+    const input = screen.getByPlaceholderText('searchPlaceholder');
+    input.focus();
+    fireEvent.keyDown(input, { key: 'ArrowDown' });
+    expect(screen.getByText('alpha.txt').closest('button')).toHaveFocus();
+
+    fireEvent.keyDown(screen.getByText('alpha.txt').closest('button')!, {
+      key: 'ArrowDown',
+    });
+    expect(screen.getByText('charlie.txt').closest('button')).toHaveFocus();
+
+    fireEvent.keyDown(screen.getByText('charlie.txt').closest('button')!, {
+      key: 'ArrowUp',
+    });
+    expect(screen.getByText('alpha.txt').closest('button')).toHaveFocus();
   });
 });

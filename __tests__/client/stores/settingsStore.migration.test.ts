@@ -920,3 +920,36 @@ describe('settingsStore migration (v53 → v54)', () => {
     expect(result.m365PlaybookChipsEnabled).toBe(true);
   });
 });
+
+/**
+ * v54 → v55: the remembered attach-picker location. Backfilled to null —
+ * open at the OneDrive root, exactly what these users already had.
+ */
+describe('settingsStore migration (v54 → v55)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills m365PickerLocation=null when migrating from v54', () => {
+    const result = migrate({ m365Connected: true }, 54) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365PickerLocation).toBeNull();
+    expect(result.m365Connected).toBe(true);
+  });
+
+  it('preserves an existing location on a current-version store', () => {
+    const location = {
+      tab: 'sharepoint',
+      crumbs: [{ label: 'HR', siteId: 's1' }],
+      sort: 'lastModified',
+      dir: 'desc',
+    };
+    const result = migrate({ m365PickerLocation: location }, 55) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365PickerLocation).toEqual(location);
+  });
+});
