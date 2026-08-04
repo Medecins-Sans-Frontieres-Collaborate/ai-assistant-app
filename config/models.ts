@@ -3,6 +3,8 @@
  * Defines default model, fallback chain, and model availability per environment
  */
 import { versionRank } from '@/lib/utils/app/modelSeries';
+import { isModelSelectableInRegion } from '@/lib/utils/shared/modelRegion';
+import { UserRegion } from '@/lib/utils/shared/region';
 
 import {
   OpenAIModel,
@@ -209,14 +211,67 @@ export function isModelDisabled(modelId: string): boolean {
 }
 
 /**
+ * Can this model silently substitute for another in the error-fallback
+ * chain? Excludes everything whose behavior or routing is not a plain
+ * hosted chat model: curated/custom agents (their tools and instructions
+ * are the point of choosing them), local-runtime models (a fallback must
+ * not ship a deliberately-local conversation to the cloud), custom-source
+ * (byom) models (they run under the user's own account, not the app's),
+ * and non-streaming reasoning models (a streamed turn can't degrade to
+ * them). `isAgent` alone does NOT exclude — it's a deployment-mechanism
+ * marker (standard models invoked via Foundry's agent service), not "the
+ * user picked a curated agent".
+ */
+export function isFallbackEligible(model: OpenAIModel): boolean {
+  return (
+    !model.isDisabled &&
+    !isModelDisabled(model.id) &&
+    model.stream !== false &&
+    !model.isCustomAgent &&
+    !model.isOrganizationAgent &&
+    !model.localRuntime &&
+    !model.id.startsWith('byom-') &&
+    !model.id.startsWith('org-') &&
+    !model.id.startsWith('foundry-') &&
+    !model.id.startsWith('custom-')
+  );
+}
+
+/**
  * Gets the error-fallback chain for the current environment. The (dynamic)
  * default model always leads: it's the ring's most vetted choice, so a
  * failing model falls back to it before the static cross-provider chain.
+ *
+ * With `availableModels` (the discovery-served list), the chain is fully
+ * DYNAMIC: the default resolves against what is actually deployed, static
+ * entries that aren't served are dropped, and the tail is extended with the
+ * remaining fallback-eligible served models (GPT series first, then other
+ * providers, newest first within each) — so the chain still resolves when
+ * the static list has rotted out of the ring (e.g. a deprecated deployment).
  */
-export function getFallbackChain(): string[] {
+export function getFallbackChain(
+  availableModels?: readonly OpenAIModel[],
+): string[] {
   const chain = getModelConfig().fallbackChain ?? DEFAULT_FALLBACK_CHAIN;
-  const defaultModel = getDefaultModel();
-  return [defaultModel, ...chain.filter((id) => id !== defaultModel)];
+  const defaultModel = getDefaultModel(
+    availableModels ? [...availableModels] : undefined,
+  );
+  const ordered = [defaultModel, ...chain.filter((id) => id !== defaultModel)];
+  if (!availableModels || availableModels.length === 0) return ordered;
+
+  const availableIds = new Set(availableModels.map((m) => m.id));
+  const served = ordered.filter((id) => availableIds.has(id));
+  const seen = new Set(served);
+  const extras = availableModels
+    .filter((m) => !seen.has(m.id) && isFallbackEligible(m))
+    .sort((a, b) => {
+      const aGpt = a.series === 'gpt' ? 1 : 0;
+      const bGpt = b.series === 'gpt' ? 1 : 0;
+      if (aGpt !== bGpt) return bGpt - aGpt;
+      return versionRank(b) - versionRank(a);
+    })
+    .map((m) => m.id);
+  return [...served, ...extras];
 }
 
 /**
@@ -237,13 +292,38 @@ export function isDeploymentNotFoundError(error: unknown): boolean {
   );
 }
 
+/** Dynamic-system context for fallback resolution (all optional). */
+export interface FallbackModelOptions {
+  /**
+   * The discovery-served model list. When present, fallback candidates are
+   * restricted to models actually served right now and the chain gains a
+   * dynamic tail (see getFallbackChain) — pass it wherever a live list
+   * exists so the fallback never targets an undeployed model.
+   */
+  availableModels?: readonly OpenAIModel[];
+  /**
+   * A default model to try FIRST — typically the user's configured default
+   * (or the ring default, which leads the chain anyway). Skipped when it's
+   * excluded (the model that just failed), blocked, unserved, or not
+   * fallback-eligible.
+   */
+  preferredDefaultId?: string | null;
+  /**
+   * The caller's region. Candidates not selectable there (EU users may only
+   * use EU-hosted models) are skipped — without this the chain could
+   * "rescue" a turn onto a model the request router would then reject.
+   */
+  userRegion?: UserRegion | null;
+}
+
 /**
  * Returns the next model to fall back to after a model-specific failure.
  *
- * Walks the environment's fallback chain and returns the first model that
- * exists, is enabled, and is not in `excludeModelIds` (the model that just
- * failed plus any fallbacks already attempted). Returns null when the chain
- * is exhausted — callers should surface the original error at that point.
+ * Walks the preferred default (if any) then the environment's fallback
+ * chain, and returns the first model that exists, is fallback-eligible, and
+ * is not in `excludeModelIds` (the model that just failed plus any
+ * fallbacks already attempted). Returns null when the chain is exhausted —
+ * callers should surface the original error at that point.
  */
 export function getFallbackModel(
   excludeModelIds: string[],
@@ -256,17 +336,37 @@ export function getFallbackModel(
    * models. Absent/empty preserves the previous behaviour exactly.
    */
   blockedModelIds: readonly string[] = [],
+  opts: FallbackModelOptions = {},
 ): OpenAIModel | null {
+  const { availableModels, preferredDefaultId, userRegion } = opts;
   const blocked = new Set(blockedModelIds.map((id) => id.toLowerCase()));
-  for (const modelId of getFallbackChain()) {
+  const byId = new Map(availableModels?.map((m) => [m.id, m]) ?? []);
+  const hasLiveList = !!availableModels && availableModels.length > 0;
+
+  const candidates = [
+    ...(preferredDefaultId ? [preferredDefaultId] : []),
+    ...getFallbackChain(availableModels),
+  ];
+
+  for (const modelId of candidates) {
     if (excludeModelIds.includes(modelId)) continue;
-    if (isModelDisabled(modelId)) continue;
     if (blocked.has(modelId.toLowerCase())) continue;
 
-    const model = OpenAIModels[modelId as OpenAIModelID];
-    if (model && !model.isDisabled) {
-      return model;
-    }
+    // Served list wins over the static catalog — a discovered model's live
+    // entry carries current flags (isDisabled, hostedIn) the catalog lacks.
+    // Chain candidates require presence in the live list when one exists;
+    // the PREFERRED default may still resolve from the static catalog — the
+    // user's persisted choice should rescue a turn even when the served
+    // list is momentarily degenerate, and the request path re-validates it.
+    const model =
+      byId.get(modelId) ??
+      (hasLiveList && modelId !== preferredDefaultId
+        ? undefined
+        : OpenAIModels[modelId as OpenAIModelID]);
+    if (!model) continue;
+    if (!isFallbackEligible(model)) continue;
+    if (userRegion && !isModelSelectableInRegion(model, userRegion)) continue;
+    return model;
   }
   return null;
 }
