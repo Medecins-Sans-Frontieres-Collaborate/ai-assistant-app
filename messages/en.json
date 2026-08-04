@@ -3828,6 +3828,7 @@
     "noM365Agents": "No Microsoft 365 agents yet.",
     "m365AgentBadge": "M365 files",
     "m365AgentSourceSummary": "{count} sources · {pending} not indexed",
+    "m365AgentEmptySourcesWarning": "{count, plural, one {# source} other {# sources}} indexed with no extractable text (scanned or image-only file?) — the agent cannot answer from {count, plural, one {it} other {them}}.",
     "m365AgentIndex": "Index",
     "m365AgentIndexHint": "Download, process and index the sources now, using your Microsoft 365 access. Can take a few minutes.",
     "m365AgentIndexSuccess": "Indexing finished — check per-source status.",
