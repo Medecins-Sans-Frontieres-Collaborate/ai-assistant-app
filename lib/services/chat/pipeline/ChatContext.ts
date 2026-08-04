@@ -274,6 +274,13 @@ export interface ChatContext {
    */
   m365AccessibleSourceIds?: string[];
 
+  /**
+   * Layer-2 trim for folder sources: child file item ids visible to the
+   * requesting user inside accessible folders. Folder chunks are retrieved
+   * per-item from this list, never by the folder-level verdict alone.
+   */
+  m365AccessibleFolderItemIds?: string[];
+
   /** Thread ID for continuing conversations */
   threadId?: string;
 
