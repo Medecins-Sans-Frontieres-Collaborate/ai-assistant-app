@@ -443,7 +443,9 @@ function filterActivitiesByYear(
   if (!activities || !Array.isArray(activities) || activities.length === 0)
     return;
 
-  const yearStr = String(year);
+  // Number() coercion: the year originates in a request body, and this
+  // string is compiled into a RegExp below (js/regex-injection).
+  const yearStr = String(Number(year));
   const yearCount = (docText.match(new RegExp(yearStr, 'g')) || []).length;
 
   // Only wipe activities when the target year is ENTIRELY ABSENT (an outdated /

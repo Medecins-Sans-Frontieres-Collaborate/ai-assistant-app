@@ -616,7 +616,7 @@ function r19(
   const activities = safe(rec['Key Terms/Activities']).trim();
   if (activities) return [];
 
-  const yearStr = String(year);
+  const yearStr = String(Number(year));
   const source = safe(rec['Source File']);
   let reason = `No ${yearStr} activities/key terms were extracted for this project.`;
 
