@@ -45,4 +45,16 @@ export interface Citation {
   sourceName?: string;
   /** Publisher site URL — drives the favicon/domain display when set. */
   sourceUrl?: string;
+  /**
+   * Position within the source document ("p. 12", "pp. 12–13") for
+   * document-backed citations (M365 agents). The card list dedupes chunks
+   * of the same file into one card and merges their locators.
+   */
+  locator?: string;
+  /**
+   * Verbatim supporting passage from the source (extractive — chosen by
+   * the search ranker, never model-generated). Rendered in the citation
+   * tooltip/card as the footnote evidence.
+   */
+  quote?: string;
 }

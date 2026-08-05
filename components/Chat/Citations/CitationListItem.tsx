@@ -68,6 +68,11 @@ export const CitationListItem: React.FC<CitationListItemProps> = ({
 
       <span className="flex-grow min-w-0 text-sm text-gray-800 dark:text-white truncate mx-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
         {citation.title}
+        {citation.locator && (
+          <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
+            {citation.locator}
+          </span>
+        )}
       </span>
 
       <div className="flex items-center flex-shrink-0 gap-3 text-xs text-gray-500 dark:text-gray-400">

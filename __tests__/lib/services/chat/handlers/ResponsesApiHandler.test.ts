@@ -33,9 +33,31 @@ describe('ResponsesApiHandler', () => {
   });
 
   describe('prepareInput', () => {
-    it('drops system messages (they travel via instructions)', () => {
+    it('keeps enricher-injected system messages as ordered input items', () => {
+      // RAG/M365 enrichers inject retrieved knowledge-base content as
+      // system-role messages; dropping them here severs agents from their
+      // sources while citations still render.
       const messages: Message[] = [
-        { role: 'system', content: 'be brief', messageType: MessageType.TEXT },
+        {
+          role: 'system',
+          content: 'Available sources:\n\nSource 1:\nContent: chunk text',
+          messageType: MessageType.TEXT,
+        },
+        { role: 'user', content: 'hi', messageType: MessageType.TEXT },
+      ];
+
+      expect(handler.prepareInput(messages)).toEqual([
+        {
+          role: 'system',
+          content: 'Available sources:\n\nSource 1:\nContent: chunk text',
+        },
+        { role: 'user', content: 'hi' },
+      ]);
+    });
+
+    it('drops empty system messages', () => {
+      const messages: Message[] = [
+        { role: 'system', content: '', messageType: MessageType.TEXT },
         { role: 'user', content: 'hi', messageType: MessageType.TEXT },
       ];
 

@@ -181,10 +181,18 @@ export class AzureOpenAIHandler extends ModelHandler {
     const sanitizedMessages = this.sanitizeMessages(messages);
     const effectiveSystemPrompt = systemPrompt || DEFAULT_SYSTEM_PROMPT;
 
-    // Reasoning/omni models: merge system prompt into first user message
+    // Reasoning/omni models: merge system prompt into first user message.
+    // In-array system messages (enricher-injected RAG/file context) become
+    // user messages in place — these models shouldn't receive the system
+    // role at all, and dropping the content would sever agents from their
+    // sources.
     if (this.shouldAvoidSystemPrompt(modelConfig)) {
+      const withoutSystemRoles = sanitizedMessages.map(
+        (msg): Message =>
+          msg.role === 'system' ? { ...msg, role: 'user' } : msg,
+      );
       return this.mergeSystemPromptIntoMessages(
-        sanitizedMessages,
+        withoutSystemRoles,
         effectiveSystemPrompt,
       );
     }

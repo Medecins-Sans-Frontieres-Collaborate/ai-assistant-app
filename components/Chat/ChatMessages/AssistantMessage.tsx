@@ -420,6 +420,16 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
       streamingToolCalls,
     ]);
 
+    // Citation numbers the message text actually cites — drives the source
+    // dropdown's per-citation evidence rows (quote paired with its pages).
+    const citedNumbers = useMemo(() => {
+      const numbers = new Set<number>();
+      for (const match of processedContent.matchAll(/\[(\d{1,3})\]/g)) {
+        numbers.add(Number(match[1]));
+      }
+      return [...numbers];
+    }, [processedContent]);
+
     // Generate contextual filename for audio downloads (1-indexed for human readability)
     const audioDownloadFilename = useMemo(() => {
       return generateAudioFilename(
@@ -826,7 +836,9 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
               )}
 
             {/* Citations - shown after content but before action buttons */}
-            {citations.length > 0 && <CitationList citations={citations} />}
+            {citations.length > 0 && (
+              <CitationList citations={citations} citedNumbers={citedNumbers} />
+            )}
 
             {/* Action buttons at the bottom of the message - only show when not streaming */}
             {!messageIsStreaming && (

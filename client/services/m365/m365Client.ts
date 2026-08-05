@@ -67,6 +67,8 @@ export interface ListDriveOptions {
   q?: string;
   sort?: M365DriveSort; // children view only; ignored by other views
   dir?: M365SortDir;
+  /** Search view only: extension filter for the guaranteed name matches. */
+  types?: readonly string[];
   pageToken?: string; // opaque M365DrivePage.nextToken echo
   signal?: AbortSignal; // cancels the underlying fetch
 }
@@ -81,6 +83,7 @@ export async function listDrivePage(
   if (options.q) params.set('q', options.q);
   if (options.sort) params.set('sort', options.sort);
   if (options.dir) params.set('dir', options.dir);
+  if (options.types?.length) params.set('types', options.types.join(','));
   if (options.pageToken) params.set('pageToken', options.pageToken);
   return requestJson<M365DrivePage>(
     `/api/m365/drive?${params.toString()}`,
@@ -387,6 +390,27 @@ export async function shareDriveItem(
       ...(emails?.length && { emails }),
     }),
   });
+}
+
+export interface M365PersonSuggestion {
+  displayName: string;
+  email: string;
+}
+
+/**
+ * People autocomplete for recipient fields — relevance-ranked contacts
+ * plus a directory supplement, resolved server-side with the user's own
+ * Graph token. Callers should treat failures as "no suggestions".
+ */
+export async function searchPeople(
+  query: string,
+  signal?: AbortSignal,
+): Promise<M365PersonSuggestion[]> {
+  const result = await requestJson<{ people: M365PersonSuggestion[] }>(
+    `/api/m365/people/search?q=${encodeURIComponent(query)}`,
+    { signal },
+  );
+  return result.people;
 }
 
 export async function saveToOneDrive(

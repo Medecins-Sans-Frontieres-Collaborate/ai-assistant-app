@@ -1,4 +1,4 @@
-import { IconRefresh, IconX } from '@tabler/icons-react';
+import { IconArrowsExchange, IconRefresh, IconX } from '@tabler/icons-react';
 import React from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -12,11 +12,20 @@ interface ChatErrorProps {
   canRegenerate?: boolean;
   /** True when a retry would succeed where regenerate wouldn't. */
   canRetry?: boolean;
+  /** Re-sends the failed turn on the next fallback-chain model. */
+  onRetryFallback?: () => void;
+  canRetryFallback?: boolean;
+  /** Display name of the fallback model the retry would use. */
+  fallbackModelName?: string | null;
 }
 
 /**
- * Renders error messages with dismiss + an action button. Prefers
- * `onRetry` when there's no assistant message to regenerate.
+ * Renders error messages with dismiss + action buttons. Prefers `onRetry`
+ * when there's no assistant message to regenerate; additionally offers a
+ * "try with <fallback model>" action when the failed turn's model has a
+ * fallback available — the manual counterpart of the store's automatic
+ * fallback, for failures it deliberately never retries silently (e.g. a
+ * stream that died mid-response).
  */
 export const ChatError: React.FC<ChatErrorProps> = ({
   error,
@@ -25,6 +34,9 @@ export const ChatError: React.FC<ChatErrorProps> = ({
   onRetry,
   canRegenerate = false,
   canRetry = false,
+  onRetryFallback,
+  canRetryFallback = false,
+  fallbackModelName,
 }) => {
   const t = useTranslations();
 
@@ -52,6 +64,8 @@ export const ChatError: React.FC<ChatErrorProps> = ({
     : showRegenerate
       ? onRegenerate
       : null;
+  const showRetryFallback =
+    canRetryFallback && onRetryFallback && !!fallbackModelName;
 
   return (
     <div className="absolute bottom-[160px] left-0 right-0 px-4 py-2">
@@ -68,6 +82,20 @@ export const ChatError: React.FC<ChatErrorProps> = ({
             >
               <IconRefresh size={16} />
               <span>{actionLabel}</span>
+            </button>
+          )}
+          {showRetryFallback && (
+            <button
+              onClick={onRetryFallback}
+              className="flex items-center gap-1.5 px-3 py-1 text-sm font-medium bg-red-200 dark:bg-red-800 rounded hover:bg-red-300 dark:hover:bg-red-700 transition-colors"
+              aria-label={t('chat.retryWithModel', {
+                model: fallbackModelName,
+              })}
+            >
+              <IconArrowsExchange size={16} />
+              <span>
+                {t('chat.retryWithModel', { model: fallbackModelName })}
+              </span>
             </button>
           )}
           <button

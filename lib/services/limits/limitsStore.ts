@@ -20,8 +20,7 @@
  * CAS discipline (why `AzureBlobStorage.upload()` must never be used) lives
  * in lib/services/agentAccess/blobCas.ts.
  */
-import { Session } from 'next-auth';
-
+import { createAdminBlobStorage } from '@/lib/services/adminBlobStorage';
 import {
   AgentAccessConflictError,
   downloadBlob,
@@ -36,40 +35,20 @@ import {
   historyBlobPath,
 } from '@/lib/services/limits/types';
 
-import { AzureBlobStorage, BlobStorage } from '@/lib/utils/server/blob/blob';
+import { BlobStorage } from '@/lib/utils/server/blob/blob';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
-
-import { env } from '@/config/environment';
 
 export { AgentAccessConflictError as LimitsConflictError };
 
 /**
- * Counters and policy always live in the PRIMARY region's storage account.
- * Account + container are passed explicitly so `getEnvVariable`'s per-user EU
- * mapping never applies — otherwise counters would shard across the US and EU
- * accounts by caller region and an org-wide total would be unreadable.
- *
- * Residency note: a usage document holds an Entra oid GUID and integers. No
- * mail, no content. Structurally identical to what agent-access rules already
- * do.
+ * Counters and policy live in the centralized ADMIN storage (EU account,
+ * dedicated lifecycle-free container) shared by every admin/system store —
+ * one location for all users, so an org-wide total stays readable and the
+ * per-user usage documents (Entra oid + integers) stay EU-resident. See
+ * lib/services/adminBlobStorage.ts for the full rationale.
  */
-const SYSTEM_USER: Session['user'] = {
-  id: 'system-usage-limits',
-  displayName: 'usage-limits',
-};
-
 export function createLimitsBlobStorage(): BlobStorage {
-  const accountName = env.AZURE_BLOB_STORAGE_NAME;
-  // Same fallback convention as blobStorageFactory: environments without a
-  // dedicated container use the image container for all app storage.
-  const containerName =
-    env.AZURE_BLOB_STORAGE_CONTAINER ?? env.AZURE_BLOB_STORAGE_IMAGE_CONTAINER;
-  if (!accountName || !containerName) {
-    throw new Error(
-      'Usage limits require AZURE_BLOB_STORAGE_NAME and a container (AZURE_BLOB_STORAGE_CONTAINER or AZURE_BLOB_STORAGE_IMAGE_CONTAINER)',
-    );
-  }
-  return new AzureBlobStorage(accountName, containerName, SYSTEM_USER);
+  return createAdminBlobStorage();
 }
 
 export interface PolicyReadResult {

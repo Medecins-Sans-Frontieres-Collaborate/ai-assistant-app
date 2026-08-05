@@ -284,49 +284,96 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
       <h4 className="mb-3 text-sm font-semibold text-black dark:text-white">
         {t(existing ? 'editM365AgentTitle' : 'newM365AgentTitle')}
       </h4>
-      <div className="space-y-3">
-        <input
-          type="text"
-          value={name}
-          maxLength={100}
-          onChange={(e) => setName(e.target.value)}
-          placeholder={t('agentNamePlaceholder')}
-          className={inputClass}
-        />
-        <input
-          type="text"
-          value={description}
-          maxLength={300}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder={t('agentDescriptionPlaceholder')}
-          className={inputClass}
-        />
-        <textarea
-          value={systemPrompt}
-          maxLength={10000}
-          rows={4}
-          onChange={(e) => setSystemPrompt(e.target.value)}
-          placeholder={t('m365AgentSystemPromptPlaceholder')}
-          className={inputClass}
-        />
-        <select
-          value={chatModelId}
-          onChange={(e) => setChatModelId(e.target.value)}
-          className={inputClass}
-          aria-label={t('agentModelLabel')}
-        >
-          <option value="">{t('m365AgentDefaultModel')}</option>
-          {selectableModels.map((model) => (
-            <option key={model.id} value={model.id}>
-              {model.name}
-            </option>
-          ))}
-        </select>
+      <div className="space-y-4">
+        <div>
+          <label
+            htmlFor="m365-agent-name"
+            className="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300"
+          >
+            {t('m365AgentNameLabel')}
+          </label>
+          <input
+            id="m365-agent-name"
+            type="text"
+            value={name}
+            maxLength={100}
+            onChange={(e) => setName(e.target.value)}
+            placeholder={t('m365AgentNamePlaceholder')}
+            className={inputClass}
+          />
+          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+            {t('m365AgentNameHelp')}
+          </p>
+        </div>
+        <div>
+          <label
+            htmlFor="m365-agent-description"
+            className="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300"
+          >
+            {t('m365AgentDescriptionLabel')}
+          </label>
+          <input
+            id="m365-agent-description"
+            type="text"
+            value={description}
+            maxLength={300}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder={t('m365AgentDescriptionPlaceholder')}
+            className={inputClass}
+          />
+          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+            {t('m365AgentDescriptionHelp')}
+          </p>
+        </div>
+        <div>
+          <label
+            htmlFor="m365-agent-system-prompt"
+            className="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300"
+          >
+            {t('m365AgentSystemPromptLabel')}
+          </label>
+          <textarea
+            id="m365-agent-system-prompt"
+            value={systemPrompt}
+            maxLength={10000}
+            rows={4}
+            onChange={(e) => setSystemPrompt(e.target.value)}
+            placeholder={t('m365AgentSystemPromptPlaceholder')}
+            className={inputClass}
+          />
+          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+            {t('m365AgentSystemPromptHelp')}
+          </p>
+        </div>
+        <div>
+          <label
+            htmlFor="m365-agent-model"
+            className="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300"
+          >
+            {t('m365AgentModelLabel')}
+          </label>
+          <select
+            id="m365-agent-model"
+            value={chatModelId}
+            onChange={(e) => setChatModelId(e.target.value)}
+            className={inputClass}
+          >
+            <option value="">{t('m365AgentDefaultModel')}</option>
+            {selectableModels.map((model) => (
+              <option key={model.id} value={model.id}>
+                {model.name}
+              </option>
+            ))}
+          </select>
+          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+            {t('m365AgentModelHelp')}
+          </p>
+        </div>
 
         {/* Sources */}
         <div>
           <div className="mb-1 flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+            <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
               {t('m365AgentSources')} ({sources.length}/{maxSources})
             </span>
             <button
@@ -338,6 +385,9 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
               <IconPlus size={14} /> {t('m365AgentAddSource')}
             </button>
           </div>
+          <p className="mb-2 text-xs text-gray-500 dark:text-gray-400">
+            {t('m365AgentSourcesHelp')}
+          </p>
           {sources.length === 0 ? (
             <p className="text-xs text-gray-500 dark:text-gray-400">
               {t('m365AgentNoSources', { max: maxSources })}
@@ -514,10 +564,34 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
         const body = await response.json().catch(() => null);
         throw new Error(body?.error || `Indexing failed (${response.status})`);
       }
-      return response.json();
+      return response.json() as Promise<{
+        data?: {
+          outcomes?: {
+            sourceId: string;
+            status: string;
+            indexedChunks: number;
+            error?: string;
+          }[];
+        };
+      }>;
     },
-    onSuccess: () => {
-      toast.success(t('m365AgentIndexSuccess'));
+    onSuccess: (result) => {
+      // The route returns 200 for the RUN completing — individual sources
+      // can still have failed. A success toast on a failed run is a lie
+      // the admin acts on; report per-source outcomes honestly.
+      const outcomes = result.data?.outcomes ?? [];
+      const failed = outcomes.filter((o) => o.status !== 'indexed');
+      if (failed.length > 0) {
+        toast.error(
+          t('m365AgentIndexPartialFailure', {
+            failed: failed.length,
+            count: outcomes.length,
+            error: failed[0].error ?? '',
+          }),
+        );
+      } else {
+        toast.success(t('m365AgentIndexSuccess'));
+      }
       invalidate();
     },
     onError: (error: Error) => {
@@ -600,9 +674,27 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
           {agents.map((entry) => {
             const stored = rulesByKey.get(entry.canonicalKey) ?? null;
             const isRestricted = stored?.rule.access.type === 'restricted';
-            const pendingSources = entry.agent.sources.filter(
+            const sources = entry.agent.sources;
+            // Content-bearing = indexed with chunks (undefined = legacy
+            // record from before chunk counts, trust the status).
+            const contentSources = sources.filter(
+              (s) => s.status === 'indexed' && (s.indexedChunks ?? 1) > 0,
+            ).length;
+            const unindexedSources = sources.filter(
               (s) => s.status !== 'indexed',
             ).length;
+            // "Indexed" with zero chunks means extraction found no text
+            // (e.g. a scanned PDF without a text layer) — a silently empty
+            // agent unless surfaced here.
+            const emptySources = sources.filter(
+              (s) => s.status === 'indexed' && (s.indexedChunks ?? 0) === 0,
+            ).length;
+            const firstSourceError = sources.find((s) => s.error)?.error;
+            const lastIndexedAt = sources
+              .map((s) => s.lastIndexedAt)
+              .filter((d): d is string => !!d)
+              .sort()
+              .at(-1);
             return (
               <li
                 key={entry.canonicalKey}
@@ -618,12 +710,47 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                         {t('m365AgentBadge')}
                       </span>
                     </div>
-                    <p className="truncate text-xs text-gray-500 dark:text-gray-400">
-                      {t('m365AgentSourceSummary', {
-                        count: entry.agent.sources.length,
-                        pending: pendingSources,
-                      })}
-                    </p>
+                    {contentSources === 0 ? (
+                      <p className="text-xs font-medium text-red-700 dark:text-red-400">
+                        {t('m365AgentStatusNotIndexed')}
+                      </p>
+                    ) : contentSources < sources.length ? (
+                      <p className="text-xs font-medium text-amber-700 dark:text-amber-400">
+                        {t('m365AgentStatusPartial', {
+                          indexed: contentSources,
+                          count: sources.length,
+                        })}
+                      </p>
+                    ) : (
+                      <p className="truncate text-xs text-gray-500 dark:text-gray-400">
+                        {t('m365AgentSourceSummary', {
+                          count: sources.length,
+                          pending: unindexedSources,
+                        })}
+                      </p>
+                    )}
+                    {lastIndexedAt && (
+                      <p className="text-xs text-gray-400 dark:text-gray-500">
+                        {t('m365AgentLastIndexed', {
+                          date: new Date(lastIndexedAt).toLocaleString(),
+                        })}
+                      </p>
+                    )}
+                    {firstSourceError && (
+                      <p
+                        className="truncate text-xs text-red-600 dark:text-red-400"
+                        title={firstSourceError}
+                      >
+                        {firstSourceError}
+                      </p>
+                    )}
+                    {emptySources > 0 && (
+                      <p className="text-xs text-amber-700 dark:text-amber-400">
+                        {t('m365AgentEmptySourcesWarning', {
+                          count: emptySources,
+                        })}
+                      </p>
+                    )}
                   </div>
                   <span
                     className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${

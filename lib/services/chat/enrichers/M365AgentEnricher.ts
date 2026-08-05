@@ -107,7 +107,12 @@ export class M365AgentEnricher extends BasePipelineStage {
     try {
       const query = await this.reformulateQuery(context.messages);
       const searchDocs = query
-        ? await searchM365Agent(query, agent, accessibleSourceIds)
+        ? await searchM365Agent(
+            query,
+            agent,
+            accessibleSourceIds,
+            context.m365AccessibleFolderItemIds ?? [],
+          )
         : [];
 
       if (searchDocs.length > 0) {
@@ -117,14 +122,31 @@ export class M365AgentEnricher extends BasePipelineStage {
             const date = doc.date
               ? new Date(doc.date).toISOString().split('T')[0]
               : '';
-            return `Source ${sourceNumber}:\nTitle: ${doc.title}\nDate: ${date}\nURL: ${doc.url}\nContent: ${doc.chunk}`;
+            const location = doc.locator ? `\nLocation: ${doc.locator}` : '';
+            return `Source ${sourceNumber}:\nTitle: ${doc.title}\nDate: ${date}${location}\nURL: ${doc.url}\nContent: ${doc.chunk}`;
           })
           .join('\n\n');
 
         enrichedMessages = [
           {
             role: 'system',
-            content: `You have access to the following knowledge base sources. When citing information, use source numbers in SEPARATE brackets like [1][2][3] - never group them like [1,2,3].\n\nAvailable sources:\n\n${contextString}`,
+            // Trust posture (Wikipedia model): the prose is the model's own
+            // words; the EVIDENCE — verbatim quote, source, page — travels
+            // on each [n] citation, which the UI renders as a footnote
+            // popover. So the text stays readable while every claim stays
+            // checkable against the original document.
+            content:
+              'You have access to the following knowledge base sources. Follow these rules:\n' +
+              '- Write naturally in your own words. Cite a source number in SEPARATE brackets after each claim it supports, like [1][2] - never group them like [1,2]. Readers see the supporting passage when they hover a citation, so cite precisely.\n' +
+              '- Quote the source verbatim inline only when the exact wording itself matters (a defined term, a specific entitlement or number). Anything inside double quotation marks must appear word-for-word in the sources.\n' +
+              "- When a source has a Location (e.g. a page number), you may point the reader there for the full context (e.g. 'see p. 12 [1]') — especially when summarizing a longer section.\n" +
+              '- If the sources do not contain the answer, say so — do not fill gaps from general knowledge without flagging it.\n' +
+              '- AFTER your complete answer, output a citation-quotes block in EXACTLY this format (it is machine-parsed and never shown to the reader):\n' +
+              '<<<CITATION_QUOTES>>>\n' +
+              '{"1": "verbatim passage from source 1 supporting the claim(s) you cited it for", "3": "..."}\n' +
+              '<<<END_CITATION_QUOTES>>>\n' +
+              "  Include one entry for EVERY source number you cited. Each passage must be copied character-for-character from that source's Content (quotes are rejected if they do not match exactly), must be the passage most relevant to YOUR claims, and should be under 60 words. Output nothing after the block.\n\n" +
+              `Available sources:\n\n${contextString}`,
             messageType: MessageType.TEXT,
           },
           ...enrichedMessages,
@@ -136,11 +158,20 @@ export class M365AgentEnricher extends BasePipelineStage {
         date: doc.date,
         url: doc.url,
         number: index + 1,
+        ...(doc.locator ? { locator: doc.locator } : {}),
+        ...(doc.quote ? { quote: doc.quote } : {}),
       }));
 
       const conversationContext = buildConversationContextSections(
         context.conversationSummary,
         context.memories,
+      );
+
+      // Verification corpus for the model's claim quotes: chunk text per
+      // citation number. StandardChatHandler ships it in a terminal
+      // metadata block; the client verifies and DISCARDS it (transient).
+      const citationQuoteSources = Object.fromEntries(
+        searchDocs.map((doc, index) => [String(index + 1), doc.chunk]),
       );
 
       return {
@@ -155,6 +186,7 @@ export class M365AgentEnricher extends BasePipelineStage {
           metadata: {
             ...context.processedContent?.metadata,
             citations,
+            citationQuoteSources,
             m365AgentConfig: {
               agentId: agent.id,
               agentName: agent.name,

@@ -947,6 +947,7 @@ describe('ToolRouterService', () => {
       it('maps a word-count classification to an absolute target', async () => {
         mockClassification({
           isLengthReductionRequest: true,
+          targetIsAttachedDocument: true,
           targetValue: 6000,
           targetUnit: 'words',
         });
@@ -976,6 +977,7 @@ describe('ToolRouterService', () => {
       it('maps pages to approximate words', async () => {
         mockClassification({
           isLengthReductionRequest: true,
+          targetIsAttachedDocument: true,
           targetValue: 5,
           targetUnit: 'pages',
         });
@@ -990,6 +992,7 @@ describe('ToolRouterService', () => {
       it('maps percent_to_keep to a ratio target', async () => {
         mockClassification({
           isLengthReductionRequest: true,
+          targetIsAttachedDocument: true,
           targetValue: 50,
           targetUnit: 'percent_to_keep',
         });
@@ -1005,6 +1008,7 @@ describe('ToolRouterService', () => {
           'not a reduction request',
           {
             isLengthReductionRequest: false,
+            targetIsAttachedDocument: false,
             targetValue: 0,
             targetUnit: 'none',
           },
@@ -1013,6 +1017,7 @@ describe('ToolRouterService', () => {
           'zero target',
           {
             isLengthReductionRequest: true,
+            targetIsAttachedDocument: true,
             targetValue: 0,
             targetUnit: 'words',
           },
@@ -1021,8 +1026,21 @@ describe('ToolRouterService', () => {
           'percent >= 100',
           {
             isLengthReductionRequest: true,
+            targetIsAttachedDocument: true,
             targetValue: 120,
             targetUnit: 'percent_to_keep',
+          },
+        ],
+        [
+          // A trimmable file sits earlier in the conversation, but the user
+          // is shortening text they pasted into the chat — the file pipeline
+          // (and its code-interpreter round-trip) must not hijack the turn.
+          'a length target aimed at chat text, not the attached document',
+          {
+            isLengthReductionRequest: true,
+            targetIsAttachedDocument: false,
+            targetValue: 200,
+            targetUnit: 'words',
           },
         ],
       ])('returns null for %s', async (_label, payload) => {

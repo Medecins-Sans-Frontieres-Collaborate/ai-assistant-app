@@ -1,5 +1,4 @@
-import { Session } from 'next-auth';
-
+import { createAdminBlobStorage } from '@/lib/services/adminBlobStorage';
 import {
   AgentAccessConflictError,
   downloadBlob,
@@ -72,10 +71,8 @@ import {
 } from '@/lib/services/agentAccess/types';
 
 import { withAzureRetry } from '@/lib/utils/server/azure/retry';
-import { AzureBlobStorage, BlobStorage } from '@/lib/utils/server/blob/blob';
+import { BlobStorage } from '@/lib/utils/server/blob/blob';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
-
-import { env } from '@/config/environment';
 
 /**
  * Blob persistence for agent access rules, config, and history.
@@ -206,28 +203,13 @@ export interface MapDatasetReadResult {
 }
 
 /**
- * Rules always live in the PRIMARY region's storage account (spec: EU
- * replicas read cross-region). Account + container are passed explicitly so
- * `getEnvVariable`'s per-user EU mapping never applies; this placeholder user
- * is therefore never consulted for region routing.
+ * Rules live in the centralized ADMIN storage (EU account, dedicated
+ * lifecycle-free container) shared by every admin/system store — see
+ * lib/services/adminBlobStorage.ts for the residency/centralization/
+ * lifecycle rationale. The name is kept for its many import sites.
  */
-const SYSTEM_USER: Session['user'] = {
-  id: 'system-agent-access',
-  displayName: 'agent-access-control',
-};
-
 export function createAgentAccessBlobStorage(): BlobStorage {
-  const accountName = env.AZURE_BLOB_STORAGE_NAME;
-  // Same fallback convention as blobStorageFactory: environments without a
-  // dedicated container use the image container for all app storage.
-  const containerName =
-    env.AZURE_BLOB_STORAGE_CONTAINER ?? env.AZURE_BLOB_STORAGE_IMAGE_CONTAINER;
-  if (!accountName || !containerName) {
-    throw new Error(
-      'Agent access control requires AZURE_BLOB_STORAGE_NAME and a container (AZURE_BLOB_STORAGE_CONTAINER or AZURE_BLOB_STORAGE_IMAGE_CONTAINER)',
-    );
-  }
-  return new AzureBlobStorage(accountName, containerName, SYSTEM_USER);
+  return createAdminBlobStorage();
 }
 
 /** Reads and parses the delegation config. Returns null when none exists. */

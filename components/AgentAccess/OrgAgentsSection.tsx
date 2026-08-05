@@ -305,7 +305,8 @@ const OrgAgentEditor: FC<OrgAgentEditorProps> = ({
   const inputClass =
     'w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm text-gray-900 focus:border-blue-600 focus:outline-none dark:border-gray-700 dark:bg-surface-dark-elevated dark:text-gray-100';
   const labelClass =
-    'text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400';
+    'mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400';
+  const fieldHelpClass = 'mt-1 text-xs text-gray-500 dark:text-gray-400';
 
   return (
     <div className="mt-2 rounded-lg border border-gray-200 p-4 dark:border-gray-700">
@@ -330,66 +331,101 @@ const OrgAgentEditor: FC<OrgAgentEditorProps> = ({
             </select>
           </div>
         )}
-        <input
-          type="text"
-          value={name}
-          maxLength={100}
-          onChange={(e) => setName(e.target.value)}
-          placeholder={t('agentNamePlaceholder')}
-          className={inputClass}
-        />
-        <input
-          type="text"
-          value={description}
-          maxLength={300}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder={t('agentDescriptionPlaceholder')}
-          className={inputClass}
-        />
-        <div className="flex gap-2">
+        <div>
+          <label htmlFor="org-agent-name" className={labelClass}>
+            {t('agentNameLabel')}
+          </label>
           <input
+            id="org-agent-name"
             type="text"
-            value={icon}
-            maxLength={64}
-            onChange={(e) => setIcon(e.target.value)}
-            placeholder={t('orgAgentIconPlaceholder')}
-            className={inputClass}
-            aria-label={t('orgAgentIconPlaceholder')}
-          />
-          <input
-            type="color"
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
-            className="h-9 w-14 shrink-0 cursor-pointer rounded-lg border border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-surface-dark-elevated"
-            aria-label={t('orgAgentColorLabel')}
-          />
-        </div>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={category}
+            value={name}
             maxLength={100}
-            onChange={(e) => setCategory(e.target.value)}
-            placeholder={t('orgAgentCategoryPlaceholder')}
+            onChange={(e) => setName(e.target.value)}
+            placeholder={t('agentNamePlaceholder')}
             className={inputClass}
           />
-          <input
-            type="text"
-            value={maintainedBy}
-            maxLength={120}
-            onChange={(e) => setMaintainedBy(e.target.value)}
-            placeholder={t('orgAgentMaintainedByPlaceholder')}
-            className={inputClass}
-          />
+          <p className={fieldHelpClass}>{t('orgAgentNameHelp')}</p>
         </div>
-        <textarea
-          value={systemPrompt}
-          maxLength={20000}
-          rows={4}
-          onChange={(e) => setSystemPrompt(e.target.value)}
-          placeholder={t('orgAgentSystemPromptPlaceholder')}
-          className={inputClass}
-        />
+        <div>
+          <label htmlFor="org-agent-description" className={labelClass}>
+            {t('agentDescriptionLabel')}
+          </label>
+          <input
+            id="org-agent-description"
+            type="text"
+            value={description}
+            maxLength={300}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder={t('agentDescriptionPlaceholder')}
+            className={inputClass}
+          />
+          <p className={fieldHelpClass}>{t('orgAgentDescriptionHelp')}</p>
+        </div>
+        <div>
+          <label htmlFor="org-agent-icon" className={labelClass}>
+            {t('orgAgentAppearanceLabel')}
+          </label>
+          <div className="flex gap-2">
+            <input
+              id="org-agent-icon"
+              type="text"
+              value={icon}
+              maxLength={64}
+              onChange={(e) => setIcon(e.target.value)}
+              placeholder={t('orgAgentIconPlaceholder')}
+              className={inputClass}
+            />
+            <input
+              type="color"
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+              className="h-9 w-14 shrink-0 cursor-pointer rounded-lg border border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-surface-dark-elevated"
+              aria-label={t('orgAgentColorLabel')}
+            />
+          </div>
+          <p className={fieldHelpClass}>{t('orgAgentAppearanceHelp')}</p>
+        </div>
+        <div>
+          <label htmlFor="org-agent-category" className={labelClass}>
+            {t('orgAgentMetadataLabel')}
+          </label>
+          <div className="flex gap-2">
+            <input
+              id="org-agent-category"
+              type="text"
+              value={category}
+              maxLength={100}
+              onChange={(e) => setCategory(e.target.value)}
+              placeholder={t('orgAgentCategoryPlaceholder')}
+              className={inputClass}
+            />
+            <input
+              type="text"
+              value={maintainedBy}
+              maxLength={120}
+              onChange={(e) => setMaintainedBy(e.target.value)}
+              placeholder={t('orgAgentMaintainedByPlaceholder')}
+              className={inputClass}
+              aria-label={t('orgAgentMaintainedByPlaceholder')}
+            />
+          </div>
+          <p className={fieldHelpClass}>{t('orgAgentMetadataHelp')}</p>
+        </div>
+        <div>
+          <label htmlFor="org-agent-system-prompt" className={labelClass}>
+            {t('agentSystemPromptLabel')}
+          </label>
+          <textarea
+            id="org-agent-system-prompt"
+            value={systemPrompt}
+            maxLength={20000}
+            rows={4}
+            onChange={(e) => setSystemPrompt(e.target.value)}
+            placeholder={t('orgAgentSystemPromptPlaceholder')}
+            className={inputClass}
+          />
+          <p className={fieldHelpClass}>{t('orgAgentSystemPromptHelp')}</p>
+        </div>
 
         {/* Retrieval config — the index is picked from the endpoint's real
             list, so a nonexistent name cannot be submitted. */}
@@ -416,44 +452,58 @@ const OrgAgentEditor: FC<OrgAgentEditorProps> = ({
               </option>
             ))}
           </select>
+          <p className={fieldHelpClass}>{t('orgAgentIndexHelp')}</p>
         </div>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={semanticConfig}
-            maxLength={200}
-            onChange={(e) => setSemanticConfig(e.target.value)}
-            placeholder={t('orgAgentSemanticPlaceholder')}
+        <div>
+          <label htmlFor="org-agent-semantic" className={labelClass}>
+            {t('orgAgentRetrievalLabel')}
+          </label>
+          <div className="flex gap-2">
+            <input
+              id="org-agent-semantic"
+              type="text"
+              value={semanticConfig}
+              maxLength={200}
+              onChange={(e) => setSemanticConfig(e.target.value)}
+              placeholder={t('orgAgentSemanticPlaceholder')}
+              className={inputClass}
+            />
+            <input
+              type="number"
+              min={1}
+              max={20}
+              value={topK}
+              onChange={(e) => {
+                const parsed = Number.parseInt(e.target.value, 10);
+                if (Number.isFinite(parsed)) {
+                  setTopK(Math.min(20, Math.max(1, parsed)));
+                }
+              }}
+              className="w-24 shrink-0 rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm text-gray-900 focus:border-blue-600 focus:outline-none dark:border-gray-700 dark:bg-surface-dark-elevated dark:text-gray-100"
+              aria-label={t('orgAgentTopKLabel')}
+            />
+          </div>
+          <p className={fieldHelpClass}>{t('orgAgentRetrievalHelp')}</p>
+        </div>
+        <div>
+          <label htmlFor="org-agent-model" className={labelClass}>
+            {t('agentModelLabel')}
+          </label>
+          <select
+            id="org-agent-model"
+            value={baseModelId}
+            onChange={(e) => setBaseModelId(e.target.value)}
             className={inputClass}
-          />
-          <input
-            type="number"
-            min={1}
-            max={20}
-            value={topK}
-            onChange={(e) => {
-              const parsed = Number.parseInt(e.target.value, 10);
-              if (Number.isFinite(parsed)) {
-                setTopK(Math.min(20, Math.max(1, parsed)));
-              }
-            }}
-            className="w-24 shrink-0 rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm text-gray-900 focus:border-blue-600 focus:outline-none dark:border-gray-700 dark:bg-surface-dark-elevated dark:text-gray-100"
-            aria-label={t('orgAgentTopKLabel')}
-          />
+          >
+            <option value="">{t('m365AgentDefaultModel')}</option>
+            {selectableModels.map((model) => (
+              <option key={model.id} value={model.id}>
+                {model.name}
+              </option>
+            ))}
+          </select>
+          <p className={fieldHelpClass}>{t('orgAgentModelHelp')}</p>
         </div>
-        <select
-          value={baseModelId}
-          onChange={(e) => setBaseModelId(e.target.value)}
-          className={inputClass}
-          aria-label={t('agentModelLabel')}
-        >
-          <option value="">{t('m365AgentDefaultModel')}</option>
-          {selectableModels.map((model) => (
-            <option key={model.id} value={model.id}>
-              {model.name}
-            </option>
-          ))}
-        </select>
 
         {/* Attribution sources shown in the agent details panel. */}
         <div>

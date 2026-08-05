@@ -1,6 +1,7 @@
 import { Session } from 'next-auth';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
+import { getAzureMonitorLogger } from '@/lib/services/observability';
 
 import Hasher from '@/lib/utils/app/hash';
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
@@ -147,6 +148,20 @@ export async function persistContainerFiles(
         `[CodeInterpreter] Failed to persist generated file ${sanitizeForLog(citation.filename)}:`,
         err,
       );
+      // Console output is not collected in production — emit an alertable
+      // event so a systematic failure (e.g. a 401 from a missing data-plane
+      // role on one regional Foundry account) can't stay invisible while
+      // chats keep completing without their files.
+      const status =
+        err && typeof err === 'object' && 'status' in err
+          ? ` (status ${(err as { status: unknown }).status})`
+          : '';
+      void getAzureMonitorLogger().logError({
+        user: session.user,
+        errorCode: 'CODE_INTERPRETER_FILE_PERSIST_FAILED',
+        errorMessage: `${err instanceof Error ? err.message : String(err)}${status}`,
+        operation: 'persistContainerFiles',
+      });
     }
   }
 

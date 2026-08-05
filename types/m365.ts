@@ -31,6 +31,42 @@ export type M365DriveSort = 'name' | 'lastModified' | 'size';
 
 export type M365SortDir = 'asc' | 'desc';
 
+export type M365PickerTab =
+  | 'onedrive'
+  | 'recent'
+  | 'shared'
+  | 'sharepoint'
+  | 'teams';
+
+/**
+ * One drill-down step in the attach picker: a folder (OneDrive), or a
+ * site/library (SharePoint), or a team (Teams).
+ */
+export interface M365PickerCrumb {
+  label: string;
+  siteId?: string;
+  driveId?: string;
+  itemId?: string;
+  /**
+   * The real path between the previous crumb and this one is unknown (the
+   * folder was opened from search results, which span the whole drive);
+   * rendered with a leading "…" segment instead of fabricating a path.
+   */
+  elided?: boolean;
+}
+
+/**
+ * Last browsed location in the attach picker, remembered across openings.
+ * null = start at the OneDrive root. Written on navigation only — searching
+ * never moves it — and dropped fail-open when the folder no longer loads.
+ */
+export interface M365PickerLocation {
+  tab: M365PickerTab;
+  crumbs: M365PickerCrumb[];
+  sort: M365DriveSort;
+  dir: M365SortDir;
+}
+
 export interface M365DrivePage {
   entries: M365DriveEntry[];
   /**

@@ -1,8 +1,10 @@
+import { applyClaimQuotes } from '@/lib/utils/app/citationQuotes';
 import {
   PendingTranscriptionInfo,
   StreamMetadata,
   TokenUsageMetadata,
   TranscriptMetadata,
+  citationQuotesStartIndex,
   createStreamDecoder,
   parseMetadataFromContent,
   pendingMetadataStartIndex,
@@ -31,12 +33,20 @@ import {
  * terminal metadata (`streamError`). Distinct from a network-level abort:
  * the server chose to finish the response, so partial tool records and
  * consent state are intact — the store surfaces the failure with that
- * context and must NOT silently retry on a fallback model.
+ * context and must NOT silently retry on a fallback model, UNLESS the
+ * server set `retry` (the partial is a broken promise, e.g. a missing
+ * generated file — retrying is strictly better than keeping it).
  */
 export class StreamInterruptedError extends Error {
   constructor(
     message: string,
     public readonly code?: string,
+    /**
+     * Server marked the partial output as not worth keeping (e.g. it
+     * promises a generated file that was never delivered) — the store
+     * SHOULD auto-retry on the fallback chain for this one.
+     */
+    public readonly retry: boolean = false,
   ) {
     super(message);
     this.name = 'StreamInterruptedError';
@@ -70,11 +80,22 @@ export class StreamParser {
   private extractedActiveFilesDropped?: string[];
   private extractedUsage?: TokenUsageMetadata;
   private extractedExtractionResult?: ExtractionResultContent;
-  private extractedStreamError?: { message: string; code?: string };
+  private extractedStreamError?: {
+    message: string;
+    code?: string;
+    retry?: boolean;
+  };
   private extractedMcpPlan?: import('@/types/mcp').McpPlan;
   private hasReceivedContent: boolean = false;
   private prevDisplayText: string = '';
   private prevCitationsStr: string = '[]';
+  /**
+   * Claim-quote verification inputs (M365 agents). The model's quotes are
+   * untrusted; the server-shipped chunk texts are TRANSIENT verification
+   * data — applied here, never exposed to callers, never persisted.
+   */
+  private modelCitationQuotes: Record<string, string> | null = null;
+  private citationQuoteSources: Record<string, string> | null = null;
   // Drives the loading text — only the latest activity is shown.
   private latestActivity: AgentActivityPayload | null = null;
   // Outcomes already surfaced; processChunk only returns new ones.
@@ -135,6 +156,14 @@ export class StreamParser {
       if (pendingMeta !== -1) {
         scanEnd = Math.min(scanEnd, pendingMeta);
       }
+    }
+    // The model-emitted citation-quotes block (complete, unclosed, or a
+    // partial start marker) is wire format, never display text — cap the
+    // scan at its start exactly like the metadata block. Per the prompt
+    // contract nothing but the terminal metadata follows it.
+    const quotesIdx = citationQuotesStartIndex(this.text);
+    if (quotesIdx !== -1) {
+      scanEnd = Math.min(scanEnd, quotesIdx);
     }
     // Once we know a metadata block exists, any trailing newlines in the
     // display text are its `\n\n` separator, never content — the separator
@@ -206,14 +235,27 @@ export class StreamParser {
       renderedDisplayText = renderedDisplayText.replace(/\n+$/, '');
     }
 
-    // Update citations if found and different from previous
-    const currentCitationsStr = JSON.stringify(parsed.citations);
+    // Claim-quote verification inputs (capture once each; the model block
+    // precedes the terminal metadata blocks in the stream).
+    if (parsed.modelCitationQuotes && !this.modelCitationQuotes) {
+      this.modelCitationQuotes = parsed.modelCitationQuotes;
+    }
+    if (parsed.citationQuoteSources && !this.citationQuoteSources) {
+      this.citationQuoteSources = parsed.citationQuoteSources;
+    }
+
+    // Update citations if found and different from previous. Callers get
+    // the EFFECTIVE citations: verified claim quotes applied on top of the
+    // server's citation list (no-op until both inputs have arrived).
+    if (parsed.citations.length > 0) {
+      this.extractedCitations = parsed.citations;
+    }
+    const effective = this.getCitations();
+    const currentCitationsStr = JSON.stringify(effective);
     const citationsChanged =
-      parsed.citations.length > 0 &&
-      currentCitationsStr !== this.prevCitationsStr;
+      effective.length > 0 && currentCitationsStr !== this.prevCitationsStr;
 
     if (citationsChanged) {
-      this.extractedCitations = parsed.citations;
       this.prevCitationsStr = currentCitationsStr;
     }
 
@@ -292,7 +334,7 @@ export class StreamParser {
 
     return {
       displayText: renderedDisplayText,
-      citations: this.extractedCitations,
+      citations: this.getCitations(),
       hasReceivedContent: this.hasReceivedContent,
       // Transient activity key (if any) takes precedence over a
       // metadata-channel `action` field; both feed the same loading text.
@@ -383,9 +425,7 @@ export class StreamParser {
       content,
       messageType: MessageType.TEXT,
       citations:
-        this.extractedCitations.length > 0
-          ? this.extractedCitations
-          : undefined,
+        this.getCitations().length > 0 ? this.getCitations() : undefined,
       transcript: this.extractedTranscript,
       thinking: this.extractedThinking,
       mcpPlan: this.extractedMcpPlan,
@@ -408,10 +448,16 @@ export class StreamParser {
   }
 
   /**
-   * Get the current citations
+   * Get the current citations, with verified claim quotes applied when the
+   * model's quotes block and the server's verification chunks both arrived.
+   * The raw model quotes and chunk texts themselves are never exposed.
    */
   getCitations(): Citation[] {
-    return this.extractedCitations;
+    return applyClaimQuotes(
+      this.extractedCitations,
+      this.modelCitationQuotes,
+      this.citationQuoteSources,
+    );
   }
 
   /**
@@ -478,7 +524,9 @@ export class StreamParser {
    * `streamError` metadata block. Callers surface it as an error state even
    * though the HTTP stream itself completed.
    */
-  getStreamError(): { message: string; code?: string } | undefined {
+  getStreamError():
+    | { message: string; code?: string; retry?: boolean }
+    | undefined {
     return this.extractedStreamError;
   }
 

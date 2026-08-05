@@ -77,8 +77,24 @@ export class AnthropicHandler extends ModelHandler {
       [];
 
     for (const msg of messages) {
-      // Skip system messages - they'll be handled separately
+      // In-array system messages (enricher-injected context) can't ride the
+      // messages array — fold them into the system param instead of
+      // dropping the content.
       if (msg.role === 'system') {
+        const text =
+          typeof msg.content === 'string'
+            ? msg.content
+            : Array.isArray(msg.content)
+              ? msg.content
+                  .filter((c) => c.type === 'text')
+                  .map((c) => (c as any).text || '')
+                  .join('\n')
+              : '';
+        if (text) {
+          this.systemPrompt = this.systemPrompt
+            ? `${this.systemPrompt}\n\n${text}`
+            : text;
+        }
         continue;
       }
 

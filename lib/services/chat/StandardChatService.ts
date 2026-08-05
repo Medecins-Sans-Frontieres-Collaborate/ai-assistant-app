@@ -962,6 +962,17 @@ export class StandardChatService {
               },
             }
           : undefined,
+        // The processor reports mid-stream failures in-band to the client
+        // with a generic message; the raw upstream detail is only durable
+        // here (console output is not collected in production).
+        (failure) =>
+          void getAzureMonitorLogger().logError({
+            user: request.user,
+            errorCode: failure.code,
+            errorMessage: failure.detail,
+            operation: 'responsesStream',
+            model: modelConfig.id,
+          }),
       );
       return new Response(processedStream, {
         headers: STREAMING_RESPONSE_HEADERS,

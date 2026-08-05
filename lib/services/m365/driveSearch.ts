@@ -19,6 +19,8 @@ import { NextRequest } from 'next/server';
 import { isNameMatch } from '@/lib/services/m365/driveSearchRanking';
 import { graphJson, normalizeDriveItem } from '@/lib/services/m365/graphApi';
 
+import { fileExtension } from '@/lib/utils/app/m365FileTypes';
+
 import type { M365DriveEntry } from '@/types/m365';
 
 export {
@@ -69,9 +71,17 @@ export async function searchDriveByFilename(
   req: NextRequest,
   scopes: string[],
   query: string,
+  typeExtensions?: readonly string[],
 ): Promise<M365DriveEntry[]> {
   const term = kqlTerm(query);
   if (!term) return [];
+  // Type-filtered searches restrict the filename query itself — without
+  // this, none of the 25 guaranteed name matches may survive the client's
+  // extension filter even though matching files of that type exist.
+  // Extensions are route-validated ([a-z0-9]+), so they are KQL-safe.
+  const filetypeClause = typeExtensions?.length
+    ? ` AND (${typeExtensions.map((ext) => `filetype:${ext}`).join(' OR ')})`
+    : '';
   try {
     const data = await graphJson<SearchQueryResponse>(
       req,
@@ -84,7 +94,7 @@ export async function searchDriveByFilename(
           requests: [
             {
               entityTypes: ['driveItem'],
-              query: { queryString: `filename:${term}*` },
+              query: { queryString: `filename:${term}*${filetypeClause}` },
               size: FILENAME_QUERY_SIZE,
             },
           ],
@@ -99,6 +109,12 @@ export async function searchDriveByFilename(
         // The index can lag or fuzz — keep only entries our own tiering
         // agrees are name matches, so the "Name matches" section stays honest.
         .filter((entry) => isNameMatch(entry.name, query))
+        // Same defensive stance for the filetype restriction.
+        .filter(
+          (entry) =>
+            !typeExtensions?.length ||
+            typeExtensions.includes(fileExtension(entry.name)),
+        )
     );
   } catch {
     return [];

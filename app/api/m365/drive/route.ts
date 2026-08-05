@@ -4,7 +4,7 @@
  * GET /api/m365/drive?view=children[&driveId=…][&itemId=…][&sort=…][&dir=…]
  * GET /api/m365/drive?view=recent
  * GET /api/m365/drive?view=shared
- * GET /api/m365/drive?view=search&q=…[&driveId=…]
+ * GET /api/m365/drive?view=search&q=…[&driveId=…][&types=ext,ext,…]
  * Any view + &pageToken=… replays a previously issued continuation token.
  *
  * `children` without ids lists the user's OneDrive root; with a driveId only,
@@ -13,6 +13,13 @@
  * unreliable/tenant-inconsistent under pagination, so it is not attempted);
  * `sort`/`dir` map to $orderby on the children view only — recent, shared and
  * search accept but ignore them (Graph rejects $orderby there).
+ *
+ * `types` restricts the search view's parallel filename query with a KQL
+ * `filetype:` clause so guaranteed name matches survive the picker's
+ * type filter; the content search window is filtered client-side (the
+ * `search(q=)` endpoint has no filetype support). Like `sort`/`dir`, it is
+ * validated on every view but only meaningful on search — browse listings
+ * filter client-side by design, so other views accept and ignore it.
  */
 import { NextRequest } from 'next/server';
 
@@ -50,6 +57,11 @@ const ITEM_SELECT =
   '$select=id,name,size,webUrl,lastModifiedDateTime,folder,file,parentReference,remoteItem';
 
 const VIEWS = ['children', 'recent', 'shared', 'search'];
+
+// `types` extensions are interpolated into a KQL query — the tight charset
+// is a hard requirement, not just hygiene.
+const TYPE_EXT_REGEX = /^[a-z0-9]{1,10}$/;
+const TYPES_MAX = 20;
 
 const SORT_FIELDS: Record<M365DriveSort, string> = {
   name: 'name',
@@ -105,6 +117,7 @@ export async function GET(req: NextRequest) {
   const sortParam = params.get('sort');
   const dirParam = params.get('dir');
   const pageToken = params.get('pageToken');
+  const typesParam = params.get('types');
 
   if (!VIEWS.includes(view)) {
     return badRequestResponse('Unknown view');
@@ -124,6 +137,21 @@ export async function GET(req: NextRequest) {
   }
   if (dirParam && dirParam !== 'asc' && dirParam !== 'desc') {
     return badRequestResponse('Invalid dir');
+  }
+  let types: string[] | undefined;
+  if (typesParam !== null) {
+    const parsed = typesParam
+      .split(',')
+      .map((ext) => ext.trim().toLowerCase())
+      .filter(Boolean);
+    if (
+      parsed.length === 0 ||
+      parsed.length > TYPES_MAX ||
+      parsed.some((ext) => !TYPE_EXT_REGEX.test(ext))
+    ) {
+      return badRequestResponse('Invalid types');
+    }
+    types = parsed;
   }
 
   try {
@@ -208,7 +236,7 @@ export async function GET(req: NextRequest) {
         const [nameHits, first] = await Promise.all([
           driveId
             ? Promise.resolve([] as M365DriveEntry[])
-            : searchDriveByFilename(req, SCOPES, query),
+            : searchDriveByFilename(req, SCOPES, query, types),
           graphJson<GraphPage>(
             req,
             SCOPES,

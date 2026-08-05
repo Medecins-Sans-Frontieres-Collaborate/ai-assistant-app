@@ -306,6 +306,63 @@ describe('GET /api/m365/drive search re-ranking', () => {
     ]);
   });
 
+  it('rejects malformed types values before any Graph call', async () => {
+    const bad = [
+      'exe;rm',
+      'a'.repeat(11),
+      '',
+      ',,,',
+      Array.from({ length: 21 }, () => 'pdf').join(','),
+    ];
+    for (const types of bad) {
+      const response = await driveGET(
+        driveRequest(`view=search&q=geo&types=${encodeURIComponent(types)}`),
+      );
+      expect(response.status).toBe(400);
+    }
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('adds a KQL filetype clause to the filename query and keeps only matching extensions', async () => {
+    fetchMock.mockImplementation((url: string | URL) =>
+      String(url).includes('/search/query')
+        ? graphJsonResponse({
+            value: [
+              {
+                hitsContainers: [
+                  {
+                    hits: [
+                      { resource: driveItem('n1', 'geo.pdf') },
+                      // The index fuzzing in a non-matching extension must
+                      // not leak past the defensive post-filter.
+                      { resource: driveItem('n2', 'geo.docx') },
+                    ],
+                  },
+                ],
+              },
+            ],
+          })
+        : graphJsonResponse({ value: [] }),
+    );
+    const response = await driveGET(
+      driveRequest('view=search&q=geo&types=pdf,txt'),
+    );
+    const body = await parseJsonResponse(response);
+    expect(response.status).toBe(200);
+    const searchQueryCall = fetchMock.mock.calls.find((call) =>
+      String(call[0]).includes('/search/query'),
+    );
+    const requestBody = JSON.parse(
+      (searchQueryCall?.[1] as RequestInit).body as string,
+    );
+    expect(requestBody.requests[0].query.queryString).toBe(
+      'filename:geo* AND (filetype:pdf OR filetype:txt)',
+    );
+    expect(body.data.entries.map((e: { name: string }) => e.name)).toEqual([
+      'geo.pdf',
+    ]);
+  });
+
   it('deduplicates nothing server-side but appends pages via distinct tokens', async () => {
     // Guard: a continuation page response still surfaces its own nextToken.
     const link1 =

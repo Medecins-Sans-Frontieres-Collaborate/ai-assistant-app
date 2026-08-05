@@ -101,6 +101,16 @@ const serverEnvSchema = z.object({
   AZURE_BLOB_STORAGE_NAME_EU: z.string().optional(),
   AZURE_BLOB_STORAGE_CONTAINER: z.string().optional(),
   AZURE_BLOB_STORAGE_IMAGE_CONTAINER: z.string().optional(),
+  /**
+   * Centralized admin/system data location (agent-access rules, usage-limit
+   * counters, admin guides, map datasets, …). Defaults to the EU account
+   * (data residency: this data references users of every region, and only
+   * EU placement satisfies "EU data never leaves the EU") in a dedicated
+   * container OUTSIDE any lifecycle-delete rule. See lib/services/
+   * adminBlobStorage.ts and docs/ADMIN_BLOB_STORAGE.md.
+   */
+  AZURE_BLOB_STORAGE_ADMIN_NAME: z.string().optional(),
+  AZURE_BLOB_STORAGE_ADMIN_CONTAINER: z.string().optional(),
   STORAGE_RESOURCE_ID: z.string().optional(),
   STORAGE_DATA_SOURCE_CONTAINER: z.string().optional(),
 
