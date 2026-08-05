@@ -8,7 +8,7 @@ import {
   IconCopy,
   IconLoader2,
 } from '@tabler/icons-react';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
@@ -17,7 +17,11 @@ import { buildBlob } from '@/client/hooks/document/useM365Save';
 
 import {
   M365ClientError,
+  M365PersonSuggestion,
+  M365_SEARCH_DEBOUNCE_MS,
+  M365_SEARCH_MIN_CHARS,
   saveToOneDrive,
+  searchPeople,
   shareDriveItem,
 } from '@/client/services/m365/m365Client';
 
@@ -62,6 +66,18 @@ function parseEmails(raw: string): { emails: string[]; invalid: string[] } {
   };
 }
 
+/** The token being typed: text after the last separator. */
+function currentToken(raw: string): string {
+  const parts = raw.split(/[,;\s]+/);
+  return parts[parts.length - 1] ?? '';
+}
+
+/** Replaces the in-progress token with the chosen email, ready for more. */
+function completeToken(raw: string, email: string): string {
+  const token = currentToken(raw);
+  return `${raw.slice(0, raw.length - token.length)}${email}, `;
+}
+
 /**
  * Share a conversation (or one message) as a readable document in the
  * user's OneDrive, permissioned via Graph: an organization view link by
@@ -87,6 +103,59 @@ export const ShareToOneDriveModal: FC<ShareToOneDriveModalProps> = ({
   const [isSharing, setIsSharing] = useState(false);
   const [outcome, setOutcome] = useState<ShareOutcome | null>(null);
   const [copied, setCopied] = useState(false);
+  // People autocomplete for the in-progress recipient token. Suggestions
+  // are a convenience: any fetch failure (not connected, consent gap,
+  // throttle) silently yields none and typing plain emails keeps working.
+  const [suggestions, setSuggestions] = useState<M365PersonSuggestion[]>([]);
+  const [activeSuggestion, setActiveSuggestion] = useState(0);
+  const suggestionsAbortRef = useRef<AbortController | null>(null);
+  const suggestionsTimerRef = useRef<number | null>(null);
+
+  const clearSuggestions = () => {
+    suggestionsAbortRef.current?.abort();
+    if (suggestionsTimerRef.current !== null) {
+      window.clearTimeout(suggestionsTimerRef.current);
+      suggestionsTimerRef.current = null;
+    }
+    setSuggestions([]);
+    setActiveSuggestion(0);
+  };
+
+  const handleRecipientsChange = (value: string) => {
+    setRecipientsRaw(value);
+    suggestionsAbortRef.current?.abort();
+    if (suggestionsTimerRef.current !== null) {
+      window.clearTimeout(suggestionsTimerRef.current);
+    }
+    const token = currentToken(value);
+    if (token.length < M365_SEARCH_MIN_CHARS) {
+      setSuggestions([]);
+      setActiveSuggestion(0);
+      return;
+    }
+    suggestionsTimerRef.current = window.setTimeout(() => {
+      const controller = new AbortController();
+      suggestionsAbortRef.current = controller;
+      searchPeople(token, controller.signal)
+        .then((people) => {
+          if (controller.signal.aborted) return;
+          // Don't resurface people already added as recipients.
+          const existing = new Set(
+            parseEmails(value).emails.map((e) => e.toLowerCase()),
+          );
+          setSuggestions(people.filter((p) => !existing.has(p.email)));
+          setActiveSuggestion(0);
+        })
+        .catch(() => {
+          if (!controller.signal.aborted) setSuggestions([]);
+        });
+    }, M365_SEARCH_DEBOUNCE_MS);
+  };
+
+  const selectSuggestion = (person: M365PersonSuggestion) => {
+    setRecipientsRaw((prev) => completeToken(prev, person.email));
+    clearSuggestions();
+  };
 
   // Reset per open — a share dialog must never leak the previous share's
   // filters, recipients, or result into the next one. Deliberately keyed on
@@ -105,6 +174,8 @@ export const ShareToOneDriveModal: FC<ShareToOneDriveModalProps> = ({
     setIsSharing(false);
     setOutcome(null);
     setCopied(false);
+    setSuggestions([]);
+    setActiveSuggestion(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
@@ -289,16 +360,75 @@ export const ShareToOneDriveModal: FC<ShareToOneDriveModalProps> = ({
                     </label>
                   </>
                 )}
-                <label className="block">
+                <label className="relative block">
                   <span className="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">
                     {t('recipients')}
                   </span>
                   <input
                     value={recipientsRaw}
-                    onChange={(e) => setRecipientsRaw(e.target.value)}
+                    onChange={(e) => handleRecipientsChange(e.target.value)}
+                    onBlur={() => clearSuggestions()}
+                    onKeyDown={(e) => {
+                      if (suggestions.length === 0) return;
+                      if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        setActiveSuggestion(
+                          (i) => (i + 1) % suggestions.length,
+                        );
+                      } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        setActiveSuggestion(
+                          (i) =>
+                            (i - 1 + suggestions.length) % suggestions.length,
+                        );
+                      } else if (e.key === 'Enter' || e.key === 'Tab') {
+                        e.preventDefault();
+                        selectSuggestion(suggestions[activeSuggestion]);
+                      } else if (e.key === 'Escape') {
+                        clearSuggestions();
+                      }
+                    }}
+                    role="combobox"
+                    aria-expanded={suggestions.length > 0}
+                    aria-autocomplete="list"
+                    aria-controls="share-people-suggestions"
                     placeholder={t('recipientsPlaceholder')}
                     className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
                   />
+                  {suggestions.length > 0 && (
+                    <ul
+                      id="share-people-suggestions"
+                      role="listbox"
+                      className="absolute z-20 mt-1 max-h-56 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800"
+                    >
+                      {suggestions.map((person, index) => (
+                        <li
+                          key={person.email}
+                          role="option"
+                          aria-selected={index === activeSuggestion}
+                          // mousedown, not click: the input's blur fires
+                          // first on click and would clear the list.
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            selectSuggestion(person);
+                          }}
+                          onMouseEnter={() => setActiveSuggestion(index)}
+                          className={`cursor-pointer px-3 py-1.5 text-sm ${
+                            index === activeSuggestion
+                              ? 'bg-blue-50 dark:bg-blue-900/30'
+                              : ''
+                          }`}
+                        >
+                          <span className="block truncate text-gray-900 dark:text-gray-100">
+                            {person.displayName}
+                          </span>
+                          <span className="block truncate text-xs text-gray-500 dark:text-gray-400">
+                            {person.email}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                   <span className="mt-1 block text-xs text-gray-500 dark:text-gray-400">
                     {t('recipientsHint')}
                   </span>
