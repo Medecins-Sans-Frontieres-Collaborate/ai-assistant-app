@@ -2,9 +2,9 @@ import React from 'react';
 
 import Link from 'next/link';
 
-import { Citation } from '@/types/rag';
+import { SourceCard } from '@/lib/utils/app/citationDisplay';
 
-export const CitationItem: React.FC<{ citation: Citation }> = ({
+export const CitationItem: React.FC<{ citation: SourceCard }> = ({
   citation,
 }) => {
   if (!citation.title || !citation.url) {
@@ -32,10 +32,13 @@ export const CitationItem: React.FC<{ citation: Citation }> = ({
   );
   const displayName = citation.sourceName || cleanDomain;
 
+  const hasEvidence = !!citation.evidence?.length;
+  const hasQuoteContent = hasEvidence || !!citation.quote;
+
   return (
     <div
       className={`relative bg-gray-200 dark:bg-surface-dark-base rounded-lg transition-all duration-300 overflow-hidden text-xs border-2 border-transparent hover:border-blue-500 hover:shadow-lg ${
-        citation.quote ? 'h-[188px] w-64' : 'h-[132px] w-48'
+        hasQuoteContent ? 'h-[188px] w-64' : 'h-[132px] w-48'
       } p-2`}
     >
       <Link
@@ -45,22 +48,49 @@ export const CitationItem: React.FC<{ citation: Citation }> = ({
         title={citation.title}
         className="flex flex-col h-full no-underline justify-between"
       >
-        <div className="flex-grow">
+        <div className="flex-grow min-h-0 flex flex-col">
           <div
-            className={`text-[12.5px] ${citation.quote ? 'line-clamp-2' : 'line-clamp-3'} text-gray-800 dark:text-white mb-2`}
+            className={`text-[12.5px] ${hasQuoteContent ? 'line-clamp-2' : 'line-clamp-3'} text-gray-800 dark:text-white mb-2 shrink-0`}
           >
             {citation.title}
           </div>
-          {citation.quote && (
-            <blockquote
-              className="text-[11.5px] italic line-clamp-4 text-gray-600 dark:text-gray-300 border-l-2 border-gray-400 dark:border-gray-500 pl-2 mb-1"
-              title={citation.quote}
-            >
-              “{citation.quote}”
-            </blockquote>
+          {hasEvidence ? (
+            // One row per CITED number: its quote paired with ITS pages —
+            // never one quote next to another chunk's locator.
+            <div className="min-h-0 overflow-y-auto space-y-1.5 mb-1">
+              {citation.evidence!.map((entry) => (
+                <blockquote
+                  key={entry.number}
+                  className="text-[11.5px] italic text-gray-600 dark:text-gray-300 border-l-2 border-gray-400 dark:border-gray-500 pl-2"
+                  title={entry.quote}
+                >
+                  <span
+                    className={
+                      citation.evidence!.length > 1
+                        ? 'line-clamp-2'
+                        : 'line-clamp-4'
+                    }
+                  >
+                    “{entry.quote}”
+                  </span>
+                  <span className="not-italic text-[10.5px] text-gray-500 dark:text-gray-400">
+                    [{entry.number}]{entry.locator ? ` · ${entry.locator}` : ''}
+                  </span>
+                </blockquote>
+              ))}
+            </div>
+          ) : (
+            citation.quote && (
+              <blockquote
+                className="text-[11.5px] italic line-clamp-4 text-gray-600 dark:text-gray-300 border-l-2 border-gray-400 dark:border-gray-500 pl-2 mb-1"
+                title={citation.quote}
+              >
+                “{citation.quote}”
+              </blockquote>
+            )
           )}
         </div>
-        {citation.locator && (
+        {citation.locator && !hasEvidence && (
           <div
             className="text-[11px] text-gray-600 dark:text-gray-400 truncate"
             title={citation.locator}
