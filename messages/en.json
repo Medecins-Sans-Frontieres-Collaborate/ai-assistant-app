@@ -4498,6 +4498,20 @@
         "modified": "Modified",
         "size": "Size"
       },
+      "typeFilter": {
+        "label": "Filter by file type",
+        "all": "Show all file types",
+        "word": "Word",
+        "excel": "Excel",
+        "pdf": "PDF",
+        "powerpoint": "PowerPoint",
+        "text": "Text",
+        "image": "Images",
+        "audio": "Audio",
+        "video": "Video",
+        "more": "More file types",
+        "noMatches": "No files of the selected type here"
+      },
       "folderTitle": "Choose a folder",
       "selectFolder": "Select",
       "selectCurrentFolder": "Save to this folder",
