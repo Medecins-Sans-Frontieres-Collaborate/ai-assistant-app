@@ -573,7 +573,7 @@ async function resolveDocuments(
 async function downloadAndExtract(
   req: NextRequest,
   doc: ResolvedDocument,
-): Promise<string> {
+): Promise<{ text: string; lastModified?: string }> {
   const meta = await graphJson<GraphItemMeta>(
     req,
     GRAPH_SCOPES,
@@ -600,7 +600,12 @@ async function downloadAndExtract(
   }
   const buffer = Buffer.from(await content.arrayBuffer());
   const file = new File([new Uint8Array(buffer)], meta.name ?? doc.title);
-  return loadDocument(file);
+  return {
+    text: await loadDocument(file),
+    // The document's REAL modified date — resolveDocuments stamps "now" for
+    // single-file sources, which is index time, not document time.
+    lastModified: meta.lastModifiedDateTime,
+  };
 }
 
 /**
@@ -740,7 +745,7 @@ export async function indexAgentSources(
     try {
       const uploadDocs: M365AgentIndexDoc[] = [];
       for (const doc of docs) {
-        const text = await downloadAndExtract(req, doc);
+        const { text, lastModified } = await downloadAndExtract(req, doc);
         const chunks = chunkDocument(text);
         if (chunks.length === 0) {
           // Surfaced to admins via the zero-chunk warning in the agents
@@ -764,7 +769,7 @@ export async function indexAgentSources(
             chunk: chunk.chunk,
             title: doc.title,
             url: doc.webUrl,
-            date: doc.lastModified,
+            date: lastModified ?? doc.lastModified,
             text_vector: vectors[index],
           });
         });
