@@ -14,6 +14,8 @@ import React, {
   useState,
 } from 'react';
 
+import { buildSourceCards } from '@/lib/utils/app/citationDisplay';
+
 import { Citation } from '@/types/rag';
 
 import { CitationItem } from './CitationItem';
@@ -21,6 +23,8 @@ import { CitationListItem } from './CitationListItem';
 
 interface CitationListProps {
   citations: Citation[];
+  /** Citation numbers that appear as [n] markers in the message text. */
+  citedNumbers?: number[];
 }
 
 /**
@@ -88,8 +92,9 @@ function useResolvedCitationLinks(citations: Citation[]): Citation[] {
   );
 }
 
-export const CitationList: FC<{ citations: Citation[] }> = ({
+export const CitationList: FC<CitationListProps> = ({
   citations: rawCitations,
+  citedNumbers,
 }) => {
   const citations = useResolvedCitationLinks(rawCitations);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -101,32 +106,14 @@ export const CitationList: FC<{ citations: Citation[] }> = ({
   >(null);
   const scrollIntervalRef = useRef<number | null>(null);
 
-  // Deduplicate citations by URL or title. Entries without a URL are
-  // dropped up front — they can't render as a source card, and counting
-  // them makes the header disagree with the visible rows. Duplicates merge
-  // their locators onto the kept card (several chunks of one document →
-  // one card listing every cited page).
-  const uniqueCitations = citations
-    .filter((c) => !!c.url)
-    .reduce((acc: Citation[], current) => {
-      const existing = acc.find(
-        (item) =>
-          (item.url && current.url && item.url === current.url) ||
-          (item.title && current.title && item.title === current.title),
-      );
-
-      if (!existing) {
-        acc.push({ ...current });
-      } else if (
-        current.locator &&
-        !(existing.locator ?? '').split(', ').includes(current.locator)
-      ) {
-        existing.locator = existing.locator
-          ? `${existing.locator}, ${current.locator}`
-          : current.locator;
-      }
-      return acc;
-    }, []);
+  // One card per source document: chunk-level citations of the same file
+  // collapse, and when the message text tells us which numbers were
+  // actually cited, the card lists each cited number's quote WITH its own
+  // page locator (see buildSourceCards).
+  const uniqueCitations = useMemo(
+    () => buildSourceCards(citations, citedNumbers),
+    [citations, citedNumbers],
+  );
 
   // Extract unique domains for header favicon display
   const uniqueDomainCitations = useMemo(() => {
