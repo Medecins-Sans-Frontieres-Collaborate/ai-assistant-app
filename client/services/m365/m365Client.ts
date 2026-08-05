@@ -389,6 +389,27 @@ export async function shareDriveItem(
   });
 }
 
+export interface M365PersonSuggestion {
+  displayName: string;
+  email: string;
+}
+
+/**
+ * People autocomplete for recipient fields — relevance-ranked contacts
+ * plus a directory supplement, resolved server-side with the user's own
+ * Graph token. Callers should treat failures as "no suggestions".
+ */
+export async function searchPeople(
+  query: string,
+  signal?: AbortSignal,
+): Promise<M365PersonSuggestion[]> {
+  const result = await requestJson<{ people: M365PersonSuggestion[] }>(
+    `/api/m365/people/search?q=${encodeURIComponent(query)}`,
+    { signal },
+  );
+  return result.people;
+}
+
 export async function saveToOneDrive(
   blob: Blob,
   fileName: string,
