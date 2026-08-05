@@ -284,49 +284,96 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
       <h4 className="mb-3 text-sm font-semibold text-black dark:text-white">
         {t(existing ? 'editM365AgentTitle' : 'newM365AgentTitle')}
       </h4>
-      <div className="space-y-3">
-        <input
-          type="text"
-          value={name}
-          maxLength={100}
-          onChange={(e) => setName(e.target.value)}
-          placeholder={t('agentNamePlaceholder')}
-          className={inputClass}
-        />
-        <input
-          type="text"
-          value={description}
-          maxLength={300}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder={t('agentDescriptionPlaceholder')}
-          className={inputClass}
-        />
-        <textarea
-          value={systemPrompt}
-          maxLength={10000}
-          rows={4}
-          onChange={(e) => setSystemPrompt(e.target.value)}
-          placeholder={t('m365AgentSystemPromptPlaceholder')}
-          className={inputClass}
-        />
-        <select
-          value={chatModelId}
-          onChange={(e) => setChatModelId(e.target.value)}
-          className={inputClass}
-          aria-label={t('agentModelLabel')}
-        >
-          <option value="">{t('m365AgentDefaultModel')}</option>
-          {selectableModels.map((model) => (
-            <option key={model.id} value={model.id}>
-              {model.name}
-            </option>
-          ))}
-        </select>
+      <div className="space-y-4">
+        <div>
+          <label
+            htmlFor="m365-agent-name"
+            className="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300"
+          >
+            {t('m365AgentNameLabel')}
+          </label>
+          <input
+            id="m365-agent-name"
+            type="text"
+            value={name}
+            maxLength={100}
+            onChange={(e) => setName(e.target.value)}
+            placeholder={t('m365AgentNamePlaceholder')}
+            className={inputClass}
+          />
+          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+            {t('m365AgentNameHelp')}
+          </p>
+        </div>
+        <div>
+          <label
+            htmlFor="m365-agent-description"
+            className="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300"
+          >
+            {t('m365AgentDescriptionLabel')}
+          </label>
+          <input
+            id="m365-agent-description"
+            type="text"
+            value={description}
+            maxLength={300}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder={t('m365AgentDescriptionPlaceholder')}
+            className={inputClass}
+          />
+          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+            {t('m365AgentDescriptionHelp')}
+          </p>
+        </div>
+        <div>
+          <label
+            htmlFor="m365-agent-system-prompt"
+            className="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300"
+          >
+            {t('m365AgentSystemPromptLabel')}
+          </label>
+          <textarea
+            id="m365-agent-system-prompt"
+            value={systemPrompt}
+            maxLength={10000}
+            rows={4}
+            onChange={(e) => setSystemPrompt(e.target.value)}
+            placeholder={t('m365AgentSystemPromptPlaceholder')}
+            className={inputClass}
+          />
+          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+            {t('m365AgentSystemPromptHelp')}
+          </p>
+        </div>
+        <div>
+          <label
+            htmlFor="m365-agent-model"
+            className="mb-1 block text-xs font-semibold text-gray-700 dark:text-gray-300"
+          >
+            {t('m365AgentModelLabel')}
+          </label>
+          <select
+            id="m365-agent-model"
+            value={chatModelId}
+            onChange={(e) => setChatModelId(e.target.value)}
+            className={inputClass}
+          >
+            <option value="">{t('m365AgentDefaultModel')}</option>
+            {selectableModels.map((model) => (
+              <option key={model.id} value={model.id}>
+                {model.name}
+              </option>
+            ))}
+          </select>
+          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+            {t('m365AgentModelHelp')}
+          </p>
+        </div>
 
         {/* Sources */}
         <div>
           <div className="mb-1 flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+            <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
               {t('m365AgentSources')} ({sources.length}/{maxSources})
             </span>
             <button
@@ -338,6 +385,9 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
               <IconPlus size={14} /> {t('m365AgentAddSource')}
             </button>
           </div>
+          <p className="mb-2 text-xs text-gray-500 dark:text-gray-400">
+            {t('m365AgentSourcesHelp')}
+          </p>
           {sources.length === 0 ? (
             <p className="text-xs text-gray-500 dark:text-gray-400">
               {t('m365AgentNoSources', { max: maxSources })}
