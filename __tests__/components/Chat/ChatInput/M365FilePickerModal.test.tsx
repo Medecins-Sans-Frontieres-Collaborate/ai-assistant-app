@@ -309,6 +309,80 @@ describe('M365FilePickerModal file-type filter', () => {
   });
 });
 
+describe('M365FilePickerModal type-filter chips', () => {
+  it('hides non-matching files behind a chip but keeps folders, and toggles off', async () => {
+    listDrivePageMock.mockResolvedValueOnce(
+      page([
+        entry('a', 'report.pdf'),
+        entry('b', 'notes.docx'),
+        entry('c', 'Folder', true),
+      ]),
+    );
+    renderPicker();
+    await screen.findByText('report.pdf');
+
+    fireEvent.click(screen.getByRole('button', { name: 'typeFilter.pdf' }));
+    expect(screen.queryByText('notes.docx')).not.toBeInTheDocument();
+    expect(screen.getByText('report.pdf')).toBeInTheDocument();
+    expect(screen.getByText('Folder')).toBeInTheDocument();
+    // No refetch — the filter is display-side for browse listings.
+    expect(
+      listDrivePageMock.mock.calls.filter(([v]) => v === 'children'),
+    ).toHaveLength(1);
+
+    // Clicking the active chip clears the filter.
+    fireEvent.click(screen.getByRole('button', { name: 'typeFilter.pdf' }));
+    expect(screen.getByText('notes.docx')).toBeInTheDocument();
+  });
+
+  it('selects an extra type from the "…" menu and clears from the empty state', async () => {
+    listDrivePageMock.mockResolvedValueOnce(page([entry('a', 'report.pdf')]));
+    renderPicker();
+    await screen.findByText('report.pdf');
+
+    fireEvent.click(screen.getByRole('button', { name: 'typeFilter.more' }));
+    fireEvent.click(
+      screen.getByRole('menuitemradio', { name: 'typeFilter.image' }),
+    );
+    expect(screen.queryByText('report.pdf')).not.toBeInTheDocument();
+    expect(screen.getByText('typeFilter.noMatches')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'typeFilter.all' }));
+    expect(screen.getByText('report.pdf')).toBeInTheDocument();
+  });
+
+  it('sends the group extensions with searches and drops folders from results', async () => {
+    vi.useFakeTimers();
+    renderPicker();
+    await act(async () => {});
+
+    fireEvent.click(screen.getByRole('button', { name: 'typeFilter.pdf' }));
+    listDrivePageMock.mockResolvedValue(
+      page([entry('x', 'geo.pdf'), entry('f', 'geo-folder', true)]),
+    );
+    const input = screen.getByPlaceholderText('searchPlaceholder');
+    fireEvent.change(input, { target: { value: 'geo' } });
+    await act(async () => {
+      vi.advanceTimersByTime(300);
+    });
+    expect(searchCalls()).toHaveLength(1);
+    expect(searchCalls()[0][1]).toMatchObject({ q: 'geo', types: ['pdf'] });
+    expect(screen.getByText('geo.pdf')).toBeInTheDocument();
+    // A type-filtered search shows files of that kind, not folders.
+    expect(screen.queryByText('geo-folder')).not.toBeInTheDocument();
+  });
+
+  it('offers no type chips in folder mode', async () => {
+    render(
+      <M365FilePickerModal isOpen onClose={vi.fn()} onPickFolder={vi.fn()} />,
+    );
+    await act(async () => {});
+    expect(
+      screen.queryByRole('button', { name: 'typeFilter.pdf' }),
+    ).not.toBeInTheDocument();
+  });
+});
+
 describe('M365FilePickerModal teams tab', () => {
   it('lists joined teams and browses the picked team drive', async () => {
     const { listJoinedTeams, getTeamDrive } =
