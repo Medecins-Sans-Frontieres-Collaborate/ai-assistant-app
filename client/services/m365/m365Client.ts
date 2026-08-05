@@ -67,6 +67,8 @@ export interface ListDriveOptions {
   q?: string;
   sort?: M365DriveSort; // children view only; ignored by other views
   dir?: M365SortDir;
+  /** Search view only: extension filter for the guaranteed name matches. */
+  types?: readonly string[];
   pageToken?: string; // opaque M365DrivePage.nextToken echo
   signal?: AbortSignal; // cancels the underlying fetch
 }
@@ -81,6 +83,7 @@ export async function listDrivePage(
   if (options.q) params.set('q', options.q);
   if (options.sort) params.set('sort', options.sort);
   if (options.dir) params.set('dir', options.dir);
+  if (options.types?.length) params.set('types', options.types.join(','));
   if (options.pageToken) params.set('pageToken', options.pageToken);
   return requestJson<M365DrivePage>(
     `/api/m365/drive?${params.toString()}`,
