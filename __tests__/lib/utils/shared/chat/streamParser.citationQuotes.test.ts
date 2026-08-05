@@ -114,6 +114,35 @@ describe('StreamParser citation-quote verification', () => {
     expect(parser.getCitations()[0].quote).toBe('extractive caption 1');
   });
 
+  it('drops non-string quote-source entries instead of throwing at render', () => {
+    const parser = new StreamParser();
+    feed(parser, 'answer [1] and [2]');
+    feed(
+      parser,
+      quotesBlock({
+        '1': 'Employees accrue three paid personal days per calendar year.',
+        '2': 'Sick leave is unlimited but requires a note after 3 days.',
+      }),
+    );
+    feed(parser, citationsBlock);
+    // A malformed map: entry 2 is a number — before the shape filter this
+    // reached normalizeForQuoteMatch and threw, breaking getCitations().
+    feed(
+      parser,
+      `\n\n<<<METADATA_START>>>${JSON.stringify({
+        citationQuoteSources: { '1': CHUNK_1, '2': 42, abc: 'non-numeric' },
+      })}<<<METADATA_END>>>`,
+    );
+    parser.finalize();
+
+    const citations = parser.getCitations();
+    // The intact entry still verifies; the bad one degrades to the fallback.
+    expect(citations[0].quote).toBe(
+      'Employees accrue three paid personal days per calendar year.',
+    );
+    expect(citations[1].quote).toBe('extractive caption 2');
+  });
+
   it('never exposes chunk texts on the citations it returns', () => {
     const parser = new StreamParser();
     feed(parser, 'answer [1]');

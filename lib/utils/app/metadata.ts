@@ -313,7 +313,18 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
           parsedData.citationQuoteSources &&
           typeof parsedData.citationQuoteSources === 'object'
         ) {
-          citationQuoteSources = parsedData.citationQuoteSources;
+          // Same shape filter as modelCitationQuotes below: a non-string
+          // value here would throw inside applyClaimQuotes (normalize calls
+          // .toLowerCase()) and break citation rendering for the message.
+          const sourceEntries = Object.entries(
+            parsedData.citationQuoteSources as Record<string, unknown>,
+          ).filter(
+            (entry): entry is [string, string] =>
+              /^\d+$/.test(entry[0]) && typeof entry[1] === 'string',
+          );
+          if (sourceEntries.length > 0) {
+            citationQuoteSources = Object.fromEntries(sourceEntries);
+          }
         }
         if (
           parsedData.streamError &&
