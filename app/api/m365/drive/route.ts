@@ -14,10 +14,12 @@
  * `sort`/`dir` map to $orderby on the children view only — recent, shared and
  * search accept but ignore them (Graph rejects $orderby there).
  *
- * `types` (search only) restricts the parallel filename query with a KQL
+ * `types` restricts the search view's parallel filename query with a KQL
  * `filetype:` clause so guaranteed name matches survive the picker's
  * type filter; the content search window is filtered client-side (the
- * `search(q=)` endpoint has no filetype support).
+ * `search(q=)` endpoint has no filetype support). Like `sort`/`dir`, it is
+ * validated on every view but only meaningful on search — browse listings
+ * filter client-side by design, so other views accept and ignore it.
  */
 import { NextRequest } from 'next/server';
 

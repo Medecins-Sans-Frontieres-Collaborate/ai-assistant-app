@@ -33,7 +33,7 @@ export interface EnvironmentConfig {
  * model-specific error. getFallbackChain() prepends the ring's (dynamic)
  * default model; this static tail then covers progressively different
  * models/providers so an outage affecting one deployment doesn't take out
- * every fallback. Agent and non-streaming reasoning models are intentionally
+ * every fallback. Agent and non-streaming models are intentionally
  * excluded — their behavior differs too much to substitute silently.
  */
 const DEFAULT_FALLBACK_CHAIN: string[] = [
@@ -217,7 +217,7 @@ export function isModelDisabled(modelId: string): boolean {
  * are the point of choosing them), local-runtime models (a fallback must
  * not ship a deliberately-local conversation to the cloud), custom-source
  * (byom) models (they run under the user's own account, not the app's),
- * and non-streaming reasoning models (a streamed turn can't degrade to
+ * and non-streaming models (a streamed turn can't degrade to
  * them). `isAgent` alone does NOT exclude — it's a deployment-mechanism
  * marker (standard models invoked via Foundry's agent service), not "the
  * user picked a curated agent".
