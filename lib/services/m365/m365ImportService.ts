@@ -157,15 +157,15 @@ function assertValidSignature(head: Buffer, name: string): void {
  * Yields the response body as Buffers, validating the audio/video signature
  * on the leading bytes before anything is written and enforcing the byte
  * cap as the stream flows (Graph metadata or Content-Length can be absent
- * or stale — the stream itself is authoritative). `counter`, when given,
- * tracks the actual byte total so callers can report the real stored size.
+ * or stale — the stream itself is authoritative). `counter` tracks the
+ * actual byte total so callers can report the real stored size.
  */
 async function* validatedChunks(
   body: ReadableStream<Uint8Array>,
   name: string,
   checkSignature: boolean,
   maxBytes: number,
-  counter?: { bytes: number },
+  counter: { bytes: number },
 ): AsyncGenerator<Buffer> {
   const reader = body.getReader();
   // Chunks held back until the signature prefix is complete.
@@ -180,7 +180,7 @@ async function* validatedChunks(
       if (!value || value.length === 0) continue;
       const chunk = Buffer.from(value);
       total += chunk.length;
-      if (counter) counter.bytes = total;
+      counter.bytes = total;
       if (total > maxBytes) {
         throw new M365ImportError(
           'File exceeds the size limit for this operation',
