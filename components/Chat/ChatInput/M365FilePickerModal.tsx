@@ -1429,9 +1429,10 @@ const M365FilePickerBody: FC<{
             <span>{t(errorKey)}</span>
             {/* Consent/connection failures are fixable in Settings →
                 Connections; there is no section deep-link mechanism, so the
-                CTA opens Settings and the label names the section. */}
-            {(errorKey === 'errors.consentMissing' ||
-              errorKey === 'errors.notConnected') && (
+                CTA opens Settings and the label names the section. Every
+                other failure gets a retry of the current listing instead. */}
+            {errorKey === 'errors.consentMissing' ||
+            errorKey === 'errors.notConnected' ? (
               <button
                 type="button"
                 onClick={() => {
@@ -1441,6 +1442,14 @@ const M365FilePickerBody: FC<{
                 className="rounded-md border border-amber-300 px-2.5 py-1 text-xs font-medium text-amber-800 hover:bg-amber-50 dark:border-amber-700 dark:text-amber-300 dark:hover:bg-amber-900/20"
               >
                 {t('errors.openConnections')}
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => void load()}
+                className="rounded-md border border-amber-300 px-2.5 py-1 text-xs font-medium text-amber-800 hover:bg-amber-50 dark:border-amber-700 dark:text-amber-300 dark:hover:bg-amber-900/20"
+              >
+                {t('retry')}
               </button>
             )}
           </div>
@@ -1469,35 +1478,69 @@ const M365FilePickerBody: FC<{
             </ul>
           )
         ) : tab === 'sharepoint' && sharePointPhase === 'sites' ? (
-          sites.length === 0 ? (
+          sitesSearched ? (
+            // Search results replace the browse listing while a completed
+            // search is active; zero hits is a no-results state, never the
+            // "start searching" hint.
+            sites.length === 0 ? (
+              <div className="flex h-full items-center justify-center px-6 text-center text-sm text-gray-500 dark:text-gray-400">
+                {t('sitesNoResults', { query: trimmedQuery })}
+              </div>
+            ) : (
+              <ul>{sites.map(renderSiteRow)}</ul>
+            )
+          ) : siteBrowse === null ? (
+            // Pre-load flash only (loading/error render above); the hint
+            // remains as a harmless fallback.
             <div className="flex h-full items-center justify-center px-6 text-center text-sm text-gray-500 dark:text-gray-400">
-              {/* A completed search with zero hits is a no-results state,
-                  not an invitation to start searching. */}
-              {sitesSearched && trimmedQuery.length >= SEARCH_MIN_CHARS
-                ? t('sitesNoResults', { query: trimmedQuery })
-                : t('sitesHint')}
+              {t('sitesHint')}
+            </div>
+          ) : siteBrowse.followed.length === 0 &&
+            siteBrowse.sites.length === 0 &&
+            !siteBrowse.nextToken ? (
+            <div className="flex h-full items-center justify-center px-6 text-center text-sm text-gray-500 dark:text-gray-400">
+              {t('sitesEmpty')}
             </div>
           ) : (
             <ul>
-              {sites.map((site) => (
-                <li key={site.siteId}>
+              {siteBrowse.followed.length > 0 && (
+                <>
+                  {siteSectionHeader('sections.followedSites')}
+                  {siteBrowse.followed.map(renderSiteRow)}
+                </>
+              )}
+              {siteSectionHeader('sections.allSites')}
+              {siteBrowse.sites.map(renderSiteRow)}
+              {sitesLoadMoreFailed ? (
+                <li className="flex items-center justify-center gap-2 px-3 py-2 text-xs text-amber-700 dark:text-amber-400">
+                  <span>{t('loadMoreFailed')}</span>
                   <button
                     type="button"
-                    onClick={() => {
-                      cancelSearch();
-                      setQuery('');
-                      setCrumbs([{ label: site.name, siteId: site.siteId }]);
-                    }}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-neutral-700/50"
+                    onClick={() => void loadMoreSites()}
+                    className="rounded-md border border-neutral-300 px-2 py-0.5 text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
                   >
-                    <IconBrandOnedrive
-                      size={18}
-                      className="flex-shrink-0 text-blue-500"
-                    />
-                    <span className="truncate">{site.name}</span>
+                    {t('retry')}
                   </button>
                 </li>
-              ))}
+              ) : siteBrowse.nextToken ? (
+                <li className="p-2">
+                  <button
+                    type="button"
+                    onClick={() => void loadMoreSites()}
+                    disabled={sitesLoadingMore}
+                    className="flex w-full items-center justify-center gap-1 rounded-md py-1.5 text-xs text-gray-600 hover:bg-gray-100 disabled:pointer-events-none dark:text-gray-400 dark:hover:bg-neutral-700/50"
+                  >
+                    {sitesLoadingMore ? (
+                      <>
+                        <IconLoader2 size={14} className="animate-spin" />
+                        {t('loadingMore')}
+                      </>
+                    ) : (
+                      t('loadMore')
+                    )}
+                  </button>
+                </li>
+              ) : null}
             </ul>
           )
         ) : tab === 'sharepoint' && sharePointPhase === 'libraries' ? (
