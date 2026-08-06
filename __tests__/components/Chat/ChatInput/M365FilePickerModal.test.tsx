@@ -744,6 +744,123 @@ describe('M365FilePickerModal SharePoint site search', () => {
   });
 });
 
+describe('M365FilePickerModal SharePoint browse', () => {
+  it('renders followed and all-sites sections on entering the tab', async () => {
+    listSitesMock.mockResolvedValueOnce({
+      followed: [{ siteId: 'f1', name: 'Team HQ' }],
+      sites: [{ siteId: 's1', name: 'Ops' }],
+    });
+    renderPicker();
+    fireEvent.click(
+      await screen.findByRole('tab', { name: 'tabs.sharepoint' }),
+    );
+    await screen.findByText('Team HQ');
+    expect(screen.getByText('sections.followedSites')).toBeInTheDocument();
+    expect(screen.getByText('sections.allSites')).toBeInTheDocument();
+    expect(screen.getByText('Ops')).toBeInTheDocument();
+    expect(listSitesMock).toHaveBeenCalledWith();
+  });
+
+  it('omits the followed section when there are no followed sites', async () => {
+    listSitesMock.mockResolvedValueOnce({
+      followed: [],
+      sites: [{ siteId: 's1', name: 'Ops' }],
+    });
+    renderPicker();
+    fireEvent.click(
+      await screen.findByRole('tab', { name: 'tabs.sharepoint' }),
+    );
+    await screen.findByText('Ops');
+    expect(
+      screen.queryByText('sections.followedSites'),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText('sections.allSites')).toBeInTheDocument();
+  });
+
+  it('pages the all-sites list, keeping rows on failure with a retry', async () => {
+    listSitesMock.mockResolvedValueOnce({
+      followed: [],
+      sites: [{ siteId: 's1', name: 'Ops' }],
+      nextToken: 'st1',
+    });
+    renderPicker();
+    fireEvent.click(
+      await screen.findByRole('tab', { name: 'tabs.sharepoint' }),
+    );
+    await screen.findByText('Ops');
+
+    // Failure keeps loaded rows and offers an inline retry.
+    listSitesMock.mockRejectedValueOnce(new Error('boom'));
+    fireEvent.click(screen.getByText('loadMore'));
+    await screen.findByText('loadMoreFailed');
+    expect(screen.getByText('Ops')).toBeInTheDocument();
+
+    // Retry replays the token; the append dedupes and drops the token.
+    listSitesMock.mockResolvedValueOnce({
+      sites: [
+        { siteId: 's1', name: 'Ops' },
+        { siteId: 's2', name: 'Legal' },
+      ],
+    });
+    fireEvent.click(screen.getByText('retry'));
+    await screen.findByText('Legal');
+    expect(listSitesMock).toHaveBeenLastCalledWith('st1');
+    expect(screen.getAllByText('Ops')).toHaveLength(1);
+    expect(screen.queryByText('loadMore')).not.toBeInTheDocument();
+  });
+
+  it('search overrides browse; clearing the query restores it without a refetch', async () => {
+    const { searchSites } = await import('@/client/services/m365/m365Client');
+    const searchSitesMock = vi.mocked(searchSites);
+    vi.useFakeTimers();
+    listSitesMock.mockResolvedValue({
+      followed: [],
+      sites: [{ siteId: 's1', name: 'Ops' }],
+    });
+    renderPicker();
+    await act(async () => {});
+    fireEvent.click(screen.getByRole('tab', { name: 'tabs.sharepoint' }));
+    await act(async () => {});
+    expect(screen.getByText('Ops')).toBeInTheDocument();
+    const browseCalls = listSitesMock.mock.calls.length;
+
+    searchSitesMock.mockResolvedValueOnce([{ siteId: 'x1', name: 'HR Hit' }]);
+    fireEvent.change(screen.getByPlaceholderText('searchSitesPlaceholder'), {
+      target: { value: 'hr' },
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(300);
+    });
+    expect(screen.getByText('HR Hit')).toBeInTheDocument();
+    expect(screen.queryByText('Ops')).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getByPlaceholderText('searchSitesPlaceholder'), {
+      target: { value: '' },
+    });
+    await act(async () => {});
+    expect(screen.getByText('Ops')).toBeInTheDocument();
+    expect(screen.queryByText('HR Hit')).not.toBeInTheDocument();
+    // The browse listing came back from the session cache, not a refetch.
+    expect(listSitesMock.mock.calls.length).toBe(browseCalls);
+  });
+
+  it('shows a typed error with retry when the browse listing fails to load', async () => {
+    listSitesMock.mockRejectedValueOnce(new Error('boom'));
+    renderPicker();
+    fireEvent.click(
+      await screen.findByRole('tab', { name: 'tabs.sharepoint' }),
+    );
+    await screen.findByText('errors.generic');
+
+    listSitesMock.mockResolvedValueOnce({
+      followed: [],
+      sites: [{ siteId: 's1', name: 'Ops' }],
+    });
+    fireEvent.click(screen.getByText('retry'));
+    await screen.findByText('Ops');
+  });
+});
+
 describe('M365FilePickerModal type-filter auto-scan state', () => {
   it('explains the scan and offers a way out when the filter empties loaded pages', async () => {
     listDrivePageMock.mockResolvedValueOnce(
