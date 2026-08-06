@@ -173,6 +173,17 @@ export interface M365SaveDestination {
   name: string;
   /** Human-readable breadcrumb for toasts/labels, e.g. "SharePoint › Marketing › Documents › Reports". */
   pathLabel: string;
+  /**
+   * Picker tab the destination was chosen from, recorded so the folder
+   * picker can reopen at the destination instead of the root. Optional:
+   * destinations persisted before this field existed open at the root.
+   */
+  tab?: M365PickerTab;
+  /**
+   * Breadcrumb trail to the destination folder (last crumb is the folder
+   * itself), for reopening the picker in place. Same optionality as `tab`.
+   */
+  crumbs?: M365PickerCrumb[];
 }
 
 export interface M365SaveResult {
