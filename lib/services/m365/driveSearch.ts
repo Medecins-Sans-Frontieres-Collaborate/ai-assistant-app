@@ -55,9 +55,18 @@ interface SearchQueryResponse {
   }[];
 }
 
-/** KQL string literal: strip quotes (they would change query semantics). */
+/**
+ * KQL term hygiene: strip quotes plus the structural characters that would
+ * change query semantics — parentheses regroup, colons start a property
+ * restriction (`x) OR (filetype:one`), comparison/brace characters bind
+ * ranges. Uppercase operator WORDS (AND/OR/NOT) between plain terms only
+ * shape relevance, never reach beyond the user's own delegated permissions.
+ */
 function kqlTerm(query: string): string {
-  return query.replace(/["']/g, '').trim();
+  return query
+    .replace(/["'():={}[\]<>*]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 /**
