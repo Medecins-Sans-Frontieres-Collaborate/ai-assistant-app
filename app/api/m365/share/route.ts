@@ -3,8 +3,11 @@
  *
  * POST /api/m365/share  { driveId, itemId, emails?: string[] }
  *
- * Always a direct, user-initiated action (the Share dialog) on a file the
- * app just saved via /api/m365/save — never triggered from model output.
+ * Always a direct, user-initiated action (the Share dialog) — never
+ * triggered from model output. The dialog only offers files the app just
+ * saved via /api/m365/save, but the route itself accepts any item the
+ * user's delegated token can share (equivalent to what the OneDrive UI
+ * would allow them).
  * Two modes:
  *   - no emails → an ORGANIZATION-scoped view link (Graph createLink).
  *     People in the tenant with the link can read; nothing is public.
@@ -26,6 +29,7 @@ import {
 
 import {
   badRequestResponse,
+  errorResponse,
   successResponse,
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
@@ -103,7 +107,14 @@ export async function POST(req: NextRequest) {
       );
       const link = permission.link?.webUrl;
       if (!link) {
-        return badRequestResponse('Graph returned no sharing link');
+        // A Graph-side anomaly, not a caller mistake — a 400 would make the
+        // client blame the request.
+        return errorResponse(
+          'Microsoft Graph returned no sharing link',
+          502,
+          undefined,
+          'M365_GRAPH_ERROR',
+        );
       }
       return successResponse({ link, scope: 'organization' });
     }
