@@ -12,7 +12,7 @@ import {
   within,
 } from '@testing-library/react';
 
-import { listDrivePage } from '@/client/services/m365/m365Client';
+import { listDrivePage, listSites } from '@/client/services/m365/m365Client';
 
 import type { M365DriveEntry, M365DrivePage } from '@/types/m365';
 
@@ -47,6 +47,7 @@ vi.mock('@/client/services/m365/m365Client', () => {
     M365_SEARCH_MIN_CHARS: 2,
     listDrivePage: vi.fn(),
     listDrive: vi.fn(),
+    listSites: vi.fn(),
     searchSites: vi.fn(),
     listSiteDrives: vi.fn(),
     listJoinedTeams: vi.fn(),
@@ -55,6 +56,7 @@ vi.mock('@/client/services/m365/m365Client', () => {
 });
 
 const listDrivePageMock = vi.mocked(listDrivePage);
+const listSitesMock = vi.mocked(listSites);
 
 function entry(itemId: string, name: string, isFolder = false): M365DriveEntry {
   return { driveId: 'd1', itemId, name, isFolder };
@@ -75,6 +77,7 @@ function renderPicker() {
 beforeEach(() => {
   vi.clearAllMocks();
   listDrivePageMock.mockResolvedValue(page([]));
+  listSitesMock.mockResolvedValue({ followed: [], sites: [] });
   // The picker persists its location into the real store singleton; reset it
   // so one test's navigation can't become the next test's starting point.
   useSettingsStore.getState().setM365PickerLocation(null);
@@ -711,9 +714,10 @@ describe('M365FilePickerModal SharePoint site search', () => {
     await act(async () => {});
     fireEvent.click(screen.getByRole('tab', { name: 'tabs.sharepoint' }));
     await act(async () => {});
-    expect(screen.getByText('sitesHint')).toBeInTheDocument();
+    // Default browse mock is empty → the empty-browse state, not the hint.
+    expect(screen.getByText('sitesEmpty')).toBeInTheDocument();
 
-    // Zero hits: a completed search must not show the "start searching" hint.
+    // Zero hits: a completed search must not show the browse/hint state.
     searchSitesMock.mockResolvedValueOnce([]);
     const input = screen.getByPlaceholderText('searchSitesPlaceholder');
     fireEvent.change(input, { target: { value: 'hr' } });
@@ -723,7 +727,7 @@ describe('M365FilePickerModal SharePoint site search', () => {
     // In-flight site searches are abortable (cancelSearch can cancel them).
     expect(searchSitesMock).toHaveBeenCalledWith('hr', expect.any(AbortSignal));
     expect(screen.getByText('sitesNoResults')).toBeInTheDocument();
-    expect(screen.queryByText('sitesHint')).not.toBeInTheDocument();
+    expect(screen.queryByText('sitesEmpty')).not.toBeInTheDocument();
 
     // A hit, then clearing the query resets the results, not just the state.
     searchSitesMock.mockResolvedValueOnce([{ siteId: 's1', name: 'HR Site' }]);
@@ -736,7 +740,7 @@ describe('M365FilePickerModal SharePoint site search', () => {
     fireEvent.change(input, { target: { value: '' } });
     await act(async () => {});
     expect(screen.queryByText('HR Site')).not.toBeInTheDocument();
-    expect(screen.getByText('sitesHint')).toBeInTheDocument();
+    expect(screen.getByText('sitesEmpty')).toBeInTheDocument();
   });
 });
 
