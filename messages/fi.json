@@ -128,7 +128,7 @@
   "Description": "Kuvaus",
   "A description for your prompt_": "Promptisi kuvaus.",
   "Prompt": "kehotus",
-  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Promptin sisältö. Käytä '{{}}' muuttujien merkitsemiseen. Esim: {{nimi}} on {{adjektiivi}} {{substantiivi}}",
+  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Kehotteen sisältö. Käytä '{{}}' osoittamaan vaihtuvaa muuttujaa. Esim: '{{name}}' on '{{adjective}}' '{{noun}}'",
   "Save": "Tallenna",
   "A name for your prompt_": "Nimi kehotteellesi.",
   "New chat": "Uusi keskustelu",

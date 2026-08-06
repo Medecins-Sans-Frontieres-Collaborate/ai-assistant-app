@@ -221,7 +221,7 @@
   "Are you sure you want to delete this folder?": "Êtes-vous sûr de vouloir supprimer ce dossier ?",
   "No prompts_": "Aucune invite.",
   "Prompt": "Invite",
-  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Contenu de l'invite. Utilisez '{{}}' pour désigner une variable. Ex : {{nom}} est un {{adjectif}} {{nom}}",
+  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Contenu de la consigne. Utilisez « {{}} » pour indiquer une variable. Ex : « {{name}} » est un(e) « {{adjective}} » « {{noun}} »",
   "A name for your prompt_": "Un nom pour votre invite.",
   "New Prompt": "Nouvelle invite",
   "Edit Prompt": "Modifier l'instruction",

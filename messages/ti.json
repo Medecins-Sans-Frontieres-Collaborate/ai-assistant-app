@@ -1348,7 +1348,7 @@
       "autoInjectPinnedImagesDescription": "ካብቲ ዝሰርሕ እንተኾነ፣ ዝተጠቑሙ ምስታት ክልቲ ግዜ ኣብ ትኵሳት ኣብ ስራሕ ኣብ ዘተኸፉ ሞዴሎም ይተላእኩም። (ወሰን ውሳነ ወፃኢ ≈ 765 tokens ንኩሎም ዝተጠቑሙ ምስታት ኣብ ክልቲ ግዜ)። እንተዘይሰርሕ ዝተጠቑሙ ምስታት ኣብ ፓነሉ ኩሉ ግዜ ክቕልጡ እዮም፣ ግና ከምኡ ካብ ግዜ ናብ ሞዴል ኣይሰደሉን እንተንካዕካይ ድማ የተላእኹን። ኣብ Anthropic models ክዳ ተጽኒና የለን፣ ምስት ምዃኑ ካብፍሉይ ሞዴል ዝሰርሑ ምስታት ኣይተቐበሉን።"
     },
     "Quarantined Data": "ዳታ ናብ ኳራንቲን ዝተሰናኸተ",
-    "quarantineDataDescription": "{count} ብቁጽሪ ኳራንቲን ዳታ ({size}) ብጉድእ ዝተሰናኸቱ ኣብዚ አይተጽዓነን።",
+    "quarantineDataDescription": "ኣብ ልዕሊ {count} ብሓደሽቲ ቅልጡፍ ዝተዓበዩ {count, plural, one {እትም} other {እትምታት}} ({size}) ዝተሳኦ ገለ ግን ብብቕኡ ዝተኣታተኑ ዳታ ኣለኩም።",
     "Review & Recover": "ኣቐምጣን ምምሕዳርን",
     "Export Quarantined Data": "ዳታ ኳራንቲን መልእኽት",
     "Delete Quarantined Data": "ዳታ ኳራንቲን ምድማር",

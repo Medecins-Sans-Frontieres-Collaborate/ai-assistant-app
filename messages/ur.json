@@ -720,11 +720,11 @@
     "collapseThinking": "سوچ کو سمیٹیں",
     "viewReasoningProcess": "استدلال کا عمل دیکھیں",
     "modelSwitchPrompt": "یہ جواب {fallback} نے دیا کیونکہ {original} دستیاب نہیں تھا۔",
-    "switchToModel": "ماڈل پر سوئچ کریں",
+    "switchToModel": "{model} پر سوئچ کریں",
     "keepOriginalModel": "{model} پر ہی رہیں",
     "alwaysSwitchToModel": "جب {original} دستیاب نہ ہو تو ہمیشہ تبدیل کریں",
     "audioFromOriginal": "اصل سے آڈیو",
-    "audioFromTranslation": "ترجمے سے آڈیو",
+    "audioFromTranslation": "آڈیو {language} ترجمہ سے ہے",
     "actionsDisabledForEmbed": "اوپر شامل کردہ مواد میں کنٹرولز استعمال کریں",
     "loadingMessages": {
       "transcribingAndProcessing": "منتقلی اور پراسیسنگ جاری ہے...",
@@ -1120,7 +1120,7 @@
     "frees up storage space": "اسٹوریج کی جگہ خالی کرتا ہے",
     "legacyDataDescription": "آپ کے پاس {size} پرانا ڈیٹا ہے۔",
     "legacyDeleteError": "پرانا ڈیٹا حذف کرنے میں ناکام۔",
-    "legacyDeleteSuccess": "پرانا ڈیٹا کامیابی سے حذف ہو گیا۔",
+    "legacyDeleteSuccess": "پرانا ڈیٹا کامیابی سے حذف کر دیا گیا اور {size} خالی ہوئی۔",
     "Custom Instructions": "حسب ضرورت ہدایات",
     "Personalization": "ذاتی تخصیص",
     "Display Name": "نام ظاہر کریں",
@@ -1458,7 +1458,7 @@
     },
     "header": {
       "backToModels": "ماڈلز پر واپس جائیں",
-      "knowledgeCutoff": "علم کی حد",
+      "knowledgeCutoff": "علم کی حد: {cutoff}",
       "knowledgeCutoffLabel": "علم کی حد"
     },
     "modelTypes": {

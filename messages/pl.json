@@ -137,7 +137,7 @@
   "Description": "Opis",
   "A description for your prompt_": "Opis Twojego prompta.",
   "Prompt": "monit",
-  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Zawartość prompta. Użyj '{{}}' żeby oznaczyć zmienną. Np.: {{nazwa}} jest {{przymiotnik}} {{rzeczownik}}",
+  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Treść promptu. Użyj '{{}}' do oznaczenia zmiennej. Przykład: '{{name}}' jest '{{adjective}}' '{{noun}}'.",
   "Save": "Zapisz",
   "A name for your prompt_": "Nazwa dla Twojej podpowiedzi.",
   "New chat": "Nowy chat",

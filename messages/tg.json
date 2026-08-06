@@ -2629,8 +2629,8 @@
     "materialAttach": "Файл замима кунед",
     "willExtractPrefix": "Маълумот гирифта мешавад аз:",
     "materialText": "матни паём",
-    "materialFiles": "{count, plural, one {1 файл} other {# файл}",
-    "materialActiveFiles": "{count, plural, one {1 файли фаъол} other {# файли фаъол}",
+    "materialFiles": "{count, plural, one {1 файл} other {# файл}}",
+    "materialActiveFiles": "{count, plural, one {1 файли фаъол} other {# файли фаъол}}",
     "dismiss": "Бароварданро ғайрифаъол кунед"
   },
   "Connectors": "Пайвасткунандаҳо",

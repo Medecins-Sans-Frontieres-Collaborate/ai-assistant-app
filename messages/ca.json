@@ -128,7 +128,7 @@
   "Description": "Descripció",
   "A description for your prompt_": "Descripció del teu prompt.",
   "Prompt": "missatge",
-  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Contingut del missatge. Utilitza '{{}}' per indicar una variable. Ex: {{nom}} és un {{adjectiu}} {{substantiu}}",
+  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Contingut del missatge. Utilitzeu '{{}}' per indicar una variable. Ex.: '{{name}}' és un '{{adjective}}' '{{noun}}'",
   "Save": "Desa",
   "A name for your prompt_": "Un nom per al teu suggeriment.",
   "New chat": "Nova conversa",

@@ -128,7 +128,7 @@
   "Description": "Descrizione",
   "A description for your prompt_": "Descrizione del tuo prompt.",
   "Prompt": "prompt",
-  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Contenuto del prompt. Utilizza '{{}}' per indicare una variabile. Per esempio: {{nome}} è un {{aggettivo}} {{sostantivo}}",
+  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Contenuto del prompt. Usa '{{}}' per indicare una variabile. Es.: '{{name}}' è un '{{adjective}}' '{{noun}}'",
   "Save": "Salva",
   "A name for your prompt_": "Un nome per il tuo prompt.",
   "New chat": "Nuova conversazione",

@@ -129,7 +129,7 @@
   "Description": "Descriere",
   "A description for your prompt_": "Descrierea solicitării prompt.",
   "Prompt": "prompt",
-  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Conținut prompt. Utilizați '{{}}' pentru a indica o variabilă. De exemplu: {{nume}} este un {{adjectiv}} {{substantiv}}",
+  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Conținutul promptului. Folosiți '{{}}' pentru a marca o variabilă. Ex: '{{name}}' este un '{{adjective}}' '{{noun}}'",
   "Save": "Salvează",
   "A name for your prompt_": "Un nume pentru promptul tău.",
   "New conversation": "Conversație nouă",

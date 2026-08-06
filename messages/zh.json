@@ -728,7 +728,7 @@
     "fullSizePreview": "全尺寸预览",
     "failedToLoadImage": "无法加载图片",
     "loadingImage": "正在加载图片...",
-    "imageAlt": "聊天中的图片",
+    "imageAlt": "图片 {number}",
     "download": "下载",
     "openAsDocument": "以文档形式打开",
     "openInCodeEditor": "在代码编辑器中打开",

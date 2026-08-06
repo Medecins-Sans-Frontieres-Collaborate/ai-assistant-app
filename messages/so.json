@@ -3416,7 +3416,7 @@
     "connectButtonShort": "Ku xidh il model",
     "addAnother": "Ku dar il model kale",
     "edit": "Tafatir",
-    "disconnect": "Ka go'{name}",
+    "disconnect": "Ka gooy {name}",
     "disconnectedToast": "La gooyey {name}",
     "modelCountLabel": "{count} model",
     "loadingModels": "Model-yo ayaa soo dhacaya...",
@@ -4560,7 +4560,7 @@
       },
       "sitesNoResults": "Goobo looma helin \"{query}\"",
       "sitesEmpty": "Goobaha SharePoint lama heli karo. Isku day inaad magac ku raadiso.",
-      "itemCount": "{count, plural, one {# shay} other {# shay}"
+      "itemCount": "{count, plural, one {# shay} other {# shay} }"
     },
     "mail": {
       "menuLabel": "Soo dejiso iimayl…",

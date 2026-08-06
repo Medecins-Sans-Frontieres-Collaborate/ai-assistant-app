@@ -787,7 +787,7 @@
     "searchLanguages": "Shakisha indimi...",
     "selectLanguage": "Hitamo ururimi",
     "audioFromOriginal": "Amajwi aturuka ku mwandiko wa mbere",
-    "audioFromTranslation": "Amajwi aturuka ku buhinduzi bw'{language}",
+    "audioFromTranslation": "Ijwi rituruka mu gisobanuro cya {language}",
     "thinking": "Gutekereza...",
     "viewReasoningProcess": "Reba inzira yo gutekereza",
     "collapseThinking": "Funga gutekereza",

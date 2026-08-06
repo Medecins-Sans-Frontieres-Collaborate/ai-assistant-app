@@ -3938,7 +3938,7 @@
     "noM365Agents": "Hakuna wakala wa Microsoft 365 bado.",
     "m365AgentBadge": "Mafaili ya M365",
     "m365AgentSourceSummary": "Vyanzo {count} · {pending} havijapata faharasa",
-    "m365AgentEmptySourcesWarning": "{count, plural, one {Kikasha kimoja} other {Vikasha {#}}} vimefaharasiwa bila maandishi yanayoweza kusomwa (labda ni faili zilizopigwa skani au picha tu?) — wakala hawezi kujibu kutoka {count, plural, one {kikasha hicho} other {vikasha hivyo}}.",
+    "m365AgentEmptySourcesWarning": "{count, plural, one {Chanzo 1} other {Vyanzo #}} vimeorodheshwa bila maandishi yanayoweza kutolewa (labda faili imeskanwa au ni picha pekee?) — msaidizi hawezi kujibu kutoka kwa {count, plural, one {hicho chanzo} other {vyanzo hivyo}}.",
     "m365AgentStatusNotIndexed": "Haijafaharasiwa — imefichwa kwa watumiaji hadi kufaharasiwa kutawezekana",
     "m365AgentStatusPartial": "Imefaharasiwa sehemu: {indexed} kati ya {count} vyanzo — watumiaji watapata majibu kutoka vilivyofaharasiwa pekee",
     "m365AgentLastIndexed": "Ilifaharasiwa mwisho tarehe {date}",

@@ -4560,7 +4560,7 @@
       },
       "sitesNoResults": "Ala site ape kɛ tî “{query}”",
       "sitesEmpty": "Site SharePoint ape teni. Sèngä mbênî ti sôkô tî lo.",
-      "itemCount": "{count, plural, one {# gïndo} other {# gïndo}"
+      "itemCount": "{count, plural, one {# zo} other {# zo na}}"
     },
     "mail": {
       "menuLabel": "Kombere email…",

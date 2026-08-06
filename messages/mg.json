@@ -4404,7 +4404,7 @@
       "codeInterpreter": "Mangina ny fanakanana toy izao: mitohy ny chat ary tsy tanterahina fotsiny ny fihodinan'ny kaody. Raha tianao halavina mivantana amin'ny hafatra, vonoy ny Code interpreter etsy ambony.",
       "mcp": "Manakana tanteraka tsy hiasa mihitsy ny connector raha mbola mitohy ny chat. Raha tianao halavina amin'ny hafatra, vonoy ny Connectors etsy ambony."
     },
-    "overrideGateOffNote": "Voafafa amin'izao fotoana izao ho an'ireto olona ireto (eto na amin'ny dikan-teny maneran-tany), ka tsy misy fiantraikany ity fetra ity raha tsy averina ilay fiasa.",
+    "overrideGateOffNote": "Novonoina amin'izao fotoana izao ho an'ireo olona ireo ny {feature} (eto na amin'ny fanaingoana ankapobeny), ka tsy misy fiantraikany ity fetra ity raha tsy hoe misy zavatra manindry hanokatra indray ilay endri-javatra.",
     "untitledOverride": "Override tsy misy lohateny",
     "expandOverride": "Ahitsio override",
     "collapseOverride": "Afenoy override",

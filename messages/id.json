@@ -686,11 +686,11 @@
     "collapseThinking": "Ciutkan pemikiran",
     "viewReasoningProcess": "Lihat proses penalaran",
     "modelSwitchPrompt": "{fallback} menjawab ini karena {original} tidak tersedia.",
-    "switchToModel": "Beralih ke model",
+    "switchToModel": "Beralih ke {model}",
     "keepOriginalModel": "Tetap gunakan {model}",
     "alwaysSwitchToModel": "Selalu beralih jika {original} tidak tersedia",
     "audioFromOriginal": "Audio dari asli",
-    "audioFromTranslation": "Audio dari terjemahan",
+    "audioFromTranslation": "Audio berasal dari terjemahan {language}",
     "actionsDisabledForEmbed": "Gunakan kontrol pada konten yang tersemat di atas",
     "loadingMessages": {
       "transcribingAndProcessing": "Sedang mentranskripsi dan memproses...",
@@ -1086,7 +1086,7 @@
     "frees up storage space": "membebaskan ruang penyimpanan",
     "legacyDataDescription": "Anda memiliki {size} data lama.",
     "legacyDeleteError": "Gagal menghapus data lama.",
-    "legacyDeleteSuccess": "Data lama berhasil dihapus.",
+    "legacyDeleteSuccess": "Berhasil menghapus data lama dan membebaskan {size}.",
     "Custom Instructions": "Instruksi Khusus",
     "Personalization": "Personalisasi",
     "Display Name": "Nama Tampilan",
@@ -1448,7 +1448,7 @@
     },
     "header": {
       "backToModels": "Kembali ke Model",
-      "knowledgeCutoff": "Batas Pengetahuan",
+      "knowledgeCutoff": "Batas pengetahuan: {cutoff}",
       "knowledgeCutoffLabel": "Batas pengetahuan"
     },
     "modelTypes": {

@@ -698,7 +698,7 @@
     "fullSizePreview": "Xem trước kích thước đầy đủ",
     "failedToLoadImage": "Không thể tải hình ảnh",
     "loadingImage": "Đang tải hình ảnh...",
-    "imageAlt": "Hình ảnh trong cuộc trò chuyện",
+    "imageAlt": "Hình ảnh {number}",
     "download": "Tải xuống",
     "openAsDocument": "Mở dưới dạng tài liệu",
     "openInCodeEditor": "Mở trong trình soạn mã",

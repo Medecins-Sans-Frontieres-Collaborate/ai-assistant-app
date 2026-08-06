@@ -161,7 +161,7 @@
   "Description": "Beskrivning",
   "A description for your prompt_": "En beskrivning för din prompt.",
   "Prompt": "uppmaning",
-  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Prompt-innehåll. Använd '{{}}' för att beteckna en variabel. Ex: {{namn}} är ett {{adjektiv}} {{substantiv}}",
+  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Promptinnehåll. Använd '{{}}' för att ange en variabel. Ex: '{{name}}' är en '{{adjective}}' '{{noun}}'",
   "Save": "Spara",
   "A name for your prompt_": "Ett namn för din uppmaning.",
   "New chat": "Ny chatt",

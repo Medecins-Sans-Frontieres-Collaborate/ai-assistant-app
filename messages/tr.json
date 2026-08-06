@@ -130,7 +130,7 @@
   "Description": "Açıklama",
   "A description for your prompt_": "İsteminiz için bir açıklama.",
   "Prompt": "İstem",
-  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "İstem içeriği. Değişken belirtmek için '{{}}' kullanın. Örn: {{isim}} bir {{sıfat}} {{isim}}dir",
+  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "İçerik istemi. Değişkenleri belirtmek için '{{}}' kullanın. Örnek: '{{name}}' bir '{{adjective}}' '{{noun}}'",
   "Save": "Kaydet",
   "A name for your prompt_": "İsteminiz için bir isim.",
   "New chat": "Yeni sohbet",

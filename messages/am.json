@@ -3751,7 +3751,7 @@
     "accessEveryone": "ሁሉም",
     "accessRestricted": "የተገደበ",
     "edit": "አስተካክል",
-    "updatedByLine": "መጨረሻ የተቀየረው በ{name} በ{date}",
+    "updatedByLine": "በ {user} በ {date} የተቀየረ መጨረሻ",
     "accessTypeLabel": "ይህን ወኪል ማን ማጠቀም ይችላል",
     "everyoneDescription": "በAzure መዳረሻቸው ወደዚህ ወኪል ማድረስ የሚችል ሁሉ።",
     "restrictedDescription": "በታች የተዘረዘሩት ተጠቃሚዎችና ዶሜኖች ብቻ።",

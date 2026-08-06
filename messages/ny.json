@@ -3119,7 +3119,7 @@
       "aggMedian": "Chapakati",
       "chartSeriesTruncated": "Kuwonetsa {max} zapamwamba",
       "chartPointsTruncated": "Kuwonetsa {max} mfundo zolimbikitsidwa",
-      "chartScatterAria": "Chithunzi cha x motsutsana ndi y",
+      "chartScatterAria": "Chithunzi cha kusiyanasiyana cha {x} motsutsana ndi {y}",
       "pivotTableAria": "Tebulo la pivot lagawidwa ndi {column}",
       "schemaFormula": "Zomwe zapezeka",
       "schemaFormulaPlaceholder": "mwa chitsanzo [Cases] / [Population] * 1000",
