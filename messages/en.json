@@ -4473,6 +4473,7 @@
       "empty": "Nothing here",
       "sitesHint": "Search for a SharePoint site to browse its document libraries.",
       "sitesNoResults": "No sites found for “{query}”",
+      "sitesEmpty": "No SharePoint sites available. Try searching by name.",
       "errors": {
         "consentMissing": "This feature is waiting for your organization’s admin approval.",
         "notConnected": "Your Microsoft 365 session is unavailable. Try signing out and back in.",
@@ -4529,7 +4530,9 @@
         "fromRecent": "From your recent files",
         "nameMatches": "Name matches",
         "contentMatches": "Found in file contents",
-        "moreResults": "More results"
+        "moreResults": "More results",
+        "followedSites": "Followed sites",
+        "allSites": "All sites"
       }
     },
     "mail": {
