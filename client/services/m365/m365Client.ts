@@ -98,9 +98,13 @@ export async function listDrive(
   return (await listDrivePage(view, options)).entries;
 }
 
-export async function searchSites(query: string): Promise<M365SiteEntry[]> {
+export async function searchSites(
+  query: string,
+  signal?: AbortSignal,
+): Promise<M365SiteEntry[]> {
   const data = await requestJson<{ sites: M365SiteEntry[] }>(
     `/api/m365/sites?q=${encodeURIComponent(query)}`,
+    signal ? { signal } : undefined,
   );
   return data.sites;
 }
