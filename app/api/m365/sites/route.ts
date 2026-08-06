@@ -1,9 +1,14 @@
 /**
  * SharePoint site discovery for the M365 file picker.
  *
+ * GET /api/m365/sites            → browse listing: the user's followed
+ *                                  (favorited) sites plus the permission-
+ *                                  trimmed all-sites list, paged
  * GET /api/m365/sites?q=…        → sites matching the search (user-permission
- *                                  trimmed by Graph); &pageToken=… replays a
- *                                  previously issued continuation token
+ *                                  trimmed by Graph)
+ * Either listing + &pageToken=…  → replays a previously issued continuation
+ *                                  token (all-sites/search pages only —
+ *                                  followed sites ride the first page)
  * GET /api/m365/sites?siteId=…   → that site's document libraries (drives),
  *                                  browsable via /api/m365/drive?driveId=…
  */
@@ -69,6 +74,24 @@ function sitesResponse(data: GraphSitePage) {
   });
 }
 
+/**
+ * The user's followed (favorited) sites. Best-effort by design: following
+ * is an optional SharePoint feature and some tenants disable the endpoint —
+ * a browse listing without a "Followed" section beats a failed tab.
+ */
+async function fetchFollowedSites(req: NextRequest): Promise<M365SiteEntry[]> {
+  try {
+    const data = await graphJson<GraphSitePage>(
+      req,
+      SCOPES,
+      '/me/followedSites?$select=id,displayName,name,webUrl',
+    );
+    return normalizeSites(data);
+  } catch {
+    return [];
+  }
+}
+
 export async function GET(req: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) {
@@ -113,7 +136,28 @@ export async function GET(req: NextRequest) {
     }
 
     if (!query) {
-      return badRequestResponse('Missing search query');
+      // Browse listing: followed sites first, then the tenant's
+      // permission-trimmed site list (`search=*` is Graph's documented way
+      // to enumerate sites the caller can reach). Followed sites are
+      // deduped out of the first all-sites page so they only appear once.
+      const [followed, allData] = await Promise.all([
+        fetchFollowedSites(req),
+        graphJson<GraphSitePage>(
+          req,
+          SCOPES,
+          `/sites?search=*&$select=id,displayName,name,webUrl&$top=25`,
+        ),
+      ]);
+      const followedIds = new Set(followed.map((s) => s.siteId));
+      const nextLink = allData['@odata.nextLink'];
+      const nextToken = nextLink ? encodeGraphNextLink(nextLink) : undefined;
+      return successResponse({
+        followed,
+        sites: normalizeSites(allData).filter(
+          (s) => !followedIds.has(s.siteId),
+        ),
+        ...(nextToken && { nextToken }),
+      });
     }
     const data = await graphJson<GraphSitePage>(
       req,
