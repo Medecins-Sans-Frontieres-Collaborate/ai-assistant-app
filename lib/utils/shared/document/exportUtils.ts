@@ -120,7 +120,32 @@ export async function fetchDocxBlob(html: string): Promise<Blob> {
   });
 
   if (!response.ok) {
-    throw new Error('Failed to convert to DOCX');
+    // The route answers errors in the app's apiResponse shape
+    // ({ error, code?, details? }) — surface the server's own message (and
+    // code) so callers' toasts/logs show the real reason, not a generic one.
+    let serverMessage: string | undefined;
+    let code: string | undefined;
+    try {
+      const body: unknown = await response.json();
+      if (body && typeof body === 'object') {
+        const { error, code: bodyCode } = body as {
+          error?: unknown;
+          code?: unknown;
+        };
+        if (typeof error === 'string' && error.trim()) {
+          serverMessage = error.trim();
+        }
+        if (typeof bodyCode === 'string' && bodyCode) {
+          code = bodyCode;
+        }
+      }
+    } catch {
+      // Non-JSON error body — fall through to the status-based message.
+    }
+    const message = serverMessage
+      ? `Failed to convert to DOCX: ${serverMessage}`
+      : `Failed to convert to DOCX (HTTP ${response.status})`;
+    throw new Error(code ? `${message} [${code}]` : message);
   }
   return response.blob();
 }
