@@ -5,11 +5,14 @@ import { useTranslations } from 'next-intl';
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
 import {
-  M365ClientError,
   downloadDriveItem,
   fetchMailImport,
   importDriveItemToStorage,
 } from '@/client/services/m365/m365Client';
+import {
+  M365ErrorKind,
+  m365ErrorKind,
+} from '@/client/services/m365/m365ErrorKinds';
 import {
   buildFailureDocument,
   makeTextFile,
@@ -29,26 +32,60 @@ import { getFileCategory } from '@/lib/constants/fileLimits';
  * marked by `sourceError` (never a blocked send, never a silent drop).
  */
 
+/**
+ * Removes the pending placeholder for one attachment. Keyed by the unique
+ * sourceKey (stored as the placeholder's sourceUrl), never the display name:
+ * two different files can legitimately share a name (report.docx in two
+ * folders), and a name-keyed filter would remove both placeholders when the
+ * first one finishes.
+ */
+function removePlaceholder(sourceKey: string): void {
+  useChatInputStore
+    .getState()
+    .setFilePreviews((prev) =>
+      prev.filter(
+        (p) => !(p.sourceUrl === sourceKey && p.status === 'pending'),
+      ),
+    );
+}
+
+/**
+ * Tags the tile `handleFileUpload` created for `file` with its M365 source.
+ * The upload pipeline only exposes tiles by name at this seam, so claim
+ * exactly ONE tile — the first name match whose sourceUrl is still unset.
+ * A plain name match would tag every same-named tile (including ones a
+ * concurrent attachment already claimed) with this attachment's source.
+ */
+function tagUploadedTile(
+  fileName: string,
+  sourceUrl: string,
+  sourceError?: string,
+): void {
+  useChatInputStore.getState().setFilePreviews((prev) => {
+    const index = prev.findIndex(
+      (p) => p.name === fileName && p.sourceUrl === undefined,
+    );
+    if (index === -1) return prev;
+    return prev.map((p, i) =>
+      i === index
+        ? { ...p, sourceUrl, ...(sourceError && { sourceError }) }
+        : p,
+    );
+  });
+}
+
+const ERROR_KIND_KEYS: Partial<Record<M365ErrorKind, string>> = {
+  consentMissing: 'errors.consentMissing',
+  notConnected: 'errors.notConnected',
+  fileTooLarge: 'errors.fileTooLarge',
+  notFound: 'errors.notFound',
+  forbidden: 'errors.forbidden',
+  network: 'errors.network',
+  rateLimited: 'errors.rateLimited',
+};
+
 function errorKey(error: unknown): string {
-  if (error instanceof M365ClientError) {
-    switch (error.code) {
-      case 'M365_CONSENT_MISSING':
-        return 'errors.consentMissing';
-      case 'M365_NOT_CONNECTED':
-        return 'errors.notConnected';
-      case 'M365_FILE_TOO_LARGE':
-        return 'errors.fileTooLarge';
-      case 'M365_NOT_FOUND':
-        return 'errors.notFound';
-      case 'M365_FORBIDDEN':
-        return 'errors.forbidden';
-      case 'NETWORK':
-        return 'errors.network';
-      default:
-        return 'errors.generic';
-    }
-  }
-  return 'errors.generic';
+  return ERROR_KIND_KEYS[m365ErrorKind(error)] ?? 'errors.generic';
 }
 
 export function useM365Attachment() {
@@ -109,9 +146,8 @@ export function useM365Attachment() {
         entry.webUrl ?? `m365://${entry.driveId}/${entry.itemId}`;
       if (store.filePreviews.some((p) => p.sourceUrl === sourceKey)) return;
 
-      const placeholderName = t('attach.fetching', { name: entry.name });
       const placeholder: FilePreview = {
-        name: placeholderName,
+        name: t('attach.fetching', { name: entry.name }),
         type: 'text/markdown',
         status: 'pending',
         previewUrl: '',
@@ -124,12 +160,13 @@ export function useM365Attachment() {
           entry.driveId,
           entry.itemId,
         );
-        useChatInputStore
-          .getState()
-          .setFilePreviews((prev) =>
-            prev.filter((p) => p.name !== placeholderName),
-          );
-        registerImportedUpload(imported);
+        removePlaceholder(sourceKey);
+        // Fall back to the sourceKey so the tile always carries the dedupe
+        // key, even when the import response has no webUrl.
+        registerImportedUpload({
+          ...imported,
+          webUrl: imported.webUrl ?? sourceKey,
+        });
       } catch (error) {
         // Same invariant as the browser path: the failure becomes an
         // explanatory attachment, never a silent drop.
@@ -144,21 +181,9 @@ export function useM365Attachment() {
             hint: t('doc.failureHint'),
           }),
         );
-        useChatInputStore
-          .getState()
-          .setFilePreviews((prev) =>
-            prev.filter((p) => p.name !== placeholderName),
-          );
+        removePlaceholder(sourceKey);
         await useChatInputStore.getState().handleFileUpload([file]);
-        useChatInputStore
-          .getState()
-          .setFilePreviews((prev) =>
-            prev.map((p) =>
-              p.name === file.name
-                ? { ...p, sourceUrl: sourceKey, sourceError }
-                : p,
-            ),
-          );
+        tagUploadedTile(file.name, sourceKey, sourceError);
       }
     },
     [registerImportedUpload, t],
@@ -206,25 +231,13 @@ export function useM365Attachment() {
         );
       }
 
-      useChatInputStore
-        .getState()
-        .setFilePreviews((prev) =>
-          prev.filter((p) => p.name !== placeholderName),
-        );
+      removePlaceholder(sourceKey);
       await useChatInputStore.getState().handleFileUpload([file]);
 
       // Tag the tile the pipeline created: sourceUrl is the dedupe key and
       // drives the link badge; webUrl (when known) makes the badge clickable
       // to the real M365 location.
-      useChatInputStore
-        .getState()
-        .setFilePreviews((prev) =>
-          prev.map((p) =>
-            p.name === file.name
-              ? { ...p, sourceUrl: webUrl ?? sourceKey, sourceError }
-              : p,
-          ),
-        );
+      tagUploadedTile(file.name, webUrl ?? sourceKey, sourceError);
     },
     [t],
   );
