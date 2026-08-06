@@ -56,13 +56,22 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    const data = await graphJson<{
-      value?: { id?: string; displayName?: string }[];
-    }>(req, TEAMS_SCOPES, '/me/joinedTeams?$select=id,displayName&$top=100');
-    const teams = (data.value ?? [])
-      .filter((t): t is { id: string; displayName?: string } => !!t.id)
-      .map((t) => ({ groupId: t.id, name: t.displayName || t.id }))
-      .sort((a, b) => a.name.localeCompare(b.name));
+    // NO $top here: /me/joinedTeams rejects the Top query option on many
+    // tenants ("Query option 'Top' is not allowed"). Follow paging instead;
+    // the cap is a runaway guard, not a page size.
+    const teams: { groupId: string; name: string }[] = [];
+    let path: string | null = '/me/joinedTeams?$select=id,displayName';
+    for (let page = 0; path && page < 10; page++) {
+      const data: {
+        value?: { id?: string; displayName?: string }[];
+        '@odata.nextLink'?: string;
+      } = await graphJson(req, TEAMS_SCOPES, path);
+      for (const t of data.value ?? []) {
+        if (t.id) teams.push({ groupId: t.id, name: t.displayName || t.id });
+      }
+      path = data['@odata.nextLink'] ?? null;
+    }
+    teams.sort((a, b) => a.name.localeCompare(b.name));
     return successResponse({ teams });
   } catch (error) {
     return m365ErrorResponse(error);
