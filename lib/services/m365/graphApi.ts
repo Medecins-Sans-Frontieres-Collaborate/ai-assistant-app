@@ -25,13 +25,14 @@ import { getGraphAccessToken } from '@/auth';
 
 export const GRAPH_V1 = 'https://graph.microsoft.com/v1.0';
 
-const CONSENT_ERROR_CODE = 'AADSTS65001';
+export const CONSENT_ERROR_CODE = 'AADSTS65001';
 
 export type M365ErrorKind =
   | 'not_connected'
   | 'consent_missing'
   | 'not_found'
   | 'forbidden'
+  | 'rate_limited'
   | 'graph_error';
 
 export class M365Error extends Error {
@@ -39,6 +40,8 @@ export class M365Error extends Error {
     message: string,
     readonly kind: M365ErrorKind,
     readonly status: number,
+    /** Graph throttle hint, seconds — only set for `rate_limited`. */
+    readonly retryAfterSeconds?: number,
   ) {
     super(message);
     this.name = 'M365Error';
@@ -108,18 +111,43 @@ export async function graphFetch(
   });
 
   if (!response.ok) {
-    const body = await response.json().catch(() => null);
-    const message =
-      body?.error?.message || `Graph request failed (${response.status})`;
-    if (response.status === 404) {
-      throw new M365Error(message, 'not_found', 404);
-    }
-    if (response.status === 403 || response.status === 401) {
-      throw new M365Error(message, 'forbidden', 403);
-    }
-    throw new M365Error(message, 'graph_error', 502);
+    throw await graphErrorFromResponse(response);
   }
   return response;
+}
+
+/**
+ * Maps a non-OK Graph response to a typed M365Error — the single mapping
+ * every M365 caller shares (graphFetch, the save route's overwrite fetch,
+ * the backup drive store). 429 keeps its status and Retry-After so clients
+ * get a real backoff signal instead of a generic 502; 401 means the token
+ * itself was rejected (not a permission gap), which is a reconnect problem.
+ */
+export async function graphErrorFromResponse(
+  response: Response,
+  fallback = 'Graph request failed',
+): Promise<M365Error> {
+  const body = await response.json().catch(() => null);
+  const message = body?.error?.message || `${fallback} (${response.status})`;
+  if (response.status === 404) {
+    return new M365Error(message, 'not_found', 404);
+  }
+  if (response.status === 401) {
+    return new M365Error(message, 'not_connected', 401);
+  }
+  if (response.status === 403) {
+    return new M365Error(message, 'forbidden', 403);
+  }
+  if (response.status === 429) {
+    const retryAfter = Number(response.headers.get('retry-after'));
+    return new M365Error(
+      'Microsoft Graph throttled the request',
+      'rate_limited',
+      429,
+      Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter : 5,
+    );
+  }
+  return new M365Error(message, 'graph_error', 502);
 }
 
 export async function graphJson<T = unknown>(
@@ -137,18 +165,23 @@ const ERROR_CODES: Record<M365ErrorKind, string> = {
   consent_missing: 'M365_CONSENT_MISSING',
   not_found: 'M365_NOT_FOUND',
   forbidden: 'M365_FORBIDDEN',
+  rate_limited: 'M365_RATE_LIMITED',
   graph_error: 'M365_GRAPH_ERROR',
 };
 
 /** Maps M365Error to the standard error envelope; falls back to handleApiError. */
 export function m365ErrorResponse(error: unknown): NextResponse {
   if (error instanceof M365Error) {
-    return errorResponse(
+    const response = errorResponse(
       error.message,
       error.status,
       undefined,
       ERROR_CODES[error.kind],
     );
+    if (error.kind === 'rate_limited' && error.retryAfterSeconds) {
+      response.headers.set('Retry-After', String(error.retryAfterSeconds));
+    }
+    return response;
   }
   return handleApiError(error, 'Microsoft 365 request failed');
 }
