@@ -93,6 +93,18 @@ import {
   getOrganizationAgentIdFromModelId,
 } from '@/lib/organizationAgents';
 
+/**
+ * New conversations are created with an empty name (see
+ * `lib/utils/app/conversationInit.ts`); 'New Conversation' is the legacy
+ * default that older stored conversations may still carry. This mirrors the
+ * untitled checks in `chatStore` auto-naming and
+ * `client/services/workflows/workflowTitle.ts`.
+ */
+const LEGACY_UNTITLED_CONVERSATION_NAME = 'New Conversation';
+
+const isUntitledConversation = (name: string | undefined): boolean =>
+  !name || name === LEGACY_UNTITLED_CONVERSATION_NAME;
+
 interface DropdownProps {
   onCameraClick: () => void;
   openDownward?: boolean;
@@ -337,10 +349,7 @@ const Dropdown: React.FC<DropdownProps> = ({
           assistantMessage,
         ],
       };
-      if (
-        !selectedConversation.name ||
-        selectedConversation.name === 'New Conversation'
-      ) {
+      if (isUntitledConversation(selectedConversation.name)) {
         updates.name = meeting.subject;
       }
       updateConversation(selectedConversation.id, updates);
@@ -407,11 +416,10 @@ const Dropdown: React.FC<DropdownProps> = ({
       };
 
       // Auto-title empty conversations
-      if (
-        !selectedConversation.name ||
-        selectedConversation.name === 'New Conversation'
-      ) {
-        updates.name = `Translation: ${reference.originalFilename}`;
+      if (isUntitledConversation(selectedConversation.name)) {
+        updates.name = t('dropdown.translationConversationTitle', {
+          filename: reference.originalFilename,
+        });
       }
 
       updateConversation(selectedConversation.id, updates);
@@ -420,7 +428,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       setIsDocumentTranslateOpen(false);
       setDocumentToTranslate(null);
     },
-    [selectedConversation, updateConversation],
+    [selectedConversation, updateConversation, t],
   );
 
   // Async (batch, PDF) path: same message pair, but the assistant message
@@ -476,18 +484,17 @@ const Dropdown: React.FC<DropdownProps> = ({
           assistantMessage,
         ],
       };
-      if (
-        !selectedConversation.name ||
-        selectedConversation.name === 'New Conversation'
-      ) {
-        updates.name = `Translation: ${pending.originalFilename}`;
+      if (isUntitledConversation(selectedConversation.name)) {
+        updates.name = t('dropdown.translationConversationTitle', {
+          filename: pending.originalFilename,
+        });
       }
       updateConversation(selectedConversation.id, updates);
 
       setIsDocumentTranslateOpen(false);
       setDocumentToTranslate(null);
     },
-    [selectedConversation, updateConversation],
+    [selectedConversation, updateConversation, t],
   );
 
   // Helper function to toggle search mode (always sets to ALWAYS when enabled)
