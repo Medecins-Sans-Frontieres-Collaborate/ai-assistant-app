@@ -4,7 +4,13 @@
  * handling, and the never-stacked Change… hand-off to the folder picker.
  * Translations resolve to raw key names via the global next-intl mock.
  */
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 
 import type { M365SavePayload } from '@/client/hooks/document/useM365Save';
 
@@ -166,6 +172,62 @@ describe('M365SaveDestinationModal', () => {
       itemId: 'f9',
     });
     expect(useSettingsStore.getState().m365SaveSkipPicker).toBe(true);
+  });
+
+  /**
+   * H5: Cancel during an in-flight save must not swallow the outcome. The
+   * body unmounts, but the upload keeps running — a late failure has to
+   * reach the user through the toast channel, and a late success still
+   * shows the saved toast.
+   */
+  it('routes a failure after cancel-mid-save to a toast, not the unmounted inline error', async () => {
+    const { M365ClientError } =
+      await import('@/client/services/m365/m365Client');
+    const toast = (await import('react-hot-toast')).default;
+    let rejectSave!: (error: unknown) => void;
+    saveToOneDriveMock.mockImplementation(
+      () =>
+        new Promise((_resolve, reject) => {
+          rejectSave = reject;
+        }),
+    );
+    const onClose = vi.fn();
+    renderDialog({ onClose });
+
+    fireEvent.click(screen.getByText('saveButton'));
+    await waitFor(() => expect(saveToOneDriveMock).toHaveBeenCalled());
+    // User closes while the upload is still in flight…
+    fireEvent.click(screen.getByText('cancel'));
+    expect(onClose).toHaveBeenCalled();
+
+    // …then the upload fails: the error surfaces as a toast.
+    await act(async () => {
+      rejectSave(new M365ClientError('boom', 'NETWORK'));
+    });
+    await waitFor(() => expect(toast.error).toHaveBeenCalledWith('network'));
+    expect(screen.queryByText('network')).not.toBeInTheDocument();
+  });
+
+  it('still shows the saved toast when the save completes after cancel', async () => {
+    const toast = (await import('react-hot-toast')).default;
+    let resolveSave!: (result: { name: string }) => void;
+    saveToOneDriveMock.mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          resolveSave = resolve;
+        }),
+    );
+    renderDialog();
+
+    fireEvent.click(screen.getByText('saveButton'));
+    await waitFor(() => expect(saveToOneDriveMock).toHaveBeenCalled());
+    fireEvent.click(screen.getByText('cancel'));
+
+    await act(async () => {
+      resolveSave({ name: 'notes.md' });
+    });
+    await waitFor(() => expect(toast.success).toHaveBeenCalled());
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it.each([
