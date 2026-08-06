@@ -30,11 +30,17 @@ import { NextRequest } from 'next/server';
 import {
   GRAPH_V1,
   M365Error,
+  graphErrorFromResponse,
   graphJson,
   isValidGraphId,
   m365ErrorResponse,
   mintGraphToken,
 } from '@/lib/services/m365/graphApi';
+import {
+  GraphUploadConflictError,
+  SIMPLE_UPLOAD_MAX,
+  uploadSessionFragments,
+} from '@/lib/services/m365/graphUpload';
 
 import {
   badRequestResponse,
@@ -50,10 +56,10 @@ export const maxDuration = 120;
 
 const SCOPES = ['Files.ReadWrite.All'];
 const APP_FOLDER = 'Apps/AI Assistant';
-const SIMPLE_UPLOAD_MAX = 4 * 1024 * 1024;
-// 16 × 320KiB — Graph upload-session fragments must be 320KiB multiples.
-const CHUNK_SIZE = 16 * 327_680;
 const MAX_SAVE_BYTES = 50 * 1024 * 1024;
+// Multipart framing overhead allowance for the Content-Length pre-check —
+// boundaries and field headers, not file bytes.
+const MULTIPART_SLACK = 64 * 1024;
 
 interface SavedItem {
   id?: string;
@@ -105,28 +111,41 @@ async function graphOverwriteFetch(
     throw new OverwriteConflictError();
   }
   if (!response.ok) {
-    const body = await response.json().catch(() => null);
-    const message =
-      body?.error?.message || `Graph request failed (${response.status})`;
-    if (response.status === 404) {
-      throw new M365Error(message, 'not_found', 404);
-    }
-    if (response.status === 403 || response.status === 401) {
-      throw new M365Error(message, 'forbidden', 403);
-    }
-    throw new M365Error(message, 'graph_error', 502);
+    throw await graphErrorFromResponse(response);
   }
   return response;
 }
+
+/** Windows/OneDrive-reserved base names — rejected by Graph regardless of case. */
+const RESERVED_NAME_REGEX = /^(con|prn|aux|nul|com[0-9]|lpt[0-9])$/i;
 
 function sanitizeFileName(name: string): string {
   const cleaned = name
     .replace(/[\\/:*?"<>|#%]/g, '-')
     .replace(/\s+/g, ' ')
-    .trim()
-    .slice(0, 120)
-    .replace(/^\.+/, '');
-  return cleaned || 'export';
+    .trim();
+  // Split the extension off first so length truncation can never amputate
+  // it (".docx" must survive an over-long conversation title).
+  const dot = cleaned.lastIndexOf('.');
+  let ext = dot > 0 ? cleaned.slice(dot) : '';
+  let base = dot > 0 ? cleaned.slice(0, dot) : cleaned;
+  if (!/^\.[A-Za-z0-9]{1,12}$/.test(ext)) {
+    // Not a real extension (empty, bare dot, over-long, odd charset) —
+    // treat the whole thing as the base name.
+    base = cleaned;
+    ext = '';
+  }
+  base = base
+    .slice(0, Math.max(1, 120 - ext.length))
+    // A name ending in a dot or space is invalid in OneDrive; leading dots
+    // and the Office lock-file prefix are stripped rather than rejected.
+    .replace(/[. ]+$/, '')
+    .replace(/^\.+/, '')
+    .replace(/^~\$+/, '');
+  if (RESERVED_NAME_REGEX.test(base)) {
+    base = `${base}-file`;
+  }
+  return base ? `${base}${ext}` : 'export';
 }
 
 function itemPath(fileName: string, target?: SaveTarget): string {
@@ -140,38 +159,6 @@ function itemPath(fileName: string, target?: SaveTarget): string {
   }
   const encodedFolder = APP_FOLDER.split('/').map(encodeURIComponent).join('/');
   return `/me/drive/root:/${encodedFolder}/${encodeURIComponent(fileName)}:`;
-}
-
-// The uploadUrl is pre-authenticated; fragments go directly to it.
-async function uploadFragments(
-  uploadUrl: string,
-  bytes: Uint8Array,
-  contentType: string,
-): Promise<SavedItem> {
-  let item: SavedItem = {};
-  for (let offset = 0; offset < bytes.length; offset += CHUNK_SIZE) {
-    const end = Math.min(offset + CHUNK_SIZE, bytes.length);
-    const fragment = bytes.slice(offset, end);
-    const response = await fetch(uploadUrl, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': contentType,
-        'Content-Range': `bytes ${offset}-${end - 1}/${bytes.length}`,
-      },
-      body: fragment,
-    });
-    if (!response.ok) {
-      throw new M365Error(
-        `Chunk upload failed (${response.status})`,
-        'graph_error',
-        502,
-      );
-    }
-    if (end === bytes.length) {
-      item = (await response.json().catch(() => ({}))) as SavedItem;
-    }
-  }
-  return item;
 }
 
 async function uploadLarge(
@@ -197,7 +184,16 @@ async function uploadLarge(
   if (!uploadUrl) {
     throw new M365Error('Upload session was not created', 'graph_error', 502);
   }
-  return uploadFragments(uploadUrl, bytes, contentType);
+  try {
+    return await uploadSessionFragments(uploadUrl, bytes, contentType);
+  } catch (error) {
+    // conflictBehavior=rename means a commit 409 should be impossible here;
+    // if Graph produces one anyway it is a fault, not a user conflict.
+    if (error instanceof GraphUploadConflictError) {
+      throw new M365Error(error.message, 'graph_error', 502);
+    }
+    throw error;
+  }
 }
 
 function overwriteItemPath(target: OverwriteTarget): string {
@@ -247,17 +243,37 @@ async function overwriteContent(
   if (!sessionData.uploadUrl) {
     throw new M365Error('Upload session was not created', 'graph_error', 502);
   }
-  return uploadFragments(
-    sessionData.uploadUrl,
-    new Uint8Array(await file.arrayBuffer()),
-    contentType,
-  );
+  try {
+    return await uploadSessionFragments(
+      sessionData.uploadUrl,
+      new Uint8Array(await file.arrayBuffer()),
+      contentType,
+    );
+  } catch (error) {
+    // The If-Match guard was already checked at session creation; a commit
+    // 409 here is a name conflict fault, not a doc-sync conflict.
+    if (error instanceof GraphUploadConflictError) {
+      throw new M365Error(error.message, 'graph_error', 502);
+    }
+    throw error;
+  }
 }
 
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) {
     return unauthorizedResponse();
+  }
+
+  // Reject oversized uploads from the declared length BEFORE formData()
+  // materializes the whole body in memory; the post-parse check below still
+  // guards senders that lie about (or omit) Content-Length.
+  const declaredLength = Number(req.headers.get('content-length'));
+  if (
+    Number.isFinite(declaredLength) &&
+    declaredLength > MAX_SAVE_BYTES + MULTIPART_SLACK
+  ) {
+    return payloadTooLargeResponse('50MB');
   }
 
   let form: FormData;
@@ -360,7 +376,8 @@ export async function POST(req: NextRequest) {
         {
           method: 'PUT',
           headers: { 'Content-Type': contentType },
-          body: Buffer.from(await file.arrayBuffer()),
+          // A view, not a copy — the file is already fully buffered.
+          body: new Uint8Array(await file.arrayBuffer()),
         },
       );
       item = response;
