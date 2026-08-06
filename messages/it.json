@@ -128,7 +128,7 @@
   "Description": "Descrizione",
   "A description for your prompt_": "Descrizione del tuo prompt.",
   "Prompt": "prompt",
-  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Contenuto del prompt. Utilizza '{{}}' per indicare una variabile. Per esempio: {{nome}} è un {{aggettivo}} {{sostantivo}}",
+  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Contenuto del prompt. Usa '{{}}' per indicare una variabile. Es.: '{{name}}' è un '{{adjective}}' '{{noun}}'",
   "Save": "Salva",
   "A name for your prompt_": "Un nome per il tuo prompt.",
   "New chat": "Nuova conversazione",
@@ -2233,7 +2233,8 @@
     "aiTools": "Strumenti AI",
     "aiToolsTooltip": "Funzionalità che l’assistente può utilizzare durante le risposte: ricerca web in tempo reale, esecuzione di codice e servizi collegati.",
     "codeInterpreterTooltip": "Esegui codice Python in un ambiente sicuro per ogni messaggio.\n\nIdeale per analisi dati, calcoli e generazione di grafici da file allegati.",
-    "categoryTools": "Strumenti e connettori"
+    "categoryTools": "Strumenti e connettori",
+    "translationConversationTitle": "Traduzione: {filename}"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Aggiungi le tue istruzioni personali per personalizzare le risposte dell’IA. Queste si uniscono alle linee guida principali per garantire risposte utili, accurate e sicure.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Suggerimento: digita \"/\" per selezionare tra i modelli di prompt salvati.",
@@ -4518,7 +4519,11 @@
         "consentMissing": "Questa funzionalità è in attesa dell’approvazione dell’amministratore della tua organizzazione.",
         "notConnected": "La tua sessione Microsoft 365 non è disponibile. Prova a uscire e ad accedere di nuovo.",
         "network": "Errore di rete — riprova.",
-        "generic": "Si è verificato un errore — riprova."
+        "generic": "Si è verificato un errore — riprova.",
+        "notFound": "Impossibile trovare l'elemento — potrebbe essere stato spostato o eliminato.",
+        "forbidden": "Non hai accesso a questo elemento.",
+        "rateLimited": "Microsoft 365 è occupato — riprova tra qualche istante.",
+        "openConnections": "Apri Impostazioni › Connessioni"
       },
       "pickTitle": "Scegli una fonte da OneDrive / SharePoint",
       "addFolder": "Aggiungi",
@@ -4539,7 +4544,8 @@
         "label": "Ordina per",
         "name": "Nome",
         "modified": "Modificato",
-        "size": "Dimensione"
+        "size": "Dimensione",
+        "notApplied": "L’ordinamento non è disponibile qui — visualizzazione nell’ordine originale"
       },
       "folderTitle": "Scegli una cartella",
       "selectFolder": "Seleziona",
@@ -4548,7 +4554,10 @@
       "sections": {
         "fromRecent": "Dai tuoi file recenti",
         "nameMatches": "Corrispondenza nel nome",
-        "contentMatches": "Trovato nel contenuto del file"
+        "contentMatches": "Trovato nel contenuto del file",
+        "moreResults": "Altri risultati",
+        "followedSites": "Siti seguiti",
+        "allSites": "Tutti i siti"
       },
       "typeFilter": {
         "label": "Filtra per tipo di file",
@@ -4562,8 +4571,12 @@
         "audio": "Audio",
         "video": "Video",
         "more": "Altri tipi di file",
-        "noMatches": "Nessun file di questo tipo disponibile"
-      }
+        "noMatches": "Nessun file di questo tipo disponibile",
+        "scanning": "Ricerca dei file corrispondenti in questa cartella… (finora {count} verificati)"
+      },
+      "sitesNoResults": "Nessun sito trovato per “{query}”",
+      "sitesEmpty": "Nessun sito SharePoint disponibile. Prova a cercare per nome.",
+      "itemCount": "{count, plural, one {# elemento} other {# elementi}}"
     },
     "mail": {
       "menuLabel": "Importa email…",
@@ -4657,7 +4670,8 @@
       "notFound": "Impossibile trovare l'elemento: potrebbe essere stato spostato o eliminato.",
       "forbidden": "Non hai accesso a questo elemento.",
       "network": "Errore di rete — riprova.",
-      "generic": "Importazione non riuscita — riprova."
+      "generic": "Importazione non riuscita — riprova.",
+      "rateLimited": "Microsoft 365 è occupato — riprova tra qualche istante."
     },
     "agentAccess": {
       "connectFirst": "Questo agente risponde da file Microsoft 365. Collega Microsoft 365 in Impostazioni → Connessioni per utilizzarlo.",
@@ -4796,6 +4810,8 @@
     "cancel": "Annulla",
     "consentMissing": "La tua organizzazione non ha ancora approvato l’accesso a OneDrive.",
     "blockedByPolicy": "La condivisione è stata bloccata dalla policy della tua organizzazione.",
-    "failed": "Impossibile condividere — nessun contenuto creato."
+    "failed": "Impossibile condividere — nessun contenuto creato.",
+    "copyFailed": "Impossibile copiare il link — selezionalo sopra e copialo manualmente.",
+    "lastMessagesCountLabel": "Numero di messaggi recenti da includere"
   }
 }

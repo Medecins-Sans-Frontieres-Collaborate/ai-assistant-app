@@ -698,7 +698,7 @@
     "fullSizePreview": "Xem trước kích thước đầy đủ",
     "failedToLoadImage": "Không thể tải hình ảnh",
     "loadingImage": "Đang tải hình ảnh...",
-    "imageAlt": "Hình ảnh trong cuộc trò chuyện",
+    "imageAlt": "Hình ảnh {number}",
     "download": "Tải xuống",
     "openAsDocument": "Mở dưới dạng tài liệu",
     "openInCodeEditor": "Mở trong trình soạn mã",
@@ -2264,7 +2264,8 @@
     "aiTools": "Công cụ AI",
     "aiToolsTooltip": "Các khả năng trợ lý có thể sử dụng khi trả lời: tìm kiếm trực tiếp trên web, thực thi mã, và các dịch vụ kết nối.",
     "codeInterpreterTooltip": "Chạy mã Python trong môi trường an toàn cho mỗi tin nhắn.\n\nPhù hợp cho phân tích dữ liệu, tính toán, và tạo biểu đồ từ các tệp đính kèm.",
-    "categoryTools": "Công cụ & kết nối"
+    "categoryTools": "Công cụ & kết nối",
+    "translationConversationTitle": "Dịch: {filename}"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Thêm hướng dẫn cá nhân của bạn để tùy chỉnh cách AI phản hồi. Các hướng dẫn này sẽ được kết hợp với các quy tắc hành vi cốt lõi nhằm đảm bảo phản hồi hữu ích, chính xác và an toàn.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Mẹo: Gõ \"/\" để chọn từ các mẫu gợi ý đã lưu.",
@@ -4549,7 +4550,11 @@
         "consentMissing": "Tính năng này đang chờ sự phê duyệt từ quản trị viên của tổ chức bạn.",
         "notConnected": "Phiên Microsoft 365 của bạn hiện không khả dụng. Vui lòng đăng xuất và đăng nhập lại.",
         "network": "Lỗi mạng — vui lòng thử lại.",
-        "generic": "Đã xảy ra lỗi — vui lòng thử lại."
+        "generic": "Đã xảy ra lỗi — vui lòng thử lại.",
+        "notFound": "Không thể tìm thấy mục này — có thể đã bị di chuyển hoặc xóa.",
+        "forbidden": "Bạn không có quyền truy cập mục này.",
+        "rateLimited": "Microsoft 365 đang bận — vui lòng thử lại sau.",
+        "openConnections": "Mở Cài đặt › Kết nối"
       },
       "pickTitle": "Chọn nguồn từ OneDrive / SharePoint",
       "addFolder": "Thêm",
@@ -4570,7 +4575,8 @@
         "label": "Sắp xếp theo",
         "name": "Tên",
         "modified": "Chỉnh sửa",
-        "size": "Kích thước"
+        "size": "Kích thước",
+        "notApplied": "Không thể sắp xếp ở đây — các mục được hiển thị theo thứ tự ban đầu"
       },
       "folderTitle": "Chọn thư mục",
       "selectFolder": "Chọn",
@@ -4579,7 +4585,10 @@
       "sections": {
         "fromRecent": "Từ các tệp gần đây của bạn",
         "nameMatches": "Tên trùng khớp",
-        "contentMatches": "Tìm thấy trong nội dung tệp"
+        "contentMatches": "Tìm thấy trong nội dung tệp",
+        "moreResults": "Kết quả khác",
+        "followedSites": "Các trang đang theo dõi",
+        "allSites": "Tất cả các trang"
       },
       "typeFilter": {
         "label": "Lọc theo loại tệp",
@@ -4593,8 +4602,12 @@
         "audio": "Âm thanh",
         "video": "Video",
         "more": "Thêm loại tệp khác",
-        "noMatches": "Không có tệp loại đã chọn ở đây"
-      }
+        "noMatches": "Không có tệp loại đã chọn ở đây",
+        "scanning": "Đang tìm kiếm trong thư mục này các tệp phù hợp… (đã kiểm tra {count})"
+      },
+      "sitesNoResults": "Không tìm thấy trang web nào cho “{query}”",
+      "sitesEmpty": "Không có trang SharePoint nào. Vui lòng thử tìm kiếm theo tên.",
+      "itemCount": "{count, plural, one {# mục} other {# mục}}"
     },
     "mail": {
       "menuLabel": "Nhập email…",
@@ -4688,7 +4701,8 @@
       "notFound": "Không tìm thấy mục — có thể đã bị di chuyển hoặc xóa.",
       "forbidden": "Bạn không có quyền truy cập mục này.",
       "network": "Lỗi mạng — vui lòng thử lại.",
-      "generic": "Việc nhập thất bại — vui lòng thử lại."
+      "generic": "Việc nhập thất bại — vui lòng thử lại.",
+      "rateLimited": "Microsoft 365 đang bận — vui lòng thử lại sau."
     },
     "agentAccess": {
       "connectFirst": "Agent này trả lời từ các tệp Microsoft 365. Kết nối Microsoft 365 trong Cài đặt → Kết nối để sử dụng.",
@@ -4827,6 +4841,8 @@
     "cancel": "Hủy",
     "consentMissing": "Tổ chức của bạn chưa phê duyệt truy cập OneDrive.",
     "blockedByPolicy": "Việc chia sẻ bị chặn bởi chính sách của tổ chức bạn.",
-    "failed": "Không thể chia sẻ — chưa tạo gì cả."
+    "failed": "Không thể chia sẻ — chưa tạo gì cả.",
+    "copyFailed": "Không thể sao chép liên kết — hãy chọn ở trên và sao chép thủ công.",
+    "lastMessagesCountLabel": "Số tin nhắn gần đây cần bao gồm"
   }
 }

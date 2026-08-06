@@ -2208,7 +2208,8 @@
     "aiTools": "AI tool-s",
     "aiToolsTooltip": "Matô na assistant na kîri: pépé web na sôko, code execution, na connected services.",
     "codeInterpreterTooltip": "Sâ Python code na sandbox gbênî mo môbé na mbênî.\n\nFunga ti analyse data, calcul, na sâ diagram na fichier na yeke.",
-    "categoryTools": "Mbênî & yâ na yôngo"
+    "categoryTools": "Mbênî & yâ na yôngo",
+    "translationConversationTitle": "Lingué: {filename}"
   },
   "transcription": {
     "transcribesOnSend": "Transcribes on send",
@@ -4502,7 +4503,11 @@
         "consentMissing": "Fungö tî siriri angu bîrî tî chef tî organisation tî mo.",
         "notConnected": "Session Microsoft 365 tî mo ala ko sirî. Línga ti yeke ködörö na mbî na kûê kô na yâ tî mo.",
         "network": "Mbingi ti réseau — sôko yeke kodro nana.",
-        "generic": "Kêtê sirî a nî — sôko yeke kodro nana."
+        "generic": "Kêtê sirî a nî — sôko yeke kodro nana.",
+        "notFound": "Gïndo yê so ala na tî zê, mû or sòkô na wa na mbi.",
+        "forbidden": "O téré ti ko zîa na gïndo yô.",
+        "rateLimited": "Microsoft 365 ayeke ti mbeni lo — yèkè sôkô na mbï mîngi.",
+        "openConnections": "Kétédî Ndrôsê › Lômôndâ"
       },
       "pickTitle": "Pata nginza tî OneDrive / SharePoint",
       "addFolder": "Dugë",
@@ -4523,7 +4528,8 @@
         "label": "Këngö na",
         "name": "Zö",
         "modified": "Gä tî sôse",
-        "size": "Gbê"
+        "size": "Gbê",
+        "notApplied": "Zia ti lé yâ kê gbênî — ayeke hînga gïndo na ti yâ na mo sôkô."
       },
       "folderTitle": "Pata dosî",
       "selectFolder": "Pata",
@@ -4532,7 +4538,10 @@
       "sections": {
         "fromRecent": "Tî fichier tî mo a mbênî",
         "nameMatches": "Zö sô gbâyê",
-        "contentMatches": "Gbâyê na bâ tî fichier"
+        "contentMatches": "Gbâyê na bâ tî fichier",
+        "moreResults": "Bê ti mbi",
+        "followedSites": "Site mo ayèkè gënga na ye",
+        "allSites": "Site kûê"
       },
       "typeFilter": {
         "label": "Séléni na tipe ti fichier",
@@ -4546,8 +4555,12 @@
         "audio": "Audio",
         "video": "Vidéo",
         "more": "Tipe na mingi ti fichier",
-        "noMatches": "Fichier mo séléni ape to"
-      }
+        "noMatches": "Fichier mo séléni ape to",
+        "scanning": "Ayeke sôkô file ti yâ na ndakati yô... ({count} ayeke sôkô ngangu)"
+      },
+      "sitesNoResults": "Ala site ape kɛ tî “{query}”",
+      "sitesEmpty": "Site SharePoint ape teni. Sèngä mbênî ti sôkô tî lo.",
+      "itemCount": "{count, plural, one {# zo} other {# zo na}}"
     },
     "mail": {
       "menuLabel": "Kombere email…",
@@ -4641,7 +4654,8 @@
       "notFound": "Bâa ayéké ape ti tî trouver item a — item a mû sô ayéké déplacer mô sô effacer.",
       "forbidden": "Mo ayéké tene nde ti item a.",
       "network": "Erreur tî réseau — gâ tî pimbâ.",
-      "generic": "Import ayéké hîla — gâ tî pimbâ."
+      "generic": "Import ayéké hîla — gâ tî pimbâ.",
+      "rateLimited": "Microsoft 365 ayeke ti mbeni lo — yèkè sôkô na mbï mîngi."
     },
     "agentAccess": {
       "connectFirst": "Agent a yeke âpi sô la fichiers Microsoft 365. Lia Microsoft 365 na Paramètres → Connections pou yé tî lo.",
@@ -4780,6 +4794,8 @@
     "cancel": "Kûâ",
     "consentMissing": "Nzönî tî mo akété OneDrive na waktî.",
     "blockedByPolicy": "Yôngbi pëpe a kûâ na règlement tî nzönî tî mo.",
-    "failed": "Mo apêpe sô kété — tîngbi na mbênî wa wa."
+    "failed": "Mo apêpe sô kété — tîngbi na mbênî wa wa.",
+    "copyFailed": "Link so gbäala yângâ na — sèngä sélé na lo, kopié a gbênî.",
+    "lastMessagesCountLabel": "Gbâ tî dënga tî ninga a yê sôkô"
   }
 }

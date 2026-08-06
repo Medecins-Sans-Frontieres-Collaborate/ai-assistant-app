@@ -12,13 +12,14 @@ import {
   within,
 } from '@testing-library/react';
 
-import { listDrivePage } from '@/client/services/m365/m365Client';
+import { listDrivePage, listSites } from '@/client/services/m365/m365Client';
 
 import type { M365DriveEntry, M365DrivePage } from '@/types/m365';
 
 import M365FilePickerModal from '@/components/Chat/ChatInput/M365FilePickerModal';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
+import { useUIStore } from '@/client/stores/uiStore';
 import '@testing-library/jest-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -46,6 +47,7 @@ vi.mock('@/client/services/m365/m365Client', () => {
     M365_SEARCH_MIN_CHARS: 2,
     listDrivePage: vi.fn(),
     listDrive: vi.fn(),
+    listSites: vi.fn(),
     searchSites: vi.fn(),
     listSiteDrives: vi.fn(),
     listJoinedTeams: vi.fn(),
@@ -54,6 +56,7 @@ vi.mock('@/client/services/m365/m365Client', () => {
 });
 
 const listDrivePageMock = vi.mocked(listDrivePage);
+const listSitesMock = vi.mocked(listSites);
 
 function entry(itemId: string, name: string, isFolder = false): M365DriveEntry {
   return { driveId: 'd1', itemId, name, isFolder };
@@ -74,9 +77,12 @@ function renderPicker() {
 beforeEach(() => {
   vi.clearAllMocks();
   listDrivePageMock.mockResolvedValue(page([]));
+  listSitesMock.mockResolvedValue({ followed: [], sites: [] });
   // The picker persists its location into the real store singleton; reset it
   // so one test's navigation can't become the next test's starting point.
   useSettingsStore.getState().setM365PickerLocation(null);
+  useSettingsStore.getState().setM365SaveDestination(null);
+  useUIStore.getState().setIsSettingsOpen(false);
 });
 
 afterEach(() => {
@@ -449,6 +455,9 @@ describe('M365FilePickerModal folder mode', () => {
       itemId: 'b',
       name: 'Bravo',
       pathLabel: 'tabs.onedrive › Bravo',
+      // Picker trail recorded so the next folder-mode opening starts here.
+      tab: 'onedrive',
+      crumbs: [{ label: 'Bravo', driveId: 'd1', itemId: 'b' }],
     });
     expect(onClose).toHaveBeenCalled();
   });
@@ -484,6 +493,8 @@ describe('M365FilePickerModal folder mode', () => {
       itemId: 'b',
       name: 'Bravo',
       pathLabel: 'tabs.onedrive › Bravo',
+      tab: 'onedrive',
+      crumbs: [{ label: 'Bravo', driveId: 'd1', itemId: 'b' }],
     });
   });
 
@@ -663,5 +674,411 @@ describe('M365FilePickerModal keyboard navigation', () => {
       key: 'ArrowUp',
     });
     expect(screen.getByText('alpha.txt').closest('button')).toHaveFocus();
+  });
+});
+
+describe('M365FilePickerModal sort truthfulness', () => {
+  it('deactivates the pills and shows a note when the server dropped the sort', async () => {
+    listDrivePageMock.mockResolvedValueOnce({
+      entries: [entry('a', 'alpha.txt')],
+      sortApplied: false,
+    });
+    renderPicker();
+    await screen.findByText('alpha.txt');
+    expect(screen.getByText('sort.notApplied')).toBeInTheDocument();
+    // No pill may claim an order the rows don't have.
+    expect(screen.getByText('sort.name').closest('button')).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    );
+  });
+
+  it('shows no note when the sort was applied (sortApplied omitted)', async () => {
+    listDrivePageMock.mockResolvedValueOnce(page([entry('a', 'alpha.txt')]));
+    renderPicker();
+    await screen.findByText('alpha.txt');
+    expect(screen.queryByText('sort.notApplied')).not.toBeInTheDocument();
+    expect(screen.getByText('sort.name').closest('button')).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+  });
+});
+
+describe('M365FilePickerModal SharePoint site search', () => {
+  it('shows a no-results message and clears stale sites below the minimum query', async () => {
+    const { searchSites } = await import('@/client/services/m365/m365Client');
+    const searchSitesMock = vi.mocked(searchSites);
+    vi.useFakeTimers();
+    renderPicker();
+    await act(async () => {});
+    fireEvent.click(screen.getByRole('tab', { name: 'tabs.sharepoint' }));
+    await act(async () => {});
+    // Default browse mock is empty → the empty-browse state, not the hint.
+    expect(screen.getByText('sitesEmpty')).toBeInTheDocument();
+
+    // Zero hits: a completed search must not show the browse/hint state.
+    searchSitesMock.mockResolvedValueOnce([]);
+    const input = screen.getByPlaceholderText('searchSitesPlaceholder');
+    fireEvent.change(input, { target: { value: 'hr' } });
+    await act(async () => {
+      vi.advanceTimersByTime(300);
+    });
+    // In-flight site searches are abortable (cancelSearch can cancel them).
+    expect(searchSitesMock).toHaveBeenCalledWith('hr', expect.any(AbortSignal));
+    expect(screen.getByText('sitesNoResults')).toBeInTheDocument();
+    expect(screen.queryByText('sitesEmpty')).not.toBeInTheDocument();
+
+    // A hit, then clearing the query resets the results, not just the state.
+    searchSitesMock.mockResolvedValueOnce([{ siteId: 's1', name: 'HR Site' }]);
+    fireEvent.change(input, { target: { value: 'hr site' } });
+    await act(async () => {
+      vi.advanceTimersByTime(300);
+    });
+    expect(screen.getByText('HR Site')).toBeInTheDocument();
+
+    fireEvent.change(input, { target: { value: '' } });
+    await act(async () => {});
+    expect(screen.queryByText('HR Site')).not.toBeInTheDocument();
+    expect(screen.getByText('sitesEmpty')).toBeInTheDocument();
+  });
+});
+
+describe('M365FilePickerModal SharePoint browse', () => {
+  it('renders followed and all-sites sections on entering the tab', async () => {
+    listSitesMock.mockResolvedValueOnce({
+      followed: [{ siteId: 'f1', name: 'Team HQ' }],
+      sites: [{ siteId: 's1', name: 'Ops' }],
+    });
+    renderPicker();
+    fireEvent.click(
+      await screen.findByRole('tab', { name: 'tabs.sharepoint' }),
+    );
+    await screen.findByText('Team HQ');
+    expect(screen.getByText('sections.followedSites')).toBeInTheDocument();
+    expect(screen.getByText('sections.allSites')).toBeInTheDocument();
+    expect(screen.getByText('Ops')).toBeInTheDocument();
+    expect(listSitesMock).toHaveBeenCalledWith();
+  });
+
+  it('omits the followed section when there are no followed sites', async () => {
+    listSitesMock.mockResolvedValueOnce({
+      followed: [],
+      sites: [{ siteId: 's1', name: 'Ops' }],
+    });
+    renderPicker();
+    fireEvent.click(
+      await screen.findByRole('tab', { name: 'tabs.sharepoint' }),
+    );
+    await screen.findByText('Ops');
+    expect(
+      screen.queryByText('sections.followedSites'),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText('sections.allSites')).toBeInTheDocument();
+  });
+
+  it('pages the all-sites list, keeping rows on failure with a retry', async () => {
+    listSitesMock.mockResolvedValueOnce({
+      followed: [],
+      sites: [{ siteId: 's1', name: 'Ops' }],
+      nextToken: 'st1',
+    });
+    renderPicker();
+    fireEvent.click(
+      await screen.findByRole('tab', { name: 'tabs.sharepoint' }),
+    );
+    await screen.findByText('Ops');
+
+    // Failure keeps loaded rows and offers an inline retry.
+    listSitesMock.mockRejectedValueOnce(new Error('boom'));
+    fireEvent.click(screen.getByText('loadMore'));
+    await screen.findByText('loadMoreFailed');
+    expect(screen.getByText('Ops')).toBeInTheDocument();
+
+    // Retry replays the token; the append dedupes and drops the token.
+    listSitesMock.mockResolvedValueOnce({
+      sites: [
+        { siteId: 's1', name: 'Ops' },
+        { siteId: 's2', name: 'Legal' },
+      ],
+    });
+    fireEvent.click(screen.getByText('retry'));
+    await screen.findByText('Legal');
+    expect(listSitesMock).toHaveBeenLastCalledWith('st1');
+    expect(screen.getAllByText('Ops')).toHaveLength(1);
+    expect(screen.queryByText('loadMore')).not.toBeInTheDocument();
+  });
+
+  it('search overrides browse; clearing the query restores it without a refetch', async () => {
+    const { searchSites } = await import('@/client/services/m365/m365Client');
+    const searchSitesMock = vi.mocked(searchSites);
+    vi.useFakeTimers();
+    listSitesMock.mockResolvedValue({
+      followed: [],
+      sites: [{ siteId: 's1', name: 'Ops' }],
+    });
+    renderPicker();
+    await act(async () => {});
+    fireEvent.click(screen.getByRole('tab', { name: 'tabs.sharepoint' }));
+    await act(async () => {});
+    expect(screen.getByText('Ops')).toBeInTheDocument();
+    const browseCalls = listSitesMock.mock.calls.length;
+
+    searchSitesMock.mockResolvedValueOnce([{ siteId: 'x1', name: 'HR Hit' }]);
+    fireEvent.change(screen.getByPlaceholderText('searchSitesPlaceholder'), {
+      target: { value: 'hr' },
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(300);
+    });
+    expect(screen.getByText('HR Hit')).toBeInTheDocument();
+    expect(screen.queryByText('Ops')).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getByPlaceholderText('searchSitesPlaceholder'), {
+      target: { value: '' },
+    });
+    await act(async () => {});
+    expect(screen.getByText('Ops')).toBeInTheDocument();
+    expect(screen.queryByText('HR Hit')).not.toBeInTheDocument();
+    // The browse listing came back from the session cache, not a refetch.
+    expect(listSitesMock.mock.calls.length).toBe(browseCalls);
+  });
+
+  it('shows a typed error with retry when the browse listing fails to load', async () => {
+    listSitesMock.mockRejectedValueOnce(new Error('boom'));
+    renderPicker();
+    fireEvent.click(
+      await screen.findByRole('tab', { name: 'tabs.sharepoint' }),
+    );
+    await screen.findByText('errors.generic');
+
+    listSitesMock.mockResolvedValueOnce({
+      followed: [],
+      sites: [{ siteId: 's1', name: 'Ops' }],
+    });
+    fireEvent.click(screen.getByText('retry'));
+    await screen.findByText('Ops');
+  });
+});
+
+describe('M365FilePickerModal type-filter auto-scan state', () => {
+  it('explains the scan and offers a way out when the filter empties loaded pages', async () => {
+    listDrivePageMock.mockResolvedValueOnce(
+      page([entry('a', 'notes.docx'), entry('b', 'draft.docx')], 'tok1'),
+    );
+    renderPicker();
+    await screen.findByText('notes.docx');
+
+    fireEvent.click(screen.getByRole('button', { name: 'typeFilter.pdf' }));
+    expect(screen.getByText('typeFilter.scanning')).toBeInTheDocument();
+    // The manual pagination affordance stays available alongside the scan.
+    expect(screen.getByText('loadMore')).toBeInTheDocument();
+
+    // The stop affordance clears the filter and restores the loaded rows.
+    fireEvent.click(screen.getByRole('button', { name: 'typeFilter.all' }));
+    expect(screen.getByText('notes.docx')).toBeInTheDocument();
+    expect(screen.queryByText('typeFilter.scanning')).not.toBeInTheDocument();
+  });
+});
+
+describe('M365FilePickerModal type-menu Escape', () => {
+  it('closes the open "…" menu first and only closes the modal when no menu is open', async () => {
+    const onClose = vi.fn();
+    listDrivePageMock.mockResolvedValue(page([entry('a', 'report.pdf')]));
+    render(<M365FilePickerModal isOpen onClose={onClose} />);
+    await screen.findByText('report.pdf');
+
+    fireEvent.click(screen.getByRole('button', { name: 'typeFilter.more' }));
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+
+    fireEvent.keyDown(document.body, { key: 'Escape' });
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    expect(onClose).not.toHaveBeenCalled();
+    // Focus returns to the menu button so keyboard users keep their place.
+    expect(
+      screen.getByRole('button', { name: 'typeFilter.more' }),
+    ).toHaveFocus();
+
+    fireEvent.keyDown(document.body, { key: 'Escape' });
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('M365FilePickerModal tablist a11y', () => {
+  it('implements roving tabindex, aria-controls and arrow-key activation', async () => {
+    renderPicker();
+    await waitFor(() => expect(listDrivePageMock).toHaveBeenCalled());
+
+    const onedriveTab = screen.getByRole('tab', { name: 'tabs.onedrive' });
+    const recentTab = screen.getByRole('tab', { name: 'tabs.recent' });
+    expect(onedriveTab).toHaveAttribute('tabindex', '0');
+    expect(recentTab).toHaveAttribute('tabindex', '-1');
+    expect(onedriveTab).toHaveAttribute('aria-controls', 'm365-picker-panel');
+    expect(screen.getByRole('tabpanel')).toHaveAttribute(
+      'aria-labelledby',
+      onedriveTab.id,
+    );
+
+    fireEvent.keyDown(onedriveTab, { key: 'ArrowRight' });
+    await waitFor(() =>
+      expect(recentTab).toHaveAttribute('aria-selected', 'true'),
+    );
+    expect(recentTab).toHaveFocus();
+    expect(recentTab).toHaveAttribute('tabindex', '0');
+    expect(onedriveTab).toHaveAttribute('tabindex', '-1');
+
+    fireEvent.keyDown(recentTab, { key: 'ArrowLeft' });
+    await waitFor(() =>
+      expect(onedriveTab).toHaveAttribute('aria-selected', 'true'),
+    );
+    // Returning to a searchable tab remounts the search box, whose
+    // intentional autoFocus wins over the tab (pre-existing behavior).
+    expect(screen.getByPlaceholderText('searchPlaceholder')).toHaveFocus();
+  });
+});
+
+describe('M365FilePickerModal row metadata formatting', () => {
+  it('formats sizes through Intl and labels folder child counts', async () => {
+    listDrivePageMock.mockResolvedValue(
+      page([
+        { ...entry('a', 'big.bin'), size: 1572864 },
+        { ...entry('b', 'Folder', true), childCount: 3 },
+      ]),
+    );
+    renderPicker();
+    await screen.findByText('big.bin');
+    // en locale from the global mock; other locales localize the separator.
+    expect(screen.getByText('1.5 MB')).toBeInTheDocument();
+    // Folder counts are labeled, not a bare number in the size column.
+    expect(screen.getByText('itemCount')).toBeInTheDocument();
+  });
+});
+
+describe('M365FilePickerModal connection error CTA', () => {
+  it('deep-links consent errors to Settings and closes the picker', async () => {
+    const { M365ClientError } =
+      await import('@/client/services/m365/m365Client');
+    const onClose = vi.fn();
+    listDrivePageMock.mockRejectedValueOnce(
+      new M365ClientError('consent', 'M365_CONSENT_MISSING'),
+    );
+    render(<M365FilePickerModal isOpen onClose={onClose} />);
+    await screen.findByText('errors.consentMissing');
+
+    fireEvent.click(
+      screen.getByRole('button', { name: 'errors.openConnections' }),
+    );
+    expect(useUIStore.getState().isSettingsOpen).toBe(true);
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  it('offers no settings CTA for generic errors', async () => {
+    listDrivePageMock.mockRejectedValueOnce(new Error('boom'));
+    renderPicker();
+    await screen.findByText('errors.generic');
+    expect(
+      screen.queryByRole('button', { name: 'errors.openConnections' }),
+    ).not.toBeInTheDocument();
+  });
+});
+
+describe('M365FilePickerModal search continuation pages', () => {
+  it('keeps untiered load-more entries out of Content matches', async () => {
+    vi.useFakeTimers();
+    renderPicker();
+    await act(async () => {});
+
+    listDrivePageMock.mockResolvedValueOnce(
+      page([{ ...entry('x', 'zeta.pptx'), match: 'name' as const }], 'tok1'),
+    );
+    fireEvent.change(screen.getByPlaceholderText('searchPlaceholder'), {
+      target: { value: 'zeta' },
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(300);
+    });
+    expect(screen.getByText('sections.nameMatches')).toBeInTheDocument();
+    expect(
+      screen.queryByText('sections.contentMatches'),
+    ).not.toBeInTheDocument();
+
+    // Continuation pages come back without `match`; they must land under a
+    // neutral header, not masquerade as content matches.
+    listDrivePageMock.mockResolvedValueOnce(page([entry('y', 'zeta-2.pptx')]));
+    fireEvent.click(screen.getByText('loadMore'));
+    await act(async () => {});
+    expect(screen.getByText('zeta-2.pptx')).toBeInTheDocument();
+    expect(
+      screen.queryByText('sections.contentMatches'),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText('sections.moreResults')).toBeInTheDocument();
+  });
+});
+
+describe('M365FilePickerModal folder-mode location memory', () => {
+  it('opens at the remembered save destination when its trail was recorded', async () => {
+    useSettingsStore.getState().setM365SaveDestination({
+      driveId: 'd9',
+      itemId: 'f9',
+      name: 'Reports',
+      pathLabel: 'tabs.onedrive › Reports',
+      tab: 'onedrive',
+      crumbs: [{ label: 'Reports', driveId: 'd9', itemId: 'f9' }],
+    });
+    listDrivePageMock.mockResolvedValue(page([entry('r', 'report.docx')]));
+    render(
+      <M365FilePickerModal isOpen onClose={vi.fn()} onPickFolder={vi.fn()} />,
+    );
+    await screen.findByText('report.docx');
+    expect(listDrivePageMock).toHaveBeenCalledWith('children', {
+      driveId: 'd9',
+      itemId: 'f9',
+      sort: 'name',
+      dir: 'asc',
+    });
+    // The trail renders so the destination is recognizable and escapable.
+    const breadcrumbs = screen.getByRole('navigation');
+    expect(within(breadcrumbs).getByText('Reports')).toBeInTheDocument();
+  });
+
+  it('falls back to the root when the remembered destination no longer loads', async () => {
+    useSettingsStore.getState().setM365SaveDestination({
+      driveId: 'd9',
+      itemId: 'gone',
+      name: 'Gone',
+      pathLabel: 'tabs.onedrive › Gone',
+      tab: 'onedrive',
+      crumbs: [{ label: 'Gone', driveId: 'd9', itemId: 'gone' }],
+    });
+    listDrivePageMock.mockImplementation(async (view, opts) => {
+      if (view === 'children' && opts?.itemId === 'gone')
+        throw new Error('itemNotFound');
+      return page([entry('r', 'root.txt')]);
+    });
+    render(
+      <M365FilePickerModal isOpen onClose={vi.fn()} onPickFolder={vi.fn()} />,
+    );
+    await screen.findByText('root.txt');
+    expect(screen.queryByText('errors.generic')).not.toBeInTheDocument();
+  });
+
+  it('starts at the root for destinations persisted without a trail', async () => {
+    useSettingsStore.getState().setM365SaveDestination({
+      driveId: 'd9',
+      itemId: 'f9',
+      name: 'Reports',
+      pathLabel: 'tabs.onedrive › Reports',
+    });
+    listDrivePageMock.mockResolvedValue(page([entry('r', 'root.txt')]));
+    render(
+      <M365FilePickerModal isOpen onClose={vi.fn()} onPickFolder={vi.fn()} />,
+    );
+    await screen.findByText('root.txt');
+    expect(listDrivePageMock).toHaveBeenCalledWith('children', {
+      driveId: undefined,
+      itemId: undefined,
+      sort: 'name',
+      dir: 'asc',
+    });
   });
 });

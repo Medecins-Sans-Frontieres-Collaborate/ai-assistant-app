@@ -193,7 +193,9 @@ describe('GET /api/m365/import', () => {
     );
     const body = await parseJsonResponse(response);
     expect(response.status).toBe(400);
-    expect(body.details).toBe('M365_FILE_TOO_LARGE');
+    // The machine-readable code the client branches on rides `code` — a
+    // regression to `details` would silence every specific client message.
+    expect(body.code).toBe('M365_FILE_TOO_LARGE');
   });
 
   it('streams content with name/webUrl headers', async () => {
@@ -554,7 +556,7 @@ describe('POST /api/m365/save', () => {
       .mockResolvedValueOnce(
         graphJsonResponse({ uploadUrl: 'https://upload.example/session' }),
       )
-      .mockResolvedValue(graphJsonResponse({ name: 'big.md' }));
+      .mockResolvedValue(graphJsonResponse({ id: 'big1', name: 'big.md' }));
     const form = targetForm({ driveId: 'd1', parentId: 'p1' });
     form.set('file', new Blob([new Uint8Array(5 * 1024 * 1024)]));
     form.set('fileName', 'big.md');
@@ -567,6 +569,49 @@ describe('POST /api/m365/save', () => {
     expect(fetchMock.mock.calls[0][1]?.body).toContain(
       '"@microsoft.graph.conflictBehavior":"rename"',
     );
+  });
+
+  it('truncates over-long names without amputating the extension', async () => {
+    grantToken();
+    fetchMock.mockResolvedValue(graphJsonResponse({ id: 'n1' }));
+    const form = targetForm({ driveId: 'd1' });
+    form.set('fileName', `${'x'.repeat(200)}.docx`);
+    const response = await savePOST(saveRequest(form));
+    expect(response.status).toBe(200);
+    const url = decodeURIComponent(fetchMock.mock.calls[0][0] as string);
+    expect(url).toContain('.docx:');
+    expect(url).toContain('x'.repeat(115));
+  });
+
+  it('defuses reserved names and trailing dots', async () => {
+    grantToken();
+    fetchMock.mockResolvedValue(graphJsonResponse({ id: 'n1' }));
+    const form = targetForm({ driveId: 'd1' });
+    form.set('fileName', 'CON.md');
+    await savePOST(saveRequest(form));
+    expect(decodeURIComponent(fetchMock.mock.calls[0][0] as string)).toContain(
+      '/CON-file.md:',
+    );
+
+    fetchMock.mockClear();
+    const trailing = targetForm({ driveId: 'd1' });
+    trailing.set('fileName', 'notes...');
+    await savePOST(saveRequest(trailing));
+    expect(decodeURIComponent(fetchMock.mock.calls[0][0] as string)).toContain(
+      '/notes:',
+    );
+  });
+
+  it('rejects an oversized declared Content-Length before buffering the body', async () => {
+    grantToken();
+    const request = new NextRequest('http://localhost/api/m365/save', {
+      method: 'POST',
+      headers: { 'content-length': String(200 * 1024 * 1024) },
+      body: new FormData(),
+    });
+    const response = await savePOST(request);
+    expect(response.status).toBe(413);
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it('maps a stale target to M365_NOT_FOUND / M365_FORBIDDEN', async () => {

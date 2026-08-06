@@ -2208,7 +2208,8 @@
     "aiTools": "Kayan aikin AI",
     "aiToolsTooltip": "Irin damar da mataimaki zai iya amfani da su yayin amsawa: binciken yanar gizo kai tsaye, gudanar da lambar code, da haɗin kai da wasu ayyuka.",
     "codeInterpreterTooltip": "Gudanar da lambar Python a cikin sandbox mai tsaro a kowane saƙo.\n\nYana da kyau don nazarin bayanai, ƙididdiga, da ƙirƙirar jadawali daga fayilolin da aka makala.",
-    "categoryTools": "Kayan aiki & mahaɗa"
+    "categoryTools": "Kayan aiki & mahaɗa",
+    "translationConversationTitle": "Fassara: {filename}"
   },
   "transcription": {
     "transcribesOnSend": "Zai fassara zuwa rubutu lokacin aikawa",
@@ -4502,7 +4503,11 @@
         "consentMissing": "Wannan fasalin yana jiran amincewar mai tsarin ƙungiyarku.",
         "notConnected": "Za a iya samun matsala da zaman Microsoft 365 ɗinku. Gwada fita sannan ku shiga kuma.",
         "network": "Kuskuren sadarwa — don Allah a gwada sake.",
-        "generic": "Wani abu ya faru — don Allah a sake gwadawa."
+        "generic": "Wani abu ya faru — don Allah a sake gwadawa.",
+        "notFound": "Ba a iya samun abu ba — wataƙila an matsar ko an goge shi.",
+        "forbidden": "Ba ku da damar shiga wannan abu.",
+        "rateLimited": "Microsoft 365 tana da aiki sosai yanzu — don Allah a sake gwadawa daga baya.",
+        "openConnections": "Bude Saituna › Haɗe-haɗe"
       },
       "pickTitle": "Zaɓi tushe daga OneDrive / SharePoint",
       "addFolder": "Ƙara",
@@ -4523,7 +4528,8 @@
         "label": "Tsara ta",
         "name": "Suna",
         "modified": "An gyara",
-        "size": "Girma"
+        "size": "Girma",
+        "notApplied": "Ba za a iya yin tantancewa a nan ba — ana nuna abubuwa yadda suke asali"
       },
       "folderTitle": "Zaɓi babban fayil",
       "selectFolder": "Zaɓi",
@@ -4532,7 +4538,10 @@
       "sections": {
         "fromRecent": "Daga fayilolinka na baya-bayan nan",
         "nameMatches": "Daidaituwar suna",
-        "contentMatches": "An samo cikin abun ciki na fayil"
+        "contentMatches": "An samo cikin abun ciki na fayil",
+        "moreResults": "Sauran sakamako",
+        "followedSites": "Wuraren da aka bi",
+        "allSites": "Dukkan wurare"
       },
       "typeFilter": {
         "label": "Tace bisa nau'in fayil",
@@ -4546,8 +4555,12 @@
         "audio": "Sauti",
         "video": "Bidiyo",
         "more": "Karin nau'ikan fayil",
-        "noMatches": "Babu fayil na irin da aka zaɓa a nan"
-      }
+        "noMatches": "Babu fayil na irin da aka zaɓa a nan",
+        "scanning": "Ana binciken wannan fayil ɗin don fayilolin da suka dace… ({count} an duba zuwa yanzu)"
+      },
+      "sitesNoResults": "Babu wuraren da aka samu don “{query}”",
+      "sitesEmpty": "Babu wuraren SharePoint da ake da su. Yi ƙoƙarin bincika da suna.",
+      "itemCount": "{count, plural, one {# abu} other {# abubuwa}}"
     },
     "mail": {
       "menuLabel": "Shigo da imel…",
@@ -4641,7 +4654,8 @@
       "notFound": "Ba a iya samun abin da ake nema ba — watakila an matsar ko an goge shi.",
       "forbidden": "Ba ku da damar samun wannan abu.",
       "network": "Matsalar sadarwa — da fatan za a sake gwadawa.",
-      "generic": "Shigo da fayil ya gaza — da fatan za a sake gwadawa."
+      "generic": "Shigo da fayil ya gaza — da fatan za a sake gwadawa.",
+      "rateLimited": "Microsoft 365 tana da aiki sosai yanzu — don Allah a sake gwadawa daga baya."
     },
     "agentAccess": {
       "connectFirst": "Wannan wakili yana amsawa daga fayilolin Microsoft 365. Haɗa Microsoft 365 a Saituna → Haɗin kai don amfani da shi.",
@@ -4780,6 +4794,8 @@
     "cancel": "Soke",
     "consentMissing": "Ƙungiyarku ba ta amince da amfani da OneDrive ba tukuna.",
     "blockedByPolicy": "Raba an toshe ta dokar ƙungiyarku.",
-    "failed": "Ba a iya raba ba — ba a ƙirƙiri komai ba."
+    "failed": "Ba a iya raba ba — ba a ƙirƙiri komai ba.",
+    "copyFailed": "An kasa kwafa hanyar haɗi — a zaɓi ta a sama ku kwafa da hannu.",
+    "lastMessagesCountLabel": "Yawan saƙonnin baya da za a lissafa"
   }
 }

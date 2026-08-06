@@ -128,7 +128,7 @@
   "Description": "Kuvaus",
   "A description for your prompt_": "Promptisi kuvaus.",
   "Prompt": "kehotus",
-  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Promptin sisältö. Käytä '{{}}' muuttujien merkitsemiseen. Esim: {{nimi}} on {{adjektiivi}} {{substantiivi}}",
+  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Kehotteen sisältö. Käytä '{{}}' osoittamaan vaihtuvaa muuttujaa. Esim: '{{name}}' on '{{adjective}}' '{{noun}}'",
   "Save": "Tallenna",
   "A name for your prompt_": "Nimi kehotteellesi.",
   "New chat": "Uusi keskustelu",
@@ -2233,7 +2233,8 @@
     "aiTools": "AI-työkalut",
     "aiToolsTooltip": "Toiminnot, joita avustaja voi käyttää vastatessaan: reaaliaikainen verkkohaku, koodin suoritus ja yhdistetyt palvelut.",
     "codeInterpreterTooltip": "Suorita Python-koodia turvallisessa hiekkalaatikossa jokaiselle viestille.\n\nSopii hyvin datan analysointiin, laskentoihin ja kaavioiden luomiseen liitetyistä tiedostoista.",
-    "categoryTools": "Työkalut ja liitännät"
+    "categoryTools": "Työkalut ja liitännät",
+    "translationConversationTitle": "Käännös: {filename}"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Lisää omat ohjeesi räätälöidäksesi, miten tekoäly vastaa. Nämä yhdistetään ydinkäyttäytymissääntöihin, jotka takaavat hyödylliset, tarkat ja turvalliset vastaukset.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Vinkki: Kirjoita \"/\" valitaksesi tallennetuista kehotepohjista.",
@@ -4518,7 +4519,11 @@
         "consentMissing": "Tämä toiminto odottaa organisaation ylläpitäjän hyväksyntää.",
         "notConnected": "Microsoft 365 -istunto ei ole saatavilla. Yritä kirjautua ulos ja sisään uudelleen.",
         "network": "Verkkovirhe — yritä uudelleen.",
-        "generic": "Jokin meni vikaan — yritä uudelleen."
+        "generic": "Jokin meni vikaan — yritä uudelleen.",
+        "notFound": "Kohdetta ei löytynyt — se on voitu siirtää tai poistaa.",
+        "forbidden": "Sinulla ei ole käyttöoikeutta tähän kohteeseen.",
+        "rateLimited": "Microsoft 365 on tällä hetkellä varattu — yritä hetken kuluttua uudelleen.",
+        "openConnections": "Avaa asetukset › Yhteydet"
       },
       "pickTitle": "Valitse lähde OneDrivesta tai SharePointista",
       "addFolder": "Lisää",
@@ -4539,7 +4544,8 @@
         "label": "Järjestä",
         "name": "Nimi",
         "modified": "Muokattu",
-        "size": "Koko"
+        "size": "Koko",
+        "notApplied": "Lajittelu ei ole käytettävissä täällä — kohteet näytetään alkuperäisessä järjestyksessä"
       },
       "folderTitle": "Valitse kansio",
       "selectFolder": "Valitse",
@@ -4548,7 +4554,10 @@
       "sections": {
         "fromRecent": "Viimeisimmistä tiedostoistasi",
         "nameMatches": "Nimi osumat",
-        "contentMatches": "Löytyi tiedoston sisällöstä"
+        "contentMatches": "Löytyi tiedoston sisällöstä",
+        "moreResults": "Lisää tuloksia",
+        "followedSites": "Seuratut sivustot",
+        "allSites": "Kaikki sivustot"
       },
       "typeFilter": {
         "label": "Suodata tiedostotyypin mukaan",
@@ -4562,8 +4571,12 @@
         "audio": "Ääni",
         "video": "Video",
         "more": "Lisää tiedostotyyppejä",
-        "noMatches": "Valittua tiedostotyyppiä ei löydy täältä"
-      }
+        "noMatches": "Valittua tiedostotyyppiä ei löydy täältä",
+        "scanning": "Etsitään tästä kansiosta sopivia tiedostoja… ({count} tarkistettu)"
+      },
+      "sitesNoResults": "Sivustoja ei löytynyt haulla “{query}”",
+      "sitesEmpty": "SharePoint-sivustoja ei ole saatavilla. Kokeile hakea nimellä.",
+      "itemCount": "{count, plural, one {# kohde} other {# kohdetta}}"
     },
     "mail": {
       "menuLabel": "Tuo sähköposti…",
@@ -4657,7 +4670,8 @@
       "notFound": "Kohdetta ei löytynyt — se on saatettu poistaa tai siirtää.",
       "forbidden": "Sinulla ei ole oikeuksia tähän kohteeseen.",
       "network": "Verkkovirhe — yritä uudelleen.",
-      "generic": "Tuonti epäonnistui — yritä uudelleen."
+      "generic": "Tuonti epäonnistui — yritä uudelleen.",
+      "rateLimited": "Microsoft 365 on tällä hetkellä varattu — yritä hetken kuluttua uudelleen."
     },
     "agentAccess": {
       "connectFirst": "Tämä agentti vastaa Microsoft 365 -tiedostoista. Yhdistä Microsoft 365 kohdassa Asetukset → Yhteydet käyttääksesi sitä.",
@@ -4796,6 +4810,8 @@
     "cancel": "Peruuta",
     "consentMissing": "Organisaatiosi ei ole vielä hyväksynyt OneDrive-käyttöoikeutta.",
     "blockedByPolicy": "Jakaminen estettiin organisaatiosi käytännön vuoksi.",
-    "failed": "Jakaminen epäonnistui — mitään ei luotu."
+    "failed": "Jakaminen epäonnistui — mitään ei luotu.",
+    "copyFailed": "Linkkiä ei voitu kopioida — valitse se yllä ja kopioi manuaalisesti.",
+    "lastMessagesCountLabel": "Sisällytettävien uusien viestien määrä"
   }
 }

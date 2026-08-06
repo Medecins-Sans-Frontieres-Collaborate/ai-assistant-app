@@ -7,7 +7,6 @@ import {
   IconExclamationCircle,
 } from '@tabler/icons-react';
 import { FC, useCallback, useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
@@ -96,18 +95,23 @@ export const ConnectionsSection: FC = () => {
 
   const [status, setStatus] = useState<M365Status | null>(null);
   const [loading, setLoading] = useState(false);
+  // Failed is tracked separately from "no status yet": a transient toast
+  // alone left the rows on "…" forever, indistinguishable from loading.
+  // The inline error persists until a re-check succeeds.
+  const [loadFailed, setLoadFailed] = useState(false);
 
   const loadStatus = useCallback(async () => {
     setLoading(true);
+    setLoadFailed(false);
     try {
       setStatus(await fetchM365Status());
     } catch {
       setStatus(null);
-      toast.error(t('statusLoadFailed'));
+      setLoadFailed(true);
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, []);
 
   useEffect(() => {
     if (m365Connected) {
@@ -208,21 +212,31 @@ export const ConnectionsSection: FC = () => {
                 {loading ? t('checking') : t('recheck')}
               </button>
             </div>
-            <ul className="space-y-1.5">
-              {visibleFeatures.map((feature) => (
-                <li
-                  key={feature}
-                  className="flex items-center justify-between text-sm text-gray-800 dark:text-gray-200"
-                >
-                  <span>{t(FEATURE_LABEL_KEYS[feature])}</span>
-                  {status ? (
-                    <StatusBadge status={status.features[feature]} />
-                  ) : (
-                    <span className="text-xs text-gray-400">…</span>
-                  )}
-                </li>
-              ))}
-            </ul>
+            {loadFailed ? (
+              <div
+                role="alert"
+                className="flex items-center gap-1.5 rounded-md bg-red-50 px-2 py-1.5 text-xs text-red-700 dark:bg-red-900/20 dark:text-red-400"
+              >
+                <IconExclamationCircle size={14} className="flex-shrink-0" />
+                <span>{t('statusLoadFailed')}</span>
+              </div>
+            ) : (
+              <ul className="space-y-1.5">
+                {visibleFeatures.map((feature) => (
+                  <li
+                    key={feature}
+                    className="flex items-center justify-between text-sm text-gray-800 dark:text-gray-200"
+                  >
+                    <span>{t(FEATURE_LABEL_KEYS[feature])}</span>
+                    {status ? (
+                      <StatusBadge status={status.features[feature]} />
+                    ) : (
+                      <span className="text-xs text-gray-400">…</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
             {status &&
               visibleFeatures.some(
                 (f) => status.features[f] === 'consent_missing',

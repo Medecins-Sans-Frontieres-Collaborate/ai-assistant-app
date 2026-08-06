@@ -2208,7 +2208,8 @@
     "aiTools": "Fitaovana AI",
     "aiToolsTooltip": "Fahaiza-manao azon’ny assistant ampiasaina amin’ny famaliana: fikarohana an-tserasera mivantana, fanatanterahana kaody, ary tolotra mifandray.",
     "codeInterpreterTooltip": "Alefa ny kaody Python ao anaty sandbox azo antoka amin’ny hafatra tsirairay.\n\nTena mety amin’ny famakafakana angona, kajy, ary famoronana tabilao avy amin’ny rakitra ampidirina.",
-    "categoryTools": "Fitaovana sy mpifandray"
+    "categoryTools": "Fitaovana sy mpifandray",
+    "translationConversationTitle": "Dikan-teny: {filename}"
   },
   "transcription": {
     "transcribesOnSend": "Mandika rehefa alefa",
@@ -4403,7 +4404,7 @@
       "codeInterpreter": "Mangina ny fanakanana toy izao: mitohy ny chat ary tsy tanterahina fotsiny ny fihodinan'ny kaody. Raha tianao halavina mivantana amin'ny hafatra, vonoy ny Code interpreter etsy ambony.",
       "mcp": "Manakana tanteraka tsy hiasa mihitsy ny connector raha mbola mitohy ny chat. Raha tianao halavina amin'ny hafatra, vonoy ny Connectors etsy ambony."
     },
-    "overrideGateOffNote": "Voafafa amin'izao fotoana izao ho an'ireto olona ireto (eto na amin'ny dikan-teny maneran-tany), ka tsy misy fiantraikany ity fetra ity raha tsy averina ilay fiasa.",
+    "overrideGateOffNote": "Novonoina amin'izao fotoana izao ho an'ireo olona ireo ny {feature} (eto na amin'ny fanaingoana ankapobeny), ka tsy misy fiantraikany ity fetra ity raha tsy hoe misy zavatra manindry hanokatra indray ilay endri-javatra.",
     "untitledOverride": "Override tsy misy lohateny",
     "expandOverride": "Ahitsio override",
     "collapseOverride": "Afenoy override",
@@ -4502,7 +4503,11 @@
         "consentMissing": "Andrasana fahazoan-dalana avy amin'ny admin-n'ny fikambananareo ity mampiasa ity.",
         "notConnected": "Tsy afaka ampiasaina ny fivorianao Microsoft 365. Miezaha mivoaka sy miditra indray.",
         "network": "Olana tamin'ny tambajotra — azafady andramo indray.",
-        "generic": "Nisy olana — azafady andramo indray."
+        "generic": "Nisy olana — azafady andramo indray.",
+        "notFound": "Tsy hita ilay singa — mety nafindra na voafafa.",
+        "forbidden": "Tsy manan-jo hiditra amin'ity singa ity ianao.",
+        "rateLimited": "Miasa be i Microsoft 365 amin'izao — andramo azafady afaka kelikely.",
+        "openConnections": "Sokafy Settings › Connections"
       },
       "pickTitle": "Misafidiana loharano avy amin'ny OneDrive / SharePoint",
       "addFolder": "Ampio",
@@ -4523,7 +4528,8 @@
         "label": "Sorty araka ny",
         "name": "Anarana",
         "modified": "Novaina",
-        "size": "Habe"
+        "size": "Habe",
+        "notApplied": "Tsy azo atao ny mandamina eto — aseho amin’ny filaharana tany am-boalohany ny singa"
       },
       "folderTitle": "Safidio ny lahatahiry",
       "selectFolder": "Safidio",
@@ -4532,7 +4538,10 @@
       "sections": {
         "fromRecent": "Avy amin'ny rakitrao vao haingana",
         "nameMatches": "Mifanaraka amin'ny anarana",
-        "contentMatches": "Hita ao anatiny rakitra"
+        "contentMatches": "Hita ao anatiny rakitra",
+        "moreResults": "Vokatra fanampiny",
+        "followedSites": "Tranonkala arahina",
+        "allSites": "Tranonkala rehetra"
       },
       "typeFilter": {
         "label": "Fanasivanana arakaraka ny karazana rakitra",
@@ -4546,8 +4555,12 @@
         "audio": "Feo",
         "video": "Lahatsary",
         "more": "Karazana rakitra hafa",
-        "noMatches": "Tsy misy rakitra amin’io karazana voafantina io eto"
-      }
+        "noMatches": "Tsy misy rakitra amin’io karazana voafantina io eto",
+        "scanning": "Mikaroka rakitra mifanaraka ato anaty lahatahiry… ({count} no efa nojerena hatreto)"
+      },
+      "sitesNoResults": "Tsy misy tranonkala hita ho an'ny “{query}”",
+      "sitesEmpty": "Tsy misy tranonkala SharePoint azo ampiasaina. Andramo karohina amin'ny anarana.",
+      "itemCount": "{count, plural, one {# singa} other {# singa} }"
     },
     "mail": {
       "menuLabel": "Ampidiro mailaka…",
@@ -4641,7 +4654,8 @@
       "notFound": "Tsy hita ilay zavatra — mety na nafindra na voafafa.",
       "forbidden": "Tsy manana fahazoan-dalana amin'ity zavatra ity ianao.",
       "network": "Diso ny tambajotra — azafady, andramo indray.",
-      "generic": "Nisendaotra ny fanafarana — andramo indray azafady."
+      "generic": "Nisendaotra ny fanafarana — andramo indray azafady.",
+      "rateLimited": "Miasa be i Microsoft 365 amin'izao — andramo azafady afaka kelikely."
     },
     "agentAccess": {
       "connectFirst": "Mamaly avy amin'ny rakitra Microsoft 365 ity agent ity. Ampifandraiso amin'ny Microsoft 365 ao amin'ny Fikirakirana → Fifandraisana ilay izy mba hampiasa azy.",
@@ -4780,6 +4794,8 @@
     "cancel": "Foano",
     "consentMissing": "Tsy mbola nankatoavin'ny fikambananareo ny fidirana amin'ny OneDrive.",
     "blockedByPolicy": "Voasakana noho ny politikan'ny fikambananareo ny fizarana.",
-    "failed": "Tsy afaka nizara — tsy nisy na inona na inona noforonina."
+    "failed": "Tsy afaka nizara — tsy nisy na inona na inona noforonina.",
+    "copyFailed": "Tsy afa-naka ny rohy — safidio etsy ambony ary adika tanana.",
+    "lastMessagesCountLabel": "Isan'ny hafatra farany tiana ampidirina"
   }
 }

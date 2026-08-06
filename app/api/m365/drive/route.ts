@@ -78,9 +78,14 @@ const DEFAULT_DIRS: Record<M365DriveSort, M365SortDir> = {
 /**
  * OneDrive for Business/SharePoint tenants reject $orderby on some fields;
  * graphFetch collapses Graph 400s into a generic M365Error, so the rejection
- * is only recognizable by its message.
+ * is only recognizable by its message. The predicate requires a sort-related
+ * word — a bare /invalid/ would also match unrelated faults (e.g. AADSTS
+ * token errors) and trigger a pointless retry that fails identically.
  */
-const ORDERBY_REJECTED_REGEX = /invalid|not.?supported|orderby/i;
+function isOrderbyRejection(message: string): boolean {
+  if (/orderby/i.test(message)) return true;
+  return /sort/i.test(message) && /invalid|not.?supported/i.test(message);
+}
 
 interface GraphPage {
   value?: unknown[];
@@ -184,10 +189,7 @@ export async function GET(req: NextRequest) {
             `${unsorted}&$orderby=${SORT_FIELDS[sort]}%20${dir}`,
           );
         } catch (error) {
-          if (
-            error instanceof M365Error &&
-            ORDERBY_REJECTED_REGEX.test(error.message)
-          ) {
+          if (error instanceof M365Error && isOrderbyRejection(error.message)) {
             // Tenant rejected the $orderby — retry once without it and let
             // the client know the requested order was dropped.
             data = await graphJson<GraphPage>(req, SCOPES, unsorted);

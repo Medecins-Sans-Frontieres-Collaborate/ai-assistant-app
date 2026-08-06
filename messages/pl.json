@@ -137,7 +137,7 @@
   "Description": "Opis",
   "A description for your prompt_": "Opis Twojego prompta.",
   "Prompt": "monit",
-  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Zawartość prompta. Użyj '{{}}' żeby oznaczyć zmienną. Np.: {{nazwa}} jest {{przymiotnik}} {{rzeczownik}}",
+  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Treść promptu. Użyj '{{}}' do oznaczenia zmiennej. Przykład: '{{name}}' jest '{{adjective}}' '{{noun}}'.",
   "Save": "Zapisz",
   "A name for your prompt_": "Nazwa dla Twojej podpowiedzi.",
   "New chat": "Nowy chat",
@@ -2233,7 +2233,8 @@
     "aiTools": "Narzędzia AI",
     "aiToolsTooltip": "Funkcje, z których asystent może korzystać podczas odpowiedzi: wyszukiwanie w internecie na żywo, wykonywanie kodu i połączone usługi.",
     "codeInterpreterTooltip": "Uruchamiaj kod Pythona w bezpiecznej piaskownicy dla każdej wiadomości.\n\nIdealne do analizy danych, obliczeń i generowania wykresów z załączonych plików.",
-    "categoryTools": "Narzędzia i łączniki"
+    "categoryTools": "Narzędzia i łączniki",
+    "translationConversationTitle": "Tłumaczenie: {filename}"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Dodaj własne instrukcje, aby dostosować sposób, w jaki AI odpowiada. Zostaną one połączone z głównymi wytycznymi, które zapewniają pomocne, dokładne i bezpieczne odpowiedzi.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Porada: wpisz „/”, aby wybrać z zapisanych szablonów podpowiedzi.",
@@ -4518,7 +4519,11 @@
         "consentMissing": "Ta funkcja oczekuje na zatwierdzenie przez administratora Twojej organizacji.",
         "notConnected": "Twoja sesja Microsoft 365 jest niedostępna. Spróbuj się wylogować i zalogować ponownie.",
         "network": "Błąd sieci — spróbuj ponownie.",
-        "generic": "Coś poszło nie tak — spróbuj ponownie."
+        "generic": "Coś poszło nie tak — spróbuj ponownie.",
+        "notFound": "Nie można znaleźć tego elementu — mógł zostać przeniesiony lub usunięty.",
+        "forbidden": "Nie masz dostępu do tego elementu.",
+        "rateLimited": "Microsoft 365 jest teraz zajęty — spróbuj ponownie za chwilę.",
+        "openConnections": "Otwórz Ustawienia › Połączenia"
       },
       "pickTitle": "Wybierz źródło z OneDrive / SharePoint",
       "addFolder": "Dodaj",
@@ -4539,7 +4544,8 @@
         "label": "Sortuj według",
         "name": "Nazwa",
         "modified": "Zmodyfikowano",
-        "size": "Rozmiar"
+        "size": "Rozmiar",
+        "notApplied": "Sortowanie nie jest tutaj dostępne — wyświetlono elementy w oryginalnej kolejności"
       },
       "folderTitle": "Wybierz folder",
       "selectFolder": "Wybierz",
@@ -4548,7 +4554,10 @@
       "sections": {
         "fromRecent": "Z Twoich ostatnich plików",
         "nameMatches": "Dopasowania nazwy",
-        "contentMatches": "Znalezione w treści pliku"
+        "contentMatches": "Znalezione w treści pliku",
+        "moreResults": "Więcej wyników",
+        "followedSites": "Obserwowane witryny",
+        "allSites": "Wszystkie witryny"
       },
       "typeFilter": {
         "label": "Filtruj według typu pliku",
@@ -4562,8 +4571,12 @@
         "audio": "Audio",
         "video": "Wideo",
         "more": "Więcej typów plików",
-        "noMatches": "Brak plików wybranego typu"
-      }
+        "noMatches": "Brak plików wybranego typu",
+        "scanning": "Trwa wyszukiwanie pasujących plików w tym folderze… (sprawdzono już {count})"
+      },
+      "sitesNoResults": "Nie znaleziono witryn dla „{query}”",
+      "sitesEmpty": "Brak dostępnych witryn SharePoint. Spróbuj wyszukać po nazwie.",
+      "itemCount": "{count, plural, one {# element} other {# elementów}}"
     },
     "mail": {
       "menuLabel": "Importuj e-mail…",
@@ -4657,7 +4670,8 @@
       "notFound": "Nie można odnaleźć elementu — mógł zostać przeniesiony lub usunięty.",
       "forbidden": "Nie masz dostępu do tego elementu.",
       "network": "Błąd sieci — spróbuj ponownie.",
-      "generic": "Import nie powiódł się — spróbuj ponownie."
+      "generic": "Import nie powiódł się — spróbuj ponownie.",
+      "rateLimited": "Microsoft 365 jest teraz zajęty — spróbuj ponownie za chwilę."
     },
     "agentAccess": {
       "connectFirst": "Ten agent odpowiada na podstawie plików Microsoft 365. Połącz z Microsoft 365 w Ustawienia → Połączenia, aby z niego korzystać.",
@@ -4796,6 +4810,8 @@
     "cancel": "Anuluj",
     "consentMissing": "Twoja organizacja nie zatwierdziła jeszcze dostępu do OneDrive.",
     "blockedByPolicy": "Udostępnianie zostało zablokowane przez politykę Twojej organizacji.",
-    "failed": "Nie udało się udostępnić — nic nie zostało utworzone."
+    "failed": "Nie udało się udostępnić — nic nie zostało utworzone.",
+    "copyFailed": "Nie można skopiować linku — zaznacz go powyżej i skopiuj ręcznie.",
+    "lastMessagesCountLabel": "Liczba ostatnich wiadomości do dołączenia"
   }
 }

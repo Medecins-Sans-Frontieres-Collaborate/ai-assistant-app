@@ -728,7 +728,7 @@
     "fullSizePreview": "全尺寸预览",
     "failedToLoadImage": "无法加载图片",
     "loadingImage": "正在加载图片...",
-    "imageAlt": "聊天中的图片",
+    "imageAlt": "图片 {number}",
     "download": "下载",
     "openAsDocument": "以文档形式打开",
     "openInCodeEditor": "在代码编辑器中打开",
@@ -2165,7 +2165,8 @@
     "aiTools": "AI 工具",
     "aiToolsTooltip": "在回答时助手可用的功能：实时网页搜索、代码执行和连接服务。",
     "codeInterpreterTooltip": "在安全沙盒环境中为每条消息运行 Python 代码。\n\n适用于数据分析、计算和从附件生成图表。",
-    "categoryTools": "工具与连接器"
+    "categoryTools": "工具与连接器",
+    "translationConversationTitle": "翻译：{filename}"
   },
   "transcription": {
     "addInstructions": "添加说明",
@@ -4549,7 +4550,11 @@
         "consentMissing": "此功能正在等待您的组织管理员批准。",
         "notConnected": "您的 Microsoft 365 会话不可用。请尝试退出并重新登录。",
         "network": "网络错误 — 请重试。",
-        "generic": "出现问题 — 请重试。"
+        "generic": "出现问题 — 请重试。",
+        "notFound": "无法找到该项——它可能已被移动或删除。",
+        "forbidden": "您没有权限访问此项。",
+        "rateLimited": "Microsoft 365 当前繁忙，请稍后再试。",
+        "openConnections": "打开设置 › 连接"
       },
       "pickTitle": "从 OneDrive / SharePoint 选择来源",
       "addFolder": "添加",
@@ -4570,7 +4575,8 @@
         "label": "排序方式",
         "name": "名称",
         "modified": "修改时间",
-        "size": "大小"
+        "size": "大小",
+        "notApplied": "这里无法排序，正在按原始顺序显示项目"
       },
       "folderTitle": "选择文件夹",
       "selectFolder": "选择",
@@ -4579,7 +4585,10 @@
       "sections": {
         "fromRecent": "来自您的最近文件",
         "nameMatches": "名称匹配",
-        "contentMatches": "在文件内容中找到"
+        "contentMatches": "在文件内容中找到",
+        "moreResults": "更多结果",
+        "followedSites": "关注的站点",
+        "allSites": "全部站点"
       },
       "typeFilter": {
         "label": "按文件类型筛选",
@@ -4593,8 +4602,12 @@
         "audio": "音频",
         "video": "视频",
         "more": "更多文件类型",
-        "noMatches": "这里没有所选类型的文件"
-      }
+        "noMatches": "这里没有所选类型的文件",
+        "scanning": "正在此文件夹中搜索匹配的文件…（已检查 {count} 个）"
+      },
+      "sitesNoResults": "未找到“{query}”的站点",
+      "sitesEmpty": "没有可用的 SharePoint 站点。请尝试按名称搜索。",
+      "itemCount": "{count, plural, one {# 个项目} other {# 个项目}}"
     },
     "mail": {
       "menuLabel": "导入邮件…",
@@ -4688,7 +4701,8 @@
       "notFound": "未找到该项目——可能已被移动或删除。",
       "forbidden": "您无权访问该项目。",
       "network": "网络错误——请重试。",
-      "generic": "导入失败——请重试。"
+      "generic": "导入失败——请重试。",
+      "rateLimited": "Microsoft 365 当前繁忙，请稍后再试。"
     },
     "agentAccess": {
       "connectFirst": "此助手从 Microsoft 365 文件中回答问题。请在“设置→连接”中连接 Microsoft 365 后使用。",
@@ -4827,6 +4841,8 @@
     "cancel": "取消",
     "consentMissing": "您的组织尚未批准 OneDrive 访问权限。",
     "blockedByPolicy": "共享被您的组织策略阻止。",
-    "failed": "无法分享 — 未创建任何内容。"
+    "failed": "无法分享 — 未创建任何内容。",
+    "copyFailed": "无法复制链接——请在上方选择并手动复制。",
+    "lastMessagesCountLabel": "要包含的最新消息数"
   }
 }

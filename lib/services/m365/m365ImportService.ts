@@ -31,7 +31,7 @@ import {
 
 import Hasher from '@/lib/utils/app/hash';
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
-import { badRequestResponse } from '@/lib/utils/server/api/apiResponse';
+import { errorResponse } from '@/lib/utils/server/api/apiResponse';
 import { validateBufferSignature } from '@/lib/utils/server/file/fileValidation';
 import { validateOrSanitizeImageBytes } from '@/lib/utils/server/file/svgSanitization';
 import { sanitizeBlobExtension } from '@/lib/utils/shared/blobPath';
@@ -84,7 +84,10 @@ export class M365ImportError extends Error {
 /** Maps import failures to responses; falls through to the Graph mapping. */
 export function m365ImportErrorResponse(error: unknown): NextResponse {
   if (error instanceof M365ImportError) {
-    return badRequestResponse(error.message, error.code);
+    // The 4th arg is the machine-readable `code` the client branches on —
+    // badRequestResponse would bury it in `details` under a generic
+    // BAD_REQUEST code.
+    return errorResponse(error.message, 400, undefined, error.code);
   }
   return m365ErrorResponse(error);
 }
@@ -112,7 +115,7 @@ export async function fetchDriveItemMeta(
   );
 }
 
-async function openContentStream(
+export async function openContentStream(
   req: NextRequest,
   target: M365ImportTarget,
   meta: GraphItemMeta,
@@ -134,19 +137,41 @@ async function openContentStream(
 }
 
 /**
+ * Leading bytes needed before signature validation can run — mp4/m4a's
+ * `ftyp` marker sits at offset 4, so a network chunk boundary that delivers
+ * fewer bytes first must accumulate rather than fail a valid file.
+ */
+const SIGNATURE_PREFIX_BYTES = 16;
+
+function assertValidSignature(head: Buffer, name: string): void {
+  const result = validateBufferSignature(head, 'any', name);
+  if (!result.isValid) {
+    throw new M365ImportError(
+      result.error ?? 'File content does not match its type',
+      'M365_INVALID_CONTENT',
+    );
+  }
+}
+
+/**
  * Yields the response body as Buffers, validating the audio/video signature
  * on the leading bytes before anything is written and enforcing the byte
  * cap as the stream flows (Graph metadata or Content-Length can be absent
- * or stale — the stream itself is authoritative).
+ * or stale — the stream itself is authoritative). `counter` tracks the
+ * actual byte total so callers can report the real stored size.
  */
 async function* validatedChunks(
   body: ReadableStream<Uint8Array>,
   name: string,
   checkSignature: boolean,
   maxBytes: number,
+  counter: { bytes: number },
 ): AsyncGenerator<Buffer> {
   const reader = body.getReader();
-  let first = true;
+  // Chunks held back until the signature prefix is complete.
+  let pending: Buffer[] = [];
+  let pendingBytes = 0;
+  let validated = !checkSignature;
   let total = 0;
   try {
     while (true) {
@@ -155,29 +180,67 @@ async function* validatedChunks(
       if (!value || value.length === 0) continue;
       const chunk = Buffer.from(value);
       total += chunk.length;
+      counter.bytes = total;
       if (total > maxBytes) {
         throw new M365ImportError(
           'File exceeds the size limit for this operation',
           'M365_FILE_TOO_LARGE',
         );
       }
-      if (first) {
-        first = false;
-        if (checkSignature) {
-          const result = validateBufferSignature(chunk, 'any', name);
-          if (!result.isValid) {
-            throw new M365ImportError(
-              result.error ?? 'File content does not match its type',
-              'M365_INVALID_CONTENT',
-            );
-          }
-        }
+      if (!validated) {
+        pending.push(chunk);
+        pendingBytes += chunk.length;
+        if (pendingBytes < SIGNATURE_PREFIX_BYTES) continue;
+        const head = Buffer.concat(pending);
+        assertValidSignature(head, name);
+        validated = true;
+        pending = [];
+        pendingBytes = 0;
+        yield head;
+        continue;
       }
       yield chunk;
+    }
+    // Stream ended before the prefix filled — validate whatever arrived.
+    if (!validated && pendingBytes > 0) {
+      const head = Buffer.concat(pending);
+      assertValidSignature(head, name);
+      yield head;
     }
   } finally {
     reader.releaseLock();
   }
+}
+
+/**
+ * Buffers a body while enforcing the byte cap DURING the read — the
+ * metadata pre-check alone cannot keep an absent/stale-sized multi-GB body
+ * out of memory, because `arrayBuffer()` would materialize all of it before
+ * any post-hoc length check runs.
+ */
+async function readCappedBuffer(
+  body: ReadableStream<Uint8Array>,
+  maxBytes: number,
+  tooLargeMessage: string,
+): Promise<Buffer> {
+  const reader = body.getReader();
+  const chunks: Buffer[] = [];
+  let total = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (!value || value.length === 0) continue;
+      total += value.length;
+      if (total > maxBytes) {
+        throw new M365ImportError(tooLargeMessage, 'M365_FILE_TOO_LARGE');
+      }
+      chunks.push(Buffer.from(value));
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  return Buffer.concat(chunks);
 }
 
 export interface M365FetchedFile {
@@ -221,13 +284,14 @@ export async function fetchDriveItemBuffer(
     );
   }
   const content = await openContentStream(req, target, meta);
-  const data = Buffer.from(await content.arrayBuffer());
-  if (data.length > limit) {
-    throw new M365ImportError(
-      `File exceeds the size limit for this operation`,
-      'M365_FILE_TOO_LARGE',
-    );
+  if (!content.body) {
+    throw new M365Error('Failed to download file content', 'graph_error', 502);
   }
+  const data = await readCappedBuffer(
+    content.body as ReadableStream<Uint8Array>,
+    limit,
+    'File exceeds the size limit for this operation',
+  );
   const parent = meta.parentReference;
   return {
     name,
@@ -283,14 +347,12 @@ export async function storeContentToUploads(
   const stream = size > BUFFER_MAX_BYTES || (size === 0 && isAudioVideo);
 
   if (!stream) {
-    let data: Buffer = Buffer.from(await content.arrayBuffer());
+    let data: Buffer = await readCappedBuffer(
+      content.body as ReadableStream<Uint8Array>,
+      limit,
+      `File exceeds the ${getFileSizeLimitDisplay(category)} limit for ${category} files`,
+    );
     storedSize = data.length;
-    if (storedSize > limit) {
-      throw new M365ImportError(
-        `File exceeds the ${getFileSizeLimitDisplay(category)} limit for ${category} files`,
-        'M365_FILE_TOO_LARGE',
-      );
-    }
     if (isAudioVideo) {
       const result = validateBufferSignature(data, 'any', name);
       if (!result.isValid) {
@@ -318,12 +380,17 @@ export async function storeContentToUploads(
   } else {
     // Images never reach this branch (5MB cap); no sanitisation needed.
     blobFilename = `${randomUUID()}.${extension}`;
+    // Graph metadata `size` can be absent (0) or stale — count the actual
+    // bytes so the returned reference reports what was really stored
+    // (downstream size-based routing, e.g. transcription, depends on it).
+    const counter = { bytes: 0 };
     const contentStream = Readable.from(
       validatedChunks(
         content.body as ReadableStream<Uint8Array>,
         name,
         isAudioVideo,
         limit,
+        counter,
       ),
     );
     await blobStorage.uploadStream({
@@ -331,6 +398,7 @@ export async function storeContentToUploads(
       contentStream,
       options: { blobHTTPHeaders },
     });
+    storedSize = counter.bytes;
   }
 
   return {

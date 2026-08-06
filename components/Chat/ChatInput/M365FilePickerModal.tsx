@@ -41,15 +41,19 @@ import {
 } from '@/client/services/m365/driveNameCache';
 import {
   DriveView,
-  M365ClientError,
   M365_SEARCH_DEBOUNCE_MS,
   M365_SEARCH_MIN_CHARS,
   getTeamDrive,
   listDrivePage,
   listJoinedTeams,
   listSiteDrives,
+  listSites,
   searchSites,
 } from '@/client/services/m365/m365Client';
+import {
+  M365ErrorKind,
+  m365ErrorKind,
+} from '@/client/services/m365/m365ErrorKinds';
 
 import {
   M365FileTypeGroupId,
@@ -76,6 +80,7 @@ import M365FileTypeIcon from '@/components/Chat/ChatInput/M365FileTypeIcon';
 import Modal from '@/components/UI/Modal';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
+import { useUIStore } from '@/client/stores/uiStore';
 
 interface M365FilePickerModalProps {
   isOpen: boolean;
@@ -112,6 +117,13 @@ type Crumb = M365PickerCrumb;
 
 interface EntryPage {
   entries: M365DriveEntry[];
+  nextToken: string | null;
+}
+
+/** SharePoint browse listing: followed sites + paged all-sites list. */
+interface SiteBrowseState {
+  followed: M365SiteEntry[];
+  sites: M365SiteEntry[];
   nextToken: string | null;
 }
 
@@ -167,20 +179,17 @@ const MORE_FILE_TYPE_IDS: readonly M365FileTypeGroupId[] =
     (id) => !M365_PRIMARY_FILE_TYPE_IDS.includes(id),
   );
 
-function formatSize(size: number | undefined): string {
-  if (size === undefined) return '';
-  if (size < 1024) return `${size} B`;
-  if (size < 1024 * 1024) return `${(size / 1024).toFixed(0)} KB`;
-  return `${(size / (1024 * 1024)).toFixed(1)} MB`;
-}
+const ERROR_KIND_KEYS: Partial<Record<M365ErrorKind, string>> = {
+  consentMissing: 'errors.consentMissing',
+  notConnected: 'errors.notConnected',
+  network: 'errors.network',
+  notFound: 'errors.notFound',
+  forbidden: 'errors.forbidden',
+  rateLimited: 'errors.rateLimited',
+};
 
 function errorMessageKey(error: unknown): string {
-  if (error instanceof M365ClientError) {
-    if (error.code === 'M365_CONSENT_MISSING') return 'errors.consentMissing';
-    if (error.code === 'M365_NOT_CONNECTED') return 'errors.notConnected';
-    if (error.code === 'NETWORK') return 'errors.network';
-  }
-  return 'errors.generic';
+  return ERROR_KIND_KEYS[m365ErrorKind(error)] ?? 'errors.generic';
 }
 
 function isAbortError(error: unknown): boolean {
@@ -200,6 +209,24 @@ function appendDeduped(
     const key = `${entry.driveId}/${entry.itemId}`;
     if (seen.has(key)) return false;
     seen.add(key);
+    return true;
+  });
+  return fresh.length > 0 ? [...prev, ...fresh] : prev;
+}
+
+/**
+ * Site-list appends dedupe by siteId — continuation pages can repeat sites
+ * (and are not guaranteed to be trimmed against the followed list).
+ */
+function appendDedupedSites(
+  prev: M365SiteEntry[],
+  incoming: M365SiteEntry[],
+  alsoSeen: M365SiteEntry[],
+): M365SiteEntry[] {
+  const seen = new Set([...alsoSeen, ...prev].map((site) => site.siteId));
+  const fresh = incoming.filter((site) => {
+    if (seen.has(site.siteId)) return false;
+    seen.add(site.siteId);
     return true;
   });
   return fresh.length > 0 ? [...prev, ...fresh] : prev;
@@ -230,29 +257,66 @@ const M365FilePickerBody: FC<{
   // onPickFolder wins over onPick — the modes are mutually exclusive.
   const onPick = folderMode ? undefined : onPickProp;
   // Plain attach-to-chat mode: the only mode with location memory and
-  // multi-select. Source-collection (onPick) and save-destination pickers
-  // start fresh at the root, and folder mode has its own remembered
-  // destination.
+  // multi-select. Source-collection (onPick) pickers start fresh at the
+  // root; folder (save-destination) mode reopens at the remembered save
+  // destination below.
   const attachMode = !folderMode && !onPick;
   const locale = useLocale();
   const { attachDriveItem } = useM365Attachment();
 
   // Read once per opening (the body mounts fresh each time); navigation
-  // writes it back below. Sanitized so a shape from another build falls
-  // back to the root instead of wedging the picker.
+  // writes it back below (attach mode only). Sanitized so a shape from
+  // another build falls back to the root instead of wedging the picker.
   const [initialLocation] = useState<M365PickerLocation | null>(() => {
-    if (!attachMode) return null;
-    const stored = useSettingsStore.getState().m365PickerLocation;
-    if (!stored || !TABS.includes(stored.tab) || !Array.isArray(stored.crumbs))
-      return null;
-    return stored;
+    if (attachMode) {
+      const stored = useSettingsStore.getState().m365PickerLocation;
+      if (
+        !stored ||
+        !TABS.includes(stored.tab) ||
+        !Array.isArray(stored.crumbs)
+      )
+        return null;
+      return stored;
+    }
+    if (folderMode) {
+      // Folder mode opens at the remembered save destination when it
+      // recorded its picker trail; restore failures fall back to the tab
+      // root via restorePendingRef, same as attach mode.
+      const destination = useSettingsStore.getState().m365SaveDestination;
+      if (
+        destination?.tab &&
+        FOLDER_TABS.includes(destination.tab) &&
+        Array.isArray(destination.crumbs) &&
+        destination.crumbs.length > 0
+      ) {
+        return {
+          tab: destination.tab,
+          crumbs: destination.crumbs,
+          sort: 'name',
+          dir: 'asc',
+        };
+      }
+    }
+    return null;
   });
 
   const [tab, setTab] = useState<PickerTab>(initialLocation?.tab ?? 'onedrive');
   const [crumbs, setCrumbs] = useState<Crumb[]>(initialLocation?.crumbs ?? []);
   const [entries, setEntries] = useState<M365DriveEntry[]>([]);
   const [nextToken, setNextToken] = useState<string | null>(null);
+  // SharePoint site SEARCH results (?q=); the browse listing is siteBrowse.
   const [sites, setSites] = useState<M365SiteEntry[]>([]);
+  // SharePoint browse listing (followed + all sites). Session-cached: kept
+  // across searches and navigation so returning to the sites phase never
+  // refetches; the ref mirror lets load() consult the cache without
+  // depending on the state (which would churn its identity).
+  const [siteBrowse, setSiteBrowse] = useState<SiteBrowseState | null>(null);
+  const siteBrowseRef = useRef<SiteBrowseState | null>(null);
+  useEffect(() => {
+    siteBrowseRef.current = siteBrowse;
+  }, [siteBrowse]);
+  const [sitesLoadingMore, setSitesLoadingMore] = useState(false);
+  const [sitesLoadMoreFailed, setSitesLoadMoreFailed] = useState(false);
   const [teams, setTeams] = useState<M365TeamEntry[]>([]);
   const [libraries, setLibraries] = useState<M365DriveInfo[]>([]);
   const [query, setQuery] = useState('');
@@ -284,11 +348,36 @@ const M365FilePickerBody: FC<{
   );
   const [typeMenuOpen, setTypeMenuOpen] = useState(false);
   const typeMenuRef = useRef<HTMLDivElement | null>(null);
+  const typeMenuButtonRef = useRef<HTMLButtonElement | null>(null);
   useEnhancedOutsideClick(
     typeMenuRef,
     () => setTypeMenuOpen(false),
     typeMenuOpen,
   );
+
+  // Escape closes the open type-filter menu BEFORE the modal: useModal
+  // listens for Escape on the document in the bubble phase, so a capture
+  // listener wins the race and stops propagation while the menu is open.
+  useEffect(() => {
+    if (!typeMenuOpen) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      event.preventDefault();
+      event.stopPropagation();
+      setTypeMenuOpen(false);
+      typeMenuButtonRef.current?.focus();
+    };
+    document.addEventListener('keydown', handleKeyDown, true);
+    return () => document.removeEventListener('keydown', handleKeyDown, true);
+  }, [typeMenuOpen]);
+
+  // True when the server dropped the requested children $orderby (tenant
+  // field restrictions): the sort pills must not claim an order the rows
+  // don't have.
+  const [sortUnavailable, setSortUnavailable] = useState(false);
+  // Distinguishes "no site search yet" (hint) from "search ran and found
+  // nothing" (no-results message) on the SharePoint sites phase.
+  const [sitesSearched, setSitesSearched] = useState(false);
 
   // True until the restored location loads once; a failure then falls back
   // to the tab root instead of surfacing an error for a navigation the
@@ -328,6 +417,29 @@ const M365FilePickerBody: FC<{
     [locale],
   );
 
+  // Byte sizes with a locale-aware decimal separator ("1,5 MB" in de/fr);
+  // the latin unit suffixes are intentionally kept as-is.
+  const sizeFormatters = useMemo(
+    () => ({
+      integer: new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }),
+      oneDecimal: new Intl.NumberFormat(locale, {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+      }),
+    }),
+    [locale],
+  );
+  const formatSize = useCallback(
+    (size: number | undefined): string => {
+      if (size === undefined) return '';
+      if (size < 1024) return `${sizeFormatters.integer.format(size)} B`;
+      if (size < 1024 * 1024)
+        return `${sizeFormatters.integer.format(size / 1024)} KB`;
+      return `${sizeFormatters.oneDecimal.format(size / (1024 * 1024))} MB`;
+    },
+    [sizeFormatters],
+  );
+
   const cancelSearch = useCallback(() => {
     searchSeqRef.current += 1;
     // Every caller is also changing the listing, so in-flight page appends
@@ -337,6 +449,7 @@ const M365FilePickerBody: FC<{
     if (debounceRef.current) clearTimeout(debounceRef.current);
     setSearching(false);
     setSearchErrorKey(null);
+    setSitesSearched(false);
   }, []);
 
   const load = useCallback(async () => {
@@ -364,6 +477,7 @@ const M365FilePickerBody: FC<{
         recordDriveEntries(page.entries);
         setEntries(page.entries);
         setNextToken(page.nextToken ?? null);
+        setSortUnavailable(page.sortApplied === false);
       } else if (tab === 'teams' && crumbs.length === 0) {
         const found = await listJoinedTeams();
         if (seq !== listSeqRef.current) return;
@@ -379,6 +493,22 @@ const M365FilePickerBody: FC<{
         recordDriveEntries(page.entries);
         setEntries(page.entries);
         setNextToken(page.nextToken ?? null);
+        setSortUnavailable(page.sortApplied === false);
+      } else if (sharePointPhase === 'sites') {
+        // Browse listing (followed + all sites), fetched once per session:
+        // returning from a site or clearing a search reuses the cache.
+        if (!siteBrowseRef.current) {
+          const sitesPage = await listSites();
+          if (seq !== listSeqRef.current) return;
+          const followed = sitesPage.followed ?? [];
+          setSiteBrowse({
+            followed,
+            // The server dedupes the first page against followed; repeat it
+            // client-side anyway — duplicate keys would crash the list.
+            sites: appendDedupedSites([], sitesPage.sites, followed),
+            nextToken: sitesPage.nextToken ?? null,
+          });
+        }
       } else if (sharePointPhase === 'libraries' && crumbs[0]?.siteId) {
         const drives = await listSiteDrives(crumbs[0].siteId);
         if (seq !== listSeqRef.current) return;
@@ -394,6 +524,7 @@ const M365FilePickerBody: FC<{
         recordDriveEntries(page.entries);
         setEntries(page.entries);
         setNextToken(page.nextToken ?? null);
+        setSortUnavailable(page.sortApplied === false);
       }
       if (seq === listSeqRef.current) restorePendingRef.current = false;
     } catch (error) {
@@ -482,6 +613,39 @@ const M365FilePickerBody: FC<{
     loadMoreRef.current = loadMore;
   }, [loadMore]);
 
+  // All-sites pagination, mirroring loadMore's guarantees: seq-guarded
+  // appends, dedupe, and loaded rows survive a pagination failure.
+  const loadMoreSites = useCallback(async () => {
+    const browse = siteBrowseRef.current;
+    if (!browse?.nextToken || sitesLoadingMore) return;
+    const seq = listSeqRef.current;
+    setSitesLoadingMore(true);
+    setSitesLoadMoreFailed(false);
+    try {
+      const sitesPage = await listSites(browse.nextToken);
+      if (seq !== listSeqRef.current) return;
+      setSiteBrowse(
+        (prev) =>
+          prev && {
+            followed: prev.followed,
+            sites: appendDedupedSites(
+              prev.sites,
+              sitesPage.sites,
+              prev.followed,
+            ),
+            nextToken: sitesPage.nextToken ?? null,
+          },
+      );
+    } catch (error) {
+      if (isAbortError(error)) return;
+      if (seq !== listSeqRef.current) return;
+      // Never discard already-loaded rows on a pagination failure.
+      setSitesLoadMoreFailed(true);
+    } finally {
+      setSitesLoadingMore(false);
+    }
+  }, [sitesLoadingMore]);
+
   const searchActive = searchResults !== null;
   const activeNextToken = searchActive ? searchResults.nextToken : nextToken;
 
@@ -515,9 +679,10 @@ const M365FilePickerBody: FC<{
       setSearchErrorKey(null);
       try {
         if (tab === 'sharepoint' && sharePointPhase === 'sites') {
-          const found = await searchSites(q);
+          const found = await searchSites(q, controller.signal);
           if (seq !== searchSeqRef.current) return;
           setSites(found);
+          setSitesSearched(true);
         } else {
           // The type filter rides along so the server-side filename query
           // returns name matches OF THAT TYPE (client filtering alone would
@@ -577,6 +742,11 @@ const M365FilePickerBody: FC<{
       setSearching(false);
       setSearchErrorKey(null);
       setSearchResults(null);
+      // Site results are search-only state: dropping the query below the
+      // minimum must clear them too, or stale sites linger under an
+      // unrelated (shorter) query.
+      setSites([]);
+      setSitesSearched(false);
       return;
     }
     debounceRef.current = setTimeout(() => {
@@ -607,8 +777,12 @@ const M365FilePickerBody: FC<{
     setSearchResults(null);
     setErrorKey(null);
     setLoadMoreFailed(false);
+    // The siteBrowse cache itself survives tab switches; only its transient
+    // pagination-failure state resets.
+    setSitesLoadMoreFailed(false);
     setSort('name');
     setDir('asc');
+    setSortUnavailable(false);
     setTypeFilter(null);
     setTypeMenuOpen(false);
   };
@@ -688,6 +862,26 @@ const M365FilePickerBody: FC<{
     }
   };
 
+  const visibleTabs = folderMode ? FOLDER_TABS : TABS;
+
+  // ARIA tabs pattern: roving tabindex with arrow-key navigation and
+  // automatic activation (selection follows focus).
+  const handleTabListKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+    const index = visibleTabs.indexOf(tab);
+    let nextIndex: number | null = null;
+    if (event.key === 'ArrowRight')
+      nextIndex = (index + 1) % visibleTabs.length;
+    else if (event.key === 'ArrowLeft')
+      nextIndex = (index - 1 + visibleTabs.length) % visibleTabs.length;
+    else if (event.key === 'Home') nextIndex = 0;
+    else if (event.key === 'End') nextIndex = visibleTabs.length - 1;
+    if (nextIndex === null) return;
+    event.preventDefault();
+    const next = visibleTabs[nextIndex];
+    if (next !== tab) switchTab(next);
+    document.getElementById(`m365-picker-tab-${next}`)?.focus();
+  };
+
   const openFolder = (entry: M365DriveEntry) => {
     // Local cache hits render while a search is still in flight, so "came
     // from search" must cover the searching window too, not just results.
@@ -720,8 +914,12 @@ const M365FilePickerBody: FC<{
   const openTeam = (team: M365TeamEntry) => {
     cancelSearch();
     setQuery('');
+    setErrorKey(null);
     setLoading(true);
-    const seq = listSeqRef.current;
+    // Take over the listing explicitly: any still-pending load (e.g. the
+    // teams-root list) must not be able to write state or clear the
+    // loading shown while the team drive resolves.
+    const seq = ++listSeqRef.current;
     getTeamDrive(team.groupId)
       .then((drive) => {
         if (seq !== listSeqRef.current) return;
@@ -748,6 +946,12 @@ const M365FilePickerBody: FC<{
       itemId: entry.itemId,
       name: entry.name,
       pathLabel: [rootLabel, ...crumbLabels(crumbs), entry.name].join(' › '),
+      // Picker trail: lets the next folder-mode opening start back here.
+      tab,
+      crumbs: [
+        ...crumbs,
+        { label: entry.name, driveId: entry.driveId, itemId: entry.itemId },
+      ],
     });
     onClose();
   };
@@ -787,6 +991,10 @@ const M365FilePickerBody: FC<{
         name: lastCrumb?.label ?? '',
         pathLabel: crumbPath,
       };
+    }
+    if (currentDestination) {
+      // Picker trail: lets the next folder-mode opening start back here.
+      currentDestination = { ...currentDestination, tab, crumbs };
     }
   }
 
@@ -862,7 +1070,13 @@ const M365FilePickerBody: FC<{
     ? listedEntries.filter((e) => e.match === 'name')
     : [];
   const contentMatches = searchActive
-    ? listedEntries.filter((e) => e.match !== 'name')
+    ? listedEntries.filter((e) => e.match === 'content')
+    : [];
+  // Continuation pages come back untiered (the server deliberately doesn't
+  // re-classify page 2+), so a missing `match` must not masquerade as a
+  // content match — those entries get a neutral trailing section instead.
+  const untieredMatches = searchActive
+    ? listedEntries.filter((e) => e.match === undefined)
     : [];
 
   // Shared-foundation file-type filter: folders always navigate; files
@@ -880,19 +1094,49 @@ const M365FilePickerBody: FC<{
     return dot > 0 && acceptSet.has(entry.name.slice(dot + 1).toLowerCase());
   };
 
+  // Shared by the site browse sections and the site search results.
+  const renderSiteRow = (site: M365SiteEntry) => (
+    <li key={site.siteId}>
+      <button
+        type="button"
+        onClick={() => {
+          cancelSearch();
+          setQuery('');
+          setCrumbs([{ label: site.name, siteId: site.siteId }]);
+        }}
+        className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-neutral-700/50"
+      >
+        <IconBrandOnedrive size={18} className="flex-shrink-0 text-blue-500" />
+        <span className="truncate">{site.name}</span>
+      </button>
+    </li>
+  );
+  const siteSectionHeader = (labelKey: string) => (
+    <li
+      key={`site-header-${labelKey}`}
+      className="sticky top-0 z-10 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:bg-neutral-900 dark:text-gray-400"
+    >
+      {t(labelKey)}
+    </li>
+  );
+
   return (
     <div className="flex h-[420px] flex-col gap-3">
       {/* Tabs */}
       <div
         className="flex gap-1 rounded-lg bg-gray-100 p-1 dark:bg-neutral-700/50"
         role="tablist"
+        onKeyDown={handleTabListKeyDown}
       >
-        {(folderMode ? FOLDER_TABS : TABS).map((candidate) => (
+        {visibleTabs.map((candidate) => (
           <button
             key={candidate}
             type="button"
             role="tab"
+            id={`m365-picker-tab-${candidate}`}
             aria-selected={tab === candidate}
+            aria-controls="m365-picker-panel"
+            tabIndex={tab === candidate ? 0 : -1}
             onClick={() => switchTab(candidate)}
             className={`flex-1 rounded-md px-2 py-1.5 text-xs font-medium transition-colors ${
               tab === candidate
@@ -1055,6 +1299,7 @@ const M365FilePickerBody: FC<{
                   <div ref={typeMenuRef} className="relative">
                     <button
                       type="button"
+                      ref={typeMenuButtonRef}
                       aria-haspopup="menu"
                       aria-expanded={typeMenuOpen}
                       aria-pressed={activeMore !== null}
@@ -1121,35 +1366,45 @@ const M365FilePickerBody: FC<{
             <span />
           )}
           {showSortPills && (
-            <div
-              className="flex gap-1 rounded-lg bg-gray-100 p-0.5 dark:bg-neutral-700/50"
-              role="group"
-              aria-label={t('sort.label')}
-            >
-              {SORT_FIELDS.map((field) => {
-                const active = sort === field;
-                return (
-                  <button
-                    key={field}
-                    type="button"
-                    aria-pressed={active}
-                    onClick={() => handleSort(field)}
-                    className={`flex items-center gap-0.5 rounded-md px-2 py-1 text-xs font-medium transition-colors ${
-                      active
-                        ? 'bg-white text-gray-900 shadow-sm dark:bg-neutral-800 dark:text-gray-100'
-                        : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'
-                    }`}
-                  >
-                    {t(SORT_LABEL_KEYS[field])}
-                    {active &&
-                      (dir === 'asc' ? (
-                        <IconArrowNarrowUp size={14} />
-                      ) : (
-                        <IconArrowNarrowDown size={14} />
-                      ))}
-                  </button>
-                );
-              })}
+            <div className="flex min-w-0 items-center gap-2">
+              {/* Truthful sort UI: when the tenant rejected the $orderby the
+                  rows are in raw Graph order, so no pill may claim to be
+                  active and a note says why. */}
+              {sortUnavailable && (
+                <span className="min-w-0 truncate text-[11px] text-gray-400 dark:text-gray-500">
+                  {t('sort.notApplied')}
+                </span>
+              )}
+              <div
+                className="flex flex-shrink-0 gap-1 rounded-lg bg-gray-100 p-0.5 dark:bg-neutral-700/50"
+                role="group"
+                aria-label={t('sort.label')}
+              >
+                {SORT_FIELDS.map((field) => {
+                  const active = sort === field && !sortUnavailable;
+                  return (
+                    <button
+                      key={field}
+                      type="button"
+                      aria-pressed={active}
+                      onClick={() => handleSort(field)}
+                      className={`flex items-center gap-0.5 rounded-md px-2 py-1 text-xs font-medium transition-colors ${
+                        active
+                          ? 'bg-white text-gray-900 shadow-sm dark:bg-neutral-800 dark:text-gray-100'
+                          : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'
+                      }`}
+                    >
+                      {t(SORT_LABEL_KEYS[field])}
+                      {active &&
+                        (dir === 'asc' ? (
+                          <IconArrowNarrowUp size={14} />
+                        ) : (
+                          <IconArrowNarrowDown size={14} />
+                        ))}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           )}
         </div>
@@ -1159,15 +1414,44 @@ const M365FilePickerBody: FC<{
       <div
         ref={listRef}
         onKeyDown={handleListKeyDown}
+        id="m365-picker-panel"
+        role="tabpanel"
+        aria-labelledby={`m365-picker-tab-${tab}`}
         className="min-h-0 flex-1 overflow-y-auto rounded-lg border border-neutral-200 dark:border-neutral-700"
       >
         {loading ? (
-          <div className="flex h-full items-center justify-center text-sm text-gray-500 dark:text-gray-400">
+          <div className="flex h-full items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+            <IconLoader2 size={16} className="animate-spin" />
             {t('loading')}
           </div>
         ) : errorKey ? (
-          <div className="flex h-full items-center justify-center px-6 text-center text-sm text-amber-700 dark:text-amber-400">
-            {t(errorKey)}
+          <div className="flex h-full flex-col items-center justify-center gap-3 px-6 text-center text-sm text-amber-700 dark:text-amber-400">
+            <span>{t(errorKey)}</span>
+            {/* Consent/connection failures are fixable in Settings →
+                Connections; there is no section deep-link mechanism, so the
+                CTA opens Settings and the label names the section. Every
+                other failure gets a retry of the current listing instead. */}
+            {errorKey === 'errors.consentMissing' ||
+            errorKey === 'errors.notConnected' ? (
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  useUIStore.getState().setIsSettingsOpen(true);
+                }}
+                className="rounded-md border border-amber-300 px-2.5 py-1 text-xs font-medium text-amber-800 hover:bg-amber-50 dark:border-amber-700 dark:text-amber-300 dark:hover:bg-amber-900/20"
+              >
+                {t('errors.openConnections')}
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => void load()}
+                className="rounded-md border border-amber-300 px-2.5 py-1 text-xs font-medium text-amber-800 hover:bg-amber-50 dark:border-amber-700 dark:text-amber-300 dark:hover:bg-amber-900/20"
+              >
+                {t('retry')}
+              </button>
+            )}
           </div>
         ) : tab === 'teams' && crumbs.length === 0 ? (
           teams.length === 0 ? (
@@ -1194,31 +1478,69 @@ const M365FilePickerBody: FC<{
             </ul>
           )
         ) : tab === 'sharepoint' && sharePointPhase === 'sites' ? (
-          sites.length === 0 ? (
+          sitesSearched ? (
+            // Search results replace the browse listing while a completed
+            // search is active; zero hits is a no-results state, never the
+            // "start searching" hint.
+            sites.length === 0 ? (
+              <div className="flex h-full items-center justify-center px-6 text-center text-sm text-gray-500 dark:text-gray-400">
+                {t('sitesNoResults', { query: trimmedQuery })}
+              </div>
+            ) : (
+              <ul>{sites.map(renderSiteRow)}</ul>
+            )
+          ) : siteBrowse === null ? (
+            // Pre-load flash only (loading/error render above); the hint
+            // remains as a harmless fallback.
             <div className="flex h-full items-center justify-center px-6 text-center text-sm text-gray-500 dark:text-gray-400">
               {t('sitesHint')}
             </div>
+          ) : siteBrowse.followed.length === 0 &&
+            siteBrowse.sites.length === 0 &&
+            !siteBrowse.nextToken ? (
+            <div className="flex h-full items-center justify-center px-6 text-center text-sm text-gray-500 dark:text-gray-400">
+              {t('sitesEmpty')}
+            </div>
           ) : (
             <ul>
-              {sites.map((site) => (
-                <li key={site.siteId}>
+              {siteBrowse.followed.length > 0 && (
+                <>
+                  {siteSectionHeader('sections.followedSites')}
+                  {siteBrowse.followed.map(renderSiteRow)}
+                </>
+              )}
+              {siteSectionHeader('sections.allSites')}
+              {siteBrowse.sites.map(renderSiteRow)}
+              {sitesLoadMoreFailed ? (
+                <li className="flex items-center justify-center gap-2 px-3 py-2 text-xs text-amber-700 dark:text-amber-400">
+                  <span>{t('loadMoreFailed')}</span>
                   <button
                     type="button"
-                    onClick={() => {
-                      cancelSearch();
-                      setQuery('');
-                      setCrumbs([{ label: site.name, siteId: site.siteId }]);
-                    }}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-neutral-700/50"
+                    onClick={() => void loadMoreSites()}
+                    className="rounded-md border border-neutral-300 px-2 py-0.5 text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
                   >
-                    <IconBrandOnedrive
-                      size={18}
-                      className="flex-shrink-0 text-blue-500"
-                    />
-                    <span className="truncate">{site.name}</span>
+                    {t('retry')}
                   </button>
                 </li>
-              ))}
+              ) : siteBrowse.nextToken ? (
+                <li className="p-2">
+                  <button
+                    type="button"
+                    onClick={() => void loadMoreSites()}
+                    disabled={sitesLoadingMore}
+                    className="flex w-full items-center justify-center gap-1 rounded-md py-1.5 text-xs text-gray-600 hover:bg-gray-100 disabled:pointer-events-none dark:text-gray-400 dark:hover:bg-neutral-700/50"
+                  >
+                    {sitesLoadingMore ? (
+                      <>
+                        <IconLoader2 size={14} className="animate-spin" />
+                        {t('loadingMore')}
+                      </>
+                    ) : (
+                      t('loadMore')
+                    )}
+                  </button>
+                </li>
+              ) : null}
             </ul>
           )
         ) : tab === 'sharepoint' && sharePointPhase === 'libraries' ? (
@@ -1348,7 +1670,9 @@ const M365FilePickerBody: FC<{
                       </span>
                       <span className="w-16 flex-shrink-0 text-right text-xs text-gray-400">
                         {entry.isFolder
-                          ? (entry.childCount ?? '')
+                          ? entry.childCount !== undefined
+                            ? t('itemCount', { count: entry.childCount })
+                            : ''
                           : formatSize(entry.size)}
                       </span>
                     </button>
@@ -1395,8 +1719,34 @@ const M365FilePickerBody: FC<{
                 section('sections.fromRecent', localHits),
                 section('sections.nameMatches', nameMatches),
                 section('sections.contentMatches', contentMatches),
+                section('sections.moreResults', untieredMatches),
               ];
             })()}
+            {/* Type filter emptied every loaded page but more pages exist:
+                the sentinel below keeps auto-scanning, so say so — a big
+                folder with no matches must not look like a bare spinner —
+                and offer a way out of the scan. */}
+            {typeExtSet &&
+              activeNextToken &&
+              !loadMoreFailed &&
+              listedEntries.length === 0 &&
+              localHits.length === 0 && (
+                <li className="flex flex-col items-center gap-2 px-6 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+                  <span className="flex items-center gap-2">
+                    <IconLoader2 size={16} className="animate-spin" />
+                    {t('typeFilter.scanning', {
+                      count: rawListedEntries.length,
+                    })}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setTypeFilter(null)}
+                    className="flex items-center gap-1 rounded-md border border-neutral-300 px-2 py-1 text-xs text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
+                  >
+                    {t('typeFilter.all')}
+                  </button>
+                </li>
+              )}
             {loadMoreFailed ? (
               <li className="flex items-center justify-center gap-2 px-3 py-2 text-xs text-amber-700 dark:text-amber-400">
                 <span>{t('loadMoreFailed')}</span>

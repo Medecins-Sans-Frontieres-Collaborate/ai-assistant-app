@@ -161,7 +161,7 @@
   "Description": "Beskrivning",
   "A description for your prompt_": "En beskrivning för din prompt.",
   "Prompt": "uppmaning",
-  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Prompt-innehåll. Använd '{{}}' för att beteckna en variabel. Ex: {{namn}} är ett {{adjektiv}} {{substantiv}}",
+  "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Promptinnehåll. Använd '{{}}' för att ange en variabel. Ex: '{{name}}' är en '{{adjective}}' '{{noun}}'",
   "Save": "Spara",
   "A name for your prompt_": "Ett namn för din uppmaning.",
   "New chat": "Ny chatt",
@@ -2233,7 +2233,8 @@
     "aiTools": "AI-verktyg",
     "aiToolsTooltip": "Funktioner assistenten kan använda vid svar: live webbsökning, kodkörning och anslutna tjänster.",
     "codeInterpreterTooltip": "Kör Python-kod i en säker sandlåda för varje meddelande.\n\nPerfekt för dataanalys, beräkningar och diagram från bifogade filer.",
-    "categoryTools": "Verktyg & kopplingar"
+    "categoryTools": "Verktyg & kopplingar",
+    "translationConversationTitle": "Översättning: {filename}"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Lägg till dina egna instruktioner för att anpassa hur AI:n svarar. Dessa kombineras med grundläggande riktlinjer som säkerställer hjälpsamma, korrekta och säkra svar.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tips: Skriv \"/\" för att välja bland sparade promptmallar.",
@@ -4518,7 +4519,11 @@
         "consentMissing": "Denna funktion inväntar godkännande från din organisations administratör.",
         "notConnected": "Din Microsoft 365-session är otillgänglig. Prova att logga ut och in igen.",
         "network": "Nätverksfel — vänligen försök igen.",
-        "generic": "Något gick fel — vänligen försök igen."
+        "generic": "Något gick fel — vänligen försök igen.",
+        "notFound": "Objektet kunde inte hittas — det kan ha flyttats eller tagits bort.",
+        "forbidden": "Du har inte åtkomst till detta objekt.",
+        "rateLimited": "Microsoft 365 är upptaget just nu — försök igen om en stund.",
+        "openConnections": "Öppna Inställningar › Anslutningar"
       },
       "pickTitle": "Välj en källa från OneDrive / SharePoint",
       "addFolder": "Lägg till",
@@ -4539,7 +4544,8 @@
         "label": "Sortera efter",
         "name": "Namn",
         "modified": "Ändrad",
-        "size": "Storlek"
+        "size": "Storlek",
+        "notApplied": "Sortering är inte tillgänglig här — visar objekt i ursprunglig ordning"
       },
       "folderTitle": "Välj en mapp",
       "selectFolder": "Välj",
@@ -4548,7 +4554,10 @@
       "sections": {
         "fromRecent": "Från dina senaste filer",
         "nameMatches": "Namnträffar",
-        "contentMatches": "Hittades i filinnehållet"
+        "contentMatches": "Hittades i filinnehållet",
+        "moreResults": "Fler resultat",
+        "followedSites": "Följda webbplatser",
+        "allSites": "Alla webbplatser"
       },
       "typeFilter": {
         "label": "Filtrera efter filtyp",
@@ -4562,8 +4571,12 @@
         "audio": "Ljud",
         "video": "Video",
         "more": "Fler filtyper",
-        "noMatches": "Inga filer av vald typ här"
-      }
+        "noMatches": "Inga filer av vald typ här",
+        "scanning": "Söker i den här mappen efter matchande filer… ({count} kontrollerade hittills)"
+      },
+      "sitesNoResults": "Inga webbplatser hittades för “{query}”",
+      "sitesEmpty": "Inga SharePoint-webbplatser tillgängliga. Prova att söka på namn.",
+      "itemCount": "{count, plural, one {# objekt} other {# objekt}}"
     },
     "mail": {
       "menuLabel": "Importera e-post…",
@@ -4657,7 +4670,8 @@
       "notFound": "Objektet kunde inte hittas — det kan ha flyttats eller tagits bort.",
       "forbidden": "Du har inte åtkomst till detta objekt.",
       "network": "Nätverksfel — försök igen.",
-      "generic": "Importen misslyckades — försök igen."
+      "generic": "Importen misslyckades — försök igen.",
+      "rateLimited": "Microsoft 365 är upptaget just nu — försök igen om en stund."
     },
     "agentAccess": {
       "connectFirst": "Denna agent svarar från Microsoft 365-filer. Anslut Microsoft 365 under Inställningar → Anslutningar för att använda den.",
@@ -4796,6 +4810,8 @@
     "cancel": "Avbryt",
     "consentMissing": "Din organisation har ännu inte godkänt åtkomst till OneDrive.",
     "blockedByPolicy": "Delning har blockerats av organisationens policy.",
-    "failed": "Kunde inte dela — ingenting skapades."
+    "failed": "Kunde inte dela — ingenting skapades.",
+    "copyFailed": "Kunde inte kopiera länken — markera den ovan och kopiera manuellt.",
+    "lastMessagesCountLabel": "Antal senaste meddelanden att inkludera"
   }
 }

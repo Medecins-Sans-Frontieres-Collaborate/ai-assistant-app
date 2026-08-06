@@ -355,8 +355,9 @@ describe('teams_list', () => {
     expect(result.resultText.indexOf('Emergency')).toBeLessThan(
       result.resultText.indexOf('Logistics'),
     );
+    // NO $top: /me/joinedTeams rejects the Top query option on many tenants.
     expect(calledPath()).toBe(
-      '/me/joinedTeams?$select=id,displayName,description&$top=100',
+      '/me/joinedTeams?$select=id,displayName,description',
     );
   });
 });

@@ -9,8 +9,14 @@ import { BackupManifest } from '@/lib/services/backup/types';
 import {
   GRAPH_V1,
   M365Error,
+  graphErrorFromResponse,
   mintGraphToken,
 } from '@/lib/services/m365/graphApi';
+import {
+  GraphUploadConflictError,
+  SIMPLE_UPLOAD_MAX,
+  uploadSessionFragments,
+} from '@/lib/services/m365/graphUpload';
 
 import { env } from '@/config/environment';
 
@@ -86,11 +92,6 @@ export function resolveDriveNamespace(
   return cleaned;
 }
 
-/** Graph simple content PUT cap; larger bodies need an upload session. */
-const SIMPLE_UPLOAD_MAX = 4 * 1024 * 1024;
-// 16 × 320KiB — Graph upload-session fragments must be 320KiB multiples.
-const CHUNK_SIZE = 16 * 327_680;
-
 /** Graph 429 — surfaces Retry-After so the route can propagate it. */
 export class DriveRateLimitError extends Error {
   constructor(readonly retryAfterSeconds: number) {
@@ -165,19 +166,18 @@ async function driveFetch(
   return response;
 }
 
+// Shared mapping (graphApi.graphErrorFromResponse) with this store's one
+// difference re-applied: 429 must become DriveRateLimitError, matching the
+// module contract, even on paths that bypass driveFetch.
 async function graphErrorFrom(
   response: Response,
   fallback: string,
-): Promise<M365Error> {
-  const body = await response.json().catch(() => null);
-  const message = body?.error?.message || `${fallback} (${response.status})`;
-  if (response.status === 404) {
-    return new M365Error(message, 'not_found', 404);
+): Promise<M365Error | DriveRateLimitError> {
+  const error = await graphErrorFromResponse(response, fallback);
+  if (error.kind === 'rate_limited') {
+    return new DriveRateLimitError(error.retryAfterSeconds ?? 5);
   }
-  if (response.status === 401 || response.status === 403) {
-    return new M365Error(message, 'forbidden', 403);
-  }
-  return new M365Error(message, 'graph_error', 502);
+  return error;
 }
 
 /**
@@ -232,7 +232,18 @@ export async function readDriveManifest(
 ): Promise<DriveManifestReadResult | null> {
   const result = await downloadItem(req, 'manifest.json');
   if (result === null) return null;
-  const manifest = JSON.parse(result.buffer.toString('utf8')) as BackupManifest;
+  let manifest: BackupManifest;
+  try {
+    manifest = JSON.parse(result.buffer.toString('utf8')) as BackupManifest;
+  } catch {
+    // A corrupt/truncated manifest must surface as a typed fault, not a raw
+    // SyntaxError that skips the routes' error mapping.
+    throw new M365Error(
+      'The OneDrive backup manifest is unreadable',
+      'graph_error',
+      502,
+    );
+  }
   return { manifest, etag: result.etag };
 }
 
@@ -273,32 +284,6 @@ export async function writeDriveManifest(
   }
   const item = (await response.json()) as DriveItemShape;
   return item.eTag ?? '';
-}
-
-// The uploadUrl is pre-authenticated; fragments go directly to it.
-async function uploadFragments(
-  uploadUrl: string,
-  bytes: Buffer,
-): Promise<void> {
-  for (let offset = 0; offset < bytes.length; offset += CHUNK_SIZE) {
-    const end = Math.min(offset + CHUNK_SIZE, bytes.length);
-    const response = await fetch(uploadUrl, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/octet-stream',
-        'Content-Range': `bytes ${offset}-${end - 1}/${bytes.length}`,
-      },
-      // Fresh copy — a Buffer view over a shared pool isn't a valid BodyInit.
-      body: new Uint8Array(bytes.subarray(offset, end)),
-    });
-    if (!response.ok) {
-      throw new M365Error(
-        `Backup chunk upload failed (${response.status})`,
-        'graph_error',
-        502,
-      );
-    }
-  }
 }
 
 /**
@@ -348,7 +333,27 @@ export async function writeDriveImmutableBlob(
   if (!session.uploadUrl) {
     throw new M365Error('Upload session was not created', 'graph_error', 502);
   }
-  await uploadFragments(session.uploadUrl, content);
+  try {
+    // Fresh copy — a Buffer view over a shared pool isn't a valid BodyInit
+    // slice source for the shared uploader's per-fragment views.
+    await uploadSessionFragments(
+      session.uploadUrl,
+      new Uint8Array(content),
+      'application/octet-stream',
+      // The rev-named item is never read back by id — a commit response
+      // without item metadata is still a success here.
+      { requireItem: false },
+    );
+  } catch (error) {
+    // conflictBehavior=fail is evaluated at the FINAL fragment commit, not
+    // at session creation — a commit 409 is the same "already landed"
+    // idempotent success as the simple-PUT path above.
+    if (error instanceof GraphUploadConflictError) return;
+    if (error instanceof M365Error && error.kind === 'rate_limited') {
+      throw new DriveRateLimitError(error.retryAfterSeconds ?? 5);
+    }
+    throw error;
+  }
 }
 
 /** Reads a ciphertext item. Returns null when it does not exist. */

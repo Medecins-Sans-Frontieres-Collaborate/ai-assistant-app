@@ -2233,7 +2233,8 @@
     "aiTools": "כלי AI",
     "aiToolsTooltip": "יכולות שהעוזר יכול להשתמש בהן כאשר עונה: חיפוש אינטרנט חי, הרצת קוד, ושירותים מחוברים.",
     "codeInterpreterTooltip": "הרץ קוד Python בסביבה מאובטחת לכל הודעה.\n\nמעולה לניתוח נתונים, חישובים ויצירת גרפים מקבצים מצורפים.",
-    "categoryTools": "כלים ומחברים"
+    "categoryTools": "כלים ומחברים",
+    "translationConversationTitle": "תרגום: {filename}"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "הוסיפו הוראות אישיות כדי להתאים את תגובת הבינה המלאכותית. הוראות אלו משולבות עם הנחיות ליבה שמבטיחות תגובות מועילות, מדויקות ובטוחות.",
   "Tip: Type \"/\" to select from saved prompt templates_": "עצה: הקלידו \"/\" כדי לבחור מהתבניות השמורות.",
@@ -4518,7 +4519,11 @@
         "consentMissing": "הפיצ'ר הזה ממתין לאישור מנהל הארגון שלך.",
         "notConnected": "החיבור שלך ל-Microsoft 365 אינו זמין. נסה להתנתק ולהתחבר מחדש.",
         "network": "שגיאת רשת — נסה שוב.",
-        "generic": "משהו השתבש — נסה שוב."
+        "generic": "משהו השתבש — נסה שוב.",
+        "notFound": "לא ניתן היה למצוא את הפריט — ייתכן שהוא הועבר או נמחק.",
+        "forbidden": "אין לך גישה לפריט זה.",
+        "rateLimited": "Microsoft 365 עמוס כרגע — נסה שוב בעוד רגע.",
+        "openConnections": "פתח הגדרות › חיבורים"
       },
       "pickTitle": "בחר מקור מ-OneDrive / SharePoint",
       "addFolder": "הוסף",
@@ -4539,7 +4544,8 @@
         "label": "מיון לפי",
         "name": "שם",
         "modified": "עודכן",
-        "size": "גודל"
+        "size": "גודל",
+        "notApplied": "מיון אינו זמין כאן — מציג את הפריטים בסדר המקורי שלהם"
       },
       "folderTitle": "בחר תיקיה",
       "selectFolder": "בחר",
@@ -4548,7 +4554,10 @@
       "sections": {
         "fromRecent": "מהקבצים האחרונים שלך",
         "nameMatches": "התאמות בשם",
-        "contentMatches": "נמצא בתוכן הקובץ"
+        "contentMatches": "נמצא בתוכן הקובץ",
+        "moreResults": "תוצאות נוספות",
+        "followedSites": "אתרים במעקב",
+        "allSites": "כל האתרים"
       },
       "typeFilter": {
         "label": "סינון לפי סוג קובץ",
@@ -4562,8 +4571,12 @@
         "audio": "שמע",
         "video": "וידאו",
         "more": "עוד סוגי קבצים",
-        "noMatches": "אין כאן קבצים מהסוג שנבחר"
-      }
+        "noMatches": "אין כאן קבצים מהסוג שנבחר",
+        "scanning": "מחפש קבצים תואמים בתיקיה זו… (עד כה נסרקו {count})"
+      },
+      "sitesNoResults": "לא נמצאו אתרים עבור \"{query}\"",
+      "sitesEmpty": "לא נמצאו אתרי SharePoint זמינים. נסה לחפש לפי שם.",
+      "itemCount": "{count, plural, one {פריט אחד} other {# פריטים}}"
     },
     "mail": {
       "menuLabel": "ייבוא אימייל…",
@@ -4657,7 +4670,8 @@
       "notFound": "הפריט לא נמצא — ייתכן שהועבר או נמחק.",
       "forbidden": "אין לך גישה לפריט זה.",
       "network": "שגיאת רשת — נא לנסות שוב.",
-      "generic": "הייבוא נכשל — נא לנסות שוב."
+      "generic": "הייבוא נכשל — נא לנסות שוב.",
+      "rateLimited": "Microsoft 365 עמוס כרגע — נסה שוב בעוד רגע."
     },
     "agentAccess": {
       "connectFirst": "סוכן זה עונה מקבצי Microsoft 365. חבר את Microsoft 365 בהגדרות → חיבורים כדי להשתמש בו.",
@@ -4710,7 +4724,7 @@
       "recordingTooLarge": "ההקלטה חורגת ממגבלת גודל ההעלאה",
       "nothingAvailable": "אין תמלול או הקלטה זמינים לפגישה זו",
       "resolveFailed": "לא ניתן היה לבדוק את הפגישה — נא נסה שוב",
-      "transcriptDenied": "רק משתתפים בפגישה יכולים לגשת לתמלול זה — בקש/{בקשי} מהמארגן ({organizer}) לשתף אותו",
+      "transcriptDenied": "רק משתתפים יכולים לגשת לתמלול הזה — יש לבקש מהמארגן ({organizer}) לשתף אותו",
       "theOrganizer": "המארגן",
       "importedMessage": "תמלול הפגישה יובא: {subject}",
       "delegatedNote": "הפגישות מוצגות מהיומן האישי שלך. תמלולים והקלטות זמינים רק עבור פגישות שאותן ארגנת או בהן השתתפת.",
@@ -4796,6 +4810,8 @@
     "cancel": "ביטול",
     "consentMissing": "הארגון שלך טרם אישר גישה ל-OneDrive.",
     "blockedByPolicy": "השיתוף נחסם עקב מדיניות הארגון שלך.",
-    "failed": "לא ניתן היה לשתף — לא נוצר דבר."
+    "failed": "לא ניתן היה לשתף — לא נוצר דבר.",
+    "copyFailed": "לא ניתן להעתיק את הקישור — נא לבחור אותו למעלה ולהעתיק ידנית.",
+    "lastMessagesCountLabel": "מספר ההודעות האחרונות לכלול"
   }
 }

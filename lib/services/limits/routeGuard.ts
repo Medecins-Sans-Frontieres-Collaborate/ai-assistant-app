@@ -20,7 +20,11 @@ import {
 import { periodKindForWindow } from '@/lib/services/limits/periods';
 import { buildPrincipal } from '@/lib/services/limits/principal';
 import { ResolvedLimit } from '@/lib/services/limits/resolver';
-import { CounterRequest, reserve } from '@/lib/services/limits/usageStore';
+import {
+  CounterRequest,
+  release,
+  reserve,
+} from '@/lib/services/limits/usageStore';
 import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 
 import { errorResponse } from '@/lib/utils/server/api/apiResponse';
@@ -53,6 +57,13 @@ export interface GuardResult {
   allowed: boolean;
   /** Ready to return from the route when `allowed` is false. */
   response?: NextResponse;
+  /**
+   * Best-effort compensating decrement of what this guard reserved. Routes
+   * whose metered work then FAILS (a rejected import, a Graph fault) call
+   * this so the user's quota isn't burned by a request that produced
+   * nothing. Absent when nothing was reserved. Never throws.
+   */
+  rollback?: () => Promise<void>;
 }
 
 const ALLOWED: GuardResult = { allowed: true };
@@ -108,11 +119,23 @@ export async function guardLimit(
       source: cell.source,
     }));
 
+    const timezone = policy?.timezone ?? 'UTC';
     const result = await reserve(principal.userId, periodKind, requests, {
-      timezone: policy?.timezone ?? 'UTC',
+      timezone,
       failMode: policy?.failMode ?? 'open',
     });
-    if (result.allowed || !result.denial) return ALLOWED;
+    if (result.allowed || !result.denial) {
+      // Only a reservation that ACTUALLY debited counters gets a rollback —
+      // releasing after a fail-open (nothing written) would decrement usage
+      // that was never charged once storage recovers.
+      const debited = result.debited;
+      if (!debited?.length) return ALLOWED;
+      const userId = principal.userId;
+      return {
+        allowed: true,
+        rollback: () => release(userId, periodKind, debited, { timezone }),
+      };
+    }
 
     // ⚠ In observe mode the counter STOPS at the cap rather than continuing
     // to climb: reserve() denies without writing, so the stored value never

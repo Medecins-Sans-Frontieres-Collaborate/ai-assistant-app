@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import React from 'react';
 
 import { M365ClientError } from '@/client/services/m365/m365Client';
@@ -7,11 +13,12 @@ import type { Conversation } from '@/types/chat';
 
 import ShareToOneDriveModal from '@/components/Chat/ShareToOneDriveModal';
 
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mocks = vi.hoisted(() => ({
   saveToOneDrive: vi.fn<() => Promise<unknown>>(),
   shareDriveItem: vi.fn<() => Promise<unknown>>(),
+  searchPeople: vi.fn<() => Promise<unknown>>(),
   buildBlob: vi.fn<() => Promise<Blob>>(),
   toastError: vi.fn(),
   toastSuccess: vi.fn(),
@@ -24,6 +31,7 @@ vi.mock('@/client/services/m365/m365Client', async (importOriginal) => {
     ...actual,
     saveToOneDrive: mocks.saveToOneDrive,
     shareDriveItem: mocks.shareDriveItem,
+    searchPeople: mocks.searchPeople,
   };
 });
 
@@ -65,6 +73,7 @@ function lastMarkdown(): string {
 describe('ShareToOneDriveModal', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mocks.searchPeople.mockResolvedValue([]);
     mocks.buildBlob.mockResolvedValue(new Blob(['doc']));
     mocks.saveToOneDrive.mockResolvedValue({
       name: 'Field visit notes.docx',
@@ -76,6 +85,10 @@ describe('ShareToOneDriveModal', () => {
       link: 'https://share.example/l',
       scope: 'organization',
     });
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it('keeps the simple case simple: filters live behind a collapsed Customize', () => {
@@ -221,5 +234,153 @@ describe('ShareToOneDriveModal', () => {
       expect(mocks.toastError).toHaveBeenCalledWith('blockedByPolicy'),
     );
     expect(screen.queryByText('sharedAsLink')).not.toBeInTheDocument();
+  });
+
+  it('focuses the title input when the modal opens', () => {
+    render(
+      <ShareToOneDriveModal
+        isOpen
+        onClose={vi.fn()}
+        conversation={conversation()}
+      />,
+    );
+    expect(screen.getByLabelText('documentTitle')).toHaveFocus();
+  });
+
+  it('strips OneDrive-invalid characters from the file name but not the document title', async () => {
+    render(
+      <ShareToOneDriveModal
+        isOpen
+        onClose={vi.fn()}
+        conversation={conversation()}
+      />,
+    );
+    fireEvent.change(screen.getByLabelText('documentTitle'), {
+      target: { value: 'Q3: results? #draft' },
+    });
+    fireEvent.click(screen.getByText('shareAction'));
+
+    await waitFor(() => expect(mocks.saveToOneDrive).toHaveBeenCalled());
+    expect(mocks.saveToOneDrive).toHaveBeenCalledWith(
+      expect.any(Blob),
+      'Q3 results draft.docx',
+    );
+    // The heading inside the document keeps the title exactly as typed.
+    expect(lastMarkdown()).toContain('Q3: results? #draft');
+  });
+
+  it('falls back to the default title when sanitizing empties the name', async () => {
+    render(
+      <ShareToOneDriveModal
+        isOpen
+        onClose={vi.fn()}
+        conversation={conversation()}
+      />,
+    );
+    fireEvent.change(screen.getByLabelText('documentTitle'), {
+      target: { value: '???' },
+    });
+    fireEvent.click(screen.getByText('shareAction'));
+
+    await waitFor(() => expect(mocks.saveToOneDrive).toHaveBeenCalled());
+    expect(mocks.saveToOneDrive).toHaveBeenCalledWith(
+      expect.any(Blob),
+      'defaultTitle.docx',
+    );
+  });
+
+  describe('copy link', () => {
+    const writeText = vi.fn<() => Promise<void>>();
+
+    beforeEach(() => {
+      writeText.mockReset();
+      Object.defineProperty(navigator, 'clipboard', {
+        value: { writeText },
+        configurable: true,
+      });
+    });
+
+    async function shareToOutcome() {
+      render(
+        <ShareToOneDriveModal
+          isOpen
+          onClose={vi.fn()}
+          conversation={conversation()}
+        />,
+      );
+      fireEvent.click(screen.getByText('shareAction'));
+      await waitFor(() =>
+        expect(screen.getByText('sharedAsLink')).toBeInTheDocument(),
+      );
+    }
+
+    it('confirms a successful copy', async () => {
+      writeText.mockResolvedValue(undefined);
+      await shareToOutcome();
+
+      fireEvent.click(screen.getByText('copyLink'));
+
+      await waitFor(() =>
+        expect(screen.getByText('copied')).toBeInTheDocument(),
+      );
+      expect(writeText).toHaveBeenCalledWith('https://share.example/l');
+      expect(mocks.toastError).not.toHaveBeenCalled();
+    });
+
+    it('surfaces a visible failure when the clipboard write is denied', async () => {
+      writeText.mockRejectedValue(new Error('denied'));
+      await shareToOutcome();
+
+      fireEvent.click(screen.getByText('copyLink'));
+
+      await waitFor(() =>
+        expect(mocks.toastError).toHaveBeenCalledWith('copyFailed'),
+      );
+      // No false "Copied" confirmation.
+      expect(screen.queryByText('copied')).not.toBeInTheDocument();
+      expect(screen.getByText('copyLink')).toBeInTheDocument();
+    });
+  });
+
+  describe('people combobox accessibility', () => {
+    it('announces the highlighted option via aria-activedescendant', async () => {
+      vi.useFakeTimers();
+      mocks.searchPeople.mockResolvedValue([
+        { displayName: 'Ana Torres', email: 'ana@msf.org' },
+        { displayName: 'Bo Lindqvist', email: 'bo@msf.org' },
+      ]);
+      render(
+        <ShareToOneDriveModal
+          isOpen
+          onClose={vi.fn()}
+          conversation={conversation()}
+        />,
+      );
+      fireEvent.click(screen.getByText('customize'));
+      const input = screen.getByRole('combobox');
+
+      // Nothing highlighted while the list is closed.
+      expect(input).not.toHaveAttribute('aria-activedescendant');
+
+      fireEvent.change(input, { target: { value: 'an' } });
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(500);
+      });
+
+      const options = screen.getAllByRole('option');
+      expect(options[0]).toHaveAttribute('id', 'share-people-option-0');
+      expect(options[1]).toHaveAttribute('id', 'share-people-option-1');
+      expect(input).toHaveAttribute(
+        'aria-activedescendant',
+        'share-people-option-0',
+      );
+
+      fireEvent.keyDown(input, { key: 'ArrowDown' });
+      expect(input).toHaveAttribute(
+        'aria-activedescendant',
+        'share-people-option-1',
+      );
+      expect(options[1]).toHaveAttribute('aria-selected', 'true');
+    });
   });
 });

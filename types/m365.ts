@@ -90,6 +90,19 @@ export interface M365SiteEntry {
   webUrl?: string;
 }
 
+/**
+ * Browse listing for the SharePoint tab (GET /api/m365/sites without q).
+ * `followed` is the user's favorited sites (/me/followedSites, best-effort —
+ * may be empty) and is present on the FIRST page only; `sites` is the
+ * permission-trimmed all-sites listing, deduped against `followed` on the
+ * first page. `nextToken` pages `sites` via the `pageToken` param.
+ */
+export interface M365SitesPage {
+  followed?: M365SiteEntry[];
+  sites: M365SiteEntry[];
+  nextToken?: string;
+}
+
 export interface M365DriveInfo {
   driveId: string;
   name: string;
@@ -173,6 +186,17 @@ export interface M365SaveDestination {
   name: string;
   /** Human-readable breadcrumb for toasts/labels, e.g. "SharePoint › Marketing › Documents › Reports". */
   pathLabel: string;
+  /**
+   * Picker tab the destination was chosen from, recorded so the folder
+   * picker can reopen at the destination instead of the root. Optional:
+   * destinations persisted before this field existed open at the root.
+   */
+  tab?: M365PickerTab;
+  /**
+   * Breadcrumb trail to the destination folder (last crumb is the folder
+   * itself), for reopening the picker in place. Same optionality as `tab`.
+   */
+  crumbs?: M365PickerCrumb[];
 }
 
 export interface M365SaveResult {

@@ -242,6 +242,85 @@ describe('Modal', () => {
     expect(contentDiv).toHaveClass('custom-content-class');
   });
 
+  it('moves initial focus to initialFocusRef when provided', () => {
+    const Wrapper = () => {
+      const inputRef = React.useRef<HTMLInputElement>(null);
+      return (
+        <Modal isOpen={true} onClose={vi.fn()} initialFocusRef={inputRef}>
+          <button>Other</button>
+          <input ref={inputRef} data-testid="target-input" />
+        </Modal>
+      );
+    };
+
+    render(<Wrapper />);
+
+    expect(screen.getByTestId('target-input')).toHaveFocus();
+  });
+
+  it('falls back to the first focusable element when initialFocusRef is absent', () => {
+    render(
+      <Modal isOpen={true} onClose={vi.fn()} showCloseButton={false}>
+        <button>First Action</button>
+        <button>Second Action</button>
+      </Modal>,
+    );
+
+    expect(screen.getByText('First Action')).toHaveFocus();
+  });
+
+  it('focuses the panel itself when nothing inside is focusable', () => {
+    render(
+      <Modal isOpen={true} onClose={vi.fn()} showCloseButton={false}>
+        <p>Plain text</p>
+      </Modal>,
+    );
+
+    expect(document.body.querySelector('[role="dialog"]')).toHaveFocus();
+  });
+
+  it('cycles Tab focus within the modal', () => {
+    render(
+      <Modal isOpen={true} onClose={vi.fn()} showCloseButton={false}>
+        <button>First Action</button>
+        <button>Last Action</button>
+      </Modal>,
+    );
+
+    const first = screen.getByText('First Action');
+    const last = screen.getByText('Last Action');
+
+    last.focus();
+    fireEvent.keyDown(document, { key: 'Tab' });
+    expect(first).toHaveFocus();
+
+    fireEvent.keyDown(document, { key: 'Tab', shiftKey: true });
+    expect(last).toHaveFocus();
+  });
+
+  it('restores focus to the previously focused element when the modal closes', () => {
+    const trigger = document.createElement('button');
+    document.body.appendChild(trigger);
+    trigger.focus();
+
+    const { rerender } = render(
+      <Modal isOpen={true} onClose={vi.fn()} title="Test">
+        <button>Inside</button>
+      </Modal>,
+    );
+
+    expect(trigger).not.toHaveFocus();
+
+    rerender(
+      <Modal isOpen={false} onClose={vi.fn()} title="Test">
+        <button>Inside</button>
+      </Modal>,
+    );
+
+    expect(trigger).toHaveFocus();
+    trigger.remove();
+  });
+
   it('marks its portal root as a settings portal so stacked dialogs do not close settings', () => {
     // The settings dialog closes on any mousedown outside its own DOM tree.
     // Modals portal to document.body, so without this attribute clicking a

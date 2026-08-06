@@ -3,7 +3,8 @@ import {
   IconFolder,
   IconLoader2,
 } from '@tabler/icons-react';
-import { FC, FormEvent, useState } from 'react';
+import { FC, FormEvent, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
@@ -14,10 +15,8 @@ import {
   showSavedToast,
 } from '@/client/hooks/document/useM365Save';
 
-import {
-  M365ClientError,
-  saveToOneDrive,
-} from '@/client/services/m365/m365Client';
+import { saveToOneDrive } from '@/client/services/m365/m365Client';
+import { m365ErrorKind } from '@/client/services/m365/m365ErrorKinds';
 
 import type { M365SaveDestination } from '@/types/m365';
 
@@ -42,21 +41,22 @@ interface SaveErrorRef {
 }
 
 function saveErrorRef(error: unknown): SaveErrorRef {
-  if (error instanceof M365ClientError) {
-    switch (error.code) {
-      case 'M365_CONSENT_MISSING':
-        return { ns: 'save', key: 'consentMissing' };
-      case 'M365_NOT_CONNECTED':
-        return { ns: 'pickerErrors', key: 'notConnected' };
-      case 'NETWORK':
-        return { ns: 'pickerErrors', key: 'network' };
-      case 'M365_NOT_FOUND':
-        return { ns: 'save', key: 'destinationMissing' };
-      case 'M365_FORBIDDEN':
-        return { ns: 'save', key: 'destinationForbidden' };
-    }
+  switch (m365ErrorKind(error)) {
+    case 'consentMissing':
+      return { ns: 'save', key: 'consentMissing' };
+    case 'notConnected':
+      return { ns: 'pickerErrors', key: 'notConnected' };
+    case 'network':
+      return { ns: 'pickerErrors', key: 'network' };
+    case 'rateLimited':
+      return { ns: 'pickerErrors', key: 'rateLimited' };
+    case 'notFound':
+      return { ns: 'save', key: 'destinationMissing' };
+    case 'forbidden':
+      return { ns: 'save', key: 'destinationForbidden' };
+    default:
+      return { ns: 'save', key: 'failed' };
   }
-  return { ns: 'save', key: 'failed' };
 }
 
 /**
@@ -91,6 +91,16 @@ const M365SaveDestinationBody: FC<{
   const [pickerOpen, setPickerOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<SaveErrorRef | null>(null);
+  // Closing during an in-flight save unmounts this body, but the upload
+  // keeps running. Its outcome must stay visible: success already toasts
+  // (showSavedToast is mount-independent), and a failure after close is
+  // routed to a toast instead of the now-unmounted inline error.
+  const closedRef = useRef(false);
+
+  const handleClose = () => {
+    closedRef.current = true;
+    onClose();
+  };
 
   const trimmedName = fileName.trim();
 
@@ -129,7 +139,12 @@ const M365SaveDestinationBody: FC<{
       });
       onClose();
     } catch (saveError) {
-      setError(saveErrorRef(saveError));
+      const ref = saveErrorRef(saveError);
+      if (closedRef.current) {
+        toast.error(ref.ns === 'save' ? t(ref.key) : tPickerErrors(ref.key));
+      } else {
+        setError(ref);
+      }
     } finally {
       setSaving(false);
     }
@@ -141,7 +156,7 @@ const M365SaveDestinationBody: FC<{
           folder picker is open, and returns when it picks or closes. */}
       <Modal
         isOpen={!pickerOpen}
-        onClose={onClose}
+        onClose={handleClose}
         title={t('dialogTitle')}
         icon={<IconBrandOnedrive size={20} />}
         size="md"
@@ -220,7 +235,7 @@ const M365SaveDestinationBody: FC<{
           <div className="flex justify-end gap-2">
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleClose}
               className="rounded-lg border border-neutral-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100 dark:border-neutral-600 dark:text-gray-300 dark:hover:bg-neutral-700"
             >
               {t('cancel')}

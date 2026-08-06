@@ -33,12 +33,13 @@ export async function teamsList(
   _args: Record<string, unknown>,
 ): Promise<string> {
   const { graphJson } = await import('@/lib/services/m365/graphApi');
+  // NO $top: /me/joinedTeams rejects the Top query option on many tenants.
   const data = await graphJson<{
     value?: { id?: string; displayName?: string; description?: string }[];
   }>(
     req,
     catalogScopes('teams_list'),
-    '/me/joinedTeams?$select=id,displayName,description&$top=100',
+    '/me/joinedTeams?$select=id,displayName,description',
   );
   const teams = (data.value ?? [])
     .filter((team): team is { id: string; displayName?: string } => !!team.id)

@@ -2879,6 +2879,7 @@
   },
   "dropdown": {
     "aiTools": "AI Tools",
+    "translationConversationTitle": "Translation: {filename}",
     "aiToolsTooltip": "Capabilities the assistant can use while answering: live web search, code execution, and connected services.",
     "searchTooltip": "Enable web search for every message.\n\nProvides up-to-date information using live news and web sources.",
     "codeInterpreterTooltip": "Run Python code in a secure sandbox for every message.\n\nGreat for data analysis, calculations, and chart generation from attached files.",
@@ -4471,10 +4472,16 @@
       "loading": "Loading…",
       "empty": "Nothing here",
       "sitesHint": "Search for a SharePoint site to browse its document libraries.",
+      "sitesNoResults": "No sites found for “{query}”",
+      "sitesEmpty": "No SharePoint sites available. Try searching by name.",
       "errors": {
         "consentMissing": "This feature is waiting for your organization’s admin approval.",
         "notConnected": "Your Microsoft 365 session is unavailable. Try signing out and back in.",
         "network": "Network error — please try again.",
+        "notFound": "The item could not be found — it may have been moved or deleted.",
+        "forbidden": "You don’t have access to this item.",
+        "rateLimited": "Microsoft 365 is busy right now — please try again in a moment.",
+        "openConnections": "Open Settings › Connections",
         "generic": "Something went wrong — please try again."
       },
       "pickTitle": "Pick a source from OneDrive / SharePoint",
@@ -4486,6 +4493,7 @@
       "searchMinChars": "Type at least 2 characters to search",
       "noResults": "No matches for “{query}”",
       "emptyFolder": "This folder is empty",
+      "itemCount": "{count, plural, one {# item} other {# items}}",
       "unsupportedType": "This file type isn’t supported here",
       "pathUnknown": "Opened from search results — the folders in between aren’t shown",
       "selectEntry": "Select {name}",
@@ -4496,7 +4504,8 @@
         "label": "Sort by",
         "name": "Name",
         "modified": "Modified",
-        "size": "Size"
+        "size": "Size",
+        "notApplied": "Sorting isn’t available here — showing items in their original order"
       },
       "typeFilter": {
         "label": "Filter by file type",
@@ -4510,7 +4519,8 @@
         "audio": "Audio",
         "video": "Video",
         "more": "More file types",
-        "noMatches": "No files of the selected type here"
+        "noMatches": "No files of the selected type here",
+        "scanning": "Searching this folder for matching files… ({count} checked so far)"
       },
       "folderTitle": "Choose a folder",
       "selectFolder": "Select",
@@ -4519,7 +4529,10 @@
       "sections": {
         "fromRecent": "From your recent files",
         "nameMatches": "Name matches",
-        "contentMatches": "Found in file contents"
+        "contentMatches": "Found in file contents",
+        "moreResults": "More results",
+        "followedSites": "Followed sites",
+        "allSites": "All sites"
       }
     },
     "mail": {
@@ -4614,6 +4627,7 @@
       "notFound": "The item could not be found — it may have been moved or deleted.",
       "forbidden": "You don’t have access to this item.",
       "network": "Network error — please try again.",
+      "rateLimited": "Microsoft 365 is busy right now — please try again in a moment.",
       "generic": "The import failed — please try again."
     },
     "agentAccess": {
@@ -4749,6 +4763,8 @@
     "sharedWithPeople": "\"{name}\" is in your OneDrive and shared with {count} people (view only).",
     "copyLink": "Copy link",
     "copied": "Copied",
+    "copyFailed": "Couldn't copy the link — select it above and copy manually.",
+    "lastMessagesCountLabel": "Number of recent messages to include",
     "done": "Done",
     "cancel": "Cancel",
     "consentMissing": "Your organization hasn't approved OneDrive access yet.",

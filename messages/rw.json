@@ -787,7 +787,7 @@
     "searchLanguages": "Shakisha indimi...",
     "selectLanguage": "Hitamo ururimi",
     "audioFromOriginal": "Amajwi aturuka ku mwandiko wa mbere",
-    "audioFromTranslation": "Amajwi aturuka ku buhinduzi bw'{language}",
+    "audioFromTranslation": "Ijwi rituruka mu gisobanuro cya {language}",
     "thinking": "Gutekereza...",
     "viewReasoningProcess": "Reba inzira yo gutekereza",
     "collapseThinking": "Funga gutekereza",
@@ -2208,7 +2208,8 @@
     "aiTools": "Ibikoresho bya AI",
     "aiToolsTooltip": "Ubushobozi umufasha ashobora gukoresha mu gusubiza: gushakisha kuri internet, gukoresha code, n’ubundi buryo buhuza serivisi.",
     "codeInterpreterTooltip": "Koresha code ya Python ahantu hizewe kuri buri butumwa.\n\nByiza mu isesengura ry’amakuru, imibare, no gukora imbonerahamwe bivuye ku mafayile wunzeho.",
-    "categoryTools": "Ibikoresho & connectors"
+    "categoryTools": "Ibikoresho & connectors",
+    "translationConversationTitle": "Ihindurabitekerezo: {filename}"
   },
   "transcription": {
     "transcribesOnSend": "Kwandika iyo byoherejwe",
@@ -4502,7 +4503,11 @@
         "consentMissing": "Iyi gahunda irategereje kwemezwa n’umuyobozi w’umuryango.",
         "notConnected": "Igihe cyawe cya Microsoft 365 ntikibonetse. Gerageza gusohoka wongere winjire.",
         "network": "Ikosa rya network — ongera ugerageze.",
-        "generic": "Habayeho ikibazo — ongera ugerageze."
+        "generic": "Habayeho ikibazo — ongera ugerageze.",
+        "notFound": "Icyo kintu nticyabonetse — gishobora kuba cyarimuriwe ahandi cyangwa cyarakuweho.",
+        "forbidden": "Nta burenganzira ufite kuri iki kintu.",
+        "rateLimited": "Microsoft 365 irahuze ubu — mwongere mugerageze akanya gato nyuma.",
+        "openConnections": "Fungura Settings › Connections"
       },
       "pickTitle": "Hitamo inkomoko kuri OneDrive / SharePoint",
       "addFolder": "Ongeramo",
@@ -4523,7 +4528,8 @@
         "label": "Tondeka hakurikijwe",
         "name": "Izina",
         "modified": "Byahinduwe",
-        "size": "Ingano"
+        "size": "Ingano",
+        "notApplied": "Gushyira mu murongo ntibiboneka hano — birerekana ibintu uko byari bimeze"
       },
       "folderTitle": "Hitamo dosiye",
       "selectFolder": "Hitamo",
@@ -4532,7 +4538,10 @@
       "sections": {
         "fromRecent": "Muri amadosiye yawe aheruka",
         "nameMatches": "Aha izina rihuye",
-        "contentMatches": "Rabonetse mu bisobanuro by'idosiye"
+        "contentMatches": "Rabonetse mu bisobanuro by'idosiye",
+        "moreResults": "Ibisubizo byinshi",
+        "followedSites": "Imbuga ukurikirana",
+        "allSites": "Imbuga zose"
       },
       "typeFilter": {
         "label": "Tonora ubisangiye ubwoko bw'inyandiko",
@@ -4546,8 +4555,12 @@
         "audio": "Amajumba",
         "video": "Amashusho y’amajwi",
         "more": "Andi moko y’inyandiko",
-        "noMatches": "Nta nyandiko z’ubu bwoko zihari"
-      }
+        "noMatches": "Nta nyandiko z’ubu bwoko zihari",
+        "scanning": "Turashakisha muri uyu mu folder dosiye zihura… ({count} zimaze gusuzumwa)"
+      },
+      "sitesNoResults": "Nta mbuga zabonetse kuri “{query}”",
+      "sitesEmpty": "Nta mbuga za SharePoint ziboneka. Gerageza gushakisha ukoresheje izina.",
+      "itemCount": "{count, plural, one {# kintu} other {# bintu}}"
     },
     "mail": {
       "menuLabel": "Ohereza email…",
@@ -4641,7 +4654,8 @@
       "notFound": "Icyo ushaka nticyabonywe—gishobora kuba cyimuwe cyangwa cyasibwe.",
       "forbidden": "Ntufite uburenganzira kuri iki kintu.",
       "network": "Ikibazo cya internet—gerageza kongera.",
-      "generic": "Gushyiramo byanze—gerageza kongera."
+      "generic": "Gushyiramo byanze—gerageza kongera.",
+      "rateLimited": "Microsoft 365 irahuze ubu — mwongere mugerageze akanya gato nyuma."
     },
     "agentAccess": {
       "connectFirst": "Uyu muyoboro usubiza ukoresheje amadosiye ya Microsoft 365. Funga Microsoft 365 muri Settings → Connections kugirango ukoreshe.",
@@ -4780,6 +4794,8 @@
     "cancel": "Hagarika",
     "consentMissing": "Ishyirahamwe ryawe ntiriremera OneDrive kugeza ubu.",
     "blockedByPolicy": "Gusangiza byabuzanyijwe na politike y’ishyirahamwe ryawe.",
-    "failed": "Ntibishobotse gusangiza — nta cyabayeho."
+    "failed": "Ntibishobotse gusangiza — nta cyabayeho.",
+    "copyFailed": "Ntibyashobotse gukoporora ihuriro — hitamo iri hejuru, unarikopore intoki.",
+    "lastMessagesCountLabel": "Umubare w’ubutumwa bushya bwo ku kugaragaza"
   }
 }

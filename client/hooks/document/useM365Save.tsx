@@ -7,10 +7,10 @@ import { ExportFormat } from '@/client/hooks/document/exportFormats';
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
 import {
-  M365ClientError,
   M365SaveTarget,
   saveToOneDrive,
 } from '@/client/services/m365/m365Client';
+import { m365ErrorKind } from '@/client/services/m365/m365ErrorKinds';
 
 import {
   fetchDocxBlob,
@@ -177,14 +177,12 @@ export function useM365Save(): M365SaveController {
           toastId,
         });
       } catch (error) {
-        const code = error instanceof M365ClientError ? error.code : undefined;
+        const kind = m365ErrorKind(error);
         // A remembered folder can go stale (deleted → 404, access revoked →
         // 403); both recover by re-picking a destination for the same file.
-        if (code === 'M365_NOT_FOUND' || code === 'M365_FORBIDDEN') {
+        if (kind === 'notFound' || kind === 'forbidden') {
           const key =
-            code === 'M365_NOT_FOUND'
-              ? 'destinationMissing'
-              : 'destinationForbidden';
+            kind === 'notFound' ? 'destinationMissing' : 'destinationForbidden';
           toast.error(
             <span>
               {t(key)}{' '}
@@ -205,8 +203,10 @@ export function useM365Save(): M365SaveController {
           return;
         }
         toast.error(
-          t(code === 'M365_CONSENT_MISSING' ? 'consentMissing' : 'failed'),
-          { id: toastId },
+          t(kind === 'consentMissing' ? 'consentMissing' : 'failed'),
+          {
+            id: toastId,
+          },
         );
       }
     },

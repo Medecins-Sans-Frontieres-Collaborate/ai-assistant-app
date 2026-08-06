@@ -2208,7 +2208,8 @@
     "aiTools": "AI Tools",
     "aiToolsTooltip": "Awoodaha kaaliyaha uu adeegsan karo marka uu ka jawaabayo: raadinta webka tooska ah, fulinta koodhka, iyo adeegyo ku xiran.",
     "codeInterpreterTooltip": "Orod koodh Python ah meel ammaan ah fariin kastaba.\n\nKu habboon falanqaynta xogta, xisaabinta, iyo sawir-garayn laga sameeyo faylasha ku lifaaqan.",
-    "categoryTools": "Qalabka & xirmooyinka"
+    "categoryTools": "Qalabka & xirmooyinka",
+    "translationConversationTitle": "Turjumaad: {filename}"
   },
   "transcription": {
     "transcribesOnSend": "Wuxuu qoraa marka la diro",
@@ -3415,7 +3416,7 @@
     "connectButtonShort": "Ku xidh il model",
     "addAnother": "Ku dar il model kale",
     "edit": "Tafatir",
-    "disconnect": "Ka go'{name}",
+    "disconnect": "Ka gooy {name}",
     "disconnectedToast": "La gooyey {name}",
     "modelCountLabel": "{count} model",
     "loadingModels": "Model-yo ayaa soo dhacaya...",
@@ -4502,7 +4503,11 @@
         "consentMissing": "Astaantan waxay sugaysaa oggolaanshaha maamulka ururkaaga.",
         "notConnected": "Fadhigaaga Microsoft 365 lama heli karo. Fadlan ka bax oo mar kale gal.",
         "network": "Khalad shabakad — fadlan isku day mar kale.",
-        "generic": "Wax baa qaldamay — fadlan isku day mar kale."
+        "generic": "Wax baa qaldamay — fadlan isku day mar kale.",
+        "notFound": "Qaybtan lama helin — waxaa laga yaabaa in la raray ama la tirtiray.",
+        "forbidden": "Ma haysid ogolaansho inaad gasho sheygan.",
+        "rateLimited": "Microsoft 365 waa mashquul hadda — fadlan isku day mar kale wax yar kadib.",
+        "openConnections": "Fur Dejinta › Xiriirada"
       },
       "pickTitle": "Ka door ilo OneDrive / SharePoint",
       "addFolder": "Kudar",
@@ -4523,7 +4528,8 @@
         "label": "Kala saar",
         "name": "Magac",
         "modified": "La beddelay",
-        "size": "Cabbir"
+        "size": "Cabbir",
+        "notApplied": "Kala soocid lama heli karo halkan — walaxaha waxaa lagu soo bandhigayaa siday u kala horeeyaan asalkooda"
       },
       "folderTitle": "Doora gal",
       "selectFolder": "Xulo",
@@ -4532,7 +4538,10 @@
       "sections": {
         "fromRecent": "Faylashaagii ugu dambeeyay",
         "nameMatches": "Magaca waa la waafajiyay",
-        "contentMatches": "Waxaa laga helay gudaha faylka"
+        "contentMatches": "Waxaa laga helay gudaha faylka",
+        "moreResults": "Natiijooyin dheeraad ah",
+        "followedSites": "Goobaha la raacay",
+        "allSites": "Dhamaan goobaha"
       },
       "typeFilter": {
         "label": "Shaandhee nooca faylka",
@@ -4546,8 +4555,12 @@
         "audio": "Cod",
         "video": "Muuqaal",
         "more": "Noocyo faylal oo dheeraad ah",
-        "noMatches": "Faylal noocan la doortay halkan kama jiro"
-      }
+        "noMatches": "Faylal noocan la doortay halkan kama jiro",
+        "scanning": "Faylasha la midka ah ayaa laga baarayaa galkan… ({count} la hubiyay ilaa hadda)"
+      },
+      "sitesNoResults": "Goobo looma helin \"{query}\"",
+      "sitesEmpty": "Goobaha SharePoint lama heli karo. Isku day inaad magac ku raadiso.",
+      "itemCount": "{count, plural, one {# shay} other {# shay} }"
     },
     "mail": {
       "menuLabel": "Soo dejiso iimayl…",
@@ -4641,7 +4654,8 @@
       "notFound": "Qodobka lama helin — waxaa laga yaabaa in la raray ama la tirtiray.",
       "forbidden": "Uma lihid oggolaansho qalabkan.",
       "network": "Khalad shabakad — fadlan isku day mar kale.",
-      "generic": "Soo dejintii waa ay fashilantay — fadlan isku day mar kale."
+      "generic": "Soo dejintii waa ay fashilantay — fadlan isku day mar kale.",
+      "rateLimited": "Microsoft 365 waa mashquul hadda — fadlan isku day mar kale wax yar kadib."
     },
     "agentAccess": {
       "connectFirst": "Wakiilkan wuxuu ka jawaabaa faylasha Microsoft 365. Ku xirma Microsoft 365 ee Dejinta → Xiriirada si aad u isticmaasho.",
@@ -4780,6 +4794,8 @@
     "cancel": "Jooji",
     "consentMissing": "Hay’addaadu weli ma oggolaan OneDrive access.",
     "blockedByPolicy": "La wadaagista waxaa xanibay siyaasadda hay’addaada.",
-    "failed": "Lama wadaagi karin — wax lama abuurin."
+    "failed": "Lama wadaagi karin — wax lama abuurin.",
+    "copyFailed": "Link-ga lama koobi karin — fadlan kor ka dooro oo gacanta ku koobi.",
+    "lastMessagesCountLabel": "Tirada fariimaha dhow ee la darinayo"
   }
 }

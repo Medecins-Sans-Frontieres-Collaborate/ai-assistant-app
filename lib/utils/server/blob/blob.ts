@@ -274,15 +274,15 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       return blockBlobClient.url;
     }
 
-    await withAzureRetry(
-      () =>
-        blockBlobClient.uploadStream(
-          contentStream,
-          bufferSize,
-          maxConcurrency,
-          options,
-        ),
-      { label: 'blob.uploadStream' },
+    // NO withAzureRetry here: the source stream cannot be rewound, so a
+    // retry after a partially consumed attempt would resume mid-stream and
+    // commit a silently truncated blob as success. Callers that want retry
+    // must re-open the source and call again.
+    await blockBlobClient.uploadStream(
+      contentStream,
+      bufferSize,
+      maxConcurrency,
+      options,
     );
     return blockBlobClient.url;
   }
