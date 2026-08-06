@@ -41,27 +41,37 @@ export const maxDuration = 120;
 /**
  * Passes bytes through while enforcing the cap on what ACTUALLY flows —
  * a body larger than its metadata claimed errors the stream mid-flight
- * instead of proxying without bound.
+ * instead of proxying without bound. The upstream reader is cancelled on
+ * overflow so the Graph download stops instead of draining to a dead sink.
  */
 function cappedBody(
   body: ReadableStream<Uint8Array>,
   maxBytes: number,
 ): ReadableStream<Uint8Array> {
+  const reader = body.getReader();
   let total = 0;
-  return body.pipeThrough(
-    new TransformStream<Uint8Array, Uint8Array>({
-      transform(chunk, controller) {
-        total += chunk.byteLength;
-        if (total > maxBytes) {
-          controller.error(
-            new Error('File exceeded the size limit while streaming'),
-          );
-          return;
-        }
-        controller.enqueue(chunk);
-      },
-    }),
-  );
+  return new ReadableStream<Uint8Array>({
+    async pull(controller) {
+      const { done, value } = await reader.read();
+      if (done) {
+        controller.close();
+        return;
+      }
+      if (!value || value.byteLength === 0) return;
+      total += value.byteLength;
+      if (total > maxBytes) {
+        controller.error(
+          new Error('File exceeded the size limit while streaming'),
+        );
+        await reader.cancel().catch(() => undefined);
+        return;
+      }
+      controller.enqueue(value);
+    },
+    cancel(reason) {
+      return reader.cancel(reason);
+    },
+  });
 }
 
 export async function GET(req: NextRequest) {
