@@ -92,6 +92,8 @@ export async function POST(req: NextRequest) {
     });
     return successResponse(imported);
   } catch (error) {
+    // Nothing was stored — hand the reserved daily-upload unit back.
+    await uploadGuard.rollback?.();
     return m365ImportErrorResponse(error);
   }
 }
