@@ -47,6 +47,7 @@ import {
   listDrivePage,
   listJoinedTeams,
   listSiteDrives,
+  listSites,
   searchSites,
 } from '@/client/services/m365/m365Client';
 import {
@@ -116,6 +117,13 @@ type Crumb = M365PickerCrumb;
 
 interface EntryPage {
   entries: M365DriveEntry[];
+  nextToken: string | null;
+}
+
+/** SharePoint browse listing: followed sites + paged all-sites list. */
+interface SiteBrowseState {
+  followed: M365SiteEntry[];
+  sites: M365SiteEntry[];
   nextToken: string | null;
 }
 
@@ -206,6 +214,24 @@ function appendDeduped(
   return fresh.length > 0 ? [...prev, ...fresh] : prev;
 }
 
+/**
+ * Site-list appends dedupe by siteId — continuation pages can repeat sites
+ * (and are not guaranteed to be trimmed against the followed list).
+ */
+function appendDedupedSites(
+  prev: M365SiteEntry[],
+  incoming: M365SiteEntry[],
+  alsoSeen: M365SiteEntry[],
+): M365SiteEntry[] {
+  const seen = new Set([...alsoSeen, ...prev].map((site) => site.siteId));
+  const fresh = incoming.filter((site) => {
+    if (seen.has(site.siteId)) return false;
+    seen.add(site.siteId);
+    return true;
+  });
+  return fresh.length > 0 ? [...prev, ...fresh] : prev;
+}
+
 /** Breadcrumb labels for path strings, with "…" standing in for elided gaps. */
 function crumbLabels(crumbs: Crumb[]): string[] {
   return crumbs.flatMap((crumb) =>
@@ -278,7 +304,19 @@ const M365FilePickerBody: FC<{
   const [crumbs, setCrumbs] = useState<Crumb[]>(initialLocation?.crumbs ?? []);
   const [entries, setEntries] = useState<M365DriveEntry[]>([]);
   const [nextToken, setNextToken] = useState<string | null>(null);
+  // SharePoint site SEARCH results (?q=); the browse listing is siteBrowse.
   const [sites, setSites] = useState<M365SiteEntry[]>([]);
+  // SharePoint browse listing (followed + all sites). Session-cached: kept
+  // across searches and navigation so returning to the sites phase never
+  // refetches; the ref mirror lets load() consult the cache without
+  // depending on the state (which would churn its identity).
+  const [siteBrowse, setSiteBrowse] = useState<SiteBrowseState | null>(null);
+  const siteBrowseRef = useRef<SiteBrowseState | null>(null);
+  useEffect(() => {
+    siteBrowseRef.current = siteBrowse;
+  }, [siteBrowse]);
+  const [sitesLoadingMore, setSitesLoadingMore] = useState(false);
+  const [sitesLoadMoreFailed, setSitesLoadMoreFailed] = useState(false);
   const [teams, setTeams] = useState<M365TeamEntry[]>([]);
   const [libraries, setLibraries] = useState<M365DriveInfo[]>([]);
   const [query, setQuery] = useState('');
@@ -456,6 +494,21 @@ const M365FilePickerBody: FC<{
         setEntries(page.entries);
         setNextToken(page.nextToken ?? null);
         setSortUnavailable(page.sortApplied === false);
+      } else if (sharePointPhase === 'sites') {
+        // Browse listing (followed + all sites), fetched once per session:
+        // returning from a site or clearing a search reuses the cache.
+        if (!siteBrowseRef.current) {
+          const sitesPage = await listSites();
+          if (seq !== listSeqRef.current) return;
+          const followed = sitesPage.followed ?? [];
+          setSiteBrowse({
+            followed,
+            // The server dedupes the first page against followed; repeat it
+            // client-side anyway — duplicate keys would crash the list.
+            sites: appendDedupedSites([], sitesPage.sites, followed),
+            nextToken: sitesPage.nextToken ?? null,
+          });
+        }
       } else if (sharePointPhase === 'libraries' && crumbs[0]?.siteId) {
         const drives = await listSiteDrives(crumbs[0].siteId);
         if (seq !== listSeqRef.current) return;
@@ -559,6 +612,39 @@ const M365FilePickerBody: FC<{
   useEffect(() => {
     loadMoreRef.current = loadMore;
   }, [loadMore]);
+
+  // All-sites pagination, mirroring loadMore's guarantees: seq-guarded
+  // appends, dedupe, and loaded rows survive a pagination failure.
+  const loadMoreSites = useCallback(async () => {
+    const browse = siteBrowseRef.current;
+    if (!browse?.nextToken || sitesLoadingMore) return;
+    const seq = listSeqRef.current;
+    setSitesLoadingMore(true);
+    setSitesLoadMoreFailed(false);
+    try {
+      const sitesPage = await listSites(browse.nextToken);
+      if (seq !== listSeqRef.current) return;
+      setSiteBrowse(
+        (prev) =>
+          prev && {
+            followed: prev.followed,
+            sites: appendDedupedSites(
+              prev.sites,
+              sitesPage.sites,
+              prev.followed,
+            ),
+            nextToken: sitesPage.nextToken ?? null,
+          },
+      );
+    } catch (error) {
+      if (isAbortError(error)) return;
+      if (seq !== listSeqRef.current) return;
+      // Never discard already-loaded rows on a pagination failure.
+      setSitesLoadMoreFailed(true);
+    } finally {
+      setSitesLoadingMore(false);
+    }
+  }, [sitesLoadingMore]);
 
   const searchActive = searchResults !== null;
   const activeNextToken = searchActive ? searchResults.nextToken : nextToken;
@@ -691,6 +777,9 @@ const M365FilePickerBody: FC<{
     setSearchResults(null);
     setErrorKey(null);
     setLoadMoreFailed(false);
+    // The siteBrowse cache itself survives tab switches; only its transient
+    // pagination-failure state resets.
+    setSitesLoadMoreFailed(false);
     setSort('name');
     setDir('asc');
     setSortUnavailable(false);
@@ -1004,6 +1093,32 @@ const M365FilePickerBody: FC<{
     const dot = entry.name.lastIndexOf('.');
     return dot > 0 && acceptSet.has(entry.name.slice(dot + 1).toLowerCase());
   };
+
+  // Shared by the site browse sections and the site search results.
+  const renderSiteRow = (site: M365SiteEntry) => (
+    <li key={site.siteId}>
+      <button
+        type="button"
+        onClick={() => {
+          cancelSearch();
+          setQuery('');
+          setCrumbs([{ label: site.name, siteId: site.siteId }]);
+        }}
+        className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-gray-800 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-neutral-700/50"
+      >
+        <IconBrandOnedrive size={18} className="flex-shrink-0 text-blue-500" />
+        <span className="truncate">{site.name}</span>
+      </button>
+    </li>
+  );
+  const siteSectionHeader = (labelKey: string) => (
+    <li
+      key={`site-header-${labelKey}`}
+      className="sticky top-0 z-10 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:bg-neutral-900 dark:text-gray-400"
+    >
+      {t(labelKey)}
+    </li>
+  );
 
   return (
     <div className="flex h-[420px] flex-col gap-3">
