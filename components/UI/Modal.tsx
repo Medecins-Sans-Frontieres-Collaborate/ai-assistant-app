@@ -10,7 +10,7 @@ import { createPortal } from 'react-dom';
 
 import { useTranslations } from 'next-intl';
 
-import useModal from '@/client/hooks/ui/useModal';
+import useModal, { FOCUSABLE_SELECTOR } from '@/client/hooks/ui/useModal';
 
 interface ModalProps {
   isOpen: boolean;
@@ -80,12 +80,22 @@ const Modal: React.FC<ModalProps> = ({
     setMounted(true); // eslint-disable-line
   }, []);
 
-  // Set focus on the specified element when the modal opens
+  // Set focus on the specified element when the modal opens, falling back to
+  // the first focusable element in the panel (or the panel itself)
   useEffect(() => {
-    if (isOpen && initialFocusRef?.current) {
+    if (!isOpen || !mounted) return;
+
+    if (initialFocusRef?.current) {
       initialFocusRef.current.focus();
+      return;
     }
-  }, [isOpen, initialFocusRef]);
+
+    const panel = modalContentRef.current;
+    if (!panel || panel.contains(document.activeElement)) return;
+
+    const firstFocusable = panel.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+    (firstFocusable ?? panel).focus();
+  }, [isOpen, mounted, initialFocusRef, modalContentRef]);
 
   // Calculate size classes
   const sizeClasses = useMemo(
@@ -131,7 +141,8 @@ const Modal: React.FC<ModalProps> = ({
       {/* Modal container */}
       <div
         ref={modalContentRef}
-        className={`${sizeClasses} w-full bg-white dark:bg-surface-dark-base rounded-lg shadow-lg p-6 relative z-10 animate-modal-in ${className.replace(/!?z-\[?\d+\]?/, '')}`}
+        tabIndex={-1}
+        className={`${sizeClasses} w-full bg-white dark:bg-surface-dark-base rounded-lg shadow-lg p-6 relative z-10 animate-modal-in focus:outline-none ${className.replace(/!?z-\[?\d+\]?/, '')}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? 'modal-title' : undefined}
