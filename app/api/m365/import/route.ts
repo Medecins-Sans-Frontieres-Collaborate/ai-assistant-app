@@ -10,17 +10,19 @@
  * treats an M365 import exactly like a local pick.
  *
  * Size is enforced against the same per-category caps as a local upload —
- * the pipeline it feeds is not built for more.
+ * first against Graph metadata, then against the actual bytes as they
+ * stream (metadata can be absent or stale). Metadata resolution and content
+ * download are the import service's — this route only adds the proxying.
  */
 import { NextRequest, NextResponse } from 'next/server';
 
+import { M365Error, isValidGraphId } from '@/lib/services/m365/graphApi';
 import {
-  M365Error,
-  graphFetch,
-  graphJson,
-  isValidGraphId,
-  m365ErrorResponse,
-} from '@/lib/services/m365/graphApi';
+  M365ImportError,
+  fetchDriveItemMeta,
+  m365ImportErrorResponse,
+  openContentStream,
+} from '@/lib/services/m365/m365ImportService';
 
 import {
   badRequestResponse,
@@ -36,15 +38,30 @@ import {
 
 export const maxDuration = 120;
 
-const SCOPES = ['Files.ReadWrite.All'];
-
-interface GraphItemMeta {
-  name?: string;
-  size?: number;
-  webUrl?: string;
-  folder?: unknown;
-  file?: { mimeType?: string };
-  '@microsoft.graph.downloadUrl'?: string;
+/**
+ * Passes bytes through while enforcing the cap on what ACTUALLY flows —
+ * a body larger than its metadata claimed errors the stream mid-flight
+ * instead of proxying without bound.
+ */
+function cappedBody(
+  body: ReadableStream<Uint8Array>,
+  maxBytes: number,
+): ReadableStream<Uint8Array> {
+  let total = 0;
+  return body.pipeThrough(
+    new TransformStream<Uint8Array, Uint8Array>({
+      transform(chunk, controller) {
+        total += chunk.byteLength;
+        if (total > maxBytes) {
+          controller.error(
+            new Error('File exceeded the size limit while streaming'),
+          );
+          return;
+        }
+        controller.enqueue(chunk);
+      },
+    }),
+  );
 }
 
 export async function GET(req: NextRequest) {
@@ -61,38 +78,25 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const meta = await graphJson<GraphItemMeta>(
-      req,
-      SCOPES,
-      `/drives/${encodeURIComponent(driveId)}/items/${encodeURIComponent(itemId)}` +
-        '?$select=name,size,webUrl,folder,file,@microsoft.graph.downloadUrl',
-    );
+    const target = { driveId, itemId };
+    const meta = await fetchDriveItemMeta(req, target);
 
     if (meta.folder) {
-      return badRequestResponse('Folders cannot be imported');
+      throw new M365ImportError('Folders cannot be imported', 'M365_IS_FOLDER');
     }
     const name = meta.name ?? 'file';
     const mimeType = meta.file?.mimeType || 'application/octet-stream';
     const category = getFileCategory(name, mimeType);
     const limit = getFileSizeLimit(category);
     if ((meta.size ?? 0) > limit) {
-      return badRequestResponse(
+      throw new M365ImportError(
         `File exceeds the ${getFileSizeLimitDisplay(category)} limit for ${category} files`,
         'M365_FILE_TOO_LARGE',
       );
     }
 
-    // The downloadUrl is pre-authenticated and short-lived; fall back to the
-    // /content endpoint (a Graph 302 fetch follows the redirect) without it.
-    const downloadUrl = meta['@microsoft.graph.downloadUrl'];
-    const content = downloadUrl
-      ? await fetch(downloadUrl)
-      : await graphFetch(
-          req,
-          SCOPES,
-          `/drives/${encodeURIComponent(driveId)}/items/${encodeURIComponent(itemId)}/content`,
-        );
-    if (!content.ok || !content.body) {
+    const content = await openContentStream(req, target, meta);
+    if (!content.body) {
       throw new M365Error(
         'Failed to download file content',
         'graph_error',
@@ -100,7 +104,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    return new NextResponse(content.body, {
+    return new NextResponse(cappedBody(content.body, limit), {
       status: 200,
       headers: {
         'Content-Type': mimeType,
@@ -113,6 +117,6 @@ export async function GET(req: NextRequest) {
       },
     });
   } catch (error) {
-    return m365ErrorResponse(error);
+    return m365ImportErrorResponse(error);
   }
 }
