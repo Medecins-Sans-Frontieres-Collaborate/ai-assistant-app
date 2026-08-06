@@ -16,6 +16,7 @@ import type {
   M365MeetingTranscript,
   M365SaveResult,
   M365SiteEntry,
+  M365SitesPage,
   M365SortDir,
   M365Status,
   M365TeamEntry,
@@ -96,6 +97,24 @@ export async function listDrive(
   options: ListDriveOptions = {},
 ): Promise<M365DriveEntry[]> {
   return (await listDrivePage(view, options)).entries;
+}
+
+/**
+ * Browse listing for the SharePoint tab: followed sites plus the
+ * permission-trimmed all-sites list. Continuation pages (`pageToken`)
+ * return only `sites` (+ possibly another `nextToken`).
+ */
+export async function listSites(
+  pageToken?: string,
+  signal?: AbortSignal,
+): Promise<M365SitesPage> {
+  const params = new URLSearchParams();
+  if (pageToken) params.set('pageToken', pageToken);
+  const qs = params.toString();
+  return requestJson<M365SitesPage>(
+    `/api/m365/sites${qs ? `?${qs}` : ''}`,
+    signal ? { signal } : undefined,
+  );
 }
 
 export async function searchSites(
