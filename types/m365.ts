@@ -90,6 +90,19 @@ export interface M365SiteEntry {
   webUrl?: string;
 }
 
+/**
+ * Browse listing for the SharePoint tab (GET /api/m365/sites without q).
+ * `followed` is the user's favorited sites (/me/followedSites, best-effort —
+ * may be empty) and is present on the FIRST page only; `sites` is the
+ * permission-trimmed all-sites listing, deduped against `followed` on the
+ * first page. `nextToken` pages `sites` via the `pageToken` param.
+ */
+export interface M365SitesPage {
+  followed?: M365SiteEntry[];
+  sites: M365SiteEntry[];
+  nextToken?: string;
+}
+
 export interface M365DriveInfo {
   driveId: string;
   name: string;
