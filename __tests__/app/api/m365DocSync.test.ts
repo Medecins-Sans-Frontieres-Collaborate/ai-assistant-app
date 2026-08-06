@@ -223,7 +223,7 @@ describe('POST /api/m365/save — overwrite mode', () => {
         graphJsonResponse({ uploadUrl: 'https://upload.example/session' }),
       )
       .mockResolvedValue(
-        graphJsonResponse({ name: 'big.md', eTag: '"etag-4"' }),
+        graphJsonResponse({ id: 'big1', name: 'big.md', eTag: '"etag-4"' }),
       );
     const form = overwriteForm({
       driveId: 'd1',
