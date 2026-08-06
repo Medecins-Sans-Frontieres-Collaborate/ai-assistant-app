@@ -125,10 +125,15 @@ export async function guardLimit(
       failMode: policy?.failMode ?? 'open',
     });
     if (result.allowed || !result.denial) {
+      // Only a reservation that ACTUALLY debited counters gets a rollback —
+      // releasing after a fail-open (nothing written) would decrement usage
+      // that was never charged once storage recovers.
+      const debited = result.debited;
+      if (!debited?.length) return ALLOWED;
       const userId = principal.userId;
       return {
         allowed: true,
-        rollback: () => release(userId, periodKind, requests, { timezone }),
+        rollback: () => release(userId, periodKind, debited, { timezone }),
       };
     }
 
