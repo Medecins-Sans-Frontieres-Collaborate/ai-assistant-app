@@ -115,6 +115,22 @@ describe('readDriveManifest', () => {
     expect(fetchMock.mock.calls[1][1]).toBeUndefined();
   });
 
+  it('maps a corrupt manifest to a typed error instead of a raw SyntaxError', async () => {
+    fetchMock
+      .mockResolvedValueOnce(
+        jsonResponse({
+          eTag: '"{ABC},1"',
+          '@microsoft.graph.downloadUrl': 'https://download.example/m',
+        }),
+      )
+      .mockResolvedValueOnce(new Response('{"truncated'));
+
+    await expect(readDriveManifest(req())).rejects.toMatchObject({
+      name: 'M365Error',
+      message: expect.stringContaining('manifest is unreadable'),
+    });
+  });
+
   it('maps Graph 429 to DriveRateLimitError with Retry-After', async () => {
     fetchMock.mockResolvedValueOnce(
       new Response(null, { status: 429, headers: { 'Retry-After': '17' } }),
@@ -213,6 +229,21 @@ describe('writeDriveImmutableBlob', () => {
     expect(
       (fragmentCall[1].headers as Record<string, string>)['Content-Range'],
     ).toMatch(/^bytes 0-\d+\/5242880$/);
+  });
+
+  it('treats a final-fragment 409 as idempotent success (commit-time conflict)', async () => {
+    // conflictBehavior=fail is evaluated when the LAST fragment commits,
+    // not at session creation — the losing racer must still see success.
+    const bytes = Buffer.alloc(5 * 1024 * 1024, 7);
+    fetchMock
+      .mockResolvedValueOnce(
+        jsonResponse({ uploadUrl: 'https://upload.example/session' }),
+      )
+      .mockResolvedValue(new Response(null, { status: 409 }));
+
+    await expect(
+      writeDriveImmutableBlob(req(), driveFoldersPath(REV), bytes),
+    ).resolves.toBeUndefined();
   });
 });
 

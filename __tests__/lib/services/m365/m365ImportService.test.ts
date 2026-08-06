@@ -7,6 +7,7 @@ import { NextRequest } from 'next/server';
 
 import {
   M365ImportError,
+  fetchDriveItemBuffer,
   importDriveItemToStorage,
 } from '@/lib/services/m365/m365ImportService';
 
@@ -172,5 +173,71 @@ describe('importDriveItemToStorage', () => {
   it('exposes M365ImportError as a named class for route mapping', () => {
     const error = new M365ImportError('nope', 'M365_IS_FOLDER');
     expect(error.name).toBe('M365ImportError');
+  });
+
+  it('reports the ACTUAL streamed byte count, not stale Graph metadata', async () => {
+    // size 0 + audio forces the streaming branch — the exact case whose
+    // returned size must come from the real bytes (transcription routes
+    // on it).
+    graphJsonMock.mockResolvedValue(meta({ size: 0 }));
+    fetchMock.mockResolvedValue(contentResponse(MP3_BYTES));
+    uploadStreamMock.mockImplementation(
+      async ({ contentStream }: { contentStream: AsyncIterable<Buffer> }) => {
+        for await (const _chunk of contentStream) {
+          // drain like the real uploader
+        }
+        return 'https://blob/x';
+      },
+    );
+
+    const imported = await importDriveItemToStorage(req, session, target);
+    expect(imported.size).toBe(MP3_BYTES.length);
+  });
+
+  it('accumulates leading bytes across tiny chunk boundaries before the signature check', async () => {
+    graphJsonMock.mockResolvedValue(meta({ size: 0 }));
+    // First network chunk is 3 bytes — smaller than any full signature; a
+    // valid mp3 must still pass once enough bytes arrive.
+    const body = new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.enqueue(new Uint8Array(MP3_BYTES.subarray(0, 3)));
+        controller.enqueue(new Uint8Array(MP3_BYTES.subarray(3)));
+        controller.close();
+      },
+    });
+    fetchMock.mockResolvedValue(new Response(body, { status: 200 }));
+    uploadStreamMock.mockImplementation(
+      async ({ contentStream }: { contentStream: AsyncIterable<Buffer> }) => {
+        const chunks: Buffer[] = [];
+        for await (const chunk of contentStream) chunks.push(chunk as Buffer);
+        expect(Buffer.concat(chunks).equals(MP3_BYTES)).toBe(true);
+        return 'https://blob/x';
+      },
+    );
+
+    const imported = await importDriveItemToStorage(req, session, target);
+    expect(imported.size).toBe(MP3_BYTES.length);
+  });
+});
+
+describe('fetchDriveItemBuffer', () => {
+  it('enforces the byte cap while reading, even when metadata understates the size', async () => {
+    // Metadata passes the pre-check; the body is bigger than the cap — the
+    // capped read must reject without buffering past the limit.
+    graphJsonMock.mockResolvedValue(meta({ size: 10 }));
+    fetchMock.mockResolvedValue(contentResponse(Buffer.alloc(200, 1)));
+
+    await expect(
+      fetchDriveItemBuffer(req, target, { maxBytes: 100 }),
+    ).rejects.toMatchObject({ code: 'M365_FILE_TOO_LARGE' });
+  });
+
+  it('returns the actual buffered bytes and size', async () => {
+    graphJsonMock.mockResolvedValue(meta({ size: 10 }));
+    fetchMock.mockResolvedValue(contentResponse(MP3_BYTES));
+
+    const fetched = await fetchDriveItemBuffer(req, target);
+    expect(fetched.size).toBe(MP3_BYTES.length);
+    expect(fetched.data.equals(MP3_BYTES)).toBe(true);
   });
 });

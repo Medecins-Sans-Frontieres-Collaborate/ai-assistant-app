@@ -2,7 +2,9 @@ import { NextRequest } from 'next/server';
 
 import {
   M365Error,
+  graphErrorFromResponse,
   isValidGraphId,
+  m365ErrorResponse,
   mintGraphToken,
   normalizeDriveItem,
   normalizeMailEnvelope,
@@ -60,6 +62,58 @@ describe('mintGraphToken', () => {
     const rejection = mintGraphToken(req, ['Mail.Read']);
     await expect(rejection).rejects.toBeInstanceOf(M365Error);
     await expect(rejection).rejects.toMatchObject({ kind: 'graph_error' });
+  });
+});
+
+describe('graphErrorFromResponse', () => {
+  it('preserves 429 as rate_limited with the Retry-After hint', async () => {
+    const error = await graphErrorFromResponse(
+      new Response(null, { status: 429, headers: { 'retry-after': '17' } }),
+    );
+    expect(error.kind).toBe('rate_limited');
+    expect(error.status).toBe(429);
+    expect(error.retryAfterSeconds).toBe(17);
+  });
+
+  it('defaults the throttle hint when Retry-After is absent or garbage', async () => {
+    const error = await graphErrorFromResponse(
+      new Response(null, { status: 429, headers: { 'retry-after': 'soon' } }),
+    );
+    expect(error.retryAfterSeconds).toBe(5);
+  });
+
+  it('maps 401 to not_connected (token rejected → reconnect, not access denied)', async () => {
+    const error = await graphErrorFromResponse(
+      new Response(JSON.stringify({ error: { message: 'bad token' } }), {
+        status: 401,
+      }),
+    );
+    expect(error.kind).toBe('not_connected');
+    expect(error.status).toBe(401);
+  });
+
+  it('keeps 403/404/5xx mappings', async () => {
+    expect(
+      (await graphErrorFromResponse(new Response(null, { status: 403 }))).kind,
+    ).toBe('forbidden');
+    expect(
+      (await graphErrorFromResponse(new Response(null, { status: 404 }))).kind,
+    ).toBe('not_found');
+    expect(
+      (await graphErrorFromResponse(new Response(null, { status: 503 }))).kind,
+    ).toBe('graph_error');
+  });
+});
+
+describe('m365ErrorResponse', () => {
+  it('propagates Retry-After on rate_limited responses', async () => {
+    const response = m365ErrorResponse(
+      new M365Error('throttled', 'rate_limited', 429, 17),
+    );
+    expect(response.status).toBe(429);
+    expect(response.headers.get('Retry-After')).toBe('17');
+    const body = await response.json();
+    expect(body.code).toBe('M365_RATE_LIMITED');
   });
 });
 
