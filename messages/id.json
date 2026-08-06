@@ -2233,7 +2233,8 @@
     "aiTools": "Alat AI",
     "aiToolsTooltip": "Kemampuan yang dapat digunakan asisten saat menjawab: pencarian web langsung, eksekusi kode, dan layanan terhubung.",
     "codeInterpreterTooltip": "Jalankan kode Python di sandbox yang aman untuk setiap pesan.\n\nSangat cocok untuk analisis data, perhitungan, dan pembuatan grafik dari file terlampir.",
-    "categoryTools": "Alat & konektor"
+    "categoryTools": "Alat & konektor",
+    "translationConversationTitle": "Terjemahan: {filename}"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Tambahkan instruksi pribadi Anda untuk menyesuaikan respons AI. Instruksi ini akan digabungkan dengan pedoman utama untuk memastikan respons yang bermanfaat, akurat, dan aman.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tip: Ketik \"/\" untuk memilih dari template prompt yang tersimpan.",
@@ -4518,7 +4519,11 @@
         "consentMissing": "Fitur ini menunggu persetujuan admin organisasi Anda.",
         "notConnected": "Sesi Microsoft 365 Anda tidak tersedia. Coba keluar lalu masuk kembali.",
         "network": "Terjadi kesalahan jaringan — silakan coba lagi.",
-        "generic": "Terjadi kesalahan — silakan coba lagi."
+        "generic": "Terjadi kesalahan — silakan coba lagi.",
+        "notFound": "Item tidak ditemukan — mungkin telah dipindahkan atau dihapus.",
+        "forbidden": "Anda tidak memiliki akses ke item ini.",
+        "rateLimited": "Microsoft 365 sedang sibuk — silakan coba lagi sebentar lagi.",
+        "openConnections": "Buka Pengaturan › Koneksi"
       },
       "pickTitle": "Pilih sumber dari OneDrive / SharePoint",
       "addFolder": "Tambah",
@@ -4539,7 +4544,8 @@
         "label": "Urutkan berdasarkan",
         "name": "Nama",
         "modified": "Diubah",
-        "size": "Ukuran"
+        "size": "Ukuran",
+        "notApplied": "Pengurutan tidak tersedia di sini — menampilkan item berdasarkan urutan aslinya"
       },
       "folderTitle": "Pilih folder",
       "selectFolder": "Pilih",
@@ -4548,7 +4554,10 @@
       "sections": {
         "fromRecent": "Dari file terbaru Anda",
         "nameMatches": "Nama cocok",
-        "contentMatches": "Ditemukan dalam isi file"
+        "contentMatches": "Ditemukan dalam isi file",
+        "moreResults": "Hasil lainnya",
+        "followedSites": "Situs yang diikuti",
+        "allSites": "Semua situs"
       },
       "typeFilter": {
         "label": "Filter berdasarkan tipe file",
@@ -4562,8 +4571,12 @@
         "audio": "Audio",
         "video": "Video",
         "more": "Tipe file lainnya",
-        "noMatches": "Tidak ada file dengan tipe yang dipilih di sini"
-      }
+        "noMatches": "Tidak ada file dengan tipe yang dipilih di sini",
+        "scanning": "Mencari file yang cocok di folder ini… ({count} telah diperiksa)"
+      },
+      "sitesNoResults": "Tidak ada situs ditemukan untuk “{query}”",
+      "sitesEmpty": "Tidak ada situs SharePoint yang tersedia. Coba cari berdasarkan nama.",
+      "itemCount": "{count, plural, one {# item} other {# item} }"
     },
     "mail": {
       "menuLabel": "Impor email…",
@@ -4657,7 +4670,8 @@
       "notFound": "Item tidak dapat ditemukan — mungkin telah dipindahkan atau dihapus.",
       "forbidden": "Anda tidak memiliki akses ke item ini.",
       "network": "Kesalahan jaringan — silakan coba lagi.",
-      "generic": "Impor gagal — silakan coba lagi."
+      "generic": "Impor gagal — silakan coba lagi.",
+      "rateLimited": "Microsoft 365 sedang sibuk — silakan coba lagi sebentar lagi."
     },
     "agentAccess": {
       "connectFirst": "Agen ini menjawab menggunakan file Microsoft 365. Hubungkan Microsoft 365 di Pengaturan → Connections untuk menggunakannya.",
@@ -4796,6 +4810,8 @@
     "cancel": "Batal",
     "consentMissing": "Organisasi Anda belum menyetujui akses OneDrive.",
     "blockedByPolicy": "Berbagi diblokir oleh kebijakan organisasi Anda.",
-    "failed": "Gagal membagikan — tidak ada yang dibuat."
+    "failed": "Gagal membagikan — tidak ada yang dibuat.",
+    "copyFailed": "Tidak dapat menyalin tautan — silakan pilih dan salin secara manual di atas.",
+    "lastMessagesCountLabel": "Jumlah pesan terbaru yang akan disertakan"
   }
 }

@@ -2233,7 +2233,8 @@
     "aiTools": "KI-Tools",
     "aiToolsTooltip": "Funktionen, die der Assistent bei Antworten nutzen kann: Live-Websuche, Code-Ausführung und verbundene Dienste.",
     "codeInterpreterTooltip": "Python-Code in einer sicheren Sandbox für jede Nachricht ausführen.\n\nIdeal für Datenanalyse, Berechnungen und Diagramme aus angehängten Dateien.",
-    "categoryTools": "Tools & Connectoren"
+    "categoryTools": "Tools & Connectoren",
+    "translationConversationTitle": "Übersetzung: {filename}"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Fügen Sie persönliche Anweisungen hinzu, um die Antworten der KI anzupassen. Diese werden mit den zentralen Verhaltensrichtlinien kombiniert, um hilfreiche, genaue und sichere Antworten zu gewährleisten.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tipp: Geben Sie \"/\" ein, um gespeicherte Vorlagen auszuwählen.",
@@ -4518,7 +4519,11 @@
         "consentMissing": "Diese Funktion wartet auf die Freigabe durch den Administrator Ihrer Organisation.",
         "notConnected": "Ihre Microsoft 365-Sitzung ist nicht verfügbar. Versuchen Sie, sich ab- und wieder anzumelden.",
         "network": "Netzwerkfehler — bitte versuchen Sie es erneut.",
-        "generic": "Etwas ist schiefgelaufen — bitte versuchen Sie es erneut."
+        "generic": "Etwas ist schiefgelaufen — bitte versuchen Sie es erneut.",
+        "notFound": "Das Element konnte nicht gefunden werden – es wurde möglicherweise verschoben oder gelöscht.",
+        "forbidden": "Sie haben keinen Zugriff auf dieses Element.",
+        "rateLimited": "Microsoft 365 ist momentan ausgelastet – bitte versuchen Sie es in Kürze erneut.",
+        "openConnections": "Einstellungen › Verbindungen öffnen"
       },
       "pickTitle": "Quelle aus OneDrive / SharePoint auswählen",
       "addFolder": "Hinzufügen",
@@ -4539,7 +4544,8 @@
         "label": "Sortieren nach",
         "name": "Name",
         "modified": "Geändert",
-        "size": "Größe"
+        "size": "Größe",
+        "notApplied": "Sortierung ist hier nicht verfügbar – die Elemente werden in der ursprünglichen Reihenfolge angezeigt"
       },
       "folderTitle": "Ordner auswählen",
       "selectFolder": "Auswählen",
@@ -4548,7 +4554,10 @@
       "sections": {
         "fromRecent": "Aus Ihren zuletzt verwendeten Dateien",
         "nameMatches": "Namensübereinstimmungen",
-        "contentMatches": "Im Dateiinhalte gefunden"
+        "contentMatches": "Im Dateiinhalte gefunden",
+        "moreResults": "Weitere Ergebnisse",
+        "followedSites": "Gefolgte Sites",
+        "allSites": "Alle Sites"
       },
       "typeFilter": {
         "label": "Nach Dateityp filtern",
@@ -4562,8 +4571,12 @@
         "audio": "Audio",
         "video": "Video",
         "more": "Weitere Dateitypen",
-        "noMatches": "Keine Dateien dieses Typs vorhanden"
-      }
+        "noMatches": "Keine Dateien dieses Typs vorhanden",
+        "scanning": "Durchsuche diesen Ordner nach passenden Dateien… ({count} bisher überprüft)"
+      },
+      "sitesNoResults": "Keine Sites für „{query}“ gefunden",
+      "sitesEmpty": "Keine SharePoint-Sites verfügbar. Bitte versuchen Sie es mit einer Namenssuche.",
+      "itemCount": "{count, plural, one {# Element} other {# Elemente}}"
     },
     "mail": {
       "menuLabel": "E-Mail importieren…",
@@ -4657,7 +4670,8 @@
       "notFound": "Das Element konnte nicht gefunden werden – es wurde möglicherweise verschoben oder gelöscht.",
       "forbidden": "Sie haben keinen Zugriff auf dieses Element.",
       "network": "Netzwerkfehler – bitte versuchen Sie es erneut.",
-      "generic": "Der Import ist fehlgeschlagen – bitte versuchen Sie es erneut."
+      "generic": "Der Import ist fehlgeschlagen – bitte versuchen Sie es erneut.",
+      "rateLimited": "Microsoft 365 ist momentan ausgelastet – bitte versuchen Sie es in Kürze erneut."
     },
     "agentAccess": {
       "connectFirst": "Dieser Agent antwortet auf Basis von Microsoft 365-Dateien. Verbinden Sie Microsoft 365 unter Einstellungen → Verbindungen, um es zu nutzen.",
@@ -4796,6 +4810,8 @@
     "cancel": "Abbrechen",
     "consentMissing": "Ihre Organisation hat den Zugriff auf OneDrive noch nicht genehmigt.",
     "blockedByPolicy": "Das Teilen wurde durch die Richtlinie Ihrer Organisation blockiert.",
-    "failed": "Konnte nicht teilen — nichts wurde erstellt."
+    "failed": "Konnte nicht teilen — nichts wurde erstellt.",
+    "copyFailed": "Link konnte nicht kopiert werden – bitte oben auswählen und manuell kopieren.",
+    "lastMessagesCountLabel": "Anzahl der letzten Nachrichten, die einbezogen werden"
   }
 }

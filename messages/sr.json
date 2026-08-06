@@ -2208,7 +2208,8 @@
     "aiTools": "AI alati",
     "aiToolsTooltip": "Mogućnosti koje asistent može koristiti tokom odgovaranja: pretraga interneta uživo, izvršavanje koda i povezane usluge.",
     "codeInterpreterTooltip": "Pokrenite Python kod u sigurnom okruženju za svaku poruku.\n\nOdlično za analizu podataka, proračune i generisanje grafikona iz priloženih fajlova.",
-    "categoryTools": "Alati i konektori"
+    "categoryTools": "Alati i konektori",
+    "translationConversationTitle": "Prevod: {filename}"
   },
   "transcription": {
     "transcribesOnSend": "Транскрибује при слању",
@@ -4502,7 +4503,11 @@
         "consentMissing": "Ova funkcija čeka odobrenje administratora vaše organizacije.",
         "notConnected": "Vaša Microsoft 365 sesija nije dostupna. Pokušajte da se odjavite i ponovo prijavite.",
         "network": "Greška u mreži — pokušajte ponovo.",
-        "generic": "Nešto nije u redu — pokušajte ponovo."
+        "generic": "Nešto nije u redu — pokušajte ponovo.",
+        "notFound": "Stavka ne može biti pronađena — možda je premeštena ili obrisana.",
+        "forbidden": "Nemate pristup ovoj stavci.",
+        "rateLimited": "Microsoft 365 je trenutno zauzet — pokušajte ponovo za nekoliko trenutaka.",
+        "openConnections": "Otvorite Podešavanja › Konekcije"
       },
       "pickTitle": "Izaberite izvor iz OneDrive / SharePoint",
       "addFolder": "Dodaj",
@@ -4523,7 +4528,8 @@
         "label": "Sortiraj po",
         "name": "Naziv",
         "modified": "Izmenjeno",
-        "size": "Veličina"
+        "size": "Veličina",
+        "notApplied": "Sortiranje nije dostupno — prikazuju se stavke u izvornom redosledu"
       },
       "folderTitle": "Izaberite folder",
       "selectFolder": "Izaberi",
@@ -4532,7 +4538,10 @@
       "sections": {
         "fromRecent": "Iz vaših nedavnih fajlova",
         "nameMatches": "Poklapanja u nazivu",
-        "contentMatches": "Pronađeno u sadržaju fajla"
+        "contentMatches": "Pronađeno u sadržaju fajla",
+        "moreResults": "Još rezultata",
+        "followedSites": "Pratite sajtove",
+        "allSites": "Svi sajtovi"
       },
       "typeFilter": {
         "label": "Filtriraj po tipu fajla",
@@ -4546,8 +4555,12 @@
         "audio": "Audio",
         "video": "Video",
         "more": "Više tipova fajlova",
-        "noMatches": "Nema fajlova izabranog tipa ovde"
-      }
+        "noMatches": "Nema fajlova izabranog tipa ovde",
+        "scanning": "Pretraživanje ovog foldera za odgovarajuće fajlove… (do sada provereno {count})"
+      },
+      "sitesNoResults": "Nijedan sajt nije pronađen za „{query}“",
+      "sitesEmpty": "Nema dostupnih SharePoint sajtova. Pokušajte da pretražite po imenu.",
+      "itemCount": "{count, plural, one {# stavka} few {# stavke} other {# stavki}}"
     },
     "mail": {
       "menuLabel": "Uvezi email…",
@@ -4641,7 +4654,8 @@
       "notFound": "Stavka nije pronađena — možda je premestena ili obrisana.",
       "forbidden": "Nemate pristup ovoj stavci.",
       "network": "Greška mreže — pokušajte ponovo.",
-      "generic": "Uvoz nije uspeo — pokušajte ponovo."
+      "generic": "Uvoz nije uspeo — pokušajte ponovo.",
+      "rateLimited": "Microsoft 365 je trenutno zauzet — pokušajte ponovo za nekoliko trenutaka."
     },
     "agentAccess": {
       "connectFirst": "Ovaj agent odgovara iz Microsoft 365 fajlova. Povežite Microsoft 365 u Podešavanjima → Veze da biste ga koristili.",
@@ -4780,6 +4794,8 @@
     "cancel": "Otkaži",
     "consentMissing": "Vaša organizacija još nije odobrila pristup OneDrive-u.",
     "blockedByPolicy": "Deljenje je blokirano politikom vaše organizacije.",
-    "failed": "Nije moguće podeliti — ništa nije kreirano."
+    "failed": "Nije moguće podeliti — ništa nije kreirano.",
+    "copyFailed": "Nije moguće kopirati link — izaberite ga iznad i kopirajte ručno.",
+    "lastMessagesCountLabel": "Broj poslednjih poruka za uključivanje"
   }
 }

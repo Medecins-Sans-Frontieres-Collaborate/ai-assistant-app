@@ -2208,7 +2208,8 @@
     "aiTools": "Ẹ̀rọ AI",
     "aiToolsTooltip": "Àwọn àǹfààní tí iranlọwọ le lò nígbà idáhùn: àwárí ayelujara taara, ṣiṣé kóòdù, àti iṣẹ́ tó so pọ̀.",
     "codeInterpreterTooltip": "Ṣiṣe kóòdù Python nínú ilé tí kó ní ewu fún gbogbo ifiranṣẹ.\n\nÓ dáa fún àyẹ̀wò data, iṣirò, àti ṣíṣe àwọn àwòrán láti inú àwọn fáìlì tó wa lẹ́gbẹ́ẹ.",
-    "categoryTools": "Ọpa & asopọ"
+    "categoryTools": "Ọpa & asopọ",
+    "translationConversationTitle": "Ìtúmọ̀: {filename}"
   },
   "transcription": {
     "transcribesOnSend": "Ó ń kọ sí ọ̀rọ̀ nígbà fífiránṣẹ́",
@@ -4502,7 +4503,11 @@
         "consentMissing": "A n duro de ìfọwọ́sowọ́pọ̀ adarí agbari rẹ lori ẹya yi.",
         "notConnected": "Ibi isẹpọ Microsoft 365 rẹ ko si. Gbiyanju lati bọ síta ki o wọle pada.",
         "network": "Aṣiṣe nẹ́tíwọ́ọ̀kì — jowo gbiyanju lẹẹkansi.",
-        "generic": "Ohun kan ṣe aṣiṣe — jowo gbiyanju lẹẹkansi."
+        "generic": "Ohun kan ṣe aṣiṣe — jowo gbiyanju lẹẹkansi.",
+        "notFound": "Kò lè rí nkan yìí — ó ṣeé ṣe kó ti gbe rò tàbí kó ti yo.",
+        "forbidden": "O kò ní àṣẹ sí nkan yìí.",
+        "rateLimited": "Microsoft 365 ti ń ṣiṣẹ́ púpọ̀ nísinsin yìí — jọ̀wọ́ gbìyànjú lẹ́yìn ìkẹyìn.",
+        "openConnections": "Ṣí Settings › Connections"
       },
       "pickTitle": "Yan orisun kan lati OneDrive / SharePoint",
       "addFolder": "Ṣafikun",
@@ -4523,7 +4528,8 @@
         "label": "Tọ́tọ̀ nipasẹ",
         "name": "Orukọ",
         "modified": "Ti yipada",
-        "size": "Iwọn"
+        "size": "Iwọn",
+        "notApplied": "Kò sí àṣàyàn títọ́ sórí — ń fi àwọn nkan hàn gẹ́gẹ́ bí wón ṣe wà."
       },
       "folderTitle": "Yan apamọ̀ kan",
       "selectFolder": "Yan",
@@ -4532,7 +4538,10 @@
       "sections": {
         "fromRecent": "Lati awọn faili to ṣẹṣẹ rẹ",
         "nameMatches": "Orukọ tó bá mọ",
-        "contentMatches": "Ri ninu akoonu faili"
+        "contentMatches": "Ri ninu akoonu faili",
+        "moreResults": "Àwọn àbájáde míì",
+        "followedSites": "Àwọn síta tí o ń tọ́lẹ̀",
+        "allSites": "Gbogbo àwọn síta"
       },
       "typeFilter": {
         "label": "Fìlà lọ́wọ́ irú fáìlì",
@@ -4546,8 +4555,12 @@
         "audio": "Fídíọ́",
         "video": "Fídíò",
         "more": "Ìmúlò fáìlì tó pọ̀ síi",
-        "noMatches": "Kò sí fáìlì ti irú yìí níbí"
-      }
+        "noMatches": "Kò sí fáìlì ti irú yìí níbí",
+        "scanning": "Ń wá fáìlì tó bá a mu nínú àpò yìí… ({count} tí a ṣàyẹ̀wò títí di báyìí)"
+      },
+      "sitesNoResults": "Àyẹ̀wò kò rí síta kankan fún “{query}”",
+      "sitesEmpty": "Kò sí SharePoint sites tó wà. Gbìyànjú láti wá orúkọ.",
+      "itemCount": "{count, plural, one {# nkan} other {# àwọn nkan}}"
     },
     "mail": {
       "menuLabel": "Gbe imeeli wọlé…",
@@ -4641,7 +4654,8 @@
       "notFound": "Kò rí ohun tí a ń wá — ó ṣeé ṣe kí wọ́n ti gbe tàbí pa a rẹ́.",
       "forbidden": "O kò ní àṣẹ sí ohun yìí.",
       "network": "Àṣiṣe nẹ́tíwọ́ọ̀kì — jọ̀wọ́ gbìyànjú lẹ́ẹ̀kàn síi.",
-      "generic": "Ìwọlé kùnà — jọ̀wọ́ gbìyànjú lẹ́ẹ̀kàn síi."
+      "generic": "Ìwọlé kùnà — jọ̀wọ́ gbìyànjú lẹ́ẹ̀kàn síi.",
+      "rateLimited": "Microsoft 365 ti ń ṣiṣẹ́ púpọ̀ nísinsin yìí — jọ̀wọ́ gbìyànjú lẹ́yìn ìkẹyìn."
     },
     "agentAccess": {
       "connectFirst": "Alákóso yìí ń fi ìdáhùn jùwọ́ láti inú awọn faili Microsoft 365. So Microsoft 365 pọ̀ nínú Eto → Àsopọ̀ láti lo.",
@@ -4780,6 +4794,8 @@
     "cancel": "Fagilé",
     "consentMissing": "Agbari rẹ kò tíì fọwọ́sowọ́pò fún wiwọlé sí OneDrive.",
     "blockedByPolicy": "Ilana agbari rẹ ti dí pínpín náà.",
-    "failed": "Kò le pín — kò sí ohun tó dà."
+    "failed": "Kò le pín — kò sí ohun tó dà.",
+    "copyFailed": "A kò lè da ìjápọ̀ náà — yan án lókè kí o sì kó o-pamọ́ lọ́wọ́.",
+    "lastMessagesCountLabel": "Ìye àwọn ìfiranṣẹ́ tuntun láti kún"
   }
 }

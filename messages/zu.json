@@ -2208,7 +2208,8 @@
     "aiTools": "Amathuluzi e-AI",
     "aiToolsTooltip": "Amakhono usizo angawasebenzisa lapho ephendula: usesho lwewebhu bukhoma, ukusebenza kwekhodi, kanye nezinsizakalo ezixhunyiwe.",
     "codeInterpreterTooltip": "Qalisa ikhodi yePython endaweni ephephile emlayezo ngamunye.\n\nKuhle ukuhlaziya idatha, izibalo, nokwenza amashadi ezifayeleni ezinamathiselwe.",
-    "categoryTools": "Amathuluzi nezixhumi"
+    "categoryTools": "Amathuluzi nezixhumi",
+    "translationConversationTitle": "Ukuhunyushwa: {filename}"
   },
   "transcription": {
     "transcribesOnSend": "Kubhalwa phansi uma kuthunyelwa",
@@ -4502,7 +4503,11 @@
         "consentMissing": "Lesi sici silinde imvume yomphathi wenhlangano yakho.",
         "notConnected": "Iseshini yakho ye-Microsoft 365 ayitholakali. Zama ukuphuma ungene futhi.",
         "network": "Iphutha lenethiwekhi — sicela uzame futhi.",
-        "generic": "Kuphume iphutha — sicela uzame futhi."
+        "generic": "Kuphume iphutha — sicela uzame futhi.",
+        "notFound": "Lento ayitholakali — kungenzeka isusiwe noma yathuthelwa kwenye indawo.",
+        "forbidden": "Awunalo igunya lokufinyelela lento.",
+        "rateLimited": "I-Microsoft 365 imatasa njengamanje — sicela uphinde uzame emva kwesikhashana.",
+        "openConnections": "Vula Izilungiselelo › Uxhumano"
       },
       "pickTitle": "Khetha umthombo ku-OneDrive / SharePoint",
       "addFolder": "Engeza",
@@ -4523,7 +4528,8 @@
         "label": "Hlela ngokuthi",
         "name": "Igama",
         "modified": "Kulungisiwe",
-        "size": "Usayizi"
+        "size": "Usayizi",
+        "notApplied": "Ukusihlela akutholakali lapha — izinto ziboniswa ngendlela yazo yokuqala"
       },
       "folderTitle": "Khetha ifolda",
       "selectFolder": "Khetha",
@@ -4532,7 +4538,10 @@
       "sections": {
         "fromRecent": "Kumafayela akamuva",
         "nameMatches": "Amaqhaza egama",
-        "contentMatches": "Kutholwe okuqukethwe kufayela"
+        "contentMatches": "Kutholwe okuqukethwe kufayela",
+        "moreResults": "Imiphumela eminingi",
+        "followedSites": "Amasayithi owalandele",
+        "allSites": "Wonke amasayithi"
       },
       "typeFilter": {
         "label": "Hluza ngohlobo lwefayela",
@@ -4546,8 +4555,12 @@
         "audio": "Umsindo",
         "video": "Ividiyo",
         "more": "Ezinye izinhlobo zamafayela",
-        "noMatches": "Azikho izifayela zohlobo olukhethiwe lapha"
-      }
+        "noMatches": "Azikho izifayela zohlobo olukhethiwe lapha",
+        "scanning": "Kuyafunwa kule folda amafayela afanele… ({count} asehloliwe)"
+      },
+      "sitesNoResults": "Awekho amasayithi atholakele we-“{query}”",
+      "sitesEmpty": "Awekho amasayithi e-SharePoint atholakala. Zama ukufuna ngegama.",
+      "itemCount": "{count, plural, one {# into} other {# izinto}}"
     },
     "mail": {
       "menuLabel": "Ngenisa i-imeyili…",
@@ -4641,7 +4654,8 @@
       "notFound": "Umkhiqizo awutholakali — kungenzeka usushintshiwe indawo noma ususiwe.",
       "forbidden": "Awunalo ilungelo lokufinyelela kulo mkhiqizo.",
       "network": "Iphutha lenethiwekhi — sicela uzame futhi.",
-      "generic": "Ukungenisa kwehlulekile — sicela uzame futhi."
+      "generic": "Ukungenisa kwehlulekile — sicela uzame futhi.",
+      "rateLimited": "I-Microsoft 365 imatasa njengamanje — sicela uphinde uzame emva kwesikhashana."
     },
     "agentAccess": {
       "connectFirst": "Le agent isebenzisa amafayela avela ku-Microsoft 365. Xhuma i-Microsoft 365 kuzilungiselelo → Uxhumano ukuze uyisebenzise.",
@@ -4780,6 +4794,8 @@
     "cancel": "Khansela",
     "consentMissing": "Inhlangano yakho ayikavumi ukufinyelela ku-OneDrive.",
     "blockedByPolicy": "Ukwabelana kuvinjwe yinqubomgomo yenhlangano yakho.",
-    "failed": "Kwehlulekile ukwabelana — akukho okwenziwe."
+    "failed": "Kwehlulekile ukwabelana — akukho okwenziwe.",
+    "copyFailed": "Ayikwazanga ukukopisha isixhumanisi — sikhethe ngenhla bese ukopisha ngesandla.",
+    "lastMessagesCountLabel": "Inani lemilayezo yakamuva okufanele ifakwe"
   }
 }

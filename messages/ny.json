@@ -2208,7 +2208,8 @@
     "aiTools": "Zida za AI",
     "aiToolsTooltip": "Zomwe wothandizayo angagwiritse ntchito popereka yankho: kufufuza pa intaneti nthawi yeniyeni, kuthamanga kwa ma code, ndi ntchito zolumikizidwa.",
     "codeInterpreterTooltip": "Thamanga nambala ya Python m’chitetezo cha sandbox pa uthenga uliwonse.\n\nNdibwino pa kusanthula deta, mawerengero, ndi kupanga ma chart kuchokera ku mafayilo ophatikizidwa.",
-    "categoryTools": "Zida & zolumikizira"
+    "categoryTools": "Zida & zolumikizira",
+    "translationConversationTitle": "Kumasulira: {filename}"
   },
   "transcription": {
     "transcribesOnSend": "Imalemba potumiza",
@@ -4502,7 +4503,11 @@
         "consentMissing": "Gawoli likudikira kuvomerezedwa ndi admin wa bungwe lanu.",
         "notConnected": "Session yanu ya Microsoft 365 sikugwira ntchito. Yesani kutuluka ndikutsegulanso.",
         "network": "Vuto pa intaneti — chonde yesaninso.",
-        "generic": "Chinachake chalakwika — chonde yesaninso."
+        "generic": "Chinachake chalakwika — chonde yesaninso.",
+        "notFound": "Sichapezeke—itha kuti yasintha malo kapena kuchotsedwa.",
+        "forbidden": "Simuloledwa kupeza chinthuchi.",
+        "rateLimited": "Microsoft 365 yathina ntchito pakadali pano—chonde yesaninso pang’ono pomwe.",
+        "openConnections": "Tsegulani Zikhazikiko › Zolumikizana"
       },
       "pickTitle": "Sankhani chitsime kuchokera ku OneDrive / SharePoint",
       "addFolder": "Onjezerani",
@@ -4523,7 +4528,8 @@
         "label": "Sanjani potsatira",
         "name": "Dzina",
         "modified": "Yasinthidwa",
-        "size": "Kukula"
+        "size": "Kukula",
+        "notApplied": "Kuika zinthu mwadongosolo sikukuthandizika pano — tikuonetsa zinthu mmene zinalili poyamba"
       },
       "folderTitle": "Sankhani foda",
       "selectFolder": "Sankhani",
@@ -4532,7 +4538,10 @@
       "sections": {
         "fromRecent": "Kuchokera pa mafayilo anu aposachedwa",
         "nameMatches": "Zofanana ndi dzina",
-        "contentMatches": "Zapezeka mkati mwa mafayilo"
+        "contentMatches": "Zapezeka mkati mwa mafayilo",
+        "moreResults": "Zotsatira zina",
+        "followedSites": "Malo omwe mukutsatira",
+        "allSites": "Malo onse"
       },
       "typeFilter": {
         "label": "Sankhani mitundu ya mafayilo",
@@ -4546,8 +4555,12 @@
         "audio": "Zomvera",
         "video": "Kanema",
         "more": "Mitundu ina ya mafayilo",
-        "noMatches": "Palibe mafayilo amtundu uwu pano"
-      }
+        "noMatches": "Palibe mafayilo amtundu uwu pano",
+        "scanning": "Kufufuza mu foda iyi kuti mupeze mafayilo ofanana... ({count} ataonedwa pano)"
+      },
+      "sitesNoResults": "Palibe malo apezeka pa “{query}”",
+      "sitesEmpty": "Palibe malo a SharePoint omwe alipo. Yesani kufufuza ndi dzina.",
+      "itemCount": "{count, plural, one {# chinthu} other {# zinthu}}"
     },
     "mail": {
       "menuLabel": "Tengani imelo…",
@@ -4641,7 +4654,8 @@
       "notFound": "Chinthucho sichinapezeke — mwina chawasamutsidwa kapena fufutidwa.",
       "forbidden": "Simulolezedwa kupeza chinthuchi.",
       "network": "Vuto pa intaneti — chonde yesaninso.",
-      "generic": "Kuikitsa kwalephera — chonde yesaninso."
+      "generic": "Kuikitsa kwalephera — chonde yesaninso.",
+      "rateLimited": "Microsoft 365 yathina ntchito pakadali pano—chonde yesaninso pang’ono pomwe."
     },
     "agentAccess": {
       "connectFirst": "Wothandizirayu amayankha kuchokera mafayilo a Microsoft 365. Lumikizani Microsoft 365 mu Zokonda → Zolumikizira kuti mugwiritse ntchito.",
@@ -4780,6 +4794,8 @@
     "cancel": "Lekani",
     "consentMissing": "Bungwe lanu silinavomereze OneDrive pano.",
     "blockedByPolicy": "Kugawana kwalephereka chifukwa cha malamulo abungwe lanu.",
-    "failed": "Sizinathe kugawidwa — palibe chogawidwa chomwe chapangidwa."
+    "failed": "Sizinathe kugawidwa — palibe chogawidwa chomwe chapangidwa.",
+    "copyFailed": "Zalephereka kukopera ulalo—sankhani pamwambapa ndikuukopera pamanja.",
+    "lastMessagesCountLabel": "Chiwerengero cha mauthenga aposachedwa oti muyikemo"
   }
 }

@@ -2134,7 +2134,8 @@
     "aiTools": "Ferramentas de IA",
     "aiToolsTooltip": "Funcionalidades que o assistente pode utilizar ao responder: busca web ao vivo, execução de código e serviços conectados.",
     "codeInterpreterTooltip": "Execute código Python em um ambiente seguro para cada mensagem.\n\nIdeal para análise de dados, cálculos e criação de gráficos a partir de arquivos anexados.",
-    "categoryTools": "Ferramentas e conectores"
+    "categoryTools": "Ferramentas e conectores",
+    "translationConversationTitle": "Tradução: {filename}"
   },
   "transcription": {
     "transcribesOnSend": "Transcreve ao enviar",
@@ -4518,7 +4519,11 @@
         "consentMissing": "Este recurso está aguardando aprovação do administrador da sua organização.",
         "notConnected": "Sua sessão do Microsoft 365 está indisponível. Tente sair e entrar novamente.",
         "network": "Erro de rede — tente novamente.",
-        "generic": "Ocorreu um erro — tente novamente."
+        "generic": "Ocorreu um erro — tente novamente.",
+        "notFound": "O item não foi encontrado — pode ter sido movido ou excluído.",
+        "forbidden": "Você não tem acesso a este item.",
+        "rateLimited": "O Microsoft 365 está ocupado no momento — tente novamente em instantes.",
+        "openConnections": "Abrir Configurações › Conexões"
       },
       "pickTitle": "Escolha uma origem do OneDrive / SharePoint",
       "addFolder": "Adicionar",
@@ -4539,7 +4544,8 @@
         "label": "Ordenar por",
         "name": "Nome",
         "modified": "Modificado",
-        "size": "Tamanho"
+        "size": "Tamanho",
+        "notApplied": "A ordenação não está disponível aqui — exibindo os itens na ordem original"
       },
       "folderTitle": "Escolha uma pasta",
       "selectFolder": "Selecionar",
@@ -4548,7 +4554,10 @@
       "sections": {
         "fromRecent": "Dos seus arquivos recentes",
         "nameMatches": "Correspondências no nome",
-        "contentMatches": "Encontrado no conteúdo do arquivo"
+        "contentMatches": "Encontrado no conteúdo do arquivo",
+        "moreResults": "Mais resultados",
+        "followedSites": "Sites seguidos",
+        "allSites": "Todos os sites"
       },
       "typeFilter": {
         "label": "Filtrar por tipo de arquivo",
@@ -4562,8 +4571,12 @@
         "audio": "Áudio",
         "video": "Vídeo",
         "more": "Mais tipos de arquivo",
-        "noMatches": "Nenhum arquivo do tipo selecionado aqui"
-      }
+        "noMatches": "Nenhum arquivo do tipo selecionado aqui",
+        "scanning": "Procurando arquivos correspondentes nesta pasta… ({count} verificados até agora)"
+      },
+      "sitesNoResults": "Nenhum site encontrado para \"{query}\"",
+      "sitesEmpty": "Nenhum site SharePoint disponível. Tente pesquisar pelo nome.",
+      "itemCount": "{count, plural, one {# item} other {# itens}}"
     },
     "mail": {
       "menuLabel": "Importar e-mail…",
@@ -4657,7 +4670,8 @@
       "notFound": "O item não foi encontrado — pode ter sido movido ou excluído.",
       "forbidden": "Você não tem acesso a este item.",
       "network": "Erro de rede — tente novamente.",
-      "generic": "Falha na importação — tente novamente."
+      "generic": "Falha na importação — tente novamente.",
+      "rateLimited": "O Microsoft 365 está ocupado no momento — tente novamente em instantes."
     },
     "agentAccess": {
       "connectFirst": "Este agente responde a partir de arquivos do Microsoft 365. Conecte o Microsoft 365 em Configurações → Conexões para utilizar.",
@@ -4796,6 +4810,8 @@
     "cancel": "Cancelar",
     "consentMissing": "Sua organização ainda não aprovou o acesso ao OneDrive.",
     "blockedByPolicy": "O compartilhamento foi bloqueado pela política da sua organização.",
-    "failed": "Não foi possível compartilhar — nada foi criado."
+    "failed": "Não foi possível compartilhar — nada foi criado.",
+    "copyFailed": "Não foi possível copiar o link — selecione acima e copie manualmente.",
+    "lastMessagesCountLabel": "Número de mensagens recentes a incluir"
   }
 }

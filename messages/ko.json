@@ -2233,7 +2233,8 @@
     "aiTools": "AI 도구",
     "aiToolsTooltip": "어시스턴트가 답변 시 사용할 수 있는 기능: 실시간 웹 검색, 코드 실행, 연결된 서비스 등.",
     "codeInterpreterTooltip": "안전한 샌드박스에서 각 메시지마다 Python 코드를 실행합니다.\n\n첨부 파일로 데이터 분석, 계산, 차트 생성 시 유용합니다.",
-    "categoryTools": "도구 및 커넥터"
+    "categoryTools": "도구 및 커넥터",
+    "translationConversationTitle": "번역: {filename}"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI의 응답 방식을 맞춤화하려면 개인 지침을 추가하세요. 이는 유용하고 정확하며 안전한 응답을 보장하는 기본 행동 지침과 함께 적용됩니다.",
   "Tip: Type \"/\" to select from saved prompt templates_": "팁: \"/\"를 입력하면 저장된 프롬프트 템플릿을 선택할 수 있습니다.",
@@ -4518,7 +4519,11 @@
         "consentMissing": "이 기능은 조직 관리자 승인 대기 중입니다.",
         "notConnected": "Microsoft 365 세션을 사용할 수 없습니다. 다시 로그인해 주세요.",
         "network": "네트워크 오류 — 다시 시도해 주세요.",
-        "generic": "문제가 발생했습니다 — 다시 시도해 주세요."
+        "generic": "문제가 발생했습니다 — 다시 시도해 주세요.",
+        "notFound": "항목을 찾을 수 없습니다 — 이동되었거나 삭제되었을 수 있습니다.",
+        "forbidden": "이 항목에 대한 접근 권한이 없습니다.",
+        "rateLimited": "Microsoft 365가 현재 바쁩니다 — 잠시 후 다시 시도해 주세요.",
+        "openConnections": "설정 › 연결 열기"
       },
       "pickTitle": "OneDrive/SharePoint에서 소스 선택",
       "addFolder": "추가",
@@ -4539,7 +4544,8 @@
         "label": "정렬 기준",
         "name": "이름",
         "modified": "수정됨",
-        "size": "크기"
+        "size": "크기",
+        "notApplied": "여기서는 정렬을 사용할 수 없습니다 — 원래 순서로 항목을 표시합니다"
       },
       "folderTitle": "폴더 선택",
       "selectFolder": "선택",
@@ -4548,7 +4554,10 @@
       "sections": {
         "fromRecent": "최근 파일에서",
         "nameMatches": "이름 일치",
-        "contentMatches": "파일 내용에서 찾음"
+        "contentMatches": "파일 내용에서 찾음",
+        "moreResults": "더 많은 결과",
+        "followedSites": "팔로우한 사이트",
+        "allSites": "모든 사이트"
       },
       "typeFilter": {
         "label": "파일 유형으로 필터링",
@@ -4562,8 +4571,12 @@
         "audio": "오디오",
         "video": "비디오",
         "more": "더 많은 파일 유형",
-        "noMatches": "선택한 유형의 파일이 없습니다"
-      }
+        "noMatches": "선택한 유형의 파일이 없습니다",
+        "scanning": "이 폴더에서 일치하는 파일을 검색 중입니다… (현재 {count}개 확인됨)"
+      },
+      "sitesNoResults": "“{query}”에 대한 사이트를 찾을 수 없습니다.",
+      "sitesEmpty": "사용 가능한 SharePoint 사이트가 없습니다. 이름으로 검색해 보세요.",
+      "itemCount": "{count, plural, one {#개 항목} other {#개 항목}}"
     },
     "mail": {
       "menuLabel": "이메일 가져오기…",
@@ -4657,7 +4670,8 @@
       "notFound": "항목을 찾을 수 없습니다 — 이동되었거나 삭제되었을 수 있습니다.",
       "forbidden": "이 항목에 접근할 수 없습니다.",
       "network": "네트워크 오류 — 다시 시도해 주세요.",
-      "generic": "가져오기에 실패했습니다 — 다시 시도해 주세요."
+      "generic": "가져오기에 실패했습니다 — 다시 시도해 주세요.",
+      "rateLimited": "Microsoft 365가 현재 바쁩니다 — 잠시 후 다시 시도해 주세요."
     },
     "agentAccess": {
       "connectFirst": "이 에이전트는 Microsoft 365 파일에서 답변합니다. 사용하려면 설정 → 연결에서 Microsoft 365를 연결하세요.",
@@ -4796,6 +4810,8 @@
     "cancel": "취소",
     "consentMissing": "조직에서 아직 OneDrive 접근을 승인하지 않았습니다.",
     "blockedByPolicy": "조직 정책에 의해 공유가 차단되었습니다.",
-    "failed": "공유할 수 없습니다 — 아무 것도 생성되지 않았습니다."
+    "failed": "공유할 수 없습니다 — 아무 것도 생성되지 않았습니다.",
+    "copyFailed": "링크를 복사할 수 없습니다 — 위에서 직접 선택하여 복사해 주세요.",
+    "lastMessagesCountLabel": "포함할 최근 메시지 수"
   }
 }

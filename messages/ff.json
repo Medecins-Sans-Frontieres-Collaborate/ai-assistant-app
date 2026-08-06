@@ -2208,7 +2208,8 @@
     "aiTools": "Kuutorgal AI",
     "aiToolsTooltip": "Doggal hokketeede ka anndaa: yenndude web, fayde code, e keftingol baɗte.",
     "codeInterpreterTooltip": "Huumtu code Python ɗum ciɗi goɗɗi moƴƴi.\n\nMoƴƴi e wulnde data, hisaabe e sariyaande graph to fayde fiilde.",
-    "categoryTools": "Jumɗe e mbutukaaji"
+    "categoryTools": "Jumɗe e mbutukaaji",
+    "translationConversationTitle": "Tarjamnde: {filename}"
   },
   "transcription": {
     "transcribesOnSend": "Ina winndita nde neldaa",
@@ -4502,7 +4503,11 @@
         "consentMissing": "Dawgal ɗee jogii e laymuɗo adamin mum.",
         "notConnected": "Lewru Microsoft 365 maa waawataa. Naat fayde dogu, kono wañnde.",
         "network": "Jaajol networg — waawan jawa.",
-        "generic": "Horiima—waawan jawa."
+        "generic": "Horiima—waawan jawa.",
+        "notFound": "Boowal ngal waawaani anndude — neɗɗo nyaami e gollal walla momtii.",
+        "forbidden": "A waawaniima njaɓɓude boowal ngal.",
+        "rateLimited": "Microsoft 365 ko fayde tigi — gollu tan dahira.",
+        "openConnections": "Uddit Settings › Connections"
       },
       "pickTitle": "Suɓo jaɓorde e OneDrive / SharePoint",
       "addFolder": "Toppi",
@@ -4523,7 +4528,8 @@
         "label": "Biri e",
         "name": "Innde",
         "modified": "Waylii",
-        "size": "Fayde"
+        "size": "Fayde",
+        "notApplied": "Toppere waawaniima ɗoo — boowale anndani sey banngal mum"
       },
       "folderTitle": "Suɓo jeyngal",
       "selectFolder": "Suɓo",
@@ -4532,7 +4538,10 @@
       "sections": {
         "fromRecent": "E fiildaji maa faaleede",
         "nameMatches": "Maɗi e innde",
-        "contentMatches": "Stondii e ginaw fiilde"
+        "contentMatches": "Stondii e ginaw fiilde",
+        "moreResults": "Cemmbu makko",
+        "followedSites": "Soowte ngaavetee",
+        "allSites": "Soowte fow"
       },
       "typeFilter": {
         "label": "Suɓo kaayto faamde fiilde",
@@ -4546,8 +4555,12 @@
         "audio": "Audio",
         "video": "Video",
         "more": "Fiilde ɓurɗe",
-        "noMatches": "Fiilde ɗum kaayto faamde alaa e jamma"
-      }
+        "noMatches": "Fiilde ɗum kaayto faamde alaa e jamma",
+        "scanning": "Naatna e kelle ndee e dosol fayde... ({count} naatnoyani)"
+      },
+      "sitesNoResults": "Alaa soowte ndeeɗo ɗum “{query}”",
+      "sitesEmpty": "Alaa SharePoint soowte. Jokkondir fii innde.",
+      "itemCount": "{count, plural, one {# boowal} other {# boowale}}"
     },
     "mail": {
       "menuLabel": "Nannude imeel...",
@@ -4641,7 +4654,8 @@
       "notFound": "Kisal on waawaa njaɓɓude — denndaama walla diwaama.",
       "forbidden": "A mbaawaani jogii kisal on.",
       "network": "Kuusal netwoork — jokkondir yetto.",
-      "generic": "Jokkude mayrii — jokkondir yetto."
+      "generic": "Jokkude mayrii — jokkondir yetto.",
+      "rateLimited": "Microsoft 365 ko fayde tigi — gollu tan dahira."
     },
     "agentAccess": {
       "connectFirst": "Agent ɓe njiɗɗo e Microsoft 365 fiilde. Dukkun Microsoft 365 e Teelte → Kawtale noon.",
@@ -4780,6 +4794,8 @@
     "cancel": "Haɗii",
     "consentMissing": "Jamni OneDrive yettaama e hoore organisation maa.",
     "blockedByPolicy": "Naftude seer golleede polisee organisation maa.",
-    "failed": "Seerɗaa — hay goongɗinɗo sosaani."
+    "failed": "Seerɗaa — hay goongɗinɗo sosaani.",
+    "copyFailed": "Waawaaniima nattude link ngal — suɓo ko hen reftine.",
+    "lastMessagesCountLabel": "Gadanal ndeeri binndiiji ko e laawol"
   }
 }

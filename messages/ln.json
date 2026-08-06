@@ -2208,7 +2208,8 @@
     "aiTools": "Biloko ya AI",
     "aiToolsTooltip": "Makoki oyo assistant akoki kosalela ntango azali kopesa eyano : recherche ya Internet na tango moke, kosala code, mpe services interconnectées.",
     "codeInterpreterTooltip": "Kobeta code ya Python na sandbox ya sécurité mpo na message moko na moko.\n\nEzalaki malamu mpo na analyse ya ba données, calculs, mpe kobimisa graphique na fichiers ezali.",
-    "categoryTools": "Biloko ya mosala & bakonekteur"
+    "categoryTools": "Biloko ya mosala & bakonekteur",
+    "translationConversationTitle": "Botá: {filename}"
   },
   "transcription": {
     "transcribesOnSend": "Ekomaka transcription ntango otindi",
@@ -4502,7 +4503,11 @@
         "consentMissing": "Funksiyo oyo ezali kotinda ete administrator ya organisasyo apesa ndingisa.",
         "notConnected": "Session na Microsoft 365 ezali te. Me, bima mpe kokota lisusu.",
         "network": "Ere ya réseau — lekisa lisusu s'il vous plaît.",
-        "generic": "Eloko moko eleki malamu te — sala liyebisi lisusu."
+        "generic": "Eloko moko eleki malamu te — sala liyebisi lisusu.",
+        "notFound": "Eloko wana emonani te — ekoki kozala ete ebonguami to ebimisami.",
+        "forbidden": "Ozali na droit te ya kotala eloko oyo.",
+        "rateLimited": "Microsoft 365 ezali na mosala mingi sik’oyo — meka lisusu na mokuse.",
+        "openConnections": "Fungola Paramètre › Koyokana"
       },
       "pickTitle": "Pona ebimiseli na OneDrive / SharePoint",
       "addFolder": "Bakisa",
@@ -4523,7 +4528,8 @@
         "label": "Botya na ndenge nini",
         "name": "Kombo",
         "modified": "Ebobani",
-        "size": "Monene"
+        "size": "Monene",
+        "notApplied": "Kosala kala te ezali te awa — tozali komonisa biloko ndenge ezalaki"
       },
       "folderTitle": "Pona dosie",
       "selectFolder": "Pona",
@@ -4532,7 +4538,10 @@
       "sections": {
         "fromRecent": "Na bafichier o justu basali",
         "nameMatches": "Komonana na kombo",
-        "contentMatches": "Ezoomonani na kati ya bafichier"
+        "contentMatches": "Ezoomonani na kati ya bafichier",
+        "moreResults": "Ba ndonzo mosusu",
+        "followedSites": "Ba site ozali kolanda",
+        "allSites": "Ba site nyonso"
       },
       "typeFilter": {
         "label": "Fitrɛ na ndenge ya dosie",
@@ -4546,8 +4555,12 @@
         "audio": "Audio",
         "video": "Video",
         "more": "Biteni mosusu ya dosie",
-        "noMatches": "Mokanda ya lolenge wana ezali te awa"
-      }
+        "noMatches": "Mokanda ya lolenge wana ezali te awa",
+        "scanning": "Toli na dossier oyo mpo na ba fichier ekoki… ({count} esili kotalela)"
+      },
+      "sitesNoResults": "Ba site moko te emonani mpo na “{query}”",
+      "sitesEmpty": "Ba SharePoint site ezali te. Meleka koluka na kombo.",
+      "itemCount": "{count, plural, one {# eloko} other {# biloko}}"
     },
     "mail": {
       "menuLabel": "Kokota email…",
@@ -4641,7 +4654,8 @@
       "notFound": "Element ekokaki te komonama — esengeli ebongisamaki to ebimisamaki.",
       "forbidden": "Ozali na nzela te ya kokota na eloko oyo.",
       "network": "Likambo ya réseau — meluka lisusu.",
-      "generic": "Kobakisa eboyi — meluka lisusu."
+      "generic": "Kobakisa eboyi — meluka lisusu.",
+      "rateLimited": "Microsoft 365 ezali na mosala mingi sik’oyo — meka lisusu na mokuse."
     },
     "agentAccess": {
       "connectFirst": "Agent oyo azongisaka na ba fichiers ya Microsoft 365. Kómisa Microsoft 365 na paramètres → Konyonama mpo na koyebisa yango.",
@@ -4780,6 +4794,8 @@
     "cancel": "Kolongola",
     "consentMissing": "Organisation na bino endimi nanu te kofungola OneDrive.",
     "blockedByPolicy": "Kobabela ekangami na mibeko ya organisation na bino.",
-    "failed": "Ekokaki te kobabela — eloko moko esalemi te."
+    "failed": "Ekokaki te kobabela — eloko moko esalemi te.",
+    "copyFailed": "Link ekokaki te kopi — zwa yango likolo mpe kopia ye na maboko.",
+    "lastMessagesCountLabel": "Motángo ya nsango ya suka ekosangana"
   }
 }

@@ -2233,7 +2233,8 @@
     "aiTools": "Yapay Zeka Araçları",
     "aiToolsTooltip": "Asistanın cevap verirken kullanabileceği yetenekler: canlı web araması, kod çalıştırma ve bağlı servisler.",
     "codeInterpreterTooltip": "Her mesaj için güvenli bir sandıkta Python kodu çalıştırır.\n\nEkli dosyalardan veri analizi, hesaplama ve grafik oluşturma için idealdir.",
-    "categoryTools": "Araçlar ve bağlayıcılar"
+    "categoryTools": "Araçlar ve bağlayıcılar",
+    "translationConversationTitle": "Çeviri: {filename}"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Yapay zekanın nasıl yanıt vereceğini özelleştirmek için kişisel talimatlarınızı ekleyin. Bunlar, yardımcı, doğru ve güvenli yanıtları garanti altına alan temel davranış yönergeleriyle birleştirilir.",
   "Tip: Type \"/\" to select from saved prompt templates_": "İpucu: Kayıtlı istem şablonlarından seçmek için \"/\" yazın.",
@@ -4518,7 +4519,11 @@
         "consentMissing": "Bu özellik için kuruluşunuzun yönetici onayı bekleniyor.",
         "notConnected": "Microsoft 365 oturumunuza erişilemiyor. Çıkış yapıp tekrar giriş yapmayı deneyin.",
         "network": "Ağ hatası — lütfen tekrar deneyin.",
-        "generic": "Bir sorun oluştu — lütfen tekrar deneyin."
+        "generic": "Bir sorun oluştu — lütfen tekrar deneyin.",
+        "notFound": "Öğe bulunamadı — taşınmış veya silinmiş olabilir.",
+        "forbidden": "Bu öğeye erişiminiz yok.",
+        "rateLimited": "Microsoft 365 şu anda meşgul — lütfen biraz sonra tekrar deneyin.",
+        "openConnections": "Ayarlar’ı Aç › Bağlantılar"
       },
       "pickTitle": "OneDrive / SharePoint'ten bir kaynak seçin",
       "addFolder": "Ekle",
@@ -4539,7 +4544,8 @@
         "label": "Sırala",
         "name": "Ad",
         "modified": "Değiştirilme",
-        "size": "Boyut"
+        "size": "Boyut",
+        "notApplied": "Sıralama burada mevcut değil — öğeler orijinal sırasıyla gösteriliyor"
       },
       "folderTitle": "Bir klasör seçin",
       "selectFolder": "Seç",
@@ -4548,7 +4554,10 @@
       "sections": {
         "fromRecent": "Son dosyalarınızdan",
         "nameMatches": "Ad eşleşmeleri",
-        "contentMatches": "Dosya içeriğinde bulundu"
+        "contentMatches": "Dosya içeriğinde bulundu",
+        "moreResults": "Daha fazla sonuç",
+        "followedSites": "Takip edilen siteler",
+        "allSites": "Tüm siteler"
       },
       "typeFilter": {
         "label": "Dosya türüne göre filtrele",
@@ -4562,8 +4571,12 @@
         "audio": "Ses",
         "video": "Video",
         "more": "Daha fazla dosya türü",
-        "noMatches": "Seçilen türde dosya bulunamadı"
-      }
+        "noMatches": "Seçilen türde dosya bulunamadı",
+        "scanning": "Bu klasörde eşleşen dosyalar aranıyor… (Şu ana kadar {count} kontrol edildi)"
+      },
+      "sitesNoResults": "“{query}” için site bulunamadı",
+      "sitesEmpty": "Kullanılabilir SharePoint sitesi yok. İsimle aramayı deneyin.",
+      "itemCount": "{count, plural, one {# öğe} other {# öğe}}"
     },
     "mail": {
       "menuLabel": "E-posta içe aktar…",
@@ -4657,7 +4670,8 @@
       "notFound": "Öğe bulunamadı — taşınmış veya silinmiş olabilir.",
       "forbidden": "Bu öğeye erişiminiz yok.",
       "network": "Ağ hatası — lütfen tekrar deneyin.",
-      "generic": "İçe aktarma başarısız oldu — lütfen tekrar deneyin."
+      "generic": "İçe aktarma başarısız oldu — lütfen tekrar deneyin.",
+      "rateLimited": "Microsoft 365 şu anda meşgul — lütfen biraz sonra tekrar deneyin."
     },
     "agentAccess": {
       "connectFirst": "Bu ajan, yanıtları Microsoft 365 dosyalarından alır. Kullanmak için Ayarlar → Bağlantılar bölümünden Microsoft 365'e bağlanın.",
@@ -4796,6 +4810,8 @@
     "cancel": "İptal",
     "consentMissing": "Kuruluşunuz henüz OneDrive erişimine onay vermedi.",
     "blockedByPolicy": "Paylaşım kuruluşunuzun politikası tarafından engellendi.",
-    "failed": "Paylaşılamadı — hiçbir şey oluşturulmadı."
+    "failed": "Paylaşılamadı — hiçbir şey oluşturulmadı.",
+    "copyFailed": "Bağlantı kopyalanamadı — yukarıdan seçip manuel olarak kopyalayın.",
+    "lastMessagesCountLabel": "Dahil edilecek son mesaj sayısı"
   }
 }

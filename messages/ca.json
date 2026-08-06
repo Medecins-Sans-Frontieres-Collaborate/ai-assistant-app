@@ -2233,7 +2233,8 @@
     "aiTools": "Eines d'IA",
     "aiToolsTooltip": "Capacitats que l'assistent pot utilitzar mentre respon: cerca web en temps real, execució de codi i serveis connectats.",
     "codeInterpreterTooltip": "Executa codi Python en una sandbox segura per a cada missatge.\n\nIdeal per a l'anàlisi de dades, càlculs i generació de gràfics a partir d'arxius adjunts.",
-    "categoryTools": "Eines i connectors"
+    "categoryTools": "Eines i connectors",
+    "translationConversationTitle": "Traducció: {filename}"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Afegeix les teves instruccions personals per personalitzar com respon la IA. Aquestes es combinen amb les directrius bàsiques de comportament que garanteixen respostes útils, precises i segures.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Consell: Escriu \"/\" per seleccionar d'entre les plantilles de prompt desades.",
@@ -4518,7 +4519,11 @@
         "consentMissing": "Aquesta funció espera l'aprovació de l'administrador de la vostra organització.",
         "notConnected": "La sessió de Microsoft 365 no està disponible. Torneu a iniciar la sessió.",
         "network": "Error de xarxa — torneu-ho a intentar.",
-        "generic": "Hi ha hagut un problema — torneu-ho a intentar."
+        "generic": "Hi ha hagut un problema — torneu-ho a intentar.",
+        "notFound": "No s'ha pogut trobar l'element; potser s'ha mogut o eliminat.",
+        "forbidden": "No teniu accés a aquest element.",
+        "rateLimited": "Microsoft 365 està ocupat ara mateix — torneu-ho a provar d'aquí a un moment.",
+        "openConnections": "Obre Configuració › Connexions"
       },
       "pickTitle": "Seleccioneu una font de OneDrive / SharePoint",
       "addFolder": "Afegeix",
@@ -4539,7 +4544,8 @@
         "label": "Ordena per",
         "name": "Nom",
         "modified": "Modificat",
-        "size": "Mida"
+        "size": "Mida",
+        "notApplied": "L'ordenació no està disponible aquí — es mostren els elements en l'ordre original"
       },
       "folderTitle": "Trieu una carpeta",
       "selectFolder": "Selecciona",
@@ -4548,7 +4554,10 @@
       "sections": {
         "fromRecent": "Dels vostres fitxers recents",
         "nameMatches": "Coincidències de nom",
-        "contentMatches": "Trobat al contingut del fitxer"
+        "contentMatches": "Trobat al contingut del fitxer",
+        "moreResults": "Més resultats",
+        "followedSites": "Llocs seguits",
+        "allSites": "Tots els llocs"
       },
       "typeFilter": {
         "label": "Filtra per tipus d'arxiu",
@@ -4562,8 +4571,12 @@
         "audio": "Àudio",
         "video": "Vídeo",
         "more": "Més tipus d'arxiu",
-        "noMatches": "No hi ha arxius del tipus seleccionat aquí"
-      }
+        "noMatches": "No hi ha arxius del tipus seleccionat aquí",
+        "scanning": "S'està cercant aquest directori per trobar fitxers coincidents… ({count} comprovats fins ara)"
+      },
+      "sitesNoResults": "No s'han trobat llocs per a «{query}»",
+      "sitesEmpty": "No hi ha cap lloc de SharePoint disponible. Proveu de buscar pel nom.",
+      "itemCount": "{count, plural, one {# element} other {# elements}}"
     },
     "mail": {
       "menuLabel": "Importa un correu…",
@@ -4657,7 +4670,8 @@
       "notFound": "No s’ha pogut trobar l’element — potser s’ha mogut o eliminat.",
       "forbidden": "No tens accés a aquest element.",
       "network": "Error de xarxa — torna-ho a provar.",
-      "generic": "Ha fallat la importació — torna-ho a provar."
+      "generic": "Ha fallat la importació — torna-ho a provar.",
+      "rateLimited": "Microsoft 365 està ocupat ara mateix — torneu-ho a provar d'aquí a un moment."
     },
     "agentAccess": {
       "connectFirst": "Aquest agent respon des d’arxius de Microsoft 365. Connecta Microsoft 365 a Configuració → Connexions per fer-lo servir.",
@@ -4796,6 +4810,8 @@
     "cancel": "Cancel·la",
     "consentMissing": "La teva organització encara no ha aprovat l'accés a OneDrive.",
     "blockedByPolicy": "El vostre organisme ha bloquejat la compartició per política.",
-    "failed": "No s'ha pogut compartir: no s'ha creat res."
+    "failed": "No s'ha pogut compartir: no s'ha creat res.",
+    "copyFailed": "No s'ha pogut copiar l'enllaç — seleccioneu-lo a dalt i copieu-lo manualment.",
+    "lastMessagesCountLabel": "Nombre de missatges recents a incloure"
   }
 }

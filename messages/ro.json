@@ -2233,7 +2233,8 @@
     "aiTools": "Instrumente AI",
     "aiToolsTooltip": "Capabilități pe care asistentul le poate folosi la răspuns: căutare web live, execuție de cod și servicii conectate.",
     "codeInterpreterTooltip": "Rulează cod Python într-un sandbox securizat pentru fiecare mesaj.\n\nIdeal pentru analiză de date, calcule și generare de grafice din fișiere atașate.",
-    "categoryTools": "Instrumente și conectori"
+    "categoryTools": "Instrumente și conectori",
+    "translationConversationTitle": "Traducere: {filename}"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Adăugați instrucțiunile personale pentru a personaliza modul în care răspunde AI. Acestea sunt combinate cu liniile directoare de bază care asigură răspunsuri utile, corecte și sigure.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Sfat: Tastați \"/\" pentru a selecta dintre șabloanele de prompt salvate.",
@@ -4518,7 +4519,11 @@
         "consentMissing": "Această funcționalitate așteaptă aprobarea administratorului organizației.",
         "notConnected": "Sesiunea Microsoft 365 nu este disponibilă. Încercați să vă deconectați și să vă reconectați.",
         "network": "Eroare de rețea — încercați din nou.",
-        "generic": "A apărut o problemă — încercați din nou."
+        "generic": "A apărut o problemă — încercați din nou.",
+        "notFound": "Elementul nu a putut fi găsit — este posibil să fi fost mutat sau șters.",
+        "forbidden": "Nu aveți acces la acest element.",
+        "rateLimited": "Microsoft 365 este ocupat acum — vă rugăm să încercați din nou în curând.",
+        "openConnections": "Deschideți Setări › Conexiuni"
       },
       "pickTitle": "Alegeți o sursă din OneDrive / SharePoint",
       "addFolder": "Adăugați",
@@ -4539,7 +4544,8 @@
         "label": "Sortare după",
         "name": "Nume",
         "modified": "Modificat",
-        "size": "Dimensiune"
+        "size": "Dimensiune",
+        "notApplied": "Sortarea nu este disponibilă aici — elementele sunt afișate în ordinea lor originală"
       },
       "folderTitle": "Alegeți un folder",
       "selectFolder": "Selectați",
@@ -4548,7 +4554,10 @@
       "sections": {
         "fromRecent": "Din fișierele recente",
         "nameMatches": "Potrivire după nume",
-        "contentMatches": "Găsit în conținutul fișierului"
+        "contentMatches": "Găsit în conținutul fișierului",
+        "moreResults": "Mai multe rezultate",
+        "followedSites": "Site-uri urmărite",
+        "allSites": "Toate site-urile"
       },
       "typeFilter": {
         "label": "Filtrează după tipul fișierului",
@@ -4562,8 +4571,12 @@
         "audio": "Audio",
         "video": "Video",
         "more": "Mai multe tipuri de fișiere",
-        "noMatches": "Nu există fișiere de tipul selectat aici"
-      }
+        "noMatches": "Nu există fișiere de tipul selectat aici",
+        "scanning": "Se caută în acest dosar fișiere care se potrivesc… ({count} verificate până acum)"
+      },
+      "sitesNoResults": "Nu au fost găsite site-uri pentru “{query}”",
+      "sitesEmpty": "Nu există site-uri SharePoint disponibile. Încercați să căutați după nume.",
+      "itemCount": "{count, plural, one {# element} other {# elemente}}"
     },
     "mail": {
       "menuLabel": "Importați e-mail…",
@@ -4657,7 +4670,8 @@
       "notFound": "Elementul nu a putut fi găsit — este posibil să fi fost mutat sau șters.",
       "forbidden": "Nu aveți acces la acest element.",
       "network": "Eroare de rețea — încercați din nou.",
-      "generic": "Importul a eșuat — încercați din nou."
+      "generic": "Importul a eșuat — încercați din nou.",
+      "rateLimited": "Microsoft 365 este ocupat acum — vă rugăm să încercați din nou în curând."
     },
     "agentAccess": {
       "connectFirst": "Acest agent răspunde din fișierele Microsoft 365. Conectați Microsoft 365 în Setări → Conexiuni pentru a-l utiliza.",
@@ -4796,6 +4810,8 @@
     "cancel": "Anulează",
     "consentMissing": "Organizația ta nu a aprobat încă accesul la OneDrive.",
     "blockedByPolicy": "Partajarea a fost blocată de politica organizației tale.",
-    "failed": "Nu s-a putut partaja — nu a fost creat nimic."
+    "failed": "Nu s-a putut partaja — nu a fost creat nimic.",
+    "copyFailed": "Nu s-a putut copia linkul — selectați-l de mai sus și copiați manual.",
+    "lastMessagesCountLabel": "Numărul de mesaje recente de inclus"
   }
 }

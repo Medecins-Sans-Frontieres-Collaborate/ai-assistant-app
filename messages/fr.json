@@ -2134,7 +2134,8 @@
     "aiTools": "Outils IA",
     "aiToolsTooltip": "Fonctionnalités que l’assistant peut utiliser lors des réponses : recherche web en direct, exécution de code et services connectés.",
     "codeInterpreterTooltip": "Exécutez du code Python dans un environnement sécurisé pour chaque message.\n\nIdéal pour l’analyse de données, les calculs et la génération de graphiques à partir de fichiers joints.",
-    "categoryTools": "Outils et connecteurs"
+    "categoryTools": "Outils et connecteurs",
+    "translationConversationTitle": "Traduction : {filename}"
   },
   "transcription": {
     "addInstructions": "Ajouter des instructions",
@@ -4518,7 +4519,11 @@
         "consentMissing": "Cette fonctionnalité attend l’approbation de l’administrateur de votre organisation.",
         "notConnected": "Votre session Microsoft 365 est indisponible. Veuillez vous déconnecter et vous reconnecter.",
         "network": "Erreur réseau — veuillez réessayer.",
-        "generic": "Un problème est survenu — veuillez réessayer."
+        "generic": "Un problème est survenu — veuillez réessayer.",
+        "notFound": "L’élément est introuvable — il a peut-être été déplacé ou supprimé.",
+        "forbidden": "Vous n’avez pas accès à cet élément.",
+        "rateLimited": "Microsoft 365 est actuellement occupé — veuillez réessayer dans un instant.",
+        "openConnections": "Ouvrir Paramètres › Connexions"
       },
       "pickTitle": "Choisissez une source depuis OneDrive / SharePoint",
       "addFolder": "Ajouter",
@@ -4539,7 +4544,8 @@
         "label": "Trier par",
         "name": "Nom",
         "modified": "Modifié",
-        "size": "Taille"
+        "size": "Taille",
+        "notApplied": "Le tri n’est pas disponible ici — affichage dans l’ordre d’origine"
       },
       "folderTitle": "Choisissez un dossier",
       "selectFolder": "Sélectionner",
@@ -4548,7 +4554,10 @@
       "sections": {
         "fromRecent": "Depuis vos fichiers récents",
         "nameMatches": "Correspondance sur le nom",
-        "contentMatches": "Trouvé dans le contenu des fichiers"
+        "contentMatches": "Trouvé dans le contenu des fichiers",
+        "moreResults": "Plus de résultats",
+        "followedSites": "Sites suivis",
+        "allSites": "Tous les sites"
       },
       "typeFilter": {
         "label": "Filtrer par type de fichier",
@@ -4562,8 +4571,12 @@
         "audio": "Audio",
         "video": "Vidéo",
         "more": "Autres types de fichiers",
-        "noMatches": "Aucun fichier de ce type ici"
-      }
+        "noMatches": "Aucun fichier de ce type ici",
+        "scanning": "Recherche de fichiers correspondants dans ce dossier… ({count} vérifiés pour l’instant)"
+      },
+      "sitesNoResults": "Aucun site trouvé pour « {query} »",
+      "sitesEmpty": "Aucun site SharePoint disponible. Essayez une recherche par nom.",
+      "itemCount": "{count, plural, one {# élément} other {# éléments}}"
     },
     "mail": {
       "menuLabel": "Importer un e-mail…",
@@ -4657,7 +4670,8 @@
       "notFound": "L'élément est introuvable — il a peut-être été déplacé ou supprimé.",
       "forbidden": "Vous n'avez pas accès à cet élément.",
       "network": "Erreur réseau — veuillez réessayer.",
-      "generic": "L'importation a échoué — veuillez réessayer."
+      "generic": "L'importation a échoué — veuillez réessayer.",
+      "rateLimited": "Microsoft 365 est actuellement occupé — veuillez réessayer dans un instant."
     },
     "agentAccess": {
       "connectFirst": "Cet agent répond à partir des fichiers Microsoft 365. Connectez Microsoft 365 dans Paramètres → Connexions pour l'utiliser.",
@@ -4796,6 +4810,8 @@
     "cancel": "Annuler",
     "consentMissing": "Votre organisation n'a pas encore autorisé l'accès à OneDrive.",
     "blockedByPolicy": "Le partage a été bloqué par la politique de votre organisation.",
-    "failed": "Impossible de partager — rien n'a été créé."
+    "failed": "Impossible de partager — rien n'a été créé.",
+    "copyFailed": "Impossible de copier le lien — veuillez le sélectionner ci-dessus et copier manuellement.",
+    "lastMessagesCountLabel": "Nombre de messages récents à inclure"
   }
 }

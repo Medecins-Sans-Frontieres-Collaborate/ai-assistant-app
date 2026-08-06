@@ -2233,7 +2233,8 @@
     "aiTools": "AIツール",
     "aiToolsTooltip": "アシスタントが利用可能な機能：ウェブ検索、コード実行、連携サービス。",
     "codeInterpreterTooltip": "各メッセージごとに安全なサンドボックスでPythonコードを実行します。\n\n添付ファイルのデータ分析・計算・グラフ作成などに最適です。",
-    "categoryTools": "ツールとコネクタ"
+    "categoryTools": "ツールとコネクタ",
+    "translationConversationTitle": "翻訳: {filename}"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AIの応答をカスタマイズするための個別指示を追加できます。これらは、役立つ・正確・安全な応答を保証するための基本的なガイドラインと組み合わされます。",
   "Tip: Type \"/\" to select from saved prompt templates_": "ヒント：「/」を入力すると保存されたプロンプトテンプレートから選択できます。",
@@ -4518,7 +4519,11 @@
         "consentMissing": "この機能は組織の管理者による承認待ちです。",
         "notConnected": "Microsoft 365 セッションを利用できません。サインアウトしてから再度サインインしてください。",
         "network": "ネットワークエラーです。再試行してください。",
-        "generic": "問題が発生しました。再試行してください。"
+        "generic": "問題が発生しました。再試行してください。",
+        "notFound": "項目が見つかりませんでした。移動または削除された可能性があります。",
+        "forbidden": "この項目にアクセスする権限がありません。",
+        "rateLimited": "Microsoft 365が現在混み合っています。しばらくしてから再試行してください。",
+        "openConnections": "設定 › 接続 を開く"
       },
       "pickTitle": "OneDrive / SharePoint からソースを選択",
       "addFolder": "追加",
@@ -4539,7 +4544,8 @@
         "label": "並び替え",
         "name": "名前",
         "modified": "更新日",
-        "size": "サイズ"
+        "size": "サイズ",
+        "notApplied": "ここでは並べ替えは利用できません。元の順序で項目を表示しています"
       },
       "folderTitle": "フォルダーを選択",
       "selectFolder": "選択",
@@ -4548,7 +4554,10 @@
       "sections": {
         "fromRecent": "最近のファイルから",
         "nameMatches": "名前が一致",
-        "contentMatches": "ファイル内容内で見つかりました"
+        "contentMatches": "ファイル内容内で見つかりました",
+        "moreResults": "さらに結果を表示",
+        "followedSites": "フォロー中のサイト",
+        "allSites": "すべてのサイト"
       },
       "typeFilter": {
         "label": "ファイルタイプで絞り込む",
@@ -4562,8 +4571,12 @@
         "audio": "音声",
         "video": "動画",
         "more": "その他のファイルタイプ",
-        "noMatches": "選択したタイプのファイルはありません"
-      }
+        "noMatches": "選択したタイプのファイルはありません",
+        "scanning": "このフォルダー内で該当ファイルを検索中…（現在{count}件確認済み）"
+      },
+      "sitesNoResults": "「{query}」に該当するサイトが見つかりません",
+      "sitesEmpty": "利用可能なSharePointサイトはありません。名前で検索してみてください。",
+      "itemCount": "{count, plural, one {# 件} other {# 件}}"
     },
     "mail": {
       "menuLabel": "メールをインポート…",
@@ -4657,7 +4670,8 @@
       "notFound": "アイテムが見つかりません。移動または削除された可能性があります。",
       "forbidden": "このアイテムへのアクセス権がありません。",
       "network": "ネットワークエラーです。もう一度お試しください。",
-      "generic": "インポートに失敗しました。もう一度お試しください。"
+      "generic": "インポートに失敗しました。もう一度お試しください。",
+      "rateLimited": "Microsoft 365が現在混み合っています。しばらくしてから再試行してください。"
     },
     "agentAccess": {
       "connectFirst": "このエージェントは Microsoft 365 ファイルから回答します。設定 → 接続 で Microsoft 365 を連携してください。",
@@ -4796,6 +4810,8 @@
     "cancel": "キャンセル",
     "consentMissing": "まだ組織で OneDrive アクセスが承認されていません。",
     "blockedByPolicy": "あなたの組織のポリシーにより共有がブロックされました。",
-    "failed": "共有できませんでした—何も作成されませんでした。"
+    "failed": "共有できませんでした—何も作成されませんでした。",
+    "copyFailed": "リンクをコピーできませんでした。上記から手動でコピーしてください。",
+    "lastMessagesCountLabel": "含める最新メッセージの数"
   }
 }

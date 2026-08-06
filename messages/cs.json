@@ -2134,7 +2134,8 @@
     "aiTools": "AI nástroje",
     "aiToolsTooltip": "Funkce, které asistent může využít při odpovídání: živé vyhledávání na webu, spouštění kódu a propojené služby.",
     "codeInterpreterTooltip": "Spuštění Python kódu v zabezpečeném sandboxu pro každou zprávu.\n\nVhodné pro analýzu dat, výpočty a generování grafů z přiložených souborů.",
-    "categoryTools": "Nástroje a konektory"
+    "categoryTools": "Nástroje a konektory",
+    "translationConversationTitle": "Překlad: {filename}"
   },
   "transcription": {
     "addInstructions": "Přidat pokyny",
@@ -4518,7 +4519,11 @@
         "consentMissing": "Tato funkce čeká na schválení administrátorem vaší organizace.",
         "notConnected": "Vaše relace Microsoft 365 není dostupná. Zkuste se odhlásit a znovu přihlásit.",
         "network": "Chyba sítě — zkuste to prosím znovu.",
-        "generic": "Něco se pokazilo — zkuste to prosím znovu."
+        "generic": "Něco se pokazilo — zkuste to prosím znovu.",
+        "notFound": "Položku se nepodařilo najít — mohla být přesunuta nebo odstraněna.",
+        "forbidden": "K této položce nemáte přístup.",
+        "rateLimited": "Microsoft 365 je nyní zaneprázdněný — zkuste to prosím za chvíli znovu.",
+        "openConnections": "Otevřít Nastavení › Připojení"
       },
       "pickTitle": "Vyberte zdroj z OneDrive / SharePoint",
       "addFolder": "Přidat",
@@ -4539,7 +4544,8 @@
         "label": "Seřadit podle",
         "name": "Název",
         "modified": "Upraveno",
-        "size": "Velikost"
+        "size": "Velikost",
+        "notApplied": "Řazení zde není dostupné — položky jsou zobrazeny v původním pořadí"
       },
       "folderTitle": "Vyberte složku",
       "selectFolder": "Vybrat",
@@ -4548,7 +4554,10 @@
       "sections": {
         "fromRecent": "Z vašich nedávných souborů",
         "nameMatches": "Shoda názvu",
-        "contentMatches": "Nalezeno v obsahu souboru"
+        "contentMatches": "Nalezeno v obsahu souboru",
+        "moreResults": "Další výsledky",
+        "followedSites": "Sledované weby",
+        "allSites": "Všechny weby"
       },
       "typeFilter": {
         "label": "Filtrovat podle typu souboru",
@@ -4562,8 +4571,12 @@
         "audio": "Audio",
         "video": "Video",
         "more": "Další typy souborů",
-        "noMatches": "Žádné soubory vybraného typu zde nejsou"
-      }
+        "noMatches": "Žádné soubory vybraného typu zde nejsou",
+        "scanning": "Vyhledávání souborů v této složce… (zatím kontrolováno: {count})"
+      },
+      "sitesNoResults": "Nenalezeny žádné weby pro „{query}“",
+      "sitesEmpty": "Nejsou dostupné žádné SharePoint weby. Zkuste hledat podle názvu.",
+      "itemCount": "{count, plural, one {# položka} few {# položky} other {# položek}}"
     },
     "mail": {
       "menuLabel": "Importovat e-mail…",
@@ -4657,7 +4670,8 @@
       "notFound": "Položku nelze najít — mohla být přesunuta nebo smazána.",
       "forbidden": "K této položce nemáte přístup.",
       "network": "Chyba sítě — zkuste to prosím znovu.",
-      "generic": "Import selhal — zkuste to prosím znovu."
+      "generic": "Import selhal — zkuste to prosím znovu.",
+      "rateLimited": "Microsoft 365 je nyní zaneprázdněný — zkuste to prosím za chvíli znovu."
     },
     "agentAccess": {
       "connectFirst": "Tento agent odpovídá ze souborů Microsoft 365. Propojte Microsoft 365 v Nastavení → Připojení, abyste jej mohli používat.",
@@ -4796,6 +4810,8 @@
     "cancel": "Zrušit",
     "consentMissing": "Vaše organizace zatím nepovolila přístup k OneDrive.",
     "blockedByPolicy": "Sdílení bylo zablokováno zásadami vaší organizace.",
-    "failed": "Sdílení se nezdařilo – nic nebylo vytvořeno."
+    "failed": "Sdílení se nezdařilo – nic nebylo vytvořeno.",
+    "copyFailed": "Odkaz se nepodařilo zkopírovat — vyberte jej výše a zkopírujte ručně.",
+    "lastMessagesCountLabel": "Počet posledních zpráv k zahrnutí"
   }
 }

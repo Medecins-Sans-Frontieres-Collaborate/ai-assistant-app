@@ -2208,7 +2208,8 @@
     "aiTools": "Zouti AI",
     "aiToolsTooltip": "Sa asistans lan ka itilize pandan li reponn: rechèch web an dirèk, ekzekisyon kòd, ak sèvis konekte.",
     "codeInterpreterTooltip": "Kouri kòd Python nan yon sandbox ki an sekirite pou chak mesaj.\n\nIdeyal pou analiz done, kalkil, ak kreye grafik soti nan fichye atache.",
-    "categoryTools": "Zouti ak konektè"
+    "categoryTools": "Zouti ak konektè",
+    "translationConversationTitle": "Tradiksyon: {filename}"
   },
   "transcription": {
     "transcribesOnSend": "Transkri lè voye",
@@ -4502,7 +4503,11 @@
         "consentMissing": "Fonksyon sa ap tann apwobasyon administratè òganizasyon w lan.",
         "notConnected": "Sesyon Microsoft 365 ou endisponib. Eseye dekonekte epi konekte ankò.",
         "network": "Erè rezo — tanpri eseye ankò.",
-        "generic": "Gen yon pwoblèm — tanpri eseye ankò."
+        "generic": "Gen yon pwoblèm — tanpri eseye ankò.",
+        "notFound": "Atik la pa ka jwenn — li ka te deplase oswa efase.",
+        "forbidden": "Ou pa gen aksè ak atik sa a.",
+        "rateLimited": "Microsoft 365 okipe kounye a — tanpri eseye ankò apre.",
+        "openConnections": "Ouvri Anviwònman › Koneksyon"
       },
       "pickTitle": "Chwazi yon sous nan OneDrive / SharePoint",
       "addFolder": "Ajoute",
@@ -4523,7 +4528,8 @@
         "label": "Triye pa",
         "name": "Non",
         "modified": "Modifye",
-        "size": "Gwosè"
+        "size": "Gwosè",
+        "notApplied": "Triyaj pa disponib isit la — ap montre atik yo nan lòd orijinal yo"
       },
       "folderTitle": "Chwazi yon dosye",
       "selectFolder": "Chwazi",
@@ -4532,7 +4538,10 @@
       "sections": {
         "fromRecent": "Nan fichye resan ou yo",
         "nameMatches": "Non ki koresponn",
-        "contentMatches": "Jwenn nan kontni fichye"
+        "contentMatches": "Jwenn nan kontni fichye",
+        "moreResults": "Plis rezilta",
+        "followedSites": "Sit ou swiv",
+        "allSites": "Tout sit yo"
       },
       "typeFilter": {
         "label": "Filtre pa tip fichye",
@@ -4546,8 +4555,12 @@
         "audio": "Odyo",
         "video": "Videyo",
         "more": "Lòt tip fichye",
-        "noMatches": "Pa gen fichye tip sa a isit la"
-      }
+        "noMatches": "Pa gen fichye tip sa a isit la",
+        "scanning": "Ap chèche dosye sa a pou fichye ki koresponn… ({count} deja verifye)"
+      },
+      "sitesNoResults": "Pa jwenn okenn sit pou “{query}”",
+      "sitesEmpty": "Pa gen okenn sit SharePoint disponib. Eseye fè rechèch ak non an.",
+      "itemCount": "{count, plural, one {# atik} other {# atik yo}}"
     },
     "mail": {
       "menuLabel": "Enpòte imèl…",
@@ -4641,7 +4654,8 @@
       "notFound": "Eleman an pa jwenn — li ka te deplase oswa efase.",
       "forbidden": "Ou pa gen aksè ak atik sa a.",
       "network": "Erè rezo — tanpri eseye ankò.",
-      "generic": "Echèk enpòte — tanpri eseye ankò."
+      "generic": "Echèk enpòte — tanpri eseye ankò.",
+      "rateLimited": "Microsoft 365 okipe kounye a — tanpri eseye ankò apre."
     },
     "agentAccess": {
       "connectFirst": "Ajan sa a bay repons soti nan fichye Microsoft 365. Konekte Microsoft 365 nan Anviwònman → Koneksyon pou itilize l.",
@@ -4780,6 +4794,8 @@
     "cancel": "Anile",
     "consentMissing": "Òganizasyon ou poko apwouve aksè OneDrive.",
     "blockedByPolicy": "Pataj sa a bloke pa règleman òganizasyon ou.",
-    "failed": "Pa t kapab pataje — pa gen anyen ki te kreye."
+    "failed": "Pa t kapab pataje — pa gen anyen ki te kreye.",
+    "copyFailed": "Pa t kapab kopye lyen an — chwazi li anlè epi kopye manyèlman.",
+    "lastMessagesCountLabel": "Kantite dènye mesaj pou enkli"
   }
 }

@@ -2134,7 +2134,8 @@
     "aiTools": "AI መሳሪያዎች",
     "aiToolsTooltip": "አጋሩ በመስጠት የሚጠቀሙት ችሎታዎች፡ live web search, code execution, እና የተገናኘ አገልግሎቶች።",
     "codeInterpreterTooltip": "ነጻነት ያለው ሲንዳቦክስ ውስጥ ለእያንዳንዱ መልእክት Python code አስኬድ።\n\nለውሂብ ትንተና፣ ስሌትና ከተያያዙ ፋይሎች ጋር ግብዓቶች ማቀናበር በጣም ይጠቅማል።",
-    "categoryTools": "መሳሪያዎች እና የማገናኛ አባላት"
+    "categoryTools": "መሳሪያዎች እና የማገናኛ አባላት",
+    "translationConversationTitle": "ትርጉም፡ {filename}"
   },
   "transcription": {
     "transcribesOnSend": "በመላክ ጊዜ ይቀዳል",
@@ -4518,7 +4519,11 @@
         "consentMissing": "ይህ ባህሪ የድርጅትዎን አስተዳዳሪ አጽድቆ ለማግኘቱ በመጠበቅ ላይ ነው።",
         "notConnected": "የ Microsoft 365 ክፍለ-ጊዜዎ ማግኘት አልተቻለም። ወደ እርስዎ መዝጋትና ዳግመኛ መግባት ይሞክሩ።",
         "network": "የኔትዎርክ ስህተት — እባክዎ ዳግመኛ ይሞክሩ።",
-        "generic": "ችግር ተከስቷል — እባክዎ ዳግመኛ ይሞክሩ።"
+        "generic": "ችግር ተከስቷል — እባክዎ ዳግመኛ ይሞክሩ።",
+        "notFound": "እቃው ማግኘት አልተቻለም — ሊከፈት ወይም ሊሰረዝ ይችላል።",
+        "forbidden": "ወደዚህ እቃ መዳረስ አይችሉም።",
+        "rateLimited": "Microsoft 365 በአሁኑ ጊዜ ተጠርጣሪ ነው — እባክዎ በአንድ ጊዜ ደግመው ይሞክሩ።",
+        "openConnections": "ማቅናቢያ ቅንብሮች ይክፈቱ › ግንኙነቶች"
       },
       "pickTitle": "ምንጩን ከ OneDrive / SharePoint ይምረጡ",
       "addFolder": "አክል",
@@ -4539,7 +4544,8 @@
         "label": "በመስተካከል",
         "name": "ስም",
         "modified": "ተሻሽሏል",
-        "size": "መጠን"
+        "size": "መጠን",
+        "notApplied": "ማደስ አይችልም — እቃዎቹ በመጀመሪያው ቅደም ተከተል እየታዩ ናቸው"
       },
       "folderTitle": "ፎልደር ይምረጡ",
       "selectFolder": "ይምረጡ",
@@ -4548,7 +4554,10 @@
       "sections": {
         "fromRecent": "ከእርስዎ ቅርብ ፋይሎች",
         "nameMatches": "በስም የሚዛመዱ",
-        "contentMatches": "በፋይል ውስጥ ተገኝቷል"
+        "contentMatches": "በፋይል ውስጥ ተገኝቷል",
+        "moreResults": "ተጨማሪ ውጤቶች",
+        "followedSites": "የተከተሉት ጣቢያዎች",
+        "allSites": "ሁሉም ጣቢያዎች"
       },
       "typeFilter": {
         "label": "በፋይል አይነት መጠረግ",
@@ -4562,8 +4571,12 @@
         "audio": "ድምፅ",
         "video": "ቪዲዮ",
         "more": "ተጨማሪ የፋይል አይነቶች",
-        "noMatches": "የተመረጠው የፋይል አይነት አለመገኘቱ"
-      }
+        "noMatches": "የተመረጠው የፋይል አይነት አለመገኘቱ",
+        "scanning": "በዚህ ፎልደር ተመሳሳይ ፋይሎችን በመፈለግ ላይ... ({count} እስካሁን ተመርመስአል)"
+      },
+      "sitesNoResults": "ስለ “{query}” ምንም ጣቢያዎች አልተገኙም",
+      "sitesEmpty": "ምንም SharePoint ጣቢያዎች አይገኙም። በስም ፈልጉ።",
+      "itemCount": "{count, plural, one {# እቃ} other {# እቃዎች}}"
     },
     "mail": {
       "menuLabel": "ኢሜይል አስመጣ…",
@@ -4657,7 +4670,8 @@
       "notFound": "እቃው አልተገኘም — ሊከፈት ወይም ሊሰረዝ የሚችለው ሊሆን ይችላል።",
       "forbidden": "ወደዚህ እቃ መዳረሻ የለዎትም።",
       "network": "የኔትወርክ ስህተት — እባክዎ ደግመው ይሞክሩ።",
-      "generic": "ማስመጣት አልተቻለም — እባክዎ ደግመው ይሞክሩ።"
+      "generic": "ማስመጣት አልተቻለም — እባክዎ ደግመው ይሞክሩ።",
+      "rateLimited": "Microsoft 365 በአሁኑ ጊዜ ተጠርጣሪ ነው — እባክዎ በአንድ ጊዜ ደግመው ይሞክሩ።"
     },
     "agentAccess": {
       "connectFirst": "ይህ ወኪል ምርጥ መልስ ከMicrosoft 365 ፋይሎች ይሰጣል። በቅኝት → ግንኙነቶች Microsoft 365 ያገናኙለት።",
@@ -4796,6 +4810,8 @@
     "cancel": "ይቅር",
     "consentMissing": "ድርጅትዎ ገና OneDrive መዳረሻ አልፈቀደም።",
     "blockedByPolicy": "ማጋራት በድርጅትዎ ፖሊሲ ተከልክሏል።",
-    "failed": "ማጋራት አልተቻለም — ምንም አልተፈጠረም።"
+    "failed": "ማጋራት አልተቻለም — ምንም አልተፈጠረም።",
+    "copyFailed": "አካባቢውን መቅዳት አልተቻለም — ከላይ ይምረጡ እና በእጅ ይቅዱ።",
+    "lastMessagesCountLabel": "ለማካተት የቅርብ መልእክቶች ብዛት"
   }
 }

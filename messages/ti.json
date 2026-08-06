@@ -2208,7 +2208,8 @@
     "aiTools": "AI መዕዛውቲ",
     "aiToolsTooltip": "ኣብ ምልማሉ ቀሊል ክትጠቐምዎ ዝኽእል ተቋማት: ብዝኽእል ድሕሪ መለለዪ ናይ web ምድላው, ኮድ ኣፈጻጸምን ብሰርቪስታት ምትሕሳስን።",
     "codeInterpreterTooltip": "ኣብ ናይ ዕላማ ስርዓት ሓላፍነት ዝበለ Python ኮድ ኣፈጻጸም ናይቶም መልሲታት ንኣብ ንእሽቶ መልእኽቲ።\n\nብዙሕ ኣብ ትንታነ ባህሪ, ምሕሳብን ብማዕበል ፋይል መመዝገብ ፍቓድ አለዎ።",
-    "categoryTools": "መሳርሒታት እና አገናኞታት"
+    "categoryTools": "መሳርሒታት እና አገናኞታት",
+    "translationConversationTitle": "ትርጉም፡ {filename}"
   },
   "transcription": {
     "transcribesOnSend": "ኣብ ምልኣኽ ይጸሓፍ",
@@ -4502,7 +4503,11 @@
         "consentMissing": "እዚ ባህሪ ንመምርሒ ቦታኻ ኣድሚን ምምላእ እተጽበ.",
         "notConnected": "Microsoft 365 ክፍሊትካ ኣይተርፈኡን። ምውፃእ ንደገና ተኣቲ.",
         "network": "ብድሕሪኡ ኣፍዪኡ፣ ኣድሓን ፈትኑ።",
-        "generic": "ምንታይ ክሳዕ ህግደፍ ይፈትኑ."
+        "generic": "ምንታይ ክሳዕ ህግደፍ ይፈትኑ.",
+        "notFound": "እቲ ናይ ዕቃ ኣይተረኸበን — ከኣ ተንቀሳቐሰ ወይ ክወጽእ ይኽእል።",
+        "forbidden": "ናይኡ ዝተመሃደሰ መድረኽ የለን።",
+        "rateLimited": "Microsoft 365 ሕጂ ብዙሕ ይሰብር። ኣብ ደሓን እንተኻ ደገም ፈቲሹ።",
+        "openConnections": "ቅንጡ ንጽሩ › መገናኛታት"
       },
       "pickTitle": "መንገዲ ካብ OneDrive / SharePoint ምረፅ",
       "addFolder": "ኣእትው",
@@ -4523,7 +4528,8 @@
         "label": "ብ… ኣኽፈል",
         "name": "ስም",
         "modified": "ተስተኻኺሉ",
-        "size": "መጠን"
+        "size": "መጠን",
+        "notApplied": "ምደምደም ኣብዚ ኣይተፈቀደን — ንውሽጣዊ ቅደም ኣቀዲም ይቕርበና።"
       },
       "folderTitle": "ፎልደር ምረፅ",
       "selectFolder": "ምረፅ",
@@ -4532,7 +4538,10 @@
       "sections": {
         "fromRecent": "ካብ ቅሩቡ ፋይሉ",
         "nameMatches": "ስም ዝሓሰበ",
-        "contentMatches": "ኣብ ናይ ፋይል ትሕቲ ተረኽበ"
+        "contentMatches": "ኣብ ናይ ፋይል ትሕቲ ተረኽበ",
+        "moreResults": "ዝበለ ውጽኢታት",
+        "followedSites": "ዝተከተሉ ሳይታት",
+        "allSites": "ኩሉ ሳይታት"
       },
       "typeFilter": {
         "label": "ብናይ ፋይል ዓይነት ምርጫ ፈልጠዩ",
@@ -4546,8 +4555,12 @@
         "audio": "ድምጺ",
         "video": "ቪዲዮ",
         "more": "ሓደ ንበለፀገ ዓይነት ፋይል",
-        "noMatches": "ናይ ተመርጾ ዓይነት ፋይል ኣይተረኢኡን ኣሎ"
-      }
+        "noMatches": "ናይ ተመርጾ ዓይነት ፋይል ኣይተረኢኡን ኣሎ",
+        "scanning": "ናይዚ ፎልደር ምርመራ ኣብ ምኽንያት ፋይላታት… ({count} ክሳብሕና ተመርመረ)"
+      },
+      "sitesNoResults": "ምንም ሳይት ኣይተረኸበን ን “{query}”",
+      "sitesEmpty": "ምንም SharePoint ሳይት ኣይተገናአን። በስም ፈልጦ ሞክር።",
+      "itemCount": "{count, plural, one {# ዕቃ} other {# ዕቃታት}}"
     },
     "mail": {
       "menuLabel": "ኢመይል ኣምጽኡ…",
@@ -4641,7 +4654,8 @@
       "notFound": "ነቲ ዝተፈተነ ነገር ኣይተረኸበን። ምስናአየ ወይ ዝሰረየ ክኸውን ይኽእል።",
       "forbidden": "ነዚ ነገር ምምሕዳር ኣብጽሒካ ኣይኮነን።",
       "network": "ጸጋሚ ኣውራጃ — ኣደሓንቲ ተፈትኑ።",
-      "generic": "ምእታው ኣይተሳናይን — ኣደሓንቲ ተፈትኑ።"
+      "generic": "ምእታው ኣይተሳናይን — ኣደሓንቲ ተፈትኑ።",
+      "rateLimited": "Microsoft 365 ሕጂ ብዙሕ ይሰብር። ኣብ ደሓን እንተኻ ደገም ፈቲሹ።"
     },
     "agentAccess": {
       "connectFirst": "ዚ ኤጅንት ምሕታው ካብ Microsoft 365 ፋይላት ይገብር። ኣብ ቅንጢ፡ እንታይ → ምትሕዝ ስር መተሓቀብ Microsoft 365 ይግበሩ።",
@@ -4780,6 +4794,8 @@
     "cancel": "ደኣ ዝተቋረጸ",
     "consentMissing": "ማሕበርኩም ድማ መድረኽ OneDrive ኣይፈቅዶምን።",
     "blockedByPolicy": "ምካፍል ብፖሊሲ ማሕበርኩም ተደኣይቲ።",
-    "failed": "ምካፍል ኣይከኣልን — ምንካፍል ኣይተፈጠረን።"
+    "failed": "ምካፍል ኣይከኣልን — ምንካፍል ኣይተፈጠረን።",
+    "copyFailed": "ሊንኩ ኣይተተቐለለን — ኣብ ላዕሊ ክትምረፁን ብእጋኹም ክትቅየሱን ይግበሩ።",
+    "lastMessagesCountLabel": "ብዝተኸፈለ መልእኽቲ ዝኽእሉ መጨመር"
   }
 }

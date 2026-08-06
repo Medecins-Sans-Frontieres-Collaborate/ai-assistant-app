@@ -2208,7 +2208,8 @@
     "aiTools": "Ibikoresho vya AI",
     "aiToolsTooltip": "Ubu bushobozi umufasha ashobora gukoresha: kurondera amakuru kuri web, gukora code, hamwe n'ibindi bisanzwe bif connecté.",
     "codeInterpreterTooltip": "Koresha code ya Python ahantu h'umutekano kuri buri butumwa.\n\nBirafasha cane mu gusesengura data, kubara, no gukora amakarata uhereye kuri dosiye ushatse.",
-    "categoryTools": "Ibikoresho n’ivyo guhuzwa"
+    "categoryTools": "Ibikoresho n’ivyo guhuzwa",
+    "translationConversationTitle": "Ibisobanuro: {filename}"
   },
   "transcription": {
     "transcribesOnSend": "Bihindurwa mu nyandiko igihe bitumwe",
@@ -4502,7 +4503,11 @@
         "consentMissing": "Iyi fonction irindiriye kwemezwa n’umuyobozi wa organisation yanyu.",
         "notConnected": "Session yawe ya Microsoft 365 ntiboneka. Gerageza gusohoka wongere winjire.",
         "network": "Ikibazo c’umulongo — gerageza gusubira.",
-        "generic": "Habaye ikitagenda neza — gerageza gusubira."
+        "generic": "Habaye ikitagenda neza — gerageza gusubira.",
+        "notFound": "Ico kintu nticabonywe — gishobora kuba cahinduye aho cari canke carasibwe.",
+        "forbidden": "Ntiwemerewe kwinjira kuri iki kintu.",
+        "rateLimited": "Microsoft 365 iriko irakora cane ubu — gerageza gusubira mu kanya.",
+        "openConnections": "Fungura Settings › Connections"
       },
       "pickTitle": "Hitamwo aho ukura kuri OneDrive / SharePoint",
       "addFolder": "Ongerako",
@@ -4523,7 +4528,8 @@
         "label": "Sobanura kuri",
         "name": "Izina",
         "modified": "Vyahinyanyuwe",
-        "size": "Ubunini"
+        "size": "Ubunini",
+        "notApplied": "Nta gutondeka kuboneka hano — ibintu biri uko vyari bimeze"
       },
       "folderTitle": "Hitamwo dossier",
       "selectFolder": "Hitamwo",
@@ -4532,7 +4538,10 @@
       "sections": {
         "fromRecent": "Kuva ku madosiye yawe aheruka",
         "nameMatches": "Izina rihuye",
-        "contentMatches": "Vyabonywe mu birimwo dosiye"
+        "contentMatches": "Vyabonywe mu birimwo dosiye",
+        "moreResults": "Vyinshi",
+        "followedSites": "Amasite wakurikiranye",
+        "allSites": "Amasite yose"
       },
       "typeFilter": {
         "label": "Gushungura hakurikijwe ubwoko bw'ido kumenya",
@@ -4546,8 +4555,12 @@
         "audio": "Ijwi",
         "video": "Video",
         "more": "Ubundi bwoko bw'ido kumenya",
-        "noMatches": "Nta fayili z’ubwoko mwahisemo ziri hano"
-      }
+        "noMatches": "Nta fayili z’ubwoko mwahisemo ziri hano",
+        "scanning": "Turiko turarondera muri uru rubika kugira turabe ibisomwa bihuye… ({count} bimaze kurabwa)"
+      },
+      "sitesNoResults": "Nta masite yabonetse kuri “{query}”",
+      "sitesEmpty": "Nta masite ya SharePoint aboneka. Gerageza kurondera ukoresheje izina.",
+      "itemCount": "{count, plural, one {# kintu} other {# ibintu}}"
     },
     "mail": {
       "menuLabel": "Kwinjiza email…",
@@ -4641,7 +4654,8 @@
       "notFound": "Ico kintu nticabonetse — gishobora kuba carimuwe canke cagizweho.",
       "forbidden": "Nta burenganzira ufise kuri iki kintu.",
       "network": "Ikosa rya réseau — gerageza gusubira.",
-      "generic": "Itwoherezwa ntiryagenze neza — gerageza wongere."
+      "generic": "Itwoherezwa ntiryagenze neza — gerageza wongere.",
+      "rateLimited": "Microsoft 365 iriko irakora cane ubu — gerageza gusubira mu kanya."
     },
     "agentAccess": {
       "connectFirst": "Uyu mushandisi yishura bivuye kuri fichiers za Microsoft 365. Fata Microsoft 365 muri Settings → Connections kugira ukoreshe.",
@@ -4780,6 +4794,8 @@
     "cancel": "Hagarika",
     "consentMissing": "Ishirahamwe ryawe ntirirakingurira OneDrive.",
     "blockedByPolicy": "Ugusangira kwabujijwe n’amategeko y’ishirahamwe ryawe.",
-    "failed": "Ntivyashobotse gusangira — nta na kimwe cakozwe."
+    "failed": "Ntivyashobotse gusangira — nta na kimwe cakozwe.",
+    "copyFailed": "Ntivyashobotse gukoporora iyo link — hitamwo hejuru uyikoporore n'intoke.",
+    "lastMessagesCountLabel": "Umubare w'ubutumwa bwheruka bwo gushirako"
   }
 }
