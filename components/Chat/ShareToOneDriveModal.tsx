@@ -16,7 +16,6 @@ import { useTranslations } from 'next-intl';
 import { buildBlob } from '@/client/hooks/document/useM365Save';
 
 import {
-  M365ClientError,
   M365PersonSuggestion,
   M365_SEARCH_DEBOUNCE_MS,
   M365_SEARCH_MIN_CHARS,
@@ -24,6 +23,7 @@ import {
   searchPeople,
   shareDriveItem,
 } from '@/client/services/m365/m365Client';
+import { m365ErrorKind } from '@/client/services/m365/m365ErrorKinds';
 
 import {
   collectShareMessages,
@@ -54,6 +54,13 @@ interface ShareOutcome {
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/**
+ * Characters OneDrive rejects in file names. The server sanitizes too —
+ * stripping client-side keeps the name in the success message identical to
+ * the file that actually lands in OneDrive.
+ */
+const INVALID_FILENAME_CHARS_RE = /[\\/:*?"<>|#%]/g;
 
 function parseEmails(raw: string): { emails: string[]; invalid: string[] } {
   const parts = raw
@@ -110,6 +117,7 @@ export const ShareToOneDriveModal: FC<ShareToOneDriveModalProps> = ({
   const [activeSuggestion, setActiveSuggestion] = useState(0);
   const suggestionsAbortRef = useRef<AbortController | null>(null);
   const suggestionsTimerRef = useRef<number | null>(null);
+  const titleInputRef = useRef<HTMLInputElement | null>(null);
 
   const clearSuggestions = () => {
     suggestionsAbortRef.current?.abort();
@@ -207,7 +215,12 @@ export const ShareToOneDriveModal: FC<ShareToOneDriveModalProps> = ({
         assistant: t('roleAssistant'),
       });
       const blob = await buildBlob('docx', markdownToHtml(markdown), markdown);
-      const saved = await saveToOneDrive(blob, `${title}.docx`);
+      // The document heading keeps the title as typed; only the FILE name
+      // needs OneDrive's character rules applied.
+      const safeTitle =
+        title.replace(INVALID_FILENAME_CHARS_RE, '').trim() ||
+        t('defaultTitle');
+      const saved = await saveToOneDrive(blob, `${safeTitle}.docx`);
       if (!saved.itemId || !saved.driveId) {
         throw new Error('Save returned no item reference');
       }
@@ -223,11 +236,11 @@ export const ShareToOneDriveModal: FC<ShareToOneDriveModalProps> = ({
         fileName: saved.name,
       });
     } catch (error) {
-      const code = error instanceof M365ClientError ? error.code : undefined;
+      const kind = m365ErrorKind(error);
       toast.error(
-        code === 'M365_CONSENT_MISSING'
+        kind === 'consentMissing'
           ? t('consentMissing')
-          : code === 'M365_FORBIDDEN'
+          : kind === 'forbidden'
             ? t('blockedByPolicy')
             : t('failed'),
       );
@@ -238,7 +251,14 @@ export const ShareToOneDriveModal: FC<ShareToOneDriveModalProps> = ({
 
   const handleCopy = async () => {
     if (!outcome?.link) return;
-    await navigator.clipboard.writeText(outcome.link);
+    try {
+      await navigator.clipboard.writeText(outcome.link);
+    } catch {
+      // Clipboard permission denied (or no clipboard API): the failure must
+      // be visible, not a silent no-op — the link stays selectable above.
+      toast.error(t('copyFailed'));
+      return;
+    }
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -253,6 +273,7 @@ export const ShareToOneDriveModal: FC<ShareToOneDriveModalProps> = ({
       title={t('title')}
       icon={<IconBrandOnedrive size={22} />}
       size="md"
+      initialFocusRef={titleInputRef}
     >
       {outcome ? (
         <div className="space-y-4">
@@ -304,6 +325,7 @@ export const ShareToOneDriveModal: FC<ShareToOneDriveModalProps> = ({
               {t('documentTitle')}
             </span>
             <input
+              ref={titleInputRef}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               maxLength={120}
@@ -338,26 +360,32 @@ export const ShareToOneDriveModal: FC<ShareToOneDriveModalProps> = ({
                       />
                       {t('assistantOnly')}
                     </label>
-                    <label className={checkboxClasses}>
-                      <input
-                        type="checkbox"
-                        checked={limitEnabled}
-                        onChange={(e) => setLimitEnabled(e.target.checked)}
-                      />
-                      {t('lastMessagesPre')}
+                    {/* The checkbox's label must not also wrap the number
+                        input — that would leave the count field without an
+                        accessible name of its own. */}
+                    <div className={checkboxClasses}>
+                      <label className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          checked={limitEnabled}
+                          onChange={(e) => setLimitEnabled(e.target.checked)}
+                        />
+                        {t('lastMessagesPre')}
+                      </label>
                       <input
                         type="number"
                         min={1}
                         max={500}
                         value={lastCount}
                         disabled={!limitEnabled}
+                        aria-label={t('lastMessagesCountLabel')}
                         onChange={(e) =>
                           setLastCount(Math.max(1, Number(e.target.value) || 1))
                         }
                         className="w-16 rounded border border-gray-300 px-2 py-1 text-sm disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800"
                       />
                       {t('lastMessagesPost')}
-                    </label>
+                    </div>
                   </>
                 )}
                 <label className="relative block">
@@ -392,6 +420,11 @@ export const ShareToOneDriveModal: FC<ShareToOneDriveModalProps> = ({
                     aria-expanded={suggestions.length > 0}
                     aria-autocomplete="list"
                     aria-controls="share-people-suggestions"
+                    aria-activedescendant={
+                      suggestions.length > 0
+                        ? `share-people-option-${activeSuggestion}`
+                        : undefined
+                    }
                     placeholder={t('recipientsPlaceholder')}
                     className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
                   />
@@ -404,6 +437,7 @@ export const ShareToOneDriveModal: FC<ShareToOneDriveModalProps> = ({
                       {suggestions.map((person, index) => (
                         <li
                           key={person.email}
+                          id={`share-people-option-${index}`}
                           role="option"
                           aria-selected={index === activeSuggestion}
                           // mousedown, not click: the input's blur fires
