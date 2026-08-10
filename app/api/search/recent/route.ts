@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { resolveOrgAgentById } from '@/lib/services/orgAgents/orgAgentRegistry';
+
 import { unauthorizedResponse } from '@/lib/utils/server/api/apiResponse';
 
 import { auth } from '@/auth';
 import { env } from '@/config/environment';
-import { getOrganizationAgentById } from '@/lib/organizationAgents';
 import { DefaultAzureCredential } from '@azure/identity';
 import { SearchClient } from '@azure/search-documents';
 
@@ -61,8 +62,9 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Verify agent exists and is a RAG agent
-    const agent = getOrganizationAgentById(agentId);
+    // Verify agent exists and is a RAG agent (static config merged with
+    // admin-authored records — admin wins).
+    const agent = await resolveOrgAgentById(agentId);
     if (!agent) {
       return NextResponse.json({ error: 'Agent not found' }, { status: 404 });
     }
@@ -80,9 +82,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ sources: cached, cached: true });
     }
 
-    // Get search config from environment
+    // Get search config from environment; per-agent index override wins
+    // (admin-authored agents always carry one).
     const searchEndpoint = env.SEARCH_ENDPOINT;
-    const searchIndex = env.SEARCH_INDEX;
+    const searchIndex = agent.ragConfig?.searchIndex || env.SEARCH_INDEX;
 
     if (!searchEndpoint || !searchIndex) {
       return NextResponse.json(

@@ -25,6 +25,9 @@ vi.mock('@/lib/services/transcription/batchTranscriptionService', () => ({
 
 const mockGetJobForUser = vi.fn();
 const mockCleanupChunks = vi.fn();
+vi.mock('@/lib/services/blobStorageFactory', () => ({
+  createBlobStorageClient: vi.fn().mockReturnValue({ fake: 'blob-storage' }),
+}));
 vi.mock('@/lib/services/transcription/chunkedJobStore', () => ({
   getJobForUser: (...args: unknown[]) => mockGetJobForUser(...args),
   JOB_ID_REGEX:
@@ -182,7 +185,11 @@ describe('/api/transcription/cleanup', () => {
     const response = await POST(makeRequest({ jobId: validJobId }));
 
     expect(response.status).toBe(200);
-    expect(mockGetJobForUser).toHaveBeenCalledWith(validJobId, userId);
+    expect(mockGetJobForUser).toHaveBeenCalledWith(
+      expect.anything(),
+      validJobId,
+      userId,
+    );
     expect(mockCleanupChunks).toHaveBeenCalledWith(chunkPaths);
   });
 

@@ -273,6 +273,98 @@ describe('ToolRouterService', () => {
         ).toBeUndefined();
       });
 
+      it('instructs the model to default to no-search when the user provided their own content', async () => {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  needsWebSearch: false,
+                  searchQuery: '',
+                  searchRecency: 'none',
+                  searchComprehensive: false,
+                }),
+              },
+            },
+          ],
+        });
+
+        const result = await service.determineTool({
+          messages: [],
+          currentMessage:
+            'Summarize this article about the 2026 election\n\n[File: article.pdf]\n...',
+          hasUserProvidedContent: true,
+        });
+
+        expect(result.tools).toEqual([]);
+        const call =
+          mockOpenAIClient.chat.completions.create.mock.calls.at(-1)![0];
+        const systemPrompt = call.messages[0].content;
+        expect(systemPrompt).toContain(
+          'The user supplied their own source material this turn',
+        );
+        expect(systemPrompt).toContain('Default to needsWebSearch=false');
+        expect(systemPrompt).toContain('EXPLICITLY asks to search the web');
+      });
+
+      it('still searches provided-content turns when the model reports an explicit request', async () => {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  needsWebSearch: true,
+                  searchQuery: 'fusion energy milestones 2026',
+                  searchRecency: 'week',
+                  searchComprehensive: false,
+                  additionalSearchQueries: [],
+                }),
+              },
+            },
+          ],
+        });
+
+        const result = await service.determineTool({
+          messages: [],
+          currentMessage:
+            'Search the web for recent fusion news and compare it with this paper\n\n[File: paper.pdf]\n...',
+          hasUserProvidedContent: true,
+        });
+
+        // The instruction is a default, not a hard gate — an explicit
+        // in-message search request still routes to web_search.
+        expect(result.tools).toEqual(['web_search']);
+        expect(result.searchQuery).toBe('fusion energy milestones 2026');
+      });
+
+      it('omits the provided-content instruction when the flag is not set', async () => {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  needsWebSearch: false,
+                  searchQuery: '',
+                  searchRecency: 'none',
+                  searchComprehensive: false,
+                }),
+              },
+            },
+          ],
+        });
+
+        await service.determineTool({
+          messages: [],
+          currentMessage: 'What is a monad?',
+        });
+
+        const call =
+          mockOpenAIClient.chat.completions.create.mock.calls.at(-1)![0];
+        expect(call.messages[0].content).not.toContain(
+          'supplied their own source material',
+        );
+      });
+
       it('should determine web search is NOT needed for general knowledge', async () => {
         const mockResponse = {
           choices: [
@@ -785,6 +877,238 @@ describe('ToolRouterService', () => {
         // Latency-tuning params should be present.
         expect(callArgs[0].reasoning_effort).toBe('minimal');
         expect(callArgs[0].max_completion_tokens).toBe(200);
+      });
+    });
+
+    describe('system prompt date anchoring', () => {
+      it('injects the current date and year, with no hardcoded stale years', async () => {
+        // Regression: the prompt used to hardcode "released after 2024" and
+        // give a year-suffixed example, so the router appended training-era
+        // years ("XYZ 2024 2025") to queries regardless of the actual date.
+        vi.useFakeTimers();
+        vi.setSystemTime(new Date('2026-07-23T12:00:00Z'));
+        try {
+          mockOpenAIClient.chat.completions.create.mockResolvedValue({
+            choices: [
+              {
+                message: {
+                  content: JSON.stringify({
+                    needsWebSearch: false,
+                    searchQuery: '',
+                    searchRecency: 'none',
+                    searchComprehensive: false,
+                    additionalSearchQueries: [],
+                  }),
+                },
+              },
+            ],
+          });
+
+          await service.determineTool({
+            messages: [],
+            currentMessage: 'hello',
+          });
+
+          const systemPrompt =
+            mockOpenAIClient.chat.completions.create.mock.calls[0][0]
+              .messages[0].content;
+          expect(systemPrompt).toContain("Today's date is 2026-07-23");
+          expect(systemPrompt).toContain('current year is 2026');
+          expect(systemPrompt).toContain('released after 2025');
+          expect(systemPrompt).not.toContain('released after 2024');
+          expect(systemPrompt).toContain('India protests 2026');
+          expect(systemPrompt).toContain('do NOT append a year by default');
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+    });
+
+    describe('classifyDocumentTrim', () => {
+      function mockClassification(payload: unknown) {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [{ message: { content: JSON.stringify(payload) } }],
+        });
+      }
+
+      const baseRequest = {
+        messages: [
+          {
+            role: 'user',
+            content: 'réduis ce document à 6000 mots',
+            messageType: MessageType.TEXT,
+          } as Message,
+        ],
+        currentMessage:
+          'réduis ce document à 6000 mots\n\n[Files attached to the current message: manuscript.docx]',
+        documentFilename: 'manuscript.docx',
+      };
+
+      it('maps a word-count classification to an absolute target', async () => {
+        mockClassification({
+          isLengthReductionRequest: true,
+          targetIsAttachedDocument: true,
+          targetValue: 6000,
+          targetUnit: 'words',
+        });
+
+        const target = await service.classifyDocumentTrim(baseRequest);
+
+        expect(target).toEqual({
+          kind: 'absolute',
+          unit: 'words',
+          target: 6000,
+          approx: false,
+        });
+        // The classifier receives the enriched currentMessage as the last
+        // message and the filename in the system prompt — meaning-based,
+        // works in any language.
+        const call = mockOpenAIClient.chat.completions.create.mock.calls[0][0];
+        expect(call.messages[0].content).toContain('manuscript.docx');
+        expect(call.messages[0].content).toContain('ANY language');
+        expect(call.messages[call.messages.length - 1].content).toBe(
+          baseRequest.currentMessage,
+        );
+        expect(call.response_format.json_schema.name).toBe(
+          'document_trim_classification',
+        );
+      });
+
+      it('maps pages to approximate words', async () => {
+        mockClassification({
+          isLengthReductionRequest: true,
+          targetIsAttachedDocument: true,
+          targetValue: 5,
+          targetUnit: 'pages',
+        });
+        expect(await service.classifyDocumentTrim(baseRequest)).toEqual({
+          kind: 'absolute',
+          unit: 'words',
+          target: 2500,
+          approx: true,
+        });
+      });
+
+      it('maps percent_to_keep to a ratio target', async () => {
+        mockClassification({
+          isLengthReductionRequest: true,
+          targetIsAttachedDocument: true,
+          targetValue: 50,
+          targetUnit: 'percent_to_keep',
+        });
+        expect(await service.classifyDocumentTrim(baseRequest)).toEqual({
+          kind: 'ratio',
+          keep: 0.5,
+          approx: true,
+        });
+      });
+
+      it.each([
+        [
+          'not a reduction request',
+          {
+            isLengthReductionRequest: false,
+            targetIsAttachedDocument: false,
+            targetValue: 0,
+            targetUnit: 'none',
+          },
+        ],
+        [
+          'zero target',
+          {
+            isLengthReductionRequest: true,
+            targetIsAttachedDocument: true,
+            targetValue: 0,
+            targetUnit: 'words',
+          },
+        ],
+        [
+          'percent >= 100',
+          {
+            isLengthReductionRequest: true,
+            targetIsAttachedDocument: true,
+            targetValue: 120,
+            targetUnit: 'percent_to_keep',
+          },
+        ],
+        [
+          // A trimmable file sits earlier in the conversation, but the user
+          // is shortening text they pasted into the chat — the file pipeline
+          // (and its code-interpreter round-trip) must not hijack the turn.
+          'a length target aimed at chat text, not the attached document',
+          {
+            isLengthReductionRequest: true,
+            targetIsAttachedDocument: false,
+            targetValue: 200,
+            targetUnit: 'words',
+          },
+        ],
+      ])('returns null for %s', async (_label, payload) => {
+        mockClassification(payload);
+        expect(await service.classifyDocumentTrim(baseRequest)).toBeNull();
+      });
+
+      it('returns null (degrades) when the call fails', async () => {
+        mockOpenAIClient.chat.completions.create.mockRejectedValue(
+          new Error('API error'),
+        );
+        expect(await service.classifyDocumentTrim(baseRequest)).toBeNull();
+      });
+
+      it('returns null on malformed classifier output', async () => {
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [{ message: { content: 'not json' } }],
+        });
+        expect(await service.classifyDocumentTrim(baseRequest)).toBeNull();
+      });
+    });
+
+    describe('classifier input construction', () => {
+      it('sends the enriched currentMessage as the last message, not the raw text', async () => {
+        // Regression: the enricher builds `currentMessage` with file
+        // excerpts and the attachment manifest, but the classifier call used
+        // to map the raw conversation messages instead — so the router LLM
+        // saw "trim this to 6k words" with no evidence a file existed and
+        // classified document-transformation requests as pure text tasks.
+        mockOpenAIClient.chat.completions.create.mockResolvedValue({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  needsWebSearch: false,
+                  searchQuery: '',
+                  searchRecency: 'none',
+                  searchComprehensive: false,
+                  additionalSearchQueries: [],
+                  needsCodeExecution: true,
+                  codeTask: 'Trim manuscript.docx to 6000 words',
+                }),
+              },
+            },
+          ],
+        });
+
+        const enriched =
+          'please trim this to 6k words\n\n' +
+          '[File excerpt: manuscript.docx]\nSome text…\n\n' +
+          '[Files attached to the current message: manuscript.docx]';
+        const result = await service.determineTool({
+          messages: [
+            {
+              role: 'user',
+              content: 'please trim this to 6k words',
+              messageType: MessageType.TEXT,
+            } as Message,
+          ],
+          currentMessage: enriched,
+          considerCodeExecution: true,
+        });
+
+        const sentMessages =
+          mockOpenAIClient.chat.completions.create.mock.calls[0][0].messages;
+        expect(sentMessages[sentMessages.length - 1].content).toBe(enriched);
+        expect(result.tools).toContain('code_interpreter');
+        expect(result.codeTask).toBe('Trim manuscript.docx to 6000 words');
       });
     });
 

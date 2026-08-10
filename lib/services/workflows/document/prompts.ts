@@ -111,6 +111,8 @@ export function buildDocAssessmentSystemPrompt(
   options: {
     specBlock?: string;
     toneBlock?: string;
+    /** Admin-guide bodies for requested `guide:` criteria (pre-budgeted). */
+    guideBlocks?: string;
     /** Profile-detected language + conventions, fed back as context. */
     language?: string;
     conventionNotes?: string;
@@ -139,7 +141,7 @@ Rules for proposed edits:
 - Never propose overlapping edits.
 - At most 20 edits; prioritize by severity.
 - An empty edits list is the correct answer when nothing needs fixing.
-- Rate every requested criterion even when proposing no edits for it.${languageLine}${selectionRules}${options.specBlock ?? ''}${options.toneBlock ?? ''}`;
+- Rate every requested criterion even when proposing no edits for it.${languageLine}${selectionRules}${options.specBlock ?? ''}${options.toneBlock ?? ''}${options.guideBlocks ?? ''}`;
 }
 
 export function buildDocAssessmentUserPrompt(

@@ -146,6 +146,7 @@ export async function GET(
         targetLanguage: job.targetLanguage,
         targetLanguageName: targetLangInfo?.englishName ?? job.targetLanguage,
         fileExtension: job.ext,
+        ...(job.m365Source && { m365Source: job.m365Source }),
       };
       return successResponse({ status: 'Succeeded' as const, reference });
     }

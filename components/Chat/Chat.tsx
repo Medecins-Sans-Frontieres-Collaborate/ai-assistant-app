@@ -22,6 +22,8 @@ import { useModalState } from '@/client/hooks/ui/useModalSync';
 import { usePasteChatInput } from '@/client/hooks/ui/usePasteChatInput';
 import { useUI } from '@/client/hooks/ui/useUI';
 
+import { isLocalModel } from '@/lib/services/models/localModels';
+
 import { getUserDisplayName } from '@/lib/utils/app/user/displayName';
 import { entryToDisplayMessage } from '@/lib/utils/shared/chat/messageVersioning';
 
@@ -44,7 +46,9 @@ import { ModelSwitchPrompt } from './ModelSwitchPrompt';
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useChatStore } from '@/client/stores/chatStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import { useUIStore } from '@/client/stores/uiStore';
+import { getFallbackModel } from '@/config/models';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
 
 /** Retries a dynamic import once after 1.5 s on failure. */
@@ -123,6 +127,7 @@ export function Chat({
     errorIsRecoverable,
     requestStop,
     retryFailedRequest,
+    retryFailedWithFallbackModel,
   } = useChat();
   const failedConversation = useChatStore((s) => s.failedConversation);
 
@@ -513,6 +518,35 @@ export function Chat({
   const canRetry = !!error && !isRetrying && failedTrailingIsUser;
   const canRegenerate =
     !!error && !isRetrying && errorIsRecoverable && !failedTrailingIsUser;
+
+  // Manual "try another model" for the failed turn. Mirrors the automatic
+  // fallback's exclusions (curated/custom agents and local models are the
+  // user's deliberate choice), but is offered for every recoverable failure
+  // — including server-reported mid-stream ones the store never silently
+  // retries, like a Responses stream dying near the end. Resolved against
+  // the served (discovery) model list with the user's default first, so the
+  // label always names a model that actually exists right now — MUST match
+  // what retryFailedWithFallbackModel will pick.
+  const userRegion = useSettingsStore((s) => s.userRegion);
+  const fallbackModelForRetry = useMemo(() => {
+    if (!failedConversation) return null;
+    const model = failedConversation.model;
+    const isNonFallbackModel =
+      model.isOrganizationAgent ||
+      model.isCustomAgent ||
+      model.id.startsWith('org-') ||
+      model.id.startsWith('foundry-') ||
+      model.id.startsWith('custom-') ||
+      isLocalModel(model);
+    if (isNonFallbackModel) return null;
+    return getFallbackModel([model.id], [], {
+      availableModels: models.length > 0 ? models : undefined,
+      preferredDefaultId: defaultModelId || null,
+      userRegion: userRegion ?? null,
+    });
+  }, [failedConversation, models, defaultModelId, userRegion]);
+  const canRetryFallback =
+    !!error && !isRetrying && errorIsRecoverable && !!fallbackModelForRetry;
   // Only auto-dismiss when there's no Retry/Regenerate button to keep up.
   useAutoDismissError(
     canRegenerate || canRetry ? null : error,
@@ -540,14 +574,22 @@ export function Chat({
       isFoundryAgent ||
       selectedConversation?.model?.isOrganizationAgent;
 
-    // Foundry agents without a static config get a minimal placeholder so the
-    // topbar can render (no web search, no specific icon).
-    if (isFoundryAgent && !orgAgent) {
+    // Foundry agents — and admin-authored org RAG agents, which are not in
+    // the static registry — get a minimal placeholder so the topbar can
+    // render. Foundry agents never expose web search here; org admin agents
+    // carry their gate on the model object; prompt/m365 agents keep
+    // `undefined` (the topbar only hides search on an explicit false).
+    if (isOrgAgent && !orgAgent) {
+      const modelSearchFlag = selectedConversation?.model?.allowWebSearch;
       return {
         orgAgent: {
           icon: undefined,
           color: undefined,
-          allowWebSearch: false,
+          allowWebSearch: isFoundryAgent
+            ? false
+            : typeof modelSearchFlag === 'boolean'
+              ? modelSearchFlag
+              : undefined,
           name: selectedConversation?.model?.name || '',
         },
         isOrgAgent: true,
@@ -560,6 +602,7 @@ export function Chat({
     selectedConversation?.model?.id,
     selectedConversation?.model?.name,
     selectedConversation?.model?.isOrganizationAgent,
+    selectedConversation?.model?.allowWebSearch,
   ]);
 
   // Show loading screen until session and data are fully loaded
@@ -723,6 +766,9 @@ export function Chat({
           onRetry={retryFailedRequest}
           canRegenerate={canRegenerate}
           canRetry={canRetry}
+          onRetryFallback={retryFailedWithFallbackModel}
+          canRetryFallback={canRetryFallback}
+          fallbackModelName={fallbackModelForRetry?.name ?? null}
         />
 
         {/* Model Switch Prompt (shown after successful retry) */}

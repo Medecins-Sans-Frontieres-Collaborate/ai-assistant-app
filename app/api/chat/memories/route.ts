@@ -9,7 +9,7 @@
  * POST /api/chat/memories
  * Body: {
  *   messages: Message[],
- *   existingMemories: { id: string; text: string }[],
+ *   existingMemories: { id: string; text: string; locked?: boolean }[],
  *   modelId?: string,
  * }
  * Response: { operations: { op: 'add'|'update'|'delete', id?, text? }[] }
@@ -66,6 +66,8 @@ const MEMORIES_SYSTEM_PROMPT = `You maintain a small list of long-term memories 
 Extract ONLY durable, user-stated facts and preferences worth remembering across conversations: their role, stable preferences, constraints, and ongoing projects. Do NOT record transient task details, one-off requests, or anything about the current conversation's subject matter that will not stay relevant.
 
 Compare against the existing memories: update an existing memory (by its id) instead of adding a near-duplicate, and delete a memory the user has explicitly contradicted or retracted. Each memory text must be a single short sentence.
+
+Memories marked (locked) were written by the user themselves. Never update or delete a locked memory, and never add one that restates what a locked memory already says — treat them as fixed context.
 
 Most exchanges contain nothing worth remembering — in that case return zero operations. Never invent facts the user did not state.`;
 
@@ -168,7 +170,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 
   let messages: Message[];
-  let existingMemories: { id: string; text: string }[];
+  let existingMemories: { id: string; text: string; locked?: boolean }[];
   let modelId: unknown;
   try {
     const body = await req.json();
@@ -191,9 +193,15 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       .slice(0, MAX_EXISTING_MEMORIES)
       .flatMap((entry) => {
         if (!entry || typeof entry !== 'object') return [];
-        const { id, text } = entry as Record<string, unknown>;
+        const { id, text, locked } = entry as Record<string, unknown>;
         if (typeof id !== 'string' || typeof text !== 'string') return [];
-        return [{ id, text: text.slice(0, MAX_MEMORY_CHARS) }];
+        return [
+          {
+            id,
+            text: text.slice(0, MAX_MEMORY_CHARS),
+            ...(locked === true ? { locked: true } : {}),
+          },
+        ];
       });
     modelId = body.modelId;
   } catch {
@@ -223,7 +231,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     const existingList =
       existingMemories.length > 0
-        ? existingMemories.map((m) => `- [${m.id}] ${m.text}`).join('\n')
+        ? existingMemories
+            .map((m) => `- [${m.id}]${m.locked ? ' (locked)' : ''} ${m.text}`)
+            .join('\n')
         : '(none)';
     const userMessage = `Existing memories:\n${existingList}\n\nRecent exchange:\n${transcript}`;
 

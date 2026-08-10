@@ -58,12 +58,17 @@ vi.mock('@/lib/utils/server/audio/audioSplitter', () => splitterMocks);
 // `processChunksAsync` is private; reach it via a typed escape hatch.
 type PrivateAccess = {
   processChunksAsync: (
+    storage: unknown,
     jobId: string,
+    userId: string,
     chunkPaths: string[],
     filename: string,
   ) => Promise<void>;
 };
 
+// The store is fully mocked, so an opaque sentinel is all the loop needs.
+const fakeStorage = { fake: 'blob-storage' };
+const userId = 'user-1';
 const jobId = '11111111-2222-3333-4444-555555555555';
 const singleChunk = ['/c/0.mp3'];
 
@@ -98,7 +103,13 @@ describe('ChunkedTranscriptionService.transcribeChunkWithRetry', () => {
       .mockResolvedValueOnce('recovered transcript');
 
     const svc = new ChunkedTranscriptionService() as unknown as PrivateAccess;
-    const promise = svc.processChunksAsync(jobId, singleChunk, 'file.mp3');
+    const promise = svc.processChunksAsync(
+      fakeStorage,
+      jobId,
+      userId,
+      singleChunk,
+      'file.mp3',
+    );
 
     // The auth retry has a backoff sleep (exponential, attempt 1). Flush it.
     await vi.advanceTimersByTimeAsync(5000);
@@ -107,7 +118,7 @@ describe('ChunkedTranscriptionService.transcribeChunkWithRetry', () => {
     // The constructor must have been called twice: initial + auth rebuild.
     expect(whisperCtor).toHaveBeenCalledTimes(2);
     expect(storeMocks.completeJob).toHaveBeenCalledTimes(1);
-    const transcript = storeMocks.completeJob.mock.calls[0][1] as string;
+    const transcript = storeMocks.completeJob.mock.calls[0][3] as string;
     expect(transcript).toBe('recovered transcript');
     expect(storeMocks.failJob).not.toHaveBeenCalled();
   });
@@ -120,7 +131,13 @@ describe('ChunkedTranscriptionService.transcribeChunkWithRetry', () => {
       .mockResolvedValueOnce('after backoff');
 
     const svc = new ChunkedTranscriptionService() as unknown as PrivateAccess;
-    const promise = svc.processChunksAsync(jobId, singleChunk, 'file.mp3');
+    const promise = svc.processChunksAsync(
+      fakeStorage,
+      jobId,
+      userId,
+      singleChunk,
+      'file.mp3',
+    );
 
     // The backoff for rate_limit+retryAfterSeconds ≈ 3000ms * (1..1.25).
     // Advancing past 4000ms guarantees the jittered sleep elapses.
@@ -141,7 +158,7 @@ describe('ChunkedTranscriptionService.transcribeChunkWithRetry', () => {
     const svc = new ChunkedTranscriptionService() as unknown as PrivateAccess;
     let caught: Error | undefined;
     const settled = svc
-      .processChunksAsync(jobId, singleChunk, 'file.mp3')
+      .processChunksAsync(fakeStorage, jobId, userId, singleChunk, 'file.mp3')
       .catch((e: Error) => {
         caught = e;
       });
@@ -157,7 +174,7 @@ describe('ChunkedTranscriptionService.transcribeChunkWithRetry', () => {
     expect(whisperMocks.transcribeChunk).toHaveBeenCalledTimes(3);
     expect(storeMocks.failJob).toHaveBeenCalledTimes(1);
     // The failure must carry the last errorClass so clients can branch.
-    expect(storeMocks.failJob.mock.calls[0][2]).toBe('transient');
+    expect(storeMocks.failJob.mock.calls[0][4]).toBe('transient');
     expect(storeMocks.completeJob).not.toHaveBeenCalled();
   });
 
@@ -169,13 +186,21 @@ describe('ChunkedTranscriptionService.transcribeChunkWithRetry', () => {
     const svc = new ChunkedTranscriptionService() as unknown as PrivateAccess;
     // No timers to advance — permanent errors bypass the retry loop.
     await expect(
-      svc.processChunksAsync(jobId, singleChunk, 'file.mp3'),
+      svc.processChunksAsync(
+        fakeStorage,
+        jobId,
+        userId,
+        singleChunk,
+        'file.mp3',
+      ),
     ).rejects.toThrow('bad codec');
 
     // Exactly one attempt — no retries, no backoff sleep.
     expect(whisperMocks.transcribeChunk).toHaveBeenCalledTimes(1);
     expect(storeMocks.failJob).toHaveBeenCalledWith(
+      fakeStorage,
       jobId,
+      userId,
       'bad codec',
       'permanent',
     );
@@ -209,7 +234,7 @@ describe('ChunkedTranscriptionService.transcribeChunkWithRetry', () => {
     // when the fake-timer microtask checkpoint runs before the assert below.
     let caught: Error | undefined;
     const settled = svc
-      .processChunksAsync(jobId, twoChunks, 'file.mp3')
+      .processChunksAsync(fakeStorage, jobId, userId, twoChunks, 'file.mp3')
       .catch((e: Error) => {
         caught = e;
       });
@@ -228,7 +253,9 @@ describe('ChunkedTranscriptionService.transcribeChunkWithRetry', () => {
     // the abort check fires before attempt 2 begins.
     expect(firstChunkAttempts).toBe(1);
     expect(storeMocks.failJob).toHaveBeenCalledWith(
+      fakeStorage,
       jobId,
+      userId,
       expect.stringContaining('fatal permanent'),
       'permanent',
     );

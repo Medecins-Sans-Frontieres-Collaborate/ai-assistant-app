@@ -4,22 +4,39 @@ import {
 } from '@/lib/services/agentAccess/AgentAccessService';
 import {
   StoredAgentAccessRule,
+  StoredGuide,
   StoredPromptAgent,
+  bumpGeneration,
+  listAllGuides,
   listAllPromptAgents,
   listAllRules,
   readConfig,
+  readGenerationEtag,
 } from '@/lib/services/agentAccess/accessRulesStore';
 import {
   AgentAccessRule,
   AgentAccessType,
+  GUIDE_SOURCE,
+  Guide,
   PROMPT_AGENT_SOURCE,
   PromptAgent,
   canonicalAgentKey,
+  guideBlobPath,
   promptAgentBlobPath,
   ruleBlobPath,
 } from '@/lib/services/agentAccess/types';
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+// groupMembership (§5) pulls in graphApi → @/auth; keep it out of node tests.
+vi.mock('@/auth', () => ({ getGraphAccessToken: vi.fn() }));
+
+// Group evaluation reads the membership cache synchronously; the mock lets
+// tests model warm and cold cache states without Graph.
+const cachedGroupsMock = vi.hoisted(() => vi.fn<() => string[]>(() => []));
+vi.mock('@/lib/services/m365/groupMembership', () => ({
+  getCachedGroupIdsForMail: cachedGroupsMock,
+}));
 
 const mockEnv = vi.hoisted(() => ({
   AGENT_ACCESS_CONTROL_ENABLED: true,
@@ -32,11 +49,17 @@ vi.mock('@/lib/services/agentAccess/accessRulesStore', () => ({
   listAllRules: vi.fn(),
   readConfig: vi.fn(),
   listAllPromptAgents: vi.fn(),
+  listAllGuides: vi.fn(),
+  readGenerationEtag: vi.fn(),
+  bumpGeneration: vi.fn(),
 }));
 
 const mockListAllRules = vi.mocked(listAllRules);
 const mockReadConfig = vi.mocked(readConfig);
 const mockListAllPromptAgents = vi.mocked(listAllPromptAgents);
+const mockListAllGuides = vi.mocked(listAllGuides);
+const mockReadGenerationEtag = vi.mocked(readGenerationEtag);
+const mockBumpGeneration = vi.mocked(bumpGeneration);
 
 const SOURCE_A = '/subscriptions/sub/projects/project-a';
 const SOURCE_B = '/subscriptions/sub/projects/project-b';
@@ -89,6 +112,29 @@ function storedPromptAgent(id: string, name = 'Helper'): StoredPromptAgent {
   };
 }
 
+function storedGuide(id: string, name = 'Style Guide'): StoredGuide {
+  const guide: Guide = {
+    version: 1,
+    id,
+    kind: 'style',
+    name,
+    description: '',
+    languages: [],
+    body: '# Rules',
+    workflows: ['document'],
+    createdBy: 'admin@example.com',
+    createdAt: '2026-07-23T00:00:00.000Z',
+    updatedBy: 'admin@example.com',
+    updatedAt: '2026-07-23T00:00:00.000Z',
+  };
+  return {
+    canonicalKey: canonicalAgentKey(GUIDE_SOURCE, id),
+    blobPath: guideBlobPath(id),
+    guide,
+    etag: '"etag-g"',
+  };
+}
+
 function getService(): AgentAccessService {
   return AgentAccessService.getInstance();
 }
@@ -113,6 +159,9 @@ describe('AgentAccessService', () => {
     mockListAllRules.mockResolvedValue([]);
     mockReadConfig.mockResolvedValue(null);
     mockListAllPromptAgents.mockResolvedValue([]);
+    mockListAllGuides.mockResolvedValue([]);
+    mockReadGenerationEtag.mockResolvedValue(null);
+    mockBumpGeneration.mockResolvedValue(undefined);
   });
 
   afterEach(() => {
@@ -411,6 +460,63 @@ describe('AgentAccessService', () => {
       expect(service.getSnapshot().rulesUnavailable).toBe(false);
       expect(errorSpy).toHaveBeenCalledWith(
         expect.stringContaining('serving last-known-good'),
+      );
+    });
+
+    it('generation sentinel: refetches inside the TTL when the etag moved', async () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-07-17T12:00:00.000Z'));
+      mockReadGenerationEtag.mockResolvedValue('"g1"');
+      const service = await freshServiceWith([]);
+      expect(mockListAllRules).toHaveBeenCalledTimes(1);
+
+      // Unchanged sentinel: warm snapshot keeps serving, no listing refetch.
+      vi.advanceTimersByTime(6_000);
+      await service.ensureFresh();
+      expect(mockListAllRules).toHaveBeenCalledTimes(1);
+
+      // Another replica wrote (etag moved): refetch well inside the TTL.
+      mockReadGenerationEtag.mockResolvedValue('"g2"');
+      vi.advanceTimersByTime(6_000);
+      await service.ensureFresh();
+      expect(mockListAllRules).toHaveBeenCalledTimes(2);
+    });
+
+    it('generation sentinel: probes at most once per interval', async () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-07-17T12:00:00.000Z'));
+      mockReadGenerationEtag.mockResolvedValue('"g1"');
+      const service = await freshServiceWith([]);
+      const probesAfterLoad = mockReadGenerationEtag.mock.calls.length;
+
+      vi.advanceTimersByTime(6_000);
+      await service.ensureFresh(); // one probe
+      await service.ensureFresh(); // throttled — no second probe
+      expect(mockReadGenerationEtag).toHaveBeenCalledTimes(probesAfterLoad + 1);
+      expect(mockListAllRules).toHaveBeenCalledTimes(1);
+    });
+
+    it('generation sentinel: a failing probe degrades to the plain TTL bound', async () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-07-17T12:00:00.000Z'));
+      mockReadGenerationEtag.mockResolvedValue('"g1"');
+      const service = await freshServiceWith([]);
+      mockReadGenerationEtag.mockRejectedValue(new Error('storage blip'));
+
+      vi.advanceTimersByTime(6_000);
+      await service.ensureFresh();
+      expect(mockListAllRules).toHaveBeenCalledTimes(1); // no refetch, no throw
+
+      vi.advanceTimersByTime(56_000); // past the 60s TTL backstop
+      await service.ensureFresh();
+      expect(mockListAllRules).toHaveBeenCalledTimes(2);
+    });
+
+    it('invalidate() bumps the sentinel best-effort', async () => {
+      const service = await freshServiceWith([]);
+      service.invalidate();
+      await vi.waitFor(() =>
+        expect(mockBumpGeneration).toHaveBeenCalledTimes(1),
       );
     });
 
@@ -773,34 +879,101 @@ describe('AgentAccessService', () => {
     });
   });
 
-  describe('allowGroups scaffold', () => {
-    it('grants nothing and warns once per rule', async () => {
-      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-      const service = await freshServiceWith([
+  describe('guides', () => {
+    it('exposes loaded guides via getGuides, getGuideById, and the snapshot', async () => {
+      const storedA = storedGuide('guide-aaa111aaa111', 'French Style');
+      const storedB = storedGuide('guide-bbb222bbb222', 'Terminology');
+      mockListAllGuides.mockResolvedValue([storedA, storedB]);
+      const service = getService();
+      await service.ensureFresh();
+
+      expect(service.getGuides()).toEqual([storedA.guide, storedB.guide]);
+      expect(service.getGuideById('guide-aaa111aaa111')).toEqual(storedA.guide);
+      expect(service.getGuideById('guide-unknown')).toBeNull();
+      expect(service.getSnapshot().guides).toEqual([
+        storedA.guide,
+        storedB.guide,
+      ]);
+    });
+
+    it('returns empty/null when the feature is off and never touches storage', async () => {
+      mockEnv.AGENT_ACCESS_CONTROL_ENABLED = false;
+      const service = getService();
+      await service.ensureFresh();
+
+      expect(service.getGuides()).toEqual([]);
+      expect(service.getGuideById('guide-aaa111aaa111')).toBeNull();
+      expect(service.getSnapshot().guides).toEqual([]);
+      expect(mockListAllGuides).not.toHaveBeenCalled();
+    });
+
+    it('keeps last-known-good guides while the rules snapshot still refreshes when only the guide listing fails', async () => {
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const stored = storedGuide('guide-aaa111aaa111');
+      mockListAllGuides.mockResolvedValue([stored]);
+      const service = await freshServiceWith([]);
+      expect(service.getGuides()).toEqual([stored.guide]);
+
+      // A NEW restriction lands while the guide listing is broken: the rule
+      // must still propagate, the guide half keeps last-known-good, and the
+      // snapshot is never marked unavailable (an absent guide fails closed
+      // at the assess route on its own).
+      mockListAllRules.mockResolvedValue([
         storedRule(SOURCE_A, 'finance-bot', {
           type: 'restricted',
-          allowGroups: ['engineering-group-id'],
+          allowUsers: ['user@example.com'],
         }),
       ]);
-      const input = {
-        userMail: 'user@example.com',
-        source: SOURCE_A,
-        agentName: 'finance-bot',
-      };
+      mockListAllGuides.mockRejectedValue(new Error('storage outage'));
+      service.invalidate();
+      await service.ensureFresh();
 
-      // Groups are persisted but never evaluated in v1 — no grant.
+      expect(service.getGuideById('guide-aaa111aaa111')).toEqual(stored.guide);
+      expect(service.getSnapshot().rulesUnavailable).toBe(false);
+      expect(errorSpy).toHaveBeenCalledWith(
+        expect.stringContaining('keeping last-known-good guides'),
+      );
+    });
+  });
+
+  describe('allowGroups evaluation (§5)', () => {
+    const groupRule = () =>
+      storedRule(SOURCE_A, 'finance-bot', {
+        type: 'restricted',
+        allowGroups: ['engineering-group-id'],
+      });
+    const input = {
+      userMail: 'user@example.com',
+      source: SOURCE_A,
+      agentName: 'finance-bot',
+    };
+
+    it('denies when the membership cache is cold or the user lacks the group', async () => {
+      cachedGroupsMock.mockReturnValue([]);
+      const service = await freshServiceWith([groupRule()]);
       expect(service.evaluateAccess(input)).toEqual({
         decision: 'deny',
         reason: 'not-allowed',
       });
-      expect(warnSpy).toHaveBeenCalledTimes(1);
-      expect(warnSpy).toHaveBeenCalledWith(
-        expect.stringContaining('allowGroups'),
-      );
 
-      // Warning is deduped per canonical key.
-      service.evaluateAccess(input);
-      expect(warnSpy).toHaveBeenCalledTimes(1);
+      cachedGroupsMock.mockReturnValue(['some-other-group']);
+      expect(service.evaluateAccess(input)).toEqual({
+        decision: 'deny',
+        reason: 'not-allowed',
+      });
+    });
+
+    it('allows a cached member of a listed group', async () => {
+      cachedGroupsMock.mockReturnValue([
+        'unrelated-group',
+        'engineering-group-id',
+      ]);
+      const service = await freshServiceWith([groupRule()]);
+      expect(service.evaluateAccess(input)).toEqual({
+        decision: 'allow',
+        reason: 'allow-group',
+      });
+      expect(cachedGroupsMock).toHaveBeenCalledWith('user@example.com');
     });
   });
 

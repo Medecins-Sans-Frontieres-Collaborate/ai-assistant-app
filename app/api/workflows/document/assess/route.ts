@@ -4,6 +4,14 @@ import {
   runDocumentAssessment,
   runDocumentProfile,
 } from '@/lib/services/workflows/document/documentOrchestrator';
+import {
+  structureGuideToSpec,
+  toneGuideToToneInput,
+} from '@/lib/services/workflows/shared/guidePrompts';
+import {
+  resolveGuideCriteria,
+  resolveSlotGuide,
+} from '@/lib/services/workflows/shared/guideResolution';
 import { resolveWorkflowModelId } from '@/lib/services/workflows/shared/workflowModels';
 
 import {
@@ -20,6 +28,10 @@ import {
   MAX_CRITERION_NAME_CHARS,
   MAX_CRITERION_RUBRIC_CHARS,
 } from '@/lib/utils/shared/review/customCriteria';
+import {
+  MAX_GUIDES_PER_ASSESSMENT,
+  isGuideCriterionId,
+} from '@/lib/utils/shared/review/guideCriteria';
 
 import { DocumentProfile, DocumentSpec } from '@/types/workflow';
 
@@ -47,6 +59,10 @@ interface DocumentAssessRequest {
   customCriteria?: Array<{ id: string; name: string; rubric: string }>;
   spec?: DocumentSpec;
   tone?: { name: string; voiceRules: string; examples?: string };
+  /** Admin structure guide filling the spec slot (mutually exclusive with spec). */
+  specGuideId?: string;
+  /** Admin tone guide filling the tone slot (mutually exclusive with tone). */
+  toneGuideId?: string;
   /** Fresh client-side profile; server re-profiles when absent. */
   profile?: DocumentProfile;
   modelId?: string;
@@ -121,6 +137,8 @@ export async function POST(req: NextRequest) {
   for (const id of criterionIds) {
     if (isDocumentBuiltinCriterionId(id)) continue;
     if (isCustomCriterionId(id) && customById.has(id)) continue;
+    // Guide ids are resolved (and access-checked) server-side below.
+    if (isGuideCriterionId(id)) continue;
     const reason = rejected.get(id);
     if (reason) {
       const label = body.customCriteria?.find((d) => d?.id === id)?.name;
@@ -130,10 +148,32 @@ export async function POST(req: NextRequest) {
     }
     return badRequestResponse('Unknown criterion');
   }
-  if (criterionIds.includes('specAdherence') && !body.spec) {
+  const guideCriterionIds = criterionIds.filter(isGuideCriterionId);
+  if (guideCriterionIds.length > MAX_GUIDES_PER_ASSESSMENT) {
+    return badRequestResponse('Too many guides selected');
+  }
+  // Exactly one occupant per slot: a local spec and an admin structure guide
+  // are competing prescriptions the model cannot follow simultaneously.
+  if (body.spec && body.specGuideId) {
+    return badRequestResponse(
+      'Attach either a spec or a structure guide, not both',
+    );
+  }
+  if (body.tone && body.toneGuideId) {
+    return badRequestResponse('Attach either a tone or a tone guide, not both');
+  }
+  if (
+    criterionIds.includes('specAdherence') &&
+    !body.spec &&
+    !body.specGuideId
+  ) {
     return badRequestResponse('specAdherence requires an attached spec');
   }
-  if (criterionIds.includes('toneAdherence') && !body.tone) {
+  if (
+    criterionIds.includes('toneAdherence') &&
+    !body.tone &&
+    !body.toneGuideId
+  ) {
     return badRequestResponse('toneAdherence requires an attached tone');
   }
   if (body.spec && (body.spec.sections?.length ?? 0) > MAX_SPEC_SECTIONS) {
@@ -146,6 +186,44 @@ export async function POST(req: NextRequest) {
     typeof body.selection === 'string' && body.selection.trim()
       ? body.selection.slice(0, MAX_DOC_CHARS)
       : undefined;
+
+  // Guides resolve server-side (fail-closed): the client only ever sends ids,
+  // so guide bodies bypass the custom-rubric cap without ever being
+  // client-supplied. All failure modes share one generic message — denied
+  // must stay indistinguishable from missing.
+  const userMail = session.user?.mail ?? undefined;
+  const guideResolution = await resolveGuideCriteria({
+    userMail,
+    workflow: 'document',
+    criterionIds: guideCriterionIds,
+  });
+  if ('error' in guideResolution) {
+    return badRequestResponse(guideResolution.error);
+  }
+  // Slot guides convert to the REAL DocumentSpec/ToneInput shapes here, so
+  // the orchestrator has exactly one spec path and one tone path.
+  let spec = body.spec;
+  if (typeof body.specGuideId === 'string' && body.specGuideId) {
+    const resolved = await resolveSlotGuide({
+      userMail,
+      guideId: body.specGuideId,
+      expectedKind: 'structure',
+      workflow: 'document',
+    });
+    if ('error' in resolved) return badRequestResponse(resolved.error);
+    spec = structureGuideToSpec(resolved.guide) ?? undefined;
+  }
+  let tone = body.tone;
+  if (typeof body.toneGuideId === 'string' && body.toneGuideId) {
+    const resolved = await resolveSlotGuide({
+      userMail,
+      guideId: body.toneGuideId,
+      expectedKind: 'tone',
+      workflow: 'document',
+    });
+    if ('error' in resolved) return badRequestResponse(resolved.error);
+    tone = toneGuideToToneInput(resolved.guide) ?? undefined;
+  }
 
   const modelId = resolveWorkflowModelId(body.modelId);
 
@@ -175,8 +253,9 @@ export async function POST(req: NextRequest) {
       selection,
       criterionIds,
       customById,
-      spec: body.spec,
-      tone: body.tone,
+      guides: guideResolution.guides,
+      spec,
+      tone,
       language: profile.language,
       conventionNotes: profile.conventionNotes,
       modelId,

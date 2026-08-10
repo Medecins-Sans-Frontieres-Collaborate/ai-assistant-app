@@ -182,6 +182,68 @@ describe('AnthropicFoundryHandler', () => {
     });
   });
 
+  describe('in-array system message capture', () => {
+    // Enricher-injected knowledge-base context arrives as system-role
+    // messages; Anthropic only takes user/assistant in `messages`, so the
+    // content must ride the `system` parameter instead of being dropped.
+    const ragMessages: Message[] = [
+      {
+        role: 'system',
+        content: 'Available sources:\n\nSource 1:\nContent: chunk text',
+        messageType: MessageType.TEXT,
+      },
+      { role: 'user', content: 'Question?', messageType: MessageType.TEXT },
+    ];
+
+    it('appends captured system content to the streaming system param', () => {
+      const prepared = handler.prepareMessages(ragMessages, mockModelConfig);
+      const params = handler.buildStreamingRequestParams(
+        mockModelConfig.id,
+        prepared,
+        'Agent prompt',
+        0.5,
+        { id: 'u1' },
+        mockModelConfig,
+      );
+      expect(params.system).toBe(
+        'Agent prompt\n\nAvailable sources:\n\nSource 1:\nContent: chunk text',
+      );
+      expect(params.messages).toEqual([{ role: 'user', content: 'Question?' }]);
+    });
+
+    it('appends captured system content to the non-streaming system param', () => {
+      const prepared = handler.prepareMessages(ragMessages, mockModelConfig);
+      const params = handler.buildNonStreamingRequestParams(
+        mockModelConfig.id,
+        prepared,
+        'Agent prompt',
+        0.5,
+        { id: 'u1' },
+        mockModelConfig,
+      );
+      expect(params.system).toBe(
+        'Agent prompt\n\nAvailable sources:\n\nSource 1:\nContent: chunk text',
+      );
+    });
+
+    it('clears captured context on a subsequent prepareMessages call', () => {
+      handler.prepareMessages(ragMessages, mockModelConfig);
+      handler.prepareMessages(
+        [{ role: 'user', content: 'Plain', messageType: MessageType.TEXT }],
+        mockModelConfig,
+      );
+      const params = handler.buildStreamingRequestParams(
+        mockModelConfig.id,
+        [],
+        'Agent prompt',
+        0.5,
+        { id: 'u1' },
+        mockModelConfig,
+      );
+      expect(params.system).toBe('Agent prompt');
+    });
+  });
+
   describe('buildNonStreamingRequestParams', () => {
     it('should build correct non-streaming request params', () => {
       const messages: Anthropic.MessageParam[] = [

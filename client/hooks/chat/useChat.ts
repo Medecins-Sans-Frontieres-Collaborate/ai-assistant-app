@@ -57,6 +57,7 @@ export function useChat() {
       setLoadingMessage: s.setLoadingMessage,
       sendMessage: s.sendMessage,
       retryFailedRequest: s.retryFailedRequest,
+      retryFailedWithFallbackModel: s.retryFailedWithFallbackModel,
       dismissModelSwitchPrompt: s.dismissModelSwitchPrompt,
       acceptModelSwitch: s.acceptModelSwitch,
     })),

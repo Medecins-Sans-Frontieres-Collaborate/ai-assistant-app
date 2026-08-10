@@ -33,9 +33,31 @@ describe('ResponsesApiHandler', () => {
   });
 
   describe('prepareInput', () => {
-    it('drops system messages (they travel via instructions)', () => {
+    it('keeps enricher-injected system messages as ordered input items', () => {
+      // RAG/M365 enrichers inject retrieved knowledge-base content as
+      // system-role messages; dropping them here severs agents from their
+      // sources while citations still render.
       const messages: Message[] = [
-        { role: 'system', content: 'be brief', messageType: MessageType.TEXT },
+        {
+          role: 'system',
+          content: 'Available sources:\n\nSource 1:\nContent: chunk text',
+          messageType: MessageType.TEXT,
+        },
+        { role: 'user', content: 'hi', messageType: MessageType.TEXT },
+      ];
+
+      expect(handler.prepareInput(messages)).toEqual([
+        {
+          role: 'system',
+          content: 'Available sources:\n\nSource 1:\nContent: chunk text',
+        },
+        { role: 'user', content: 'hi' },
+      ]);
+    });
+
+    it('drops empty system messages', () => {
+      const messages: Message[] = [
+        { role: 'system', content: '', messageType: MessageType.TEXT },
         { role: 'user', content: 'hi', messageType: MessageType.TEXT },
       ];
 
@@ -166,8 +188,13 @@ describe('ResponsesApiHandler', () => {
           container: { type: 'auto', file_ids: ['file_1', 'file_2'] },
         },
       ]);
-      // Not forced: instructions carry only the system prompt
-      expect(params.instructions).toBe('p');
+      // Not forced: no Run-code directive, but mounted files DO carry the
+      // execute-don't-advise + same-format output instruction.
+      expect(params.instructions).not.toContain(
+        'The user has enabled "Run code"',
+      );
+      expect(params.instructions).toContain('SAME format as the input');
+      expect(params.instructions).toContain('actually perform the task now');
     });
 
     it('appends the Run-code instruction when forced', () => {

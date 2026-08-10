@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  IconDatabase,
   IconDownload,
   IconHistory,
   IconInfoCircle,
@@ -12,6 +13,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 
+import {
+  AvailableMapDataset,
+  useAvailableMapDatasets,
+} from '@/client/hooks/settings/useAvailableMapDatasets';
 import { useAutoFocusComposer } from '@/client/hooks/ui/useAutoFocusComposer';
 import { usePasteComposer } from '@/client/hooks/ui/usePasteComposer';
 
@@ -22,6 +27,11 @@ import {
   urlErrorKey,
 } from '@/client/services/url/urlFetchClient';
 import { uploadAndExtractText } from '@/client/services/workflows/fileTextExtraction';
+import {
+  LoadableMapDataset,
+  loadDatasetIntoWorkspace,
+} from '@/client/services/workflows/map/datasetLoad';
+import { extractMapFeatures } from '@/client/services/workflows/map/mapExtraction';
 import { appendWorkflowRailMessages } from '@/client/services/workflows/railMessages';
 import { nameWorkflowConversation } from '@/client/services/workflows/workflowTitle';
 
@@ -48,6 +58,7 @@ import {
 import { featuresToGeoJson } from '@/lib/utils/shared/geo/geojson';
 import { findDemotedAreaIds } from '@/lib/utils/shared/geo/granularity';
 import { featuresToKml } from '@/lib/utils/shared/geo/kml';
+import { MAP_MAX_FEATURES } from '@/lib/utils/shared/geo/mapLimits';
 import { computeTimelineKeyframes } from '@/lib/utils/shared/geo/timelineKeyframes';
 import {
   DateRange,
@@ -62,6 +73,7 @@ import { EventPrecision, MapFeature, MapWorkflowState } from '@/types/workflow';
 
 import { WorkflowWorkspaceProps } from '../registry';
 import { CategoryFilterBar } from './CategoryFilterBar';
+import { DatasetPicker } from './DatasetPicker';
 import { DateRangeFilter } from './DateRangeFilter';
 import { FeatureList } from './FeatureList';
 import type { MapFocus } from './MapView';
@@ -87,7 +99,7 @@ const MapView = dynamic(() => import('./MapView'), {
   ),
 });
 
-const MAX_FEATURES = 2_000;
+const MAX_FEATURES = MAP_MAX_FEATURES;
 
 export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const t = useTranslations('workflows');
@@ -137,6 +149,10 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   });
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [datasetPickerOpen, setDatasetPickerOpen] = useState(false);
+  const [loadingDatasetId, setLoadingDatasetId] = useState<string | null>(null);
+  // Admin-curated datasets; empty when the feature is off or none shared.
+  const { datasets } = useAvailableMapDatasets();
   const [tileError, setTileError] = useState(false);
   const [legendOpen, setLegendOpen] = useState(false);
   // Nonce so re-clicking the same list row re-centers the map.
@@ -366,29 +382,18 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     const notices: string[] = extra?.notice ? [extra.notice] : [];
     setNotice(notices.length > 0 ? notices.join(' ') : null);
     try {
-      const response = await fetch('/api/workflows/map', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...input,
-          existingNames: features.map((f) => f.name),
-          modelId: conversation?.model?.id,
-        }),
+      const result = await extractMapFeatures(input, {
+        existingNames: features.map((f) => f.name),
+        modelId: conversation?.model?.id,
       });
-      const parsed = await response.json();
-      if (!response.ok || !parsed?.success) {
-        throw new Error(parsed?.error || `Request failed (${response.status})`);
-      }
 
       const sourceId = uuidv4();
-      const incoming = (parsed.data.features as Omit<MapFeature, 'id'>[]).map(
-        (f) => ({ ...f, id: uuidv4(), sourceId }),
-      );
-      const citations = (parsed.data.sources ?? []) as Array<{
-        number: number;
-        title: string;
-        url: string;
-      }>;
+      const incoming = result.features.map((f) => ({
+        ...f,
+        id: uuidv4(),
+        sourceId,
+      }));
+      const citations = result.citations;
       if (incoming.length === 0) {
         notices.push(t('map.noneFound'));
         setNotice(notices.join(' '));
@@ -402,10 +407,8 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
 
       // Resolve name-referenced connections: this run's features take
       // priority, then anything already on the map.
-      const namedConnections = (parsed.data.connections ??
-        []) as NamedConnection[];
       const { connections: newConnections, unresolved } = resolveConnections(
-        namedConnections,
+        result.connections,
         [...incoming, ...features],
         uuidv4,
         sourceId,
@@ -630,6 +633,42 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   // Pasting a link is the whole affordance — no extra toggle to discover.
   const urlCandidate = !searchMode && isLikelyUrl(trimmedSource);
 
+  const handleLoadDataset = async (meta: AvailableMapDataset) => {
+    setLoadingDatasetId(meta.id);
+    setError(null);
+    try {
+      const response = await fetch(`/api/map-datasets/${meta.id}`);
+      const parsed = await response.json().catch(() => null);
+      if (!response.ok || !parsed?.success) {
+        throw new Error(parsed?.error || `Request failed (${response.status})`);
+      }
+      const dataset = parsed.data.dataset as LoadableMapDataset;
+      const result = loadDatasetIntoWorkspace(conversationId, dataset);
+      if (!result) return;
+      if (result.capped) {
+        setError(t('map.datasetCapExceeded', { max: String(MAX_FEATURES) }));
+        return;
+      }
+      setDatasetPickerOpen(false);
+      if (features.length === 0) {
+        nameWorkflowConversation(conversationId, {
+          label: dataset.name,
+          sample: dataset.description || dataset.name,
+          workflow: 'Map',
+        });
+      }
+      appendWorkflowRailMessages(
+        conversationId,
+        t('map.railDatasetRequest', { name: dataset.name }),
+        t('map.railDone', { count: String(result.added) }),
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t('map.datasetLoadFailed'));
+    } finally {
+      setLoadingDatasetId(null);
+    }
+  };
+
   const handleSubmit = () => {
     if (!trimmedSource || busy) return;
     if (urlCandidate) {
@@ -706,6 +745,32 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           >
             <IconPaperclip size={16} aria-hidden />
           </button>
+        )}
+        {/* Admin-curated datasets; hidden when none are shared with this
+            user (also covers the feature being off — no flag on the client). */}
+        {datasets.length > 0 && (
+          <span className="relative">
+            <button
+              type="button"
+              onClick={() => setDatasetPickerOpen((open) => !open)}
+              disabled={busy}
+              aria-expanded={datasetPickerOpen}
+              aria-label={t('map.addFromDataset')}
+              title={t('map.addFromDataset')}
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 disabled:opacity-30 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
+            >
+              <IconDatabase size={16} aria-hidden />
+            </button>
+            {datasetPickerOpen && (
+              <DatasetPicker
+                datasets={datasets}
+                onLoad={(meta) => void handleLoadDataset(meta)}
+                onClose={() => setDatasetPickerOpen(false)}
+                loadingId={loadingDatasetId}
+                disabled={busy}
+              />
+            )}
+          </span>
         )}
         <input
           ref={fileInputRef}

@@ -29,6 +29,8 @@ export interface TranslationJob {
   translatedFilename: string;
   /** File extension without the dot (blob path + download URL). */
   ext: string;
+  /** M365 source folder, carried through to the completed reference. */
+  m365Source?: { driveId: string; parentItemId: string };
   targetLanguage: string;
   createdAt: number;
 }

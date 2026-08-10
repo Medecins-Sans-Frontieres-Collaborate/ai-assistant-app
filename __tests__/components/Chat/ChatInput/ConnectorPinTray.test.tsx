@@ -274,3 +274,92 @@ describe('ConnectorActivityBadge', () => {
     expect(screen.queryByText('2 tools')).not.toBeInTheDocument();
   });
 });
+
+describe('ConnectorPinTray — virtual Microsoft 365 row', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    selectedConversation = { id: 'conv-1' };
+    setServers([]);
+    useChatInputStore.setState({ connectorPinTrayOpen: true });
+    // jsdom runs on localhost, so useM365Enabled().toolsEnabled is true via
+    // the documented localhost escape hatch — only the store gates remain.
+    useSettingsStore.setState({
+      m365Connected: true,
+      m365ToolsUserEnabled: true,
+    });
+  });
+
+  it('renders the row when M365 is connected, even with no configured servers', () => {
+    render(<ConnectorPinTray />);
+    expect(screen.getByText('Microsoft 365')).toBeInTheDocument();
+  });
+
+  it('hides the row when M365 is not connected', () => {
+    useSettingsStore.setState({ m365Connected: false });
+    render(<ConnectorPinTray />);
+    expect(screen.queryByText('Microsoft 365')).not.toBeInTheDocument();
+  });
+
+  it('per-chat checkbox writes builtin-m365 into disabledMcpServerIds', () => {
+    render(<ConnectorPinTray />);
+    fireEvent.click(within(rowFor('Microsoft 365')).getByRole('checkbox'));
+    expect(updateConversation).toHaveBeenCalledWith('conv-1', {
+      disabledMcpServerIds: ['builtin-m365'],
+    });
+  });
+
+  it('global toggle flips m365ToolsUserEnabled and dims the chat checkbox', () => {
+    render(<ConnectorPinTray />);
+    const row = rowFor('Microsoft 365');
+    fireEvent.click(within(row).getByText('Global on'));
+    expect(useSettingsStore.getState().m365ToolsUserEnabled).toBe(false);
+  });
+
+  it('chat checkbox is disabled while the global toggle is off', () => {
+    useSettingsStore.setState({ m365ToolsUserEnabled: false });
+    render(<ConnectorPinTray />);
+    expect(
+      within(rowFor('Microsoft 365')).getByRole('checkbox'),
+    ).toBeDisabled();
+  });
+
+  it('focus action pins builtin-m365 on the conversation', () => {
+    render(<ConnectorPinTray />);
+    fireEvent.click(within(rowFor('Microsoft 365')).getByText('Focus'));
+    expect(updateConversation).toHaveBeenCalledWith('conv-1', {
+      pinnedMcpServerId: 'builtin-m365',
+    });
+  });
+});
+
+describe('ConnectorActivityBadge — builtin Microsoft 365', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    selectedConversation = { id: 'conv-1' };
+    setServers([]);
+    useSettingsStore.setState({
+      m365Connected: true,
+      m365ToolsUserEnabled: true,
+    });
+  });
+
+  it('counts the toolset active and names it when it is the only one', () => {
+    render(<ConnectorActivityBadge />);
+    expect(screen.getByText('Microsoft 365')).toBeInTheDocument();
+  });
+
+  it('renders nothing when the conversation disabled it per-chat', () => {
+    selectedConversation = {
+      id: 'conv-1',
+      disabledMcpServerIds: ['builtin-m365'],
+    };
+    const { container } = render(<ConnectorActivityBadge />);
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it('renders nothing when the global toolset toggle is off', () => {
+    useSettingsStore.setState({ m365ToolsUserEnabled: false });
+    const { container } = render(<ConnectorActivityBadge />);
+    expect(container).toBeEmptyDOMElement();
+  });
+});

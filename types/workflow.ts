@@ -182,6 +182,12 @@ export interface TranslationWorkflowState {
   targetLanguage?: TranslationTargetLanguage;
   /** References a glossary in settingsStore; the entries travel per-request. */
   glossaryId?: string;
+  /**
+   * Admin terminology guide attached for generation + assessment. Entries
+   * resolve server-side by id and merge with (winning over) the local
+   * glossary's.
+   */
+  glossaryGuideId?: string;
   mode: 'quick' | 'agentic';
   analysis?: TranslationAnalysis;
   rounds: TranslationReviewRound[];
@@ -353,6 +359,24 @@ export interface DocumentRevisionRecord {
   at: string;
 }
 
+/**
+ * Binding of a document workflow to a OneDrive/SharePoint file for two-way
+ * sync (docs/M365_THIRD_PASS_FEATURES_DESIGN.md §2). All sync is
+ * client-driven — delegated tokens only exist while the user is present.
+ */
+export interface M365DocumentBinding {
+  driveId: string;
+  itemId: string;
+  fileName: string;
+  webUrl: string;
+  format: 'docx' | 'md' | 'html' | 'txt';
+  /** Remote eTag at last successful sync — the If-Match guard for pushes. */
+  lastSyncedETag: string;
+  lastSyncedAt: string;
+  /** Push local edits automatically (debounced); opt-in per binding. */
+  autoPush: boolean;
+}
+
 export interface DocumentWorkflowState {
   kind: 'document';
   title: string;
@@ -364,6 +388,13 @@ export interface DocumentWorkflowState {
   specId?: string;
   /** Attached voice/tone (settingsStore.tones). */
   toneId?: string;
+  /**
+   * Admin structure guide filling the spec slot (server-resolved by id).
+   * Mutually exclusive with specId — the slot has one occupant.
+   */
+  specGuideId?: string;
+  /** Admin tone guide filling the tone slot; exclusive with toneId. */
+  toneGuideId?: string;
   /** Pinned spelling variety; absent = 'auto' (detected, mixing flagged). */
   spellingVariety?: 'auto' | 'US' | 'UK';
   /**
@@ -374,6 +405,12 @@ export interface DocumentWorkflowState {
    * every mode; these are views onto it.
    */
   editorMode?: 'markdown' | 'html';
+  /**
+   * OneDrive/SharePoint sync binding. ABSENT (not null/defaulted) on
+   * unbound documents — like `editorMode`, a fresh document must still
+   * deep-equal `createInitialWorkflowState('document')`.
+   */
+  m365Binding?: M365DocumentBinding;
   profile?: DocumentProfile;
   assessment?: DocumentAssessment;
   updatedAt: string;
@@ -643,7 +680,9 @@ export interface MapSourceRecord {
   addedAt: string;
   featureCount: number;
   /** How the material arrived. Absent on records saved before this field. */
-  kind?: 'text' | 'file' | 'search' | 'chat' | 'url';
+  kind?: 'text' | 'file' | 'search' | 'chat' | 'url' | 'dataset';
+  /** Admin dataset this source snapshot came from, for kind 'dataset'. */
+  datasetId?: string;
   /** The web search query, for kind 'search'. */
   query?: string;
   /** Final page URL after redirects, for kind 'url'. */

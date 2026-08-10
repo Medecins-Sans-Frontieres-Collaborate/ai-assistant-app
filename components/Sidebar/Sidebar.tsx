@@ -34,6 +34,7 @@ import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useFolderManagement } from '@/client/hooks/ui/useFolderManagement';
 import { useUI } from '@/client/hooks/ui/useUI';
+import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
 import { createWorkflowConversation } from '@/lib/utils/app/conversationInit';
 import {
@@ -57,6 +58,7 @@ import {
 
 import { SearchModal } from './components/SearchModal';
 import { SidebarHeader } from './components/SidebarHeader';
+import ShareToOneDriveModal from '@/components/Chat/ShareToOneDriveModal';
 import { CustomizationsModal } from '@/components/QuickActions/CustomizationsModal';
 import { ConfirmDialog } from '@/components/UI/ConfirmDialog';
 import { DropdownPortal } from '@/components/UI/DropdownPortal';
@@ -69,6 +71,7 @@ import { UserMenu } from './UserMenu';
 import { VirtualConversationList } from './VirtualConversationList';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import { useUIStore } from '@/client/stores/uiStore';
 import { getOrganizationAgentIdFromModelId } from '@/lib/organizationAgents';
 import { v4 as uuidv4 } from 'uuid';
@@ -114,6 +117,10 @@ export const Sidebar = memo(function Sidebar() {
   } = useSettings();
 
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const [shareConversationTarget, setShareConversationTarget] =
+    useState<Conversation | null>(null);
+  const { sharingEnabled } = useM365Enabled();
+  const m365Connected = useSettingsStore((s) => s.m365Connected);
   // Quick Actions modal state lives in uiStore so other surfaces (e.g. the
   // extraction recipe picker) can open it on a specific tab.
   const isCustomizationsOpen = useUIStore((s) => s.isCustomizationsOpen);
@@ -421,6 +428,12 @@ export const Sidebar = memo(function Sidebar() {
     },
     [updateConversation],
   );
+
+  // Absent (undefined) when unavailable so ConversationItem hides the entry.
+  const handleShareConversation =
+    sharingEnabled && m365Connected
+      ? (conversation: Conversation) => setShareConversationTarget(conversation)
+      : undefined;
 
   const handleExportConversation = useCallback(
     (conversation: Conversation) => {
@@ -753,7 +766,7 @@ export const Sidebar = memo(function Sidebar() {
 
         {/* Content */}
         <div
-          className={`flex-1 overflow-y-auto transition-all duration-300 ${showChatbar ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+          className={`flex-1 overflow-y-auto hover-scrollbar transition-all duration-300 ${showChatbar ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         >
           {displayConversations.length === 0 ? (
             <div className="p-4 text-center text-sm text-gray-500">
@@ -972,6 +985,7 @@ export const Sidebar = memo(function Sidebar() {
                           handleMoveToFolder={handleMoveToFolder}
                           handleRenameConversation={handleRenameConversation}
                           handleExportConversation={handleExportConversation}
+                          handleShareConversation={handleShareConversation}
                           folders={folders}
                           t={t}
                         />
@@ -1003,6 +1017,7 @@ export const Sidebar = memo(function Sidebar() {
                     handleMoveToFolder={handleMoveToFolder}
                     handleRenameConversation={handleRenameConversation}
                     handleExportConversation={handleExportConversation}
+                    handleShareConversation={handleShareConversation}
                     folders={folders}
                     t={t}
                   />
@@ -1033,6 +1048,12 @@ export const Sidebar = memo(function Sidebar() {
       </div>
 
       {/* Customizations Modal */}
+      <ShareToOneDriveModal
+        isOpen={shareConversationTarget !== null}
+        onClose={() => setShareConversationTarget(null)}
+        conversation={shareConversationTarget}
+      />
+
       <CustomizationsModal
         isOpen={isCustomizationsOpen}
         onClose={() => setIsCustomizationsOpen(false)}

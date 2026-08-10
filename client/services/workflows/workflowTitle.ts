@@ -2,8 +2,6 @@
 
 import { generateConversationTitle } from '@/client/services/titleService';
 
-import { DEFAULT_ANALYSIS_MODEL } from '@/lib/utils/app/const';
-
 import { ConversationEntry, Message, MessageType } from '@/types/chat';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
@@ -72,8 +70,7 @@ export function nameWorkflowConversation(
   const sample = seed.sample?.trim();
   if (!sample) return;
 
-  const modelId = conversation.model?.id || DEFAULT_ANALYSIS_MODEL;
-  generateConversationTitle(syntheticEntries(seed, sample), modelId)
+  generateConversationTitle(syntheticEntries(seed, sample))
     .then((result) => {
       if (!result?.title) return;
       // Re-read: the user may have renamed the conversation during the

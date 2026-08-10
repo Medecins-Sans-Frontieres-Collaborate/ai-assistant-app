@@ -25,6 +25,8 @@ export const TOOL_CALL_RECORD_OPEN = '<<<TOOL_CALL_RECORD>>>';
 export const TOOL_CALL_RECORD_CLOSE = '<<<END_TOOL_CALL_RECORD>>>';
 export const WORKFLOW_EVENT_OPEN = '<<<WORKFLOW_EVENT>>>';
 export const WORKFLOW_EVENT_CLOSE = '<<<END_WORKFLOW_EVENT>>>';
+export const SEARCH_INTERIM_OPEN = '<<<SEARCH_INTERIM>>>';
+export const SEARCH_INTERIM_CLOSE = '<<<END_SEARCH_INTERIM>>>';
 
 // ───────────────────────────────────────────────────────────────────
 // Payload shapes
@@ -156,6 +158,19 @@ export interface WorkflowEventPayload {
   data: unknown;
 }
 
+/**
+ * Interim search results from a combined (Bing + Google News) search: the
+ * fast feed's headlines, emitted mid-search while the Bing agent is still
+ * running. Transient — the client renders them on the in-progress message
+ * with a "Summarize from headlines" action and drops them once the full
+ * search result (or the final answer) arrives; they never persist.
+ */
+export interface SearchInterimPayload {
+  /** Queries the headlines answered (loader/record display + echo-back). */
+  queries: string[];
+  entries: import('@/types/webSearch').SearchHeadlineEntry[];
+}
+
 // ───────────────────────────────────────────────────────────────────
 // Emit helpers (server-side)
 // ───────────────────────────────────────────────────────────────────
@@ -184,6 +199,10 @@ export function emitWorkflowEvent(payload: WorkflowEventPayload): string {
   return `\n\n${WORKFLOW_EVENT_OPEN}${JSON.stringify(payload)}${WORKFLOW_EVENT_CLOSE}\n\n`;
 }
 
+export function emitSearchInterim(payload: SearchInterimPayload): string {
+  return `\n\n${SEARCH_INTERIM_OPEN}${JSON.stringify(payload)}${SEARCH_INTERIM_CLOSE}\n\n`;
+}
+
 // ───────────────────────────────────────────────────────────────────
 // Parse helpers (client-side)
 // ───────────────────────────────────────────────────────────────────
@@ -206,6 +225,11 @@ const TOOL_CALL_RECORD_RE =
 
 const WORKFLOW_EVENT_RE =
   /<<<WORKFLOW_EVENT>>>([\s\S]*?)<<<END_WORKFLOW_EVENT>>>/g;
+
+const SEARCH_INTERIM_RE =
+  /<<<SEARCH_INTERIM>>>([\s\S]*?)<<<END_SEARCH_INTERIM>>>/g;
+const SEARCH_INTERIM_STRIP_RE =
+  /\n*<<<SEARCH_INTERIM>>>[\s\S]*?<<<END_SEARCH_INTERIM>>>\n*/g;
 
 /**
  * Pulls the latest `AGENT_ACTIVITY` payload out of the stream content
@@ -373,6 +397,66 @@ export function extractWorkflowEvents(content: string): {
 }
 
 /**
+ * Only http(s) URLs are acceptable in interim entries — they are rendered
+ * into <a href> and echoed back to the server, so `javascript:`/`data:`
+ * schemes must never survive the parse.
+ */
+function isHttpUrl(value: unknown): value is string {
+  return typeof value === 'string' && /^https?:\/\//i.test(value);
+}
+
+/** Full runtime mirror of SearchHeadlineEntry — guard matches the type. */
+function isSearchHeadlineEntry(value: unknown): boolean {
+  if (!value || typeof value !== 'object') return false;
+  const e = value as Record<string, unknown>;
+  return (
+    typeof e.title === 'string' &&
+    isHttpUrl(e.url) &&
+    typeof e.date === 'string' &&
+    (e.sourceName === undefined || typeof e.sourceName === 'string') &&
+    (e.sourceUrl === undefined || isHttpUrl(e.sourceUrl)) &&
+    (e.snippet === undefined || typeof e.snippet === 'string')
+  );
+}
+
+function isSearchInterimPayload(value: unknown): value is SearchInterimPayload {
+  if (!value || typeof value !== 'object') return false;
+  const p = value as { queries?: unknown; entries?: unknown };
+  return (
+    Array.isArray(p.queries) &&
+    p.queries.every((q) => typeof q === 'string') &&
+    Array.isArray(p.entries) &&
+    p.entries.every(isSearchHeadlineEntry)
+  );
+}
+
+/**
+ * Pulls the latest `SEARCH_INTERIM` payload from content and returns a
+ * cleaned copy with all interim markers removed. Interim headlines are
+ * transient streaming UI — on persisted-content reload only the strip
+ * matters (the search is long over), so callers typically discard
+ * `latest` there.
+ */
+export function extractLatestSearchInterim(content: string): {
+  latest: SearchInterimPayload | null;
+  cleaned: string;
+} {
+  const matches = [...content.matchAll(SEARCH_INTERIM_RE)];
+  let latest: SearchInterimPayload | null = null;
+  if (matches.length > 0) {
+    try {
+      const parsed = JSON.parse(matches[matches.length - 1][1]);
+      if (isSearchInterimPayload(parsed)) latest = parsed;
+    } catch {
+      // ignore malformed payload
+    }
+  }
+  const cleaned =
+    matches.length > 0 ? content.replace(SEARCH_INTERIM_STRIP_RE, '') : content;
+  return { latest, cleaned };
+}
+
+/**
  * Hides partially-streamed sentinel markers from the rendered text. When
  * the open tag has arrived but the close tag hasn't yet, slice everything
  * from the open onward off the displayed content. The next render (after
@@ -387,6 +471,7 @@ const MARKER_PAIRS: ReadonlyArray<readonly [string, string]> = [
   [AGENT_ACTIVITY_OPEN, AGENT_ACTIVITY_CLOSE],
   [TOOL_CALL_RECORD_OPEN, TOOL_CALL_RECORD_CLOSE],
   [WORKFLOW_EVENT_OPEN, WORKFLOW_EVENT_CLOSE],
+  [SEARCH_INTERIM_OPEN, SEARCH_INTERIM_CLOSE],
 ];
 
 export function stripIncompleteStreamMarkers(content: string): string {
@@ -410,7 +495,8 @@ export type StreamEvent =
   | { type: 'consent_request'; payload: ConsentRequestPayload }
   | { type: 'consent_outcome'; payload: ConsentOutcomePayload }
   | { type: 'tool_call_record'; payload: ToolCallRecordPayload }
-  | { type: 'workflow_event'; payload: WorkflowEventPayload };
+  | { type: 'workflow_event'; payload: WorkflowEventPayload }
+  | { type: 'search_interim'; payload: SearchInterimPayload };
 
 export interface StreamScanResult {
   /** Events consumed in this scan, in arrival order. */
@@ -452,6 +538,11 @@ const MARKERS: readonly MarkerSpec[] = [
     open: WORKFLOW_EVENT_OPEN,
     close: WORKFLOW_EVENT_CLOSE,
     type: 'workflow_event',
+  },
+  {
+    open: SEARCH_INTERIM_OPEN,
+    close: SEARCH_INTERIM_CLOSE,
+    type: 'search_interim',
   },
 ];
 
@@ -564,6 +655,10 @@ function parseEventPayload(spec: MarkerSpec, json: string): StreamEvent | null {
       case 'workflow_event': {
         if (!isWorkflowEventPayload(parsed)) return null;
         return { type: 'workflow_event', payload: parsed };
+      }
+      case 'search_interim': {
+        if (!isSearchInterimPayload(parsed)) return null;
+        return { type: 'search_interim', payload: parsed };
       }
     }
   } catch {

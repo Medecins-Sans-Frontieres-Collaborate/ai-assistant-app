@@ -37,6 +37,13 @@ export interface McpServerRequestEntry {
   connectorId?: string;
   url?: string;
   authToken?: string;
+  /**
+   * First-party builtin toolset marker (currently only the Microsoft 365
+   * toolset, id `builtin-m365`). Builtin entries carry no url/token — the
+   * server constructs the synthetic ResolvedMcpServer itself and executes
+   * tools in-process, so a tampered entry can never point anywhere.
+   */
+  builtin?: boolean;
 }
 
 /**

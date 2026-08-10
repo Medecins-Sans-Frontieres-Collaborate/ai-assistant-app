@@ -1,3 +1,5 @@
+import type { M365BuiltinExecutor } from '@/lib/services/m365/tools/executor';
+
 import {
   StreamMetadata,
   TokenUsageMetadata,
@@ -124,6 +126,12 @@ export interface ToolLoopCoreOptions<TMessage> {
   pendingToolCalls?: McpPendingToolCall[];
   approvalResponses?: ApprovalResponse[];
   loopRound: number;
+  /**
+   * Admin-configured cap from `feature.mcp.roundsPerRequest` (docs/LIMITS.md).
+   * Absent → the compiled MAX_TOOL_ROUNDS, so behaviour is unchanged when
+   * usage limits are disabled or unconfigured.
+   */
+  maxRounds?: number;
   userId: string;
   citations?: Citation[];
   usage: {
@@ -145,15 +153,48 @@ export interface ToolLoopCoreOptions<TMessage> {
   existingPlan?: McpPlan;
   /** Last user message text, for the planner. */
   userMessageText?: string;
+  /**
+   * In-process executor for `provenance: 'builtin'` servers (the M365
+   * toolset). Listing and dispatch route here instead of an MCP connection;
+   * a builtin server without an executor degrades to zero tools.
+   */
+  builtinExecutor?: M365BuiltinExecutor;
 }
 
 export async function listToolsForServers(
   servers: ResolvedMcpServer[],
   userId: string,
+  builtinExecutor?: M365BuiltinExecutor,
 ): Promise<{ serversWithTools: ServerWithTools[]; failedLabels: string[] }> {
   const failedLabels: string[] = [];
   const results = await Promise.all(
     servers.map(async (server): Promise<ServerWithTools> => {
+      if (server.provenance === 'builtin') {
+        // Builtin servers list in-process: no connection, and no
+        // toolSchemaCache entry — its (userId, url, authToken) key shape
+        // never applies to a url-less synthetic server, and the executor
+        // does its own consent-probe caching.
+        if (!builtinExecutor) return { server, tools: [] };
+        try {
+          const tools = await withBudget(
+            builtinExecutor.listTools(),
+            LIST_TOOLS_BUDGET_MS,
+          );
+          return {
+            server,
+            tools: tools.map((tool) => ({
+              name: tool.name,
+              description: tool.description,
+              inputSchema: tool.inputSchema,
+            })),
+            instructions: builtinExecutor.instructions,
+          };
+        } catch {
+          // Same degrade-don't-fail posture as network servers below.
+          failedLabels.push(server.label);
+          return { server, tools: [] };
+        }
+      }
       const cacheKey = toolCacheKey(userId, server.url, server.authToken);
       const cached = getCachedTools(cacheKey);
       if (cached)
@@ -217,6 +258,7 @@ export async function runToolLoopCore<TMessage>(
         const { serversWithTools, failedLabels } = await listToolsForServers(
           options.servers,
           options.userId,
+          options.builtinExecutor,
         );
         for (const label of failedLabels) {
           write(
@@ -381,9 +423,32 @@ export async function runToolLoopCore<TMessage>(
               );
             }
             try {
-              const connection = await connectMcp(server);
+              // Builtin dispatch: in-process execution, no connection to
+              // open or close. The executor never throws (failures come
+              // back as isError results), so the catch below only fires
+              // for network servers or executor-contract violations.
+              const connection =
+                server.provenance === 'builtin' && options.builtinExecutor
+                  ? null
+                  : await connectMcp(server);
               try {
-                const result = await connection.callTool(call.toolName, args);
+                const result = connection
+                  ? await connection.callTool(call.toolName, args)
+                  : await options
+                      .builtinExecutor!.callTool(call.toolName, args, {
+                        // Composite tools stream progress ("scanning 214
+                        // messages…") through the loop's activity channel.
+                        emitActivity: (detail) =>
+                          write(
+                            emitAgentActivity('chat.activity.m365Progress', {
+                              detail,
+                            }),
+                          ),
+                      })
+                      .then((r) => ({
+                        text: r.resultText,
+                        isError: r.isError,
+                      }));
                 write(
                   toolResultToRecordMarker(
                     call,
@@ -413,7 +478,7 @@ export async function runToolLoopCore<TMessage>(
                   isError: result.isError,
                 });
               } finally {
-                await connection.close();
+                await connection?.close();
               }
             } catch (error) {
               const isAuth = isMcpAuthError(error);
@@ -462,7 +527,7 @@ export async function runToolLoopCore<TMessage>(
         const round = await options.strategy.runModelRound(
           messages,
           serversWithTools,
-          options.loopRound < MAX_TOOL_ROUNDS,
+          options.loopRound < (options.maxRounds ?? MAX_TOOL_ROUNDS),
           write,
         );
 

@@ -101,6 +101,16 @@ const serverEnvSchema = z.object({
   AZURE_BLOB_STORAGE_NAME_EU: z.string().optional(),
   AZURE_BLOB_STORAGE_CONTAINER: z.string().optional(),
   AZURE_BLOB_STORAGE_IMAGE_CONTAINER: z.string().optional(),
+  /**
+   * Centralized admin/system data location (agent-access rules, usage-limit
+   * counters, admin guides, map datasets, …). Defaults to the EU account
+   * (data residency: this data references users of every region, and only
+   * EU placement satisfies "EU data never leaves the EU") in a dedicated
+   * container OUTSIDE any lifecycle-delete rule. See lib/services/
+   * adminBlobStorage.ts and docs/ADMIN_BLOB_STORAGE.md.
+   */
+  AZURE_BLOB_STORAGE_ADMIN_NAME: z.string().optional(),
+  AZURE_BLOB_STORAGE_ADMIN_CONTAINER: z.string().optional(),
   STORAGE_RESOURCE_ID: z.string().optional(),
   STORAGE_DATA_SOURCE_CONTAINER: z.string().optional(),
 
@@ -112,6 +122,17 @@ const serverEnvSchema = z.object({
   SEARCH_INDEXER: z.string().optional(),
   SEARCH_ENDPOINT_API_KEY: z.string().optional(), // Legacy: Used by OpenAI data_sources feature in documentSummary.ts
   ALLOW_INDEX_DOWNTIME: booleanString(false),
+  // M365 file-backed agents (docs/M365_SECOND_PASS_AGENTS_DESIGN.md).
+  // Endpoint defaults to SEARCH_ENDPOINT; override to pin the shared
+  // m365-agents index to a specific region's Search service (residency
+  // decision: an agent whose audience spans US+EU is hosted in EU).
+  M365_AGENTS_SEARCH_ENDPOINT: z.string().url().optional(),
+  M365_AGENTS_SEARCH_INDEX: z.string().default('m365-agents'),
+  // Documents per M365 agent (after folder expansion). Layer-2 probes run
+  // as Graph $batch calls (20/request), so the ceiling is indexing wall
+  // time and per-user probe latency, not probe fan-out. 200 is a hard
+  // sanity bound — the synchronous index route has a 300s budget.
+  M365_AGENT_MAX_DOCUMENTS: z.coerce.number().int().min(1).max(200).default(50),
 
   // Web search backend:
   //  - 'news': GDELT + Google News RSS queried IN PARALLEL and merged —
@@ -121,8 +142,20 @@ const serverEnvSchema = z.object({
   //  - 'google-news': Google News RSS alone + link decoding.
   //  - 'bing-agent': the Foundry agent with Bing grounding — broader web
   //    coverage but 30-90s round-trips and flaky result quality.
+  //  - 'combined': Bing agent + Google News feed concurrently; headlines
+  //    stream to the client while Bing runs, then the results merge.
+  //  - 'bing-responses': the native web_search tool on the Azure OpenAI
+  //    Responses API — same Bing grounding as 'bing-agent' but a direct
+  //    model call instead of a Foundry agent run.
   WEB_SEARCH_PROVIDER: z
-    .enum(['news', 'gdelt', 'google-news', 'bing-agent'])
+    .enum([
+      'news',
+      'gdelt',
+      'google-news',
+      'bing-agent',
+      'bing-responses',
+      'combined',
+    ])
     .default('news'),
 
   // Web search round-trip budget (ms). Applies to whichever provider runs.
@@ -140,6 +173,12 @@ const serverEnvSchema = z.object({
   // Deployment that backs the interpreter sub-tool round-trip (must support
   // the Responses-API code_interpreter tool in the project's region).
   CODE_INTERPRETER_MODEL: z.string().default('gpt-5.2'),
+
+  // Deployment used by the 'bing-responses' web-search provider (Responses
+  // API native web_search tool). Must be a Responses-capable deployment in
+  // the default Foundry project, with the web_search tool enabled on the
+  // subscription.
+  WEB_SEARCH_RESPONSES_MODEL: z.string().default('gpt-5.2'),
 
   // MCP (Model Context Protocol) connectors
   // Server-side gate for ARBITRARY (non-catalog) MCP server URLs — defense in
@@ -178,6 +217,16 @@ const serverEnvSchema = z.object({
   // Comma-separated global-admin emails (Graph `mail` values, matched
   // lowercased + trimmed). Bootstrap mechanism — changing it needs a redeploy.
   AGENT_ACCESS_ADMINS: z.string().optional(),
+
+  // Usage limits (docs/LIMITS.md)
+  // Master gate for enforcement + admin API + UI. Break-glass for a
+  // policy-blob outage: set to "false" and redeploy.
+  //
+  // Deliberately its OWN gate rather than reusing AGENT_ACCESS_CONTROL_ENABLED:
+  // break-glassing access control during a rules-blob outage must not also
+  // silently remove every spend cap. The admin roster IS shared — limits are
+  // authored by the same AGENT_ACCESS_ADMINS global admins.
+  LIMITS_ENABLED: booleanString(false),
 
   // Application Configuration
   // Optional explicit override; when unset the default model resolves

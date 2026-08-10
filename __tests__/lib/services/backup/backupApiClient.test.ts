@@ -168,4 +168,34 @@ describe('createBackupApiClient', () => {
       { method: 'DELETE' },
     ]);
   });
+
+  describe('backend selection', () => {
+    it("omits the backend param entirely for 'app' (wire compat)", async () => {
+      const fetchImpl = vi
+        .fn()
+        .mockResolvedValue(jsonResponse({ data: { manifest, etag: '"e"' } }));
+      await createBackupApiClient(fetchImpl, 'app').getManifest();
+      expect(fetchImpl.mock.calls[0][0]).toBe('/api/backup/manifest');
+    });
+
+    it('appends backend=onedrive to every route', async () => {
+      const fetchImpl = vi.fn(async (url: string) =>
+        url.includes('conversations')
+          ? new Response(new Uint8Array([1]))
+          : jsonResponse({ data: { manifest, etag: '"e"' } }),
+      );
+      const api = createBackupApiClient(fetchImpl, 'onedrive');
+      await api.getManifest();
+      await api.getConversationBlob('conv1', '0123456789abcdef');
+      await api.deleteBackup();
+
+      expect(fetchImpl.mock.calls[0][0]).toBe(
+        '/api/backup/manifest?backend=onedrive',
+      );
+      expect(fetchImpl.mock.calls[1][0]).toBe(
+        '/api/backup/conversations/conv1?rev=0123456789abcdef&backend=onedrive',
+      );
+      expect(fetchImpl.mock.calls[2][0]).toBe('/api/backup?backend=onedrive');
+    });
+  });
 });

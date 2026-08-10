@@ -1,5 +1,8 @@
 import { NextRequest } from 'next/server';
 
+import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
+import { mergeGlossaryEntries } from '@/lib/services/workflows/shared/glossaryPrompts';
+import { resolveSlotGuide } from '@/lib/services/workflows/shared/guideResolution';
 import { createWorkflowStream } from '@/lib/services/workflows/shared/workflowLlm';
 import { resolveWorkflowModelId } from '@/lib/services/workflows/shared/workflowModels';
 import { runTranslationWorkflow } from '@/lib/services/workflows/translation/translationOrchestrator';
@@ -31,6 +34,9 @@ interface TranslationWorkflowRequest {
    */
   targetLanguage: string;
   glossaryEntries?: GlossaryEntry[];
+  /** Admin terminology guide whose entries merge with (and win over) the
+   * local glossary. Resolved server-side by id, fail-closed. */
+  glossaryGuideId?: string;
   mode: 'quick' | 'agentic';
   maxReviewRounds?: number;
   modelId?: string;
@@ -44,6 +50,10 @@ interface TranslationWorkflowRequest {
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session) return unauthorizedResponse();
+
+  // Group-membership warm-up MUST precede resolveSlotGuide below — guide
+  // access rules with group scope read the cache synchronously. Never throws.
+  await resolveUserGroupIds(req, session);
 
   let body: TranslationWorkflowRequest;
   try {
@@ -70,14 +80,33 @@ export async function POST(req: NextRequest) {
     return badRequestResponse('mode must be "quick" or "agentic"');
   }
 
-  const glossaryEntries: GlossaryEntry[] = Array.isArray(body.glossaryEntries)
-    ? body.glossaryEntries
-        .filter(
-          (e): e is GlossaryEntry =>
-            !!e && typeof e.source === 'string' && typeof e.target === 'string',
-        )
-        .slice(0, MAX_GLOSSARY_ENTRIES)
+  const localEntries: GlossaryEntry[] = Array.isArray(body.glossaryEntries)
+    ? body.glossaryEntries.filter(
+        (e): e is GlossaryEntry =>
+          !!e && typeof e.source === 'string' && typeof e.target === 'string',
+      )
     : [];
+
+  // Admin terminology guide: resolved fail-closed BEFORE the stream opens so
+  // a stale/revoked reference is a clean 400. Guide entries come first and
+  // win on duplicate source terms — org terminology is authoritative.
+  let guideEntries: GlossaryEntry[] = [];
+  if (typeof body.glossaryGuideId === 'string' && body.glossaryGuideId) {
+    const resolved = await resolveSlotGuide({
+      userMail: session.user?.mail ?? undefined,
+      guideId: body.glossaryGuideId,
+      expectedKind: 'terminology',
+      workflow: 'translation',
+    });
+    if ('error' in resolved) return badRequestResponse(resolved.error);
+    if (resolved.guide.payload.kind === 'terminology') {
+      guideEntries = resolved.guide.payload.entries;
+    }
+  }
+  const glossaryEntries = mergeGlossaryEntries(
+    guideEntries,
+    localEntries,
+  ).slice(0, MAX_GLOSSARY_ENTRIES);
 
   const { stream, writer } = createWorkflowStream();
 

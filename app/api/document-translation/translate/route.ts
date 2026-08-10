@@ -7,7 +7,11 @@
  * POST /api/document-translation/translate
  * Content-Type: multipart/form-data
  * Body:
- *   - document: File (required) - The document to translate
+ *   - document: File (required unless driveId+itemId) - The document to translate
+ *   - driveId + itemId: string (optional) - OneDrive/SharePoint source instead
+ *     of `document`; the server fetches the bytes with the caller's delegated
+ *     Graph token and everything downstream is identical to an upload. The
+ *     Translator still only ever sees the staging account.
  *   - targetLanguage: string (required) - Target language code (e.g., 'es', 'fr')
  *   - sourceLanguage: string (optional) - Source language code (auto-detect if omitted)
  *   - glossary: File (optional) - Glossary file (CSV, TSV, or XLIFF)
@@ -19,6 +23,12 @@ import { NextRequest } from 'next/server';
 
 import { DocumentTranslationService } from '@/lib/services/documentTranslation/documentTranslationService';
 import { createTranslationJob } from '@/lib/services/documentTranslation/translationJobStore';
+import { guardLimit } from '@/lib/services/limits/routeGuard';
+import { isValidGraphId } from '@/lib/services/m365/graphApi';
+import {
+  fetchDriveItemBuffer,
+  m365ImportErrorResponse,
+} from '@/lib/services/m365/m365ImportService';
 
 import { getEnvVariable } from '@/lib/utils/app/env';
 import {
@@ -75,13 +85,43 @@ export async function POST(request: NextRequest) {
   }
 
   // Extract form fields
-  const document = formData.get('document') as File | null;
+  let document = formData.get('document') as File | null;
   const targetLanguage = formData.get('targetLanguage') as string | null;
   const sourceLanguage = formData.get('sourceLanguage') as string | null;
   const glossary = formData.get('glossary') as File | null;
   const customOutputFilename = formData.get('customOutputFilename') as
     | string
     | null;
+  const driveId = formData.get('driveId');
+  const itemId = formData.get('itemId');
+
+  // M365 source: fetch the bytes server-side and continue exactly as if
+  // they had been uploaded. Provenance (the source's folder) is kept so the
+  // viewer can offer "save next to original".
+  let m365Source: { driveId: string; parentItemId: string } | undefined;
+  if (!document && typeof driveId === 'string' && typeof itemId === 'string') {
+    if (!isValidGraphId(driveId) || !isValidGraphId(itemId)) {
+      return badRequestResponse('Invalid driveId or itemId');
+    }
+    try {
+      const fetched = await fetchDriveItemBuffer(
+        request,
+        { driveId, itemId },
+        { maxBytes: MAX_DOCUMENT_SIZE },
+      );
+      document = new File([new Uint8Array(fetched.data)], fetched.name, {
+        type: fetched.mimeType,
+      });
+      if (fetched.parentFolder) {
+        m365Source = {
+          driveId: fetched.parentFolder.driveId,
+          parentItemId: fetched.parentFolder.itemId,
+        };
+      }
+    } catch (error) {
+      return m365ImportErrorResponse(error);
+    }
+  }
 
   // Validate required fields
   if (!document) {
@@ -101,6 +141,17 @@ export async function POST(request: NextRequest) {
       `Unsupported document format. Supported formats: .txt, .html, .docx, .xlsx, .pptx, .pdf, .msg, .xliff, .csv, .tsv, .mhtml`,
       'UNSUPPORTED_FORMAT',
     );
+  }
+
+  // Usage limit: document translations per day (docs/LIMITS.md). Checked
+  // alongside the existing size gate, before any staging-account work.
+  const translationGuard = await guardLimit(
+    session,
+    'feature.translation.jobsPerDay',
+    { req: request },
+  );
+  if (!translationGuard.allowed && translationGuard.response) {
+    return translationGuard.response;
   }
 
   // Validate document size
@@ -272,6 +323,7 @@ export async function POST(request: NextRequest) {
         ext: fileExtension,
         targetLanguage,
         createdAt: Date.now(),
+        ...(m365Source && { m365Source }),
       });
 
       console.log(
@@ -381,6 +433,7 @@ export async function POST(request: NextRequest) {
       targetLanguage,
       targetLanguageName: targetLangInfo.englishName,
       fileExtension,
+      ...(m365Source && { m365Source }),
     };
 
     return successResponse(reference);

@@ -7,6 +7,7 @@ import { getBackupKeys } from '@/client/services/backup/keystore';
 import { createSyncCrypto } from '@/client/services/backup/syncCrypto';
 import { createBackupApiClient } from '@/lib/services/backup/backupApiClient';
 import { conversationUpdatedAt, toMillis } from '@/lib/services/backup/merge';
+import { createPlainSyncCrypto } from '@/lib/services/backup/plainCrypto';
 import { runSync } from '@/lib/services/backup/syncEngine';
 import type {
   BackupApi,
@@ -46,8 +47,13 @@ export interface UseBackupSyncResult {
 }
 
 /** Bridges stores + keystore + crypto + API client into the engine's deps. */
-function buildSyncDeps(keys: BackupKeys): SyncDeps {
-  const api = createBackupApiClient();
+function buildSyncDeps(keys: BackupKeys | 'plain'): SyncDeps {
+  // Read the backend per run, not per hook mount — a settings-page switch
+  // must redirect the very next debounced sync.
+  const api = createBackupApiClient(
+    undefined,
+    useBackupStore.getState().storageBackend,
+  );
 
   // Capture the manifest's folders timestamp on every fetch: pulled folders
   // must be stamped with the REMOTE updatedAt — stamping "now" would win the
@@ -64,7 +70,10 @@ function buildSyncDeps(keys: BackupKeys): SyncDeps {
 
   return {
     api: trackingApi,
-    crypto: createSyncCrypto(keys, useBackupStore.getState().localKeyEpoch),
+    crypto:
+      keys === 'plain'
+        ? createPlainSyncCrypto(useBackupStore.getState().localKeyEpoch)
+        : createSyncCrypto(keys, useBackupStore.getState().localKeyEpoch),
     getLocalState: () => {
       const state = useConversationStore.getState();
       return {
@@ -163,10 +172,14 @@ export function useBackupSync(): UseBackupSyncResult {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const sync = useCallback(async (): Promise<SyncResult | null> => {
-    // Always re-read from the keystore — its memo is single-flight and is
+    // Plain mode (unencrypted OneDrive) has no keys to fetch. Otherwise
+    // always re-read from the keystore — its memo is single-flight and is
     // correctly invalidated on rotation/restore, unlike an instance-local
     // cache (a second hook instance survives key changes unremounted).
-    const keys = await getBackupKeys();
+    const keys =
+      useBackupStore.getState().encryptionMode === 'plain'
+        ? ('plain' as const)
+        : await getBackupKeys();
     if (!keys) return null; // enrolled but keystore empty — banner flow owns it
     const result = await runSync(buildSyncDeps(keys));
     if (result.status === 'error') {

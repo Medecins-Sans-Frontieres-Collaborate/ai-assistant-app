@@ -46,6 +46,8 @@ export interface AnthropicMcpToolLoopOptions {
   pendingToolCalls?: McpPendingToolCall[];
   approvalResponses?: ApprovalResponse[];
   loopRound: number;
+  /** Admin-configured round cap (docs/LIMITS.md); absent → MAX_TOOL_ROUNDS. */
+  maxRounds?: number;
   userId: string;
   citations?: Citation[];
   usage: {
@@ -57,6 +59,8 @@ export interface AnthropicMcpToolLoopOptions {
   planner?: ToolLoopCoreOptions<Anthropic.MessageParam>['planner'];
   existingPlan?: McpPlan;
   userMessageText?: string;
+  /** In-process executor for builtin-provenance servers (see ToolLoopCoreOptions). */
+  builtinExecutor?: ToolLoopCoreOptions<Anthropic.MessageParam>['builtinExecutor'];
 }
 
 function buildAnthropicStrategy(
@@ -146,11 +150,13 @@ export async function runAnthropicMcpToolLoop(
     pendingToolCalls: options.pendingToolCalls,
     approvalResponses: options.approvalResponses,
     loopRound: options.loopRound,
+    maxRounds: options.maxRounds,
     userId: options.userId,
     citations: options.citations,
     usage: options.usage,
     planner: options.planner,
     existingPlan: options.existingPlan,
     userMessageText: options.userMessageText,
+    builtinExecutor: options.builtinExecutor,
   });
 }

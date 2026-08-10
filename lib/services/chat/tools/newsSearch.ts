@@ -9,6 +9,8 @@
  * and normalized title, which also cross-checks coverage: a story both
  * feeds surface appears once.
  */
+import { SearchHeadlineEntry } from '@/types/webSearch';
+
 import { GdeltArticle, searchGdelt } from './gdeltSearch';
 import {
   GoogleNewsSearchOptions,
@@ -19,14 +21,12 @@ import {
 
 export type NewsSource = 'gdelt' | 'google-news';
 
-interface NewsEntry {
-  title: string;
-  url: string;
-  date: string;
-  sourceName?: string;
-  sourceUrl?: string;
-  snippet?: string;
-}
+/**
+ * Same shape as the wire-level SearchHeadlineEntry on purpose: combined
+ * searches stream these entries to the client mid-search, and "Summarize
+ * from headlines" resends echo them back to rebuild the digest.
+ */
+export type NewsEntry = SearchHeadlineEntry;
 
 function normalizeTitle(title: string): string {
   return title
@@ -185,7 +185,7 @@ export async function searchNewsParallel(
 }
 
 /** Formats merged entries as the digest + citations shape all providers share. */
-function buildNewsResult(
+export function buildNewsResult(
   entries: NewsEntry[],
   queryLabel: string,
 ): GoogleNewsSearchResult {
@@ -231,6 +231,30 @@ export async function searchNewsFanOut(
   options: GoogleNewsSearchOptions,
 ): Promise<GoogleNewsSearchResult & { providersUsed: NewsSource[] }> {
   const capped = queries.slice(0, 5);
+  const entries = await fetchGoogleNewsHeadlines(capped, options);
+  const label = capped.map((q) => `"${q}"`).join('; ');
+  return {
+    ...buildNewsResult(entries, label),
+    providersUsed: entries.length > 0 ? ['google-news'] : [],
+  };
+}
+
+/**
+ * Entry-level Google News search shared by the fan-out provider and the
+ * combined (Bing + news) provider's fast leg: one leg per query (max 5),
+ * concurrent, merged with the standard interleave/dedupe. Single-query
+ * calls skip the fan-out plumbing. Throws only when EVERY leg failed;
+ * empty feeds return [].
+ */
+export async function fetchGoogleNewsHeadlines(
+  queries: string[],
+  options: GoogleNewsSearchOptions,
+): Promise<NewsEntry[]> {
+  const capped = queries.slice(0, 5);
+  if (capped.length <= 1) {
+    return googleNewsEntries(capped[0] ?? '', options);
+  }
+
   // Fetch a per-query share plus buffer so cross-query dedupe and the
   // interleave still fill the total cap.
   const perQueryCount = Math.min(
@@ -265,10 +289,5 @@ export async function searchNewsFanOut(
     throw new Error(`All fan-out queries failed — ${failures.join('; ')}`);
   }
 
-  const entries = mergeNewsEntries(lists, options.resultCount);
-  const label = capped.map((q) => `"${q}"`).join('; ');
-  return {
-    ...buildNewsResult(entries, label),
-    providersUsed: lists.length > 0 ? ['google-news'] : [],
-  };
+  return mergeNewsEntries(lists, options.resultCount);
 }

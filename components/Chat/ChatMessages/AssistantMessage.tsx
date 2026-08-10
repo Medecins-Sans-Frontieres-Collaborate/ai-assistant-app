@@ -3,8 +3,10 @@ import {
   IconCopy,
   IconFileText,
   IconLanguage,
+  IconListCheck,
   IconLoader2,
   IconRefresh,
+  IconShare2,
   IconVolume,
   IconVolumeOff,
 } from '@tabler/icons-react';
@@ -22,12 +24,14 @@ import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 
 import { useSettings } from '@/client/hooks/settings/useSettings';
+import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
 import { translateText } from '@/lib/services/translation';
 
 import { appendCitationsToMarkdown } from '@/lib/utils/app/export/citationExport';
 import { getAutonym } from '@/lib/utils/app/locales';
 import { parseThinkingContent } from '@/lib/utils/app/stream/thinking';
+import { rewriteSandboxLinks } from '@/lib/utils/shared/chat/sandboxLinks';
 import { generateAudioFilename } from '@/lib/utils/shared/string/slugify';
 
 import {
@@ -48,17 +52,24 @@ import {
 } from '@/components/Chat/ChatMessages/ConsentCard';
 import { DocumentTranslationContent } from '@/components/Chat/ChatMessages/DocumentTranslationContent';
 import { GeneratedFilesPanel } from '@/components/Chat/ChatMessages/GeneratedFilesPanel';
+import { InterimSearchPanel } from '@/components/Chat/ChatMessages/InterimSearchPanel';
+import M365TodoTasksModal, {
+  extractTaskCandidates,
+} from '@/components/Chat/ChatMessages/M365TodoTasksModal';
+import { MessageDownloadMenu } from '@/components/Chat/ChatMessages/MessageDownloadMenu';
 import { ThinkingBlock } from '@/components/Chat/ChatMessages/ThinkingBlock';
 import { ToolCallSummary } from '@/components/Chat/ChatMessages/ToolCallSummary';
 import { TranscriptContent } from '@/components/Chat/ChatMessages/TranscriptContent';
 import { TranslationDropdown } from '@/components/Chat/ChatMessages/TranslationDropdown';
 import { VersionNavigation } from '@/components/Chat/ChatMessages/VersionNavigation';
 import { CitationList } from '@/components/Chat/Citations/CitationList';
+import ShareToOneDriveModal from '@/components/Chat/ShareToOneDriveModal';
 import { TTSContextMenu } from '@/components/Chat/TTS/TTSContextMenu';
 import { StreamdownWithCodeButtons } from '@/components/Markdown/StreamdownWithCodeButtons';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useChatStore } from '@/client/stores/chatStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import {
   extractConsentRequests,
   stripIncompleteStreamMarkers,
@@ -104,7 +115,7 @@ function isBlobTranscriptReference(content: string): boolean {
 function isDocumentTranslationReference(content: string): boolean {
   const trimmed = content.trim();
   return (
-    /^\[Translation:\s*.+?\s*\|\s*lang:[a-zA-Z-]+\s*\|\s*blob:[a-fA-F0-9-]+\s*\|\s*ext:[a-zA-Z0-9]+\s*\|\s*expires:\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z\]$/.test(
+    /^\[Translation:\s*.+?\s*\|\s*lang:[a-zA-Z-]+\s*\|\s*blob:[a-fA-F0-9-]+\s*\|\s*ext:[a-zA-Z0-9]+\s*\|\s*expires:\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z(?:\s*\|\s*src:[A-Za-z0-9!$_.,=-]+:[A-Za-z0-9!$_.,=-]+)?\]$/.test(
       trimmed,
     ) ||
     /^\[TranslationPending:\s*.+?\s*\|\s*lang:[a-zA-Z-]+\s*\|\s*job:[a-fA-F0-9-]+\s*\|\s*ext:[a-zA-Z0-9]+\s*\|\s*submitted:\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z\]$/.test(
@@ -157,6 +168,10 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
       (s) => s.streamingConsentRequests,
     );
     const streamingToolCalls = useChatStore((s) => s.streamingToolCalls);
+    // Interim headlines from a combined search (Bing leg still running).
+    const streamingInterimSearch = useChatStore(
+      (s) => s.streamingInterimSearch,
+    );
     const [isGeneratingAudio, setIsGeneratingAudio] = useState<boolean>(false);
     const [audioUrl, setAudioUrl] = useState<string | null>(null);
     const [audioSourceLocale, setAudioSourceLocale] = useState<string | null>(
@@ -165,6 +180,14 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
     const [loadingMessage, setLoadingMessage] = useState<string | null>(null);
     const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
     const [messageCopied, setMessageCopied] = useState(false);
+
+    // §4 output tie-in: action items → Microsoft To Do (user-confirmed
+    // batch). Flag + connect opt-in, and only when the text has list items.
+    const { meetingsEnabled: m365MeetingsFlag, sharingEnabled } =
+      useM365Enabled();
+    const m365Connected = useSettingsStore((s) => s.m365Connected);
+    const [showTodoModal, setShowTodoModal] = useState(false);
+    const [showShareModal, setShowShareModal] = useState(false);
 
     // TTS context menu state
     const [ttsContextMenu, setTTSContextMenu] = useState<{
@@ -373,11 +396,39 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
     // Displayed content (original or translated) - must be declared before handlers that use it
     const displayedContent = useMemo(() => {
       const { currentLocale, translations } = translationState;
-      if (currentLocale && translations[currentLocale]) {
-        return translations[currentLocale].translatedText;
+      const base =
+        currentLocale && translations[currentLocale]
+          ? translations[currentLocale].translatedText
+          : processedContent;
+      // Sandbox links survive in persisted messages (saved before the
+      // server-side strip) and in native code-interpreter streams, where
+      // the model's text goes straight to the client. Re-point them at the
+      // persisted file when one matches; degrade to plain text otherwise.
+      const generatedFiles = (
+        message?.toolCalls?.length
+          ? message.toolCalls
+          : messageIsStreaming
+            ? streamingToolCalls
+            : (message?.toolCalls ?? [])
+      ).flatMap((call) => call.generated_files ?? []);
+      return rewriteSandboxLinks(base, generatedFiles);
+    }, [
+      translationState,
+      processedContent,
+      message?.toolCalls,
+      messageIsStreaming,
+      streamingToolCalls,
+    ]);
+
+    // Citation numbers the message text actually cites — drives the source
+    // dropdown's per-citation evidence rows (quote paired with its pages).
+    const citedNumbers = useMemo(() => {
+      const numbers = new Set<number>();
+      for (const match of processedContent.matchAll(/\[(\d{1,3})\]/g)) {
+        numbers.add(Number(match[1]));
       }
-      return processedContent;
-    }, [translationState, processedContent]);
+      return [...numbers];
+    }, [processedContent]);
 
     // Generate contextual filename for audio downloads (1-indexed for human readability)
     const audioDownloadFilename = useMemo(() => {
@@ -770,8 +821,24 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
               );
             })()}
 
+            {/* Interim headlines from a combined search — only on the live
+                placeholder (no persisted content or tool records) and only
+                until the model starts producing output. A thinking block
+                counts as output: the search is over by then, and keeping
+                the panel mounted through the layout change replays its
+                entrance animation. */}
+            {messageIsStreaming &&
+              streamingInterimSearch &&
+              !processedContent.trim() &&
+              !thinking &&
+              !message?.toolCalls?.length && (
+                <InterimSearchPanel interim={streamingInterimSearch} />
+              )}
+
             {/* Citations - shown after content but before action buttons */}
-            {citations.length > 0 && <CitationList citations={citations} />}
+            {citations.length > 0 && (
+              <CitationList citations={citations} citedNumbers={citedNumbers} />
+            )}
 
             {/* Action buttons at the bottom of the message - only show when not streaming */}
             {!messageIsStreaming && (
@@ -943,6 +1010,40 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                   >
                     <IconFileText size={18} />
                   </button>
+
+                  {/* Download / export button */}
+                  <MessageDownloadMenu
+                    content={displayedContent}
+                    citations={citations}
+                    disabled={hasEmbeddedContent}
+                    disabledTitle={t('chat.actionsDisabledForEmbed')}
+                  />
+
+                  {/* Share this message to OneDrive */}
+                  {sharingEnabled && m365Connected && !hasEmbeddedContent && (
+                    <button
+                      onClick={() => setShowShareModal(true)}
+                      className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors"
+                      title={t('share.title')}
+                    >
+                      <IconShare2 size={18} />
+                    </button>
+                  )}
+
+                  {/* Create To Do tasks (§4) */}
+                  {m365MeetingsFlag &&
+                    m365Connected &&
+                    !hasEmbeddedContent &&
+                    extractTaskCandidates(displayedContent).length > 0 && (
+                      <button
+                        className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors"
+                        onClick={() => setShowTodoModal(true)}
+                        aria-label={t('chat.createTodoTasks')}
+                        title={t('chat.createTodoTasks')}
+                      >
+                        <IconListCheck size={18} />
+                      </button>
+                    )}
                 </div>
               </div>
             )}
@@ -968,6 +1069,24 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                   downloadFilename={audioDownloadFilename}
                 />
               </>
+            )}
+
+            {showShareModal && (
+              <ShareToOneDriveModal
+                isOpen={showShareModal}
+                onClose={() => setShowShareModal(false)}
+                conversation={selectedConversation}
+                messageContent={displayedContent}
+              />
+            )}
+
+            {/* To Do batch-confirm modal (§4) */}
+            {showTodoModal && (
+              <M365TodoTasksModal
+                isOpen={showTodoModal}
+                onClose={() => setShowTodoModal(false)}
+                content={displayedContent}
+              />
             )}
 
             {/* Translation dropdown */}

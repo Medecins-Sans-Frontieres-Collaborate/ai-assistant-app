@@ -20,6 +20,8 @@ export interface AssessTranslationInput {
    */
   customCriteria?: CustomCriterionDefinition[];
   glossaryEntries?: GlossaryEntry[];
+  /** Admin terminology guide; entries resolve server-side and merge in. */
+  glossaryGuideId?: string;
   modelId?: string;
   signal?: AbortSignal;
 }
