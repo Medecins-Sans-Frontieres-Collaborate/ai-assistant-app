@@ -2,6 +2,7 @@ import { Session } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { detectLanguage } from '@/lib/services/languageDetection';
+import { guardLimit } from '@/lib/services/limits/routeGuard';
 
 import { cleanMarkdown } from '@/lib/utils/app/clean';
 import { unauthorizedResponse } from '@/lib/utils/server/api/apiResponse';
@@ -140,6 +141,20 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // Validate input before processing - check raw input, not processed output
     if (typeof text !== 'string' || text.trim().length === 0) {
       return NextResponse.json({ error: 'No text provided' }, { status: 400 });
+    }
+
+    // Usage limits (docs/LIMITS.md). Checked on the RAW text, before any
+    // synthesis work: TTS is the largest unbounded cost surface in the app —
+    // until this landed its only validation was that `text` is a non-empty
+    // string. `feature.tts.charactersPerRequest` caps a single read-aloud;
+    // `feature.tts.charactersPerDay` caps the running total.
+    const ttsGuard = await guardLimit(session, 'feature.tts.charactersPerDay', {
+      amount: text.length,
+      ceilingKey: 'feature.tts.charactersPerRequest',
+      req: request,
+    });
+    if (!ttsGuard.allowed && ttsGuard.response) {
+      return ttsGuard.response;
     }
 
     const cleanedText = cleanMarkdown(text);

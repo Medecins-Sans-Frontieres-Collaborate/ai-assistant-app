@@ -10,6 +10,8 @@ import { useTranslations } from 'next-intl';
 import { useAvailableConnectors } from '@/client/hooks/settings/useAvailableConnectors';
 import { useMcpOauthAvailability } from '@/client/hooks/settings/useMcpOauthAvailability';
 
+import { BuiltinM365Row } from '@/components/Settings/Connectors/BuiltinM365Row';
+
 import { AdminConnectorRow } from '../Connectors/AdminConnectorRow';
 import { ConnectorBrowser } from '../Connectors/ConnectorBrowser';
 import { CuratedConnectorRow } from '../Connectors/CuratedConnectorRow';
@@ -139,6 +141,10 @@ export const ConnectorsSection: FC = () => {
       <p className="mb-6 text-sm text-gray-600 dark:text-gray-400">
         {t('localOnlyNote')}
       </p>
+
+      {/* Built-in first-party toolsets render alongside connectors — same
+          controls, no URL/auth editing. */}
+      <BuiltinM365Row />
 
       {/* Connected first: what the user already has is the thing they came
           back to change. Everything on offer lives below, behind an add. */}

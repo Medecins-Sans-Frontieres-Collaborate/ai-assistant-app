@@ -47,6 +47,8 @@ export interface McpToolLoopOptions {
   pendingToolCalls?: McpPendingToolCall[];
   approvalResponses?: ApprovalResponse[];
   loopRound: number;
+  /** Admin-configured round cap (docs/LIMITS.md); absent → MAX_TOOL_ROUNDS. */
+  maxRounds?: number;
   userId: string;
   citations?: Citation[];
   usage: {
@@ -59,6 +61,8 @@ export interface McpToolLoopOptions {
   planner?: ToolLoopCoreOptions<OpenAIMessage>['planner'];
   existingPlan?: McpPlan;
   userMessageText?: string;
+  /** In-process executor for builtin-provenance servers (see ToolLoopCoreOptions). */
+  builtinExecutor?: ToolLoopCoreOptions<OpenAIMessage>['builtinExecutor'];
 }
 
 type OpenAIMessage = OpenAI.Chat.Completions.ChatCompletionMessageParam;
@@ -157,11 +161,13 @@ export async function runMcpToolLoop(
     pendingToolCalls: options.pendingToolCalls,
     approvalResponses: options.approvalResponses,
     loopRound: options.loopRound,
+    maxRounds: options.maxRounds,
     userId: options.userId,
     citations: options.citations,
     usage: options.usage,
     planner: options.planner,
     existingPlan: options.existingPlan,
     userMessageText: options.userMessageText,
+    builtinExecutor: options.builtinExecutor,
   });
 }

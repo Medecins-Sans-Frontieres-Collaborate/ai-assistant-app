@@ -8,6 +8,7 @@ import {
   IconDownload,
   IconEdit,
   IconFolder,
+  IconShare2,
   IconTrash,
 } from '@tabler/icons-react';
 import { memo, useCallback, useRef, useState } from 'react';
@@ -26,6 +27,8 @@ interface ConversationItemProps {
   handleMoveToFolder: (conversationId: string, folderId: string | null) => void;
   handleRenameConversation: (id: string, currentName: string) => void;
   handleExportConversation: (conversation: Conversation) => void;
+  /** Absent when sharing is unavailable (flag off / M365 not connected). */
+  handleShareConversation?: (conversation: Conversation) => void;
   folders: any[];
   t: (key: string) => string;
 }
@@ -38,6 +41,7 @@ function ConversationItemInner({
   handleMoveToFolder,
   handleRenameConversation,
   handleExportConversation,
+  handleShareConversation,
   folders,
   t,
 }: ConversationItemProps) {
@@ -260,6 +264,24 @@ function ConversationItemInner({
                 />
                 {t('Export')}
               </button>
+
+              {/* Share option — only when the capability is wired */}
+              {handleShareConversation && (
+                <button
+                  className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleCloseMenu();
+                    handleShareConversation(conversation);
+                  }}
+                >
+                  <IconShare2
+                    size={14}
+                    className="text-gray-600 dark:text-gray-400"
+                  />
+                  {t('Share')}
+                </button>
+              )}
 
               {/* Delete option */}
               <button

@@ -145,35 +145,55 @@ export const CitationStreamdown: FC<CitationStreamdownProps> = memo(
         // can still override via `components.table`.
         table: MarkdownTable,
         ...components,
-        p({ children, ...props }: any) {
+        // `node` (the hast AST node react-markdown passes to component
+        // overrides) must not reach a DOM tag — it would serialize as a
+        // literal node="[object Object]" attribute. Custom components keep
+        // receiving it per the react-markdown contract.
+        p({ children, node, ...props }: any) {
           const processedChildren = processChildren(children);
           const CustomP = components.p as any;
           if (CustomP) {
-            return <CustomP {...props}>{processedChildren}</CustomP>;
+            return (
+              <CustomP node={node} {...props}>
+                {processedChildren}
+              </CustomP>
+            );
           }
           return <p {...props}>{processedChildren}</p>;
         },
-        li({ children, ...props }: any) {
+        li({ children, node, ...props }: any) {
           const processedChildren = processChildren(children);
           const CustomLi = components.li as any;
           if (CustomLi) {
-            return <CustomLi {...props}>{processedChildren}</CustomLi>;
+            return (
+              <CustomLi node={node} {...props}>
+                {processedChildren}
+              </CustomLi>
+            );
           }
           return <li {...props}>{processedChildren}</li>;
         },
-        strong({ children, ...props }: any) {
+        strong({ children, node, ...props }: any) {
           const processedChildren = processChildren(children);
           const CustomStrong = components.strong as any;
           if (CustomStrong) {
-            return <CustomStrong {...props}>{processedChildren}</CustomStrong>;
+            return (
+              <CustomStrong node={node} {...props}>
+                {processedChildren}
+              </CustomStrong>
+            );
           }
           return <strong {...props}>{processedChildren}</strong>;
         },
-        em({ children, ...props }: any) {
+        em({ children, node, ...props }: any) {
           const processedChildren = processChildren(children);
           const CustomEm = components.em as any;
           if (CustomEm) {
-            return <CustomEm {...props}>{processedChildren}</CustomEm>;
+            return (
+              <CustomEm node={node} {...props}>
+                {processedChildren}
+              </CustomEm>
+            );
           }
           return <em {...props}>{processedChildren}</em>;
         },

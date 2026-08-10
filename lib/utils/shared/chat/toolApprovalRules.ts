@@ -1,3 +1,8 @@
+import {
+  M365_ALWAYS_CONFIRM_TOOLS,
+  M365_BUILTIN_SERVER_ID,
+} from '@/lib/services/m365/tools/toolCatalog';
+
 /**
  * Global (cross-conversation) MCP tool approval rules.
  *
@@ -41,6 +46,25 @@ function labelMatches(
  * when no rule matches (the prompt surfaces as usual). When both an
  * approve and a reject rule match the same call, reject wins.
  */
+/**
+ * First-party M365 write tools confirm on EVERY call (fourth-pass B3):
+ * reject rules still win as usual, but approve rules and per-conversation
+ * "always approve" preferences must be IGNORED for them — the consent card
+ * with the concrete payload shows every time. Matches on the native-MCP
+ * `server_id` plus the RAW (un-namespaced) tool name, exactly as carried by
+ * the consent payload.
+ */
+export function isAlwaysConfirmTool(
+  serverId: string | null | undefined,
+  toolName: string | null | undefined,
+): boolean {
+  return (
+    serverId === M365_BUILTIN_SERVER_ID &&
+    !!toolName &&
+    M365_ALWAYS_CONFIRM_TOOLS.has(toolName)
+  );
+}
+
 export function evaluateToolApprovalRules(
   rules: ToolApprovalRule[],
   toolName: string | null | undefined,

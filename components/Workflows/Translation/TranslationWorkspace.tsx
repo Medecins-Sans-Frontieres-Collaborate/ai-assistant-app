@@ -15,6 +15,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useAvailableGuides } from '@/client/hooks/settings/useAvailableGuides';
 import { useAutoFocusComposer } from '@/client/hooks/ui/useAutoFocusComposer';
 import { usePasteComposer } from '@/client/hooks/ui/usePasteComposer';
 import { useEditPreview } from '@/client/hooks/workflows/useEditPreview';
@@ -30,6 +31,10 @@ import {
   sortLanguageOptionsByLabel,
 } from '@/lib/utils/app/languagePickerHelpers';
 import { isCustomCriterionId } from '@/lib/utils/shared/review/customCriteria';
+import {
+  guideCriterionId,
+  isGuideCriterionId,
+} from '@/lib/utils/shared/review/guideCriteria';
 import {
   hasResolvedEdits,
   invertPatch,
@@ -61,6 +66,7 @@ import { AnnotatedText } from '../Shared/Review/AnnotatedText';
 import { AssessmentPanel } from '../Shared/Review/AssessmentPanel';
 import { CriteriaManager } from '../Shared/Review/CriteriaManager';
 import { CriteriaPicker } from '../Shared/Review/CriteriaPicker';
+import { GuidePicker } from '../Shared/Review/GuidePicker';
 import { WorkflowWorkspaceProps } from '../registry';
 import { AnalysisPanel } from './AnalysisPanel';
 import { GlossaryManager } from './GlossaryManager';
@@ -272,6 +278,23 @@ export function TranslationWorkspace({
     [translationCriteria, t],
   );
 
+  // Admin guides usable in the translation workflow. Terminology guides
+  // appear twice by design: as review criteria in the GuidePicker AND as an
+  // organization-glossary attachment for generation (the "criterion +
+  // generation" model).
+  const { guides } = useAvailableGuides();
+  const translationGuides = useMemo(
+    () => guides.filter((g) => g.workflows.includes('translation')),
+    [guides],
+  );
+  const terminologyGuides = useMemo(
+    () => translationGuides.filter((g) => g.kind === 'terminology'),
+    [translationGuides],
+  );
+  const attachedTerminologyGuide = terminologyGuides.find(
+    (g) => g.id === state?.glossaryGuideId,
+  );
+
   /**
    * Custom ids can't be localized, and a criterion may have been renamed or
    * deleted since the assessment ran — so fall back through the label
@@ -279,6 +302,13 @@ export function TranslationWorkspace({
    */
   const resolveCriterionLabel = useCallback(
     (id: string) => {
+      if (isGuideCriterionId(id)) {
+        return (
+          assessment?.labels?.[id] ??
+          translationGuides.find((g) => guideCriterionId(g.id) === id)?.name ??
+          id
+        );
+      }
       if (!isCustomCriterionId(id)) {
         return t(`translation.criteria.${id}.label`);
       }
@@ -288,7 +318,7 @@ export function TranslationWorkspace({
         id
       );
     },
-    [assessment?.labels, translationCriteria, t],
+    [assessment?.labels, translationCriteria, translationGuides, t],
   );
 
   const handleUpload = async (files: FileList | null) => {
@@ -347,6 +377,7 @@ export function TranslationWorkspace({
           targetLanguage: targetLanguage.label,
           mode: state.mode,
           glossaryEntries: activeGlossary?.entries ?? [],
+          glossaryGuideId: state.glossaryGuideId,
           modelId: conversation?.model?.id,
         },
         onText: (fullText) => setTargetDraft(fullText),
@@ -457,12 +488,18 @@ export function TranslationWorkspace({
         criteria,
         customCriteria: customDefs,
         glossaryEntries: activeGlossary?.entries ?? [],
+        glossaryGuideId: state.glossaryGuideId,
         modelId: conversation?.model?.id,
       });
       // Snapshot custom labels so this assessment still reads correctly
       // after the criterion is renamed or deleted.
       const labels: Record<string, string> = {};
       for (const def of customDefs) labels[def.id] = def.name;
+      // Guide names snapshot for the same reason (rename/revoke/delete).
+      for (const g of translationGuides) {
+        const id = guideCriterionId(g.id);
+        if (criteria.includes(id)) labels[id] = g.name;
+      }
       patchState({
         assessment: {
           id: uuidv4(),
@@ -502,6 +539,7 @@ export function TranslationWorkspace({
     sourceText,
     selectedCriteria,
     translationCriteria,
+    translationGuides,
     hasUnresolvedEdits,
     activeGlossary,
     conversation?.model?.id,
@@ -726,6 +764,38 @@ export function TranslationWorkspace({
             </option>
           ))}
         </select>
+
+        {/* Organization terminology guide — attachable ALONGSIDE the local
+            glossary (entries merge server-side; the guide's win on duplicate
+            source terms). */}
+        {(terminologyGuides.length > 0 || state.glossaryGuideId) && (
+          <select
+            value={state.glossaryGuideId ?? ''}
+            onChange={(e) =>
+              patchState({ glossaryGuideId: e.target.value || undefined })
+            }
+            disabled={isRunning}
+            aria-label={t('translation.organizationTerminology')}
+            className="min-h-[36px] rounded-lg border border-gray-300 bg-transparent px-2 py-1.5 text-sm text-gray-700 disabled:opacity-50 dark:border-gray-700 dark:bg-surface-dark dark:text-gray-300"
+          >
+            <option value="">
+              {t('translation.noOrganizationTerminology')}
+            </option>
+            {terminologyGuides.map((guide) => (
+              <option key={guide.id} value={guide.id}>
+                {guide.name}
+              </option>
+            ))}
+            {/* A stored guide no longer visible (deleted or access revoked)
+                stays selectable-but-disabled so the user can SEE the stale
+                attachment and clear it — the server would 400 anyway. */}
+            {state.glossaryGuideId && !attachedTerminologyGuide && (
+              <option value={state.glossaryGuideId} disabled>
+                {t('translation.terminologyGuideUnavailable')}
+              </option>
+            )}
+          </select>
+        )}
 
         <button
           type="button"
@@ -965,6 +1035,20 @@ export function TranslationWorkspace({
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-t border-gray-200 px-3 py-2 dark:border-gray-700">
               <CriteriaPicker
                 criteria={criteriaItems}
+                selected={selectedCriteria}
+                onToggle={(id) =>
+                  setSelectedCriteria((prev) => {
+                    const next = new Set(prev);
+                    if (next.has(id)) next.delete(id);
+                    else next.add(id);
+                    return next;
+                  })
+                }
+                i18nNamespace="workflows.translation"
+                disabled={assessing || isRunning}
+              />
+              <GuidePicker
+                guides={translationGuides}
                 selected={selectedCriteria}
                 onToggle={(id) =>
                   setSelectedCriteria((prev) => {

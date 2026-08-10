@@ -20,7 +20,7 @@ import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { DisplayNamePreference, StreamingSpeedConfig } from '@/types/settings';
 import { Tone } from '@/types/tone';
-import { WebSearchOptions } from '@/types/webSearch';
+import { PrecomputedSearchResults, WebSearchOptions } from '@/types/webSearch';
 
 import { apiClient } from '../api';
 
@@ -161,6 +161,8 @@ export class ChatService {
       threadId?: string;
       searchMode?: SearchMode;
       webSearchOptions?: WebSearchOptions;
+      /** "Summarize from headlines" echo — replaces a fresh search. */
+      precomputedSearchResults?: PrecomputedSearchResults;
       interpreterMode?: InterpreterMode;
       hostedRegion?: 'US' | 'EU';
       forcedAgentType?: string;
@@ -192,6 +194,10 @@ export class ChatService {
       conversationSummary?: string;
       /** Long-term user memory snippets (see ChatBody). */
       memories?: string[];
+      /** Phishing-screen override message ids (see ChatBody). */
+      m365MailScreenOverrides?: string[];
+      /** Configured shared mailbox addresses (see ChatBody). */
+      m365SharedMailboxes?: string[];
     },
   ): Promise<ReadableStream<Uint8Array>> {
     const messagesWithPlaceholders = await prepareMessagesForAPI(messages);
@@ -208,6 +214,7 @@ export class ChatService {
       threadId: options?.threadId,
       searchMode: options?.searchMode,
       webSearchOptions: options?.webSearchOptions,
+      precomputedSearchResults: options?.precomputedSearchResults,
       interpreterMode: options?.interpreterMode,
       hostedRegion: options?.hostedRegion,
       forcedAgentType: options?.forcedAgentType,
@@ -232,6 +239,8 @@ export class ChatService {
       extraction: options?.extraction,
       conversationSummary: options?.conversationSummary,
       memories: options?.memories,
+      m365MailScreenOverrides: options?.m365MailScreenOverrides,
+      m365SharedMailboxes: options?.m365SharedMailboxes,
     };
 
     const { body, report } = trimBodyToByteBudget(rawBody);

@@ -1,11 +1,21 @@
 'use client';
 
-import { IconPlugConnected, IconX } from '@tabler/icons-react';
+import {
+  IconBrandWindows,
+  IconPlugConnected,
+  IconX,
+} from '@tabler/icons-react';
 import { FC } from 'react';
 
 import { useTranslations } from 'next-intl';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
+import { useM365Enabled } from '@/client/hooks/useM365Enabled';
+
+import {
+  M365_BUILTIN_SERVER_ID,
+  M365_BUILTIN_SERVER_LABEL,
+} from '@/lib/services/m365/tools/toolCatalog';
 
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
@@ -34,21 +44,39 @@ import { useSettingsStore } from '@/client/stores/settingsStore';
  */
 export const ConnectorPinTray: FC = () => {
   const t = useTranslations('connectorPin');
+  const tM365 = useTranslations('m365.tools');
   const mcpServers = useSettingsStore((s) => s.mcpServers);
   const updateMcpServer = useSettingsStore((s) => s.updateMcpServer);
+  const m365Connected = useSettingsStore((s) => s.m365Connected);
+  const m365ToolsUserEnabled = useSettingsStore((s) => s.m365ToolsUserEnabled);
+  const setM365ToolsUserEnabled = useSettingsStore(
+    (s) => s.setM365ToolsUserEnabled,
+  );
+  const { toolsEnabled: m365ToolsFlagOn } = useM365Enabled();
   const setTrayOpen = useChatInputStore((s) => s.setConnectorPinTrayOpen);
   const { selectedConversation, updateConversation } = useConversations();
 
   if (!selectedConversation) return null;
   const pinnedId = selectedConversation.pinnedMcpServerId;
   const chatDisabledIds = selectedConversation.disabledMcpServerIds ?? [];
+  // Virtual Microsoft 365 row: not a store row — its "global toggle" is
+  // m365ToolsUserEnabled, its per-chat toggle and focus pin ride the same
+  // disabledMcpServerIds / pinnedMcpServerId machinery as real connectors.
+  const m365RowVisible = m365ToolsFlagOn && m365Connected;
+  const m365ChatEnabled =
+    m365ToolsUserEnabled && !chatDisabledIds.includes(M365_BUILTIN_SERVER_ID);
+  const pinnedIsM365 = pinnedId === M365_BUILTIN_SERVER_ID;
   const pinnedServer = pinnedId
     ? mcpServers.find((s) => s.id === pinnedId)
     : undefined;
-  const pinnedUsable =
-    !!pinnedServer?.enabled &&
-    !chatDisabledIds.includes(pinnedServer.id) &&
-    !(pinnedServer.authMode === 'oauth' && pinnedServer.oauth?.needsReauth);
+  const pinnedName = pinnedIsM365
+    ? M365_BUILTIN_SERVER_LABEL
+    : (pinnedServer?.name ?? t('unknownConnector'));
+  const pinnedUsable = pinnedIsM365
+    ? m365RowVisible && m365ChatEnabled
+    : !!pinnedServer?.enabled &&
+      !chatDisabledIds.includes(pinnedServer.id) &&
+      !(pinnedServer.authMode === 'oauth' && pinnedServer.oauth?.needsReauth);
 
   const setPin = (serverId: string | undefined) => {
     updateConversation(selectedConversation.id, {
@@ -93,12 +121,88 @@ export const ConnectorPinTray: FC = () => {
         </button>
       </div>
 
-      {mcpServers.length === 0 ? (
+      {mcpServers.length === 0 && !m365RowVisible ? (
         <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
           {t('noEligibleConnectors')}
         </p>
       ) : (
         <ul className="mt-2 space-y-1">
+          {m365RowVisible && (
+            <li className="flex items-center gap-2">
+              <label
+                className={`flex min-w-0 flex-1 items-center gap-2 ${
+                  m365ToolsUserEnabled ? 'cursor-pointer' : 'cursor-default'
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  checked={m365ChatEnabled}
+                  disabled={!m365ToolsUserEnabled}
+                  onChange={() =>
+                    setChatEnabled(M365_BUILTIN_SERVER_ID, !m365ChatEnabled)
+                  }
+                  aria-label={t('toggleServerInChat', {
+                    name: M365_BUILTIN_SERVER_LABEL,
+                  })}
+                  className="h-3.5 w-3.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-40 dark:border-gray-600 dark:bg-gray-800"
+                />
+                <IconBrandWindows
+                  size={14}
+                  className="flex-shrink-0 text-blue-500"
+                  aria-hidden="true"
+                />
+                <span className="min-w-0">
+                  <span
+                    className={`block truncate text-xs ${
+                      m365ChatEnabled
+                        ? 'text-gray-800 dark:text-gray-200'
+                        : 'text-gray-400 dark:text-gray-500'
+                    }`}
+                  >
+                    {M365_BUILTIN_SERVER_LABEL}
+                  </span>
+                  <span className="block truncate text-[11px] text-gray-500 dark:text-gray-400">
+                    {tM365('trayDescription')}
+                  </span>
+                </span>
+              </label>
+              <button
+                type="button"
+                onClick={() => setM365ToolsUserEnabled(!m365ToolsUserEnabled)}
+                title={t('globalToggleTitle', {
+                  name: M365_BUILTIN_SERVER_LABEL,
+                })}
+                className={`flex-shrink-0 rounded-md px-1.5 py-0.5 text-[11px] transition-colors ${
+                  m365ToolsUserEnabled
+                    ? 'text-gray-400 dark:text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700'
+                    : 'text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 dark:hover:bg-amber-900/40'
+                }`}
+              >
+                {m365ToolsUserEnabled ? t('globalOn') : t('globalOff')}
+              </button>
+              {pinnedIsM365 ? (
+                <button
+                  type="button"
+                  onClick={() => setPin(undefined)}
+                  className="flex-shrink-0 inline-flex items-center gap-1 rounded-md bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 px-2 py-0.5 text-xs text-blue-800 dark:text-blue-200 hover:bg-blue-100 dark:hover:bg-blue-800/50 transition-colors"
+                  title={t('unpin')}
+                >
+                  {t('focusedChip')}
+                  <IconX size={11} aria-hidden="true" />
+                </button>
+              ) : (
+                m365ChatEnabled && (
+                  <button
+                    type="button"
+                    onClick={() => setPin(M365_BUILTIN_SERVER_ID)}
+                    className="flex-shrink-0 rounded-md px-2 py-0.5 text-xs text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+                  >
+                    {t('focusAction')}
+                  </button>
+                )
+              )}
+            </li>
+          )}
           {mcpServers.map((server) => {
             const needsReauth =
               server.authMode === 'oauth' && !!server.oauth?.needsReauth;
@@ -185,9 +289,7 @@ export const ConnectorPinTray: FC = () => {
       <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
         {pinnedId
           ? pinnedUsable
-            ? t('pinnedHint', {
-                name: pinnedServer?.name ?? t('unknownConnector'),
-              })
+            ? t('pinnedHint', { name: pinnedName })
             : t('staleHint')
           : t('chatToggleHint')}
       </p>

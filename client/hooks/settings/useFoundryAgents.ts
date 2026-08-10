@@ -9,6 +9,8 @@ import { useSettingsStore } from '@/client/stores/settingsStore';
 
 interface FoundryAgentsResponse {
   agents: DiscoveredAgent[];
+  /** Static org-agent ids currently overridden or disabled by admin records. */
+  suppressedOrgAgentIds?: string[];
   regionalPath: string | null;
   officePaths: string[];
 }
@@ -106,6 +108,7 @@ export function useFoundryAgents() {
 
   return {
     foundryAgents: isRefreshing ? [] : visibleAgents,
+    suppressedOrgAgentIds: data?.suppressedOrgAgentIds ?? [],
     regionalPath: data?.regionalPath ?? null,
     officePaths: data?.officePaths ?? [],
     isLoadingFoundryAgents: isLoadingFoundryAgents || isRefreshing,

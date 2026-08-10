@@ -11,13 +11,22 @@
  * (WEB_SEARCH_PROVIDER env). The feed providers work in every deployment;
  * 'bing-agent' needs the Foundry search agent — where that infrastructure
  * is absent, a search on it degrades to a knowledge answer with a notice.
+ * 'combined' runs the Bing agent and the Google News feed concurrently:
+ * headlines surface as soon as the feed answers, the Bing summary joins
+ * when the agent finishes (35-90s), and the two are merged. Where the
+ * Foundry agent is absent it degrades to the feed result alone.
+ * 'bing-responses' is the native web_search tool on the Azure OpenAI
+ * Responses API — the same Bing grounding as 'bing-agent' but a direct
+ * model call instead of a Foundry agent run (A/B latency candidate).
  */
 export type WebSearchProviderOption =
   | 'auto'
   | 'news'
   | 'google-news'
   | 'gdelt'
-  | 'bing-agent';
+  | 'bing-agent'
+  | 'bing-responses'
+  | 'combined';
 
 export const WEB_SEARCH_PROVIDER_OPTIONS: WebSearchProviderOption[] = [
   'auto',
@@ -25,6 +34,8 @@ export const WEB_SEARCH_PROVIDER_OPTIONS: WebSearchProviderOption[] = [
   'google-news',
   'gdelt',
   'bing-agent',
+  'bing-responses',
+  'combined',
 ];
 
 export interface WebSearchOptions {
@@ -49,8 +60,34 @@ export const MAX_SEARCH_RESULT_COUNT = 15;
 export const DEFAULT_WEB_SEARCH_OPTIONS: WebSearchOptions = {
   resultCount: 8,
   freshness: 'auto',
-  provider: 'auto',
+  provider: 'combined',
 };
+
+/**
+ * One headline from the fast (Google News) leg of a combined search —
+ * streamed to the client mid-search so the wait for Bing shows real
+ * content, and echoed back verbatim on "Summarize from headlines" resends
+ * so the server can rebuild the digest without re-searching.
+ */
+export interface SearchHeadlineEntry {
+  title: string;
+  url: string;
+  date: string;
+  sourceName?: string;
+  sourceUrl?: string;
+  snippet?: string;
+}
+
+/**
+ * Client-echoed search results for a "Summarize from headlines" resend:
+ * the interim headlines the user already saw, sent back in place of a
+ * fresh search (the server is stateless — same pattern as mcpPlan).
+ */
+export interface PrecomputedSearchResults {
+  /** The queries the interim results answered (display/record only). */
+  queries: string[];
+  entries: SearchHeadlineEntry[];
+}
 
 export function isWebSearchProviderOption(
   value: unknown,

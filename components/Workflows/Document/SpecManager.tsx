@@ -7,6 +7,8 @@ import { useTranslations } from 'next-intl';
 
 import { DocumentSpec } from '@/types/workflow';
 
+import { SpecFieldsEditor } from '../Shared/SpecFieldsEditor';
+
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -41,18 +43,6 @@ export function SpecManager({ onClose }: SpecManagerProps) {
     };
     addDocumentSpec(spec);
     setEditingId(spec.id);
-  };
-
-  const patchSection = (
-    index: number,
-    patch: Partial<DocumentSpec['sections'][number]>,
-  ) => {
-    if (!editing) return;
-    updateDocumentSpec(editing.id, {
-      sections: editing.sections.map((s, i) =>
-        i === index ? { ...s, ...patch } : s,
-      ),
-    });
   };
 
   const inputClass =
@@ -136,87 +126,17 @@ export function SpecManager({ onClose }: SpecManagerProps) {
                 className={`${inputClass} mb-3 w-full`}
               />
 
-              <div className="space-y-2">
-                {editing.sections.map((section, index) => (
-                  <div
-                    key={index}
-                    className="flex flex-wrap items-center gap-2"
-                  >
-                    <span className="w-4 text-xs text-gray-400">
-                      {index + 1}.
-                    </span>
-                    <input
-                      value={section.heading}
-                      onChange={(e) =>
-                        patchSection(index, { heading: e.target.value })
-                      }
-                      placeholder={t('sectionHeading')}
-                      aria-label={t('sectionHeading')}
-                      className={`${inputClass} w-44`}
-                    />
-                    <input
-                      value={section.guidance ?? ''}
-                      onChange={(e) =>
-                        patchSection(index, { guidance: e.target.value })
-                      }
-                      placeholder={t('sectionGuidance')}
-                      aria-label={t('sectionGuidance')}
-                      className={`${inputClass} min-w-[160px] flex-1`}
-                    />
-                    <label className="inline-flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400">
-                      <input
-                        type="checkbox"
-                        checked={section.required}
-                        onChange={(e) =>
-                          patchSection(index, { required: e.target.checked })
-                        }
-                      />
-                      {t('sectionRequired')}
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        updateDocumentSpec(editing.id, {
-                          sections: editing.sections.filter(
-                            (_, i) => i !== index,
-                          ),
-                        })
-                      }
-                      aria-label={t('removeSection')}
-                      className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-surface-dark-elevated dark:hover:text-gray-200"
-                    >
-                      <IconX size={13} aria-hidden />
-                    </button>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={() =>
-                    updateDocumentSpec(editing.id, {
-                      sections: [
-                        ...editing.sections,
-                        { heading: '', required: true },
-                      ],
-                    })
-                  }
-                  className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-surface-dark-elevated"
-                >
-                  <IconPlus size={13} aria-hidden />
-                  {t('addSection')}
-                </button>
-              </div>
-
-              <textarea
-                value={editing.generalGuidance ?? ''}
-                onChange={(e) =>
+              <SpecFieldsEditor
+                value={{
+                  sections: editing.sections,
+                  generalGuidance: editing.generalGuidance,
+                }}
+                onChange={(next) =>
                   updateDocumentSpec(editing.id, {
-                    generalGuidance: e.target.value,
+                    sections: next.sections,
+                    generalGuidance: next.generalGuidance,
                   })
                 }
-                rows={2}
-                placeholder={t('generalGuidance')}
-                aria-label={t('generalGuidance')}
-                className={`${inputClass} mt-3 w-full resize-y`}
               />
             </>
           ) : (

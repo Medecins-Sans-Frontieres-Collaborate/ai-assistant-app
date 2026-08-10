@@ -16,6 +16,7 @@ interface VirtualConversationListProps {
   handleMoveToFolder: (conversationId: string, folderId: string | null) => void;
   handleRenameConversation: (id: string, currentName: string) => void;
   handleExportConversation: (conversation: Conversation) => void;
+  handleShareConversation?: (conversation: Conversation) => void;
   folders: FolderInterface[];
   t: (key: string) => string;
   /** Estimated row height in px. Real heights are measured at runtime. */
@@ -44,6 +45,7 @@ export const VirtualConversationList: FC<VirtualConversationListProps> = ({
   handleMoveToFolder,
   handleRenameConversation,
   handleExportConversation,
+  handleShareConversation,
   folders,
   t,
   rowHeight = 44,
@@ -62,6 +64,7 @@ export const VirtualConversationList: FC<VirtualConversationListProps> = ({
       handleMoveToFolder={handleMoveToFolder}
       handleRenameConversation={handleRenameConversation}
       handleExportConversation={handleExportConversation}
+      handleShareConversation={handleShareConversation}
       folders={folders}
       t={t}
     />
@@ -134,6 +137,7 @@ export const VirtualConversationList: FC<VirtualConversationListProps> = ({
                 handleMoveToFolder={handleMoveToFolder}
                 handleRenameConversation={handleRenameConversation}
                 handleExportConversation={handleExportConversation}
+                handleShareConversation={handleShareConversation}
                 folders={folders}
                 t={t}
               />

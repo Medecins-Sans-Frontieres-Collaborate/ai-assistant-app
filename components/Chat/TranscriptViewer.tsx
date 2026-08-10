@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  IconBrandOnedrive,
   IconCheck,
   IconCopy,
   IconDownload,
@@ -11,25 +12,34 @@ import {
   IconVolumeOff,
 } from '@tabler/icons-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
 import { useSettings } from '@/client/hooks/settings/useSettings';
+import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
+import {
+  M365ClientError,
+  saveToOneDrive,
+} from '@/client/services/m365/m365Client';
 import { translateText } from '@/lib/services/translation/translationService';
 
 import { getAutonym } from '@/lib/utils/app/locales';
 import { generateAudioFilename } from '@/lib/utils/shared/string/slugify';
 
+import type { M365SaveDestination } from '@/types/m365';
 import { TRANSCRIPT_EXPIRY_DAYS } from '@/types/transcription';
 import { MessageTranslationState } from '@/types/translation';
 
 import AudioPlayer from '@/components/Chat/AudioPlayer';
+import M365FilePickerModal from '@/components/Chat/ChatInput/M365FilePickerModal';
 import { TranslationDropdown } from '@/components/Chat/ChatMessages/TranslationDropdown';
 import { CitationStreamdown } from '@/components/Markdown/CitationStreamdown';
 import { StreamdownWithCodeButtons } from '@/components/Markdown/StreamdownWithCodeButtons';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 
 /**
  * Regex to match blob transcript references.
@@ -427,6 +437,52 @@ export const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
     URL.revokeObjectURL(url);
   }, [displayedTranscript, filename, translationState.currentLocale]);
 
+  // §3 third pass: save the displayed transcript back to OneDrive via the
+  // folder picker. Flag + per-user connect opt-in, like every M365 surface.
+  const { transcriptionEnabled: m365TranscriptionFlag } = useM365Enabled();
+  const m365Connected = useSettingsStore((st) => st.m365Connected);
+  const canSaveToOneDrive = m365TranscriptionFlag && m365Connected;
+  const [oneDrivePickerOpen, setOneDrivePickerOpen] = useState(false);
+  const [isSavingToOneDrive, setIsSavingToOneDrive] = useState(false);
+
+  const handleSaveTranscriptTo = useCallback(
+    async (destination: M365SaveDestination) => {
+      if (isSavingToOneDrive) return;
+      setIsSavingToOneDrive(true);
+      const toastId = toast.loading(t('transcript.savingToOneDrive'));
+      try {
+        const suffix = translationState.currentLocale
+          ? `_${translationState.currentLocale}`
+          : '';
+        const name = `${filename.replace(/\.(mp3|mp4|mpeg|mpga|m4a|wav|webm)$/i, '')}_transcript${suffix}.txt`;
+        const blob = new Blob([displayedTranscript], { type: 'text/plain' });
+        const result = await saveToOneDrive(blob, name, {
+          driveId: destination.driveId,
+          parentId: destination.itemId ?? undefined,
+        });
+        toast.success(t('transcript.savedToOneDrive', { name: result.name }), {
+          id: toastId,
+          duration: 6000,
+        });
+      } catch (error) {
+        const key =
+          error instanceof M365ClientError && error.code === 'M365_FORBIDDEN'
+            ? 'transcript.saveForbidden'
+            : 'transcript.saveToOneDriveFailed';
+        toast.error(t(key), { id: toastId });
+      } finally {
+        setIsSavingToOneDrive(false);
+      }
+    },
+    [
+      isSavingToOneDrive,
+      displayedTranscript,
+      filename,
+      translationState.currentLocale,
+      t,
+    ],
+  );
+
   // Format transcript with line breaks at sentence boundaries
   const formattedTranscript = displayedTranscript
     .replace(/([.!?])\s+/g, '$1\n\n')
@@ -578,6 +634,27 @@ export const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
                 {t('transcript.download')}
               </button>
 
+              {/* Save to OneDrive (§3 third pass) */}
+              {canSaveToOneDrive && (
+                <button
+                  onClick={() => setOneDrivePickerOpen(true)}
+                  disabled={isSavingToOneDrive}
+                  className={`flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded transition-colors ${
+                    isSavingToOneDrive
+                      ? 'text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                  }`}
+                  title={t('transcript.saveToOneDriveHint')}
+                >
+                  {isSavingToOneDrive ? (
+                    <IconLoader2 size={14} className="animate-spin" />
+                  ) : (
+                    <IconBrandOnedrive size={14} className="text-blue-500" />
+                  )}
+                  {t('transcript.saveToOneDrive')}
+                </button>
+              )}
+
               {/* TTS button - hidden for blob transcripts (too long for TTS) */}
               {!blobRef && (
                 <button
@@ -704,6 +781,15 @@ export const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
         currentLocale={translationState.currentLocale}
         isTranslating={translationState.isTranslating}
         cachedLocales={cachedLocales}
+      />
+
+      {/* Folder picker for the OneDrive transcript save */}
+      <M365FilePickerModal
+        isOpen={oneDrivePickerOpen}
+        onClose={() => setOneDrivePickerOpen(false)}
+        onPickFolder={(destination) => {
+          void handleSaveTranscriptTo(destination);
+        }}
       />
     </div>
   );

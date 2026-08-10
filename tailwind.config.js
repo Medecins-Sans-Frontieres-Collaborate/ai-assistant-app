@@ -159,6 +159,15 @@ module.exports = {
           '0%': { backgroundPosition: '-200% 0' },
           '100%': { backgroundPosition: '200% 0' },
         },
+        // One full gradient period per iteration (background-size 200% →
+        // 0%→200% is exactly one tile). The loading-text gradient keeps its
+        // color band away from the window at 0%/200%, so every iteration
+        // boundary is a fully-gray frame — animationiteration handlers can
+        // swap colors there without a visible jump.
+        'shimmer-wave': {
+          '0%': { backgroundPosition: '0% 0' },
+          '100%': { backgroundPosition: '200% 0' },
+        },
       },
       animation: {
         'scroll-text': 'scroll-text 10s linear infinite',
@@ -185,6 +194,11 @@ module.exports = {
           'slide-out-right 0.2s cubic-bezier(0.4, 0, 1, 1) forwards',
         'fade-out': 'fade-out 0.2s ease-out forwards',
         shimmer: 'shimmer 4s linear infinite',
+        'shimmer-wave': 'shimmer-wave 2s linear infinite',
+        // Staggered list reveal (interim search headlines): pair with an
+        // inline animationDelay per item; 'both' keeps items hidden until
+        // their delay starts so the list appears to stream in.
+        'headline-in': 'slide-in-from-bottom 0.45s ease-out both',
       },
     },
   },

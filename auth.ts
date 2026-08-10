@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
 
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
+import { qualifyGraphScopes } from '@/lib/services/auth/m365GraphScopes';
 
 import {
   REGION_OVERRIDE_COOKIE,
@@ -179,6 +180,28 @@ async function fetchUserData(accessToken: string): Promise<UserData> {
 }
 
 /**
+ * Decrypts the server-side session JWT for the incoming request. The refresh
+ * token lives only in this JWT (never on the Session), so token-minting
+ * helpers must go through here.
+ */
+async function readServerJwt(req: NextRequest): Promise<JWT | null> {
+  // getToken derives the cookie name + JWE salt from `secureCookie`, so we must
+  // match how the cookie was issued: prod (https) uses the __Secure- prefixed
+  // cookie, dev (http) the unprefixed one. Behind a TLS-terminating proxy the
+  // internal request can be http, so key off the configured auth URL rather
+  // than the request protocol.
+  const secureCookie =
+    (process.env.AUTH_URL || process.env.NEXTAUTH_URL || '').startsWith(
+      'https',
+    ) || process.env.NODE_ENV === 'production';
+  return getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET,
+    secureCookie,
+  });
+}
+
+/**
  * Gets a fresh access token for OBO exchange from the user's refresh token.
  * The returned token is scoped to the app's own audience (api://<client-id>/.default)
  * and serves as the "user assertion" for OnBehalfOfCredential.
@@ -192,20 +215,7 @@ async function fetchUserData(accessToken: string): Promise<UserData> {
 export async function getAccessTokenForOBO(
   req: NextRequest,
 ): Promise<string | null> {
-  // getToken derives the cookie name + JWE salt from `secureCookie`, so we must
-  // match how the cookie was issued: prod (https) uses the __Secure- prefixed
-  // cookie, dev (http) the unprefixed one. Behind a TLS-terminating proxy the
-  // internal request can be http, so key off the configured auth URL rather
-  // than the request protocol.
-  const secureCookie =
-    (process.env.AUTH_URL || process.env.NEXTAUTH_URL || '').startsWith(
-      'https',
-    ) || process.env.NODE_ENV === 'production';
-  const token = await getToken({
-    req,
-    secret: process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET,
-    secureCookie,
-  });
+  const token = await readServerJwt(req);
 
   if (!token?.refreshToken) {
     console.warn('[Auth] No refresh token available for OBO exchange');
@@ -243,6 +253,87 @@ export async function getAccessTokenForOBO(
   } catch (error) {
     console.error('[Auth] Error acquiring access token for OBO:', error);
     return null;
+  }
+}
+
+export interface GraphTokenResult {
+  accessToken: string | null;
+  /** Scopes Entra actually granted on the token (space-split `scope` field). */
+  grantedScopes: string[];
+  /**
+   * Entra error description when minting failed. A consent gap surfaces here
+   * as AADSTS65001 ("user or administrator has not consented") — callers can
+   * treat that as "feature not enabled by the tenant" rather than a fault.
+   */
+  error?: string;
+}
+
+/**
+ * Mints a Microsoft Graph access token for the signed-in user with exactly
+ * the requested delegated scopes, using the server-side refresh token.
+ *
+ * This is the incremental-consent path for the M365 integrations: refresh
+ * tokens are not scope-bound, so once the tenant admin grants consent on the
+ * app registration, any of the scopes in `lib/services/auth/m365GraphScopes`
+ * can be requested here on demand — without adding them to the base sign-in
+ * request (which would block sign-in behind the consent screen for everyone).
+ *
+ * Request the minimum scope set for the operation at hand; tokens are minted
+ * per request and never persisted.
+ */
+export async function getGraphAccessToken(
+  req: NextRequest,
+  scopes: string[],
+): Promise<GraphTokenResult> {
+  const token = await readServerJwt(req);
+
+  if (!token?.refreshToken) {
+    return {
+      accessToken: null,
+      grantedScopes: [],
+      error: 'No refresh token available',
+    };
+  }
+
+  try {
+    const url = `https://login.microsoftonline.com/${process.env.AZURE_TENANT_ID}/oauth2/v2.0/token`;
+
+    const formData = {
+      grant_type: 'refresh_token',
+      client_id: process.env.AZURE_CLIENT_ID || '',
+      client_secret: process.env.AZURE_CLIENT_SECRET || '',
+      refresh_token: token.refreshToken,
+      scope: qualifyGraphScopes(scopes).join(' '),
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(formData).toString(),
+    });
+
+    const tokens = await response.json();
+
+    if (!response.ok) {
+      return {
+        accessToken: null,
+        grantedScopes: [],
+        error: tokens.error_description || 'Failed to acquire Graph token',
+      };
+    }
+
+    return {
+      accessToken: tokens.access_token,
+      grantedScopes:
+        typeof tokens.scope === 'string' ? tokens.scope.split(' ') : [],
+    };
+  } catch (error) {
+    console.error('[Auth] Error acquiring Graph access token:', error);
+    return {
+      accessToken: null,
+      grantedScopes: [],
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
   }
 }
 

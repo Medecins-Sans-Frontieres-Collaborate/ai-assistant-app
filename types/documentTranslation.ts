@@ -172,6 +172,12 @@ export interface DocumentTranslationReference {
   /** Path in blob storage */
   blobPath: string;
 
+  /**
+   * When the source came from OneDrive/SharePoint: its containing folder,
+   * so the viewer can offer "save next to original". Absent for uploads.
+   */
+  m365Source?: { driveId: string; parentItemId: string };
+
   /** ISO timestamp when the translation expires */
   expiresAt: string;
 

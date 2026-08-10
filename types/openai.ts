@@ -28,6 +28,14 @@ export interface OpenAIModel {
   isAgent?: boolean;
   isCustomAgent?: boolean; // User-created custom agent (vs built-in agent)
   isOrganizationAgent?: boolean; // Organization-defined agent (e.g., MSF Communications bot)
+  /**
+   * Admin-authored org RAG agents only: tool-toggle gates carried on the
+   * model object because these agents are not in the static config the
+   * client-side gates (chatStore / ChatInput dropdown) look up. When
+   * present (boolean), the model-object value wins over the static lookup.
+   */
+  allowWebSearch?: boolean;
+  allowCodeInterpreter?: boolean;
   agentId?: string; // Azure AI Foundry agent name (or legacy asst_xxx ID)
   /** Agent version the Application's deployment routes to. Required in the
    * agent_reference body when invoking via the project endpoint. */

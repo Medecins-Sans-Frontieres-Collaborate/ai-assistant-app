@@ -1,4 +1,4 @@
-import { OpenAIModelID, OpenAIModels } from '@/types/openai';
+import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
 
 import {
   getCurrentEnvironment,
@@ -187,6 +187,121 @@ describe('Model Configuration', () => {
           expect(excluded).not.toContain(fallback.id);
         }
       }
+    });
+  });
+
+  describe('dynamic fallback (served model list)', () => {
+    beforeEach(() => {
+      vi.stubEnv('NEXT_PUBLIC_ENV', 'prod');
+    });
+
+    const mkModel = (
+      id: string,
+      over: Partial<OpenAIModel> = {},
+    ): OpenAIModel =>
+      ({
+        id,
+        name: id,
+        maxLength: 100000,
+        tokenLimit: 16000,
+        ...over,
+      }) as OpenAIModel;
+
+    // A served ring where the static chain has rotted: no gpt-5.2*, no
+    // gpt-5-mini, DeepSeek-V3.1 gone (deprecated). The latest standard GPT
+    // is gpt-5.6-sol.
+    const served: OpenAIModel[] = [
+      mkModel('gpt-5.6-sol', {
+        series: 'gpt',
+        variant: 'standard',
+        versionLabel: '5.6',
+      }),
+      mkModel('gpt-5.5', {
+        series: 'gpt',
+        variant: 'standard',
+        versionLabel: '5.5',
+      }),
+      mkModel('DeepSeek-V3.2', { series: 'deepseek', versionLabel: '3.2' }),
+      mkModel('my-org-agent', { isOrganizationAgent: true }),
+      mkModel('o3-batch', { stream: false, versionLabel: '3' }),
+    ];
+
+    it('leads with the served default and never names an unserved model', () => {
+      const chain = getFallbackChain(served);
+      expect(chain[0]).toBe('gpt-5.6-sol');
+      const servedIds = new Set(served.map((m) => m.id));
+      for (const id of chain) {
+        expect(servedIds.has(id)).toBe(true);
+      }
+    });
+
+    it('extends the chain past the rotted static tail with eligible served models', () => {
+      const chain = getFallbackChain(served);
+      // GPT models first (newest first), then other providers; agents and
+      // non-streaming models never appear.
+      expect(chain).toEqual(['gpt-5.6-sol', 'gpt-5.5', 'DeepSeek-V3.2']);
+    });
+
+    it('resolves discovered-only models that are absent from the static catalog', () => {
+      const fallback = getFallbackModel(['gpt-5.6-sol'], [], {
+        availableModels: served,
+      });
+      expect(fallback?.id).toBe('gpt-5.5');
+    });
+
+    it('tries the preferred default (user setting) before the chain', () => {
+      const fallback = getFallbackModel(['gpt-5.6-sol'], [], {
+        availableModels: served,
+        preferredDefaultId: 'DeepSeek-V3.2',
+      });
+      expect(fallback?.id).toBe('DeepSeek-V3.2');
+    });
+
+    it('skips the preferred default when it is the model that just failed', () => {
+      const fallback = getFallbackModel(['DeepSeek-V3.2'], [], {
+        availableModels: served,
+        preferredDefaultId: 'DeepSeek-V3.2',
+      });
+      expect(fallback?.id).toBe('gpt-5.6-sol');
+    });
+
+    it('skips the preferred default when it is not fallback-eligible', () => {
+      const fallback = getFallbackModel([], [], {
+        availableModels: served,
+        preferredDefaultId: 'my-org-agent',
+      });
+      expect(fallback?.id).toBe('gpt-5.6-sol');
+    });
+
+    it('respects the user region', () => {
+      const regional: OpenAIModel[] = [
+        mkModel('gpt-5.6-sol', {
+          series: 'gpt',
+          variant: 'standard',
+          versionLabel: '5.6',
+          hostedIn: ['US'],
+        }),
+        mkModel('gpt-5.5', {
+          series: 'gpt',
+          variant: 'standard',
+          versionLabel: '5.5',
+          hostedIn: ['US', 'EU'],
+        }),
+      ];
+      const fallback = getFallbackModel([], [], {
+        availableModels: regional,
+        userRegion: 'EU',
+      });
+      expect(fallback?.id).toBe('gpt-5.5');
+    });
+
+    it('returns null when every served model has been attempted', () => {
+      const fallback = getFallbackModel(
+        ['gpt-5.6-sol', 'gpt-5.5', 'DeepSeek-V3.2'],
+        [],
+        { availableModels: served },
+      );
+      expect(fallback).toBeNull();
     });
   });
 

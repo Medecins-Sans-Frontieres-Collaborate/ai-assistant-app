@@ -5,6 +5,8 @@ import { FC, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { isAlwaysConfirmTool } from '@/lib/utils/shared/chat/toolApprovalRules';
+
 import type { ConsentRequest } from '@/types/chat';
 
 import { useChatStore } from '@/client/stores/chatStore';
@@ -29,6 +31,11 @@ interface ApprovalBatchActionsProps {
  * approval dispatches the whole batch in one resume. Foundry approvals (no
  * server_id) are excluded — they dispatch per-approval against server-side
  * thread state and don't batch.
+ *
+ * Always-confirm M365 write tools may participate: "Approve all" is an
+ * explicit click on a visible batch and only emits once-approvals — it never
+ * writes setAutoApprove or approval rules, so no auto-approve preference can
+ * be created for them here.
  */
 export const ApprovalBatchActions: FC<ApprovalBatchActionsProps> = ({
   requests,
@@ -61,11 +68,18 @@ export const ApprovalBatchActions: FC<ApprovalBatchActionsProps> = ({
 
   const disabled = isStreaming || batchRunning || !selectedConversation;
 
+  // alwaysConfirm writes (M365 mail/calendar/tasks) are excluded from
+  // batch APPROVAL — each needs its own card decision (and may carry
+  // per-item edits the batch path can't see). Deny-all still covers them.
+  const batchApprovable = undecided.filter(
+    (req) => !isAlwaysConfirmTool(req.server_id, req.tool_name),
+  );
+
   const decideAll = async (approve: boolean) => {
     if (disabled || !selectedConversation) return;
     setBatchRunning(true);
     try {
-      for (const req of undecided) {
+      for (const req of approve ? batchApprovable : undecided) {
         await submitApproval(
           req.approval_request_id!,
           approve,
@@ -84,15 +98,17 @@ export const ApprovalBatchActions: FC<ApprovalBatchActionsProps> = ({
       <span className="text-xs text-gray-500 dark:text-gray-400">
         {t('batchPendingHint', { count: undecided.length })}
       </span>
-      <button
-        type="button"
-        onClick={() => void decideAll(true)}
-        disabled={disabled}
-        className="inline-flex items-center gap-1 rounded-md bg-blue-600 px-2.5 py-1 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-blue-700 dark:hover:bg-blue-600"
-      >
-        <IconChecks size={14} aria-hidden="true" />
-        {t('approveAllButton')}
-      </button>
+      {batchApprovable.length > 0 && (
+        <button
+          type="button"
+          onClick={() => void decideAll(true)}
+          disabled={disabled}
+          className="inline-flex items-center gap-1 rounded-md bg-blue-600 px-2.5 py-1 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-blue-700 dark:hover:bg-blue-600"
+        >
+          <IconChecks size={14} aria-hidden="true" />
+          {t('approveAllButton')}
+        </button>
+      )}
       <button
         type="button"
         onClick={() => void decideAll(false)}

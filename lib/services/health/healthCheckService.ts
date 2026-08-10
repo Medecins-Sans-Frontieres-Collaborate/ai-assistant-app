@@ -4,6 +4,8 @@
  * Singleton service that validates Azure service dependencies.
  * Supports tiered health checks: liveness, readiness, and deep checks.
  */
+import { resolveAdminStorageLocation } from '@/lib/services/adminBlobStorage';
+
 import {
   CheckLevel,
   CheckStatus,
@@ -108,6 +110,7 @@ export class HealthCheckService {
             'azureSearch',
             'azureBlobStorage',
             'azureBlobStorageEU',
+            'azureBlobStorageAdmin',
             'azureSpeechWhisper',
             'ffmpeg',
           ];
@@ -227,6 +230,8 @@ export class HealthCheckService {
         return this.checkAzureBlobStorage();
       case 'azureBlobStorageEU':
         return this.checkAzureBlobStorageEU();
+      case 'azureBlobStorageAdmin':
+        return this.checkAzureBlobStorageAdmin();
       case 'azureSpeechWhisper':
         return this.checkAzureSpeechWhisper();
       case 'ffmpeg':
@@ -381,6 +386,19 @@ export class HealthCheckService {
       env.AZURE_BLOB_STORAGE_CONTAINER ||
         env.AZURE_BLOB_STORAGE_IMAGE_CONTAINER,
     );
+  }
+
+  /**
+   * Checks the centralized ADMIN storage location (agent-access rules,
+   * usage-limit counters, admin guides/datasets — see
+   * lib/services/adminBlobStorage.ts). A missing container, broken private
+   * endpoint, or revoked RBAC here silently disables admin features for
+   * every region, so it must surface as a failing check, not as stale
+   * config served from caches.
+   */
+  private async checkAzureBlobStorageAdmin(): Promise<ServiceCheck> {
+    const { accountName, containerName } = resolveAdminStorageLocation();
+    return this.checkBlobAccount(accountName, containerName);
   }
 
   /**

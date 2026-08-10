@@ -30,6 +30,8 @@ vi.mock('katex/dist/katex.min.css', () => ({}));
 // Mock next-intl for component tests with common translations.
 // This provides a global mock that looks up translations from a messages object.
 const mockMessages: Record<string, unknown> = {
+  // Root-namespace key (messages/en.json has a top-level "close").
+  close: 'Close',
   common: {
     cancel: 'Cancel',
     undo: 'Undo',
@@ -43,7 +45,33 @@ const mockMessages: Record<string, unknown> = {
     search: 'Search',
     beta: 'Beta',
   },
+  admin: {
+    title: 'Admin',
+    openSettings: 'Open settings',
+    areaNavLabel: 'Admin areas',
+  },
   chat: {
+    toolSummary: {
+      usedTools: 'Used {count} tools',
+      failedCount: '{count} failed',
+      statusApproved: 'Approved',
+      statusAutoApproved: 'Auto-approved',
+      statusAutoDenied: 'Auto-denied',
+      statusFailed: 'Failed',
+      statusIncomplete: 'Incomplete',
+      viaService: 'via {service}',
+      downloadFile: 'Download',
+      executedCode: 'Executed code',
+      codeOutput: 'Output',
+    },
+    interimSearch: {
+      title: 'Headlines found — deep search still running',
+      hint: 'The deep Bing search can take up to 90 seconds. Answer now from the {count} headlines already found, or wait for the merged result.',
+      summarizeNow: 'Summarize from headlines now',
+      sourcesCount: '{count} sources',
+      showAll: 'Show all {count} sources',
+      showFewer: 'Show fewer',
+    },
     fullSizePreview: 'Full size preview',
     imageContent: 'Image Content',
     thinking: 'Thinking...',
@@ -71,6 +99,25 @@ const mockMessages: Record<string, unknown> = {
       batchPendingHint: '{count} tool requests pending',
       approveAllButton: 'Approve all',
       denyAllButton: 'Deny all',
+      runToolTitle: 'Run <code>{tool}</code>?',
+      runToolGeneric: 'Run this tool?',
+      viaService: 'via {service}',
+      approveButton: 'Approve',
+      approveOptionsLabel: 'Approve options',
+      approveOnce: 'Approve once',
+      alwaysApproveThisTool: 'Always approve this tool',
+      alwaysApproveAllTools: 'Always approve all tools',
+      alwaysApproveEverywhere: 'Always approve this tool — in every chat',
+      denyButton: 'Deny',
+      denyOptionsLabel: 'Deny options',
+      denyOnce: 'Deny once',
+      neverAllowEverywhere: 'Never allow this tool — in every chat',
+      deniedByRuleHint:
+        'Blocked by your rule — manage in Settings → Connectors.',
+      keyboardHint: '{modifier}+⏎ approve · esc deny',
+      submittingState: 'Submitting your decision',
+      approvedState: 'Approved — agent resumed',
+      deniedState: 'Denied',
     },
   },
   fileUpload: {
@@ -210,6 +257,48 @@ const mockMessages: Record<string, unknown> = {
     badgeTooltip:
       'Connector tools are active on every message — they add tokens and response time. Click to manage.',
   },
+  m365: {
+    tools: {
+      alwaysConfirmNote:
+        'This action always asks for confirmation — it can’t be auto-approved.',
+      batchToggleHint:
+        'Uncheck items you don’t want — only checked items are created.',
+      batchAllUnchecked:
+        'Nothing selected — approving would create nothing. Deny instead if you want none.',
+      consentCard: {
+        listLine: 'List: {name}',
+        to: 'To',
+        cc: 'Cc',
+        bcc: 'Bcc',
+        external: 'External',
+        replyAllCallout:
+          'Reply-all — this reply goes to everyone on the original message.',
+        subject: 'Subject',
+        fileLine: 'Attach file: {name}',
+        draftLine: 'Draft: {id}',
+      },
+    },
+    playbooks: {
+      dismissChip: 'Dismiss {title}',
+      chipLabel: 'Playbook: {title}',
+      menuLabel: 'Microsoft 365 playbooks',
+      menuTooltip:
+        'Curated multi-step chains over your calendar, mail and tasks — they gather first, propose, and only write after you agree',
+      meetingFollowThrough: {
+        title: 'Meeting follow-through',
+        description:
+          'Summary, action items, follow-up draft and (if needed) the next meeting — from this transcript',
+      },
+      morningTriage: {
+        title: 'Morning triage',
+        description:
+          'What came in, what’s waiting on you, and today’s calendar — one briefing',
+      },
+      chipsSettingLabel: 'Suggest Microsoft 365 playbooks',
+      chipsSettingHint:
+        'Show playbook suggestions above the message box when they apply (e.g. after importing a meeting transcript).',
+    },
+  },
   toolApprovals: {
     title: 'Tool approvals',
     description:
@@ -312,10 +401,15 @@ const mockMessages: Record<string, unknown> = {
     chipAddHint: 'Press Enter to add',
     removeChip: 'Remove',
     groupsLabel: 'Allowed groups',
-    groupsPendingConsent:
-      "Group-based access is pending tenant admin consent and can't be edited yet.",
+    groupsPlaceholder: 'Entra group object ID',
+    groupSearchPlaceholder: 'Search groups by name…',
+    groupSearchNoResults: 'No groups match that name.',
+    groupSearchError:
+      'Group search failed. You can still paste a group object ID below.',
+    groupSearchHint:
+      "Type at least 2 characters to search your organization's groups, or paste a group object ID directly. Access follows the member list in Microsoft Entra.",
     restrictedEmptyWarning:
-      'No users or domains are listed — nobody will be able to use this agent.',
+      'No users, domains, or groups are listed — nobody will be able to use this agent.',
     save: 'Save',
     saving: 'Saving…',
     cancel: 'Cancel',
@@ -542,13 +636,30 @@ const mockMessages: Record<string, unknown> = {
     privacyNote:
       'Facts are stored only in this browser and included in your chats to personalize replies.',
     empty:
-      'No memories yet. Facts worth remembering are saved automatically from your conversations.',
+      'No memories yet. Add one above, or let the assistant save facts from your conversations.',
     savedOn: 'Saved {date}',
     deleteMemory: 'Delete memory',
     clearAll: 'Clear all memories',
     clearAllConfirmQuestion: 'Delete all memories? This cannot be undone.',
     clearAllConfirm: 'Delete all',
     cancel: 'Cancel',
+    pauseToggle: 'Pause saving new memories',
+    pauseNote:
+      'Memories you already have keep personalizing your chats — nothing new is saved until you resume.',
+    addLabel: 'Add a memory',
+    addPlaceholder:
+      'Something the assistant should remember, e.g. "Prefers concise answers"',
+    addMemory: 'Add memory',
+    editMemory: 'Edit memory',
+    saveMemory: 'Save',
+    addedByYou: 'Added by you',
+    storedCount: '{count} of {max} memories saved',
+    charCount: '{count}/{max} characters',
+    noLineBreaksHint:
+      'Line breaks are removed — a memory is stored as one line.',
+    duplicate: 'That memory is already saved.',
+    atCapacity:
+      "You've reached the {max}-memory limit. Delete one to add another.",
   },
   contextWindow: {
     label: 'Context window',
@@ -579,6 +690,12 @@ const mockMessages: Record<string, unknown> = {
       providerBing: 'Bing grounding (via Microsoft)',
       providerBingDescription:
         'Reads full pages for deeper summaries and covers the general web, not just news. However, searches routinely take 30–90 seconds and result quality is often inconsistent from one search to the next.',
+      providerBingResponses: 'Bing fast search (Azure OpenAI)',
+      providerBingResponsesDescription:
+        'The same Bing web coverage as Bing grounding, run as a single direct model call instead of a Foundry agent — typically much faster. New option under evaluation against Bing grounding.',
+      providerCombined: 'Deep search with early headlines (Bing + Google News)',
+      providerCombinedDescription:
+        'Runs Bing grounding and Google News together: headlines appear within seconds while the deep Bing search keeps working, and you can choose to answer from the headlines right away instead of waiting out the slow search. When Bing finishes, both result sets are merged.',
       sourcesLabel: 'Sources per search',
       sourcesDescription:
         'How many distinct sources a search keeps as citations. Research-style questions may automatically widen this.',

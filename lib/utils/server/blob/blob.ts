@@ -210,6 +210,19 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
     }
   }
 
+  /**
+   * Creates this client's container when it doesn't exist yet (idempotent).
+   * Data-plane call — "Storage Blob Data Contributor" covers it, and it
+   * works over a private endpoint. Used as a self-healing backstop for
+   * containers whose source of truth is Terraform (e.g. the admin
+   * container), so a fresh environment works before the next infra apply.
+   */
+  async ensureContainerExists(): Promise<void> {
+    await this.blobServiceClient
+      .getContainerClient(this.containerName as string)
+      .createIfNotExists();
+  }
+
   async upload(
     blobName: string,
     content: string | Buffer,
@@ -292,15 +305,15 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       return blockBlobClient.url;
     }
 
-    await withAzureRetry(
-      () =>
-        blockBlobClient.uploadStream(
-          contentStream,
-          bufferSize,
-          maxConcurrency,
-          options,
-        ),
-      { label: 'blob.uploadStream' },
+    // NO withAzureRetry here: the source stream cannot be rewound, so a
+    // retry after a partially consumed attempt would resume mid-stream and
+    // commit a silently truncated blob as success. Callers that want retry
+    // must re-open the source and call again.
+    await blockBlobClient.uploadStream(
+      contentStream,
+      bufferSize,
+      maxConcurrency,
+      options,
     );
     return blockBlobClient.url;
   }

@@ -1,5 +1,11 @@
 import { NextRequest } from 'next/server';
 
+import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
+import { mergeGlossaryEntries } from '@/lib/services/workflows/shared/glossaryPrompts';
+import {
+  resolveGuideCriteria,
+  resolveSlotGuide,
+} from '@/lib/services/workflows/shared/guideResolution';
 import { resolveWorkflowModelId } from '@/lib/services/workflows/shared/workflowModels';
 import { runTranslationAssessment } from '@/lib/services/workflows/translation/translationOrchestrator';
 
@@ -14,6 +20,10 @@ import {
   collectCustomCriteria,
   isCustomCriterionId,
 } from '@/lib/utils/shared/review/customCriteria';
+import {
+  MAX_GUIDES_PER_ASSESSMENT,
+  isGuideCriterionId,
+} from '@/lib/utils/shared/review/guideCriteria';
 import { isTranslationBuiltinCriterionId } from '@/lib/utils/shared/translation/qualityCriteria';
 
 import { GlossaryEntry } from '@/types/workflow';
@@ -34,6 +44,9 @@ interface TranslationAssessRequest {
   criteria: string[];
   customCriteria?: CustomCriterionDefinition[];
   glossaryEntries?: GlossaryEntry[];
+  /** Admin terminology guide whose entries merge with (and win over) the
+   * local glossary — same attachment the translate route accepts. */
+  glossaryGuideId?: string;
   modelId?: string;
 }
 
@@ -46,6 +59,11 @@ interface TranslationAssessRequest {
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session) return unauthorizedResponse();
+
+  // Group-membership warm-up MUST precede resolveGuideCriteria /
+  // resolveSlotGuide below — guide access rules with group scope read the
+  // cache synchronously. Never throws.
+  await resolveUserGroupIds(req, session);
 
   let body: TranslationAssessRequest;
   try {
@@ -84,17 +102,48 @@ export async function POST(req: NextRequest) {
   for (const id of criterionIds) {
     if (isTranslationBuiltinCriterionId(id)) continue;
     if (isCustomCriterionId(id) && customById.has(id)) continue;
+    // Guide ids are resolved (and access-checked) server-side below.
+    if (isGuideCriterionId(id)) continue;
     return badRequestResponse('Unknown criterion');
   }
+  const guideCriterionIds = criterionIds.filter(isGuideCriterionId);
+  if (guideCriterionIds.length > MAX_GUIDES_PER_ASSESSMENT) {
+    return badRequestResponse('Too many guides selected');
+  }
+  const guideResolution = await resolveGuideCriteria({
+    userMail: session.user?.mail ?? undefined,
+    workflow: 'translation',
+    criterionIds: guideCriterionIds,
+  });
+  if ('error' in guideResolution) {
+    return badRequestResponse(guideResolution.error);
+  }
 
-  const glossaryEntries: GlossaryEntry[] = Array.isArray(body.glossaryEntries)
-    ? body.glossaryEntries
-        .filter(
-          (e): e is GlossaryEntry =>
-            !!e && typeof e.source === 'string' && typeof e.target === 'string',
-        )
-        .slice(0, MAX_GLOSSARY_ENTRIES)
+  const localEntries: GlossaryEntry[] = Array.isArray(body.glossaryEntries)
+    ? body.glossaryEntries.filter(
+        (e): e is GlossaryEntry =>
+          !!e && typeof e.source === 'string' && typeof e.target === 'string',
+      )
     : [];
+  // Same merge as the translate route: guide entries first, guide wins on
+  // duplicate source terms.
+  let guideEntries: GlossaryEntry[] = [];
+  if (typeof body.glossaryGuideId === 'string' && body.glossaryGuideId) {
+    const resolved = await resolveSlotGuide({
+      userMail: session.user?.mail ?? undefined,
+      guideId: body.glossaryGuideId,
+      expectedKind: 'terminology',
+      workflow: 'translation',
+    });
+    if ('error' in resolved) return badRequestResponse(resolved.error);
+    if (resolved.guide.payload.kind === 'terminology') {
+      guideEntries = resolved.guide.payload.entries;
+    }
+  }
+  const glossaryEntries = mergeGlossaryEntries(
+    guideEntries,
+    localEntries,
+  ).slice(0, MAX_GLOSSARY_ENTRIES);
 
   try {
     const result = await runTranslationAssessment({
@@ -105,6 +154,7 @@ export async function POST(req: NextRequest) {
       targetLanguage,
       criterionIds,
       customById,
+      guides: guideResolution.guides,
       glossaryEntries,
       modelId: resolveWorkflowModelId(body.modelId),
     });

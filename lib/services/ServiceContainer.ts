@@ -108,13 +108,14 @@ export class ServiceContainer {
     });
 
     // OpenAI client for AI Foundry OpenAI-compatible endpoint (Grok, DeepSeek, etc.)
-    // Note: AI Foundry's OpenAI-compatible endpoint currently requires API key
-    // TODO: Investigate if token-based auth is supported
+    // Auth: Entra bearer per request (verified supported on /openai/v1/),
+    // with the static key as fallback — see createEntraPreferredFetch.
     this.openAIClient = new OpenAI({
       baseURL:
         env.AZURE_AI_FOUNDRY_OPENAI_ENDPOINT ||
         `${env.AZURE_AI_FOUNDRY_ENDPOINT?.replace('/api/projects/default', '')}/openai/v1/`,
-      apiKey: env.OPENAI_API_KEY || 'placeholder', // Required by SDK even if not used
+      apiKey: env.OPENAI_API_KEY || 'placeholder', // Fallback when Entra fails
+      fetch: this.createEntraPreferredFetch(),
     });
 
     // Anthropic Foundry client for Claude models via Azure AI Foundry
@@ -186,6 +187,35 @@ export class ServiceContainer {
    * Missing configuration never breaks chat: absent fields make callers fall
    * back to the default clients per-SDK.
    */
+  /**
+   * Per-request auth for the Foundry OpenAI-compatible data plane: inject a
+   * fresh Entra bearer token (the same identity every other Azure client
+   * here uses), falling back to whatever api key the SDK already set when
+   * token acquisition fails.
+   *
+   * Why not the static key alone: account keys rot silently on rotation. A
+   * stale OPENAI_API_KEY 401'd every tool-router classification while chat
+   * itself kept working on the Entra-authed clients — so intelligent
+   * search/code-interpreter routing degraded to "no tools" with no visible
+   * error anywhere but a server log line.
+   */
+  private createEntraPreferredFetch(): typeof fetch {
+    return async (input, init) => {
+      try {
+        const token = await this.azureADTokenProvider();
+        const headers = new Headers(init?.headers);
+        headers.set('Authorization', `Bearer ${token}`);
+        return fetch(input, { ...init, headers });
+      } catch (error) {
+        console.warn(
+          '[ServiceContainer] Entra token unavailable for OpenAI-compat call; using configured API key:',
+          error instanceof Error ? error.message : error,
+        );
+        return fetch(input, init);
+      }
+    };
+  }
+
   public getChatClientsForRegion(region: UserRegion): RegionChatClients {
     const cached = this.regionChatClients.get(region);
     if (cached) return cached;
@@ -216,10 +246,14 @@ export class ServiceContainer {
 
     const regionApiKey =
       region === 'EU' ? env.OPENAI_API_KEY_EU : env.OPENAI_API_KEY_US;
-    if (accountBase && regionApiKey) {
+    if (accountBase) {
+      // Entra tokens are account-agnostic (same as the Anthropic client
+      // below), so a region client no longer requires a region-scoped key —
+      // the key is only the fallback when token acquisition fails.
       clients.openAIClient = new OpenAI({
         baseURL: `${accountBase}/openai/v1/`,
-        apiKey: regionApiKey,
+        apiKey: regionApiKey || 'placeholder',
+        fetch: this.createEntraPreferredFetch(),
       });
     }
 

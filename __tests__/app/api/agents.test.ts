@@ -19,6 +19,7 @@ const accessIsEnabled = vi.hoisted(() => vi.fn());
 const accessEnsureFresh = vi.hoisted(() => vi.fn());
 const accessEvaluate = vi.hoisted(() => vi.fn());
 const accessGetPromptAgents = vi.hoisted(() => vi.fn());
+const accessGetM365Agents = vi.hoisted(() => vi.fn());
 
 vi.mock('@/auth', () => ({ auth: mockAuth, getAccessTokenForOBO }));
 vi.mock('@/lib/services/auth/OfficeResolver', () => ({
@@ -48,6 +49,10 @@ vi.mock('@/lib/services/agentAccess/AgentAccessService', () => ({
       ensureFresh: accessEnsureFresh,
       evaluateAccess: accessEvaluate,
       getPromptAgents: accessGetPromptAgents,
+      getM365Agents: accessGetM365Agents,
+      // Org RAG agents ride the same discovery merge; these tests don't
+      // exercise that path.
+      getOrgAgents: () => [],
     }),
   },
 }));
@@ -82,6 +87,7 @@ describe('GET /api/agents — access-control discovery filter', () => {
     accessEnsureFresh.mockResolvedValue(undefined);
     accessEvaluate.mockReturnValue({ decision: 'allow', reason: 'no-rule' });
     accessGetPromptAgents.mockReturnValue([]);
+    accessGetM365Agents.mockReturnValue([]);
   });
 
   it('returns 401 when unauthenticated', async () => {
@@ -257,6 +263,7 @@ describe('GET /api/agents — access-control discovery filter', () => {
             type: 'prompt',
           },
         ],
+        suppressedOrgAgentIds: [],
         regionalPath: null,
         officePaths: [],
       });
@@ -326,6 +333,54 @@ describe('GET /api/agents — access-control discovery filter', () => {
         data.agents.map((a: { agentName: string }) => a.agentName),
       ).toEqual(['agent-a', 'agent-b']);
       expect(accessGetPromptAgents).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('M365 file-backed agents', () => {
+    const m365Source = (overrides: Record<string, unknown>) => ({
+      sourceId: 'src-1',
+      driveId: 'd1',
+      itemId: 'i1',
+      kind: 'file',
+      title: 'Doc',
+      webUrl: '',
+      status: 'pending',
+      ...overrides,
+    });
+    const m365Agent = (
+      id: string,
+      sources: Array<Record<string, unknown>>,
+    ) => ({
+      id,
+      name: id,
+      description: '',
+      sources,
+    });
+
+    it('hides never-indexed and zero-chunk agents from discovery', async () => {
+      accessIsEnabled.mockReturnValue(true);
+      accessGetM365Agents.mockReturnValue([
+        m365Agent('m365-indexed0000', [
+          m365Source({ status: 'indexed', indexedChunks: 12 }),
+        ]),
+        m365Agent('m365-neverindexed', [m365Source({})]),
+        m365Agent('m365-emptyextract', [
+          m365Source({ status: 'indexed', indexedChunks: 0 }),
+        ]),
+        m365Agent('m365-errored00000', [
+          m365Source({ status: 'error', indexedChunks: 0 }),
+        ]),
+        // Legacy record: indexed before indexedChunks existed — stays.
+        m365Agent('m365-legacy000000', [m365Source({ status: 'indexed' })]),
+      ]);
+
+      const response = await GET(request());
+      const data = await parseJsonResponse(response);
+
+      const ids = data.agents
+        .filter((a: { type: string }) => a.type === 'm365')
+        .map((a: { id: string }) => a.id);
+      expect(ids).toEqual(['m365-indexed0000', 'm365-legacy000000']);
     });
   });
 });

@@ -1,4 +1,6 @@
+import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { FileProcessingService } from '@/lib/services/chat';
+import { guardTranscriptionMinutes } from '@/lib/services/limits/transcriptionBudget';
 import { getAzureMonitorLogger } from '@/lib/services/observability';
 
 import { FILE_SIZE_LIMITS, WHISPER_MAX_SIZE } from '@/lib/utils/app/const';
@@ -16,6 +18,7 @@ import { loadDocument } from '@/lib/utils/server/file/fileHandling';
 import { validateBufferSignature } from '@/lib/utils/server/file/fileValidation';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
+import { Message, TextMessageContent } from '@/types/chat';
 import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 
 import { getChunkedTranscriptionService } from '../../transcription/chunkedTranscriptionService';
@@ -65,7 +68,14 @@ export class FileProcessor extends BasePipelineStage {
   }
 
   shouldRun(context: ChatContext): boolean {
-    return context.hasFiles;
+    // Also runs on follow-up turns whose LAST message has no attachment but
+    // an earlier user message does — otherwise the document context
+    // evaporates after the upload turn and the model asks the user to
+    // re-upload a file it was just discussing.
+    return (
+      context.hasFiles ||
+      FileProcessor.findLatestDocumentMessage(context.messages) !== null
+    );
   }
 
   protected async executeStage(context: ChatContext): Promise<ChatContext> {
@@ -88,7 +98,25 @@ export class FileProcessor extends BasePipelineStage {
           const perfStart = performance.now();
           const lastMessage = context.messages[context.messages.length - 1];
 
-          if (!Array.isArray(lastMessage.content)) {
+          // Upload turns carry attachments on the last message; follow-up
+          // turns ("now actually do it") do not — fall back to the most
+          // recent user message with document attachments so file context
+          // survives the whole conversation. Walk-back deliberately skips
+          // audio/video below: re-transcribing on every follow-up would be
+          // prohibitively expensive, and finished transcripts already live
+          // in the conversation text.
+          const sourceMessage = context.hasFiles
+            ? lastMessage
+            : FileProcessor.findLatestDocumentMessage(context.messages);
+          if (!sourceMessage) {
+            console.log(
+              '[FileProcessor] No message with attachments found; skipping',
+            );
+            return context;
+          }
+          const isWalkBack = sourceMessage !== lastMessage;
+
+          if (!Array.isArray(sourceMessage.content)) {
             throw new Error('Expected array content for file processing');
           }
 
@@ -121,10 +149,16 @@ export class FileProcessor extends BasePipelineStage {
           }> = [];
           let prompt = '';
 
-          for (const section of lastMessage.content) {
+          for (const section of sourceMessage.content) {
             if (section.type === 'text') {
               prompt = section.text;
             } else if (section.type === 'file_url') {
+              if (
+                isWalkBack &&
+                isAudioVideoFile(section.originalFilename || section.url)
+              ) {
+                continue;
+              }
               files.push({
                 url: section.url,
                 originalFilename: section.originalFilename,
@@ -132,11 +166,26 @@ export class FileProcessor extends BasePipelineStage {
                 transcriptionPrompt: section.transcriptionPrompt,
               });
             } else if (section.type === 'image_url') {
-              images.push({
-                url: section.image_url.url,
-                detail: section.image_url.detail || 'auto',
-              });
+              // Prior-turn images stay ImageProcessor/last-message territory.
+              if (!isWalkBack) {
+                images.push({
+                  url: section.image_url.url,
+                  detail: section.image_url.detail || 'auto',
+                });
+              }
             }
+          }
+
+          // The guiding prompt must be the CURRENT request ("please do it"),
+          // not whatever accompanied the original upload.
+          if (isWalkBack) {
+            prompt = FileProcessor.extractPromptText(lastMessage) || prompt;
+          }
+
+          if (isWalkBack && files.length > 0) {
+            console.log(
+              `[FileProcessor] Follow-up turn: re-processing ${files.length} attachment(s) from an earlier message`,
+            );
           }
 
           console.log(
@@ -352,6 +401,26 @@ export class FileProcessor extends BasePipelineStage {
                     );
                   }
 
+                  // Usage limit: transcription minutes per day
+                  // (`feature.transcription.minutesPerDay`, docs/LIMITS.md).
+                  // Measured BEFORE any transcription work, using the existing
+                  // ffprobe helper — duration is the honest unit here, since a
+                  // 5-minute lossless file and a 5-minute compressed one cost
+                  // the same to transcribe but differ wildly in bytes.
+                  //
+                  // Rounded UP to whole minutes: a limit of 60 must not be
+                  // circumvented by 120 requests of 30 seconds each.
+                  const transcriptionGuard = await guardTranscriptionMinutes(
+                    context.session,
+                    fileToTranscribe,
+                  );
+                  if (!transcriptionGuard.allowed) {
+                    throw new Error(
+                      transcriptionGuard.message ??
+                        `Transcription limit reached. "${filename}" was not transcribed.`,
+                    );
+                  }
+
                   let transcript: string;
 
                   // Route based on file size: ≤25MB → Whisper, >25MB → Batch
@@ -416,9 +485,12 @@ export class FileProcessor extends BasePipelineStage {
                       `[FileProcessor] Starting chunked transcription job...`,
                     );
 
-                    // Start chunked transcription job (returns immediately)
+                    // Start chunked transcription job (returns immediately).
+                    // Job state lives in the user's regional storage account,
+                    // so the store client must be session-scoped.
                     const { jobId, totalChunks } =
                       await chunkedService.startJob(
+                        createBlobStorageClient(context.session),
                         fileToTranscribe,
                         filename,
                         context.user.id,
@@ -492,6 +564,12 @@ export class FileProcessor extends BasePipelineStage {
                   `[FileProcessor] Processing document: ${sanitizeForLog(filename)}`,
                 );
 
+                // Extraction of a multi-MB document takes seconds — tell the
+                // client what is happening instead of a generic "Thinking…".
+                void context.emitActivity?.('chat.activity.readingDocument', {
+                  filename: FileProcessor.truncateName(filename),
+                });
+
                 const docFile = new File(
                   [new Uint8Array(fileBuffer)],
                   filename,
@@ -526,6 +604,17 @@ export class FileProcessor extends BasePipelineStage {
                     `[FileProcessor] Large file (${text.length} chars > ${chunkSize} chunk size), summarizing: ${sanitizeForLog(filename)}`,
                   );
 
+                  // A large document means dozens of sequential summarization
+                  // batches (minutes of otherwise-silent wall clock). Emit a
+                  // starting marker now and per-batch progress below.
+                  void context.emitActivity?.(
+                    'chat.activity.condensingDocument',
+                    {
+                      filename: FileProcessor.truncateName(filename),
+                      percent: '0',
+                    },
+                  );
+
                   // Process with parseAndQueryFileOpenAI, passing pre-extracted text
                   // Note: We get the summary as a string (non-streaming for pipeline)
                   // Note: Images are NOT passed here - they remain in the message for the final chat
@@ -535,16 +624,33 @@ export class FileProcessor extends BasePipelineStage {
                     prompt: prompt || 'Summarize this document',
                     modelId: context.modelId,
                     user: context.user,
-                    // Prompt agents arrive via botId but must never trigger
-                    // a knowledge-base search (mirrors RAGEnricher): a
-                    // truthy botId turns the summarization into an Azure
+                    // Prompt/M365 agents arrive via botId but must never
+                    // trigger a knowledge-base search (mirrors RAGEnricher):
+                    // a truthy botId turns the summarization into an Azure
                     // "On Your Data" request grounded on the org KB index.
-                    botId: context.promptAgent ? undefined : context.botId,
+                    botId:
+                      context.promptAgent || context.m365Agent
+                        ? undefined
+                        : context.botId,
                     stream: false,
                     // Don't pass images - blob URLs aren't accessible to Azure OpenAI during summarization
                     // Images will be included in the final message content by StandardChatHandler
                     images: undefined,
                     preExtractedText: text,
+                    onProgress: (processed, total) => {
+                      void context.emitActivity?.(
+                        'chat.activity.condensingDocument',
+                        {
+                          filename: FileProcessor.truncateName(filename),
+                          percent: String(
+                            Math.min(
+                              100,
+                              Math.round((processed / total) * 100),
+                            ),
+                          ),
+                        },
+                      );
+                    },
                   });
                   console.log(
                     `[Perf] FileProcessor.parseAndQueryFileOpenAI "${sanitizeForLog(filename)}": ${(performance.now() - perfSummaryStart).toFixed(1)}ms`,
@@ -697,5 +803,37 @@ export class FileProcessor extends BasePipelineStage {
         }
       },
     );
+  }
+
+  /** Keeps filenames loader-friendly: the marker renders in a one-line pill. */
+  private static truncateName(filename: string): string {
+    const MAX = 40;
+    return filename.length > MAX ? `${filename.slice(0, MAX - 1)}…` : filename;
+  }
+
+  /** Most recent user message carrying a document (file_url) attachment. */
+  private static findLatestDocumentMessage(
+    messages: Message[],
+  ): Message | null {
+    for (let i = messages.length - 1; i >= 0; i--) {
+      const message = messages[i];
+      if (message.role !== 'user' || !Array.isArray(message.content)) continue;
+      if (message.content.some((section) => section.type === 'file_url')) {
+        return message;
+      }
+    }
+    return null;
+  }
+
+  /** Text of a message whose content may be a string or a parts array. */
+  private static extractPromptText(message: Message): string {
+    if (typeof message.content === 'string') return message.content;
+    if (Array.isArray(message.content)) {
+      const text = message.content.find(
+        (section) => section.type === 'text',
+      ) as TextMessageContent | undefined;
+      return text?.text ?? '';
+    }
+    return '';
   }
 }

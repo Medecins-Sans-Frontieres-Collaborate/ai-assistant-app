@@ -23,6 +23,16 @@ vi.mock('@/lib/services/chat/tools/citedSourceReader', () => ({
   readCitedSources: vi.fn(),
 }));
 
+const runDocumentTrimMock = vi.fn();
+vi.mock('@/lib/services/chat/tools/documentTrim/DocumentTrimPipeline', () => ({
+  runDocumentTrim: (...args: unknown[]) => runDocumentTrimMock(...args),
+}));
+
+const consumeToolBudgetMock = vi.fn();
+vi.mock('@/lib/services/limits/toolBudget', () => ({
+  consumeToolBudget: (...args: unknown[]) => consumeToolBudgetMock(...args),
+}));
+
 describe('ToolRouter Enricher', () => {
   let enricher: ToolRouterEnricher;
   let mockToolRouterService: any;
@@ -35,6 +45,7 @@ describe('ToolRouter Enricher', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    consumeToolBudgetMock.mockResolvedValue(true);
     // Most search expectations here encode the Bing-agent path (agent model
     // requirement, model-labeled records); google-news has its own describe.
     (env as any).WEB_SEARCH_PROVIDER = 'bing-agent';
@@ -42,6 +53,9 @@ describe('ToolRouter Enricher', () => {
     // Mock ToolRouterService
     mockToolRouterService = {
       determineTool: vi.fn(),
+      // Factual trim gate passes → intent classifier consulted; null =
+      // "not a trim request", turn proceeds with normal routing.
+      classifyDocumentTrim: vi.fn().mockResolvedValue(null),
     };
 
     // Mock AgentChatService
@@ -254,6 +268,116 @@ describe('ToolRouter Enricher', () => {
       });
     });
 
+    describe('precomputedSearchResults (summarize from headlines)', () => {
+      const entries = [
+        {
+          title: 'Fusion record broken',
+          url: 'https://a.example/1',
+          date: '2026-07-23',
+          sourceName: 'a.example',
+          snippet: 'A tokamak sustained plasma for a record time.',
+        },
+        {
+          title: 'Funding round for fusion startup',
+          url: 'https://b.example/2',
+          date: '2026-07-22',
+        },
+      ];
+
+      it('merges echoed headlines as THE search result — no router call, no search', async () => {
+        const context = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          messages: [createTestMessage({ content: 'Latest fusion news?' })],
+          precomputedSearchResults: {
+            queries: ['fusion news'],
+            entries,
+          },
+        });
+
+        const result = await enricher.execute(context);
+
+        expect(mockToolRouterService.determineTool).not.toHaveBeenCalled();
+        expect((enricher as any).webSearchTool.execute).not.toHaveBeenCalled();
+
+        const lastMsg =
+          result.enrichedMessages![result.enrichedMessages!.length - 1];
+        expect(lastMsg.content).toContain('Web Search results');
+        expect(lastMsg.content).toContain('Fusion record broken');
+
+        const citations = result.processedContent?.metadata?.citations;
+        expect(citations).toHaveLength(2);
+        expect(citations![0]).toMatchObject({
+          number: 1,
+          url: 'https://a.example/1',
+        });
+        expect(citations![1]).toMatchObject({
+          number: 2,
+          url: 'https://b.example/2',
+        });
+      });
+
+      it('shifts only line-start citation markers when RAG citations occupy the low numbers', async () => {
+        const context = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          messages: [createTestMessage({ content: 'budget question' })],
+          processedContent: {
+            metadata: {
+              citations: [
+                {
+                  number: 1,
+                  title: 'RAG doc',
+                  url: 'https://rag.example',
+                  date: '',
+                },
+              ],
+            },
+          },
+          precomputedSearchResults: {
+            queries: ['budget'],
+            entries: [
+              {
+                title: 'Report cites [3] agencies',
+                url: 'https://a.example/1',
+                date: '2026-07-23',
+                snippet: 'Audit found [2] discrepancies.',
+              },
+            ],
+          },
+        });
+
+        const result = await enricher.execute(context);
+        const merged = String(
+          result.enrichedMessages![result.enrichedMessages!.length - 1].content,
+        );
+
+        // The line-start digest marker shifts past the RAG citation…
+        expect(merged).toContain('[2] Report cites [3] agencies');
+        // …while bracketed numbers INSIDE title/snippet stay untouched.
+        expect(merged).toContain('Audit found [2] discrepancies.');
+        expect(result.processedContent?.metadata?.citations).toHaveLength(2);
+      });
+
+      it('does nothing with echoed headlines when search is not requested', async () => {
+        mockToolRouterService.determineTool.mockResolvedValue({ tools: [] });
+        const context = createTestChatContext({
+          searchMode: SearchMode.OFF,
+          interpreterMode: InterpreterMode.INTELLIGENT,
+          messages: [createTestMessage({ content: 'Hello' })],
+          precomputedSearchResults: {
+            queries: ['fusion news'],
+            entries,
+          },
+        });
+
+        const result = await enricher.execute(context);
+
+        expect((enricher as any).webSearchTool.execute).not.toHaveBeenCalled();
+        expect(result.processedContent?.metadata?.citations ?? []).toHaveLength(
+          0,
+        );
+      });
+    });
+
     describe('when web search is needed', () => {
       it('should execute web search and add results to enrichedMessages', async () => {
         mockToolRouterService.determineTool.mockResolvedValue({
@@ -276,6 +400,13 @@ describe('ToolRouter Enricher', () => {
           ],
           model: { agentId: 'test-agent-id' },
         });
+        // This test exercises the DEPLOYMENT default (bing-agent env);
+        // the store-level default provider is 'combined', so pin 'auto'.
+        (context as any).webSearchOptions = {
+          resultCount: 8,
+          freshness: 'auto',
+          provider: 'auto',
+        };
 
         const result = await enricher.execute(context);
 
@@ -289,6 +420,7 @@ describe('ToolRouter Enricher', () => {
           freshness: 'any',
           provider: 'bing-agent',
           deep: false,
+          onInterimResults: undefined,
           onActivity: expect.any(Function),
         });
 
@@ -541,7 +673,7 @@ describe('ToolRouter Enricher', () => {
         expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
           expect.objectContaining({
             currentMessage: expect.stringContaining(
-              '[Document summary: doc1.pdf]',
+              '[Document summary excerpt: doc1.pdf]',
             ),
           }),
         );
@@ -576,7 +708,9 @@ describe('ToolRouter Enricher', () => {
 
         expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
           expect.objectContaining({
-            currentMessage: expect.stringContaining('[Audio/Video: audio.mp3]'),
+            currentMessage: expect.stringContaining(
+              '[Audio/Video excerpt: audio.mp3]',
+            ),
           }),
         );
 
@@ -587,6 +721,159 @@ describe('ToolRouter Enricher', () => {
             ),
           }),
         );
+      });
+
+      it('appends an attachment manifest for current-turn and prior-turn files', async () => {
+        // Regression: follow-up turns ("now actually do it") carry no
+        // attachment on the last message; without the prior-turns manifest
+        // line the router cannot know a transformable file exists and
+        // classifies document-transformation requests as pure text tasks.
+        mockToolRouterService.determineTool.mockResolvedValue({
+          tools: [],
+          reasoning: 'No search needed',
+        });
+
+        const context = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          messages: [
+            createTestMessage({
+              content: [
+                { type: 'text', text: 'please trim this to 6k words' },
+                {
+                  type: 'file_url',
+                  url: '/api/file/abc123.docx',
+                  originalFilename: 'manuscript.docx',
+                },
+              ] as Message['content'],
+            }),
+            createTestMessage({
+              role: 'assistant',
+              content: 'Here is how I would trim it…',
+            }),
+            createTestMessage({ content: 'please do it' }),
+          ],
+        });
+
+        await enricher.execute(context);
+
+        expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
+          expect.objectContaining({
+            currentMessage: expect.stringContaining(
+              '[Files uploaded earlier in this conversation: manuscript.docx]',
+            ),
+          }),
+        );
+
+        const currentTurnContext = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          messages: [
+            createTestMessage({
+              content: [
+                { type: 'text', text: 'please trim this to 6k words' },
+                {
+                  type: 'file_url',
+                  url: '/api/file/abc123.docx',
+                  originalFilename: 'manuscript.docx',
+                },
+              ] as Message['content'],
+            }),
+          ],
+        });
+
+        await enricher.execute(currentTurnContext);
+
+        expect(mockToolRouterService.determineTool).toHaveBeenLastCalledWith(
+          expect.objectContaining({
+            currentMessage: expect.stringContaining(
+              '[Files attached to the current message: manuscript.docx]',
+            ),
+          }),
+        );
+      });
+    });
+
+    describe('user-provided content signal (search dilution guard)', () => {
+      beforeEach(() => {
+        mockToolRouterService.determineTool.mockResolvedValue({
+          tools: [],
+          reasoning: 'No search needed',
+        });
+      });
+
+      it('flags turns with uploaded files', async () => {
+        const context = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          messages: [createTestMessage({ content: 'Review this document' })],
+          hasFiles: true,
+        });
+
+        await enricher.execute(context);
+
+        expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
+          expect.objectContaining({ hasUserProvidedContent: true }),
+        );
+      });
+
+      it('flags turns with processed file content', async () => {
+        const context = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          messages: [createTestMessage({ content: 'Summarize' })],
+          processedContent: {
+            fileSummaries: [{ filename: 'doc.pdf', summary: 'A summary' }],
+          },
+        });
+
+        await enricher.execute(context);
+
+        expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
+          expect.objectContaining({ hasUserProvidedContent: true }),
+        );
+      });
+
+      it('flags turns whose prompt is a large pasted text block', async () => {
+        const pastedBlock = `Please clean up this text:\n\n${'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '.repeat(20)}`;
+        const context = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          messages: [createTestMessage({ content: pastedBlock })],
+        });
+
+        await enricher.execute(context);
+
+        expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
+          expect.objectContaining({ hasUserProvidedContent: true }),
+        );
+      });
+
+      it('does not flag a short typed question', async () => {
+        const context = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          messages: [
+            createTestMessage({ content: 'What happened in the news today?' }),
+          ],
+        });
+
+        await enricher.execute(context);
+
+        expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
+          expect.objectContaining({ hasUserProvidedContent: false }),
+        );
+      });
+
+      it('ALWAYS mode still forces search without consulting the classifier, files or not', async () => {
+        (enricher as any).webSearchTool.execute.mockResolvedValue({
+          text: 'Result.',
+          citations: [],
+        });
+        const context = createTestChatContext({
+          searchMode: SearchMode.ALWAYS,
+          messages: [createTestMessage({ content: 'Check this file' })],
+          hasFiles: true,
+        });
+
+        await enricher.execute(context);
+
+        expect(mockToolRouterService.determineTool).not.toHaveBeenCalled();
+        expect((enricher as any).webSearchTool.execute).toHaveBeenCalled();
       });
     });
   });
@@ -865,6 +1152,13 @@ describe('ToolRouter Enricher', () => {
         model: { id: 'Mistral-Large-3' },
         emitMarker,
       });
+      // Exercises the DEPLOYMENT default (google-news env); the store-level
+      // default provider is 'combined', so pin 'auto'.
+      (context as any).webSearchOptions = {
+        resultCount: 8,
+        freshness: 'auto',
+        provider: 'auto',
+      };
 
       const result = await enricher.execute(context);
 
@@ -914,6 +1208,45 @@ describe('ToolRouter Enricher', () => {
           .replace(/<<<END_TOOL_CALL_RECORD>>>[\s\S]*/, ''),
       );
       expect(record.server_label).toBe('Web Search (Google News)');
+    });
+
+    it('bing-responses runs without an agent model and labels the record with the deployment', async () => {
+      (enricher as any).webSearchTool.execute.mockResolvedValue({
+        text: 'Grounded digest.[1]',
+        citations: [{ number: 1, title: 'A', url: 'https://a.example' }],
+      });
+      const emitMarker = vi.fn().mockResolvedValue(undefined);
+      const context = createTestChatContext({
+        searchMode: SearchMode.ALWAYS,
+        messages: [createTestMessage({ content: 'india protests' })],
+        // No agentId anywhere — the Responses path needs no Foundry agent.
+        model: { id: 'Mistral-Large-3' },
+        emitMarker,
+      });
+      (context as any).webSearchOptions = {
+        resultCount: 8,
+        freshness: 'auto',
+        provider: 'bing-responses',
+      };
+
+      const result = await enricher.execute(context);
+
+      expect((enricher as any).webSearchTool.execute).toHaveBeenCalledWith(
+        expect.objectContaining({
+          provider: 'bing-responses',
+          searchQuery: 'india protests',
+        }),
+      );
+      expect(result.processedContent?.metadata?.citations).toHaveLength(1);
+
+      const record = JSON.parse(
+        (emitMarker.mock.calls[0][0] as string)
+          .replace(/[\s\S]*<<<TOOL_CALL_RECORD>>>/, '')
+          .replace(/<<<END_TOOL_CALL_RECORD>>>[\s\S]*/, ''),
+      );
+      expect(record.server_label).toBe(
+        `Web Search (Bing web_search (${env.WEB_SEARCH_RESPONSES_MODEL}))`,
+      );
     });
 
     it("'auto' keeps the deployment default (bing-agent path here)", async () => {
@@ -1172,6 +1505,13 @@ describe('ToolRouter Enricher', () => {
         model: { agentId: 'agent-1', id: 'gpt-5.2' },
         emitMarker,
       });
+      // Model-labeled record = the bing-agent env path; pin 'auto' so the
+      // store-level 'combined' default doesn't reroute it.
+      (context as any).webSearchOptions = {
+        resultCount: 8,
+        freshness: 'auto',
+        provider: 'auto',
+      };
 
       await enricher.execute(context);
 
@@ -1465,6 +1805,216 @@ describe('ToolRouter Enricher', () => {
         );
         expect(mockInterpreterExecute).not.toHaveBeenCalled();
       });
+    });
+  });
+
+  describe('document trim dedicated path', () => {
+    const trimMessage = (): Message =>
+      createTestMessage({
+        content: [
+          { type: 'text', text: 'please trim this to 6k words' },
+          {
+            type: 'file_url',
+            url: '/api/file/abc123.docx',
+            originalFilename: 'manuscript.docx',
+          },
+        ] as Message['content'],
+      });
+
+    const trimResult = {
+      text: 'Document trimmed: manuscript.docx (18000 words) → manuscript_trimmed_6000words.docx (6100 words); target 6000 words.',
+      codeRuns: [],
+      generatedFiles: [
+        {
+          url: '/api/file/out.docx',
+          filename: 'manuscript_trimmed_6000words.docx',
+          mime_type: 'application/octet-stream',
+          is_image: false,
+        },
+      ],
+      containerIds: [],
+      durationMs: 1000,
+      unit: 'words',
+      targetCount: 6000,
+      countBefore: 18000,
+      countAfter: 6100,
+      retried: false,
+    };
+
+    function trimContext(overrides: Record<string, unknown> = {}) {
+      const context = createTestChatContext({
+        searchMode: SearchMode.OFF,
+        interpreterMode: InterpreterMode.INTELLIGENT,
+        messages: [trimMessage()],
+        // Natively capable model — the trim path must STILL win over the
+        // native deferral (model discretion is the bug this path removes).
+        model: {
+          supportsCodeInterpreter: true,
+          supportsResponsesApi: true,
+          sdk: 'azure-openai',
+        },
+        processedContent: {
+          inlineFiles: [
+            { filename: 'manuscript.docx', content: 'word '.repeat(100) },
+          ],
+        },
+        ...overrides,
+      });
+      return context;
+    }
+
+    const wordsTarget = {
+      kind: 'absolute',
+      unit: 'words',
+      target: 6000,
+      approx: false,
+    };
+
+    beforeEach(() => {
+      runDocumentTrimMock.mockResolvedValue(trimResult);
+      mockToolRouterService.classifyDocumentTrim.mockResolvedValue(wordsTarget);
+      // Bytes for the attachment: stub the private collector so no blob
+      // client is needed.
+      (enricher as any).collectInterpreterInputFiles = vi
+        .fn()
+        .mockResolvedValue([
+          { filename: 'manuscript.docx', data: Buffer.from('bytes') },
+        ]);
+    });
+
+    it('runs the pipeline, bypassing the router and the native deferral', async () => {
+      const result = await enricher.execute(trimContext());
+
+      // Intent came from the multilingual classifier, scoped to the
+      // factually-attached document.
+      expect(mockToolRouterService.classifyDocumentTrim).toHaveBeenCalledWith(
+        expect.objectContaining({ documentFilename: 'manuscript.docx' }),
+      );
+      expect(runDocumentTrimMock).toHaveBeenCalledTimes(1);
+      const call = runDocumentTrimMock.mock.calls[0][0];
+      expect(call.target).toEqual(wordsTarget);
+      expect(call.format).toBe('docx');
+      expect(call.document.filename).toBe('manuscript.docx');
+      // Planning input came from the already-extracted inline text.
+      expect(call.extractedText).toContain('word');
+
+      expect(mockToolRouterService.determineTool).not.toHaveBeenCalled();
+      expect(result.nativeCodeInterpreter).toBeUndefined();
+
+      const lastMessage =
+        result.enrichedMessages![result.enrichedMessages!.length - 1];
+      const text = Array.isArray(lastMessage.content)
+        ? (
+            lastMessage.content.find((c) => c.type === 'text') as {
+              text: string;
+            }
+          ).text
+        : (lastMessage.content as string);
+      expect(text).toContain('Document trimmed');
+    });
+
+    it('fires on follow-up turns via prior-turn attachments', async () => {
+      const context = trimContext({
+        messages: [
+          trimMessage(),
+          createTestMessage({
+            role: 'assistant',
+            content: 'Here is how I would trim it…',
+          }),
+          createTestMessage({ content: 'please cut it down to 6000 words' }),
+        ],
+      });
+
+      await enricher.execute(context);
+
+      expect(runDocumentTrimMock).toHaveBeenCalledTimes(1);
+      expect(mockToolRouterService.determineTool).not.toHaveBeenCalled();
+    });
+
+    it('degrades to the limit marker when the daily budget is exhausted', async () => {
+      consumeToolBudgetMock.mockResolvedValue(false);
+      const emitActivity = vi.fn().mockResolvedValue(undefined);
+      const context = trimContext();
+      context.emitActivity = emitActivity;
+
+      const result = await enricher.execute(context);
+
+      expect(runDocumentTrimMock).not.toHaveBeenCalled();
+      expect(emitActivity).toHaveBeenCalledWith(
+        'chat.activity.codeInterpreterLimitReached',
+      );
+      expect(result.enrichedMessages).toBeUndefined();
+    });
+
+    it('never consults the intent classifier without a trimmable document (factual gate)', async () => {
+      mockToolRouterService.determineTool.mockResolvedValue({ tools: [] });
+      const context = trimContext({
+        searchMode: SearchMode.INTELLIGENT,
+        // PDF only — not trimmable; native model would defer, but search
+        // INTELLIGENT still consults the router.
+        messages: [
+          createTestMessage({
+            content: [
+              { type: 'text', text: 'please trim this to 6k words' },
+              {
+                type: 'file_url',
+                url: '/api/file/abc.pdf',
+                originalFilename: 'report.pdf',
+              },
+            ] as Message['content'],
+          }),
+        ],
+        model: { sdk: 'openai' },
+      });
+
+      await enricher.execute(context);
+
+      expect(mockToolRouterService.classifyDocumentTrim).not.toHaveBeenCalled();
+      expect(runDocumentTrimMock).not.toHaveBeenCalled();
+      expect(mockToolRouterService.determineTool).toHaveBeenCalled();
+    });
+
+    it('falls through to normal routing when the classifier says not a trim', async () => {
+      mockToolRouterService.classifyDocumentTrim.mockResolvedValue(null);
+      mockToolRouterService.determineTool.mockResolvedValue({ tools: [] });
+      const context = trimContext({
+        searchMode: SearchMode.INTELLIGENT,
+        model: { sdk: 'openai' },
+      });
+
+      await enricher.execute(context);
+
+      expect(mockToolRouterService.classifyDocumentTrim).toHaveBeenCalled();
+      expect(runDocumentTrimMock).not.toHaveBeenCalled();
+      expect(mockToolRouterService.determineTool).toHaveBeenCalled();
+    });
+
+    it('merges an honest failure notice and a failed record when the pipeline throws', async () => {
+      runDocumentTrimMock.mockRejectedValue(new Error('sandbox exploded'));
+      const emitMarker = vi.fn().mockResolvedValue(undefined);
+      const context = trimContext();
+      context.emitMarker = emitMarker;
+
+      const result = await enricher.execute(context);
+
+      const record = JSON.parse(
+        (emitMarker.mock.calls[0][0] as string)
+          .replace(/^[\s\S]*?<<<TOOL_CALL_RECORD>>>/, '')
+          .replace(/<<<END_TOOL_CALL_RECORD>>>[\s\S]*$/, ''),
+      );
+      expect(record.status).toBe('failed');
+
+      const lastMessage =
+        result.enrichedMessages![result.enrichedMessages!.length - 1];
+      const text = Array.isArray(lastMessage.content)
+        ? (
+            lastMessage.content.find((c) => c.type === 'text') as {
+              text: string;
+            }
+          ).text
+        : (lastMessage.content as string);
+      expect(text).toContain('FAILED');
+      expect(text).toContain('do not claim any file was produced');
     });
   });
 });

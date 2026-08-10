@@ -28,6 +28,7 @@ import {
   LocalRuntimeStatus,
   isValidPort,
 } from '@/types/localRuntime';
+import type { M365PickerLocation, M365SaveDestination } from '@/types/m365';
 import {
   DEFAULT_MODEL_ORDER,
   ModelListSource,
@@ -300,6 +301,14 @@ interface SettingsStore {
   /** User opt-in for cross-conversation Memories (default off). */
   memoriesEnabled: boolean;
   /**
+   * Pauses automatic memory CAPTURE while leaving injection untouched: the
+   * memories already saved keep reaching the system prompt, but no new ones
+   * are extracted. Negative polarity is deliberate — an undefined value
+   * (skipped or partial migration) is falsy and so means "behave as before",
+   * never "silently stop capturing".
+   */
+  memoryCapturePaused: boolean;
+  /**
    * Runtime-only mirror of the LaunchDarkly `enableMemories` flag, set by
    * AppInitializer so vanilla stores (chatStore) can gate without hook
    * access (same pattern as mcpArbitraryFlagEnabled). Fail-closed: defaults
@@ -518,6 +527,7 @@ interface SettingsStore {
   setContextWindowSize: (size: number) => void;
   setMemoriesEnabled: (enabled: boolean) => void;
   setMemoriesFlagEnabled: (enabled: boolean) => void;
+  setMemoryCapturePaused: (paused: boolean) => void;
 
   // Saved Structure Actions
   setSavedStructures: (structures: SavedStructure[]) => void;
@@ -694,6 +704,66 @@ interface SettingsStore {
   ) => void;
   setSuggestRevisionsLargeRewriteRatio: (ratio: number) => void;
 
+  /**
+   * Per-user Microsoft 365 opt-in. M365 features (attach from OneDrive/
+   * SharePoint, email import, save to OneDrive) stay hidden until the user
+   * explicitly connects in Settings → Connections — nothing is enabled by
+   * virtue of signing in (docs/M365_GRAPH_PERMISSIONS_REQUEST.md).
+   */
+  m365Connected: boolean;
+  setM365Connected: (connected: boolean) => void;
+
+  /**
+   * Global user toggle for the builtin Microsoft 365 toolset (the connector
+   * tray's virtual row). Default ON: connecting M365 is itself the opt-in,
+   * this is the "off everywhere" switch. Persisted.
+   */
+  m365ToolsUserEnabled: boolean;
+  setM365ToolsUserEnabled: (enabled: boolean) => void;
+  /**
+   * Shared mailbox SMTP addresses the user says they can read (fifth pass
+   * tier 3). Graph cannot enumerate these; the user maintains the list in
+   * Settings → Connections and mail tools only ever target addresses on
+   * it. Persisted.
+   */
+  m365SharedMailboxes: string[];
+  setM365SharedMailboxes: (mailboxes: string[]) => void;
+  /**
+   * Whether playbook suggestion chips may appear above the composer (sixth
+   * pass, docs/M365_SIXTH_PASS_CROSS_SERVICE_WORKFLOWS.md). Default ON:
+   * chips only render when a precondition already holds and each one is
+   * dismissible, but proactive suggestions can read as pushy — this is the
+   * per-user off switch. The menu entries are unaffected. Persisted.
+   */
+  m365PlaybookChipsEnabled: boolean;
+  setM365PlaybookChipsEnabled: (enabled: boolean) => void;
+  /**
+   * Runtime-only mirror of the LaunchDarkly `m365Tools` gate, set by
+   * AppInitializer so chatStore (vanilla, no hook access) can gate what
+   * gets SENT (same pattern as mcpArbitraryFlagEnabled). Fail-closed:
+   * defaults to false. NOT persisted.
+   */
+  m365ToolsFlagEnabled: boolean;
+  setM365ToolsFlagEnabled: (enabled: boolean) => void;
+
+  /**
+   * Remembered "Save to OneDrive" folder. null = the default app folder
+   * (Apps/AI Assistant). When skip-picker is on, saves go straight to the
+   * remembered destination without showing the dialog.
+   */
+  m365SaveDestination: M365SaveDestination | null;
+  m365SaveSkipPicker: boolean;
+  setM365SaveDestination: (destination: M365SaveDestination | null) => void;
+  setM365SaveSkipPicker: (skip: boolean) => void;
+
+  /**
+   * Last browsed location in the attach-from-OneDrive picker. null = open
+   * at the OneDrive root. Written by the picker on navigation only (never
+   * on search) and dropped fail-open when the folder no longer loads.
+   */
+  m365PickerLocation: M365PickerLocation | null;
+  setM365PickerLocation: (location: M365PickerLocation | null) => void;
+
   // Reset
   resetSettings: () => void;
 }
@@ -749,6 +819,7 @@ export const useSettingsStore = create<SettingsStore>()(
       contextWindowSize: DEFAULT_CONTEXT_WINDOW_SIZE,
       memoriesEnabled: false,
       memoriesFlagEnabled: false,
+      memoryCapturePaused: false,
       hiddenModelIds: [],
       starredModelIds: [],
       tokenUsageStats: {},
@@ -809,6 +880,14 @@ export const useSettingsStore = create<SettingsStore>()(
       confirmStopFromButton: true,
       confirmStopFromKeyboard: true,
       autoClearResolvedEdits: false,
+      m365Connected: false,
+      m365ToolsUserEnabled: true,
+      m365SharedMailboxes: [],
+      m365PlaybookChipsEnabled: true,
+      m365ToolsFlagEnabled: false,
+      m365SaveDestination: null,
+      m365SaveSkipPicker: false,
+      m365PickerLocation: null,
       suggestRevisions: true,
       suggestRevisionsExceptions: {
         largeRewrites: true,
@@ -1161,6 +1240,8 @@ export const useSettingsStore = create<SettingsStore>()(
       setMemoriesFlagEnabled: (enabled) =>
         set({ memoriesFlagEnabled: enabled }),
 
+      setMemoryCapturePaused: (paused) => set({ memoryCapturePaused: paused }),
+
       // Hidden Model/Agent Actions. Hiding unstars: a model can't be both
       // surfaced in "Your models" and hidden from the picker.
       hideModel: (id) =>
@@ -1508,6 +1589,44 @@ export const useSettingsStore = create<SettingsStore>()(
         set({ autoClearResolvedEdits: enabled }),
 
       setSuggestRevisions: (enabled) => set({ suggestRevisions: enabled }),
+      setM365Connected: (connected) =>
+        set(
+          connected
+            ? { m365Connected: true }
+            : {
+                // Disconnecting drops the remembered save folder too — a stale
+                // drive id must not leak into the next connection. Shared
+                // mailboxes go with it: the list is meaningless without a
+                // connected account.
+                m365Connected: false,
+                m365SaveDestination: null,
+                m365SaveSkipPicker: false,
+                m365PickerLocation: null,
+                m365SharedMailboxes: [],
+              },
+        ),
+
+      setM365ToolsUserEnabled: (enabled) =>
+        set({ m365ToolsUserEnabled: enabled }),
+      setM365SharedMailboxes: (mailboxes) =>
+        set({
+          m365SharedMailboxes: mailboxes
+            .map((mailbox) => mailbox.trim().toLowerCase())
+            .filter((mailbox, index, all) =>
+              mailbox.includes('@') ? all.indexOf(mailbox) === index : false,
+            )
+            .slice(0, 10),
+        }),
+      setM365PlaybookChipsEnabled: (enabled) =>
+        set({ m365PlaybookChipsEnabled: enabled }),
+      setM365ToolsFlagEnabled: (enabled) =>
+        set({ m365ToolsFlagEnabled: enabled }),
+
+      setM365SaveDestination: (destination) =>
+        set({ m365SaveDestination: destination }),
+      setM365SaveSkipPicker: (skip) => set({ m365SaveSkipPicker: skip }),
+      setM365PickerLocation: (location) =>
+        set({ m365PickerLocation: location }),
 
       setSuggestRevisionsException: (key, enabled) =>
         set((state) => ({
@@ -1548,6 +1667,7 @@ export const useSettingsStore = create<SettingsStore>()(
           allowArbitraryMcpServers: false,
           contextWindowSize: DEFAULT_CONTEXT_WINDOW_SIZE,
           memoriesEnabled: false,
+          memoryCapturePaused: false,
           hiddenModelIds: [],
           starredModelIds: [],
           tokenUsageStats: {},
@@ -1586,11 +1706,16 @@ export const useSettingsStore = create<SettingsStore>()(
             structuralReorders: false,
           },
           suggestRevisionsLargeRewriteRatio: DEFAULT_LARGE_REWRITE_RATIO,
+          m365Connected: false,
+          m365SaveDestination: null,
+          m365SaveSkipPicker: false,
+          m365PickerLocation: null,
+          m365PlaybookChipsEnabled: true,
         }),
     }),
     {
       name: 'settings-storage',
-      version: 48, // Increment this when schema changes to trigger migrations
+      version: 55, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1645,6 +1770,7 @@ export const useSettingsStore = create<SettingsStore>()(
         toolApprovalRules: state.toolApprovalRules,
         contextWindowSize: state.contextWindowSize,
         memoriesEnabled: state.memoriesEnabled,
+        memoryCapturePaused: state.memoryCapturePaused,
         hiddenModelIds: state.hiddenModelIds,
         starredModelIds: state.starredModelIds,
         tokenUsageStats: state.tokenUsageStats,
@@ -1681,6 +1807,15 @@ export const useSettingsStore = create<SettingsStore>()(
         confirmStopFromKeyboard: state.confirmStopFromKeyboard,
         autoClearResolvedEdits: state.autoClearResolvedEdits,
         suggestRevisions: state.suggestRevisions,
+        m365Connected: state.m365Connected,
+        // m365ToolsFlagEnabled is deliberately NOT persisted (LD mirror,
+        // same rationale as mcpArbitraryFlagEnabled above).
+        m365ToolsUserEnabled: state.m365ToolsUserEnabled,
+        m365SharedMailboxes: state.m365SharedMailboxes,
+        m365PlaybookChipsEnabled: state.m365PlaybookChipsEnabled,
+        m365SaveDestination: state.m365SaveDestination,
+        m365SaveSkipPicker: state.m365SaveSkipPicker,
+        m365PickerLocation: state.m365PickerLocation,
         suggestRevisionsExceptions: state.suggestRevisionsExceptions,
         suggestRevisionsLargeRewriteRatio:
           state.suggestRevisionsLargeRewriteRatio,
@@ -2158,6 +2293,67 @@ export const useSettingsStore = create<SettingsStore>()(
           state.webSearchOptions = sanitizeWebSearchOptions(
             state.webSearchOptions,
           );
+        }
+
+        // Version 48 → 49: Pause-capture toggle for Memories. Backfill to
+        // not-paused so an existing opt-in keeps capturing as it did.
+        if (version < 49) {
+          if (typeof state.memoryCapturePaused !== 'boolean') {
+            state.memoryCapturePaused = false;
+          }
+        }
+
+        // Version 49 → 50: Microsoft 365 opt-in. Backfill to disconnected —
+        // M365 access is explicit per-user opt-in, never a default.
+        if (version < 50) {
+          if (typeof state.m365Connected !== 'boolean') {
+            state.m365Connected = false;
+          }
+        }
+
+        // Version 50 → 51: Remembered "Save to OneDrive" destination.
+        // Backfill to the defaults (default app folder, dialog shown) —
+        // matching the behavior these users already have.
+        if (version < 51) {
+          if (state.m365SaveDestination === undefined) {
+            state.m365SaveDestination = null;
+          }
+          if (typeof state.m365SaveSkipPicker !== 'boolean') {
+            state.m365SaveSkipPicker = false;
+          }
+        }
+
+        // Version 51 → 52: Global toggle for the builtin M365 toolset.
+        // Backfill to ON — connecting M365 is the opt-in; this is only the
+        // "off everywhere" switch, and the LD flag still gates everything.
+        if (version < 52) {
+          if (typeof state.m365ToolsUserEnabled !== 'boolean') {
+            state.m365ToolsUserEnabled = true;
+          }
+        }
+
+        // Version 52 → 53: shared mailbox address list (fifth pass tier 3).
+        if (version < 53) {
+          if (!Array.isArray(state.m365SharedMailboxes)) {
+            state.m365SharedMailboxes = [];
+          }
+        }
+
+        // Version 53 → 54: playbook suggestion chips (sixth pass). Backfill
+        // to ON — the chips are precondition-gated and dismissible, and the
+        // LD flag still gates the whole feature.
+        if (version < 54) {
+          if (typeof state.m365PlaybookChipsEnabled !== 'boolean') {
+            state.m365PlaybookChipsEnabled = true;
+          }
+        }
+
+        // Version 54 → 55: remembered attach-picker location. Backfill to
+        // null — open at the OneDrive root, as these users always have.
+        if (version < 55) {
+          if (state.m365PickerLocation === undefined) {
+            state.m365PickerLocation = null;
+          }
         }
 
         return state;

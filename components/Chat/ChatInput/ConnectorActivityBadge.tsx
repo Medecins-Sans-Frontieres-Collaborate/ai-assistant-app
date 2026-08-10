@@ -6,6 +6,12 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
+import { useM365Enabled } from '@/client/hooks/useM365Enabled';
+
+import {
+  M365_BUILTIN_SERVER_ID,
+  M365_BUILTIN_SERVER_LABEL,
+} from '@/lib/services/m365/tools/toolCatalog';
 
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
@@ -26,16 +32,33 @@ import { useSettingsStore } from '@/client/stores/settingsStore';
 export const ConnectorActivityBadge: React.FC = () => {
   const t = useTranslations('connectorPin');
   const mcpServers = useSettingsStore((s) => s.mcpServers);
+  const m365Connected = useSettingsStore((s) => s.m365Connected);
+  const m365ToolsUserEnabled = useSettingsStore((s) => s.m365ToolsUserEnabled);
+  const { toolsEnabled: m365ToolsFlagOn } = useM365Enabled();
   const trayOpen = useChatInputStore((s) => s.connectorPinTrayOpen);
   const setTrayOpen = useChatInputStore((s) => s.setConnectorPinTrayOpen);
   const { selectedConversation } = useConversations();
 
-  const active = mcpServers.filter(
-    (s) =>
-      s.enabled &&
-      !(s.authMode === 'oauth' && s.oauth?.needsReauth) &&
-      !selectedConversation?.disabledMcpServerIds?.includes(s.id),
-  );
+  // The builtin M365 toolset counts as active under the same gates the send
+  // path uses (flag + connected + global toggle + not per-chat disabled).
+  const m365Active =
+    m365ToolsFlagOn &&
+    m365Connected &&
+    m365ToolsUserEnabled &&
+    !selectedConversation?.disabledMcpServerIds?.includes(
+      M365_BUILTIN_SERVER_ID,
+    );
+  const active: { id: string; name: string }[] = [
+    ...mcpServers.filter(
+      (s) =>
+        s.enabled &&
+        !(s.authMode === 'oauth' && s.oauth?.needsReauth) &&
+        !selectedConversation?.disabledMcpServerIds?.includes(s.id),
+    ),
+    ...(m365Active
+      ? [{ id: M365_BUILTIN_SERVER_ID, name: M365_BUILTIN_SERVER_LABEL }]
+      : []),
+  ];
   if (active.length === 0) return null;
 
   const pinnedServer = selectedConversation?.pinnedMcpServerId

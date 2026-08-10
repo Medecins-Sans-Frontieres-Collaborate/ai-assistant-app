@@ -10,6 +10,10 @@ import { updateConversationCompaction } from '@/client/services/compactionServic
 import { ensureFreshOauthToken } from '@/client/services/mcp/mcpOauth';
 import { extractMemories } from '@/client/services/memoryService';
 import { generateConversationTitle } from '@/client/services/titleService';
+import {
+  M365_BUILTIN_SERVER_ID,
+  M365_BUILTIN_SERVER_LABEL,
+} from '@/lib/services/m365/tools/toolCatalog';
 import { isLocalModel } from '@/lib/services/models/localModels';
 
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
@@ -51,6 +55,7 @@ import {
 } from '@/types/openai';
 import { Citation } from '@/types/rag';
 import { SearchMode } from '@/types/searchMode';
+import { PrecomputedSearchResults } from '@/types/webSearch';
 
 import { useChatInputStore } from './chatInputStore';
 import { useConversationStore } from './conversationStore';
@@ -61,7 +66,10 @@ import { useUIStore } from './uiStore';
 import { ApiError, chatService } from '@/client/services';
 import { getFallbackModel, isModelDisabled } from '@/config/models';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
-import { ConsentRequestPayload } from '@/lib/streamMarkers';
+import {
+  ConsentRequestPayload,
+  SearchInterimPayload,
+} from '@/lib/streamMarkers';
 import { create } from 'zustand';
 
 /** Sentinel key for OAuth resume state when a server has no label. */
@@ -77,6 +85,23 @@ function clampContextWindowSize(size: number | undefined): number {
     Math.max(size ?? VALIDATION_LIMITS.CLIENT_MAX_MESSAGES, 20),
     VALIDATION_LIMITS.MAX_API_MESSAGES,
   );
+}
+
+/**
+ * Fallback-resolution context from the client's live state: the discovery-
+ * served model list (so the fallback never targets an undeployed model),
+ * the user's configured default model (tried first — the most predictable
+ * substitute), and the user's region. Every chatStore fallback lookup goes
+ * through this so the chain tracks the dynamic model system instead of the
+ * static catalog.
+ */
+function dynamicFallbackOpts() {
+  const settings = useSettingsStore.getState();
+  return {
+    availableModels: settings.models.length > 0 ? settings.models : undefined,
+    preferredDefaultId: settings.defaultModelId || null,
+    userRegion: settings.userRegion ?? null,
+  };
 }
 
 /** Returns a new Set without `item`, or the same set when `item` isn't present
@@ -133,6 +158,19 @@ interface ChatStore {
   streamingConsentRequests: ConsentRequestPayload[];
   /** Live tool call records during streaming; rendered as the summary. */
   streamingToolCalls: ToolCallRecord[];
+  /**
+   * Interim headlines from a combined (Bing + news) search — rendered on
+   * the in-progress message with a "Summarize from headlines" action while
+   * the Bing leg is still running.
+   */
+  streamingInterimSearch: SearchInterimPayload | null;
+  /** Search mode of the in-flight turn, kept for headline resends. */
+  streamingSearchMode: SearchMode | undefined;
+  /**
+   * One-shot echo payload for a "Summarize from headlines" resend; consumed
+   * (and cleared) by the next sendChatRequest.
+   */
+  pendingPrecomputedSearchResults: PrecomputedSearchResults | null;
   abortController: AbortController | null;
 
   // Retry-related state
@@ -184,6 +222,16 @@ interface ChatStore {
   /** Approval ids that errored or were aborted. Prevents the auto-approve
    *  effect from retrying the same id indefinitely after a failure. */
   failedApprovals: Set<string>;
+  /**
+   * Map of MCP approval_request_id → argument JSON the user edited on the
+   * consent card (sixth pass: per-item toggles on a `tasks_create` batch).
+   * The native resume is stateless — the server executes the `argumentsJson`
+   * the CLIENT echoes back in `mcpPendingToolCalls` — so a per-item edit is
+   * expressed purely as an override applied when that payload is assembled.
+   * Entries are consumed (dropped) once their resume succeeds; a failed
+   * resume keeps them so the card's retry resends the same edited batch.
+   */
+  approvalArgumentOverrides: Map<string, string>;
 
   /**
    * Per-server "Continue in flight" markers, keyed by server label
@@ -252,6 +300,11 @@ interface ChatStore {
    * `alwaysApprove*` match — so the tool usage summary can label
    * auto-approved calls accordingly and the consent card can suppress
    * its display when the user never had a choice.
+   *
+   * `modifiedArgumentsJson` lets the card narrow what an approval actually
+   * runs (batch consent cards with items unchecked). It replaces the pending
+   * call's arguments in the resume payload; other pending calls are
+   * untouched. Ignored for denials — a denied call never executes.
    */
   submitApproval: (
     approvalRequestId: string,
@@ -259,6 +312,7 @@ interface ChatStore {
     conversation: Conversation,
     sourceMessageIndex?: number,
     source?: 'manual' | 'auto-approved' | 'auto-denied',
+    modifiedArgumentsJson?: string,
   ) => Promise<void>;
   processStream: (
     stream: ReadableStream<Uint8Array>,
@@ -328,6 +382,21 @@ interface ChatStore {
    * assistant group to append a version to.
    */
   retryFailedRequest: () => Promise<void>;
+  /**
+   * User-initiated retry of the failed turn on the next fallback-chain
+   * model. Unlike the automatic fallback (network/5xx failures only),
+   * this is offered in the error UI for EVERY recoverable failure —
+   * including server-reported mid-stream ones, where switching model is a
+   * deliberate user choice rather than a silent substitution.
+   */
+  retryFailedWithFallbackModel: () => Promise<void>;
+  /**
+   * "Summarize from headlines now": aborts the in-flight combined search
+   * (Bing still running) and resends the same user message with the
+   * already-received interim headlines echoed back — the server merges
+   * them as the search result without searching again.
+   */
+  summarizeFromHeadlines: () => Promise<void>;
   dismissModelSwitchPrompt: () => void;
   acceptModelSwitch: (alwaysSwitch?: boolean) => void;
 
@@ -379,6 +448,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   loadingMessageParams: undefined,
   streamingConsentRequests: [],
   streamingToolCalls: [],
+  streamingInterimSearch: null,
+  streamingSearchMode: undefined,
+  pendingPrecomputedSearchResults: null,
   abortController: null,
 
   // Retry-related initial state
@@ -403,6 +475,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   submittedApprovals: new Map<string, boolean>(),
   submittingApprovals: new Set<string>(),
   failedApprovals: new Set<string>(),
+  approvalArgumentOverrides: new Map<string, string>(),
   pendingOAuthResume: {},
 
   setPendingOAuthResume: (info) =>
@@ -488,6 +561,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       loadingMessageParams: undefined,
       streamingConsentRequests: [],
       streamingToolCalls: [],
+      streamingInterimSearch: null,
+      streamingSearchMode: undefined,
+      pendingPrecomputedSearchResults: null,
       abortController: null,
       // Reset retry state
       isRetrying: false,
@@ -547,6 +623,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
       // Initialize streaming state
       get().initializeStreamingState(conversation.id, loadingMessage);
+      // Remember the turn's search mode so a "Summarize from headlines"
+      // resend can replay it faithfully.
+      set({ streamingSearchMode: searchMode });
 
       // Schedule loading message display (only if response is slow)
       showLoadingTimeout = get().scheduleLoadingMessage(loadingMessage);
@@ -710,6 +789,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       loadingMessageParams: undefined,
       streamingConsentRequests: [],
       streamingToolCalls: [],
+      streamingInterimSearch: null,
       stopRequested: false,
       abortController,
     });
@@ -796,14 +876,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       console.warn(
         `[chatStore] Model "${conversation.model.id}" no longer exists, using fallback model`,
       );
-      // Try settings default, then the fallback chain
-      const fallbackId = settings.defaultModelId || fallbackModelID;
+      // The user's default leads (via preferredDefaultId), then the dynamic
+      // chain over the served list; the static ultimate fallback only
+      // matters when the live list is empty AND the chain resolves nothing.
       const rescuedModel =
-        OpenAIModels[fallbackId] ?? getFallbackModel([conversation.model.id]);
+        getFallbackModel([conversation.model.id], [], dynamicFallbackOpts()) ??
+        OpenAIModels[fallbackModelID];
 
       if (!rescuedModel) {
         throw new Error(
-          `No valid model available. Requested: ${conversation.model.id}, Fallback: ${fallbackId}`,
+          `No valid model available. Requested: ${conversation.model.id}`,
         );
       }
       latestModelConfig = rescuedModel;
@@ -870,6 +952,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
     // Memories require BOTH the user opt-in and the LD flag mirror —
     // flipping the flag off stops memories from being SENT, not just shown.
+    // memoryCapturePaused is deliberately NOT checked here: pausing stops new
+    // memories being learned, it does not stop the saved ones being used.
     // Same Foundry approval-resume exclusion as the summary. Select the 60
     // most recently UPDATED (the store array is insertion-ordered and
     // updateMemory edits in place, so a tail slice would drop freshly
@@ -890,12 +974,19 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
     // Echo the whole pending batch back (not just the answered ones): the
     // server auto-denies unanswered calls, mirroring the Foundry behavior.
+    // Card-side argument edits (per-item batch toggles) are applied here and
+    // only here: the stateless loop executes exactly the argumentsJson we
+    // echo, so an override narrows the call without any server change.
+    const argumentOverrides = get().approvalArgumentOverrides;
     const mcpPendingToolCalls = isMcpResume
       ? mcpPendingConsents.map((c) => ({
           id: c.approval_request_id!,
           serverId: c.server_id!,
           toolName: c.tool_name ?? '',
-          argumentsJson: c.tool_arguments ?? '{}',
+          argumentsJson:
+            argumentOverrides.get(c.approval_request_id!) ??
+            c.tool_arguments ??
+            '{}',
         }))
       : undefined;
     // Plan echo: the turn plan persisted on the same message that carries
@@ -977,11 +1068,17 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // otherwise strip searchMode for them.
     const isPromptAgentPersona =
       conversation.model.id.startsWith('org-prompt-');
+    // Admin-authored org RAG agents are not in the static registry; their
+    // gates ride the model object (set by ModelSelect from /api/agents).
+    // When the model carries a boolean it wins — for overrides of static
+    // ids it is fresher than the bundled config.
     const orgAgentSearchAllowed = isPromptAgentPersona
       ? true
       : isOrganizationAgent && conversation.model.id.startsWith('org-')
-        ? getOrganizationAgentById(conversation.model.id.slice('org-'.length))
-            ?.allowWebSearch === true
+        ? typeof conversation.model.allowWebSearch === 'boolean'
+          ? conversation.model.allowWebSearch
+          : getOrganizationAgentById(conversation.model.id.slice('org-'.length))
+              ?.allowWebSearch === true
         : false;
     const isAgentInvocation = isOrganizationAgent || isCustomAgent;
     const effectiveSearchMode =
@@ -996,8 +1093,10 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const orgAgentInterpreterAllowed = isPromptAgentPersona
       ? true
       : isOrganizationAgent && conversation.model.id.startsWith('org-')
-        ? getOrganizationAgentById(conversation.model.id.slice('org-'.length))
-            ?.allowCodeInterpreter === true
+        ? typeof conversation.model.allowCodeInterpreter === 'boolean'
+          ? conversation.model.allowCodeInterpreter
+          : getOrganizationAgentById(conversation.model.id.slice('org-'.length))
+              ?.allowCodeInterpreter === true
         : false;
     const effectiveInterpreterMode =
       isAgentInvocation && !orgAgentInterpreterAllowed
@@ -1009,29 +1108,25 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // a token to be useful; arbitrary entries additionally require BOTH the
     // user opt-in and the LaunchDarkly flag mirror — flipping the flag off
     // stops arbitrary servers from being SENT, not just shown.
-    const mcpCandidates = applyMcpPin(
-      isAgentInvocation
-        ? []
-        : settings.mcpServers
-            .filter((s) => s.enabled)
-            // Per-conversation opt-outs from the connector tray.
-            .filter((s) => !conversation.disabledMcpServerIds?.includes(s.id))
-            .filter(
-              (s) =>
-                s.catalogKey ||
-                // Connectors are server-resolved and access-checked; the
-                // arbitrary-URL flag does not apply to them.
-                s.connectorId ||
-                (settings.allowArbitraryMcpServers &&
-                  settings.mcpArbitraryFlagEnabled),
-            ),
-      // A pinned connector focuses the turn: only its tools are declared.
-      conversation.pinnedMcpServerId,
-    );
+    const mcpCandidates = isAgentInvocation
+      ? []
+      : settings.mcpServers
+          .filter((s) => s.enabled)
+          // Per-conversation opt-outs from the connector tray.
+          .filter((s) => !conversation.disabledMcpServerIds?.includes(s.id))
+          .filter(
+            (s) =>
+              s.catalogKey ||
+              // Connectors are server-resolved and access-checked; the
+              // arbitrary-URL flag does not apply to them.
+              s.connectorId ||
+              (settings.allowArbitraryMcpServers &&
+                settings.mcpArbitraryFlagEnabled),
+          );
     // Per-server auth: oauth servers refresh through the proxy first (single-
     // flight) and are EXCLUDED when no live access token exists (needsReauth);
     // bearer/header servers need their token; 'none' servers go bare.
-    const mcpServersToSend = (
+    const networkMcpEntries = (
       await Promise.all(
         mcpCandidates.map(async (s) => {
           let effectiveToken: string | undefined;
@@ -1057,6 +1152,33 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         }),
       )
     ).filter((s): s is NonNullable<typeof s> => s !== null);
+
+    // Builtin Microsoft 365 toolset: a url-less, token-less marker entry the
+    // server resolves in-process. Gated on the LD flag mirror, the per-user
+    // M365 connection, the global toolset toggle, and the per-chat opt-out —
+    // and skipped for agent invocations like every other MCP entry.
+    const m365ToolsActive =
+      !isAgentInvocation &&
+      settings.m365ToolsFlagEnabled &&
+      settings.m365Connected &&
+      settings.m365ToolsUserEnabled &&
+      !conversation.disabledMcpServerIds?.includes(M365_BUILTIN_SERVER_ID);
+    // The focus pin applies to the COMBINED list, so pinning the M365 row
+    // (or any connector) narrows the turn to just that server's tools.
+    const mcpServersToSend = applyMcpPin(
+      m365ToolsActive
+        ? [
+            ...networkMcpEntries,
+            {
+              id: M365_BUILTIN_SERVER_ID,
+              name: M365_BUILTIN_SERVER_LABEL,
+              builtin: true,
+            },
+          ]
+        : networkMcpEntries,
+      // A pinned connector focuses the turn: only its tools are declared.
+      conversation.pinnedMcpServerId,
+    );
 
     // Resolve extraction payload from the chat-input store + the persisted
     // recipes. Extraction mode is ephemeral (per-conversation) and recipes
@@ -1094,6 +1216,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         ? 'EU'
         : undefined);
 
+    // One-shot echo for "Summarize from headlines" resends: consume the
+    // pending payload so it can never leak into a later, unrelated send.
+    const { pendingPrecomputedSearchResults } = get();
+    if (pendingPrecomputedSearchResults) {
+      set({ pendingPrecomputedSearchResults: null });
+    }
+
     return await chatService.chat(modelToSend, messagesForAPI, {
       prompt: settings.systemPrompt,
       temperature: settings.temperature,
@@ -1110,6 +1239,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         effectiveSearchMode === SearchMode.ALWAYS
           ? settings.webSearchOptions
           : undefined,
+      precomputedSearchResults: pendingPrecomputedSearchResults ?? undefined,
       interpreterMode: effectiveInterpreterMode,
       hostedRegion,
       tone, // Pass the full tone object
@@ -1130,6 +1260,19 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       mcpPendingToolCalls,
       mcpLoopRound,
       mcpPlan,
+      // Fifth pass: screen overrides ride the conversation (explicit UI
+      // action on a flagged record); shared mailboxes ride settings. Sent
+      // only when the builtin M365 server is in play.
+      m365MailScreenOverrides:
+        mcpServersToSend.some((entry) => 'builtin' in entry && entry.builtin) &&
+        conversation.m365MailScreenOverrides?.length
+          ? conversation.m365MailScreenOverrides.slice(0, 20)
+          : undefined,
+      m365SharedMailboxes:
+        mcpServersToSend.some((entry) => 'builtin' in entry && entry.builtin) &&
+        settings.m365SharedMailboxes?.length
+          ? settings.m365SharedMailboxes
+          : undefined,
       extraction,
       conversationSummary,
       memories: memoryTexts.length > 0 ? memoryTexts : undefined,
@@ -1268,6 +1411,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       if (result.toolCallsChanged) {
         set({ streamingToolCalls: streamParser.getToolCallRecords?.() ?? [] });
       }
+      if (result.searchInterimChanged) {
+        set({ streamingInterimSearch: streamParser.getSearchInterim() });
+      }
 
       // Clear loading timeout once content arrives
       if (result.hasReceivedContent && showLoadingTimeout) {
@@ -1343,7 +1489,11 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // tool records / consent cards are in the streaming slices.
     const streamError = streamParser.getStreamError?.();
     if (streamError) {
-      throw new StreamInterruptedError(streamError.message, streamError.code);
+      throw new StreamInterruptedError(
+        streamError.message,
+        streamError.code,
+        streamError.retry === true,
+      );
     }
 
     return {
@@ -1427,13 +1577,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           //
           // Generate AI title async (fire and forget - updates when ready)
           const conversationId = conversation.id;
-          const modelId = conversation.model.id;
           const messageGroups = [
             ...conversation.messages,
             createMessageGroup(assistantMessage),
           ];
 
-          generateConversationTitle(messageGroups, modelId)
+          generateConversationTitle(messageGroups)
             .then((result) => {
               if (!result?.title) return;
               // Re-read before writing: the user may have renamed the
@@ -1484,7 +1633,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           contextWindowSize,
         );
       }
-      if (settings.memoriesEnabled && settings.memoriesFlagEnabled) {
+      // memoryCapturePaused gates capture ONLY — see the injection block
+      // above, which deliberately keeps sending what is already saved.
+      if (
+        settings.memoriesEnabled &&
+        settings.memoriesFlagEnabled &&
+        !settings.memoryCapturePaused
+      ) {
         void extractMemories(finalConversation, flat);
       }
     }
@@ -1522,6 +1677,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       loadingMessageParams: undefined,
       streamingConsentRequests: [],
       streamingToolCalls: [],
+      streamingInterimSearch: null,
+      streamingSearchMode: undefined,
       abortController: null,
       stopRequested: false,
     });
@@ -1540,6 +1697,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         streamingContent: '',
         streamingConversationId: null,
         loadingMessage: null,
+        streamingInterimSearch: null,
         abortController: null,
         stopRequested: false,
         error: null, // Don't show error for user-initiated stops
@@ -1568,11 +1726,21 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // silently retried on a fallback model: the stream was already underway
     // — tool calls may have run — and the user has been staring at a
     // loader; surface the failure with its partial context immediately.
-    const isStreamInterrupted = error instanceof StreamInterruptedError;
+    // EXCEPT when the server flagged `retry`: the partial is a broken
+    // promise (a generated file that doesn't exist, or no content at all),
+    // so a fallback retry is forced — keeping it would be worse.
+    const isStreamInterrupted =
+      error instanceof StreamInterruptedError && !error.retry;
+    // The 429 exemption exists for MODEL-level rate limits (an Azure TPM
+    // ceiling), which another model genuinely can absorb. Our own per-USER
+    // limits — the burst limiter and admin usage limits — are keyed on the
+    // user, so every fallback model hits them identically: retrying the chain
+    // just fires N doomed requests and delays the message the user needs to
+    // see. Identified by error code, since status cannot tell them apart.
     const isNonRetryableClientError =
       (error instanceof ApiError &&
         error.isClientError() &&
-        error.status !== 429) ||
+        (error.status !== 429 || error.isRateLimitError())) ||
       isStreamInterrupted;
     const modelId = conversation?.model?.id ?? '';
     const isNonFallbackModel =
@@ -1583,7 +1751,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       modelId.startsWith('custom-') ||
       isLocalModel(conversation?.model);
     const nextFallbackModel = conversation
-      ? getFallbackModel([conversation.model.id])
+      ? getFallbackModel([conversation.model.id], [], dynamicFallbackOpts())
       : null;
 
     if (
@@ -1709,7 +1877,11 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     searchMode?: SearchMode,
     attemptedModelIds: string[] = [conversation.model.id],
   ) => {
-    const fallbackModel = getFallbackModel(attemptedModelIds);
+    const fallbackModel = getFallbackModel(
+      attemptedModelIds,
+      [],
+      dynamicFallbackOpts(),
+    );
     if (!fallbackModel) {
       console.error(
         '[chatStore] Fallback chain exhausted, attempted:',
@@ -1760,6 +1932,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
       // Initialize streaming state
       get().initializeStreamingState(retryConversation.id, loadingMessage);
+      set({ streamingSearchMode: searchMode });
 
       // Schedule loading message display
       showLoadingTimeout = get().scheduleLoadingMessage(loadingMessage);
@@ -1917,14 +2090,19 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       }
 
       // Try the next model in the fallback chain, unless this failure would
-      // hit every model the same way (4xx other than rate limiting)
+      // hit every model the same way (4xx other than rate limiting). A
+      // per-user rate/usage limit is exactly such a failure despite being a
+      // 429 — see the matching check in the send path.
       const isNonRetryableClientError =
         retryError instanceof ApiError &&
         retryError.isClientError() &&
-        retryError.status !== 429;
+        (retryError.status !== 429 || retryError.isRateLimitError());
       const nextAttemptedIds = [...attemptedModelIds, fallbackModel.id];
 
-      if (!isNonRetryableClientError && getFallbackModel(nextAttemptedIds)) {
+      if (
+        !isNonRetryableClientError &&
+        getFallbackModel(nextAttemptedIds, [], dynamicFallbackOpts())
+      ) {
         toast.dismiss(toastId);
         return get().retryWithFallbackModel(
           conversation,
@@ -1962,6 +2140,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     }
   },
 
+  retryFailedWithFallbackModel: async () => {
+    const { failedConversation, failedSearchMode } = get();
+    if (!failedConversation) return;
+    set({
+      error: null,
+      errorIsRecoverable: true,
+    });
+    await get().retryWithFallbackModel(failedConversation, failedSearchMode);
+  },
+
   retryFailedRequest: async () => {
     const { failedConversation, failedSearchMode } = get();
     if (!failedConversation) return;
@@ -1986,6 +2174,75 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     });
 
     await get().sendMessage(userMessage, failedConversation, failedSearchMode);
+  },
+
+  summarizeFromHeadlines: async () => {
+    const {
+      isStreaming,
+      streamingInterimSearch,
+      streamingConversationId,
+      streamingSearchMode,
+      abortController,
+    } = get();
+    if (!isStreaming || !streamingInterimSearch || !streamingConversationId) {
+      return;
+    }
+    const conversation = useConversationStore
+      .getState()
+      .conversations.find((c) => c.id === streamingConversationId);
+    if (!conversation) return;
+
+    // Capture before aborting — the abort teardown clears the streaming
+    // slices (including the interim payload).
+    const payload: PrecomputedSearchResults = {
+      queries: streamingInterimSearch.queries,
+      entries: streamingInterimSearch.entries,
+    };
+    const searchMode = streamingSearchMode ?? SearchMode.INTELLIGENT;
+
+    console.log(
+      '[chatStore] Summarize from headlines: aborting the Bing wait and resending with echoed headlines',
+    );
+    abortController?.abort();
+
+    // Wait for the aborted request's teardown to finish (its catch path
+    // resets the streaming state) so it can't clobber the resend's fresh
+    // state. Bounded — if teardown somehow never lands, bail rather than
+    // fire a second request on top of a live one.
+    const deadline = Date.now() + 5000;
+    while (get().isStreaming && Date.now() < deadline) {
+      await new Promise((resolve) => setTimeout(resolve, 25));
+    }
+    if (get().isStreaming) {
+      console.warn(
+        '[chatStore] Summarize from headlines: stream teardown timed out; not resending',
+      );
+      return;
+    }
+
+    // The aborted turn never finalized an assistant message, so the
+    // conversation still ends with the user message — resend it (same
+    // shape as retryFailedRequest).
+    const flat = flattenEntriesForAPI(conversation.messages);
+    let userMessage: Message | undefined;
+    for (let i = flat.length - 1; i >= 0; i--) {
+      if (flat[i].role === 'user') {
+        userMessage = flat[i];
+        break;
+      }
+    }
+    if (!userMessage) return;
+
+    set({ pendingPrecomputedSearchResults: payload });
+    try {
+      await get().sendMessage(userMessage, conversation, searchMode);
+    } finally {
+      // Normally consumed by sendChatRequest; clear defensively in case
+      // the send failed before reaching it.
+      if (get().pendingPrecomputedSearchResults) {
+        set({ pendingPrecomputedSearchResults: null });
+      }
+    }
   },
 
   dismissModelSwitchPrompt: () => {
@@ -2040,7 +2297,19 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     conversation,
     sourceMessageIndex,
     source,
+    modifiedArgumentsJson,
   ) => {
+    // Record the card's argument edit BEFORE the batch gate: the deciding
+    // click may only be an interim decision (early return below), and the
+    // sibling click that finally dispatches must still find this override.
+    if (approve && modifiedArgumentsJson !== undefined) {
+      set((state) => {
+        const next = new Map(state.approvalArgumentOverrides);
+        next.set(approvalRequestId, modifiedArgumentsJson);
+        return { approvalArgumentOverrides: next };
+      });
+    }
+
     // ── MULTI-TOOL BATCH GATE (native MCP only) ──────────────────────────
     // A native consent round can pause on SEVERAL pending calls at once, and
     // the stateless resume must carry a decision for every one of them — the
@@ -2142,15 +2411,23 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // outcome on the source message, and tear down streaming state. Shared by
     // the success path and the "duplicate (already recorded)" path.
     const finalizeSubmitted = () => {
+      // Ids whose pending calls this resume consumed — their argument
+      // overrides have been sent and must not leak into a later round.
+      const dispatchedIds = isNativeBatch
+        ? batchConsents.map((c) => c.approval_request_id!)
+        : [approvalRequestId];
       set((state) => {
         const submitted = new Map(state.submittedApprovals);
         submitted.set(approvalRequestId, approve);
         const submitting = new Set(state.submittingApprovals);
         submitting.delete(approvalRequestId);
+        const overrides = new Map(state.approvalArgumentOverrides);
+        for (const id of dispatchedIds) overrides.delete(id);
         return {
           submittedApprovals: submitted,
           submittingApprovals: submitting,
           failedApprovals: setWithout(state.failedApprovals, approvalRequestId),
+          approvalArgumentOverrides: overrides,
         };
       });
       if (sourceMessageIndex !== undefined) {

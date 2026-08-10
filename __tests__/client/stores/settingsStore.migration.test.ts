@@ -732,10 +732,12 @@ describe('settingsStore migration (v46 → v47)', () => {
       { webSearchOptions: { resultCount: 12, freshness: 'week' } },
       46,
     ) as Record<string, unknown>;
+    // Absent provider backfills to the store default — 'combined' since
+    // combined (Bing + headlines) became the product default.
     expect(result.webSearchOptions).toEqual({
       resultCount: 12,
       freshness: 'week',
-      provider: 'auto',
+      provider: 'combined',
     });
 
     const repaired = migrate(
@@ -745,7 +747,7 @@ describe('settingsStore migration (v46 → v47)', () => {
     expect(repaired.webSearchOptions).toEqual({
       resultCount: 15,
       freshness: 'auto',
-      provider: 'auto',
+      provider: 'combined',
     });
   });
 });
@@ -762,12 +764,12 @@ describe('settingsStore migration (v47 → v48)', () => {
     expect(result.webSearchOptions).toEqual({
       resultCount: 10,
       freshness: 'day',
-      provider: 'auto',
+      provider: 'combined',
     });
   });
 
   it('keeps a valid persisted provider and repairs an invalid one', () => {
-    for (const valid of ['google-news', 'bing-agent']) {
+    for (const valid of ['google-news', 'bing-agent', 'bing-responses']) {
       const kept = migrate(
         {
           webSearchOptions: {
@@ -795,6 +797,159 @@ describe('settingsStore migration (v47 → v48)', () => {
     ) as Record<string, unknown>;
     expect(
       (repaired.webSearchOptions as Record<string, unknown>).provider,
-    ).toBe('auto');
+    ).toBe('combined');
+  });
+});
+
+/**
+ * v48 → v49: the pause-capture toggle for Memories. Negative polarity is
+ * deliberate — an absent or malformed key repairs to "not paused", which is
+ * how the feature behaved before the toggle existed.
+ */
+describe('settingsStore migration (v48 → v49)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills memoryCapturePaused=false when migrating from v48', () => {
+    const result = migrate({ memoriesEnabled: true }, 48) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.memoryCapturePaused).toBe(false);
+    // The opt-in itself must survive untouched.
+    expect(result.memoriesEnabled).toBe(true);
+  });
+
+  it('preserves an explicit pause on a current-version store', () => {
+    const result = migrate({ memoryCapturePaused: true }, 49) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.memoryCapturePaused).toBe(true);
+  });
+
+  it('repairs a non-boolean value', () => {
+    const result = migrate({ memoryCapturePaused: 'yes' }, 48) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.memoryCapturePaused).toBe(false);
+  });
+});
+
+/**
+ * v50 → v51: the remembered "Save to OneDrive" destination. Backfill to the
+ * defaults these users already have — default app folder (null), dialog shown.
+ */
+describe('settingsStore migration (v50 → v51)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills m365SaveDestination=null and m365SaveSkipPicker=false when migrating from v50', () => {
+    const result = migrate({ m365Connected: true }, 50) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365SaveDestination).toBeNull();
+    expect(result.m365SaveSkipPicker).toBe(false);
+    // The connection opt-in itself must survive untouched.
+    expect(result.m365Connected).toBe(true);
+  });
+
+  it('preserves a remembered destination on a current-version store', () => {
+    const destination = {
+      driveId: 'd1',
+      itemId: 'i1',
+      name: 'Reports',
+      pathLabel: 'OneDrive › Reports',
+    };
+    const result = migrate(
+      { m365SaveDestination: destination, m365SaveSkipPicker: true },
+      51,
+    ) as Record<string, unknown>;
+
+    expect(result.m365SaveDestination).toEqual(destination);
+    expect(result.m365SaveSkipPicker).toBe(true);
+  });
+
+  it('repairs a non-boolean skip-picker value', () => {
+    const result = migrate({ m365SaveSkipPicker: 'yes' }, 50) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365SaveSkipPicker).toBe(false);
+  });
+});
+
+/**
+ * v53 → v54: the playbook suggestion chips toggle (sixth pass). Backfilled
+ * ON — the chips are precondition-gated and dismissible, and the LD flag
+ * still gates the feature — but an explicit off must survive.
+ */
+describe('settingsStore migration (v53 → v54)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills m365PlaybookChipsEnabled=true when migrating from v53', () => {
+    const result = migrate({ m365Connected: true }, 53) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365PlaybookChipsEnabled).toBe(true);
+    expect(result.m365Connected).toBe(true);
+  });
+
+  it('preserves an explicit opt-out on a current-version store', () => {
+    const result = migrate({ m365PlaybookChipsEnabled: false }, 54) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365PlaybookChipsEnabled).toBe(false);
+  });
+
+  it('repairs a non-boolean value', () => {
+    const result = migrate({ m365PlaybookChipsEnabled: 'yes' }, 53) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365PlaybookChipsEnabled).toBe(true);
+  });
+});
+
+/**
+ * v54 → v55: the remembered attach-picker location. Backfilled to null —
+ * open at the OneDrive root, exactly what these users already had.
+ */
+describe('settingsStore migration (v54 → v55)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills m365PickerLocation=null when migrating from v54', () => {
+    const result = migrate({ m365Connected: true }, 54) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365PickerLocation).toBeNull();
+    expect(result.m365Connected).toBe(true);
+  });
+
+  it('preserves an existing location on a current-version store', () => {
+    const location = {
+      tab: 'sharepoint',
+      crumbs: [{ label: 'HR', siteId: 's1' }],
+      sort: 'lastModified',
+      dir: 'desc',
+    };
+    const result = migrate({ m365PickerLocation: location }, 55) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365PickerLocation).toEqual(location);
   });
 });

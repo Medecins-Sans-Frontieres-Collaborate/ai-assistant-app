@@ -5,7 +5,9 @@ import { useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { GlossaryEntry, TranslationGlossary } from '@/types/workflow';
+import { TranslationGlossary } from '@/types/workflow';
+
+import { GlossaryEntriesEditor } from '../Shared/GlossaryEntriesEditor';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { v4 as uuidv4 } from 'uuid';
@@ -31,10 +33,6 @@ export function GlossaryManager({ onClose }: GlossaryManagerProps) {
   );
   const editing = glossaries.find((g) => g.id === editingId);
 
-  const [newSource, setNewSource] = useState('');
-  const [newTarget, setNewTarget] = useState('');
-  const [newNote, setNewNote] = useState('');
-
   const handleCreate = () => {
     const glossary: TranslationGlossary = {
       id: uuidv4(),
@@ -45,26 +43,6 @@ export function GlossaryManager({ onClose }: GlossaryManagerProps) {
     };
     addGlossary(glossary);
     setEditingId(glossary.id);
-  };
-
-  const handleAddEntry = () => {
-    if (!editing || !newSource.trim() || !newTarget.trim()) return;
-    const entry: GlossaryEntry = {
-      source: newSource.trim(),
-      target: newTarget.trim(),
-      ...(newNote.trim() ? { note: newNote.trim() } : {}),
-    };
-    updateGlossary(editing.id, { entries: [...editing.entries, entry] });
-    setNewSource('');
-    setNewTarget('');
-    setNewNote('');
-  };
-
-  const handleRemoveEntry = (index: number) => {
-    if (!editing) return;
-    updateGlossary(editing.id, {
-      entries: editing.entries.filter((_, i) => i !== index),
-    });
   };
 
   const inputClass =
@@ -139,86 +117,10 @@ export function GlossaryManager({ onClose }: GlossaryManagerProps) {
                 </button>
               </div>
 
-              {editing.entries.length > 0 && (
-                <table className="mb-3 w-full text-sm">
-                  <thead>
-                    <tr className="text-start text-xs text-gray-500 dark:text-gray-400">
-                      <th className="pb-1 pe-2 font-medium">
-                        {t('translation.sourceTerm')}
-                      </th>
-                      <th className="pb-1 pe-2 font-medium">
-                        {t('translation.targetTerm')}
-                      </th>
-                      <th className="pb-1 pe-2 font-medium">
-                        {t('translation.note')}
-                      </th>
-                      <th className="pb-1" />
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {editing.entries.map((entry, index) => (
-                      <tr
-                        key={`${entry.source}-${index}`}
-                        className="border-t border-gray-100 text-gray-800 dark:border-gray-800 dark:text-gray-200"
-                      >
-                        <td className="py-1.5 pe-2">{entry.source}</td>
-                        <td className="py-1.5 pe-2">{entry.target}</td>
-                        <td className="py-1.5 pe-2 text-gray-500 dark:text-gray-400">
-                          {entry.note}
-                        </td>
-                        <td className="py-1.5 text-end">
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveEntry(index)}
-                            aria-label={t('translation.removeEntry', {
-                              term: entry.source,
-                            })}
-                            className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-surface-dark-elevated dark:hover:text-gray-200"
-                          >
-                            <IconX size={13} aria-hidden />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-
-              <div className="flex flex-wrap items-end gap-2">
-                <input
-                  value={newSource}
-                  onChange={(e) => setNewSource(e.target.value)}
-                  placeholder={t('translation.sourceTerm')}
-                  aria-label={t('translation.sourceTerm')}
-                  className={`${inputClass} w-32`}
-                />
-                <input
-                  value={newTarget}
-                  onChange={(e) => setNewTarget(e.target.value)}
-                  placeholder={t('translation.targetTerm')}
-                  aria-label={t('translation.targetTerm')}
-                  className={`${inputClass} w-32`}
-                />
-                <input
-                  value={newNote}
-                  onChange={(e) => setNewNote(e.target.value)}
-                  placeholder={t('translation.noteOptional')}
-                  aria-label={t('translation.noteOptional')}
-                  className={`${inputClass} w-36`}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') handleAddEntry();
-                  }}
-                />
-                <button
-                  type="button"
-                  onClick={handleAddEntry}
-                  disabled={!newSource.trim() || !newTarget.trim()}
-                  className="inline-flex min-h-[34px] items-center gap-1 rounded-lg bg-gray-200 px-2.5 py-1.5 text-sm text-gray-900 hover:bg-gray-300 disabled:opacity-30 dark:bg-surface-dark-elevated dark:text-gray-100 dark:hover:bg-gray-700"
-                >
-                  <IconPlus size={14} aria-hidden />
-                  {t('translation.addEntry')}
-                </button>
-              </div>
+              <GlossaryEntriesEditor
+                value={editing.entries}
+                onChange={(entries) => updateGlossary(editing.id, { entries })}
+              />
             </>
           ) : (
             <p className="max-w-[50ch] text-sm text-gray-500 dark:text-gray-400">

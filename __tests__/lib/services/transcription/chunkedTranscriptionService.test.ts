@@ -42,11 +42,17 @@ vi.mock('@/lib/utils/server/audio/audioSplitter', () => splitterMocks);
 type PrivateAccess = {
   combineTranscripts: (transcripts: string[], total: number) => string;
   processChunksAsync: (
+    storage: unknown,
     jobId: string,
+    userId: string,
     chunkPaths: string[],
     filename: string,
   ) => Promise<void>;
 };
+
+// The store is fully mocked, so an opaque sentinel is all the loop needs.
+const fakeStorage = { fake: 'blob-storage' };
+const userId = 'user-1';
 
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -100,10 +106,16 @@ describe('ChunkedTranscriptionService.processChunksAsync (worker pool)', () => {
     });
 
     const svc = new ChunkedTranscriptionService() as unknown as PrivateAccess;
-    await svc.processChunksAsync(jobId, chunkPaths, 'file.mp3');
+    await svc.processChunksAsync(
+      fakeStorage,
+      jobId,
+      userId,
+      chunkPaths,
+      'file.mp3',
+    );
 
     expect(storeMocks.completeJob).toHaveBeenCalledTimes(1);
-    const transcript = storeMocks.completeJob.mock.calls[0][1] as string;
+    const transcript = storeMocks.completeJob.mock.calls[0][3] as string;
     expect(transcript).toBe(
       '[Chunk 1/4]\nt0\n\n[Chunk 2/4]\nt1\n\n[Chunk 3/4]\nt2\n\n[Chunk 4/4]\nt3',
     );
@@ -115,7 +127,13 @@ describe('ChunkedTranscriptionService.processChunksAsync (worker pool)', () => {
     storeMocks.getJob.mockReturnValue({ jobId, status: 'cancelled' });
 
     const svc = new ChunkedTranscriptionService() as unknown as PrivateAccess;
-    await svc.processChunksAsync(jobId, chunkPaths, 'file.mp3');
+    await svc.processChunksAsync(
+      fakeStorage,
+      jobId,
+      userId,
+      chunkPaths,
+      'file.mp3',
+    );
 
     expect(whisperMocks.transcribeChunk).not.toHaveBeenCalled();
     expect(storeMocks.completeJob).not.toHaveBeenCalled();
@@ -136,11 +154,19 @@ describe('ChunkedTranscriptionService.processChunksAsync (worker pool)', () => {
 
     const svc = new ChunkedTranscriptionService() as unknown as PrivateAccess;
     await expect(
-      svc.processChunksAsync(jobId, chunkPaths, 'file.mp3'),
+      svc.processChunksAsync(
+        fakeStorage,
+        jobId,
+        userId,
+        chunkPaths,
+        'file.mp3',
+      ),
     ).rejects.toThrow('chunk too large');
 
     expect(storeMocks.failJob).toHaveBeenCalledWith(
+      fakeStorage,
       jobId,
+      userId,
       'chunk too large',
       'permanent',
     );
@@ -165,7 +191,13 @@ describe('ChunkedTranscriptionService.processChunksAsync (worker pool)', () => {
     });
 
     const svc = new ChunkedTranscriptionService() as unknown as PrivateAccess;
-    await svc.processChunksAsync(jobId, chunkPaths, 'file.mp3');
+    await svc.processChunksAsync(
+      fakeStorage,
+      jobId,
+      userId,
+      chunkPaths,
+      'file.mp3',
+    );
 
     expect(storeMocks.completeJob).not.toHaveBeenCalled();
     expect(storeMocks.failJob).not.toHaveBeenCalled();

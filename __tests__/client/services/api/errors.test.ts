@@ -157,6 +157,103 @@ describe('ApiError', () => {
     });
   });
 
+  /**
+   * Regression: a rate limit (429) and an admin usage-limit denial (403) were
+   * both rendered as "Authentication required. Please sign in." — the 403
+   * because isAuthError() covers it, the 429 because RATE_LIMIT_EXCEEDED used
+   * to be mapped to 401 server-side. Users were told to fix the one thing
+   * that was not wrong, and the server's actual message (wait time, which
+   * limit was hit) was discarded.
+   */
+  describe('rate-limit and usage-limit errors', () => {
+    it('identifies a burst rate limit by code, not status', () => {
+      const error = new ApiError(
+        'Rate limit exceeded. Try again in 30 seconds.',
+        429,
+        'Too Many Requests',
+        {
+          code: 'RATE_LIMIT_EXCEEDED',
+        },
+      );
+      expect(error.isRateLimitError()).toBe(true);
+    });
+
+    it('identifies an admin usage limit by code, despite sharing 403 with auth', () => {
+      const error = new ApiError(
+        "You've reached your limit of 100 requests today.",
+        403,
+        'Forbidden',
+        {
+          code: 'RATE_LIMIT_QUOTA_EXCEEDED',
+        },
+      );
+      expect(error.isRateLimitError()).toBe(true);
+      // Still an auth error BY STATUS — which is exactly why getUserMessage
+      // must consult the code first.
+      expect(error.isAuthError()).toBe(true);
+    });
+
+    it('does not mistake a genuine 403 for a limit', () => {
+      const error = new ApiError('Forbidden', 403, 'Forbidden', {
+        code: 'FORBIDDEN',
+      });
+      expect(error.isRateLimitError()).toBe(false);
+    });
+
+    it('does not mistake a bare 429 with no code for one of ours', () => {
+      // An upstream 429 (e.g. an Azure model TPM limit) carries no such code
+      // and SHOULD stay retryable on a fallback model.
+      const error = new ApiError('Too Many Requests', 429, 'Too Many Requests');
+      expect(error.isRateLimitError()).toBe(false);
+    });
+
+    it('surfaces the server message for a rate limit, NOT "please sign in"', () => {
+      const error = new ApiError(
+        'Rate limit exceeded. Try again in 30 seconds.',
+        429,
+        'Too Many Requests',
+        {
+          code: 'RATE_LIMIT_EXCEEDED',
+        },
+      );
+      expect(error.getUserMessage()).toBe(
+        'Rate limit exceeded. Try again in 30 seconds.',
+      );
+      expect(error.getUserMessage()).not.toContain('sign in');
+    });
+
+    it('surfaces the server message for a usage limit, NOT "please sign in"', () => {
+      const error = new ApiError(
+        "You've reached your limit of 100 requests today.",
+        403,
+        'Forbidden',
+        {
+          code: 'RATE_LIMIT_QUOTA_EXCEEDED',
+        },
+      );
+      expect(error.getUserMessage()).toBe(
+        "You've reached your limit of 100 requests today.",
+      );
+      expect(error.getUserMessage()).not.toContain('sign in');
+    });
+
+    it('still tells a genuinely unauthenticated user to sign in', () => {
+      const error = new ApiError('Unauthorized', 401, 'Unauthorized');
+      expect(error.getUserMessage()).toBe(
+        'Authentication required. Please sign in.',
+      );
+    });
+
+    it('falls back to a generic sentence when the server sent no message', () => {
+      const error = new ApiError('', 429, 'Too Many Requests', {
+        code: 'RATE_LIMIT_EXCEEDED',
+      });
+      expect(error.getUserMessage()).toBe(
+        'Usage limit reached. Please try again later.',
+      );
+    });
+  });
+
   describe('error type checking', () => {
     it('should allow proper instanceof checks', () => {
       const error = new ApiError('Test', 400, 'Bad Request');

@@ -492,6 +492,63 @@ describe('validateChatRequest - conversationSummary and memories', () => {
   });
 });
 
+describe('validateChatRequest - m365MailScreenOverrides', () => {
+  const base = {
+    model: { id: 'gpt-5.2', name: 'GPT-5.2' },
+    messages: [{ role: 'user' as const, content: 'hi' }],
+  };
+
+  it('accepts Graph-id-shaped override ids and round-trips them', () => {
+    const validator = new InputValidator();
+    const ids = ['AAMkAGI2NGVhZTVlLTI3ZjMtNGQ1Yy1iMDEy_x=', 'msg-2.body,id'];
+    expect(
+      validator.validateChatRequest({ ...base, m365MailScreenOverrides: ids })
+        .m365MailScreenOverrides,
+    ).toEqual(ids);
+  });
+
+  it('is optional', () => {
+    const validator = new InputValidator();
+    expect(
+      validator.validateChatRequest(base).m365MailScreenOverrides,
+    ).toBeUndefined();
+  });
+
+  it('accepts at most 20 ids', () => {
+    const validator = new InputValidator();
+    const twenty = Array.from({ length: 20 }, (_, i) => `id-${i}`);
+    expect(
+      validator.validateChatRequest({
+        ...base,
+        m365MailScreenOverrides: twenty,
+      }).m365MailScreenOverrides,
+    ).toHaveLength(20);
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        m365MailScreenOverrides: [...twenty, 'id-20'],
+      }),
+    ).toThrow(PipelineError);
+  });
+
+  it('rejects ids outside the Graph-id charset or over 512 chars', () => {
+    const validator = new InputValidator();
+    for (const bad of [
+      "id' or 1=1",
+      'id with spaces',
+      'id/with/slashes',
+      'a'.repeat(513),
+    ]) {
+      expect(() =>
+        validator.validateChatRequest({
+          ...base,
+          m365MailScreenOverrides: [bad],
+        }),
+      ).toThrow(PipelineError);
+    }
+  });
+});
+
 describe('validateChatRequest - hostedRegion', () => {
   const base = {
     model: { id: 'gpt-5.2', name: 'GPT-5.2' },
@@ -557,6 +614,178 @@ describe('validateChatRequest - interpreterMode', () => {
     ).toThrow();
     expect(() =>
       validator.validateChatRequest({ ...base, interpreterMode: 'agent' }),
+    ).toThrow();
+  });
+});
+
+describe('validateChatRequest - webSearchOptions.provider', () => {
+  const base = {
+    model: { id: 'gpt-5.2', name: 'GPT-5.2' },
+    messages: [{ role: 'user' as const, content: 'hi' }],
+  };
+
+  it('keeps the provider selection (the regression: it used to be stripped)', () => {
+    const validator = new InputValidator();
+    for (const provider of [
+      'auto',
+      'news',
+      'google-news',
+      'gdelt',
+      'bing-agent',
+      'bing-responses',
+      'combined',
+    ]) {
+      const result = validator.validateChatRequest({
+        ...base,
+        webSearchOptions: { resultCount: 8, freshness: 'any', provider },
+      });
+      expect(result.webSearchOptions?.provider).toBe(provider);
+    }
+  });
+
+  it('accepts webSearchOptions without a provider (older clients)', () => {
+    const validator = new InputValidator();
+    const result = validator.validateChatRequest({
+      ...base,
+      webSearchOptions: { resultCount: 8, freshness: 'any' },
+    });
+    expect(result.webSearchOptions?.provider).toBeUndefined();
+  });
+
+  it('rejects unknown providers', () => {
+    const validator = new InputValidator();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        webSearchOptions: {
+          resultCount: 8,
+          freshness: 'any',
+          provider: 'altavista',
+        },
+      }),
+    ).toThrow();
+  });
+});
+
+describe('validateChatRequest - precomputedSearchResults', () => {
+  const base = {
+    model: { id: 'gpt-5.2', name: 'GPT-5.2' },
+    messages: [{ role: 'user' as const, content: 'hi' }],
+  };
+  const entry = {
+    title: 'Headline',
+    url: 'https://example.com/a',
+    date: '2026-07-23',
+    sourceName: 'example.com',
+    snippet: 'Snippet text',
+  };
+
+  it('accepts a bounded echo payload', () => {
+    const validator = new InputValidator();
+    const result = validator.validateChatRequest({
+      ...base,
+      precomputedSearchResults: { queries: ['q1', 'q2'], entries: [entry] },
+    });
+    expect(result.precomputedSearchResults?.entries).toHaveLength(1);
+    expect(result.precomputedSearchResults?.queries).toEqual(['q1', 'q2']);
+  });
+
+  it('rejects non-http(s) entry URLs (clickable-citation injection)', () => {
+    const validator = new InputValidator();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        precomputedSearchResults: {
+          queries: ['q'],
+          entries: [{ ...entry, url: 'javascript:alert(1)' }],
+        },
+      }),
+    ).toThrow();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        precomputedSearchResults: {
+          queries: ['q'],
+          entries: [{ ...entry, sourceUrl: 'data:text/html,x' }],
+        },
+      }),
+    ).toThrow();
+  });
+
+  it('rejects empty entries and oversized lists', () => {
+    const validator = new InputValidator();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        precomputedSearchResults: { queries: ['q'], entries: [] },
+      }),
+    ).toThrow();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        precomputedSearchResults: {
+          queries: ['q'],
+          entries: Array.from({ length: 40 }, (_, i) => ({
+            ...entry,
+            url: `https://example.com/${i}`,
+          })),
+        },
+      }),
+    ).toThrow();
+  });
+});
+
+describe('validateChatRequest - mcpServers entries', () => {
+  const base = {
+    messages: [{ role: 'user' as const, content: 'hi' }],
+    model: { id: 'gpt-5.2', name: 'GPT-5.2' },
+  };
+
+  it('accepts a builtin marker entry (builtin-m365)', () => {
+    const validator = new InputValidator();
+    const result = validator.validateChatRequest({
+      ...base,
+      mcpServers: [
+        { id: 'builtin-m365', name: 'Microsoft 365', builtin: true },
+      ],
+    });
+    expect(result.mcpServers).toEqual([
+      { id: 'builtin-m365', name: 'Microsoft 365', builtin: true },
+    ]);
+  });
+
+  it('accepts an admin-connector entry carrying connectorId', () => {
+    const validator = new InputValidator();
+    const result = validator.validateChatRequest({
+      ...base,
+      mcpServers: [
+        { id: 'conn-1', name: 'NetSuite', connectorId: 'connector-abc123' },
+      ],
+    });
+    expect(result.mcpServers?.[0].connectorId).toBe('connector-abc123');
+  });
+
+  it('still rejects unknown fields (schema stays strict)', () => {
+    const validator = new InputValidator();
+    try {
+      validator.validateChatRequest({
+        ...base,
+        mcpServers: [{ id: 'x', name: 'X', somethingElse: 'nope' }],
+      });
+      expect.fail('Should have thrown PipelineError');
+    } catch (error) {
+      expect(error).toBeInstanceOf(PipelineError);
+      expect((error as PipelineError).code).toBe(ErrorCode.VALIDATION_FAILED);
+    }
+  });
+
+  it('rejects a non-boolean builtin value', () => {
+    const validator = new InputValidator();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        mcpServers: [{ id: 'builtin-m365', name: 'M365', builtin: 'yes' }],
+      }),
     ).toThrow();
   });
 });

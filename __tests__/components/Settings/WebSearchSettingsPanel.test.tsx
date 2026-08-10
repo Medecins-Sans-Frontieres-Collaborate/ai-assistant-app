@@ -15,12 +15,16 @@ describe('WebSearchSettingsPanel', () => {
     });
   });
 
-  it('renders all provider choices with Automatic selected by default', () => {
+  it('renders all provider choices with the combined default selected', () => {
     render(<WebSearchSettingsPanel />);
 
+    // 'combined' is the product default (DEFAULT_WEB_SEARCH_OPTIONS).
+    expect(
+      screen.getByRole('radio', { name: /Deep search with early headlines/ }),
+    ).toBeChecked();
     expect(
       screen.getByRole('radio', { name: /Automatic \(recommended\)/ }),
-    ).toBeChecked();
+    ).not.toBeChecked();
     expect(
       screen.getByRole('radio', { name: /Combined news/ }),
     ).not.toBeChecked();
@@ -29,8 +33,23 @@ describe('WebSearchSettingsPanel', () => {
     ).not.toBeChecked();
     expect(screen.getByRole('radio', { name: /GDELT only/ })).not.toBeChecked();
     expect(
-      screen.getByRole('radio', { name: /Bing grounding/ }),
+      screen.getByRole('radio', { name: /Bing grounding \(via Microsoft\)/ }),
     ).not.toBeChecked();
+    expect(
+      screen.getByRole('radio', { name: /Bing fast search/ }),
+    ).not.toBeChecked();
+  });
+
+  it('writes the combined provider to the settings store', () => {
+    render(<WebSearchSettingsPanel />);
+
+    fireEvent.click(
+      screen.getByRole('radio', { name: /Deep search with early headlines/ }),
+    );
+
+    expect(useSettingsStore.getState().webSearchOptions.provider).toBe(
+      'combined',
+    );
   });
 
   it('warns that Bing grounding is slow and inconsistent', () => {
@@ -58,6 +77,19 @@ describe('WebSearchSettingsPanel', () => {
     );
     expect(
       screen.getByRole('radio', { name: /Google News only/ }),
+    ).toBeChecked();
+  });
+
+  it('writes the bing-responses provider to the settings store', () => {
+    render(<WebSearchSettingsPanel />);
+
+    fireEvent.click(screen.getByRole('radio', { name: /Bing fast search/ }));
+
+    expect(useSettingsStore.getState().webSearchOptions.provider).toBe(
+      'bing-responses',
+    );
+    expect(
+      screen.getByRole('radio', { name: /Bing fast search/ }),
     ).toBeChecked();
   });
 

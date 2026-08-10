@@ -125,6 +125,43 @@ describe('ApprovalBatchActions', () => {
     }
   });
 
+  it('Approve all skips alwaysConfirm M365 writes; Deny all covers them', async () => {
+    const alwaysConfirm: ConsentRequest = {
+      ...nativeApproval('w'),
+      server_id: 'builtin-m365',
+      tool_name: 'tasks_create',
+    };
+    render(
+      <ApprovalBatchActions
+        requests={[nativeApproval('a'), alwaysConfirm, nativeApproval('b')]}
+        messageIndex={1}
+      />,
+    );
+    fireEvent.click(screen.getByText('Approve all'));
+    await waitFor(() => expect(submitApproval).toHaveBeenCalledTimes(2));
+    expect(submitApproval.mock.calls.map((c) => c[0])).toEqual(['a', 'b']);
+
+    submitApproval.mockClear();
+    fireEvent.click(screen.getByText('Deny all'));
+    await waitFor(() => expect(submitApproval).toHaveBeenCalledTimes(3));
+  });
+
+  it('hides Approve all entirely when every undecided call is alwaysConfirm', () => {
+    const write = (id: string): ConsentRequest => ({
+      ...nativeApproval(id),
+      server_id: 'builtin-m365',
+      tool_name: 'calendar_create_event',
+    });
+    render(
+      <ApprovalBatchActions
+        requests={[write('x'), write('y')]}
+        messageIndex={1}
+      />,
+    );
+    expect(screen.queryByText('Approve all')).not.toBeInTheDocument();
+    expect(screen.getByText('Deny all')).toBeInTheDocument();
+  });
+
   it('Deny all submits every undecided approval with approve=false', async () => {
     render(
       <ApprovalBatchActions
