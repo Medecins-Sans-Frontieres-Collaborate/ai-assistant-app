@@ -56,6 +56,7 @@ class PreprocessProgress {
           label,
           percent: Math.max(0, Math.min(100, Math.round(percent))),
         }),
+        { mode: 0o600 },
       );
     } catch {
       /* ignore */
@@ -100,6 +101,7 @@ class PreprocessProgress {
           percent: 100,
           ...(result || {}),
         }),
+        { mode: 0o600 },
       );
     } catch {
       /* ignore */
@@ -116,6 +118,7 @@ class PreprocessProgress {
           percent: 100,
           error: message,
         }),
+        { mode: 0o600 },
       );
     } catch {
       /* ignore */
@@ -424,7 +427,7 @@ async function runCoverageCheck(params: {
         blobPath,
         BlobProperty.BLOB,
       )) as Buffer;
-      await writeFile(localPath, buffer);
+      await writeFile(localPath, buffer, { mode: 0o600 });
       localDocPaths.push(localPath);
     }
 
@@ -742,7 +745,7 @@ async function runCoverageCheck(params: {
   } catch (error) {
     console.error(
       '[Grants Preprocess] run failed:',
-      runId,
+      JSON.stringify(runId),
       JSON.stringify(error instanceof Error ? error.message : String(error)),
     );
     prog.fail(error instanceof Error ? error.message : 'Internal server error');

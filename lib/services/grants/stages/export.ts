@@ -207,7 +207,7 @@ export function run(params: {
   }
 
   const csvContent = [headerLine, ...dataLines].join('\n');
-  writeFileSync(outputPath, csvContent, 'utf-8');
+  writeFileSync(outputPath, csvContent, { encoding: 'utf-8', mode: 0o600 });
 
   console.log(
     `  Wrote ${total} row(s) x ${CSV_COLUMNS.length} columns -> ${outputPath}`,
@@ -222,11 +222,10 @@ export function run(params: {
       '.validation.json',
     );
     mkdirSync(dirname(validationOutputPath), { recursive: true });
-    writeFileSync(
-      validationOutputPath,
-      JSON.stringify(validation, null, 2),
-      'utf-8',
-    );
+    writeFileSync(validationOutputPath, JSON.stringify(validation, null, 2), {
+      encoding: 'utf-8',
+      mode: 0o600,
+    });
     const summary = validation.summary || {};
     console.log(
       `  Wrote validation report -> ${validationOutputPath} ` +

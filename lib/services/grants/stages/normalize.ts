@@ -788,7 +788,10 @@ export async function run(params: {
 
   // Write normalized records to cache
   const outputPath = join(cacheDir, 'normalized_records.json');
-  writeFileSync(outputPath, JSON.stringify(finalRecords, null, 2), 'utf-8');
+  writeFileSync(outputPath, JSON.stringify(finalRecords, null, 2), {
+    encoding: 'utf-8',
+    mode: 0o600,
+  });
 
   // Persist the model's per-document type classification (project narrative vs
   // coordination / strategy / overview / compilation) for the results UI to flag
@@ -805,7 +808,7 @@ export async function run(params: {
     writeFileSync(
       join(cacheDir, 'document_types.json'),
       JSON.stringify(docTypes, null, 2),
-      'utf-8',
+      { encoding: 'utf-8', mode: 0o600 },
     );
   } catch {
     /* non-fatal — UI falls back to keyword classification */

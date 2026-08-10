@@ -140,7 +140,7 @@ export async function POST(
 
     // 5. Write updated CSV to work directory (overwrite output.csv)
     const csvContent = rowsToCSV(columns, rows);
-    await writeFile(outputPath, csvContent, 'utf-8');
+    await writeFile(outputPath, csvContent, { encoding: 'utf-8', mode: 0o600 });
 
     console.log(`[${runId}] Saved ${rows.length} rows to output.csv`);
 

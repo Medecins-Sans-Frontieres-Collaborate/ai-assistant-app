@@ -677,7 +677,10 @@ export function run(params: {
     progress.stageDone('validate');
     if (validationOutput) {
       mkdirSync(dirname(validationOutput), { recursive: true });
-      writeFileSync(validationOutput, JSON.stringify([], null, 2), 'utf-8');
+      writeFileSync(validationOutput, JSON.stringify([], null, 2), {
+        encoding: 'utf-8',
+        mode: 0o600,
+      });
     }
     return undefined;
   }
@@ -753,7 +756,10 @@ export function run(params: {
 
   // Write to cache
   const validationPath = join(cacheDir, 'validation.json');
-  writeFileSync(validationPath, JSON.stringify(result, null, 2), 'utf-8');
+  writeFileSync(validationPath, JSON.stringify(result, null, 2), {
+    encoding: 'utf-8',
+    mode: 0o600,
+  });
   console.log(`  Wrote ${validationPath}`);
 
   // Optionally copy to a second location

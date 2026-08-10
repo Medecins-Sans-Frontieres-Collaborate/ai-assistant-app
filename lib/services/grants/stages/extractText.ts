@@ -235,10 +235,10 @@ export async function run(params: {
 
       // Extract text
       console.log(
-        `  [${idx + 1}/${total}] ${logName}: extracting (${extname(docPath)})...`,
+        `  [${idx + 1}/${total}] ${logName}: extracting (${JSON.stringify(extname(docPath))})...`,
       );
       const text = await extractText(docPath);
-      writeFileSync(outPath, text, 'utf-8');
+      writeFileSync(outPath, text, { encoding: 'utf-8', mode: 0o600 });
       const charCount = text.length;
       console.log(
         `  [${idx + 1}/${total}] ${logName}: ${charCount.toLocaleString()} chars extracted`,

@@ -140,7 +140,7 @@ export async function loadExpectedProjects(params: {
 
   const localPath = safeJoin(workDir, safeChildName(blobPath));
   const buffer = (await blobClient.get(blobPath, BlobProperty.BLOB)) as Buffer;
-  await writeFile(localPath, buffer);
+  await writeFile(localPath, buffer, { mode: 0o600 });
 
   const rows = loadTable(localPath, spec.skiprows || 0);
   const headers = Object.keys(rows[0] ?? {});

@@ -530,7 +530,7 @@ export async function run(params: {
 
   if (!existsSync(inputPath)) {
     console.log('  No normalized records found.');
-    writeFileSync(emptyOutput, '[]', 'utf-8');
+    writeFileSync(emptyOutput, '[]', { encoding: 'utf-8', mode: 0o600 });
     progress.stageStart('enrich', 0);
     progress.stageDone('enrich');
     return;
@@ -541,7 +541,7 @@ export async function run(params: {
 
   if (total === 0) {
     console.log('  No records to enrich.');
-    writeFileSync(emptyOutput, '[]', 'utf-8');
+    writeFileSync(emptyOutput, '[]', { encoding: 'utf-8', mode: 0o600 });
     progress.stageStart('enrich', 0);
     progress.stageDone('enrich');
     return;
@@ -790,7 +790,7 @@ export async function run(params: {
   writeFileSync(
     join(cacheDir, 'supplemental_report.json'),
     JSON.stringify(suppReport, null, 2),
-    'utf-8',
+    { encoding: 'utf-8', mode: 0o600 },
   );
   console.log(
     `  Supplemental report: ${loadedEntries.length} loaded, ${missingEntries.length} missing, ${failedEntries.length} failed`,
@@ -885,7 +885,10 @@ export async function run(params: {
 
   // Write enriched records
   const outputPath = join(cacheDir, 'enriched_records.json');
-  writeFileSync(outputPath, JSON.stringify(records, null, 2), 'utf-8');
+  writeFileSync(outputPath, JSON.stringify(records, null, 2), {
+    encoding: 'utf-8',
+    mode: 0o600,
+  });
 
   progress.stageDone('enrich');
   console.log(`  Enrichment complete: ${total} record(s) -> ${outputPath}`);

@@ -686,7 +686,10 @@ export async function run(params: {
       safeCode ? `${safeName}_${safeCode}.json` : `${safeName}_${idx}.json`,
     );
 
-    writeFileSync(outPath, JSON.stringify(rec, null, 2), 'utf-8');
+    writeFileSync(outPath, JSON.stringify(rec, null, 2), {
+      encoding: 'utf-8',
+      mode: 0o600,
+    });
   }
 
   progress.stageDone('extract_fields');

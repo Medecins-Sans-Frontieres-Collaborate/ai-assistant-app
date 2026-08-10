@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
         blobPath,
         BlobProperty.BLOB,
       )) as Buffer;
-      await writeFile(localPath, buffer);
+      await writeFile(localPath, buffer, { mode: 0o600 });
       downloadedDocPaths.push(localPath);
       console.log(
         `[${runId}] Saved document: ${JSON.stringify(fileName)} (${buffer.length} bytes)`,
@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
           blobPath,
           BlobProperty.BLOB,
         )) as Buffer;
-        await writeFile(localPath, buffer);
+        await writeFile(localPath, buffer, { mode: 0o600 });
         console.log(
           `[${runId}] Saved supplemental: ${JSON.stringify(fileName)} (${buffer.length} bytes)`,
         );
@@ -167,6 +167,7 @@ export async function POST(request: NextRequest) {
     await writeFile(
       join(workDir, 'metadata.json'),
       JSON.stringify(metadata, null, 2),
+      { mode: 0o600 },
     );
 
     // Resolve the prompt: unsaved in-flight edits (body) take precedence, then a
