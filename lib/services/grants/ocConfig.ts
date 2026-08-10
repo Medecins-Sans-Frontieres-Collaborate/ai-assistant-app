@@ -18,17 +18,21 @@ const RAW_CONFIGS: Record<string, Record<string, unknown>> = {
   waca: wacaConfig,
 };
 
-/** The set of OC identifiers */
-export const OC_NAMES: readonly string[] = Object.keys(RAW_CONFIGS);
+/** Canonical OC display names, e.g. 'OCA', 'WaCA'. */
+export const OC_NAMES: readonly string[] = Object.values(RAW_CONFIGS).map(
+  (c) => c.name as string,
+);
 
 /**
- * Resolve a client-supplied OC name to its canonical config key, or null if
- * unknown. The returned string is one of the static OC_NAMES literals.
+ * Resolve a client-supplied OC name (any case) to its canonical name, or null
+ * if unknown. The returned string is the config's own name, which is also
+ * the exact casing used for blob-path segments (grants/<name>/...), so read
+ * and write paths agree. Matching is case-insensitive, the returned value is not.
  */
 export function resolveOC(ocName: unknown): string | null {
   if (typeof ocName !== 'string') return null;
-  const lower = ocName.toLowerCase();
-  return OC_NAMES.find((name) => name === lower) ?? null;
+  const cfg = RAW_CONFIGS[ocName.toLowerCase()];
+  return cfg ? (cfg.name as string) : null;
 }
 
 export interface SupplementalFileSpec {

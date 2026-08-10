@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { canAccessGrants } from '@/lib/services/grants/access';
+import { resolveOC } from '@/lib/services/grants/ocConfig';
 
 import { auth } from '@/auth';
 
@@ -28,7 +29,6 @@ export async function POST(request: NextRequest) {
 
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
-    const oc = formData.get('oc') as string | null;
 
     if (!file) {
       return NextResponse.json(
@@ -37,9 +37,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const oc = resolveOC(formData.get('oc'));
     if (!oc) {
       return NextResponse.json(
-        { error: 'Missing required field: oc' },
+        { error: 'Missing or unknown field: oc' },
         { status: 400 },
       );
     }
@@ -93,12 +94,12 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const oc = searchParams.get('oc');
+    const oc = resolveOC(searchParams.get('oc'));
     const type = searchParams.get('type') || 'narrative';
 
     if (!oc) {
       return NextResponse.json(
-        { error: 'Missing required query parameter: oc' },
+        { error: 'Missing or unknown query parameter: oc' },
         { status: 400 },
       );
     }
@@ -160,12 +161,12 @@ export async function DELETE(request: NextRequest) {
     const storage = createBlobStorageClient(session);
 
     if (blobPath === 'all') {
-      const oc = searchParams.get('oc');
+      const oc = resolveOC(searchParams.get('oc'));
       if (!oc) {
         return NextResponse.json(
           {
             error:
-              'Missing required query parameter: oc (needed for bulk delete)',
+              'Missing or unknown query parameter: oc (needed for bulk delete)',
           },
           { status: 400 },
         );
