@@ -377,6 +377,17 @@ function normalizeRecord(
       ) {
         filenameCode = ocCfg.code_prefix.toUpperCase() + filenameCode;
       }
+      // A filename-derived code must satisfy the OC's code pattern.
+      try {
+        if (!new RegExp(ocCfg.code_regex, 'i').test(filenameCode)) {
+          console.log(
+            `  ! ${source}: filename fragment "${filenameCode}" does not match ${ocCfg.name} pattern ${ocCfg.code_regex} — ignoring it`,
+          );
+          filenameCode = '';
+        }
+      } catch {
+        // keep legacy behavior
+      }
     }
   }
 
