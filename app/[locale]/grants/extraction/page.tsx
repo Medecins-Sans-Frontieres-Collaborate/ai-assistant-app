@@ -1348,7 +1348,7 @@ export default function GrantExtractionPage() {
                     </span>
                     <input
                       type="file"
-                      accept=".pdf,.docx"
+                      accept=".pdf,.docx,.doc"
                       multiple
                       onChange={handleFileUpload}
                       className="hidden"
