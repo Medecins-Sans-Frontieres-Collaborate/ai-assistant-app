@@ -141,11 +141,29 @@ async function extractWithDocIntelligence(docPath: string): Promise<string> {
 
   throw new Error('Document Intelligence analysis timed out');
 }
+// Azure Document Intelligence does not support .doc files,
+// so the word-extractor package is used to extract text from them.
+async function extractLegacyDoc(docPath: string): Promise<string> {
+  const { default: WordExtractor } = await import('word-extractor');
+  const doc = await new WordExtractor().extract(docPath);
+  return [
+    doc.getBody(),
+    doc.getHeaders({ includeFooters: true }),
+    doc.getTextboxes({ includeHeadersAndFooters: false }),
+    doc.getFootnotes(),
+    doc.getEndnotes(),
+  ]
+    .filter((part) => part && part.trim())
+    .join('\n');
+}
 
 async function extractText(docPath: string): Promise<string> {
   const ext = extname(docPath).toLowerCase();
   if (ext === '.txt') {
     return readFileSync(docPath, 'utf-8');
+  }
+  if (ext === '.doc') {
+    return extractLegacyDoc(docPath);
   }
   // Use Document Intelligence for PDF, DOCX, and other formats
   return extractWithDocIntelligence(docPath);
