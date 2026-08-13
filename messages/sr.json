@@ -950,7 +950,8 @@
       "showFewer": "Prikaži manje"
     },
     "retryWithModel": "Pokušajte sa modelom {model}",
-    "createTodoTasks": "Kreiraj To Do zadatke iz ovog odgovora"
+    "createTodoTasks": "Kreiraj To Do zadatke iz ovog odgovora",
+    "attachedFileExpired": "Priloženi fajl više nije dostupan — otpremljeni fajlovi se čuvaju ograničeno vreme. Uklonjen je iz ovog razgovora. Pokušajte ponovo bez njega ili ponovo otpremite fajl."
   },
   "transcript": {
     "originalTranscript": "Оригинални транскрипт",

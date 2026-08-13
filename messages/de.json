@@ -838,7 +838,8 @@
       "showFewer": "Weniger anzeigen"
     },
     "retryWithModel": "Mit {model} versuchen",
-    "createTodoTasks": "To-Do-Aufgaben aus dieser Antwort erstellen"
+    "createTodoTasks": "To-Do-Aufgaben aus dieser Antwort erstellen",
+    "attachedFileExpired": "Eine angehängte Datei ist nicht mehr verfügbar — hochgeladene Dateien werden nur für eine begrenzte Zeit gespeichert. Sie wurde aus diesem Gespräch entfernt. Versuchen Sie es ohne die Datei erneut oder laden Sie die Datei noch einmal hoch."
   },
   "sidebar": {
     "collapseSidebar": "Seitenleiste einklappen",

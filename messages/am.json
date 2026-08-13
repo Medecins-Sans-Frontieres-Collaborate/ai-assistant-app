@@ -835,7 +835,8 @@
       "showFewer": "በቁጥር ቅንጡ"
     },
     "retryWithModel": "በ{model} ይሞክሩ",
-    "createTodoTasks": "ከዚህ መልስ የሚከተሉትን To Do ተግባራት ይፍጠሩ"
+    "createTodoTasks": "ከዚህ መልስ የሚከተሉትን To Do ተግባራት ይፍጠሩ",
+    "attachedFileExpired": "የተያያዙት ፋይሎች አልተገኙም — የተጫኑ ፋይሎች ለጊዜ ብቻ ይቀመጣሉ። ከዚህ ውይይት ተወግደዋል። ያለውን ፋይል ያለ ትንሽ ደግመው ይሞክሩ ወይም እንደገና ያስጫኑ።"
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",

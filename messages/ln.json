@@ -950,7 +950,8 @@
       "showFewer": "Lakisa moke"
     },
     "retryWithModel": "Meka na {model}",
-    "createTodoTasks": "Kokela ba misala To Do epai ya eyano oyo"
+    "createTodoTasks": "Kokela ba misala To Do epai ya eyano oyo",
+    "attachedFileExpired": "Fichier oyo batye elongo ezali lisusu te — bafichier oyo batindami na système ezali kaka na mwa tango mokuse. Fichier elongwe na lisolo oyo. Tala lisusu kozanga yango, to telemelaka fichier lisusu."
   },
   "transcript": {
     "originalTranscript": "Transkripsheni ya ebandeli",

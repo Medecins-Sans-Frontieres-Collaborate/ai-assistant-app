@@ -867,7 +867,8 @@
       "showFewer": "הצג פחות"
     },
     "retryWithModel": "נסה עם {model}",
-    "createTodoTasks": "צור משימות To Do מהתגובה הזו"
+    "createTodoTasks": "צור משימות To Do מהתגובה הזו",
+    "attachedFileExpired": "קובץ מצורף אינו זמין יותר — קבצים שהועלו נשמרים לזמן מוגבל. הקובץ הוסר מהשיחה. נסו שוב בלעדיו, או העלו את הקובץ מחדש."
   },
   "sidebar": {
     "collapseSidebar": "כיווץ סרגל צד",

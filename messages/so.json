@@ -950,7 +950,8 @@
       "showFewer": "Muuji wax ka yar"
     },
     "retryWithModel": "Isku day {model}",
-    "createTodoTasks": "Abuur hawlo To Do oo laga sameeyay jawaabtan"
+    "createTodoTasks": "Abuur hawlo To Do oo laga sameeyay jawaabtan",
+    "attachedFileExpired": "Fayl la lifaaqay lama heli karo — faylasha la soo geliyay waxaa la kaydiyaa muddo xaddidan. Waxaa laga saaray wadahadalkan. Isku day mar kale adigoon isticmaalin, ama dib u soo geli faylka."
   },
   "transcript": {
     "originalTranscript": "Qoraalka Aslka ah",

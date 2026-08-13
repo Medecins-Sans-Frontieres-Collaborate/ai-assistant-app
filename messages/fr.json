@@ -838,7 +838,8 @@
       "showFewer": "Afficher moins"
     },
     "retryWithModel": "Essayer avec {model}",
-    "createTodoTasks": "Créer des tâches à faire à partir de cette réponse"
+    "createTodoTasks": "Créer des tâches à faire à partir de cette réponse",
+    "attachedFileExpired": "Un fichier joint n'est plus disponible — les fichiers téléchargés sont conservés pendant une durée limitée. Il a été supprimé de cette conversation. Veuillez réessayer sans ce fichier, ou téléchargez-le à nouveau."
   },
   "sidebar": {
     "collapseSidebar": "Réduire la barre latérale",

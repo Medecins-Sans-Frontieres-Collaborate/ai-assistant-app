@@ -950,7 +950,8 @@
       "showFewer": "Hollu tuugol"
     },
     "retryWithModel": "Huutore e {model}",
-    "createTodoTasks": "Sari To Do tasks e jaajol ɓeyngu"
+    "createTodoTasks": "Sari To Do tasks e jaajol ɓeyngu",
+    "attachedFileExpired": "Fiilo jokkii heɓni, ɗum waawi aɗa waawaa ndokkude — fiilo jokkiɗe nanndini so tawii waawli ɗin. Ñande ɗin, fiilo jokkii ɗin anndi ko ɓurnde. Fuɗɗo jangirde e to yamirde fiilo mum."
   },
   "transcript": {
     "originalTranscript": "Winnditagol Goongɗinɗo",

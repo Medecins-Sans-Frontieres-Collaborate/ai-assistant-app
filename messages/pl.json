@@ -889,7 +889,8 @@
       "showFewer": "Pokaż mniej"
     },
     "retryWithModel": "Spróbuj z {model}",
-    "createTodoTasks": "Utwórz zadania To Do z tej odpowiedzi"
+    "createTodoTasks": "Utwórz zadania To Do z tej odpowiedzi",
+    "attachedFileExpired": "Załączony plik nie jest już dostępny — przesłane pliki są przechowywane przez ograniczony czas. Został usunięty z tej rozmowy. Spróbuj ponownie bez niego lub prześlij plik jeszcze raz."
   },
   "sidebar": {
     "collapseSidebar": "Zwiń pasek boczny",

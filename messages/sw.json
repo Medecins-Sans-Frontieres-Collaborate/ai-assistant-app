@@ -892,7 +892,8 @@
       "showFewer": "Onyesha vichache"
     },
     "retryWithModel": "Jaribu na {model}",
-    "createTodoTasks": "Unda kazi za 'To Do' kutoka kwa jibu hili"
+    "createTodoTasks": "Unda kazi za 'To Do' kutoka kwa jibu hili",
+    "attachedFileExpired": "Faili iliyounganishwa haipatikani tena — faili zilizopakiwa huhifadhiwa kwa muda mfupi. Imeondolewa kwenye mazungumzo haya. Tafadhali jaribu tena bila faili hiyo, au pakia faili upya."
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",

@@ -892,7 +892,8 @@
       "showFewer": "Zobrazit méně"
     },
     "retryWithModel": "Zkusit s {model}",
-    "createTodoTasks": "Vytvořit úkoly To Do z této odpovědi"
+    "createTodoTasks": "Vytvořit úkoly To Do z této odpovědi",
+    "attachedFileExpired": "Připojený soubor již není dostupný — nahrané soubory jsou uchovávány jen po omezenou dobu. Byl z tohoto rozhovoru odstraněn. Pokračujte bez něj, nebo soubor nahrajte znovu."
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",

@@ -950,7 +950,8 @@
       "showFewer": "Onetsani zochepa"
     },
     "retryWithModel": "Yesani ndi {model}",
-    "createTodoTasks": "Pangani ntchito za To Do kuchokera pa yankho ili"
+    "createTodoTasks": "Pangani ntchito za To Do kuchokera pa yankho ili",
+    "attachedFileExpired": "Fayilo yolumikizidwa silikupezekanso — mafayilo omwe amatumizidwa amasungidwa kwa nthawi yochepa. Fayiloyi yachotsedwa pa zokambiranazi. Yesetsaninso popanda fayiloyi, kapena tumizaninso fayiloyo."
   },
   "transcript": {
     "originalTranscript": "Zolemba Zoyambirira",

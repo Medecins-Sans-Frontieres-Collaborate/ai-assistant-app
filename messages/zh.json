@@ -923,7 +923,8 @@
       "showFewer": "显示较少"
     },
     "retryWithModel": "尝试使用 {model}",
-    "createTodoTasks": "根据本回复创建待办任务"
+    "createTodoTasks": "根据本回复创建待办任务",
+    "attachedFileExpired": "附件已不再可用 — 上传的文件仅保存有限时间。该文件已从本对话中移除。请重新尝试，或重新上传文件。"
   },
   "sidebar": {
     "collapseSidebar": "折叠侧边栏",

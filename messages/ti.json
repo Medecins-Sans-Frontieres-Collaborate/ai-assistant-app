@@ -950,7 +950,8 @@
       "showFewer": "ንእሽቶ ርኣዩ"
     },
     "retryWithModel": "ብ{model} ፈትኑ",
-    "createTodoTasks": "ካብዚ መልሲ ዕለታዊ ስራሕ ፍጠሩ"
+    "createTodoTasks": "ካብዚ መልሲ ዕለታዊ ስራሕ ፍጠሩ",
+    "attachedFileExpired": "ተያያዥ ፋይል ኣይተገናአን — ዝተወደደ ፋይል ንውሑድ ጊዜ ብግዜኡ ይውሰን። ካብዚ መገለጺ ዘይስረው ኣሎ። ብዚ ዘይኮነ ንደገሚ ፈትኑ፣ ወይ ፋይሉ ኣብ ኣንተኹም ደገና ኣስተኻኽሉ።"
   },
   "transcript": {
     "originalTranscript": "ኦሪጂናል ጽሕፈት",

@@ -890,7 +890,8 @@
       "showFewer": "Afișează mai puține"
     },
     "retryWithModel": "Încearcă cu {model}",
-    "createTodoTasks": "Creează sarcini To Do din acest răspuns"
+    "createTodoTasks": "Creează sarcini To Do din acest răspuns",
+    "attachedFileExpired": "Un fișier atașat nu mai este disponibil — fișierele încărcate sunt păstrate doar pentru o perioadă limitată. Acesta a fost eliminat din această conversație. Încercați din nou fără el sau reîncărcați fișierul."
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",

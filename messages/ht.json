@@ -950,7 +950,8 @@
       "showFewer": "Montre mwens"
     },
     "retryWithModel": "Ese ak {model}",
-    "createTodoTasks": "Kreye travay To Do soti nan repons sa a"
+    "createTodoTasks": "Kreye travay To Do soti nan repons sa a",
+    "attachedFileExpired": "Yon fichye ki te tache pa disponib ankò — fichye ou telechaje yo estoke pandan yon limit tan. Yo retire li nan konvèsasyon sa a. Eseye ankò san li, oswa telechaje fichye a ankò."
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",

@@ -950,7 +950,8 @@
       "showFewer": "Hombï tsïna"
     },
     "retryWithModel": "Gbalë sô mbênî na {model}",
-    "createTodoTasks": "Dü tângo To Do sô yâ tî ngangu a kêtê"
+    "createTodoTasks": "Dü tângo To Do sô yâ tî ngangu a kêtê",
+    "attachedFileExpired": "Fi le yeke bindî ti lo na koko — fi nga suka zo ti yeke hinga na wüne ti tango kêtê. A zia na wa na kongöro ti yângâ tî mbi. Sô siriri kâ sô, to mbi tî zo wânde fi ahînga mo, lo yeke sâra fi tî mbênî."
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",

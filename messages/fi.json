@@ -867,7 +867,8 @@
       "showFewer": "Näytä vähemmän"
     },
     "retryWithModel": "Kokeile mallilla {model}",
-    "createTodoTasks": "Luo To Do -tehtäviä tästä vastauksesta"
+    "createTodoTasks": "Luo To Do -tehtäviä tästä vastauksesta",
+    "attachedFileExpired": "Liitetiedosto ei ole enää saatavilla — ladatut tiedostot säilytetään vain rajoitetun ajan. Se on poistettu tästä keskustelusta. Yritä uudelleen ilman tiedostoa tai lataa tiedosto uudelleen."
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",

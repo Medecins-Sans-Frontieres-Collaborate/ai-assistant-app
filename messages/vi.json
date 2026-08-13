@@ -893,7 +893,8 @@
       "showFewer": "Hiển thị ít hơn"
     },
     "retryWithModel": "Thử với {model}",
-    "createTodoTasks": "Tạo nhiệm vụ To Do từ phản hồi này"
+    "createTodoTasks": "Tạo nhiệm vụ To Do từ phản hồi này",
+    "attachedFileExpired": "Một tệp đính kèm không còn khả dụng — các tệp đã tải lên chỉ được lưu trữ trong thời gian giới hạn. Tệp này đã bị xóa khỏi cuộc trò chuyện này. Vui lòng thử lại mà không cần tệp, hoặc tải lên tệp một lần nữa."
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",

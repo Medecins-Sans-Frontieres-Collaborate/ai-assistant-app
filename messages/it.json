@@ -813,7 +813,8 @@
       "showFewer": "Mostra meno"
     },
     "retryWithModel": "Prova con {model}",
-    "createTodoTasks": "Crea attività To Do da questa risposta"
+    "createTodoTasks": "Crea attività To Do da questa risposta",
+    "attachedFileExpired": "Un file allegato non è più disponibile: i file caricati vengono conservati per un periodo limitato. È stato rimosso da questa conversazione. Riprova senza il file oppure ricaricalo."
   },
   "sidebar": {
     "collapseSidebar": "Comprimi barra laterale",

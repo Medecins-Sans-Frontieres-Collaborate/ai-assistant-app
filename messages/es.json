@@ -838,7 +838,8 @@
       "showFewer": "Mostrar menos"
     },
     "retryWithModel": "Intentar con {model}",
-    "createTodoTasks": "Crear tareas de To Do desde esta respuesta"
+    "createTodoTasks": "Crear tareas de To Do desde esta respuesta",
+    "attachedFileExpired": "Un archivo adjunto ya no está disponible; los archivos cargados se almacenan por un tiempo limitado. Ha sido eliminado de esta conversación. Intente nuevamente sin él, o cargue el archivo otra vez."
   },
   "sidebar": {
     "collapseSidebar": "Contraer barra lateral",

@@ -867,7 +867,8 @@
       "showFewer": "Mostra menys"
     },
     "retryWithModel": "Prova amb {model}",
-    "createTodoTasks": "Crea tasques To Do a partir d'aquesta resposta"
+    "createTodoTasks": "Crea tasques To Do a partir d'aquesta resposta",
+    "attachedFileExpired": "Un fitxer adjunt ja no està disponible — els fitxers pujats s'emmagatzemen durant un temps limitat. S'ha eliminat d'aquesta conversa. Torneu-ho a provar sense el fitxer o pugeu-lo de nou."
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",

@@ -892,7 +892,8 @@
       "showFewer": "Daha az göster"
     },
     "retryWithModel": "{model} ile deneyin",
-    "createTodoTasks": "Bu yanıtı To Do görevlerine dönüştür"
+    "createTodoTasks": "Bu yanıtı To Do görevlerine dönüştür",
+    "attachedFileExpired": "Ekli bir dosya artık mevcut değil — yüklenen dosyalar sınırlı bir süre saklanır. Bu dosya bu sohbetten kaldırıldı. Dosya olmadan tekrar deneyin veya dosyayı tekrar yükleyin."
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",

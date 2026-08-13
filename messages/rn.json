@@ -950,7 +950,8 @@
       "showFewer": "Garagaza bike"
     },
     "retryWithModel": "Gerageza ukoresheje {model}",
-    "createTodoTasks": "Himba imirimo ya To Do kuri uru rwandiko"
+    "createTodoTasks": "Himba imirimo ya To Do kuri uru rwandiko",
+    "attachedFileExpired": "Idosiye washyizeho ntikiboneka — amadosiye yoherejwe abikwa igihe gito. Yarakuwe muri ubu butumwa. Gerageza utayikoresheje canke uyisubizeho wongere uyohereze."
   },
   "transcript": {
     "originalTranscript": "Inyandiko y'intango",

@@ -950,7 +950,8 @@
       "showFewer": "Erekana make"
     },
     "retryWithModel": "Gerageza ukoresheje {model}",
-    "createTodoTasks": "Hanga imirimo ya To Do kuva kuri iyi nyunganizi"
+    "createTodoTasks": "Hanga imirimo ya To Do kuva kuri iyi nyunganizi",
+    "attachedFileExpired": "Ifishi yashyizweho ntikiboneka — amadosiye yoherejwe abikwa igihe gito. Yakuwemo muri iyi biganiro. Gerageza kongera kugerageza utayifatanyije, cyangwa wongere wohereze ifishi."
   },
   "transcript": {
     "originalTranscript": "Ubwandiko bwa Mbere",

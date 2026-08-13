@@ -950,7 +950,8 @@
       "showFewer": "Asehoy vitsy kokoa"
     },
     "retryWithModel": "Andramo amin'i {model}",
-    "createTodoTasks": "Mamoròna asa To Do avy amin’ity valiny ity"
+    "createTodoTasks": "Mamoròna asa To Do avy amin’ity valiny ity",
+    "attachedFileExpired": "Tsy azo idirana intsony ilay rakitra nampiarina — voatahiry mandritra ny fotoana voafetra ny rakitra nampiakatra. Esorina tao amin’ity resaka ity izy io. Azonao atao ny manohy tsy misy azy, na mampiakatra indray ilay rakitra."
   },
   "transcript": {
     "originalTranscript": "Dikan-teny Tany Am-boalohany",

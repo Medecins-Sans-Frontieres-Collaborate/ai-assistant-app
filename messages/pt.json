@@ -838,7 +838,8 @@
       "showFewer": "Mostrar menos"
     },
     "retryWithModel": "Tentar com {model}",
-    "createTodoTasks": "Criar tarefas To Do a partir desta resposta"
+    "createTodoTasks": "Criar tarefas To Do a partir desta resposta",
+    "attachedFileExpired": "Um arquivo anexado não está mais disponível — arquivos enviados são armazenados por tempo limitado. Ele foi removido desta conversa. Tente novamente sem o arquivo, ou faça o upload do arquivo novamente."
   },
   "sidebar": {
     "collapseSidebar": "Recolher barra lateral",

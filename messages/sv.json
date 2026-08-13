@@ -892,7 +892,8 @@
       "showFewer": "Visa färre"
     },
     "retryWithModel": "Försök med {model}",
-    "createTodoTasks": "Skapa att göra-uppgifter från svaret"
+    "createTodoTasks": "Skapa att göra-uppgifter från svaret",
+    "attachedFileExpired": "En bifogad fil är inte längre tillgänglig — uppladdade filer sparas under en begränsad tid. Filen har tagits bort från denna konversation. Försök igen utan filen eller ladda upp den på nytt."
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",
