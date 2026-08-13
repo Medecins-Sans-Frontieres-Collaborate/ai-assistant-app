@@ -29,6 +29,7 @@ export function useChat() {
       streamingConversationId: s.streamingConversationId,
       citations: s.citations,
       error: s.error,
+      errorCode: s.errorCode,
       stopRequested: s.stopRequested,
       loadingMessage: s.loadingMessage,
       loadingMessageParams: s.loadingMessageParams,
