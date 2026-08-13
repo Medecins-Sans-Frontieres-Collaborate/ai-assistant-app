@@ -113,6 +113,7 @@ export function Chat({
     streamingContent,
     streamingConversationId,
     error,
+    errorCode,
     sendMessage,
     citations,
     clearError,
@@ -761,6 +762,7 @@ export function Chat({
         {/* Error Display */}
         <ChatError
           error={error}
+          errorCode={errorCode}
           onClearError={clearError}
           onRegenerate={handleRegenerate}
           onRetry={retryFailedRequest}

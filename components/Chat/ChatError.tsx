@@ -5,6 +5,12 @@ import { useTranslations } from 'next-intl';
 
 interface ChatErrorProps {
   error: string | null;
+  /**
+   * Structured server error code for `error`, when one was reported.
+   * Code-specific failures (e.g. FILE_NOT_FOUND for an expired attachment)
+   * render localized copy instead of the raw server string.
+   */
+  errorCode?: string | null;
   onClearError: () => void;
   onRegenerate?: () => void;
   /** Re-sends the trailing user message; used when no assistant group exists. */
@@ -29,6 +35,7 @@ interface ChatErrorProps {
  */
 export const ChatError: React.FC<ChatErrorProps> = ({
   error,
+  errorCode,
   onClearError,
   onRegenerate,
   onRetry,
@@ -42,14 +49,19 @@ export const ChatError: React.FC<ChatErrorProps> = ({
 
   if (!error) return null;
 
+  // The store keeps the raw (English) server message; localized copy for
+  // known codes is owned here, where translations are available.
+  const effectiveError =
+    errorCode === 'FILE_NOT_FOUND' ? t('chat.attachedFileExpired') : error;
+
   // Truncate so the card stays readable; full text stays on the title attr.
   const renderedError = (() => {
-    if (error.length <= 280) return error;
-    const firstPeriod = error.indexOf('.');
+    if (effectiveError.length <= 280) return effectiveError;
+    const firstPeriod = effectiveError.indexOf('.');
     if (firstPeriod > 0 && firstPeriod < 280) {
-      return error.slice(0, firstPeriod + 1) + ' …';
+      return effectiveError.slice(0, firstPeriod + 1) + ' …';
     }
-    return error.slice(0, 240).trimEnd() + ' …';
+    return effectiveError.slice(0, 240).trimEnd() + ' …';
   })();
 
   const showRetry = canRetry && onRetry;
@@ -70,7 +82,7 @@ export const ChatError: React.FC<ChatErrorProps> = ({
   return (
     <div className="absolute bottom-[160px] left-0 right-0 px-4 py-2">
       <div className="mx-auto max-w-3xl rounded-lg bg-red-100 p-4 text-red-800 dark:bg-red-900 dark:text-red-200 flex items-start justify-between">
-        <span className="flex-1 whitespace-pre-wrap" title={error}>
+        <span className="flex-1 whitespace-pre-wrap" title={effectiveError}>
           {renderedError}
         </span>
         <div className="flex items-center gap-2 ml-4 flex-shrink-0">
