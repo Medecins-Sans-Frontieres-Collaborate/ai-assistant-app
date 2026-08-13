@@ -1,6 +1,7 @@
 import { Session } from 'next-auth';
 
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
+import { isBlobNotFoundError } from '@/lib/utils/server/blob/storageErrors';
 
 import { ChatBody, Message } from '@/types/chat';
 import { ErrorCode, PipelineError } from '@/types/errors';
@@ -725,6 +726,10 @@ export class InputValidator {
         throw error;
       }
 
+      if (isBlobNotFoundError(error)) {
+        throw expiredFilePipelineError(fileUrl, error);
+      }
+
       throw PipelineError.critical(
         ErrorCode.VALIDATION_FAILED,
         'Failed to validate file size',
@@ -736,4 +741,27 @@ export class InputValidator {
       );
     }
   }
+}
+
+/**
+ * The blob backing a `file_url` is gone — uploads live in a container with a
+ * lifecycle delete rule, so this normally means the file expired. Thrown with
+ * a DISTINCT code (vs the generic VALIDATION_FAILED) and the offending
+ * `fileUrl` in metadata so the client can flag the file in the Active Files
+ * tray and strip the dead reference instead of failing every future turn.
+ * The message is streamed to the user verbatim — keep it client-safe.
+ */
+export function expiredFilePipelineError(
+  fileUrl: string,
+  error: unknown,
+): PipelineError {
+  return PipelineError.critical(
+    ErrorCode.FILE_NOT_FOUND,
+    'An attached file is no longer available — uploaded files are stored for a limited time. Send your message without it, or upload the file again.',
+    {
+      fileUrl,
+      originalError: error instanceof Error ? error.message : String(error),
+    },
+    error instanceof Error ? error : undefined,
+  );
 }

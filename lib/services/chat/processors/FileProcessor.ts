@@ -14,6 +14,7 @@ import {
   isFFmpegAvailable,
 } from '@/lib/utils/server/audio/audioExtractor';
 import { BlobStorage, getBlobBase64String } from '@/lib/utils/server/blob/blob';
+import { isBlobNotFoundError } from '@/lib/utils/server/blob/storageErrors';
 import { loadDocument } from '@/lib/utils/server/file/fileHandling';
 import { validateBufferSignature } from '@/lib/utils/server/file/fileValidation';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
@@ -25,7 +26,10 @@ import { getChunkedTranscriptionService } from '../../transcription/chunkedTrans
 import { TranscriptionServiceFactory } from '../../transcriptionService';
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
-import { InputValidator } from '../validators/InputValidator';
+import {
+  InputValidator,
+  expiredFilePipelineError,
+} from '../validators/InputValidator';
 
 import {
   isAudioVideoFile,
@@ -234,13 +238,22 @@ export class FileProcessor extends BasePipelineStage {
                 }),
               );
 
-              // Download file
+              // Download file. A blob deleted between the size validation
+              // above and this GET still surfaces as the distinct
+              // expired-file error, not an opaque failure.
               const perfDownloadStart = performance.now();
-              await this.fileProcessingService.downloadFile(
-                file.url,
-                filePath,
-                context.user,
-              );
+              try {
+                await this.fileProcessingService.downloadFile(
+                  file.url,
+                  filePath,
+                  context.user,
+                );
+              } catch (downloadError) {
+                if (isBlobNotFoundError(downloadError)) {
+                  throw expiredFilePipelineError(file.url, downloadError);
+                }
+                throw downloadError;
+              }
               console.log(
                 `[Perf] FileProcessor.downloadFile "${sanitizeForLog(filename)}": ${(performance.now() - perfDownloadStart).toFixed(1)}ms`,
               );
