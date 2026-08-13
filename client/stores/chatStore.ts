@@ -3,6 +3,10 @@
 import toast from 'react-hot-toast';
 
 import {
+  forceSessionExpiredSignOut,
+  isSessionExpiredApiError,
+} from '@/client/services/auth/sessionExpiry';
+import {
   LocalRuntimeError,
   localChatService,
 } from '@/client/services/chat/LocalChatService';
@@ -46,6 +50,7 @@ import {
   MessageType,
   ToolCallRecord,
 } from '@/types/chat';
+import { ErrorCode } from '@/types/errors';
 import { ExtractionRequest } from '@/types/extractionRecipe';
 import {
   OpenAIModel,
@@ -146,6 +151,13 @@ interface ChatStore {
   streamingConversationId: string | null;
   citations: Citation[];
   error: string | null;
+  /**
+   * Structured server error code accompanying `error` (e.g. FILE_NOT_FOUND
+   * for an expired attachment). Lets components render localized,
+   * code-specific copy instead of the raw server string. Null whenever
+   * `error` is null or the failure carried no code.
+   */
+  errorCode: string | null;
   stopRequested: boolean;
   loadingMessage: string | null;
   /**
@@ -443,6 +455,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   streamingConversationId: null,
   citations: [],
   error: null,
+  errorCode: null,
   stopRequested: false,
   loadingMessage: null,
   loadingMessageParams: undefined,
@@ -530,9 +543,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
   setCitations: (citations) => set({ citations }),
 
-  setError: (error) => set({ error }),
+  setError: (error) => set({ error, errorCode: null }),
 
-  clearError: () => set({ error: null }),
+  clearError: () => set({ error: null, errorCode: null }),
 
   requestStop: () => {
     const { abortController } = get();
@@ -556,6 +569,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       streamingConversationId: null,
       citations: [],
       error: null,
+      errorCode: null,
       stopRequested: false,
       loadingMessage: null,
       loadingMessageParams: undefined,
@@ -784,6 +798,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       streamingContent: '',
       streamingConversationId: conversationId,
       error: null,
+      errorCode: null,
       citations: [],
       loadingMessage: null, // Start with null, will be set after delay
       loadingMessageParams: undefined,
@@ -1493,6 +1508,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         streamError.message,
         streamError.code,
         streamError.retry === true,
+        streamError.fileUrl,
       );
     }
 
@@ -1701,8 +1717,39 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         abortController: null,
         stopRequested: false,
         error: null, // Don't show error for user-initiated stops
+        errorCode: null,
         isRetrying: false,
       });
+      return;
+    }
+
+    // A 401 whose code says the session itself is dead (e.g. token refresh
+    // failing after a client-secret rotation). No banner could help — every
+    // retry fails identically until the user signs in again. The submitted
+    // question is already safe: handleSend persists it to the conversation
+    // store (localStorage) BEFORE the request fires, and signOut doesn't
+    // clear localStorage — after re-login the trailing user message shows
+    // the "Generate response" button. Settle streaming state quietly, then
+    // force re-authentication; the signin page shows the SessionExpired card.
+    if (isSessionExpiredApiError(error)) {
+      console.error('[chatStore] Session expired — forcing sign-out');
+      set({
+        isStreaming: false,
+        streamingContent: '',
+        streamingConversationId: null,
+        loadingMessage: null,
+        streamingInterimSearch: null,
+        streamingToolCalls: [],
+        streamingConsentRequests: [],
+        abortController: null,
+        stopRequested: false,
+        isRetrying: false,
+        error: null, // no dead-end banner — we navigate to signin instead
+        errorCode: null,
+        failedConversation: null,
+        failedSearchMode: undefined,
+      });
+      forceSessionExpiredSignOut();
       return;
     }
 
@@ -1822,6 +1869,65 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       errorMessage = error.message;
     }
 
+    // Structured code accompanying the failure — from the in-band stream
+    // error (streaming path) or the JSON error body (HTTP path).
+    const structuredCode =
+      error instanceof StreamInterruptedError
+        ? error.code
+        : error instanceof ApiError
+          ? (error.response?.code as string | undefined)
+          : undefined;
+
+    // An expired attachment (FILE_NOT_FOUND) needs repair, not just a
+    // banner: the dead `file_url` lives in the persisted history, so every
+    // future turn would re-validate the missing blob and fail identically.
+    // Flag the file in the Active Files tray and strip the dead reference,
+    // so "Try again" (and every later turn) sends a clean history.
+    let conversationForRetry = conversation || null;
+    if (structuredCode === ErrorCode.FILE_NOT_FOUND && conversation) {
+      let failedFileUrl =
+        error instanceof StreamInterruptedError
+          ? error.fileUrl
+          : error instanceof ApiError
+            ? ((error.response?.metadata?.fileUrl ??
+                error.response?.details?.[0]?.metadata?.fileUrl) as
+                | string
+                | undefined)
+            : undefined;
+      // Defensive: if the server didn't name the file, target the most
+      // recent attachment in history — the conversation must never stay
+      // permanently broken.
+      if (!failedFileUrl) {
+        const flat = flattenEntriesForAPI(conversation.messages);
+        for (let i = flat.length - 1; i >= 0 && !failedFileUrl; i--) {
+          const content = flat[i].content;
+          if (flat[i].role !== 'user' || !Array.isArray(content)) continue;
+          const filePart = content.find((p) => p.type === 'file_url');
+          if (filePart && 'url' in filePart) failedFileUrl = filePart.url;
+        }
+      }
+      if (failedFileUrl) {
+        const conversationStore = useConversationStore.getState();
+        conversationStore.markActiveFileError(
+          conversation.id,
+          failedFileUrl,
+          errorMessage,
+        );
+        conversationStore.stripExpiredFileFromMessages(
+          conversation.id,
+          failedFileUrl,
+        );
+        // The snapshot captured at send time still contains the dead
+        // file_url — retryFailedRequest replays it verbatim, so refresh it
+        // to the sanitized conversation.
+        conversationForRetry =
+          useConversationStore
+            .getState()
+            .conversations.find((c) => c.id === conversation.id) ??
+          conversation;
+      }
+    }
+
     // Browser network-failure strings are not for humans: Firefox throws
     // NS_ERROR_* codes (e.g. NS_ERROR_NET_PARTIAL_TRANSFER when the server
     // aborts mid-stream), Chrome says "Failed to fetch", Safari "Load
@@ -1857,6 +1963,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // Show error and store conversation for regenerate
     set({
       error: errorMessage,
+      errorCode: structuredCode ?? null,
       isStreaming: false,
       streamingContent: '',
       streamingConversationId: null,
@@ -1866,7 +1973,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       abortController: null,
       stopRequested: false,
       isRetrying: false,
-      failedConversation: conversation || null,
+      failedConversation: conversationForRetry,
       failedSearchMode: searchMode,
       errorIsRecoverable,
     });
@@ -2127,6 +2234,10 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       // Show error with regenerate option
       set({
         error: errorMessage,
+        errorCode:
+          retryError instanceof ApiError
+            ? ((retryError.response?.code as string | undefined) ?? null)
+            : null,
         isStreaming: false,
         streamingContent: '',
         streamingConversationId: null,
@@ -2145,6 +2256,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     if (!failedConversation) return;
     set({
       error: null,
+      errorCode: null,
       errorIsRecoverable: true,
     });
     await get().retryWithFallbackModel(failedConversation, failedSearchMode);
@@ -2168,6 +2280,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
     set({
       error: null,
+      errorCode: null,
       failedConversation: null,
       failedSearchMode: undefined,
       errorIsRecoverable: true,
