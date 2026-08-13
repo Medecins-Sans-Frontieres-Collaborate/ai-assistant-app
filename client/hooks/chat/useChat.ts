@@ -30,6 +30,7 @@ export function useChat() {
       citations: s.citations,
       error: s.error,
       errorCode: s.errorCode,
+      errorStreaks: s.errorStreaks,
       stopRequested: s.stopRequested,
       loadingMessage: s.loadingMessage,
       loadingMessageParams: s.loadingMessageParams,
