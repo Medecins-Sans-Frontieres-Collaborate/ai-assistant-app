@@ -24,6 +24,7 @@ import { useUI } from '@/client/hooks/ui/useUI';
 
 import { isLocalModel } from '@/lib/services/models/localModels';
 
+import { downloadChatDebugBundle } from '@/lib/utils/app/export/chatDebugExport';
 import { getUserDisplayName } from '@/lib/utils/app/user/displayName';
 import { entryToDisplayMessage } from '@/lib/utils/shared/chat/messageVersioning';
 
@@ -114,6 +115,7 @@ export function Chat({
     streamingConversationId,
     error,
     errorCode,
+    errorStreaks,
     sendMessage,
     citations,
     clearError,
@@ -548,6 +550,29 @@ export function Chat({
   }, [failedConversation, models, defaultModelId, userRegion]);
   const canRetryFallback =
     !!error && !isRetrying && errorIsRecoverable && !!fallbackModelForRetry;
+
+  // Repeated-failure escalation: the streak only escalates the banner that
+  // MATCHES it — a different banner (e.g. a one-off setError from TTS)
+  // while a streak exists must not inherit the "corrupted conversation"
+  // framing.
+  const failureStreak = selectedConversation
+    ? errorStreaks[selectedConversation.id]
+    : undefined;
+  const failureStreakCount =
+    failureStreak && error && failureStreak.message === error
+      ? failureStreak.count
+      : 0;
+  const handleDownloadDebugInfo = useCallback(
+    (includeContent: boolean) => {
+      if (!selectedConversation) return;
+      downloadChatDebugBundle(
+        selectedConversation,
+        failureStreak ?? null,
+        includeContent,
+      );
+    },
+    [selectedConversation, failureStreak],
+  );
   // Only auto-dismiss when there's no Retry/Regenerate button to keep up.
   useAutoDismissError(
     canRegenerate || canRetry ? null : error,
@@ -771,6 +796,9 @@ export function Chat({
           onRetryFallback={retryFailedWithFallbackModel}
           canRetryFallback={canRetryFallback}
           fallbackModelName={fallbackModelForRetry?.name ?? null}
+          failureStreakCount={failureStreakCount}
+          onStartNewConversation={handleNewConversation}
+          onDownloadDebugInfo={handleDownloadDebugInfo}
         />
 
         {/* Model Switch Prompt (shown after successful retry) */}
