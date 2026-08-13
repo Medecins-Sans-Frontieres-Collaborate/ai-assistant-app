@@ -81,6 +81,14 @@ import { create } from 'zustand';
 const NO_SERVER_LABEL = '__no_label__';
 
 /**
+ * Consecutive identical failures in one conversation before the error
+ * banner escalates ("this conversation may be corrupted — start a fresh
+ * one" + debug-info download). Exported so the banner component and tests
+ * share the boundary.
+ */
+export const REPEATED_FAILURE_THRESHOLD = 3;
+
+/**
  * Clamps the user-adjustable context window size. Mirrors the settingsStore
  * setter's bounds; the upper bound matters because the server rejects
  * requests with more than MAX_API_MESSAGES messages.
@@ -223,6 +231,20 @@ interface ChatStore {
   lastTurnDroppedActiveFileIds: Record<string, string[]>;
 
   /**
+   * Consecutive-identical-failure streak per conversation, keyed by
+   * conversation id. Incremented at every terminal banner-set site (same
+   * message → count+1, different message → restart at 1), cleared when a
+   * turn for that conversation succeeds. Page-load scoped like the rest of
+   * this store — a streak is a live-session signal, not durable history.
+   * `errorCode` is the latest structured code, kept for the debug bundle;
+   * matching is on the message string only.
+   */
+  errorStreaks: Record<
+    string,
+    { message: string; errorCode: string | null; count: number }
+  >;
+
+  /**
    * Map of MCP approval_request_id → user decision (true=approve). Resolved
    * approvals are stored here so the consent card can render its "Approved"
    * / "Denied" terminal state without re-prompting. Reset per page load —
@@ -269,6 +291,14 @@ interface ChatStore {
     conversationId: string,
     fileIds: string[],
   ) => void;
+  /** Extends or restarts the conversation's failure streak (see errorStreaks). */
+  recordErrorStreak: (
+    conversationId: string,
+    message: string,
+    errorCode: string | null,
+  ) => void;
+  /** Drops the conversation's failure streak (a turn succeeded). */
+  clearErrorStreak: (conversationId: string) => void;
   setCurrentMessage: (message: Message | undefined) => void;
   setIsStreaming: (isStreaming: boolean) => void;
   setStreamingContent: (content: string) => void;
@@ -485,6 +515,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
   // Dropped active file IDs by conversation (most recent turn only)
   lastTurnDroppedActiveFileIds: {},
+  errorStreaks: {},
   submittedApprovals: new Map<string, boolean>(),
   submittingApprovals: new Set<string>(),
   failedApprovals: new Set<string>(),
@@ -522,6 +553,28 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
   // Actions
   setRegeneratingIndex: (index) => set({ regeneratingIndex: index }),
+  recordErrorStreak: (conversationId, message, errorCode) =>
+    set((state) => {
+      const prev = state.errorStreaks[conversationId];
+      return {
+        errorStreaks: {
+          ...state.errorStreaks,
+          [conversationId]:
+            prev?.message === message
+              ? { message, errorCode, count: prev.count + 1 }
+              : { message, errorCode, count: 1 },
+        },
+      };
+    }),
+
+  clearErrorStreak: (conversationId) =>
+    set((state) => {
+      if (!(conversationId in state.errorStreaks)) return state;
+      const next = { ...state.errorStreaks };
+      delete next[conversationId];
+      return { errorStreaks: next };
+    }),
+
   setLastTurnDroppedActiveFileIds: (conversationId, fileIds) =>
     set((state) => {
       const next = { ...state.lastTurnDroppedActiveFileIds };
@@ -1542,6 +1595,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const hasPendingTranscription =
       pendingTranscriptions && pendingTranscriptions.length > 0;
 
+    // A completed turn ends the conversation's failure streak. Guarded:
+    // handleSendError also finalizes a PARTIAL message flagged `error:
+    // true`, and a failed turn must not reset its own streak.
+    if (assistantMessage.error !== true) {
+      get().clearErrorStreak(conversation.id);
+    }
+
     if (regeneratingIndex !== null) {
       // Adding a new version to an existing message group
       const version = messageToVersion(assistantMessage);
@@ -1960,6 +2020,17 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       void get().finalizeMessage(partialMessage, conversation);
     }
 
+    // One user-visible failure = one streak increment (the escalation
+    // trigger). Only this terminal set counts — the abort/session-expired/
+    // auto-fallback early returns above never show a banner.
+    if (conversation) {
+      get().recordErrorStreak(
+        conversation.id,
+        errorMessage,
+        structuredCode ?? null,
+      );
+    }
+
     // Show error and store conversation for regenerate
     set({
       error: errorMessage,
@@ -1994,8 +2065,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         '[chatStore] Fallback chain exhausted, attempted:',
         attemptedModelIds,
       );
+      // Shared by banner and streak so the two can't drift apart — streak
+      // matching is on the exact message string.
+      const exhaustedMessage = 'Failed to send message. Please try again.';
+      get().recordErrorStreak(conversation.id, exhaustedMessage, null);
       set({
-        error: 'Failed to send message. Please try again.',
+        error: exhaustedMessage,
+        errorCode: null,
         isStreaming: false,
         isRetrying: false,
       });
@@ -2230,14 +2306,17 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       } else if (retryError instanceof Error) {
         errorMessage = retryError.message;
       }
+      const retryErrorCode =
+        retryError instanceof ApiError
+          ? ((retryError.response?.code as string | undefined) ?? null)
+          : null;
+
+      get().recordErrorStreak(conversation.id, errorMessage, retryErrorCode);
 
       // Show error with regenerate option
       set({
         error: errorMessage,
-        errorCode:
-          retryError instanceof ApiError
-            ? ((retryError.response?.code as string | undefined) ?? null)
-            : null,
+        errorCode: retryErrorCode,
         isStreaming: false,
         streamingContent: '',
         streamingConversationId: null,
