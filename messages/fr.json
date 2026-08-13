@@ -838,7 +838,12 @@
       "showFewer": "Afficher moins"
     },
     "retryWithModel": "Essayer avec {model}",
-    "createTodoTasks": "Créer des tâches à faire à partir de cette réponse"
+    "createTodoTasks": "Créer des tâches à faire à partir de cette réponse",
+    "attachedFileExpired": "Un fichier joint n'est plus disponible — les fichiers téléchargés sont conservés pendant une durée limitée. Il a été supprimé de cette conversation. Veuillez réessayer sans ce fichier, ou téléchargez-le à nouveau.",
+    "repeatedFailureNotice": "Échec répété — la conversation a peut-être été corrompue. Commencer une nouvelle conversation résout généralement ce problème.",
+    "startNewConversation": "Démarrer une nouvelle conversation",
+    "downloadDebugInfo": "Télécharger les informations de débogage",
+    "includeMessageText": "Inclure le texte du message"
   },
   "sidebar": {
     "collapseSidebar": "Réduire la barre latérale",

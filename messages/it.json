@@ -813,7 +813,12 @@
       "showFewer": "Mostra meno"
     },
     "retryWithModel": "Prova con {model}",
-    "createTodoTasks": "Crea attività To Do da questa risposta"
+    "createTodoTasks": "Crea attività To Do da questa risposta",
+    "attachedFileExpired": "Un file allegato non è più disponibile: i file caricati vengono conservati per un periodo limitato. È stato rimosso da questa conversazione. Riprova senza il file oppure ricaricalo.",
+    "repeatedFailureNotice": "Continua a non funzionare: la conversazione potrebbe essere danneggiata. Di solito avviare una nuova conversazione risolve il problema.",
+    "startNewConversation": "Avvia una nuova conversazione",
+    "downloadDebugInfo": "Scarica informazioni di debug",
+    "includeMessageText": "Includi il testo dei messaggi"
   },
   "sidebar": {
     "collapseSidebar": "Comprimi barra laterale",

@@ -47,6 +47,12 @@ export class StreamInterruptedError extends Error {
      * SHOULD auto-retry on the fallback chain for this one.
      */
     public readonly retry: boolean = false,
+    /**
+     * The `/api/file/…` reference behind a FILE_NOT_FOUND failure (an
+     * expired attachment) — lets the store flag the file in the Active
+     * Files tray and strip the dead reference from the conversation.
+     */
+    public readonly fileUrl?: string,
   ) {
     super(message);
     this.name = 'StreamInterruptedError';
@@ -84,6 +90,7 @@ export class StreamParser {
     message: string;
     code?: string;
     retry?: boolean;
+    fileUrl?: string;
   };
   private extractedMcpPlan?: import('@/types/mcp').McpPlan;
   private hasReceivedContent: boolean = false;
@@ -525,7 +532,7 @@ export class StreamParser {
    * though the HTTP stream itself completed.
    */
   getStreamError():
-    | { message: string; code?: string; retry?: boolean }
+    | { message: string; code?: string; retry?: boolean; fileUrl?: string }
     | undefined {
     return this.extractedStreamError;
   }

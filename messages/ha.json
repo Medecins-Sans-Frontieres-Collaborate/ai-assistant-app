@@ -950,7 +950,12 @@
       "showFewer": "Nuna kaɗan"
     },
     "retryWithModel": "Gwada da {model}",
-    "createTodoTasks": "Ƙirƙira ayyukan To Do daga wannan amsa"
+    "createTodoTasks": "Ƙirƙira ayyukan To Do daga wannan amsa",
+    "attachedFileExpired": "Anfanin da aka haɗa a cikin wannan hirar bai samuwa yanzu ba — ana adana fayilolin da aka loda na ɗan lokaci kawai. An cire shi daga wannan tattaunawar. Gwada sake aikawa ba tare da fayil ɗin ba, ko kuma sake loda fayil ɗin.",
+    "repeatedFailureNotice": "Ana ci gaba da samun matsala — yiwuwar tattaunawar ta samu matsala. Fara sabuwar tattaunawa yawanci yana gyara haka.",
+    "startNewConversation": "Fara sabuwar tattaunawa",
+    "downloadDebugInfo": "Sauke bayanan warware matsala",
+    "includeMessageText": "Hada da rubutun saƙo"
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",

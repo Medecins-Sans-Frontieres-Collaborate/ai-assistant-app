@@ -950,7 +950,12 @@
       "showFewer": "Montre mwens"
     },
     "retryWithModel": "Ese ak {model}",
-    "createTodoTasks": "Kreye travay To Do soti nan repons sa a"
+    "createTodoTasks": "Kreye travay To Do soti nan repons sa a",
+    "attachedFileExpired": "Yon fichye ki te tache pa disponib ankò — fichye ou telechaje yo estoke pandan yon limit tan. Yo retire li nan konvèsasyon sa a. Eseye ankò san li, oswa telechaje fichye a ankò.",
+    "repeatedFailureNotice": "Sa ap toujou echwe — konvèsasyon an ka gate. Kòmanse yon nouvo konvèsasyon anjeneral rezoud pwoblèm nan.",
+    "startNewConversation": "Kòmanse yon nouvo konvèsasyon",
+    "downloadDebugInfo": "Telechaje enfòmasyon analiz erè",
+    "includeMessageText": "Enkli tèks mesaj la"
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",

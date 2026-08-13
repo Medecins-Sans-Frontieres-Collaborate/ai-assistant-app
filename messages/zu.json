@@ -950,7 +950,12 @@
       "showFewer": "Bonisa okumbalwa"
     },
     "retryWithModel": "Zama ngo-{model}",
-    "createTodoTasks": "Yakha imisebenzi ye-To Do kusuka kule mpendulo"
+    "createTodoTasks": "Yakha imisebenzi ye-To Do kusuka kule mpendulo",
+    "attachedFileExpired": "Ifayela elinamathiselwe alisekho — amafayela alayishiwe agcinwa isikhashana kuphela. Selisusiwe kule ngxoxo. Zama futhi ngaphandle kwalo, noma ulayishe ifayela futhi.",
+    "repeatedFailureNotice": "Lokhu kuyaqhubeka kwehluleka — ingxoxo ingase isonakale. Ukuqala ingxoxo entsha kuvamise ukulungisa lokhu.",
+    "startNewConversation": "Qala ingxoxo entsha",
+    "downloadDebugInfo": "Landa ulwazi lokuhlola amaphutha",
+    "includeMessageText": "Faka umbhalo womyalezo"
   },
   "transcript": {
     "originalTranscript": "Okubhaliwe Kokuqala",

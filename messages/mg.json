@@ -950,7 +950,12 @@
       "showFewer": "Asehoy vitsy kokoa"
     },
     "retryWithModel": "Andramo amin'i {model}",
-    "createTodoTasks": "Mamoròna asa To Do avy amin’ity valiny ity"
+    "createTodoTasks": "Mamoròna asa To Do avy amin’ity valiny ity",
+    "attachedFileExpired": "Tsy azo idirana intsony ilay rakitra nampiarina — voatahiry mandritra ny fotoana voafetra ny rakitra nampiakatra. Esorina tao amin’ity resaka ity izy io. Azonao atao ny manohy tsy misy azy, na mampiakatra indray ilay rakitra.",
+    "repeatedFailureNotice": "Miverimberina tsy mahomby ity — mety ho simba ny resaka. Matetika dia afaka manamboatra izany amin'ny fanombohana resaka vaovao.",
+    "startNewConversation": "Atombohy resaka vaovao",
+    "downloadDebugInfo": "Sintomy ny vaovao fanamboarana",
+    "includeMessageText": "Ampidiro ny lahatsoratra hafatra"
   },
   "transcript": {
     "originalTranscript": "Dikan-teny Tany Am-boalohany",

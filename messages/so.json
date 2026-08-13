@@ -950,7 +950,12 @@
       "showFewer": "Muuji wax ka yar"
     },
     "retryWithModel": "Isku day {model}",
-    "createTodoTasks": "Abuur hawlo To Do oo laga sameeyay jawaabtan"
+    "createTodoTasks": "Abuur hawlo To Do oo laga sameeyay jawaabtan",
+    "attachedFileExpired": "Fayl la lifaaqay lama heli karo — faylasha la soo geliyay waxaa la kaydiyaa muddo xaddidan. Waxaa laga saaray wadahadalkan. Isku day mar kale adigoon isticmaalin, ama dib u soo geli faylka.",
+    "repeatedFailureNotice": "Arrintu way fashilantay marar badan — wadahadalka waxa laga yaabaa inuu dhaawacmay. Bilaabidda wadahadal cusub badanaa way xallisaa.",
+    "startNewConversation": "Bilow wadahadal cusub",
+    "downloadDebugInfo": "Soo degso macluumaadka cilad-baarista",
+    "includeMessageText": "Ku dar qoraalka farriinta"
   },
   "transcript": {
     "originalTranscript": "Qoraalka Aslka ah",

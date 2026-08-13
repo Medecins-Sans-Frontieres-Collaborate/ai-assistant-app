@@ -838,7 +838,12 @@
       "showFewer": "Mostrar menos"
     },
     "retryWithModel": "Tentar com {model}",
-    "createTodoTasks": "Criar tarefas To Do a partir desta resposta"
+    "createTodoTasks": "Criar tarefas To Do a partir desta resposta",
+    "attachedFileExpired": "Um arquivo anexado não está mais disponível — arquivos enviados são armazenados por tempo limitado. Ele foi removido desta conversa. Tente novamente sem o arquivo, ou faça o upload do arquivo novamente.",
+    "repeatedFailureNotice": "Isto continua falhando — a conversa pode ter sido corrompida. Iniciar uma nova conversa geralmente resolve o problema.",
+    "startNewConversation": "Iniciar uma nova conversa",
+    "downloadDebugInfo": "Baixar informações de depuração",
+    "includeMessageText": "Incluir texto da mensagem"
   },
   "sidebar": {
     "collapseSidebar": "Recolher barra lateral",

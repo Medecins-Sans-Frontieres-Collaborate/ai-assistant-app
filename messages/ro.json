@@ -890,7 +890,12 @@
       "showFewer": "Afișează mai puține"
     },
     "retryWithModel": "Încearcă cu {model}",
-    "createTodoTasks": "Creează sarcini To Do din acest răspuns"
+    "createTodoTasks": "Creează sarcini To Do din acest răspuns",
+    "attachedFileExpired": "Un fișier atașat nu mai este disponibil — fișierele încărcate sunt păstrate doar pentru o perioadă limitată. Acesta a fost eliminat din această conversație. Încercați din nou fără el sau reîncărcați fișierul.",
+    "repeatedFailureNotice": "Aceasta continuă să eșueze — conversația ar putea fi coruptă. De obicei, pornirea unei conversații noi rezolvă această problemă.",
+    "startNewConversation": "Pornește o conversație nouă",
+    "downloadDebugInfo": "Descarcă informațiile de depanare",
+    "includeMessageText": "Include textul mesajului"
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",

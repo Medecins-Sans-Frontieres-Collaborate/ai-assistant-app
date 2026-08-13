@@ -950,7 +950,12 @@
       "showFewer": "ንእሽቶ ርኣዩ"
     },
     "retryWithModel": "ብ{model} ፈትኑ",
-    "createTodoTasks": "ካብዚ መልሲ ዕለታዊ ስራሕ ፍጠሩ"
+    "createTodoTasks": "ካብዚ መልሲ ዕለታዊ ስራሕ ፍጠሩ",
+    "attachedFileExpired": "ተያያዥ ፋይል ኣይተገናአን — ዝተወደደ ፋይል ንውሑድ ጊዜ ብግዜኡ ይውሰን። ካብዚ መገለጺ ዘይስረው ኣሎ። ብዚ ዘይኮነ ንደገሚ ፈትኑ፣ ወይ ፋይሉ ኣብ ኣንተኹም ደገና ኣስተኻኽሉ።",
+    "repeatedFailureNotice": "እዚ ብመደብ ኣይሰርሐን — ዝተወደበ ወይ ተወሳኺ ቃለ-መጠይቕ ክሆን ይኽእል። እቲ ናይ መሓደሪ ቃለ-መጠይቕ ጀምረካ ዝበሃልካ ይፍጸም።",
+    "startNewConversation": "ሓድሽ ቃለ-መጠይቕ ጀምር",
+    "downloadDebugInfo": "መረጋገጺ መረጃ ውርድ",
+    "includeMessageText": "ናይ መልእኽቲ ጽሑፍ ኣካብዪ"
   },
   "transcript": {
     "originalTranscript": "ኦሪጂናል ጽሕፈት",

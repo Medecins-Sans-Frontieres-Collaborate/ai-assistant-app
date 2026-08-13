@@ -116,6 +116,19 @@ export const authMiddleware: Middleware = async (req) => {
     );
   }
 
+  // A session whose access-token refresh failed (rotated client secret,
+  // revoked refresh token — auth.ts sets 'RefreshAccessTokenError' or
+  // 'RefreshTokenMissing') still decodes and would otherwise sail through,
+  // only to fail unpredictably downstream. Reject it here with a DISTINCT
+  // code so the client can force a sign-out instead of a dead-end banner.
+  if (session.error) {
+    throw PipelineError.critical(
+      ErrorCode.AUTH_SESSION_EXPIRED,
+      'Session expired: access-token refresh failed. Sign in again.',
+      { sessionError: session.error },
+    );
+  }
+
   return {
     session,
     user: session.user,

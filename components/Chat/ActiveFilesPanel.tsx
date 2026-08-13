@@ -260,9 +260,14 @@ export function ActiveFilesPanel() {
                   )}
                 {f.status === 'error' && (
                   <>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300">
-                      {t('error')}
-                    </span>
+                    <Tooltip
+                      content={f.errorMessage || t('error')}
+                      position="top"
+                    >
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300">
+                        {t('error')}
+                      </span>
+                    </Tooltip>
                     <button
                       onClick={() => handleRetryProcessing(f)}
                       className="text-[10px] px-1.5 py-0.5 rounded border border-red-300 dark:border-red-700

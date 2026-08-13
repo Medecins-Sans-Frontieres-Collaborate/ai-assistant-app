@@ -950,7 +950,12 @@
       "showFewer": "Lakisa moke"
     },
     "retryWithModel": "Meka na {model}",
-    "createTodoTasks": "Kokela ba misala To Do epai ya eyano oyo"
+    "createTodoTasks": "Kokela ba misala To Do epai ya eyano oyo",
+    "attachedFileExpired": "Fichier oyo batye elongo ezali lisusu te — bafichier oyo batindami na système ezali kaka na mwa tango mokuse. Fichier elongwe na lisolo oyo. Tala lisusu kozanga yango, to telemelaka fichier lisusu.",
+    "repeatedFailureNotice": "Ekoki kaka kobeba — boyokanisi ekoki kozala ebateli te. Kozwa boyokanisi ya sika ezalaka mbala mingi solution.",
+    "startNewConversation": "Kobanda boyokanisi ya sika",
+    "downloadDebugInfo": "Kozwa ba informasyo ya debug",
+    "includeMessageText": "Tia kati mobeko ya sango"
   },
   "transcript": {
     "originalTranscript": "Transkripsheni ya ebandeli",

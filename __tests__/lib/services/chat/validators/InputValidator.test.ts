@@ -134,6 +134,48 @@ describe('InputValidator', () => {
       }
     });
 
+    it('classifies a missing blob (RestError-style 404) as FILE_NOT_FOUND', async () => {
+      const validator = new InputValidator();
+      const fileUrl = '/api/file/abc123.pdf';
+      const mockGetFileSize = async () => {
+        throw Object.assign(
+          new Error('BlobNotFound: The specified blob does not exist.'),
+          { statusCode: 404, code: 'BlobNotFound' },
+        );
+      };
+
+      try {
+        await validator.validateFileSize(fileUrl, mockUser, mockGetFileSize);
+        expect.fail('Should have thrown PipelineError');
+      } catch (error) {
+        expect(error).toBeInstanceOf(PipelineError);
+        const pipelineError = error as PipelineError;
+        expect(pipelineError.code).toBe(ErrorCode.FILE_NOT_FOUND);
+        expect(pipelineError.metadata?.fileUrl).toBe(fileUrl);
+        // Client-safe message: streamed to the user verbatim.
+        expect(pipelineError.message).toContain('no longer available');
+        expect(pipelineError.message).not.toContain('BlobNotFound');
+      }
+    });
+
+    it('classifies a bare 404 message without statusCode as FILE_NOT_FOUND', async () => {
+      const validator = new InputValidator();
+      const mockGetFileSize = async () => {
+        throw new Error('Request failed with status 404');
+      };
+
+      try {
+        await validator.validateFileSize(
+          '/api/file/gone.docx',
+          mockUser,
+          mockGetFileSize,
+        );
+        expect.fail('Should have thrown PipelineError');
+      } catch (error) {
+        expect((error as PipelineError).code).toBe(ErrorCode.FILE_NOT_FOUND);
+      }
+    });
+
     it('should include file URL in error metadata', async () => {
       const validator = new InputValidator();
       const fileUrl = 'https://blob.azure.com/large-file.pdf';

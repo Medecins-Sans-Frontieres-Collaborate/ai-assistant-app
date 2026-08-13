@@ -892,7 +892,12 @@
       "showFewer": "Daha az göster"
     },
     "retryWithModel": "{model} ile deneyin",
-    "createTodoTasks": "Bu yanıtı To Do görevlerine dönüştür"
+    "createTodoTasks": "Bu yanıtı To Do görevlerine dönüştür",
+    "attachedFileExpired": "Ekli bir dosya artık mevcut değil — yüklenen dosyalar sınırlı bir süre saklanır. Bu dosya bu sohbetten kaldırıldı. Dosya olmadan tekrar deneyin veya dosyayı tekrar yükleyin.",
+    "repeatedFailureNotice": "Bu işlem sürekli başarısız oluyor — konuşma bozulmuş olabilir. Genellikle yeni bir konuşma başlatmak sorunu çözer.",
+    "startNewConversation": "Yeni bir konuşma başlat",
+    "downloadDebugInfo": "Hata ayıklama bilgisini indir",
+    "includeMessageText": "Mesaj metnini dahil et"
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",

@@ -54,6 +54,20 @@ function extract(error: unknown): { statusCode?: number; code?: string } {
 }
 
 /**
+ * True when a thrown error means a specific BLOB is missing — as opposed to
+ * the container/account problems {@link classifyStorageError} deals with.
+ * User uploads live in a container with a lifecycle delete rule, so a missing
+ * blob usually means the file expired; callers use this to tell the user
+ * "your file is gone" instead of masking it as a server fault.
+ */
+export function isBlobNotFoundError(error: unknown): boolean {
+  const { statusCode, code } = extract(error);
+  if (statusCode === 404 || code === 'BlobNotFound') return true;
+  const message = error instanceof Error ? error.message : String(error);
+  return message.includes('BlobNotFound') || message.includes('404');
+}
+
+/**
  * Maps a thrown blob-storage error to an {@link ClassifiedStorageError}.
  * Never throws; falls back to `unknown`/500 for anything unrecognized.
  */

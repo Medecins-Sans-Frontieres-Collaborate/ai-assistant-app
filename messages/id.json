@@ -859,7 +859,12 @@
       "showFewer": "Tampilkan lebih sedikit"
     },
     "retryWithModel": "Coba dengan {model}",
-    "createTodoTasks": "Buat tugas To Do dari respons ini"
+    "createTodoTasks": "Buat tugas To Do dari respons ini",
+    "attachedFileExpired": "Berkas terlampir sudah tidak tersedia — berkas yang diunggah hanya disimpan untuk waktu terbatas. Berkas tersebut telah dihapus dari percakapan ini. Coba lagi tanpa berkas tersebut, atau unggah kembali berkasnya.",
+    "repeatedFailureNotice": "Ini terus gagal — percakapan mungkin telah rusak. Memulai percakapan baru biasanya dapat memperbaikinya.",
+    "startNewConversation": "Mulai percakapan baru",
+    "downloadDebugInfo": "Unduh info debug",
+    "includeMessageText": "Sertakan teks pesan"
   },
   "sidebar": {
     "collapseSidebar": "Ciutkan sidebar",

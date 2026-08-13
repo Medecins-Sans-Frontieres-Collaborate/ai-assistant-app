@@ -44,6 +44,7 @@ const mockMessages: Record<string, unknown> = {
     variables: 'Variables',
     search: 'Search',
     beta: 'Beta',
+    tryAgain: 'Try again',
   },
   admin: {
     title: 'Admin',
@@ -51,6 +52,13 @@ const mockMessages: Record<string, unknown> = {
     areaNavLabel: 'Admin areas',
   },
   chat: {
+    attachedFileExpired:
+      'An attached file is no longer available — uploaded files are stored for a limited time. It has been removed from this conversation. Try again without it, or upload the file again.',
+    repeatedFailureNotice:
+      'This keeps failing — the conversation may have become corrupted. Starting a fresh conversation usually fixes this.',
+    startNewConversation: 'Start a new conversation',
+    downloadDebugInfo: 'Download debug info',
+    includeMessageText: 'Include message text',
     toolSummary: {
       usedTools: 'Used {count} tools',
       failedCount: '{count} failed',

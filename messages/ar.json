@@ -838,7 +838,12 @@
       "showFewer": "عرض أقل"
     },
     "retryWithModel": "جرّب باستخدام {model}",
-    "createTodoTasks": "إنشاء مهام To Do من هذا الرد"
+    "createTodoTasks": "إنشاء مهام To Do من هذا الرد",
+    "attachedFileExpired": "لم يعد الملف المرفق متاحًا — حيث يتم تخزين الملفات المرفوعة لفترة محدودة فقط. تمت إزالته من هذه المحادثة. يرجى المحاولة مرة أخرى بدون الملف أو إعادة رفعه.",
+    "repeatedFailureNotice": "حدث فشل متكرر — قد تكون المحادثة تعرضت للتلف. بدء محادثة جديدة غالبًا ما يحل هذه المشكلة.",
+    "startNewConversation": "ابدأ محادثة جديدة",
+    "downloadDebugInfo": "تنزيل معلومات التصحيح",
+    "includeMessageText": "تضمين نص الرسالة"
   },
   "sidebar": {
     "collapseSidebar": "طي الشريط الجانبي",
