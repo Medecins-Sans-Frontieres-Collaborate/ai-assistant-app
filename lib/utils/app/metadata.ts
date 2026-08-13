@@ -93,8 +93,16 @@ export interface StreamMetadata {
    * `retry: true` marks the partial output as not worth keeping (e.g. it
    * promises a generated file that doesn't exist) — the client SHOULD
    * auto-retry on the fallback chain instead of surfacing the partial.
+   * `fileUrl` identifies the attachment behind a FILE_NOT_FOUND failure so
+   * the client can flag it in the Active Files tray and strip the dead
+   * reference from the conversation.
    */
-  streamError?: { message: string; code?: string; retry?: boolean };
+  streamError?: {
+    message: string;
+    code?: string;
+    retry?: boolean;
+    fileUrl?: string;
+  };
   /**
    * Retrieved chunk text per citation number, shipped by the server so the
    * client can verify model-claimed citation quotes are verbatim. TRANSIENT:
@@ -119,7 +127,12 @@ export interface ParsedMetadata {
   activeFilesDropped?: string[];
   usage?: TokenUsageMetadata;
   extractionResult?: ExtractionResultContent;
-  streamError?: { message: string; code?: string; retry?: boolean };
+  streamError?: {
+    message: string;
+    code?: string;
+    retry?: boolean;
+    fileUrl?: string;
+  };
   mcpPlan?: import('@/types/mcp').McpPlan;
   /**
    * Claim-supporting quotes the MODEL emitted in its own
@@ -336,6 +349,9 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
               ? { code: parsedData.streamError.code }
               : {}),
             ...(parsedData.streamError.retry === true ? { retry: true } : {}),
+            ...(typeof parsedData.streamError.fileUrl === 'string'
+              ? { fileUrl: parsedData.streamError.fileUrl }
+              : {}),
           };
         }
         const anyData = parsedData as unknown as {
