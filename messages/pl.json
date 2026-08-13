@@ -890,7 +890,11 @@
     },
     "retryWithModel": "Spróbuj z {model}",
     "createTodoTasks": "Utwórz zadania To Do z tej odpowiedzi",
-    "attachedFileExpired": "Załączony plik nie jest już dostępny — przesłane pliki są przechowywane przez ograniczony czas. Został usunięty z tej rozmowy. Spróbuj ponownie bez niego lub prześlij plik jeszcze raz."
+    "attachedFileExpired": "Załączony plik nie jest już dostępny — przesłane pliki są przechowywane przez ograniczony czas. Został usunięty z tej rozmowy. Spróbuj ponownie bez niego lub prześlij plik jeszcze raz.",
+    "repeatedFailureNotice": "Coś stale nie działa — rozmowa mogła zostać uszkodzona. Zwykle pomaga rozpoczęcie nowej rozmowy.",
+    "startNewConversation": "Rozpocznij nową rozmowę",
+    "downloadDebugInfo": "Pobierz informacje debugowania",
+    "includeMessageText": "Dołącz treść wiadomości"
   },
   "sidebar": {
     "collapseSidebar": "Zwiń pasek boczny",

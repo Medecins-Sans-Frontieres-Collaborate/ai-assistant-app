@@ -893,7 +893,11 @@
     },
     "retryWithModel": "Försök med {model}",
     "createTodoTasks": "Skapa att göra-uppgifter från svaret",
-    "attachedFileExpired": "En bifogad fil är inte längre tillgänglig — uppladdade filer sparas under en begränsad tid. Filen har tagits bort från denna konversation. Försök igen utan filen eller ladda upp den på nytt."
+    "attachedFileExpired": "En bifogad fil är inte längre tillgänglig — uppladdade filer sparas under en begränsad tid. Filen har tagits bort från denna konversation. Försök igen utan filen eller ladda upp den på nytt.",
+    "repeatedFailureNotice": "Det här misslyckas upprepade gånger — konversationen kan ha blivit korrupt. Att starta en ny konversation löser oftast problemet.",
+    "startNewConversation": "Starta en ny konversation",
+    "downloadDebugInfo": "Ladda ner felsökningsinformation",
+    "includeMessageText": "Inkludera meddelandetext"
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",

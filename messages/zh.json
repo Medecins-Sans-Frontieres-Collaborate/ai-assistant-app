@@ -924,7 +924,11 @@
     },
     "retryWithModel": "尝试使用 {model}",
     "createTodoTasks": "根据本回复创建待办任务",
-    "attachedFileExpired": "附件已不再可用 — 上传的文件仅保存有限时间。该文件已从本对话中移除。请重新尝试，或重新上传文件。"
+    "attachedFileExpired": "附件已不再可用 — 上传的文件仅保存有限时间。该文件已从本对话中移除。请重新尝试，或重新上传文件。",
+    "repeatedFailureNotice": "操作持续失败，可能对话已损坏。通常重新开始一个新对话可解决此问题。",
+    "startNewConversation": "开始新对话",
+    "downloadDebugInfo": "下载调试信息",
+    "includeMessageText": "包含消息内容"
   },
   "sidebar": {
     "collapseSidebar": "折叠侧边栏",

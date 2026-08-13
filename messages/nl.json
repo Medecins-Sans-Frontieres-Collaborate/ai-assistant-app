@@ -858,7 +858,11 @@
     },
     "retryWithModel": "Probeer met {model}",
     "createTodoTasks": "Maak takenlijst-items van deze reactie",
-    "attachedFileExpired": "Een bijgevoegd bestand is niet meer beschikbaar — geüploade bestanden worden maar tijdelijk bewaard. Het bestand is uit dit gesprek verwijderd. Probeer het opnieuw zonder het bestand, of upload het opnieuw."
+    "attachedFileExpired": "Een bijgevoegd bestand is niet meer beschikbaar — geüploade bestanden worden maar tijdelijk bewaard. Het bestand is uit dit gesprek verwijderd. Probeer het opnieuw zonder het bestand, of upload het opnieuw.",
+    "repeatedFailureNotice": "Dit blijft misgaan — het gesprek is mogelijk beschadigd geraakt. Een nieuw gesprek starten lost dit meestal op.",
+    "startNewConversation": "Nieuw gesprek starten",
+    "downloadDebugInfo": "Debug-informatie downloaden",
+    "includeMessageText": "Berichttekst toevoegen"
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",

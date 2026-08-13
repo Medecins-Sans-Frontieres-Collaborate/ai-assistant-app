@@ -951,7 +951,11 @@
     },
     "retryWithModel": "Gerageza ukoresheje {model}",
     "createTodoTasks": "Hanga imirimo ya To Do kuva kuri iyi nyunganizi",
-    "attachedFileExpired": "Ifishi yashyizweho ntikiboneka — amadosiye yoherejwe abikwa igihe gito. Yakuwemo muri iyi biganiro. Gerageza kongera kugerageza utayifatanyije, cyangwa wongere wohereze ifishi."
+    "attachedFileExpired": "Ifishi yashyizweho ntikiboneka — amadosiye yoherejwe abikwa igihe gito. Yakuwemo muri iyi biganiro. Gerageza kongera kugerageza utayifatanyije, cyangwa wongere wohereze ifishi.",
+    "repeatedFailureNotice": "Birakomeje kunanirana—ikiganiro gishobora kuba cyarangiritse. Gutangira ikiganiro gishya akenshi bikemura iki kibazo.",
+    "startNewConversation": "Tangiza ikiganiro gishya",
+    "downloadDebugInfo": "Kuramo amakuru yifashishwa mu gukosora ibibazo",
+    "includeMessageText": "Shyiramo ubutumwa bwanditse"
   },
   "transcript": {
     "originalTranscript": "Ubwandiko bwa Mbere",

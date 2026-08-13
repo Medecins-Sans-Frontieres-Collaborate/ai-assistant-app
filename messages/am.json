@@ -836,7 +836,11 @@
     },
     "retryWithModel": "በ{model} ይሞክሩ",
     "createTodoTasks": "ከዚህ መልስ የሚከተሉትን To Do ተግባራት ይፍጠሩ",
-    "attachedFileExpired": "የተያያዙት ፋይሎች አልተገኙም — የተጫኑ ፋይሎች ለጊዜ ብቻ ይቀመጣሉ። ከዚህ ውይይት ተወግደዋል። ያለውን ፋይል ያለ ትንሽ ደግመው ይሞክሩ ወይም እንደገና ያስጫኑ።"
+    "attachedFileExpired": "የተያያዙት ፋይሎች አልተገኙም — የተጫኑ ፋይሎች ለጊዜ ብቻ ይቀመጣሉ። ከዚህ ውይይት ተወግደዋል። ያለውን ፋይል ያለ ትንሽ ደግመው ይሞክሩ ወይም እንደገና ያስጫኑ።",
+    "repeatedFailureNotice": "ይህ በተደጋጋሚ እየተሳካ አይገኝም — ውይይቱ ሊበላሽ ይችላል። አዲስ ውይይት መጀመር ብዙውን ጊዜ ይፈጽማል።",
+    "startNewConversation": "አዲስ ውይይት ጀምር",
+    "downloadDebugInfo": "የ ዲበግ መረጃ አውርድ",
+    "includeMessageText": "የመልእክቱን ጽሑፍ አካትት"
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",

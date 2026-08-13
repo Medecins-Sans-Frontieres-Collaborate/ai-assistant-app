@@ -839,7 +839,11 @@
     },
     "retryWithModel": "Mit {model} versuchen",
     "createTodoTasks": "To-Do-Aufgaben aus dieser Antwort erstellen",
-    "attachedFileExpired": "Eine angehängte Datei ist nicht mehr verfügbar — hochgeladene Dateien werden nur für eine begrenzte Zeit gespeichert. Sie wurde aus diesem Gespräch entfernt. Versuchen Sie es ohne die Datei erneut oder laden Sie die Datei noch einmal hoch."
+    "attachedFileExpired": "Eine angehängte Datei ist nicht mehr verfügbar — hochgeladene Dateien werden nur für eine begrenzte Zeit gespeichert. Sie wurde aus diesem Gespräch entfernt. Versuchen Sie es ohne die Datei erneut oder laden Sie die Datei noch einmal hoch.",
+    "repeatedFailureNotice": "Dies schlägt wiederholt fehl – das Gespräch könnte beschädigt sein. Meistens hilft es, ein neues Gespräch zu beginnen.",
+    "startNewConversation": "Neues Gespräch starten",
+    "downloadDebugInfo": "Debug-Informationen herunterladen",
+    "includeMessageText": "Nachrichtentext einschließen"
   },
   "sidebar": {
     "collapseSidebar": "Seitenleiste einklappen",

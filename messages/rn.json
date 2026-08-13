@@ -951,7 +951,11 @@
     },
     "retryWithModel": "Gerageza ukoresheje {model}",
     "createTodoTasks": "Himba imirimo ya To Do kuri uru rwandiko",
-    "attachedFileExpired": "Idosiye washyizeho ntikiboneka — amadosiye yoherejwe abikwa igihe gito. Yarakuwe muri ubu butumwa. Gerageza utayikoresheje canke uyisubizeho wongere uyohereze."
+    "attachedFileExpired": "Idosiye washyizeho ntikiboneka — amadosiye yoherejwe abikwa igihe gito. Yarakuwe muri ubu butumwa. Gerageza utayikoresheje canke uyisubizeho wongere uyohereze.",
+    "repeatedFailureNotice": "Biracika kuja gusubira kwaduka — ibiganiro birashobora kuba vyononekara. Gutangura ikiganiro gisha akenshi birabikemura.",
+    "startNewConversation": "Tangu ikiganiro gishasha",
+    "downloadDebugInfo": "Kurondera no gukuraho amakuru yo gutohoza",
+    "includeMessageText": "Shiramwo inyandiko y’ubutumwa"
   },
   "transcript": {
     "originalTranscript": "Inyandiko y'intango",

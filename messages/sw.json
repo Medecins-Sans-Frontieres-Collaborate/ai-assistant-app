@@ -893,7 +893,11 @@
     },
     "retryWithModel": "Jaribu na {model}",
     "createTodoTasks": "Unda kazi za 'To Do' kutoka kwa jibu hili",
-    "attachedFileExpired": "Faili iliyounganishwa haipatikani tena — faili zilizopakiwa huhifadhiwa kwa muda mfupi. Imeondolewa kwenye mazungumzo haya. Tafadhali jaribu tena bila faili hiyo, au pakia faili upya."
+    "attachedFileExpired": "Faili iliyounganishwa haipatikani tena — faili zilizopakiwa huhifadhiwa kwa muda mfupi. Imeondolewa kwenye mazungumzo haya. Tafadhali jaribu tena bila faili hiyo, au pakia faili upya.",
+    "repeatedFailureNotice": "Hii inaendelea kushindwa — mazungumzo huenda yameharibika. Kuanza mazungumzo mapya kawaida hutatua tatizo hili.",
+    "startNewConversation": "Anza mazungumzo mapya",
+    "downloadDebugInfo": "Pakua taarifa za utatuzi wa hitilafu",
+    "includeMessageText": "Jumlisha maandishi ya ujumbe"
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",

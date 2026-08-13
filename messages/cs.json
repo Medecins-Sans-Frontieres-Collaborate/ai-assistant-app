@@ -893,7 +893,11 @@
     },
     "retryWithModel": "Zkusit s {model}",
     "createTodoTasks": "Vytvořit úkoly To Do z této odpovědi",
-    "attachedFileExpired": "Připojený soubor již není dostupný — nahrané soubory jsou uchovávány jen po omezenou dobu. Byl z tohoto rozhovoru odstraněn. Pokračujte bez něj, nebo soubor nahrajte znovu."
+    "attachedFileExpired": "Připojený soubor již není dostupný — nahrané soubory jsou uchovávány jen po omezenou dobu. Byl z tohoto rozhovoru odstraněn. Pokračujte bez něj, nebo soubor nahrajte znovu.",
+    "repeatedFailureNotice": "Něco stále selhává — konverzace může být poškozená. Obvykle pomůže začít novou konverzaci.",
+    "startNewConversation": "Zahájit novou konverzaci",
+    "downloadDebugInfo": "Stáhnout ladicí informace",
+    "includeMessageText": "Zahrnout text zprávy"
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",

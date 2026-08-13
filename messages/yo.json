@@ -951,7 +951,11 @@
     },
     "retryWithModel": "Ṣe ìgbìyànjú pẹ̀lú {model}",
     "createTodoTasks": "Ṣẹda àṣẹṣe ‘To Do’ látinú ìdáhùn yìí",
-    "attachedFileExpired": "Fáìlì to so pọ̀ mọ́ ìfọ̀rọ̀wánilẹ́nuwo yìí kò sí mọ́ — àwọn fáìlì tí a gbé sórí ẹrọ̀ ní àkókò díẹ̀ péré ni a máa tọju wọn. A ti yọ fáìlì yìí kúrò látinú ìfọ̀rọ̀wánilẹ́nuwo yìí. Ẹ jọ̀wọ́, gbìyànjú lẹ́ẹ̀kàn síi láì fi fáìlì náà, tàbí gbé fáìlì náà sórí ẹrọ̀ lẹ́ẹ̀kàn míì."
+    "attachedFileExpired": "Fáìlì to so pọ̀ mọ́ ìfọ̀rọ̀wánilẹ́nuwo yìí kò sí mọ́ — àwọn fáìlì tí a gbé sórí ẹrọ̀ ní àkókò díẹ̀ péré ni a máa tọju wọn. A ti yọ fáìlì yìí kúrò látinú ìfọ̀rọ̀wánilẹ́nuwo yìí. Ẹ jọ̀wọ́, gbìyànjú lẹ́ẹ̀kàn síi láì fi fáìlì náà, tàbí gbé fáìlì náà sórí ẹrọ̀ lẹ́ẹ̀kàn míì.",
+    "repeatedFailureNotice": "Eyi ń tẹsiwaju láti kuna — àpérò náà lè ti bàjẹ́. Bibẹrẹ àpérò tuntun maa n yanjú iṣoro yii.",
+    "startNewConversation": "Bẹrẹ àpérò tuntun",
+    "downloadDebugInfo": "Ṣàgbàasilẹ ìtòlẹ́sẹẹsẹ àbáyọ",
+    "includeMessageText": "Fi ọrọ ìfiránṣọ̀ kun"
   },
   "transcript": {
     "originalTranscript": "Ìkọsílẹ̀ Àkọ́kọ́",

@@ -951,7 +951,11 @@
     },
     "retryWithModel": "Pokušajte sa modelom {model}",
     "createTodoTasks": "Kreiraj To Do zadatke iz ovog odgovora",
-    "attachedFileExpired": "Priloženi fajl više nije dostupan — otpremljeni fajlovi se čuvaju ograničeno vreme. Uklonjen je iz ovog razgovora. Pokušajte ponovo bez njega ili ponovo otpremite fajl."
+    "attachedFileExpired": "Priloženi fajl više nije dostupan — otpremljeni fajlovi se čuvaju ograničeno vreme. Uklonjen je iz ovog razgovora. Pokušajte ponovo bez njega ili ponovo otpremite fajl.",
+    "repeatedFailureNotice": "Nešto stalno ne uspeva — razgovor je možda oštećen. Pokretanje novog razgovora obično rešava ovaj problem.",
+    "startNewConversation": "Započni novi razgovor",
+    "downloadDebugInfo": "Preuzmi informacije za otklanjanje grešaka",
+    "includeMessageText": "Uključi tekst poruke"
   },
   "transcript": {
     "originalTranscript": "Оригинални транскрипт",

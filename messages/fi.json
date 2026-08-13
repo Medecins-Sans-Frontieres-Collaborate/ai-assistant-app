@@ -868,7 +868,11 @@
     },
     "retryWithModel": "Kokeile mallilla {model}",
     "createTodoTasks": "Luo To Do -tehtäviä tästä vastauksesta",
-    "attachedFileExpired": "Liitetiedosto ei ole enää saatavilla — ladatut tiedostot säilytetään vain rajoitetun ajan. Se on poistettu tästä keskustelusta. Yritä uudelleen ilman tiedostoa tai lataa tiedosto uudelleen."
+    "attachedFileExpired": "Liitetiedosto ei ole enää saatavilla — ladatut tiedostot säilytetään vain rajoitetun ajan. Se on poistettu tästä keskustelusta. Yritä uudelleen ilman tiedostoa tai lataa tiedosto uudelleen.",
+    "repeatedFailureNotice": "Tämä epäonnistuu toistuvasti — keskustelu saattaa olla vioittunut. Uuden keskustelun aloittaminen korjaa yleensä ongelman.",
+    "startNewConversation": "Aloita uusi keskustelu",
+    "downloadDebugInfo": "Lataa vianmääritystiedot",
+    "includeMessageText": "Sisällytä viestien teksti"
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",

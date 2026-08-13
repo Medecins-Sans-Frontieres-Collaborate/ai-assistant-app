@@ -894,7 +894,11 @@
     },
     "retryWithModel": "Thử với {model}",
     "createTodoTasks": "Tạo nhiệm vụ To Do từ phản hồi này",
-    "attachedFileExpired": "Một tệp đính kèm không còn khả dụng — các tệp đã tải lên chỉ được lưu trữ trong thời gian giới hạn. Tệp này đã bị xóa khỏi cuộc trò chuyện này. Vui lòng thử lại mà không cần tệp, hoặc tải lên tệp một lần nữa."
+    "attachedFileExpired": "Một tệp đính kèm không còn khả dụng — các tệp đã tải lên chỉ được lưu trữ trong thời gian giới hạn. Tệp này đã bị xóa khỏi cuộc trò chuyện này. Vui lòng thử lại mà không cần tệp, hoặc tải lên tệp một lần nữa.",
+    "repeatedFailureNotice": "Việc này liên tục thất bại — cuộc trò chuyện có thể đã bị lỗi. Thường thì bắt đầu một cuộc trò chuyện mới sẽ khắc phục được vấn đề này.",
+    "startNewConversation": "Bắt đầu cuộc trò chuyện mới",
+    "downloadDebugInfo": "Tải thông tin gỡ lỗi",
+    "includeMessageText": "Bao gồm nội dung tin nhắn"
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",
