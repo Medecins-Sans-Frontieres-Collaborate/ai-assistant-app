@@ -95,9 +95,14 @@ export async function POST(req: NextRequest): Promise<Response> {
   const writeStreamError = async (
     message: string,
     code?: string,
+    extra?: { fileUrl?: string },
   ): Promise<void> => {
     const payload = `\n\n<<<METADATA_START>>>${JSON.stringify({
-      streamError: { message, ...(code ? { code } : {}) },
+      streamError: {
+        message,
+        ...(code ? { code } : {}),
+        ...(extra?.fileUrl ? { fileUrl: extra.fileUrl } : {}),
+      },
     })}<<<METADATA_END>>>`;
     try {
       await streamWriter.write(activityEncoder.encode(payload));
@@ -105,6 +110,17 @@ export async function POST(req: NextRequest): Promise<Response> {
       // Writer already closed/aborted — nothing more we can report.
     }
   };
+
+  /**
+   * The only PipelineError metadata forwarded to the client. Never spread the
+   * whole metadata object into the stream — `originalError` can carry Azure
+   * SDK internals. `fileUrl` is the user's own `/api/file/…` reference,
+   * needed client-side to flag/strip an expired attachment.
+   */
+  const streamErrorExtra = (err: unknown): { fileUrl?: string } | undefined =>
+    err instanceof PipelineError && typeof err.metadata?.fileUrl === 'string'
+      ? { fileUrl: err.metadata.fileUrl }
+      : undefined;
 
   const abortWriter = async (err: unknown): Promise<void> => {
     try {
@@ -244,6 +260,7 @@ export async function POST(req: NextRequest): Promise<Response> {
             firstError instanceof PipelineError
               ? firstError.code
               : ErrorCode.INTERNAL_ERROR,
+            streamErrorExtra(firstError),
           );
           return;
         }
@@ -307,6 +324,7 @@ export async function POST(req: NextRequest): Promise<Response> {
         await writeStreamError(
           err instanceof Error ? err.message : 'Chat request failed',
           err instanceof PipelineError ? err.code : ErrorCode.INTERNAL_ERROR,
+          streamErrorExtra(err),
         );
       } finally {
         if (!aborted) {
@@ -357,7 +375,12 @@ export async function POST(req: NextRequest): Promise<Response> {
 /** Maps pipeline error codes to HTTP status codes (non-streaming + context phase). */
 function getStatusCodeForPipelineError(code: ErrorCode): number {
   switch (code) {
+    // AUTH_SESSION_EXPIRED shares the 401, but the DISTINCT code tells the
+    // client the session itself is dead (failed token refresh after a
+    // client-secret rotation) — it forces a sign-out instead of a dead-end
+    // error banner.
     case ErrorCode.AUTH_FAILED:
+    case ErrorCode.AUTH_SESSION_EXPIRED:
       return 401;
     case ErrorCode.RATE_LIMIT_EXCEEDED:
       // 429. This was 401 until 2026-07-25 — it shared a fall-through case
@@ -385,6 +408,11 @@ function getStatusCodeForPipelineError(code: ErrorCode): number {
       return 403;
     case ErrorCode.VALIDATION_FAILED:
       return 400;
+    case ErrorCode.FILE_NOT_FOUND:
+      // An attached blob has expired (uploads live in a container with a
+      // lifecycle delete rule). 404 = client error, so no fallback-model
+      // auto-retry; the client flags the file and strips the dead reference.
+      return 404;
     case ErrorCode.AGENT_UNAVAILABLE:
     case ErrorCode.MODEL_UNAVAILABLE:
       return 409;
