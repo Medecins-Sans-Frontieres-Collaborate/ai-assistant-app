@@ -5,6 +5,7 @@ import {
   IconSettings,
   IconUserShield,
 } from '@tabler/icons-react';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { FC, ReactNode } from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -43,6 +44,14 @@ interface AdminShellProps {
 export const AdminShell: FC<AdminShellProps> = ({ areas, children }) => {
   const t = useTranslations();
   const segments = useSelectedLayoutSegments();
+  // The usage-limits rollout gate is CLIENT-side only: the server-side area
+  // resolver includes 'limits' for every global admin, and the LaunchDarkly
+  // flag decides here whether the rail shows it. Hiding the entry is not the
+  // security control — the limits page and API keep their global-admin gates.
+  const { usageLimits } = useFlags();
+  const visibleAreas = usageLimits
+    ? areas
+    : areas.filter((area) => area !== 'limits');
   // Admin renders without the chat sidebar (ChatShell skips it on /admin),
   // so the gear below is the only way to reach Settings from here — the
   // modal host stays mounted in ChatShell and opens over the admin page.
@@ -81,10 +90,10 @@ export const AdminShell: FC<AdminShellProps> = ({ areas, children }) => {
         </button>
       </header>
 
-      <AdminAreaNav areas={areas} variant="pills" />
+      <AdminAreaNav areas={visibleAreas} variant="pills" />
 
       <div className="flex min-h-0 flex-1">
-        <AdminAreaNav areas={areas} variant="rail" />
+        <AdminAreaNav areas={visibleAreas} variant="rail" />
         <main className="min-w-0 flex-1 overflow-y-auto">
           <div className="mx-auto max-w-4xl p-6">{children}</div>
         </main>

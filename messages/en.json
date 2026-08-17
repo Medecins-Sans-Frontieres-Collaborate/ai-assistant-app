@@ -3964,6 +3964,7 @@
   },
   "limits": {
     "title": "Usage limits",
+    "featureDisabled": "Usage limits are not enabled for this deployment.",
     "description": "Cap how much of each model and feature people can use. Everything is unlimited unless you set a limit here.",
     "back": "Back to chat",
     "loading": "Loading…",

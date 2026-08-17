@@ -4441,7 +4441,8 @@
     "groupSearchNoResults": "Sappoore walaa e innde maa.",
     "groupSearchError": "Njiilaw sappoore mawii; yo a waawi yetta ID sappoore ciiltagol.",
     "groupSearchHint": "Naat gollal e atii 2 ngol ngol ngollal sappoore e cim mburnde maa, walla yetta ID sappoore ciiltagol. Mbamtagol ngal ɗaɗi sappoore e Microsoft Entra.",
-    "groupsFlagOff": "Njiilaw sappoore kadi andiraa e nde nguurndam. Sappoore tigi jipporde mbeɗi."
+    "groupsFlagOff": "Njiilaw sappoore kadi andiraa e nde nguurndam. Sappoore tigi jipporde mbeɗi.",
+    "featureDisabled": "Limitaaji huutorde ngoodi feewi wano udditaaka e ndee doggol."
   },
   "m365": {
     "connections": {

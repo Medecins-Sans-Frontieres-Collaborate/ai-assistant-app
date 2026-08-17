@@ -4457,7 +4457,8 @@
     "groupSearchNoResults": "Hakuna kundi linalolingana na jina hilo.",
     "groupSearchError": "Utafutaji wa kundi umeshindikana. Unaweza bado kubandika kitambulisho cha kundi hapa chini.",
     "groupSearchHint": "Andika angalau herufi 2 ili kutafuta makundi ya shirika lako, au bandika moja kwa moja kitambulisho cha kundi. Uwekaji wa override unahusu wanachama wa kundi kwenye Microsoft Entra.",
-    "groupsFlagOff": "Kuchagua makundi bado hakijawashwa kwenye mazingira haya. Malengo ya makundi yaliyopo yanaendelea kufanya kazi."
+    "groupsFlagOff": "Kuchagua makundi bado hakijawashwa kwenye mazingira haya. Malengo ya makundi yaliyopo yanaendelea kufanya kazi.",
+    "featureDisabled": "Mipaka ya matumizi haijawashwa kwa utekelezaji huu."
   },
   "m365": {
     "connections": {

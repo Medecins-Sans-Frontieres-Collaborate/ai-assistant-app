@@ -4457,7 +4457,8 @@
     "groupSearchNoResults": "Yhtään ryhmää ei löytynyt kyseisellä nimellä.",
     "groupSearchError": "Ryhmähaun suoritus epäonnistui. Voit silti liittää ryhmän objektitunnuksen alle.",
     "groupSearchHint": "Kirjoita vähintään 2 merkkiä hakeaksesi organisaatiosi ryhmiä tai liitä ryhmän objektitunnus suoraan. Ohitus koskee ryhmän jäseniä Microsoft Entrassa.",
-    "groupsFlagOff": "Ryhmien kohdistus ei ole vielä käytössä tässä ympäristössä. Nykyiset ryhmäkohdistukset toimivat edelleen."
+    "groupsFlagOff": "Ryhmien kohdistus ei ole vielä käytössä tässä ympäristössä. Nykyiset ryhmäkohdistukset toimivat edelleen.",
+    "featureDisabled": "Käyttörajoitukset eivät ole käytössä tässä käyttöönotossa."
   },
   "m365": {
     "connections": {

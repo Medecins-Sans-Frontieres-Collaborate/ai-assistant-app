@@ -4457,7 +4457,8 @@
     "groupSearchNoResults": "No hi ha cap grup que coincideixi amb aquest nom.",
     "groupSearchError": "No s'ha pogut cercar el grup. Encara pots enganxar l'ID de l'objecte del grup a continuació.",
     "groupSearchHint": "Escriu almenys 2 caràcters per cercar els grups de la teva organització, o enganxa directament un ID d'objecte de grup. L'excepció s'aplica als membres del grup a Microsoft Entra.",
-    "groupsFlagOff": "L'orientació per grups encara no està habilitada en aquest entorn. Els objectius de grup ja existents continuen funcionant."
+    "groupsFlagOff": "L'orientació per grups encara no està habilitada en aquest entorn. Els objectius de grup ja existents continuen funcionant.",
+    "featureDisabled": "Els límits d'ús no estan habilitats per a aquest desplegament."
   },
   "m365": {
     "connections": {

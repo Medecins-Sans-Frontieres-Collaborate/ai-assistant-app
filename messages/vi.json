@@ -4488,7 +4488,8 @@
     "groupSearchNoResults": "Không có nhóm nào phù hợp với tên đó.",
     "groupSearchError": "Tìm kiếm nhóm không thành công. Bạn vẫn có thể dán mã ID đối tượng nhóm bên dưới.",
     "groupSearchHint": "Nhập ít nhất 2 ký tự để tìm kiếm các nhóm của tổ chức bạn, hoặc dán trực tiếp mã ID đối tượng nhóm. Ghi đè này áp dụng cho thành viên của nhóm trong Microsoft Entra.",
-    "groupsFlagOff": "Chức năng nhắm mục tiêu theo nhóm chưa được bật cho môi trường này. Các mục tiêu nhóm hiện có vẫn hoạt động."
+    "groupsFlagOff": "Chức năng nhắm mục tiêu theo nhóm chưa được bật cho môi trường này. Các mục tiêu nhóm hiện có vẫn hoạt động.",
+    "featureDisabled": "Giới hạn sử dụng chưa được bật cho lần triển khai này."
   },
   "m365": {
     "connections": {

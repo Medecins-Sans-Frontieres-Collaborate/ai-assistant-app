@@ -4441,7 +4441,8 @@
     "groupSearchNoResults": "Gbēngö ti zîî tî nzö tî grupo ayeke.",
     "groupSearchError": "Kombere tî grupo ayeke. Mbutu yeke na kötä ID tî grupo tala ape.",
     "groupSearchHint": "Kötä tî lêtï 2 mbï tî kombere grupo tî organization na wa, ou bien kötä ID tî grupo direki. Sô tî wa bionga ti grupo sô tî Microsoft Entra.",
-    "groupsFlagOff": "Sô tî wa tî grupo ayeke kötä na yeke na ndakü na yeke. Grupö sô kötä kïri gbê ti continue."
+    "groupsFlagOff": "Sô tî wa tî grupo ayeke kötä na yeke na ndakü na yeke. Grupö sô kötä kïri gbê ti continue.",
+    "featureDisabled": "Limite ti lo alingbî ti kombété na zo na ndakîle oyo."
   },
   "m365": {
     "connections": {

@@ -4441,7 +4441,8 @@
     "groupSearchNoResults": "Tsy misy vondrona mifanaraka amin'ilay anarana.",
     "groupSearchError": "Tsy nahomby ny fikarohana vondrona. Afaka mampiditra ID an'ny vondrona etsy ambany ihany ianao.",
     "groupSearchHint": "Soraty ny litera 2 farafahakeliny mba hitadiavana vondrona ao amin'ny fikambanana, na apetaho mivantana ny ID an'ny vondrona. Mihatra amin'ny mpikambana ao amin'ilay vondrona ao amin'ny Microsoft Entra ny fanovana.",
-    "groupsFlagOff": "Tsy mbola misy ny fanasokajiana vondrona amin'ity tontolo iainana ity. Mbola mandeha ihany ireo fanasokajiana vondrona efa misy."
+    "groupsFlagOff": "Tsy mbola misy ny fanasokajiana vondrona amin'ity tontolo iainana ity. Mbola mandeha ihany ireo fanasokajiana vondrona efa misy.",
+    "featureDisabled": "Tsy ampiasaina amin'ity fametrahana ity ny famerana fampiasana."
   },
   "m365": {
     "connections": {

@@ -4457,7 +4457,8 @@
     "groupSearchNoResults": "Aucun groupe ne correspond à ce nom.",
     "groupSearchError": "La recherche de groupe a échoué. Vous pouvez toujours coller un ID d’objet de groupe ci-dessous.",
     "groupSearchHint": "Saisissez au moins 2 caractères pour rechercher les groupes de votre organisation, ou collez directement un ID d’objet de groupe. La dérogation s’applique aux membres du groupe dans Microsoft Entra.",
-    "groupsFlagOff": "Le ciblage des groupes n’est pas encore activé pour cet environnement. Les cibles de groupe existantes restent fonctionnelles."
+    "groupsFlagOff": "Le ciblage des groupes n’est pas encore activé pour cet environnement. Les cibles de groupe existantes restent fonctionnelles.",
+    "featureDisabled": "Les limites d’utilisation ne sont pas activées pour ce déploiement."
   },
   "m365": {
     "connections": {

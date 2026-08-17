@@ -4457,7 +4457,8 @@
     "groupSearchNoResults": "Žádné skupiny neodpovídají tomuto názvu.",
     "groupSearchError": "Hledání skupin se nezdařilo. Níže můžete stále vložit objektové ID skupiny.",
     "groupSearchHint": "Prohledávejte skupiny vaší organizace zadáním alespoň 2 znaků, nebo přímo vložte objektové ID skupiny. Přepsání platí pro členy skupiny v Microsoft Entra.",
-    "groupsFlagOff": "Cílení na skupiny není zatím v tomto prostředí povoleno. Stávající skupinová cílení nadále fungují."
+    "groupsFlagOff": "Cílení na skupiny není zatím v tomto prostředí povoleno. Stávající skupinová cílení nadále fungují.",
+    "featureDisabled": "Limity používání nejsou v tomto nasazení povoleny."
   },
   "m365": {
     "connections": {

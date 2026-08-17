@@ -4441,7 +4441,8 @@
     "groupSearchNoResults": "Ko si ẹgbẹ kankan ti o ba orukọ yẹn mu.",
     "groupSearchError": "Ṣiṣawari ẹgbẹ kuna. O tun le lẹẹ mọ ID ẹgbẹ si isalẹ.",
     "groupSearchHint": "Tẹ o kere ju lẹta meji lati wa awọn ẹgbẹ ajọ rẹ, tabi lẹẹ mọ ID ẹgbẹ taara. Àtúnṣe yìí kan àwọn ọmọ ẹgbẹ rẹ̀ ní Microsoft Entra.",
-    "groupsFlagOff": "Iwulo lati lo ẹgbẹ ko ti ṣetan fun ayika yi sibẹ. Awọn ibi-afẹde ẹgbẹ to wa tẹlẹ ṣi n ṣiṣẹ."
+    "groupsFlagOff": "Iwulo lati lo ẹgbẹ ko ti ṣetan fun ayika yi sibẹ. Awọn ibi-afẹde ẹgbẹ to wa tẹlẹ ṣi n ṣiṣẹ.",
+    "featureDisabled": "A ko ti muu awọn aala lilo ṣiṣẹ fun ibi fifi sori ẹrọ yii."
   },
   "m365": {
     "connections": {

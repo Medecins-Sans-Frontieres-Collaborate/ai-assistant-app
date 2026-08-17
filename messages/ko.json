@@ -4457,7 +4457,8 @@
     "groupSearchNoResults": "해당 이름과 일치하는 그룹이 없습니다.",
     "groupSearchError": "그룹 검색에 실패했습니다. 아래에 그룹 객체 ID를 직접 붙여넣을 수 있습니다.",
     "groupSearchHint": "조직의 그룹을 검색하려면 최소 2글자를 입력하거나 그룹 객체 ID를 직접 붙여넣으세요. 이 설정은 Microsoft Entra의 해당 그룹 구성원에게 적용됩니다.",
-    "groupsFlagOff": "이 환경에서는 아직 그룹 타겟팅이 활성화되어 있지 않습니다. 기존 그룹 타겟은 계속 작동합니다."
+    "groupsFlagOff": "이 환경에서는 아직 그룹 타겟팅이 활성화되어 있지 않습니다. 기존 그룹 타겟은 계속 작동합니다.",
+    "featureDisabled": "이 배포에서는 사용 한도가 활성화되어 있지 않습니다."
   },
   "m365": {
     "connections": {

@@ -4457,7 +4457,8 @@
     "groupSearchNoResults": "Nessun gruppo corrisponde a questo nome.",
     "groupSearchError": "Ricerca gruppi non riuscita. Puoi comunque incollare un ID oggetto gruppo qui sotto.",
     "groupSearchHint": "Digita almeno 2 caratteri per cercare i gruppi della tua organizzazione o incolla direttamente un ID oggetto gruppo. La deroga si applica ai membri del gruppo in Microsoft Entra.",
-    "groupsFlagOff": "La selezione dei gruppi non è ancora abilitata per questo ambiente. I target di gruppo esistenti continuano a funzionare."
+    "groupsFlagOff": "La selezione dei gruppi non è ancora abilitata per questo ambiente. I target di gruppo esistenti continuano a funzionare.",
+    "featureDisabled": "I limiti d'uso non sono abilitati per questa implementazione."
   },
   "m365": {
     "connections": {

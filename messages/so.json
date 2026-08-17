@@ -4441,7 +4441,8 @@
     "groupSearchNoResults": "Ma jiraan kooxo ku habboon magacaas.",
     "groupSearchError": "Baadhista kooxdu way fashilantay. Waxa aad weli hoos ka dhigi kartaa aqoonsiga kooxda.",
     "groupSearchHint": "Qor ugu yaraan 2 xaraf si aad kooxaha ururkaaga u baadho, ama si toos ah u dhaji aqoonsiga kooxda. Isbeddelkan waxa uu saameeyaa xubnaha kooxda ee Microsoft Entra.",
-    "groupsFlagOff": "Bartilmaameedka kooxaha laguma darin deegaankaan weli. Bartilmaameedyada kooxaha jira way sii shaqeynayaan."
+    "groupsFlagOff": "Bartilmaameedka kooxaha laguma darin deegaankaan weli. Bartilmaameedyada kooxaha jira way sii shaqeynayaan.",
+    "featureDisabled": "Xadka isticmaalka lama hawlgelin ee hawlgalkan."
   },
   "m365": {
     "connections": {

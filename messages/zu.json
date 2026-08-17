@@ -4441,7 +4441,8 @@
     "groupSearchNoResults": "Awekho amaqembu avumelana nalelo gama.",
     "groupSearchError": "Ukusesha iqembu kuhlulekile. Usengakwazi ukunamathisela i-ID yeqembu engezansi.",
     "groupSearchHint": "Bhala okungenani izinhlamvu ezi-2 ukuze useshe amaqembu enhlangano yakho, noma unamathisele i-ID yeqembu ngqo. Ukweqa kuzosebenza kumalungu eqembu ku-Microsoft Entra.",
-    "groupsFlagOff": "Ukuqondisa amaqembu akukavulwa kulesi sikhala okwamanje. Amaqembu asevele eqondisiwe asaqhubeka nokusebenza."
+    "groupsFlagOff": "Ukuqondisa amaqembu akukavulwa kulesi sikhala okwamanje. Amaqembu asevele eqondisiwe asaqhubeka nokusebenza.",
+    "featureDisabled": "Imikhawulo yokusetshenziswa ayikavunyelwa kulokhu kufakwa."
   },
   "m365": {
     "connections": {

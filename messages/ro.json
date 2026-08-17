@@ -4457,7 +4457,8 @@
     "groupSearchNoResults": "Nicio grupă nu corespunde acestui nume.",
     "groupSearchError": "Căutarea grupului a eșuat. Totuși, puteți insera un ID de obiect al grupului mai jos.",
     "groupSearchHint": "Introduceți cel puțin 2 caractere pentru a căuta grupurile organizației sau inserați direct un ID de obiect de grup. Suprapunerea se aplică membrilor grupului din Microsoft Entra.",
-    "groupsFlagOff": "Direcționarea grupurilor nu este activată încă pentru acest mediu. Țintele de grup existente funcționează în continuare."
+    "groupsFlagOff": "Direcționarea grupurilor nu este activată încă pentru acest mediu. Țintele de grup existente funcționează în continuare.",
+    "featureDisabled": "Limitele de utilizare nu sunt activate pentru această implementare."
   },
   "m365": {
     "connections": {

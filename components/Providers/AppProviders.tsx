@@ -9,7 +9,6 @@ import { Toaster } from 'react-hot-toast';
 import { Session } from 'next-auth';
 
 import { AgentAccessEnabledContext } from '@/client/hooks/settings/useAgentAccessAdmin';
-import { LimitsEnabledContext } from '@/client/hooks/settings/useLimitsAdmin';
 
 import { UIPreferences } from '@/types/ui';
 
@@ -36,7 +35,6 @@ interface AppProvidersProps {
    * nothing fires while the feature is disabled.
    */
   agentAccessEnabled?: boolean;
-  limitsEnabled?: boolean;
   userContext?: {
     id: string;
     email?: string;
@@ -59,7 +57,6 @@ export function AppProviders({
   session,
   launchDarklyClientId,
   agentAccessEnabled,
-  limitsEnabled,
   userContext,
   initialUIPreferences,
 }: AppProvidersProps) {
@@ -72,40 +69,38 @@ export function AppProviders({
       <SessionErrorHandler />
       <QueryClientProvider client={queryClient}>
         <AgentAccessEnabledContext.Provider value={agentAccessEnabled ?? false}>
-          <LimitsEnabledContext.Provider value={limitsEnabled ?? false}>
-            <UIPreferencesProvider initialPreferences={initialUIPreferences}>
-              {launchDarklyClientId ? (
-                <LDProvider
-                  clientSideID={launchDarklyClientId}
-                  options={{
-                    bootstrap: 'localStorage',
-                    sendEvents: true,
-                  }}
-                  context={{
-                    kind: 'user',
-                    key: userContext?.id || 'anonymous-user',
-                    email: userContext?.email,
-                    givenName: userContext?.givenName,
-                    surName: userContext?.surname,
-                    displayName: userContext?.displayName,
-                    jobTitle: userContext?.jobTitle,
-                    department: userContext?.department,
-                    companyName: userContext?.companyName,
-                  }}
-                >
-                  <TermsAcceptanceProvider>
-                    <Toaster position="top-center" />
-                    {children}
-                  </TermsAcceptanceProvider>
-                </LDProvider>
-              ) : (
+          <UIPreferencesProvider initialPreferences={initialUIPreferences}>
+            {launchDarklyClientId ? (
+              <LDProvider
+                clientSideID={launchDarklyClientId}
+                options={{
+                  bootstrap: 'localStorage',
+                  sendEvents: true,
+                }}
+                context={{
+                  kind: 'user',
+                  key: userContext?.id || 'anonymous-user',
+                  email: userContext?.email,
+                  givenName: userContext?.givenName,
+                  surName: userContext?.surname,
+                  displayName: userContext?.displayName,
+                  jobTitle: userContext?.jobTitle,
+                  department: userContext?.department,
+                  companyName: userContext?.companyName,
+                }}
+              >
                 <TermsAcceptanceProvider>
                   <Toaster position="top-center" />
                   {children}
                 </TermsAcceptanceProvider>
-              )}
-            </UIPreferencesProvider>
-          </LimitsEnabledContext.Provider>
+              </LDProvider>
+            ) : (
+              <TermsAcceptanceProvider>
+                <Toaster position="top-center" />
+                {children}
+              </TermsAcceptanceProvider>
+            )}
+          </UIPreferencesProvider>
         </AgentAccessEnabledContext.Provider>
       </QueryClientProvider>
     </SessionProvider>

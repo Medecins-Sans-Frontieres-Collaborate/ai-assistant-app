@@ -4457,7 +4457,8 @@
     "groupSearchNoResults": "Bu isme uygun grup bulunamadı.",
     "groupSearchError": "Grup araması başarısız oldu. Yine de aşağıya bir grup nesne kimliği yapıştırabilirsiniz.",
     "groupSearchHint": "Kuruluşunuzun gruplarında arama yapmak için en az 2 karakter yazın ya da doğrudan bir grup nesne kimliği yapıştırın. Geçersiz kılma, Microsoft Entra'daki grup üyelerine uygulanır.",
-    "groupsFlagOff": "Grup hedefleme bu ortamda henüz etkin değil. Mevcut grup hedefleri çalışmaya devam eder."
+    "groupsFlagOff": "Grup hedefleme bu ortamda henüz etkin değil. Mevcut grup hedefleri çalışmaya devam eder.",
+    "featureDisabled": "Bu dağıtım için kullanım limitleri etkin değil."
   },
   "m365": {
     "connections": {

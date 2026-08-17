@@ -4457,7 +4457,8 @@
     "groupSearchNoResults": "Tidak ada grup yang cocok dengan nama tersebut.",
     "groupSearchError": "Pencarian grup gagal. Anda masih dapat menempelkan ID objek grup di bawah ini.",
     "groupSearchHint": "Ketik minimal 2 karakter untuk mencari grup organisasi Anda, atau tempelkan ID objek grup secara langsung. Penggantian ini berlaku untuk anggota grup di Microsoft Entra.",
-    "groupsFlagOff": "Penargetan grup belum diaktifkan untuk lingkungan ini. Target grup yang sudah ada tetap berfungsi."
+    "groupsFlagOff": "Penargetan grup belum diaktifkan untuk lingkungan ini. Target grup yang sudah ada tetap berfungsi.",
+    "featureDisabled": "Batas penggunaan tidak diaktifkan untuk deployment ini."
   },
   "m365": {
     "connections": {

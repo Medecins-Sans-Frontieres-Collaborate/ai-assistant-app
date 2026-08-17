@@ -239,7 +239,6 @@ export function meteredCells(
 /** Resolves the policy snapshot once per request. Never throws. */
 export async function currentPolicy(): Promise<LimitsPolicy | null> {
   const service = LimitsService.getInstance();
-  if (!service.isEnabled()) return null;
   await service.ensureFresh();
   return service.getSnapshot().policy;
 }

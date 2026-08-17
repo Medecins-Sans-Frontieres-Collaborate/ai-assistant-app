@@ -4457,7 +4457,8 @@
     "groupSearchNoResults": "Brak grup o takiej nazwie.",
     "groupSearchError": "Wyszukiwanie grup nie powiodło się. Nadal możesz wkleić poniżej identyfikator grupy.",
     "groupSearchHint": "Wpisz co najmniej 2 znaki, aby wyszukać grupy w swojej organizacji lub wklej bezpośrednio identyfikator grupy. Nadpisanie dotyczy członków grupy w Microsoft Entra.",
-    "groupsFlagOff": "Kierowanie na grupy nie jest jeszcze włączone w tym środowisku. Istniejące cele grupowe nadal działają."
+    "groupsFlagOff": "Kierowanie na grupy nie jest jeszcze włączone w tym środowisku. Istniejące cele grupowe nadal działają.",
+    "featureDisabled": "Limity użytkowania nie są włączone dla tego wdrożenia."
   },
   "m365": {
     "connections": {
