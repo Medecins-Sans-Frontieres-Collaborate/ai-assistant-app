@@ -47,7 +47,6 @@ export default async function ChatLayout({
       session={session}
       launchDarklyClientId={process.env.LAUNCHDARKLY_CLIENT_ID}
       agentAccessEnabled={env.AGENT_ACCESS_CONTROL_ENABLED}
-      limitsEnabled={env.LIMITS_ENABLED}
       userContext={{
         id: session.user?.id || 'anonymous',
         email: session.user?.mail,
