@@ -10,9 +10,10 @@
  * EVERY page under app/[locale]/(chat)/admin/ keeps its own server-side gate,
  * verbatim, and those gates remain the real control. The two areas do NOT
  * share an admin model: agent access accepts per-key-delegated LOCAL admins,
- * while usage limits is global-admins-only behind a separate env flag.
- * Collapsing them into one check would hand every zero-key local admin write
- * access to the org-wide spend policy.
+ * while usage limits is global-admins-only (its rollout gate is the
+ * client-side `usageLimits` LaunchDarkly flag). Collapsing them into one
+ * check would hand every zero-key local admin write access to the org-wide
+ * spend policy.
  */
 import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessService';
 import {
@@ -77,11 +78,16 @@ export async function resolveAdminAreas(
 
   // INDEPENDENT branch, deliberately reading isGlobalAdmin from env rather
   // than from `status`: `status` is all-false whenever agent access is
-  // disabled, and the two env flags are documented as independent kill
-  // switches. Deriving one from the other is exactly the bug this fixes — a
-  // deployment with LIMITS_ENABLED=true and AGENT_ACCESS_CONTROL_ENABLED=false
-  // showed a global admin no admin entry at all.
-  if (env.LIMITS_ENABLED && isGlobalAdmin(mail)) {
+  // disabled, and limits must not depend on that kill switch. Deriving one
+  // from the other is exactly the bug this fixes — a deployment with limits
+  // in use and AGENT_ACCESS_CONTROL_ENABLED=false showed a global admin no
+  // admin entry at all.
+  //
+  // The limits feature gate is the CLIENT-side `usageLimits` LaunchDarkly
+  // flag, which this server-side resolver cannot evaluate — AdminShell
+  // filters the entry out of the rail when the flag is off. Including it here
+  // grants nothing: the limits page and API keep their own global-admin gates.
+  if (isGlobalAdmin(mail)) {
     areas.push('limits');
   }
 

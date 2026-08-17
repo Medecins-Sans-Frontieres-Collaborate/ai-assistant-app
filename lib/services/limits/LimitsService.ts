@@ -30,8 +30,6 @@ import { LimitsPolicy } from '@/lib/services/limits/types';
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
-import { env } from '@/config/environment';
-
 const POLICY_CACHE_TTL_MS = 60_000;
 /**
  * After a failed refresh, replicas holding a last-known-good policy serve it
@@ -78,17 +76,17 @@ export class LimitsService {
     LimitsService.instance = null;
   }
 
-  isEnabled(): boolean {
-    return env.LIMITS_ENABLED;
-  }
-
   /**
    * Refreshes the cached policy when the TTL has expired (single-flight).
    * Never throws — a failure keeps the last-known-good policy, and is only
    * visible through `policyUnavailable` when nothing was ever loaded.
+   *
+   * There is no enabled/disabled state: the feature's only kill switch is the
+   * client-side `usageLimits` LaunchDarkly flag, which gates the ADMIN UI.
+   * Server-side, a deployment with no authored policy resolves everything
+   * from the compiled catalog (unlimited), so refreshing is always safe.
    */
   async ensureFresh(): Promise<void> {
-    if (!this.isEnabled()) return;
     if (this.loadedOnce && Date.now() - this.fetchedAt < POLICY_CACHE_TTL_MS) {
       return;
     }
@@ -123,7 +121,7 @@ export class LimitsService {
     return {
       policy: this.policy,
       etag: this.etag,
-      policyUnavailable: this.isEnabled() && !this.loadedOnce,
+      policyUnavailable: !this.loadedOnce,
       fetchedAt: this.loadedOnce ? this.fetchedAt : null,
     };
   }

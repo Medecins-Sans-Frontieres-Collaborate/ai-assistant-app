@@ -16,7 +16,6 @@ import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
 import { createAppIdentityCredential } from '@/lib/services/auth/appIdentityCredential';
 import { createFoundryTokenCredential } from '@/lib/services/auth/foundryCredential';
 import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
-import { LimitsService } from '@/lib/services/limits/LimitsService';
 import {
   LimitCheckResult,
   applyMode,
@@ -1242,7 +1241,9 @@ export async function createLimitsMiddleware(
 ): Promise<Partial<ChatContext>> {
   try {
     const policy = await currentPolicy();
-    if (policy === null && !LimitsService.getInstance().isEnabled()) {
+    // No policy authored (or never loaded): everything resolves to the
+    // compiled catalog defaults, i.e. unlimited — nothing to check or count.
+    if (policy === null) {
       return {};
     }
 
