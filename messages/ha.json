@@ -4441,7 +4441,8 @@
     "groupSearchNoResults": "Babu wata ƙungiya da ta dace da wannan suna.",
     "groupSearchError": "Binciken ƙungiya ya gaza. Har yanzu za ka iya liƙa ID na ƙungiya a ƙasa.",
     "groupSearchHint": "Rubuta aƙalla haruffa 2 don bincika ƙungiyoyin kungiyarku, ko liƙa ID na ƙungiya kai tsaye. Gyaran zai shafi membobin ƙungiyar a Microsoft Entra.",
-    "groupsFlagOff": "Ba a kunna zaɓin maƙasudin ƙungiya a wannan muhalli ba tukuna. Zaɓin ƙungiyoyi da aka riga aka sa suna aiki."
+    "groupsFlagOff": "Ba a kunna zaɓin maƙasudin ƙungiya a wannan muhalli ba tukuna. Zaɓin ƙungiyoyi da aka riga aka sa suna aiki.",
+    "featureDisabled": "Iyakar amfani bai kunna a wannan shigarwar ba."
   },
   "m365": {
     "connections": {

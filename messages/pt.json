@@ -4457,7 +4457,8 @@
     "groupSearchNoResults": "Nenhum grupo corresponde a esse nome.",
     "groupSearchError": "A busca por grupos falhou. Você ainda pode colar um ID de objeto de grupo abaixo.",
     "groupSearchHint": "Digite ao menos 2 caracteres para buscar os grupos da sua organização ou cole diretamente um ID de objeto de grupo. A substituição se aplica aos membros do grupo no Microsoft Entra.",
-    "groupsFlagOff": "A segmentação por grupos ainda não está habilitada neste ambiente. Os direcionamentos de grupo existentes continuam funcionando."
+    "groupsFlagOff": "A segmentação por grupos ainda não está habilitada neste ambiente. Os direcionamentos de grupo existentes continuam funcionando.",
+    "featureDisabled": "Os limites de uso não estão ativados para esta implementação."
   },
   "m365": {
     "connections": {

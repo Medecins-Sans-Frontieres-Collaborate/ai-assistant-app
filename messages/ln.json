@@ -4441,7 +4441,8 @@
     "groupSearchNoResults": "Mokɛngɛli moko te esangani na kombo wana.",
     "groupSearchError": "Kofunda bangroup esalemaki te. Okoki kaka kokɔpya ID ya groupe awa na nse.",
     "groupSearchHint": "Koma mwa bilembo mibale to koleka mpo na koluka bangroup ya organisation na bino, to kɔpya ID ya groupe ndenge moko. Amasolo oyo ekosala na ba membres ya groupe na Microsoft Entra.",
-    "groupsFlagOff": "Kokotisa groupe ezali nanu na sima te mpo na environnement oyo. Ba groupe oyo esalaka sikawa ekotika kosala te."
+    "groupsFlagOff": "Kokotisa groupe ezali nanu na sima te mpo na environnement oyo. Ba groupe oyo esalaka sikawa ekotika kosala te.",
+    "featureDisabled": "Mokonzi ya misala akoki nanu te kotia bakangiseli ya bosaleli mpo na ebimiseli oyo."
   },
   "m365": {
     "connections": {

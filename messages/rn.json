@@ -4441,7 +4441,8 @@
     "groupSearchNoResults": "Nta matsinda ahuye n'iryo zina.",
     "groupSearchError": "Ihiganwa ry'amatsinda ntiryagenze neza. Ushobora gushira ID y'ikintu c'itsinda hasi.",
     "groupSearchHint": "Andika inyuguti zibiri canke zirenga kugira ushakire mu matsinda y'ikigo cawe, canke ucapure ID y'itsinda. Override ikoreshwa ku banywanyi b'itsinda muri Microsoft Entra.",
-    "groupsFlagOff": "Guhitamo itsinda ntibirashirwa muri kino kibanza. Amatsinda asanzwe akora azoguma akora."
+    "groupsFlagOff": "Guhitamo itsinda ntibirashirwa muri kino kibanza. Amatsinda asanzwe akora azoguma akora.",
+    "featureDisabled": "Ingingo ngenga ikoreshwa ntirashyirwaho kuri ubu bushikirizwa."
   },
   "m365": {
     "connections": {

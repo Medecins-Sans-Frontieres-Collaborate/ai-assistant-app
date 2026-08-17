@@ -4441,7 +4441,8 @@
     "groupSearchNoResults": "Nta matsinda ahuye n'iryo zina.",
     "groupSearchError": "Gushakisha itsinda byanze. Ushobora gushyiramo ID y'itsinda hano hepfo.",
     "groupSearchHint": "Andika nibura inyuguti 2 kugirango ushakishe amatsinda y'umuryango wawe, cyangwa ushyiremo ID y'itsinda. Iri hinduka rigira ingaruka ku bagize itsinda muri Microsoft Entra.",
-    "groupsFlagOff": "Kwerekeza ku matsinda ntikirashobora gukoreshwa muri uru rwego. Amatsinda yashyizweho aracyakora."
+    "groupsFlagOff": "Kwerekeza ku matsinda ntikirashobora gukoreshwa muri uru rwego. Amatsinda yashyizweho aracyakora.",
+    "featureDisabled": "Imipaka yo gukoresha ntirashyirwaho kuri ubu busesenguzi."
   },
   "m365": {
     "connections": {

@@ -4441,7 +4441,8 @@
     "groupSearchNoResults": "Palibe magulu omwe akugwirizana ndi dzina limenelo.",
     "groupSearchError": "Kusaka gulu kwalephera. Mungathenso kulemba Group Object ID pansipa.",
     "groupSearchHint": "Lembani zilembo zosachepera ziwiri kuti musake magulu a bungwe lanu, kapena lowetsani Group Object ID. Override imagwira ntchito kwa mamembala a gululo mu Microsoft Entra.",
-    "groupsFlagOff": "Group targeting sinayatsidwe pa environment iyi. Magulu omwe akuyendabe apitilira kugwira ntchito."
+    "groupsFlagOff": "Group targeting sinayatsidwe pa environment iyi. Magulu omwe akuyendabe apitilira kugwira ntchito.",
+    "featureDisabled": "Malire a kugwiritsa ntchito sanayatsidwe pa kugwiritsa ntchito uku."
   },
   "m365": {
     "connections": {

@@ -4457,7 +4457,8 @@
     "groupSearchNoResults": "Inga grupper matchar det namnet.",
     "groupSearchError": "Gruppsökningen misslyckades. Du kan fortfarande klistra in ett gruppobjekt-ID nedan.",
     "groupSearchHint": "Skriv minst 2 tecken för att söka efter din organisations grupper, eller klistra in ett gruppobjekt-ID direkt. Åsidosättningen gäller gruppens medlemmar i Microsoft Entra.",
-    "groupsFlagOff": "Gruppriktning är inte aktiverad för denna miljö ännu. Befintliga gruppriktningar fungerar fortfarande."
+    "groupsFlagOff": "Gruppriktning är inte aktiverad för denna miljö ännu. Befintliga gruppriktningar fungerar fortfarande.",
+    "featureDisabled": "Användningsbegränsningar är inte aktiverade för denna driftsättning."
   },
   "m365": {
     "connections": {

@@ -4441,7 +4441,8 @@
     "groupSearchNoResults": "Pa gen okenn gwoup ki koresponn ak non sa a.",
     "groupSearchError": "Rechèch gwoup la echwe. Ou ka toujou kole yon ID objè gwoup anba a.",
     "groupSearchHint": "Tape omwen 2 karaktè pou chèche gwoup òganizasyon w lan, oswa kole yon ID objè gwoup dirèkteman. Chanjman an aplike pou manm gwoup la nan Microsoft Entra.",
-    "groupsFlagOff": "Sibyaj gwoup poko aktive pou anviwònman sa a. Sibi gwoup ki egziste yo ap kontinye mache."
+    "groupsFlagOff": "Sibyaj gwoup poko aktive pou anviwònman sa a. Sibi gwoup ki egziste yo ap kontinye mache.",
+    "featureDisabled": "Limit itilizasyon yo pa aktive pou deplwaman sa a."
   },
   "m365": {
     "connections": {

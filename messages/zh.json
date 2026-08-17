@@ -4488,7 +4488,8 @@
     "groupSearchNoResults": "未找到符合该名称的群组。",
     "groupSearchError": "群组搜索失败。您仍可在下方粘贴群组对象 ID。",
     "groupSearchHint": "请输入至少 2 个字符以搜索您组织的群组，或直接粘贴群组对象 ID。此覆盖将应用于 Microsoft Entra 中该群组的成员。",
-    "groupsFlagOff": "当前环境尚未开启群组定向。已有的群组目标仍可使用。"
+    "groupsFlagOff": "当前环境尚未开启群组定向。已有的群组目标仍可使用。",
+    "featureDisabled": "此部署未启用使用限制。"
   },
   "m365": {
     "connections": {

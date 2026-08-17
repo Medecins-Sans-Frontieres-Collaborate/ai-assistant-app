@@ -4457,7 +4457,8 @@
     "groupSearchNoResults": "Ningún grupo coincide con ese nombre.",
     "groupSearchError": "La búsqueda de grupos ha fallado. Aún puede pegar un ID de objeto de grupo abajo.",
     "groupSearchHint": "Escriba al menos 2 caracteres para buscar grupos de su organización, o pegue directamente un ID de objeto de grupo. La anulación se aplica a los miembros del grupo en Microsoft Entra.",
-    "groupsFlagOff": "La selección de grupos aún no está habilitada para este entorno. Los grupos existentes seguirán funcionando."
+    "groupsFlagOff": "La selección de grupos aún no está habilitada para este entorno. Los grupos existentes seguirán funcionando.",
+    "featureDisabled": "Los límites de uso no están habilitados para este despliegue."
   },
   "m365": {
     "connections": {

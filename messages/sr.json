@@ -4441,7 +4441,8 @@
     "groupSearchNoResults": "Nijedna grupa ne odgovara tom imenu.",
     "groupSearchError": "Pretraga grupa nije uspela. Još uvek možete da nalepite ID objekta grupe ispod.",
     "groupSearchHint": "Unesite najmanje 2 znaka za pretragu grupa vaše organizacije ili nalepite ID objekta grupe direktno. Preklapanje se odnosi na članove grupe u Microsoft Entra.",
-    "groupsFlagOff": "Ciljanje grupa još nije omogućeno za ovo okruženje. Postojeći ciljevi za grupe i dalje funkcionišu."
+    "groupsFlagOff": "Ciljanje grupa još nije omogućeno za ovo okruženje. Postojeći ciljevi za grupe i dalje funkcionišu.",
+    "featureDisabled": "Ograničenja korišćenja nisu omogućena za ovu implementaciju."
   },
   "m365": {
     "connections": {

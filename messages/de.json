@@ -4457,7 +4457,8 @@
     "groupSearchNoResults": "Keine Gruppen entsprechen diesem Namen.",
     "groupSearchError": "Gruppensuche fehlgeschlagen. Sie können unten trotzdem eine Gruppen-Objekt-ID einfügen.",
     "groupSearchHint": "Geben Sie mindestens 2 Zeichen ein, um nach Gruppen Ihrer Organisation zu suchen, oder fügen Sie direkt eine Gruppen-Objekt-ID ein. Die Überschreibung gilt für die Mitglieder der Gruppe in Microsoft Entra.",
-    "groupsFlagOff": "Gruppenzuweisung ist für diese Umgebung noch nicht aktiviert. Bestehende Gruppenzuweisungen funktionieren weiterhin."
+    "groupsFlagOff": "Gruppenzuweisung ist für diese Umgebung noch nicht aktiviert. Bestehende Gruppenzuweisungen funktionieren weiterhin.",
+    "featureDisabled": "Nutzungsbegrenzungen sind für diese Bereitstellung nicht aktiviert."
   },
   "m365": {
     "connections": {

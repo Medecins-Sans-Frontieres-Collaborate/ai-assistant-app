@@ -4457,7 +4457,8 @@
     "groupSearchNoResults": "Geen groepen gevonden met die naam.",
     "groupSearchError": "Groepen zoeken mislukt. U kunt hieronder nog steeds een groep-object-ID plakken.",
     "groupSearchHint": "Typ minimaal 2 tekens om te zoeken in de groepen van uw organisatie, of plak direct een groep-object-ID. De override geldt voor de leden van de groep in Microsoft Entra.",
-    "groupsFlagOff": "Groepstargeting is nog niet ingeschakeld voor deze omgeving. Bestaande groepstargets blijven werken."
+    "groupsFlagOff": "Groepstargeting is nog niet ingeschakeld voor deze omgeving. Bestaande groepstargets blijven werken.",
+    "featureDisabled": "Gebruiksbeperkingen zijn niet ingeschakeld voor deze deployment."
   },
   "m365": {
     "connections": {
