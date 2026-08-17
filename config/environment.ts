@@ -218,15 +218,12 @@ const serverEnvSchema = z.object({
   // lowercased + trimmed). Bootstrap mechanism — changing it needs a redeploy.
   AGENT_ACCESS_ADMINS: z.string().optional(),
 
-  // Usage limits (docs/LIMITS.md)
-  // Master gate for enforcement + admin API + UI. Break-glass for a
-  // policy-blob outage: set to "false" and redeploy.
-  //
-  // Deliberately its OWN gate rather than reusing AGENT_ACCESS_CONTROL_ENABLED:
-  // break-glassing access control during a rules-blob outage must not also
-  // silently remove every spend cap. The admin roster IS shared — limits are
-  // authored by the same AGENT_ACCESS_ADMINS global admins.
-  LIMITS_ENABLED: booleanString(false),
+  // Usage limits (docs/LIMITS.md) have no env gate: the UI is gated by the
+  // client-side `usageLimits` LaunchDarkly flag, and the server side is inert
+  // until a policy is authored (no policy blob → everything unlimited).
+  // Break-glass for a bad policy is the admin UI itself, or deleting the blob.
+  // The admin roster IS shared — limits are authored by the same
+  // AGENT_ACCESS_ADMINS global admins.
 
   // Application Configuration
   // Optional explicit override; when unset the default model resolves
