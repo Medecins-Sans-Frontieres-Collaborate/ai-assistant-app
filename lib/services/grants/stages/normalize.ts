@@ -4,6 +4,7 @@
  * Applies deterministic normalization rules to raw records from Stage 2.
  * No LLM calls.
  */
+import { aliasMentions, deriveDocAliases } from '../aliasMap';
 import { normalizeCountry } from '../lookups/countryReference';
 import { matchGreenInitiatives } from '../lookups/greenInitiatives';
 import { getPurposeCodes } from '../lookups/purposeCodes';
@@ -484,19 +485,55 @@ function normalizeRecord(
   let evidenceSummary = formatEvidenceSummary(activities);
 
   //Green initiatives
-  const greenSource = ocCfg.multi_project
-    ? [
-        record.project_objective,
-        evidenceSummary,
-        ...activities.map((a: AnyRecord) =>
-          typeof a === 'object' && a !== null
-            ? `${a.activity || ''} ${a.quote_english || ''} ${a.quote_original || ''}`
-            : String(a),
-        ),
-      ]
-        .filter(Boolean)
-        .join('\n')
-    : record._raw_text || record.project_objective || '';
+  const aliasCtx = record._alias_context as
+    | { mine: string[]; foreign: string[] }
+    | undefined;
+  const recordLocalText = [
+    record.project_objective,
+    evidenceSummary,
+    ...activities.map((a: AnyRecord) =>
+      typeof a === 'object' && a !== null
+        ? `${a.activity || ''} ${a.quote_english || ''} ${a.quote_original || ''}`
+        : String(a),
+    ),
+  ]
+    .filter(Boolean)
+    .join('\n');
+  const aliasScopedText =
+    record._multi_code_doc &&
+    aliasCtx &&
+    (aliasCtx.mine.length > 0 || aliasCtx.foreign.length > 0)
+      ? String(record._raw_text || '')
+          .split('\n')
+          .filter((line) => {
+            const hitsMine =
+              aliasCtx.mine.some((al) => aliasMentions(line, al)) ||
+              line
+                .toUpperCase()
+                .includes(String(record.project_code || '').toUpperCase());
+            if (hitsMine) return true;
+            return false;
+          })
+          .join('\n') +
+        '\n' +
+        recordLocalText
+      : null;
+  const greenSource =
+    aliasScopedText !== null
+      ? aliasScopedText
+      : ocCfg.multi_project
+        ? [
+            record.project_objective,
+            evidenceSummary,
+            ...activities.map((a: AnyRecord) =>
+              typeof a === 'object' && a !== null
+                ? `${a.activity || ''} ${a.quote_english || ''} ${a.quote_original || ''}`
+                : String(a),
+            ),
+          ]
+            .filter(Boolean)
+            .join('\n')
+        : record._raw_text || record.project_objective || '';
   const green = matchGreenInitiatives(String(greenSource));
   if (green.subcategories.length > 0) {
     const existing = activitiesList ? activitiesList.split(', ') : [];
@@ -744,6 +781,83 @@ export async function run(params: {
 
   const normalized: AnyRecord[] = [];
 
+  const aliasesBySource = new Map<string, Map<string, string[]>>();
+  const aliasOwners = new Map<string, Map<string, string>>(); // src -> alias -> code
+  const derivedFlag = new Map<string, Set<string>>(); // src -> codes with doc-derived aliases
+  {
+    const codesBySource = new Map<string, string[]>();
+    for (const rec of records) {
+      const src = String(rec._source_file || '');
+      const code = String(rec.project_code || '').toUpperCase();
+      if (!codesBySource.has(src)) codesBySource.set(src, []);
+      if (code && !codesBySource.get(src)!.includes(code))
+        codesBySource.get(src)!.push(code);
+    }
+    const derivedBySource = new Map<string, Map<string, string[]>>();
+    // Codes whose aliases came from the document itself — exempt from the
+    // ownership strip below (the document may share one alias across codes).
+
+    for (const [src, codes] of codesBySource) {
+      const txtName = basename(src).replace(/\.[^.]+$/, '') + '.txt';
+      const raw = rawTexts[txtName] ?? rawTexts[src] ?? '';
+      derivedBySource.set(
+        src,
+        raw ? deriveDocAliases(raw, codes) : new Map<string, string[]>(),
+      );
+    }
+    for (const rec of records) {
+      const src = String(rec._source_file || '');
+      const code = String(rec.project_code || '').toUpperCase();
+      const derived = derivedBySource.get(src)?.get(code) || [];
+      let aliases = derived;
+      if (derived.length > 0) {
+        if (!derivedFlag.has(src)) derivedFlag.set(src, new Set());
+        derivedFlag.get(src)!.add(code);
+      }
+      if (aliases.length === 0) {
+        // Fallback: model-reported aliases, sanity-gated.
+        aliases = (
+          Array.isArray(rec.project_aliases) ? rec.project_aliases : []
+        )
+          .map((a: unknown) => String(a).trim())
+          .filter(
+            (a: string) =>
+              a.length >= 2 && a.length <= 12 && /[A-Za-z].*[A-Za-z]/.test(a),
+          );
+      } else {
+        if (!aliasOwners.has(src)) aliasOwners.set(src, new Map());
+        const owners = aliasOwners.get(src)!;
+        for (const d of derived)
+          if (!owners.has(d.toUpperCase())) owners.set(d.toUpperCase(), code);
+      }
+      if (!aliasesBySource.has(src)) aliasesBySource.set(src, new Map());
+      aliasesBySource.get(src)!.set(code, aliases);
+    }
+  }
+  // Ownership rule: a model-reported alias that the document
+  // assigns to a different code is a misclaim — strip it, so a record
+  // claiming a sibling's alias cannot siphon away that sibling's content.
+  for (const [src, byCode] of aliasesBySource) {
+    const owners = aliasOwners.get(src);
+    if (!owners) continue;
+    for (const [code, as] of byCode) {
+      if (derivedFlag.get(src)?.has(code)) continue; // doc-derived: trusted
+      byCode.set(
+        code,
+        as.filter((a) => {
+          const owner = owners.get(a.toUpperCase());
+          if (owner && owner !== code) {
+            console.log(
+              `  ! alias "${a}" claimed by ${code} belongs to ${owner} (per the document) — ignoring the claim`,
+            );
+            return false;
+          }
+          return true;
+        }),
+      );
+    }
+  }
+
   for (let idx = 0; idx < records.length; idx++) {
     const record = records[idx];
     const source = record._source_file || `record_${idx + 1}`;
@@ -771,6 +885,95 @@ export async function run(params: {
           );
         }
       }
+    }
+
+    const srcAliasMap = aliasesBySource.get(String(record._source_file || ''));
+    if (srcAliasMap && srcAliasMap.size > 1 && Array.isArray(acts)) {
+      const myCode = String(record.project_code || '').toUpperCase();
+      const mine = (srcAliasMap.get(myCode) || []).map((a) => a.toUpperCase());
+      const foreign: string[] = [];
+      for (const [c, as] of srcAliasMap) {
+        if (c !== myCode)
+          foreign.push(
+            ...as.map((a) => a.toUpperCase()).filter((a) => !mine.includes(a)),
+          );
+      }
+      if (foreign.length > 0) {
+        const rawText = String(record._raw_text || '');
+        const contextLine = (quote: string): string => {
+          const q = quote.trim();
+          if (q.length < 12 || !rawText) return '';
+          const i = rawText.indexOf(q.slice(0, 80));
+          if (i < 0) return '';
+          const start = rawText.lastIndexOf('\n', i) + 1;
+          const endN = rawText.indexOf('\n', i);
+          return rawText.slice(start, endN < 0 ? rawText.length : endN);
+        };
+        const kept = acts.filter((a: AnyRecord) => {
+          if (!a || typeof a !== 'object') return true;
+          const verbatim = String(a.quote_original || '').trim();
+          const quotes = verbatim || String(a.quote_english || '');
+          if (!quotes.trim()) return true;
+          let hitsMine = mine.some((al) => aliasMentions(quotes, al));
+          let hitsForeign = foreign.some((al) => aliasMentions(quotes, al));
+          if (verbatim) {
+            const en = String(a.quote_english || '');
+            if (en && !hitsMine && mine.some((al) => aliasMentions(en, al))) {
+              console.log(
+                `  ! ${source}: translated quote for "${a.activity || '?'}" on ${myCode} claims this project's alias but the verbatim text does not — treating as fabricated`,
+              );
+            }
+          }
+          if (!hitsMine && !hitsForeign) {
+            const ctx =
+              contextLine(String(a.quote_original || '')) ||
+              contextLine(String(a.quote_english || ''));
+            if (ctx) {
+              hitsMine = mine.some((al) => aliasMentions(ctx, al));
+              hitsForeign = foreign.some((al) => aliasMentions(ctx, al));
+              if (hitsMine && !mine.some((al) => aliasMentions(quotes, al))) {
+                const sentences = ctx.split(/(?<=[.!?])\s+/);
+                const q = String(a.quote_original || a.quote_english || '')
+                  .trim()
+                  .slice(0, 60);
+                let expanded =
+                  sentences.find(
+                    (sent) =>
+                      sent.includes(q) &&
+                      mine.some((al) => aliasMentions(sent, al)),
+                  ) || '';
+                if (!expanded && ctx.length <= 400) expanded = ctx;
+                if (!expanded) {
+                  const i = ctx.indexOf(q);
+                  if (i >= 0) {
+                    const start = Math.max(0, i - 150);
+                    const end = Math.min(ctx.length, i + q.length + 150);
+                    expanded = ctx.slice(start, end);
+                  }
+                }
+                if (
+                  expanded &&
+                  mine.some((al) => aliasMentions(expanded, al))
+                ) {
+                  a.quote_original = expanded.trim();
+                }
+              }
+            }
+          }
+          if (hitsForeign && !hitsMine) {
+            console.log(
+              `  ! ${source}: dropped activity "${a.activity || '?'}" from ${myCode} — its evidence belongs to a sibling project's context`,
+            );
+            return false;
+          }
+          return true;
+        });
+        if (kept.length !== acts.length) {
+          record.activities_2026 = kept;
+          if (record[`activities_${year}`]) record[`activities_${year}`] = kept;
+        }
+      }
+      record._alias_context = { mine, foreign };
     }
 
     try {
