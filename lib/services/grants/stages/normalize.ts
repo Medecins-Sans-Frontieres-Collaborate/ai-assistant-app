@@ -5,6 +5,7 @@
  * No LLM calls.
  */
 import { normalizeCountry } from '../lookups/countryReference';
+import { matchGreenInitiatives } from '../lookups/greenInitiatives';
 import { getPurposeCodes } from '../lookups/purposeCodes';
 import { isSensitive } from '../lookups/sensitiveCountries';
 import {
@@ -361,7 +362,7 @@ function normalizeRecord(
 
   let filenameCode = '';
   if (source && !ocCfg.multi_project) {
-    const match = source.match(/([A-Z]{2,3}W?\d{2,4})/i);
+    const match = source.match(/([A-Z]{1,3}W?\d{2,4})/i);
     if (match) {
       filenameCode = match[1].toUpperCase();
       if (ocCfg.old_to_new_codes && filenameCode in ocCfg.old_to_new_codes) {
@@ -414,6 +415,20 @@ function normalizeRecord(
   } catch {
     modelCodeValid = !!modelCode;
   }
+  if (modelCodeValid) {
+    const yearDigits = modelCode.match(/\d{4}/)?.[0];
+    const digitRun = modelCode.match(/\d+/)?.[0];
+    if (
+      (yearDigits && yearDigits === String(year)) ||
+      digitRun === '001' ||
+      digitRun === '000'
+    ) {
+      console.log(
+        `  ! ${source}: model code "${modelCode}" looks fabricated (year/placeholder digits) — ignoring it in favor of filename/blank`,
+      );
+      modelCodeValid = false;
+    }
+  }
 
   let projectCode: string;
   if (overrideCode) {
@@ -465,11 +480,55 @@ function normalizeRecord(
   if (normalizedCountry) missionCountry = normalizedCountry;
 
   // --- Activities ---
-  const activitiesList = formatActivitiesList(activities);
-  const evidenceSummary = formatEvidenceSummary(activities);
+  let activitiesList = formatActivitiesList(activities);
+  let evidenceSummary = formatEvidenceSummary(activities);
+
+  //Green initiatives
+  const greenSource = ocCfg.multi_project
+    ? [
+        record.project_objective,
+        evidenceSummary,
+        ...activities.map((a: AnyRecord) =>
+          typeof a === 'object' && a !== null
+            ? `${a.activity || ''} ${a.quote_english || ''} ${a.quote_original || ''}`
+            : String(a),
+        ),
+      ]
+        .filter(Boolean)
+        .join('\n')
+    : record._raw_text || record.project_objective || '';
+  const green = matchGreenInitiatives(String(greenSource));
+  if (green.subcategories.length > 0) {
+    const existing = activitiesList ? activitiesList.split(', ') : [];
+    for (const sub of green.subcategories) {
+      if (!existing.includes(sub)) existing.push(sub);
+    }
+    activitiesList = existing.join(', ');
+    // Audit trail: show which column-A phrases produced each green key term,
+    // in the same Evidence Summary format the model's activities use.
+    const greenEvidence = green.subcategories
+      .map((sub) => {
+        const phrases = (green.phrasesBySubcategory[sub] || []).slice(0, 3);
+        return `- ${sub} (Green Initiative)\n  Matched phrase${phrases.length > 1 ? 's' : ''}: ${phrases.map((ph) => `"${ph}"`).join('; ')}`;
+      })
+      .join('\n\n');
+    evidenceSummary = evidenceSummary
+      ? `${evidenceSummary}\n\n${greenEvidence}`
+      : greenEvidence;
+  }
 
   // --- Project name ---
   let projectName = record.project_name || '';
+  if (!String(projectName).trim() && record._raw_text) {
+    const m = String(record._raw_text).match(
+      /Initiative\s+Name\s*[:\u2013\u2014-]\s*([^\n\r]+)/i,
+    );
+    if (m)
+      projectName = m[1]
+        .trim()
+        .replace(/\s{2,}.*$/, '')
+        .slice(0, 160);
+  }
   projectName = fixHealthcareSpelling(projectName);
   projectName = applyAmericanEnglish(projectName);
 
@@ -486,6 +545,16 @@ function normalizeRecord(
   let projectObjective = record.project_objective || '';
   projectObjective = fixHealthcareSpelling(projectObjective);
   projectObjective = applyAmericanEnglish(projectObjective);
+
+  if (
+    green.subcategories.length > 0 &&
+    !/Green initiative/i.test(projectObjective)
+  ) {
+    const sentence = `Green initiative — ${green.actions.join(', ')}: ${green.subcategories.join(', ')}.`;
+    projectObjective = projectObjective
+      ? `${projectObjective.replace(/\s+$/, '')}${/[.!?]$/.test(projectObjective.trim()) ? '' : '.'} ${sentence}`
+      : sentence;
+  }
 
   // Closing/handover is tracked separately (from a supplemental source), NOT
   // inferred from the narrative. Keep the raw model value for the (non-focus)
