@@ -193,6 +193,7 @@ ${multiProjectSection}
 
 2. **project_name** (REQUIRED): The full title of the project
    - Look for: "Title of the Project", "Project Name", "Titre du projet"
+   - Green Initiative submission forms label the title "Initiative Name:" — treat that as the project name
    - If no explicit label is present, use the most prominent title/heading of the project — including a heading or text box at the top of the document or section. For documents that contain multiple projects, the project name is the heading at the start of each project's section.
    - STANDARDIZATION RULES FOR PROJECT NAME:
 ${nameInstructions}
@@ -321,6 +322,7 @@ Good examples by focus area (each example is a real project, shown as its Projec
     - "strategy" — a strategic plan or strategy paper.
     - "overview" — a high-level country or portfolio overview/summary that mainly references projects documented in detail elsewhere.
     - "compilation" — a single file bundling many separate project fiches.
+    - "green initiative" — a Green Initiative submission form (environmental/climate initiative proposal, often titled "Green Initiatives <year>" with an "Initiative Name:" field).
     - Or a short lowercase label of your own if none fit (e.g. "situation report", "budget annex").
     Use "project narrative" whenever the document's main purpose is to propose or describe the actual project(s); use the others only when the document is primarily a mission/strategy/overview/summary. For a multi-project response, put document_type ONCE at the TOP LEVEL next to "projects".
 
