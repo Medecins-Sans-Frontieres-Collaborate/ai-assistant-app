@@ -111,11 +111,21 @@ function parseCSV(csvText: string): {
 function classifyDocType(
   headerText: string,
   filename: string,
-): 'coordination' | 'strategy' | 'narrative' {
+): 'coordination' | 'strategy' | 'narrative' | 'green initiative' {
   const t = (headerText || '').slice(0, 4000).toLowerCase();
   const f = (filename || '').toLowerCase();
   const inText = (arr: string[]) => arr.some((k) => t.includes(k));
   const inName = (arr: string[]) => arr.some((k) => f.includes(k));
+
+  // Green Initiative submission forms are their own document type,
+  // these are checked first because their headers often also mention strategy/plan
+  // vocabulary that would otherwise misclassify them.
+  if (
+    inText(['green initiative', 'green initiatives']) ||
+    inName(['green_initiative', 'green initiative', 'green-initiative'])
+  ) {
+    return 'green initiative';
+  }
 
   if (
     inText([
@@ -155,6 +165,7 @@ function classifyDocType(
  */
 function filenameStrongType(filename: string): string | null {
   const f = (filename || '').toLowerCase();
+  if (/green[ _-]?initiative/.test(f)) return 'green initiative';
   if (/coordination|coordo\b/.test(f)) return 'coordination';
   if (/strateg/.test(f)) return 'strategy';
   return null;
