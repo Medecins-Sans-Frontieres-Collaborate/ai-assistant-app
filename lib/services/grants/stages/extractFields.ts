@@ -3,6 +3,7 @@
  *
  * Uses Azure OpenAI to extract structured project information.
  */
+import { aliasMentions, deriveDocAliases } from '../aliasMap';
 import { getDeployment, getGrantOpenAIClient } from '../grantOpenAIClient';
 import type { OCConfig } from '../ocConfig';
 import type { ProgressEmitter } from '../progress';
@@ -211,25 +212,68 @@ async function extractPerCode(
   const upper = fullText.toUpperCase();
   const head = fullText.slice(0, 3000); // country/context header
   const RADIUS = 6000;
+  // Alias map derived from the document itself. Codes are
+  // often confined to cover/budget tables while the narrative references
+  // projects only by alias — windows must follow the alias too, or the call
+  // never sees the project's own activity sections.
+  const docAliases = deriveDocAliases(fullText, codes);
 
   for (const code of codes) {
     // Focused excerpt: the document head (country/context) plus a window around
-    // EVERY occurrence of this code — its table row, its section, its budget line.
+    // occurrences of this code AND of its alias — table rows, budget lines,
+    // and the alias-labeled narrative sections.
+    const myAliases = docAliases.get(code.toUpperCase()) || [];
     const windows: string[] = [];
-    let from = 0;
-    let occ = 0;
-    while (occ < 6) {
-      const idx = upper.indexOf(code.toUpperCase(), from);
-      if (idx < 0) break;
-      windows.push(
-        fullText.slice(
-          Math.max(0, idx - RADIUS),
-          Math.min(fullText.length, idx + code.length + RADIUS),
-        ),
-      );
-      from = idx + code.length;
-      occ++;
+    const collect = (anchor: string, into: string[]) => {
+      let from = 0;
+      let occ = 0;
+      while (occ < 6) {
+        const idx = upper.indexOf(anchor, from);
+        if (idx < 0) break;
+        into.push(
+          fullText.slice(
+            Math.max(0, idx - RADIUS),
+            Math.min(fullText.length, idx + anchor.length + RADIUS),
+          ),
+        );
+        from = idx + anchor.length;
+        occ++;
+      }
+    };
+    collect(code.toUpperCase(), windows);
+    const aliasWindows: string[] = [];
+    {
+      const ranges: Array<[number, number]> = [];
+      const AR = 2500;
+      for (const a of myAliases) {
+        const anchor = a.toUpperCase();
+        let from = 0;
+        while (true) {
+          const idx = upper.indexOf(anchor, from);
+          if (idx < 0) break;
+          ranges.push([
+            Math.max(0, idx - AR),
+            Math.min(fullText.length, idx + anchor.length + AR),
+          ]);
+          from = idx + anchor.length;
+        }
+      }
+      ranges.sort((x, y) => x[0] - y[0]);
+      const merged: Array<[number, number]> = [];
+      for (const r of ranges) {
+        const last = merged[merged.length - 1];
+        if (last && r[0] <= last[1]) last[1] = Math.max(last[1], r[1]);
+        else merged.push([...r] as [number, number]);
+      }
+      let budget = 60000;
+      for (const [a2, b2] of merged) {
+        if (budget <= 0) break;
+        const slice = fullText.slice(a2, Math.min(b2, a2 + budget));
+        aliasWindows.push(slice);
+        budget -= slice.length;
+      }
     }
+    windows.push(...aliasWindows);
     const excerpt = (
       head + (windows.length ? '\n…\n' + windows.join('\n…\n') : '')
     ).slice(0, 120000);
@@ -243,7 +287,12 @@ async function extractPerCode(
       `  * any other identifier (a date, a budget line, a document reference) that is not the label of a distinct project.\n` +
       `Surrounding text describing a real project does NOT make "${code}" that project's code — a road number printed inside a project's narrative is still a road number.\n\n` +
       `ONLY if "${code}" genuinely labels its OWN project here — it heads a project fiche/section/title, or is that project's row in a project table — extract THAT project: return a SINGLE JSON object (not a "projects" array), using only the passages describing "${code}".\n\n` +
-      `NEVER copy another project's name, objective, or activities onto "${code}" — attributing one project's data to another code is a serious error.\n\n`;
+      `NEVER copy another project's name, objective, or activities onto "${code}" — attributing one project's data to another code is a serious error.\n\n` +
+      (myAliases.length > 0
+        ? `KNOWN ALIAS: this document's own project list assigns the alias ${myAliases.map((a) => `"${a}"`).join(', ')} to "${code}". Content labeled with that alias belongs to THIS project — content labeled with a DIFFERENT project's alias does not.\n` +
+          `REQUIRED COVERAGE: scan the ENTIRE excerpt for every passage mentioning ${myAliases.map((a) => `"${a}"`).join(' or ')} — planned services, pilots, recruitments, integrations, or changes described there are THIS project's activities. Include EACH such planned activity in activities_${year}, quoting the alias-labeled sentence itself as the evidence quote (keep the alias inside the quote). Missing an alias-labeled activity is an extraction error.\n\n`
+        : '') +
+      `ALIASES: multi-cost-center documents usually define a short alias for each project code near the top (e.g. "P1054 Kachin State IDP Health Care (MKA)", "P1072 Eastern Primary Healthcare WGM(LZ)") and the body then references projects by alias only. Identify the alias belonging to "${code}" and include it in your JSON as "project_aliases": ["..."] (or [] if the document defines none). Text labeled with ANOTHER project's alias belongs to that other project — do NOT use it as "${code}"'s activities or evidence quotes.\n\n`;
 
     const result = await llmExtract(
       client,
@@ -274,6 +323,105 @@ async function extractPerCode(
         `      - ${code}: no dedicated project description in this document (passing reference) — skipped`,
       );
       continue;
+    }
+
+    if (myAliases.length > 0 && aliasWindows.length > 0) {
+      const acts: AnyRecord[] =
+        rec[`activities_${year}`] || rec.activities_2026 || [];
+      const quotesAll = acts
+        .map((a) =>
+          a && typeof a === 'object'
+            ? `${a.quote_english || ''} ${a.quote_original || ''}`
+            : String(a),
+        )
+        .join('\n');
+      const covered = myAliases.some((al) => aliasMentions(quotesAll, al));
+      if (!covered) {
+        const aliasList = myAliases.map((a) => `"${a}"`).join(', ');
+        const focusHint =
+          `\n\nFOCUSED PASS — this excerpt is for project "${code}" (alias ${aliasList}) ONLY. IGNORE the multiple-projects scanning rule for this pass: do not scan for codes, do not return a "projects" array, and ignore any other project code or alias that appears. Every passage below mentions ${aliasList}; they describe THIS project.\n` +
+          `Return a SINGLE JSON object: {"project_code": "${code}", "project_name": "", "project_objective": "", "activities_${year}": [ ... ]} — only activities_${year} matters; leave other fields empty.\n` +
+          `Extract every planned ${year} activity these passages describe (pilots, recruitments, service changes, integrations, continued services). HARD REQUIREMENT: each activity's "quote_original" MUST be one exact verbatim sentence from the excerpt that contains ${aliasList} — copied character-for-character, alias included. OMIT any activity with no ${aliasList}-containing sentence. If at least one passage describes a planned activity, you MUST return at least one activity.\n\n`;
+        const focusExcerpt = aliasWindows.join('\n…\n').slice(0, 80000);
+        const focused = await llmExtract(
+          client,
+          deploymentName,
+          prompt,
+          focusHint + focusExcerpt,
+        );
+        if (!('error' in focused)) {
+          const frec: AnyRecord =
+            Array.isArray(focused.projects) && focused.projects.length > 0
+              ? focused.projects[0]
+              : focused;
+          const fActs: AnyRecord[] =
+            frec[`activities_${year}`] || frec.activities_2026 || [];
+          const have = new Set(
+            acts.map((a) =>
+              String(
+                a && typeof a === 'object' ? a.activity || '' : a,
+              ).toLowerCase(),
+            ),
+          );
+          let added = 0;
+          let upgraded = 0;
+          for (const fa of fActs) {
+            if (!fa || typeof fa !== 'object') continue;
+            const label = String(fa.activity || '').toLowerCase();
+            if (!label) continue;
+            // Deterministic gate: the verbatim quote must prove the alias
+            // attribution and exist in the document (whitespace-normalized) —
+            // translated quotes are model output and can carry fabricated
+            // aliases.
+            const fq = String(fa.quote_original || '');
+            if (!myAliases.some((al) => aliasMentions(fq, al))) continue;
+            const normed = (t: string) =>
+              t.replace(/\s+/g, ' ').trim().toLowerCase();
+            if (
+              fq.trim().length < 12 ||
+              !normed(fullText).includes(normed(fq).slice(0, 120))
+            )
+              continue;
+            if (have.has(label)) {
+              // Same activity already extracted with a generic quote — upgrade
+              // its evidence to the alias-bearing sentence instead of skipping.
+              const existing = acts.find(
+                (a) =>
+                  a &&
+                  typeof a === 'object' &&
+                  String(a.activity || '').toLowerCase() === label &&
+                  !myAliases.some((al) =>
+                    aliasMentions(
+                      `${a.quote_english || ''} ${a.quote_original || ''}`,
+                      al,
+                    ),
+                  ),
+              );
+              if (existing) {
+                existing.quote_original =
+                  fa.quote_original || existing.quote_original;
+                if (fa.quote_english) existing.quote_english = fa.quote_english;
+                upgraded++;
+              }
+              continue;
+            }
+            acts.push(fa);
+            have.add(label);
+            added++;
+            if (added >= 8) break;
+          }
+          if (added > 0 || upgraded > 0) {
+            rec[`activities_${year}`] = acts;
+            console.log(
+              `      + ${code}: focused alias pass added ${added}, upgraded evidence on ${upgraded} (${myAliases.join(', ')})`,
+            );
+          } else {
+            console.log(
+              `      - ${code}: focused alias pass returned no alias-quoted activities`,
+            );
+          }
+        }
+      }
     }
 
     rec.project_code = code; // pin: we know which project we asked for
