@@ -283,6 +283,10 @@ function isFlaggedDocType(t?: string): boolean {
   return !!t && /coordinat|strateg/i.test(t);
 }
 
+function isGreenInitiativeDocType(t?: string): boolean {
+  return !!t && /green/i.test(t);
+}
+
 export default function GrantExtractionPage() {
   // Access control — restrict the whole page to allowlisted users.
   const { data: session, status: sessionStatus } = useSession();
@@ -2234,6 +2238,16 @@ export default function GrantExtractionPage() {
                               <span
                                 className="ml-0.5 whitespace-nowrap rounded bg-amber-100 px-1 py-0.5 text-[10px] font-medium uppercase tracking-wide text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
                                 title="Coordination/strategy document — not a project narrative. Review and check the box to include it in the exported CSV."
+                              >
+                                {docTypeForRow(rowIdx)}
+                              </span>
+                            )}
+                            {isGreenInitiativeDocType(
+                              docTypeForRow(rowIdx),
+                            ) && (
+                              <span
+                                className="ml-0.5 whitespace-nowrap rounded bg-emerald-100 px-1 py-0.5 text-[10px] font-medium uppercase tracking-wide text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300"
+                                title="Green Initiative submission — included in the export by default."
                               >
                                 {docTypeForRow(rowIdx)}
                               </span>
