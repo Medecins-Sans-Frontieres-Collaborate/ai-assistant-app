@@ -15,7 +15,7 @@ type AnyRecord = Record<string, any>;
 export const CSV_COLUMNS: string[] = [
   'Project Code',
   'Project Name',
-  'Mission Country',
+  'Country',
   'OC',
   'Project Objective',
   'Key Terms/Activities',
@@ -116,7 +116,7 @@ function recordToRow(
   return {
     'Project Code': safeStr(record.project_code),
     'Project Name': safeStr(record.project_name),
-    'Mission Country': safeStr(record.mission_country || record.country),
+    Country: safeStr(record.mission_country || record.country),
     OC: safeStr(record.oc_name || ocName),
     'Project Objective': safeStr(record.project_objective),
     'Key Terms/Activities': joinList(

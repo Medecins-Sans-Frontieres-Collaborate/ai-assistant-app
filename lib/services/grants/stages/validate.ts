@@ -90,7 +90,7 @@ const COMMON_ACRONYMS = [
 
 const REQUIRED_FIELDS = [
   'Project Name',
-  'Mission Country',
+  'Country',
   'Project Objective',
   'Key Terms/Activities',
 ];
@@ -98,7 +98,7 @@ const REQUIRED_FIELDS = [
 const _INTERNAL_TO_DISPLAY: Record<string, string> = {
   project_code: 'Project Code',
   project_name: 'Project Name',
-  mission_country: 'Mission Country',
+  mission_country: 'Country',
   country: 'Country',
   oc_name: 'OC',
   project_objective: 'Project Objective',
@@ -174,6 +174,7 @@ function normalizeKeys(rec: AnyRecord): AnyRecord {
     }
     mapped[displayKey] = val;
   }
+  if (rec.mission_country) mapped['Country'] = rec.mission_country;
   return mapped;
 }
 
@@ -259,7 +260,7 @@ function r02(rec: AnyRecord, row: number): Flag[] {
 }
 
 function r03(rec: AnyRecord, row: number): Flag[] {
-  const mc = safe(rec['Mission Country']);
+  const mc = safe(rec['Country']);
   const obj = safe(rec['Project Objective']);
   if (!mc || mc.length <= 3 || !obj) return [];
   const mcLower = mc.toLowerCase();

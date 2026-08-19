@@ -198,7 +198,7 @@ const COLUMN_GROUPS: {
 }[] = [
   {
     label: 'Core Identity',
-    columns: ['Project Code', 'Project Name', 'Mission Country', 'OC'],
+    columns: ['Project Code', 'Project Name', 'Country', 'OC'],
   },
   {
     label: 'Project Details',
