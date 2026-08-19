@@ -139,13 +139,30 @@ give every project the union of all services in the document. Two projects that 
 heading (e.g. "SL124 & SL125") must still be differentiated by their individual details — never emit identical
 rows for distinct codes.
 
+PROJECT ALIASES (how multi-cost-center documents usually mark attribution): such documents typically define a
+short alias or site abbreviation for each project code once, near the top — e.g. a cover table listing
+"P1054 Kachin State IDP Health Care (MKA)", "P1756 Hpakant Healthcare (HPK)", "P1072 Eastern Primary
+Healthcare WGM(LZ)" — and the body then references projects ONLY by alias ("a new Mental Health Supervisor
+will be recruited in MKA"). You MUST:
+  1. Build the code-to-alias map from wherever the document introduces it (cover table, header, project list).
+  2. Resolve every alias-labeled activity, section, location, or budget line to that alias's project code and
+     attribute it there — an alias label IS that project's marker.
+  3. A sentence naming several aliases (e.g. "in MKA, HPK and MUS") counts for EACH of those projects.
+Never leave a project without activities merely because its sections are labeled with the alias instead of the
+code — resolve the alias FIRST, then attribute. Do not treat an alias as a separate project.
+QUOTE INTEGRITY: never alter a place name, alias, or site abbreviation inside a quote — "quote_original" is copied character-for-character from the document, and "quote_english" must faithfully render it WITHOUT substituting a different project's location or alias. Changing "in WGM(LZ)" to "in MUS" is falsification.
+In EVERY project object include "project_aliases": an array of the EXACT alias strings the document uses for
+that project (e.g. ["MKA"]), or [] if the document defines none. Evidence discipline: every quote you attach to
+a project must come from that project's own text — a sentence labeled with ANOTHER project's alias is NOT
+evidence for this one, even for an activity both projects perform.
+
 Example multi-project response:
 \`\`\`json
 {
     "document_type": "project narrative",
     "projects": [
-        {"project_code": "P1054", "project_name": "...", ...},
-        {"project_code": "P1055", "project_name": "...", ...}
+        {"project_code": "P1054", "project_name": "...", "project_aliases": ["MKA"], ...},
+        {"project_code": "P1055", "project_name": "...", "project_aliases": ["MUS"], ...}
     ]
 }
 \`\`\`
