@@ -157,12 +157,6 @@ export const TERM_HIERARCHY: Record<string, string[]> = {
     'Severe malnutrition',
   ],
   Malaria: ['Malaria'],
-  'Community Health': [
-    'Community Engagement',
-    'Community Mobilization',
-    'Community Outreach',
-    'Community Health Workers',
-  ],
 };
 
 export const MEDICAL_ACTIVITIES_VOCAB: string[] = [
@@ -183,7 +177,6 @@ export const MEDICAL_ACTIVITIES_VOCAB: string[] = [
   'SRH',
   'Nutrition',
   'Malaria',
-  'Community Health',
   // Additional common terms (not in hierarchy - include as-is)
   'Primary Healthcare',
   'Secondary Healthcare',
@@ -194,7 +187,6 @@ export const MEDICAL_ACTIVITIES_VOCAB: string[] = [
   'Referral Services',
   'Blood Transfusion',
   'Health Promotion',
-  'Community Engagement',
   'Emergency Response',
   'Epidemic Response',
   'Hepatitis C',
@@ -332,6 +324,8 @@ export function normalizeActivity(raw: string): string {
 
   // Drop operational / non-medical labels entirely.
   if (OPERATIONAL_DROP.has(lower)) return '';
+
+  if (lower.includes('community')) return '';
 
   // Pass 0: exact match against canonical category names
   for (const canonical of Object.keys(TERM_HIERARCHY)) {
