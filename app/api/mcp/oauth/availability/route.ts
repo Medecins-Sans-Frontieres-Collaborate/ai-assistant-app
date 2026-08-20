@@ -21,5 +21,7 @@ export async function GET() {
   const session = await auth();
   if (!session?.user) return unauthorizedResponse();
 
-  return successResponse({ availability: getCatalogOauthAppAvailability() });
+  return successResponse({
+    availability: await getCatalogOauthAppAvailability(),
+  });
 }
