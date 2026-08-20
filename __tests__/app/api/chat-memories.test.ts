@@ -261,7 +261,7 @@ describe('/api/chat/memories', () => {
       expect(data.operations).toEqual([{ op: 'delete', id: 'mem-2' }]);
     });
 
-    it('falls back to gpt-5.2-chat for byom- model ids', async () => {
+    it('falls back to gpt-5.4 for byom- model ids', async () => {
       await POST(
         createMemoriesRequest({
           body: {
@@ -273,11 +273,11 @@ describe('/api/chat/memories', () => {
       );
 
       expect(mockCreate).toHaveBeenCalledWith(
-        expect.objectContaining({ model: 'gpt-5.2-chat' }),
+        expect.objectContaining({ model: 'gpt-5.4' }),
       );
     });
 
-    it('falls back to gpt-5.2-chat for agent-prefixed model ids', async () => {
+    it('falls back to gpt-5.4 for agent-prefixed model ids', async () => {
       await POST(
         createMemoriesRequest({
           body: {
@@ -289,11 +289,11 @@ describe('/api/chat/memories', () => {
       );
 
       expect(mockCreate).toHaveBeenCalledWith(
-        expect.objectContaining({ model: 'gpt-5.2-chat' }),
+        expect.objectContaining({ model: 'gpt-5.4' }),
       );
     });
 
-    it('falls back to gpt-5.2-chat for anthropic-foundry model ids', async () => {
+    it('falls back to gpt-5.4 for anthropic-foundry model ids', async () => {
       await POST(
         createMemoriesRequest({
           body: {
@@ -305,11 +305,11 @@ describe('/api/chat/memories', () => {
       );
 
       expect(mockCreate).toHaveBeenCalledWith(
-        expect.objectContaining({ model: 'gpt-5.2-chat' }),
+        expect.objectContaining({ model: 'gpt-5.4' }),
       );
     });
 
-    it('falls back to gpt-5.2-chat for Foundry openai-sdk model ids', async () => {
+    it('falls back to gpt-5.4 for Foundry openai-sdk model ids', async () => {
       await POST(
         createMemoriesRequest({
           body: {
@@ -321,11 +321,11 @@ describe('/api/chat/memories', () => {
       );
 
       expect(mockCreate).toHaveBeenCalledWith(
-        expect.objectContaining({ model: 'gpt-5.2-chat' }),
+        expect.objectContaining({ model: 'gpt-5.4' }),
       );
     });
 
-    it('falls back to gpt-5.2-chat for unknown model ids', async () => {
+    it('falls back to gpt-5.4 for unknown model ids', async () => {
       await POST(
         createMemoriesRequest({
           body: {
@@ -337,7 +337,7 @@ describe('/api/chat/memories', () => {
       );
 
       expect(mockCreate).toHaveBeenCalledWith(
-        expect.objectContaining({ model: 'gpt-5.2-chat' }),
+        expect.objectContaining({ model: 'gpt-5.4' }),
       );
     });
 

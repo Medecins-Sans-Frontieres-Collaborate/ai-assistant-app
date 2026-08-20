@@ -213,7 +213,7 @@ describe('/api/chat/summarize', () => {
       );
     });
 
-    it('falls back to gpt-5.2-chat for byom- model ids', async () => {
+    it('falls back to gpt-5.4 for byom- model ids', async () => {
       await POST(
         createSummarizeRequest({
           body: {
@@ -224,11 +224,11 @@ describe('/api/chat/summarize', () => {
       );
 
       expect(mockCreate).toHaveBeenCalledWith(
-        expect.objectContaining({ model: 'gpt-5.2-chat' }),
+        expect.objectContaining({ model: 'gpt-5.4' }),
       );
     });
 
-    it('falls back to gpt-5.2-chat for agent-prefixed model ids', async () => {
+    it('falls back to gpt-5.4 for agent-prefixed model ids', async () => {
       await POST(
         createSummarizeRequest({
           body: {
@@ -239,11 +239,11 @@ describe('/api/chat/summarize', () => {
       );
 
       expect(mockCreate).toHaveBeenCalledWith(
-        expect.objectContaining({ model: 'gpt-5.2-chat' }),
+        expect.objectContaining({ model: 'gpt-5.4' }),
       );
     });
 
-    it('falls back to gpt-5.2-chat when no modelId is provided', async () => {
+    it('falls back to gpt-5.4 when no modelId is provided', async () => {
       await POST(
         createSummarizeRequest({
           body: { messages: [{ role: 'user', content: 'hi' }] },
@@ -251,11 +251,11 @@ describe('/api/chat/summarize', () => {
       );
 
       expect(mockCreate).toHaveBeenCalledWith(
-        expect.objectContaining({ model: 'gpt-5.2-chat' }),
+        expect.objectContaining({ model: 'gpt-5.4' }),
       );
     });
 
-    it('falls back to gpt-5.2-chat for anthropic-foundry model ids', async () => {
+    it('falls back to gpt-5.4 for anthropic-foundry model ids', async () => {
       await POST(
         createSummarizeRequest({
           body: {
@@ -266,11 +266,11 @@ describe('/api/chat/summarize', () => {
       );
 
       expect(mockCreate).toHaveBeenCalledWith(
-        expect.objectContaining({ model: 'gpt-5.2-chat' }),
+        expect.objectContaining({ model: 'gpt-5.4' }),
       );
     });
 
-    it('falls back to gpt-5.2-chat for Foundry openai-sdk model ids', async () => {
+    it('falls back to gpt-5.4 for Foundry openai-sdk model ids', async () => {
       await POST(
         createSummarizeRequest({
           body: {
@@ -281,11 +281,11 @@ describe('/api/chat/summarize', () => {
       );
 
       expect(mockCreate).toHaveBeenCalledWith(
-        expect.objectContaining({ model: 'gpt-5.2-chat' }),
+        expect.objectContaining({ model: 'gpt-5.4' }),
       );
     });
 
-    it('falls back to gpt-5.2-chat for unknown model ids', async () => {
+    it('falls back to gpt-5.4 for unknown model ids', async () => {
       await POST(
         createSummarizeRequest({
           body: {
@@ -296,7 +296,7 @@ describe('/api/chat/summarize', () => {
       );
 
       expect(mockCreate).toHaveBeenCalledWith(
-        expect.objectContaining({ model: 'gpt-5.2-chat' }),
+        expect.objectContaining({ model: 'gpt-5.4' }),
       );
     });
   });
