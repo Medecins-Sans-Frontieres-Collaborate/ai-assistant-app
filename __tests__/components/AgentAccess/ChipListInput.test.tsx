@@ -203,3 +203,78 @@ describe('ChipListInput suggestions', () => {
     expect(onChange).toHaveBeenCalledWith(['someone@x.org']);
   });
 });
+
+describe('ChipListInput suggestion loading states', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('shows the searching indicator while the fetch is pending, keeping typing unblocked', () => {
+    const suggest = vi.fn(async () => []);
+    render(
+      <ChipListInput
+        values={[]}
+        onChange={vi.fn()}
+        placeholder="add"
+        addHint="more"
+        removeLabel="Remove"
+        suggest={suggest}
+        suggestionsLabel="People"
+      />,
+    );
+    const input = screen.getByPlaceholderText('add');
+
+    fireEvent.change(input, { target: { value: 'ad' } });
+
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Searching your organization…',
+    );
+    // The input still accepts and shows the draft — search never blocks it.
+    expect(input).toHaveValue('ad');
+  });
+
+  it('shows a no-matches row after an empty result', async () => {
+    const suggest = vi.fn(async () => []);
+    render(
+      <ChipListInput
+        values={[]}
+        onChange={vi.fn()}
+        placeholder="add"
+        addHint="more"
+        removeLabel="Remove"
+        suggest={suggest}
+        suggestionsLabel="People"
+      />,
+    );
+    const input = screen.getByPlaceholderText('add');
+
+    fireEvent.change(input, { target: { value: 'zz' } });
+    await act(async () => {
+      vi.advanceTimersByTime(400);
+      await Promise.resolve();
+    });
+
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'No directory matches — you can enter the address manually',
+    );
+  });
+
+  it('never renders status rows without a suggest source', () => {
+    render(
+      <ChipListInput
+        values={[]}
+        onChange={vi.fn()}
+        placeholder="add"
+        addHint="more"
+        removeLabel="Remove"
+      />,
+    );
+    fireEvent.change(screen.getByPlaceholderText('add'), {
+      target: { value: 'ad' },
+    });
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+  });
+});

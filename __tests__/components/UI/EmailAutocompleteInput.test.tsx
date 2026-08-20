@@ -135,3 +135,75 @@ describe('EmailAutocompleteInput', () => {
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 });
+
+describe('EmailAutocompleteInput loading states', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('shows the searching indicator immediately while typing, before the debounce fires', () => {
+    const suggest = vi.fn(async () => PEOPLE);
+    render(<Harness suggest={suggest} />);
+    const input = screen.getByPlaceholderText('email');
+
+    fireEvent.change(input, { target: { value: 'ad' } });
+
+    // No timers advanced: the fetch hasn't even been scheduled yet, but the
+    // field already reads as assisted.
+    expect(suggest).not.toHaveBeenCalled();
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Searching your organization…',
+    );
+    expect(input).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  it('shows a no-matches row when the search resolves empty', async () => {
+    const suggest = vi.fn(async () => []);
+    render(<Harness suggest={suggest} />);
+    const input = screen.getByPlaceholderText('email');
+
+    fireEvent.change(input, { target: { value: 'zz' } });
+    await act(async () => {
+      vi.advanceTimersByTime(400);
+      await Promise.resolve();
+    });
+
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'No directory matches — you can enter the address manually',
+    );
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+  });
+
+  it('shows nothing after a failed search — broken assistance never claims "no matches"', async () => {
+    const suggest = vi.fn(async () => {
+      throw new Error('offline');
+    });
+    render(<Harness suggest={suggest} />);
+    const input = screen.getByPlaceholderText('email');
+
+    fireEvent.change(input, { target: { value: 'ad' } });
+    await act(async () => {
+      vi.advanceTimersByTime(400);
+      await Promise.resolve();
+    });
+
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    expect(input).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('clears the searching indicator when the token drops below the minimum', () => {
+    const suggest = vi.fn(async () => PEOPLE);
+    render(<Harness suggest={suggest} />);
+    const input = screen.getByPlaceholderText('email');
+
+    fireEvent.change(input, { target: { value: 'ad' } });
+    expect(screen.getByRole('status')).toBeInTheDocument();
+
+    fireEvent.change(input, { target: { value: 'a' } });
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+  });
+});
