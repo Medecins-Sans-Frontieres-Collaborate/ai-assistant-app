@@ -20,6 +20,17 @@ vi.mock('@/client/hooks/conversation/useConversations', () => ({
   }),
 }));
 
+// The agent section pulls the discovered-agent list (React Query + LD flags
+// underneath) — stub it so the connector rows under test render standalone.
+vi.mock('@/client/hooks/settings/useAvailableAgents', () => ({
+  useAvailableAgents: () => ({ agents: [], isLoading: false }),
+  findAttachedAgent: () => undefined,
+}));
+
+vi.mock('@/client/hooks/settings/useSettings', () => ({
+  useSettings: () => ({ models: [], defaultModelId: undefined }),
+}));
+
 type TestServer = {
   id: string;
   name: string;
@@ -33,6 +44,10 @@ function setServers(servers: TestServer[]) {
     mcpServers: servers as unknown as ReturnType<
       typeof useSettingsStore.getState
     >['mcpServers'],
+    // These suites exercise plain MCP connectors; keep the builtin M365 row
+    // out of the tray (m365Connected defaults to true since v57). The
+    // builtin-row suites below opt back in explicitly.
+    m365Connected: false,
   });
 }
 

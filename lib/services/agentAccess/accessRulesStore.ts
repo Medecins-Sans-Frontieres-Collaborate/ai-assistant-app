@@ -7,6 +7,7 @@ import {
 } from '@/lib/services/agentAccess/blobCas';
 import { defineBlobEntity } from '@/lib/services/agentAccess/blobEntityStore';
 import {
+  AGENT_ACCESS_CATALOG_OAUTH_PREFIX,
   AGENT_ACCESS_CONFIG_PATH,
   AGENT_ACCESS_CONNECTORS_PREFIX,
   AGENT_ACCESS_GENERATION_PATH,
@@ -22,6 +23,11 @@ import {
   AgentAccessHistoryEntrySchema,
   AgentAccessRule,
   AgentAccessRuleSchema,
+  CATALOG_OAUTH_SOURCE,
+  CatalogOauthApp,
+  CatalogOauthAppHistoryEntry,
+  CatalogOauthAppHistoryEntrySchema,
+  CatalogOauthAppSchema,
   GUIDE_SOURCE,
   Guide,
   GuideHistoryEntry,
@@ -57,6 +63,7 @@ import {
   PromptAgentHistoryEntrySchema,
   PromptAgentSchema,
   canonicalAgentKey,
+  catalogOauthBlobPath,
   connectorBlobPath,
   guideBlobPath,
   historyBlobPath,
@@ -167,6 +174,20 @@ export interface StoredMcpConnector {
   blobPath: string;
   connector: McpConnector;
   /** Raw (quoted) Azure ETag — echoed to admin clients for If-Match CAS. */
+  etag: string;
+}
+
+export interface StoredCatalogOauthApp {
+  /** `catalog-oauth::<catalogKey>`. */
+  canonicalKey: string;
+  blobPath: string;
+  app: CatalogOauthApp;
+  /** Raw (quoted) Azure ETag — echoed to admin clients for If-Match CAS. */
+  etag: string;
+}
+
+export interface CatalogOauthAppReadResult {
+  app: CatalogOauthApp;
   etag: string;
 }
 
@@ -547,6 +568,20 @@ const connectorEntity = defineBlobEntity<
   labelBase: 'Connector',
 });
 
+const catalogOauthEntity = defineBlobEntity<
+  CatalogOauthApp,
+  CatalogOauthAppHistoryEntry
+>({
+  logNoun: 'catalog-oauth-app',
+  errorNoun: 'catalog OAuth app',
+  source: CATALOG_OAUTH_SOURCE,
+  listPrefix: AGENT_ACCESS_CATALOG_OAUTH_PREFIX,
+  blobPath: catalogOauthBlobPath,
+  schema: CatalogOauthAppSchema,
+  historySchema: CatalogOauthAppHistoryEntrySchema,
+  labelBase: 'CatalogOauthApp',
+});
+
 const guideEntity = defineBlobEntity<Guide, GuideHistoryEntry>({
   logNoun: 'guide',
   errorNoun: 'guide',
@@ -746,6 +781,58 @@ export function writeConnectorHistoryEntry(
   entry: McpConnectorHistoryEntry,
 ): Promise<void> {
   return connectorEntity.writeHistory(storage, entry);
+}
+
+/* --- Catalog OAuth apps --------------------------------------------- */
+
+export async function listAllCatalogOauthApps(
+  storage: BlobStorage,
+): Promise<StoredCatalogOauthApp[]> {
+  const entries = await catalogOauthEntity.listAll(storage);
+  return entries.map(({ canonicalKey, blobPath, record, etag }) => ({
+    canonicalKey,
+    blobPath,
+    app: record,
+    etag,
+  }));
+}
+
+/** Reads one catalog OAuth app by catalog key. Null when none exists. */
+export async function readCatalogOauthApp(
+  storage: BlobStorage,
+  catalogKey: string,
+): Promise<CatalogOauthAppReadResult | null> {
+  const result = await catalogOauthEntity.read(storage, catalogKey);
+  return result && { app: result.record, etag: result.etag };
+}
+
+/**
+ * Compare-and-swap catalog OAuth app write. The record id (= catalog key)
+ * derives both the blob path and the sealed secret's AAD binding, and the
+ * history entry carries the record verbatim INCLUDING its sealed secret —
+ * sealed, so the audit trail never holds plaintext.
+ */
+export function writeCatalogOauthApp(
+  storage: BlobStorage,
+  app: CatalogOauthApp,
+  ifMatchEtag: string | null,
+): Promise<string> {
+  return catalogOauthEntity.write(storage, app, ifMatchEtag);
+}
+
+export function deleteCatalogOauthApp(
+  storage: BlobStorage,
+  catalogKey: string,
+  ifMatchEtag: string,
+): Promise<boolean> {
+  return catalogOauthEntity.remove(storage, catalogKey, ifMatchEtag);
+}
+
+export function writeCatalogOauthAppHistoryEntry(
+  storage: BlobStorage,
+  entry: CatalogOauthAppHistoryEntry,
+): Promise<void> {
+  return catalogOauthEntity.writeHistory(storage, entry);
 }
 
 /* --- Workflow guides ------------------------------------------------ */

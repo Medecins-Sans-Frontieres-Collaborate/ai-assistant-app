@@ -986,7 +986,9 @@
     "quickActions": "Ficilada Degdegga ah",
     "expandFolder": "Balaadhi galka {name}",
     "collapseFolder": "Yaree galka {name}",
-    "folderOptions": "Xulashooyinka {name}"
+    "folderOptions": "Xulashooyinka {name}",
+    "agentsEntry": "Wakiillo",
+    "agentsTitle": "Baadh wakiillo waxaadna wada sheekaysi la bilaabi kartaa midkood"
   },
   "errors": {
     "somethingWentWrong": "Wax baa qalday",
@@ -4036,7 +4038,30 @@
     "conflictTakeTheirs": "Qaado nuqulkooda",
     "conflictNoFieldDiff": "Qiima kastaa waa isku mid — nooca diiwaanka ayaa kaliya la beddelay.",
     "conflictRecordGone": "Diiwaankan waa la tirtiray (ama lama soo celin karo). Nuqul ka qaado wixii aad u baahan tahay foomka, kadibna dib u rar.",
-    "groupsFlagOff": "Bartilmaameedka kooxaha lama hawlgelin deegaankaan weli. Kooxaha jira wali way shaqaynayaan."
+    "groupsFlagOff": "Bartilmaameedka kooxaha lama hawlgelin deegaankaan weli. Kooxaha jira wali way shaqaynayaan.",
+    "catalogOauth": {
+      "title": "Barnaamijyada OAuth ee isku xirka ku dhexjira",
+      "description": "Barnaamijyada OAuth guud ahaan u dhaqangala isku-xirayaasha ku dhexjira (GitHub, Asana, ...). Diiwaan halkan lagu keydiyo wuxuu ka horeynayaa beddelka MCP_OAUTH_* ee deegaanka; tirtiristiisuna waxay dib ugu laabanaysaa kuwa deegaanka. Sirta macaamiisha waa la sirayaa xilliga keydinta mana la muujinayo mar kale.",
+      "badgeAdmin": "Halkan ayaa lagu qeexay",
+      "badgeEnv": "Ka socota deegaanka",
+      "badgeNone": "Aan la qaabeyn",
+      "badgeDcr": "Isdiiwaangelin toos ah",
+      "badgeDcrHint": "Bixiyahan wuxuu si otomaatig ah u diiwaangeliyaa macaamiisha OAuth, sidaas darteed wuu shaqeynayaa xitaa haddii app halkan aan lagu diiwaangalin.",
+      "clientIdLabel": "Aqoonsiga macaamiisha OAuth",
+      "clientSecretLabel": "Sirta macaamiisha OAuth",
+      "secretStoredPlaceholder": "La keydiyay — qor si aad u beddesho, madhnaanta sii si aad u ilaaliso",
+      "secretNewPlaceholder": "Ku dhaji sirta macaamiisha",
+      "save": "Kaydi",
+      "remove": "Tirtir",
+      "removeToEnv": "Tirtir (ugu laabo deegaanka)",
+      "saved": "{name} barnaamijka OAuth waa la keydiyay",
+      "removed": "{name} barnaamijka OAuth waa la tirtiray",
+      "saveError": "Keydinta barnaamijka OAuth waa ay fashilantay. Fadlan mar kale isku day.",
+      "conflict": "Diiwaankaan waxaa laga beddelay meel kale — dib ayaa loo cusbooneysiiyay, fadlan mar kale isku day.",
+      "storageUnavailable": "Keydka maamulka lama heli karo; diiwaanada jirana lama soo bandhigi karo. Keydintu waa la xannibay ilaa ay soo hagaagayso.",
+      "sealingUnavailable": "Sirta kaydinta lama qaabeyn qorshahan (AUTH_SECRET waa maqan yahay) — siraha macaamiisha lama kaydin karo.",
+      "updatedBy": "Waxaa cusbooneysiiyay {by} {at}"
+    }
   },
   "localModels": {
     "title": "Moodallo maxalli ah",
@@ -4803,5 +4828,51 @@
     "failed": "Lama wadaagi karin — wax lama abuurin.",
     "copyFailed": "Link-ga lama koobi karin — fadlan kor ka dooro oo gacanta ku koobi.",
     "lastMessagesCountLabel": "Tirada fariimaha dhow ee la darinayo"
+  },
+  "toolModes": {
+    "webSearch": "Raadinta webka",
+    "codeInterpreter": "Fasiraadda koodhka",
+    "off": "Dami",
+    "auto": "Si toos ah",
+    "always": "Had iyo jeer",
+    "routingPrivacy": "Arrimaha asturnaanta",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI search waxay weydiimaha u dirtaa Azure AI Foundry, waana suurtagal inay kaydiso.",
+    "learnMore": "Wax dheeri ah baro"
+  },
+  "agentAttach": {
+    "browserTitle": "Wakiillo",
+    "browserSubtitle": "Ku dar wakiillo iyo isku-xidhayaal sheekadan, ama wakiil cusub la bilaaw. Waa la jaan qaadi karaan inta badan moodellada aad dooratay.",
+    "searchPlaceholder": "Raadi wakiillo iyo isku-xidhayaal…",
+    "loading": "Wakiillada waa la rarayaa…",
+    "noMatches": "Waxba lama helin raadintaada.",
+    "noAgents": "Wakiil lama heli karo.",
+    "addToChat": "Ku dar sheekadan",
+    "removeFromChat": "Ka saar sheekadan",
+    "newChat": "Sheeko cusub",
+    "attached": "Kusoo xiran",
+    "detach": "Ka xiro",
+    "change": "Beddel",
+    "browse": "Baadh wakiillo…",
+    "noAgent": "Wakiil sooxiran ma jiro",
+    "close": "Xidh",
+    "kind": {
+      "rag": "Aqoonta",
+      "prompt": "Qof ahaaneed",
+      "m365": "Aqoonta (Microsoft 365)",
+      "org": "Aqoonta",
+      "foundry": "Wakiilka Foundry",
+      "connector": "Isku-xidhaha"
+    },
+    "semantics": {
+      "your-model": "waxay adeegsataa moodelkaaga",
+      "pinned-model": "moodel uu doortay maamulaha",
+      "own-model": "waxay ku socotaa moodelkeeda gaarka ah"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Talooyin ka socda ururkaaga",
+    "searching": "Waxaan ka raadinayaa hay’addaada…",
+    "noMatches": "Lama helin wax u dhigma buugga — waad gali kartaa cinwaanka gacanta"
   }
 }

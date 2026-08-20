@@ -22,6 +22,11 @@ const serviceMock = vi.hoisted(() => ({
   isEnabled: vi.fn(() => true),
   ensureFresh: vi.fn(async () => {}),
   getConnectorById: vi.fn<(id: string) => McpConnector | null>(() => null),
+  getCatalogOauthApp: vi.fn<
+    (
+      key: string,
+    ) => import('@/lib/services/agentAccess/types').CatalogOauthApp | null
+  >(() => null),
 }));
 
 vi.mock('@/config/environment', () => ({ env: mockEnv }));
@@ -60,6 +65,9 @@ describe('getOauthClientCredentials', () => {
     vi.clearAllMocks();
     mockEnv.AUTH_SECRET = 'test-server-secret';
     serviceMock.isEnabled.mockReturnValue(true);
+    serviceMock.getCatalogOauthApp.mockReturnValue(null);
+    mockEnv.MCP_OAUTH_GITHUB_CLIENT_ID = undefined;
+    mockEnv.MCP_OAUTH_GITHUB_CLIENT_SECRET = undefined;
   });
 
   describe('catalog entries', () => {
@@ -78,6 +86,65 @@ describe('getOauthClientCredentials', () => {
       await expect(
         getOauthClientCredentials({ catalogKey: 'github' }),
       ).resolves.toBeNull();
+    });
+  });
+
+  describe('catalog entries — admin records (Admin → Connectors)', () => {
+    const adminApp = {
+      version: 1 as const,
+      id: 'github',
+      clientId: 'admin-client',
+      createdBy: 'global@example.com',
+      createdAt: '2026-08-20T00:00:00.000Z',
+      updatedBy: 'global@example.com',
+      updatedAt: '2026-08-20T00:00:00.000Z',
+    };
+
+    it('prefers an admin-stored app over the env pair', async () => {
+      mockEnv.MCP_OAUTH_GITHUB_CLIENT_ID = 'env-client';
+      mockEnv.MCP_OAUTH_GITHUB_CLIENT_SECRET = 'env-secret';
+      serviceMock.getCatalogOauthApp.mockReturnValue({
+        ...adminApp,
+        clientSecret: sealConnectorSecret('github', 'admin-secret'),
+      });
+
+      await expect(
+        getOauthClientCredentials({ catalogKey: 'github' }),
+      ).resolves.toEqual({
+        clientId: 'admin-client',
+        clientSecret: 'admin-secret',
+      });
+    });
+
+    it('supports secretless (public-client) admin records', async () => {
+      serviceMock.getCatalogOauthApp.mockReturnValue(adminApp);
+
+      await expect(
+        getOauthClientCredentials({ catalogKey: 'github' }),
+      ).resolves.toEqual({ clientId: 'admin-client' });
+    });
+
+    it('falls back to env when agent access control is disabled', async () => {
+      serviceMock.isEnabled.mockReturnValue(false);
+      mockEnv.MCP_OAUTH_GITHUB_CLIENT_ID = 'env-client';
+
+      await expect(
+        getOauthClientCredentials({ catalogKey: 'github' }),
+      ).resolves.toEqual({ clientId: 'env-client', clientSecret: undefined });
+      expect(serviceMock.getCatalogOauthApp).not.toHaveBeenCalled();
+    });
+
+    it('surfaces an unreadable sealed secret as CONNECTOR_SECRET_UNREADABLE instead of falling back to env', async () => {
+      mockEnv.MCP_OAUTH_GITHUB_CLIENT_ID = 'env-client';
+      serviceMock.getCatalogOauthApp.mockReturnValue({
+        ...adminApp,
+        // Sealed under a DIFFERENT id — the AAD check must fail.
+        clientSecret: sealConnectorSecret('asana', 'admin-secret'),
+      });
+
+      await expect(
+        getOauthClientCredentials({ catalogKey: 'github' }),
+      ).rejects.toMatchObject({ code: 'CONNECTOR_SECRET_UNREADABLE' });
     });
   });
 

@@ -906,7 +906,9 @@
     "quickActions": "Rychlé akce",
     "expandFolder": "Rozbalit složku {name}",
     "collapseFolder": "Sbalit složku {name}",
-    "folderOptions": "Možnosti složky {name}"
+    "folderOptions": "Možnosti složky {name}",
+    "agentsEntry": "Agenti",
+    "agentsTitle": "Procházejte agenty a začněte s některým chatovat"
   },
   "prompts": {
     "buildReusablePrompts": "Vytvářejte opakovaně použitelné výzvy s pomocí AI",
@@ -4052,7 +4054,30 @@
     "conflictTakeTheirs": "Převzít jejich verzi",
     "conflictNoFieldDiff": "Hodnoty souhlasí — změnila se pouze verze záznamu.",
     "conflictRecordGone": "Tento záznam byl smazán (nebo jej nelze znovu načíst). Zkopírujte vše potřebné z formuláře a znovu načtěte.",
-    "groupsFlagOff": "Cílení na skupiny zde zatím není povoleno. Stávající cíle skupin dál fungují."
+    "groupsFlagOff": "Cílení na skupiny zde zatím není povoleno. Stávající cíle skupin dál fungují.",
+    "catalogOauth": {
+      "title": "Integrované OAuth aplikace konektorů",
+      "description": "OAuth aplikace pro integrované konektory (GitHub, Asana, …) platné v celé instalaci. Záznam uložený zde přepisuje proměnné prostředí MCP_OAUTH_*. Jeho odstraněním se vrátí použití těchto proměnných. Klientská tajemství jsou v klidu šifrována a po uložení již nejsou opět zobrazena.",
+      "badgeAdmin": "Nastaveno zde",
+      "badgeEnv": "Z prostředí",
+      "badgeNone": "Nenastaveno",
+      "badgeDcr": "Automatická registrace",
+      "badgeDcrHint": "Tento poskytovatel může zaregistrovat OAuth klienta automaticky, takže funguje i bez zde nastavené aplikace.",
+      "clientIdLabel": "ID OAuth klienta",
+      "clientSecretLabel": "Tajemství OAuth klienta",
+      "secretStoredPlaceholder": "Uloženo — napište pro změnu, ponechte prázdné pro zachování",
+      "secretNewPlaceholder": "Vložte klientské tajemství",
+      "save": "Uložit",
+      "remove": "Odstranit",
+      "removeToEnv": "Odstranit (vrátit na prostředí)",
+      "saved": "OAuth aplikace {name} uložena",
+      "removed": "OAuth aplikace {name} odstraněna",
+      "saveError": "Uložení OAuth aplikace selhalo. Zkuste to znovu.",
+      "conflict": "Tento záznam byl změněn jinde — znovu načteno, zkuste znovu.",
+      "storageUnavailable": "Úložiště pro správu není dostupné; stávající záznamy nelze zobrazit. Ukládání je do obnovení vypnuto.",
+      "sealingUnavailable": "Šifrování tajemství není v této instalaci nastaveno (chybí AUTH_SECRET) — klientská tajemství nelze uložit.",
+      "updatedBy": "Aktualizoval(a) {by} dne {at}"
+    }
   },
   "localModels": {
     "title": "Lokální modely",
@@ -4819,5 +4844,51 @@
     "failed": "Sdílení se nezdařilo – nic nebylo vytvořeno.",
     "copyFailed": "Odkaz se nepodařilo zkopírovat — vyberte jej výše a zkopírujte ručně.",
     "lastMessagesCountLabel": "Počet posledních zpráv k zahrnutí"
+  },
+  "toolModes": {
+    "webSearch": "Vyhledávání na webu",
+    "codeInterpreter": "Interpret kódu",
+    "off": "Vypnuto",
+    "auto": "Automaticky",
+    "always": "Vždy",
+    "routingPrivacy": "Soukromí",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Vyhledávání Azure AI odesílá dotazy přes Azure AI Foundry, kde mohou být uchovávány.",
+    "learnMore": "Zjistit více"
+  },
+  "agentAttach": {
+    "browserTitle": "Agenti",
+    "browserSubtitle": "Přidejte do tohoto chatu agenty a konektory, nebo začněte nový chat s agentem. Většina funguje s modelem, který jste si vybrali.",
+    "searchPlaceholder": "Hledejte agenty a konektory…",
+    "loading": "Načítání agentů…",
+    "noMatches": "Vašemu hledání nic neodpovídá.",
+    "noAgents": "Nejsou dostupní žádní agenti.",
+    "addToChat": "Přidat do tohoto chatu",
+    "removeFromChat": "Odebrat z tohoto chatu",
+    "newChat": "Nový chat",
+    "attached": "Připojeno",
+    "detach": "Odpojit",
+    "change": "Změnit",
+    "browse": "Procházet agenty…",
+    "noAgent": "Není připojen žádný agent",
+    "close": "Zavřít",
+    "kind": {
+      "rag": "Znalosti",
+      "prompt": "Osobnost",
+      "m365": "Znalosti (Microsoft 365)",
+      "org": "Znalosti",
+      "foundry": "Foundry agent",
+      "connector": "Konektor"
+    },
+    "semantics": {
+      "your-model": "používá váš model",
+      "pinned-model": "model nastavený správcem",
+      "own-model": "běží na vlastním modelu"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Návrhy z vaší organizace",
+    "searching": "Vyhledávání ve vaší organizaci…",
+    "noMatches": "Žádné shody v adresáři — můžete zadat adresu ručně"
   }
 }

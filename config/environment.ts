@@ -172,13 +172,13 @@ const serverEnvSchema = z.object({
   CODE_INTERPRETER_ENABLED: booleanString(true),
   // Deployment that backs the interpreter sub-tool round-trip (must support
   // the Responses-API code_interpreter tool in the project's region).
-  CODE_INTERPRETER_MODEL: z.string().default('gpt-5.2'),
+  CODE_INTERPRETER_MODEL: z.string().default('gpt-5.4'),
 
   // Deployment used by the 'bing-responses' web-search provider (Responses
   // API native web_search tool). Must be a Responses-capable deployment in
   // the default Foundry project, with the web_search tool enabled on the
   // subscription.
-  WEB_SEARCH_RESPONSES_MODEL: z.string().default('gpt-5.2'),
+  WEB_SEARCH_RESPONSES_MODEL: z.string().default('gpt-5.4'),
 
   // MCP (Model Context Protocol) connectors
   // Server-side gate for ARBITRARY (non-catalog) MCP server URLs — defense in

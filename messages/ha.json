@@ -986,7 +986,9 @@
     "quickActions": "Ayyuka masu sauri",
     "expandFolder": "Faɗaɗa babban fayil {name}",
     "collapseFolder": "Rufewa babban fayil {name}",
-    "folderOptions": "Zaɓuɓɓukan {name}"
+    "folderOptions": "Zaɓuɓɓukan {name}",
+    "agentsEntry": "Wakilai",
+    "agentsTitle": "Bincika wakilai kuma fara hira da ɗaya"
   },
   "errors": {
     "somethingWentWrong": "Wani abu ya samu matsala",
@@ -4036,7 +4038,30 @@
     "conflictTakeTheirs": "Karbi nasu",
     "conflictNoFieldDiff": "Ƙimar sun yi daidai — sigar bayanai kawai ta canza.",
     "conflictRecordGone": "An goge wannan bayanin (ko ba a iya sake lodawa ba). Kwafi duk abin da kake bukata daga fom, sannan kayi loda.",
-    "groupsFlagOff": "Ba a kunna nufin ƙungiyoyi ga wannan muhallin ba tukuna. Tsoffin nufin ƙungiyoyi suna aiki har yanzu."
+    "groupsFlagOff": "Ba a kunna nufin ƙungiyoyi ga wannan muhallin ba tukuna. Tsoffin nufin ƙungiyoyi suna aiki har yanzu.",
+    "catalogOauth": {
+      "title": "Manhajojin OAuth na mai haɗin gwiwa na ciki",
+      "description": "Manhajojin OAuth na gaba ɗaya don masu haɗin gwiwa na ciki (GitHub, Asana, ...). Duk bayanin da aka adana a nan zai wuce ƙimar MCP_OAUTH_* environment variables; gogewa zai maido da su. Ana ɓoye sirrin abokin ciniki a lokacin ajiyewa kuma ba za a sake nuna shi ba.",
+      "badgeAdmin": "An saita a nan",
+      "badgeEnv": "Daga environment",
+      "badgeNone": "Ba a saita ba",
+      "badgeDcr": "Yana yin rajista kansa",
+      "badgeDcrHint": "Wannan mai ba da sabis na iya rajistar abokin OAuth kai tsaye, don haka zai yi aiki koda ba a saita app a nan ba.",
+      "clientIdLabel": "OAuth client ID",
+      "clientSecretLabel": "OAuth client secret",
+      "secretStoredPlaceholder": "An ajiye — shiga don maye, bar babu komai don ci gaba",
+      "secretNewPlaceholder": "Liƙa sirrin abokin ciniki",
+      "save": "Ajiye",
+      "remove": "Cire",
+      "removeToEnv": "Cire (dawo da environment)",
+      "saved": "An ajiye manhajar OAuth {name}",
+      "removed": "An cire manhajar OAuth {name}",
+      "saveError": "Ajiye manhajar OAuth ya gaza. Tofa ƙoƙari.",
+      "conflict": "An canza wannan bayanin a wani wuri — an sake lodawa, don Allah ku sake gwadawa.",
+      "storageUnavailable": "Ba a iya samun ajiyar admin; ba a iya jera bayanan da suke akwai. Ajiya yana a kashe har sai an gyara.",
+      "sealingUnavailable": "Ba a saita ɓoye sirri ba a wannan warwarewa (AUTH_SECRET babu) — ba za a iya adana sirrin abokin ba.",
+      "updatedBy": "An sabunta ta {by} a {at}"
+    }
   },
   "localModels": {
     "title": "Samfuran cikin gida",
@@ -4803,5 +4828,51 @@
     "failed": "Ba a iya raba ba — ba a ƙirƙiri komai ba.",
     "copyFailed": "An kasa kwafa hanyar haɗi — a zaɓi ta a sama ku kwafa da hannu.",
     "lastMessagesCountLabel": "Yawan saƙonnin baya da za a lissafa"
+  },
+  "toolModes": {
+    "webSearch": "Binciken yanar gizo",
+    "codeInterpreter": "Mai fassara lambar kwamfuta",
+    "off": "A kashe",
+    "auto": "Ta atomatik",
+    "always": "Kullum",
+    "routingPrivacy": "Sirri",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Binciken Azure AI yana tura tambayoyi ta Azure AI Foundry, wanda zai iya adana su.",
+    "learnMore": "Kara sani"
+  },
+  "agentAttach": {
+    "browserTitle": "Wakilai",
+    "browserSubtitle": "Ƙara wakilai da connectors cikin wannan hira, ko fara hira da sabon wakili. Yawancinsu suna aiki da duk wani samfurin da ka zaba.",
+    "searchPlaceholder": "Nemo wakilai da connectors…",
+    "loading": "Ana loda wakilai…",
+    "noMatches": "Ba a samu daidaituwa da bincikanka ba.",
+    "noAgents": "Babu wakili a halin yanzu.",
+    "addToChat": "Ƙara zuwa wannan hira",
+    "removeFromChat": "Cire daga wannan hira",
+    "newChat": "Sabuwar hira",
+    "attached": "An haɗa",
+    "detach": "Cire haɗin",
+    "change": "Canja",
+    "browse": "Bincika wakilai…",
+    "noAgent": "Babu wakili da aka haɗa",
+    "close": "Rufe",
+    "kind": {
+      "rag": "Sanin ilimi",
+      "prompt": "Hali",
+      "m365": "Sanin ilimi (Microsoft 365)",
+      "org": "Sanin ilimi",
+      "foundry": "Wakilin Foundry",
+      "connector": "Mai haɗawa"
+    },
+    "semantics": {
+      "your-model": "yana amfani da samfurinka",
+      "pinned-model": "samfurin da mai gudanarwa ya saita",
+      "own-model": "yana aiki da samfurinsa kansa"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Shawarwari daga ƙungiyarku",
+    "searching": "Ana bincika ƙungiyarku…",
+    "noMatches": "Babu abin da ya dace a cikin kundin — za ka iya shigar da adireshin da hannu"
   }
 }

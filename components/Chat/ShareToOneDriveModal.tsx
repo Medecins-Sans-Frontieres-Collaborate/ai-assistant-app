@@ -14,11 +14,12 @@ import toast from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
 
 import { buildBlob } from '@/client/hooks/document/useM365Save';
+import {
+  TypeaheadFetch,
+  useTypeaheadSuggestions,
+} from '@/client/hooks/useTypeaheadSuggestions';
 
 import {
-  M365PersonSuggestion,
-  M365_SEARCH_DEBOUNCE_MS,
-  M365_SEARCH_MIN_CHARS,
   saveToOneDrive,
   searchPeople,
   shareDriveItem,
@@ -34,6 +35,10 @@ import { markdownToHtml } from '@/lib/utils/shared/document/formatConverter';
 import { Conversation, Message } from '@/types/chat';
 
 import Modal from '@/components/UI/Modal';
+import {
+  TypeaheadDropdown,
+  typeaheadDropdownOpen,
+} from '@/components/UI/TypeaheadDropdown';
 
 interface ShareToOneDriveModalProps {
   isOpen: boolean;
@@ -110,58 +115,36 @@ export const ShareToOneDriveModal: FC<ShareToOneDriveModalProps> = ({
   const [isSharing, setIsSharing] = useState(false);
   const [outcome, setOutcome] = useState<ShareOutcome | null>(null);
   const [copied, setCopied] = useState(false);
-  // People autocomplete for the in-progress recipient token. Suggestions
-  // are a convenience: any fetch failure (not connected, consent gap,
-  // throttle) silently yields none and typing plain emails keeps working.
-  const [suggestions, setSuggestions] = useState<M365PersonSuggestion[]>([]);
-  const [activeSuggestion, setActiveSuggestion] = useState(0);
-  const suggestionsAbortRef = useRef<AbortController | null>(null);
-  const suggestionsTimerRef = useRef<number | null>(null);
   const titleInputRef = useRef<HTMLInputElement | null>(null);
 
-  const clearSuggestions = () => {
-    suggestionsAbortRef.current?.abort();
-    if (suggestionsTimerRef.current !== null) {
-      window.clearTimeout(suggestionsTimerRef.current);
-      suggestionsTimerRef.current = null;
-    }
-    setSuggestions([]);
-    setActiveSuggestion(0);
-  };
+  // People autocomplete for the in-progress recipient token, on the shared
+  // typeahead machinery (searching / no-matches feedback included).
+  // Suggestions are a convenience: any fetch failure (not connected, consent
+  // gap, throttle) silently yields none and typing plain emails keeps
+  // working. The modal only opens on sharing-enabled + connected surfaces,
+  // so no additional gate is needed here.
+  const suggestPeople: TypeaheadFetch = async (q, signal) =>
+    (await searchPeople(q, signal)).map((person) => ({
+      label: person.displayName,
+      value: person.email,
+    }));
+  const {
+    suggestions,
+    status: suggestStatus,
+    activeIndex: activeSuggestion,
+    setActiveIndex: setActiveSuggestion,
+    query: querySuggestions,
+    clear: clearSuggestions,
+  } = useTypeaheadSuggestions(suggestPeople);
 
   const handleRecipientsChange = (value: string) => {
     setRecipientsRaw(value);
-    suggestionsAbortRef.current?.abort();
-    if (suggestionsTimerRef.current !== null) {
-      window.clearTimeout(suggestionsTimerRef.current);
-    }
-    const token = currentToken(value);
-    if (token.length < M365_SEARCH_MIN_CHARS) {
-      setSuggestions([]);
-      setActiveSuggestion(0);
-      return;
-    }
-    suggestionsTimerRef.current = window.setTimeout(() => {
-      const controller = new AbortController();
-      suggestionsAbortRef.current = controller;
-      searchPeople(token, controller.signal)
-        .then((people) => {
-          if (controller.signal.aborted) return;
-          // Don't resurface people already added as recipients.
-          const existing = new Set(
-            parseEmails(value).emails.map((e) => e.toLowerCase()),
-          );
-          setSuggestions(people.filter((p) => !existing.has(p.email)));
-          setActiveSuggestion(0);
-        })
-        .catch(() => {
-          if (!controller.signal.aborted) setSuggestions([]);
-        });
-    }, M365_SEARCH_DEBOUNCE_MS);
+    // Don't resurface people already added as recipients.
+    querySuggestions(currentToken(value), parseEmails(value).emails);
   };
 
-  const selectSuggestion = (person: M365PersonSuggestion) => {
-    setRecipientsRaw((prev) => completeToken(prev, person.email));
+  const selectSuggestion = (email: string) => {
+    setRecipientsRaw((prev) => completeToken(prev, email));
     clearSuggestions();
   };
 
@@ -182,8 +165,7 @@ export const ShareToOneDriveModal: FC<ShareToOneDriveModalProps> = ({
     setIsSharing(false);
     setOutcome(null);
     setCopied(false);
-    setSuggestions([]);
-    setActiveSuggestion(0);
+    clearSuggestions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
@@ -401,68 +383,45 @@ export const ShareToOneDriveModal: FC<ShareToOneDriveModalProps> = ({
                       if (e.key === 'ArrowDown') {
                         e.preventDefault();
                         setActiveSuggestion(
-                          (i) => (i + 1) % suggestions.length,
+                          (activeSuggestion + 1) % suggestions.length,
                         );
                       } else if (e.key === 'ArrowUp') {
                         e.preventDefault();
                         setActiveSuggestion(
-                          (i) =>
-                            (i - 1 + suggestions.length) % suggestions.length,
+                          (activeSuggestion - 1 + suggestions.length) %
+                            suggestions.length,
                         );
                       } else if (e.key === 'Enter' || e.key === 'Tab') {
                         e.preventDefault();
-                        selectSuggestion(suggestions[activeSuggestion]);
+                        selectSuggestion(suggestions[activeSuggestion].value);
                       } else if (e.key === 'Escape') {
                         clearSuggestions();
                       }
                     }}
                     role="combobox"
-                    aria-expanded={suggestions.length > 0}
+                    aria-expanded={typeaheadDropdownOpen(
+                      suggestStatus,
+                      suggestions.length,
+                    )}
                     aria-autocomplete="list"
                     aria-controls="share-people-suggestions"
                     aria-activedescendant={
                       suggestions.length > 0
-                        ? `share-people-option-${activeSuggestion}`
+                        ? `share-people-suggestions-option-${activeSuggestion}`
                         : undefined
                     }
                     placeholder={t('recipientsPlaceholder')}
                     className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
                   />
-                  {suggestions.length > 0 && (
-                    <ul
-                      id="share-people-suggestions"
-                      role="listbox"
-                      className="absolute z-20 mt-1 max-h-56 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800"
-                    >
-                      {suggestions.map((person, index) => (
-                        <li
-                          key={person.email}
-                          id={`share-people-option-${index}`}
-                          role="option"
-                          aria-selected={index === activeSuggestion}
-                          // mousedown, not click: the input's blur fires
-                          // first on click and would clear the list.
-                          onMouseDown={(e) => {
-                            e.preventDefault();
-                            selectSuggestion(person);
-                          }}
-                          onMouseEnter={() => setActiveSuggestion(index)}
-                          className={`cursor-pointer px-3 py-1.5 text-sm ${
-                            index === activeSuggestion
-                              ? 'bg-blue-50 dark:bg-blue-900/30'
-                              : ''
-                          }`}
-                        >
-                          <span className="block truncate text-gray-900 dark:text-gray-100">
-                            {person.displayName}
-                          </span>
-                          <span className="block truncate text-xs text-gray-500 dark:text-gray-400">
-                            {person.email}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                  <TypeaheadDropdown
+                    listId="share-people-suggestions"
+                    suggestions={suggestions}
+                    status={suggestStatus}
+                    activeIndex={activeSuggestion}
+                    onSelect={selectSuggestion}
+                    onHover={setActiveSuggestion}
+                    listLabel={t('recipients')}
+                  />
                   <span className="mt-1 block text-xs text-gray-500 dark:text-gray-400">
                     {t('recipientsHint')}
                   </span>

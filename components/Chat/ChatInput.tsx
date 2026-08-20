@@ -56,6 +56,7 @@ import { InterpreterMode } from '@/types/interpreterMode';
 import { Prompt } from '@/types/prompt';
 import { SearchMode } from '@/types/searchMode';
 
+import { AgentChip } from '@/components/Chat/ChatInput/AgentChip';
 import { ArtifactContextBar } from '@/components/Chat/ChatInput/ArtifactContextBar';
 import ChatFileUploadPreviews from '@/components/Chat/ChatInput/ChatFileUploadPreviews';
 import ChatInputFile from '@/components/Chat/ChatInput/ChatInputFile';
@@ -739,12 +740,15 @@ export const ChatInput = ({
                   <EmissionsChip conversation={selectedConversation} />
                 </div>
 
-                {/* Active-connector indicator — left-aligned mirror of the
-                    emissions chip, ABOVE the pill: inside it the badge
-                    overlapped the placeholder text. Anchored to the pill
-                    container, so it follows the input in the empty-chat
-                    (centered) layout too. */}
-                <div className="absolute bottom-full mb-2 left-2 z-[9999]">
+                {/* Capability indicators (attached agent + active
+                    connectors) — left-aligned mirror of the emissions chip,
+                    ABOVE the pill: inside it the badges overlapped the
+                    placeholder text. Anchored to the pill container, so they
+                    follow the input in the empty-chat (centered) layout too.
+                    Both render nothing when inactive, so the default
+                    conversation adds zero chrome. */}
+                <div className="absolute bottom-full mb-2 left-2 z-[9999] flex items-center gap-1.5">
+                  <AgentChip />
                   <ConnectorActivityBadge />
                 </div>
 

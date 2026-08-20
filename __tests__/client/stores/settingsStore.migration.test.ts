@@ -953,3 +953,83 @@ describe('settingsStore migration (v54 → v55)', () => {
     expect(result.m365PickerLocation).toEqual(location);
   });
 });
+
+/**
+ * v56 → v57: Microsoft 365 goes connected-by-default. Pre-57 state cannot
+ * distinguish "never decided" from "explicitly disconnected" (both stored
+ * false), so this one migration flips everyone to connected and starts
+ * recording deliberate choices in m365ConnectedUserSet. From v57 on, an
+ * explicit choice (userSet=true) must survive any future default change.
+ */
+describe('settingsStore migration (v56 → v57)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('flips a never-decided user (field absent, disconnected) to connected', () => {
+    const result = migrate({ m365Connected: false }, 56) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365Connected).toBe(true);
+    expect(result.m365ConnectedUserSet).toBe(false);
+  });
+
+  it('keeps an already-connected demo user connected (field absent)', () => {
+    const result = migrate({ m365Connected: true }, 56) as Record<
+      string,
+      unknown
+    >;
+
+    expect(result.m365Connected).toBe(true);
+    expect(result.m365ConnectedUserSet).toBe(false);
+  });
+
+  it('respects an explicit disconnect once the choice field exists', () => {
+    // e.g. state written after v57 shipped, re-run through migrate
+    const result = migrate(
+      { m365Connected: false, m365ConnectedUserSet: true },
+      56,
+    ) as Record<string, unknown>;
+
+    expect(result.m365Connected).toBe(false);
+    expect(result.m365ConnectedUserSet).toBe(true);
+  });
+
+  it('connects a very old store through the full migration chain', () => {
+    // Pre-v50 state has no m365 fields at all: v50 backfills disconnected,
+    // v57 then flips to connected-by-default.
+    const result = migrate({}, 49) as Record<string, unknown>;
+
+    expect(result.m365Connected).toBe(true);
+    expect(result.m365ConnectedUserSet).toBe(false);
+  });
+});
+
+/**
+ * The v57 companion behavior: Connect/Disconnect in Settings is the only
+ * writer of m365ConnectedUserSet, so any explicit click marks the state as
+ * a deliberate choice.
+ */
+describe('setM365Connected records a deliberate choice', () => {
+  it('marks userSet on explicit disconnect', () => {
+    useSettingsStore.setState({
+      m365Connected: true,
+      m365ConnectedUserSet: false,
+    });
+    useSettingsStore.getState().setM365Connected(false);
+
+    expect(useSettingsStore.getState().m365Connected).toBe(false);
+    expect(useSettingsStore.getState().m365ConnectedUserSet).toBe(true);
+  });
+
+  it('marks userSet on explicit reconnect', () => {
+    useSettingsStore.setState({
+      m365Connected: false,
+      m365ConnectedUserSet: false,
+    });
+    useSettingsStore.getState().setM365Connected(true);
+
+    expect(useSettingsStore.getState().m365Connected).toBe(true);
+    expect(useSettingsStore.getState().m365ConnectedUserSet).toBe(true);
+  });
+});

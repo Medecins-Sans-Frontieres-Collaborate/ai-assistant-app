@@ -986,7 +986,9 @@
     "quickActions": "Ibikorwa vya Vuba",
     "expandFolder": "Gufungura dosiye {name}",
     "collapseFolder": "Gufunga dosiye {name}",
-    "folderOptions": "Amahitamo ya {name}"
+    "folderOptions": "Amahitamo ya {name}",
+    "agentsEntry": "Abashinzwe",
+    "agentsTitle": "Rondera abashinzwe kandi utangure kuganira n’umwe"
   },
   "errors": {
     "somethingWentWrong": "Hari ikintu kitajenda neza",
@@ -4036,7 +4038,30 @@
     "conflictTakeTheirs": "Fata ivyabo",
     "conflictNoFieldDiff": "Agaciro karangana — gusa version ya dosiye niyo yahindutse.",
     "conflictRecordGone": "Iyi dosiye yarahanaguwe (caneke ntishoboye gusubirizwa). Fata ayo ukeneye muri fomu hanyuma usubire kubanza.",
-    "groupsFlagOff": "Kurondera ku matsinda ntikirashoboka muri ino siyanse. Amatsinda yari yasanzwe azobandanya gukora."
+    "groupsFlagOff": "Kurondera ku matsinda ntikirashoboka muri ino siyanse. Amatsinda yari yasanzwe azobandanya gukora.",
+    "catalogOauth": {
+      "title": "Porogaramu za OAuth zihuza imbere muri sisiteme",
+      "description": "Porogaramu za OAuth zikoreshwa ku rwego rwa deployment ku bihuza vyubatswe imbere (nka GitHub, Asana, ...). Ivyo ubitswe hano birasimbura imirongo MCP_OAUTH_* mu bidukikije; kubikuraho bisubira gukoresha ivyo bidukikije. Amabanga y'ibanga y'abakiriya arakingirwa mu bubiko kandi ntasubira kwerekanwa.",
+      "badgeAdmin": "Byashizweho hano",
+      "badgeEnv": "Biva mu bidukikije",
+      "badgeNone": "Ntivyashizweho",
+      "badgeDcr": "Kwiyandikisha ubwabwo",
+      "badgeDcrHint": "Uwu mutanga serivisi arashobora kwiyandikisha umukiriya wa OAuth ukwabo, bityo birashoboka n'aho porogaramu itashizweho hano.",
+      "clientIdLabel": "ID y'umukiriya wa OAuth",
+      "clientSecretLabel": "Ijambo ry'ibanga ry'umukiriya wa OAuth",
+      "secretStoredPlaceholder": "Bibitswe — andika ushaka gusubiriza, reka gusiba kugira bigume",
+      "secretNewPlaceholder": "Shira ijambo ry'ibanga ry'umukiriya",
+      "save": "Bika",
+      "remove": "Kuraho",
+      "removeToEnv": "Kuraho (subira kubidukikije)",
+      "saved": "Porogaramu ya OAuth ya {name} ibitswe",
+      "removed": "Porogaramu ya OAuth ya {name} yakuwemo",
+      "saveError": "Kugira ubike porogaramu ya OAuth vyarananiranye. Gerageza gusubira.",
+      "conflict": "Iyi dosiye yarahinduwe ahandi — vyasukuwe, gerageza gusubira.",
+      "storageUnavailable": "Ububiko bw'abayobozi ntibugerekanwa; dosiye zabitswe ntizashoboye kwerekanwa. Kubika ntibishoboka gushika bikosowe.",
+      "sealingUnavailable": "Ugukinga amabanga ntikwashizweho kuri iri deployment (AUTH_SECRET irabuze) — amabanga y'abakiriya ntashobora kubikwa.",
+      "updatedBy": "Vyavuguruwe na {by} kw'itariki ya {at}"
+    }
   },
   "localModels": {
     "title": "Akarorero k'imbere mu muduga",
@@ -4803,5 +4828,51 @@
     "failed": "Ntivyashobotse gusangira — nta na kimwe cakozwe.",
     "copyFailed": "Ntivyashobotse gukoporora iyo link — hitamwo hejuru uyikoporore n'intoke.",
     "lastMessagesCountLabel": "Umubare w'ubutumwa bwheruka bwo gushirako"
+  },
+  "toolModes": {
+    "webSearch": "Gushakisha kuri web",
+    "codeInterpreter": "Ibisobanuro vy’amakode",
+    "off": "Zimije",
+    "auto": "Gikora ku bw'ikimenyeretso",
+    "always": "Igihe cose",
+    "routingPrivacy": "Ubumenyi bwite",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Gushakisha hifashishijwe Azure AI bisubiza ivyifuzo biciye muri Azure AI Foundry, bishobora kugumizwa.",
+    "learnMore": "Menya vyinshi"
+  },
+  "agentAttach": {
+    "browserTitle": "Abashinzwe",
+    "browserSubtitle": "Ongerako abashinzwe n’abahuza muri iki kiganiro, canke utangure ikiganiro gishasha n’umushinzwe. Benshi barakorana n’icagezwe cose wahisemwo.",
+    "searchPlaceholder": "Rondera abashinzwe n’abahuza…",
+    "loading": "Biriko birapakururwa abashinzwe…",
+    "noMatches": "Nta gisubizo gihuye n’ivyo warondera.",
+    "noAgents": "Nta bashinzwe baboneka.",
+    "addToChat": "Shiramwo muri iki kiganiro",
+    "removeFromChat": "Kuramwo muri iki kiganiro",
+    "newChat": "Ikiganiro gishasha",
+    "attached": "Vyashizweho",
+    "detach": "Kuraho",
+    "change": "Hindura",
+    "browse": "Rondera abashinzwe…",
+    "noAgent": "Nta mushinzwe yashizweho",
+    "close": "Funga",
+    "kind": {
+      "rag": "Ubumenyi",
+      "prompt": "Imico",
+      "m365": "Ubumenyi (Microsoft 365)",
+      "org": "Ubumenyi",
+      "foundry": "Umushinzwe Foundry",
+      "connector": "Umuhuza"
+    },
+    "semantics": {
+      "your-model": "ikoreshwa na modele yawe",
+      "pinned-model": "modele yashizweho n’umuyobozi",
+      "own-model": "ikoresha modele yayo ubwayo"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Ivyo usabwe n'ishirahamwe ryawe",
+    "searching": "Turiko turondera mw'ishirahamwe ryawe...",
+    "noMatches": "Nta bisubizo vyabonetse muri dosiye — ushobora kwandika aderesi intoke"
   }
 }

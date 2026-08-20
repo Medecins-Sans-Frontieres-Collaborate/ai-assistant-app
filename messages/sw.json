@@ -906,7 +906,9 @@
     "quickActions": "Vitendo vya Haraka",
     "expandFolder": "Panua folda {name}",
     "collapseFolder": "Fupisha folda {name}",
-    "folderOptions": "Chaguzi za {name}"
+    "folderOptions": "Chaguzi za {name}",
+    "agentsEntry": "Wakala",
+    "agentsTitle": "Vinjari wakala na anza mazungumzo na mmoja"
   },
   "prompts": {
     "buildReusablePrompts": "Jenga vidokezi vinavyoweza kutumika tena kwa msaada wa AI",
@@ -4052,7 +4054,30 @@
     "conflictTakeTheirs": "Chukua lao",
     "conflictNoFieldDiff": "Thamani zinafanana — toleo la rekodi pekee ndilo limebadilika.",
     "conflictRecordGone": "Rekodi hii imefutwa (au haikuweza kupakiwa upya). Nakili chochote unachohitaji kutoka fomu, kisha upakie upya.",
-    "groupsFlagOff": "Ulengaji wa vikundi bado haujawezeshwa kwa mazingira haya. Malengo ya vikundi vilivyopo bado yanafanya kazi."
+    "groupsFlagOff": "Ulengaji wa vikundi bado haujawezeshwa kwa mazingira haya. Malengo ya vikundi vilivyopo bado yanafanya kazi.",
+    "catalogOauth": {
+      "title": "Programu za OAuth zilizojengwa ndani",
+      "description": "Programu za OAuth kwa ajili ya vimbo vinavyopatikana ndani ya mfumo (GitHub, Asana, …) katika usanidi wa usambazaji wote. Rekodi iliyohifadhiwa hapa itazidisha vigezo vya mazingira vya MCP_OAUTH_*; kuiondoa kunarejesha matumizi ya vigezo hivyo. Siri za wateja zimefichwa salama na hazitaonyeshwa tena.",
+      "badgeAdmin": "Imesanidiwa hapa",
+      "badgeEnv": "Kutoka mazingira",
+      "badgeNone": "Haijasanidiwa",
+      "badgeDcr": "Inajiandikisha yenyewe",
+      "badgeDcrHint": "Mtoaji huyu anaweza kujiandikisha mteja wa OAuth kiotomati, hivyo itaendelea kufanya kazi hata bila programu kusanidiwa hapa.",
+      "clientIdLabel": "ID ya mteja wa OAuth",
+      "clientSecretLabel": "Siri ya mteja wa OAuth",
+      "secretStoredPlaceholder": "Imehifadhiwa — andika kubadilisha, acha wazi kubakiza",
+      "secretNewPlaceholder": "Bandika siri ya mteja",
+      "save": "Hifadhi",
+      "remove": "Ondoa",
+      "removeToEnv": "Ondoa (rejea kwenye mazingira)",
+      "saved": "Programu ya {name} OAuth imehifadhiwa",
+      "removed": "Programu ya {name} OAuth imeondolewa",
+      "saveError": "Imeshindikana kuhifadhi programu ya OAuth. Jaribu tena.",
+      "conflict": "Rekodi hii imebadilishwa kwingineko — imesasaishwa upya, tafadhali jaribu tena.",
+      "storageUnavailable": "Hifadhi ya msimamizi haipatikani; rekodi zilizopo haziwezi kuorodheshwa. Kuhifadhi kumezimwa hadi itakaporejea.",
+      "sealingUnavailable": "Ulembavu wa siri haujasanidiwa kwenye usambazaji huu (AUTH_SECRET haipo) — siri za wateja haziwezi kuhifadhiwa.",
+      "updatedBy": "Imesasishwa na {by} tarehe {at}"
+    }
   },
   "localModels": {
     "title": "Miundo ya ndani",
@@ -4819,5 +4844,51 @@
     "failed": "Imeshindikana kushiriki — hakuna kilichoundwa.",
     "copyFailed": "Imeshindikana kunakili kiungo — chagua hapo juu na nakili kwa mkono.",
     "lastMessagesCountLabel": "Idadi ya ujumbe wa hivi karibuni wa kujumuisha"
+  },
+  "toolModes": {
+    "webSearch": "Utafutaji wa wavuti",
+    "codeInterpreter": "Mfasiri wa msimbo",
+    "off": "Zima",
+    "auto": "Otomatiki",
+    "always": "Daima",
+    "routingPrivacy": "Faragha",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Utafutaji wa Azure AI hutuma maswali kupitia Azure AI Foundry, ambapo yanaweza kuhifadhiwa.",
+    "learnMore": "Jifunze zaidi"
+  },
+  "agentAttach": {
+    "browserTitle": "Wakala",
+    "browserSubtitle": "Ongeza wakala na viunganishi kwenye mazungumzo haya, au anzisha mazungumzo mapya na wakala. Wengi hufanya kazi na mfano wowote uliouchagua.",
+    "searchPlaceholder": "Tafuta wakala na viunganishi…",
+    "loading": "Inapakia wakala…",
+    "noMatches": "Hakuna kinacholingana na utafutaji wako.",
+    "noAgents": "Hakuna wakala waliopo.",
+    "addToChat": "Ongeza kwenye mazungumzo haya",
+    "removeFromChat": "Ondoa kwenye mazungumzo haya",
+    "newChat": "Mazungumzo mapya",
+    "attached": "Imeunganishwa",
+    "detach": "Tenganisha",
+    "change": "Badilisha",
+    "browse": "Vinjari wakala…",
+    "noAgent": "Hakuna wakala aliyeunganishwa",
+    "close": "Funga",
+    "kind": {
+      "rag": "Maarifa",
+      "prompt": "Persona",
+      "m365": "Maarifa (Microsoft 365)",
+      "org": "Maarifa",
+      "foundry": "Wakala wa Foundry",
+      "connector": "Kiunganishi"
+    },
+    "semantics": {
+      "your-model": "hutumia mfano wako",
+      "pinned-model": "mfano umewekwa na msimamizi",
+      "own-model": "inaendeshwa na mfano wake binafsi"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Mapendekezo kutoka shirika lako",
+    "searching": "Inatafuta katika shirika lako…",
+    "noMatches": "Hakuna mlinganisho katika saraka — unaweza kuingiza anwani mwenyewe"
   }
 }

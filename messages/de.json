@@ -852,7 +852,9 @@
     "quickActions": "Schnellaktionen",
     "expandFolder": "Ordner {name} erweitern",
     "collapseFolder": "Ordner {name} reduzieren",
-    "folderOptions": "Optionen für {name}"
+    "folderOptions": "Optionen für {name}",
+    "agentsEntry": "Agenten",
+    "agentsTitle": "Agenten durchsuchen und mit einem chatten"
   },
   "errors": {
     "somethingWentWrong": "Etwas ist schief gelaufen",
@@ -4052,7 +4054,30 @@
     "conflictTakeTheirs": "Deren übernehmen",
     "conflictNoFieldDiff": "Die Werte stimmen überein – nur die Eintragsversion hat sich geändert.",
     "conflictRecordGone": "Dieser Eintrag wurde gelöscht (oder konnte nicht erneut geladen werden). Kopieren Sie alles Benötigte aus dem Formular und laden Sie dann neu.",
-    "groupsFlagOff": "Die Gruppenzielsteuerung ist für diese Umgebung noch nicht aktiviert. Bestehende Gruppenziele funktionieren weiterhin."
+    "groupsFlagOff": "Die Gruppenzielsteuerung ist für diese Umgebung noch nicht aktiviert. Bestehende Gruppenziele funktionieren weiterhin.",
+    "catalogOauth": {
+      "title": "Integrierte OAuth-Apps für Konnektoren",
+      "description": "OAuth-Apps für die integrierten Konnektoren (GitHub, Asana, …) für die gesamte Bereitstellung. Ein hier gespeicherter Eintrag überschreibt die MCP_OAUTH_* Umgebungsvariablen; das Entfernen setzt diese wieder ein. Client-Secrets werden verschlüsselt gespeichert und nicht erneut angezeigt.",
+      "badgeAdmin": "Hier konfiguriert",
+      "badgeEnv": "Aus Umgebung",
+      "badgeNone": "Nicht konfiguriert",
+      "badgeDcr": "Selbstregistrierung",
+      "badgeDcrHint": "Dieser Anbieter kann einen OAuth-Client automatisch registrieren, sodass er auch ohne hier konfigurierte App funktioniert.",
+      "clientIdLabel": "OAuth-Client-ID",
+      "clientSecretLabel": "OAuth-Client-Secret",
+      "secretStoredPlaceholder": "Gespeichert — zum Ersetzen eingeben, leer lassen um zu behalten",
+      "secretNewPlaceholder": "Client-Secret einfügen",
+      "save": "Speichern",
+      "remove": "Entfernen",
+      "removeToEnv": "Entfernen (auf Umgebung zurücksetzen)",
+      "saved": "{name} OAuth-App gespeichert",
+      "removed": "{name} OAuth-App entfernt",
+      "saveError": "Speichern der OAuth-App fehlgeschlagen. Bitte erneut versuchen.",
+      "conflict": "Dieser Eintrag wurde anderswo geändert — neu geladen, bitte erneut versuchen.",
+      "storageUnavailable": "Admin-Speicher ist nicht erreichbar; vorhandene Einträge konnten nicht aufgelistet werden. Speichern ist deaktiviert, bis der Speicher wieder verfügbar ist.",
+      "sealingUnavailable": "Verschlüsselung von Secrets ist in dieser Bereitstellung nicht konfiguriert (AUTH_SECRET fehlt) — Client-Secrets können nicht gespeichert werden.",
+      "updatedBy": "Aktualisiert von {by} am {at}"
+    }
   },
   "localModels": {
     "title": "Lokale Modelle",
@@ -4819,5 +4844,51 @@
     "failed": "Konnte nicht teilen — nichts wurde erstellt.",
     "copyFailed": "Link konnte nicht kopiert werden – bitte oben auswählen und manuell kopieren.",
     "lastMessagesCountLabel": "Anzahl der letzten Nachrichten, die einbezogen werden"
+  },
+  "toolModes": {
+    "webSearch": "Websuche",
+    "codeInterpreter": "Code-Interpreter",
+    "off": "Aus",
+    "auto": "Automatisch",
+    "always": "Immer",
+    "routingPrivacy": "Datenschutz",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI Search sendet Anfragen über Azure AI Foundry, die diese möglicherweise speichert.",
+    "learnMore": "Mehr erfahren"
+  },
+  "agentAttach": {
+    "browserTitle": "Agenten",
+    "browserSubtitle": "Fügen Sie diesem Chat Agenten und Connectoren hinzu oder starten Sie einen neuen Chat mit einem Agenten. Die meisten funktionieren mit dem von Ihnen gewählten Modell.",
+    "searchPlaceholder": "Agenten und Connectoren suchen…",
+    "loading": "Lade Agenten…",
+    "noMatches": "Keine Treffer für Ihre Suche.",
+    "noAgents": "Keine Agenten verfügbar.",
+    "addToChat": "Zu diesem Chat hinzufügen",
+    "removeFromChat": "Aus diesem Chat entfernen",
+    "newChat": "Neuer Chat",
+    "attached": "Hinzugefügt",
+    "detach": "Entfernen",
+    "change": "Ändern",
+    "browse": "Agenten durchsuchen…",
+    "noAgent": "Kein Agent hinzugefügt",
+    "close": "Schließen",
+    "kind": {
+      "rag": "Wissen",
+      "prompt": "Persona",
+      "m365": "Wissen (Microsoft 365)",
+      "org": "Wissen",
+      "foundry": "Foundry-Agent",
+      "connector": "Connector"
+    },
+    "semantics": {
+      "your-model": "verwendet Ihr Modell",
+      "pinned-model": "vom Admin festgelegtes Modell",
+      "own-model": "nutzt eigenes Modell"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Vorschläge aus Ihrer Organisation",
+    "searching": "Ihre Organisation wird durchsucht…",
+    "noMatches": "Keine Treffer im Verzeichnis – Sie können die Adresse manuell eingeben"
   }
 }

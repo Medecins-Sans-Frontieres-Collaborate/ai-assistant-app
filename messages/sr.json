@@ -986,7 +986,9 @@
     "quickActions": "Брзе акције",
     "expandFolder": "Proširi fasciklu {name}",
     "collapseFolder": "Sažmi fasciklu {name}",
-    "folderOptions": "Opcije za {name}"
+    "folderOptions": "Opcije za {name}",
+    "agentsEntry": "Agenti",
+    "agentsTitle": "Pregledajte agente i započnite razgovor sa nekim"
   },
   "errors": {
     "somethingWentWrong": "Нешто је пошло наопако",
@@ -4036,7 +4038,30 @@
     "conflictTakeTheirs": "Preuzmi njihovu",
     "conflictNoFieldDiff": "Vrednosti su iste — promenjena je samo verzija zapisa.",
     "conflictRecordGone": "Ovaj zapis je obrisan (ili nije mogao biti ponovo učitan). Kopirajte šta vam je potrebno iz formulara, zatim ponovo učitajte.",
-    "groupsFlagOff": "Ciljanje grupa još nije omogućeno za ovo okruženje. Postojeći ciljevi grupa i dalje funkcionišu."
+    "groupsFlagOff": "Ciljanje grupa još nije omogućeno za ovo okruženje. Postojeći ciljevi grupa i dalje funkcionišu.",
+    "catalogOauth": {
+      "title": "OAuth aplikacije za ugrađene konektore",
+      "description": "OAuth aplikacije na nivou implementacije za ugrađene konektore (GitHub, Asana, …). Zapis sačuvan ovde zamenjuje MCP_OAUTH_* promenljive okruženja; njegovo uklanjanje vraća korišćenje njih. Klijentske tajne su enkriptovane u mirovanju i više se ne prikazuju.",
+      "badgeAdmin": "Konfigurisano ovde",
+      "badgeEnv": "Iz okruženja",
+      "badgeNone": "Nije konfigurisano",
+      "badgeDcr": "Samoregistrujuće",
+      "badgeDcrHint": "Ovaj provajder može automatski da registruje OAuth klijenta, tako da radi čak i bez aplikacije konfigurisane ovde.",
+      "clientIdLabel": "OAuth ID klijenta",
+      "clientSecretLabel": "OAuth tajna klijenta",
+      "secretStoredPlaceholder": "Sačuvano — unesite da zamenite, ostavite prazno za zadržavanje",
+      "secretNewPlaceholder": "Nalepite tajnu klijenta",
+      "save": "Sačuvaj",
+      "remove": "Ukloni",
+      "removeToEnv": "Ukloni (oslanjanje na okruženje)",
+      "saved": "OAuth aplikacija {name} sačuvana",
+      "removed": "OAuth aplikacija {name} uklonjena",
+      "saveError": "Čuvanje OAuth aplikacije nije uspelo. Pokušajte ponovo.",
+      "conflict": "Ovaj zapis je promenjen na drugom mestu — ponovo učitano, pokušajte ponovo.",
+      "storageUnavailable": "Administratorsko skladište nije dostupno; postojeći zapisi ne mogu biti prikazani. Čuvanje je onemogućeno dok se pristup ne povrati.",
+      "sealingUnavailable": "Enkripcija tajni nije konfigurisana na ovoj implementaciji (nedostaje AUTH_SECRET) — tajne klijenata ne mogu biti sačuvane.",
+      "updatedBy": "Ažurirao {by} dana {at}"
+    }
   },
   "localModels": {
     "title": "Lokalni modeli",
@@ -4803,5 +4828,51 @@
     "failed": "Nije moguće podeliti — ništa nije kreirano.",
     "copyFailed": "Nije moguće kopirati link — izaberite ga iznad i kopirajte ručno.",
     "lastMessagesCountLabel": "Broj poslednjih poruka za uključivanje"
+  },
+  "toolModes": {
+    "webSearch": "Pretraga interneta",
+    "codeInterpreter": "Tumač koda",
+    "off": "Isključeno",
+    "auto": "Automatski",
+    "always": "Uvek",
+    "routingPrivacy": "Privatnost",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI pretraga šalje upite preko Azure AI Foundry, koji ih može sačuvati.",
+    "learnMore": "Saznajte više"
+  },
+  "agentAttach": {
+    "browserTitle": "Agenti",
+    "browserSubtitle": "Dodajte agente i konektore u ovaj razgovor ili započnite novi razgovor sa agentom. Većina radi sa izabranim modelom.",
+    "searchPlaceholder": "Pretražite agente i konektore…",
+    "loading": "Učitavanje agenata…",
+    "noMatches": "Nije pronađen nijedan rezultat.",
+    "noAgents": "Nema dostupnih agenata.",
+    "addToChat": "Dodaj u ovaj razgovor",
+    "removeFromChat": "Ukloni iz ovog razgovora",
+    "newChat": "Novi razgovor",
+    "attached": "Prikačen",
+    "detach": "Otkači",
+    "change": "Promeni",
+    "browse": "Pregledaj agente…",
+    "noAgent": "Nijedan agent nije prikačen",
+    "close": "Zatvori",
+    "kind": {
+      "rag": "Znanje",
+      "prompt": "Persona",
+      "m365": "Znanje (Microsoft 365)",
+      "org": "Znanje",
+      "foundry": "Foundry agent",
+      "connector": "Konektor"
+    },
+    "semantics": {
+      "your-model": "koristi vaš model",
+      "pinned-model": "model je postavio administrator",
+      "own-model": "koristi svoj sopstveni model"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Predlozi iz vaše organizacije",
+    "searching": "Pretražujem vašu organizaciju…",
+    "noMatches": "Nema podudaranja u imeniku — možete ručno uneti adresu"
   }
 }

@@ -906,7 +906,9 @@
     "quickActions": "Hızlı İşlemler",
     "expandFolder": "Klasörü genişlet {name}",
     "collapseFolder": "Klasörü daralt {name}",
-    "folderOptions": "{name} seçenekleri"
+    "folderOptions": "{name} seçenekleri",
+    "agentsEntry": "Agentlar",
+    "agentsTitle": "Agentlara göz atın ve biriyle sohbet başlatın"
   },
   "prompts": {
     "buildReusablePrompts": "AI yardımıyla yeniden kullanılabilir istemler oluşturun",
@@ -4052,7 +4054,30 @@
     "conflictTakeTheirs": "Onlarınkini al",
     "conflictNoFieldDiff": "Değerler eşleşiyor — sadece kayıt versiyonu değişti.",
     "conflictRecordGone": "Bu kayıt silindi (veya tekrar yüklenemedi). Formdan gerekli bilgileri kopyalayın ve yeniden yükleyin.",
-    "groupsFlagOff": "Grup hedeflemesi bu ortam için henüz etkin değil. Mevcut grup hedefleri çalışmaya devam edecektir."
+    "groupsFlagOff": "Grup hedeflemesi bu ortam için henüz etkin değil. Mevcut grup hedefleri çalışmaya devam edecektir.",
+    "catalogOauth": {
+      "title": "Yerleşik bağlantı OAuth uygulamaları",
+      "description": "Yerleşik bağlantılar (GitHub, Asana, …) için dağıtım genelinde OAuth uygulamaları. Buraya kaydedilen bir kayıt, MCP_OAUTH_* ortam değişkenlerini geçersiz kılar; silindiğinde bu değişkenler devreye girer. İstemci sırları şifreli olarak saklanır ve bir daha görüntülenmez.",
+      "badgeAdmin": "Burada yapılandırıldı",
+      "badgeEnv": "Ortamdan",
+      "badgeNone": "Yapılandırılmadı",
+      "badgeDcr": "Kendiliğinden kaydolan",
+      "badgeDcrHint": "Bu sağlayıcı bir OAuth istemcisini otomatik olarak kaydedebilir, bu nedenle burada bir uygulama yapılandırılmamış olsa da çalışır.",
+      "clientIdLabel": "OAuth istemci kimliği",
+      "clientSecretLabel": "OAuth istemci sırrı",
+      "secretStoredPlaceholder": "Saklandı — değiştirmek için yazın, korumak için boş bırakın",
+      "secretNewPlaceholder": "İstemci sırrını yapıştırın",
+      "save": "Kaydet",
+      "remove": "Kaldır",
+      "removeToEnv": "Kaldır (ortam değişkenlerine dön)",
+      "saved": "{name} OAuth uygulaması kaydedildi",
+      "removed": "{name} OAuth uygulaması kaldırıldı",
+      "saveError": "OAuth uygulaması kaydedilemedi. Lütfen tekrar deneyin.",
+      "conflict": "Bu kayıt başka bir yerde değiştirildi — yeniden yüklendi, lütfen tekrar deneyin.",
+      "storageUnavailable": "Yönetici hafızasına erişilemiyor; mevcut kayıtlar listelenemedi. Kurtarılana kadar kaydetme devre dışı.",
+      "sealingUnavailable": "Bu dağıtımda gizli şifreleme yapılandırılmamış (AUTH_SECRET eksik) — istemci sırları kaydedilemez.",
+      "updatedBy": "{by} tarafından {at} tarihinde güncellendi"
+    }
   },
   "localModels": {
     "title": "Yerel modeller",
@@ -4819,5 +4844,51 @@
     "failed": "Paylaşılamadı — hiçbir şey oluşturulmadı.",
     "copyFailed": "Bağlantı kopyalanamadı — yukarıdan seçip manuel olarak kopyalayın.",
     "lastMessagesCountLabel": "Dahil edilecek son mesaj sayısı"
+  },
+  "toolModes": {
+    "webSearch": "Web araması",
+    "codeInterpreter": "Kod yorumlayıcı",
+    "off": "Kapalı",
+    "auto": "Otomatik",
+    "always": "Her zaman",
+    "routingPrivacy": "Gizlilik",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI araması, sorguları Azure AI Foundry üzerinden gönderir ve sorgular saklanabilir.",
+    "learnMore": "Daha fazla bilgi"
+  },
+  "agentAttach": {
+    "browserTitle": "Agentlar",
+    "browserSubtitle": "Bu sohbete agent ve bağlayıcılar ekleyin veya bir agent ile yeni bir sohbet başlatın. Çoğu, seçtiğiniz model ile uyumludur.",
+    "searchPlaceholder": "Agent ve bağlayıcıları arayın…",
+    "loading": "Agentlar yükleniyor…",
+    "noMatches": "Aramanızla eşleşen bir sonuç bulunamadı.",
+    "noAgents": "Uygun agent yok.",
+    "addToChat": "Sohbete ekle",
+    "removeFromChat": "Sohbetten çıkar",
+    "newChat": "Yeni sohbet",
+    "attached": "Eklendi",
+    "detach": "Ayır",
+    "change": "Değiştir",
+    "browse": "Agentlara göz at…",
+    "noAgent": "Hiçbir agent ekli değil",
+    "close": "Kapat",
+    "kind": {
+      "rag": "Bilgi",
+      "prompt": "Profil",
+      "m365": "Bilgi (Microsoft 365)",
+      "org": "Bilgi",
+      "foundry": "Foundry agent",
+      "connector": "Bağlayıcı"
+    },
+    "semantics": {
+      "your-model": "kendi modelinizi kullanır",
+      "pinned-model": "yönetici tarafından atanmış model",
+      "own-model": "kendi modeli üzerinde çalışıyor"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Kuruluşunuzdan öneriler",
+    "searching": "Kuruluşunuzda aranıyor…",
+    "noMatches": "Dizinde eşleşme yok — adresi manuel olarak girebilirsiniz"
   }
 }

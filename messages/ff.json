@@ -986,7 +986,9 @@
     "quickActions": "Golle Jaawɗe",
     "expandFolder": "Feere bolle {name}",
     "collapseFolder": "Luudu bolle {name}",
-    "folderOptions": "Cuɓoraaɗi {name}"
+    "folderOptions": "Cuɓoraaɗi {name}",
+    "agentsEntry": "Agentiɗe",
+    "agentsTitle": "Yiɗdi agentiɗe e fuɗɗi waawi haasagol e ɗuum"
   },
   "errors": {
     "somethingWentWrong": "Huunde woorii",
@@ -4036,7 +4038,30 @@
     "conflictTakeTheirs": "Naan gaarol sayɓe",
     "conflictNoFieldDiff": "Golleji ɗiɗi ɗiɗon — tan versiyon rekord golle.",
     "conflictRecordGone": "Rekord nde momtin (wala waawaaniima okkilni). Jokkondir nagol ngadii, njokkil form.",
-    "groupsFlagOff": "Targete groupe waawaaniima e environment nde bado. Group targetji okuɗi waawuyi no waawii."
+    "groupsFlagOff": "Targete groupe waawaaniima e environment nde bado. Group targetji okuɗi waawuyi no waawii.",
+    "catalogOauth": {
+      "title": "OAuth appji connectorji holli e jamfaare",
+      "description": "OAuth appji holi e jamfaare banndu waawde feewnde to connectoreji (GitHub, Asana, ...). Hakkil nde waawi ngarti e nder heen, o waawi rewta MCP_OAUTH_* environment variables; so o mbaydi, so tawii hay hujja hara. Client secretsji taaɗi e jiwo kono waawaa jamtude duubi kala.",
+      "badgeAdmin": "Configuré e nder heen",
+      "badgeEnv": "E environment",
+      "badgeNone": "Alaa configuration",
+      "badgeDcr": "Huusi e woɗnde",
+      "badgeDcrHint": "Provider ngol waawi huusde OAuth client e jamfaare, kono waawaani majju to app ngon hay.",
+      "clientIdLabel": "OAuth client ID",
+      "clientSecretLabel": "OAuth client secret",
+      "secretStoredPlaceholder": "Taaɗii — windu konee, waawi woppude mbaawi bombude",
+      "secretNewPlaceholder": "Ɗakku client secret",
+      "save": "Danndu",
+      "remove": "Momtu",
+      "removeToEnv": "Momtu (daasi e environment)",
+      "saved": "{name} OAuth app danndii",
+      "removed": "{name} OAuth app momtii",
+      "saveError": "Waawaniima danndude OAuth app. Fuɗɗu nataa.",
+      "conflict": "Nafoore nden waynii hay-gooto — rewtii, jamu kadi fuɗɗu.",
+      "storageUnavailable": "Admin storage alaa — caɗeeji adaa hokkanii ngari wonde. Danndugol waawaani seeda o welli.",
+      "sealingUnavailable": "Secret encryption alaa configuration e jamfaare nde (AUTH_SECRET pucci) — client secretsji waawaani danndude.",
+      "updatedBy": "Waynii e {by} le {at}"
+    }
   },
   "localModels": {
     "title": "Moodelji jowte ɗee",
@@ -4803,5 +4828,51 @@
     "failed": "Seerɗaa — hay goongɗinɗo sosaani.",
     "copyFailed": "Waawaaniima nattude link ngal — suɓo ko hen reftine.",
     "lastMessagesCountLabel": "Gadanal ndeeri binndiiji ko e laawol"
+  },
+  "toolModes": {
+    "webSearch": "Nayngol Web",
+    "codeInterpreter": "Tarjumo kode",
+    "off": "Doggiral",
+    "auto": "Automaatigi",
+    "always": "Jooni fof",
+    "routingPrivacy": "Njeɗɗo ɓurnde",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Nayngol Azure AI no sendi ceertooji majjuɗi e Azure AI Foundry; kono mayi suɓoɗe he ɗum.",
+    "learnMore": "Learn more"
+  },
+  "agentAttach": {
+    "browserTitle": "Agentiɗe",
+    "browserSubtitle": "Ɓeydu agentiɗe e connectors e konngol nde, walla fuɗɗi konngol kesɗe e agent. Tiiɗi, ɓuri agentiɗe jogii moƴƴere e model woni ɗum.",
+    "searchPlaceholder": "Nay agentiɗe e connectors…",
+    "loading": "Naatude agentiɗe…",
+    "noMatches": "Alaa moƴɗo e cebbinal maa.",
+    "noAgents": "Alaa agentu tottude.",
+    "addToChat": "Ɓeydu e konngol nde",
+    "removeFromChat": "Momtu e konngol nde",
+    "newChat": "Konngol kesɗe",
+    "attached": "Ɓeyditoy",
+    "detach": "Momtu",
+    "change": "Waylu",
+    "browse": "Yiɗdi agentiɗe…",
+    "noAgent": "Alaa agentu ɓeyditoy",
+    "close": "Uddu",
+    "kind": {
+      "rag": "Garsital",
+      "prompt": "Wonaa",
+      "m365": "Garsital (Microsoft 365)",
+      "org": "Garsital",
+      "foundry": "Agentu Foundry",
+      "connector": "Connector"
+    },
+    "semantics": {
+      "your-model": "naatnoy model maa",
+      "pinned-model": "model toggoɗo e admin",
+      "own-model": "taaƴi e model moƴƴi"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Golleji pilkil e organisation maa",
+    "searching": "Nana yiɗan e garbal maa...",
+    "noMatches": "Noone soodaani e daftal — ena waawi hokkude ñiiɓirde baɗo"
   }
 }

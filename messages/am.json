@@ -849,7 +849,9 @@
     "quickActions": "ፈጣን ድርጊቶች",
     "expandFolder": "{name} ፎልደሩን ዘርፍ",
     "collapseFolder": "{name} ፎልደሩን አንሳ",
-    "folderOptions": "የ{name} አማራጮች"
+    "folderOptions": "የ{name} አማራጮች",
+    "agentsEntry": "ወኪሎች",
+    "agentsTitle": "ወኪሎችን ያስሱ እና ከአንዱ ጋር ውይይት ይጀምሩ"
   },
   "prompts": {
     "buildReusablePrompts": "በAI እገዛ እንደገና ሊጠቀሙ የሚችሉ ጥያቄዎችን ይፍጠሩ",
@@ -4052,7 +4054,30 @@
     "conflictTakeTheirs": "የእነሱን ይውሰዱ",
     "conflictNoFieldDiff": "ዋጋዎቹ ተመሳሳይ ናቸው — የመዝገቡ እትም ብቻ ተቀይሯል።",
     "conflictRecordGone": "ይህ መዝገብ ተሰርዟል (ወይም መውሰድ አልተቻለም)። ያስፈለጉትን ነገር ከቅጹ ውስጥ ይቅዱ፣ ከዚያም ዳግም ይጫኑ።",
-    "groupsFlagOff": "ለዚህ ማካተቻ የቡድን መታመር ገና አልተጠበቀም። ያሉት የቡድን ግቤቶች ስራ ቀጥላል።"
+    "groupsFlagOff": "ለዚህ ማካተቻ የቡድን መታመር ገና አልተጠበቀም። ያሉት የቡድን ግቤቶች ስራ ቀጥላል።",
+    "catalogOauth": {
+      "title": "የተገናኘ ኦኦዋት መተግበሪያዎች",
+      "description": "ለበሽታ መቆጣጠሪያዎች የመከላከያ ኦኦዋት መተግበሪያዎች (GitHub, Asana, …)። እዚህ የተቀመጠ መዝገብ MCP_OAUTH_* የአካባቢ ተለዋዋጮችን ይጎድታል፤ ሰርዎት ከተደረገ ወደ እነሱ ይመለሳል። የእንግዳ ሚስጥሮች በተመራመሩ ሁኔታ ይቀመጣሉ እና ከዚያ በኋላ አይታዩም።",
+      "badgeAdmin": "እዚህ ተዘዋዋሪ",
+      "badgeEnv": "ከአካባቢ",
+      "badgeNone": "አልተዘዋዋሪም",
+      "badgeDcr": "በራሱ የሚሰየመ",
+      "badgeDcrHint": "ይህ አቅራቢ ኦኦዋት ደንበኛ በራሱ ሊመዝግበው ይችላል፣ ስለዚህ እዚህ ማመዝገብ ያልተደረገም ቢሆን ይሰራል።",
+      "clientIdLabel": "የኦኦዋት ደንበኛ ID",
+      "clientSecretLabel": "የኦኦዋት ደንበኛ ሚስጥር",
+      "secretStoredPlaceholder": "የተቀመጠ — ለመቀየር ይተይቡ፣ ለመጠበቅ ባዶ ተዉ",
+      "secretNewPlaceholder": "የደንበኛ ሚስጥሩን ለጥፉ",
+      "save": "አስቀምጥ",
+      "remove": "አስወግድ",
+      "removeToEnv": "አስወግድ (ወደ አካባቢ ይመለሳል)",
+      "saved": "{name} ኦኦዋት መተግበሪያ ተቀመጠ",
+      "removed": "{name} ኦኦዋት መተግበሪያ ተወግዷል",
+      "saveError": "ኦኦዋት መተግበሪያውን ማስቀመጥ አልተቻለም። እንደገና ይሞክሩ።",
+      "conflict": "ይህ መዝገብ በሌላ ቦታ ተቀይሯል — በድጋሚ ተጫኗል፣ እባክዎ ደግመው ይሞክሩ።",
+      "storageUnavailable": "የአስተዳዳሪ ማከማቻ ማይደርስበት ነው፤ ያሉት መዝገቦች ማሳየት አልተቻለም። እስከሚመለስ ድረስ ማስቀመጥ የተሰናከለ ነው።",
+      "sealingUnavailable": "በዚህ ትውልድ ላይ የሚስጥር እርዳታ አልተዘጋጀም (AUTH_SECRET ይጎድባል) — የደንበኞች ሚስጥር ማስቀመጥ አይቻልም።",
+      "updatedBy": "በ{by} በ{at} ተሻሽሏል"
+    }
   },
   "localModels": {
     "title": "የአካባቢ ሞዴሎች",
@@ -4819,5 +4844,51 @@
     "failed": "ማጋራት አልተቻለም — ምንም አልተፈጠረም።",
     "copyFailed": "አካባቢውን መቅዳት አልተቻለም — ከላይ ይምረጡ እና በእጅ ይቅዱ።",
     "lastMessagesCountLabel": "ለማካተት የቅርብ መልእክቶች ብዛት"
+  },
+  "toolModes": {
+    "webSearch": "ድህረ ገፅ ፍለጋ",
+    "codeInterpreter": "ኮድ ተረጋጋጭ",
+    "off": "ዝግ",
+    "auto": "ራሱ በራሱ",
+    "always": "ሁል ጊዜ",
+    "routingPrivacy": "ግላዊነት",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI ፍለጋ ጥያቄዎችን በAzure AI Foundry ያቅራል፣ እና ሊያጠብቃቸው ይችላል።",
+    "learnMore": "ተጨማሪ ይማሩ"
+  },
+  "agentAttach": {
+    "browserTitle": "ወኪሎች",
+    "browserSubtitle": "ወኪሎችን እና ማገናኛዎችን ወደዚህ ውይይት ያክሉ፣ ወይም ከወኪል ጋር አዲስ ውይይት ይጀምሩ። አብዛኞቹ ከመረጡት ሞዴል ጋር ይሰራሉ።",
+    "searchPlaceholder": "ወኪሎችን እና ማገናኛዎችን ፈልጉ…",
+    "loading": "ወኪሎችን በመጫን ላይ…",
+    "noMatches": "ለፍለጋዎ ምንም አልተገኘም።",
+    "noAgents": "ምንም ወኪሎች የሉም።",
+    "addToChat": "ወደዚህ ውይይት ያክሉ",
+    "removeFromChat": "ከዚህ ውይይት ያስወግዱ",
+    "newChat": "አዲስ ውይይት",
+    "attached": "ተያይዟል",
+    "detach": "አፍታ",
+    "change": "ቀይር",
+    "browse": "ወኪሎችን ያስሱ…",
+    "noAgent": "የታያዙ ወኪሎች የሉም",
+    "close": "ዝጋ",
+    "kind": {
+      "rag": "እውቀት",
+      "prompt": "ግልባጭ ባህሪ",
+      "m365": "እውቀት (Microsoft 365)",
+      "org": "እውቀት",
+      "foundry": "Foundry ወኪል",
+      "connector": "ማገናኛ"
+    },
+    "semantics": {
+      "your-model": "ሞዴልዎን ይጠቀማል",
+      "pinned-model": "በአስተዳዳሪ የተዘጋጀ ሞዴል",
+      "own-model": "በራሱ ሞዴል ላይ ይሰራል"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "ከድርጅትዎ የተመነዙ ጥቆማዎች",
+    "searching": "በድርጅታችሁ ውስጥ በማስፈለግ ላይ…",
+    "noMatches": "በዳይሬክቶሪ ውስጥ ምንም አካል አልተገኘም — አድራሻውን በእጅዎ ማስገባት ይችላሉ"
   }
 }

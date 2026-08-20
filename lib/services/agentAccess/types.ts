@@ -19,6 +19,7 @@ export const AGENT_ACCESS_GENERATION_PATH = `${AGENT_ACCESS_PREFIX}generation.js
 export const AGENT_ACCESS_PROMPT_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}prompt-agents/`;
 export const AGENT_ACCESS_CONNECTORS_PREFIX = `${AGENT_ACCESS_PREFIX}connectors/`;
 export const AGENT_ACCESS_GUIDES_PREFIX = `${AGENT_ACCESS_PREFIX}guides/`;
+export const AGENT_ACCESS_CATALOG_OAUTH_PREFIX = `${AGENT_ACCESS_PREFIX}catalog-oauth/`;
 export const AGENT_ACCESS_MAP_DATASET_META_PREFIX = `${AGENT_ACCESS_PREFIX}map-datasets/meta/`;
 export const AGENT_ACCESS_MAP_DATASET_DATA_PREFIX = `${AGENT_ACCESS_PREFIX}map-datasets/data/`;
 export const AGENT_ACCESS_M365_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}m365-agents/`;
@@ -46,6 +47,14 @@ export const MCP_CONNECTOR_SOURCE = 'mcp-connector';
  * local-admin delegation, and history machinery for free.
  */
 export const GUIDE_SOURCE = 'guide';
+
+/**
+ * Pseudo-source for admin-configured CATALOG OAuth apps in canonical keys
+ * (`catalog-oauth::<catalogKey>`). These records carry the deployment's
+ * OAuth client id/secret for a curated catalog connector (github, asana, …)
+ * so admins can configure them in Admin → Connectors instead of env vars.
+ */
+export const CATALOG_OAUTH_SOURCE = 'catalog-oauth';
 
 /**
  * Pseudo-source for admin-curated map datasets in canonical keys
@@ -400,6 +409,41 @@ export type McpConnectorHistoryEntry = z.infer<
   typeof McpConnectorHistoryEntrySchema
 >;
 
+/**
+ * Deployment-level OAuth app for one curated catalog connector, stored so
+ * admins can manage these credentials in Admin → Connectors instead of the
+ * MCP_OAUTH_* env vars (which remain the fallback when no record exists).
+ * The record id IS the MCP_CATALOG key (e.g. 'github'), which also binds the
+ * sealed secret's AAD — catalog keys can never collide with `connector-<hex>`
+ * ids, so the two sealed namespaces stay distinct.
+ */
+export const CatalogOauthAppSchema = z.object({
+  version: z.literal(1),
+  /** The MCP_CATALOG key this app belongs to; immutable. */
+  id: z.string().min(1),
+  clientId: z.string().min(1),
+  /** ALWAYS sealed; never echoed to clients (hasClientSecret only). */
+  clientSecret: SealedSecretSchema.optional(),
+  createdBy: z.string(),
+  createdAt: z.string(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type CatalogOauthApp = z.infer<typeof CatalogOauthAppSchema>;
+
+/** Immutable audit copy for catalog OAuth app writes (null = delete). */
+export const CatalogOauthAppHistoryEntrySchema = z.object({
+  version: z.literal(1),
+  canonicalKey: z.string().min(1),
+  action: z.enum(['upsert', 'delete']),
+  app: CatalogOauthAppSchema.nullable(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type CatalogOauthAppHistoryEntry = z.infer<
+  typeof CatalogOauthAppHistoryEntrySchema
+>;
+
 export const GuideKindSchema = z.enum([
   'style',
   'terminology',
@@ -746,6 +790,15 @@ export function connectorBlobPath(id: string): string {
  */
 export function guideBlobPath(id: string): string {
   return `${AGENT_ACCESS_GUIDES_PREFIX}${id}.json`;
+}
+
+/**
+ * `system/agent-access/catalog-oauth/<catalogKey>.json` — a SIBLING of
+ * rules/ for the same reason as the other entity prefixes: listAllRules is
+ * fail-closed, so an alien blob under rules/ would brick every invocation.
+ */
+export function catalogOauthBlobPath(id: string): string {
+  return `${AGENT_ACCESS_CATALOG_OAUTH_PREFIX}${id}.json`;
 }
 
 /**

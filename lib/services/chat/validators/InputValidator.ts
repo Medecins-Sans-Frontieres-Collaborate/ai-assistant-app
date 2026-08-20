@@ -315,6 +315,12 @@ const ChatBodySchema = z
     reasoningEffort: z.enum(['minimal', 'low', 'medium', 'high']).optional(),
     verbosity: z.enum(['low', 'medium', 'high']).optional(),
     botId: z.string().max(100, 'Bot ID too long').optional(),
+    // Explicit agent-attachment signal (capabilities tray): the user attached
+    // botId's agent to this conversation, independent of the model. Unlocks
+    // the server-side agent resolution that is otherwise scoped to legacy
+    // `org-<botId>` model ids — old clients never send it, so a stale bot on
+    // a pre-tray conversation can't hijack an explicitly selected model.
+    agentAttached: z.boolean().optional(),
     searchMode: z.nativeEnum(SearchMode).optional(),
     webSearchOptions: z
       .object({

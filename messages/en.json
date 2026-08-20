@@ -992,6 +992,8 @@
     "expandSidebar": "Expand sidebar",
     "quickActionsTitle": "Quick Actions",
     "quickActions": "Quick Actions",
+    "agentsEntry": "Agents",
+    "agentsTitle": "Browse agents and start a chat with one",
     "expandFolder": "Expand folder {name}",
     "collapseFolder": "Collapse folder {name}",
     "folderOptions": "{name} options"
@@ -3943,7 +3945,30 @@
     "conflictTakeTheirs": "Take theirs",
     "conflictNoFieldDiff": "The values match — only the record version changed.",
     "conflictRecordGone": "This record was deleted (or could not be reloaded). Copy anything you need from the form, then reload.",
-    "groupsFlagOff": "Group targeting is not enabled for this environment yet. Existing group targets keep working."
+    "groupsFlagOff": "Group targeting is not enabled for this environment yet. Existing group targets keep working.",
+    "catalogOauth": {
+      "title": "Built-in connector OAuth apps",
+      "description": "Deployment-wide OAuth apps for the built-in connectors (GitHub, Asana, …). A record saved here overrides the MCP_OAUTH_* environment variables; removing it falls back to them. Client secrets are encrypted at rest and never shown again.",
+      "badgeAdmin": "Configured here",
+      "badgeEnv": "From environment",
+      "badgeNone": "Not configured",
+      "badgeDcr": "Self-registering",
+      "badgeDcrHint": "This provider can register an OAuth client automatically, so it works even without an app configured here.",
+      "clientIdLabel": "OAuth client ID",
+      "clientSecretLabel": "OAuth client secret",
+      "secretStoredPlaceholder": "Stored — type to replace, leave blank to keep",
+      "secretNewPlaceholder": "Paste the client secret",
+      "save": "Save",
+      "remove": "Remove",
+      "removeToEnv": "Remove (fall back to environment)",
+      "saved": "{name} OAuth app saved",
+      "removed": "{name} OAuth app removed",
+      "saveError": "Saving the OAuth app failed. Try again.",
+      "conflict": "This record changed elsewhere — reloaded, please retry.",
+      "storageUnavailable": "Admin storage is unreachable; existing records could not be listed. Saving is disabled until it recovers.",
+      "sealingUnavailable": "Secret encryption is not configured on this deployment (AUTH_SECRET missing) — client secrets cannot be saved.",
+      "updatedBy": "Updated by {by} on {at}"
+    }
   },
   "admin": {
     "title": "Admin",
@@ -4200,6 +4225,47 @@
     "fieldEventPrecision": "Precision",
     "fieldEventOngoing": "Ongoing"
   },
+  "toolModes": {
+    "webSearch": "Web search",
+    "codeInterpreter": "Code interpreter",
+    "off": "Off",
+    "auto": "Auto",
+    "always": "Always",
+    "routingPrivacy": "Privacy",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI search sends queries through Azure AI Foundry, which may retain them.",
+    "learnMore": "Learn more"
+  },
+  "agentAttach": {
+    "browserTitle": "Agents",
+    "browserSubtitle": "Add agents and connectors to this chat, or start a new chat with an agent. Most work with whatever model you've chosen.",
+    "searchPlaceholder": "Search agents and connectors…",
+    "loading": "Loading agents…",
+    "noMatches": "Nothing matches your search.",
+    "noAgents": "No agents available.",
+    "addToChat": "Add to this chat",
+    "removeFromChat": "Remove from this chat",
+    "newChat": "New chat",
+    "attached": "Attached",
+    "detach": "Detach",
+    "change": "Change",
+    "browse": "Browse agents…",
+    "noAgent": "No agent attached",
+    "close": "Close",
+    "kind": {
+      "rag": "Knowledge",
+      "prompt": "Persona",
+      "m365": "Knowledge (Microsoft 365)",
+      "org": "Knowledge",
+      "foundry": "Foundry agent",
+      "connector": "Connector"
+    },
+    "semantics": {
+      "your-model": "uses your model",
+      "pinned-model": "model set by admin",
+      "own-model": "runs on its own model"
+    }
+  },
   "connectorPin": {
     "toggleLabel": "Manage connector tools",
     "menuLabel": "Connectors",
@@ -4420,10 +4486,10 @@
   "m365": {
     "connections": {
       "title": "Connections",
-      "description": "Connect external accounts so the assistant can work with your own content. Everything is delegated: the assistant only ever acts as you, on content you can already access.",
+      "description": "Manage the external accounts the assistant can work with. Everything is delegated: the assistant only ever acts as you, on content you can already access.",
       "microsoft365": "Microsoft 365",
       "microsoft365Description": "Attach files from OneDrive and SharePoint, import emails, and save exports back to OneDrive.",
-      "delegatedNote": "Uses your own Microsoft account permissions. Nothing is shared with anyone else, and you can disconnect at any time.",
+      "delegatedNote": "Uses your own Microsoft account permissions. Nothing is shared with anyone else. Microsoft 365 is enabled by default for your organization — you can disconnect at any time, and your choice is remembered.",
       "calendarScopeNote": "Calendar access is granted at read-write level by your organization’s consent, but meeting features only ever read your calendar — nothing is created or changed in it.",
       "connect": "Connect",
       "disconnect": "Disconnect",
@@ -4776,5 +4842,10 @@
     "consentMissing": "Your organization hasn't approved OneDrive access yet.",
     "blockedByPolicy": "Sharing was blocked by your organization's policy.",
     "failed": "Couldn't share — nothing was created."
+  },
+  "peopleSuggest": {
+    "listLabel": "Suggestions from your organization",
+    "searching": "Searching your organization…",
+    "noMatches": "No directory matches — you can enter the address manually"
   }
 }

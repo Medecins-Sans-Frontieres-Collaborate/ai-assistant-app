@@ -986,7 +986,9 @@
     "quickActions": "Zochitika Mwachangu",
     "expandFolder": "Tsegulani chikwatu {name}",
     "collapseFolder": "Tsekani chikwatu {name}",
-    "folderOptions": "Njira za {name}"
+    "folderOptions": "Njira za {name}",
+    "agentsEntry": "Othandizira",
+    "agentsTitle": "Onani othandizira ndipo yambitsani kucheza ndi m'modzi"
   },
   "errors": {
     "somethingWentWrong": "Chinachake chalakwika",
@@ -4036,7 +4038,30 @@
     "conflictTakeTheirs": "Landirani zawo",
     "conflictNoFieldDiff": "Zambiri zili zofanana — version ya record yokha yasinthidwa.",
     "conflictRecordGone": "Record iyi yachotsedwa (kapena yalephera kutsegulidwanso). Kopani chilichonse chomwe mukufuna kuchokera mu fomu, kenaka onaninso.",
-    "groupsFlagOff": "Group targeting sinayatsidwe kwa environment iyi. Magulu omwe anasankhidwa kale akupitilizabe kugwira ntchito."
+    "groupsFlagOff": "Group targeting sinayatsidwe kwa environment iyi. Magulu omwe anasankhidwa kale akupitilizabe kugwira ntchito.",
+    "catalogOauth": {
+      "title": "Mapulogalamu a OAuth a olumikizidwa mkati",
+      "description": "Mapulogalamu a OAuth a ntchito yonse ya olumikizidwa mkati (GitHub, Asana, ...). Zomwe zasungidwa apa zimasintha MCP_OAUTH_* variables a environment; kuchotsa zimalola kuti zigwiritse ntchito zoyambirira. Zinsinsi za kasitomala zimakhala zotetezedwa ndipo sizingawonetsedwenso.",
+      "badgeAdmin": "Yakhazikitsidwa pano",
+      "badgeEnv": "Kuchokera pa environment",
+      "badgeNone": "Sinakhazikitsidwe",
+      "badgeDcr": "Iloleledwa paokha",
+      "badgeDcrHint": "Wopereka uyu angalembetse kasitomala wa OAuth yekha, kotero imagwiranso ntchito ngakhale palibe app yakonzedwa pano.",
+      "clientIdLabel": "ID ya kasitomala wa OAuth",
+      "clientSecretLabel": "Chinsinsi cha kasitomala wa OAuth",
+      "secretStoredPlaceholder": "Yasungidwa — lembani kusintha, siyani yopanda kanthu kusunga",
+      "secretNewPlaceholder": "Ikani chinsinsi cha kasitomala",
+      "save": "Sungani",
+      "remove": "Chotsani",
+      "removeToEnv": "Chotsani (bwererani ku environment)",
+      "saved": "{name} OAuth app yasungidwa",
+      "removed": "{name} OAuth app yachotsedwa",
+      "saveError": "Kusunga OAuth app kwalephera. Yesani kachiwiri.",
+      "conflict": "Zolemba izi zasintha kwina — zakonzanso, chonde yesaninso.",
+      "storageUnavailable": "Admin storage sikufikika; zolemba zomwe zilipo sizingathe kuonedwa. Kusunga kwazimitsidwa mpaka ibwerera.",
+      "sealingUnavailable": "Encryption ya chinsinsi sinakhazikitsidwe pa deployment iyi (AUTH_SECRET ilibe) — zinsinsi za makasitomala sizingathe kusungidwa.",
+      "updatedBy": "Yasinthidwa ndi {by} pa {at}"
+    }
   },
   "localModels": {
     "title": "Mitundu yapafupi",
@@ -4803,5 +4828,51 @@
     "failed": "Sizinathe kugawidwa — palibe chogawidwa chomwe chapangidwa.",
     "copyFailed": "Zalephereka kukopera ulalo—sankhani pamwambapa ndikuukopera pamanja.",
     "lastMessagesCountLabel": "Chiwerengero cha mauthenga aposachedwa oti muyikemo"
+  },
+  "toolModes": {
+    "webSearch": "Kusaka pa intaneti",
+    "codeInterpreter": "Womasulira ma code",
+    "off": "Zatsekedwa",
+    "auto": "Zodziwikiratu",
+    "always": "Nthawi zonse",
+    "routingPrivacy": "Chinsinsi",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Kusaka kwa Azure AI kudutsa ku Azure AI Foundry ndipo zingasungidwe.",
+    "learnMore": "Dziwani zambiri"
+  },
+  "agentAttach": {
+    "browserTitle": "Othandizira",
+    "browserSubtitle": "Onjezani othandizira ndi olumikizira m’cheza ichi, kapena yambitsani cheza chatsopano ndi wothandizira. Ambiri amagwirizana ndi mtundu uliwonse womwe mwasankha.",
+    "searchPlaceholder": "Fufuzani othandizira ndi olumikizira…",
+    "loading": "Ikutsegula othandizira…",
+    "noMatches": "Palibe chofananira ndi zomwe mwafufuza.",
+    "noAgents": "Palibe othandizira alipo.",
+    "addToChat": "Onjezani pa cheza ichi",
+    "removeFromChat": "Chotsani m’cheza ichi",
+    "newChat": "Cheza Chatsopano",
+    "attached": "Zalumikizidwa",
+    "detach": "Chotsani ulalo",
+    "change": "Sintha",
+    "browse": "Onani othandizira…",
+    "noAgent": "Palibe wothandizira walumikizidwa",
+    "close": "Tsekani",
+    "kind": {
+      "rag": "Chidziwitso",
+      "prompt": "Munthu",
+      "m365": "Chidziwitso (Microsoft 365)",
+      "org": "Chidziwitso",
+      "foundry": "Wothandizira wa Foundry",
+      "connector": "Olumikizira"
+    },
+    "semantics": {
+      "your-model": "amagwiritsa ntchito mtundu wanu",
+      "pinned-model": "mtundu wakhazikitsidwa ndi admin",
+      "own-model": "amagwiritsa ntchito mtundu wake"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Malangizo ochokera ku gulu lanu",
+    "searching": "Kusaka mu bungwe lanu…",
+    "noMatches": "Palibe zotsatana mu buku la mayina — mutha kulemba adiresi pamanja"
   }
 }

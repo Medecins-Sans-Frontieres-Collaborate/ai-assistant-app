@@ -986,7 +986,9 @@
     "quickActions": "Àwọn Ìṣe Kíákíá",
     "expandFolder": "Fa folda {name}",
     "collapseFolder": "Dín folda {name} ku",
-    "folderOptions": "Aṣayan {name}"
+    "folderOptions": "Aṣayan {name}",
+    "agentsEntry": "Àgbẹ̀rẹ́ ayélujára",
+    "agentsTitle": "Ṣàyẹ̀wò àwọn àgbẹ̀rẹ́ ayélujára kí o sì bẹ̀rẹ̀ ìjíròrò pẹ̀lú ẹ̀kan"
   },
   "errors": {
     "somethingWentWrong": "Nǹkan kan ṣẹlẹ̀",
@@ -4036,7 +4038,30 @@
     "conflictTakeTheirs": "Gba tiwọn",
     "conflictNoFieldDiff": "Iye mejeeji jọra — ẹya igbasilẹ nikan lo yipada.",
     "conflictRecordGone": "A ti pa igbasilẹ yii (tabi ko le tun gbasilẹ). Daakọ ohun tí o fẹ lati fọọmu, lẹhinna tun gbasilẹ.",
-    "groupsFlagOff": "A ko ti mu ìfojúkan ẹgbẹ ṣiṣẹ fun ayika yii. Àfojúkan ẹgbẹ to wa tẹlẹ ṣiwaju."
+    "groupsFlagOff": "A ko ti mu ìfojúkan ẹgbẹ ṣiṣẹ fun ayika yii. Àfojúkan ẹgbẹ to wa tẹlẹ ṣiwaju.",
+    "catalogOauth": {
+      "title": "Awọn ohun elo OAuth asopọ inu",
+      "description": "Awọn ohun elo OAuth fun gbogbo ibi-fifiranṣẹ fun awọn asopọ inu (GitHub, Asana, …). Fifi igbasilẹ pamọ nibi yoo kọja awọn oniyipada ayika MCP_OAUTH_* ; yọ kuro ki o lo awọn ayika wọnyi. A fi aṣiri awọn client secret pamọ nigba ipamọ, a ko si tun maa fi han lẹẹkansi.",
+      "badgeAdmin": "Ti ṣeto nibi",
+      "badgeEnv": "Lati ayika",
+      "badgeNone": "Kò tíì ṣeto",
+      "badgeDcr": "Ṣiṣeto ara rẹ",
+      "badgeDcrHint": "Atunṣe yi le forukọsilẹ OAuth client laifọwọyi, nitorinaa yoo ṣiṣẹ paapaa ti ko ba si ohun elo kan ti a ti ṣeto nibi.",
+      "clientIdLabel": "OAuth client ID",
+      "clientSecretLabel": "OAuth client secret",
+      "secretStoredPlaceholder": "Ti fipamọ — tẹ lati rọpo, fi silẹ silẹ lati pa mọ",
+      "secretNewPlaceholder": "Lẹẹmọ client secret",
+      "save": "Fipamọ",
+      "remove": "Yọ kuro",
+      "removeToEnv": "Yọ kuro (padà si ayika)",
+      "saved": "A ti fipamọ ohun elo OAuth {name}",
+      "removed": "A ti yọ ohun elo OAuth {name} kuro",
+      "saveError": "Fifipamọ ohun elo OAuth kuna. Gbiyanju lẹẹkansi.",
+      "conflict": "A ti yi igbasilẹ yi pada ni ibomiran — ti tun gbejade, jọwọ gbiyanju lẹẹkansi.",
+      "storageUnavailable": "Ko le wọle si ibi ipamọ admin; awọn igbasilẹ to wa ko le ṣe atokọ. A ti pa fifipamọ mọ titi ti o fi pada bọ.",
+      "sealingUnavailable": "A ko ti ṣeto amuṣeri aṣiri lori aṣàlẹ yii (AUTH_SECRET ti nsọnu) — a ko le fipamọ client secrets.",
+      "updatedBy": "A ti ṣagbeyẹwo nipasẹ {by} ni {at}"
+    }
   },
   "localModels": {
     "title": "Àwòrán àgbéyẹ̀wò agbègbè",
@@ -4803,5 +4828,51 @@
     "failed": "Kò le pín — kò sí ohun tó dà.",
     "copyFailed": "A kò lè da ìjápọ̀ náà — yan án lókè kí o sì kó o-pamọ́ lọ́wọ́.",
     "lastMessagesCountLabel": "Ìye àwọn ìfiranṣẹ́ tuntun láti kún"
+  },
+  "toolModes": {
+    "webSearch": "Ṣàwárí Ayélujára",
+    "codeInterpreter": "Onítejú kóòdù",
+    "off": "Pà",
+    "auto": "Aifọwọyi",
+    "always": "Nígbà gbogbo",
+    "routingPrivacy": "Ìpamọ̀",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Ìwádìí Azure AI n fi ibeere kọja Azure AI Foundry, ó ṣeé ṣe kí wọ́n pa wọ́n tán.",
+    "learnMore": "Káàkiri síi"
+  },
+  "agentAttach": {
+    "browserTitle": "Àgbẹ̀rẹ́ ayélujára",
+    "browserSubtitle": "Fi àwọn àgbẹ̀rẹ́ ati asopọ sí àjíròrò yìí, tàbí bẹ̀rẹ̀ àjíròrò tuntun pẹ̀lú àgbẹ̀rẹ́. Púpọ̀ nínú wọn ṣiṣẹ́ pẹ̀lú irú àmọ̀ràn tí o yàn.",
+    "searchPlaceholder": "Ṣàwárí àgbẹ̀rẹ́ àti asopọ…",
+    "loading": "N gbìyànjú àgbẹ̀rẹ́…",
+    "noMatches": "Kò sí ohun tó báwí pẹ̀lú àwárí rẹ.",
+    "noAgents": "Kò sí àgbẹ̀rẹ́ lọ́wọ́.",
+    "addToChat": "Fikun àjíròrò yìí",
+    "removeFromChat": "Yọ kuro ní àjíròrò yìí",
+    "newChat": "Àjíròrò tuntun",
+    "attached": "Asopọ̀",
+    "detach": "Yọ asopọ̀",
+    "change": "Ṣàtúnṣe",
+    "browse": "Ṣàwárí àgbẹ̀rẹ́…",
+    "noAgent": "Kò sí àgbẹ̀rẹ́ tó so mọ́",
+    "close": "Pa à",
+    "kind": {
+      "rag": "Ìmọ̀",
+      "prompt": "Ìwà",
+      "m365": "Ìmọ̀ (Microsoft 365)",
+      "org": "Ìmọ̀",
+      "foundry": "Àgbẹ̀rẹ́ Foundry",
+      "connector": "Asopọ"
+    },
+    "semantics": {
+      "your-model": "nlo àmọ̀ràn rẹ",
+      "pinned-model": "àmọ̀ràn tó ṣètò olùṣàkóso",
+      "own-model": "n ṣiṣẹ́ lórí àmọ̀ràn tirẹ"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Awọn imọran lati ọdọ agbari rẹ",
+    "searching": "N ṣe àwádi ilé-iṣẹ rẹ…",
+    "noMatches": "Kò sí ìbámu pẹ̀lú àkójọ orúkọ — o lè tẹ adirẹsi náà sílẹ̀ lọ́wọ́"
   }
 }

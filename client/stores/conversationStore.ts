@@ -950,7 +950,7 @@ export const useConversationStore = create<ConversationStore>()(
     }),
     {
       name: 'conversation-storage',
-      version: 7, // v7: backup tombstones (deletedConversations) + foldersUpdatedAt
+      version: 8, // v8: clear stale bot mirrors (agent/model decoupling)
       storage: createJSONStorage(() => perConversationStorage),
       partialize: (state) => ({
         conversations: state.conversations,
@@ -1053,6 +1053,24 @@ export const useConversationStore = create<ConversationStore>()(
             Array.isArray(state.folders) && state.folders.length > 0
               ? new Date().toISOString()
               : null;
+        }
+
+        if (version < 8) {
+          // Agent/model decoupling: `bot` used to be a mirror of an
+          // agent-shaped model id, and two write paths (useModelSelection,
+          // WorkflowModelSelect) left it stale after a model switch. From
+          // v8 a bot beside a REAL model means "agent attached" and the
+          // request carries agentAttached — so historical stale mirrors
+          // must be dropped once, or they'd surface as surprise
+          // attachments. A bot matching its `org-<bot>` model is a live
+          // legacy selection and is kept.
+          state.conversations = state.conversations.map((conv) => {
+            if (conv.bot && conv.model?.id !== `org-${conv.bot}`) {
+              const { bot: _bot, ...rest } = conv;
+              return rest as Conversation;
+            }
+            return conv;
+          });
         }
 
         return state;

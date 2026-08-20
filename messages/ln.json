@@ -986,7 +986,9 @@
     "quickActions": "Misala ya mbangu",
     "expandFolder": "Kofungola dossier {name}",
     "collapseFolder": "Kokanga dossier {name}",
-    "folderOptions": "Bapɔsɔ ya {name}"
+    "folderOptions": "Bapɔsɔ ya {name}",
+    "agentsEntry": "Ba agents",
+    "agentsTitle": "Luka ba agents mpe banda kosolola na moko"
   },
   "errors": {
     "somethingWentWrong": "Eloko moko ekende malamu te",
@@ -4036,7 +4038,30 @@
     "conflictTakeTheirs": "Zwa ya bango",
     "conflictNoFieldDiff": "Ba valeurs ekokani — version ya dossier nde ebonganaki.",
     "conflictRecordGone": "Dossier oyo elongwaki (to ekokaki te kozongisama). Kopia nionso olingi na formulaire, sima zongisa.",
-    "groupsFlagOff": "Group targeting etali te naino na environnement oyo. Bato ya groupe bazali naino kosalama."
+    "groupsFlagOff": "Group targeting etali te naino na environnement oyo. Bato ya groupe bazali naino kosalama.",
+    "catalogOauth": {
+      "title": "Ba-applications OAuth ya connector ya kati",
+      "description": "Ba-applications OAuth ya deployment mobimba mpo na ba connector ya kati (GitHub, Asana, ...). Soki ozali kokoma eloko awa, ekolongola ba MCP_OAUTH_* environment variables; soki o supprimaka, ezali kozwa ba variables yango lisusu. Ba client secrets ezalaka na encrypt na esika ya stockage mpe ekowumelama pamba, ekolakisamaka lisusu te.",
+      "badgeAdmin": "Epesami ebongiseli awa",
+      "badgeEnv": "Euti na environment",
+      "badgeNone": "Ebongisamaki te",
+      "badgeDcr": "Ezali komibongisa moko",
+      "badgeDcrHint": "Provider oyo ekoki kobongisa client OAuth moko na ndenge automatique, yango ezali kosala ata soki application ebongisamaki awa te.",
+      "clientIdLabel": "Client ID ya OAuth",
+      "clientSecretLabel": "Client secret ya OAuth",
+      "secretStoredPlaceholder": "Ebatelami — koma soki olingi kobongola, tika mpamba soki olingi ekoba",
+      "secretNewPlaceholder": "Kopier-pepaste client secret",
+      "save": "Kokanga",
+      "remove": "Kolongola",
+      "removeToEnv": "Kolongola (ezongi na environment)",
+      "saved": "{name} OAuth application ebongisami",
+      "removed": "{name} OAuth application elongwami",
+      "saveError": "Kobikisa OAuth application eleki te. Sala lisusu.",
+      "conflict": "Element oyo ebongwami bisika mosusu — ezozongisama, sala lisusu",
+      "storageUnavailable": "Stockage ya admin ekoki kokotama te; ba dossiers oyo ezali ekoki kolakisama te. Kobikisa ezali kokotama te ti ekomi lisusu normal.",
+      "sealingUnavailable": "Secret encryption ebongisami te na deployment oyo (AUTH_SECRET ezali te) — client secrets bakoki kobikisa yango te.",
+      "updatedBy": "Ebongisami na {by} na mokolo {at}"
+    }
   },
   "localModels": {
     "title": "Bamodelo ya esika",
@@ -4803,5 +4828,51 @@
     "failed": "Ekokaki te kobabela — eloko moko esalemi te.",
     "copyFailed": "Link ekokaki te kopi — zwa yango likolo mpe kopia ye na maboko.",
     "lastMessagesCountLabel": "Motángo ya nsango ya suka ekosangana"
+  },
+  "toolModes": {
+    "webSearch": "Koyebisa na Web",
+    "codeInterpreter": "Motángi ya code",
+    "off": "Kipe",
+    "auto": "Auto",
+    "always": "Ntango nyonso",
+    "routingPrivacy": "Bipai",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI search etindaka mituna na nzela ya Azure AI Foundry, oyo ekoki kobomba yango.",
+    "learnMore": "Yekola lisusu"
+  },
+  "agentAttach": {
+    "browserTitle": "Ba agents",
+    "browserSubtitle": "Bakisa ba agents mpe ba connectors na masolo oyo, to banda sango ya sika na agent. Mingi basalaka na model nyonso yo poní.",
+    "searchPlaceholder": "Luka ba agents mpe ba connectors…",
+    "loading": "Kozwa ba agents…",
+    "noMatches": "Eloko moko te ebimeli na boluki na yo.",
+    "noAgents": "Ba agents ezali te.",
+    "addToChat": "Bakisa na masolo oyo",
+    "removeFromChat": "Longola na masolo oyo",
+    "newChat": "Sango ya sika",
+    "attached": "Ebakami",
+    "detach": "Kolongola",
+    "change": "Kobongola",
+    "browse": "Luka ba agents…",
+    "noAgent": "Motiki agent te",
+    "close": "Kolongela",
+    "kind": {
+      "rag": "Boyebi",
+      "prompt": "Moto",
+      "m365": "Boyebi (Microsoft 365)",
+      "org": "Boyebi",
+      "foundry": "Agent ya Foundry",
+      "connector": "Connector"
+    },
+    "semantics": {
+      "your-model": "asalelaka model na yo",
+      "pinned-model": "model esalemi na admin",
+      "own-model": "esalelaka model na ye moko"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Bato oyo organisation na bino epesi toli",
+    "searching": "Tosalaki recherche na organisation na bino…",
+    "noMatches": "Ezali eloko moko te na répertoire — okoki kotya adresse na maboko"
   }
 }

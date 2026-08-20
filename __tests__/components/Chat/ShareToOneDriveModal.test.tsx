@@ -368,17 +368,23 @@ describe('ShareToOneDriveModal', () => {
       });
 
       const options = screen.getAllByRole('option');
-      expect(options[0]).toHaveAttribute('id', 'share-people-option-0');
-      expect(options[1]).toHaveAttribute('id', 'share-people-option-1');
+      expect(options[0]).toHaveAttribute(
+        'id',
+        'share-people-suggestions-option-0',
+      );
+      expect(options[1]).toHaveAttribute(
+        'id',
+        'share-people-suggestions-option-1',
+      );
       expect(input).toHaveAttribute(
         'aria-activedescendant',
-        'share-people-option-0',
+        'share-people-suggestions-option-0',
       );
 
       fireEvent.keyDown(input, { key: 'ArrowDown' });
       expect(input).toHaveAttribute(
         'aria-activedescendant',
-        'share-people-option-1',
+        'share-people-suggestions-option-1',
       );
       expect(options[1]).toHaveAttribute('aria-selected', 'true');
     });

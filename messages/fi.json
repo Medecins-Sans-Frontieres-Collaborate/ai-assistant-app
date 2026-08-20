@@ -881,7 +881,9 @@
     "quickActions": "Pikatoiminnot",
     "expandFolder": "Laajenna kansio {name}",
     "collapseFolder": "Supista kansio {name}",
-    "folderOptions": "{name} asetukset"
+    "folderOptions": "{name} asetukset",
+    "agentsEntry": "Agentit",
+    "agentsTitle": "Selaa agentteja ja aloita keskustelu jonkun kanssa"
   },
   "prompts": {
     "buildReusablePrompts": "Rakenna uudelleenkäytettäviä kehotteita tekoälyn avulla",
@@ -4052,7 +4054,30 @@
     "conflictTakeTheirs": "Ota heidän versio",
     "conflictNoFieldDiff": "Arvot vastaavat — vain tietueen versio muuttui.",
     "conflictRecordGone": "Tämä tietue on poistettu (tai sitä ei voitu ladata uudelleen). Kopioi tarvitsemasi tiedot lomakkeelta ja lataa sivu uudelleen.",
-    "groupsFlagOff": "Ryhmien kohdistus ei ole vielä käytössä tässä ympäristössä. Olemassa olevat ryhmäkohdistukset toimivat edelleen."
+    "groupsFlagOff": "Ryhmien kohdistus ei ole vielä käytössä tässä ympäristössä. Olemassa olevat ryhmäkohdistukset toimivat edelleen.",
+    "catalogOauth": {
+      "title": "Sisäänrakennetut connectorin OAuth-sovellukset",
+      "description": "Koko käyttöönoton laajuiset OAuth-sovellukset sisäänrakennettuja liittimiä varten (GitHub, Asana, …). Täällä tallennettu tieto ohittaa MCP_OAUTH_* -ympäristömuuttujat; poistaminen palauttaa ne käyttöön. Client secret -arvot ovat levyllä salattuja eikä niitä näytetä uudelleen.",
+      "badgeAdmin": "Määritetty täällä",
+      "badgeEnv": "Ympäristöstä",
+      "badgeNone": "Ei määritetty",
+      "badgeDcr": "Itse rekisteröityvä",
+      "badgeDcrHint": "Tämä tarjoaja voi rekisteröidä OAuth-klientin automaattisesti, joten se toimii myös ilman täällä määritettyä sovellusta.",
+      "clientIdLabel": "OAuth client ID",
+      "clientSecretLabel": "OAuth client secret",
+      "secretStoredPlaceholder": "Tallennettu — kirjoita korvataksesi, jätä tyhjäksi säilyttääksesi",
+      "secretNewPlaceholder": "Liitä client secret",
+      "save": "Tallenna",
+      "remove": "Poista",
+      "removeToEnv": "Poista (palaa ympäristömuuttujiin)",
+      "saved": "{name} OAuth-sovellus tallennettu",
+      "removed": "{name} OAuth-sovellus poistettu",
+      "saveError": "OAuth-sovelluksen tallennus epäonnistui. Yritä uudelleen.",
+      "conflict": "Tätä tietuetta on muutettu muualla — ladattu uudelleen, yritä uudelleen.",
+      "storageUnavailable": "Ylläpidon tallennustila ei ole saavutettavissa; olemassa olevia tietueita ei voitu listata. Tallennus on poissa käytöstä kunnes tilanne korjaantuu.",
+      "sealingUnavailable": "Salaisuuksien salaus ei ole määritetty tässä käyttöönotossa (AUTH_SECRET puuttuu) — client secret -arvoja ei voi tallentaa.",
+      "updatedBy": "Päivittänyt {by} {at}"
+    }
   },
   "localModels": {
     "title": "Paikalliset mallit",
@@ -4819,5 +4844,51 @@
     "failed": "Jakaminen epäonnistui — mitään ei luotu.",
     "copyFailed": "Linkkiä ei voitu kopioida — valitse se yllä ja kopioi manuaalisesti.",
     "lastMessagesCountLabel": "Sisällytettävien uusien viestien määrä"
+  },
+  "toolModes": {
+    "webSearch": "Verkkohaku",
+    "codeInterpreter": "Koodin tulkki",
+    "off": "Pois",
+    "auto": "Automaattinen",
+    "always": "Aina",
+    "routingPrivacy": "Tietosuoja",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI -haku lähettää kyselyt Azure AI Foundryn kautta, joka saattaa säilyttää ne.",
+    "learnMore": "Lue lisää"
+  },
+  "agentAttach": {
+    "browserTitle": "Agentit",
+    "browserSubtitle": "Lisää agentteja ja liittimiä tähän keskusteluun tai aloita uusi keskustelu agentin kanssa. Useimmat toimivat valitsemallasi mallilla.",
+    "searchPlaceholder": "Etsi agentteja ja liittimiä…",
+    "loading": "Ladataan agentteja…",
+    "noMatches": "Haullasi ei löytynyt tuloksia.",
+    "noAgents": "Ei agentteja saatavilla.",
+    "addToChat": "Lisää tähän keskusteluun",
+    "removeFromChat": "Poista tästä keskustelusta",
+    "newChat": "Uusi keskustelu",
+    "attached": "Liitetty",
+    "detach": "Irrota",
+    "change": "Vaihda",
+    "browse": "Selaa agentteja…",
+    "noAgent": "Ei agenttia liitettynä",
+    "close": "Sulje",
+    "kind": {
+      "rag": "Tietämys",
+      "prompt": "Persoona",
+      "m365": "Tietämys (Microsoft 365)",
+      "org": "Tietämys",
+      "foundry": "Foundry-agentti",
+      "connector": "Liitin"
+    },
+    "semantics": {
+      "your-model": "käyttää omaa malliasti",
+      "pinned-model": "ylläpitäjän määrittämä malli",
+      "own-model": "käyttää omaa malliaan"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Ehdotuksia organisaatioltasi",
+    "searching": "Haetaan organisaatiostasi…",
+    "noMatches": "Hakemistosta ei löytynyt sopivia – voit syöttää osoitteen manuaalisesti"
   }
 }

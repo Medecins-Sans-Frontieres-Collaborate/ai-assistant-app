@@ -33,15 +33,30 @@ export interface EnvironmentConfig {
  * model-specific error. getFallbackChain() prepends the ring's (dynamic)
  * default model; this static tail then covers progressively different
  * models/providers so an outage affecting one deployment doesn't take out
- * every fallback. Agent and non-streaming models are intentionally
+ * every fallback. Ordered cheapest-viable-first (cost policy): Mistral sits
+ * high deliberately, and the gpt-5.2 deployments are intentionally absent —
+ * in EU that deployment actually serves 5.5, so falling back onto it defeats
+ * the cost ordering. Agent and non-streaming models are intentionally
  * excluded — their behavior differs too much to substitute silently.
  */
 const DEFAULT_FALLBACK_CHAIN: string[] = [
-  OpenAIModelID.GPT_5_2_CHAT,
-  OpenAIModelID.GPT_5_2,
+  OpenAIModelID.GPT_5_4,
+  OpenAIModelID.MISTRAL_LARGE_3,
   OpenAIModelID.GPT_5_MINI,
-  OpenAIModelID.DEEPSEEK_V3_1,
+  OpenAIModelID.DEEPSEEK_V4_PRO,
 ];
+
+/**
+ * Ordered default-model preference (cost policy). getDefaultModel() picks the
+ * first entry that is actually present in the model list it resolves against
+ * (and selectable in the caller's region). A ranked list rather than a single
+ * id because US and EU are served from different accounts: a candidate
+ * missing in one region simply falls through to the next, and finally to the
+ * dynamic latest-standard-GPT rule. gpt-5.4 leads because it is deployed in
+ * BOTH regions and is the cheaper choice — the gpt-5.2 deployment is NOT
+ * (in EU it actually serves 5.5).
+ */
+const DEFAULT_MODEL_PREFERENCE: string[] = [OpenAIModelID.GPT_5_4];
 
 /**
  * Models excluded from the STATIC (non-discovery) list in beta/prod.
@@ -56,7 +71,9 @@ const DEFAULT_FALLBACK_CHAIN: string[] = [
  * enabled in every ring.
  */
 const STATIC_LIST_EXCLUSIONS: string[] = [
-  OpenAIModelID.GPT_5_4,
+  // gpt-5.4 is deliberately NOT excluded: it is the preferred default
+  // (DEFAULT_MODEL_PREFERENCE) and is deployed in both the US and EU
+  // accounts, so the static fallback path must be able to resolve it.
   OpenAIModelID.GPT_5_4_NANO,
   OpenAIModelID.GPT_5_3_CHAT,
   OpenAIModelID.GPT_5,
@@ -180,21 +197,41 @@ export function getModelConfig(): EnvironmentConfig {
 /**
  * Gets the default model for the current environment.
  *
- * Unless the ring config sets an explicit `defaultModel` override, the
- * default is DYNAMIC: the latest (highest versionRank) standard-variant GPT
- * among `availableModels` — pass the live/served model list where you have
- * one so the default tracks actual deployments. Without a list it resolves
- * against the vetted static list, so callers that run before/without
- * discovery still get a ring-safe answer.
+ * Resolution order:
+ *  1. The ring config's explicit `defaultModel` override, when set.
+ *  2. The first DEFAULT_MODEL_PREFERENCE entry present in the candidate
+ *     pool — the cost-policy pick.
+ *  3. The latest (highest versionRank) standard-variant GPT in the pool.
+ *  4. fallbackModelID as the last resort.
+ *
+ * The pool is `availableModels` — pass the live/served model list where you
+ * have one so the default tracks actual deployments — or the vetted static
+ * list, so callers that run before/without discovery still get a ring-safe
+ * answer. Pass `region` where the caller's region is known: US and EU are
+ * served from different accounts, so a model that is a fine default in one
+ * region may not be selectable in the other.
  */
-export function getDefaultModel(availableModels?: OpenAIModel[]): string {
+export function getDefaultModel(
+  availableModels?: OpenAIModel[],
+  region?: UserRegion | null,
+): string {
   const override = getModelConfig().defaultModel;
   if (override) return override;
 
+  const pool = (availableModels ?? getStaticModelList()).filter(
+    (m) =>
+      !m.isDisabled &&
+      !isModelDisabled(m.id) &&
+      isModelSelectableInRegion(m, region),
+  );
+
+  for (const preferredId of DEFAULT_MODEL_PREFERENCE) {
+    if (pool.some((m) => m.id === preferredId)) return preferredId;
+  }
+
   let latest: OpenAIModel | undefined;
-  for (const model of availableModels ?? getStaticModelList()) {
+  for (const model of pool) {
     if (model.series !== 'gpt' || model.variant !== 'standard') continue;
-    if (model.isDisabled || isModelDisabled(model.id)) continue;
     if (!latest || versionRank(model) > versionRank(latest)) {
       latest = model;
     }

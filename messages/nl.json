@@ -871,7 +871,9 @@
     "quickActions": "Snelle acties",
     "expandFolder": "Map {name} uitvouwen",
     "collapseFolder": "Map {name} samenvouwen",
-    "folderOptions": "Opties voor {name}"
+    "folderOptions": "Opties voor {name}",
+    "agentsEntry": "Agenten",
+    "agentsTitle": "Blader door agenten en begin een chat met een"
   },
   "prompts": {
     "buildReusablePrompts": "Bouw herbruikbare prompts met AI-assistentie",
@@ -4052,7 +4054,30 @@
     "conflictTakeTheirs": "Hun versie nemen",
     "conflictNoFieldDiff": "De waarden komen overeen — alleen de recordversie is gewijzigd.",
     "conflictRecordGone": "Dit record is verwijderd (of kon niet opnieuw worden geladen). Kopieer alles wat u nodig heeft uit het formulier en herlaad dan.",
-    "groupsFlagOff": "Groepstargeting is voor deze omgeving nog niet ingeschakeld. Bestaande groepstargets blijven werken."
+    "groupsFlagOff": "Groepstargeting is voor deze omgeving nog niet ingeschakeld. Bestaande groepstargets blijven werken.",
+    "catalogOauth": {
+      "title": "Ingebouwde connector OAuth-apps",
+      "description": "Organisatiebrede OAuth-apps voor de ingebouwde connectors (GitHub, Asana, ...). Een record dat hier wordt opgeslagen overschrijft de MCP_OAUTH_* omgevingsvariabelen; als u deze verwijdert, wordt er teruggevallen op die variabelen. Client secrets worden versleuteld opgeslagen en nooit opnieuw getoond.",
+      "badgeAdmin": "Hier geconfigureerd",
+      "badgeEnv": "Uit omgeving",
+      "badgeNone": "Niet geconfigureerd",
+      "badgeDcr": "Zelfregistrerend",
+      "badgeDcrHint": "Deze provider kan automatisch een OAuth-client aanmaken, dus werkt ook zonder een hier geconfigureerde app.",
+      "clientIdLabel": "OAuth client-ID",
+      "clientSecretLabel": "OAuth client secret",
+      "secretStoredPlaceholder": "Opgeslagen — typ om te vervangen, laat leeg om te behouden",
+      "secretNewPlaceholder": "Plak het client secret",
+      "save": "Opslaan",
+      "remove": "Verwijderen",
+      "removeToEnv": "Verwijderen (terugvallen op omgeving)",
+      "saved": "{name} OAuth-app opgeslagen",
+      "removed": "{name} OAuth-app verwijderd",
+      "saveError": "Het opslaan van de OAuth-app is mislukt. Probeer het opnieuw.",
+      "conflict": "Dit record is elders gewijzigd — opnieuw geladen, probeer het opnieuw.",
+      "storageUnavailable": "Beheeropslag is onbereikbaar; bestaande records konden niet worden weergegeven. Opslaan is uitgeschakeld totdat het is hersteld.",
+      "sealingUnavailable": "Versleuteling van secrets is niet geconfigureerd voor deze deployment (AUTH_SECRET ontbreekt) — client secrets kunnen niet worden opgeslagen.",
+      "updatedBy": "Bijgewerkt door {by} op {at}"
+    }
   },
   "localModels": {
     "title": "Lokale modellen",
@@ -4819,5 +4844,51 @@
     "failed": "Kon niet delen — er is niets aangemaakt.",
     "copyFailed": "Kan de link niet kopiëren — selecteer deze hierboven en kopieer handmatig.",
     "lastMessagesCountLabel": "Aantal recente berichten om mee te nemen"
+  },
+  "toolModes": {
+    "webSearch": "Webzoekopdracht",
+    "codeInterpreter": "Code-interpreter",
+    "off": "Uit",
+    "auto": "Automatisch",
+    "always": "Altijd",
+    "routingPrivacy": "Privacy",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI Search verstuurt zoekopdrachten via Azure AI Foundry, waar deze mogelijk worden bewaard.",
+    "learnMore": "Meer informatie"
+  },
+  "agentAttach": {
+    "browserTitle": "Agenten",
+    "browserSubtitle": "Voeg agenten en connectoren toe aan deze chat, of start een nieuw gesprek met een agent. De meeste werken met het gekozen model.",
+    "searchPlaceholder": "Zoek agenten en connectoren…",
+    "loading": "Agenten laden…",
+    "noMatches": "Geen resultaten voor uw zoekopdracht.",
+    "noAgents": "Geen agenten beschikbaar.",
+    "addToChat": "Toevoegen aan deze chat",
+    "removeFromChat": "Verwijderen uit deze chat",
+    "newChat": "Nieuwe chat",
+    "attached": "Gekoppeld",
+    "detach": "Ontkoppelen",
+    "change": "Wijzigen",
+    "browse": "Blader door agenten…",
+    "noAgent": "Geen agent gekoppeld",
+    "close": "Sluiten",
+    "kind": {
+      "rag": "Kennis",
+      "prompt": "Persona",
+      "m365": "Kennis (Microsoft 365)",
+      "org": "Kennis",
+      "foundry": "Foundry-agent",
+      "connector": "Connector"
+    },
+    "semantics": {
+      "your-model": "gebruikt uw model",
+      "pinned-model": "model ingesteld door admin",
+      "own-model": "draait op eigen model"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Suggesties van uw organisatie",
+    "searching": "Zoeken in uw organisatie…",
+    "noMatches": "Geen overeenkomsten in de directory — u kunt het adres handmatig invoeren"
   }
 }

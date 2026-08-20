@@ -852,7 +852,9 @@
     "quickActions": "Acciones rápidas",
     "expandFolder": "Expandir carpeta {name}",
     "collapseFolder": "Colapsar carpeta {name}",
-    "folderOptions": "Opciones de {name}"
+    "folderOptions": "Opciones de {name}",
+    "agentsEntry": "Agentes",
+    "agentsTitle": "Explora agentes y comienza un chat con uno"
   },
   "errors": {
     "somethingWentWrong": "Algo salió mal",
@@ -4052,7 +4054,30 @@
     "conflictTakeTheirs": "Usar su versión",
     "conflictNoFieldDiff": "Los valores coinciden; solo cambió la versión del registro.",
     "conflictRecordGone": "Este registro fue eliminado (o no se pudo recargar). Copie lo que necesite del formulario y luego recargue.",
-    "groupsFlagOff": "La orientación por grupos aún no está habilitada en este entorno. Los grupos ya configurados siguen funcionando."
+    "groupsFlagOff": "La orientación por grupos aún no está habilitada en este entorno. Los grupos ya configurados siguen funcionando.",
+    "catalogOauth": {
+      "title": "Aplicaciones OAuth de conectores integrados",
+      "description": "Aplicaciones OAuth a nivel de despliegue para los conectores integrados (GitHub, Asana, …). Un registro guardado aquí sobrescribe las variables de entorno MCP_OAUTH_*; al retirarlo, vuelven a utilizarse. Los secretos de cliente se cifran en reposo y no se mostrarán de nuevo.",
+      "badgeAdmin": "Configurado aquí",
+      "badgeEnv": "Desde el entorno",
+      "badgeNone": "No configurado",
+      "badgeDcr": "Autoregistrado",
+      "badgeDcrHint": "Este proveedor puede registrar un cliente OAuth automáticamente, por lo que funcionará incluso sin una aplicación configurada aquí.",
+      "clientIdLabel": "ID de cliente OAuth",
+      "clientSecretLabel": "Secreto de cliente OAuth",
+      "secretStoredPlaceholder": "Guardado — escriba para reemplazar, deje en blanco para conservar",
+      "secretNewPlaceholder": "Pegue el secreto de cliente",
+      "save": "Guardar",
+      "remove": "Eliminar",
+      "removeToEnv": "Eliminar (volver al entorno)",
+      "saved": "Aplicación OAuth {name} guardada",
+      "removed": "Aplicación OAuth {name} eliminada",
+      "saveError": "Error al guardar la aplicación OAuth. Intente de nuevo.",
+      "conflict": "Este registro ha cambiado en otro lugar — recargado, por favor intente de nuevo.",
+      "storageUnavailable": "El almacenamiento administrativo no está disponible; no se pudieron listar los registros existentes. El guardado estará deshabilitado hasta que se recupere.",
+      "sealingUnavailable": "El cifrado de secretos no está configurado en este despliegue (falta AUTH_SECRET); no se pueden guardar los secretos de cliente.",
+      "updatedBy": "Actualizado por {by} el {at}"
+    }
   },
   "localModels": {
     "title": "Modelos locales",
@@ -4819,5 +4844,51 @@
     "failed": "No se pudo compartir; no se creó nada.",
     "copyFailed": "No se pudo copiar el enlace; selecciónelo arriba y cópielo manualmente.",
     "lastMessagesCountLabel": "Número de mensajes recientes a incluir"
+  },
+  "toolModes": {
+    "webSearch": "Búsqueda web",
+    "codeInterpreter": "Intérprete de código",
+    "off": "Desactivado",
+    "auto": "Automático",
+    "always": "Siempre",
+    "routingPrivacy": "Privacidad",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "La búsqueda de Azure AI envía consultas a través de Azure AI Foundry, que puede conservarlas.",
+    "learnMore": "Más información"
+  },
+  "agentAttach": {
+    "browserTitle": "Agentes",
+    "browserSubtitle": "Agregue agentes y conectores a este chat o inicie un nuevo chat con un agente. La mayoría funciona con el modelo que haya elegido.",
+    "searchPlaceholder": "Buscar agentes y conectores…",
+    "loading": "Cargando agentes…",
+    "noMatches": "No hay resultados para su búsqueda.",
+    "noAgents": "No hay agentes disponibles.",
+    "addToChat": "Agregar a este chat",
+    "removeFromChat": "Eliminar de este chat",
+    "newChat": "Nuevo chat",
+    "attached": "Adjuntado",
+    "detach": "Desvincular",
+    "change": "Cambiar",
+    "browse": "Explorar agentes…",
+    "noAgent": "Ningún agente adjunto",
+    "close": "Cerrar",
+    "kind": {
+      "rag": "Conocimiento",
+      "prompt": "Persona",
+      "m365": "Conocimiento (Microsoft 365)",
+      "org": "Conocimiento",
+      "foundry": "Agente Foundry",
+      "connector": "Conector"
+    },
+    "semantics": {
+      "your-model": "usa su modelo",
+      "pinned-model": "modelo definido por el administrador",
+      "own-model": "funciona con su propio modelo"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Sugerencias de su organización",
+    "searching": "Buscando en su organización…",
+    "noMatches": "No hay coincidencias en el directorio; puede ingresar la dirección manualmente"
   }
 }

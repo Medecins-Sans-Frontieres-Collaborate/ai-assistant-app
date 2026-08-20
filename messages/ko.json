@@ -906,7 +906,9 @@
     "quickActions": "빠른 작업",
     "expandFolder": "폴더 {name} 펼치기",
     "collapseFolder": "폴더 {name} 접기",
-    "folderOptions": "{name} 옵션"
+    "folderOptions": "{name} 옵션",
+    "agentsEntry": "에이전트",
+    "agentsTitle": "에이전트를 찾아보고 채팅을 시작하세요"
   },
   "prompts": {
     "buildReusablePrompts": "AI 지원으로 재사용 가능한 프롬프트 구축",
@@ -4052,7 +4054,30 @@
     "conflictTakeTheirs": "상대 버전 적용",
     "conflictNoFieldDiff": "값은 동일하며, 버전만 변경되었습니다.",
     "conflictRecordGone": "이 레코드는 삭제되었거나 다시 불러올 수 없습니다. 필요한 내용이 있다면 복사 후 새로고침 해주세요.",
-    "groupsFlagOff": "이 환경에서는 아직 그룹 타깃팅이 활성화되지 않았습니다. 기존 그룹 타깃팅은 계속 작동합니다."
+    "groupsFlagOff": "이 환경에서는 아직 그룹 타깃팅이 활성화되지 않았습니다. 기존 그룹 타깃팅은 계속 작동합니다.",
+    "catalogOauth": {
+      "title": "내장 커넥터 OAuth 앱",
+      "description": "내장 커넥터(GitHub, Asana 등)를 위한 전체 배포 OAuth 앱입니다. 여기에 저장된 값은 MCP_OAUTH_* 환경 변수를 덮어씁니다. 삭제하면 환경 변수로 복귀합니다. 클라이언트 시크릿은 저장 시 암호화되며, 다시 표시되지 않습니다.",
+      "badgeAdmin": "여기서 구성됨",
+      "badgeEnv": "환경에서 가져옴",
+      "badgeNone": "미구성",
+      "badgeDcr": "자가 등록",
+      "badgeDcrHint": "이 공급자는 OAuth 클라이언트를 자동으로 등록할 수 있으므로, 여기에 앱이 구성되어 있지 않아도 동작합니다.",
+      "clientIdLabel": "OAuth 클라이언트 ID",
+      "clientSecretLabel": "OAuth 클라이언트 시크릿",
+      "secretStoredPlaceholder": "저장됨 — 변경하려면 입력, 그대로 두려면 비워두기",
+      "secretNewPlaceholder": "클라이언트 시크릿을 붙여넣기",
+      "save": "저장",
+      "remove": "제거",
+      "removeToEnv": "제거(환경 변수로 복귀)",
+      "saved": "{name} OAuth 앱이 저장되었습니다",
+      "removed": "{name} OAuth 앱이 제거되었습니다",
+      "saveError": "OAuth 앱 저장에 실패했습니다. 다시 시도해 주세요.",
+      "conflict": "이 레코드는 다른 곳에서 변경되었습니다 — 새로고침되었으니 다시 시도해 주세요.",
+      "storageUnavailable": "관리자 저장소에 접근할 수 없습니다. 기존 레코드를 불러올 수 없습니다. 복구 전까지 저장이 비활성화됩니다.",
+      "sealingUnavailable": "이 배포에서 비밀 암호화가 설정되어 있지 않습니다(AUTH_SECRET 누락) — 클라이언트 시크릿을 저장할 수 없습니다.",
+      "updatedBy": "{by}님이 {at}에 업데이트함"
+    }
   },
   "localModels": {
     "title": "로컬 모델",
@@ -4819,5 +4844,51 @@
     "failed": "공유할 수 없습니다 — 아무 것도 생성되지 않았습니다.",
     "copyFailed": "링크를 복사할 수 없습니다 — 위에서 직접 선택하여 복사해 주세요.",
     "lastMessagesCountLabel": "포함할 최근 메시지 수"
+  },
+  "toolModes": {
+    "webSearch": "웹 검색",
+    "codeInterpreter": "코드 인터프리터",
+    "off": "끄기",
+    "auto": "자동",
+    "always": "항상",
+    "routingPrivacy": "개인정보",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI 검색은 쿼리를 Azure AI Foundry를 통해 전송하며, 이때 쿼리가 저장될 수 있습니다.",
+    "learnMore": "자세히 알아보기"
+  },
+  "agentAttach": {
+    "browserTitle": "에이전트",
+    "browserSubtitle": "이 채팅에 에이전트와 커넥터를 추가하거나, 에이전트로 새 채팅을 시작할 수 있습니다. 대부분은 선택한 모델과 함께 작동합니다.",
+    "searchPlaceholder": "에이전트 및 커넥터 검색…",
+    "loading": "에이전트 불러오는 중…",
+    "noMatches": "검색 결과가 없습니다.",
+    "noAgents": "사용 가능한 에이전트가 없습니다.",
+    "addToChat": "이 채팅에 추가",
+    "removeFromChat": "이 채팅에서 제거",
+    "newChat": "새 채팅",
+    "attached": "첨부됨",
+    "detach": "분리",
+    "change": "변경",
+    "browse": "에이전트 둘러보기…",
+    "noAgent": "첨부된 에이전트 없음",
+    "close": "닫기",
+    "kind": {
+      "rag": "지식",
+      "prompt": "페르소나",
+      "m365": "지식(Microsoft 365)",
+      "org": "지식",
+      "foundry": "Foundry 에이전트",
+      "connector": "커넥터"
+    },
+    "semantics": {
+      "your-model": "내 모델 사용",
+      "pinned-model": "관리자가 설정한 모델",
+      "own-model": "자체 모델로 실행"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "귀하의 기관에서 추천",
+    "searching": "조직에서 검색 중입니다…",
+    "noMatches": "디렉터리에서 일치하는 항목이 없습니다 — 주소를 직접 입력할 수 있습니다"
   }
 }

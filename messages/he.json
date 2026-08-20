@@ -881,7 +881,9 @@
     "quickActions": "פעולות מהירות",
     "expandFolder": "הרחב תיקיה {name}",
     "collapseFolder": "כווץ תיקיה {name}",
-    "folderOptions": "אפשרויות עבור {name}"
+    "folderOptions": "אפשרויות עבור {name}",
+    "agentsEntry": "סוכנים",
+    "agentsTitle": "עיינו בסוכנים והתחילו שיחה עם אחד"
   },
   "prompts": {
     "buildReusablePrompts": "בניית הנחיות לשימוש חוזר בעזרת AI",
@@ -4052,7 +4054,30 @@
     "conflictTakeTheirs": "קח את שלהם",
     "conflictNoFieldDiff": "הערכים זהים — רק גרסת הרשומה השתנתה.",
     "conflictRecordGone": "הרשומה הזאת נמחקה (או שלא ניתנה לטעינה חוזרת). העתק כל מה שדרוש מהטופס וטען מחדש.",
-    "groupsFlagOff": "טרגוט לקבוצות לא הופעל עדיין בסביבה זו. קבוצה שהוגדרה תמשיך לפעול."
+    "groupsFlagOff": "טרגוט לקבוצות לא הופעל עדיין בסביבה זו. קבוצה שהוגדרה תמשיך לפעול.",
+    "catalogOauth": {
+      "title": "אפליקציות OAuth מובנות של מחברים פנימיים",
+      "description": "אפליקציות OAuth ברמת הפריסה למחברים המובנים (GitHub, Asana, …). רשומה שנשמרת כאן גוברת על משתני הסביבה MCP_OAUTH_*. הסרה תחזיר לשימוש במשתני הסביבה. סודות הלקוח מוצפנים במנוחה ולעולם לא יוצגו שוב.",
+      "badgeAdmin": "הוגדר כאן",
+      "badgeEnv": "ממשתני סביבה",
+      "badgeNone": "לא הוגדר",
+      "badgeDcr": "רישום עצמי",
+      "badgeDcrHint": "ספק זה יכול לרשום לקוח OAuth באופן אוטומטי, ולכן הוא פועל גם בלי אפליקציה שהוגדרה כאן.",
+      "clientIdLabel": "OAuth client ID",
+      "clientSecretLabel": "OAuth client secret",
+      "secretStoredPlaceholder": "נשמר — הזינו להחלפה, השאירו ריק כדי לשמור",
+      "secretNewPlaceholder": "הדביקו את סוד הלקוח",
+      "save": "שמירה",
+      "remove": "הסרה",
+      "removeToEnv": "הסרה (מעבר למשתני סביבה)",
+      "saved": "האפליקציה {name} OAuth נשמרה",
+      "removed": "האפליקציה {name} OAuth הוסרה",
+      "saveError": "שמירת אפליקציית ה-OAuth נכשלה. נסו שוב.",
+      "conflict": "הרשומה השתנתה במקום אחר — נטען מחדש, נא לנסות שוב.",
+      "storageUnavailable": "אחסון הניהול לא נגיש; לא ניתן להציג רשומות קיימות. שמירה מושבתת עד לשחזור הגישה.",
+      "sealingUnavailable": "הצפנת הסודות אינה מוגדרת בפריסה זו (חסר AUTH_SECRET) — לא ניתן לשמור סודות לקוח.",
+      "updatedBy": "עודכן על ידי {by} בתאריך {at}"
+    }
   },
   "localModels": {
     "title": "מודלים מקומיים",
@@ -4819,5 +4844,51 @@
     "failed": "לא ניתן היה לשתף — לא נוצר דבר.",
     "copyFailed": "לא ניתן להעתיק את הקישור — נא לבחור אותו למעלה ולהעתיק ידנית.",
     "lastMessagesCountLabel": "מספר ההודעות האחרונות לכלול"
+  },
+  "toolModes": {
+    "webSearch": "חיפוש באינטרנט",
+    "codeInterpreter": "מתרגם קוד",
+    "off": "כבוי",
+    "auto": "אוטומטי",
+    "always": "תמיד",
+    "routingPrivacy": "פרטיות",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "חיפוש Azure AI שולח שאילתות דרך Azure AI Foundry, אשר עשוי לשמור אותן.",
+    "learnMore": "למידע נוסף"
+  },
+  "agentAttach": {
+    "browserTitle": "סוכנים",
+    "browserSubtitle": "הוסיפו סוכנים ומחברים לשיחה זו, או התחילו שיחה חדשה עם סוכן. רובם עובדים עם כל מודל שבחרתם.",
+    "searchPlaceholder": "חפשו סוכנים ומחברים…",
+    "loading": "טוען סוכנים…",
+    "noMatches": "אין תוצאות התואמות לחיפוש שלכם.",
+    "noAgents": "אין סוכנים זמינים.",
+    "addToChat": "הוספה לשיחה",
+    "removeFromChat": "הסרה מהשיחה",
+    "newChat": "שיחה חדשה",
+    "attached": "מצורף",
+    "detach": "הסרה",
+    "change": "שינוי",
+    "browse": "עיינו בסוכנים…",
+    "noAgent": "לא מצורף סוכן",
+    "close": "סגירה",
+    "kind": {
+      "rag": "ידע",
+      "prompt": "פרסונה",
+      "m365": "ידע (Microsoft 365)",
+      "org": "ידע",
+      "foundry": "סוכן Foundry",
+      "connector": "מחבר"
+    },
+    "semantics": {
+      "your-model": "משתמש במודל שלך",
+      "pinned-model": "מודל שנקבע על ידי מנהל",
+      "own-model": "פועל על המודל הפרטי שלו"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "הצעות מהארגון שלך",
+    "searching": "מחפש בארגון שלך…",
+    "noMatches": "אין התאמות בספריה — אפשר להכניס את הכתובת ידנית"
   }
 }

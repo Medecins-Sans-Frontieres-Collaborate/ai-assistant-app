@@ -986,7 +986,9 @@
     "quickActions": "ቅልጡፍ ተግባራት",
     "expandFolder": "ፎልደር {name} ፍጽው ኣበልዎ",
     "collapseFolder": "ፎልደር {name} ሰንካል",
-    "folderOptions": "ኣማራጮታት {name}"
+    "folderOptions": "ኣማራጮታት {name}",
+    "agentsEntry": "ወኪላት",
+    "agentsTitle": "ወኪላት ይቐይሩን ከኣንዳንዱ ምዛር ቴክስት ጀምሩ"
   },
   "errors": {
     "somethingWentWrong": "ገለ ጸገም ተፈጢሩ",
@@ -4036,7 +4038,30 @@
     "conflictTakeTheirs": "ናተኦም ተቐቢል",
     "conflictNoFieldDiff": "ዋጋታት ተዛዚሙ — ምርጫ መዝገብ ብቓንቓ ተስዕበ።",
     "conflictRecordGone": "ነዚ መዝገብ ተሰሪዙ ወይ ኣይኽእሉን እንተተጻአኑ። ንዝፈጠረካ ዝፈትን ወሲን ኣብ ቅጥዒ ቀትልካ ቀጻሊ ብቓንቓ መለስ።",
-    "groupsFlagOff": "ኣብዚ ኣካባቢ group targeting ኣይተኣናብቦን። ፀብፃብ ዘለዎም ቡድናት ትሰርዩ።"
+    "groupsFlagOff": "ኣብዚ ኣካባቢ group targeting ኣይተኣናብቦን። ፀብፃብ ዘለዎም ቡድናት ትሰርዩ።",
+    "catalogOauth": {
+      "title": "ውሑድ ኮነክተር ዘይሕተተ ኦታው መተግበሪታት",
+      "description": "ኩሎም ቦታ ትፈልጦ ኦታው መተግበሪታት ንውሑድ ኮነክተሮች (GitHub, Asana, …)። ኣብዚ ኣእቱዎ መዝገብ MCP_OAUTH_* environment variables ንምሕሳስ ይቅድም። ነዚ ዝተዛረበ ሲምዲኡ ይደልየየ፣ ንኡስ ይመለስ። ናይ ክላይንት ምስጢር ኣብ መዀኒት ይትበጸር፡ ግን ደጊሞ ኣይትቀርበን።",
+      "badgeAdmin": "ኣብዚ ተዘጋጅኦ",
+      "badgeEnv": "ካብ environment",
+      "badgeNone": "ዘይተዘጋጅ",
+      "badgeDcr": "ብሓላፊነት ይመዝገቡ",
+      "badgeDcrHint": "እዚ ኣታክዮ ኦታው ክላይንት ብሓላፊነት ይመዝገብ ይኽእል፣ እቲ ኣብዚ ዘይተዘጋጅኦ ምስ እንኳ ይሰርሕ።",
+      "clientIdLabel": "ኦታው ክላይንት ID",
+      "clientSecretLabel": "ኦታው ክላይንት ምስጢር",
+      "secretStoredPlaceholder": "ተዓቒበ — ምስትቐየር ኣብዚ ጻፍ፣ ንምግባር ሻጅንዎ።",
+      "secretNewPlaceholder": "ክላይንት ምስጢር ኣእትዉ",
+      "save": "ኣቑዱ",
+      "remove": "ሰርዝ",
+      "removeToEnv": "ሰርዝ (ናብ environment ይመለስ)",
+      "saved": "{name} ኦታው መተግበሪት ተኣቒበ",
+      "removed": "{name} ኦታው መተግበሪት ተሰሪዙ",
+      "saveError": "ኦታው መተግበሪት ኣቓሊኡ ውን አይተሳነን። በደገም ፈትኑ።",
+      "conflict": "ዝኾነ መዝገብ ኣብ ካልእ ቦታ ተቐይሩ — ተቐጺሉ ኣነው፣ ደጊሞ ፈትኑ።",
+      "storageUnavailable": "ኣድሚን ማእከል ኣይተረኸበን። ኣለኹም ዘሎ መዝገቦች ክትርኢሉ ኣይከኣልኩምን። ምእታዊ ምድማቕ ድማ ይውዕል ድማ።",
+      "sealingUnavailable": "ኣምልኾ ምስጢር ኣብዚ deployment ኣይተዘጋጀን (AUTH_SECRET የጎደሎ) — ክላይንት ምስጢር ኣይኽእልኩም ምድማቕን።",
+      "updatedBy": "ብ{by} ብ{at} ተሓደሰ"
+    }
   },
   "localModels": {
     "title": "ኣካባቢ ሞዴልታት",
@@ -4803,5 +4828,51 @@
     "failed": "ምካፍል ኣይከኣልን — ምንካፍል ኣይተፈጠረን።",
     "copyFailed": "ሊንኩ ኣይተተቐለለን — ኣብ ላዕሊ ክትምረፁን ብእጋኹም ክትቅየሱን ይግበሩ።",
     "lastMessagesCountLabel": "ብዝተኸፈለ መልእኽቲ ዝኽእሉ መጨመር"
+  },
+  "toolModes": {
+    "webSearch": "ዝውውር መፈለጊ",
+    "codeInterpreter": "ኮድ ተትርጉሚ",
+    "off": "ዝቕረበ",
+    "auto": "አውቶ",
+    "always": "ሕልዋ",
+    "routingPrivacy": "ምንባር",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI ምርኣይ ፍለጋ በAzure AI Foundry ይልፃ። ኣብቲ ውድብ ክሓፁፉን ክቕየሩን ይኽእሉ እዮም።",
+    "learnMore": "ብዝበለጸ ማረፅ"
+  },
+  "agentAttach": {
+    "browserTitle": "ወኪላት",
+    "browserSubtitle": "ወኪላትን ኮኔክተሮችን ናብዚ ቻት ይወስኑ፣ ወይ ሓዲሽ ቻት ኣብ ወኪል ዘመሁኑ ጀምሩ። አብዚ ዝተመርጸ ሞዴል ምሉእ ስራሕ ይሰርሕዎም።",
+    "searchPlaceholder": "ወኪላትን ኮኔክተሮችን ፈልጡ…",
+    "loading": "ወኪላት ምግባር…",
+    "noMatches": "ዘለዉ ምውሳን ኣይተረኽበን።",
+    "noAgents": "ወኪላት የለን።",
+    "addToChat": "ናብዚ ቻት ወስን",
+    "removeFromChat": "ካብዚ ቻት ወሰዶ",
+    "newChat": "ሓዲሽ ቻት",
+    "attached": "ተዳምሲ",
+    "detach": "ውሰድ",
+    "change": "ቅድሚ",
+    "browse": "ወኪላት ቐይሩ…",
+    "noAgent": "ወኪል የተዳምሰን",
+    "close": "ዝብጽሕ",
+    "kind": {
+      "rag": "መረዳእታ",
+      "prompt": "ተቋማንቲ",
+      "m365": "መረዳእታ (Microsoft 365)",
+      "org": "መረዳእታ",
+      "foundry": "Foundry ወኪል",
+      "connector": "ኮኔክተር"
+    },
+    "semantics": {
+      "your-model": "ሞዴልካ ይጥቀም",
+      "pinned-model": "አመሓዳሪ ዝመርጸ ሞዴል",
+      "own-model": "ሓደ ሞዴል ይግዚኡ"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "ሓገዝታት ካብ ኣካዳሚኻ",
+    "searching": "ኣብ ውህብቲ ኣካውንቲ እዩ እዩ ዝተዓረፈ…",
+    "noMatches": "ምስ መዝገብ ኣይተመሃሪናን — ኣብ ውሳኔ ኣድራሻ ብ እግዚኣኻ ትእትው"
   }
 }

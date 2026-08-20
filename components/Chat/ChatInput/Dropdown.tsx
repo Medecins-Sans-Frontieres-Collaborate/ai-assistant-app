@@ -31,6 +31,7 @@ import { createPortal } from 'react-dom';
 import { useLocale, useTranslations } from 'next-intl';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
+import { useAgentToolGates } from '@/client/hooks/settings/useAgentToolGates';
 import { useCameraSupport } from '@/client/hooks/ui/useCameraSupport';
 import { useDropdownKeyboardNav } from '@/client/hooks/ui/useDropdownKeyboardNav';
 import useEnhancedOutsideClick from '@/client/hooks/ui/useEnhancedOutsideClick';
@@ -88,10 +89,6 @@ import {
   DOCUMENT_TRANSLATION_ACCEPT_TYPES,
   TRANSCRIPTION_ACCEPT_TYPES,
 } from '@/lib/constants/fileTypes';
-import {
-  getOrganizationAgentById,
-  getOrganizationAgentIdFromModelId,
-} from '@/lib/organizationAgents';
 
 /**
  * New conversations are created with an empty name (see
@@ -524,44 +521,11 @@ const Dropdown: React.FC<DropdownProps> = ({
     selectedConversation?.defaultInterpreterMode,
   ]);
 
-  // Foundry agents and org agents with allowWebSearch:false manage their own
-  // search behavior — hide the toggle so it can't contradict the agent.
-  const hideWebSearch = useMemo(() => {
-    const model = selectedConversation?.model;
-    const modelId = model?.id;
-    if (!modelId) return false;
-    if (modelId.startsWith('foundry-')) return true;
-    const orgAgentId = getOrganizationAgentIdFromModelId(modelId);
-    if (!orgAgentId) return false;
-    // Admin-authored org RAG agents carry their gates on the model object
-    // (they're absent from — or fresher than — the static registry).
-    if (typeof model?.allowWebSearch === 'boolean') {
-      return !model.allowWebSearch;
-    }
-    const agent = getOrganizationAgentById(orgAgentId);
-    if (!agent) return false;
-    if (agent.type === 'foundry') return true;
-    return agent.allowWebSearch === false;
-  }, [selectedConversation?.model]);
-
-  // Same rule for the code-interpreter toggle: hidden for Foundry agents
-  // (they orchestrate their own tools) and org agents that don't opt in.
-  const hideCodeInterpreter = useMemo(() => {
-    const model = selectedConversation?.model;
-    const modelId = model?.id;
-    if (!modelId) return false;
-    if (modelId.startsWith('foundry-')) return true;
-    const orgAgentId = getOrganizationAgentIdFromModelId(modelId);
-    if (!orgAgentId) return false;
-    // Same model-object-first rule as hideWebSearch.
-    if (typeof model?.allowCodeInterpreter === 'boolean') {
-      return !model.allowCodeInterpreter;
-    }
-    const agent = getOrganizationAgentById(orgAgentId);
-    if (!agent) return false;
-    if (agent.type === 'foundry') return true;
-    return agent.allowCodeInterpreter !== true;
-  }, [selectedConversation?.model]);
+  // Foundry agents and org agents that don't opt in manage their own tool
+  // behavior — hide the toggles so they can't contradict the agent. Shared
+  // with the capabilities tray (legacy model-id gates + decoupled
+  // attachments alike) via useAgentToolGates.
+  const { hideWebSearch, hideCodeInterpreter } = useAgentToolGates();
 
   // Per-item icon color is a deliberate carve-out: this menu is scanned often
   // and the hue helps locate actions at a glance. Each color matches its

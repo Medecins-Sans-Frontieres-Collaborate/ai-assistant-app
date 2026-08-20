@@ -906,7 +906,9 @@
     "quickActions": "クイックアクション",
     "expandFolder": "フォルダー{name}を展開",
     "collapseFolder": "フォルダー{name}を折りたたみ",
-    "folderOptions": "{name}のオプション"
+    "folderOptions": "{name}のオプション",
+    "agentsEntry": "エージェント",
+    "agentsTitle": "エージェントを閲覧してチャットを開始する"
   },
   "prompts": {
     "buildReusablePrompts": "AIの支援で再利用可能なプロンプトを構築",
@@ -4052,7 +4054,30 @@
     "conflictTakeTheirs": "他の人の変更を反映",
     "conflictNoFieldDiff": "値に差異はありません。レコードのバージョンのみが変更されました。",
     "conflictRecordGone": "このレコードは削除されたか、再読み込みできませんでした。必要な内容をフォームからコピーし、再度読み込んでください。",
-    "groupsFlagOff": "この環境ではグループターゲティングはまだ有効化されていません。既存のグループターゲット設定は引き続き有効です。"
+    "groupsFlagOff": "この環境ではグループターゲティングはまだ有効化されていません。既存のグループターゲット設定は引き続き有効です。",
+    "catalogOauth": {
+      "title": "組み込みコネクタのOAuthアプリ",
+      "description": "組み込みコネクタ（GitHub、Asana など）向けの、全展開共通OAuthアプリ。ここで保存されたレコードはMCP_OAUTH_*環境変数を上書きします。削除すると環境変数に戻ります。クライアントシークレットは保存時に暗号化され、再表示されません。",
+      "badgeAdmin": "ここで設定済み",
+      "badgeEnv": "環境変数から",
+      "badgeNone": "未設定",
+      "badgeDcr": "自動登録",
+      "badgeDcrHint": "このプロバイダーはOAuthクライアントを自動的に登録できるため、ここでアプリ未設定でも動作します。",
+      "clientIdLabel": "OAuthクライアントID",
+      "clientSecretLabel": "OAuthクライアントシークレット",
+      "secretStoredPlaceholder": "保存済み — 入力すると上書き、空欄なら現状維持",
+      "secretNewPlaceholder": "クライアントシークレットを貼り付け",
+      "save": "保存",
+      "remove": "削除",
+      "removeToEnv": "削除（環境変数へ戻す）",
+      "saved": "{name} OAuthアプリを保存しました",
+      "removed": "{name} OAuthアプリを削除しました",
+      "saveError": "OAuthアプリの保存に失敗しました。再度お試しください。",
+      "conflict": "他の場所で変更されたため再読み込みされました。再試行してください。",
+      "storageUnavailable": "管理ストレージに接続できません。既存レコードが表示できず、復旧まで保存は無効です。",
+      "sealingUnavailable": "このデプロイメントで秘密情報暗号化が未設定です（AUTH_SECRETがありません）— クライアントシークレットは保存できません。",
+      "updatedBy": "{by}が{at}に更新"
+    }
   },
   "localModels": {
     "title": "ローカルモデル",
@@ -4819,5 +4844,51 @@
     "failed": "共有できませんでした—何も作成されませんでした。",
     "copyFailed": "リンクをコピーできませんでした。上記から手動でコピーしてください。",
     "lastMessagesCountLabel": "含める最新メッセージの数"
+  },
+  "toolModes": {
+    "webSearch": "ウェブ検索",
+    "codeInterpreter": "コードインタープリタ",
+    "off": "オフ",
+    "auto": "自動",
+    "always": "常に有効",
+    "routingPrivacy": "プライバシー",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI 検索はクエリを Azure AI Foundry 経由で送信し、保持される場合があります。",
+    "learnMore": "詳細"
+  },
+  "agentAttach": {
+    "browserTitle": "エージェント",
+    "browserSubtitle": "このチャットにエージェントやコネクターを追加するか、エージェントとの新しいチャットを開始してください。ほとんどは選択したモデルで動作します。",
+    "searchPlaceholder": "エージェントとコネクターを検索…",
+    "loading": "エージェントを読み込み中…",
+    "noMatches": "検索に一致するものがありません。",
+    "noAgents": "利用可能なエージェントがありません。",
+    "addToChat": "このチャットに追加",
+    "removeFromChat": "このチャットから削除",
+    "newChat": "新しいチャット",
+    "attached": "追加済み",
+    "detach": "解除",
+    "change": "変更",
+    "browse": "エージェントを閲覧…",
+    "noAgent": "エージェント未追加",
+    "close": "閉じる",
+    "kind": {
+      "rag": "ナレッジ",
+      "prompt": "ペルソナ",
+      "m365": "ナレッジ（Microsoft 365）",
+      "org": "ナレッジ",
+      "foundry": "Foundry エージェント",
+      "connector": "コネクター"
+    },
+    "semantics": {
+      "your-model": "ご自身のモデルを使用",
+      "pinned-model": "管理者によるモデル指定",
+      "own-model": "独自のモデルで動作"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "あなたの組織からの提案",
+    "searching": "組織内を検索しています…",
+    "noMatches": "ディレクトリに該当がありません — 手動でアドレスを入力できます"
   }
 }
