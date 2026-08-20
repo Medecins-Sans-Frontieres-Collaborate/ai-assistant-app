@@ -247,7 +247,7 @@ ${multiProjectSection}
    - STANDARDIZATION RULES FOR PROJECT NAME:
 ${nameInstructions}
 
-3. **mission_country** (REQUIRED): The country where the project operates
+3. **country** (REQUIRED): The country where the project operates
    - Look for: "Mission", "Country", "Pays", country names in title
    - STANDARDIZATION: Always use the standard English country name:
      * "République démocratique du Congo" or "DRC" → "Democratic Republic of Congo"
@@ -382,7 +382,7 @@ Good examples by focus area (each example is a real project, shown as its Projec
     "document_type": "project narrative",
     "project_code": "NG162",
     "project_name": "Katsina Nutrition Care",
-    "mission_country": "Nigeria",
+    "country": "Nigeria",
     "start_date": "2021-04-15",
     "end_date": "",
     "project_objective": "Large-scale malnutrition prevention and treatment, operating ITFCs and ATFCs and supporting malaria and epidemic response in Katsina State.",

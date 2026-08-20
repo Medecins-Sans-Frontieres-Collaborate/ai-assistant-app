@@ -476,7 +476,7 @@ function normalizeRecord(
   if (!projectCode) projectCode = 'No Project Code';
 
   // --- Country ---
-  let missionCountry = record.mission_country || '';
+  let missionCountry = record.country || record.mission_country || '';
   const normalizedCountry = normalizeCountry(missionCountry);
   if (normalizedCountry) missionCountry = normalizedCountry;
 
