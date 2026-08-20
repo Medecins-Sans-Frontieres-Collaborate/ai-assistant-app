@@ -114,6 +114,11 @@ function fixHealthcareSpelling(text: string): string {
   return text.replace(/\bhealth\s+care\b/gi, 'healthcare');
 }
 
+function cleanNotFound(v: unknown): string {
+  const s = String(v ?? '').trim();
+  return /^(not\s*found|n\/?a|null|none)$/i.test(s) ? '' : s;
+}
+
 function parseDateFlexible(dateStr: string): Date | null {
   const s = dateStr.trim();
   if (!s) return null;
@@ -167,30 +172,6 @@ function validateProjectActive(
   } catch {
     return 'Yes';
   }
-}
-
-function processClosingProject(rawValue: string, isEmergency: boolean): string {
-  if (isEmergency) return 'No';
-  if (!rawValue) return 'No';
-  const val = rawValue.trim().toLowerCase();
-  if (['no', 'false', 'n'].includes(val)) return 'No';
-  if (
-    val.includes('full') ||
-    (['yes', 'true', 'y'].includes(val) && !val.includes('handover'))
-  ) {
-    return 'Yes/Full Closure';
-  }
-  if (
-    val.includes('handover') &&
-    (val.includes('partial') || val.includes('reorientation'))
-  ) {
-    return 'Partial Handover/Reorientation';
-  }
-  if (val.includes('handover')) return 'Handover to Another OC';
-  if (val.includes('partial') || val.includes('reorientation')) {
-    return 'Partial Handover/Reorientation';
-  }
-  return 'No';
 }
 
 // These helpers use the model's quote only as a pointer to locate the real document
@@ -421,12 +402,35 @@ function normalizeRecord(
     }
   }
 
+  const codeInText = (c: string): boolean => {
+    const raw = String(record._raw_text || '').toUpperCase();
+    if (!raw) return true; // no text available — keep previous behavior
+    const forms = [c];
+    const p = ocCfg.code_prefix?.toUpperCase();
+    if (p && c.startsWith(p)) forms.push(c.slice(p.length));
+    for (const f of forms) {
+      if (raw.includes(f)) return true;
+      const m = f.match(/^([A-Z]+)(\d+[A-Z]?)$/);
+      if (m && new RegExp(m[1] + '[\\s._-]{1,2}' + m[2]).test(raw)) return true;
+    }
+    return false;
+  };
+
   let projectCode: string;
   if (overrideCode) {
     projectCode = overrideCode;
-  } else if (record._multi_code_doc && modelCodeValid) {
+  } else if (
+    record._multi_code_doc &&
+    modelCodeValid &&
+    codeInText(modelCode)
+  ) {
     projectCode = modelCode;
   } else if (filenameCode) {
+    if (record._multi_code_doc && modelCodeValid) {
+      console.log(
+        `  ! ${source}: model code "${modelCode}" never appears in the document text — using filename code "${filenameCode}" instead`,
+      );
+    }
     projectCode = filenameCode;
   } else if (modelCodeValid) {
     projectCode = modelCode;
@@ -466,7 +470,7 @@ function normalizeRecord(
   if (!projectCode) projectCode = 'No Project Code';
 
   // --- Country ---
-  let missionCountry = record.country || record.mission_country || '';
+  let missionCountry = cleanNotFound(record.country || record.mission_country);
   const normalizedCountry = normalizeCountry(missionCountry);
   if (normalizedCountry) missionCountry = normalizedCountry;
 
@@ -549,7 +553,7 @@ function normalizeRecord(
   }
 
   // --- Project name ---
-  let projectName = record.project_name || '';
+  let projectName = cleanNotFound(record.project_name);
   if (!String(projectName).trim() && record._raw_text) {
     const m = String(record._raw_text).match(
       /Initiative\s+Name\s*[:\u2013\u2014-]\s*([^\n\r]+)/i,
@@ -573,7 +577,7 @@ function normalizeRecord(
   );
 
   // --- Project objective ---
-  let projectObjective = record.project_objective || '';
+  let projectObjective = cleanNotFound(record.project_objective);
   projectObjective = fixHealthcareSpelling(projectObjective);
   projectObjective = applyAmericanEnglish(projectObjective);
 
@@ -710,6 +714,21 @@ export async function run(params: {
       }
     } catch (e) {
       console.log(`  ! Error loading ${f}: ${e}`);
+    }
+  }
+
+  const sentinel = /no\s+\d{4}\s+or\s+current(\s+year)?\s+activities\s+found/i;
+  for (const rec of records) {
+    for (const k of [`activities_${year}`, 'activities_2026']) {
+      const v = rec[k];
+      if (typeof v === 'string') rec[k] = [];
+      else if (Array.isArray(v)) {
+        rec[k] = v.filter((a) => {
+          const label =
+            typeof a === 'string' ? a : String((a && a.activity) || '');
+          return !sentinel.test(label) && !/^not\s*found$/i.test(label.trim());
+        });
+      }
     }
   }
 

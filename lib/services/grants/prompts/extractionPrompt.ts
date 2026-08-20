@@ -120,6 +120,25 @@ export function buildExtractionPrompt(
     tableExampleByOC[ocName] ||
     '"AF183 Khost Maternal and Neonatal Healthcare", "AF101 ..."';
 
+  const exampleDoc =
+    ocName === 'OCB'
+      ? {
+          code: 'NG110',
+          name: 'Maiduguri Emergency Nutrition Care',
+          objective:
+            'Large-scale malnutrition prevention and treatment, operating ITFCs and ATFCs and supporting malaria and epidemic response in Maiduguri, Borno State.',
+          atfcQuote:
+            'We will maintain the four current ATFCs across the LGAs and one ITFC, activating the second ITFC during the malnutrition peak.',
+        }
+      : {
+          code: 'NG162',
+          name: 'Katsina Nutrition Care',
+          objective:
+            'Large-scale malnutrition prevention and treatment, operating ITFCs and ATFCs and supporting malaria and epidemic response in Katsina State.',
+          atfcQuote:
+            "We will maintain four out of 5 current ATFCs in the three (3) LGAs (1 in Katsina 2 in Jibia and 1 in Mashi). 1 ITFC in (Kofar Sauri) and the second ITFC Turai Yar'Adua Hospital during the peak.",
+        };
+
   let multiProjectSection = `
 ## MULTIPLE PROJECTS IN ONE DOCUMENT
 FIRST, scan the ENTIRE document for EVERY distinct project code (a token matching the code pattern
@@ -180,6 +199,110 @@ NOTE: ${ocName} frequently submits country-level documents that cover MANY proje
   const objectiveInstructions = getProjectObjectiveInstructions(year);
   const globalRules = getGlobalTextRules();
 
+  const FOCUS_EXAMPLES: [string, [string, string, string][]][] = [
+    [
+      'Nutrition',
+      [
+        [
+          'P1397',
+          'Massakory Nutrition and Sexual and Reproductive Healthcare',
+          'OCA',
+        ],
+        ['NG110', 'Maiduguri Emergency Nutrition Care', 'OCB'],
+        ['NG162', 'Katsina Nutrition Care', 'OCP'],
+      ],
+    ],
+    [
+      'Refugees/IDPs',
+      [
+        ['P1005', 'Kutupalong Rohingya Refugee Secondary Healthcare', 'OCA'],
+        ['P1188', 'Central Mediterranean Search and Rescue', 'OCA'],
+        ['P1642', 'Gaza IDP Response', 'OCA'],
+        ['TD180', 'Adré Primary Healthcare for Sudanese Refugees', 'OCG'],
+        [
+          'BD112',
+          "Medical Humanitarian Response for Rohingya Refugees in Cox's Bazaar - Jamtoli camp",
+          'OCB',
+        ],
+        [
+          'MZ142',
+          'Access to health care in conflict in Cabo Delgado province (host population and IDPs) - Macomia',
+          'OCB',
+        ],
+        ['BI110', 'Réfugiés Congolais Ruyigi', 'OCB'],
+        ['BE114', 'Migration Health Belgium', 'OCB'],
+      ],
+    ],
+    ['Mental health', [['PI120', 'Nablus Mental Health and SGBV Care', 'OCP']]],
+    [
+      'Maternal health',
+      [
+        ['AF183', 'Khost Maternal and Neonatal Healthcare', 'OCB'],
+        ['SS153', 'Aweil State Maternity and Pediatrics Hospital', 'OCP'],
+      ],
+    ],
+    [
+      'Pediatrics',
+      [
+        ['CF144', 'Bria Pediatric Primary and Secondary Healthcare', 'OCP'],
+        [
+          'SL125',
+          'Paediatric and maternal healthcare in Hangha Hospital - Kenema',
+          'OCB',
+        ],
+      ],
+    ],
+    [
+      'Climate impact',
+      [
+        ['P1624', 'Afghanistan Environmental Impact Project', 'OCA'],
+        ['P1709', 'Nigeria Environmental Impact Project', 'OCA'],
+        ['P1798', 'South Sudan Environmental Impact Project', 'OCA'],
+        [
+          'CF123',
+          'Regional Climate, Environment and Health Roadmap - Green Initiative',
+          'OCB',
+        ],
+        ['MG161', 'Ikongo Planetary Health', 'OCG'],
+      ],
+    ],
+  ];
+  // OCA's tested baseline list, kept byte-identical: entries added later for
+  // other OCs do not appear in OCA's prompt.
+  const OCA_LEGACY_EXAMPLES = new Set([
+    'P1397',
+    'NG110',
+    'NG162',
+    'P1005',
+    'P1188',
+    'P1642',
+    'TD180',
+    'PI120',
+    'AF183',
+    'SS153',
+    'CF144',
+    'P1624',
+    'P1709',
+    'P1798',
+    'CF123',
+    'MG161',
+  ]);
+  const focusLines: string[] = [];
+  for (const [area, examples] of FOCUS_EXAMPLES) {
+    const kept =
+      ocName === 'OCA'
+        ? examples.filter(([c]) => OCA_LEGACY_EXAMPLES.has(c))
+        : examples.filter(([, , owner]) => owner === ocName);
+    if (kept.length === 0) continue;
+    focusLines.push(`- ${area}:`);
+    for (const [c, n] of kept)
+      focusLines.push(`  * Project Code: ${c}, Project Name: ${n}`);
+  }
+  const focusExamplesSection =
+    focusLines.length > 0
+      ? `Good examples by focus area (each example is a real project, shown as its Project Code and Project Name):\n${focusLines.join('\n')}\n`
+      : '';
+
   // Using template literal with double-brace escaping for JSON examples
   const prompt = `You are an expert data extractor for MSF (Médecins Sans Frontières) grant documents.
 
@@ -189,7 +312,7 @@ ${globalRules}
 
 ## ${year} ACTIVITIES — BE EXHAUSTIVE, BUT ${year}-SCOPED
 The document is a plan for the year ${year}. Capture EVERY medical service the project will deliver, continue, or start in ${year} — completeness matters as much as accuracy. Under-listing (dropping services the document actually describes) is a common and serious error; be thorough.
-- The document MUST contain the literal string "${year}" somewhere for you to extract any activities. If the year ${year} does not appear ANYWHERE in the document text, return an empty activities_${year} array so the report can state "No ${year} or current year activities found" for this project.
+- The document MUST contain the literal string "${year}" somewhere for you to extract any activities. If the year ${year} does not appear ANYWHERE in the document text, return "no ${year} or current year activities found" instead of an activities list.
 - Many documents include a SERVICES TABLE comparing the previous year and ${year} (rows/columns marked "Yes"/"Oui"/"Sí"/"${year}", "new in ${year}", "continues in ${year}", or "NON→OUI"). EVERY service marked as provided, planned, continuing, or new for ${year} in such a table IS an activity — extract ALL of them.
 - A service the project is currently delivering and will CONTINUE counts for ${year} unless the document says it ends BEFORE ${year}. You do NOT need the literal year printed next to each service: if the document's planning horizon is ${year} and the service is part of the ${year} package (objectives, services table, "prospects for next year", logframe), include it.
 - A project described only for ${prevYear}, with no indication it continues, does NOT automatically extend to ${year}.
@@ -300,30 +423,7 @@ Examples:
 16. **focuses_on_nutrition** 17. **focuses_on_refugees_idps** 18. **focuses_on_mental_health**
 19. **focuses_on_maternal_health** 20. **focuses_on_pediatrics** 21. **focuses_on_climate_impact**
 
-Good examples by focus area (each example is a real project, shown as its Project Code and Project Name):
-- Nutrition:
-  * Project Code: P1397, Project Name: Massakory Nutrition and Sexual and Reproductive Healthcare
-  * Project Code: NG110, Project Name: Maiduguri Emergency Nutrition Care
-  * Project Code: NG162, Project Name: Katsina Nutrition Care
-- Refugees/IDPs:
-  * Project Code: P1005, Project Name: Kutupalong Rohingya Refugee Secondary Healthcare
-  * Project Code: P1188, Project Name: Central Mediterranean Search and Rescue
-  * Project Code: P1642, Project Name: Gaza IDP Response
-  * Project Code: TD180, Project Name: Adré Primary Healthcare for Sudanese Refugees
-- Mental health:
-  * Project Code: PI120, Project Name: Nablus Mental Health and SGBV Care
-- Maternal health:
-  * Project Code: AF183, Project Name: Khost Maternal and Neonatal Healthcare
-  * Project Code: SS153, Project Name: Aweil State Maternity and Pediatrics Hospital
-- Pediatrics:
-  * Project Code: CF144, Project Name: Bria Pediatric Primary and Secondary Healthcare
-- Climate impact:
-  * Project Code: P1624, Project Name: Afghanistan Environmental Impact Project
-  * Project Code: P1709, Project Name: Nigeria Environmental Impact Project
-  * Project Code: P1798, Project Name: South Sudan Environmental Impact Project
-  * Project Code: CF123, Project Name: Regional Climate, Environment and Health Roadmap - Green Initiative
-  * Project Code: MG161, Project Name: Ikongo Planetary Health
-
+${focusExamplesSection}
 22. **document_type** (REQUIRED): Classify what KIND of document this is, based on its OVERALL purpose (this describes the DOCUMENT, not the project):
     - "project narrative" — a dedicated proposal / annual plan whose primary purpose is to describe the actual project(s), including a country document that IS the project submission with per-project detail. This is the normal case.
     - "coordination" — a mission or national coordination / management document (e.g. "Coordination Nationale", mission analysis) that frames the mission rather than proposing a specific project.
@@ -339,19 +439,19 @@ Good examples by focus area (each example is a real project, shown as its Projec
 \`\`\`json
 {
     "document_type": "project narrative",
-    "project_code": "NG162",
-    "project_name": "Katsina Nutrition Care",
+    "project_code": "${exampleDoc.code}",
+    "project_name": "${exampleDoc.name}",
     "country": "Nigeria",
     "start_date": "",
     "end_date": "",
-    "project_objective": "Large-scale malnutrition prevention and treatment, operating ITFCs and ATFCs and supporting malaria and epidemic response in Katsina State.",
+    "project_objective": "${exampleDoc.objective}",
     "is_new_project": "no",
     "is_emergency_project": "no",
     "is_closing_project": "no",
     "is_community_centered": "no",
-    "context": "Armed Conflict",
-    "event": "Population affected by endemics/epidemics",
-    "population_type": "General Population",
+    "context": "",
+    "event": "",
+    "population_type": "",
     "focuses_on_nutrition": "yes",
     "focuses_on_refugees_idps": "no",
     "focuses_on_mental_health": "no",
@@ -362,8 +462,8 @@ Good examples by focus area (each example is a real project, shown as its Projec
         {
             "activity": "Nutrition (ITFC, ATFC)",
             "section": "Prospects for next year(s)",
-            "quote_english": "We will maintain four out of 5 current ATFCs in the three (3) LGAs (1 in Katsina 2 in Jibia and 1 in Mashi). 1 ITFC in (Kofar Sauri) and the second ITFC Turai Yar'Adua Hospital during the peak.",
-            "quote_original": "We will maintain four out of 5 current ATFCs in the three (3) LGAs (1 in Katsina 2 in Jibia and 1 in Mashi). 1 ITFC in (Kofar Sauri) and the second ITFC Turai Yar'Adua Hospital during the peak."
+            "quote_english": "${exampleDoc.atfcQuote}",
+            "quote_original": "${exampleDoc.atfcQuote}"
         },
         {
             "activity": "Epidemics Preparedness (Cholera, Measles, Meningitis)",
@@ -397,9 +497,13 @@ Good examples by focus area (each example is a real project, shown as its Projec
 1. Each activity MUST have a supporting quote that can be found via Ctrl+F
 2. Quotes should be 1-2 sentences max, directly mentioning the activity
 3. If the document is in French/Spanish/other, translate activity names and quote_english to English, but quote_original must be the VERBATIM source text as physically written in the document. Do NOT translate quote_english into another language to fill quote_original — copy only text that actually appears in the document (so Ctrl+F finds it). If the document is in English, quote_original is English and identical to quote_english.
-4. Return null for optional fields if not found
-5. If the year ${year} does not appear ANYWHERE in the document text, OR no ${year}-specific activities are described, return an EMPTY activities_${year} array so the report can state "No ${year} or current year activities found" for this project. An empty array is the correct, expected output in that case — do NOT populate it with activities from other years.
-6. Activities are the project's SUBSTANTIVE work. For MEDICAL project narratives that means MEDICAL SERVICE DELIVERY — do NOT pad the list with operational/administrative side-details (capacity building, training, advocacy, stewardship, logistics, supply chain management). For documents whose purpose is NON-MEDICAL (green/environmental initiatives, construction, coordination, learning initiatives), report the substantive non-medical activities the document describes — being non-medical is NOT a reason to exclude a project's core activities.
+4. Return "not found" for optional fields if the information is not found in the document
+5. If the year ${year} does not appear ANYWHERE in the document text, OR no ${year}-specific activities are described, return "no ${year} or current year activities found" instead of an activities list. Do NOT populate it with activities from other years.
+6. Activities are the project's SUBSTANTIVE work. For MEDICAL project narratives that means MEDICAL SERVICE DELIVERY — do NOT pad the list with operational/administrative side-details (capacity building, training, advocacy, stewardship, logistics, supply chain management). For documents whose purpose is NON-MEDICAL, report the substantive non-medical activities the document describes:
+   - environmental impact (e.g. "Solar Power Installation", "Waste Management", "Energy Efficiency", "Water Conservation")
+   - construction (e.g. "Facility Construction", "Facility Rehabilitation", "Infrastructure Upgrade")
+   - learning and development (e.g. "Staff Training Program", "Clinical Mentorship", "E-Learning Development")
+   Being non-medical is NOT a reason to exclude a project's core activities.
 
 ## TERM NORMALIZATION (apply AFTER extracting all activities):
 For specific trigger terms, use the canonical term instead:
