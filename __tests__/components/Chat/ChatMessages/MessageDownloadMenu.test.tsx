@@ -3,6 +3,7 @@ import React from 'react';
 
 import { MessageDownloadMenu } from '@/components/Chat/ChatMessages/MessageDownloadMenu';
 
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import '@testing-library/jest-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -47,6 +48,10 @@ vi.mock('@/lib/utils/shared/document/formatConverter', () => ({
 
 describe('MessageDownloadMenu', () => {
   beforeEach(() => {
+    // This suite covers the plain download column; M365 is connected by
+    // default (settingsStore v57), which would add the Save-to-OneDrive
+    // column and duplicate every format label.
+    useSettingsStore.setState({ m365Connected: false });
     downloadFileMock.mockClear();
     exportToPDFMock.mockClear();
     exportToPDFMock.mockResolvedValue(undefined);

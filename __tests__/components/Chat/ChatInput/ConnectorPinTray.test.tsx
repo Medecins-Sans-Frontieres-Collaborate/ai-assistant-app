@@ -44,6 +44,10 @@ function setServers(servers: TestServer[]) {
     mcpServers: servers as unknown as ReturnType<
       typeof useSettingsStore.getState
     >['mcpServers'],
+    // These suites exercise plain MCP connectors; keep the builtin M365 row
+    // out of the tray (m365Connected defaults to true since v57). The
+    // builtin-row suites below opt back in explicitly.
+    m365Connected: false,
   });
 }
 
