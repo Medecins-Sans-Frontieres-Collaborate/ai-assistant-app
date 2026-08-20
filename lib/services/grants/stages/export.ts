@@ -126,7 +126,10 @@ function recordToRow(
     'Project Active': yesNo(record.project_active),
     'Purpose Code': safeStr(record.purpose_code),
     'New Project': yesNo(record.new_project),
-    'Emergency Project': yesNo(record.emergency_project),
+    'Emergency Project':
+      record.emergency_project === 'Not in file'
+        ? 'Not in file'
+        : yesNo(record.emergency_project),
     'Closing Project': safeStr(record.closing_project),
     Sanctions: sanctionsValue(record.sanctions),
     'Sensitive Context for Screening': yesNo(record.sensitive_context),

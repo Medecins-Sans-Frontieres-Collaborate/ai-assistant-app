@@ -393,7 +393,7 @@ ${objectiveInstructions}
 
 10. **is_emergency_project**: Return "no" — emergency status is NOT taken from the narrative. It is
     determined by the supplemental classifications file (Regular/Emergency); projects not listed
-    there default to "no".
+    there are reported as "not in file".
 
 11. **is_closing_project**: Return "no" — closing status is NOT taken from the narrative. It is
     determined from supplemental files: a project classified as Regular whose ops end date (from

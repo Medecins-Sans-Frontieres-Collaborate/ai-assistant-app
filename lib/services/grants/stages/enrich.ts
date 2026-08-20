@@ -1080,17 +1080,20 @@ export async function run(params: {
       if (emer) projInfo = { reg_emer: emer };
     }
 
+    let emergencyDetermined = false;
     if (projInfo) {
       const regEmer = projInfo.reg_emer || '';
       if (regEmer === 'Emergency') {
         record.emergency_project = 'Yes';
         record.new_project = 'No';
         record.closing_project = 'No';
+        emergencyDetermined = true;
       } else if (regEmer === 'Regular') {
         record.emergency_project = 'No';
         record.new_project =
           startYear(projInfo.start_date) === yearStr ? 'Yes' : 'No';
         record.closing_project = processClosingProject(rawClosing, false);
+        emergencyDetermined = true;
       } else {
         record.emergency_project = 'No';
         record.new_project = 'No';
@@ -1107,8 +1110,13 @@ export async function run(params: {
     const clsType = classifications[cleanJoinCode(code)];
     if (clsType) {
       const isRegular = clsType === 'regular';
-      if (clsType === 'emergency') record.emergency_project = 'Yes';
-      else if (isRegular) record.emergency_project = 'No';
+      if (clsType === 'emergency') {
+        record.emergency_project = 'Yes';
+        emergencyDetermined = true;
+      } else if (isRegular) {
+        record.emergency_project = 'No';
+        emergencyDetermined = true;
+      }
       const clsDates = datesData[cleanJoinCode(code)];
       const startsThisYear = (clsDates?.start || '').startsWith(`${year}-`);
       const endsThisYear = (clsDates?.end || '').startsWith(`${year}-`);
@@ -1116,6 +1124,7 @@ export async function run(params: {
       record.closing_project =
         isRegular && endsThisYear ? 'Yes/Full Closure' : 'No';
     }
+    if (!emergencyDetermined) record.emergency_project = 'Not in file';
 
     // Final emergency override
     if (record.emergency_project === 'Yes') {
