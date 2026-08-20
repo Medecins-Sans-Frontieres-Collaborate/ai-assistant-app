@@ -275,11 +275,14 @@ ${objectiveInstructions}
     - "yes" if the project document describes delivering healthcare through a community-centered approach that ensures medical operations are both responsive to local needs and aligned with MSF's commitment to people-centered, context-sensitive, and culturally appropriate approaches that strengthen community agency and dignity.
     - "no" otherwise
 
-13. **context**: ONE of: "Armed Conflict", "Internal Instability", "Post-Conflict", "Stable"
+13. **context**: Return "" — the operating context is NOT interpreted from the narrative. It will be
+    supplied by a supplemental file and joined to each project by code after extraction.
 
-14. **event**: ONE of: "Population affected by endemics/epidemics", "Population affected by natural disaster", "Population affected by social violence and healthcare exclusion", "Victims of armed conflict"
+14. **event**: Return "" — the event category is NOT interpreted from the narrative. It will be
+    supplied by a supplemental file and joined to each project by code after extraction.
 
-15. **population_type**: ONE of: "Displaced", "General Population", "Mixed Displaced/General", "Victims of Natural Disasters"
+15. **population_type**: Return "" — the population type is NOT interpreted from the narrative. It
+    will be supplied by a supplemental file and joined to each project by code after extraction.
 
 ## THEMATIC FOCUS FIELDS (yes/no — primary focus only):
 Answer "yes" ONLY if the thematic area is a PRIMARY, DEFINING purpose of the project — not merely one activity among many. These flags identify SPECIALIZED projects, not general hospitals that happen to offer a service.
