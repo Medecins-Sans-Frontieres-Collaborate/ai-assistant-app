@@ -233,7 +233,13 @@ NOTE: ${ocName} frequently submits country-level documents that cover MANY proje
         ['BE114', 'Migration Health Belgium', 'OCB'],
       ],
     ],
-    ['Mental health', [['PI120', 'Nablus Mental Health and SGBV Care', 'OCP']]],
+    [
+      'Mental health',
+      [
+        ['PI120', 'Nablus Mental Health and SGBV Care', 'OCP'],
+        ['UA122', 'Early Rehabilitation', 'OCB'],
+      ],
+    ],
     [
       'Maternal health',
       [
