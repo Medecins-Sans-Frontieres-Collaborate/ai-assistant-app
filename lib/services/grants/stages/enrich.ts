@@ -128,6 +128,7 @@ const CATEGORY_KEYWORDS: Record<string, string[][]> = {
   code_mapping: [['code', 'mapping']],
   funding_rates: [['funding', 'rate']],
   dates: [['dates']],
+  classifications: [['classification']],
 };
 
 function findFile(
@@ -567,6 +568,74 @@ function loadDates(
   return [result, path, matchType];
 }
 
+/**
+ * Load the per-OC project classifications file
+ * ([OC]_Project_Classifications.csv): cleaned project code -> lowercased
+ * "Type of project" value ("regular" / "emergency"). Used with the dates file
+ * to derive New Project (regular + starts in the extraction year).
+ */
+function loadClassifications(
+  supplementalDir: string,
+  spec: SupplementalFileSpec,
+): [Record<string, string>, string | null, string] {
+  const [path, matchType] = findFile(
+    supplementalDir,
+    spec.filename,
+    'classifications',
+  );
+  if (!path) return [{}, null, ''];
+
+  const data = loadTabular(path, spec.skiprows || 0);
+  if (!data || data.length === 0) return [{}, path, matchType];
+
+  const headers = Object.keys(data[0]);
+  const resolve = (
+    configured: unknown,
+    exact: string[],
+    words: string[],
+  ): string => {
+    if (configured && headers.includes(String(configured)))
+      return String(configured);
+    for (const h of headers) if (exact.includes(h.toLowerCase())) return h;
+    for (const h of headers) {
+      const hl = h.toLowerCase();
+      if (words.every((w) => hl.includes(w))) return h;
+    }
+    return '';
+  };
+  const codeCol = resolve(
+    spec.columns?.code,
+    ['project code', 'project_code', 'code'],
+    ['code'],
+  );
+  const typeCol = resolve(
+    spec.columns?.type,
+    ['type of project', 'type_of_project', 'type', 'classification'],
+    ['type'],
+  );
+  if (!codeCol || !typeCol) {
+    console.log(
+      `  ! Classifications file ${path.split('/').pop()}: could not resolve columns (headers: ${headers.join(', ')})`,
+    );
+    return [{}, path, matchType];
+  }
+
+  const result: Record<string, string> = {};
+  for (const row of data) {
+    const code = cleanJoinCode(row[codeCol]);
+    const type = String(row[typeCol] ?? '')
+      .trim()
+      .toLowerCase();
+    if (!code || code === 'NAN' || !type) continue;
+    result[code] = type;
+  }
+
+  console.log(
+    `  Loaded ${Object.keys(result).length} classification entries from ${path.split('/').pop()} (columns: ${codeCol}, ${typeCol})`,
+  );
+  return [result, path, matchType];
+}
+
 // ---------------------------------------------------------------------------
 // Supplemental report helper
 // ---------------------------------------------------------------------------
@@ -654,6 +723,7 @@ export async function run(params: {
   let budgets: Record<string, number> = {};
   let allocationData: Record<string, AnyRecord> = {};
   let datesData: Record<string, { start: string; end: string }> = {};
+  let classifications: Record<string, string> = {};
   let oldToNew: Record<string, string> = {};
 
   const suppFiles = ocCfg.supplemental_files || {};
@@ -909,6 +979,44 @@ export async function run(params: {
         missingEntries.push(buildReportEntry('dates', spec.filename, null, ''));
       }
     }
+
+    // Project classifications ([OC]_Project_Classifications.csv) with the
+    // dates file, drives the New Project value.
+    {
+      const spec: SupplementalFileSpec = suppFiles.classifications ?? {
+        filename: `${ocCfg.name}_Project_Classifications.csv`,
+        skiprows: 0,
+        columns: {},
+      };
+      const [cl, cPath, cMatch] = loadClassifications(supplementalDir, spec);
+      classifications = cl;
+      if (cPath && cMatch && Object.keys(cl).length > 0) {
+        loadedEntries.push(
+          buildReportEntry(
+            'classifications',
+            spec.filename,
+            cPath,
+            cMatch,
+            Object.keys(cl).length,
+          ),
+        );
+      } else if (cPath) {
+        failedEntries.push(
+          buildReportEntry(
+            'classifications',
+            spec.filename,
+            cPath,
+            '',
+            undefined,
+            'Failed to parse',
+          ),
+        );
+      } else {
+        missingEntries.push(
+          buildReportEntry('classifications', spec.filename, null, ''),
+        );
+      }
+    }
   } else {
     console.log('  No supplemental directory; skipping data joins.');
   }
@@ -994,6 +1102,19 @@ export async function run(params: {
         rawClosing,
         finalEmergency,
       );
+    }
+
+    const clsType = classifications[cleanJoinCode(code)];
+    if (clsType) {
+      const isRegular = clsType === 'regular';
+      if (clsType === 'emergency') record.emergency_project = 'Yes';
+      else if (isRegular) record.emergency_project = 'No';
+      const clsDates = datesData[cleanJoinCode(code)];
+      const startsThisYear = (clsDates?.start || '').startsWith(`${year}-`);
+      const endsThisYear = (clsDates?.end || '').startsWith(`${year}-`);
+      record.new_project = isRegular && startsThisYear ? 'Yes' : 'No';
+      record.closing_project =
+        isRegular && endsThisYear ? 'Yes/Full Closure' : 'No';
     }
 
     // Final emergency override
