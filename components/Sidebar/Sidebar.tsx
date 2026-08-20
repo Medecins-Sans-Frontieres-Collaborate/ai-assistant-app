@@ -14,6 +14,7 @@ import {
   IconLogout,
   IconMessage,
   IconPlus,
+  IconRobot,
   IconSearch,
   IconSettings,
   IconTrash,
@@ -31,6 +32,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
+import { useAgentBrowserHasItems } from '@/client/hooks/settings/useAvailableAgents';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useFolderManagement } from '@/client/hooks/ui/useFolderManagement';
 import { useUI } from '@/client/hooks/ui/useUI';
@@ -58,6 +60,7 @@ import {
 
 import { SearchModal } from './components/SearchModal';
 import { SidebarHeader } from './components/SidebarHeader';
+import { AgentBrowserModal } from '@/components/Agents/AgentBrowserModal';
 import ShareToOneDriveModal from '@/components/Chat/ShareToOneDriveModal';
 import { CustomizationsModal } from '@/components/QuickActions/CustomizationsModal';
 import { ConfirmDialog } from '@/components/UI/ConfirmDialog';
@@ -128,6 +131,12 @@ export const Sidebar = memo(function Sidebar() {
   const setCustomizationsInitialTab = useUIStore(
     (s) => s.setCustomizationsInitialTab,
   );
+  // Agent browser modal state also lives in uiStore — opened from here and
+  // from the capabilities tray.
+  const setAgentBrowserOpen = useUIStore((s) => s.setAgentBrowserOpen);
+  // Hide the Agents entry entirely when the browser would be empty (no
+  // agents, no connectors, no M365 toolset).
+  const agentBrowserHasItems = useAgentBrowserHasItems();
   const [userPhotoUrl, setUserPhotoUrl] = useState<string | null>(null);
   const [isLoadingPhoto, setIsLoadingPhoto] = useState(true);
   const [showNewChatMenu, setShowNewChatMenu] = useState(false);
@@ -714,6 +723,29 @@ export const Sidebar = memo(function Sidebar() {
             )}
           </button>
 
+          {/* Agents button - opens the agent browser in launch mode.
+              Hidden when the browser would be empty. */}
+          {agentBrowserHasItems && (
+            <button
+              className={`group relative flex items-center w-full rounded-lg text-sm text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-800 transition-all duration-300 ${showChatbar ? 'gap-2 px-3 py-2' : 'justify-center px-2 py-3'}`}
+              onClick={() => setAgentBrowserOpen(true)}
+              title={t('sidebar.agentsTitle')}
+              aria-label={t('sidebar.agentsEntry')}
+            >
+              <IconRobot size={showChatbar ? 16 : 20} className="shrink-0" />
+              <span
+                className={`whitespace-nowrap transition-all duration-300 ${showChatbar ? 'opacity-100 w-auto' : 'opacity-0 w-0 overflow-hidden'}`}
+              >
+                {t('sidebar.agentsEntry')}
+              </span>
+              {!showChatbar && (
+                <span className="absolute left-full ml-2 px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-[100] transition-opacity shadow-lg">
+                  {t('sidebar.agentsEntry')}
+                </span>
+              )}
+            </button>
+          )}
+
           {/* New folder button with dropdown menu - only in expanded state */}
           <div
             className={`transition-all duration-300 ${showChatbar ? 'opacity-100 max-h-[100px]' : 'opacity-0 max-h-0 overflow-hidden'}`}
@@ -1058,6 +1090,9 @@ export const Sidebar = memo(function Sidebar() {
         isOpen={isCustomizationsOpen}
         onClose={() => setIsCustomizationsOpen(false)}
       />
+
+      {/* Agent browser — self-gating on uiStore.agentBrowserMode */}
+      <AgentBrowserModal />
 
       {/* Hidden file input for importing conversations */}
       <input
