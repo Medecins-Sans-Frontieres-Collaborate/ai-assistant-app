@@ -12,6 +12,7 @@ import {
   useAgentAccessAdmin,
 } from '@/client/hooks/settings/useAgentAccessAdmin';
 
+import { CatalogOauthSection } from './CatalogOauthSection';
 import { ConnectorEditor } from './ConnectorEditor';
 import { GuideEditor } from './GuideEditor';
 import { LocalAdminsSection } from './LocalAdminsSection';
@@ -1122,208 +1123,218 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
             </>
           )
         ) : activeTab === 'connectors' ? (
-          connectorsQuery.isLoading ? (
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              {t('loading')}
-            </p>
-          ) : connectorsQuery.error ||
-            connectorsQuery.data?.connectorsUnavailable === true ? (
-            <div className="text-sm text-red-600 dark:text-red-400">
-              {/* An outage returns an empty list; rendering it as "no
-                  connectors exist" would invite an admin to recreate one. */}
-              <p>
-                {connectorsQuery.data?.connectorsUnavailable
-                  ? t('connectorsUnavailableWarning')
-                  : t('loadError')}
+          <>
+            {/* Deployment OAuth apps for the curated catalog — the Admin →
+                Connectors replacement for the MCP_OAUTH_* env vars. Global
+                admins only: these credentials are deployment-wide config,
+                not per-agent records. */}
+            {isGlobalAdmin && <CatalogOauthSection />}
+            {connectorsQuery.isLoading ? (
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                {t('loading')}
               </p>
-              <button
-                type="button"
-                className="mt-2 rounded-md border border-gray-300 dark:border-gray-600 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
-                onClick={() => void connectorsQuery.refetch()}
-              >
-                {t('retry')}
-              </button>
-            </div>
-          ) : (
-            <>
-              <button
-                type="button"
-                aria-expanded={isCreatingConnector}
-                className="mb-4 flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-gray-700 px-3 py-1.5 text-sm font-medium text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
-                onClick={() => setIsCreatingConnector((creating) => !creating)}
-              >
-                <IconPlus size={16} />
-                {t('addConnector')}
-              </button>
-
-              {isCreatingConnector && (
-                <div className="mb-4">
-                  <ConnectorEditor
-                    existing={null}
-                    secretSealingAvailable={
-                      connectorsQuery.data?.secretSealingAvailable !== false
-                    }
-                    onSaved={handleConnectorSaved}
-                    onCancel={() => setIsCreatingConnector(false)}
-                    onConflictReload={handleConnectorConflictReload}
-                  />
-                </div>
-              )}
-
-              {connectorRows.length === 0 ? (
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {t('noConnectors')}
+            ) : connectorsQuery.error ||
+              connectorsQuery.data?.connectorsUnavailable === true ? (
+              <div className="text-sm text-red-600 dark:text-red-400">
+                {/* An outage returns an empty list; rendering it as "no
+                  connectors exist" would invite an admin to recreate one. */}
+                <p>
+                  {connectorsQuery.data?.connectorsUnavailable
+                    ? t('connectorsUnavailableWarning')
+                    : t('loadError')}
                 </p>
-              ) : (
-                <ul className="space-y-2">
-                  {connectorRows.map(({ row, entry }) => {
-                    const isRestricted =
-                      row.stored?.rule.access.type === 'restricted';
-                    return (
-                      <li
-                        key={row.canonicalKey}
-                        className="rounded-lg border border-gray-200 dark:border-gray-700 p-3"
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="min-w-0 flex-1">
-                            <span className="truncate text-sm font-medium text-black dark:text-white">
-                              {row.displayName}
-                            </span>
-                            <p
-                              className="truncate text-xs text-gray-500 dark:text-gray-400"
-                              title={entry.connector.url}
-                            >
-                              {entry.connector.url}
-                            </p>
-                          </div>
-                          <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300">
-                            {entry.connector.authStyle}
-                          </span>
-                          <span
-                            className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
-                              isRestricted
-                                ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                                : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                            }`}
-                          >
-                            {isRestricted
-                              ? t('accessRestricted')
-                              : t('accessEveryone')}
-                          </span>
-                          <button
-                            type="button"
-                            className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
-                            onClick={() =>
-                              setEditingConnectorRuleKey(
-                                editingConnectorRuleKey === row.canonicalKey
-                                  ? null
-                                  : row.canonicalKey,
-                              )
-                            }
-                          >
-                            {editingConnectorRuleKey === row.canonicalKey
-                              ? t('cancel')
-                              : t('editAccess')}
-                          </button>
-                          <button
-                            type="button"
-                            className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
-                            onClick={() =>
-                              setEditingConnectorId(
-                                editingConnectorId === entry.connector.id
-                                  ? null
-                                  : entry.connector.id,
-                              )
-                            }
-                          >
-                            {editingConnectorId === entry.connector.id
-                              ? t('cancel')
-                              : t('edit')}
-                          </button>
-                          <button
-                            type="button"
-                            className="shrink-0 rounded-md border border-red-200 dark:border-red-900 px-3 py-1 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
-                            onClick={() =>
-                              setConfirmDeleteConnectorId(
-                                confirmDeleteConnectorId === entry.connector.id
-                                  ? null
-                                  : entry.connector.id,
-                              )
-                            }
-                          >
-                            {t('deleteConnector')}
-                          </button>
-                        </div>
+                <button
+                  type="button"
+                  className="mt-2 rounded-md border border-gray-300 dark:border-gray-600 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                  onClick={() => void connectorsQuery.refetch()}
+                >
+                  {t('retry')}
+                </button>
+              </div>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  aria-expanded={isCreatingConnector}
+                  className="mb-4 flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-gray-700 px-3 py-1.5 text-sm font-medium text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                  onClick={() =>
+                    setIsCreatingConnector((creating) => !creating)
+                  }
+                >
+                  <IconPlus size={16} />
+                  {t('addConnector')}
+                </button>
 
-                        <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
-                          {t('updatedByLine', {
-                            user: entry.connector.updatedBy,
-                            date: entry.connector.updatedAt,
-                          })}
-                        </p>
+                {isCreatingConnector && (
+                  <div className="mb-4">
+                    <ConnectorEditor
+                      existing={null}
+                      secretSealingAvailable={
+                        connectorsQuery.data?.secretSealingAvailable !== false
+                      }
+                      onSaved={handleConnectorSaved}
+                      onCancel={() => setIsCreatingConnector(false)}
+                      onConflictReload={handleConnectorConflictReload}
+                    />
+                  </div>
+                )}
 
-                        {editingConnectorRuleKey === row.canonicalKey && (
-                          <RuleEditor
-                            key={`${row.canonicalKey}:${row.stored?.etag ?? 'none'}`}
-                            row={row}
-                            onSaved={async () => {
-                              setEditingConnectorRuleKey(null);
-                              await invalidateConnectorData();
-                            }}
-                            onCancel={() => setEditingConnectorRuleKey(null)}
-                            onConflictReload={async () => {
-                              setEditingConnectorRuleKey(null);
-                              await refetchRules();
-                            }}
-                          />
-                        )}
-
-                        {editingConnectorId === entry.connector.id && (
-                          <ConnectorEditor
-                            key={`${entry.connector.id}:${entry.etag}`}
-                            existing={entry}
-                            secretSealingAvailable={
-                              connectorsQuery.data?.secretSealingAvailable !==
-                              false
-                            }
-                            onSaved={handleConnectorSaved}
-                            onCancel={() => setEditingConnectorId(null)}
-                            onConflictReload={handleConnectorConflictReload}
-                          />
-                        )}
-
-                        {confirmDeleteConnectorId === entry.connector.id && (
-                          <div className="mt-2 rounded-md border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/20 p-3 text-sm text-red-800 dark:text-red-300">
-                            <p>{t('deleteConnectorConfirm')}</p>
-                            <div className="mt-2 flex gap-2">
-                              <button
-                                type="button"
-                                className="rounded-md bg-red-600 px-3 py-1 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
-                                onClick={() => handleDeleteConnector(entry)}
-                                disabled={isDeletingConnector}
+                {connectorRows.length === 0 ? (
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    {t('noConnectors')}
+                  </p>
+                ) : (
+                  <ul className="space-y-2">
+                    {connectorRows.map(({ row, entry }) => {
+                      const isRestricted =
+                        row.stored?.rule.access.type === 'restricted';
+                      return (
+                        <li
+                          key={row.canonicalKey}
+                          className="rounded-lg border border-gray-200 dark:border-gray-700 p-3"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="min-w-0 flex-1">
+                              <span className="truncate text-sm font-medium text-black dark:text-white">
+                                {row.displayName}
+                              </span>
+                              <p
+                                className="truncate text-xs text-gray-500 dark:text-gray-400"
+                                title={entry.connector.url}
                               >
-                                {t('confirmDeleteConnector')}
-                              </button>
-                              <button
-                                type="button"
-                                className="rounded-md px-3 py-1 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
-                                onClick={() =>
-                                  setConfirmDeleteConnectorId(null)
-                                }
-                                disabled={isDeletingConnector}
-                              >
-                                {t('cancel')}
-                              </button>
+                                {entry.connector.url}
+                              </p>
                             </div>
+                            <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                              {entry.connector.authStyle}
+                            </span>
+                            <span
+                              className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
+                                isRestricted
+                                  ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                                  : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                              }`}
+                            >
+                              {isRestricted
+                                ? t('accessRestricted')
+                                : t('accessEveryone')}
+                            </span>
+                            <button
+                              type="button"
+                              className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                              onClick={() =>
+                                setEditingConnectorRuleKey(
+                                  editingConnectorRuleKey === row.canonicalKey
+                                    ? null
+                                    : row.canonicalKey,
+                                )
+                              }
+                            >
+                              {editingConnectorRuleKey === row.canonicalKey
+                                ? t('cancel')
+                                : t('editAccess')}
+                            </button>
+                            <button
+                              type="button"
+                              className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                              onClick={() =>
+                                setEditingConnectorId(
+                                  editingConnectorId === entry.connector.id
+                                    ? null
+                                    : entry.connector.id,
+                                )
+                              }
+                            >
+                              {editingConnectorId === entry.connector.id
+                                ? t('cancel')
+                                : t('edit')}
+                            </button>
+                            <button
+                              type="button"
+                              className="shrink-0 rounded-md border border-red-200 dark:border-red-900 px-3 py-1 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                              onClick={() =>
+                                setConfirmDeleteConnectorId(
+                                  confirmDeleteConnectorId ===
+                                    entry.connector.id
+                                    ? null
+                                    : entry.connector.id,
+                                )
+                              }
+                            >
+                              {t('deleteConnector')}
+                            </button>
                           </div>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </>
-          )
+
+                          <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+                            {t('updatedByLine', {
+                              user: entry.connector.updatedBy,
+                              date: entry.connector.updatedAt,
+                            })}
+                          </p>
+
+                          {editingConnectorRuleKey === row.canonicalKey && (
+                            <RuleEditor
+                              key={`${row.canonicalKey}:${row.stored?.etag ?? 'none'}`}
+                              row={row}
+                              onSaved={async () => {
+                                setEditingConnectorRuleKey(null);
+                                await invalidateConnectorData();
+                              }}
+                              onCancel={() => setEditingConnectorRuleKey(null)}
+                              onConflictReload={async () => {
+                                setEditingConnectorRuleKey(null);
+                                await refetchRules();
+                              }}
+                            />
+                          )}
+
+                          {editingConnectorId === entry.connector.id && (
+                            <ConnectorEditor
+                              key={`${entry.connector.id}:${entry.etag}`}
+                              existing={entry}
+                              secretSealingAvailable={
+                                connectorsQuery.data?.secretSealingAvailable !==
+                                false
+                              }
+                              onSaved={handleConnectorSaved}
+                              onCancel={() => setEditingConnectorId(null)}
+                              onConflictReload={handleConnectorConflictReload}
+                            />
+                          )}
+
+                          {confirmDeleteConnectorId === entry.connector.id && (
+                            <div className="mt-2 rounded-md border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/20 p-3 text-sm text-red-800 dark:text-red-300">
+                              <p>{t('deleteConnectorConfirm')}</p>
+                              <div className="mt-2 flex gap-2">
+                                <button
+                                  type="button"
+                                  className="rounded-md bg-red-600 px-3 py-1 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
+                                  onClick={() => handleDeleteConnector(entry)}
+                                  disabled={isDeletingConnector}
+                                >
+                                  {t('confirmDeleteConnector')}
+                                </button>
+                                <button
+                                  type="button"
+                                  className="rounded-md px-3 py-1 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+                                  onClick={() =>
+                                    setConfirmDeleteConnectorId(null)
+                                  }
+                                  disabled={isDeletingConnector}
+                                >
+                                  {t('cancel')}
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </>
+            )}
+          </>
         ) : isLoading ? (
           <p className="text-sm text-gray-500 dark:text-gray-400">
             {t('loading')}

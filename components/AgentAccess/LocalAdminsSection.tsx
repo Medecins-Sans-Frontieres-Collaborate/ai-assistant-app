@@ -8,8 +8,11 @@ import toast from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
 
 import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
+import { useM365PeopleSuggest } from '@/client/hooks/useM365PeopleSuggest';
 
 import type { LocalAdminEntry } from '@/lib/services/agentAccess/types';
+
+import { EmailAutocompleteInput } from '@/components/UI/EmailAutocompleteInput';
 
 import { AdminConfigResponse, MergedAgentRow } from './types';
 
@@ -25,6 +28,8 @@ interface LocalAdminsSectionProps {
  */
 export const LocalAdminsSection: FC<LocalAdminsSectionProps> = ({ rows }) => {
   const t = useTranslations('agentAccess');
+  const tPeople = useTranslations('peopleSuggest');
+  const peopleSuggest = useM365PeopleSuggest();
   const queryClient = useQueryClient();
 
   const { data, isLoading, error, refetch } = useQuery<AdminConfigResponse>({
@@ -151,15 +156,16 @@ export const LocalAdminsSection: FC<LocalAdminsSectionProps> = ({ rows }) => {
                 <label className="mb-1 block text-sm font-medium text-black dark:text-white">
                   {t('emailLabel')}
                 </label>
-                <input
-                  type="email"
-                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-sm text-black dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                <EmailAutocompleteInput
+                  className="rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-sm text-black dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
                   value={admin.email}
                   placeholder={t('emailPlaceholder')}
-                  onChange={(e) =>
+                  suggest={peopleSuggest}
+                  suggestionsLabel={tPeople('listLabel')}
+                  onChange={(email) =>
                     updateAdmins(
                       localAdmins.map((a, i) =>
-                        i === index ? { ...a, email: e.target.value } : a,
+                        i === index ? { ...a, email } : a,
                       ),
                     )
                   }
