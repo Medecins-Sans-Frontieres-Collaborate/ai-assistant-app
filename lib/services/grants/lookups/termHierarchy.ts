@@ -183,12 +183,7 @@ export const MEDICAL_ACTIVITIES_VOCAB: string[] = [
   'Emergency Care',
   'Trauma Care',
   'Pediatric Care',
-  'Laboratory Services',
   'Referral Services',
-  'Blood Transfusion',
-  'Health Promotion',
-  'Emergency Response',
-  'Epidemic Response',
   'Hepatitis C',
   'Palliative Care',
 ];
