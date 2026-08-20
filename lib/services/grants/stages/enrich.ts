@@ -127,6 +127,7 @@ const CATEGORY_KEYWORDS: Record<string, string[][]> = {
   allocation: [['allocation']],
   code_mapping: [['code', 'mapping']],
   funding_rates: [['funding', 'rate']],
+  dates: [['dates']],
 };
 
 function findFile(
@@ -472,6 +473,100 @@ function loadAllocation(
   return [result, path, matchType];
 }
 
+/**
+ * Canonicalize a project code for joining across sources. The dates export
+ * writes codes like "AF1-83" where narratives use "AF183", so separators are
+ * stripped before comparison.
+ */
+function cleanJoinCode(raw: unknown): string {
+  return String(raw ?? '')
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, '');
+}
+
+/** Convert an Excel serial number or date string to "YYYY-MM-DD" ('' if neither). */
+function toIsoDate(value: unknown): string {
+  const s = String(value ?? '').trim();
+  if (!s || s.toUpperCase() === 'NAN') return '';
+  if (/^\d{4,6}(\.\d+)?$/.test(s)) {
+    const serial = Number(s);
+    if (serial > 30000 && serial < 80000) {
+      const d = new Date(Date.UTC(1899, 11, 30) + serial * 86400000);
+      return d.toISOString().slice(0, 10);
+    }
+  }
+  const parsed = new Date(s);
+  if (!isNaN(parsed.getTime()) && s.length > 4)
+    return parsed.toISOString().slice(0, 10);
+  return '';
+}
+
+/**
+ * Load the per-OC dates file ([Year]_[OC]_Dates.xlsx):
+ * the authoritative source for project start/end dates
+ */
+function loadDates(
+  supplementalDir: string,
+  spec: SupplementalFileSpec,
+): [Record<string, { start: string; end: string }>, string | null, string] {
+  const [path, matchType] = findFile(supplementalDir, spec.filename, 'dates');
+  if (!path) return [{}, null, ''];
+
+  const data = loadTabular(path, spec.skiprows || 0);
+  if (!data || data.length === 0) return [{}, path, matchType];
+
+  const headers = Object.keys(data[0]);
+  const resolve = (
+    configured: unknown,
+    exact: string[],
+    words: string[],
+  ): string => {
+    if (configured && headers.includes(String(configured)))
+      return String(configured);
+    for (const h of headers) if (exact.includes(h.toLowerCase())) return h;
+    for (const h of headers) {
+      const hl = h.toLowerCase();
+      if (words.every((w) => hl.includes(w))) return h;
+    }
+    return '';
+  };
+  const codeCol = resolve(
+    spec.columns?.code,
+    ['project_code', 'project code', 'code'],
+    ['code'],
+  );
+  const startCol = resolve(
+    spec.columns?.start_date,
+    ['ops_start_date', 'start_date', 'start date'],
+    ['start', 'date'],
+  );
+  const endCol = resolve(
+    spec.columns?.end_date,
+    ['ops_end_date', 'end_date', 'end date'],
+    ['end', 'date'],
+  );
+  if (!codeCol || (!startCol && !endCol)) {
+    console.log(
+      `  ! Dates file ${path.split('/').pop()}: could not resolve columns (headers: ${headers.join(', ')})`,
+    );
+    return [{}, path, matchType];
+  }
+
+  const result: Record<string, { start: string; end: string }> = {};
+  for (const row of data) {
+    const code = cleanJoinCode(row[codeCol]);
+    if (!code || code === 'NAN') continue;
+    const start = startCol ? toIsoDate(row[startCol]) : '';
+    const end = endCol ? toIsoDate(row[endCol]) : '';
+    if (start || end) result[code] = { start, end };
+  }
+
+  console.log(
+    `  Loaded ${Object.keys(result).length} date entries from ${path.split('/').pop()} (columns: ${[codeCol, startCol, endCol].filter(Boolean).join(', ')})`,
+  );
+  return [result, path, matchType];
+}
+
 // ---------------------------------------------------------------------------
 // Supplemental report helper
 // ---------------------------------------------------------------------------
@@ -558,6 +653,7 @@ export async function run(params: {
   let sanctionsSet = new Set<string>();
   let budgets: Record<string, number> = {};
   let allocationData: Record<string, AnyRecord> = {};
+  let datesData: Record<string, { start: string; end: string }> = {};
   let oldToNew: Record<string, string> = {};
 
   const suppFiles = ocCfg.supplemental_files || {};
@@ -778,6 +874,41 @@ export async function run(params: {
         );
       }
     }
+
+    // Project dates ([Year]_[OC]_Dates.xlsx)
+    {
+      const spec: SupplementalFileSpec = suppFiles.dates ?? {
+        filename: `${year}_${ocCfg.name}_Dates.xlsx`,
+        skiprows: 0,
+        columns: {},
+      };
+      const [dd, dPath, dMatch] = loadDates(supplementalDir, spec);
+      datesData = dd;
+      if (dPath && dMatch && Object.keys(dd).length > 0) {
+        loadedEntries.push(
+          buildReportEntry(
+            'dates',
+            spec.filename,
+            dPath,
+            dMatch,
+            Object.keys(dd).length,
+          ),
+        );
+      } else if (dPath) {
+        failedEntries.push(
+          buildReportEntry(
+            'dates',
+            spec.filename,
+            dPath,
+            '',
+            undefined,
+            'Failed to parse',
+          ),
+        );
+      } else {
+        missingEntries.push(buildReportEntry('dates', spec.filename, null, ''));
+      }
+    }
   } else {
     console.log('  No supplemental directory; skipping data joins.');
   }
@@ -812,6 +943,25 @@ export async function run(params: {
           `  [${idx + 1}] Filled mission_country from allocation: ${allocCountry}`,
         );
       }
+    }
+
+    // Dates come exclusively from the supplemental dates file
+    // Narrative-extracted dates are never used: a code missing
+    // from the file gets "No date found".
+    const dateEntry = datesData[cleanJoinCode(code)];
+    record.start_date = dateEntry?.start || 'No date found';
+    if (dateEntry?.end) {
+      record.end_date = dateEntry.end;
+      const cutoff = new Date(Date.UTC(year, 11, 31));
+      record.project_active =
+        new Date(dateEntry.end + 'T00:00:00Z') < cutoff ? 'No' : 'Yes';
+    } else {
+      record.end_date = 'No date found';
+    }
+    if (dateEntry) {
+      console.log(
+        `  [${idx + 1}] ${code}: dates from supplemental file (${dateEntry.start || '-'} to ${dateEntry.end || '-'})`,
+      );
     }
 
     // Emergency / New / Closing from project list

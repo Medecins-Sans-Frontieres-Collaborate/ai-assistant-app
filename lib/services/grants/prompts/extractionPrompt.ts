@@ -257,13 +257,11 @@ ${nameInstructions}
      * "Soudan du Sud" → "South Sudan"
      * Always use full English names, no abbreviations or French names
 
-4. **start_date**: Project start date (format: YYYY-MM-DD or as found)
-   - Look for: "Start date", "Date de début"
+4. **start_date**: Return "" — project start dates are NOT taken from the narrative. They are
+   supplied by a separate supplemental dates file and joined to each project by code after
+   extraction; a project not covered by that file is reported as "No date found".
 
-5. **end_date**: Project end date (format: YYYY-MM-DD or as found)
-   - Look for: "End date", "Date de fin", "Estimated End date"
-   - If end date field contains placeholder text like "Click here to enter a date" or is empty, use "ongoing"
-   - If no end date is mentioned AND project is active in ${year}, use "ongoing"
+5. **end_date**: Return "" — same as start_date, the supplemental dates file is the only source.
 
 6. **activities_${year}** (REQUIRED): ${year} activities only. 2-5 word concise labels.
    - Use HIGH-LEVEL category names from this reference vocabulary: ${vocabText}
@@ -383,7 +381,7 @@ Good examples by focus area (each example is a real project, shown as its Projec
     "project_code": "NG162",
     "project_name": "Katsina Nutrition Care",
     "country": "Nigeria",
-    "start_date": "2021-04-15",
+    "start_date": "",
     "end_date": "",
     "project_objective": "Large-scale malnutrition prevention and treatment, operating ITFCs and ATFCs and supporting malaria and epidemic response in Katsina State.",
     "is_new_project": "no",
