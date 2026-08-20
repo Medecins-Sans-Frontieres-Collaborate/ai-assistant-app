@@ -272,15 +272,8 @@ ${objectiveInstructions}
     listed in the files are not.
 
 12. **is_community_centered**: Is this project primarily community-based or patient-centered in its delivery model? (yes/no)
-    - "yes" if the project document describes delivering healthcare through a community-centered approach — care delivered primarily through community structures and responsive to local needs, consistent with MSF's commitment to people-centered, context-sensitive, and culturally appropriate care that strengthens community agency and dignity.
-    - Concrete examples of community-centered approaches (any of these as the PRIMARY delivery model indicates "yes"):
-      * Community health workers (CHWs) delivering or supervising care
-      * Mobile clinics or outreach teams bringing care into communities
-      * Home-based or door-to-door care
-      * Decentralized care delivered at the village/community level rather than at a central facility
-      * Community-led case finding, referral, or health promotion as the project's core strategy
-    - "no" if the project is primarily facility-based (hospital, clinic, health center) even if it includes some community activities like health promotion or outreach
-    - The key question: WHERE is care primarily delivered — in facilities, or in communities?
+    - "yes" if the project document describes delivering healthcare through a community-centered approach that ensures medical operations are both responsive to local needs and aligned with MSF's commitment to people-centered, context-sensitive, and culturally appropriate approaches that strengthen community agency and dignity.
+    - "no" otherwise
 
 13. **context**: ONE of: "Armed Conflict", "Internal Instability", "Post-Conflict", "Stable"
 
