@@ -76,9 +76,16 @@ export function isAgentModel(
   );
 }
 
-/** True when the conversation chats with an agent (usage isn't tracked for agents). */
+/**
+ * True when the conversation EXECUTES on an agent — the Foundry path, where
+ * requests leave the standard pipeline and usage isn't tracked. Keyed on the
+ * MODEL being agent-shaped, not on `conversation.bot`: since the
+ * agent/model decoupling a bot beside a real model is a knowledge/persona
+ * ATTACHMENT that still runs on the standard path with real token usage, so
+ * emissions and usage backfill must keep tracking it.
+ */
 export function conversationUsesAgent(conversation: Conversation): boolean {
-  return !!conversation.bot || isAgentModel(conversation.model ?? null);
+  return isAgentModel(conversation.model ?? null);
 }
 
 /** The subset of Message/AssistantMessageVersion the walk needs. */
