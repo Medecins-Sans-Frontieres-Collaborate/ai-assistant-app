@@ -3,6 +3,7 @@
  *
  * Uses xlsx (SheetJS) for reading CSV/Excel files.
  */
+import { normalizeCountry } from '../lookups/countryReference';
 import { getIcaCountryInfo } from '../lookups/icaCountries';
 import {
   type OCConfig,
@@ -806,7 +807,7 @@ export async function run(params: {
     if (!record.mission_country && code in allocationData) {
       const allocCountry = allocationData[code]?.country;
       if (allocCountry) {
-        record.mission_country = allocCountry;
+        record.mission_country = normalizeCountry(allocCountry) || allocCountry;
         console.log(
           `  [${idx + 1}] Filled mission_country from allocation: ${allocCountry}`,
         );

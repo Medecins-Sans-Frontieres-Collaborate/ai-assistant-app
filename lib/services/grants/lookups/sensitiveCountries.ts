@@ -6,6 +6,7 @@ export const SENSITIVE_COUNTRIES: Set<string> = new Set([
   'Afghanistan',
   'Central African Republic',
   'Democratic Republic of the Congo',
+  'DRC',
   'Iran',
   'Iraq',
   'Libya',

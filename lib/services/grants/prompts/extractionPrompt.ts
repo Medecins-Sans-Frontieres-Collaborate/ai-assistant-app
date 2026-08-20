@@ -250,7 +250,7 @@ ${nameInstructions}
 3. **country** (REQUIRED): The country where the project operates
    - Look for: "Mission", "Country", "Pays", country names in title
    - STANDARDIZATION: Always use the standard English country name:
-     * "République démocratique du Congo" or "DRC" → "Democratic Republic of Congo"
+     * "République démocratique du Congo" or "Democratic Republic of Congo" or "DRC" → "DRC"
      * "Côte d'Ivoire" → "Ivory Coast"
      * "Tchad" → "Chad"
      * "République centrafricaine" or "RCA" → "Central African Republic"

@@ -3,8 +3,8 @@
  */
 
 export const COUNTRY_ALIASES: Record<string, string> = {
-  'democratic republic of congo': 'Democratic Republic of the Congo',
-  'democratic republic of the congo': 'Democratic Republic of the Congo',
+  'democratic republic of congo': 'DRC',
+  'democratic republic of the congo': 'DRC',
   drc: 'DRC',
   'dr congo': 'DRC',
   'congo-kinshasa': 'DRC',
@@ -66,7 +66,6 @@ export const REFERENCE_COUNTRIES: Set<string> = new Set([
   'Colombia',
   "Côte d'Ivoire",
   'Cuba',
-  'Democratic Republic of the Congo',
   'Djibouti',
   'DRC',
   'Ecuador',
