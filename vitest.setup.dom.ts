@@ -265,6 +265,49 @@ const mockMessages: Record<string, unknown> = {
     badgeTooltip:
       'Connector tools are active on every message — they add tokens and response time. Click to manage.',
   },
+  toolModes: {
+    webSearch: 'Web search',
+    codeInterpreter: 'Code interpreter',
+    off: 'Off',
+    auto: 'Auto',
+    always: 'Always',
+    routingPrivacy: 'Privacy',
+    routingAgent: 'Azure AI',
+    agentRoutingNote:
+      'Azure AI search sends queries through Azure AI Foundry, which may retain them.',
+    learnMore: 'Learn more',
+  },
+  agentAttach: {
+    browserTitle: 'Agents',
+    browserSubtitle:
+      "Add agents and connectors to this chat, or start a new chat with an agent. Most work with whatever model you've chosen.",
+    searchPlaceholder: 'Search agents and connectors…',
+    loading: 'Loading agents…',
+    noMatches: 'Nothing matches your search.',
+    noAgents: 'No agents available.',
+    addToChat: 'Add to this chat',
+    removeFromChat: 'Remove from this chat',
+    newChat: 'New chat',
+    attached: 'Attached',
+    detach: 'Detach',
+    change: 'Change',
+    browse: 'Browse agents…',
+    noAgent: 'No agent attached',
+    close: 'Close',
+    kind: {
+      rag: 'Knowledge',
+      prompt: 'Persona',
+      m365: 'Knowledge (Microsoft 365)',
+      org: 'Knowledge',
+      foundry: 'Foundry agent',
+      connector: 'Connector',
+    },
+    semantics: {
+      'your-model': 'uses your model',
+      'pinned-model': 'model set by admin',
+      'own-model': 'runs on its own model',
+    },
+  },
   m365: {
     tools: {
       alwaysConfirmNote:
