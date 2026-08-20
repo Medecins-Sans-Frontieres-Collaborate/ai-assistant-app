@@ -41,17 +41,6 @@ function getProjectObjectiveInstructions(year: number): string {
    - Keep it concise — one sentence maximum`;
 }
 
-function getRemoteManagementInstructions(): string {
-  return `
-    - "yes" ONLY if the document explicitly states that the ENTIRE project is CURRENTLY managed remotely as its operational model
-    - "no" for partial remote management, plans, preparations, toolkits, training, or if only a sub-component is remote
-    - "no" if "remote" is used in other contexts (e.g., "remote communities", "remote areas")
-
-    **remote_management_notes**: If there is ANY mention of remote management — even partial, planned, or for specific components — describe it briefly here. Return null if no mentions at all.
-    - Examples: "Foumban component operated remotely without MSF presence", "Remote management toolkit being developed", "Training on remote management for supervisors planned"
-    - This field captures all remote management references for review, even when has_remote_management is "no" `;
-}
-
 function getGlobalTextRules(): string {
   return `
 ## GLOBAL TEXT RULES (apply to ALL fields):
@@ -189,7 +178,6 @@ NOTE: ${ocName} frequently submits country-level documents that cover MANY proje
 
   const nameInstructions = getProjectNameInstructions();
   const objectiveInstructions = getProjectObjectiveInstructions(year);
-  const remoteInstructions = getRemoteManagementInstructions();
   const globalRules = getGlobalTextRules();
 
   // Using template literal with double-brace escaping for JSON examples
@@ -283,10 +271,7 @@ ${objectiveInstructions}
     the supplemental dates file) falls in ${year} is closing; Emergency projects and projects not
     listed in the files are not.
 
-12. **has_remote_management**: Does this project involve remote management? (yes/no)
-${remoteInstructions}
-
-13. **is_community_centered**: Is this project primarily community-based or patient-centered in its delivery model? (yes/no)
+12. **is_community_centered**: Is this project primarily community-based or patient-centered in its delivery model? (yes/no)
     - "yes" if the project document describes delivering healthcare through a community-centered approach — care delivered primarily through community structures and responsive to local needs, consistent with MSF's commitment to people-centered, context-sensitive, and culturally appropriate care that strengthens community agency and dignity.
     - Concrete examples of community-centered approaches (any of these as the PRIMARY delivery model indicates "yes"):
       * Community health workers (CHWs) delivering or supervising care
@@ -297,11 +282,11 @@ ${remoteInstructions}
     - "no" if the project is primarily facility-based (hospital, clinic, health center) even if it includes some community activities like health promotion or outreach
     - The key question: WHERE is care primarily delivered — in facilities, or in communities?
 
-14. **context**: ONE of: "Armed Conflict", "Internal Instability", "Post-Conflict", "Stable"
+13. **context**: ONE of: "Armed Conflict", "Internal Instability", "Post-Conflict", "Stable"
 
-15. **event**: ONE of: "Population affected by endemics/epidemics", "Population affected by natural disaster", "Population affected by social violence and healthcare exclusion", "Victims of armed conflict"
+14. **event**: ONE of: "Population affected by endemics/epidemics", "Population affected by natural disaster", "Population affected by social violence and healthcare exclusion", "Victims of armed conflict"
 
-16. **population_type**: ONE of: "Displaced", "General Population", "Mixed Displaced/General", "Victims of Natural Disasters"
+15. **population_type**: ONE of: "Displaced", "General Population", "Mixed Displaced/General", "Victims of Natural Disasters"
 
 ## THEMATIC FOCUS FIELDS (yes/no — primary focus only):
 Answer "yes" ONLY if the thematic area is a PRIMARY, DEFINING purpose of the project — not merely one activity among many. These flags identify SPECIALIZED projects, not general hospitals that happen to offer a service.
@@ -316,8 +301,8 @@ Examples:
 - A pediatric inpatient care project = focuses_on_pediatrics: "yes"
 - focuses_on_refugees_idps: "yes" if displaced populations (refugees, IDPs, displaced) are an explicitly NAMED target group in the project description, even if the project also serves the general population
 
-17. **focuses_on_nutrition** 18. **focuses_on_refugees_idps** 19. **focuses_on_mental_health**
-20. **focuses_on_maternal_health** 21. **focuses_on_pediatrics** 22. **focuses_on_climate_impact**
+16. **focuses_on_nutrition** 17. **focuses_on_refugees_idps** 18. **focuses_on_mental_health**
+19. **focuses_on_maternal_health** 20. **focuses_on_pediatrics** 21. **focuses_on_climate_impact**
 
 Good examples by focus area (each example is a real project, shown as its Project Code and Project Name):
 - Nutrition:
@@ -343,7 +328,7 @@ Good examples by focus area (each example is a real project, shown as its Projec
   * Project Code: CF123, Project Name: Regional Climate, Environment and Health Roadmap - Green Initiative
   * Project Code: MG161, Project Name: Ikongo Planetary Health
 
-23. **document_type** (REQUIRED): Classify what KIND of document this is, based on its OVERALL purpose (this describes the DOCUMENT, not the project):
+22. **document_type** (REQUIRED): Classify what KIND of document this is, based on its OVERALL purpose (this describes the DOCUMENT, not the project):
     - "project narrative" — a dedicated proposal / annual plan whose primary purpose is to describe the actual project(s), including a country document that IS the project submission with per-project detail. This is the normal case.
     - "coordination" — a mission or national coordination / management document (e.g. "Coordination Nationale", mission analysis) that frames the mission rather than proposing a specific project.
     - "strategy" — a strategic plan or strategy paper.
@@ -367,8 +352,6 @@ Good examples by focus area (each example is a real project, shown as its Projec
     "is_new_project": "no",
     "is_emergency_project": "no",
     "is_closing_project": "no",
-    "has_remote_management": "no",
-    "remote_management_notes": null,
     "is_community_centered": "no",
     "context": "Armed Conflict",
     "event": "Population affected by endemics/epidemics",

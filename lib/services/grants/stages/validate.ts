@@ -112,8 +112,6 @@ const _INTERNAL_TO_DISPLAY: Record<string, string> = {
   new_project: 'New Project',
   emergency_project: 'Emergency Project',
   closing_project: 'Closing Project',
-  remote_management: 'Remote Management',
-  remote_management_notes: 'Remote Management Notes',
   sanctions: 'Sanctions',
   sensitive_context: 'Sensitive Context for Screening',
   impact_climate: 'Impact of Climate Change',

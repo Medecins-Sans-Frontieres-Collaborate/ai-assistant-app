@@ -94,7 +94,6 @@ const NARROW_COLUMNS = new Set([
   'New Project',
   'Emergency Project',
   'Closing Project',
-  'Remote Management',
   'Sanctions',
   'Emergency Relief Fund',
   'Sensitive Context for Screening',
@@ -111,7 +110,6 @@ const WIDE_COLUMNS = new Set([
   'Project Objective',
   'Key Terms/Activities',
   'Evidence Summary',
-  'Remote Management Notes',
 ]);
 // Long-text fields shown in the row detail panel
 const DETAIL_FIELDS = [
@@ -220,13 +218,7 @@ const COLUMN_GROUPS: {
   },
   {
     label: 'Operational',
-    columns: [
-      'Remote Management',
-      'Remote Management Notes',
-      'Sanctions',
-      'Emergency Project',
-      'Emergency Relief Fund',
-    ],
+    columns: ['Sanctions', 'Emergency Project', 'Emergency Relief Fund'],
   },
   {
     label: 'Thematic Flags',

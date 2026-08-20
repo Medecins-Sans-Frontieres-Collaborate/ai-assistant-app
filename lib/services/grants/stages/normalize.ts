@@ -12,7 +12,6 @@ import { isSensitive } from '../lookups/sensitiveCountries';
 import {
   formatActivitiesList,
   formatEvidenceSummary,
-  normalizeActivity,
 } from '../lookups/termHierarchy';
 import type { OCConfig } from '../ocConfig';
 import type { ProgressEmitter } from '../progress';
@@ -191,15 +190,6 @@ function processClosingProject(rawValue: string, isEmergency: boolean): string {
   if (val.includes('partial') || val.includes('reorientation')) {
     return 'Partial Handover/Reorientation';
   }
-  return 'No';
-}
-
-function toYesNo(value: unknown): string {
-  if (
-    value &&
-    ['yes', 'true', '1', 'y'].includes(String(value).toLowerCase().trim())
-  )
-    return 'Yes';
   return 'No';
 }
 
@@ -614,58 +604,6 @@ function normalizeRecord(
   // Default value is No.
   const emergencyLlm = 'No';
 
-  // --- Remote management ---
-  let remoteMgmt = toYesNo(record.has_remote_management || 'no');
-  let remoteNotes = record.remote_management_notes || '';
-  if (
-    !remoteNotes ||
-    ['null', 'none', ''].includes(String(remoteNotes).toLowerCase())
-  ) {
-    remoteNotes = 'N/A';
-  }
-
-  // Remote management backstop
-  const rawText = record._raw_text || '';
-  if (remoteMgmt === 'Yes' && rawText) {
-    const textLower = rawText.toLowerCase();
-    if (
-      !textLower.includes('remote management') &&
-      !textLower.includes('remotely managed')
-    ) {
-      remoteMgmt = 'No';
-    }
-  }
-
-  if (remoteMgmt === 'Yes' && remoteNotes && remoteNotes !== 'N/A') {
-    const notesLower = remoteNotes.toLowerCase();
-    const partialIndicators = [
-      'parts of',
-      'partial',
-      'hybrid',
-      'flash visit',
-      'some ',
-      'specific',
-      'component',
-      'cannot supervise',
-      'cannot ',
-      'restricted',
-      'outsourced',
-      'semi-remote',
-      'semi-remotely',
-      'clinic managed',
-      'site managed',
-      'certain ',
-      'during periods',
-      'procedures in place',
-      'planned for',
-      'remote technical support',
-      'remote support',
-    ];
-    if (partialIndicators.some((ind) => notesLower.includes(ind))) {
-      remoteMgmt = 'No';
-    }
-  }
-
   // --- Thematic flags ---
   function llmFlag(field: string): string {
     const v = record[field];
@@ -696,8 +634,6 @@ function normalizeRecord(
     new_project: 'No', // Finalized in enrich
     emergency_project: emergencyLlm,
     closing_project: rawClosing, // Raw LLM value; finalized in enrich
-    remote_management: remoteMgmt,
-    remote_management_notes: remoteNotes,
     sanctions: 'Not Found',
     sensitive_context: sensitive ? 'Yes' : 'No',
     impact_climate: llmFlag('focuses_on_climate_impact'),
