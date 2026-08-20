@@ -4038,7 +4038,30 @@
     "conflictTakeTheirs": "Sebenzisa eyabo",
     "conflictNoFieldDiff": "Amanani ayafana — kushintshile kuphela inguqulo yerekhodi.",
     "conflictRecordGone": "Le rekhodi isusiwe (noma ayikwazanga ukulayishwa kabusha). Kopisha okufunayo efomini, bese uyalayisha kabusha.",
-    "groupsFlagOff": "Ukunqamulwa kwamaqembu akuvuliwe kule ndawo okwamanje. Okuqondiwe kwamaqembu akhona kuyaqhubeka ukusebenza."
+    "groupsFlagOff": "Ukunqamulwa kwamaqembu akuvuliwe kule ndawo okwamanje. Okuqondiwe kwamaqembu akhona kuyaqhubeka ukusebenza.",
+    "catalogOauth": {
+      "title": "Izinhlelo zokusebenza ze-OAuth zesixhumi esishumekiwe",
+      "description": "Izinhlelo zokusebenza ze-OAuth ezisebenzayo kuyo yonke i-Deployment yezixhumi ezishumekiwe (GitHub, Asana, ...). Irekhodi elilondolozwe lapha lizoshintsha izilungiselelo zemvelo ze-MCP_OAUTH_*. Uma lisuswa, kuzosetshenziswa lezo ezisemvelo. Izimfihlo zamaklayenti zigcinwa ziphasekile futhi azisoze zakhonjiswa njalo futhi.",
+      "badgeAdmin": "Kulungiselelwe lapha",
+      "badgeEnv": "Kusuka ezilungiselelweni zemvelo",
+      "badgeNone": "Akukalungiselelwa",
+      "badgeDcr": "Iyazirejista",
+      "badgeDcrHint": "Lo mphakeli angazirejista ngokuzenzakalelayo iklayenti le-OAuth, ngakho uyasebenza noma inhlangano ayikalungiselelwa lapha.",
+      "clientIdLabel": "I-OAuth client ID",
+      "clientSecretLabel": "I-OAuth client secret",
+      "secretStoredPlaceholder": "Iyagcinwa — bhala okusha ukuze ushintshe, shiya izinkambu ezingenalutho ukuhlala usebenzisa elikade likhona",
+      "secretNewPlaceholder": "Namathisela i-client secret",
+      "save": "Londoloza",
+      "remove": "Susa",
+      "removeToEnv": "Susa (buyela kokuzenzakalelayo kwezilungiselelo zemvelo)",
+      "saved": "Uhlelo lokusebenza lwe-OAuth luka-{name} lulondoloziwe",
+      "removed": "Uhlelo lokusebenza lwe-OAuth luka-{name} lususiwe",
+      "saveError": "Kwehlulekile ukulondoloza uhlelo lokusebenza lwe-OAuth. Zama futhi.",
+      "conflict": "Leli rekhodi liguqulwe kwenye indawo — lilayishwe kabusha, sicela uzame futhi.",
+      "storageUnavailable": "Indawo yokugcina yama-Admin ayitholakali; amarekhodi akhona awakwazi ukuboniswa. Ukulondoloza akukhawulelwe kuze kulungiseke.",
+      "sealingUnavailable": "Ukuvikeleka kwezimfihlo akukalungiswa kule deployment (AUTH_SECRET ayikho) — izimfihlo zamaklayenti azikwazi ukulondolozwa.",
+      "updatedBy": "Kubuyekezwe ngu-{by} ngo-{at}"
+    }
   },
   "localModels": {
     "title": "Amamodeli endaweni",
@@ -4846,5 +4869,10 @@
       "pinned-model": "imodeli ebekwe umphathi",
       "own-model": "isebenzisa imodeli yayo"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "Izincomo ezivela enhlanganweni yakho",
+    "searching": "Kuyaseshwa enhlangano yakho…",
+    "noMatches": "Awekho okufanako kudayari — ungafaka ikheli mathupha"
   }
 }

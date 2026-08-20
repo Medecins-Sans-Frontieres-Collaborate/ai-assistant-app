@@ -4054,7 +4054,30 @@
     "conflictTakeTheirs": "Preia versiunea lor",
     "conflictNoFieldDiff": "Valorile coincid — doar versiunea înregistrării s-a schimbat.",
     "conflictRecordGone": "Această înregistrare a fost ștearsă (sau nu a putut fi reîncărcată). Copiați ce aveți nevoie din formular, apoi reîncărcați.",
-    "groupsFlagOff": "Targetarea pe grup nu este activată încă pentru acest mediu. Grupurile existente continuă să funcționeze."
+    "groupsFlagOff": "Targetarea pe grup nu este activată încă pentru acest mediu. Grupurile existente continuă să funcționeze.",
+    "catalogOauth": {
+      "title": "Aplicații OAuth pentru conectori integrați",
+      "description": "Aplicații OAuth la nivel de implementare pentru conectorii integrați (GitHub, Asana, …). O înregistrare salvată aici suprascrie variabilele de mediu MCP_OAUTH_*; ștergerea acesteia revine la variabilele respective. Secretele de client sunt criptate la repaus și nu vor mai fi afișate.",
+      "badgeAdmin": "Configurat aici",
+      "badgeEnv": "Din mediu",
+      "badgeNone": "Neconfigurat",
+      "badgeDcr": "Auto-înregistrare",
+      "badgeDcrHint": "Acest furnizor poate înregistra automat un client OAuth, deci funcționează chiar și fără o aplicație configurată aici.",
+      "clientIdLabel": "ID client OAuth",
+      "clientSecretLabel": "Secret client OAuth",
+      "secretStoredPlaceholder": "Salvat — scrieți pentru a înlocui, lăsați gol pentru a păstra",
+      "secretNewPlaceholder": "Lipiți secretul clientului",
+      "save": "Salvați",
+      "remove": "Eliminați",
+      "removeToEnv": "Eliminați (reveniți la mediu)",
+      "saved": "Aplicația OAuth {name} a fost salvată",
+      "removed": "Aplicația OAuth {name} a fost eliminată",
+      "saveError": "Salvarea aplicației OAuth a eșuat. Încercați din nou.",
+      "conflict": "Această înregistrare a fost modificată în altă parte — reîncărcată, vă rugăm să reîncercați.",
+      "storageUnavailable": "Stocarea pentru administrare nu este accesibilă; înregistrările existente nu au putut fi listate. Salvarea este dezactivată până la remediere.",
+      "sealingUnavailable": "Criptarea secretelor nu este configurată în această implementare (lipsește AUTH_SECRET) — secretele de client nu pot fi salvate.",
+      "updatedBy": "Actualizat de {by} la {at}"
+    }
   },
   "localModels": {
     "title": "Modele locale",
@@ -4862,5 +4885,10 @@
       "pinned-model": "model stabilit de administrator",
       "own-model": "rulează pe propriul său model"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "Sugestii din organizația dumneavoastră",
+    "searching": "Se caută în organizația dvs.…",
+    "noMatches": "Nicio potrivire în director — puteți introduce adresa manual"
   }
 }

@@ -4054,7 +4054,30 @@
     "conflictTakeTheirs": "Prendre la leur",
     "conflictNoFieldDiff": "Les valeurs sont identiques — seule la version du dossier a changé.",
     "conflictRecordGone": "Ce dossier a été supprimé (ou n’a pas pu être rechargé). Copiez ce dont vous avez besoin depuis le formulaire, puis rechargez.",
-    "groupsFlagOff": "Le ciblage par groupe n’est pas encore activé pour cet environnement. Les cibles de groupe existantes continuent de fonctionner."
+    "groupsFlagOff": "Le ciblage par groupe n’est pas encore activé pour cet environnement. Les cibles de groupe existantes continuent de fonctionner.",
+    "catalogOauth": {
+      "title": "Applications OAuth des connecteurs intégrés",
+      "description": "Applications OAuth à l’échelle du déploiement pour les connecteurs intégrés (GitHub, Asana, …). Un enregistrement enregistré ici remplace les variables d’environnement MCP_OAUTH_* ; le supprimer rétablit leur utilisation. Les secrets clients sont chiffrés au repos et ne sont plus jamais affichés.",
+      "badgeAdmin": "Configuré ici",
+      "badgeEnv": "Depuis l’environnement",
+      "badgeNone": "Non configuré",
+      "badgeDcr": "Auto-enregistrement",
+      "badgeDcrHint": "Ce fournisseur peut enregistrer un client OAuth automatiquement, il fonctionnera donc même sans application configurée ici.",
+      "clientIdLabel": "ID client OAuth",
+      "clientSecretLabel": "Secret client OAuth",
+      "secretStoredPlaceholder": "Enregistré — saisissez pour remplacer, laissez vide pour conserver",
+      "secretNewPlaceholder": "Collez le secret client",
+      "save": "Enregistrer",
+      "remove": "Supprimer",
+      "removeToEnv": "Supprimer (retour à l’environnement)",
+      "saved": "Application OAuth {name} enregistrée",
+      "removed": "Application OAuth {name} supprimée",
+      "saveError": "Échec de l’enregistrement de l’application OAuth. Veuillez réessayer.",
+      "conflict": "Cet enregistrement a été modifié ailleurs — rechargé, veuillez réessayer.",
+      "storageUnavailable": "Le stockage administrateur est inaccessible ; les enregistrements existants n’ont pas pu être listés. L’enregistrement est désactivé jusqu’à résolution.",
+      "sealingUnavailable": "Le chiffrement des secrets n’est pas configuré sur ce déploiement (AUTH_SECRET manquant) — les secrets clients ne peuvent pas être enregistrés.",
+      "updatedBy": "Mis à jour par {by} le {at}"
+    }
   },
   "localModels": {
     "title": "Modèles locaux",
@@ -4862,5 +4885,10 @@
       "pinned-model": "modèle défini par l’administrateur",
       "own-model": "utilise son propre modèle"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "Suggestions de votre organisation",
+    "searching": "Recherche dans votre organisation…",
+    "noMatches": "Aucune correspondance dans l'annuaire — vous pouvez saisir l'adresse manuellement"
   }
 }

@@ -4038,7 +4038,30 @@
     "conflictTakeTheirs": "Karbi nasu",
     "conflictNoFieldDiff": "Ƙimar sun yi daidai — sigar bayanai kawai ta canza.",
     "conflictRecordGone": "An goge wannan bayanin (ko ba a iya sake lodawa ba). Kwafi duk abin da kake bukata daga fom, sannan kayi loda.",
-    "groupsFlagOff": "Ba a kunna nufin ƙungiyoyi ga wannan muhallin ba tukuna. Tsoffin nufin ƙungiyoyi suna aiki har yanzu."
+    "groupsFlagOff": "Ba a kunna nufin ƙungiyoyi ga wannan muhallin ba tukuna. Tsoffin nufin ƙungiyoyi suna aiki har yanzu.",
+    "catalogOauth": {
+      "title": "Manhajojin OAuth na mai haɗin gwiwa na ciki",
+      "description": "Manhajojin OAuth na gaba ɗaya don masu haɗin gwiwa na ciki (GitHub, Asana, ...). Duk bayanin da aka adana a nan zai wuce ƙimar MCP_OAUTH_* environment variables; gogewa zai maido da su. Ana ɓoye sirrin abokin ciniki a lokacin ajiyewa kuma ba za a sake nuna shi ba.",
+      "badgeAdmin": "An saita a nan",
+      "badgeEnv": "Daga environment",
+      "badgeNone": "Ba a saita ba",
+      "badgeDcr": "Yana yin rajista kansa",
+      "badgeDcrHint": "Wannan mai ba da sabis na iya rajistar abokin OAuth kai tsaye, don haka zai yi aiki koda ba a saita app a nan ba.",
+      "clientIdLabel": "OAuth client ID",
+      "clientSecretLabel": "OAuth client secret",
+      "secretStoredPlaceholder": "An ajiye — shiga don maye, bar babu komai don ci gaba",
+      "secretNewPlaceholder": "Liƙa sirrin abokin ciniki",
+      "save": "Ajiye",
+      "remove": "Cire",
+      "removeToEnv": "Cire (dawo da environment)",
+      "saved": "An ajiye manhajar OAuth {name}",
+      "removed": "An cire manhajar OAuth {name}",
+      "saveError": "Ajiye manhajar OAuth ya gaza. Tofa ƙoƙari.",
+      "conflict": "An canza wannan bayanin a wani wuri — an sake lodawa, don Allah ku sake gwadawa.",
+      "storageUnavailable": "Ba a iya samun ajiyar admin; ba a iya jera bayanan da suke akwai. Ajiya yana a kashe har sai an gyara.",
+      "sealingUnavailable": "Ba a saita ɓoye sirri ba a wannan warwarewa (AUTH_SECRET babu) — ba za a iya adana sirrin abokin ba.",
+      "updatedBy": "An sabunta ta {by} a {at}"
+    }
   },
   "localModels": {
     "title": "Samfuran cikin gida",
@@ -4846,5 +4869,10 @@
       "pinned-model": "samfurin da mai gudanarwa ya saita",
       "own-model": "yana aiki da samfurinsa kansa"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "Shawarwari daga ƙungiyarku",
+    "searching": "Ana bincika ƙungiyarku…",
+    "noMatches": "Babu abin da ya dace a cikin kundin — za ka iya shigar da adireshin da hannu"
   }
 }

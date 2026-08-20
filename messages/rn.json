@@ -4038,7 +4038,30 @@
     "conflictTakeTheirs": "Fata ivyabo",
     "conflictNoFieldDiff": "Agaciro karangana — gusa version ya dosiye niyo yahindutse.",
     "conflictRecordGone": "Iyi dosiye yarahanaguwe (caneke ntishoboye gusubirizwa). Fata ayo ukeneye muri fomu hanyuma usubire kubanza.",
-    "groupsFlagOff": "Kurondera ku matsinda ntikirashoboka muri ino siyanse. Amatsinda yari yasanzwe azobandanya gukora."
+    "groupsFlagOff": "Kurondera ku matsinda ntikirashoboka muri ino siyanse. Amatsinda yari yasanzwe azobandanya gukora.",
+    "catalogOauth": {
+      "title": "Porogaramu za OAuth zihuza imbere muri sisiteme",
+      "description": "Porogaramu za OAuth zikoreshwa ku rwego rwa deployment ku bihuza vyubatswe imbere (nka GitHub, Asana, ...). Ivyo ubitswe hano birasimbura imirongo MCP_OAUTH_* mu bidukikije; kubikuraho bisubira gukoresha ivyo bidukikije. Amabanga y'ibanga y'abakiriya arakingirwa mu bubiko kandi ntasubira kwerekanwa.",
+      "badgeAdmin": "Byashizweho hano",
+      "badgeEnv": "Biva mu bidukikije",
+      "badgeNone": "Ntivyashizweho",
+      "badgeDcr": "Kwiyandikisha ubwabwo",
+      "badgeDcrHint": "Uwu mutanga serivisi arashobora kwiyandikisha umukiriya wa OAuth ukwabo, bityo birashoboka n'aho porogaramu itashizweho hano.",
+      "clientIdLabel": "ID y'umukiriya wa OAuth",
+      "clientSecretLabel": "Ijambo ry'ibanga ry'umukiriya wa OAuth",
+      "secretStoredPlaceholder": "Bibitswe — andika ushaka gusubiriza, reka gusiba kugira bigume",
+      "secretNewPlaceholder": "Shira ijambo ry'ibanga ry'umukiriya",
+      "save": "Bika",
+      "remove": "Kuraho",
+      "removeToEnv": "Kuraho (subira kubidukikije)",
+      "saved": "Porogaramu ya OAuth ya {name} ibitswe",
+      "removed": "Porogaramu ya OAuth ya {name} yakuwemo",
+      "saveError": "Kugira ubike porogaramu ya OAuth vyarananiranye. Gerageza gusubira.",
+      "conflict": "Iyi dosiye yarahinduwe ahandi — vyasukuwe, gerageza gusubira.",
+      "storageUnavailable": "Ububiko bw'abayobozi ntibugerekanwa; dosiye zabitswe ntizashoboye kwerekanwa. Kubika ntibishoboka gushika bikosowe.",
+      "sealingUnavailable": "Ugukinga amabanga ntikwashizweho kuri iri deployment (AUTH_SECRET irabuze) — amabanga y'abakiriya ntashobora kubikwa.",
+      "updatedBy": "Vyavuguruwe na {by} kw'itariki ya {at}"
+    }
   },
   "localModels": {
     "title": "Akarorero k'imbere mu muduga",
@@ -4846,5 +4869,10 @@
       "pinned-model": "modele yashizweho n’umuyobozi",
       "own-model": "ikoresha modele yayo ubwayo"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "Ivyo usabwe n'ishirahamwe ryawe",
+    "searching": "Turiko turondera mw'ishirahamwe ryawe...",
+    "noMatches": "Nta bisubizo vyabonetse muri dosiye — ushobora kwandika aderesi intoke"
   }
 }

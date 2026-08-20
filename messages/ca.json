@@ -4054,7 +4054,30 @@
     "conflictTakeTheirs": "Utilitza la seva versió",
     "conflictNoFieldDiff": "Els valors coincideixen — només ha canviat la versió del registre.",
     "conflictRecordGone": "Aquest registre s’ha eliminat (o no s’ha pogut tornar a carregar). Copieu el que necessiteu del formulari, i recapteu la pàgina.",
-    "groupsFlagOff": "L’assignació per grup encara no està habilitada en aquest entorn. Les assignacions de grup existents continuen funcionant."
+    "groupsFlagOff": "L’assignació per grup encara no està habilitada en aquest entorn. Les assignacions de grup existents continuen funcionant.",
+    "catalogOauth": {
+      "title": "Aplicacions OAuth de connectors integrats",
+      "description": "Aplicacions OAuth de tot el desplegament per als connectors integrats (GitHub, Asana, …). Un registre desat aquí reemplaça les variables d’entorn MCP_OAUTH_*; si s’elimina, es torna a utilitzar les variables d’entorn. Els secrets de client s’emmagatzemen xifrats en repòs i no es mostraran mai més.",
+      "badgeAdmin": "Configurat aquí",
+      "badgeEnv": "Des de l’entorn",
+      "badgeNone": "No configurat",
+      "badgeDcr": "Autorregistrable",
+      "badgeDcrHint": "Aquest proveïdor pot registrar automàticament un client OAuth, així que funciona encara que no hi hagi cap aplicació configurada aquí.",
+      "clientIdLabel": "ID de client OAuth",
+      "clientSecretLabel": "Secret de client OAuth",
+      "secretStoredPlaceholder": "Desat: escriviu per substituir, deixeu en blanc per mantenir",
+      "secretNewPlaceholder": "Enganxeu el secret de client",
+      "save": "Desa",
+      "remove": "Elimina",
+      "removeToEnv": "Elimina (tornar a l’entorn)",
+      "saved": "Aplicació OAuth {name} desada",
+      "removed": "Aplicació OAuth {name} eliminada",
+      "saveError": "No s’ha pogut desar l’aplicació OAuth. Torneu-ho a provar.",
+      "conflict": "Aquest registre ha canviat en un altre lloc: s’ha recarregat, torneu-ho a provar.",
+      "storageUnavailable": "L’emmagatzematge d’administració és inabastable; no s’han pogut mostrar els registres existents. El desament estarà desactivat fins que es recuperi.",
+      "sealingUnavailable": "No s’ha configurat el xifrat de secrets en aquest desplegament (falta AUTH_SECRET): no es poden desar els secrets de client.",
+      "updatedBy": "Actualitzat per {by} el {at}"
+    }
   },
   "localModels": {
     "title": "Models locals",
@@ -4862,5 +4885,10 @@
       "pinned-model": "model establert per l'administrador",
       "own-model": "fa servir el seu propi model"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "Suggeriments de la vostra organització",
+    "searching": "S'està cercant a la vostra organització…",
+    "noMatches": "No hi ha coincidències al directori — podeu introduir l'adreça manualment"
   }
 }

@@ -4054,7 +4054,30 @@
     "conflictTakeTheirs": "Převzít jejich verzi",
     "conflictNoFieldDiff": "Hodnoty souhlasí — změnila se pouze verze záznamu.",
     "conflictRecordGone": "Tento záznam byl smazán (nebo jej nelze znovu načíst). Zkopírujte vše potřebné z formuláře a znovu načtěte.",
-    "groupsFlagOff": "Cílení na skupiny zde zatím není povoleno. Stávající cíle skupin dál fungují."
+    "groupsFlagOff": "Cílení na skupiny zde zatím není povoleno. Stávající cíle skupin dál fungují.",
+    "catalogOauth": {
+      "title": "Integrované OAuth aplikace konektorů",
+      "description": "OAuth aplikace pro integrované konektory (GitHub, Asana, …) platné v celé instalaci. Záznam uložený zde přepisuje proměnné prostředí MCP_OAUTH_*. Jeho odstraněním se vrátí použití těchto proměnných. Klientská tajemství jsou v klidu šifrována a po uložení již nejsou opět zobrazena.",
+      "badgeAdmin": "Nastaveno zde",
+      "badgeEnv": "Z prostředí",
+      "badgeNone": "Nenastaveno",
+      "badgeDcr": "Automatická registrace",
+      "badgeDcrHint": "Tento poskytovatel může zaregistrovat OAuth klienta automaticky, takže funguje i bez zde nastavené aplikace.",
+      "clientIdLabel": "ID OAuth klienta",
+      "clientSecretLabel": "Tajemství OAuth klienta",
+      "secretStoredPlaceholder": "Uloženo — napište pro změnu, ponechte prázdné pro zachování",
+      "secretNewPlaceholder": "Vložte klientské tajemství",
+      "save": "Uložit",
+      "remove": "Odstranit",
+      "removeToEnv": "Odstranit (vrátit na prostředí)",
+      "saved": "OAuth aplikace {name} uložena",
+      "removed": "OAuth aplikace {name} odstraněna",
+      "saveError": "Uložení OAuth aplikace selhalo. Zkuste to znovu.",
+      "conflict": "Tento záznam byl změněn jinde — znovu načteno, zkuste znovu.",
+      "storageUnavailable": "Úložiště pro správu není dostupné; stávající záznamy nelze zobrazit. Ukládání je do obnovení vypnuto.",
+      "sealingUnavailable": "Šifrování tajemství není v této instalaci nastaveno (chybí AUTH_SECRET) — klientská tajemství nelze uložit.",
+      "updatedBy": "Aktualizoval(a) {by} dne {at}"
+    }
   },
   "localModels": {
     "title": "Lokální modely",
@@ -4862,5 +4885,10 @@
       "pinned-model": "model nastavený správcem",
       "own-model": "běží na vlastním modelu"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "Návrhy z vaší organizace",
+    "searching": "Vyhledávání ve vaší organizaci…",
+    "noMatches": "Žádné shody v adresáři — můžete zadat adresu ručně"
   }
 }

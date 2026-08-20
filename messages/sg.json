@@ -4038,7 +4038,30 @@
     "conflictTakeTheirs": "Yèkê ti yângâ",
     "conflictNoFieldDiff": "Valeur a yângâ — version ti rum mô so ni.",
     "conflictRecordGone": "Rum ô a kété kûê (ou pâa yâso). Kopié na bendê ti form ô, puise reload.",
-    "groupsFlagOff": "Group targeting abûka yâso na environnement ô tî téné. Group ti cible tî sô ngô so a kété yâso ngangu."
+    "groupsFlagOff": "Group targeting abûka yâso na environnement ô tî téné. Group ti cible tî sô ngô so a kété yâso ngangu.",
+    "catalogOauth": {
+      "title": "OAuth apps ya connector ti linga na ndolo",
+      "description": "OAuth apps ti koko deployment sô lo hinga na connectors ti linga na ndolo (GitHub, Asana, …). Si lo pépé lâ na mbeti ape na wa, lo yeke mboca MCP_OAUTH_* variables ti environment; si lo yeke kode wa ape, lo biani na variables a. Client secrets yeke huli na ndô tî mo ape na lo si mô biani mo mûngu.",
+      "badgeAdmin": "A hinga kode wa",
+      "badgeEnv": "Tî environment",
+      "badgeNone": "A hinga kode ape",
+      "badgeDcr": "A kêtê yâ tî kodro",
+      "badgeDcrHint": "Provider a yeke kodro OAuth client na mbênî, ala so app ape kode wa zîngö, lo mô hûngö.",
+      "clientIdLabel": "OAuth client ID",
+      "clientSecretLabel": "OAuth client secret",
+      "secretStoredPlaceholder": "A huli ti lo — mbôko sô lo gó ti gû, samba mo bâda wa ape",
+      "secretNewPlaceholder": "Kopië client secret",
+      "save": "Sêda",
+      "remove": "Kûè",
+      "removeToEnv": "Kûè (yeke na yângâ-ti-environment)",
+      "saved": "{name} OAuth app a sêda wa",
+      "removed": "{name} OAuth app a kûè wa",
+      "saveError": "Sêda OAuth app a yâ tî hûngö. Wa tâmbula pâsi.",
+      "conflict": "Mbeti a ayeke mû na lo birê — ayeke gû, wa tâmbula pâsi.",
+      "storageUnavailable": "Admin storage a yâ tî hûngö; mbeti sô ayeke huli wa ape. Sêda yâ tî hûngö bada storage a bâka.",
+      "sealingUnavailable": "Encryption tî secret a hinga kode ape na deployment a (AUTH_SECRET yâ tî hûngö) — OAuth client secret yâ tî hûngö sêda.",
+      "updatedBy": "A sâra na {by} na {at}"
+    }
   },
   "localModels": {
     "title": "Model ti gbë na mbongo",
@@ -4846,5 +4869,10 @@
       "pinned-model": "model a admin a zia",
       "own-model": "yeke na model iye"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "Mbênî ya organisation tî mo",
+    "searching": "Bi yeke ti mbênî wa na sô nginza…",
+    "noMatches": "Ala ti nzönî na dite — oko yeke kûè adrèsê na lo mûngû"
   }
 }

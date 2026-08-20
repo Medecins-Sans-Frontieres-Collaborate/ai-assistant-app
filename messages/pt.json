@@ -4054,7 +4054,30 @@
     "conflictTakeTheirs": "Manter deles",
     "conflictNoFieldDiff": "Os valores coincidem — apenas a versão do registro foi alterada.",
     "conflictRecordGone": "Este registro foi excluído (ou não pôde ser recarregado). Copie o que precisar do formulário e recarregue.",
-    "groupsFlagOff": "O direcionamento por grupo ainda não está ativado para este ambiente. Direcionamentos existentes continuam funcionando."
+    "groupsFlagOff": "O direcionamento por grupo ainda não está ativado para este ambiente. Direcionamentos existentes continuam funcionando.",
+    "catalogOauth": {
+      "title": "Apps OAuth de conectores integrados",
+      "description": "Apps OAuth de uso geral para os conectores integrados (GitHub, Asana, ...). Um registro salvo aqui substitui as variáveis de ambiente MCP_OAUTH_*; removendo-o, volta a usá-las. Segredos de cliente são criptografados em repouso e nunca mais exibidos.",
+      "badgeAdmin": "Configurado aqui",
+      "badgeEnv": "Do ambiente",
+      "badgeNone": "Não configurado",
+      "badgeDcr": "Autorregistro",
+      "badgeDcrHint": "Este provedor pode registrar um cliente OAuth automaticamente, funcionando mesmo sem um app configurado aqui.",
+      "clientIdLabel": "ID do cliente OAuth",
+      "clientSecretLabel": "Segredo do cliente OAuth",
+      "secretStoredPlaceholder": "Armazenado — digite para substituir, deixe em branco para manter",
+      "secretNewPlaceholder": "Cole o segredo do cliente",
+      "save": "Salvar",
+      "remove": "Remover",
+      "removeToEnv": "Remover (voltar para ambiente)",
+      "saved": "App OAuth {name} salvo",
+      "removed": "App OAuth {name} removido",
+      "saveError": "Falha ao salvar o app OAuth. Tente novamente.",
+      "conflict": "Este registro foi alterado em outro local — recarregado, favor tentar novamente.",
+      "storageUnavailable": "O armazenamento administrativo está inacessível; registros existentes não puderam ser listados. Salvamento desativado até recuperar.",
+      "sealingUnavailable": "Criptografia de segredos não configurada nesta implantação (AUTH_SECRET ausente) — segredos de cliente não podem ser salvos.",
+      "updatedBy": "Atualizado por {by} em {at}"
+    }
   },
   "localModels": {
     "title": "Modelos locais",
@@ -4862,5 +4885,10 @@
       "pinned-model": "modelo definido pelo administrador",
       "own-model": "utiliza seu próprio modelo"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "Sugestões da sua organização",
+    "searching": "Pesquisando na sua organização…",
+    "noMatches": "Nenhuma correspondência no diretório — você pode inserir o endereço manualmente"
   }
 }

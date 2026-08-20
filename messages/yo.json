@@ -4038,7 +4038,30 @@
     "conflictTakeTheirs": "Gba tiwọn",
     "conflictNoFieldDiff": "Iye mejeeji jọra — ẹya igbasilẹ nikan lo yipada.",
     "conflictRecordGone": "A ti pa igbasilẹ yii (tabi ko le tun gbasilẹ). Daakọ ohun tí o fẹ lati fọọmu, lẹhinna tun gbasilẹ.",
-    "groupsFlagOff": "A ko ti mu ìfojúkan ẹgbẹ ṣiṣẹ fun ayika yii. Àfojúkan ẹgbẹ to wa tẹlẹ ṣiwaju."
+    "groupsFlagOff": "A ko ti mu ìfojúkan ẹgbẹ ṣiṣẹ fun ayika yii. Àfojúkan ẹgbẹ to wa tẹlẹ ṣiwaju.",
+    "catalogOauth": {
+      "title": "Awọn ohun elo OAuth asopọ inu",
+      "description": "Awọn ohun elo OAuth fun gbogbo ibi-fifiranṣẹ fun awọn asopọ inu (GitHub, Asana, …). Fifi igbasilẹ pamọ nibi yoo kọja awọn oniyipada ayika MCP_OAUTH_* ; yọ kuro ki o lo awọn ayika wọnyi. A fi aṣiri awọn client secret pamọ nigba ipamọ, a ko si tun maa fi han lẹẹkansi.",
+      "badgeAdmin": "Ti ṣeto nibi",
+      "badgeEnv": "Lati ayika",
+      "badgeNone": "Kò tíì ṣeto",
+      "badgeDcr": "Ṣiṣeto ara rẹ",
+      "badgeDcrHint": "Atunṣe yi le forukọsilẹ OAuth client laifọwọyi, nitorinaa yoo ṣiṣẹ paapaa ti ko ba si ohun elo kan ti a ti ṣeto nibi.",
+      "clientIdLabel": "OAuth client ID",
+      "clientSecretLabel": "OAuth client secret",
+      "secretStoredPlaceholder": "Ti fipamọ — tẹ lati rọpo, fi silẹ silẹ lati pa mọ",
+      "secretNewPlaceholder": "Lẹẹmọ client secret",
+      "save": "Fipamọ",
+      "remove": "Yọ kuro",
+      "removeToEnv": "Yọ kuro (padà si ayika)",
+      "saved": "A ti fipamọ ohun elo OAuth {name}",
+      "removed": "A ti yọ ohun elo OAuth {name} kuro",
+      "saveError": "Fifipamọ ohun elo OAuth kuna. Gbiyanju lẹẹkansi.",
+      "conflict": "A ti yi igbasilẹ yi pada ni ibomiran — ti tun gbejade, jọwọ gbiyanju lẹẹkansi.",
+      "storageUnavailable": "Ko le wọle si ibi ipamọ admin; awọn igbasilẹ to wa ko le ṣe atokọ. A ti pa fifipamọ mọ titi ti o fi pada bọ.",
+      "sealingUnavailable": "A ko ti ṣeto amuṣeri aṣiri lori aṣàlẹ yii (AUTH_SECRET ti nsọnu) — a ko le fipamọ client secrets.",
+      "updatedBy": "A ti ṣagbeyẹwo nipasẹ {by} ni {at}"
+    }
   },
   "localModels": {
     "title": "Àwòrán àgbéyẹ̀wò agbègbè",
@@ -4846,5 +4869,10 @@
       "pinned-model": "àmọ̀ràn tó ṣètò olùṣàkóso",
       "own-model": "n ṣiṣẹ́ lórí àmọ̀ràn tirẹ"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "Awọn imọran lati ọdọ agbari rẹ",
+    "searching": "N ṣe àwádi ilé-iṣẹ rẹ…",
+    "noMatches": "Kò sí ìbámu pẹ̀lú àkójọ orúkọ — o lè tẹ adirẹsi náà sílẹ̀ lọ́wọ́"
   }
 }

@@ -4038,7 +4038,30 @@
     "conflictTakeTheirs": "Zwa ya bango",
     "conflictNoFieldDiff": "Ba valeurs ekokani — version ya dossier nde ebonganaki.",
     "conflictRecordGone": "Dossier oyo elongwaki (to ekokaki te kozongisama). Kopia nionso olingi na formulaire, sima zongisa.",
-    "groupsFlagOff": "Group targeting etali te naino na environnement oyo. Bato ya groupe bazali naino kosalama."
+    "groupsFlagOff": "Group targeting etali te naino na environnement oyo. Bato ya groupe bazali naino kosalama.",
+    "catalogOauth": {
+      "title": "Ba-applications OAuth ya connector ya kati",
+      "description": "Ba-applications OAuth ya deployment mobimba mpo na ba connector ya kati (GitHub, Asana, ...). Soki ozali kokoma eloko awa, ekolongola ba MCP_OAUTH_* environment variables; soki o supprimaka, ezali kozwa ba variables yango lisusu. Ba client secrets ezalaka na encrypt na esika ya stockage mpe ekowumelama pamba, ekolakisamaka lisusu te.",
+      "badgeAdmin": "Epesami ebongiseli awa",
+      "badgeEnv": "Euti na environment",
+      "badgeNone": "Ebongisamaki te",
+      "badgeDcr": "Ezali komibongisa moko",
+      "badgeDcrHint": "Provider oyo ekoki kobongisa client OAuth moko na ndenge automatique, yango ezali kosala ata soki application ebongisamaki awa te.",
+      "clientIdLabel": "Client ID ya OAuth",
+      "clientSecretLabel": "Client secret ya OAuth",
+      "secretStoredPlaceholder": "Ebatelami — koma soki olingi kobongola, tika mpamba soki olingi ekoba",
+      "secretNewPlaceholder": "Kopier-pepaste client secret",
+      "save": "Kokanga",
+      "remove": "Kolongola",
+      "removeToEnv": "Kolongola (ezongi na environment)",
+      "saved": "{name} OAuth application ebongisami",
+      "removed": "{name} OAuth application elongwami",
+      "saveError": "Kobikisa OAuth application eleki te. Sala lisusu.",
+      "conflict": "Element oyo ebongwami bisika mosusu — ezozongisama, sala lisusu",
+      "storageUnavailable": "Stockage ya admin ekoki kokotama te; ba dossiers oyo ezali ekoki kolakisama te. Kobikisa ezali kokotama te ti ekomi lisusu normal.",
+      "sealingUnavailable": "Secret encryption ebongisami te na deployment oyo (AUTH_SECRET ezali te) — client secrets bakoki kobikisa yango te.",
+      "updatedBy": "Ebongisami na {by} na mokolo {at}"
+    }
   },
   "localModels": {
     "title": "Bamodelo ya esika",
@@ -4846,5 +4869,10 @@
       "pinned-model": "model esalemi na admin",
       "own-model": "esalelaka model na ye moko"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "Bato oyo organisation na bino epesi toli",
+    "searching": "Tosalaki recherche na organisation na bino…",
+    "noMatches": "Ezali eloko moko te na répertoire — okoki kotya adresse na maboko"
   }
 }

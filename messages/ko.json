@@ -4054,7 +4054,30 @@
     "conflictTakeTheirs": "상대 버전 적용",
     "conflictNoFieldDiff": "값은 동일하며, 버전만 변경되었습니다.",
     "conflictRecordGone": "이 레코드는 삭제되었거나 다시 불러올 수 없습니다. 필요한 내용이 있다면 복사 후 새로고침 해주세요.",
-    "groupsFlagOff": "이 환경에서는 아직 그룹 타깃팅이 활성화되지 않았습니다. 기존 그룹 타깃팅은 계속 작동합니다."
+    "groupsFlagOff": "이 환경에서는 아직 그룹 타깃팅이 활성화되지 않았습니다. 기존 그룹 타깃팅은 계속 작동합니다.",
+    "catalogOauth": {
+      "title": "내장 커넥터 OAuth 앱",
+      "description": "내장 커넥터(GitHub, Asana 등)를 위한 전체 배포 OAuth 앱입니다. 여기에 저장된 값은 MCP_OAUTH_* 환경 변수를 덮어씁니다. 삭제하면 환경 변수로 복귀합니다. 클라이언트 시크릿은 저장 시 암호화되며, 다시 표시되지 않습니다.",
+      "badgeAdmin": "여기서 구성됨",
+      "badgeEnv": "환경에서 가져옴",
+      "badgeNone": "미구성",
+      "badgeDcr": "자가 등록",
+      "badgeDcrHint": "이 공급자는 OAuth 클라이언트를 자동으로 등록할 수 있으므로, 여기에 앱이 구성되어 있지 않아도 동작합니다.",
+      "clientIdLabel": "OAuth 클라이언트 ID",
+      "clientSecretLabel": "OAuth 클라이언트 시크릿",
+      "secretStoredPlaceholder": "저장됨 — 변경하려면 입력, 그대로 두려면 비워두기",
+      "secretNewPlaceholder": "클라이언트 시크릿을 붙여넣기",
+      "save": "저장",
+      "remove": "제거",
+      "removeToEnv": "제거(환경 변수로 복귀)",
+      "saved": "{name} OAuth 앱이 저장되었습니다",
+      "removed": "{name} OAuth 앱이 제거되었습니다",
+      "saveError": "OAuth 앱 저장에 실패했습니다. 다시 시도해 주세요.",
+      "conflict": "이 레코드는 다른 곳에서 변경되었습니다 — 새로고침되었으니 다시 시도해 주세요.",
+      "storageUnavailable": "관리자 저장소에 접근할 수 없습니다. 기존 레코드를 불러올 수 없습니다. 복구 전까지 저장이 비활성화됩니다.",
+      "sealingUnavailable": "이 배포에서 비밀 암호화가 설정되어 있지 않습니다(AUTH_SECRET 누락) — 클라이언트 시크릿을 저장할 수 없습니다.",
+      "updatedBy": "{by}님이 {at}에 업데이트함"
+    }
   },
   "localModels": {
     "title": "로컬 모델",
@@ -4862,5 +4885,10 @@
       "pinned-model": "관리자가 설정한 모델",
       "own-model": "자체 모델로 실행"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "귀하의 기관에서 추천",
+    "searching": "조직에서 검색 중입니다…",
+    "noMatches": "디렉터리에서 일치하는 항목이 없습니다 — 주소를 직접 입력할 수 있습니다"
   }
 }

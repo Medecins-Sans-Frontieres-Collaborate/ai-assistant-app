@@ -4054,7 +4054,30 @@
     "conflictTakeTheirs": "Deren übernehmen",
     "conflictNoFieldDiff": "Die Werte stimmen überein – nur die Eintragsversion hat sich geändert.",
     "conflictRecordGone": "Dieser Eintrag wurde gelöscht (oder konnte nicht erneut geladen werden). Kopieren Sie alles Benötigte aus dem Formular und laden Sie dann neu.",
-    "groupsFlagOff": "Die Gruppenzielsteuerung ist für diese Umgebung noch nicht aktiviert. Bestehende Gruppenziele funktionieren weiterhin."
+    "groupsFlagOff": "Die Gruppenzielsteuerung ist für diese Umgebung noch nicht aktiviert. Bestehende Gruppenziele funktionieren weiterhin.",
+    "catalogOauth": {
+      "title": "Integrierte OAuth-Apps für Konnektoren",
+      "description": "OAuth-Apps für die integrierten Konnektoren (GitHub, Asana, …) für die gesamte Bereitstellung. Ein hier gespeicherter Eintrag überschreibt die MCP_OAUTH_* Umgebungsvariablen; das Entfernen setzt diese wieder ein. Client-Secrets werden verschlüsselt gespeichert und nicht erneut angezeigt.",
+      "badgeAdmin": "Hier konfiguriert",
+      "badgeEnv": "Aus Umgebung",
+      "badgeNone": "Nicht konfiguriert",
+      "badgeDcr": "Selbstregistrierung",
+      "badgeDcrHint": "Dieser Anbieter kann einen OAuth-Client automatisch registrieren, sodass er auch ohne hier konfigurierte App funktioniert.",
+      "clientIdLabel": "OAuth-Client-ID",
+      "clientSecretLabel": "OAuth-Client-Secret",
+      "secretStoredPlaceholder": "Gespeichert — zum Ersetzen eingeben, leer lassen um zu behalten",
+      "secretNewPlaceholder": "Client-Secret einfügen",
+      "save": "Speichern",
+      "remove": "Entfernen",
+      "removeToEnv": "Entfernen (auf Umgebung zurücksetzen)",
+      "saved": "{name} OAuth-App gespeichert",
+      "removed": "{name} OAuth-App entfernt",
+      "saveError": "Speichern der OAuth-App fehlgeschlagen. Bitte erneut versuchen.",
+      "conflict": "Dieser Eintrag wurde anderswo geändert — neu geladen, bitte erneut versuchen.",
+      "storageUnavailable": "Admin-Speicher ist nicht erreichbar; vorhandene Einträge konnten nicht aufgelistet werden. Speichern ist deaktiviert, bis der Speicher wieder verfügbar ist.",
+      "sealingUnavailable": "Verschlüsselung von Secrets ist in dieser Bereitstellung nicht konfiguriert (AUTH_SECRET fehlt) — Client-Secrets können nicht gespeichert werden.",
+      "updatedBy": "Aktualisiert von {by} am {at}"
+    }
   },
   "localModels": {
     "title": "Lokale Modelle",
@@ -4862,5 +4885,10 @@
       "pinned-model": "vom Admin festgelegtes Modell",
       "own-model": "nutzt eigenes Modell"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "Vorschläge aus Ihrer Organisation",
+    "searching": "Ihre Organisation wird durchsucht…",
+    "noMatches": "Keine Treffer im Verzeichnis – Sie können die Adresse manuell eingeben"
   }
 }

@@ -4038,7 +4038,30 @@
     "conflictTakeTheirs": "Landirani zawo",
     "conflictNoFieldDiff": "Zambiri zili zofanana — version ya record yokha yasinthidwa.",
     "conflictRecordGone": "Record iyi yachotsedwa (kapena yalephera kutsegulidwanso). Kopani chilichonse chomwe mukufuna kuchokera mu fomu, kenaka onaninso.",
-    "groupsFlagOff": "Group targeting sinayatsidwe kwa environment iyi. Magulu omwe anasankhidwa kale akupitilizabe kugwira ntchito."
+    "groupsFlagOff": "Group targeting sinayatsidwe kwa environment iyi. Magulu omwe anasankhidwa kale akupitilizabe kugwira ntchito.",
+    "catalogOauth": {
+      "title": "Mapulogalamu a OAuth a olumikizidwa mkati",
+      "description": "Mapulogalamu a OAuth a ntchito yonse ya olumikizidwa mkati (GitHub, Asana, ...). Zomwe zasungidwa apa zimasintha MCP_OAUTH_* variables a environment; kuchotsa zimalola kuti zigwiritse ntchito zoyambirira. Zinsinsi za kasitomala zimakhala zotetezedwa ndipo sizingawonetsedwenso.",
+      "badgeAdmin": "Yakhazikitsidwa pano",
+      "badgeEnv": "Kuchokera pa environment",
+      "badgeNone": "Sinakhazikitsidwe",
+      "badgeDcr": "Iloleledwa paokha",
+      "badgeDcrHint": "Wopereka uyu angalembetse kasitomala wa OAuth yekha, kotero imagwiranso ntchito ngakhale palibe app yakonzedwa pano.",
+      "clientIdLabel": "ID ya kasitomala wa OAuth",
+      "clientSecretLabel": "Chinsinsi cha kasitomala wa OAuth",
+      "secretStoredPlaceholder": "Yasungidwa — lembani kusintha, siyani yopanda kanthu kusunga",
+      "secretNewPlaceholder": "Ikani chinsinsi cha kasitomala",
+      "save": "Sungani",
+      "remove": "Chotsani",
+      "removeToEnv": "Chotsani (bwererani ku environment)",
+      "saved": "{name} OAuth app yasungidwa",
+      "removed": "{name} OAuth app yachotsedwa",
+      "saveError": "Kusunga OAuth app kwalephera. Yesani kachiwiri.",
+      "conflict": "Zolemba izi zasintha kwina — zakonzanso, chonde yesaninso.",
+      "storageUnavailable": "Admin storage sikufikika; zolemba zomwe zilipo sizingathe kuonedwa. Kusunga kwazimitsidwa mpaka ibwerera.",
+      "sealingUnavailable": "Encryption ya chinsinsi sinakhazikitsidwe pa deployment iyi (AUTH_SECRET ilibe) — zinsinsi za makasitomala sizingathe kusungidwa.",
+      "updatedBy": "Yasinthidwa ndi {by} pa {at}"
+    }
   },
   "localModels": {
     "title": "Mitundu yapafupi",
@@ -4846,5 +4869,10 @@
       "pinned-model": "mtundu wakhazikitsidwa ndi admin",
       "own-model": "amagwiritsa ntchito mtundu wake"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "Malangizo ochokera ku gulu lanu",
+    "searching": "Kusaka mu bungwe lanu…",
+    "noMatches": "Palibe zotsatana mu buku la mayina — mutha kulemba adiresi pamanja"
   }
 }

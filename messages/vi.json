@@ -4085,7 +4085,30 @@
     "conflictTakeTheirs": "Dùng của họ",
     "conflictNoFieldDiff": "Các giá trị giống nhau — chỉ phiên bản bản ghi thay đổi.",
     "conflictRecordGone": "Bản ghi này đã bị xóa (hoặc không thể tải lại). Vui lòng sao chép những gì cần thiết từ biểu mẫu, sau đó tải lại.",
-    "groupsFlagOff": "Chức năng phân nhóm chưa được bật cho môi trường này. Các nhóm mục tiêu hiện tại vẫn hoạt động."
+    "groupsFlagOff": "Chức năng phân nhóm chưa được bật cho môi trường này. Các nhóm mục tiêu hiện tại vẫn hoạt động.",
+    "catalogOauth": {
+      "title": "Ứng dụng OAuth của trình kết nối tích hợp",
+      "description": "Ứng dụng OAuth cho toàn bộ hoạt động triển khai dành cho các trình kết nối tích hợp (GitHub, Asana, ...). Bản ghi lưu tại đây sẽ ghi đè các biến môi trường MCP_OAUTH_*; xóa bản ghi sẽ quay về sử dụng biến môi trường. Client secret được mã hóa khi lưu trữ và sẽ không được hiển thị lại.",
+      "badgeAdmin": "Được cấu hình tại đây",
+      "badgeEnv": "Từ môi trường",
+      "badgeNone": "Chưa cấu hình",
+      "badgeDcr": "Tự đăng ký",
+      "badgeDcrHint": "Nhà cung cấp này có thể tự động đăng ký ứng dụng OAuth, vì vậy vẫn hoạt động kể cả khi chưa cấu hình ứng dụng tại đây.",
+      "clientIdLabel": "OAuth client ID",
+      "clientSecretLabel": "OAuth client secret",
+      "secretStoredPlaceholder": "Đã lưu — nhập để thay thế, để trống để giữ nguyên",
+      "secretNewPlaceholder": "Dán client secret",
+      "save": "Lưu",
+      "remove": "Xóa",
+      "removeToEnv": "Xóa (quay về dùng biến môi trường)",
+      "saved": "Đã lưu ứng dụng OAuth {name}",
+      "removed": "Đã xóa ứng dụng OAuth {name}",
+      "saveError": "Lưu ứng dụng OAuth thất bại. Vui lòng thử lại.",
+      "conflict": "Bản ghi này đã bị thay đổi ở nơi khác — đã tải lại, vui lòng thử lại.",
+      "storageUnavailable": "Không thể truy cập lưu trữ quản trị; không thể liệt kê các bản ghi hiện tại. Chức năng lưu sẽ bị vô hiệu hóa cho đến khi được khôi phục.",
+      "sealingUnavailable": "Mã hóa secret chưa được cấu hình trên triển khai này (thiếu AUTH_SECRET) — không thể lưu client secret.",
+      "updatedBy": "Được cập nhật bởi {by} vào {at}"
+    }
   },
   "localModels": {
     "title": "Mô hình cục bộ",
@@ -4893,5 +4916,10 @@
       "pinned-model": "mô hình do quản trị viên đặt",
       "own-model": "chạy trên chính mô hình của nó"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "Gợi ý từ tổ chức của bạn",
+    "searching": "Đang tìm kiếm trong tổ chức của bạn…",
+    "noMatches": "Không tìm thấy kết quả — bạn có thể nhập địa chỉ thủ công"
   }
 }

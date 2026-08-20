@@ -4054,7 +4054,30 @@
     "conflictTakeTheirs": "Hun versie nemen",
     "conflictNoFieldDiff": "De waarden komen overeen — alleen de recordversie is gewijzigd.",
     "conflictRecordGone": "Dit record is verwijderd (of kon niet opnieuw worden geladen). Kopieer alles wat u nodig heeft uit het formulier en herlaad dan.",
-    "groupsFlagOff": "Groepstargeting is voor deze omgeving nog niet ingeschakeld. Bestaande groepstargets blijven werken."
+    "groupsFlagOff": "Groepstargeting is voor deze omgeving nog niet ingeschakeld. Bestaande groepstargets blijven werken.",
+    "catalogOauth": {
+      "title": "Ingebouwde connector OAuth-apps",
+      "description": "Organisatiebrede OAuth-apps voor de ingebouwde connectors (GitHub, Asana, ...). Een record dat hier wordt opgeslagen overschrijft de MCP_OAUTH_* omgevingsvariabelen; als u deze verwijdert, wordt er teruggevallen op die variabelen. Client secrets worden versleuteld opgeslagen en nooit opnieuw getoond.",
+      "badgeAdmin": "Hier geconfigureerd",
+      "badgeEnv": "Uit omgeving",
+      "badgeNone": "Niet geconfigureerd",
+      "badgeDcr": "Zelfregistrerend",
+      "badgeDcrHint": "Deze provider kan automatisch een OAuth-client aanmaken, dus werkt ook zonder een hier geconfigureerde app.",
+      "clientIdLabel": "OAuth client-ID",
+      "clientSecretLabel": "OAuth client secret",
+      "secretStoredPlaceholder": "Opgeslagen — typ om te vervangen, laat leeg om te behouden",
+      "secretNewPlaceholder": "Plak het client secret",
+      "save": "Opslaan",
+      "remove": "Verwijderen",
+      "removeToEnv": "Verwijderen (terugvallen op omgeving)",
+      "saved": "{name} OAuth-app opgeslagen",
+      "removed": "{name} OAuth-app verwijderd",
+      "saveError": "Het opslaan van de OAuth-app is mislukt. Probeer het opnieuw.",
+      "conflict": "Dit record is elders gewijzigd — opnieuw geladen, probeer het opnieuw.",
+      "storageUnavailable": "Beheeropslag is onbereikbaar; bestaande records konden niet worden weergegeven. Opslaan is uitgeschakeld totdat het is hersteld.",
+      "sealingUnavailable": "Versleuteling van secrets is niet geconfigureerd voor deze deployment (AUTH_SECRET ontbreekt) — client secrets kunnen niet worden opgeslagen.",
+      "updatedBy": "Bijgewerkt door {by} op {at}"
+    }
   },
   "localModels": {
     "title": "Lokale modellen",
@@ -4862,5 +4885,10 @@
       "pinned-model": "model ingesteld door admin",
       "own-model": "draait op eigen model"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "Suggesties van uw organisatie",
+    "searching": "Zoeken in uw organisatie…",
+    "noMatches": "Geen overeenkomsten in de directory — u kunt het adres handmatig invoeren"
   }
 }

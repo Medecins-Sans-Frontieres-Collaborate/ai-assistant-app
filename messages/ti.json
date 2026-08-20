@@ -4038,7 +4038,30 @@
     "conflictTakeTheirs": "ናተኦም ተቐቢል",
     "conflictNoFieldDiff": "ዋጋታት ተዛዚሙ — ምርጫ መዝገብ ብቓንቓ ተስዕበ።",
     "conflictRecordGone": "ነዚ መዝገብ ተሰሪዙ ወይ ኣይኽእሉን እንተተጻአኑ። ንዝፈጠረካ ዝፈትን ወሲን ኣብ ቅጥዒ ቀትልካ ቀጻሊ ብቓንቓ መለስ።",
-    "groupsFlagOff": "ኣብዚ ኣካባቢ group targeting ኣይተኣናብቦን። ፀብፃብ ዘለዎም ቡድናት ትሰርዩ።"
+    "groupsFlagOff": "ኣብዚ ኣካባቢ group targeting ኣይተኣናብቦን። ፀብፃብ ዘለዎም ቡድናት ትሰርዩ።",
+    "catalogOauth": {
+      "title": "ውሑድ ኮነክተር ዘይሕተተ ኦታው መተግበሪታት",
+      "description": "ኩሎም ቦታ ትፈልጦ ኦታው መተግበሪታት ንውሑድ ኮነክተሮች (GitHub, Asana, …)። ኣብዚ ኣእቱዎ መዝገብ MCP_OAUTH_* environment variables ንምሕሳስ ይቅድም። ነዚ ዝተዛረበ ሲምዲኡ ይደልየየ፣ ንኡስ ይመለስ። ናይ ክላይንት ምስጢር ኣብ መዀኒት ይትበጸር፡ ግን ደጊሞ ኣይትቀርበን።",
+      "badgeAdmin": "ኣብዚ ተዘጋጅኦ",
+      "badgeEnv": "ካብ environment",
+      "badgeNone": "ዘይተዘጋጅ",
+      "badgeDcr": "ብሓላፊነት ይመዝገቡ",
+      "badgeDcrHint": "እዚ ኣታክዮ ኦታው ክላይንት ብሓላፊነት ይመዝገብ ይኽእል፣ እቲ ኣብዚ ዘይተዘጋጅኦ ምስ እንኳ ይሰርሕ።",
+      "clientIdLabel": "ኦታው ክላይንት ID",
+      "clientSecretLabel": "ኦታው ክላይንት ምስጢር",
+      "secretStoredPlaceholder": "ተዓቒበ — ምስትቐየር ኣብዚ ጻፍ፣ ንምግባር ሻጅንዎ።",
+      "secretNewPlaceholder": "ክላይንት ምስጢር ኣእትዉ",
+      "save": "ኣቑዱ",
+      "remove": "ሰርዝ",
+      "removeToEnv": "ሰርዝ (ናብ environment ይመለስ)",
+      "saved": "{name} ኦታው መተግበሪት ተኣቒበ",
+      "removed": "{name} ኦታው መተግበሪት ተሰሪዙ",
+      "saveError": "ኦታው መተግበሪት ኣቓሊኡ ውን አይተሳነን። በደገም ፈትኑ።",
+      "conflict": "ዝኾነ መዝገብ ኣብ ካልእ ቦታ ተቐይሩ — ተቐጺሉ ኣነው፣ ደጊሞ ፈትኑ።",
+      "storageUnavailable": "ኣድሚን ማእከል ኣይተረኸበን። ኣለኹም ዘሎ መዝገቦች ክትርኢሉ ኣይከኣልኩምን። ምእታዊ ምድማቕ ድማ ይውዕል ድማ።",
+      "sealingUnavailable": "ኣምልኾ ምስጢር ኣብዚ deployment ኣይተዘጋጀን (AUTH_SECRET የጎደሎ) — ክላይንት ምስጢር ኣይኽእልኩም ምድማቕን።",
+      "updatedBy": "ብ{by} ብ{at} ተሓደሰ"
+    }
   },
   "localModels": {
     "title": "ኣካባቢ ሞዴልታት",
@@ -4846,5 +4869,10 @@
       "pinned-model": "አመሓዳሪ ዝመርጸ ሞዴል",
       "own-model": "ሓደ ሞዴል ይግዚኡ"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "ሓገዝታት ካብ ኣካዳሚኻ",
+    "searching": "ኣብ ውህብቲ ኣካውንቲ እዩ እዩ ዝተዓረፈ…",
+    "noMatches": "ምስ መዝገብ ኣይተመሃሪናን — ኣብ ውሳኔ ኣድራሻ ብ እግዚኣኻ ትእትው"
   }
 }

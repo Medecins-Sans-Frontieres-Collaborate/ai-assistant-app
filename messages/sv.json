@@ -4054,7 +4054,30 @@
     "conflictTakeTheirs": "Ta deras",
     "conflictNoFieldDiff": "Värdena matchar — endast postens version har ändrats.",
     "conflictRecordGone": "Denna post har tagits bort (eller kunde inte läsas in igen). Kopiera det du behöver från formuläret och ladda sedan om.",
-    "groupsFlagOff": "Grupptargeting är inte aktiverad för denna miljö ännu. Befintliga grupptargets fungerar fortsatt."
+    "groupsFlagOff": "Grupptargeting är inte aktiverad för denna miljö ännu. Befintliga grupptargets fungerar fortsatt.",
+    "catalogOauth": {
+      "title": "Inbyggda connector OAuth-appar",
+      "description": "OAuth-appar för inbyggda connectors (GitHub, Asana, …) gäller för hela deploymenten. En post sparad här ersätter MCP_OAUTH_* miljövariabler; om den tas bort används dessa istället. Klienthemligheter är krypterade i vila och visas aldrig igen.",
+      "badgeAdmin": "Konfigurerad här",
+      "badgeEnv": "Från miljö",
+      "badgeNone": "Inte konfigurerad",
+      "badgeDcr": "Självregistrerande",
+      "badgeDcrHint": "Den här leverantören kan registrera en OAuth-klient automatiskt, så den fungerar även utan att en app är konfigurerad här.",
+      "clientIdLabel": "OAuth-klient-ID",
+      "clientSecretLabel": "OAuth-klienthemlighet",
+      "secretStoredPlaceholder": "Sparad — skriv nytt för att ersätta, lämna tomt för att behålla",
+      "secretNewPlaceholder": "Klistra in klienthemligheten",
+      "save": "Spara",
+      "remove": "Ta bort",
+      "removeToEnv": "Ta bort (återgå till miljövariabler)",
+      "saved": "{name} OAuth-app sparad",
+      "removed": "{name} OAuth-app borttagen",
+      "saveError": "Det gick inte att spara OAuth-appen. Försök igen.",
+      "conflict": "Den här posten har ändrats på annat håll — omladdad, vänligen försök igen.",
+      "storageUnavailable": "Adminlagring är inte tillgänglig; befintliga poster kunde inte listas. Spara är inaktiverat tills anslutningen återställs.",
+      "sealingUnavailable": "Hemlighetskryptering är inte konfigurerad för denna deployment (AUTH_SECRET saknas) — klienthemligheter kan inte sparas.",
+      "updatedBy": "Uppdaterad av {by} den {at}"
+    }
   },
   "localModels": {
     "title": "Lokala modeller",
@@ -4862,5 +4885,10 @@
       "pinned-model": "modell vald av admin",
       "own-model": "kör på egen modell"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "Förslag från din organisation",
+    "searching": "Söker i din organisation…",
+    "noMatches": "Inga träffar i katalogen — du kan ange adressen manuellt"
   }
 }

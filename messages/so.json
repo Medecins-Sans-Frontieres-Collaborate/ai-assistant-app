@@ -4038,7 +4038,30 @@
     "conflictTakeTheirs": "Qaado nuqulkooda",
     "conflictNoFieldDiff": "Qiima kastaa waa isku mid — nooca diiwaanka ayaa kaliya la beddelay.",
     "conflictRecordGone": "Diiwaankan waa la tirtiray (ama lama soo celin karo). Nuqul ka qaado wixii aad u baahan tahay foomka, kadibna dib u rar.",
-    "groupsFlagOff": "Bartilmaameedka kooxaha lama hawlgelin deegaankaan weli. Kooxaha jira wali way shaqaynayaan."
+    "groupsFlagOff": "Bartilmaameedka kooxaha lama hawlgelin deegaankaan weli. Kooxaha jira wali way shaqaynayaan.",
+    "catalogOauth": {
+      "title": "Barnaamijyada OAuth ee isku xirka ku dhexjira",
+      "description": "Barnaamijyada OAuth guud ahaan u dhaqangala isku-xirayaasha ku dhexjira (GitHub, Asana, ...). Diiwaan halkan lagu keydiyo wuxuu ka horeynayaa beddelka MCP_OAUTH_* ee deegaanka; tirtiristiisuna waxay dib ugu laabanaysaa kuwa deegaanka. Sirta macaamiisha waa la sirayaa xilliga keydinta mana la muujinayo mar kale.",
+      "badgeAdmin": "Halkan ayaa lagu qeexay",
+      "badgeEnv": "Ka socota deegaanka",
+      "badgeNone": "Aan la qaabeyn",
+      "badgeDcr": "Isdiiwaangelin toos ah",
+      "badgeDcrHint": "Bixiyahan wuxuu si otomaatig ah u diiwaangeliyaa macaamiisha OAuth, sidaas darteed wuu shaqeynayaa xitaa haddii app halkan aan lagu diiwaangalin.",
+      "clientIdLabel": "Aqoonsiga macaamiisha OAuth",
+      "clientSecretLabel": "Sirta macaamiisha OAuth",
+      "secretStoredPlaceholder": "La keydiyay — qor si aad u beddesho, madhnaanta sii si aad u ilaaliso",
+      "secretNewPlaceholder": "Ku dhaji sirta macaamiisha",
+      "save": "Kaydi",
+      "remove": "Tirtir",
+      "removeToEnv": "Tirtir (ugu laabo deegaanka)",
+      "saved": "{name} barnaamijka OAuth waa la keydiyay",
+      "removed": "{name} barnaamijka OAuth waa la tirtiray",
+      "saveError": "Keydinta barnaamijka OAuth waa ay fashilantay. Fadlan mar kale isku day.",
+      "conflict": "Diiwaankaan waxaa laga beddelay meel kale — dib ayaa loo cusbooneysiiyay, fadlan mar kale isku day.",
+      "storageUnavailable": "Keydka maamulka lama heli karo; diiwaanada jirana lama soo bandhigi karo. Keydintu waa la xannibay ilaa ay soo hagaagayso.",
+      "sealingUnavailable": "Sirta kaydinta lama qaabeyn qorshahan (AUTH_SECRET waa maqan yahay) — siraha macaamiisha lama kaydin karo.",
+      "updatedBy": "Waxaa cusbooneysiiyay {by} {at}"
+    }
   },
   "localModels": {
     "title": "Moodallo maxalli ah",
@@ -4846,5 +4869,10 @@
       "pinned-model": "moodel uu doortay maamulaha",
       "own-model": "waxay ku socotaa moodelkeeda gaarka ah"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "Talooyin ka socda ururkaaga",
+    "searching": "Waxaan ka raadinayaa hay’addaada…",
+    "noMatches": "Lama helin wax u dhigma buugga — waad gali kartaa cinwaanka gacanta"
   }
 }

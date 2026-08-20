@@ -4038,7 +4038,30 @@
     "conflictTakeTheirs": "Raiso ny an-izy ireo",
     "conflictNoFieldDiff": "Mifanaraka ny sanda — ny dikan'ny firaketana ihany no niova.",
     "conflictRecordGone": "Voafafa ity firaketana ity (na tsy afaka nisokatra indray). Alaharo izay ilainao ao amin'ny endrika, dia avereno ny pejy.",
-    "groupsFlagOff": "Tsy mbola mandeha amin'ity tontolo ity ny fitodikevitra amin'ny vondrona. Mbola mandeha ireo vondrona efa misy."
+    "groupsFlagOff": "Tsy mbola mandeha amin'ity tontolo ity ny fitodikevitra amin'ny vondrona. Mbola mandeha ireo vondrona efa misy.",
+    "catalogOauth": {
+      "title": "App OAuth mifandray anatiny",
+      "description": "App OAuth amin'ny alalan'ny deployment ho an'ireo connector anatiny (GitHub, Asana, ...). Raha misy rakitra voatahiry eto, dia hanafoana ny masontsivana MCP_OAUTH_* ao amin'ny tontolo iainana; raha esorina dia hiverina amin’ireo masontsivana ireo. Voahidy anaty fitahirizana ny client secrets ary tsy aseho intsony.",
+      "badgeAdmin": "Voarafitra eto",
+      "badgeEnv": "Avy amin'ny tontolo iainana",
+      "badgeNone": "Tsy voarafitra",
+      "badgeDcr": "Misoratra ho azy",
+      "badgeDcrHint": "Afaka misoratra ho azy ho OAuth client ity mpanome ity, ka miasa na dia tsy misy app voarafitra eto aza.",
+      "clientIdLabel": "ID-n’ny OAuth client",
+      "clientSecretLabel": "Tsiambaratelo OAuth client",
+      "secretStoredPlaceholder": "Voatahiry — soraty raha ovaina, avela banga raha tiana ho tahiana",
+      "secretNewPlaceholder": "Adikao eto ny tsiambaratelo ny client",
+      "save": "Tehirizo",
+      "remove": "Esory",
+      "removeToEnv": "Esory (miverina amin'ny tontolo iainana)",
+      "saved": "Voatahiry ny app OAuth an'i {name}",
+      "removed": "Voafafa ny app OAuth an'i {name}",
+      "saveError": "Tsy nahomby ny fitehirizana ny app OAuth. Andramo indray azafady.",
+      "conflict": "Nisy niova tany an-kafa ity rakitra ity — efa nampiana, mba andramo indray.",
+      "storageUnavailable": "Tsy tratra ny fitahirizana ho an'ny admin; tsy afaka aseho ireo rakitra efa misy. Tsy azo atao ny mitahiry mandra-piverin'ny asa ara-dalàna.",
+      "sealingUnavailable": "Tsy voarindrina ny fanidiana tsiambaratelo amin’ity deployment ity (AUTH_SECRET tsy hita) — tsy afaka mitahiry tsiambaratelo ny client.",
+      "updatedBy": "Nohavaozin’i {by} tamin’ny {at}"
+    }
   },
   "localModels": {
     "title": "Model eo an-toerana",
@@ -4846,5 +4869,10 @@
       "pinned-model": "modely napetraky ny admin",
       "own-model": "miasa amin'ny modeliny manokana"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "Soso-kevitra avy amin’ny fikambananareo",
+    "searching": "Mitady ao amin'ny fikambananareo…",
+    "noMatches": "Tsy nahitana fitoviana tao amin'ny lahatahiry — azonao atao ny manoratra ny adiresy amin'ny tanana"
   }
 }

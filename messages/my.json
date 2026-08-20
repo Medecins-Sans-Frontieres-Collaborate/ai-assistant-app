@@ -4054,7 +4054,30 @@
     "conflictTakeTheirs": "သူတို့၏ကို လက်ခံပါ",
     "conflictNoFieldDiff": "တန်ဖိုးများ တူညီနေသည် — မွမ်းမံဗားရှင်းသာ ပြောင်းလဲသည်။",
     "conflictRecordGone": "ဤမှတ်တမ်းကို ဖျက်ပြီးဖြစ်သည် (သို့) ပြန်တင်၍ မရပါ။ လိုအပ်သောအချက်အလက်များကို ကူးယူပြီး reload လုပ်ပါ။",
-    "groupsFlagOff": "ဤအခြေအနေတွင် Group targeting ကို မဖွင့်ရသေးပါ။ ရှိပြီးသား group target များသည် ဆက်လက် အလုပ်လုပ်ပါမည်။"
+    "groupsFlagOff": "ဤအခြေအနေတွင် Group targeting ကို မဖွင့်ရသေးပါ။ ရှိပြီးသား group target များသည် ဆက်လက် အလုပ်လုပ်ပါမည်။",
+    "catalogOauth": {
+      "title": "တပ်ဆင်ပေးထားသော connector များအတွက် OAuth app များ",
+      "description": "တပ်ဆင်မှုလုံးဝအတွင်း built-in connector များ (GitHub, Asana, …) အတွက် OAuth app များ။ ယခုတည့်ထားသည့် အချက်အလက်သည် MCP_OAUTH_* environment variable များကို အစားထိုးသွားသည်။ ဖျက်လိုက်ပါက ထို variable များသို့ပြန်လည်သွားမည်။ Client secret များကို မှတ်တမ်းတင်ထားသည်မှာ စာရင်းသွင်းထားသည်။ ထပ်မပေးပြသပါ။",
+      "badgeAdmin": "ဤနေရာတွင်ချိန်ညှိထားသည်",
+      "badgeEnv": "Environment မှ",
+      "badgeNone": "မချိန်ညှိရသေးပါ",
+      "badgeDcr": "မိမိကိုယ်တိုင်မှတ်ပုံတင်သည်",
+      "badgeDcrHint": "ဤ provider သည် OAuth client ကို အလိုအလျောက် မှတ်ပုံတင်နိုင်ပါသည်၊ ထို့ကြောင့် ဒီနေရာမှာ app ကို မသတ်မှတ်ထားလည်း အလုပ်လုပ်ပါသည်။",
+      "clientIdLabel": "OAuth client ID",
+      "clientSecretLabel": "OAuth client secret",
+      "secretStoredPlaceholder": "သိမ်းထားပြီး — အစားထိုးလိုပါက ရိုက်ထည့်ပါ၊ ထည့်မရေးပါက ယခုတံဆိပ်သိမ်းဆည်းမည်",
+      "secretNewPlaceholder": "Client secret ကို paste လုပ်ပါ",
+      "save": "သိမ်းဆည်းပါ",
+      "remove": "ဖယ်ရှားပါ",
+      "removeToEnv": "ဖယ်ရှားပါ (environment သို့ ပြန်သွားမည်)",
+      "saved": "{name} OAuth app ကို သိမ်းဆည်းပြီးပါပြီ",
+      "removed": "{name} OAuth app ကို ဖယ်ရှားပြီးပါပြီ",
+      "saveError": "OAuth app ကို သိမ်းစည်းမှု မအောင်မြင်ပါ။ ထပ်မံကြိုးစားပါ။",
+      "conflict": "ဤမှတ်တမ်းသည်အခြားနေရာတွင်ပြောင်းလဲခဲ့သည် — ပြန်လည်တင်နိုင်ပြီ၊ မကြာသေးခင်ထပ်မံကြိုးစားပါ။",
+      "storageUnavailable": "Admin storage ကို မရနိုင်သေးပါ။ ယခင်မှတ်တမ်းများကို လုပ်နိုင်ခြင်း မရှိပါ။ ပြန်လည်ရောက်ရှိမသည်အထိ သိမ်းဆည်းနိုင်မှု ပိတ်ထားပါသည်။",
+      "sealingUnavailable": "ဤ deployment တွင် secret encryption မသတ်မှတ်ထားပါ (AUTH_SECRET မရှိပါ) — client secret များကို သိမ်းဆည်း၍မရပါ။",
+      "updatedBy": "{by} မှ {at} တွင် ပြင်ဆင်ထားသည်"
+    }
   },
   "localModels": {
     "title": "ဒေသတွင်း မော်ဒယ်များ",
@@ -4862,5 +4885,10 @@
       "pinned-model": "အက်ဒမင် သတ်မှတ်ထားသော မော်ဒယ်",
       "own-model": "မိမိ မော်ဒယ်ကို အသုံးပြု၍ လည်ပတ်သည်"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "သင့်အဖွဲ့အစည်းမှ အကြံပြုချက်များ",
+    "searching": "သင့်အဖွဲ့အစည်းအတွက် ရှာဖွေနေသည်…",
+    "noMatches": "ညီတွဲမှုမရှိပါ — လိပ်စာကို ကိုယ်တိုင်ထည့်ရနိုင်သည်"
   }
 }

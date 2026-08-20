@@ -4054,7 +4054,30 @@
     "conflictTakeTheirs": "Ambil versi mereka",
     "conflictNoFieldDiff": "Nilai sama — hanya versi data yang berubah.",
     "conflictRecordGone": "Data ini telah dihapus (atau tidak dapat dimuat ulang). Salin data yang diperlukan dari formulir lalu muat ulang.",
-    "groupsFlagOff": "Penargetan grup belum diaktifkan untuk lingkungan ini. Grup yang sudah ditargetkan tetap berjalan."
+    "groupsFlagOff": "Penargetan grup belum diaktifkan untuk lingkungan ini. Grup yang sudah ditargetkan tetap berjalan.",
+    "catalogOauth": {
+      "title": "Aplikasi OAuth konektor bawaan",
+      "description": "Aplikasi OAuth untuk seluruh deployment pada konektor bawaan (GitHub, Asana, ...). Data yang disimpan di sini akan menimpa variabel lingkungan MCP_OAUTH_*. Jika dihapus, akan menggunakan variabel tersebut. Client secret dienkripsi saat disimpan dan tidak akan ditampilkan lagi.",
+      "badgeAdmin": "Dikonfigurasi di sini",
+      "badgeEnv": "Dari environment",
+      "badgeNone": "Belum dikonfigurasi",
+      "badgeDcr": "Daftar mandiri",
+      "badgeDcrHint": "Penyedia ini dapat mendaftarkan OAuth client secara otomatis, jadi bisa bekerja bahkan tanpa aplikasi yang dikonfigurasi di sini.",
+      "clientIdLabel": "OAuth client ID",
+      "clientSecretLabel": "OAuth client secret",
+      "secretStoredPlaceholder": "Tersimpan — ketik untuk mengganti, kosongkan untuk mempertahankan",
+      "secretNewPlaceholder": "Tempel client secret",
+      "save": "Simpan",
+      "remove": "Hapus",
+      "removeToEnv": "Hapus (kembali ke environment)",
+      "saved": "Aplikasi OAuth {name} disimpan",
+      "removed": "Aplikasi OAuth {name} dihapus",
+      "saveError": "Gagal menyimpan aplikasi OAuth. Silakan coba lagi.",
+      "conflict": "Data ini telah berubah di tempat lain — telah dimuat ulang, silakan coba lagi.",
+      "storageUnavailable": "Penyimpanan admin tidak dapat dijangkau; data yang ada tidak dapat ditampilkan. Penyimpanan dinonaktifkan hingga sistem pulih.",
+      "sealingUnavailable": "Enkripsi secret belum dikonfigurasi pada deployment ini (AUTH_SECRET tidak ada) — client secret tidak dapat disimpan.",
+      "updatedBy": "Diperbarui oleh {by} pada {at}"
+    }
   },
   "localModels": {
     "title": "Model lokal",
@@ -4862,5 +4885,10 @@
       "pinned-model": "model ditetapkan admin",
       "own-model": "berjalan di model sendiri"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "Saran dari organisasi Anda",
+    "searching": "Mencari di organisasi Anda…",
+    "noMatches": "Tidak ada kecocokan di direktori — Anda dapat memasukkan alamat secara manual"
   }
 }

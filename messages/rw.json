@@ -4038,7 +4038,30 @@
     "conflictTakeTheirs": "Fata ibyabo",
     "conflictNoFieldDiff": "Agaciro karahuye – gusa version ya nyandiko ni yo yahindutse.",
     "conflictRecordGone": "Iyi nyandiko yasibwe (cyangwa ntishoboye kongera kuboneka). Kopera ibyo ukeneye muri form, ubone kongera gutangiza.",
-    "groupsFlagOff": "Kugenera amatsinda ntibirakunda muri uru rwego. Ayo wateguye mbere aracyakora."
+    "groupsFlagOff": "Kugenera amatsinda ntibirakunda muri uru rwego. Ayo wateguye mbere aracyakora.",
+    "catalogOauth": {
+      "title": "Porogaramu OAuth za connector ziri imbere mu mikorere",
+      "description": "Porogaramu OAuth zigera kuri byose mu ishyirwaho rya connector ziri imbere (GitHub, Asana, …). Inyandiko ibitswe hano isimbura imbonerahamwe ya MCP_OAUTH_*; kuyikuraho bisubiza kuri izo mbonerahamwe. Ibanga ry’umukiliya rirabikwa rikabungabungwa kandi ntirizongera kugaragarizwa.",
+      "badgeAdmin": "Byashyizwemo hano",
+      "badgeEnv": "Biturutse muri environment",
+      "badgeNone": "Ntibirashyirwaho",
+      "badgeDcr": "Kwiyandikisha ubwabyo",
+      "badgeDcrHint": "Uyu utanga serivisi ashobora kwiyandikisha nk’umukiliya wa OAuth mu buryo bwikora, bityo bikora nubwo nta porogaramu yashyizweho hano.",
+      "clientIdLabel": "ID y’umukiliya wa OAuth",
+      "clientSecretLabel": "Ibanga ry’umukiliya wa OAuth",
+      "secretStoredPlaceholder": "Bibitswe — andika usimbura, ureke ubusa niba ushaka kugumana",
+      "secretNewPlaceholder": "Shyiramo ibanga ry’umukiliya",
+      "save": "Bika",
+      "remove": "Kuraho",
+      "removeToEnv": "Kuraho (s ubira kuri environment)",
+      "saved": "Porogaramu ya OAuth ya {name} ibitswe",
+      "removed": "Porogaramu ya OAuth ya {name} yakuweho",
+      "saveError": "Kubika porogaramu ya OAuth byanze. Ongera ugerageze.",
+      "conflict": "Inyandiko yahinduriwe ahandi — irasubiwemo, ongera ugerageze.",
+      "storageUnavailable": "Ahantu habikwa amadosiye ha admin ntihagerwaho; inyandiko ziriho ntizagaragaye. Kubika birafunzwe kugeza habonetse.",
+      "sealingUnavailable": "Kubika mu ibanga ntibyakozwe kuri iri shyirwaho (AUTH_SECRET irabuze) — amabanga y’abakiliya ntashobora kubikwa.",
+      "updatedBy": "Byavuguruwe na {by} ku wa {at}"
+    }
   },
   "localModels": {
     "title": "Imiterere ziri kuri mudasobwa",
@@ -4846,5 +4869,10 @@
       "pinned-model": "imoderele yashyizweho n'umuyobozi",
       "own-model": "ikoresha imoderele yayo bwite"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "Ibyifuzo bituruka muri sosiyete yawe",
+    "searching": "Turimo gushakisha mu kigo cyanyu…",
+    "noMatches": "Nta bahuye babonetse mu bubiko — mushobora kwandika aderesi n’imibare muyinjije mu buryo bw’ikomeye"
   }
 }

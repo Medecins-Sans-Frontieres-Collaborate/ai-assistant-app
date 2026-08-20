@@ -4038,7 +4038,30 @@
     "conflictTakeTheirs": "Pran pa yo",
     "conflictNoFieldDiff": "Valè yo menm — sèlman vèsyon dosye a chanje.",
     "conflictRecordGone": "Dosye sa a efase (oswa li pa te ka rechaje). Kopi sa ou bezwen nan fòm lan, epi rechaje paj la.",
-    "groupsFlagOff": "Sible gwoup yo poko aktive pou anviwònman sa a. Sijè gwoup ki deja egziste yo ap kontinye mache."
+    "groupsFlagOff": "Sible gwoup yo poko aktive pou anviwònman sa a. Sijè gwoup ki deja egziste yo ap kontinye mache.",
+    "catalogOauth": {
+      "title": "App OAuth entegre yo",
+      "description": "App OAuth pou tout deplwaman pou konektè entegre yo (GitHub, Asana, elatriye). Si ou sove yon anrejistreman isit la, li ap ranplase variab anviwònman MCP_OAUTH_*. Si ou retire li, variab anviwònman yo ap pran plas li. Sekrè kliyan an ankripte pandan li ret nan depo epi li pap parèt ankò.",
+      "badgeAdmin": "Konfigire isit la",
+      "badgeEnv": "Soti nan anviwònman an",
+      "badgeNone": "Pa konfigire",
+      "badgeDcr": "Self-enregistré",
+      "badgeDcrHint": "Founisè sa a ka enskri yon kliyan OAuth otomatikman, kidonk li mache menm si pa gen app ki konfigire isit la.",
+      "clientIdLabel": "ID kliyan OAuth",
+      "clientSecretLabel": "Sekrè kliyan OAuth",
+      "secretStoredPlaceholder": "Sove — tape pou chanje, kite vid pou kenbe",
+      "secretNewPlaceholder": "Kole sekrè kliyan an",
+      "save": "Sove",
+      "remove": "Retire",
+      "removeToEnv": "Retire (retounen sou anviwònman an)",
+      "saved": "App OAuth {name} sove",
+      "removed": "App OAuth {name} retire",
+      "saveError": "Sove app OAuth la echwe. Eseye ankò.",
+      "conflict": "Anrejistreman sa a chanje yon lòt kote — rechaje, tanpri eseye ankò.",
+      "storageUnavailable": "Depo admin lan pa disponib; pa t kapab montre anrejistreman ki egziste. Sove ap rete dezaktive jiskaske sa rezoud.",
+      "sealingUnavailable": "Ankriptaj pou sekrè pa konfigire sou deplwaman sa a (AUTH_SECRET manke) — pa ka sove sekrè kliyan yo.",
+      "updatedBy": "Mizajou pa {by} sou {at}"
+    }
   },
   "localModels": {
     "title": "Modèl lokal",
@@ -4846,5 +4869,10 @@
       "pinned-model": "modèl mete pa admin",
       "own-model": "kouri sou pwòp modèl li"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "Sijesyon ki soti nan òganizasyon ou",
+    "searching": "Nap chèche nan òganizasyon w…",
+    "noMatches": "Pa gen rezilta nan anyè a — ou ka antre adrès la manuelman"
   }
 }

@@ -4085,7 +4085,30 @@
     "conflictTakeTheirs": "使用对方版本",
     "conflictNoFieldDiff": "值一致，仅记录版本已变。",
     "conflictRecordGone": "此记录已被删除（或无法重新加载）。请先复制需要的内容，然后重新加载。",
-    "groupsFlagOff": "当前环境尚未启用分组定向。现有分组目标仍然有效。"
+    "groupsFlagOff": "当前环境尚未启用分组定向。现有分组目标仍然有效。",
+    "catalogOauth": {
+      "title": "内置连接器 OAuth 应用",
+      "description": "适用于内置连接器（如 GitHub、Asana 等）的全部署 OAuth 应用。在此保存的记录将覆盖 MCP_OAUTH_* 环境变量；删除后将回退使用环境变量。客户端密钥静态加密存储，且不会再次显示。",
+      "badgeAdmin": "已在此配置",
+      "badgeEnv": "来自环境变量",
+      "badgeNone": "未配置",
+      "badgeDcr": "自注册",
+      "badgeDcrHint": "此提供方可自动注册 OAuth 客户端，即使此处未配置应用也可用。",
+      "clientIdLabel": "OAuth 客户端 ID",
+      "clientSecretLabel": "OAuth 客户端密钥",
+      "secretStoredPlaceholder": "已保存 — 输入以替换，留空则保留",
+      "secretNewPlaceholder": "粘贴客户端密钥",
+      "save": "保存",
+      "remove": "移除",
+      "removeToEnv": "移除（回退到环境变量）",
+      "saved": "{name} OAuth 应用已保存",
+      "removed": "{name} OAuth 应用已移除",
+      "saveError": "OAuth 应用保存失败。请重试。",
+      "conflict": "该记录已在其他位置更改 — 已重新加载，请重试。",
+      "storageUnavailable": "无法访问管理员存储；无法列出现有记录。存储恢复前，保存功能已禁用。",
+      "sealingUnavailable": "本部署未配置密钥加密（缺少 AUTH_SECRET）— 无法保存客户端密钥。",
+      "updatedBy": "由 {by} 于 {at} 更新"
+    }
   },
   "localModels": {
     "title": "本地模型",
@@ -4893,5 +4916,10 @@
       "pinned-model": "管理员指定模型",
       "own-model": "使用自有模型"
     }
+  },
+  "peopleSuggest": {
+    "listLabel": "来自您组织的建议",
+    "searching": "正在搜索您的组织…",
+    "noMatches": "没有目录匹配项 — 您可以手动输入地址"
   }
 }
