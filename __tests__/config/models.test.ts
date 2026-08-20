@@ -75,28 +75,57 @@ describe('Model Configuration', () => {
   });
 
   describe('getDefaultModel', () => {
-    // The default is DYNAMIC: the newest standard-variant GPT enabled in the
-    // ring — rings with NOT_YET_ROLLED_OUT gates resolve to the newest
-    // un-gated one. These pins move whenever a newer standard GPT lands in
-    // the catalog (or is un-gated); that's the feature, not drift.
-    it('returns the latest standard GPT for localhost', () => {
+    // The cost-policy preference (DEFAULT_MODEL_PREFERENCE, currently
+    // gpt-5.4) wins in every ring where it is present; the dynamic
+    // latest-standard-GPT rule is the tail behavior when no preference
+    // resolves. These pins move when the preference list changes; that's
+    // the feature, not drift.
+    it('returns the preferred default for localhost', () => {
       vi.stubEnv('NEXT_PUBLIC_ENV', undefined);
-      expect(getDefaultModel()).toBe('gpt-5.5');
+      expect(getDefaultModel()).toBe('gpt-5.4');
     });
 
-    it('returns the latest standard GPT for dev', () => {
+    it('returns the preferred default for dev', () => {
       vi.stubEnv('NEXT_PUBLIC_ENV', 'dev');
-      expect(getDefaultModel()).toBe('gpt-5.5');
+      expect(getDefaultModel()).toBe('gpt-5.4');
     });
 
-    it('returns the latest un-gated standard GPT for prod', () => {
+    it('returns the preferred default for prod', () => {
       vi.stubEnv('NEXT_PUBLIC_ENV', 'prod');
-      expect(getDefaultModel()).toBe('gpt-5.2');
+      expect(getDefaultModel()).toBe('gpt-5.4');
     });
 
-    it('returns the latest un-gated standard GPT for production', () => {
+    it('returns the preferred default for production', () => {
       vi.stubEnv('NEXT_PUBLIC_ENV', 'production');
-      expect(getDefaultModel()).toBe('gpt-5.2');
+      expect(getDefaultModel()).toBe('gpt-5.4');
+    });
+
+    it('falls back to the latest standard GPT when the preference is not served', () => {
+      vi.stubEnv('NEXT_PUBLIC_ENV', 'prod');
+      const served = [
+        OpenAIModels[OpenAIModelID.GPT_5_2],
+        OpenAIModels[OpenAIModelID.GPT_5],
+      ];
+      expect(getDefaultModel(served)).toBe('gpt-5.2');
+    });
+
+    it('skips a preference that is not selectable in the caller region', () => {
+      vi.stubEnv('NEXT_PUBLIC_ENV', 'prod');
+      const served: OpenAIModel[] = [
+        { ...OpenAIModels[OpenAIModelID.GPT_5_4], hostedIn: ['US'] },
+        { ...OpenAIModels[OpenAIModelID.GPT_5_2], hostedIn: ['US', 'EU'] },
+      ];
+      expect(getDefaultModel(served, 'EU')).toBe('gpt-5.2');
+      expect(getDefaultModel(served, 'US')).toBe('gpt-5.4');
+    });
+
+    it('prefers gpt-5.4 over newer served standard GPTs (cost policy)', () => {
+      vi.stubEnv('NEXT_PUBLIC_ENV', 'dev');
+      const served = [
+        OpenAIModels[OpenAIModelID.GPT_5_5],
+        OpenAIModels[OpenAIModelID.GPT_5_4],
+      ];
+      expect(getDefaultModel(served)).toBe('gpt-5.4');
     });
   });
 
