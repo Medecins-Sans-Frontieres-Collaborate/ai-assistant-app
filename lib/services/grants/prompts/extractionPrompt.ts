@@ -41,24 +41,6 @@ function getProjectObjectiveInstructions(year: number): string {
    - Keep it concise — one sentence maximum`;
 }
 
-function getClosingProjectInstructions(year: number): string {
-  return `
-    Answer with one of these exact values:
-    - "no" — the project is NOT closing in ${year}
-    - "full_closure" — the ENTIRE project will permanently cease ALL activities by end of ${year} or activities are being fully handed over to local authorities/MoH
-    - "handover_to_oc" — the ENTIRE project is being transferred to another MSF operational center (e.g., "handover to OCB")
-    - "partial_handover" — the project is reorienting (e.g., shifting from hospital to primary healthcare) or partially handing over some activities while continuing others under the same OC
-
-    Important distinctions:
-    - "full_closure" = MSF completely stops ALL activities at this location
-    - "handover_to_oc" = project continues but under a different MSF OC
-    - "partial_handover" = project continues under same OC but with significant scope changes or partial activity transfers
-    - "no" = project continues as normal, including standard capacity building or sustainability planning
-
-    If only SPECIFIC activities are transitioning while the project broadly continues, answer "no"
-    If the project is expanding or adding new activities, answer "no" `;
-}
-
 function getRemoteManagementInstructions(): string {
   return `
     - "yes" ONLY if the document explicitly states that the ENTIRE project is CURRENTLY managed remotely as its operational model
@@ -207,7 +189,6 @@ NOTE: ${ocName} frequently submits country-level documents that cover MANY proje
 
   const nameInstructions = getProjectNameInstructions();
   const objectiveInstructions = getProjectObjectiveInstructions(year);
-  const closingInstructions = getClosingProjectInstructions(year);
   const remoteInstructions = getRemoteManagementInstructions();
   const globalRules = getGlobalTextRules();
 
@@ -228,7 +209,7 @@ The document is a plan for the year ${year}. Capture EVERY medical service the p
   * It is aspirational, conditional, or not yet secured — e.g. "ambition to", "hope to", "if approved", "if funded", "plan to introduce (pending approval)", "may be added". Extract only services that will actually be delivered in ${year}.
   * It is delivered by SOMEONE ELSE, not this project — e.g. the project only refers patients out, or the service is provided by UNICEF / the Ministry of Health / another actor while MSF only advocates, coordinates, or supports.
   * It belongs to a DIFFERENT year (explicitly ${prevYear} or earlier, already achieved, or closed).
-  * It is operational/non-medical (see the rules below).
+  * It is an operational/administrative side-detail of a medical project (see the MEDICAL vs NON-MEDICAL rule below). For a document whose purpose is non-medical (green initiative, construction, coordination, learning initiative), the substantive non-medical activities DO count.
 - Do NOT invent services. Every activity must trace to a specific passage in THIS project's own section.
 
 ${multiProjectSection}
@@ -271,7 +252,7 @@ ${nameInstructions}
    - FINAL CHECK before you finish — scan the document once more for these frequently-provided but frequently-MISSED ${year} services, and include every one that is documented for THIS project: Maternal Health, SRH, Neonatology, SGBV / sexual-violence care, Surgery (including obstetric/C-section surgery), Nutrition (ITFC/ATFC), Vaccination, Mental Health / MHPSS, HIV, TB, NCDs, Malaria, WatSan, Emergency Care, Inpatient Care, Referral Services.
    - GOOD: "Maternal Health", "Neonatology", "Vaccination", "Mental Health", "Nutrition", "Surgery", "SRH", "HIV", "TB", "SGBV", "Palliative Care"
    - BAD: "Kangaroo Mother Care" (technique within Maternal Health — use "Maternal Health"), "Antimicrobial Stewardship" (operational protocol), "Capacity Building" (operational), "Biomedical Sustainability" (operational)
-   - Include ALL distinct medical service lines but NOT operational/administrative details
+   - MEDICAL vs NON-MEDICAL: for a medical project narrative, the activities list is its distinct MEDICAL service lines — do not pad it with the operational/administrative side-details every project has (logistics, HR, admin, supply chain). But when the document's PURPOSE is non-medical — a green/environmental initiative, construction or infrastructure work, a coordination office, a learning/training initiative — its substantive activities ARE the activities: report them as concise labels (e.g. "Solar Power Installation", "Waste Management", "Staff Training Program") rather than forcing medical labels onto them or leaving the list empty.
    - When the document describes a broad package, expect 8-15 activities — if a project provides many medical services, list them ALL. Under-listing is a common and serious error.
 
 7. **evidence**: For EACH activity, provide citation evidence with TWO quotes:
@@ -288,20 +269,19 @@ ${nameInstructions}
 8. **project_objective** (REQUIRED): One sentence about the project's main objective/focus and location
 ${objectiveInstructions}
 
-9. **is_new_project**: Is this a new project? (yes/no)
-    - "yes" if the project is described as new, recently launched, starting in ${prevYear}/${year}, or in its first year
-    - Look for: "new project", "newly established", "launched in", "starting", "first year", "pilot"
-    - "no" if the project has been running for multiple years or is established
+9. **is_new_project**: Return "no" — new-project status is NOT taken from the narrative. It is
+    determined from supplemental files after extraction: a project classified as Regular (not
+    Emergency) in the project classifications file whose ops start date (from the supplemental
+    dates file) falls in ${year} is a new project.
 
-10. **is_emergency_project**: Is this an emergency response project? (yes/no)
-    - "yes" ONLY if the project was LAUNCHED AS an emergency response, crisis response, or disaster response — i.e., the entire project exists to respond to an acute emergency
-    - "no" for ongoing/established medical projects that include emergency response CAPACITY or preparedness as one component
-    - "no" for general hospitals or healthcare projects in conflict zones — operating in a conflict area does NOT make a project an "emergency project"
-    - A referral hospital that maintains emergency preparedness and responds to outbreaks = "no" (it's a general healthcare project)
-    - A project deployed specifically to respond to a cholera outbreak or earthquake = "yes"
+10. **is_emergency_project**: Return "no" — emergency status is NOT taken from the narrative. It is
+    determined by the supplemental classifications file (Regular/Emergency); projects not listed
+    there default to "no".
 
-11. **is_closing_project**: Is this project closing or being handed over?
-${closingInstructions}
+11. **is_closing_project**: Return "no" — closing status is NOT taken from the narrative. It is
+    determined from supplemental files: a project classified as Regular whose ops end date (from
+    the supplemental dates file) falls in ${year} is closing; Emergency projects and projects not
+    listed in the files are not.
 
 12. **has_remote_management**: Does this project involve remote management? (yes/no)
 ${remoteInstructions}
@@ -440,7 +420,7 @@ Good examples by focus area (each example is a real project, shown as its Projec
 3. If the document is in French/Spanish/other, translate activity names and quote_english to English, but quote_original must be the VERBATIM source text as physically written in the document. Do NOT translate quote_english into another language to fill quote_original — copy only text that actually appears in the document (so Ctrl+F finds it). If the document is in English, quote_original is English and identical to quote_english.
 4. Return null for optional fields if not found
 5. If the year ${year} does not appear ANYWHERE in the document text, OR no ${year}-specific activities are described, return an EMPTY activities_${year} array so the report can state "No ${year} or current year activities found" for this project. An empty array is the correct, expected output in that case — do NOT populate it with activities from other years.
-6. Do NOT include operational/non-medical activities like capacity building, training, advocacy, stewardship, logistics, environmental sustainability, or supply chain management — only include MEDICAL SERVICE DELIVERY activities
+6. Activities are the project's SUBSTANTIVE work. For MEDICAL project narratives that means MEDICAL SERVICE DELIVERY — do NOT pad the list with operational/administrative side-details (capacity building, training, advocacy, stewardship, logistics, supply chain management). For documents whose purpose is NON-MEDICAL (green/environmental initiatives, construction, coordination, learning initiatives), report the substantive non-medical activities the document describes — being non-medical is NOT a reason to exclude a project's core activities.
 
 ## TERM NORMALIZATION (apply AFTER extracting all activities):
 For specific trigger terms, use the canonical term instead:
