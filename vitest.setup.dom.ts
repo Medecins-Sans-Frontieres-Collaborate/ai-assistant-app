@@ -32,6 +32,11 @@ vi.mock('katex/dist/katex.min.css', () => ({}));
 const mockMessages: Record<string, unknown> = {
   // Root-namespace key (messages/en.json has a top-level "close").
   close: 'Close',
+  peopleSuggest: {
+    listLabel: 'Suggestions from your organization',
+    searching: 'Searching your organization…',
+    noMatches: 'No directory matches — you can enter the address manually',
+  },
   common: {
     cancel: 'Cancel',
     undo: 'Undo',
