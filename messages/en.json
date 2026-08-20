@@ -4463,10 +4463,10 @@
   "m365": {
     "connections": {
       "title": "Connections",
-      "description": "Connect external accounts so the assistant can work with your own content. Everything is delegated: the assistant only ever acts as you, on content you can already access.",
+      "description": "Manage the external accounts the assistant can work with. Everything is delegated: the assistant only ever acts as you, on content you can already access.",
       "microsoft365": "Microsoft 365",
       "microsoft365Description": "Attach files from OneDrive and SharePoint, import emails, and save exports back to OneDrive.",
-      "delegatedNote": "Uses your own Microsoft account permissions. Nothing is shared with anyone else, and you can disconnect at any time.",
+      "delegatedNote": "Uses your own Microsoft account permissions. Nothing is shared with anyone else. Microsoft 365 is enabled by default for your organization — you can disconnect at any time, and your choice is remembered.",
       "calendarScopeNote": "Calendar access is granted at read-write level by your organization’s consent, but meeting features only ever read your calendar — nothing is created or changed in it.",
       "connect": "Connect",
       "disconnect": "Disconnect",
