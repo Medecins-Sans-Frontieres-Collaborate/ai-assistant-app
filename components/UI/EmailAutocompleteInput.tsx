@@ -7,6 +7,11 @@ import {
   useTypeaheadSuggestions,
 } from '@/client/hooks/useTypeaheadSuggestions';
 
+import {
+  TypeaheadDropdown,
+  typeaheadDropdownOpen,
+} from '@/components/UI/TypeaheadDropdown';
+
 interface EmailAutocompleteInputProps extends Omit<
   InputHTMLAttributes<HTMLInputElement>,
   'value' | 'onChange'
@@ -46,8 +51,9 @@ export const EmailAutocompleteInput: FC<EmailAutocompleteInputProps> = ({
   ...inputProps
 }) => {
   const listId = useId();
-  const { suggestions, activeIndex, setActiveIndex, query, clear } =
+  const { suggestions, status, activeIndex, setActiveIndex, query, clear } =
     useTypeaheadSuggestions(suggest);
+  const dropdownOpen = typeaheadDropdownOpen(status, suggestions.length);
 
   const select = (email: string) => {
     if (onSelectSuggestion) onSelectSuggestion(email);
@@ -99,46 +105,23 @@ export const EmailAutocompleteInput: FC<EmailAutocompleteInputProps> = ({
           onBlur?.(e);
         }}
         role={suggest ? 'combobox' : undefined}
-        aria-expanded={suggest ? suggestions.length > 0 : undefined}
+        aria-expanded={suggest ? dropdownOpen : undefined}
         aria-autocomplete={suggest ? 'list' : undefined}
         aria-controls={suggest ? listId : undefined}
         aria-activedescendant={
           suggestions.length > 0 ? `${listId}-option-${activeIndex}` : undefined
         }
       />
-      {suggestions.length > 0 && (
-        <ul
-          id={listId}
-          role="listbox"
-          aria-label={suggestionsLabel}
-          className="absolute z-20 mt-1 max-h-56 w-full min-w-[220px] overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800"
-        >
-          {suggestions.map((person, index) => (
-            <li
-              key={person.value}
-              id={`${listId}-option-${index}`}
-              role="option"
-              aria-selected={index === activeIndex}
-              // mousedown, not click: the input's blur fires first on click
-              // and would clear the list before the click lands.
-              onMouseDown={(e) => {
-                e.preventDefault();
-                select(person.value);
-              }}
-              onMouseEnter={() => setActiveIndex(index)}
-              className={`cursor-pointer px-3 py-1.5 text-sm ${
-                index === activeIndex ? 'bg-blue-50 dark:bg-blue-900/30' : ''
-              }`}
-            >
-              <span className="block truncate text-gray-900 dark:text-gray-100">
-                {person.label}
-              </span>
-              <span className="block truncate text-xs text-gray-500 dark:text-gray-400">
-                {person.value}
-              </span>
-            </li>
-          ))}
-        </ul>
+      {suggest && (
+        <TypeaheadDropdown
+          listId={listId}
+          suggestions={suggestions}
+          status={status}
+          activeIndex={activeIndex}
+          onSelect={select}
+          onHover={setActiveIndex}
+          listLabel={suggestionsLabel}
+        />
       )}
     </div>
   );
