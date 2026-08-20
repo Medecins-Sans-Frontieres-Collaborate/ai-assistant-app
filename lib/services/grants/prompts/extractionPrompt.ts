@@ -220,7 +220,7 @@ ${globalRules}
 
 ## ${year} ACTIVITIES — BE EXHAUSTIVE, BUT ${year}-SCOPED
 The document is a plan for the year ${year}. Capture EVERY medical service the project will deliver, continue, or start in ${year} — completeness matters as much as accuracy. Under-listing (dropping services the document actually describes) is a common and serious error; be thorough.
-- The document MUST contain the literal string "${year}" somewhere for you to extract any activities. If the year ${year} does not appear ANYWHERE in the document text, return an empty activities_${year} array.
+- The document MUST contain the literal string "${year}" somewhere for you to extract any activities. If the year ${year} does not appear ANYWHERE in the document text, return an empty activities_${year} array so the report can state "No ${year} or current year activities found" for this project.
 - Many documents include a SERVICES TABLE comparing the previous year and ${year} (rows/columns marked "Yes"/"Oui"/"Sí"/"${year}", "new in ${year}", "continues in ${year}", or "NON→OUI"). EVERY service marked as provided, planned, continuing, or new for ${year} in such a table IS an activity — extract ALL of them.
 - A service the project is currently delivering and will CONTINUE counts for ${year} unless the document says it ends BEFORE ${year}. You do NOT need the literal year printed next to each service: if the document's planning horizon is ${year} and the service is part of the ${year} package (objectives, services table, "prospects for next year", logframe), include it.
 - A project described only for ${prevYear}, with no indication it continues, does NOT automatically extend to ${year}.
