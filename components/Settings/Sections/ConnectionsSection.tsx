@@ -23,13 +23,16 @@ import type {
 import { useSettingsStore } from '@/client/stores/settingsStore';
 
 /**
- * Settings → Connections: the per-user Microsoft 365 opt-in.
+ * Settings → Connections: the per-user Microsoft 365 connection, ON by
+ * default since settingsStore v57 (users disconnect here rather than
+ * opt in; an explicit choice is remembered across future default changes
+ * via m365ConnectedUserSet).
  *
- * Connecting flips a local preference only — the tenant-wide admin consent
- * already covers the OAuth side, so there is no extra consent screen. The
- * panel shows, per feature area, whether the tenant grant has actually
- * landed (from /api/m365/status), so "connected but pending admin consent"
- * is visible instead of features just silently missing.
+ * Connect/Disconnect flips a local preference only — the tenant-wide admin
+ * consent already covers the OAuth side, so there is no extra consent
+ * screen. The panel shows, per feature area, whether the tenant grant has
+ * actually landed (from /api/m365/status), so "connected but pending admin
+ * consent" is visible instead of features just silently missing.
  */
 
 const FEATURE_LABEL_KEYS: Record<M365FeatureKey, string> = {
