@@ -4844,6 +4844,8 @@
     "failed": "Couldn't share — nothing was created."
   },
   "peopleSuggest": {
-    "listLabel": "Suggestions from your organization"
+    "listLabel": "Suggestions from your organization",
+    "searching": "Searching your organization…",
+    "noMatches": "No directory matches — you can enter the address manually"
   }
 }
