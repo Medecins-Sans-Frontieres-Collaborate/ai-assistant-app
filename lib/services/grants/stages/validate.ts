@@ -389,8 +389,8 @@ function r08(rec: AnyRecord, row: number): Flag[] {
       row,
       'Project Objective',
       'R8',
-      'error',
-      `Closing is "${closing}" but objective does not mention handover, closure, or related terms.`,
+      'warning',
+      `Closing is "${closing}" (derived from the supplemental classification/dates files) but the objective does not mention handover, closure, or related terms.`,
     ),
   ];
 }
