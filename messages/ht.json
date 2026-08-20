@@ -986,7 +986,9 @@
     "quickActions": "Aksyon Rapid",
     "expandFolder": "Elaji dosye {name}",
     "collapseFolder": "Redwi dosye {name}",
-    "folderOptions": "Opsyon {name}"
+    "folderOptions": "Opsyon {name}",
+    "agentsEntry": "Ajan",
+    "agentsTitle": "Browse ajan yo epi kòmanse chat ak youn"
   },
   "errors": {
     "somethingWentWrong": "Yon bagay mal pase",
@@ -4803,5 +4805,46 @@
     "failed": "Pa t kapab pataje — pa gen anyen ki te kreye.",
     "copyFailed": "Pa t kapab kopye lyen an — chwazi li anlè epi kopye manyèlman.",
     "lastMessagesCountLabel": "Kantite dènye mesaj pou enkli"
+  },
+  "toolModes": {
+    "webSearch": "Rechèch sou entènèt",
+    "codeInterpreter": "Entèprèt kòd",
+    "off": "Fèmen",
+    "auto": "Otomatik",
+    "always": "Toujou",
+    "routingPrivacy": "Konfidansyalite",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Rechèch Azure AI voye kesyon atravè Azure AI Foundry, ki ka kenbe yo.",
+    "learnMore": "Aprann plis"
+  },
+  "agentAttach": {
+    "browserTitle": "Ajan",
+    "browserSubtitle": "Ajoute ajan ak konektè nan chat sa a, oswa kòmanse yon nouvo chat ak yon ajan. Pifò travay ak nenpòt modèl ou chwazi a.",
+    "searchPlaceholder": "Chèche ajan ak konektè…",
+    "loading": "Y ap chaje ajan yo…",
+    "noMatches": "Pa gen anyen ki koresponn ak rechèch ou.",
+    "noAgents": "Pa gen ajan ki disponib.",
+    "addToChat": "Ajoute nan chat sa a",
+    "removeFromChat": "Retire nan chat sa a",
+    "newChat": "Nouvo chat",
+    "attached": "Atache",
+    "detach": "Dekole",
+    "change": "Chanje",
+    "browse": "Browse ajan yo…",
+    "noAgent": "Pa gen ajan ki atache",
+    "close": "Fèmen",
+    "kind": {
+      "rag": "Konesans",
+      "prompt": "Pèsonalite",
+      "m365": "Konesans (Microsoft 365)",
+      "org": "Konesans",
+      "foundry": "Ajan Foundry",
+      "connector": "Konektè"
+    },
+    "semantics": {
+      "your-model": "itilize modèl ou",
+      "pinned-model": "modèl mete pa admin",
+      "own-model": "kouri sou pwòp modèl li"
+    }
   }
 }

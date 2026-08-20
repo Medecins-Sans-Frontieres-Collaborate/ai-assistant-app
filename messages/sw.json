@@ -906,7 +906,9 @@
     "quickActions": "Vitendo vya Haraka",
     "expandFolder": "Panua folda {name}",
     "collapseFolder": "Fupisha folda {name}",
-    "folderOptions": "Chaguzi za {name}"
+    "folderOptions": "Chaguzi za {name}",
+    "agentsEntry": "Wakala",
+    "agentsTitle": "Vinjari wakala na anza mazungumzo na mmoja"
   },
   "prompts": {
     "buildReusablePrompts": "Jenga vidokezi vinavyoweza kutumika tena kwa msaada wa AI",
@@ -4819,5 +4821,46 @@
     "failed": "Imeshindikana kushiriki — hakuna kilichoundwa.",
     "copyFailed": "Imeshindikana kunakili kiungo — chagua hapo juu na nakili kwa mkono.",
     "lastMessagesCountLabel": "Idadi ya ujumbe wa hivi karibuni wa kujumuisha"
+  },
+  "toolModes": {
+    "webSearch": "Utafutaji wa wavuti",
+    "codeInterpreter": "Mfasiri wa msimbo",
+    "off": "Zima",
+    "auto": "Otomatiki",
+    "always": "Daima",
+    "routingPrivacy": "Faragha",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Utafutaji wa Azure AI hutuma maswali kupitia Azure AI Foundry, ambapo yanaweza kuhifadhiwa.",
+    "learnMore": "Jifunze zaidi"
+  },
+  "agentAttach": {
+    "browserTitle": "Wakala",
+    "browserSubtitle": "Ongeza wakala na viunganishi kwenye mazungumzo haya, au anzisha mazungumzo mapya na wakala. Wengi hufanya kazi na mfano wowote uliouchagua.",
+    "searchPlaceholder": "Tafuta wakala na viunganishi…",
+    "loading": "Inapakia wakala…",
+    "noMatches": "Hakuna kinacholingana na utafutaji wako.",
+    "noAgents": "Hakuna wakala waliopo.",
+    "addToChat": "Ongeza kwenye mazungumzo haya",
+    "removeFromChat": "Ondoa kwenye mazungumzo haya",
+    "newChat": "Mazungumzo mapya",
+    "attached": "Imeunganishwa",
+    "detach": "Tenganisha",
+    "change": "Badilisha",
+    "browse": "Vinjari wakala…",
+    "noAgent": "Hakuna wakala aliyeunganishwa",
+    "close": "Funga",
+    "kind": {
+      "rag": "Maarifa",
+      "prompt": "Persona",
+      "m365": "Maarifa (Microsoft 365)",
+      "org": "Maarifa",
+      "foundry": "Wakala wa Foundry",
+      "connector": "Kiunganishi"
+    },
+    "semantics": {
+      "your-model": "hutumia mfano wako",
+      "pinned-model": "mfano umewekwa na msimamizi",
+      "own-model": "inaendeshwa na mfano wake binafsi"
+    }
   }
 }

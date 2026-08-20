@@ -852,7 +852,9 @@
     "quickActions": "Acciones rápidas",
     "expandFolder": "Expandir carpeta {name}",
     "collapseFolder": "Colapsar carpeta {name}",
-    "folderOptions": "Opciones de {name}"
+    "folderOptions": "Opciones de {name}",
+    "agentsEntry": "Agentes",
+    "agentsTitle": "Explora agentes y comienza un chat con uno"
   },
   "errors": {
     "somethingWentWrong": "Algo salió mal",
@@ -4819,5 +4821,46 @@
     "failed": "No se pudo compartir; no se creó nada.",
     "copyFailed": "No se pudo copiar el enlace; selecciónelo arriba y cópielo manualmente.",
     "lastMessagesCountLabel": "Número de mensajes recientes a incluir"
+  },
+  "toolModes": {
+    "webSearch": "Búsqueda web",
+    "codeInterpreter": "Intérprete de código",
+    "off": "Desactivado",
+    "auto": "Automático",
+    "always": "Siempre",
+    "routingPrivacy": "Privacidad",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "La búsqueda de Azure AI envía consultas a través de Azure AI Foundry, que puede conservarlas.",
+    "learnMore": "Más información"
+  },
+  "agentAttach": {
+    "browserTitle": "Agentes",
+    "browserSubtitle": "Agregue agentes y conectores a este chat o inicie un nuevo chat con un agente. La mayoría funciona con el modelo que haya elegido.",
+    "searchPlaceholder": "Buscar agentes y conectores…",
+    "loading": "Cargando agentes…",
+    "noMatches": "No hay resultados para su búsqueda.",
+    "noAgents": "No hay agentes disponibles.",
+    "addToChat": "Agregar a este chat",
+    "removeFromChat": "Eliminar de este chat",
+    "newChat": "Nuevo chat",
+    "attached": "Adjuntado",
+    "detach": "Desvincular",
+    "change": "Cambiar",
+    "browse": "Explorar agentes…",
+    "noAgent": "Ningún agente adjunto",
+    "close": "Cerrar",
+    "kind": {
+      "rag": "Conocimiento",
+      "prompt": "Persona",
+      "m365": "Conocimiento (Microsoft 365)",
+      "org": "Conocimiento",
+      "foundry": "Agente Foundry",
+      "connector": "Conector"
+    },
+    "semantics": {
+      "your-model": "usa su modelo",
+      "pinned-model": "modelo definido por el administrador",
+      "own-model": "funciona con su propio modelo"
+    }
   }
 }

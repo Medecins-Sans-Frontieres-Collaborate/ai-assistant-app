@@ -986,7 +986,9 @@
     "quickActions": "ቅልጡፍ ተግባራት",
     "expandFolder": "ፎልደር {name} ፍጽው ኣበልዎ",
     "collapseFolder": "ፎልደር {name} ሰንካል",
-    "folderOptions": "ኣማራጮታት {name}"
+    "folderOptions": "ኣማራጮታት {name}",
+    "agentsEntry": "ወኪላት",
+    "agentsTitle": "ወኪላት ይቐይሩን ከኣንዳንዱ ምዛር ቴክስት ጀምሩ"
   },
   "errors": {
     "somethingWentWrong": "ገለ ጸገም ተፈጢሩ",
@@ -4803,5 +4805,46 @@
     "failed": "ምካፍል ኣይከኣልን — ምንካፍል ኣይተፈጠረን።",
     "copyFailed": "ሊንኩ ኣይተተቐለለን — ኣብ ላዕሊ ክትምረፁን ብእጋኹም ክትቅየሱን ይግበሩ።",
     "lastMessagesCountLabel": "ብዝተኸፈለ መልእኽቲ ዝኽእሉ መጨመር"
+  },
+  "toolModes": {
+    "webSearch": "ዝውውር መፈለጊ",
+    "codeInterpreter": "ኮድ ተትርጉሚ",
+    "off": "ዝቕረበ",
+    "auto": "አውቶ",
+    "always": "ሕልዋ",
+    "routingPrivacy": "ምንባር",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI ምርኣይ ፍለጋ በAzure AI Foundry ይልፃ። ኣብቲ ውድብ ክሓፁፉን ክቕየሩን ይኽእሉ እዮም።",
+    "learnMore": "ብዝበለጸ ማረፅ"
+  },
+  "agentAttach": {
+    "browserTitle": "ወኪላት",
+    "browserSubtitle": "ወኪላትን ኮኔክተሮችን ናብዚ ቻት ይወስኑ፣ ወይ ሓዲሽ ቻት ኣብ ወኪል ዘመሁኑ ጀምሩ። አብዚ ዝተመርጸ ሞዴል ምሉእ ስራሕ ይሰርሕዎም።",
+    "searchPlaceholder": "ወኪላትን ኮኔክተሮችን ፈልጡ…",
+    "loading": "ወኪላት ምግባር…",
+    "noMatches": "ዘለዉ ምውሳን ኣይተረኽበን።",
+    "noAgents": "ወኪላት የለን።",
+    "addToChat": "ናብዚ ቻት ወስን",
+    "removeFromChat": "ካብዚ ቻት ወሰዶ",
+    "newChat": "ሓዲሽ ቻት",
+    "attached": "ተዳምሲ",
+    "detach": "ውሰድ",
+    "change": "ቅድሚ",
+    "browse": "ወኪላት ቐይሩ…",
+    "noAgent": "ወኪል የተዳምሰን",
+    "close": "ዝብጽሕ",
+    "kind": {
+      "rag": "መረዳእታ",
+      "prompt": "ተቋማንቲ",
+      "m365": "መረዳእታ (Microsoft 365)",
+      "org": "መረዳእታ",
+      "foundry": "Foundry ወኪል",
+      "connector": "ኮኔክተር"
+    },
+    "semantics": {
+      "your-model": "ሞዴልካ ይጥቀም",
+      "pinned-model": "አመሓዳሪ ዝመርጸ ሞዴል",
+      "own-model": "ሓደ ሞዴል ይግዚኡ"
+    }
   }
 }

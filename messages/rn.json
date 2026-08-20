@@ -986,7 +986,9 @@
     "quickActions": "Ibikorwa vya Vuba",
     "expandFolder": "Gufungura dosiye {name}",
     "collapseFolder": "Gufunga dosiye {name}",
-    "folderOptions": "Amahitamo ya {name}"
+    "folderOptions": "Amahitamo ya {name}",
+    "agentsEntry": "Abashinzwe",
+    "agentsTitle": "Rondera abashinzwe kandi utangure kuganira n’umwe"
   },
   "errors": {
     "somethingWentWrong": "Hari ikintu kitajenda neza",
@@ -4803,5 +4805,46 @@
     "failed": "Ntivyashobotse gusangira — nta na kimwe cakozwe.",
     "copyFailed": "Ntivyashobotse gukoporora iyo link — hitamwo hejuru uyikoporore n'intoke.",
     "lastMessagesCountLabel": "Umubare w'ubutumwa bwheruka bwo gushirako"
+  },
+  "toolModes": {
+    "webSearch": "Gushakisha kuri web",
+    "codeInterpreter": "Ibisobanuro vy’amakode",
+    "off": "Zimije",
+    "auto": "Gikora ku bw'ikimenyeretso",
+    "always": "Igihe cose",
+    "routingPrivacy": "Ubumenyi bwite",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Gushakisha hifashishijwe Azure AI bisubiza ivyifuzo biciye muri Azure AI Foundry, bishobora kugumizwa.",
+    "learnMore": "Menya vyinshi"
+  },
+  "agentAttach": {
+    "browserTitle": "Abashinzwe",
+    "browserSubtitle": "Ongerako abashinzwe n’abahuza muri iki kiganiro, canke utangure ikiganiro gishasha n’umushinzwe. Benshi barakorana n’icagezwe cose wahisemwo.",
+    "searchPlaceholder": "Rondera abashinzwe n’abahuza…",
+    "loading": "Biriko birapakururwa abashinzwe…",
+    "noMatches": "Nta gisubizo gihuye n’ivyo warondera.",
+    "noAgents": "Nta bashinzwe baboneka.",
+    "addToChat": "Shiramwo muri iki kiganiro",
+    "removeFromChat": "Kuramwo muri iki kiganiro",
+    "newChat": "Ikiganiro gishasha",
+    "attached": "Vyashizweho",
+    "detach": "Kuraho",
+    "change": "Hindura",
+    "browse": "Rondera abashinzwe…",
+    "noAgent": "Nta mushinzwe yashizweho",
+    "close": "Funga",
+    "kind": {
+      "rag": "Ubumenyi",
+      "prompt": "Imico",
+      "m365": "Ubumenyi (Microsoft 365)",
+      "org": "Ubumenyi",
+      "foundry": "Umushinzwe Foundry",
+      "connector": "Umuhuza"
+    },
+    "semantics": {
+      "your-model": "ikoreshwa na modele yawe",
+      "pinned-model": "modele yashizweho n’umuyobozi",
+      "own-model": "ikoresha modele yayo ubwayo"
+    }
   }
 }

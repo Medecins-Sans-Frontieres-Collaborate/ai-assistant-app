@@ -986,7 +986,9 @@
     "quickActions": "Ibikorwa Byihuse",
     "expandFolder": "Gura ubwoko bwa dosiye {name}",
     "collapseFolder": "Hina dosiye {name}",
-    "folderOptions": "Amahitamo ya {name}"
+    "folderOptions": "Amahitamo ya {name}",
+    "agentsEntry": "Abakozi",
+    "agentsTitle": "Reba abakozi kandi utangire kuganira n’umwe"
   },
   "errors": {
     "somethingWentWrong": "Hari ikintu kitagenze neza",
@@ -4803,5 +4805,46 @@
     "failed": "Ntibishobotse gusangiza — nta cyabayeho.",
     "copyFailed": "Ntibyashobotse gukoporora ihuriro — hitamo iri hejuru, unarikopore intoki.",
     "lastMessagesCountLabel": "Umubare w’ubutumwa bushya bwo ku kugaragaza"
+  },
+  "toolModes": {
+    "webSearch": "Gushakisha kuri internet",
+    "codeInterpreter": "Gusesengura kode",
+    "off": "Funga",
+    "auto": "Imodoka",
+    "always": "Burigihe",
+    "routingPrivacy": "Ubwirinzi bw’amakuru",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI search itanga ibisabwa binyuze muri Azure AI Foundry, ishobora kubitaho.",
+    "learnMore": "Menya byinshi"
+  },
+  "agentAttach": {
+    "browserTitle": "Abakozi",
+    "browserSubtitle": "Ongeramo abakozi n’abahuza muri iki kiganiro, cyangwa utangire ikiganiro gishya n’umukozi. Abenshi bakorana n’imashini wahisemo.",
+    "searchPlaceholder": "Shakisha abakozi n’abahuza...",
+    "loading": "Birimo kuzana abakozi...",
+    "noMatches": "Nta bijyanye n’ishakisha ryawe.",
+    "noAgents": "Nta bakozi babonetse.",
+    "addToChat": "Ongeramo muri iki kiganiro",
+    "removeFromChat": "Kuraho muri iki kiganiro",
+    "newChat": "Ikiganiro gishya",
+    "attached": "Bihujwe",
+    "detach": "Guhuza",
+    "change": "Hindura",
+    "browse": "Reba abakozi...",
+    "noAgent": "Nta mukozi wahujwe",
+    "close": "Funga",
+    "kind": {
+      "rag": "Ubumenyi",
+      "prompt": "Umwirondoro",
+      "m365": "Ubumenyi (Microsoft 365)",
+      "org": "Ubumenyi",
+      "foundry": "Umukozi wa Foundry",
+      "connector": "Umuhuza"
+    },
+    "semantics": {
+      "your-model": "ikoresha imoderele yawe",
+      "pinned-model": "imoderele yashyizweho n'umuyobozi",
+      "own-model": "ikoresha imoderele yayo bwite"
+    }
   }
 }

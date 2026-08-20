@@ -907,7 +907,9 @@
     "quickActions": "Hành động nhanh",
     "expandFolder": "Mở rộng thư mục {name}",
     "collapseFolder": "Thu gọn thư mục {name}",
-    "folderOptions": "Tùy chọn {name}"
+    "folderOptions": "Tùy chọn {name}",
+    "agentsEntry": "Tác nhân",
+    "agentsTitle": "Duyệt các tác nhân và bắt đầu trò chuyện với một tác nhân"
   },
   "prompts": {
     "buildReusablePrompts": "Xây dựng lời nhắc có thể tái sử dụng với sự hỗ trợ của AI",
@@ -4850,5 +4852,46 @@
     "failed": "Không thể chia sẻ — chưa tạo gì cả.",
     "copyFailed": "Không thể sao chép liên kết — hãy chọn ở trên và sao chép thủ công.",
     "lastMessagesCountLabel": "Số tin nhắn gần đây cần bao gồm"
+  },
+  "toolModes": {
+    "webSearch": "Tìm kiếm web",
+    "codeInterpreter": "Phiên dịch mã",
+    "off": "Tắt",
+    "auto": "Tự động",
+    "always": "Luôn bật",
+    "routingPrivacy": "Bảo mật",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Tìm kiếm Azure AI sẽ gửi truy vấn qua Azure AI Foundry, các truy vấn này có thể được lưu lại.",
+    "learnMore": "Tìm hiểu thêm"
+  },
+  "agentAttach": {
+    "browserTitle": "Tác nhân",
+    "browserSubtitle": "Thêm các tác nhân và kết nối vào cuộc trò chuyện này, hoặc bắt đầu trò chuyện mới với một tác nhân. Hầu hết hoạt động với bất kỳ mô hình nào bạn đã chọn.",
+    "searchPlaceholder": "Tìm kiếm tác nhân và kết nối…",
+    "loading": "Đang tải các tác nhân…",
+    "noMatches": "Không có kết quả phù hợp với tìm kiếm của bạn.",
+    "noAgents": "Không có tác nhân nào.",
+    "addToChat": "Thêm vào cuộc trò chuyện này",
+    "removeFromChat": "Xóa khỏi cuộc trò chuyện này",
+    "newChat": "Trò chuyện mới",
+    "attached": "Đã đính kèm",
+    "detach": "Gỡ đính kèm",
+    "change": "Thay đổi",
+    "browse": "Duyệt tác nhân…",
+    "noAgent": "Chưa đính kèm tác nhân nào",
+    "close": "Đóng",
+    "kind": {
+      "rag": "Kiến thức",
+      "prompt": "Nhân cách",
+      "m365": "Kiến thức (Microsoft 365)",
+      "org": "Kiến thức",
+      "foundry": "Tác nhân Foundry",
+      "connector": "Kết nối"
+    },
+    "semantics": {
+      "your-model": "sử dụng mô hình của bạn",
+      "pinned-model": "mô hình do quản trị viên đặt",
+      "own-model": "chạy trên chính mô hình của nó"
+    }
   }
 }

@@ -906,7 +906,9 @@
     "quickActions": "त्वरित क्रियाएं",
     "expandFolder": "{name} फ़ोल्डर फैलाएँ",
     "collapseFolder": "{name} फ़ोल्डर संक्षिप्त करें",
-    "folderOptions": "{name} विकल्प"
+    "folderOptions": "{name} विकल्प",
+    "agentsEntry": "एजेंट्स",
+    "agentsTitle": "एजेंट्स ब्राउज़ करें और किसी से चैट शुरू करें"
   },
   "prompts": {
     "buildReusablePrompts": "AI सहायता से पुन: प्रयोज्य प्रॉम्प्ट बनाएं",
@@ -4819,5 +4821,46 @@
     "failed": "साझा नहीं कर सके — कुछ भी नहीं बनाया गया।",
     "copyFailed": "लिंक कॉपी नहीं कर सके — कृपया ऊपर से चुनकर मैन्युअली कॉपी करें।",
     "lastMessagesCountLabel": "शामिल करने के लिए हाल की संदेशों की संख्या"
+  },
+  "toolModes": {
+    "webSearch": "वेब सर्च",
+    "codeInterpreter": "कोड इंटरप्रेटर",
+    "off": "बंद",
+    "auto": "स्वचालित",
+    "always": "हमेशा",
+    "routingPrivacy": "गोपनीयता",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI सर्च आपके प्रश्नों को Azure AI Foundry के माध्यम से भेजता है, जिन्हें वह संग्रहीत कर सकता है।",
+    "learnMore": "और जानें"
+  },
+  "agentAttach": {
+    "browserTitle": "एजेंट्स",
+    "browserSubtitle": "इस चैट में एजेंट्स और कनेक्टर्स जोड़ें, या किसी एजेंट के साथ नई चैट शुरू करें। अधिकांश आपके चुने मॉडल के साथ काम करते हैं।",
+    "searchPlaceholder": "एजेंट्स और कनेक्टर्स खोजें…",
+    "loading": "एजेंट्स लोड हो रहे हैं…",
+    "noMatches": "आपकी खोज से कुछ नहीं मिला।",
+    "noAgents": "कोई एजेंट उपलब्ध नहीं है।",
+    "addToChat": "इस चैट में जोड़ें",
+    "removeFromChat": "इस चैट से हटाएँ",
+    "newChat": "नई चैट",
+    "attached": "संलग्न",
+    "detach": "अलग करें",
+    "change": "बदलें",
+    "browse": "एजेंट्स ब्राउज़ करें…",
+    "noAgent": "कोई एजेंट संलग्न नहीं",
+    "close": "बंद करें",
+    "kind": {
+      "rag": "ज्ञान",
+      "prompt": "व्यक्तित्व",
+      "m365": "ज्ञान (Microsoft 365)",
+      "org": "ज्ञान",
+      "foundry": "Foundry एजेंट",
+      "connector": "कनेक्टर"
+    },
+    "semantics": {
+      "your-model": "आपका मॉडल उपयोग करता है",
+      "pinned-model": "मॉडल व्यवस्थापक द्वारा निर्धारित",
+      "own-model": "अपने मॉडल पर चलता है"
+    }
   }
 }

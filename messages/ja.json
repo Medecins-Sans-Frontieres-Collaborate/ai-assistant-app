@@ -906,7 +906,9 @@
     "quickActions": "クイックアクション",
     "expandFolder": "フォルダー{name}を展開",
     "collapseFolder": "フォルダー{name}を折りたたみ",
-    "folderOptions": "{name}のオプション"
+    "folderOptions": "{name}のオプション",
+    "agentsEntry": "エージェント",
+    "agentsTitle": "エージェントを閲覧してチャットを開始する"
   },
   "prompts": {
     "buildReusablePrompts": "AIの支援で再利用可能なプロンプトを構築",
@@ -4819,5 +4821,46 @@
     "failed": "共有できませんでした—何も作成されませんでした。",
     "copyFailed": "リンクをコピーできませんでした。上記から手動でコピーしてください。",
     "lastMessagesCountLabel": "含める最新メッセージの数"
+  },
+  "toolModes": {
+    "webSearch": "ウェブ検索",
+    "codeInterpreter": "コードインタープリタ",
+    "off": "オフ",
+    "auto": "自動",
+    "always": "常に有効",
+    "routingPrivacy": "プライバシー",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI 検索はクエリを Azure AI Foundry 経由で送信し、保持される場合があります。",
+    "learnMore": "詳細"
+  },
+  "agentAttach": {
+    "browserTitle": "エージェント",
+    "browserSubtitle": "このチャットにエージェントやコネクターを追加するか、エージェントとの新しいチャットを開始してください。ほとんどは選択したモデルで動作します。",
+    "searchPlaceholder": "エージェントとコネクターを検索…",
+    "loading": "エージェントを読み込み中…",
+    "noMatches": "検索に一致するものがありません。",
+    "noAgents": "利用可能なエージェントがありません。",
+    "addToChat": "このチャットに追加",
+    "removeFromChat": "このチャットから削除",
+    "newChat": "新しいチャット",
+    "attached": "追加済み",
+    "detach": "解除",
+    "change": "変更",
+    "browse": "エージェントを閲覧…",
+    "noAgent": "エージェント未追加",
+    "close": "閉じる",
+    "kind": {
+      "rag": "ナレッジ",
+      "prompt": "ペルソナ",
+      "m365": "ナレッジ（Microsoft 365）",
+      "org": "ナレッジ",
+      "foundry": "Foundry エージェント",
+      "connector": "コネクター"
+    },
+    "semantics": {
+      "your-model": "ご自身のモデルを使用",
+      "pinned-model": "管理者によるモデル指定",
+      "own-model": "独自のモデルで動作"
+    }
   }
 }

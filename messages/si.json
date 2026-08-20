@@ -873,7 +873,9 @@
     "quickActions": "ඉක්මන් ක්‍රියාමාර්ග",
     "expandFolder": "ෆොල්ඩරය විහිදන්න {name}",
     "collapseFolder": "ෆොල්ඩරය හකුලාගන්න {name}",
-    "folderOptions": "{name} විකල්ප"
+    "folderOptions": "{name} විකල්ප",
+    "agentsEntry": "පැතිකඩ",
+    "agentsTitle": "පැතිකඩ පිරික්සා එක් එක් පසුඔරයෙක් සමඟ සංවාදයක් ආරම්භ කරන්න"
   },
   "prompts": {
     "buildReusablePrompts": "AI සහාය ඇතිව නැවත භාවිතා කළ හැකි විමසීම් තනන්න",
@@ -4819,5 +4821,46 @@
     "failed": "බෙදා ගත නොහැකි විය — කිසිවක් නිර්මාණය වී නැහැ.",
     "copyFailed": "සබැඳිය පිටපත් කළ නොහැකියි — ඉහත සඳහන් කර තිබෙන සබැඳිය අතින් පිටපත් කරන්න.",
     "lastMessagesCountLabel": "අතුළත් කළ යුතු ඔවුන්ගේ අලුත් පණිවුඩ ගණන"
+  },
+  "toolModes": {
+    "webSearch": "අන්තර්ජාල සෙවීම",
+    "codeInterpreter": "කේත විභාගකරු",
+    "off": "අක්‍රිය",
+    "auto": "ස්වයංක්‍රීය",
+    "always": "සැමවිට",
+    "routingPrivacy": "රහස්‍යතාව",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI search විමසුම් Azure AI Foundry හරහා යැවෙයි, එය ඒවා තබා විය හැක.",
+    "learnMore": "තවත් ඉගෙන ගන්න"
+  },
+  "agentAttach": {
+    "browserTitle": "පැතිකඩ",
+    "browserSubtitle": "මෙම සංවාදයට පැතිකඩ සහ සම්බන්ධක එකතු කරන්න, නැතහොත් පෙන්වන පැතිකඩක් සමඟ නව සංවාදයක් ආරම්භ කරන්න. බොහෝ විට ඔබ තේරුණු ආදර්ශය සමඟ ඒවා වැඩ කරයි.",
+    "searchPlaceholder": "පැතිකඩ හා සම්බන්ධක සෙවීම…",
+    "loading": "පැතිකඩ පූරණය වේ…",
+    "noMatches": "ඔබේ සෙවුමට කිසිවක් නොමැත.",
+    "noAgents": "පැතිකඩ නොමැත.",
+    "addToChat": "මෙම සංවාදයට එකතු කරන්න",
+    "removeFromChat": "මෙම සංවාදයෙන් ඉවත් කරන්න",
+    "newChat": "නව සංවාදය",
+    "attached": "එක් කර ඇත",
+    "detach": "ඉවත් කරන්න",
+    "change": "වෙනස් කරන්න",
+    "browse": "පැතිකඩ පිරික්සන්න…",
+    "noAgent": "පැතිකඩක් සම්බන්ධ කර නොමැත",
+    "close": "වසන්න",
+    "kind": {
+      "rag": "දැනුම",
+      "prompt": "පෞරුෂය",
+      "m365": "දැනුම (Microsoft 365)",
+      "org": "දැනුම",
+      "foundry": "Foundry පැතිකඩ",
+      "connector": "සම්බන්ධකය"
+    },
+    "semantics": {
+      "your-model": "ඔබේ ආදර්ශය භාවිතා කරයි",
+      "pinned-model": "පරිපාලක අවිස්සපු ආදර්ශය",
+      "own-model": "තම ආදර්ශය මත ක්‍රියා කරයි"
+    }
   }
 }

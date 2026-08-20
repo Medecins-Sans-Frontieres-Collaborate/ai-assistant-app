@@ -986,7 +986,9 @@
     "quickActions": "Kiryarên Bilez",
     "expandFolder": "بوخچە {name} فراوان بکە",
     "collapseFolder": "بوخچە {name} دادەبەزە",
-    "folderOptions": "هەڵبژاردەکانی {name}"
+    "folderOptions": "هەڵبژاردەکانی {name}",
+    "agentsEntry": "ئەجێنتەکان",
+    "agentsTitle": "بگەڕێ بۆ ئەجێنتەکان و گفتوگۆیەک لەگەڵ یەکێک دەست پێبکە"
   },
   "errors": {
     "somethingWentWrong": "Tiştek xelet çûye",
@@ -4803,5 +4805,46 @@
     "failed": "نەکرا بەش پێبکەیت — هیچ شتێک دروست نەکرا.",
     "copyFailed": "نەتوانرا بەستەرەکە بکۆپیە — لەسەرەوە دیاری بکە و دەستیک بکۆپە.",
     "lastMessagesCountLabel": "ژمارەی نامەکانی نزیکترین کات بۆ زیادکردن"
+  },
+  "toolModes": {
+    "webSearch": "گەڕانی وێب",
+    "codeInterpreter": "وەڵامدەری کۆد",
+    "off": "کوژراو",
+    "auto": "خۆکار",
+    "always": "هەمیڤە",
+    "routingPrivacy": "تێکچووی نهێنی",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "گەڕانی Azure AI پرسیارەکان دەبەستێت بە Azure AI Foundry، کە لەوانەیە پرسیارەکان پاش هەڵبگرێت.",
+    "learnMore": "زیاتر بزانە"
+  },
+  "agentAttach": {
+    "browserTitle": "ئەجێنتەکان",
+    "browserSubtitle": "ئەجێنت و پەیوەندیدەرەکان زیاد بکە بۆ ئەم چاتە، یان چاتێکی نوێ لەگەڵ ئەجێنتێک دەست پێبکە. زۆربەیی کار دەکەن بە هەر مۆدێلەکە هەڵبژێریت.",
+    "searchPlaceholder": "گەڕان بۆ ئەجێنت و پەیوەندیدەرەکان…",
+    "loading": "ئەجێنتەکان بار دەکرێن…",
+    "noMatches": "هیچ پێکەوەیەک نییە بەم گەڕانە.",
+    "noAgents": "هیچ ئەجێنتێک بەردەست نییە.",
+    "addToChat": "زیاد بکە بەم چاتە",
+    "removeFromChat": "لابەرە لە چاتەکە",
+    "newChat": "چاتێکی نوێ",
+    "attached": "پیوەستکرا",
+    "detach": "بەستە",
+    "change": "گۆڕین",
+    "browse": "بگەڕێ بۆ ئەجێنتەکان…",
+    "noAgent": "هیچ ئەجێنتێک پیوەست نەکراوە",
+    "close": "داخستن",
+    "kind": {
+      "rag": "زانیاری",
+      "prompt": "شخصیەت",
+      "m365": "زانیاری (Microsoft 365)",
+      "org": "زانیاری",
+      "foundry": "ئەجێنتی Foundry",
+      "connector": "پەیوەندیدەر"
+    },
+    "semantics": {
+      "your-model": "مۆدێلی خۆت بەکاردێنێت",
+      "pinned-model": "مۆدێل دیاریکراوە لەلایەن بەڕێوەبەر",
+      "own-model": "بە مۆدێلی خۆی کاردەکات"
+    }
   }
 }

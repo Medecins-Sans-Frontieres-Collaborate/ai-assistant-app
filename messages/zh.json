@@ -937,7 +937,9 @@
     "quickActions": "快速操作",
     "expandFolder": "展开文件夹 {name}",
     "collapseFolder": "收起文件夹 {name}",
-    "folderOptions": "{name} 选项"
+    "folderOptions": "{name} 选项",
+    "agentsEntry": "代理",
+    "agentsTitle": "浏览代理并开始对话"
   },
   "prompts": {
     "buildReusablePrompts": "使用 AI 辅助构建可重复使用的提示",
@@ -4850,5 +4852,46 @@
     "failed": "无法分享 — 未创建任何内容。",
     "copyFailed": "无法复制链接——请在上方选择并手动复制。",
     "lastMessagesCountLabel": "要包含的最新消息数"
+  },
+  "toolModes": {
+    "webSearch": "网页搜索",
+    "codeInterpreter": "代码解释器",
+    "off": "关闭",
+    "auto": "自动",
+    "always": "始终启用",
+    "routingPrivacy": "隐私",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI 搜索会通过 Azure AI Foundry 发送查询，可能会保留查询内容。",
+    "learnMore": "了解更多"
+  },
+  "agentAttach": {
+    "browserTitle": "代理",
+    "browserSubtitle": "将代理或连接器添加到此对话，或与代理开启新的对话。大多数代理支持您选择的任意模型。",
+    "searchPlaceholder": "搜索代理和连接器…",
+    "loading": "正在加载代理…",
+    "noMatches": "没有匹配的结果。",
+    "noAgents": "暂无可用代理。",
+    "addToChat": "添加到此对话",
+    "removeFromChat": "从此对话移除",
+    "newChat": "新对话",
+    "attached": "已添加",
+    "detach": "移除",
+    "change": "更改",
+    "browse": "浏览代理…",
+    "noAgent": "未添加代理",
+    "close": "关闭",
+    "kind": {
+      "rag": "知识",
+      "prompt": "人物设定",
+      "m365": "知识（Microsoft 365）",
+      "org": "知识",
+      "foundry": "Foundry 代理",
+      "connector": "连接器"
+    },
+    "semantics": {
+      "your-model": "使用您的模型",
+      "pinned-model": "管理员指定模型",
+      "own-model": "使用自有模型"
+    }
   }
 }

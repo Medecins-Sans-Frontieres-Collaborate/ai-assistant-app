@@ -986,7 +986,9 @@
     "quickActions": "Брзе акције",
     "expandFolder": "Proširi fasciklu {name}",
     "collapseFolder": "Sažmi fasciklu {name}",
-    "folderOptions": "Opcije za {name}"
+    "folderOptions": "Opcije za {name}",
+    "agentsEntry": "Agenti",
+    "agentsTitle": "Pregledajte agente i započnite razgovor sa nekim"
   },
   "errors": {
     "somethingWentWrong": "Нешто је пошло наопако",
@@ -4803,5 +4805,46 @@
     "failed": "Nije moguće podeliti — ništa nije kreirano.",
     "copyFailed": "Nije moguće kopirati link — izaberite ga iznad i kopirajte ručno.",
     "lastMessagesCountLabel": "Broj poslednjih poruka za uključivanje"
+  },
+  "toolModes": {
+    "webSearch": "Pretraga interneta",
+    "codeInterpreter": "Tumač koda",
+    "off": "Isključeno",
+    "auto": "Automatski",
+    "always": "Uvek",
+    "routingPrivacy": "Privatnost",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI pretraga šalje upite preko Azure AI Foundry, koji ih može sačuvati.",
+    "learnMore": "Saznajte više"
+  },
+  "agentAttach": {
+    "browserTitle": "Agenti",
+    "browserSubtitle": "Dodajte agente i konektore u ovaj razgovor ili započnite novi razgovor sa agentom. Većina radi sa izabranim modelom.",
+    "searchPlaceholder": "Pretražite agente i konektore…",
+    "loading": "Učitavanje agenata…",
+    "noMatches": "Nije pronađen nijedan rezultat.",
+    "noAgents": "Nema dostupnih agenata.",
+    "addToChat": "Dodaj u ovaj razgovor",
+    "removeFromChat": "Ukloni iz ovog razgovora",
+    "newChat": "Novi razgovor",
+    "attached": "Prikačen",
+    "detach": "Otkači",
+    "change": "Promeni",
+    "browse": "Pregledaj agente…",
+    "noAgent": "Nijedan agent nije prikačen",
+    "close": "Zatvori",
+    "kind": {
+      "rag": "Znanje",
+      "prompt": "Persona",
+      "m365": "Znanje (Microsoft 365)",
+      "org": "Znanje",
+      "foundry": "Foundry agent",
+      "connector": "Konektor"
+    },
+    "semantics": {
+      "your-model": "koristi vaš model",
+      "pinned-model": "model je postavio administrator",
+      "own-model": "koristi svoj sopstveni model"
+    }
   }
 }

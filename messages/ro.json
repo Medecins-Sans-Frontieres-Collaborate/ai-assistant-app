@@ -904,7 +904,9 @@
     "quickActions": "Acțiuni rapide",
     "expandFolder": "Extinde folderul {name}",
     "collapseFolder": "Restrânge folderul {name}",
-    "folderOptions": "Opțiuni {name}"
+    "folderOptions": "Opțiuni {name}",
+    "agentsEntry": "Agenți",
+    "agentsTitle": "Răsfoiți agenții și începeți un chat cu unul"
   },
   "prompts": {
     "buildReusablePrompts": "Construiește prompt-uri reutilizabile cu asistență AI",
@@ -4819,5 +4821,46 @@
     "failed": "Nu s-a putut partaja — nu a fost creat nimic.",
     "copyFailed": "Nu s-a putut copia linkul — selectați-l de mai sus și copiați manual.",
     "lastMessagesCountLabel": "Numărul de mesaje recente de inclus"
+  },
+  "toolModes": {
+    "webSearch": "Căutare web",
+    "codeInterpreter": "Interpret de cod",
+    "off": "Oprit",
+    "auto": "Automat",
+    "always": "Întotdeauna",
+    "routingPrivacy": "Confidențialitate",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Căutarea Azure AI trimite interogările prin Azure AI Foundry, care le poate păstra.",
+    "learnMore": "Află mai multe"
+  },
+  "agentAttach": {
+    "browserTitle": "Agenți",
+    "browserSubtitle": "Adăugați agenți și conectori în acest chat sau începeți un chat nou cu un agent. Majoritatea funcționează cu orice model ați ales.",
+    "searchPlaceholder": "Căutați agenți și conectori…",
+    "loading": "Se încarcă agenții…",
+    "noMatches": "Nicio potrivire pentru căutarea dvs.",
+    "noAgents": "Niciun agent disponibil.",
+    "addToChat": "Adaugă la acest chat",
+    "removeFromChat": "Elimină din acest chat",
+    "newChat": "Chat nou",
+    "attached": "Atașat",
+    "detach": "Detașează",
+    "change": "Schimbă",
+    "browse": "Răsfoiește agenți…",
+    "noAgent": "Niciun agent atașat",
+    "close": "Închide",
+    "kind": {
+      "rag": "Cunoaștere",
+      "prompt": "Persoană",
+      "m365": "Cunoaștere (Microsoft 365)",
+      "org": "Cunoaștere",
+      "foundry": "Agent Foundry",
+      "connector": "Conector"
+    },
+    "semantics": {
+      "your-model": "folosește modelul dvs.",
+      "pinned-model": "model stabilit de administrator",
+      "own-model": "rulează pe propriul său model"
+    }
   }
 }

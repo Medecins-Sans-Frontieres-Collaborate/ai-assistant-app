@@ -881,7 +881,9 @@
     "quickActions": "פעולות מהירות",
     "expandFolder": "הרחב תיקיה {name}",
     "collapseFolder": "כווץ תיקיה {name}",
-    "folderOptions": "אפשרויות עבור {name}"
+    "folderOptions": "אפשרויות עבור {name}",
+    "agentsEntry": "סוכנים",
+    "agentsTitle": "עיינו בסוכנים והתחילו שיחה עם אחד"
   },
   "prompts": {
     "buildReusablePrompts": "בניית הנחיות לשימוש חוזר בעזרת AI",
@@ -4819,5 +4821,46 @@
     "failed": "לא ניתן היה לשתף — לא נוצר דבר.",
     "copyFailed": "לא ניתן להעתיק את הקישור — נא לבחור אותו למעלה ולהעתיק ידנית.",
     "lastMessagesCountLabel": "מספר ההודעות האחרונות לכלול"
+  },
+  "toolModes": {
+    "webSearch": "חיפוש באינטרנט",
+    "codeInterpreter": "מתרגם קוד",
+    "off": "כבוי",
+    "auto": "אוטומטי",
+    "always": "תמיד",
+    "routingPrivacy": "פרטיות",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "חיפוש Azure AI שולח שאילתות דרך Azure AI Foundry, אשר עשוי לשמור אותן.",
+    "learnMore": "למידע נוסף"
+  },
+  "agentAttach": {
+    "browserTitle": "סוכנים",
+    "browserSubtitle": "הוסיפו סוכנים ומחברים לשיחה זו, או התחילו שיחה חדשה עם סוכן. רובם עובדים עם כל מודל שבחרתם.",
+    "searchPlaceholder": "חפשו סוכנים ומחברים…",
+    "loading": "טוען סוכנים…",
+    "noMatches": "אין תוצאות התואמות לחיפוש שלכם.",
+    "noAgents": "אין סוכנים זמינים.",
+    "addToChat": "הוספה לשיחה",
+    "removeFromChat": "הסרה מהשיחה",
+    "newChat": "שיחה חדשה",
+    "attached": "מצורף",
+    "detach": "הסרה",
+    "change": "שינוי",
+    "browse": "עיינו בסוכנים…",
+    "noAgent": "לא מצורף סוכן",
+    "close": "סגירה",
+    "kind": {
+      "rag": "ידע",
+      "prompt": "פרסונה",
+      "m365": "ידע (Microsoft 365)",
+      "org": "ידע",
+      "foundry": "סוכן Foundry",
+      "connector": "מחבר"
+    },
+    "semantics": {
+      "your-model": "משתמש במודל שלך",
+      "pinned-model": "מודל שנקבע על ידי מנהל",
+      "own-model": "פועל על המודל הפרטי שלו"
+    }
   }
 }

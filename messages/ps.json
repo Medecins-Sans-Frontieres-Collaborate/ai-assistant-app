@@ -986,7 +986,9 @@
     "quickActions": "چټک کړنې",
     "expandFolder": "پوښۍ غځول {name}",
     "collapseFolder": "پوښۍ ټولول {name}",
-    "folderOptions": "{name} اختیارات"
+    "folderOptions": "{name} اختیارات",
+    "agentsEntry": "استازي",
+    "agentsTitle": "استازي وګورئ او له یوه سره خبرې وکړئ"
   },
   "errors": {
     "somethingWentWrong": "یوه ستونزه پېښه شوه",
@@ -4803,5 +4805,46 @@
     "failed": "شریکولی نشو — هیڅ نه دي جوړ شوي.",
     "copyFailed": "لینک نشو نقلولی — پورته یې انتخاب کړئ او لاسوند نقل کړئ.",
     "lastMessagesCountLabel": "د ګډولو وروستیو پيغامونو شمېر"
+  },
+  "toolModes": {
+    "webSearch": "وېب لټون",
+    "codeInterpreter": "کوډ تحلیلونکی",
+    "off": "بند",
+    "auto": "اتومات",
+    "always": "تل",
+    "routingPrivacy": "محرمیت",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "د Azure AI لټون د Azure AI Foundry له لارې پوښتنې لېږي، چې ښايي دا وساتي.",
+    "learnMore": "نور معلومات واخلئ"
+  },
+  "agentAttach": {
+    "browserTitle": "استازي",
+    "browserSubtitle": "استازي او وصلوونکي دې چټ ته اضافه کړئ، یا له یوه استازي سره نوی چټ پیل کړئ. اکثره یې له هر هغه ماډل سره کار کوي چې تاسې یې غوره کړی.",
+    "searchPlaceholder": "استازي او وصلوونکي ولټوئ...",
+    "loading": "استازي بار کېږي...",
+    "noMatches": "ستاسې لټون سره هېڅ نه دي سمون خوړلی.",
+    "noAgents": "هیڅ استازی موجود نه دی.",
+    "addToChat": "دې چټ ته اضافه کړئ",
+    "removeFromChat": "له دې چټ څخه لرې کړئ",
+    "newChat": "نوی چټ",
+    "attached": "وصل شوی",
+    "detach": "جلا کړئ",
+    "change": "بدلون",
+    "browse": "استازي وګورئ...",
+    "noAgent": "هیڅ استازی نه دی وصل",
+    "close": "بند کړئ",
+    "kind": {
+      "rag": "ځانګړي معلومات",
+      "prompt": "شخصیت",
+      "m365": "ځانګړي معلومات (Microsoft 365)",
+      "org": "ځانګړي معلومات",
+      "foundry": "Foundry استازی",
+      "connector": "وصلوونکی"
+    },
+    "semantics": {
+      "your-model": "ستاسې ماډل کاروي",
+      "pinned-model": "ادارې لخوا ټاکل شوی ماډل",
+      "own-model": "خپل ځانګړی ماډل کاروي"
+    }
   }
 }

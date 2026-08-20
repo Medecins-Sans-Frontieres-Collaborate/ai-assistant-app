@@ -881,7 +881,9 @@
     "quickActions": "Accions ràpides",
     "expandFolder": "Expandeix la carpeta {name}",
     "collapseFolder": "Redueix la carpeta {name}",
-    "folderOptions": "Opcions de {name}"
+    "folderOptions": "Opcions de {name}",
+    "agentsEntry": "Agents",
+    "agentsTitle": "Explora els agents i comença una conversa amb un"
   },
   "prompts": {
     "buildReusablePrompts": "Crear indicacions reutilitzables amb assistència d'IA",
@@ -4819,5 +4821,46 @@
     "failed": "No s'ha pogut compartir: no s'ha creat res.",
     "copyFailed": "No s'ha pogut copiar l'enllaç — seleccioneu-lo a dalt i copieu-lo manualment.",
     "lastMessagesCountLabel": "Nombre de missatges recents a incloure"
+  },
+  "toolModes": {
+    "webSearch": "Cerca web",
+    "codeInterpreter": "Intèrpret de codi",
+    "off": "Desactivat",
+    "auto": "Automàtic",
+    "always": "Sempre",
+    "routingPrivacy": "Privacitat",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "La cerca d'Azure AI envia consultes a través d'Azure AI Foundry, que podria conservar-les.",
+    "learnMore": "Més informació"
+  },
+  "agentAttach": {
+    "browserTitle": "Agents",
+    "browserSubtitle": "Afegeix agents i connectors a aquesta conversa, o comença una conversa nova amb un agent. La majoria funcionen amb el model que hagis escollit.",
+    "searchPlaceholder": "Cerca agents i connectors…",
+    "loading": "Carregant agents…",
+    "noMatches": "No hi ha coincidències amb la teva cerca.",
+    "noAgents": "No hi ha agents disponibles.",
+    "addToChat": "Afegeix a aquesta conversa",
+    "removeFromChat": "Elimina d'aquesta conversa",
+    "newChat": "Nova conversa",
+    "attached": "Adjuntat",
+    "detach": "Desadjunta",
+    "change": "Canvia",
+    "browse": "Explora agents…",
+    "noAgent": "Cap agent adjunt",
+    "close": "Tanca",
+    "kind": {
+      "rag": "Coneixement",
+      "prompt": "Persona",
+      "m365": "Coneixement (Microsoft 365)",
+      "org": "Coneixement",
+      "foundry": "Agent Foundry",
+      "connector": "Connector"
+    },
+    "semantics": {
+      "your-model": "fa servir el teu model",
+      "pinned-model": "model establert per l'administrador",
+      "own-model": "fa servir el seu propi model"
+    }
   }
 }

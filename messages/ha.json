@@ -986,7 +986,9 @@
     "quickActions": "Ayyuka masu sauri",
     "expandFolder": "Faɗaɗa babban fayil {name}",
     "collapseFolder": "Rufewa babban fayil {name}",
-    "folderOptions": "Zaɓuɓɓukan {name}"
+    "folderOptions": "Zaɓuɓɓukan {name}",
+    "agentsEntry": "Wakilai",
+    "agentsTitle": "Bincika wakilai kuma fara hira da ɗaya"
   },
   "errors": {
     "somethingWentWrong": "Wani abu ya samu matsala",
@@ -4803,5 +4805,46 @@
     "failed": "Ba a iya raba ba — ba a ƙirƙiri komai ba.",
     "copyFailed": "An kasa kwafa hanyar haɗi — a zaɓi ta a sama ku kwafa da hannu.",
     "lastMessagesCountLabel": "Yawan saƙonnin baya da za a lissafa"
+  },
+  "toolModes": {
+    "webSearch": "Binciken yanar gizo",
+    "codeInterpreter": "Mai fassara lambar kwamfuta",
+    "off": "A kashe",
+    "auto": "Ta atomatik",
+    "always": "Kullum",
+    "routingPrivacy": "Sirri",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Binciken Azure AI yana tura tambayoyi ta Azure AI Foundry, wanda zai iya adana su.",
+    "learnMore": "Kara sani"
+  },
+  "agentAttach": {
+    "browserTitle": "Wakilai",
+    "browserSubtitle": "Ƙara wakilai da connectors cikin wannan hira, ko fara hira da sabon wakili. Yawancinsu suna aiki da duk wani samfurin da ka zaba.",
+    "searchPlaceholder": "Nemo wakilai da connectors…",
+    "loading": "Ana loda wakilai…",
+    "noMatches": "Ba a samu daidaituwa da bincikanka ba.",
+    "noAgents": "Babu wakili a halin yanzu.",
+    "addToChat": "Ƙara zuwa wannan hira",
+    "removeFromChat": "Cire daga wannan hira",
+    "newChat": "Sabuwar hira",
+    "attached": "An haɗa",
+    "detach": "Cire haɗin",
+    "change": "Canja",
+    "browse": "Bincika wakilai…",
+    "noAgent": "Babu wakili da aka haɗa",
+    "close": "Rufe",
+    "kind": {
+      "rag": "Sanin ilimi",
+      "prompt": "Hali",
+      "m365": "Sanin ilimi (Microsoft 365)",
+      "org": "Sanin ilimi",
+      "foundry": "Wakilin Foundry",
+      "connector": "Mai haɗawa"
+    },
+    "semantics": {
+      "your-model": "yana amfani da samfurinka",
+      "pinned-model": "samfurin da mai gudanarwa ya saita",
+      "own-model": "yana aiki da samfurinsa kansa"
+    }
   }
 }

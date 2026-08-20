@@ -986,7 +986,9 @@
     "quickActions": "សកម្មភាពរហ័ស",
     "expandFolder": "ពង្រីកថត {name}",
     "collapseFolder": "បង្រួមថត {name}",
-    "folderOptions": "ជម្រើស {name}"
+    "folderOptions": "ជម្រើស {name}",
+    "agentsEntry": "ភ្នាក់ងារ",
+    "agentsTitle": "រកមើលភ្នាក់ងារ និងចាប់ផ្ដើមជជែកជាមួយភ្នាក់ងារម្នាក់"
   },
   "errors": {
     "somethingWentWrong": "មានអ្វីមួយខុសប្រក្រតី",
@@ -4803,5 +4805,46 @@
     "failed": "មិនអាចចែករំលែកបានទេ — មិនមានអ្វីត្រូវបានបង្កើតឡើយ។",
     "copyFailed": "មិនអាចចម្លងតំណនេះបានទេ — សូមជ្រើសវខាងលើ ហើយចម្លងដោយដៃ។",
     "lastMessagesCountLabel": "ចំនួនសារថ្មីៗដែលត្រូវបញ្ចូល"
+  },
+  "toolModes": {
+    "webSearch": "ស្វែងរកតាមបណ្តាញ",
+    "codeInterpreter": "បកស្រាយកូដ",
+    "off": "បិទ",
+    "auto": "ស្វ័យប្រវត្តិ",
+    "always": "ជានិច្ច",
+    "routingPrivacy": "ឯកជនភាព",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "ការស្វែងរក Azure AI នឹងផ្ញើសំណួរតាមរយៈ Azure AI Foundry ដែលអាចរក្សាទុកសំណួរនោះ។",
+    "learnMore": "ស្វែងយល់បន្ថែម"
+  },
+  "agentAttach": {
+    "browserTitle": "ភ្នាក់ងារ",
+    "browserSubtitle": "បន្ថែមភ្នាក់ងារ និងតំណភ្ជាប់ទៅក្នុងជជែកនេះ ឬចាប់ផ្តើមជជែកថ្មីជាមួយភ្នាក់ងារ។ភាគច្រើនធ្វើការជាមួយម៉ូដែលដែលអ្នកបានជ្រើស។",
+    "searchPlaceholder": "ស្វែងរកភ្នាក់ងារ និងតំណភ្ជាប់…",
+    "loading": "កំពុងផ្ទុកភ្នាក់ងារ…",
+    "noMatches": "រកមិនឃើញលទ្ធផលតាមការស្វែងរក។",
+    "noAgents": "មិនមានភ្នាក់ងារអាចប្រើបានទេ។",
+    "addToChat": "បន្ថែមទៅក្នុងជជែកនេះ",
+    "removeFromChat": "យកចេញពីជជែកនេះ",
+    "newChat": "ជជែកថ្មី",
+    "attached": "បានភ្ជាប់",
+    "detach": "ផ្ដាច់",
+    "change": "ប្តូរ",
+    "browse": "រកមើលភ្នាក់ងារ…",
+    "noAgent": "មិនមានភ្នាក់ងារភ្ជាប់",
+    "close": "បិទ",
+    "kind": {
+      "rag": "ចំណេះដឹង",
+      "prompt": "បុគ្គលិកលក្ខណៈ",
+      "m365": "ចំណេះដឹង (Microsoft 365)",
+      "org": "ចំណេះដឹង",
+      "foundry": "ភ្នាក់ងារ Foundry",
+      "connector": "តំណភ្ជាប់"
+    },
+    "semantics": {
+      "your-model": "ប្រើម៉ូដែលរបស់អ្នក",
+      "pinned-model": "ម៉ូដែលកំណត់ដោយអ្នកគ្រប់គ្រង",
+      "own-model": "ដំណើរការនៅលើម៉ូដែលផ្ទាល់ខ្លួន"
+    }
   }
 }

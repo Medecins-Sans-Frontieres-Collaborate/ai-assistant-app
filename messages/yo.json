@@ -986,7 +986,9 @@
     "quickActions": "Àwọn Ìṣe Kíákíá",
     "expandFolder": "Fa folda {name}",
     "collapseFolder": "Dín folda {name} ku",
-    "folderOptions": "Aṣayan {name}"
+    "folderOptions": "Aṣayan {name}",
+    "agentsEntry": "Àgbẹ̀rẹ́ ayélujára",
+    "agentsTitle": "Ṣàyẹ̀wò àwọn àgbẹ̀rẹ́ ayélujára kí o sì bẹ̀rẹ̀ ìjíròrò pẹ̀lú ẹ̀kan"
   },
   "errors": {
     "somethingWentWrong": "Nǹkan kan ṣẹlẹ̀",
@@ -4803,5 +4805,46 @@
     "failed": "Kò le pín — kò sí ohun tó dà.",
     "copyFailed": "A kò lè da ìjápọ̀ náà — yan án lókè kí o sì kó o-pamọ́ lọ́wọ́.",
     "lastMessagesCountLabel": "Ìye àwọn ìfiranṣẹ́ tuntun láti kún"
+  },
+  "toolModes": {
+    "webSearch": "Ṣàwárí Ayélujára",
+    "codeInterpreter": "Onítejú kóòdù",
+    "off": "Pà",
+    "auto": "Aifọwọyi",
+    "always": "Nígbà gbogbo",
+    "routingPrivacy": "Ìpamọ̀",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Ìwádìí Azure AI n fi ibeere kọja Azure AI Foundry, ó ṣeé ṣe kí wọ́n pa wọ́n tán.",
+    "learnMore": "Káàkiri síi"
+  },
+  "agentAttach": {
+    "browserTitle": "Àgbẹ̀rẹ́ ayélujára",
+    "browserSubtitle": "Fi àwọn àgbẹ̀rẹ́ ati asopọ sí àjíròrò yìí, tàbí bẹ̀rẹ̀ àjíròrò tuntun pẹ̀lú àgbẹ̀rẹ́. Púpọ̀ nínú wọn ṣiṣẹ́ pẹ̀lú irú àmọ̀ràn tí o yàn.",
+    "searchPlaceholder": "Ṣàwárí àgbẹ̀rẹ́ àti asopọ…",
+    "loading": "N gbìyànjú àgbẹ̀rẹ́…",
+    "noMatches": "Kò sí ohun tó báwí pẹ̀lú àwárí rẹ.",
+    "noAgents": "Kò sí àgbẹ̀rẹ́ lọ́wọ́.",
+    "addToChat": "Fikun àjíròrò yìí",
+    "removeFromChat": "Yọ kuro ní àjíròrò yìí",
+    "newChat": "Àjíròrò tuntun",
+    "attached": "Asopọ̀",
+    "detach": "Yọ asopọ̀",
+    "change": "Ṣàtúnṣe",
+    "browse": "Ṣàwárí àgbẹ̀rẹ́…",
+    "noAgent": "Kò sí àgbẹ̀rẹ́ tó so mọ́",
+    "close": "Pa à",
+    "kind": {
+      "rag": "Ìmọ̀",
+      "prompt": "Ìwà",
+      "m365": "Ìmọ̀ (Microsoft 365)",
+      "org": "Ìmọ̀",
+      "foundry": "Àgbẹ̀rẹ́ Foundry",
+      "connector": "Asopọ"
+    },
+    "semantics": {
+      "your-model": "nlo àmọ̀ràn rẹ",
+      "pinned-model": "àmọ̀ràn tó ṣètò olùṣàkóso",
+      "own-model": "n ṣiṣẹ́ lórí àmọ̀ràn tirẹ"
+    }
   }
 }

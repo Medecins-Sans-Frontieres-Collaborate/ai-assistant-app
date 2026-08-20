@@ -907,7 +907,9 @@
     "quickActions": "فوری اقدامات",
     "expandFolder": "فولڈر {name} کھولیں",
     "collapseFolder": "فولڈر {name} بند کریں",
-    "folderOptions": "{name} کے اختیارات"
+    "folderOptions": "{name} کے اختیارات",
+    "agentsEntry": "ایجنٹس",
+    "agentsTitle": "ایجنٹس کو براؤز کریں اور چیٹ شروع کریں"
   },
   "prompts": {
     "buildReusablePrompts": "AI کی مدد سے دوبارہ قابل استعمال پرامپٹس بنائیں",
@@ -4849,5 +4851,46 @@
     "failed": "شیئر نہیں ہو سکا — کچھ تخلیق نہیں ہوا۔",
     "copyFailed": "لنک کاپی نہیں ہو سکا — اوپر سے منتخب کر کے دستی طور پر کاپی کریں۔",
     "lastMessagesCountLabel": "شامل کرنے کے لیے حالیہ پیغامات کی تعداد"
+  },
+  "toolModes": {
+    "webSearch": "ویب سرچ",
+    "codeInterpreter": "کوڈ انٹرپریٹر",
+    "off": "بند",
+    "auto": "خودکار",
+    "always": "ہمیشہ",
+    "routingPrivacy": "پرائیویسی",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI سرچ آپ کی کوئریز کو Azure AI Foundry کے ذریعے بھیجتی ہے، جو انہیں محفوظ رکھ سکتا ہے۔",
+    "learnMore": "مزید جانیں"
+  },
+  "agentAttach": {
+    "browserTitle": "ایجنٹس",
+    "browserSubtitle": "اس چیٹ میں ایجنٹس اور کنیکٹرز شامل کریں، یا کسی ایجنٹ کے ساتھ نیا چیٹ شروع کریں۔ زیادہ تر آپ کے منتخب کردہ ماڈل کے ساتھ کام کرتے ہیں۔",
+    "searchPlaceholder": "ایجنٹس اور کنیکٹرز تلاش کریں…",
+    "loading": "ایجنٹس لوڈ ہو رہے ہیں…",
+    "noMatches": "آپ کی تلاش کے مطابق کچھ نہیں ملا۔",
+    "noAgents": "کوئی ایجنٹ دستیاب نہیں۔",
+    "addToChat": "اس چیٹ میں شامل کریں",
+    "removeFromChat": "اس چیٹ سے ہٹائیں",
+    "newChat": "نئی چیٹ",
+    "attached": "منسلک",
+    "detach": "علیحدہ کریں",
+    "change": "تبدیل کریں",
+    "browse": "ایجنٹس براؤز کریں…",
+    "noAgent": "کوئی ایجنٹ منسلک نہیں",
+    "close": "بند کریں",
+    "kind": {
+      "rag": "علم",
+      "prompt": "پرسونا",
+      "m365": "علم (Microsoft 365)",
+      "org": "علم",
+      "foundry": "Foundry ایجنٹ",
+      "connector": "کنیکٹر"
+    },
+    "semantics": {
+      "your-model": "آپ کے ماڈل کو استعمال کرتا ہے",
+      "pinned-model": "ایڈمن کی طرف سے سیٹ کردہ ماڈل",
+      "own-model": "اپنے ماڈل پر چلتا ہے"
+    }
   }
 }

@@ -852,7 +852,9 @@
     "quickActions": "الإجراءات السريعة",
     "expandFolder": "توسيع المجلد {name}",
     "collapseFolder": "طي المجلد {name}",
-    "folderOptions": "خيارات {name}"
+    "folderOptions": "خيارات {name}",
+    "agentsEntry": "الوكلاء",
+    "agentsTitle": "تصفح الوكلاء وابدأ محادثة مع أحدهم"
   },
   "prompts": {
     "buildReusablePrompts": "بناء موجهات قابلة لإعادة الاستخدام بمساعدة الذكاء الاصطناعي",
@@ -4819,5 +4821,46 @@
     "failed": "تعذرت المشاركة — لم يتم إنشاء أي شيء.",
     "copyFailed": "تعذر نسخ الرابط — يرجى تحديده أعلاه ونسخه يدوياً.",
     "lastMessagesCountLabel": "عدد الرسائل الأخيرة التي سيتم تضمينها"
+  },
+  "toolModes": {
+    "webSearch": "بحث ويب",
+    "codeInterpreter": "مفسر الشيفرة",
+    "off": "إيقاف",
+    "auto": "تلقائي",
+    "always": "دائمًا",
+    "routingPrivacy": "الخصوصية",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "بحث Azure AI يرسل الاستعلامات عبر Azure AI Foundry، وقد يتم الاحتفاظ بها.",
+    "learnMore": "اعرف المزيد"
+  },
+  "agentAttach": {
+    "browserTitle": "الوكلاء",
+    "browserSubtitle": "أضف وكلاء وموصلات إلى هذه المحادثة، أو ابدأ محادثة جديدة مع وكيل. معظمهم يعمل مع أي نموذج اخترته.",
+    "searchPlaceholder": "ابحث عن الوكلاء والموصلات…",
+    "loading": "جارٍ تحميل الوكلاء…",
+    "noMatches": "لا توجد نتائج مطابقة لبحثك.",
+    "noAgents": "لا يوجد وكلاء متاحون.",
+    "addToChat": "أضف إلى هذه المحادثة",
+    "removeFromChat": "إزالة من هذه المحادثة",
+    "newChat": "محادثة جديدة",
+    "attached": "تم الإرفاق",
+    "detach": "إلغاء الإرفاق",
+    "change": "تغيير",
+    "browse": "تصفح الوكلاء…",
+    "noAgent": "لا يوجد وكيل مرفق",
+    "close": "إغلاق",
+    "kind": {
+      "rag": "معرفة",
+      "prompt": "شخصية",
+      "m365": "معرفة (Microsoft 365)",
+      "org": "معرفة",
+      "foundry": "وكيل Foundry",
+      "connector": "موصل"
+    },
+    "semantics": {
+      "your-model": "يستخدم النموذج الخاص بك",
+      "pinned-model": "النموذج محدد من الإدارة",
+      "own-model": "يعمل على نموذجه الخاص"
+    }
   }
 }

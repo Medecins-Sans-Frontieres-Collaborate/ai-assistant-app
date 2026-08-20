@@ -849,7 +849,9 @@
     "quickActions": "ፈጣን ድርጊቶች",
     "expandFolder": "{name} ፎልደሩን ዘርፍ",
     "collapseFolder": "{name} ፎልደሩን አንሳ",
-    "folderOptions": "የ{name} አማራጮች"
+    "folderOptions": "የ{name} አማራጮች",
+    "agentsEntry": "ወኪሎች",
+    "agentsTitle": "ወኪሎችን ያስሱ እና ከአንዱ ጋር ውይይት ይጀምሩ"
   },
   "prompts": {
     "buildReusablePrompts": "በAI እገዛ እንደገና ሊጠቀሙ የሚችሉ ጥያቄዎችን ይፍጠሩ",
@@ -4819,5 +4821,46 @@
     "failed": "ማጋራት አልተቻለም — ምንም አልተፈጠረም።",
     "copyFailed": "አካባቢውን መቅዳት አልተቻለም — ከላይ ይምረጡ እና በእጅ ይቅዱ።",
     "lastMessagesCountLabel": "ለማካተት የቅርብ መልእክቶች ብዛት"
+  },
+  "toolModes": {
+    "webSearch": "ድህረ ገፅ ፍለጋ",
+    "codeInterpreter": "ኮድ ተረጋጋጭ",
+    "off": "ዝግ",
+    "auto": "ራሱ በራሱ",
+    "always": "ሁል ጊዜ",
+    "routingPrivacy": "ግላዊነት",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI ፍለጋ ጥያቄዎችን በAzure AI Foundry ያቅራል፣ እና ሊያጠብቃቸው ይችላል።",
+    "learnMore": "ተጨማሪ ይማሩ"
+  },
+  "agentAttach": {
+    "browserTitle": "ወኪሎች",
+    "browserSubtitle": "ወኪሎችን እና ማገናኛዎችን ወደዚህ ውይይት ያክሉ፣ ወይም ከወኪል ጋር አዲስ ውይይት ይጀምሩ። አብዛኞቹ ከመረጡት ሞዴል ጋር ይሰራሉ።",
+    "searchPlaceholder": "ወኪሎችን እና ማገናኛዎችን ፈልጉ…",
+    "loading": "ወኪሎችን በመጫን ላይ…",
+    "noMatches": "ለፍለጋዎ ምንም አልተገኘም።",
+    "noAgents": "ምንም ወኪሎች የሉም።",
+    "addToChat": "ወደዚህ ውይይት ያክሉ",
+    "removeFromChat": "ከዚህ ውይይት ያስወግዱ",
+    "newChat": "አዲስ ውይይት",
+    "attached": "ተያይዟል",
+    "detach": "አፍታ",
+    "change": "ቀይር",
+    "browse": "ወኪሎችን ያስሱ…",
+    "noAgent": "የታያዙ ወኪሎች የሉም",
+    "close": "ዝጋ",
+    "kind": {
+      "rag": "እውቀት",
+      "prompt": "ግልባጭ ባህሪ",
+      "m365": "እውቀት (Microsoft 365)",
+      "org": "እውቀት",
+      "foundry": "Foundry ወኪል",
+      "connector": "ማገናኛ"
+    },
+    "semantics": {
+      "your-model": "ሞዴልዎን ይጠቀማል",
+      "pinned-model": "በአስተዳዳሪ የተዘጋጀ ሞዴል",
+      "own-model": "በራሱ ሞዴል ላይ ይሰራል"
+    }
   }
 }

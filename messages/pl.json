@@ -903,7 +903,9 @@
     "quickActions": "Szybkie akcje",
     "expandFolder": "Rozwiń folder {name}",
     "collapseFolder": "Zwiń folder {name}",
-    "folderOptions": "Opcje {name}"
+    "folderOptions": "Opcje {name}",
+    "agentsEntry": "Agenci",
+    "agentsTitle": "Przeglądaj agentów i rozpocznij z jednym rozmowę"
   },
   "prompts": {
     "buildReusablePrompts": "Twórz wielokrotnego użytku podpowiedzi z pomocą AI",
@@ -4819,5 +4821,46 @@
     "failed": "Nie udało się udostępnić — nic nie zostało utworzone.",
     "copyFailed": "Nie można skopiować linku — zaznacz go powyżej i skopiuj ręcznie.",
     "lastMessagesCountLabel": "Liczba ostatnich wiadomości do dołączenia"
+  },
+  "toolModes": {
+    "webSearch": "Wyszukiwanie w sieci",
+    "codeInterpreter": "Interpreter kodu",
+    "off": "Wyłączone",
+    "auto": "Automatycznie",
+    "always": "Zawsze",
+    "routingPrivacy": "Prywatność",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Wyszukiwanie przez Azure AI przesyła zapytania przez Azure AI Foundry, gdzie mogą być zachowane.",
+    "learnMore": "Dowiedz się więcej"
+  },
+  "agentAttach": {
+    "browserTitle": "Agenci",
+    "browserSubtitle": "Dodaj agentów i konektory do tej rozmowy lub rozpocznij nową z agentem. Większość działa z wybranym modelem.",
+    "searchPlaceholder": "Szukaj agentów i konektorów…",
+    "loading": "Ładowanie agentów…",
+    "noMatches": "Brak wyników dla wyszukiwania.",
+    "noAgents": "Brak dostępnych agentów.",
+    "addToChat": "Dodaj do tej rozmowy",
+    "removeFromChat": "Usuń z tej rozmowy",
+    "newChat": "Nowa rozmowa",
+    "attached": "Dołączono",
+    "detach": "Odłącz",
+    "change": "Zmień",
+    "browse": "Przeglądaj agentów…",
+    "noAgent": "Brak dołączonego agenta",
+    "close": "Zamknij",
+    "kind": {
+      "rag": "Wiedza",
+      "prompt": "Osobowość",
+      "m365": "Wiedza (Microsoft 365)",
+      "org": "Wiedza",
+      "foundry": "Agent Foundry",
+      "connector": "Konektor"
+    },
+    "semantics": {
+      "your-model": "korzysta z Twojego modelu",
+      "pinned-model": "model ustawiony przez administratora",
+      "own-model": "korzysta z własnego modelu"
+    }
   }
 }

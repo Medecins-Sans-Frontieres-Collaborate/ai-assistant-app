@@ -986,7 +986,9 @@
     "quickActions": "Golle Jaawɗe",
     "expandFolder": "Feere bolle {name}",
     "collapseFolder": "Luudu bolle {name}",
-    "folderOptions": "Cuɓoraaɗi {name}"
+    "folderOptions": "Cuɓoraaɗi {name}",
+    "agentsEntry": "Agentiɗe",
+    "agentsTitle": "Yiɗdi agentiɗe e fuɗɗi waawi haasagol e ɗuum"
   },
   "errors": {
     "somethingWentWrong": "Huunde woorii",
@@ -4803,5 +4805,46 @@
     "failed": "Seerɗaa — hay goongɗinɗo sosaani.",
     "copyFailed": "Waawaaniima nattude link ngal — suɓo ko hen reftine.",
     "lastMessagesCountLabel": "Gadanal ndeeri binndiiji ko e laawol"
+  },
+  "toolModes": {
+    "webSearch": "Nayngol Web",
+    "codeInterpreter": "Tarjumo kode",
+    "off": "Doggiral",
+    "auto": "Automaatigi",
+    "always": "Jooni fof",
+    "routingPrivacy": "Njeɗɗo ɓurnde",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Nayngol Azure AI no sendi ceertooji majjuɗi e Azure AI Foundry; kono mayi suɓoɗe he ɗum.",
+    "learnMore": "Learn more"
+  },
+  "agentAttach": {
+    "browserTitle": "Agentiɗe",
+    "browserSubtitle": "Ɓeydu agentiɗe e connectors e konngol nde, walla fuɗɗi konngol kesɗe e agent. Tiiɗi, ɓuri agentiɗe jogii moƴƴere e model woni ɗum.",
+    "searchPlaceholder": "Nay agentiɗe e connectors…",
+    "loading": "Naatude agentiɗe…",
+    "noMatches": "Alaa moƴɗo e cebbinal maa.",
+    "noAgents": "Alaa agentu tottude.",
+    "addToChat": "Ɓeydu e konngol nde",
+    "removeFromChat": "Momtu e konngol nde",
+    "newChat": "Konngol kesɗe",
+    "attached": "Ɓeyditoy",
+    "detach": "Momtu",
+    "change": "Waylu",
+    "browse": "Yiɗdi agentiɗe…",
+    "noAgent": "Alaa agentu ɓeyditoy",
+    "close": "Uddu",
+    "kind": {
+      "rag": "Garsital",
+      "prompt": "Wonaa",
+      "m365": "Garsital (Microsoft 365)",
+      "org": "Garsital",
+      "foundry": "Agentu Foundry",
+      "connector": "Connector"
+    },
+    "semantics": {
+      "your-model": "naatnoy model maa",
+      "pinned-model": "model toggoɗo e admin",
+      "own-model": "taaƴi e model moƴƴi"
+    }
   }
 }

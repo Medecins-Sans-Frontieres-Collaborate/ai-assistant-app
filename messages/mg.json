@@ -986,7 +986,9 @@
     "quickActions": "Hetsika Haingana",
     "expandFolder": "Vakio antontan-taratasy {name}",
     "collapseFolder": "Akimpio antontan-taratasy {name}",
-    "folderOptions": "Safidin'i {name}"
+    "folderOptions": "Safidin'i {name}",
+    "agentsEntry": "Mpanampy",
+    "agentsTitle": "Hijery mpanampy ary manomboka miresaka amin'ny iray"
   },
   "errors": {
     "somethingWentWrong": "Nisy tsy nety",
@@ -4803,5 +4805,46 @@
     "failed": "Tsy afaka nizara — tsy nisy na inona na inona noforonina.",
     "copyFailed": "Tsy afa-naka ny rohy — safidio etsy ambony ary adika tanana.",
     "lastMessagesCountLabel": "Isan'ny hafatra farany tiana ampidirina"
+  },
+  "toolModes": {
+    "webSearch": "Fitadiavana amin'ny web",
+    "codeInterpreter": "Mpandikana kaody",
+    "off": "Nesorina",
+    "auto": "Ho azy",
+    "always": "Foana",
+    "routingPrivacy": "Fiainana manokana",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Mandefa fanontaniana amin'ny alalan'ny Azure AI Foundry ny fitadiavana Azure AI, mety hitazona izany.",
+    "learnMore": "Mianara bebe kokoa"
+  },
+  "agentAttach": {
+    "browserTitle": "Mpanampy",
+    "browserSubtitle": "Ampio mpanampy sy mpampifandray amin'ity resaka ity, na manomboka resaka vaovao amin'ny mpanampy iray. Miasa amin'ny ankamaroan'ny modely fidinao izy ireo.",
+    "searchPlaceholder": "Mitady mpanampy sy mpampifandray...",
+    "loading": "Manokatra mpanampy...",
+    "noMatches": "Tsy nisy nifanaraka tamin'ny fikarohanao.",
+    "noAgents": "Tsy misy mpanampy azo ampiasaina.",
+    "addToChat": "Ampio amin'ity resaka ity",
+    "removeFromChat": "Esory amin'ity resaka ity",
+    "newChat": "Resaka vaovao",
+    "attached": "Nampifandray",
+    "detach": "Esory",
+    "change": "Hanova",
+    "browse": "Hijery mpanampy...",
+    "noAgent": "Tsy misy mpanampy nampifandray",
+    "close": "Akatona",
+    "kind": {
+      "rag": "Fahalalana",
+      "prompt": "Toetra",
+      "m365": "Fahalalana (Microsoft 365)",
+      "org": "Fahalalana",
+      "foundry": "Mpanampy Foundry",
+      "connector": "Mpampifandray"
+    },
+    "semantics": {
+      "your-model": "mampiasa ny modelinao",
+      "pinned-model": "modely napetraky ny admin",
+      "own-model": "miasa amin'ny modeliny manokana"
+    }
   }
 }

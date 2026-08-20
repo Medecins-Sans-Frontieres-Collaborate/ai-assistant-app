@@ -986,7 +986,9 @@
     "quickActions": "Zochitika Mwachangu",
     "expandFolder": "Tsegulani chikwatu {name}",
     "collapseFolder": "Tsekani chikwatu {name}",
-    "folderOptions": "Njira za {name}"
+    "folderOptions": "Njira za {name}",
+    "agentsEntry": "Othandizira",
+    "agentsTitle": "Onani othandizira ndipo yambitsani kucheza ndi m'modzi"
   },
   "errors": {
     "somethingWentWrong": "Chinachake chalakwika",
@@ -4803,5 +4805,46 @@
     "failed": "Sizinathe kugawidwa — palibe chogawidwa chomwe chapangidwa.",
     "copyFailed": "Zalephereka kukopera ulalo—sankhani pamwambapa ndikuukopera pamanja.",
     "lastMessagesCountLabel": "Chiwerengero cha mauthenga aposachedwa oti muyikemo"
+  },
+  "toolModes": {
+    "webSearch": "Kusaka pa intaneti",
+    "codeInterpreter": "Womasulira ma code",
+    "off": "Zatsekedwa",
+    "auto": "Zodziwikiratu",
+    "always": "Nthawi zonse",
+    "routingPrivacy": "Chinsinsi",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Kusaka kwa Azure AI kudutsa ku Azure AI Foundry ndipo zingasungidwe.",
+    "learnMore": "Dziwani zambiri"
+  },
+  "agentAttach": {
+    "browserTitle": "Othandizira",
+    "browserSubtitle": "Onjezani othandizira ndi olumikizira m’cheza ichi, kapena yambitsani cheza chatsopano ndi wothandizira. Ambiri amagwirizana ndi mtundu uliwonse womwe mwasankha.",
+    "searchPlaceholder": "Fufuzani othandizira ndi olumikizira…",
+    "loading": "Ikutsegula othandizira…",
+    "noMatches": "Palibe chofananira ndi zomwe mwafufuza.",
+    "noAgents": "Palibe othandizira alipo.",
+    "addToChat": "Onjezani pa cheza ichi",
+    "removeFromChat": "Chotsani m’cheza ichi",
+    "newChat": "Cheza Chatsopano",
+    "attached": "Zalumikizidwa",
+    "detach": "Chotsani ulalo",
+    "change": "Sintha",
+    "browse": "Onani othandizira…",
+    "noAgent": "Palibe wothandizira walumikizidwa",
+    "close": "Tsekani",
+    "kind": {
+      "rag": "Chidziwitso",
+      "prompt": "Munthu",
+      "m365": "Chidziwitso (Microsoft 365)",
+      "org": "Chidziwitso",
+      "foundry": "Wothandizira wa Foundry",
+      "connector": "Olumikizira"
+    },
+    "semantics": {
+      "your-model": "amagwiritsa ntchito mtundu wanu",
+      "pinned-model": "mtundu wakhazikitsidwa ndi admin",
+      "own-model": "amagwiritsa ntchito mtundu wake"
+    }
   }
 }

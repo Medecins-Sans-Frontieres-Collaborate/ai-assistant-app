@@ -986,7 +986,9 @@
     "quickActions": "Γρήγορες Ενέργειες",
     "expandFolder": "Άνοιγμα φακέλου {name}",
     "collapseFolder": "Σύμπτυξη φακέλου {name}",
-    "folderOptions": "Επιλογές {name}"
+    "folderOptions": "Επιλογές {name}",
+    "agentsEntry": "Agents",
+    "agentsTitle": "Περιηγηθείτε στους agents και ξεκινήστε συνομιλία με έναν"
   },
   "errors": {
     "somethingWentWrong": "Κάτι πήγε στραβά",
@@ -4803,5 +4805,46 @@
     "failed": "Αδυναμία κοινής χρήσης — δεν δημιουργήθηκε τίποτα.",
     "copyFailed": "Αδυναμία αντιγραφής του συνδέσμου — επιλέξτε τον παραπάνω και αντιγράψτε χειροκίνητα.",
     "lastMessagesCountLabel": "Αριθμός πρόσφατων μηνυμάτων για συμπερίληψη"
+  },
+  "toolModes": {
+    "webSearch": "Αναζήτηση στον ιστό",
+    "codeInterpreter": "Διερμηνευτής κώδικα",
+    "off": "Απενεργοποιημένο",
+    "auto": "Αυτόματο",
+    "always": "Πάντα",
+    "routingPrivacy": "Απόρρητο",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Η αναζήτηση Azure AI στέλνει ερωτήματα μέσω του Azure AI Foundry, το οποίο μπορεί να τα διατηρήσει.",
+    "learnMore": "Μάθετε περισσότερα"
+  },
+  "agentAttach": {
+    "browserTitle": "Agents",
+    "browserSubtitle": "Προσθέστε agents και connectors σε αυτή τη συνομιλία ή ξεκινήστε νέα συνομιλία με agent. Οι περισσότεροι λειτουργούν με το μοντέλο που έχετε επιλέξει.",
+    "searchPlaceholder": "Αναζήτηση agents και connectors…",
+    "loading": "Φόρτωση agents…",
+    "noMatches": "Δεν βρέθηκαν αποτελέσματα για την αναζήτησή σας.",
+    "noAgents": "Δεν υπάρχουν διαθέσιμοι agents.",
+    "addToChat": "Προσθήκη σε αυτή τη συνομιλία",
+    "removeFromChat": "Αφαίρεση από αυτή τη συνομιλία",
+    "newChat": "Νέα συνομιλία",
+    "attached": "Προστέθηκε",
+    "detach": "Αφαίρεση",
+    "change": "Αλλαγή",
+    "browse": "Περιήγηση σε agents…",
+    "noAgent": "Δεν έχει προστεθεί agent",
+    "close": "Κλείσιμο",
+    "kind": {
+      "rag": "Γνώση",
+      "prompt": "Προσωπικότητα",
+      "m365": "Γνώση (Microsoft 365)",
+      "org": "Γνώση",
+      "foundry": "Foundry agent",
+      "connector": "Connector"
+    },
+    "semantics": {
+      "your-model": "χρησιμοποιεί το δικό σας μοντέλο",
+      "pinned-model": "μοντέλο που ορίστηκε από τον διαχειριστή",
+      "own-model": "λειτουργεί με το δικό του μοντέλο"
+    }
   }
 }

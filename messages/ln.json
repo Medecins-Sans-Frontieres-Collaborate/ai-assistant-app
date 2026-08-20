@@ -986,7 +986,9 @@
     "quickActions": "Misala ya mbangu",
     "expandFolder": "Kofungola dossier {name}",
     "collapseFolder": "Kokanga dossier {name}",
-    "folderOptions": "Bapɔsɔ ya {name}"
+    "folderOptions": "Bapɔsɔ ya {name}",
+    "agentsEntry": "Ba agents",
+    "agentsTitle": "Luka ba agents mpe banda kosolola na moko"
   },
   "errors": {
     "somethingWentWrong": "Eloko moko ekende malamu te",
@@ -4803,5 +4805,46 @@
     "failed": "Ekokaki te kobabela — eloko moko esalemi te.",
     "copyFailed": "Link ekokaki te kopi — zwa yango likolo mpe kopia ye na maboko.",
     "lastMessagesCountLabel": "Motángo ya nsango ya suka ekosangana"
+  },
+  "toolModes": {
+    "webSearch": "Koyebisa na Web",
+    "codeInterpreter": "Motángi ya code",
+    "off": "Kipe",
+    "auto": "Auto",
+    "always": "Ntango nyonso",
+    "routingPrivacy": "Bipai",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI search etindaka mituna na nzela ya Azure AI Foundry, oyo ekoki kobomba yango.",
+    "learnMore": "Yekola lisusu"
+  },
+  "agentAttach": {
+    "browserTitle": "Ba agents",
+    "browserSubtitle": "Bakisa ba agents mpe ba connectors na masolo oyo, to banda sango ya sika na agent. Mingi basalaka na model nyonso yo poní.",
+    "searchPlaceholder": "Luka ba agents mpe ba connectors…",
+    "loading": "Kozwa ba agents…",
+    "noMatches": "Eloko moko te ebimeli na boluki na yo.",
+    "noAgents": "Ba agents ezali te.",
+    "addToChat": "Bakisa na masolo oyo",
+    "removeFromChat": "Longola na masolo oyo",
+    "newChat": "Sango ya sika",
+    "attached": "Ebakami",
+    "detach": "Kolongola",
+    "change": "Kobongola",
+    "browse": "Luka ba agents…",
+    "noAgent": "Motiki agent te",
+    "close": "Kolongela",
+    "kind": {
+      "rag": "Boyebi",
+      "prompt": "Moto",
+      "m365": "Boyebi (Microsoft 365)",
+      "org": "Boyebi",
+      "foundry": "Agent ya Foundry",
+      "connector": "Connector"
+    },
+    "semantics": {
+      "your-model": "asalelaka model na yo",
+      "pinned-model": "model esalemi na admin",
+      "own-model": "esalelaka model na ye moko"
+    }
   }
 }

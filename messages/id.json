@@ -873,7 +873,9 @@
     "quickActions": "Tindakan Cepat",
     "expandFolder": "Perluas folder {name}",
     "collapseFolder": "Perkecil folder {name}",
-    "folderOptions": "Opsi {name}"
+    "folderOptions": "Opsi {name}",
+    "agentsEntry": "Agen",
+    "agentsTitle": "Jelajahi agen dan mulai percakapan dengan salah satu"
   },
   "prompts": {
     "buildReusablePrompts": "Bangun prompt yang dapat digunakan kembali dengan bantuan AI",
@@ -4819,5 +4821,46 @@
     "failed": "Gagal membagikan — tidak ada yang dibuat.",
     "copyFailed": "Tidak dapat menyalin tautan — silakan pilih dan salin secara manual di atas.",
     "lastMessagesCountLabel": "Jumlah pesan terbaru yang akan disertakan"
+  },
+  "toolModes": {
+    "webSearch": "Pencarian web",
+    "codeInterpreter": "Interpreter kode",
+    "off": "Nonaktif",
+    "auto": "Otomatis",
+    "always": "Selalu",
+    "routingPrivacy": "Privasi",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Pencarian Azure AI mengirimkan permintaan melalui Azure AI Foundry, yang mungkin menyimpannya.",
+    "learnMore": "Pelajari lebih lanjut"
+  },
+  "agentAttach": {
+    "browserTitle": "Agen",
+    "browserSubtitle": "Tambahkan agen dan konektor ke percakapan ini, atau mulai percakapan baru dengan agen. Sebagian besar bekerja dengan model apa pun yang Anda pilih.",
+    "searchPlaceholder": "Cari agen dan konektor…",
+    "loading": "Memuat agen…",
+    "noMatches": "Tidak ada yang cocok dengan pencarian Anda.",
+    "noAgents": "Tidak ada agen tersedia.",
+    "addToChat": "Tambahkan ke percakapan ini",
+    "removeFromChat": "Hapus dari percakapan ini",
+    "newChat": "Percakapan baru",
+    "attached": "Terlampir",
+    "detach": "Lepaskan",
+    "change": "Ubah",
+    "browse": "Jelajahi agen…",
+    "noAgent": "Tidak ada agen terlampir",
+    "close": "Tutup",
+    "kind": {
+      "rag": "Pengetahuan",
+      "prompt": "Persona",
+      "m365": "Pengetahuan (Microsoft 365)",
+      "org": "Pengetahuan",
+      "foundry": "Agen Foundry",
+      "connector": "Konektor"
+    },
+    "semantics": {
+      "your-model": "menggunakan model Anda",
+      "pinned-model": "model ditetapkan admin",
+      "own-model": "berjalan di model sendiri"
+    }
   }
 }

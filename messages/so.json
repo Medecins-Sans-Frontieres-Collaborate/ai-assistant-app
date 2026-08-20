@@ -986,7 +986,9 @@
     "quickActions": "Ficilada Degdegga ah",
     "expandFolder": "Balaadhi galka {name}",
     "collapseFolder": "Yaree galka {name}",
-    "folderOptions": "Xulashooyinka {name}"
+    "folderOptions": "Xulashooyinka {name}",
+    "agentsEntry": "Wakiillo",
+    "agentsTitle": "Baadh wakiillo waxaadna wada sheekaysi la bilaabi kartaa midkood"
   },
   "errors": {
     "somethingWentWrong": "Wax baa qalday",
@@ -4803,5 +4805,46 @@
     "failed": "Lama wadaagi karin — wax lama abuurin.",
     "copyFailed": "Link-ga lama koobi karin — fadlan kor ka dooro oo gacanta ku koobi.",
     "lastMessagesCountLabel": "Tirada fariimaha dhow ee la darinayo"
+  },
+  "toolModes": {
+    "webSearch": "Raadinta webka",
+    "codeInterpreter": "Fasiraadda koodhka",
+    "off": "Dami",
+    "auto": "Si toos ah",
+    "always": "Had iyo jeer",
+    "routingPrivacy": "Arrimaha asturnaanta",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI search waxay weydiimaha u dirtaa Azure AI Foundry, waana suurtagal inay kaydiso.",
+    "learnMore": "Wax dheeri ah baro"
+  },
+  "agentAttach": {
+    "browserTitle": "Wakiillo",
+    "browserSubtitle": "Ku dar wakiillo iyo isku-xidhayaal sheekadan, ama wakiil cusub la bilaaw. Waa la jaan qaadi karaan inta badan moodellada aad dooratay.",
+    "searchPlaceholder": "Raadi wakiillo iyo isku-xidhayaal…",
+    "loading": "Wakiillada waa la rarayaa…",
+    "noMatches": "Waxba lama helin raadintaada.",
+    "noAgents": "Wakiil lama heli karo.",
+    "addToChat": "Ku dar sheekadan",
+    "removeFromChat": "Ka saar sheekadan",
+    "newChat": "Sheeko cusub",
+    "attached": "Kusoo xiran",
+    "detach": "Ka xiro",
+    "change": "Beddel",
+    "browse": "Baadh wakiillo…",
+    "noAgent": "Wakiil sooxiran ma jiro",
+    "close": "Xidh",
+    "kind": {
+      "rag": "Aqoonta",
+      "prompt": "Qof ahaaneed",
+      "m365": "Aqoonta (Microsoft 365)",
+      "org": "Aqoonta",
+      "foundry": "Wakiilka Foundry",
+      "connector": "Isku-xidhaha"
+    },
+    "semantics": {
+      "your-model": "waxay adeegsataa moodelkaaga",
+      "pinned-model": "moodel uu doortay maamulaha",
+      "own-model": "waxay ku socotaa moodelkeeda gaarka ah"
+    }
   }
 }

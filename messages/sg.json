@@ -986,7 +986,9 @@
     "quickActions": "Sâra na hïngângö",
     "expandFolder": "Ngandë dosi {name}",
     "collapseFolder": "Kûâ dosi {name}",
-    "folderOptions": "Mbêtï ti {name}"
+    "folderOptions": "Mbêtï ti {name}",
+    "agentsEntry": "Bângbi",
+    "agentsTitle": "Zia bângbi kɛ pé ayeke zo jihâ na mo"
   },
   "errors": {
     "somethingWentWrong": "Ë a sara nzönî pepe",
@@ -4803,5 +4805,46 @@
     "failed": "Mo apêpe sô kété — tîngbi na mbênî wa wa.",
     "copyFailed": "Link so gbäala yângâ na — sèngä sélé na lo, kopié a gbênî.",
     "lastMessagesCountLabel": "Gbâ tî dënga tî ninga a yê sôkô"
+  },
+  "toolModes": {
+    "webSearch": "Könö na Internet",
+    "codeInterpreter": "Kötö na code",
+    "off": "Wete",
+    "auto": "Gbâ",
+    "always": "Ndüa",
+    "routingPrivacy": "Süngü",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI search köde na sô mbi Azure AI Foundry, a mbi yeke wáka tene sa go.",
+    "learnMore": "Yeke sô nzoni"
+  },
+  "agentAttach": {
+    "browserTitle": "Bângbi",
+    "browserSubtitle": "Tînga bângbi na connectors na ndû yângâ, mû yeke zo jihâ na bângbi. Sû sô a sô bänzi na model wangä.",
+    "searchPlaceholder": "Könö bângbi na connectors…",
+    "loading": "Bângbi yeke kötä…",
+    "noMatches": "Käte na könö mo hütsa.",
+    "noAgents": "Bângbi mbi yeke tena.",
+    "addToChat": "Kötï na ndû yângâ",
+    "removeFromChat": "Wete na ndû yângâ",
+    "newChat": "Ndû yângâ sô mbïko",
+    "attached": "Tîngä",
+    "detach": "Fâta",
+    "change": "Kange",
+    "browse": "Zia bângbi…",
+    "noAgent": "Bângbi mbi tîngä kena",
+    "close": "Kwê",
+    "kind": {
+      "rag": "Sûngö",
+      "prompt": "Ngangu",
+      "m365": "Sûngö (Microsoft 365)",
+      "org": "Sûngö",
+      "foundry": "Bângbi Foundry",
+      "connector": "Connector"
+    },
+    "semantics": {
+      "your-model": "yeke na model wangä",
+      "pinned-model": "model a admin a zia",
+      "own-model": "yeke na model iye"
+    }
   }
 }

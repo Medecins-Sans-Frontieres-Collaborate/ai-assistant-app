@@ -852,7 +852,9 @@
     "quickActions": "Schnellaktionen",
     "expandFolder": "Ordner {name} erweitern",
     "collapseFolder": "Ordner {name} reduzieren",
-    "folderOptions": "Optionen für {name}"
+    "folderOptions": "Optionen für {name}",
+    "agentsEntry": "Agenten",
+    "agentsTitle": "Agenten durchsuchen und mit einem chatten"
   },
   "errors": {
     "somethingWentWrong": "Etwas ist schief gelaufen",
@@ -4819,5 +4821,46 @@
     "failed": "Konnte nicht teilen — nichts wurde erstellt.",
     "copyFailed": "Link konnte nicht kopiert werden – bitte oben auswählen und manuell kopieren.",
     "lastMessagesCountLabel": "Anzahl der letzten Nachrichten, die einbezogen werden"
+  },
+  "toolModes": {
+    "webSearch": "Websuche",
+    "codeInterpreter": "Code-Interpreter",
+    "off": "Aus",
+    "auto": "Automatisch",
+    "always": "Immer",
+    "routingPrivacy": "Datenschutz",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI Search sendet Anfragen über Azure AI Foundry, die diese möglicherweise speichert.",
+    "learnMore": "Mehr erfahren"
+  },
+  "agentAttach": {
+    "browserTitle": "Agenten",
+    "browserSubtitle": "Fügen Sie diesem Chat Agenten und Connectoren hinzu oder starten Sie einen neuen Chat mit einem Agenten. Die meisten funktionieren mit dem von Ihnen gewählten Modell.",
+    "searchPlaceholder": "Agenten und Connectoren suchen…",
+    "loading": "Lade Agenten…",
+    "noMatches": "Keine Treffer für Ihre Suche.",
+    "noAgents": "Keine Agenten verfügbar.",
+    "addToChat": "Zu diesem Chat hinzufügen",
+    "removeFromChat": "Aus diesem Chat entfernen",
+    "newChat": "Neuer Chat",
+    "attached": "Hinzugefügt",
+    "detach": "Entfernen",
+    "change": "Ändern",
+    "browse": "Agenten durchsuchen…",
+    "noAgent": "Kein Agent hinzugefügt",
+    "close": "Schließen",
+    "kind": {
+      "rag": "Wissen",
+      "prompt": "Persona",
+      "m365": "Wissen (Microsoft 365)",
+      "org": "Wissen",
+      "foundry": "Foundry-Agent",
+      "connector": "Connector"
+    },
+    "semantics": {
+      "your-model": "verwendet Ihr Modell",
+      "pinned-model": "vom Admin festgelegtes Modell",
+      "own-model": "nutzt eigenes Modell"
+    }
   }
 }

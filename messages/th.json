@@ -823,7 +823,9 @@
     "quickActions": "การดำเนินการด่วน",
     "expandFolder": "ขยายโฟลเดอร์ {name}",
     "collapseFolder": "ย่อโฟลเดอร์ {name}",
-    "folderOptions": "ตัวเลือกของ {name}"
+    "folderOptions": "ตัวเลือกของ {name}",
+    "agentsEntry": "เอเจนต์",
+    "agentsTitle": "เรียกดูเอเจนต์และเริ่มแชทกับเอเจนต์"
   },
   "prompts": {
     "buildReusablePrompts": "สร้างพรอมต์ที่ใช้ซ้ำได้ด้วยความช่วยเหลือจาก AI",
@@ -4819,5 +4821,46 @@
     "failed": "ไม่สามารถแชร์ได้ — ไม่มีการสร้างข้อมูลใด",
     "copyFailed": "ไม่สามารถคัดลอกลิงก์ได้ — โปรดเลือกด้านบนและคัดลอกด้วยตนเอง",
     "lastMessagesCountLabel": "จำนวนข้อความล่าสุดที่ต้องการแนบ"
+  },
+  "toolModes": {
+    "webSearch": "ค้นหาบนเว็บ",
+    "codeInterpreter": "ตัวแปลโค้ด",
+    "off": "ปิด",
+    "auto": "อัตโนมัติ",
+    "always": "เสมอ",
+    "routingPrivacy": "ความเป็นส่วนตัว",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "ระบบค้นหาของ Azure AI จะส่งคำค้นผ่าน Azure AI Foundry ซึ่งอาจมีการเก็บข้อมูลไว้",
+    "learnMore": "ดูข้อมูลเพิ่มเติม"
+  },
+  "agentAttach": {
+    "browserTitle": "เอเจนต์",
+    "browserSubtitle": "เพิ่มเอเจนต์และคอนเนคเตอร์ไปยังแชทนี้ หรือเริ่มแชทใหม่กับเอเจนต์ ส่วนใหญ่สามารถทำงานกับโมเดลที่คุณเลือกได้",
+    "searchPlaceholder": "ค้นหาเอเจนต์และคอนเนคเตอร์…",
+    "loading": "กำลังโหลดเอเจนต์…",
+    "noMatches": "ไม่พบผลลัพธ์จากการค้นหา",
+    "noAgents": "ไม่มีเอเจนต์ให้ใช้งาน",
+    "addToChat": "เพิ่มในแชทนี้",
+    "removeFromChat": "ลบออกจากแชทนี้",
+    "newChat": "เริ่มแชทใหม่",
+    "attached": "แนบแล้ว",
+    "detach": "ถอดออก",
+    "change": "เปลี่ยน",
+    "browse": "เรียกดูเอเจนต์…",
+    "noAgent": "ไม่มีเอเจนต์ที่แนบอยู่",
+    "close": "ปิด",
+    "kind": {
+      "rag": "ความรู้",
+      "prompt": "บุคคลิก",
+      "m365": "ความรู้ (Microsoft 365)",
+      "org": "ความรู้",
+      "foundry": "Foundry agent",
+      "connector": "คอนเนคเตอร์"
+    },
+    "semantics": {
+      "your-model": "ใช้โมเดลของคุณ",
+      "pinned-model": "โมเดลที่ผู้ดูแลระบบกำหนด",
+      "own-model": "ทำงานบนโมเดลของตัวเอง"
+    }
   }
 }

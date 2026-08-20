@@ -906,7 +906,9 @@
     "quickActions": "Snabbåtgärder",
     "expandFolder": "Expandera mapp {name}",
     "collapseFolder": "Komprimera mapp {name}",
-    "folderOptions": "{name}-alternativ"
+    "folderOptions": "{name}-alternativ",
+    "agentsEntry": "Agenter",
+    "agentsTitle": "Bläddra bland agenter och starta en chatt med en"
   },
   "prompts": {
     "buildReusablePrompts": "Bygg återanvändbara prompter med AI-assistans",
@@ -4819,5 +4821,46 @@
     "failed": "Kunde inte dela — ingenting skapades.",
     "copyFailed": "Kunde inte kopiera länken — markera den ovan och kopiera manuellt.",
     "lastMessagesCountLabel": "Antal senaste meddelanden att inkludera"
+  },
+  "toolModes": {
+    "webSearch": "Webbsök",
+    "codeInterpreter": "Kodtolk",
+    "off": "Av",
+    "auto": "Auto",
+    "always": "Alltid",
+    "routingPrivacy": "Integritet",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI-sökning skickar frågor via Azure AI Foundry, som kan spara dem.",
+    "learnMore": "Läs mer"
+  },
+  "agentAttach": {
+    "browserTitle": "Agenter",
+    "browserSubtitle": "Lägg till agenter och kopplingar i denna chatt, eller starta en ny chatt med en agent. De flesta fungerar med den modell du valt.",
+    "searchPlaceholder": "Sök agenter och kopplingar…",
+    "loading": "Laddar agenter…",
+    "noMatches": "Inget matchar din sökning.",
+    "noAgents": "Inga agenter tillgängliga.",
+    "addToChat": "Lägg till i denna chatt",
+    "removeFromChat": "Ta bort från denna chatt",
+    "newChat": "Ny chatt",
+    "attached": "Tillagd",
+    "detach": "Ta bort",
+    "change": "Byt",
+    "browse": "Bläddra bland agenter…",
+    "noAgent": "Ingen agent tillagd",
+    "close": "Stäng",
+    "kind": {
+      "rag": "Kunskap",
+      "prompt": "Personlighet",
+      "m365": "Kunskap (Microsoft 365)",
+      "org": "Kunskap",
+      "foundry": "Foundry-agent",
+      "connector": "Koppling"
+    },
+    "semantics": {
+      "your-model": "använder din modell",
+      "pinned-model": "modell vald av admin",
+      "own-model": "kör på egen modell"
+    }
   }
 }

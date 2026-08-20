@@ -906,7 +906,9 @@
     "quickActions": "Быстрые действия",
     "expandFolder": "Развернуть папку {name}",
     "collapseFolder": "Свернуть папку {name}",
-    "folderOptions": "Параметры {name}"
+    "folderOptions": "Параметры {name}",
+    "agentsEntry": "Агенты",
+    "agentsTitle": "Просмотрите агентов и начните чат с одним из них"
   },
   "prompts": {
     "buildReusablePrompts": "Создавайте многоразовые подсказки с помощью ИИ",
@@ -4819,5 +4821,46 @@
     "failed": "Не удалось поделиться — ничего не создано.",
     "copyFailed": "Не удалось скопировать ссылку — выделите её выше и скопируйте вручную.",
     "lastMessagesCountLabel": "Количество последних сообщений для добавления"
+  },
+  "toolModes": {
+    "webSearch": "Веб-поиск",
+    "codeInterpreter": "Интерпретатор кода",
+    "off": "Выкл.",
+    "auto": "Авто",
+    "always": "Всегда",
+    "routingPrivacy": "Конфиденциальность",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Поиск Azure AI отправляет запросы через Azure AI Foundry, где они могут сохраняться.",
+    "learnMore": "Подробнее"
+  },
+  "agentAttach": {
+    "browserTitle": "Агенты",
+    "browserSubtitle": "Добавьте агентов и коннекторы в этот чат или начните новый чат с агентом. Большинство из них работают с выбранной вами моделью.",
+    "searchPlaceholder": "Поиск агентов и коннекторов…",
+    "loading": "Загрузка агентов…",
+    "noMatches": "По вашему запросу ничего не найдено.",
+    "noAgents": "Нет доступных агентов.",
+    "addToChat": "Добавить в чат",
+    "removeFromChat": "Удалить из чата",
+    "newChat": "Новый чат",
+    "attached": "Подключен",
+    "detach": "Отключить",
+    "change": "Изменить",
+    "browse": "Просмотреть агентов…",
+    "noAgent": "Агент не подключён",
+    "close": "Закрыть",
+    "kind": {
+      "rag": "Знания",
+      "prompt": "Персона",
+      "m365": "Знания (Microsoft 365)",
+      "org": "Знания",
+      "foundry": "Foundry-агент",
+      "connector": "Коннектор"
+    },
+    "semantics": {
+      "your-model": "использует вашу модель",
+      "pinned-model": "модель задана администратором",
+      "own-model": "работает на собственной модели"
+    }
   }
 }

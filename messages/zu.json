@@ -986,7 +986,9 @@
     "quickActions": "Izenzo Ezisheshayo",
     "expandFolder": "Nweba ifolda {name}",
     "collapseFolder": "Songa ifolda {name}",
-    "folderOptions": "Izinketho zika-{name}"
+    "folderOptions": "Izinketho zika-{name}",
+    "agentsEntry": "Osebenzayo",
+    "agentsTitle": "Hlola osebenzayo bese uqala ingxoxo nomunye"
   },
   "errors": {
     "somethingWentWrong": "Kukhona okungahambanga kahle",
@@ -4803,5 +4805,46 @@
     "failed": "Kwehlulekile ukwabelana — akukho okwenziwe.",
     "copyFailed": "Ayikwazanga ukukopisha isixhumanisi — sikhethe ngenhla bese ukopisha ngesandla.",
     "lastMessagesCountLabel": "Inani lemilayezo yakamuva okufanele ifakwe"
+  },
+  "toolModes": {
+    "webSearch": "Ukusesha kuwebhu",
+    "codeInterpreter": "Umhumushi wekhodi",
+    "off": "Kuvaliwe",
+    "auto": "Okuzenzakalelayo",
+    "always": "Njalo",
+    "routingPrivacy": "Ubumfihlo",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Ukusesha kwe-Azure AI kuthumela imibuzo nge-Azure AI Foundry, okungenzeka kuzigcine.",
+    "learnMore": "Funda kabanzi"
+  },
+  "agentAttach": {
+    "browserTitle": "Osebenzayo",
+    "browserSubtitle": "Engeza osebenzayo kanye nezixhumi kule ngxoxo, noma uqale entsha nomunye osebenzayo. Abaningi basebenza nganoma imodeli oyikhethile.",
+    "searchPlaceholder": "Sesha osebenzayo nezixhumi…",
+    "loading": "Kulayishwa osebenzayo…",
+    "noMatches": "Akukho okufana nokuseshwe.",
+    "noAgents": "Abekho osebenzayo abatholakalayo.",
+    "addToChat": "Engeza kule ngxoxo",
+    "removeFromChat": "Susa kule ngxoxo",
+    "newChat": "Ingxoxo entsha",
+    "attached": "Kuqukethwe",
+    "detach": "Hlukanisa",
+    "change": "Shintsha",
+    "browse": "Hlola osebenzayo…",
+    "noAgent": "Awekho osebenzayo abaxhunywe",
+    "close": "Vala",
+    "kind": {
+      "rag": "Ulwazi",
+      "prompt": "Uhlamvu",
+      "m365": "Ulwazi (Microsoft 365)",
+      "org": "Ulwazi",
+      "foundry": "Umsebenzi we-Foundry",
+      "connector": "Isixhumi"
+    },
+    "semantics": {
+      "your-model": "isebenzisa imodeli yakho",
+      "pinned-model": "imodeli ebekwe umphathi",
+      "own-model": "isebenzisa imodeli yayo"
+    }
   }
 }

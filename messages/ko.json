@@ -906,7 +906,9 @@
     "quickActions": "빠른 작업",
     "expandFolder": "폴더 {name} 펼치기",
     "collapseFolder": "폴더 {name} 접기",
-    "folderOptions": "{name} 옵션"
+    "folderOptions": "{name} 옵션",
+    "agentsEntry": "에이전트",
+    "agentsTitle": "에이전트를 찾아보고 채팅을 시작하세요"
   },
   "prompts": {
     "buildReusablePrompts": "AI 지원으로 재사용 가능한 프롬프트 구축",
@@ -4819,5 +4821,46 @@
     "failed": "공유할 수 없습니다 — 아무 것도 생성되지 않았습니다.",
     "copyFailed": "링크를 복사할 수 없습니다 — 위에서 직접 선택하여 복사해 주세요.",
     "lastMessagesCountLabel": "포함할 최근 메시지 수"
+  },
+  "toolModes": {
+    "webSearch": "웹 검색",
+    "codeInterpreter": "코드 인터프리터",
+    "off": "끄기",
+    "auto": "자동",
+    "always": "항상",
+    "routingPrivacy": "개인정보",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI 검색은 쿼리를 Azure AI Foundry를 통해 전송하며, 이때 쿼리가 저장될 수 있습니다.",
+    "learnMore": "자세히 알아보기"
+  },
+  "agentAttach": {
+    "browserTitle": "에이전트",
+    "browserSubtitle": "이 채팅에 에이전트와 커넥터를 추가하거나, 에이전트로 새 채팅을 시작할 수 있습니다. 대부분은 선택한 모델과 함께 작동합니다.",
+    "searchPlaceholder": "에이전트 및 커넥터 검색…",
+    "loading": "에이전트 불러오는 중…",
+    "noMatches": "검색 결과가 없습니다.",
+    "noAgents": "사용 가능한 에이전트가 없습니다.",
+    "addToChat": "이 채팅에 추가",
+    "removeFromChat": "이 채팅에서 제거",
+    "newChat": "새 채팅",
+    "attached": "첨부됨",
+    "detach": "분리",
+    "change": "변경",
+    "browse": "에이전트 둘러보기…",
+    "noAgent": "첨부된 에이전트 없음",
+    "close": "닫기",
+    "kind": {
+      "rag": "지식",
+      "prompt": "페르소나",
+      "m365": "지식(Microsoft 365)",
+      "org": "지식",
+      "foundry": "Foundry 에이전트",
+      "connector": "커넥터"
+    },
+    "semantics": {
+      "your-model": "내 모델 사용",
+      "pinned-model": "관리자가 설정한 모델",
+      "own-model": "자체 모델로 실행"
+    }
   }
 }

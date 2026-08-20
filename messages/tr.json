@@ -906,7 +906,9 @@
     "quickActions": "Hızlı İşlemler",
     "expandFolder": "Klasörü genişlet {name}",
     "collapseFolder": "Klasörü daralt {name}",
-    "folderOptions": "{name} seçenekleri"
+    "folderOptions": "{name} seçenekleri",
+    "agentsEntry": "Agentlar",
+    "agentsTitle": "Agentlara göz atın ve biriyle sohbet başlatın"
   },
   "prompts": {
     "buildReusablePrompts": "AI yardımıyla yeniden kullanılabilir istemler oluşturun",
@@ -4819,5 +4821,46 @@
     "failed": "Paylaşılamadı — hiçbir şey oluşturulmadı.",
     "copyFailed": "Bağlantı kopyalanamadı — yukarıdan seçip manuel olarak kopyalayın.",
     "lastMessagesCountLabel": "Dahil edilecek son mesaj sayısı"
+  },
+  "toolModes": {
+    "webSearch": "Web araması",
+    "codeInterpreter": "Kod yorumlayıcı",
+    "off": "Kapalı",
+    "auto": "Otomatik",
+    "always": "Her zaman",
+    "routingPrivacy": "Gizlilik",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI araması, sorguları Azure AI Foundry üzerinden gönderir ve sorgular saklanabilir.",
+    "learnMore": "Daha fazla bilgi"
+  },
+  "agentAttach": {
+    "browserTitle": "Agentlar",
+    "browserSubtitle": "Bu sohbete agent ve bağlayıcılar ekleyin veya bir agent ile yeni bir sohbet başlatın. Çoğu, seçtiğiniz model ile uyumludur.",
+    "searchPlaceholder": "Agent ve bağlayıcıları arayın…",
+    "loading": "Agentlar yükleniyor…",
+    "noMatches": "Aramanızla eşleşen bir sonuç bulunamadı.",
+    "noAgents": "Uygun agent yok.",
+    "addToChat": "Sohbete ekle",
+    "removeFromChat": "Sohbetten çıkar",
+    "newChat": "Yeni sohbet",
+    "attached": "Eklendi",
+    "detach": "Ayır",
+    "change": "Değiştir",
+    "browse": "Agentlara göz at…",
+    "noAgent": "Hiçbir agent ekli değil",
+    "close": "Kapat",
+    "kind": {
+      "rag": "Bilgi",
+      "prompt": "Profil",
+      "m365": "Bilgi (Microsoft 365)",
+      "org": "Bilgi",
+      "foundry": "Foundry agent",
+      "connector": "Bağlayıcı"
+    },
+    "semantics": {
+      "your-model": "kendi modelinizi kullanır",
+      "pinned-model": "yönetici tarafından atanmış model",
+      "own-model": "kendi modeli üzerinde çalışıyor"
+    }
   }
 }

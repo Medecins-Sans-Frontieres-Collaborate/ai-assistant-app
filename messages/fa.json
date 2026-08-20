@@ -831,7 +831,9 @@
     "quickActions": "اقدامات سریع",
     "expandFolder": "باز کردن پوشه {name}",
     "collapseFolder": "بستن پوشه {name}",
-    "folderOptions": "گزینه‌های {name}"
+    "folderOptions": "گزینه‌های {name}",
+    "agentsEntry": "نمایندگان",
+    "agentsTitle": "نمایندگان را مرور کنید و با یکی گفتگو را آغاز کنید"
   },
   "prompts": {
     "buildReusablePrompts": "ساخت پرامپت‌های قابل استفاده مجدد با کمک هوش مصنوعی",
@@ -4819,5 +4821,46 @@
     "failed": "امکان اشتراک‌گذاری وجود ندارد — چیزی ایجاد نشد.",
     "copyFailed": "امکان کپی کردن لینک نبود — لطفاً آن را در بالا انتخاب و به صورت دستی کپی کنید.",
     "lastMessagesCountLabel": "تعداد پیام‌های اخیر برای درج"
+  },
+  "toolModes": {
+    "webSearch": "جستجوی وب",
+    "codeInterpreter": "تفسیرگر کد",
+    "off": "خاموش",
+    "auto": "خودکار",
+    "always": "همیشه",
+    "routingPrivacy": "حریم خصوصی",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "جستجوی Azure AI درخواست‌ها را از طریق Azure AI Foundry ارسال می‌کند که ممکن است آنها را ذخیره کند.",
+    "learnMore": "بیشتر بدانید"
+  },
+  "agentAttach": {
+    "browserTitle": "نمایندگان",
+    "browserSubtitle": "نمایندگان و کانکتورها را به این گفتگو اضافه کنید یا یک گفتگوی جدید با نماینده‌ای آغاز کنید. بیشتر آنها با هر مدلی که انتخاب کرده‌اید کار می‌کنند.",
+    "searchPlaceholder": "جستجوی نمایندگان و کانکتورها…",
+    "loading": "در حال بارگذاری نمایندگان…",
+    "noMatches": "چیزی با جستجوی شما مطابقت ندارد.",
+    "noAgents": "نماینده‌ای موجود نیست.",
+    "addToChat": "افزودن به این گفتگو",
+    "removeFromChat": "حذف از این گفتگو",
+    "newChat": "گفتگوی جدید",
+    "attached": "متصل شد",
+    "detach": "جدا کردن",
+    "change": "تغییر",
+    "browse": "مرور نمایندگان…",
+    "noAgent": "نماینده‌ای متصل نیست",
+    "close": "بستن",
+    "kind": {
+      "rag": "دانش",
+      "prompt": "شخصیت",
+      "m365": "دانش (Microsoft 365)",
+      "org": "دانش",
+      "foundry": "نماینده Foundry",
+      "connector": "کانکتور"
+    },
+    "semantics": {
+      "your-model": "از مدل شما استفاده می‌کند",
+      "pinned-model": "مدل تعیین‌شده توسط ادمین",
+      "own-model": "روی مدل اختصاصی خود اجرا می‌شود"
+    }
   }
 }

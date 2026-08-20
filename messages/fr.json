@@ -852,7 +852,9 @@
     "quickActions": "Actions rapides",
     "expandFolder": "Développer le dossier {name}",
     "collapseFolder": "Réduire le dossier {name}",
-    "folderOptions": "Options {name}"
+    "folderOptions": "Options {name}",
+    "agentsEntry": "Agents",
+    "agentsTitle": "Parcourez les agents et démarrez une discussion avec l’un d’eux"
   },
   "errors": {
     "somethingWentWrong": "Quelque chose s'est mal passé",
@@ -4819,5 +4821,46 @@
     "failed": "Impossible de partager — rien n'a été créé.",
     "copyFailed": "Impossible de copier le lien — veuillez le sélectionner ci-dessus et copier manuellement.",
     "lastMessagesCountLabel": "Nombre de messages récents à inclure"
+  },
+  "toolModes": {
+    "webSearch": "Recherche web",
+    "codeInterpreter": "Interpréteur de code",
+    "off": "Désactivé",
+    "auto": "Auto",
+    "always": "Toujours",
+    "routingPrivacy": "Confidentialité",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "La recherche Azure AI envoie les requêtes via Azure AI Foundry, qui peut les conserver.",
+    "learnMore": "En savoir plus"
+  },
+  "agentAttach": {
+    "browserTitle": "Agents",
+    "browserSubtitle": "Ajoutez des agents et des connecteurs à cette discussion ou démarrez une nouvelle discussion avec un agent. La plupart fonctionnent avec le modèle que vous avez choisi.",
+    "searchPlaceholder": "Rechercher des agents et des connecteurs…",
+    "loading": "Chargement des agents…",
+    "noMatches": "Aucun résultat pour votre recherche.",
+    "noAgents": "Aucun agent disponible.",
+    "addToChat": "Ajouter à cette discussion",
+    "removeFromChat": "Retirer de cette discussion",
+    "newChat": "Nouvelle discussion",
+    "attached": "Ajouté",
+    "detach": "Retirer",
+    "change": "Changer",
+    "browse": "Parcourir les agents…",
+    "noAgent": "Aucun agent ajouté",
+    "close": "Fermer",
+    "kind": {
+      "rag": "Connaissance",
+      "prompt": "Personnalité",
+      "m365": "Connaissance (Microsoft 365)",
+      "org": "Connaissance",
+      "foundry": "Agent Foundry",
+      "connector": "Connecteur"
+    },
+    "semantics": {
+      "your-model": "utilise votre modèle",
+      "pinned-model": "modèle défini par l’administrateur",
+      "own-model": "utilise son propre modèle"
+    }
   }
 }
