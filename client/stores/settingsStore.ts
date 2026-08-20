@@ -713,12 +713,22 @@ interface SettingsStore {
   setSuggestRevisionsLargeRewriteRatio: (ratio: number) => void;
 
   /**
-   * Per-user Microsoft 365 opt-in. M365 features (attach from OneDrive/
-   * SharePoint, email import, save to OneDrive) stay hidden until the user
-   * explicitly connects in Settings → Connections — nothing is enabled by
-   * virtue of signing in (docs/M365_GRAPH_PERMISSIONS_REQUEST.md).
+   * Per-user Microsoft 365 connection. CONNECTED BY DEFAULT (since v57) —
+   * the tenant-wide admin consent covers the OAuth side, and the LD flags
+   * still gate every M365 surface, so this is the user-facing off switch
+   * rather than an opt-in gate. Users disconnect (or reconnect) in
+   * Settings → Connections; docs/M365_GRAPH_PERMISSIONS_REQUEST.md tracks
+   * the policy history (originally explicit opt-in).
    */
   m365Connected: boolean;
+  /**
+   * True once the USER has clicked Connect/Disconnect themselves (set only
+   * by setM365Connected). Distinguishes a deliberate choice from the
+   * default: migrations may flip the default for users who never chose
+   * (userSet false / absent), but must never override an explicit
+   * disconnect (userSet true). Keep for future default changes.
+   */
+  m365ConnectedUserSet: boolean;
   setM365Connected: (connected: boolean) => void;
 
   /**
@@ -891,7 +901,8 @@ export const useSettingsStore = create<SettingsStore>()(
       confirmStopFromButton: true,
       confirmStopFromKeyboard: true,
       autoClearResolvedEdits: false,
-      m365Connected: false,
+      m365Connected: true,
+      m365ConnectedUserSet: false,
       m365ToolsUserEnabled: true,
       m365SharedMailboxes: [],
       m365PlaybookChipsEnabled: true,
@@ -1609,15 +1620,19 @@ export const useSettingsStore = create<SettingsStore>()(
 
       setSuggestRevisions: (enabled) => set({ suggestRevisions: enabled }),
       setM365Connected: (connected) =>
+        // Only called from user-facing Connect/Disconnect controls, so it
+        // also records that the state is now a deliberate choice — future
+        // default-flip migrations must leave this user alone.
         set(
           connected
-            ? { m365Connected: true }
+            ? { m365Connected: true, m365ConnectedUserSet: true }
             : {
                 // Disconnecting drops the remembered save folder too — a stale
                 // drive id must not leak into the next connection. Shared
                 // mailboxes go with it: the list is meaningless without a
                 // connected account.
                 m365Connected: false,
+                m365ConnectedUserSet: true,
                 m365SaveDestination: null,
                 m365SaveSkipPicker: false,
                 m365PickerLocation: null,
@@ -1725,7 +1740,8 @@ export const useSettingsStore = create<SettingsStore>()(
             structuralReorders: false,
           },
           suggestRevisionsLargeRewriteRatio: DEFAULT_LARGE_REWRITE_RATIO,
-          m365Connected: false,
+          m365Connected: true,
+          m365ConnectedUserSet: false,
           m365SaveDestination: null,
           m365SaveSkipPicker: false,
           m365PickerLocation: null,
@@ -1734,7 +1750,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 56, // Increment this when schema changes to trigger migrations
+      version: 57, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1828,6 +1844,7 @@ export const useSettingsStore = create<SettingsStore>()(
         autoClearResolvedEdits: state.autoClearResolvedEdits,
         suggestRevisions: state.suggestRevisions,
         m365Connected: state.m365Connected,
+        m365ConnectedUserSet: state.m365ConnectedUserSet,
         // m365ToolsFlagEnabled is deliberately NOT persisted (LD mirror,
         // same rationale as mcpArbitraryFlagEnabled above).
         m365ToolsUserEnabled: state.m365ToolsUserEnabled,
@@ -2384,6 +2401,21 @@ export const useSettingsStore = create<SettingsStore>()(
             typeof state.agentBrowserUsage !== 'object'
           ) {
             state.agentBrowserUsage = {};
+          }
+        }
+
+        // Version 56 → 57: M365 goes connected-by-default. Pre-57 state
+        // cannot distinguish "never decided" from "explicitly disconnected"
+        // (both stored false), so this ONE migration flips everyone to
+        // connected and starts recording deliberate choices in
+        // m365ConnectedUserSet — accepted trade-off while the rollout is a
+        // small demo subset; anyone re-disconnecting now sticks forever.
+        // Future default changes must check m365ConnectedUserSet and leave
+        // users who chose (true) alone.
+        if (version < 57) {
+          if (typeof state.m365ConnectedUserSet !== 'boolean') {
+            state.m365Connected = true;
+            state.m365ConnectedUserSet = false;
           }
         }
 
