@@ -303,11 +303,60 @@ export function getStaticOauthClient(
  * fallback to DCR, because falling back would authenticate as the wrong
  * client and fail confusingly at the vendor instead of here.
  */
+/**
+ * Admin-stored OAuth app for a catalog key (Admin → Connectors), or null.
+ * Precedence: an admin record beats the MCP_OAUTH_* env vars — an admin who
+ * writes a record is deliberately overriding deployment config — and env
+ * remains the fallback so nothing breaks before any record exists (or when
+ * agent access control is disabled entirely).
+ *
+ * Unseal failures surface as the same 503 as connector secrets rather than
+ * silently falling through to env: the env app is very likely a DIFFERENT
+ * OAuth client, and authenticating as the wrong client fails confusingly at
+ * the vendor instead of here.
+ */
+async function getAdminCatalogOauthClient(
+  catalogKey: string,
+): Promise<{ clientId: string; clientSecret?: string } | null> {
+  const { AgentAccessService } =
+    await import('@/lib/services/agentAccess/AgentAccessService');
+  const service = AgentAccessService.getInstance();
+  if (!service.isEnabled()) return null;
+  await service.ensureFresh();
+  const app = service.getCatalogOauthApp(catalogKey);
+  if (!app) return null;
+
+  if (!app.clientSecret) {
+    return { clientId: app.clientId };
+  }
+  const { ConnectorSecretIntegrityError, unsealConnectorSecret } =
+    await import('@/lib/services/agentAccess/connectorSecretCrypto');
+  try {
+    return {
+      clientId: app.clientId,
+      clientSecret: unsealConnectorSecret(app.id, app.clientSecret),
+    };
+  } catch (error) {
+    if (error instanceof ConnectorSecretIntegrityError) {
+      throw new McpOauthError(
+        'This connector’s stored client secret could not be read; an administrator must re-enter it',
+        503,
+        'CONNECTOR_SECRET_UNREADABLE',
+      );
+    }
+    throw error;
+  }
+}
+
 export async function getOauthClientCredentials(
   entry: Pick<McpServerRequestEntry, 'catalogKey' | 'connectorId'>,
 ): Promise<{ clientId: string; clientSecret?: string } | null> {
   if (entry.connectorId === undefined) {
-    return getStaticOauthClient(entry.catalogKey);
+    if (entry.catalogKey === undefined) return null;
+    return (
+      (await getAdminCatalogOauthClient(entry.catalogKey)) ??
+      getStaticOauthClient(entry.catalogKey)
+    );
   }
 
   const { AgentAccessService } =
@@ -361,12 +410,24 @@ export async function getOauthClientCredentials(
  * Arbitrary (non-catalog) servers are deliberately absent: their DCR support
  * is unknown until discovery runs, so their UI keeps offering the attempt.
  */
-export function getCatalogOauthAppAvailability(): Record<string, boolean> {
+export async function getCatalogOauthAppAvailability(): Promise<
+  Record<string, boolean>
+> {
+  // One snapshot consult for all keys: admin-stored apps count as available
+  // exactly like env-configured ones. When agent access control is off, the
+  // getter returns null for every key and this reduces to the env answer.
+  const { AgentAccessService } =
+    await import('@/lib/services/agentAccess/AgentAccessService');
+  const service = AgentAccessService.getInstance();
+  if (service.isEnabled()) {
+    await service.ensureFresh();
+  }
   const availability: Record<string, boolean> = {};
   for (const entry of Object.values(MCP_CATALOG)) {
     if (entry.auth.style !== 'oauth' && !entry.alsoSupportsOauth) continue;
     availability[entry.key] =
       entry.supportsDynamicRegistration === true ||
+      service.getCatalogOauthApp(entry.key) !== null ||
       getStaticOauthClient(entry.key) !== null;
   }
   return availability;
