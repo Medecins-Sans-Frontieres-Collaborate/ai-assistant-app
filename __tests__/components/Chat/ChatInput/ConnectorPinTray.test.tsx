@@ -20,6 +20,17 @@ vi.mock('@/client/hooks/conversation/useConversations', () => ({
   }),
 }));
 
+// The agent section pulls the discovered-agent list (React Query + LD flags
+// underneath) — stub it so the connector rows under test render standalone.
+vi.mock('@/client/hooks/settings/useAvailableAgents', () => ({
+  useAvailableAgents: () => ({ agents: [], isLoading: false }),
+  findAttachedAgent: () => undefined,
+}));
+
+vi.mock('@/client/hooks/settings/useSettings', () => ({
+  useSettings: () => ({ models: [], defaultModelId: undefined }),
+}));
+
 type TestServer = {
   id: string;
   name: string;
