@@ -158,6 +158,11 @@ export class ChatService {
       reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high';
       verbosity?: 'low' | 'medium' | 'high';
       botId?: string;
+      /**
+       * True when botId is an EXPLICIT attachment (capabilities tray) riding
+       * a real model — unlocks decoupled agent resolution server-side.
+       */
+      agentAttached?: boolean;
       threadId?: string;
       searchMode?: SearchMode;
       webSearchOptions?: WebSearchOptions;
@@ -211,6 +216,7 @@ export class ChatService {
       reasoningEffort: options?.reasoningEffort,
       verbosity: options?.verbosity,
       botId: options?.botId,
+      agentAttached: options?.agentAttached,
       threadId: options?.threadId,
       searchMode: options?.searchMode,
       webSearchOptions: options?.webSearchOptions,
@@ -276,6 +282,11 @@ export class ChatService {
       reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high';
       verbosity?: 'low' | 'medium' | 'high';
       botId?: string;
+      /**
+       * True when botId is an EXPLICIT attachment (capabilities tray) riding
+       * a real model — unlocks decoupled agent resolution server-side.
+       */
+      agentAttached?: boolean;
       threadId?: string;
       searchMode?: SearchMode;
       forcedAgentType?: string;
@@ -298,6 +309,7 @@ export class ChatService {
       reasoningEffort: options?.reasoningEffort,
       verbosity: options?.verbosity,
       botId: options?.botId,
+      agentAttached: options?.agentAttached,
       threadId: options?.threadId,
       searchMode: options?.searchMode,
       forcedAgentType: options?.forcedAgentType,
