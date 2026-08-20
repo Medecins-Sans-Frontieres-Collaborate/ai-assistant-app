@@ -601,13 +601,18 @@ function normalizeRecord(
   // inferred from the narrative. Keep the raw model value for the (non-focus)
   // closing_project column, but do NOT append any closure text to the project
   // objective.
-  const rawClosing = record.is_closing_project || 'no';
+  // Closing status is derived from supplemental files in enrich (classifications
+  // + dates), not the narrative.
+  const rawClosing = 'no';
 
   // --- Purpose codes ---
   const purposeCodes = getPurposeCodes(missionCountry, projectName);
 
   // --- Emergency ---
-  const emergencyLlm = toYesNo(record.is_emergency_project || 'no');
+  // Emergency status comes from supplemental files only (classifications file
+  // or project list); the model's narrative reading is not used.
+  // Default value is No.
+  const emergencyLlm = 'No';
 
   // --- Remote management ---
   let remoteMgmt = toYesNo(record.has_remote_management || 'no');
