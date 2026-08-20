@@ -20,6 +20,7 @@ import {
 } from '@/lib/services/m365/tools/toolCatalog';
 import { isLocalModel } from '@/lib/services/models/localModels';
 
+import { isDecoupledAgentAttachment } from '@/lib/utils/app/agentAttachment';
 import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
 import { buildConversationContextSections } from '@/lib/utils/app/systemPrompt';
@@ -1296,6 +1297,10 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       temperature: settings.temperature,
       stream: modelSupportsStreaming,
       botId: conversation.bot,
+      // Decoupled attachment (capabilities tray): a bot riding a REAL model
+      // is an explicit attach; legacy `org-`-shaped models keep the
+      // historical scoped resolution instead.
+      agentAttached: isDecoupledAgentAttachment(conversation) || undefined,
       threadId: conversation.threadId,
       reasoningEffort:
         conversation.reasoningEffort || modelToSend.reasoningEffort,

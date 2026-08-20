@@ -396,6 +396,13 @@ interface SettingsStore {
   // Slash menu usage tracking
   slashMenuUsageCounts: Record<string, number>;
 
+  /**
+   * Agent-browser selection counts, keyed by browser item id (agent id or
+   * `connector-<id>`). Orders the browser list by usage — most-selected
+   * first, default order as tiebreaker — mirroring modelUsageStats.
+   */
+  agentBrowserUsage: Record<string, number>;
+
   // Chat input "+" dropdown tool personalization
   pinnedToolIds: string[];
   toolUsageCounts: Record<string, number>;
@@ -566,6 +573,7 @@ interface SettingsStore {
   incrementModelUsage: (modelId: string) => void;
   recordSuccessfulModelUsage: (modelId: string) => void;
   resetModelOrder: () => void;
+  incrementAgentBrowserUsage: (itemId: string) => void;
 
   // Organization Actions
   setOrganizationPreference: (org: MSFOrganization | null) => void;
@@ -842,6 +850,9 @@ export const useSettingsStore = create<SettingsStore>()(
 
       // Slash menu usage tracking
       slashMenuUsageCounts: {},
+
+      // Agent-browser usage ordering
+      agentBrowserUsage: {},
 
       // Chat input "+" dropdown tool personalization
       pinnedToolIds: [],
@@ -1420,6 +1431,14 @@ export const useSettingsStore = create<SettingsStore>()(
           customModelOrder: [],
         }),
 
+      incrementAgentBrowserUsage: (itemId) =>
+        set((state) => ({
+          agentBrowserUsage: {
+            ...state.agentBrowserUsage,
+            [itemId]: (state.agentBrowserUsage[itemId] ?? 0) + 1,
+          },
+        })),
+
       // Organization Actions
       setOrganizationPreference: (org) => set({ organizationPreference: org }),
 
@@ -1715,7 +1734,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 55, // Increment this when schema changes to trigger migrations
+      version: 56, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1791,6 +1810,7 @@ export const useSettingsStore = create<SettingsStore>()(
         reasoningEffort: state.reasoningEffort,
         verbosity: state.verbosity,
         slashMenuUsageCounts: state.slashMenuUsageCounts,
+        agentBrowserUsage: state.agentBrowserUsage,
         pinnedToolIds: state.pinnedToolIds,
         toolUsageCounts: state.toolUsageCounts,
         hiddenToolIds: state.hiddenToolIds,
@@ -2353,6 +2373,17 @@ export const useSettingsStore = create<SettingsStore>()(
         if (version < 55) {
           if (state.m365PickerLocation === undefined) {
             state.m365PickerLocation = null;
+          }
+        }
+
+        // Version 55 → 56: agent-browser usage ordering
+        if (version < 56) {
+          if (
+            state.agentBrowserUsage === undefined ||
+            state.agentBrowserUsage === null ||
+            typeof state.agentBrowserUsage !== 'object'
+          ) {
+            state.agentBrowserUsage = {};
           }
         }
 
