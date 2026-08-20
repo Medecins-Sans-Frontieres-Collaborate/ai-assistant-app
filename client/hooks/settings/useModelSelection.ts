@@ -26,6 +26,17 @@ export function useModelSelection() {
         model: model,
       };
 
+      // Leaving a LEGACY agent selection (bot mirroring an `org-` model id)
+      // must clear the mirror — left behind it would read as an explicit
+      // attachment and hijack the newly chosen model. A decoupled
+      // attachment (bot beside a real model) survives model switches.
+      if (
+        selectedConversation.bot &&
+        selectedConversation.model?.id === `org-${selectedConversation.bot}`
+      ) {
+        updates.bot = undefined;
+      }
+
       // If the conversation has never had a search mode set before, set it to INTELLIGENT
       if (
         selectedConversation.defaultSearchMode === undefined ||
