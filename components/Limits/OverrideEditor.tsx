@@ -9,6 +9,8 @@ import { FC, useMemo, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useM365PeopleSuggest } from '@/client/hooks/useM365PeopleSuggest';
+
 import {
   LimitEntry,
   LimitOverride,
@@ -91,6 +93,8 @@ export const OverrideEditor: FC<OverrideEditorProps> = ({
   defaultExpanded = true,
 }) => {
   const t = useTranslations('limits');
+  const tPeople = useTranslations('peopleSuggest');
+  const peopleSuggest = useM365PeopleSuggest();
   const [expanded, setExpanded] = useState(defaultExpanded);
   const [pendingAdd, setPendingAdd] = useState('');
   const draft: EntryDraft = useMemo(
@@ -312,6 +316,8 @@ export const OverrideEditor: FC<OverrideEditorProps> = ({
                 addHint={t('chipAddHint')}
                 removeLabel={t('removeChip')}
                 disabled={disabled}
+                suggest={override.scope === 'user' ? peopleSuggest : undefined}
+                suggestionsLabel={tPeople('listLabel')}
               />
             )}
           </div>
