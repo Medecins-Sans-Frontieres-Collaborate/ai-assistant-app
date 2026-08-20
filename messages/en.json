@@ -3945,7 +3945,30 @@
     "conflictTakeTheirs": "Take theirs",
     "conflictNoFieldDiff": "The values match — only the record version changed.",
     "conflictRecordGone": "This record was deleted (or could not be reloaded). Copy anything you need from the form, then reload.",
-    "groupsFlagOff": "Group targeting is not enabled for this environment yet. Existing group targets keep working."
+    "groupsFlagOff": "Group targeting is not enabled for this environment yet. Existing group targets keep working.",
+    "catalogOauth": {
+      "title": "Built-in connector OAuth apps",
+      "description": "Deployment-wide OAuth apps for the built-in connectors (GitHub, Asana, …). A record saved here overrides the MCP_OAUTH_* environment variables; removing it falls back to them. Client secrets are encrypted at rest and never shown again.",
+      "badgeAdmin": "Configured here",
+      "badgeEnv": "From environment",
+      "badgeNone": "Not configured",
+      "badgeDcr": "Self-registering",
+      "badgeDcrHint": "This provider can register an OAuth client automatically, so it works even without an app configured here.",
+      "clientIdLabel": "OAuth client ID",
+      "clientSecretLabel": "OAuth client secret",
+      "secretStoredPlaceholder": "Stored — type to replace, leave blank to keep",
+      "secretNewPlaceholder": "Paste the client secret",
+      "save": "Save",
+      "remove": "Remove",
+      "removeToEnv": "Remove (fall back to environment)",
+      "saved": "{name} OAuth app saved",
+      "removed": "{name} OAuth app removed",
+      "saveError": "Saving the OAuth app failed. Try again.",
+      "conflict": "This record changed elsewhere — reloaded, please retry.",
+      "storageUnavailable": "Admin storage is unreachable; existing records could not be listed. Saving is disabled until it recovers.",
+      "sealingUnavailable": "Secret encryption is not configured on this deployment (AUTH_SECRET missing) — client secrets cannot be saved.",
+      "updatedBy": "Updated by {by} on {at}"
+    }
   },
   "admin": {
     "title": "Admin",
@@ -4819,5 +4842,8 @@
     "consentMissing": "Your organization hasn't approved OneDrive access yet.",
     "blockedByPolicy": "Sharing was blocked by your organization's policy.",
     "failed": "Couldn't share — nothing was created."
+  },
+  "peopleSuggest": {
+    "listLabel": "Suggestions from your organization"
   }
 }
