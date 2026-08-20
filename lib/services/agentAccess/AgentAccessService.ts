@@ -22,6 +22,7 @@ import {
   StoredPromptAgent,
   bumpGeneration,
   createAgentAccessBlobStorage,
+  listAllCatalogOauthApps,
   listAllConnectors,
   listAllGuides,
   listAllM365Agents,
@@ -33,6 +34,7 @@ import {
 } from '@/lib/services/agentAccess/accessRulesStore';
 import {
   AgentAccessConfig,
+  CatalogOauthApp,
   Guide,
   M365Agent,
   McpConnector,
@@ -104,6 +106,8 @@ export interface AgentAccessSnapshot {
   promptAgents: PromptAgent[];
   /** Admin MCP connectors; empty when the feature is off or never loaded. */
   connectors: McpConnector[];
+  /** Admin catalog OAuth apps; empty when the feature is off or never loaded. */
+  catalogOauthApps: CatalogOauthApp[];
   /** Admin workflow guides; empty when the feature is off or never loaded. */
   guides: Guide[];
   /** M365 file-backed agents; empty when the feature is off or never loaded. */
@@ -148,6 +152,8 @@ interface LoadedState {
   promptAgentsById: Map<string, PromptAgent>;
   connectors: McpConnector[];
   connectorsById: Map<string, McpConnector>;
+  catalogOauthApps: CatalogOauthApp[];
+  catalogOauthAppsById: Map<string, CatalogOauthApp>;
   guides: Guide[];
   guidesById: Map<string, Guide>;
   m365Agents: M365Agent[];
@@ -298,6 +304,7 @@ export class AgentAccessService {
       configEtag: this.state?.configEtag ?? null,
       promptAgents: this.state?.promptAgents ?? [],
       connectors: this.state?.connectors ?? [],
+      catalogOauthApps: this.state?.catalogOauthApps ?? [],
       guides: this.state?.guides ?? [],
       m365Agents: this.state?.m365Agents ?? [],
       orgAgents: this.state?.orgAgents ?? [],
@@ -335,6 +342,16 @@ export class AgentAccessService {
   getConnectorById(id: string): McpConnector | null {
     if (!this.isEnabled()) return null;
     return this.state?.connectorsById.get(id) ?? null;
+  }
+
+  /**
+   * Admin-configured OAuth app for one curated catalog key (github, asana,
+   * …); null when none is stored (callers fall back to the MCP_OAUTH_* env
+   * vars) or when the feature is off. Same contract as getConnectorById.
+   */
+  getCatalogOauthApp(catalogKey: string): CatalogOauthApp | null {
+    if (!this.isEnabled()) return null;
+    return this.state?.catalogOauthAppsById.get(catalogKey) ?? null;
   }
 
   /** Admin workflow guides from the cached snapshot — callers ensureFresh() first. */
@@ -575,6 +592,30 @@ export class AgentAccessService {
         );
       }
 
+      // Catalog OAuth apps: same isolated-failure contract as connectors.
+      // A listing failure keeps last-known-good records; an absent record
+      // falls back to the env-var OAuth client, so this too fails closed
+      // (never to a wrong credential).
+      let catalogOauthApps: CatalogOauthApp[] =
+        this.state?.catalogOauthApps ?? [];
+      let catalogOauthAppsById: Map<string, CatalogOauthApp> =
+        this.state?.catalogOauthAppsById ?? new Map();
+      try {
+        const storedApps = await listAllCatalogOauthApps(storage);
+        catalogOauthApps = storedApps.map((stored) => stored.app);
+        catalogOauthAppsById = new Map<string, CatalogOauthApp>(
+          catalogOauthApps.map((app) => [app.id, app]),
+        );
+      } catch (error) {
+        console.error(
+          `[agent-access] catalog-oauth-app listing failed (${
+            this.state
+              ? 'keeping last-known-good records'
+              : 'env-var fallback until a load succeeds'
+          }; rules snapshot unaffected): ${sanitizeForLog(error)}`,
+        );
+      }
+
       // Guides: same isolated-failure contract as personas and connectors.
       // A listing failure leaves guides ABSENT — an absent guide rejects the
       // assess request that references it rather than injecting an unknown
@@ -665,6 +706,8 @@ export class AgentAccessService {
         promptAgentsById,
         connectors,
         connectorsById,
+        catalogOauthApps,
+        catalogOauthAppsById,
         guides,
         guidesById,
         m365Agents,
