@@ -615,7 +615,11 @@ function r19(
   year: number,
 ): Flag[] {
   const activities = safe(rec['Key Terms/Activities']).trim();
-  if (activities) return [];
+  if (
+    activities &&
+    !/^No \d{4} or current year activities found$/i.test(activities)
+  )
+    return [];
 
   const yearStr = String(Number(year));
   const source = safe(rec['Source File']);

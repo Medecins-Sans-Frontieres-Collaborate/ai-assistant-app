@@ -554,6 +554,10 @@ function normalizeRecord(
       : greenEvidence;
   }
 
+  if (!activitiesList.trim()) {
+    activitiesList = `No ${year} or current year activities found`;
+  }
+
   // --- Project name ---
   let projectName = record.project_name || '';
   if (!String(projectName).trim() && record._raw_text) {

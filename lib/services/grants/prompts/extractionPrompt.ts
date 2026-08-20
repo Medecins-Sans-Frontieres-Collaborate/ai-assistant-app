@@ -117,6 +117,38 @@ export function buildExtractionPrompt(
       'Format is 2-letter country code + 2-4 digit number (e.g., AF101, BD112)';
   }
 
+  // Multi-project examples in the OC's own code style, so e.g. OCB reviewers
+  // don't see OCA's P-codes in their prompt. [code, aliasesJson] pairs feed
+  // both the table/list illustration and the example JSON response. Only OCA
+  // shows populated aliases (the real Myanmar case); other OCs show [] so the
+  // example doesn't imply their documents are expected to define aliases.
+  const exampleCodesByOC: Record<string, [string, string][]> = {
+    OCA: [
+      ['P1054', '["MKA"]'],
+      ['P1055', '["MUS"]'],
+    ],
+    OCBA: [
+      ['ESAF183', '[]'],
+      ['ESNE110', '[]'],
+    ],
+    WaCA: [
+      ['BF201', '[]'],
+      ['MLW12', '[]'],
+    ],
+  };
+  const [exA, exB] = exampleCodesByOC[ocName] || [
+    ['AF183', '[]'],
+    ['AF101', '[]'],
+  ];
+  const tableExampleByOC: Record<string, string> = {
+    OCA: '"P1054 Kachin State IDP Healthcare", "P1055 Shan State ..."',
+    OCBA: '"ESAF183 Khost Maternal and Neonatal Healthcare", "ESNE110 ..."',
+    WaCA: '"BF201 Bobo-Dioulasso Healthcare", "MLW12 ..."',
+  };
+  const tableExample =
+    tableExampleByOC[ocName] ||
+    '"AF183 Khost Maternal and Neonatal Healthcare", "AF101 ..."';
+
   let multiProjectSection = `
 ## MULTIPLE PROJECTS IN ONE DOCUMENT
 FIRST, scan the ENTIRE document for EVERY distinct project code (a token matching the code pattern
@@ -128,7 +160,7 @@ Multiple codes can appear in several forms — treat ALL of these as multi-proje
   * a combined title or heading ("BD112 & BD114", "NG110 NG109", "SL-125 / SL-124", "UA120-121-122");
   * separate sections/pages, one per project;
   * a TABLE or LIST where each code sits beside its own project name, location, or budget line
-    (e.g. "P1054 Kachin State IDP Healthcare", "P1055 Shan State ...", each with its own budget).
+    (e.g. ${tableExample}, each with its own budget).
 Be exhaustive — a missed project code is a missed project. But do NOT invent projects, do NOT split
 a single project (one code) into several, and do NOT merge distinct codes into one.
 
@@ -161,8 +193,8 @@ Example multi-project response:
 {
     "document_type": "project narrative",
     "projects": [
-        {"project_code": "P1054", "project_name": "...", "project_aliases": ["MKA"], ...},
-        {"project_code": "P1055", "project_name": "...", "project_aliases": ["MUS"], ...}
+        {"project_code": "${exA[0]}", "project_name": "...", "project_aliases": ${exA[1]}, ...},
+        {"project_code": "${exB[0]}", "project_name": "...", "project_aliases": ${exB[1]}, ...}
     ]
 }
 \`\`\`
@@ -409,7 +441,7 @@ Good examples by focus area (each example is a real project, shown as its Projec
 2. Quotes should be 1-2 sentences max, directly mentioning the activity
 3. If the document is in French/Spanish/other, translate activity names and quote_english to English, but quote_original must be the VERBATIM source text as physically written in the document. Do NOT translate quote_english into another language to fill quote_original — copy only text that actually appears in the document (so Ctrl+F finds it). If the document is in English, quote_original is English and identical to quote_english.
 4. Return null for optional fields if not found
-5. If the year ${year} does not appear in the document, OR no ${year}-specific activities are described, return an EMPTY activities_${year} array. Do NOT populate it with activities from other years.
+5. If the year ${year} does not appear ANYWHERE in the document text, OR no ${year}-specific activities are described, return an EMPTY activities_${year} array so the report can state "No ${year} or current year activities found" for this project. An empty array is the correct, expected output in that case — do NOT populate it with activities from other years.
 6. Do NOT include operational/non-medical activities like capacity building, training, advocacy, stewardship, logistics, environmental sustainability, or supply chain management — only include MEDICAL SERVICE DELIVERY activities
 
 ## TERM NORMALIZATION (apply AFTER extracting all activities):
