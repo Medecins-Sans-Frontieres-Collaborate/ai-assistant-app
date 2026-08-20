@@ -3,6 +3,7 @@
 import {
   IconBrandWindows,
   IconPlugConnected,
+  IconRobot,
   IconX,
 } from '@tabler/icons-react';
 import { FC } from 'react';
@@ -10,6 +11,11 @@ import { FC } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
+import {
+  findAttachedAgent,
+  useAvailableAgents,
+} from '@/client/hooks/settings/useAvailableAgents';
+import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
 import {
@@ -17,8 +23,17 @@ import {
   M365_BUILTIN_SERVER_LABEL,
 } from '@/lib/services/m365/tools/toolCatalog';
 
+import {
+  agentModelSemantics,
+  detachAgentUpdates,
+  isAgentShapedModelId,
+} from '@/lib/utils/app/agentAttachment';
+
+import { ToolModeControls } from '@/components/Chat/ChatInput/ToolModeControls';
+
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
+import { useUIStore } from '@/client/stores/uiStore';
 
 /**
  * Inline connector tray above the composer: one row per configured MCP
@@ -44,7 +59,11 @@ import { useSettingsStore } from '@/client/stores/settingsStore';
  */
 export const ConnectorPinTray: FC = () => {
   const t = useTranslations('connectorPin');
+  const tAgent = useTranslations('agentAttach');
   const tM365 = useTranslations('m365.tools');
+  const { agents } = useAvailableAgents();
+  const { models, defaultModelId } = useSettings();
+  const setAgentBrowserOpen = useUIStore((s) => s.setAgentBrowserOpen);
   const mcpServers = useSettingsStore((s) => s.mcpServers);
   const updateMcpServer = useSettingsStore((s) => s.updateMcpServer);
   const m365Connected = useSettingsStore((s) => s.m365Connected);
@@ -95,6 +114,34 @@ export const ConnectorPinTray: FC = () => {
 
   const close = () => setTrayOpen(false);
 
+  // Agent section state — the attached agent (decoupled bot OR legacy
+  // agent-shaped model), its model semantics, and the detach action.
+  const attachedAgent = findAttachedAgent(agents, selectedConversation);
+  const modelIsAgentShaped = isAgentShapedModelId(
+    selectedConversation.model?.id,
+  );
+  const hasAgent =
+    !!attachedAgent || !!selectedConversation.bot || modelIsAgentShaped;
+  const agentName =
+    attachedAgent?.name ??
+    (modelIsAgentShaped
+      ? selectedConversation.model.name
+      : selectedConversation.bot) ??
+    '';
+  const agentSemantics = attachedAgent
+    ? agentModelSemantics(attachedAgent.kind)
+    : modelIsAgentShaped
+      ? 'own-model'
+      : 'your-model';
+  const detachAgent = () => {
+    const fallbackModel =
+      models.find((m) => m.id === defaultModelId) ?? models[0];
+    updateConversation(
+      selectedConversation.id,
+      detachAgentUpdates(selectedConversation, models, fallbackModel),
+    );
+  };
+
   return (
     <div
       className="relative mx-3 my-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#1c1c1c] px-3 py-2"
@@ -118,6 +165,46 @@ export const ConnectorPinTray: FC = () => {
           title={t('dismiss')}
         >
           <IconX size={14} />
+        </button>
+      </div>
+
+      {/* Agent — one quiet row: the attached agent with its model
+          semantics and a Detach action, or a browse entry point. */}
+      <div className="mt-2 flex items-center gap-2 border-b border-gray-200 pb-2 dark:border-gray-700">
+        <IconRobot
+          size={14}
+          className={`flex-shrink-0 ${hasAgent ? 'text-violet-500' : 'text-gray-400 dark:text-gray-500'}`}
+          aria-hidden="true"
+        />
+        {hasAgent ? (
+          <>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-xs text-gray-800 dark:text-gray-200">
+                {agentName}
+              </span>
+              <span className="block truncate text-[11px] text-gray-500 dark:text-gray-400">
+                {tAgent(`semantics.${agentSemantics}`)}
+              </span>
+            </span>
+            <button
+              type="button"
+              onClick={detachAgent}
+              className="flex-shrink-0 rounded-md px-2 py-0.5 text-xs text-gray-500 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-100 transition-colors"
+            >
+              {tAgent('detach')}
+            </button>
+          </>
+        ) : (
+          <span className="min-w-0 flex-1 truncate text-xs text-gray-500 dark:text-gray-400">
+            {tAgent('noAgent')}
+          </span>
+        )}
+        <button
+          type="button"
+          onClick={() => setAgentBrowserOpen(true)}
+          className="flex-shrink-0 rounded-md px-2 py-0.5 text-xs text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+        >
+          {hasAgent ? tAgent('change') : tAgent('browse')}
         </button>
       </div>
 
@@ -285,6 +372,10 @@ export const ConnectorPinTray: FC = () => {
           })}
         </ul>
       )}
+
+      {/* Tools — web search & code interpreter as Off/Auto/Always (the
+          model picker's former sections; Phase 2 consolidation). */}
+      <ToolModeControls />
 
       <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
         {pinnedId
