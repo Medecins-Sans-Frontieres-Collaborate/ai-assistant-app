@@ -496,6 +496,13 @@ function toIsoDate(value: unknown): string {
       return d.toISOString().slice(0, 10);
     }
   }
+  // European day.month.year (SAP exports write "15.08.2022").
+  const dm = s.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+  if (dm) {
+    const [, d, m, y] = dm;
+    if (+m >= 1 && +m <= 12 && +d >= 1 && +d <= 31)
+      return `${y}-${String(+m).padStart(2, '0')}-${String(+d).padStart(2, '0')}`;
+  }
   const parsed = new Date(s);
   if (!isNaN(parsed.getTime()) && s.length > 4)
     return parsed.toISOString().slice(0, 10);
@@ -513,45 +520,74 @@ function loadDates(
   const [path, matchType] = findFile(supplementalDir, spec.filename, 'dates');
   if (!path) return [{}, null, ''];
 
-  const data = loadTabular(path, spec.skiprows || 0);
-  if (!data || data.length === 0) return [{}, path, matchType];
-
-  const headers = Object.keys(data[0]);
-  const resolve = (
-    configured: unknown,
-    exact: string[],
-    words: string[],
-  ): string => {
-    if (configured && headers.includes(String(configured)))
-      return String(configured);
-    for (const h of headers) if (exact.includes(h.toLowerCase())) return h;
-    for (const h of headers) {
-      const hl = h.toLowerCase();
-      if (words.every((w) => hl.includes(w))) return h;
-    }
-    return '';
+  // Column wordings vary by OC's export tool (OCB: "ops_start_date"; OCBA's
+  // export: "Proj. def." / "Start date" / "Finish dat"), and SAP exports
+  // put legend rows above the header — so resolve columns tolerantly and, if
+  // that fails, scan downward for the real header row.
+  const tryResolve = (
+    data: AnyRecord[] | null,
+  ): {
+    data: AnyRecord[];
+    codeCol: string;
+    startCol: string;
+    endCol: string;
+  } | null => {
+    if (!data || data.length === 0) return null;
+    const headers = Object.keys(data[0]);
+    const resolve = (
+      configured: unknown,
+      exact: string[],
+      words: string[],
+      fallbackWords: string[] = [],
+    ): string => {
+      if (configured && headers.includes(String(configured)))
+        return String(configured);
+      for (const h of headers) if (exact.includes(h.toLowerCase())) return h;
+      for (const h of headers) {
+        const hl = h.toLowerCase();
+        if (words.every((w) => hl.includes(w))) return h;
+      }
+      for (const h of headers) {
+        const hl = h.toLowerCase();
+        if (fallbackWords.some((w) => hl.includes(w))) return h;
+      }
+      return '';
+    };
+    const codeCol = resolve(
+      spec.columns?.code,
+      ['project_code', 'project code', 'code', 'proj. def.', 'proj def'],
+      ['code'],
+      ['proj'],
+    );
+    const startCol = resolve(
+      spec.columns?.start_date,
+      ['ops_start_date', 'start_date', 'start date'],
+      ['start', 'date'],
+      ['start'],
+    );
+    const endCol = resolve(
+      spec.columns?.end_date,
+      ['ops_end_date', 'end_date', 'end date', 'finish date', 'finish dat'],
+      ['end', 'date'],
+      ['finish'],
+    );
+    if (!codeCol || (!startCol && !endCol)) return null;
+    return { data, codeCol, startCol, endCol };
   };
-  const codeCol = resolve(
-    spec.columns?.code,
-    ['project_code', 'project code', 'code'],
-    ['code'],
-  );
-  const startCol = resolve(
-    spec.columns?.start_date,
-    ['ops_start_date', 'start_date', 'start date'],
-    ['start', 'date'],
-  );
-  const endCol = resolve(
-    spec.columns?.end_date,
-    ['ops_end_date', 'end_date', 'end date'],
-    ['end', 'date'],
-  );
-  if (!codeCol || (!startCol && !endCol)) {
+
+  let resolved = tryResolve(loadTabular(path, spec.skiprows || 0));
+  if (!resolved && !spec.skiprows) {
+    for (let skip = 1; skip <= 10 && !resolved; skip++) {
+      resolved = tryResolve(loadTabular(path, skip));
+    }
+  }
+  if (!resolved) {
     console.log(
-      `  ! Dates file ${path.split('/').pop()}: could not resolve columns (headers: ${headers.join(', ')})`,
+      `  ! Dates file ${path.split('/').pop()}: could not resolve code/date columns on any of the first rows`,
     );
     return [{}, path, matchType];
   }
+  const { data, codeCol, startCol, endCol } = resolved;
 
   const result: Record<string, { start: string; end: string }> = {};
   for (const row of data) {
