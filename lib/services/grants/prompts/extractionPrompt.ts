@@ -74,15 +74,18 @@ export function buildExtractionPrompt(
   let codeHint: string;
 
   if (ocName === 'OCA') {
-    codeHint = 'Format is P + 3-4 digit number (e.g., P1412, P987)';
+    codeHint = 'Format is P + 4 digit number (e.g., P1036, P1655)';
   } else if (ocName === 'OCBA') {
-    codeHint = `Format is ES + 2-letter country + 2-4 digit number. In OCBA documents the code is frequently written WITHOUT the "ES" prefix, and sometimes as ONLY the number — e.g. "CODE PROJET: NE415", or "CÓDIGO DEL PROYECTO: 415". Return the code as country-letters + number: if the two country letters are already present, keep them; if ONLY the number is given, prepend the project country's ISO 3166-1 alpha-2 code (a project in Mexico numbered 415 → "MX415"; Niger 415 → "NE415"; note Niger=NE and Nigeria=NG differ). Do NOT add the "${codePrefix}" prefix yourself — it is applied automatically. NEVER discard a code just because it lacks the prefix.`;
+    codeHint = `Format is ES + 2-letter country + 2-4 digit number (e.g., ESBF103, ESCO123). In OCBA documents the code is frequently written WITHOUT the "ES" prefix, and sometimes as ONLY the number — e.g. "CODE PROJET: NE110", "BF104", or "CÓDIGO DEL PROYECTO: 107". Return the code as country-letters + number: if the two country letters are already present, keep them; if ONLY the number is given, prepend the project country's ISO 3166-1 alpha-2 code (a project in Mexico numbered 107 → "MX107"; Niger 110 → "NE110"; note Niger=NE and Nigeria=NG differ). Do NOT add the "${codePrefix}" prefix yourself — it is applied automatically. NEVER discard a code just because it lacks the prefix.`;
   } else if (ocName === 'OCP') {
     codeHint =
-      'Format is 2-letter country code + 2-4 digit number (e.g., AF110, CD507). One document may contain MULTIPLE projects.';
+      'Format is 2-letter country code + 2-4 digit number (e.g., BF182, CD105). One document may contain MULTIPLE projects.';
+  } else if (ocName === 'OCG') {
+    codeHint =
+      'Format is 2-letter country code + 2-4 digit number (e.g., TD180, MG161)';
   } else if (ocName === 'WaCA') {
     codeHint =
-      'Format is 2-3 letter code + optional W + 2-3 digit number (e.g., BF201, MLW12)';
+      'Format is 2-3 letter code + optional W + 2-3 digit number (e.g., TD270, CI261)';
   } else {
     codeHint =
       'Format is 2-letter country code + 2-4 digit number (e.g., AF101, BD112)';
@@ -102,66 +105,50 @@ export function buildExtractionPrompt(
       ['ESBF103', '[]'],
       ['ESBF104', '[]'],
     ],
+    OCB: [
+      ['AF183', '[]'],
+      ['AF101', '[]'],
+    ],
+    OCG: [
+      ['TD180', '[]'],
+      ['MG161', '[]'],
+    ],
+    OCP: [
+      ['CD105', '[]'],
+      ['BF182', '[]'],
+    ],
     WaCA: [
-      ['BF201', '[]'],
-      ['MLW12', '[]'],
+      ['TD270', '[]'],
+      ['TD274', '[]'],
     ],
   };
   const [exA, exB] = exampleCodesByOC[ocName] || [
-    ['AF183', '[]'],
-    ['AF101', '[]'],
+    ['XX101', '[]'],
+    ['XX102', '[]'],
   ];
   const tableExampleByOC: Record<string, string> = {
     OCA: '"P1054 Kachin State IDP Healthcare", "P1055 Shan State ..."',
+    OCB: '"AF183 Khost Maternal and Neonatal Healthcare", "AF101 ..."',
     OCBA: '"ESBF103 Bobo-Dioulasso Healthcare", "ESBF104 ..."',
-    WaCA: '"XXW01 <project name>", "XXW02 <project name>"',
+    OCG: '"TD180 Adré Primary Healthcare for Sudanese Refugees", "MG161 ..."',
+    OCP: '"CD105 Measles North Kivu", "BF182 ..."',
+    WaCA: '"TD270 Pediatrics and Nutrition Ndjamena", "TD274 ..."',
   };
   const tableExample =
     tableExampleByOC[ocName] ||
-    '"AF183 Khost Maternal and Neonatal Healthcare", "AF101 ..."';
+    '"XX101 <project name>", "XX102 <project name>"';
 
-  const exampleDoc =
+  const dashed = (c: string) => c.replace(/^([A-Z]+)/, '$1-');
+  const headingFormsExample =
     ocName === 'OCB'
-      ? {
-          code: 'NG110',
-          name: 'Maiduguri Emergency Nutrition Care',
-          objective:
-            'Large-scale malnutrition prevention and treatment, operating ITFCs and ATFCs and supporting malaria and epidemic response in Maiduguri, Borno State.',
-          atfcQuote:
-            'We will maintain the four current ATFCs across the LGAs and one ITFC, activating the second ITFC during the malnutrition peak.',
-        }
-      : {
-          code: 'NG162',
-          name: 'Katsina Nutrition Care',
-          objective:
-            'Large-scale malnutrition prevention and treatment, operating ITFCs and ATFCs and supporting malaria and epidemic response in Katsina State.',
-          atfcQuote:
-            "We will maintain four out of 5 current ATFCs in the three (3) LGAs (1 in Katsina 2 in Jibia and 1 in Mashi). 1 ITFC in (Kofar Sauri) and the second ITFC Turai Yar'Adua Hospital during the peak.",
-        };
+      ? '"BD112 & BD114", "NG110 NG109", "SL-125 / SL-124", "UA120-121-122"'
+      : `"${exA[0]} & ${exB[0]}", "${exA[0]} ${exB[0]}", "${dashed(exA[0])} / ${dashed(exB[0])}"`;
+  const combinedHeadingExample =
+    ocName === 'OCB' ? 'SL124 & SL125' : `${exA[0]} & ${exB[0]}`;
 
-  let multiProjectSection = `
-## MULTIPLE PROJECTS IN ONE DOCUMENT
-FIRST, scan the ENTIRE document for EVERY distinct project code (a token matching the code pattern
-"${codeRegex}"). The number of DISTINCT project codes = the number of projects to return.
-- Exactly ONE distinct code -> return a SINGLE JSON object (the schema below).
-- MORE THAN ONE distinct code -> the document describes MULTIPLE projects and you MUST extract EVERY
-  one: return {"projects": [ ... ]} with ONE object per distinct code, each following the FULL schema.
-Multiple codes can appear in several forms — treat ALL of these as multi-project:
-  * a combined title or heading ("BD112 & BD114", "NG110 NG109", "SL-125 / SL-124", "UA120-121-122");
-  * separate sections/pages, one per project;
-  * a TABLE or LIST where each code sits beside its own project name, location, or budget line
-    (e.g. ${tableExample}, each with its own budget).
-Be exhaustive — a missed project code is a missed project. But do NOT invent projects, do NOT split
-a single project (one code) into several, and do NOT merge distinct codes into one.
-
-ATTRIBUTION (critical when a document covers multiple projects/cost-centers): assign each activity, objective,
-location, and budget line ONLY to the specific project it belongs to. A service counts for a project ONLY if that
-project's own section, row, or budget line marks it. Do NOT copy one project's services onto another, and do NOT
-give every project the union of all services in the document. Two projects that share a combined narrative or
-heading (e.g. "SL124 & SL125") must still be differentiated by their individual details — never emit identical
-rows for distinct codes.
-
-PROJECT ALIASES (how multi-cost-center documents usually mark attribution): such documents typically define a
+  const aliasSection =
+    ocName === 'OCA'
+      ? `PROJECT ALIASES (how multi-cost-center documents usually mark attribution): such documents typically define a
 short alias or site abbreviation for each project code once, near the top — e.g. a cover table listing
 "P1054 Kachin State IDP Health Care (MKA)", "P1756 Hpakant Healthcare (HPK)", "P1072 Eastern Primary
 Healthcare WGM(LZ)" — and the body then references projects ONLY by alias ("a new Mental Health Supervisor
@@ -176,7 +163,123 @@ QUOTE INTEGRITY: never alter a place name, alias, or site abbreviation inside a 
 In EVERY project object include "project_aliases": an array of the EXACT alias strings the document uses for
 that project (e.g. ["MKA"]), or [] if the document defines none. Evidence discipline: every quote you attach to
 a project must come from that project's own text — a sentence labeled with ANOTHER project's alias is NOT
-evidence for this one, even for an activity both projects perform.
+evidence for this one, even for an activity both projects perform.`
+      : `PROJECT ALIASES (how multi-cost-center documents may mark attribution): such documents sometimes define a
+short alias or site abbreviation for each project code once, near the top — typically a cover table or header
+listing each project code beside its project name with a short abbreviation in parentheses — and the body then
+references projects ONLY by that abbreviation. If the document does this, you MUST:
+  1. Build the code-to-alias map from wherever the document introduces it (cover table, header, project list).
+  2. Resolve every alias-labeled activity, section, location, or budget line to that alias's project code and
+     attribute it there — an alias label IS that project's marker.
+  3. A sentence naming several aliases counts for EACH of those projects.
+Never leave a project without activities merely because its sections are labeled with the alias instead of the
+code — resolve the alias FIRST, then attribute. Do not treat an alias as a separate project.
+QUOTE INTEGRITY: never alter a place name, alias, or site abbreviation inside a quote — "quote_original" is copied character-for-character from the document, and "quote_english" must faithfully render it WITHOUT substituting a different project's location or alias for the one actually written. That substitution is falsification.
+In EVERY project object include "project_aliases": an array of the EXACT alias strings the document uses for
+that project, or [] if the document defines none. Evidence discipline: every quote you attach to a project
+must come from that project's own text — a sentence labeled with ANOTHER project's alias is NOT evidence for
+this one, even for an activity both projects perform.`;
+
+  // Worked-example identity per OC — each OC's example uses one of its own
+  // real projects (OCB: NG110 per its roster; OCBA: ESML104 per its allocation
+  // list; the NG162 default is a real OCP project and remains the fallback for
+  // OCs whose own example is not yet chosen).
+  const exampleDocByOC: Record<
+    string,
+    {
+      code: string;
+      country: string;
+      name: string;
+      objective: string;
+      atfcQuote: string;
+    }
+  > = {
+    OCB: {
+      code: 'NG110',
+      country: 'Nigeria',
+      name: 'Maiduguri Emergency Nutrition Care',
+      objective:
+        'Large-scale malnutrition prevention and treatment, operating ITFCs and ATFCs and supporting malaria and epidemic response in Maiduguri, Borno State.',
+      atfcQuote:
+        'We will maintain the four current ATFCs across the LGAs and one ITFC, activating the second ITFC during the malnutrition peak.',
+    },
+    OCBA: {
+      code: 'ESML104',
+      country: 'Mali',
+      name: 'Ansongo Referral Healthcare',
+      objective:
+        'Primary and secondary healthcare at the Ansongo referral health center, including malnutrition treatment through ITFC and ATFC services and malaria and epidemic response.',
+      atfcQuote:
+        'We will maintain the current ATFCs in the district and one ITFC, activating a second ITFC during the malnutrition peak.',
+    },
+  };
+  exampleDocByOC.OCA = {
+    code: 'P1397',
+    country: 'Chad',
+    name: 'Massakory Nutrition and Sexual and Reproductive Healthcare',
+    objective:
+      'Large-scale malnutrition prevention and treatment, operating ITFCs and ATFCs and supporting malaria and epidemic response in Massakory.',
+    atfcQuote:
+      'We will maintain the current ATFCs across the districts and one ITFC, activating the second ITFC during the malnutrition peak.',
+  };
+  exampleDocByOC.OCG = {
+    code: 'TD180',
+    country: 'Chad',
+    name: 'Adré Primary Healthcare for Sudanese Refugees',
+    objective:
+      'Primary healthcare for Sudanese refugees in Adré, including malnutrition treatment through ITFC and ATFC services and malaria and epidemic response.',
+    atfcQuote:
+      'We will maintain the current ATFCs in the camps and one ITFC, activating a second ITFC during the malnutrition peak.',
+  };
+  exampleDocByOC.OCP = {
+    code: 'NG162',
+    country: 'Nigeria',
+    name: 'Katsina Nutrition Care',
+    objective:
+      'Large-scale malnutrition prevention and treatment, operating ITFCs and ATFCs and supporting malaria and epidemic response in Katsina State.',
+    atfcQuote:
+      "We will maintain four out of 5 current ATFCs in the three (3) LGAs (1 in Katsina 2 in Jibia and 1 in Mashi). 1 ITFC in (Kofar Sauri) and the second ITFC Turai Yar'Adua Hospital during the peak.",
+  };
+  exampleDocByOC.WaCA = {
+    code: 'TD270',
+    country: 'Chad',
+    name: 'Ndjamena Pediatrics and Nutrition Care',
+    objective:
+      'Pediatric care and malnutrition treatment, operating ITFC and ATFC services and supporting malaria and epidemic response in Ndjamena.',
+    atfcQuote:
+      'We will maintain the current ATFCs across the city and one ITFC, activating the second ITFC during the malnutrition peak.',
+  };
+  const exampleDoc = exampleDocByOC[ocName] || {
+    code: 'XX101',
+    country: '<country>',
+    name: '<project name>',
+    objective: '<one-sentence project objective>',
+    atfcQuote: '<verbatim quote from the document>',
+  };
+
+  let multiProjectSection = `
+## MULTIPLE PROJECTS IN ONE DOCUMENT
+FIRST, scan the ENTIRE document for EVERY distinct project code (a token matching the code pattern
+"${codeRegex}"). The number of DISTINCT project codes = the number of projects to return.
+- Exactly ONE distinct code -> return a SINGLE JSON object (the schema below).
+- MORE THAN ONE distinct code -> the document describes MULTIPLE projects and you MUST extract EVERY
+  one: return {"projects": [ ... ]} with ONE object per distinct code, each following the FULL schema.
+Multiple codes can appear in several forms — treat ALL of these as multi-project:
+  * a combined title or heading (${headingFormsExample});
+  * separate sections/pages, one per project;
+  * a TABLE or LIST where each code sits beside its own project name, location, or budget line
+    (e.g. ${tableExample}, each with its own budget).
+Be exhaustive — a missed project code is a missed project. But do NOT invent projects, do NOT split
+a single project (one code) into several, and do NOT merge distinct codes into one.
+
+ATTRIBUTION (critical when a document covers multiple projects/cost-centers): assign each activity, objective,
+location, and budget line ONLY to the specific project it belongs to. A service counts for a project ONLY if that
+project's own section, row, or budget line marks it. Do NOT copy one project's services onto another, and do NOT
+give every project the union of all services in the document. Two projects that share a combined narrative or
+heading (e.g. "${combinedHeadingExample}") must still be differentiated by their individual details — never emit identical
+rows for distinct codes.
+
+${aliasSection}
 
 Example multi-project response:
 \`\`\`json
@@ -273,25 +376,16 @@ NOTE: ${ocName} frequently submits country-level documents that cover MANY proje
       ],
     ],
   ];
-  // OCA's tested baseline list, kept byte-identical: entries added later for
-  // other OCs do not appear in OCA's prompt.
+  // OCA's focus examples: OCA-owned projects only (the original mixed list
+  // included other OCs' codes).
   const OCA_LEGACY_EXAMPLES = new Set([
     'P1397',
-    'NG110',
-    'NG162',
     'P1005',
     'P1188',
     'P1642',
-    'TD180',
-    'PI120',
-    'AF183',
-    'SS153',
-    'CF144',
     'P1624',
     'P1709',
     'P1798',
-    'CF123',
-    'MG161',
   ]);
   const focusLines: string[] = [];
   for (const [area, examples] of FOCUS_EXAMPLES) {
@@ -355,13 +449,12 @@ ${nameInstructions}
      * "Soudan du Sud" → "South Sudan"
      * Always use full English names, no abbreviations or French names
 
-4. **start_date**: Return "" — project start dates are NOT taken from the narrative. They are
-   supplied by a separate supplemental dates file and joined to each project by code after
-   extraction; a project not covered by that file is reported as "No date found".
+NOTE — fields you do NOT output: start/end dates, new/emergency/closing project status, operating
+context, event category, and population type are not extracted from the narrative at all. They are
+filled from supplemental files (the dates file and the project classifications file) after
+extraction — do not include them in your JSON.
 
-5. **end_date**: Return "" — same as start_date, the supplemental dates file is the only source.
-
-6. **activities_${year}** (REQUIRED): ${year} activities only. 2-5 word concise labels.
+4. **activities_${year}** (REQUIRED): ${year} activities only. 2-5 word concise labels.
    - Use HIGH-LEVEL category names from this reference vocabulary: ${vocabText}
    - Extract EVERY distinct medical service category the project delivers — be thorough and exhaustive.
    - List each distinct service SEPARATELY. Do NOT let a broad category swallow a distinctly-provided service: if the project provides Neonatology, SGBV / sexual-violence care, Surgery, SRH, or Mental Health IN ADDITION to Maternal Health or Primary Healthcare, list EACH one separately — never fold them into a single broad label.
@@ -369,10 +462,10 @@ ${nameInstructions}
    - FINAL CHECK before you finish — scan the document once more for these frequently-provided but frequently-MISSED ${year} services, and include every one that is documented for THIS project: Maternal Health, SRH, Neonatology, SGBV / sexual-violence care, Surgery (including obstetric/C-section surgery), Nutrition (ITFC/ATFC), Vaccination, Mental Health / MHPSS, HIV, TB, NCDs, Malaria, WatSan, Emergency Care, Inpatient Care, Referral Services.
    - GOOD: "Maternal Health", "Neonatology", "Vaccination", "Mental Health", "Nutrition", "Surgery", "SRH", "HIV", "TB", "SGBV", "Palliative Care"
    - BAD: "Kangaroo Mother Care" (technique within Maternal Health — use "Maternal Health"), "Antimicrobial Stewardship" (operational protocol), "Capacity Building" (operational), "Biomedical Sustainability" (operational)
-   - MEDICAL vs NON-MEDICAL: for a medical project narrative, the activities list is its distinct MEDICAL service lines — do not pad it with the operational/administrative side-details every project has (logistics, HR, admin, supply chain). But when the document's PURPOSE is non-medical — a green/environmental initiative, construction or infrastructure work, a coordination office, a learning/training initiative — its substantive activities ARE the activities: report them as concise labels (e.g. "Solar Power Installation", "Waste Management", "Staff Training Program") rather than forcing medical labels onto them or leaving the list empty.
+   - MEDICAL vs NON-MEDICAL: for a medical project narrative, the activities list is its distinct MEDICAL service lines — do not pad it with the operational/administrative side-details every project has (logistics, HR, admin, supply chain). But when the document's PURPOSE is non-medical — a green/environmental initiative, construction or infrastructure work, a coordination office, a learning/training initiative — its substantive activities ARE the activities: report them as concise labels — for green/environmental work use the Subcategory terms from the shared Green Initiative Key Terms reference (e.g. "Renewable Energy Transition"); for construction or learning work use concise labels like "Facility Rehabilitation" or "Staff Training Program" — rather than forcing medical labels onto them or leaving the list empty.
    - When the document describes a broad package, expect 8-15 activities — if a project provides many medical services, list them ALL. Under-listing is a common and serious error.
 
-7. **evidence**: For EACH activity, provide citation evidence with TWO quotes:
+5. **evidence**: For EACH activity, provide citation evidence with TWO quotes:
    - **section**: The section name where the activity was found
    - **quote_english**: MUST be in English - if document is in French/Spanish/other, TRANSLATE this quote to English
    - **quote_original**: The text COPIED VERBATIM (character-for-character) from the document, exactly as it appears, so it can be found with Ctrl+F in the source. Use the language the document is ACTUALLY written in. IMPORTANT: many documents are written in ENGLISH even for French/Spanish-speaking countries — in that case quote_original is English and IDENTICAL to quote_english. Only when the document itself is written in another language is quote_original in that language. NEVER translate, paraphrase, localize, or reconstruct this field: do NOT translate quote_english into the country's language. If you cannot copy a verbatim matching passage from the document, leave it identical to quote_english (copy the English) — never invent text that is not physically in the document.
@@ -383,35 +476,12 @@ ${nameInstructions}
      * quote_english: "Strengthen mental healthcare activities with focus on identification and referral of cases at IDP sites."
      * quote_original: "Renforcement des activités de soins de santé mentale avec focus sur l'identification et orientation des cas au niveau des sites IDPs."
 
-8. **project_objective** (REQUIRED): One sentence about the project's main objective/focus and location
+6. **project_objective** (REQUIRED): One sentence about the project's main objective/focus and location
 ${objectiveInstructions}
 
-9. **is_new_project**: Return "no" — new-project status is NOT taken from the narrative. It is
-    determined from supplemental files after extraction: a project classified as Regular (not
-    Emergency) in the project classifications file whose ops start date (from the supplemental
-    dates file) falls in ${year} is a new project.
-
-10. **is_emergency_project**: Return "no" — emergency status is NOT taken from the narrative. It is
-    determined by the supplemental classifications file (Regular/Emergency); projects not listed
-    there are reported as "not in file".
-
-11. **is_closing_project**: Return "no" — closing status is NOT taken from the narrative. It is
-    determined from supplemental files: a project classified as Regular whose ops end date (from
-    the supplemental dates file) falls in ${year} is closing; Emergency projects and projects not
-    listed in the files are not.
-
-12. **is_community_centered**: Is this project primarily community-based or patient-centered in its delivery model? (yes/no)
+7. **is_community_centered**: Is this project primarily community-based or patient-centered in its delivery model? (yes/no)
     - "yes" if the project document describes delivering healthcare through a community-centered approach that ensures medical operations are both responsive to local needs and aligned with MSF's commitment to people-centered, context-sensitive, and culturally appropriate approaches that strengthen community agency and dignity.
     - "no" otherwise
-
-13. **context**: Return "" — the operating context is NOT interpreted from the narrative. It will be
-    supplied by a supplemental file and joined to each project by code after extraction.
-
-14. **event**: Return "" — the event category is NOT interpreted from the narrative. It will be
-    supplied by a supplemental file and joined to each project by code after extraction.
-
-15. **population_type**: Return "" — the population type is NOT interpreted from the narrative. It
-    will be supplied by a supplemental file and joined to each project by code after extraction.
 
 ## THEMATIC FOCUS FIELDS (yes/no — primary focus only):
 Answer "yes" ONLY if the thematic area is a PRIMARY, DEFINING purpose of the project — not merely one activity among many. These flags identify SPECIALIZED projects, not general hospitals that happen to offer a service.
@@ -426,11 +496,11 @@ Examples:
 - A pediatric inpatient care project = focuses_on_pediatrics: "yes"
 - focuses_on_refugees_idps: "yes" if displaced populations (refugees, IDPs, displaced) are an explicitly NAMED target group in the project description, even if the project also serves the general population
 
-16. **focuses_on_nutrition** 17. **focuses_on_refugees_idps** 18. **focuses_on_mental_health**
-19. **focuses_on_maternal_health** 20. **focuses_on_pediatrics** 21. **focuses_on_climate_impact**
+8. **focuses_on_nutrition** 9. **focuses_on_refugees_idps** 10. **focuses_on_mental_health**
+11. **focuses_on_maternal_health** 12. **focuses_on_pediatrics** 13. **focuses_on_climate_impact**
 
 ${focusExamplesSection}
-22. **document_type** (REQUIRED): Classify what KIND of document this is, based on its OVERALL purpose (this describes the DOCUMENT, not the project):
+14. **document_type** (REQUIRED): Classify what KIND of document this is, based on its OVERALL purpose (this describes the DOCUMENT, not the project):
     - "project narrative" — a dedicated proposal / annual plan whose primary purpose is to describe the actual project(s), including a country document that IS the project submission with per-project detail. This is the normal case.
     - "coordination" — a mission or national coordination / management document (e.g. "Coordination Nationale", mission analysis) that frames the mission rather than proposing a specific project.
     - "strategy" — a strategic plan or strategy paper.
@@ -447,17 +517,9 @@ ${focusExamplesSection}
     "document_type": "project narrative",
     "project_code": "${exampleDoc.code}",
     "project_name": "${exampleDoc.name}",
-    "country": "Nigeria",
-    "start_date": "",
-    "end_date": "",
+    "country": "${exampleDoc.country}",
     "project_objective": "${exampleDoc.objective}",
-    "is_new_project": "no",
-    "is_emergency_project": "no",
-    "is_closing_project": "no",
     "is_community_centered": "no",
-    "context": "",
-    "event": "",
-    "population_type": "",
     "focuses_on_nutrition": "yes",
     "focuses_on_refugees_idps": "no",
     "focuses_on_mental_health": "no",
@@ -506,7 +568,7 @@ ${focusExamplesSection}
 4. Return "not found" for optional fields if the information is not found in the document
 5. If the year ${year} does not appear ANYWHERE in the document text, OR no ${year}-specific activities are described, return "no ${year} or current year activities found" instead of an activities list. Do NOT populate it with activities from other years.
 6. Activities are the project's SUBSTANTIVE work. For MEDICAL project narratives that means MEDICAL SERVICE DELIVERY — do NOT pad the list with operational/administrative side-details (capacity building, training, advocacy, stewardship, logistics, supply chain management). For documents whose purpose is NON-MEDICAL, report the substantive non-medical activities the document describes:
-   - environmental impact (e.g. "Solar Power Installation", "Waste Management", "Energy Efficiency", "Water Conservation")
+   - environmental impact — use the Subcategory terms from the shared Green Initiative Key Terms reference (e.g. "Renewable Energy Transition", "Energy Efficiency & Reduced Energy Demand", "Water Security & Drought Adaptation", "Waste & Circular Resource Management")
    - construction (e.g. "Facility Construction", "Facility Rehabilitation", "Infrastructure Upgrade")
    - learning and development (e.g. "Staff Training Program", "Clinical Mentorship", "E-Learning Development")
    Being non-medical is NOT a reason to exclude a project's core activities.
@@ -519,6 +581,10 @@ ${normalizationText}
 NORMALIZATION RULES:
 - If multiple triggers map to the same canonical term, list the canonical term only ONCE
 - Use the reference vocabulary wherever possible — prefer canonical terms over inventing new labels
+- GREEN INITIATIVES: the same phrase-to-term grouping is applied automatically AFTER extraction using
+  the shared "Green Initiative Key Terms" reference — each narrative phrase it lists is matched in the
+  document and grouped into its Subcategory (e.g. "solar installation" → "Renewable Energy Transition").
+  Report the substantive green activities you find; the reference mapping standardizes the key terms.
 
 Now extract from this document:
 
