@@ -26,7 +26,7 @@ export default async function LimitsAdminPage() {
     redirect('/signin');
   }
 
-  if (!isGlobalAdmin(session.user?.mail)) {
+  if (!isGlobalAdmin(session.user)) {
     redirect('/');
   }
 
