@@ -2658,6 +2658,10 @@
       "map": {
         "label": "Maapu",
         "description": "Ṣèyí data kankan di ibi lórí maapu"
+      },
+      "grants": {
+        "label": "Ilana Ifowopamosi àwọn ilẹ̀ amáyédẹrù",
+        "description": "Ṣàfikun àti yọ data tó ṣàtúnṣe jáde láti àlàyé ilẹ̀ amáyédẹrù"
       }
     },
     "chooser": {
@@ -2667,7 +2671,8 @@
       "newTranslation": "Ìtumọ̀ tuntun",
       "newDocument": "Àkọsílẹ̀ tuntun",
       "newDataAnalysis": "Ìtúpalẹ̀ data tuntun",
-      "newMap": "Maapu tuntun"
+      "newMap": "Maapu tuntun",
+      "newGrants": "Ilana ilẹ̀ amáyédẹrù tuntun"
     },
     "translation": {
       "chooseLanguage": "Èdè ibi-afẹ́",
@@ -3284,7 +3289,8 @@
       "unknownType": "Ibànísọ̀rọ̀ yìí n lò iṣẹ́ tí ẹ̀dá yìí kò mọ̀. Àkọsílẹ̀ ibànísọ̀rọ̀ wà lókè yìí.",
       "untitled": "Ibànísọ̀rọ̀ Tuntun",
       "toggleMenu": "Yi àkójọ aṣayan padà",
-      "model": "Àpẹẹrẹ fún iṣẹ́ yìí"
+      "model": "Àpẹẹrẹ fún iṣẹ́ yìí",
+      "disabledByAdmin": "Akọ́sẹmọsẹ yìí ti wa ní àìmọ́ṣẹ́ ní ọwọ́ adarí. Ìtàn ìbànilẹ́rọ̀ wà nísàlẹ̀."
     },
     "tabs": {
       "label": "Ipo ìbànísọ̀rọ̀",
@@ -4061,7 +4067,11 @@
       "storageUnavailable": "Ko le wọle si ibi ipamọ admin; awọn igbasilẹ to wa ko le ṣe atokọ. A ti pa fifipamọ mọ titi ti o fi pada bọ.",
       "sealingUnavailable": "A ko ti ṣeto amuṣeri aṣiri lori aṣàlẹ yii (AUTH_SECRET ti nsọnu) — a ko le fipamọ client secrets.",
       "updatedBy": "A ti ṣagbeyẹwo nipasẹ {by} ni {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Ṣàṣàlàyé aṣojú tó wà nínú",
+    "orgAgentOverrideAction": "Ṣàṣàlàyé",
+    "orgAgentBuiltinBadge": "Tó wà nínú",
+    "orgAgentBuiltinHint": "A ṣe àtúnpinnu rẹ̀ nínú ìlànà deployment. Ìlànà ìforúkọsílẹ rẹ̀ le yípadà níbí; lo iṣàṣàlàyé láti yí àwọn ètò rẹ̀ padà láì déploy."
   },
   "localModels": {
     "title": "Àwòrán àgbéyẹ̀wò agbègbè",
@@ -4262,9 +4272,15 @@
       "connectors": "Àwọn asopọ agbari àti ẹni tó le lò wọn.",
       "guides": "Ìtọ́sọ́nà ara, itumọ̀ ọrọ̀ àti ìbámu.",
       "mapDatasets": "Àwọn àkójọpọ̀ data tí a ti yàn fún iṣẹ́ map.",
-      "localAdmins": "Fi ètò irọrun àṣẹ sí ọwọ́ àwọn mìíràn."
+      "localAdmins": "Fi ètò irọrun àṣẹ sí ọwọ́ àwọn mìíràn.",
+      "workflows": "Ṣí tabi pa àwọn akọ́sẹmọsẹ ìjíròrò fún gbogbo ènìyàn.",
+      "viewAs": "Ṣàyẹ̀wò àpẹẹrẹ bí ẹni tó bójú mu tàbí tó kọlùṣọ́n àìpẹ̀."
     },
-    "openSettings": "Ṣí eto"
+    "openSettings": "Ṣí eto",
+    "area": {
+      "workflows": "Àkọ́sẹmọsẹ",
+      "viewAs": "Wo gẹ́gẹ́ bí"
+    }
   },
   "limits": {
     "title": "Ìdìpọ̀ ìlò",
@@ -4874,5 +4890,103 @@
     "listLabel": "Awọn imọran lati ọdọ agbari rẹ",
     "searching": "N ṣe àwádi ilé-iṣẹ rẹ…",
     "noMatches": "Kò sí ìbámu pẹ̀lú àkójọ orúkọ — o lè tẹ adirẹsi náà sílẹ̀ lọ́wọ́"
+  },
+  "workflowsAdmin": {
+    "title": "Àkọ́sẹmọsẹ",
+    "description": "Mú kó wà ní ṣiṣẹ́ tàbí pa akọ́sẹmọsẹ kọọkan fún gbogbo ẹgbẹ́. Àkọ́sẹmọsẹ tó wa ni àìmọ́ṣẹ́ kò ní farahàn lórí akojọ oúnjé, àti àwọn sẹ́ńfà kọ ló máa forúkọrẹ̀ wọ́lé, paapá jùlọ fún àwọn tó ni ìtọ́kasí sí.",
+    "layeredNote": "Àmọ̀ran LaunchDarkly conversationWorkflows ṣi ń bẹ lori ìpilẹ̀ṣẹ̀: akọ́sẹmọsẹ tí a ti mú ṣiṣẹ́ níbí kìí ṣe pé kó wọ̀lé ayafi ibi tí àmì yìí wa lórí. Kò sí nnkan tí ojú ewé yìí le fi hàn bí àmì náà bá fi pamọ́.",
+    "loading": "N gbìyànjú láti rù ìlànà akọ́sẹmọsẹ…",
+    "loadError": "A kò le rù ìlànà akọ́sẹmọsẹ.",
+    "policyUnavailable": "A kò le ka ìlànà akọ́sẹmọsẹ láti ipamọ. Awọn yíyí yipada ti pamọ dípò wọ́n fi àyọkúrò hàn tí kò le ba a mu ohun tí a gbìmọ̀.",
+    "retry": "Tun gbìyànjú",
+    "enableAll": "Mú gbogbo ṣiṣẹ́",
+    "disableAll": "Pa gbogbo",
+    "enabledLabel": "Ti ṣiṣẹ́",
+    "disabledLabel": "Aìmọ́ṣẹ́",
+    "defaultOnHint": "Àyípadà ti kò bá sí ìlànà fipamọ: ti ṣiṣẹ́.",
+    "defaultOffHint": "Àyípadà ti kò bá sí ìlànà fipamọ: aìmọ́ṣẹ́ — adarí gbọ́dọ̀ ṣiṣẹ́ rẹ ní kedere.",
+    "grantsNote": "Ilana Ifowopamosi àwọn ilẹ̀ amáyédẹrù ní ìdìkà tó pọ̀ fún àwọn oníṣe MSF-USA nínú Ẹ̀ka Ètò tó ní \"grants\" nínú àkọlé iṣẹ́ wọn, tàbí nínú Systems tí àkọlé wọn bá ní \"innovation\". Mímú ṣiṣẹ́ rẹ níbí kò tú ìlànà yìí kálẹ̀ síwájú.",
+    "unsaved": "Ẹ ni ayipada tí a kò tíì fipamọ.",
+    "save": "Fipamọ",
+    "saving": "N ṣiṣẹ́ fipamọ…",
+    "saveSuccess": "Ìlànà akọ́sẹmọsẹ ti fipamọ.",
+    "saveError": "A kò le fi ìlànà akọ́sẹmọsẹ pamọ́.",
+    "conflictError": "Adarí mìíràn ti yí ìlànà padà tele. A ti tun gbà wọlé — jọ̀wọ́ ṣàyẹ̀wò àti fipamọ lẹ́ẹ̀kansi.",
+    "updatedByLine": "Ìkẹhin fipamọ ní ọwọ́ {by} ní {at}.",
+    "neverSaved": "Kò sí ìlànà tí a ti fipamọ sibẹ̀; àwọn àyípadà t'ó wa l'ókè ló wulo."
+  },
+  "viewAs": {
+    "title": "Wo gẹ́gẹ́ bí",
+    "description": "Ṣàyẹ̀wò àpẹẹrẹ ìṣe app fún ipade tirẹ̀ nikan, gẹ́gẹ́ bí ẹni tí ó bójú mu tàbí kọlùṣọ́n àìpẹ̀ tí ìfilọ́lẹ̀ àkọlé onà йилẹ̀ tabi awọn adarí ṣe n pinnu. Idirẹ́ kọ kọ́ yí padà: gbogbo ohun tí o dá ṣi jẹ́ tirẹ̀, àti gbogbo akọmọ àyẹ̀wo orúkọ rẹ wà.",
+    "activeTitle": "Ìṣe 'wo gẹ́gẹ́ bí' n ṣiṣẹ́",
+    "inactiveTitle": "Ìṣe 'wo gẹ́gẹ́ bí' kò ṣiṣẹ́",
+    "sections": {
+      "role": "Iṣẹ́ adarí",
+      "region": "Agbègbè data",
+      "attributes": "Àmì ìwé itọ́kasí",
+      "groups": "Ìjọpọ̀ ẹgbẹ́",
+      "presets": "Tótúntò"
+    },
+    "role": {
+      "global": "Adarí àgbáyé (ìṣẹ́ rẹ gangan)",
+      "local": "Adarí agbègbè",
+      "none": "Olùmúlò àwọ̀n",
+      "localKeysLabel": "Bọtìnì aṣojú tí a fi fún agbègbè",
+      "localKeysHint": "Bọtìnì aṣojú tó tọ́sọ́tọ́ tí adarí agbègbè le ṣe àtúnṣe. Fi silẹ bí ó ṣófo fún adarí agbègbè láìní aṣojú tí a fi fún.",
+      "noneWarning": "Gẹ́gẹ́ bí olùmúlò àwọ̀n, gbogbo apá adarí míì máa sọnù. Ojú ewé yìí ṣi wa níwọ̀le, ati pé ampẹ at'óri app máa n fi abala àbáyọ hàn."
+    },
+    "region": {
+      "actual": "Gẹ́gẹ́ bí otito ({region})",
+      "hint": "Yoo gbe àwọn ìbéèrè rẹ — ati gbogbo ohun tí o kó sórí ẹrọ lakoko ti o n ṣiṣẹ — sí ipamọ agbègbè míì. Yóò ṣiṣẹ ju ?regionOverride= kuki lọ."
+    },
+    "attributes": {
+      "department": "Ẹ̀ka",
+      "companyName": "Ilé-iṣẹ́",
+      "jobTitle": "Ìtòlẹ́ṣẹ",
+      "officeId": "Ọ́fíìsì",
+      "officeActual": "Ọ́fíìsì gidi",
+      "officeNone": "Kò sí ọ́fíìsì",
+      "actualValue": "Gidi: {value}",
+      "actualEmpty": "Gidi: (ofò)",
+      "hint": "Fi aaye kọọkan sílẹ̀ láì kún un lati fi iye gidi rẹ pamọ. Wọ́n lo wọ̀n yìí fún ìlànà ìfọkànsin, iye mímu títọ si àfikún àti ìlànà wọlé."
+    },
+    "groups": {
+      "label": "ID ẹgbẹ́",
+      "placeholder": "ID nkan ẹgbẹ́ Entra kan ní ilà kọọkan",
+      "hint": "Yóò rọ́pò mímu ẹgbẹ́ gidi rẹ fún ìpẹ̀yà yìí — kì í fi kún un — kí o le dá àjoinsí àti àìjọinsí àdánwò."
+    },
+    "presets": {
+      "grantsMember": "Olùkópa ẹgbẹ́ grants",
+      "regularUser": "Olùlò àtìlẹ́yìn",
+      "localAdmin": "Alákóso abẹ́lẹ̀, kò sí aṣojú",
+      "otherRegion": "Agbègbè míì",
+      "hint": "Àwọn àtúnyẹ̀wò ni wọ́nú fọ́ọ̀mù; kò sí ohun tí yóò ṣiṣẹ́ títí tí o fi tẹ Apply."
+    },
+    "apply": "Lọ́wọ́ sí i àti túnṣe",
+    "applying": "Nlọ́wọ́ sí i…",
+    "clear": "Jade kúrò nínú view-as",
+    "clearing": "N jade…",
+    "reset": "Tún fọ́ọ̀mù ṣe",
+    "nothingToApply": "Yàn o kere tan àtúnṣe kan kí o tó lo.",
+    "applyError": "A kò le fi View-as ṣiṣẹ́: {error}",
+    "clearError": "A kò le yọ View-as kúrò: {error}",
+    "loadError": "A kò le gbé ipo view-as wọlé.",
+    "retry": "Tun gbìyànjú",
+    "expiresNote": "View-as máa wà títí di wákàtí mẹjọ tàbí títí o fi jáde.",
+    "banner": {
+      "label": "N wo bíi",
+      "adjust": "Ṣàtúnṣe",
+      "exit": "Jade",
+      "role": {
+        "local": "alákóso abẹ́lẹ̀",
+        "none": "olùlò àtìlẹ́yìn"
+      },
+      "region": "agbègbè {region}",
+      "department": "ẹ̀ka \"{value}\"",
+      "companyName": "ilé-iṣẹ́ \"{value}\"",
+      "jobTitle": "ítòlẹ́ṣẹ \"{value}\"",
+      "officeId": "ọ́fíìsì {value}",
+      "groups": "{count, plural, one {# ẹgbẹ́} other {# ẹgbẹ́}}"
+    }
   }
 }

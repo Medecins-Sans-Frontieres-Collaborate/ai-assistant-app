@@ -2674,6 +2674,10 @@
       "map": {
         "label": "Karta",
         "description": "Omvandla data till platser på en karta"
+      },
+      "grants": {
+        "label": "Bidragshantering",
+        "description": "Stäm av och extrahera strukturerad data från bidragsberättelser"
       }
     },
     "chooser": {
@@ -2683,7 +2687,8 @@
       "newTranslation": "Ny översättning",
       "newDocument": "Nytt dokument",
       "newDataAnalysis": "Ny dataanalys",
-      "newMap": "Ny karta"
+      "newMap": "Ny karta",
+      "newGrants": "Ny bidragshantering"
     },
     "translation": {
       "chooseLanguage": "Målspråk",
@@ -3300,7 +3305,8 @@
       "unknownType": "Denna konversation använder ett arbetsflöde som denna version inte känner igen. Konversationshistoriken visas nedan.",
       "untitled": "Ny konversation",
       "toggleMenu": "Visa/dölj meny",
-      "model": "Modell för detta arbetsflöde"
+      "model": "Modell för detta arbetsflöde",
+      "disabledByAdmin": "Detta arbetsflöde har inaktiverats av en administratör. Konversationshistoriken visas nedan."
     },
     "tabs": {
       "label": "Konversationsläge",
@@ -4077,7 +4083,11 @@
       "storageUnavailable": "Adminlagring är inte tillgänglig; befintliga poster kunde inte listas. Spara är inaktiverat tills anslutningen återställs.",
       "sealingUnavailable": "Hemlighetskryptering är inte konfigurerad för denna deployment (AUTH_SECRET saknas) — klienthemligheter kan inte sparas.",
       "updatedBy": "Uppdaterad av {by} den {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Åsidosätt inbyggd agent",
+    "orgAgentOverrideAction": "Åsidosätt",
+    "orgAgentBuiltinBadge": "Inbyggd",
+    "orgAgentBuiltinHint": "Definierad i driftskonfigurationen. Dess åtkomstregel kan redigeras här; åsidosätt den för att ändra inställningarna utan ny driftsättning."
   },
   "localModels": {
     "title": "Lokala modeller",
@@ -4278,9 +4288,15 @@
       "connectors": "Organisationens connectors och vilka som kan använda dem.",
       "guides": "Stil-, terminologi- och regelefterlevnadsguider.",
       "mapDatasets": "Kurerade dataset tillgängliga för kartarbetsflödet.",
-      "localAdmins": "Delegera redigering av åtkomstregler till andra personer."
+      "localAdmins": "Delegera redigering av åtkomstregler till andra personer.",
+      "workflows": "Slå på eller av konversationsarbetsflöden för alla.",
+      "viewAs": "Testa appen som någon som uppfyller – eller inte uppfyller – ett villkor."
     },
-    "openSettings": "Öppna inställningar"
+    "openSettings": "Öppna inställningar",
+    "area": {
+      "workflows": "Arbetsflöden",
+      "viewAs": "Visa som"
+    }
   },
   "limits": {
     "title": "Användningsgränser",
@@ -4890,5 +4906,103 @@
     "listLabel": "Förslag från din organisation",
     "searching": "Söker i din organisation…",
     "noMatches": "Inga träffar i katalogen — du kan ange adressen manuellt"
+  },
+  "workflowsAdmin": {
+    "title": "Arbetsflöden",
+    "description": "Aktivera eller inaktivera varje arbetsflöde för hela organisationen. Ett inaktiverat arbetsflöde döljs i menyer och blockeras av servern, även för personer som annars har tillgång till det.",
+    "layeredNote": "Flaggan LaunchDarkly conversationWorkflows styr fortfarande utrullning: ett arbetsflöde som är aktiverat här är endast tillgängligt där flaggan är på. Denna sida kan inte göra något synligt som flaggan döljer.",
+    "loading": "Laddar arbetsflödets policy…",
+    "loadError": "Arbetsflödets policy kunde inte laddas.",
+    "policyUnavailable": "Arbetsflödets policy kunde inte läsas från lagringen. Växlarna är dolda istället för att visas med standardvärden som kanske inte motsvarar det som faktiskt gäller.",
+    "retry": "Försök igen",
+    "enableAll": "Aktivera alla",
+    "disableAll": "Inaktivera alla",
+    "enabledLabel": "Aktiverad",
+    "disabledLabel": "Inaktiverad",
+    "defaultOnHint": "Standard när ingen policy har sparats: aktiverad.",
+    "defaultOffHint": "Standard när ingen policy har sparats: inaktiverad – en administratör måste aktivera den manuellt.",
+    "grantsNote": "Bidragshantering är dessutom begränsad till MSF-USA-användare i Program-avdelningen med \"grants\" i sin jobbtitel, eller i Systems med \"innovation\" i titeln. Att aktivera det här breddar inte den regeln.",
+    "unsaved": "Du har osparade ändringar.",
+    "save": "Spara",
+    "saving": "Sparar…",
+    "saveSuccess": "Arbetsflödets policy har sparats.",
+    "saveError": "Arbetsflödets policy kunde inte sparas.",
+    "conflictError": "En annan administratör ändrade policyn först. Den har nu laddats om – granska och spara igen.",
+    "updatedByLine": "Senast sparad av {by} den {at}.",
+    "neverSaved": "Ingen policy har sparats än; ovanstående standardvärden gäller."
+  },
+  "viewAs": {
+    "title": "Visa som",
+    "description": "Testa appen, endast för din egen session, som någon som uppfyller eller inte uppfyller ett villkor som normalt avgörs av katalogen eller av administratörer. Din identitet ändras aldrig: allt du skapar förblir ditt, och varje granskningsrad anger fortfarande dig.",
+    "activeTitle": "Visa som är aktivt",
+    "inactiveTitle": "Visa som är inte aktivt",
+    "sections": {
+      "role": "Adminroll",
+      "region": "Dataregion",
+      "attributes": "Katalogattribut",
+      "groups": "Gruppmedlemskap",
+      "presets": "Förinställningar"
+    },
+    "role": {
+      "global": "Global administratör (din faktiska roll)",
+      "local": "Lokal administratör",
+      "none": "Vanlig användare",
+      "localKeysLabel": "Delegerade agentnycklar",
+      "localKeysHint": "Kommaseparerade kanoniska agentnycklar som denna lokala administratör får redigera. Lämna tomt för en lokal administratör utan delegerade agenter.",
+      "noneWarning": "Som vanlig användare försvinner alla andra adminsidor. Den här sidan finns kvar, och bannern högst upp i appen erbjuder alltid en väg ut."
+    },
+    "region": {
+      "actual": "Verklig ({region})",
+      "hint": "Dirigerar dina förfrågningar — och allt du laddar upp när funktionen är aktiv — till den andra regionens lagring. Går före en ?regionOverride=-cookie."
+    },
+    "attributes": {
+      "department": "Avdelning",
+      "companyName": "Företag",
+      "jobTitle": "Jobbtitel",
+      "officeId": "Kontor",
+      "officeActual": "Faktiskt kontor",
+      "officeNone": "Inget kontor",
+      "actualValue": "Faktiskt: {value}",
+      "actualEmpty": "Faktiskt: (tomt)",
+      "hint": "Lämna ett fält tomt för att behålla ditt faktiska värde. Dessa används för bidragsregler, attributbaserade användningsgränser och åtkomstregler."
+    },
+    "groups": {
+      "label": "Grupp-id:n",
+      "placeholder": "Ett Entra group object id per rad",
+      "hint": "Ersätter — utökar inte — ditt faktiska medlemskap för denna session, så du kan testa tillhörighet och icke-tillhörighet."
+    },
+    "presets": {
+      "grantsMember": "Bidragsteammedlem",
+      "regularUser": "Vanlig användare",
+      "localAdmin": "Lokal administratör, inga agenter",
+      "otherRegion": "Annan region",
+      "hint": "Förinställningarna fyller i formuläret; inget gäller förrän du trycker på Verkställ."
+    },
+    "apply": "Verkställ och ladda om",
+    "applying": "Verkställer…",
+    "clear": "Avsluta visa som",
+    "clearing": "Avslutar…",
+    "reset": "Återställ formulär",
+    "nothingToApply": "Ange minst en åsidosättning för att verkställa.",
+    "applyError": "Visa som kunde inte verkställas: {error}",
+    "clearError": "Visa som kunde inte avslutas: {error}",
+    "loadError": "Visa som-status kunde inte laddas.",
+    "retry": "Försök igen",
+    "expiresNote": "Visa som varar upp till 8 timmar eller tills du avslutar.",
+    "banner": {
+      "label": "Visar som",
+      "adjust": "Justera",
+      "exit": "Avsluta",
+      "role": {
+        "local": "lokal administratör",
+        "none": "vanlig användare"
+      },
+      "region": "region {region}",
+      "department": "avdelning \"{value}\"",
+      "companyName": "företag \"{value}\"",
+      "jobTitle": "titel \"{value}\"",
+      "officeId": "kontor {value}",
+      "groups": "{count, plural, one {# grupp} other {# grupper}}"
+    }
   }
 }

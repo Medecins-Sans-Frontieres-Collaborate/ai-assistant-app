@@ -2658,6 +2658,10 @@
       "map": {
         "label": "Imephu",
         "description": "Guqula noma iyiphi idatha ibe yizindawo kwimephu"
+      },
+      "grants": {
+        "label": "Ukucubungula Izibonelelo",
+        "description": "Qhathanisa futhi uthole idatha ehlelekile ezindaba zezibonelelo"
       }
     },
     "chooser": {
@@ -2667,7 +2671,8 @@
       "newTranslation": "Ukuhumusha okusha",
       "newDocument": "Umbhalo omusha",
       "newDataAnalysis": "Ukuhlaziywa kwedatha okusha",
-      "newMap": "Imephu entsha"
+      "newMap": "Imephu entsha",
+      "newGrants": "Ukucubungula izibonelelo ezintsha"
     },
     "translation": {
       "chooseLanguage": "Ulimi oluqondiwe",
@@ -3284,7 +3289,8 @@
       "unknownType": "Le ngxoxo isebenzisa umsebenzi ongaziwa inguqulo yohlelo. Umlando wengxoxo uboniswa ngezansi.",
       "untitled": "Ingxoxo Entsha",
       "toggleMenu": "Vula noma vula kabusha imenyu",
-      "model": "Imodeli yomsebenzi lo"
+      "model": "Imodeli yomsebenzi lo",
+      "disabledByAdmin": "Lo msebenzi usuvinjelwe ngumlawuli. Umlando wengxoxo uboniswe ngezansi."
     },
     "tabs": {
       "label": "Imodi yengxoxo",
@@ -4061,7 +4067,11 @@
       "storageUnavailable": "Indawo yokugcina yama-Admin ayitholakali; amarekhodi akhona awakwazi ukuboniswa. Ukulondoloza akukhawulelwe kuze kulungiseke.",
       "sealingUnavailable": "Ukuvikeleka kwezimfihlo akukalungiswa kule deployment (AUTH_SECRET ayikho) — izimfihlo zamaklayenti azikwazi ukulondolozwa.",
       "updatedBy": "Kubuyekezwe ngu-{by} ngo-{at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Qeda isilungiselelo esizenzakalelayo se-ejenti",
+    "orgAgentOverrideAction": "Qeda",
+    "orgAgentBuiltinBadge": "Okuzenzakalelayo",
+    "orgAgentBuiltinHint": "Kuchazwe ku-deployment config. Umthetho wokufinyelela ungahlelelwa lapha; qeda isilungiselelo ukuze ushintshe izilungiselelo ngaphandle kwe-deploy."
   },
   "localModels": {
     "title": "Amamodeli endaweni",
@@ -4262,9 +4272,15 @@
       "connectors": "Izixhumanisi zenhlangano nabantu abangazisebenzisa.",
       "guides": "Imihlahlandlela yokusetshenziswa, amagama nezindinganiso.",
       "mapDatasets": "Amasethi edatha akhethiweyo atholakalayo emsebenzini wemephu.",
-      "localAdmins": "Nikeza abanye abantu ilungelo lokuhlela imithetho yokufinyelela."
+      "localAdmins": "Nikeza abanye abantu ilungelo lokuhlela imithetho yokufinyelela.",
+      "workflows": "Shintsha imisebenzi yengxoxo ivuleke noma ivinjwe kubo bonke.",
+      "viewAs": "Hlola uhlelo njengesinye isimo, noma singanelanga isimo esidingekayo."
     },
-    "openSettings": "Vula izilungiselelo"
+    "openSettings": "Vula izilungiselelo",
+    "area": {
+      "workflows": "Imisebenzi",
+      "viewAs": "Buka njengo"
+    }
   },
   "limits": {
     "title": "Imikhawulo yokusetshenziswa",
@@ -4874,5 +4890,103 @@
     "listLabel": "Izincomo ezivela enhlanganweni yakho",
     "searching": "Kuyaseshwa enhlangano yakho…",
     "noMatches": "Awekho okufanako kudayari — ungafaka ikheli mathupha"
+  },
+  "workflowsAdmin": {
+    "title": "Imisebenzi",
+    "description": "Vulela noma vimba umsebenzi ngamunye kuwo wonke umphakathi. Umsebenzi evaliwe ufihlwa kumamenyu futhi wenqatshwa iseva, noma ungabe umuntu efanelwe.»",
+    "layeredNote": "Ipharamitha ye-LaunchDarkly conversationWorkflows isalawula ukusakazwa: umsebenzi ovuliwe lapha utholakala kuphela lapho leyo pharamitha ivuliwe. Le khasi alikwazi kwenza lutho lubonakale uma iphutha likhona.",
+    "loading": "Kulayishwa inqubomgomo yokusebenza…",
+    "loadError": "Inqubomgomo yokusebenza ayikwazanga ukulayishwa.",
+    "policyUnavailable": "Inqubomgomo yokusebenza ayikwazanga ukufundwa kusitoreji. Izilungiselelo zifihlwe kunokuba ziboniswe ngamanani okuqala angase angafani namanye asebenza khona.",
+    "retry": "Phinda uzame",
+    "enableAll": "Vulela konke",
+    "disableAll": "Vimba konke",
+    "enabledLabel": "Kuvuliwe",
+    "disabledLabel": "Kuvaliwe",
+    "defaultOnHint": "Okuzokwenziwa uma inqubomgomo ingakagcinwa: kuvuliwe.",
+    "defaultOffHint": "Okuzokwenziwa uma inqubomgomo ingakagcinwa: kuvaliwe — umlawuli kufanele avule yona mathupha.",
+    "grantsNote": "Ukucubungula Izibonelelo kudlulelwe kuphela kubasebenzi be-MSF-USA abaphakathi kweSikhulu Senzuzo abane-\"grants\" esihlokweni somsebenzi, noma abaku-Systems abane-\"innovation\" esihlokweni. Ukuvula lapha akwandisi lowo mthetho.",
+    "unsaved": "Izinguquko zakho azikagcinwa.",
+    "save": "Gcina",
+    "saving": "Kuyagcinwa…",
+    "saveSuccess": "Inqubomgomo yokusebenza igciniwe.",
+    "saveError": "Inqubomgomo yokusebenza ayikwazanga ukugcinwa.",
+    "conflictError": "Omunye umlawuli usushintshe inqubomgomo kuqala. Ibuyiselwe — sicela uhlole bese ugcina futhi.",
+    "updatedByLine": "Okokugcina kugcinwe ngu-{by} ngomhlaka-{at}.",
+    "neverSaved": "Ayikakagcinwa inqubomgomo; okungenhla kuyasebenza."
+  },
+  "viewAs": {
+    "title": "Buka njengo",
+    "description": "Hlola uhlelo, esimisweni sakho kuphela, njengesimo esifanela noma esinganeli umbani oyinqubomgomo, okuvame ukunqunywa yi-directory noma abalawuli. Ubunikazi bakho abuguquki: konke okudala kusala kungokwakho futhi yonke imigqa yokuqapha ithwala igama lakho.",
+    "activeTitle": "I-View-as isebenza",
+    "inactiveTitle": "I-View-as ayisebenzi",
+    "sections": {
+      "role": "Indima yomlawuli",
+      "region": "Isifunda sedatha",
+      "attributes": "Izimfanelo ze-directory",
+      "groups": "Ububambiswano beqembu",
+      "presets": "Izilungiselelo zangaphambilini"
+    },
+    "role": {
+      "global": "Umlawuli omkhulu (yindima yakho yangempela)",
+      "local": "Umlawuli wendawo",
+      "none": "Umsebenzisi ojwayelekile",
+      "localKeysLabel": "Okhiye be-ejenti abahlaziyelwe",
+      "localKeysHint": "Okhiye be-ejenti bamukelwe abawuhlelelayo lo mlawuli wendawo, abahlukaniswe ngama-comma. Shiya likhulu uma umlawuli wendawo engenawo ama-ejenti anikeziwe.",
+      "noneWarning": "Njengomsebenzisi ojwayelekile yonke enye indawo yomlawuli iyanyamalala. Le khasi lihlala litholakala, futhi ibhendi ephezulu kohlelo ihlale ikhombisa indlela yokuphuma."
+    },
+    "region": {
+      "actual": "Okuyikho ({region})",
+      "hint": "Izicelo zakho — kanye nalokho okuthumele online ngesikhathi kusebenze — kuzogcinwa endaweni yesifunda esinye. Lokhu kudlula i-?regionOverride= cookie."
+    },
+    "attributes": {
+      "department": "Umnyango",
+      "companyName": "Inkampani",
+      "jobTitle": "Isikhundla somsebenzi",
+      "officeId": "Ihhovisi",
+      "officeActual": "Ihhovisi langempela",
+      "officeNone": "Akunahhovisi",
+      "actualValue": "Langempela: {value}",
+      "actualEmpty": "Langempela: (akukho)",
+      "hint": "Shiya inkambu ingenalutho uma ufuna ukugcina inani lakho langempela. Lokhu kusetshenziswa emigomeni yemvume, imikhawulo yokusetshenziswa kanye nemithetho yokufinyelela."
+    },
+    "groups": {
+      "label": "Ama-ID eqembu",
+      "placeholder": "I-Entra group object id eyodwa kulayini ngamunye",
+      "hint": "Kufaka esikhundleni — akwandisi — ubulungu bakho langempela kulesi sikhathi, ukuze uhlolise zombili izimo zokuba yingxenye noma cha."
+    },
+    "presets": {
+      "grantsMember": "Ilungu leqembu le-Grants",
+      "regularUser": "Umsebenzisi ojwayelekile",
+      "localAdmin": "Umphathi wendawo, awekho ama-ejenti",
+      "otherRegion": "Esinye isifunda",
+      "hint": "Amaphresethi agcwalisa ifomu; akukho okusebenza kuze uchofoze u-Apply."
+    },
+    "apply": "Faka bese ulayisha kabusha",
+    "applying": "Kuyafakwa…",
+    "clear": "Phuma ku-view-as",
+    "clearing": "Kuyaphumayo…",
+    "reset": "Setha kabusha ifomu",
+    "nothingToApply": "Beka okungenani okukodwa ukuze usebenzise.",
+    "applyError": "I-view-as ayikwazanga ukufakwa: {error}",
+    "clearError": "I-view-as ayikwazanga ukusulwa: {error}",
+    "loadError": "Isimo se-view-as asikwazanga ukulayishwa.",
+    "retry": "Phinda uzame",
+    "expiresNote": "I-view-as isebenza kufikela emahoreni angu-8, noma uma usuphuma.",
+    "banner": {
+      "label": "Ukubuka njenge",
+      "adjust": "Lungisa",
+      "exit": "Phuma",
+      "role": {
+        "local": "umphathi wendawo",
+        "none": "umsebenzisi ojwayelekile"
+      },
+      "region": "isifunda {region}",
+      "department": "umnyango \"{value}\"",
+      "companyName": "inkampani \"{value}\"",
+      "jobTitle": "isikhundla \"{value}\"",
+      "officeId": "ihhovisi {value}",
+      "groups": "{count, plural, one {# iqembu} other {# amaqembu}}"
+    }
   }
 }

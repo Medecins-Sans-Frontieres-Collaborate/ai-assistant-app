@@ -2658,6 +2658,10 @@
       "map": {
         "label": "Karte",
         "description": "Bûta données mbi na sâka ya na karte"
+      },
+      "grants": {
+        "label": "Sêse ti grants",
+        "description": "Kwêti na kekë ti bâgara data ti grants"
       }
     },
     "chooser": {
@@ -2667,7 +2671,8 @@
       "newTranslation": "Kêtî sangö mûtu",
       "newDocument": "Document mûtu",
       "newDataAnalysis": "Analize tî données mûtu",
-      "newMap": "Karte mûtu"
+      "newMap": "Karte mûtu",
+      "newGrants": "Sêse ti grants mbï"
     },
     "translation": {
       "chooseLanguage": "Sangö tî sû",
@@ -3284,7 +3289,8 @@
       "unknownType": "Bêrê-bîanî âti na workflow ti version a mbi ape na yeke bâ. Histrûa ti bêrê-bîanî ayeke a mbênî ndömâ.",
       "untitled": "Bêrê-bîanî mû",
       "toggleMenu": "Sûngbo menü",
-      "model": "Modelo ti workflow ôko"
+      "model": "Modelo ti workflow ôko",
+      "disabledByAdmin": "Administrateur a yeke pekê workflow ûtu. Bê ti dëfärï tîrï vënî akɛ nzönî."
     },
     "tabs": {
       "label": "Fason ya mbëtïrï",
@@ -4061,7 +4067,11 @@
       "storageUnavailable": "Admin storage a yâ tî hûngö; mbeti sô ayeke huli wa ape. Sêda yâ tî hûngö bada storage a bâka.",
       "sealingUnavailable": "Encryption tî secret a hinga kode ape na deployment a (AUTH_SECRET yâ tî hûngö) — OAuth client secret yâ tî hûngö sêda.",
       "updatedBy": "A sâra na {by} na {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Kûè ayeke agent so sènga",
+    "orgAgentOverrideAction": "Kûè",
+    "orgAgentBuiltinBadge": "So sènga",
+    "orgAgentBuiltinHint": "Adefini na config ti deployment. Regle ti accès anî na pengö nînî; ti kûè ape ndö ti yä tî ayeke règle sô ayê na deploy."
   },
   "localModels": {
     "title": "Model ti gbë na mbongo",
@@ -4262,9 +4272,15 @@
       "connectors": "Connector tî organisation na mo ayeke nîngu yângö.",
       "guides": "Style, têrminologie na guides tî conformité.",
       "mapDatasets": "Datasets sô ndurü tî workflow tî map.",
-      "localAdmins": "Tènè bina mo azanë tî yeke changer règle tî accès."
+      "localAdmins": "Tènè bina mo azanë tî yeke changer règle tî accès.",
+      "workflows": "Wûsa workflow ti nzönî sô vètè ndö ayeke ôko ôko.",
+      "viewAs": "Gbenza app tî ngu nzönî sô agbenza na fâa — walï walï — tî zîa sô tîrï ndurü."
     },
-    "openSettings": "Fungbi tî settings"
+    "openSettings": "Fungbi tî settings",
+    "area": {
+      "workflows": "Workflows",
+      "viewAs": "Gbenza ti…"
+    }
   },
   "limits": {
     "title": "Limitî tî nîngu",
@@ -4874,5 +4890,103 @@
     "listLabel": "Mbênî ya organisation tî mo",
     "searching": "Bi yeke ti mbênî wa na sô nginza…",
     "noMatches": "Ala ti nzönî na dite — oko yeke kûè adrèsê na lo mûngû"
+  },
+  "workflowsAdmin": {
+    "title": "Workflows",
+    "description": "Oko ti wûsa ndö pekê workflow kêtë na organisation wûsa tî. Sêse workflow sô apekê, ayake ngā na menu, na server vênî na ndü-ku, wa ngangu ayeke kodro na yâ la.",
+    "layeredNote": "Flag LaunchDarkly conversationWorkflows mo aji tî ghôrô rollout: workflow tî sêse so wûsa ape ayake gï na gbâ sô a wûsa flag. Nä page ape kpî mbi yeke kodro tî flag ape ghôrö.",
+    "loading": "Kûê policy ti workflow…",
+    "loadError": "Policy ti workflow ape kûê.",
+    "policyUnavailable": "Policy ti workflow ape yê na storage. Toggle ayê kpî, walï ape vënî na bâgara sô mbi kûë ti policy sô ayeke enforce.",
+    "retry": "Gwaga",
+    "enableAll": "Wûsa gï tî wose",
+    "disableAll": "Yêka gï tî wose",
+    "enabledLabel": "Ayeke wûsa",
+    "disabledLabel": "Ayeke pekê",
+    "defaultOnHint": "Sô policy ape kûê: ayeke wûsa.",
+    "defaultOffHint": "Sô policy ape kûê: ayeke pekê — admin ayeke gbênza sô ghôrö ndö.",
+    "grantsNote": "Sêse ti grants mo ànî sô ape besenî yângâ ti MSF-USA na Program department sô \"grants\" ayê na titre ti fadre, wala Systems tî \"innovation\" ayê na titre. Wûsa mo a, ape fetî règle lâ.",
+    "unsaved": "A yeke bâsë tî ape teni-ndu.",
+    "save": "Tenï-ndu",
+    "saving": "Tenï-ndu…",
+    "saveSuccess": "Policy ti workflow ateni-ndu.",
+    "saveError": "Policy ti workflow ape teni-ndu.",
+    "conflictError": "Mbï ti admin yeke tene policy tî mbï. Ngbâ kûê — yeke zîa na tenï sagâ.",
+    "updatedByLine": "Tenï-ndu ndö ti {by} na {at}.",
+    "neverSaved": "Policy apeni-ndu; default tî dô ayê na mbi mbênî."
+  },
+  "viewAs": {
+    "title": "Gbenza ti…",
+    "description": "Gbenza app tî so, na session tî yâ kpë, ti yâ ngangu sô agbenza na walï tî zîa sô ayeke wa na repertoire wala na admin. Nzönî tî yâ ape gbanî: na kereni yâ so awusa ayeke yâ, na audit ayeke bê ti yâ.",
+    "activeTitle": "Gbenza ti… ayeke wûsa",
+    "inactiveTitle": "Gbenza ti… ape wûsa",
+    "sections": {
+      "role": "Rolë ti admin",
+      "region": "Region ti data",
+      "attributes": "Attribut ti repertoire",
+      "groups": "Bodö ti group",
+      "presets": "Presets"
+    },
+    "role": {
+      "global": "Admin global (rolë ti ngangu yâ)",
+      "local": "Admin local",
+      "none": "Ködörö user",
+      "localKeysLabel": "Ködörö agent dè",
+      "localKeysHint": "Ngbagöse agent ko so local admin mo agbenza la. Kete le na mo local admin ape na agent dè.",
+      "noneWarning": "Na ködörö user, yângâ ti admin area ayè kpî. Page so ayeke vënî, na banner na lutu app ape wûsa tî zaré."
+    },
+    "region": {
+      "actual": "Titî ({region})",
+      "hint": "Ti lo mo yâ mo sôhênî ape ngu yeke gbe ti yângâ ti orë na, mo ape mo yeke cû mu kala ti cî na. Ala ti ga mbi na ?regionOverride= cookie."
+    },
+    "attributes": {
+      "department": "Departéma",
+      "companyName": "Ködörö",
+      "jobTitle": "Mbëtï tî wäkätî",
+      "officeId": "Ofisi",
+      "officeActual": "Ofisi kêtê",
+      "officeNone": "Ala ofisi",
+      "actualValue": "Kêtê: {value}",
+      "actualEmpty": "Kêtê: (mara mbênî)",
+      "hint": "Sôkô tî sêmô pa makôko mo alîngbi bîan. Yângâ akan yeke gbia, ti nsara grants, ti usage limits na ti access rules."
+    },
+    "groups": {
+      "label": "Group id",
+      "placeholder": "Group object id tî Entra môkô kô na linï",
+      "hint": "Wota nî yeke fan mô membership za la sessio so, mo yeke ga tî gbenî ape sô mondro kodoro."
+    },
+    "presets": {
+      "grantsMember": "Membre tî grants team",
+      "regularUser": "Linga tî biasa",
+      "localAdmin": "Local admin, ala agent",
+      "otherRegion": "Region bîan",
+      "hint": "Preset ti fû form, mo ala mbi söngö tî mo zo bändö Apply."
+    },
+    "apply": "Bändö na sôndö",
+    "applying": "Gbëngu…",
+    "clear": "Kûatî view-as",
+    "clearing": "Gbëngbë…",
+    "reset": "Sëkkë form",
+    "nothingToApply": "Set akötî yângâ mbi bändö.",
+    "applyError": "View-as abï yeke bändö: {error}",
+    "clearError": "View-as abï yeke kûatè: {error}",
+    "loadError": "View-as abï yeke sôkô na.",
+    "retry": "Gbi",
+    "expiresNote": "View-as yeke pèkë bïrï 8 tî ngû, walla tî mo kûatè.",
+    "banner": {
+      "label": "Mo yeke wèngö si",
+      "adjust": "Gbëtï",
+      "exit": "Kûatè",
+      "role": {
+        "local": "local admin",
+        "none": "linga tî biasa"
+      },
+      "region": "region {region}",
+      "department": "departéma \"{value}\"",
+      "companyName": "ködörö \"{value}\"",
+      "jobTitle": "mbëtï \"{value}\"",
+      "officeId": "ofisi {value}",
+      "groups": "{count, plural, one {# group} other {# group}}"
+    }
   }
 }

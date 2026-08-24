@@ -2674,6 +2674,10 @@
       "map": {
         "label": "Hartă",
         "description": "Transformați orice date în locații pe hartă"
+      },
+      "grants": {
+        "label": "Procesare granturi",
+        "description": "Reconciliază și extrage date structurate din narațiuni de grant"
       }
     },
     "chooser": {
@@ -2683,7 +2687,8 @@
       "newTranslation": "Traducere nouă",
       "newDocument": "Document nou",
       "newDataAnalysis": "Analiză de date nouă",
-      "newMap": "Hartă nouă"
+      "newMap": "Hartă nouă",
+      "newGrants": "Procesare granturi noi"
     },
     "translation": {
       "chooseLanguage": "Limba țintă",
@@ -3300,7 +3305,8 @@
       "unknownType": "Această conversație folosește un flux de lucru nerecunoscut de această versiune. Istoricul conversației este afișat mai jos.",
       "untitled": "Conversație nouă",
       "toggleMenu": "Comută meniul",
-      "model": "Model pentru acest flux de lucru"
+      "model": "Model pentru acest flux de lucru",
+      "disabledByAdmin": "Acest flux de lucru a fost dezactivat de un administrator. Istoricul conversației este afișat mai jos."
     },
     "tabs": {
       "label": "Mod conversație",
@@ -4077,7 +4083,11 @@
       "storageUnavailable": "Stocarea pentru administrare nu este accesibilă; înregistrările existente nu au putut fi listate. Salvarea este dezactivată până la remediere.",
       "sealingUnavailable": "Criptarea secretelor nu este configurată în această implementare (lipsește AUTH_SECRET) — secretele de client nu pot fi salvate.",
       "updatedBy": "Actualizat de {by} la {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Suprascriere agent integrat",
+    "orgAgentOverrideAction": "Suprascrie",
+    "orgAgentBuiltinBadge": "Integrat",
+    "orgAgentBuiltinHint": "Definit în configurația de implementare. Regula sa de acces poate fi modificată aici; suprascrieți pentru a schimba setările fără o implementare."
   },
   "localModels": {
     "title": "Modele locale",
@@ -4278,9 +4288,15 @@
       "connectors": "Conectori de organizație și cine îi poate utiliza.",
       "guides": "Ghiduri de stil, terminologie și conformitate.",
       "mapDatasets": "Seturi de date selectate disponibile pentru fluxul de lucru pe hartă.",
-      "localAdmins": "Deleagă editarea regulilor de acces altor persoane."
+      "localAdmins": "Deleagă editarea regulilor de acces altor persoane.",
+      "workflows": "Activează sau dezactivează fluxurile de conversație pentru toată lumea.",
+      "viewAs": "Testează aplicația ca și cum ai îndeplini — sau nu — o condiție."
     },
-    "openSettings": "Deschide setările"
+    "openSettings": "Deschide setările",
+    "area": {
+      "workflows": "Fluxuri de lucru",
+      "viewAs": "Vizualizează ca"
+    }
   },
   "limits": {
     "title": "Limite de utilizare",
@@ -4890,5 +4906,103 @@
     "listLabel": "Sugestii din organizația dumneavoastră",
     "searching": "Se caută în organizația dvs.…",
     "noMatches": "Nicio potrivire în director — puteți introduce adresa manual"
+  },
+  "workflowsAdmin": {
+    "title": "Fluxuri de lucru",
+    "description": "Activează sau dezactivează fiecare flux de lucru pentru întreaga organizație. Un flux dezactivat este ascuns din meniuri și respins de server, chiar și pentru cei care altfel ar avea acces.",
+    "layeredNote": "Indicatorul conversationWorkflows din LaunchDarkly controlează în continuare activarea: un flux activat aici este accesibil doar acolo unde acel indicator este activ. Această pagină nu poate face vizibil nimic ce este ascuns de indicator.",
+    "loading": "Se încarcă politica fluxului de lucru…",
+    "loadError": "Politica fluxului de lucru nu a putut fi încărcată.",
+    "policyUnavailable": "Politica fluxului de lucru nu a putut fi citită din stocare. Comutatoarele sunt ascunse în loc să fie afișate cu valori implicite care pot să nu corespundă celor impuse.",
+    "retry": "Reîncearcă",
+    "enableAll": "Activează toate",
+    "disableAll": "Dezactivează toate",
+    "enabledLabel": "Activat",
+    "disabledLabel": "Dezactivat",
+    "defaultOnHint": "Implicit când nu există nicio politică salvată: activat.",
+    "defaultOffHint": "Implicit când nu există nicio politică salvată: dezactivat — un administrator trebuie să-l activeze explicit.",
+    "grantsNote": "Procesarea granturilor este suplimentar restricționată la utilizatorii MSF-USA din departamentul Program cu \"grants\" în titulatura postului sau din Systems cu \"innovation\" în titulatură. Activarea aici nu extinde această regulă.",
+    "unsaved": "Aveți modificări nesalvate.",
+    "save": "Salvează",
+    "saving": "Se salvează…",
+    "saveSuccess": "Politica fluxului de lucru a fost salvată.",
+    "saveError": "Politica fluxului de lucru nu a putut fi salvată.",
+    "conflictError": "Un alt administrator a modificat politica înainte. Aceasta a fost reîncărcată — vă rugăm verificați și salvați din nou.",
+    "updatedByLine": "Ultima salvare de către {by} pe {at}.",
+    "neverSaved": "Nicio politică nu a fost salvată încă; se aplică valorile implicite de mai sus."
+  },
+  "viewAs": {
+    "title": "Vizualizează ca",
+    "description": "Testează aplicația, doar pentru sesiunea ta, ca și cum ai îndeplini sau nu o condiție care este de obicei decisă de director sau de administratori. Identitatea ta nu este schimbată: tot ce creezi rămâne al tău și fiecare linie de audit te va menționa pe tine.",
+    "activeTitle": "Modul Vizualizează ca este activ",
+    "inactiveTitle": "Modul Vizualizează ca nu este activ",
+    "sections": {
+      "role": "Rol de administrator",
+      "region": "Regiune de date",
+      "attributes": "Atribute director",
+      "groups": "Apartenență la grup",
+      "presets": "Presetări"
+    },
+    "role": {
+      "global": "Administrator global (rolul tău real)",
+      "local": "Administrator local",
+      "none": "Utilizator obișnuit",
+      "localKeysLabel": "Chei agent delegate",
+      "localKeysHint": "Chei canonice de agent, separate prin virgulă, pe care acest administrator local le poate edita. Lăsați necompletat pentru un admin local fără agenți delegați.",
+      "noneWarning": "Ca utilizator obișnuit, toate celelalte zone de administrare dispar. Această pagină rămâne accesibilă, iar bannerul din partea de sus a aplicației oferă mereu o cale de ieșire."
+    },
+    "region": {
+      "actual": "Actual ({region})",
+      "hint": "Direcționează solicitările dvs. — și orice încărcați în timp ce este activ — către stocarea celeilalte regiuni. Are prioritate față de un cookie ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Departament",
+      "companyName": "Companie",
+      "jobTitle": "Funcție",
+      "officeId": "Birou",
+      "officeActual": "Birou real",
+      "officeNone": "Fără birou",
+      "actualValue": "Real: {value}",
+      "actualEmpty": "Real: (gol)",
+      "hint": "Lăsați câmpul necompletat pentru a păstra valoarea reală. Acestea alimentează regula de acordare, limitele pe atribute și regulile de acces."
+    },
+    "groups": {
+      "label": "ID-uri grup",
+      "placeholder": "Un ID de obiect grup Entra pe linie",
+      "hint": "Înlocuiește — nu extinde — apartenența dvs. reală pentru această sesiune, astfel încât să puteți testa atât apartenența, cât și lipsa acesteia."
+    },
+    "presets": {
+      "grantsMember": "Membru echipă grants",
+      "regularUser": "Utilizator obișnuit",
+      "localAdmin": "Administrator local, fără agenți",
+      "otherRegion": "Altă regiune",
+      "hint": "Presetările completează formularul; nu se aplică nimic până când nu apăsați Aplică."
+    },
+    "apply": "Aplică și reîncarcă",
+    "applying": "Se aplică…",
+    "clear": "Ieși din view-as",
+    "clearing": "Ieșire…",
+    "reset": "Resetează formularul",
+    "nothingToApply": "Stabiliți cel puțin o suprascriere pentru a aplica.",
+    "applyError": "View-as nu a putut fi aplicat: {error}",
+    "clearError": "View-as nu a putut fi anulat: {error}",
+    "loadError": "Starea view-as nu a putut fi încărcată.",
+    "retry": "Reîncearcă",
+    "expiresNote": "View-as rămâne activ până la 8 ore sau până la ieșire.",
+    "banner": {
+      "label": "Vizualizați ca",
+      "adjust": "Ajustează",
+      "exit": "Ieșiți",
+      "role": {
+        "local": "administrator local",
+        "none": "utilizator obișnuit"
+      },
+      "region": "regiunea {region}",
+      "department": "departamentul „{value}”",
+      "companyName": "compania „{value}”",
+      "jobTitle": "funcția „{value}”",
+      "officeId": "biroul {value}",
+      "groups": "{count, plural, one {# grup} other {# grupuri}}"
+    }
   }
 }

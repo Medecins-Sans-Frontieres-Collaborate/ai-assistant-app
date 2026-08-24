@@ -2674,6 +2674,10 @@
       "map": {
         "label": "지도",
         "description": "데이터를 지도상의 위치로 변환"
+      },
+      "grants": {
+        "label": "보조금 처리",
+        "description": "보조금 서술에서 구조화된 데이터를 조정 및 추출합니다"
       }
     },
     "chooser": {
@@ -2683,7 +2687,8 @@
       "newTranslation": "새 번역",
       "newDocument": "새 문서",
       "newDataAnalysis": "새 데이터 분석",
-      "newMap": "새 지도"
+      "newMap": "새 지도",
+      "newGrants": "신규 보조금 처리"
     },
     "translation": {
       "chooseLanguage": "목표 언어",
@@ -3300,7 +3305,8 @@
       "unknownType": "이 대화는 현재 버전에서 인식하지 못하는 워크플로를 사용합니다. 아래에 대화 기록이 표시됩니다.",
       "untitled": "새 대화",
       "toggleMenu": "메뉴 토글",
-      "model": "이 워크플로의 모델"
+      "model": "이 워크플로의 모델",
+      "disabledByAdmin": "이 워크플로우는 관리자에 의해 비활성화되었습니다. 아래에 대화 내역이 표시됩니다."
     },
     "tabs": {
       "label": "대화 모드",
@@ -4077,7 +4083,11 @@
       "storageUnavailable": "관리자 저장소에 접근할 수 없습니다. 기존 레코드를 불러올 수 없습니다. 복구 전까지 저장이 비활성화됩니다.",
       "sealingUnavailable": "이 배포에서 비밀 암호화가 설정되어 있지 않습니다(AUTH_SECRET 누락) — 클라이언트 시크릿을 저장할 수 없습니다.",
       "updatedBy": "{by}님이 {at}에 업데이트함"
-    }
+    },
+    "orgAgentOverrideTitle": "내장 에이전트 재정의",
+    "orgAgentOverrideAction": "재정의",
+    "orgAgentBuiltinBadge": "내장",
+    "orgAgentBuiltinHint": "배포 구성에서 정의되었습니다. 이곳에서 접근 규칙을 편집할 수 있으며, 배포 없이 설정을 변경하려면 재정의하세요."
   },
   "localModels": {
     "title": "로컬 모델",
@@ -4278,9 +4288,15 @@
       "connectors": "조직 커넥터 및 사용 권한 관리.",
       "guides": "스타일, 용어 및 준수 가이드.",
       "mapDatasets": "지도 워크플로우에서 사용할 수 있는 선별 데이터셋.",
-      "localAdmins": "다른 사람에게 접근 규칙 편집 권한 위임."
+      "localAdmins": "다른 사람에게 접근 규칙 편집 권한 위임.",
+      "workflows": "모든 사용자에 대해 대화 워크플로우를 켜거나 끄십시오.",
+      "viewAs": "조건을 충족하거나 충족하지 못하는 사용자로 앱을 테스트합니다."
     },
-    "openSettings": "설정 열기"
+    "openSettings": "설정 열기",
+    "area": {
+      "workflows": "워크플로우",
+      "viewAs": "다음으로 보기"
+    }
   },
   "limits": {
     "title": "사용 한도",
@@ -4890,5 +4906,103 @@
     "listLabel": "귀하의 기관에서 추천",
     "searching": "조직에서 검색 중입니다…",
     "noMatches": "디렉터리에서 일치하는 항목이 없습니다 — 주소를 직접 입력할 수 있습니다"
+  },
+  "workflowsAdmin": {
+    "title": "워크플로우",
+    "description": "조직 전체에 대해 각 워크플로우를 활성화 또는 비활성화합니다. 비활성화된 워크플로우는 메뉴에서 숨겨지며, 자격이 있는 사용자라도 서버에서 거부됩니다.",
+    "layeredNote": "LaunchDarkly의 conversationWorkflows 플래그가 여전히 롤아웃을 제어합니다: 여기에서 활성화해도 해당 플래그가 켜진 곳에서만 접근 가능합니다. 이 페이지에서 플래그가 숨긴 워크플로우를 표시할 수는 없습니다.",
+    "loading": "워크플로우 정책 불러오는 중…",
+    "loadError": "워크플로우 정책을 불러올 수 없습니다.",
+    "policyUnavailable": "저장소에서 워크플로우 정책을 읽을 수 없습니다. 적용되지 않을 수 있는 기본값 대신 토글을 숨겼습니다.",
+    "retry": "재시도",
+    "enableAll": "전체 활성화",
+    "disableAll": "전체 비활성화",
+    "enabledLabel": "활성화됨",
+    "disabledLabel": "비활성화됨",
+    "defaultOnHint": "정책이 저장되지 않은 경우 기본값: 활성화됨.",
+    "defaultOffHint": "정책이 저장되지 않은 경우 기본값: 비활성화됨 — 관리자가 명시적으로 활성화해야 합니다.",
+    "grantsNote": "보조금 처리는 추가로 MSF-USA의 Program 부서에서 'grants'가 직책에 포함된 사용자 또는 Systems 부서에서 'innovation'이 직책에 포함된 사용자로 제한됩니다. 여기서 활성화해도 그 규칙이 완화되지는 않습니다.",
+    "unsaved": "저장되지 않은 변경 사항이 있습니다.",
+    "save": "저장",
+    "saving": "저장 중…",
+    "saveSuccess": "워크플로우 정책이 저장되었습니다.",
+    "saveError": "워크플로우 정책을 저장할 수 없습니다.",
+    "conflictError": "다른 관리자가 먼저 정책을 변경했습니다. 정책이 새로 고쳐졌으니 확인 후 다시 저장하세요.",
+    "updatedByLine": "{by}님이 {at}에 마지막으로 저장함.",
+    "neverSaved": "아직 정책이 저장되지 않았습니다. 위 기본값이 적용됩니다."
+  },
+  "viewAs": {
+    "title": "다음으로 보기",
+    "description": "디렉터리 또는 관리자가 보통 결정하는 조건을 충족하거나 충족하지 않는 사용자로 앱을 테스트합니다(본인 세션에만 적용). 사용자의 신원은 변경되지 않으며, 생성한 모든 항목과 감사 내역에는 계속 사용자의 이름이 남습니다.",
+    "activeTitle": "‘다음으로 보기’가 활성화됨",
+    "inactiveTitle": "‘다음으로 보기’가 비활성화됨",
+    "sections": {
+      "role": "관리자 역할",
+      "region": "데이터 지역",
+      "attributes": "디렉터리 속성",
+      "groups": "그룹 소속",
+      "presets": "프리셋"
+    },
+    "role": {
+      "global": "글로벌 관리자(실제 역할)",
+      "local": "로컬 관리자",
+      "none": "일반 사용자",
+      "localKeysLabel": "위임된 에이전트 키",
+      "localKeysHint": "이 로컬 관리자가 편집할 수 있는 콤마 구분 공식 에이전트 키들입니다. 위임된 에이전트가 없는 경우 비워 두세요.",
+      "noneWarning": "일반 사용자는 다른 모든 관리자 영역에 접근할 수 없습니다. 이 페이지는 계속 볼 수 있으며, 앱 상단의 배너에서 항상 원래 상태로 돌아갈 수 있습니다."
+    },
+    "region": {
+      "actual": "실제({region})",
+      "hint": "요청과 활성화된 동안 업로드한 모든 파일이 다른 지역의 스토리지로 전달됩니다. ?regionOverride= 쿠키보다 우선 적용됩니다."
+    },
+    "attributes": {
+      "department": "부서",
+      "companyName": "회사",
+      "jobTitle": "직책",
+      "officeId": "사무실",
+      "officeActual": "실제 사무실",
+      "officeNone": "사무실 없음",
+      "actualValue": "실제 값: {value}",
+      "actualEmpty": "실제 값: (비어 있음)",
+      "hint": "실제 값을 유지하려면 필드를 비워 두세요. 해당 값들은 권한 규칙, 속성별 사용 제한 및 접근 규칙에 사용됩니다."
+    },
+    "groups": {
+      "label": "그룹 ID",
+      "placeholder": "한 줄에 하나씩 Entra 그룹 오브젝트 ID 입력",
+      "hint": "이 세션 동안 실제 소속이 교체되며(확장되지 않음), 소속 및 미소속 테스트 모두 가능하게 지원합니다."
+    },
+    "presets": {
+      "grantsMember": "Grants 팀원",
+      "regularUser": "일반 사용자",
+      "localAdmin": "로컬 관리자(에이전트 없음)",
+      "otherRegion": "다른 지역",
+      "hint": "사전 설정은 양식을 채웁니다. 적용을 누르기 전까지는 아무 것도 적용되지 않습니다."
+    },
+    "apply": "적용 및 새로고침",
+    "applying": "적용 중…",
+    "clear": "view-as 종료",
+    "clearing": "종료 중…",
+    "reset": "양식 초기화",
+    "nothingToApply": "적용할 항목을 하나 이상 설정하세요.",
+    "applyError": "View-as를 적용할 수 없습니다: {error}",
+    "clearError": "View-as를 종료할 수 없습니다: {error}",
+    "loadError": "View-as 상태를 불러올 수 없습니다.",
+    "retry": "재시도",
+    "expiresNote": "View-as는 최대 8시간 또는 종료할 때까지 유지됩니다.",
+    "banner": {
+      "label": "다음으로 보기",
+      "adjust": "조정",
+      "exit": "종료",
+      "role": {
+        "local": "로컬 관리자",
+        "none": "일반 사용자"
+      },
+      "region": "지역 {region}",
+      "department": "부서 \"{value}\"",
+      "companyName": "회사 \"{value}\"",
+      "jobTitle": "직책 \"{value}\"",
+      "officeId": "사무실 {value}",
+      "groups": "{count, plural, one {#개 그룹} other {#개 그룹}}"
+    }
   }
 }

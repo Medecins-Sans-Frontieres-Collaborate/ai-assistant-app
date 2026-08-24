@@ -2674,6 +2674,10 @@
       "map": {
         "label": "Carte",
         "description": "Transformez n'importe quelle donnée en emplacements sur une carte"
+      },
+      "grants": {
+        "label": "Traitement des subventions",
+        "description": "Rapprocher et extraire des données structurées à partir des descriptions de subventions"
       }
     },
     "chooser": {
@@ -2683,7 +2687,8 @@
       "newTranslation": "Nouvelle traduction",
       "newDocument": "Nouveau document",
       "newDataAnalysis": "Nouvelle analyse de données",
-      "newMap": "Nouvelle carte"
+      "newMap": "Nouvelle carte",
+      "newGrants": "Nouveau traitement des subventions"
     },
     "translation": {
       "chooseLanguage": "Langue cible",
@@ -3300,7 +3305,8 @@
       "unknownType": "Cette conversation utilise un workflow non reconnu par cette version. L’historique de la conversation est affiché ci-dessous.",
       "untitled": "Nouvelle conversation",
       "toggleMenu": "Afficher/masquer le menu",
-      "model": "Modèle pour ce workflow"
+      "model": "Modèle pour ce workflow",
+      "disabledByAdmin": "Ce workflow a été désactivé par un administrateur. L’historique de la conversation s’affiche ci-dessous."
     },
     "tabs": {
       "label": "Mode conversation",
@@ -4077,7 +4083,11 @@
       "storageUnavailable": "Le stockage administrateur est inaccessible ; les enregistrements existants n’ont pas pu être listés. L’enregistrement est désactivé jusqu’à résolution.",
       "sealingUnavailable": "Le chiffrement des secrets n’est pas configuré sur ce déploiement (AUTH_SECRET manquant) — les secrets clients ne peuvent pas être enregistrés.",
       "updatedBy": "Mis à jour par {by} le {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Remplacer l’agent intégré",
+    "orgAgentOverrideAction": "Remplacer",
+    "orgAgentBuiltinBadge": "Intégré",
+    "orgAgentBuiltinHint": "Défini dans la configuration de déploiement. Sa règle d’accès est modifiable ici ; remplacez-la pour modifier ses paramètres sans redéploiement."
   },
   "localModels": {
     "title": "Modèles locaux",
@@ -4278,9 +4288,15 @@
       "connectors": "Connecteurs d’organisation et personnes autorisées à les utiliser.",
       "guides": "Guides de style, de terminologie et de conformité.",
       "mapDatasets": "Jeux de données sélectionnés disponibles pour le flux cartographique.",
-      "localAdmins": "Déléguer l’édition des règles d’accès à d’autres personnes."
+      "localAdmins": "Déléguer l’édition des règles d’accès à d’autres personnes.",
+      "workflows": "Activez ou désactivez les workflows de conversation pour tout le monde.",
+      "viewAs": "Testez l’application comme si vous remplissiez — ou non — une condition."
     },
-    "openSettings": "Ouvrir les paramètres"
+    "openSettings": "Ouvrir les paramètres",
+    "area": {
+      "workflows": "Workflows",
+      "viewAs": "Voir comme"
+    }
   },
   "limits": {
     "title": "Limites d’utilisation",
@@ -4890,5 +4906,103 @@
     "listLabel": "Suggestions de votre organisation",
     "searching": "Recherche dans votre organisation…",
     "noMatches": "Aucune correspondance dans l'annuaire — vous pouvez saisir l'adresse manuellement"
+  },
+  "workflowsAdmin": {
+    "title": "Workflows",
+    "description": "Activez ou désactivez chaque workflow pour l’ensemble de l’organisation. Un workflow désactivé est caché dans les menus et refusé par le serveur, même pour les personnes qui y auraient normalement accès.",
+    "layeredNote": "Le flag LaunchDarkly conversationWorkflows contrôle toujours le déploiement : un workflow activé ici n’est accessible que là où ce flag est actif. Cette page ne peut pas rendre visible ce que le flag masque.",
+    "loading": "Chargement de la politique de workflow…",
+    "loadError": "La politique de workflow n’a pas pu être chargée.",
+    "policyUnavailable": "La politique de workflow n’a pas pu être lue depuis le stockage. Les interrupteurs sont cachés plutôt que d’afficher des valeurs par défaut qui pourraient ne pas correspondre à ce qui est appliqué.",
+    "retry": "Réessayer",
+    "enableAll": "Tout activer",
+    "disableAll": "Tout désactiver",
+    "enabledLabel": "Activé",
+    "disabledLabel": "Désactivé",
+    "defaultOnHint": "Par défaut, en l’absence de politique enregistrée : activé.",
+    "defaultOffHint": "Par défaut, en l’absence de politique enregistrée : désactivé — un administrateur doit l’activer explicitement.",
+    "grantsNote": "Le traitement des subventions est en plus limité aux utilisateurs MSF-USA du département Program portant \"grants\" dans leur intitulé de poste, ou du département Systems avec \"innovation\" dans leur poste. L’activer ici n’élargit pas cette règle.",
+    "unsaved": "Vous avez des modifications non enregistrées.",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "saveSuccess": "Politique de workflow enregistrée.",
+    "saveError": "La politique de workflow n’a pas pu être enregistrée.",
+    "conflictError": "Un autre administrateur a modifié la politique avant vous. Elle a été rechargée — veuillez vérifier et enregistrer à nouveau.",
+    "updatedByLine": "Dernier enregistrement par {by} le {at}.",
+    "neverSaved": "Aucune politique n’a encore été enregistrée ; les valeurs par défaut ci-dessus s’appliquent."
+  },
+  "viewAs": {
+    "title": "Voir comme",
+    "description": "Testez l’application, uniquement pour votre propre session, comme si vous remplissiez ou non une condition normalement déterminée par l’annuaire ou par les administrateurs. Votre identité ne change jamais : tout ce que vous créez reste à votre nom et chaque ligne d’audit continuera de vous nommer.",
+    "activeTitle": "Voir-comme est actif",
+    "inactiveTitle": "Voir-comme n’est pas actif",
+    "sections": {
+      "role": "Rôle administrateur",
+      "region": "Région des données",
+      "attributes": "Attributs de l’annuaire",
+      "groups": "Appartenance à un groupe",
+      "presets": "Préréglages"
+    },
+    "role": {
+      "global": "Administrateur global (votre rôle actuel)",
+      "local": "Administrateur local",
+      "none": "Utilisateur standard",
+      "localKeysLabel": "Clés d’agent déléguées",
+      "localKeysHint": "Clés d’agent canoniques séparées par une virgule que cet admin local peut modifier. Laissez vide pour un admin local sans agent délégué.",
+      "noneWarning": "En tant qu’utilisateur standard, toutes les autres zones admin disparaissent. Cette page reste accessible et la bannière en haut de l’application propose toujours une sortie."
+    },
+    "region": {
+      "actual": "Réelle ({region})",
+      "hint": "Redirige vos requêtes — et tout ce que vous téléversez pendant l’activation — vers le stockage de l’autre région. Prend le pas sur le cookie ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Département",
+      "companyName": "Entreprise",
+      "jobTitle": "Intitulé du poste",
+      "officeId": "Bureau",
+      "officeActual": "Bureau réel",
+      "officeNone": "Aucun bureau",
+      "actualValue": "Réel : {value}",
+      "actualEmpty": "Réel : (vide)",
+      "hint": "Laissez un champ vide pour conserver la valeur réelle. Cela alimente la règle des droits, les limites d’utilisation par attribut et les règles d’accès."
+    },
+    "groups": {
+      "label": "ID de groupe",
+      "placeholder": "Un ID d’objet de groupe Entra par ligne",
+      "hint": "Remplace — sans étendre — votre appartenance réelle pour cette session, afin que vous puissiez tester l’appartenance ou non."
+    },
+    "presets": {
+      "grantsMember": "Membre de l’équipe Grants",
+      "regularUser": "Utilisateur régulier",
+      "localAdmin": "Admin local, pas d’agents",
+      "otherRegion": "Autre région",
+      "hint": "Les préréglages remplissent le formulaire ; rien n’est appliqué tant que vous n’appuyez pas sur Appliquer."
+    },
+    "apply": "Appliquer et recharger",
+    "applying": "Application en cours…",
+    "clear": "Quitter le mode d’emprunt",
+    "clearing": "Sortie en cours…",
+    "reset": "Réinitialiser le formulaire",
+    "nothingToApply": "Définissez au moins une substitution à appliquer.",
+    "applyError": "L’application du mode d’emprunt a échoué : {error}",
+    "clearError": "La sortie du mode d’emprunt a échoué : {error}",
+    "loadError": "Impossible de charger l’état du mode d’emprunt.",
+    "retry": "Réessayer",
+    "expiresNote": "Le mode d’emprunt dure jusqu’à 8 heures, ou jusqu’à ce que vous quittiez.",
+    "banner": {
+      "label": "Vous visualisez comme",
+      "adjust": "Ajuster",
+      "exit": "Quitter",
+      "role": {
+        "local": "admin local",
+        "none": "utilisateur régulier"
+      },
+      "region": "région {region}",
+      "department": "département « {value} »",
+      "companyName": "entreprise « {value} »",
+      "jobTitle": "titre « {value} »",
+      "officeId": "bureau {value}",
+      "groups": "{count, plural, one {# groupe} other {# groupes}}"
+    }
   }
 }

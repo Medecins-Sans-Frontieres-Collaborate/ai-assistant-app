@@ -2674,6 +2674,10 @@
       "map": {
         "label": "Mapa",
         "description": "Převádějte libovolná data na umístění v mapě"
+      },
+      "grants": {
+        "label": "Zpracování grantů",
+        "description": "Sloučení a extrakce strukturovaných dat z narativů grantů"
       }
     },
     "chooser": {
@@ -2683,7 +2687,8 @@
       "newTranslation": "Nový překlad",
       "newDocument": "Nový dokument",
       "newDataAnalysis": "Nová analýza dat",
-      "newMap": "Nová mapa"
+      "newMap": "Nová mapa",
+      "newGrants": "Nové zpracování grantů"
     },
     "translation": {
       "chooseLanguage": "Cílový jazyk",
@@ -3300,7 +3305,8 @@
       "unknownType": "Tato konverzace používá workflow, které tato verze nezná. Historie konverzace je uvedena níže.",
       "untitled": "Nová konverzace",
       "toggleMenu": "Přepnout menu",
-      "model": "Model pro tento workflow"
+      "model": "Model pro tento workflow",
+      "disabledByAdmin": "Tento workflow byl deaktivován administrátorem. Historie konverzace je zobrazena níže."
     },
     "tabs": {
       "label": "Režim konverzace",
@@ -4077,7 +4083,11 @@
       "storageUnavailable": "Úložiště pro správu není dostupné; stávající záznamy nelze zobrazit. Ukládání je do obnovení vypnuto.",
       "sealingUnavailable": "Šifrování tajemství není v této instalaci nastaveno (chybí AUTH_SECRET) — klientská tajemství nelze uložit.",
       "updatedBy": "Aktualizoval(a) {by} dne {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Přepsat vestavěného agenta",
+    "orgAgentOverrideAction": "Přepsat",
+    "orgAgentBuiltinBadge": "Vestavěný",
+    "orgAgentBuiltinHint": "Definováno v konfiguračním souboru nasazení. Pravidlo přístupu lze zde upravit; přepište ho pro změnu nastavení bez nasazení nové verze."
   },
   "localModels": {
     "title": "Lokální modely",
@@ -4278,9 +4288,15 @@
       "connectors": "Organizační konektory a jejich uživatelé.",
       "guides": "Pokyny ke stylu, terminologii a souladu.",
       "mapDatasets": "Kurátorované datasety dostupné ve workflow mapy.",
-      "localAdmins": "Delegujte úpravu přístupových pravidel dalším osobám."
+      "localAdmins": "Delegujte úpravu přístupových pravidel dalším osobám.",
+      "workflows": "Zapněte nebo vypněte workflowy pro všechny uživatele.",
+      "viewAs": "Testujte aplikaci jako někdo, kdo splňuje nebo nesplňuje podmínku."
     },
-    "openSettings": "Otevřít nastavení"
+    "openSettings": "Otevřít nastavení",
+    "area": {
+      "workflows": "Workflowy",
+      "viewAs": "Zobrazit jako"
+    }
   },
   "limits": {
     "title": "Limity používání",
@@ -4890,5 +4906,103 @@
     "listLabel": "Návrhy z vaší organizace",
     "searching": "Vyhledávání ve vaší organizaci…",
     "noMatches": "Žádné shody v adresáři — můžete zadat adresu ručně"
+  },
+  "workflowsAdmin": {
+    "title": "Workflowy",
+    "description": "Aktivujte nebo deaktivujte každý workflow pro celou organizaci. Deaktivovaný workflow je skrytý v menu a server ho odmítá i pro osoby, které by k němu měly přístup.",
+    "layeredNote": "Flag LaunchDarkly conversationWorkflows stále řídí nasazení: workflow povolený zde je přístupný jen tam, kde je tento flag zapnutý. Tato stránka nemůže zviditelnit nic, co je tímto flagem skryto.",
+    "loading": "Načítání politiky workflowu…",
+    "loadError": "Politiku workflowu se nepodařilo načíst.",
+    "policyUnavailable": "Politiku workflowu se nepodařilo přečíst z úložiště. Přepínače jsou skryté, aby neukazovaly výchozí hodnoty, které nemusí odpovídat aktuálně platným pravidlům.",
+    "retry": "Zkusit znovu",
+    "enableAll": "Povolit vše",
+    "disableAll": "Zakázat vše",
+    "enabledLabel": "Povoleno",
+    "disabledLabel": "Zakázáno",
+    "defaultOnHint": "Výchozí stav, pokud není uložena politika: povoleno.",
+    "defaultOffHint": "Výchozí stav, pokud není uložena politika: zakázáno — aktivaci musí výslovně provést administrátor.",
+    "grantsNote": "Zpracování grantů je dále omezeno na uživatele MSF-USA v oddělení Program se \"grants\" v názvu pracovní pozice nebo v oddělení Systems s \"innovation\" v názvu pozice. Povolení zde toto pravidlo dále nerozšiřuje.",
+    "unsaved": "Máte neuložené změny.",
+    "save": "Uložit",
+    "saving": "Ukládání…",
+    "saveSuccess": "Politika workflowu byla uložena.",
+    "saveError": "Politiku workflowu se nepodařilo uložit.",
+    "conflictError": "Jiný administrátor mezitím změnil politiku. Nastavení bylo znovu načteno — prosím zkontrolujte a uložte znovu.",
+    "updatedByLine": "Naposledy uložil uživatel {by} dne {at}.",
+    "neverSaved": "Politika zatím nebyla uložena; použijí se výchozí hodnoty výše."
+  },
+  "viewAs": {
+    "title": "Zobrazit jako",
+    "description": "Otestujte aplikaci pouze ve svém sezení tak, jakoby splňujete nebo nesplňujete podmínku, kterou obvykle určuje adresář nebo správci. Vaše identita se nikdy nemění: vše, co vytvoříte, zůstává vaše a každý auditní záznam vás pořád uvádí jako autora.",
+    "activeTitle": "'Zobrazit jako' je aktivní",
+    "inactiveTitle": "'Zobrazit jako' není aktivní",
+    "sections": {
+      "role": "Role administrátora",
+      "region": "Datová oblast",
+      "attributes": "Atributy adresáře",
+      "groups": "Členství ve skupině",
+      "presets": "Předvolby"
+    },
+    "role": {
+      "global": "Globální administrátor (vaše skutečná role)",
+      "local": "Lokální administrátor",
+      "none": "Běžný uživatel",
+      "localKeysLabel": "Delegované klíče agentů",
+      "localKeysHint": "Kanonické klíče agentů, které může tento lokální administrátor upravovat. Oddělené čárkou. Nechte prázdné pro lokálního administrátora bez delegovaných agentů.",
+      "noneWarning": "Jako běžný uživatel máte všechny ostatní administrátorské sekce skryté. Tato stránka zůstává dostupná a banner v horní části aplikace vám vždy umožní návrat."
+    },
+    "region": {
+      "actual": "Aktuální ({region})",
+      "hint": "Přesměruje vaše požadavky — a vše, co během aktivace nahrajete — do úložiště druhého regionu. Má přednost před cookies ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Oddělení",
+      "companyName": "Společnost",
+      "jobTitle": "Pracovní pozice",
+      "officeId": "Pobočka",
+      "officeActual": "Skutečná pobočka",
+      "officeNone": "Žádná pobočka",
+      "actualValue": "Skutečné: {value}",
+      "actualEmpty": "Skutečné: (prázdné)",
+      "hint": "Nechte pole prázdné, abyste zachovali svou skutečnou hodnotu. Tyto údaje ovlivňují pravidla grantů, limity použití a přístupová pravidla závislá na atributech."
+    },
+    "groups": {
+      "label": "ID skupin",
+      "placeholder": "Každý Entra group object id na samostatný řádek",
+      "hint": "Nahrazuje — nerozšiřuje — vaše skutečné členství pro tuto relaci, takže můžete testovat příslušnost i nepříslušnost."
+    },
+    "presets": {
+      "grantsMember": "Člen týmu grantů",
+      "regularUser": "Běžný uživatel",
+      "localAdmin": "Místní administrátor, bez agentů",
+      "otherRegion": "Jiný region",
+      "hint": "Přednastavení vyplní formulář; nic se neprovede, dokud nestisknete Použít."
+    },
+    "apply": "Použít a znovu načíst",
+    "applying": "Probíhá použití…",
+    "clear": "Ukončit zobrazení jako",
+    "clearing": "Ukončování…",
+    "reset": "Obnovit formulář",
+    "nothingToApply": "Nastavte alespoň jednu změnu, kterou chcete použít.",
+    "applyError": "Zobrazení jako nebylo možné použít: {error}",
+    "clearError": "Zobrazení jako nebylo možné zrušit: {error}",
+    "loadError": "Stav zobrazení jako se nepodařilo načíst.",
+    "retry": "Zkusit znovu",
+    "expiresNote": "Zobrazení jako platí maximálně 8 hodin nebo do ukončení režimu.",
+    "banner": {
+      "label": "Zobrazení jako",
+      "adjust": "Upravit",
+      "exit": "Ukončit",
+      "role": {
+        "local": "místní administrátor",
+        "none": "běžný uživatel"
+      },
+      "region": "region {region}",
+      "department": "oddělení \"{value}\"",
+      "companyName": "společnost \"{value}\"",
+      "jobTitle": "pozice \"{value}\"",
+      "officeId": "pobočka {value}",
+      "groups": "{count, plural, one {# skupina} other {# skupin}}"
+    }
   }
 }

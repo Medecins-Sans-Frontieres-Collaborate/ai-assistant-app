@@ -2674,6 +2674,10 @@
       "map": {
         "label": "Mapa",
         "description": "Zamień dowolne dane w lokalizacje na mapie"
+      },
+      "grants": {
+        "label": "Przetwarzanie grantów",
+        "description": "Uzgadnianie i wyodrębnianie danych strukturalnych z narracji grantów"
       }
     },
     "chooser": {
@@ -2683,7 +2687,8 @@
       "newTranslation": "Nowe tłumaczenie",
       "newDocument": "Nowy dokument",
       "newDataAnalysis": "Nowa analiza danych",
-      "newMap": "Nowa mapa"
+      "newMap": "Nowa mapa",
+      "newGrants": "Nowe przetwarzanie grantów"
     },
     "translation": {
       "chooseLanguage": "Język docelowy",
@@ -3300,7 +3305,8 @@
       "unknownType": "Ta rozmowa używa przepływu pracy, którego ta wersja nie rozpoznaje. Historia rozmowy znajduje się poniżej.",
       "untitled": "Nowa rozmowa",
       "toggleMenu": "Przełącz menu",
-      "model": "Model dla tego przepływu pracy"
+      "model": "Model dla tego przepływu pracy",
+      "disabledByAdmin": "Ten przepływ pracy został wyłączony przez administratora. Historia rozmowy znajduje się poniżej."
     },
     "tabs": {
       "label": "Tryb rozmowy",
@@ -4077,7 +4083,11 @@
       "storageUnavailable": "Magazyn administracyjny jest niedostępny; nie można wyświetlić istniejących rekordów. Zapisywanie jest wyłączone do czasu odzyskania dostępu.",
       "sealingUnavailable": "Szyfrowanie sekretów nie jest skonfigurowane w tej instalacji (brak AUTH_SECRET) — nie można zapisać sekretów klienta.",
       "updatedBy": "Zaktualizowane przez {by} dnia {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Zastąp wbudowanego agenta",
+    "orgAgentOverrideAction": "Zastąp",
+    "orgAgentBuiltinBadge": "Wbudowany",
+    "orgAgentBuiltinHint": "Zdefiniowany w konfiguracji wdrożenia. Jego zasady dostępu można edytować tutaj; zastąp je, aby zmienić ustawienia bez wdrażania."
   },
   "localModels": {
     "title": "Modele lokalne",
@@ -4278,9 +4288,15 @@
       "connectors": "Konektory organizacji i kto może z nich korzystać.",
       "guides": "Przewodniki dotyczące stylu, terminologii i zgodności.",
       "mapDatasets": "Wyselekcjonowane zestawy danych dostępne w procesie mapowania.",
-      "localAdmins": "Deleguj edycję reguł dostępu innym osobom."
+      "localAdmins": "Deleguj edycję reguł dostępu innym osobom.",
+      "workflows": "Włączaj lub wyłączaj przepływy rozmów dla wszystkich.",
+      "viewAs": "Testuj aplikację jako osoba spełniająca — lub nie — wybrany warunek."
     },
-    "openSettings": "Otwórz ustawienia"
+    "openSettings": "Otwórz ustawienia",
+    "area": {
+      "workflows": "Przepływy",
+      "viewAs": "Wyświetl jako"
+    }
   },
   "limits": {
     "title": "Limity wykorzystania",
@@ -4890,5 +4906,103 @@
     "listLabel": "Sugestie z Twojej organizacji",
     "searching": "Wyszukiwanie w Twojej organizacji…",
     "noMatches": "Brak wyników w katalogu — możesz wpisać adres ręcznie"
+  },
+  "workflowsAdmin": {
+    "title": "Przepływy",
+    "description": "Włączaj lub wyłączaj każdy przepływ pracy dla całej organizacji. Wyłączony przepływ znika z menu i jest odrzucany przez serwer, nawet dla osób spełniających wymagania.",
+    "layeredNote": "Flaga conversationWorkflows w LaunchDarkly nadal steruje wdrożeniem: przepływ włączony tutaj będzie dostępny tylko tam, gdzie ta flaga jest aktywna. Ta strona nie ujawnia niczego, co jest ukryte przez flagę.",
+    "loading": "Ładowanie zasad przepływów…",
+    "loadError": "Nie można załadować zasad przepływów pracy.",
+    "policyUnavailable": "Nie udało się odczytać zasad przepływów z magazynu. Przełączniki są ukryte, by nie pokazywać domyślnych wartości, które mogą nie odpowiadać faktycznym zasadom.",
+    "retry": "Ponów próbę",
+    "enableAll": "Włącz wszystkie",
+    "disableAll": "Wyłącz wszystkie",
+    "enabledLabel": "Włączony",
+    "disabledLabel": "Wyłączony",
+    "defaultOnHint": "Domyślnie, jeśli nie zapisano zasad: włączony.",
+    "defaultOffHint": "Domyślnie, jeśli nie zapisano zasad: wyłączony — administrator musi ręcznie włączyć tę opcję.",
+    "grantsNote": "Przetwarzanie grantów jest dodatkowo ograniczone do użytkowników MSF-USA z działu Program, mających w tytule stanowiska \"grants\", lub z działu Systems z \"innovation\" w tytule. Włączenie tutaj nie zmienia tej zasady.",
+    "unsaved": "Masz niezapisane zmiany.",
+    "save": "Zapisz",
+    "saving": "Zapisywanie…",
+    "saveSuccess": "Zasady przepływów pracy zapisane.",
+    "saveError": "Nie można zapisać zasad przepływów pracy.",
+    "conflictError": "Inny administrator najpierw zmienił zasady. Zostały ponownie załadowane — przejrzyj je i zapisz ponownie.",
+    "updatedByLine": "Ostatnio zapisane przez {by} dnia {at}.",
+    "neverSaved": "Zasady nie zostały jeszcze zapisane; obowiązują powyższe ustawienia domyślne."
+  },
+  "viewAs": {
+    "title": "Wyświetl jako",
+    "description": "Testuj aplikację, tylko dla własnej sesji, jako osoba spełniająca lub nie dany warunek, który zwykle ustalany jest przez katalog lub administratorów. Twoja tożsamość się nie zmienia: wszystko, co stworzysz, pozostaje Twoje, a w audycie nadal pojawia się Twoje imię i nazwisko.",
+    "activeTitle": "Tryb \"Wyświetl jako\" jest aktywny",
+    "inactiveTitle": "Tryb \"Wyświetl jako\" jest nieaktywny",
+    "sections": {
+      "role": "Rola administratora",
+      "region": "Region danych",
+      "attributes": "Atrybuty katalogowe",
+      "groups": "Członkostwo w grupach",
+      "presets": "Ustawienia wstępne"
+    },
+    "role": {
+      "global": "Administrator globalny (Twoja aktualna rola)",
+      "local": "Administrator lokalny",
+      "none": "Zwykły użytkownik",
+      "localKeysLabel": "Delegowane klucze agenta",
+      "localKeysHint": "Oddzielone przecinkami kanoniczne klucze agentów, które ten lokalny administrator może edytować. Pozostaw puste, jeśli lokalny administrator nie ma delegowanych agentów.",
+      "noneWarning": "Jako zwykły użytkownik każda inna strefa administracyjna znika. Ta strona nadal jest dostępna, a baner na górze aplikacji zawsze pozwala wyjść z trybu."
+    },
+    "region": {
+      "actual": "Rzeczywisty ({region})",
+      "hint": "Kieruje Twoje żądania — oraz wszystko, co przesyłasz w trakcie działania — do magazynu innego regionu. Ma pierwszeństwo przed ciasteczkiem ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Dział",
+      "companyName": "Firma",
+      "jobTitle": "Stanowisko",
+      "officeId": "Biuro",
+      "officeActual": "Rzeczywiste biuro",
+      "officeNone": "Brak biura",
+      "actualValue": "Rzeczywiste: {value}",
+      "actualEmpty": "Rzeczywiste: (puste)",
+      "hint": "Pozostaw pole puste, aby zachować swoją rzeczywistą wartość. Te dane wpływają na reguły grantów, limity użycia powiązane z atrybutami oraz reguły dostępu."
+    },
+    "groups": {
+      "label": "Identyfikatory grup",
+      "placeholder": "Jeden Entra group object id w każdym wierszu",
+      "hint": "Zastępuje — nie rozszerza — Twoje rzeczywiste członkostwo na czas tej sesji, co pozwala testować bycie członkiem i brak członkostwa."
+    },
+    "presets": {
+      "grantsMember": "Członek zespołu grantów",
+      "regularUser": "Zwykły użytkownik",
+      "localAdmin": "Lokalny administrator, bez agentów",
+      "otherRegion": "Inny region",
+      "hint": "Wstępne ustawienia wypełniają formularz; nic nie zostanie zastosowane, dopóki nie naciśniesz Zastosuj."
+    },
+    "apply": "Zastosuj i odśwież",
+    "applying": "Trwa stosowanie…",
+    "clear": "Wyjdź z widoku jako",
+    "clearing": "Trwa wychodzenie…",
+    "reset": "Resetuj formularz",
+    "nothingToApply": "Ustaw co najmniej jedną zmianę, aby zastosować.",
+    "applyError": "Nie udało się zastosować widoku jako: {error}",
+    "clearError": "Nie udało się wyczyścić widoku jako: {error}",
+    "loadError": "Nie udało się załadować stanu widoku jako.",
+    "retry": "Ponów próbę",
+    "expiresNote": "Widok jako działa do 8 godzin lub do wyjścia.",
+    "banner": {
+      "label": "Widok jako",
+      "adjust": "Dostosuj",
+      "exit": "Wyjdź",
+      "role": {
+        "local": "lokalny administrator",
+        "none": "zwykły użytkownik"
+      },
+      "region": "region {region}",
+      "department": "dział \"{value}\"",
+      "companyName": "firma \"{value}\"",
+      "jobTitle": "stanowisko \"{value}\"",
+      "officeId": "biuro {value}",
+      "groups": "{count, plural, one {# grupa} other {# grupy}}"
+    }
   }
 }

@@ -2658,6 +2658,10 @@
       "map": {
         "label": "Taswira",
         "description": "Juya kowanne bayanai zuwa wurare a cikin taswira"
+      },
+      "grants": {
+        "label": "Sarrafa Tallafi",
+        "description": "Daidaita da cire bayanai masu tsari daga labarin tallafi"
       }
     },
     "chooser": {
@@ -2667,7 +2671,8 @@
       "newTranslation": "Sabo fassara",
       "newDocument": "Sabuwar takarda",
       "newDataAnalysis": "Sabo nazarin bayanai",
-      "newMap": "Sabuwar taswira"
+      "newMap": "Sabuwar taswira",
+      "newGrants": "Sabon sarrafa tallafi"
     },
     "translation": {
       "chooseLanguage": "Harshe na fassara",
@@ -3284,7 +3289,8 @@
       "unknownType": "Wannan tattaunawar tana amfani da workflow da wannan sigar ba ta gane ba. Tarihin tattaunawa yana ƙasa.",
       "untitled": "Sabuwar Tattaunawa",
       "toggleMenu": "Buɗe/ruffa menu",
-      "model": "Samfuri don wannan workflow"
+      "model": "Samfuri don wannan workflow",
+      "disabledByAdmin": "Mai gudanarwa ya kashe wannan aikin. Tarihin hirar yana kasa."
     },
     "tabs": {
       "label": "Yanayin hira",
@@ -4061,7 +4067,11 @@
       "storageUnavailable": "Ba a iya samun ajiyar admin; ba a iya jera bayanan da suke akwai. Ajiya yana a kashe har sai an gyara.",
       "sealingUnavailable": "Ba a saita ɓoye sirri ba a wannan warwarewa (AUTH_SECRET babu) — ba za a iya adana sirrin abokin ba.",
       "updatedBy": "An sabunta ta {by} a {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Canja wakili na ciki",
+    "orgAgentOverrideAction": "Canjawa",
+    "orgAgentBuiltinBadge": "Na ciki",
+    "orgAgentBuiltinHint": "An bayyana a cikin saitin tura manhaja. Ana iya gyara dokar samunsa a nan; canja ta don sabunta saitinsa ba tare da sake tura app ba."
   },
   "localModels": {
     "title": "Samfuran cikin gida",
@@ -4262,9 +4272,15 @@
       "connectors": "Sadarwar kungiya da wanda zai iya amfani da su.",
       "guides": "Jagorar salo, sharuɗɗa, da bin doka.",
       "mapDatasets": "An zaɓi bayanan da ake da su don aikin taswira.",
-      "localAdmins": "Ba wa wasu damar gyara ƙa’idojin izini."
+      "localAdmins": "Ba wa wasu damar gyara ƙa’idojin izini.",
+      "workflows": "Kashe ko kunnawa aikin hira ga kowa.",
+      "viewAs": "Gwada app kamar wani da ya cika – ko bai cika ba – wani sharadi."
     },
-    "openSettings": "Buɗe saituna"
+    "openSettings": "Buɗe saituna",
+    "area": {
+      "workflows": "Ayyuka",
+      "viewAs": "Duba a matsayin"
+    }
   },
   "limits": {
     "title": "Iyakar amfani",
@@ -4874,5 +4890,103 @@
     "listLabel": "Shawarwari daga ƙungiyarku",
     "searching": "Ana bincika ƙungiyarku…",
     "noMatches": "Babu abin da ya dace a cikin kundin — za ka iya shigar da adireshin da hannu"
+  },
+  "workflowsAdmin": {
+    "title": "Ayyuka",
+    "description": "Kunna ko kashe kowanne aiki ga duka ƙungiyar. Idan an kashe wani aiki, ba za a nuna shi ba kuma sabar ba za ta amsa da shi ba, koda ga wadanda suke da cancanta.",
+    "layeredNote": "Alamar LaunchDarkly conversationWorkflows har yanzu ke kula da samuwa: aiki da aka kunna a nan zai samuwa ne kawai inda alamar take kunne. Wannan shafi ba zai iya bayyana abin da alamar ke ɓoye ba.",
+    "loading": "Ana loda dokar aiki…",
+    "loadError": "Ba a iya lodawa dokar aikin ba.",
+    "policyUnavailable": "Ba a samu dokar aikin daga ajiya ba. An ɓoye maballan mayarwa don kada a nuna su da ƙimar tsoho wanda zai saba da abin da ake aiwatarwa.",
+    "retry": "Sake gwadawa",
+    "enableAll": "Kunna dukkan",
+    "disableAll": "Kashe dukkan",
+    "enabledLabel": "An kunna",
+    "disabledLabel": "An kashe",
+    "defaultOnHint": "Tsohuwar ƙima idan ba a ajiye dokar ba: an kunna.",
+    "defaultOffHint": "Tsohuwar ƙima idan ba a ajiye dokar ba: an kashe — dole ne mai gudanarwa ya kunna shi kai tsaye.",
+    "grantsNote": "Ana takaita Sarrafa Tallafi ga masu amfani MSF-USA a bangaren Program da \"grants\" a matsayin aikin su, ko a Systems da \"innovation\" a matsayin su. Kunna shi a nan ba ya faɗaɗa wannan ƙa’ida.",
+    "unsaved": "Kana da canje-canje da ba a ajiye ba.",
+    "save": "Ajiye",
+    "saving": "Ana ajiye…",
+    "saveSuccess": "An ajiye dokar aikin.",
+    "saveError": "Ba a iya ajiye dokar aikin ba.",
+    "conflictError": "Wani mai gudanarwa ya canja dokar kafin ka. An sabunta — don Allah duba da ajiye kuma.",
+    "updatedByLine": "Na ƙarshe an ajiye ta {by} a {at}.",
+    "neverSaved": "Ba a taɓa ajiye dokar ba tukuna; ƙimar da ke sama su za a bi."
+  },
+  "viewAs": {
+    "title": "Duba a matsayin",
+    "description": "Gwada app ɗin, don zaman ku kaɗai, a matsayin wanda ya cika ko bai cika ba wani sharadi da galibi directory ko masu gudanarwa ke yanke. Ba a taɓa chanja asalin kai ba: duk abin da ka ƙirƙira naka ne, kuma layin audit zai ci gaba da nuna sunan ka.",
+    "activeTitle": "Duba-a-matsayin yana aiki",
+    "inactiveTitle": "Duba-a-matsayin baya aiki",
+    "sections": {
+      "role": "Matsayin Admin",
+      "region": "Yanki na bayanai",
+      "attributes": "Siffofin directory",
+      "groups": "Membobin rukuni",
+      "presets": "Tsaruka"
+    },
+    "role": {
+      "global": "Babban mai gudanarwa (wannan shi ne matsayin ka na gaskiya)",
+      "local": "Mai gudanarwa na yankin",
+      "none": "Mai amfani na yau da kullum",
+      "localKeysLabel": "Maballin wakilin da aka mika",
+      "localKeysHint": "Maballin wakilai (kanonical) da wannan local admin zai iya gyarawa, an raba su da alamar coma. Bar shi fanko idan ba za a mika wani wakili ba.",
+      "noneWarning": "A matsayin mai amfani na yau da kullum, sauran sassan admin za su bace. Wannan shafin zai ci gaba da kasancewa, kuma sandar sama a app ɗin kullum tana nuna hanyar fita."
+    },
+    "region": {
+      "actual": "Na Gaskiya ({region})",
+      "hint": "Zai tura buƙatunka — da duk abin da ka loda yayin aiki — zuwa ajiya na yankin ɗaya. Wannan zai fi ƙarfin kuki mai ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Sashe",
+      "companyName": "Kamfani",
+      "jobTitle": "Sunan aiki",
+      "officeId": "Ofishi",
+      "officeActual": "Ofishi na gaskiya",
+      "officeNone": "Babu ofishi",
+      "actualValue": "Gaskiya: {value}",
+      "actualEmpty": "Gaskiya: (babu)",
+      "hint": "Bar filin babu komai don a ci gaba da amfani da gaskiyar darajar ka. Waɗannan na taimaka wa ƙa'idojin grant, iyakar amfani bisa sigogi da ƙa'idodin samun dama."
+    },
+    "groups": {
+      "label": "Id na rukuni",
+      "placeholder": "Harshen id na abu na rukuni ɗaya na Entra kowane layi",
+      "hint": "Wannan zai maye gurbin — ba ƙaruwa ba — membobin ka na gaskiya a wannan zamanin, domin ka gwada kasancewa memba ko ba memba."
+    },
+    "presets": {
+      "grantsMember": "Memba na ƙungiyar grants",
+      "regularUser": "Mai amfani na yau da kullum",
+      "localAdmin": "Admin na gida, babu wakilai",
+      "otherRegion": "Wani yanki",
+      "hint": "Yanayin da aka riga aka sa suna cika fam din; ba za a aiwatar da komai ba sai ka danna Aiwatar."
+    },
+    "apply": "Aiwatar da sabunta shafi",
+    "applying": "Ana aiwatarwa…",
+    "clear": "Fita daga view-as",
+    "clearing": "Ana fita…",
+    "reset": "Sake fam",
+    "nothingToApply": "Zaɓi akalla ɗaya daga cikin gyara kafin aiwatarwa.",
+    "applyError": "Ba a iya aiwatar da view-as ba: {error}",
+    "clearError": "Ba a iya fitowa daga view-as ba: {error}",
+    "loadError": "Ba a iya ɗora yanayin view-as ba.",
+    "retry": "Sake gwadawa",
+    "expiresNote": "View-as zai kai awanni 8, ko har sai ka fita.",
+    "banner": {
+      "label": "Ana duba a matsayin",
+      "adjust": "Daidaici",
+      "exit": "Fita",
+      "role": {
+        "local": "admin na gida",
+        "none": "mai amfani na yau da kullum"
+      },
+      "region": "yanki {region}",
+      "department": "sashe \"{value}\"",
+      "companyName": "kamfani \"{value}\"",
+      "jobTitle": "suna \"{value}\"",
+      "officeId": "ofishi {value}",
+      "groups": "{count, plural, one {# rukuni} other {# rukuni}}"
+    }
   }
 }

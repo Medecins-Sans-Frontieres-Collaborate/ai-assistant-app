@@ -2658,6 +2658,10 @@
       "map": {
         "label": "Ikarata",
         "description": "Gira ikibazo cose kivemo amakuru y’ahantu kuri karata"
+      },
+      "grants": {
+        "label": "Gukora ivyo gutunganya inkunga",
+        "description": "Uhuze kandi ukuramwo amakuru ateguye neza mu bisobanuro vy’inkunga"
       }
     },
     "chooser": {
@@ -2667,7 +2671,8 @@
       "newTranslation": "Ukundi guhindura",
       "newDocument": "Inyandiko nshasha",
       "newDataAnalysis": "Isesengura nshasha ry'ibiharuro",
-      "newMap": "Ikarata nshasha"
+      "newMap": "Ikarata nshasha",
+      "newGrants": "Gutangura gukorana n’inkunga nshasha"
     },
     "translation": {
       "chooseLanguage": "Ururimi muriko mushiramwo",
@@ -3284,7 +3289,8 @@
       "unknownType": "Iki kiganiro kirakoresha workflow iyi version itazi. Amakuru y'ikiganiro ari hasi aha.",
       "untitled": "Ikiganiro gishasha",
       "toggleMenu": "Hindura urutonde",
-      "model": "Model kuri workflow iyi"
+      "model": "Model kuri workflow iyi",
+      "disabledByAdmin": "Iyi workflow yarahagaritswe n’umuyobozi. Inyandiko y’ibiganiro irerekanywe hasi."
     },
     "tabs": {
       "label": "Uburyo bwo kuganira",
@@ -4061,7 +4067,11 @@
       "storageUnavailable": "Ububiko bw'abayobozi ntibugerekanwa; dosiye zabitswe ntizashoboye kwerekanwa. Kubika ntibishoboka gushika bikosowe.",
       "sealingUnavailable": "Ugukinga amabanga ntikwashizweho kuri iri deployment (AUTH_SECRET irabuze) — amabanga y'abakiriya ntashobora kubikwa.",
       "updatedBy": "Vyavuguruwe na {by} kw'itariki ya {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Guhinduza agent yashizwemwo",
+    "orgAgentOverrideAction": "Hindura",
+    "orgAgentBuiltinBadge": "Yashizwemwo",
+    "orgAgentBuiltinHint": "Yasobanuwe muri deployment config. Amategeko yo kuyikoresha arashobora guhindurwa hano; hindura kugira uhindure ayindi minyerezano ata deployment ukoze."
   },
   "localModels": {
     "title": "Akarorero k'imbere mu muduga",
@@ -4262,9 +4272,15 @@
       "connectors": "Connectors y'ishirahamwe n'abayikoresha.",
       "guides": "Imitwarariko, amajambo n’amabwirizwa ajanye no kubahiriza.",
       "mapDatasets": "Datasets zahisemwo zizokoreshwa mu mashusho y'ikarata.",
-      "localAdmins": "Shingira abandi amabanga yo guhindura amategeko y’ukwinjira."
+      "localAdmins": "Shingira abandi amabanga yo guhindura amategeko y’ukwinjira.",
+      "workflows": "Zimya canke shira ku murongo uburyo bw'ibiganiro kuri bose.",
+      "viewAs": "Gerageza application nk’uwujuje canke atujuje ibisabwa."
     },
-    "openSettings": "Fungura ivyo gushiraho"
+    "openSettings": "Fungura ivyo gushiraho",
+    "area": {
+      "workflows": "Uburyo bw’akazi",
+      "viewAs": "Raba nka"
+    }
   },
   "limits": {
     "title": "Ingingo ngenderwako z'ikoreshwa",
@@ -4874,5 +4890,103 @@
     "listLabel": "Ivyo usabwe n'ishirahamwe ryawe",
     "searching": "Turiko turondera mw'ishirahamwe ryawe...",
     "noMatches": "Nta bisubizo vyabonetse muri dosiye — ushobora kwandika aderesi intoke"
+  },
+  "workflowsAdmin": {
+    "title": "Uburyo bw’akazi",
+    "description": "Shira ku murongo canke zimya buri workflow kuri organisation yose. Workflow yavuye ku murongo ntigaragara mu menyo kandi server irayanka, na n'ubwo hari uwari akwiye kuyironka.",
+    "layeredNote": "Flag ya LaunchDarkly conversationWorkflows igikomeza uburyo bwo gushira ku murongo: workflow yashizwe ku murongo hano irashobora kuboneka gusa iyo iyo flag yashizweho. Iyi page ntishobora kwerekana ikintu flag ihishe.",
+    "loading": "Hariko haradandazwa amategeko ya workflow…",
+    "loadError": "Ntivyashobotse kuronka amategeko ya workflow.",
+    "policyUnavailable": "Ntivyashobotse gusoma amategeko ya workflow kuri storage. Ama toggle ntagaragazwa aho kwerekana ibisanzwe bishobora kutahuza n’ivyo amategeko asaba.",
+    "retry": "Gerageza gusubira",
+    "enableAll": "Shira vyose ku murongo",
+    "disableAll": "Zimya vyose",
+    "enabledLabel": "Vyashizwe ku murongo",
+    "disabledLabel": "Vyavuye ku murongo",
+    "defaultOnHint": "Ivyo bigira igihe ata mategeko arazigamwa: vyashizwe ku murongo.",
+    "defaultOffHint": "Ivyo bigira igihe ata mategeko arazigamwa: vyavuye ku murongo — umuyobozi agomba kubishira ku murongo n’intoki.",
+    "grantsNote": "Gukora inkunga birimwo imbibe z’inyongera: biri gusa ku bakozi ba MSF-USA bo mu gisata ca Program bafise “grants” ku mirimo, canke abo muri Systems bafise “innovation” ku mirimo. Kuvyemeza hano ntibisimbura ayo mategeko.",
+    "unsaved": "Ufise impinduka utarazigama.",
+    "save": "Zigama",
+    "saving": "Hariko harazigama…",
+    "saveSuccess": "Amategeko ya workflow arazigamwe.",
+    "saveError": "Ntivyashobotse kuzigama amategeko ya workflow.",
+    "conflictError": "Hari uwundi muyobozi yahinduye amategeko imbere yawe. Vyarongeye kuradandazwa — raba neza wongere uzigame.",
+    "updatedByLine": "Vyaheruka kuzigamwa na {by} kw’itariki {at}.",
+    "neverSaved": "Nta mategeko arazigamwa; ibisanzwe biri hejuru ni vyo bikurikizwa."
+  },
+  "viewAs": {
+    "title": "Raba nka",
+    "description": "Gerageza application, gusa ku gihe ca session yawe, nka kanaka yuzuza canke atuzuza ivyo bisanzwe bigenwa n’umurongo canke n’abayobozi. Izina ryawe ntirihinduka: ivyo ukoze vyose biguma ari ivy’inyawe kandi ibisigazwa vyose birakuvuga.",
+    "activeTitle": "Raba-nka birakora",
+    "inactiveTitle": "Raba-nka ntibirakora",
+    "sections": {
+      "role": "Inshingano z’umuyobozi",
+      "region": "Agace k’amakuru",
+      "attributes": "Ibiranga vya directory",
+      "groups": "Ubugira mu matsinda",
+      "presets": "Ibiteguye"
+    },
+    "role": {
+      "global": "Umuyobozi mukuru (inshingano zawe nyazo)",
+      "local": "Umuyobozi w’aho",
+      "none": "Umukoresha w’imbere",
+      "localKeysLabel": "Imfunguruzo za agent yahawe",
+      "localKeysHint": "Imfunguruzo z’aba agent yahawe arakosora, zandikijwe zitandukanyijwe na comma. Teba ubusa kuri admin w’aho adafise agents yahawe.",
+      "noneWarning": "Nk’umukoresha asanzwe, ayandi mashirahamwe yose ntazoboneka. Iyi page iracagerwako, kandi banner hejuru mu gisohokayanditse irakwereka inzira yo gusubira."
+    },
+    "region": {
+      "actual": "Kuri ({region})",
+      "hint": "Ishira ibisabwa vyawe hamwe n'ivyo ushyira kuri storage y’iyindi ntara igihe bikiri gukora. Birarengeye cookie ya ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Ishirahamwe",
+      "companyName": "Sosiyete",
+      "jobTitle": "Izina ry'akazi",
+      "officeId": "Ibiro",
+      "officeActual": "Ibiro nyakuri",
+      "officeNone": "Nta biro",
+      "actualValue": "Iciriho: {value}",
+      "actualEmpty": "Iciriho: (ntacyo)",
+      "hint": "Wemerewe gusiga ikibanza kitaranditse kugira ugumane agaciro kariho. Ibi bikora kuri grants rule, attribute-scoped usage limits na access rules."
+    },
+    "groups": {
+      "label": "ID z’amatsinda",
+      "placeholder": "ID ya group kimwe kuri murongo ku murongo",
+      "hint": "Bisimbura—ntibyongezwa—ubumwe nyabwo muri kino gihe, kugira ugerageze kwinjiramo canke kutinjiramo."
+    },
+    "presets": {
+      "grantsMember": "Umurwi wa grants",
+      "regularUser": "Umukoresha asanzwe",
+      "localAdmin": "Admin wa hano, nta agents",
+      "otherRegion": "Iyindi ntara",
+      "hint": "Presets yuzura ifishi; nta na kimwe gikora mbere yo gukanda Apply."
+    },
+    "apply": "Shira mu bikorwa kandi ushore ivugurura",
+    "applying": "Biriko birakoreshwa…",
+    "clear": "Sohoka view-as",
+    "clearing": "Uriko urasohoka…",
+    "reset": "Sangira ishusho",
+    "nothingToApply": "Tegereza nibura kimwe ca override kugira ushobore gushira mu bikorwa.",
+    "applyError": "View-as ntivyashoboye gukorwa: {error}",
+    "clearError": "View-as ntivyashoboye gusohorwa: {error}",
+    "loadError": "State ya view-as ntiyashoboye gutwara.",
+    "retry": "Subira kugerageza",
+    "expiresNote": "View-as imara amasaha umunani canke igihe usohotse.",
+    "banner": {
+      "label": "Uriko uraraba nka",
+      "adjust": "Hindura",
+      "exit": "Sohoka",
+      "role": {
+        "local": "admin wa hano",
+        "none": "umukoresha asanzwe"
+      },
+      "region": "intara {region}",
+      "department": "ishirahamwe \"{value}\"",
+      "companyName": "sosiyete \"{value}\"",
+      "jobTitle": "izina \"{value}\"",
+      "officeId": "ibiro {value}",
+      "groups": "{count, plural, one {# tsinda} other {# matsinda}}"
+    }
   }
 }

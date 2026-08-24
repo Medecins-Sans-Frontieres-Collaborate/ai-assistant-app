@@ -2658,6 +2658,10 @@
       "map": {
         "label": "ካርታ",
         "description": "ብዝኾነ ውህብቲ ኣብ ካርታ ቦታ ምቕያር"
+      },
+      "grants": {
+        "label": "ሒደታት ናይ መቐባብያ ግንዛቤታት",
+        "description": "ኣብ ትሕቲ ግንዛቤታት ዘሎ ሓበሬታ ብመደብ ምምዳብን ምሕታትን"
       }
     },
     "chooser": {
@@ -2667,7 +2671,8 @@
       "newTranslation": "ሓድሽ ትርጉም",
       "newDocument": "ሓድሽ መደብ",
       "newDataAnalysis": "ሓድሽ ውህብቲ ትንታነ",
-      "newMap": "ሓድሽ ካርታ"
+      "newMap": "ሓድሽ ካርታ",
+      "newGrants": "ሓድሽ ምምዳብ ግንዛቤታት"
     },
     "translation": {
       "chooseLanguage": "ትርጉም ቋንቋ",
@@ -3284,7 +3289,8 @@
       "unknownType": "እዚ ውይይት ዘይትረዳኦ ዓይነት workflow ተጠቒምካ። ታሪኽ ውይይት ታሕቲ ተረኽበሉ እዩ።",
       "untitled": "ዓዲ ውይይት",
       "toggleMenu": "ምዝዋር መኑ",
-      "model": "መደብ ዝተጠቐሙ ናይዚ ውልቀ ስራሕ"
+      "model": "መደብ ዝተጠቐሙ ናይዚ ውልቀ ስራሕ",
+      "disabledByAdmin": "እዚ ስርሒት ብ መምርሒ ተዕጊዡ ኣሎ። ዝኾነ ታሪኽ ውዕል ታቲ ተረኽቦም ኣሎ።"
     },
     "tabs": {
       "label": "ምዝናና ሞዴ",
@@ -4061,7 +4067,11 @@
       "storageUnavailable": "ኣድሚን ማእከል ኣይተረኸበን። ኣለኹም ዘሎ መዝገቦች ክትርኢሉ ኣይከኣልኩምን። ምእታዊ ምድማቕ ድማ ይውዕል ድማ።",
       "sealingUnavailable": "ኣምልኾ ምስጢር ኣብዚ deployment ኣይተዘጋጀን (AUTH_SECRET የጎደሎ) — ክላይንት ምስጢር ኣይኽእልኩም ምድማቕን።",
       "updatedBy": "ብ{by} ብ{at} ተሓደሰ"
-    }
+    },
+    "orgAgentOverrideTitle": "ብምኻን ሓሳብ ንዝምልከት ኤጀንት ምስዓር",
+    "orgAgentOverrideAction": "ምስዓር",
+    "orgAgentBuiltinBadge": "እዋናዊ",
+    "orgAgentBuiltinHint": "ኣብ ምድብ ምሃንዲ ውልቀ ይተሰርሐሉ። ናይ እቲ ዓዳማዊ መደብ ኣብዚ ክትግዛኣዮ ትዕዛዙ ይተራይ ክትገድስ ብምስዓር ይኽእል።"
   },
   "localModels": {
     "title": "ኣካባቢ ሞዴልታት",
@@ -4262,9 +4272,15 @@
       "connectors": "ንማህበራዊ ቦታታት ኮነክተርን ከመይ ሰባት ይጥቀማዎም ከይትንክሩ።",
       "guides": "ዘብላዕ ኣብ ኣዘጋጅነት፣ ቃላትን ትምክህታትን መሳርሒ መግበሪ መልክን።",
       "mapDatasets": "ናይ ብቕጽል ተሰፊሑ ዳታ ተቃራኒታት ናብ workflow ካድ ትረኽቦም ኢዮም።",
-      "localAdmins": "ሕገ-ኤርትኤ-መደብ ማስተኻኸል ካብ ነገር ንሰባት ሪአይታ።"
+      "localAdmins": "ሕገ-ኤርትኤ-መደብ ማስተኻኸል ካብ ነገር ንሰባት ሪአይታ።",
+      "workflows": "ሒደታት ውዕል ንኩሉ ሰብ ምክፋት ወይ ምዕጻውን።",
+      "viewAs": "እቲ መተግበሪ እንተ ኣብ ዝኽእል ኩነታት ዝገብሩ ወይስ ዝደብሩ ሰባት ምፈታት።"
     },
-    "openSettings": "ቅንጥታት ክፈት"
+    "openSettings": "ቅንጥታት ክፈት",
+    "area": {
+      "workflows": "ሒደታት ውዕል",
+      "viewAs": "ርአኺኦ ከም"
+    }
   },
   "limits": {
     "title": "ድንበሮታት ኣጠቃቕያ",
@@ -4874,5 +4890,103 @@
     "listLabel": "ሓገዝታት ካብ ኣካዳሚኻ",
     "searching": "ኣብ ውህብቲ ኣካውንቲ እዩ እዩ ዝተዓረፈ…",
     "noMatches": "ምስ መዝገብ ኣይተመሃሪናን — ኣብ ውሳኔ ኣድራሻ ብ እግዚኣኻ ትእትው"
+  },
+  "workflowsAdmin": {
+    "title": "ሒደታት ውዕል",
+    "description": "ነቲ ሓደ ሒደት ለውሉ ይክኣል ወይ ይሰክሕ ንኩሉ ትካል ኤርጎናይዜሽን። እቲ ዝተዕጊዙ ሒደት ኣብ ምናይ ምስክርን እንተኾይኑ ንሰባት ይበጽሖን የኣኽኣልን።",
+    "layeredNote": "ዝተቓነቐ ዝርከብ ናይ LaunchDarkly conversationWorkflows flag እዩ እታ ምርጫ ይቐጽ። እዚ ገጽ ዝሰኻል ሂደት እንምበር እቲ flag ነዚ ኣይተልዕሎን ኣይታየንን።",
+    "loading": "ፖሊሲ ሒደት ዝግበር…",
+    "loadError": "ፖሊሲ ሒደት ምምጻእ ኣይካኣልን።",
+    "policyUnavailable": "ፖሊሲ ሒደት ካብ ቀሪቡ ምንባብ ኣይተኻኣለን። ቀዋሚ መዋቅር ኣይታረዱን ከም default ተረኽቦም ይርከቡ።",
+    "retry": "እንደገና ፈትኑ",
+    "enableAll": "ኩሉ ኣክትዩ",
+    "disableAll": "ኩሉ ኣጥፉ",
+    "enabledLabel": "ኣክቲብ",
+    "disabledLabel": "ዝተዕጊዙ",
+    "defaultOnHint": "ብምትእታዊ ፖሊሲ ዘይምኽእኡ እንተኾይኑ፡ ብቀዋሚ ኣክቲብ እዩ።",
+    "defaultOffHint": "ብምትእታዊ ፖሊሲ ዘይምኽእኡ እንተኾይኑ፡ ብቀዋሚ ዝተዕጊዙ እዩ፡ ኣስተማማዕ ኣክቲብ ክድልዩ ይግበሩ።",
+    "grantsNote": "ምምዳብ ግንዛቤታት ብዝተሓደሰ ናይ MSF-USA ዘሎም ተጠቃሚታት ኣብ መደብ Program ብ “grants” ኣብ ድሕሪ መደብ ወይ Systems ብ “innovation” ዝኸውን ዝተዓበየ እዩ። ኣብዚ ኣክቲብ ምግባር ናይ ዝሰራሕ ስርሒት ኣይተፋሓናን።",
+    "unsaved": "ዘይተዓቲ ግብሪ ኣለኩም።",
+    "save": "ኣቁም",
+    "saving": "ይቕምጥ…",
+    "saveSuccess": "ፖሊሲ ሒደት ተቐሚጡ።",
+    "saveError": "ፖሊሲ ሒደት ምቕማጥ ኣይካኣልን።",
+    "conflictError": "ካልኦት መምርሒ ፖሊሲ ቀዳማይ ቀየሮ። ተቐሚጡ ኣሎ—በጃኹም ደጊምኩም ተመልከቱን ኣብ ድሕሪኡ ኣቁሙ።",
+    "updatedByLine": "ኣብ መደብ {by} ኣብ {at} ዝተቐመጠ።",
+    "neverSaved": "ኣይተቐመጠ ፖሊሲ ኣሎን፤ ናይ ቀዋሚ መዋቅር ይሰርሕ።"
+  },
+  "viewAs": {
+    "title": "ርአኺኦ ከም",
+    "description": "መተግበሪ ኣብ እቲ ሓላፊ ስነ ልውውጥ እንተ ዝሓለፉ ወይ ዝደቑ መንገዲ ምፍታይ፣ ብኩሉ እቲ መለኪያ ናይካ ይኸውን፣ ኣብ መዓልቲ ውልቀ ምኻን ውዕል ከባቢ ኩሉ ቀረባ ናብካ ይቕምጡ።",
+    "activeTitle": "ርአኺኦ ከም – ኣክቲብ እዩ",
+    "inactiveTitle": "ርአኺኦ ከም – ዘይኣክቲብ እዩ",
+    "sections": {
+      "role": "መደብ ኣስተዳዳሪ",
+      "region": "ዞባ ውልቀ ባዮም",
+      "attributes": "ናይ ዝርዝር ባዮም ባሕሪ",
+      "groups": "ኣባልነት ቡድን",
+      "presets": "ቅድመ-መዋቅር"
+    },
+    "role": {
+      "global": "ባሕላዊ ኣስተዳዳሪ (እቲ መደብካ እዚ)",
+      "local": "ዞባዊ ኣስተዳዳሪ",
+      "none": "ተጠቃሚ ቀዋሚ",
+      "localKeysLabel": "ቀባላት ኤጀንት ዓላማ",
+      "localKeysHint": "ዘተፈላለወ ሓላፊ ኤጀንት ቀባላት ይፃፉ። ባዕላ ዉጹ ብዞባዊ ኣስተዳዳሪ ከም ዝተመሉእ እንተለኻ ይቀይሩ።",
+      "noneWarning": "እንተ ተጠቃሚ ቀዋሚ ኸውንካ ዚፈላለየ ኣካባቢ ውልቀ ምኻን ይጠፍኡ። እዚ ገጽ ብፍጹም ይቀፅሉ፣ ራእሳ ላዕለዎ እቲ ካርዶ ኤፍ ምኽንያቱ ኣቕልቦ ይፈጽም።"
+    },
+    "region": {
+      "actual": "እዋናዊ ({region})",
+      "hint": "እንዳኣታዊ ግልባጭ ግዘያታካን ዝተሰቐሙ ነገራትን ናብ ካልእ ክልል ቤት-መከማቻ ይልከዋ። ከም ቅድሚ ጸንሒ ጽንሑ ?regionOverride= cookie ይስራል።"
+    },
+    "attributes": {
+      "department": "መደብ",
+      "companyName": "ኩባንያ",
+      "jobTitle": "ዝርዝር ስራሕ",
+      "officeId": "ቢሮ",
+      "officeActual": "ሓበሬታ ቢሮ",
+      "officeNone": "ቢሮ የለን",
+      "actualValue": "ዓተት: {value}",
+      "actualEmpty": "ዓተት: (ባዶ)",
+      "hint": "ዓትም ሳዕሪ ትፈትን ዘይብል ክትተው ትኽእል። እዚ ሓሳብን ውሳኔ ውክልና ወሳኺ ግደፅን ምምሕያሽ ሕጉን ይሓትት።"
+    },
+    "groups": {
+      "label": "እተታተፉ ቡድናት መለለይ ቁ.",
+      "placeholder": "ናይ ኣንዳንድ Entra ቡድን ኦቤጅክት መለለይ በዓቕላ መልእኽቲ",
+      "hint": "ምዃኑ ክልተወሓዱ ኣይኮነን — ብምንታይ ኣቦ እተገብረካዮ ንዚ ስግንታ ክትፈትን ትኽእል።"
+    },
+    "presets": {
+      "grantsMember": "ኣባል ቡድን Grants",
+      "regularUser": "ተጠቃሚ መደበኛ",
+      "localAdmin": "ኣማኒ ቦታዊ፣ ናይ ካልእ ኣገንታት የለን",
+      "otherRegion": "ካልእ ክልል",
+      "hint": "መዋበድታት ቅፅዓ ይሙሉ፤ ምንታይስ ከዚ ኣብ መተግበሪ አይኮነን ክትጠውቅ።"
+    },
+    "apply": "ምግባርን ደግመን ጽዕኖ",
+    "applying": "ይምግባር...",
+    "clear": "ናይ view-as ውጽኢ",
+    "clearing": "እየ ይወፅእ...",
+    "reset": "ቅፅዓ ኣነጻጽር",
+    "nothingToApply": "ቢዝካር ንዝተረዳበፉ ንኣንድነት ዝግበር ምዕባለ ጨምዕ።",
+    "applyError": "ናይ view-as ምውሳነ ኣይተተቐበለን፡ {error}",
+    "clearError": "ናይ view-as ንኽላይ ኣይተተቐበለን፡ {error}",
+    "loadError": "ናይ view-as ሁኔታ ኣይተጸዓነን ክሕትቱ.",
+    "retry": "ደግመን ፈትን",
+    "expiresNote": "view-as ክሳብ 8 ሰዓት ድማ ወይ ክሳብ ንዝወጽእካ ይኽእል።",
+    "banner": {
+      "label": "እንደዚ view-as ተመልከቲ",
+      "adjust": "ግጥም",
+      "exit": "ውጽኢ",
+      "role": {
+        "local": "ቦታዊ ኣማኒ",
+        "none": "መደበኛ ተጠቃሚ"
+      },
+      "region": "ክልል {region}",
+      "department": "መደብ \"{value}\"",
+      "companyName": "ኩባንያ \"{value}\"",
+      "jobTitle": "ስም \"{value}\"",
+      "officeId": "ቢሮ {value}",
+      "groups": "{count, plural, one {# ቡድን} other {# ቡድናት}}"
+    }
   }
 }

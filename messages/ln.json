@@ -2658,6 +2658,10 @@
       "map": {
         "label": "Carte",
         "description": "Kobongola ba données nyonso ezali bisika na carte"
+      },
+      "grants": {
+        "label": "Kopesa misala ya ba grants",
+        "description": "Kobongisa mpe kobima ba données structurées uta na ba histoires ya grant"
       }
     },
     "chooser": {
@@ -2667,7 +2671,8 @@
       "newTranslation": "Kokokisa boyokani sika",
       "newDocument": "Document sika",
       "newDataAnalysis": "Analyse ya ba données sika",
-      "newMap": "Carte sika"
+      "newMap": "Carte sika",
+      "newGrants": "Misala ya ba grants ya sika"
     },
     "translation": {
       "chooseLanguage": "Lokota ya bokokani",
@@ -3284,7 +3289,8 @@
       "unknownType": "Dialogue oyo ezali na workflow oyo version oyo eyebi te. Lisolo mobimba ezali awa na se.",
       "untitled": "Dialogue ya sika",
       "toggleMenu": "Kokanga to kofungola menu",
-      "model": "Model ya workflow oyo"
+      "model": "Model ya workflow oyo",
+      "disabledByAdmin": "Administrateur aboyisi misala oyo. Lisolo ya kala ezali nse."
     },
     "tabs": {
       "label": "Mode ya masolo",
@@ -4061,7 +4067,11 @@
       "storageUnavailable": "Stockage ya admin ekoki kokotama te; ba dossiers oyo ezali ekoki kolakisama te. Kobikisa ezali kokotama te ti ekomi lisusu normal.",
       "sealingUnavailable": "Secret encryption ebongisami te na deployment oyo (AUTH_SECRET ezali te) — client secrets bakoki kobikisa yango te.",
       "updatedBy": "Ebongisami na {by} na mokolo {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Kobongola agent ya ndakisa",
+    "orgAgentOverrideAction": "Bongola",
+    "orgAgentBuiltinBadge": "Ya kati",
+    "orgAgentBuiltinHint": "Ekotamaki na déploiement config. Règle ya accès na yango ekoki kobongama awa ; soki olingi kobongola yango, sala override ata mokolo moko te."
   },
   "localModels": {
     "title": "Bamodelo ya esika",
@@ -4262,9 +4272,15 @@
       "connectors": "Basangisi ya organisation mpe nani akoki kosalela yango.",
       "guides": "Mitindo ya ekomeli, maloba ya mosala mpe mabongisi ya bosembo.",
       "mapDatasets": "Datasets oyo basalaki mpo ebengama na map workflow.",
-      "localAdmins": "Pesa batu mosusu mokumba ya kobongola mibeko ya kopesa nzela."
+      "localAdmins": "Pesa batu mosusu mokumba ya kobongola mibeko ya kopesa nzela.",
+      "workflows": "Fantisa to kotelemisa ba workflow ya masolo mpo na bato nyonso.",
+      "viewAs": "Tala application ndenge ndenge moko ya moto akoki kosala to te."
     },
-    "openSettings": "Fungola malamu misala ya malamu"
+    "openSettings": "Fungola malamu misala ya malamu",
+    "area": {
+      "workflows": "Ba workflows",
+      "viewAs": "Talela lokola"
+    }
   },
   "limits": {
     "title": "Mbongwana ya kosalela",
@@ -4874,5 +4890,103 @@
     "listLabel": "Bato oyo organisation na bino epesi toli",
     "searching": "Tosalaki recherche na organisation na bino…",
     "noMatches": "Ezali eloko moko te na répertoire — okoki kotya adresse na maboko"
+  },
+  "workflowsAdmin": {
+    "title": "Ba workflows",
+    "description": "Ongoya to kotelemisa workflow moko na moko mpo na organisation mobimba. Workflow oyo ebotamaki ezali kokangama na menu mpe serveur etiki yango, ata soki moto asengeli kozwaka yango.",
+    "layeredNote": "Flag conversationWorkflows ya LaunchDarkly nde ezalaka na bokonzi ya kosala rollout : workflow oyo efungolami awa ekoki kokatama soki flag yango eza te. Page oyo ekoki komonisa eloko te soki flag ekutani na yango.",
+    "loading": "Kozwa politique ya workflow…",
+    "loadError": "Politique ya workflow ekokaki kozwama te.",
+    "policyUnavailable": "Politique ya workflow ekokaki kotangama te na esika ezali. Ba toggles ekangami esika ya komonisa na valeurs par défaut oyo ekoki te kozingama ndenge ekolekaka.",
+    "retry": "Yebisa lisusu",
+    "enableAll": "Fungola nyonso",
+    "disableAll": "Kanga nyonso",
+    "enabledLabel": "Efungolami",
+    "disabledLabel": "Ekangami",
+    "defaultOnHint": "Soki politique ebombami te : efungolami.",
+    "defaultOffHint": "Soki politique ebombami te : ekangami — administrateur asengeli kofungola yango na maboko.",
+    "grantsNote": "Kopesa misala ya ba grants ezali kaka mpo na ba utilisateur MSF-USA ya departement Program oyo na titre ya mosala ezali \"grants\", to Systems na \"innovation\" na titre. Ko fungola yango awa ekobongisa règlements yango te.",
+    "unsaved": "Ozalaki naino kobombela mabongisi.",
+    "save": "Bomba",
+    "saving": "Kobomba…",
+    "saveSuccess": "Politique ya workflow ebombami.",
+    "saveError": "Politique ya workflow ekokaki kobombama te.",
+    "conflictError": "Administrateur mosusu abongolaki politique liboso. Ebimisami lisusu – tala yango mpe bombela lisusu.",
+    "updatedByLine": "Ebombami mbala sima na {by} na {at}.",
+    "neverSaved": "Politique nanu ebombami te; ba defaults ya likoló nde esalemi."
+  },
+  "viewAs": {
+    "title": "Talela lokola",
+    "description": "Zwa application ndenge ndenge moko ya moto akoki kotonda to kokosa condition oyo mbala mingi directory to ba administrateur nde basalaka. Identité na yo ekobongwana te : nyonso osalaki ekotikala ya yo, mpe na audit, kombo na yo ekotikala na yango.",
+    "activeTitle": "View-as ezali",
+    "inactiveTitle": "View-as ezali te",
+    "sections": {
+      "role": "Role ya admin",
+      "region": "Region ya ba données",
+      "attributes": "Attributs ya directory",
+      "groups": "Kombo ya groupe",
+      "presets": "Presets"
+    },
+    "role": {
+      "global": "Administrateur global (role na yo ya solo)",
+      "local": "Administrateur ya esika",
+      "none": "Utilisateur normal",
+      "localKeysLabel": "Bakonzi ya ba agents délégué",
+      "localKeysHint": "Ba clés ya agent oyo local admin akoki kobongisa, séparés na virgule. Tiká mpamba soki local admin azali na ba agent te.",
+      "noneWarning": "Lokola utilisateur ya normal ba zones nyonso ya admin ekoboma. Page oyo ekotikala, mpe bannière ya likoló ya application ekopesa nzela ya kokima."
+    },
+    "region": {
+      "actual": "Ya solo ({region})",
+      "hint": "Epesi ndakisa ya kobongisa ba demandes na yo — mpe nyonso oyo otelemisaka ntango ezali na misala — na stockage ya region mosusu. Ekoya liboso ya cookie ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Departema",
+      "companyName": "Kompani",
+      "jobTitle": "Mosala",
+      "officeId": "Bureau",
+      "officeActual": "Bureau ya solo",
+      "officeNone": "Bureau te",
+      "actualValue": "Ya solo: {value}",
+      "actualEmpty": "Ya solo: (pamba)",
+      "hint": "Tika esika moko pamba mpo okoba kosalela motuya ya solo. Oyo ezali kosalisa mibeko ya grants, limite ya utilisation ya attribute mpe mibeko ya accès."
+    },
+    "groups": {
+      "label": "Group ids",
+      "placeholder": "Id ya groupe ya Entra moko na ligne",
+      "hint": "Ekokabela — ekotombola te — lisanga na yo oyo ezali solo mpo na session oyo, mpo olinga komeka soki ozali membre pe soki te."
+    },
+    "presets": {
+      "grantsMember": "Membre ya équipe grants",
+      "regularUser": "Utilisateur normal",
+      "localAdmin": "Local admin, ba agents te",
+      "otherRegion": "Region mosusu",
+      "hint": "Presets efandaka formulaire; eloko moko ekosalama kaka soki okanisi Apply."
+    },
+    "apply": "Appliquer pe recharger",
+    "applying": "Ezalaki kosala…",
+    "clear": "Kobima na view-as",
+    "clearing": "Obimi…",
+    "reset": "Réinitialiser formulaire",
+    "nothingToApply": "Tia option moko boye liboso ya kosala application.",
+    "applyError": "View-as ekokaki kosalema te: {error}",
+    "clearError": "View-as ekokaki kolongwa te: {error}",
+    "loadError": "Etat ya view-as ekokaki kotalisama te.",
+    "retry": "Komeka lisusu",
+    "expiresNote": "View-as ezalaka tii na 8 heures, to tii okei libanda.",
+    "banner": {
+      "label": "Ozali komona lokola",
+      "adjust": "Kobongola",
+      "exit": "Kobima",
+      "role": {
+        "local": "admin local",
+        "none": "utilisateur normal"
+      },
+      "region": "region {region}",
+      "department": "departema \"{value}\"",
+      "companyName": "compani \"{value}\"",
+      "jobTitle": "titre \"{value}\"",
+      "officeId": "bureau {value}",
+      "groups": "{count, plural, one {# groupe} other {# groupes}}"
+    }
   }
 }
