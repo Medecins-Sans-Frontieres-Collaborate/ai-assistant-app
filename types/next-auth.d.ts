@@ -26,9 +26,10 @@ declare module 'next-auth' {
       actualRegion?: 'US' | 'EU';
       /**
        * True when a manual region override is active for this session, i.e.
-       * `region` came from the override cookie rather than the user's identity.
-       * Surfaced so the UI can warn that data is being routed to an overridden
-       * location, not the user's actual one.
+       * `region` came from the (global-admin-only) override cookie or from a
+       * view-as region override rather than the user's identity. Surfaced so
+       * the UI can warn that data is being routed to an overridden location,
+       * not the user's actual one.
        */
       regionOverridden?: boolean;
       /** ID of the user's office, e.g. 'msf-usa'. Null if no office matched. */
