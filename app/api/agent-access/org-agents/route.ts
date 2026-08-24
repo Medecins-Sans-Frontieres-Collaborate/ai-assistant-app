@@ -46,8 +46,10 @@ import {
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { OpenAIModels } from '@/types/openai';
+import { OrganizationAgent } from '@/types/organizationAgent';
 
 import { auth } from '@/auth';
+import { env } from '@/config/environment';
 import { getOrganizationAgents } from '@/lib/organizationAgents';
 import { randomUUID } from 'crypto';
 import { z } from 'zod';
@@ -152,6 +154,48 @@ function staticAgentIds(): Set<string> {
   return new Set(getOrganizationAgents().map((agent) => agent.id));
 }
 
+/**
+ * The editable-field subset of an OrgRagAgent record, projected from a
+ * static config entry. Served alongside the stored records so the admin
+ * page can list built-in agents (access rules apply to them by canonical
+ * key exactly like admin records) and prefill an override form without
+ * the admin re-keying the deployment config.
+ */
+export type StaticOrgAgentView = Omit<
+  OrgRagAgent,
+  | 'version'
+  | 'validation'
+  | 'createdBy'
+  | 'createdAt'
+  | 'updatedBy'
+  | 'updatedAt'
+>;
+
+export function toStaticOrgAgentView(
+  agent: OrganizationAgent,
+): StaticOrgAgentView {
+  return {
+    id: agent.id,
+    name: agent.name,
+    description: agent.description ?? '',
+    icon: agent.icon || 'IconHexagon',
+    color: agent.color || '#4190f2',
+    category: agent.category ?? '',
+    maintainedBy: agent.maintainedBy ?? '',
+    systemPrompt: agent.systemPrompt ?? '',
+    sources: (agent.sources ?? []).map((s) => ({ name: s.name, url: s.url })),
+    // Static agents ride the env pair unless the entry overrides it — the
+    // same resolution the RAG pipeline and the startup index check use.
+    searchIndex: agent.ragConfig?.searchIndex || env.SEARCH_INDEX || '',
+    semanticConfig: agent.ragConfig?.semanticConfig ?? '',
+    topK: agent.ragConfig?.topK ?? 10,
+    baseModelId: agent.baseModelId ?? null,
+    allowWebSearch: agent.allowWebSearch ?? false,
+    allowCodeInterpreter: agent.allowCodeInterpreter ?? false,
+    enabled: agent.enabled !== false,
+  };
+}
+
 function isKnownOrgAgentId(id: string): boolean {
   return ORG_AGENT_ID_PATTERN.test(id) || staticAgentIds().has(id);
 }
@@ -222,12 +266,31 @@ export async function GET() {
         ? stored
         : stored.filter((entry) => canEditKey(status, entry.canonicalKey));
 
+    // Built-in (config/organization-agents.json) RAG agents, projected onto
+    // the record shape and scoped by the same per-key delegation. A static
+    // entry that an admin record already overrides is reported as such so
+    // the UI shows the record row instead of a duplicate.
+    const storedIds = new Set(stored.map((entry) => entry.orgAgent.id));
+    const staticAgents = getOrganizationAgents()
+      .filter((agent) => agent.type === 'rag')
+      .map((agent) => ({
+        canonicalKey: canonicalAgentKey(ORG_AGENT_SOURCE, agent.id),
+        agent: toStaticOrgAgentView(agent),
+        overridden: storedIds.has(agent.id),
+      }))
+      .filter(
+        (entry) =>
+          status.editableAgentKeys === ALL_AGENT_KEYS ||
+          canEditKey(status, entry.canonicalKey),
+      );
+
     return successResponse({
       orgAgents: visible.map((entry) => ({
         canonicalKey: entry.canonicalKey,
         agent: entry.orgAgent,
         etag: entry.etag,
       })),
+      staticAgents,
       orgAgentsUnavailable,
       fetchedAt,
       // Static config ids the editor may offer as override targets.
