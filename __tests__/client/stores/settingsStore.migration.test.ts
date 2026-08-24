@@ -7,6 +7,10 @@ import {
   DEFAULT_MAP_TIMELAPSE,
   MAX_CARDS_MAX,
 } from '@/lib/utils/shared/geo/timelapsePacing';
+import {
+  DEFAULT_PASTE_ATTACHMENT_CHARS,
+  LEGACY_DEFAULT_PASTE_ATTACHMENT_CHARS,
+} from '@/lib/utils/shared/paste/pastedText';
 
 import { InterpreterMode } from '@/types/interpreterMode';
 import { DEFAULT_WEB_SEARCH_OPTIONS } from '@/types/webSearch';
@@ -1031,5 +1035,42 @@ describe('setM365Connected records a deliberate choice', () => {
 
     expect(useSettingsStore.getState().m365Connected).toBe(true);
     expect(useSettingsStore.getState().m365ConnectedUserSet).toBe(true);
+  });
+});
+
+/**
+ * v57 → v58: the large-paste default rose from 2,000 characters to ~2,000
+ * words. Only a store still holding the OLD default is moved; any value the
+ * user set themselves (including 0 = off) must survive.
+ */
+describe('settingsStore migration (v57 → v58)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('moves a user still on the old 2,000-character default to the new default', () => {
+    const result = migrate(
+      { pasteAsAttachmentChars: LEGACY_DEFAULT_PASTE_ATTACHMENT_CHARS },
+      57,
+    ) as Record<string, unknown>;
+
+    expect(result.pasteAsAttachmentChars).toBe(DEFAULT_PASTE_ATTACHMENT_CHARS);
+  });
+
+  it('keeps a custom threshold and an explicit off (0)', () => {
+    expect(
+      (migrate({ pasteAsAttachmentChars: 5000 }, 57) as Record<string, unknown>)
+        .pasteAsAttachmentChars,
+    ).toBe(5000);
+    expect(
+      (migrate({ pasteAsAttachmentChars: 0 }, 57) as Record<string, unknown>)
+        .pasteAsAttachmentChars,
+    ).toBe(0);
+  });
+
+  it('lands a pre-v40 store (no field yet) on the new default via the chain', () => {
+    // v40 backfills the field with clamp(undefined) = current default, which
+    // is not the legacy value, so v58 leaves it alone — already correct.
+    const result = migrate({}, 39) as Record<string, unknown>;
+
+    expect(result.pasteAsAttachmentChars).toBe(DEFAULT_PASTE_ATTACHMENT_CHARS);
   });
 });
