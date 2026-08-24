@@ -1,8 +1,12 @@
 /**
  * Server-side enforcement helpers for the workflow policy.
  *
- * Every workflow API route calls {@link isWorkflowEnabled} after auth: the
- * client hides disabled workflows, but hiding is not a control. Returning
+ * Every workflow-SPECIFIC API route (`/api/workflows/{document,data,map,
+ * translation}/**` and `/api/grants/**`) calls {@link isWorkflowEnabled}
+ * after auth: the client hides disabled workflows, but hiding is not a
+ * control. `/api/workflows/fetch-url` is deliberately NOT gated — it serves
+ * URL attachments for plain chat and document references too, so tying it
+ * to any one workflow's toggle would break unrelated features. Returning
  * 403 with a stable code lets the client tell "disabled by an admin" apart
  * from an ordinary authorization failure.
  */
