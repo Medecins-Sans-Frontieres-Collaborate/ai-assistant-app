@@ -37,6 +37,7 @@ import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useFolderManagement } from '@/client/hooks/ui/useFolderManagement';
 import { useUI } from '@/client/hooks/ui/useUI';
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
+import { useWorkflowPolicy } from '@/client/hooks/workflows/useWorkflowPolicy';
 
 import { canAccessGrants } from '@/lib/services/grants/access';
 
@@ -98,6 +99,9 @@ export const Sidebar = memo(function Sidebar() {
   // Grants is allowlist-restricted; its workflow entry is hidden for
   // everyone else (the server APIs enforce access regardless).
   const showGrants = canAccessGrants(session?.user);
+  // Admin workflow policy: a workflow switched off by an admin is hidden for
+  // everyone, on top of the flag and the grants rule (server enforces too).
+  const { isWorkflowEnabled } = useWorkflowPolicy();
   const { showChatbar, toggleChatbar, setIsSettingsOpen, theme } = useUI();
   const {
     conversations,
@@ -647,7 +651,9 @@ export const Sidebar = memo(function Sidebar() {
                 {workflowsEnabled && (
                   <>
                     {CONVERSATION_WORKFLOW_TYPES.filter(
-                      (type) => type !== 'grants' || showGrants,
+                      (type) =>
+                        isWorkflowEnabled(type) &&
+                        (type !== 'grants' || showGrants),
                     ).map((type) => {
                       const meta = WORKFLOW_META[type];
                       const Icon = meta.icon;
