@@ -65,6 +65,7 @@ import { auth, getAccessTokenForOBO } from '@/auth';
 import { env } from '@/config/environment';
 import { getLimitDefinition } from '@/config/limits';
 import { getDefaultModel, getFallbackChain } from '@/config/models';
+import { getOrganizationAgentById } from '@/lib/organizationAgents';
 import { TokenCredential } from '@azure/identity';
 
 /**
@@ -734,14 +735,16 @@ export const createCredentialMiddleware = async (
     }
   }
 
-  // Admin-authored org RAG agents: the same layer-1 guard as prompt agents.
-  // Keyed on the RECORD existing for this botId (server-generated `orgr-`
-  // ids or overrides of static config ids) — static agents with no admin
-  // record keep their historical rule-free path. The cold-start fail-closed
-  // arm applies to `orgr-` ids only: a static-id botId whose override
-  // cannot be verified degrades to the static config entry, exactly like a
-  // deployment where the record never existed (blocking there would take
-  // every static agent down with a storage outage).
+  // Org RAG agents: the same layer-1 guard as prompt agents. Admin records
+  // (server-generated `orgr-` ids or overrides of static config ids) are
+  // evaluated against the rule stored under `org-agent::<id>`; a STATIC
+  // config agent with no record is evaluated under the very same key, so
+  // an admin can restrict a built-in agent without overriding it (no rule
+  // → allow, so this is a no-op until a rule exists). The cold-start
+  // fail-closed arm applies to `orgr-` ids only: a static-id botId whose
+  // rules cannot be verified degrades to the rule-free static entry,
+  // exactly like a deployment where the record never existed (blocking
+  // there would take every static agent down with a storage outage).
   if (accessService.isEnabled() && context.botId) {
     await accessService.ensureFresh();
     const orgRecord = accessService.getOrgAgentById(context.botId);
@@ -762,15 +765,31 @@ export const createCredentialMiddleware = async (
       );
       throw agentAccessDenied('unavailable', 'rules-unavailable');
     }
-    if (orgRecord) {
+    const staticAgent = orgRecord
+      ? null
+      : getOrganizationAgentById(context.botId);
+    if (staticAgent && accessService.getSnapshot().rulesUnavailable) {
+      // Static fail-open (see above): audited so the degradation is visible.
+      emitAccessAudit({
+        userMail: context.user?.mail,
+        agentName: staticAgent.id,
+        source: ORG_AGENT_SOURCE,
+        decision: 'allow',
+        reason: 'rules-unavailable-static-fallback',
+      });
+      console.warn(
+        '[CredentialMiddleware] Agent access rules unavailable; serving static org agent rule-free',
+      );
+    } else if (orgRecord || staticAgent) {
+      const agentName = orgRecord ? orgRecord.id : staticAgent!.id;
       const decision = accessService.evaluateAccess({
         userMail: context.user?.mail,
         source: ORG_AGENT_SOURCE,
-        agentName: orgRecord.id,
+        agentName,
       });
       emitAccessAudit({
         userMail: context.user?.mail,
-        agentName: orgRecord.id,
+        agentName,
         source: ORG_AGENT_SOURCE,
         decision: decision.decision,
         reason: decision.reason,
