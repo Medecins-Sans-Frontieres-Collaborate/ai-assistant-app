@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
 
 import { applyViewAs, readViewAs } from '@/lib/services/admin/viewAs';
+import { isGlobalAdmin } from '@/lib/services/agentAccess/adminAuth';
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
 import { qualifyGraphScopes } from '@/lib/services/auth/m365GraphScopes';
 
@@ -449,7 +450,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // Apply an optional manual region override (testing/diagnostics). It
       // replaces only the data-plane region — office identity is unchanged —
       // and is surfaced via `regionOverridden` so the UI can warn the user.
-      const override = await readRegionOverride();
+      // GLOBAL ADMINS ONLY (bare-mail = real identity): the cookie is plain
+      // and anyone can set it from a URL, so for everyone else it is inert —
+      // routing a regular user's data to the other region is not a test
+      // affordance they should have (docs/ADMIN_WORKFLOWS_AND_VIEW_AS.md).
+      const override = isGlobalAdmin(userMail)
+        ? await readRegionOverride()
+        : null;
       const userRegion = override ?? actualRegion;
 
       // Admin "view as" (lib/services/admin/viewAs.ts): honoured only when
