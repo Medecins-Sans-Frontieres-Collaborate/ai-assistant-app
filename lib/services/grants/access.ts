@@ -18,9 +18,6 @@
  */
 
 export interface GrantsUser {
-  displayName?: string | null;
-  mail?: string | null;
-  email?: string | null;
   department?: string | null;
   jobTitle?: string | null;
   companyName?: string | null;
@@ -39,7 +36,7 @@ function norm(value?: string | null): string {
   return (value || '').trim().toLowerCase();
 }
 
-/** True if the given user is allowed to use the Grants Processing feature. */
+// True if the given user is allowed to use the Grants Processing feature.
 export function canAccessGrants(user?: GrantsUser | null): boolean {
   if (!user) return false;
   if (!GRANTS_ALLOWED_ORGS.has(norm(user.companyName))) return false;
