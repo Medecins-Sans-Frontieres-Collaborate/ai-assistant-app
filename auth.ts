@@ -4,6 +4,7 @@ import MicrosoftEntraID from 'next-auth/providers/microsoft-entra-id';
 import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
 
+import { applyViewAs, readViewAs } from '@/lib/services/admin/viewAs';
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
 import { qualifyGraphScopes } from '@/lib/services/auth/m365GraphScopes';
 
@@ -451,6 +452,26 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const override = await readRegionOverride();
       const userRegion = override ?? actualRegion;
 
+      // Admin "view as" (lib/services/admin/viewAs.ts): honoured only when
+      // the REAL mail on the JWT is a global admin, and applied last so it
+      // wins over the anyone-can-set region cookie. Identity (id, mail) is
+      // never touched; only the fields access decisions read.
+      const viewAsOverrides = await readViewAs(userId, userMail);
+      const profile = {
+        jobTitle: token.userJobTitle,
+        department: token.userDepartment,
+        companyName: token.userCompanyName,
+        officeId: userOfficeId,
+        officeName: userOfficeName,
+        region: userRegion,
+      };
+      const effective = viewAsOverrides
+        ? applyViewAs(profile, viewAsOverrides)
+        : { ...profile, viewAs: undefined };
+      const regionOverridden =
+        effective.region !== actualRegion &&
+        (override !== null || viewAsOverrides?.region !== undefined);
+
       return {
         ...session,
         user: {
@@ -459,14 +480,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           mail: userMail,
           givenName: token.userGivenName,
           surname: token.userSurname,
-          jobTitle: token.userJobTitle,
-          department: token.userDepartment,
-          companyName: token.userCompanyName,
-          region: userRegion,
+          jobTitle: effective.jobTitle,
+          department: effective.department,
+          companyName: effective.companyName,
+          region: effective.region,
           actualRegion,
-          regionOverridden: override !== null && override !== actualRegion,
-          officeId: userOfficeId,
-          officeName: userOfficeName,
+          regionOverridden,
+          officeId: effective.officeId,
+          officeName: effective.officeName,
+          viewAs: effective.viewAs,
         } as Session['user'],
         error: token.error,
         // Refresh token is deliberately omitted here — it must not reach the
