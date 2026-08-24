@@ -621,10 +621,10 @@ describe('createCredentialMiddleware — agent access invocation guard', () => {
       expect(emitAccessAudit).not.toHaveBeenCalled();
     });
 
-    it('static rag botId (non-prompt-agent) passes through when no admin record exists', async () => {
-      // Since admin org-agent overrides landed, EVERY botId consults the
-      // access snapshot (an override cannot be honored without it) — but a
-      // static botId with no record evaluates no rules and passes through.
+    it('static rag botId (non-prompt-agent) is evaluated under the org-agent source and passes with no rule', async () => {
+      // A built-in config agent with no admin record is guarded by the rule
+      // stored under the same `org-agent::<id>` key an override would use —
+      // no rule → allow, so the historical behavior is unchanged.
       const result = await createCredentialMiddleware(
         makePromptAgentContext({
           promptAgent: undefined,
@@ -635,6 +635,85 @@ describe('createCredentialMiddleware — agent access invocation guard', () => {
 
       expect(result).toEqual({});
       expect(accessGetPromptAgentById).not.toHaveBeenCalled();
+      expect(accessEvaluate).toHaveBeenCalledWith({
+        userMail: 'u@msf.org',
+        source: 'org-agent',
+        agentName: 'msf_communications',
+      });
+      expect(emitAccessAudit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          agentName: 'msf_communications',
+          source: 'org-agent',
+          decision: 'allow',
+        }),
+      );
+    });
+
+    it('static rag botId + deny rule: blocked and audited', async () => {
+      accessEvaluate.mockReturnValue({
+        decision: 'deny',
+        reason: 'not-allowed',
+      });
+
+      await expect(
+        createCredentialMiddleware(
+          makePromptAgentContext({
+            promptAgent: undefined,
+            botId: 'msf_communications',
+          }),
+          mockReq,
+        ),
+      ).rejects.toMatchObject({
+        code: ErrorCode.AGENT_UNAVAILABLE,
+        metadata: { accessDecision: 'deny', accessReason: 'not-allowed' },
+      });
+      expect(emitAccessAudit).toHaveBeenCalledWith({
+        userMail: 'u@msf.org',
+        agentName: 'msf_communications',
+        source: 'org-agent',
+        decision: 'deny',
+        reason: 'not-allowed',
+      });
+    });
+
+    it('static rag botId + rules unavailable: serves rule-free (fail-open, audited)', async () => {
+      // Unlike `orgr-` ids, a built-in agent must survive a storage outage.
+      accessGetSnapshot.mockReturnValue({ rulesUnavailable: true });
+      accessEvaluate.mockReturnValue({
+        decision: 'unavailable',
+        reason: 'rules-unavailable',
+      });
+
+      const result = await createCredentialMiddleware(
+        makePromptAgentContext({
+          promptAgent: undefined,
+          botId: 'msf_communications',
+        }),
+        mockReq,
+      );
+
+      expect(result).toEqual({});
+      expect(accessEvaluate).not.toHaveBeenCalled();
+      expect(emitAccessAudit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          agentName: 'msf_communications',
+          source: 'org-agent',
+          decision: 'allow',
+          reason: 'rules-unavailable-static-fallback',
+        }),
+      );
+    });
+
+    it('unknown botId (neither record nor static agent) never evaluates', async () => {
+      const result = await createCredentialMiddleware(
+        makePromptAgentContext({
+          promptAgent: undefined,
+          botId: 'no_such_agent',
+        }),
+        mockReq,
+      );
+
+      expect(result).toEqual({});
       expect(accessEvaluate).not.toHaveBeenCalled();
     });
 
