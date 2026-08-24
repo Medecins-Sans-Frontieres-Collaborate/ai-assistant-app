@@ -25,7 +25,7 @@ export default async function AdminLayout({
     redirect('/signin');
   }
 
-  const { areas } = await resolveAdminAreas(session.user?.mail);
+  const { areas } = await resolveAdminAreas(session.user);
   if (areas.length === 0) {
     redirect('/');
   }
