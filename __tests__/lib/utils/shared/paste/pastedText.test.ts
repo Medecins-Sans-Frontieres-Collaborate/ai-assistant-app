@@ -1,5 +1,6 @@
 import {
   DEFAULT_PASTE_ATTACHMENT_CHARS,
+  LEGACY_DEFAULT_PASTE_ATTACHMENT_CHARS,
   PASTE_ATTACHMENT_MAX_CHARS,
   PASTE_ATTACHMENT_MIN_CHARS,
   buildPastedTextDocument,
@@ -158,5 +159,18 @@ describe('buildPastedTextDocument', () => {
       now,
     );
     expect(doc.endsWith('line one\n\nline two\n')).toBe(true);
+  });
+});
+
+describe('DEFAULT_PASTE_ATTACHMENT_CHARS', () => {
+  it('is roughly 2,000 words (~6 chars/word), well above the legacy 2,000 chars', () => {
+    expect(DEFAULT_PASTE_ATTACHMENT_CHARS).toBe(24_000);
+    expect(LEGACY_DEFAULT_PASTE_ATTACHMENT_CHARS).toBe(2000);
+    expect(DEFAULT_PASTE_ATTACHMENT_CHARS).toBeGreaterThanOrEqual(
+      PASTE_ATTACHMENT_MIN_CHARS,
+    );
+    expect(DEFAULT_PASTE_ATTACHMENT_CHARS).toBeLessThanOrEqual(
+      PASTE_ATTACHMENT_MAX_CHARS,
+    );
   });
 });
