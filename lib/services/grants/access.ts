@@ -25,12 +25,12 @@ export interface GrantsUser {
 
 /** department (lowercase) -> job-title keywords (lowercase), any of which
  *  qualifies a member of that department. */
-const GRANTS_DEPARTMENT_TITLE_RULES: Record<string, string[]> = {
+export const GRANTS_DEPARTMENT_TITLE_RULES: Record<string, string[]> = {
   program: ['grants'],
   systems: ['innovation'],
 };
 
-const GRANTS_ALLOWED_ORGS = new Set<string>(['msf-usa']);
+export const GRANTS_ALLOWED_ORGS = new Set<string>(['msf-usa']);
 
 function norm(value?: string | null): string {
   return (value || '').trim().toLowerCase();
