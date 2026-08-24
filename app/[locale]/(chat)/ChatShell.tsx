@@ -8,6 +8,7 @@ import { LocalStorageService } from '@/client/services/storage/localStorageServi
 
 import { shouldShowStorageWarning } from '@/lib/utils/app/storage/storageMonitor';
 
+import { ViewAsBanner } from '@/components/Admin/ViewAs/ViewAsBanner';
 import { UpdateBanner } from '@/components/App/UpdateBanner';
 import { BackupModals } from '@/components/Backup/BackupModals';
 import { BackupSyncBanner } from '@/components/Backup/BackupSyncBanner';
@@ -90,6 +91,7 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
   return (
     <>
       <UpdateBanner />
+      <ViewAsBanner />
       <BackupSyncBanner />
       <MigrationDialog
         isOpen={showMigrationDialog}
