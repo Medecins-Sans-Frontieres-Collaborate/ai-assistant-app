@@ -92,6 +92,8 @@
     "streamdown": "^1.4.0",
     "turndown": "^7.2.2",
     "uuid": "^13.0.0",
+    "word-extractor": "^1.0.4",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "zod": "^4.1.12",
     "zustand": "^5.0.2"
   },

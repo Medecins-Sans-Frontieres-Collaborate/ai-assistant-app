@@ -14,6 +14,7 @@ export const CONVERSATION_WORKFLOW_TYPES = [
   'document',
   'data-analysis',
   'map',
+  'grants',
 ] as const;
 
 export type ConversationWorkflowType =
@@ -715,6 +716,37 @@ export interface MapWorkflowState {
 }
 
 /* ------------------------------------------------------------------ */
+/* Grants                                                              */
+/* ------------------------------------------------------------------ */
+
+/** The grants extraction workflows step; mirrors the workspace UI states. */
+export type GrantsWorkflowStep =
+  | 'document-management'
+  | 'confirm'
+  | 'coverage-check'
+  | 'progress'
+  | 'validation-review';
+
+/**
+ * Grants extraction workflow. Deliberately stores only identifiers — the
+ * selected OC/year, the workflow step, and the server-side run ids. Run
+ * artifacts (coverage reconciliation, extraction rows) live server-side
+ * keyed by runId and are re-fetched when the conversation reopens, keeping
+ * this state far under the workflow-state size budget.
+ */
+export interface GrantsWorkflowState {
+  kind: 'grants';
+  oc?: string;
+  year?: number;
+  step?: GrantsWorkflowStep;
+  /** Latest coverage-check run (restorable via the preprocess progress API). */
+  coverageRunId?: string;
+  /** Latest extraction run (restorable via the runs data API). */
+  extractionRunId?: string;
+  updatedAt: string;
+}
+
+/* ------------------------------------------------------------------ */
 /* Union                                                               */
 /* ------------------------------------------------------------------ */
 
@@ -728,4 +760,5 @@ export type WorkflowState =
   | TranslationWorkflowState
   | DocumentWorkflowState
   | DataAnalysisWorkflowState
-  | MapWorkflowState;
+  | MapWorkflowState
+  | GrantsWorkflowState;

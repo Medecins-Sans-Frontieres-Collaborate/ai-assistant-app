@@ -2,6 +2,7 @@ import {
   IconFileText,
   IconLanguage,
   IconMap,
+  IconReportMoney,
   IconTable,
 } from '@tabler/icons-react';
 
@@ -22,7 +23,7 @@ export interface WorkflowMeta {
   type: ConversationWorkflowType;
   icon: TablerIcon;
   /** Key under the `workflows.types.*` namespace in messages/en.json. */
-  i18nKey: 'translation' | 'document' | 'dataAnalysis' | 'map';
+  i18nKey: 'translation' | 'document' | 'dataAnalysis' | 'map' | 'grants';
 }
 
 export const WORKFLOW_META: Record<ConversationWorkflowType, WorkflowMeta> = {
@@ -45,6 +46,11 @@ export const WORKFLOW_META: Record<ConversationWorkflowType, WorkflowMeta> = {
     type: 'map',
     icon: IconMap,
     i18nKey: 'map',
+  },
+  grants: {
+    type: 'grants',
+    icon: IconReportMoney,
+    i18nKey: 'grants',
   },
 };
 

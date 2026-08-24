@@ -38,6 +38,8 @@ import { useFolderManagement } from '@/client/hooks/ui/useFolderManagement';
 import { useUI } from '@/client/hooks/ui/useUI';
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
+import { canAccessGrants } from '@/lib/services/grants/access';
+
 import { createWorkflowConversation } from '@/lib/utils/app/conversationInit';
 import {
   exportConversation,
@@ -93,6 +95,9 @@ export const Sidebar = memo(function Sidebar() {
   const params = useParams();
   const locale = params?.locale || 'en';
   const { data: session } = useSession();
+  // Grants is allowlist-restricted; its workflow entry is hidden for
+  // everyone else (the server APIs enforce access regardless).
+  const showGrants = canAccessGrants(session?.user);
   const { showChatbar, toggleChatbar, setIsSettingsOpen, theme } = useUI();
   const {
     conversations,
@@ -641,7 +646,9 @@ export const Sidebar = memo(function Sidebar() {
               <div className="p-1">
                 {workflowsEnabled && (
                   <>
-                    {CONVERSATION_WORKFLOW_TYPES.map((type) => {
+                    {CONVERSATION_WORKFLOW_TYPES.filter(
+                      (type) => type !== 'grants' || showGrants,
+                    ).map((type) => {
                       const meta = WORKFLOW_META[type];
                       const Icon = meta.icon;
                       const labels: Record<typeof meta.i18nKey, string> = {
@@ -649,6 +656,7 @@ export const Sidebar = memo(function Sidebar() {
                         document: tWorkflows('sidebar.newDocument'),
                         dataAnalysis: tWorkflows('sidebar.newDataAnalysis'),
                         map: tWorkflows('sidebar.newMap'),
+                        grants: tWorkflows('sidebar.newGrants'),
                       };
                       return (
                         <button
