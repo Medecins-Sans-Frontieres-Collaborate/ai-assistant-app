@@ -16,7 +16,9 @@
     "coverage": "npm run coverage:node && npm run coverage:jsdom",
     "search:config": "npx ts-node --project tsconfig.scripts.json scripts/search/index.ts",
     "search:config-downtime": "npx ts-node --project tsconfig.scripts.json scripts/search/index.ts --allow-downtime",
-    "prepare": "husky"
+    "prepare": "husky",
+    "evals": "vitest --run --config ./vitest.config.evals.mts",
+    "evals:fresh": "EVAL_NO_CACHE=1 vitest --run --config ./vitest.config.evals.mts"
   },
   "dependencies": {
     "@anthropic-ai/foundry-sdk": "^0.2.0",
