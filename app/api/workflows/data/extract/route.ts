@@ -5,6 +5,10 @@ import {
   buildExtractionUserPrompt,
 } from '@/lib/services/workflows/data/prompts';
 import { extractionResponseSchema } from '@/lib/services/workflows/data/tableSchema';
+import {
+  isWorkflowEnabled,
+  workflowDisabledResponse,
+} from '@/lib/services/workflows/policy/guard';
 import { truncateToTokenBudget } from '@/lib/services/workflows/shared/textBudget';
 import {
   callStructured,
@@ -57,6 +61,11 @@ function isValidColumn(value: unknown): value is DataColumn {
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session) return unauthorizedResponse();
+  // Admin workflow policy (docs/ADMIN_WORKFLOWS_AND_VIEW_AS.md): a workflow an
+  // admin switched off is refused server-side, not just hidden.
+  if (!(await isWorkflowEnabled('data-analysis'))) {
+    return workflowDisabledResponse('data-analysis');
+  }
 
   let body: DataExtractRequest;
   try {

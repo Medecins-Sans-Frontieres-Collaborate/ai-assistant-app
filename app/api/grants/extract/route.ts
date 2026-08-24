@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
-import { canAccessGrants } from '@/lib/services/grants/access';
 import { resolveOC } from '@/lib/services/grants/ocConfig';
 import { runPipeline } from '@/lib/services/grants/pipeline';
 import { loadPromptOverride } from '@/lib/services/grants/promptStore';
@@ -10,6 +9,7 @@ import {
   safeChildName,
   safeJoin,
 } from '@/lib/services/grants/runPaths';
+import { canUseGrants } from '@/lib/services/grants/serverAccess';
 
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
 
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    if (!canAccessGrants(session.user)) {
+    if (!(await canUseGrants(session.user))) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 

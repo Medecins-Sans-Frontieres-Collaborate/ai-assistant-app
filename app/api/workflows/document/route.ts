@@ -13,6 +13,10 @@ import {
   buildToneBlock,
 } from '@/lib/services/workflows/document/prompts';
 import {
+  isWorkflowEnabled,
+  workflowDisabledResponse,
+} from '@/lib/services/workflows/policy/guard';
+import {
   structureGuideToSpec,
   toneGuideToToneInput,
 } from '@/lib/services/workflows/shared/guidePrompts';
@@ -77,6 +81,11 @@ interface DocumentWorkflowRequest {
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session) return unauthorizedResponse();
+  // Admin workflow policy (docs/ADMIN_WORKFLOWS_AND_VIEW_AS.md): a workflow an
+  // admin switched off is refused server-side, not just hidden.
+  if (!(await isWorkflowEnabled('document'))) {
+    return workflowDisabledResponse('document');
+  }
 
   let body: DocumentWorkflowRequest;
   try {

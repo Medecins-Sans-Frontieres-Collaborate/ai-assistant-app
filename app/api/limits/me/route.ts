@@ -83,7 +83,7 @@ export async function GET(request: NextRequest) {
 
     const as = request.nextUrl.searchParams.get('as');
     if (as) {
-      if (!isGlobalAdmin(session.user.mail)) return forbiddenResponse();
+      if (!isGlobalAdmin(session.user)) return forbiddenResponse();
       const mail = normalizeMail(as);
       const preview: Principal = {
         userId: '',

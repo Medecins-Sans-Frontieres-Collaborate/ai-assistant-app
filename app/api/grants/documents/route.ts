@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
-import { canAccessGrants } from '@/lib/services/grants/access';
 import { resolveOC } from '@/lib/services/grants/ocConfig';
+import { canUseGrants } from '@/lib/services/grants/serverAccess';
 
 import { auth } from '@/auth';
 
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    if (!canAccessGrants(session.user)) {
+    if (!(await canUseGrants(session.user))) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    if (!canAccessGrants(session.user)) {
+    if (!(await canUseGrants(session.user))) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -144,7 +144,7 @@ export async function DELETE(request: NextRequest) {
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    if (!canAccessGrants(session.user)) {
+    if (!(await canUseGrants(session.user))) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
