@@ -13,14 +13,12 @@ import {
   IconMailDown,
   IconPaperclip,
   IconPlugConnected,
-  IconReportMoney,
   IconRoute,
   IconSparkles,
   IconVolume,
   IconWorld,
 } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import { useSession } from 'next-auth/react';
 import React, {
   useCallback,
   useEffect,
@@ -41,7 +39,6 @@ import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
 import { fillComposerWithPlaybook } from '@/client/services/m365/playbooks/playbookLauncher';
 import { M365_PLAYBOOKS } from '@/client/services/m365/playbooks/playbookRegistry';
-import { canAccessGrants } from '@/lib/services/grants/access';
 import {
   M365_BUILTIN_SERVER_ID,
   M365_BUILTIN_SERVER_LABEL,
@@ -237,8 +234,6 @@ const Dropdown: React.FC<DropdownProps> = ({
   }, []);
 
   const t = useTranslations();
-  const { data: session } = useSession();
-  const showGrants = canAccessGrants(session?.user);
   const tUrl = useTranslations('urlFetch');
   const tM365 = useTranslations('m365');
 
@@ -1077,36 +1072,9 @@ const Dropdown: React.FC<DropdownProps> = ({
             },
           ]
         : []),
-      ...(showGrants
-        ? [
-            {
-              id: 'grants',
-              icon: (
-                <IconReportMoney
-                  size={18}
-                  className="text-green-600 flex-shrink-0"
-                />
-              ),
-              label: 'Grants Processing',
-              infoTooltip:
-                'Reconcile and extract structured data from grant narratives (restricted access).',
-              onClick: () => {
-                window.open(
-                  `/${locale}/grants/extraction`,
-                  '_blank',
-                  'noopener,noreferrer',
-                );
-                closeDropdown();
-              },
-              category: 'transform' as const,
-            },
-          ]
-        : []),
     ],
     [
       t,
-      showGrants,
-      locale,
       tUrl,
       tM365,
       isM365FilesEnabled,
