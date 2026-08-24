@@ -165,6 +165,31 @@ async function getVisibleOrgAgentEntries(
   return entries;
 }
 
+/**
+ * Static config agents the caller may not use, by the same layer-1 rule
+ * lookup the invocation guard applies (`org-agent::<id>`). Folded into
+ * `suppressedOrgAgentIds` so the bundled client list trims them — a UX
+ * filter only; the chat pipeline re-evaluates on invocation. 'unavailable'
+ * passes through like every other discovery surface.
+ */
+async function getDeniedStaticOrgAgentIds(
+  userMail: string | undefined,
+): Promise<string[]> {
+  const accessService = AgentAccessService.getInstance();
+  if (!accessService.isEnabled()) return [];
+  await accessService.ensureFresh();
+  return getOrganizationAgents()
+    .filter(
+      (agent) =>
+        accessService.evaluateAccess({
+          userMail,
+          source: ORG_AGENT_SOURCE,
+          agentName: agent.id,
+        }).decision === 'deny',
+    )
+    .map((agent) => agent.id);
+}
+
 export async function GET(request: NextRequest) {
   const session = await auth();
 
@@ -217,10 +242,16 @@ export async function GET(request: NextRequest) {
       session.user.mail,
     );
     const orgAgentEntries = await getVisibleOrgAgentEntries(session.user.mail);
-    // Static config ids that admin records currently override or disable —
-    // the client trims the bundled list with this, so a file agent can be
-    // retired or replaced without a deploy.
-    const suppressedOrgAgentIds = await getSuppressedStaticAgentIds();
+    // Static config ids that admin records currently override or disable,
+    // plus the ones an access rule denies THIS user — the client trims the
+    // bundled list with this, so a file agent can be retired, replaced or
+    // restricted without a deploy.
+    const suppressedOrgAgentIds = Array.from(
+      new Set([
+        ...(await getSuppressedStaticAgentIds()),
+        ...(await getDeniedStaticOrgAgentIds(session.user.mail)),
+      ]),
+    );
 
     if (allPaths.length === 0) {
       return NextResponse.json({
