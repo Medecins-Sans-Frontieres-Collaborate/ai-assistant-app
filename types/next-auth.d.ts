@@ -1,5 +1,7 @@
 import NextAuth from 'next-auth';
 
+import { ViewAsSessionInfo } from '@/lib/services/admin/viewAsTypes';
+
 declare module 'next-auth' {
   interface Session {
     user: {
@@ -33,6 +35,14 @@ declare module 'next-auth' {
       officeId?: string | null;
       /** Human-readable office name, e.g. 'MSF USA'. */
       officeName?: string | null;
+      /**
+       * Present only while a GLOBAL admin has "view as" active for their own
+       * session (lib/services/admin/viewAsTypes.ts). The profile fields
+       * above already reflect the overrides; this records which ones and
+       * what the real values are, so UI can say so. `id` and `mail` are
+       * never overridden.
+       */
+      viewAs?: ViewAsSessionInfo;
     };
     error?: string;
     // accessToken is kept in JWT only (server-side) to reduce cookie size
