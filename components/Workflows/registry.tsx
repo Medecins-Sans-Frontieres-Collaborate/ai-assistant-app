@@ -82,4 +82,13 @@ export const WORKFLOW_REGISTRY: Record<
     // events/connections; see docs/MAP_WORKFLOW.md.
     railSend: () => import('@/client/services/workflows/map/mapRailChat'),
   },
+  grants: {
+    meta: WORKFLOW_META.grants,
+    Workspace: lazy(() =>
+      import('./Grants/GrantsWorkspace').then((m) => ({
+        default: m.GrantsWorkspace,
+      })),
+    ),
+    createInitialState: () => createInitialWorkflowState('grants'),
+  },
 };

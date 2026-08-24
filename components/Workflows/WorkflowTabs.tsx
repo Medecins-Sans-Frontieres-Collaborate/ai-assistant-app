@@ -2,6 +2,7 @@
 
 import { IconCheck, IconChevronDown, IconMessage } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
+import { useSession } from 'next-auth/react';
 import {
   KeyboardEvent,
   createElement,
@@ -14,6 +15,8 @@ import { createPortal } from 'react-dom';
 import { useTranslations } from 'next-intl';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
+
+import { canAccessGrants } from '@/lib/services/grants/access';
 
 import { CONVERSATION_WORKFLOW_TYPES } from '@/types/workflow';
 
@@ -105,6 +108,12 @@ export function useWorkflowTabsEnabled(): boolean {
  * gates on its own "has messages" notion; the guards below are the floor.
  */
 export function WorkflowTabs() {
+  // Grants is allowlist-restricted: its tab is hidden for everyone else
+  // (the server APIs enforce access regardless).
+  const { data: session } = useSession();
+  const visibleTabIds = TAB_IDS.filter(
+    (tab) => tab !== 'grants' || canAccessGrants(session?.user),
+  );
   const t = useTranslations('workflows');
   const enabled = useWorkflowTabsEnabled();
   const { selectedConversation, updateConversation } = useConversations();
@@ -239,7 +248,7 @@ export function WorkflowTabs() {
               className="fixed inset-x-0 bottom-0 z-[10001] flex max-h-[75dvh] flex-col overflow-y-auto rounded-t-2xl border-t border-gray-200 bg-white shadow-lg outline-none animate-slide-up pb-[env(safe-area-inset-bottom)] dark:border-gray-700 dark:bg-surface-dark"
             >
               <div className="p-2">
-                {TAB_IDS.map((tab) => {
+                {visibleTabIds.map((tab) => {
                   const isActive = tab === activeTab;
                   return (
                     <button
@@ -306,7 +315,7 @@ export function WorkflowTabs() {
         aria-orientation="horizontal"
         className="hidden shrink-0 items-center gap-0.5 rounded-lg bg-gray-100 p-0.5 md:flex dark:bg-surface-dark-elevated"
       >
-        {TAB_IDS.map((tab) => {
+        {visibleTabIds.map((tab) => {
           const Icon = tab === CHAT_TAB ? IconMessage : WORKFLOW_META[tab].icon;
           const isActive = tab === activeTab;
           const label = labelFor(tab);
