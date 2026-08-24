@@ -49,8 +49,11 @@ export function buildPrincipal(session: Session | null): Principal {
     mail,
     domain: domainOfMail(user?.mail),
     attributes,
-    // Sync cache read: [] until a route warms it via resolveUserGroupIds
+    // View-as (admin test mode) replaces membership outright; otherwise a
+    // sync cache read: [] until a route warms it via resolveUserGroupIds
     // (see lib/services/m365/groupMembership.ts for the posture).
-    groupIds: user?.id ? getCachedGroupIdsForUser(user.id) : [],
+    groupIds:
+      user?.viewAs?.overrides.groupIds ??
+      (user?.id ? getCachedGroupIdsForUser(user.id) : []),
   };
 }

@@ -2658,6 +2658,10 @@
       "map": {
         "label": "Saritany",
         "description": "Avadiho ho toerana ao anaty sarintany ny angona rehetra"
+      },
+      "grants": {
+        "label": "Fikarakarana Grants",
+        "description": "Ahitsio sy alao ny angona voarafitra avy amin’ny fitantarana grant"
       }
     },
     "chooser": {
@@ -2667,7 +2671,8 @@
       "newTranslation": "Fandikan-teny vaovao",
       "newDocument": "Antontan-taratasy vaovao",
       "newDataAnalysis": "Fanadihadiana angona vaovao",
-      "newMap": "Saritany vaovao"
+      "newMap": "Saritany vaovao",
+      "newGrants": "Fikarakarana grant vaovao"
     },
     "translation": {
       "chooseLanguage": "Fiteny kendrena",
@@ -3284,7 +3289,8 @@
       "unknownType": "Ity resaka ity dia mampiasa workflow izay tsy fantatry ny kinova ampiasaina. Aseho fotsiny ny tantaran'ny resaka etsy ambany.",
       "untitled": "Resaka vaovao",
       "toggleMenu": "Atsangano/ahenoy ny sakafo",
-      "model": "Modely amin'ity workflow ity"
+      "model": "Modely amin'ity workflow ity",
+      "disabledByAdmin": "Notapahan’ny mpitantana ity workflow ity. Aseho etsy ambany ny tantaran’ny resaka."
     },
     "tabs": {
       "label": "Fomba fifanakalozan-dresaka",
@@ -4061,7 +4067,11 @@
       "storageUnavailable": "Tsy tratra ny fitahirizana ho an'ny admin; tsy afaka aseho ireo rakitra efa misy. Tsy azo atao ny mitahiry mandra-piverin'ny asa ara-dalàna.",
       "sealingUnavailable": "Tsy voarindrina ny fanidiana tsiambaratelo amin’ity deployment ity (AUTH_SECRET tsy hita) — tsy afaka mitahiry tsiambaratelo ny client.",
       "updatedBy": "Nohavaozin’i {by} tamin’ny {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Override agent hatrany anatiny",
+    "orgAgentOverrideAction": "Override",
+    "orgAgentBuiltinBadge": "Hatrany anatiny",
+    "orgAgentBuiltinHint": "Voafaritra ao amin’ny deployment config. Azonao ovaina eto ny fitsipika fidirana; override-no ovaina raha tsy te handefa deploy."
   },
   "localModels": {
     "title": "Model eo an-toerana",
@@ -4262,9 +4272,15 @@
       "connectors": "Connectors sy iza no afaka mampiasa azy ao amin'ny fikambanana.",
       "guides": "Torolalana momba ny fomba, voambolana ary fitoviana.",
       "mapDatasets": "Dataset voafantina azo ampiasaina amin'ny workflow mikasika ny sarintany.",
-      "localAdmins": "Manome alalana hanova fitsipika amin’ny hafa."
+      "localAdmins": "Manome alalana hanova fitsipika amin’ny hafa.",
+      "workflows": "Ahodina na alefa ho an’ny rehetra ny workflows resaka.",
+      "viewAs": "Andramo ny app toy ny olona mahafeno - na tsy mahafeno - fepetra."
     },
-    "openSettings": "Sokafy ny fikirakirana"
+    "openSettings": "Sokafy ny fikirakirana",
+    "area": {
+      "workflows": "Workflows",
+      "viewAs": "Hijery toy ny"
+    }
   },
   "limits": {
     "title": "Fetra fampiasana",
@@ -4874,5 +4890,103 @@
     "listLabel": "Soso-kevitra avy amin’ny fikambananareo",
     "searching": "Mitady ao amin'ny fikambananareo…",
     "noMatches": "Tsy nahitana fitoviana tao amin'ny lahatahiry — azonao atao ny manoratra ny adiresy amin'ny tanana"
+  },
+  "workflowsAdmin": {
+    "title": "Workflows",
+    "description": "Afindra ho alefa na tohizana ny workflow tsirairay ho an’ny fikambanana iray manontolo. Raha voahilika ny workflow iray dia miafina amin’ny menu ary lavin’ny server, na mety ho afaka amin’izany aza ilay olona.",
+    "layeredNote": "Ny saina LaunchDarkly conversationWorkflows ihany no mifehy ny fampiaviana workflow: workflow alefa eto dia azo idirana ihany raha mandeha io saina io. Tsy afaka mampiseho eto raha miafina noho io saina io.",
+    "loading": "Eo am-pitrohana politikan’ny workflow...",
+    "loadError": "Tsy afaka nohafarina ny politikan’ny workflow.",
+    "policyUnavailable": "Tsy afaka vakiana amin’ny fitahirizana ny politikan’ny workflow. Afenina ny bokotra famadihana fa tsy asiana sanda default mety tsy mifanaraka amin’ny voafaritra.",
+    "retry": "Avereno",
+    "enableAll": "Atsangano rehetra",
+    "disableAll": "Alefa avokoa ny famonoana",
+    "enabledLabel": "Alefa",
+    "disabledLabel": "Nohajanona",
+    "defaultOnHint": "Default rehefa tsy misy politika voatahiry: alefa.",
+    "defaultOffHint": "Default rehefa tsy misy politika voatahiry: nohajanona — tsy maintsy avadika amin’ny tanana izany.",
+    "grantsNote": "Voafetra ho an’ny mpikambana MSF-USA ao amin’ny sampana Program manana \"grants\" amin’ny anaram-piasana, na ao amin’ny Systems manana \"innovation\" amin’ny anaram-piasana ihany koa ny Grants Processing. Tsy manova io fepetra io ny famelàna eto.",
+    "unsaved": "Misy fanovana tsy mbola voatahiry.",
+    "save": "Tehirizo",
+    "saving": "Eo am-tehirizana...",
+    "saveSuccess": "Vita ny fitahirizana politika amin'ny workflow.",
+    "saveError": "Tsy afaka voatahiry ny politikan’ny workflow.",
+    "conflictError": "Admin hafa efa nanova voalohany. Nohavaozina — azafady jereo ary tehirizo indray.",
+    "updatedByLine": "Farany nataon’i {by} tamin’ny {at}.",
+    "neverSaved": "Tsy mbola nisy politika voatahiry; ireo default etsy ambony no mihatra."
+  },
+  "viewAs": {
+    "title": "Hijery toy ny",
+    "description": "Andramo amin'ny session-nao ihany ny app, toy ny olona mahafeno na tsy mahafeno fepetra izay amboarin’ny directory na admin. Tsy ovaina ny mombamomba anao: anay rehetra foroninao, anananao avokoa ary mbola voarakitra amin’ny anaranao amin’ny audit rehetra.",
+    "activeTitle": "Mandeha ny View-as",
+    "inactiveTitle": "Tsy mandeha ny View-as",
+    "sections": {
+      "role": "Sata Admin",
+      "region": "Faritra angona",
+      "attributes": "Toetoetra directory",
+      "groups": "Mpikambana group",
+      "presets": "Presets"
+    },
+    "role": {
+      "global": "Admin maneran-tany (sata tena misy aminao)",
+      "local": "Admin eo an-toerana",
+      "none": "Mpampiasa tsotra",
+      "localKeysLabel": "Fanalahidin’ny agent natolotra",
+      "localKeysHint": "Fanalahidin’ny agent azo ovain’ity admin eo an-toerana ity, sarihana amin’ny comma. Avelao foana ho an’ny admin tsy manana agent natolotra.",
+      "noneWarning": "Amin’ny maha-mpampiasa tsotra anao dia hiala avokoa ireo faritra admin rehetra. Hitoetra eto ihany ity pejy ity, ary hisy foana safidy mivoaka eo an-tampon’ny app."
+    },
+    "region": {
+      "actual": "Tena misy ({region})",
+      "hint": "Mandefa ny fangatahanao — sy izay rehetra alefanao rehefa mandeha — ho any amin'ny fitahirizan'ny faritra hafa. Manan-kery mihoatra noho ny cookie ?regionOverride= izany."
+    },
+    "attributes": {
+      "department": "Sampana",
+      "companyName": "Orinasa",
+      "jobTitle": "Anaram-piasana",
+      "officeId": "Biraon'ny asa",
+      "officeActual": "Birao tena misy",
+      "officeNone": "Tsy misy birao",
+      "actualValue": "Tena misy: {value}",
+      "actualEmpty": "Tena misy: (foana)",
+      "hint": "Avelao banga ny saha iray raha tianao hitazona ny sandanao tena izy. Ireo no manome toky ny fitsipika grants, famerana fampiasana amin'ny toetra sy fitsipika fidirana."
+    },
+    "groups": {
+      "label": "ID an'ny vondrona",
+      "placeholder": "ID an'ny object Entra vondrona iray isaky ny tsipika",
+      "hint": "Soloiny — fa tsy ampianina — ny maha-mpikambana anao tena izy mandritra ity session ity, mba hahafahanao manandrana ny fidirana sy tsy fidirana."
+    },
+    "presets": {
+      "grantsMember": "Mpikambana ao amin'ny ekipa grants",
+      "regularUser": "Mpampiasa mahazatra",
+      "localAdmin": "Admin an-toerana, tsy misy agents",
+      "otherRegion": "Faritra hafa",
+      "hint": "Ny preset dia mameno ny taratasy; tsy misy mihatra raha tsy manindry Apply ianao."
+    },
+    "apply": "Ampiharo ary avereno",
+    "applying": "Ampiharina…",
+    "clear": "Miala amin'ny view-as",
+    "clearing": "Miala…",
+    "reset": "Avereno amin'ny voalohany ny taratasy",
+    "nothingToApply": "Atsofohy farafahakeliny fanovana iray vao hanan-kery.",
+    "applyError": "Tsy afaka nampiharina ny view-as: {error}",
+    "clearError": "Tsy afaka nesorina ny view-as: {error}",
+    "loadError": "Tsy afaka nampidirina ny toe-javatra view-as.",
+    "retry": "Andramo indray",
+    "expiresNote": "Maharitra hatramin'ny 8 ora ny view-as, na mandra-pialanao.",
+    "banner": {
+      "label": "Mijery amin'ny maha",
+      "adjust": "Ahitsio",
+      "exit": "Miala",
+      "role": {
+        "local": "admin an-toerana",
+        "none": "mpampiasa mahazatra"
+      },
+      "region": "faritra {region}",
+      "department": "sampana \"{value}\"",
+      "companyName": "orinasa \"{value}\"",
+      "jobTitle": "lohateny \"{value}\"",
+      "officeId": "birao {value}",
+      "groups": "{count, plural, one {# vondrona} other {# vondrona}}"
+    }
   }
 }

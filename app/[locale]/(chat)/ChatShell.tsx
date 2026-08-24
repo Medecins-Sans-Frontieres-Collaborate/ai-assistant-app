@@ -8,11 +8,13 @@ import { LocalStorageService } from '@/client/services/storage/localStorageServi
 
 import { shouldShowStorageWarning } from '@/lib/utils/app/storage/storageMonitor';
 
+import { ViewAsBanner } from '@/components/Admin/ViewAs/ViewAsBanner';
 import { UpdateBanner } from '@/components/App/UpdateBanner';
 import { BackupModals } from '@/components/Backup/BackupModals';
 import { BackupSyncBanner } from '@/components/Backup/BackupSyncBanner';
 import { MigrationDialog } from '@/components/Migration/MigrationDialog';
 import { AppInitializer } from '@/components/Providers/AppInitializer';
+import { RegionOverrideBanner } from '@/components/RegionOverride/RegionOverrideBanner';
 import { SettingDialog } from '@/components/Settings/SettingDialog';
 import { Sidebar } from '@/components/Sidebar/Sidebar';
 import { StorageWarningDialog } from '@/components/Storage/StorageWarningDialog';
@@ -90,6 +92,10 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
   return (
     <>
       <UpdateBanner />
+      {/* Both banners read the session, so they live inside AppProviders
+          (SessionProvider) rather than the locale layout. */}
+      <RegionOverrideBanner />
+      <ViewAsBanner />
       <BackupSyncBanner />
       <MigrationDialog
         isOpen={showMigrationDialog}

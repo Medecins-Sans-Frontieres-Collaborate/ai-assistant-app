@@ -2674,6 +2674,10 @@
       "map": {
         "label": "マップ",
         "description": "任意のデータを地図上のロケーションに変換"
+      },
+      "grants": {
+        "label": "助成金処理",
+        "description": "助成金説明文から構造化データを突き合わせて抽出します"
       }
     },
     "chooser": {
@@ -2683,7 +2687,8 @@
       "newTranslation": "新しい翻訳",
       "newDocument": "新しいドキュメント",
       "newDataAnalysis": "新しいデータ分析",
-      "newMap": "新しいマップ"
+      "newMap": "新しいマップ",
+      "newGrants": "新規助成金処理"
     },
     "translation": {
       "chooseLanguage": "対象言語",
@@ -3300,7 +3305,8 @@
       "unknownType": "この会話は本バージョンが認識できないワークフローを使用しています。会話履歴を以下に表示します。",
       "untitled": "新しい会話",
       "toggleMenu": "メニューの切り替え",
-      "model": "このワークフローのモデル"
+      "model": "このワークフローのモデル",
+      "disabledByAdmin": "このワークフローは管理者によって無効化されています。下記に会話履歴が表示されます。"
     },
     "tabs": {
       "label": "会話モード",
@@ -4077,7 +4083,11 @@
       "storageUnavailable": "管理ストレージに接続できません。既存レコードが表示できず、復旧まで保存は無効です。",
       "sealingUnavailable": "このデプロイメントで秘密情報暗号化が未設定です（AUTH_SECRETがありません）— クライアントシークレットは保存できません。",
       "updatedBy": "{by}が{at}に更新"
-    }
+    },
+    "orgAgentOverrideTitle": "組み込みエージェントの上書き",
+    "orgAgentOverrideAction": "上書き",
+    "orgAgentBuiltinBadge": "組み込み",
+    "orgAgentBuiltinHint": "デプロイ設定で定義されています。ここでアクセスルールを編集できます。デプロイせずに設定を変更したい場合は上書きしてください。"
   },
   "localModels": {
     "title": "ローカルモデル",
@@ -4278,9 +4288,15 @@
       "connectors": "組織用コネクターと利用可能なユーザー。",
       "guides": "スタイル、用語、コンプライアンスのガイド。",
       "mapDatasets": "マップワークフローで利用できる精選データセット。",
-      "localAdmins": "アクセスルール編集権限を他のユーザーに委任します。"
+      "localAdmins": "アクセスルール編集権限を他のユーザーに委任します。",
+      "workflows": "すべてのユーザーに対して会話ワークフローを有効または無効にします。",
+      "viewAs": "条件を満たす、または満たさないユーザーとしてアプリをテストします。"
     },
-    "openSettings": "設定を開く"
+    "openSettings": "設定を開く",
+    "area": {
+      "workflows": "ワークフロー",
+      "viewAs": "他のユーザーとして表示"
+    }
   },
   "limits": {
     "title": "利用制限",
@@ -4890,5 +4906,103 @@
     "listLabel": "あなたの組織からの提案",
     "searching": "組織内を検索しています…",
     "noMatches": "ディレクトリに該当がありません — 手動でアドレスを入力できます"
+  },
+  "workflowsAdmin": {
+    "title": "ワークフロー",
+    "description": "組織全体の各ワークフローを有効または無効にできます。無効化されたワークフローはメニューに表示されず、サーバーからも拒否されます。対象者にも利用できません。",
+    "layeredNote": "LaunchDarkly の conversationWorkflows フラグが有効時のみ、ここで有効なワークフローにアクセスできます。このページでフラグが非表示にしたものを表示することはできません。",
+    "loading": "ワークフローポリシーを読み込み中…",
+    "loadError": "ワークフローポリシーを読み込めませんでした。",
+    "policyUnavailable": "ワークフローポリシーがストレージから読み取れません。トグルは初期値で表示せず非表示にしています。",
+    "retry": "再試行",
+    "enableAll": "すべて有効にする",
+    "disableAll": "すべて無効にする",
+    "enabledLabel": "有効",
+    "disabledLabel": "無効",
+    "defaultOnHint": "ポリシー未保存時の初期値：有効",
+    "defaultOffHint": "ポリシー未保存時の初期値：無効 — 管理者が明示的に有効化する必要があります。",
+    "grantsNote": "助成金処理は追加制限があり、「grants」が職名に含まれるプログラム部門のMSF-USAユーザー、または「innovation」が職名に含まれるSystems部門ユーザーのみ利用可能です。ここで有効にしてもその制限は変更されません。",
+    "unsaved": "未保存の変更があります。",
+    "save": "保存",
+    "saving": "保存中…",
+    "saveSuccess": "ワークフローポリシーを保存しました。",
+    "saveError": "ワークフローポリシーを保存できませんでした。",
+    "conflictError": "他の管理者が先にポリシーを変更しました。リロードされたので再確認して再度保存してください。",
+    "updatedByLine": "最終保存者：{by}（{at}）",
+    "neverSaved": "まだポリシーは保存されていません。上記の初期値が適用されます。"
+  },
+  "viewAs": {
+    "title": "他のユーザーとして表示",
+    "description": "ディレクトリや管理者によって通常決定される条件を満たす/満たさないユーザーとして、このセッションのみアプリをテストします。あなたの本人情報は変わりません：作成したものはすべてあなたのものとなり、監査記録にもあなたの名前が残ります。",
+    "activeTitle": "「他のユーザーとして表示」が有効です",
+    "inactiveTitle": "「他のユーザーとして表示」は無効です",
+    "sections": {
+      "role": "管理者ロール",
+      "region": "データリージョン",
+      "attributes": "ディレクトリ属性",
+      "groups": "グループメンバーシップ",
+      "presets": "プリセット"
+    },
+    "role": {
+      "global": "グローバル管理者（実際の役割）",
+      "local": "ローカル管理者",
+      "none": "一般ユーザー",
+      "localKeysLabel": "移譲エージェントキー",
+      "localKeysHint": "このローカル管理者が編集可能な、カンマ区切りの標準エージェントキー。移譲エージェントが無い場合は空欄にしてください。",
+      "noneWarning": "一般ユーザーになると他の管理エリアはすべて表示されなくなります。このページは引き続きアクセス可能で、アプリの上部バナーに常に戻る方法が表示されます。"
+    },
+    "region": {
+      "actual": "実際の値（{region}）",
+      "hint": "リクエストやアクティブ時にアップロードしたものを他のリージョンのストレージにルーティングします。?regionOverride= クッキーよりも優先されます。"
+    },
+    "attributes": {
+      "department": "部署",
+      "companyName": "会社",
+      "jobTitle": "職位",
+      "officeId": "オフィス",
+      "officeActual": "実際のオフィス",
+      "officeNone": "オフィスなし",
+      "actualValue": "実際: {value}",
+      "actualEmpty": "実際: （空）",
+      "hint": "フィールドを空欄のままにすると、実際の値が保持されます。これらは付与ルール、属性ごとの利用制限、アクセスルールに利用されます。"
+    },
+    "groups": {
+      "label": "グループID",
+      "placeholder": "1行につき1つのEntraグループオブジェクトID",
+      "hint": "このセッション中は実際のメンバーシップを置き換えます（拡張ではありません）。所属・非所属の両方をテストできます。"
+    },
+    "presets": {
+      "grantsMember": "Grantsチームメンバー",
+      "regularUser": "一般ユーザー",
+      "localAdmin": "ローカル管理者（エージェントなし）",
+      "otherRegion": "別リージョン",
+      "hint": "プリセットはフォームに入力されます。「適用」を押すまで変更は反映されません。"
+    },
+    "apply": "適用して再読み込み",
+    "applying": "適用中…",
+    "clear": "view-asを終了",
+    "clearing": "終了中…",
+    "reset": "フォームをリセット",
+    "nothingToApply": "少なくとも1つの上書きを設定してください。",
+    "applyError": "view-asを適用できませんでした: {error}",
+    "clearError": "view-asを解除できませんでした: {error}",
+    "loadError": "view-asの状態を読み込めませんでした。",
+    "retry": "再試行",
+    "expiresNote": "view-asは最大8時間、または終了まで有効です。",
+    "banner": {
+      "label": "以下として表示中",
+      "adjust": "調整",
+      "exit": "終了",
+      "role": {
+        "local": "ローカル管理者",
+        "none": "一般ユーザー"
+      },
+      "region": "リージョン {region}",
+      "department": "部署「{value}」",
+      "companyName": "会社「{value}」",
+      "jobTitle": "職位「{value}」",
+      "officeId": "オフィス {value}",
+      "groups": "{count, plural, one {# グループ} other {# グループ}}"
+    }
   }
 }

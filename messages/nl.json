@@ -2674,6 +2674,10 @@
       "map": {
         "label": "Kaart",
         "description": "Zet gegevens om in locaties op een kaart"
+      },
+      "grants": {
+        "label": "Grantsverwerking",
+        "description": "Afstemmen en gestructureerde gegevens uit grantbeschrijvingen extraheren"
       }
     },
     "chooser": {
@@ -2683,7 +2687,8 @@
       "newTranslation": "Nieuwe vertaling",
       "newDocument": "Nieuw document",
       "newDataAnalysis": "Nieuwe data-analyse",
-      "newMap": "Nieuwe kaart"
+      "newMap": "Nieuwe kaart",
+      "newGrants": "Nieuwe grantsverwerking"
     },
     "translation": {
       "chooseLanguage": "Doeltaal",
@@ -3300,7 +3305,8 @@
       "unknownType": "Dit gesprek gebruikt een workflow die deze versie niet herkent. De gespreksgeschiedenis wordt hieronder weergegeven.",
       "untitled": "Nieuw gesprek",
       "toggleMenu": "Menu tonen/verbergen",
-      "model": "Model voor deze workflow"
+      "model": "Model voor deze workflow",
+      "disabledByAdmin": "Deze workflow is uitgeschakeld door een beheerder. De gespreksgeschiedenis is hieronder weergegeven."
     },
     "tabs": {
       "label": "Gespreksmodus",
@@ -4077,7 +4083,11 @@
       "storageUnavailable": "Beheeropslag is onbereikbaar; bestaande records konden niet worden weergegeven. Opslaan is uitgeschakeld totdat het is hersteld.",
       "sealingUnavailable": "Versleuteling van secrets is niet geconfigureerd voor deze deployment (AUTH_SECRET ontbreekt) — client secrets kunnen niet worden opgeslagen.",
       "updatedBy": "Bijgewerkt door {by} op {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Standaardagent overschrijven",
+    "orgAgentOverrideAction": "Overschrijven",
+    "orgAgentBuiltinBadge": "Standaard",
+    "orgAgentBuiltinHint": "Gedefinieerd in de deploymentconfiguratie. De toegangsregel kan hier worden aangepast; overschrijf deze om de instellingen te wijzigen zonder een deploy."
   },
   "localModels": {
     "title": "Lokale modellen",
@@ -4278,9 +4288,15 @@
       "connectors": "Connectoren van de organisatie en wie ze mag gebruiken.",
       "guides": "Stijl-, terminologie- en complianceregels.",
       "mapDatasets": "Geselecteerde datasets beschikbaar voor de kaartworkflow.",
-      "localAdmins": "Toegang tot bewerkingsregels delegeren aan anderen."
+      "localAdmins": "Toegang tot bewerkingsregels delegeren aan anderen.",
+      "workflows": "Schakel gespreksworkflows voor iedereen in of uit.",
+      "viewAs": "Test de app als iemand die wel of niet aan een voorwaarde voldoet."
     },
-    "openSettings": "Instellingen openen"
+    "openSettings": "Instellingen openen",
+    "area": {
+      "workflows": "Workflows",
+      "viewAs": "Bekijken als"
+    }
   },
   "limits": {
     "title": "Gebruiksbeperkingen",
@@ -4890,5 +4906,103 @@
     "listLabel": "Suggesties van uw organisatie",
     "searching": "Zoeken in uw organisatie…",
     "noMatches": "Geen overeenkomsten in de directory — u kunt het adres handmatig invoeren"
+  },
+  "workflowsAdmin": {
+    "title": "Workflows",
+    "description": "Schakel elke workflow voor de hele organisatie in of uit. Een uitgeschakelde workflow wordt verborgen in menu's en geweigerd door de server, ook voor mensen die er normaal recht op hebben.",
+    "layeredNote": "De LaunchDarkly-vlag conversationWorkflows bepaalt nog steeds de uitrol: een hier ingeschakelde workflow is alleen beschikbaar waar die vlag aan staat. Deze pagina kan niets zichtbaar maken wat door de vlag verborgen is.",
+    "loading": "Workflowbeleid laden…",
+    "loadError": "Het workflowbeleid kon niet worden geladen.",
+    "policyUnavailable": "Het workflowbeleid kon niet uit de opslag worden gelezen. De schakelaars zijn verborgen zodat standaardwaarden die mogelijk niet overeenkomen met het beleid niet worden getoond.",
+    "retry": "Opnieuw proberen",
+    "enableAll": "Alles inschakelen",
+    "disableAll": "Alles uitschakelen",
+    "enabledLabel": "Ingeschakeld",
+    "disabledLabel": "Uitgeschakeld",
+    "defaultOnHint": "Standaard als er geen beleid is opgeslagen: ingeschakeld.",
+    "defaultOffHint": "Standaard als er geen beleid is opgeslagen: uitgeschakeld — een beheerder moet het expliciet inschakelen.",
+    "grantsNote": "Grantsverwerking is bovendien alleen beschikbaar voor MSF-USA-gebruikers in de afdeling Programma met \"grants\" in hun functietitel, of in Systems met \"innovation\" in hun titel. Inschakelen hier verruimt die regel niet.",
+    "unsaved": "U heeft niet-opgeslagen wijzigingen.",
+    "save": "Opslaan",
+    "saving": "Bezig met opslaan…",
+    "saveSuccess": "Workflowbeleid opgeslagen.",
+    "saveError": "Het workflowbeleid kon niet worden opgeslagen.",
+    "conflictError": "Een andere beheerder heeft het beleid eerst aangepast. Het is opnieuw geladen — controleer en sla opnieuw op.",
+    "updatedByLine": "Laatst opgeslagen door {by} op {at}.",
+    "neverSaved": "Er is nog geen beleid opgeslagen; bovenstaande standaardwaarden zijn van toepassing."
+  },
+  "viewAs": {
+    "title": "Bekijken als",
+    "description": "Test de app, alleen voor uw eigen sessie, als iemand die voldoet of niet voldoet aan een voorwaarde die normaal door de directory of beheerders wordt bepaald. Uw identiteit verandert nooit: alles wat u aanmaakt blijft van u en elke auditregel blijft uw naam tonen.",
+    "activeTitle": "Bekijken-als is actief",
+    "inactiveTitle": "Bekijken-als is niet actief",
+    "sections": {
+      "role": "Adminrol",
+      "region": "Dataregio",
+      "attributes": "Directory-attributen",
+      "groups": "Groepslidmaatschap",
+      "presets": "Presets"
+    },
+    "role": {
+      "global": "Globale beheerder (uw eigenlijke rol)",
+      "local": "Lokale beheerder",
+      "none": "Reguliere gebruiker",
+      "localKeysLabel": "Gedelegeerde agentensleutels",
+      "localKeysHint": "Door komma's gescheiden canonieke agentensleutels die deze lokale admin mag bewerken. Laat leeg voor een lokale admin zonder gedelegeerde agents.",
+      "noneWarning": "Als reguliere gebruiker verdwijnen alle andere beheergebieden. Deze pagina blijft bereikbaar en de banner boven in de app biedt altijd een uitweg."
+    },
+    "region": {
+      "actual": "Actueel ({region})",
+      "hint": "Stuurt uw verzoeken — en alles wat u uploadt terwijl dit actief is — naar de opslag van de andere regio. Dit gaat voor op een ?regionOverride= cookie."
+    },
+    "attributes": {
+      "department": "Afdeling",
+      "companyName": "Bedrijf",
+      "jobTitle": "Functietitel",
+      "officeId": "Kantoor",
+      "officeActual": "Huidig kantoor",
+      "officeNone": "Geen kantoor",
+      "actualValue": "Huidig: {value}",
+      "actualEmpty": "Huidig: (leeg)",
+      "hint": "Laat een veld leeg om uw huidige waarde te behouden. Deze worden gebruikt voor de grants-regel, limieten op basis van attributen en toegangsregels."
+    },
+    "groups": {
+      "label": "Groep-id's",
+      "placeholder": "Eén Entra group object id per regel",
+      "hint": "Vervangt — en breidt dus niet uit — uw echte lidmaatschap voor deze sessie, zodat u zowel wel als niet-lid kunt testen."
+    },
+    "presets": {
+      "grantsMember": "Lid van grants-team",
+      "regularUser": "Reguliere gebruiker",
+      "localAdmin": "Lokale admin, geen agents",
+      "otherRegion": "Andere regio",
+      "hint": "Presets vullen het formulier in; er gebeurt niets totdat u op Toepassen drukt."
+    },
+    "apply": "Toepassen en herladen",
+    "applying": "Bezig met toepassen…",
+    "clear": "View-as afsluiten",
+    "clearing": "Bezig met afsluiten…",
+    "reset": "Formulier resetten",
+    "nothingToApply": "Stel minimaal één override in om toe te passen.",
+    "applyError": "View-as kon niet worden toegepast: {error}",
+    "clearError": "View-as kon niet worden afgesloten: {error}",
+    "loadError": "De view-as status kon niet worden geladen.",
+    "retry": "Opnieuw proberen",
+    "expiresNote": "View-as blijft maximaal 8 uur actief, of totdat u afsluit.",
+    "banner": {
+      "label": "Bekijken als",
+      "adjust": "Aanpassen",
+      "exit": "Afsluiten",
+      "role": {
+        "local": "lokale admin",
+        "none": "reguliere gebruiker"
+      },
+      "region": "regio {region}",
+      "department": "afdeling \"{value}\"",
+      "companyName": "bedrijf \"{value}\"",
+      "jobTitle": "titel \"{value}\"",
+      "officeId": "kantoor {value}",
+      "groups": "{count, plural, one {# groep} other {# groepen}}"
+    }
   }
 }

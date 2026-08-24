@@ -2658,6 +2658,10 @@
       "map": {
         "label": "Mapa",
         "description": "Pretvorite bilo koje podatke u lokacije na mapi"
+      },
+      "grants": {
+        "label": "Obrada grantova",
+        "description": "Usaglasite i izdvojite strukturirane podatke iz narativa grantova"
       }
     },
     "chooser": {
@@ -2667,7 +2671,8 @@
       "newTranslation": "Novi prevod",
       "newDocument": "Novi dokument",
       "newDataAnalysis": "Nova analiza podataka",
-      "newMap": "Nova mapa"
+      "newMap": "Nova mapa",
+      "newGrants": "Nova obrada grantova"
     },
     "translation": {
       "chooseLanguage": "Ciljni jezik",
@@ -3284,7 +3289,8 @@
       "unknownType": "Ova konverzacija koristi radni tok koji ova verzija ne prepoznaje. Istorija konverzacije je prikazana ispod.",
       "untitled": "Nova konverzacija",
       "toggleMenu": "Prikaži/sakrij meni",
-      "model": "Model za ovaj radni tok"
+      "model": "Model za ovaj radni tok",
+      "disabledByAdmin": "Ovaj tok rada je onemogućen od strane administratora. Istorija razgovora je prikazana ispod."
     },
     "tabs": {
       "label": "Režim razgovora",
@@ -4061,7 +4067,11 @@
       "storageUnavailable": "Administratorsko skladište nije dostupno; postojeći zapisi ne mogu biti prikazani. Čuvanje je onemogućeno dok se pristup ne povrati.",
       "sealingUnavailable": "Enkripcija tajni nije konfigurisana na ovoj implementaciji (nedostaje AUTH_SECRET) — tajne klijenata ne mogu biti sačuvane.",
       "updatedBy": "Ažurirao {by} dana {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Prepisivanje ugrađenog agenta",
+    "orgAgentOverrideAction": "Prepiši",
+    "orgAgentBuiltinBadge": "Ugrađen",
+    "orgAgentBuiltinHint": "Definisano u konfiguraciji implementacije. Pravilo pristupa je izmenjivo ovde; prepišite ga za promenu podešavanja bez nove implementacije."
   },
   "localModels": {
     "title": "Lokalni modeli",
@@ -4262,9 +4272,15 @@
       "connectors": "Organizacioni konektori i ko može da ih koristi.",
       "guides": "Vodiči za stil, terminologiju i usklađenost.",
       "mapDatasets": "Kreirane baze podataka dostupne za rad sa mapom.",
-      "localAdmins": "Delegirajte uređivanje pravila pristupa drugim osobama."
+      "localAdmins": "Delegirajte uređivanje pravila pristupa drugim osobama.",
+      "workflows": "Uključivanje ili isključivanje tokova razgovora za sve.",
+      "viewAs": "Testirajte aplikaciju kao neko ko ispunjava — ili ne ispunjava — uslov."
     },
-    "openSettings": "Otvori podešavanja"
+    "openSettings": "Otvori podešavanja",
+    "area": {
+      "workflows": "Tokovi rada",
+      "viewAs": "Prikaži kao"
+    }
   },
   "limits": {
     "title": "Ograničenja upotrebe",
@@ -4874,5 +4890,103 @@
     "listLabel": "Predlozi iz vaše organizacije",
     "searching": "Pretražujem vašu organizaciju…",
     "noMatches": "Nema podudaranja u imeniku — možete ručno uneti adresu"
+  },
+  "workflowsAdmin": {
+    "title": "Tokovi rada",
+    "description": "Uključite ili isključite svaki tok rada za celu organizaciju. Onemogućeni tok rada je skriven iz menija i server ga odbija, čak i za korisnike koji inače ispunjavaju uslove.",
+    "layeredNote": "Zastavica LaunchDarkly conversationWorkflows i dalje kontroliše puštanje: tok rada omogućen ovde je dostupan samo gde je ta zastavica uključena. Ova stranica ne može učiniti vidljivim ono što zastavica skriva.",
+    "loading": "Učitavanje pravila toka rada...",
+    "loadError": "Pravila toka rada nije moguće učitati.",
+    "policyUnavailable": "Pravila toka rada nije moguće pročitati iz skladišta. Prekidači su skriveni umesto da budu prikazani sa podrazumevanim vrednostima koje možda nisu istinite.",
+    "retry": "Pokušaj ponovo",
+    "enableAll": "Omogući sve",
+    "disableAll": "Onemogući sve",
+    "enabledLabel": "Omogućeno",
+    "disabledLabel": "Onemogućeno",
+    "defaultOnHint": "Podrazumevana vrednost kada nema sačuvanih pravila: omogućeno.",
+    "defaultOffHint": "Podrazumevana vrednost kada nema sačuvanih pravila: onemogućeno — administrator mora eksplicitno da uključi.",
+    "grantsNote": "Obrada grantova je dodatno ograničena na MSF-USA korisnike u Program odeljenju koji imaju \"grants\" u nazivu radnog mesta, ili u Systems sa \"innovation\" u nazivu pozicije. Omogućavanje ovde ne proširuje to pravilo.",
+    "unsaved": "Imate nesačuvane izmene.",
+    "save": "Sačuvaj",
+    "saving": "Čuvanje...",
+    "saveSuccess": "Pravila toka rada su sačuvana.",
+    "saveError": "Pravila toka rada nije moguće sačuvati.",
+    "conflictError": "Drugi administrator je prvo izmenio pravilo. Pravilo je ponovo učitano — proverite i sačuvajte ponovo.",
+    "updatedByLine": "Poslednji put sačuvao/la {by} dana {at}.",
+    "neverSaved": "Pravila još nisu sačuvana; primenjuju se gore navedene podrazumevane vrednosti."
+  },
+  "viewAs": {
+    "title": "Prikaži kao",
+    "description": "Testirajte aplikaciju, samo za svoju sesiju, kao neko ko ispunjava ili ne ispunjava uslov koji se inače određuje preko direktorijuma ili administratora. Vaš identitet se nikad ne menja: sve što napravite ostaje vaše, a svaki audit zapis i dalje navodi vaše ime.",
+    "activeTitle": "Prikaz kao je aktivan",
+    "inactiveTitle": "Prikaz kao nije aktivan",
+    "sections": {
+      "role": "Administratorova uloga",
+      "region": "Region podataka",
+      "attributes": "Atributi direktorijuma",
+      "groups": "Članstvo u grupi",
+      "presets": "Unapred definisane postavke"
+    },
+    "role": {
+      "global": "Globalni administrator (vaša stvarna uloga)",
+      "local": "Lokalni administrator",
+      "none": "Običan korisnik",
+      "localKeysLabel": "Delegirani ključevi agenta",
+      "localKeysHint": "Kanonski ključevi agenata (zarezom odvojeni) koje ovaj lokalni administrator može da menja. Ostavite prazno za lokalnog administratora bez delegiranih agenata.",
+      "noneWarning": "Kao običan korisnik svi ostali administratorski delovi aplikacije nestaju. Ova stranica ostaje dostupna, a traka na vrhu aplikacije uvek nudi način za izlaz."
+    },
+    "region": {
+      "actual": "Stvarni ({region})",
+      "hint": "Usmerava vaše zahteve — i sve što otpremite dok je aktivno — u skladište druge regije. Ima prednost u odnosu na kolačić ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Odeljenje",
+      "companyName": "Kompanija",
+      "jobTitle": "Radno mesto",
+      "officeId": "Kancelarija",
+      "officeActual": "Stvarna kancelarija",
+      "officeNone": "Bez kancelarije",
+      "actualValue": "Stvarno: {value}",
+      "actualEmpty": "Stvarno: (prazno)",
+      "hint": "Ostavite polje prazno da zadržite svoju stvarnu vrednost. Ove vrednosti se koriste za pravila grantova, ograničenja po atributima i pravila pristupa."
+    },
+    "groups": {
+      "label": "ID-ovi grupa",
+      "placeholder": "Po jedan Entra group object id u svakom redu",
+      "hint": "Zamenjuje — ne proširuje — vaše stvarno članstvo za ovu sesiju, tako da možete testirati i pripadanje i nepripadanje."
+    },
+    "presets": {
+      "grantsMember": "Član tima za grantove",
+      "regularUser": "Običan korisnik",
+      "localAdmin": "Lokalni administrator, bez agenata",
+      "otherRegion": "Druga regija",
+      "hint": "Predlošci popunjavaju formular; ništa se ne primenjuje dok ne pritisnete Primeni."
+    },
+    "apply": "Primeni i osveži",
+    "applying": "Primena…",
+    "clear": "Izađi iz prikaza",
+    "clearing": "Izlazak…",
+    "reset": "Resetuj formular",
+    "nothingToApply": "Postavite bar jednu izmenu da biste primenili.",
+    "applyError": "Nije moguće primeniti prikaz kao: {error}",
+    "clearError": "Nije moguće očistiti prikaz kao: {error}",
+    "loadError": "Stanje prikaza nije moguće učitati.",
+    "retry": "Pokušaj ponovo",
+    "expiresNote": "Prikaz traje do 8 sati ili dok ne izađete.",
+    "banner": {
+      "label": "Prikaz kao",
+      "adjust": "Prilagodi",
+      "exit": "Izađi",
+      "role": {
+        "local": "lokalni administrator",
+        "none": "običan korisnik"
+      },
+      "region": "regija {region}",
+      "department": "odeljenje \"{value}\"",
+      "companyName": "kompanija \"{value}\"",
+      "jobTitle": "pozicija \"{value}\"",
+      "officeId": "kancelarija {value}",
+      "groups": "{count, plural, one {# grupa} other {# grupa}}"
+    }
   }
 }

@@ -2658,6 +2658,10 @@
       "map": {
         "label": "Mapu",
         "description": "Sinthani deta iliyonse kukhala malo pa mapu"
+      },
+      "grants": {
+        "label": "Kukonza Ma Grants",
+        "description": "Yerekezerani ndi kutulutsa deta yokonzedwa kuchokera m'mafotokozedwe a ma grant"
       }
     },
     "chooser": {
@@ -2667,7 +2671,8 @@
       "newTranslation": "Kutanthauzira kwatsopano",
       "newDocument": "Chikalata chatsopano",
       "newDataAnalysis": "Kuwerengera deta kwatsopano",
-      "newMap": "Mapu atsopano"
+      "newMap": "Mapu atsopano",
+      "newGrants": "Kukonza ma grant atsopano"
     },
     "translation": {
       "chooseLanguage": "Chilankhulo chofuna kutanthauzira",
@@ -3284,7 +3289,8 @@
       "unknownType": "Zokambiranazi zikugwiritsa ntchito ntchito yomwe mtundu uwu suizindikira. Mbiri ya zokambiranazi ili pansipa.",
       "untitled": "Zokambirana zatsopano",
       "toggleMenu": "Tsegula kapena tsekani menyu",
-      "model": "Mtundu wa ntchito iyi"
+      "model": "Mtundu wa ntchito iyi",
+      "disabledByAdmin": "Ntchitoyi yayimitsidwa ndi woyang'anira. Mbiri ya zokambirana ili pansipa."
     },
     "tabs": {
       "label": "Mtundu wa kucheza",
@@ -4061,7 +4067,11 @@
       "storageUnavailable": "Admin storage sikufikika; zolemba zomwe zilipo sizingathe kuonedwa. Kusunga kwazimitsidwa mpaka ibwerera.",
       "sealingUnavailable": "Encryption ya chinsinsi sinakhazikitsidwe pa deployment iyi (AUTH_SECRET ilibe) — zinsinsi za makasitomala sizingathe kusungidwa.",
       "updatedBy": "Yasinthidwa ndi {by} pa {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Sintha agent yomangidwiratu",
+    "orgAgentOverrideAction": "Sintha",
+    "orgAgentBuiltinBadge": "Yomangidwira",
+    "orgAgentBuiltinHint": "Yatanthauzidwa pa config ya deployment. Lamulo lake la mwayi lithekanso kusinthidwa apa; sinthani kuti musinthe zokonda popanda deploy."
   },
   "localModels": {
     "title": "Mitundu yapafupi",
@@ -4262,9 +4272,15 @@
       "connectors": "Ma connector a bungwe ndi amene angazigwiritse ntchito.",
       "guides": "Maukadaulo osamalira ma style, mawu ndi malamulo.",
       "mapDatasets": "Ma dataset osankhidwa omwe akupezeka pa map workflow.",
-      "localAdmins": "Perekani mwayi wosintha malamulo a kupeza kwa anthu ena."
+      "localAdmins": "Perekani mwayi wosintha malamulo a kupeza kwa anthu ena.",
+      "workflows": "Yatsani kapena yimitsani njira za zokambirana kwa aliyense.",
+      "viewAs": "Yesani pulogalamuyi ngati munthu amene amakwaniritsa — kapena alephera — chikhalidwe."
     },
-    "openSettings": "Tsegulani makonda"
+    "openSettings": "Tsegulani makonda",
+    "area": {
+      "workflows": "Njira",
+      "viewAs": "Onani ngati"
+    }
   },
   "limits": {
     "title": "Malire ogwiritsa ntchito",
@@ -4874,5 +4890,103 @@
     "listLabel": "Malangizo ochokera ku gulu lanu",
     "searching": "Kusaka mu bungwe lanu…",
     "noMatches": "Palibe zotsatana mu buku la mayina — mutha kulemba adiresi pamanja"
+  },
+  "workflowsAdmin": {
+    "title": "Njira",
+    "description": "Yatsani kapena yimitsani njira iliyonse kwa bungwe lonse. Njira yomwe yayimitsidwa imabisika pa menus komanso imakanidwa ndi seva, ngakhale kwa anthu omwe angayenerere.",
+    "layeredNote": "Chizindikiro cha LaunchDarkly conversationWorkflows chikalipobe, chimatsogolera kugwiritsa ntchito: njira yololedwa apa imapezeka kokha pomwe chizindikirocho chili pa ON. Tsambali silingawonetse china chomwe chizindikirocho chimabisa.",
+    "loading": "Kukweza ndondomeko ya njira...",
+    "loadError": "Ndondomeko ya njira sinathe kukwezedwa.",
+    "policyUnavailable": "Ndondomeko ya njira sinathe kuwerengedwa m'sitoreji. Matogolo abisidwa m'malo mowonetsedwa ndi zinthu zosasinthidwa zomwe sizingafanane ndi zomwe zikutsatiridwa.",
+    "retry": "Yesaninso",
+    "enableAll": "Yatsani zonse",
+    "disableAll": "Yimitsani zonse",
+    "enabledLabel": "Yayatsidwa",
+    "disabledLabel": "Yayimitsidwa",
+    "defaultOnHint": "Zosasintha ngati palibe ndondomeko yosungidwa: yayatsidwa.",
+    "defaultOffHint": "Zosasintha ngati palibe ndondomeko yosungidwa: yayimitsidwa — woyang'anira muyenera kuyatsa pamanja.",
+    "grantsNote": "Kukonza Ma Grants kuli kochepetsa kwabwino kwa ogwiritsa ntchito MSF-USA mu dipatimenti ya Program ndi mawu oti \"grants\" mu udindo wao, kapena mu Systems ali ndi \"innovation\". Kuyatsa apa sikuwonjezera lamulo limeneli.",
+    "unsaved": "Mwakhala ndi kusintha kosasungidwa.",
+    "save": "Sungani",
+    "saving": "Kusunga...",
+    "saveSuccess": "Ndondomeko ya njira yasungidwa.",
+    "saveError": "Ndondomeko ya njira sinathe kusungidwa.",
+    "conflictError": "Wina woyang'anira wasintha ndondomeko kale. Yakhazikitsidwanso — chonde onaninso ndikusunga.",
+    "updatedByLine": "Yasungidwa komaliza ndi {by} pa {at}.",
+    "neverSaved": "Palibe ndondomeko yasungidwa pano; zosasintha zam'mwambazi zigwiritsidwa ntchito."
+  },
+  "viewAs": {
+    "title": "Onani ngati",
+    "description": "Yesani pulogalamuyi, pa nthawi yanu yokha, ngati munthu amene amakwaniritsa kapena alephera chikhalidwe chomwe nthawi zambiri chimasankhidwa ndi directory kapena oyang'anira. Chizindikiritso chanu sichisintha: zonse zomwe mupanga zimakhalabe zanu ndipo record iliyonse ya audit izitchula dzina lanu.",
+    "activeTitle": "View-as yagwiritsidwa ntchito",
+    "inactiveTitle": "View-as siyagwiritsidwa ntchito",
+    "sections": {
+      "role": "Udindo wa admin",
+      "region": "Chigawo cha deta",
+      "attributes": "Zina za directory",
+      "groups": "Ubale wa magulu",
+      "presets": "Zokonzedwa kale"
+    },
+    "role": {
+      "global": "Woyang'anira waukulu (udindo wanu enieni)",
+      "local": "Woyang'anira wakomweko",
+      "none": "Wogwiritsa ntchito wamba",
+      "localKeysLabel": "Ma key a agent osinthidwa",
+      "localKeysHint": "Ma key a agent oyesedwa omwe admin wakomweko angasinthe, olumizidwa ndi ma koma. Siyani osadzazidwa ngati palibe agents ompsidwa.",
+      "noneWarning": "Monga wogwiritsa ntchito wamba, madera ena onse a admin amasowa. Tsamba ili likhalabe logwirika, ndipo banner pamwamba pa pulogalamu limapereka njira yotulukira."
+    },
+    "region": {
+      "actual": "Enieni ({region})",
+      "hint": "Imatha kutumiza zomwe mwapempha — komanso zomwe mutumiza nthawi yomwe ili yogwira ntchito — kusungira kwa dera lina. Izi zimayamba ntchito kuposa cookie ya ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Dipatimenti",
+      "companyName": "Kampani",
+      "jobTitle": "Udindo",
+      "officeId": "Ofesi",
+      "officeActual": "Ofesi yeniyeni",
+      "officeNone": "Palibe ofesi",
+      "actualValue": "Yeniyeni: {value}",
+      "actualEmpty": "Yeniyeni: (palibe)",
+      "hint": "Siyani gawo liri lonse popanda kulemba ngati mukufuna kusunga mtengo wanu weniweni. Izi zimathandiza malamulo a grants, malire ogwiritsa ntchito pa attribute ndi malamulo a mwayi."
+    },
+    "groups": {
+      "label": "Ma group id",
+      "placeholder": "ID ya group ya Entra iliyonse pa mzere uliwonse",
+      "hint": "Izi zimabisala mamembala anu enieni pa session iyi, kuti muthe kuyesa kukhala membala kapena osakhala."
+    },
+    "presets": {
+      "grantsMember": "Wogwira ntchito mu grants team",
+      "regularUser": "Wogwiritsa ntchito wamba",
+      "localAdmin": "Local admin, palibe agents",
+      "otherRegion": "Dera lina",
+      "hint": "Presets amalemba zonse mu fomu; palibe chomwe chimayamba mpaka mutadina Apply."
+    },
+    "apply": "Tsegulani ndi kutsitsimudza",
+    "applying": "Kukugwiritsidwa ntchito...",
+    "clear": "Tulukani view-as",
+    "clearing": "Kutuluka...",
+    "reset": "Bwezeretsani fomu",
+    "nothingToApply": "Ikani osachepera override imodzi musanayambe.",
+    "applyError": "View-as sizinagwire ntchito: {error}",
+    "clearError": "View-as sizinatulukire: {error}",
+    "loadError": "View-as state sinathe kutsegulidwa.",
+    "retry": "Yesaninso",
+    "expiresNote": "View-as imakhalapo mpaka maola 8, kapena mpaka mutatuluka.",
+    "banner": {
+      "label": "Mukuwoneka ngati",
+      "adjust": "Sinthani",
+      "exit": "Tulukani",
+      "role": {
+        "local": "local admin",
+        "none": "wogwiritsa ntchito wamba"
+      },
+      "region": "dera {region}",
+      "department": "dipatimenti \"{value}\"",
+      "companyName": "kampani \"{value}\"",
+      "jobTitle": "udindo \"{value}\"",
+      "officeId": "ofesi {value}",
+      "groups": "{count, plural, one {# gulu} other {# magulu}}"
+    }
   }
 }

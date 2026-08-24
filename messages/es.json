@@ -2674,6 +2674,10 @@
       "map": {
         "label": "Mapa",
         "description": "Convierta cualquier dato en ubicaciones en un mapa"
+      },
+      "grants": {
+        "label": "Procesamiento de subvenciones",
+        "description": "Conciliar y extraer datos estructurados de narrativas de subvenciones"
       }
     },
     "chooser": {
@@ -2683,7 +2687,8 @@
       "newTranslation": "Nueva traducción",
       "newDocument": "Nuevo documento",
       "newDataAnalysis": "Nuevo análisis de datos",
-      "newMap": "Nuevo mapa"
+      "newMap": "Nuevo mapa",
+      "newGrants": "Nuevo procesamiento de subvenciones"
     },
     "translation": {
       "chooseLanguage": "Idioma de destino",
@@ -3300,7 +3305,8 @@
       "unknownType": "Esta conversación utiliza un flujo de trabajo que esta versión no reconoce. El historial de la conversación se muestra a continuación.",
       "untitled": "Nueva conversación",
       "toggleMenu": "Mostrar/ocultar menú",
-      "model": "Modelo para este flujo de trabajo"
+      "model": "Modelo para este flujo de trabajo",
+      "disabledByAdmin": "Este flujo de trabajo ha sido deshabilitado por un administrador. El historial de la conversación se muestra a continuación."
     },
     "tabs": {
       "label": "Modo de conversación",
@@ -4077,7 +4083,11 @@
       "storageUnavailable": "El almacenamiento administrativo no está disponible; no se pudieron listar los registros existentes. El guardado estará deshabilitado hasta que se recupere.",
       "sealingUnavailable": "El cifrado de secretos no está configurado en este despliegue (falta AUTH_SECRET); no se pueden guardar los secretos de cliente.",
       "updatedBy": "Actualizado por {by} el {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Sobrescribir agente integrado",
+    "orgAgentOverrideAction": "Sobrescribir",
+    "orgAgentBuiltinBadge": "Integrado",
+    "orgAgentBuiltinHint": "Definido en la configuración de despliegue. Su regla de acceso se puede editar aquí; sobrescríbala para cambiar la configuración sin desplegar."
   },
   "localModels": {
     "title": "Modelos locales",
@@ -4278,9 +4288,15 @@
       "connectors": "Conectores de la organización y quién puede usarlos.",
       "guides": "Guías de estilo, terminología y cumplimiento.",
       "mapDatasets": "Conjuntos de datos seleccionados disponibles para el flujo de trabajo de mapas.",
-      "localAdmins": "Delegar la edición de reglas de acceso a otras personas."
+      "localAdmins": "Delegar la edición de reglas de acceso a otras personas.",
+      "workflows": "Active o desactive los flujos de conversación para todos.",
+      "viewAs": "Pruebe la aplicación como alguien que cumple, o no, una condición."
     },
-    "openSettings": "Abrir ajustes"
+    "openSettings": "Abrir ajustes",
+    "area": {
+      "workflows": "Flujos de trabajo",
+      "viewAs": "Ver como"
+    }
   },
   "limits": {
     "title": "Límites de uso",
@@ -4890,5 +4906,103 @@
     "listLabel": "Sugerencias de su organización",
     "searching": "Buscando en su organización…",
     "noMatches": "No hay coincidencias en el directorio; puede ingresar la dirección manualmente"
+  },
+  "workflowsAdmin": {
+    "title": "Flujos de trabajo",
+    "description": "Active o desactive cada flujo de trabajo para toda la organización. Un flujo deshabilitado se oculta en los menús y es rechazado por el servidor, incluso para quienes de otro modo calificarían.",
+    "layeredNote": "La bandera conversationWorkflows de LaunchDarkly sigue controlando la implementación: un flujo habilitado aquí solo es accesible donde esa bandera esté activa. Esta página no puede mostrar nada que la bandera oculte.",
+    "loading": "Cargando la política de flujo de trabajo…",
+    "loadError": "No se pudo cargar la política de flujo de trabajo.",
+    "policyUnavailable": "No se pudo leer la política de flujo de trabajo desde el almacenamiento. Los interruptores están ocultos en vez de mostrarse con valores predeterminados que podrían no coincidir con lo que realmente se aplica.",
+    "retry": "Reintentar",
+    "enableAll": "Habilitar todo",
+    "disableAll": "Deshabilitar todo",
+    "enabledLabel": "Habilitado",
+    "disabledLabel": "Deshabilitado",
+    "defaultOnHint": "Predeterminado si no hay política guardada: habilitado.",
+    "defaultOffHint": "Predeterminado si no hay política guardada: deshabilitado — un administrador debe habilitarlo explícitamente.",
+    "grantsNote": "El procesamiento de subvenciones está restringido además a usuarios de MSF-USA del departamento de Programas con \"grants\" en su puesto, o de Sistemas con \"innovation\" en su título. Habilitarlo aquí no amplia esa regla.",
+    "unsaved": "Tiene cambios sin guardar.",
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "saveSuccess": "Política de flujo de trabajo guardada.",
+    "saveError": "No se pudo guardar la política de flujo de trabajo.",
+    "conflictError": "Otro administrador cambió la política primero. Se ha recargado: revise y guarde nuevamente.",
+    "updatedByLine": "Última guardada por {by} el {at}.",
+    "neverSaved": "Aún no se ha guardado ninguna política; aplican los valores predeterminados anteriores."
+  },
+  "viewAs": {
+    "title": "Ver como",
+    "description": "Pruebe la aplicación, solo para su sesión, como alguien que cumple o no una condición normalmente decidida por el directorio o los administradores. Su identidad nunca cambia: todo lo que cree seguirá siendo suyo y toda línea de auditoría seguirá mostrando su nombre.",
+    "activeTitle": "Ver como está activo",
+    "inactiveTitle": "Ver como no está activo",
+    "sections": {
+      "role": "Rol de administrador",
+      "region": "Región de datos",
+      "attributes": "Atributos de directorio",
+      "groups": "Membresía de grupo",
+      "presets": "Preajustes"
+    },
+    "role": {
+      "global": "Administrador global (su rol real)",
+      "local": "Administrador local",
+      "none": "Usuario regular",
+      "localKeysLabel": "Claves de agente delegadas",
+      "localKeysHint": "Claves de agente canónicas separadas por comas que este administrador local puede editar. Déjelo vacío para un administrador local sin agentes delegados.",
+      "noneWarning": "Como usuario regular, el resto de las áreas de administración desaparece. Esta página sigue siendo accesible y la barra superior de la aplicación siempre ofrece una forma de salir."
+    },
+    "region": {
+      "actual": "Real ({region})",
+      "hint": "Redirige sus solicitudes — y todo lo que suba mientras esté activo — al almacenamiento de la otra región. Tiene prioridad sobre una cookie ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Departamento",
+      "companyName": "Empresa",
+      "jobTitle": "Puesto",
+      "officeId": "Oficina",
+      "officeActual": "Oficina real",
+      "officeNone": "Sin oficina",
+      "actualValue": "Real: {value}",
+      "actualEmpty": "Real: (vacío)",
+      "hint": "Deje un campo en blanco para mantener su valor real. Estos datos se usan en la regla de asignaciones, límites de uso según atributo y reglas de acceso."
+    },
+    "groups": {
+      "label": "IDs de grupo",
+      "placeholder": "Un id de objeto de grupo Entra por línea",
+      "hint": "Reemplaza — no extiende — su membresía real en esta sesión, para que pueda probar tanto pertenecer como no pertenecer."
+    },
+    "presets": {
+      "grantsMember": "Miembro del equipo Grants",
+      "regularUser": "Usuario regular",
+      "localAdmin": "Administrador local, sin agentes",
+      "otherRegion": "Otra región",
+      "hint": "Las preselecciones llenan el formulario; nada se aplica hasta que presione Aplicar."
+    },
+    "apply": "Aplicar y recargar",
+    "applying": "Aplicando…",
+    "clear": "Salir de ver como",
+    "clearing": "Saliendo…",
+    "reset": "Restablecer formulario",
+    "nothingToApply": "Configure al menos una modificación para aplicar.",
+    "applyError": "No se pudo aplicar ver como: {error}",
+    "clearError": "No se pudo salir de ver como: {error}",
+    "loadError": "No se pudo cargar el estado de ver como.",
+    "retry": "Reintentar",
+    "expiresNote": "Ver como dura hasta 8 horas o hasta que salga.",
+    "banner": {
+      "label": "Viendo como",
+      "adjust": "Ajustar",
+      "exit": "Salir",
+      "role": {
+        "local": "administrador local",
+        "none": "usuario regular"
+      },
+      "region": "región {region}",
+      "department": "departamento \"{value}\"",
+      "companyName": "empresa \"{value}\"",
+      "jobTitle": "puesto \"{value}\"",
+      "officeId": "oficina {value}",
+      "groups": "{count, plural, one {# grupo} other {# grupos}}"
+    }
   }
 }

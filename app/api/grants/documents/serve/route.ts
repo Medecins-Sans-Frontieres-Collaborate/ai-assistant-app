@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
-import { canAccessGrants } from '@/lib/services/grants/access';
+import { canUseGrants } from '@/lib/services/grants/serverAccess';
 
 import { auth } from '@/auth';
 
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    if (!canAccessGrants(session.user)) {
+    if (!(await canUseGrants(session.user))) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 

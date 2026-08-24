@@ -2674,6 +2674,10 @@
       "map": {
         "label": "Peta",
         "description": "Ubah data apa pun menjadi lokasi di peta"
+      },
+      "grants": {
+        "label": "Pemrosesan Hibah",
+        "description": "Rekonsiliasi dan ekstraksi data terstruktur dari narasi hibah"
       }
     },
     "chooser": {
@@ -2683,7 +2687,8 @@
       "newTranslation": "Terjemahan baru",
       "newDocument": "Dokumen baru",
       "newDataAnalysis": "Analisis data baru",
-      "newMap": "Peta baru"
+      "newMap": "Peta baru",
+      "newGrants": "Pemrosesan hibah baru"
     },
     "translation": {
       "chooseLanguage": "Bahasa target",
@@ -3300,7 +3305,8 @@
       "unknownType": "Percakapan ini menggunakan workflow yang tidak dikenali versi ini. Riwayat percakapan ditampilkan di bawah.",
       "untitled": "Percakapan Baru",
       "toggleMenu": "Tampilkan/sembunyikan menu",
-      "model": "Model untuk workflow ini"
+      "model": "Model untuk workflow ini",
+      "disabledByAdmin": "Alur kerja ini telah dinonaktifkan oleh administrator. Riwayat percakapan ditampilkan di bawah."
     },
     "tabs": {
       "label": "Mode percakapan",
@@ -4077,7 +4083,11 @@
       "storageUnavailable": "Penyimpanan admin tidak dapat dijangkau; data yang ada tidak dapat ditampilkan. Penyimpanan dinonaktifkan hingga sistem pulih.",
       "sealingUnavailable": "Enkripsi secret belum dikonfigurasi pada deployment ini (AUTH_SECRET tidak ada) — client secret tidak dapat disimpan.",
       "updatedBy": "Diperbarui oleh {by} pada {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Timpa agen bawaan",
+    "orgAgentOverrideAction": "Timpa",
+    "orgAgentBuiltinBadge": "Bawaan",
+    "orgAgentBuiltinHint": "Ditetapkan dalam konfigurasi deployment. Aturan aksesnya dapat diedit di sini; timpa untuk mengubah pengaturan tanpa perlu deployment."
   },
   "localModels": {
     "title": "Model lokal",
@@ -4278,9 +4288,15 @@
       "connectors": "Konektor organisasi dan siapa saja yang dapat menggunakannya.",
       "guides": "Panduan gaya, terminologi, dan kepatuhan.",
       "mapDatasets": "Dataset terkurasi yang tersedia untuk alur kerja peta.",
-      "localAdmins": "Delegasikan pengeditan aturan akses ke orang lain."
+      "localAdmins": "Delegasikan pengeditan aturan akses ke orang lain.",
+      "workflows": "Aktifkan atau nonaktifkan alur kerja percakapan untuk semua orang.",
+      "viewAs": "Uji aplikasi sebagai seseorang yang memenuhi — atau tidak memenuhi — suatu kondisi."
     },
-    "openSettings": "Buka pengaturan"
+    "openSettings": "Buka pengaturan",
+    "area": {
+      "workflows": "Alur Kerja",
+      "viewAs": "Lihat sebagai"
+    }
   },
   "limits": {
     "title": "Batas penggunaan",
@@ -4890,5 +4906,103 @@
     "listLabel": "Saran dari organisasi Anda",
     "searching": "Mencari di organisasi Anda…",
     "noMatches": "Tidak ada kecocokan di direktori — Anda dapat memasukkan alamat secara manual"
+  },
+  "workflowsAdmin": {
+    "title": "Alur Kerja",
+    "description": "Aktifkan atau nonaktifkan setiap alur kerja untuk seluruh organisasi. Alur kerja yang dinonaktifkan akan disembunyikan dari menu dan ditolak oleh server, meskipun seseorang seharusnya memenuhi syarat.",
+    "layeredNote": "Flag conversationWorkflows di LaunchDarkly tetap mengatur peluncuran: alur kerja yang diaktifkan di sini hanya dapat diakses jika flag tersebut aktif. Halaman ini tidak dapat menampilkan apapun yang disembunyikan oleh flag.",
+    "loading": "Memuat kebijakan alur kerja…",
+    "loadError": "Kebijakan alur kerja tidak dapat dimuat.",
+    "policyUnavailable": "Kebijakan alur kerja tidak dapat dibaca dari penyimpanan. Saklar tidak ditampilkan, bukan memakai nilai default yang mungkin tidak sesuai dengan kebijakan yang diterapkan.",
+    "retry": "Coba lagi",
+    "enableAll": "Aktifkan semua",
+    "disableAll": "Nonaktifkan semua",
+    "enabledLabel": "Diaktifkan",
+    "disabledLabel": "Dinonaktifkan",
+    "defaultOnHint": "Default jika tidak ada kebijakan yang disimpan: diaktifkan.",
+    "defaultOffHint": "Default jika tidak ada kebijakan yang disimpan: dinonaktifkan — administrator harus mengaktifkannya secara eksplisit.",
+    "grantsNote": "Pemrosesan Hibah juga dibatasi untuk pengguna MSF-USA di departemen Program dengan jabatan mengandung \"grants\", atau di Systems dengan jabatan mengandung \"innovation\". Mengaktifkan di sini tidak mengubah aturan tersebut.",
+    "unsaved": "Anda memiliki perubahan yang belum disimpan.",
+    "save": "Simpan",
+    "saving": "Menyimpan…",
+    "saveSuccess": "Kebijakan alur kerja telah disimpan.",
+    "saveError": "Kebijakan alur kerja tidak dapat disimpan.",
+    "conflictError": "Administrator lain telah mengubah kebijakan terlebih dahulu. Kebijakan sudah dimuat ulang — silakan periksa dan simpan lagi.",
+    "updatedByLine": "Terakhir disimpan oleh {by} pada {at}.",
+    "neverSaved": "Belum ada kebijakan yang disimpan; default di atas berlaku."
+  },
+  "viewAs": {
+    "title": "Lihat sebagai",
+    "description": "Uji aplikasi, hanya untuk sesi Anda sendiri, sebagai seseorang yang memenuhi atau tidak memenuhi suatu kondisi yang biasanya diputuskan oleh direktori atau administrator. Identitas Anda tidak pernah berubah: semua yang Anda buat tetap milik Anda dan setiap jejak audit tetap mencantumkan nama Anda.",
+    "activeTitle": "Mode lihat-sebagai aktif",
+    "inactiveTitle": "Mode lihat-sebagai tidak aktif",
+    "sections": {
+      "role": "Peran Admin",
+      "region": "Wilayah data",
+      "attributes": "Atribut direktori",
+      "groups": "Keanggotaan grup",
+      "presets": "Preset"
+    },
+    "role": {
+      "global": "Administrator global (peran Anda saat ini)",
+      "local": "Administrator lokal",
+      "none": "Pengguna biasa",
+      "localKeysLabel": "Kunci agen terdelegasi",
+      "localKeysHint": "Kunci agen kanonik dipisahkan koma yang dapat diedit oleh admin lokal ini. Biarkan kosong jika admin lokal tidak memiliki agen terdelegasi.",
+      "noneWarning": "Sebagai pengguna biasa, semua area admin lainnya akan hilang. Halaman ini tetap dapat diakses, dan banner di atas aplikasi selalu menawarkan cara untuk kembali."
+    },
+    "region": {
+      "actual": "Aktual ({region})",
+      "hint": "Mengalihkan permintaan Anda — dan apa pun yang Anda unggah saat aktif — ke penyimpanan region lain. Mengutamakan daripada cookie ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Departemen",
+      "companyName": "Perusahaan",
+      "jobTitle": "Jabatan",
+      "officeId": "Kantor",
+      "officeActual": "Kantor sebenarnya",
+      "officeNone": "Tidak ada kantor",
+      "actualValue": "Sebenarnya: {value}",
+      "actualEmpty": "Sebenarnya: (kosong)",
+      "hint": "Biarkan kolom kosong untuk mempertahankan nilai sebenarnya. Ini digunakan untuk aturan hibah, pembatasan penggunaan atribut, dan aturan akses."
+    },
+    "groups": {
+      "label": "ID grup",
+      "placeholder": "Satu Entra group object id per baris",
+      "hint": "Mengganti — tidak menambah — keanggotaan asli Anda selama sesi ini, sehingga Anda dapat menguji sebagai anggota maupun bukan."
+    },
+    "presets": {
+      "grantsMember": "Anggota tim grants",
+      "regularUser": "Pengguna biasa",
+      "localAdmin": "Admin lokal, tanpa agen",
+      "otherRegion": "Region lain",
+      "hint": "Preset akan mengisi formulir; tidak ada yang diterapkan sebelum Anda menekan Terapkan."
+    },
+    "apply": "Terapkan dan muat ulang",
+    "applying": "Menerapkan…",
+    "clear": "Keluar dari view-as",
+    "clearing": "Keluar…",
+    "reset": "Setel ulang formulir",
+    "nothingToApply": "Setidaknya tetapkan satu override untuk diterapkan.",
+    "applyError": "View-as tidak dapat diterapkan: {error}",
+    "clearError": "View-as tidak dapat dihapus: {error}",
+    "loadError": "Status view-as tidak dapat dimuat.",
+    "retry": "Coba lagi",
+    "expiresNote": "View-as berlaku hingga 8 jam, atau sampai Anda keluar.",
+    "banner": {
+      "label": "Melihat sebagai",
+      "adjust": "Atur",
+      "exit": "Keluar",
+      "role": {
+        "local": "admin lokal",
+        "none": "pengguna biasa"
+      },
+      "region": "region {region}",
+      "department": "departemen \"{value}\"",
+      "companyName": "perusahaan \"{value}\"",
+      "jobTitle": "jabatan \"{value}\"",
+      "officeId": "kantor {value}",
+      "groups": "{count, plural, one {# grup} other {# grup}}"
+    }
   }
 }

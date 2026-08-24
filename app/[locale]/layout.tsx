@@ -2,8 +2,6 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
-import { RegionOverrideBanner } from '@/components/RegionOverride/RegionOverrideBanner';
-
 import { routing } from '@/config/i18n';
 
 export function generateStaticParams() {
@@ -28,7 +26,6 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider messages={messages}>
-      <RegionOverrideBanner />
       {children}
     </NextIntlClientProvider>
   );

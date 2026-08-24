@@ -81,7 +81,10 @@ export async function POST(request: NextRequest) {
   const canonicalKey = canonicalAgentKey(ORG_AGENT_SOURCE, parsed.data.id);
   try {
     await service.ensureFresh();
-    const status = resolveAdminStatus(userMail, service.getSnapshot().config);
+    const status = resolveAdminStatus(
+      session.user,
+      service.getSnapshot().config,
+    );
     if (!status.isGlobalAdmin && !status.isLocalAdmin) {
       return forbiddenResponse();
     }

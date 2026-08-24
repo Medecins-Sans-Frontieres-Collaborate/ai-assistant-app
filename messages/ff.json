@@ -2658,6 +2658,10 @@
       "map": {
         "label": "Karte",
         "description": "Waɗ e dencuka ko leydi e karte"
+      },
+      "grants": {
+        "label": "Cuɓoraaɗe kurkure e jaajoraa",
+        "description": "Naɗ e artu hubcel e keɓe cuɓoraaɗi e jaajoraa kurkure"
       }
     },
     "chooser": {
@@ -2667,7 +2671,8 @@
       "newTranslation": "Hubitere hesere",
       "newDocument": "Baafal hesere",
       "newDataAnalysis": "Junggol dencuka hesere",
-      "newMap": "Karte hesere"
+      "newMap": "Karte hesere",
+      "newGrants": "Cuɓoraaɗe kurkure hesere"
     },
     "translation": {
       "chooseLanguage": "Ɓernde hubitere",
@@ -3284,7 +3289,8 @@
       "unknownType": "Ñaamtu ɗin naatnoyaa laawol tawa njiɓinii. Histori ñaamtu ndiyam ena uddita dow kawtal.",
       "untitled": "Ñaamtu hesere",
       "toggleMenu": "Luɓtu wadalkal",
-      "model": "Moƴƴol laawol on"
+      "model": "Moƴƴol laawol on",
+      "disabledByAdmin": "Admin ngol daaɓi cuɓoraaɗen ngal. Rimɗinde hokkanii nden woni ko ɗow."
     },
     "tabs": {
       "label": "Haɓaare hiraande",
@@ -4061,7 +4067,11 @@
       "storageUnavailable": "Admin storage alaa — caɗeeji adaa hokkanii ngari wonde. Danndugol waawaani seeda o welli.",
       "sealingUnavailable": "Secret encryption alaa configuration e jamfaare nde (AUTH_SECRET pucci) — client secretsji waawaani danndude.",
       "updatedBy": "Waynii e {by} le {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Neeɓnu agent wondude",
+    "orgAgentOverrideAction": "Neeɓnu",
+    "orgAgentBuiltinBadge": "Wondi",
+    "orgAgentBuiltinHint": "Eɓanii e config deployment. Ndee kaɗol jamɗii kadi e ndin; neeɓnu tawa a waawi waylude settings ngu kono."
   },
   "localModels": {
     "title": "Moodelji jowte ɗee",
@@ -4262,9 +4272,15 @@
       "connectors": "Konnektorgol e hol ko hombo waawi ummoraade.",
       "guides": "Doole, mbindi e toroo mabbe e ɗaɓɓugol.",
       "mapDatasets": "Rewle data boosu ɗee heɓan laawol feccere.",
-      "localAdmins": "Yetoo heɓtol wannga kanko mo woni e yeeso doggol huutorde."
+      "localAdmins": "Yetoo heɓtol wannga kanko mo woni e yeeso doggol huutorde.",
+      "workflows": "Sagtini walla daaɓi cuɓoraaɗe rimɗinde e kala juulnde.",
+      "viewAs": "Huumti app ngal leydi innde juutal ko woni — walla ko nobi — ko e jamfa."
     },
-    "openSettings": "Hollu teeltorde"
+    "openSettings": "Hollu teeltorde",
+    "area": {
+      "workflows": "Cuɓoraaɗe",
+      "viewAs": "Hollu ko gooto"
+    }
   },
   "limits": {
     "title": "Doggol hoore nguum",
@@ -4874,5 +4890,103 @@
     "listLabel": "Golleji pilkil e organisation maa",
     "searching": "Nana yiɗan e garbal maa...",
     "noMatches": "Noone soodaani e daftal — ena waawi hokkude ñiiɓirde baɗo"
+  },
+  "workflowsAdmin": {
+    "title": "Cuɓoraaɗe",
+    "description": "Suutor walla daaɓi cuɓoraaɗe kala e jaaɓnirgal juulnde. Cuɓoraaɗen daaɓaani ukkii e menus tawi server waawi gaɗa nden, kadi nefko ɓeyda nden waawi seerude.",
+    "layeredNote": "Flag conversationWorkflows e LaunchDarkly yettinii rollout: cuɓoraaɗen suutorii ndun hokkanii tawi flag ngal ndi. Hello ngal wayi marɓude noon ko flag ngal neɗɗi.",
+    "loading": "Nana lootirde kaɗol cuɓoraaɗe...",
+    "loadError": "Kaɗol cuɓoraaɗe alaa lootaani.",
+    "policyUnavailable": "Kaɗol cuɓoraaɗe alaa hokkanii e jayngol. Nadɓe waɗaani tintintooji ko mornii, hay goongɗin ndin waawi waaya e nder ko huutoraa.",
+    "retry": "Fuɗɗit",
+    "enableAll": "Suutor fow",
+    "disableAll": "Daaɓi fow",
+    "enabledLabel": "Suutorɗo",
+    "disabledLabel": "Daaɓiɗo",
+    "defaultOnHint": "Suutorɗo so kaɗol alaa: suutorɗo.",
+    "defaultOffHint": "Suutorɗo so kaɗol alaa: daaɓito — admin jarɗaa waawaa suutor nden.",
+    "grantsNote": "Cuɓoraaɗe kurkure watera MSF-USA baɗte Program e jaajoraa 'grants' ko e golle mum, walla Systems e 'innovation' e ɗuum. Suutorde nden ko njuulnde ndun, min ngalaa yamiro ndin.",
+    "unsaved": "A alaa ñaamaaji fesɗe yettude.",
+    "save": "Danndu",
+    "saving": "Nana danndude...",
+    "saveSuccess": "Kaɗol cuɓoraaɗe danndaani.",
+    "saveError": "Kaɗol cuɓoraaɗe alaa danndaani.",
+    "conflictError": "Admin gooto suɓi kaɗol ngun e nder. Lootanii — mbaawi danndu kadi.",
+    "updatedByLine": "Danndi laato {by} e {at}.",
+    "neverSaved": "Kaɗol danndaani yettude; ko suutorɗe fof wayi."
+  },
+  "viewAs": {
+    "title": "Hollu ko gooto",
+    "description": "Huumti app ngal, e juulnde maa refti, gooto woni innde tawa seydii walla so saylayta. Innde maa ndon waawaani waylude: ko kala ndiyam a waawi waalude umma mum e audit loowdi maa ko non goɗɗum.",
+    "activeTitle": "Hollu ko gooto nanii",
+    "inactiveTitle": "Hollu ko gooto alaa nanii",
+    "sections": {
+      "role": "Hokkagol admin",
+      "region": "Leyɗe keɓe",
+      "attributes": "Keɓe directory",
+      "groups": "Koppi e gese",
+      "presets": "Beetol juulnde"
+    },
+    "role": {
+      "global": "Admin global (hokkagol maa nden)",
+      "local": "Admin leydi",
+      "none": "Jabbaaɗo sah",
+      "localKeysLabel": "Cifkoyji agent weñde",
+      "localKeysHint": "Cifkoyji agent wondirde nofeere gooto; woodan celloowo e admin ndin kala waawaa golle agent mo.",
+      "noneWarning": "Ko jabbaaɗo sah, dowgal admin fow yedda. Hello ngal njiiti, kadi banner e ndiyam app ngal waawi jibia maa."
+    },
+    "region": {
+      "actual": "Ndee danki ({region})",
+      "hint": "Nanaadi mbaawaaɗe maa e kala ko a naatna heen so a mbaɗi tan, e coowde dow hoore maɓɓe e laawol region gooto. Ko ɓe heɗi lowre regionOverride= cookie."
+    },
+    "attributes": {
+      "department": "Bakaar",
+      "companyName": "Kumpanii",
+      "jobTitle": "Tiitel neɗɗo",
+      "officeId": "Biiro",
+      "officeActual": "Biiro jooni",
+      "officeNone": "Biiro jaltu",
+      "actualValue": "Jooni: {value}",
+      "actualEmpty": "Jooni: (ɗuumbo)",
+      "hint": "Siiɗa field gooto gal ko ndiyam, so aɗa yiɗi tagi ndikka jooni. Kene, ɗe ɓe buti e laawol grants, huutoraade attribute, e toppirde dokkal."
+    },
+    "groups": {
+      "label": "IDɗe group",
+      "placeholder": "ID object group Entra gooto leydi, liino gooto",
+      "hint": "Ko ɓuri haalaare maa, tee hiɗa waawaa yunndude aslol gooto e session maa, kadi hiɗa suɓo hoolaade no aɓi e no aɓi-ɗaa."
+    },
+    "presets": {
+      "grantsMember": "Daale team grants",
+      "regularUser": "Doole jooni",
+      "localAdmin": "Hokkataaɓe lowre, agent-so wonaa",
+      "otherRegion": "Region gooto",
+      "hint": "Presets ɗe nannditi form makko; caggal kurka a danni Apply, wonaa noon."
+    },
+    "apply": "Naatu e horii",
+    "applying": "Naatude…",
+    "clear": "Yaltu view-as",
+    "clearing": "Yaltude…",
+    "reset": "Yolle form makko",
+    "nothingToApply": "Cemma override gooto tago, kur to naatude.",
+    "applyError": "View-as waawaani naatude: {error}",
+    "clearError": "View-as waawaani yaltoode: {error}",
+    "loadError": "Haalugol view-as so waddi waawaani yuɓi.",
+    "retry": "Fuɗɗito",
+    "expiresNote": "View-as jogii cappan e 8 awi, walla harka a yaltu.",
+    "banner": {
+      "label": "Nanaandira hay",
+      "adjust": "Sos",
+      "exit": "Yaltu",
+      "role": {
+        "local": "hokkataaɓe lowre",
+        "none": "doole jooni"
+      },
+      "region": "region {region}",
+      "department": "bakaar \"{value}\"",
+      "companyName": "kumpanii \"{value}\"",
+      "jobTitle": "tiitel \"{value}\"",
+      "officeId": "biiro {value}",
+      "groups": "{count, plural, one {# group} other {# groupɗe}}"
+    }
   }
 }

@@ -2705,6 +2705,10 @@
       "map": {
         "label": "Bản đồ",
         "description": "Biến mọi dữ liệu thành vị trí trên bản đồ"
+      },
+      "grants": {
+        "label": "Xử lý trợ cấp",
+        "description": "Đối chiếu và trích xuất dữ liệu có cấu trúc từ các mô tả trợ cấp"
       }
     },
     "chooser": {
@@ -2714,7 +2718,8 @@
       "newTranslation": "Dịch mới",
       "newDocument": "Tài liệu mới",
       "newDataAnalysis": "Phân tích dữ liệu mới",
-      "newMap": "Bản đồ mới"
+      "newMap": "Bản đồ mới",
+      "newGrants": "Xử lý trợ cấp mới"
     },
     "translation": {
       "chooseLanguage": "Ngôn ngữ đích",
@@ -3331,7 +3336,8 @@
       "unknownType": "Cuộc hội thoại này sử dụng quy trình làm việc mà phiên bản này chưa nhận diện được. Lịch sử hội thoại được hiển thị bên dưới.",
       "untitled": "Cuộc hội thoại mới",
       "toggleMenu": "Chuyển đổi menu",
-      "model": "Mô hình cho quy trình làm việc này"
+      "model": "Mô hình cho quy trình làm việc này",
+      "disabledByAdmin": "Quy trình công việc này đã bị quản trị viên vô hiệu hoá. Lịch sử hội thoại được hiển thị bên dưới."
     },
     "tabs": {
       "label": "Chế độ hội thoại",
@@ -4108,7 +4114,11 @@
       "storageUnavailable": "Không thể truy cập lưu trữ quản trị; không thể liệt kê các bản ghi hiện tại. Chức năng lưu sẽ bị vô hiệu hóa cho đến khi được khôi phục.",
       "sealingUnavailable": "Mã hóa secret chưa được cấu hình trên triển khai này (thiếu AUTH_SECRET) — không thể lưu client secret.",
       "updatedBy": "Được cập nhật bởi {by} vào {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Ghi đè agent tích hợp sẵn",
+    "orgAgentOverrideAction": "Ghi đè",
+    "orgAgentBuiltinBadge": "Tích hợp sẵn",
+    "orgAgentBuiltinHint": "Được định nghĩa trong cấu hình triển khai. Quy tắc truy cập của nó có thể chỉnh sửa tại đây; ghi đè để thay đổi thiết lập mà không cần triển khai lại."
   },
   "localModels": {
     "title": "Mô hình cục bộ",
@@ -4309,9 +4319,15 @@
       "connectors": "Các connector của tổ chức và người được phép sử dụng.",
       "guides": "Hướng dẫn về phong cách, thuật ngữ và tuân thủ.",
       "mapDatasets": "Các bộ dữ liệu đã chọn sẵn cho quy trình bản đồ.",
-      "localAdmins": "Phân quyền chỉnh sửa quy tắc truy cập cho người khác."
+      "localAdmins": "Phân quyền chỉnh sửa quy tắc truy cập cho người khác.",
+      "workflows": "Bật hoặc tắt các quy trình hội thoại cho tất cả mọi người.",
+      "viewAs": "Kiểm tra ứng dụng như một người đáp ứng — hoặc không đáp ứng — một điều kiện."
     },
-    "openSettings": "Mở cài đặt"
+    "openSettings": "Mở cài đặt",
+    "area": {
+      "workflows": "Quy trình công việc",
+      "viewAs": "Xem dạng"
+    }
   },
   "limits": {
     "title": "Giới hạn sử dụng",
@@ -4921,5 +4937,103 @@
     "listLabel": "Gợi ý từ tổ chức của bạn",
     "searching": "Đang tìm kiếm trong tổ chức của bạn…",
     "noMatches": "Không tìm thấy kết quả — bạn có thể nhập địa chỉ thủ công"
+  },
+  "workflowsAdmin": {
+    "title": "Quy trình công việc",
+    "description": "Bật hoặc tắt từng quy trình cho toàn tổ chức. Một quy trình bị tắt sẽ bị ẩn khỏi menu và bị máy chủ từ chối, kể cả với những người đủ điều kiện khác.",
+    "layeredNote": "Cờ conversationWorkflows của LaunchDarkly vẫn kiểm soát việc triển khai: một quy trình được bật ở đây chỉ khả dụng khi cờ đó được bật. Trang này không thể hiển thị bất cứ thứ gì mà cờ đang ẩn.",
+    "loading": "Đang tải chính sách quy trình công việc…",
+    "loadError": "Không thể tải chính sách quy trình công việc.",
+    "policyUnavailable": "Không thể đọc chính sách quy trình từ kho lưu trữ. Các tùy chọn chuyển đổi sẽ bị ẩn thay vì hiển thị theo giá trị mặc định có thể không khớp với thực tế.",
+    "retry": "Thử lại",
+    "enableAll": "Bật tất cả",
+    "disableAll": "Tắt tất cả",
+    "enabledLabel": "Đã bật",
+    "disabledLabel": "Đã tắt",
+    "defaultOnHint": "Mặc định khi chưa lưu chính sách: đã bật.",
+    "defaultOffHint": "Mặc định khi chưa lưu chính sách: đã tắt — quản trị viên phải tự bật.",
+    "grantsNote": "Xử lý trợ cấp chỉ giới hạn thêm cho người dùng MSF-USA thuộc bộ phận Chương trình có \"grants\" trong chức danh, hoặc thuộc bộ phận Hệ thống có \"innovation\" trong chức danh. Việc bật tại đây không thay đổi quy tắc đó.",
+    "unsaved": "Bạn có thay đổi chưa lưu.",
+    "save": "Lưu",
+    "saving": "Đang lưu…",
+    "saveSuccess": "Đã lưu chính sách quy trình công việc.",
+    "saveError": "Không thể lưu chính sách quy trình công việc.",
+    "conflictError": "Một quản trị viên khác đã thay đổi chính sách trước đó. Chính sách đã được tải lại — vui lòng kiểm tra và lưu lại.",
+    "updatedByLine": "Lần cuối lưu bởi {by} vào {at}.",
+    "neverSaved": "Chưa có chính sách nào được lưu; áp dụng các mặc định bên trên."
+  },
+  "viewAs": {
+    "title": "Xem dạng",
+    "description": "Kiểm tra ứng dụng, chỉ với phiên của bạn, như một người đáp ứng hoặc không đáp ứng điều kiện thông thường do thư mục hoặc quản trị viên quyết định. Danh tính của bạn không bao giờ thay đổi: tất cả những gì bạn tạo ra vẫn thuộc về bạn và mọi ghi vết kiểm toán vẫn ghi tên bạn.",
+    "activeTitle": "Chế độ xem dạng đang bật",
+    "inactiveTitle": "Chế độ xem dạng chưa bật",
+    "sections": {
+      "role": "Vai trò quản trị viên",
+      "region": "Vùng dữ liệu",
+      "attributes": "Thuộc tính thư mục",
+      "groups": "Thành viên nhóm",
+      "presets": "Cài đặt trước"
+    },
+    "role": {
+      "global": "Quản trị viên toàn cầu (vai trò thực tế của bạn)",
+      "local": "Quản trị viên địa phương",
+      "none": "Người dùng thông thường",
+      "localKeysLabel": "Khoá agent được uỷ quyền",
+      "localKeysHint": "Danh sách khoá agent chuẩn hóa, phân tách bằng dấu phẩy mà quản trị viên địa phương này được phép chỉnh sửa. Để trống nếu không có agent nào được uỷ quyền.",
+      "noneWarning": "Với tư cách là người dùng thông thường, tất cả khu vực quản trị khác sẽ biến mất. Trang này vẫn truy cập được, và biểu ngữ ở đầu ứng dụng luôn cung cấp lối thoát."
+    },
+    "region": {
+      "actual": "Thực tế ({region})",
+      "hint": "Chuyển hướng các yêu cầu của bạn — và mọi thứ bạn tải lên khi đang kích hoạt — sang vùng lưu trữ khác. Ưu tiên hơn cookie ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Phòng ban",
+      "companyName": "Công ty",
+      "jobTitle": "Chức danh",
+      "officeId": "Văn phòng",
+      "officeActual": "Văn phòng thực tế",
+      "officeNone": "Không có văn phòng",
+      "actualValue": "Thực tế: {value}",
+      "actualEmpty": "Thực tế: (trống)",
+      "hint": "Để trống trường để giữ giá trị thực tế. Các trường này liên quan đến quy tắc cấp quyền, giới hạn sử dụng theo thuộc tính và quy tắc truy cập."
+    },
+    "groups": {
+      "label": "ID nhóm",
+      "placeholder": "Mỗi dòng một Entra group object id",
+      "hint": "Thay thế — không mở rộng — tư cách thành viên thực của bạn cho phiên này, giúp bạn kiểm tra cả trường hợp có và không thuộc nhóm."
+    },
+    "presets": {
+      "grantsMember": "Thành viên nhóm grants",
+      "regularUser": "Người dùng thông thường",
+      "localAdmin": "Quản trị viên cục bộ, không có agent",
+      "otherRegion": "Vùng khác",
+      "hint": "Các mẫu này sẽ điền vào biểu mẫu; chỉ hiệu lực khi bạn nhấn Áp dụng."
+    },
+    "apply": "Áp dụng và tải lại",
+    "applying": "Đang áp dụng…",
+    "clear": "Thoát chế độ xem dưới tư cách khác",
+    "clearing": "Đang thoát…",
+    "reset": "Đặt lại biểu mẫu",
+    "nothingToApply": "Thiết lập ít nhất một thay thế để áp dụng.",
+    "applyError": "Không thể áp dụng chế độ xem dưới tư cách khác: {error}",
+    "clearError": "Không thể thoát chế độ xem dưới tư cách khác: {error}",
+    "loadError": "Không thể tải trạng thái chế độ xem dưới tư cách khác.",
+    "retry": "Thử lại",
+    "expiresNote": "Chế độ xem dưới tư cách khác tồn tại tối đa 8 giờ, hoặc cho tới khi bạn thoát.",
+    "banner": {
+      "label": "Đang xem dưới tư cách",
+      "adjust": "Điều chỉnh",
+      "exit": "Thoát",
+      "role": {
+        "local": "quản trị viên cục bộ",
+        "none": "người dùng thông thường"
+      },
+      "region": "vùng {region}",
+      "department": "phòng ban \"{value}\"",
+      "companyName": "công ty \"{value}\"",
+      "jobTitle": "chức danh \"{value}\"",
+      "officeId": "văn phòng {value}",
+      "groups": "{count, plural, one {# nhóm} other {# nhóm}}"
+    }
   }
 }

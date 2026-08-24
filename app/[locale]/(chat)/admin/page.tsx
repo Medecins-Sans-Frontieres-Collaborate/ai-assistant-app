@@ -21,7 +21,7 @@ export default async function AdminIndexPage() {
     redirect('/signin');
   }
 
-  const { areas } = await resolveAdminAreas(session.user?.mail);
+  const { areas } = await resolveAdminAreas(session.user);
   if (areas.length === 0) {
     redirect('/');
   }

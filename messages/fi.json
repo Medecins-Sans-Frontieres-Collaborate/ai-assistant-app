@@ -2674,6 +2674,10 @@
       "map": {
         "label": "Kartta",
         "description": "Muunna mikä tahansa data karttasijainneiksi"
+      },
+      "grants": {
+        "label": "Avustusten käsittely",
+        "description": "Sovita ja poimi rakenteellista tietoa avustusten kuvauksista"
       }
     },
     "chooser": {
@@ -2683,7 +2687,8 @@
       "newTranslation": "Uusi käännös",
       "newDocument": "Uusi dokumentti",
       "newDataAnalysis": "Uusi data-analyysi",
-      "newMap": "Uusi kartta"
+      "newMap": "Uusi kartta",
+      "newGrants": "Uusien avustusten käsittely"
     },
     "translation": {
       "chooseLanguage": "Kohdekieli",
@@ -3300,7 +3305,8 @@
       "unknownType": "Tämä keskustelu käyttää työnkulkua, jota tämä versio ei tunnista. Keskusteluhistoria näkyy alla.",
       "untitled": "Uusi keskustelu",
       "toggleMenu": "Avaa/sulje valikko",
-      "model": "Työnkulun malli"
+      "model": "Työnkulun malli",
+      "disabledByAdmin": "Ylläpitäjä on poistanut tämän työnkulun käytöstä. Keskusteluhistoria näytetään alla."
     },
     "tabs": {
       "label": "Keskustelutila",
@@ -4077,7 +4083,11 @@
       "storageUnavailable": "Ylläpidon tallennustila ei ole saavutettavissa; olemassa olevia tietueita ei voitu listata. Tallennus on poissa käytöstä kunnes tilanne korjaantuu.",
       "sealingUnavailable": "Salaisuuksien salaus ei ole määritetty tässä käyttöönotossa (AUTH_SECRET puuttuu) — client secret -arvoja ei voi tallentaa.",
       "updatedBy": "Päivittänyt {by} {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Yliaja sisäänrakennettu agentti",
+    "orgAgentOverrideAction": "Yliaja",
+    "orgAgentBuiltinBadge": "Sisäänrakennettu",
+    "orgAgentBuiltinHint": "Määritelty käyttöönottokonfiguraatiossa. Sen käyttöoikeussääntö on muokattavissa täällä; yliaja muuttaaksesi asetuksia ilman käyttöönottopäivitystä."
   },
   "localModels": {
     "title": "Paikalliset mallit",
@@ -4278,9 +4288,15 @@
       "connectors": "Organisaation yhdistimet ja niiden käyttäjät.",
       "guides": "Tyyli-, termistö- ja vaatimustenmukaisuusohjeet.",
       "mapDatasets": "Karttatyönkulkuun käytettävissä olevat valikoidut tietoaineistot.",
-      "localAdmins": "Valtuuta muut henkilöt muokkaamaan käyttöoikeussääntöjä."
+      "localAdmins": "Valtuuta muut henkilöt muokkaamaan käyttöoikeussääntöjä.",
+      "workflows": "Ota keskustelutyönkulut käyttöön tai pois käytöstä kaikille.",
+      "viewAs": "Testaa sovellusta henkilönä, joka täyttää — tai ei täytä — jonkin ehdon."
     },
-    "openSettings": "Avaa asetukset"
+    "openSettings": "Avaa asetukset",
+    "area": {
+      "workflows": "Työnkulut",
+      "viewAs": "Katso roolissa"
+    }
   },
   "limits": {
     "title": "Käyttörajoitukset",
@@ -4890,5 +4906,103 @@
     "listLabel": "Ehdotuksia organisaatioltasi",
     "searching": "Haetaan organisaatiostasi…",
     "noMatches": "Hakemistosta ei löytynyt sopivia – voit syöttää osoitteen manuaalisesti"
+  },
+  "workflowsAdmin": {
+    "title": "Työnkulut",
+    "description": "Ota kukin työnkulku käyttöön tai pois käytöstä koko organisaatiolle. Poistettu työnkulku on piilotettu valikoista ja estetty palvelimella, vaikka käyttäjä muuten täyttäisi ehdot.",
+    "layeredNote": "LaunchDarklyn conversationWorkflows-käyttöönottolippu säätelee silti käyttöönottoa: täällä käyttöön otettu työnkulku on saatavilla vain, jos lippu on päällä. Tämä sivu ei tuo näkyviin mitään, minkä lippu piilottaa.",
+    "loading": "Ladataan työnkulun käytäntöä…",
+    "loadError": "Työnkulun käytäntöä ei voitu ladata.",
+    "policyUnavailable": "Työnkulun käytäntöä ei voitu lukea tallennuksesta. Kytkimet on piilotettu sen sijaan, että näytettäisiin oletusarvot, jotka eivät ehkä vastaa käytäntöä.",
+    "retry": "Yritä uudelleen",
+    "enableAll": "Ota kaikki käyttöön",
+    "disableAll": "Poista kaikki käytöstä",
+    "enabledLabel": "Käytössä",
+    "disabledLabel": "Pois käytöstä",
+    "defaultOnHint": "Oletus, kun käytäntöä ei ole tallennettu: käytössä.",
+    "defaultOffHint": "Oletus, kun käytäntöä ei ole tallennettu: pois käytöstä — ylläpitäjän on otettava käyttöön erikseen.",
+    "grantsNote": "Avustusten käsittely on lisäksi rajoitettu MSF-USA:n ohjelmatiimin käyttäjille, joiden tehtävänimikkeessä on \"grants\", tai Systems-tiimille, joiden nimikkeessä on \"innovation\". Käytön salliminen täällä ei laajenna tätä sääntöä.",
+    "unsaved": "Sinulla on tallentamattomia muutoksia.",
+    "save": "Tallenna",
+    "saving": "Tallennetaan…",
+    "saveSuccess": "Työnkulun käytäntö tallennettu.",
+    "saveError": "Työnkulun käytäntöä ei voitu tallentaa.",
+    "conflictError": "Toinen ylläpitäjä muutti käytäntöä ensin. Se on ladattu uudelleen — tarkista ja tallenna uudelleen.",
+    "updatedByLine": "Viimeksi tallentanut {by} {at}.",
+    "neverSaved": "Käytäntöä ei ole vielä tallennettu; yllä olevat oletukset pätevät."
+  },
+  "viewAs": {
+    "title": "Katso roolissa",
+    "description": "Testaa sovellusta vain omassa istunnossasi henkilönä, joka täyttää tai ei täytä ehdon, jonka normaalisti määrittää hakemisto tai ylläpitäjä. Henkilöllisyytesi ei muutu: kaikki luomasi pysyy sinun nimissäsi ja kaikki auditointirivit viittaavat edelleen sinuun.",
+    "activeTitle": "Katso roolissa on aktiivinen",
+    "inactiveTitle": "Katso roolissa ei ole aktiivinen",
+    "sections": {
+      "role": "Ylläpitäjän rooli",
+      "region": "Tietoalue",
+      "attributes": "Hakemiston ominaisuudet",
+      "groups": "Ryhmäjäsenyys",
+      "presets": "Esiasetukset"
+    },
+    "role": {
+      "global": "Globaali ylläpitäjä (oikea roolisi)",
+      "local": "Paikallinen ylläpitäjä",
+      "none": "Tavallinen käyttäjä",
+      "localKeysLabel": "Delegoidut agenttiavaimet",
+      "localKeysHint": "Pilkulla erotellut kanoniset agenttiavaimet, joita tämä paikallinen ylläpitäjä voi muokata. Jätä tyhjäksi, jos paikallisella ylläpitäjällä ei ole delegoituja agentteja.",
+      "noneWarning": "Tavallisena käyttäjänä kaikki muut ylläpidonalueet katoavat. Tämä sivu pysyy käytettävissä ja sovelluksen yläosan bannerista pääsee pois tilasta."
+    },
+    "region": {
+      "actual": "Todellinen ({region})",
+      "hint": "Ohjaa pyyntösi ja kaikki lataamasi tiedot toisen alueen tallennukseen tämän ollessa aktiivinen. Ohittaa ?regionOverride= -evästeen."
+    },
+    "attributes": {
+      "department": "Osasto",
+      "companyName": "Yritys",
+      "jobTitle": "Tehtävänimike",
+      "officeId": "Toimisto",
+      "officeActual": "Todellinen toimisto",
+      "officeNone": "Ei toimistoa",
+      "actualValue": "Todellinen: {value}",
+      "actualEmpty": "Todellinen: (tyhjä)",
+      "hint": "Jätä kenttä tyhjäksi pitääksesi todellisen arvosi. Näitä käytetään sääntöjen, attribuuttikohtaisten käyttörajojen ja käyttöoikeussääntöjen määrittelyyn."
+    },
+    "groups": {
+      "label": "Ryhmä-ID:t",
+      "placeholder": "Yksi Entra-ryhmäobjektin id per rivi",
+      "hint": "Korvaa todellisen jäsenyytesi tälle istunnolle – ei lisää siihen – joten voit testata sekä kuulumista että kuulumattomuutta."
+    },
+    "presets": {
+      "grantsMember": "Grants-tiimin jäsen",
+      "regularUser": "Tavallinen käyttäjä",
+      "localAdmin": "Paikallinen ylläpitäjä, ei agentteja",
+      "otherRegion": "Toinen alue",
+      "hint": "Esiasetukset täyttävät lomakkeen; mikään ei astu voimaan ennen kuin painat Käytä."
+    },
+    "apply": "Käytä ja lataa uudelleen",
+    "applying": "Käytetään…",
+    "clear": "Poistu view-as-tilasta",
+    "clearing": "Poistutaan…",
+    "reset": "Palauta lomake",
+    "nothingToApply": "Aseta vähintään yksi korvaus, jotta voit käyttää.",
+    "applyError": "View-as-tilaa ei voitu käyttää: {error}",
+    "clearError": "View-as-tilaa ei voitu poistaa: {error}",
+    "loadError": "View-as-tilan lataaminen epäonnistui.",
+    "retry": "Yritä uudelleen",
+    "expiresNote": "View-as on voimassa enintään 8 tuntia tai kunnes poistut tilasta.",
+    "banner": {
+      "label": "Käyt näkymää nimellä",
+      "adjust": "Muokkaa",
+      "exit": "Poistu",
+      "role": {
+        "local": "paikallinen ylläpitäjä",
+        "none": "tavallinen käyttäjä"
+      },
+      "region": "alue {region}",
+      "department": "osasto \"{value}\"",
+      "companyName": "yritys \"{value}\"",
+      "jobTitle": "nimike \"{value}\"",
+      "officeId": "toimisto {value}",
+      "groups": "{count, plural, one {# ryhmä} other {# ryhmää}}"
+    }
   }
 }

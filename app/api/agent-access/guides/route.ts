@@ -334,7 +334,7 @@ export async function GET() {
       config = service.getSnapshot().config;
     }
 
-    const status = resolveAdminStatus(session.user.mail, config);
+    const status = resolveAdminStatus(session.user, config);
     if (!status.isGlobalAdmin && !status.isLocalAdmin) {
       return forbiddenResponse();
     }
@@ -390,7 +390,10 @@ export async function POST(request: NextRequest) {
 
   try {
     await service.ensureFresh();
-    const status = resolveAdminStatus(userMail, service.getSnapshot().config);
+    const status = resolveAdminStatus(
+      session.user,
+      service.getSnapshot().config,
+    );
     // Any admin may create — including a local admin with zero delegated keys
     // (the created guide is auto-delegated to them below).
     if (!status.isGlobalAdmin && !status.isLocalAdmin) {
@@ -517,7 +520,10 @@ export async function PUT(request: NextRequest) {
 
   try {
     await service.ensureFresh();
-    const status = resolveAdminStatus(userMail, service.getSnapshot().config);
+    const status = resolveAdminStatus(
+      session.user,
+      service.getSnapshot().config,
+    );
     if (!status.isGlobalAdmin && !status.isLocalAdmin) {
       return forbiddenResponse();
     }
@@ -610,7 +616,10 @@ export async function DELETE(request: NextRequest) {
 
   try {
     await service.ensureFresh();
-    const status = resolveAdminStatus(userMail, service.getSnapshot().config);
+    const status = resolveAdminStatus(
+      session.user,
+      service.getSnapshot().config,
+    );
     if (!status.isGlobalAdmin && !status.isLocalAdmin) {
       return forbiddenResponse();
     }

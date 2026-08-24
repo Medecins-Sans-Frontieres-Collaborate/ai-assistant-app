@@ -2658,6 +2658,10 @@
       "map": {
         "label": "Kat",
         "description": "Konvèti nenpòt done an kote sou yon kat"
+      },
+      "grants": {
+        "label": "Pwosesis Sibvansyon",
+        "description": "Rasinble epi retire done estriktire nan narasyon sibvansyon yo"
       }
     },
     "chooser": {
@@ -2667,7 +2671,8 @@
       "newTranslation": "Nouvo tradiksyon",
       "newDocument": "Nouvo dokiman",
       "newDataAnalysis": "Nouvo analiz done",
-      "newMap": "Nouvo kat"
+      "newMap": "Nouvo kat",
+      "newGrants": "Nouvo pwosesis sibvansyon"
     },
     "translation": {
       "chooseLanguage": "Lang sib",
@@ -3284,7 +3289,8 @@
       "unknownType": "Konvèsasyon sa ap itilize yon workflow vèsyon sa a pa rekonèt. Istwa konvèsasyon an parèt anba a.",
       "untitled": "Nouvo Konvèsasyon",
       "toggleMenu": "Afiche/oswa kache meni an",
-      "model": "Modèl pou workflow sa a"
+      "model": "Modèl pou workflow sa a",
+      "disabledByAdmin": "Administratè dezaktive workflow sa. Istwa konvèsasyon an afiche pi ba a."
     },
     "tabs": {
       "label": "Mòd konvèsasyon",
@@ -4061,7 +4067,11 @@
       "storageUnavailable": "Depo admin lan pa disponib; pa t kapab montre anrejistreman ki egziste. Sove ap rete dezaktive jiskaske sa rezoud.",
       "sealingUnavailable": "Ankriptaj pou sekrè pa konfigire sou deplwaman sa a (AUTH_SECRET manke) — pa ka sove sekrè kliyan yo.",
       "updatedBy": "Mizajou pa {by} sou {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Ranplase ajan entegre",
+    "orgAgentOverrideAction": "Ranplase",
+    "orgAgentBuiltinBadge": "Entegre",
+    "orgAgentBuiltinHint": "Defini nan konfigirasyon deplwaman an. Règ aksè li la editab isit la; ranplase l pou chanje paramèt li san deplwaye."
   },
   "localModels": {
     "title": "Modèl lokal",
@@ -4262,9 +4272,15 @@
       "connectors": "Konektè òganizasyon ak kilès ki ka itilize yo.",
       "guides": "Gid stil, tèm ak konformite.",
       "mapDatasets": "Bazdone prepare pou workflow kat la.",
-      "localAdmins": "Delege edisyon règ aksè bay lòt moun."
+      "localAdmins": "Delege edisyon règ aksè bay lòt moun.",
+      "workflows": "Aktive oswa dezaktive workflow konvèsasyon pou tout moun.",
+      "viewAs": "Teste aplikasyon an tankou yon moun ki ranpli — ou pa ranpli — yon kondisyon."
     },
-    "openSettings": "Louvri anviwònman yo"
+    "openSettings": "Louvri anviwònman yo",
+    "area": {
+      "workflows": "Workflows",
+      "viewAs": "Wè kòm"
+    }
   },
   "limits": {
     "title": "Limit itilizasyon",
@@ -4874,5 +4890,103 @@
     "listLabel": "Sijesyon ki soti nan òganizasyon ou",
     "searching": "Nap chèche nan òganizasyon w…",
     "noMatches": "Pa gen rezilta nan anyè a — ou ka antre adrès la manuelman"
+  },
+  "workflowsAdmin": {
+    "title": "Workflows",
+    "description": "Aktive oswa dezaktive chak workflow pou tout òganizasyon an. Yon workflow ki dezaktive pa parèt nan meni yo epi sèvè a ap refize li, menm pou moun ki ta dwe gen aksè.",
+    "layeredNote": "Flag LaunchDarkly conversationWorkflows la toujou kontwole lansman: workflow ki aktive isit la ap disponib sèlman kote flag sa limen. Paj sa pa ka fè anyen parèt si flag la kache li.",
+    "loading": "Y ap chaje politik workflow…",
+    "loadError": "Politik workflow lan pa t ka chaje.",
+    "policyUnavailable": "Pa t ka li politik workflow lan nan depo a. Bouton on/off yo kache pito ke montre ak valè default ki ka pa matche ak sa k ap aplike.",
+    "retry": "Reeseye",
+    "enableAll": "Aktive tout",
+    "disableAll": "Dezaktive tout",
+    "enabledLabel": "Aktive",
+    "disabledLabel": "Dezaktive",
+    "defaultOnHint": "Default si pa gen okenn politik ki sove: aktive.",
+    "defaultOffHint": "Default si pa gen okenn politik ki sove: dezaktive — yon administratè dwe limen li klèman.",
+    "grantsNote": "Pwosesis Sibvansyon limite anplis a itilizatè MSF-USA ki nan depatman Pwogram ki gen 'grants' nan tit travay yo, oswa nan Systems ki gen 'innovation' nan tit yo. Aktive li isit la pa elaji règ sa a.",
+    "unsaved": "Ou gen chanjman ki pa sove.",
+    "save": "Sove",
+    "saving": "Ap sove…",
+    "saveSuccess": "Politik workflow lan sove.",
+    "saveError": "Pa t ka sove politik workflow lan.",
+    "conflictError": "Yon lòt administratè modifye politik lan anvan. Li re-chaje — tanpri revize epi sove ankò.",
+    "updatedByLine": "Dènye sove pa {by} sou {at}.",
+    "neverSaved": "Pa gen okenn politik ki sove ankò; default anlè yo ap aplike."
+  },
+  "viewAs": {
+    "title": "Wè kòm",
+    "description": "Teste aplikasyon an, sèlman pou sesyon pa w, tankou yon moun ki ranpli oswa pa ranpli yon kondisyon administratè oswa anyè moun yo deside. Idantite w pa janm chanje: tout sa ou kreye rete pa ou e tout tras ki fèt toujou mete non pa ou.",
+    "activeTitle": "Wè-kòm aktif",
+    "inactiveTitle": "Wè-kòm pa aktif",
+    "sections": {
+      "role": "Wòl admin",
+      "region": "Rejyon done",
+      "attributes": "Atribi anyè",
+      "groups": "Patenarya gwoup",
+      "presets": "Predefini yo"
+    },
+    "role": {
+      "global": "Administratè global (wòl aktyèl ou)",
+      "local": "Administratè lokal",
+      "none": "Itilizatè regilye",
+      "localKeysLabel": "Kle ajan delege yo",
+      "localKeysHint": "Kle ajan delege admin lokal sa ka modifye, separe ak vigil. Kite vid pou admin lokal ki pa gen ajan delege.",
+      "noneWarning": "Kòm yon itilizatè regilye, tout lòt zòn admin yo disparèt. Paj sa ap toujou aksesib, epi banyè anlè app a ap toujou bay yon fason pou sòti."
+    },
+    "region": {
+      "actual": "Aktyèl ({region})",
+      "hint": "Deside kote demann ou yo ak tout sa ou telechaje pandan w ap itilize sistèm lan ap estoke, nan depo lòt rejyon an. Sa pran priyorite sou bonbon ?regionOverride= la."
+    },
+    "attributes": {
+      "department": "Depatman",
+      "companyName": "Konpayi",
+      "jobTitle": "Tit travay",
+      "officeId": "Biwo",
+      "officeActual": "Biwo aktyèl",
+      "officeNone": "Pa gen biwo",
+      "actualValue": "Reyalite: {value}",
+      "actualEmpty": "Reyalite: (vid)",
+      "hint": "Kite yon chan vid pou w konsève valè ou genyen aktyèlman. Sa yo sèvi ak règ sibvansyon, limit itilizasyon selon atribi ak règ aksè yo."
+    },
+    "groups": {
+      "label": "Id gwoup",
+      "placeholder": "Youn chak liy pou chak id objè gwoup Entra",
+      "hint": "Ranplase aderan reyèl ou yo pou sesyon sa a—li pa ajoute—, konsa ou ka teste si ou fè pati oswa si ou pa fè pati."
+    },
+    "presets": {
+      "grantsMember": "Manm ekip sibvansyon",
+      "regularUser": "Itilizatè regilye",
+      "localAdmin": "Admin lokal, pa gen ajan",
+      "otherRegion": "Lòt rejyon",
+      "hint": "Predefini yo konplete fòm lan; anyen pap aplike jiskaske ou peze Aplike."
+    },
+    "apply": "Aplike epi rechaje",
+    "applying": "Ap aplike…",
+    "clear": "Sòti view-as",
+    "clearing": "Ap sòti…",
+    "reset": "Reyajiste fòm lan",
+    "nothingToApply": "Mete omwen yon chanjman pou aplike.",
+    "applyError": "Pa t kapab aplike view-as: {error}",
+    "clearError": "Pa t kapab sòti view-as: {error}",
+    "loadError": "Pa t kapab chaje eta view-as la.",
+    "retry": "Repran",
+    "expiresNote": "View-as dire jiska 8 èdtan, oubyen jiskaske ou sòti.",
+    "banner": {
+      "label": "W ap gade kòm",
+      "adjust": "Ajiste",
+      "exit": "Sòti",
+      "role": {
+        "local": "admin lokal",
+        "none": "itilizatè regilye"
+      },
+      "region": "rejyon {region}",
+      "department": "depatman \"{value}\"",
+      "companyName": "konpayi \"{value}\"",
+      "jobTitle": "tit \"{value}\"",
+      "officeId": "biwo {value}",
+      "groups": "{count, plural, one {# gwoup} other {# gwoup}}"
+    }
   }
 }

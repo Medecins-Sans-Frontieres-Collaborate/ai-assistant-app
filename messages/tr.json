@@ -2674,6 +2674,10 @@
       "map": {
         "label": "Harita",
         "description": "Herhangi bir veriyi harita üzerinde konumlara dönüştürün"
+      },
+      "grants": {
+        "label": "Hibe İşlemleri",
+        "description": "Hibe anlatılarından yapılandırılmış verileri uzlaştırın ve çıkarın"
       }
     },
     "chooser": {
@@ -2683,7 +2687,8 @@
       "newTranslation": "Yeni çeviri",
       "newDocument": "Yeni belge",
       "newDataAnalysis": "Yeni veri analizi",
-      "newMap": "Yeni harita"
+      "newMap": "Yeni harita",
+      "newGrants": "Yeni hibe işlemleri"
     },
     "translation": {
       "chooseLanguage": "Hedef dil",
@@ -3300,7 +3305,8 @@
       "unknownType": "Bu konuşma, bu sürümün tanımadığı bir iş akışını kullanıyor. Konuşma geçmişi aşağıda gösterilmiştir.",
       "untitled": "Yeni Konuşma",
       "toggleMenu": "Menüyü aç/kapat",
-      "model": "Bu iş akışı için model"
+      "model": "Bu iş akışı için model",
+      "disabledByAdmin": "Bu iş akışı bir yönetici tarafından devre dışı bırakıldı. Konuşma geçmişi aşağıda gösterilmektedir."
     },
     "tabs": {
       "label": "Konuşma modu",
@@ -4077,7 +4083,11 @@
       "storageUnavailable": "Yönetici hafızasına erişilemiyor; mevcut kayıtlar listelenemedi. Kurtarılana kadar kaydetme devre dışı.",
       "sealingUnavailable": "Bu dağıtımda gizli şifreleme yapılandırılmamış (AUTH_SECRET eksik) — istemci sırları kaydedilemez.",
       "updatedBy": "{by} tarafından {at} tarihinde güncellendi"
-    }
+    },
+    "orgAgentOverrideTitle": "Dahili aracı geçersiz kıl",
+    "orgAgentOverrideAction": "Geçersiz kıl",
+    "orgAgentBuiltinBadge": "Dahili",
+    "orgAgentBuiltinHint": "Dağıtım yapılandırmasında tanımlıdır. Erişim kuralı burada düzenlenebilir; dağıtım yapmadan ayarlarını değiştirmek için geçersiz kılın."
   },
   "localModels": {
     "title": "Yerel modeller",
@@ -4278,9 +4288,15 @@
       "connectors": "Kuruluş bağlayıcıları ve bunları kimin kullanabileceği.",
       "guides": "Stil, terminoloji ve uyum rehberleri.",
       "mapDatasets": "Harita iş akışı için kullanılabilir seçili veri setleri.",
-      "localAdmins": "Erişim kurallarını düzenleme yetkisini başkalarına devredin."
+      "localAdmins": "Erişim kurallarını düzenleme yetkisini başkalarına devredin.",
+      "workflows": "Konuşma iş akışlarını herkes için açıp kapatın.",
+      "viewAs": "Bir koşulu karşılayan veya karşılamayan biri olarak uygulamayı test edin."
     },
-    "openSettings": "Ayarları aç"
+    "openSettings": "Ayarları aç",
+    "area": {
+      "workflows": "İş Akışları",
+      "viewAs": "Görüntüle"
+    }
   },
   "limits": {
     "title": "Kullanım sınırları",
@@ -4890,5 +4906,103 @@
     "listLabel": "Kuruluşunuzdan öneriler",
     "searching": "Kuruluşunuzda aranıyor…",
     "noMatches": "Dizinde eşleşme yok — adresi manuel olarak girebilirsiniz"
+  },
+  "workflowsAdmin": {
+    "title": "İş Akışları",
+    "description": "Her iş akışını tüm organizasyon için etkinleştirin veya devre dışı bırakın. Devre dışı bırakılan bir iş akışı menülerde gizlenir ve uygun olanlar dahil sunucu tarafından reddedilir.",
+    "layeredNote": "LaunchDarkly conversationWorkflows bayrağı hâlâ yayını kontrol eder: burada etkinleştirilen bir iş akışına sadece bu bayrak açıksa erişilebilir. Bu sayfa, bayrağın gizlediği hiçbir şeyi görünür yapamaz.",
+    "loading": "İş akışı politikası yükleniyor…",
+    "loadError": "İş akışı politikası yüklenemedi.",
+    "policyUnavailable": "İş akışı politikası depolamadan okunamadı. Anahtarlar, varsayılan değerlerle gösterilmek yerine gizlendi; çünkü bunlar zorunlu olanla uyuşmayabilir.",
+    "retry": "Tekrar Dene",
+    "enableAll": "Tümünü etkinleştir",
+    "disableAll": "Tümünü devre dışı bırak",
+    "enabledLabel": "Etkin",
+    "disabledLabel": "Devre Dışı",
+    "defaultOnHint": "Politika kaydedilmediğinde varsayılan: etkin.",
+    "defaultOffHint": "Politika kaydedilmediğinde varsayılan: devre dışı — bir yöneticinin açıkça açması gerekir.",
+    "grantsNote": "Hibe İşlemleri ek olarak, Program departmanında 'hibeler' iş unvanına sahip MSF-USA kullanıcıları veya Systems departmanında unvanında 'inovasyon' olanlarla sınırlıdır. Buradan etkinleştirmek bu kuralı genişletmez.",
+    "unsaved": "Kaydedilmemiş değişiklikleriniz var.",
+    "save": "Kaydet",
+    "saving": "Kaydediliyor…",
+    "saveSuccess": "İş akışı politikası kaydedildi.",
+    "saveError": "İş akışı politikası kaydedilemedi.",
+    "conflictError": "Bir başka yönetici önce politikayı değiştirdi. Politika yeniden yüklendi — lütfen inceleyip tekrar kaydedin.",
+    "updatedByLine": "Son olarak {at} tarihinde {by} tarafından kaydedildi.",
+    "neverSaved": "Henüz bir politika kaydedilmedi; yukarıdaki varsayılanlar geçerlidir."
+  },
+  "viewAs": {
+    "title": "Görüntüle",
+    "description": "Uygulamayı sadece kendi oturumunuz için, genellikle dizin ya da yöneticiler tarafından belirlenen bir koşulu karşılayan ya da karşılamayan biri olarak test edin. Kimliğiniz asla değişmez: oluşturduğunuz her şey size ait olarak kalır ve tüm denetim geçmişinde adınız görünür.",
+    "activeTitle": "Görüntüleme modu etkin",
+    "inactiveTitle": "Görüntüleme modu etkin değil",
+    "sections": {
+      "role": "Yönetici rolü",
+      "region": "Veri bölgesi",
+      "attributes": "Dizin özellikleri",
+      "groups": "Grup üyeliği",
+      "presets": "Hazır ayarlar"
+    },
+    "role": {
+      "global": "Global yönetici (gerçek rolünüz)",
+      "local": "Yerel yönetici",
+      "none": "Normal kullanıcı",
+      "localKeysLabel": "Devredilen aracı anahtarları",
+      "localKeysHint": "Bu yerel yöneticinin düzenleyebileceği virgülle ayrılmış kanonik aracı anahtarları. Hiçbir devredilmiş aracı yoksa boş bırakın.",
+      "noneWarning": "Normal kullanıcı olarak diğer tüm yönetim alanları kaybolur. Bu sayfa erişilebilir kalır ve uygulamanın üstündeki banner her zaman çıkış yolu sunar."
+    },
+    "region": {
+      "actual": "Gerçek ({region})",
+      "hint": "Taleplerinizi ve aktifken yüklediğiniz her şeyi diğer bölgenin depolamasına yönlendirir. ?regionOverride= çerezinden önceliklidir."
+    },
+    "attributes": {
+      "department": "Departman",
+      "companyName": "Şirket",
+      "jobTitle": "Pozisyon",
+      "officeId": "Ofis",
+      "officeActual": "Gerçek ofis",
+      "officeNone": "Ofis yok",
+      "actualValue": "Gerçek: {value}",
+      "actualEmpty": "Gerçek: (boş)",
+      "hint": "Gerçek değerinizin kalmasını istiyorsanız alanı boş bırakın. Bunlar; hibe kurallarına, öznitelik tabanlı kullanım limitlerine ve erişim kurallarına etki eder."
+    },
+    "groups": {
+      "label": "Grup kimlikleri",
+      "placeholder": "Her satıra bir Entra grup nesne kimliği",
+      "hint": "Gerçek üyeliğinizi genişletmez — değiştirir, böylece hem ait olup olmadığınızı test edebilirsiniz."
+    },
+    "presets": {
+      "grantsMember": "Hibe ekibi üyesi",
+      "regularUser": "Normal kullanıcı",
+      "localAdmin": "Yerel yönetici, ajan yok",
+      "otherRegion": "Diğer bölge",
+      "hint": "Hazır ayarlar formu doldurur; Yalnızca Uygula'ya bastığınızda geçerli olur."
+    },
+    "apply": "Uygula ve yeniden yükle",
+    "applying": "Uygulanıyor…",
+    "clear": "View-as'tan çık",
+    "clearing": "Çıkılıyor…",
+    "reset": "Formu sıfırla",
+    "nothingToApply": "Uygulamak için en az bir geçersiz kılma ayarlayın.",
+    "applyError": "View-as uygulanamadı: {error}",
+    "clearError": "View-as kaldırılamadı: {error}",
+    "loadError": "View-as durumu yüklenemedi.",
+    "retry": "Yeniden dene",
+    "expiresNote": "View-as en fazla 8 saat veya çıkana kadar geçerlidir.",
+    "banner": {
+      "label": "Görüntülenen kişi",
+      "adjust": "Düzenle",
+      "exit": "Çıkış",
+      "role": {
+        "local": "yerel yönetici",
+        "none": "normal kullanıcı"
+      },
+      "region": "bölge {region}",
+      "department": "departman \"{value}\"",
+      "companyName": "şirket \"{value}\"",
+      "jobTitle": "pozisyon \"{value}\"",
+      "officeId": "ofis {value}",
+      "groups": "{count, plural, one {# grup} other {# grup}}"
+    }
   }
 }

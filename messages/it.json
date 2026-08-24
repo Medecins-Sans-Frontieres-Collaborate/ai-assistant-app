@@ -2674,6 +2674,10 @@
       "map": {
         "label": "Mappa",
         "description": "Trasforma qualsiasi dato in posizioni su una mappa"
+      },
+      "grants": {
+        "label": "Elaborazione grant",
+        "description": "Riconcilia ed estrai dati strutturati dalle narrazioni dei grant"
       }
     },
     "chooser": {
@@ -2683,7 +2687,8 @@
       "newTranslation": "Nuova traduzione",
       "newDocument": "Nuovo documento",
       "newDataAnalysis": "Nuova analisi dati",
-      "newMap": "Nuova mappa"
+      "newMap": "Nuova mappa",
+      "newGrants": "Nuova elaborazione grant"
     },
     "translation": {
       "chooseLanguage": "Lingua di destinazione",
@@ -3300,7 +3305,8 @@
       "unknownType": "Questa conversazione utilizza un workflow non riconosciuto da questa versione. La cronologia della conversazione è mostrata sotto.",
       "untitled": "Nuova conversazione",
       "toggleMenu": "Apri/chiudi menu",
-      "model": "Modello per questo workflow"
+      "model": "Modello per questo workflow",
+      "disabledByAdmin": "Questo workflow è stato disabilitato da un amministratore. Di seguito viene mostrata la cronologia della conversazione."
     },
     "tabs": {
       "label": "Modalità conversazione",
@@ -4077,7 +4083,11 @@
       "storageUnavailable": "Lo storage di amministrazione non è raggiungibile; non è stato possibile elencare i record esistenti. Il salvataggio è disabilitato finché non si ripristina.",
       "sealingUnavailable": "La cifratura dei secret non è configurata in questo deployment (manca AUTH_SECRET): i client secret non possono essere salvati.",
       "updatedBy": "Aggiornato da {by} il {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Sostituisci agente integrato",
+    "orgAgentOverrideAction": "Sostituisci",
+    "orgAgentBuiltinBadge": "Integrato",
+    "orgAgentBuiltinHint": "Definito nella configurazione di deployment. La sua regola di accesso può essere modificata qui; sostituiscila per cambiare le impostazioni senza un nuovo deploy."
   },
   "localModels": {
     "title": "Modelli locali",
@@ -4278,9 +4288,15 @@
       "connectors": "Connettori dell’organizzazione e chi può usarli.",
       "guides": "Guide di stile, terminologia e conformità.",
       "mapDatasets": "Set di dati curati disponibili per il flusso delle mappe.",
-      "localAdmins": "Delega la modifica delle regole di accesso ad altre persone."
+      "localAdmins": "Delega la modifica delle regole di accesso ad altre persone.",
+      "workflows": "Attiva o disattiva i workflow di conversazione per tutti.",
+      "viewAs": "Testa l'app come utente che soddisfa — o non soddisfa — una condizione."
     },
-    "openSettings": "Apri impostazioni"
+    "openSettings": "Apri impostazioni",
+    "area": {
+      "workflows": "Workflow",
+      "viewAs": "Visualizza come"
+    }
   },
   "limits": {
     "title": "Limiti di utilizzo",
@@ -4890,5 +4906,103 @@
     "listLabel": "Suggerimenti dalla tua organizzazione",
     "searching": "Ricerca nella tua organizzazione…",
     "noMatches": "Nessun risultato nella directory — puoi inserire l'indirizzo manualmente"
+  },
+  "workflowsAdmin": {
+    "title": "Workflow",
+    "description": "Abilita o disabilita ogni workflow per tutta l'organizzazione. Un workflow disabilitato è nascosto dai menu e rifiutato dal server, anche per utenti che altrimenti vi avrebbero accesso.",
+    "layeredNote": "Il flag LaunchDarkly conversationWorkflows regola comunque la distribuzione: un workflow abilitato qui è accessibile solo dove il flag è attivo. Questa pagina non può rendere visibile ciò che il flag nasconde.",
+    "loading": "Caricamento della policy workflow…",
+    "loadError": "Impossibile caricare la policy workflow.",
+    "policyUnavailable": "Impossibile leggere la policy workflow dallo storage. Gli switch sono nascosti invece che mostrati con valori predefiniti che potrebbero non corrispondere a quelli effettivi.",
+    "retry": "Riprova",
+    "enableAll": "Abilita tutti",
+    "disableAll": "Disabilita tutti",
+    "enabledLabel": "Abilitato",
+    "disabledLabel": "Disabilitato",
+    "defaultOnHint": "Predefinito in assenza di policy salvata: abilitato.",
+    "defaultOffHint": "Predefinito in assenza di policy salvata: disabilitato — un amministratore deve abilitarlo esplicitamente.",
+    "grantsNote": "L'elaborazione grant è ulteriormente riservata agli utenti MSF-USA del dipartimento Program con \"grants\" nel titolo lavorativo, o di Systems con \"innovation\" nel titolo. Abilitarla qui non amplia questa regola.",
+    "unsaved": "Ci sono modifiche non salvate.",
+    "save": "Salva",
+    "saving": "Salvataggio…",
+    "saveSuccess": "Policy workflow salvata.",
+    "saveError": "Non è stato possibile salvare la policy workflow.",
+    "conflictError": "Un altro amministratore ha modificato la policy prima. È stata ricaricata: si prega di verificare e salvare nuovamente.",
+    "updatedByLine": "Ultimo salvataggio di {by} il {at}.",
+    "neverSaved": "Nessuna policy è stata ancora salvata; si applicano i valori sopra indicati."
+  },
+  "viewAs": {
+    "title": "Visualizza come",
+    "description": "Testa l'app, solo per la tua sessione, come utente che soddisfa o meno una condizione normalmente decisa dalla directory o dagli amministratori. La tua identità non cambia mai: tutto ciò che crei resta tuo e ogni riga di audit riporta comunque il tuo nome.",
+    "activeTitle": "Visualizzazione come attiva",
+    "inactiveTitle": "Visualizzazione come non attiva",
+    "sections": {
+      "role": "Ruolo amministratore",
+      "region": "Regione dati",
+      "attributes": "Attributi directory",
+      "groups": "Appartenenza a gruppi",
+      "presets": "Preset"
+    },
+    "role": {
+      "global": "Amministratore globale (tuo ruolo attuale)",
+      "local": "Amministratore locale",
+      "none": "Utente normale",
+      "localKeysLabel": "Chiavi agente delegate",
+      "localKeysHint": "Chiavi agente canoniche, separate da virgola, che questo admin locale può modificare. Lascia vuoto se non ci sono agenti delegati.",
+      "noneWarning": "Come utente normale tutte le altre aree di amministrazione scompaiono. Questa pagina resta accessibile e il banner in alto nell'app offre sempre una via d'uscita."
+    },
+    "region": {
+      "actual": "Attuale ({region})",
+      "hint": "Instrada le tue richieste — e qualsiasi file caricato mentre attivo — nell'archivio dell'altra regione. Ha priorità su un cookie ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Dipartimento",
+      "companyName": "Azienda",
+      "jobTitle": "Titolo professionale",
+      "officeId": "Ufficio",
+      "officeActual": "Ufficio effettivo",
+      "officeNone": "Nessun ufficio",
+      "actualValue": "Effettivo: {value}",
+      "actualEmpty": "Effettivo: (vuoto)",
+      "hint": "Lascia un campo vuoto per mantenere il valore effettivo. Questi parametri alimentano la regola dei grants, i limiti di utilizzo su attributo e le regole di accesso."
+    },
+    "groups": {
+      "label": "ID gruppo",
+      "placeholder": "Un id oggetto gruppo Entra per riga",
+      "hint": "Sostituisce — non estende — la tua reale appartenenza per questa sessione; puoi così testare sia l'appartenenza che la non appartenenza."
+    },
+    "presets": {
+      "grantsMember": "Membro del team grants",
+      "regularUser": "Utente normale",
+      "localAdmin": "Admin locale, senza agenti",
+      "otherRegion": "Altra regione",
+      "hint": "I preset compilano il modulo; niente si applica finché non premi Applica."
+    },
+    "apply": "Applica e ricarica",
+    "applying": "Applicazione in corso…",
+    "clear": "Esci da view-as",
+    "clearing": "Uscita in corso…",
+    "reset": "Reimposta modulo",
+    "nothingToApply": "Imposta almeno una modifica per applicare.",
+    "applyError": "Impossibile applicare view-as: {error}",
+    "clearError": "Impossibile uscire da view-as: {error}",
+    "loadError": "Impossibile caricare lo stato view-as.",
+    "retry": "Riprova",
+    "expiresNote": "View-as dura fino a 8 ore o finché non esci.",
+    "banner": {
+      "label": "Stai visualizzando come",
+      "adjust": "Modifica",
+      "exit": "Esci",
+      "role": {
+        "local": "admin locale",
+        "none": "utente normale"
+      },
+      "region": "regione {region}",
+      "department": "dipartimento \"{value}\"",
+      "companyName": "azienda \"{value}\"",
+      "jobTitle": "titolo \"{value}\"",
+      "officeId": "ufficio {value}",
+      "groups": "{count, plural, one {# gruppo} other {# gruppi}}"
+    }
   }
 }

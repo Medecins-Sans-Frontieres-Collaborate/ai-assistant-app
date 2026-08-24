@@ -5,6 +5,10 @@ import {
   buildDataChatUserPrompt,
   buildDataDigest,
 } from '@/lib/services/workflows/data/chatPrompts';
+import {
+  isWorkflowEnabled,
+  workflowDisabledResponse,
+} from '@/lib/services/workflows/policy/guard';
 import { truncateToTokenBudget } from '@/lib/services/workflows/shared/textBudget';
 import {
   callStreamedText,
@@ -50,6 +54,11 @@ interface DataChatRequest {
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session) return unauthorizedResponse();
+  // Admin workflow policy (docs/ADMIN_WORKFLOWS_AND_VIEW_AS.md): a workflow an
+  // admin switched off is refused server-side, not just hidden.
+  if (!(await isWorkflowEnabled('data-analysis'))) {
+    return workflowDisabledResponse('data-analysis');
+  }
 
   let body: DataChatRequest;
   try {

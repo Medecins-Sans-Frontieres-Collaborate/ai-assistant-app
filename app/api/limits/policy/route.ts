@@ -142,7 +142,7 @@ export async function GET() {
   // global-admin check below is, and always was, the real access control.
   const session = await auth();
   if (!session?.user) return unauthorizedResponse();
-  if (!isGlobalAdmin(session.user.mail)) return forbiddenResponse();
+  if (!isGlobalAdmin(session.user)) return forbiddenResponse();
 
   try {
     const result = await readPolicy(createLimitsBlobStorage());
@@ -171,7 +171,7 @@ export async function PUT(request: NextRequest) {
   if (!session?.user) return unauthorizedResponse();
 
   const userMail = session.user.mail?.trim().toLowerCase();
-  if (!userMail || !isGlobalAdmin(userMail)) return forbiddenResponse();
+  if (!userMail || !isGlobalAdmin(session.user)) return forbiddenResponse();
 
   let body: unknown;
   try {

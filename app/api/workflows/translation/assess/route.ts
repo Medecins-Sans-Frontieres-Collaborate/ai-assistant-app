@@ -1,6 +1,10 @@
 import { NextRequest } from 'next/server';
 
 import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
+import {
+  isWorkflowEnabled,
+  workflowDisabledResponse,
+} from '@/lib/services/workflows/policy/guard';
 import { mergeGlossaryEntries } from '@/lib/services/workflows/shared/glossaryPrompts';
 import {
   resolveGuideCriteria,
@@ -59,6 +63,11 @@ interface TranslationAssessRequest {
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session) return unauthorizedResponse();
+  // Admin workflow policy (docs/ADMIN_WORKFLOWS_AND_VIEW_AS.md): a workflow an
+  // admin switched off is refused server-side, not just hidden.
+  if (!(await isWorkflowEnabled('translation'))) {
+    return workflowDisabledResponse('translation');
+  }
 
   // Group-membership warm-up MUST precede resolveGuideCriteria /
   // resolveSlotGuide below — guide access rules with group scope read the

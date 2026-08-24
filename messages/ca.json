@@ -2674,6 +2674,10 @@
       "map": {
         "label": "Mapa",
         "description": "Converteix qualsevol dada en ubicacions en un mapa"
+      },
+      "grants": {
+        "label": "Processament de subvencions",
+        "description": "Reconciliar i extreure dades estructurades de les narratives de subvencions"
       }
     },
     "chooser": {
@@ -2683,7 +2687,8 @@
       "newTranslation": "Nova traducció",
       "newDocument": "Nou document",
       "newDataAnalysis": "Nova anàlisi de dades",
-      "newMap": "Nou mapa"
+      "newMap": "Nou mapa",
+      "newGrants": "Processament de noves subvencions"
     },
     "translation": {
       "chooseLanguage": "Idioma de destinació",
@@ -3300,7 +3305,8 @@
       "unknownType": "Aquesta conversa utilitza un flux de treball que aquesta versió no reconeix. A continuació es mostra l’historial de la conversa.",
       "untitled": "Nova conversa",
       "toggleMenu": "Alterna el menú",
-      "model": "Model per a aquest flux de treball"
+      "model": "Model per a aquest flux de treball",
+      "disabledByAdmin": "Aquest flux de treball ha estat desactivat per un administrador. El historial de la conversa es mostra a continuació."
     },
     "tabs": {
       "label": "Mode conversa",
@@ -4077,7 +4083,11 @@
       "storageUnavailable": "L’emmagatzematge d’administració és inabastable; no s’han pogut mostrar els registres existents. El desament estarà desactivat fins que es recuperi.",
       "sealingUnavailable": "No s’ha configurat el xifrat de secrets en aquest desplegament (falta AUTH_SECRET): no es poden desar els secrets de client.",
       "updatedBy": "Actualitzat per {by} el {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Sobreescriu l'agent integrat",
+    "orgAgentOverrideAction": "Sobreescriu",
+    "orgAgentBuiltinBadge": "Integrat",
+    "orgAgentBuiltinHint": "Definit a la configuració de desplegament. La norma d'accés es pot editar aquí; sobreescrigui-la per canviar la configuració sense desplegar."
   },
   "localModels": {
     "title": "Models locals",
@@ -4278,9 +4288,15 @@
       "connectors": "Connectors de l’organització i qui pot utilitzar-los.",
       "guides": "Guies d'estil, terminologia i compliment.",
       "mapDatasets": "Jocs de dades seleccionats disponibles pel flux de mapes.",
-      "localAdmins": "Delegar l’edició de normes d’accés a altres persones."
+      "localAdmins": "Delegar l’edició de normes d’accés a altres persones.",
+      "workflows": "Activa o desactiva els fluxos de conversa per a tothom.",
+      "viewAs": "Prova l'aplicació com una persona que compleix —o no— una condició."
     },
-    "openSettings": "Obre la configuració"
+    "openSettings": "Obre la configuració",
+    "area": {
+      "workflows": "Fluxos de treball",
+      "viewAs": "Veure com"
+    }
   },
   "limits": {
     "title": "Límits d'ús",
@@ -4890,5 +4906,103 @@
     "listLabel": "Suggeriments de la vostra organització",
     "searching": "S'està cercant a la vostra organització…",
     "noMatches": "No hi ha coincidències al directori — podeu introduir l'adreça manualment"
+  },
+  "workflowsAdmin": {
+    "title": "Fluxos de treball",
+    "description": "Activa o desactiva cada flux de treball per a tota l'organització. Un flux desactivat queda ocult als menús i és refusat pel servidor, fins i tot si algú hi tindria accés.",
+    "layeredNote": "La bandera conversationWorkflows de LaunchDarkly continua regulant el desplegament: només es pot accedir a un flux activat aquí si aquella bandera també està activa. Aquesta pàgina no pot fer visible res que la bandera amagui.",
+    "loading": "Carregant la política de flux de treball…",
+    "loadError": "No s'ha pogut carregar la política del flux de treball.",
+    "policyUnavailable": "No s'ha pogut llegir la política del flux de treball des de l'emmagatzematge. Els commutadors es mantenen ocults per evitar mostrar valors per defecte que podrien no coincidir amb el que s'aplica.",
+    "retry": "Reintenta",
+    "enableAll": "Activa-ho tot",
+    "disableAll": "Desactiva-ho tot",
+    "enabledLabel": "Activat",
+    "disabledLabel": "Desactivat",
+    "defaultOnHint": "Per defecte quan no hi ha cap política desada: activat.",
+    "defaultOffHint": "Per defecte quan no hi ha cap política desada: desactivat — un administrador l'ha d'activar explícitament.",
+    "grantsNote": "El processament de subvencions també està restringit a usuaris de MSF-USA del departament de Programa amb \"grants\" al títol del lloc, o de Systems amb \"innovation\" al títol. Activar-ho aquí no modifica aquesta norma.",
+    "unsaved": "Tens canvis no desats.",
+    "save": "Desa",
+    "saving": "Desant…",
+    "saveSuccess": "Política de flux de treball desada.",
+    "saveError": "No s'ha pogut desar la política del flux de treball.",
+    "conflictError": "Un altre administrador ha canviat la política abans. S'ha recarregat — revisa-ho i desa de nou.",
+    "updatedByLine": "Darrer desament per {by} el {at}.",
+    "neverSaved": "Encara no s'ha desat cap política; s'apliquen els valors per defecte."
+  },
+  "viewAs": {
+    "title": "Veure com",
+    "description": "Prova l'aplicació, només per a la teva sessió, com algú que compleix o no una condició que normalment es determina pel directori o per administradors. La teva identitat no canvia mai: tot el que creïs et pertany i tota línia d'auditoria continua portant el teu nom.",
+    "activeTitle": "Veure com està actiu",
+    "inactiveTitle": "Veure com no està actiu",
+    "sections": {
+      "role": "Rol d'administrador",
+      "region": "Regió de dades",
+      "attributes": "Atributs del directori",
+      "groups": "Membres del grup",
+      "presets": "Predefinits"
+    },
+    "role": {
+      "global": "Administrador global (el teu rol real)",
+      "local": "Administrador local",
+      "none": "Usuari habitual",
+      "localKeysLabel": "Claus d'agent delegat",
+      "localKeysHint": "Claus d'agent canòniques separades per comes que aquest administrador local pot editar. Deixa-ho en blanc si l'administrador local no té agents delegats.",
+      "noneWarning": "Com a usuari habitual, totes les altres àrees d'administrador desapareixen. Aquesta pàgina roman accessible i la barra superior de l'app t'ofereix sempre una sortida."
+    },
+    "region": {
+      "actual": "Real ({region})",
+      "hint": "Redirigeix les teves sol·licituds — i tot el que pugis mentre és actiu — a l’emmagatzematge de l’altra regió. Té prioritat sobre la galeta ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Departament",
+      "companyName": "Empresa",
+      "jobTitle": "Càrrec",
+      "officeId": "Oficina",
+      "officeActual": "Oficina actual",
+      "officeNone": "Sense oficina",
+      "actualValue": "Actual: {value}",
+      "actualEmpty": "Actual: (buit)",
+      "hint": "Deixa un camp en blanc per mantenir el valor actual. Aquests valors s’utilitzen per a les regles de permisos, límits d’ús per atribut i regles d’accés."
+    },
+    "groups": {
+      "label": "IDs de grup",
+      "placeholder": "Un id d'objecte de grup d’Entra per línia",
+      "hint": "Substitueix — no amplia — la teva pertinença real durant aquesta sessió, perquè puguis provar tant pertànyer com no pertànyer."
+    },
+    "presets": {
+      "grantsMember": "Membre de l’equip de permisos",
+      "regularUser": "Usuari habitual",
+      "localAdmin": "Administrador local, sense agents",
+      "otherRegion": "Altra regió",
+      "hint": "Els predefinits emplenen el formulari; res s’aplica fins que premis \"Aplica\"."
+    },
+    "apply": "Aplica i recarrega",
+    "applying": "Aplicant…",
+    "clear": "Sortir de vista-com",
+    "clearing": "Sortint…",
+    "reset": "Reinicia el formulari",
+    "nothingToApply": "Configura almenys una sobreescriptura per aplicar.",
+    "applyError": "No s’ha pogut aplicar la vista-com: {error}",
+    "clearError": "No s’ha pogut sortir de la vista-com: {error}",
+    "loadError": "No s’ha pogut carregar l'estat de la vista-com.",
+    "retry": "Torna-ho a provar",
+    "expiresNote": "La vista-com dura fins a 8 hores o fins que en surtis.",
+    "banner": {
+      "label": "Visualitzant com a",
+      "adjust": "Ajusta",
+      "exit": "Sortir",
+      "role": {
+        "local": "administrador local",
+        "none": "usuari habitual"
+      },
+      "region": "regió {region}",
+      "department": "departament “{value}”",
+      "companyName": "empresa “{value}”",
+      "jobTitle": "càrrec “{value}”",
+      "officeId": "oficina {value}",
+      "groups": "{count, plural, one {# grup} other {# grups}}"
+    }
   }
 }

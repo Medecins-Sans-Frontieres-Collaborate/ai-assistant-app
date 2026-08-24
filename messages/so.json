@@ -2658,6 +2658,10 @@
       "map": {
         "label": "Khariidad",
         "description": "Xog ku beddel goobo khariidad ku yaal"
+      },
+      "grants": {
+        "label": "Habraaca Ka shaqaynta Deeqaha",
+        "description": "Isku-xisaabi oo ka soo saar xog habaysan warbixinnada deeqaha"
       }
     },
     "chooser": {
@@ -2667,7 +2671,8 @@
       "newTranslation": "Turjumaad cusub",
       "newDocument": "Dukumeenti cusub",
       "newDataAnalysis": "Falanqayn xog cusub",
-      "newMap": "Khariidad cusub"
+      "newMap": "Khariidad cusub",
+      "newGrants": "Ka shaqaynta deeqo cusub"
     },
     "translation": {
       "chooseLanguage": "Luqadda la beegsanayo",
@@ -3284,7 +3289,8 @@
       "unknownType": "Wadahadalkan wuxuu isticmaalayaa hab-socod aanu nuqulkani aqoonsanayn. Taariikhda wadahadalka hoose ayaad ku arki kartaa.",
       "untitled": "Wadahadal Cusub",
       "toggleMenu": "Soo rogo/ka qari menu-ga",
-      "model": "Model-ka hab-socodkan"
+      "model": "Model-ka hab-socodkan",
+      "disabledByAdmin": "Habraacan waxaa xannibay maamulaha. Taariikhda wada hadalka waxaa hoos ku arki doontaa."
     },
     "tabs": {
       "label": "Hab wada hadal",
@@ -4061,7 +4067,11 @@
       "storageUnavailable": "Keydka maamulka lama heli karo; diiwaanada jirana lama soo bandhigi karo. Keydintu waa la xannibay ilaa ay soo hagaagayso.",
       "sealingUnavailable": "Sirta kaydinta lama qaabeyn qorshahan (AUTH_SECRET waa maqan yahay) — siraha macaamiisha lama kaydin karo.",
       "updatedBy": "Waxaa cusbooneysiiyay {by} {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Ka baddal wakiilka ku dhex-dhisnaa",
+    "orgAgentOverrideAction": "Ka baddal",
+    "orgAgentBuiltinBadge": "Ku dhex-jira",
+    "orgAgentBuiltinHint": "Waxaa lagu qeexay dejinta gaarsiinta. Xeerka galitaanka wuu saxmi karaa halkan; u baddal si aad wax uga beddesho dejimaha adigoon dib u dajin."
   },
   "localModels": {
     "title": "Moodallo maxalli ah",
@@ -4262,9 +4272,15 @@
       "connectors": "Isku xirayaasha ururka iyo cidda isticmaali karta.",
       "guides": "Hagayaasha qaabka, eray-bixinta, iyo waafaqsanaanta.",
       "mapDatasets": "Xogaha la diyaariyay ee loo heli karo howsha khariidada.",
-      "localAdmins": "U wareeji dadka kale tafatirka xeerarka helitaanka."
+      "localAdmins": "U wareeji dadka kale tafatirka xeerarka helitaanka.",
+      "workflows": "Dami ama shid habraaca wada hadalka qof walba.",
+      "viewAs": "Tijaabi app-ka adoo ah qof buuxiya ama waaya shardi."
     },
-    "openSettings": "Fur dejinta"
+    "openSettings": "Fur dejinta",
+    "area": {
+      "workflows": "Habraacyo",
+      "viewAs": "Eeg sida"
+    }
   },
   "limits": {
     "title": "Xadid isticmaalka",
@@ -4874,5 +4890,103 @@
     "listLabel": "Talooyin ka socda ururkaaga",
     "searching": "Waxaan ka raadinayaa hay’addaada…",
     "noMatches": "Lama helin wax u dhigma buugga — waad gali kartaa cinwaanka gacanta"
+  },
+  "workflowsAdmin": {
+    "title": "Habraacyo",
+    "description": "Shid ama dami mid kasta oo habraacyada ah dhammaan ururka. Habraaca la xannibo waa la qarinaa menu-yada waxaana diidaya server-ka, xitaa kuwa xaqa u leh.",
+    "layeredNote": "Calaamadda LaunchDarkly conversationWorkflows ayaa wali xaqiijisa baahinta: habraac halkan la shido waxaa laga heli karaa oo keliya meesha calaamaddu furan tahay. Boggan ma ka dhigi karo wax muuqda haddii calaamaddu qariso.",
+    "loading": "Gudbinaya siyaasadda habraaca…",
+    "loadError": "Siyaasadda habraaca lama soo dejin karin.",
+    "policyUnavailable": "Siyaasadda habraaca lagama akhrin karin kaydka. Baddallada waa la qarshay halkii lagu muujin lahaa qiimayaasha caadiga ah ee laga yaabo inaysan la jaanqaadin waxa jira.",
+    "retry": "Isku day mar kale",
+    "enableAll": "Dhammaan shid",
+    "disableAll": "Dhammaan dami",
+    "enabledLabel": "La shiday",
+    "disabledLabel": "La damiyay",
+    "defaultOnHint": "Marka aan la kaydin siyaasadda: waa la shiday.",
+    "defaultOffHint": "Marka aan la kaydin siyaasadda: waa la damiyay — maamule baa si cad u shidi kara oo kaliya.",
+    "grantsNote": "Ka shaqaynta deeqaha waxa intaas ka badan laga xaddiday MSF-USA shaqaalaha barnaamijyada oo shaqadoodu \"grants\" ku jirto iyo Systems kuwa cinwaankooda \"innovation\" ku jiro. Haddaynu halkan ka shidnana ma ballaarinayso xeerkaas.",
+    "unsaved": "Waxaad haysaa isbeddello aan la kaydin.",
+    "save": "Kaydi",
+    "saving": "Kaydinaya…",
+    "saveSuccess": "Siyaasadda habraaca waa la kaydiyay.",
+    "saveError": "Siyaasadda habraaca lama kaydin karin.",
+    "conflictError": "Maamule kale ayaa hore u beddelay siyaasadda. Waa la cusbooneysiiyay — fadlan dib u eeg oo kaydi mar kale.",
+    "updatedByLine": "Ugu dambeyn waxaa kaydiyay {by} {at}.",
+    "neverSaved": "Siyaasad lama kaydin weli; kuwa kor ku xusan ayaa la adeegsanayaa."
+  },
+  "viewAs": {
+    "title": "Eeg sida",
+    "description": "Tijaabi app-ka, kaliya fadhiigaaga, adoon ah qof buuxiya ama waaya shardi caadiyan laga go'aamiyo diiwaanka ama maamulayaasha. Aqoonsigaaga waligiis isma beddelo: wax walba oo aad abuurto adiga ayaa iska leh oo diiwaan kasta magacaaaga ayuu sitaa.",
+    "activeTitle": "View-as wuu shaqaynayaa",
+    "inactiveTitle": "View-as ma shaqaynayo",
+    "sections": {
+      "role": "Doorka maamulka",
+      "region": "Gobolka xogta",
+      "attributes": "Astaamaha diiwaanka",
+      "groups": "Xubinimada kooxda",
+      "presets": "Qeexitaanno hore"
+    },
+    "role": {
+      "global": "Maamule guud (dhab ahaanta doorkaaga)",
+      "local": "Maamule maxalli ah",
+      "none": "Isticmaalaha caadiga ah",
+      "localKeysLabel": "Furayaasha wakiilka la xilsaaray",
+      "localKeysHint": "Furayaasha wakiilka la oggolyahay ee uu maamule maxalli ahi edit-gari karo. Haddii banaan la dhaafo, ma jirto wakiil la xilsaaray.",
+      "noneWarning": "Marka aad noqoto isticmaalaha caadiga ah dhammaan meelaha maamulaha waa laga nuqaa. Boggan wuu sii muuqanayaa, banner-ka sare ee app-ku had iyo jeer wuu kuu oggolaanayaa in aad ka baxdo."
+    },
+    "region": {
+      "actual": "Dhabta ah ({region})",
+      "hint": "Waxay codsiyadaada—iyo wixii aad geliso intaad firfircoon tahay—u wareejinaysaa kaydka gobolka kale. Waxay ka sarreysaa cookie-ga ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Waaxda",
+      "companyName": "Shirkad",
+      "jobTitle": "Jagada shaqada",
+      "officeId": "Xafiis",
+      "officeActual": "Xafiiska dhabta ah",
+      "officeNone": "Xafiis ma jiro",
+      "actualValue": "Dhabta ah: {value}",
+      "actualEmpty": "Dhabta ah: (banaan)",
+      "hint": "Ka tag meel bannaan si aad u ilaaliso qiimahaaga dhabta ah. Kuwani waxay quudiyaan xeerka deeqaha, xadadka isticmaalka ee la xiriira sifooyinka, iyo xeerarka gelitaanka."
+    },
+    "groups": {
+      "label": "Aqoonsiyada kooxaha",
+      "placeholder": "Hal Entra group object id mid kasta oo khad ah",
+      "hint": "Waxay beddeshaa—mana kordhiso—xubinnimadaada dhabta ah ee fadhigan, si aad u tijaabiso adigoo ka tirsan ama aan ka tirsanayn."
+    },
+    "presets": {
+      "grantsMember": "Xubin kooxda deeqaha",
+      "regularUser": "Isticmaale caadi ah",
+      "localAdmin": "Maamulaha deegaanka, wakiillo la'aan",
+      "otherRegion": "Gobolka kale",
+      "hint": "Diyaarsooyinka waxay buuxiyaan foomka; waxba lama dhaqan galinayo ilaa aad gujiso Codso."
+    },
+    "apply": "Codso oo dib u shub",
+    "applying": "Waa la codsanayaa…",
+    "clear": "Ka bax view-as",
+    "clearing": "Waa la baxayaa…",
+    "reset": "Foomka dib u daji",
+    "nothingToApply": "Ugu yaraan hal override samee si aad u codsato.",
+    "applyError": "View-as lama codsan karin: {error}",
+    "clearError": "View-as lama tirtiri karin: {error}",
+    "loadError": "Xaaladda view-as lama soo dejin karin.",
+    "retry": "Mar kale isku day",
+    "expiresNote": "View-as wuxuu shaqaynayaa illaa 8 saacadood, ama ilaa aad ka baxdo.",
+    "banner": {
+      "label": "Ku arag sida",
+      "adjust": "Beddel",
+      "exit": "Bax",
+      "role": {
+        "local": "maamule deegaanka",
+        "none": "isticmaale caadi ah"
+      },
+      "region": "gobolka {region}",
+      "department": "waaxda \"{value}\"",
+      "companyName": "shirkad \"{value}\"",
+      "jobTitle": "jagada \"{value}\"",
+      "officeId": "xafiis {value}",
+      "groups": "{count, plural, one {# koox} other {# kooxood}}"
+    }
   }
 }

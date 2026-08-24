@@ -2674,6 +2674,10 @@
       "map": {
         "label": "Karte",
         "description": "Verwandeln Sie beliebige Daten in Standorte auf einer Karte"
+      },
+      "grants": {
+        "label": "Grants-Verarbeitung",
+        "description": "Abgleich und Extraktion strukturierter Daten aus Grant-Berichten"
       }
     },
     "chooser": {
@@ -2683,7 +2687,8 @@
       "newTranslation": "Neue Übersetzung",
       "newDocument": "Neues Dokument",
       "newDataAnalysis": "Neue Datenanalyse",
-      "newMap": "Neue Karte"
+      "newMap": "Neue Karte",
+      "newGrants": "Neue Grants-Verarbeitung"
     },
     "translation": {
       "chooseLanguage": "Zielsprache",
@@ -3300,7 +3305,8 @@
       "unknownType": "Diese Konversation verwendet einen Workflow, den diese Version nicht erkennt. Der Konversationsverlauf wird unten angezeigt.",
       "untitled": "Neue Konversation",
       "toggleMenu": "Menü ein-/ausblenden",
-      "model": "Modell für diesen Workflow"
+      "model": "Modell für diesen Workflow",
+      "disabledByAdmin": "Dieser Workflow wurde von einer Administratorin/einem Administrator deaktiviert. Der Gesprächsverlauf wird unten angezeigt."
     },
     "tabs": {
       "label": "Konversationsmodus",
@@ -4077,7 +4083,11 @@
       "storageUnavailable": "Admin-Speicher ist nicht erreichbar; vorhandene Einträge konnten nicht aufgelistet werden. Speichern ist deaktiviert, bis der Speicher wieder verfügbar ist.",
       "sealingUnavailable": "Verschlüsselung von Secrets ist in dieser Bereitstellung nicht konfiguriert (AUTH_SECRET fehlt) — Client-Secrets können nicht gespeichert werden.",
       "updatedBy": "Aktualisiert von {by} am {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Integrierten Agenten überschreiben",
+    "orgAgentOverrideAction": "Überschreiben",
+    "orgAgentBuiltinBadge": "Integriert",
+    "orgAgentBuiltinHint": "In der Deployment-Konfiguration definiert. Die Zugriffsregel kann hier bearbeitet werden; überschreiben Sie sie, um die Einstellungen ohne erneutes Deployment zu ändern."
   },
   "localModels": {
     "title": "Lokale Modelle",
@@ -4278,9 +4288,15 @@
       "connectors": "Organisations-Connectoren und wer sie verwenden darf.",
       "guides": "Style-, Terminologie- und Compliance-Guides.",
       "mapDatasets": "Kuratierten Datensätze, die für den Karten-Workflow verfügbar sind.",
-      "localAdmins": "Berechtigung für die Bearbeitung von Zugriffsregeln an andere delegieren."
+      "localAdmins": "Berechtigung für die Bearbeitung von Zugriffsregeln an andere delegieren.",
+      "workflows": "Konversations-Workflows für alle ein- oder ausschalten.",
+      "viewAs": "App testen als jemand, der eine Bedingung erfüllt — oder nicht erfüllt."
     },
-    "openSettings": "Einstellungen öffnen"
+    "openSettings": "Einstellungen öffnen",
+    "area": {
+      "workflows": "Workflows",
+      "viewAs": "Anzeigen als"
+    }
   },
   "limits": {
     "title": "Nutzungsbegrenzungen",
@@ -4890,5 +4906,103 @@
     "listLabel": "Vorschläge aus Ihrer Organisation",
     "searching": "Ihre Organisation wird durchsucht…",
     "noMatches": "Keine Treffer im Verzeichnis – Sie können die Adresse manuell eingeben"
+  },
+  "workflowsAdmin": {
+    "title": "Workflows",
+    "description": "Aktivieren oder deaktivieren Sie jeden Workflow für die gesamte Organisation. Ein deaktivierter Workflow wird in Menüs ausgeblendet und vom Server verweigert, auch für berechtigte Nutzer:innen.",
+    "layeredNote": "Das LaunchDarkly-Flag 'conversationWorkflows' steuert weiterhin die Freigabe: Ein hier aktivierter Workflow ist nur verfügbar, wenn dieses Flag gesetzt ist. Diese Seite kann nichts sichtbar machen, was das Flag verbirgt.",
+    "loading": "Workflows-Richtlinie wird geladen…",
+    "loadError": "Die Workflows-Richtlinie konnte nicht geladen werden.",
+    "policyUnavailable": "Die Workflows-Richtlinie konnte nicht aus dem Speicher gelesen werden. Die Schalter werden ausgeblendet, statt mit Standardwerten angezeigt zu werden, da diese nicht den tatsächlich angewendeten Werten entsprechen könnten.",
+    "retry": "Wiederholen",
+    "enableAll": "Alle aktivieren",
+    "disableAll": "Alle deaktivieren",
+    "enabledLabel": "Aktiviert",
+    "disabledLabel": "Deaktiviert",
+    "defaultOnHint": "Standard, wenn keine Richtlinie gespeichert ist: aktiviert.",
+    "defaultOffHint": "Standard, wenn keine Richtlinie gespeichert ist: deaktiviert — eine Administratorin/ein Administrator muss sie explizit aktivieren.",
+    "grantsNote": "Grants-Verarbeitung ist zusätzlich auf MSF-USA-Nutzer:innen im Programmbereich mit \"grants\" im Titel oder in Systems mit \"innovation\" im Titel beschränkt. Die Aktivierung hier erweitert diese Regel nicht.",
+    "unsaved": "Sie haben ungespeicherte Änderungen.",
+    "save": "Speichern",
+    "saving": "Speichern…",
+    "saveSuccess": "Workflows-Richtlinie gespeichert.",
+    "saveError": "Die Workflows-Richtlinie konnte nicht gespeichert werden.",
+    "conflictError": "Eine andere Administration hat die Richtlinie zuerst geändert. Sie wurde neu geladen — bitte überprüfen Sie die Änderungen und speichern Sie erneut.",
+    "updatedByLine": "Zuletzt gespeichert von {by} am {at}.",
+    "neverSaved": "Bisher wurde keine Richtlinie gespeichert; oben genannte Standardwerte gelten."
+  },
+  "viewAs": {
+    "title": "Anzeigen als",
+    "description": "Testen Sie die App nur für Ihre aktuelle Sitzung als jemand, der eine Bedingung erfüllt oder nicht, die sonst vom Verzeichnis oder von Administrator:innen bestimmt wird. Ihre Identität bleibt unverändert: Alles, was Sie erstellen, bleibt Ihnen zugeordnet und jede Protokollzeile benennt weiterhin Sie.",
+    "activeTitle": "Anzeigen-als ist aktiv",
+    "inactiveTitle": "Anzeigen-als ist nicht aktiv",
+    "sections": {
+      "role": "Admin-Rolle",
+      "region": "Datenregion",
+      "attributes": "Verzeichnisattribute",
+      "groups": "Gruppenzugehörigkeit",
+      "presets": "Voreinstellungen"
+    },
+    "role": {
+      "global": "Globale/r Administrator:in (Ihre tatsächliche Rolle)",
+      "local": "Lokale/r Administrator:in",
+      "none": "Normale/r Nutzer:in",
+      "localKeysLabel": "Delegierte Agentenschlüssel",
+      "localKeysHint": "Kommagetrennte kanonische Agentenschlüssel, die diese/r lokale Administrator:in bearbeiten darf. Leer lassen für eine/n lokale/n Administrator:in ohne delegierte Agenten.",
+      "noneWarning": "Als normale/r Nutzer:in verschwinden alle anderen Admin-Bereiche. Diese Seite bleibt erreichbar und das Banner oben in der App bietet immer einen Ausstieg."
+    },
+    "region": {
+      "actual": "Aktuell ({region})",
+      "hint": "Leitet Ihre Anfragen – und alles, was Sie währenddessen hochladen – an den Speicher der anderen Region. Hat Vorrang vor einem ?regionOverride= Cookie."
+    },
+    "attributes": {
+      "department": "Abteilung",
+      "companyName": "Unternehmen",
+      "jobTitle": "Position",
+      "officeId": "Büro",
+      "officeActual": "Tatsächliches Büro",
+      "officeNone": "Kein Büro",
+      "actualValue": "Tatsächlich: {value}",
+      "actualEmpty": "Tatsächlich: (leer)",
+      "hint": "Lassen Sie ein Feld leer, um Ihren tatsächlichen Wert zu behalten. Diese werden für Berechtigungsregeln, attributbasierte Nutzungslimits und Zugriffsregeln verwendet."
+    },
+    "groups": {
+      "label": "Gruppen-IDs",
+      "placeholder": "Jeweils eine Entra-Gruppenobjekt-ID pro Zeile",
+      "hint": "Ersetzt – erweitert nicht – Ihre tatsächliche Mitgliedschaft für diese Sitzung. So können Sie Zugehörigkeit und Nichtzugehörigkeit testen."
+    },
+    "presets": {
+      "grantsMember": "Grants-Teammitglied",
+      "regularUser": "Regulärer Nutzer",
+      "localAdmin": "Lokaler Admin, keine Agents",
+      "otherRegion": "Andere Region",
+      "hint": "Voreinstellungen füllen das Formular aus; es wird erst übernommen, wenn Sie Anwenden drücken."
+    },
+    "apply": "Anwenden und neu laden",
+    "applying": "Wird angewendet…",
+    "clear": "View-as verlassen",
+    "clearing": "Wird beendet…",
+    "reset": "Formular zurücksetzen",
+    "nothingToApply": "Legen Sie mindestens eine Einstellung fest, um sie anzuwenden.",
+    "applyError": "View-as konnte nicht angewendet werden: {error}",
+    "clearError": "View-as konnte nicht beendet werden: {error}",
+    "loadError": "Der View-as-Status konnte nicht geladen werden.",
+    "retry": "Erneut versuchen",
+    "expiresNote": "View-as gilt bis zu 8 Stunden oder bis Sie beenden.",
+    "banner": {
+      "label": "Anzeigen als",
+      "adjust": "Anpassen",
+      "exit": "Beenden",
+      "role": {
+        "local": "lokaler Admin",
+        "none": "regulärer Nutzer"
+      },
+      "region": "Region {region}",
+      "department": "Abteilung „{value}“",
+      "companyName": "Unternehmen „{value}“",
+      "jobTitle": "Position „{value}“",
+      "officeId": "Büro {value}",
+      "groups": "{count, plural, one {# Gruppe} other {# Gruppen}}"
+    }
   }
 }

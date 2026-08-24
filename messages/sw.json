@@ -2674,6 +2674,10 @@
       "map": {
         "label": "Ramani",
         "description": "Geuza data yoyote kuwa maeneo kwenye ramani"
+      },
+      "grants": {
+        "label": "Uchakataji wa Ruzuku",
+        "description": "Linganishi na toa data iliyopangwa kutoka kwenye maelezo ya ruzuku"
       }
     },
     "chooser": {
@@ -2683,7 +2687,8 @@
       "newTranslation": "Tafsiri mpya",
       "newDocument": "Hati mpya",
       "newDataAnalysis": "Uchambuzi wa data mpya",
-      "newMap": "Ramani mpya"
+      "newMap": "Ramani mpya",
+      "newGrants": "Uchakatiji mpya wa ruzuku"
     },
     "translation": {
       "chooseLanguage": "Lugha lengwa",
@@ -3300,7 +3305,8 @@
       "unknownType": "Mazungumzo haya yanatumia utiririshaji kazi ambao toleo hili halitambui. Historia ya mazungumzo imeonyeshwa hapa chini.",
       "untitled": "Mazungumzo Mapya",
       "toggleMenu": "Fungua/funga menyu",
-      "model": "Mfano wa utiririshaji kazi huu"
+      "model": "Mfano wa utiririshaji kazi huu",
+      "disabledByAdmin": "Utaratibu huu umezimwa na msimamizi. Historia ya mazungumzo inaonekana hapa chini."
     },
     "tabs": {
       "label": "Hali ya mazungumzo",
@@ -4077,7 +4083,11 @@
       "storageUnavailable": "Hifadhi ya msimamizi haipatikani; rekodi zilizopo haziwezi kuorodheshwa. Kuhifadhi kumezimwa hadi itakaporejea.",
       "sealingUnavailable": "Ulembavu wa siri haujasanidiwa kwenye usambazaji huu (AUTH_SECRET haipo) — siri za wateja haziwezi kuhifadhiwa.",
       "updatedBy": "Imesasishwa na {by} tarehe {at}"
-    }
+    },
+    "orgAgentOverrideTitle": "Badilisha wakala aliyejengwa",
+    "orgAgentOverrideAction": "Badilisha",
+    "orgAgentBuiltinBadge": "Iliyojengwa",
+    "orgAgentBuiltinHint": "Imetengwa kwenye usanidi wa usambazaji. Sheria yake ya ufikiaji inaweza kuhaririwa hapa; ibadilishe ili kubadilisha mipangilio yake bila kutekeleza upya."
   },
   "localModels": {
     "title": "Miundo ya ndani",
@@ -4278,9 +4288,15 @@
       "connectors": "Viunganishi vya shirika na nani anaweza kuvitumia.",
       "guides": "Mwongozo wa mtindo, istilahi na ufuatiliaji wa sheria.",
       "mapDatasets": "Seti za data zilizochaguliwa zinazopatikana kwa mtiririko wa ramani.",
-      "localAdmins": "Tawanya uhariri wa kanuni za upatikanaji kwa watu wengine."
+      "localAdmins": "Tawanya uhariri wa kanuni za upatikanaji kwa watu wengine.",
+      "workflows": "Washa au zima utaratibu wa mazungumzo kwa kila mtu.",
+      "viewAs": "Jaribu programu kama mtu anayekidhi — au asiyekidhi — sharti fulani."
     },
-    "openSettings": "Fungua mipangilio"
+    "openSettings": "Fungua mipangilio",
+    "area": {
+      "workflows": "Utaratibu",
+      "viewAs": "Tazama kama"
+    }
   },
   "limits": {
     "title": "Mipaka ya matumizi",
@@ -4890,5 +4906,103 @@
     "listLabel": "Mapendekezo kutoka shirika lako",
     "searching": "Inatafuta katika shirika lako…",
     "noMatches": "Hakuna mlinganisho katika saraka — unaweza kuingiza anwani mwenyewe"
+  },
+  "workflowsAdmin": {
+    "title": "Utaratibu",
+    "description": "Washa au zima kila utaratibu kwa shirika zima. Utaratibu uliozimwa umefichwa kwenye menyu na utafutiliwa mbali na seva, hata kwa watu wanaostahiki vinginevyo.",
+    "layeredNote": "Bendera ya LaunchDarkly conversationWorkflows bado inadhibiti uanzishaji: utaratibu uliowashwa hapa unafikika tu mahali ambapo bendera hiyo iko wazi. Ukurasa huu hauwezi kufanya kitu chochote kinachoonekana ambacho bendera inaficha.",
+    "loading": "Inapakia sera ya utaratibu…",
+    "loadError": "Sera ya utaratibu haikuweza kupakiwa.",
+    "policyUnavailable": "Sera ya utaratibu haikuweza kusomwa kutoka kwenye hifadhi. Swichi zimefichwa badala ya kuoneshwa na thamani za chaguomsingi ambazo huenda hazilingani na kinachotekelezwa.",
+    "retry": "Jaribu tena",
+    "enableAll": "Washa zote",
+    "disableAll": "Zima zote",
+    "enabledLabel": "Imewashwa",
+    "disabledLabel": "Imezimwa",
+    "defaultOnHint": "Chaguo-msingi ikiwa hakuna sera imehifadhiwa: imewashwa.",
+    "defaultOffHint": "Chaguo-msingi ikiwa hakuna sera imehifadhiwa: imezimwa — msimamizi lazima aiwashe mwenyewe.",
+    "grantsNote": "Uchakataji wa Ruzuku umewekewa kikomo cha ziada kwa watumiaji wa MSF-USA katika Idara ya Programu wenye \"grants\" kwenye cheo chao, au katika Systems wenye \"innovation\" kwenye cheo chao. Kuiwasha hapa hapan posha sheria hiyo.",
+    "unsaved": "Una mabadiliko ambayo hayijahifadhiwa.",
+    "save": "Hifadhi",
+    "saving": "Inahifadhi…",
+    "saveSuccess": "Sera ya utaratibu imehifadhiwa.",
+    "saveError": "Sera ya utaratibu haikuweza kuhifadhiwa.",
+    "conflictError": "Msimamizi mwingine alibadilisha sera kwanza. Imepakiwa upya — tafadhali kagua na uhifadhi tena.",
+    "updatedByLine": "Ilihifadhiwa mwisho na {by} tarehe {at}.",
+    "neverSaved": "Hakuna sera iliyohifadhiwa bado; chaguomsingi zilizo juu zinatumika."
+  },
+  "viewAs": {
+    "title": "Tazama kama",
+    "description": "Jaribu programu, kwa kikao chako pekee, kama mtu anayekidhi au asiyekidhi sharti ambalo kawaida huamuliwa na orodha ya watumiaji au wasimamizi. Utambulisho wako haujawahi kubadilishwa: kila kitu unachounda hubaki chako na kila mstari wa ukaguzi bado unakuonesha wewe.",
+    "activeTitle": "'View-as' inafanya kazi",
+    "inactiveTitle": "'View-as' haifanyi kazi",
+    "sections": {
+      "role": "Jukumu la msimamizi",
+      "region": "Eneo la data",
+      "attributes": "Sifa za orodha ya watumiaji",
+      "groups": "Uanachama wa kikundi",
+      "presets": "Mipangilio ya awali"
+    },
+    "role": {
+      "global": "Msimamizi mkuu (jukumu lako halisi)",
+      "local": "Msimamizi wa eneo",
+      "none": "Mtumiaji wa kawaida",
+      "localKeysLabel": "Vifunguo vya wakala waliokabidhiwa",
+      "localKeysHint": "Vifunguo vya wakala sahihi vilivyotengwa vinavyohaririwa na msimamizi huyu wa eneo. Acha wazi kwa msimamizi asiye na wakala waliokabidhiwa.",
+      "noneWarning": "Kama mtumiaji wa kawaida, maeneo mengine yote ya msimamizi hayatakuwepo. Ukurasa huu bado unafikika, na bango lililo juu ya programu daima linakupa njia ya kutoka."
+    },
+    "region": {
+      "actual": "Halisi ({region})",
+      "hint": "Inaelekeza maombi yako — na chochote unachopakia ukiwa umewezeshwa — kwenye hifadhi ya eneo jingine. Inatangulia kidakuzi cha ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Idara",
+      "companyName": "Kampuni",
+      "jobTitle": "Cheo kazini",
+      "officeId": "Ofisi",
+      "officeActual": "Ofisi halisi",
+      "officeNone": "Hamna ofisi",
+      "actualValue": "Halisi: {value}",
+      "actualEmpty": "Halisi: (hakuna)",
+      "hint": "Acha sehemu tupu kubaki na thamani yako halisi. Hizi hutumika kwenye kanuni za ruzuku, kikomo cha matumizi chenye kiasi, na kanuni za ufikiaji."
+    },
+    "groups": {
+      "label": "Nambari za kundi",
+      "placeholder": "Andika id ya kitu cha kundi la Entra kila mstari",
+      "hint": "Inabadilisha — haiongezi — uanachama wako halisi kwa kikao hiki, hivyo unaweza kujaribu kuwa au kutokuwepo kwenye kundi."
+    },
+    "presets": {
+      "grantsMember": "Mwanakikundi wa timu ya ruzuku",
+      "regularUser": "Mtumiaji wa kawaida",
+      "localAdmin": "Msimamizi wa ndani, bila maajenti",
+      "otherRegion": "Eneo jingine",
+      "hint": "Mipangilio hujaza fomu; hakuna kinachotumika mpaka ubonyeze Tumia."
+    },
+    "apply": "Tumia na upyaisha",
+    "applying": "Inatumiwa…",
+    "clear": "Toka mtazamo huu",
+    "clearing": "Inatoka…",
+    "reset": "Weka fomu upya",
+    "nothingToApply": "Weka angalau override moja ili utumie.",
+    "applyError": "Mtazamo-huu haukuweza kutumika: {error}",
+    "clearError": "Mtazamo-huu haukuweza kufutwa: {error}",
+    "loadError": "Hali ya mtazamo-huu haikuweza kupakiwa.",
+    "retry": "Jaribu tena",
+    "expiresNote": "Mtazamo-huu hudumu hadi saa 8, au mpaka utoke.",
+    "banner": {
+      "label": "Unaangalia kama",
+      "adjust": "Badilisha",
+      "exit": "Toka",
+      "role": {
+        "local": "msimamizi wa ndani",
+        "none": "mtumiaji wa kawaida"
+      },
+      "region": "eneo {region}",
+      "department": "idara \"{value}\"",
+      "companyName": "kampuni \"{value}\"",
+      "jobTitle": "cheo \"{value}\"",
+      "officeId": "ofisi {value}",
+      "groups": "{count, plural, one {# kundi} other {# makundi}}"
+    }
   }
 }
