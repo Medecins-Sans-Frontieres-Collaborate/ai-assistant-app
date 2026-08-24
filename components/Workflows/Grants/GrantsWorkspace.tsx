@@ -23,6 +23,12 @@ import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 
 import { canAccessGrants } from '@/lib/services/grants/access';
 
+import { GrantsWorkflowState, GrantsWorkflowStep } from '@/types/workflow';
+
+import { WorkflowWorkspaceProps } from '../registry';
+
+import { useConversationStore } from '@/client/stores/conversationStore';
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -214,7 +220,7 @@ const COLUMN_GROUPS: {
   },
   {
     label: 'Funding',
-    columns: ['Purpose Code', 'Initial Budget EUR'],
+    columns: ['Purpose Code', 'Initial Budget EUR'], // need to add revised budgets
   },
   {
     label: 'Operational',
@@ -259,6 +265,7 @@ const DEFAULT_COLUMNS = [
   'OC',
   'Project Objective',
   'Key Terms/Activities',
+  'Country',
 ].filter((c) => ALL_CSV_COLUMNS.includes(c));
 
 // ---------------------------------------------------------------------------
@@ -279,13 +286,29 @@ function isGreenInitiativeDocType(t?: string): boolean {
   return !!t && /green/i.test(t);
 }
 
-export default function GrantExtractionPage() {
+/**
+ * Grants extraction workspace: the OC/document setup, coverage check,
+ * extraction progress, and validation review, hosted inside a
+ * workflow conversation. Ported from the former standalone
+ * /grants/extraction page; server APIs are unchanged. Only identifiers
+ * (OC, year, step, run ids) persist on the conversation — run artifacts are
+ * re-fetched from the server when the conversation reopens.
+ */
+export function GrantsWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   // Access control — restrict the whole page to allowlisted users.
   const { data: session, status: sessionStatus } = useSession();
   const hasGrantsAccess = canAccessGrants(session?.user);
 
   // State management
   const [uiState, setUiState] = useState<UIState>('document-management');
+  // Latest coverage-check run id — persisted on the conversation so the
+  // reconciliation can be restored when the conversation reopens.
+  const [coverageRunId, setCoverageRunId] = useState<string | null>(null);
+  const updateWorkflowState = useConversationStore(
+    (s) => s.updateWorkflowState,
+  );
+  const updateConversation = useConversationStore((s) => s.updateConversation);
+  const hydratedRef = useRef(false);
   const [selectedOC, setSelectedOC] = useState<string>('');
   const [selectedYear, setSelectedYear] = useState<number>(() =>
     new Date().getFullYear(),
@@ -599,6 +622,7 @@ export default function GrantExtractionPage() {
       typeof globalThis.crypto !== 'undefined' && globalThis.crypto.randomUUID
         ? globalThis.crypto.randomUUID()
         : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    setCoverageRunId(runId);
 
     try {
       // Starts the coverage check. The server runs it in the background and
@@ -666,7 +690,7 @@ export default function GrantExtractionPage() {
   };
 
   /* Proposed-matches accept/toggle — disabled while the code-matching UI is
-     scoped out with Nelli and Mary
+     scoped out with the Grants team
   const toggleProposal = (file: string) => {
     setAcceptedProposals((prev) => {
       const next = new Set(prev);
@@ -686,6 +710,93 @@ export default function GrantExtractionPage() {
         .filter((r) => r.align === 'Yes' && r.narrativeFile)
         .map((r) => r.projectCode),
     );
+
+  // -------------------------------------------------------------------------
+  // Conversation persistence: hydrate once from the conversation's workflow
+  // state, then write identifiers back on every transition. Run artifacts are
+  // never persisted — they're re-fetched from the server by run id.
+  // -------------------------------------------------------------------------
+  useEffect(() => {
+    if (hydratedRef.current) return;
+    hydratedRef.current = true;
+    const ws = useConversationStore
+      .getState()
+      .conversations.find((c) => c.id === conversationId)?.workflowState;
+    if (ws?.kind !== 'grants') return;
+    if (ws.oc) setSelectedOC(ws.oc);
+    if (ws.year) setSelectedYear(ws.year);
+    (async () => {
+      if (ws.step === 'validation-review' && ws.extractionRunId) {
+        setCurrentRunId(ws.extractionRunId);
+        await fetchExtractionData(ws.extractionRunId);
+        setUiState('validation-review');
+      } else if (ws.step === 'coverage-check' && ws.coverageRunId) {
+        try {
+          const pr = await fetch(
+            `/api/grants/preprocess/progress?runId=${encodeURIComponent(ws.coverageRunId)}`,
+          );
+          if (!pr.ok) return;
+          const d = await pr.json();
+          if (d?.status === 'done' && d?.reconciliation) {
+            setCoverageRunId(ws.coverageRunId ?? null);
+            setCoverageData({
+              oc: d.oc,
+              hasExpectedList: !!d.hasExpectedList,
+              reconciliation: d.reconciliation,
+            });
+            setIncludedLikely(defaultRowSelection(d.reconciliation));
+            setUiState('coverage-check');
+          }
+        } catch {
+          /* stale run — stay on the fresh start screen */
+        }
+      } else if (ws.step === 'confirm' || ws.step === 'document-management') {
+        setUiState(ws.step);
+      }
+    })();
+    // Mount-only: hydration must not re-run as state changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!hydratedRef.current) return;
+    // 'complete' restores to the review it concluded from.
+    const step: GrantsWorkflowStep =
+      uiState === 'complete' ? 'validation-review' : uiState;
+    updateWorkflowState(conversationId, (prev) => {
+      const base: GrantsWorkflowState =
+        prev?.kind === 'grants'
+          ? prev
+          : { kind: 'grants', updatedAt: new Date().toISOString() };
+      const next: GrantsWorkflowState = {
+        ...base,
+        oc: selectedOC || undefined,
+        year: selectedYear,
+        step,
+        coverageRunId: coverageRunId || base.coverageRunId,
+        extractionRunId: currentRunId || base.extractionRunId,
+        updatedAt: new Date().toISOString(),
+      };
+      const same =
+        base.oc === next.oc &&
+        base.year === next.year &&
+        base.step === next.step &&
+        base.coverageRunId === next.coverageRunId &&
+        base.extractionRunId === next.extractionRunId;
+      return same && prev?.kind === 'grants' ? prev : next;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedOC, selectedYear, uiState, coverageRunId, currentRunId]);
+
+  // Name the conversation after the run so sidebar history stays legible
+  // ("Grants — OCB 2026" instead of a default title).
+  useEffect(() => {
+    if (!hydratedRef.current || !selectedOC) return;
+    updateConversation(conversationId, {
+      name: `Grants — ${selectedOC} ${selectedYear}`,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedOC, selectedYear]);
 
   // Resolve a narrative filename to its blob path so it can be opened via the
   // document-serve endpoint. Prefers the actual selected-doc blob path; falls
@@ -975,7 +1086,7 @@ export default function GrantExtractionPage() {
     });
   };
 
-  // Build and download the final CSV from the INCLUDED rows only, honoring the
+  // Build and download the final CSV from the included rows only, honoring the
   // currently-selected columns. Reflects unsaved edits and the inclusion
   // checkboxes (unlike the server download, which serves the saved file as-is).
   const handleExportSelected = () => {
@@ -1129,10 +1240,7 @@ export default function GrantExtractionPage() {
   // Access gate — block direct-URL access for non-allowlisted users.
   if (sessionStatus !== 'loading' && !hasGrantsAccess) {
     return (
-      <div
-        className="mx-auto flex max-w-7xl items-center justify-center p-6"
-        style={{ position: 'fixed', inset: 0 }}
-      >
+      <div className="mx-auto flex h-full max-w-7xl items-center justify-center overflow-y-auto p-6">
         <div className="max-w-md rounded-lg border border-gray-200 bg-white p-8 text-center dark:border-gray-700 dark:bg-gray-800">
           <h1 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">
             Access restricted
@@ -1147,10 +1255,7 @@ export default function GrantExtractionPage() {
   }
 
   return (
-    <div
-      className="mx-auto max-w-7xl overflow-y-auto p-6"
-      style={{ position: 'fixed', inset: 0 }}
-    >
+    <div className="mx-auto h-full max-w-7xl overflow-y-auto p-6">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
           Grant Extraction Pipeline
