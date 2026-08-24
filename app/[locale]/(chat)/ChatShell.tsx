@@ -14,6 +14,7 @@ import { BackupModals } from '@/components/Backup/BackupModals';
 import { BackupSyncBanner } from '@/components/Backup/BackupSyncBanner';
 import { MigrationDialog } from '@/components/Migration/MigrationDialog';
 import { AppInitializer } from '@/components/Providers/AppInitializer';
+import { RegionOverrideBanner } from '@/components/RegionOverride/RegionOverrideBanner';
 import { SettingDialog } from '@/components/Settings/SettingDialog';
 import { Sidebar } from '@/components/Sidebar/Sidebar';
 import { StorageWarningDialog } from '@/components/Storage/StorageWarningDialog';
@@ -91,6 +92,9 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
   return (
     <>
       <UpdateBanner />
+      {/* Both banners read the session, so they live inside AppProviders
+          (SessionProvider) rather than the locale layout. */}
+      <RegionOverrideBanner />
       <ViewAsBanner />
       <BackupSyncBanner />
       <MigrationDialog
