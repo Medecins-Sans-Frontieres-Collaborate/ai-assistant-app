@@ -103,7 +103,7 @@ async function requireGlobalAdmin(): Promise<AdminGateOk | Response> {
   if (!userMail) return forbiddenResponse();
 
   await service.ensureFresh();
-  const status = resolveAdminStatus(userMail, service.getSnapshot().config);
+  const status = resolveAdminStatus(session.user, service.getSnapshot().config);
   if (!status.isGlobalAdmin) return forbiddenResponse();
   return { userMail };
 }

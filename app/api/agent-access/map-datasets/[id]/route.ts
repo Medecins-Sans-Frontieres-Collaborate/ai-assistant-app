@@ -198,7 +198,7 @@ async function authorizeAdmin(
   }
   const canonicalKey = canonicalAgentKey(MAP_DATASET_SOURCE, id);
   await service.ensureFresh();
-  const status = resolveAdminStatus(userMail, service.getSnapshot().config);
+  const status = resolveAdminStatus(session.user, service.getSnapshot().config);
   if (!status.isGlobalAdmin && !status.isLocalAdmin) {
     return { ok: false, response: forbiddenResponse() };
   }
