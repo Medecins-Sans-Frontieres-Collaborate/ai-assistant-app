@@ -18,6 +18,7 @@
 import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessService';
 import {
   AdminStatus,
+  AdminSubject,
   isGlobalAdmin,
   resolveAdminStatus,
 } from '@/lib/services/agentAccess/adminAuth';
@@ -30,7 +31,9 @@ export const ADMIN_AREA_IDS = [
   'guides',
   'map-datasets',
   'limits',
+  'workflows',
   'local-admins',
+  'view-as',
 ] as const;
 
 export type AdminAreaId = (typeof ADMIN_AREA_IDS)[number];
@@ -54,7 +57,7 @@ const NO_ADMIN: AdminStatus = {
 };
 
 export async function resolveAdminAreas(
-  mail: string | null | undefined,
+  user: AdminSubject | null | undefined,
 ): Promise<AdminAreaResolution> {
   const areas: AdminAreaId[] = [];
   let status: AdminStatus = NO_ADMIN;
@@ -65,7 +68,7 @@ export async function resolveAdminAreas(
     await service.ensureFresh();
     const { config } = service.getSnapshot();
     configUnavailable = config === null;
-    status = resolveAdminStatus(mail, config);
+    status = resolveAdminStatus(user, config);
     if (status.isGlobalAdmin || status.isLocalAdmin) {
       areas.push('agents', 'connectors', 'guides', 'map-datasets');
     }
@@ -87,8 +90,19 @@ export async function resolveAdminAreas(
   // flag, which this server-side resolver cannot evaluate — AdminShell
   // filters the entry out of the rail when the flag is off. Including it here
   // grants nothing: the limits page and API keep their own global-admin gates.
-  if (isGlobalAdmin(mail)) {
+  if (isGlobalAdmin(user)) {
     areas.push('limits');
+    // The workflow policy is one org-wide document, like limits: global only.
+    areas.push('workflows');
+  }
+
+  // "View as" is resolved from the REAL identity (bare-mail form) on purpose:
+  // while an admin is viewing as a regular user every other area above
+  // vanishes for them, and this entry is how they adjust or leave the test
+  // mode from inside the admin surface. The page keeps the same real-identity
+  // gate, so it grants nothing the person does not already have.
+  if (isGlobalAdmin(user?.mail)) {
+    areas.push('view-as');
   }
 
   return { areas, status, configUnavailable };
