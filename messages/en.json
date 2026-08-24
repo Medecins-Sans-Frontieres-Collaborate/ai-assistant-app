@@ -1469,6 +1469,10 @@
       "map": {
         "label": "Map",
         "description": "Turn any data into locations on a map"
+      },
+      "grants": {
+        "label": "Grants Processing",
+        "description": "Reconcile and extract structured data from grant narratives"
       }
     },
     "tabs": {
@@ -1485,7 +1489,8 @@
       "newTranslation": "New translation",
       "newDocument": "New document",
       "newDataAnalysis": "New data analysis",
-      "newMap": "New map"
+      "newMap": "New map",
+      "newGrants": "New grants processing"
     },
     "translation": {
       "chooseLanguage": "Target language",
