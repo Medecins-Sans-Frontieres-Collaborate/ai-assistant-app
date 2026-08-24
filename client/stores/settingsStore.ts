@@ -17,6 +17,7 @@ import {
 } from '@/lib/utils/shared/geo/timelapsePacing';
 import {
   DEFAULT_PASTE_ATTACHMENT_CHARS,
+  LEGACY_DEFAULT_PASTE_ATTACHMENT_CHARS,
   clampPasteAttachmentChars,
 } from '@/lib/utils/shared/paste/pastedText';
 import { UserRegion } from '@/lib/utils/shared/region';
@@ -1750,7 +1751,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 57, // Increment this when schema changes to trigger migrations
+      version: 58, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -2416,6 +2417,18 @@ export const useSettingsStore = create<SettingsStore>()(
           if (typeof state.m365ConnectedUserSet !== 'boolean') {
             state.m365Connected = true;
             state.m365ConnectedUserSet = false;
+          }
+        }
+
+        // Version 57 → 58: the large-paste default rose from 2,000 characters
+        // to ~2,000 words. Only users still on the OLD default move to the
+        // new one; a value they set themselves (including 0 = off) is kept.
+        if (version < 58) {
+          if (
+            state.pasteAsAttachmentChars ===
+            LEGACY_DEFAULT_PASTE_ATTACHMENT_CHARS
+          ) {
+            state.pasteAsAttachmentChars = DEFAULT_PASTE_ATTACHMENT_CHARS;
           }
         }
 

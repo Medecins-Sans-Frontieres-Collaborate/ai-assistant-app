@@ -152,8 +152,37 @@ export interface AdminHistoryResponse {
   truncated?: boolean;
 }
 
+/**
+ * The editable-field subset of an org RAG agent — what a built-in
+ * (config/organization-agents.json) entry can supply. Also the prefill
+ * shape the editor accepts (a stored record satisfies it structurally).
+ */
+export type OrgAgentDraft = Omit<
+  OrgRagAgent,
+  | 'version'
+  | 'validation'
+  | 'createdBy'
+  | 'createdAt'
+  | 'updatedBy'
+  | 'updatedAt'
+>;
+
+/**
+ * One built-in org RAG agent as served by GET /api/agent-access/org-agents.
+ * Read-only (it lives in the deployment config); access rules apply to it
+ * by canonical key exactly like a stored record, and `overridden` means an
+ * admin record with the same id already replaces it.
+ */
+export interface AdminStaticOrgAgent {
+  canonicalKey: string;
+  agent: OrgAgentDraft;
+  overridden: boolean;
+}
+
 export interface AdminOrgAgentsResponse {
   orgAgents: AdminStoredOrgAgent[];
+  /** Built-in config agents (listed for access editing / override). */
+  staticAgents?: AdminStaticOrgAgent[];
   /** Same outage contract as promptAgentsUnavailable. */
   orgAgentsUnavailable?: boolean;
   fetchedAt?: number | null;

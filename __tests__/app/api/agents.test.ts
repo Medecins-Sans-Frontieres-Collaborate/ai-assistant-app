@@ -336,6 +336,42 @@ describe('GET /api/agents — access-control discovery filter', () => {
     });
   });
 
+  describe('static org agents', () => {
+    it('folds static ids the user is denied into suppressedOrgAgentIds', async () => {
+      accessIsEnabled.mockReturnValue(true);
+      accessEvaluate.mockImplementation(
+        ({ source, agentName }: { source: string; agentName: string }) =>
+          source === 'org-agent' && agentName === 'msf_communications'
+            ? { decision: 'deny', reason: 'not-allowed' }
+            : { decision: 'allow', reason: 'no-rule' },
+      );
+
+      const response = await GET(request());
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(200);
+      expect(data.suppressedOrgAgentIds).toEqual(['msf_communications']);
+      // Foundry discovery is untouched by the org-agent rule.
+      expect(
+        data.agents.map((a: { agentName: string }) => a.agentName),
+      ).toEqual(['agent-a', 'agent-b']);
+    });
+
+    it('keeps static agents visible on no-rule and on unavailable (visibility-only surface)', async () => {
+      accessIsEnabled.mockReturnValue(true);
+      accessEvaluate.mockImplementation(({ source }: { source: string }) =>
+        source === 'org-agent'
+          ? { decision: 'unavailable', reason: 'rules-unavailable' }
+          : { decision: 'allow', reason: 'no-rule' },
+      );
+
+      const response = await GET(request());
+      const data = await parseJsonResponse(response);
+
+      expect(data.suppressedOrgAgentIds).toEqual([]);
+    });
+  });
+
   describe('M365 file-backed agents', () => {
     const m365Source = (overrides: Record<string, unknown>) => ({
       sourceId: 'src-1',

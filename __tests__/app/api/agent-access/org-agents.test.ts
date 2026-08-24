@@ -170,6 +170,62 @@ describe('/api/agent-access/org-agents', () => {
     expect(body.data.orgAgents).toHaveLength(1);
     expect(body.data.staticAgentIds).toContain('msf_communications');
     expect(body.data.canCreate).toBe(true);
+    // Built-in agents ride along as read-only rows keyed like records, so
+    // the admin page can edit their access rules and prefill an override.
+    const staticEntry = body.data.staticAgents.find(
+      (entry: { agent: { id: string } }) =>
+        entry.agent.id === 'msf_communications',
+    );
+    expect(staticEntry).toMatchObject({
+      canonicalKey: 'org-agent::msf_communications',
+      overridden: false,
+      agent: {
+        id: 'msf_communications',
+        name: 'MSF Communications',
+        icon: 'IconNews',
+        topK: 10,
+        allowWebSearch: true,
+        allowCodeInterpreter: false,
+        enabled: true,
+        baseModelId: null,
+      },
+    });
+    expect(staticEntry.agent.sources).toHaveLength(2);
+    expect(staticEntry.agent).not.toHaveProperty('validation');
+  });
+
+  it('GET flags a static agent as overridden when a record reuses its id', async () => {
+    mockStore.listAllOrgAgents.mockResolvedValue([
+      {
+        canonicalKey: 'org-agent::msf_communications',
+        blobPath: 'x',
+        orgAgent: makeAgent({ id: 'msf_communications', name: 'Comms v2' }),
+        etag: '"etag-1"',
+      },
+    ]);
+    const response = await GET();
+    const body = await parseJsonResponse(response);
+    expect(response.status).toBe(200);
+    expect(body.data.staticAgents).toEqual([
+      expect.objectContaining({
+        canonicalKey: 'org-agent::msf_communications',
+        overridden: true,
+      }),
+    ]);
+  });
+
+  it("GET scopes static rows to a local admin's delegated keys", async () => {
+    mockAdminAuth.resolveAdminStatus.mockReturnValue({
+      isGlobalAdmin: false,
+      isLocalAdmin: true,
+      editableAgentKeys: ['org-agent::orgr-abcdefabcdef'],
+    });
+    mockStore.listAllOrgAgents.mockResolvedValue([]);
+    const response = await GET();
+    const body = await parseJsonResponse(response);
+    expect(response.status).toBe(200);
+    expect(body.data.staticAgents).toEqual([]);
+    expect(body.data.canCreate).toBe(false);
   });
 
   it('403s LOCAL admins on create (global-only, unlike m365 agents)', async () => {

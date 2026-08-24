@@ -1,0 +1,19 @@
+{
+  "id": "multi-turn-followup",
+  "description": "Three-turn thread where later turns depend on remembering and refining earlier output.",
+  "tags": ["multi-turn", "writing"],
+  "rubric": "Turn 2 must edit the turn-1 draft rather than start over; turn 3 must apply the length limit to the turn-2 version.",
+  "turns": [
+    {
+      "user": "Draft a short internal announcement that our logistics team is moving the weekly supply call from Tuesday 10:00 to Wednesday 14:00 starting next week."
+    },
+    {
+      "user": "Make it warmer and mention that the recording will be shared for people in other time zones.",
+      "expect": "Keeps the key facts from turn 1, adds recording note, tone warmer."
+    },
+    {
+      "user": "Now cut it to under 60 words.",
+      "expect": "Under 60 words, still has day/time change and recording note."
+    }
+  ]
+}
