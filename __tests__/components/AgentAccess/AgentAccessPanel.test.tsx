@@ -999,6 +999,19 @@ describe('AgentAccessPanel', () => {
     ).not.toBeChecked();
   });
 
+  it('shows each agent’s canonical key with a copy action', async () => {
+    agentsResponse = [...discoveredAgents, promptAgentDiscoveryEntry];
+    promptAgentsResponse = [storedPromptAgent];
+    renderPanel('agents');
+    const row = (await screen.findByText('Travel Advisor')).closest('li');
+    expect(
+      within(row as HTMLElement).getByText(storedPromptAgent.canonicalKey),
+    ).toBeInTheDocument();
+    expect(
+      within(row as HTMLElement).getByRole('button', { name: 'Copy key' }),
+    ).toBeInTheDocument();
+  });
+
   it('lets an admin hide an agent from their own list and reveal it again', async () => {
     useSettingsStore.setState({ hiddenAdminAgentKeys: [] });
     agentsResponse = [...discoveredAgents, promptAgentDiscoveryEntry];
