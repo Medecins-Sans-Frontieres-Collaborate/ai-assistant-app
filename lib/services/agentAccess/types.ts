@@ -356,8 +356,21 @@ export const M365IndexJobStatusSchema = z.enum([
 ]);
 export type M365IndexJobStatus = z.infer<typeof M365IndexJobStatusSchema>;
 
+/** What an incremental refresh found under a source (indexable items). */
+export const M365SourceChangesSchema = z.object({
+  added: z.number().default(0),
+  modified: z.number().default(0),
+  removed: z.number().default(0),
+  unchanged: z.number().default(0),
+});
+export type M365SourceChanges = z.infer<typeof M365SourceChangesSchema>;
+
 export const M365IndexJobSourceSchema = z.object({
   sourceId: z.string().min(1),
+  /** Refresh jobs: what changed since the last manifest. */
+  changes: M365SourceChangesSchema.optional(),
+  /** Refresh jobs: the listing came from the stored delta link. */
+  incremental: z.boolean().optional(),
   /** Plan-level verdict; `pending` until finalize decides. */
   status: z.enum(['pending', 'indexed', 'error', 'missing']).default('pending'),
   error: z.string().optional(),
@@ -379,6 +392,14 @@ export const M365IndexJobSchema = z.object({
   finishedAt: z.string().optional(),
   /** Resolved at start; every chunk of the run embeds with it. */
   embeddingDeployment: z.string(),
+  /**
+   * `refresh` (phase 3) re-lists sources incrementally against the last
+   * manifest and only re-processes what changed; `full` re-processes
+   * everything.
+   */
+  mode: z.enum(['full', 'refresh']).default('full'),
+  /** Refresh jobs: change totals across sources. */
+  changes: M365SourceChangesSchema.optional(),
   sources: z.array(M365IndexJobSourceSchema).default([]),
   error: z.string().optional(),
 });
