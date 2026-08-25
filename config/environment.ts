@@ -144,6 +144,11 @@ const serverEnvSchema = z.object({
     .min(1)
     .max(4096)
     .default(512),
+  /**
+   * Vision-capable chat deployment used to describe images and OCR scanned
+   * PDFs when an admin prepares such a file for an M365 agent (phase 4).
+   */
+  M365_AGENT_VISION_MODEL: z.string().default('gpt-5-mini'),
 
   // Web search backend:
   //  - 'news': GDELT + Google News RSS queried IN PARALLEL and merged —
