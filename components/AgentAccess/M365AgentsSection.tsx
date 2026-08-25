@@ -190,6 +190,8 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
   const [planLoading, setPlanLoading] = useState(false);
   const [planError, setPlanError] = useState<string | null>(null);
   const planRequest = useRef(0);
+  /** Bumped when a file is prepared so the plan re-runs unchanged sources. */
+  const [planVersion, setPlanVersion] = useState(0);
 
   // Last index run's per-item outcomes, for existing agents only.
   const manifestQuery = useQuery<M365AgentManifest | null>({
@@ -258,7 +260,10 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
         const response = await fetch('/api/agent-access/m365-agents/plan', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sources: sources.map(toSourcePayload) }),
+          body: JSON.stringify({
+            sources: sources.map(toSourcePayload),
+            ...(existing ? { agentId: existing.agent.id } : {}),
+          }),
         });
         if (requestId !== planRequest.current) return;
         if (!response.ok) {
@@ -278,7 +283,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
     }, PLAN_DEBOUNCE_MS);
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectionKey]);
+  }, [selectionKey, planVersion]);
 
   const planBySourceKey = useMemo(() => {
     const map = new Map<string, ClientSourcePlan>();
@@ -727,6 +732,8 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
                         ? manifestBySourceId.get(source.persisted.sourceId)
                         : undefined
                     }
+                    agentId={existing?.agent.id}
+                    onPrepared={() => setPlanVersion((v) => v + 1)}
                     onChange={(patch) => updateSelection(source, patch)}
                   />
                 </li>
