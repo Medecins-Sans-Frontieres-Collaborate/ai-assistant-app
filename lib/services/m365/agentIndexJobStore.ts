@@ -41,6 +41,11 @@ export interface IndexJobReadResult {
   etag: string;
 }
 
+export interface IndexJobMutateResult extends IndexJobReadResult {
+  /** False when the mutator declined (returned null) — nothing was written. */
+  changed: boolean;
+}
+
 export async function readIndexJob(
   storage: BlobStorage,
   agentId: string,
@@ -91,15 +96,15 @@ export async function mutateIndexJob(
   storage: BlobStorage,
   agentId: string,
   mutate: (job: M365IndexJob) => M365IndexJob | null,
-): Promise<IndexJobReadResult | null> {
+): Promise<IndexJobMutateResult | null> {
   for (let attempt = 0; attempt <= CAS_RETRIES; attempt++) {
     const current = await readIndexJob(storage, agentId);
     if (!current) return null;
     const next = mutate(current.job);
-    if (next === null) return current;
+    if (next === null) return { ...current, changed: false };
     try {
       const etag = await writeIndexJob(storage, next, current.etag);
-      return { job: next, etag };
+      return { job: next, etag, changed: true };
     } catch (error) {
       if (!(error instanceof AgentAccessConflictError)) throw error;
       // Another writer won; re-read and re-apply.

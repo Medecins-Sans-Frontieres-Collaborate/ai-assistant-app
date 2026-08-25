@@ -314,7 +314,8 @@ export async function stepIndexJob(
 
   let job = current.job;
   try {
-    while (Date.now() - startedAt < budgetMs) {
+    // At least one batch per step, then as many as the budget allows.
+    do {
       // The mutator may run more than once (CAS retry); the claims from
       // the invocation whose write landed are the ones this step owns.
       let mine: ClaimedItem[] = [];
@@ -375,7 +376,7 @@ export async function stepIndexJob(
       if (!recorded) throw new IndexJobMismatchError();
       job = recorded.job;
       if (isTerminalIndexJob(job)) return summarizeIndexJob(job);
-    }
+    } while (Date.now() - startedAt < budgetMs);
   } catch (error) {
     if (error instanceof IndexJobMismatchError) throw error;
     // Session-level Graph failures (token gone, consent revoked) and
@@ -415,7 +416,7 @@ export async function cancelIndexJob(
       finishedAt: now(),
     };
   });
-  if (!result) return null;
+  if (!result || !result.changed) return null;
   await markAgentSources(storage, agentId, 'pending', 'indexing');
   return summarizeIndexJob(result.job);
 }
