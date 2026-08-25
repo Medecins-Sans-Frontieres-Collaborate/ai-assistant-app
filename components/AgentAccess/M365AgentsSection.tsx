@@ -4,12 +4,13 @@ import {
   IconBrandOnedrive,
   IconFile,
   IconFolder,
+  IconPlayerPause,
   IconPlus,
   IconRefresh,
   IconTrash,
   IconX,
 } from '@tabler/icons-react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -43,6 +44,7 @@ import {
   AdminStoredRule,
   CLIENT_M365_AGENT_SOURCE,
   ClientAgentPlan,
+  ClientIndexJobSummary,
   ClientSourcePlan,
   clientCanonicalAgentKey,
 } from './types';
@@ -61,6 +63,31 @@ const DEFAULT_MAX_SOURCES = 50;
 const DEFAULT_MAX_BYTES = 512 * 1024 * 1024;
 /** Selection edits re-plan after this pause (metadata calls only). */
 const PLAN_DEBOUNCE_MS = 400;
+/**
+ * When a step returns without progress (another admin's browser holds
+ * the in-flight claims), wait this long before stepping again.
+ */
+const STEP_IDLE_RETRY_MS = 3000;
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function readJobResponse(
+  response: Response,
+): Promise<ClientIndexJobSummary> {
+  const body = await response.json().catch(() => null);
+  if (!response.ok) {
+    const error = new Error(
+      body?.error || `Indexing request failed (${response.status})`,
+    ) as Error & { code?: string };
+    error.code = body?.code;
+    throw error;
+  }
+  const job = unwrapApiData<{ job: ClientIndexJobSummary | null }>(body)?.job;
+  if (!job) throw new Error('No job in response');
+  return job;
+}
 
 function isServerKnownModelId(modelId: string): boolean {
   return Object.prototype.hasOwnProperty.call(OpenAIModels, modelId);
@@ -743,52 +770,144 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
     [rules],
   );
 
-  const indexMutation = useMutation({
-    mutationFn: async (id: string) => {
+  /**
+   * Live job view per agent: seeded from the listing, then updated by the
+   * step loop this browser drives (design §4 — the admin's browser is the
+   * job runner because Graph tokens exist only in their session).
+   */
+  const [jobs, setJobs] = useState<Record<string, ClientIndexJobSummary>>({});
+  const [drivingIds, setDrivingIds] = useState<Set<string>>(new Set());
+  const drivingRef = useRef(new Set<string>());
+  const unmountedRef = useRef(false);
+  useEffect(() => {
+    unmountedRef.current = false;
+    return () => {
+      unmountedRef.current = true;
+    };
+  }, []);
+  useEffect(() => {
+    const listed = agentsQuery.data?.jobs;
+    if (!listed) return;
+    setJobs((prev) => {
+      const next = { ...prev };
+      for (const [agentId, job] of Object.entries(listed)) {
+        const local = prev[agentId];
+        if (!local || local.updatedAt <= job.updatedAt) next[agentId] = job;
+      }
+      return next;
+    });
+  }, [agentsQuery.data?.jobs]);
+
+  const setDriving = (agentId: string, on: boolean) => {
+    if (on) drivingRef.current.add(agentId);
+    else drivingRef.current.delete(agentId);
+    setDrivingIds(new Set(drivingRef.current));
+  };
+
+  const reportTerminal = (job: ClientIndexJobSummary) => {
+    if (job.status === 'succeeded') {
+      const fn = job.failed + job.missing > 0 ? toast.error : toast.success;
+      fn(
+        t('m365AgentIndexDone', {
+          indexed: job.indexed,
+          failed: job.failed + job.missing,
+          noText: job.noText,
+        }),
+      );
+    } else if (job.status === 'failed') {
+      toast.error(t('m365AgentIndexJobFailed', { error: job.error ?? '' }));
+    } else if (job.status === 'cancelled') {
+      toast(t('m365AgentIndexCancelled'));
+    }
+  };
+
+  const stepUntilDone = async (agentId: string, jobId: string) => {
+    if (drivingRef.current.has(agentId)) return;
+    setDriving(agentId, true);
+    try {
+      let lastDone = -1;
+      for (;;) {
+        if (unmountedRef.current) return;
+        const response = await fetch(
+          '/api/agent-access/m365-agents/index/step',
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: agentId, jobId }),
+          },
+        );
+        const job = await readJobResponse(response);
+        setJobs((prev) => ({ ...prev, [agentId]: job }));
+        if (job.status !== 'running') {
+          reportTerminal(job);
+          invalidate();
+          return;
+        }
+        if (job.done === lastDone) await sleep(STEP_IDLE_RETRY_MS);
+        lastDone = job.done;
+      }
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : t('m365AgentIndexFailed'),
+      );
+      invalidate();
+    } finally {
+      setDriving(agentId, false);
+    }
+  };
+
+  const startIndex = async (agentId: string) => {
+    try {
       const response = await fetch('/api/agent-access/m365-agents/index', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id }),
+        body: JSON.stringify({ id: agentId }),
       });
-      if (!response.ok) {
-        const body = await response.json().catch(() => null);
-        throw new Error(body?.error || `Indexing failed (${response.status})`);
-      }
-      return response.json() as Promise<{
-        data?: {
-          outcomes?: {
-            sourceId: string;
-            status: string;
-            indexedChunks: number;
-            error?: string;
-          }[];
-        };
-      }>;
-    },
-    onSuccess: (result) => {
-      // The route returns 200 for the RUN completing — individual sources
-      // can still have failed. A success toast on a failed run is a lie
-      // the admin acts on; report per-source outcomes honestly.
-      const outcomes = result.data?.outcomes ?? [];
-      const failed = outcomes.filter((o) => o.status !== 'indexed');
-      if (failed.length > 0) {
-        toast.error(
-          t('m365AgentIndexPartialFailure', {
-            failed: failed.length,
-            count: outcomes.length,
-            error: failed[0].error ?? '',
-          }),
+      let job: ClientIndexJobSummary;
+      try {
+        job = await readJobResponse(response);
+      } catch (error) {
+        if ((error as { code?: string }).code !== 'M365_INDEX_JOB_ACTIVE') {
+          throw error;
+        }
+        // Someone else's job is live — join it instead of failing.
+        job = await readJobResponse(
+          await fetch(
+            `/api/agent-access/m365-agents/index/status?id=${encodeURIComponent(agentId)}`,
+          ),
         );
-      } else {
-        toast.success(t('m365AgentIndexSuccess'));
       }
+      setJobs((prev) => ({ ...prev, [agentId]: job }));
       invalidate();
-    },
-    onError: (error: Error) => {
-      toast.error(error.message || t('m365AgentIndexFailed'));
+      if (job.status === 'running') await stepUntilDone(agentId, job.jobId);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : t('m365AgentIndexFailed'),
+      );
       invalidate();
-    },
-  });
+    }
+  };
+
+  const cancelIndex = async (agentId: string, jobId: string) => {
+    try {
+      const response = await fetch(
+        '/api/agent-access/m365-agents/index/cancel',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: agentId, jobId }),
+        },
+      );
+      const job = await readJobResponse(response);
+      setJobs((prev) => ({ ...prev, [agentId]: job }));
+      reportTerminal(job);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : t('m365AgentIndexFailed'),
+      );
+    }
+    invalidate();
+  };
 
   const handleDelete = async (entry: AdminStoredM365Agent) => {
     setConfirmDeleteId(null);
@@ -882,6 +1001,9 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
               (s) => s.status === 'indexed' && (s.indexedChunks ?? 0) === 0,
             ).length;
             const firstSourceError = sources.find((s) => s.error)?.error;
+            const job = jobs[entry.agent.id];
+            const jobActive = job?.status === 'running';
+            const driving = drivingIds.has(entry.agent.id);
             // Seventh-pass per-document counts (absent on records that were
             // never indexed under the planner).
             const docCounts = sources.reduce(
@@ -943,6 +1065,46 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                         })}
                       </p>
                     )}
+                    {jobActive && (
+                      <p
+                        className={`flex items-center gap-1 text-xs font-medium ${
+                          job.stale && !driving
+                            ? 'text-amber-700 dark:text-amber-400'
+                            : 'text-blue-700 dark:text-blue-400'
+                        }`}
+                      >
+                        {driving && (
+                          <IconRefresh size={12} className="animate-spin" />
+                        )}
+                        {job.stale && !driving
+                          ? t('m365AgentIndexInterrupted', {
+                              done: job.done,
+                              total: job.total,
+                            })
+                          : t('m365AgentIndexProgress', {
+                              done: job.done,
+                              total: job.total,
+                            })}
+                        {!driving && (
+                          <span className="font-normal text-gray-500 dark:text-gray-400">
+                            ·{' '}
+                            {t('m365AgentIndexStartedBy', {
+                              name: job.startedBy,
+                            })}
+                          </span>
+                        )}
+                      </p>
+                    )}
+                    {job?.status === 'failed' && (
+                      <p
+                        className="truncate text-xs text-red-700 dark:text-red-400"
+                        title={job.error}
+                      >
+                        {t('m365AgentIndexJobFailed', {
+                          error: job.error ?? '',
+                        })}
+                      </p>
+                    )}
                     {docCounts.present && (
                       <p className="text-xs text-gray-500 dark:text-gray-400">
                         {t('m365AgentDocCounts', {
@@ -986,19 +1148,43 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                   >
                     {isRestricted ? t('accessRestricted') : t('accessEveryone')}
                   </span>
-                  <button
-                    type="button"
-                    disabled={indexMutation.isPending}
-                    onClick={() => indexMutation.mutate(entry.agent.id)}
-                    className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
-                    title={t('m365AgentIndexHint')}
-                  >
-                    <IconRefresh
-                      size={14}
-                      className={indexMutation.isPending ? 'animate-spin' : ''}
-                    />
-                    {t('m365AgentIndex')}
-                  </button>
+                  {jobActive ? (
+                    <>
+                      {(!driving || job?.stale) && (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            void stepUntilDone(entry.agent.id, job!.jobId)
+                          }
+                          className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                          title={t('m365AgentIndexResumeHint')}
+                        >
+                          <IconRefresh size={14} />
+                          {t('m365AgentIndexResume')}
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          void cancelIndex(entry.agent.id, job!.jobId)
+                        }
+                        className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-red-700 hover:bg-red-50 dark:border-gray-700 dark:text-red-400 dark:hover:bg-red-900/20"
+                      >
+                        <IconPlayerPause size={14} />
+                        {t('m365AgentIndexCancel')}
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => void startIndex(entry.agent.id)}
+                      className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                      title={t('m365AgentIndexHint')}
+                    >
+                      <IconRefresh size={14} />
+                      {t('m365AgentIndex')}
+                    </button>
+                  )}
                   <button
                     type="button"
                     onClick={() =>

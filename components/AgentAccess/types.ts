@@ -116,6 +116,28 @@ export interface AdminM365AgentsResponse {
   maxDocuments?: number;
   /** Server's env-configured per-agent byte budget (M365_AGENT_MAX_SOURCE_MB). */
   maxBytes?: number;
+  /** Latest index job per agent id (seventh pass, phase 2). */
+  jobs?: Record<string, ClientIndexJobSummary>;
+}
+
+/** Mirror of IndexJobSummary (agentIndexJobStore) for the admin client. */
+export interface ClientIndexJobSummary {
+  jobId: string;
+  agentId: string;
+  status: 'running' | 'succeeded' | 'failed' | 'cancelled';
+  /** Running but without a heartbeat — resumable by any admin. */
+  stale: boolean;
+  startedBy: string;
+  startedAt: string;
+  updatedAt: string;
+  finishedAt?: string;
+  total: number;
+  done: number;
+  indexed: number;
+  failed: number;
+  noText: number;
+  missing: number;
+  error?: string;
 }
 
 /** One source's plan as returned by POST /api/agent-access/m365-agents/plan. */
