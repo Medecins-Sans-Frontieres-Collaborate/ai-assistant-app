@@ -186,6 +186,11 @@ const connectorWriteCalls: {
   url: string;
 }[] = [];
 
+let configPutCalls: {
+  headers: Record<string, string>;
+  body: { localAdmins: { email: string; agentKeys: string[] }[] };
+}[] = [];
+
 const fetchMock = vi.fn(async (input: string | URL, init?: RequestInit) => {
   const url = String(input);
   const method = init?.method ?? 'GET';
@@ -290,6 +295,13 @@ const fetchMock = vi.fn(async (input: string | URL, init?: RequestInit) => {
     });
   }
   if (url.startsWith('/api/agent-access/config')) {
+    if (method === 'PUT') {
+      configPutCalls.push({
+        headers: (init?.headers ?? {}) as Record<string, string>,
+        body: JSON.parse(String(init?.body)),
+      });
+      return jsonResponse(200, { success: true, data: { etag: '"cfg-2"' } });
+    }
     return jsonResponse(200, { success: true, data: configResponse });
   }
   if (url.startsWith('/api/agent-access/connectors')) {
@@ -309,6 +321,39 @@ const fetchMock = vi.fn(async (input: string | URL, init?: RequestInit) => {
         connectorsUnavailable,
         secretSealingAvailable,
         fetchedAt: 1752700000000,
+      },
+    });
+  }
+  if (url.startsWith('/api/agent-access/m365-agents')) {
+    return jsonResponse(200, {
+      success: true,
+      data: {
+        m365Agents: [
+          {
+            canonicalKey: 'm365-agent::m365-0123456789ab',
+            etag: '"etag-m365-1"',
+            agent: {
+              version: 1,
+              id: 'm365-0123456789ab',
+              name: 'HR Handbook (M365)',
+              description: 'Answers from the HR SharePoint',
+              systemPrompt: '',
+              chatModelId: null,
+              embeddingModelId: 'text-embedding',
+              ragConfig: { topK: 10 },
+              sources: [],
+              createdBy: 'admin@example.org',
+              createdAt: '2026-07-29T00:00:00.000Z',
+              updatedBy: 'admin@example.org',
+              updatedAt: '2026-07-29T00:00:00.000Z',
+            },
+          },
+        ],
+        m365AgentsUnavailable: false,
+        fetchedAt: 1752700000000,
+        maxDocuments: 50,
+        maxBytes: 512 * 1024 * 1024,
+        jobs: {},
       },
     });
   }
@@ -420,6 +465,7 @@ describe('AgentAccessPanel', () => {
     secretSealingAvailable = true;
     connectorWriteCalls.length = 0;
     fetchMock.mockClear();
+    configPutCalls = [];
     vi.mocked(toast.success).mockClear();
     vi.mocked(toast.error).mockClear();
     vi.stubGlobal('fetch', fetchMock);
@@ -951,6 +997,91 @@ describe('AgentAccessPanel', () => {
     expect(
       within(promptLabel as HTMLElement).getByRole('checkbox'),
     ).not.toBeChecked();
+  });
+
+  it('shows each agent’s canonical key with a copy action', async () => {
+    agentsResponse = [...discoveredAgents, promptAgentDiscoveryEntry];
+    promptAgentsResponse = [storedPromptAgent];
+    renderPanel('agents');
+    const row = (await screen.findByText('Travel Advisor')).closest('li');
+    expect(
+      within(row as HTMLElement).getByText(storedPromptAgent.canonicalKey),
+    ).toBeInTheDocument();
+    expect(
+      within(row as HTMLElement).getByRole('button', { name: 'Copy key' }),
+    ).toBeInTheDocument();
+  });
+
+  it('lets an admin hide an agent from their own list and reveal it again', async () => {
+    useSettingsStore.setState({ hiddenAdminAgentKeys: [] });
+    agentsResponse = [...discoveredAgents, promptAgentDiscoveryEntry];
+    promptAgentsResponse = [storedPromptAgent];
+    renderPanel('agents');
+    const row = (await screen.findByText('Travel Advisor')).closest('li');
+    expect(row).not.toBeNull();
+
+    fireEvent.click(
+      within(row as HTMLElement).getByRole('button', { name: 'Hide' }),
+    );
+    expect(screen.queryByText('Travel Advisor')).not.toBeInTheDocument();
+    expect(useSettingsStore.getState().hiddenAdminAgentKeys).toEqual([
+      storedPromptAgent.canonicalKey,
+    ]);
+    expect(screen.getByText('1 hidden agents')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Show' }));
+    const revealed = screen.getByText('Travel Advisor').closest('li');
+    expect(
+      within(revealed as HTMLElement).getByText('Hidden'),
+    ).toBeInTheDocument();
+    fireEvent.click(
+      within(revealed as HTMLElement).getByRole('button', { name: 'Unhide' }),
+    );
+    expect(useSettingsStore.getState().hiddenAdminAgentKeys).toEqual([]);
+    expect(screen.queryByText('Hidden')).not.toBeInTheDocument();
+  });
+
+  it('offers M365 agents and knowledge agents for delegation, grouped', async () => {
+    renderPanel('localAdmins');
+
+    expect(await screen.findByText('Microsoft 365 agents')).toBeInTheDocument();
+    expect(screen.getByText('Knowledge agents')).toBeInTheDocument();
+
+    const m365Label = screen.getByText('HR Handbook (M365)').closest('label');
+    expect(m365Label).not.toBeNull();
+    const m365Checkbox = within(m365Label as HTMLElement).getByRole('checkbox');
+    expect(m365Checkbox).not.toBeChecked();
+
+    const orgLabel = screen.getByText('MSF Communications').closest('label');
+    expect(orgLabel).not.toBeNull();
+    expect(
+      within(orgLabel as HTMLElement).getByRole('checkbox'),
+    ).not.toBeChecked();
+
+    // Ticking one updates the summary line and enables Save.
+    fireEvent.click(m365Checkbox);
+    expect(m365Checkbox).toBeChecked();
+    expect(
+      screen.getByText(/1 delegated: HR Handbook \(M365\)/),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled();
+  });
+
+  it('saves M365 and knowledge agent keys into the delegation config', async () => {
+    renderPanel('localAdmins');
+    const m365Label = (await screen.findByText('HR Handbook (M365)')).closest(
+      'label',
+    );
+    fireEvent.click(within(m365Label as HTMLElement).getByRole('checkbox'));
+    const orgLabel = screen.getByText('MSF Communications').closest('label');
+    fireEvent.click(within(orgLabel as HTMLElement).getByRole('checkbox'));
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() => expect(configPutCalls.length).toBe(1));
+    expect(configPutCalls[0].body.localAdmins[0].agentKeys).toEqual([
+      'm365-agent::m365-0123456789ab',
+      'org-agent::msf_communications',
+    ]);
   });
 
   describe('connectors tab', () => {

@@ -111,7 +111,7 @@ export class M365AgentEnricher extends BasePipelineStage {
             query,
             agent,
             accessibleSourceIds,
-            context.m365AccessibleFolderItemIds ?? [],
+            context.m365AccessibleFolderItems ?? [],
           )
         : [];
 

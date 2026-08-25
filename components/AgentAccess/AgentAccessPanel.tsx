@@ -11,10 +11,17 @@ import {
   unwrapApiData,
   useAgentAccessAdmin,
 } from '@/client/hooks/settings/useAgentAccessAdmin';
+import { useHiddenAdminAgents } from '@/client/hooks/useHiddenAdminAgents';
 
+import { CanonicalKeyChip } from './CanonicalKeyChip';
 import { CatalogOauthSection } from './CatalogOauthSection';
 import { ConnectorEditor } from './ConnectorEditor';
 import { GuideEditor } from './GuideEditor';
+import {
+  HiddenBadge,
+  HideAgentButton,
+  ShowHiddenToggle,
+} from './HiddenAgentsControls';
 import { LocalAdminsSection } from './LocalAdminsSection';
 import { M365AgentsSection } from './M365AgentsSection';
 import { OrgAgentsSection } from './OrgAgentsSection';
@@ -306,6 +313,11 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
    * listing IS the discovery for connectors; there is no second source that
    * could know about one.
    */
+  // Per-admin hidden agents (presentational only — see the hook).
+  const hiddenAgents = useHiddenAdminAgents();
+  const { visible: visibleRows, hiddenCount: hiddenRowCount } =
+    hiddenAgents.partition(rows, (row) => row.canonicalKey);
+
   const connectorRows = useMemo(() => {
     const rulesByKey = new Map(
       (rulesQuery.data?.rules ?? []).map((r) => [r.canonicalKey, r]),
@@ -1381,17 +1393,23 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
               </div>
             )}
 
-            {rows.length === 0 ? (
+            <ShowHiddenToggle
+              hiddenCount={hiddenRowCount}
+              showHidden={hiddenAgents.showHidden}
+              onToggle={hiddenAgents.setShowHidden}
+            />
+            {visibleRows.length === 0 ? (
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                {t('noAgents')}
+                {rows.length === 0 ? t('noAgents') : t('allAgentsHidden')}
               </p>
             ) : (
               <ul className="space-y-2">
-                {rows.map((row) => {
+                {visibleRows.map((row) => {
                   const isRestricted =
                     row.stored?.rule.access.type === 'restricted';
                   const isPromptAgent =
                     row.source === CLIENT_PROMPT_AGENT_SOURCE;
+                  const isHiddenRow = hiddenAgents.isHidden(row.canonicalKey);
                   return (
                     <li
                       key={row.canonicalKey}
@@ -1423,6 +1441,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                           >
                             {t('sourceLabel')}: {row.source}
                           </p>
+                          <CanonicalKeyChip canonicalKey={row.canonicalKey} />
                         </div>
                         <span
                           className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
@@ -1435,6 +1454,12 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                             ? t('accessRestricted')
                             : t('accessEveryone')}
                         </span>
+                        {isHiddenRow && <HiddenBadge />}
+                        <HideAgentButton
+                          hidden={isHiddenRow}
+                          onHide={() => hiddenAgents.hide(row.canonicalKey)}
+                          onUnhide={() => hiddenAgents.unhide(row.canonicalKey)}
+                        />
                         <button
                           type="button"
                           className="shrink-0 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800"

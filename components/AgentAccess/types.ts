@@ -3,6 +3,9 @@ import type {
   AgentAccessRule,
   Guide,
   M365Agent,
+  M365ManifestFolder,
+  M365ManifestItem,
+  M365SourceCounts,
   MapDataset,
   MapDatasetMeta,
   OrgRagAgent,
@@ -111,6 +114,55 @@ export interface AdminM365AgentsResponse {
   fetchedAt?: number | null;
   /** Server's env-configured per-agent document cap (M365_AGENT_MAX_DOCUMENTS). */
   maxDocuments?: number;
+  /** Server's env-configured per-agent byte budget (M365_AGENT_MAX_SOURCE_MB). */
+  maxBytes?: number;
+  /** Latest index job per agent id (seventh pass, phase 2). */
+  jobs?: Record<string, ClientIndexJobSummary>;
+}
+
+/** Mirror of IndexJobSummary (agentIndexJobStore) for the admin client. */
+export interface ClientIndexJobSummary {
+  jobId: string;
+  agentId: string;
+  status: 'running' | 'succeeded' | 'failed' | 'cancelled';
+  mode: 'full' | 'refresh';
+  /** Refresh jobs: what changed since the last manifest. */
+  changes?: ClientSourceChanges;
+  /** Running but without a heartbeat — resumable by any admin. */
+  stale: boolean;
+  startedBy: string;
+  startedAt: string;
+  updatedAt: string;
+  finishedAt?: string;
+  total: number;
+  done: number;
+  indexed: number;
+  failed: number;
+  noText: number;
+  missing: number;
+  error?: string;
+}
+
+/** One source's plan as returned by POST /api/agent-access/m365-agents/plan. */
+export interface ClientSourcePlan {
+  driveId: string;
+  itemId: string;
+  missing: boolean;
+  truncated: boolean;
+  deltaLink?: string;
+  folders: M365ManifestFolder[];
+  items: M365ManifestItem[];
+  counts: M365SourceCounts;
+}
+
+export interface ClientAgentPlan {
+  plans: ClientSourcePlan[];
+  totalDocuments: number;
+  totalBytes: number;
+  maxDocuments: number;
+  maxBytes: number;
+  overDocumentCap: boolean;
+  overByteCap: boolean;
 }
 
 /**
@@ -324,4 +376,26 @@ export function clientCanonicalAgentKey(
   agentName: string,
 ): string {
   return `${source.trim().toLowerCase()}::${agentName.trim().toLowerCase()}`;
+}
+
+export interface ClientSourceChanges {
+  added: number;
+  modified: number;
+  removed: number;
+  unchanged: number;
+}
+
+/** GET /api/agent-access/m365-agents/changes response. */
+export interface ClientRefreshPreview {
+  preview: {
+    sources: {
+      sourceId: string;
+      changes: ClientSourceChanges;
+      incremental: boolean;
+      missing: boolean;
+      error?: string;
+    }[];
+    changes: ClientSourceChanges;
+  } | null;
+  lastIndexedAt: string | null;
 }

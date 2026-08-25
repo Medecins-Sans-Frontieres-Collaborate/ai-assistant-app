@@ -133,6 +133,22 @@ const serverEnvSchema = z.object({
   // time and per-user probe latency, not probe fan-out. 200 is a hard
   // sanity bound — the synchronous index route has a 300s budget.
   M365_AGENT_MAX_DOCUMENTS: z.coerce.number().int().min(1).max(200).default(50),
+  /**
+   * Sum of the sizes of an M365 agent's indexable files (MB). Known from
+   * Graph metadata, so the plan view can refuse an oversized tree before a
+   * single download.
+   */
+  M365_AGENT_MAX_SOURCE_MB: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(4096)
+    .default(512),
+  /**
+   * Vision-capable chat deployment used to describe images and OCR scanned
+   * PDFs when an admin prepares such a file for an M365 agent (phase 4).
+   */
+  M365_AGENT_VISION_MODEL: z.string().default('gpt-5-mini'),
 
   // Web search backend:
   //  - 'news': GDELT + Google News RSS queried IN PARALLEL and merged —

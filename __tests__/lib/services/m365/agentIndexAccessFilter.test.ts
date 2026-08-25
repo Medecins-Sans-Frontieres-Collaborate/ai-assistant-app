@@ -66,12 +66,40 @@ describe('buildM365AccessFilter', () => {
     const filter = buildM365AccessFilter(
       agent,
       ['src-folder'],
-      ['childA', 'childB'],
+      [
+        { driveId: 'drive1', itemId: 'childA' },
+        { driveId: 'drive1', itemId: 'childB' },
+      ],
     );
     expect(filter).toBe(
-      "agent_id eq 'm365-abcdefabcdef' and (search.in(item_id, 'childA,childB', ','))",
+      "agent_id eq 'm365-abcdefabcdef' and ((drive_id eq 'drive1' and search.in(item_id, 'childA,childB', ',')) or (drive_id eq null and search.in(item_id, 'childA,childB', ',')))",
     );
     expect(filter).not.toContain('src-folder');
+  });
+
+  it('keeps same-named items from different drives apart', () => {
+    const agent = makeAgent([
+      { sourceId: 'src-a', kind: 'folder' },
+      { sourceId: 'src-b', kind: 'folder' },
+    ]);
+    const filter = buildM365AccessFilter(
+      agent,
+      ['src-a', 'src-b'],
+      [
+        { driveId: 'driveA', itemId: 'shared' },
+        { driveId: 'driveB', itemId: 'other' },
+      ],
+    );
+    // A chunk of item "shared" in driveB is NOT matched by driveA's clause.
+    expect(filter).toContain(
+      "(drive_id eq 'driveA' and search.in(item_id, 'shared', ','))",
+    );
+    expect(filter).toContain(
+      "(drive_id eq 'driveB' and search.in(item_id, 'other', ','))",
+    );
+    expect(filter).not.toContain(
+      "drive_id eq 'driveB' and search.in(item_id, 'shared",
+    );
   });
 
   it('returns null for an accessible folder with no visible children', () => {
@@ -85,9 +113,13 @@ describe('buildM365AccessFilter', () => {
       { sourceId: 'src-folder', kind: 'folder' },
     ]);
     expect(
-      buildM365AccessFilter(agent, ['src-file', 'src-folder'], ['childA']),
+      buildM365AccessFilter(
+        agent,
+        ['src-file', 'src-folder'],
+        [{ driveId: 'drive1', itemId: 'childA' }],
+      ),
     ).toBe(
-      "agent_id eq 'm365-abcdefabcdef' and (search.in(source_id, 'src-file', ',') or search.in(item_id, 'childA', ','))",
+      "agent_id eq 'm365-abcdefabcdef' and (search.in(source_id, 'src-file', ',') or (drive_id eq 'drive1' and search.in(item_id, 'childA', ',')) or (drive_id eq null and search.in(item_id, 'childA', ',')))",
     );
   });
 
@@ -99,10 +131,10 @@ describe('buildM365AccessFilter', () => {
     const filter = buildM365AccessFilter(
       agent,
       ['src-folder'],
-      ["child'1!AB,CD"],
+      [{ driveId: "b!dr'ive,1", itemId: "child'1!AB,CD" }],
     );
     expect(filter).toBe(
-      "agent_id eq 'm365-x'' or agent_id ne ''' and (search.in(item_id, 'child1ABCD', ','))",
+      "agent_id eq 'm365-x'' or agent_id ne ''' and ((drive_id eq 'bdrive1' and search.in(item_id, 'child1ABCD', ',')) or (drive_id eq null and search.in(item_id, 'child1ABCD', ',')))",
     );
   });
 });

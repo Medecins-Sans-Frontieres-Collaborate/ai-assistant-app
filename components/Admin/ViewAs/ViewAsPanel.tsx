@@ -31,6 +31,7 @@ import {
   ADMIN_LABEL,
   ADMIN_MUTED,
 } from '@/components/Admin/adminClasses';
+import { AgentKeyPicker } from '@/components/AgentAccess/AgentKeyPicker';
 
 export interface ViewAsOffice {
   id: string;
@@ -88,12 +89,14 @@ function formFromOverrides(overrides: ViewAsOverrides): FormState {
   };
 }
 
+const splitKeys = (raw: string) =>
+  raw
+    .split(/[\n,]/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+
 function overridesFromForm(form: FormState): ViewAsOverrides {
-  const splitList = (raw: string) =>
-    raw
-      .split(/[\n,]/)
-      .map((s) => s.trim())
-      .filter((s) => s.length > 0);
+  const splitList = splitKeys;
   return normalizeViewAsOverrides({
     adminRole: form.adminRole,
     localAdminKeys: splitList(form.localAdminKeys),
@@ -284,12 +287,11 @@ export const ViewAsPanel: FC<ViewAsPanelProps> = ({ offices }) => {
             <label htmlFor="view-as-local-keys" className={ADMIN_LABEL}>
               {t('role.localKeysLabel')}
             </label>
-            <input
+            <AgentKeyPicker
               id="view-as-local-keys"
-              type="text"
-              className={`${ADMIN_FIELD} w-full`}
-              value={form.localAdminKeys}
-              onChange={(e) => set('localAdminKeys', e.target.value)}
+              inputClassName={`${ADMIN_FIELD} w-full`}
+              value={splitKeys(form.localAdminKeys)}
+              onChange={(keys) => set('localAdminKeys', keys.join(', '))}
             />
             <p className={ADMIN_HINT}>{t('role.localKeysHint')}</p>
           </div>

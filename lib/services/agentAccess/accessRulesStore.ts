@@ -38,6 +38,8 @@ import {
   M365Agent,
   M365AgentHistoryEntry,
   M365AgentHistoryEntrySchema,
+  M365AgentManifest,
+  M365AgentManifestSchema,
   M365AgentSchema,
   M365_AGENT_SOURCE,
   MAP_DATASET_SOURCE,
@@ -69,6 +71,7 @@ import {
   historyBlobPath,
   historyListPrefix,
   m365AgentBlobPath,
+  m365AgentManifestBlobPath,
   mapDatasetDataBlobPath,
   mapDatasetMeta,
   mapDatasetMetaBlobPath,
@@ -79,7 +82,10 @@ import {
 
 import { withAzureRetry } from '@/lib/utils/server/azure/retry';
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
-import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+import {
+  sanitizeForLog,
+  zodIssueSummary,
+} from '@/lib/utils/server/log/logSanitization';
 
 /**
  * Blob persistence for agent access rules, config, and history.
@@ -676,6 +682,63 @@ export function deleteM365Agent(
   ifMatchEtag: string,
 ): Promise<boolean> {
   return m365AgentEntity.remove(storage, id, ifMatchEtag);
+}
+
+/**
+ * Reads an agent's source manifest (per-item plan + index outcomes). Null
+ * when the agent was never indexed under the seventh-pass pipeline. A
+ * malformed manifest reads as null too — it is derived data the next index
+ * run rewrites, so degrading to "no manifest" is safe.
+ */
+export async function readM365AgentManifest(
+  storage: BlobStorage,
+  id: string,
+): Promise<M365AgentManifest | null> {
+  const result = await downloadBlob(
+    storage,
+    m365AgentManifestBlobPath(id),
+    'agentAccess.readM365AgentManifest',
+  );
+  if (result === null) return null;
+  try {
+    const parsed = M365AgentManifestSchema.safeParse(
+      JSON.parse(result.buffer.toString('utf8')),
+    );
+    if (parsed.success) return parsed.data;
+    console.error(
+      `[agent-access] ignoring malformed m365-agent manifest for ${sanitizeForLog(id)}: ${zodIssueSummary(parsed.error)}`,
+    );
+  } catch (error) {
+    console.error(
+      `[agent-access] ignoring unreadable m365-agent manifest for ${sanitizeForLog(id)}: ${error instanceof Error ? error.name : 'unknown error'}`,
+    );
+  }
+  return null;
+}
+
+/** Last-writer-wins: the index route is the only writer. */
+export async function writeM365AgentManifest(
+  storage: BlobStorage,
+  manifest: M365AgentManifest,
+): Promise<void> {
+  const parsed = M365AgentManifestSchema.parse(manifest);
+  await uploadJson(
+    storage,
+    m365AgentManifestBlobPath(parsed.agentId),
+    parsed,
+    null,
+    'agentAccess.writeM365AgentManifest',
+  );
+}
+
+export async function deleteM365AgentManifest(
+  storage: BlobStorage,
+  id: string,
+): Promise<void> {
+  await withAzureRetry(
+    () => storage.deleteIfExists(m365AgentManifestBlobPath(id)),
+    { label: 'agentAccess.deleteM365AgentManifest' },
+  );
 }
 
 export function writeM365AgentHistoryEntry(

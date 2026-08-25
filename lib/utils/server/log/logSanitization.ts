@@ -81,3 +81,19 @@ export function perfLog(label: string, startTime: number, extra?: string) {
   const ms = (performance.now() - startTime).toFixed(1);
   console.log(`[Perf] ${label}: ${ms}ms${extra ? ` ${extra}` : ''}`);
 }
+
+/**
+ * Schema-only description of a zod failure for logs: issue paths and
+ * codes, never the received values (which came from stored/user data).
+ */
+export function zodIssueSummary(error: {
+  issues: readonly { path: readonly PropertyKey[]; code: string }[];
+}): string {
+  return error.issues
+    .slice(0, 5)
+    .map(
+      (issue) =>
+        `${issue.path.map((p) => String(p)).join('.') || '<root>'}:${issue.code}`,
+    )
+    .join(', ');
+}

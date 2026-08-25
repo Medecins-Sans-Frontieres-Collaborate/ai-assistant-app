@@ -325,6 +325,13 @@ interface SettingsStore {
    */
   hiddenModelIds: string[];
   /**
+   * Canonical agent keys (`<source>::<id>`) an admin hid from THEIR OWN
+   * admin lists (Agents tab, Microsoft 365 agents, Knowledge agents). A
+   * per-browser preference — it never affects what users see or what other
+   * admins see; "Show hidden" reveals and unhides.
+   */
+  hiddenAdminAgentKeys: string[];
+  /**
    * Model IDs the user has starred (same key space as hiddenModelIds: base
    * models and agents alike). Starred models surface first in the picker's
    * Favorites section. Mutually exclusive with hiddenModelIds — the
@@ -546,6 +553,8 @@ interface SettingsStore {
   // Hidden Model/Agent Actions
   hideModel: (id: string) => void;
   unhideModel: (id: string) => void;
+  hideAdminAgent: (canonicalKey: string) => void;
+  unhideAdminAgent: (canonicalKey: string) => void;
 
   // Starred Model/Agent Actions
   starModel: (id: string) => void;
@@ -840,6 +849,7 @@ export const useSettingsStore = create<SettingsStore>()(
       memoriesFlagEnabled: false,
       memoryCapturePaused: false,
       hiddenModelIds: [],
+      hiddenAdminAgentKeys: [],
       starredModelIds: [],
       tokenUsageStats: {},
       tokenUsageFirstTrackedAt: null,
@@ -1282,6 +1292,25 @@ export const useSettingsStore = create<SettingsStore>()(
           hiddenModelIds: state.hiddenModelIds.filter((m) => m !== id),
         })),
 
+      hideAdminAgent: (canonicalKey) =>
+        set((state) =>
+          state.hiddenAdminAgentKeys.includes(canonicalKey)
+            ? state
+            : {
+                hiddenAdminAgentKeys: [
+                  ...state.hiddenAdminAgentKeys,
+                  canonicalKey,
+                ],
+              },
+        ),
+
+      unhideAdminAgent: (canonicalKey) =>
+        set((state) => ({
+          hiddenAdminAgentKeys: state.hiddenAdminAgentKeys.filter(
+            (k) => k !== canonicalKey,
+          ),
+        })),
+
       // Starred Model/Agent Actions. Starring unhides (see hideModel).
       starModel: (id) =>
         set((state) =>
@@ -1704,6 +1733,7 @@ export const useSettingsStore = create<SettingsStore>()(
           memoriesEnabled: false,
           memoryCapturePaused: false,
           hiddenModelIds: [],
+          hiddenAdminAgentKeys: [],
           starredModelIds: [],
           tokenUsageStats: {},
           tokenUsageFirstTrackedAt: null,
@@ -1751,7 +1781,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 58, // Increment this when schema changes to trigger migrations
+      version: 59, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1808,6 +1838,7 @@ export const useSettingsStore = create<SettingsStore>()(
         memoriesEnabled: state.memoriesEnabled,
         memoryCapturePaused: state.memoryCapturePaused,
         hiddenModelIds: state.hiddenModelIds,
+        hiddenAdminAgentKeys: state.hiddenAdminAgentKeys,
         starredModelIds: state.starredModelIds,
         tokenUsageStats: state.tokenUsageStats,
         tokenUsageFirstTrackedAt: state.tokenUsageFirstTrackedAt,
@@ -2429,6 +2460,13 @@ export const useSettingsStore = create<SettingsStore>()(
             LEGACY_DEFAULT_PASTE_ATTACHMENT_CHARS
           ) {
             state.pasteAsAttachmentChars = DEFAULT_PASTE_ATTACHMENT_CHARS;
+          }
+        }
+
+        // Version 58 → 59: per-admin hidden agent keys for the admin lists.
+        if (version < 59) {
+          if (!Array.isArray(state.hiddenAdminAgentKeys)) {
+            state.hiddenAdminAgentKeys = [];
           }
         }
 

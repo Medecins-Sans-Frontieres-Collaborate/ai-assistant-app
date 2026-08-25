@@ -288,7 +288,7 @@ export interface ChatContext {
    * requesting user inside accessible folders. Folder chunks are retrieved
    * per-item from this list, never by the folder-level verdict alone.
    */
-  m365AccessibleFolderItemIds?: string[];
+  m365AccessibleFolderItems?: { driveId: string; itemId: string }[];
 
   /** Thread ID for continuing conversations */
   threadId?: string;

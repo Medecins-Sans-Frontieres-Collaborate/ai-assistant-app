@@ -45,6 +45,10 @@ const mockIndexService = vi.hoisted(() => ({
 const mockSourceAccess = vi.hoisted(() => ({
   checkAgentSourceAccess: vi.fn(),
 }));
+const mockPlanner = vi.hoisted(() => ({
+  planSources: vi.fn(),
+  MAX_M365_AGENT_SOURCE_BYTES: 512 * 1024 * 1024,
+}));
 
 vi.mock('@/auth', () => ({ auth: mockAuth, getGraphAccessToken: vi.fn() }));
 vi.mock('@/lib/services/agentAccess/AgentAccessService', () => ({
@@ -69,7 +73,19 @@ vi.mock('@/lib/services/agentAccess/adminAuth', async (importOriginal) => {
   return { ...actual, ...mockAdminAuth };
 });
 vi.mock('@/lib/services/m365/agentIndexService', () => mockIndexService);
+vi.mock('@/lib/services/m365/agentIndexJobStore', async (importOriginal) => {
+  const actual =
+    await importOriginal<
+      typeof import('@/lib/services/m365/agentIndexJobStore')
+    >();
+  return {
+    ...actual,
+    listIndexJobs: vi.fn(async () => new Map()),
+    deleteIndexJob: vi.fn(async () => undefined),
+  };
+});
 vi.mock('@/lib/services/m365/agentSourceAccess', () => mockSourceAccess);
+vi.mock('@/lib/services/m365/agentSourcePlanner', () => mockPlanner);
 
 const session = {
   user: { id: 'u1', mail: 'admin@example.org', name: 'Admin' },
@@ -138,6 +154,15 @@ beforeEach(() => {
   mockStore.readConfig.mockResolvedValue(null);
   mockStore.writeM365Agent.mockResolvedValue('"etag-1"');
   mockStore.writeM365AgentHistoryEntry.mockResolvedValue(undefined);
+  mockPlanner.planSources.mockResolvedValue({
+    plans: [],
+    totalDocuments: 1,
+    totalBytes: 1024,
+    maxDocuments: 10,
+    maxBytes: 512 * 1024 * 1024,
+    overDocumentCap: false,
+    overByteCap: false,
+  });
 });
 
 describe('/api/agent-access/m365-agents', () => {
@@ -204,6 +229,91 @@ describe('/api/agent-access/m365-agents', () => {
       expect.objectContaining({ version: 1 }),
       null,
     );
+  });
+
+  it('refuses a create whose sources expand past the document cap', async () => {
+    mockPlanner.planSources.mockResolvedValue({
+      plans: [],
+      totalDocuments: 312,
+      totalBytes: 1024,
+      maxDocuments: 10,
+      maxBytes: 512 * 1024 * 1024,
+      overDocumentCap: true,
+      overByteCap: false,
+    });
+    const response = await POST(
+      postRequest({
+        name: 'Big',
+        sources: [{ ...validSource, kind: 'folder', recursive: true }],
+      }),
+    );
+    const body = await parseJsonResponse(response);
+    expect(response.status).toBe(400);
+    expect(body.error).toMatch(/312 documents/);
+    expect(mockStore.writeM365Agent).not.toHaveBeenCalled();
+  });
+
+  it('still saves when the save-time plan itself fails (Graph outage)', async () => {
+    mockPlanner.planSources.mockRejectedValue(new Error('throttled'));
+    const response = await POST(
+      postRequest({ name: 'X', sources: [validSource] }),
+    );
+    expect(response.status).toBe(200);
+  });
+
+  it('PUT flags a folder as pending again when its selection changes', async () => {
+    const existing = makeAgent({
+      sources: [
+        {
+          sourceId: 'src-11111111',
+          driveId: 'drive1',
+          itemId: 'folder1',
+          kind: 'folder',
+          title: 'Reports',
+          webUrl: '',
+          status: 'indexed',
+          recursive: false,
+          excludedItemIds: [],
+        },
+      ],
+    });
+    mockStore.readM365Agent.mockResolvedValue({
+      m365Agent: existing,
+      etag: '"etag-1"',
+    });
+    const response = await PUT(
+      new NextRequest('http://localhost/api/agent-access/m365-agents', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'If-Match': '"etag-1"',
+        },
+        body: JSON.stringify({
+          id: existing.id,
+          name: 'Reports agent',
+          sources: [
+            {
+              driveId: 'drive1',
+              itemId: 'folder1',
+              kind: 'folder',
+              title: 'Reports',
+              webUrl: '',
+              recursive: true,
+              excludedItemIds: ['sub1'],
+              includeExtensions: ['PDF', 'docx'],
+            },
+          ],
+        }),
+      }),
+    );
+    const body = await parseJsonResponse(response);
+    expect(response.status).toBe(200);
+    const [source] = body.data.agent.sources;
+    expect(source.sourceId).toBe('src-11111111');
+    expect(source.status).toBe('pending');
+    expect(source.recursive).toBe(true);
+    expect(source.excludedItemIds).toEqual(['sub1']);
+    expect(source.includeExtensions).toEqual(['pdf', 'docx']);
   });
 
   it('PUT keeps sourceIds for unchanged sources and purges removed ones', async () => {
