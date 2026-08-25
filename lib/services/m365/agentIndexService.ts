@@ -12,7 +12,7 @@
  * requires re-index).
  *
  * One shared index (`m365-agents` by default) holds every agent's chunks,
- * partitioned by `agent_id`, `source_id`, and `item_id` filters. Retrieval
+ * partitioned by `agent_id`, `source_id`, `drive_id` and `item_id` filters. Retrieval
  * is ALWAYS filtered to what the requesting user's own token can open
  * (layer-2 trim — see agentSourceAccess.ts): by source for file sources,
  * per child file for folder sources. There is no unfiltered read path.
@@ -79,6 +79,12 @@ export interface M365AgentIndexDoc {
   source_id: string;
   /** Sanitized Graph drive-item id — the per-file trim unit for folder sources. */
   item_id: string;
+  /**
+   * Sanitized Graph drive id. Item ids are only unique within a drive, so
+   * the folder trim filters on (drive_id, item_id) pairs. Chunks written
+   * before this field existed have no value; see buildM365AccessFilter.
+   */
+  drive_id?: string;
   chunk: string;
   title: string;
   url: string;
@@ -163,6 +169,7 @@ async function createOrUpdateIndex(): Promise<void> {
       { name: 'agent_id', type: 'Edm.String', filterable: true },
       { name: 'source_id', type: 'Edm.String', filterable: true },
       { name: 'item_id', type: 'Edm.String', filterable: true },
+      { name: 'drive_id', type: 'Edm.String', filterable: true },
       { name: 'locator', type: 'Edm.String' },
       { name: 'chunk', type: 'Edm.String', searchable: true },
       { name: 'title', type: 'Edm.String', searchable: true },
@@ -1040,6 +1047,7 @@ export async function indexJobItem(
         agent_id: agentId,
         source_id: sourceId,
         item_id: itemId,
+        drive_id: sanitizeGraphId(item.driveId),
         locator: chunk.locator ?? '',
         chunk: chunk.chunk,
         title: item.name,
@@ -1143,23 +1151,36 @@ export interface M365AgentSearchDoc {
   quote: string;
 }
 
+/** A child file the requesting user may read, addressed within its drive. */
+export interface AccessibleFolderItem {
+  driveId: string;
+  itemId: string;
+}
+
 /**
  * Hybrid vector+semantic retrieval over the agent's chunks, HARD-FILTERED
  * to what the requesting user's own token can open. File-kind sources are
  * trimmed by source_id; folder-kind sources are trimmed PER CHILD FILE via
- * item_id (`accessibleFolderItemIds` from agentSourceAccess) — a
- * folder-level verdict alone would leak item-restricted children. Never
- * call this with unverified access lists — the filter IS the layer-2
- * enforcement.
+ * (drive_id, item_id) pairs (`accessibleFolderItems` from
+ * agentSourceAccess) — a folder-level verdict alone would leak
+ * item-restricted children, and an item id alone is only unique within
+ * its drive. Never call this with unverified access lists — the filter IS
+ * the layer-2 enforcement.
  */
 /**
  * Builds the layer-2 access filter, or null when nothing may be read.
  * Exported for tests — this string IS the enforcement boundary.
+ *
+ * Folder items are grouped by drive: `(drive_id eq 'D' and
+ * search.in(item_id, …))` per drive. Chunks indexed before `drive_id`
+ * existed carry no drive; they stay reachable through a `drive_id eq null`
+ * clause over the same item ids until a full re-index rewrites them
+ * (Refresh carries unchanged chunks over as-is).
  */
 export function buildM365AccessFilter(
   agent: M365Agent,
   accessibleSourceIds: string[],
-  accessibleFolderItemIds: string[],
+  accessibleFolderItems: AccessibleFolderItem[],
 ): string | null {
   if (accessibleSourceIds.length === 0) return null;
 
@@ -1170,17 +1191,31 @@ export function buildM365AccessFilter(
     .filter((id) => kindBySourceId.get(id) !== 'folder')
     .map((id) => id.replace(/[^A-Za-z0-9_-]/g, ''))
     .join(',');
-  const folderItemList = accessibleFolderItemIds
-    .map((id) => sanitizeGraphId(id))
-    .filter((id) => id.length > 0)
-    .join(',');
+
+  const itemsByDrive = new Map<string, string[]>();
+  for (const item of accessibleFolderItems) {
+    const driveId = sanitizeGraphId(item.driveId);
+    const itemId = sanitizeGraphId(item.itemId);
+    if (!driveId || !itemId) continue;
+    const list = itemsByDrive.get(driveId) ?? [];
+    if (!list.includes(itemId)) list.push(itemId);
+    itemsByDrive.set(driveId, list);
+  }
 
   const accessClauses: string[] = [];
   if (fileSourceList) {
     accessClauses.push(`search.in(source_id, '${fileSourceList}', ',')`);
   }
-  if (folderItemList) {
-    accessClauses.push(`search.in(item_id, '${folderItemList}', ',')`);
+  for (const [driveId, itemIds] of itemsByDrive) {
+    accessClauses.push(
+      `(drive_id eq '${driveId}' and search.in(item_id, '${itemIds.join(',')}', ','))`,
+    );
+  }
+  if (itemsByDrive.size > 0) {
+    const allItems = [...new Set([...itemsByDrive.values()].flat())].join(',');
+    accessClauses.push(
+      `(drive_id eq null and search.in(item_id, '${allItems}', ','))`,
+    );
   }
   // Accessible sources but no matchable clause (e.g. accessible folders
   // whose visible children resolved to none): nothing may be read.
@@ -1193,12 +1228,12 @@ export async function searchM365Agent(
   query: string,
   agent: M365Agent,
   accessibleSourceIds: string[],
-  accessibleFolderItemIds: string[] = [],
+  accessibleFolderItems: AccessibleFolderItem[] = [],
 ): Promise<M365AgentSearchDoc[]> {
   const filter = buildM365AccessFilter(
     agent,
     accessibleSourceIds,
-    accessibleFolderItemIds,
+    accessibleFolderItems,
   );
   if (filter === null) return [];
 

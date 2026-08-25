@@ -31,6 +31,7 @@ import type {
   M365Agent,
   M365AgentSource,
 } from '@/lib/services/agentAccess/types';
+import type { AccessibleFolderItem } from '@/lib/services/m365/agentIndexService';
 import { graphJson } from '@/lib/services/m365/graphApi';
 
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
@@ -54,12 +55,13 @@ export interface AgentSourceAccess {
   /** Sources the user's own token can currently open. */
   accessibleSourceIds: string[];
   /**
-   * Child FILE item ids the user can see inside accessible folder sources.
+   * Child FILES the user can see inside accessible folder sources, each
+   * addressed within its drive (item ids are only unique per drive).
    * Folder chunks are trimmed per-item with this list — a folder-level
    * verdict alone would leak children with tighter item-level permissions
    * (broken inheritance) to anyone who can open the folder.
    */
-  accessibleFolderItemIds: string[];
+  accessibleFolderItems: AccessibleFolderItem[];
   results: SourceAccessResult[];
 }
 
@@ -211,9 +213,9 @@ async function resolveAccessibleFolderItems(
   req: NextRequest,
   agent: M365Agent,
   folders: M365AgentSource[],
-): Promise<string[]> {
+): Promise<AccessibleFolderItem[]> {
   if (folders.length === 0) return [];
-  const itemIds: string[] = [];
+  const items: AccessibleFolderItem[] = [];
   const indexed = await loadIndexedItems(agent);
   const legacyFolders: M365AgentSource[] = [];
   const targets: ProbeTarget[] = [];
@@ -226,7 +228,9 @@ async function resolveAccessibleFolderItems(
     try {
       const verdicts = await probeItems(req, targets);
       for (const target of targets) {
-        if (verdicts.get(target.key)) itemIds.push(target.itemId);
+        if (verdicts.get(target.key)) {
+          items.push({ driveId: target.driveId, itemId: target.itemId });
+        }
       }
     } catch (error) {
       // Fail closed for the manifest-backed folders only.
@@ -247,7 +251,7 @@ async function resolveAccessibleFolderItems(
       );
       for (const child of children.value ?? []) {
         if (!child.id || child.folder) continue;
-        itemIds.push(child.id);
+        items.push({ driveId: folder.driveId, itemId: child.id });
       }
     } catch (error) {
       console.warn(
@@ -255,7 +259,7 @@ async function resolveAccessibleFolderItems(
       );
     }
   }
-  return itemIds;
+  return items;
 }
 
 /**
@@ -283,7 +287,7 @@ export async function checkAgentSourceAccess(
     }),
   );
 
-  const accessibleFolderItemIds = await resolveAccessibleFolderItems(
+  const accessibleFolderItems = await resolveAccessibleFolderItems(
     req,
     agent,
     agent.sources.filter(
@@ -296,7 +300,7 @@ export async function checkAgentSourceAccess(
     accessibleSourceIds: results
       .filter((r) => r.accessible)
       .map((r) => r.sourceId),
-    accessibleFolderItemIds,
+    accessibleFolderItems,
     results,
   };
 
