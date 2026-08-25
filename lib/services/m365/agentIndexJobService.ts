@@ -31,6 +31,10 @@ import type {
   M365ManifestItem,
 } from '@/lib/services/agentAccess/types';
 import {
+  readDerivedIndex,
+  readDerivedText,
+} from '@/lib/services/m365/agentDerivedTextStore';
+import {
   IndexJobSummary,
   isStaleIndexJob,
   isTerminalIndexJob,
@@ -126,9 +130,11 @@ export async function startIndexJob(
   // simply a full run.
   const manifest =
     mode === 'refresh' ? await readM365AgentManifest(storage, agent.id) : null;
+  const { index: derived } = await readDerivedIndex(storage, agent.id);
   const job = await prepareIndexJob(req, agent, userId, userMail, {
     mode: manifest ? 'refresh' : 'full',
     manifest,
+    prepared: derived.items,
   });
   // Replace whatever was there (terminal or interrupted). A concurrent
   // start loses the CAS and surfaces as a conflict to its caller.
@@ -374,6 +380,12 @@ export async function stepIndexJob(
             job.embeddingDeployment,
             sourceId,
             item,
+            async (id) => {
+              const derived = await readDerivedText(storage, agentId, id);
+              return derived
+                ? { eTag: derived.eTag, text: derived.text }
+                : null;
+            },
           ),
         }),
       );
