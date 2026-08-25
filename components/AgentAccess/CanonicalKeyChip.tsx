@@ -1,7 +1,7 @@
 'use client';
 
 import { IconCheck, IconCopy } from '@tabler/icons-react';
-import { FC, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -23,15 +23,33 @@ export const CanonicalKeyChip: FC<CanonicalKeyChipProps> = ({
   const t = useTranslations('agentAccess');
   const [copied, setCopied] = useState(false);
 
+  const codeRef = useRef<HTMLElement>(null);
+
+  /** Selects the key text so the admin can copy it by hand. */
+  const selectKey = () => {
+    const node = codeRef.current;
+    if (!node || typeof window === 'undefined') return;
+    const selection = window.getSelection();
+    if (!selection) return;
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  };
+
   const copy = async () => {
     try {
-      if (typeof navigator !== 'undefined' && navigator.clipboard) {
-        await navigator.clipboard.writeText(canonicalKey);
+      if (typeof navigator === 'undefined' || !navigator.clipboard) {
+        selectKey();
+        return;
       }
+      await navigator.clipboard.writeText(canonicalKey);
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {
-      // Clipboard denied: the key is still selectable text.
+      // Clipboard denied (insecure context, permissions): fall back to a
+      // selection — and never claim success.
+      selectKey();
     }
   };
 
@@ -39,6 +57,7 @@ export const CanonicalKeyChip: FC<CanonicalKeyChipProps> = ({
     <span className="inline-flex max-w-full items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
       <span className="shrink-0">{label ?? t('canonicalKeyLabel')}:</span>
       <code
+        ref={codeRef}
         className="min-w-0 truncate rounded bg-gray-100 px-1 py-0.5 font-mono text-[11px] text-gray-700 dark:bg-gray-800 dark:text-gray-300"
         title={canonicalKey}
       >
