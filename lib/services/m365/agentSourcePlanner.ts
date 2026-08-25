@@ -18,6 +18,7 @@
 import { NextRequest } from 'next/server';
 
 import type {
+  M365DerivedIndexEntry,
   M365ManifestFolder,
   M365ManifestItem,
   M365ManifestSkipReason,
@@ -72,6 +73,12 @@ export interface PlanSourceInput {
   recursive?: boolean;
   excludedItemIds?: string[];
   includeExtensions?: string[];
+  /**
+   * The agent's prepared files (phase 4): item id → derived-text entry.
+   * A file whose current eTag matches becomes `indexable` with `prepared`
+   * set; the index run then reads the derived text instead of extracting.
+   */
+  prepared?: Record<string, M365DerivedIndexEntry>;
 }
 
 export interface SourcePlan {
@@ -219,6 +226,44 @@ export function applySourceFilters(
       return { ...item, tier: 'skipped', reason: 'typeFilter' };
     }
     return item;
+  });
+}
+
+/**
+ * Flips files with matching prepared text to `indexable` (phase 4).
+ * Applies to media that needs preparation and to PDFs that were OCR'd
+ * because extraction found no text. A stale preparation (eTag changed) is
+ * ignored — the file shows as needing preparation again. Runs AFTER the
+ * filters: an excluded or type-filtered file stays skipped even if it was
+ * prepared earlier.
+ */
+export function applyPreparedItems(
+  items: M365ManifestItem[],
+  prepared: Record<string, M365DerivedIndexEntry> | undefined,
+): M365ManifestItem[] {
+  if (!prepared) return items;
+  return items.map((item) => {
+    const entry = prepared[item.itemId];
+    if (!entry || !item.eTag || entry.eTag !== item.eTag) return item;
+    const eligible =
+      item.tier === 'needsPreparation' ||
+      (item.tier === 'indexable' &&
+        entry.kind === 'pdfOcr' &&
+        extensionOf(item.name) === 'pdf');
+    if (!eligible) return item;
+    const { reason: _dropped, ...rest } = item;
+    void _dropped;
+    return {
+      ...rest,
+      tier: 'indexable',
+      prepared: {
+        eTag: entry.eTag,
+        kind: entry.kind,
+        preparedAt: entry.preparedAt,
+        ...(entry.model && { model: entry.model }),
+        ...(entry.chars !== undefined && { chars: entry.chars }),
+      },
+    };
   });
 }
 
@@ -565,7 +610,10 @@ export async function planSource(
   input: PlanSourceInput,
 ): Promise<SourcePlan> {
   const raw = await enumerateSource(req, userId, input);
-  const items = applySourceFilters(raw.items, raw.folders, input);
+  const items = applyPreparedItems(
+    applySourceFilters(raw.items, raw.folders, input),
+    input.prepared,
+  );
   return {
     missing: raw.missing,
     truncated: raw.truncated,
@@ -668,8 +716,9 @@ function reclassifyStored(item: M365ManifestItem): M365ManifestItem {
     mimeType: item.mimeType,
     malware: item.reason === 'malware',
   });
-  const { reason: _dropped, ...rest } = item;
+  const { reason: _dropped, prepared: _prepared, ...rest } = item;
   void _dropped;
+  void _prepared;
   return {
     ...rest,
     tier: classification.tier,
@@ -778,10 +827,14 @@ export function carryOverOutcomes(
         error: undefined,
       };
     }
+    // Same content AND same preparation state: a file prepared since the
+    // last run must be (re)indexed from its derived text.
     const settled =
       base?.tier === 'indexable' &&
       !!base.eTag &&
       base.eTag === item.eTag &&
+      (base.prepared?.preparedAt ?? null) ===
+        (item.prepared?.preparedAt ?? null) &&
       (base.status === 'indexed' || base.status === 'noText');
     if (settled) {
       changes.unchanged += 1;
@@ -868,7 +921,10 @@ export async function refreshSourcePlan(
   }
   if (!raw) raw = await enumerateUncached(req, input);
 
-  const filtered = applySourceFilters(raw.items, raw.folders, input);
+  const filtered = applyPreparedItems(
+    applySourceFilters(raw.items, raw.folders, input),
+    input.prepared,
+  );
   const { items, changes } = carryOverOutcomes(filtered, base.items);
   return {
     missing: raw.missing,
