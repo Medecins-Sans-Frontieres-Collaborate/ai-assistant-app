@@ -157,9 +157,9 @@ describe('checkAgentSourceAccess ($batch probes)', () => {
     const access = await checkAgentSourceAccess(req, 'u1', agent);
     expect(access.accessibleSourceIds).toEqual(['src-0', 'src-1']);
     // Child files only — subfolders don't carry chunks of their own.
-    expect(access.accessibleFolderItemIds).toEqual([
-      'childFile1',
-      'childFile2',
+    expect(access.accessibleFolderItems).toEqual([
+      { driveId: 'drive1', itemId: 'childFile1' },
+      { driveId: 'drive1', itemId: 'childFile2' },
     ]);
     const childrenCalls = fetchMock.mock.calls.filter((call) =>
       String(call[0]).includes('/children'),
@@ -232,7 +232,9 @@ describe('checkAgentSourceAccess ($batch probes)', () => {
     // denied one is trimmed.
     expect(probed.filter((u) => u.includes('/items/'))).toHaveLength(2 + 2);
     expect(probed.some((u) => u.includes('failed'))).toBe(false);
-    expect(access.accessibleFolderItemIds).toEqual(['deep1']);
+    expect(access.accessibleFolderItems).toEqual([
+      { driveId: 'drive1', itemId: 'deep1' },
+    ]);
   });
 
   it('falls back to the legacy listing for folders absent from the manifest', async () => {
@@ -256,7 +258,9 @@ describe('checkAgentSourceAccess ($batch probes)', () => {
       return batchResponse(() => 200)(url, init);
     });
     const access = await checkAgentSourceAccess(req, 'u1', agent);
-    expect(access.accessibleFolderItemIds).toEqual(['child1']);
+    expect(access.accessibleFolderItems).toEqual([
+      { driveId: 'drive1', itemId: 'child1' },
+    ]);
   });
 
   it('fails closed for a folder whose children listing fails', async () => {
@@ -273,7 +277,7 @@ describe('checkAgentSourceAccess ($batch probes)', () => {
     // The folder source stays "accessible" (probe passed) but contributes
     // no readable items — retrieval for it yields nothing.
     expect(access.accessibleSourceIds).toEqual(['src-0', 'src-1']);
-    expect(access.accessibleFolderItemIds).toEqual([]);
+    expect(access.accessibleFolderItems).toEqual([]);
   });
 
   it('fails closed for sources missing from the batch response', async () => {
