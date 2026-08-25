@@ -32,6 +32,11 @@ import {
   canonicalAgentKey,
 } from '@/lib/services/agentAccess/types';
 import {
+  deleteIndexJob,
+  listIndexJobs,
+  summarizeIndexJob,
+} from '@/lib/services/m365/agentIndexJobStore';
+import {
   MAX_M365_AGENT_DOCUMENTS,
   purgeAgentFromIndex,
   purgeSourcesFromIndex,
@@ -301,15 +306,27 @@ export async function GET() {
     let config: AgentAccessConfig | null = null;
     let m365AgentsUnavailable = false;
     let fetchedAt: number | null = null;
+    const jobs: Record<string, ReturnType<typeof summarizeIndexJob>> = {};
     try {
       const storage = createAgentAccessBlobStorage();
-      const [listed, configResult] = await Promise.all([
+      const [listed, configResult, jobRecords] = await Promise.all([
         listAllM365Agents(storage),
         readConfig(storage),
+        // Index job summaries ride along so the list can show progress /
+        // Resume without a request per row. Best-effort.
+        listIndexJobs(storage).catch((error) => {
+          console.warn(
+            `[agent-access-admin] index job listing failed: ${sanitizeForLog(error)}`,
+          );
+          return new Map();
+        }),
       ]);
       stored = listed;
       config = configResult?.config ?? null;
       fetchedAt = Date.now();
+      for (const [agentId, job] of jobRecords) {
+        jobs[agentId] = summarizeIndexJob(job);
+      }
     } catch (error) {
       console.error(
         `[agent-access-admin] direct m365-agents read failed: ${sanitizeForLog(error)}`,
@@ -340,6 +357,11 @@ export async function GET() {
       // matches what POST/PUT will actually accept.
       maxDocuments: MAX_M365_AGENT_DOCUMENTS,
       maxBytes: MAX_M365_AGENT_SOURCE_BYTES,
+      jobs: Object.fromEntries(
+        Object.entries(jobs).filter(([agentId]) =>
+          visible.some((entry) => entry.m365Agent.id === agentId),
+        ),
+      ),
     });
   } catch (error) {
     return handleApiError(error, 'Failed to list M365 agents');
@@ -613,7 +635,9 @@ export async function DELETE(request: NextRequest) {
     // agent record are unreachable through retrieval regardless).
     await purgeAgentFromIndex(id);
     try {
-      await deleteM365AgentManifest(createAgentAccessBlobStorage(), id);
+      const cleanupStorage = createAgentAccessBlobStorage();
+      await deleteM365AgentManifest(cleanupStorage, id);
+      await deleteIndexJob(cleanupStorage, id);
     } catch (error) {
       console.warn(
         `[agent-access-admin] manifest cleanup failed for ${sanitizeForLog(id)}: ${sanitizeForLog(error)}`,
