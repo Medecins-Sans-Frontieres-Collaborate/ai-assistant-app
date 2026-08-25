@@ -1,6 +1,8 @@
 import { isAllowedDownloadUrl } from '@/lib/services/m365/agentIndexService';
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+vi.mock('@/auth', () => ({ getGraphAccessToken: vi.fn() }));
 
 describe('isAllowedDownloadUrl', () => {
   it('accepts Microsoft file-content hosts over https', () => {
