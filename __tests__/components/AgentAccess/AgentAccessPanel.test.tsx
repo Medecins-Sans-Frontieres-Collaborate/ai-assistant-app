@@ -999,6 +999,35 @@ describe('AgentAccessPanel', () => {
     ).not.toBeChecked();
   });
 
+  it('lets an admin hide an agent from their own list and reveal it again', async () => {
+    useSettingsStore.setState({ hiddenAdminAgentKeys: [] });
+    agentsResponse = [...discoveredAgents, promptAgentDiscoveryEntry];
+    promptAgentsResponse = [storedPromptAgent];
+    renderPanel('agents');
+    const row = (await screen.findByText('Travel Advisor')).closest('li');
+    expect(row).not.toBeNull();
+
+    fireEvent.click(
+      within(row as HTMLElement).getByRole('button', { name: 'Hide' }),
+    );
+    expect(screen.queryByText('Travel Advisor')).not.toBeInTheDocument();
+    expect(useSettingsStore.getState().hiddenAdminAgentKeys).toEqual([
+      storedPromptAgent.canonicalKey,
+    ]);
+    expect(screen.getByText('1 hidden agents')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Show' }));
+    const revealed = screen.getByText('Travel Advisor').closest('li');
+    expect(
+      within(revealed as HTMLElement).getByText('Hidden'),
+    ).toBeInTheDocument();
+    fireEvent.click(
+      within(revealed as HTMLElement).getByRole('button', { name: 'Unhide' }),
+    );
+    expect(useSettingsStore.getState().hiddenAdminAgentKeys).toEqual([]);
+    expect(screen.queryByText('Hidden')).not.toBeInTheDocument();
+  });
+
   it('offers M365 agents and knowledge agents for delegation, grouped', async () => {
     renderPanel('localAdmins');
 
