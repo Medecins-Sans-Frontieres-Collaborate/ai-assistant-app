@@ -32,6 +32,7 @@ import { OpenAIModels } from '@/types/openai';
 
 import M365FilePickerModal from '@/components/Chat/ChatInput/M365FilePickerModal';
 
+import { CanonicalKeyChip } from './CanonicalKeyChip';
 import { ConflictDiff, ConflictDiffRow } from './ConflictDiff';
 import {
   HiddenBadge,
@@ -1164,6 +1165,7 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                         {t('m365AgentBadge')}
                       </span>
                     </div>
+                    <CanonicalKeyChip canonicalKey={entry.canonicalKey} />
                     {contentSources === 0 ? (
                       <p className="text-xs font-medium text-red-700 dark:text-red-400">
                         {t('m365AgentStatusNotIndexed')}

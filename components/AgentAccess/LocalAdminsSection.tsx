@@ -14,64 +14,18 @@ import toast from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
 
 import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
+import { useDelegatableAgents } from '@/client/hooks/useDelegatableAgents';
 import { useM365PeopleSuggest } from '@/client/hooks/useM365PeopleSuggest';
 
 import type { LocalAdminEntry } from '@/lib/services/agentAccess/types';
 
 import { EmailAutocompleteInput } from '@/components/UI/EmailAutocompleteInput';
 
-import {
-  AdminConfigResponse,
-  AdminConnectorsResponse,
-  AdminGuidesResponse,
-  AdminM365AgentsResponse,
-  AdminMapDatasetsResponse,
-  AdminOrgAgentsResponse,
-  CLIENT_PROMPT_AGENT_SOURCE,
-  MergedAgentRow,
-} from './types';
+import { AdminConfigResponse, MergedAgentRow } from './types';
 
 interface LocalAdminsSectionProps {
   /** Merged agent rows from the admin's own discovery + stored rules. */
   rows: MergedAgentRow[];
-}
-
-/** One delegatable thing: a canonical key with a human name. */
-interface DelegationOption {
-  canonicalKey: string;
-  displayName: string;
-  /** Secondary line (agent id, source path, "built-in", …). */
-  detail?: string;
-}
-
-type GroupId =
-  | 'agents'
-  | 'promptAgents'
-  | 'm365Agents'
-  | 'orgAgents'
-  | 'guides'
-  | 'connectors'
-  | 'datasets';
-
-interface DelegationGroup {
-  id: GroupId;
-  options: DelegationOption[];
-  /** The listing behind this group failed to load. */
-  unavailable: boolean;
-}
-
-const GROUP_ORDER: GroupId[] = [
-  'agents',
-  'promptAgents',
-  'm365Agents',
-  'orgAgents',
-  'guides',
-  'connectors',
-  'datasets',
-];
-
-function byName(a: DelegationOption, b: DelegationOption): number {
-  return a.displayName.localeCompare(b.displayName);
 }
 
 async function fetchAdminList<T>(path: string): Promise<T> {
@@ -103,133 +57,13 @@ export const LocalAdminsSection: FC<LocalAdminsSectionProps> = ({ rows }) => {
     refetchOnWindowFocus: false,
   });
 
-  // The other delegatable entities. Same query keys as the panel's own
-  // queries, so the cache is shared when both are mounted; each group
-  // degrades alone when its listing fails.
-  const listQuery = { retry: 1, refetchOnWindowFocus: false } as const;
-  const m365Query = useQuery<AdminM365AgentsResponse>({
-    queryKey: ['agent-access-m365-agents'],
-    queryFn: () => fetchAdminList('/api/agent-access/m365-agents'),
-    ...listQuery,
-  });
-  const orgQuery = useQuery<AdminOrgAgentsResponse>({
-    queryKey: ['agent-access-org-agents'],
-    queryFn: () => fetchAdminList('/api/agent-access/org-agents'),
-    ...listQuery,
-  });
-  const guidesQuery = useQuery<AdminGuidesResponse>({
-    queryKey: ['agent-access-guides'],
-    queryFn: () => fetchAdminList('/api/agent-access/guides'),
-    ...listQuery,
-  });
-  const connectorsQuery = useQuery<AdminConnectorsResponse>({
-    queryKey: ['agent-access-connectors'],
-    queryFn: () => fetchAdminList('/api/agent-access/connectors'),
-    ...listQuery,
-  });
-  const datasetsQuery = useQuery<AdminMapDatasetsResponse>({
-    queryKey: ['agent-access-map-datasets'],
-    queryFn: () => fetchAdminList('/api/agent-access/map-datasets'),
-    ...listQuery,
-  });
-
-  const groups = useMemo<DelegationGroup[]>(() => {
-    const agents: DelegationOption[] = [];
-    const promptAgents: DelegationOption[] = [];
-    for (const row of rows) {
-      const option = {
-        canonicalKey: row.canonicalKey,
-        displayName: row.displayName,
-        detail: row.agentName,
-      };
-      if (row.source === CLIENT_PROMPT_AGENT_SOURCE) promptAgents.push(option);
-      else agents.push(option);
-    }
-    const m365Agents = (m365Query.data?.m365Agents ?? []).map((entry) => ({
-      canonicalKey: entry.canonicalKey,
-      displayName: entry.agent.name,
-      detail: entry.agent.description || entry.agent.id,
-    }));
-    const orgAgents = [
-      ...(orgQuery.data?.orgAgents ?? []).map((entry) => ({
-        canonicalKey: entry.canonicalKey,
-        displayName: entry.agent.name,
-        detail: entry.agent.id,
-      })),
-      ...(orgQuery.data?.staticAgents ?? []).map((entry) => ({
-        canonicalKey: entry.canonicalKey,
-        displayName: entry.agent.name,
-        detail: t('localAdminBuiltIn'),
-      })),
-    ];
-    const guides = (guidesQuery.data?.guides ?? []).map((entry) => ({
-      canonicalKey: entry.canonicalKey,
-      displayName: entry.guide.name,
-      detail: entry.guide.id,
-    }));
-    const connectors = (connectorsQuery.data?.connectors ?? []).map(
-      (entry) => ({
-        canonicalKey: entry.canonicalKey,
-        displayName: entry.connector.name,
-        detail: entry.connector.url,
-      }),
-    );
-    const datasets = (datasetsQuery.data?.datasets ?? []).map((entry) => ({
-      canonicalKey: entry.canonicalKey,
-      displayName: entry.meta.name,
-      detail: entry.meta.id,
-    }));
-    const lists: Record<
-      GroupId,
-      { options: DelegationOption[]; unavailable: boolean }
-    > = {
-      agents: { options: agents, unavailable: false },
-      promptAgents: { options: promptAgents, unavailable: false },
-      m365Agents: {
-        options: m365Agents,
-        unavailable:
-          m365Query.isError || m365Query.data?.m365AgentsUnavailable === true,
-      },
-      orgAgents: {
-        options: orgAgents,
-        unavailable:
-          orgQuery.isError || orgQuery.data?.orgAgentsUnavailable === true,
-      },
-      guides: { options: guides, unavailable: guidesQuery.isError },
-      connectors: { options: connectors, unavailable: connectorsQuery.isError },
-      datasets: { options: datasets, unavailable: datasetsQuery.isError },
-    };
-    return GROUP_ORDER.map((id) => ({
-      id,
-      options: [...lists[id].options].sort(byName),
-      unavailable: lists[id].unavailable,
-    }));
-  }, [
+  const { groups, nameByKey } = useDelegatableAgents({
     rows,
-    m365Query.data,
-    m365Query.isError,
-    orgQuery.data,
-    orgQuery.isError,
-    guidesQuery.data,
-    guidesQuery.isError,
-    connectorsQuery.data,
-    connectorsQuery.isError,
-    datasetsQuery.data,
-    datasetsQuery.isError,
-    t,
-  ]);
+    builtInLabel: t('localAdminBuiltIn'),
+  });
 
   const knownKeys = useMemo(
     () => new Set(groups.flatMap((g) => g.options.map((o) => o.canonicalKey))),
-    [groups],
-  );
-  const nameByKey = useMemo(
-    () =>
-      new Map(
-        groups.flatMap((g) =>
-          g.options.map((o) => [o.canonicalKey, o.displayName] as const),
-        ),
-      ),
     [groups],
   );
 

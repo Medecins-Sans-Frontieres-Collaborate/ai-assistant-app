@@ -23,6 +23,7 @@ import { isModelSelectableInRegion } from '@/lib/utils/shared/modelRegion';
 
 import { OpenAIModels } from '@/types/openai';
 
+import { CanonicalKeyChip } from './CanonicalKeyChip';
 import { ConflictDiff, ConflictDiffRow } from './ConflictDiff';
 import {
   HiddenBadge,
@@ -1029,6 +1030,7 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                         {t('orgAgentBuiltinBadge')}
                       </span>
                     </div>
+                    <CanonicalKeyChip canonicalKey={entry.canonicalKey} />
                     <p className="truncate text-xs text-gray-500 dark:text-gray-400">
                       {entry.agent.searchIndex || entry.agent.id}
                     </p>
@@ -1131,6 +1133,7 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                         </span>
                       )}
                     </div>
+                    <CanonicalKeyChip canonicalKey={entry.canonicalKey} />
                     <p className="truncate text-xs text-gray-500 dark:text-gray-400">
                       {entry.agent.searchIndex}
                     </p>

@@ -13,6 +13,7 @@ import {
 } from '@/client/hooks/settings/useAgentAccessAdmin';
 import { useHiddenAdminAgents } from '@/client/hooks/useHiddenAdminAgents';
 
+import { CanonicalKeyChip } from './CanonicalKeyChip';
 import { CatalogOauthSection } from './CatalogOauthSection';
 import { ConnectorEditor } from './ConnectorEditor';
 import { GuideEditor } from './GuideEditor';
@@ -1440,6 +1441,7 @@ export const AgentAccessPanel: FC<AgentAccessPanelProps> = ({ section }) => {
                           >
                             {t('sourceLabel')}: {row.source}
                           </p>
+                          <CanonicalKeyChip canonicalKey={row.canonicalKey} />
                         </div>
                         <span
                           className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
