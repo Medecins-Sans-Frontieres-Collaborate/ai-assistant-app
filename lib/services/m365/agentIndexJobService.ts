@@ -21,6 +21,7 @@ import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessServic
 import {
   AgentAccessConflictError,
   readM365Agent,
+  readM365AgentManifest,
   writeM365Agent,
   writeM365AgentManifest,
 } from '@/lib/services/agentAccess/accessRulesStore';
@@ -111,6 +112,7 @@ export async function startIndexJob(
   agent: M365Agent,
   userId: string,
   userMail: string,
+  mode: 'full' | 'refresh' = 'full',
 ): Promise<IndexJobSummary> {
   const current = await readIndexJob(storage, agent.id);
   if (
@@ -120,7 +122,14 @@ export async function startIndexJob(
   ) {
     throw new IndexJobActiveError(summarizeIndexJob(current.job));
   }
-  const job = await prepareIndexJob(req, agent, userId, userMail);
+  // A refresh without a manifest (never indexed under the planner) is
+  // simply a full run.
+  const manifest =
+    mode === 'refresh' ? await readM365AgentManifest(storage, agent.id) : null;
+  const job = await prepareIndexJob(req, agent, userId, userMail, {
+    mode: manifest ? 'refresh' : 'full',
+    manifest,
+  });
   // Replace whatever was there (terminal or interrupted). A concurrent
   // start loses the CAS and surfaces as a conflict to its caller.
   await writeIndexJob(storage, job, current?.etag ?? null);

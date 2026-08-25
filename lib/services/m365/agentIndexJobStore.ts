@@ -21,6 +21,7 @@ import {
   M365IndexJob,
   M365IndexJobSchema,
   M365IndexJobSource,
+  M365SourceChanges,
   m365AgentIndexJobBlobPath,
 } from '@/lib/services/agentAccess/types';
 
@@ -172,6 +173,9 @@ export interface IndexJobSummary {
   jobId: string;
   agentId: string;
   status: M365IndexJob['status'];
+  mode: M365IndexJob['mode'];
+  /** Refresh jobs: what changed since the last manifest. */
+  changes?: M365SourceChanges;
   /** Running but no heartbeat for STALE_INDEX_JOB_MS — resumable. */
   stale: boolean;
   startedBy: string;
@@ -197,6 +201,8 @@ export function summarizeIndexJob(
     jobId: job.jobId,
     agentId: job.agentId,
     status: job.status,
+    mode: job.mode,
+    ...(job.changes && { changes: job.changes }),
     stale: isStaleIndexJob(job, now),
     startedBy: job.startedBy,
     startedAt: job.startedAt,
