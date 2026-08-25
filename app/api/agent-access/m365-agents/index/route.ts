@@ -18,6 +18,7 @@ import {
   createAgentAccessBlobStorage,
   readM365Agent,
   writeM365Agent,
+  writeM365AgentManifest,
 } from '@/lib/services/agentAccess/accessRulesStore';
 import { resolveAdminStatus } from '@/lib/services/agentAccess/adminAuth';
 import {
@@ -26,6 +27,7 @@ import {
 } from '@/lib/services/agentAccess/adminRouteHelpers';
 import {
   M365Agent,
+  M365AgentManifest,
   M365_AGENT_SOURCE,
   canonicalAgentKey,
 } from '@/lib/services/agentAccess/types';
@@ -45,6 +47,7 @@ import {
   successResponse,
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
+import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { auth } from '@/auth';
 
@@ -74,10 +77,32 @@ function applyOutcomes(
         ...source,
         status: outcome.status,
         indexedChunks: outcome.indexedChunks,
+        counts: outcome.counts,
+        ...(outcome.deltaLink && { deltaLink: outcome.deltaLink }),
         ...(outcome.status === 'indexed' && { lastIndexedAt: now }),
         ...(outcome.error ? { error: outcome.error } : { error: undefined }),
       };
     }),
+  };
+}
+
+/** The per-item record the editor and the layer-2 trim read. */
+function buildManifest(
+  agentId: string,
+  outcomes: SourceIndexOutcome[],
+  now: string,
+): M365AgentManifest {
+  return {
+    version: 1,
+    agentId,
+    updatedAt: now,
+    sources: outcomes.map((outcome) => ({
+      sourceId: outcome.sourceId,
+      truncated: outcome.truncated,
+      ...(outcome.deltaLink && { deltaLink: outcome.deltaLink }),
+      folders: outcome.folders,
+      items: outcome.items,
+    })),
   };
 }
 
@@ -127,7 +152,11 @@ export async function POST(request: NextRequest) {
     // typed M365 errors, not generic 500s.
     let run: AgentIndexRun;
     try {
-      run = await indexAgentSources(request, existing.m365Agent);
+      run = await indexAgentSources(
+        request,
+        existing.m365Agent,
+        session.user.id,
+      );
     } catch (error) {
       if (error instanceof M365Error) return m365ErrorResponse(error);
       throw error;
@@ -137,6 +166,15 @@ export async function POST(request: NextRequest) {
     // Persist outcomes onto the LATEST record (an admin may have edited the
     // agent while indexing ran; statuses attach by stable sourceId).
     const now = new Date().toISOString();
+    // Manifest first: it is derived data with no CAS, and the layer-2 trim
+    // reads it to know which nested items are indexed.
+    try {
+      await writeM365AgentManifest(storage, buildManifest(id, outcomes, now));
+    } catch (error) {
+      console.error(
+        `[m365-agents] manifest write failed for ${sanitizeForLog(id)}: ${sanitizeForLog(error)}`,
+      );
+    }
     const latest = await readM365Agent(storage, id);
     if (!latest) return notFoundResponse('M365 agent');
     const updated = applyOutcomes(
