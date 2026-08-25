@@ -714,14 +714,14 @@ export const createCredentialMiddleware = async (
           m365Agent,
         );
         console.log(
-          `[agent-access-audit] m365-layer2 agent=${sanitizeForLog(m365Agent.id)} accessible=${access.accessibleSourceIds.length}/${m365Agent.sources.length} folderItems=${access.accessibleFolderItemIds.length}`,
+          `[agent-access-audit] m365-layer2 agent=${sanitizeForLog(m365Agent.id)} accessible=${access.accessibleSourceIds.length}/${m365Agent.sources.length} folderItems=${access.accessibleFolderItems.length}`,
         );
         if (access.accessibleSourceIds.length === 0) {
           throw agentAccessDenied('deny', 'm365-no-file-access');
         }
         return {
           m365AccessibleSourceIds: access.accessibleSourceIds,
-          m365AccessibleFolderItemIds: access.accessibleFolderItemIds,
+          m365AccessibleFolderItems: access.accessibleFolderItems,
         };
       } catch (error) {
         if (error instanceof M365Error) {
