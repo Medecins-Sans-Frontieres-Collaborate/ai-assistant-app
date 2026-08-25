@@ -5,9 +5,12 @@ import {
   IconChevronDown,
   IconChevronRight,
 } from '@tabler/icons-react';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
+
+import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
 
 import type {
   M365ManifestFolder,
@@ -31,7 +34,29 @@ interface M365SourcePlanViewProps {
   loading: boolean;
   /** The last index run's per-item outcomes for this source, if any. */
   manifestSource?: M365ManifestSource | null;
+  /** Saved agent id — enables the per-file Prepare action (phase 4). */
+  agentId?: string;
+  /** A file was prepared: the caller re-plans so it shows as indexable. */
+  onPrepared?: () => void;
   onChange: (patch: Partial<SourceSelection>) => void;
+}
+
+type PrepareOutcome =
+  | { status: 'prepared'; name: string; chars: number }
+  | { status: 'pending'; name: string; jobId: string; itemId: string }
+  | { status: 'running'; jobId: string }
+  | { status: 'failed'; error: string };
+
+/** Chunked transcription status poll interval. */
+const PREPARE_POLL_MS = 5000;
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/** ~1 MB per minute at typical speech bitrates — a hint, not a meter. */
+function estimateMediaMinutes(bytes: number): number {
+  return Math.max(1, Math.round(bytes / (1024 * 1024)));
 }
 
 /** Rows shown per file group before collapsing into "and N more". */
@@ -65,10 +90,185 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
   plan,
   loading,
   manifestSource,
+  agentId,
+  onPrepared,
   onChange,
 }) => {
   const t = useTranslations('agentAccess');
   const [expanded, setExpanded] = useState(false);
+  const [preparing, setPreparing] = useState<Set<string>>(new Set());
+  const [pendingJobs, setPendingJobs] = useState<Set<string>>(new Set());
+  const unmountedRef = useRef(false);
+  useEffect(() => {
+    unmountedRef.current = false;
+    return () => {
+      unmountedRef.current = true;
+    };
+  }, []);
+
+  const setBusy = (itemId: string, on: boolean) =>
+    setPreparing((prev) => {
+      const next = new Set(prev);
+      if (on) next.add(itemId);
+      else next.delete(itemId);
+      return next;
+    });
+
+  const readOutcome = async (response: Response): Promise<PrepareOutcome> => {
+    const body = await response.json().catch(() => null);
+    if (!response.ok) {
+      throw new Error(body?.error || t('m365PrepareFailedGeneric'));
+    }
+    const outcome = unwrapApiData<{ outcome: PrepareOutcome }>(body)?.outcome;
+    if (!outcome) throw new Error(t('m365PrepareFailedGeneric'));
+    return outcome;
+  };
+
+  /** Polls the chunked transcription job, then stores the transcript. */
+  const completePending = async (item: M365ManifestItem, jobId: string) => {
+    setPendingJobs((prev) => new Set(prev).add(item.itemId));
+    try {
+      for (;;) {
+        if (unmountedRef.current) return;
+        await sleep(PREPARE_POLL_MS);
+        const status = await fetch(
+          `/api/transcription/status/${encodeURIComponent(jobId)}`,
+        );
+        const statusBody = await status.json().catch(() => null);
+        const state: string | undefined =
+          unwrapApiData<{ status?: string }>(statusBody)?.status ??
+          statusBody?.status;
+        if (state !== 'Succeeded' && state !== 'Failed') continue;
+        const outcome = await readOutcome(
+          await fetch('/api/agent-access/m365-agents/prepare/complete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: agentId, itemId: item.itemId }),
+          }),
+        );
+        if (outcome.status === 'running') continue;
+        if (outcome.status === 'failed') {
+          toast.error(
+            t('m365PrepareFailed', { name: item.name, error: outcome.error }),
+          );
+        } else if (outcome.status === 'prepared') {
+          toast.success(
+            t('m365PrepareDone', { name: item.name, chars: outcome.chars }),
+          );
+          onPrepared?.();
+        }
+        return;
+      }
+    } catch (error) {
+      toast.error(
+        t('m365PrepareFailed', {
+          name: item.name,
+          error: error instanceof Error ? error.message : '',
+        }),
+      );
+    } finally {
+      setPendingJobs((prev) => {
+        const next = new Set(prev);
+        next.delete(item.itemId);
+        return next;
+      });
+    }
+  };
+
+  const prepare = async (item: M365ManifestItem) => {
+    if (!agentId || preparing.has(item.itemId)) return;
+    setBusy(item.itemId, true);
+    try {
+      const outcome = await readOutcome(
+        await fetch('/api/agent-access/m365-agents/prepare', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: agentId,
+            driveId: item.driveId,
+            itemId: item.itemId,
+          }),
+        }),
+      );
+      if (outcome.status === 'prepared') {
+        toast.success(
+          t('m365PrepareDone', { name: item.name, chars: outcome.chars }),
+        );
+        onPrepared?.();
+      } else if (outcome.status === 'pending') {
+        toast(t('m365PrepareStarted', { name: item.name }));
+        void completePending(item, outcome.jobId);
+      } else if (outcome.status === 'failed') {
+        toast.error(
+          t('m365PrepareFailed', { name: item.name, error: outcome.error }),
+        );
+      }
+    } catch (error) {
+      toast.error(
+        t('m365PrepareFailed', {
+          name: item.name,
+          error: error instanceof Error ? error.message : '',
+        }),
+      );
+    } finally {
+      setBusy(item.itemId, false);
+    }
+  };
+
+  const prepareHint = (item: M365ManifestItem): string => {
+    const ext = item.name.toLowerCase().split('.').pop() ?? '';
+    if (ext === 'pdf') return t('m365PrepareHintOcr');
+    if (
+      [
+        'mp3',
+        'm4a',
+        'wav',
+        'ogg',
+        'oga',
+        'flac',
+        'aac',
+        'opus',
+        'wma',
+        'mpeg',
+        'mpga',
+        'mp4',
+        'mov',
+        'webm',
+        'mkv',
+        'avi',
+        'wmv',
+        'm4v',
+      ].includes(ext)
+    ) {
+      return t('m365PrepareHintMedia', {
+        minutes: estimateMediaMinutes(item.size),
+      });
+    }
+    return t('m365PrepareHintImage');
+  };
+
+  const prepareButton = (item: M365ManifestItem, ocr: boolean) => {
+    if (!agentId) {
+      return <span className="text-gray-400">{t('m365PrepareSaveFirst')}</span>;
+    }
+    const busy = preparing.has(item.itemId);
+    const pending = pendingJobs.has(item.itemId);
+    return (
+      <button
+        type="button"
+        disabled={busy || pending}
+        onClick={() => void prepare(item)}
+        className="rounded border border-amber-300 px-1.5 py-0.5 text-amber-800 hover:bg-amber-100 disabled:opacity-50 dark:border-amber-700 dark:text-amber-300 dark:hover:bg-amber-900/40"
+        title={prepareHint(item)}
+      >
+        {busy
+          ? t('m365PreparePreparing')
+          : pending
+            ? t('m365PreparePending')
+            : t(ocr ? 'm365PrepareOcrButton' : 'm365PrepareButton')}
+      </button>
+    );
+  };
   const [extensionsDraft, setExtensionsDraft] = useState(
     selection.includeExtensions?.join(', ') ?? '',
   );
@@ -285,17 +485,32 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
             statusByItem={statusByItem}
             renderNote={(item) => {
               const status = statusByItem.get(item.itemId);
-              if (!status?.status) return null;
+              const isPdf = item.name.toLowerCase().endsWith('.pdf');
               return (
-                <span
-                  className={
-                    status.status === 'indexed'
-                      ? 'text-green-700 dark:text-green-400'
-                      : 'text-red-700 dark:text-red-400'
-                  }
-                  title={status.error}
-                >
-                  {t(`m365ItemStatus.${status.status}`)}
+                <span className="flex items-center gap-1.5">
+                  {item.prepared && (
+                    <span className="text-green-700 dark:text-green-400">
+                      {t('m365PreparedNote', {
+                        kind: t(`m365PreparedKind.${item.prepared.kind}`),
+                      })}
+                    </span>
+                  )}
+                  {status?.status && (
+                    <span
+                      className={
+                        status.status === 'indexed'
+                          ? 'text-green-700 dark:text-green-400'
+                          : 'text-red-700 dark:text-red-400'
+                      }
+                      title={status.error}
+                    >
+                      {t(`m365ItemStatus.${status.status}`)}
+                    </span>
+                  )}
+                  {status?.status === 'noText' &&
+                    isPdf &&
+                    !item.prepared &&
+                    prepareButton(item, true)}
                 </span>
               );
             }}
@@ -304,9 +519,12 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
             title={t('m365PlanGroupNeedsPreparation')}
             items={groups.needsPreparation}
             statusByItem={statusByItem}
-            renderNote={() => (
-              <span className="text-amber-700 dark:text-amber-400">
-                {t('m365PlanPreparationHint')}
+            renderNote={(item) => (
+              <span className="flex items-center gap-1.5">
+                <span className="text-amber-700 dark:text-amber-400">
+                  {prepareHint(item)}
+                </span>
+                {prepareButton(item, false)}
               </span>
             )}
           />
