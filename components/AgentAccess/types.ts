@@ -125,6 +125,9 @@ export interface ClientIndexJobSummary {
   jobId: string;
   agentId: string;
   status: 'running' | 'succeeded' | 'failed' | 'cancelled';
+  mode: 'full' | 'refresh';
+  /** Refresh jobs: what changed since the last manifest. */
+  changes?: ClientSourceChanges;
   /** Running but without a heartbeat — resumable by any admin. */
   stale: boolean;
   startedBy: string;
@@ -373,4 +376,26 @@ export function clientCanonicalAgentKey(
   agentName: string,
 ): string {
   return `${source.trim().toLowerCase()}::${agentName.trim().toLowerCase()}`;
+}
+
+export interface ClientSourceChanges {
+  added: number;
+  modified: number;
+  removed: number;
+  unchanged: number;
+}
+
+/** GET /api/agent-access/m365-agents/changes response. */
+export interface ClientRefreshPreview {
+  preview: {
+    sources: {
+      sourceId: string;
+      changes: ClientSourceChanges;
+      incremental: boolean;
+      missing: boolean;
+      error?: string;
+    }[];
+    changes: ClientSourceChanges;
+  } | null;
+  lastIndexedAt: string | null;
 }
