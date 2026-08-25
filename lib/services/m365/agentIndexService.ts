@@ -22,18 +22,20 @@ import { NextRequest } from 'next/server';
 import { ServiceContainer } from '@/lib/services/ServiceContainer';
 import type {
   M365Agent,
-  M365ManifestFolder,
+  M365IndexJob,
+  M365IndexJobSource,
   M365ManifestItem,
-  M365SourceCounts,
 } from '@/lib/services/agentAccess/types';
+import {
+  chunkRetentionFor,
+  selectStaleChunkIds,
+} from '@/lib/services/m365/agentIndexJobStore';
 import {
   MAX_M365_AGENT_DOCUMENTS,
   MAX_M365_AGENT_SOURCE_BYTES,
   MAX_M365_SOURCE_FILE_BYTES,
-  SourcePlan,
   extensionOf,
   planSource,
-  summarizeCounts,
 } from '@/lib/services/m365/agentSourcePlanner';
 import { checkDocumentSignature } from '@/lib/services/m365/documentSignature';
 import { M365Error, graphFetch, graphJson } from '@/lib/services/m365/graphApi';
@@ -44,6 +46,7 @@ import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 import { env } from '@/config/environment';
 import { DefaultAzureCredential } from '@azure/identity';
 import { SearchClient } from '@azure/search-documents';
+import { randomUUID } from 'crypto';
 
 // Caps live with the planner (the plan view and the index run must agree);
 // re-exported so existing importers keep working.
@@ -687,28 +690,15 @@ export async function purgeAgentFromIndex(agentId: string): Promise<void> {
   }
 }
 
-export interface SourceIndexOutcome {
-  sourceId: string;
-  status: 'indexed' | 'error' | 'missing';
-  indexedChunks: number;
-  error?: string;
-  /** Per-item plan + outcome — persisted to the manifest by the route. */
-  items: M365ManifestItem[];
-  folders: M365ManifestFolder[];
-  counts: M365SourceCounts;
-  truncated: boolean;
-  deltaLink?: string;
-}
-
 /**
- * Documents processed concurrently per index run. Each document is itself
+ * Documents processed concurrently per step. Each document is itself
  * sequential (download → extract → embed → upload); 3 in flight keeps a
- * 50-document run inside the route's 300s budget without hammering Graph
- * or the extraction toolchain (pandoc/LibreOffice are process-per-file).
+ * batch well inside a step's time box without hammering Graph or the
+ * extraction toolchain (pandoc/LibreOffice are process-per-file).
  */
-const DOCUMENT_INDEX_CONCURRENCY = 3;
+export const DOCUMENT_INDEX_CONCURRENCY = 3;
 
-async function mapWithConcurrency<T, R>(
+export async function mapWithConcurrency<T, R>(
   items: T[],
   limit: number,
   fn: (item: T) => Promise<R>,
@@ -730,36 +720,27 @@ async function mapWithConcurrency<T, R>(
   return results;
 }
 
-export interface AgentIndexRun {
-  outcomes: SourceIndexOutcome[];
-  /**
-   * The deployment every chunk in this run was embedded with. The caller
-   * MUST stamp it onto the agent record (embeddingModelId) — retrieval
-   * embeds queries with the stamped value, and it has to match the index.
-   */
-  embeddingDeployment: string;
-}
-
-interface PlannedSource {
-  source: M365Agent['sources'][number];
-  plan: SourcePlan | null;
-  planError?: unknown;
-}
-
 /**
- * Plans every source up front (metadata only) so the cap is enforced
- * before any download, exactly as the plan endpoint reports it. A source
- * whose enumeration fails is carried through as an error outcome rather
- * than aborting the run — except for session-level failures (no Graph
- * session, consent gap), which are the caller's to surface.
+ * Plans every source (metadata only) so the cap is enforced before any
+ * download, exactly as the plan endpoint reports it. A source whose
+ * enumeration fails becomes an `error` job source rather than aborting
+ * the run — except for session-level failures (no Graph session, consent
+ * gap), which are the caller's to surface.
  */
-async function planAgentSources(
+async function planJobSources(
   req: NextRequest,
   agent: M365Agent,
   userId: string,
-): Promise<PlannedSource[]> {
-  const planned: PlannedSource[] = [];
+): Promise<M365IndexJobSource[]> {
+  const sources: M365IndexJobSource[] = [];
   for (const source of agent.sources) {
+    const base: M365IndexJobSource = {
+      sourceId: source.sourceId,
+      status: 'pending',
+      truncated: false,
+      folders: [],
+      items: [],
+    };
     try {
       const plan = await planSource(req, userId, {
         sourceId: source.sourceId,
@@ -770,7 +751,35 @@ async function planAgentSources(
         excludedItemIds: source.excludedItemIds,
         includeExtensions: source.includeExtensions,
       });
-      planned.push({ source, plan });
+      if (plan.missing) {
+        sources.push({
+          ...base,
+          status: 'missing',
+          error: 'The file or folder could not be opened with your account',
+        });
+        continue;
+      }
+      sources.push({
+        ...base,
+        truncated: plan.truncated,
+        ...(plan.deltaLink && { deltaLink: plan.deltaLink }),
+        folders: plan.folders,
+        items: plan.items.map((item) =>
+          item.tier === 'indexable'
+            ? {
+                ...item,
+                status: 'pending',
+                indexedChunks: undefined,
+                error: undefined,
+              }
+            : {
+                ...item,
+                status: undefined,
+                indexedChunks: undefined,
+                error: undefined,
+              },
+        ),
+      });
     } catch (error) {
       if (
         error instanceof M365Error &&
@@ -778,13 +787,24 @@ async function planAgentSources(
       ) {
         throw error;
       }
-      planned.push({ source, plan: null, planError: error });
+      console.error(
+        `[m365-agents] planning failed for agent ${sanitizeForLog(agent.id)} source ${sanitizeForLog(source.sourceId)}: ${sanitizeForLog(error)}`,
+      );
+      sources.push({
+        ...base,
+        status: 'error',
+        error:
+          error instanceof Error
+            ? error.message.slice(0, 300)
+            : 'Could not list the source',
+      });
     }
   }
-  const totalDocuments = planned.reduce(
-    (n, p) => n + (p.plan?.counts.indexable ?? 0),
-    0,
-  );
+
+  const counts = sources
+    .flatMap((s) => s.items)
+    .filter((i) => i.tier === 'indexable');
+  const totalDocuments = counts.length;
   if (totalDocuments > MAX_M365_AGENT_DOCUMENTS) {
     throw new M365Error(
       `Agent expands to ${totalDocuments} documents, more than the ${MAX_M365_AGENT_DOCUMENTS} allowed — exclude subfolders, filter by type, or remove sources`,
@@ -792,10 +812,7 @@ async function planAgentSources(
       400,
     );
   }
-  const totalBytes = planned.reduce(
-    (n, p) => n + (p.plan?.counts.bytes ?? 0),
-    0,
-  );
+  const totalBytes = counts.reduce((n, item) => n + item.size, 0);
   if (totalBytes > MAX_M365_AGENT_SOURCE_BYTES) {
     throw new M365Error(
       `Agent sources total ${Math.round(totalBytes / (1024 * 1024))}MB, more than the ${Math.round(MAX_M365_AGENT_SOURCE_BYTES / (1024 * 1024))}MB allowed — exclude subfolders or large files`,
@@ -803,197 +820,151 @@ async function planAgentSources(
       400,
     );
   }
-  return planned;
+  return sources;
 }
 
 /**
- * Indexes every source of an agent using the CALLING USER'S Graph token
- * (creation/refresh runs only while someone with file access is present —
- * there is no offline token access, by design). Returns per-source
- * outcomes in source order, each carrying per-item results; the caller
- * persists them (and the resolved embedding deployment) onto the agent
- * record and the manifest.
+ * Builds a fresh job for the agent using the CALLING ADMIN'S Graph token:
+ * resolves the embedding deployment, plans every source, and lists every
+ * indexable item as `pending`. Nothing is downloaded here; steps do that.
  */
-export async function indexAgentSources(
+export async function prepareIndexJob(
   req: NextRequest,
   agent: M365Agent,
-  userId = 'index',
-): Promise<AgentIndexRun> {
+  userId: string,
+  startedBy: string,
+): Promise<M365IndexJob> {
+  await ensureM365AgentsIndex();
+  const embeddingDeployment = await resolveEmbeddingDeployment(agent);
+  const sources = await planJobSources(req, agent, userId);
+  const now = new Date().toISOString();
+  return {
+    version: 1,
+    jobId: `job-${randomUUID().replace(/-/g, '').slice(0, 12)}`,
+    agentId: agent.id,
+    status: 'running',
+    startedBy,
+    startedAt: now,
+    updatedAt: now,
+    embeddingDeployment,
+    sources,
+  };
+}
+
+/**
+ * Processes ONE planned item end to end — download → validate → extract
+ * → chunk → embed → upload — and returns the item with its outcome.
+ * Chunk ids are deterministic (`agent_source_item_index`), so re-running
+ * an item after an interrupted step is idempotent.
+ */
+export async function indexJobItem(
+  req: NextRequest,
+  agentId: string,
+  embeddingDeployment: string,
+  sourceId: string,
+  item: M365ManifestItem,
+): Promise<M365ManifestItem> {
+  try {
+    const { text, lastModified } = await downloadAndExtract(req, item);
+    const chunks = chunkDocument(text);
+    if (chunks.length === 0) {
+      console.warn(
+        `[m365-agents] extraction yielded no text for agent ${sanitizeForLog(agentId)} item ${sanitizeForLog(item.itemId)} (scanned/image-only file?)`,
+      );
+      return { ...item, status: 'noText', indexedChunks: 0, error: undefined };
+    }
+    const vectors = await embedTexts(
+      chunks.map((c) => c.chunk),
+      embeddingDeployment,
+    );
+    const itemId = sanitizeGraphId(item.itemId);
+    const docs = chunks.map(
+      (chunk, index): M365AgentIndexDoc => ({
+        chunk_id: `${agentId}_${sourceId}_${itemId}_${index}`,
+        agent_id: agentId,
+        source_id: sourceId,
+        item_id: itemId,
+        locator: chunk.locator ?? '',
+        chunk: chunk.chunk,
+        title: item.name,
+        url: item.webUrl,
+        date: lastModified ?? item.lastModified ?? new Date().toISOString(),
+        text_vector: vectors[index],
+      }),
+    );
+    await getSearchClient().mergeOrUploadDocuments(docs);
+    return {
+      ...item,
+      status: 'indexed',
+      indexedChunks: docs.length,
+      error: undefined,
+    };
+  } catch (error) {
+    const missing =
+      error instanceof M365Error &&
+      (error.kind === 'not_found' || error.kind === 'forbidden');
+    console.error(
+      `[m365-agents] indexing failed for agent ${sanitizeForLog(agentId)} item ${sanitizeForLog(item.itemId)}: ${sanitizeForLog(error)}`,
+    );
+    return {
+      ...item,
+      status: missing ? 'missing' : 'failed',
+      indexedChunks: 0,
+      error:
+        error instanceof Error ? error.message.slice(0, 300) : 'Unknown error',
+    };
+  }
+}
+
+/** Every chunk id currently in the index for the agent, keyset-paged. */
+async function listAgentChunkIds(
+  client: SearchClient<M365AgentIndexDoc>,
+  agentId: string,
+): Promise<string[]> {
+  const ids: string[] = [];
+  let last: string | null = null;
+  for (;;) {
+    const filter: string =
+      `agent_id eq '${odataEscape(agentId)}'` +
+      (last ? ` and chunk_id gt '${odataEscape(last)}'` : '');
+    const results = await client.search('*', {
+      filter,
+      select: ['chunk_id'],
+      orderBy: ['chunk_id asc'],
+      top: 1000,
+    });
+    let count = 0;
+    for await (const result of results.results) {
+      ids.push(result.document.chunk_id);
+      last = result.document.chunk_id;
+      count += 1;
+    }
+    if (count < 1000) return ids;
+  }
+}
+
+/**
+ * End-of-run diff (design §4): removes chunks the finished job no longer
+ * accounts for — items that left the plan, shrank, or lost their text —
+ * while keeping the previous chunks of items that failed this run and of
+ * sources whose plan failed. Runs AFTER every new chunk is uploaded, so
+ * users mid-chat never see an empty index during a re-index.
+ */
+export async function reconcileAgentChunks(job: M365IndexJob): Promise<number> {
   await ensureM365AgentsIndex();
   const client = getSearchClient();
-  const deployment = await resolveEmbeddingDeployment(agent);
-  const planned = await planAgentSources(req, agent, userId);
-
-  const indexOneItem = async (
-    item: M365ManifestItem,
-    sourceId: string,
-  ): Promise<{ item: M365ManifestItem; docs: M365AgentIndexDoc[] }> => {
-    if (item.tier !== 'indexable') {
-      return { item: { ...item, status: undefined }, docs: [] };
-    }
-    try {
-      const { text, lastModified } = await downloadAndExtract(req, item);
-      const chunks = chunkDocument(text);
-      if (chunks.length === 0) {
-        console.warn(
-          `[m365-agents] extraction yielded no text for agent ${sanitizeForLog(agent.id)} item ${sanitizeForLog(item.itemId)} (scanned/image-only file?)`,
-        );
-        return {
-          item: {
-            ...item,
-            status: 'noText',
-            indexedChunks: 0,
-            error: undefined,
-          },
-          docs: [],
-        };
-      }
-      const vectors = await embedTexts(
-        chunks.map((c) => c.chunk),
-        deployment,
-      );
-      const itemId = sanitizeGraphId(item.itemId);
-      const docs = chunks.map(
-        (chunk, index): M365AgentIndexDoc => ({
-          chunk_id: `${agent.id}_${sourceId}_${itemId}_${index}`,
-          agent_id: agent.id,
-          source_id: sourceId,
-          item_id: itemId,
-          locator: chunk.locator ?? '',
-          chunk: chunk.chunk,
-          title: item.name,
-          url: item.webUrl,
-          date: lastModified ?? item.lastModified ?? new Date().toISOString(),
-          text_vector: vectors[index],
-        }),
-      );
-      return {
-        item: {
-          ...item,
-          status: 'indexed',
-          indexedChunks: docs.length,
-          error: undefined,
-        },
-        docs,
-      };
-    } catch (error) {
-      const missing =
-        error instanceof M365Error &&
-        (error.kind === 'not_found' || error.kind === 'forbidden');
-      console.error(
-        `[m365-agents] indexing failed for agent ${sanitizeForLog(agent.id)} item ${sanitizeForLog(item.itemId)}: ${sanitizeForLog(error)}`,
-      );
-      return {
-        item: {
-          ...item,
-          status: missing ? 'missing' : 'failed',
-          indexedChunks: 0,
-          error:
-            error instanceof Error
-              ? error.message.slice(0, 300)
-              : 'Unknown error',
-        },
-        docs: [],
-      };
-    }
-  };
-
-  const indexOneSource = async ({
-    source,
-    plan,
-    planError,
-  }: PlannedSource): Promise<SourceIndexOutcome> => {
-    const base = {
-      sourceId: source.sourceId,
-      items: [] as M365ManifestItem[],
-      folders: [] as M365ManifestFolder[],
-      counts: summarizeCounts([]),
-      truncated: false,
-    };
-    if (!plan) {
-      console.error(
-        `[m365-agents] planning failed for agent ${sanitizeForLog(agent.id)} source ${sanitizeForLog(source.sourceId)}: ${sanitizeForLog(planError)}`,
-      );
-      return {
-        ...base,
-        status: 'error',
-        indexedChunks: 0,
-        error:
-          planError instanceof Error
-            ? planError.message.slice(0, 300)
-            : 'Could not list the source',
-      };
-    }
-    if (plan.missing) {
-      return {
-        ...base,
-        status: 'missing',
-        indexedChunks: 0,
-        error: 'The file or folder could not be opened with your account',
-      };
-    }
-
-    // Items run concurrently; the replace-by-source swap below is per
-    // source, so a failure mid-way leaves the previous chunks in place.
-    const results = await mapWithConcurrency(
-      plan.items,
-      DOCUMENT_INDEX_CONCURRENCY,
-      (item) => indexOneItem(item, source.sourceId),
+  const existing = await listAgentChunkIds(client, job.agentId);
+  const stale = selectStaleChunkIds(
+    existing,
+    chunkRetentionFor(job, sanitizeGraphId),
+  );
+  for (let offset = 0; offset < stale.length; offset += 1000) {
+    await client.deleteDocuments(
+      'chunk_id',
+      stale.slice(offset, offset + 1000),
     );
-    const items = results.map((r) => r.item);
-    const uploadDocs = results.flatMap((r) => r.docs);
-    const counts = summarizeCounts(items);
-
-    try {
-      // Replace-by-source: old chunks out, new chunks in.
-      await deleteSourceDocuments(client, agent.id, source.sourceId);
-      if (uploadDocs.length > 0) {
-        await client.mergeOrUploadDocuments(uploadDocs);
-      }
-    } catch (error) {
-      console.error(
-        `[m365-agents] index upload failed for agent ${sanitizeForLog(agent.id)} source ${sanitizeForLog(source.sourceId)}: ${sanitizeForLog(error)}`,
-      );
-      return {
-        ...base,
-        items,
-        folders: plan.folders,
-        counts,
-        truncated: plan.truncated,
-        ...(plan.deltaLink && { deltaLink: plan.deltaLink }),
-        status: 'error',
-        indexedChunks: 0,
-        error:
-          error instanceof Error
-            ? error.message.slice(0, 300)
-            : 'Upload failed',
-      };
-    }
-
-    // Every indexable item failed → the source is in error; partial
-    // failures are visible per item and in the counts.
-    const attempted = counts.indexable;
-    const failed = (counts.failed ?? 0) + (counts.missing ?? 0);
-    const allFailed = attempted > 0 && failed === attempted;
-    const firstError = items.find((i) => i.error)?.error;
-    return {
-      ...base,
-      items,
-      folders: plan.folders,
-      counts,
-      truncated: plan.truncated,
-      ...(plan.deltaLink && { deltaLink: plan.deltaLink }),
-      status: allFailed ? 'error' : 'indexed',
-      indexedChunks: uploadDocs.length,
-      ...(firstError && { error: firstError }),
-    };
-  };
-
-  const outcomes: SourceIndexOutcome[] = [];
-  for (const entry of planned) {
-    outcomes.push(await indexOneSource(entry));
   }
-  return { outcomes, embeddingDeployment: deployment };
+  return stale.length;
 }
 
 // ---------------------------------------------------------------------------
