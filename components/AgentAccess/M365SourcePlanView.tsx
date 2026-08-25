@@ -5,7 +5,7 @@ import {
   IconChevronDown,
   IconChevronRight,
 } from '@tabler/icons-react';
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -72,6 +72,12 @@ export const M365SourcePlanView: FC<M365SourcePlanViewProps> = ({
   const [extensionsDraft, setExtensionsDraft] = useState(
     selection.includeExtensions?.join(', ') ?? '',
   );
+  // Keep the draft in step when the selection changes from outside (e.g.
+  // "take theirs" on a save conflict swaps the whole source list).
+  const committedExtensions = selection.includeExtensions?.join(', ') ?? '';
+  useEffect(() => {
+    setExtensionsDraft(committedExtensions);
+  }, [committedExtensions]);
 
   const statusByItem = useMemo(() => {
     const map = new Map<string, M365ManifestItem>();
