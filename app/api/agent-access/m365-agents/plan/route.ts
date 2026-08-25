@@ -15,7 +15,15 @@
 import { NextRequest } from 'next/server';
 
 import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessService';
+import { createAgentAccessBlobStorage } from '@/lib/services/agentAccess/accessRulesStore';
 import { resolveAdminStatus } from '@/lib/services/agentAccess/adminAuth';
+import { canEditKey } from '@/lib/services/agentAccess/adminRouteHelpers';
+import {
+  M365DerivedIndexEntry,
+  M365_AGENT_SOURCE,
+  canonicalAgentKey,
+} from '@/lib/services/agentAccess/types';
+import { readDerivedIndex } from '@/lib/services/m365/agentDerivedTextStore';
 import { planSources } from '@/lib/services/m365/agentSourcePlanner';
 import {
   GRAPH_ID_REGEX,
@@ -61,7 +69,19 @@ const planSourceSchema = z
   .strict();
 
 const bodySchema = z
-  .object({ sources: z.array(planSourceSchema).min(1).max(200) })
+  .object({
+    sources: z.array(planSourceSchema).min(1).max(200),
+    /**
+     * Existing agent being edited: its prepared files (phase 4) are
+     * applied so the plan matches what an index run would do. Ignored
+     * unless the caller holds the agent's key.
+     */
+    agentId: z
+      .string()
+      .trim()
+      .regex(/^m365-[a-f0-9]{12}$/)
+      .optional(),
+  })
   .strict();
 
 export async function POST(request: NextRequest) {
@@ -95,9 +115,33 @@ export async function POST(request: NextRequest) {
       return forbiddenResponse();
     }
 
+    let prepared: Record<string, M365DerivedIndexEntry> | undefined;
+    if (
+      parsed.data.agentId &&
+      canEditKey(
+        status,
+        canonicalAgentKey(M365_AGENT_SOURCE, parsed.data.agentId),
+      )
+    ) {
+      try {
+        prepared = (
+          await readDerivedIndex(
+            createAgentAccessBlobStorage(),
+            parsed.data.agentId,
+          )
+        ).index.items;
+      } catch {
+        prepared = undefined; // plan without preparation info
+      }
+    }
+
     let plan;
     try {
-      plan = await planSources(request, session.user.id, parsed.data.sources);
+      plan = await planSources(
+        request,
+        session.user.id,
+        parsed.data.sources.map((source) => ({ ...source, prepared })),
+      );
     } catch (error) {
       if (error instanceof M365Error) return m365ErrorResponse(error);
       throw error;
