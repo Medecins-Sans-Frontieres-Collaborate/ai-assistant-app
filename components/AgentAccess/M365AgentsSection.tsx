@@ -45,6 +45,7 @@ import {
   CLIENT_M365_AGENT_SOURCE,
   ClientAgentPlan,
   ClientIndexJobSummary,
+  ClientRefreshPreview,
   ClientSourcePlan,
   clientCanonicalAgentKey,
 } from './types';
@@ -143,6 +144,8 @@ interface M365AgentEditorProps {
   maxSources: number;
   /** Server's env-configured byte budget (from the listing response). */
   maxBytes: number;
+  /** Starts an index job for the agent being edited (existing agents). */
+  onStartIndex?: (mode: 'full' | 'refresh') => void;
   onSaved: () => void;
   onCancel: () => void;
   onConflictReload: () => void;
@@ -159,6 +162,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
   existing,
   maxSources,
   maxBytes,
+  onStartIndex,
   onSaved,
   onCancel,
   onConflictReload,
@@ -204,6 +208,31 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
     retry: 0,
     refetchOnWindowFocus: false,
   });
+  // Change detection on open (design §7): what a refresh would do, from
+  // the stored delta links — metadata only, nothing is indexed here.
+  const changesQuery = useQuery<ClientRefreshPreview | null>({
+    queryKey: ['agent-access-m365-agent-changes', existing?.agent.id],
+    queryFn: async () => {
+      const response = await fetch(
+        `/api/agent-access/m365-agents/changes?id=${encodeURIComponent(existing!.agent.id)}`,
+      );
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        throw new Error(body?.error || t('m365ChangesFailed'));
+      }
+      return unwrapApiData<ClientRefreshPreview>(await response.json()) ?? null;
+    },
+    enabled: existing !== null,
+    retry: 0,
+    refetchOnWindowFocus: false,
+    staleTime: 60_000,
+  });
+  const changeTotal = changesQuery.data?.preview
+    ? changesQuery.data.preview.changes.added +
+      changesQuery.data.preview.changes.modified +
+      changesQuery.data.preview.changes.removed
+    : 0;
+
   const manifestBySourceId = useMemo(() => {
     const map = new Map<string, M365AgentManifest['sources'][number]>();
     for (const source of manifestQuery.data?.sources ?? []) {
@@ -525,6 +554,59 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
           </p>
         </div>
 
+        {existing && (
+          <div
+            className={`rounded-md px-2 py-1.5 text-xs ${
+              changeTotal > 0
+                ? 'bg-amber-50 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300'
+                : 'bg-gray-50 text-gray-600 dark:bg-gray-800 dark:text-gray-400'
+            }`}
+          >
+            {changesQuery.isLoading ? (
+              t('m365ChangesChecking')
+            ) : changesQuery.isError ? (
+              <span className="text-amber-700 dark:text-amber-400">
+                {changesQuery.error instanceof Error
+                  ? changesQuery.error.message
+                  : t('m365ChangesFailed')}
+              </span>
+            ) : !changesQuery.data?.preview ? (
+              t('m365ChangesNeverIndexed')
+            ) : (
+              <span className="flex flex-wrap items-center gap-2">
+                <span>
+                  {changeTotal > 0
+                    ? t('m365ChangesFound', {
+                        count: changeTotal,
+                        added: changesQuery.data.preview.changes.added,
+                        modified: changesQuery.data.preview.changes.modified,
+                        removed: changesQuery.data.preview.changes.removed,
+                      })
+                    : t('m365ChangesNone', {
+                        date: changesQuery.data.lastIndexedAt
+                          ? new Date(
+                              changesQuery.data.lastIndexedAt,
+                            ).toLocaleString()
+                          : '',
+                      })}
+                </span>
+                {changeTotal > 0 && onStartIndex && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onStartIndex('refresh');
+                      onCancel();
+                    }}
+                    className="rounded-md border border-amber-300 px-2 py-0.5 font-medium hover:bg-amber-100 dark:border-amber-700 dark:hover:bg-amber-900/40"
+                  >
+                    {t('m365AgentRefresh')}
+                  </button>
+                )}
+              </span>
+            )}
+          </div>
+        )}
+
         {/* Sources */}
         <div>
           <div className="mb-1 flex items-center justify-between">
@@ -808,11 +890,18 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
     if (job.status === 'succeeded') {
       const fn = job.failed + job.missing > 0 ? toast.error : toast.success;
       fn(
-        t('m365AgentIndexDone', {
-          indexed: job.indexed,
-          failed: job.failed + job.missing,
-          noText: job.noText,
-        }),
+        job.mode === 'refresh' && job.changes
+          ? t('m365AgentRefreshDone', {
+              added: job.changes.added,
+              modified: job.changes.modified,
+              removed: job.changes.removed,
+              failed: job.failed + job.missing,
+            })
+          : t('m365AgentIndexDone', {
+              indexed: job.indexed,
+              failed: job.failed + job.missing,
+              noText: job.noText,
+            }),
       );
     } else if (job.status === 'failed') {
       toast.error(t('m365AgentIndexJobFailed', { error: job.error ?? '' }));
@@ -856,12 +945,15 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
     }
   };
 
-  const startIndex = async (agentId: string) => {
+  const startIndex = async (
+    agentId: string,
+    mode: 'full' | 'refresh' = 'full',
+  ) => {
     try {
       const response = await fetch('/api/agent-access/m365-agents/index', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: agentId }),
+        body: JSON.stringify({ id: agentId, mode }),
       });
       let job: ClientIndexJobSummary;
       try {
@@ -1004,6 +1096,9 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
             const job = jobs[entry.agent.id];
             const jobActive = job?.status === 'running';
             const driving = drivingIds.has(entry.agent.id);
+            // Refresh needs a manifest to diff against; a source that was
+            // ever indexed under the planner implies one.
+            const hasBeenIndexed = sources.some((s) => !!s.counts);
             // Seventh-pass per-document counts (absent on records that were
             // never indexed under the planner).
             const docCounts = sources.reduce(
@@ -1081,10 +1176,12 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                               done: job.done,
                               total: job.total,
                             })
-                          : t('m365AgentIndexProgress', {
-                              done: job.done,
-                              total: job.total,
-                            })}
+                          : t(
+                              job.mode === 'refresh'
+                                ? 'm365AgentRefreshProgress'
+                                : 'm365AgentIndexProgress',
+                              { done: job.done, total: job.total },
+                            )}
                         {!driving && (
                           <span className="font-normal text-gray-500 dark:text-gray-400">
                             ·{' '}
@@ -1174,10 +1271,32 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                         {t('m365AgentIndexCancel')}
                       </button>
                     </>
+                  ) : hasBeenIndexed ? (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          void startIndex(entry.agent.id, 'refresh')
+                        }
+                        className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                        title={t('m365AgentRefreshHint')}
+                      >
+                        <IconRefresh size={14} />
+                        {t('m365AgentRefresh')}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => void startIndex(entry.agent.id, 'full')}
+                        className="shrink-0 rounded-md px-1.5 py-1 text-xs text-gray-500 hover:bg-gray-100 hover:text-black dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
+                        title={t('m365AgentIndexHint')}
+                      >
+                        {t('m365AgentReindexAll')}
+                      </button>
+                    </>
                   ) : (
                     <button
                       type="button"
-                      onClick={() => void startIndex(entry.agent.id)}
+                      onClick={() => void startIndex(entry.agent.id, 'full')}
                       className="flex shrink-0 items-center gap-1 rounded-md border border-gray-200 px-2 py-1 text-sm text-black hover:bg-gray-100 disabled:opacity-40 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
                       title={t('m365AgentIndexHint')}
                     >
@@ -1276,6 +1395,9 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                     existing={entry}
                     maxSources={maxDocuments}
                     maxBytes={maxBytes}
+                    onStartIndex={(mode) =>
+                      void startIndex(entry.agent.id, mode)
+                    }
                     onSaved={() => {
                       setEditingId(null);
                       invalidate();
