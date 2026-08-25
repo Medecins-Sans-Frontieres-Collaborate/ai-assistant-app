@@ -22,9 +22,11 @@ import { NextRequest } from 'next/server';
 import { ServiceContainer } from '@/lib/services/ServiceContainer';
 import type {
   M365Agent,
+  M365AgentManifest,
   M365IndexJob,
   M365IndexJobSource,
   M365ManifestItem,
+  M365SourceChanges,
 } from '@/lib/services/agentAccess/types';
 import {
   chunkRetentionFor,
@@ -34,8 +36,12 @@ import {
   MAX_M365_AGENT_DOCUMENTS,
   MAX_M365_AGENT_SOURCE_BYTES,
   MAX_M365_SOURCE_FILE_BYTES,
+  RefreshSourcePlan,
+  SourcePlan,
   extensionOf,
   planSource,
+  refreshSourcePlan,
+  sumChanges,
 } from '@/lib/services/m365/agentSourcePlanner';
 import { checkDocumentSignature } from '@/lib/services/m365/documentSignature';
 import { M365Error, graphFetch, graphJson } from '@/lib/services/m365/graphApi';
@@ -727,11 +733,21 @@ export async function mapWithConcurrency<T, R>(
  * the run — except for session-level failures (no Graph session, consent
  * gap), which are the caller's to surface.
  */
+function isRefreshPlan(
+  plan: SourcePlan | RefreshSourcePlan,
+): plan is RefreshSourcePlan {
+  return 'changes' in plan && 'incremental' in plan;
+}
+
 async function planJobSources(
   req: NextRequest,
   agent: M365Agent,
   userId: string,
+  manifest: M365AgentManifest | null = null,
 ): Promise<M365IndexJobSource[]> {
+  const manifestBySourceId = new Map(
+    (manifest?.sources ?? []).map((s) => [s.sourceId, s]),
+  );
   const sources: M365IndexJobSource[] = [];
   for (const source of agent.sources) {
     const base: M365IndexJobSource = {
@@ -742,7 +758,7 @@ async function planJobSources(
       items: [],
     };
     try {
-      const plan = await planSource(req, userId, {
+      const input = {
         sourceId: source.sourceId,
         driveId: source.driveId,
         itemId: source.itemId,
@@ -750,7 +766,15 @@ async function planJobSources(
         recursive: source.recursive,
         excludedItemIds: source.excludedItemIds,
         includeExtensions: source.includeExtensions,
-      });
+      };
+      // Refresh: sources with a manifest entry plan incrementally against
+      // it (unchanged items keep their outcome); sources added since the
+      // last run are planned in full like a first index.
+      const previous = manifestBySourceId.get(source.sourceId);
+      const plan: SourcePlan | RefreshSourcePlan = previous
+        ? await refreshSourcePlan(req, input, previous)
+        : await planSource(req, userId, input);
+      const refresh = isRefreshPlan(plan) ? plan : null;
       if (plan.missing) {
         sources.push({
           ...base,
@@ -763,22 +787,30 @@ async function planJobSources(
         ...base,
         truncated: plan.truncated,
         ...(plan.deltaLink && { deltaLink: plan.deltaLink }),
+        ...(refresh && {
+          changes: refresh.changes,
+          incremental: refresh.incremental,
+        }),
         folders: plan.folders,
-        items: plan.items.map((item) =>
-          item.tier === 'indexable'
-            ? {
-                ...item,
-                status: 'pending',
-                indexedChunks: undefined,
-                error: undefined,
-              }
-            : {
-                ...item,
-                status: undefined,
-                indexedChunks: undefined,
-                error: undefined,
-              },
-        ),
+        // Refresh plans arrive with carried-over statuses; full plans
+        // start every indexable item pending.
+        items: refresh
+          ? plan.items
+          : plan.items.map((item) =>
+              item.tier === 'indexable'
+                ? {
+                    ...item,
+                    status: 'pending',
+                    indexedChunks: undefined,
+                    error: undefined,
+                  }
+                : {
+                    ...item,
+                    status: undefined,
+                    indexedChunks: undefined,
+                    error: undefined,
+                  },
+            ),
       });
     } catch (error) {
       if (
@@ -828,15 +860,33 @@ async function planJobSources(
  * resolves the embedding deployment, plans every source, and lists every
  * indexable item as `pending`. Nothing is downloaded here; steps do that.
  */
+export interface PrepareIndexJobOptions {
+  mode: 'full' | 'refresh';
+  /** Required for `refresh`; the last run's per-item record. */
+  manifest?: M365AgentManifest | null;
+}
+
 export async function prepareIndexJob(
   req: NextRequest,
   agent: M365Agent,
   userId: string,
   startedBy: string,
+  options: PrepareIndexJobOptions = { mode: 'full' },
 ): Promise<M365IndexJob> {
   await ensureM365AgentsIndex();
   const embeddingDeployment = await resolveEmbeddingDeployment(agent);
-  const sources = await planJobSources(req, agent, userId);
+  // A refresh must embed with the deployment the kept chunks used; if the
+  // deployment changed, carried-over chunks would not match query vectors.
+  const refresh =
+    options.mode === 'refresh' &&
+    !!options.manifest &&
+    (!agent.embeddingModelId || agent.embeddingModelId === embeddingDeployment);
+  const sources = await planJobSources(
+    req,
+    agent,
+    userId,
+    refresh ? options.manifest : null,
+  );
   const now = new Date().toISOString();
   return {
     version: 1,
@@ -847,8 +897,48 @@ export async function prepareIndexJob(
     startedAt: now,
     updatedAt: now,
     embeddingDeployment,
+    mode: refresh ? 'refresh' : 'full',
+    ...(refresh && {
+      changes: sumChanges(
+        sources
+          .map((s) => s.changes)
+          .filter((c): c is M365SourceChanges => !!c),
+      ),
+    }),
     sources,
   };
+}
+
+export interface RefreshPreviewSource {
+  sourceId: string;
+  changes: M365SourceChanges;
+  incremental: boolean;
+  missing: boolean;
+  error?: string;
+}
+
+/**
+ * "What would a refresh do?" — the change detection behind the editor's
+ * banner (design §7). Metadata only; no job, no writes. Throws the cap
+ * errors a refresh would, so the admin learns early.
+ */
+export async function previewRefresh(
+  req: NextRequest,
+  agent: M365Agent,
+  userId: string,
+  manifest: M365AgentManifest,
+): Promise<{ sources: RefreshPreviewSource[]; changes: M365SourceChanges }> {
+  const planned = await planJobSources(req, agent, userId, manifest);
+  const sources = planned.map(
+    (s): RefreshPreviewSource => ({
+      sourceId: s.sourceId,
+      changes: s.changes ?? { added: 0, modified: 0, removed: 0, unchanged: 0 },
+      incremental: s.incremental ?? false,
+      missing: s.status === 'missing',
+      ...(s.error && { error: s.error }),
+    }),
+  );
+  return { sources, changes: sumChanges(sources.map((s) => s.changes)) };
 }
 
 /**
