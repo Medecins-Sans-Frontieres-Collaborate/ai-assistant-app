@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} imeandaliwa ({chars} herufi). Endesha Sasisha kufahamu.",
     "m365PrepareStarted": "Ufasiri wa {name} umeanza kwa nyuma — weka tab hii wazi.",
     "m365PrepareFailed": "Imeshindikana kuandaa {name}: {error}",
-    "m365PrepareFailedGeneric": "Uandaaji umeshindikana."
+    "m365PrepareFailedGeneric": "Uandaaji umeshindikana.",
+    "canonicalKeyLabel": "Funguo",
+    "copyKey": "Nakili funguo",
+    "agentKeySearchPlaceholder": "Tafuta mawakala, miongozo, viunganishi… au bandika funguo",
+    "agentKeyAddCustom": "Ongeza \"{key}\" kama ulivyoandika",
+    "agentKeyRemove": "Ondoa {name}",
+    "hideAgent": "Ficha",
+    "unhideAgent": "Onyesha tena",
+    "hideAgentHint": "Ficha wakala huyu kutoka kwenye orodha yako ya usimamizi. Inaathiri mtazamo wako pekee — watumiaji na wasimamizi wengine hawaathiriki.",
+    "unhideAgentHint": "Onyesha wakala huyu tena kwenye orodha yako ya usimamizi.",
+    "hiddenBadge": "Imefichwa",
+    "hiddenAgentsCount": "{count, plural, one {wakala 1 amefichwa} other {mawakala # wamefichwa}}",
+    "hiddenAgentsShowing": "Inaonyesha {count, plural, one {wakala 1 aliyefichwa} other {mawakala # waliofichwa}}",
+    "hiddenAgentsShow": "Onyesha",
+    "hiddenAgentsHide": "Ficha tena",
+    "allAgentsHidden": "Mawakala wote hapa wamefichwa kwenye mtazamo wako — tumia Onyesha ili kuwaonyesha."
   },
   "localModels": {
     "title": "Miundo ya ndani",

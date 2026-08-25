@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} siap ({chars} karakter). Jalankan Perbarui untuk mengindeksnya.",
     "m365PrepareStarted": "Transkripsi {name} telah dimulai di latar belakang — biarkan tab ini tetap terbuka.",
     "m365PrepareFailed": "Tidak dapat menyiapkan {name}: {error}",
-    "m365PrepareFailedGeneric": "Gagal menyiapkan."
+    "m365PrepareFailedGeneric": "Gagal menyiapkan.",
+    "canonicalKeyLabel": "Kunci",
+    "copyKey": "Salin kunci",
+    "agentKeySearchPlaceholder": "Cari agen, panduan, konektor… atau tempelkan kunci",
+    "agentKeyAddCustom": "Tambahkan \"{key}\" sesuai yang diketik",
+    "agentKeyRemove": "Hapus {name}",
+    "hideAgent": "Sembunyikan",
+    "unhideAgent": "Tampilkan",
+    "hideAgentHint": "Sembunyikan agen ini dari daftar admin Anda. Hanya memengaruhi tampilan Anda — pengguna dan admin lain tidak terpengaruh.",
+    "unhideAgentHint": "Tampilkan kembali agen ini di daftar admin Anda.",
+    "hiddenBadge": "Tersembunyi",
+    "hiddenAgentsCount": "{count, plural, one {# agen tersembunyi} other {# agen tersembunyi}}",
+    "hiddenAgentsShowing": "Menampilkan {count, plural, one {# agen tersembunyi} other {# agen tersembunyi}}",
+    "hiddenAgentsShow": "Tampilkan",
+    "hiddenAgentsHide": "Sembunyikan lagi",
+    "allAgentsHidden": "Semua agen di sini tersembunyi dari tampilan Anda — gunakan Tampilkan untuk memperlihatkan mereka."
   },
   "localModels": {
     "title": "Model lokal",

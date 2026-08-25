@@ -4175,7 +4175,22 @@
     "m365PrepareDone": "{name} ti ṣètò ({chars} àmì-ọ̀rọ̀). Ṣiṣe Túnṣe láti ṣàkóso rẹ.",
     "m365PrepareStarted": "Ìtúmọ̀ {name} ti bẹ̀rẹ̀ ní abẹ́lẹ̀ — jẹ́ kí tab yìí ṣí.",
     "m365PrepareFailed": "A kò lè ṣètò {name}: {error}",
-    "m365PrepareFailedGeneric": "Ìṣètò ṣìṣe aṣìṣe."
+    "m365PrepareFailedGeneric": "Ìṣètò ṣìṣe aṣìṣe.",
+    "canonicalKeyLabel": "Bọtini",
+    "copyKey": "Da bọtini pọ́",
+    "agentKeySearchPlaceholder": "Wa àwọn aṣojú, ìtòsọ́nà, aṣàpọ̀… tàbí lẹẹmu bọtini",
+    "agentKeyAddCustom": "Fi \"{key}\" kun gẹ́gẹ́ bí o ṣe kọ",
+    "agentKeyRemove": "Yọ {name} kúrò",
+    "hideAgent": "Pa aṣojú mọ́",
+    "unhideAgent": "Ṣí aṣojú",
+    "hideAgentHint": "Pa aṣojú yìí mọ́ nínú àkójọ alákóso rẹ. Kìí fara kàn àwọn oníṣe tàbí alákóso míì — ìwọ nìkan ni ó kan.",
+    "unhideAgentHint": "Ṣí aṣojú yìí láti fi hàn nínú àkójọ alákóso rẹ lẹ́ẹ̀kan síi.",
+    "hiddenBadge": "Ìfarapamọ́",
+    "hiddenAgentsCount": "{count, plural, one {# aṣojú tí a fi pamọ́} other {# àwọn aṣojú tí a fi pamọ́}}",
+    "hiddenAgentsShowing": "Nṣàfihàn {count, plural, one {# aṣojú tí a fi pamọ́} other {# àwọn aṣojú tí a fi pamọ́}}",
+    "hiddenAgentsShow": "Fi hàn",
+    "hiddenAgentsHide": "Pa mọ́ lẹ́ẹkan síi",
+    "allAgentsHidden": "Gbogbo àwọn aṣojú nibi ti wa ní ìfarapamọ́ fún ọ — lo Fi hàn láti ṣàfihàn wọn."
   },
   "localModels": {
     "title": "Àwòrán àgbéyẹ̀wò agbègbè",

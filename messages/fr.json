@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} préparé ({chars} caractères). Lancez Actualiser pour l’indexer.",
     "m365PrepareStarted": "La transcription de {name} a démarré en arrière-plan — gardez cet onglet ouvert.",
     "m365PrepareFailed": "Impossible de préparer {name} : {error}",
-    "m365PrepareFailedGeneric": "La préparation a échoué."
+    "m365PrepareFailedGeneric": "La préparation a échoué.",
+    "canonicalKeyLabel": "Clé",
+    "copyKey": "Copier la clé",
+    "agentKeySearchPlaceholder": "Rechercher des agents, guides, connecteurs… ou coller une clé",
+    "agentKeyAddCustom": "Ajouter « {key} » tel que saisi",
+    "agentKeyRemove": "Supprimer {name}",
+    "hideAgent": "Masquer",
+    "unhideAgent": "Afficher",
+    "hideAgentHint": "Masquer cet agent de votre liste d’administrateur. Ceci n’affecte que votre affichage : les utilisateurs et autres administrateurs ne sont pas concernés.",
+    "unhideAgentHint": "Afficher à nouveau cet agent dans votre liste d’administrateur.",
+    "hiddenBadge": "Masqué",
+    "hiddenAgentsCount": "{count, plural, one {# agent masqué} other {# agents masqués}}",
+    "hiddenAgentsShowing": "Affichage de {count, plural, one {# agent masqué} other {# agents masqués}}",
+    "hiddenAgentsShow": "Afficher",
+    "hiddenAgentsHide": "Masquer de nouveau",
+    "allAgentsHidden": "Tous les agents ici sont masqués pour vous — cliquez sur Afficher pour les révéler."
   },
   "localModels": {
     "title": "Modèles locaux",

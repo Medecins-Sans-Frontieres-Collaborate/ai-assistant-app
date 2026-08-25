@@ -4222,7 +4222,22 @@
     "m365PrepareDone": "{name} 已准备（{chars} 个字符）。运行刷新以索引。",
     "m365PrepareStarted": "{name} 的转录已在后台开始 — 请保持本标签页打开。",
     "m365PrepareFailed": "无法准备 {name}：{error}",
-    "m365PrepareFailedGeneric": "准备失败。"
+    "m365PrepareFailedGeneric": "准备失败。",
+    "canonicalKeyLabel": "密钥",
+    "copyKey": "复制密钥",
+    "agentKeySearchPlaceholder": "搜索代理、指南、连接器…或粘贴密钥",
+    "agentKeyAddCustom": "按原样添加“{key}”",
+    "agentKeyRemove": "移除{name}",
+    "hideAgent": "隐藏",
+    "unhideAgent": "取消隐藏",
+    "hideAgentHint": "从您的管理员列表中隐藏此代理。仅影响您的视图——用户和其他管理员不受影响。",
+    "unhideAgentHint": "在您的管理员列表中重新显示此代理。",
+    "hiddenBadge": "已隐藏",
+    "hiddenAgentsCount": "{count, plural, one {# 个已隐藏代理} other {# 个已隐藏代理}}",
+    "hiddenAgentsShowing": "正在显示{count, plural, one {# 个已隐藏代理} other {# 个已隐藏代理}}",
+    "hiddenAgentsShow": "显示",
+    "hiddenAgentsHide": "再次隐藏",
+    "allAgentsHidden": "此处所有代理已从您的视图中隐藏—使用“显示”来恢复。"
   },
   "localModels": {
     "title": "本地模型",

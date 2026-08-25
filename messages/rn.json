@@ -4175,7 +4175,22 @@
     "m365PrepareDone": "{name} vyateguwe ({chars} inyuguti). Kora Ongera kugira bishirwe mu rutonde.",
     "m365PrepareStarted": "Ihindurwamajambo rya {name} ryatanguye mu mwanya — gira iyi tab ifunguye.",
     "m365PrepareFailed": "Ntivyashobotse gutegura {name}: {error}",
-    "m365PrepareFailedGeneric": "Kugitegura vyapfubye."
+    "m365PrepareFailedGeneric": "Kugitegura vyapfubye.",
+    "canonicalKeyLabel": "Urufunguzo",
+    "copyKey": "Gukoporora urufunguzo",
+    "agentKeySearchPlaceholder": "Shaka abahuza, inyigisho, connectors… canke ushiremo urufunguzo",
+    "agentKeyAddCustom": "Ongeramwo \"{key}\" nk'uko wayanditse",
+    "agentKeyRemove": "Kuraho {name}",
+    "hideAgent": "Hisha",
+    "unhideAgent": "Garagaza",
+    "hideAgentHint": "Hisha uyu muhuza ku rutonde rwawe rwa admin. Bigira ku murongo wawe gusa — abakoresha n'abandi ba admin ntibibahindura.",
+    "unhideAgentHint": "Siyo uyu muhuza agaruke ku rutonde rwawe rwa admin.",
+    "hiddenBadge": "Vyahishwe",
+    "hiddenAgentsCount": "{count, plural, one {# muhuza yahishwe} other {# abahuza bahishwe}}",
+    "hiddenAgentsShowing": "Hariko harerekanwa {count, plural, one {# muhuza yahishwe} other {# abahuza bahishwe}}",
+    "hiddenAgentsShow": "Garagaza",
+    "hiddenAgentsHide": "Hisha kandi",
+    "allAgentsHidden": "Abahuza bose hano bahishwe kuri wewe — kanda Garagaza kugira uberekane."
   },
   "localModels": {
     "title": "Akarorero k'imbere mu muduga",

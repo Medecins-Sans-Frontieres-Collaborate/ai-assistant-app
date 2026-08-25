@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} සූදානම් විය ({chars} අක්ෂර). එය දර්ශක කිරීම සඳහා නැවුම් කරන්න දිවිය.",
     "m365PrepareStarted": "{name} ලියවීම පසුබැසීමේදී ආරම්භ කර ඇත — මෙම ටැබය විවෘත තබා ගන්න.",
     "m365PrepareFailed": "{name} සූදානම් කළ නොහැකිය: {error}",
-    "m365PrepareFailedGeneric": "සූදානම් කිරීම අසාර්ථකයි."
+    "m365PrepareFailedGeneric": "සූදානම් කිරීම අසාර්ථකයි.",
+    "canonicalKeyLabel": "යතුර",
+    "copyKey": "යතුර පිටපත් කරන්න",
+    "agentKeySearchPlaceholder": "යෝජනා, මාර්ගෝපදේශ, සම්බන්ධනයන් සොයන්න… හෝ යතුරක් අලවන්න",
+    "agentKeyAddCustom": "\"{key}\" ලෙස එකතු කරන්න",
+    "agentKeyRemove": "{name} ඉවත් කරන්න",
+    "hideAgent": "සඟවන්න",
+    "unhideAgent": "පෙන්වන්න",
+    "hideAgentHint": "ඔබගේ පරිපාලක ලැයිස්තුවෙන් මෙම නියෝජිතයා සඟවන්න. මෙය ඔබගේ දර්ශනයට පමණක් බලපායි — පරිශීලකයන්ට සහ අනෙකුත් පරිපාලකයන්ට බලපාන්නේ නැත.",
+    "unhideAgentHint": "මෙම නියෝජිතයා නැවත ඔබගේ පරිපාලක ලැයිස්තුව තුළ පෙන්වන්න.",
+    "hiddenBadge": "සඟවා ඇත",
+    "hiddenAgentsCount": "{count, plural, one {# සඟවා ඇති නියෝජිතයා} other {# සඟවා ඇති නියෝජිතයින්}}",
+    "hiddenAgentsShowing": "{count, plural, one {# සඟවා ඇති නියෝජිතයා පෙන්වයි} other {# සඟවා ඇති නියෝජිතයින් පෙන්වයි}}",
+    "hiddenAgentsShow": "පෙන්වන්න",
+    "hiddenAgentsHide": "නැවත සඟවන්න",
+    "allAgentsHidden": "මෙහි සියලුම නියෝජිතයින් ඔබගේ දර්ශනයෙන් සඟවා ඇත — ඔවුන් බැලීමට 'පෙන්වන්න' යොදා ගන්න."
   },
   "localModels": {
     "title": "ප්‍රාදේශීය ආදර්ශ",

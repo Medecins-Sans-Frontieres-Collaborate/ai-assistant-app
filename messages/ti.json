@@ -4175,7 +4175,22 @@
     "m365PrepareDone": "{name} ተዘጋጂ ({chars} ፊደላት)। ምስ ተዘጋጂ ምሕዳስ ኣድርጉ።",
     "m365PrepareStarted": "ትርጉም ናይ {name} ኣብ ትራይ ጀመሯ — ታብ ክትዕወፍ ይቕጽሉ።",
     "m365PrepareFailed": "{name} ክትዘጋጅ ኣይተኻኣለን፡ {error}",
-    "m365PrepareFailedGeneric": "ምዘጋጀት ኣይከኣለን።"
+    "m365PrepareFailedGeneric": "ምዘጋጀት ኣይከኣለን።",
+    "canonicalKeyLabel": "መፍትሒ ቁፅሪ",
+    "copyKey": "ቁፅሪ ወስደል",
+    "agentKeySearchPlaceholder": "ወኪል፡ መመሪያ፡ አቀናጂታት… ወይ ቁፅሪ ኣቐምጥ",
+    "agentKeyAddCustom": "\"{key}\" ከምዝተጸሓፈ ኣእትው",
+    "agentKeyRemove": "{name} ኣርፍ",
+    "hideAgent": "ሰውር",
+    "unhideAgent": "ትርከብ",
+    "hideAgentHint": "እዚ ወኪል ካብ ዝተገልፀ ዝኾነ ዝርዝር ኣስውር። እዚ ብሓርነትካ ብብላይ የቐንየለይ — ተጠቃሚን ካልኦት መምርሒን ኣይንከኣኣቶምን።",
+    "unhideAgentHint": "እዚ ወኪል ኣብ ዝተገለፀ ዝርዝርካ ዳግማይ ኣርከብ።",
+    "hiddenBadge": "ሰውሩ",
+    "hiddenAgentsCount": "{count, plural, one {# የሰወሩ ወኪል} other {# የሰወሩ ወኪላት}}",
+    "hiddenAgentsShowing": "{count, plural, one {# የሰወሩ ወኪል እዩ ይተፀይዩ} other {# የሰወሩ ወኪላት እዮም ይተፀዩ}}",
+    "hiddenAgentsShow": "ፀይይ",
+    "hiddenAgentsHide": "ዳግማይ ሰውር",
+    "allAgentsHidden": "ከምዚ ውሽጢ ሓዊ ውን ሓሳብካ ዘሰወሩ ወኪላት እዮም። ንምርካብ ፀይይ ተጠቀም።"
   },
   "localModels": {
     "title": "ኣካባቢ ሞዴልታት",

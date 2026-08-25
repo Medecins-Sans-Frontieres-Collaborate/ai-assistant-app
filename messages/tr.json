@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} hazırlandı ({chars} karakter). İndekslemek için Yenile'yi çalıştırın.",
     "m365PrepareStarted": "{name} dosyasının deşifresi arka planda başlatıldı — bu sekmeyi açık tutun.",
     "m365PrepareFailed": "{name} hazırlanamadı: {error}",
-    "m365PrepareFailedGeneric": "Hazırlama başarısız."
+    "m365PrepareFailedGeneric": "Hazırlama başarısız.",
+    "canonicalKeyLabel": "Anahtar",
+    "copyKey": "Anahtarı kopyala",
+    "agentKeySearchPlaceholder": "Ajansları, rehberleri, konektörleri arayın… veya bir anahtar yapıştırın",
+    "agentKeyAddCustom": "\"{key}\" olduğu gibi ekle",
+    "agentKeyRemove": "{name} öğesini kaldır",
+    "hideAgent": "Gizle",
+    "unhideAgent": "Göster",
+    "hideAgentHint": "Bu ajansı yönetici listenizden gizleyin. Sadece sizin görüntünüzü etkiler — kullanıcılar ve diğer yöneticiler etkilenmez.",
+    "unhideAgentHint": "Bu ajansı yönetici listenizde tekrar gösterin.",
+    "hiddenBadge": "Gizli",
+    "hiddenAgentsCount": "{count, plural, one {# gizli ajan} other {# gizli ajan}}",
+    "hiddenAgentsShowing": "{count, plural, one {# gizli ajan gösteriliyor} other {# gizli ajan gösteriliyor}}",
+    "hiddenAgentsShow": "Göster",
+    "hiddenAgentsHide": "Yeniden gizle",
+    "allAgentsHidden": "Buradaki tüm ajanlar görünümünüzden gizlenmiş durumda — onları göstermek için 'Göster'i kullanın."
   },
   "localModels": {
     "title": "Yerel modeller",

@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} pregătit ({chars} caractere). Rulați Reîmprospătare pentru a-l indexa.",
     "m365PrepareStarted": "Transcrierea fișierului {name} a pornit în fundal — păstrați acest tab deschis.",
     "m365PrepareFailed": "Nu s-a putut pregăti {name}: {error}",
-    "m365PrepareFailedGeneric": "Pregătirea a eșuat."
+    "m365PrepareFailedGeneric": "Pregătirea a eșuat.",
+    "canonicalKeyLabel": "Cheie",
+    "copyKey": "Copiază cheia",
+    "agentKeySearchPlaceholder": "Caută agenți, ghiduri, conectori… sau lipește o cheie",
+    "agentKeyAddCustom": "Adaugă \"{key}\" exact cum ai scris",
+    "agentKeyRemove": "Șterge {name}",
+    "hideAgent": "Ascunde",
+    "unhideAgent": "Afișează",
+    "hideAgentHint": "Ascunde acest agent din lista ta de administrare. Afectează doar vizualizarea ta — utilizatorii și ceilalți administratori nu sunt afectați.",
+    "unhideAgentHint": "Afișează din nou acest agent în lista ta de administrare.",
+    "hiddenBadge": "Ascuns",
+    "hiddenAgentsCount": "{count, plural, one {# agent ascuns} other {# agenți ascunși}}",
+    "hiddenAgentsShowing": "Se afișează {count, plural, one {# agent ascuns} other {# agenți ascunși}}",
+    "hiddenAgentsShow": "Afișează",
+    "hiddenAgentsHide": "Ascunde din nou",
+    "allAgentsHidden": "Toți agenții de aici sunt ascunși din vizualizarea ta — folosește Afișează pentru a-i vedea."
   },
   "localModels": {
     "title": "Modele locale",

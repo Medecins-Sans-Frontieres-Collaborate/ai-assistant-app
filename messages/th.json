@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "เตรียม {name} แล้ว ({chars} ตัวอักษร) กรุณารีเฟรชเพื่อนำไปจัดทำดัชนี",
     "m365PrepareStarted": "เริ่มถอดเสียง {name} ในเบื้องหลัง — กรุณาเปิดแท็บนี้ไว้",
     "m365PrepareFailed": "ไม่สามารถเตรียม {name}: {error}",
-    "m365PrepareFailedGeneric": "การเตรียมล้มเหลว"
+    "m365PrepareFailedGeneric": "การเตรียมล้มเหลว",
+    "canonicalKeyLabel": "คีย์",
+    "copyKey": "คัดลอกคีย์",
+    "agentKeySearchPlaceholder": "ค้นหาเอเจนต์ คู่มือ ตัวเชื่อมต่อ… หรือวางคีย์",
+    "agentKeyAddCustom": "เพิ่ม \"{key}\" ตามที่พิมพ์",
+    "agentKeyRemove": "ลบ {name}",
+    "hideAgent": "ซ่อน",
+    "unhideAgent": "แสดง",
+    "hideAgentHint": "ซ่อนเอเจนต์นี้จากรายการผู้ดูแลของคุณ มีผลเฉพาะมุมมองของคุณ — ผู้ใช้และผู้ดูแลคนอื่นไม่ถูกกระทบ",
+    "unhideAgentHint": "แสดงเอเจนต์นี้ในรายการผู้ดูแลของคุณอีกครั้ง",
+    "hiddenBadge": "ถูกซ่อน",
+    "hiddenAgentsCount": "{count, plural, one {# เอเจนต์ที่ถูกซ่อน} other {# เอเจนต์ที่ถูกซ่อน}}",
+    "hiddenAgentsShowing": "กำลังแสดง {count, plural, one {# เอเจนต์ที่ถูกซ่อน} other {# เอเจนต์ที่ถูกซ่อน}}",
+    "hiddenAgentsShow": "แสดง",
+    "hiddenAgentsHide": "ซ่อนอีกครั้ง",
+    "allAgentsHidden": "เอเจนต์ทั้งหมดถูกซ่อนจากมุมมองของคุณ — ใช้ \"แสดง\" เพื่อเปิดเผย"
   },
   "localModels": {
     "title": "โมเดลภายในเครื่อง",

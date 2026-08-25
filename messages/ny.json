@@ -4175,7 +4175,22 @@
     "m365PrepareDone": "{name} yakonzedwa ({chars} zilembo). Yambitsaninso kuti mu index.",
     "m365PrepareStarted": "Kusindikiza kwa {name} kwayamba kumbuyo — sungani tabu iyi yotseguka.",
     "m365PrepareFailed": "Sizinatheke kukonza {name}: {error}",
-    "m365PrepareFailedGeneric": "Kukonzekera kwalephera."
+    "m365PrepareFailedGeneric": "Kukonzekera kwalephera.",
+    "canonicalKeyLabel": "Kiyi",
+    "copyKey": "Kopera kiyi",
+    "agentKeySearchPlaceholder": "Fufuzani ma agent, ma guide, ma connector... kapena mamata kiyi",
+    "agentKeyAddCustom": "Onjezani \"{key}\" monga mwalowamo",
+    "agentKeyRemove": "Chotsani {name}",
+    "hideAgent": "Bisani",
+    "unhideAgent": "Onetsaninso",
+    "hideAgentHint": "Bisani agent uyu m'ndandanda ya ma admin anu. Zimangakhudza mawonedwe anu — ogwiritsa ntchito ndi ma admin ena sizikukhudzidwa.",
+    "unhideAgentHint": "Onetsaninso agent uyu m'ndandanda yanu ya ma admin.",
+    "hiddenBadge": "Yabisika",
+    "hiddenAgentsCount": "{count, plural, one {# agent yabisika} other {# ma agent obisika}}",
+    "hiddenAgentsShowing": "Kuwonetsa {count, plural, one {# agent yabisika} other {# ma agent obisika}}",
+    "hiddenAgentsShow": "Onetsani",
+    "hiddenAgentsHide": "Bisaninso",
+    "allAgentsHidden": "Ma agent onse apa abisika m'mawonedwe anu — gwiritsani ntchito Onetsani kuti muwawone."
   },
   "localModels": {
     "title": "Mitundu yapafupi",

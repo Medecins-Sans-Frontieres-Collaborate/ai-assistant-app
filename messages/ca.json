@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} preparat ({chars} caràcters). Executa Actualitza per indexar-lo.",
     "m365PrepareStarted": "La transcripció de {name} s'ha iniciat en segon pla — mantingues aquesta pestanya oberta.",
     "m365PrepareFailed": "No s'ha pogut preparar {name}: {error}",
-    "m365PrepareFailedGeneric": "Ha fallat la preparació."
+    "m365PrepareFailedGeneric": "Ha fallat la preparació.",
+    "canonicalKeyLabel": "Clau",
+    "copyKey": "Copia la clau",
+    "agentKeySearchPlaceholder": "Cerca agents, guies, connectors… o enganxa una clau",
+    "agentKeyAddCustom": "Afegeix «{key}» tal com està escrit",
+    "agentKeyRemove": "Elimina {name}",
+    "hideAgent": "Amaga",
+    "unhideAgent": "Mostra",
+    "hideAgentHint": "Amaga aquest agent de la teva llista d'administració. Només afecta la teva vista; els usuaris i altres administradors no es veuen afectats.",
+    "unhideAgentHint": "Mostra aquest agent de nou a la teva llista d'administració.",
+    "hiddenBadge": "Amagat",
+    "hiddenAgentsCount": "{count, plural, one {# agent amagat} other {# agents amagats}}",
+    "hiddenAgentsShowing": "S'estan mostrant {count, plural, one {# agent amagat} other {# agents amagats}}",
+    "hiddenAgentsShow": "Mostra",
+    "hiddenAgentsHide": "Torna a amagar",
+    "allAgentsHidden": "Tots els agents aquí estan amagats de la teva vista. Utilitza «Mostra» per revelar-los."
   },
   "localModels": {
     "title": "Models locals",

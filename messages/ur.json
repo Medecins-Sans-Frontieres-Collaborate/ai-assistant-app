@@ -4221,7 +4221,22 @@
     "m365PrepareDone": "{name} تیار ہوگیا ({chars} حروف)۔ انڈیکس کے لیے ریفرش رن کریں۔",
     "m365PrepareStarted": "{name} کی تحریر میں منتقلی پس منظر میں شروع ہوگئی ہے — اس ٹیب کو کھلا رکھیں۔",
     "m365PrepareFailed": "{name} کو تیار نہیں کیا جا سکا: {error}",
-    "m365PrepareFailedGeneric": "تیاری ناکام ہوگئی۔"
+    "m365PrepareFailedGeneric": "تیاری ناکام ہوگئی۔",
+    "canonicalKeyLabel": "کلید",
+    "copyKey": "کلید نقل کریں",
+    "agentKeySearchPlaceholder": "ایجنٹس، گائیڈز، کنیکٹرز تلاش کریں… یا کوئی کلید چسپاں کریں",
+    "agentKeyAddCustom": "\"{key}\" جیسا لکھا ہے شامل کریں",
+    "agentKeyRemove": "{name} کو حذف کریں",
+    "hideAgent": "چھپائیں",
+    "unhideAgent": "واپس دکھائیں",
+    "hideAgentHint": "اس ایجنٹ کو اپنی ایڈمن فہرست سے چھپائیں۔ یہ صرف آپ کی نظر پر اثر انداز ہوتا ہے — صارفین اور دوسرے ایڈمنز پر نہیں۔",
+    "unhideAgentHint": "اس ایجنٹ کو دوبارہ اپنی ایڈمن فہرست میں دکھائیں۔",
+    "hiddenBadge": "چھپایا گیا",
+    "hiddenAgentsCount": "{count, plural, one {# چھپایا گیا ایجنٹ} other {# چھپائے گئے ایجنٹس}}",
+    "hiddenAgentsShowing": "{count, plural, one {# چھپایا گیا ایجنٹ دکھایا جا رہا ہے} other {# چھپائے گئے ایجنٹس دکھائے جا رہے ہیں}}",
+    "hiddenAgentsShow": "دکھائیں",
+    "hiddenAgentsHide": "دوبارہ چھپائیں",
+    "allAgentsHidden": "یہاں تمام ایجنٹس آپ کی نظر سے چھپائے گئے ہیں — انہیں ظاہر کرنے کے لیے 'دکھائیں' استعمال کریں۔"
   },
   "localModels": {
     "title": "لوکل ماڈلز",

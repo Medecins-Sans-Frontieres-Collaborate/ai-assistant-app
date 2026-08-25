@@ -4175,7 +4175,22 @@
     "m365PrepareDone": "{name} pripremljeno ({chars} karaktera). Pokrenite Osveži za indeksiranje.",
     "m365PrepareStarted": "Transkripcija {name} je pokrenuta u pozadini — držite ovu karticu otvorenom.",
     "m365PrepareFailed": "Nije moguće pripremiti {name}: {error}",
-    "m365PrepareFailedGeneric": "Priprema nije uspela."
+    "m365PrepareFailedGeneric": "Priprema nije uspela.",
+    "canonicalKeyLabel": "Ključ",
+    "copyKey": "Kopiraj ključ",
+    "agentKeySearchPlaceholder": "Pretražite agente, vodiče, konektore… ili nalepite ključ",
+    "agentKeyAddCustom": "Dodajte „{key}“ kao upisano",
+    "agentKeyRemove": "Uklonite {name}",
+    "hideAgent": "Sakrij",
+    "unhideAgent": "Prikaži",
+    "hideAgentHint": "Sakrijte ovog agenta sa svoje administratorske liste. Ovo utiče samo na vaš prikaz — korisnici i drugi administratori ostaju nepromenjeni.",
+    "unhideAgentHint": "Ponovo prikažite ovog agenta na svojoj administratorskoj listi.",
+    "hiddenBadge": "Skriveno",
+    "hiddenAgentsCount": "{count, plural, one {# skriveni agent} other {# skrivenih agenata}}",
+    "hiddenAgentsShowing": "Prikazano {count, plural, one {# skriveni agent} other {# skrivenih agenata}}",
+    "hiddenAgentsShow": "Prikaži",
+    "hiddenAgentsHide": "Ponovo sakrij",
+    "allAgentsHidden": "Svi agenti ovde su skriveni sa vašeg prikaza — upotrebite „Prikaži“ da ih otkrijete."
   },
   "localModels": {
     "title": "Lokalni modeli",

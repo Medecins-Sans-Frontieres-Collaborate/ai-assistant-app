@@ -4175,7 +4175,22 @@
     "m365PrepareDone": "{name} ត្រៀមរួច ({chars} តួអក្សរ)។ សូមបើកថែមទាន់ ដើម្បីបញ្ចូលទៅក្នុងលិបិក្រម។",
     "m365PrepareStarted": "ការបម្លែងអត្ថបទ {name} បានចាប់ផ្ដើមនៅខាងក្រោយ — សូមបើកផ្ទាំងនេះទុក។",
     "m365PrepareFailed": "មិនអាចត្រៀម {name} បានទេ៖ {error}",
-    "m365PrepareFailedGeneric": "ការត្រៀមបានបរាជ័យ។"
+    "m365PrepareFailedGeneric": "ការត្រៀមបានបរាជ័យ។",
+    "canonicalKeyLabel": "កម្មវិធីគ្រាន់តែ Key",
+    "copyKey": "ចម្លង Key",
+    "agentKeySearchPlaceholder": "ស្វែងរក agent, guide, connector… ឬបញ្ចូល key",
+    "agentKeyAddCustom": "បន្ថែម \"{key}\" ដូចដែលបានវាយ",
+    "agentKeyRemove": "លុប {name}",
+    "hideAgent": "លាក់",
+    "unhideAgent": "បង្ហាញឡើងវិញ",
+    "hideAgentHint": "លាក់ agent នេះចេញពីបញ្ជីរបស់អ្នក។ មានផលប៉ះពាល់តែទៅលើការមើលរបស់អ្នកប៉ុណ្ណោះ — មិនប៉ះពាល់តមនុស្សដទៃ និង admin ផ្សេងទៀតទេ។",
+    "unhideAgentHint": "បង្ហាញ agent នេះនៅក្នុងបញ្ជីរបស់អ្នកឡើងវិញ។",
+    "hiddenBadge": "បានលាក់",
+    "hiddenAgentsCount": "{count, plural, one {# agent ដែលបានលាក់} other {# agent ដែលបានលាក់}}",
+    "hiddenAgentsShowing": "បង្ហាញ {count, plural, one {# agent ដែលបានលាក់} other {# agent ដែលបានលាក់}}",
+    "hiddenAgentsShow": "បង្ហាញ",
+    "hiddenAgentsHide": "លាក់ម្ដងទៀត",
+    "allAgentsHidden": "agent ទាំងអស់នេះត្រូវបានលាក់ចេញពីការមើលរបស់អ្នក — ប្រើ \"បង្ហាញ\" ដើម្បីបង្ហាញវាឡើងវិញ។"
   },
   "localModels": {
     "title": "ម៉ូឌែលក្នុងតំបន់",

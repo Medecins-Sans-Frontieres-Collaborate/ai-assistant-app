@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} ተዘጋጅቷል ({chars} ቁምፊዎች)። ለማስያዝ Refresh ያድሱ።",
     "m365PrepareStarted": "የ {name} የድምፅ ትርጉም በጀመረ — ይህን ታብ ቁጠብ።",
     "m365PrepareFailed": "{name} ማዘጋጀት አልተቻለም፡ {error}",
-    "m365PrepareFailedGeneric": "አዘጋጅት አልተሳካም።"
+    "m365PrepareFailedGeneric": "አዘጋጅት አልተሳካም።",
+    "canonicalKeyLabel": "ቁልፍ",
+    "copyKey": "ቁልፉን ወደ ቅዳሜ ቅዳ",
+    "agentKeySearchPlaceholder": "ወኪሎችን፣ መመሪያዎችን፣ connectors... ፈልጉ ወይም ቁልፍ ለጥፉ",
+    "agentKeyAddCustom": "\"{key}\" እንደተፃፈ ያክሉ",
+    "agentKeyRemove": "{name} ያስወግዱ",
+    "hideAgent": "ደብቅ",
+    "unhideAgent": "አሳይ",
+    "hideAgentHint": "ይህን ወኪል ከአስተዳዳሪ ዝርዝርዎ ውስጥ ደብቁ። የራስዎን እይታ ብቻ ይቀየራል — ተጠቃሚዎችና ሌሎች አስተዳዳሪዎች አይተጋለጡም።",
+    "unhideAgentHint": "ይህን ወኪል እንደገና በአስተዳዳሪ ዝርዝርዎ ያሳዩ።",
+    "hiddenBadge": "የተደበቀ",
+    "hiddenAgentsCount": "{count, plural, one {# የተደበቀ ወኪል} other {# የተደበቁ ወኪሎች}}",
+    "hiddenAgentsShowing": "{count, plural, one {# የተደበቀ ወኪል ታይቷል} other {# የተደበቁ ወኪሎች ታይተዋል}}",
+    "hiddenAgentsShow": "አሳይ",
+    "hiddenAgentsHide": "ደብቅ ድጋሚ",
+    "allAgentsHidden": "እዚህ ያሉ ሁሉም ወኪሎች ከእይታዎ ተደብተዋል — ለማሳየት “አሳይ” ይጠቀሙ።"
   },
   "localModels": {
     "title": "የአካባቢ ሞዴሎች",

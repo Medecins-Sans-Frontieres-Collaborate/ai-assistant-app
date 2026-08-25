@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} подготовлен ({chars} символов). Для индексирования выполните обновление.",
     "m365PrepareStarted": "Транскрипция {name} запущена в фоновом режиме — не закрывайте вкладку.",
     "m365PrepareFailed": "Не удалось подготовить {name}: {error}",
-    "m365PrepareFailedGeneric": "Не удалось выполнить подготовку."
+    "m365PrepareFailedGeneric": "Не удалось выполнить подготовку.",
+    "canonicalKeyLabel": "Ключ",
+    "copyKey": "Скопировать ключ",
+    "agentKeySearchPlaceholder": "Поиск агентов, руководств, коннекторов… или вставьте ключ",
+    "agentKeyAddCustom": "Добавить «{key}» как введённый",
+    "agentKeyRemove": "Удалить {name}",
+    "hideAgent": "Скрыть",
+    "unhideAgent": "Показать",
+    "hideAgentHint": "Скрыть этого агента из вашего списка администраторов. Влияет только на ваш просмотр — пользователи и другие администраторы не затронуты.",
+    "unhideAgentHint": "Снова показать этого агента в вашем списке администраторов.",
+    "hiddenBadge": "Скрыто",
+    "hiddenAgentsCount": "{count, plural, one {# скрытый агент} few {# скрытых агента} many {# скрытых агентов} other {# скрытых агентов}}",
+    "hiddenAgentsShowing": "Показано {count, plural, one {# скрытый агент} few {# скрытых агента} many {# скрытых агентов} other {# скрытых агентов}}",
+    "hiddenAgentsShow": "Показать",
+    "hiddenAgentsHide": "Скрыть снова",
+    "allAgentsHidden": "Все агенты здесь скрыты из вашего вида — используйте «Показать», чтобы открыть их."
   },
   "localModels": {
     "title": "Локальные модели",

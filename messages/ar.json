@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "تمت تهيئة {name} ({chars} حرفاً). شغّل التحديث لفهرسته.",
     "m365PrepareStarted": "بدأ نسخ {name} في الخلفية — يرجى إبقاء هذا التبويب مفتوحاً.",
     "m365PrepareFailed": "تعذر تهيئة {name}: {error}",
-    "m365PrepareFailedGeneric": "فشلت التهيئة."
+    "m365PrepareFailedGeneric": "فشلت التهيئة.",
+    "canonicalKeyLabel": "المفتاح",
+    "copyKey": "نسخ المفتاح",
+    "agentKeySearchPlaceholder": "ابحث عن العملاء أو الأدلة أو الموصلات... أو الصق مفتاحاً",
+    "agentKeyAddCustom": "إضافة \"{key}\" كما كُتب",
+    "agentKeyRemove": "إزالة {name}",
+    "hideAgent": "إخفاء",
+    "unhideAgent": "إظهار",
+    "hideAgentHint": "إخفاء هذا العميل من قائمة المسؤولين الخاصة بك. يؤثر ذلك فقط على العرض الخاص بك — المستخدمون والمسؤولون الآخرون غير متأثرين.",
+    "unhideAgentHint": "إظهار هذا العميل مرة أخرى في قائمة المسؤولين الخاصة بك.",
+    "hiddenBadge": "مخفي",
+    "hiddenAgentsCount": "{count, plural, one {عميل واحد مخفي} other {# عملاء مخفين}}",
+    "hiddenAgentsShowing": "يتم عرض {count, plural, one {عميل واحد مخفي} other {# عملاء مخفين}}",
+    "hiddenAgentsShow": "إظهار",
+    "hiddenAgentsHide": "إخفاء مرة أخرى",
+    "allAgentsHidden": "جميع العملاء هنا مخفيون عن عرضك — استخدم \"إظهار\" لإظهارهم."
   },
   "localModels": {
     "title": "النماذج المحلية",

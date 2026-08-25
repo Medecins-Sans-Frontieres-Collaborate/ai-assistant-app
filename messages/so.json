@@ -4175,7 +4175,22 @@
     "m365PrepareDone": "{name} waa la diyaariyay ({chars} xaraf). Ku ordo Cusbooneysii si loo sifeeyo.",
     "m365PrepareStarted": "Turjumaadda {name} waxay ka bilaabatay asalka — tab-kan furanaow.",
     "m365PrepareFailed": "Lama diyaarin karin {name}: {error}",
-    "m365PrepareFailedGeneric": "Diyaarinta waa fashilantay."
+    "m365PrepareFailedGeneric": "Diyaarinta waa fashilantay.",
+    "canonicalKeyLabel": "Furaha",
+    "copyKey": "Nuqulso furaha",
+    "agentKeySearchPlaceholder": "Raadi wakiillo, hagayaal, isku-xirayaal… ama dheji furaha",
+    "agentKeyAddCustom": "Kudar \"{key}\" sida aad u qortay",
+    "agentKeyRemove": "Ka saar {name}",
+    "hideAgent": "Qari",
+    "unhideAgent": "Soo bandhig",
+    "hideAgentHint": "Qari wakiilkan liiskaaga maareeyaha. Tani waxay saameyneysaa oo keliya aragtidaada — isticmaaleyaasha iyo maareeyayaasha kale lama saameeyo.",
+    "unhideAgentHint": "Wakiilkan mar kale ku soo bandhig liiskaaga maareeyaha.",
+    "hiddenBadge": "Laga qariyey",
+    "hiddenAgentsCount": "{count, plural, one {# wakiil qarsoon} other {# wakiilal qarsoon}}",
+    "hiddenAgentsShowing": "Waxaa la soo bandhigay {count, plural, one {# wakiil qarsoon} other {# wakiilal qarsoon}}",
+    "hiddenAgentsShow": "Soo bandhig",
+    "hiddenAgentsHide": "Mar kale qari",
+    "allAgentsHidden": "Dhammaan wakiillada halkan ku jira waa laga qariyey aragtidaada — isticmaal Soo bandhig si aad u muujiso."
   },
   "localModels": {
     "title": "Moodallo maxalli ah",

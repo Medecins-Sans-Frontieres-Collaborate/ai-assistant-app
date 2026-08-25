@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} vorbereitet ({chars} Zeichen). Führen Sie \"Aktualisieren\" aus, um zu indexieren.",
     "m365PrepareStarted": "Transkription von {name} wurde im Hintergrund gestartet — lassen Sie diesen Tab geöffnet.",
     "m365PrepareFailed": "{name} konnte nicht vorbereitet werden: {error}",
-    "m365PrepareFailedGeneric": "Vorbereitung fehlgeschlagen."
+    "m365PrepareFailedGeneric": "Vorbereitung fehlgeschlagen.",
+    "canonicalKeyLabel": "Schlüssel",
+    "copyKey": "Schlüssel kopieren",
+    "agentKeySearchPlaceholder": "Agenten, Guides, Connectoren suchen … oder Schlüssel einfügen",
+    "agentKeyAddCustom": "„{key}“ wie eingegeben hinzufügen",
+    "agentKeyRemove": "{name} entfernen",
+    "hideAgent": "Ausblenden",
+    "unhideAgent": "Einblenden",
+    "hideAgentHint": "Blenden Sie diesen Agenten in Ihrer Admin-Liste aus. Betrifft nur Ihre Ansicht – Benutzer und andere Admins sind nicht betroffen.",
+    "unhideAgentHint": "Diesen Agenten wieder in Ihrer Admin-Liste anzeigen.",
+    "hiddenBadge": "Ausgeblendet",
+    "hiddenAgentsCount": "{count, plural, one {# ausgeblendeter Agent} other {# ausgeblendete Agenten}}",
+    "hiddenAgentsShowing": "{count, plural, one {# ausgeblendeter Agent wird angezeigt} other {# ausgeblendete Agenten werden angezeigt}}",
+    "hiddenAgentsShow": "Anzeigen",
+    "hiddenAgentsHide": "Erneut ausblenden",
+    "allAgentsHidden": "Alle Agenten hier sind in Ihrer Ansicht ausgeblendet – verwenden Sie „Anzeigen“, um sie einzublenden."
   },
   "localModels": {
     "title": "Lokale Modelle",

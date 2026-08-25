@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} آماده شد ({chars} کاراکتر). برای ایندکس، به‌روزرسانی را اجرا کنید.",
     "m365PrepareStarted": "رونویسی {name} در پس‌زمینه شروع شد — این تب را باز نگه دارید.",
     "m365PrepareFailed": "آماده‌سازی {name} ممکن نشد: {error}",
-    "m365PrepareFailedGeneric": "آماده‌سازی ناموفق بود."
+    "m365PrepareFailedGeneric": "آماده‌سازی ناموفق بود.",
+    "canonicalKeyLabel": "کلید",
+    "copyKey": "کپی کلید",
+    "agentKeySearchPlaceholder": "جستجوی عامل‌ها، راهنماها، اتصال‌ها… یا جای‌گذاری کلید",
+    "agentKeyAddCustom": "افزودن \"{key}\" به همان صورت تایپ‌شده",
+    "agentKeyRemove": "حذف {name}",
+    "hideAgent": "مخفی کردن",
+    "unhideAgent": "نمایش مجدد",
+    "hideAgentHint": "این عامل را از فهرست مدیر خود مخفی کنید. فقط نمای شما را تحت تأثیر قرار می‌دهد — کاربران و مدیران دیگر بی‌تأثیرند.",
+    "unhideAgentHint": "این عامل را دوباره در فهرست مدیر خود نمایش دهید.",
+    "hiddenBadge": "مخفی شده",
+    "hiddenAgentsCount": "{count, plural, one {# عامل مخفی} other {# عامل مخفی}}",
+    "hiddenAgentsShowing": "در حال نمایش {count, plural, one {# عامل مخفی} other {# عامل مخفی}}",
+    "hiddenAgentsShow": "نمایش",
+    "hiddenAgentsHide": "دوباره مخفی کن",
+    "allAgentsHidden": "تمام عامل‌های اینجا برای شما مخفی هستند — برای نمایش از گزینه نمایش استفاده کنید."
   },
   "localModels": {
     "title": "مدل‌های محلی",

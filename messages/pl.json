@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} przygotowano ({chars} znaków). Uruchom Odśwież, aby zindeksować.",
     "m365PrepareStarted": "Transkrypcja {name} rozpoczęta w tle — pozostaw tę kartę otwartą.",
     "m365PrepareFailed": "Nie udało się przygotować {name}: {error}",
-    "m365PrepareFailedGeneric": "Nie udało się przygotować."
+    "m365PrepareFailedGeneric": "Nie udało się przygotować.",
+    "canonicalKeyLabel": "Klucz",
+    "copyKey": "Kopiuj klucz",
+    "agentKeySearchPlaceholder": "Wyszukaj agentów, przewodniki, konektory… lub wklej klucz",
+    "agentKeyAddCustom": "Dodaj \"{key}\" dokładnie tak, jak wpisano",
+    "agentKeyRemove": "Usuń {name}",
+    "hideAgent": "Ukryj",
+    "unhideAgent": "Odkryj",
+    "hideAgentHint": "Ukryj tego agenta na swojej liście administratorów. Dotyczy tylko Twojego widoku — użytkownicy i inni administratorzy nie są tym objęci.",
+    "unhideAgentHint": "Ponownie wyświetl tego agenta na swojej liście administratorów.",
+    "hiddenBadge": "Ukryty",
+    "hiddenAgentsCount": "{count, plural, one {# ukryty agent} other {# ukrytych agentów}}",
+    "hiddenAgentsShowing": "Wyświetlono {count, plural, one {# ukrytego agenta} other {# ukrytych agentów}}",
+    "hiddenAgentsShow": "Pokaż",
+    "hiddenAgentsHide": "Ukryj ponownie",
+    "allAgentsHidden": "Wszyscy agenci tutaj są ukryci w Twoim widoku — użyj opcji Pokaż, aby ich wyświetlić."
   },
   "localModels": {
     "title": "Modele lokalne",

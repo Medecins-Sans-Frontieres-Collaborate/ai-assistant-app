@@ -4175,7 +4175,22 @@
     "m365PrepareDone": "{name} ebosanami ({chars} ba caractère). Salela Refresh mpo na ko-index yango.",
     "m365PrepareStarted": "Tanga {name} ebandaki na background — tika ongenga efaungwami.",
     "m365PrepareFailed": "Ekoki te kobosana {name}: {error}",
-    "m365PrepareFailedGeneric": "Kobosana elembaki."
+    "m365PrepareFailedGeneric": "Kobosana elembaki.",
+    "canonicalKeyLabel": "Liso ya motuya",
+    "copyKey": "Kopɛsisa clé",
+    "agentKeySearchPlaceholder": "Sosola basalisani, batindami, bakɔnekte... to kopɛsa clé",
+    "agentKeyAddCustom": "Kobakisa \"{key}\" ndenge emonisami",
+    "agentKeyRemove": "Longola {name}",
+    "hideAgent": "Kobomba",
+    "unhideAgent": "Lakisa lisusu",
+    "hideAgentHint": "Bombá mosalisani oyo na liste ya ba-admin na yo. Ekozwama kaka na motuya na yo — bato mosusu mpe ba-admin mosusu bakomonanga te.",
+    "unhideAgentHint": "Lakisa lisusu mosalisani oyo na liste ya ba-admin na yo.",
+    "hiddenBadge": "Ebombami",
+    "hiddenAgentsCount": "{count, plural, one {# mosalisani ebombami} other {# basalisani ebombami}}",
+    "hiddenAgentsShowing": "Kolakisa {count, plural, one {# mosalisani ebombami} other {# basalisani ebombami}}",
+    "hiddenAgentsShow": "Lakisa",
+    "hiddenAgentsHide": "Bombá lisusu",
+    "allAgentsHidden": "Basalisani nyonso awa babombami na monɔkɔ na yo — salá Lakisa mpo olakisa bango."
   },
   "localModels": {
     "title": "Bamodelo ya esika",

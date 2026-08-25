@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} förberedd ({chars} tecken). Kör Uppdatera för att indexera.",
     "m365PrepareStarted": "Transkribering av {name} har startat i bakgrunden — ha denna flik öppen.",
     "m365PrepareFailed": "Kunde inte förbereda {name}: {error}",
-    "m365PrepareFailedGeneric": "Förberedelse misslyckades."
+    "m365PrepareFailedGeneric": "Förberedelse misslyckades.",
+    "canonicalKeyLabel": "Nyckel",
+    "copyKey": "Kopiera nyckel",
+    "agentKeySearchPlaceholder": "Sök agenter, guider, connectors… eller klistra in en nyckel",
+    "agentKeyAddCustom": "Lägg till \"{key}\" som skrivet",
+    "agentKeyRemove": "Ta bort {name}",
+    "hideAgent": "Dölj",
+    "unhideAgent": "Visa",
+    "hideAgentHint": "Dölj denna agent från din adminlista. Endast du påverkas – användare och andra administratörer påverkas inte.",
+    "unhideAgentHint": "Visa denna agent i din adminlista igen.",
+    "hiddenBadge": "Dold",
+    "hiddenAgentsCount": "{count, plural, one {# dold agent} other {# dolda agenter}}",
+    "hiddenAgentsShowing": "Visar {count, plural, one {# dold agent} other {# dolda agenter}}",
+    "hiddenAgentsShow": "Visa",
+    "hiddenAgentsHide": "Dölj igen",
+    "allAgentsHidden": "Alla agenter här är dolda från din vy – använd Visa för att visa dem."
   },
   "localModels": {
     "title": "Lokala modeller",

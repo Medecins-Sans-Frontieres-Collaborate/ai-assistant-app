@@ -4175,7 +4175,22 @@
     "m365PrepareDone": "{name} voaomana ({chars} tarehintsoratra). Ampiasao ny Refresh hizara index.",
     "m365PrepareStarted": "Fandika soratra an'i {name} dia natomboka ao ambadika — avelao hisokatra ity takelaka ity.",
     "m365PrepareFailed": "Tsy afaka nanomana an'i {name}: {error}",
-    "m365PrepareFailedGeneric": "Nisy lesoka ny fanomanana."
+    "m365PrepareFailedGeneric": "Nisy lesoka ny fanomanana.",
+    "canonicalKeyLabel": "Key",
+    "copyKey": "Adikao ny key",
+    "agentKeySearchPlaceholder": "Mitady agents, guides, connectors… na manoratra key",
+    "agentKeyAddCustom": "Ampio \"{key}\" araka ny voasoratra",
+    "agentKeyRemove": "Esory {name}",
+    "hideAgent": "Afeno",
+    "unhideAgent": "Asehoy",
+    "hideAgentHint": "Afeno amin'ny lisitry ny admin anao ity agent ity. Tsy misy fiantraikany amin'ny mpampiasa sy admins hafa — fanovàna ho anao irery ihany.",
+    "unhideAgentHint": "Asehoy indray ity agent ity ao amin'ny lisitry ny admin-nao.",
+    "hiddenBadge": "Afina",
+    "hiddenAgentsCount": "{count, plural, one {# agent afina} other {# agents afina}}",
+    "hiddenAgentsShowing": "Aseho {count, plural, one {# agent afina} other {# agents afina}}",
+    "hiddenAgentsShow": "Asehoy",
+    "hiddenAgentsHide": "Afeno indray",
+    "allAgentsHidden": "Afina rehetra amin’ny fijery-nao ireo agent eto — ampiasao ny Asehoy mba hanehoana azy ireo."
   },
   "localModels": {
     "title": "Model eo an-toerana",

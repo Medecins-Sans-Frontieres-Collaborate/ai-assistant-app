@@ -4175,7 +4175,22 @@
     "m365PrepareDone": "{name} taƴti ({chars} binndanɗe). Wonna e Sappo ngam wonnata.",
     "m365PrepareStarted": "Heftinde {name} fuɗɗi e gila — jogdu tab ngal umma.",
     "m365PrepareFailed": "Taƴtude {name} waawaani: {error}",
-    "m365PrepareFailedGeneric": "Taƴtude waawaani."
+    "m365PrepareFailedGeneric": "Taƴtude waawaani.",
+    "canonicalKeyLabel": "Cilal",
+    "copyKey": "Nat cilal",
+    "agentKeySearchPlaceholder": "Yiyta agente, gundo, konektorgal… walla bollota cilal",
+    "agentKeyAddCustom": "Toppu \"{key}\" tun",
+    "agentKeyRemove": "Momtu {name}",
+    "hideAgent": "Buusa",
+    "unhideAgent": "Hollu",
+    "hideAgentHint": "Buusa agente maa dagi to ceertu admin maa. So tawii hay goonga konngol maa – jeytinooji e adminɓe ɓe jogii kosam.",
+    "unhideAgentHint": "Hollu agente on dagi to ceertu admin maa tan.",
+    "hiddenBadge": "Buusaani",
+    "hiddenAgentsCount": "{count, plural, one {# agente buusaani} other {# agente buusaani}}",
+    "hiddenAgentsShowing": "Nana hollu {count, plural, one {# agente buusaani} other {# agente buusaani}}",
+    "hiddenAgentsShow": "Hollu",
+    "hiddenAgentsHide": "Buusa tun",
+    "allAgentsHidden": "Agente fow ɗi buusanii to ceertu maa – waawi hollu ɓe enhude e mayde Hollu."
   },
   "localModels": {
     "title": "Moodelji jowte ɗee",

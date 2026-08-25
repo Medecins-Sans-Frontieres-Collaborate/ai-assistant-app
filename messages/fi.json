@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} valmisteltu ({chars} merkkiä). Suorita Päivitä indeksointia varten.",
     "m365PrepareStarted": "{name} litterointi aloitettu taustalla — pidä välilehti auki.",
     "m365PrepareFailed": "{name} valmistelu epäonnistui: {error}",
-    "m365PrepareFailedGeneric": "Valmistelu epäonnistui."
+    "m365PrepareFailedGeneric": "Valmistelu epäonnistui.",
+    "canonicalKeyLabel": "Avain",
+    "copyKey": "Kopioi avain",
+    "agentKeySearchPlaceholder": "Etsi agenteista, ohjeista, yhdistimistä… tai liitä avain",
+    "agentKeyAddCustom": "Lisää \"{key}\" sellaisenaan",
+    "agentKeyRemove": "Poista {name}",
+    "hideAgent": "Piilota",
+    "unhideAgent": "Näytä",
+    "hideAgentHint": "Piilota tämä agentti ylläpitoluettelostasi. Tämä vaikuttaa vain omaan näkymääsi — käyttäjiin ja muihin ylläpitäjiin tämä ei vaikuta.",
+    "unhideAgentHint": "Näytä tämä agentti ylläpitoluettelossasi uudelleen.",
+    "hiddenBadge": "Piilotettu",
+    "hiddenAgentsCount": "{count, plural, one {# piilotettu agentti} other {# piilotettua agenttia}}",
+    "hiddenAgentsShowing": "Näytetään {count, plural, one {# piilotettu agentti} other {# piilotettua agenttia}}",
+    "hiddenAgentsShow": "Näytä",
+    "hiddenAgentsHide": "Piilota uudelleen",
+    "allAgentsHidden": "Kaikki täällä olevat agentit ovat piilotettu omasta näkymästäsi — käytä Näytä-palikkaa paljastaaksesi ne."
   },
   "localModels": {
     "title": "Paikalliset mallit",

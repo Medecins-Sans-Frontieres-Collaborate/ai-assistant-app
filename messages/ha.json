@@ -4175,7 +4175,22 @@
     "m365PrepareDone": "An shirya {name} ({chars} haruffa). Yi amfani da Sabunta don tsara shi.",
     "m365PrepareStarted": "An fara fassara {name} a bango — ka bar wannan shafin a buɗe.",
     "m365PrepareFailed": "Ba a iya shirya {name}: {error}",
-    "m365PrepareFailedGeneric": "Shiryawa ta gaza."
+    "m365PrepareFailedGeneric": "Shiryawa ta gaza.",
+    "canonicalKeyLabel": "Maɓalli",
+    "copyKey": "Kwafi maɓalli",
+    "agentKeySearchPlaceholder": "Bincika wakilai, jagorori, haɗe-haɗe… ko liƙa maɓalli",
+    "agentKeyAddCustom": "Ƙara \"{key}\" kamar yadda aka rubuta",
+    "agentKeyRemove": "Cire {name}",
+    "hideAgent": "Boye",
+    "unhideAgent": "Bayyana",
+    "hideAgentHint": "Boye wannan wakili daga jerin masu gudanarwa naka. Wannan yana shafar kallonka kawai — masu amfani da sauran masu gudanarwa ba su da tasiri.",
+    "unhideAgentHint": "Bayyana wannan wakili a jerin masu gudanarwarka sake.",
+    "hiddenBadge": "An ɓoye",
+    "hiddenAgentsCount": "{count, plural, one {# wakili da aka ɓoye} other {# wakilan da aka ɓoye}}",
+    "hiddenAgentsShowing": "Ana nuna {count, plural, one {# wakili da aka ɓoye} other {# wakilan da aka ɓoye}}",
+    "hiddenAgentsShow": "Bayyana",
+    "hiddenAgentsHide": "Sake ɓoyewa",
+    "allAgentsHidden": "Dukkan wakilan nan an ɓoye su daga kallo naka — amfani da Bayyana don ganin su."
   },
   "localModels": {
     "title": "Samfuran cikin gida",

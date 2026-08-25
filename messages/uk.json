@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} підготовлено ({chars} символів). Виконайте Оновити для його індексації.",
     "m365PrepareStarted": "Транскрипція {name} запущена у фоновому режимі — тримайте цю вкладку відкритою.",
     "m365PrepareFailed": "Не вдалося підготувати {name}: {error}",
-    "m365PrepareFailedGeneric": "Підготовка не вдалася."
+    "m365PrepareFailedGeneric": "Підготовка не вдалася.",
+    "canonicalKeyLabel": "Ключ",
+    "copyKey": "Скопіювати ключ",
+    "agentKeySearchPlaceholder": "Пошук агентів, гідів, конекторів… або вставте ключ",
+    "agentKeyAddCustom": "Додати «{key}» як введено",
+    "agentKeyRemove": "Видалити {name}",
+    "hideAgent": "Приховати",
+    "unhideAgent": "Показати",
+    "hideAgentHint": "Приховати цього агента у вашому списку адміністраторів. Впливає лише на ваш вигляд — користувачі й інші адміністратори не бачать змін.",
+    "unhideAgentHint": "Показати цього агента у вашому списку адміністраторів знову.",
+    "hiddenBadge": "Приховано",
+    "hiddenAgentsCount": "{count, plural, one {# прихований агент} other {# прихованих агентів}}",
+    "hiddenAgentsShowing": "Показано {count, plural, one {# прихований агент} other {# прихованих агентів}}",
+    "hiddenAgentsShow": "Показати",
+    "hiddenAgentsHide": "Приховати знову",
+    "allAgentsHidden": "Усі агенти тут приховані у вашому вигляді — скористайтеся “Показати”, щоб їх відобразити."
   },
   "localModels": {
     "title": "Локальні моделі",

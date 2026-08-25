@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} připraveno ({chars} znaků). Spusťte Obnovit pro indexaci.",
     "m365PrepareStarted": "Přepis {name} byl spuštěn na pozadí — ponechte tuto kartu otevřenou.",
     "m365PrepareFailed": "Nepodařilo se připravit {name}: {error}",
-    "m365PrepareFailedGeneric": "Příprava selhala."
+    "m365PrepareFailedGeneric": "Příprava selhala.",
+    "canonicalKeyLabel": "Klíč",
+    "copyKey": "Kopírovat klíč",
+    "agentKeySearchPlaceholder": "Hledat agenty, průvodce, konektory… nebo vložte klíč",
+    "agentKeyAddCustom": "Přidat „{key}“ tak, jak bylo zadáno",
+    "agentKeyRemove": "Odebrat {name}",
+    "hideAgent": "Skrýt",
+    "unhideAgent": "Zobrazit",
+    "hideAgentHint": "Skrýt tohoto agenta z vašeho seznamu správců. Ovlivní to jen váš pohled – uživatelé a ostatní správci zůstanou nedotčeni.",
+    "unhideAgentHint": "Zobrazit tohoto agenta znovu ve vašem seznamu správců.",
+    "hiddenBadge": "Skrytý",
+    "hiddenAgentsCount": "{count, plural, one {# skrytý agent} few {# skrytí agenti} other {# skrytých agentů}}",
+    "hiddenAgentsShowing": "Zobrazuje se {count, plural, one {# skrytý agent} few {# skrytí agenti} other {# skrytých agentů}}",
+    "hiddenAgentsShow": "Zobrazit",
+    "hiddenAgentsHide": "Znovu skrýt",
+    "allAgentsHidden": "Všichni agenti zde jsou ve vašem zobrazení skrytí – pro zobrazení klikněte na Zobrazit."
   },
   "localModels": {
     "title": "Lokální modely",

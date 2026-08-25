@@ -4175,7 +4175,22 @@
     "m365PrepareDone": "{name} چمتو شو ({chars} توري). د اندېکس لپاره تازه‌کول ترسره کړئ.",
     "m365PrepareStarted": "د {name} لیکل په بغل کې پیل شول — دا ټب پرانستی وساتئ.",
     "m365PrepareFailed": "{name} چمتو نه‌شو: {error}",
-    "m365PrepareFailedGeneric": "چمتو کول ناکام شول."
+    "m365PrepareFailedGeneric": "چمتو کول ناکام شول.",
+    "canonicalKeyLabel": "کلید",
+    "copyKey": "کلید نقل کړئ",
+    "agentKeySearchPlaceholder": "ایجنټان، لارښودونه، نښلوونکي ولټوئ… یا کلید پیسټ کړئ",
+    "agentKeyAddCustom": "\"{key}\" همداسې اضافه کړئ",
+    "agentKeyRemove": "{name} لرې کړئ",
+    "hideAgent": "پټ کړئ",
+    "unhideAgent": "بیا ښکاره کړئ",
+    "hideAgentHint": "دا ایجنټ له خپل اډمین لیست څخه پټ کړئ. دا یوازې ستاسو لید اغېزمنوي — نور کارنان او اډمینان اغېزمنېږي نه.",
+    "unhideAgentHint": "دا ایجنټ بیرته په خپل اډمین لیست کې ښکاره کړئ.",
+    "hiddenBadge": "پټ شوی",
+    "hiddenAgentsCount": "{count, plural, one {# پټ ایجنټ} other {# پټ ایجنټان}}",
+    "hiddenAgentsShowing": "{count, plural, one {# پټ ایجنټ ښکاره شوی} other {# پټ ایجنټان ښکاره شوي}}",
+    "hiddenAgentsShow": "ښکاره کړئ",
+    "hiddenAgentsHide": "بیا پټ کړئ",
+    "allAgentsHidden": "دلته ټول ایجنټان ستاسو له نظره پټ دي — له ښکاره کولو څخه د هغوی د ښکاره کېدو لپاره استفاده وکړئ."
   },
   "localModels": {
     "title": "محلي ماډلونه",

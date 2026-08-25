@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} voorbereid ({chars} tekens). Voer Vernieuwen uit om het te indexeren.",
     "m365PrepareStarted": "Transcriptie van {name} opgestart op de achtergrond — houd dit tabblad open.",
     "m365PrepareFailed": "Kon {name} niet voorbereiden: {error}",
-    "m365PrepareFailedGeneric": "Voorbereiding mislukt."
+    "m365PrepareFailedGeneric": "Voorbereiding mislukt.",
+    "canonicalKeyLabel": "Sleutel",
+    "copyKey": "Kopieer sleutel",
+    "agentKeySearchPlaceholder": "Zoek agenten, gidsen, connectors… of plak een sleutel",
+    "agentKeyAddCustom": "Voeg \"{key}\" toe zoals getypt",
+    "agentKeyRemove": "Verwijder {name}",
+    "hideAgent": "Verbergen",
+    "unhideAgent": "Weergeven",
+    "hideAgentHint": "Verberg deze agent in uw beheerderslijst. Dit heeft alleen effect op uw weergave — gebruikers en andere beheerders merken hier niets van.",
+    "unhideAgentHint": "Toon deze agent opnieuw in uw beheerderslijst.",
+    "hiddenBadge": "Verborgen",
+    "hiddenAgentsCount": "{count, plural, one {# verborgen agent} other {# verborgen agenten}}",
+    "hiddenAgentsShowing": "Toont {count, plural, one {# verborgen agent} other {# verborgen agenten}}",
+    "hiddenAgentsShow": "Weergeven",
+    "hiddenAgentsHide": "Opnieuw verbergen",
+    "allAgentsHidden": "Alle agenten hier zijn verborgen voor uw weergave — gebruik Weergeven om ze te tonen."
   },
   "localModels": {
     "title": "Lokale modellen",

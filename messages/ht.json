@@ -4175,7 +4175,22 @@
     "m365PrepareDone": "{name} prepare ({chars} karaktè). Kouri Rafrechi pou endèks li.",
     "m365PrepareStarted": "Transkripsyon {name} kòmanse an fon — kenbe fich sa louvri.",
     "m365PrepareFailed": "Pa kapab prepare {name} : {error}",
-    "m365PrepareFailedGeneric": "Preparasyon echwe."
+    "m365PrepareFailedGeneric": "Preparasyon echwe.",
+    "canonicalKeyLabel": "Kle",
+    "copyKey": "Kopi kle",
+    "agentKeySearchPlaceholder": "Chèche ajan, gid, konektè… oswa kole yon kle",
+    "agentKeyAddCustom": "Ajoute \"{key}\" jan ou tape li",
+    "agentKeyRemove": "Retire {name}",
+    "hideAgent": "Kache",
+    "unhideAgent": "Montre ankò",
+    "hideAgentHint": "Kache ajan sa nan lis admin ou. Sa afekte sèlman vizyon ou — itilizatè ak lòt admin yo pap afekte.",
+    "unhideAgentHint": "Montre ajan sa ankò nan lis admin ou.",
+    "hiddenBadge": "Kache",
+    "hiddenAgentsCount": "{count, plural, one {# ajan kache} other {# ajan kache}}",
+    "hiddenAgentsShowing": "Ap montre {count, plural, one {# ajan kache} other {# ajan kache}}",
+    "hiddenAgentsShow": "Montre",
+    "hiddenAgentsHide": "Kache ankò",
+    "allAgentsHidden": "Tout ajan yo kache pou ou — sèvi ak Montre pou w ka wè yo."
   },
   "localModels": {
     "title": "Modèl lokal",

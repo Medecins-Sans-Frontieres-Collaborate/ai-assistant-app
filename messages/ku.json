@@ -4175,7 +4175,22 @@
     "m365PrepareDone": "{name} ئامادەکرا ({chars} پیت). نوێکردنەوە بەکاربهێنە بۆ ئەندێکس کردن.",
     "m365PrepareStarted": "وەرگێڕانی دەقی {name} لە پشتەوەدەستپێکرد — ئەم تابیە بکەوە.",
     "m365PrepareFailed": "نەتوانرا {name} ئامادەکرێت: {error}",
-    "m365PrepareFailedGeneric": "ئامادەکردن سەرکەوتوو نەبوو."
+    "m365PrepareFailedGeneric": "ئامادەکردن سەرکەوتوو نەبوو.",
+    "canonicalKeyLabel": "کلیل",
+    "copyKey": "کلیلەکە لەبەر بکە",
+    "agentKeySearchPlaceholder": "لێکۆڵینەوە بۆ ئەجێنت، ڕێبەر، گرێدەر... یان کلیلێک پەسکەرە",
+    "agentKeyAddCustom": "\"{key}\" زیاد بکە وەکوو نووسراو",
+    "agentKeyRemove": "سڕینەوەی {name}",
+    "hideAgent": "شاردنەوە",
+    "unhideAgent": "پیشاندان",
+    "hideAgentHint": "ئەم ئەجێنتە لە لیستی بەڕێوەبەرانتدا شاربدەرەوە. تەنها سەیرکردنی خۆت دەگۆڕێت ـ بەکارهێنەران و بەڕێوەبەرانى تر کاریگرییان لەسەر نییە.",
+    "unhideAgentHint": "دووبارە ئەم ئەجێنتە لە لیستی بەڕێوەبەرانتدا پیشان بدە.",
+    "hiddenBadge": "شاراو",
+    "hiddenAgentsCount": "{count, plural, one {# ئەجێنتی شاراو} other {# ئەجێنتی شاراو}}",
+    "hiddenAgentsShowing": "{count, plural, one {# ئەجێنتی شاراو پیشان دەدرێت} other {# ئەجێنتی شاراو پیشان دەدرێن}}",
+    "hiddenAgentsShow": "پیشاندان",
+    "hiddenAgentsHide": "دووبارە شاردنەوە",
+    "allAgentsHidden": "هەموو ئەجێنتەکان لێرە شاراوە لە تۆ. پیشاندان بەکاربە بۆ دەرکەوتنیان."
   },
   "localModels": {
     "title": "مۆدێلە سەرەکییەکان",

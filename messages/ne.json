@@ -4175,7 +4175,22 @@
     "m365PrepareDone": "{name} तयार भयो ({chars} क्यारेक्टरहरू)। यसलाई अनुक्रमणिका बनाउन Refresh चलाउनुहोस्।",
     "m365PrepareStarted": "{name} को प्रतिलिपि बनाउने कार्य पृष्ठभूमिमा सुरु भएको छ — यो टैब खुला राख्नुहोस्।",
     "m365PrepareFailed": "{name} तयार गर्न सकिएन: {error}",
-    "m365PrepareFailedGeneric": "तयारी असफल भयो।"
+    "m365PrepareFailedGeneric": "तयारी असफल भयो।",
+    "canonicalKeyLabel": "कुञ्जी",
+    "copyKey": "कुञ्जी प्रतिलिपि गर्नुहोस्",
+    "agentKeySearchPlaceholder": "एजेन्ट, गाइड, कनेक्टर खोज्नुहोस्… वा कुञ्जी टाँस्नुहोस्",
+    "agentKeyAddCustom": "\"{key}\" जस्ताको तस्तै थप्नुहोस्",
+    "agentKeyRemove": "{name} हटाउनुहोस्",
+    "hideAgent": "लोंकाउनुहोस्",
+    "unhideAgent": "देखाउनुहोस्",
+    "hideAgentHint": "यस एजेन्टलाई तपाईंको प्रशासन सूचीबाट लुकाउनुहोस्। यसले तपाईंको दृश्यमा मात्र असर गर्छ — प्रयोगकर्ता र अन्य प्रशासकहरूमा कुनै असर गर्दैन।",
+    "unhideAgentHint": "यो एजेन्टलाई पुनः तपाईंको प्रशासक सूचीमा देखाउनुहोस्।",
+    "hiddenBadge": "लुकाइएको",
+    "hiddenAgentsCount": "{count, plural, one {# लुकाइएको एजेन्ट} other {# लुकाइएका एजेन्टहरू}}",
+    "hiddenAgentsShowing": "{count, plural, one {# लुकाइएको एजेन्ट देखाउँदै} other {# लुकाइएका एजेन्टहरू देखाउँदै}}",
+    "hiddenAgentsShow": "देखाउनुहोस्",
+    "hiddenAgentsHide": "फेरि लुकाउनुहोस्",
+    "allAgentsHidden": "यहाँका सबै एजेन्टहरू तपाईंको दृश्यबाट लुकाइएका छन् — देखाउनका लागि 'देखाउनुहोस्' प्रयोग गर्नुहोस्।"
   },
   "localModels": {
     "title": "स्थानीय मोडेलहरू",

@@ -4175,7 +4175,22 @@
     "m365PrepareDone": "{name} προετοιμάστηκε ({chars} χαρακτήρες). Τρέξτε Ανανέωση για να το ευρετηριάσετε.",
     "m365PrepareStarted": "Η απομαγνητοφώνηση του {name} ξεκίνησε στο παρασκήνιο — αφήστε αυτήν την καρτέλα ανοιχτή.",
     "m365PrepareFailed": "Αδυναμία προετοιμασίας του {name}: {error}",
-    "m365PrepareFailedGeneric": "Η προετοιμασία απέτυχε."
+    "m365PrepareFailedGeneric": "Η προετοιμασία απέτυχε.",
+    "canonicalKeyLabel": "Κλειδί",
+    "copyKey": "Αντιγραφή κλειδιού",
+    "agentKeySearchPlaceholder": "Αναζήτηση agents, οδηγών, connectors… ή επικόλληση κλειδιού",
+    "agentKeyAddCustom": "Προσθήκη του «{key}» όπως πληκτρολογήθηκε",
+    "agentKeyRemove": "Αφαίρεση {name}",
+    "hideAgent": "Απόκρυψη",
+    "unhideAgent": "Εμφάνιση",
+    "hideAgentHint": "Απόκρυψη αυτού του agent από τη λίστα διαχειριστή σας. Επηρεάζει μόνο την προβολή σας — οι χρήστες και άλλοι διαχειριστές δεν επηρεάζονται.",
+    "unhideAgentHint": "Εμφάνιση αυτού του agent ξανά στη λίστα διαχειριστή σας.",
+    "hiddenBadge": "Κρυφό",
+    "hiddenAgentsCount": "{count, plural, one {# κρυφός agent} other {# κρυφοί agents}}",
+    "hiddenAgentsShowing": "Εμφανίζονται {count, plural, one {# κρυφός agent} other {# κρυφοί agents}}",
+    "hiddenAgentsShow": "Εμφάνιση",
+    "hiddenAgentsHide": "Απόκρυψη ξανά",
+    "allAgentsHidden": "Όλοι οι agents εδώ είναι κρυφοί από την προβολή σας — χρησιμοποιήστε Εμφάνιση για να τους αποκαλύψετε."
   },
   "localModels": {
     "title": "Τοπικά μοντέλα",

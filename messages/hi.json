@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} तैयार हुआ ({chars} अक्षर)। Index के लिए Refresh चलाएं।",
     "m365PrepareStarted": "{name} की ट्रांसक्रिप्शन बैकग्राउंड में शुरू हुई — यह टैब खुला रखें।",
     "m365PrepareFailed": "{name} तैयार नहीं कर सके: {error}",
-    "m365PrepareFailedGeneric": "तैयारी असफल रही।"
+    "m365PrepareFailedGeneric": "तैयारी असफल रही।",
+    "canonicalKeyLabel": "कुंजी",
+    "copyKey": "कुंजी कॉपी करें",
+    "agentKeySearchPlaceholder": "एजेंट, गाइड, कनेक्टर खोजें… या कुंजी चिपकाएं",
+    "agentKeyAddCustom": "\"{key}\" को जैसे टाइप किया गया है जोड़ें",
+    "agentKeyRemove": "{name} हटाएं",
+    "hideAgent": "छिपाएं",
+    "unhideAgent": "फिर दिखाएं",
+    "hideAgentHint": "इस एजेंट को अपनी एडमिन सूची से छिपाएं। यह केवल आपके दृश्य को प्रभावित करता है — उपयोगकर्ता और अन्य एडमिन पर कोई प्रभाव नहीं पड़ेगा।",
+    "unhideAgentHint": "इस एजेंट को अपनी एडमिन सूची में फिर से दिखाएं।",
+    "hiddenBadge": "छिपा हुआ",
+    "hiddenAgentsCount": "{count, plural, one {# छिपा हुआ एजेंट} other {# छिपे हुए एजेंट}}",
+    "hiddenAgentsShowing": "{count, plural, one {# छिपा हुआ एजेंट दिखा रहे हैं} other {# छिपे हुए एजेंट दिखा रहे हैं}}",
+    "hiddenAgentsShow": "दिखाएं",
+    "hiddenAgentsHide": "फिर छिपाएं",
+    "allAgentsHidden": "यहां के सभी एजेंट आपके दृश्य से छिपे हैं — उन्हें दिखाने के लिए 'दिखाएं' का उपयोग करें।"
   },
   "localModels": {
     "title": "स्थानीय मॉडल्स",

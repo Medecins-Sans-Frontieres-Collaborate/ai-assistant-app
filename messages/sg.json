@@ -4175,7 +4175,22 @@
     "m365PrepareDone": "{name} a bèngô ({chars} caractères). Refresh sô index lô.",
     "m365PrepareStarted": "Transcription tî {name} a sôndô na mbirima — kîtî nâ tab yô pété.",
     "m365PrepareFailed": "Mbï amâ sô bèngô {name}: {error}",
-    "m365PrepareFailedGeneric": "Mbï amâ sô bèngô."
+    "m365PrepareFailedGeneric": "Mbï amâ sô bèngô.",
+    "canonicalKeyLabel": "Ködro",
+    "copyKey": "Kombë ködro",
+    "agentKeySearchPlaceholder": "Küété agents, guides, connectors… löngö yäkü kombë ködro",
+    "agentKeyAddCustom": "Gbokö \"{key}\" lo ye kötä",
+    "agentKeyRemove": "Kpé {name}",
+    "hideAgent": "Finga",
+    "unhideAgent": "Ganza",
+    "hideAgentHint": "Finga agent ti mbi lo na admin ti mo. Ala mbi wa mbi yeke so mo — tî users, tî admins apî körö wala a gbanî.",
+    "unhideAgentHint": "Ganza agent ô zo admin ti mo siriri.",
+    "hiddenBadge": "Fingä",
+    "hiddenAgentsCount": "{count, plural, one {# agent fingä} other {# agents fingä}}",
+    "hiddenAgentsShowing": "Yeke bia {count, plural, one {# agent fingä} other {# agents fingä}}",
+    "hiddenAgentsShow": "Bia",
+    "hiddenAgentsHide": "Finga na",
+    "allAgentsHidden": "Agents sô tî yâ lo fingä na sè ti mbi — sü Bia na köngö."
   },
   "localModels": {
     "title": "Model ti gbë na mbongo",

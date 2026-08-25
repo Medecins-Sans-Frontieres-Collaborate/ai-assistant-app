@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} הוכן ({chars} תווים). יש להריץ רענון כדי לאנדקס.",
     "m365PrepareStarted": "החלה תמלול של {name} ברקע — יש להשאיר את הלשונית פתוחה.",
     "m365PrepareFailed": "לא ניתן להכין את {name}: {error}",
-    "m365PrepareFailedGeneric": "ההכנה נכשלה."
+    "m365PrepareFailedGeneric": "ההכנה נכשלה.",
+    "canonicalKeyLabel": "מפתח",
+    "copyKey": "העתק מפתח",
+    "agentKeySearchPlaceholder": "חפש סוכנים, מדריכים, מחברים… או הדבק מפתח",
+    "agentKeyAddCustom": "הוסף \"{key}\" כפי שהוזן",
+    "agentKeyRemove": "הסר את {name}",
+    "hideAgent": "הסתר",
+    "unhideAgent": "הצג",
+    "hideAgentHint": "הסתר את הסוכן הזה מרשימת הניהול שלך. משפיע רק על התצוגה שלך — משתמשים ומנהלים אחרים לא יושפעו.",
+    "unhideAgentHint": "הצג שוב את הסוכן הזה ברשימת הניהול שלך.",
+    "hiddenBadge": "מוסתר",
+    "hiddenAgentsCount": "{count, plural, one {סוכן מוסתר אחד} other {# סוכנים מוסתרים}}",
+    "hiddenAgentsShowing": "מציג {count, plural, one {סוכן מוסתר אחד} other {# סוכנים מוסתרים}}",
+    "hiddenAgentsShow": "הצג",
+    "hiddenAgentsHide": "הסתר שוב",
+    "allAgentsHidden": "כל הסוכנים כאן מוסתרים מהתצוגה שלך — השתמש ב'הצג' כדי לחשוף אותם."
   },
   "localModels": {
     "title": "מודלים מקומיים",

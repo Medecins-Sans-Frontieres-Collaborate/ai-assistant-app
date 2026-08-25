@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} తయారయ్యింది ({chars} అక్షరాలు). దాన్ని ఇండెక్స్ చేయడానికి Refresh నడపండి.",
     "m365PrepareStarted": "{name} ట్రాన్స్‌క్రిప్షన్ బ్యాక్‌గ్రౌండ్‌లో ప్రారంభమయ్యింది — ఈ ట్యాబ్ ఓపెన్‌గా ఉంచండి.",
     "m365PrepareFailed": "{name}ను తయారుచేయలేక పోయింది: {error}",
-    "m365PrepareFailedGeneric": "తయారీ విఫలమైంది."
+    "m365PrepareFailedGeneric": "తయారీ విఫలమైంది.",
+    "canonicalKeyLabel": "కీ",
+    "copyKey": "కీ కాపీ చేయండి",
+    "agentKeySearchPlaceholder": "ఏజెంట్లు, గైడ్లు, కనెక్టర్లు వెతకండి… లేదా కీ పేస్ట్ చేయండి",
+    "agentKeyAddCustom": "\"{key}\" అందినదానిపరిగా జోడించండి",
+    "agentKeyRemove": "{name} ను తొలగించండి",
+    "hideAgent": "దాచు",
+    "unhideAgent": "తిరిగి చూపించు",
+    "hideAgentHint": "మీ అడ్మిన్ జాబితాలో ఈ ఏజెంట్‌ను దాచండి. ఇది మీ వీక్షణను మాత్రమే ప్రభావితం చేస్తుంది — వినియోగదారులు మరియు ఇతర అడ్మిన్స్‌కు ప్రభావం లేదు.",
+    "unhideAgentHint": "ఈ ఏజెంట్‌ను మీ అడ్మిన్ జాబితాలో మళ్లీ చూపించండి.",
+    "hiddenBadge": "దాచింది",
+    "hiddenAgentsCount": "{count, plural, one {# దాగిన ఏజెంట్} other {# దాగిన ఏజెంట్లు}}",
+    "hiddenAgentsShowing": "{count, plural, one {# దాగిన ఏజెంట్ చూపబడుతోంది} other {# దాగిన ఏజెంట్లు చూపబడుతున్నారు}}",
+    "hiddenAgentsShow": "చూపించు",
+    "hiddenAgentsHide": "మళ్లీ దాచు",
+    "allAgentsHidden": "ఇక్కడ ఉన్న అన్నీ ఏజెంట్లు మీ వీక్షణలో దాగిపోయాయి — వీటిని చూడాలంటే \"చూపించు\" ను ఉపయోగించండి."
   },
   "localModels": {
     "title": "లోకల్ మోడల్స్",

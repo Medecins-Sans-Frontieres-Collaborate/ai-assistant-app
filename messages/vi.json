@@ -4222,7 +4222,22 @@
     "m365PrepareDone": "{name} đã được chuẩn bị ({chars} ký tự). Chạy Làm mới để lập chỉ mục.",
     "m365PrepareStarted": "Quá trình chuyển lời {name} đã bắt đầu ở chế độ nền — hãy giữ tab này mở.",
     "m365PrepareFailed": "Không thể chuẩn bị {name}: {error}",
-    "m365PrepareFailedGeneric": "Chuẩn bị không thành công."
+    "m365PrepareFailedGeneric": "Chuẩn bị không thành công.",
+    "canonicalKeyLabel": "Khóa",
+    "copyKey": "Sao chép khóa",
+    "agentKeySearchPlaceholder": "Tìm kiếm agent, hướng dẫn, connector… hoặc dán một khóa",
+    "agentKeyAddCustom": "Thêm \"{key}\" như đã nhập",
+    "agentKeyRemove": "Xóa {name}",
+    "hideAgent": "Ẩn",
+    "unhideAgent": "Hiện lại",
+    "hideAgentHint": "Ẩn agent này khỏi danh sách quản trị của bạn. Chỉ ảnh hưởng đến chế độ xem của bạn — người dùng và quản trị viên khác sẽ không bị ảnh hưởng.",
+    "unhideAgentHint": "Hiển thị lại agent này trong danh sách quản trị của bạn.",
+    "hiddenBadge": "Đã ẩn",
+    "hiddenAgentsCount": "{count, plural, one {# agent đã ẩn} other {# agent đã ẩn}}",
+    "hiddenAgentsShowing": "Đang hiển thị {count, plural, one {# agent đã ẩn} other {# agent đã ẩn}}",
+    "hiddenAgentsShow": "Hiển thị",
+    "hiddenAgentsHide": "Ẩn lại",
+    "allAgentsHidden": "Tất cả agent ở đây đều đã bị ẩn khỏi chế độ xem của bạn — sử dụng Hiển thị để xem lại."
   },
   "localModels": {
     "title": "Mô hình cục bộ",

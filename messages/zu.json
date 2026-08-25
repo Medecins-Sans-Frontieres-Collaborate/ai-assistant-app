@@ -4175,7 +4175,22 @@
     "m365PrepareDone": "{name} kulungiselelwe ({chars} izinhlamvu). Gijima i-Refresh ukuyifaka ku-index.",
     "m365PrepareStarted": "Ukuhumusha kuka-{name} kuqale ngemuva — qhubeka uvule leli thebhu.",
     "m365PrepareFailed": "Akuphumelelanga ukulungiselela u-{name}: {error}",
-    "m365PrepareFailedGeneric": "Ukwelungiselela kwehlulekile."
+    "m365PrepareFailedGeneric": "Ukwelungiselela kwehlulekile.",
+    "canonicalKeyLabel": "Ukhiye",
+    "copyKey": "Kopisha ukhiye",
+    "agentKeySearchPlaceholder": "Sesha ama-ejenti, imihlahlandlela, oxhumana nabo… noma unamathisele ukhiye",
+    "agentKeyAddCustom": "Engeza \"{key}\" njengoba kubhaliwe",
+    "agentKeyRemove": "Susa u-{name}",
+    "hideAgent": "Fihla",
+    "unhideAgent": "Veza",
+    "hideAgentHint": "Fihla lo mejenti ohlwini lwakho lwezokuphatha. Lokhu kuthinta wena kuphela — abasebenzisi nabanye abaphathi abakuthinteki.",
+    "unhideAgentHint": "Bonisa lo mejenti ohlwini lwakho lwezokuphatha futhi.",
+    "hiddenBadge": "Kufihliwe",
+    "hiddenAgentsCount": "{count, plural, one {# mejenti ofihliwe} other {# ama-ejenti afihliwe}}",
+    "hiddenAgentsShowing": "Kuboniswa {count, plural, one {# mejenti ofihliwe} other {# ama-ejenti afihliwe}}",
+    "hiddenAgentsShow": "Veza",
+    "hiddenAgentsHide": "Fihla futhi",
+    "allAgentsHidden": "Bonke ama-ejenti lapha abafihliwe embonweni wakho — sebenzisa u-Veza ukubakhombisa."
   },
   "localModels": {
     "title": "Amamodeli endaweni",

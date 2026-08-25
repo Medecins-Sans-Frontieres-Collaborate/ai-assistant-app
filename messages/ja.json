@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} を準備しました（{chars} 文字）。インデックスには更新を実行してください。",
     "m365PrepareStarted": "{name} の文字起こしがバックグラウンドで開始されました — このタブを開いたままにしてください。",
     "m365PrepareFailed": "{name} を準備できませんでした: {error}",
-    "m365PrepareFailedGeneric": "準備に失敗しました。"
+    "m365PrepareFailedGeneric": "準備に失敗しました。",
+    "canonicalKeyLabel": "キー",
+    "copyKey": "キーをコピー",
+    "agentKeySearchPlaceholder": "エージェント、ガイド、コネクタを検索… またはキーを貼り付け",
+    "agentKeyAddCustom": "「{key}」をそのまま追加",
+    "agentKeyRemove": "{name} を削除",
+    "hideAgent": "非表示",
+    "unhideAgent": "表示",
+    "hideAgentHint": "このエージェントを管理者リストから非表示にします。ご自身の画面だけに影響し、利用者や他の管理者には影響しません。",
+    "unhideAgentHint": "このエージェントを管理者リストに再表示します。",
+    "hiddenBadge": "非表示",
+    "hiddenAgentsCount": "{count, plural, one {# 件の非表示エージェント} other {# 件の非表示エージェント}}",
+    "hiddenAgentsShowing": "{count, plural, one {# 件の非表示エージェントを表示中} other {# 件の非表示エージェントを表示中}}",
+    "hiddenAgentsShow": "表示",
+    "hiddenAgentsHide": "再度非表示",
+    "allAgentsHidden": "ここにあるすべてのエージェントはご自身の画面で非表示です。「表示」を押すと確認できます。"
   },
   "localModels": {
     "title": "ローカルモデル",

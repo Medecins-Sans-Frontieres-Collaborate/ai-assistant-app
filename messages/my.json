@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} ပြင်ဆင်ပြီး ({chars} စာလုံး)။ Index ထားရန် Refresh လုပ်ပါ။",
     "m365PrepareStarted": "{name} ကို အနောက်ဖက်မှာ ရိုက်နှိပ်ဖတ်နေသည် — ဤtab ကို ဖွင့်ထားပါ။",
     "m365PrepareFailed": "{name} ပြင်ဆင်၍ မရပါ: {error}",
-    "m365PrepareFailedGeneric": "ပြင်ဆင်မှု မအောင်မြင်ပါ။"
+    "m365PrepareFailedGeneric": "ပြင်ဆင်မှု မအောင်မြင်ပါ။",
+    "canonicalKeyLabel": "သော့ချက်",
+    "copyKey": "သော့ချက်ကို ကူးယူမည်",
+    "agentKeySearchPlaceholder": "Agent၊ Guide၊ Connector များ ရှာရန်... သို့မဟုတ် သော့ချက် အပ်နိုင်သည်။",
+    "agentKeyAddCustom": "\"{key}\" ကို ရိုက်ထည့်သည့်အတိုင်း ပေါင်းထည့်မည်",
+    "agentKeyRemove": "{name} ကို ဖြုတ်မည်",
+    "hideAgent": "ဖျောက်ထားမည်",
+    "unhideAgent": "ပြသမည်",
+    "hideAgentHint": "Admin စာရင်းတွင် agent ဤကို ဖျောက်ထားမည်။ သင်၏မြင်ကွင်းအတွက်သာ သက်ရောက်သည် — အသုံးပြုသူများနှင့် အခြား admin များ မသက်ရောက်ပါ။",
+    "unhideAgentHint": "Agent ဤကို admin စာရင်းတွင် ပြန်လည်ပြသမည်။",
+    "hiddenBadge": "ဖျောက်ထားပြီး",
+    "hiddenAgentsCount": "{count, plural, one {ဖျောက်ထားသည့် agent # ခု} other {ဖျောက်ထားသည့် agent # ခု}}",
+    "hiddenAgentsShowing": "{count, plural, one {ဖျောက်ထားသည့် agent # ခု ပြသနေသည်} other {ဖျောက်ထားသည့် agent # ခုများ ပြသနေသည်}}",
+    "hiddenAgentsShow": "ပြသပါ",
+    "hiddenAgentsHide": "ထပ်မံဖျောက်ထားမည်",
+    "allAgentsHidden": "ဤနေရာရှိ agent အားလုံးသည် သင်၏မြင်ကွင်းတွင် ဖျောက်ထားပါသည် — ပြသရန် 'ပြသပါ' ကို အသုံးပြုပါ။"
   },
   "localModels": {
     "title": "ဒေသတွင်း မော်ဒယ်များ",

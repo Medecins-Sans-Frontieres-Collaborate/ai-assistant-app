@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} প্রস্তুত হয়েছে ({chars} অক্ষর)। ইনডেক্স করতে রিফ্রেশ চালান।",
     "m365PrepareStarted": "{name} ট্রান্সক্রিপশন ব্যাকগ্রাউন্ডে শুরু হয়েছে — এই ট্যাব খোলা রাখুন।",
     "m365PrepareFailed": "{name} প্রস্তুত করা যায়নি: {error}",
-    "m365PrepareFailedGeneric": "প্রস্তুতি ব্যর্থ হয়েছে।"
+    "m365PrepareFailedGeneric": "প্রস্তুতি ব্যর্থ হয়েছে।",
+    "canonicalKeyLabel": "কী",
+    "copyKey": "কী কপি করুন",
+    "agentKeySearchPlaceholder": "এজেন্ট, গাইড, কানেক্টর অনুসন্ধান করুন… অথবা একটি কী পেস্ট করুন",
+    "agentKeyAddCustom": "\"{key}\" টাইপ করা অনুযায়ী যোগ করুন",
+    "agentKeyRemove": "{name} সরান",
+    "hideAgent": "লুকান",
+    "unhideAgent": "দেখান",
+    "hideAgentHint": "আপনার অ্যাডমিন তালিকা থেকে এই এজেন্টটি লুকান। এটি শুধু আপনার ভিউ-তে প্রভাব ফেলবে — ব্যবহারকারী এবং অন্যান্য অ্যাডমিনদের জন্য পরিবর্তন হবে না।",
+    "unhideAgentHint": "আপনার অ্যাডমিন তালিকায় আবার এই এজেন্টটি দেখান।",
+    "hiddenBadge": "লুকানো",
+    "hiddenAgentsCount": "{count, plural, one {#টি লুকানো এজেন্ট} other {#টি লুকানো এজেন্ট}}",
+    "hiddenAgentsShowing": "{count, plural, one {#টি লুকানো এজেন্ট দেখানো হচ্ছে} other {#টি লুকানো এজেন্ট দেখানো হচ্ছে}}",
+    "hiddenAgentsShow": "দেখান",
+    "hiddenAgentsHide": "আবার লুকান",
+    "allAgentsHidden": "এখানে সব এজেন্ট আপনার ভিউ থেকে লুকানো — দেখতে Show ব্যবহার করুন।"
   },
   "localModels": {
     "title": "স্থানীয় মডেলসমূহ",

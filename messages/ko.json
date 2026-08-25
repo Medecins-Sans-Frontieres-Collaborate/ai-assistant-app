@@ -4191,7 +4191,22 @@
     "m365PrepareDone": "{name} 준비 완료({chars}자). 색인하려면 새로고침을 실행하세요.",
     "m365PrepareStarted": "{name} 전사가 백그라운드에서 시작되었습니다. 이 탭을 열어 두세요.",
     "m365PrepareFailed": "{name}을(를) 준비할 수 없습니다: {error}",
-    "m365PrepareFailedGeneric": "준비에 실패했습니다."
+    "m365PrepareFailedGeneric": "준비에 실패했습니다.",
+    "canonicalKeyLabel": "키",
+    "copyKey": "키 복사",
+    "agentKeySearchPlaceholder": "에이전트, 가이드, 커넥터 검색… 또는 키를 붙여넣기",
+    "agentKeyAddCustom": "\"{key}\" 그대로 추가",
+    "agentKeyRemove": "{name} 제거",
+    "hideAgent": "숨기기",
+    "unhideAgent": "표시하기",
+    "hideAgentHint": "이 에이전트를 내 관리자 목록에서 숨깁니다. 본인에게만 적용되며, 다른 사용자와 관리자에게는 영향이 없습니다.",
+    "unhideAgentHint": "이 에이전트를 관리자 목록에 다시 표시합니다.",
+    "hiddenBadge": "숨김",
+    "hiddenAgentsCount": "{count, plural, one {숨김 에이전트 #명} other {숨김 에이전트 #명}}",
+    "hiddenAgentsShowing": "{count, plural, one {숨김 에이전트 #명 표시 중} other {숨김 에이전트 #명 표시 중}}",
+    "hiddenAgentsShow": "표시",
+    "hiddenAgentsHide": "다시 숨기기",
+    "allAgentsHidden": "여기에 있는 모든 에이전트가 내 화면에서 숨겨져 있습니다. 표시를 사용해 다시 보세요."
   },
   "localModels": {
     "title": "로컬 모델",
