@@ -23,6 +23,12 @@ export const AGENT_ACCESS_CATALOG_OAUTH_PREFIX = `${AGENT_ACCESS_PREFIX}catalog-
 export const AGENT_ACCESS_MAP_DATASET_META_PREFIX = `${AGENT_ACCESS_PREFIX}map-datasets/meta/`;
 export const AGENT_ACCESS_MAP_DATASET_DATA_PREFIX = `${AGENT_ACCESS_PREFIX}map-datasets/data/`;
 export const AGENT_ACCESS_M365_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}m365-agents/`;
+/**
+ * Per-agent source manifests (docs/M365_SEVENTH_PASS_RECURSIVE_AGENT_SOURCES.md)
+ * live OUTSIDE the agents prefix: listAllM365Agents rejects (loudly) any blob
+ * under m365-agents/ whose name isn't `<id>.json`.
+ */
+export const AGENT_ACCESS_M365_MANIFESTS_PREFIX = `${AGENT_ACCESS_PREFIX}m365-agent-manifests/`;
 export const AGENT_ACCESS_ORG_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}org-agents/`;
 
 /**
@@ -173,6 +179,20 @@ export type PromptAgentHistoryEntry = z.infer<
   typeof PromptAgentHistoryEntrySchema
 >;
 
+/** Per-tier counts from the last plan/index run of a source. */
+export const M365SourceCountsSchema = z.object({
+  indexable: z.number().default(0),
+  needsPreparation: z.number().default(0),
+  skipped: z.number().default(0),
+  /** Bytes of the indexable files (early budget signal). */
+  bytes: z.number().default(0),
+  indexed: z.number().optional(),
+  failed: z.number().optional(),
+  noText: z.number().optional(),
+  missing: z.number().optional(),
+});
+export type M365SourceCounts = z.infer<typeof M365SourceCountsSchema>;
+
 /**
  * One OneDrive/SharePoint source backing an M365 agent. Read-side permissive
  * per the schema-evolution rule.
@@ -195,8 +215,121 @@ export const M365AgentSourceSchema = z.object({
   /** Chunks currently in the search index for this source. */
   indexedChunks: z.number().optional(),
   error: z.string().optional(),
+  /**
+   * Folder sources only: include the whole subtree (seventh pass). Records
+   * written before recursion existed default to the old immediate-children
+   * snapshot semantics until an admin re-saves them; the editor defaults
+   * NEW folders to true.
+   */
+  recursive: z.boolean().default(false),
+  /**
+   * Graph item ids (subfolders or files) the admin unchecked in the plan
+   * view. Excluding a folder excludes its subtree.
+   */
+  excludedItemIds: z.array(z.string()).default([]),
+  /**
+   * Lowercase extensions without the dot; when set, only matching files are
+   * indexed (others are reported as skipped by the type filter).
+   */
+  includeExtensions: z.array(z.string()).optional(),
+  /** Aggregate of the last plan/index run, for the admin list and editor. */
+  counts: M365SourceCountsSchema.optional(),
 });
 export type M365AgentSource = z.infer<typeof M365AgentSourceSchema>;
+
+/**
+ * Per-document classification made by the planner BEFORE any download
+ * (docs/M365_SEVENTH_PASS_RECURSIVE_AGENT_SOURCES.md §3). `indexable` files
+ * are processed by the index run; `needsPreparation` files (images,
+ * audio/video) wait for an explicit per-file preparation step; `skipped`
+ * files carry the reason and never count toward the cap.
+ */
+export const M365ManifestTierSchema = z.enum([
+  'indexable',
+  'needsPreparation',
+  'skipped',
+]);
+export type M365ManifestTier = z.infer<typeof M365ManifestTierSchema>;
+
+export const M365ManifestSkipReasonSchema = z.enum([
+  'unsupported',
+  'tooLarge',
+  'disallowedType',
+  'malware',
+  'zeroBytes',
+  'excluded',
+  'typeFilter',
+]);
+export type M365ManifestSkipReason = z.infer<
+  typeof M365ManifestSkipReasonSchema
+>;
+
+/** Outcome of the index run for one manifest item. */
+export const M365ManifestItemStatusSchema = z.enum([
+  'pending',
+  'indexed',
+  'failed',
+  'noText',
+  'missing',
+]);
+export type M365ManifestItemStatus = z.infer<
+  typeof M365ManifestItemStatusSchema
+>;
+
+export const M365ManifestItemSchema = z.object({
+  itemId: z.string().min(1),
+  driveId: z.string().min(1),
+  name: z.string(),
+  /** Folder path relative to the source folder ("" at the source root). */
+  path: z.string().default(''),
+  /** Graph id of the containing folder (the source itself at its root). */
+  parentItemId: z.string().default(''),
+  size: z.number().default(0),
+  mimeType: z.string().optional(),
+  eTag: z.string().optional(),
+  webUrl: z.string().default(''),
+  lastModified: z.string().optional(),
+  tier: M365ManifestTierSchema,
+  reason: M365ManifestSkipReasonSchema.optional(),
+  status: M365ManifestItemStatusSchema.optional(),
+  indexedChunks: z.number().optional(),
+  error: z.string().optional(),
+});
+export type M365ManifestItem = z.infer<typeof M365ManifestItemSchema>;
+
+/** A folder discovered under a source — the plan view's tree nodes. */
+export const M365ManifestFolderSchema = z.object({
+  itemId: z.string().min(1),
+  name: z.string(),
+  path: z.string().default(''),
+  parentItemId: z.string().default(''),
+});
+export type M365ManifestFolder = z.infer<typeof M365ManifestFolderSchema>;
+
+export const M365ManifestSourceSchema = z.object({
+  sourceId: z.string().min(1),
+  /** Enumeration hit the ceiling — the listing is incomplete. */
+  truncated: z.boolean().default(false),
+  /** Graph delta link captured by the plan, for incremental refresh. */
+  deltaLink: z.string().optional(),
+  folders: z.array(M365ManifestFolderSchema).default([]),
+  items: z.array(M365ManifestItemSchema).default([]),
+});
+export type M365ManifestSource = z.infer<typeof M365ManifestSourceSchema>;
+
+/**
+ * The per-agent manifest: what the last index run saw under every source
+ * and what it did with each file. Written by the index route only; read by
+ * the editor (per-item outcomes) and by the layer-2 trim (which item ids
+ * are indexed under a folder source).
+ */
+export const M365AgentManifestSchema = z.object({
+  version: z.literal(1),
+  agentId: z.string().min(1),
+  updatedAt: z.string(),
+  sources: z.array(M365ManifestSourceSchema).default([]),
+});
+export type M365AgentManifest = z.infer<typeof M365AgentManifestSchema>;
 
 /**
  * An M365 file-backed RAG agent (docs/M365_SECOND_PASS_AGENTS_DESIGN.md):
@@ -820,6 +953,10 @@ export function mapDatasetDataBlobPath(id: string): string {
  * same reason as the other entities: listAllRules is fail-closed, so an
  * alien blob under rules/ would brick every Foundry invocation.
  */
+export function m365AgentManifestBlobPath(id: string): string {
+  return `${AGENT_ACCESS_M365_MANIFESTS_PREFIX}${id}.json`;
+}
+
 export function m365AgentBlobPath(id: string): string {
   return `${AGENT_ACCESS_M365_AGENTS_PREFIX}${id}.json`;
 }
