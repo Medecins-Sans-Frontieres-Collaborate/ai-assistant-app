@@ -73,6 +73,17 @@ vi.mock('@/lib/services/agentAccess/adminAuth', async (importOriginal) => {
   return { ...actual, ...mockAdminAuth };
 });
 vi.mock('@/lib/services/m365/agentIndexService', () => mockIndexService);
+vi.mock('@/lib/services/m365/agentIndexJobStore', async (importOriginal) => {
+  const actual =
+    await importOriginal<
+      typeof import('@/lib/services/m365/agentIndexJobStore')
+    >();
+  return {
+    ...actual,
+    listIndexJobs: vi.fn(async () => new Map()),
+    deleteIndexJob: vi.fn(async () => undefined),
+  };
+});
 vi.mock('@/lib/services/m365/agentSourceAccess', () => mockSourceAccess);
 vi.mock('@/lib/services/m365/agentSourcePlanner', () => mockPlanner);
 
