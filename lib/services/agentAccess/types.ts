@@ -29,6 +29,8 @@ export const AGENT_ACCESS_M365_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}m365-agent
  * under m365-agents/ whose name isn't `<id>.json`.
  */
 export const AGENT_ACCESS_M365_MANIFESTS_PREFIX = `${AGENT_ACCESS_PREFIX}m365-agent-manifests/`;
+/** One resumable index job per agent (seventh pass, phase 2). */
+export const AGENT_ACCESS_M365_JOBS_PREFIX = `${AGENT_ACCESS_PREFIX}m365-agent-jobs/`;
 export const AGENT_ACCESS_ORG_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}org-agents/`;
 
 /**
@@ -264,9 +266,14 @@ export type M365ManifestSkipReason = z.infer<
   typeof M365ManifestSkipReasonSchema
 >;
 
-/** Outcome of the index run for one manifest item. */
+/**
+ * Outcome of the index run for one manifest item. `processing` only ever
+ * appears inside a job record (an item claimed by a step); the manifest
+ * written at the end maps any leftover back to `pending`.
+ */
 export const M365ManifestItemStatusSchema = z.enum([
   'pending',
+  'processing',
   'indexed',
   'failed',
   'noText',
@@ -330,6 +337,52 @@ export const M365AgentManifestSchema = z.object({
   sources: z.array(M365ManifestSourceSchema).default([]),
 });
 export type M365AgentManifest = z.infer<typeof M365AgentManifestSchema>;
+
+/**
+ * A resumable index job (docs/M365_SEVENTH_PASS_RECURSIVE_AGENT_SOURCES.md
+ * §4). One record per agent at `m365-agent-jobs/<agentId>.json`, mutated
+ * by compare-and-swap: steps claim `pending` items (→ `processing`),
+ * record outcomes, and the last step finalizes (diff-deletes stale
+ * chunks, writes the manifest, stamps the agent record). Because Graph
+ * tokens live only in admin sessions, the admin's browser drives the
+ * steps; a job whose `updatedAt` goes stale is "interrupted" and any
+ * admin holding the key can resume it.
+ */
+export const M365IndexJobStatusSchema = z.enum([
+  'running',
+  'succeeded',
+  'failed',
+  'cancelled',
+]);
+export type M365IndexJobStatus = z.infer<typeof M365IndexJobStatusSchema>;
+
+export const M365IndexJobSourceSchema = z.object({
+  sourceId: z.string().min(1),
+  /** Plan-level verdict; `pending` until finalize decides. */
+  status: z.enum(['pending', 'indexed', 'error', 'missing']).default('pending'),
+  error: z.string().optional(),
+  truncated: z.boolean().default(false),
+  deltaLink: z.string().optional(),
+  folders: z.array(M365ManifestFolderSchema).default([]),
+  items: z.array(M365ManifestItemSchema).default([]),
+});
+export type M365IndexJobSource = z.infer<typeof M365IndexJobSourceSchema>;
+
+export const M365IndexJobSchema = z.object({
+  version: z.literal(1),
+  jobId: z.string().min(1),
+  agentId: z.string().min(1),
+  status: M365IndexJobStatusSchema,
+  startedBy: z.string(),
+  startedAt: z.string(),
+  updatedAt: z.string(),
+  finishedAt: z.string().optional(),
+  /** Resolved at start; every chunk of the run embeds with it. */
+  embeddingDeployment: z.string(),
+  sources: z.array(M365IndexJobSourceSchema).default([]),
+  error: z.string().optional(),
+});
+export type M365IndexJob = z.infer<typeof M365IndexJobSchema>;
 
 /**
  * An M365 file-backed RAG agent (docs/M365_SECOND_PASS_AGENTS_DESIGN.md):
@@ -953,6 +1006,10 @@ export function mapDatasetDataBlobPath(id: string): string {
  * same reason as the other entities: listAllRules is fail-closed, so an
  * alien blob under rules/ would brick every Foundry invocation.
  */
+export function m365AgentIndexJobBlobPath(agentId: string): string {
+  return `${AGENT_ACCESS_M365_JOBS_PREFIX}${agentId}.json`;
+}
+
 export function m365AgentManifestBlobPath(id: string): string {
   return `${AGENT_ACCESS_M365_MANIFESTS_PREFIX}${id}.json`;
 }
