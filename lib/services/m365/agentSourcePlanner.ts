@@ -21,7 +21,9 @@ import type {
   M365ManifestFolder,
   M365ManifestItem,
   M365ManifestSkipReason,
+  M365ManifestSource,
   M365ManifestTier,
+  M365SourceChanges,
   M365SourceCounts,
 } from '@/lib/services/agentAccess/types';
 import { INDEXABLE_EXTENSIONS } from '@/lib/services/m365/documentSignature';
@@ -602,4 +604,292 @@ export async function planSources(
     plans.push(await planSource(req, userId, input));
   }
   return { plans, ...summarizePlans(plans) };
+}
+
+// ---------------------------------------------------------------------------
+// Incremental refresh (phase 3)
+// ---------------------------------------------------------------------------
+
+export interface RefreshSourcePlan extends SourcePlan {
+  changes: M365SourceChanges;
+  /** The listing came from the stored delta link (no full re-walk). */
+  incremental: boolean;
+}
+
+/** A manifest source reduced to what a refresh needs. */
+export type RefreshBase = Pick<
+  M365ManifestSource,
+  'deltaLink' | 'truncated' | 'folders' | 'items'
+>;
+
+interface DeltaFetch {
+  entries: GraphItem[];
+  deltaLink?: string;
+  truncated: boolean;
+}
+
+/**
+ * Follows a stored delta link: Graph returns only items that were added,
+ * changed, moved or deleted under the folder since the link was minted,
+ * plus a new link. Tombstones and the root are kept here (the merge
+ * needs them); ceiling-bounded like every listing.
+ */
+async function fetchDelta(
+  req: NextRequest,
+  deltaLink: string,
+): Promise<DeltaFetch> {
+  const entries: GraphItem[] = [];
+  let url: string | undefined = deltaLink;
+  let nextDelta: string | undefined;
+  while (url) {
+    const page: GraphPage = await graphJson<GraphPage>(req, GRAPH_SCOPES, url);
+    for (const item of page.value ?? []) {
+      if (!item.id) continue;
+      entries.push(item);
+      if (entries.length >= ENUMERATION_CEILING) {
+        return { entries, truncated: true };
+      }
+    }
+    nextDelta = page['@odata.deltaLink'] ?? nextDelta;
+    url = page['@odata.nextLink'];
+  }
+  return { entries, deltaLink: nextDelta, truncated: false };
+}
+
+/**
+ * Re-derives an item's raw (pre-filter) classification from the fields
+ * the manifest stored. Filters are re-applied afterwards, so a lifted
+ * exclusion un-skips an item on refresh.
+ */
+function reclassifyStored(item: M365ManifestItem): M365ManifestItem {
+  const classification = classifyItem({
+    name: item.name,
+    size: item.size,
+    mimeType: item.mimeType,
+    malware: item.reason === 'malware',
+  });
+  const { reason: _dropped, ...rest } = item;
+  void _dropped;
+  return {
+    ...rest,
+    tier: classification.tier,
+    ...(classification.reason && { reason: classification.reason }),
+  };
+}
+
+/**
+ * Merges delta entries into the last listing (pure). Deleted entries and
+ * anything whose folder chain no longer reaches the source root (moved
+ * out of scope) are dropped — a deleted folder takes its subtree with it.
+ * Paths are recomputed from the merged folder set so renames propagate.
+ * Returns the RAW (unfiltered) listing, like enumeration does.
+ */
+export function applyDeltaToListing(
+  base: Pick<RefreshBase, 'folders' | 'items'>,
+  rootItemId: string,
+  driveId: string,
+  entries: GraphItem[],
+): { folders: M365ManifestFolder[]; items: M365ManifestItem[] } {
+  const folderById = new Map<string, GraphItem>(
+    base.folders.map((f) => [
+      f.itemId,
+      {
+        id: f.itemId,
+        name: f.name,
+        folder: {},
+        parentReference: { id: f.parentItemId },
+      },
+    ]),
+  );
+  const rawById = new Map<string, GraphItem | M365ManifestItem>(
+    base.items.map((i) => [i.itemId, reclassifyStored(i)]),
+  );
+  for (const entry of entries) {
+    if (!entry.id || entry.id === rootItemId) continue;
+    if (entry.deleted) {
+      folderById.delete(entry.id);
+      rawById.delete(entry.id);
+      continue;
+    }
+    if (entry.folder) {
+      rawById.delete(entry.id);
+      folderById.set(entry.id, entry);
+    } else {
+      folderById.delete(entry.id);
+      rawById.set(entry.id, entry);
+    }
+  }
+
+  // Keep only folders whose chain reaches the root.
+  const reachable = new Set<string>([rootItemId]);
+  const reaches = (id: string, hops = 0): boolean => {
+    if (reachable.has(id)) return true;
+    const folder = folderById.get(id);
+    if (!folder || hops > MAX_FOLDER_DEPTH) return false;
+    const parentId = folder.parentReference?.id ?? '';
+    if (parentId && reaches(parentId, hops + 1)) {
+      reachable.add(id);
+      return true;
+    }
+    return false;
+  };
+  const liveFolders = [...folderById.values()].filter((f) => reaches(f.id!));
+  const { paths, nodes } = buildFolderPaths(rootItemId, liveFolders);
+
+  const items: M365ManifestItem[] = [];
+  for (const raw of rawById.values()) {
+    const manifestItem =
+      'itemId' in raw ? raw : toManifestItem(raw, driveId, paths);
+    if (!reachable.has(manifestItem.parentItemId)) continue;
+    items.push({
+      ...manifestItem,
+      path: paths.get(manifestItem.parentItemId) ?? '',
+    });
+  }
+  return { folders: nodes, items };
+}
+
+/**
+ * Carries the last run's outcome onto items whose content is unchanged
+ * (same eTag, and the run had a definitive result), leaves everything
+ * else `pending`, and counts what a refresh will do. Failed/missing items
+ * are retried even when unchanged. `removed` counts indexable items of
+ * the last manifest that are gone or no longer indexable.
+ */
+export function carryOverOutcomes(
+  items: M365ManifestItem[],
+  baseItems: M365ManifestItem[],
+): { items: M365ManifestItem[]; changes: M365SourceChanges } {
+  const baseById = new Map(baseItems.map((i) => [i.itemId, i]));
+  const changes: M365SourceChanges = {
+    added: 0,
+    modified: 0,
+    removed: 0,
+    unchanged: 0,
+  };
+  const carried = items.map((item): M365ManifestItem => {
+    const base = baseById.get(item.itemId);
+    if (item.tier !== 'indexable') {
+      if (base?.tier === 'indexable') changes.removed += 1;
+      return {
+        ...item,
+        status: undefined,
+        indexedChunks: undefined,
+        error: undefined,
+      };
+    }
+    const settled =
+      base?.tier === 'indexable' &&
+      !!base.eTag &&
+      base.eTag === item.eTag &&
+      (base.status === 'indexed' || base.status === 'noText');
+    if (settled) {
+      changes.unchanged += 1;
+      return {
+        ...item,
+        status: base!.status,
+        indexedChunks: base!.indexedChunks,
+        error: undefined,
+      };
+    }
+    if (base?.tier === 'indexable') changes.modified += 1;
+    else changes.added += 1;
+    return {
+      ...item,
+      status: 'pending',
+      indexedChunks: undefined,
+      error: undefined,
+    };
+  });
+  const seen = new Set(items.map((i) => i.itemId));
+  for (const base of baseItems) {
+    if (base.tier === 'indexable' && !seen.has(base.itemId)) {
+      changes.removed += 1;
+    }
+  }
+  return { items: carried, changes };
+}
+
+/**
+ * Plans a source against its last manifest: follows the stored delta
+ * link when there is one (recursive folder, complete previous listing),
+ * otherwise re-enumerates in full — always fresh, never from the plan
+ * cache. Any failure on the delta link that isn't a session problem
+ * (expired token → 410 resyncRequired, drive moved, …) falls back to the
+ * full walk, so a refresh can never be wrong, only slower.
+ */
+export async function refreshSourcePlan(
+  req: NextRequest,
+  input: PlanSourceInput,
+  base: RefreshBase,
+): Promise<RefreshSourcePlan> {
+  let raw: RawEnumeration | null = null;
+  let incremental = false;
+  if (
+    input.kind === 'folder' &&
+    input.recursive &&
+    base.deltaLink &&
+    !base.truncated
+  ) {
+    try {
+      const delta = await fetchDelta(req, base.deltaLink);
+      if (!delta.truncated) {
+        const merged = applyDeltaToListing(
+          base,
+          input.itemId,
+          input.driveId,
+          delta.entries,
+        );
+        raw = {
+          missing: false,
+          truncated: false,
+          ...(delta.deltaLink && { deltaLink: delta.deltaLink }),
+          folders: merged.folders,
+          items: merged.items,
+        };
+        incremental = true;
+      }
+    } catch (error) {
+      if (isMissing(error)) {
+        raw = { missing: true, truncated: false, folders: [], items: [] };
+      } else if (
+        error instanceof M365Error &&
+        (error.kind === 'not_connected' ||
+          error.kind === 'consent_missing' ||
+          error.kind === 'rate_limited')
+      ) {
+        throw error;
+      } else {
+        console.warn(
+          `[m365-agents] delta link rejected for ${sanitizeForLog(input.itemId)}; re-listing in full: ${sanitizeForLog(error)}`,
+        );
+      }
+    }
+  }
+  if (!raw) raw = await enumerateUncached(req, input);
+
+  const filtered = applySourceFilters(raw.items, raw.folders, input);
+  const { items, changes } = carryOverOutcomes(filtered, base.items);
+  return {
+    missing: raw.missing,
+    truncated: raw.truncated,
+    ...(raw.deltaLink && { deltaLink: raw.deltaLink }),
+    folders: raw.folders,
+    items,
+    counts: summarizeCounts(items),
+    changes,
+    incremental,
+  };
+}
+
+export function sumChanges(list: M365SourceChanges[]): M365SourceChanges {
+  return list.reduce(
+    (acc, c) => ({
+      added: acc.added + c.added,
+      modified: acc.modified + c.modified,
+      removed: acc.removed + c.removed,
+      unchanged: acc.unchanged + c.unchanged,
+    }),
+    { added: 0, modified: 0, removed: 0, unchanged: 0 },
+  );
 }
