@@ -10,7 +10,7 @@ import {
   IconX,
 } from '@tabler/icons-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
@@ -18,7 +18,10 @@ import { useTranslations } from 'next-intl';
 import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
-import type { M365AgentSource } from '@/lib/services/agentAccess/types';
+import type {
+  M365AgentManifest,
+  M365AgentSource,
+} from '@/lib/services/agentAccess/types';
 
 import { isModelSelectableInRegion } from '@/lib/utils/shared/modelRegion';
 
@@ -28,12 +31,19 @@ import { OpenAIModels } from '@/types/openai';
 import M365FilePickerModal from '@/components/Chat/ChatInput/M365FilePickerModal';
 
 import { ConflictDiff, ConflictDiffRow } from './ConflictDiff';
+import {
+  M365SourcePlanView,
+  SourceSelection,
+  formatBytes,
+} from './M365SourcePlanView';
 import { RuleEditor } from './RuleEditor';
 import {
   AdminM365AgentsResponse,
   AdminStoredM365Agent,
   AdminStoredRule,
   CLIENT_M365_AGENT_SOURCE,
+  ClientAgentPlan,
+  ClientSourcePlan,
   clientCanonicalAgentKey,
 } from './types';
 
@@ -47,12 +57,16 @@ const AGENT_MODEL_ID_PREFIXES = ['foundry-', 'org-', 'custom-', 'byom-'];
  * loaded — matches the server's M365_AGENT_MAX_DOCUMENTS default.
  */
 const DEFAULT_MAX_SOURCES = 50;
+/** Fallback for the byte budget (M365_AGENT_MAX_SOURCE_MB default). */
+const DEFAULT_MAX_BYTES = 512 * 1024 * 1024;
+/** Selection edits re-plan after this pause (metadata calls only). */
+const PLAN_DEBOUNCE_MS = 400;
 
 function isServerKnownModelId(modelId: string): boolean {
   return Object.prototype.hasOwnProperty.call(OpenAIModels, modelId);
 }
 
-interface EditorSource {
+interface EditorSource extends SourceSelection {
   driveId: string;
   itemId: string;
   kind: 'file' | 'folder';
@@ -62,10 +76,46 @@ interface EditorSource {
   persisted?: M365AgentSource;
 }
 
+function sourceKey(source: { driveId: string; itemId: string }): string {
+  return `${source.driveId}:${source.itemId}`;
+}
+
+function toEditorSource(source: M365AgentSource): EditorSource {
+  return {
+    driveId: source.driveId,
+    itemId: source.itemId,
+    kind: source.kind,
+    title: source.title,
+    webUrl: source.webUrl,
+    recursive: source.recursive,
+    excludedItemIds: source.excludedItemIds,
+    includeExtensions: source.includeExtensions,
+    persisted: source,
+  };
+}
+
+/** The wire shape for POST/PUT and /plan. */
+function toSourcePayload(source: EditorSource) {
+  return {
+    driveId: source.driveId,
+    itemId: source.itemId,
+    kind: source.kind,
+    title: source.title,
+    webUrl: source.webUrl,
+    recursive: source.kind === 'folder' && source.recursive,
+    excludedItemIds: source.kind === 'folder' ? source.excludedItemIds : [],
+    ...(source.includeExtensions?.length
+      ? { includeExtensions: source.includeExtensions }
+      : {}),
+  };
+}
+
 interface M365AgentEditorProps {
   existing: AdminStoredM365Agent | null;
   /** Server's env-configured document cap (from the listing response). */
   maxSources: number;
+  /** Server's env-configured byte budget (from the listing response). */
+  maxBytes: number;
   onSaved: () => void;
   onCancel: () => void;
   onConflictReload: () => void;
@@ -81,6 +131,7 @@ interface M365AgentEditorProps {
 const M365AgentEditor: FC<M365AgentEditorProps> = ({
   existing,
   maxSources,
+  maxBytes,
   onSaved,
   onCancel,
   onConflictReload,
@@ -100,16 +151,101 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
     existing?.agent.chatModelId ?? '',
   );
   const [sources, setSources] = useState<EditorSource[]>(
-    (existing?.agent.sources ?? []).map((source) => ({
-      driveId: source.driveId,
-      itemId: source.itemId,
-      kind: source.kind,
-      title: source.title,
-      webUrl: source.webUrl,
-      persisted: source,
-    })),
+    (existing?.agent.sources ?? []).map(toEditorSource),
   );
   const [pickerOpen, setPickerOpen] = useState(false);
+  /** Plan for the CURRENT selection (design §1); null until the first run. */
+  const [plan, setPlan] = useState<ClientAgentPlan | null>(null);
+  const [planLoading, setPlanLoading] = useState(false);
+  const [planError, setPlanError] = useState<string | null>(null);
+  const planRequest = useRef(0);
+
+  // Last index run's per-item outcomes, for existing agents only.
+  const manifestQuery = useQuery<M365AgentManifest | null>({
+    queryKey: ['agent-access-m365-agent-manifest', existing?.agent.id],
+    queryFn: async () => {
+      const response = await fetch(
+        `/api/agent-access/m365-agents/manifest?id=${encodeURIComponent(existing!.agent.id)}`,
+      );
+      if (!response.ok) return null;
+      const data = unwrapApiData<{ manifest: M365AgentManifest | null }>(
+        await response.json(),
+      );
+      return data?.manifest ?? null;
+    },
+    enabled: existing !== null,
+    retry: 0,
+    refetchOnWindowFocus: false,
+  });
+  const manifestBySourceId = useMemo(() => {
+    const map = new Map<string, M365AgentManifest['sources'][number]>();
+    for (const source of manifestQuery.data?.sources ?? []) {
+      map.set(source.sourceId, source);
+    }
+    return map;
+  }, [manifestQuery.data]);
+
+  // Re-plan whenever the selection changes (debounced). The plan is what
+  // the server enforces at save and index time, so the numbers shown are
+  // the numbers that count.
+  const selectionKey = JSON.stringify(sources.map(toSourcePayload));
+  useEffect(() => {
+    if (sources.length === 0) {
+      setPlan(null);
+      setPlanError(null);
+      return;
+    }
+    const requestId = ++planRequest.current;
+    const timer = setTimeout(async () => {
+      setPlanLoading(true);
+      try {
+        const response = await fetch('/api/agent-access/m365-agents/plan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sources: sources.map(toSourcePayload) }),
+        });
+        if (requestId !== planRequest.current) return;
+        if (!response.ok) {
+          const body = await response.json().catch(() => null);
+          setPlanError(body?.error || t('m365PlanFailed'));
+          return;
+        }
+        const data = unwrapApiData<ClientAgentPlan>(await response.json());
+        setPlan(data ?? null);
+        setPlanError(null);
+      } catch {
+        if (requestId === planRequest.current)
+          setPlanError(t('m365PlanFailed'));
+      } finally {
+        if (requestId === planRequest.current) setPlanLoading(false);
+      }
+    }, PLAN_DEBOUNCE_MS);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectionKey]);
+
+  const planBySourceKey = useMemo(() => {
+    const map = new Map<string, ClientSourcePlan>();
+    for (const sourcePlan of plan?.plans ?? []) {
+      map.set(sourceKey(sourcePlan), sourcePlan);
+    }
+    return map;
+  }, [plan]);
+
+  const updateSelection = (
+    target: EditorSource,
+    patch: Partial<SourceSelection>,
+  ) => {
+    setSources((prev) =>
+      prev.map((source) =>
+        sourceKey(source) === sourceKey(target)
+          ? { ...source, ...patch }
+          : source,
+      ),
+    );
+  };
+
+  const overCap = !!plan && (plan.overDocumentCap || plan.overByteCap);
   const [isSaving, setIsSaving] = useState(false);
   /**
    * 409 state: the record that won the race (null = deleted meanwhile).
@@ -156,6 +292,10 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
           kind: entry.isFolder ? 'folder' : 'file',
           title: entry.name,
           webUrl: entry.webUrl ?? '',
+          // New folders include their subtree by default (review decision);
+          // the plan view shows the consequence immediately.
+          recursive: entry.isFolder,
+          excludedItemIds: [],
         },
       ];
     });
@@ -165,6 +305,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
     name.trim().length > 0 &&
     sources.length > 0 &&
     !isSaving &&
+    !overCap &&
     conflict === null;
 
   const sourcesSummary = (list: { title: string }[]) =>
@@ -196,16 +337,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
     setDescription(latest.agent.description);
     setSystemPrompt(latest.agent.systemPrompt);
     setChatModelId(latest.agent.chatModelId ?? '');
-    setSources(
-      latest.agent.sources.map((source) => ({
-        driveId: source.driveId,
-        itemId: source.itemId,
-        kind: source.kind,
-        title: source.title,
-        webUrl: source.webUrl,
-        persisted: source,
-      })),
-    );
+    setSources(latest.agent.sources.map(toEditorSource));
   };
 
   /**
@@ -250,13 +382,7 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
           systemPrompt: systemPrompt.trim(),
           chatModelId: chatModelId || null,
           topK: existing?.agent.ragConfig.topK ?? 10,
-          sources: sources.map((source) => ({
-            driveId: source.driveId,
-            itemId: source.itemId,
-            kind: source.kind,
-            title: source.title,
-            webUrl: source.webUrl,
-          })),
+          sources: sources.map(toSourcePayload),
         }),
       });
       if (response.status === 409 || (existing && response.status === 404)) {
@@ -264,6 +390,8 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
         return;
       }
       if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        if (response.status === 400 && body?.error) toast.error(body.error);
         setSaveError(true);
         return;
       }
@@ -388,6 +516,47 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
           <p className="mb-2 text-xs text-gray-500 dark:text-gray-400">
             {t('m365AgentSourcesHelp')}
           </p>
+          {sources.length > 0 && (
+            <div
+              className={`mb-2 rounded-md px-2 py-1 text-xs ${
+                overCap
+                  ? 'bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-300'
+                  : 'bg-gray-50 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
+              }`}
+            >
+              <span className="font-semibold">
+                {t('m365CapDocuments', {
+                  count: plan?.totalDocuments ?? 0,
+                  max: maxSources,
+                })}
+              </span>
+              {' · '}
+              {t('m365CapBytes', {
+                bytes: formatBytes(plan?.totalBytes ?? 0),
+                max: formatBytes(maxBytes),
+              })}
+              {planLoading && (
+                <span className="ml-2 text-gray-500 dark:text-gray-400">
+                  {t('m365PlanScanning')}
+                </span>
+              )}
+              {plan?.overDocumentCap && (
+                <p className="mt-1">
+                  {t('m365CapOverDocuments', { max: maxSources })}
+                </p>
+              )}
+              {plan?.overByteCap && (
+                <p className="mt-1">
+                  {t('m365CapOverBytes', { max: formatBytes(maxBytes) })}
+                </p>
+              )}
+              {planError && (
+                <p className="mt-1 text-amber-700 dark:text-amber-400">
+                  {planError}
+                </p>
+              )}
+            </div>
+          )}
           {sources.length === 0 ? (
             <p className="text-xs text-gray-500 dark:text-gray-400">
               {t('m365AgentNoSources', { max: maxSources })}
@@ -397,39 +566,60 @@ const M365AgentEditor: FC<M365AgentEditorProps> = ({
               {sources.map((source) => (
                 <li
                   key={`${source.driveId}-${source.itemId}`}
-                  className="flex items-center gap-2 rounded-md border border-neutral-200 px-2 py-1 text-sm dark:border-neutral-700"
+                  className="rounded-md border border-neutral-200 px-2 py-1 text-sm dark:border-neutral-700"
                 >
-                  {source.kind === 'folder' ? (
-                    <IconFolder size={15} className="shrink-0 text-amber-500" />
-                  ) : (
-                    <IconFile size={15} className="shrink-0 text-gray-400" />
-                  )}
-                  <span className="min-w-0 flex-1 truncate text-gray-800 dark:text-gray-200">
-                    {source.title}
-                  </span>
-                  {source.persisted && (
-                    <span className="shrink-0 text-xs text-gray-400">
-                      {t(`m365SourceStatus.${source.persisted.status}`)}
+                  <div className="flex items-center gap-2">
+                    {source.kind === 'folder' ? (
+                      <IconFolder
+                        size={15}
+                        className="shrink-0 text-amber-500"
+                      />
+                    ) : (
+                      <IconFile size={15} className="shrink-0 text-gray-400" />
+                    )}
+                    <span className="min-w-0 flex-1 truncate text-gray-800 dark:text-gray-200">
+                      {source.title}
                     </span>
-                  )}
-                  <button
-                    type="button"
-                    aria-label={t('m365AgentRemoveSource')}
-                    onClick={() =>
-                      setSources((prev) =>
-                        prev.filter(
-                          (s) =>
-                            !(
-                              s.driveId === source.driveId &&
-                              s.itemId === source.itemId
-                            ),
-                        ),
-                      )
+                    {source.persisted && (
+                      <span className="shrink-0 text-xs text-gray-400">
+                        {t(`m365SourceStatus.${source.persisted.status}`)}
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      aria-label={t('m365AgentRemoveSource')}
+                      onClick={() =>
+                        setSources((prev) =>
+                          prev.filter(
+                            (s) =>
+                              !(
+                                s.driveId === source.driveId &&
+                                s.itemId === source.itemId
+                              ),
+                          ),
+                        )
+                      }
+                      className="shrink-0 text-gray-400 hover:text-red-600"
+                    >
+                      <IconX size={14} />
+                    </button>
+                  </div>
+                  <M365SourcePlanView
+                    kind={source.kind}
+                    selection={{
+                      recursive: source.recursive,
+                      excludedItemIds: source.excludedItemIds,
+                      includeExtensions: source.includeExtensions,
+                    }}
+                    plan={planBySourceKey.get(sourceKey(source))}
+                    loading={planLoading}
+                    manifestSource={
+                      source.persisted
+                        ? manifestBySourceId.get(source.persisted.sourceId)
+                        : undefined
                     }
-                    className="shrink-0 text-gray-400 hover:text-red-600"
-                  >
-                    <IconX size={14} />
-                  </button>
+                    onChange={(patch) => updateSelection(source, patch)}
+                  />
                 </li>
               ))}
             </ul>
@@ -618,6 +808,7 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
 
   const agents = agentsQuery.data?.m365Agents ?? [];
   const maxDocuments = agentsQuery.data?.maxDocuments ?? DEFAULT_MAX_SOURCES;
+  const maxBytes = agentsQuery.data?.maxBytes ?? DEFAULT_MAX_BYTES;
 
   return (
     <div className="mt-6 border-t border-gray-200 pt-4 dark:border-gray-700">
@@ -646,6 +837,7 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
           <M365AgentEditor
             existing={null}
             maxSources={maxDocuments}
+            maxBytes={maxBytes}
             onSaved={() => {
               setIsCreating(false);
               invalidate();
@@ -690,6 +882,28 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
               (s) => s.status === 'indexed' && (s.indexedChunks ?? 0) === 0,
             ).length;
             const firstSourceError = sources.find((s) => s.error)?.error;
+            // Seventh-pass per-document counts (absent on records that were
+            // never indexed under the planner).
+            const docCounts = sources.reduce(
+              (acc, s) => {
+                if (!s.counts) return acc;
+                acc.present = true;
+                acc.indexed += s.counts.indexed ?? 0;
+                acc.failed += (s.counts.failed ?? 0) + (s.counts.missing ?? 0);
+                acc.noText += s.counts.noText ?? 0;
+                acc.needsPreparation += s.counts.needsPreparation;
+                acc.skipped += s.counts.skipped;
+                return acc;
+              },
+              {
+                present: false,
+                indexed: 0,
+                failed: 0,
+                noText: 0,
+                needsPreparation: 0,
+                skipped: 0,
+              },
+            );
             const lastIndexedAt = sources
               .map((s) => s.lastIndexedAt)
               .filter((d): d is string => !!d)
@@ -726,6 +940,17 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                         {t('m365AgentSourceSummary', {
                           count: sources.length,
                           pending: unindexedSources,
+                        })}
+                      </p>
+                    )}
+                    {docCounts.present && (
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {t('m365AgentDocCounts', {
+                          indexed: docCounts.indexed,
+                          failed: docCounts.failed,
+                          noText: docCounts.noText,
+                          needsPreparation: docCounts.needsPreparation,
+                          skipped: docCounts.skipped,
                         })}
                       </p>
                     )}
@@ -864,6 +1089,7 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                     key={`${entry.agent.id}:${entry.etag}`}
                     existing={entry}
                     maxSources={maxDocuments}
+                    maxBytes={maxBytes}
                     onSaved={() => {
                       setEditingId(null);
                       invalidate();
