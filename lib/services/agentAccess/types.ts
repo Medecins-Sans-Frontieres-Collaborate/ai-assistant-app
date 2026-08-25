@@ -31,6 +31,8 @@ export const AGENT_ACCESS_M365_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}m365-agent
 export const AGENT_ACCESS_M365_MANIFESTS_PREFIX = `${AGENT_ACCESS_PREFIX}m365-agent-manifests/`;
 /** One resumable index job per agent (seventh pass, phase 2). */
 export const AGENT_ACCESS_M365_JOBS_PREFIX = `${AGENT_ACCESS_PREFIX}m365-agent-jobs/`;
+/** Per-file prepared (derived) text — phase 4: `<agentId>/index.json` + `<agentId>/<itemId>.json`. */
+export const AGENT_ACCESS_M365_DERIVED_PREFIX = `${AGENT_ACCESS_PREFIX}m365-agent-derived/`;
 export const AGENT_ACCESS_ORG_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}org-agents/`;
 
 /**
@@ -283,6 +285,25 @@ export type M365ManifestItemStatus = z.infer<
   typeof M365ManifestItemStatusSchema
 >;
 
+/** How a file that can't be extracted directly was turned into text. */
+export const M365PreparationKindSchema = z.enum([
+  'image',
+  'audio',
+  'video',
+  'pdfOcr',
+]);
+export type M365PreparationKind = z.infer<typeof M365PreparationKindSchema>;
+
+/** Stamped on a manifest item when its derived text matches its eTag. */
+export const M365PreparedInfoSchema = z.object({
+  eTag: z.string(),
+  kind: M365PreparationKindSchema,
+  preparedAt: z.string(),
+  model: z.string().optional(),
+  chars: z.number().optional(),
+});
+export type M365PreparedInfo = z.infer<typeof M365PreparedInfoSchema>;
+
 export const M365ManifestItemSchema = z.object({
   itemId: z.string().min(1),
   driveId: z.string().min(1),
@@ -298,11 +319,59 @@ export const M365ManifestItemSchema = z.object({
   lastModified: z.string().optional(),
   tier: M365ManifestTierSchema,
   reason: M365ManifestSkipReasonSchema.optional(),
+  /**
+   * Present when the index run should read this item's prepared text
+   * instead of extracting the file (phase 4). Such an item is `indexable`
+   * whatever the classifier said.
+   */
+  prepared: M365PreparedInfoSchema.optional(),
   status: M365ManifestItemStatusSchema.optional(),
   indexedChunks: z.number().optional(),
   error: z.string().optional(),
 });
 export type M365ManifestItem = z.infer<typeof M365ManifestItemSchema>;
+
+/**
+ * The per-agent index of prepared files (phase 4). One small blob the
+ * planner reads to flip prepared files to `indexable`; the text itself
+ * lives beside it, one blob per item. A `pending` entry tracks a chunked
+ * transcription job the admin's browser is still polling.
+ */
+export const M365DerivedIndexEntrySchema = M365PreparedInfoSchema.extend({
+  name: z.string().default(''),
+});
+export type M365DerivedIndexEntry = z.infer<typeof M365DerivedIndexEntrySchema>;
+
+export const M365DerivedPendingSchema = z.object({
+  jobId: z.string(),
+  eTag: z.string(),
+  kind: M365PreparationKindSchema,
+  name: z.string().default(''),
+  startedAt: z.string(),
+  startedBy: z.string(),
+});
+export type M365DerivedPending = z.infer<typeof M365DerivedPendingSchema>;
+
+export const M365DerivedIndexSchema = z.object({
+  version: z.literal(1),
+  agentId: z.string().min(1),
+  updatedAt: z.string(),
+  items: z.record(z.string(), M365DerivedIndexEntrySchema).default({}),
+  pending: z.record(z.string(), M365DerivedPendingSchema).default({}),
+});
+export type M365DerivedIndex = z.infer<typeof M365DerivedIndexSchema>;
+
+export const M365DerivedTextSchema = z.object({
+  version: z.literal(1),
+  agentId: z.string().min(1),
+  itemId: z.string().min(1),
+  eTag: z.string(),
+  kind: M365PreparationKindSchema,
+  preparedAt: z.string(),
+  model: z.string().optional(),
+  text: z.string(),
+});
+export type M365DerivedText = z.infer<typeof M365DerivedTextSchema>;
 
 /** A folder discovered under a source — the plan view's tree nodes. */
 export const M365ManifestFolderSchema = z.object({
@@ -1027,6 +1096,18 @@ export function mapDatasetDataBlobPath(id: string): string {
  * same reason as the other entities: listAllRules is fail-closed, so an
  * alien blob under rules/ would brick every Foundry invocation.
  */
+export function m365AgentDerivedIndexBlobPath(agentId: string): string {
+  return `${AGENT_ACCESS_M365_DERIVED_PREFIX}${agentId}/index.json`;
+}
+
+/** Item ids are sanitized to the drive-item alphabet before use in a path. */
+export function m365AgentDerivedTextBlobPath(
+  agentId: string,
+  itemId: string,
+): string {
+  return `${AGENT_ACCESS_M365_DERIVED_PREFIX}${agentId}/${itemId.replace(/[^A-Za-z0-9_=-]/g, '')}.json`;
+}
+
 export function m365AgentIndexJobBlobPath(agentId: string): string {
   return `${AGENT_ACCESS_M365_JOBS_PREFIX}${agentId}.json`;
 }
