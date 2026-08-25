@@ -440,6 +440,18 @@ const mockMessages: Record<string, unknown> = {
     delegatedAgentsLabel: 'Delegated agents',
     noDelegatedAgents: 'No agents available to delegate.',
     unknownAgentKey: 'Unknown agent key',
+    hideAgent: 'Hide',
+    unhideAgent: 'Unhide',
+    hideAgentHint: 'Hide this agent from your admin list.',
+    unhideAgentHint: 'Show this agent in your admin list again.',
+    hiddenBadge: 'Hidden',
+    // ICU plurals in the real keys; the mock t() only does {param}
+    hiddenAgentsCount: '{count} hidden agents',
+    hiddenAgentsShowing: 'Showing {count} hidden agents',
+    hiddenAgentsShow: 'Show',
+    hiddenAgentsHide: 'Hide again',
+    allAgentsHidden:
+      'All agents here are hidden from your view — use Show to reveal them.',
     localAdminGroup: {
       agents: 'Agents',
       promptAgents: 'Prompt agents',
