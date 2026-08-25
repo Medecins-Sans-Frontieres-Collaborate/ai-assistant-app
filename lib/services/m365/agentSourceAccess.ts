@@ -11,14 +11,22 @@
  *
  * Probes run as Graph JSON $batch calls (20 sub-requests per call), so an
  * agent at the 50-document default costs 3 round-trips per user per TTL.
- * Folder sources additionally get one security-trimmed children listing per
- * accessible folder, yielding the per-item trim for their chunks.
+ * Folder sources are trimmed PER INDEXED ITEM: the agent's manifest (what
+ * the last index run actually put in the index, recursively) lists the
+ * item ids, and each is probed with the user's token — exact for nested
+ * files and for children with broken permission inheritance. Folders
+ * indexed before manifests existed fall back to one security-trimmed
+ * immediate-children listing, matching their snapshot semantics.
  * Verdicts are cached per user+agent for a short TTL (per-process, like the
  * access-rules snapshot): max staleness after a permission revocation in
  * SharePoint is CACHE_TTL_MS.
  */
 import { NextRequest } from 'next/server';
 
+import {
+  createAgentAccessBlobStorage,
+  readM365AgentManifest,
+} from '@/lib/services/agentAccess/accessRulesStore';
 import type {
   M365Agent,
   M365AgentSource,
@@ -32,8 +40,10 @@ const CACHE_TTL_MS = 5 * 60_000;
 const MAX_CACHE_ENTRIES = 2000;
 /** Graph JSON batching allows at most 20 sub-requests per call. */
 const GRAPH_BATCH_SIZE = 20;
-/** Matches the indexing-side folder expansion page (agentIndexService). */
+/** Legacy (pre-manifest) folder expansion page — immediate children only. */
 const FOLDER_CHILD_PAGE = 200;
+/** Manifests change only on index runs; a short per-process cache suffices. */
+const MANIFEST_CACHE_TTL_MS = 60_000;
 
 export interface SourceAccessResult {
   sourceId: string;
@@ -77,13 +87,20 @@ interface GraphBatchResponseShape {
  * the cache entry expires. Batch-level failures (no session, consent gap,
  * transport) throw for the caller to map to the connect flow.
  */
-async function probeSources(
+interface ProbeTarget {
+  /** Verdict key (source id, or item id for manifest items). */
+  key: string;
+  driveId: string;
+  itemId: string;
+}
+
+async function probeItems(
   req: NextRequest,
-  sources: M365AgentSource[],
+  targets: ProbeTarget[],
 ): Promise<Map<string, boolean>> {
   const verdicts = new Map<string, boolean>();
-  for (let offset = 0; offset < sources.length; offset += GRAPH_BATCH_SIZE) {
-    const slice = sources.slice(offset, offset + GRAPH_BATCH_SIZE);
+  for (let offset = 0; offset < targets.length; offset += GRAPH_BATCH_SIZE) {
+    const slice = targets.slice(offset, offset + GRAPH_BATCH_SIZE);
     const data = await graphJson<GraphBatchResponseShape>(
       req,
       GRAPH_SCOPES,
@@ -92,28 +109,94 @@ async function probeSources(
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          requests: slice.map((source, index) => ({
+          requests: slice.map((target, index) => ({
             id: String(offset + index),
             method: 'GET',
-            url: `/drives/${encodeURIComponent(source.driveId)}/items/${encodeURIComponent(source.itemId)}?$select=id`,
+            url: `/drives/${encodeURIComponent(target.driveId)}/items/${encodeURIComponent(target.itemId)}?$select=id`,
           })),
         }),
       },
     );
     for (const response of data.responses ?? []) {
       const index = Number(response.id);
-      const source = sources[index];
-      if (!source) continue;
+      const target = targets[index];
+      if (!target) continue;
       const status = response.status ?? 0;
       if (status !== 200 && status !== 403 && status !== 404) {
         console.warn(
-          `[m365-agents] unexpected probe status ${status} for source ${sanitizeForLog(source.sourceId)}; failing closed for this source`,
+          `[m365-agents] unexpected probe status ${status} for ${sanitizeForLog(target.key)}; failing closed for this item`,
         );
       }
-      verdicts.set(source.sourceId, status >= 200 && status < 300);
+      verdicts.set(target.key, status >= 200 && status < 300);
     }
   }
   return verdicts;
+}
+
+function probeSources(
+  req: NextRequest,
+  sources: M365AgentSource[],
+): Promise<Map<string, boolean>> {
+  return probeItems(
+    req,
+    sources.map((source) => ({
+      key: source.sourceId,
+      driveId: source.driveId,
+      itemId: source.itemId,
+    })),
+  );
+}
+
+interface ManifestCacheEntry {
+  at: number;
+  /** Indexed items per source id; null = no manifest for this agent. */
+  bySource: Map<string, ProbeTarget[]> | null;
+}
+
+const manifestCache = new Map<string, ManifestCacheEntry>();
+
+/**
+ * Indexed item ids per folder source from the agent's manifest. Null when
+ * the agent has no manifest (never indexed under the seventh-pass
+ * pipeline) or the read fails — callers then use the legacy listing,
+ * which is still security-trimmed by the user's own token.
+ */
+async function loadIndexedItems(
+  agent: M365Agent,
+): Promise<Map<string, ProbeTarget[]> | null> {
+  const cached = manifestCache.get(agent.id);
+  if (cached && Date.now() - cached.at < MANIFEST_CACHE_TTL_MS) {
+    return cached.bySource;
+  }
+  let bySource: Map<string, ProbeTarget[]> | null = null;
+  try {
+    const manifest = await readM365AgentManifest(
+      createAgentAccessBlobStorage(),
+      agent.id,
+    );
+    if (manifest) {
+      bySource = new Map();
+      for (const source of manifest.sources) {
+        bySource.set(
+          source.sourceId,
+          source.items
+            .filter((item) => item.status === 'indexed')
+            .map((item) => ({
+              key: item.itemId,
+              driveId: item.driveId,
+              itemId: item.itemId,
+            })),
+        );
+      }
+    }
+  } catch (error) {
+    console.warn(
+      `[m365-agents] manifest read failed for ${sanitizeForLog(agent.id)}; using legacy folder listing: ${sanitizeForLog(error)}`,
+    );
+  }
+  if (manifestCache.size >= MAX_CACHE_ENTRIES) manifestCache.clear();
+  manifestCache.set(agent.id, { at: Date.now(), bySource });
+  return bySource;
 }
 
 /**
@@ -124,10 +207,33 @@ async function probeSources(
  */
 async function resolveAccessibleFolderItems(
   req: NextRequest,
+  agent: M365Agent,
   folders: M365AgentSource[],
 ): Promise<string[]> {
+  if (folders.length === 0) return [];
   const itemIds: string[] = [];
+  const indexed = await loadIndexedItems(agent);
+  const legacyFolders: M365AgentSource[] = [];
+  const targets: ProbeTarget[] = [];
   for (const folder of folders) {
+    const items = indexed?.get(folder.sourceId);
+    if (items) targets.push(...items);
+    else legacyFolders.push(folder);
+  }
+  if (targets.length > 0) {
+    try {
+      const verdicts = await probeItems(req, targets);
+      for (const target of targets) {
+        if (verdicts.get(target.key)) itemIds.push(target.itemId);
+      }
+    } catch (error) {
+      // Fail closed for the manifest-backed folders only.
+      console.warn(
+        `[m365-agents] per-item probe failed for agent ${sanitizeForLog(agent.id)}; failing closed for its folder items: ${sanitizeForLog(error)}`,
+      );
+    }
+  }
+  for (const folder of legacyFolders) {
     try {
       const children = await graphJson<{
         value?: { id?: string; folder?: unknown }[];
@@ -177,6 +283,7 @@ export async function checkAgentSourceAccess(
 
   const accessibleFolderItemIds = await resolveAccessibleFolderItems(
     req,
+    agent,
     agent.sources.filter(
       (source) =>
         source.kind === 'folder' && (verdicts.get(source.sourceId) ?? false),
@@ -202,4 +309,5 @@ export async function checkAgentSourceAccess(
 /** Test hook. */
 export function clearAgentSourceAccessCache(): void {
   cache.clear();
+  manifestCache.clear();
 }
