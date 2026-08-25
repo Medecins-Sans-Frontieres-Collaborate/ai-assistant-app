@@ -31,6 +31,7 @@ import {
   M365_AGENT_SOURCE,
   canonicalAgentKey,
 } from '@/lib/services/agentAccess/types';
+import { deleteDerivedForAgent } from '@/lib/services/m365/agentDerivedTextStore';
 import {
   deleteIndexJob,
   listIndexJobs,
@@ -638,6 +639,7 @@ export async function DELETE(request: NextRequest) {
       const cleanupStorage = createAgentAccessBlobStorage();
       await deleteM365AgentManifest(cleanupStorage, id);
       await deleteIndexJob(cleanupStorage, id);
+      await deleteDerivedForAgent(cleanupStorage, id);
     } catch (error) {
       console.warn(
         `[agent-access-admin] manifest cleanup failed for ${sanitizeForLog(id)}: ${sanitizeForLog(error)}`,
