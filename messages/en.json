@@ -3690,6 +3690,11 @@
     "delegatedAgentsLabel": "Delegated agents",
     "noDelegatedAgents": "No agents available to delegate.",
     "unknownAgentKey": "Unknown agent key",
+    "canonicalKeyLabel": "Key",
+    "copyKey": "Copy key",
+    "agentKeySearchPlaceholder": "Search agents, guides, connectors… or paste a key",
+    "agentKeyAddCustom": "Add \"{key}\" as typed",
+    "agentKeyRemove": "Remove {name}",
     "hideAgent": "Hide",
     "unhideAgent": "Unhide",
     "hideAgentHint": "Hide this agent from your admin list. Only affects your view — users and other admins are unaffected.",
@@ -5019,7 +5024,7 @@
       "local": "Local administrator",
       "none": "Regular user",
       "localKeysLabel": "Delegated agent keys",
-      "localKeysHint": "Comma-separated canonical agent keys this local admin may edit. Leave empty for a local admin with no delegated agents.",
+      "localKeysHint": "The agents, guides, connectors and datasets this local admin may edit. Pick from the list, or paste a canonical key (shown as \"Key\" on every row in the admin area). Leave empty for a local admin with no delegated items.",
       "noneWarning": "As a regular user every other admin area disappears. This page stays reachable, and the banner at the top of the app always offers a way out."
     },
     "region": {

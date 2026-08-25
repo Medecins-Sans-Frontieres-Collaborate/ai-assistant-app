@@ -440,6 +440,12 @@ const mockMessages: Record<string, unknown> = {
     delegatedAgentsLabel: 'Delegated agents',
     noDelegatedAgents: 'No agents available to delegate.',
     unknownAgentKey: 'Unknown agent key',
+    canonicalKeyLabel: 'Key',
+    copyKey: 'Copy key',
+    agentKeySearchPlaceholder:
+      'Search agents, guides, connectors… or paste a key',
+    agentKeyAddCustom: 'Add "{key}" as typed',
+    agentKeyRemove: 'Remove {name}',
     hideAgent: 'Hide',
     unhideAgent: 'Unhide',
     hideAgentHint: 'Hide this agent from your admin list.',
