@@ -33,7 +33,6 @@ import {
   successResponse,
 } from '@/lib/utils/server/api/apiResponse';
 
-import { auth } from '@/auth';
 import { z } from 'zod';
 
 export const maxDuration = 300;
@@ -59,8 +58,6 @@ export async function POST(request: NextRequest) {
   try {
     const authz = await authorizeM365AgentAdmin(parsed.data.id);
     if (!authz.ok) return authz.response;
-    const session = await auth();
-    if (!session?.user) return notFoundResponse('Session');
 
     const storage = createAgentAccessBlobStorage();
     const existing = await readM365Agent(storage, parsed.data.id);
@@ -70,7 +67,7 @@ export async function POST(request: NextRequest) {
     try {
       outcome = await prepareAgentItem(
         request,
-        session,
+        authz.context.session,
         storage,
         existing.m365Agent,
         {
