@@ -3,6 +3,9 @@ import type {
   AgentAccessRule,
   Guide,
   M365Agent,
+  M365ManifestFolder,
+  M365ManifestItem,
+  M365SourceCounts,
   MapDataset,
   MapDatasetMeta,
   OrgRagAgent,
@@ -111,6 +114,30 @@ export interface AdminM365AgentsResponse {
   fetchedAt?: number | null;
   /** Server's env-configured per-agent document cap (M365_AGENT_MAX_DOCUMENTS). */
   maxDocuments?: number;
+  /** Server's env-configured per-agent byte budget (M365_AGENT_MAX_SOURCE_MB). */
+  maxBytes?: number;
+}
+
+/** One source's plan as returned by POST /api/agent-access/m365-agents/plan. */
+export interface ClientSourcePlan {
+  driveId: string;
+  itemId: string;
+  missing: boolean;
+  truncated: boolean;
+  deltaLink?: string;
+  folders: M365ManifestFolder[];
+  items: M365ManifestItem[];
+  counts: M365SourceCounts;
+}
+
+export interface ClientAgentPlan {
+  plans: ClientSourcePlan[];
+  totalDocuments: number;
+  totalBytes: number;
+  maxDocuments: number;
+  maxBytes: number;
+  overDocumentCap: boolean;
+  overByteCap: boolean;
 }
 
 /**
