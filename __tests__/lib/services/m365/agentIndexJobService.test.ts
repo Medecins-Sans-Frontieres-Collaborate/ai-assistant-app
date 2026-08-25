@@ -37,6 +37,7 @@ const mockIndex = vi.hoisted(() => ({
 }));
 const mockStore = vi.hoisted(() => ({
   readM365Agent: vi.fn(),
+  readM365AgentManifest: vi.fn(async () => null),
   writeM365Agent: vi.fn(async () => '"etag-2"'),
   writeM365AgentManifest: vi.fn(async () => undefined),
 }));
@@ -232,6 +233,60 @@ describe('startIndexJob', () => {
       'admin@example.org',
     );
     expect(summary.jobId).toBe('job-000000000000');
+  });
+});
+
+describe('startIndexJob refresh mode', () => {
+  it('passes the manifest to prepareIndexJob for a refresh, and downgrades to full without one', async () => {
+    const manifest = {
+      version: 1,
+      agentId: agent.id,
+      updatedAt: 'x',
+      sources: [],
+    };
+    mockStore.readM365AgentManifest.mockResolvedValueOnce(manifest as never);
+    mockIndex.prepareIndexJob.mockImplementationOnce(async () => ({
+      ...freshJob(['a']),
+      mode: 'refresh',
+      changes: { added: 1, modified: 0, removed: 0, unchanged: 3 },
+    }));
+    const summary = await startIndexJob(
+      req,
+      storage,
+      agent,
+      'u1',
+      'admin@example.org',
+      'refresh',
+    );
+    expect(mockIndex.prepareIndexJob).toHaveBeenLastCalledWith(
+      expect.anything(),
+      agent,
+      'u1',
+      'admin@example.org',
+      { mode: 'refresh', manifest },
+    );
+    expect(summary).toMatchObject({
+      mode: 'refresh',
+      changes: { added: 1, unchanged: 3 },
+    });
+
+    await cancelIndexJob(storage, agent.id, summary.jobId);
+    mockStore.readM365AgentManifest.mockResolvedValueOnce(null);
+    await startIndexJob(
+      req,
+      storage,
+      agent,
+      'u1',
+      'admin@example.org',
+      'refresh',
+    );
+    expect(mockIndex.prepareIndexJob).toHaveBeenLastCalledWith(
+      expect.anything(),
+      agent,
+      'u1',
+      'admin@example.org',
+      { mode: 'full', manifest: null },
+    );
   });
 });
 
