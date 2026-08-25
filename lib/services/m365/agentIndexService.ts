@@ -23,6 +23,7 @@ import { ServiceContainer } from '@/lib/services/ServiceContainer';
 import type {
   M365Agent,
   M365AgentManifest,
+  M365DerivedIndexEntry,
   M365IndexJob,
   M365IndexJobSource,
   M365ManifestItem,
@@ -520,6 +521,7 @@ export function __clearEmbeddingProbeCacheForTests(): void {
 interface GraphItemMeta {
   name?: string;
   size?: number;
+  eTag?: string;
   lastModifiedDateTime?: string;
   '@microsoft.graph.downloadUrl'?: string;
 }
@@ -570,25 +572,34 @@ function withTimeout<T>(
   });
 }
 
+export interface DownloadedItem {
+  buffer: Buffer;
+  name: string;
+  eTag?: string;
+  lastModified?: string;
+}
+
 /**
- * Downloads one planned item and extracts its text. The planner already
- * vetted type and size from metadata; this re-checks size against what
- * Graph reports now and verifies the bytes match the extension before the
- * extraction toolchain sees them.
+ * Downloads one item's bytes with the caller's token. Re-checks the size
+ * Graph reports now against `maxBytes` before and after the transfer, and
+ * only follows pre-authenticated download URLs on Microsoft hosts.
  */
-async function downloadAndExtract(
+export async function downloadItemBytes(
   req: NextRequest,
-  item: M365ManifestItem,
-): Promise<{ text: string; lastModified?: string }> {
+  driveId: string,
+  itemId: string,
+  fallbackName: string,
+  maxBytes: number = MAX_M365_SOURCE_FILE_BYTES,
+): Promise<DownloadedItem> {
   const meta = await graphJson<GraphItemMeta>(
     req,
     GRAPH_SCOPES,
-    `/drives/${encodeURIComponent(item.driveId)}/items/${encodeURIComponent(item.itemId)}` +
-      '?$select=name,size,lastModifiedDateTime,@microsoft.graph.downloadUrl',
+    `/drives/${encodeURIComponent(driveId)}/items/${encodeURIComponent(itemId)}` +
+      '?$select=name,size,eTag,lastModifiedDateTime,@microsoft.graph.downloadUrl',
   );
-  if ((meta.size ?? 0) > MAX_M365_SOURCE_FILE_BYTES) {
+  if ((meta.size ?? 0) > maxBytes) {
     throw new M365Error(
-      `File exceeds the ${Math.round(MAX_M365_SOURCE_FILE_BYTES / (1024 * 1024))}MB indexing limit`,
+      `File exceeds the ${Math.round(maxBytes / (1024 * 1024))}MB limit`,
       'graph_error',
       400,
     );
@@ -600,32 +611,59 @@ async function downloadAndExtract(
       : await graphFetch(
           req,
           GRAPH_SCOPES,
-          `/drives/${encodeURIComponent(item.driveId)}/items/${encodeURIComponent(item.itemId)}/content`,
+          `/drives/${encodeURIComponent(driveId)}/items/${encodeURIComponent(itemId)}/content`,
         );
   if (!content.ok) {
     throw new M365Error('Failed to download file content', 'graph_error', 502);
   }
   const buffer = Buffer.from(await content.arrayBuffer());
-  if (buffer.byteLength > MAX_M365_SOURCE_FILE_BYTES) {
+  if (buffer.byteLength > maxBytes) {
     throw new M365Error(
-      'Downloaded content exceeds the indexing limit',
+      'Downloaded content exceeds the limit',
       'graph_error',
       400,
     );
   }
-  const name = meta.name ?? item.name;
-  const signature = checkDocumentSignature(buffer, extensionOf(name));
+  return {
+    buffer,
+    name: meta.name ?? fallbackName,
+    ...(meta.eTag && { eTag: meta.eTag }),
+    ...(meta.lastModifiedDateTime && {
+      lastModified: meta.lastModifiedDateTime,
+    }),
+  };
+}
+
+/**
+ * Downloads one planned item and extracts its text. The planner already
+ * vetted type and size from metadata; this verifies the bytes match the
+ * extension before the extraction toolchain sees them.
+ */
+async function downloadAndExtract(
+  req: NextRequest,
+  item: M365ManifestItem,
+): Promise<{ text: string; lastModified?: string }> {
+  const downloaded = await downloadItemBytes(
+    req,
+    item.driveId,
+    item.itemId,
+    item.name,
+  );
+  const signature = checkDocumentSignature(
+    downloaded.buffer,
+    extensionOf(downloaded.name),
+  );
   if (!signature.ok) {
     throw new Error(signature.error ?? 'File content does not match its type');
   }
-  const file = new File([new Uint8Array(buffer)], name);
+  const file = new File([new Uint8Array(downloaded.buffer)], downloaded.name);
   return {
     text: await withTimeout(
       loadDocument(file),
       EXTRACTION_TIMEOUT_MS,
       'Extraction',
     ),
-    lastModified: meta.lastModifiedDateTime,
+    lastModified: downloaded.lastModified,
   };
 }
 
@@ -744,6 +782,7 @@ async function planJobSources(
   agent: M365Agent,
   userId: string,
   manifest: M365AgentManifest | null = null,
+  prepared: Record<string, M365DerivedIndexEntry> | undefined = undefined,
 ): Promise<M365IndexJobSource[]> {
   const manifestBySourceId = new Map(
     (manifest?.sources ?? []).map((s) => [s.sourceId, s]),
@@ -766,6 +805,7 @@ async function planJobSources(
         recursive: source.recursive,
         excludedItemIds: source.excludedItemIds,
         includeExtensions: source.includeExtensions,
+        prepared,
       };
       // Refresh: sources with a manifest entry plan incrementally against
       // it (unchanged items keep their outcome); sources added since the
@@ -864,6 +904,8 @@ export interface PrepareIndexJobOptions {
   mode: 'full' | 'refresh';
   /** Required for `refresh`; the last run's per-item record. */
   manifest?: M365AgentManifest | null;
+  /** The agent's prepared files (phase 4), from the derived index. */
+  prepared?: Record<string, M365DerivedIndexEntry>;
 }
 
 export async function prepareIndexJob(
@@ -886,6 +928,7 @@ export async function prepareIndexJob(
     agent,
     userId,
     refresh ? options.manifest : null,
+    options.prepared,
   );
   const now = new Date().toISOString();
   return {
@@ -927,8 +970,9 @@ export async function previewRefresh(
   agent: M365Agent,
   userId: string,
   manifest: M365AgentManifest,
+  prepared?: Record<string, M365DerivedIndexEntry>,
 ): Promise<{ sources: RefreshPreviewSource[]; changes: M365SourceChanges }> {
-  const planned = await planJobSources(req, agent, userId, manifest);
+  const planned = await planJobSources(req, agent, userId, manifest, prepared);
   const sources = planned.map(
     (s): RefreshPreviewSource => ({
       sourceId: s.sourceId,
@@ -947,15 +991,37 @@ export async function previewRefresh(
  * Chunk ids are deterministic (`agent_source_item_index`), so re-running
  * an item after an interrupted step is idempotent.
  */
+/** Reads a prepared item's derived text (phase 4); null when absent. */
+export type DerivedTextReader = (
+  itemId: string,
+) => Promise<{ eTag: string; text: string } | null>;
+
 export async function indexJobItem(
   req: NextRequest,
   agentId: string,
   embeddingDeployment: string,
   sourceId: string,
   item: M365ManifestItem,
+  readDerived?: DerivedTextReader,
 ): Promise<M365ManifestItem> {
   try {
-    const { text, lastModified } = await downloadAndExtract(req, item);
+    let text: string;
+    let lastModified: string | undefined;
+    if (item.prepared) {
+      // Prepared file: the derived text stands in for extraction. It must
+      // match the item's current eTag — otherwise the file changed after
+      // preparation and the admin has to prepare it again.
+      const derived = readDerived ? await readDerived(item.itemId) : null;
+      if (!derived || derived.eTag !== item.eTag) {
+        throw new Error(
+          'Prepared text is missing or outdated — prepare the file again',
+        );
+      }
+      text = derived.text;
+      lastModified = item.lastModified;
+    } else {
+      ({ text, lastModified } = await downloadAndExtract(req, item));
+    }
     const chunks = chunkDocument(text);
     if (chunks.length === 0) {
       console.warn(
