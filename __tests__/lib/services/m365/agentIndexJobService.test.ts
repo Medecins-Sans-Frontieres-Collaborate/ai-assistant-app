@@ -263,7 +263,7 @@ describe('startIndexJob refresh mode', () => {
       agent,
       'u1',
       'admin@example.org',
-      { mode: 'refresh', manifest },
+      { mode: 'refresh', manifest, prepared: {} },
     );
     expect(summary).toMatchObject({
       mode: 'refresh',
@@ -285,7 +285,7 @@ describe('startIndexJob refresh mode', () => {
       agent,
       'u1',
       'admin@example.org',
-      { mode: 'full', manifest: null },
+      { mode: 'full', manifest: null, prepared: {} },
     );
   });
 });

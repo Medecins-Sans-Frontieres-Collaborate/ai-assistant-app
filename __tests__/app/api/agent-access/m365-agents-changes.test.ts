@@ -32,6 +32,18 @@ vi.mock('@/lib/services/agentAccess/adminAuth', async (importOriginal) => {
 });
 vi.mock('@/lib/services/agentAccess/accessRulesStore', () => mockStore);
 vi.mock('@/lib/services/m365/agentIndexService', () => mockIndex);
+vi.mock('@/lib/services/m365/agentDerivedTextStore', () => ({
+  readDerivedIndex: vi.fn(async () => ({
+    index: {
+      version: 1,
+      agentId: AGENT_ID,
+      updatedAt: '',
+      items: { img: { eTag: '"i"', kind: 'image', preparedAt: '' } },
+      pending: {},
+    },
+    etag: null,
+  })),
+}));
 
 const AGENT_ID = 'm365-abcdefabcdef';
 const request = () =>
@@ -88,6 +100,9 @@ describe('GET /api/agent-access/m365-agents/changes', () => {
       expect.objectContaining({ id: AGENT_ID }),
       'u1',
       expect.objectContaining({ agentId: AGENT_ID }),
+      expect.objectContaining({
+        img: expect.objectContaining({ kind: 'image' }),
+      }),
     );
   });
 
