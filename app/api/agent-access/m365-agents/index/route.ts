@@ -1,12 +1,15 @@
 /**
- * POST /api/agent-access/m365-agents/index  { id }
+ * POST /api/agent-access/m365-agents/index  { id, mode?: 'full' | 'refresh' }
  *
  * STARTS a resumable index job for an M365 agent (seventh pass §4): plans
  * every source with the CALLING ADMIN'S delegated Graph token — the
  * constraint the whole design honors: refresh tokens exist only inside
  * the session JWT, so indexing runs only while someone with file access
  * is present — and writes the job with every indexable item pending.
- * The caller then drives ./step until the job is terminal.
+ * The caller then drives ./step until the job is terminal. `refresh`
+ * (phase 3) plans incrementally against the last manifest — stored delta
+ * links, carried-over outcomes for unchanged files — so a stable tree
+ * costs one metadata call and no downloads.
  *
  * 409 with the running job's summary when one is already active.
  */
@@ -46,6 +49,14 @@ export async function POST(request: NextRequest) {
     typeof body === 'object' && body !== null && 'id' in body
       ? String((body as { id: unknown }).id).trim()
       : '';
+  const modeRaw =
+    typeof body === 'object' && body !== null && 'mode' in body
+      ? (body as { mode: unknown }).mode
+      : 'full';
+  if (modeRaw !== 'full' && modeRaw !== 'refresh') {
+    return badRequestResponse('Invalid mode');
+  }
+  const mode: 'full' | 'refresh' = modeRaw;
 
   try {
     const authz = await authorizeM365AgentAdmin(id);
@@ -64,6 +75,7 @@ export async function POST(request: NextRequest) {
         existing.m365Agent,
         userId,
         userMail,
+        mode,
       );
     } catch (error) {
       if (error instanceof IndexJobActiveError) {
@@ -86,7 +98,11 @@ export async function POST(request: NextRequest) {
       if (error instanceof M365Error) return m365ErrorResponse(error);
       throw error;
     }
-    auditAdminWrite('m365-agent-index-start', canonicalKey, userMail);
+    auditAdminWrite(
+      `m365-agent-index-start-${summary.mode}`,
+      canonicalKey,
+      userMail,
+    );
     return successResponse({ job: summary });
   } catch (error) {
     return handleApiError(error, 'Failed to start indexing');
