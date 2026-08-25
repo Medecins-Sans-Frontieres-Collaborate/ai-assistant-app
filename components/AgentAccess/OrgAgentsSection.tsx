@@ -15,6 +15,7 @@ import toast from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
 
 import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
+import { useHiddenAdminAgents } from '@/client/hooks/useHiddenAdminAgents';
 
 import type { OrgRagAgent } from '@/lib/services/agentAccess/types';
 
@@ -23,6 +24,11 @@ import { isModelSelectableInRegion } from '@/lib/utils/shared/modelRegion';
 import { OpenAIModels } from '@/types/openai';
 
 import { ConflictDiff, ConflictDiffRow } from './ConflictDiff';
+import {
+  HiddenBadge,
+  HideAgentButton,
+  ShowHiddenToggle,
+} from './HiddenAgentsControls';
 import { RuleEditor } from './RuleEditor';
 import {
   AdminHistoryResponse,
@@ -812,6 +818,7 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
     agent: OrgRagAgent;
   } | null>(null);
 
+  const hiddenAgents = useHiddenAdminAgents();
   const agentsQuery = useQuery<AdminOrgAgentsResponse>({
     queryKey: ['agent-access-org-agents'],
     queryFn: async () => {
@@ -907,6 +914,14 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
   const staticAgents = (agentsQuery.data?.staticAgents ?? []).filter(
     (entry) => !entry.overridden,
   );
+  const hiddenStatic = hiddenAgents.partition(
+    staticAgents,
+    (entry) => entry.canonicalKey,
+  );
+  const hiddenStored = hiddenAgents.partition(
+    agents,
+    (entry) => entry.canonicalKey,
+  );
   const staticAgentIds = agentsQuery.data?.staticAgentIds ?? [];
   const canCreate = agentsQuery.data?.canCreate !== false;
   const indexNames = indexesQuery.data?.indexes ?? [];
@@ -972,13 +987,21 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
         </p>
       )}
 
-      {agents.length === 0 && staticAgents.length === 0 ? (
+      <ShowHiddenToggle
+        hiddenCount={hiddenStatic.hiddenCount + hiddenStored.hiddenCount}
+        showHidden={hiddenAgents.showHidden}
+        onToggle={hiddenAgents.setShowHidden}
+      />
+      {hiddenStored.visible.length === 0 &&
+      hiddenStatic.visible.length === 0 ? (
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          {t('noOrgAgents')}
+          {agents.length === 0 && staticAgents.length === 0
+            ? t('noOrgAgents')
+            : t('allAgentsHidden')}
         </p>
       ) : (
         <ul className="space-y-2">
-          {staticAgents.map((entry) => {
+          {hiddenStatic.visible.map((entry) => {
             // Built-in (deployment config) agent: read-only settings, but
             // its access rule is editable under the same canonical key the
             // invocation guard and discovery filter evaluate.
@@ -1019,6 +1042,12 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                   >
                     {isRestricted ? t('accessRestricted') : t('accessEveryone')}
                   </span>
+                  {hiddenAgents.isHidden(entry.canonicalKey) && <HiddenBadge />}
+                  <HideAgentButton
+                    hidden={hiddenAgents.isHidden(entry.canonicalKey)}
+                    onHide={() => hiddenAgents.hide(entry.canonicalKey)}
+                    onUnhide={() => hiddenAgents.unhide(entry.canonicalKey)}
+                  />
                   <button
                     type="button"
                     onClick={() =>
@@ -1078,7 +1107,7 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
               </li>
             );
           })}
-          {agents.map((entry) => {
+          {hiddenStored.visible.map((entry) => {
             const stored = rulesByKey.get(entry.canonicalKey) ?? null;
             const isRestricted = stored?.rule.access.type === 'restricted';
             const validation = entry.agent.validation;
@@ -1135,6 +1164,12 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                   >
                     {isRestricted ? t('accessRestricted') : t('accessEveryone')}
                   </span>
+                  {hiddenAgents.isHidden(entry.canonicalKey) && <HiddenBadge />}
+                  <HideAgentButton
+                    hidden={hiddenAgents.isHidden(entry.canonicalKey)}
+                    onHide={() => hiddenAgents.hide(entry.canonicalKey)}
+                    onUnhide={() => hiddenAgents.unhide(entry.canonicalKey)}
+                  />
                   <button
                     type="button"
                     onClick={() =>

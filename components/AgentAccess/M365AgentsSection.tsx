@@ -17,6 +17,7 @@ import toast from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
 
 import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
+import { useHiddenAdminAgents } from '@/client/hooks/useHiddenAdminAgents';
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
 
 import type {
@@ -32,6 +33,11 @@ import { OpenAIModels } from '@/types/openai';
 import M365FilePickerModal from '@/components/Chat/ChatInput/M365FilePickerModal';
 
 import { ConflictDiff, ConflictDiffRow } from './ConflictDiff';
+import {
+  HiddenBadge,
+  HideAgentButton,
+  ShowHiddenToggle,
+} from './HiddenAgentsControls';
 import {
   M365SourcePlanView,
   SourceSelection,
@@ -833,6 +839,7 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
   const [editingRuleKey, setEditingRuleKey] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
+  const hiddenAgents = useHiddenAdminAgents();
   const agentsQuery = useQuery<AdminM365AgentsResponse>({
     queryKey: ['agent-access-m365-agents'],
     queryFn: async () => {
@@ -1025,6 +1032,10 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
   if (!agentsEnabled) return null;
 
   const agents = agentsQuery.data?.m365Agents ?? [];
+  const { visible: visibleAgents, hiddenCount } = hiddenAgents.partition(
+    agents,
+    (entry) => entry.canonicalKey,
+  );
   const maxDocuments = agentsQuery.data?.maxDocuments ?? DEFAULT_MAX_SOURCES;
   const maxBytes = agentsQuery.data?.maxBytes ?? DEFAULT_MAX_BYTES;
 
@@ -1075,13 +1086,18 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
         </p>
       )}
 
-      {agents.length === 0 ? (
+      <ShowHiddenToggle
+        hiddenCount={hiddenCount}
+        showHidden={hiddenAgents.showHidden}
+        onToggle={hiddenAgents.setShowHidden}
+      />
+      {visibleAgents.length === 0 ? (
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          {t('noM365Agents')}
+          {agents.length === 0 ? t('noM365Agents') : t('allAgentsHidden')}
         </p>
       ) : (
         <ul className="space-y-2">
-          {agents.map((entry) => {
+          {visibleAgents.map((entry) => {
             const stored = rulesByKey.get(entry.canonicalKey) ?? null;
             const isRestricted = stored?.rule.access.type === 'restricted';
             const sources = entry.agent.sources;
@@ -1252,6 +1268,12 @@ export const M365AgentsSection: FC<M365AgentsSectionProps> = ({
                   >
                     {isRestricted ? t('accessRestricted') : t('accessEveryone')}
                   </span>
+                  {hiddenAgents.isHidden(entry.canonicalKey) && <HiddenBadge />}
+                  <HideAgentButton
+                    hidden={hiddenAgents.isHidden(entry.canonicalKey)}
+                    onHide={() => hiddenAgents.hide(entry.canonicalKey)}
+                    onUnhide={() => hiddenAgents.unhide(entry.canonicalKey)}
+                  />
                   {jobActive ? (
                     <>
                       {(!driving || job?.stale) && (
