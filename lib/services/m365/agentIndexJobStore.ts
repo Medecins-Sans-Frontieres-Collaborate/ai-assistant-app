@@ -27,7 +27,10 @@ import {
 
 import { withAzureRetry } from '@/lib/utils/server/azure/retry';
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
-import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+import {
+  sanitizeForLog,
+  zodIssueSummary,
+} from '@/lib/utils/server/log/logSanitization';
 
 /**
  * A running job whose last write is older than this is "interrupted":
@@ -64,7 +67,7 @@ export async function readIndexJob(
     // Derived data: a malformed job reads as "no job" so a fresh start
     // can overwrite it, but say so.
     console.error(
-      `[m365-agents] ignoring malformed index job for ${sanitizeForLog(agentId)}: ${sanitizeForLog(parsed.error.message)}`,
+      `[m365-agents] ignoring malformed index job for ${sanitizeForLog(agentId)}: ${zodIssueSummary(parsed.error)}`,
     );
     return null;
   }

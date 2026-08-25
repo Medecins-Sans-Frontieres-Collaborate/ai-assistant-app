@@ -82,7 +82,10 @@ import {
 
 import { withAzureRetry } from '@/lib/utils/server/azure/retry';
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
-import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+import {
+  sanitizeForLog,
+  zodIssueSummary,
+} from '@/lib/utils/server/log/logSanitization';
 
 /**
  * Blob persistence for agent access rules, config, and history.
@@ -703,11 +706,11 @@ export async function readM365AgentManifest(
     );
     if (parsed.success) return parsed.data;
     console.error(
-      `[agent-access] ignoring malformed m365-agent manifest for ${sanitizeForLog(id)}: ${sanitizeForLog(parsed.error.message)}`,
+      `[agent-access] ignoring malformed m365-agent manifest for ${sanitizeForLog(id)}: ${zodIssueSummary(parsed.error)}`,
     );
   } catch (error) {
     console.error(
-      `[agent-access] ignoring unreadable m365-agent manifest for ${sanitizeForLog(id)}: ${sanitizeForLog(error)}`,
+      `[agent-access] ignoring unreadable m365-agent manifest for ${sanitizeForLog(id)}: ${error instanceof Error ? error.name : 'unknown error'}`,
     );
   }
   return null;

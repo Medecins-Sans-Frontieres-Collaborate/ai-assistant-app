@@ -181,8 +181,10 @@ async function loadIndexedItems(
           source.sourceId,
           source.items
             .filter((item) => item.status === 'indexed')
+            // Graph item ids are unique per DRIVE; a composite key keeps two
+            // drives' items from sharing (and widening) a verdict.
             .map((item) => ({
-              key: item.itemId,
+              key: `${item.driveId}:${item.itemId}`,
               driveId: item.driveId,
               itemId: item.itemId,
             })),

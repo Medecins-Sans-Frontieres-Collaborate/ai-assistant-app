@@ -30,7 +30,10 @@ import {
 
 import { withAzureRetry } from '@/lib/utils/server/azure/retry';
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
-import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+import {
+  sanitizeForLog,
+  zodIssueSummary,
+} from '@/lib/utils/server/log/logSanitization';
 
 const CAS_RETRIES = 4;
 
@@ -59,7 +62,7 @@ export async function readDerivedIndex(
   );
   if (!parsed.success) {
     console.error(
-      `[m365-agents] ignoring malformed derived index for ${sanitizeForLog(agentId)}: ${sanitizeForLog(parsed.error.message)}`,
+      `[m365-agents] ignoring malformed derived index for ${sanitizeForLog(agentId)}: ${zodIssueSummary(parsed.error)}`,
     );
     return { index: emptyIndex(agentId), etag: result.etag };
   }
@@ -112,7 +115,7 @@ export async function readDerivedText(
   );
   if (!parsed.success) {
     console.error(
-      `[m365-agents] ignoring malformed derived text for ${sanitizeForLog(agentId)}/${sanitizeForLog(itemId)}: ${sanitizeForLog(parsed.error.message)}`,
+      `[m365-agents] ignoring malformed derived text for ${sanitizeForLog(agentId)}/${sanitizeForLog(itemId)}: ${zodIssueSummary(parsed.error)}`,
     );
     return null;
   }

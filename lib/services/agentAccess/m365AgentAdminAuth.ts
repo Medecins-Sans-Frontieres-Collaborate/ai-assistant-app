@@ -4,6 +4,7 @@
  * key. Mirrors the checks PUT performs in the CRUD route so a job can only
  * be driven by someone who could edit the agent.
  */
+import { Session } from 'next-auth';
 import { NextResponse } from 'next/server';
 
 import { AgentAccessService } from '@/lib/services/agentAccess/AgentAccessService';
@@ -29,6 +30,8 @@ export interface M365AgentAdminContext {
   userId: string;
   userMail: string;
   canonicalKey: string;
+  /** The authenticated session — so callers never need a second auth(). */
+  session: Session;
 }
 
 export type M365AgentAdminResult =
@@ -64,6 +67,6 @@ export async function authorizeM365AgentAdmin(
   }
   return {
     ok: true,
-    context: { userId: session.user.id, userMail, canonicalKey },
+    context: { userId: session.user.id, userMail, canonicalKey, session },
   };
 }

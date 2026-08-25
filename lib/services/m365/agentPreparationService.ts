@@ -40,7 +40,7 @@ import {
   classifyItem,
   extensionOf,
 } from '@/lib/services/m365/agentSourcePlanner';
-import { M365Error, graphJson } from '@/lib/services/m365/graphApi';
+import { graphJson } from '@/lib/services/m365/graphApi';
 import { getJobForUser } from '@/lib/services/transcription/chunkedJobStore';
 import { getChunkedTranscriptionService } from '@/lib/services/transcription/chunkedTranscriptionService';
 import { WhisperTranscriptionService } from '@/lib/services/transcription/whisperTranscriptionService';
@@ -122,22 +122,39 @@ function kindFor(name: string, mimeType?: string): M365PreparationKind | null {
   return null;
 }
 
-function tempPath(name: string): string {
-  return path.join(os.tmpdir(), `${randomUUID()}${path.extname(name)}`);
+/**
+ * Only a short alphanumeric extension survives from the Graph file name:
+ * the extractors key format detection off it, and nothing else from an
+ * attacker-controllable name may reach the file system.
+ */
+function safeExtension(name: string): string {
+  const ext = path.extname(name).toLowerCase();
+  return /^\.[a-z0-9]{1,10}$/.test(ext) ? ext : '';
 }
 
+/**
+ * Writes downloaded bytes to a private, per-call temp directory
+ * (mkdtemp → 0700) as a fresh file (wx, 0600), runs `fn`, and removes the
+ * directory afterwards — unless `keep` is set because a background job
+ * (chunked transcription) takes ownership of the file.
+ */
 async function withTempFile<T>(
   name: string,
   buffer: Buffer,
   fn: (filePath: string) => Promise<T>,
   keep = false,
 ): Promise<T> {
-  const filePath = tempPath(name);
-  await fs.promises.writeFile(filePath, buffer);
+  const dir = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'm365-prep-'));
+  const filePath = path.join(dir, `${randomUUID()}${safeExtension(name)}`);
+  await fs.promises.writeFile(filePath, buffer, { flag: 'wx', mode: 0o600 });
   try {
     return await fn(filePath);
   } finally {
-    if (!keep) await fs.promises.unlink(filePath).catch(() => undefined);
+    if (!keep) {
+      await fs.promises
+        .rm(dir, { recursive: true, force: true })
+        .catch(() => undefined);
+    }
   }
 }
 
