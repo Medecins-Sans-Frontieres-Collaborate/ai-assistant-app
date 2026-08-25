@@ -167,6 +167,21 @@ describe('index job routes', () => {
       expect.objectContaining({ id: AGENT_ID }),
       'u1',
       'admin@example.org',
+      'full',
+    );
+
+    // mode is validated and passed through.
+    expect(
+      (await startPOST(post('index', { id: AGENT_ID, mode: 'weird' }))).status,
+    ).toBe(400);
+    await startPOST(post('index', { id: AGENT_ID, mode: 'refresh' }));
+    expect(mockJobs.startIndexJob).toHaveBeenLastCalledWith(
+      expect.anything(),
+      expect.anything(),
+      expect.objectContaining({ id: AGENT_ID }),
+      'u1',
+      'admin@example.org',
+      'refresh',
     );
 
     mockJobs.startIndexJob.mockRejectedValue(
