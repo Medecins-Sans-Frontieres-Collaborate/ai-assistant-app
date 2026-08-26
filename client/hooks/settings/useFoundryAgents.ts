@@ -33,7 +33,9 @@ export function useFoundryAgents() {
   const {
     data,
     isLoading: isLoadingFoundryAgents,
+    isError: isFoundryAgentsError,
     error: foundryAgentsError,
+    refetch,
   } = useQuery<FoundryAgentsResponse>({
     queryKey: ['foundry-agents', ...sourcePaths],
     queryFn: async () => {
@@ -50,8 +52,16 @@ export function useFoundryAgents() {
     },
     staleTime: 24 * 60 * 60 * 1000, // 24 hours — user can manually refresh
     gcTime: 24 * 60 * 60 * 1000, // 24 hours — persist cache across modal open/close
-    retry: 1,
-    refetchOnWindowFocus: false,
+    // Discovery is a slow multi-hop route (Graph groups, blob reads, ARM,
+    // Foundry) and a single transient failure used to strand the query in
+    // `error` for the whole session — the hook is mounted permanently, so
+    // nothing ever refetched and users reloaded the page. Retry with
+    // backoff, and refetch on focus/reconnect ONLY while errored (a good
+    // list stays cached for the day).
+    retry: 2,
+    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 8000),
+    refetchOnWindowFocus: (query) => query.state.status === 'error',
+    refetchOnReconnect: (query) => query.state.status === 'error',
   });
 
   const queryClient = useQueryClient();
@@ -107,12 +117,20 @@ export function useFoundryAgents() {
   );
 
   return {
-    foundryAgents: isRefreshing ? [] : visibleAgents,
+    // Keep the last good list on screen during a manual refresh instead of
+    // blanking it (which made entry points that gate on "any agents"
+    // flicker away mid-refresh).
+    foundryAgents: visibleAgents,
     suppressedOrgAgentIds: data?.suppressedOrgAgentIds ?? [],
     regionalPath: data?.regionalPath ?? null,
     officePaths: data?.officePaths ?? [],
     isLoadingFoundryAgents: isLoadingFoundryAgents || isRefreshing,
+    isRefreshingFoundryAgents: isRefreshing,
+    /** The last fetch failed and nothing is cached — see useAgentBrowserAvailability. */
+    isFoundryAgentsError: isFoundryAgentsError && data === undefined,
     foundryAgentsError,
     refetchFoundryAgents: refreshAgents,
+    /** Plain React Query refetch (no server-cache bust) for error recovery. */
+    retryFoundryAgents: refetch,
   };
 }
