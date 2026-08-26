@@ -190,6 +190,87 @@ async function getDeniedStaticOrgAgentIds(
     .map((agent) => agent.id);
 }
 
+interface DiscoveryTokens {
+  armToken: string;
+  foundryToken: string | null;
+}
+
+interface DiscoveryOutcome {
+  results: PromiseSettledResult<DiscoveredAgent[]>[];
+}
+
+/**
+ * Acquires the user's ARM token via OBO (per-user RBAC filtering) and,
+ * best-effort, a Foundry data-plane token — the two exchanges run in
+ * parallel. Returns null when OBO fails in production: the app identity
+ * has broader RBAC than any single user, so falling back would leak the
+ * union of all agents to every user. In dev the app credential is used so
+ * local setups without OBO can exercise discovery.
+ */
+async function acquireDiscoveryTokens(
+  request: NextRequest,
+  userLabel: string,
+): Promise<DiscoveryTokens | null> {
+  const isProd = process.env.NODE_ENV === 'production';
+  try {
+    const appAccessToken = await getAccessTokenForOBO(request);
+    if (!appAccessToken) throw new Error('No OBO token');
+    const tokenProvider = UserTokenProvider.getInstance();
+    const [armToken, foundryToken] = await Promise.all([
+      tokenProvider.getArmToken(appAccessToken),
+      tokenProvider.getFoundryToken(appAccessToken).catch((enrichErr) => {
+        console.warn(
+          '[/api/agents] Foundry OBO unavailable, skipping data-plane enrichment:',
+          enrichErr instanceof Error ? enrichErr.message : enrichErr,
+        );
+        return null;
+      }),
+    ]);
+    return { armToken, foundryToken };
+  } catch (e) {
+    const errMsg = e instanceof Error ? e.message : String(e);
+    if (isProd) {
+      console.error(`[/api/agents] OBO failed for ${userLabel}: ${errMsg}`);
+      return null;
+    }
+    console.warn(
+      `[/api/agents] OBO failed (dev), using fallback credential: ${errMsg}`,
+    );
+    const credential = await createAppIdentityCredential();
+    const [armResponse, foundryToken] = await Promise.all([
+      credential.getToken('https://management.azure.com/.default'),
+      credential
+        .getToken('https://ai.azure.com/.default')
+        .then((t) => t.token)
+        .catch(() => null),
+    ]);
+    return { armToken: armResponse.token, foundryToken };
+  }
+}
+
+/** Tokens → per-path discovery. Started before the group warm-up settles. */
+async function startDiscovery(
+  request: NextRequest,
+  discoveryService: AgentDiscoveryService,
+  allPaths: string[],
+  cacheOwner: string,
+): Promise<DiscoveryOutcome | null> {
+  const tokens = await acquireDiscoveryTokens(request, cacheOwner);
+  if (!tokens) return null;
+  const results = await Promise.allSettled(
+    allPaths.map(async (path) => {
+      const agents = await discoveryService.listUserAgents(
+        tokens.armToken,
+        path,
+        tokens.foundryToken,
+        cacheOwner,
+      );
+      return agents.map((agent) => ({ ...agent, source: path }));
+    }),
+  );
+  return { results };
+}
+
 export async function GET(request: NextRequest) {
   const session = await auth();
 
@@ -197,9 +278,11 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  // Group-membership warm-up MUST precede the evaluateAccess filtering
-  // below — group-scoped rules read the cache synchronously. Never throws.
-  await resolveUserGroupIds(request, session);
+  // Group-membership warm-up MUST precede every evaluateAccess below —
+  // group-scoped rules read the cache synchronously. Never throws. Started
+  // here and awaited just before the first access-filtered lookup so the
+  // Graph round-trip overlaps the OBO token exchange (see startDiscovery).
+  const groupsWarmup = resolveUserGroupIds(request, session);
 
   try {
     // Office-scoped discovery returns three buckets:
@@ -235,22 +318,46 @@ export async function GET(request: NextRequest) {
 
     // Computed up front so every response path — including the discovery
     // early-returns below — serves the (access-filtered) prompt agents.
+    const discoveryService = AgentDiscoveryService.getInstance();
+    const cacheOwner =
+      session.user.mail?.trim().toLowerCase() || session.user.id;
+    // Clear THIS user's server-side discovery cache on refresh (never
+    // everyone's — one reload button must not cold-start the replica).
+    if (request.nextUrl.searchParams.has('refresh')) {
+      discoveryService.clearCacheForUser(cacheOwner);
+    }
+
+    // Critical path, overlapped as far as the data dependencies allow:
+    //   groups ∥ (OBO tokens → ARM/Foundry discovery)
+    //   then visibility lookups (need groups) ∥ discovery still running
+    //   then the access filter (needs both).
+    // Discovery only needs the tokens, so it starts before the group
+    // warm-up resolves; the five lookups below evaluate group-scoped rules
+    // and therefore wait for it.
+    const discoveryPromise: Promise<DiscoveryOutcome | null> =
+      allPaths.length > 0
+        ? startDiscovery(request, discoveryService, allPaths, cacheOwner)
+        : Promise.resolve(null);
+    await groupsWarmup;
+
     // These five lookups are independent (each reads the access snapshot /
-    // its own blob listing); running them together instead of one after
-    // another takes seconds off the first load, which is what gates the
-    // sidebar's Agents entry.
+    // its own blob listing); running them together — and alongside
+    // discovery — takes seconds off the first load, which is what gates
+    // the sidebar's Agents entry.
     const [
       promptAgentEntries,
       m365AgentEntries,
       orgAgentEntries,
       suppressedStaticIds,
       deniedStaticIds,
+      discovery,
     ] = await Promise.all([
       getVisiblePromptAgentEntries(session.user.mail),
       getVisibleM365AgentEntries(session.user.mail),
       getVisibleOrgAgentEntries(session.user.mail),
       getSuppressedStaticAgentIds(),
       getDeniedStaticOrgAgentIds(session.user.mail),
+      discoveryPromise,
     ]);
     // Static config ids that admin records currently override or disable,
     // plus the ones an access rule denies THIS user — the client trims the
@@ -273,82 +380,22 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // Clear server-side discovery cache on refresh
-    if (request.nextUrl.searchParams.has('refresh')) {
-      AgentDiscoveryService.getInstance().clearCache();
+    if (!discovery) {
+      // OBO failed in production: return the app-defined agents only. The
+      // app identity has broader RBAC than any single user, so a silent
+      // fallback would leak the union of all agents to every user.
+      return NextResponse.json({
+        agents: [
+          ...promptAgentEntries,
+          ...m365AgentEntries,
+          ...orgAgentEntries,
+        ],
+        suppressedOrgAgentIds,
+        regionalPath,
+        officePaths,
+      });
     }
-
-    // Acquire ARM token via OBO (per-user RBAC filtering).
-    // In production, if OBO fails we return empty rather than falling back to
-    // the app's identity — the app identity has broader RBAC than any single
-    // user, so a silent fallback would leak the union of all agents to every
-    // user. In dev, we allow fallback so local devs without OBO setup can
-    // exercise the discovery path.
-    const isProd = process.env.NODE_ENV === 'production';
-    let armToken: string;
-    let foundryToken: string | null = null;
-
-    try {
-      const appAccessToken = await getAccessTokenForOBO(request);
-      if (!appAccessToken) throw new Error('No OBO token');
-      const tokenProvider = UserTokenProvider.getInstance();
-      armToken = await tokenProvider.getArmToken(appAccessToken);
-      // Foundry token is used to enrich each Application with the data
-      // plane agent's name + description. Best-effort: discovery still
-      // works without it (returns ARM-only fields).
-      try {
-        foundryToken = await tokenProvider.getFoundryToken(appAccessToken);
-      } catch (enrichErr) {
-        console.warn(
-          '[/api/agents] Foundry OBO unavailable, skipping data-plane enrichment:',
-          enrichErr instanceof Error ? enrichErr.message : enrichErr,
-        );
-      }
-    } catch (e) {
-      const errMsg = e instanceof Error ? e.message : String(e);
-      if (isProd) {
-        console.error(
-          `[/api/agents] OBO failed for ${session.user.mail ?? 'unknown'}: ${errMsg}`,
-        );
-        return NextResponse.json({
-          agents: [
-            ...promptAgentEntries,
-            ...m365AgentEntries,
-            ...orgAgentEntries,
-          ],
-          suppressedOrgAgentIds,
-          regionalPath,
-          officePaths,
-        });
-      }
-      console.warn(
-        `[/api/agents] OBO failed (dev), using fallback credential: ${errMsg}`,
-      );
-      const credential = await createAppIdentityCredential();
-      const tokenResponse = await credential.getToken(
-        'https://management.azure.com/.default',
-      );
-      armToken = tokenResponse.token;
-      try {
-        const fTok = await credential.getToken('https://ai.azure.com/.default');
-        foundryToken = fTok.token;
-      } catch {
-        // Best-effort enrichment only.
-      }
-    }
-
-    const discoveryService = AgentDiscoveryService.getInstance();
-    const results = await Promise.allSettled(
-      allPaths.map(async (path) => {
-        const agents = await discoveryService.listUserAgents(
-          armToken,
-          path,
-          foundryToken,
-        );
-        return agents.map((agent) => ({ ...agent, source: path }));
-      }),
-    );
-
+    const { results } = discovery;
     // Collect all successful results, skip failures silently
     const allAgents: DiscoveredAgent[] = [];
     const seenAgentNames = new Set<string>();
