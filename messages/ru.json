@@ -2530,7 +2530,8 @@
     "searchConversations": "Поиск по беседам",
     "toggleTheme": "Переключить тему",
     "regenerateResponse": "Сгенерировать ответ снова",
-    "copyLastResponse": "Скопировать последний ответ"
+    "copyLastResponse": "Скопировать последний ответ",
+    "pasteOptions": "Вставить как… (выберите текст, Markdown, вложение, изображение или ссылку)"
   },
   "quarantine": {
     "title": "Карантинные беседы",
@@ -4284,7 +4285,19 @@
     "settingsDescription": "Если вставить текст длиннее указанного ниже лимита, он будет приложен файлом, а не вставлен в окно сообщения. Текст используется в точности как вставлен — ничего не загружается и не изменяется.",
     "settingsThresholdLabel": "Вкладывать вставки длиннее",
     "settingsThresholdUnit": "символов",
-    "settingsThresholdHint": "От {min, number} до {max, number} символов."
+    "settingsThresholdHint": "От {min, number} до {max, number} символов.",
+    "options": {
+      "menuLabel": "Вставить как…",
+      "insertHeading": "Вставить в сообщение",
+      "attachHeading": "Прикрепить",
+      "text": "Обычный текст",
+      "markdown": "Форматированный текст (Markdown)",
+      "attachText": "Текстовый файл",
+      "attachMarkdown": "Форматированный файл (Markdown)",
+      "image": "{count, plural, one {Изображение} other {# изображений}}",
+      "link": "Содержимое страницы по ссылке",
+      "hint": "↑↓ выбрать · Enter вставить · Esc отменить · 1–9 выбрать"
+    }
   },
   "structures": {
     "section": "Структуры",

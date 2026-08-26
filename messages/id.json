@@ -2530,7 +2530,8 @@
     "searchConversations": "Cari percakapan",
     "toggleTheme": "Ganti tema",
     "regenerateResponse": "Buat ulang respons",
-    "copyLastResponse": "Salin respons terakhir"
+    "copyLastResponse": "Salin respons terakhir",
+    "pasteOptions": "Tempel sebagai... (pilih teks, Markdown, lampiran, gambar, atau tautan)"
   },
   "quarantine": {
     "title": "Percakapan Dikarantina",
@@ -4284,7 +4285,19 @@
     "settingsDescription": "Menempel teks melebihi batas di bawah akan melampirkannya sebagai file, bukan mengisi kotak pesan. Teks digunakan persis seperti yang ditempel — tidak diambil atau diubah.",
     "settingsThresholdLabel": "Lampirkan tempelan yang lebih panjang dari",
     "settingsThresholdUnit": "karakter",
-    "settingsThresholdHint": "Antara {min, number} dan {max, number} karakter."
+    "settingsThresholdHint": "Antara {min, number} dan {max, number} karakter.",
+    "options": {
+      "menuLabel": "Tempel sebagai...",
+      "insertHeading": "Masukkan ke pesan",
+      "attachHeading": "Lampirkan",
+      "text": "Teks biasa",
+      "markdown": "Teks terformat (Markdown)",
+      "attachText": "Berkas teks",
+      "attachMarkdown": "Berkas teks terformat (Markdown)",
+      "image": "{count, plural, one {Gambar} other {# gambar}}",
+      "link": "Konten halaman dari tautan",
+      "hint": "↑↓ pilih · Enter tempel · Esc batal · 1–9 pilih"
+    }
   },
   "structures": {
     "section": "Struktur",

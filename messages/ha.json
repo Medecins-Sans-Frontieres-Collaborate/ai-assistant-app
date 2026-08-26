@@ -2514,7 +2514,8 @@
     "searchConversations": "Bincika tattaunawa",
     "toggleTheme": "Canja jigo",
     "regenerateResponse": "Sake samar da amsa",
-    "copyLastResponse": "Kwafi amsa ta ƙarshe"
+    "copyLastResponse": "Kwafi amsa ta ƙarshe",
+    "pasteOptions": "Manna a matsayin… (zaɓi rubutu, Markdown, ɗaure, hoto ko mahada)"
   },
   "quarantine": {
     "title": "Hirar da aka killace",
@@ -4268,7 +4269,19 @@
     "settingsDescription": "Nadewa rubutu sama da iyaka da ke ƙasa yana ɗora shi a matsayin fayil maimakon cike akwatin saƙo. Rubutun ana amfani da shi daidai yadda aka nade shi — ba a samo komai ko canzawa.",
     "settingsThresholdLabel": "Ɗora nadewa fiye da",
     "settingsThresholdUnit": "haruffa",
-    "settingsThresholdHint": "Tsakanin {min, number} da {max, number} haruffa."
+    "settingsThresholdHint": "Tsakanin {min, number} da {max, number} haruffa.",
+    "options": {
+      "menuLabel": "Manna a matsayin…",
+      "insertHeading": "Saka cikin saƙo",
+      "attachHeading": "Haɗa",
+      "text": "Rubutu kai tsaye",
+      "markdown": "Rubutun da aka jera (Markdown)",
+      "attachText": "Fayil na rubutu",
+      "attachMarkdown": "Fayil na rubutun da aka jera (Markdown)",
+      "image": "{count, plural, one {Hoto} other {Hoto #}}",
+      "link": "Abubuwan shafi daga mahada",
+      "hint": "↑↓ zaɓi · Enter manna · Esc soke · 1–9 zaɓi"
+    }
   },
   "structures": {
     "section": "Tsaruka",

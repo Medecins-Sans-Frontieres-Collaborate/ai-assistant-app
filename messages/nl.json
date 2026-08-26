@@ -2530,7 +2530,8 @@
     "searchConversations": "Gesprekken zoeken",
     "toggleTheme": "Thema wisselen",
     "regenerateResponse": "Antwoord opnieuw genereren",
-    "copyLastResponse": "Laatste antwoord kopiëren"
+    "copyLastResponse": "Laatste antwoord kopiëren",
+    "pasteOptions": "Plakken als… (kies tekst, Markdown, bijlage, afbeelding of link)"
   },
   "quarantine": {
     "title": "Geïnventariseerde gesprekken",
@@ -4284,7 +4285,19 @@
     "settingsDescription": "Als u meer tekst plakt dan de onderstaande limiet, wordt deze als bestand bijgevoegd in plaats van het berichtvak te vullen. De tekst wordt exact zoals geplakt gebruikt — er wordt niets opgehaald of gewijzigd.",
     "settingsThresholdLabel": "Plakacties als bijlage toevoegen bij meer dan",
     "settingsThresholdUnit": "tekens",
-    "settingsThresholdHint": "Tussen {min, number} en {max, number} tekens."
+    "settingsThresholdHint": "Tussen {min, number} en {max, number} tekens.",
+    "options": {
+      "menuLabel": "Plakken als…",
+      "insertHeading": "Invoegen in bericht",
+      "attachHeading": "Bijvoegen",
+      "text": "Platte tekst",
+      "markdown": "Opgemaakte tekst (Markdown)",
+      "attachText": "Tekstbestand",
+      "attachMarkdown": "Opgemaakt tekstbestand (Markdown)",
+      "image": "{count, plural, one {Afbeelding} other {# afbeeldingen}}",
+      "link": "Paginainhoud van link",
+      "hint": "↑↓ kiezen · Enter plakken · Esc annuleren · 1–9 selecteren"
+    }
   },
   "structures": {
     "section": "Structuren",

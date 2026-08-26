@@ -2530,7 +2530,8 @@
     "searchConversations": "Tafuta mazungumzo",
     "toggleTheme": "Badilisha mandhari",
     "regenerateResponse": "Tengeneza upya majibu",
-    "copyLastResponse": "Nakili jibu la mwisho"
+    "copyLastResponse": "Nakili jibu la mwisho",
+    "pasteOptions": "Bandika kama... (chagua maandishi, Markdown, kiambatisho, picha au kiungo)"
   },
   "quarantine": {
     "title": "Mazungumzo Yaliyo kwenye Karantini",
@@ -4284,7 +4285,19 @@
     "settingsDescription": "Ukibandika maandishi zaidi ya kikomo hapa chini, yataambatishwa kama faili badala ya kujaza kisanduku cha ujumbe. Maandishi yatatumika kama ulivyopachika — hakuna kinachopatikana wala kubadilishwa.",
     "settingsThresholdLabel": "Ambatisha maandishi marefu kuliko",
     "settingsThresholdUnit": "herufi",
-    "settingsThresholdHint": "Kati ya {min, number} na {max, number} herufi."
+    "settingsThresholdHint": "Kati ya {min, number} na {max, number} herufi.",
+    "options": {
+      "menuLabel": "Bandika kama...",
+      "insertHeading": "Weka kwenye ujumbe",
+      "attachHeading": "Ambatisha",
+      "text": "Maandishi ya kawaida",
+      "markdown": "Maandishi yaliyo na miundo (Markdown)",
+      "attachText": "Faili ya maandishi",
+      "attachMarkdown": "Faili ya maandishi iliyo na miundo (Markdown)",
+      "image": "{count, plural, one {Picha} other {Picha #}}",
+      "link": "Yaliyomo kwenye ukurasa kutoka kiunganishi",
+      "hint": "↑↓ chagua · Ingiza bandika · Esc batilisha · 1–9 chagua"
+    }
   },
   "structures": {
     "section": "Miundo",

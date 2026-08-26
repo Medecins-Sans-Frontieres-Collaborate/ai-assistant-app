@@ -2530,7 +2530,8 @@
     "searchConversations": "စကားပြောချက်များကို ရှာဖွေပါ",
     "toggleTheme": "အပြင်အဆင် ပြောင်းပါ",
     "regenerateResponse": "တုံပြန်ချက်အသစ် ပြန်ထုတ်ပါ",
-    "copyLastResponse": "နောက်ဆုံးတုံပြန်ချက် ကူးယူပါ"
+    "copyLastResponse": "နောက်ဆုံးတုံပြန်ချက် ကူးယူပါ",
+    "pasteOptions": "အဖြစ်... ဖြင့် ပွားထည့် (စာသား၊ Markdown၊ ဖိုင်တွဲ၊ ပုံသို့မဟုတ် လင့်ခ်ကို ရွေးပါ)"
   },
   "quarantine": {
     "title": "သီးသန့်ထားသော စကားပြောချက်များ",
@@ -4284,7 +4285,19 @@
     "settingsDescription": "အောက်ပါကန့်သတ်ချက်ထက်ပိုသောစာသားကူးထည့်ပါက၊ အကြောင်းအရာကို attachment အဖြစ်ထည့်သွင်းပေးမည်၊ message box တွင်အကြောင်းအရာပြစ်မထားတော့ပါ။ စာသားကိုတစ်ခြန်းတည်းအသုံးပြုသည်—တခြားဒေတာများ fetch လုပ်ခြင်း မရှိပါ။",
     "settingsThresholdLabel": "ဤအလျောက်စာလုံးအထက်ရှိ paste များကိုပူးတွဲပါ",
     "settingsThresholdUnit": "စာလုံးများ",
-    "settingsThresholdHint": "{min, number} မှ {max, number} စာလုံးအတွင်းဖြစ်ရမည်။"
+    "settingsThresholdHint": "{min, number} မှ {max, number} စာလုံးအတွင်းဖြစ်ရမည်။",
+    "options": {
+      "menuLabel": "အဖြစ်... ဖြင့် ပွားထည့်",
+      "insertHeading": "စာကို မက်ဆေ့ခ်ျထဲ ထည့်ပါ",
+      "attachHeading": "ဖိုင်တွဲမည်",
+      "text": "ပုံမှန်စာသား",
+      "markdown": "ဖော်မက်ထားသောစာသား (Markdown)",
+      "attachText": "စာသားဖိုင်",
+      "attachMarkdown": "ဖော်မက်ထားသောစာသားဖိုင် (Markdown)",
+      "image": "{count, plural, one {ပုံတစ်ပုံ} other {ပုံ # ပုံ}}",
+      "link": "လင့်ခ်မှ စာမျက်နှာအကြောင်းအရာ",
+      "hint": "↑↓ ရွေးပါ · Enter ပွားထည့်ပါ · Esc ဖျက်သိမ်းပါ · 1–9 ရွေးချယ်ပါ"
+    }
   },
   "structures": {
     "section": "ဖွဲ့စည်းပုံများ",

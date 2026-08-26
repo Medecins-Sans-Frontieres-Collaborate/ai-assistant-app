@@ -2514,7 +2514,8 @@
     "searchConversations": "Luka na boyokanisi",
     "toggleTheme": "Bongola thème",
     "regenerateResponse": "Salisa eyano lisusu",
-    "copyLastResponse": "Kopía eyano ya suka"
+    "copyLastResponse": "Kopía eyano ya suka",
+    "pasteOptions": "Kopola lokola… (pɔ́náká mokanda, Markdown, lokangí, elilingi to link)"
   },
   "quarantine": {
     "title": "Bapanzi na karantine",
@@ -4268,7 +4269,19 @@
     "settingsDescription": "Soki balobi mingi koleka limiti na nse, ekangami lokola fichier esika ya kotondisa sanduku ya nsango. Maloba ezali na ndenge ekangamaki — eloko moko te ekobongwana to kokangama lisusu.",
     "settingsThresholdLabel": "Kanga maloba ekangami eleki",
     "settingsThresholdUnit": "ba caractère",
-    "settingsThresholdHint": "Kati na {min, number} mpe {max, number} ba caractère."
+    "settingsThresholdHint": "Kati na {min, number} mpe {max, number} ba caractère.",
+    "options": {
+      "menuLabel": "Kopola lokola…",
+      "insertHeading": "Kotisá na nsango",
+      "attachHeading": "Kokangisa",
+      "text": "Mokanda mwa pete",
+      "markdown": "Mokanda ya malembelo (Markdown)",
+      "attachText": "Fichie ya mokanda",
+      "attachMarkdown": "Fichie ya malembelo (Markdown)",
+      "image": "{count, plural, one {Elilingi} other {# bililingi}}",
+      "link": "Makambo ya lokasa uta na link",
+      "hint": "↑↓ pɔ́náká · Enter kopola · Esc koboya · 1–9 pɔ́náká"
+    }
   },
   "structures": {
     "section": "Bakontrimi",

@@ -2560,7 +2560,8 @@
     "searchConversations": "گفتگو تلاش کریں",
     "toggleTheme": "تھیم تبدیل کریں",
     "regenerateResponse": "جواب دوبارہ تیار کریں",
-    "copyLastResponse": "آخری جواب نقل کریں"
+    "copyLastResponse": "آخری جواب نقل کریں",
+    "pasteOptions": "اس طور پر چسپاں کریں… (متن، مارک ڈاؤن، منسلکہ، تصویر یا لنک منتخب کریں)"
   },
   "quarantine": {
     "title": "قرنطینہ شدہ گفتگوئیں",
@@ -4314,7 +4315,19 @@
     "settingsDescription": "اگر درج ذیل حد سے زیادہ متن پیسٹ کیا جائے تو اسے فائل کے طور پر منسلک کیا جائے گا بجائے اس کے کہ پیغام کے خانے کو پُر کرے۔ متن بالکل ویسا ہی استعمال ہو گا جیسا چسپاں کیا گیا — کوئی چیز حاصل نہیں کی جاتی یا تبدیل نہیں کی جاتی۔",
     "settingsThresholdLabel": "اس سے بڑے پیسٹ منسلک کریں",
     "settingsThresholdUnit": "حروف",
-    "settingsThresholdHint": "{min, number} سے {max, number} حروف کے درمیان۔"
+    "settingsThresholdHint": "{min, number} سے {max, number} حروف کے درمیان۔",
+    "options": {
+      "menuLabel": "اس طور پر چسپاں کریں…",
+      "insertHeading": "پیغام میں شامل کریں",
+      "attachHeading": "منسلک کریں",
+      "text": "سادہ متن",
+      "markdown": "فارمیٹ شدہ متن (Markdown)",
+      "attachText": "متن کی فائل",
+      "attachMarkdown": "فارمیٹ شدہ متن کی فائل (Markdown)",
+      "image": "{count, plural, one {تصویر} other {# تصاویر}}",
+      "link": "لنک سے صفحہ کا مواد",
+      "hint": "↑↓ منتخب کریں · Enter چسپاں کریں · Esc منسوخ کریں · 1–9 منتخب کریں"
+    }
   },
   "structures": {
     "section": "اسٹرکچر",

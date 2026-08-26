@@ -2530,7 +2530,8 @@
     "searchConversations": "Procurar conversas",
     "toggleTheme": "Alternar tema",
     "regenerateResponse": "Regenerar resposta",
-    "copyLastResponse": "Copiar última resposta"
+    "copyLastResponse": "Copiar última resposta",
+    "pasteOptions": "Colar como... (escolha texto, Markdown, anexo, imagem ou link)"
   },
   "quarantine": {
     "title": "Conversas em quarentena",
@@ -4284,7 +4285,19 @@
     "settingsDescription": "Se colar mais texto do que o limite abaixo, ele será anexado como arquivo em vez de preencher a caixa de mensagem. O texto é usado exatamente como colado — nada é buscado ou alterado.",
     "settingsThresholdLabel": "Anexar colagens maiores que",
     "settingsThresholdUnit": "caracteres",
-    "settingsThresholdHint": "Entre {min, number} e {max, number} caracteres."
+    "settingsThresholdHint": "Entre {min, number} e {max, number} caracteres.",
+    "options": {
+      "menuLabel": "Colar como...",
+      "insertHeading": "Inserir na mensagem",
+      "attachHeading": "Anexar",
+      "text": "Texto sem formatação",
+      "markdown": "Texto formatado (Markdown)",
+      "attachText": "Arquivo de texto",
+      "attachMarkdown": "Arquivo de texto formatado (Markdown)",
+      "image": "{count, plural, one {Imagem} other {# imagens}}",
+      "link": "Conteúdo da página do link",
+      "hint": "↑↓ escolher · Enter colar · Esc cancelar · 1–9 selecionar"
+    }
   },
   "structures": {
     "section": "Estruturas",

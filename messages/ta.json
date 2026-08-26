@@ -2514,7 +2514,8 @@
     "searchConversations": "உரையாடல்களை தேடுக",
     "toggleTheme": "தீமைக் மாற்றுக",
     "regenerateResponse": "பதில் மறுபடியும் உருவாக்கு",
-    "copyLastResponse": "கடைசி பதிலை நகலெடுக்கவும்"
+    "copyLastResponse": "கடைசி பதிலை நகலெடுக்கவும்",
+    "pasteOptions": "...ஆக ஒட்டவும் (உரை, Markdown, இணைப்பு, படம் அல்லது லிங்க் தேர்வு செய்யவும்)"
   },
   "quarantine": {
     "title": "தடுப்பு செய்யப்பட்ட உரையாடல்கள்",
@@ -4268,7 +4269,19 @@
     "settingsDescription": "கீழே குறிப்பிடப்பட்ட வரம்பை விட அதிகமாக உரை ஒட்டப்பட்டால், அது கோப்பாக இணைக்கப்படும், உரை பெட்டியில் நேரடியாக சேர்க்கப்படாது. உரை அப்படியே பயன்படுத்தப்படும் — எதுவும் பெறப்படவோ மாற்றப்படவோ மாட்டாது.",
     "settingsThresholdLabel": "இதற்கு மேல் நீளமான உரைகளை இணைக்கவும்",
     "settingsThresholdUnit": "எழுத்துகள்",
-    "settingsThresholdHint": "{min, number} முதல் {max, number} எழுத்துகள் வரை."
+    "settingsThresholdHint": "{min, number} முதல் {max, number} எழுத்துகள் வரை.",
+    "options": {
+      "menuLabel": "...ஆக ஒட்டவும்",
+      "insertHeading": "செய்திக்குள் சேர்க்கவும்",
+      "attachHeading": "இணைக்கவும்",
+      "text": "சாதாரண உரை",
+      "markdown": "வடிவமைக்கப்பட்ட உரை (Markdown)",
+      "attachText": "உரை கோப்பு",
+      "attachMarkdown": "வடிவமைக்கப்பட்ட உரைக் கோப்பு (Markdown)",
+      "image": "{count, plural, one {படம்} other {# படங்கள்}}",
+      "link": "இணையதள உள்ளடக்கம் (லிங்க் மூலம்)",
+      "hint": "↑↓ தேர்வு · Enter ஒட்டு · Esc ரத்து · 1–9 தேர்ந்தெடு"
+    }
   },
   "structures": {
     "section": "வடிவமைப்புகள்",

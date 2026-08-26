@@ -2530,7 +2530,8 @@
     "searchConversations": "Cerca converses",
     "toggleTheme": "Canvia el tema",
     "regenerateResponse": "Torna a generar la resposta",
-    "copyLastResponse": "Copia l’última resposta"
+    "copyLastResponse": "Copia l’última resposta",
+    "pasteOptions": "Enganxa com a… (trieu text, Markdown, adjunt, imatge o enllaç)"
   },
   "quarantine": {
     "title": "Converses en quarantena",
@@ -4284,7 +4285,19 @@
     "settingsDescription": "Si enganxeu més text que el límit de sota, s’adjunta com a fitxer en lloc d’omplir el quadre de missatge. El text s’utilitza exactament tal com s’ha enganxat: no es recupera ni es modifica res.",
     "settingsThresholdLabel": "Adjunta enganxats més llargs de",
     "settingsThresholdUnit": "caràcters",
-    "settingsThresholdHint": "Entre {min, number} i {max, number} caràcters."
+    "settingsThresholdHint": "Entre {min, number} i {max, number} caràcters.",
+    "options": {
+      "menuLabel": "Enganxa com a…",
+      "insertHeading": "Insereix al missatge",
+      "attachHeading": "Adjunta",
+      "text": "Text sense format",
+      "markdown": "Text formatat (Markdown)",
+      "attachText": "Fitxer de text",
+      "attachMarkdown": "Fitxer de text formatat (Markdown)",
+      "image": "{count, plural, one {Imatge} other {# imatges}}",
+      "link": "Contingut de la pàgina des de l'enllaç",
+      "hint": "↑↓ tria · Enter enganxa · Esc cancel·la · 1–9 selecciona"
+    }
   },
   "structures": {
     "section": "Estructures",

@@ -2514,7 +2514,8 @@
     "searchConversations": "گفتوگۆکان بگەڕێ",
     "toggleTheme": "ڕوخسار بگۆڕە",
     "regenerateResponse": "وەڵام نوێ بیکەوە",
-    "copyLastResponse": "دوایین وەڵام کۆپی بکە"
+    "copyLastResponse": "دوایین وەڵام کۆپی بکە",
+    "pasteOptions": "لێنان وەک... (دەقی ئاسایی، Markdown، هاوپێچ، وێنە یان بەستەر هەڵبژێر)"
   },
   "quarantine": {
     "title": "وتووێژە قرەنتینەکراوەکان",
@@ -4268,7 +4269,19 @@
     "settingsDescription": "ئەگەر دەقی چەسپکراوت لە سنووردی خوارەوە زۆرتر بێت، وەک پەڕگە دادەبەسترێت. دەقەکە وەک کە چەسپکراوە بەکاردەهێنرێت — هیچت گرتن یان گۆڕانکاری بۆ ئەنجام نادەدرێت.",
     "settingsThresholdLabel": "پەیوەستنەوەی چەسپاندنەکان لە سەر",
     "settingsThresholdUnit": "پیت",
-    "settingsThresholdHint": "لە نێوان {min, number} و {max, number} پیت."
+    "settingsThresholdHint": "لە نێوان {min, number} و {max, number} پیت.",
+    "options": {
+      "menuLabel": "لێنان وەک...",
+      "insertHeading": "زیادکردن بۆ پەیام",
+      "attachHeading": "هاوپێچکردن",
+      "text": "دەقی ئاسایی",
+      "markdown": "دەقی فۆرماتکراو (Markdown)",
+      "attachText": "پەڕگەی دەق",
+      "attachMarkdown": "پەڕگەی دەقی فۆرماتکراو (Markdown)",
+      "image": "{count, plural, one {وێنە} other {# وێنە}}",
+      "link": "ناوەڕۆکی پەڕە لە بەستەر",
+      "hint": "↑↓ هەڵبژێر · Enter لێنان · Esc هەڵوەشاندنەوە · ١–٩ هەڵبژاردن"
+    }
   },
   "structures": {
     "section": "ڕووکارییەکان",

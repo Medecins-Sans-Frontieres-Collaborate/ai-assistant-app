@@ -2530,7 +2530,8 @@
     "searchConversations": "Caută în conversații",
     "toggleTheme": "Comută tema",
     "regenerateResponse": "Regenerează răspunsul",
-    "copyLastResponse": "Copiază ultimul răspuns"
+    "copyLastResponse": "Copiază ultimul răspuns",
+    "pasteOptions": "Lipește ca… (alege text, Markdown, atașament, imagine sau link)"
   },
   "quarantine": {
     "title": "Conversații în carantină",
@@ -4284,7 +4285,19 @@
     "settingsDescription": "Dacă lipiți mai mult text decât limita de mai jos, acesta va fi atașat ca fișier, nu introdus în câmpul mesajului. Textul se folosește exact așa cum a fost lipit — nu se preia și nu se modifică nimic.",
     "settingsThresholdLabel": "Atașează lipituri mai lungi de",
     "settingsThresholdUnit": "caractere",
-    "settingsThresholdHint": "Între {min, number} și {max, number} caractere."
+    "settingsThresholdHint": "Între {min, number} și {max, number} caractere.",
+    "options": {
+      "menuLabel": "Lipește ca…",
+      "insertHeading": "Inserează în mesaj",
+      "attachHeading": "Atașează",
+      "text": "Text simplu",
+      "markdown": "Text formatat (Markdown)",
+      "attachText": "Fișier text",
+      "attachMarkdown": "Fișier text formatat (Markdown)",
+      "image": "{count, plural, one {Imagine} other {# imagini}}",
+      "link": "Conținutul paginii din link",
+      "hint": "↑↓ alege · Enter lipește · Esc anulează · 1–9 selectează"
+    }
   },
   "structures": {
     "section": "Structuri",

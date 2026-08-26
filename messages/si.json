@@ -2530,7 +2530,8 @@
     "searchConversations": "සාකච්ඡා සොයන්න",
     "toggleTheme": "තේමාව මාරු කරන්න",
     "regenerateResponse": "ප්‍රතිචාරය නැවත ජනනය කරන්න",
-    "copyLastResponse": "අවසන් ප්‍රතිචාරය පිටපත් කරන්න"
+    "copyLastResponse": "අවසන් ප්‍රතිචාරය පිටපත් කරන්න",
+    "pasteOptions": "අලවුම් කරන්න ලෙස... (පෙළ, Markdown, ඇමුණුම, පින්තූරයක් හෝ සබැඳියක් තෝරන්න)"
   },
   "quarantine": {
     "title": "නිරෝධායන කල සංවාද",
@@ -4284,7 +4285,19 @@
     "settingsDescription": "පහත සීමාවට වඩා වැඩි පෙළ ඇලවීමකදී එය ආයාචනාවක් ලෙස ඇමුණුම් කරයි, පණිවුඩ බොක්ස් හරහා පිරවීම වෙනුවට. ඇලවූ පෙළක් පමණක් භාවිතා වේ — කිසිවක් ලබාගනියි හෝ වෙනස් කරන්නේ නැත.",
     "settingsThresholdLabel": "මෙයට වඩා දිගු ඇලවීම් ඇමුණුම් කරන්න",
     "settingsThresholdUnit": "අක්ෂර",
-    "settingsThresholdHint": "අක්ෂර {min, number} න් {max, number} දක්වා අතර."
+    "settingsThresholdHint": "අක්ෂර {min, number} න් {max, number} දක්වා අතර.",
+    "options": {
+      "menuLabel": "අලවුම් කරන්න ලෙස...",
+      "insertHeading": "පණිවිඩයට ඇතුළත් කරන්න",
+      "attachHeading": "අමුණන්න",
+      "text": "සරල පෙළ",
+      "markdown": "පැවැති පෙළ (Markdown)",
+      "attachText": "පෙළ ගොනුව",
+      "attachMarkdown": "පැවැති පෙළ ගොනුව (Markdown)",
+      "image": "{count, plural, one {පින්තූරය} other {පින්තූර #}}",
+      "link": "සබැඳියේ පිටුවේ අන්තර්ගතය",
+      "hint": "↑↓ තෝරන්න · Enter අලවුම් කරන්න · Esc අහෝසි කරන්න · 1–9 තෝරන්න"
+    }
   },
   "structures": {
     "section": "ව්‍යුහ",

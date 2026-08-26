@@ -2530,7 +2530,8 @@
     "searchConversations": "Пошук розмов",
     "toggleTheme": "Змінити тему",
     "regenerateResponse": "Згенерувати відповідь ще раз",
-    "copyLastResponse": "Скопіювати останню відповідь"
+    "copyLastResponse": "Скопіювати останню відповідь",
+    "pasteOptions": "Вставити як… (оберіть текст, Markdown, вкладення, зображення або посилання)"
   },
   "quarantine": {
     "title": "Розмови на карантині",
@@ -4284,7 +4285,19 @@
     "settingsDescription": "Якщо вставити більше тексту, ніж вказано нижче, він додається як файл, а не у поле повідомлення. Текст використовується саме як вставлено — нічого не завантажується і не змінюється.",
     "settingsThresholdLabel": "Додавати як файл вставки довші за",
     "settingsThresholdUnit": "символів",
-    "settingsThresholdHint": "Від {min, number} до {max, number} символів."
+    "settingsThresholdHint": "Від {min, number} до {max, number} символів.",
+    "options": {
+      "menuLabel": "Вставити як…",
+      "insertHeading": "Вставити в повідомлення",
+      "attachHeading": "Додати як вкладення",
+      "text": "Звичайний текст",
+      "markdown": "Форматований текст (Markdown)",
+      "attachText": "Текстовий файл",
+      "attachMarkdown": "Форматований текстовий файл (Markdown)",
+      "image": "{count, plural, one {Зображення} other {# зображень}}",
+      "link": "Вміст сторінки за посиланням",
+      "hint": "↑↓ вибрати · Enter вставити · Esc скасувати · 1–9 обрати"
+    }
   },
   "structures": {
     "section": "Структури",

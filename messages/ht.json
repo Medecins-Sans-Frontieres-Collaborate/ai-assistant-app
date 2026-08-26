@@ -2514,7 +2514,8 @@
     "searchConversations": "Chèche konvèsasyon",
     "toggleTheme": "Chanje tèm",
     "regenerateResponse": "Rejenere repons",
-    "copyLastResponse": "Kopye dènye repons lan"
+    "copyLastResponse": "Kopye dènye repons lan",
+    "pasteOptions": "Kole kòm… (chwazi tèks, Markdown, atachman, imaj oswa lyen)"
   },
   "quarantine": {
     "title": "Konvèsasyon Ankarantèn",
@@ -4268,7 +4269,19 @@
     "settingsDescription": "Si w kole plis tèks pase limit ki anba a, sa pral atache li kòm fichye olye li plen bwat mesaj la. Tèks la itilize egzakteman jan li kole — anyen pa chaje oubyen chanje.",
     "settingsThresholdLabel": "Atache kole ki depase",
     "settingsThresholdUnit": "karaktè",
-    "settingsThresholdHint": "Ant {min, number} ak {max, number} karaktè."
+    "settingsThresholdHint": "Ant {min, number} ak {max, number} karaktè.",
+    "options": {
+      "menuLabel": "Kole kòm…",
+      "insertHeading": "Mete nan mesaj",
+      "attachHeading": "Atache",
+      "text": "Tèks senp",
+      "markdown": "Tèks ak fòm (Markdown)",
+      "attachText": "Fichye tèks",
+      "attachMarkdown": "Fichye tèks ak fòm (Markdown)",
+      "image": "{count, plural, one {Imaj} other {# imaj}}",
+      "link": "Kontni paj soti nan lyen",
+      "hint": "↑↓ chwazi · Antre kole · Esc anile · 1–9 seleksyone"
+    }
   },
   "structures": {
     "section": "Estrikti",

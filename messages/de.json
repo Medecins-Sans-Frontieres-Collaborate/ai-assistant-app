@@ -2530,7 +2530,8 @@
     "searchConversations": "Konversationen durchsuchen",
     "toggleTheme": "Design umschalten",
     "regenerateResponse": "Antwort neu generieren",
-    "copyLastResponse": "Letzte Antwort kopieren"
+    "copyLastResponse": "Letzte Antwort kopieren",
+    "pasteOptions": "Einfügen als… (Text, Markdown, Anhang, Bild oder Link wählen)"
   },
   "quarantine": {
     "title": "Quarantänisierte Konversationen",
@@ -4284,7 +4285,19 @@
     "settingsDescription": "Wenn Sie mehr Text als das untenstehende Limit einfügen, wird dieser als Datei angehängt, anstatt das Nachrichtenfeld auszufüllen. Der Text wird exakt wie eingefügt verwendet – es wird nichts abgerufen oder verändert.",
     "settingsThresholdLabel": "Einfügungen anhängen ab",
     "settingsThresholdUnit": "Zeichen",
-    "settingsThresholdHint": "Zwischen {min, number} und {max, number} Zeichen."
+    "settingsThresholdHint": "Zwischen {min, number} und {max, number} Zeichen.",
+    "options": {
+      "menuLabel": "Einfügen als…",
+      "insertHeading": "In Nachricht einfügen",
+      "attachHeading": "Anhängen",
+      "text": "Nur-Text",
+      "markdown": "Formatierter Text (Markdown)",
+      "attachText": "Textdatei",
+      "attachMarkdown": "Formatierte Textdatei (Markdown)",
+      "image": "{count, plural, one {Bild} other {# Bilder}}",
+      "link": "Seiteninhalt vom Link",
+      "hint": "↑↓ wählen · Enter einfügen · Esc abbrechen · 1–9 auswählen"
+    }
   },
   "structures": {
     "section": "Strukturen",

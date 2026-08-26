@@ -2530,7 +2530,8 @@
     "searchConversations": "חיפוש שיחות",
     "toggleTheme": "החלפת ערכת נושא",
     "regenerateResponse": "הפק תגובה מחדש",
-    "copyLastResponse": "העתקת התגובה האחרונה"
+    "copyLastResponse": "העתקת התגובה האחרונה",
+    "pasteOptions": "הדבק כ... (בחרו טקסט, Markdown, קובץ מצורף, תמונה או קישור)"
   },
   "quarantine": {
     "title": "שיחות בהסגר",
@@ -4284,7 +4285,19 @@
     "settingsDescription": "הדבקת טקסט מעבר למגבלה למטה תצרף אותו כקובץ במקום למלא בתיבה. הטקסט נשמר בדיוק כפי שהודבק — לא מתבצע שליפה או שינוי.",
     "settingsThresholdLabel": "צרף הדבקות מעל",
     "settingsThresholdUnit": "תווים",
-    "settingsThresholdHint": "בין {min, number} ל-{max, number} תווים."
+    "settingsThresholdHint": "בין {min, number} ל-{max, number} תווים.",
+    "options": {
+      "menuLabel": "הדבק כ...",
+      "insertHeading": "הוסף להודעה",
+      "attachHeading": "צרף",
+      "text": "טקסט רגיל",
+      "markdown": "טקסט מעוצב (Markdown)",
+      "attachText": "קובץ טקסט",
+      "attachMarkdown": "קובץ טקסט מעוצב (Markdown)",
+      "image": "{count, plural, one {תמונה} other {# תמונות}}",
+      "link": "תוכן עמוד מקישור",
+      "hint": "↑↓ בחירה · Enter להדבקה · Esc לביטול · 1–9 לבחור"
+    }
   },
   "structures": {
     "section": "מבנים",

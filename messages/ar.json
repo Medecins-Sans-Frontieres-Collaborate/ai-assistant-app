@@ -2530,7 +2530,8 @@
     "searchConversations": "البحث في المحادثات",
     "toggleTheme": "تبديل السمة",
     "regenerateResponse": "إعادة توليد الرد",
-    "copyLastResponse": "نسخ آخر رد"
+    "copyLastResponse": "نسخ آخر رد",
+    "pasteOptions": "لصق كـ... (اختر نص، Markdown، مرفق، صورة أو رابط)"
   },
   "quarantine": {
     "title": "المحادثات المحجوزة",
@@ -4284,7 +4285,19 @@
     "settingsDescription": "عند لصق نص يتجاوز الحد أدناه، يُرفق كنص في ملف بدلاً من ملء صندوق الرسالة. يُستخدم النص كما هو ملصق — لا يتم جلب أو تغيير أي شيء.",
     "settingsThresholdLabel": "إرفاق اللصقات التي تتجاوز",
     "settingsThresholdUnit": "حرفاً",
-    "settingsThresholdHint": "بين {min, number} و{max, number} حرف."
+    "settingsThresholdHint": "بين {min, number} و{max, number} حرف.",
+    "options": {
+      "menuLabel": "لصق كـ...",
+      "insertHeading": "إدراج في الرسالة",
+      "attachHeading": "إرفاق",
+      "text": "نص عادي",
+      "markdown": "نص منسق (Markdown)",
+      "attachText": "ملف نصي",
+      "attachMarkdown": "ملف نص منسق (Markdown)",
+      "image": "{count, plural, one {صورة} other {# صور}}",
+      "link": "محتوى الصفحة من الرابط",
+      "hint": "↑↓ اختر · Enter للصق · Esc لإلغاء · 1–9 للاختيار"
+    }
   },
   "structures": {
     "section": "الهياكل",

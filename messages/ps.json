@@ -2514,7 +2514,8 @@
     "searchConversations": "خبرواترو لټون",
     "toggleTheme": "بڼه بدله کړئ",
     "regenerateResponse": "ځواب بیا تولید کړئ",
-    "copyLastResponse": "وروستی ځواب کاپي کړئ"
+    "copyLastResponse": "وروستی ځواب کاپي کړئ",
+    "pasteOptions": "په توګه پیسټ کړئ... (متن، Markdown، ضمیمه، انځور یا لینک وټاکئ)"
   },
   "quarantine": {
     "title": "قرنطین شوې خبرې اترې",
@@ -4268,7 +4269,19 @@
     "settingsDescription": "که له لاندې محدودیت څخه زیات متن پیس کړئ، دا د فایل په ډول ضمیمه کیږي نه چې پیغام بکس ته ځای شي. متن هماغسې کارول کېږي، بدلون یا تر لاسه کېدل نه پکې کیږي.",
     "settingsThresholdLabel": "پیچونه چې له دې څخه اوږده وي، ضمیمه کړئ",
     "settingsThresholdUnit": "توري",
-    "settingsThresholdHint": "د {min, number} او {max, number} تورو ترمنځ."
+    "settingsThresholdHint": "د {min, number} او {max, number} تورو ترمنځ.",
+    "options": {
+      "menuLabel": "په توګه پیسټ کړئ...",
+      "insertHeading": "پیغام ته داخل کړئ",
+      "attachHeading": "ضمیمه کړئ",
+      "text": "عادي متن",
+      "markdown": "فارمیټ شوی متن (Markdown)",
+      "attachText": "د متني فایل",
+      "attachMarkdown": "فارمیټ شوی متني فایل (Markdown)",
+      "image": "{count, plural, one {انځور} other {# انځورونه}}",
+      "link": "د لینک محتوا",
+      "hint": "↑↓ وټاکئ · Enter پيست کړئ · Esc لغوه کړئ · ۱–۹ غوره کړئ"
+    }
   },
   "structures": {
     "section": "جوړښتونه",

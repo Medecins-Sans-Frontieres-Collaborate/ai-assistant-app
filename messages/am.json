@@ -2500,7 +2500,8 @@
     "searchConversations": "ውይይቶችን ፈልግ",
     "toggleTheme": "አቀማመጡን ቀይር",
     "regenerateResponse": "መልሱን ዳግመኛ ፍጠር",
-    "copyLastResponse": "የመጨረሻውን መልስ ቅዳ"
+    "copyLastResponse": "የመጨረሻውን መልስ ቅዳ",
+    "pasteOptions": "እንደ... ለጥፍ (ጽሑፍ፣ Markdown፣ አባሪ፣ ምስል ወይም አገናኝ ይመርጡ)"
   },
   "activeFiles": {
     "title": "በተሳተፉ ያሉ ፋይሎች",
@@ -4284,7 +4285,19 @@
     "settingsDescription": "ከታች የቀጠለው ዉስጥ በላይ ጽሑፍ ሲሚቀመጥ፣ እንደ file ያስቀመጣል እንጂ ወደ መልእክት ሳጥን አይክፈልም። ጽሑፉ እንደታተመበት በትክክል ይጠቀማል — ምንም አይቀየም፣ አይመጣም።",
     "settingsThresholdLabel": "የተሰቀመው በዚህ በላይ ከሆነ አስቀመጥ",
     "settingsThresholdUnit": "ቁምፊዎች",
-    "settingsThresholdHint": "በ{min, number} እና {max, number} ቁምፊዎች መካከል።"
+    "settingsThresholdHint": "በ{min, number} እና {max, number} ቁምፊዎች መካከል።",
+    "options": {
+      "menuLabel": "እንደ... ለጥፍ",
+      "insertHeading": "ወደ መልእክቱ አስገባ",
+      "attachHeading": "አባር",
+      "text": "የቀላል ጽሑፍ",
+      "markdown": "የተቀየረ ጽሑፍ (Markdown)",
+      "attachText": "የጽሑፍ ፋይል",
+      "attachMarkdown": "የተቀየረ ጽሑፍ ፋይል (Markdown)",
+      "image": "{count, plural, one {ምስል} other {# ምስሎች}}",
+      "link": "ከአገናኝ የመረጃ ይዘት",
+      "hint": "↑↓ ይምረጡ · እባይ ለጥፍ · Esc ተድው · 1–9 ይምረጡ"
+    }
   },
   "structures": {
     "section": "አዋቂ መዋቅሮች",

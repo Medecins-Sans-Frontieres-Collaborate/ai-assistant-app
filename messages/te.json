@@ -2530,7 +2530,8 @@
     "searchConversations": "సంభాషణలను వెతకండి",
     "toggleTheme": "థీమ్ మార్చు",
     "regenerateResponse": "ప్రతిస్పందన మళ్లీ సృష్టించు",
-    "copyLastResponse": "తాజా ప్రతిస్పందనను కాపీ చేయండి"
+    "copyLastResponse": "తాజా ప్రతిస్పందనను కాపీ చేయండి",
+    "pasteOptions": "ఇలా అంటించండి… (పాఠ్యం, Markdown, అనుబంధం, చిత్రం లేదా లింక్‍‌ని ఎంచుకోండి)"
   },
   "quarantine": {
     "title": "క్వారంటైన్ చేసిన సంభాషణలు",
@@ -4284,7 +4285,19 @@
     "settingsDescription": "క్రింద ఇచ్చిన పరిమితిని మించే టెక్స్ట్‌ను మీరు పేస్ట్ చేస్తే, అది సందేశం బాక్స్‌లో కాదు, ఫైల్‌గా జోడించబడుతుంది. పాఠ్యం మీరు అల్లించిందిది 그대로 ఉపయోగించబడుతుంది — ఏదీ పొందబడదు లేదా మారదు.",
     "settingsThresholdLabel": "ఇంతకంటే ఎక్కువ ఉన్న పేస్ట్లను జత చేయండి",
     "settingsThresholdUnit": "అక్షరాలు",
-    "settingsThresholdHint": "{min, number} నుండి {max, number} అక్షరాల మధ్య."
+    "settingsThresholdHint": "{min, number} నుండి {max, number} అక్షరాల మధ్య.",
+    "options": {
+      "menuLabel": "ఇలా అంటించండి…",
+      "insertHeading": "సందేశంలో చొప్పించు",
+      "attachHeading": "అనుబంధించు",
+      "text": "సాధారణ పాఠ్యం",
+      "markdown": "ఫార్మాట్ చేసిన పాఠ్యం (Markdown)",
+      "attachText": "పాఠ్య ఫైల్",
+      "attachMarkdown": "ఫార్మాట్ చేసిన పాఠ్య ఫైల్ (Markdown)",
+      "image": "{count, plural, one {చిత్రం} other {# చిత్రాలు}}",
+      "link": "లింక్ నుండి పేజీ కంటెంట్",
+      "hint": "↑↓ ఎంచుకోండి · Enter-అంటించు · Esc-రద్దు · 1–9 ఎంచుకోండి"
+    }
   },
   "structures": {
     "section": "స్ట్రక్చర్లు",

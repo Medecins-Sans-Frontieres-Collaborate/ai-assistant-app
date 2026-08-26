@@ -2514,7 +2514,8 @@
     "searchConversations": "Wa ibanisọrọ",
     "toggleTheme": "Yi àkópọ́ àyẹyẹ pada",
     "regenerateResponse": "Tun idahun ṣẹda",
-    "copyLastResponse": "Da idahun to kẹhin mọ"
+    "copyLastResponse": "Da idahun to kẹhin mọ",
+    "pasteOptions": "Lẹẹmọ gẹgẹ bi… (yan ọrọ, Markdown, amugbooro, aworan tabi asopọ)"
   },
   "quarantine": {
     "title": "Ìbánisọ̀rọ̀ tí wọ́n wà nínú ìdàabobo",
@@ -4268,7 +4269,19 @@
     "settingsDescription": "Títẹ̀sí ọrọ tó ju àyè tó wa lókè lọ máa dà a fúnní gẹ́gẹ́ bí fáìlì dípò pípa apoti ifọrọranṣẹ. Ọrọ naa máa wulo gẹ́gẹ́ bó ṣe tẹ̀sé — kò si ohun tí a máa gba tàbí yí padà.",
     "settingsThresholdLabel": "Fi àfikún fún ìtẹ̀sí tó ju",
     "settingsThresholdUnit": "àmi",
-    "settingsThresholdHint": "Láàárin {min, number} àti {max, number} àmi."
+    "settingsThresholdHint": "Láàárin {min, number} àti {max, number} àmi.",
+    "options": {
+      "menuLabel": "Lẹẹmọ gẹgẹ bi…",
+      "insertHeading": "Fi kun ifiranṣẹ",
+      "attachHeading": "So pọ",
+      "text": "Òrọ àtàkò",
+      "markdown": "Òrọ to ni ún-rí (Markdown)",
+      "attachText": "Faili ọrọ",
+      "attachMarkdown": "Faili ọrọ to ni ún-rí (Markdown)",
+      "image": "{count, plural, one {Aworan} other {# awọn aworan}}",
+      "link": "Akọkọ oju-ìwé láti asopọ",
+      "hint": "↑↓ yan · Tẹ Enter lẹẹmọ · Esc fagilé · 1–9 yan"
+    }
   },
   "structures": {
     "section": "Ilana",

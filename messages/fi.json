@@ -2530,7 +2530,8 @@
     "searchConversations": "Etsi keskusteluja",
     "toggleTheme": "Vaihda teemaa",
     "regenerateResponse": "Luo vastaus uudelleen",
-    "copyLastResponse": "Kopioi viimeisin vastaus"
+    "copyLastResponse": "Kopioi viimeisin vastaus",
+    "pasteOptions": "Liitä muodossa… (valitse teksti, Markdown, liitetiedosto, kuva tai linkki)"
   },
   "quarantine": {
     "title": "Karanteenissa olevat keskustelut",
@@ -4284,7 +4285,19 @@
     "settingsDescription": "Jos liität enemmän tekstiä kuin alla oleva raja, se liitetään tiedostona viestikentän täyttämisen sijaan. Tekstiä käytetään sellaisenaan — mitään ei haeta tai muuteta.",
     "settingsThresholdLabel": "Liitä liitteeksi, jos pituus ylittää",
     "settingsThresholdUnit": "merkkiä",
-    "settingsThresholdHint": "Välillä {min, number}–{max, number} merkkiä."
+    "settingsThresholdHint": "Välillä {min, number}–{max, number} merkkiä.",
+    "options": {
+      "menuLabel": "Liitä muodossa…",
+      "insertHeading": "Lisää viestiin",
+      "attachHeading": "Liitä",
+      "text": "Pelkkä teksti",
+      "markdown": "Muotoiltu teksti (Markdown)",
+      "attachText": "Tekstitiedosto",
+      "attachMarkdown": "Muotoiltu tekstitiedosto (Markdown)",
+      "image": "{count, plural, one {Kuva} other {# kuvaa}}",
+      "link": "Sivun sisältö linkistä",
+      "hint": "↑↓ valitse · Enter liitä · Esc peruuta · 1–9 valitse"
+    }
   },
   "structures": {
     "section": "Rakennekuvaukset",

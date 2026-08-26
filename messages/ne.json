@@ -2514,7 +2514,8 @@
     "searchConversations": "वार्तालाप खोज्नुहोस्",
     "toggleTheme": "थिम परिवर्तन गर्नुहोस्",
     "regenerateResponse": "उत्तर पुन: उत्पन्न गर्नुहोस्",
-    "copyLastResponse": "पछिल्लो उत्तर प्रतिलिपि गर्नुहोस्"
+    "copyLastResponse": "पछिल्लो उत्तर प्रतिलिपि गर्नुहोस्",
+    "pasteOptions": "यस रूपमा टाँस्नुहोस्… (पाठ, Markdown, संलग्नक, छवि वा लिङ्क रोज्नुहोस्)"
   },
   "quarantine": {
     "title": "एकान्तवासमा राखिएका संवादहरू",
@@ -4268,7 +4269,19 @@
     "settingsDescription": "तलको सीमाभन्दा बढी पाठ पेस्ट गर्दा उक्त पाठ फाइलका रूपमा संलग्न हुनेछ, म्यासेज बक्समा भरिने छैन। पाठ जस्ताको तस्तै प्रयोग गरिन्छ — केही ल्याइँदैन वा परिवर्तन गरिँदैन।",
     "settingsThresholdLabel": "यसभन्दा लामो पेस्ट संलग्न गर्नुहोस्",
     "settingsThresholdUnit": "क्यारेक्टरहरू",
-    "settingsThresholdHint": "{min, number} देखि {max, number} क्यारेक्टरहरू बीच।"
+    "settingsThresholdHint": "{min, number} देखि {max, number} क्यारेक्टरहरू बीच।",
+    "options": {
+      "menuLabel": "यस रूपमा टाँस्नुहोस्…",
+      "insertHeading": "सन्देशमा राख्नुहोस्",
+      "attachHeading": "संलग्न गर्नुहोस्",
+      "text": "साधारण पाठ",
+      "markdown": "फर्म्याट गरिएको पाठ (Markdown)",
+      "attachText": "पाठ फाइल",
+      "attachMarkdown": "फर्म्याट गरिएको पाठ फाइल (Markdown)",
+      "image": "{count, plural, one {छवि} other {# वटा छविहरू}}",
+      "link": "लिङ्कबाट पृष्ठ सामग्री",
+      "hint": "↑↓ रोज्नुहोस् · Enter टाँस्ने · Esc रद्द गर्ने · 1–9 छान्नुहोस्"
+    }
   },
   "structures": {
     "section": "संरचनाहरू",

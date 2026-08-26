@@ -2561,7 +2561,8 @@
     "searchConversations": "Tìm kiếm cuộc trò chuyện",
     "toggleTheme": "Chuyển đổi giao diện",
     "regenerateResponse": "Tạo lại phản hồi",
-    "copyLastResponse": "Sao chép phản hồi cuối cùng"
+    "copyLastResponse": "Sao chép phản hồi cuối cùng",
+    "pasteOptions": "Dán dưới dạng… (chọn văn bản, Markdown, tệp đính kèm, hình ảnh hoặc liên kết)"
   },
   "quarantine": {
     "title": "Cuộc trò chuyện bị cách ly",
@@ -4315,7 +4316,19 @@
     "settingsDescription": "Khi dán văn bản vượt giới hạn dưới đây, nội dung sẽ được đính kèm dưới dạng tệp thay vì điền vào ô tin nhắn. Văn bản được sử dụng nguyên trạng như khi dán — không truy xuất hoặc thay đổi gì.",
     "settingsThresholdLabel": "Đính kèm các lần dán dài hơn",
     "settingsThresholdUnit": "ký tự",
-    "settingsThresholdHint": "Trong khoảng từ {min, number} đến {max, number} ký tự."
+    "settingsThresholdHint": "Trong khoảng từ {min, number} đến {max, number} ký tự.",
+    "options": {
+      "menuLabel": "Dán dưới dạng…",
+      "insertHeading": "Chèn vào tin nhắn",
+      "attachHeading": "Đính kèm",
+      "text": "Văn bản thuần",
+      "markdown": "Văn bản có định dạng (Markdown)",
+      "attachText": "Tệp văn bản",
+      "attachMarkdown": "Tệp văn bản có định dạng (Markdown)",
+      "image": "{count, plural, one {Hình ảnh} other {# hình ảnh}}",
+      "link": "Nội dung trang từ liên kết",
+      "hint": "↑↓ chọn · Enter dán · Esc hủy · 1–9 chọn"
+    }
   },
   "structures": {
     "section": "Cấu trúc",

@@ -2514,7 +2514,8 @@
     "searchConversations": "Sesha izingxoxo",
     "toggleTheme": "Shintsha itimu",
     "regenerateResponse": "Phinda uphendule",
-    "copyLastResponse": "Kopisha impendulo yokugcina"
+    "copyLastResponse": "Kopisha impendulo yokugcina",
+    "pasteOptions": "Namathisela ngokuthi… (khetha umbhalo, i-Markdown, isithombe, isithasiselo noma isixhumanisi)"
   },
   "quarantine": {
     "title": "Izingxoxo EzikuQuarantine",
@@ -4268,7 +4269,19 @@
     "settingsDescription": "Ukuphawula umbhalo ongaphezu komkhawulo ongezansi kuzenza ufakwe njengefayela esikhundleni sokugcwalisa ibhokisi lombhalo. Umbhalo usetshenziswa njengoba unamathiselwe — akukho okuthathwayo noma okuguquliwayo.",
     "settingsThresholdLabel": "Faka njengefayela uma kudlula",
     "settingsThresholdUnit": "izinhlamvu",
-    "settingsThresholdHint": "Phakathi kuka-{min, number} no-{max, number} izinhlamvu."
+    "settingsThresholdHint": "Phakathi kuka-{min, number} no-{max, number} izinhlamvu.",
+    "options": {
+      "menuLabel": "Namathisela ngokuthi…",
+      "insertHeading": "Faka kumlayezo",
+      "attachHeading": "Namathisela",
+      "text": "Umbhalo oqondile",
+      "markdown": "Umbhalo onhlelwe (Markdown)",
+      "attachText": "Ifayela lombhalo",
+      "attachMarkdown": "Ifayela lombhalo onhlelwe (Markdown)",
+      "image": "{count, plural, one {Isithombe} other {# izithombe}}",
+      "link": "Okuqukethwe ekhasini kusuka esixhumanisini",
+      "hint": "↑↓ khetha · Enter namathisela · Esc khansela · 1–9 khetha"
+    }
   },
   "structures": {
     "section": "Izakhiwo",

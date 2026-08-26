@@ -2514,7 +2514,8 @@
     "searchConversations": "Yiyloo ngaddan e bisinooki",
     "toggleTheme": "Waylo jamɗi theme",
     "regenerateResponse": "Waɗtu e njaɓnirde",
-    "copyLastResponse": "Natto njaɓnirde so yidi"
+    "copyLastResponse": "Natto njaɓnirde so yidi",
+    "pasteOptions": "Toppita e… (suɓo binndi, Markdown, jaɓɗo, nataande walla jokku) "
   },
   "quarantine": {
     "title": "Kisennangol jawdiiji",
@@ -4268,7 +4269,19 @@
     "settingsDescription": "So a juuta banndu juutugol ko teddini ɗum faa waɗi gila leydi kuu waɗti, ko e suɓo ɓuri banngugol. Banndu ngal ko dow juutirde baɗi — ko faydaaki anndude walla yerude.",
     "settingsThresholdLabel": "Suɓi banndu juutugol ɓuri",
     "settingsThresholdUnit": "harfi",
-    "settingsThresholdHint": "Nder {min, number} e {max, number} harfi."
+    "settingsThresholdHint": "Nder {min, number} e {max, number} harfi.",
+    "options": {
+      "menuLabel": "Toppita e…",
+      "insertHeading": "Galto e jaɓɓorgo",
+      "attachHeading": "Dobo",
+      "text": "Binndi juulnde",
+      "markdown": "Binndi tektiteede (Markdown)",
+      "attachText": "Fiilde binndi",
+      "attachMarkdown": "Fiilde binndi tektiteede (Markdown)",
+      "image": "{count, plural, one {Nataande} other {# nataandeji}}",
+      "link": "Cuɓorgo jokku nde",
+      "hint": "↑↓ suɓo · Enter toppito · Esc bayyi · 1–9 suɓo"
+    }
   },
   "structures": {
     "section": "Laawol",

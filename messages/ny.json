@@ -2514,7 +2514,8 @@
     "searchConversations": "Fufuzani zokambirana",
     "toggleTheme": "Sinthani mutu",
     "regenerateResponse": "Bwezeretsaninso yankho",
-    "copyLastResponse": "Koperani yankho lomaliza"
+    "copyLastResponse": "Koperani yankho lomaliza",
+    "pasteOptions": "Ikani monga... (sankhani zikalata, Markdown, chikalata, chithunzi kapena ulalo)"
   },
   "quarantine": {
     "title": "Zokambirana Zomwe Zili mu Quarantine",
@@ -4268,7 +4269,19 @@
     "settingsDescription": "Ngati mumalemba mawu ochulukirapo kuposa malire pansipa, zimasungidwa ngati fayilo m'malo modzaza bokosi la uthenga. Mawuwo amagwiritsidwa ntchito monga momwe adamatidwira — palibe chomwe chikuzengedwa kapena kusintha.",
     "settingsThresholdLabel": "Ikhani ngati attachment mawu omata oposa",
     "settingsThresholdUnit": "zilembo",
-    "settingsThresholdHint": "Pakati pa {min, number} ndi {max, number} zilembo."
+    "settingsThresholdHint": "Pakati pa {min, number} ndi {max, number} zilembo.",
+    "options": {
+      "menuLabel": "Ikani monga...",
+      "insertHeading": "Ikani mu uthenga",
+      "attachHeading": "Phatikizani",
+      "text": "Mawu wamba",
+      "markdown": "Mawu okonzedwa (Markdown)",
+      "attachText": "Fayilo ya mawu",
+      "attachMarkdown": "Fayilo ya mawu okonzedwa (Markdown)",
+      "image": "{count, plural, one {Chithunzi} other {# zithunzi}}",
+      "link": "Zam’malo kuchokera pa ulalo",
+      "hint": "↑↓ sankhani · Enter ikani · Esc lekani · 1–9 sankhani"
+    }
   },
   "structures": {
     "section": "Zomangamanga",

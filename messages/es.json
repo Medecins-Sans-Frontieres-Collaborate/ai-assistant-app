@@ -2530,7 +2530,8 @@
     "searchConversations": "Buscar conversaciones",
     "toggleTheme": "Cambiar tema",
     "regenerateResponse": "Regenerar respuesta",
-    "copyLastResponse": "Copiar última respuesta"
+    "copyLastResponse": "Copiar última respuesta",
+    "pasteOptions": "Pegar como… (elija texto, Markdown, archivo adjunto, imagen o enlace)"
   },
   "quarantine": {
     "title": "Conversaciones en cuarentena",
@@ -4284,7 +4285,19 @@
     "settingsDescription": "Si se pega más texto que el límite indicado abajo, se adjunta como archivo en lugar de llenar la caja de mensaje. El texto se usa exactamente como se pegó: no se recupera ni se modifica.",
     "settingsThresholdLabel": "Adjuntar pegados mayores que",
     "settingsThresholdUnit": "caracteres",
-    "settingsThresholdHint": "Entre {min, number} y {max, number} caracteres."
+    "settingsThresholdHint": "Entre {min, number} y {max, number} caracteres.",
+    "options": {
+      "menuLabel": "Pegar como…",
+      "insertHeading": "Insertar en el mensaje",
+      "attachHeading": "Adjuntar",
+      "text": "Texto sin formato",
+      "markdown": "Texto con formato (Markdown)",
+      "attachText": "Archivo de texto",
+      "attachMarkdown": "Archivo de texto con formato (Markdown)",
+      "image": "{count, plural, one {Imagen} other {# imágenes}}",
+      "link": "Contenido de la página desde el enlace",
+      "hint": "↑↓ elegir · Intro pegar · Esc cancelar · 1–9 seleccionar"
+    }
   },
   "structures": {
     "section": "Estructuras",
