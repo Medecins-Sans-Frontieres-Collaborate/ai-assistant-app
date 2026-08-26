@@ -908,7 +908,9 @@
     "collapseFolder": "폴더 {name} 접기",
     "folderOptions": "{name} 옵션",
     "agentsEntry": "에이전트",
-    "agentsTitle": "에이전트를 찾아보고 채팅을 시작하세요"
+    "agentsTitle": "에이전트를 찾아보고 채팅을 시작하세요",
+    "agentsLoading": "사용 가능한 에이전트를 확인하는 중…",
+    "agentsLoadError": "에이전트를 불러올 수 없습니다 — 다시 시도하려면 열어주세요"
   },
   "prompts": {
     "buildReusablePrompts": "AI 지원으로 재사용 가능한 프롬프트 구축",
@@ -5019,7 +5021,11 @@
       "your-model": "내 모델 사용",
       "pinned-model": "관리자가 설정한 모델",
       "own-model": "자체 모델로 실행"
-    }
+    },
+    "loadError": "지금 에이전트를 불러올 수 없습니다. 대부분 일시적인 문제입니다.",
+    "discoveryLoading": "Foundry 에이전트를 찾는 중…",
+    "discoveryError": "Foundry 에이전트를 불러올 수 없습니다.",
+    "retry": "다시 시도하기"
   },
   "peopleSuggest": {
     "listLabel": "귀하의 기관에서 추천",

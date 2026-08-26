@@ -883,7 +883,9 @@
     "collapseFolder": "Supista kansio {name}",
     "folderOptions": "{name} asetukset",
     "agentsEntry": "Agentit",
-    "agentsTitle": "Selaa agentteja ja aloita keskustelu jonkun kanssa"
+    "agentsTitle": "Selaa agentteja ja aloita keskustelu jonkun kanssa",
+    "agentsLoading": "Tarkistetaan, mitä agenteja voit käyttää…",
+    "agentsLoadError": "Agenntiesi lataaminen epäonnistui — avaa ja yritä uudelleen"
   },
   "prompts": {
     "buildReusablePrompts": "Rakenna uudelleenkäytettäviä kehotteita tekoälyn avulla",
@@ -5019,7 +5021,11 @@
       "your-model": "käyttää omaa malliasti",
       "pinned-model": "ylläpitäjän määrittämä malli",
       "own-model": "käyttää omaa malliaan"
-    }
+    },
+    "loadError": "Agenntiesi lataaminen ei onnistunut juuri nyt. Tämä on yleensä väliaikaista.",
+    "discoveryLoading": "Etsitään Foundry-agentteja…",
+    "discoveryError": "Foundry-agenttien lataaminen epäonnistui.",
+    "retry": "Yritä uudelleen"
   },
   "peopleSuggest": {
     "listLabel": "Ehdotuksia organisaatioltasi",

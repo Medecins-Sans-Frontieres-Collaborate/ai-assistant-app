@@ -854,7 +854,9 @@
     "collapseFolder": "Ordner {name} reduzieren",
     "folderOptions": "Optionen für {name}",
     "agentsEntry": "Agenten",
-    "agentsTitle": "Agenten durchsuchen und mit einem chatten"
+    "agentsTitle": "Agenten durchsuchen und mit einem chatten",
+    "agentsLoading": "Es wird geprüft, welche Agents Sie verwenden können…",
+    "agentsLoadError": "Ihre Agents konnten nicht geladen werden — zum Wiederholen öffnen"
   },
   "errors": {
     "somethingWentWrong": "Etwas ist schief gelaufen",
@@ -5019,7 +5021,11 @@
       "your-model": "verwendet Ihr Modell",
       "pinned-model": "vom Admin festgelegtes Modell",
       "own-model": "nutzt eigenes Modell"
-    }
+    },
+    "loadError": "Ihre Agents konnten gerade nicht geladen werden. Dies ist in der Regel vorübergehend.",
+    "discoveryLoading": "Es wird nach Foundry Agents gesucht…",
+    "discoveryError": "Foundry Agents konnten nicht geladen werden.",
+    "retry": "Erneut versuchen"
   },
   "peopleSuggest": {
     "listLabel": "Vorschläge aus Ihrer Organisation",

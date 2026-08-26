@@ -988,7 +988,9 @@
     "collapseFolder": "Gufunga dosiye {name}",
     "folderOptions": "Amahitamo ya {name}",
     "agentsEntry": "Abashinzwe",
-    "agentsTitle": "Rondera abashinzwe kandi utangure kuganira n’umwe"
+    "agentsTitle": "Rondera abashinzwe kandi utangure kuganira n’umwe",
+    "agentsLoading": "Turiko turarondera abashobora gukoreshwa…",
+    "agentsLoadError": "Ntivyashobotse gupakira abakozi bawe — fungura wongere ugerageze"
   },
   "errors": {
     "somethingWentWrong": "Hari ikintu kitajenda neza",
@@ -5003,7 +5005,11 @@
       "your-model": "ikoreshwa na modele yawe",
       "pinned-model": "modele yashizweho n’umuyobozi",
       "own-model": "ikoresha modele yayo ubwayo"
-    }
+    },
+    "loadError": "Abakozi bawe ntibashoboye gupakirwa ubu nyene. Akenshi ni ikibazo c'igihe gito.",
+    "discoveryLoading": "Turiko turarondera abakozi ba Foundry…",
+    "discoveryError": "Abakozi ba Foundry ntibashoboye gupakirwa.",
+    "retry": "Gerageza kandi"
   },
   "peopleSuggest": {
     "listLabel": "Ivyo usabwe n'ishirahamwe ryawe",

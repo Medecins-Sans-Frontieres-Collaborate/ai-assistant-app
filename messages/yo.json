@@ -988,7 +988,9 @@
     "collapseFolder": "Dín folda {name} ku",
     "folderOptions": "Aṣayan {name}",
     "agentsEntry": "Àgbẹ̀rẹ́ ayélujára",
-    "agentsTitle": "Ṣàyẹ̀wò àwọn àgbẹ̀rẹ́ ayélujára kí o sì bẹ̀rẹ̀ ìjíròrò pẹ̀lú ẹ̀kan"
+    "agentsTitle": "Ṣàyẹ̀wò àwọn àgbẹ̀rẹ́ ayélujára kí o sì bẹ̀rẹ̀ ìjíròrò pẹ̀lú ẹ̀kan",
+    "agentsLoading": "N ṣayẹwo awọn aṣoju ti o le lo…",
+    "agentsLoadError": "A ko le gbe awọn aṣoju rẹ— ṣii lati tun gbiyanju"
   },
   "errors": {
     "somethingWentWrong": "Nǹkan kan ṣẹlẹ̀",
@@ -5003,7 +5005,11 @@
       "your-model": "nlo àmọ̀ràn rẹ",
       "pinned-model": "àmọ̀ràn tó ṣètò olùṣàkóso",
       "own-model": "n ṣiṣẹ́ lórí àmọ̀ràn tirẹ"
-    }
+    },
+    "loadError": "A ko le gbe awọn aṣoju rẹ sẹsẹ yii. Eleyi maa n jẹ iṣoro igba diẹ.",
+    "discoveryLoading": "N wa awọn aṣoju Foundry…",
+    "discoveryError": "A ko le gbe awọn aṣoju Foundry.",
+    "retry": "Tun gbiyanju"
   },
   "peopleSuggest": {
     "listLabel": "Awọn imọran lati ọdọ agbari rẹ",

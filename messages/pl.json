@@ -905,7 +905,9 @@
     "collapseFolder": "Zwiń folder {name}",
     "folderOptions": "Opcje {name}",
     "agentsEntry": "Agenci",
-    "agentsTitle": "Przeglądaj agentów i rozpocznij z jednym rozmowę"
+    "agentsTitle": "Przeglądaj agentów i rozpocznij z jednym rozmowę",
+    "agentsLoading": "Sprawdzanie, których agentów możesz użyć…",
+    "agentsLoadError": "Nie udało się załadować Twoich agentów — otwórz ponownie, aby spróbować jeszcze raz"
   },
   "prompts": {
     "buildReusablePrompts": "Twórz wielokrotnego użytku podpowiedzi z pomocą AI",
@@ -5019,7 +5021,11 @@
       "your-model": "korzysta z Twojego modelu",
       "pinned-model": "model ustawiony przez administratora",
       "own-model": "korzysta z własnego modelu"
-    }
+    },
+    "loadError": "Nie udało się teraz załadować Twoich agentów. Zwykle to chwilowy problem.",
+    "discoveryLoading": "Wyszukiwanie agentów Foundry…",
+    "discoveryError": "Nie udało się załadować agentów Foundry.",
+    "retry": "Spróbuj ponownie"
   },
   "peopleSuggest": {
     "listLabel": "Sugestie z Twojej organizacji",

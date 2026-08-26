@@ -908,7 +908,9 @@
     "collapseFolder": "Fupisha folda {name}",
     "folderOptions": "Chaguzi za {name}",
     "agentsEntry": "Wakala",
-    "agentsTitle": "Vinjari wakala na anza mazungumzo na mmoja"
+    "agentsTitle": "Vinjari wakala na anza mazungumzo na mmoja",
+    "agentsLoading": "Inaangalia ni mawakala gani unaweza kutumia…",
+    "agentsLoadError": "Mawakala wako hawakuweza kupakiwa — fungua upya ujaribu tena"
   },
   "prompts": {
     "buildReusablePrompts": "Jenga vidokezi vinavyoweza kutumika tena kwa msaada wa AI",
@@ -5019,7 +5021,11 @@
       "your-model": "hutumia mfano wako",
       "pinned-model": "mfano umewekwa na msimamizi",
       "own-model": "inaendeshwa na mfano wake binafsi"
-    }
+    },
+    "loadError": "Mawakala wako hawakuweza kupakiwa sasa hivi. Hii mara nyingi ni ya muda mfupi.",
+    "discoveryLoading": "Inatafuta mawakala wa Foundry…",
+    "discoveryError": "Mawakala wa Foundry hawakuweza kupakiwa.",
+    "retry": "Jaribu tena"
   },
   "peopleSuggest": {
     "listLabel": "Mapendekezo kutoka shirika lako",

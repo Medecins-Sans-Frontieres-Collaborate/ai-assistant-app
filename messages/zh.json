@@ -939,7 +939,9 @@
     "collapseFolder": "收起文件夹 {name}",
     "folderOptions": "{name} 选项",
     "agentsEntry": "代理",
-    "agentsTitle": "浏览代理并开始对话"
+    "agentsTitle": "浏览代理并开始对话",
+    "agentsLoading": "正在检查可用的智能体…",
+    "agentsLoadError": "无法加载您的智能体 — 点击重试"
   },
   "prompts": {
     "buildReusablePrompts": "使用 AI 辅助构建可重复使用的提示",
@@ -5050,7 +5052,11 @@
       "your-model": "使用您的模型",
       "pinned-model": "管理员指定模型",
       "own-model": "使用自有模型"
-    }
+    },
+    "loadError": "刚才无法加载您的智能体，通常是暂时性问题。",
+    "discoveryLoading": "正在查找Foundry智能体…",
+    "discoveryError": "无法加载Foundry智能体。",
+    "retry": "重试"
   },
   "peopleSuggest": {
     "listLabel": "来自您组织的建议",

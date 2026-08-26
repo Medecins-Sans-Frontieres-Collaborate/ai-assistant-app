@@ -988,7 +988,9 @@
     "collapseFolder": "ፎልደር {name} ሰንካል",
     "folderOptions": "ኣማራጮታት {name}",
     "agentsEntry": "ወኪላት",
-    "agentsTitle": "ወኪላት ይቐይሩን ከኣንዳንዱ ምዛር ቴክስት ጀምሩ"
+    "agentsTitle": "ወኪላት ይቐይሩን ከኣንዳንዱ ምዛር ቴክስት ጀምሩ",
+    "agentsLoading": "እዚ ትኽክልኩም ዘምጽኡን ዝኽእሉ ገለ ኣጄንት እዚ እዚ እተረዳኡ…",
+    "agentsLoadError": "ኣጄንታትኩም ምምጻዕ ኣይተኻአኑን — ምለላዕ ክትፈትኑ ክኽእሉ ኢኹም"
   },
   "errors": {
     "somethingWentWrong": "ገለ ጸገም ተፈጢሩ",
@@ -5003,7 +5005,11 @@
       "your-model": "ሞዴልካ ይጥቀም",
       "pinned-model": "አመሓዳሪ ዝመርጸ ሞዴል",
       "own-model": "ሓደ ሞዴል ይግዚኡ"
-    }
+    },
+    "loadError": "ኣጄንታትኩም ሕጂ ምምጻዕ ኣይተቻአኑን። ዚኣ ሓደ ግዜ ክብል ኢዩ።",
+    "discoveryLoading": "Foundry ኣጄንታት እዚ እተኣክቱ…",
+    "discoveryError": "Foundry ኣጄንታት ምምጻዕ ኣይተቻአኑን።",
+    "retry": "ብደገም ፈትኑ"
   },
   "peopleSuggest": {
     "listLabel": "ሓገዝታት ካብ ኣካዳሚኻ",

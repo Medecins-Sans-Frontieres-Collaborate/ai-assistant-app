@@ -906,7 +906,9 @@
     "collapseFolder": "Restrânge folderul {name}",
     "folderOptions": "Opțiuni {name}",
     "agentsEntry": "Agenți",
-    "agentsTitle": "Răsfoiți agenții și începeți un chat cu unul"
+    "agentsTitle": "Răsfoiți agenții și începeți un chat cu unul",
+    "agentsLoading": "Se verifică ce agenți puteți folosi…",
+    "agentsLoadError": "Agenții nu au putut fi încărcați — deschideți pentru a reîncerca"
   },
   "prompts": {
     "buildReusablePrompts": "Construiește prompt-uri reutilizabile cu asistență AI",
@@ -5019,7 +5021,11 @@
       "your-model": "folosește modelul dvs.",
       "pinned-model": "model stabilit de administrator",
       "own-model": "rulează pe propriul său model"
-    }
+    },
+    "loadError": "Agenții nu au putut fi încărcați momentan. De obicei, aceasta este o situație temporară.",
+    "discoveryLoading": "Se caută agenți Foundry…",
+    "discoveryError": "Agenții Foundry nu au putut fi încărcați.",
+    "retry": "Reîncercați"
   },
   "peopleSuggest": {
     "listLabel": "Sugestii din organizația dumneavoastră",

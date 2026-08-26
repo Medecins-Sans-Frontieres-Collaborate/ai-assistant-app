@@ -873,7 +873,9 @@
     "collapseFolder": "Map {name} samenvouwen",
     "folderOptions": "Opties voor {name}",
     "agentsEntry": "Agenten",
-    "agentsTitle": "Blader door agenten en begin een chat met een"
+    "agentsTitle": "Blader door agenten en begin een chat met een",
+    "agentsLoading": "Controleren welke agents u kunt gebruiken…",
+    "agentsLoadError": "Uw agents konden niet worden geladen — klik om het opnieuw te proberen"
   },
   "prompts": {
     "buildReusablePrompts": "Bouw herbruikbare prompts met AI-assistentie",
@@ -5019,7 +5021,11 @@
       "your-model": "gebruikt uw model",
       "pinned-model": "model ingesteld door admin",
       "own-model": "draait op eigen model"
-    }
+    },
+    "loadError": "Uw agents konden zojuist niet worden geladen. Dit is meestal tijdelijk.",
+    "discoveryLoading": "Zoeken naar Foundry-agents…",
+    "discoveryError": "Foundry-agents konden niet worden geladen.",
+    "retry": "Opnieuw proberen"
   },
   "peopleSuggest": {
     "listLabel": "Suggesties van uw organisatie",

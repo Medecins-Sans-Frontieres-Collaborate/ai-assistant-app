@@ -854,7 +854,9 @@
     "collapseFolder": "طي المجلد {name}",
     "folderOptions": "خيارات {name}",
     "agentsEntry": "الوكلاء",
-    "agentsTitle": "تصفح الوكلاء وابدأ محادثة مع أحدهم"
+    "agentsTitle": "تصفح الوكلاء وابدأ محادثة مع أحدهم",
+    "agentsLoading": "جارٍ التحقق من الوكلاء المتاحين لك…",
+    "agentsLoadError": "تعذر تحميل وكلائك — انقر لإعادة المحاولة"
   },
   "prompts": {
     "buildReusablePrompts": "بناء موجهات قابلة لإعادة الاستخدام بمساعدة الذكاء الاصطناعي",
@@ -5019,7 +5021,11 @@
       "your-model": "يستخدم النموذج الخاص بك",
       "pinned-model": "النموذج محدد من الإدارة",
       "own-model": "يعمل على نموذجه الخاص"
-    }
+    },
+    "loadError": "تعذر تحميل وكلائك الآن. عادةً ما تكون هذه مشكلة مؤقتة.",
+    "discoveryLoading": "جارٍ البحث عن وكلاء Foundry…",
+    "discoveryError": "تعذر تحميل وكلاء Foundry.",
+    "retry": "إعادة المحاولة"
   },
   "peopleSuggest": {
     "listLabel": "اقتراحات من مؤسستك",

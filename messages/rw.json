@@ -988,7 +988,9 @@
     "collapseFolder": "Hina dosiye {name}",
     "folderOptions": "Amahitamo ya {name}",
     "agentsEntry": "Abakozi",
-    "agentsTitle": "Reba abakozi kandi utangire kuganira n’umwe"
+    "agentsTitle": "Reba abakozi kandi utangire kuganira n’umwe",
+    "agentsLoading": "Turagenzura abakozi ushobora gukoresha…",
+    "agentsLoadError": "Abakozi bawe ntibashoboye gupakirwa — fungura wongere ugerageze"
   },
   "errors": {
     "somethingWentWrong": "Hari ikintu kitagenze neza",
@@ -5003,7 +5005,11 @@
       "your-model": "ikoresha imoderele yawe",
       "pinned-model": "imoderele yashyizweho n'umuyobozi",
       "own-model": "ikoresha imoderele yayo bwite"
-    }
+    },
+    "loadError": "Abakozi bawe ntibashoboye gupakirwa ubu. Akenshi biba ari iby'igihe gito.",
+    "discoveryLoading": "Turashakisha abakozi ba Foundry…",
+    "discoveryError": "Abakozi ba Foundry ntibashoboye gupakirwa.",
+    "retry": "Ongera ugerageze"
   },
   "peopleSuggest": {
     "listLabel": "Ibyifuzo bituruka muri sosiyete yawe",

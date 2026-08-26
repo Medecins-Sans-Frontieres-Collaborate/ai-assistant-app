@@ -883,7 +883,9 @@
     "collapseFolder": "כווץ תיקיה {name}",
     "folderOptions": "אפשרויות עבור {name}",
     "agentsEntry": "סוכנים",
-    "agentsTitle": "עיינו בסוכנים והתחילו שיחה עם אחד"
+    "agentsTitle": "עיינו בסוכנים והתחילו שיחה עם אחד",
+    "agentsLoading": "בודק אילו סוכנים זמינים לשימוש…",
+    "agentsLoadError": "לא ניתן היה לטעון את הסוכנים שלך — פתח לנסות שוב"
   },
   "prompts": {
     "buildReusablePrompts": "בניית הנחיות לשימוש חוזר בעזרת AI",
@@ -5019,7 +5021,11 @@
       "your-model": "משתמש במודל שלך",
       "pinned-model": "מודל שנקבע על ידי מנהל",
       "own-model": "פועל על המודל הפרטי שלו"
-    }
+    },
+    "loadError": "לא ניתן היה לטעון את הסוכנים שלך כרגע. לרוב מדובר בתקלה זמנית.",
+    "discoveryLoading": "מחפש סוכני Foundry…",
+    "discoveryError": "לא ניתן היה לטעון את סוכני Foundry.",
+    "retry": "נסה שוב"
   },
   "peopleSuggest": {
     "listLabel": "הצעות מהארגון שלך",

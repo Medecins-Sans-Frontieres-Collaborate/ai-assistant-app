@@ -988,7 +988,9 @@
     "collapseFolder": "Kûâ dosi {name}",
     "folderOptions": "Mbêtï ti {name}",
     "agentsEntry": "Bângbi",
-    "agentsTitle": "Zia bângbi kɛ pé ayeke zo jihâ na mo"
+    "agentsTitle": "Zia bângbi kɛ pé ayeke zo jihâ na mo",
+    "agentsLoading": "Bi na na sô lo agents mo yeke koui…",
+    "agentsLoadError": "Agents mo ape yeke koui — wilî lo na koke"
   },
   "errors": {
     "somethingWentWrong": "Ë a sara nzönî pepe",
@@ -5003,7 +5005,11 @@
       "your-model": "yeke na model wangä",
       "pinned-model": "model a admin a zia",
       "own-model": "yeke na model iye"
-    }
+    },
+    "loadError": "Agents mo ape yeke koui tî lo nzoni. Doko mbênî ape na ndatabarî.",
+    "discoveryLoading": "Bi na na sô lo agents tî Foundry…",
+    "discoveryError": "Agents tî Foundry ape yeke koui.",
+    "retry": "Koke"
   },
   "peopleSuggest": {
     "listLabel": "Mbênî ya organisation tî mo",

@@ -908,7 +908,9 @@
     "collapseFolder": "フォルダー{name}を折りたたみ",
     "folderOptions": "{name}のオプション",
     "agentsEntry": "エージェント",
-    "agentsTitle": "エージェントを閲覧してチャットを開始する"
+    "agentsTitle": "エージェントを閲覧してチャットを開始する",
+    "agentsLoading": "利用可能なエージェントを確認しています…",
+    "agentsLoadError": "エージェントを読み込めませんでした — クリックして再試行してください"
   },
   "prompts": {
     "buildReusablePrompts": "AIの支援で再利用可能なプロンプトを構築",
@@ -5019,7 +5021,11 @@
       "your-model": "ご自身のモデルを使用",
       "pinned-model": "管理者によるモデル指定",
       "own-model": "独自のモデルで動作"
-    }
+    },
+    "loadError": "エージェントをただいま読み込めませんでした。通常は一時的な問題です。",
+    "discoveryLoading": "Foundryエージェントを検索中…",
+    "discoveryError": "Foundryエージェントを読み込めませんでした。",
+    "retry": "再試行"
   },
   "peopleSuggest": {
     "listLabel": "あなたの組織からの提案",

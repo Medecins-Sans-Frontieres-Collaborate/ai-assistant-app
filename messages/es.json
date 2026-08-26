@@ -854,7 +854,9 @@
     "collapseFolder": "Colapsar carpeta {name}",
     "folderOptions": "Opciones de {name}",
     "agentsEntry": "Agentes",
-    "agentsTitle": "Explora agentes y comienza un chat con uno"
+    "agentsTitle": "Explora agentes y comienza un chat con uno",
+    "agentsLoading": "Verificando qué agentes puede usar…",
+    "agentsLoadError": "No se pudieron cargar sus agentes; ábralo para reintentar"
   },
   "errors": {
     "somethingWentWrong": "Algo salió mal",
@@ -5019,7 +5021,11 @@
       "your-model": "usa su modelo",
       "pinned-model": "modelo definido por el administrador",
       "own-model": "funciona con su propio modelo"
-    }
+    },
+    "loadError": "No se pudieron cargar sus agentes en este momento. Esto suele ser temporal.",
+    "discoveryLoading": "Buscando agentes de Foundry…",
+    "discoveryError": "No se pudieron cargar los agentes de Foundry.",
+    "retry": "Intentar de nuevo"
   },
   "peopleSuggest": {
     "listLabel": "Sugerencias de su organización",

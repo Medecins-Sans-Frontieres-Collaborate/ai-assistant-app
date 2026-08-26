@@ -854,7 +854,9 @@
     "collapseFolder": "Réduire le dossier {name}",
     "folderOptions": "Options {name}",
     "agentsEntry": "Agents",
-    "agentsTitle": "Parcourez les agents et démarrez une discussion avec l’un d’eux"
+    "agentsTitle": "Parcourez les agents et démarrez une discussion avec l’un d’eux",
+    "agentsLoading": "Vérification des agents disponibles…",
+    "agentsLoadError": "Vos agents n'ont pas pu être chargés — ouvrez pour réessayer"
   },
   "errors": {
     "somethingWentWrong": "Quelque chose s'est mal passé",
@@ -5019,7 +5021,11 @@
       "your-model": "utilise votre modèle",
       "pinned-model": "modèle défini par l’administrateur",
       "own-model": "utilise son propre modèle"
-    }
+    },
+    "loadError": "Vos agents n'ont pas pu être chargés pour le moment. C'est généralement temporaire.",
+    "discoveryLoading": "Recherche des agents Foundry…",
+    "discoveryError": "Les agents Foundry n'ont pas pu être chargés.",
+    "retry": "Réessayer"
   },
   "peopleSuggest": {
     "listLabel": "Suggestions de votre organisation",

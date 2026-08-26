@@ -908,7 +908,9 @@
     "collapseFolder": "Klasörü daralt {name}",
     "folderOptions": "{name} seçenekleri",
     "agentsEntry": "Agentlar",
-    "agentsTitle": "Agentlara göz atın ve biriyle sohbet başlatın"
+    "agentsTitle": "Agentlara göz atın ve biriyle sohbet başlatın",
+    "agentsLoading": "Kullanabileceğiniz ajanlar kontrol ediliyor…",
+    "agentsLoadError": "Ajanlarınız yüklenemedi — yeniden denemek için açın"
   },
   "prompts": {
     "buildReusablePrompts": "AI yardımıyla yeniden kullanılabilir istemler oluşturun",
@@ -5019,7 +5021,11 @@
       "your-model": "kendi modelinizi kullanır",
       "pinned-model": "yönetici tarafından atanmış model",
       "own-model": "kendi modeli üzerinde çalışıyor"
-    }
+    },
+    "loadError": "Ajanlarınız şu anda yüklenemedi. Bu genellikle geçici bir durumdur.",
+    "discoveryLoading": "Foundry ajanları aranıyor…",
+    "discoveryError": "Foundry ajanları yüklenemedi.",
+    "retry": "Tekrar deneyin"
   },
   "peopleSuggest": {
     "listLabel": "Kuruluşunuzdan öneriler",

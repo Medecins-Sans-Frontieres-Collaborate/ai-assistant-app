@@ -851,7 +851,9 @@
     "collapseFolder": "{name} ፎልደሩን አንሳ",
     "folderOptions": "የ{name} አማራጮች",
     "agentsEntry": "ወኪሎች",
-    "agentsTitle": "ወኪሎችን ያስሱ እና ከአንዱ ጋር ውይይት ይጀምሩ"
+    "agentsTitle": "ወኪሎችን ያስሱ እና ከአንዱ ጋር ውይይት ይጀምሩ",
+    "agentsLoading": "ምን ዓይነት agent መጠቀም እንደምትችሉ በመፈተሽ ላይ ነው…",
+    "agentsLoadError": "agent ዎት መጫን አልተቻለም — ለማደግ ይክፈቱ"
   },
   "prompts": {
     "buildReusablePrompts": "በAI እገዛ እንደገና ሊጠቀሙ የሚችሉ ጥያቄዎችን ይፍጠሩ",
@@ -5019,7 +5021,11 @@
       "your-model": "ሞዴልዎን ይጠቀማል",
       "pinned-model": "በአስተዳዳሪ የተዘጋጀ ሞዴል",
       "own-model": "በራሱ ሞዴል ላይ ይሰራል"
-    }
+    },
+    "loadError": "agent ዎት በአሁኑ ጊዜ መጫን አልተቻለም። ይህ ብዙ ጊዜ ጊዜያዊ ነው።",
+    "discoveryLoading": "Foundry agent እየተፈለጉ ነው…",
+    "discoveryError": "Foundry agent መጫን አልተቻለም።",
+    "retry": "ደግመው ይሞክሩ"
   },
   "peopleSuggest": {
     "listLabel": "ከድርጅትዎ የተመነዙ ጥቆማዎች",

@@ -909,7 +909,9 @@
     "collapseFolder": "Thu gọn thư mục {name}",
     "folderOptions": "Tùy chọn {name}",
     "agentsEntry": "Tác nhân",
-    "agentsTitle": "Duyệt các tác nhân và bắt đầu trò chuyện với một tác nhân"
+    "agentsTitle": "Duyệt các tác nhân và bắt đầu trò chuyện với một tác nhân",
+    "agentsLoading": "Đang kiểm tra các agent bạn có thể sử dụng…",
+    "agentsLoadError": "Không thể tải các agent của bạn — bấm để thử lại"
   },
   "prompts": {
     "buildReusablePrompts": "Xây dựng lời nhắc có thể tái sử dụng với sự hỗ trợ của AI",
@@ -5050,7 +5052,11 @@
       "your-model": "sử dụng mô hình của bạn",
       "pinned-model": "mô hình do quản trị viên đặt",
       "own-model": "chạy trên chính mô hình của nó"
-    }
+    },
+    "loadError": "Không thể tải các agent của bạn lúc này. Thông thường đây chỉ là tạm thời.",
+    "discoveryLoading": "Đang tìm agent Foundry…",
+    "discoveryError": "Không thể tải agent Foundry.",
+    "retry": "Thử lại"
   },
   "peopleSuggest": {
     "listLabel": "Gợi ý từ tổ chức của bạn",

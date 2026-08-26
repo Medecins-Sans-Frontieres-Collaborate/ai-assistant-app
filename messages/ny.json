@@ -988,7 +988,9 @@
     "collapseFolder": "Tsekani chikwatu {name}",
     "folderOptions": "Njira za {name}",
     "agentsEntry": "Othandizira",
-    "agentsTitle": "Onani othandizira ndipo yambitsani kucheza ndi m'modzi"
+    "agentsTitle": "Onani othandizira ndipo yambitsani kucheza ndi m'modzi",
+    "agentsLoading": "Kuyang'ana omwe mungagwiritse ntchito…",
+    "agentsLoadError": "Simungathe kutsitsa omwe mungagwiritse ntchito — dinani kuti muyese kachiwiri"
   },
   "errors": {
     "somethingWentWrong": "Chinachake chalakwika",
@@ -5003,7 +5005,11 @@
       "your-model": "amagwiritsa ntchito mtundu wanu",
       "pinned-model": "mtundu wakhazikitsidwa ndi admin",
       "own-model": "amagwiritsa ntchito mtundu wake"
-    }
+    },
+    "loadError": "Simungathe kutsitsa omwe mungagwiritse ntchito pano pano. Nthawi zambiri izi zimakhala zakanthawi.",
+    "discoveryLoading": "Kufunafuna ma Foundry agents…",
+    "discoveryError": "Simungathe kutsitsa ma Foundry agents.",
+    "retry": "Yesaninso"
   },
   "peopleSuggest": {
     "listLabel": "Malangizo ochokera ku gulu lanu",

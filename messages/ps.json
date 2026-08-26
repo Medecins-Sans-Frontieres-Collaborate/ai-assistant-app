@@ -988,7 +988,9 @@
     "collapseFolder": "پوښۍ ټولول {name}",
     "folderOptions": "{name} اختیارات",
     "agentsEntry": "استازي",
-    "agentsTitle": "استازي وګورئ او له یوه سره خبرې وکړئ"
+    "agentsTitle": "استازي وګورئ او له یوه سره خبرې وکړئ",
+    "agentsLoading": "درک کوو چې کوم ایجنټان تاسو کارولی شئ…",
+    "agentsLoadError": "ستاسو ایجنټان نه شول پورته کېدل — د بیا هڅې لپاره پرانیزئ"
   },
   "errors": {
     "somethingWentWrong": "یوه ستونزه پېښه شوه",
@@ -5003,7 +5005,11 @@
       "your-model": "ستاسې ماډل کاروي",
       "pinned-model": "ادارې لخوا ټاکل شوی ماډل",
       "own-model": "خپل ځانګړی ماډل کاروي"
-    }
+    },
+    "loadError": "ستاسو ایجنټان همدا اوس نه شول پورته کېدل. دا معمولا لنډمهاله وي.",
+    "discoveryLoading": "د Foundry ایجنټانو لټون کوو…",
+    "discoveryError": "Foundry ایجنټان پورته نه شول.",
+    "retry": "بیا هڅه وکړئ"
   },
   "peopleSuggest": {
     "listLabel": "ستاسې له ادارې څخه وړاندیزونه",

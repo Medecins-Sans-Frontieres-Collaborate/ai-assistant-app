@@ -908,7 +908,9 @@
     "collapseFolder": "Komprimera mapp {name}",
     "folderOptions": "{name}-alternativ",
     "agentsEntry": "Agenter",
-    "agentsTitle": "Bläddra bland agenter och starta en chatt med en"
+    "agentsTitle": "Bläddra bland agenter och starta en chatt med en",
+    "agentsLoading": "Kontrollerar vilka agenter du kan använda…",
+    "agentsLoadError": "Dina agenter kunde inte laddas — öppna för att försöka igen"
   },
   "prompts": {
     "buildReusablePrompts": "Bygg återanvändbara prompter med AI-assistans",
@@ -5019,7 +5021,11 @@
       "your-model": "använder din modell",
       "pinned-model": "modell vald av admin",
       "own-model": "kör på egen modell"
-    }
+    },
+    "loadError": "Dina agenter kunde inte laddas just nu. Detta är vanligtvis tillfälligt.",
+    "discoveryLoading": "Letar efter Foundry-agenter…",
+    "discoveryError": "Det gick inte att ladda Foundry-agenter.",
+    "retry": "Försök igen"
   },
   "peopleSuggest": {
     "listLabel": "Förslag från din organisation",

@@ -883,7 +883,9 @@
     "collapseFolder": "Redueix la carpeta {name}",
     "folderOptions": "Opcions de {name}",
     "agentsEntry": "Agents",
-    "agentsTitle": "Explora els agents i comença una conversa amb un"
+    "agentsTitle": "Explora els agents i comença una conversa amb un",
+    "agentsLoading": "S'està comprovant quins agents pots utilitzar…",
+    "agentsLoadError": "No s'han pogut carregar els teus agents — obre per tornar-ho a intentar"
   },
   "prompts": {
     "buildReusablePrompts": "Crear indicacions reutilitzables amb assistència d'IA",
@@ -5019,7 +5021,11 @@
       "your-model": "fa servir el teu model",
       "pinned-model": "model establert per l'administrador",
       "own-model": "fa servir el seu propi model"
-    }
+    },
+    "loadError": "Ara mateix no s'han pogut carregar els teus agents. Normalment és temporal.",
+    "discoveryLoading": "S'estan cercant agents Foundry…",
+    "discoveryError": "No s'han pogut carregar els agents Foundry.",
+    "retry": "Torna-ho a provar"
   },
   "peopleSuggest": {
     "listLabel": "Suggeriments de la vostra organització",

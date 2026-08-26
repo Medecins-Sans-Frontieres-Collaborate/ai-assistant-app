@@ -988,7 +988,9 @@
     "collapseFolder": "Kokanga dossier {name}",
     "folderOptions": "Bapɔsɔ ya {name}",
     "agentsEntry": "Ba agents",
-    "agentsTitle": "Luka ba agents mpe banda kosolola na moko"
+    "agentsTitle": "Luka ba agents mpe banda kosolola na moko",
+    "agentsLoading": "Tosili kotalisa ba agents okoki kosalela…",
+    "agentsLoadError": "Ba agents na yo esimbaki te — fungola mpo na komeka lisusu"
   },
   "errors": {
     "somethingWentWrong": "Eloko moko ekende malamu te",
@@ -5003,7 +5005,11 @@
       "your-model": "asalelaka model na yo",
       "pinned-model": "model esalemi na admin",
       "own-model": "esalelaka model na ye moko"
-    }
+    },
+    "loadError": "Ba agents na yo esimbaki te sik’oyo. Makambo boye alongwaka mbala mingi.",
+    "discoveryLoading": "Tosili koluka ba agents ya Foundry…",
+    "discoveryError": "Ba agents ya Foundry esimbaki te.",
+    "retry": "Meka lisusu"
   },
   "peopleSuggest": {
     "listLabel": "Bato oyo organisation na bino epesi toli",

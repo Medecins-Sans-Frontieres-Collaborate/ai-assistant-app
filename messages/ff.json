@@ -988,7 +988,9 @@
     "collapseFolder": "Luudu bolle {name}",
     "folderOptions": "Cuɓoraaɗi {name}",
     "agentsEntry": "Agentiɗe",
-    "agentsTitle": "Yiɗdi agentiɗe e fuɗɗi waawi haasagol e ɗuum"
+    "agentsTitle": "Yiɗdi agentiɗe e fuɗɗi waawi haasagol e ɗuum",
+    "agentsLoading": "Njanngo e mbaɗɓe ma waɗi...",
+    "agentsLoadError": "Mbaɗɓe maa waawi aniima njannde — uddit tee hurmit"
   },
   "errors": {
     "somethingWentWrong": "Huunde woorii",
@@ -5003,7 +5005,11 @@
       "your-model": "naatnoy model maa",
       "pinned-model": "model toggoɗo e admin",
       "own-model": "taaƴi e model moƴƴi"
-    }
+    },
+    "loadError": "Mbaɗɓe maa waawi aniima njannde jooni. Ko fii gonga hiɗɗo waa.",
+    "discoveryLoading": "Njalngol mbaɗɓe Foundry...",
+    "discoveryError": "Waawi aniima njannde mbaɗɓe Foundry.",
+    "retry": "Hurmit baale"
   },
   "peopleSuggest": {
     "listLabel": "Golleji pilkil e organisation maa",

@@ -988,7 +988,9 @@
     "collapseFolder": "Rufewa babban fayil {name}",
     "folderOptions": "Zaɓuɓɓukan {name}",
     "agentsEntry": "Wakilai",
-    "agentsTitle": "Bincika wakilai kuma fara hira da ɗaya"
+    "agentsTitle": "Bincika wakilai kuma fara hira da ɗaya",
+    "agentsLoading": "Ana duba waɗanne wakilai za ka iya amfani da su…",
+    "agentsLoadError": "An kasa ɗora wakilanka — buɗe don ƙoƙarin sake sawa"
   },
   "errors": {
     "somethingWentWrong": "Wani abu ya samu matsala",
@@ -5003,7 +5005,11 @@
       "your-model": "yana amfani da samfurinka",
       "pinned-model": "samfurin da mai gudanarwa ya saita",
       "own-model": "yana aiki da samfurinsa kansa"
-    }
+    },
+    "loadError": "Ba a iya ɗora wakilanka a yanzu. Wannan yawanci na ɗan lokaci ne.",
+    "discoveryLoading": "Ana neman wakilan Foundry…",
+    "discoveryError": "An kasa ɗora wakilan Foundry.",
+    "retry": "Sake ƙoƙari"
   },
   "peopleSuggest": {
     "listLabel": "Shawarwari daga ƙungiyarku",

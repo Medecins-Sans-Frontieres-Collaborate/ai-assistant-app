@@ -988,7 +988,9 @@
     "collapseFolder": "Songa ifolda {name}",
     "folderOptions": "Izinketho zika-{name}",
     "agentsEntry": "Osebenzayo",
-    "agentsTitle": "Hlola osebenzayo bese uqala ingxoxo nomunye"
+    "agentsTitle": "Hlola osebenzayo bese uqala ingxoxo nomunye",
+    "agentsLoading": "Sihlola ukuthi imiphi imisebenzi ongayisebenzisa…",
+    "agentsLoadError": "Ayikwazanga ukulayisha imisebenzi yakho — vula ukuze uzame futhi"
   },
   "errors": {
     "somethingWentWrong": "Kukhona okungahambanga kahle",
@@ -5003,7 +5005,11 @@
       "your-model": "isebenzisa imodeli yakho",
       "pinned-model": "imodeli ebekwe umphathi",
       "own-model": "isebenzisa imodeli yayo"
-    }
+    },
+    "loadError": "Imisebenzi yakho ayikwazanga ukulayishwa njengamanje. Lokhu kujwayele ukuba isikhashana.",
+    "discoveryLoading": "Sifuna imisebenzi ye-Foundry…",
+    "discoveryError": "Imisebenzi ye-Foundry ayikwazanga ukulayishwa.",
+    "retry": "Zama futhi"
   },
   "peopleSuggest": {
     "listLabel": "Izincomo ezivela enhlanganweni yakho",

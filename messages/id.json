@@ -875,7 +875,9 @@
     "collapseFolder": "Perkecil folder {name}",
     "folderOptions": "Opsi {name}",
     "agentsEntry": "Agen",
-    "agentsTitle": "Jelajahi agen dan mulai percakapan dengan salah satu"
+    "agentsTitle": "Jelajahi agen dan mulai percakapan dengan salah satu",
+    "agentsLoading": "Memeriksa agen yang dapat Anda gunakan…",
+    "agentsLoadError": "Agen Anda tidak dapat dimuat — buka untuk mencoba lagi"
   },
   "prompts": {
     "buildReusablePrompts": "Bangun prompt yang dapat digunakan kembali dengan bantuan AI",
@@ -5019,7 +5021,11 @@
       "your-model": "menggunakan model Anda",
       "pinned-model": "model ditetapkan admin",
       "own-model": "berjalan di model sendiri"
-    }
+    },
+    "loadError": "Agen Anda tidak dapat dimuat saat ini. Biasanya ini hanya sementara.",
+    "discoveryLoading": "Mencari agen Foundry…",
+    "discoveryError": "Agen Foundry tidak dapat dimuat.",
+    "retry": "Coba lagi"
   },
   "peopleSuggest": {
     "listLabel": "Saran dari organisasi Anda",

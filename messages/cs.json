@@ -908,7 +908,9 @@
     "collapseFolder": "Sbalit složku {name}",
     "folderOptions": "Možnosti složky {name}",
     "agentsEntry": "Agenti",
-    "agentsTitle": "Procházejte agenty a začněte s některým chatovat"
+    "agentsTitle": "Procházejte agenty a začněte s některým chatovat",
+    "agentsLoading": "Kontroluje se, které agenty můžete použít…",
+    "agentsLoadError": "Vaše agenty se nepodařilo načíst — otevřete pro opakování"
   },
   "prompts": {
     "buildReusablePrompts": "Vytvářejte opakovaně použitelné výzvy s pomocí AI",
@@ -5019,7 +5021,11 @@
       "your-model": "používá váš model",
       "pinned-model": "model nastavený správcem",
       "own-model": "běží na vlastním modelu"
-    }
+    },
+    "loadError": "Vaše agenty se nyní nepodařilo načíst. Obvykle jde o dočasný problém.",
+    "discoveryLoading": "Vyhledávají se Foundry agenti…",
+    "discoveryError": "Foundry agenti se nepodařili načíst.",
+    "retry": "Zkusit znovu"
   },
   "peopleSuggest": {
     "listLabel": "Návrhy z vaší organizace",

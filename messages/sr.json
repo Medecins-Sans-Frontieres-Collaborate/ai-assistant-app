@@ -988,7 +988,9 @@
     "collapseFolder": "Sažmi fasciklu {name}",
     "folderOptions": "Opcije za {name}",
     "agentsEntry": "Agenti",
-    "agentsTitle": "Pregledajte agente i započnite razgovor sa nekim"
+    "agentsTitle": "Pregledajte agente i započnite razgovor sa nekim",
+    "agentsLoading": "Proveravamo koje agente možete da koristite…",
+    "agentsLoadError": "Vaši agenti nisu mogli da se učitaju — otvorite ponovo da pokušate"
   },
   "errors": {
     "somethingWentWrong": "Нешто је пошло наопако",
@@ -5003,7 +5005,11 @@
       "your-model": "koristi vaš model",
       "pinned-model": "model je postavio administrator",
       "own-model": "koristi svoj sopstveni model"
-    }
+    },
+    "loadError": "Vaši agenti trenutno nisu mogli da se učitaju. Ovo je obično privremeno.",
+    "discoveryLoading": "Tražimo Foundry agente…",
+    "discoveryError": "Foundry agenti nisu mogli da se učitaju.",
+    "retry": "Pokušajte ponovo"
   },
   "peopleSuggest": {
     "listLabel": "Predlozi iz vaše organizacije",

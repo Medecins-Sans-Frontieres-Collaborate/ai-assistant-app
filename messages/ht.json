@@ -988,7 +988,9 @@
     "collapseFolder": "Redwi dosye {name}",
     "folderOptions": "Opsyon {name}",
     "agentsEntry": "Ajan",
-    "agentsTitle": "Browse ajan yo epi kòmanse chat ak youn"
+    "agentsTitle": "Browse ajan yo epi kòmanse chat ak youn",
+    "agentsLoading": "N ap tcheke ki ajan ou ka itilize…",
+    "agentsLoadError": "Nou pa t ka chaje ajan ou yo — klike pou eseye ankò"
   },
   "errors": {
     "somethingWentWrong": "Yon bagay mal pase",
@@ -5003,7 +5005,11 @@
       "your-model": "itilize modèl ou",
       "pinned-model": "modèl mete pa admin",
       "own-model": "kouri sou pwòp modèl li"
-    }
+    },
+    "loadError": "Nou pa t ka chaje ajan ou yo kounye a. Sa tipikman se yon pwoblèm tanporè.",
+    "discoveryLoading": "N ap chèche ajan Foundry…",
+    "discoveryError": "Nou pa t ka chaje ajan Foundry yo.",
+    "retry": "Reeseye"
   },
   "peopleSuggest": {
     "listLabel": "Sijesyon ki soti nan òganizasyon ou",

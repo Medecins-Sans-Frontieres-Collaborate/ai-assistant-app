@@ -988,7 +988,9 @@
     "collapseFolder": "Yaree galka {name}",
     "folderOptions": "Xulashooyinka {name}",
     "agentsEntry": "Wakiillo",
-    "agentsTitle": "Baadh wakiillo waxaadna wada sheekaysi la bilaabi kartaa midkood"
+    "agentsTitle": "Baadh wakiillo waxaadna wada sheekaysi la bilaabi kartaa midkood",
+    "agentsLoading": "Waxaa la hubinayaa wakiillada aad isticmaali karto…",
+    "agentsLoadError": "Wakiillada lama soo rogi karin — fur si aad markale u tijaabiso"
   },
   "errors": {
     "somethingWentWrong": "Wax baa qalday",
@@ -5003,7 +5005,11 @@
       "your-model": "waxay adeegsataa moodelkaaga",
       "pinned-model": "moodel uu doortay maamulaha",
       "own-model": "waxay ku socotaa moodelkeeda gaarka ah"
-    }
+    },
+    "loadError": "Wakiillada lama soo rogi karin waqtigan. Badanaa tani waa arrin ku meel gaar ah.",
+    "discoveryLoading": "Waxaa la raadinayaa wakiillada Foundry…",
+    "discoveryError": "Wakiillada Foundry lama soo rogi karin.",
+    "retry": "Mar kale isku day"
   },
   "peopleSuggest": {
     "listLabel": "Talooyin ka socda ururkaaga",
