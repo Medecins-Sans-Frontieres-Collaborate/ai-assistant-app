@@ -288,6 +288,9 @@ const mockMessages: Record<string, unknown> = {
       "Add agents and connectors to this chat, or start a new chat with an agent. Most work with whatever model you've chosen.",
     searchPlaceholder: 'Search agents and connectors…',
     loading: 'Loading agents…',
+    loadError:
+      "Your agents couldn't be loaded just now. This is usually temporary.",
+    retry: 'Try again',
     noMatches: 'Nothing matches your search.',
     noAgents: 'No agents available.',
     addToChat: 'Add to this chat',
