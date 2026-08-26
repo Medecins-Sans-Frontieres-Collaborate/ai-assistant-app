@@ -11,6 +11,7 @@ import { useTranslations } from 'next-intl';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useUI } from '@/client/hooks/ui/useUI';
+import { useWorkflowPolicy } from '@/client/hooks/workflows/useWorkflowPolicy';
 
 import { Tooltip } from '@/components/UI/Tooltip';
 
@@ -33,6 +34,12 @@ export function WorkflowShell() {
   const { selectedConversation } = useConversations();
   const { toggleChatbar } = useUI();
   const tabsEnabled = useWorkflowTabsEnabled();
+  // Admin workflow policy (docs/ADMIN_WORKFLOWS_AND_VIEW_AS.md). Unlike the
+  // LD flag this DOES apply to existing conversations: it is a kill switch,
+  // and the server refuses the workflow's API calls regardless. While the
+  // policy is still loading the workspace renders, so a slow fetch never
+  // flashes the notice at someone who is allowed in.
+  const { isWorkflowEnabled, isLoading: policyLoading } = useWorkflowPolicy();
   // Collapsed by default: the workspace is the point of a workflow screen,
   // so it gets the width until the user asks for the chat rail. Mobile is
   // unaffected — the two panes are tabs there, already defaulting to the
@@ -48,6 +55,19 @@ export function WorkflowShell() {
   const showTabs = tabsEnabled && selectedConversation.messages.length === 0;
 
   const definition = WORKFLOW_REGISTRY[type];
+  if (definition && !policyLoading && !isWorkflowEnabled(type)) {
+    return (
+      <div className="flex h-full w-full flex-col bg-white dark:bg-surface-dark">
+        <div className="flex items-center gap-3 border-b border-gray-200 p-4 dark:border-gray-700">
+          <p className="min-w-0 flex-1 text-sm text-gray-600 dark:text-gray-300">
+            {t('shell.disabledByAdmin')}
+          </p>
+          {showTabs && <WorkflowTabs />}
+        </div>
+        <WorkflowRail conversation={selectedConversation} />
+      </div>
+    );
+  }
   if (!definition) {
     // Unknown type (e.g. data from a newer version): fail safe with the rail
     // only, so the conversation content stays reachable.

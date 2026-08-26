@@ -36,6 +36,44 @@ const cacheById = new Map<string, CacheEntry>();
 const cacheByMail = new Map<string, CacheEntry>();
 const inFlight = new Map<string, Promise<string[]>>();
 
+/**
+ * "View as" group overrides (lib/services/admin/viewAsTypes.ts), kept in
+ * their OWN maps so a test session never pollutes the real membership
+ * cache. Written by `resolveUserGroupIds` on every request that carries an
+ * active override (short TTL, refreshed while the test session lasts) and
+ * dropped by the first request without one, so exiting view-as takes
+ * effect immediately on the replica that serves it and within
+ * VIEW_AS_GROUPS_TTL_MS on any other.
+ */
+const VIEW_AS_GROUPS_TTL_MS = 2 * 60 * 1000;
+const viewAsById = new Map<string, CacheEntry>();
+const viewAsByMail = new Map<string, CacheEntry>();
+
+function readViewAsOverride(
+  map: Map<string, CacheEntry>,
+  key: string,
+): string[] | null {
+  return readCache(map, key);
+}
+
+function writeViewAsOverride(
+  userId: string,
+  mail: string | undefined,
+  groupIds: string[],
+): void {
+  const entry: CacheEntry = {
+    groupIds,
+    expiresAt: Date.now() + VIEW_AS_GROUPS_TTL_MS,
+  };
+  viewAsById.set(userId, entry);
+  if (mail) viewAsByMail.set(mail, entry);
+}
+
+function clearViewAsOverride(userId: string, mail: string | undefined): void {
+  viewAsById.delete(userId);
+  if (mail) viewAsByMail.delete(mail);
+}
+
 function readCache(map: Map<string, CacheEntry>, key: string): string[] | null {
   const entry = map.get(key);
   if (!entry) return null;
@@ -66,7 +104,9 @@ function writeCache(
 
 /** Sync cache read for the limits principal builder. [] when cold. */
 export function getCachedGroupIdsForUser(userId: string): string[] {
-  return readCache(cacheById, userId) ?? [];
+  return (
+    readViewAsOverride(viewAsById, userId) ?? readCache(cacheById, userId) ?? []
+  );
 }
 
 /** Sync cache read for the agent-access evaluator. [] when cold. */
@@ -75,7 +115,11 @@ export function getCachedGroupIdsForMail(
 ): string[] {
   const normalized = normalizeMail(mail);
   if (!normalized) return [];
-  return readCache(cacheByMail, normalized) ?? [];
+  return (
+    readViewAsOverride(viewAsByMail, normalized) ??
+    readCache(cacheByMail, normalized) ??
+    []
+  );
 }
 
 /**
@@ -89,13 +133,23 @@ export async function resolveUserGroupIds(
 ): Promise<string[]> {
   const userId = session?.user?.id;
   if (!userId) return [];
+  const mail = normalizeMail(session?.user?.mail);
+
+  // View-as (admin test mode) replaces membership for this session only.
+  // The session callback already verified the real identity is a global
+  // admin before attaching `viewAs`, so this is trusted input here.
+  const viewAsGroups = session?.user?.viewAs?.overrides.groupIds;
+  if (viewAsGroups) {
+    writeViewAsOverride(userId, mail, viewAsGroups);
+    return viewAsGroups;
+  }
+  clearViewAsOverride(userId, mail);
+
   const cached = readCache(cacheById, userId);
   if (cached !== null) return cached;
 
   const running = inFlight.get(userId);
   if (running) return running;
-
-  const mail = normalizeMail(session?.user?.mail);
   const fetchPromise = (async () => {
     try {
       // Lazy import: this module is reached from the sync principal-building
@@ -144,4 +198,6 @@ export function clearGroupMembershipCache(): void {
   cacheById.clear();
   cacheByMail.clear();
   inFlight.clear();
+  viewAsById.clear();
+  viewAsByMail.clear();
 }

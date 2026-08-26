@@ -111,17 +111,11 @@ interface AgentsTabProps {
   selectedModel: OpenAIModel | undefined;
   modelConfig: OpenAIModel | null | undefined;
   isCustomAgent: boolean;
-  searchModeEnabled: boolean;
   displaySearchMode: SearchMode;
-  interpreterEnabled: boolean;
-  handleToggleInterpreterMode: () => void;
-  agentAvailable: boolean;
   showModelAdvanced: boolean;
   selectedConversation: Conversation | null;
   mobileView: 'list' | 'details';
   setMobileView: (view: 'list' | 'details') => void;
-  handleToggleSearchMode: () => void;
-  handleSetSearchMode: (mode: SearchMode) => void;
   setShowModelAdvanced: (show: boolean) => void;
   updateConversation: (id: string, updates: Partial<Conversation>) => void;
 }
@@ -147,17 +141,11 @@ export const AgentsTab: FC<AgentsTabProps> = ({
   selectedModel,
   modelConfig,
   isCustomAgent,
-  searchModeEnabled,
   displaySearchMode,
-  interpreterEnabled,
-  handleToggleInterpreterMode,
-  agentAvailable,
   showModelAdvanced,
   selectedConversation,
   mobileView,
   setMobileView,
-  handleToggleSearchMode,
-  handleSetSearchMode,
   setShowModelAdvanced,
   updateConversation,
 }) => {
@@ -782,16 +770,10 @@ export const AgentsTab: FC<AgentsTabProps> = ({
                 selectedModel={selectedModel}
                 modelConfig={modelConfig}
                 isCustomAgent={isCustomAgent}
-                searchModeEnabled={searchModeEnabled}
                 displaySearchMode={displaySearchMode}
-                interpreterEnabled={interpreterEnabled}
-                handleToggleInterpreterMode={handleToggleInterpreterMode}
-                agentAvailable={agentAvailable}
                 showModelAdvanced={showModelAdvanced}
                 selectedConversation={selectedConversation}
                 setMobileView={setMobileView}
-                handleToggleSearchMode={handleToggleSearchMode}
-                handleSetSearchMode={handleSetSearchMode}
                 setShowModelAdvanced={setShowModelAdvanced}
                 updateConversation={updateConversation}
                 organizationAgent={selectedOrgAgent}

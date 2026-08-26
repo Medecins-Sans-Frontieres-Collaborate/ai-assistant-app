@@ -337,8 +337,13 @@ the usual ≤60s TTL.
 - Picker visibility inherits the `exploreBots` flag gating (prompt agents render in the same
   section as org/discovered agents).
 - 24h picker staleness for non-admin users (above).
-- Static `rag`/organization agents remain unguarded by access rules — pre-existing accepted gap;
-  prompt agents are guarded from day one.
+- Static `rag`/organization agents (config/organization-agents.json) are guarded by rules stored
+  under `org-agent::<id>` — the same key an admin override record would use. They are listed in the
+  admin org-agents block (read-only settings, editable access, an Override action that prefills the
+  create form). No rule → allow, so a fresh deployment behaves as before. Exception: when the access
+  snapshot is unavailable (cold start + storage outage), a static-id botId serves rule-free (audited
+  `rules-unavailable-static-fallback`) rather than blocking — a storage outage must never take every
+  built-in agent down. Discovery folds denied static ids into `/api/agents`'s `suppressedOrgAgentIds`.
 
 ## Admin UI
 

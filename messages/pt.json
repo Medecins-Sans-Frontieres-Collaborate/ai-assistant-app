@@ -838,7 +838,12 @@
       "showFewer": "Mostrar menos"
     },
     "retryWithModel": "Tentar com {model}",
-    "createTodoTasks": "Criar tarefas To Do a partir desta resposta"
+    "createTodoTasks": "Criar tarefas To Do a partir desta resposta",
+    "attachedFileExpired": "Um arquivo anexado não está mais disponível — arquivos enviados são armazenados por tempo limitado. Ele foi removido desta conversa. Tente novamente sem o arquivo, ou faça o upload do arquivo novamente.",
+    "repeatedFailureNotice": "Isto continua falhando — a conversa pode ter sido corrompida. Iniciar uma nova conversa geralmente resolve o problema.",
+    "startNewConversation": "Iniciar uma nova conversa",
+    "downloadDebugInfo": "Baixar informações de depuração",
+    "includeMessageText": "Incluir texto da mensagem"
   },
   "sidebar": {
     "collapseSidebar": "Recolher barra lateral",
@@ -847,7 +852,9 @@
     "quickActions": "Ações rápidas",
     "expandFolder": "Expandir pasta {name}",
     "collapseFolder": "Recolher pasta {name}",
-    "folderOptions": "Opções de {name}"
+    "folderOptions": "Opções de {name}",
+    "agentsEntry": "Agentes",
+    "agentsTitle": "Navegue pelos agentes e inicie um chat com um"
   },
   "errors": {
     "somethingWentWrong": "Algo deu errado",
@@ -2667,6 +2674,10 @@
       "map": {
         "label": "Mapa",
         "description": "Transforme qualquer dado em localizações em um mapa"
+      },
+      "grants": {
+        "label": "Processamento de Grants",
+        "description": "Conciliar e extrair dados estruturados de narrativas de grants"
       }
     },
     "chooser": {
@@ -2676,7 +2687,8 @@
       "newTranslation": "Nova tradução",
       "newDocument": "Novo documento",
       "newDataAnalysis": "Nova análise de dados",
-      "newMap": "Novo mapa"
+      "newMap": "Novo mapa",
+      "newGrants": "Novo processamento de grants"
     },
     "translation": {
       "chooseLanguage": "Idioma de destino",
@@ -3293,7 +3305,8 @@
       "unknownType": "Esta conversa usa um fluxo de trabalho que esta versão não reconhece. O histórico da conversa é mostrado abaixo.",
       "untitled": "Nova conversa",
       "toggleMenu": "Alternar menu",
-      "model": "Modelo deste fluxo de trabalho"
+      "model": "Modelo deste fluxo de trabalho",
+      "disabledByAdmin": "Este fluxo de trabalho foi desativado por um administrador. O histórico da conversa está mostrado abaixo."
     },
     "tabs": {
       "label": "Modo de conversa",
@@ -4047,7 +4060,153 @@
     "conflictTakeTheirs": "Manter deles",
     "conflictNoFieldDiff": "Os valores coincidem — apenas a versão do registro foi alterada.",
     "conflictRecordGone": "Este registro foi excluído (ou não pôde ser recarregado). Copie o que precisar do formulário e recarregue.",
-    "groupsFlagOff": "O direcionamento por grupo ainda não está ativado para este ambiente. Direcionamentos existentes continuam funcionando."
+    "groupsFlagOff": "O direcionamento por grupo ainda não está ativado para este ambiente. Direcionamentos existentes continuam funcionando.",
+    "catalogOauth": {
+      "title": "Apps OAuth de conectores integrados",
+      "description": "Apps OAuth de uso geral para os conectores integrados (GitHub, Asana, ...). Um registro salvo aqui substitui as variáveis de ambiente MCP_OAUTH_*; removendo-o, volta a usá-las. Segredos de cliente são criptografados em repouso e nunca mais exibidos.",
+      "badgeAdmin": "Configurado aqui",
+      "badgeEnv": "Do ambiente",
+      "badgeNone": "Não configurado",
+      "badgeDcr": "Autorregistro",
+      "badgeDcrHint": "Este provedor pode registrar um cliente OAuth automaticamente, funcionando mesmo sem um app configurado aqui.",
+      "clientIdLabel": "ID do cliente OAuth",
+      "clientSecretLabel": "Segredo do cliente OAuth",
+      "secretStoredPlaceholder": "Armazenado — digite para substituir, deixe em branco para manter",
+      "secretNewPlaceholder": "Cole o segredo do cliente",
+      "save": "Salvar",
+      "remove": "Remover",
+      "removeToEnv": "Remover (voltar para ambiente)",
+      "saved": "App OAuth {name} salvo",
+      "removed": "App OAuth {name} removido",
+      "saveError": "Falha ao salvar o app OAuth. Tente novamente.",
+      "conflict": "Este registro foi alterado em outro local — recarregado, favor tentar novamente.",
+      "storageUnavailable": "O armazenamento administrativo está inacessível; registros existentes não puderam ser listados. Salvamento desativado até recuperar.",
+      "sealingUnavailable": "Criptografia de segredos não configurada nesta implantação (AUTH_SECRET ausente) — segredos de cliente não podem ser salvos.",
+      "updatedBy": "Atualizado por {by} em {at}"
+    },
+    "orgAgentOverrideTitle": "Substituir agente incorporado",
+    "orgAgentOverrideAction": "Substituir",
+    "orgAgentBuiltinBadge": "Incorporado",
+    "orgAgentBuiltinHint": "Definido na configuração de deployment. Sua regra de acesso pode ser editada aqui; substitua para alterar suas configurações sem necessidade de deploy.",
+    "m365AgentIndexProgress": "Indexando {done} de {total} {total, plural, one {documento} other {documentos}}…",
+    "m365AgentIndexInterrupted": "A indexação foi interrompida em {done} de {total} — retome para continuar.",
+    "m365AgentIndexStartedBy": "iniciado por {name}",
+    "m365AgentIndexResume": "Retomar",
+    "m365AgentIndexResumeHint": "Continue a indexação de onde parou, usando seu acesso ao Microsoft 365. Mantenha esta guia aberta.",
+    "m365AgentIndexCancel": "Cancelar",
+    "m365AgentIndexCancelled": "Indexação cancelada — documentos já processados permanecem pesquisáveis.",
+    "m365AgentIndexJobFailed": "Indexação parada: {error}",
+    "m365AgentIndexDone": "Indexação concluída: {indexed} indexados, {failed} com falha, {noText} sem texto.",
+    "m365AgentDocCounts": "{indexed, plural, one {# documento} other {# documentos}} indexados · {failed} com falha · {noText} sem texto · {needsPreparation} precisam de preparação · {skipped} pulados",
+    "m365CapDocuments": "Documentos: {count} / {max}",
+    "m365CapBytes": "{bytes} de {max}",
+    "m365CapOverDocuments": "Acima do limite de {max} documentos. Desmarque subpastas, filtre por tipo de arquivo ou remova fontes — só contam os arquivos que realmente serão indexados.",
+    "m365CapOverBytes": "Acima do limite de tamanho de {max}. Exclua subpastas ou arquivos grandes.",
+    "m365PlanScanning": "Analisando…",
+    "m365PlanRefreshing": "atualizando…",
+    "m365PlanFailed": "Não foi possível analisar as fontes com sua conta Microsoft 365.",
+    "m365PlanMissing": "Não encontrado ou sem acesso",
+    "m365PlanIndexable": "{count, plural, one {# arquivo será indexado} other {# arquivos serão indexados}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# precisa de preparação} other {# precisam de preparação}}",
+    "m365PlanSkipped": "{count} pulados",
+    "m365PlanShowDetails": "Detalhes",
+    "m365PlanHideDetails": "Ocultar detalhes",
+    "m365PlanTruncated": "Esta pasta é muito grande para ser analisada completamente — apenas os primeiros 1.000 itens foram listados. Escolha uma subpasta.",
+    "m365PlanRecursive": "Incluir subpastas",
+    "m365PlanExtensionsLabel": "Apenas tipos de arquivo:",
+    "m365PlanExtensionsPlaceholder": "ex: pdf, docx",
+    "m365PlanSubfolders": "Subpastas",
+    "m365PlanFolderCount": "{count, plural, one {# arquivo} other {# arquivos}}",
+    "m365PlanGroupIndexable": "Será indexado",
+    "m365PlanGroupNeedsPreparation": "Precisa de preparação",
+    "m365PlanGroupSkipped": "Ignorado",
+    "m365PlanPreparationHint": "imagem/áudio/vídeo — ainda não indexado",
+    "m365PlanMoreRows": "…e mais {count}",
+    "m365ItemStatus": {
+      "pending": "pendente",
+      "indexed": "indexado",
+      "failed": "falhou",
+      "noText": "nenhum texto extraído",
+      "missing": "ausente"
+    },
+    "m365SkipReason": {
+      "unsupported": "tipo não suportado",
+      "tooLarge": "acima de 25 MB",
+      "disallowedType": "tipo bloqueado (executável/arquivo compactado)",
+      "malware": "sinalizado pela Microsoft como malware",
+      "zeroBytes": "arquivo vazio",
+      "excluded": "excluído",
+      "typeFilter": "fora do filtro de tipo"
+    },
+    "localAdminGroup": {
+      "agents": "Agentes",
+      "promptAgents": "Agentes de prompt",
+      "m365Agents": "Agentes do Microsoft 365",
+      "orgAgents": "Agentes de conhecimento",
+      "guides": "Guias",
+      "connectors": "Conectores",
+      "datasets": "Conjuntos de dados de mapa",
+      "unknown": "Delegado, mas não encontrado"
+    },
+    "localAdminGroupUnavailable": "Esta lista está temporariamente indisponível — as delegações existentes foram mantidas.",
+    "localAdminBuiltIn": "integrado",
+    "localAdminSummary": "{count, plural, one {# delegação} other {# delegações}}: {names}",
+    "localAdminSummaryMore": "{names} e mais {more}",
+    "localAdminNoDelegations": "Ainda não há delegações — um administrador local sem agentes só pode ver a área administrativa.",
+    "localAdminSelectedCount": "{selected} de {total} selecionados",
+    "localAdminCopyFrom": "Copiar de",
+    "localAdminClearAll": "Limpar tudo",
+    "localAdminSelectGroup": "Selecionar tudo",
+    "localAdminClearGroup": "Limpar",
+    "localAdminSearchPlaceholder": "Pesquisar agentes, guias, conectores…",
+    "localAdminDuplicateEmail": "Este e-mail já está listado — mescle as duas entradas.",
+    "localAdminExpand": "Mostrar delegações",
+    "localAdminCollapse": "Ocultar delegações",
+    "localAdminDiscard": "Descartar alterações",
+    "m365AgentRefresh": "Atualizar",
+    "m365AgentRefreshHint": "Captura arquivos adicionados, alterados ou removidos desde a última execução — arquivos sem alterações não são baixados novamente. Mantenha esta aba aberta.",
+    "m365AgentReindexAll": "Reindexar tudo",
+    "m365AgentRefreshProgress": "Atualizando — {done} de {total} {total, plural, one {documento} other {documentos}} alterados…",
+    "m365AgentRefreshDone": "Atualização concluída: {added} adicionados, {modified} atualizados, {removed} removidos, {failed} falharam.",
+    "m365ChangesChecking": "Verificando mudanças no Microsoft 365 desde a última indexação…",
+    "m365ChangesFailed": "Não foi possível verificar por mudanças na sua conta Microsoft 365.",
+    "m365ChangesNeverIndexed": "Ainda não indexado — execute Indexar após salvar.",
+    "m365ChangesFound": "{count, plural, one {# alteração} other {# alterações}} desde a última indexação: {added} adicionados, {modified} atualizados, {removed} removidos.",
+    "m365ChangesNone": "Sem alterações desde a última indexação ({date}).",
+    "m365PrepareButton": "Preparar",
+    "m365PrepareOcrButton": "Preparar (OCR)",
+    "m365PrepareSaveFirst": "salve o agente para preparar",
+    "m365PrepareHintImage": "imagem — 1 chamada de visão",
+    "m365PrepareHintMedia": "~{minutes} min de áudio para transcrever",
+    "m365PrepareHintOcr": "sem camada de texto — OCR via visão, até 30 páginas",
+    "m365PreparePreparing": "Preparando…",
+    "m365PreparePending": "Transcrevendo…",
+    "m365PreparedNote": "preparado · {kind}",
+    "m365PreparedKind": {
+      "image": "descrição da imagem",
+      "audio": "transcrição",
+      "video": "transcrição",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "{name} preparado ({chars} caracteres). Execute Atualizar para indexá-lo.",
+    "m365PrepareStarted": "Transcrição de {name} iniciada em segundo plano — mantenha esta aba aberta.",
+    "m365PrepareFailed": "Não foi possível preparar {name}: {error}",
+    "m365PrepareFailedGeneric": "Falha na preparação.",
+    "canonicalKeyLabel": "Chave",
+    "copyKey": "Copiar chave",
+    "agentKeySearchPlaceholder": "Pesquisar agentes, guias, conectores… ou cole uma chave",
+    "agentKeyAddCustom": "Adicionar \"{key}\" conforme digitado",
+    "agentKeyRemove": "Remover {name}",
+    "hideAgent": "Ocultar",
+    "unhideAgent": "Exibir",
+    "hideAgentHint": "Oculte este agente da sua lista de administração. Afeta apenas sua visualização — usuários e outros administradores não são afetados.",
+    "unhideAgentHint": "Mostre este agente novamente na sua lista de administração.",
+    "hiddenBadge": "Oculto",
+    "hiddenAgentsCount": "{count, plural, one {# agente oculto} other {# agentes ocultos}}",
+    "hiddenAgentsShowing": "Exibindo {count, plural, one {# agente oculto} other {# agentes ocultos}}",
+    "hiddenAgentsShow": "Exibir",
+    "hiddenAgentsHide": "Ocultar novamente",
+    "allAgentsHidden": "Todos os agentes aqui estão ocultos da sua visualização — use Exibir para mostrá-los."
   },
   "localModels": {
     "title": "Modelos locais",
@@ -4248,9 +4407,15 @@
       "connectors": "Conectores da organização e quem pode usá-los.",
       "guides": "Guias de estilo, terminologia e conformidade.",
       "mapDatasets": "Conjuntos de dados selecionados disponíveis para o fluxo de mapas.",
-      "localAdmins": "Delegar edição de regras de acesso para outras pessoas."
+      "localAdmins": "Delegar edição de regras de acesso para outras pessoas.",
+      "workflows": "Ative ou desative os fluxos de conversa para todos.",
+      "viewAs": "Teste o app como alguém que cumpre — ou não cumpre — uma condição."
     },
-    "openSettings": "Abrir configurações"
+    "openSettings": "Abrir configurações",
+    "area": {
+      "workflows": "Fluxos de trabalho",
+      "viewAs": "Visualizar como"
+    }
   },
   "limits": {
     "title": "Limites de uso",
@@ -4452,7 +4617,8 @@
     "groupSearchNoResults": "Nenhum grupo corresponde a esse nome.",
     "groupSearchError": "A busca por grupos falhou. Você ainda pode colar um ID de objeto de grupo abaixo.",
     "groupSearchHint": "Digite ao menos 2 caracteres para buscar os grupos da sua organização ou cole diretamente um ID de objeto de grupo. A substituição se aplica aos membros do grupo no Microsoft Entra.",
-    "groupsFlagOff": "A segmentação por grupos ainda não está habilitada neste ambiente. Os direcionamentos de grupo existentes continuam funcionando."
+    "groupsFlagOff": "A segmentação por grupos ainda não está habilitada neste ambiente. Os direcionamentos de grupo existentes continuam funcionando.",
+    "featureDisabled": "Os limites de uso não estão ativados para esta implementação."
   },
   "m365": {
     "connections": {
@@ -4813,5 +4979,149 @@
     "failed": "Não foi possível compartilhar — nada foi criado.",
     "copyFailed": "Não foi possível copiar o link — selecione acima e copie manualmente.",
     "lastMessagesCountLabel": "Número de mensagens recentes a incluir"
+  },
+  "toolModes": {
+    "webSearch": "Pesquisa na web",
+    "codeInterpreter": "Interpretador de código",
+    "off": "Desligado",
+    "auto": "Automático",
+    "always": "Sempre",
+    "routingPrivacy": "Privacidade",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "A pesquisa Azure AI envia as consultas pelo Azure AI Foundry, que pode retê-las.",
+    "learnMore": "Saiba mais"
+  },
+  "agentAttach": {
+    "browserTitle": "Agentes",
+    "browserSubtitle": "Adicione agentes e conectores a este chat ou inicie um novo chat com um agente. A maioria funciona com qualquer modelo escolhido.",
+    "searchPlaceholder": "Pesquisar agentes e conectores…",
+    "loading": "Carregando agentes…",
+    "noMatches": "Nenhum resultado encontrado para sua pesquisa.",
+    "noAgents": "Nenhum agente disponível.",
+    "addToChat": "Adicionar a este chat",
+    "removeFromChat": "Remover deste chat",
+    "newChat": "Novo chat",
+    "attached": "Anexado",
+    "detach": "Desanexar",
+    "change": "Alterar",
+    "browse": "Navegar por agentes…",
+    "noAgent": "Nenhum agente anexado",
+    "close": "Fechar",
+    "kind": {
+      "rag": "Conhecimento",
+      "prompt": "Persona",
+      "m365": "Conhecimento (Microsoft 365)",
+      "org": "Conhecimento",
+      "foundry": "Agente Foundry",
+      "connector": "Conector"
+    },
+    "semantics": {
+      "your-model": "usa seu modelo",
+      "pinned-model": "modelo definido pelo administrador",
+      "own-model": "utiliza seu próprio modelo"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Sugestões da sua organização",
+    "searching": "Pesquisando na sua organização…",
+    "noMatches": "Nenhuma correspondência no diretório — você pode inserir o endereço manualmente"
+  },
+  "workflowsAdmin": {
+    "title": "Fluxos de trabalho",
+    "description": "Ative ou desative cada fluxo de trabalho para toda a organização. Um fluxo de trabalho desativado fica oculto nos menus e é recusado pelo servidor, mesmo para quem atenderia aos critérios.",
+    "layeredNote": "O flag conversationWorkflows do LaunchDarkly ainda controla a liberação: um fluxo de trabalho ativado aqui só estará acessível onde esse flag estiver ativado. Esta página não pode tornar visível nada que o flag oculte.",
+    "loading": "Carregando política de fluxos de trabalho…",
+    "loadError": "Não foi possível carregar a política de fluxos de trabalho.",
+    "policyUnavailable": "Não foi possível ler a política de fluxos de trabalho do armazenamento. Os alternadores ficam ocultos, em vez de mostrar valores padrão que podem não corresponder ao que é aplicado.",
+    "retry": "Tentar novamente",
+    "enableAll": "Ativar todos",
+    "disableAll": "Desativar todos",
+    "enabledLabel": "Ativado",
+    "disabledLabel": "Desativado",
+    "defaultOnHint": "Padrão quando não há política salva: ativado.",
+    "defaultOffHint": "Padrão quando não há política salva: desativado — um administrador precisa ativar manualmente.",
+    "grantsNote": "O Processamento de Grants é restrito, adicionalmente, aos usuários da MSF-USA do departamento de Programas com \"grants\" no título do cargo ou de Sistemas com \"inovação\" no título. Ativar aqui não muda essa regra.",
+    "unsaved": "Há alterações não salvas.",
+    "save": "Salvar",
+    "saving": "Salvando…",
+    "saveSuccess": "Política de fluxos de trabalho salva.",
+    "saveError": "Não foi possível salvar a política de fluxos de trabalho.",
+    "conflictError": "Outro administrador alterou a política antes. Ela foi recarregada — revise e salve novamente.",
+    "updatedByLine": "Última alteração por {by} em {at}.",
+    "neverSaved": "Nenhuma política foi salva ainda; os padrões acima se aplicam."
+  },
+  "viewAs": {
+    "title": "Visualizar como",
+    "description": "Teste o aplicativo, apenas para sua sessão, como alguém que atende ou não a uma condição normalmente definida pelo diretório ou administradores. Sua identidade nunca é alterada: tudo o que criar permanece seu e toda linha de auditoria ainda mostra seu nome.",
+    "activeTitle": "Visualizar como está ativo",
+    "inactiveTitle": "Visualizar como não está ativo",
+    "sections": {
+      "role": "Função de admin",
+      "region": "Região de dados",
+      "attributes": "Atributos do diretório",
+      "groups": "Membro de grupo",
+      "presets": "Predefinições"
+    },
+    "role": {
+      "global": "Administrador global (sua função real)",
+      "local": "Administrador local",
+      "none": "Usuário comum",
+      "localKeysLabel": "Chaves de agente delegadas",
+      "localKeysHint": "Chaves de agente canônicas separadas por vírgulas que este admin local pode editar. Deixe vazio para um admin local sem agentes delegados.",
+      "noneWarning": "Como usuário comum, todas as outras áreas de admin desaparecem. Esta página segue acessível e o banner na parte superior do app sempre oferece uma saída."
+    },
+    "region": {
+      "actual": "Atual ({region})",
+      "hint": "Redireciona suas solicitações — e tudo o que você enviar enquanto estiver ativo — para o armazenamento da outra região. Tem prioridade sobre o cookie ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Departamento",
+      "companyName": "Empresa",
+      "jobTitle": "Cargo",
+      "officeId": "Escritório",
+      "officeActual": "Escritório atual",
+      "officeNone": "Sem escritório",
+      "actualValue": "Atual: {value}",
+      "actualEmpty": "Atual: (vazio)",
+      "hint": "Deixe um campo em branco para manter seu valor atual. Esses campos alimentam as regras de concessão, limites de uso por atributo e regras de acesso."
+    },
+    "groups": {
+      "label": "IDs de grupo",
+      "placeholder": "Um ID de objeto de grupo Entra por linha",
+      "hint": "Substitui — não adiciona — sua associação real nesta sessão, permitindo testar tanto pertencendo quanto não pertencendo."
+    },
+    "presets": {
+      "grantsMember": "Membro da equipe de concessões",
+      "regularUser": "Usuário comum",
+      "localAdmin": "Administrador local, sem agentes",
+      "otherRegion": "Outra região",
+      "hint": "Os pré-definidos preenchem o formulário; nada é aplicado até você clicar em Aplicar."
+    },
+    "apply": "Aplicar e recarregar",
+    "applying": "Aplicando…",
+    "clear": "Sair do visualizar como",
+    "clearing": "Saindo…",
+    "reset": "Redefinir formulário",
+    "nothingToApply": "Defina pelo menos uma substituição para aplicar.",
+    "applyError": "Não foi possível aplicar o visualizar como: {error}",
+    "clearError": "Não foi possível limpar o visualizar como: {error}",
+    "loadError": "Não foi possível carregar o estado de visualizar como.",
+    "retry": "Tentar novamente",
+    "expiresNote": "O modo visualizar como dura até 8 horas ou até você sair.",
+    "banner": {
+      "label": "Visualizando como",
+      "adjust": "Ajustar",
+      "exit": "Sair",
+      "role": {
+        "local": "administrador local",
+        "none": "usuário comum"
+      },
+      "region": "região {region}",
+      "department": "departamento \"{value}\"",
+      "companyName": "empresa \"{value}\"",
+      "jobTitle": "cargo \"{value}\"",
+      "officeId": "escritório {value}",
+      "groups": "{count, plural, one {# grupo} other {# grupos}}"
+    }
   }
 }

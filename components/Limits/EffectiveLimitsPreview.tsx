@@ -9,6 +9,7 @@ import {
   MyLimit,
   useEffectiveLimitsPreview,
 } from '@/client/hooks/settings/useLimitsAdmin';
+import { useM365PeopleSuggest } from '@/client/hooks/useM365PeopleSuggest';
 
 import { LimitOverride } from '@/lib/services/limits/types';
 
@@ -19,6 +20,7 @@ import {
   ADMIN_MUTED,
 } from '@/components/Admin/adminClasses';
 import { LIMIT_GROUPS } from '@/components/Limits/limitGroups';
+import { EmailAutocompleteInput } from '@/components/UI/EmailAutocompleteInput';
 
 import { getLimitDefinition } from '@/config/limits';
 
@@ -48,6 +50,8 @@ export const EffectiveLimitsPreview: FC<EffectiveLimitsPreviewProps> = ({
   dirty,
 }) => {
   const t = useTranslations('limits');
+  const tPeople = useTranslations('peopleSuggest');
+  const peopleSuggest = useM365PeopleSuggest();
   const [input, setInput] = useState('');
   const [submitted, setSubmitted] = useState<string | null>(null);
   const { result, forbidden, isLoading, error } =
@@ -110,11 +114,12 @@ export const EffectiveLimitsPreview: FC<EffectiveLimitsPreviewProps> = ({
       </h3>
       <p className={`mb-2 ${ADMIN_MUTED}`}>{t('previewDescription')}</p>
       <div className="flex flex-wrap items-center gap-2">
-        <input
-          type="email"
+        <EmailAutocompleteInput
           className={`min-w-[220px] ${ADMIN_FIELD}`}
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={setInput}
+          suggest={peopleSuggest}
+          suggestionsLabel={tPeople('listLabel')}
           onKeyDown={(e) => {
             if (e.key === 'Enter') check();
           }}

@@ -16,7 +16,9 @@
     "coverage": "npm run coverage:node && npm run coverage:jsdom",
     "search:config": "npx ts-node --project tsconfig.scripts.json scripts/search/index.ts",
     "search:config-downtime": "npx ts-node --project tsconfig.scripts.json scripts/search/index.ts --allow-downtime",
-    "prepare": "husky"
+    "prepare": "husky",
+    "evals": "vitest --run --config ./vitest.config.evals.mts",
+    "evals:fresh": "EVAL_NO_CACHE=1 vitest --run --config ./vitest.config.evals.mts"
   },
   "dependencies": {
     "@anthropic-ai/foundry-sdk": "^0.2.0",
@@ -58,7 +60,7 @@
     "ffprobe-static": "^3.1.0",
     "fluent-ffmpeg": "^2.1.3",
     "he": "^1.2.0",
-    "html-to-docx": "^1.8.0",
+    "html-to-docx": "^1.1.2",
     "html2pdf.js": "^0.14.0",
     "isomorphic-dompurify": "^3.4.0",
     "jsdom": "^27.4.0",

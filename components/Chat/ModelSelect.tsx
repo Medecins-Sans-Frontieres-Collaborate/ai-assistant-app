@@ -21,6 +21,7 @@ import { useLocalRuntimeModels } from '@/client/hooks/useLocalRuntimeModels';
 
 import { isLocalModel } from '@/lib/services/models/localModels';
 
+import { isAgentShapedModelId } from '@/lib/utils/app/agentAttachment';
 import { shortSourceHash } from '@/lib/utils/app/agentId';
 import { modelIdToLocaleKey } from '@/lib/utils/app/locales';
 import {
@@ -30,7 +31,6 @@ import {
 } from '@/lib/utils/app/modelSeries';
 
 import { Conversation } from '@/types/chat';
-import { InterpreterMode } from '@/types/interpreterMode';
 import { LOCAL_RUNTIMES, LOCAL_RUNTIME_DEFAULTS } from '@/types/localRuntime';
 import {
   OpenAIModel,
@@ -61,7 +61,6 @@ import { ModelStatusBadge } from './ModelSelect/ModelStatusBadge';
 import { SHOW_RECOMMENDED_TAG } from './ModelSelect/showRecommendedTag';
 import { ModelSourceForm } from './ModelSources/ModelSourceForm';
 
-import { useChatInputStore } from '@/client/stores/chatInputStore';
 import {
   AgentSource,
   ModelSource,
@@ -108,14 +107,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({
   const { exploreBots, enableClaudeModels, enableBYOModels } = useFlags();
   const { selectedConversation, updateConversation, conversations } =
     useConversations();
-  const {
-    models,
-    defaultModelId,
-    setDefaultModelId,
-    setDefaultSearchMode,
-    defaultInterpreterMode,
-    setDefaultInterpreterMode,
-  } = useSettings();
+  const { models, defaultModelId, setDefaultModelId } = useSettings();
 
   // Feature flag: Control organization bots visibility via LaunchDarkly
   // Default to true if LaunchDarkly is not configured (for local development)
@@ -133,10 +125,12 @@ export const ModelSelect: FC<ModelSelectProps> = ({
 
   const selectedModelId = selectedConversation?.model?.id || defaultModelId;
 
-  // Check if the currently selected model is a custom/foundry agent
+  // Open on the Agents tab when an agent is selected — a legacy
+  // custom/foundry model id, or a decoupled attachment (conversation.bot).
   const isSelectedModelAgent =
     selectedModelId?.startsWith('custom-') ||
     selectedModelId?.startsWith('foundry-') ||
+    !!selectedConversation?.bot ||
     false;
 
   // Custom hooks for state management
@@ -506,15 +500,32 @@ export const ModelSelect: FC<ModelSelectProps> = ({
   const agentAvailable =
     modelConfig?.agentId !== undefined || selectedModel?.agentId !== undefined;
 
+  // Agents-tab selection: a decoupled attachment (capabilities tray) keeps
+  // the REAL model in selectedModelId, so the tab resolves its highlight
+  // from the attached bot instead; legacy coupled selections keep their
+  // agent-shaped model id and the exact objects they always got.
+  const attachedAgentModelId = selectedConversation?.bot
+    ? `org-${selectedConversation.bot}`
+    : selectedModelId &&
+        (selectedModelId.startsWith('foundry-') ||
+          selectedModelId.startsWith('custom-') ||
+          selectedModelId.startsWith('org-'))
+      ? selectedModelId
+      : undefined;
+  const agentsTabIsLegacySelection = attachedAgentModelId === selectedModelId;
+  const agentsTabSelectedModel = attachedAgentModelId
+    ? agentsTabIsLegacySelection
+      ? selectedModel
+      : availableModels.find((m) => m.id === attachedAgentModelId)
+    : undefined;
+  const agentsTabModelConfig = agentsTabIsLegacySelection ? modelConfig : null;
+  const agentsTabIsCustomAgent = agentsTabIsLegacySelection
+    ? isCustomAgent
+    : false;
+
   // Get current search mode from conversation (default to INTELLIGENT for privacy)
   const currentSearchMode =
     selectedConversation?.defaultSearchMode ?? SearchMode.INTELLIGENT;
-  const searchModeEnabled = currentSearchMode !== SearchMode.OFF;
-
-  // Interpreter mode: conversation override, else the settings default.
-  const currentInterpreterMode =
-    selectedConversation?.defaultInterpreterMode ?? defaultInterpreterMode;
-  const interpreterEnabled = currentInterpreterMode !== InterpreterMode.OFF;
 
   // For non-agent models, if AGENT mode is somehow set, display as INTELLIGENT in UI
   const displaySearchMode =
@@ -569,59 +580,91 @@ export const ModelSelect: FC<ModelSelectProps> = ({
       // Switch to details view on mobile when a model is selected
       setMobileView('details');
 
+      const orgAgentId = getOrganizationAgentIdFromModelId(model.id);
+      const foundryAgentId = isFoundryAgentId(model.id);
+      // Foundry-style entries genuinely replace the model (execution happens
+      // inside Foundry): dynamic foundry- ids, and static org- entries that
+      // carry an agentId. Everything else org- shaped is a knowledge/persona
+      // agent — an ATTACHMENT that leaves the conversation's model alone.
+      const isFoundryStyleAgent =
+        !!foundryAgentId || (!!orgAgentId && model.agentId !== undefined);
+      const isKnowledgeAgent = !!orgAgentId && !isFoundryStyleAgent;
+
       // Set as default model for future conversations — skipped when the
-      // picker is scoped to one conversation (see scopedToConversation), and
-      // for local models: they exist only while their runtime is detected, so
-      // a persisted local default would leave a fresh session pointing at a
-      // model that isn't in any list until the user re-runs detection.
-      if (!scopedToConversation && !isLocalModel(model)) {
+      // picker is scoped to one conversation (see scopedToConversation),
+      // for local models (they exist only while their runtime is detected,
+      // so a persisted local default would leave a fresh session pointing
+      // at a model that isn't in any list until re-detection), and for
+      // AGENTS: an agent is an attachment now, never the default model.
+      if (
+        !scopedToConversation &&
+        !isLocalModel(model) &&
+        !orgAgentId &&
+        !foundryAgentId
+      ) {
         console.log(
           `[ModelSelect] Setting default model to: ${model.id} (${model.name})`,
         );
         setDefaultModelId(model.id as OpenAIModelID);
       }
 
-      // Update conversation with selected model
-      // Initialize defaultSearchMode to INTELLIGENT (privacy-focused) if not already set
-      const updates: Partial<Conversation> = {
-        model: model,
-      };
+      const updates: Partial<Conversation> = {};
 
-      // Set bot ID for organization agents (enables RAG) or Foundry agents
-      const orgAgentId = getOrganizationAgentIdFromModelId(model.id);
-      const foundryAgentId = isFoundryAgentId(model.id);
-      if (orgAgentId) {
-        updates.bot = orgAgentId;
+      if (isKnowledgeAgent) {
+        // Attach semantics (capabilities tray parity): bot only, the
+        // conversation keeps whatever real model it has. A legacy fake
+        // agent-model on the conversation is left for detach/model-pick to
+        // resolve — attaching from here never creates a new one.
+        updates.bot = orgAgentId!;
         console.log(
-          `[ModelSelect] Setting bot to organization agent: ${orgAgentId}`,
+          `[ModelSelect] Attaching organization agent: ${orgAgentId}`,
         );
-      } else if (foundryAgentId) {
-        // Dynamic Foundry agents don't use bot ID — agent routing is via agentId
-        // Clear any previous bot setting
-        updates.bot = undefined;
-        console.log(
-          `[ModelSelect] Selected dynamic Foundry agent: ${model.id}`,
-        );
-      } else if (selectedConversation.bot) {
-        // Clear bot if switching away from an organization agent
-        updates.bot = undefined;
-        console.log(`[ModelSelect] Clearing bot (switched to non-org agent)`);
-      }
+      } else if (isFoundryStyleAgent) {
+        // Model swap with a remembered restore point, mirroring
+        // attachAgentUpdates: detach puts the user's real model back.
+        updates.model = model;
+        updates.bot = orgAgentId ?? undefined;
+        updates.agentPrevModelId = isAgentShapedModelId(
+          selectedConversation.model?.id,
+        )
+          ? selectedConversation.agentPrevModelId
+          : selectedConversation.model?.id;
+        updates.threadId = undefined;
+        console.log(`[ModelSelect] Selected Foundry agent: ${model.id}`);
+      } else {
+        updates.model = model;
+        if (
+          selectedConversation.bot &&
+          selectedConversation.model?.id === `org-${selectedConversation.bot}`
+        ) {
+          // Leaving a LEGACY agent selection (bot mirroring an org- model):
+          // picking a plain model still means "leave the agent". A decoupled
+          // attachment (bot beside a real model, set from the capabilities
+          // tray) deliberately survives model switches — detach is explicit.
+          updates.bot = undefined;
+          console.log(`[ModelSelect] Clearing bot (switched to non-org agent)`);
+        }
+        // Any switch onto a plain model invalidates a remembered Foundry
+        // restore point — the user just chose their model directly.
+        if (selectedConversation.agentPrevModelId) {
+          updates.agentPrevModelId = undefined;
+        }
 
-      // Check if the new model supports agents (check both static config and model object for org agents)
-      const newModelConfig = OpenAIModels[model.id as OpenAIModelID];
-      const newModelHasAgent =
-        newModelConfig?.agentId !== undefined || model.agentId !== undefined;
+        // Check if the new model supports agents (static config or model object)
+        const newModelConfig = OpenAIModels[model.id as OpenAIModelID];
+        const newModelHasAgent =
+          newModelConfig?.agentId !== undefined || model.agentId !== undefined;
 
-      // If switching to a model without agent support and current mode is AGENT, reset to INTELLIGENT
-      if (
-        !newModelHasAgent &&
-        selectedConversation.defaultSearchMode === SearchMode.AGENT
-      ) {
-        updates.defaultSearchMode = SearchMode.INTELLIGENT;
-        console.log(
-          `[ModelSelect] Resetting AGENT mode to INTELLIGENT for non-agent model`,
-        );
+        // If switching to a model without agent support and current mode is AGENT, reset to INTELLIGENT
+        if (
+          !newModelHasAgent &&
+          selectedConversation.defaultSearchMode === SearchMode.AGENT
+        ) {
+          updates.defaultSearchMode = SearchMode.INTELLIGENT;
+          console.log(
+            `[ModelSelect] Resetting AGENT mode to INTELLIGENT for non-agent model`,
+          );
+        }
       }
 
       // Only set defaultSearchMode if it's not already set on the conversation
@@ -633,7 +676,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({
       }
 
       console.log(
-        `[ModelSelect] Updating conversation ${selectedConversation.id} with model: ${model.id}`,
+        `[ModelSelect] Updating conversation ${selectedConversation.id} with selection: ${model.id}`,
       );
       updateConversation(selectedConversation.id, updates);
 
@@ -649,80 +692,8 @@ export const ModelSelect: FC<ModelSelectProps> = ({
     ],
   );
 
-  const handleToggleInterpreterMode = useCallback(() => {
-    if (!selectedConversation) return;
-
-    const newMode = interpreterEnabled
-      ? InterpreterMode.OFF
-      : InterpreterMode.INTELLIGENT;
-
-    console.log(
-      `[ModelSelect] Toggling Interpreter Mode: ${currentInterpreterMode} → ${newMode}`,
-    );
-
-    // Update current conversation + live composer state
-    updateConversation(selectedConversation.id, {
-      defaultInterpreterMode: newMode,
-    });
-    useChatInputStore.getState().setInterpreterMode(newMode);
-
-    // Set as default interpreter mode for future conversations
-    setDefaultInterpreterMode(newMode);
-  }, [
-    selectedConversation,
-    interpreterEnabled,
-    currentInterpreterMode,
-    updateConversation,
-    setDefaultInterpreterMode,
-  ]);
-
-  const handleToggleSearchMode = useCallback(() => {
-    if (!selectedConversation) return;
-
-    const newMode = searchModeEnabled ? SearchMode.OFF : SearchMode.INTELLIGENT;
-
-    console.log(
-      `[ModelSelect] Toggling Search Mode: ${currentSearchMode} → ${newMode}`,
-    );
-
-    // Update current conversation
-    updateConversation(selectedConversation.id, {
-      defaultSearchMode: newMode,
-    });
-
-    // Set as default search mode for future conversations
-    setDefaultSearchMode(newMode);
-  }, [
-    selectedConversation,
-    searchModeEnabled,
-    currentSearchMode,
-    updateConversation,
-    setDefaultSearchMode,
-  ]);
-
-  const handleSetSearchMode = useCallback(
-    (mode: SearchMode) => {
-      if (!selectedConversation) return;
-
-      console.log(
-        `[ModelSelect] Setting Search Mode: ${currentSearchMode} → ${mode}`,
-      );
-
-      // Update current conversation
-      updateConversation(selectedConversation.id, {
-        defaultSearchMode: mode,
-      });
-
-      // Set as default search mode for future conversations
-      setDefaultSearchMode(mode);
-    },
-    [
-      selectedConversation,
-      currentSearchMode,
-      updateConversation,
-      setDefaultSearchMode,
-    ],
-  );
+  // Search-mode and interpreter defaults are edited from the composer's
+  // capabilities tray (ToolModeControls) — the picker only picks models.
 
   const handleSaveAgentSource = useCallback(
     (source: AgentSource) => {
@@ -1474,16 +1445,10 @@ export const ModelSelect: FC<ModelSelectProps> = ({
                     )?.name
                   }
                   isCustomAgent={isCustomAgent}
-                  searchModeEnabled={searchModeEnabled}
                   displaySearchMode={displaySearchMode}
-                  interpreterEnabled={interpreterEnabled}
-                  handleToggleInterpreterMode={handleToggleInterpreterMode}
-                  agentAvailable={agentAvailable}
                   showModelAdvanced={showModelAdvanced}
                   selectedConversation={selectedConversation}
                   setMobileView={setMobileView}
-                  handleToggleSearchMode={handleToggleSearchMode}
-                  handleSetSearchMode={handleSetSearchMode}
                   setShowModelAdvanced={setShowModelAdvanced}
                   updateConversation={updateConversation}
                 />
@@ -1507,7 +1472,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({
           suppressedOrgAgentIds={suppressedOrgAgentIds}
           regionalPath={regionalPath}
           officePaths={officePaths}
-          selectedModelId={selectedModelId}
+          selectedModelId={attachedAgentModelId ?? null}
           isLoadingFoundryAgents={isLoadingFoundryAgents}
           onRefreshAgents={() => refetchFoundryAgents()}
           agentSources={customAgentSources}
@@ -1521,20 +1486,14 @@ export const ModelSelect: FC<ModelSelectProps> = ({
           onHideAgent={requestHide}
           onUnhideAgent={unhideModel}
           // Props for details panel
-          selectedModel={selectedModel}
-          modelConfig={modelConfig}
-          isCustomAgent={isCustomAgent}
-          searchModeEnabled={searchModeEnabled}
+          selectedModel={agentsTabSelectedModel}
+          modelConfig={agentsTabModelConfig}
+          isCustomAgent={agentsTabIsCustomAgent}
           displaySearchMode={displaySearchMode}
-          interpreterEnabled={interpreterEnabled}
-          handleToggleInterpreterMode={handleToggleInterpreterMode}
-          agentAvailable={agentAvailable}
           showModelAdvanced={showModelAdvanced}
           selectedConversation={selectedConversation}
           mobileView={mobileView}
           setMobileView={setMobileView}
-          handleToggleSearchMode={handleToggleSearchMode}
-          handleSetSearchMode={handleSetSearchMode}
           setShowModelAdvanced={setShowModelAdvanced}
           updateConversation={updateConversation}
         />

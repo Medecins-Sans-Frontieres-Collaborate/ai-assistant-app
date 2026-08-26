@@ -867,7 +867,12 @@
       "showFewer": "הצג פחות"
     },
     "retryWithModel": "נסה עם {model}",
-    "createTodoTasks": "צור משימות To Do מהתגובה הזו"
+    "createTodoTasks": "צור משימות To Do מהתגובה הזו",
+    "attachedFileExpired": "קובץ מצורף אינו זמין יותר — קבצים שהועלו נשמרים לזמן מוגבל. הקובץ הוסר מהשיחה. נסו שוב בלעדיו, או העלו את הקובץ מחדש.",
+    "repeatedFailureNotice": "זה נכשל שוב ושוב — ייתכן שהשיחה התושחתה. בדרך כלל התחלת שיחה חדשה פותרת את הבעיה.",
+    "startNewConversation": "התחל שיחה חדשה",
+    "downloadDebugInfo": "הורד מידע לאיתור תקלות",
+    "includeMessageText": "כלול את תוכן ההודעה"
   },
   "sidebar": {
     "collapseSidebar": "כיווץ סרגל צד",
@@ -876,7 +881,9 @@
     "quickActions": "פעולות מהירות",
     "expandFolder": "הרחב תיקיה {name}",
     "collapseFolder": "כווץ תיקיה {name}",
-    "folderOptions": "אפשרויות עבור {name}"
+    "folderOptions": "אפשרויות עבור {name}",
+    "agentsEntry": "סוכנים",
+    "agentsTitle": "עיינו בסוכנים והתחילו שיחה עם אחד"
   },
   "prompts": {
     "buildReusablePrompts": "בניית הנחיות לשימוש חוזר בעזרת AI",
@@ -2667,6 +2674,10 @@
       "map": {
         "label": "מפה",
         "description": "הפוך כל נתון למיקום על גבי מפה"
+      },
+      "grants": {
+        "label": "עיבוד מענקים",
+        "description": "פיוס וחילוץ נתונים מובנים מתיאורי מענקים"
       }
     },
     "chooser": {
@@ -2676,7 +2687,8 @@
       "newTranslation": "תרגום חדש",
       "newDocument": "מסמך חדש",
       "newDataAnalysis": "ניתוח נתונים חדש",
-      "newMap": "מפה חדשה"
+      "newMap": "מפה חדשה",
+      "newGrants": "עיבוד מענקים חדש"
     },
     "translation": {
       "chooseLanguage": "שפת יעד",
@@ -3293,7 +3305,8 @@
       "unknownType": "שיחה זו משתמשת בתהליך עבודה שגרסה זו אינה מזהה. היסטוריית השיחה מופיעה למטה.",
       "untitled": "שיחה חדשה",
       "toggleMenu": "הצג/הסתר תפריט",
-      "model": "מודל לתהליך עבודה זה"
+      "model": "מודל לתהליך עבודה זה",
+      "disabledByAdmin": "תהליך עבודה זה הושבת על ידי מנהל. היסטוריית השיחה מוצגת למטה."
     },
     "tabs": {
       "label": "מצב שיחה",
@@ -4047,7 +4060,153 @@
     "conflictTakeTheirs": "קח את שלהם",
     "conflictNoFieldDiff": "הערכים זהים — רק גרסת הרשומה השתנתה.",
     "conflictRecordGone": "הרשומה הזאת נמחקה (או שלא ניתנה לטעינה חוזרת). העתק כל מה שדרוש מהטופס וטען מחדש.",
-    "groupsFlagOff": "טרגוט לקבוצות לא הופעל עדיין בסביבה זו. קבוצה שהוגדרה תמשיך לפעול."
+    "groupsFlagOff": "טרגוט לקבוצות לא הופעל עדיין בסביבה זו. קבוצה שהוגדרה תמשיך לפעול.",
+    "catalogOauth": {
+      "title": "אפליקציות OAuth מובנות של מחברים פנימיים",
+      "description": "אפליקציות OAuth ברמת הפריסה למחברים המובנים (GitHub, Asana, …). רשומה שנשמרת כאן גוברת על משתני הסביבה MCP_OAUTH_*. הסרה תחזיר לשימוש במשתני הסביבה. סודות הלקוח מוצפנים במנוחה ולעולם לא יוצגו שוב.",
+      "badgeAdmin": "הוגדר כאן",
+      "badgeEnv": "ממשתני סביבה",
+      "badgeNone": "לא הוגדר",
+      "badgeDcr": "רישום עצמי",
+      "badgeDcrHint": "ספק זה יכול לרשום לקוח OAuth באופן אוטומטי, ולכן הוא פועל גם בלי אפליקציה שהוגדרה כאן.",
+      "clientIdLabel": "OAuth client ID",
+      "clientSecretLabel": "OAuth client secret",
+      "secretStoredPlaceholder": "נשמר — הזינו להחלפה, השאירו ריק כדי לשמור",
+      "secretNewPlaceholder": "הדביקו את סוד הלקוח",
+      "save": "שמירה",
+      "remove": "הסרה",
+      "removeToEnv": "הסרה (מעבר למשתני סביבה)",
+      "saved": "האפליקציה {name} OAuth נשמרה",
+      "removed": "האפליקציה {name} OAuth הוסרה",
+      "saveError": "שמירת אפליקציית ה-OAuth נכשלה. נסו שוב.",
+      "conflict": "הרשומה השתנתה במקום אחר — נטען מחדש, נא לנסות שוב.",
+      "storageUnavailable": "אחסון הניהול לא נגיש; לא ניתן להציג רשומות קיימות. שמירה מושבתת עד לשחזור הגישה.",
+      "sealingUnavailable": "הצפנת הסודות אינה מוגדרת בפריסה זו (חסר AUTH_SECRET) — לא ניתן לשמור סודות לקוח.",
+      "updatedBy": "עודכן על ידי {by} בתאריך {at}"
+    },
+    "orgAgentOverrideTitle": "עקוף סוכן מובנה",
+    "orgAgentOverrideAction": "עקוף",
+    "orgAgentBuiltinBadge": "מובנה",
+    "orgAgentBuiltinHint": "מוגדר בהגדרות הפריסה. ניתן לערוך כאן את כלל הגישה שלו; עקוף כדי לשנות הגדרה זו מבלי לבצע פריסה.",
+    "m365AgentIndexProgress": "מעדכן אינדקס עבור {done} מתוך {total} {total, plural, one {מסמך} other {מסמכים}}…",
+    "m365AgentIndexInterrupted": "העדכון לאינדקס הופסק ב-{done} מתוך {total} — יש להמשיך כדי להמשיך.",
+    "m365AgentIndexStartedBy": "התחיל על ידי {name}",
+    "m365AgentIndexResume": "המשך",
+    "m365AgentIndexResumeHint": "המשך יצירת אינדקס מהמקום בו נעצר, באמצעות הגישה שלך ל-Microsoft 365. השאר את הלשונית הזו פתוחה.",
+    "m365AgentIndexCancel": "ביטול",
+    "m365AgentIndexCancelled": "העדכון לאינדקס בוטל — מסמכים שכבר עובדו ימשיכו להופיע בחיפוש.",
+    "m365AgentIndexJobFailed": "העדכון לאינדקס נעצר: {error}",
+    "m365AgentIndexDone": "העדכון לאינדקס הסתיים: {indexed} עודכנו, {failed} נכשלו, {noText} ללא טקסט.",
+    "m365AgentDocCounts": "{indexed, plural, one {# מסמך עודכן} other {# מסמכים עודכנו}} · {failed} נכשלו · {noText} ללא טקסט · {needsPreparation} דורשים הכנה · {skipped} דולגו",
+    "m365CapDocuments": "מסמכים: {count} / {max}",
+    "m365CapBytes": "{bytes} מתוך {max}",
+    "m365CapOverDocuments": "עברתם את הגבלת {max} מסמכים. בטלו סימון לתת-תיקיות, סננו לפי סוג קובץ, או הסירו מקורות — רק קבצים שממש יעודכנו נספרים.",
+    "m365CapOverBytes": "עברתם את מגבלת הגודל {max}. הסירו תת-תיקיות או קבצים גדולים.",
+    "m365PlanScanning": "סורק…",
+    "m365PlanRefreshing": "מעדכן…",
+    "m365PlanFailed": "לא ניתן היה לסרוק את המקורות באמצעות החשבון שלך ב-Microsoft 365.",
+    "m365PlanMissing": "לא נמצא או שאין גישה",
+    "m365PlanIndexable": "{count, plural, one {# קובץ יעודכן} other {# קבצים יעודכנו}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# דורש הכנה} other {# דורשים הכנה}}",
+    "m365PlanSkipped": "{count} דולגו",
+    "m365PlanShowDetails": "פרטים",
+    "m365PlanHideDetails": "הסתר פרטים",
+    "m365PlanTruncated": "תיקיה זו גדולה מדי לסריקה מלאה — רק 1,000 פריטים ראשונים הוצגו. בחרו תת-תיקיה במקום.",
+    "m365PlanRecursive": "הכלל תת-תיקיות",
+    "m365PlanExtensionsLabel": "סוגי קבצים בלבד:",
+    "m365PlanExtensionsPlaceholder": "לדוג' pdf, docx",
+    "m365PlanSubfolders": "תת-תיקיות",
+    "m365PlanFolderCount": "{count, plural, one {# קובץ} other {# קבצים}}",
+    "m365PlanGroupIndexable": "יועלה לאינדקס",
+    "m365PlanGroupNeedsPreparation": "דורש הכנה",
+    "m365PlanGroupSkipped": "דולג",
+    "m365PlanPreparationHint": "תמונה/אודיו/וידאו — עדיין לא באינדקס",
+    "m365PlanMoreRows": "…ועוד {count}",
+    "m365ItemStatus": {
+      "pending": "ממתין",
+      "indexed": "באינדקס",
+      "failed": "נכשל",
+      "noText": "לא הופק טקסט",
+      "missing": "חסר"
+    },
+    "m365SkipReason": {
+      "unsupported": "סוג לא נתמך",
+      "tooLarge": "מעל 25 מגה-בייט",
+      "disallowedType": "סוג חסום (הרצה/ארכיון)",
+      "malware": "סומן על ידי Microsoft כנגוע",
+      "zeroBytes": "קובץ ריק",
+      "excluded": "הוחרג",
+      "typeFilter": "לא בסנן סוגי קבצים"
+    },
+    "localAdminGroup": {
+      "agents": "סוכנים",
+      "promptAgents": "סוכני Prompt",
+      "m365Agents": "סוכני Microsoft 365",
+      "orgAgents": "סוכני ידע",
+      "guides": "מדריכים",
+      "connectors": "מחברים",
+      "datasets": "מאגרי נתוני מפות",
+      "unknown": "הוקצה אך לא נמצא"
+    },
+    "localAdminGroupUnavailable": "הרשימה אינה זמינה זמנית — ההקצאות הקיימות נשמרות.",
+    "localAdminBuiltIn": "מובנה",
+    "localAdminSummary": "{count, plural, one {הקצאה אחת} other {# הקצאות}}: {names}",
+    "localAdminSummaryMore": "{names} ועוד {more}",
+    "localAdminNoDelegations": "אין הקצאות עדיין — אדמין מקומי ללא סוכנים יוכל לראות רק את אזור הניהול.",
+    "localAdminSelectedCount": "נבחרו {selected} מתוך {total}",
+    "localAdminCopyFrom": "העתקה מ",
+    "localAdminClearAll": "ניקוי הכל",
+    "localAdminSelectGroup": "בחר הכל",
+    "localAdminClearGroup": "נקה",
+    "localAdminSearchPlaceholder": "חפש סוכנים, מדריכים, מחברים…",
+    "localAdminDuplicateEmail": "האימייל הזה כבר קיים ברשימה — יש לאחד את שני הרשומות.",
+    "localAdminExpand": "הצג הקצאות",
+    "localAdminCollapse": "הסתר הקצאות",
+    "localAdminDiscard": "בטל שינויים",
+    "m365AgentRefresh": "רענון",
+    "m365AgentRefreshHint": "לחץ לאסוף קבצים שנוספו, שונו או הוסרו מאז הריצה האחרונה — קבצים ללא שינוי לא יורדו שוב. יש להשאיר את הלשונית הזו פתוחה.",
+    "m365AgentReindexAll": "אינדוקס מחדש לכל",
+    "m365AgentRefreshProgress": "מרענן — {done} מתוך {total} {total, plural, one {מסמך} other {מסמכים}} השתנו…",
+    "m365AgentRefreshDone": "הרענון הסתיים: {added} נוספו, {modified} עודכנו, {removed} הוסרו, {failed} נכשלו.",
+    "m365ChangesChecking": "בודק שינויים במיקרוסופט 365 מאז האינדוקס האחרון…",
+    "m365ChangesFailed": "לא ניתן לבדוק שינויים עם חשבון Microsoft 365 שלך.",
+    "m365ChangesNeverIndexed": "עדיין לא עבר אינדוקס — יש להפעיל אינדוקס לאחר שמירה.",
+    "m365ChangesFound": "{count, plural, one {שינוי אחד} other {# שינויים}} מאז האינדוקס האחרון: {added} נוספו, {modified} עודכנו, {removed} הוסרו.",
+    "m365ChangesNone": "אין שינויים מאז האינדוקס האחרון ({date}).",
+    "m365PrepareButton": "הכנה",
+    "m365PrepareOcrButton": "הכנה (OCR)",
+    "m365PrepareSaveFirst": "יש לשמור את הסוכן כדי להכין",
+    "m365PrepareHintImage": "תמונה — קריאה אחת ל-Vision",
+    "m365PrepareHintMedia": "~{minutes} דקות אודיו לפריטה",
+    "m365PrepareHintOcr": "אין שכבת טקסט — OCR דרך Vision, עד 30 עמודים",
+    "m365PreparePreparing": "מתבצעת הכנה…",
+    "m365PreparePending": "בתהליך תמלול…",
+    "m365PreparedNote": "מוכן · {kind}",
+    "m365PreparedKind": {
+      "image": "תיאור תמונה",
+      "audio": "תמלול",
+      "video": "תמלול",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "{name} הוכן ({chars} תווים). יש להריץ רענון כדי לאנדקס.",
+    "m365PrepareStarted": "החלה תמלול של {name} ברקע — יש להשאיר את הלשונית פתוחה.",
+    "m365PrepareFailed": "לא ניתן להכין את {name}: {error}",
+    "m365PrepareFailedGeneric": "ההכנה נכשלה.",
+    "canonicalKeyLabel": "מפתח",
+    "copyKey": "העתק מפתח",
+    "agentKeySearchPlaceholder": "חפש סוכנים, מדריכים, מחברים… או הדבק מפתח",
+    "agentKeyAddCustom": "הוסף \"{key}\" כפי שהוזן",
+    "agentKeyRemove": "הסר את {name}",
+    "hideAgent": "הסתר",
+    "unhideAgent": "הצג",
+    "hideAgentHint": "הסתר את הסוכן הזה מרשימת הניהול שלך. משפיע רק על התצוגה שלך — משתמשים ומנהלים אחרים לא יושפעו.",
+    "unhideAgentHint": "הצג שוב את הסוכן הזה ברשימת הניהול שלך.",
+    "hiddenBadge": "מוסתר",
+    "hiddenAgentsCount": "{count, plural, one {סוכן מוסתר אחד} other {# סוכנים מוסתרים}}",
+    "hiddenAgentsShowing": "מציג {count, plural, one {סוכן מוסתר אחד} other {# סוכנים מוסתרים}}",
+    "hiddenAgentsShow": "הצג",
+    "hiddenAgentsHide": "הסתר שוב",
+    "allAgentsHidden": "כל הסוכנים כאן מוסתרים מהתצוגה שלך — השתמש ב'הצג' כדי לחשוף אותם."
   },
   "localModels": {
     "title": "מודלים מקומיים",
@@ -4248,9 +4407,15 @@
       "connectors": "מחברי הארגון ומי יכול להשתמש בהם.",
       "guides": "מדריכי סגנון, מינוחים וציות.",
       "mapDatasets": "סטי נתונים מוכנים זמינים לתהליך המפות.",
-      "localAdmins": "העבר עריכת כללי גישה לאחרים."
+      "localAdmins": "העבר עריכת כללי גישה לאחרים.",
+      "workflows": "הפעל או השבת תהליכי עבודה בשיחות עבור כולם.",
+      "viewAs": "בדוק את האפליקציה כמי שעומד — או לא עומד — בתנאי מסוים."
     },
-    "openSettings": "פתח הגדרות"
+    "openSettings": "פתח הגדרות",
+    "area": {
+      "workflows": "תהליכי עבודה",
+      "viewAs": "הצג כ"
+    }
   },
   "limits": {
     "title": "מגבלות שימוש",
@@ -4452,7 +4617,8 @@
     "groupSearchNoResults": "לא נמצאו קבוצות בשם הזה.",
     "groupSearchError": "החיפוש אחר קבוצה נכשל. ניתן להדביק מזהה קבוצה למטה.",
     "groupSearchHint": "יש להקליד לפחות 2 תווים לחיפוש קבוצות הארגון שלך, או להדביק ישירות מזהה קבוצה. ההגדרה תחול על חברי הקבוצה ב-Microsoft Entra.",
-    "groupsFlagOff": "הגדרה לפי קבוצה אינה מופעלת עדיין בסביבה זו. הגדרות קבוצות קיימות ימשיכו לעבוד."
+    "groupsFlagOff": "הגדרה לפי קבוצה אינה מופעלת עדיין בסביבה זו. הגדרות קבוצות קיימות ימשיכו לעבוד.",
+    "featureDisabled": "הגבלות שימוש אינן מופעלות בפריסה זו."
   },
   "m365": {
     "connections": {
@@ -4813,5 +4979,149 @@
     "failed": "לא ניתן היה לשתף — לא נוצר דבר.",
     "copyFailed": "לא ניתן להעתיק את הקישור — נא לבחור אותו למעלה ולהעתיק ידנית.",
     "lastMessagesCountLabel": "מספר ההודעות האחרונות לכלול"
+  },
+  "toolModes": {
+    "webSearch": "חיפוש באינטרנט",
+    "codeInterpreter": "מתרגם קוד",
+    "off": "כבוי",
+    "auto": "אוטומטי",
+    "always": "תמיד",
+    "routingPrivacy": "פרטיות",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "חיפוש Azure AI שולח שאילתות דרך Azure AI Foundry, אשר עשוי לשמור אותן.",
+    "learnMore": "למידע נוסף"
+  },
+  "agentAttach": {
+    "browserTitle": "סוכנים",
+    "browserSubtitle": "הוסיפו סוכנים ומחברים לשיחה זו, או התחילו שיחה חדשה עם סוכן. רובם עובדים עם כל מודל שבחרתם.",
+    "searchPlaceholder": "חפשו סוכנים ומחברים…",
+    "loading": "טוען סוכנים…",
+    "noMatches": "אין תוצאות התואמות לחיפוש שלכם.",
+    "noAgents": "אין סוכנים זמינים.",
+    "addToChat": "הוספה לשיחה",
+    "removeFromChat": "הסרה מהשיחה",
+    "newChat": "שיחה חדשה",
+    "attached": "מצורף",
+    "detach": "הסרה",
+    "change": "שינוי",
+    "browse": "עיינו בסוכנים…",
+    "noAgent": "לא מצורף סוכן",
+    "close": "סגירה",
+    "kind": {
+      "rag": "ידע",
+      "prompt": "פרסונה",
+      "m365": "ידע (Microsoft 365)",
+      "org": "ידע",
+      "foundry": "סוכן Foundry",
+      "connector": "מחבר"
+    },
+    "semantics": {
+      "your-model": "משתמש במודל שלך",
+      "pinned-model": "מודל שנקבע על ידי מנהל",
+      "own-model": "פועל על המודל הפרטי שלו"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "הצעות מהארגון שלך",
+    "searching": "מחפש בארגון שלך…",
+    "noMatches": "אין התאמות בספריה — אפשר להכניס את הכתובת ידנית"
+  },
+  "workflowsAdmin": {
+    "title": "תהליכי עבודה",
+    "description": "אפשר או השבת כל תהליך עבודה לכלל הארגון. תהליך עבודה מושבת מוסתר מהתפריטים ומסורב על ידי השרת, גם למי שבאופן רגיל היה זכאי אליו.",
+    "layeredNote": "הדגל conversationWorkflows ב-LaunchDarkly עדיין שולט בפריסה: תהליך עבודה שמופעל כאן נגיש רק כאשר הדגל פעיל. עמוד זה לא יכול להציג משהו שהדגל מסתיר.",
+    "loading": "טוען מדיניות תהליך עבודה…",
+    "loadError": "לא ניתן היה לטעון את מדיניות תהליך העבודה.",
+    "policyUnavailable": "לא ניתן לקרוא את מדיניות תהליך העבודה מהאחסון. המתגים מוסתרים במקום להופיע עם ערכים ברירת מחדל שאולי לא תואמים את הנאכף בפועל.",
+    "retry": "נסה שוב",
+    "enableAll": "הפעל הכל",
+    "disableAll": "השבת הכל",
+    "enabledLabel": "פעיל",
+    "disabledLabel": "מושבת",
+    "defaultOnHint": "ברירת מחדל כאשר אין מדיניות שמורה: פעיל.",
+    "defaultOffHint": "ברירת מחדל כאשר אין מדיניות שמורה: מושבת — מנהל חייב להפעיל אותו במפורש.",
+    "grantsNote": "עיבוד מענקים מוגבל בנוסף למשתמשי MSF-USA במחלקת התכניות שתפקידם כולל \"grants\", או במחלקת מערכות עם \"innovation\" בתפקידם. הפעלה כאן לא משנה כלל זה.",
+    "unsaved": "יש לך שינויים שלא נשמרו.",
+    "save": "שמירה",
+    "saving": "שומר…",
+    "saveSuccess": "מדיניות תהליך העבודה נשמרה.",
+    "saveError": "לא ניתן היה לשמור את מדיניות תהליך העבודה.",
+    "conflictError": "מנהל אחר שינה את המדיניות תחילה. המדיניות נטענה מחדש — נא לבדוק ולשמור שוב.",
+    "updatedByLine": "נשמר לאחרונה על ידי {by} בתאריך {at}.",
+    "neverSaved": "טרם נשמרה מדיניות; חלים הערכים שבברירת המחדל למעלה."
+  },
+  "viewAs": {
+    "title": "הצג כ",
+    "description": "בדוק את האפליקציה, עבור הסשן הנוכחי שלך בלבד, כמי שעומד או לא עומד בתנאי שנקבע בדרך כלל על ידי הספריה או המנהלים. הזהות שלך לא משתנה: כל מה שתיצור יישאר על שמך וכל שורת ביקורת תציין את שמך.",
+    "activeTitle": "הצג-כ פעיל",
+    "inactiveTitle": "הצג-כ אינו פעיל",
+    "sections": {
+      "role": "תפקיד מנהל",
+      "region": "אזור נתונים",
+      "attributes": "תכונות ספריה",
+      "groups": "חברות בקבוצות",
+      "presets": "שימוש מקדים"
+    },
+    "role": {
+      "global": "מנהל גלובלי (תפקידך בפועל)",
+      "local": "מנהל מקומי",
+      "none": "משתמש רגיל",
+      "localKeysLabel": "מפתחות סוכן מואצלים",
+      "localKeysHint": "מפתחות סוכן קנוניים מופרדים בפסיקים שהמנהל המקומי יכול לערוך. השאר ריק למנהל מקומי ללא סוכנים מואצלים.",
+      "noneWarning": "כמשתמש רגיל כל יתר אזורי הניהול יוסתרו. דף זה יישאר נגיש, ותמיד תוצג בראש האפליקציה דרך יציאה."
+    },
+    "region": {
+      "actual": "אמיתי ({region})",
+      "hint": "מנתב את הבקשות שלך — וכל דבר שתעלה בזמן שהוא פעיל — לאחסון של האזור האחר. גובר על עוגיית ‎?regionOverride=."
+    },
+    "attributes": {
+      "department": "מחלקה",
+      "companyName": "חברה",
+      "jobTitle": "תפקיד",
+      "officeId": "משרד",
+      "officeActual": "משרד בפועל",
+      "officeNone": "ללא משרד",
+      "actualValue": "בפועל: {value}",
+      "actualEmpty": "בפועל: (ריק)",
+      "hint": "השאר את השדה ריק כדי לשמור את הערך הנוכחי שלך. ערכים אלו משפיעים על כללי מענקים, הגבלות שימוש לפי מאפיין וחוקי גישה."
+    },
+    "groups": {
+      "label": "מזהי קבוצה",
+      "placeholder": "מזהה אובייקט של קבוצת Entra בכל שורה",
+      "hint": "מחליף — לא מרחיב — את החברות האמיתית שלך במהלך סשן זה, כך שתוכל לבדוק שייכות או אי שייכות."
+    },
+    "presets": {
+      "grantsMember": "חבר צוות מענקים",
+      "regularUser": "משתמש רגיל",
+      "localAdmin": "מנהל מקומי, ללא סוכנים",
+      "otherRegion": "אזור אחר",
+      "hint": "הגדרות מילוי טופס אוטומטיות; דבר לא חל עד שלוחצים על החל."
+    },
+    "apply": "החל וטען מחדש",
+    "applying": "מוחל…",
+    "clear": "יציאה מתצוגת כמשתמש אחר",
+    "clearing": "יוצא…",
+    "reset": "איפוס טופס",
+    "nothingToApply": "יש להגדיר לפחות שינוי אחד כדי להחיל.",
+    "applyError": "לא ניתן להחיל תצוגה כמשתמש אחר: {error}",
+    "clearError": "לא ניתן לצאת מתצוגת כמשתמש אחר: {error}",
+    "loadError": "לא ניתן היה לטעון את מצב תצוגה כמשתמש אחר.",
+    "retry": "נסה מחדש",
+    "expiresNote": "תצוגה כמשתמש אחר פעילה עד 8 שעות, או עד היציאה.",
+    "banner": {
+      "label": "מציג כ",
+      "adjust": "התאם",
+      "exit": "יציאה",
+      "role": {
+        "local": "מנהל מקומי",
+        "none": "משתמש רגיל"
+      },
+      "region": "אזור {region}",
+      "department": "מחלקה \"{value}\"",
+      "companyName": "חברה \"{value}\"",
+      "jobTitle": "תפקיד \"{value}\"",
+      "officeId": "משרד {value}",
+      "groups": "{count, plural, one {# קבוצה} other {# קבוצות}}"
+    }
   }
 }

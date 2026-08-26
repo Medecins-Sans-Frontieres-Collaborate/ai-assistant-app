@@ -9,9 +9,9 @@ import { isGlobalAdmin } from '@/lib/services/agentAccess/adminAuth';
  * rules there is no per-key delegation: a limits policy is a single org-wide
  * document, so a local admin has no meaningful subset to own.
  *
- * 404 while the feature is disabled. CAS: If-Match update / absent If-Match
- * create-only, 412 → 409. GET reads storage DIRECTLY rather than the ≤60s
- * stale service snapshot, so the echoed ETag is current for editing.
+ * CAS: If-Match update / absent If-Match create-only, 412 → 409. GET reads
+ * storage DIRECTLY rather than the ≤60s stale service snapshot, so the echoed
+ * ETag is current for editing.
  */
 // Only an exact quoted strong ETag may reach a storage CAS condition — see
 // STRONG_ETAG_REGEX in adminRouteHelpers for the full rationale.
@@ -31,7 +31,6 @@ import {
   errorResponse,
   forbiddenResponse,
   handleApiError,
-  notFoundResponse,
   successResponse,
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
@@ -138,14 +137,12 @@ function isValidTimezone(timezone: string): boolean {
 }
 
 export async function GET() {
-  // Feature gate BEFORE auth: a disabled deployment must answer 404 to
-  // everyone, exactly like a route that does not exist.
-  if (!LimitsService.getInstance().isEnabled())
-    return notFoundResponse('Resource');
-
+  // No feature gate here: the `usageLimits` LaunchDarkly flag is CLIENT-side
+  // only (it hides the admin UI), so the server cannot evaluate it. The
+  // global-admin check below is, and always was, the real access control.
   const session = await auth();
   if (!session?.user) return unauthorizedResponse();
-  if (!isGlobalAdmin(session.user.mail)) return forbiddenResponse();
+  if (!isGlobalAdmin(session.user)) return forbiddenResponse();
 
   try {
     const result = await readPolicy(createLimitsBlobStorage());
@@ -170,14 +167,11 @@ export async function GET() {
 }
 
 export async function PUT(request: NextRequest) {
-  const service = LimitsService.getInstance();
-  if (!service.isEnabled()) return notFoundResponse('Resource');
-
   const session = await auth();
   if (!session?.user) return unauthorizedResponse();
 
   const userMail = session.user.mail?.trim().toLowerCase();
-  if (!userMail || !isGlobalAdmin(userMail)) return forbiddenResponse();
+  if (!userMail || !isGlobalAdmin(session.user)) return forbiddenResponse();
 
   let body: unknown;
   try {
@@ -246,7 +240,7 @@ export async function PUT(request: NextRequest) {
     });
     // This replica served the write, so drop its cache immediately; others
     // pick the change up within the 60s TTL.
-    service.invalidate();
+    LimitsService.getInstance().invalidate();
     return successResponse({ policy, etag });
   } catch (error) {
     if (error instanceof LimitsConflictError) {

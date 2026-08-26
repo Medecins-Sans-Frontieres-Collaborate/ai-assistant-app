@@ -18,6 +18,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 const accessIsEnabled = vi.hoisted(() => vi.fn());
 const accessEnsureFresh = vi.hoisted(() => vi.fn());
 const accessGetPromptAgentById = vi.hoisted(() => vi.fn());
+const accessGetM365AgentById = vi.hoisted(() => vi.fn());
+const accessGetOrgAgentById = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/services/agentAccess/AgentAccessService', () => ({
   AgentAccessService: {
@@ -25,10 +27,8 @@ vi.mock('@/lib/services/agentAccess/AgentAccessService', () => ({
       isEnabled: accessIsEnabled,
       ensureFresh: accessEnsureFresh,
       getPromptAgentById: accessGetPromptAgentById,
-      // These tests exercise the prompt/Foundry paths; the m365/org agent
-      // branches key on their own id shapes and resolve to nothing here.
-      getM365AgentById: () => null,
-      getOrgAgentById: () => null,
+      getM365AgentById: accessGetM365AgentById,
+      getOrgAgentById: accessGetOrgAgentById,
     }),
   },
   emitAccessAudit: vi.fn(),
@@ -89,6 +89,8 @@ beforeEach(() => {
   accessIsEnabled.mockReturnValue(true);
   accessEnsureFresh.mockResolvedValue(undefined);
   accessGetPromptAgentById.mockReturnValue(promptAgentRecord);
+  accessGetM365AgentById.mockReturnValue(null);
+  accessGetOrgAgentById.mockReturnValue(null);
 });
 
 afterEach(() => {
@@ -228,6 +230,86 @@ describe('createModelSelectionMiddleware — prompt-agent resolution', () => {
       expect(accessGetPromptAgentById).not.toHaveBeenCalled();
       expect(result.promptAgent).toBeUndefined();
       expect(result.modelId).toBe('org-msf_communications');
+    });
+  });
+
+  // ─────────────────────────────────────────────────────────────────
+  // Decoupled attachment (capabilities tray): agentAttached widens the
+  // resolution beyond the `org-<botId>` model-id scoping. Personas keep
+  // their hard model pin; knowledge agents ride the request's real model.
+  // ─────────────────────────────────────────────────────────────────
+  describe('explicit attachment (agentAttached)', () => {
+    it('prompt agent attached to a real model: persona resolves and the pinned model still wins', async () => {
+      const result = await createModelSelectionMiddleware(
+        makeContext({
+          model: { id: 'gpt-4.1', name: 'GPT-4.1' },
+          agentAttached: true,
+        }),
+      );
+
+      expect(result.promptAgent).toEqual(promptAgentRecord);
+      expect(result.modelId).toBe('gpt-5.2');
+      expect(result.model).toBe(OpenAIModels[OpenAIModelID.GPT_5_2]);
+      expect(result.agentMode).toBe(false);
+    });
+
+    it('org RAG record attached to a real model: enrichment resolves but the request model is kept', async () => {
+      accessGetOrgAgentById.mockReturnValue({
+        id: 'orgr-abc',
+        enabled: true,
+        validation: { status: 'ok' },
+        baseModelId: 'gpt-5.2',
+      });
+
+      const result = await createModelSelectionMiddleware(
+        makeContext({
+          model: { id: 'gpt-4.1', name: 'GPT-4.1' },
+          botId: 'orgr-abc',
+          agentAttached: true,
+        }),
+      );
+
+      // "Uses your model": the admin baseModelId only replaces the legacy
+      // fake org- model, never an explicitly chosen real one.
+      expect(result.modelId).toBe('gpt-4.1');
+      expect(result.agentMode).toBe(false);
+    });
+
+    it('m365 agent attached to a real model: retrieval resolves, request model kept', async () => {
+      const m365Record = { id: 'm365-abc', chatModelId: 'gpt-5.2' };
+      accessGetM365AgentById.mockReturnValue(m365Record);
+
+      const result = await createModelSelectionMiddleware(
+        makeContext({
+          model: { id: 'gpt-4.1', name: 'GPT-4.1' },
+          botId: 'm365-abc',
+          agentAttached: true,
+        }),
+      );
+
+      expect(result.m365Agent).toEqual(m365Record);
+      expect(result.modelId).toBe('gpt-4.1');
+      expect(result.agentMode).toBe(false);
+    });
+
+    it('without agentAttached the same stale bot stays inert (old-client contract)', async () => {
+      accessGetOrgAgentById.mockReturnValue({
+        id: 'orgr-abc',
+        enabled: true,
+        validation: { status: 'ok' },
+        baseModelId: 'gpt-5.2',
+      });
+
+      const result = await createModelSelectionMiddleware(
+        makeContext({
+          model: { id: 'gpt-4.1', name: 'GPT-4.1' },
+          botId: 'orgr-abc',
+        }),
+      );
+
+      expect(result.modelId).toBe('gpt-4.1');
+      expect(result.promptAgent).toBeUndefined();
+      expect(result.m365Agent).toBeUndefined();
     });
   });
 

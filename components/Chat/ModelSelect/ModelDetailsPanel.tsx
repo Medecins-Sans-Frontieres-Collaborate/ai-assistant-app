@@ -11,10 +11,8 @@ import { AdvancedOptionsSection } from './AdvancedOptionsSection';
 import { CustomAgentInfo } from './CustomAgentInfo';
 import { DeploymentDetailsSection } from './DeploymentDetailsSection';
 import { HostedRegionSection } from './HostedRegionSection';
-import { InterpreterModeSection } from './InterpreterModeSection';
 import { ModelHeader } from './ModelHeader';
 import { RecentSourcesSection } from './RecentSourcesSection';
-import { SearchModeSection } from './SearchModeSection';
 import { VariantSection } from './VariantSection';
 import { VersionSection } from './VersionSection';
 
@@ -24,16 +22,15 @@ interface ModelDetailsPanelProps {
   selectedModel: OpenAIModel;
   modelConfig?: OpenAIModel | null;
   isCustomAgent: boolean;
-  searchModeEnabled: boolean;
+  /**
+   * Conversation search-mode default, only consulted to hide the advanced
+   * options under AGENT routing. The search/interpreter controls themselves
+   * moved to the composer's capabilities tray (ToolModeControls).
+   */
   displaySearchMode: SearchMode;
-  interpreterEnabled: boolean;
-  handleToggleInterpreterMode: () => void;
-  agentAvailable: boolean;
   showModelAdvanced: boolean;
   selectedConversation: Conversation | null;
   setMobileView: (view: 'list' | 'details') => void;
-  handleToggleSearchMode: () => void;
-  handleSetSearchMode: (mode: SearchMode) => void;
   setShowModelAdvanced: (show: boolean) => void;
   updateConversation: (id: string, updates: Partial<Conversation>) => void;
   /** Selects another version of the selected model's series (base models). */
@@ -58,16 +55,10 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
   selectedModel,
   modelConfig,
   isCustomAgent,
-  searchModeEnabled,
   displaySearchMode,
-  interpreterEnabled,
-  handleToggleInterpreterMode,
-  agentAvailable,
   showModelAdvanced,
   selectedConversation,
   setMobileView,
-  handleToggleSearchMode,
-  handleSetSearchMode,
   setShowModelAdvanced,
   updateConversation,
   onSelectVersion,
@@ -188,40 +179,8 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
         <RecentSourcesSection agentId={organizationAgent.id} />
       )}
 
-      {/* Hide search mode section for Foundry agents (they decide on their
-          own via web_search_call) and for org agents that explicitly
-          disallow web search. RAG bots keep the section because the
-          pre-router controls their search behavior. */}
-      {!(
-        organizationAgent &&
-        (organizationAgent.type === 'foundry' ||
-          organizationAgent.allowWebSearch === false)
-      ) &&
-        !selectedModel?.id?.startsWith('foundry-') && (
-          <SearchModeSection
-            searchModeEnabled={searchModeEnabled}
-            displaySearchMode={displaySearchMode}
-            agentAvailable={agentAvailable}
-            modelConfig={modelConfig}
-            handleToggleSearchMode={handleToggleSearchMode}
-            handleSetSearchMode={handleSetSearchMode}
-          />
-        )}
-
-      {/* Code interpreter default on/off. Same visibility rule as search:
-          Foundry agents orchestrate their own tools, and org agents must
-          opt in via allowCodeInterpreter. */}
-      {!(
-        organizationAgent &&
-        (organizationAgent.type === 'foundry' ||
-          organizationAgent.allowCodeInterpreter !== true)
-      ) &&
-        !selectedModel?.id?.startsWith('foundry-') && (
-          <InterpreterModeSection
-            interpreterEnabled={interpreterEnabled}
-            handleToggleInterpreterMode={handleToggleInterpreterMode}
-          />
-        )}
+      {/* Search-mode and code-interpreter defaults moved to the composer's
+          capabilities tray (ToolModeControls) — the picker picks models. */}
 
       {displaySearchMode !== SearchMode.AGENT &&
         selectedConversation &&

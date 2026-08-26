@@ -202,6 +202,15 @@ export interface ChatContext {
   /** Bot/knowledge base ID for RAG */
   botId?: string;
 
+  /**
+   * Explicit signal that `botId` was ATTACHED to the conversation via the
+   * capabilities tray (decoupled from the model). Widens the prompt/m365/org
+   * agent resolution in createModelSelectionMiddleware beyond the legacy
+   * `org-<botId>` model-id scoping; never set by old clients, so stale bots
+   * on pre-tray conversations stay inert.
+   */
+  agentAttached?: boolean;
+
   /** Search mode for tool routing */
   searchMode?: SearchMode;
 
@@ -279,7 +288,7 @@ export interface ChatContext {
    * requesting user inside accessible folders. Folder chunks are retrieved
    * per-item from this list, never by the folder-level verdict alone.
    */
-  m365AccessibleFolderItemIds?: string[];
+  m365AccessibleFolderItems?: { driveId: string; itemId: string }[];
 
   /** Thread ID for continuing conversations */
   threadId?: string;

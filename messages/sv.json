@@ -892,7 +892,12 @@
       "showFewer": "Visa färre"
     },
     "retryWithModel": "Försök med {model}",
-    "createTodoTasks": "Skapa att göra-uppgifter från svaret"
+    "createTodoTasks": "Skapa att göra-uppgifter från svaret",
+    "attachedFileExpired": "En bifogad fil är inte längre tillgänglig — uppladdade filer sparas under en begränsad tid. Filen har tagits bort från denna konversation. Försök igen utan filen eller ladda upp den på nytt.",
+    "repeatedFailureNotice": "Det här misslyckas upprepade gånger — konversationen kan ha blivit korrupt. Att starta en ny konversation löser oftast problemet.",
+    "startNewConversation": "Starta en ny konversation",
+    "downloadDebugInfo": "Ladda ner felsökningsinformation",
+    "includeMessageText": "Inkludera meddelandetext"
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",
@@ -901,7 +906,9 @@
     "quickActions": "Snabbåtgärder",
     "expandFolder": "Expandera mapp {name}",
     "collapseFolder": "Komprimera mapp {name}",
-    "folderOptions": "{name}-alternativ"
+    "folderOptions": "{name}-alternativ",
+    "agentsEntry": "Agenter",
+    "agentsTitle": "Bläddra bland agenter och starta en chatt med en"
   },
   "prompts": {
     "buildReusablePrompts": "Bygg återanvändbara prompter med AI-assistans",
@@ -2667,6 +2674,10 @@
       "map": {
         "label": "Karta",
         "description": "Omvandla data till platser på en karta"
+      },
+      "grants": {
+        "label": "Bidragshantering",
+        "description": "Stäm av och extrahera strukturerad data från bidragsberättelser"
       }
     },
     "chooser": {
@@ -2676,7 +2687,8 @@
       "newTranslation": "Ny översättning",
       "newDocument": "Nytt dokument",
       "newDataAnalysis": "Ny dataanalys",
-      "newMap": "Ny karta"
+      "newMap": "Ny karta",
+      "newGrants": "Ny bidragshantering"
     },
     "translation": {
       "chooseLanguage": "Målspråk",
@@ -3293,7 +3305,8 @@
       "unknownType": "Denna konversation använder ett arbetsflöde som denna version inte känner igen. Konversationshistoriken visas nedan.",
       "untitled": "Ny konversation",
       "toggleMenu": "Visa/dölj meny",
-      "model": "Modell för detta arbetsflöde"
+      "model": "Modell för detta arbetsflöde",
+      "disabledByAdmin": "Detta arbetsflöde har inaktiverats av en administratör. Konversationshistoriken visas nedan."
     },
     "tabs": {
       "label": "Konversationsläge",
@@ -4047,7 +4060,153 @@
     "conflictTakeTheirs": "Ta deras",
     "conflictNoFieldDiff": "Värdena matchar — endast postens version har ändrats.",
     "conflictRecordGone": "Denna post har tagits bort (eller kunde inte läsas in igen). Kopiera det du behöver från formuläret och ladda sedan om.",
-    "groupsFlagOff": "Grupptargeting är inte aktiverad för denna miljö ännu. Befintliga grupptargets fungerar fortsatt."
+    "groupsFlagOff": "Grupptargeting är inte aktiverad för denna miljö ännu. Befintliga grupptargets fungerar fortsatt.",
+    "catalogOauth": {
+      "title": "Inbyggda connector OAuth-appar",
+      "description": "OAuth-appar för inbyggda connectors (GitHub, Asana, …) gäller för hela deploymenten. En post sparad här ersätter MCP_OAUTH_* miljövariabler; om den tas bort används dessa istället. Klienthemligheter är krypterade i vila och visas aldrig igen.",
+      "badgeAdmin": "Konfigurerad här",
+      "badgeEnv": "Från miljö",
+      "badgeNone": "Inte konfigurerad",
+      "badgeDcr": "Självregistrerande",
+      "badgeDcrHint": "Den här leverantören kan registrera en OAuth-klient automatiskt, så den fungerar även utan att en app är konfigurerad här.",
+      "clientIdLabel": "OAuth-klient-ID",
+      "clientSecretLabel": "OAuth-klienthemlighet",
+      "secretStoredPlaceholder": "Sparad — skriv nytt för att ersätta, lämna tomt för att behålla",
+      "secretNewPlaceholder": "Klistra in klienthemligheten",
+      "save": "Spara",
+      "remove": "Ta bort",
+      "removeToEnv": "Ta bort (återgå till miljövariabler)",
+      "saved": "{name} OAuth-app sparad",
+      "removed": "{name} OAuth-app borttagen",
+      "saveError": "Det gick inte att spara OAuth-appen. Försök igen.",
+      "conflict": "Den här posten har ändrats på annat håll — omladdad, vänligen försök igen.",
+      "storageUnavailable": "Adminlagring är inte tillgänglig; befintliga poster kunde inte listas. Spara är inaktiverat tills anslutningen återställs.",
+      "sealingUnavailable": "Hemlighetskryptering är inte konfigurerad för denna deployment (AUTH_SECRET saknas) — klienthemligheter kan inte sparas.",
+      "updatedBy": "Uppdaterad av {by} den {at}"
+    },
+    "orgAgentOverrideTitle": "Åsidosätt inbyggd agent",
+    "orgAgentOverrideAction": "Åsidosätt",
+    "orgAgentBuiltinBadge": "Inbyggd",
+    "orgAgentBuiltinHint": "Definierad i driftskonfigurationen. Dess åtkomstregel kan redigeras här; åsidosätt den för att ändra inställningarna utan ny driftsättning.",
+    "m365AgentIndexProgress": "Indexerarar {done} av {total} {total, plural, one {dokument} other {dokument}}…",
+    "m365AgentIndexInterrupted": "Indexeringen avbröts vid {done} av {total} — återuppta för att fortsätta.",
+    "m365AgentIndexStartedBy": "startad av {name}",
+    "m365AgentIndexResume": "Återuppta",
+    "m365AgentIndexResumeHint": "Fortsätt indexeringen där den stoppade med din Microsoft 365-åtkomst. Låt denna flik vara öppen.",
+    "m365AgentIndexCancel": "Avbryt",
+    "m365AgentIndexCancelled": "Indexering avbruten — redan bearbetade dokument är fortfarande sökbara.",
+    "m365AgentIndexJobFailed": "Indexering stoppad: {error}",
+    "m365AgentIndexDone": "Indexering klar: {indexed} indexerade, {failed} misslyckades, {noText} utan text.",
+    "m365AgentDocCounts": "{indexed, plural, one {# dokument} other {# dokument}} indexerade · {failed} misslyckades · {noText} utan text · {needsPreparation} behöver förberedas · {skipped} hoppades över",
+    "m365CapDocuments": "Dokument: {count} / {max}",
+    "m365CapBytes": "{bytes} av {max}",
+    "m365CapOverDocuments": "Över gränsen på {max} dokument. Avmarkera undermappar, filtrera på filtyp eller ta bort källor — endast filer som faktiskt indexeras räknas.",
+    "m365CapOverBytes": "Över utrymmesgränsen på {max}. Uteslut undermappar eller stora filer.",
+    "m365PlanScanning": "Skannar…",
+    "m365PlanRefreshing": "uppdaterar…",
+    "m365PlanFailed": "Kunde inte skanna källorna med ditt Microsoft 365-konto.",
+    "m365PlanMissing": "Hittades inte eller ingen åtkomst",
+    "m365PlanIndexable": "{count, plural, one {# fil kommer att indexeras} other {# filer kommer att indexeras}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# behöver förberedas} other {# behöver förberedas}}",
+    "m365PlanSkipped": "{count} hoppades över",
+    "m365PlanShowDetails": "Detaljer",
+    "m365PlanHideDetails": "Dölj detaljer",
+    "m365PlanTruncated": "Denna mapp är för stor för att skannas helt — endast de första 1 000 objekten visas. Välj i stället en undermapp.",
+    "m365PlanRecursive": "Inkludera undermappar",
+    "m365PlanExtensionsLabel": "Endast filtyper:",
+    "m365PlanExtensionsPlaceholder": "t.ex. pdf, docx",
+    "m365PlanSubfolders": "Undermappar",
+    "m365PlanFolderCount": "{count, plural, one {# fil} other {# filer}}",
+    "m365PlanGroupIndexable": "Kommer att indexeras",
+    "m365PlanGroupNeedsPreparation": "Behöver förberedas",
+    "m365PlanGroupSkipped": "Hoppades över",
+    "m365PlanPreparationHint": "bild/ljud/video — ännu ej indexerade",
+    "m365PlanMoreRows": "…och {count} till",
+    "m365ItemStatus": {
+      "pending": "väntar",
+      "indexed": "indexerad",
+      "failed": "misslyckades",
+      "noText": "ingen text utvunnen",
+      "missing": "saknas"
+    },
+    "m365SkipReason": {
+      "unsupported": "ej stödd typ",
+      "tooLarge": "över 25 MB",
+      "disallowedType": "blockerad typ (körbar/arkiv)",
+      "malware": "markerad av Microsoft som skadlig kod",
+      "zeroBytes": "tom fil",
+      "excluded": "utesluten",
+      "typeFilter": "ingår ej i typfiltret"
+    },
+    "localAdminGroup": {
+      "agents": "Agenter",
+      "promptAgents": "Prompt-agenter",
+      "m365Agents": "Microsoft 365-agenter",
+      "orgAgents": "Kunskapsagenter",
+      "guides": "Guider",
+      "connectors": "Kontakter",
+      "datasets": "Kartdataset",
+      "unknown": "Delegerad men ej hittad"
+    },
+    "localAdminGroupUnavailable": "Denna lista är tillfälligt otillgänglig — befintliga delegeringar behålls.",
+    "localAdminBuiltIn": "inbyggd",
+    "localAdminSummary": "{count, plural, one {# delegering} other {# delegeringar}}: {names}",
+    "localAdminSummaryMore": "{names} och {more} till",
+    "localAdminNoDelegations": "Inga delegeringar ännu — en lokal administratör utan agenter kan bara se administrationsområdet.",
+    "localAdminSelectedCount": "{selected} av {total} valda",
+    "localAdminCopyFrom": "Kopiera från",
+    "localAdminClearAll": "Rensa alla",
+    "localAdminSelectGroup": "Välj alla",
+    "localAdminClearGroup": "Rensa",
+    "localAdminSearchPlaceholder": "Sök agenter, guider, kontakter…",
+    "localAdminDuplicateEmail": "Denna e-postadress är redan listad — slå ihop de två posterna.",
+    "localAdminExpand": "Visa delegeringar",
+    "localAdminCollapse": "Dölj delegeringar",
+    "localAdminDiscard": "Ignorera ändringar",
+    "m365AgentRefresh": "Uppdatera",
+    "m365AgentRefreshHint": "Hämta filer som har lagts till, ändrats eller tagits bort sedan senaste körningen — oförändrade filer laddas inte ner igen. Lämna denna flik öppen.",
+    "m365AgentReindexAll": "Indexera om alla",
+    "m365AgentRefreshProgress": "Uppdaterar — {done} av {total} ändrade {total, plural, one {dokument} other {dokument}}…",
+    "m365AgentRefreshDone": "Uppdatering klar: {added} tillagda, {modified} uppdaterade, {removed} borttagna, {failed} misslyckades.",
+    "m365ChangesChecking": "Kontrollerar Microsoft 365 efter ändringar sedan senaste indexering…",
+    "m365ChangesFailed": "Det gick inte att kontrollera ändringar med ditt Microsoft 365-konto.",
+    "m365ChangesNeverIndexed": "Inte indexerat än — kör Indexera efter att ha sparat.",
+    "m365ChangesFound": "{count, plural, one {# ändring} other {# ändringar}} sedan senaste indexering: {added} tillagda, {modified} uppdaterade, {removed} borttagna.",
+    "m365ChangesNone": "Inga ändringar sedan senaste indexering ({date}).",
+    "m365PrepareButton": "Förbered",
+    "m365PrepareOcrButton": "Förbered (OCR)",
+    "m365PrepareSaveFirst": "spara agenten för att förbereda",
+    "m365PrepareHintImage": "bild — 1 vision-anrop",
+    "m365PrepareHintMedia": "~{minutes} min ljud att transkribera",
+    "m365PrepareHintOcr": "ingen textlager — OCR via vision, upp till 30 sidor",
+    "m365PreparePreparing": "Förbereder…",
+    "m365PreparePending": "Transkriberar…",
+    "m365PreparedNote": "förberedd · {kind}",
+    "m365PreparedKind": {
+      "image": "bildbeskrivning",
+      "audio": "transkription",
+      "video": "transkription",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "{name} förberedd ({chars} tecken). Kör Uppdatera för att indexera.",
+    "m365PrepareStarted": "Transkribering av {name} har startat i bakgrunden — ha denna flik öppen.",
+    "m365PrepareFailed": "Kunde inte förbereda {name}: {error}",
+    "m365PrepareFailedGeneric": "Förberedelse misslyckades.",
+    "canonicalKeyLabel": "Nyckel",
+    "copyKey": "Kopiera nyckel",
+    "agentKeySearchPlaceholder": "Sök agenter, guider, connectors… eller klistra in en nyckel",
+    "agentKeyAddCustom": "Lägg till \"{key}\" som skrivet",
+    "agentKeyRemove": "Ta bort {name}",
+    "hideAgent": "Dölj",
+    "unhideAgent": "Visa",
+    "hideAgentHint": "Dölj denna agent från din adminlista. Endast du påverkas – användare och andra administratörer påverkas inte.",
+    "unhideAgentHint": "Visa denna agent i din adminlista igen.",
+    "hiddenBadge": "Dold",
+    "hiddenAgentsCount": "{count, plural, one {# dold agent} other {# dolda agenter}}",
+    "hiddenAgentsShowing": "Visar {count, plural, one {# dold agent} other {# dolda agenter}}",
+    "hiddenAgentsShow": "Visa",
+    "hiddenAgentsHide": "Dölj igen",
+    "allAgentsHidden": "Alla agenter här är dolda från din vy – använd Visa för att visa dem."
   },
   "localModels": {
     "title": "Lokala modeller",
@@ -4248,9 +4407,15 @@
       "connectors": "Organisationens connectors och vilka som kan använda dem.",
       "guides": "Stil-, terminologi- och regelefterlevnadsguider.",
       "mapDatasets": "Kurerade dataset tillgängliga för kartarbetsflödet.",
-      "localAdmins": "Delegera redigering av åtkomstregler till andra personer."
+      "localAdmins": "Delegera redigering av åtkomstregler till andra personer.",
+      "workflows": "Slå på eller av konversationsarbetsflöden för alla.",
+      "viewAs": "Testa appen som någon som uppfyller – eller inte uppfyller – ett villkor."
     },
-    "openSettings": "Öppna inställningar"
+    "openSettings": "Öppna inställningar",
+    "area": {
+      "workflows": "Arbetsflöden",
+      "viewAs": "Visa som"
+    }
   },
   "limits": {
     "title": "Användningsgränser",
@@ -4452,7 +4617,8 @@
     "groupSearchNoResults": "Inga grupper matchar det namnet.",
     "groupSearchError": "Gruppsökningen misslyckades. Du kan fortfarande klistra in ett gruppobjekt-ID nedan.",
     "groupSearchHint": "Skriv minst 2 tecken för att söka efter din organisations grupper, eller klistra in ett gruppobjekt-ID direkt. Åsidosättningen gäller gruppens medlemmar i Microsoft Entra.",
-    "groupsFlagOff": "Gruppriktning är inte aktiverad för denna miljö ännu. Befintliga gruppriktningar fungerar fortfarande."
+    "groupsFlagOff": "Gruppriktning är inte aktiverad för denna miljö ännu. Befintliga gruppriktningar fungerar fortfarande.",
+    "featureDisabled": "Användningsbegränsningar är inte aktiverade för denna driftsättning."
   },
   "m365": {
     "connections": {
@@ -4813,5 +4979,149 @@
     "failed": "Kunde inte dela — ingenting skapades.",
     "copyFailed": "Kunde inte kopiera länken — markera den ovan och kopiera manuellt.",
     "lastMessagesCountLabel": "Antal senaste meddelanden att inkludera"
+  },
+  "toolModes": {
+    "webSearch": "Webbsök",
+    "codeInterpreter": "Kodtolk",
+    "off": "Av",
+    "auto": "Auto",
+    "always": "Alltid",
+    "routingPrivacy": "Integritet",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI-sökning skickar frågor via Azure AI Foundry, som kan spara dem.",
+    "learnMore": "Läs mer"
+  },
+  "agentAttach": {
+    "browserTitle": "Agenter",
+    "browserSubtitle": "Lägg till agenter och kopplingar i denna chatt, eller starta en ny chatt med en agent. De flesta fungerar med den modell du valt.",
+    "searchPlaceholder": "Sök agenter och kopplingar…",
+    "loading": "Laddar agenter…",
+    "noMatches": "Inget matchar din sökning.",
+    "noAgents": "Inga agenter tillgängliga.",
+    "addToChat": "Lägg till i denna chatt",
+    "removeFromChat": "Ta bort från denna chatt",
+    "newChat": "Ny chatt",
+    "attached": "Tillagd",
+    "detach": "Ta bort",
+    "change": "Byt",
+    "browse": "Bläddra bland agenter…",
+    "noAgent": "Ingen agent tillagd",
+    "close": "Stäng",
+    "kind": {
+      "rag": "Kunskap",
+      "prompt": "Personlighet",
+      "m365": "Kunskap (Microsoft 365)",
+      "org": "Kunskap",
+      "foundry": "Foundry-agent",
+      "connector": "Koppling"
+    },
+    "semantics": {
+      "your-model": "använder din modell",
+      "pinned-model": "modell vald av admin",
+      "own-model": "kör på egen modell"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Förslag från din organisation",
+    "searching": "Söker i din organisation…",
+    "noMatches": "Inga träffar i katalogen — du kan ange adressen manuellt"
+  },
+  "workflowsAdmin": {
+    "title": "Arbetsflöden",
+    "description": "Aktivera eller inaktivera varje arbetsflöde för hela organisationen. Ett inaktiverat arbetsflöde döljs i menyer och blockeras av servern, även för personer som annars har tillgång till det.",
+    "layeredNote": "Flaggan LaunchDarkly conversationWorkflows styr fortfarande utrullning: ett arbetsflöde som är aktiverat här är endast tillgängligt där flaggan är på. Denna sida kan inte göra något synligt som flaggan döljer.",
+    "loading": "Laddar arbetsflödets policy…",
+    "loadError": "Arbetsflödets policy kunde inte laddas.",
+    "policyUnavailable": "Arbetsflödets policy kunde inte läsas från lagringen. Växlarna är dolda istället för att visas med standardvärden som kanske inte motsvarar det som faktiskt gäller.",
+    "retry": "Försök igen",
+    "enableAll": "Aktivera alla",
+    "disableAll": "Inaktivera alla",
+    "enabledLabel": "Aktiverad",
+    "disabledLabel": "Inaktiverad",
+    "defaultOnHint": "Standard när ingen policy har sparats: aktiverad.",
+    "defaultOffHint": "Standard när ingen policy har sparats: inaktiverad – en administratör måste aktivera den manuellt.",
+    "grantsNote": "Bidragshantering är dessutom begränsad till MSF-USA-användare i Program-avdelningen med \"grants\" i sin jobbtitel, eller i Systems med \"innovation\" i titeln. Att aktivera det här breddar inte den regeln.",
+    "unsaved": "Du har osparade ändringar.",
+    "save": "Spara",
+    "saving": "Sparar…",
+    "saveSuccess": "Arbetsflödets policy har sparats.",
+    "saveError": "Arbetsflödets policy kunde inte sparas.",
+    "conflictError": "En annan administratör ändrade policyn först. Den har nu laddats om – granska och spara igen.",
+    "updatedByLine": "Senast sparad av {by} den {at}.",
+    "neverSaved": "Ingen policy har sparats än; ovanstående standardvärden gäller."
+  },
+  "viewAs": {
+    "title": "Visa som",
+    "description": "Testa appen, endast för din egen session, som någon som uppfyller eller inte uppfyller ett villkor som normalt avgörs av katalogen eller av administratörer. Din identitet ändras aldrig: allt du skapar förblir ditt, och varje granskningsrad anger fortfarande dig.",
+    "activeTitle": "Visa som är aktivt",
+    "inactiveTitle": "Visa som är inte aktivt",
+    "sections": {
+      "role": "Adminroll",
+      "region": "Dataregion",
+      "attributes": "Katalogattribut",
+      "groups": "Gruppmedlemskap",
+      "presets": "Förinställningar"
+    },
+    "role": {
+      "global": "Global administratör (din faktiska roll)",
+      "local": "Lokal administratör",
+      "none": "Vanlig användare",
+      "localKeysLabel": "Delegerade agentnycklar",
+      "localKeysHint": "Kommaseparerade kanoniska agentnycklar som denna lokala administratör får redigera. Lämna tomt för en lokal administratör utan delegerade agenter.",
+      "noneWarning": "Som vanlig användare försvinner alla andra adminsidor. Den här sidan finns kvar, och bannern högst upp i appen erbjuder alltid en väg ut."
+    },
+    "region": {
+      "actual": "Verklig ({region})",
+      "hint": "Dirigerar dina förfrågningar — och allt du laddar upp när funktionen är aktiv — till den andra regionens lagring. Går före en ?regionOverride=-cookie."
+    },
+    "attributes": {
+      "department": "Avdelning",
+      "companyName": "Företag",
+      "jobTitle": "Jobbtitel",
+      "officeId": "Kontor",
+      "officeActual": "Faktiskt kontor",
+      "officeNone": "Inget kontor",
+      "actualValue": "Faktiskt: {value}",
+      "actualEmpty": "Faktiskt: (tomt)",
+      "hint": "Lämna ett fält tomt för att behålla ditt faktiska värde. Dessa används för bidragsregler, attributbaserade användningsgränser och åtkomstregler."
+    },
+    "groups": {
+      "label": "Grupp-id:n",
+      "placeholder": "Ett Entra group object id per rad",
+      "hint": "Ersätter — utökar inte — ditt faktiska medlemskap för denna session, så du kan testa tillhörighet och icke-tillhörighet."
+    },
+    "presets": {
+      "grantsMember": "Bidragsteammedlem",
+      "regularUser": "Vanlig användare",
+      "localAdmin": "Lokal administratör, inga agenter",
+      "otherRegion": "Annan region",
+      "hint": "Förinställningarna fyller i formuläret; inget gäller förrän du trycker på Verkställ."
+    },
+    "apply": "Verkställ och ladda om",
+    "applying": "Verkställer…",
+    "clear": "Avsluta visa som",
+    "clearing": "Avslutar…",
+    "reset": "Återställ formulär",
+    "nothingToApply": "Ange minst en åsidosättning för att verkställa.",
+    "applyError": "Visa som kunde inte verkställas: {error}",
+    "clearError": "Visa som kunde inte avslutas: {error}",
+    "loadError": "Visa som-status kunde inte laddas.",
+    "retry": "Försök igen",
+    "expiresNote": "Visa som varar upp till 8 timmar eller tills du avslutar.",
+    "banner": {
+      "label": "Visar som",
+      "adjust": "Justera",
+      "exit": "Avsluta",
+      "role": {
+        "local": "lokal administratör",
+        "none": "vanlig användare"
+      },
+      "region": "region {region}",
+      "department": "avdelning \"{value}\"",
+      "companyName": "företag \"{value}\"",
+      "jobTitle": "titel \"{value}\"",
+      "officeId": "kontor {value}",
+      "groups": "{count, plural, one {# grupp} other {# grupper}}"
+    }
   }
 }

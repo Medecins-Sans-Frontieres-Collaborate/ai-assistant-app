@@ -892,7 +892,12 @@
       "showFewer": "表示を減らす"
     },
     "retryWithModel": "{model} で再試行",
-    "createTodoTasks": "この回答からTo Doタスクを作成"
+    "createTodoTasks": "この回答からTo Doタスクを作成",
+    "attachedFileExpired": "添付ファイルは利用できなくなりました。アップロードされたファイルは一定期間のみ保存されます。この会話から削除されました。ファイルなしで再度お試しいただくか、もう一度ファイルをアップロードしてください。",
+    "repeatedFailureNotice": "この処理は繰り返し失敗しています。会話データが破損している可能性があります。新しい会話を始めると通常、この問題は解決します。",
+    "startNewConversation": "新しい会話を始める",
+    "downloadDebugInfo": "デバッグ情報をダウンロード",
+    "includeMessageText": "メッセージ本文を含める"
   },
   "sidebar": {
     "collapseSidebar": "サイドバーを折りたたむ",
@@ -901,7 +906,9 @@
     "quickActions": "クイックアクション",
     "expandFolder": "フォルダー{name}を展開",
     "collapseFolder": "フォルダー{name}を折りたたみ",
-    "folderOptions": "{name}のオプション"
+    "folderOptions": "{name}のオプション",
+    "agentsEntry": "エージェント",
+    "agentsTitle": "エージェントを閲覧してチャットを開始する"
   },
   "prompts": {
     "buildReusablePrompts": "AIの支援で再利用可能なプロンプトを構築",
@@ -2667,6 +2674,10 @@
       "map": {
         "label": "マップ",
         "description": "任意のデータを地図上のロケーションに変換"
+      },
+      "grants": {
+        "label": "助成金処理",
+        "description": "助成金説明文から構造化データを突き合わせて抽出します"
       }
     },
     "chooser": {
@@ -2676,7 +2687,8 @@
       "newTranslation": "新しい翻訳",
       "newDocument": "新しいドキュメント",
       "newDataAnalysis": "新しいデータ分析",
-      "newMap": "新しいマップ"
+      "newMap": "新しいマップ",
+      "newGrants": "新規助成金処理"
     },
     "translation": {
       "chooseLanguage": "対象言語",
@@ -3293,7 +3305,8 @@
       "unknownType": "この会話は本バージョンが認識できないワークフローを使用しています。会話履歴を以下に表示します。",
       "untitled": "新しい会話",
       "toggleMenu": "メニューの切り替え",
-      "model": "このワークフローのモデル"
+      "model": "このワークフローのモデル",
+      "disabledByAdmin": "このワークフローは管理者によって無効化されています。下記に会話履歴が表示されます。"
     },
     "tabs": {
       "label": "会話モード",
@@ -4047,7 +4060,153 @@
     "conflictTakeTheirs": "他の人の変更を反映",
     "conflictNoFieldDiff": "値に差異はありません。レコードのバージョンのみが変更されました。",
     "conflictRecordGone": "このレコードは削除されたか、再読み込みできませんでした。必要な内容をフォームからコピーし、再度読み込んでください。",
-    "groupsFlagOff": "この環境ではグループターゲティングはまだ有効化されていません。既存のグループターゲット設定は引き続き有効です。"
+    "groupsFlagOff": "この環境ではグループターゲティングはまだ有効化されていません。既存のグループターゲット設定は引き続き有効です。",
+    "catalogOauth": {
+      "title": "組み込みコネクタのOAuthアプリ",
+      "description": "組み込みコネクタ（GitHub、Asana など）向けの、全展開共通OAuthアプリ。ここで保存されたレコードはMCP_OAUTH_*環境変数を上書きします。削除すると環境変数に戻ります。クライアントシークレットは保存時に暗号化され、再表示されません。",
+      "badgeAdmin": "ここで設定済み",
+      "badgeEnv": "環境変数から",
+      "badgeNone": "未設定",
+      "badgeDcr": "自動登録",
+      "badgeDcrHint": "このプロバイダーはOAuthクライアントを自動的に登録できるため、ここでアプリ未設定でも動作します。",
+      "clientIdLabel": "OAuthクライアントID",
+      "clientSecretLabel": "OAuthクライアントシークレット",
+      "secretStoredPlaceholder": "保存済み — 入力すると上書き、空欄なら現状維持",
+      "secretNewPlaceholder": "クライアントシークレットを貼り付け",
+      "save": "保存",
+      "remove": "削除",
+      "removeToEnv": "削除（環境変数へ戻す）",
+      "saved": "{name} OAuthアプリを保存しました",
+      "removed": "{name} OAuthアプリを削除しました",
+      "saveError": "OAuthアプリの保存に失敗しました。再度お試しください。",
+      "conflict": "他の場所で変更されたため再読み込みされました。再試行してください。",
+      "storageUnavailable": "管理ストレージに接続できません。既存レコードが表示できず、復旧まで保存は無効です。",
+      "sealingUnavailable": "このデプロイメントで秘密情報暗号化が未設定です（AUTH_SECRETがありません）— クライアントシークレットは保存できません。",
+      "updatedBy": "{by}が{at}に更新"
+    },
+    "orgAgentOverrideTitle": "組み込みエージェントの上書き",
+    "orgAgentOverrideAction": "上書き",
+    "orgAgentBuiltinBadge": "組み込み",
+    "orgAgentBuiltinHint": "デプロイ設定で定義されています。ここでアクセスルールを編集できます。デプロイせずに設定を変更したい場合は上書きしてください。",
+    "m365AgentIndexProgress": "{done}/{total} 件の{total, plural, one {ドキュメント} other {ドキュメント}}をインデックス作成中…",
+    "m365AgentIndexInterrupted": "{done}/{total}でインデックス作成が中断されました — 続行するには再開してください。",
+    "m365AgentIndexStartedBy": "{name} によって開始されました",
+    "m365AgentIndexResume": "再開",
+    "m365AgentIndexResumeHint": "Microsoft 365 アクセスを利用して中断された箇所からインデックス作成を続行します。このタブを開いたままにしてください。",
+    "m365AgentIndexCancel": "キャンセル",
+    "m365AgentIndexCancelled": "インデックス作成はキャンセルされました — 既に処理済みのドキュメントは引き続き検索可能です。",
+    "m365AgentIndexJobFailed": "インデックス作成が停止しました: {error}",
+    "m365AgentIndexDone": "インデックス作成完了: {indexed} 件をインデックス化、{failed} 件失敗、{noText} 件テキストなし。",
+    "m365AgentDocCounts": "{indexed, plural, one {# 件インデックス化済み} other {# 件インデックス化済み}} · {failed} 件失敗 · {noText} 件テキストなし · {needsPreparation} 件準備必要 · {skipped} 件スキップ",
+    "m365CapDocuments": "ドキュメント: {count} / {max}",
+    "m365CapBytes": "{bytes} / {max}",
+    "m365CapOverDocuments": "{max}件のドキュメント上限を超えています。サブフォルダーの選択解除、ファイルタイプでフィルター、またはソースを削除してください — 実際にインデックス化されるファイルのみがカウントされます。",
+    "m365CapOverBytes": "{max} のサイズ上限を超えています。サブフォルダーや大きなファイルを除外してください。",
+    "m365PlanScanning": "スキャン中…",
+    "m365PlanRefreshing": "更新中…",
+    "m365PlanFailed": "Microsoft 365 アカウントでソースをスキャンできませんでした。",
+    "m365PlanMissing": "見つからない、またはアクセス不可",
+    "m365PlanIndexable": "{count, plural, one {# 件のファイルがインデックス化されます} other {# 件のファイルがインデックス化されます}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# 件準備必要} other {# 件準備必要}}",
+    "m365PlanSkipped": "{count} 件スキップ",
+    "m365PlanShowDetails": "詳細",
+    "m365PlanHideDetails": "詳細を非表示",
+    "m365PlanTruncated": "このフォルダーは大きすぎて全てをスキャンできません — 最初の1,000件のみ表示されます。サブフォルダーを選択してください。",
+    "m365PlanRecursive": "サブフォルダーを含める",
+    "m365PlanExtensionsLabel": "ファイルタイプ指定:",
+    "m365PlanExtensionsPlaceholder": "例: pdf, docx",
+    "m365PlanSubfolders": "サブフォルダー",
+    "m365PlanFolderCount": "{count, plural, one {# 件のファイル} other {# 件のファイル}}",
+    "m365PlanGroupIndexable": "インデックス化予定",
+    "m365PlanGroupNeedsPreparation": "準備必要",
+    "m365PlanGroupSkipped": "スキップ済み",
+    "m365PlanPreparationHint": "画像／音声／動画 — まだインデックス化されていません",
+    "m365PlanMoreRows": "…さらに{count}件",
+    "m365ItemStatus": {
+      "pending": "保留中",
+      "indexed": "インデックス化済み",
+      "failed": "失敗",
+      "noText": "テキスト抽出なし",
+      "missing": "見つからない"
+    },
+    "m365SkipReason": {
+      "unsupported": "非対応タイプ",
+      "tooLarge": "25 MB超過",
+      "disallowedType": "ブロックされたタイプ（実行ファイル／アーカイブ）",
+      "malware": "Microsoft によりマルウェアとして検出",
+      "zeroBytes": "空ファイル",
+      "excluded": "除外済み",
+      "typeFilter": "タイプフィルター対象外"
+    },
+    "localAdminGroup": {
+      "agents": "エージェント",
+      "promptAgents": "プロンプトエージェント",
+      "m365Agents": "Microsoft 365 エージェント",
+      "orgAgents": "ナレッジエージェント",
+      "guides": "ガイド",
+      "connectors": "コネクター",
+      "datasets": "地図データセット",
+      "unknown": "委任済みですが見つかりません"
+    },
+    "localAdminGroupUnavailable": "このリストは一時的に利用できません — 既存の委任設定は保持されます。",
+    "localAdminBuiltIn": "組み込み",
+    "localAdminSummary": "{count, plural, one {# 件の委任} other {# 件の委任}}: {names}",
+    "localAdminSummaryMore": "{names} 他 {more} 件",
+    "localAdminNoDelegations": "まだ委任がありません — エージェントのいないローカル管理者は管理画面のみ閲覧できます。",
+    "localAdminSelectedCount": "{total} 件中 {selected} 件選択中",
+    "localAdminCopyFrom": "コピー元",
+    "localAdminClearAll": "すべてクリア",
+    "localAdminSelectGroup": "すべて選択",
+    "localAdminClearGroup": "クリア",
+    "localAdminSearchPlaceholder": "エージェント、ガイド、コネクターを検索…",
+    "localAdminDuplicateEmail": "このメールアドレスは既に登録されています — 2つのエントリーを統合してください。",
+    "localAdminExpand": "委任内容を表示",
+    "localAdminCollapse": "委任内容を非表示",
+    "localAdminDiscard": "変更を破棄",
+    "m365AgentRefresh": "更新",
+    "m365AgentRefreshHint": "前回から追加・変更・削除されたファイルを取得します（未変更ファイルは再ダウンロードしません）。このタブを開いたままにしてください。",
+    "m365AgentReindexAll": "すべて再インデックス",
+    "m365AgentRefreshProgress": "更新中 — 変更済み {total, plural, one {# 件のドキュメント} other {# 件のドキュメント}} のうち {done} 件…",
+    "m365AgentRefreshDone": "更新完了: {added} 件追加、{modified} 件更新、{removed} 件削除、{failed} 件失敗。",
+    "m365ChangesChecking": "前回のインデックス以降の変更を Microsoft 365 で確認中…",
+    "m365ChangesFailed": "Microsoft 365 アカウントで変更内容を確認できませんでした。",
+    "m365ChangesNeverIndexed": "まだインデックスされていません — 保存後にインデックスを実行してください。",
+    "m365ChangesFound": "前回のインデックス以降 {count, plural, one {# 件の変更} other {# 件の変更}}: {added} 件追加、{modified} 件更新、{removed} 件削除。",
+    "m365ChangesNone": "前回のインデックス以降、変更はありません（{date}）。",
+    "m365PrepareButton": "準備",
+    "m365PrepareOcrButton": "準備（OCR）",
+    "m365PrepareSaveFirst": "準備するにはエージェントを保存してください",
+    "m365PrepareHintImage": "画像 — 1回のVision呼び出し",
+    "m365PrepareHintMedia": "~{minutes} 分の音声を文字起こし",
+    "m365PrepareHintOcr": "テキスト層なし — VisionによるOCR、最大30ページ",
+    "m365PreparePreparing": "準備中…",
+    "m365PreparePending": "文字起こし中…",
+    "m365PreparedNote": "準備済み · {kind}",
+    "m365PreparedKind": {
+      "image": "画像説明",
+      "audio": "文字起こし",
+      "video": "文字起こし",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "{name} を準備しました（{chars} 文字）。インデックスには更新を実行してください。",
+    "m365PrepareStarted": "{name} の文字起こしがバックグラウンドで開始されました — このタブを開いたままにしてください。",
+    "m365PrepareFailed": "{name} を準備できませんでした: {error}",
+    "m365PrepareFailedGeneric": "準備に失敗しました。",
+    "canonicalKeyLabel": "キー",
+    "copyKey": "キーをコピー",
+    "agentKeySearchPlaceholder": "エージェント、ガイド、コネクタを検索… またはキーを貼り付け",
+    "agentKeyAddCustom": "「{key}」をそのまま追加",
+    "agentKeyRemove": "{name} を削除",
+    "hideAgent": "非表示",
+    "unhideAgent": "表示",
+    "hideAgentHint": "このエージェントを管理者リストから非表示にします。ご自身の画面だけに影響し、利用者や他の管理者には影響しません。",
+    "unhideAgentHint": "このエージェントを管理者リストに再表示します。",
+    "hiddenBadge": "非表示",
+    "hiddenAgentsCount": "{count, plural, one {# 件の非表示エージェント} other {# 件の非表示エージェント}}",
+    "hiddenAgentsShowing": "{count, plural, one {# 件の非表示エージェントを表示中} other {# 件の非表示エージェントを表示中}}",
+    "hiddenAgentsShow": "表示",
+    "hiddenAgentsHide": "再度非表示",
+    "allAgentsHidden": "ここにあるすべてのエージェントはご自身の画面で非表示です。「表示」を押すと確認できます。"
   },
   "localModels": {
     "title": "ローカルモデル",
@@ -4248,9 +4407,15 @@
       "connectors": "組織用コネクターと利用可能なユーザー。",
       "guides": "スタイル、用語、コンプライアンスのガイド。",
       "mapDatasets": "マップワークフローで利用できる精選データセット。",
-      "localAdmins": "アクセスルール編集権限を他のユーザーに委任します。"
+      "localAdmins": "アクセスルール編集権限を他のユーザーに委任します。",
+      "workflows": "すべてのユーザーに対して会話ワークフローを有効または無効にします。",
+      "viewAs": "条件を満たす、または満たさないユーザーとしてアプリをテストします。"
     },
-    "openSettings": "設定を開く"
+    "openSettings": "設定を開く",
+    "area": {
+      "workflows": "ワークフロー",
+      "viewAs": "他のユーザーとして表示"
+    }
   },
   "limits": {
     "title": "利用制限",
@@ -4452,7 +4617,8 @@
     "groupSearchNoResults": "該当するグループが見つかりません。",
     "groupSearchError": "グループ検索に失敗しました。下にグループのオブジェクトIDを貼り付けることもできます。",
     "groupSearchHint": "最低2文字入力して組織のグループを検索するか、グループのオブジェクトIDを直接貼り付けてください。Microsoft Entra内のそのグループのメンバーに対して上書き設定が適用されます。",
-    "groupsFlagOff": "この環境ではグループターゲット機能はまだ有効になっていません。既存のグループターゲットは引き続き利用可能です。"
+    "groupsFlagOff": "この環境ではグループターゲット機能はまだ有効になっていません。既存のグループターゲットは引き続き利用可能です。",
+    "featureDisabled": "このデプロイメントでは使用制限は有効になっていません。"
   },
   "m365": {
     "connections": {
@@ -4813,5 +4979,149 @@
     "failed": "共有できませんでした—何も作成されませんでした。",
     "copyFailed": "リンクをコピーできませんでした。上記から手動でコピーしてください。",
     "lastMessagesCountLabel": "含める最新メッセージの数"
+  },
+  "toolModes": {
+    "webSearch": "ウェブ検索",
+    "codeInterpreter": "コードインタープリタ",
+    "off": "オフ",
+    "auto": "自動",
+    "always": "常に有効",
+    "routingPrivacy": "プライバシー",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI 検索はクエリを Azure AI Foundry 経由で送信し、保持される場合があります。",
+    "learnMore": "詳細"
+  },
+  "agentAttach": {
+    "browserTitle": "エージェント",
+    "browserSubtitle": "このチャットにエージェントやコネクターを追加するか、エージェントとの新しいチャットを開始してください。ほとんどは選択したモデルで動作します。",
+    "searchPlaceholder": "エージェントとコネクターを検索…",
+    "loading": "エージェントを読み込み中…",
+    "noMatches": "検索に一致するものがありません。",
+    "noAgents": "利用可能なエージェントがありません。",
+    "addToChat": "このチャットに追加",
+    "removeFromChat": "このチャットから削除",
+    "newChat": "新しいチャット",
+    "attached": "追加済み",
+    "detach": "解除",
+    "change": "変更",
+    "browse": "エージェントを閲覧…",
+    "noAgent": "エージェント未追加",
+    "close": "閉じる",
+    "kind": {
+      "rag": "ナレッジ",
+      "prompt": "ペルソナ",
+      "m365": "ナレッジ（Microsoft 365）",
+      "org": "ナレッジ",
+      "foundry": "Foundry エージェント",
+      "connector": "コネクター"
+    },
+    "semantics": {
+      "your-model": "ご自身のモデルを使用",
+      "pinned-model": "管理者によるモデル指定",
+      "own-model": "独自のモデルで動作"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "あなたの組織からの提案",
+    "searching": "組織内を検索しています…",
+    "noMatches": "ディレクトリに該当がありません — 手動でアドレスを入力できます"
+  },
+  "workflowsAdmin": {
+    "title": "ワークフロー",
+    "description": "組織全体の各ワークフローを有効または無効にできます。無効化されたワークフローはメニューに表示されず、サーバーからも拒否されます。対象者にも利用できません。",
+    "layeredNote": "LaunchDarkly の conversationWorkflows フラグが有効時のみ、ここで有効なワークフローにアクセスできます。このページでフラグが非表示にしたものを表示することはできません。",
+    "loading": "ワークフローポリシーを読み込み中…",
+    "loadError": "ワークフローポリシーを読み込めませんでした。",
+    "policyUnavailable": "ワークフローポリシーがストレージから読み取れません。トグルは初期値で表示せず非表示にしています。",
+    "retry": "再試行",
+    "enableAll": "すべて有効にする",
+    "disableAll": "すべて無効にする",
+    "enabledLabel": "有効",
+    "disabledLabel": "無効",
+    "defaultOnHint": "ポリシー未保存時の初期値：有効",
+    "defaultOffHint": "ポリシー未保存時の初期値：無効 — 管理者が明示的に有効化する必要があります。",
+    "grantsNote": "助成金処理は追加制限があり、「grants」が職名に含まれるプログラム部門のMSF-USAユーザー、または「innovation」が職名に含まれるSystems部門ユーザーのみ利用可能です。ここで有効にしてもその制限は変更されません。",
+    "unsaved": "未保存の変更があります。",
+    "save": "保存",
+    "saving": "保存中…",
+    "saveSuccess": "ワークフローポリシーを保存しました。",
+    "saveError": "ワークフローポリシーを保存できませんでした。",
+    "conflictError": "他の管理者が先にポリシーを変更しました。リロードされたので再確認して再度保存してください。",
+    "updatedByLine": "最終保存者：{by}（{at}）",
+    "neverSaved": "まだポリシーは保存されていません。上記の初期値が適用されます。"
+  },
+  "viewAs": {
+    "title": "他のユーザーとして表示",
+    "description": "ディレクトリや管理者によって通常決定される条件を満たす/満たさないユーザーとして、このセッションのみアプリをテストします。あなたの本人情報は変わりません：作成したものはすべてあなたのものとなり、監査記録にもあなたの名前が残ります。",
+    "activeTitle": "「他のユーザーとして表示」が有効です",
+    "inactiveTitle": "「他のユーザーとして表示」は無効です",
+    "sections": {
+      "role": "管理者ロール",
+      "region": "データリージョン",
+      "attributes": "ディレクトリ属性",
+      "groups": "グループメンバーシップ",
+      "presets": "プリセット"
+    },
+    "role": {
+      "global": "グローバル管理者（実際の役割）",
+      "local": "ローカル管理者",
+      "none": "一般ユーザー",
+      "localKeysLabel": "移譲エージェントキー",
+      "localKeysHint": "このローカル管理者が編集可能な、カンマ区切りの標準エージェントキー。移譲エージェントが無い場合は空欄にしてください。",
+      "noneWarning": "一般ユーザーになると他の管理エリアはすべて表示されなくなります。このページは引き続きアクセス可能で、アプリの上部バナーに常に戻る方法が表示されます。"
+    },
+    "region": {
+      "actual": "実際の値（{region}）",
+      "hint": "リクエストやアクティブ時にアップロードしたものを他のリージョンのストレージにルーティングします。?regionOverride= クッキーよりも優先されます。"
+    },
+    "attributes": {
+      "department": "部署",
+      "companyName": "会社",
+      "jobTitle": "職位",
+      "officeId": "オフィス",
+      "officeActual": "実際のオフィス",
+      "officeNone": "オフィスなし",
+      "actualValue": "実際: {value}",
+      "actualEmpty": "実際: （空）",
+      "hint": "フィールドを空欄のままにすると、実際の値が保持されます。これらは付与ルール、属性ごとの利用制限、アクセスルールに利用されます。"
+    },
+    "groups": {
+      "label": "グループID",
+      "placeholder": "1行につき1つのEntraグループオブジェクトID",
+      "hint": "このセッション中は実際のメンバーシップを置き換えます（拡張ではありません）。所属・非所属の両方をテストできます。"
+    },
+    "presets": {
+      "grantsMember": "Grantsチームメンバー",
+      "regularUser": "一般ユーザー",
+      "localAdmin": "ローカル管理者（エージェントなし）",
+      "otherRegion": "別リージョン",
+      "hint": "プリセットはフォームに入力されます。「適用」を押すまで変更は反映されません。"
+    },
+    "apply": "適用して再読み込み",
+    "applying": "適用中…",
+    "clear": "view-asを終了",
+    "clearing": "終了中…",
+    "reset": "フォームをリセット",
+    "nothingToApply": "少なくとも1つの上書きを設定してください。",
+    "applyError": "view-asを適用できませんでした: {error}",
+    "clearError": "view-asを解除できませんでした: {error}",
+    "loadError": "view-asの状態を読み込めませんでした。",
+    "retry": "再試行",
+    "expiresNote": "view-asは最大8時間、または終了まで有効です。",
+    "banner": {
+      "label": "以下として表示中",
+      "adjust": "調整",
+      "exit": "終了",
+      "role": {
+        "local": "ローカル管理者",
+        "none": "一般ユーザー"
+      },
+      "region": "リージョン {region}",
+      "department": "部署「{value}」",
+      "companyName": "会社「{value}」",
+      "jobTitle": "職位「{value}」",
+      "officeId": "オフィス {value}",
+      "groups": "{count, plural, one {# グループ} other {# グループ}}"
+    }
   }
 }

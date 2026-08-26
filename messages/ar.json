@@ -838,7 +838,12 @@
       "showFewer": "عرض أقل"
     },
     "retryWithModel": "جرّب باستخدام {model}",
-    "createTodoTasks": "إنشاء مهام To Do من هذا الرد"
+    "createTodoTasks": "إنشاء مهام To Do من هذا الرد",
+    "attachedFileExpired": "لم يعد الملف المرفق متاحًا — حيث يتم تخزين الملفات المرفوعة لفترة محدودة فقط. تمت إزالته من هذه المحادثة. يرجى المحاولة مرة أخرى بدون الملف أو إعادة رفعه.",
+    "repeatedFailureNotice": "حدث فشل متكرر — قد تكون المحادثة تعرضت للتلف. بدء محادثة جديدة غالبًا ما يحل هذه المشكلة.",
+    "startNewConversation": "ابدأ محادثة جديدة",
+    "downloadDebugInfo": "تنزيل معلومات التصحيح",
+    "includeMessageText": "تضمين نص الرسالة"
   },
   "sidebar": {
     "collapseSidebar": "طي الشريط الجانبي",
@@ -847,7 +852,9 @@
     "quickActions": "الإجراءات السريعة",
     "expandFolder": "توسيع المجلد {name}",
     "collapseFolder": "طي المجلد {name}",
-    "folderOptions": "خيارات {name}"
+    "folderOptions": "خيارات {name}",
+    "agentsEntry": "الوكلاء",
+    "agentsTitle": "تصفح الوكلاء وابدأ محادثة مع أحدهم"
   },
   "prompts": {
     "buildReusablePrompts": "بناء موجهات قابلة لإعادة الاستخدام بمساعدة الذكاء الاصطناعي",
@@ -2667,6 +2674,10 @@
       "map": {
         "label": "خريطة",
         "description": "حوّل أي بيانات إلى مواقع على الخريطة"
+      },
+      "grants": {
+        "label": "معالجة المنح",
+        "description": "تسوية واستخلاص بيانات منظمة من نصوص المنح"
       }
     },
     "chooser": {
@@ -2676,7 +2687,8 @@
       "newTranslation": "ترجمة جديدة",
       "newDocument": "مستند جديد",
       "newDataAnalysis": "تحليل بيانات جديد",
-      "newMap": "خريطة جديدة"
+      "newMap": "خريطة جديدة",
+      "newGrants": "معالجة منح جديدة"
     },
     "translation": {
       "chooseLanguage": "اللغة المستهدفة",
@@ -3293,7 +3305,8 @@
       "unknownType": "تستخدم هذه المحادثة سير عمل غير مدعوم في هذا الإصدار. سيتم عرض سجل المحادثة أدناه.",
       "untitled": "محادثة جديدة",
       "toggleMenu": "تبديل القائمة",
-      "model": "النموذج لهذا سير العمل"
+      "model": "النموذج لهذا سير العمل",
+      "disabledByAdmin": "تم تعطيل هذا سير العمل من قبل المدير. يظهر سجل المحادثة أدناه."
     },
     "tabs": {
       "label": "وضع المحادثة",
@@ -4047,7 +4060,153 @@
     "conflictTakeTheirs": "اعتماد نسختهم",
     "conflictNoFieldDiff": "القيم متطابقة — فقط إصدار السجل تغير.",
     "conflictRecordGone": "تم حذف هذا السجل (أو تعذر إعادة تحميله). انسخ ما تحتاجه من النموذج ثم أعد التحميل.",
-    "groupsFlagOff": "استهداف المجموعات غير مفعل لهذا البيئة بعد. أهداف المجموعات الحالية تظل تعمل."
+    "groupsFlagOff": "استهداف المجموعات غير مفعل لهذا البيئة بعد. أهداف المجموعات الحالية تظل تعمل.",
+    "catalogOauth": {
+      "title": "تطبيقات OAuth للموصلات المدمجة",
+      "description": "تطبيقات OAuth على مستوى النشر للموصلات المدمجة (GitHub، Asana، ...). السجل المحفوظ هنا يتجاوز متغيرات البيئة MCP_OAUTH_*. إزالة السجل يعيد الاعتماد على هذه المتغيرات. أسرار العملاء مشفرة أثناء التخزين ولا تُعرض مرة أخرى.",
+      "badgeAdmin": "تمت التهيئة هنا",
+      "badgeEnv": "من البيئة",
+      "badgeNone": "غير مهيأ",
+      "badgeDcr": "يسجل ذاتيًا",
+      "badgeDcrHint": "يمكن لهذا المزوّد تسجيل عميل OAuth تلقائيًا، لذا يعمل حتى بدون تهيئة تطبيق هنا.",
+      "clientIdLabel": "معرّف عميل OAuth",
+      "clientSecretLabel": "سر عميل OAuth",
+      "secretStoredPlaceholder": "محفوظ — اكتب للاستبدال، اتركه فارغًا للاحتفاظ",
+      "secretNewPlaceholder": "الصق سر العميل",
+      "save": "حفظ",
+      "remove": "إزالة",
+      "removeToEnv": "إزالة (الرجوع إلى البيئة)",
+      "saved": "تم حفظ تطبيق OAuth‏ {name}",
+      "removed": "تمت إزالة تطبيق OAuth‏ {name}",
+      "saveError": "فشل حفظ تطبيق OAuth. يرجى المحاولة مجددًا.",
+      "conflict": "تم تغيير هذا السجل في مكان آخر — تم إعادة التحميل، يرجى إعادة المحاولة.",
+      "storageUnavailable": "التخزين الإداري غير متاح؛ تعذّر عرض السجلات الحالية. الحفظ معطل حتى يتم الاستعادة.",
+      "sealingUnavailable": "لم يتم ضبط تشفير الأسرار في هذا النشر (AUTH_SECRET مفقود) — لا يمكن حفظ أسرار العملاء.",
+      "updatedBy": "تم التحديث بواسطة {by} في {at}"
+    },
+    "orgAgentOverrideTitle": "تجاوز الوكيل المدمج",
+    "orgAgentOverrideAction": "تجاوز",
+    "orgAgentBuiltinBadge": "مدمج",
+    "orgAgentBuiltinHint": "تم تعريفه في إعدادات النشر. قاعدة الوصول قابلة للتعديل هنا؛ يمكنك تجاوزها لتغيير إعداداتها دون نشر جديد.",
+    "m365AgentIndexProgress": "يتم فهرسة {done} من {total} {total, plural, one {مستند} other {مستندات}}…",
+    "m365AgentIndexInterrupted": "تم تعليق الفهرسة عند {done} من {total} — تابع للاستمرار.",
+    "m365AgentIndexStartedBy": "بدأها {name}",
+    "m365AgentIndexResume": "استئناف",
+    "m365AgentIndexResumeHint": "تابع الفهرسة من حيث توقفت باستخدام وصولك إلى Microsoft 365. يرجى إبقاء هذا التبويب مفتوحًا.",
+    "m365AgentIndexCancel": "إلغاء",
+    "m365AgentIndexCancelled": "تم إلغاء الفهرسة — ستظل المستندات التي تمت معالجتها قابلة للبحث.",
+    "m365AgentIndexJobFailed": "توقفت الفهرسة: {error}",
+    "m365AgentIndexDone": "انتهت الفهرسة: {indexed} تمت فهرستها، {failed} فشلت، {noText} بدون نص.",
+    "m365AgentDocCounts": "{indexed, plural, one {# مستند} other {# مستندات}} تمت فهرستها · {failed} فشل · {noText} بدون نص · {needsPreparation} بحاجة لتحضير · {skipped} تم تجاوزها",
+    "m365CapDocuments": "المستندات: {count} / {max}",
+    "m365CapBytes": "{bytes} من {max}",
+    "m365CapOverDocuments": "تجاوزت الحد الأقصى لعدد المستندات ({max}). ألغِ تحديد المجلدات الفرعية، صفِّ حسب نوع الملف، أو احذف المصادر — يتم احتساب الملفات التي ستتم فهرستها فقط.",
+    "m365CapOverBytes": "تجاوزت الحد الأقصى للحجم ({max}). استبعد المجلدات الفرعية أو الملفات الكبيرة.",
+    "m365PlanScanning": "جاري الفحص…",
+    "m365PlanRefreshing": "جاري التحديث…",
+    "m365PlanFailed": "تعذر فحص المصادر باستخدام حساب Microsoft 365 الخاص بك.",
+    "m365PlanMissing": "غير موجود أو لا يوجد وصول",
+    "m365PlanIndexable": "{count, plural, one {# ملف سيتم فهرسته} other {# ملفات سيتم فهرستها}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# بحاجة لتحضير} other {# بحاجة لتحضير}}",
+    "m365PlanSkipped": "{count} تم تجاوزها",
+    "m365PlanShowDetails": "تفاصيل",
+    "m365PlanHideDetails": "إخفاء التفاصيل",
+    "m365PlanTruncated": "هذا المجلد كبير جدًا ولا يمكن فحصه بالكامل — تم عرض أول 1,000 عنصر فقط. يرجى اختيار مجلد فرعي.",
+    "m365PlanRecursive": "تضمين المجلدات الفرعية",
+    "m365PlanExtensionsLabel": "أنواع الملفات فقط:",
+    "m365PlanExtensionsPlaceholder": "مثلاً: pdf، docx",
+    "m365PlanSubfolders": "المجلدات الفرعية",
+    "m365PlanFolderCount": "{count, plural, one {# ملف} other {# ملفات}}",
+    "m365PlanGroupIndexable": "سيتم فهرسته",
+    "m365PlanGroupNeedsPreparation": "بحاجة لتحضير",
+    "m365PlanGroupSkipped": "تم تجاوزها",
+    "m365PlanPreparationHint": "صورة/صوت/فيديو — لم تُفهرس بعد",
+    "m365PlanMoreRows": "…و{count} المزيد",
+    "m365ItemStatus": {
+      "pending": "قيد الانتظار",
+      "indexed": "تمت فهرسته",
+      "failed": "فشل",
+      "noText": "لم يُستخرج نص",
+      "missing": "مفقود"
+    },
+    "m365SkipReason": {
+      "unsupported": "نوع غير مدعوم",
+      "tooLarge": "أكبر من 25 ميجابايت",
+      "disallowedType": "نوع محظور (تنفيذي/مضغوط)",
+      "malware": "مصنف من مايكروسوفت كبرمجية خبيثة",
+      "zeroBytes": "ملف فارغ",
+      "excluded": "مستبعد",
+      "typeFilter": "غير مشمول في مرشح الأنواع"
+    },
+    "localAdminGroup": {
+      "agents": "الوكلاء",
+      "promptAgents": "وكلاء البرومبت",
+      "m365Agents": "وكلاء Microsoft 365",
+      "orgAgents": "وكلاء المعرفة",
+      "guides": "الإرشادات",
+      "connectors": "الموصلات",
+      "datasets": "مجموعات بيانات الخريطة",
+      "unknown": "مفوّض ولكن غير موجود"
+    },
+    "localAdminGroupUnavailable": "هذه القائمة غير متاحة حالياً — سيتم الاحتفاظ بالتفويضات الموجودة.",
+    "localAdminBuiltIn": "مضمّن",
+    "localAdminSummary": "{count, plural, one {# تفويض} other {# تفويضات}}: {names}",
+    "localAdminSummaryMore": "{names} و{more} أخرى",
+    "localAdminNoDelegations": "لا توجد تفويضات حتى الآن — يمكن لمسؤول محلي بدون وكلاء رؤية منطقة الإدارة فقط.",
+    "localAdminSelectedCount": "{selected} من {total} محدد",
+    "localAdminCopyFrom": "نسخ من",
+    "localAdminClearAll": "مسح الكل",
+    "localAdminSelectGroup": "تحديد الكل",
+    "localAdminClearGroup": "مسح",
+    "localAdminSearchPlaceholder": "ابحث في الوكلاء أو الإرشادات أو الموصلات…",
+    "localAdminDuplicateEmail": "هذا البريد الإلكتروني مدرج بالفعل — يرجى دمج السجلين.",
+    "localAdminExpand": "عرض التفويضات",
+    "localAdminCollapse": "إخفاء التفويضات",
+    "localAdminDiscard": "تجاهل التغييرات",
+    "m365AgentRefresh": "تحديث",
+    "m365AgentRefreshHint": "استرجع الملفات التي تمت إضافتها أو تعديلها أو حذفها منذ آخر تشغيل — لن يتم تنزيل الملفات غير المتغيرة مرة أخرى. يرجى إبقاء هذا التبويب مفتوحاً.",
+    "m365AgentReindexAll": "إعادة فهرسة الكل",
+    "m365AgentRefreshProgress": "يتم التحديث — {done} من {total} {total, plural, one {مستند} other {مستندات}} تم تغييرها…",
+    "m365AgentRefreshDone": "تم إنهاء التحديث: {added} تمت إضافتها، {modified} تم تحديثها، {removed} تم حذفها، {failed} فشلت.",
+    "m365ChangesChecking": "جارٍ التحقق من Microsoft 365 لمعرفة التغييرات منذ آخر فهرسة…",
+    "m365ChangesFailed": "تعذر التحقق من التغييرات باستخدام حساب Microsoft 365 الخاص بك.",
+    "m365ChangesNeverIndexed": "لم يتم الفهرسة بعد — قم بتنفيذ الفهرسة بعد الحفظ.",
+    "m365ChangesFound": "{count, plural, one {# تغيير} other {# تغييرات}} منذ آخر فهرسة: {added} تمت إضافتها، {modified} تم تحديثها، {removed} تم حذفها.",
+    "m365ChangesNone": "لا توجد تغييرات منذ آخر فهرسة ({date}).",
+    "m365PrepareButton": "تهيئة",
+    "m365PrepareOcrButton": "تهيئة (OCR)",
+    "m365PrepareSaveFirst": "احفظ الوكيل للتهيئة",
+    "m365PrepareHintImage": "صورة — اتصال رؤية واحد",
+    "m365PrepareHintMedia": "~{minutes} دقائق من الصوت لتحويله إلى نص",
+    "m365PrepareHintOcr": "لا توجد طبقة نص — OCR عبر الرؤية، حتى 30 صفحة",
+    "m365PreparePreparing": "جارٍ التهيئة…",
+    "m365PreparePending": "جارٍ النسخ…",
+    "m365PreparedNote": "مُهيأ · {kind}",
+    "m365PreparedKind": {
+      "image": "وصف الصورة",
+      "audio": "النص المحوّل من الصوت",
+      "video": "النص المحوّل من الفيديو",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "تمت تهيئة {name} ({chars} حرفاً). شغّل التحديث لفهرسته.",
+    "m365PrepareStarted": "بدأ نسخ {name} في الخلفية — يرجى إبقاء هذا التبويب مفتوحاً.",
+    "m365PrepareFailed": "تعذر تهيئة {name}: {error}",
+    "m365PrepareFailedGeneric": "فشلت التهيئة.",
+    "canonicalKeyLabel": "المفتاح",
+    "copyKey": "نسخ المفتاح",
+    "agentKeySearchPlaceholder": "ابحث عن العملاء أو الأدلة أو الموصلات... أو الصق مفتاحاً",
+    "agentKeyAddCustom": "إضافة \"{key}\" كما كُتب",
+    "agentKeyRemove": "إزالة {name}",
+    "hideAgent": "إخفاء",
+    "unhideAgent": "إظهار",
+    "hideAgentHint": "إخفاء هذا العميل من قائمة المسؤولين الخاصة بك. يؤثر ذلك فقط على العرض الخاص بك — المستخدمون والمسؤولون الآخرون غير متأثرين.",
+    "unhideAgentHint": "إظهار هذا العميل مرة أخرى في قائمة المسؤولين الخاصة بك.",
+    "hiddenBadge": "مخفي",
+    "hiddenAgentsCount": "{count, plural, one {عميل واحد مخفي} other {# عملاء مخفين}}",
+    "hiddenAgentsShowing": "يتم عرض {count, plural, one {عميل واحد مخفي} other {# عملاء مخفين}}",
+    "hiddenAgentsShow": "إظهار",
+    "hiddenAgentsHide": "إخفاء مرة أخرى",
+    "allAgentsHidden": "جميع العملاء هنا مخفيون عن عرضك — استخدم \"إظهار\" لإظهارهم."
   },
   "localModels": {
     "title": "النماذج المحلية",
@@ -4248,9 +4407,15 @@
       "connectors": "موصلات المنظمة ومن يمكنه استخدامها.",
       "guides": "أدلة الأسلوب والمصطلحات والامتثال.",
       "mapDatasets": "مجموعات البيانات المنسقة المتاحة لسير عمل الخرائط.",
-      "localAdmins": "تفويض تحرير قواعد الوصول لأشخاص آخرين."
+      "localAdmins": "تفويض تحرير قواعد الوصول لأشخاص آخرين.",
+      "workflows": "تفعيل أو تعطيل سير العمل في المحادثة للجميع.",
+      "viewAs": "اختبر التطبيق كشخص يستوفي - أو لا يستوفي - شرطاً ما."
     },
-    "openSettings": "افتح الإعدادات"
+    "openSettings": "افتح الإعدادات",
+    "area": {
+      "workflows": "سير العمل",
+      "viewAs": "عرض كـ"
+    }
   },
   "limits": {
     "title": "حدود الاستخدام",
@@ -4452,7 +4617,8 @@
     "groupSearchNoResults": "لا توجد مجموعات تطابق هذا الاسم.",
     "groupSearchError": "فشل بحث المجموعات. لا يزال بإمكانك لصق معرف كائن المجموعة أدناه.",
     "groupSearchHint": "اكتب حرفين على الأقل للبحث في مجموعات مؤسستك، أو الصق معرف كائن المجموعة مباشرةً. يسري التجاوز على أعضاء المجموعة في Microsoft Entra.",
-    "groupsFlagOff": "استهداف المجموعات غير مفعل في هذه البيئة حتى الآن. الهدف للمجموعات الموجودة لا يزال يعمل."
+    "groupsFlagOff": "استهداف المجموعات غير مفعل في هذه البيئة حتى الآن. الهدف للمجموعات الموجودة لا يزال يعمل.",
+    "featureDisabled": "حدود الاستخدام غير مفعّلة لهذا النشر."
   },
   "m365": {
     "connections": {
@@ -4813,5 +4979,149 @@
     "failed": "تعذرت المشاركة — لم يتم إنشاء أي شيء.",
     "copyFailed": "تعذر نسخ الرابط — يرجى تحديده أعلاه ونسخه يدوياً.",
     "lastMessagesCountLabel": "عدد الرسائل الأخيرة التي سيتم تضمينها"
+  },
+  "toolModes": {
+    "webSearch": "بحث ويب",
+    "codeInterpreter": "مفسر الشيفرة",
+    "off": "إيقاف",
+    "auto": "تلقائي",
+    "always": "دائمًا",
+    "routingPrivacy": "الخصوصية",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "بحث Azure AI يرسل الاستعلامات عبر Azure AI Foundry، وقد يتم الاحتفاظ بها.",
+    "learnMore": "اعرف المزيد"
+  },
+  "agentAttach": {
+    "browserTitle": "الوكلاء",
+    "browserSubtitle": "أضف وكلاء وموصلات إلى هذه المحادثة، أو ابدأ محادثة جديدة مع وكيل. معظمهم يعمل مع أي نموذج اخترته.",
+    "searchPlaceholder": "ابحث عن الوكلاء والموصلات…",
+    "loading": "جارٍ تحميل الوكلاء…",
+    "noMatches": "لا توجد نتائج مطابقة لبحثك.",
+    "noAgents": "لا يوجد وكلاء متاحون.",
+    "addToChat": "أضف إلى هذه المحادثة",
+    "removeFromChat": "إزالة من هذه المحادثة",
+    "newChat": "محادثة جديدة",
+    "attached": "تم الإرفاق",
+    "detach": "إلغاء الإرفاق",
+    "change": "تغيير",
+    "browse": "تصفح الوكلاء…",
+    "noAgent": "لا يوجد وكيل مرفق",
+    "close": "إغلاق",
+    "kind": {
+      "rag": "معرفة",
+      "prompt": "شخصية",
+      "m365": "معرفة (Microsoft 365)",
+      "org": "معرفة",
+      "foundry": "وكيل Foundry",
+      "connector": "موصل"
+    },
+    "semantics": {
+      "your-model": "يستخدم النموذج الخاص بك",
+      "pinned-model": "النموذج محدد من الإدارة",
+      "own-model": "يعمل على نموذجه الخاص"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "اقتراحات من مؤسستك",
+    "searching": "جارٍ البحث في مؤسستك…",
+    "noMatches": "لا توجد نتائج في الدليل — يمكنك إدخال العنوان يدويًا"
+  },
+  "workflowsAdmin": {
+    "title": "سير العمل",
+    "description": "تمكين أو تعطيل كل سير عمل لجميع أفراد المؤسسة. سير العمل المعطل مخفٍ في القوائم ويتم رفضه من قبل الخادم حتى لمن يحق لهم الوصول إليه عادةً.",
+    "layeredNote": "علم conversationWorkflows في LaunchDarkly ما زال يتحكم في النشر: الوصول لسير العمل المفعّل هنا متاح فقط حيث يكون العلم مفعلًا. لا يمكن لهذه الصفحة إظهار أي شيء يخفيه هذا العلم.",
+    "loading": "جارٍ تحميل سياسة سير العمل…",
+    "loadError": "تعذّر تحميل سياسة سير العمل.",
+    "policyUnavailable": "تعذّر قراءة سياسة سير العمل من التخزين. تم إخفاء المحولات بدلاً من عرضها بقيم افتراضية قد لا تتوافق مع ما يتم تطبيقه.",
+    "retry": "إعادة المحاولة",
+    "enableAll": "تفعيل الكل",
+    "disableAll": "تعطيل الكل",
+    "enabledLabel": "مفعّل",
+    "disabledLabel": "معطل",
+    "defaultOnHint": "الافتراضي عند عدم حفظ سياسة: مفعّل.",
+    "defaultOffHint": "الافتراضي عند عدم حفظ سياسة: معطل — يجب على المدير تفعيله صراحةً.",
+    "grantsNote": "معالجة المنح مقصورة أيضاً على مستخدمي MSF-USA في قسم البرامج الذين يوجد في مسمّاهم الوظيفي \"grants\" أو في قسم الأنظمة بمسمى وظيفي يحتوي \"innovation\". تفعيلها هنا لا يوسع هذا الشرط.",
+    "unsaved": "لديك تغييرات غير محفوظة.",
+    "save": "حفظ",
+    "saving": "جارٍ الحفظ…",
+    "saveSuccess": "تم حفظ سياسة سير العمل.",
+    "saveError": "تعذّر حفظ سياسة سير العمل.",
+    "conflictError": "قام مدير آخر بتغيير السياسة أولاً. تم إعادة تحميلها — يرجى المراجعة والحفظ مرة أخرى.",
+    "updatedByLine": "آخر حفظ بواسطة {by} في {at}.",
+    "neverSaved": "لم يتم حفظ أي سياسة بعد؛ القيم الافتراضية أعلاه مطبقة."
+  },
+  "viewAs": {
+    "title": "عرض كـ",
+    "description": "اختبر التطبيق لجلسة العمل الخاصة بك فقط باعتبارك شخصًا يستوفي أو لا يستوفي شرطًا يُحدد عادةً من الدليل أو من المسؤولين. هويتك لا تتغير أبدًا: كل ما تنشئه يبقى ملكًا لك وكل سجل تدقيق يحمل اسمك.",
+    "activeTitle": "وضع العرض كـ مفعل",
+    "inactiveTitle": "وضع العرض كـ غير مفعل",
+    "sections": {
+      "role": "دور المسؤول",
+      "region": "منطقة البيانات",
+      "attributes": "سمات الدليل",
+      "groups": "عضوية المجموعة",
+      "presets": "الإعدادات المسبقة"
+    },
+    "role": {
+      "global": "مسؤول عام (دورك الفعلي)",
+      "local": "مسؤول محلي",
+      "none": "مستخدم عادي",
+      "localKeysLabel": "مفاتيح الوكلاء المفوضة",
+      "localKeysHint": "مفاتيح الوكلاء النظامية المفصولة بفواصل التي يمكن لهذا المسؤول المحلي تعديلها. اتركها فارغة إذا كان لا يوجد وكلاء مفوضون.",
+      "noneWarning": "كمستخدم عادي ستختفي جميع مناطق الإدارة الأخرى. تبقى هذه الصفحة متاحة، ويوفر الشريط العلوي في التطبيق دائمًا وسيلة للخروج."
+    },
+    "region": {
+      "actual": "الفعلية ({region})",
+      "hint": "يوجه طلباتك — وأي ملفات تقوم بتحميلها أثناء التفعيل — إلى تخزين المنطقة الأخرى. يتجاوز قيمة ?regionOverride= في الكوكي."
+    },
+    "attributes": {
+      "department": "القسم",
+      "companyName": "الشركة",
+      "jobTitle": "المسمى الوظيفي",
+      "officeId": "المكتب",
+      "officeActual": "المكتب الفعلي",
+      "officeNone": "لا يوجد مكتب",
+      "actualValue": "القيمة الفعلية: {value}",
+      "actualEmpty": "القيمة الفعلية: (فارغ)",
+      "hint": "اترك الحقل فارغًا للحفاظ على قيمتك الفعلية. هذه الحقول تؤثر على قاعدة المنح وحدود الاستخدام المرتبطة بالخاصية وقواعد الوصول."
+    },
+    "groups": {
+      "label": "معرفات المجموعات",
+      "placeholder": "معرّف كائن مجموعة Entra واحد في كل سطر",
+      "hint": "يستبدل عضويتك الحقيقية لهذه الجلسة — لا يضيف عليها — بحيث يمكنك اختبار الانتماء وعدم الانتماء."
+    },
+    "presets": {
+      "grantsMember": "عضو فريق المنح",
+      "regularUser": "مستخدم عادي",
+      "localAdmin": "مسؤول محلي، بدون وكلاء",
+      "otherRegion": "منطقة أخرى",
+      "hint": "الإعدادات المسبقة تملأ النموذج؛ لن يُطبق أي شيء حتى تضغط على تطبيق."
+    },
+    "apply": "تطبيق وإعادة تحميل",
+    "applying": "جارٍ التطبيق…",
+    "clear": "الخروج من وضع عرض باسم",
+    "clearing": "جارٍ الخروج…",
+    "reset": "إعادة تعيين النموذج",
+    "nothingToApply": "عيّن تغييرًا واحدًا على الأقل لتتمكن من التطبيق.",
+    "applyError": "تعذر تطبيق وضع عرض باسم: {error}",
+    "clearError": "تعذر الخروج من وضع عرض باسم: {error}",
+    "loadError": "تعذر تحميل حالة وضع عرض باسم.",
+    "retry": "إعادة المحاولة",
+    "expiresNote": "يستمر وضع عرض باسم حتى 8 ساعات أو حتى تغادر.",
+    "banner": {
+      "label": "عرض باسم",
+      "adjust": "تعديل",
+      "exit": "خروج",
+      "role": {
+        "local": "مسؤول محلي",
+        "none": "مستخدم عادي"
+      },
+      "region": "المنطقة {region}",
+      "department": "القسم \"{value}\"",
+      "companyName": "الشركة \"{value}\"",
+      "jobTitle": "المسمى \"{value}\"",
+      "officeId": "المكتب {value}",
+      "groups": "{count, plural, one {مجموعة واحدة} other {# مجموعات}}"
+    }
   }
 }

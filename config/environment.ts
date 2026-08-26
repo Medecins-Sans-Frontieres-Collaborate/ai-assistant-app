@@ -133,6 +133,22 @@ const serverEnvSchema = z.object({
   // time and per-user probe latency, not probe fan-out. 200 is a hard
   // sanity bound — the synchronous index route has a 300s budget.
   M365_AGENT_MAX_DOCUMENTS: z.coerce.number().int().min(1).max(200).default(50),
+  /**
+   * Sum of the sizes of an M365 agent's indexable files (MB). Known from
+   * Graph metadata, so the plan view can refuse an oversized tree before a
+   * single download.
+   */
+  M365_AGENT_MAX_SOURCE_MB: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(4096)
+    .default(512),
+  /**
+   * Vision-capable chat deployment used to describe images and OCR scanned
+   * PDFs when an admin prepares such a file for an M365 agent (phase 4).
+   */
+  M365_AGENT_VISION_MODEL: z.string().default('gpt-5-mini'),
 
   // Web search backend:
   //  - 'news': GDELT + Google News RSS queried IN PARALLEL and merged —
@@ -172,13 +188,13 @@ const serverEnvSchema = z.object({
   CODE_INTERPRETER_ENABLED: booleanString(true),
   // Deployment that backs the interpreter sub-tool round-trip (must support
   // the Responses-API code_interpreter tool in the project's region).
-  CODE_INTERPRETER_MODEL: z.string().default('gpt-5.2'),
+  CODE_INTERPRETER_MODEL: z.string().default('gpt-5.4'),
 
   // Deployment used by the 'bing-responses' web-search provider (Responses
   // API native web_search tool). Must be a Responses-capable deployment in
   // the default Foundry project, with the web_search tool enabled on the
   // subscription.
-  WEB_SEARCH_RESPONSES_MODEL: z.string().default('gpt-5.2'),
+  WEB_SEARCH_RESPONSES_MODEL: z.string().default('gpt-5.4'),
 
   // MCP (Model Context Protocol) connectors
   // Server-side gate for ARBITRARY (non-catalog) MCP server URLs — defense in
@@ -218,15 +234,12 @@ const serverEnvSchema = z.object({
   // lowercased + trimmed). Bootstrap mechanism — changing it needs a redeploy.
   AGENT_ACCESS_ADMINS: z.string().optional(),
 
-  // Usage limits (docs/LIMITS.md)
-  // Master gate for enforcement + admin API + UI. Break-glass for a
-  // policy-blob outage: set to "false" and redeploy.
-  //
-  // Deliberately its OWN gate rather than reusing AGENT_ACCESS_CONTROL_ENABLED:
-  // break-glassing access control during a rules-blob outage must not also
-  // silently remove every spend cap. The admin roster IS shared — limits are
-  // authored by the same AGENT_ACCESS_ADMINS global admins.
-  LIMITS_ENABLED: booleanString(false),
+  // Usage limits (docs/LIMITS.md) have no env gate: the UI is gated by the
+  // client-side `usageLimits` LaunchDarkly flag, and the server side is inert
+  // until a policy is authored (no policy blob → everything unlimited).
+  // Break-glass for a bad policy is the admin UI itself, or deleting the blob.
+  // The admin roster IS shared — limits are authored by the same
+  // AGENT_ACCESS_ADMINS global admins.
 
   // Application Configuration
   // Optional explicit override; when unset the default model resolves

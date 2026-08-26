@@ -6,10 +6,17 @@ import LanguageSwitcher from '@/components/Sidebar/components/LanguageSwitcher';
 import '@testing-library/jest-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-// Mock next-intl
+// Mock next-intl: the test drives the locale; translations echo their keys
+// (the shared LanguagePicker only uses them for placeholder/aria text).
 const mockUseLocale = vi.fn();
 vi.mock('next-intl', () => ({
   useLocale: () => mockUseLocale(),
+  useTranslations: () => {
+    const translate = (key: string) => key;
+    translate.has = () => false;
+    translate.rich = (key: string) => key;
+    return translate;
+  },
 }));
 
 // Mock locales utility
@@ -26,6 +33,10 @@ vi.mock('@/lib/utils/app/locales', () => ({
   },
 }));
 
+const openPicker = () => {
+  fireEvent.click(screen.getByRole('button', { name: 'chat.selectLanguage' }));
+};
+
 describe('LanguageSwitcher', () => {
   let mockReload: ReturnType<typeof vi.fn>;
   let originalLocation: typeof window.location;
@@ -33,13 +44,11 @@ describe('LanguageSwitcher', () => {
   beforeEach(() => {
     mockUseLocale.mockReturnValue('en');
 
-    // Mock window.location.reload
     mockReload = vi.fn();
     originalLocation = window.location;
     delete (window as any).location;
     window.location = { ...originalLocation, reload: mockReload } as any;
 
-    // Mock document.cookie
     Object.defineProperty(document, 'cookie', {
       writable: true,
       value: '',
@@ -52,180 +61,89 @@ describe('LanguageSwitcher', () => {
   });
 
   describe('Rendering', () => {
-    it('renders language selector', () => {
+    it('renders a trigger showing the current locale autonym', () => {
+      mockUseLocale.mockReturnValue('fr');
       render(<LanguageSwitcher />);
 
-      const select = screen.getByRole('combobox');
-      expect(select).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'chat.selectLanguage' }),
+      ).toHaveTextContent('Français');
     });
 
-    it('renders all supported locales as options', () => {
+    it('opens the searchable picker listing every supported locale', () => {
       render(<LanguageSwitcher />);
+      openPicker();
 
-      expect(screen.getByText('English')).toBeInTheDocument();
+      const listbox = screen.getByRole('listbox');
+      expect(listbox).toBeInTheDocument();
+      // SettingDialog's outside-click close ignores marked portals; without
+      // this, clicking a language row closes Settings before it can select.
+      expect(listbox).toHaveAttribute('data-settings-portal');
+      // Autonyms as primary labels (trigger also shows 'English' — hence
+      // getAllByText for the active locale).
+      expect(screen.getAllByText('English').length).toBeGreaterThan(0);
       expect(screen.getByText('Français')).toBeInTheDocument();
       expect(screen.getByText('Español')).toBeInTheDocument();
       expect(screen.getByText('Deutsch')).toBeInTheDocument();
     });
 
-    it('displays current locale as selected', () => {
-      mockUseLocale.mockReturnValue('fr');
+    it('marks the current locale as selected', () => {
+      mockUseLocale.mockReturnValue('es');
       render(<LanguageSwitcher />);
+      openPicker();
 
-      const select = screen.getByRole('combobox') as HTMLSelectElement;
-      expect(select.value).toBe('fr');
+      const selected = screen.getByRole('option', { selected: true });
+      expect(selected).toHaveTextContent('Español');
     });
 
-    it('has correct number of options', () => {
+    it('search filters the list', () => {
       render(<LanguageSwitcher />);
+      openPicker();
 
-      const options = screen.getAllByRole('option');
-      expect(options).toHaveLength(4);
+      fireEvent.change(screen.getByPlaceholderText('chat.searchLanguages'), {
+        target: { value: 'Deu' },
+      });
+
+      expect(screen.getByText('Deutsch')).toBeInTheDocument();
+      expect(screen.queryByText('Français')).toBeNull();
     });
   });
 
   describe('Locale Change', () => {
-    it('sets NEXT_LOCALE cookie when locale is changed', () => {
+    it('sets the NEXT_LOCALE cookie and reloads on selection', () => {
       render(<LanguageSwitcher />);
+      openPicker();
 
-      const select = screen.getByRole('combobox');
-      fireEvent.change(select, { target: { value: 'es' } });
+      fireEvent.click(screen.getByText('Español'));
 
       expect(document.cookie).toContain('NEXT_LOCALE=es');
-    });
-
-    it('calls window.location.reload when locale is changed', () => {
-      render(<LanguageSwitcher />);
-
-      const select = screen.getByRole('combobox');
-      fireEvent.change(select, { target: { value: 'es' } });
-
+      expect(document.cookie).toContain('path=/');
+      expect(document.cookie).toContain('max-age=31536000');
+      expect(document.cookie).toContain('SameSite=Lax');
       expect(mockReload).toHaveBeenCalledTimes(1);
     });
 
-    it('sets correct cookie attributes', () => {
+    it('re-selecting the current locale is a no-op (no reload)', () => {
       render(<LanguageSwitcher />);
+      openPicker();
 
-      const select = screen.getByRole('combobox');
-      fireEvent.change(select, { target: { value: 'de' } });
+      fireEvent.click(screen.getByRole('option', { selected: true }));
 
-      const cookie = document.cookie;
-      expect(cookie).toContain('path=/');
-      expect(cookie).toContain('max-age=31536000');
-      expect(cookie).toContain('SameSite=Lax');
+      expect(document.cookie).not.toContain('NEXT_LOCALE');
+      expect(mockReload).not.toHaveBeenCalled();
     });
 
-    it('updates cookie for different locales', () => {
+    it('keyboard: ArrowDown + Enter selects the highlighted language', () => {
       render(<LanguageSwitcher />);
+      openPicker();
 
-      const select = screen.getByRole('combobox');
+      const listbox = screen.getByRole('listbox');
+      // Options are sorted alphabetically by autonym: Deutsch is first.
+      fireEvent.keyDown(listbox, { key: 'ArrowDown' });
+      fireEvent.keyDown(listbox, { key: 'Enter' });
 
-      fireEvent.change(select, { target: { value: 'fr' } });
-      expect(document.cookie).toContain('NEXT_LOCALE=fr');
-
-      fireEvent.change(select, { target: { value: 'de' } });
       expect(document.cookie).toContain('NEXT_LOCALE=de');
-    });
-  });
-
-  describe('Styling', () => {
-    it('has correct select styling classes', () => {
-      render(<LanguageSwitcher />);
-
-      const select = screen.getByRole('combobox');
-      expect(select).toHaveClass('w-[100px]');
-      expect(select).toHaveClass('cursor-pointer');
-      expect(select).toHaveClass('bg-transparent');
-      expect(select).toHaveClass('text-center');
-    });
-
-    it('has dark mode styling', () => {
-      render(<LanguageSwitcher />);
-
-      const select = screen.getByRole('combobox');
-      expect(select).toHaveClass('dark:text-gray-200');
-    });
-
-    it('options have correct background classes', () => {
-      render(<LanguageSwitcher />);
-
-      const options = screen.getAllByRole('option');
-      options.forEach((option) => {
-        expect(option).toHaveClass('bg-white');
-        expect(option).toHaveClass('dark:bg-black');
-      });
-    });
-
-    it('has hover styling', () => {
-      render(<LanguageSwitcher />);
-
-      const select = screen.getByRole('combobox');
-      expect(select).toHaveClass('hover:bg-gray-500/10');
-    });
-  });
-
-  describe('Different Locales', () => {
-    it('works with English locale', () => {
-      mockUseLocale.mockReturnValue('en');
-      render(<LanguageSwitcher />);
-
-      const select = screen.getByRole('combobox') as HTMLSelectElement;
-      expect(select.value).toBe('en');
-      expect(screen.getByText('English')).toBeInTheDocument();
-    });
-
-    it('works with French locale', () => {
-      mockUseLocale.mockReturnValue('fr');
-      render(<LanguageSwitcher />);
-
-      const select = screen.getByRole('combobox') as HTMLSelectElement;
-      expect(select.value).toBe('fr');
-      expect(screen.getByText('Français')).toBeInTheDocument();
-    });
-
-    it('works with Spanish locale', () => {
-      mockUseLocale.mockReturnValue('es');
-      render(<LanguageSwitcher />);
-
-      const select = screen.getByRole('combobox') as HTMLSelectElement;
-      expect(select.value).toBe('es');
-      expect(screen.getByText('Español')).toBeInTheDocument();
-    });
-
-    it('works with German locale', () => {
-      mockUseLocale.mockReturnValue('de');
-      render(<LanguageSwitcher />);
-
-      const select = screen.getByRole('combobox') as HTMLSelectElement;
-      expect(select.value).toBe('de');
-      expect(screen.getByText('Deutsch')).toBeInTheDocument();
-    });
-  });
-
-  describe('Option Values', () => {
-    it('each option has correct value attribute', () => {
-      render(<LanguageSwitcher />);
-
-      const englishOption = screen.getByText('English') as HTMLOptionElement;
-      expect(englishOption.value).toBe('en');
-
-      const frenchOption = screen.getByText('Français') as HTMLOptionElement;
-      expect(frenchOption.value).toBe('fr');
-
-      const spanishOption = screen.getByText('Español') as HTMLOptionElement;
-      expect(spanishOption.value).toBe('es');
-
-      const germanOption = screen.getByText('Deutsch') as HTMLOptionElement;
-      expect(germanOption.value).toBe('de');
-    });
-  });
-
-  describe('Accessibility', () => {
-    it('select is keyboard accessible', () => {
-      render(<LanguageSwitcher />);
-
-      const select = screen.getByRole('combobox');
-      expect(select.tagName).toBe('SELECT');
+      expect(mockReload).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -950,7 +950,12 @@
       "showFewer": "Montre mwens"
     },
     "retryWithModel": "Ese ak {model}",
-    "createTodoTasks": "Kreye travay To Do soti nan repons sa a"
+    "createTodoTasks": "Kreye travay To Do soti nan repons sa a",
+    "attachedFileExpired": "Yon fichye ki te tache pa disponib ankò — fichye ou telechaje yo estoke pandan yon limit tan. Yo retire li nan konvèsasyon sa a. Eseye ankò san li, oswa telechaje fichye a ankò.",
+    "repeatedFailureNotice": "Sa ap toujou echwe — konvèsasyon an ka gate. Kòmanse yon nouvo konvèsasyon anjeneral rezoud pwoblèm nan.",
+    "startNewConversation": "Kòmanse yon nouvo konvèsasyon",
+    "downloadDebugInfo": "Telechaje enfòmasyon analiz erè",
+    "includeMessageText": "Enkli tèks mesaj la"
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",
@@ -981,7 +986,9 @@
     "quickActions": "Aksyon Rapid",
     "expandFolder": "Elaji dosye {name}",
     "collapseFolder": "Redwi dosye {name}",
-    "folderOptions": "Opsyon {name}"
+    "folderOptions": "Opsyon {name}",
+    "agentsEntry": "Ajan",
+    "agentsTitle": "Browse ajan yo epi kòmanse chat ak youn"
   },
   "errors": {
     "somethingWentWrong": "Yon bagay mal pase",
@@ -2651,6 +2658,10 @@
       "map": {
         "label": "Kat",
         "description": "Konvèti nenpòt done an kote sou yon kat"
+      },
+      "grants": {
+        "label": "Pwosesis Sibvansyon",
+        "description": "Rasinble epi retire done estriktire nan narasyon sibvansyon yo"
       }
     },
     "chooser": {
@@ -2660,7 +2671,8 @@
       "newTranslation": "Nouvo tradiksyon",
       "newDocument": "Nouvo dokiman",
       "newDataAnalysis": "Nouvo analiz done",
-      "newMap": "Nouvo kat"
+      "newMap": "Nouvo kat",
+      "newGrants": "Nouvo pwosesis sibvansyon"
     },
     "translation": {
       "chooseLanguage": "Lang sib",
@@ -3277,7 +3289,8 @@
       "unknownType": "Konvèsasyon sa ap itilize yon workflow vèsyon sa a pa rekonèt. Istwa konvèsasyon an parèt anba a.",
       "untitled": "Nouvo Konvèsasyon",
       "toggleMenu": "Afiche/oswa kache meni an",
-      "model": "Modèl pou workflow sa a"
+      "model": "Modèl pou workflow sa a",
+      "disabledByAdmin": "Administratè dezaktive workflow sa. Istwa konvèsasyon an afiche pi ba a."
     },
     "tabs": {
       "label": "Mòd konvèsasyon",
@@ -4031,7 +4044,153 @@
     "conflictTakeTheirs": "Pran pa yo",
     "conflictNoFieldDiff": "Valè yo menm — sèlman vèsyon dosye a chanje.",
     "conflictRecordGone": "Dosye sa a efase (oswa li pa te ka rechaje). Kopi sa ou bezwen nan fòm lan, epi rechaje paj la.",
-    "groupsFlagOff": "Sible gwoup yo poko aktive pou anviwònman sa a. Sijè gwoup ki deja egziste yo ap kontinye mache."
+    "groupsFlagOff": "Sible gwoup yo poko aktive pou anviwònman sa a. Sijè gwoup ki deja egziste yo ap kontinye mache.",
+    "catalogOauth": {
+      "title": "App OAuth entegre yo",
+      "description": "App OAuth pou tout deplwaman pou konektè entegre yo (GitHub, Asana, elatriye). Si ou sove yon anrejistreman isit la, li ap ranplase variab anviwònman MCP_OAUTH_*. Si ou retire li, variab anviwònman yo ap pran plas li. Sekrè kliyan an ankripte pandan li ret nan depo epi li pap parèt ankò.",
+      "badgeAdmin": "Konfigire isit la",
+      "badgeEnv": "Soti nan anviwònman an",
+      "badgeNone": "Pa konfigire",
+      "badgeDcr": "Self-enregistré",
+      "badgeDcrHint": "Founisè sa a ka enskri yon kliyan OAuth otomatikman, kidonk li mache menm si pa gen app ki konfigire isit la.",
+      "clientIdLabel": "ID kliyan OAuth",
+      "clientSecretLabel": "Sekrè kliyan OAuth",
+      "secretStoredPlaceholder": "Sove — tape pou chanje, kite vid pou kenbe",
+      "secretNewPlaceholder": "Kole sekrè kliyan an",
+      "save": "Sove",
+      "remove": "Retire",
+      "removeToEnv": "Retire (retounen sou anviwònman an)",
+      "saved": "App OAuth {name} sove",
+      "removed": "App OAuth {name} retire",
+      "saveError": "Sove app OAuth la echwe. Eseye ankò.",
+      "conflict": "Anrejistreman sa a chanje yon lòt kote — rechaje, tanpri eseye ankò.",
+      "storageUnavailable": "Depo admin lan pa disponib; pa t kapab montre anrejistreman ki egziste. Sove ap rete dezaktive jiskaske sa rezoud.",
+      "sealingUnavailable": "Ankriptaj pou sekrè pa konfigire sou deplwaman sa a (AUTH_SECRET manke) — pa ka sove sekrè kliyan yo.",
+      "updatedBy": "Mizajou pa {by} sou {at}"
+    },
+    "orgAgentOverrideTitle": "Ranplase ajan entegre",
+    "orgAgentOverrideAction": "Ranplase",
+    "orgAgentBuiltinBadge": "Entegre",
+    "orgAgentBuiltinHint": "Defini nan konfigirasyon deplwaman an. Règ aksè li la editab isit la; ranplase l pou chanje paramèt li san deplwaye.",
+    "m365AgentIndexProgress": "Ap endèks {done} sou {total} {total, plural, one {dokiman} other {dokiman yo}}…",
+    "m365AgentIndexInterrupted": "Endèks la te entèwonp nan {done} sou {total} — kontinye pou ou kapab swiv.",
+    "m365AgentIndexStartedBy": "kòmanse pa {name}",
+    "m365AgentIndexResume": "Kontinye",
+    "m365AgentIndexResumeHint": "Kontinye endèks kote li te sispann, lè w itilize aksè Microsoft 365 ou. Kite fich sa a louvri.",
+    "m365AgentIndexCancel": "Anile",
+    "m365AgentIndexCancelled": "Endèks anile — dokiman yo ki deja trete ap rete rechèchab.",
+    "m365AgentIndexJobFailed": "Endèks sispann: {error}",
+    "m365AgentIndexDone": "Endèks fini: {indexed} endèks, {failed} echwe, {noText} san tèks.",
+    "m365AgentDocCounts": "{indexed, plural, one {# dokiman} other {# dokiman}} endèks · {failed} echwe · {noText} san tèks · {needsPreparation} bezwen preparasyon · {skipped} sote",
+    "m365CapDocuments": "Dokiman: {count} / {max}",
+    "m365CapBytes": "{bytes} sou {max}",
+    "m365CapOverDocuments": "Depase limit {max} dokiman. Dekoche sous-dosye, filtre pa tip fichye, oswa retire sous yo — sèlman fichye ki pral endèks yo konte.",
+    "m365CapOverBytes": "Depase bidjè gwosè {max}. Eskli sous-dosye oswa fichye ki gwo.",
+    "m365PlanScanning": "Ap eskane…",
+    "m365PlanRefreshing": "ap mete ajou…",
+    "m365PlanFailed": "Pa kapab eskane sous yo ak kont Microsoft 365 ou.",
+    "m365PlanMissing": "Pa jwenn oswa pa gen aksè",
+    "m365PlanIndexable": "{count, plural, one {# fichye ap endèks} other {# fichye ap endèks}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# bezwen preparasyon} other {# bezwen preparasyon}}",
+    "m365PlanSkipped": "{count} sote",
+    "m365PlanShowDetails": "Detay",
+    "m365PlanHideDetails": "Kache detay yo",
+    "m365PlanTruncated": "Katab sa a two gwo pou eskane nèt — sèlman 1,000 premye atik yo te montre. Chwazi yon sous-dosye pito.",
+    "m365PlanRecursive": "Enkli sous-dosye",
+    "m365PlanExtensionsLabel": "Sèl tip fichye:",
+    "m365PlanExtensionsPlaceholder": "egzanp: pdf, docx",
+    "m365PlanSubfolders": "Sous-dosye yo",
+    "m365PlanFolderCount": "{count, plural, one {# fichye} other {# fichye}}",
+    "m365PlanGroupIndexable": "Ap endèks",
+    "m365PlanGroupNeedsPreparation": "Bezwen preparasyon",
+    "m365PlanGroupSkipped": "Sote",
+    "m365PlanPreparationHint": "imaj/odyo/videyo — poko endèks",
+    "m365PlanMoreRows": "…epi {count} ankò",
+    "m365ItemStatus": {
+      "pending": "an atant",
+      "indexed": "endèks",
+      "failed": "echwe",
+      "noText": "pa gen tèks ekstrè",
+      "missing": "pa jwenn"
+    },
+    "m365SkipReason": {
+      "unsupported": "tip pa sipòte",
+      "tooLarge": "plis pase 25 MB",
+      "disallowedType": "tip bloke (egzekitab/achiv)",
+      "malware": "make kòm malveyan pa Microsoft",
+      "zeroBytes": "fichye vid",
+      "excluded": "ekskli",
+      "typeFilter": "pa nan filtre tip la"
+    },
+    "localAdminGroup": {
+      "agents": "Ajan",
+      "promptAgents": "Ajan kòmand",
+      "m365Agents": "Ajan Microsoft 365",
+      "orgAgents": "Ajan konesans",
+      "guides": "Gid",
+      "connectors": "Konektè",
+      "datasets": "Bazdone kat",
+      "unknown": "Delege men pa jwenn"
+    },
+    "localAdminGroupUnavailable": "Lis sa a pa disponib pou kounye a — delege ki egziste yo rete la.",
+    "localAdminBuiltIn": "entegre",
+    "localAdminSummary": "{count, plural, one {# delege} other {# delege}} : {names}",
+    "localAdminSummaryMore": "{names} ak {more} lòt",
+    "localAdminNoDelegations": "Pa gen okenn delege ankò — yon administratè lokal san ajan kapab sèlman wè zòn administrasyon an.",
+    "localAdminSelectedCount": "{selected} sou {total} chwazi",
+    "localAdminCopyFrom": "Kopye depi",
+    "localAdminClearAll": "Netwaye tout",
+    "localAdminSelectGroup": "Chwazi tout",
+    "localAdminClearGroup": "Netwaye",
+    "localAdminSearchPlaceholder": "Chèche ajan, gid, konektè…",
+    "localAdminDuplicateEmail": "Imèl sa a deja nan lis la — fusionne de antre yo.",
+    "localAdminExpand": "Montre delege yo",
+    "localAdminCollapse": "Kache delege yo",
+    "localAdminDiscard": "Anile chanjman yo",
+    "m365AgentRefresh": "Rafrechi",
+    "m365AgentRefreshHint": "Pran fichye ki ajoute, modifye oswa retire depi dènye eskan — fichye ki pa chanje yo pap telechaje ankò. Kenbe fich sa louvri.",
+    "m365AgentReindexAll": "Refè tout endèks",
+    "m365AgentRefreshProgress": "Ap rafrechi — {done} sou {total} chanje {total, plural, one {dokiman} other {dokiman}}…",
+    "m365AgentRefreshDone": "Rafrechi fini : {added} ajoute, {modified} mete ajou, {removed} retire, {failed} echwe.",
+    "m365ChangesChecking": "Ap verifye chanjman nan Microsoft 365 depi dènye endèks…",
+    "m365ChangesFailed": "Pa kapab verifye chanjman ak kont Microsoft 365 ou an.",
+    "m365ChangesNeverIndexed": "Pa endèkse ankò — kouri Endèks apre ou fin sove.",
+    "m365ChangesFound": "{count, plural, one {# chanjman} other {# chanjman}} depi dènye endèks : {added} ajoute, {modified} mete ajou, {removed} retire.",
+    "m365ChangesNone": "Pa gen okenn chanjman depi dènye endèks la ({date}).",
+    "m365PrepareButton": "Prepare",
+    "m365PrepareOcrButton": "Prepare (OCR)",
+    "m365PrepareSaveFirst": "sove ajan an pou prepare",
+    "m365PrepareHintImage": "imaj — 1 apèl vizyon",
+    "m365PrepareHintMedia": "~{minutes} min odyo pou transkri",
+    "m365PrepareHintOcr": "pa gen kouch tèks — OCR ak vizyon, jiska 30 paj",
+    "m365PreparePreparing": "Ap prepare…",
+    "m365PreparePending": "Ap transkri…",
+    "m365PreparedNote": "prepare · {kind}",
+    "m365PreparedKind": {
+      "image": "deskripsyon imaj",
+      "audio": "transkripsyon",
+      "video": "transkripsyon",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "{name} prepare ({chars} karaktè). Kouri Rafrechi pou endèks li.",
+    "m365PrepareStarted": "Transkripsyon {name} kòmanse an fon — kenbe fich sa louvri.",
+    "m365PrepareFailed": "Pa kapab prepare {name} : {error}",
+    "m365PrepareFailedGeneric": "Preparasyon echwe.",
+    "canonicalKeyLabel": "Kle",
+    "copyKey": "Kopi kle",
+    "agentKeySearchPlaceholder": "Chèche ajan, gid, konektè… oswa kole yon kle",
+    "agentKeyAddCustom": "Ajoute \"{key}\" jan ou tape li",
+    "agentKeyRemove": "Retire {name}",
+    "hideAgent": "Kache",
+    "unhideAgent": "Montre ankò",
+    "hideAgentHint": "Kache ajan sa nan lis admin ou. Sa afekte sèlman vizyon ou — itilizatè ak lòt admin yo pap afekte.",
+    "unhideAgentHint": "Montre ajan sa ankò nan lis admin ou.",
+    "hiddenBadge": "Kache",
+    "hiddenAgentsCount": "{count, plural, one {# ajan kache} other {# ajan kache}}",
+    "hiddenAgentsShowing": "Ap montre {count, plural, one {# ajan kache} other {# ajan kache}}",
+    "hiddenAgentsShow": "Montre",
+    "hiddenAgentsHide": "Kache ankò",
+    "allAgentsHidden": "Tout ajan yo kache pou ou — sèvi ak Montre pou w ka wè yo."
   },
   "localModels": {
     "title": "Modèl lokal",
@@ -4232,9 +4391,15 @@
       "connectors": "Konektè òganizasyon ak kilès ki ka itilize yo.",
       "guides": "Gid stil, tèm ak konformite.",
       "mapDatasets": "Bazdone prepare pou workflow kat la.",
-      "localAdmins": "Delege edisyon règ aksè bay lòt moun."
+      "localAdmins": "Delege edisyon règ aksè bay lòt moun.",
+      "workflows": "Aktive oswa dezaktive workflow konvèsasyon pou tout moun.",
+      "viewAs": "Teste aplikasyon an tankou yon moun ki ranpli — ou pa ranpli — yon kondisyon."
     },
-    "openSettings": "Louvri anviwònman yo"
+    "openSettings": "Louvri anviwònman yo",
+    "area": {
+      "workflows": "Workflows",
+      "viewAs": "Wè kòm"
+    }
   },
   "limits": {
     "title": "Limit itilizasyon",
@@ -4436,7 +4601,8 @@
     "groupSearchNoResults": "Pa gen okenn gwoup ki koresponn ak non sa a.",
     "groupSearchError": "Rechèch gwoup la echwe. Ou ka toujou kole yon ID objè gwoup anba a.",
     "groupSearchHint": "Tape omwen 2 karaktè pou chèche gwoup òganizasyon w lan, oswa kole yon ID objè gwoup dirèkteman. Chanjman an aplike pou manm gwoup la nan Microsoft Entra.",
-    "groupsFlagOff": "Sibyaj gwoup poko aktive pou anviwònman sa a. Sibi gwoup ki egziste yo ap kontinye mache."
+    "groupsFlagOff": "Sibyaj gwoup poko aktive pou anviwònman sa a. Sibi gwoup ki egziste yo ap kontinye mache.",
+    "featureDisabled": "Limit itilizasyon yo pa aktive pou deplwaman sa a."
   },
   "m365": {
     "connections": {
@@ -4797,5 +4963,149 @@
     "failed": "Pa t kapab pataje — pa gen anyen ki te kreye.",
     "copyFailed": "Pa t kapab kopye lyen an — chwazi li anlè epi kopye manyèlman.",
     "lastMessagesCountLabel": "Kantite dènye mesaj pou enkli"
+  },
+  "toolModes": {
+    "webSearch": "Rechèch sou entènèt",
+    "codeInterpreter": "Entèprèt kòd",
+    "off": "Fèmen",
+    "auto": "Otomatik",
+    "always": "Toujou",
+    "routingPrivacy": "Konfidansyalite",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Rechèch Azure AI voye kesyon atravè Azure AI Foundry, ki ka kenbe yo.",
+    "learnMore": "Aprann plis"
+  },
+  "agentAttach": {
+    "browserTitle": "Ajan",
+    "browserSubtitle": "Ajoute ajan ak konektè nan chat sa a, oswa kòmanse yon nouvo chat ak yon ajan. Pifò travay ak nenpòt modèl ou chwazi a.",
+    "searchPlaceholder": "Chèche ajan ak konektè…",
+    "loading": "Y ap chaje ajan yo…",
+    "noMatches": "Pa gen anyen ki koresponn ak rechèch ou.",
+    "noAgents": "Pa gen ajan ki disponib.",
+    "addToChat": "Ajoute nan chat sa a",
+    "removeFromChat": "Retire nan chat sa a",
+    "newChat": "Nouvo chat",
+    "attached": "Atache",
+    "detach": "Dekole",
+    "change": "Chanje",
+    "browse": "Browse ajan yo…",
+    "noAgent": "Pa gen ajan ki atache",
+    "close": "Fèmen",
+    "kind": {
+      "rag": "Konesans",
+      "prompt": "Pèsonalite",
+      "m365": "Konesans (Microsoft 365)",
+      "org": "Konesans",
+      "foundry": "Ajan Foundry",
+      "connector": "Konektè"
+    },
+    "semantics": {
+      "your-model": "itilize modèl ou",
+      "pinned-model": "modèl mete pa admin",
+      "own-model": "kouri sou pwòp modèl li"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Sijesyon ki soti nan òganizasyon ou",
+    "searching": "Nap chèche nan òganizasyon w…",
+    "noMatches": "Pa gen rezilta nan anyè a — ou ka antre adrès la manuelman"
+  },
+  "workflowsAdmin": {
+    "title": "Workflows",
+    "description": "Aktive oswa dezaktive chak workflow pou tout òganizasyon an. Yon workflow ki dezaktive pa parèt nan meni yo epi sèvè a ap refize li, menm pou moun ki ta dwe gen aksè.",
+    "layeredNote": "Flag LaunchDarkly conversationWorkflows la toujou kontwole lansman: workflow ki aktive isit la ap disponib sèlman kote flag sa limen. Paj sa pa ka fè anyen parèt si flag la kache li.",
+    "loading": "Y ap chaje politik workflow…",
+    "loadError": "Politik workflow lan pa t ka chaje.",
+    "policyUnavailable": "Pa t ka li politik workflow lan nan depo a. Bouton on/off yo kache pito ke montre ak valè default ki ka pa matche ak sa k ap aplike.",
+    "retry": "Reeseye",
+    "enableAll": "Aktive tout",
+    "disableAll": "Dezaktive tout",
+    "enabledLabel": "Aktive",
+    "disabledLabel": "Dezaktive",
+    "defaultOnHint": "Default si pa gen okenn politik ki sove: aktive.",
+    "defaultOffHint": "Default si pa gen okenn politik ki sove: dezaktive — yon administratè dwe limen li klèman.",
+    "grantsNote": "Pwosesis Sibvansyon limite anplis a itilizatè MSF-USA ki nan depatman Pwogram ki gen 'grants' nan tit travay yo, oswa nan Systems ki gen 'innovation' nan tit yo. Aktive li isit la pa elaji règ sa a.",
+    "unsaved": "Ou gen chanjman ki pa sove.",
+    "save": "Sove",
+    "saving": "Ap sove…",
+    "saveSuccess": "Politik workflow lan sove.",
+    "saveError": "Pa t ka sove politik workflow lan.",
+    "conflictError": "Yon lòt administratè modifye politik lan anvan. Li re-chaje — tanpri revize epi sove ankò.",
+    "updatedByLine": "Dènye sove pa {by} sou {at}.",
+    "neverSaved": "Pa gen okenn politik ki sove ankò; default anlè yo ap aplike."
+  },
+  "viewAs": {
+    "title": "Wè kòm",
+    "description": "Teste aplikasyon an, sèlman pou sesyon pa w, tankou yon moun ki ranpli oswa pa ranpli yon kondisyon administratè oswa anyè moun yo deside. Idantite w pa janm chanje: tout sa ou kreye rete pa ou e tout tras ki fèt toujou mete non pa ou.",
+    "activeTitle": "Wè-kòm aktif",
+    "inactiveTitle": "Wè-kòm pa aktif",
+    "sections": {
+      "role": "Wòl admin",
+      "region": "Rejyon done",
+      "attributes": "Atribi anyè",
+      "groups": "Patenarya gwoup",
+      "presets": "Predefini yo"
+    },
+    "role": {
+      "global": "Administratè global (wòl aktyèl ou)",
+      "local": "Administratè lokal",
+      "none": "Itilizatè regilye",
+      "localKeysLabel": "Kle ajan delege yo",
+      "localKeysHint": "Kle ajan delege admin lokal sa ka modifye, separe ak vigil. Kite vid pou admin lokal ki pa gen ajan delege.",
+      "noneWarning": "Kòm yon itilizatè regilye, tout lòt zòn admin yo disparèt. Paj sa ap toujou aksesib, epi banyè anlè app a ap toujou bay yon fason pou sòti."
+    },
+    "region": {
+      "actual": "Aktyèl ({region})",
+      "hint": "Deside kote demann ou yo ak tout sa ou telechaje pandan w ap itilize sistèm lan ap estoke, nan depo lòt rejyon an. Sa pran priyorite sou bonbon ?regionOverride= la."
+    },
+    "attributes": {
+      "department": "Depatman",
+      "companyName": "Konpayi",
+      "jobTitle": "Tit travay",
+      "officeId": "Biwo",
+      "officeActual": "Biwo aktyèl",
+      "officeNone": "Pa gen biwo",
+      "actualValue": "Reyalite: {value}",
+      "actualEmpty": "Reyalite: (vid)",
+      "hint": "Kite yon chan vid pou w konsève valè ou genyen aktyèlman. Sa yo sèvi ak règ sibvansyon, limit itilizasyon selon atribi ak règ aksè yo."
+    },
+    "groups": {
+      "label": "Id gwoup",
+      "placeholder": "Youn chak liy pou chak id objè gwoup Entra",
+      "hint": "Ranplase aderan reyèl ou yo pou sesyon sa a—li pa ajoute—, konsa ou ka teste si ou fè pati oswa si ou pa fè pati."
+    },
+    "presets": {
+      "grantsMember": "Manm ekip sibvansyon",
+      "regularUser": "Itilizatè regilye",
+      "localAdmin": "Admin lokal, pa gen ajan",
+      "otherRegion": "Lòt rejyon",
+      "hint": "Predefini yo konplete fòm lan; anyen pap aplike jiskaske ou peze Aplike."
+    },
+    "apply": "Aplike epi rechaje",
+    "applying": "Ap aplike…",
+    "clear": "Sòti view-as",
+    "clearing": "Ap sòti…",
+    "reset": "Reyajiste fòm lan",
+    "nothingToApply": "Mete omwen yon chanjman pou aplike.",
+    "applyError": "Pa t kapab aplike view-as: {error}",
+    "clearError": "Pa t kapab sòti view-as: {error}",
+    "loadError": "Pa t kapab chaje eta view-as la.",
+    "retry": "Repran",
+    "expiresNote": "View-as dire jiska 8 èdtan, oubyen jiskaske ou sòti.",
+    "banner": {
+      "label": "W ap gade kòm",
+      "adjust": "Ajiste",
+      "exit": "Sòti",
+      "role": {
+        "local": "admin lokal",
+        "none": "itilizatè regilye"
+      },
+      "region": "rejyon {region}",
+      "department": "depatman \"{value}\"",
+      "companyName": "konpayi \"{value}\"",
+      "jobTitle": "tit \"{value}\"",
+      "officeId": "biwo {value}",
+      "groups": "{count, plural, one {# gwoup} other {# gwoup}}"
+    }
   }
 }

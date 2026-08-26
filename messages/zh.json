@@ -923,7 +923,12 @@
       "showFewer": "显示较少"
     },
     "retryWithModel": "尝试使用 {model}",
-    "createTodoTasks": "根据本回复创建待办任务"
+    "createTodoTasks": "根据本回复创建待办任务",
+    "attachedFileExpired": "附件已不再可用 — 上传的文件仅保存有限时间。该文件已从本对话中移除。请重新尝试，或重新上传文件。",
+    "repeatedFailureNotice": "操作持续失败，可能对话已损坏。通常重新开始一个新对话可解决此问题。",
+    "startNewConversation": "开始新对话",
+    "downloadDebugInfo": "下载调试信息",
+    "includeMessageText": "包含消息内容"
   },
   "sidebar": {
     "collapseSidebar": "折叠侧边栏",
@@ -932,7 +937,9 @@
     "quickActions": "快速操作",
     "expandFolder": "展开文件夹 {name}",
     "collapseFolder": "收起文件夹 {name}",
-    "folderOptions": "{name} 选项"
+    "folderOptions": "{name} 选项",
+    "agentsEntry": "代理",
+    "agentsTitle": "浏览代理并开始对话"
   },
   "prompts": {
     "buildReusablePrompts": "使用 AI 辅助构建可重复使用的提示",
@@ -2698,6 +2705,10 @@
       "map": {
         "label": "地图",
         "description": "将数据转为地图上的地点"
+      },
+      "grants": {
+        "label": "拨款处理",
+        "description": "对拨款说明进行校对并提取结构化数据"
       }
     },
     "chooser": {
@@ -2707,7 +2718,8 @@
       "newTranslation": "新建翻译",
       "newDocument": "新建文档",
       "newDataAnalysis": "新建数据分析",
-      "newMap": "新建地图"
+      "newMap": "新建地图",
+      "newGrants": "新拨款处理"
     },
     "translation": {
       "chooseLanguage": "目标语言",
@@ -3324,7 +3336,8 @@
       "unknownType": "此会话使用的工作流当前版本无法识别。下方显示会话历史记录。",
       "untitled": "新会话",
       "toggleMenu": "切换菜单",
-      "model": "此工作流使用的模型"
+      "model": "此工作流使用的模型",
+      "disabledByAdmin": "该工作流已被管理员禁用。以下显示对话历史记录。"
     },
     "tabs": {
       "label": "对话模式",
@@ -4078,7 +4091,153 @@
     "conflictTakeTheirs": "使用对方版本",
     "conflictNoFieldDiff": "值一致，仅记录版本已变。",
     "conflictRecordGone": "此记录已被删除（或无法重新加载）。请先复制需要的内容，然后重新加载。",
-    "groupsFlagOff": "当前环境尚未启用分组定向。现有分组目标仍然有效。"
+    "groupsFlagOff": "当前环境尚未启用分组定向。现有分组目标仍然有效。",
+    "catalogOauth": {
+      "title": "内置连接器 OAuth 应用",
+      "description": "适用于内置连接器（如 GitHub、Asana 等）的全部署 OAuth 应用。在此保存的记录将覆盖 MCP_OAUTH_* 环境变量；删除后将回退使用环境变量。客户端密钥静态加密存储，且不会再次显示。",
+      "badgeAdmin": "已在此配置",
+      "badgeEnv": "来自环境变量",
+      "badgeNone": "未配置",
+      "badgeDcr": "自注册",
+      "badgeDcrHint": "此提供方可自动注册 OAuth 客户端，即使此处未配置应用也可用。",
+      "clientIdLabel": "OAuth 客户端 ID",
+      "clientSecretLabel": "OAuth 客户端密钥",
+      "secretStoredPlaceholder": "已保存 — 输入以替换，留空则保留",
+      "secretNewPlaceholder": "粘贴客户端密钥",
+      "save": "保存",
+      "remove": "移除",
+      "removeToEnv": "移除（回退到环境变量）",
+      "saved": "{name} OAuth 应用已保存",
+      "removed": "{name} OAuth 应用已移除",
+      "saveError": "OAuth 应用保存失败。请重试。",
+      "conflict": "该记录已在其他位置更改 — 已重新加载，请重试。",
+      "storageUnavailable": "无法访问管理员存储；无法列出现有记录。存储恢复前，保存功能已禁用。",
+      "sealingUnavailable": "本部署未配置密钥加密（缺少 AUTH_SECRET）— 无法保存客户端密钥。",
+      "updatedBy": "由 {by} 于 {at} 更新"
+    },
+    "orgAgentOverrideTitle": "覆盖内置代理",
+    "orgAgentOverrideAction": "覆盖",
+    "orgAgentBuiltinBadge": "内置",
+    "orgAgentBuiltinHint": "在部署配置中定义。其访问规则可在此编辑；覆盖后可在不重新部署的情况下更改设置。",
+    "m365AgentIndexProgress": "正在索引 {done} / {total} 个{total, plural, one {文档} other {文档}}…",
+    "m365AgentIndexInterrupted": "索引在 {done} / {total} 时中断 — 继续可恢复。",
+    "m365AgentIndexStartedBy": "由 {name} 启动",
+    "m365AgentIndexResume": "继续",
+    "m365AgentIndexResumeHint": "使用您的 Microsoft 365 访问权限，从停止处继续索引。请保持此标签页开启。",
+    "m365AgentIndexCancel": "取消",
+    "m365AgentIndexCancelled": "索引已取消 — 已处理的文档仍可搜索。",
+    "m365AgentIndexJobFailed": "索引已停止：{error}",
+    "m365AgentIndexDone": "索引完成：已索引 {indexed}，失败 {failed}，无文本 {noText}。",
+    "m365AgentDocCounts": "{indexed, plural, one {# 个文档已索引} other {# 个文档已索引}} · 失败 {failed} · 无文本 {noText} · 需预处理 {needsPreparation} · 跳过 {skipped}",
+    "m365CapDocuments": "文档：{count} / {max}",
+    "m365CapBytes": "{bytes} / {max}",
+    "m365CapOverDocuments": "已超过 {max} 个文档的限制。取消选中子文件夹、按文件类型过滤，或移除来源，仅实际被索引的文件会计入。",
+    "m365CapOverBytes": "已超出 {max} 的容量限制。请排除子文件夹或大型文件。",
+    "m365PlanScanning": "正在扫描…",
+    "m365PlanRefreshing": "正在更新…",
+    "m365PlanFailed": "无法使用您的 Microsoft 365 账户扫描来源。",
+    "m365PlanMissing": "未找到或无访问权限",
+    "m365PlanIndexable": "{count, plural, one {# 个文件将被索引} other {# 个文件将被索引}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# 需预处理} other {# 需预处理}}",
+    "m365PlanSkipped": "已跳过 {count}",
+    "m365PlanShowDetails": "详情",
+    "m365PlanHideDetails": "隐藏详情",
+    "m365PlanTruncated": "该文件夹太大，无法完整扫描 — 仅列出前 1,000 个项目。请选择子文件夹。",
+    "m365PlanRecursive": "包含子文件夹",
+    "m365PlanExtensionsLabel": "仅包含文件类型：",
+    "m365PlanExtensionsPlaceholder": "如 pdf，docx",
+    "m365PlanSubfolders": "子文件夹",
+    "m365PlanFolderCount": "{count, plural, one {# 个文件} other {# 个文件}}",
+    "m365PlanGroupIndexable": "将被索引",
+    "m365PlanGroupNeedsPreparation": "需预处理",
+    "m365PlanGroupSkipped": "已跳过",
+    "m365PlanPreparationHint": "图片/音频/视频 — 尚未索引",
+    "m365PlanMoreRows": "…以及另外 {count} 项",
+    "m365ItemStatus": {
+      "pending": "待处理",
+      "indexed": "已索引",
+      "failed": "失败",
+      "noText": "未提取到文本",
+      "missing": "缺失"
+    },
+    "m365SkipReason": {
+      "unsupported": "不支持的类型",
+      "tooLarge": "超过 25 MB",
+      "disallowedType": "已阻止类型（可执行/压缩文件）",
+      "malware": "被 Microsoft 标记为恶意软件",
+      "zeroBytes": "空文件",
+      "excluded": "已排除",
+      "typeFilter": "不在类型筛选中"
+    },
+    "localAdminGroup": {
+      "agents": "代理",
+      "promptAgents": "提示代理",
+      "m365Agents": "Microsoft 365 代理",
+      "orgAgents": "知识代理",
+      "guides": "指南",
+      "connectors": "连接器",
+      "datasets": "地图数据集",
+      "unknown": "已委派但未找到"
+    },
+    "localAdminGroupUnavailable": "该列表暂时不可用 — 现有委派已保留。",
+    "localAdminBuiltIn": "内置",
+    "localAdminSummary": "{count, plural, one {# 项委派} other {# 项委派}}：{names}",
+    "localAdminSummaryMore": "{names} 和另外 {more} 个",
+    "localAdminNoDelegations": "暂无委派 — 没有代理的本地管理员只能访问管理区。",
+    "localAdminSelectedCount": "已选 {selected} / {total}",
+    "localAdminCopyFrom": "复制自",
+    "localAdminClearAll": "全部清除",
+    "localAdminSelectGroup": "全选",
+    "localAdminClearGroup": "清除",
+    "localAdminSearchPlaceholder": "搜索代理、指南、连接器…",
+    "localAdminDuplicateEmail": "该邮箱已在列表中 — 请合并两个条目。",
+    "localAdminExpand": "显示委派",
+    "localAdminCollapse": "隐藏委派",
+    "localAdminDiscard": "放弃更改",
+    "m365AgentRefresh": "刷新",
+    "m365AgentRefreshHint": "获取自上次运行后已添加、更改或删除的文件 — 未更改的文件不会重新下载。请保持本标签页打开。",
+    "m365AgentReindexAll": "全部重新索引",
+    "m365AgentRefreshProgress": "正在刷新 — 已处理 {done} / {total} 个更改的 {total, plural, one {文档} other {文档}}…",
+    "m365AgentRefreshDone": "刷新完成：已添加 {added}，已更新 {modified}，已移除 {removed}，失败 {failed}。",
+    "m365ChangesChecking": "正在检查 Microsoft 365 中自上次索引以来的更改…",
+    "m365ChangesFailed": "无法通过您的 Microsoft 365 账户检查更改。",
+    "m365ChangesNeverIndexed": "尚未索引 — 保存后运行索引。",
+    "m365ChangesFound": "自上次索引以来有 {count, plural, one {# 项更改} other {# 项更改}}：已添加 {added}，已更新 {modified}，已移除 {removed}。",
+    "m365ChangesNone": "自上次索引（{date}）以来无更改。",
+    "m365PrepareButton": "准备",
+    "m365PrepareOcrButton": "准备（OCR）",
+    "m365PrepareSaveFirst": "请先保存代理以进行准备",
+    "m365PrepareHintImage": "图片 — 1 次视觉调用",
+    "m365PrepareHintMedia": "约 {minutes} 分钟音频转录",
+    "m365PrepareHintOcr": "无文本层 — 经视觉 OCR，最多 30 页",
+    "m365PreparePreparing": "正在准备…",
+    "m365PreparePending": "正在转录…",
+    "m365PreparedNote": "已准备 · {kind}",
+    "m365PreparedKind": {
+      "image": "图片描述",
+      "audio": "转录文本",
+      "video": "转录文本",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "{name} 已准备（{chars} 个字符）。运行刷新以索引。",
+    "m365PrepareStarted": "{name} 的转录已在后台开始 — 请保持本标签页打开。",
+    "m365PrepareFailed": "无法准备 {name}：{error}",
+    "m365PrepareFailedGeneric": "准备失败。",
+    "canonicalKeyLabel": "密钥",
+    "copyKey": "复制密钥",
+    "agentKeySearchPlaceholder": "搜索代理、指南、连接器…或粘贴密钥",
+    "agentKeyAddCustom": "按原样添加“{key}”",
+    "agentKeyRemove": "移除{name}",
+    "hideAgent": "隐藏",
+    "unhideAgent": "取消隐藏",
+    "hideAgentHint": "从您的管理员列表中隐藏此代理。仅影响您的视图——用户和其他管理员不受影响。",
+    "unhideAgentHint": "在您的管理员列表中重新显示此代理。",
+    "hiddenBadge": "已隐藏",
+    "hiddenAgentsCount": "{count, plural, one {# 个已隐藏代理} other {# 个已隐藏代理}}",
+    "hiddenAgentsShowing": "正在显示{count, plural, one {# 个已隐藏代理} other {# 个已隐藏代理}}",
+    "hiddenAgentsShow": "显示",
+    "hiddenAgentsHide": "再次隐藏",
+    "allAgentsHidden": "此处所有代理已从您的视图中隐藏—使用“显示”来恢复。"
   },
   "localModels": {
     "title": "本地模型",
@@ -4279,9 +4438,15 @@
       "connectors": "组织连接器及其使用权限。",
       "guides": "风格、术语与合规指南。",
       "mapDatasets": "地图工作流可用的精选数据集。",
-      "localAdmins": "将访问规则编辑权限委托给他人。"
+      "localAdmins": "将访问规则编辑权限委托给他人。",
+      "workflows": "为所有人启用或关闭对话工作流。",
+      "viewAs": "以符合或不符合某条件的身份测试应用。"
     },
-    "openSettings": "打开设置"
+    "openSettings": "打开设置",
+    "area": {
+      "workflows": "工作流",
+      "viewAs": "以其他身份查看"
+    }
   },
   "limits": {
     "title": "使用限制",
@@ -4483,7 +4648,8 @@
     "groupSearchNoResults": "未找到符合该名称的群组。",
     "groupSearchError": "群组搜索失败。您仍可在下方粘贴群组对象 ID。",
     "groupSearchHint": "请输入至少 2 个字符以搜索您组织的群组，或直接粘贴群组对象 ID。此覆盖将应用于 Microsoft Entra 中该群组的成员。",
-    "groupsFlagOff": "当前环境尚未开启群组定向。已有的群组目标仍可使用。"
+    "groupsFlagOff": "当前环境尚未开启群组定向。已有的群组目标仍可使用。",
+    "featureDisabled": "此部署未启用使用限制。"
   },
   "m365": {
     "connections": {
@@ -4844,5 +5010,149 @@
     "failed": "无法分享 — 未创建任何内容。",
     "copyFailed": "无法复制链接——请在上方选择并手动复制。",
     "lastMessagesCountLabel": "要包含的最新消息数"
+  },
+  "toolModes": {
+    "webSearch": "网页搜索",
+    "codeInterpreter": "代码解释器",
+    "off": "关闭",
+    "auto": "自动",
+    "always": "始终启用",
+    "routingPrivacy": "隐私",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI 搜索会通过 Azure AI Foundry 发送查询，可能会保留查询内容。",
+    "learnMore": "了解更多"
+  },
+  "agentAttach": {
+    "browserTitle": "代理",
+    "browserSubtitle": "将代理或连接器添加到此对话，或与代理开启新的对话。大多数代理支持您选择的任意模型。",
+    "searchPlaceholder": "搜索代理和连接器…",
+    "loading": "正在加载代理…",
+    "noMatches": "没有匹配的结果。",
+    "noAgents": "暂无可用代理。",
+    "addToChat": "添加到此对话",
+    "removeFromChat": "从此对话移除",
+    "newChat": "新对话",
+    "attached": "已添加",
+    "detach": "移除",
+    "change": "更改",
+    "browse": "浏览代理…",
+    "noAgent": "未添加代理",
+    "close": "关闭",
+    "kind": {
+      "rag": "知识",
+      "prompt": "人物设定",
+      "m365": "知识（Microsoft 365）",
+      "org": "知识",
+      "foundry": "Foundry 代理",
+      "connector": "连接器"
+    },
+    "semantics": {
+      "your-model": "使用您的模型",
+      "pinned-model": "管理员指定模型",
+      "own-model": "使用自有模型"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "来自您组织的建议",
+    "searching": "正在搜索您的组织…",
+    "noMatches": "没有目录匹配项 — 您可以手动输入地址"
+  },
+  "workflowsAdmin": {
+    "title": "工作流",
+    "description": "为整个组织启用或禁用每个工作流。即使用户本来有权限，被禁用的工作流也会在菜单中隐藏，并被服务器拒绝访问。",
+    "layeredNote": "LaunchDarkly 的 conversationWorkflows 标志仍决定上线范围：只有在该标志开启的地方，此处启用的工作流才可用。本页面无法让被该标志隐藏的内容可见。",
+    "loading": "正在加载工作流策略…",
+    "loadError": "无法加载工作流策略。",
+    "policyUnavailable": "无法从存储读取工作流策略。切换开关将被隐藏，而不是按默认值显示（可能与实际强制策略不符）。",
+    "retry": "重试",
+    "enableAll": "全部启用",
+    "disableAll": "全部禁用",
+    "enabledLabel": "已启用",
+    "disabledLabel": "已禁用",
+    "defaultOnHint": "未保存策略时默认：已启用。",
+    "defaultOffHint": "未保存策略时默认：禁用——管理员需显式开启。",
+    "grantsNote": "拨款处理仅限 MSF-USA 项目部门的职位名称含“grants”的用户，或系统部门职位含“innovation”的用户。此处启用不会放宽此规则。",
+    "unsaved": "您有未保存的更改。",
+    "save": "保存",
+    "saving": "正在保存…",
+    "saveSuccess": "工作流策略已保存。",
+    "saveError": "无法保存工作流策略。",
+    "conflictError": "另一位管理员已先修改了该策略。已重新加载——请核查并再次保存。",
+    "updatedByLine": "最后由 {by} 于 {at} 保存。",
+    "neverSaved": "尚未保存任何策略；以上默认值生效。"
+  },
+  "viewAs": {
+    "title": "以其他身份查看",
+    "description": "仅对您个人会话测试应用程序，以符合或不符合通常由目录或管理员决定的条件的身份进行测试。您的身份不会改变：您创建的内容仍归您，每条审计记录依然标注您的名字。",
+    "activeTitle": "“以其他身份查看”已激活",
+    "inactiveTitle": "“以其他身份查看”未激活",
+    "sections": {
+      "role": "管理员角色",
+      "region": "数据区域",
+      "attributes": "目录属性",
+      "groups": "群组成员资格",
+      "presets": "预设"
+    },
+    "role": {
+      "global": "全局管理员（您的实际角色）",
+      "local": "本地管理员",
+      "none": "普通用户",
+      "localKeysLabel": "委托代理密钥",
+      "localKeysHint": "该本地管理员可编辑的逗号分隔的标准代理密钥。如无委托代理，可留空。",
+      "noneWarning": "作为普通用户，所有其他管理区域都将消失。此页面仍可访问，App 顶部横幅始终提供退出方式。"
+    },
+    "region": {
+      "actual": "实际（{region}）",
+      "hint": "将您的请求及激活期间上传的任何内容路由到另一区域的存储。优先于 ?regionOverride= cookie。"
+    },
+    "attributes": {
+      "department": "部门",
+      "companyName": "公司",
+      "jobTitle": "职位",
+      "officeId": "办公室",
+      "officeActual": "实际办公室",
+      "officeNone": "无办公室",
+      "actualValue": "实际：{value}",
+      "actualEmpty": "实际：（空）",
+      "hint": "将字段留空可保留您的实际值。这些将用于授权规则、属性范围的使用限制和访问规则。"
+    },
+    "groups": {
+      "label": "组ID",
+      "placeholder": "每行一个Entra组对象ID",
+      "hint": "本次会话将替换（不增加）您的真实成员身份，便于您测试所属或不属于。"
+    },
+    "presets": {
+      "grantsMember": "授权团队成员",
+      "regularUser": "普通用户",
+      "localAdmin": "本地管理员，无代理",
+      "otherRegion": "其他区域",
+      "hint": "预设会填充表单；在点击“应用”前不会生效。"
+    },
+    "apply": "应用并重新加载",
+    "applying": "正在应用…",
+    "clear": "退出模拟视图",
+    "clearing": "正在退出…",
+    "reset": "重置表单",
+    "nothingToApply": "请至少设置一项覆盖后再应用。",
+    "applyError": "无法应用模拟视图：{error}",
+    "clearError": "无法清除模拟视图：{error}",
+    "loadError": "无法加载模拟视图状态。",
+    "retry": "重试",
+    "expiresNote": "模拟视图持续最长8小时，或直到您退出为止。",
+    "banner": {
+      "label": "模拟视图",
+      "adjust": "调整",
+      "exit": "退出",
+      "role": {
+        "local": "本地管理员",
+        "none": "普通用户"
+      },
+      "region": "区域 {region}",
+      "department": "部门“{value}”",
+      "companyName": "公司“{value}”",
+      "jobTitle": "职位“{value}”",
+      "officeId": "办公室 {value}",
+      "groups": "{count, plural, one {# 个组} other {# 个组}}"
+    }
   }
 }

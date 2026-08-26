@@ -6,6 +6,7 @@
  * agent key via config.json (editable by global admins in the UI, no
  * redeploy). All matching is on lowercased + trimmed Graph `mail` values.
  */
+import { ViewAsAdminRole } from '@/lib/services/admin/viewAsTypes';
 import { AgentAccessConfig } from '@/lib/services/agentAccess/types';
 
 import { env } from '@/config/environment';
@@ -33,16 +34,76 @@ export function parseGlobalAdminEmails(
     .filter((email) => email.length > 0);
 }
 
-export function isGlobalAdmin(mail: string | null | undefined): boolean {
+/**
+ * The session user, or whatever structurally carries the same two fields.
+ * Passing the USER (rather than its bare mail) is what makes "view as"
+ * (lib/services/admin/viewAsTypes.ts) reach every admin gate: an admin
+ * viewing as a local admin or a regular user is answered as that role.
+ */
+export interface AdminSubject {
+  mail?: string | null;
+  viewAs?: {
+    overrides: { adminRole?: ViewAsAdminRole; localAdminKeys?: string[] };
+  } | null;
+}
+
+/**
+ * A bare mail string is the REAL-identity form: it ignores any view-as
+ * demotion. Use it only where the real identity is the point — the view-as
+ * controls themselves, and the admin rail entry that leads back to them.
+ */
+export type AdminIdentity = string | null | undefined | AdminSubject;
+
+function mailOf(identity: AdminIdentity): string | null | undefined {
+  return typeof identity === 'object' && identity !== null
+    ? identity.mail
+    : identity;
+}
+
+function demotedRole(identity: AdminIdentity): ViewAsAdminRole | undefined {
+  if (typeof identity !== 'object' || identity === null) return undefined;
+  const role = identity.viewAs?.overrides.adminRole;
+  return role === 'local' || role === 'none' ? role : undefined;
+}
+
+function isRealGlobalAdmin(mail: string | null | undefined): boolean {
   if (!mail) return false;
   return parseGlobalAdminEmails().includes(mail.trim().toLowerCase());
 }
 
+export function isGlobalAdmin(identity: AdminIdentity): boolean {
+  if (demotedRole(identity)) return false;
+  return isRealGlobalAdmin(mailOf(identity));
+}
+
 export function resolveAdminStatus(
-  mail: string | null | undefined,
+  identity: AdminIdentity,
   config: AgentAccessConfig | null,
 ): AdminStatus {
-  if (isGlobalAdmin(mail)) {
+  const mail = mailOf(identity);
+  const demoted = demotedRole(identity);
+  if (demoted && isRealGlobalAdmin(mail)) {
+    // View-as demotion applies only to a real global admin (the cookie is
+    // never honoured for anyone else — see readViewAs — but be explicit).
+    if (demoted === 'none') {
+      return {
+        isGlobalAdmin: false,
+        isLocalAdmin: false,
+        editableAgentKeys: [],
+      };
+    }
+    const keys = (
+      typeof identity === 'object' && identity !== null
+        ? (identity.viewAs?.overrides.localAdminKeys ?? [])
+        : []
+    ).map((key) => key.trim().toLowerCase());
+    return {
+      isGlobalAdmin: false,
+      isLocalAdmin: true,
+      editableAgentKeys: [...new Set(keys)],
+    };
+  }
+  if (isRealGlobalAdmin(mail)) {
     return {
       isGlobalAdmin: true,
       isLocalAdmin: false,

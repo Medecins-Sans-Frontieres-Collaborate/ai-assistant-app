@@ -17,6 +17,7 @@ import {
 } from '@/lib/utils/shared/geo/timelapsePacing';
 import {
   DEFAULT_PASTE_ATTACHMENT_CHARS,
+  LEGACY_DEFAULT_PASTE_ATTACHMENT_CHARS,
   clampPasteAttachmentChars,
 } from '@/lib/utils/shared/paste/pastedText';
 import { UserRegion } from '@/lib/utils/shared/region';
@@ -324,6 +325,13 @@ interface SettingsStore {
    */
   hiddenModelIds: string[];
   /**
+   * Canonical agent keys (`<source>::<id>`) an admin hid from THEIR OWN
+   * admin lists (Agents tab, Microsoft 365 agents, Knowledge agents). A
+   * per-browser preference — it never affects what users see or what other
+   * admins see; "Show hidden" reveals and unhides.
+   */
+  hiddenAdminAgentKeys: string[];
+  /**
    * Model IDs the user has starred (same key space as hiddenModelIds: base
    * models and agents alike). Starred models surface first in the picker's
    * Favorites section. Mutually exclusive with hiddenModelIds — the
@@ -395,6 +403,13 @@ interface SettingsStore {
 
   // Slash menu usage tracking
   slashMenuUsageCounts: Record<string, number>;
+
+  /**
+   * Agent-browser selection counts, keyed by browser item id (agent id or
+   * `connector-<id>`). Orders the browser list by usage — most-selected
+   * first, default order as tiebreaker — mirroring modelUsageStats.
+   */
+  agentBrowserUsage: Record<string, number>;
 
   // Chat input "+" dropdown tool personalization
   pinnedToolIds: string[];
@@ -538,6 +553,8 @@ interface SettingsStore {
   // Hidden Model/Agent Actions
   hideModel: (id: string) => void;
   unhideModel: (id: string) => void;
+  hideAdminAgent: (canonicalKey: string) => void;
+  unhideAdminAgent: (canonicalKey: string) => void;
 
   // Starred Model/Agent Actions
   starModel: (id: string) => void;
@@ -566,6 +583,7 @@ interface SettingsStore {
   incrementModelUsage: (modelId: string) => void;
   recordSuccessfulModelUsage: (modelId: string) => void;
   resetModelOrder: () => void;
+  incrementAgentBrowserUsage: (itemId: string) => void;
 
   // Organization Actions
   setOrganizationPreference: (org: MSFOrganization | null) => void;
@@ -705,12 +723,22 @@ interface SettingsStore {
   setSuggestRevisionsLargeRewriteRatio: (ratio: number) => void;
 
   /**
-   * Per-user Microsoft 365 opt-in. M365 features (attach from OneDrive/
-   * SharePoint, email import, save to OneDrive) stay hidden until the user
-   * explicitly connects in Settings → Connections — nothing is enabled by
-   * virtue of signing in (docs/M365_GRAPH_PERMISSIONS_REQUEST.md).
+   * Per-user Microsoft 365 connection. CONNECTED BY DEFAULT (since v57) —
+   * the tenant-wide admin consent covers the OAuth side, and the LD flags
+   * still gate every M365 surface, so this is the user-facing off switch
+   * rather than an opt-in gate. Users disconnect (or reconnect) in
+   * Settings → Connections; docs/M365_GRAPH_PERMISSIONS_REQUEST.md tracks
+   * the policy history (originally explicit opt-in).
    */
   m365Connected: boolean;
+  /**
+   * True once the USER has clicked Connect/Disconnect themselves (set only
+   * by setM365Connected). Distinguishes a deliberate choice from the
+   * default: migrations may flip the default for users who never chose
+   * (userSet false / absent), but must never override an explicit
+   * disconnect (userSet true). Keep for future default changes.
+   */
+  m365ConnectedUserSet: boolean;
   setM365Connected: (connected: boolean) => void;
 
   /**
@@ -821,6 +849,7 @@ export const useSettingsStore = create<SettingsStore>()(
       memoriesFlagEnabled: false,
       memoryCapturePaused: false,
       hiddenModelIds: [],
+      hiddenAdminAgentKeys: [],
       starredModelIds: [],
       tokenUsageStats: {},
       tokenUsageFirstTrackedAt: null,
@@ -842,6 +871,9 @@ export const useSettingsStore = create<SettingsStore>()(
 
       // Slash menu usage tracking
       slashMenuUsageCounts: {},
+
+      // Agent-browser usage ordering
+      agentBrowserUsage: {},
 
       // Chat input "+" dropdown tool personalization
       pinnedToolIds: [],
@@ -880,7 +912,8 @@ export const useSettingsStore = create<SettingsStore>()(
       confirmStopFromButton: true,
       confirmStopFromKeyboard: true,
       autoClearResolvedEdits: false,
-      m365Connected: false,
+      m365Connected: true,
+      m365ConnectedUserSet: false,
       m365ToolsUserEnabled: true,
       m365SharedMailboxes: [],
       m365PlaybookChipsEnabled: true,
@@ -1259,6 +1292,25 @@ export const useSettingsStore = create<SettingsStore>()(
           hiddenModelIds: state.hiddenModelIds.filter((m) => m !== id),
         })),
 
+      hideAdminAgent: (canonicalKey) =>
+        set((state) =>
+          state.hiddenAdminAgentKeys.includes(canonicalKey)
+            ? state
+            : {
+                hiddenAdminAgentKeys: [
+                  ...state.hiddenAdminAgentKeys,
+                  canonicalKey,
+                ],
+              },
+        ),
+
+      unhideAdminAgent: (canonicalKey) =>
+        set((state) => ({
+          hiddenAdminAgentKeys: state.hiddenAdminAgentKeys.filter(
+            (k) => k !== canonicalKey,
+          ),
+        })),
+
       // Starred Model/Agent Actions. Starring unhides (see hideModel).
       starModel: (id) =>
         set((state) =>
@@ -1419,6 +1471,14 @@ export const useSettingsStore = create<SettingsStore>()(
           modelOrderMode: 'usage' as ModelOrderMode,
           customModelOrder: [],
         }),
+
+      incrementAgentBrowserUsage: (itemId) =>
+        set((state) => ({
+          agentBrowserUsage: {
+            ...state.agentBrowserUsage,
+            [itemId]: (state.agentBrowserUsage[itemId] ?? 0) + 1,
+          },
+        })),
 
       // Organization Actions
       setOrganizationPreference: (org) => set({ organizationPreference: org }),
@@ -1590,15 +1650,19 @@ export const useSettingsStore = create<SettingsStore>()(
 
       setSuggestRevisions: (enabled) => set({ suggestRevisions: enabled }),
       setM365Connected: (connected) =>
+        // Only called from user-facing Connect/Disconnect controls, so it
+        // also records that the state is now a deliberate choice — future
+        // default-flip migrations must leave this user alone.
         set(
           connected
-            ? { m365Connected: true }
+            ? { m365Connected: true, m365ConnectedUserSet: true }
             : {
                 // Disconnecting drops the remembered save folder too — a stale
                 // drive id must not leak into the next connection. Shared
                 // mailboxes go with it: the list is meaningless without a
                 // connected account.
                 m365Connected: false,
+                m365ConnectedUserSet: true,
                 m365SaveDestination: null,
                 m365SaveSkipPicker: false,
                 m365PickerLocation: null,
@@ -1669,6 +1733,7 @@ export const useSettingsStore = create<SettingsStore>()(
           memoriesEnabled: false,
           memoryCapturePaused: false,
           hiddenModelIds: [],
+          hiddenAdminAgentKeys: [],
           starredModelIds: [],
           tokenUsageStats: {},
           tokenUsageFirstTrackedAt: null,
@@ -1706,7 +1771,8 @@ export const useSettingsStore = create<SettingsStore>()(
             structuralReorders: false,
           },
           suggestRevisionsLargeRewriteRatio: DEFAULT_LARGE_REWRITE_RATIO,
-          m365Connected: false,
+          m365Connected: true,
+          m365ConnectedUserSet: false,
           m365SaveDestination: null,
           m365SaveSkipPicker: false,
           m365PickerLocation: null,
@@ -1715,7 +1781,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 55, // Increment this when schema changes to trigger migrations
+      version: 59, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1772,6 +1838,7 @@ export const useSettingsStore = create<SettingsStore>()(
         memoriesEnabled: state.memoriesEnabled,
         memoryCapturePaused: state.memoryCapturePaused,
         hiddenModelIds: state.hiddenModelIds,
+        hiddenAdminAgentKeys: state.hiddenAdminAgentKeys,
         starredModelIds: state.starredModelIds,
         tokenUsageStats: state.tokenUsageStats,
         tokenUsageFirstTrackedAt: state.tokenUsageFirstTrackedAt,
@@ -1791,6 +1858,7 @@ export const useSettingsStore = create<SettingsStore>()(
         reasoningEffort: state.reasoningEffort,
         verbosity: state.verbosity,
         slashMenuUsageCounts: state.slashMenuUsageCounts,
+        agentBrowserUsage: state.agentBrowserUsage,
         pinnedToolIds: state.pinnedToolIds,
         toolUsageCounts: state.toolUsageCounts,
         hiddenToolIds: state.hiddenToolIds,
@@ -1808,6 +1876,7 @@ export const useSettingsStore = create<SettingsStore>()(
         autoClearResolvedEdits: state.autoClearResolvedEdits,
         suggestRevisions: state.suggestRevisions,
         m365Connected: state.m365Connected,
+        m365ConnectedUserSet: state.m365ConnectedUserSet,
         // m365ToolsFlagEnabled is deliberately NOT persisted (LD mirror,
         // same rationale as mcpArbitraryFlagEnabled above).
         m365ToolsUserEnabled: state.m365ToolsUserEnabled,
@@ -2353,6 +2422,51 @@ export const useSettingsStore = create<SettingsStore>()(
         if (version < 55) {
           if (state.m365PickerLocation === undefined) {
             state.m365PickerLocation = null;
+          }
+        }
+
+        // Version 55 → 56: agent-browser usage ordering
+        if (version < 56) {
+          if (
+            state.agentBrowserUsage === undefined ||
+            state.agentBrowserUsage === null ||
+            typeof state.agentBrowserUsage !== 'object'
+          ) {
+            state.agentBrowserUsage = {};
+          }
+        }
+
+        // Version 56 → 57: M365 goes connected-by-default. Pre-57 state
+        // cannot distinguish "never decided" from "explicitly disconnected"
+        // (both stored false), so this ONE migration flips everyone to
+        // connected and starts recording deliberate choices in
+        // m365ConnectedUserSet — accepted trade-off while the rollout is a
+        // small demo subset; anyone re-disconnecting now sticks forever.
+        // Future default changes must check m365ConnectedUserSet and leave
+        // users who chose (true) alone.
+        if (version < 57) {
+          if (typeof state.m365ConnectedUserSet !== 'boolean') {
+            state.m365Connected = true;
+            state.m365ConnectedUserSet = false;
+          }
+        }
+
+        // Version 57 → 58: the large-paste default rose from 2,000 characters
+        // to ~2,000 words. Only users still on the OLD default move to the
+        // new one; a value they set themselves (including 0 = off) is kept.
+        if (version < 58) {
+          if (
+            state.pasteAsAttachmentChars ===
+            LEGACY_DEFAULT_PASTE_ATTACHMENT_CHARS
+          ) {
+            state.pasteAsAttachmentChars = DEFAULT_PASTE_ATTACHMENT_CHARS;
+          }
+        }
+
+        // Version 58 → 59: per-admin hidden agent keys for the admin lists.
+        if (version < 59) {
+          if (!Array.isArray(state.hiddenAdminAgentKeys)) {
+            state.hiddenAdminAgentKeys = [];
           }
         }
 

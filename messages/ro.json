@@ -890,7 +890,12 @@
       "showFewer": "Afișează mai puține"
     },
     "retryWithModel": "Încearcă cu {model}",
-    "createTodoTasks": "Creează sarcini To Do din acest răspuns"
+    "createTodoTasks": "Creează sarcini To Do din acest răspuns",
+    "attachedFileExpired": "Un fișier atașat nu mai este disponibil — fișierele încărcate sunt păstrate doar pentru o perioadă limitată. Acesta a fost eliminat din această conversație. Încercați din nou fără el sau reîncărcați fișierul.",
+    "repeatedFailureNotice": "Aceasta continuă să eșueze — conversația ar putea fi coruptă. De obicei, pornirea unei conversații noi rezolvă această problemă.",
+    "startNewConversation": "Pornește o conversație nouă",
+    "downloadDebugInfo": "Descarcă informațiile de depanare",
+    "includeMessageText": "Include textul mesajului"
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",
@@ -899,7 +904,9 @@
     "quickActions": "Acțiuni rapide",
     "expandFolder": "Extinde folderul {name}",
     "collapseFolder": "Restrânge folderul {name}",
-    "folderOptions": "Opțiuni {name}"
+    "folderOptions": "Opțiuni {name}",
+    "agentsEntry": "Agenți",
+    "agentsTitle": "Răsfoiți agenții și începeți un chat cu unul"
   },
   "prompts": {
     "buildReusablePrompts": "Construiește prompt-uri reutilizabile cu asistență AI",
@@ -2667,6 +2674,10 @@
       "map": {
         "label": "Hartă",
         "description": "Transformați orice date în locații pe hartă"
+      },
+      "grants": {
+        "label": "Procesare granturi",
+        "description": "Reconciliază și extrage date structurate din narațiuni de grant"
       }
     },
     "chooser": {
@@ -2676,7 +2687,8 @@
       "newTranslation": "Traducere nouă",
       "newDocument": "Document nou",
       "newDataAnalysis": "Analiză de date nouă",
-      "newMap": "Hartă nouă"
+      "newMap": "Hartă nouă",
+      "newGrants": "Procesare granturi noi"
     },
     "translation": {
       "chooseLanguage": "Limba țintă",
@@ -3293,7 +3305,8 @@
       "unknownType": "Această conversație folosește un flux de lucru nerecunoscut de această versiune. Istoricul conversației este afișat mai jos.",
       "untitled": "Conversație nouă",
       "toggleMenu": "Comută meniul",
-      "model": "Model pentru acest flux de lucru"
+      "model": "Model pentru acest flux de lucru",
+      "disabledByAdmin": "Acest flux de lucru a fost dezactivat de un administrator. Istoricul conversației este afișat mai jos."
     },
     "tabs": {
       "label": "Mod conversație",
@@ -4047,7 +4060,153 @@
     "conflictTakeTheirs": "Preia versiunea lor",
     "conflictNoFieldDiff": "Valorile coincid — doar versiunea înregistrării s-a schimbat.",
     "conflictRecordGone": "Această înregistrare a fost ștearsă (sau nu a putut fi reîncărcată). Copiați ce aveți nevoie din formular, apoi reîncărcați.",
-    "groupsFlagOff": "Targetarea pe grup nu este activată încă pentru acest mediu. Grupurile existente continuă să funcționeze."
+    "groupsFlagOff": "Targetarea pe grup nu este activată încă pentru acest mediu. Grupurile existente continuă să funcționeze.",
+    "catalogOauth": {
+      "title": "Aplicații OAuth pentru conectori integrați",
+      "description": "Aplicații OAuth la nivel de implementare pentru conectorii integrați (GitHub, Asana, …). O înregistrare salvată aici suprascrie variabilele de mediu MCP_OAUTH_*; ștergerea acesteia revine la variabilele respective. Secretele de client sunt criptate la repaus și nu vor mai fi afișate.",
+      "badgeAdmin": "Configurat aici",
+      "badgeEnv": "Din mediu",
+      "badgeNone": "Neconfigurat",
+      "badgeDcr": "Auto-înregistrare",
+      "badgeDcrHint": "Acest furnizor poate înregistra automat un client OAuth, deci funcționează chiar și fără o aplicație configurată aici.",
+      "clientIdLabel": "ID client OAuth",
+      "clientSecretLabel": "Secret client OAuth",
+      "secretStoredPlaceholder": "Salvat — scrieți pentru a înlocui, lăsați gol pentru a păstra",
+      "secretNewPlaceholder": "Lipiți secretul clientului",
+      "save": "Salvați",
+      "remove": "Eliminați",
+      "removeToEnv": "Eliminați (reveniți la mediu)",
+      "saved": "Aplicația OAuth {name} a fost salvată",
+      "removed": "Aplicația OAuth {name} a fost eliminată",
+      "saveError": "Salvarea aplicației OAuth a eșuat. Încercați din nou.",
+      "conflict": "Această înregistrare a fost modificată în altă parte — reîncărcată, vă rugăm să reîncercați.",
+      "storageUnavailable": "Stocarea pentru administrare nu este accesibilă; înregistrările existente nu au putut fi listate. Salvarea este dezactivată până la remediere.",
+      "sealingUnavailable": "Criptarea secretelor nu este configurată în această implementare (lipsește AUTH_SECRET) — secretele de client nu pot fi salvate.",
+      "updatedBy": "Actualizat de {by} la {at}"
+    },
+    "orgAgentOverrideTitle": "Suprascriere agent integrat",
+    "orgAgentOverrideAction": "Suprascrie",
+    "orgAgentBuiltinBadge": "Integrat",
+    "orgAgentBuiltinHint": "Definit în configurația de implementare. Regula sa de acces poate fi modificată aici; suprascrieți pentru a schimba setările fără o implementare.",
+    "m365AgentIndexProgress": "Se indexează {done} din {total} {total, plural, one {document} other {documente}}…",
+    "m365AgentIndexInterrupted": "Indexarea a fost întreruptă la {done} din {total} — reluați pentru a continua.",
+    "m365AgentIndexStartedBy": "inițiată de {name}",
+    "m365AgentIndexResume": "Reia",
+    "m365AgentIndexResumeHint": "Continuați indexarea de unde s-a oprit, folosind accesul dumneavoastră Microsoft 365. Țineți acest tab deschis.",
+    "m365AgentIndexCancel": "Anulează",
+    "m365AgentIndexCancelled": "Indexarea a fost anulată — documentele deja procesate rămân căutabile.",
+    "m365AgentIndexJobFailed": "Indexarea s-a oprit: {error}",
+    "m365AgentIndexDone": "Indexare finalizată: {indexed} indexate, {failed} eșuate, {noText} fără text.",
+    "m365AgentDocCounts": "{indexed, plural, one {# document indexat} other {# documente indexate}} · {failed} eșuate · {noText} fără text · {needsPreparation} necesită pregătire · {skipped} omise",
+    "m365CapDocuments": "Documente: {count} / {max}",
+    "m365CapBytes": "{bytes} din {max}",
+    "m365CapOverDocuments": "Peste limita de {max} documente. Deselectați subfolderele, filtrați după tipul de fișier sau eliminați surse — doar fișierele care vor fi efectiv indexate se iau în calcul.",
+    "m365CapOverBytes": "Depășește limita de {max}. Excludeți subfoldere sau fișiere mari.",
+    "m365PlanScanning": "Se scanează…",
+    "m365PlanRefreshing": "se actualizează…",
+    "m365PlanFailed": "Nu s-au putut scana sursele cu contul dumneavoastră Microsoft 365.",
+    "m365PlanMissing": "Nu a fost găsit sau nu există acces",
+    "m365PlanIndexable": "{count, plural, one {# fișier va fi indexat} other {# fișiere vor fi indexate}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# necesită pregătire} other {# necesită pregătire}}",
+    "m365PlanSkipped": "{count} omise",
+    "m365PlanShowDetails": "Detalii",
+    "m365PlanHideDetails": "Ascunde detalii",
+    "m365PlanTruncated": "Acest folder este prea mare pentru a fi scanat complet — doar primele 1.000 de elemente au fost listate. Alegeți un subfolder.",
+    "m365PlanRecursive": "Include subfoldere",
+    "m365PlanExtensionsLabel": "Doar tipuri de fișiere:",
+    "m365PlanExtensionsPlaceholder": "ex. pdf, docx",
+    "m365PlanSubfolders": "Subfoldere",
+    "m365PlanFolderCount": "{count, plural, one {# fișier} other {# fișiere}}",
+    "m365PlanGroupIndexable": "Va fi indexat",
+    "m365PlanGroupNeedsPreparation": "Necesită pregătire",
+    "m365PlanGroupSkipped": "Omise",
+    "m365PlanPreparationHint": "imagine/audio/video — încă neindexate",
+    "m365PlanMoreRows": "…și încă {count}",
+    "m365ItemStatus": {
+      "pending": "în așteptare",
+      "indexed": "indexat",
+      "failed": "eșuat",
+      "noText": "nu s-a extras text",
+      "missing": "lipsește"
+    },
+    "m365SkipReason": {
+      "unsupported": "tip neacceptat",
+      "tooLarge": "peste 25 MB",
+      "disallowedType": "tip blocat (executabil/arhivă)",
+      "malware": "semnalat ca malware de Microsoft",
+      "zeroBytes": "fișier gol",
+      "excluded": "exclus",
+      "typeFilter": "nu este în filtrul de tip"
+    },
+    "localAdminGroup": {
+      "agents": "Agenți",
+      "promptAgents": "Agenți de prompt",
+      "m365Agents": "Agenți Microsoft 365",
+      "orgAgents": "Agenți de cunoștințe",
+      "guides": "Ghiduri",
+      "connectors": "Conectori",
+      "datasets": "Seturi de date hartă",
+      "unknown": "Delegat dar negăsit"
+    },
+    "localAdminGroupUnavailable": "Această listă este indisponibilă temporar — delegările existente sunt păstrate.",
+    "localAdminBuiltIn": "integrat",
+    "localAdminSummary": "{count, plural, one {# delegare} other {# delegări}}: {names}",
+    "localAdminSummaryMore": "{names} și încă {more}",
+    "localAdminNoDelegations": "Nicio delegare momentan — un admin local fără agenți poate vedea doar zona de administrare.",
+    "localAdminSelectedCount": "{selected} din {total} selectate",
+    "localAdminCopyFrom": "Copiază de la",
+    "localAdminClearAll": "Șterge tot",
+    "localAdminSelectGroup": "Selectează tot",
+    "localAdminClearGroup": "Șterge",
+    "localAdminSearchPlaceholder": "Caută agenți, ghiduri, conectori…",
+    "localAdminDuplicateEmail": "Acest email este deja listat — unește cele două intrări.",
+    "localAdminExpand": "Arată delegările",
+    "localAdminCollapse": "Ascunde delegările",
+    "localAdminDiscard": "Renunță la modificări",
+    "m365AgentRefresh": "Reîmprospătează",
+    "m365AgentRefreshHint": "Preia fișierele adăugate, modificate sau șterse de la ultima rulare — fișierele neschimbate nu vor fi descărcate din nou. Păstrați acest tab deschis.",
+    "m365AgentReindexAll": "Reindexează tot",
+    "m365AgentRefreshProgress": "Reîmprospătare — {done} din {total} {total, plural, one {document modificat} other {documente modificate}}…",
+    "m365AgentRefreshDone": "Reîmprospătare finalizată: {added} adăugate, {modified} actualizate, {removed} șterse, {failed} eșuate.",
+    "m365ChangesChecking": "Se verifică modificările din Microsoft 365 de la ultima indexare…",
+    "m365ChangesFailed": "Nu s-au putut verifica modificările cu contul Microsoft 365.",
+    "m365ChangesNeverIndexed": "Nu a fost indexat încă — rulați Index după salvare.",
+    "m365ChangesFound": "{count, plural, one {# modificare} other {# modificări}} de la ultima indexare: {added} adăugate, {modified} actualizate, {removed} șterse.",
+    "m365ChangesNone": "Nicio modificare de la ultima indexare ({date}).",
+    "m365PrepareButton": "Pregătește",
+    "m365PrepareOcrButton": "Pregătește (OCR)",
+    "m365PrepareSaveFirst": "salvați agentul pentru a pregăti",
+    "m365PrepareHintImage": "imagine — 1 apel vision",
+    "m365PrepareHintMedia": "~{minutes} min de audio de transcris",
+    "m365PrepareHintOcr": "fără strat de text — OCR prin vision, până la 30 pagini",
+    "m365PreparePreparing": "Se pregătește…",
+    "m365PreparePending": "Se transcrie…",
+    "m365PreparedNote": "pregătit · {kind}",
+    "m365PreparedKind": {
+      "image": "descriere imagine",
+      "audio": "transcriere",
+      "video": "transcriere",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "{name} pregătit ({chars} caractere). Rulați Reîmprospătare pentru a-l indexa.",
+    "m365PrepareStarted": "Transcrierea fișierului {name} a pornit în fundal — păstrați acest tab deschis.",
+    "m365PrepareFailed": "Nu s-a putut pregăti {name}: {error}",
+    "m365PrepareFailedGeneric": "Pregătirea a eșuat.",
+    "canonicalKeyLabel": "Cheie",
+    "copyKey": "Copiază cheia",
+    "agentKeySearchPlaceholder": "Caută agenți, ghiduri, conectori… sau lipește o cheie",
+    "agentKeyAddCustom": "Adaugă \"{key}\" exact cum ai scris",
+    "agentKeyRemove": "Șterge {name}",
+    "hideAgent": "Ascunde",
+    "unhideAgent": "Afișează",
+    "hideAgentHint": "Ascunde acest agent din lista ta de administrare. Afectează doar vizualizarea ta — utilizatorii și ceilalți administratori nu sunt afectați.",
+    "unhideAgentHint": "Afișează din nou acest agent în lista ta de administrare.",
+    "hiddenBadge": "Ascuns",
+    "hiddenAgentsCount": "{count, plural, one {# agent ascuns} other {# agenți ascunși}}",
+    "hiddenAgentsShowing": "Se afișează {count, plural, one {# agent ascuns} other {# agenți ascunși}}",
+    "hiddenAgentsShow": "Afișează",
+    "hiddenAgentsHide": "Ascunde din nou",
+    "allAgentsHidden": "Toți agenții de aici sunt ascunși din vizualizarea ta — folosește Afișează pentru a-i vedea."
   },
   "localModels": {
     "title": "Modele locale",
@@ -4248,9 +4407,15 @@
       "connectors": "Conectori de organizație și cine îi poate utiliza.",
       "guides": "Ghiduri de stil, terminologie și conformitate.",
       "mapDatasets": "Seturi de date selectate disponibile pentru fluxul de lucru pe hartă.",
-      "localAdmins": "Deleagă editarea regulilor de acces altor persoane."
+      "localAdmins": "Deleagă editarea regulilor de acces altor persoane.",
+      "workflows": "Activează sau dezactivează fluxurile de conversație pentru toată lumea.",
+      "viewAs": "Testează aplicația ca și cum ai îndeplini — sau nu — o condiție."
     },
-    "openSettings": "Deschide setările"
+    "openSettings": "Deschide setările",
+    "area": {
+      "workflows": "Fluxuri de lucru",
+      "viewAs": "Vizualizează ca"
+    }
   },
   "limits": {
     "title": "Limite de utilizare",
@@ -4452,7 +4617,8 @@
     "groupSearchNoResults": "Nicio grupă nu corespunde acestui nume.",
     "groupSearchError": "Căutarea grupului a eșuat. Totuși, puteți insera un ID de obiect al grupului mai jos.",
     "groupSearchHint": "Introduceți cel puțin 2 caractere pentru a căuta grupurile organizației sau inserați direct un ID de obiect de grup. Suprapunerea se aplică membrilor grupului din Microsoft Entra.",
-    "groupsFlagOff": "Direcționarea grupurilor nu este activată încă pentru acest mediu. Țintele de grup existente funcționează în continuare."
+    "groupsFlagOff": "Direcționarea grupurilor nu este activată încă pentru acest mediu. Țintele de grup existente funcționează în continuare.",
+    "featureDisabled": "Limitele de utilizare nu sunt activate pentru această implementare."
   },
   "m365": {
     "connections": {
@@ -4813,5 +4979,149 @@
     "failed": "Nu s-a putut partaja — nu a fost creat nimic.",
     "copyFailed": "Nu s-a putut copia linkul — selectați-l de mai sus și copiați manual.",
     "lastMessagesCountLabel": "Numărul de mesaje recente de inclus"
+  },
+  "toolModes": {
+    "webSearch": "Căutare web",
+    "codeInterpreter": "Interpret de cod",
+    "off": "Oprit",
+    "auto": "Automat",
+    "always": "Întotdeauna",
+    "routingPrivacy": "Confidențialitate",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Căutarea Azure AI trimite interogările prin Azure AI Foundry, care le poate păstra.",
+    "learnMore": "Află mai multe"
+  },
+  "agentAttach": {
+    "browserTitle": "Agenți",
+    "browserSubtitle": "Adăugați agenți și conectori în acest chat sau începeți un chat nou cu un agent. Majoritatea funcționează cu orice model ați ales.",
+    "searchPlaceholder": "Căutați agenți și conectori…",
+    "loading": "Se încarcă agenții…",
+    "noMatches": "Nicio potrivire pentru căutarea dvs.",
+    "noAgents": "Niciun agent disponibil.",
+    "addToChat": "Adaugă la acest chat",
+    "removeFromChat": "Elimină din acest chat",
+    "newChat": "Chat nou",
+    "attached": "Atașat",
+    "detach": "Detașează",
+    "change": "Schimbă",
+    "browse": "Răsfoiește agenți…",
+    "noAgent": "Niciun agent atașat",
+    "close": "Închide",
+    "kind": {
+      "rag": "Cunoaștere",
+      "prompt": "Persoană",
+      "m365": "Cunoaștere (Microsoft 365)",
+      "org": "Cunoaștere",
+      "foundry": "Agent Foundry",
+      "connector": "Conector"
+    },
+    "semantics": {
+      "your-model": "folosește modelul dvs.",
+      "pinned-model": "model stabilit de administrator",
+      "own-model": "rulează pe propriul său model"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Sugestii din organizația dumneavoastră",
+    "searching": "Se caută în organizația dvs.…",
+    "noMatches": "Nicio potrivire în director — puteți introduce adresa manual"
+  },
+  "workflowsAdmin": {
+    "title": "Fluxuri de lucru",
+    "description": "Activează sau dezactivează fiecare flux de lucru pentru întreaga organizație. Un flux dezactivat este ascuns din meniuri și respins de server, chiar și pentru cei care altfel ar avea acces.",
+    "layeredNote": "Indicatorul conversationWorkflows din LaunchDarkly controlează în continuare activarea: un flux activat aici este accesibil doar acolo unde acel indicator este activ. Această pagină nu poate face vizibil nimic ce este ascuns de indicator.",
+    "loading": "Se încarcă politica fluxului de lucru…",
+    "loadError": "Politica fluxului de lucru nu a putut fi încărcată.",
+    "policyUnavailable": "Politica fluxului de lucru nu a putut fi citită din stocare. Comutatoarele sunt ascunse în loc să fie afișate cu valori implicite care pot să nu corespundă celor impuse.",
+    "retry": "Reîncearcă",
+    "enableAll": "Activează toate",
+    "disableAll": "Dezactivează toate",
+    "enabledLabel": "Activat",
+    "disabledLabel": "Dezactivat",
+    "defaultOnHint": "Implicit când nu există nicio politică salvată: activat.",
+    "defaultOffHint": "Implicit când nu există nicio politică salvată: dezactivat — un administrator trebuie să-l activeze explicit.",
+    "grantsNote": "Procesarea granturilor este suplimentar restricționată la utilizatorii MSF-USA din departamentul Program cu \"grants\" în titulatura postului sau din Systems cu \"innovation\" în titulatură. Activarea aici nu extinde această regulă.",
+    "unsaved": "Aveți modificări nesalvate.",
+    "save": "Salvează",
+    "saving": "Se salvează…",
+    "saveSuccess": "Politica fluxului de lucru a fost salvată.",
+    "saveError": "Politica fluxului de lucru nu a putut fi salvată.",
+    "conflictError": "Un alt administrator a modificat politica înainte. Aceasta a fost reîncărcată — vă rugăm verificați și salvați din nou.",
+    "updatedByLine": "Ultima salvare de către {by} pe {at}.",
+    "neverSaved": "Nicio politică nu a fost salvată încă; se aplică valorile implicite de mai sus."
+  },
+  "viewAs": {
+    "title": "Vizualizează ca",
+    "description": "Testează aplicația, doar pentru sesiunea ta, ca și cum ai îndeplini sau nu o condiție care este de obicei decisă de director sau de administratori. Identitatea ta nu este schimbată: tot ce creezi rămâne al tău și fiecare linie de audit te va menționa pe tine.",
+    "activeTitle": "Modul Vizualizează ca este activ",
+    "inactiveTitle": "Modul Vizualizează ca nu este activ",
+    "sections": {
+      "role": "Rol de administrator",
+      "region": "Regiune de date",
+      "attributes": "Atribute director",
+      "groups": "Apartenență la grup",
+      "presets": "Presetări"
+    },
+    "role": {
+      "global": "Administrator global (rolul tău real)",
+      "local": "Administrator local",
+      "none": "Utilizator obișnuit",
+      "localKeysLabel": "Chei agent delegate",
+      "localKeysHint": "Chei canonice de agent, separate prin virgulă, pe care acest administrator local le poate edita. Lăsați necompletat pentru un admin local fără agenți delegați.",
+      "noneWarning": "Ca utilizator obișnuit, toate celelalte zone de administrare dispar. Această pagină rămâne accesibilă, iar bannerul din partea de sus a aplicației oferă mereu o cale de ieșire."
+    },
+    "region": {
+      "actual": "Actual ({region})",
+      "hint": "Direcționează solicitările dvs. — și orice încărcați în timp ce este activ — către stocarea celeilalte regiuni. Are prioritate față de un cookie ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Departament",
+      "companyName": "Companie",
+      "jobTitle": "Funcție",
+      "officeId": "Birou",
+      "officeActual": "Birou real",
+      "officeNone": "Fără birou",
+      "actualValue": "Real: {value}",
+      "actualEmpty": "Real: (gol)",
+      "hint": "Lăsați câmpul necompletat pentru a păstra valoarea reală. Acestea alimentează regula de acordare, limitele pe atribute și regulile de acces."
+    },
+    "groups": {
+      "label": "ID-uri grup",
+      "placeholder": "Un ID de obiect grup Entra pe linie",
+      "hint": "Înlocuiește — nu extinde — apartenența dvs. reală pentru această sesiune, astfel încât să puteți testa atât apartenența, cât și lipsa acesteia."
+    },
+    "presets": {
+      "grantsMember": "Membru echipă grants",
+      "regularUser": "Utilizator obișnuit",
+      "localAdmin": "Administrator local, fără agenți",
+      "otherRegion": "Altă regiune",
+      "hint": "Presetările completează formularul; nu se aplică nimic până când nu apăsați Aplică."
+    },
+    "apply": "Aplică și reîncarcă",
+    "applying": "Se aplică…",
+    "clear": "Ieși din view-as",
+    "clearing": "Ieșire…",
+    "reset": "Resetează formularul",
+    "nothingToApply": "Stabiliți cel puțin o suprascriere pentru a aplica.",
+    "applyError": "View-as nu a putut fi aplicat: {error}",
+    "clearError": "View-as nu a putut fi anulat: {error}",
+    "loadError": "Starea view-as nu a putut fi încărcată.",
+    "retry": "Reîncearcă",
+    "expiresNote": "View-as rămâne activ până la 8 ore sau până la ieșire.",
+    "banner": {
+      "label": "Vizualizați ca",
+      "adjust": "Ajustează",
+      "exit": "Ieșiți",
+      "role": {
+        "local": "administrator local",
+        "none": "utilizator obișnuit"
+      },
+      "region": "regiunea {region}",
+      "department": "departamentul „{value}”",
+      "companyName": "compania „{value}”",
+      "jobTitle": "funcția „{value}”",
+      "officeId": "biroul {value}",
+      "groups": "{count, plural, one {# grup} other {# grupuri}}"
+    }
   }
 }

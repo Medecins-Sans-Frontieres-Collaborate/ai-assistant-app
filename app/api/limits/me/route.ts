@@ -35,9 +35,10 @@ import { auth } from '@/auth';
  * session, not in any directory this route can read, so an `attribute`
  * override is reported as not-evaluated rather than silently ignored.
  *
- * 200 with `enabled: false` while the feature is off — unlike the admin
- * routes this is a normal client call on the chat path, and a 404 would make
- * every client log an error on a deployment that simply has limits disabled.
+ * Always answers: there is no server-side feature gate. The `usageLimits`
+ * LaunchDarkly flag is client-side only, and the client already gates this
+ * fetch on it; a deployment with no authored policy simply resolves an empty
+ * list. The `enabled: true` field is kept for response-shape stability.
  */
 
 interface MeLimit {
@@ -73,10 +74,6 @@ function collectLimits(
 
 export async function GET(request: NextRequest) {
   const service = LimitsService.getInstance();
-  if (!service.isEnabled()) {
-    return successResponse({ enabled: false, limits: [], mode: 'observe' });
-  }
-
   const session = await auth();
   if (!session?.user) return unauthorizedResponse();
 
@@ -86,7 +83,7 @@ export async function GET(request: NextRequest) {
 
     const as = request.nextUrl.searchParams.get('as');
     if (as) {
-      if (!isGlobalAdmin(session.user.mail)) return forbiddenResponse();
+      if (!isGlobalAdmin(session.user)) return forbiddenResponse();
       const mail = normalizeMail(as);
       const preview: Principal = {
         userId: '',

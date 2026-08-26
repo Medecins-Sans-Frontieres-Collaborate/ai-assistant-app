@@ -199,6 +199,23 @@ export interface OpenAIModel {
   defaultRank?: number;
 
   /**
+   * List-price token rates in USD per 1M tokens for this model's standard
+   * (Global) deployment. Sourced from the Azure Retail Prices API for
+   * Azure-billed models and Anthropic list rates for claude-* — see the
+   * $pricing-note in config/models.json for provenance, caveats, and the
+   * as-of date. Data-only for now: available for cost handling but not yet
+   * rendered anywhere.
+   */
+  pricing?: {
+    /** USD per 1M input (prompt) tokens. */
+    inputPer1M: number;
+    /** USD per 1M output (completion) tokens. */
+    outputPer1M: number;
+    /** USD per 1M cached input tokens (cache READ rate), where published. */
+    cachedInputPer1M?: number;
+  };
+
+  /**
    * Azure Foundry lifecycle stage of the underlying model version, mirrored
    * from Microsoft's model retirement schedule (see the $retirement-note in
    * config/models.json for source + as-of date). INFORMATIONAL ONLY — never
@@ -296,10 +313,12 @@ export enum OpenAIModelID {
 // via metadata without editing an enum here.
 
 // Last-resort fallback model id, used when no default can be resolved. Must
-// be a standard-variant GPT that is enabled in EVERY ring (the dynamic
-// default in config/models.ts getDefaultModel() is preferred everywhere a
-// ring-aware answer is possible).
-export const fallbackModelID = OpenAIModelID.GPT_5_2;
+// be a standard-variant GPT that is enabled in EVERY ring and deployed in
+// BOTH the US and EU accounts (the dynamic default in config/models.ts
+// getDefaultModel() is preferred everywhere a ring-aware answer is
+// possible). gpt-5.4 rather than gpt-5.2: the EU gpt-5.2 deployment
+// actually serves 5.5, which the cost policy avoids.
+export const fallbackModelID = OpenAIModelID.GPT_5_4;
 
 /**
  * Default display order for models in the model selection UI.
@@ -434,6 +453,13 @@ const openAIModelSchema = z.object({
   retirementDate: z.string().optional(),
   retirementReplacement: z.string().optional(),
   sizeClass: z.enum(['nano', 'mini', 'standard', 'large']).optional(),
+  pricing: z
+    .object({
+      inputPer1M: z.number(),
+      outputPer1M: z.number(),
+      cachedInputPer1M: z.number().optional(),
+    })
+    .optional(),
   series: z.string().optional(),
   seriesLabel: z.string().optional(),
   versionLabel: z.string().optional(),

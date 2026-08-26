@@ -27,9 +27,7 @@ export async function GET() {
   if (!session?.user) return unauthorizedResponse();
 
   try {
-    const { areas, configUnavailable } = await resolveAdminAreas(
-      session.user.mail,
-    );
+    const { areas, configUnavailable } = await resolveAdminAreas(session.user);
     return successResponse({ areas, configUnavailable });
   } catch (error) {
     return handleApiError(error, 'Failed to resolve admin areas');

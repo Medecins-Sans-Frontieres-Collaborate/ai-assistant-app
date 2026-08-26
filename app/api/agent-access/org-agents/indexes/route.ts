@@ -30,7 +30,7 @@ export async function GET() {
   try {
     await service.ensureFresh();
     const status = resolveAdminStatus(
-      session.user.mail,
+      session.user,
       service.getSnapshot().config,
     );
     if (!status.isGlobalAdmin && !status.isLocalAdmin) {

@@ -867,7 +867,12 @@
       "showFewer": "Näytä vähemmän"
     },
     "retryWithModel": "Kokeile mallilla {model}",
-    "createTodoTasks": "Luo To Do -tehtäviä tästä vastauksesta"
+    "createTodoTasks": "Luo To Do -tehtäviä tästä vastauksesta",
+    "attachedFileExpired": "Liitetiedosto ei ole enää saatavilla — ladatut tiedostot säilytetään vain rajoitetun ajan. Se on poistettu tästä keskustelusta. Yritä uudelleen ilman tiedostoa tai lataa tiedosto uudelleen.",
+    "repeatedFailureNotice": "Tämä epäonnistuu toistuvasti — keskustelu saattaa olla vioittunut. Uuden keskustelun aloittaminen korjaa yleensä ongelman.",
+    "startNewConversation": "Aloita uusi keskustelu",
+    "downloadDebugInfo": "Lataa vianmääritystiedot",
+    "includeMessageText": "Sisällytä viestien teksti"
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",
@@ -876,7 +881,9 @@
     "quickActions": "Pikatoiminnot",
     "expandFolder": "Laajenna kansio {name}",
     "collapseFolder": "Supista kansio {name}",
-    "folderOptions": "{name} asetukset"
+    "folderOptions": "{name} asetukset",
+    "agentsEntry": "Agentit",
+    "agentsTitle": "Selaa agentteja ja aloita keskustelu jonkun kanssa"
   },
   "prompts": {
     "buildReusablePrompts": "Rakenna uudelleenkäytettäviä kehotteita tekoälyn avulla",
@@ -2667,6 +2674,10 @@
       "map": {
         "label": "Kartta",
         "description": "Muunna mikä tahansa data karttasijainneiksi"
+      },
+      "grants": {
+        "label": "Avustusten käsittely",
+        "description": "Sovita ja poimi rakenteellista tietoa avustusten kuvauksista"
       }
     },
     "chooser": {
@@ -2676,7 +2687,8 @@
       "newTranslation": "Uusi käännös",
       "newDocument": "Uusi dokumentti",
       "newDataAnalysis": "Uusi data-analyysi",
-      "newMap": "Uusi kartta"
+      "newMap": "Uusi kartta",
+      "newGrants": "Uusien avustusten käsittely"
     },
     "translation": {
       "chooseLanguage": "Kohdekieli",
@@ -3293,7 +3305,8 @@
       "unknownType": "Tämä keskustelu käyttää työnkulkua, jota tämä versio ei tunnista. Keskusteluhistoria näkyy alla.",
       "untitled": "Uusi keskustelu",
       "toggleMenu": "Avaa/sulje valikko",
-      "model": "Työnkulun malli"
+      "model": "Työnkulun malli",
+      "disabledByAdmin": "Ylläpitäjä on poistanut tämän työnkulun käytöstä. Keskusteluhistoria näytetään alla."
     },
     "tabs": {
       "label": "Keskustelutila",
@@ -4047,7 +4060,153 @@
     "conflictTakeTheirs": "Ota heidän versio",
     "conflictNoFieldDiff": "Arvot vastaavat — vain tietueen versio muuttui.",
     "conflictRecordGone": "Tämä tietue on poistettu (tai sitä ei voitu ladata uudelleen). Kopioi tarvitsemasi tiedot lomakkeelta ja lataa sivu uudelleen.",
-    "groupsFlagOff": "Ryhmien kohdistus ei ole vielä käytössä tässä ympäristössä. Olemassa olevat ryhmäkohdistukset toimivat edelleen."
+    "groupsFlagOff": "Ryhmien kohdistus ei ole vielä käytössä tässä ympäristössä. Olemassa olevat ryhmäkohdistukset toimivat edelleen.",
+    "catalogOauth": {
+      "title": "Sisäänrakennetut connectorin OAuth-sovellukset",
+      "description": "Koko käyttöönoton laajuiset OAuth-sovellukset sisäänrakennettuja liittimiä varten (GitHub, Asana, …). Täällä tallennettu tieto ohittaa MCP_OAUTH_* -ympäristömuuttujat; poistaminen palauttaa ne käyttöön. Client secret -arvot ovat levyllä salattuja eikä niitä näytetä uudelleen.",
+      "badgeAdmin": "Määritetty täällä",
+      "badgeEnv": "Ympäristöstä",
+      "badgeNone": "Ei määritetty",
+      "badgeDcr": "Itse rekisteröityvä",
+      "badgeDcrHint": "Tämä tarjoaja voi rekisteröidä OAuth-klientin automaattisesti, joten se toimii myös ilman täällä määritettyä sovellusta.",
+      "clientIdLabel": "OAuth client ID",
+      "clientSecretLabel": "OAuth client secret",
+      "secretStoredPlaceholder": "Tallennettu — kirjoita korvataksesi, jätä tyhjäksi säilyttääksesi",
+      "secretNewPlaceholder": "Liitä client secret",
+      "save": "Tallenna",
+      "remove": "Poista",
+      "removeToEnv": "Poista (palaa ympäristömuuttujiin)",
+      "saved": "{name} OAuth-sovellus tallennettu",
+      "removed": "{name} OAuth-sovellus poistettu",
+      "saveError": "OAuth-sovelluksen tallennus epäonnistui. Yritä uudelleen.",
+      "conflict": "Tätä tietuetta on muutettu muualla — ladattu uudelleen, yritä uudelleen.",
+      "storageUnavailable": "Ylläpidon tallennustila ei ole saavutettavissa; olemassa olevia tietueita ei voitu listata. Tallennus on poissa käytöstä kunnes tilanne korjaantuu.",
+      "sealingUnavailable": "Salaisuuksien salaus ei ole määritetty tässä käyttöönotossa (AUTH_SECRET puuttuu) — client secret -arvoja ei voi tallentaa.",
+      "updatedBy": "Päivittänyt {by} {at}"
+    },
+    "orgAgentOverrideTitle": "Yliaja sisäänrakennettu agentti",
+    "orgAgentOverrideAction": "Yliaja",
+    "orgAgentBuiltinBadge": "Sisäänrakennettu",
+    "orgAgentBuiltinHint": "Määritelty käyttöönottokonfiguraatiossa. Sen käyttöoikeussääntö on muokattavissa täällä; yliaja muuttaaksesi asetuksia ilman käyttöönottopäivitystä.",
+    "m365AgentIndexProgress": "Indeksoidaan {done} / {total} {total, plural, one {dokumentti} other {dokumenttia}}…",
+    "m365AgentIndexInterrupted": "Indeksointi keskeytettiin kohdassa {done} / {total} — jatkaaksesi jatka indeksointia.",
+    "m365AgentIndexStartedBy": "aloittanut {name}",
+    "m365AgentIndexResume": "Jatka",
+    "m365AgentIndexResumeHint": "Jatka indeksointia siitä, mihin se jäi, käyttämällä Microsoft 365 -tunnustasi. Pidä tämä välilehti auki.",
+    "m365AgentIndexCancel": "Peruuta",
+    "m365AgentIndexCancelled": "Indeksointi peruutettu — jo käsitellyt dokumentit ovat edelleen haettavissa.",
+    "m365AgentIndexJobFailed": "Indeksointi pysäytetty: {error}",
+    "m365AgentIndexDone": "Indeksointi valmis: {indexed} indeksoitu, {failed} epäonnistui, {noText} ilman tekstiä.",
+    "m365AgentDocCounts": "{indexed, plural, one {# dokumentti indeksoitu} other {# dokumenttia indeksoitu}} · {failed} epäonnistui · {noText} ilman tekstiä · {needsPreparation} vaatii valmistelua · {skipped} ohitettu",
+    "m365CapDocuments": "Dokumentteja: {count} / {max}",
+    "m365CapBytes": "{bytes} / {max}",
+    "m365CapOverDocuments": "Ylittää {max} dokumentin rajan. Poista alikansioiden valinta, suodata tiedostotyypin mukaan tai poista lähteitä — vain varsinaisesti indeksoitavat tiedostot lasketaan mukaan.",
+    "m365CapOverBytes": "Ylittää {max} kokorajoituksen. Sulje pois alikansiot tai suuret tiedostot.",
+    "m365PlanScanning": "Skannataan…",
+    "m365PlanRefreshing": "päivitetään…",
+    "m365PlanFailed": "Lähteiden skannaus Microsoft 365 -tililläsi epäonnistui.",
+    "m365PlanMissing": "Ei löytynyt tai ei oikeuksia",
+    "m365PlanIndexable": "{count, plural, one {# tiedosto indeksoidaan} other {# tiedostoa indeksoidaan}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# vaatii valmistelua} other {# vaatii valmistelua}}",
+    "m365PlanSkipped": "{count} ohitettu",
+    "m365PlanShowDetails": "Tiedot",
+    "m365PlanHideDetails": "Piilota tiedot",
+    "m365PlanTruncated": "Tämä kansio on liian suuri skannattavaksi kokonaan — vain ensimmäiset 1 000 kohdetta listattiin. Valitse alikansio sen sijaan.",
+    "m365PlanRecursive": "Sisällytä alikansiot",
+    "m365PlanExtensionsLabel": "Vain tiedostotyypit:",
+    "m365PlanExtensionsPlaceholder": "esim. pdf, docx",
+    "m365PlanSubfolders": "Alikansiot",
+    "m365PlanFolderCount": "{count, plural, one {# tiedosto} other {# tiedostoa}}",
+    "m365PlanGroupIndexable": "Indeksoidaan",
+    "m365PlanGroupNeedsPreparation": "Vaatii valmistelua",
+    "m365PlanGroupSkipped": "Ohitettu",
+    "m365PlanPreparationHint": "kuva/ääni/video — ei vielä indeksoitu",
+    "m365PlanMoreRows": "…ja {count} lisää",
+    "m365ItemStatus": {
+      "pending": "odottaa",
+      "indexed": "indeksoitu",
+      "failed": "epäonnistui",
+      "noText": "tekstiä ei löydy",
+      "missing": "puuttuu"
+    },
+    "m365SkipReason": {
+      "unsupported": "ei tuettu tyyppi",
+      "tooLarge": "yli 25 Mt",
+      "disallowedType": "estetty tyyppi (suoritettava/arkisto)",
+      "malware": "Microsoft on merkinnyt haittaohjelmaksi",
+      "zeroBytes": "tyhjä tiedosto",
+      "excluded": "poissuljettu",
+      "typeFilter": "ei tyypin suodattimessa"
+    },
+    "localAdminGroup": {
+      "agents": "Agentit",
+      "promptAgents": "Prompt-agentit",
+      "m365Agents": "Microsoft 365 -agentit",
+      "orgAgents": "Tietoagentit",
+      "guides": "Oppaat",
+      "connectors": "Liittimet",
+      "datasets": "Kartta-aineistot",
+      "unknown": "Delegoitu mutta ei löydy"
+    },
+    "localAdminGroupUnavailable": "Tämä luettelo ei ole tilapäisesti käytettävissä — nykyiset delegoinnit säilyvät.",
+    "localAdminBuiltIn": "sisäänrakennettu",
+    "localAdminSummary": "{count, plural, one {# delegointi} other {# delegointia}}: {names}",
+    "localAdminSummaryMore": "{names} ja {more} lisää",
+    "localAdminNoDelegations": "Ei vielä delegointeja — paikallinen ylläpitäjä ilman agentteja näkee vain hallinta-alueen.",
+    "localAdminSelectedCount": "{selected} / {total} valittu",
+    "localAdminCopyFrom": "Kopioi muualta",
+    "localAdminClearAll": "Tyhjennä kaikki",
+    "localAdminSelectGroup": "Valitse kaikki",
+    "localAdminClearGroup": "Tyhjennä",
+    "localAdminSearchPlaceholder": "Etsi agentteja, oppaita, liittimiä…",
+    "localAdminDuplicateEmail": "Tämä sähköposti on jo luettelossa — yhdistä kaksi merkintää.",
+    "localAdminExpand": "Näytä delegoinnit",
+    "localAdminCollapse": "Piilota delegoinnit",
+    "localAdminDiscard": "Hylkää muutokset",
+    "m365AgentRefresh": "Päivitä",
+    "m365AgentRefreshHint": "Nouda tiedostot, jotka on lisätty, muutettu tai poistettu viimeisen ajon jälkeen — muuttumattomia tiedostoja ei ladata uudelleen. Pidä tämä välilehti auki.",
+    "m365AgentReindexAll": "Indeksoi kaikki uudelleen",
+    "m365AgentRefreshProgress": "Päivitetään — {done} / {total} muuttunutta {total, plural, one {dokumenttia} other {dokumenttia}}…",
+    "m365AgentRefreshDone": "Päivitys valmis: {added} lisätty, {modified} päivitetty, {removed} poistettu, {failed} epäonnistui.",
+    "m365ChangesChecking": "Tarkistetaan muutokset Microsoft 365:ssä viimeisen indeksin jälkeen…",
+    "m365ChangesFailed": "Muutosten tarkistaminen Microsoft 365 -tililläsi epäonnistui.",
+    "m365ChangesNeverIndexed": "Ei vielä indeksoitu — suorita Indeksointi tallennuksen jälkeen.",
+    "m365ChangesFound": "{count, plural, one {# muutos} other {# muutosta}} viimeisen indeksin jälkeen: {added} lisätty, {modified} päivitetty, {removed} poistettu.",
+    "m365ChangesNone": "Ei muutoksia viimeisen indeksin jälkeen ({date}).",
+    "m365PrepareButton": "Valmistele",
+    "m365PrepareOcrButton": "Valmistele (OCR)",
+    "m365PrepareSaveFirst": "tallenna agentti valmistelemiseksi",
+    "m365PrepareHintImage": "kuva — 1 vision-kutsu",
+    "m365PrepareHintMedia": "~{minutes} min äänitiedostoa litteroitavaksi",
+    "m365PrepareHintOcr": "ei tekstikerrosta — OCR visionin avulla, enintään 30 sivua",
+    "m365PreparePreparing": "Valmistellaan…",
+    "m365PreparePending": "Litteroidaan…",
+    "m365PreparedNote": "valmisteltu · {kind}",
+    "m365PreparedKind": {
+      "image": "kuvailu",
+      "audio": "litterointi",
+      "video": "litterointi",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "{name} valmisteltu ({chars} merkkiä). Suorita Päivitä indeksointia varten.",
+    "m365PrepareStarted": "{name} litterointi aloitettu taustalla — pidä välilehti auki.",
+    "m365PrepareFailed": "{name} valmistelu epäonnistui: {error}",
+    "m365PrepareFailedGeneric": "Valmistelu epäonnistui.",
+    "canonicalKeyLabel": "Avain",
+    "copyKey": "Kopioi avain",
+    "agentKeySearchPlaceholder": "Etsi agenteista, ohjeista, yhdistimistä… tai liitä avain",
+    "agentKeyAddCustom": "Lisää \"{key}\" sellaisenaan",
+    "agentKeyRemove": "Poista {name}",
+    "hideAgent": "Piilota",
+    "unhideAgent": "Näytä",
+    "hideAgentHint": "Piilota tämä agentti ylläpitoluettelostasi. Tämä vaikuttaa vain omaan näkymääsi — käyttäjiin ja muihin ylläpitäjiin tämä ei vaikuta.",
+    "unhideAgentHint": "Näytä tämä agentti ylläpitoluettelossasi uudelleen.",
+    "hiddenBadge": "Piilotettu",
+    "hiddenAgentsCount": "{count, plural, one {# piilotettu agentti} other {# piilotettua agenttia}}",
+    "hiddenAgentsShowing": "Näytetään {count, plural, one {# piilotettu agentti} other {# piilotettua agenttia}}",
+    "hiddenAgentsShow": "Näytä",
+    "hiddenAgentsHide": "Piilota uudelleen",
+    "allAgentsHidden": "Kaikki täällä olevat agentit ovat piilotettu omasta näkymästäsi — käytä Näytä-palikkaa paljastaaksesi ne."
   },
   "localModels": {
     "title": "Paikalliset mallit",
@@ -4248,9 +4407,15 @@
       "connectors": "Organisaation yhdistimet ja niiden käyttäjät.",
       "guides": "Tyyli-, termistö- ja vaatimustenmukaisuusohjeet.",
       "mapDatasets": "Karttatyönkulkuun käytettävissä olevat valikoidut tietoaineistot.",
-      "localAdmins": "Valtuuta muut henkilöt muokkaamaan käyttöoikeussääntöjä."
+      "localAdmins": "Valtuuta muut henkilöt muokkaamaan käyttöoikeussääntöjä.",
+      "workflows": "Ota keskustelutyönkulut käyttöön tai pois käytöstä kaikille.",
+      "viewAs": "Testaa sovellusta henkilönä, joka täyttää — tai ei täytä — jonkin ehdon."
     },
-    "openSettings": "Avaa asetukset"
+    "openSettings": "Avaa asetukset",
+    "area": {
+      "workflows": "Työnkulut",
+      "viewAs": "Katso roolissa"
+    }
   },
   "limits": {
     "title": "Käyttörajoitukset",
@@ -4452,7 +4617,8 @@
     "groupSearchNoResults": "Yhtään ryhmää ei löytynyt kyseisellä nimellä.",
     "groupSearchError": "Ryhmähaun suoritus epäonnistui. Voit silti liittää ryhmän objektitunnuksen alle.",
     "groupSearchHint": "Kirjoita vähintään 2 merkkiä hakeaksesi organisaatiosi ryhmiä tai liitä ryhmän objektitunnus suoraan. Ohitus koskee ryhmän jäseniä Microsoft Entrassa.",
-    "groupsFlagOff": "Ryhmien kohdistus ei ole vielä käytössä tässä ympäristössä. Nykyiset ryhmäkohdistukset toimivat edelleen."
+    "groupsFlagOff": "Ryhmien kohdistus ei ole vielä käytössä tässä ympäristössä. Nykyiset ryhmäkohdistukset toimivat edelleen.",
+    "featureDisabled": "Käyttörajoitukset eivät ole käytössä tässä käyttöönotossa."
   },
   "m365": {
     "connections": {
@@ -4813,5 +4979,149 @@
     "failed": "Jakaminen epäonnistui — mitään ei luotu.",
     "copyFailed": "Linkkiä ei voitu kopioida — valitse se yllä ja kopioi manuaalisesti.",
     "lastMessagesCountLabel": "Sisällytettävien uusien viestien määrä"
+  },
+  "toolModes": {
+    "webSearch": "Verkkohaku",
+    "codeInterpreter": "Koodin tulkki",
+    "off": "Pois",
+    "auto": "Automaattinen",
+    "always": "Aina",
+    "routingPrivacy": "Tietosuoja",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI -haku lähettää kyselyt Azure AI Foundryn kautta, joka saattaa säilyttää ne.",
+    "learnMore": "Lue lisää"
+  },
+  "agentAttach": {
+    "browserTitle": "Agentit",
+    "browserSubtitle": "Lisää agentteja ja liittimiä tähän keskusteluun tai aloita uusi keskustelu agentin kanssa. Useimmat toimivat valitsemallasi mallilla.",
+    "searchPlaceholder": "Etsi agentteja ja liittimiä…",
+    "loading": "Ladataan agentteja…",
+    "noMatches": "Haullasi ei löytynyt tuloksia.",
+    "noAgents": "Ei agentteja saatavilla.",
+    "addToChat": "Lisää tähän keskusteluun",
+    "removeFromChat": "Poista tästä keskustelusta",
+    "newChat": "Uusi keskustelu",
+    "attached": "Liitetty",
+    "detach": "Irrota",
+    "change": "Vaihda",
+    "browse": "Selaa agentteja…",
+    "noAgent": "Ei agenttia liitettynä",
+    "close": "Sulje",
+    "kind": {
+      "rag": "Tietämys",
+      "prompt": "Persoona",
+      "m365": "Tietämys (Microsoft 365)",
+      "org": "Tietämys",
+      "foundry": "Foundry-agentti",
+      "connector": "Liitin"
+    },
+    "semantics": {
+      "your-model": "käyttää omaa malliasti",
+      "pinned-model": "ylläpitäjän määrittämä malli",
+      "own-model": "käyttää omaa malliaan"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Ehdotuksia organisaatioltasi",
+    "searching": "Haetaan organisaatiostasi…",
+    "noMatches": "Hakemistosta ei löytynyt sopivia – voit syöttää osoitteen manuaalisesti"
+  },
+  "workflowsAdmin": {
+    "title": "Työnkulut",
+    "description": "Ota kukin työnkulku käyttöön tai pois käytöstä koko organisaatiolle. Poistettu työnkulku on piilotettu valikoista ja estetty palvelimella, vaikka käyttäjä muuten täyttäisi ehdot.",
+    "layeredNote": "LaunchDarklyn conversationWorkflows-käyttöönottolippu säätelee silti käyttöönottoa: täällä käyttöön otettu työnkulku on saatavilla vain, jos lippu on päällä. Tämä sivu ei tuo näkyviin mitään, minkä lippu piilottaa.",
+    "loading": "Ladataan työnkulun käytäntöä…",
+    "loadError": "Työnkulun käytäntöä ei voitu ladata.",
+    "policyUnavailable": "Työnkulun käytäntöä ei voitu lukea tallennuksesta. Kytkimet on piilotettu sen sijaan, että näytettäisiin oletusarvot, jotka eivät ehkä vastaa käytäntöä.",
+    "retry": "Yritä uudelleen",
+    "enableAll": "Ota kaikki käyttöön",
+    "disableAll": "Poista kaikki käytöstä",
+    "enabledLabel": "Käytössä",
+    "disabledLabel": "Pois käytöstä",
+    "defaultOnHint": "Oletus, kun käytäntöä ei ole tallennettu: käytössä.",
+    "defaultOffHint": "Oletus, kun käytäntöä ei ole tallennettu: pois käytöstä — ylläpitäjän on otettava käyttöön erikseen.",
+    "grantsNote": "Avustusten käsittely on lisäksi rajoitettu MSF-USA:n ohjelmatiimin käyttäjille, joiden tehtävänimikkeessä on \"grants\", tai Systems-tiimille, joiden nimikkeessä on \"innovation\". Käytön salliminen täällä ei laajenna tätä sääntöä.",
+    "unsaved": "Sinulla on tallentamattomia muutoksia.",
+    "save": "Tallenna",
+    "saving": "Tallennetaan…",
+    "saveSuccess": "Työnkulun käytäntö tallennettu.",
+    "saveError": "Työnkulun käytäntöä ei voitu tallentaa.",
+    "conflictError": "Toinen ylläpitäjä muutti käytäntöä ensin. Se on ladattu uudelleen — tarkista ja tallenna uudelleen.",
+    "updatedByLine": "Viimeksi tallentanut {by} {at}.",
+    "neverSaved": "Käytäntöä ei ole vielä tallennettu; yllä olevat oletukset pätevät."
+  },
+  "viewAs": {
+    "title": "Katso roolissa",
+    "description": "Testaa sovellusta vain omassa istunnossasi henkilönä, joka täyttää tai ei täytä ehdon, jonka normaalisti määrittää hakemisto tai ylläpitäjä. Henkilöllisyytesi ei muutu: kaikki luomasi pysyy sinun nimissäsi ja kaikki auditointirivit viittaavat edelleen sinuun.",
+    "activeTitle": "Katso roolissa on aktiivinen",
+    "inactiveTitle": "Katso roolissa ei ole aktiivinen",
+    "sections": {
+      "role": "Ylläpitäjän rooli",
+      "region": "Tietoalue",
+      "attributes": "Hakemiston ominaisuudet",
+      "groups": "Ryhmäjäsenyys",
+      "presets": "Esiasetukset"
+    },
+    "role": {
+      "global": "Globaali ylläpitäjä (oikea roolisi)",
+      "local": "Paikallinen ylläpitäjä",
+      "none": "Tavallinen käyttäjä",
+      "localKeysLabel": "Delegoidut agenttiavaimet",
+      "localKeysHint": "Pilkulla erotellut kanoniset agenttiavaimet, joita tämä paikallinen ylläpitäjä voi muokata. Jätä tyhjäksi, jos paikallisella ylläpitäjällä ei ole delegoituja agentteja.",
+      "noneWarning": "Tavallisena käyttäjänä kaikki muut ylläpidonalueet katoavat. Tämä sivu pysyy käytettävissä ja sovelluksen yläosan bannerista pääsee pois tilasta."
+    },
+    "region": {
+      "actual": "Todellinen ({region})",
+      "hint": "Ohjaa pyyntösi ja kaikki lataamasi tiedot toisen alueen tallennukseen tämän ollessa aktiivinen. Ohittaa ?regionOverride= -evästeen."
+    },
+    "attributes": {
+      "department": "Osasto",
+      "companyName": "Yritys",
+      "jobTitle": "Tehtävänimike",
+      "officeId": "Toimisto",
+      "officeActual": "Todellinen toimisto",
+      "officeNone": "Ei toimistoa",
+      "actualValue": "Todellinen: {value}",
+      "actualEmpty": "Todellinen: (tyhjä)",
+      "hint": "Jätä kenttä tyhjäksi pitääksesi todellisen arvosi. Näitä käytetään sääntöjen, attribuuttikohtaisten käyttörajojen ja käyttöoikeussääntöjen määrittelyyn."
+    },
+    "groups": {
+      "label": "Ryhmä-ID:t",
+      "placeholder": "Yksi Entra-ryhmäobjektin id per rivi",
+      "hint": "Korvaa todellisen jäsenyytesi tälle istunnolle – ei lisää siihen – joten voit testata sekä kuulumista että kuulumattomuutta."
+    },
+    "presets": {
+      "grantsMember": "Grants-tiimin jäsen",
+      "regularUser": "Tavallinen käyttäjä",
+      "localAdmin": "Paikallinen ylläpitäjä, ei agentteja",
+      "otherRegion": "Toinen alue",
+      "hint": "Esiasetukset täyttävät lomakkeen; mikään ei astu voimaan ennen kuin painat Käytä."
+    },
+    "apply": "Käytä ja lataa uudelleen",
+    "applying": "Käytetään…",
+    "clear": "Poistu view-as-tilasta",
+    "clearing": "Poistutaan…",
+    "reset": "Palauta lomake",
+    "nothingToApply": "Aseta vähintään yksi korvaus, jotta voit käyttää.",
+    "applyError": "View-as-tilaa ei voitu käyttää: {error}",
+    "clearError": "View-as-tilaa ei voitu poistaa: {error}",
+    "loadError": "View-as-tilan lataaminen epäonnistui.",
+    "retry": "Yritä uudelleen",
+    "expiresNote": "View-as on voimassa enintään 8 tuntia tai kunnes poistut tilasta.",
+    "banner": {
+      "label": "Käyt näkymää nimellä",
+      "adjust": "Muokkaa",
+      "exit": "Poistu",
+      "role": {
+        "local": "paikallinen ylläpitäjä",
+        "none": "tavallinen käyttäjä"
+      },
+      "region": "alue {region}",
+      "department": "osasto \"{value}\"",
+      "companyName": "yritys \"{value}\"",
+      "jobTitle": "nimike \"{value}\"",
+      "officeId": "toimisto {value}",
+      "groups": "{count, plural, one {# ryhmä} other {# ryhmää}}"
+    }
   }
 }

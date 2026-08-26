@@ -950,7 +950,12 @@
       "showFewer": "Onetsani zochepa"
     },
     "retryWithModel": "Yesani ndi {model}",
-    "createTodoTasks": "Pangani ntchito za To Do kuchokera pa yankho ili"
+    "createTodoTasks": "Pangani ntchito za To Do kuchokera pa yankho ili",
+    "attachedFileExpired": "Fayilo yolumikizidwa silikupezekanso — mafayilo omwe amatumizidwa amasungidwa kwa nthawi yochepa. Fayiloyi yachotsedwa pa zokambiranazi. Yesetsaninso popanda fayiloyi, kapena tumizaninso fayiloyo.",
+    "repeatedFailureNotice": "Zikuchitika mobwerezabwereza — kukambirana kumeneku kungakhale kwawonongeka. Kuyambiranso kukambirana kwatsopano nthawi zambiri kumathandiza kuthetsa vutoli.",
+    "startNewConversation": "Yambitsa kukambirana kwatsopano",
+    "downloadDebugInfo": "Tsitsani zambiri za debug",
+    "includeMessageText": "Phatikizani mawu a uthenga"
   },
   "transcript": {
     "originalTranscript": "Zolemba Zoyambirira",
@@ -981,7 +986,9 @@
     "quickActions": "Zochitika Mwachangu",
     "expandFolder": "Tsegulani chikwatu {name}",
     "collapseFolder": "Tsekani chikwatu {name}",
-    "folderOptions": "Njira za {name}"
+    "folderOptions": "Njira za {name}",
+    "agentsEntry": "Othandizira",
+    "agentsTitle": "Onani othandizira ndipo yambitsani kucheza ndi m'modzi"
   },
   "errors": {
     "somethingWentWrong": "Chinachake chalakwika",
@@ -2651,6 +2658,10 @@
       "map": {
         "label": "Mapu",
         "description": "Sinthani deta iliyonse kukhala malo pa mapu"
+      },
+      "grants": {
+        "label": "Kukonza Ma Grants",
+        "description": "Yerekezerani ndi kutulutsa deta yokonzedwa kuchokera m'mafotokozedwe a ma grant"
       }
     },
     "chooser": {
@@ -2660,7 +2671,8 @@
       "newTranslation": "Kutanthauzira kwatsopano",
       "newDocument": "Chikalata chatsopano",
       "newDataAnalysis": "Kuwerengera deta kwatsopano",
-      "newMap": "Mapu atsopano"
+      "newMap": "Mapu atsopano",
+      "newGrants": "Kukonza ma grant atsopano"
     },
     "translation": {
       "chooseLanguage": "Chilankhulo chofuna kutanthauzira",
@@ -3277,7 +3289,8 @@
       "unknownType": "Zokambiranazi zikugwiritsa ntchito ntchito yomwe mtundu uwu suizindikira. Mbiri ya zokambiranazi ili pansipa.",
       "untitled": "Zokambirana zatsopano",
       "toggleMenu": "Tsegula kapena tsekani menyu",
-      "model": "Mtundu wa ntchito iyi"
+      "model": "Mtundu wa ntchito iyi",
+      "disabledByAdmin": "Ntchitoyi yayimitsidwa ndi woyang'anira. Mbiri ya zokambirana ili pansipa."
     },
     "tabs": {
       "label": "Mtundu wa kucheza",
@@ -4031,7 +4044,153 @@
     "conflictTakeTheirs": "Landirani zawo",
     "conflictNoFieldDiff": "Zambiri zili zofanana — version ya record yokha yasinthidwa.",
     "conflictRecordGone": "Record iyi yachotsedwa (kapena yalephera kutsegulidwanso). Kopani chilichonse chomwe mukufuna kuchokera mu fomu, kenaka onaninso.",
-    "groupsFlagOff": "Group targeting sinayatsidwe kwa environment iyi. Magulu omwe anasankhidwa kale akupitilizabe kugwira ntchito."
+    "groupsFlagOff": "Group targeting sinayatsidwe kwa environment iyi. Magulu omwe anasankhidwa kale akupitilizabe kugwira ntchito.",
+    "catalogOauth": {
+      "title": "Mapulogalamu a OAuth a olumikizidwa mkati",
+      "description": "Mapulogalamu a OAuth a ntchito yonse ya olumikizidwa mkati (GitHub, Asana, ...). Zomwe zasungidwa apa zimasintha MCP_OAUTH_* variables a environment; kuchotsa zimalola kuti zigwiritse ntchito zoyambirira. Zinsinsi za kasitomala zimakhala zotetezedwa ndipo sizingawonetsedwenso.",
+      "badgeAdmin": "Yakhazikitsidwa pano",
+      "badgeEnv": "Kuchokera pa environment",
+      "badgeNone": "Sinakhazikitsidwe",
+      "badgeDcr": "Iloleledwa paokha",
+      "badgeDcrHint": "Wopereka uyu angalembetse kasitomala wa OAuth yekha, kotero imagwiranso ntchito ngakhale palibe app yakonzedwa pano.",
+      "clientIdLabel": "ID ya kasitomala wa OAuth",
+      "clientSecretLabel": "Chinsinsi cha kasitomala wa OAuth",
+      "secretStoredPlaceholder": "Yasungidwa — lembani kusintha, siyani yopanda kanthu kusunga",
+      "secretNewPlaceholder": "Ikani chinsinsi cha kasitomala",
+      "save": "Sungani",
+      "remove": "Chotsani",
+      "removeToEnv": "Chotsani (bwererani ku environment)",
+      "saved": "{name} OAuth app yasungidwa",
+      "removed": "{name} OAuth app yachotsedwa",
+      "saveError": "Kusunga OAuth app kwalephera. Yesani kachiwiri.",
+      "conflict": "Zolemba izi zasintha kwina — zakonzanso, chonde yesaninso.",
+      "storageUnavailable": "Admin storage sikufikika; zolemba zomwe zilipo sizingathe kuonedwa. Kusunga kwazimitsidwa mpaka ibwerera.",
+      "sealingUnavailable": "Encryption ya chinsinsi sinakhazikitsidwe pa deployment iyi (AUTH_SECRET ilibe) — zinsinsi za makasitomala sizingathe kusungidwa.",
+      "updatedBy": "Yasinthidwa ndi {by} pa {at}"
+    },
+    "orgAgentOverrideTitle": "Sintha agent yomangidwiratu",
+    "orgAgentOverrideAction": "Sintha",
+    "orgAgentBuiltinBadge": "Yomangidwira",
+    "orgAgentBuiltinHint": "Yatanthauzidwa pa config ya deployment. Lamulo lake la mwayi lithekanso kusinthidwa apa; sinthani kuti musinthe zokonda popanda deploy.",
+    "m365AgentIndexProgress": "Kukonza chikwatu {done} mwa {total} {total, plural, one {chikalata} other {zikalata}}...",
+    "m365AgentIndexInterrupted": "Kukonza chikwatu kwayimitsidwa pa {done} mwa {total} — pitirizani kuti mupitirize.",
+    "m365AgentIndexStartedBy": "yoyambitsidwa ndi {name}",
+    "m365AgentIndexResume": "Pitirizani",
+    "m365AgentIndexResumeHint": "Pitirizani kukonza chikwatu kuchokera pomwe chinayima, pogwiritsa ntchito ma Microsoft 365 anu. Siyani tabu iyi yotseguka.",
+    "m365AgentIndexCancel": "Lekani",
+    "m365AgentIndexCancelled": "Kukonza chikwatu kwaletsedwa — zikalata zomwe zadaikidwa kale zikupitirizabe kupezeka.",
+    "m365AgentIndexJobFailed": "Kukonza chikwatu kwatayika: {error}",
+    "m365AgentIndexDone": "Kukonza chikwatu kwatha: {indexed} zadaikidwa, {failed} zatayika, {noText} palibe zolemba.",
+    "m365AgentDocCounts": "{indexed, plural, one {# chikalata} other {# zikalata}} zadaikidwa · {failed} zatayika · {noText} palibe zolemba · {needsPreparation} zikufuna kukonzedwa · {skipped} zapitilira",
+    "m365CapDocuments": "Zikalata: {count} / {max}",
+    "m365CapBytes": "{bytes} mwa {max}",
+    "m365CapOverDocuments": "Zaposa malire a {max} zikalata. Chotsani subfolders, selektani mwa mtundu wa mafayilo, kapena chotsani magwero — mafayilo amene adzakhala adzaikidwa okha ndi omwe amawerengedwa.",
+    "m365CapOverBytes": "Zaposa malire a {max} pa kukula. Chotsani mafoda apansi kapena mafayilo akulu.",
+    "m365PlanScanning": "Kusaka...",
+    "m365PlanRefreshing": "kusintha...",
+    "m365PlanFailed": "Sizinathe kusaka magwero ndi akaunti yanu ya Microsoft 365.",
+    "m365PlanMissing": "Sikupezeka kapena mulibe mwayi",
+    "m365PlanIndexable": "{count, plural, one {# fayilo adzaikidwa} other {# mafayilo adzaikidwa}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# ikufuna kukonzedwa} other {# zikufuna kukonzedwa}}",
+    "m365PlanSkipped": "{count} zapitilira",
+    "m365PlanShowDetails": "Tsatanetsatane",
+    "m365PlanHideDetails": "Bisani tsatanetsatane",
+    "m365PlanTruncated": "Foda iyi ndi yayikulu kwambiri kuti isakidwe yonse — zinthu zoyambirira 1,000 zokha zatchulidwa. Sankhani foda yapansi m'malo mwake.",
+    "m365PlanRecursive": "Phatikizani mafoda apansi",
+    "m365PlanExtensionsLabel": "Mitundu ya mafayilo yokha:",
+    "m365PlanExtensionsPlaceholder": "monga pdf, docx",
+    "m365PlanSubfolders": "Mafoda apansi",
+    "m365PlanFolderCount": "{count, plural, one {# fayilo} other {# mafayilo}}",
+    "m365PlanGroupIndexable": "Adzaikidwa",
+    "m365PlanGroupNeedsPreparation": "Akufunika kukonzedwa",
+    "m365PlanGroupSkipped": "Zapitilira",
+    "m365PlanPreparationHint": "chithunzi/mawu/kanema — sanayikidwebe",
+    "m365PlanMoreRows": "...ndi {count} zina",
+    "m365ItemStatus": {
+      "pending": "ikusungidwa",
+      "indexed": "yathandizidwa",
+      "failed": "yataya",
+      "noText": "palibe zolemba zowoneka",
+      "missing": "ikusowa"
+    },
+    "m365SkipReason": {
+      "unsupported": "mitundu yopanda thandizo",
+      "tooLarge": "kupitirira 25 MB",
+      "disallowedType": "mitundu yoletsedwa (executable/archive)",
+      "malware": "Mwa Microsoft zapezeka ngati malware",
+      "zeroBytes": "fayilo yopanda zinthu",
+      "excluded": "yasiyidwa",
+      "typeFilter": "ilibe mu fyirita ya mitundu"
+    },
+    "localAdminGroup": {
+      "agents": "Othandizira",
+      "promptAgents": "Othandizira a prompt",
+      "m365Agents": "Othandizira a Microsoft 365",
+      "orgAgents": "Othandizira a chidziwitso",
+      "guides": "Malangizo",
+      "connectors": "Zolumikizira",
+      "datasets": "Ma dataset a mapu",
+      "unknown": "Adasankhidwa koma sasowa"
+    },
+    "localAdminGroupUnavailable": "Mndandandawu ukupuma — ma delegations akale akupitirirabe.",
+    "localAdminBuiltIn": "zapakhazikikatu",
+    "localAdminSummary": "{count, plural, one {# delegation} other {# ma delegation}}: {names}",
+    "localAdminSummaryMore": "{names} ndi {more} ena",
+    "localAdminNoDelegations": "Palibe ma delegations pano — admin wa m'deralo wopanda othandizira amatha kuona admin area yokha.",
+    "localAdminSelectedCount": "{selected} mwa {total} zasankhidwa",
+    "localAdminCopyFrom": "Kopera kuchokera",
+    "localAdminClearAll": "Chotsani zonse",
+    "localAdminSelectGroup": "Sankhani zonse",
+    "localAdminClearGroup": "Chotsani",
+    "localAdminSearchPlaceholder": "Fufuzani othandizira, malangizo, zolumikizira...",
+    "localAdminDuplicateEmail": "Imeli iyi ilipo kale — yambani kugwirizanitsa slotsiwiri.",
+    "localAdminExpand": "Onetsani ma delegations",
+    "localAdminCollapse": "Bisani ma delegations",
+    "localAdminDiscard": "Siyani zosintha",
+    "m365AgentRefresh": "yambitsaninso",
+    "m365AgentRefreshHint": "Kokani mafayilo atsopano, osintha kapena kuchotsedwa kuchokera nthawi yomaliza — mafayilo osasintha sadzatsitsidwa kachiwiri. Khalani ndi tabu iyi yotseguka.",
+    "m365AgentReindexAll": "Re-index zonse",
+    "m365AgentRefreshProgress": "Ku yambitsanso — {done} mwa {total} zasintha {total, plural, one {chikalata} other {zikalata}}...",
+    "m365AgentRefreshDone": "Kuyambitsanso kwatha: {added} zawonjezedwa, {modified} zasinthidwa, {removed} zachotsedwa, {failed} zalephera.",
+    "m365ChangesChecking": "Kuyang'ana Microsoft 365 kuti apeze kusintha kuyambira pamene inaperekedwa index yomaliza...",
+    "m365ChangesFailed": "Sizinatheke kuyang'ana zosintha pa akaunti yanu ya Microsoft 365.",
+    "m365ChangesNeverIndexed": "Sanaikidwepo — yambitsani Index mutasunga.",
+    "m365ChangesFound": "{count, plural, one {# kusintha} other {# kusintha}} kuyambira index yomaliza: {added} zawonjezedwa, {modified} zasinthidwa, {removed} zachotsedwa.",
+    "m365ChangesNone": "Palibe kusintha kuyambira index yomaliza ({date}).",
+    "m365PrepareButton": "Konzani",
+    "m365PrepareOcrButton": "Konzani (OCR)",
+    "m365PrepareSaveFirst": "sungani othandizira kuti mukonze",
+    "m365PrepareHintImage": "chithunzi — kuitana kamodzi kwa vision",
+    "m365PrepareHintMedia": "~{minutes} min za mawu oti amasulire",
+    "m365PrepareHintOcr": "palibe gulu la mawu — OCR kudzera pa vision, mpaka masamba 30",
+    "m365PreparePreparing": "Kukonzekera...",
+    "m365PreparePending": "Kusindikiza mawu...",
+    "m365PreparedNote": "zokonzedwa · {kind}",
+    "m365PreparedKind": {
+      "image": "fotofanizo",
+      "audio": "zotulutsidwa m'kalata",
+      "video": "zotulutsidwa m'kalata",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "{name} yakonzedwa ({chars} zilembo). Yambitsaninso kuti mu index.",
+    "m365PrepareStarted": "Kusindikiza kwa {name} kwayamba kumbuyo — sungani tabu iyi yotseguka.",
+    "m365PrepareFailed": "Sizinatheke kukonza {name}: {error}",
+    "m365PrepareFailedGeneric": "Kukonzekera kwalephera.",
+    "canonicalKeyLabel": "Kiyi",
+    "copyKey": "Kopera kiyi",
+    "agentKeySearchPlaceholder": "Fufuzani ma agent, ma guide, ma connector... kapena mamata kiyi",
+    "agentKeyAddCustom": "Onjezani \"{key}\" monga mwalowamo",
+    "agentKeyRemove": "Chotsani {name}",
+    "hideAgent": "Bisani",
+    "unhideAgent": "Onetsaninso",
+    "hideAgentHint": "Bisani agent uyu m'ndandanda ya ma admin anu. Zimangakhudza mawonedwe anu — ogwiritsa ntchito ndi ma admin ena sizikukhudzidwa.",
+    "unhideAgentHint": "Onetsaninso agent uyu m'ndandanda yanu ya ma admin.",
+    "hiddenBadge": "Yabisika",
+    "hiddenAgentsCount": "{count, plural, one {# agent yabisika} other {# ma agent obisika}}",
+    "hiddenAgentsShowing": "Kuwonetsa {count, plural, one {# agent yabisika} other {# ma agent obisika}}",
+    "hiddenAgentsShow": "Onetsani",
+    "hiddenAgentsHide": "Bisaninso",
+    "allAgentsHidden": "Ma agent onse apa abisika m'mawonedwe anu — gwiritsani ntchito Onetsani kuti muwawone."
   },
   "localModels": {
     "title": "Mitundu yapafupi",
@@ -4232,9 +4391,15 @@
       "connectors": "Ma connector a bungwe ndi amene angazigwiritse ntchito.",
       "guides": "Maukadaulo osamalira ma style, mawu ndi malamulo.",
       "mapDatasets": "Ma dataset osankhidwa omwe akupezeka pa map workflow.",
-      "localAdmins": "Perekani mwayi wosintha malamulo a kupeza kwa anthu ena."
+      "localAdmins": "Perekani mwayi wosintha malamulo a kupeza kwa anthu ena.",
+      "workflows": "Yatsani kapena yimitsani njira za zokambirana kwa aliyense.",
+      "viewAs": "Yesani pulogalamuyi ngati munthu amene amakwaniritsa — kapena alephera — chikhalidwe."
     },
-    "openSettings": "Tsegulani makonda"
+    "openSettings": "Tsegulani makonda",
+    "area": {
+      "workflows": "Njira",
+      "viewAs": "Onani ngati"
+    }
   },
   "limits": {
     "title": "Malire ogwiritsa ntchito",
@@ -4436,7 +4601,8 @@
     "groupSearchNoResults": "Palibe magulu omwe akugwirizana ndi dzina limenelo.",
     "groupSearchError": "Kusaka gulu kwalephera. Mungathenso kulemba Group Object ID pansipa.",
     "groupSearchHint": "Lembani zilembo zosachepera ziwiri kuti musake magulu a bungwe lanu, kapena lowetsani Group Object ID. Override imagwira ntchito kwa mamembala a gululo mu Microsoft Entra.",
-    "groupsFlagOff": "Group targeting sinayatsidwe pa environment iyi. Magulu omwe akuyendabe apitilira kugwira ntchito."
+    "groupsFlagOff": "Group targeting sinayatsidwe pa environment iyi. Magulu omwe akuyendabe apitilira kugwira ntchito.",
+    "featureDisabled": "Malire a kugwiritsa ntchito sanayatsidwe pa kugwiritsa ntchito uku."
   },
   "m365": {
     "connections": {
@@ -4797,5 +4963,149 @@
     "failed": "Sizinathe kugawidwa — palibe chogawidwa chomwe chapangidwa.",
     "copyFailed": "Zalephereka kukopera ulalo—sankhani pamwambapa ndikuukopera pamanja.",
     "lastMessagesCountLabel": "Chiwerengero cha mauthenga aposachedwa oti muyikemo"
+  },
+  "toolModes": {
+    "webSearch": "Kusaka pa intaneti",
+    "codeInterpreter": "Womasulira ma code",
+    "off": "Zatsekedwa",
+    "auto": "Zodziwikiratu",
+    "always": "Nthawi zonse",
+    "routingPrivacy": "Chinsinsi",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Kusaka kwa Azure AI kudutsa ku Azure AI Foundry ndipo zingasungidwe.",
+    "learnMore": "Dziwani zambiri"
+  },
+  "agentAttach": {
+    "browserTitle": "Othandizira",
+    "browserSubtitle": "Onjezani othandizira ndi olumikizira m’cheza ichi, kapena yambitsani cheza chatsopano ndi wothandizira. Ambiri amagwirizana ndi mtundu uliwonse womwe mwasankha.",
+    "searchPlaceholder": "Fufuzani othandizira ndi olumikizira…",
+    "loading": "Ikutsegula othandizira…",
+    "noMatches": "Palibe chofananira ndi zomwe mwafufuza.",
+    "noAgents": "Palibe othandizira alipo.",
+    "addToChat": "Onjezani pa cheza ichi",
+    "removeFromChat": "Chotsani m’cheza ichi",
+    "newChat": "Cheza Chatsopano",
+    "attached": "Zalumikizidwa",
+    "detach": "Chotsani ulalo",
+    "change": "Sintha",
+    "browse": "Onani othandizira…",
+    "noAgent": "Palibe wothandizira walumikizidwa",
+    "close": "Tsekani",
+    "kind": {
+      "rag": "Chidziwitso",
+      "prompt": "Munthu",
+      "m365": "Chidziwitso (Microsoft 365)",
+      "org": "Chidziwitso",
+      "foundry": "Wothandizira wa Foundry",
+      "connector": "Olumikizira"
+    },
+    "semantics": {
+      "your-model": "amagwiritsa ntchito mtundu wanu",
+      "pinned-model": "mtundu wakhazikitsidwa ndi admin",
+      "own-model": "amagwiritsa ntchito mtundu wake"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Malangizo ochokera ku gulu lanu",
+    "searching": "Kusaka mu bungwe lanu…",
+    "noMatches": "Palibe zotsatana mu buku la mayina — mutha kulemba adiresi pamanja"
+  },
+  "workflowsAdmin": {
+    "title": "Njira",
+    "description": "Yatsani kapena yimitsani njira iliyonse kwa bungwe lonse. Njira yomwe yayimitsidwa imabisika pa menus komanso imakanidwa ndi seva, ngakhale kwa anthu omwe angayenerere.",
+    "layeredNote": "Chizindikiro cha LaunchDarkly conversationWorkflows chikalipobe, chimatsogolera kugwiritsa ntchito: njira yololedwa apa imapezeka kokha pomwe chizindikirocho chili pa ON. Tsambali silingawonetse china chomwe chizindikirocho chimabisa.",
+    "loading": "Kukweza ndondomeko ya njira...",
+    "loadError": "Ndondomeko ya njira sinathe kukwezedwa.",
+    "policyUnavailable": "Ndondomeko ya njira sinathe kuwerengedwa m'sitoreji. Matogolo abisidwa m'malo mowonetsedwa ndi zinthu zosasinthidwa zomwe sizingafanane ndi zomwe zikutsatiridwa.",
+    "retry": "Yesaninso",
+    "enableAll": "Yatsani zonse",
+    "disableAll": "Yimitsani zonse",
+    "enabledLabel": "Yayatsidwa",
+    "disabledLabel": "Yayimitsidwa",
+    "defaultOnHint": "Zosasintha ngati palibe ndondomeko yosungidwa: yayatsidwa.",
+    "defaultOffHint": "Zosasintha ngati palibe ndondomeko yosungidwa: yayimitsidwa — woyang'anira muyenera kuyatsa pamanja.",
+    "grantsNote": "Kukonza Ma Grants kuli kochepetsa kwabwino kwa ogwiritsa ntchito MSF-USA mu dipatimenti ya Program ndi mawu oti \"grants\" mu udindo wao, kapena mu Systems ali ndi \"innovation\". Kuyatsa apa sikuwonjezera lamulo limeneli.",
+    "unsaved": "Mwakhala ndi kusintha kosasungidwa.",
+    "save": "Sungani",
+    "saving": "Kusunga...",
+    "saveSuccess": "Ndondomeko ya njira yasungidwa.",
+    "saveError": "Ndondomeko ya njira sinathe kusungidwa.",
+    "conflictError": "Wina woyang'anira wasintha ndondomeko kale. Yakhazikitsidwanso — chonde onaninso ndikusunga.",
+    "updatedByLine": "Yasungidwa komaliza ndi {by} pa {at}.",
+    "neverSaved": "Palibe ndondomeko yasungidwa pano; zosasintha zam'mwambazi zigwiritsidwa ntchito."
+  },
+  "viewAs": {
+    "title": "Onani ngati",
+    "description": "Yesani pulogalamuyi, pa nthawi yanu yokha, ngati munthu amene amakwaniritsa kapena alephera chikhalidwe chomwe nthawi zambiri chimasankhidwa ndi directory kapena oyang'anira. Chizindikiritso chanu sichisintha: zonse zomwe mupanga zimakhalabe zanu ndipo record iliyonse ya audit izitchula dzina lanu.",
+    "activeTitle": "View-as yagwiritsidwa ntchito",
+    "inactiveTitle": "View-as siyagwiritsidwa ntchito",
+    "sections": {
+      "role": "Udindo wa admin",
+      "region": "Chigawo cha deta",
+      "attributes": "Zina za directory",
+      "groups": "Ubale wa magulu",
+      "presets": "Zokonzedwa kale"
+    },
+    "role": {
+      "global": "Woyang'anira waukulu (udindo wanu enieni)",
+      "local": "Woyang'anira wakomweko",
+      "none": "Wogwiritsa ntchito wamba",
+      "localKeysLabel": "Ma key a agent osinthidwa",
+      "localKeysHint": "Ma key a agent oyesedwa omwe admin wakomweko angasinthe, olumizidwa ndi ma koma. Siyani osadzazidwa ngati palibe agents ompsidwa.",
+      "noneWarning": "Monga wogwiritsa ntchito wamba, madera ena onse a admin amasowa. Tsamba ili likhalabe logwirika, ndipo banner pamwamba pa pulogalamu limapereka njira yotulukira."
+    },
+    "region": {
+      "actual": "Enieni ({region})",
+      "hint": "Imatha kutumiza zomwe mwapempha — komanso zomwe mutumiza nthawi yomwe ili yogwira ntchito — kusungira kwa dera lina. Izi zimayamba ntchito kuposa cookie ya ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Dipatimenti",
+      "companyName": "Kampani",
+      "jobTitle": "Udindo",
+      "officeId": "Ofesi",
+      "officeActual": "Ofesi yeniyeni",
+      "officeNone": "Palibe ofesi",
+      "actualValue": "Yeniyeni: {value}",
+      "actualEmpty": "Yeniyeni: (palibe)",
+      "hint": "Siyani gawo liri lonse popanda kulemba ngati mukufuna kusunga mtengo wanu weniweni. Izi zimathandiza malamulo a grants, malire ogwiritsa ntchito pa attribute ndi malamulo a mwayi."
+    },
+    "groups": {
+      "label": "Ma group id",
+      "placeholder": "ID ya group ya Entra iliyonse pa mzere uliwonse",
+      "hint": "Izi zimabisala mamembala anu enieni pa session iyi, kuti muthe kuyesa kukhala membala kapena osakhala."
+    },
+    "presets": {
+      "grantsMember": "Wogwira ntchito mu grants team",
+      "regularUser": "Wogwiritsa ntchito wamba",
+      "localAdmin": "Local admin, palibe agents",
+      "otherRegion": "Dera lina",
+      "hint": "Presets amalemba zonse mu fomu; palibe chomwe chimayamba mpaka mutadina Apply."
+    },
+    "apply": "Tsegulani ndi kutsitsimudza",
+    "applying": "Kukugwiritsidwa ntchito...",
+    "clear": "Tulukani view-as",
+    "clearing": "Kutuluka...",
+    "reset": "Bwezeretsani fomu",
+    "nothingToApply": "Ikani osachepera override imodzi musanayambe.",
+    "applyError": "View-as sizinagwire ntchito: {error}",
+    "clearError": "View-as sizinatulukire: {error}",
+    "loadError": "View-as state sinathe kutsegulidwa.",
+    "retry": "Yesaninso",
+    "expiresNote": "View-as imakhalapo mpaka maola 8, kapena mpaka mutatuluka.",
+    "banner": {
+      "label": "Mukuwoneka ngati",
+      "adjust": "Sinthani",
+      "exit": "Tulukani",
+      "role": {
+        "local": "local admin",
+        "none": "wogwiritsa ntchito wamba"
+      },
+      "region": "dera {region}",
+      "department": "dipatimenti \"{value}\"",
+      "companyName": "kampani \"{value}\"",
+      "jobTitle": "udindo \"{value}\"",
+      "officeId": "ofesi {value}",
+      "groups": "{count, plural, one {# gulu} other {# magulu}}"
+    }
   }
 }

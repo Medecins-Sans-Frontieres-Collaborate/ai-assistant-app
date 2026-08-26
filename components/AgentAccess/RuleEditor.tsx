@@ -6,6 +6,8 @@ import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
+import { useM365PeopleSuggest } from '@/client/hooks/useM365PeopleSuggest';
+
 import { ChipListInput } from './ChipListInput';
 import { GroupSearchPicker } from './GroupSearchPicker';
 import { MergedAgentRow } from './types';
@@ -44,6 +46,8 @@ export const RuleEditor: FC<RuleEditorProps> = ({
   onConflictReload,
 }) => {
   const t = useTranslations('agentAccess');
+  const tPeople = useTranslations('peopleSuggest');
+  const peopleSuggest = useM365PeopleSuggest();
 
   const storedAccess = row.stored?.rule.access;
   const [accessType, setAccessType] = useState<EditorAccessType>(
@@ -213,6 +217,8 @@ export const RuleEditor: FC<RuleEditorProps> = ({
               placeholder={t('allowUsersPlaceholder')}
               addHint={t('chipAddHint')}
               removeLabel={t('removeChip')}
+              suggest={peopleSuggest}
+              suggestionsLabel={tPeople('listLabel')}
             />
           </div>
 

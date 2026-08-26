@@ -155,6 +155,16 @@ describe('ApiError', () => {
         'An error occurred. Please try again.',
       );
     });
+
+    it('returns session-specific copy for AUTH_SESSION_EXPIRED', () => {
+      const error = new ApiError('Session expired', 401, 'Unauthorized', {
+        code: 'AUTH_SESSION_EXPIRED',
+      });
+
+      expect(error.getUserMessage()).toBe(
+        'Your session has expired. Please sign in again to continue.',
+      );
+    });
   });
 
   /**

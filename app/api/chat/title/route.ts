@@ -45,13 +45,13 @@ interface ChatTitleResponse {
  *
  * Ordered cheapest-first. Not every environment deploys every model (the EU
  * account carries only a few hand-created deployments), so on failure the
- * next candidate is tried; the last entry is the full chat model expected to
- * exist everywhere.
+ * next candidate is tried; the last entry is the full model deployed in both
+ * the US and EU accounts.
  */
 const TITLE_MODEL_FALLBACKS: OpenAIModelID[] = [
   OpenAIModelID.GPT_5_4_NANO,
   OpenAIModelID.GPT_5_MINI,
-  OpenAIModelID.GPT_5_2_CHAT,
+  OpenAIModelID.GPT_5_4,
 ];
 
 /**

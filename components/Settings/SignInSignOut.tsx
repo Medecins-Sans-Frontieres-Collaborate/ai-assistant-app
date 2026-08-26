@@ -1,19 +1,15 @@
 import { IconLogin } from '@tabler/icons-react';
 import { signOut, useSession } from 'next-auth/react';
-import { useEffect } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+// NOTE: session-error handling deliberately does NOT live here now. The globally
+// mounted SessionErrorHandler owns the forced sign-out for a failed token
+// refresh (with the callbackUrl that shows the "session expired" card); a
+// duplicate bare signOut() here used to race it and lose that message.
 export const SignInSignOut = () => {
   const { data: session } = useSession();
   const t = useTranslations();
-
-  // If there's an error refreshing the token, sign out and redirect
-  useEffect(() => {
-    if (session?.error) {
-      signOut();
-    }
-  }, [session?.error]);
 
   // Don't render anything until we have a session
   // This prevents flickering UI during the brief loading phase

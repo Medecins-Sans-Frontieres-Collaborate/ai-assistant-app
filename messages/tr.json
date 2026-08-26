@@ -892,7 +892,12 @@
       "showFewer": "Daha az göster"
     },
     "retryWithModel": "{model} ile deneyin",
-    "createTodoTasks": "Bu yanıtı To Do görevlerine dönüştür"
+    "createTodoTasks": "Bu yanıtı To Do görevlerine dönüştür",
+    "attachedFileExpired": "Ekli bir dosya artık mevcut değil — yüklenen dosyalar sınırlı bir süre saklanır. Bu dosya bu sohbetten kaldırıldı. Dosya olmadan tekrar deneyin veya dosyayı tekrar yükleyin.",
+    "repeatedFailureNotice": "Bu işlem sürekli başarısız oluyor — konuşma bozulmuş olabilir. Genellikle yeni bir konuşma başlatmak sorunu çözer.",
+    "startNewConversation": "Yeni bir konuşma başlat",
+    "downloadDebugInfo": "Hata ayıklama bilgisini indir",
+    "includeMessageText": "Mesaj metnini dahil et"
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",
@@ -901,7 +906,9 @@
     "quickActions": "Hızlı İşlemler",
     "expandFolder": "Klasörü genişlet {name}",
     "collapseFolder": "Klasörü daralt {name}",
-    "folderOptions": "{name} seçenekleri"
+    "folderOptions": "{name} seçenekleri",
+    "agentsEntry": "Agentlar",
+    "agentsTitle": "Agentlara göz atın ve biriyle sohbet başlatın"
   },
   "prompts": {
     "buildReusablePrompts": "AI yardımıyla yeniden kullanılabilir istemler oluşturun",
@@ -2667,6 +2674,10 @@
       "map": {
         "label": "Harita",
         "description": "Herhangi bir veriyi harita üzerinde konumlara dönüştürün"
+      },
+      "grants": {
+        "label": "Hibe İşlemleri",
+        "description": "Hibe anlatılarından yapılandırılmış verileri uzlaştırın ve çıkarın"
       }
     },
     "chooser": {
@@ -2676,7 +2687,8 @@
       "newTranslation": "Yeni çeviri",
       "newDocument": "Yeni belge",
       "newDataAnalysis": "Yeni veri analizi",
-      "newMap": "Yeni harita"
+      "newMap": "Yeni harita",
+      "newGrants": "Yeni hibe işlemleri"
     },
     "translation": {
       "chooseLanguage": "Hedef dil",
@@ -3293,7 +3305,8 @@
       "unknownType": "Bu konuşma, bu sürümün tanımadığı bir iş akışını kullanıyor. Konuşma geçmişi aşağıda gösterilmiştir.",
       "untitled": "Yeni Konuşma",
       "toggleMenu": "Menüyü aç/kapat",
-      "model": "Bu iş akışı için model"
+      "model": "Bu iş akışı için model",
+      "disabledByAdmin": "Bu iş akışı bir yönetici tarafından devre dışı bırakıldı. Konuşma geçmişi aşağıda gösterilmektedir."
     },
     "tabs": {
       "label": "Konuşma modu",
@@ -4047,7 +4060,153 @@
     "conflictTakeTheirs": "Onlarınkini al",
     "conflictNoFieldDiff": "Değerler eşleşiyor — sadece kayıt versiyonu değişti.",
     "conflictRecordGone": "Bu kayıt silindi (veya tekrar yüklenemedi). Formdan gerekli bilgileri kopyalayın ve yeniden yükleyin.",
-    "groupsFlagOff": "Grup hedeflemesi bu ortam için henüz etkin değil. Mevcut grup hedefleri çalışmaya devam edecektir."
+    "groupsFlagOff": "Grup hedeflemesi bu ortam için henüz etkin değil. Mevcut grup hedefleri çalışmaya devam edecektir.",
+    "catalogOauth": {
+      "title": "Yerleşik bağlantı OAuth uygulamaları",
+      "description": "Yerleşik bağlantılar (GitHub, Asana, …) için dağıtım genelinde OAuth uygulamaları. Buraya kaydedilen bir kayıt, MCP_OAUTH_* ortam değişkenlerini geçersiz kılar; silindiğinde bu değişkenler devreye girer. İstemci sırları şifreli olarak saklanır ve bir daha görüntülenmez.",
+      "badgeAdmin": "Burada yapılandırıldı",
+      "badgeEnv": "Ortamdan",
+      "badgeNone": "Yapılandırılmadı",
+      "badgeDcr": "Kendiliğinden kaydolan",
+      "badgeDcrHint": "Bu sağlayıcı bir OAuth istemcisini otomatik olarak kaydedebilir, bu nedenle burada bir uygulama yapılandırılmamış olsa da çalışır.",
+      "clientIdLabel": "OAuth istemci kimliği",
+      "clientSecretLabel": "OAuth istemci sırrı",
+      "secretStoredPlaceholder": "Saklandı — değiştirmek için yazın, korumak için boş bırakın",
+      "secretNewPlaceholder": "İstemci sırrını yapıştırın",
+      "save": "Kaydet",
+      "remove": "Kaldır",
+      "removeToEnv": "Kaldır (ortam değişkenlerine dön)",
+      "saved": "{name} OAuth uygulaması kaydedildi",
+      "removed": "{name} OAuth uygulaması kaldırıldı",
+      "saveError": "OAuth uygulaması kaydedilemedi. Lütfen tekrar deneyin.",
+      "conflict": "Bu kayıt başka bir yerde değiştirildi — yeniden yüklendi, lütfen tekrar deneyin.",
+      "storageUnavailable": "Yönetici hafızasına erişilemiyor; mevcut kayıtlar listelenemedi. Kurtarılana kadar kaydetme devre dışı.",
+      "sealingUnavailable": "Bu dağıtımda gizli şifreleme yapılandırılmamış (AUTH_SECRET eksik) — istemci sırları kaydedilemez.",
+      "updatedBy": "{by} tarafından {at} tarihinde güncellendi"
+    },
+    "orgAgentOverrideTitle": "Dahili aracı geçersiz kıl",
+    "orgAgentOverrideAction": "Geçersiz kıl",
+    "orgAgentBuiltinBadge": "Dahili",
+    "orgAgentBuiltinHint": "Dağıtım yapılandırmasında tanımlıdır. Erişim kuralı burada düzenlenebilir; dağıtım yapmadan ayarlarını değiştirmek için geçersiz kılın.",
+    "m365AgentIndexProgress": "{total} {total, plural, one {belgenin} other {belgenin}} {done} tanesi endeksleniyor…",
+    "m365AgentIndexInterrupted": "Endeksleme {total} üzerinden {done} noktasında kesildi — devam etmek için sürdürün.",
+    "m365AgentIndexStartedBy": "başlatan: {name}",
+    "m365AgentIndexResume": "Devam Et",
+    "m365AgentIndexResumeHint": "Microsoft 365 erişiminizi kullanarak endekslemeye durduğu yerden devam edin. Bu sekmeyi açık tutun.",
+    "m365AgentIndexCancel": "İptal Et",
+    "m365AgentIndexCancelled": "Endeksleme iptal edildi — işlenen belgeler aranabilir kalacak.",
+    "m365AgentIndexJobFailed": "Endeksleme durdu: {error}",
+    "m365AgentIndexDone": "Endeksleme tamamlandı: {indexed} endekslendi, {failed} başarısız, {noText} metinsiz.",
+    "m365AgentDocCounts": "{indexed, plural, one {# belge endekslendi} other {# belge endekslendi}} · {failed} başarısız · {noText} metinsiz · {needsPreparation} hazırlık gerekiyor · {skipped} atlandı",
+    "m365CapDocuments": "Belgeler: {count} / {max}",
+    "m365CapBytes": "{bytes} / {max}",
+    "m365CapOverDocuments": "{max} belge sınırının üzerinde. Alt klasörlerin seçimini kaldırın, dosya türüyle filtreleyin veya kaynakları kaldırın — yalnızca gerçekten endekslenecek dosyalar sayılır.",
+    "m365CapOverBytes": "{max} boyut sınırının üzerinde. Alt klasörleri veya büyük dosyaları hariç tutun.",
+    "m365PlanScanning": "Taranıyor…",
+    "m365PlanRefreshing": "güncelleniyor…",
+    "m365PlanFailed": "Microsoft 365 hesabınızla kaynaklar taranamadı.",
+    "m365PlanMissing": "Bulunamadı veya erişim yok",
+    "m365PlanIndexable": "{count, plural, one {# dosya endekslenecek} other {# dosya endekslenecek}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# hazırlık gerektiriyor} other {# hazırlık gerektiriyor}}",
+    "m365PlanSkipped": "{count} atlandı",
+    "m365PlanShowDetails": "Ayrıntılar",
+    "m365PlanHideDetails": "Ayrıntıları gizle",
+    "m365PlanTruncated": "Bu klasör tümüyle taranamayacak kadar büyük — yalnızca ilk 1.000 öğe listelendi. Bunun yerine bir alt klasör seçin.",
+    "m365PlanRecursive": "Alt klasörleri dahil et",
+    "m365PlanExtensionsLabel": "Sadece dosya türleri:",
+    "m365PlanExtensionsPlaceholder": "örn. pdf, docx",
+    "m365PlanSubfolders": "Alt klasörler",
+    "m365PlanFolderCount": "{count, plural, one {# dosya} other {# dosya}}",
+    "m365PlanGroupIndexable": "Endekslenecek",
+    "m365PlanGroupNeedsPreparation": "Hazırlık gerekiyor",
+    "m365PlanGroupSkipped": "Atlandı",
+    "m365PlanPreparationHint": "görsel/ses/video — henüz endekslenmedi",
+    "m365PlanMoreRows": "…ve {count} tane daha",
+    "m365ItemStatus": {
+      "pending": "beklemede",
+      "indexed": "endekslendi",
+      "failed": "başarısız",
+      "noText": "metin çıkarılamadı",
+      "missing": "bulunamadı"
+    },
+    "m365SkipReason": {
+      "unsupported": "desteklenmeyen tür",
+      "tooLarge": "25 MB üzerinde",
+      "disallowedType": "engellenmiş tür (çalıştırılabilir/arşiv)",
+      "malware": "Microsoft tarafından zararlı olarak işaretlenmiş",
+      "zeroBytes": "boş dosya",
+      "excluded": "hariç tutuldu",
+      "typeFilter": "tür filtresinde değil"
+    },
+    "localAdminGroup": {
+      "agents": "Ajanslar",
+      "promptAgents": "Prompt ajanları",
+      "m365Agents": "Microsoft 365 ajanları",
+      "orgAgents": "Bilgi ajanları",
+      "guides": "Kılavuzlar",
+      "connectors": "Bağlayıcılar",
+      "datasets": "Harita veri setleri",
+      "unknown": "Yetkilendirilmiş ancak bulunamadı"
+    },
+    "localAdminGroupUnavailable": "Bu liste geçici olarak kullanılamıyor — mevcut yetkilendirmeler korunur.",
+    "localAdminBuiltIn": "yerleşik",
+    "localAdminSummary": "{count, plural, one {# yetkilendirme} other {# yetkilendirme}}: {names}",
+    "localAdminSummaryMore": "{names} ve {more} daha",
+    "localAdminNoDelegations": "Henüz bir yetkilendirme yok — ajansı olmayan yerel bir yönetici sadece yönetici alanını görebilir.",
+    "localAdminSelectedCount": "{selected} / {total} seçildi",
+    "localAdminCopyFrom": "Kopyala",
+    "localAdminClearAll": "Tümünü temizle",
+    "localAdminSelectGroup": "Tümünü seç",
+    "localAdminClearGroup": "Temizle",
+    "localAdminSearchPlaceholder": "Ajan, kılavuz, bağlayıcı ara…",
+    "localAdminDuplicateEmail": "Bu e-posta zaten listede — iki girdiyi birleştirin.",
+    "localAdminExpand": "Yetkilendirmeleri göster",
+    "localAdminCollapse": "Yetkilendirmeleri gizle",
+    "localAdminDiscard": "Değişiklikleri iptal et",
+    "m365AgentRefresh": "Yenile",
+    "m365AgentRefreshHint": "En son çalıştırmadan beri eklenen, değiştirilen veya silinen dosyaları alır — değişmeyen dosyalar tekrar indirilmez. Bu sekmeyi açık tutun.",
+    "m365AgentReindexAll": "Tümünü yeniden indeksle",
+    "m365AgentRefreshProgress": "Yenileniyor — {total} {total, plural, one {belge} other {belge}} değişeninin {done} tanesi…",
+    "m365AgentRefreshDone": "Yenileme tamamlandı: {added} eklendi, {modified} güncellendi, {removed} silindi, {failed} hata.",
+    "m365ChangesChecking": "Microsoft 365'te son endeksten bu yana değişiklikler kontrol ediliyor…",
+    "m365ChangesFailed": "Microsoft 365 hesabınızla değişiklikler kontrol edilemedi.",
+    "m365ChangesNeverIndexed": "Henüz endekslenmedi — kaydettikten sonra Endeksle'yi çalıştırın.",
+    "m365ChangesFound": "Son endeksten bu yana {count, plural, one {# değişiklik} other {# değişiklik}}: {added} eklendi, {modified} güncellendi, {removed} silindi.",
+    "m365ChangesNone": "Son endeksten bu yana değişiklik yok ({date}).",
+    "m365PrepareButton": "Hazırla",
+    "m365PrepareOcrButton": "Hazırla (OCR)",
+    "m365PrepareSaveFirst": "hazırlamak için ajanı kaydedin",
+    "m365PrepareHintImage": "görüntü — 1 vision çağrısı",
+    "m365PrepareHintMedia": "~{minutes} dk ses deşifre edilecek",
+    "m365PrepareHintOcr": "metin katmanı yok — vision üzerinden OCR, en fazla 30 sayfa",
+    "m365PreparePreparing": "Hazırlanıyor…",
+    "m365PreparePending": "Deşifre ediliyor…",
+    "m365PreparedNote": "hazırlandı · {kind}",
+    "m365PreparedKind": {
+      "image": "görüntü açıklaması",
+      "audio": "deşifre",
+      "video": "deşifre",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "{name} hazırlandı ({chars} karakter). İndekslemek için Yenile'yi çalıştırın.",
+    "m365PrepareStarted": "{name} dosyasının deşifresi arka planda başlatıldı — bu sekmeyi açık tutun.",
+    "m365PrepareFailed": "{name} hazırlanamadı: {error}",
+    "m365PrepareFailedGeneric": "Hazırlama başarısız.",
+    "canonicalKeyLabel": "Anahtar",
+    "copyKey": "Anahtarı kopyala",
+    "agentKeySearchPlaceholder": "Ajansları, rehberleri, konektörleri arayın… veya bir anahtar yapıştırın",
+    "agentKeyAddCustom": "\"{key}\" olduğu gibi ekle",
+    "agentKeyRemove": "{name} öğesini kaldır",
+    "hideAgent": "Gizle",
+    "unhideAgent": "Göster",
+    "hideAgentHint": "Bu ajansı yönetici listenizden gizleyin. Sadece sizin görüntünüzü etkiler — kullanıcılar ve diğer yöneticiler etkilenmez.",
+    "unhideAgentHint": "Bu ajansı yönetici listenizde tekrar gösterin.",
+    "hiddenBadge": "Gizli",
+    "hiddenAgentsCount": "{count, plural, one {# gizli ajan} other {# gizli ajan}}",
+    "hiddenAgentsShowing": "{count, plural, one {# gizli ajan gösteriliyor} other {# gizli ajan gösteriliyor}}",
+    "hiddenAgentsShow": "Göster",
+    "hiddenAgentsHide": "Yeniden gizle",
+    "allAgentsHidden": "Buradaki tüm ajanlar görünümünüzden gizlenmiş durumda — onları göstermek için 'Göster'i kullanın."
   },
   "localModels": {
     "title": "Yerel modeller",
@@ -4248,9 +4407,15 @@
       "connectors": "Kuruluş bağlayıcıları ve bunları kimin kullanabileceği.",
       "guides": "Stil, terminoloji ve uyum rehberleri.",
       "mapDatasets": "Harita iş akışı için kullanılabilir seçili veri setleri.",
-      "localAdmins": "Erişim kurallarını düzenleme yetkisini başkalarına devredin."
+      "localAdmins": "Erişim kurallarını düzenleme yetkisini başkalarına devredin.",
+      "workflows": "Konuşma iş akışlarını herkes için açıp kapatın.",
+      "viewAs": "Bir koşulu karşılayan veya karşılamayan biri olarak uygulamayı test edin."
     },
-    "openSettings": "Ayarları aç"
+    "openSettings": "Ayarları aç",
+    "area": {
+      "workflows": "İş Akışları",
+      "viewAs": "Görüntüle"
+    }
   },
   "limits": {
     "title": "Kullanım sınırları",
@@ -4452,7 +4617,8 @@
     "groupSearchNoResults": "Bu isme uygun grup bulunamadı.",
     "groupSearchError": "Grup araması başarısız oldu. Yine de aşağıya bir grup nesne kimliği yapıştırabilirsiniz.",
     "groupSearchHint": "Kuruluşunuzun gruplarında arama yapmak için en az 2 karakter yazın ya da doğrudan bir grup nesne kimliği yapıştırın. Geçersiz kılma, Microsoft Entra'daki grup üyelerine uygulanır.",
-    "groupsFlagOff": "Grup hedefleme bu ortamda henüz etkin değil. Mevcut grup hedefleri çalışmaya devam eder."
+    "groupsFlagOff": "Grup hedefleme bu ortamda henüz etkin değil. Mevcut grup hedefleri çalışmaya devam eder.",
+    "featureDisabled": "Bu dağıtım için kullanım limitleri etkin değil."
   },
   "m365": {
     "connections": {
@@ -4813,5 +4979,149 @@
     "failed": "Paylaşılamadı — hiçbir şey oluşturulmadı.",
     "copyFailed": "Bağlantı kopyalanamadı — yukarıdan seçip manuel olarak kopyalayın.",
     "lastMessagesCountLabel": "Dahil edilecek son mesaj sayısı"
+  },
+  "toolModes": {
+    "webSearch": "Web araması",
+    "codeInterpreter": "Kod yorumlayıcı",
+    "off": "Kapalı",
+    "auto": "Otomatik",
+    "always": "Her zaman",
+    "routingPrivacy": "Gizlilik",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI araması, sorguları Azure AI Foundry üzerinden gönderir ve sorgular saklanabilir.",
+    "learnMore": "Daha fazla bilgi"
+  },
+  "agentAttach": {
+    "browserTitle": "Agentlar",
+    "browserSubtitle": "Bu sohbete agent ve bağlayıcılar ekleyin veya bir agent ile yeni bir sohbet başlatın. Çoğu, seçtiğiniz model ile uyumludur.",
+    "searchPlaceholder": "Agent ve bağlayıcıları arayın…",
+    "loading": "Agentlar yükleniyor…",
+    "noMatches": "Aramanızla eşleşen bir sonuç bulunamadı.",
+    "noAgents": "Uygun agent yok.",
+    "addToChat": "Sohbete ekle",
+    "removeFromChat": "Sohbetten çıkar",
+    "newChat": "Yeni sohbet",
+    "attached": "Eklendi",
+    "detach": "Ayır",
+    "change": "Değiştir",
+    "browse": "Agentlara göz at…",
+    "noAgent": "Hiçbir agent ekli değil",
+    "close": "Kapat",
+    "kind": {
+      "rag": "Bilgi",
+      "prompt": "Profil",
+      "m365": "Bilgi (Microsoft 365)",
+      "org": "Bilgi",
+      "foundry": "Foundry agent",
+      "connector": "Bağlayıcı"
+    },
+    "semantics": {
+      "your-model": "kendi modelinizi kullanır",
+      "pinned-model": "yönetici tarafından atanmış model",
+      "own-model": "kendi modeli üzerinde çalışıyor"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Kuruluşunuzdan öneriler",
+    "searching": "Kuruluşunuzda aranıyor…",
+    "noMatches": "Dizinde eşleşme yok — adresi manuel olarak girebilirsiniz"
+  },
+  "workflowsAdmin": {
+    "title": "İş Akışları",
+    "description": "Her iş akışını tüm organizasyon için etkinleştirin veya devre dışı bırakın. Devre dışı bırakılan bir iş akışı menülerde gizlenir ve uygun olanlar dahil sunucu tarafından reddedilir.",
+    "layeredNote": "LaunchDarkly conversationWorkflows bayrağı hâlâ yayını kontrol eder: burada etkinleştirilen bir iş akışına sadece bu bayrak açıksa erişilebilir. Bu sayfa, bayrağın gizlediği hiçbir şeyi görünür yapamaz.",
+    "loading": "İş akışı politikası yükleniyor…",
+    "loadError": "İş akışı politikası yüklenemedi.",
+    "policyUnavailable": "İş akışı politikası depolamadan okunamadı. Anahtarlar, varsayılan değerlerle gösterilmek yerine gizlendi; çünkü bunlar zorunlu olanla uyuşmayabilir.",
+    "retry": "Tekrar Dene",
+    "enableAll": "Tümünü etkinleştir",
+    "disableAll": "Tümünü devre dışı bırak",
+    "enabledLabel": "Etkin",
+    "disabledLabel": "Devre Dışı",
+    "defaultOnHint": "Politika kaydedilmediğinde varsayılan: etkin.",
+    "defaultOffHint": "Politika kaydedilmediğinde varsayılan: devre dışı — bir yöneticinin açıkça açması gerekir.",
+    "grantsNote": "Hibe İşlemleri ek olarak, Program departmanında 'hibeler' iş unvanına sahip MSF-USA kullanıcıları veya Systems departmanında unvanında 'inovasyon' olanlarla sınırlıdır. Buradan etkinleştirmek bu kuralı genişletmez.",
+    "unsaved": "Kaydedilmemiş değişiklikleriniz var.",
+    "save": "Kaydet",
+    "saving": "Kaydediliyor…",
+    "saveSuccess": "İş akışı politikası kaydedildi.",
+    "saveError": "İş akışı politikası kaydedilemedi.",
+    "conflictError": "Bir başka yönetici önce politikayı değiştirdi. Politika yeniden yüklendi — lütfen inceleyip tekrar kaydedin.",
+    "updatedByLine": "Son olarak {at} tarihinde {by} tarafından kaydedildi.",
+    "neverSaved": "Henüz bir politika kaydedilmedi; yukarıdaki varsayılanlar geçerlidir."
+  },
+  "viewAs": {
+    "title": "Görüntüle",
+    "description": "Uygulamayı sadece kendi oturumunuz için, genellikle dizin ya da yöneticiler tarafından belirlenen bir koşulu karşılayan ya da karşılamayan biri olarak test edin. Kimliğiniz asla değişmez: oluşturduğunuz her şey size ait olarak kalır ve tüm denetim geçmişinde adınız görünür.",
+    "activeTitle": "Görüntüleme modu etkin",
+    "inactiveTitle": "Görüntüleme modu etkin değil",
+    "sections": {
+      "role": "Yönetici rolü",
+      "region": "Veri bölgesi",
+      "attributes": "Dizin özellikleri",
+      "groups": "Grup üyeliği",
+      "presets": "Hazır ayarlar"
+    },
+    "role": {
+      "global": "Global yönetici (gerçek rolünüz)",
+      "local": "Yerel yönetici",
+      "none": "Normal kullanıcı",
+      "localKeysLabel": "Devredilen aracı anahtarları",
+      "localKeysHint": "Bu yerel yöneticinin düzenleyebileceği virgülle ayrılmış kanonik aracı anahtarları. Hiçbir devredilmiş aracı yoksa boş bırakın.",
+      "noneWarning": "Normal kullanıcı olarak diğer tüm yönetim alanları kaybolur. Bu sayfa erişilebilir kalır ve uygulamanın üstündeki banner her zaman çıkış yolu sunar."
+    },
+    "region": {
+      "actual": "Gerçek ({region})",
+      "hint": "Taleplerinizi ve aktifken yüklediğiniz her şeyi diğer bölgenin depolamasına yönlendirir. ?regionOverride= çerezinden önceliklidir."
+    },
+    "attributes": {
+      "department": "Departman",
+      "companyName": "Şirket",
+      "jobTitle": "Pozisyon",
+      "officeId": "Ofis",
+      "officeActual": "Gerçek ofis",
+      "officeNone": "Ofis yok",
+      "actualValue": "Gerçek: {value}",
+      "actualEmpty": "Gerçek: (boş)",
+      "hint": "Gerçek değerinizin kalmasını istiyorsanız alanı boş bırakın. Bunlar; hibe kurallarına, öznitelik tabanlı kullanım limitlerine ve erişim kurallarına etki eder."
+    },
+    "groups": {
+      "label": "Grup kimlikleri",
+      "placeholder": "Her satıra bir Entra grup nesne kimliği",
+      "hint": "Gerçek üyeliğinizi genişletmez — değiştirir, böylece hem ait olup olmadığınızı test edebilirsiniz."
+    },
+    "presets": {
+      "grantsMember": "Hibe ekibi üyesi",
+      "regularUser": "Normal kullanıcı",
+      "localAdmin": "Yerel yönetici, ajan yok",
+      "otherRegion": "Diğer bölge",
+      "hint": "Hazır ayarlar formu doldurur; Yalnızca Uygula'ya bastığınızda geçerli olur."
+    },
+    "apply": "Uygula ve yeniden yükle",
+    "applying": "Uygulanıyor…",
+    "clear": "View-as'tan çık",
+    "clearing": "Çıkılıyor…",
+    "reset": "Formu sıfırla",
+    "nothingToApply": "Uygulamak için en az bir geçersiz kılma ayarlayın.",
+    "applyError": "View-as uygulanamadı: {error}",
+    "clearError": "View-as kaldırılamadı: {error}",
+    "loadError": "View-as durumu yüklenemedi.",
+    "retry": "Yeniden dene",
+    "expiresNote": "View-as en fazla 8 saat veya çıkana kadar geçerlidir.",
+    "banner": {
+      "label": "Görüntülenen kişi",
+      "adjust": "Düzenle",
+      "exit": "Çıkış",
+      "role": {
+        "local": "yerel yönetici",
+        "none": "normal kullanıcı"
+      },
+      "region": "bölge {region}",
+      "department": "departman \"{value}\"",
+      "companyName": "şirket \"{value}\"",
+      "jobTitle": "pozisyon \"{value}\"",
+      "officeId": "ofis {value}",
+      "groups": "{count, plural, one {# grup} other {# grup}}"
+    }
   }
 }

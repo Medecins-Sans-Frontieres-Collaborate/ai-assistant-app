@@ -1,19 +1,9 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { createContext, useContext } from 'react';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
-
-/**
- * Server-side LIMITS_ENABLED flag, threaded down from
- * app/[locale]/(chat)/layout.tsx via AppProviders — the same route
- * AgentAccessEnabledContext takes, and for the same reason: NEXT_PUBLIC_
- * vars are inlined at build time, which breaks single-build multi-env
- * deploys. Defaults to false so no query fires unless a server component
- * explicitly enabled the feature.
- */
-export const LimitsEnabledContext = createContext<boolean>(false);
 
 export interface MyLimit {
   limitKey: string;
@@ -44,7 +34,7 @@ export interface MyLimitsResponse {
  * the UI can render nothing at all rather than a wall of "Unlimited" rows.
  */
 export function useMyLimits() {
-  const limitsEnabled = useContext(LimitsEnabledContext);
+  const limitsEnabled = useLimitsEnabled();
 
   const { data, isLoading, error, refetch } = useQuery<MyLimitsResponse | null>(
     {
@@ -75,9 +65,18 @@ export function useMyLimits() {
   };
 }
 
-/** True when this deployment has limits enabled at all. */
+/**
+ * True when the `usageLimits` LaunchDarkly flag is on for this user.
+ *
+ * CLIENT-side only, and deliberately so: it gates UI (the admin rail entry,
+ * the limits panel, the /api/limits/me fetch), not security — the limits
+ * admin page and API routes keep their own server-side global-admin gates.
+ * Outside an LDProvider (or before flags load) `useFlags()` returns no keys,
+ * so this fails closed to hidden.
+ */
 export function useLimitsEnabled(): boolean {
-  return useContext(LimitsEnabledContext);
+  const { usageLimits } = useFlags();
+  return Boolean(usageLimits);
 }
 
 /**

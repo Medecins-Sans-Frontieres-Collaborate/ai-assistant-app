@@ -37,7 +37,7 @@ export default async function MapDatasetAdminPage({
   const service = AgentAccessService.getInstance();
   await service.ensureFresh();
   const { config } = service.getSnapshot();
-  const status = resolveAdminStatus(session.user?.mail, config);
+  const status = resolveAdminStatus(session.user, config);
   if (!status.isGlobalAdmin && !status.isLocalAdmin) {
     redirect('/');
   }

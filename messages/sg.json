@@ -950,7 +950,12 @@
       "showFewer": "Hombï tsïna"
     },
     "retryWithModel": "Gbalë sô mbênî na {model}",
-    "createTodoTasks": "Dü tângo To Do sô yâ tî ngangu a kêtê"
+    "createTodoTasks": "Dü tângo To Do sô yâ tî ngangu a kêtê",
+    "attachedFileExpired": "Fi le yeke bindî ti lo na koko — fi nga suka zo ti yeke hinga na wüne ti tango kêtê. A zia na wa na kongöro ti yângâ tî mbi. Sô siriri kâ sô, to mbi tî zo wânde fi ahînga mo, lo yeke sâra fi tî mbênî.",
+    "repeatedFailureNotice": "Kodê na panda ndési — sô mbênî ti sô na yeke a kûê. Sô ngbângbâ tâ kûê kodê pepe ape sô na sirî mbênî.",
+    "startNewConversation": "Kûê kodê mbênî",
+    "downloadDebugInfo": "Zu debug info",
+    "includeMessageText": "Gbia lângûi na mbi kodê"
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",
@@ -981,7 +986,9 @@
     "quickActions": "Sâra na hïngângö",
     "expandFolder": "Ngandë dosi {name}",
     "collapseFolder": "Kûâ dosi {name}",
-    "folderOptions": "Mbêtï ti {name}"
+    "folderOptions": "Mbêtï ti {name}",
+    "agentsEntry": "Bângbi",
+    "agentsTitle": "Zia bângbi kɛ pé ayeke zo jihâ na mo"
   },
   "errors": {
     "somethingWentWrong": "Ë a sara nzönî pepe",
@@ -2651,6 +2658,10 @@
       "map": {
         "label": "Karte",
         "description": "Bûta données mbi na sâka ya na karte"
+      },
+      "grants": {
+        "label": "Sêse ti grants",
+        "description": "Kwêti na kekë ti bâgara data ti grants"
       }
     },
     "chooser": {
@@ -2660,7 +2671,8 @@
       "newTranslation": "Kêtî sangö mûtu",
       "newDocument": "Document mûtu",
       "newDataAnalysis": "Analize tî données mûtu",
-      "newMap": "Karte mûtu"
+      "newMap": "Karte mûtu",
+      "newGrants": "Sêse ti grants mbï"
     },
     "translation": {
       "chooseLanguage": "Sangö tî sû",
@@ -3277,7 +3289,8 @@
       "unknownType": "Bêrê-bîanî âti na workflow ti version a mbi ape na yeke bâ. Histrûa ti bêrê-bîanî ayeke a mbênî ndömâ.",
       "untitled": "Bêrê-bîanî mû",
       "toggleMenu": "Sûngbo menü",
-      "model": "Modelo ti workflow ôko"
+      "model": "Modelo ti workflow ôko",
+      "disabledByAdmin": "Administrateur a yeke pekê workflow ûtu. Bê ti dëfärï tîrï vënî akɛ nzönî."
     },
     "tabs": {
       "label": "Fason ya mbëtïrï",
@@ -4031,7 +4044,153 @@
     "conflictTakeTheirs": "Yèkê ti yângâ",
     "conflictNoFieldDiff": "Valeur a yângâ — version ti rum mô so ni.",
     "conflictRecordGone": "Rum ô a kété kûê (ou pâa yâso). Kopié na bendê ti form ô, puise reload.",
-    "groupsFlagOff": "Group targeting abûka yâso na environnement ô tî téné. Group ti cible tî sô ngô so a kété yâso ngangu."
+    "groupsFlagOff": "Group targeting abûka yâso na environnement ô tî téné. Group ti cible tî sô ngô so a kété yâso ngangu.",
+    "catalogOauth": {
+      "title": "OAuth apps ya connector ti linga na ndolo",
+      "description": "OAuth apps ti koko deployment sô lo hinga na connectors ti linga na ndolo (GitHub, Asana, …). Si lo pépé lâ na mbeti ape na wa, lo yeke mboca MCP_OAUTH_* variables ti environment; si lo yeke kode wa ape, lo biani na variables a. Client secrets yeke huli na ndô tî mo ape na lo si mô biani mo mûngu.",
+      "badgeAdmin": "A hinga kode wa",
+      "badgeEnv": "Tî environment",
+      "badgeNone": "A hinga kode ape",
+      "badgeDcr": "A kêtê yâ tî kodro",
+      "badgeDcrHint": "Provider a yeke kodro OAuth client na mbênî, ala so app ape kode wa zîngö, lo mô hûngö.",
+      "clientIdLabel": "OAuth client ID",
+      "clientSecretLabel": "OAuth client secret",
+      "secretStoredPlaceholder": "A huli ti lo — mbôko sô lo gó ti gû, samba mo bâda wa ape",
+      "secretNewPlaceholder": "Kopië client secret",
+      "save": "Sêda",
+      "remove": "Kûè",
+      "removeToEnv": "Kûè (yeke na yângâ-ti-environment)",
+      "saved": "{name} OAuth app a sêda wa",
+      "removed": "{name} OAuth app a kûè wa",
+      "saveError": "Sêda OAuth app a yâ tî hûngö. Wa tâmbula pâsi.",
+      "conflict": "Mbeti a ayeke mû na lo birê — ayeke gû, wa tâmbula pâsi.",
+      "storageUnavailable": "Admin storage a yâ tî hûngö; mbeti sô ayeke huli wa ape. Sêda yâ tî hûngö bada storage a bâka.",
+      "sealingUnavailable": "Encryption tî secret a hinga kode ape na deployment a (AUTH_SECRET yâ tî hûngö) — OAuth client secret yâ tî hûngö sêda.",
+      "updatedBy": "A sâra na {by} na {at}"
+    },
+    "orgAgentOverrideTitle": "Kûè ayeke agent so sènga",
+    "orgAgentOverrideAction": "Kûè",
+    "orgAgentBuiltinBadge": "So sènga",
+    "orgAgentBuiltinHint": "Adefini na config ti deployment. Regle ti accès anî na pengö nînî; ti kûè ape ndö ti yä tî ayeke règle sô ayê na deploy.",
+    "m365AgentIndexProgress": "Sé ti mbênî {done} na {total} {total, plural, one {kôdôro} other {kôdôro}}...",
+    "m365AgentIndexInterrupted": "Sé ti mbênî ayeke na {done} na {total} — sôngô sô ayeke",
+    "m365AgentIndexStartedBy": "awûse na {name}",
+    "m365AgentIndexResume": "Sôngô",
+    "m365AgentIndexResumeHint": "Sôngô sé ti mbênî fâ mbênî zo ayeke, na Microsoft 365 mo. Yeke tab ru.",
+    "m365AgentIndexCancel": "Kûê",
+    "m365AgentIndexCancelled": "Sé ti mbênî kûê — kôdôro ni so a mbênî lâ, mo tî yângâ.",
+    "m365AgentIndexJobFailed": "Sé ti mbênî ayeke: {error}",
+    "m365AgentIndexDone": "Sé ti mbênî sôle: {indexed} mbênî, {failed} ayeke, {noText} wâlï ndï text.",
+    "m365AgentDocCounts": "{indexed, plural, one {# kôdôro mbênî} other {# kôdôro mbênî}} · {failed} ayeke · {noText} wâlï ndï text · {needsPreparation} mbênî kodro · {skipped} sôkô",
+    "m365CapDocuments": "Kôdôro: {count} / {max}",
+    "m365CapBytes": "{bytes} na {max}",
+    "m365CapOverDocuments": "A kûê bâa tî {max} kôdôro. Kete subfolders, sâra hînga file, lômbï sources — file wâ kâ ti mbênî zo, mo ti beli ti kôdôro.",
+    "m365CapOverBytes": "A kûê bâa budget tî {max}. Fâ subfolders wâ bânga file mûmû.",
+    "m365PlanScanning": "Mbênî...",
+    "m365PlanRefreshing": "bêtîngö...",
+    "m365PlanFailed": "Apê mbênî sources na Microsoft 365 mo.",
+    "m365PlanMissing": "A tîmbê tî wâ ayeke",
+    "m365PlanIndexable": "{count, plural, one {# file ti mbênî} other {# file ti mbênî}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# ti kodro} other {# ti kodro}}",
+    "m365PlanSkipped": "{count} sôkô",
+    "m365PlanShowDetails": "Détails",
+    "m365PlanHideDetails": "Kûê détails",
+    "m365PlanTruncated": "Dossier âla mûmû siriri sô tî mbênî tâmbû — item môto 1 000 pâkô tî zîa. Sâra subfolder.",
+    "m365PlanRecursive": "Fâ subfolders",
+    "m365PlanExtensionsLabel": "File types môjö:",
+    "m365PlanExtensionsPlaceholder": "gî. pdf, docx",
+    "m365PlanSubfolders": "Subfolders",
+    "m365PlanFolderCount": "{count, plural, one {# file} other {# file}}",
+    "m365PlanGroupIndexable": "Kwé ti mbênî",
+    "m365PlanGroupNeedsPreparation": "Kwé ti kodro",
+    "m365PlanGroupSkipped": "Sôkô",
+    "m365PlanPreparationHint": "image/audio/video — a mbênî ayeke",
+    "m365PlanMoreRows": "…na {count} lo ïrï",
+    "m365ItemStatus": {
+      "pending": "ayeke",
+      "indexed": "mbênî",
+      "failed": "ayeke",
+      "noText": "mbênî wâlï text",
+      "missing": "tîmbê"
+    },
+    "m365SkipReason": {
+      "unsupported": "type ayeke",
+      "tooLarge": "bâa 25 MB",
+      "disallowedType": "type ti kûê (executable/archive)",
+      "malware": "Microsoft sâra malware",
+      "zeroBytes": "file pâ",
+      "excluded": "kuê",
+      "typeFilter": "ayeke na filter type"
+    },
+    "localAdminGroup": {
+      "agents": "Bangî",
+      "promptAgents": "Bangî ti prompt",
+      "m365Agents": "Bangî Microsoft 365",
+      "orgAgents": "Bangî ti zingaï na bîanî",
+      "guides": "Guides",
+      "connectors": "Connectors",
+      "datasets": "Map datasets",
+      "unknown": "Asili mbi sô ti tâhâ tî mo"
+    },
+    "localAdminGroupUnavailable": "Listê yô akô ködörö na tîmbï — zamba tî tâhâ sô ti mo ape.",
+    "localAdminBuiltIn": "na kokô",
+    "localAdminSummary": "{count, plural, one {# tâhâ} other {# tâhâs}}: {names}",
+    "localAdminSummaryMore": "{names} na {more} awè",
+    "localAdminNoDelegations": "Tâhâ té zâmbê — local admin sô âla bangî, awê yô lè sô yô kîrî admin area.",
+    "localAdminSelectedCount": "{selected} na {total} tî sambi",
+    "localAdminCopyFrom": "Köpî ti",
+    "localAdminClearAll": "Sèhî kötotî",
+    "localAdminSelectGroup": "Sambi kötotî",
+    "localAdminClearGroup": "Sèhî",
+    "localAdminSearchPlaceholder": "Sôso bangî, guides, connectors...",
+    "localAdminDuplicateEmail": "Email âla ti mbi sô na listê — kômbini ti item mbï ôko.",
+    "localAdminExpand": "Vâ tâhâ sô ti mo",
+    "localAdminCollapse": "Fèrè tâhâ sô ti mo",
+    "localAdminDiscard": "Gbulû sô ti change",
+    "m365AgentRefresh": "Refresh",
+    "m365AgentRefreshHint": "Tî pio fayara sô sâra, gbêtî na sèhî depi passê — fayara sô akê sèhî tî hinga mbi gugu. Kîtî nâ tab yô pété.",
+    "m365AgentReindexAll": "Re-index kötotî",
+    "m365AgentRefreshProgress": "O wâ na refresh — {done} na {total} sô sèhî {total, plural, one {document} other {documents}}...",
+    "m365AgentRefreshDone": "Refresh a sêsê: {added} bâa, {modified} sêsê, {removed} sâra, {failed} sô akê bâa.",
+    "m365ChangesChecking": "O zûnû ti Microsoft 365 sô fayara sèhî depi passê...",
+    "m365ChangesFailed": "Mbï amâ sô zûnû ti fayara sèhî na Microsoft 365 account yô.",
+    "m365ChangesNeverIndexed": "Atâyi index — bègè index lôgo yâmbtê.",
+    "m365ChangesFound": "{count, plural, one {# fayara sèhî} other {# fayara sèhî}} depi index passê: {added} bâa, {modified} sêsê, {removed} sâra.",
+    "m365ChangesNone": "Fâyara sèhî tî hinga na index passê ({date}).",
+    "m365PrepareButton": "Bèngô",
+    "m365PrepareOcrButton": "Bèngô (OCR)",
+    "m365PrepareSaveFirst": "sambisa bangî sô bèngô",
+    "m365PrepareHintImage": "image — 1 vision call",
+    "m365PrepareHintMedia": "~{minutes} min tî audio ti transcribe",
+    "m365PrepareHintOcr": "atènî na text layer — OCR via vision, pâsê 30 pages",
+    "m365PreparePreparing": "On bèngô...",
+    "m365PreparePending": "Transcribing...",
+    "m365PreparedNote": "A bèngô · {kind}",
+    "m365PreparedKind": {
+      "image": "Image description",
+      "audio": "transcript",
+      "video": "transcript",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "{name} a bèngô ({chars} caractères). Refresh sô index lô.",
+    "m365PrepareStarted": "Transcription tî {name} a sôndô na mbirima — kîtî nâ tab yô pété.",
+    "m365PrepareFailed": "Mbï amâ sô bèngô {name}: {error}",
+    "m365PrepareFailedGeneric": "Mbï amâ sô bèngô.",
+    "canonicalKeyLabel": "Ködro",
+    "copyKey": "Kombë ködro",
+    "agentKeySearchPlaceholder": "Küété agents, guides, connectors… löngö yäkü kombë ködro",
+    "agentKeyAddCustom": "Gbokö \"{key}\" lo ye kötä",
+    "agentKeyRemove": "Kpé {name}",
+    "hideAgent": "Finga",
+    "unhideAgent": "Ganza",
+    "hideAgentHint": "Finga agent ti mbi lo na admin ti mo. Ala mbi wa mbi yeke so mo — tî users, tî admins apî körö wala a gbanî.",
+    "unhideAgentHint": "Ganza agent ô zo admin ti mo siriri.",
+    "hiddenBadge": "Fingä",
+    "hiddenAgentsCount": "{count, plural, one {# agent fingä} other {# agents fingä}}",
+    "hiddenAgentsShowing": "Yeke bia {count, plural, one {# agent fingä} other {# agents fingä}}",
+    "hiddenAgentsShow": "Bia",
+    "hiddenAgentsHide": "Finga na",
+    "allAgentsHidden": "Agents sô tî yâ lo fingä na sè ti mbi — sü Bia na köngö."
   },
   "localModels": {
     "title": "Model ti gbë na mbongo",
@@ -4232,9 +4391,15 @@
       "connectors": "Connector tî organisation na mo ayeke nîngu yângö.",
       "guides": "Style, têrminologie na guides tî conformité.",
       "mapDatasets": "Datasets sô ndurü tî workflow tî map.",
-      "localAdmins": "Tènè bina mo azanë tî yeke changer règle tî accès."
+      "localAdmins": "Tènè bina mo azanë tî yeke changer règle tî accès.",
+      "workflows": "Wûsa workflow ti nzönî sô vètè ndö ayeke ôko ôko.",
+      "viewAs": "Gbenza app tî ngu nzönî sô agbenza na fâa — walï walï — tî zîa sô tîrï ndurü."
     },
-    "openSettings": "Fungbi tî settings"
+    "openSettings": "Fungbi tî settings",
+    "area": {
+      "workflows": "Workflows",
+      "viewAs": "Gbenza ti…"
+    }
   },
   "limits": {
     "title": "Limitî tî nîngu",
@@ -4436,7 +4601,8 @@
     "groupSearchNoResults": "Gbēngö ti zîî tî nzö tî grupo ayeke.",
     "groupSearchError": "Kombere tî grupo ayeke. Mbutu yeke na kötä ID tî grupo tala ape.",
     "groupSearchHint": "Kötä tî lêtï 2 mbï tî kombere grupo tî organization na wa, ou bien kötä ID tî grupo direki. Sô tî wa bionga ti grupo sô tî Microsoft Entra.",
-    "groupsFlagOff": "Sô tî wa tî grupo ayeke kötä na yeke na ndakü na yeke. Grupö sô kötä kïri gbê ti continue."
+    "groupsFlagOff": "Sô tî wa tî grupo ayeke kötä na yeke na ndakü na yeke. Grupö sô kötä kïri gbê ti continue.",
+    "featureDisabled": "Limite ti lo alingbî ti kombété na zo na ndakîle oyo."
   },
   "m365": {
     "connections": {
@@ -4797,5 +4963,149 @@
     "failed": "Mo apêpe sô kété — tîngbi na mbênî wa wa.",
     "copyFailed": "Link so gbäala yângâ na — sèngä sélé na lo, kopié a gbênî.",
     "lastMessagesCountLabel": "Gbâ tî dënga tî ninga a yê sôkô"
+  },
+  "toolModes": {
+    "webSearch": "Könö na Internet",
+    "codeInterpreter": "Kötö na code",
+    "off": "Wete",
+    "auto": "Gbâ",
+    "always": "Ndüa",
+    "routingPrivacy": "Süngü",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI search köde na sô mbi Azure AI Foundry, a mbi yeke wáka tene sa go.",
+    "learnMore": "Yeke sô nzoni"
+  },
+  "agentAttach": {
+    "browserTitle": "Bângbi",
+    "browserSubtitle": "Tînga bângbi na connectors na ndû yângâ, mû yeke zo jihâ na bângbi. Sû sô a sô bänzi na model wangä.",
+    "searchPlaceholder": "Könö bângbi na connectors…",
+    "loading": "Bângbi yeke kötä…",
+    "noMatches": "Käte na könö mo hütsa.",
+    "noAgents": "Bângbi mbi yeke tena.",
+    "addToChat": "Kötï na ndû yângâ",
+    "removeFromChat": "Wete na ndû yângâ",
+    "newChat": "Ndû yângâ sô mbïko",
+    "attached": "Tîngä",
+    "detach": "Fâta",
+    "change": "Kange",
+    "browse": "Zia bângbi…",
+    "noAgent": "Bângbi mbi tîngä kena",
+    "close": "Kwê",
+    "kind": {
+      "rag": "Sûngö",
+      "prompt": "Ngangu",
+      "m365": "Sûngö (Microsoft 365)",
+      "org": "Sûngö",
+      "foundry": "Bângbi Foundry",
+      "connector": "Connector"
+    },
+    "semantics": {
+      "your-model": "yeke na model wangä",
+      "pinned-model": "model a admin a zia",
+      "own-model": "yeke na model iye"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Mbênî ya organisation tî mo",
+    "searching": "Bi yeke ti mbênî wa na sô nginza…",
+    "noMatches": "Ala ti nzönî na dite — oko yeke kûè adrèsê na lo mûngû"
+  },
+  "workflowsAdmin": {
+    "title": "Workflows",
+    "description": "Oko ti wûsa ndö pekê workflow kêtë na organisation wûsa tî. Sêse workflow sô apekê, ayake ngā na menu, na server vênî na ndü-ku, wa ngangu ayeke kodro na yâ la.",
+    "layeredNote": "Flag LaunchDarkly conversationWorkflows mo aji tî ghôrô rollout: workflow tî sêse so wûsa ape ayake gï na gbâ sô a wûsa flag. Nä page ape kpî mbi yeke kodro tî flag ape ghôrö.",
+    "loading": "Kûê policy ti workflow…",
+    "loadError": "Policy ti workflow ape kûê.",
+    "policyUnavailable": "Policy ti workflow ape yê na storage. Toggle ayê kpî, walï ape vënî na bâgara sô mbi kûë ti policy sô ayeke enforce.",
+    "retry": "Gwaga",
+    "enableAll": "Wûsa gï tî wose",
+    "disableAll": "Yêka gï tî wose",
+    "enabledLabel": "Ayeke wûsa",
+    "disabledLabel": "Ayeke pekê",
+    "defaultOnHint": "Sô policy ape kûê: ayeke wûsa.",
+    "defaultOffHint": "Sô policy ape kûê: ayeke pekê — admin ayeke gbênza sô ghôrö ndö.",
+    "grantsNote": "Sêse ti grants mo ànî sô ape besenî yângâ ti MSF-USA na Program department sô \"grants\" ayê na titre ti fadre, wala Systems tî \"innovation\" ayê na titre. Wûsa mo a, ape fetî règle lâ.",
+    "unsaved": "A yeke bâsë tî ape teni-ndu.",
+    "save": "Tenï-ndu",
+    "saving": "Tenï-ndu…",
+    "saveSuccess": "Policy ti workflow ateni-ndu.",
+    "saveError": "Policy ti workflow ape teni-ndu.",
+    "conflictError": "Mbï ti admin yeke tene policy tî mbï. Ngbâ kûê — yeke zîa na tenï sagâ.",
+    "updatedByLine": "Tenï-ndu ndö ti {by} na {at}.",
+    "neverSaved": "Policy apeni-ndu; default tî dô ayê na mbi mbênî."
+  },
+  "viewAs": {
+    "title": "Gbenza ti…",
+    "description": "Gbenza app tî so, na session tî yâ kpë, ti yâ ngangu sô agbenza na walï tî zîa sô ayeke wa na repertoire wala na admin. Nzönî tî yâ ape gbanî: na kereni yâ so awusa ayeke yâ, na audit ayeke bê ti yâ.",
+    "activeTitle": "Gbenza ti… ayeke wûsa",
+    "inactiveTitle": "Gbenza ti… ape wûsa",
+    "sections": {
+      "role": "Rolë ti admin",
+      "region": "Region ti data",
+      "attributes": "Attribut ti repertoire",
+      "groups": "Bodö ti group",
+      "presets": "Presets"
+    },
+    "role": {
+      "global": "Admin global (rolë ti ngangu yâ)",
+      "local": "Admin local",
+      "none": "Ködörö user",
+      "localKeysLabel": "Ködörö agent dè",
+      "localKeysHint": "Ngbagöse agent ko so local admin mo agbenza la. Kete le na mo local admin ape na agent dè.",
+      "noneWarning": "Na ködörö user, yângâ ti admin area ayè kpî. Page so ayeke vënî, na banner na lutu app ape wûsa tî zaré."
+    },
+    "region": {
+      "actual": "Titî ({region})",
+      "hint": "Ti lo mo yâ mo sôhênî ape ngu yeke gbe ti yângâ ti orë na, mo ape mo yeke cû mu kala ti cî na. Ala ti ga mbi na ?regionOverride= cookie."
+    },
+    "attributes": {
+      "department": "Departéma",
+      "companyName": "Ködörö",
+      "jobTitle": "Mbëtï tî wäkätî",
+      "officeId": "Ofisi",
+      "officeActual": "Ofisi kêtê",
+      "officeNone": "Ala ofisi",
+      "actualValue": "Kêtê: {value}",
+      "actualEmpty": "Kêtê: (mara mbênî)",
+      "hint": "Sôkô tî sêmô pa makôko mo alîngbi bîan. Yângâ akan yeke gbia, ti nsara grants, ti usage limits na ti access rules."
+    },
+    "groups": {
+      "label": "Group id",
+      "placeholder": "Group object id tî Entra môkô kô na linï",
+      "hint": "Wota nî yeke fan mô membership za la sessio so, mo yeke ga tî gbenî ape sô mondro kodoro."
+    },
+    "presets": {
+      "grantsMember": "Membre tî grants team",
+      "regularUser": "Linga tî biasa",
+      "localAdmin": "Local admin, ala agent",
+      "otherRegion": "Region bîan",
+      "hint": "Preset ti fû form, mo ala mbi söngö tî mo zo bändö Apply."
+    },
+    "apply": "Bändö na sôndö",
+    "applying": "Gbëngu…",
+    "clear": "Kûatî view-as",
+    "clearing": "Gbëngbë…",
+    "reset": "Sëkkë form",
+    "nothingToApply": "Set akötî yângâ mbi bändö.",
+    "applyError": "View-as abï yeke bändö: {error}",
+    "clearError": "View-as abï yeke kûatè: {error}",
+    "loadError": "View-as abï yeke sôkô na.",
+    "retry": "Gbi",
+    "expiresNote": "View-as yeke pèkë bïrï 8 tî ngû, walla tî mo kûatè.",
+    "banner": {
+      "label": "Mo yeke wèngö si",
+      "adjust": "Gbëtï",
+      "exit": "Kûatè",
+      "role": {
+        "local": "local admin",
+        "none": "linga tî biasa"
+      },
+      "region": "region {region}",
+      "department": "departéma \"{value}\"",
+      "companyName": "ködörö \"{value}\"",
+      "jobTitle": "mbëtï \"{value}\"",
+      "officeId": "ofisi {value}",
+      "groups": "{count, plural, one {# group} other {# group}}"
+    }
   }
 }

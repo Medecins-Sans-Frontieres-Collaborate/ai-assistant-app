@@ -950,7 +950,12 @@
       "showFewer": "کمې وښایئ"
     },
     "retryWithModel": "د {model} سره هڅه وکړئ",
-    "createTodoTasks": "له دې ځواب څخه د To Do دندې جوړې کړئ"
+    "createTodoTasks": "له دې ځواب څخه د To Do دندې جوړې کړئ",
+    "attachedFileExpired": "ضمیمه شوی فایل نور شتون نه لري — پورته شوي فایلونه یوازې د محدود وخت لپاره ساتل کیږي. دا له دې خبرواترو لیرې شوی. هڅه وکړئ بې له دې فایل څخه، یا فایل بیا پورته کړئ.",
+    "repeatedFailureNotice": "دا بار بار ناکامېږي — ښايي خبرې فاسد شوې وي. عموماً نوې خبرې پيلول دا ستونزه حل کوي.",
+    "startNewConversation": "نوې خبرې پيل کړئ",
+    "downloadDebugInfo": "د Debug معلومات ډاونلوډ کړئ",
+    "includeMessageText": "د پیغام متن هم شامل کړئ"
   },
   "transcript": {
     "originalTranscript": "اصلي لیک",
@@ -981,7 +986,9 @@
     "quickActions": "چټک کړنې",
     "expandFolder": "پوښۍ غځول {name}",
     "collapseFolder": "پوښۍ ټولول {name}",
-    "folderOptions": "{name} اختیارات"
+    "folderOptions": "{name} اختیارات",
+    "agentsEntry": "استازي",
+    "agentsTitle": "استازي وګورئ او له یوه سره خبرې وکړئ"
   },
   "errors": {
     "somethingWentWrong": "یوه ستونزه پېښه شوه",
@@ -2651,6 +2658,10 @@
       "map": {
         "label": "نقشه",
         "description": "هر ډول معلومات نقشه کې ځای پر ځای کړئ"
+      },
+      "grants": {
+        "label": "د مرستو پروسس",
+        "description": "د مرستو د راپورونو له مخې جوړ جوړښت لرونکی معلومات څیړل او استخراجول"
       }
     },
     "chooser": {
@@ -2660,7 +2671,8 @@
       "newTranslation": "نوې ژباړه",
       "newDocument": "نوې سند",
       "newDataAnalysis": "نوې د معلوماتو شننه",
-      "newMap": "نوې نقشه"
+      "newMap": "نوې نقشه",
+      "newGrants": "د نویو مرستو پروسس"
     },
     "translation": {
       "chooseLanguage": "هدف ژبه",
@@ -3277,7 +3289,8 @@
       "unknownType": "دا مکالمه داسې کاري بهیر کاروي چې دا نسخه یې نه پېژني. د مکالمې تاریخچه لاندې ښودل شوې ده.",
       "untitled": "نوې مکالمه",
       "toggleMenu": "مینو پرانیزئ یا بند کړئ",
-      "model": "د دې کاري بهیر ماډل"
+      "model": "د دې کاري بهیر ماډل",
+      "disabledByAdmin": "دا کاري جریان د مدیر لخوا بند شوی دی. د خبرو اترو تاریخ لاندې ښودل شوی دی."
     },
     "tabs": {
       "label": "مکالموي طریقه",
@@ -4031,7 +4044,153 @@
     "conflictTakeTheirs": "د دوی نسخه واخلئ",
     "conflictNoFieldDiff": "ارزښتونه یو شان دي — یوازې د ثبت نسخه بدله شوې.",
     "conflictRecordGone": "دا ثبت ړنګ شوی (یا بیا نشي بارېدای). اړتیا لرئ څه نقل کړئ، بیا فورم تازه کړئ.",
-    "groupsFlagOff": "د ګروپ ټاکنه لا د دې چاپېریال لپاره فعاله نه ده. موجود ګروپونه لا کار کوي."
+    "groupsFlagOff": "د ګروپ ټاکنه لا د دې چاپېریال لپاره فعاله نه ده. موجود ګروپونه لا کار کوي.",
+    "catalogOauth": {
+      "title": "جوړ شوي اتصالگرونو لپاره OAuth ایپونه",
+      "description": "د جوړ شویو اتصالگرونو (GitHub، Asana، ...) لپاره د تطبیق کچې OAuth ایپونه. دلته ثبت شوې ریکارډونه MCP_OAUTH_* محیط متغیرات تر سیوري لاندې راولي؛ د دې لرې کول یې پر هغو بېرته برابروي. د مراجعینو پټنومونه ساتل کېږي او بیا نه ښودل کېږي.",
+      "badgeAdmin": "دلته تنظیم شوی",
+      "badgeEnv": "له چاپېریاله",
+      "badgeNone": "نه دی تنظیم شوی",
+      "badgeDcr": "خپله ثبتېدونکی",
+      "badgeDcrHint": "دا وړاندې کوونکی کولی شي له خپل اړخه یو OAuth مراجع ثبت کړي، نو حتی که دلته ایپ تنظیم نشي، هم کار کوي.",
+      "clientIdLabel": "د OAuth مراجع ID",
+      "clientSecretLabel": "د OAuth مراجع پټنوم",
+      "secretStoredPlaceholder": "زېرمه شوی — د بدلولو لپاره ولیکئ، د پاتېدو لپاره پریږدئ",
+      "secretNewPlaceholder": "د مراجع پټنوم پیسټ کړئ",
+      "save": "ذخیره کړئ",
+      "remove": "لرې کړئ",
+      "removeToEnv": "لرې کړئ (چاپېریال ته بېرته ستونېدل)",
+      "saved": "د {name} OAuth ایپ ذخیره شو",
+      "removed": "د {name} OAuth ایپ لرې شو",
+      "saveError": "د OAuth ایپ ذخیره کول ناکام شول. بیا هڅه وکړئ.",
+      "conflict": "دا ریکارډ بل ځای کې بدل شوی — بیا تازه شو، مهرباني وکړئ بیا هڅه وکړئ.",
+      "storageUnavailable": "اداري ذخیره ته لاسرسی نشته؛ شته ریکارډونه نشو لیست کولی. تر رغېدو پورې ذخیره کول غیرفعاله دي.",
+      "sealingUnavailable": "په دې تطبیق کې د پټنوم رمز بندي نه ده تنظیم شوې (AUTH_SECRET شتون نه لري) — د مراجع پټنومونه نشي ذخیره کېدای.",
+      "updatedBy": "د {by} لخوا په {at} تازه شوی"
+    },
+    "orgAgentOverrideTitle": "جوړه شوې استازی اړول",
+    "orgAgentOverrideAction": "اړول",
+    "orgAgentBuiltinBadge": "جوړه شوې",
+    "orgAgentBuiltinHint": "په ډیپلویمنټ تنظیم کې تعریف شوی. د دې لاسرسی قانون دلته سمونیدلی شي؛ د بدلون لپاره یې بدل کړئ څو بغیر له ډیپلوی څخه ترتیبونه بدل کړئ.",
+    "m365AgentIndexProgress": "د {total} څخه {done} {total, plural, one {سند} other {سندونه}} اندېکس کېږي…",
+    "m365AgentIndexInterrupted": "اندېکس کول د {total} څخه په {done} کې بند شوي — د دوام ورکولو لپاره بیا پيل کړئ.",
+    "m365AgentIndexStartedBy": "پیل شوی د {name} لخوا",
+    "m365AgentIndexResume": "بیا پیل کړئ",
+    "m365AgentIndexResumeHint": "اندېکس کول د هغه ځای څخه دوام ورکړئ چې بند شوي و، د خپل Microsoft 365 لاسرسي سره. دا ټب خلاص پریږدئ.",
+    "m365AgentIndexCancel": "غوڅ کړئ",
+    "m365AgentIndexCancelled": "اندېکس کول لغوه شول — کوم سندونه چې پروسس شوي، لا هم لټون کېدلی شي.",
+    "m365AgentIndexJobFailed": "اندېکس کول ودرېد: {error}",
+    "m365AgentIndexDone": "اندېکس کول پای ته ورسېدل: {indexed} اندېکس شول، {failed} ناکامه، {noText} بې متنه.",
+    "m365AgentDocCounts": "{indexed, plural, one {# سند} other {# سندونه}} اندېکس شول · {failed} ناکامه شول · {noText} بې متنه · {needsPreparation} چمتووالي ته اړتیا لري · {skipped} پریښودل شوي",
+    "m365CapDocuments": "سندونه: {count} / {max}",
+    "m365CapBytes": "{bytes} د {max} څخه",
+    "m365CapOverDocuments": "د {max} سندونو له حد څخه زیات شوي. فرعي فولډرونه غیرعلامه کړئ، د فایل ډول له مخې فلټر کړئ، یا سرچینې وټولئ — یوازې هغه فایلونه چې اندېکس کېږي، حسابېږي.",
+    "m365CapOverBytes": "د {max} اندازې له اندازې حده ډېر شوی. فرعي فولډرونه یا لوی فایلونه وباسئ.",
+    "m365PlanScanning": "سکین کېږي…",
+    "m365PlanRefreshing": "تازه کېږي…",
+    "m365PlanFailed": "نشو کولای سرچینې د خپل Microsoft 365 حساب سره سکین کړو.",
+    "m365PlanMissing": "نه موندل کېږي یا لاسرسی نشته",
+    "m365PlanIndexable": "{count, plural, one {# فایل به اندېکس شي} other {# فایلونه به اندېکس شي}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# ته چمتووالي اړتیا ده} other {# ته چمتووالي اړتیا ده}}",
+    "m365PlanSkipped": "{count} پریښودل شوي",
+    "m365PlanShowDetails": "جزییات",
+    "m365PlanHideDetails": "جزییات پټ کړئ",
+    "m365PlanTruncated": "دا فولډر د بشپړ سکین کولو لپاره ډېر لوی دی — یوازې لومړي ۱,۰۰۰ توکي لست شوي. پر ځای یې فرعي فولډر وټاکئ.",
+    "m365PlanRecursive": "فرعي فولډرونه شامل کړئ",
+    "m365PlanExtensionsLabel": "یوازې د فایل ډولونه:",
+    "m365PlanExtensionsPlaceholder": "لکه pdf، docx",
+    "m365PlanSubfolders": "فرعي فولډرونه",
+    "m365PlanFolderCount": "{count, plural, one {# فایل} other {# فایلونه}}",
+    "m365PlanGroupIndexable": "اندېکس کېږي",
+    "m365PlanGroupNeedsPreparation": "چمتووالي ته اړتیا لري",
+    "m365PlanGroupSkipped": "پریښودل شوي",
+    "m365PlanPreparationHint": "انځور/غږ/ویډیو — لا نه دي اندېکس شوي",
+    "m365PlanMoreRows": "…او نور {count}",
+    "m365ItemStatus": {
+      "pending": "په تمه",
+      "indexed": "اندېکس شول",
+      "failed": "ناکامه شول",
+      "noText": "متن نه دی ترلاسه شوی",
+      "missing": "له منځه تللی"
+    },
+    "m365SkipReason": {
+      "unsupported": "ناسم ډول",
+      "tooLarge": "له ۲۵ MB څخه زیات",
+      "disallowedType": "بند ډول (اجرا کېدونکی/آرشیف)",
+      "malware": "د Microsoft لخوا د زیان وړ برنامې په توګه نښه شوی",
+      "zeroBytes": "خالي فایل",
+      "excluded": "ایستل شوی",
+      "typeFilter": "په ډول فلټر کې نشته"
+    },
+    "localAdminGroup": {
+      "agents": "استازي",
+      "promptAgents": "پرومپټ استازي",
+      "m365Agents": "Microsoft 365 استازي",
+      "orgAgents": "د پوهې استازي",
+      "guides": "لارښودونه",
+      "connectors": "نښلونکی",
+      "datasets": "د نقشې معلوماتي ټولګې",
+      "unknown": "سپارل شوي، خو ونه موندل شول"
+    },
+    "localAdminGroupUnavailable": "دا لړ لنډمهاله نه‌شته ده — شته سپارښتنې به پاتې شي.",
+    "localAdminBuiltIn": "د سیستم برخه",
+    "localAdminSummary": "{count, plural, one {# سپارښتنه} other {# سپارښتنې}}: {names}",
+    "localAdminSummaryMore": "{names} او {more} نور",
+    "localAdminNoDelegations": "تر اوسه هیڅ سپارښتنه نشته — یوې سیمه‌ییزې ادارې ته پرته له استازو یوازې د ادارې برخه ښکاري.",
+    "localAdminSelectedCount": "{selected} له {total} څخه ټاکل شوي",
+    "localAdminCopyFrom": "کاپي له",
+    "localAdminClearAll": "ټول پاک کړئ",
+    "localAdminSelectGroup": "ټول وټاکئ",
+    "localAdminClearGroup": "پاکول",
+    "localAdminSearchPlaceholder": "استازي، لارښودونه، نښلونکی وپلټئ…",
+    "localAdminDuplicateEmail": "دا ایمیل لا دمخه لیست شوی — دواړه ننوتنې سره وصل کړئ.",
+    "localAdminExpand": "سپارښتنې وښایاست",
+    "localAdminCollapse": "سپارښتنې پټ کړئ",
+    "localAdminDiscard": "بدلونونه رد کړئ",
+    "m365AgentRefresh": "تازه‌کړه",
+    "m365AgentRefreshHint": "هغه فایلونه ترلاسه کړئ چې وروستي ځل راهیسې زیات شوي، بدل شوي یا لېرې شوي — چې نه دي بدل شوي، بیا نه ښکته کېږي. دا ټب پرانستی وساتئ.",
+    "m365AgentReindexAll": "ټول بیا اندېکس کړئ",
+    "m365AgentRefreshProgress": "تازه‌کول — {done} له {total} بدل {total, plural, one {سند} other {سندونه}}…",
+    "m365AgentRefreshDone": "تازه‌کول بشپړ شول: {added} زیات شول، {modified} اوسمهال شول، {removed} لېرې شول، {failed} ناکامه شول.",
+    "m365ChangesChecking": "Microsoft 365 کې د وروستي اندېکس راهیسې د بدلونونو پلټنه…",
+    "m365ChangesFailed": "ستاسو په Microsoft 365 حساب کې د بدلونونو پلټنه ونه شوه.",
+    "m365ChangesNeverIndexed": "لا اندېکس نه‌دی شوی — ثبتولو وروسته اندېکس پرمخ بوځئ.",
+    "m365ChangesFound": "{count, plural, one {# بدلون} other {# بدلونونه}} د وروستي اندېکس راهیسې: {added} زیات شول، {modified} اوسمهال شول، {removed} لېرې شول.",
+    "m365ChangesNone": "له وروستي اندېکس راهیسې هېڅ بدلون نشته ({date}).",
+    "m365PrepareButton": "چمتو کړئ",
+    "m365PrepareOcrButton": "چمتو کړئ (OCR)",
+    "m365PrepareSaveFirst": "د چمتو کولو لپاره استازی ثبت کړئ",
+    "m365PrepareHintImage": "انځور — ۱ vision غږ",
+    "m365PrepareHintMedia": "شاوخوا {minutes} دقیقې غږ د لیک لپاره",
+    "m365PrepareHintOcr": "د لیک لایه نشته — OCR له vision، تر ۳۰ مخونو پورې",
+    "m365PreparePreparing": "چمتو کېږي…",
+    "m365PreparePending": "لیک کېږي…",
+    "m365PreparedNote": "چمتو شو · {kind}",
+    "m365PreparedKind": {
+      "image": "د انځور تشریحات",
+      "audio": "تراجم",
+      "video": "تراجم",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "{name} چمتو شو ({chars} توري). د اندېکس لپاره تازه‌کول ترسره کړئ.",
+    "m365PrepareStarted": "د {name} لیکل په بغل کې پیل شول — دا ټب پرانستی وساتئ.",
+    "m365PrepareFailed": "{name} چمتو نه‌شو: {error}",
+    "m365PrepareFailedGeneric": "چمتو کول ناکام شول.",
+    "canonicalKeyLabel": "کلید",
+    "copyKey": "کلید نقل کړئ",
+    "agentKeySearchPlaceholder": "ایجنټان، لارښودونه، نښلوونکي ولټوئ… یا کلید پیسټ کړئ",
+    "agentKeyAddCustom": "\"{key}\" همداسې اضافه کړئ",
+    "agentKeyRemove": "{name} لرې کړئ",
+    "hideAgent": "پټ کړئ",
+    "unhideAgent": "بیا ښکاره کړئ",
+    "hideAgentHint": "دا ایجنټ له خپل اډمین لیست څخه پټ کړئ. دا یوازې ستاسو لید اغېزمنوي — نور کارنان او اډمینان اغېزمنېږي نه.",
+    "unhideAgentHint": "دا ایجنټ بیرته په خپل اډمین لیست کې ښکاره کړئ.",
+    "hiddenBadge": "پټ شوی",
+    "hiddenAgentsCount": "{count, plural, one {# پټ ایجنټ} other {# پټ ایجنټان}}",
+    "hiddenAgentsShowing": "{count, plural, one {# پټ ایجنټ ښکاره شوی} other {# پټ ایجنټان ښکاره شوي}}",
+    "hiddenAgentsShow": "ښکاره کړئ",
+    "hiddenAgentsHide": "بیا پټ کړئ",
+    "allAgentsHidden": "دلته ټول ایجنټان ستاسو له نظره پټ دي — له ښکاره کولو څخه د هغوی د ښکاره کېدو لپاره استفاده وکړئ."
   },
   "localModels": {
     "title": "محلي ماډلونه",
@@ -4232,9 +4391,15 @@
       "connectors": "د سازمان کنیکټرونه او چا ته اجازه لري چې وکاروي.",
       "guides": "د سبک، اصطلاحاتو او اطاعت لارښودونه.",
       "mapDatasets": "د نقشه چارو لپاره آماده ډیټاسټونه.",
-      "localAdmins": "د لاس‌رسي قوانین نورو کسانو ته وسپارئ."
+      "localAdmins": "د لاس‌رسي قوانین نورو کسانو ته وسپارئ.",
+      "workflows": "د ټولو لپاره د خبرو اترو کاري جریانونه فعال یا غیر فعال کړئ.",
+      "viewAs": "اپلیکیشن د داسې چا په حیث ازموینه وکړئ چې یوه شرط پوره کوي یا یې نه کوي."
     },
-    "openSettings": "تنظیمات پرانېستل"
+    "openSettings": "تنظیمات پرانېستل",
+    "area": {
+      "workflows": "کاري جریانونه",
+      "viewAs": "کتنه د ... په توګه"
+    }
   },
   "limits": {
     "title": "د کارونې محدودیتونه",
@@ -4436,7 +4601,8 @@
     "groupSearchNoResults": "دې نوم سره هېڅ ډله نشته.",
     "groupSearchError": "د ډلې لټون ناکام شو. تاسو لا هم کولای شئ لاندې د ډلې د Object ID پیس کړئ.",
     "groupSearchHint": "د خپلې ادارې د ډلو لټون لپاره لږ تر لږه ۲ توري ټايپ کړئ، یا مستقیماً د ډلې Object ID پیس کړئ. دا override به د ډلې غړو ته په Microsoft Entra کې تطبيق شي.",
-    "groupsFlagOff": "د دې چاپېریال لپاره د ډلو ټاکنه لا فعاله شوې نه ده. اوسني ډليز هدفونه به کار ته دوام ورکړي."
+    "groupsFlagOff": "د دې چاپېریال لپاره د ډلو ټاکنه لا فعاله شوې نه ده. اوسني ډليز هدفونه به کار ته دوام ورکړي.",
+    "featureDisabled": "د کارونې محدودیتونه د دې ځای پر مخ نه دي فعال شوي."
   },
   "m365": {
     "connections": {
@@ -4797,5 +4963,149 @@
     "failed": "شریکولی نشو — هیڅ نه دي جوړ شوي.",
     "copyFailed": "لینک نشو نقلولی — پورته یې انتخاب کړئ او لاسوند نقل کړئ.",
     "lastMessagesCountLabel": "د ګډولو وروستیو پيغامونو شمېر"
+  },
+  "toolModes": {
+    "webSearch": "وېب لټون",
+    "codeInterpreter": "کوډ تحلیلونکی",
+    "off": "بند",
+    "auto": "اتومات",
+    "always": "تل",
+    "routingPrivacy": "محرمیت",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "د Azure AI لټون د Azure AI Foundry له لارې پوښتنې لېږي، چې ښايي دا وساتي.",
+    "learnMore": "نور معلومات واخلئ"
+  },
+  "agentAttach": {
+    "browserTitle": "استازي",
+    "browserSubtitle": "استازي او وصلوونکي دې چټ ته اضافه کړئ، یا له یوه استازي سره نوی چټ پیل کړئ. اکثره یې له هر هغه ماډل سره کار کوي چې تاسې یې غوره کړی.",
+    "searchPlaceholder": "استازي او وصلوونکي ولټوئ...",
+    "loading": "استازي بار کېږي...",
+    "noMatches": "ستاسې لټون سره هېڅ نه دي سمون خوړلی.",
+    "noAgents": "هیڅ استازی موجود نه دی.",
+    "addToChat": "دې چټ ته اضافه کړئ",
+    "removeFromChat": "له دې چټ څخه لرې کړئ",
+    "newChat": "نوی چټ",
+    "attached": "وصل شوی",
+    "detach": "جلا کړئ",
+    "change": "بدلون",
+    "browse": "استازي وګورئ...",
+    "noAgent": "هیڅ استازی نه دی وصل",
+    "close": "بند کړئ",
+    "kind": {
+      "rag": "ځانګړي معلومات",
+      "prompt": "شخصیت",
+      "m365": "ځانګړي معلومات (Microsoft 365)",
+      "org": "ځانګړي معلومات",
+      "foundry": "Foundry استازی",
+      "connector": "وصلوونکی"
+    },
+    "semantics": {
+      "your-model": "ستاسې ماډل کاروي",
+      "pinned-model": "ادارې لخوا ټاکل شوی ماډل",
+      "own-model": "خپل ځانګړی ماډل کاروي"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "ستاسې له ادارې څخه وړاندیزونه",
+    "searching": "ستاسو د سازمان لټون روان دی...",
+    "noMatches": "هیڅ تطابق ونه موندل شو — تاسو کولای شئ پته په لاسې ډول کړئ"
+  },
+  "workflowsAdmin": {
+    "title": "کاري جریانونه",
+    "description": "هر کاري جریان د ټولې ادارې لپاره فعال یا غیر فعال کړئ. غیر فعال کاري جریانونه د مینو له لورې پټیږي او سرور پرې هم نه عمل کوي، حتی د هغو کسانو لپاره چې بل ډول مستحق وي.",
+    "layeredNote": "د LaunchDarkly conversationWorkflows بیرغ لا هم د خپراوي واک لري: دلته فعال شوی کاري جریان یوازې هلته د لاسرسي وړ دی چې دغه بیرغ فعال وي. دا پاڼه نشي کولی هغه څه ښکاره کړي چې بیرغ یې پټ کړي.",
+    "loading": "د کاري جریان پالیسۍ لوستل کیږي…",
+    "loadError": "د کاري جریان پالیسۍ ونه لوستل شوه.",
+    "policyUnavailable": "د کاري جریان پالیسۍ له زېرمه نه شي لوستل کېدای. ټوګلونه پټ دي، نه دا چې له مخکنۍ ارزښتونو سره (چې ښايي پلي شوي نه وي) ښکاره شي.",
+    "retry": "بیا هڅه وکړئ",
+    "enableAll": "ټول فعال کړئ",
+    "disableAll": "ټول غیر فعال کړئ",
+    "enabledLabel": "فعال",
+    "disabledLabel": "غیر فعال",
+    "defaultOnHint": "کله چې پالیسي خوندي نه وي: فعال.",
+    "defaultOffHint": "کله چې پالیسي خوندي نه وي: غیر فعال — مدیر باید دا ښکاره فعال کړي.",
+    "grantsNote": "د مرستو پروسس یوازې د MSF-USA د پروګرام څانګې کاروونکو ته محدود دی چې په دنده کې «grants» لري، یا د سیستمونو څانګې هغو ته چې په عنوان کې «innovation» لري. دلته فعالول یې دا قاعده نه پراخوي.",
+    "unsaved": "تاسو نه خوندي شوې بدلونونه لرئ.",
+    "save": "خوندي کړئ",
+    "saving": "خوندي کېږي…",
+    "saveSuccess": "د کاري جریان پالیسي خوندي شوه.",
+    "saveError": "د کاري جریان پالیسي ونه خوندي شوه.",
+    "conflictError": "بل مدیر مخکې پالیسۍ ته بدلون ورکړی دی. پاليسي بیا ولولئ — مهرباني وکړئ بیا مو معاینه او خوندي یې کړئ.",
+    "updatedByLine": "وروستي ځل {by} لخوا پر {at} خوندي شوی.",
+    "neverSaved": "تر اوسه پالیسي نه ده خوندي شوې؛ پورته شته اصلي ارزښتونه به پلي وي."
+  },
+  "viewAs": {
+    "title": "کتنه د ... په توګه",
+    "description": "اپلیکیشن یوازې ستاسې د ناستې لپاره، د داسې چا په حیث وازمويه چې عموماً د لارښود یا مدیرانو له لورې تصمیم کیږي. ستاسې هویت نه بدلیږي: هر څه چې جوړوئ ستاسې په نوم پاتې کیږي او د تفتیش کرښې به هم ستاسې نوم ښيي.",
+    "activeTitle": "د \"د ... په توګه\" کتل فعال دي",
+    "inactiveTitle": "د \"د ... په توګه\" کتل فعال نه دي",
+    "sections": {
+      "role": "د مدیر رول",
+      "region": "د معلوماتو سیمه",
+      "attributes": "د لارښود ځانګړتیاوې",
+      "groups": "د ډلې غړیتوب",
+      "presets": "مخکنۍ ترتیبونه"
+    },
+    "role": {
+      "global": "نړېوال مدیر (ستاسې اصلي رول)",
+      "local": "سیمه ییز مدیر",
+      "none": "عادي کاروونکی",
+      "localKeysLabel": "وکالت ورکړل شوي د استازي کیلي",
+      "localKeysHint": "د استازي معیاري کیلي، پر کامه سره جلا، چې دا سیمه ییز مدیر یې سمولی شي. که تش پرېږدي، دا مدیر وکالت نه لري.",
+      "noneWarning": "د عادي کارونکي په توګه، نورې ادارې برخې له منځه ځي. دا پاڼه لا هم لاسرسي لري، او د اپلیکیشن په سر کې بیرغ تل د وتلو لاره وړاندې کوي."
+    },
+    "region": {
+      "actual": "اصلي ({region})",
+      "hint": "ستا غوښتنې او هر څه چې د فعال حالت پر مهال اپلوډ شي، د بل سیمې ذخیره ته لېږي. دا د ?regionOverride= کوکي پر ټولو ارجح والی لري."
+    },
+    "attributes": {
+      "department": "څانګه",
+      "companyName": "شرکت",
+      "jobTitle": "دنده",
+      "officeId": "دفتر",
+      "officeActual": "اصلي دفتر",
+      "officeNone": "دفتر نشته",
+      "actualValue": "اصلي: {value}",
+      "actualEmpty": "اصلي: (تش)",
+      "hint": "که غواړئ خپل اصلي ارزښت وي، ساحه تش پرېږدئ. دا به د امتیازاتو مقرراتو، د ویژگیو کارونې محدودیتونو او لاسرسي مقرراتو ته داخلېږي."
+    },
+    "groups": {
+      "label": "د ډلې پېژندنې",
+      "placeholder": "هر کرښه کې یو Entra ډلې object id ولیکئ",
+      "hint": "اصلي عضویت بدلوي — نه زیاتوي — یوازې د دې غونډې لپاره، نو دواړه حالتونه ازمایلای شئ."
+    },
+    "presets": {
+      "grantsMember": "د امتیازاتو ټیم غړی",
+      "regularUser": "عادي کاروونکی",
+      "localAdmin": "محلي اډمین، اجنټان نشته",
+      "otherRegion": "بله سیمه",
+      "hint": "امادې ارزښتونه فورمه ډکوي؛ تر هغې پورې هېڅ نشي تطبیق کېدای چې Apply کلک نه کړئ."
+    },
+    "apply": "تطبیق کړه او بیاچالان کړه",
+    "applying": "تطبیقېږي…",
+    "clear": "د view-as حالت وتړئ",
+    "clearing": "وتل…",
+    "reset": "فورمه بیا تنظیم کړه",
+    "nothingToApply": "د تطبیق لپاره لږ تر لږه یوه بدله ټاکنه وکړئ.",
+    "applyError": "View-as تطبیق نشو: {error}",
+    "clearError": "View-as پاک/تړل نشو: {error}",
+    "loadError": "د view-as حالت نشو بارېدلی.",
+    "retry": "بیا هڅه وکړه",
+    "expiresNote": "View-as تر ۸ ساعتونو یا تر وتلو پورې فعال دی.",
+    "banner": {
+      "label": "داسې کتل چې",
+      "adjust": "تنظیم کړه",
+      "exit": "وتل",
+      "role": {
+        "local": "محلي اډمین",
+        "none": "عادي کاروونکی"
+      },
+      "region": "سیمه {region}",
+      "department": "څانګه \"{value}\"",
+      "companyName": "شرکت \"{value}\"",
+      "jobTitle": "عنوان \"{value}\"",
+      "officeId": "دفتر {value}",
+      "groups": "{count, plural, one {# ډله} other {# ډلې}}"
+    }
   }
 }

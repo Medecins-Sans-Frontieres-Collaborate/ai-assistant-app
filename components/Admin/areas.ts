@@ -2,8 +2,10 @@ import {
   IconBook,
   IconGauge,
   IconMap2,
+  IconMasksTheater,
   IconPlugConnected,
   IconRobot,
+  IconRoute,
   IconUsersGroup,
 } from '@tabler/icons-react';
 import { ComponentType } from 'react';
@@ -83,6 +85,14 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     labelKey: 'limits.title',
     descriptionKey: 'limits.description',
   },
+  workflows: {
+    id: 'workflows',
+    href: '/admin/workflows',
+    icon: IconRoute,
+    group: 'access',
+    labelKey: 'admin.area.workflows',
+    descriptionKey: 'admin.areaDescription.workflows',
+  },
   'local-admins': {
     id: 'local-admins',
     href: '/admin/local-admins',
@@ -90,6 +100,14 @@ export const ADMIN_AREAS: Record<AdminAreaId, AdminAreaDescriptor> = {
     group: 'administration',
     labelKey: 'agentAccess.localAdminsTab',
     descriptionKey: 'admin.areaDescription.localAdmins',
+  },
+  'view-as': {
+    id: 'view-as',
+    href: '/admin/view-as',
+    icon: IconMasksTheater,
+    group: 'administration',
+    labelKey: 'admin.area.viewAs',
+    descriptionKey: 'admin.areaDescription.viewAs',
   },
 };
 

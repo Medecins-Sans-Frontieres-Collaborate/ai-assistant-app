@@ -147,7 +147,7 @@ export async function GET() {
       rulesUnavailable = true;
     }
 
-    const status = resolveAdminStatus(session.user.mail, config);
+    const status = resolveAdminStatus(session.user, config);
     if (!status.isGlobalAdmin && !status.isLocalAdmin) {
       return forbiddenResponse();
     }
@@ -209,7 +209,10 @@ export async function PUT(request: NextRequest) {
 
   try {
     await service.ensureFresh();
-    const status = resolveAdminStatus(userMail, service.getSnapshot().config);
+    const status = resolveAdminStatus(
+      session.user,
+      service.getSnapshot().config,
+    );
     if (!status.isGlobalAdmin && !status.isLocalAdmin) {
       return forbiddenResponse();
     }
@@ -286,7 +289,10 @@ export async function DELETE(request: NextRequest) {
 
   try {
     await service.ensureFresh();
-    const status = resolveAdminStatus(userMail, service.getSnapshot().config);
+    const status = resolveAdminStatus(
+      session.user,
+      service.getSnapshot().config,
+    );
     if (!status.isGlobalAdmin && !status.isLocalAdmin) {
       return forbiddenResponse();
     }

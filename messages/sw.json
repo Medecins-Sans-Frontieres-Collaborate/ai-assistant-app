@@ -892,7 +892,12 @@
       "showFewer": "Onyesha vichache"
     },
     "retryWithModel": "Jaribu na {model}",
-    "createTodoTasks": "Unda kazi za 'To Do' kutoka kwa jibu hili"
+    "createTodoTasks": "Unda kazi za 'To Do' kutoka kwa jibu hili",
+    "attachedFileExpired": "Faili iliyounganishwa haipatikani tena — faili zilizopakiwa huhifadhiwa kwa muda mfupi. Imeondolewa kwenye mazungumzo haya. Tafadhali jaribu tena bila faili hiyo, au pakia faili upya.",
+    "repeatedFailureNotice": "Hii inaendelea kushindwa — mazungumzo huenda yameharibika. Kuanza mazungumzo mapya kawaida hutatua tatizo hili.",
+    "startNewConversation": "Anza mazungumzo mapya",
+    "downloadDebugInfo": "Pakua taarifa za utatuzi wa hitilafu",
+    "includeMessageText": "Jumlisha maandishi ya ujumbe"
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",
@@ -901,7 +906,9 @@
     "quickActions": "Vitendo vya Haraka",
     "expandFolder": "Panua folda {name}",
     "collapseFolder": "Fupisha folda {name}",
-    "folderOptions": "Chaguzi za {name}"
+    "folderOptions": "Chaguzi za {name}",
+    "agentsEntry": "Wakala",
+    "agentsTitle": "Vinjari wakala na anza mazungumzo na mmoja"
   },
   "prompts": {
     "buildReusablePrompts": "Jenga vidokezi vinavyoweza kutumika tena kwa msaada wa AI",
@@ -2667,6 +2674,10 @@
       "map": {
         "label": "Ramani",
         "description": "Geuza data yoyote kuwa maeneo kwenye ramani"
+      },
+      "grants": {
+        "label": "Uchakataji wa Ruzuku",
+        "description": "Linganishi na toa data iliyopangwa kutoka kwenye maelezo ya ruzuku"
       }
     },
     "chooser": {
@@ -2676,7 +2687,8 @@
       "newTranslation": "Tafsiri mpya",
       "newDocument": "Hati mpya",
       "newDataAnalysis": "Uchambuzi wa data mpya",
-      "newMap": "Ramani mpya"
+      "newMap": "Ramani mpya",
+      "newGrants": "Uchakatiji mpya wa ruzuku"
     },
     "translation": {
       "chooseLanguage": "Lugha lengwa",
@@ -3293,7 +3305,8 @@
       "unknownType": "Mazungumzo haya yanatumia utiririshaji kazi ambao toleo hili halitambui. Historia ya mazungumzo imeonyeshwa hapa chini.",
       "untitled": "Mazungumzo Mapya",
       "toggleMenu": "Fungua/funga menyu",
-      "model": "Mfano wa utiririshaji kazi huu"
+      "model": "Mfano wa utiririshaji kazi huu",
+      "disabledByAdmin": "Utaratibu huu umezimwa na msimamizi. Historia ya mazungumzo inaonekana hapa chini."
     },
     "tabs": {
       "label": "Hali ya mazungumzo",
@@ -4047,7 +4060,153 @@
     "conflictTakeTheirs": "Chukua lao",
     "conflictNoFieldDiff": "Thamani zinafanana — toleo la rekodi pekee ndilo limebadilika.",
     "conflictRecordGone": "Rekodi hii imefutwa (au haikuweza kupakiwa upya). Nakili chochote unachohitaji kutoka fomu, kisha upakie upya.",
-    "groupsFlagOff": "Ulengaji wa vikundi bado haujawezeshwa kwa mazingira haya. Malengo ya vikundi vilivyopo bado yanafanya kazi."
+    "groupsFlagOff": "Ulengaji wa vikundi bado haujawezeshwa kwa mazingira haya. Malengo ya vikundi vilivyopo bado yanafanya kazi.",
+    "catalogOauth": {
+      "title": "Programu za OAuth zilizojengwa ndani",
+      "description": "Programu za OAuth kwa ajili ya vimbo vinavyopatikana ndani ya mfumo (GitHub, Asana, …) katika usanidi wa usambazaji wote. Rekodi iliyohifadhiwa hapa itazidisha vigezo vya mazingira vya MCP_OAUTH_*; kuiondoa kunarejesha matumizi ya vigezo hivyo. Siri za wateja zimefichwa salama na hazitaonyeshwa tena.",
+      "badgeAdmin": "Imesanidiwa hapa",
+      "badgeEnv": "Kutoka mazingira",
+      "badgeNone": "Haijasanidiwa",
+      "badgeDcr": "Inajiandikisha yenyewe",
+      "badgeDcrHint": "Mtoaji huyu anaweza kujiandikisha mteja wa OAuth kiotomati, hivyo itaendelea kufanya kazi hata bila programu kusanidiwa hapa.",
+      "clientIdLabel": "ID ya mteja wa OAuth",
+      "clientSecretLabel": "Siri ya mteja wa OAuth",
+      "secretStoredPlaceholder": "Imehifadhiwa — andika kubadilisha, acha wazi kubakiza",
+      "secretNewPlaceholder": "Bandika siri ya mteja",
+      "save": "Hifadhi",
+      "remove": "Ondoa",
+      "removeToEnv": "Ondoa (rejea kwenye mazingira)",
+      "saved": "Programu ya {name} OAuth imehifadhiwa",
+      "removed": "Programu ya {name} OAuth imeondolewa",
+      "saveError": "Imeshindikana kuhifadhi programu ya OAuth. Jaribu tena.",
+      "conflict": "Rekodi hii imebadilishwa kwingineko — imesasaishwa upya, tafadhali jaribu tena.",
+      "storageUnavailable": "Hifadhi ya msimamizi haipatikani; rekodi zilizopo haziwezi kuorodheshwa. Kuhifadhi kumezimwa hadi itakaporejea.",
+      "sealingUnavailable": "Ulembavu wa siri haujasanidiwa kwenye usambazaji huu (AUTH_SECRET haipo) — siri za wateja haziwezi kuhifadhiwa.",
+      "updatedBy": "Imesasishwa na {by} tarehe {at}"
+    },
+    "orgAgentOverrideTitle": "Badilisha wakala aliyejengwa",
+    "orgAgentOverrideAction": "Badilisha",
+    "orgAgentBuiltinBadge": "Iliyojengwa",
+    "orgAgentBuiltinHint": "Imetengwa kwenye usanidi wa usambazaji. Sheria yake ya ufikiaji inaweza kuhaririwa hapa; ibadilishe ili kubadilisha mipangilio yake bila kutekeleza upya.",
+    "m365AgentIndexProgress": "Inaorodhesha {done} kati ya {total} {total, plural, one {nyaraka} other {nyaraka}}…",
+    "m365AgentIndexInterrupted": "Uorodheshaji umekatizwa katika {done} kati ya {total} — endelea ili kuendelea.",
+    "m365AgentIndexStartedBy": "imeanzishwa na {name}",
+    "m365AgentIndexResume": "Endeleza",
+    "m365AgentIndexResumeHint": "Endelea kuorodhesha kutoka palipoishia, ukitumia ufikiaji wako wa Microsoft 365. Weka kichupo hiki wazi.",
+    "m365AgentIndexCancel": "Ghairi",
+    "m365AgentIndexCancelled": "Uorodheshaji umegairiwa — nyaraka zilizokwishashughulikiwa zinaweza kutafutwa.",
+    "m365AgentIndexJobFailed": "Uorodheshaji umesimama: {error}",
+    "m365AgentIndexDone": "Uorodheshaji umekamilika: {indexed} zimeorodheshwa, {failed} zimefeli, {noText} bila maandishi.",
+    "m365AgentDocCounts": "{indexed, plural, one {# nyaraka imeorodheshwa} other {# nyaraka zimeorodheshwa}} · {failed} zimefeli · {noText} bila maandishi · {needsPreparation} zinahitaji maandalizi · {skipped} zimeachwa",
+    "m365CapDocuments": "Nyaraka: {count} / {max}",
+    "m365CapBytes": "{bytes} kati ya {max}",
+    "m365CapOverDocuments": "Umezidi kikomo cha nyaraka {max}. Ondoa tiki kwenye folda ndogo, chagua aina ya faili, au ondoa vyanzo — ni faili zitakazo orodheshwa pekee ndizo zinazohesabiwa.",
+    "m365CapOverBytes": "Imevuka bajeti ya ukubwa wa {max}. Ondoa folda ndogo au faili kubwa.",
+    "m365PlanScanning": "Inachanganua…",
+    "m365PlanRefreshing": "inasasisha…",
+    "m365PlanFailed": "Haikuweza kuchanganua vyanzo kwa akaunti yako ya Microsoft 365.",
+    "m365PlanMissing": "Haijapatikana au hakuna ufikiaji",
+    "m365PlanIndexable": "{count, plural, one {# faili itachanganuliwa} other {# faili zitachanganuliwa}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# inahitaji maandalizi} other {# zinahitaji maandalizi}}",
+    "m365PlanSkipped": "{count} zimeachwa",
+    "m365PlanShowDetails": "Maelezo",
+    "m365PlanHideDetails": "Ficha maelezo",
+    "m365PlanTruncated": "Folda hii ni kubwa mno kuchanganuliwa yote — vipengele 1,000 vya kwanza pekee vimeorodheshwa. Chagua folda ndogo badala yake.",
+    "m365PlanRecursive": "Jumlisha folda ndogo",
+    "m365PlanExtensionsLabel": "Aina za faili pekee:",
+    "m365PlanExtensionsPlaceholder": "mf. pdf, docx",
+    "m365PlanSubfolders": "Folda ndogo",
+    "m365PlanFolderCount": "{count, plural, one {# faili} other {# faili}}",
+    "m365PlanGroupIndexable": "Zitaorodheshwa",
+    "m365PlanGroupNeedsPreparation": "Zinahitaji maandalizi",
+    "m365PlanGroupSkipped": "Zimeachwa",
+    "m365PlanPreparationHint": "picha/sauti/video — bado hazijaorodheshwa",
+    "m365PlanMoreRows": "…na {count} zaidi",
+    "m365ItemStatus": {
+      "pending": "inasubiri",
+      "indexed": "imeorodheshwa",
+      "failed": "imefeli",
+      "noText": "hakuna maandishi yaliyotolewa",
+      "missing": "haipo"
+    },
+    "m365SkipReason": {
+      "unsupported": "aina isiyoungwa mkono",
+      "tooLarge": "imezidi 25 MB",
+      "disallowedType": "aina iliyozuiwa (endeshaji/archive)",
+      "malware": "imebainishwa na Microsoft kuwa programu hasidi",
+      "zeroBytes": "faili tupu",
+      "excluded": "imetengwa",
+      "typeFilter": "si kwenye kichujio cha aina"
+    },
+    "localAdminGroup": {
+      "agents": "Wakala",
+      "promptAgents": "Wakala wa maelekezo",
+      "m365Agents": "Wakala wa Microsoft 365",
+      "orgAgents": "Wakala wa maarifa",
+      "guides": "Mwongozo",
+      "connectors": "Viunganishi",
+      "datasets": "Seti za data za ramani",
+      "unknown": "Imepewa lakini haijapatikana"
+    },
+    "localAdminGroupUnavailable": "Orodha hii haipatikani kwa muda — mamlaka zilizopo zimetunzwa.",
+    "localAdminBuiltIn": "iliyojengwa ndani",
+    "localAdminSummary": "{count, plural, one {# mamlaka} other {# mamlaka}}: {names}",
+    "localAdminSummaryMore": "{names} na wengine {more}",
+    "localAdminNoDelegations": "Hakuna mamlaka bado — msimamizi wa eneo bila wakala ataweza kuona eneo la usimamizi pekee.",
+    "localAdminSelectedCount": "{selected} kati ya {total} imechaguliwa",
+    "localAdminCopyFrom": "Nakili kutoka",
+    "localAdminClearAll": "Futa zote",
+    "localAdminSelectGroup": "Chagua zote",
+    "localAdminClearGroup": "Futa",
+    "localAdminSearchPlaceholder": "Tafuta wakala, mwongozo, viunganishi…",
+    "localAdminDuplicateEmail": "Barua pepe hii tayari ipo — unganisha ingizo mbili.",
+    "localAdminExpand": "Onyesha mamlaka",
+    "localAdminCollapse": "Ficha mamlaka",
+    "localAdminDiscard": "Tupa mabadiliko",
+    "m365AgentRefresh": "Sasisha",
+    "m365AgentRefreshHint": "Chukua faili zilizoongezwa, kubadilishwa au kufutwa tangu kipindi kilichopita — faili ambazo hazijabadilishwa hazitapakuliwa tena. Weka tab hii wazi.",
+    "m365AgentReindexAll": "Weka faharasa upya zote",
+    "m365AgentRefreshProgress": "Inasasisha — {done} kati ya {total} {total, plural, one {hati} other {nyaraka}} zilizobadilishwa…",
+    "m365AgentRefreshDone": "Usasishaji umekamilika: {added} zimeongezwa, {modified} zimesasishwa, {removed} zimeondolewa, {failed} zimeteleza.",
+    "m365ChangesChecking": "Inaangalia Microsoft 365 kwa mabadiliko tangu faharasa ya mwisho…",
+    "m365ChangesFailed": "Imeshindikana kukagua mabadiliko kwenye akaunti yako ya Microsoft 365.",
+    "m365ChangesNeverIndexed": "Haijafaharisiwa bado — endesha Faharasa baada ya kuhifadhi.",
+    "m365ChangesFound": "{count, plural, one {# mabadiliko} other {# mabadiliko}} tangu faharasa ya mwisho: {added} zimeongezwa, {modified} zimesasishwa, {removed} zimeondolewa.",
+    "m365ChangesNone": "Hakuna mabadiliko tangu faharasa ya mwisho ({date}).",
+    "m365PrepareButton": "Andaa",
+    "m365PrepareOcrButton": "Andaa (OCR)",
+    "m365PrepareSaveFirst": "hifadhi wakala kisha uandae",
+    "m365PrepareHintImage": "picha — simu 1 ya vision",
+    "m365PrepareHintMedia": "~{minutes} dakika za sauti kutafsiri",
+    "m365PrepareHintOcr": "hakuna safu ya maandishi — OCR kupitia vision, hadi kurasa 30",
+    "m365PreparePreparing": "Inaandaa…",
+    "m365PreparePending": "Inatafsiri…",
+    "m365PreparedNote": "imeandaliwa · {kind}",
+    "m365PreparedKind": {
+      "image": "maelezo ya picha",
+      "audio": "nakala ya maandishi",
+      "video": "nakala ya maandishi",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "{name} imeandaliwa ({chars} herufi). Endesha Sasisha kufahamu.",
+    "m365PrepareStarted": "Ufasiri wa {name} umeanza kwa nyuma — weka tab hii wazi.",
+    "m365PrepareFailed": "Imeshindikana kuandaa {name}: {error}",
+    "m365PrepareFailedGeneric": "Uandaaji umeshindikana.",
+    "canonicalKeyLabel": "Funguo",
+    "copyKey": "Nakili funguo",
+    "agentKeySearchPlaceholder": "Tafuta mawakala, miongozo, viunganishi… au bandika funguo",
+    "agentKeyAddCustom": "Ongeza \"{key}\" kama ulivyoandika",
+    "agentKeyRemove": "Ondoa {name}",
+    "hideAgent": "Ficha",
+    "unhideAgent": "Onyesha tena",
+    "hideAgentHint": "Ficha wakala huyu kutoka kwenye orodha yako ya usimamizi. Inaathiri mtazamo wako pekee — watumiaji na wasimamizi wengine hawaathiriki.",
+    "unhideAgentHint": "Onyesha wakala huyu tena kwenye orodha yako ya usimamizi.",
+    "hiddenBadge": "Imefichwa",
+    "hiddenAgentsCount": "{count, plural, one {wakala 1 amefichwa} other {mawakala # wamefichwa}}",
+    "hiddenAgentsShowing": "Inaonyesha {count, plural, one {wakala 1 aliyefichwa} other {mawakala # waliofichwa}}",
+    "hiddenAgentsShow": "Onyesha",
+    "hiddenAgentsHide": "Ficha tena",
+    "allAgentsHidden": "Mawakala wote hapa wamefichwa kwenye mtazamo wako — tumia Onyesha ili kuwaonyesha."
   },
   "localModels": {
     "title": "Miundo ya ndani",
@@ -4248,9 +4407,15 @@
       "connectors": "Viunganishi vya shirika na nani anaweza kuvitumia.",
       "guides": "Mwongozo wa mtindo, istilahi na ufuatiliaji wa sheria.",
       "mapDatasets": "Seti za data zilizochaguliwa zinazopatikana kwa mtiririko wa ramani.",
-      "localAdmins": "Tawanya uhariri wa kanuni za upatikanaji kwa watu wengine."
+      "localAdmins": "Tawanya uhariri wa kanuni za upatikanaji kwa watu wengine.",
+      "workflows": "Washa au zima utaratibu wa mazungumzo kwa kila mtu.",
+      "viewAs": "Jaribu programu kama mtu anayekidhi — au asiyekidhi — sharti fulani."
     },
-    "openSettings": "Fungua mipangilio"
+    "openSettings": "Fungua mipangilio",
+    "area": {
+      "workflows": "Utaratibu",
+      "viewAs": "Tazama kama"
+    }
   },
   "limits": {
     "title": "Mipaka ya matumizi",
@@ -4452,7 +4617,8 @@
     "groupSearchNoResults": "Hakuna kundi linalolingana na jina hilo.",
     "groupSearchError": "Utafutaji wa kundi umeshindikana. Unaweza bado kubandika kitambulisho cha kundi hapa chini.",
     "groupSearchHint": "Andika angalau herufi 2 ili kutafuta makundi ya shirika lako, au bandika moja kwa moja kitambulisho cha kundi. Uwekaji wa override unahusu wanachama wa kundi kwenye Microsoft Entra.",
-    "groupsFlagOff": "Kuchagua makundi bado hakijawashwa kwenye mazingira haya. Malengo ya makundi yaliyopo yanaendelea kufanya kazi."
+    "groupsFlagOff": "Kuchagua makundi bado hakijawashwa kwenye mazingira haya. Malengo ya makundi yaliyopo yanaendelea kufanya kazi.",
+    "featureDisabled": "Mipaka ya matumizi haijawashwa kwa utekelezaji huu."
   },
   "m365": {
     "connections": {
@@ -4813,5 +4979,149 @@
     "failed": "Imeshindikana kushiriki — hakuna kilichoundwa.",
     "copyFailed": "Imeshindikana kunakili kiungo — chagua hapo juu na nakili kwa mkono.",
     "lastMessagesCountLabel": "Idadi ya ujumbe wa hivi karibuni wa kujumuisha"
+  },
+  "toolModes": {
+    "webSearch": "Utafutaji wa wavuti",
+    "codeInterpreter": "Mfasiri wa msimbo",
+    "off": "Zima",
+    "auto": "Otomatiki",
+    "always": "Daima",
+    "routingPrivacy": "Faragha",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Utafutaji wa Azure AI hutuma maswali kupitia Azure AI Foundry, ambapo yanaweza kuhifadhiwa.",
+    "learnMore": "Jifunze zaidi"
+  },
+  "agentAttach": {
+    "browserTitle": "Wakala",
+    "browserSubtitle": "Ongeza wakala na viunganishi kwenye mazungumzo haya, au anzisha mazungumzo mapya na wakala. Wengi hufanya kazi na mfano wowote uliouchagua.",
+    "searchPlaceholder": "Tafuta wakala na viunganishi…",
+    "loading": "Inapakia wakala…",
+    "noMatches": "Hakuna kinacholingana na utafutaji wako.",
+    "noAgents": "Hakuna wakala waliopo.",
+    "addToChat": "Ongeza kwenye mazungumzo haya",
+    "removeFromChat": "Ondoa kwenye mazungumzo haya",
+    "newChat": "Mazungumzo mapya",
+    "attached": "Imeunganishwa",
+    "detach": "Tenganisha",
+    "change": "Badilisha",
+    "browse": "Vinjari wakala…",
+    "noAgent": "Hakuna wakala aliyeunganishwa",
+    "close": "Funga",
+    "kind": {
+      "rag": "Maarifa",
+      "prompt": "Persona",
+      "m365": "Maarifa (Microsoft 365)",
+      "org": "Maarifa",
+      "foundry": "Wakala wa Foundry",
+      "connector": "Kiunganishi"
+    },
+    "semantics": {
+      "your-model": "hutumia mfano wako",
+      "pinned-model": "mfano umewekwa na msimamizi",
+      "own-model": "inaendeshwa na mfano wake binafsi"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Mapendekezo kutoka shirika lako",
+    "searching": "Inatafuta katika shirika lako…",
+    "noMatches": "Hakuna mlinganisho katika saraka — unaweza kuingiza anwani mwenyewe"
+  },
+  "workflowsAdmin": {
+    "title": "Utaratibu",
+    "description": "Washa au zima kila utaratibu kwa shirika zima. Utaratibu uliozimwa umefichwa kwenye menyu na utafutiliwa mbali na seva, hata kwa watu wanaostahiki vinginevyo.",
+    "layeredNote": "Bendera ya LaunchDarkly conversationWorkflows bado inadhibiti uanzishaji: utaratibu uliowashwa hapa unafikika tu mahali ambapo bendera hiyo iko wazi. Ukurasa huu hauwezi kufanya kitu chochote kinachoonekana ambacho bendera inaficha.",
+    "loading": "Inapakia sera ya utaratibu…",
+    "loadError": "Sera ya utaratibu haikuweza kupakiwa.",
+    "policyUnavailable": "Sera ya utaratibu haikuweza kusomwa kutoka kwenye hifadhi. Swichi zimefichwa badala ya kuoneshwa na thamani za chaguomsingi ambazo huenda hazilingani na kinachotekelezwa.",
+    "retry": "Jaribu tena",
+    "enableAll": "Washa zote",
+    "disableAll": "Zima zote",
+    "enabledLabel": "Imewashwa",
+    "disabledLabel": "Imezimwa",
+    "defaultOnHint": "Chaguo-msingi ikiwa hakuna sera imehifadhiwa: imewashwa.",
+    "defaultOffHint": "Chaguo-msingi ikiwa hakuna sera imehifadhiwa: imezimwa — msimamizi lazima aiwashe mwenyewe.",
+    "grantsNote": "Uchakataji wa Ruzuku umewekewa kikomo cha ziada kwa watumiaji wa MSF-USA katika Idara ya Programu wenye \"grants\" kwenye cheo chao, au katika Systems wenye \"innovation\" kwenye cheo chao. Kuiwasha hapa hapan posha sheria hiyo.",
+    "unsaved": "Una mabadiliko ambayo hayijahifadhiwa.",
+    "save": "Hifadhi",
+    "saving": "Inahifadhi…",
+    "saveSuccess": "Sera ya utaratibu imehifadhiwa.",
+    "saveError": "Sera ya utaratibu haikuweza kuhifadhiwa.",
+    "conflictError": "Msimamizi mwingine alibadilisha sera kwanza. Imepakiwa upya — tafadhali kagua na uhifadhi tena.",
+    "updatedByLine": "Ilihifadhiwa mwisho na {by} tarehe {at}.",
+    "neverSaved": "Hakuna sera iliyohifadhiwa bado; chaguomsingi zilizo juu zinatumika."
+  },
+  "viewAs": {
+    "title": "Tazama kama",
+    "description": "Jaribu programu, kwa kikao chako pekee, kama mtu anayekidhi au asiyekidhi sharti ambalo kawaida huamuliwa na orodha ya watumiaji au wasimamizi. Utambulisho wako haujawahi kubadilishwa: kila kitu unachounda hubaki chako na kila mstari wa ukaguzi bado unakuonesha wewe.",
+    "activeTitle": "'View-as' inafanya kazi",
+    "inactiveTitle": "'View-as' haifanyi kazi",
+    "sections": {
+      "role": "Jukumu la msimamizi",
+      "region": "Eneo la data",
+      "attributes": "Sifa za orodha ya watumiaji",
+      "groups": "Uanachama wa kikundi",
+      "presets": "Mipangilio ya awali"
+    },
+    "role": {
+      "global": "Msimamizi mkuu (jukumu lako halisi)",
+      "local": "Msimamizi wa eneo",
+      "none": "Mtumiaji wa kawaida",
+      "localKeysLabel": "Vifunguo vya wakala waliokabidhiwa",
+      "localKeysHint": "Vifunguo vya wakala sahihi vilivyotengwa vinavyohaririwa na msimamizi huyu wa eneo. Acha wazi kwa msimamizi asiye na wakala waliokabidhiwa.",
+      "noneWarning": "Kama mtumiaji wa kawaida, maeneo mengine yote ya msimamizi hayatakuwepo. Ukurasa huu bado unafikika, na bango lililo juu ya programu daima linakupa njia ya kutoka."
+    },
+    "region": {
+      "actual": "Halisi ({region})",
+      "hint": "Inaelekeza maombi yako — na chochote unachopakia ukiwa umewezeshwa — kwenye hifadhi ya eneo jingine. Inatangulia kidakuzi cha ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Idara",
+      "companyName": "Kampuni",
+      "jobTitle": "Cheo kazini",
+      "officeId": "Ofisi",
+      "officeActual": "Ofisi halisi",
+      "officeNone": "Hamna ofisi",
+      "actualValue": "Halisi: {value}",
+      "actualEmpty": "Halisi: (hakuna)",
+      "hint": "Acha sehemu tupu kubaki na thamani yako halisi. Hizi hutumika kwenye kanuni za ruzuku, kikomo cha matumizi chenye kiasi, na kanuni za ufikiaji."
+    },
+    "groups": {
+      "label": "Nambari za kundi",
+      "placeholder": "Andika id ya kitu cha kundi la Entra kila mstari",
+      "hint": "Inabadilisha — haiongezi — uanachama wako halisi kwa kikao hiki, hivyo unaweza kujaribu kuwa au kutokuwepo kwenye kundi."
+    },
+    "presets": {
+      "grantsMember": "Mwanakikundi wa timu ya ruzuku",
+      "regularUser": "Mtumiaji wa kawaida",
+      "localAdmin": "Msimamizi wa ndani, bila maajenti",
+      "otherRegion": "Eneo jingine",
+      "hint": "Mipangilio hujaza fomu; hakuna kinachotumika mpaka ubonyeze Tumia."
+    },
+    "apply": "Tumia na upyaisha",
+    "applying": "Inatumiwa…",
+    "clear": "Toka mtazamo huu",
+    "clearing": "Inatoka…",
+    "reset": "Weka fomu upya",
+    "nothingToApply": "Weka angalau override moja ili utumie.",
+    "applyError": "Mtazamo-huu haukuweza kutumika: {error}",
+    "clearError": "Mtazamo-huu haukuweza kufutwa: {error}",
+    "loadError": "Hali ya mtazamo-huu haikuweza kupakiwa.",
+    "retry": "Jaribu tena",
+    "expiresNote": "Mtazamo-huu hudumu hadi saa 8, au mpaka utoke.",
+    "banner": {
+      "label": "Unaangalia kama",
+      "adjust": "Badilisha",
+      "exit": "Toka",
+      "role": {
+        "local": "msimamizi wa ndani",
+        "none": "mtumiaji wa kawaida"
+      },
+      "region": "eneo {region}",
+      "department": "idara \"{value}\"",
+      "companyName": "kampuni \"{value}\"",
+      "jobTitle": "cheo \"{value}\"",
+      "officeId": "ofisi {value}",
+      "groups": "{count, plural, one {# kundi} other {# makundi}}"
+    }
   }
 }

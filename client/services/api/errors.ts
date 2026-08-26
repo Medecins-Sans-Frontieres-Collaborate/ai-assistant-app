@@ -93,6 +93,13 @@ export class ApiError extends Error {
       return this.message || 'Usage limit reached. Please try again later.';
     }
 
+    // Session-death 401s (failed token refresh — e.g. after a client-secret
+    // rotation) normally never render: chatStore forces a sign-out instead.
+    // This copy is a fallback for other ApiError consumers.
+    if (this.response?.code === 'AUTH_SESSION_EXPIRED') {
+      return 'Your session has expired. Please sign in again to continue.';
+    }
+
     if (this.isAuthError()) {
       return 'Authentication required. Please sign in.';
     }

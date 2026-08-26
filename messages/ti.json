@@ -950,7 +950,12 @@
       "showFewer": "ንእሽቶ ርኣዩ"
     },
     "retryWithModel": "ብ{model} ፈትኑ",
-    "createTodoTasks": "ካብዚ መልሲ ዕለታዊ ስራሕ ፍጠሩ"
+    "createTodoTasks": "ካብዚ መልሲ ዕለታዊ ስራሕ ፍጠሩ",
+    "attachedFileExpired": "ተያያዥ ፋይል ኣይተገናአን — ዝተወደደ ፋይል ንውሑድ ጊዜ ብግዜኡ ይውሰን። ካብዚ መገለጺ ዘይስረው ኣሎ። ብዚ ዘይኮነ ንደገሚ ፈትኑ፣ ወይ ፋይሉ ኣብ ኣንተኹም ደገና ኣስተኻኽሉ።",
+    "repeatedFailureNotice": "እዚ ብመደብ ኣይሰርሐን — ዝተወደበ ወይ ተወሳኺ ቃለ-መጠይቕ ክሆን ይኽእል። እቲ ናይ መሓደሪ ቃለ-መጠይቕ ጀምረካ ዝበሃልካ ይፍጸም።",
+    "startNewConversation": "ሓድሽ ቃለ-መጠይቕ ጀምር",
+    "downloadDebugInfo": "መረጋገጺ መረጃ ውርድ",
+    "includeMessageText": "ናይ መልእኽቲ ጽሑፍ ኣካብዪ"
   },
   "transcript": {
     "originalTranscript": "ኦሪጂናል ጽሕፈት",
@@ -981,7 +986,9 @@
     "quickActions": "ቅልጡፍ ተግባራት",
     "expandFolder": "ፎልደር {name} ፍጽው ኣበልዎ",
     "collapseFolder": "ፎልደር {name} ሰንካል",
-    "folderOptions": "ኣማራጮታት {name}"
+    "folderOptions": "ኣማራጮታት {name}",
+    "agentsEntry": "ወኪላት",
+    "agentsTitle": "ወኪላት ይቐይሩን ከኣንዳንዱ ምዛር ቴክስት ጀምሩ"
   },
   "errors": {
     "somethingWentWrong": "ገለ ጸገም ተፈጢሩ",
@@ -2651,6 +2658,10 @@
       "map": {
         "label": "ካርታ",
         "description": "ብዝኾነ ውህብቲ ኣብ ካርታ ቦታ ምቕያር"
+      },
+      "grants": {
+        "label": "ሒደታት ናይ መቐባብያ ግንዛቤታት",
+        "description": "ኣብ ትሕቲ ግንዛቤታት ዘሎ ሓበሬታ ብመደብ ምምዳብን ምሕታትን"
       }
     },
     "chooser": {
@@ -2660,7 +2671,8 @@
       "newTranslation": "ሓድሽ ትርጉም",
       "newDocument": "ሓድሽ መደብ",
       "newDataAnalysis": "ሓድሽ ውህብቲ ትንታነ",
-      "newMap": "ሓድሽ ካርታ"
+      "newMap": "ሓድሽ ካርታ",
+      "newGrants": "ሓድሽ ምምዳብ ግንዛቤታት"
     },
     "translation": {
       "chooseLanguage": "ትርጉም ቋንቋ",
@@ -3277,7 +3289,8 @@
       "unknownType": "እዚ ውይይት ዘይትረዳኦ ዓይነት workflow ተጠቒምካ። ታሪኽ ውይይት ታሕቲ ተረኽበሉ እዩ።",
       "untitled": "ዓዲ ውይይት",
       "toggleMenu": "ምዝዋር መኑ",
-      "model": "መደብ ዝተጠቐሙ ናይዚ ውልቀ ስራሕ"
+      "model": "መደብ ዝተጠቐሙ ናይዚ ውልቀ ስራሕ",
+      "disabledByAdmin": "እዚ ስርሒት ብ መምርሒ ተዕጊዡ ኣሎ። ዝኾነ ታሪኽ ውዕል ታቲ ተረኽቦም ኣሎ።"
     },
     "tabs": {
       "label": "ምዝናና ሞዴ",
@@ -4031,7 +4044,153 @@
     "conflictTakeTheirs": "ናተኦም ተቐቢል",
     "conflictNoFieldDiff": "ዋጋታት ተዛዚሙ — ምርጫ መዝገብ ብቓንቓ ተስዕበ።",
     "conflictRecordGone": "ነዚ መዝገብ ተሰሪዙ ወይ ኣይኽእሉን እንተተጻአኑ። ንዝፈጠረካ ዝፈትን ወሲን ኣብ ቅጥዒ ቀትልካ ቀጻሊ ብቓንቓ መለስ።",
-    "groupsFlagOff": "ኣብዚ ኣካባቢ group targeting ኣይተኣናብቦን። ፀብፃብ ዘለዎም ቡድናት ትሰርዩ።"
+    "groupsFlagOff": "ኣብዚ ኣካባቢ group targeting ኣይተኣናብቦን። ፀብፃብ ዘለዎም ቡድናት ትሰርዩ።",
+    "catalogOauth": {
+      "title": "ውሑድ ኮነክተር ዘይሕተተ ኦታው መተግበሪታት",
+      "description": "ኩሎም ቦታ ትፈልጦ ኦታው መተግበሪታት ንውሑድ ኮነክተሮች (GitHub, Asana, …)። ኣብዚ ኣእቱዎ መዝገብ MCP_OAUTH_* environment variables ንምሕሳስ ይቅድም። ነዚ ዝተዛረበ ሲምዲኡ ይደልየየ፣ ንኡስ ይመለስ። ናይ ክላይንት ምስጢር ኣብ መዀኒት ይትበጸር፡ ግን ደጊሞ ኣይትቀርበን።",
+      "badgeAdmin": "ኣብዚ ተዘጋጅኦ",
+      "badgeEnv": "ካብ environment",
+      "badgeNone": "ዘይተዘጋጅ",
+      "badgeDcr": "ብሓላፊነት ይመዝገቡ",
+      "badgeDcrHint": "እዚ ኣታክዮ ኦታው ክላይንት ብሓላፊነት ይመዝገብ ይኽእል፣ እቲ ኣብዚ ዘይተዘጋጅኦ ምስ እንኳ ይሰርሕ።",
+      "clientIdLabel": "ኦታው ክላይንት ID",
+      "clientSecretLabel": "ኦታው ክላይንት ምስጢር",
+      "secretStoredPlaceholder": "ተዓቒበ — ምስትቐየር ኣብዚ ጻፍ፣ ንምግባር ሻጅንዎ።",
+      "secretNewPlaceholder": "ክላይንት ምስጢር ኣእትዉ",
+      "save": "ኣቑዱ",
+      "remove": "ሰርዝ",
+      "removeToEnv": "ሰርዝ (ናብ environment ይመለስ)",
+      "saved": "{name} ኦታው መተግበሪት ተኣቒበ",
+      "removed": "{name} ኦታው መተግበሪት ተሰሪዙ",
+      "saveError": "ኦታው መተግበሪት ኣቓሊኡ ውን አይተሳነን። በደገም ፈትኑ።",
+      "conflict": "ዝኾነ መዝገብ ኣብ ካልእ ቦታ ተቐይሩ — ተቐጺሉ ኣነው፣ ደጊሞ ፈትኑ።",
+      "storageUnavailable": "ኣድሚን ማእከል ኣይተረኸበን። ኣለኹም ዘሎ መዝገቦች ክትርኢሉ ኣይከኣልኩምን። ምእታዊ ምድማቕ ድማ ይውዕል ድማ።",
+      "sealingUnavailable": "ኣምልኾ ምስጢር ኣብዚ deployment ኣይተዘጋጀን (AUTH_SECRET የጎደሎ) — ክላይንት ምስጢር ኣይኽእልኩም ምድማቕን።",
+      "updatedBy": "ብ{by} ብ{at} ተሓደሰ"
+    },
+    "orgAgentOverrideTitle": "ብምኻን ሓሳብ ንዝምልከት ኤጀንት ምስዓር",
+    "orgAgentOverrideAction": "ምስዓር",
+    "orgAgentBuiltinBadge": "እዋናዊ",
+    "orgAgentBuiltinHint": "ኣብ ምድብ ምሃንዲ ውልቀ ይተሰርሐሉ። ናይ እቲ ዓዳማዊ መደብ ኣብዚ ክትግዛኣዮ ትዕዛዙ ይተራይ ክትገድስ ብምስዓር ይኽእል።",
+    "m365AgentIndexProgress": "እዚ ዝተጻሓፈ {done} ካብ {total} {total, plural, one {ዶኩመንት} other {ዶኩመንታት}}…",
+    "m365AgentIndexInterrupted": "መዝጽኢ እቲ {done} ካብ {total} ውሽጢ ተዕግዶ ኣሎ — ምቕጻል ንምቅጻል ምምላስ።",
+    "m365AgentIndexStartedBy": "ብ{name} ተጀሚሩ",
+    "m365AgentIndexResume": "ምቕጻል",
+    "m365AgentIndexResumeHint": "ኣካል ዝተዕገደሉ ካብቲ መቐሬታ መዝጽኢ ኣብ Microsoft 365 ዝምልከትካ ምቕጻል። እዚ ታብ ክትፈቱ ይግበሩ።",
+    "m365AgentIndexCancel": "ምቁራን",
+    "m365AgentIndexCancelled": "መዝጽኢ ተቐጺሉ — ኣብ ዚኣካይዶም ዶኩመንታት ኣይትርፉ፡ ክትድልዩ ይኽእሉ።",
+    "m365AgentIndexJobFailed": "መዝጽኢ ተዕግዶ፡ {error}",
+    "m365AgentIndexDone": "መዝጽኢ ወዲኡ፡ {indexed} ተመዝጺኡ፡ {failed} ኣይተሳነቱን፡ {noText} ቀለጢ ጽሁፍ የገበራን።",
+    "m365AgentDocCounts": "{indexed, plural, one {# ዶኩመንት ተመዝጺኡ} other {# ዶኩመንታት ተመዝጺኡ}} · {failed} ኣይተሳነቱን · {noText} ዹሩ ጽሑፍ ኣይተገበረን · {needsPreparation} በዝሒ ስርዓት ይፈጠር · {skipped} ተፈጺሙ",
+    "m365CapDocuments": "ዶኩመንታት፡ {count} / {max}",
+    "m365CapBytes": "{bytes} ካብ {max}",
+    "m365CapOverDocuments": "ካብ ኣቐዲሙ {max} የለዕ ዶኩመንት ወይ ይሕወሱ፡ ንምንካፍ ስቡእ ዝተመረፁ ኣይ ዶኩመንታት ብጣዕሚ ይተኻሩ፡ ኣርእያ ምስ ገና ክትመዝጽእ ደሊኩም ኣብ ውሽጢ ዝርከቡ ፋይሎት ብቐሊል ይሸቕሉ።",
+    "m365CapOverBytes": "ካብ {max} መጠን ዓቐን ውሽጢ ኣሎ። ስቡእ ዝተመረፁ፡ ዝበዝሐን ፋይሎም ውሰዱ።",
+    "m365PlanScanning": "ምረመሲ…",
+    "m365PlanRefreshing": "ምዝውዓል…",
+    "m365PlanFailed": "ኣብ Microsoft 365 ኣካውንትካ ተፈላለዩ ምረመሲ ኣይተሳነን።",
+    "m365PlanMissing": "ኣይተረኸበን ወይ ኣይተፈቀደን",
+    "m365PlanIndexable": "{count, plural, one {# ፋይል ይተመዝጽእ} other {# ፋይሎት ይተመዝጽኡ}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# ስርዓት ይፈጠር ይግበሩ} other {# ስርዓት ይፈጠሩ ይግበሩ}}",
+    "m365PlanSkipped": "{count} ተፈጺሙ",
+    "m365PlanShowDetails": "ዝርዝር",
+    "m365PlanHideDetails": "ዝርዝር ሰንኪ",
+    "m365PlanTruncated": "እዚ ፎልደር ክትተርአዊ ምምረመሲ ቅሉጡ ይከኣል፡ ሓደ 1000 ኣገባብ ብሓደ ብቑል፡ ቀዳማይ ሰብዓዊ ፎልደር ምምረፅ ኣኽእል።",
+    "m365PlanRecursive": "ሰብዓዊ ፎልደርታት ኣካብሎ",
+    "m365PlanExtensionsLabel": "ኣይነት ፋይሎት ብቑል፡",
+    "m365PlanExtensionsPlaceholder": "ልምምድ፡ pdf, docx",
+    "m365PlanSubfolders": "ሰብዓዊ ፎልደርታት",
+    "m365PlanFolderCount": "{count, plural, one {# ፋይል} other {# ፋይሎት}}",
+    "m365PlanGroupIndexable": "ክትመዝጽእ ዝተወስነ",
+    "m365PlanGroupNeedsPreparation": "ስርዓት የድሊ",
+    "m365PlanGroupSkipped": "ተፈጺሙ",
+    "m365PlanPreparationHint": "ምስት/ድምጺ/ቪድዮ — ኣይተመዝጽኡን እዮም",
+    "m365PlanMoreRows": "…ከምኡውን {count} ኣብ ደቂ",
+    "m365ItemStatus": {
+      "pending": "ጸባኦ",
+      "indexed": "ተመዝጺኡ",
+      "failed": "ኣይተሳነን",
+      "noText": "ጽሑፍ ኣይወፅአን",
+      "missing": "ኣይረኸበን"
+    },
+    "m365SkipReason": {
+      "unsupported": "ዘይተደገፈ ኣይነት",
+      "tooLarge": "ካብ 25 MB ዓቐን",
+      "disallowedType": "መእተዊ ኣይነት (executable/archive)",
+      "malware": "ብMicrosoft ናይ ሓጻኢ ፋይል ተምልከቱ",
+      "zeroBytes": "ፋይል ባዶ",
+      "excluded": "ተኣስዲቱ",
+      "typeFilter": "ኣብ ፍልተር ኣይነት ኣይኮነን"
+    },
+    "localAdminGroup": {
+      "agents": "ኣጄንትታት",
+      "promptAgents": "ኣጄንትታት ምጽዓን",
+      "m365Agents": "Microsoft 365 ኣጄንትታት",
+      "orgAgents": "ናይ መፍለጢ ኣጄንትታት",
+      "guides": "መምሪ መስርሒታት",
+      "connectors": "መያያዣታት",
+      "datasets": "መድብ ውህብታት",
+      "unknown": "ተደላይቶ እዩ እንተተረኽበ፣ ነገርግን የተገናአን"
+    },
+    "localAdminGroupUnavailable": "እዚ ልዕሊ ዘለዎ ዝርዝር ብዝግታን የብለንን — ኣብ ሎሚ ዘሎ ተደላይቲ ይቆረጽ።",
+    "localAdminBuiltIn": "ብውሑድ ዘለዎ",
+    "localAdminSummary": "{count, plural, one {# ተደላይቲ} other {# ተደላይታት}}: {names}",
+    "localAdminSummaryMore": "{names}ን {more} ዝሓለፉ",
+    "localAdminNoDelegations": "ድሕሪ ንምድላይ የለን — ሎካላዊ ኣድሚን ነቲ ኣጄንት ዘይብሉ ብናይ ኣድሚን ክፋላትን እቲ ማእከል ኣድሚን ብምእታወት ይትዕረፍ።",
+    "localAdminSelectedCount": "{selected} ካብ {total} ተመርጺ",
+    "localAdminCopyFrom": "ካብ ዝተቐየረ ቅዳሕ",
+    "localAdminClearAll": "ኩሉ ኣድጊ።",
+    "localAdminSelectGroup": "ኩሎም ይመርጹ",
+    "localAdminClearGroup": "ኣድጊ",
+    "localAdminSearchPlaceholder": "ኣጄንትታት፣ መምሪ መስርሒታት፣ መያያዣታት… ድለ",
+    "localAdminDuplicateEmail": "እዚ ኢሜይል ኣብ ዝርዝር ኣሎ — ኩልኡ መኸሻ ኣብ አንደኛ ኣድፉ።",
+    "localAdminExpand": "ተደላይታት ርኣዩ",
+    "localAdminCollapse": "ተደላይታት ተዓቅፉ",
+    "localAdminDiscard": "ለውጦታት ወስዱ",
+    "m365AgentRefresh": "ምሕዳስ",
+    "m365AgentRefreshHint": "ካብ መድረኽ ናይ መዓልቲ ዘብሉ ፋይላት ወይ ዝተለወጠን ዝወጻእን ኣእቱ — ዘይለወጠ ፋይል ኣይተውሃበን። እዚ ታብ ምሕደራኩም ክትፍቱ ይቕጽሉ።",
+    "m365AgentReindexAll": "ኩሎም ምምድናን ደጊም",
+    "m365AgentRefreshProgress": "ኣብ ምሕዳስ ኣሎ — {done} ካብ {total} ዝተለወጠ {total, plural, one {ሰነድ} other {ሰነዳት}}…",
+    "m365AgentRefreshDone": "ምሕዳስ ወዲኡ፡ {added} ውህብቲ፣ {modified} ሓደስ፣ {removed} ወፃኢ፣ {failed} ኣይተኻኣለን።",
+    "m365ChangesChecking": "Microsoft 365 ምምርመራ ነቲ መተወሳኺ ለውጦታት ካብ መድንነት መዓልቲ…",
+    "m365ChangesFailed": "ለውጦታት ንምቕፅፅር ብ Microsoft 365 ኣካውንትኩም ኣይፈጸምን።",
+    "m365ChangesNeverIndexed": "ኣይተምድነንን — ድሕሪ ምቕባል Index ኣድርጉ።",
+    "m365ChangesFound": "{count, plural, one {# ለውጢ} other {# ለውጦታት}} ካብ መድንነት መዓልቲ፡ {added} ውህብቲ፣ {modified} ሓደስ፣ {removed} ወፃኢ።",
+    "m365ChangesNone": "ምንም ለውጦታት የለን ካብ መድንነት መዓልቲ ({date})።",
+    "m365PrepareButton": "ኣዘጋጅ",
+    "m365PrepareOcrButton": "ኣዘጋጅ (OCR)",
+    "m365PrepareSaveFirst": "ኣጄንቱ ኣእቱ ክትዘጋጅ ቅድሚ ምሕዳስ",
+    "m365PrepareHintImage": "ስእሊ — 1 vision ጽሑፍ ጥሪ",
+    "m365PrepareHintMedia": "~{minutes} ደቒቕ ድምጺ ንምቅስቓስ",
+    "m365PrepareHintOcr": "ናይ ጽሑፍ ማዕከን የለን — OCR ብ vision፣ ክልተ 30 ገጾች",
+    "m365PreparePreparing": "ኣብ ምዘጋጀት…",
+    "m365PreparePending": "ኣብ ምቅስቓስ…",
+    "m365PreparedNote": "ዝዘጋጀ · {kind}",
+    "m365PreparedKind": {
+      "image": "ናይ ስእሊ መግለጺ",
+      "audio": "ጽሑፋዊ ሃብቲ",
+      "video": "ጽሑፋዊ ሃብቲ",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "{name} ተዘጋጂ ({chars} ፊደላት)। ምስ ተዘጋጂ ምሕዳስ ኣድርጉ።",
+    "m365PrepareStarted": "ትርጉም ናይ {name} ኣብ ትራይ ጀመሯ — ታብ ክትዕወፍ ይቕጽሉ።",
+    "m365PrepareFailed": "{name} ክትዘጋጅ ኣይተኻኣለን፡ {error}",
+    "m365PrepareFailedGeneric": "ምዘጋጀት ኣይከኣለን።",
+    "canonicalKeyLabel": "መፍትሒ ቁፅሪ",
+    "copyKey": "ቁፅሪ ወስደል",
+    "agentKeySearchPlaceholder": "ወኪል፡ መመሪያ፡ አቀናጂታት… ወይ ቁፅሪ ኣቐምጥ",
+    "agentKeyAddCustom": "\"{key}\" ከምዝተጸሓፈ ኣእትው",
+    "agentKeyRemove": "{name} ኣርፍ",
+    "hideAgent": "ሰውር",
+    "unhideAgent": "ትርከብ",
+    "hideAgentHint": "እዚ ወኪል ካብ ዝተገልፀ ዝኾነ ዝርዝር ኣስውር። እዚ ብሓርነትካ ብብላይ የቐንየለይ — ተጠቃሚን ካልኦት መምርሒን ኣይንከኣኣቶምን።",
+    "unhideAgentHint": "እዚ ወኪል ኣብ ዝተገለፀ ዝርዝርካ ዳግማይ ኣርከብ።",
+    "hiddenBadge": "ሰውሩ",
+    "hiddenAgentsCount": "{count, plural, one {# የሰወሩ ወኪል} other {# የሰወሩ ወኪላት}}",
+    "hiddenAgentsShowing": "{count, plural, one {# የሰወሩ ወኪል እዩ ይተፀይዩ} other {# የሰወሩ ወኪላት እዮም ይተፀዩ}}",
+    "hiddenAgentsShow": "ፀይይ",
+    "hiddenAgentsHide": "ዳግማይ ሰውር",
+    "allAgentsHidden": "ከምዚ ውሽጢ ሓዊ ውን ሓሳብካ ዘሰወሩ ወኪላት እዮም። ንምርካብ ፀይይ ተጠቀም።"
   },
   "localModels": {
     "title": "ኣካባቢ ሞዴልታት",
@@ -4232,9 +4391,15 @@
       "connectors": "ንማህበራዊ ቦታታት ኮነክተርን ከመይ ሰባት ይጥቀማዎም ከይትንክሩ።",
       "guides": "ዘብላዕ ኣብ ኣዘጋጅነት፣ ቃላትን ትምክህታትን መሳርሒ መግበሪ መልክን።",
       "mapDatasets": "ናይ ብቕጽል ተሰፊሑ ዳታ ተቃራኒታት ናብ workflow ካድ ትረኽቦም ኢዮም።",
-      "localAdmins": "ሕገ-ኤርትኤ-መደብ ማስተኻኸል ካብ ነገር ንሰባት ሪአይታ።"
+      "localAdmins": "ሕገ-ኤርትኤ-መደብ ማስተኻኸል ካብ ነገር ንሰባት ሪአይታ።",
+      "workflows": "ሒደታት ውዕል ንኩሉ ሰብ ምክፋት ወይ ምዕጻውን።",
+      "viewAs": "እቲ መተግበሪ እንተ ኣብ ዝኽእል ኩነታት ዝገብሩ ወይስ ዝደብሩ ሰባት ምፈታት።"
     },
-    "openSettings": "ቅንጥታት ክፈት"
+    "openSettings": "ቅንጥታት ክፈት",
+    "area": {
+      "workflows": "ሒደታት ውዕል",
+      "viewAs": "ርአኺኦ ከም"
+    }
   },
   "limits": {
     "title": "ድንበሮታት ኣጠቃቕያ",
@@ -4436,7 +4601,8 @@
     "groupSearchNoResults": "ኣዚ ሽም ዘለዎም ቡድናት ኣይተረኸበን።",
     "groupSearchError": "ድለ ቡድን ዝገበረ ዝተፈላለዩ ምርኣዩ ኣይሳናኣን። ነቲ ታሕቲ ኣብ ቦታ ውሽጢ መለክዒ ናይ ቡድን መለኪኡ ድማ ቀጹ።",
     "groupSearchHint": "ኣብቲ ዕለታዊ ቡድናት ንምርኣይ ዶኣልካ ክርኢ ኣብዚ በዝሒ 2 ፊደላት ወይ ብመተግበሪ ኣብ ታሕቲ ቡድን Object ID ኣብ ቦታ ድማ ክቅንጹ ትኽእሉ። ነዚ ኣብ Microsoft Entraን ኣብ ቡድኑ ኣባላት ይሕግዝ።",
-    "groupsFlagOff": "ኣብኡ ምስተበጽሖ ትእዛዝ ዘለዎ ተወካይ ቡድናት ንዚ ከባቢ ገና ኣይተኣተወዎን። እቲ ቀዳም ዝተውከፈሉ ቡድናት ዝርከቡ ይተዓሓዙ።"
+    "groupsFlagOff": "ኣብኡ ምስተበጽሖ ትእዛዝ ዘለዎ ተወካይ ቡድናት ንዚ ከባቢ ገና ኣይተኣተወዎን። እቲ ቀዳም ዝተውከፈሉ ቡድናት ዝርከቡ ይተዓሓዙ።",
+    "featureDisabled": "ዓይነት ጥቅምቲ ክተደንበር ኣብዚ ምድብ ኣይተኣስተኻኸለን።"
   },
   "m365": {
     "connections": {
@@ -4797,5 +4963,149 @@
     "failed": "ምካፍል ኣይከኣልን — ምንካፍል ኣይተፈጠረን።",
     "copyFailed": "ሊንኩ ኣይተተቐለለን — ኣብ ላዕሊ ክትምረፁን ብእጋኹም ክትቅየሱን ይግበሩ።",
     "lastMessagesCountLabel": "ብዝተኸፈለ መልእኽቲ ዝኽእሉ መጨመር"
+  },
+  "toolModes": {
+    "webSearch": "ዝውውር መፈለጊ",
+    "codeInterpreter": "ኮድ ተትርጉሚ",
+    "off": "ዝቕረበ",
+    "auto": "አውቶ",
+    "always": "ሕልዋ",
+    "routingPrivacy": "ምንባር",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI ምርኣይ ፍለጋ በAzure AI Foundry ይልፃ። ኣብቲ ውድብ ክሓፁፉን ክቕየሩን ይኽእሉ እዮም።",
+    "learnMore": "ብዝበለጸ ማረፅ"
+  },
+  "agentAttach": {
+    "browserTitle": "ወኪላት",
+    "browserSubtitle": "ወኪላትን ኮኔክተሮችን ናብዚ ቻት ይወስኑ፣ ወይ ሓዲሽ ቻት ኣብ ወኪል ዘመሁኑ ጀምሩ። አብዚ ዝተመርጸ ሞዴል ምሉእ ስራሕ ይሰርሕዎም።",
+    "searchPlaceholder": "ወኪላትን ኮኔክተሮችን ፈልጡ…",
+    "loading": "ወኪላት ምግባር…",
+    "noMatches": "ዘለዉ ምውሳን ኣይተረኽበን።",
+    "noAgents": "ወኪላት የለን።",
+    "addToChat": "ናብዚ ቻት ወስን",
+    "removeFromChat": "ካብዚ ቻት ወሰዶ",
+    "newChat": "ሓዲሽ ቻት",
+    "attached": "ተዳምሲ",
+    "detach": "ውሰድ",
+    "change": "ቅድሚ",
+    "browse": "ወኪላት ቐይሩ…",
+    "noAgent": "ወኪል የተዳምሰን",
+    "close": "ዝብጽሕ",
+    "kind": {
+      "rag": "መረዳእታ",
+      "prompt": "ተቋማንቲ",
+      "m365": "መረዳእታ (Microsoft 365)",
+      "org": "መረዳእታ",
+      "foundry": "Foundry ወኪል",
+      "connector": "ኮኔክተር"
+    },
+    "semantics": {
+      "your-model": "ሞዴልካ ይጥቀም",
+      "pinned-model": "አመሓዳሪ ዝመርጸ ሞዴል",
+      "own-model": "ሓደ ሞዴል ይግዚኡ"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "ሓገዝታት ካብ ኣካዳሚኻ",
+    "searching": "ኣብ ውህብቲ ኣካውንቲ እዩ እዩ ዝተዓረፈ…",
+    "noMatches": "ምስ መዝገብ ኣይተመሃሪናን — ኣብ ውሳኔ ኣድራሻ ብ እግዚኣኻ ትእትው"
+  },
+  "workflowsAdmin": {
+    "title": "ሒደታት ውዕል",
+    "description": "ነቲ ሓደ ሒደት ለውሉ ይክኣል ወይ ይሰክሕ ንኩሉ ትካል ኤርጎናይዜሽን። እቲ ዝተዕጊዙ ሒደት ኣብ ምናይ ምስክርን እንተኾይኑ ንሰባት ይበጽሖን የኣኽኣልን።",
+    "layeredNote": "ዝተቓነቐ ዝርከብ ናይ LaunchDarkly conversationWorkflows flag እዩ እታ ምርጫ ይቐጽ። እዚ ገጽ ዝሰኻል ሂደት እንምበር እቲ flag ነዚ ኣይተልዕሎን ኣይታየንን።",
+    "loading": "ፖሊሲ ሒደት ዝግበር…",
+    "loadError": "ፖሊሲ ሒደት ምምጻእ ኣይካኣልን።",
+    "policyUnavailable": "ፖሊሲ ሒደት ካብ ቀሪቡ ምንባብ ኣይተኻኣለን። ቀዋሚ መዋቅር ኣይታረዱን ከም default ተረኽቦም ይርከቡ።",
+    "retry": "እንደገና ፈትኑ",
+    "enableAll": "ኩሉ ኣክትዩ",
+    "disableAll": "ኩሉ ኣጥፉ",
+    "enabledLabel": "ኣክቲብ",
+    "disabledLabel": "ዝተዕጊዙ",
+    "defaultOnHint": "ብምትእታዊ ፖሊሲ ዘይምኽእኡ እንተኾይኑ፡ ብቀዋሚ ኣክቲብ እዩ።",
+    "defaultOffHint": "ብምትእታዊ ፖሊሲ ዘይምኽእኡ እንተኾይኑ፡ ብቀዋሚ ዝተዕጊዙ እዩ፡ ኣስተማማዕ ኣክቲብ ክድልዩ ይግበሩ።",
+    "grantsNote": "ምምዳብ ግንዛቤታት ብዝተሓደሰ ናይ MSF-USA ዘሎም ተጠቃሚታት ኣብ መደብ Program ብ “grants” ኣብ ድሕሪ መደብ ወይ Systems ብ “innovation” ዝኸውን ዝተዓበየ እዩ። ኣብዚ ኣክቲብ ምግባር ናይ ዝሰራሕ ስርሒት ኣይተፋሓናን።",
+    "unsaved": "ዘይተዓቲ ግብሪ ኣለኩም።",
+    "save": "ኣቁም",
+    "saving": "ይቕምጥ…",
+    "saveSuccess": "ፖሊሲ ሒደት ተቐሚጡ።",
+    "saveError": "ፖሊሲ ሒደት ምቕማጥ ኣይካኣልን።",
+    "conflictError": "ካልኦት መምርሒ ፖሊሲ ቀዳማይ ቀየሮ። ተቐሚጡ ኣሎ—በጃኹም ደጊምኩም ተመልከቱን ኣብ ድሕሪኡ ኣቁሙ።",
+    "updatedByLine": "ኣብ መደብ {by} ኣብ {at} ዝተቐመጠ።",
+    "neverSaved": "ኣይተቐመጠ ፖሊሲ ኣሎን፤ ናይ ቀዋሚ መዋቅር ይሰርሕ።"
+  },
+  "viewAs": {
+    "title": "ርአኺኦ ከም",
+    "description": "መተግበሪ ኣብ እቲ ሓላፊ ስነ ልውውጥ እንተ ዝሓለፉ ወይ ዝደቑ መንገዲ ምፍታይ፣ ብኩሉ እቲ መለኪያ ናይካ ይኸውን፣ ኣብ መዓልቲ ውልቀ ምኻን ውዕል ከባቢ ኩሉ ቀረባ ናብካ ይቕምጡ።",
+    "activeTitle": "ርአኺኦ ከም – ኣክቲብ እዩ",
+    "inactiveTitle": "ርአኺኦ ከም – ዘይኣክቲብ እዩ",
+    "sections": {
+      "role": "መደብ ኣስተዳዳሪ",
+      "region": "ዞባ ውልቀ ባዮም",
+      "attributes": "ናይ ዝርዝር ባዮም ባሕሪ",
+      "groups": "ኣባልነት ቡድን",
+      "presets": "ቅድመ-መዋቅር"
+    },
+    "role": {
+      "global": "ባሕላዊ ኣስተዳዳሪ (እቲ መደብካ እዚ)",
+      "local": "ዞባዊ ኣስተዳዳሪ",
+      "none": "ተጠቃሚ ቀዋሚ",
+      "localKeysLabel": "ቀባላት ኤጀንት ዓላማ",
+      "localKeysHint": "ዘተፈላለወ ሓላፊ ኤጀንት ቀባላት ይፃፉ። ባዕላ ዉጹ ብዞባዊ ኣስተዳዳሪ ከም ዝተመሉእ እንተለኻ ይቀይሩ።",
+      "noneWarning": "እንተ ተጠቃሚ ቀዋሚ ኸውንካ ዚፈላለየ ኣካባቢ ውልቀ ምኻን ይጠፍኡ። እዚ ገጽ ብፍጹም ይቀፅሉ፣ ራእሳ ላዕለዎ እቲ ካርዶ ኤፍ ምኽንያቱ ኣቕልቦ ይፈጽም።"
+    },
+    "region": {
+      "actual": "እዋናዊ ({region})",
+      "hint": "እንዳኣታዊ ግልባጭ ግዘያታካን ዝተሰቐሙ ነገራትን ናብ ካልእ ክልል ቤት-መከማቻ ይልከዋ። ከም ቅድሚ ጸንሒ ጽንሑ ?regionOverride= cookie ይስራል።"
+    },
+    "attributes": {
+      "department": "መደብ",
+      "companyName": "ኩባንያ",
+      "jobTitle": "ዝርዝር ስራሕ",
+      "officeId": "ቢሮ",
+      "officeActual": "ሓበሬታ ቢሮ",
+      "officeNone": "ቢሮ የለን",
+      "actualValue": "ዓተት: {value}",
+      "actualEmpty": "ዓተት: (ባዶ)",
+      "hint": "ዓትም ሳዕሪ ትፈትን ዘይብል ክትተው ትኽእል። እዚ ሓሳብን ውሳኔ ውክልና ወሳኺ ግደፅን ምምሕያሽ ሕጉን ይሓትት።"
+    },
+    "groups": {
+      "label": "እተታተፉ ቡድናት መለለይ ቁ.",
+      "placeholder": "ናይ ኣንዳንድ Entra ቡድን ኦቤጅክት መለለይ በዓቕላ መልእኽቲ",
+      "hint": "ምዃኑ ክልተወሓዱ ኣይኮነን — ብምንታይ ኣቦ እተገብረካዮ ንዚ ስግንታ ክትፈትን ትኽእል።"
+    },
+    "presets": {
+      "grantsMember": "ኣባል ቡድን Grants",
+      "regularUser": "ተጠቃሚ መደበኛ",
+      "localAdmin": "ኣማኒ ቦታዊ፣ ናይ ካልእ ኣገንታት የለን",
+      "otherRegion": "ካልእ ክልል",
+      "hint": "መዋበድታት ቅፅዓ ይሙሉ፤ ምንታይስ ከዚ ኣብ መተግበሪ አይኮነን ክትጠውቅ።"
+    },
+    "apply": "ምግባርን ደግመን ጽዕኖ",
+    "applying": "ይምግባር...",
+    "clear": "ናይ view-as ውጽኢ",
+    "clearing": "እየ ይወፅእ...",
+    "reset": "ቅፅዓ ኣነጻጽር",
+    "nothingToApply": "ቢዝካር ንዝተረዳበፉ ንኣንድነት ዝግበር ምዕባለ ጨምዕ።",
+    "applyError": "ናይ view-as ምውሳነ ኣይተተቐበለን፡ {error}",
+    "clearError": "ናይ view-as ንኽላይ ኣይተተቐበለን፡ {error}",
+    "loadError": "ናይ view-as ሁኔታ ኣይተጸዓነን ክሕትቱ.",
+    "retry": "ደግመን ፈትን",
+    "expiresNote": "view-as ክሳብ 8 ሰዓት ድማ ወይ ክሳብ ንዝወጽእካ ይኽእል።",
+    "banner": {
+      "label": "እንደዚ view-as ተመልከቲ",
+      "adjust": "ግጥም",
+      "exit": "ውጽኢ",
+      "role": {
+        "local": "ቦታዊ ኣማኒ",
+        "none": "መደበኛ ተጠቃሚ"
+      },
+      "region": "ክልል {region}",
+      "department": "መደብ \"{value}\"",
+      "companyName": "ኩባንያ \"{value}\"",
+      "jobTitle": "ስም \"{value}\"",
+      "officeId": "ቢሮ {value}",
+      "groups": "{count, plural, one {# ቡድን} other {# ቡድናት}}"
+    }
   }
 }

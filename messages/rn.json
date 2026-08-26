@@ -950,7 +950,12 @@
       "showFewer": "Garagaza bike"
     },
     "retryWithModel": "Gerageza ukoresheje {model}",
-    "createTodoTasks": "Himba imirimo ya To Do kuri uru rwandiko"
+    "createTodoTasks": "Himba imirimo ya To Do kuri uru rwandiko",
+    "attachedFileExpired": "Idosiye washyizeho ntikiboneka — amadosiye yoherejwe abikwa igihe gito. Yarakuwe muri ubu butumwa. Gerageza utayikoresheje canke uyisubizeho wongere uyohereze.",
+    "repeatedFailureNotice": "Biracika kuja gusubira kwaduka — ibiganiro birashobora kuba vyononekara. Gutangura ikiganiro gisha akenshi birabikemura.",
+    "startNewConversation": "Tangu ikiganiro gishasha",
+    "downloadDebugInfo": "Kurondera no gukuraho amakuru yo gutohoza",
+    "includeMessageText": "Shiramwo inyandiko y’ubutumwa"
   },
   "transcript": {
     "originalTranscript": "Inyandiko y'intango",
@@ -981,7 +986,9 @@
     "quickActions": "Ibikorwa vya Vuba",
     "expandFolder": "Gufungura dosiye {name}",
     "collapseFolder": "Gufunga dosiye {name}",
-    "folderOptions": "Amahitamo ya {name}"
+    "folderOptions": "Amahitamo ya {name}",
+    "agentsEntry": "Abashinzwe",
+    "agentsTitle": "Rondera abashinzwe kandi utangure kuganira n’umwe"
   },
   "errors": {
     "somethingWentWrong": "Hari ikintu kitajenda neza",
@@ -2651,6 +2658,10 @@
       "map": {
         "label": "Ikarata",
         "description": "Gira ikibazo cose kivemo amakuru y’ahantu kuri karata"
+      },
+      "grants": {
+        "label": "Gukora ivyo gutunganya inkunga",
+        "description": "Uhuze kandi ukuramwo amakuru ateguye neza mu bisobanuro vy’inkunga"
       }
     },
     "chooser": {
@@ -2660,7 +2671,8 @@
       "newTranslation": "Ukundi guhindura",
       "newDocument": "Inyandiko nshasha",
       "newDataAnalysis": "Isesengura nshasha ry'ibiharuro",
-      "newMap": "Ikarata nshasha"
+      "newMap": "Ikarata nshasha",
+      "newGrants": "Gutangura gukorana n’inkunga nshasha"
     },
     "translation": {
       "chooseLanguage": "Ururimi muriko mushiramwo",
@@ -3277,7 +3289,8 @@
       "unknownType": "Iki kiganiro kirakoresha workflow iyi version itazi. Amakuru y'ikiganiro ari hasi aha.",
       "untitled": "Ikiganiro gishasha",
       "toggleMenu": "Hindura urutonde",
-      "model": "Model kuri workflow iyi"
+      "model": "Model kuri workflow iyi",
+      "disabledByAdmin": "Iyi workflow yarahagaritswe n’umuyobozi. Inyandiko y’ibiganiro irerekanywe hasi."
     },
     "tabs": {
       "label": "Uburyo bwo kuganira",
@@ -4031,7 +4044,153 @@
     "conflictTakeTheirs": "Fata ivyabo",
     "conflictNoFieldDiff": "Agaciro karangana — gusa version ya dosiye niyo yahindutse.",
     "conflictRecordGone": "Iyi dosiye yarahanaguwe (caneke ntishoboye gusubirizwa). Fata ayo ukeneye muri fomu hanyuma usubire kubanza.",
-    "groupsFlagOff": "Kurondera ku matsinda ntikirashoboka muri ino siyanse. Amatsinda yari yasanzwe azobandanya gukora."
+    "groupsFlagOff": "Kurondera ku matsinda ntikirashoboka muri ino siyanse. Amatsinda yari yasanzwe azobandanya gukora.",
+    "catalogOauth": {
+      "title": "Porogaramu za OAuth zihuza imbere muri sisiteme",
+      "description": "Porogaramu za OAuth zikoreshwa ku rwego rwa deployment ku bihuza vyubatswe imbere (nka GitHub, Asana, ...). Ivyo ubitswe hano birasimbura imirongo MCP_OAUTH_* mu bidukikije; kubikuraho bisubira gukoresha ivyo bidukikije. Amabanga y'ibanga y'abakiriya arakingirwa mu bubiko kandi ntasubira kwerekanwa.",
+      "badgeAdmin": "Byashizweho hano",
+      "badgeEnv": "Biva mu bidukikije",
+      "badgeNone": "Ntivyashizweho",
+      "badgeDcr": "Kwiyandikisha ubwabwo",
+      "badgeDcrHint": "Uwu mutanga serivisi arashobora kwiyandikisha umukiriya wa OAuth ukwabo, bityo birashoboka n'aho porogaramu itashizweho hano.",
+      "clientIdLabel": "ID y'umukiriya wa OAuth",
+      "clientSecretLabel": "Ijambo ry'ibanga ry'umukiriya wa OAuth",
+      "secretStoredPlaceholder": "Bibitswe — andika ushaka gusubiriza, reka gusiba kugira bigume",
+      "secretNewPlaceholder": "Shira ijambo ry'ibanga ry'umukiriya",
+      "save": "Bika",
+      "remove": "Kuraho",
+      "removeToEnv": "Kuraho (subira kubidukikije)",
+      "saved": "Porogaramu ya OAuth ya {name} ibitswe",
+      "removed": "Porogaramu ya OAuth ya {name} yakuwemo",
+      "saveError": "Kugira ubike porogaramu ya OAuth vyarananiranye. Gerageza gusubira.",
+      "conflict": "Iyi dosiye yarahinduwe ahandi — vyasukuwe, gerageza gusubira.",
+      "storageUnavailable": "Ububiko bw'abayobozi ntibugerekanwa; dosiye zabitswe ntizashoboye kwerekanwa. Kubika ntibishoboka gushika bikosowe.",
+      "sealingUnavailable": "Ugukinga amabanga ntikwashizweho kuri iri deployment (AUTH_SECRET irabuze) — amabanga y'abakiriya ntashobora kubikwa.",
+      "updatedBy": "Vyavuguruwe na {by} kw'itariki ya {at}"
+    },
+    "orgAgentOverrideTitle": "Guhinduza agent yashizwemwo",
+    "orgAgentOverrideAction": "Hindura",
+    "orgAgentBuiltinBadge": "Yashizwemwo",
+    "orgAgentBuiltinHint": "Yasobanuwe muri deployment config. Amategeko yo kuyikoresha arashobora guhindurwa hano; hindura kugira uhindure ayindi minyerezano ata deployment ukoze.",
+    "m365AgentIndexProgress": "Biriko biratunganywa {done} kuri {total} {total, plural, one {urwandiko} other {inyandiko}}…",
+    "m365AgentIndexInterrupted": "Itunganya ryarahagaze kuri {done} muri {total} — komereza imbere kugira ngo urangize.",
+    "m365AgentIndexStartedBy": "vyatangujwe na {name}",
+    "m365AgentIndexResume": "Subira ubandanye",
+    "m365AgentIndexResumeHint": "Bandanya gutunganya guhera aho vyahagaze, ukoresheje uburenganzira bwa Microsoft 365. Guma ufise uru rupapuro rwa Internet rukinguye.",
+    "m365AgentIndexCancel": "Hagarika",
+    "m365AgentIndexCancelled": "Itunganya ryarahagaritswe — inyandiko zimaze gutunganywa zirashobora kuronderwa.",
+    "m365AgentIndexJobFailed": "Itunganya ryarahagaze: {error}",
+    "m365AgentIndexDone": "Itunganya ryarangiye: {indexed} zaratunganyijwe, {failed} ntizashobotse, {noText} nta majambo ahari.",
+    "m365AgentDocCounts": "{indexed, plural, one {# urwandiko zaratunganyijwe} other {# inyandiko zaratunganyijwe}} · {failed} ntizashobotse · {noText} nta majambo · {needsPreparation} zirakeneye gutegurwa · {skipped} zarasizwe",
+    "m365CapDocuments": "Inyandiko: {count} / {max}",
+    "m365CapBytes": "{bytes} kuri {max}",
+    "m365CapOverDocuments": "Wararengeje urugero rwa {max} rw'inyandiko. Kuraho utuzu kuri subfolders, sanganya ubwoko bw'amadosiye, canke kuraho inkomoko — gusa amadosiye azotunganywa nizo zibazwa.",
+    "m365CapOverBytes": "Wararengeje urugero rwa {max} mu bunini. Kuramwo subfolders cyangwa amadosiye manini.",
+    "m365PlanScanning": "Biriko birasuzumwa…",
+    "m365PlanRefreshing": "Biravugururwa…",
+    "m365PlanFailed": "Ntivyashobotse gusuzuma inkomoko ukoresheje konti yawe ya Microsoft 365.",
+    "m365PlanMissing": "Ntivyabonetse canke nta burenganzira",
+    "m365PlanIndexable": "{count, plural, one {# idosiye izotunganywa} other {# madosiye azotunganywa}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# irakeneye gutegurwa} other {# zirakeneye gutegurwa}}",
+    "m365PlanSkipped": "{count} vyarasizwe",
+    "m365PlanShowDetails": "Ibisobanuro",
+    "m365PlanHideDetails": "Siba ibisobanuro",
+    "m365PlanTruncated": "Dosiyiye nini cane kugira isuzumwe yose — gusa ibikoresho 1,000 vya mbere vyaragaragajwe. Hitamwo subfolder aho.",
+    "m365PlanRecursive": "Harimwo subfolders",
+    "m365PlanExtensionsLabel": "Ubwoko bw'amadosiye gusa:",
+    "m365PlanExtensionsPlaceholder": "nk'icitegererezo: pdf, docx",
+    "m365PlanSubfolders": "Subfolders",
+    "m365PlanFolderCount": "{count, plural, one {# idosiye} other {# madosiye}}",
+    "m365PlanGroupIndexable": "Bizotunganywa",
+    "m365PlanGroupNeedsPreparation": "Birakeneye gutegurwa",
+    "m365PlanGroupSkipped": "Vyasizwe",
+    "m365PlanPreparationHint": "ishusho/ijwi/video — ntibiratunganywa",
+    "m365PlanMoreRows": "…n'ibindi {count}",
+    "m365ItemStatus": {
+      "pending": "birategererejwe",
+      "indexed": "vyaratunganyijwe",
+      "failed": "ntivyashobotse",
+      "noText": "nta majambo yakuwemwo",
+      "missing": "ntibiriho"
+    },
+    "m365SkipReason": {
+      "unsupported": "ubwoko butemewe",
+      "tooLarge": "burengeje 25 MB",
+      "disallowedType": "ubwoko bwabujijwe (executable/archive)",
+      "malware": "Microsoft yabonye nk'urwaye virus",
+      "zeroBytes": "idosiye irimwo ubusa",
+      "excluded": "ntiririmwo",
+      "typeFilter": "ntiri muri type filter"
+    },
+    "localAdminGroup": {
+      "agents": "Abashinzwe",
+      "promptAgents": "Abashinzwe prompt",
+      "m365Agents": "Abashinzwe Microsoft 365",
+      "orgAgents": "Abashinzwe ubumenyi",
+      "guides": "Imfashanyigisho",
+      "connectors": "Connectors",
+      "datasets": "Datasets z'ikarata",
+      "unknown": "Vyashinzwe ariko ntivyabonetse"
+    },
+    "localAdminGroupUnavailable": "Urutonde ntiruriko igihe gito — iyo delegation iriho iragumaho.",
+    "localAdminBuiltIn": "birimwo",
+    "localAdminSummary": "{count, plural, one {# delegation} other {# delegations}}: {names}",
+    "localAdminSummaryMore": "{names} hamwe na {more} yindi",
+    "localAdminNoDelegations": "Nta delegation irahari — admin y'aho gusa adafise abashinzwe abona gusa aho kwungururira.",
+    "localAdminSelectedCount": "{selected} kuri {total} vyatoranijwe",
+    "localAdminCopyFrom": "Gukoporora kuri",
+    "localAdminClearAll": "Siba vyose",
+    "localAdminSelectGroup": "Hitamwo vyose",
+    "localAdminClearGroup": "Siba",
+    "localAdminSearchPlaceholder": "Rondera abashinzwe, imfashanyigisho, connectors…",
+    "localAdminDuplicateEmail": "Iyi email isanzwe iri ku rutonde — huza ibintu bibiri.",
+    "localAdminExpand": "Erekana delegation",
+    "localAdminCollapse": "Hisha delegation",
+    "localAdminDiscard": "Rasiba ivyonahinduwe",
+    "m365AgentRefresh": "Ongera",
+    "m365AgentRefreshHint": "Tora dosiye zashizweko, zahahinduwe canke zavanyweho kuva irya nyuma — dosiye zitahindutse ntizisubirwamwo. Iyi tab uyifungure.",
+    "m365AgentReindexAll": "Shira vyose mu rutonde bundi bushasha",
+    "m365AgentRefreshProgress": "Biriko biravugururwa — {done} kuri {total} ivyarangiye {total, plural, one {document} other {documents}}…",
+    "m365AgentRefreshDone": "Ongera birarangiye: {added} vyashizweko, {modified} vyavuguruwe, {removed} vyakuweho, {failed} vyapfubye.",
+    "m365ChangesChecking": "Biriko bararaba ibihindutse muri Microsoft 365 kuva isuzuma riheruka…",
+    "m365ChangesFailed": "Ntivyashobotse kuraba ibihindutse kuri Microsoft 365 yawe.",
+    "m365ChangesNeverIndexed": "Ntibirashyirwa mu rutonde — shiramwo Index uhejeje kuzigama.",
+    "m365ChangesFound": "{count, plural, one {# ihinduka} other {# ibihinduka}} kuva irya nyuma: {added} vyashizweko, {modified} vyavuguruwe, {removed} vyakuweho.",
+    "m365ChangesNone": "Nta gihindutse kuva irindi suzuma ({date}).",
+    "m365PrepareButton": "Tegekanya",
+    "m365PrepareOcrButton": "Tegekanya (OCR)",
+    "m365PrepareSaveFirst": "ziga agent kugira utegure",
+    "m365PrepareHintImage": "ishusho — 1 vision call",
+    "m365PrepareHintMedia": "~{minutes} min y'amajwi yo guhindura ibivugwa",
+    "m365PrepareHintOcr": "nta tekst layer — OCR ukoresheje vision, gushika ku mapaji 30",
+    "m365PreparePreparing": "Biriko birategurwa…",
+    "m365PreparePending": "Biriko birahindurwa mu majambo…",
+    "m365PreparedNote": "vyateguwe · {kind}",
+    "m365PreparedKind": {
+      "image": "insiguro y'ishusho",
+      "audio": "insiguro",
+      "video": "insiguro",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "{name} vyateguwe ({chars} inyuguti). Kora Ongera kugira bishirwe mu rutonde.",
+    "m365PrepareStarted": "Ihindurwamajambo rya {name} ryatanguye mu mwanya — gira iyi tab ifunguye.",
+    "m365PrepareFailed": "Ntivyashobotse gutegura {name}: {error}",
+    "m365PrepareFailedGeneric": "Kugitegura vyapfubye.",
+    "canonicalKeyLabel": "Urufunguzo",
+    "copyKey": "Gukoporora urufunguzo",
+    "agentKeySearchPlaceholder": "Shaka abahuza, inyigisho, connectors… canke ushiremo urufunguzo",
+    "agentKeyAddCustom": "Ongeramwo \"{key}\" nk'uko wayanditse",
+    "agentKeyRemove": "Kuraho {name}",
+    "hideAgent": "Hisha",
+    "unhideAgent": "Garagaza",
+    "hideAgentHint": "Hisha uyu muhuza ku rutonde rwawe rwa admin. Bigira ku murongo wawe gusa — abakoresha n'abandi ba admin ntibibahindura.",
+    "unhideAgentHint": "Siyo uyu muhuza agaruke ku rutonde rwawe rwa admin.",
+    "hiddenBadge": "Vyahishwe",
+    "hiddenAgentsCount": "{count, plural, one {# muhuza yahishwe} other {# abahuza bahishwe}}",
+    "hiddenAgentsShowing": "Hariko harerekanwa {count, plural, one {# muhuza yahishwe} other {# abahuza bahishwe}}",
+    "hiddenAgentsShow": "Garagaza",
+    "hiddenAgentsHide": "Hisha kandi",
+    "allAgentsHidden": "Abahuza bose hano bahishwe kuri wewe — kanda Garagaza kugira uberekane."
   },
   "localModels": {
     "title": "Akarorero k'imbere mu muduga",
@@ -4232,9 +4391,15 @@
       "connectors": "Connectors y'ishirahamwe n'abayikoresha.",
       "guides": "Imitwarariko, amajambo n’amabwirizwa ajanye no kubahiriza.",
       "mapDatasets": "Datasets zahisemwo zizokoreshwa mu mashusho y'ikarata.",
-      "localAdmins": "Shingira abandi amabanga yo guhindura amategeko y’ukwinjira."
+      "localAdmins": "Shingira abandi amabanga yo guhindura amategeko y’ukwinjira.",
+      "workflows": "Zimya canke shira ku murongo uburyo bw'ibiganiro kuri bose.",
+      "viewAs": "Gerageza application nk’uwujuje canke atujuje ibisabwa."
     },
-    "openSettings": "Fungura ivyo gushiraho"
+    "openSettings": "Fungura ivyo gushiraho",
+    "area": {
+      "workflows": "Uburyo bw’akazi",
+      "viewAs": "Raba nka"
+    }
   },
   "limits": {
     "title": "Ingingo ngenderwako z'ikoreshwa",
@@ -4436,7 +4601,8 @@
     "groupSearchNoResults": "Nta matsinda ahuye n'iryo zina.",
     "groupSearchError": "Ihiganwa ry'amatsinda ntiryagenze neza. Ushobora gushira ID y'ikintu c'itsinda hasi.",
     "groupSearchHint": "Andika inyuguti zibiri canke zirenga kugira ushakire mu matsinda y'ikigo cawe, canke ucapure ID y'itsinda. Override ikoreshwa ku banywanyi b'itsinda muri Microsoft Entra.",
-    "groupsFlagOff": "Guhitamo itsinda ntibirashirwa muri kino kibanza. Amatsinda asanzwe akora azoguma akora."
+    "groupsFlagOff": "Guhitamo itsinda ntibirashirwa muri kino kibanza. Amatsinda asanzwe akora azoguma akora.",
+    "featureDisabled": "Ingingo ngenga ikoreshwa ntirashyirwaho kuri ubu bushikirizwa."
   },
   "m365": {
     "connections": {
@@ -4797,5 +4963,149 @@
     "failed": "Ntivyashobotse gusangira — nta na kimwe cakozwe.",
     "copyFailed": "Ntivyashobotse gukoporora iyo link — hitamwo hejuru uyikoporore n'intoke.",
     "lastMessagesCountLabel": "Umubare w'ubutumwa bwheruka bwo gushirako"
+  },
+  "toolModes": {
+    "webSearch": "Gushakisha kuri web",
+    "codeInterpreter": "Ibisobanuro vy’amakode",
+    "off": "Zimije",
+    "auto": "Gikora ku bw'ikimenyeretso",
+    "always": "Igihe cose",
+    "routingPrivacy": "Ubumenyi bwite",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Gushakisha hifashishijwe Azure AI bisubiza ivyifuzo biciye muri Azure AI Foundry, bishobora kugumizwa.",
+    "learnMore": "Menya vyinshi"
+  },
+  "agentAttach": {
+    "browserTitle": "Abashinzwe",
+    "browserSubtitle": "Ongerako abashinzwe n’abahuza muri iki kiganiro, canke utangure ikiganiro gishasha n’umushinzwe. Benshi barakorana n’icagezwe cose wahisemwo.",
+    "searchPlaceholder": "Rondera abashinzwe n’abahuza…",
+    "loading": "Biriko birapakururwa abashinzwe…",
+    "noMatches": "Nta gisubizo gihuye n’ivyo warondera.",
+    "noAgents": "Nta bashinzwe baboneka.",
+    "addToChat": "Shiramwo muri iki kiganiro",
+    "removeFromChat": "Kuramwo muri iki kiganiro",
+    "newChat": "Ikiganiro gishasha",
+    "attached": "Vyashizweho",
+    "detach": "Kuraho",
+    "change": "Hindura",
+    "browse": "Rondera abashinzwe…",
+    "noAgent": "Nta mushinzwe yashizweho",
+    "close": "Funga",
+    "kind": {
+      "rag": "Ubumenyi",
+      "prompt": "Imico",
+      "m365": "Ubumenyi (Microsoft 365)",
+      "org": "Ubumenyi",
+      "foundry": "Umushinzwe Foundry",
+      "connector": "Umuhuza"
+    },
+    "semantics": {
+      "your-model": "ikoreshwa na modele yawe",
+      "pinned-model": "modele yashizweho n’umuyobozi",
+      "own-model": "ikoresha modele yayo ubwayo"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Ivyo usabwe n'ishirahamwe ryawe",
+    "searching": "Turiko turondera mw'ishirahamwe ryawe...",
+    "noMatches": "Nta bisubizo vyabonetse muri dosiye — ushobora kwandika aderesi intoke"
+  },
+  "workflowsAdmin": {
+    "title": "Uburyo bw’akazi",
+    "description": "Shira ku murongo canke zimya buri workflow kuri organisation yose. Workflow yavuye ku murongo ntigaragara mu menyo kandi server irayanka, na n'ubwo hari uwari akwiye kuyironka.",
+    "layeredNote": "Flag ya LaunchDarkly conversationWorkflows igikomeza uburyo bwo gushira ku murongo: workflow yashizwe ku murongo hano irashobora kuboneka gusa iyo iyo flag yashizweho. Iyi page ntishobora kwerekana ikintu flag ihishe.",
+    "loading": "Hariko haradandazwa amategeko ya workflow…",
+    "loadError": "Ntivyashobotse kuronka amategeko ya workflow.",
+    "policyUnavailable": "Ntivyashobotse gusoma amategeko ya workflow kuri storage. Ama toggle ntagaragazwa aho kwerekana ibisanzwe bishobora kutahuza n’ivyo amategeko asaba.",
+    "retry": "Gerageza gusubira",
+    "enableAll": "Shira vyose ku murongo",
+    "disableAll": "Zimya vyose",
+    "enabledLabel": "Vyashizwe ku murongo",
+    "disabledLabel": "Vyavuye ku murongo",
+    "defaultOnHint": "Ivyo bigira igihe ata mategeko arazigamwa: vyashizwe ku murongo.",
+    "defaultOffHint": "Ivyo bigira igihe ata mategeko arazigamwa: vyavuye ku murongo — umuyobozi agomba kubishira ku murongo n’intoki.",
+    "grantsNote": "Gukora inkunga birimwo imbibe z’inyongera: biri gusa ku bakozi ba MSF-USA bo mu gisata ca Program bafise “grants” ku mirimo, canke abo muri Systems bafise “innovation” ku mirimo. Kuvyemeza hano ntibisimbura ayo mategeko.",
+    "unsaved": "Ufise impinduka utarazigama.",
+    "save": "Zigama",
+    "saving": "Hariko harazigama…",
+    "saveSuccess": "Amategeko ya workflow arazigamwe.",
+    "saveError": "Ntivyashobotse kuzigama amategeko ya workflow.",
+    "conflictError": "Hari uwundi muyobozi yahinduye amategeko imbere yawe. Vyarongeye kuradandazwa — raba neza wongere uzigame.",
+    "updatedByLine": "Vyaheruka kuzigamwa na {by} kw’itariki {at}.",
+    "neverSaved": "Nta mategeko arazigamwa; ibisanzwe biri hejuru ni vyo bikurikizwa."
+  },
+  "viewAs": {
+    "title": "Raba nka",
+    "description": "Gerageza application, gusa ku gihe ca session yawe, nka kanaka yuzuza canke atuzuza ivyo bisanzwe bigenwa n’umurongo canke n’abayobozi. Izina ryawe ntirihinduka: ivyo ukoze vyose biguma ari ivy’inyawe kandi ibisigazwa vyose birakuvuga.",
+    "activeTitle": "Raba-nka birakora",
+    "inactiveTitle": "Raba-nka ntibirakora",
+    "sections": {
+      "role": "Inshingano z’umuyobozi",
+      "region": "Agace k’amakuru",
+      "attributes": "Ibiranga vya directory",
+      "groups": "Ubugira mu matsinda",
+      "presets": "Ibiteguye"
+    },
+    "role": {
+      "global": "Umuyobozi mukuru (inshingano zawe nyazo)",
+      "local": "Umuyobozi w’aho",
+      "none": "Umukoresha w’imbere",
+      "localKeysLabel": "Imfunguruzo za agent yahawe",
+      "localKeysHint": "Imfunguruzo z’aba agent yahawe arakosora, zandikijwe zitandukanyijwe na comma. Teba ubusa kuri admin w’aho adafise agents yahawe.",
+      "noneWarning": "Nk’umukoresha asanzwe, ayandi mashirahamwe yose ntazoboneka. Iyi page iracagerwako, kandi banner hejuru mu gisohokayanditse irakwereka inzira yo gusubira."
+    },
+    "region": {
+      "actual": "Kuri ({region})",
+      "hint": "Ishira ibisabwa vyawe hamwe n'ivyo ushyira kuri storage y’iyindi ntara igihe bikiri gukora. Birarengeye cookie ya ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Ishirahamwe",
+      "companyName": "Sosiyete",
+      "jobTitle": "Izina ry'akazi",
+      "officeId": "Ibiro",
+      "officeActual": "Ibiro nyakuri",
+      "officeNone": "Nta biro",
+      "actualValue": "Iciriho: {value}",
+      "actualEmpty": "Iciriho: (ntacyo)",
+      "hint": "Wemerewe gusiga ikibanza kitaranditse kugira ugumane agaciro kariho. Ibi bikora kuri grants rule, attribute-scoped usage limits na access rules."
+    },
+    "groups": {
+      "label": "ID z’amatsinda",
+      "placeholder": "ID ya group kimwe kuri murongo ku murongo",
+      "hint": "Bisimbura—ntibyongezwa—ubumwe nyabwo muri kino gihe, kugira ugerageze kwinjiramo canke kutinjiramo."
+    },
+    "presets": {
+      "grantsMember": "Umurwi wa grants",
+      "regularUser": "Umukoresha asanzwe",
+      "localAdmin": "Admin wa hano, nta agents",
+      "otherRegion": "Iyindi ntara",
+      "hint": "Presets yuzura ifishi; nta na kimwe gikora mbere yo gukanda Apply."
+    },
+    "apply": "Shira mu bikorwa kandi ushore ivugurura",
+    "applying": "Biriko birakoreshwa…",
+    "clear": "Sohoka view-as",
+    "clearing": "Uriko urasohoka…",
+    "reset": "Sangira ishusho",
+    "nothingToApply": "Tegereza nibura kimwe ca override kugira ushobore gushira mu bikorwa.",
+    "applyError": "View-as ntivyashoboye gukorwa: {error}",
+    "clearError": "View-as ntivyashoboye gusohorwa: {error}",
+    "loadError": "State ya view-as ntiyashoboye gutwara.",
+    "retry": "Subira kugerageza",
+    "expiresNote": "View-as imara amasaha umunani canke igihe usohotse.",
+    "banner": {
+      "label": "Uriko uraraba nka",
+      "adjust": "Hindura",
+      "exit": "Sohoka",
+      "role": {
+        "local": "admin wa hano",
+        "none": "umukoresha asanzwe"
+      },
+      "region": "intara {region}",
+      "department": "ishirahamwe \"{value}\"",
+      "companyName": "sosiyete \"{value}\"",
+      "jobTitle": "izina \"{value}\"",
+      "officeId": "ibiro {value}",
+      "groups": "{count, plural, one {# tsinda} other {# matsinda}}"
+    }
   }
 }

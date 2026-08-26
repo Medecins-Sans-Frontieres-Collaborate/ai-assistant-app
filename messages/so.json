@@ -950,7 +950,12 @@
       "showFewer": "Muuji wax ka yar"
     },
     "retryWithModel": "Isku day {model}",
-    "createTodoTasks": "Abuur hawlo To Do oo laga sameeyay jawaabtan"
+    "createTodoTasks": "Abuur hawlo To Do oo laga sameeyay jawaabtan",
+    "attachedFileExpired": "Fayl la lifaaqay lama heli karo — faylasha la soo geliyay waxaa la kaydiyaa muddo xaddidan. Waxaa laga saaray wadahadalkan. Isku day mar kale adigoon isticmaalin, ama dib u soo geli faylka.",
+    "repeatedFailureNotice": "Arrintu way fashilantay marar badan — wadahadalka waxa laga yaabaa inuu dhaawacmay. Bilaabidda wadahadal cusub badanaa way xallisaa.",
+    "startNewConversation": "Bilow wadahadal cusub",
+    "downloadDebugInfo": "Soo degso macluumaadka cilad-baarista",
+    "includeMessageText": "Ku dar qoraalka farriinta"
   },
   "transcript": {
     "originalTranscript": "Qoraalka Aslka ah",
@@ -981,7 +986,9 @@
     "quickActions": "Ficilada Degdegga ah",
     "expandFolder": "Balaadhi galka {name}",
     "collapseFolder": "Yaree galka {name}",
-    "folderOptions": "Xulashooyinka {name}"
+    "folderOptions": "Xulashooyinka {name}",
+    "agentsEntry": "Wakiillo",
+    "agentsTitle": "Baadh wakiillo waxaadna wada sheekaysi la bilaabi kartaa midkood"
   },
   "errors": {
     "somethingWentWrong": "Wax baa qalday",
@@ -2651,6 +2658,10 @@
       "map": {
         "label": "Khariidad",
         "description": "Xog ku beddel goobo khariidad ku yaal"
+      },
+      "grants": {
+        "label": "Habraaca Ka shaqaynta Deeqaha",
+        "description": "Isku-xisaabi oo ka soo saar xog habaysan warbixinnada deeqaha"
       }
     },
     "chooser": {
@@ -2660,7 +2671,8 @@
       "newTranslation": "Turjumaad cusub",
       "newDocument": "Dukumeenti cusub",
       "newDataAnalysis": "Falanqayn xog cusub",
-      "newMap": "Khariidad cusub"
+      "newMap": "Khariidad cusub",
+      "newGrants": "Ka shaqaynta deeqo cusub"
     },
     "translation": {
       "chooseLanguage": "Luqadda la beegsanayo",
@@ -3277,7 +3289,8 @@
       "unknownType": "Wadahadalkan wuxuu isticmaalayaa hab-socod aanu nuqulkani aqoonsanayn. Taariikhda wadahadalka hoose ayaad ku arki kartaa.",
       "untitled": "Wadahadal Cusub",
       "toggleMenu": "Soo rogo/ka qari menu-ga",
-      "model": "Model-ka hab-socodkan"
+      "model": "Model-ka hab-socodkan",
+      "disabledByAdmin": "Habraacan waxaa xannibay maamulaha. Taariikhda wada hadalka waxaa hoos ku arki doontaa."
     },
     "tabs": {
       "label": "Hab wada hadal",
@@ -4031,7 +4044,153 @@
     "conflictTakeTheirs": "Qaado nuqulkooda",
     "conflictNoFieldDiff": "Qiima kastaa waa isku mid — nooca diiwaanka ayaa kaliya la beddelay.",
     "conflictRecordGone": "Diiwaankan waa la tirtiray (ama lama soo celin karo). Nuqul ka qaado wixii aad u baahan tahay foomka, kadibna dib u rar.",
-    "groupsFlagOff": "Bartilmaameedka kooxaha lama hawlgelin deegaankaan weli. Kooxaha jira wali way shaqaynayaan."
+    "groupsFlagOff": "Bartilmaameedka kooxaha lama hawlgelin deegaankaan weli. Kooxaha jira wali way shaqaynayaan.",
+    "catalogOauth": {
+      "title": "Barnaamijyada OAuth ee isku xirka ku dhexjira",
+      "description": "Barnaamijyada OAuth guud ahaan u dhaqangala isku-xirayaasha ku dhexjira (GitHub, Asana, ...). Diiwaan halkan lagu keydiyo wuxuu ka horeynayaa beddelka MCP_OAUTH_* ee deegaanka; tirtiristiisuna waxay dib ugu laabanaysaa kuwa deegaanka. Sirta macaamiisha waa la sirayaa xilliga keydinta mana la muujinayo mar kale.",
+      "badgeAdmin": "Halkan ayaa lagu qeexay",
+      "badgeEnv": "Ka socota deegaanka",
+      "badgeNone": "Aan la qaabeyn",
+      "badgeDcr": "Isdiiwaangelin toos ah",
+      "badgeDcrHint": "Bixiyahan wuxuu si otomaatig ah u diiwaangeliyaa macaamiisha OAuth, sidaas darteed wuu shaqeynayaa xitaa haddii app halkan aan lagu diiwaangalin.",
+      "clientIdLabel": "Aqoonsiga macaamiisha OAuth",
+      "clientSecretLabel": "Sirta macaamiisha OAuth",
+      "secretStoredPlaceholder": "La keydiyay — qor si aad u beddesho, madhnaanta sii si aad u ilaaliso",
+      "secretNewPlaceholder": "Ku dhaji sirta macaamiisha",
+      "save": "Kaydi",
+      "remove": "Tirtir",
+      "removeToEnv": "Tirtir (ugu laabo deegaanka)",
+      "saved": "{name} barnaamijka OAuth waa la keydiyay",
+      "removed": "{name} barnaamijka OAuth waa la tirtiray",
+      "saveError": "Keydinta barnaamijka OAuth waa ay fashilantay. Fadlan mar kale isku day.",
+      "conflict": "Diiwaankaan waxaa laga beddelay meel kale — dib ayaa loo cusbooneysiiyay, fadlan mar kale isku day.",
+      "storageUnavailable": "Keydka maamulka lama heli karo; diiwaanada jirana lama soo bandhigi karo. Keydintu waa la xannibay ilaa ay soo hagaagayso.",
+      "sealingUnavailable": "Sirta kaydinta lama qaabeyn qorshahan (AUTH_SECRET waa maqan yahay) — siraha macaamiisha lama kaydin karo.",
+      "updatedBy": "Waxaa cusbooneysiiyay {by} {at}"
+    },
+    "orgAgentOverrideTitle": "Ka baddal wakiilka ku dhex-dhisnaa",
+    "orgAgentOverrideAction": "Ka baddal",
+    "orgAgentBuiltinBadge": "Ku dhex-jira",
+    "orgAgentBuiltinHint": "Waxaa lagu qeexay dejinta gaarsiinta. Xeerka galitaanka wuu saxmi karaa halkan; u baddal si aad wax uga beddesho dejimaha adigoon dib u dajin.",
+    "m365AgentIndexProgress": "Waxaa la adeegsanayaa {done} ee {total} {total, plural, one {dukumenti} other {dukumentiyo}}…",
+    "m365AgentIndexInterrupted": "Habka tusmada ayaa istaagay marka la marayo {done} ee {total} — sii wad si aad u dhammaystirto.",
+    "m365AgentIndexStartedBy": "waxa bilaabay {name}",
+    "m365AgentIndexResume": "Sii wad",
+    "m365AgentIndexResumeHint": "Sii wad tusmeynta meesha ay ka istaagtay, adoo adeegsanaya Microsoft 365-kaaga. Tab-kan furan ha ahaado.",
+    "m365AgentIndexCancel": "Jooji",
+    "m365AgentIndexCancelled": "Tusmeyntu waa la joojiyay — dukumentiyada hore loo shaqeeyay way sii raadin karaan.",
+    "m365AgentIndexJobFailed": "Tusmeyntu way istaagtay: {error}",
+    "m365AgentIndexDone": "Tusmeyntu waa dhamaatay: {indexed} la tusmeeyay, {failed} waa fashilmeen, {noText} ma lahayn qoraal.",
+    "m365AgentDocCounts": "{indexed, plural, one {# dukumenti la tusmeeyay} other {# dukumentiyo la tusmeeyay}} · {failed} waa fashilmeen · {noText} qoraal malaha · {needsPreparation} u baahan diyaar-garow · {skipped} waa la dhaafay",
+    "m365CapDocuments": "Dukumentiyada: {count} / {max}",
+    "m365CapBytes": "{bytes} ee {max}",
+    "m365CapOverDocuments": "Waxaad dhaaftay xaddiga {max} dukumenti. Ka saar galalka hoose, kala saar nooca file-ka, ama tirtir ilo — waxa keliya ee la xisaabinayo waa faylasha la tusmeyndoono.",
+    "m365CapOverBytes": "Waxaad dhaaftay xadka baaxadda {max}. Ka reeb galalada hoose ama faylasha waaweyn.",
+    "m365PlanScanning": "Waxaa la baarayaa…",
+    "m365PlanRefreshing": "waxaa la cusbooneysiinayaa…",
+    "m365PlanFailed": "Lama awoodin in laguu baaro ilaha adigoo adeegsanaya akoonkaaga Microsoft 365.",
+    "m365PlanMissing": "Lama helin ama ma jirto ogolaansho",
+    "m365PlanIndexable": "{count, plural, one {# fayl waa la tusmeenya} other {# fayl waa la tusmeyndoonayaa}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# u baahan diyaar-garow} other {# u baahan diyaar-garow}}",
+    "m365PlanSkipped": "{count} la dhaafay",
+    "m365PlanShowDetails": "Faahfaahin",
+    "m365PlanHideDetails": "Qari faahfaahinta",
+    "m365PlanTruncated": "Gal-dan waa weyn yahay si dhammaystiran loo baaro — kaliya 1,000 shey ee ugu horreeya ayaa la taxay. Dooro galal-hoosaad.",
+    "m365PlanRecursive": "Ku dar galalka hoose",
+    "m365PlanExtensionsLabel": "Noocyada faylka keliya:",
+    "m365PlanExtensionsPlaceholder": "tusaale: pdf, docx",
+    "m365PlanSubfolders": "Galaldoosaadyo",
+    "m365PlanFolderCount": "{count, plural, one {# fayl} other {# faylal}}",
+    "m365PlanGroupIndexable": "Waa la tusmeyndoonayaa",
+    "m365PlanGroupNeedsPreparation": "U baahan diyaar-garow",
+    "m365PlanGroupSkipped": "La dhaafay",
+    "m365PlanPreparationHint": "sawir/dhawaaq/muuqaal — weli lama tusmeynin",
+    "m365PlanMoreRows": "…iyo {count} kale",
+    "m365ItemStatus": {
+      "pending": "sugaya",
+      "indexed": "la tusmeeyay",
+      "failed": "waa fashilantay",
+      "noText": "qoraal lagama saarin",
+      "missing": "maqan"
+    },
+    "m365SkipReason": {
+      "unsupported": "nooc aan la taageerin",
+      "tooLarge": "ka badan 25 MB",
+      "disallowedType": "nooc la xanibay (executable/archive)",
+      "malware": "Microsoft wuxuu calaamadeeyay in uu yahay malware",
+      "zeroBytes": "fayl madhan",
+      "excluded": "waa la saaray",
+      "typeFilter": "kuma jiro shaandhaynta nooca"
+    },
+    "localAdminGroup": {
+      "agents": "Wakiillo",
+      "promptAgents": "Wakiillada prompt-ka",
+      "m365Agents": "Wakiillada Microsoft 365",
+      "orgAgents": "Wakiillada aqoonta",
+      "guides": "Hagayaal",
+      "connectors": "Isku-xiryayaal",
+      "datasets": "Xog ururinta khariidada",
+      "unknown": "La wareejiyay balse lama helin"
+    },
+    "localAdminGroupUnavailable": "Liiskan si ku meel gaar ah looma heli karo — wareejintii hore waa la hayaa.",
+    "localAdminBuiltIn": "ku-dhex-jira",
+    "localAdminSummary": "{count, plural, one {# wareejin} other {# wareejinno}}: {names}",
+    "localAdminSummaryMore": "{names} iyo {more} kale",
+    "localAdminNoDelegations": "Wali lama wareejin — maamulka maxalliga ah oo aan wakiillo lahayn wuxuu arki karaa kaliya aagga maamulka.",
+    "localAdminSelectedCount": "{selected} ka mid ah {total} waa la doortay",
+    "localAdminCopyFrom": "Ka nuqul",
+    "localAdminClearAll": "Tirtir dhammaan",
+    "localAdminSelectGroup": "Xulo dhammaan",
+    "localAdminClearGroup": "Tirtir",
+    "localAdminSearchPlaceholder": "Raadi wakiillo, hageyaal, isku-xiryayaal…",
+    "localAdminDuplicateEmail": "Email-kan hore ayuu u diiwaangashanaa — isku dar labada gelin.",
+    "localAdminExpand": "Tusi wareejinno",
+    "localAdminCollapse": "Qari wareejinno",
+    "localAdminDiscard": "Ka tag isbeddellada",
+    "m365AgentRefresh": "Cusbooneysii",
+    "m365AgentRefreshHint": "Ka soo qaado faylasha la soo geliyay, la beddelay ama la tiray wixii ka dambeeyay hawlgalkii u dambeeyay — faylasha aan isbeddelin mar kale lama soo dejinayo. Ka soo tag tab-kan furan.",
+    "m365AgentReindexAll": "Dib-u-sifee dhammaan",
+    "m365AgentRefreshProgress": "Waxaa la cusboonaysiinayaa — {done} ka mid ah {total} {total, plural, one {dukumenti} other {dukumenti}} la beddelay…",
+    "m365AgentRefreshDone": "Cusbooneysiinta waa dhammaatay: {added} waa la daray, {modified} waa la beddelay, {removed} waa la tirtiray, {failed} waa la fashilmay.",
+    "m365ChangesChecking": "Waxaa la eegayaa Microsoft 365 wixii isbeddel ah ee ka dambeeyay sifeeyntii ugu dambeysay…",
+    "m365ChangesFailed": "Ma suurtoobin in laguu eego isbeddelada xisaabtaada Microsoft 365.",
+    "m365ChangesNeverIndexed": "Weli lama sifayn — Riix Sifee markaad kaydiso.",
+    "m365ChangesFound": "{count, plural, one {# isbeddel} other {# isbeddel}} wixii ka dambeeyay sifeeyntii ugu dambeysay: {added} waa la daray, {modified} waa la beddelay, {removed} waa la tirtiray.",
+    "m365ChangesNone": "Wax isbeddel ah ma jiro tan iyo sifeeyntii ugu dambeysay ({date}).",
+    "m365PrepareButton": "Diyaari",
+    "m365PrepareOcrButton": "Diyaari (OCR)",
+    "m365PrepareSaveFirst": "wad wakiilka si aad u diyaariso",
+    "m365PrepareHintImage": "sawir — 1 wicitaan aragti",
+    "m365PrepareHintMedia": "~{minutes} daqiiqo maqal ah oo la tafsiro",
+    "m365PrepareHintOcr": "ma jiro lakab qoraal ah — OCR iyadoo la adeegsanayo vision, ugu badnaan 30 bog",
+    "m365PreparePreparing": "Waxaa la diyaarinayaa…",
+    "m365PreparePending": "Waxaa la turjumayaa…",
+    "m365PreparedNote": "waa la diyaariyay · {kind}",
+    "m365PreparedKind": {
+      "image": "sharraxaad sawir",
+      "audio": "qoraalka maqalka",
+      "video": "qoraalka muuqaalka",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "{name} waa la diyaariyay ({chars} xaraf). Ku ordo Cusbooneysii si loo sifeeyo.",
+    "m365PrepareStarted": "Turjumaadda {name} waxay ka bilaabatay asalka — tab-kan furanaow.",
+    "m365PrepareFailed": "Lama diyaarin karin {name}: {error}",
+    "m365PrepareFailedGeneric": "Diyaarinta waa fashilantay.",
+    "canonicalKeyLabel": "Furaha",
+    "copyKey": "Nuqulso furaha",
+    "agentKeySearchPlaceholder": "Raadi wakiillo, hagayaal, isku-xirayaal… ama dheji furaha",
+    "agentKeyAddCustom": "Kudar \"{key}\" sida aad u qortay",
+    "agentKeyRemove": "Ka saar {name}",
+    "hideAgent": "Qari",
+    "unhideAgent": "Soo bandhig",
+    "hideAgentHint": "Qari wakiilkan liiskaaga maareeyaha. Tani waxay saameyneysaa oo keliya aragtidaada — isticmaaleyaasha iyo maareeyayaasha kale lama saameeyo.",
+    "unhideAgentHint": "Wakiilkan mar kale ku soo bandhig liiskaaga maareeyaha.",
+    "hiddenBadge": "Laga qariyey",
+    "hiddenAgentsCount": "{count, plural, one {# wakiil qarsoon} other {# wakiilal qarsoon}}",
+    "hiddenAgentsShowing": "Waxaa la soo bandhigay {count, plural, one {# wakiil qarsoon} other {# wakiilal qarsoon}}",
+    "hiddenAgentsShow": "Soo bandhig",
+    "hiddenAgentsHide": "Mar kale qari",
+    "allAgentsHidden": "Dhammaan wakiillada halkan ku jira waa laga qariyey aragtidaada — isticmaal Soo bandhig si aad u muujiso."
   },
   "localModels": {
     "title": "Moodallo maxalli ah",
@@ -4232,9 +4391,15 @@
       "connectors": "Isku xirayaasha ururka iyo cidda isticmaali karta.",
       "guides": "Hagayaasha qaabka, eray-bixinta, iyo waafaqsanaanta.",
       "mapDatasets": "Xogaha la diyaariyay ee loo heli karo howsha khariidada.",
-      "localAdmins": "U wareeji dadka kale tafatirka xeerarka helitaanka."
+      "localAdmins": "U wareeji dadka kale tafatirka xeerarka helitaanka.",
+      "workflows": "Dami ama shid habraaca wada hadalka qof walba.",
+      "viewAs": "Tijaabi app-ka adoo ah qof buuxiya ama waaya shardi."
     },
-    "openSettings": "Fur dejinta"
+    "openSettings": "Fur dejinta",
+    "area": {
+      "workflows": "Habraacyo",
+      "viewAs": "Eeg sida"
+    }
   },
   "limits": {
     "title": "Xadid isticmaalka",
@@ -4436,7 +4601,8 @@
     "groupSearchNoResults": "Ma jiraan kooxo ku habboon magacaas.",
     "groupSearchError": "Baadhista kooxdu way fashilantay. Waxa aad weli hoos ka dhigi kartaa aqoonsiga kooxda.",
     "groupSearchHint": "Qor ugu yaraan 2 xaraf si aad kooxaha ururkaaga u baadho, ama si toos ah u dhaji aqoonsiga kooxda. Isbeddelkan waxa uu saameeyaa xubnaha kooxda ee Microsoft Entra.",
-    "groupsFlagOff": "Bartilmaameedka kooxaha laguma darin deegaankaan weli. Bartilmaameedyada kooxaha jira way sii shaqeynayaan."
+    "groupsFlagOff": "Bartilmaameedka kooxaha laguma darin deegaankaan weli. Bartilmaameedyada kooxaha jira way sii shaqeynayaan.",
+    "featureDisabled": "Xadka isticmaalka lama hawlgelin ee hawlgalkan."
   },
   "m365": {
     "connections": {
@@ -4797,5 +4963,149 @@
     "failed": "Lama wadaagi karin — wax lama abuurin.",
     "copyFailed": "Link-ga lama koobi karin — fadlan kor ka dooro oo gacanta ku koobi.",
     "lastMessagesCountLabel": "Tirada fariimaha dhow ee la darinayo"
+  },
+  "toolModes": {
+    "webSearch": "Raadinta webka",
+    "codeInterpreter": "Fasiraadda koodhka",
+    "off": "Dami",
+    "auto": "Si toos ah",
+    "always": "Had iyo jeer",
+    "routingPrivacy": "Arrimaha asturnaanta",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI search waxay weydiimaha u dirtaa Azure AI Foundry, waana suurtagal inay kaydiso.",
+    "learnMore": "Wax dheeri ah baro"
+  },
+  "agentAttach": {
+    "browserTitle": "Wakiillo",
+    "browserSubtitle": "Ku dar wakiillo iyo isku-xidhayaal sheekadan, ama wakiil cusub la bilaaw. Waa la jaan qaadi karaan inta badan moodellada aad dooratay.",
+    "searchPlaceholder": "Raadi wakiillo iyo isku-xidhayaal…",
+    "loading": "Wakiillada waa la rarayaa…",
+    "noMatches": "Waxba lama helin raadintaada.",
+    "noAgents": "Wakiil lama heli karo.",
+    "addToChat": "Ku dar sheekadan",
+    "removeFromChat": "Ka saar sheekadan",
+    "newChat": "Sheeko cusub",
+    "attached": "Kusoo xiran",
+    "detach": "Ka xiro",
+    "change": "Beddel",
+    "browse": "Baadh wakiillo…",
+    "noAgent": "Wakiil sooxiran ma jiro",
+    "close": "Xidh",
+    "kind": {
+      "rag": "Aqoonta",
+      "prompt": "Qof ahaaneed",
+      "m365": "Aqoonta (Microsoft 365)",
+      "org": "Aqoonta",
+      "foundry": "Wakiilka Foundry",
+      "connector": "Isku-xidhaha"
+    },
+    "semantics": {
+      "your-model": "waxay adeegsataa moodelkaaga",
+      "pinned-model": "moodel uu doortay maamulaha",
+      "own-model": "waxay ku socotaa moodelkeeda gaarka ah"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Talooyin ka socda ururkaaga",
+    "searching": "Waxaan ka raadinayaa hay’addaada…",
+    "noMatches": "Lama helin wax u dhigma buugga — waad gali kartaa cinwaanka gacanta"
+  },
+  "workflowsAdmin": {
+    "title": "Habraacyo",
+    "description": "Shid ama dami mid kasta oo habraacyada ah dhammaan ururka. Habraaca la xannibo waa la qarinaa menu-yada waxaana diidaya server-ka, xitaa kuwa xaqa u leh.",
+    "layeredNote": "Calaamadda LaunchDarkly conversationWorkflows ayaa wali xaqiijisa baahinta: habraac halkan la shido waxaa laga heli karaa oo keliya meesha calaamaddu furan tahay. Boggan ma ka dhigi karo wax muuqda haddii calaamaddu qariso.",
+    "loading": "Gudbinaya siyaasadda habraaca…",
+    "loadError": "Siyaasadda habraaca lama soo dejin karin.",
+    "policyUnavailable": "Siyaasadda habraaca lagama akhrin karin kaydka. Baddallada waa la qarshay halkii lagu muujin lahaa qiimayaasha caadiga ah ee laga yaabo inaysan la jaanqaadin waxa jira.",
+    "retry": "Isku day mar kale",
+    "enableAll": "Dhammaan shid",
+    "disableAll": "Dhammaan dami",
+    "enabledLabel": "La shiday",
+    "disabledLabel": "La damiyay",
+    "defaultOnHint": "Marka aan la kaydin siyaasadda: waa la shiday.",
+    "defaultOffHint": "Marka aan la kaydin siyaasadda: waa la damiyay — maamule baa si cad u shidi kara oo kaliya.",
+    "grantsNote": "Ka shaqaynta deeqaha waxa intaas ka badan laga xaddiday MSF-USA shaqaalaha barnaamijyada oo shaqadoodu \"grants\" ku jirto iyo Systems kuwa cinwaankooda \"innovation\" ku jiro. Haddaynu halkan ka shidnana ma ballaarinayso xeerkaas.",
+    "unsaved": "Waxaad haysaa isbeddello aan la kaydin.",
+    "save": "Kaydi",
+    "saving": "Kaydinaya…",
+    "saveSuccess": "Siyaasadda habraaca waa la kaydiyay.",
+    "saveError": "Siyaasadda habraaca lama kaydin karin.",
+    "conflictError": "Maamule kale ayaa hore u beddelay siyaasadda. Waa la cusbooneysiiyay — fadlan dib u eeg oo kaydi mar kale.",
+    "updatedByLine": "Ugu dambeyn waxaa kaydiyay {by} {at}.",
+    "neverSaved": "Siyaasad lama kaydin weli; kuwa kor ku xusan ayaa la adeegsanayaa."
+  },
+  "viewAs": {
+    "title": "Eeg sida",
+    "description": "Tijaabi app-ka, kaliya fadhiigaaga, adoon ah qof buuxiya ama waaya shardi caadiyan laga go'aamiyo diiwaanka ama maamulayaasha. Aqoonsigaaga waligiis isma beddelo: wax walba oo aad abuurto adiga ayaa iska leh oo diiwaan kasta magacaaaga ayuu sitaa.",
+    "activeTitle": "View-as wuu shaqaynayaa",
+    "inactiveTitle": "View-as ma shaqaynayo",
+    "sections": {
+      "role": "Doorka maamulka",
+      "region": "Gobolka xogta",
+      "attributes": "Astaamaha diiwaanka",
+      "groups": "Xubinimada kooxda",
+      "presets": "Qeexitaanno hore"
+    },
+    "role": {
+      "global": "Maamule guud (dhab ahaanta doorkaaga)",
+      "local": "Maamule maxalli ah",
+      "none": "Isticmaalaha caadiga ah",
+      "localKeysLabel": "Furayaasha wakiilka la xilsaaray",
+      "localKeysHint": "Furayaasha wakiilka la oggolyahay ee uu maamule maxalli ahi edit-gari karo. Haddii banaan la dhaafo, ma jirto wakiil la xilsaaray.",
+      "noneWarning": "Marka aad noqoto isticmaalaha caadiga ah dhammaan meelaha maamulaha waa laga nuqaa. Boggan wuu sii muuqanayaa, banner-ka sare ee app-ku had iyo jeer wuu kuu oggolaanayaa in aad ka baxdo."
+    },
+    "region": {
+      "actual": "Dhabta ah ({region})",
+      "hint": "Waxay codsiyadaada—iyo wixii aad geliso intaad firfircoon tahay—u wareejinaysaa kaydka gobolka kale. Waxay ka sarreysaa cookie-ga ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Waaxda",
+      "companyName": "Shirkad",
+      "jobTitle": "Jagada shaqada",
+      "officeId": "Xafiis",
+      "officeActual": "Xafiiska dhabta ah",
+      "officeNone": "Xafiis ma jiro",
+      "actualValue": "Dhabta ah: {value}",
+      "actualEmpty": "Dhabta ah: (banaan)",
+      "hint": "Ka tag meel bannaan si aad u ilaaliso qiimahaaga dhabta ah. Kuwani waxay quudiyaan xeerka deeqaha, xadadka isticmaalka ee la xiriira sifooyinka, iyo xeerarka gelitaanka."
+    },
+    "groups": {
+      "label": "Aqoonsiyada kooxaha",
+      "placeholder": "Hal Entra group object id mid kasta oo khad ah",
+      "hint": "Waxay beddeshaa—mana kordhiso—xubinnimadaada dhabta ah ee fadhigan, si aad u tijaabiso adigoo ka tirsan ama aan ka tirsanayn."
+    },
+    "presets": {
+      "grantsMember": "Xubin kooxda deeqaha",
+      "regularUser": "Isticmaale caadi ah",
+      "localAdmin": "Maamulaha deegaanka, wakiillo la'aan",
+      "otherRegion": "Gobolka kale",
+      "hint": "Diyaarsooyinka waxay buuxiyaan foomka; waxba lama dhaqan galinayo ilaa aad gujiso Codso."
+    },
+    "apply": "Codso oo dib u shub",
+    "applying": "Waa la codsanayaa…",
+    "clear": "Ka bax view-as",
+    "clearing": "Waa la baxayaa…",
+    "reset": "Foomka dib u daji",
+    "nothingToApply": "Ugu yaraan hal override samee si aad u codsato.",
+    "applyError": "View-as lama codsan karin: {error}",
+    "clearError": "View-as lama tirtiri karin: {error}",
+    "loadError": "Xaaladda view-as lama soo dejin karin.",
+    "retry": "Mar kale isku day",
+    "expiresNote": "View-as wuxuu shaqaynayaa illaa 8 saacadood, ama ilaa aad ka baxdo.",
+    "banner": {
+      "label": "Ku arag sida",
+      "adjust": "Beddel",
+      "exit": "Bax",
+      "role": {
+        "local": "maamule deegaanka",
+        "none": "isticmaale caadi ah"
+      },
+      "region": "gobolka {region}",
+      "department": "waaxda \"{value}\"",
+      "companyName": "shirkad \"{value}\"",
+      "jobTitle": "jagada \"{value}\"",
+      "officeId": "xafiis {value}",
+      "groups": "{count, plural, one {# koox} other {# kooxood}}"
+    }
   }
 }

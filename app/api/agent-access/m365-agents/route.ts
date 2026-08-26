@@ -6,6 +6,7 @@ import {
   StoredM365Agent,
   createAgentAccessBlobStorage,
   deleteM365Agent,
+  deleteM365AgentManifest,
   listAllM365Agents,
   readConfig,
   readM365Agent,
@@ -30,11 +31,21 @@ import {
   M365_AGENT_SOURCE,
   canonicalAgentKey,
 } from '@/lib/services/agentAccess/types';
+import { deleteDerivedForAgent } from '@/lib/services/m365/agentDerivedTextStore';
+import {
+  deleteIndexJob,
+  listIndexJobs,
+  summarizeIndexJob,
+} from '@/lib/services/m365/agentIndexJobStore';
 import {
   MAX_M365_AGENT_DOCUMENTS,
   purgeAgentFromIndex,
   purgeSourcesFromIndex,
 } from '@/lib/services/m365/agentIndexService';
+import {
+  MAX_M365_AGENT_SOURCE_BYTES,
+  planSources,
+} from '@/lib/services/m365/agentSourcePlanner';
 import { GRAPH_ID_REGEX } from '@/lib/services/m365/graphApi';
 
 import {
@@ -74,6 +85,22 @@ const sourceFieldsSchema = z
     title: z.string().trim().min(1).max(200),
     webUrl: z.string().trim().url().max(2000).or(z.literal('')).default(''),
     ownerDisplay: z.string().trim().max(120).optional(),
+    /** Folder sources: index the whole subtree (seventh pass). */
+    recursive: z.boolean().default(false),
+    excludedItemIds: z
+      .array(z.string().trim().min(1).max(512).regex(GRAPH_ID_REGEX))
+      .max(500)
+      .default([]),
+    includeExtensions: z
+      .array(
+        z
+          .string()
+          .trim()
+          .toLowerCase()
+          .regex(/^[a-z0-9]{1,10}$/),
+      )
+      .max(30)
+      .optional(),
   })
   .strict();
 
@@ -85,8 +112,8 @@ const agentFieldsSchema = z
     /** null → ride the catalog default at request time. */
     chatModelId: z.string().trim().min(1).max(100).nullable().default(null),
     topK: z.number().int().min(1).max(20).default(10),
-    // Review decision: at most 10 documents per agent (folder expansion is
-    // re-checked at index time).
+    // Sources are capped at the document cap; the DOCUMENT count after
+    // folder expansion is checked by the planner at save and index time.
     sources: z.array(sourceFieldsSchema).min(1).max(MAX_M365_AGENT_DOCUMENTS),
   })
   .strict();
@@ -132,7 +159,20 @@ function reconcileSources(
     const kept = byLocation.get(
       `${source.driveId}:${source.itemId}:${source.kind}`,
     );
+    const selection = {
+      recursive: source.kind === 'folder' ? source.recursive : false,
+      excludedItemIds: source.kind === 'folder' ? source.excludedItemIds : [],
+      ...(source.includeExtensions?.length
+        ? { includeExtensions: source.includeExtensions }
+        : { includeExtensions: undefined }),
+    };
     if (kept) {
+      const selectionChanged =
+        (kept.recursive ?? false) !== selection.recursive ||
+        (kept.excludedItemIds ?? []).join(',') !==
+          selection.excludedItemIds.join(',') ||
+        (kept.includeExtensions ?? []).join(',') !==
+          (selection.includeExtensions ?? []).join(',');
       return {
         ...kept,
         title: source.title,
@@ -140,6 +180,12 @@ function reconcileSources(
         ...(source.ownerDisplay !== undefined && {
           ownerDisplay: source.ownerDisplay,
         }),
+        ...selection,
+        // A changed selection makes the existing index stale: flag it so
+        // the list shows "not indexed" until the next run.
+        ...(selectionChanged && kept.status === 'indexed'
+          ? { status: 'pending' as const }
+          : {}),
       };
     }
     return {
@@ -152,9 +198,51 @@ function reconcileSources(
       ...(source.ownerDisplay !== undefined && {
         ownerDisplay: source.ownerDisplay,
       }),
+      ...selection,
       status: 'pending' as const,
     };
   });
+}
+
+/**
+ * Save-time cap check (design §2): re-plans the sources with the caller's
+ * token — normally a cache hit from the editor's own plan call — and
+ * refuses an over-cap agent with the same numbers the plan view shows.
+ * A Graph failure here (no M365 session, throttling) does NOT block the
+ * save: the record is only metadata, and the index run re-checks.
+ */
+async function overCapMessage(
+  request: NextRequest,
+  userId: string,
+  sources: M365AgentSource[],
+): Promise<string | null> {
+  try {
+    const plan = await planSources(
+      request,
+      userId,
+      sources.map((source) => ({
+        sourceId: source.sourceId,
+        driveId: source.driveId,
+        itemId: source.itemId,
+        kind: source.kind,
+        recursive: source.recursive,
+        excludedItemIds: source.excludedItemIds,
+        includeExtensions: source.includeExtensions,
+      })),
+    );
+    if (plan.overDocumentCap) {
+      return `Sources expand to ${plan.totalDocuments} documents; at most ${plan.maxDocuments} are allowed`;
+    }
+    if (plan.overByteCap) {
+      return `Sources total ${Math.round(plan.totalBytes / (1024 * 1024))}MB; at most ${Math.round(plan.maxBytes / (1024 * 1024))}MB are allowed`;
+    }
+    return null;
+  } catch (error) {
+    console.warn(
+      `[agent-access-admin] save-time plan skipped: ${sanitizeForLog(error)}`,
+    );
+    return null;
+  }
 }
 
 /** History failure must never fail the mutation (see guides route). */
@@ -219,15 +307,27 @@ export async function GET() {
     let config: AgentAccessConfig | null = null;
     let m365AgentsUnavailable = false;
     let fetchedAt: number | null = null;
+    const jobs: Record<string, ReturnType<typeof summarizeIndexJob>> = {};
     try {
       const storage = createAgentAccessBlobStorage();
-      const [listed, configResult] = await Promise.all([
+      const [listed, configResult, jobRecords] = await Promise.all([
         listAllM365Agents(storage),
         readConfig(storage),
+        // Index job summaries ride along so the list can show progress /
+        // Resume without a request per row. Best-effort.
+        listIndexJobs(storage).catch((error) => {
+          console.warn(
+            `[agent-access-admin] index job listing failed: ${sanitizeForLog(error)}`,
+          );
+          return new Map();
+        }),
       ]);
       stored = listed;
       config = configResult?.config ?? null;
       fetchedAt = Date.now();
+      for (const [agentId, job] of jobRecords) {
+        jobs[agentId] = summarizeIndexJob(job);
+      }
     } catch (error) {
       console.error(
         `[agent-access-admin] direct m365-agents read failed: ${sanitizeForLog(error)}`,
@@ -236,7 +336,7 @@ export async function GET() {
       config = service.getSnapshot().config;
     }
 
-    const status = resolveAdminStatus(session.user.mail, config);
+    const status = resolveAdminStatus(session.user, config);
     if (!status.isGlobalAdmin && !status.isLocalAdmin) {
       return forbiddenResponse();
     }
@@ -257,6 +357,12 @@ export async function GET() {
       // Env-configured cap, served so the editor's client-side limit always
       // matches what POST/PUT will actually accept.
       maxDocuments: MAX_M365_AGENT_DOCUMENTS,
+      maxBytes: MAX_M365_AGENT_SOURCE_BYTES,
+      jobs: Object.fromEntries(
+        Object.entries(jobs).filter(([agentId]) =>
+          visible.some((entry) => entry.m365Agent.id === agentId),
+        ),
+      ),
     });
   } catch (error) {
     return handleApiError(error, 'Failed to list M365 agents');
@@ -290,7 +396,10 @@ export async function POST(request: NextRequest) {
 
   try {
     await service.ensureFresh();
-    const status = resolveAdminStatus(userMail, service.getSnapshot().config);
+    const status = resolveAdminStatus(
+      session.user,
+      service.getSnapshot().config,
+    );
     // Any admin may create — global AND local (design decision from review).
     if (!status.isGlobalAdmin && !status.isLocalAdmin) {
       return forbiddenResponse();
@@ -299,6 +408,9 @@ export async function POST(request: NextRequest) {
     const id = `m365-${randomUUID().replace(/-/g, '').slice(0, 12)}`;
     const canonicalKey = canonicalAgentKey(M365_AGENT_SOURCE, id);
     const now = new Date().toISOString();
+    const newSources = reconcileSources(parsed.data.sources, []);
+    const capError = await overCapMessage(request, session.user.id, newSources);
+    if (capError) return badRequestResponse(capError);
     const agent: M365Agent = {
       version: 1,
       id,
@@ -310,7 +422,7 @@ export async function POST(request: NextRequest) {
       // per-agent embedding choice is a later phase (requires re-index).
       embeddingModelId: env.OPENAI_EMBEDDING_DEPLOYMENT,
       ragConfig: { topK: parsed.data.topK },
-      sources: reconcileSources(parsed.data.sources, []),
+      sources: newSources,
       createdBy: userMail,
       createdAt: now,
       updatedBy: userMail,
@@ -410,7 +522,10 @@ export async function PUT(request: NextRequest) {
   const canonicalKey = canonicalAgentKey(M365_AGENT_SOURCE, parsed.data.id);
   try {
     await service.ensureFresh();
-    const status = resolveAdminStatus(userMail, service.getSnapshot().config);
+    const status = resolveAdminStatus(
+      session.user,
+      service.getSnapshot().config,
+    );
     if (!status.isGlobalAdmin && !status.isLocalAdmin) {
       return forbiddenResponse();
     }
@@ -427,6 +542,8 @@ export async function PUT(request: NextRequest) {
       parsed.data.sources,
       existing.m365Agent.sources,
     );
+    const capError = await overCapMessage(request, session.user.id, sources);
+    if (capError) return badRequestResponse(capError);
     const agent: M365Agent = {
       ...existing.m365Agent,
       name: parsed.data.name,
@@ -494,7 +611,10 @@ export async function DELETE(request: NextRequest) {
   const canonicalKey = canonicalAgentKey(M365_AGENT_SOURCE, id);
   try {
     await service.ensureFresh();
-    const status = resolveAdminStatus(userMail, service.getSnapshot().config);
+    const status = resolveAdminStatus(
+      session.user,
+      service.getSnapshot().config,
+    );
     if (!status.isGlobalAdmin && !status.isLocalAdmin) {
       return forbiddenResponse();
     }
@@ -515,6 +635,16 @@ export async function DELETE(request: NextRequest) {
     // The design requires index purge on delete; best-effort (chunks with no
     // agent record are unreachable through retrieval regardless).
     await purgeAgentFromIndex(id);
+    try {
+      const cleanupStorage = createAgentAccessBlobStorage();
+      await deleteM365AgentManifest(cleanupStorage, id);
+      await deleteIndexJob(cleanupStorage, id);
+      await deleteDerivedForAgent(cleanupStorage, id);
+    } catch (error) {
+      console.warn(
+        `[agent-access-admin] manifest cleanup failed for ${sanitizeForLog(id)}: ${sanitizeForLog(error)}`,
+      );
+    }
 
     await appendHistoryBestEffort({
       version: 1,

@@ -893,7 +893,12 @@
       "showFewer": "Hiển thị ít hơn"
     },
     "retryWithModel": "Thử với {model}",
-    "createTodoTasks": "Tạo nhiệm vụ To Do từ phản hồi này"
+    "createTodoTasks": "Tạo nhiệm vụ To Do từ phản hồi này",
+    "attachedFileExpired": "Một tệp đính kèm không còn khả dụng — các tệp đã tải lên chỉ được lưu trữ trong thời gian giới hạn. Tệp này đã bị xóa khỏi cuộc trò chuyện này. Vui lòng thử lại mà không cần tệp, hoặc tải lên tệp một lần nữa.",
+    "repeatedFailureNotice": "Việc này liên tục thất bại — cuộc trò chuyện có thể đã bị lỗi. Thường thì bắt đầu một cuộc trò chuyện mới sẽ khắc phục được vấn đề này.",
+    "startNewConversation": "Bắt đầu cuộc trò chuyện mới",
+    "downloadDebugInfo": "Tải thông tin gỡ lỗi",
+    "includeMessageText": "Bao gồm nội dung tin nhắn"
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",
@@ -902,7 +907,9 @@
     "quickActions": "Hành động nhanh",
     "expandFolder": "Mở rộng thư mục {name}",
     "collapseFolder": "Thu gọn thư mục {name}",
-    "folderOptions": "Tùy chọn {name}"
+    "folderOptions": "Tùy chọn {name}",
+    "agentsEntry": "Tác nhân",
+    "agentsTitle": "Duyệt các tác nhân và bắt đầu trò chuyện với một tác nhân"
   },
   "prompts": {
     "buildReusablePrompts": "Xây dựng lời nhắc có thể tái sử dụng với sự hỗ trợ của AI",
@@ -2698,6 +2705,10 @@
       "map": {
         "label": "Bản đồ",
         "description": "Biến mọi dữ liệu thành vị trí trên bản đồ"
+      },
+      "grants": {
+        "label": "Xử lý trợ cấp",
+        "description": "Đối chiếu và trích xuất dữ liệu có cấu trúc từ các mô tả trợ cấp"
       }
     },
     "chooser": {
@@ -2707,7 +2718,8 @@
       "newTranslation": "Dịch mới",
       "newDocument": "Tài liệu mới",
       "newDataAnalysis": "Phân tích dữ liệu mới",
-      "newMap": "Bản đồ mới"
+      "newMap": "Bản đồ mới",
+      "newGrants": "Xử lý trợ cấp mới"
     },
     "translation": {
       "chooseLanguage": "Ngôn ngữ đích",
@@ -3324,7 +3336,8 @@
       "unknownType": "Cuộc hội thoại này sử dụng quy trình làm việc mà phiên bản này chưa nhận diện được. Lịch sử hội thoại được hiển thị bên dưới.",
       "untitled": "Cuộc hội thoại mới",
       "toggleMenu": "Chuyển đổi menu",
-      "model": "Mô hình cho quy trình làm việc này"
+      "model": "Mô hình cho quy trình làm việc này",
+      "disabledByAdmin": "Quy trình công việc này đã bị quản trị viên vô hiệu hoá. Lịch sử hội thoại được hiển thị bên dưới."
     },
     "tabs": {
       "label": "Chế độ hội thoại",
@@ -4078,7 +4091,153 @@
     "conflictTakeTheirs": "Dùng của họ",
     "conflictNoFieldDiff": "Các giá trị giống nhau — chỉ phiên bản bản ghi thay đổi.",
     "conflictRecordGone": "Bản ghi này đã bị xóa (hoặc không thể tải lại). Vui lòng sao chép những gì cần thiết từ biểu mẫu, sau đó tải lại.",
-    "groupsFlagOff": "Chức năng phân nhóm chưa được bật cho môi trường này. Các nhóm mục tiêu hiện tại vẫn hoạt động."
+    "groupsFlagOff": "Chức năng phân nhóm chưa được bật cho môi trường này. Các nhóm mục tiêu hiện tại vẫn hoạt động.",
+    "catalogOauth": {
+      "title": "Ứng dụng OAuth của trình kết nối tích hợp",
+      "description": "Ứng dụng OAuth cho toàn bộ hoạt động triển khai dành cho các trình kết nối tích hợp (GitHub, Asana, ...). Bản ghi lưu tại đây sẽ ghi đè các biến môi trường MCP_OAUTH_*; xóa bản ghi sẽ quay về sử dụng biến môi trường. Client secret được mã hóa khi lưu trữ và sẽ không được hiển thị lại.",
+      "badgeAdmin": "Được cấu hình tại đây",
+      "badgeEnv": "Từ môi trường",
+      "badgeNone": "Chưa cấu hình",
+      "badgeDcr": "Tự đăng ký",
+      "badgeDcrHint": "Nhà cung cấp này có thể tự động đăng ký ứng dụng OAuth, vì vậy vẫn hoạt động kể cả khi chưa cấu hình ứng dụng tại đây.",
+      "clientIdLabel": "OAuth client ID",
+      "clientSecretLabel": "OAuth client secret",
+      "secretStoredPlaceholder": "Đã lưu — nhập để thay thế, để trống để giữ nguyên",
+      "secretNewPlaceholder": "Dán client secret",
+      "save": "Lưu",
+      "remove": "Xóa",
+      "removeToEnv": "Xóa (quay về dùng biến môi trường)",
+      "saved": "Đã lưu ứng dụng OAuth {name}",
+      "removed": "Đã xóa ứng dụng OAuth {name}",
+      "saveError": "Lưu ứng dụng OAuth thất bại. Vui lòng thử lại.",
+      "conflict": "Bản ghi này đã bị thay đổi ở nơi khác — đã tải lại, vui lòng thử lại.",
+      "storageUnavailable": "Không thể truy cập lưu trữ quản trị; không thể liệt kê các bản ghi hiện tại. Chức năng lưu sẽ bị vô hiệu hóa cho đến khi được khôi phục.",
+      "sealingUnavailable": "Mã hóa secret chưa được cấu hình trên triển khai này (thiếu AUTH_SECRET) — không thể lưu client secret.",
+      "updatedBy": "Được cập nhật bởi {by} vào {at}"
+    },
+    "orgAgentOverrideTitle": "Ghi đè agent tích hợp sẵn",
+    "orgAgentOverrideAction": "Ghi đè",
+    "orgAgentBuiltinBadge": "Tích hợp sẵn",
+    "orgAgentBuiltinHint": "Được định nghĩa trong cấu hình triển khai. Quy tắc truy cập của nó có thể chỉnh sửa tại đây; ghi đè để thay đổi thiết lập mà không cần triển khai lại.",
+    "m365AgentIndexProgress": "Đang lập chỉ mục {done} trên {total} {total, plural, one {tài liệu} other {tài liệu}}…",
+    "m365AgentIndexInterrupted": "Việc lập chỉ mục đã bị gián đoạn tại {done} trên {total} — tiếp tục để hoàn thành.",
+    "m365AgentIndexStartedBy": "bắt đầu bởi {name}",
+    "m365AgentIndexResume": "Tiếp tục",
+    "m365AgentIndexResumeHint": "Tiếp tục lập chỉ mục tại vị trí đã dừng, sử dụng quyền truy cập Microsoft 365 của bạn. Vui lòng giữ tab này mở.",
+    "m365AgentIndexCancel": "Hủy",
+    "m365AgentIndexCancelled": "Đã hủy lập chỉ mục — các tài liệu đã xử lý vẫn có thể tìm kiếm.",
+    "m365AgentIndexJobFailed": "Lập chỉ mục dừng lại: {error}",
+    "m365AgentIndexDone": "Đã hoàn thành lập chỉ mục: {indexed} đã lập chỉ mục, {failed} thất bại, {noText} không có văn bản.",
+    "m365AgentDocCounts": "{indexed, plural, one {# tài liệu} other {# tài liệu}} đã lập chỉ mục · {failed} thất bại · {noText} không có văn bản · {needsPreparation} cần chuẩn bị · {skipped} đã bỏ qua",
+    "m365CapDocuments": "Tài liệu: {count} / {max}",
+    "m365CapBytes": "{bytes} trên {max}",
+    "m365CapOverDocuments": "Vượt quá giới hạn {max} tài liệu. Bỏ chọn các thư mục con, lọc theo loại tệp, hoặc xóa nguồn — chỉ các tệp thực sự được lập chỉ mục mới được tính.",
+    "m365CapOverBytes": "Vượt quá dung lượng cho phép {max}. Loại trừ thư mục con hoặc tệp lớn.",
+    "m365PlanScanning": "Đang quét…",
+    "m365PlanRefreshing": "đang cập nhật…",
+    "m365PlanFailed": "Không thể quét nguồn bằng tài khoản Microsoft 365 của bạn.",
+    "m365PlanMissing": "Không tìm thấy hoặc không có quyền truy cập",
+    "m365PlanIndexable": "{count, plural, one {# tệp sẽ được lập chỉ mục} other {# tệp sẽ được lập chỉ mục}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# cần chuẩn bị} other {# cần chuẩn bị}}",
+    "m365PlanSkipped": "{count} đã bỏ qua",
+    "m365PlanShowDetails": "Chi tiết",
+    "m365PlanHideDetails": "Ẩn chi tiết",
+    "m365PlanTruncated": "Thư mục này quá lớn để quét toàn bộ — chỉ liệt kê 1.000 mục đầu tiên. Vui lòng chọn thư mục con.",
+    "m365PlanRecursive": "Bao gồm thư mục con",
+    "m365PlanExtensionsLabel": "Chỉ loại tệp:",
+    "m365PlanExtensionsPlaceholder": "ví dụ: pdf, docx",
+    "m365PlanSubfolders": "Thư mục con",
+    "m365PlanFolderCount": "{count, plural, one {# tệp} other {# tệp}}",
+    "m365PlanGroupIndexable": "Sẽ được lập chỉ mục",
+    "m365PlanGroupNeedsPreparation": "Cần chuẩn bị",
+    "m365PlanGroupSkipped": "Đã bỏ qua",
+    "m365PlanPreparationHint": "hình ảnh/âm thanh/video — chưa được lập chỉ mục",
+    "m365PlanMoreRows": "…và còn {count} nữa",
+    "m365ItemStatus": {
+      "pending": "đang chờ xử lý",
+      "indexed": "đã lập chỉ mục",
+      "failed": "thất bại",
+      "noText": "không trích xuất được văn bản",
+      "missing": "không tồn tại"
+    },
+    "m365SkipReason": {
+      "unsupported": "loại không hỗ trợ",
+      "tooLarge": "trên 25 MB",
+      "disallowedType": "loại bị chặn (thực thi/nén)",
+      "malware": "Microsoft gắn cờ là phần mềm độc hại",
+      "zeroBytes": "tệp rỗng",
+      "excluded": "đã loại trừ",
+      "typeFilter": "không trong bộ lọc loại"
+    },
+    "localAdminGroup": {
+      "agents": "Tác nhân",
+      "promptAgents": "Tác nhân nhắc lệnh",
+      "m365Agents": "Tác nhân Microsoft 365",
+      "orgAgents": "Tác nhân kiến thức",
+      "guides": "Hướng dẫn",
+      "connectors": "Kết nối",
+      "datasets": "Bộ dữ liệu bản đồ",
+      "unknown": "Đã ủy quyền nhưng không tìm thấy"
+    },
+    "localAdminGroupUnavailable": "Danh sách này tạm thời không khả dụng — các ủy quyền hiện có vẫn được giữ lại.",
+    "localAdminBuiltIn": "tích hợp",
+    "localAdminSummary": "{count, plural, one {# ủy quyền} other {# ủy quyền}}: {names}",
+    "localAdminSummaryMore": "{names} và {more} thêm",
+    "localAdminNoDelegations": "Chưa có ủy quyền nào — quản trị viên cục bộ không có tác nhân chỉ xem được khu vực quản trị.",
+    "localAdminSelectedCount": "Đã chọn {selected} / {total}",
+    "localAdminCopyFrom": "Sao chép từ",
+    "localAdminClearAll": "Xóa tất cả",
+    "localAdminSelectGroup": "Chọn tất cả",
+    "localAdminClearGroup": "Xóa",
+    "localAdminSearchPlaceholder": "Tìm kiếm tác nhân, hướng dẫn, kết nối…",
+    "localAdminDuplicateEmail": "Email này đã có trong danh sách — hãy gộp hai mục này lại.",
+    "localAdminExpand": "Hiển thị ủy quyền",
+    "localAdminCollapse": "Ẩn ủy quyền",
+    "localAdminDiscard": "Hủy thay đổi",
+    "m365AgentRefresh": "Làm mới",
+    "m365AgentRefreshHint": "Tải về các tệp được thêm, thay đổi hoặc xóa kể từ lần chạy trước — các tệp không thay đổi sẽ không được tải lại. Hãy giữ tab này mở.",
+    "m365AgentReindexAll": "Lập chỉ mục lại tất cả",
+    "m365AgentRefreshProgress": "Đang làm mới — {done} / {total} {total, plural, one {tài liệu} other {tài liệu}} đã thay đổi…",
+    "m365AgentRefreshDone": "Hoàn tất làm mới: đã thêm {added}, đã cập nhật {modified}, đã xóa {removed}, lỗi {failed}.",
+    "m365ChangesChecking": "Đang kiểm tra thay đổi trên Microsoft 365 kể từ lần lập chỉ mục trước…",
+    "m365ChangesFailed": "Không thể kiểm tra thay đổi với tài khoản Microsoft 365 của bạn.",
+    "m365ChangesNeverIndexed": "Chưa được lập chỉ mục — chạy Lập chỉ mục sau khi lưu.",
+    "m365ChangesFound": "{count, plural, one {# thay đổi} other {# thay đổi}} kể từ lần lập chỉ mục trước: đã thêm {added}, đã cập nhật {modified}, đã xóa {removed}.",
+    "m365ChangesNone": "Không có thay đổi kể từ lần lập chỉ mục trước ({date}).",
+    "m365PrepareButton": "Chuẩn bị",
+    "m365PrepareOcrButton": "Chuẩn bị (OCR)",
+    "m365PrepareSaveFirst": "lưu tác nhân để chuẩn bị",
+    "m365PrepareHintImage": "hình ảnh — 1 cuộc gọi vision",
+    "m365PrepareHintMedia": "~{minutes} phút âm thanh cần chuyển lời",
+    "m365PrepareHintOcr": "không có lớp văn bản — OCR bằng vision, tối đa 30 trang",
+    "m365PreparePreparing": "Đang chuẩn bị…",
+    "m365PreparePending": "Đang chuyển lời…",
+    "m365PreparedNote": "đã chuẩn bị · {kind}",
+    "m365PreparedKind": {
+      "image": "mô tả hình ảnh",
+      "audio": "bản chép lời",
+      "video": "bản chép lời",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "{name} đã được chuẩn bị ({chars} ký tự). Chạy Làm mới để lập chỉ mục.",
+    "m365PrepareStarted": "Quá trình chuyển lời {name} đã bắt đầu ở chế độ nền — hãy giữ tab này mở.",
+    "m365PrepareFailed": "Không thể chuẩn bị {name}: {error}",
+    "m365PrepareFailedGeneric": "Chuẩn bị không thành công.",
+    "canonicalKeyLabel": "Khóa",
+    "copyKey": "Sao chép khóa",
+    "agentKeySearchPlaceholder": "Tìm kiếm agent, hướng dẫn, connector… hoặc dán một khóa",
+    "agentKeyAddCustom": "Thêm \"{key}\" như đã nhập",
+    "agentKeyRemove": "Xóa {name}",
+    "hideAgent": "Ẩn",
+    "unhideAgent": "Hiện lại",
+    "hideAgentHint": "Ẩn agent này khỏi danh sách quản trị của bạn. Chỉ ảnh hưởng đến chế độ xem của bạn — người dùng và quản trị viên khác sẽ không bị ảnh hưởng.",
+    "unhideAgentHint": "Hiển thị lại agent này trong danh sách quản trị của bạn.",
+    "hiddenBadge": "Đã ẩn",
+    "hiddenAgentsCount": "{count, plural, one {# agent đã ẩn} other {# agent đã ẩn}}",
+    "hiddenAgentsShowing": "Đang hiển thị {count, plural, one {# agent đã ẩn} other {# agent đã ẩn}}",
+    "hiddenAgentsShow": "Hiển thị",
+    "hiddenAgentsHide": "Ẩn lại",
+    "allAgentsHidden": "Tất cả agent ở đây đều đã bị ẩn khỏi chế độ xem của bạn — sử dụng Hiển thị để xem lại."
   },
   "localModels": {
     "title": "Mô hình cục bộ",
@@ -4279,9 +4438,15 @@
       "connectors": "Các connector của tổ chức và người được phép sử dụng.",
       "guides": "Hướng dẫn về phong cách, thuật ngữ và tuân thủ.",
       "mapDatasets": "Các bộ dữ liệu đã chọn sẵn cho quy trình bản đồ.",
-      "localAdmins": "Phân quyền chỉnh sửa quy tắc truy cập cho người khác."
+      "localAdmins": "Phân quyền chỉnh sửa quy tắc truy cập cho người khác.",
+      "workflows": "Bật hoặc tắt các quy trình hội thoại cho tất cả mọi người.",
+      "viewAs": "Kiểm tra ứng dụng như một người đáp ứng — hoặc không đáp ứng — một điều kiện."
     },
-    "openSettings": "Mở cài đặt"
+    "openSettings": "Mở cài đặt",
+    "area": {
+      "workflows": "Quy trình công việc",
+      "viewAs": "Xem dạng"
+    }
   },
   "limits": {
     "title": "Giới hạn sử dụng",
@@ -4483,7 +4648,8 @@
     "groupSearchNoResults": "Không có nhóm nào phù hợp với tên đó.",
     "groupSearchError": "Tìm kiếm nhóm không thành công. Bạn vẫn có thể dán mã ID đối tượng nhóm bên dưới.",
     "groupSearchHint": "Nhập ít nhất 2 ký tự để tìm kiếm các nhóm của tổ chức bạn, hoặc dán trực tiếp mã ID đối tượng nhóm. Ghi đè này áp dụng cho thành viên của nhóm trong Microsoft Entra.",
-    "groupsFlagOff": "Chức năng nhắm mục tiêu theo nhóm chưa được bật cho môi trường này. Các mục tiêu nhóm hiện có vẫn hoạt động."
+    "groupsFlagOff": "Chức năng nhắm mục tiêu theo nhóm chưa được bật cho môi trường này. Các mục tiêu nhóm hiện có vẫn hoạt động.",
+    "featureDisabled": "Giới hạn sử dụng chưa được bật cho lần triển khai này."
   },
   "m365": {
     "connections": {
@@ -4844,5 +5010,149 @@
     "failed": "Không thể chia sẻ — chưa tạo gì cả.",
     "copyFailed": "Không thể sao chép liên kết — hãy chọn ở trên và sao chép thủ công.",
     "lastMessagesCountLabel": "Số tin nhắn gần đây cần bao gồm"
+  },
+  "toolModes": {
+    "webSearch": "Tìm kiếm web",
+    "codeInterpreter": "Phiên dịch mã",
+    "off": "Tắt",
+    "auto": "Tự động",
+    "always": "Luôn bật",
+    "routingPrivacy": "Bảo mật",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Tìm kiếm Azure AI sẽ gửi truy vấn qua Azure AI Foundry, các truy vấn này có thể được lưu lại.",
+    "learnMore": "Tìm hiểu thêm"
+  },
+  "agentAttach": {
+    "browserTitle": "Tác nhân",
+    "browserSubtitle": "Thêm các tác nhân và kết nối vào cuộc trò chuyện này, hoặc bắt đầu trò chuyện mới với một tác nhân. Hầu hết hoạt động với bất kỳ mô hình nào bạn đã chọn.",
+    "searchPlaceholder": "Tìm kiếm tác nhân và kết nối…",
+    "loading": "Đang tải các tác nhân…",
+    "noMatches": "Không có kết quả phù hợp với tìm kiếm của bạn.",
+    "noAgents": "Không có tác nhân nào.",
+    "addToChat": "Thêm vào cuộc trò chuyện này",
+    "removeFromChat": "Xóa khỏi cuộc trò chuyện này",
+    "newChat": "Trò chuyện mới",
+    "attached": "Đã đính kèm",
+    "detach": "Gỡ đính kèm",
+    "change": "Thay đổi",
+    "browse": "Duyệt tác nhân…",
+    "noAgent": "Chưa đính kèm tác nhân nào",
+    "close": "Đóng",
+    "kind": {
+      "rag": "Kiến thức",
+      "prompt": "Nhân cách",
+      "m365": "Kiến thức (Microsoft 365)",
+      "org": "Kiến thức",
+      "foundry": "Tác nhân Foundry",
+      "connector": "Kết nối"
+    },
+    "semantics": {
+      "your-model": "sử dụng mô hình của bạn",
+      "pinned-model": "mô hình do quản trị viên đặt",
+      "own-model": "chạy trên chính mô hình của nó"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Gợi ý từ tổ chức của bạn",
+    "searching": "Đang tìm kiếm trong tổ chức của bạn…",
+    "noMatches": "Không tìm thấy kết quả — bạn có thể nhập địa chỉ thủ công"
+  },
+  "workflowsAdmin": {
+    "title": "Quy trình công việc",
+    "description": "Bật hoặc tắt từng quy trình cho toàn tổ chức. Một quy trình bị tắt sẽ bị ẩn khỏi menu và bị máy chủ từ chối, kể cả với những người đủ điều kiện khác.",
+    "layeredNote": "Cờ conversationWorkflows của LaunchDarkly vẫn kiểm soát việc triển khai: một quy trình được bật ở đây chỉ khả dụng khi cờ đó được bật. Trang này không thể hiển thị bất cứ thứ gì mà cờ đang ẩn.",
+    "loading": "Đang tải chính sách quy trình công việc…",
+    "loadError": "Không thể tải chính sách quy trình công việc.",
+    "policyUnavailable": "Không thể đọc chính sách quy trình từ kho lưu trữ. Các tùy chọn chuyển đổi sẽ bị ẩn thay vì hiển thị theo giá trị mặc định có thể không khớp với thực tế.",
+    "retry": "Thử lại",
+    "enableAll": "Bật tất cả",
+    "disableAll": "Tắt tất cả",
+    "enabledLabel": "Đã bật",
+    "disabledLabel": "Đã tắt",
+    "defaultOnHint": "Mặc định khi chưa lưu chính sách: đã bật.",
+    "defaultOffHint": "Mặc định khi chưa lưu chính sách: đã tắt — quản trị viên phải tự bật.",
+    "grantsNote": "Xử lý trợ cấp chỉ giới hạn thêm cho người dùng MSF-USA thuộc bộ phận Chương trình có \"grants\" trong chức danh, hoặc thuộc bộ phận Hệ thống có \"innovation\" trong chức danh. Việc bật tại đây không thay đổi quy tắc đó.",
+    "unsaved": "Bạn có thay đổi chưa lưu.",
+    "save": "Lưu",
+    "saving": "Đang lưu…",
+    "saveSuccess": "Đã lưu chính sách quy trình công việc.",
+    "saveError": "Không thể lưu chính sách quy trình công việc.",
+    "conflictError": "Một quản trị viên khác đã thay đổi chính sách trước đó. Chính sách đã được tải lại — vui lòng kiểm tra và lưu lại.",
+    "updatedByLine": "Lần cuối lưu bởi {by} vào {at}.",
+    "neverSaved": "Chưa có chính sách nào được lưu; áp dụng các mặc định bên trên."
+  },
+  "viewAs": {
+    "title": "Xem dạng",
+    "description": "Kiểm tra ứng dụng, chỉ với phiên của bạn, như một người đáp ứng hoặc không đáp ứng điều kiện thông thường do thư mục hoặc quản trị viên quyết định. Danh tính của bạn không bao giờ thay đổi: tất cả những gì bạn tạo ra vẫn thuộc về bạn và mọi ghi vết kiểm toán vẫn ghi tên bạn.",
+    "activeTitle": "Chế độ xem dạng đang bật",
+    "inactiveTitle": "Chế độ xem dạng chưa bật",
+    "sections": {
+      "role": "Vai trò quản trị viên",
+      "region": "Vùng dữ liệu",
+      "attributes": "Thuộc tính thư mục",
+      "groups": "Thành viên nhóm",
+      "presets": "Cài đặt trước"
+    },
+    "role": {
+      "global": "Quản trị viên toàn cầu (vai trò thực tế của bạn)",
+      "local": "Quản trị viên địa phương",
+      "none": "Người dùng thông thường",
+      "localKeysLabel": "Khoá agent được uỷ quyền",
+      "localKeysHint": "Danh sách khoá agent chuẩn hóa, phân tách bằng dấu phẩy mà quản trị viên địa phương này được phép chỉnh sửa. Để trống nếu không có agent nào được uỷ quyền.",
+      "noneWarning": "Với tư cách là người dùng thông thường, tất cả khu vực quản trị khác sẽ biến mất. Trang này vẫn truy cập được, và biểu ngữ ở đầu ứng dụng luôn cung cấp lối thoát."
+    },
+    "region": {
+      "actual": "Thực tế ({region})",
+      "hint": "Chuyển hướng các yêu cầu của bạn — và mọi thứ bạn tải lên khi đang kích hoạt — sang vùng lưu trữ khác. Ưu tiên hơn cookie ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Phòng ban",
+      "companyName": "Công ty",
+      "jobTitle": "Chức danh",
+      "officeId": "Văn phòng",
+      "officeActual": "Văn phòng thực tế",
+      "officeNone": "Không có văn phòng",
+      "actualValue": "Thực tế: {value}",
+      "actualEmpty": "Thực tế: (trống)",
+      "hint": "Để trống trường để giữ giá trị thực tế. Các trường này liên quan đến quy tắc cấp quyền, giới hạn sử dụng theo thuộc tính và quy tắc truy cập."
+    },
+    "groups": {
+      "label": "ID nhóm",
+      "placeholder": "Mỗi dòng một Entra group object id",
+      "hint": "Thay thế — không mở rộng — tư cách thành viên thực của bạn cho phiên này, giúp bạn kiểm tra cả trường hợp có và không thuộc nhóm."
+    },
+    "presets": {
+      "grantsMember": "Thành viên nhóm grants",
+      "regularUser": "Người dùng thông thường",
+      "localAdmin": "Quản trị viên cục bộ, không có agent",
+      "otherRegion": "Vùng khác",
+      "hint": "Các mẫu này sẽ điền vào biểu mẫu; chỉ hiệu lực khi bạn nhấn Áp dụng."
+    },
+    "apply": "Áp dụng và tải lại",
+    "applying": "Đang áp dụng…",
+    "clear": "Thoát chế độ xem dưới tư cách khác",
+    "clearing": "Đang thoát…",
+    "reset": "Đặt lại biểu mẫu",
+    "nothingToApply": "Thiết lập ít nhất một thay thế để áp dụng.",
+    "applyError": "Không thể áp dụng chế độ xem dưới tư cách khác: {error}",
+    "clearError": "Không thể thoát chế độ xem dưới tư cách khác: {error}",
+    "loadError": "Không thể tải trạng thái chế độ xem dưới tư cách khác.",
+    "retry": "Thử lại",
+    "expiresNote": "Chế độ xem dưới tư cách khác tồn tại tối đa 8 giờ, hoặc cho tới khi bạn thoát.",
+    "banner": {
+      "label": "Đang xem dưới tư cách",
+      "adjust": "Điều chỉnh",
+      "exit": "Thoát",
+      "role": {
+        "local": "quản trị viên cục bộ",
+        "none": "người dùng thông thường"
+      },
+      "region": "vùng {region}",
+      "department": "phòng ban \"{value}\"",
+      "companyName": "công ty \"{value}\"",
+      "jobTitle": "chức danh \"{value}\"",
+      "officeId": "văn phòng {value}",
+      "groups": "{count, plural, one {# nhóm} other {# nhóm}}"
+    }
   }
 }

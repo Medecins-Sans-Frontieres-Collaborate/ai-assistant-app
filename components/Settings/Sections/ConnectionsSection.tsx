@@ -11,6 +11,7 @@ import { FC, useCallback, useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { useM365Enabled } from '@/client/hooks/useM365Enabled';
+import { useM365PeopleSuggest } from '@/client/hooks/useM365PeopleSuggest';
 
 import { fetchM365Status } from '@/client/services/m365/m365Client';
 
@@ -20,16 +21,21 @@ import type {
   M365Status,
 } from '@/types/m365';
 
+import { EmailAutocompleteInput } from '@/components/UI/EmailAutocompleteInput';
+
 import { useSettingsStore } from '@/client/stores/settingsStore';
 
 /**
- * Settings → Connections: the per-user Microsoft 365 opt-in.
+ * Settings → Connections: the per-user Microsoft 365 connection, ON by
+ * default since settingsStore v57 (users disconnect here rather than
+ * opt in; an explicit choice is remembered across future default changes
+ * via m365ConnectedUserSet).
  *
- * Connecting flips a local preference only — the tenant-wide admin consent
- * already covers the OAuth side, so there is no extra consent screen. The
- * panel shows, per feature area, whether the tenant grant has actually
- * landed (from /api/m365/status), so "connected but pending admin consent"
- * is visible instead of features just silently missing.
+ * Connect/Disconnect flips a local preference only — the tenant-wide admin
+ * consent already covers the OAuth side, so there is no extra consent
+ * screen. The panel shows, per feature area, whether the tenant grant has
+ * actually landed (from /api/m365/status), so "connected but pending admin
+ * consent" is visible instead of features just silently missing.
  */
 
 const FEATURE_LABEL_KEYS: Record<M365FeatureKey, string> = {
@@ -74,6 +80,8 @@ const StatusBadge: FC<{ status: M365FeatureStatus }> = ({ status }) => {
 export const ConnectionsSection: FC = () => {
   const t = useTranslations('m365.connections');
   const tPlaybooks = useTranslations('m365.playbooks');
+  const tPeople = useTranslations('peopleSuggest');
+  const peopleSuggest = useM365PeopleSuggest();
   const m365Connected = useSettingsStore((s) => s.m365Connected);
   const setM365Connected = useSettingsStore((s) => s.setM365Connected);
   const {
@@ -269,12 +277,22 @@ export const ConnectionsSection: FC = () => {
                 setMailboxDraft('');
               }}
             >
-              <input
-                type="email"
+              <EmailAutocompleteInput
                 value={mailboxDraft}
-                onChange={(e) => setMailboxDraft(e.target.value)}
+                onChange={setMailboxDraft}
+                suggest={peopleSuggest}
+                suggestionsLabel={tPeople('listLabel')}
+                onSelectSuggestion={(email) => {
+                  // Picking a suggestion adds it directly — no second
+                  // "Add" click for the common case.
+                  const address = email.trim().toLowerCase();
+                  if (address.includes('@')) {
+                    setSharedMailboxes([...sharedMailboxes, address]);
+                  }
+                  setMailboxDraft('');
+                }}
                 placeholder={t('sharedMailboxPlaceholder')}
-                className="min-w-0 flex-1 rounded-lg border border-gray-300 bg-gray-50 px-2 py-1.5 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-600 focus:outline-none dark:border-gray-700 dark:bg-surface-dark-elevated dark:text-gray-100 dark:placeholder-gray-400"
+                className="rounded-lg border border-gray-300 bg-gray-50 px-2 py-1.5 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-600 focus:outline-none dark:border-gray-700 dark:bg-surface-dark-elevated dark:text-gray-100 dark:placeholder-gray-400"
               />
               <button
                 type="submit"

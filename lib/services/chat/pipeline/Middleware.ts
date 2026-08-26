@@ -16,7 +16,6 @@ import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
 import { createAppIdentityCredential } from '@/lib/services/auth/appIdentityCredential';
 import { createFoundryTokenCredential } from '@/lib/services/auth/foundryCredential';
 import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
-import { LimitsService } from '@/lib/services/limits/LimitsService';
 import {
   LimitCheckResult,
   applyMode,
@@ -66,6 +65,7 @@ import { auth, getAccessTokenForOBO } from '@/auth';
 import { env } from '@/config/environment';
 import { getLimitDefinition } from '@/config/limits';
 import { getDefaultModel, getFallbackChain } from '@/config/models';
+import { getOrganizationAgentById } from '@/lib/organizationAgents';
 import { TokenCredential } from '@azure/identity';
 
 /**
@@ -113,6 +113,19 @@ export const authMiddleware: Middleware = async (req) => {
     throw PipelineError.critical(
       ErrorCode.AUTH_FAILED,
       'Unauthorized: No valid session found',
+    );
+  }
+
+  // A session whose access-token refresh failed (rotated client secret,
+  // revoked refresh token — auth.ts sets 'RefreshAccessTokenError' or
+  // 'RefreshTokenMissing') still decodes and would otherwise sail through,
+  // only to fail unpredictably downstream. Reject it here with a DISTINCT
+  // code so the client can force a sign-out instead of a dead-end banner.
+  if (session.error) {
+    throw PipelineError.critical(
+      ErrorCode.AUTH_SESSION_EXPIRED,
+      'Session expired: access-token refresh failed. Sign in again.',
+      { sessionError: session.error },
     );
   }
 
@@ -183,6 +196,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       reasoningEffort,
       verbosity,
       botId,
+      agentAttached,
       searchMode,
       webSearchOptions,
       precomputedSearchResults,
@@ -261,6 +275,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       reasoningEffort,
       verbosity,
       botId,
+      agentAttached,
       searchMode,
       webSearchOptions,
       precomputedSearchResults,
@@ -699,14 +714,14 @@ export const createCredentialMiddleware = async (
           m365Agent,
         );
         console.log(
-          `[agent-access-audit] m365-layer2 agent=${sanitizeForLog(m365Agent.id)} accessible=${access.accessibleSourceIds.length}/${m365Agent.sources.length} folderItems=${access.accessibleFolderItemIds.length}`,
+          `[agent-access-audit] m365-layer2 agent=${sanitizeForLog(m365Agent.id)} accessible=${access.accessibleSourceIds.length}/${m365Agent.sources.length} folderItems=${access.accessibleFolderItems.length}`,
         );
         if (access.accessibleSourceIds.length === 0) {
           throw agentAccessDenied('deny', 'm365-no-file-access');
         }
         return {
           m365AccessibleSourceIds: access.accessibleSourceIds,
-          m365AccessibleFolderItemIds: access.accessibleFolderItemIds,
+          m365AccessibleFolderItems: access.accessibleFolderItems,
         };
       } catch (error) {
         if (error instanceof M365Error) {
@@ -720,14 +735,16 @@ export const createCredentialMiddleware = async (
     }
   }
 
-  // Admin-authored org RAG agents: the same layer-1 guard as prompt agents.
-  // Keyed on the RECORD existing for this botId (server-generated `orgr-`
-  // ids or overrides of static config ids) — static agents with no admin
-  // record keep their historical rule-free path. The cold-start fail-closed
-  // arm applies to `orgr-` ids only: a static-id botId whose override
-  // cannot be verified degrades to the static config entry, exactly like a
-  // deployment where the record never existed (blocking there would take
-  // every static agent down with a storage outage).
+  // Org RAG agents: the same layer-1 guard as prompt agents. Admin records
+  // (server-generated `orgr-` ids or overrides of static config ids) are
+  // evaluated against the rule stored under `org-agent::<id>`; a STATIC
+  // config agent with no record is evaluated under the very same key, so
+  // an admin can restrict a built-in agent without overriding it (no rule
+  // → allow, so this is a no-op until a rule exists). The cold-start
+  // fail-closed arm applies to `orgr-` ids only: a static-id botId whose
+  // rules cannot be verified degrades to the rule-free static entry,
+  // exactly like a deployment where the record never existed (blocking
+  // there would take every static agent down with a storage outage).
   if (accessService.isEnabled() && context.botId) {
     await accessService.ensureFresh();
     const orgRecord = accessService.getOrgAgentById(context.botId);
@@ -748,15 +765,31 @@ export const createCredentialMiddleware = async (
       );
       throw agentAccessDenied('unavailable', 'rules-unavailable');
     }
-    if (orgRecord) {
+    const staticAgent = orgRecord
+      ? null
+      : getOrganizationAgentById(context.botId);
+    if (staticAgent && accessService.getSnapshot().rulesUnavailable) {
+      // Static fail-open (see above): audited so the degradation is visible.
+      emitAccessAudit({
+        userMail: context.user?.mail,
+        agentName: staticAgent.id,
+        source: ORG_AGENT_SOURCE,
+        decision: 'allow',
+        reason: 'rules-unavailable-static-fallback',
+      });
+      console.warn(
+        '[CredentialMiddleware] Agent access rules unavailable; serving static org agent rule-free',
+      );
+    } else if (orgRecord || staticAgent) {
+      const agentName = orgRecord ? orgRecord.id : staticAgent!.id;
       const decision = accessService.evaluateAccess({
         userMail: context.user?.mail,
         source: ORG_AGENT_SOURCE,
-        agentName: orgRecord.id,
+        agentName,
       });
       emitAccessAudit({
         userMail: context.user?.mail,
-        agentName: orgRecord.id,
+        agentName,
         source: ORG_AGENT_SOURCE,
         decision: decision.decision,
         reason: decision.reason,
@@ -1071,18 +1104,24 @@ export const createModelSelectionMiddleware = async (
   // would misroute the request into the Foundry execution path.
   //
   // Scoped to requests whose MODEL actually selects the prompt agent
-  // (`org-<botId>`): conversation.bot is sent on every request and survives
-  // model switches that don't go through ModelSelect (WorkflowModelSelect /
-  // useModelSelection update the model without clearing bot), so a stale
-  // botId must never hijack an explicitly selected different model — in
-  // particular it must never swap a byom-/foundry- selection onto an
-  // app-hosted deployment. The `prompt-` prefix check (ids are
-  // server-generated `prompt-<hex>`) also keeps static RAG botIds off the
-  // access-service path entirely — no ensureFresh() on their hot path.
+  // (`org-<botId>`) — OR that carry the explicit `agentAttached` signal from
+  // the capabilities tray (the user attached the agent to the conversation
+  // independent of the model). Without either, conversation.bot is treated
+  // as potentially stale: it is sent on every request and, pre-tray,
+  // survived model switches that don't go through ModelSelect
+  // (WorkflowModelSelect / useModelSelection update the model without
+  // clearing bot), so a stale botId must never hijack an explicitly
+  // selected different model — in particular it must never swap a
+  // byom-/foundry- selection onto an app-hosted deployment. Old clients
+  // never send agentAttached, so their stale bots stay inert. The `prompt-`
+  // prefix check (ids are server-generated `prompt-<hex>`) also keeps
+  // static RAG botIds off the access-service path entirely — no
+  // ensureFresh() on their hot path.
+  const explicitlyAttached = context.agentAttached === true;
   const accessService = AgentAccessService.getInstance();
   if (
     context.botId?.startsWith('prompt-') &&
-    modelId === `org-${context.botId}` &&
+    (modelId === `org-${context.botId}` || explicitlyAttached) &&
     accessService.isEnabled()
   ) {
     await accessService.ensureFresh();
@@ -1118,9 +1157,13 @@ export const createModelSelectionMiddleware = async (
   // `org-<botId>`). Differences: `chatModelId: null` means "ride the
   // default" (the agent tracks catalog upgrades), and the RAG retrieval
   // happens later in M365AgentEnricher rather than via a system prompt.
+  // Knowledge agents are "uses your model" under explicit attachment: when
+  // the tray attached the agent alongside a REAL model, that model wins and
+  // the admin chatModelId acts only as the legacy-selection default.
+  const legacyM365Selection = modelId === `org-${context.botId}`;
   if (
     context.botId?.startsWith('m365-') &&
-    modelId === `org-${context.botId}` &&
+    (legacyM365Selection || explicitlyAttached) &&
     accessService.isEnabled()
   ) {
     await accessService.ensureFresh();
@@ -1129,7 +1172,10 @@ export const createModelSelectionMiddleware = async (
       selection.m365Agent = m365Agent;
       // Same Foundry-misroute protection as prompt agents.
       selection.agentMode = false;
-      if (m365Agent.chatModelId) {
+      if (!legacyM365Selection) {
+        // Explicit attachment with a real model: retrieval enriches the
+        // request's own model — no swap.
+      } else if (m365Agent.chatModelId) {
         const configured = OpenAIModels[
           m365Agent.chatModelId as OpenAIModelID
         ] as OpenAIModel | undefined;
@@ -1165,11 +1211,12 @@ export const createModelSelectionMiddleware = async (
   // (or the catalog default) actually executes. This puts overridden static
   // botIds on the access-service path — deliberate: an override cannot be
   // honored without consulting the store.
+  const legacyOrgSelection = modelId === `org-${context.botId}`;
   if (
     context.botId &&
     !context.botId.startsWith('prompt-') &&
     !context.botId.startsWith('m365-') &&
-    modelId === `org-${context.botId}` &&
+    (legacyOrgSelection || explicitlyAttached) &&
     accessService.isEnabled()
   ) {
     await accessService.ensureFresh();
@@ -1181,17 +1228,21 @@ export const createModelSelectionMiddleware = async (
     ) {
       // Same Foundry-misroute protection as prompt agents.
       selection.agentMode = false;
-      const chosenId = orgRecord.baseModelId ?? getDefaultModel();
-      const configured = OpenAIModels[chosenId as OpenAIModelID] as
-        | OpenAIModel
-        | undefined;
-      if (configured) {
-        selection.modelId = configured.id;
-        selection.model = configured;
-      } else {
-        console.error(
-          `[ModelSelectionMiddleware] Org agent ${sanitizeForLog(orgRecord.id)} references unknown model '${sanitizeForLog(chosenId)}'; keeping default model behavior`,
-        );
+      // Knowledge agents are "uses your model" under explicit attachment:
+      // the admin baseModelId only replaces the legacy fake `org-` model.
+      if (legacyOrgSelection) {
+        const chosenId = orgRecord.baseModelId ?? getDefaultModel();
+        const configured = OpenAIModels[chosenId as OpenAIModelID] as
+          | OpenAIModel
+          | undefined;
+        if (configured) {
+          selection.modelId = configured.id;
+          selection.model = configured;
+        } else {
+          console.error(
+            `[ModelSelectionMiddleware] Org agent ${sanitizeForLog(orgRecord.id)} references unknown model '${sanitizeForLog(chosenId)}'; keeping default model behavior`,
+          );
+        }
       }
       console.log(
         `[ModelSelectionMiddleware] Resolved org agent ${sanitizeForLog(orgRecord.id)} → model ${sanitizeForLog(selection.modelId ?? modelId)}`,
@@ -1229,7 +1280,9 @@ export async function createLimitsMiddleware(
 ): Promise<Partial<ChatContext>> {
   try {
     const policy = await currentPolicy();
-    if (policy === null && !LimitsService.getInstance().isEnabled()) {
+    // No policy authored (or never loaded): everything resolves to the
+    // compiled catalog defaults, i.e. unlimited — nothing to check or count.
+    if (policy === null) {
       return {};
     }
 

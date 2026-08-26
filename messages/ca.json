@@ -867,7 +867,12 @@
       "showFewer": "Mostra menys"
     },
     "retryWithModel": "Prova amb {model}",
-    "createTodoTasks": "Crea tasques To Do a partir d'aquesta resposta"
+    "createTodoTasks": "Crea tasques To Do a partir d'aquesta resposta",
+    "attachedFileExpired": "Un fitxer adjunt ja no està disponible — els fitxers pujats s'emmagatzemen durant un temps limitat. S'ha eliminat d'aquesta conversa. Torneu-ho a provar sense el fitxer o pugeu-lo de nou.",
+    "repeatedFailureNotice": "Això continua fallant: pot ser que la conversa s’hagi corromput. Normalment, començar una conversa nova resol el problema.",
+    "startNewConversation": "Comença una conversa nova",
+    "downloadDebugInfo": "Descarrega la informació de depuració",
+    "includeMessageText": "Inclou el text del missatge"
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",
@@ -876,7 +881,9 @@
     "quickActions": "Accions ràpides",
     "expandFolder": "Expandeix la carpeta {name}",
     "collapseFolder": "Redueix la carpeta {name}",
-    "folderOptions": "Opcions de {name}"
+    "folderOptions": "Opcions de {name}",
+    "agentsEntry": "Agents",
+    "agentsTitle": "Explora els agents i comença una conversa amb un"
   },
   "prompts": {
     "buildReusablePrompts": "Crear indicacions reutilitzables amb assistència d'IA",
@@ -2667,6 +2674,10 @@
       "map": {
         "label": "Mapa",
         "description": "Converteix qualsevol dada en ubicacions en un mapa"
+      },
+      "grants": {
+        "label": "Processament de subvencions",
+        "description": "Reconciliar i extreure dades estructurades de les narratives de subvencions"
       }
     },
     "chooser": {
@@ -2676,7 +2687,8 @@
       "newTranslation": "Nova traducció",
       "newDocument": "Nou document",
       "newDataAnalysis": "Nova anàlisi de dades",
-      "newMap": "Nou mapa"
+      "newMap": "Nou mapa",
+      "newGrants": "Processament de noves subvencions"
     },
     "translation": {
       "chooseLanguage": "Idioma de destinació",
@@ -3293,7 +3305,8 @@
       "unknownType": "Aquesta conversa utilitza un flux de treball que aquesta versió no reconeix. A continuació es mostra l’historial de la conversa.",
       "untitled": "Nova conversa",
       "toggleMenu": "Alterna el menú",
-      "model": "Model per a aquest flux de treball"
+      "model": "Model per a aquest flux de treball",
+      "disabledByAdmin": "Aquest flux de treball ha estat desactivat per un administrador. El historial de la conversa es mostra a continuació."
     },
     "tabs": {
       "label": "Mode conversa",
@@ -4047,7 +4060,153 @@
     "conflictTakeTheirs": "Utilitza la seva versió",
     "conflictNoFieldDiff": "Els valors coincideixen — només ha canviat la versió del registre.",
     "conflictRecordGone": "Aquest registre s’ha eliminat (o no s’ha pogut tornar a carregar). Copieu el que necessiteu del formulari, i recapteu la pàgina.",
-    "groupsFlagOff": "L’assignació per grup encara no està habilitada en aquest entorn. Les assignacions de grup existents continuen funcionant."
+    "groupsFlagOff": "L’assignació per grup encara no està habilitada en aquest entorn. Les assignacions de grup existents continuen funcionant.",
+    "catalogOauth": {
+      "title": "Aplicacions OAuth de connectors integrats",
+      "description": "Aplicacions OAuth de tot el desplegament per als connectors integrats (GitHub, Asana, …). Un registre desat aquí reemplaça les variables d’entorn MCP_OAUTH_*; si s’elimina, es torna a utilitzar les variables d’entorn. Els secrets de client s’emmagatzemen xifrats en repòs i no es mostraran mai més.",
+      "badgeAdmin": "Configurat aquí",
+      "badgeEnv": "Des de l’entorn",
+      "badgeNone": "No configurat",
+      "badgeDcr": "Autorregistrable",
+      "badgeDcrHint": "Aquest proveïdor pot registrar automàticament un client OAuth, així que funciona encara que no hi hagi cap aplicació configurada aquí.",
+      "clientIdLabel": "ID de client OAuth",
+      "clientSecretLabel": "Secret de client OAuth",
+      "secretStoredPlaceholder": "Desat: escriviu per substituir, deixeu en blanc per mantenir",
+      "secretNewPlaceholder": "Enganxeu el secret de client",
+      "save": "Desa",
+      "remove": "Elimina",
+      "removeToEnv": "Elimina (tornar a l’entorn)",
+      "saved": "Aplicació OAuth {name} desada",
+      "removed": "Aplicació OAuth {name} eliminada",
+      "saveError": "No s’ha pogut desar l’aplicació OAuth. Torneu-ho a provar.",
+      "conflict": "Aquest registre ha canviat en un altre lloc: s’ha recarregat, torneu-ho a provar.",
+      "storageUnavailable": "L’emmagatzematge d’administració és inabastable; no s’han pogut mostrar els registres existents. El desament estarà desactivat fins que es recuperi.",
+      "sealingUnavailable": "No s’ha configurat el xifrat de secrets en aquest desplegament (falta AUTH_SECRET): no es poden desar els secrets de client.",
+      "updatedBy": "Actualitzat per {by} el {at}"
+    },
+    "orgAgentOverrideTitle": "Sobreescriu l'agent integrat",
+    "orgAgentOverrideAction": "Sobreescriu",
+    "orgAgentBuiltinBadge": "Integrat",
+    "orgAgentBuiltinHint": "Definit a la configuració de desplegament. La norma d'accés es pot editar aquí; sobreescrigui-la per canviar la configuració sense desplegar.",
+    "m365AgentIndexProgress": "Indexant {done} de {total} {total, plural, one {document} other {documents}}…",
+    "m365AgentIndexInterrupted": "Indexació interrompuda a {done} de {total} — reanudeu per continuar.",
+    "m365AgentIndexStartedBy": "iniciat per {name}",
+    "m365AgentIndexResume": "Reanuda",
+    "m365AgentIndexResumeHint": "Continueu la indexació des d’on es va aturar, utilitzant el vostre accés a Microsoft 365. Mantingueu aquesta pestanya oberta.",
+    "m365AgentIndexCancel": "Cancel·la",
+    "m365AgentIndexCancelled": "Indexació cancel·lada — els documents ja processats es mantenen cercables.",
+    "m365AgentIndexJobFailed": "Indexació aturada: {error}",
+    "m365AgentIndexDone": "Indexació finalitzada: {indexed} indexats, {failed} amb errors, {noText} sense text.",
+    "m365AgentDocCounts": "{indexed, plural, one {# document} other {# documents}} indexats · {failed} amb errors · {noText} sense text · {needsPreparation} pendents de preparació · {skipped} omesos",
+    "m365CapDocuments": "Documents: {count} / {max}",
+    "m365CapBytes": "{bytes} de {max}",
+    "m365CapOverDocuments": "Supera el límit de {max} documents. Desmarca subcarpetes, filtra per tipus d’arxiu o suprimeix fonts — només compten els fitxers que realment s’indexaran.",
+    "m365CapOverBytes": "Supera la quota de mida de {max}. Excloeu subcarpetes o fitxers grans.",
+    "m365PlanScanning": "S’està escanejant…",
+    "m365PlanRefreshing": "actualitzant…",
+    "m365PlanFailed": "No s’han pogut escanejar les fonts amb el vostre compte de Microsoft 365.",
+    "m365PlanMissing": "No trobat o sense accés",
+    "m365PlanIndexable": "{count, plural, one {# fitxer s’indexarà} other {# fitxers s’indexaran}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# necessita preparació} other {# necessiten preparació}}",
+    "m365PlanSkipped": "{count} omesos",
+    "m365PlanShowDetails": "Detalls",
+    "m365PlanHideDetails": "Amaga els detalls",
+    "m365PlanTruncated": "Aquesta carpeta és massa gran per escanejar-la completament — només s’han llistat els primers 1.000 elements. Trieu una subcarpeta.",
+    "m365PlanRecursive": "Inclou subcarpetes",
+    "m365PlanExtensionsLabel": "Només tipus de fitxer:",
+    "m365PlanExtensionsPlaceholder": "p. ex. pdf, docx",
+    "m365PlanSubfolders": "Subcarpetes",
+    "m365PlanFolderCount": "{count, plural, one {# fitxer} other {# fitxers}}",
+    "m365PlanGroupIndexable": "S’indexarà",
+    "m365PlanGroupNeedsPreparation": "Requereix preparació",
+    "m365PlanGroupSkipped": "Omesos",
+    "m365PlanPreparationHint": "imatge/àudio/vídeo — encara no indexat",
+    "m365PlanMoreRows": "…i {count} més",
+    "m365ItemStatus": {
+      "pending": "pendent",
+      "indexed": "indexat",
+      "failed": "error",
+      "noText": "sense text extret",
+      "missing": "no trobat"
+    },
+    "m365SkipReason": {
+      "unsupported": "tipus no compatible",
+      "tooLarge": "més de 25 MB",
+      "disallowedType": "tipus blocat (executable/arxiu)",
+      "malware": "assenyalat per Microsoft com a programari maliciós",
+      "zeroBytes": "fitxer buit",
+      "excluded": "exclòs",
+      "typeFilter": "no és al filtre de tipus"
+    },
+    "localAdminGroup": {
+      "agents": "Agents",
+      "promptAgents": "Agents de prompt",
+      "m365Agents": "Agents de Microsoft 365",
+      "orgAgents": "Agents de coneixement",
+      "guides": "Guies",
+      "connectors": "Connectors",
+      "datasets": "Jocs de dades de mapes",
+      "unknown": "Delegat però no trobat"
+    },
+    "localAdminGroupUnavailable": "Aquesta llista no està disponible temporalment — es mantenen les delegacions existents.",
+    "localAdminBuiltIn": "integrat",
+    "localAdminSummary": "{count, plural, one {# delegació} other {# delegacions}}: {names}",
+    "localAdminSummaryMore": "{names} i {more} més",
+    "localAdminNoDelegations": "Encara no hi ha delegacions — un administrador local sense agents només pot veure l'àrea d'administració.",
+    "localAdminSelectedCount": "{selected} de {total} seleccionats",
+    "localAdminCopyFrom": "Copiar de",
+    "localAdminClearAll": "Neteja-ho tot",
+    "localAdminSelectGroup": "Selecciona-ho tot",
+    "localAdminClearGroup": "Neteja",
+    "localAdminSearchPlaceholder": "Cerca agents, guies, connectors…",
+    "localAdminDuplicateEmail": "Aquest correu electrònic ja està a la llista — combina les dues entrades.",
+    "localAdminExpand": "Mostra les delegacions",
+    "localAdminCollapse": "Oculta les delegacions",
+    "localAdminDiscard": "Descarta els canvis",
+    "m365AgentRefresh": "Actualitza",
+    "m365AgentRefreshHint": "Recull fitxers afegits, modificats o eliminats des de l'última execució — els fitxers sense canvis no es descarregaran de nou. Mantingues aquesta pestanya oberta.",
+    "m365AgentReindexAll": "Reindexa-ho tot",
+    "m365AgentRefreshProgress": "Actualitzant — {done} de {total} {total, plural, one {document} other {documents}} canviats…",
+    "m365AgentRefreshDone": "Actualització finalitzada: {added} afegits, {modified} actualitzats, {removed} eliminats, {failed} amb errors.",
+    "m365ChangesChecking": "Comprovant canvis a Microsoft 365 des de l'últim índex…",
+    "m365ChangesFailed": "No s'han pogut comprovar els canvis amb el vostre compte de Microsoft 365.",
+    "m365ChangesNeverIndexed": "Encara no indexat — executa Indexa després de desar.",
+    "m365ChangesFound": "{count, plural, one {# canvi} other {# canvis}} des de l'últim índex: {added} afegits, {modified} actualitzats, {removed} eliminats.",
+    "m365ChangesNone": "Cap canvi des de l'últim índex ({date}).",
+    "m365PrepareButton": "Prepara",
+    "m365PrepareOcrButton": "Prepara (OCR)",
+    "m365PrepareSaveFirst": "desa l'agent per preparar",
+    "m365PrepareHintImage": "imatge — 1 trucada vision",
+    "m365PrepareHintMedia": "~{minutes} min d'àudio per transcriure",
+    "m365PrepareHintOcr": "sense capa de text — OCR amb vision, fins a 30 pàgines",
+    "m365PreparePreparing": "Preparant…",
+    "m365PreparePending": "Transcrivint…",
+    "m365PreparedNote": "preparat · {kind}",
+    "m365PreparedKind": {
+      "image": "descripció de la imatge",
+      "audio": "transcripció",
+      "video": "transcripció",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "{name} preparat ({chars} caràcters). Executa Actualitza per indexar-lo.",
+    "m365PrepareStarted": "La transcripció de {name} s'ha iniciat en segon pla — mantingues aquesta pestanya oberta.",
+    "m365PrepareFailed": "No s'ha pogut preparar {name}: {error}",
+    "m365PrepareFailedGeneric": "Ha fallat la preparació.",
+    "canonicalKeyLabel": "Clau",
+    "copyKey": "Copia la clau",
+    "agentKeySearchPlaceholder": "Cerca agents, guies, connectors… o enganxa una clau",
+    "agentKeyAddCustom": "Afegeix «{key}» tal com està escrit",
+    "agentKeyRemove": "Elimina {name}",
+    "hideAgent": "Amaga",
+    "unhideAgent": "Mostra",
+    "hideAgentHint": "Amaga aquest agent de la teva llista d'administració. Només afecta la teva vista; els usuaris i altres administradors no es veuen afectats.",
+    "unhideAgentHint": "Mostra aquest agent de nou a la teva llista d'administració.",
+    "hiddenBadge": "Amagat",
+    "hiddenAgentsCount": "{count, plural, one {# agent amagat} other {# agents amagats}}",
+    "hiddenAgentsShowing": "S'estan mostrant {count, plural, one {# agent amagat} other {# agents amagats}}",
+    "hiddenAgentsShow": "Mostra",
+    "hiddenAgentsHide": "Torna a amagar",
+    "allAgentsHidden": "Tots els agents aquí estan amagats de la teva vista. Utilitza «Mostra» per revelar-los."
   },
   "localModels": {
     "title": "Models locals",
@@ -4248,9 +4407,15 @@
       "connectors": "Connectors de l’organització i qui pot utilitzar-los.",
       "guides": "Guies d'estil, terminologia i compliment.",
       "mapDatasets": "Jocs de dades seleccionats disponibles pel flux de mapes.",
-      "localAdmins": "Delegar l’edició de normes d’accés a altres persones."
+      "localAdmins": "Delegar l’edició de normes d’accés a altres persones.",
+      "workflows": "Activa o desactiva els fluxos de conversa per a tothom.",
+      "viewAs": "Prova l'aplicació com una persona que compleix —o no— una condició."
     },
-    "openSettings": "Obre la configuració"
+    "openSettings": "Obre la configuració",
+    "area": {
+      "workflows": "Fluxos de treball",
+      "viewAs": "Veure com"
+    }
   },
   "limits": {
     "title": "Límits d'ús",
@@ -4452,7 +4617,8 @@
     "groupSearchNoResults": "No hi ha cap grup que coincideixi amb aquest nom.",
     "groupSearchError": "No s'ha pogut cercar el grup. Encara pots enganxar l'ID de l'objecte del grup a continuació.",
     "groupSearchHint": "Escriu almenys 2 caràcters per cercar els grups de la teva organització, o enganxa directament un ID d'objecte de grup. L'excepció s'aplica als membres del grup a Microsoft Entra.",
-    "groupsFlagOff": "L'orientació per grups encara no està habilitada en aquest entorn. Els objectius de grup ja existents continuen funcionant."
+    "groupsFlagOff": "L'orientació per grups encara no està habilitada en aquest entorn. Els objectius de grup ja existents continuen funcionant.",
+    "featureDisabled": "Els límits d'ús no estan habilitats per a aquest desplegament."
   },
   "m365": {
     "connections": {
@@ -4813,5 +4979,149 @@
     "failed": "No s'ha pogut compartir: no s'ha creat res.",
     "copyFailed": "No s'ha pogut copiar l'enllaç — seleccioneu-lo a dalt i copieu-lo manualment.",
     "lastMessagesCountLabel": "Nombre de missatges recents a incloure"
+  },
+  "toolModes": {
+    "webSearch": "Cerca web",
+    "codeInterpreter": "Intèrpret de codi",
+    "off": "Desactivat",
+    "auto": "Automàtic",
+    "always": "Sempre",
+    "routingPrivacy": "Privacitat",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "La cerca d'Azure AI envia consultes a través d'Azure AI Foundry, que podria conservar-les.",
+    "learnMore": "Més informació"
+  },
+  "agentAttach": {
+    "browserTitle": "Agents",
+    "browserSubtitle": "Afegeix agents i connectors a aquesta conversa, o comença una conversa nova amb un agent. La majoria funcionen amb el model que hagis escollit.",
+    "searchPlaceholder": "Cerca agents i connectors…",
+    "loading": "Carregant agents…",
+    "noMatches": "No hi ha coincidències amb la teva cerca.",
+    "noAgents": "No hi ha agents disponibles.",
+    "addToChat": "Afegeix a aquesta conversa",
+    "removeFromChat": "Elimina d'aquesta conversa",
+    "newChat": "Nova conversa",
+    "attached": "Adjuntat",
+    "detach": "Desadjunta",
+    "change": "Canvia",
+    "browse": "Explora agents…",
+    "noAgent": "Cap agent adjunt",
+    "close": "Tanca",
+    "kind": {
+      "rag": "Coneixement",
+      "prompt": "Persona",
+      "m365": "Coneixement (Microsoft 365)",
+      "org": "Coneixement",
+      "foundry": "Agent Foundry",
+      "connector": "Connector"
+    },
+    "semantics": {
+      "your-model": "fa servir el teu model",
+      "pinned-model": "model establert per l'administrador",
+      "own-model": "fa servir el seu propi model"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Suggeriments de la vostra organització",
+    "searching": "S'està cercant a la vostra organització…",
+    "noMatches": "No hi ha coincidències al directori — podeu introduir l'adreça manualment"
+  },
+  "workflowsAdmin": {
+    "title": "Fluxos de treball",
+    "description": "Activa o desactiva cada flux de treball per a tota l'organització. Un flux desactivat queda ocult als menús i és refusat pel servidor, fins i tot si algú hi tindria accés.",
+    "layeredNote": "La bandera conversationWorkflows de LaunchDarkly continua regulant el desplegament: només es pot accedir a un flux activat aquí si aquella bandera també està activa. Aquesta pàgina no pot fer visible res que la bandera amagui.",
+    "loading": "Carregant la política de flux de treball…",
+    "loadError": "No s'ha pogut carregar la política del flux de treball.",
+    "policyUnavailable": "No s'ha pogut llegir la política del flux de treball des de l'emmagatzematge. Els commutadors es mantenen ocults per evitar mostrar valors per defecte que podrien no coincidir amb el que s'aplica.",
+    "retry": "Reintenta",
+    "enableAll": "Activa-ho tot",
+    "disableAll": "Desactiva-ho tot",
+    "enabledLabel": "Activat",
+    "disabledLabel": "Desactivat",
+    "defaultOnHint": "Per defecte quan no hi ha cap política desada: activat.",
+    "defaultOffHint": "Per defecte quan no hi ha cap política desada: desactivat — un administrador l'ha d'activar explícitament.",
+    "grantsNote": "El processament de subvencions també està restringit a usuaris de MSF-USA del departament de Programa amb \"grants\" al títol del lloc, o de Systems amb \"innovation\" al títol. Activar-ho aquí no modifica aquesta norma.",
+    "unsaved": "Tens canvis no desats.",
+    "save": "Desa",
+    "saving": "Desant…",
+    "saveSuccess": "Política de flux de treball desada.",
+    "saveError": "No s'ha pogut desar la política del flux de treball.",
+    "conflictError": "Un altre administrador ha canviat la política abans. S'ha recarregat — revisa-ho i desa de nou.",
+    "updatedByLine": "Darrer desament per {by} el {at}.",
+    "neverSaved": "Encara no s'ha desat cap política; s'apliquen els valors per defecte."
+  },
+  "viewAs": {
+    "title": "Veure com",
+    "description": "Prova l'aplicació, només per a la teva sessió, com algú que compleix o no una condició que normalment es determina pel directori o per administradors. La teva identitat no canvia mai: tot el que creïs et pertany i tota línia d'auditoria continua portant el teu nom.",
+    "activeTitle": "Veure com està actiu",
+    "inactiveTitle": "Veure com no està actiu",
+    "sections": {
+      "role": "Rol d'administrador",
+      "region": "Regió de dades",
+      "attributes": "Atributs del directori",
+      "groups": "Membres del grup",
+      "presets": "Predefinits"
+    },
+    "role": {
+      "global": "Administrador global (el teu rol real)",
+      "local": "Administrador local",
+      "none": "Usuari habitual",
+      "localKeysLabel": "Claus d'agent delegat",
+      "localKeysHint": "Claus d'agent canòniques separades per comes que aquest administrador local pot editar. Deixa-ho en blanc si l'administrador local no té agents delegats.",
+      "noneWarning": "Com a usuari habitual, totes les altres àrees d'administrador desapareixen. Aquesta pàgina roman accessible i la barra superior de l'app t'ofereix sempre una sortida."
+    },
+    "region": {
+      "actual": "Real ({region})",
+      "hint": "Redirigeix les teves sol·licituds — i tot el que pugis mentre és actiu — a l’emmagatzematge de l’altra regió. Té prioritat sobre la galeta ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Departament",
+      "companyName": "Empresa",
+      "jobTitle": "Càrrec",
+      "officeId": "Oficina",
+      "officeActual": "Oficina actual",
+      "officeNone": "Sense oficina",
+      "actualValue": "Actual: {value}",
+      "actualEmpty": "Actual: (buit)",
+      "hint": "Deixa un camp en blanc per mantenir el valor actual. Aquests valors s’utilitzen per a les regles de permisos, límits d’ús per atribut i regles d’accés."
+    },
+    "groups": {
+      "label": "IDs de grup",
+      "placeholder": "Un id d'objecte de grup d’Entra per línia",
+      "hint": "Substitueix — no amplia — la teva pertinença real durant aquesta sessió, perquè puguis provar tant pertànyer com no pertànyer."
+    },
+    "presets": {
+      "grantsMember": "Membre de l’equip de permisos",
+      "regularUser": "Usuari habitual",
+      "localAdmin": "Administrador local, sense agents",
+      "otherRegion": "Altra regió",
+      "hint": "Els predefinits emplenen el formulari; res s’aplica fins que premis \"Aplica\"."
+    },
+    "apply": "Aplica i recarrega",
+    "applying": "Aplicant…",
+    "clear": "Sortir de vista-com",
+    "clearing": "Sortint…",
+    "reset": "Reinicia el formulari",
+    "nothingToApply": "Configura almenys una sobreescriptura per aplicar.",
+    "applyError": "No s’ha pogut aplicar la vista-com: {error}",
+    "clearError": "No s’ha pogut sortir de la vista-com: {error}",
+    "loadError": "No s’ha pogut carregar l'estat de la vista-com.",
+    "retry": "Torna-ho a provar",
+    "expiresNote": "La vista-com dura fins a 8 hores o fins que en surtis.",
+    "banner": {
+      "label": "Visualitzant com a",
+      "adjust": "Ajusta",
+      "exit": "Sortir",
+      "role": {
+        "local": "administrador local",
+        "none": "usuari habitual"
+      },
+      "region": "regió {region}",
+      "department": "departament “{value}”",
+      "companyName": "empresa “{value}”",
+      "jobTitle": "càrrec “{value}”",
+      "officeId": "oficina {value}",
+      "groups": "{count, plural, one {# grup} other {# grups}}"
+    }
   }
 }

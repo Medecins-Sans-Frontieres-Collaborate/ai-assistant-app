@@ -106,8 +106,9 @@ function extractMessageText(message: Message): string {
  * Cheap-model selection: anything that is not a plain azure-openai-SDK
  * chat-completions model — agent-prefixed (incl. byom-), unknown ids,
  * non-azure-openai SDKs (anthropic-foundry, Foundry openai), responses-API
- * and reasoning models — reroutes to GPT_5_2_CHAT. The route only ever
- * calls the Azure OpenAI deployments endpoint, so any other id would 404.
+ * and reasoning models — reroutes to GPT_5_4 (deployed in both the US and
+ * EU accounts). The route only ever calls the Azure OpenAI deployments
+ * endpoint, so any other id would 404.
  */
 function resolveDeploymentId(modelId: unknown): OpenAIModelID {
   const requested = typeof modelId === 'string' ? modelId : '';
@@ -123,7 +124,7 @@ function resolveDeploymentId(modelId: unknown): OpenAIModelID {
     model.sdk !== 'azure-openai' ||
     model.usesResponsesAPI ||
     isReasoningModel(requested)
-    ? OpenAIModelID.GPT_5_2_CHAT
+    ? OpenAIModelID.GPT_5_4
     : (requested as OpenAIModelID);
 }
 

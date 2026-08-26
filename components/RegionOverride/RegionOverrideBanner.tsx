@@ -1,8 +1,11 @@
 'use client';
 
-import { useEffect, useSyncExternalStore } from 'react';
+import { useSession } from 'next-auth/react';
+import { useEffect } from 'react';
 
 import { useTranslations } from 'next-intl';
+
+import { useAdminAreas } from '@/client/hooks/settings/useAdminAreas';
 
 import {
   REGION_OVERRIDE_CLEAR,
@@ -30,74 +33,74 @@ function clearOverrideCookie(): void {
   document.cookie = `${REGION_OVERRIDE_COOKIE}=; path=/; max-age=0; samesite=lax`;
 }
 
-// The override only changes when we write the cookie and then reload, so there
-// is no live source to subscribe to — a no-op subscribe is sufficient for
-// useSyncExternalStore (which we use to read the cookie without a hydration
-// mismatch: null on the server, the real value after mount).
-const subscribe = () => () => {};
+/** Strips `?regionOverride=` so it isn't re-applied or shared. */
+function stripParam(params: URLSearchParams): void {
+  params.delete(REGION_OVERRIDE_PARAM);
+  const qs = params.toString();
+  window.history.replaceState(
+    null,
+    '',
+    window.location.pathname + (qs ? `?${qs}` : '') + window.location.hash,
+  );
+}
 
 /**
  * Persistent warning banner for the manual data-region override.
  *
- * Activated by a `?regionOverride=US|EU` URL param (or `=clear` to remove it).
- * The param is read once on the client, written to a cookie that the server
- * reads in the auth session callback (so subsequent API requests route to the
- * overridden region), then stripped from the URL so it isn't sticky/shareable.
- * A full reload follows so server-rendered content reflects the new region.
+ * GLOBAL ADMINS ONLY. The `?regionOverride=US|EU` param (or `=clear`) writes
+ * a plain cookie that the auth session callback honours solely when the real
+ * identity is a global admin (auth.ts); for anyone else it is inert. So:
  *
- * While an override is active this renders a prominent banner making it
- * unmistakable that requests are being sent to a region the user selected
- * manually — NOT their actual location.
+ *  - the param is applied only once the admin-areas query confirms the
+ *    caller is a real global admin (`view-as` is the real-identity area),
+ *    and is silently stripped for everyone else;
+ *  - the banner is driven by the SESSION (`regionOverridden`), never by the
+ *    cookie's presence, so a non-admin can never see a warning about an
+ *    override that is not actually in effect.
+ *
+ * A region set through view-as is announced by ViewAsBanner instead, so this
+ * stays quiet in that case rather than saying the same thing twice.
  */
 export function RegionOverrideBanner() {
   const t = useTranslations();
+  const { data: session } = useSession();
+  const { areas, isLoading: areasLoading } = useAdminAreas();
+  const isRealGlobalAdmin = areas.includes('view-as');
 
-  // Apply (or clear) a `?regionOverride=` param once on mount, then reload so
-  // the server session callback re-reads the cookie and every server-rendered
-  // surface reflects the new region.
   useEffect(() => {
+    if (areasLoading) return;
     const params = new URLSearchParams(window.location.search);
     const raw = params.get(REGION_OVERRIDE_PARAM);
     if (raw === null) return;
 
-    const normalized = raw.trim().toLowerCase();
     let changed = false;
-
-    if (normalized === REGION_OVERRIDE_CLEAR || normalized === '') {
-      if (readCookie(REGION_OVERRIDE_COOKIE) !== null) {
-        clearOverrideCookie();
-        changed = true;
-      }
-    } else {
-      const parsed = parseRegion(raw);
-      if (parsed && readCookie(REGION_OVERRIDE_COOKIE) !== parsed) {
-        setOverrideCookie(parsed);
-        changed = true;
+    if (isRealGlobalAdmin) {
+      const normalized = raw.trim().toLowerCase();
+      if (normalized === REGION_OVERRIDE_CLEAR || normalized === '') {
+        if (readCookie(REGION_OVERRIDE_COOKIE) !== null) {
+          clearOverrideCookie();
+          changed = true;
+        }
+      } else {
+        const parsed = parseRegion(raw);
+        if (parsed && readCookie(REGION_OVERRIDE_COOKIE) !== parsed) {
+          setOverrideCookie(parsed);
+          changed = true;
+        }
       }
     }
 
-    // Strip the param so the override isn't re-applied on every navigation and
-    // the URL stays shareable without leaking the override.
-    params.delete(REGION_OVERRIDE_PARAM);
-    const qs = params.toString();
-    window.history.replaceState(
-      null,
-      '',
-      window.location.pathname + (qs ? `?${qs}` : '') + window.location.hash,
-    );
-
+    stripParam(params);
+    // Reload so the server session callback re-reads the cookie and every
+    // server-rendered surface reflects the new region.
     if (changed) window.location.reload();
-  }, []);
+  }, [areasLoading, isRealGlobalAdmin]);
 
-  const override = parseRegion(
-    useSyncExternalStore(
-      subscribe,
-      () => readCookie(REGION_OVERRIDE_COOKIE),
-      () => null,
-    ),
-  );
-
-  if (!override) return null;
+  const user = session?.user;
+  const active =
+    user?.regionOverridden === true &&
+    user.viewAs?.overrides.region === undefined;
+  if (!active || !user?.region) return null;
 
   const handleClear = () => {
     clearOverrideCookie();
@@ -110,7 +113,7 @@ export function RegionOverrideBanner() {
       className="flex w-full items-center justify-center gap-3 border-b border-amber-500 bg-amber-100 px-4 py-2 text-center text-sm font-medium text-amber-900 dark:border-amber-500/60 dark:bg-amber-950/60 dark:text-amber-200"
     >
       <span aria-hidden="true">⚠️</span>
-      <span>{t('regionOverride.warning', { region: override })}</span>
+      <span>{t('regionOverride.warning', { region: user.region })}</span>
       <button
         type="button"
         onClick={handleClear}

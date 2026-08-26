@@ -892,7 +892,12 @@
       "showFewer": "Zobrazit méně"
     },
     "retryWithModel": "Zkusit s {model}",
-    "createTodoTasks": "Vytvořit úkoly To Do z této odpovědi"
+    "createTodoTasks": "Vytvořit úkoly To Do z této odpovědi",
+    "attachedFileExpired": "Připojený soubor již není dostupný — nahrané soubory jsou uchovávány jen po omezenou dobu. Byl z tohoto rozhovoru odstraněn. Pokračujte bez něj, nebo soubor nahrajte znovu.",
+    "repeatedFailureNotice": "Něco stále selhává — konverzace může být poškozená. Obvykle pomůže začít novou konverzaci.",
+    "startNewConversation": "Zahájit novou konverzaci",
+    "downloadDebugInfo": "Stáhnout ladicí informace",
+    "includeMessageText": "Zahrnout text zprávy"
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",
@@ -901,7 +906,9 @@
     "quickActions": "Rychlé akce",
     "expandFolder": "Rozbalit složku {name}",
     "collapseFolder": "Sbalit složku {name}",
-    "folderOptions": "Možnosti složky {name}"
+    "folderOptions": "Možnosti složky {name}",
+    "agentsEntry": "Agenti",
+    "agentsTitle": "Procházejte agenty a začněte s některým chatovat"
   },
   "prompts": {
     "buildReusablePrompts": "Vytvářejte opakovaně použitelné výzvy s pomocí AI",
@@ -2667,6 +2674,10 @@
       "map": {
         "label": "Mapa",
         "description": "Převádějte libovolná data na umístění v mapě"
+      },
+      "grants": {
+        "label": "Zpracování grantů",
+        "description": "Sloučení a extrakce strukturovaných dat z narativů grantů"
       }
     },
     "chooser": {
@@ -2676,7 +2687,8 @@
       "newTranslation": "Nový překlad",
       "newDocument": "Nový dokument",
       "newDataAnalysis": "Nová analýza dat",
-      "newMap": "Nová mapa"
+      "newMap": "Nová mapa",
+      "newGrants": "Nové zpracování grantů"
     },
     "translation": {
       "chooseLanguage": "Cílový jazyk",
@@ -3293,7 +3305,8 @@
       "unknownType": "Tato konverzace používá workflow, které tato verze nezná. Historie konverzace je uvedena níže.",
       "untitled": "Nová konverzace",
       "toggleMenu": "Přepnout menu",
-      "model": "Model pro tento workflow"
+      "model": "Model pro tento workflow",
+      "disabledByAdmin": "Tento workflow byl deaktivován administrátorem. Historie konverzace je zobrazena níže."
     },
     "tabs": {
       "label": "Režim konverzace",
@@ -4047,7 +4060,153 @@
     "conflictTakeTheirs": "Převzít jejich verzi",
     "conflictNoFieldDiff": "Hodnoty souhlasí — změnila se pouze verze záznamu.",
     "conflictRecordGone": "Tento záznam byl smazán (nebo jej nelze znovu načíst). Zkopírujte vše potřebné z formuláře a znovu načtěte.",
-    "groupsFlagOff": "Cílení na skupiny zde zatím není povoleno. Stávající cíle skupin dál fungují."
+    "groupsFlagOff": "Cílení na skupiny zde zatím není povoleno. Stávající cíle skupin dál fungují.",
+    "catalogOauth": {
+      "title": "Integrované OAuth aplikace konektorů",
+      "description": "OAuth aplikace pro integrované konektory (GitHub, Asana, …) platné v celé instalaci. Záznam uložený zde přepisuje proměnné prostředí MCP_OAUTH_*. Jeho odstraněním se vrátí použití těchto proměnných. Klientská tajemství jsou v klidu šifrována a po uložení již nejsou opět zobrazena.",
+      "badgeAdmin": "Nastaveno zde",
+      "badgeEnv": "Z prostředí",
+      "badgeNone": "Nenastaveno",
+      "badgeDcr": "Automatická registrace",
+      "badgeDcrHint": "Tento poskytovatel může zaregistrovat OAuth klienta automaticky, takže funguje i bez zde nastavené aplikace.",
+      "clientIdLabel": "ID OAuth klienta",
+      "clientSecretLabel": "Tajemství OAuth klienta",
+      "secretStoredPlaceholder": "Uloženo — napište pro změnu, ponechte prázdné pro zachování",
+      "secretNewPlaceholder": "Vložte klientské tajemství",
+      "save": "Uložit",
+      "remove": "Odstranit",
+      "removeToEnv": "Odstranit (vrátit na prostředí)",
+      "saved": "OAuth aplikace {name} uložena",
+      "removed": "OAuth aplikace {name} odstraněna",
+      "saveError": "Uložení OAuth aplikace selhalo. Zkuste to znovu.",
+      "conflict": "Tento záznam byl změněn jinde — znovu načteno, zkuste znovu.",
+      "storageUnavailable": "Úložiště pro správu není dostupné; stávající záznamy nelze zobrazit. Ukládání je do obnovení vypnuto.",
+      "sealingUnavailable": "Šifrování tajemství není v této instalaci nastaveno (chybí AUTH_SECRET) — klientská tajemství nelze uložit.",
+      "updatedBy": "Aktualizoval(a) {by} dne {at}"
+    },
+    "orgAgentOverrideTitle": "Přepsat vestavěného agenta",
+    "orgAgentOverrideAction": "Přepsat",
+    "orgAgentBuiltinBadge": "Vestavěný",
+    "orgAgentBuiltinHint": "Definováno v konfiguračním souboru nasazení. Pravidlo přístupu lze zde upravit; přepište ho pro změnu nastavení bez nasazení nové verze.",
+    "m365AgentIndexProgress": "Indexuje se {done} z {total} {total, plural, one {dokumentu} other {dokumentů}}…",
+    "m365AgentIndexInterrupted": "Indexování bylo přerušeno na {done} z {total} — pro pokračování obnovte.",
+    "m365AgentIndexStartedBy": "zahájil {name}",
+    "m365AgentIndexResume": "Pokračovat",
+    "m365AgentIndexResumeHint": "Pokračujte v indexování tam, kde bylo zastaveno, pomocí vašeho přístupu k Microsoft 365. Nechte tuto kartu otevřenou.",
+    "m365AgentIndexCancel": "Zrušit",
+    "m365AgentIndexCancelled": "Indexování zrušeno — již zpracované dokumenty zůstávají vyhledatelné.",
+    "m365AgentIndexJobFailed": "Indexování zastaveno: {error}",
+    "m365AgentIndexDone": "Indexování dokončeno: {indexed} zaindexováno, {failed} neúspěšně, {noText} bez textu.",
+    "m365AgentDocCounts": "{indexed, plural, one {# dokument zaindexován} other {# dokumentů zaindexováno}} · {failed} neúspěšně · {noText} bez textu · {needsPreparation} nutno připravit · {skipped} přeskočeno",
+    "m365CapDocuments": "Dokumenty: {count} / {max}",
+    "m365CapBytes": "{bytes} z {max}",
+    "m365CapOverDocuments": "Překročen limit {max} dokumentů. Odznačte podsložky, filtrujte podle typu souboru nebo odeberte zdroje — započítávají se pouze skutečně indexované soubory.",
+    "m365CapOverBytes": "Překročen limit velikosti {max}. Vyřaďte podsložky nebo velké soubory.",
+    "m365PlanScanning": "Skenování…",
+    "m365PlanRefreshing": "aktualizace…",
+    "m365PlanFailed": "Nelze prohledat zdroje pomocí vašeho účtu Microsoft 365.",
+    "m365PlanMissing": "Nenalezeno nebo bez přístupu",
+    "m365PlanIndexable": "{count, plural, one {# soubor bude indexován} other {# souborů bude indexováno}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# je nutno připravit} other {# je nutno připravit}}",
+    "m365PlanSkipped": "{count} přeskočeno",
+    "m365PlanShowDetails": "Detaily",
+    "m365PlanHideDetails": "Skrýt detaily",
+    "m365PlanTruncated": "Tato složka je příliš velká na úplné prohledání — zobrazeno pouze prvních 1 000 položek. Vyberte raději podsložku.",
+    "m365PlanRecursive": "Zahrnout podsložky",
+    "m365PlanExtensionsLabel": "Pouze typy souborů:",
+    "m365PlanExtensionsPlaceholder": "např. pdf, docx",
+    "m365PlanSubfolders": "Podsložky",
+    "m365PlanFolderCount": "{count, plural, one {# soubor} other {# souborů}}",
+    "m365PlanGroupIndexable": "Bude indexováno",
+    "m365PlanGroupNeedsPreparation": "Nutno připravit",
+    "m365PlanGroupSkipped": "Přeskočeno",
+    "m365PlanPreparationHint": "obrázky/audio/video — zatím neindexováno",
+    "m365PlanMoreRows": "…a ještě {count}",
+    "m365ItemStatus": {
+      "pending": "čeká",
+      "indexed": "indexováno",
+      "failed": "neúspěšně",
+      "noText": "text nezískán",
+      "missing": "chybí"
+    },
+    "m365SkipReason": {
+      "unsupported": "nepodporovaný typ",
+      "tooLarge": "více než 25 MB",
+      "disallowedType": "blokovaný typ (spustitelný/archivní)",
+      "malware": "Microsoft označil jako malware",
+      "zeroBytes": "prázdný soubor",
+      "excluded": "vyloučeno",
+      "typeFilter": "není ve filtru typů"
+    },
+    "localAdminGroup": {
+      "agents": "Agentí",
+      "promptAgents": "Prompt agenti",
+      "m365Agents": "Microsoft 365 agenti",
+      "orgAgents": "Knowledge agenti",
+      "guides": "Průvodci",
+      "connectors": "Konektory",
+      "datasets": "Mapová datová sada",
+      "unknown": "Delegováno, ale nenalezeno"
+    },
+    "localAdminGroupUnavailable": "Tento seznam je dočasně nedostupný — stávající delegace zůstávají zachovány.",
+    "localAdminBuiltIn": "vestavěný",
+    "localAdminSummary": "{count, plural, one {# delegace} other {# delegací}}: {names}",
+    "localAdminSummaryMore": "{names} a dalších {more}",
+    "localAdminNoDelegations": "Zatím žádné delegace — lokální administrátor bez agentů vidí pouze administrátorskou oblast.",
+    "localAdminSelectedCount": "Vybráno {selected} z {total}",
+    "localAdminCopyFrom": "Kopírovat z",
+    "localAdminClearAll": "Vymazat vše",
+    "localAdminSelectGroup": "Vybrat vše",
+    "localAdminClearGroup": "Vymazat",
+    "localAdminSearchPlaceholder": "Hledat agenty, průvodce, konektory…",
+    "localAdminDuplicateEmail": "Tento e-mail je již uveden — sloučte oba záznamy.",
+    "localAdminExpand": "Zobrazit delegace",
+    "localAdminCollapse": "Skrýt delegace",
+    "localAdminDiscard": "Zahodit změny",
+    "m365AgentRefresh": "Obnovit",
+    "m365AgentRefreshHint": "Načte soubory přidané, změněné nebo odstraněné od posledního spuštění — nezměněné soubory se znovu nestahují. Nechte tuto kartu otevřenou.",
+    "m365AgentReindexAll": "Reindexovat vše",
+    "m365AgentRefreshProgress": "Probíhá obnova — {done} z {total} změněných {total, plural, one {dokumentu} other {dokumentů}}…",
+    "m365AgentRefreshDone": "Obnova dokončena: {added} přidáno, {modified} aktualizováno, {removed} odstraněno, {failed} selhalo.",
+    "m365ChangesChecking": "Kontroluje se Microsoft 365 na změny od poslední indexace…",
+    "m365ChangesFailed": "Nelze zkontrolovat změny s vaším účtem Microsoft 365.",
+    "m365ChangesNeverIndexed": "Ještě nebylo indexováno — spusťte Index po uložení.",
+    "m365ChangesFound": "{count, plural, one {# změna} other {# změn}} od poslední indexace: {added} přidáno, {modified} aktualizováno, {removed} odstraněno.",
+    "m365ChangesNone": "Žádné změny od poslední indexace ({date}).",
+    "m365PrepareButton": "Připravit",
+    "m365PrepareOcrButton": "Připravit (OCR)",
+    "m365PrepareSaveFirst": "nejprve uložte agenta pro přípravu",
+    "m365PrepareHintImage": "obrázek — 1 volání vision",
+    "m365PrepareHintMedia": "~{minutes} min zvuku k přepisu",
+    "m365PrepareHintOcr": "žádná textová vrstva — OCR přes vision, až 30 stran",
+    "m365PreparePreparing": "Probíhá příprava…",
+    "m365PreparePending": "Probíhá přepis…",
+    "m365PreparedNote": "připraveno · {kind}",
+    "m365PreparedKind": {
+      "image": "popis obrázku",
+      "audio": "přepis",
+      "video": "přepis",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "{name} připraveno ({chars} znaků). Spusťte Obnovit pro indexaci.",
+    "m365PrepareStarted": "Přepis {name} byl spuštěn na pozadí — ponechte tuto kartu otevřenou.",
+    "m365PrepareFailed": "Nepodařilo se připravit {name}: {error}",
+    "m365PrepareFailedGeneric": "Příprava selhala.",
+    "canonicalKeyLabel": "Klíč",
+    "copyKey": "Kopírovat klíč",
+    "agentKeySearchPlaceholder": "Hledat agenty, průvodce, konektory… nebo vložte klíč",
+    "agentKeyAddCustom": "Přidat „{key}“ tak, jak bylo zadáno",
+    "agentKeyRemove": "Odebrat {name}",
+    "hideAgent": "Skrýt",
+    "unhideAgent": "Zobrazit",
+    "hideAgentHint": "Skrýt tohoto agenta z vašeho seznamu správců. Ovlivní to jen váš pohled – uživatelé a ostatní správci zůstanou nedotčeni.",
+    "unhideAgentHint": "Zobrazit tohoto agenta znovu ve vašem seznamu správců.",
+    "hiddenBadge": "Skrytý",
+    "hiddenAgentsCount": "{count, plural, one {# skrytý agent} few {# skrytí agenti} other {# skrytých agentů}}",
+    "hiddenAgentsShowing": "Zobrazuje se {count, plural, one {# skrytý agent} few {# skrytí agenti} other {# skrytých agentů}}",
+    "hiddenAgentsShow": "Zobrazit",
+    "hiddenAgentsHide": "Znovu skrýt",
+    "allAgentsHidden": "Všichni agenti zde jsou ve vašem zobrazení skrytí – pro zobrazení klikněte na Zobrazit."
   },
   "localModels": {
     "title": "Lokální modely",
@@ -4248,9 +4407,15 @@
       "connectors": "Organizační konektory a jejich uživatelé.",
       "guides": "Pokyny ke stylu, terminologii a souladu.",
       "mapDatasets": "Kurátorované datasety dostupné ve workflow mapy.",
-      "localAdmins": "Delegujte úpravu přístupových pravidel dalším osobám."
+      "localAdmins": "Delegujte úpravu přístupových pravidel dalším osobám.",
+      "workflows": "Zapněte nebo vypněte workflowy pro všechny uživatele.",
+      "viewAs": "Testujte aplikaci jako někdo, kdo splňuje nebo nesplňuje podmínku."
     },
-    "openSettings": "Otevřít nastavení"
+    "openSettings": "Otevřít nastavení",
+    "area": {
+      "workflows": "Workflowy",
+      "viewAs": "Zobrazit jako"
+    }
   },
   "limits": {
     "title": "Limity používání",
@@ -4452,7 +4617,8 @@
     "groupSearchNoResults": "Žádné skupiny neodpovídají tomuto názvu.",
     "groupSearchError": "Hledání skupin se nezdařilo. Níže můžete stále vložit objektové ID skupiny.",
     "groupSearchHint": "Prohledávejte skupiny vaší organizace zadáním alespoň 2 znaků, nebo přímo vložte objektové ID skupiny. Přepsání platí pro členy skupiny v Microsoft Entra.",
-    "groupsFlagOff": "Cílení na skupiny není zatím v tomto prostředí povoleno. Stávající skupinová cílení nadále fungují."
+    "groupsFlagOff": "Cílení na skupiny není zatím v tomto prostředí povoleno. Stávající skupinová cílení nadále fungují.",
+    "featureDisabled": "Limity používání nejsou v tomto nasazení povoleny."
   },
   "m365": {
     "connections": {
@@ -4813,5 +4979,149 @@
     "failed": "Sdílení se nezdařilo – nic nebylo vytvořeno.",
     "copyFailed": "Odkaz se nepodařilo zkopírovat — vyberte jej výše a zkopírujte ručně.",
     "lastMessagesCountLabel": "Počet posledních zpráv k zahrnutí"
+  },
+  "toolModes": {
+    "webSearch": "Vyhledávání na webu",
+    "codeInterpreter": "Interpret kódu",
+    "off": "Vypnuto",
+    "auto": "Automaticky",
+    "always": "Vždy",
+    "routingPrivacy": "Soukromí",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Vyhledávání Azure AI odesílá dotazy přes Azure AI Foundry, kde mohou být uchovávány.",
+    "learnMore": "Zjistit více"
+  },
+  "agentAttach": {
+    "browserTitle": "Agenti",
+    "browserSubtitle": "Přidejte do tohoto chatu agenty a konektory, nebo začněte nový chat s agentem. Většina funguje s modelem, který jste si vybrali.",
+    "searchPlaceholder": "Hledejte agenty a konektory…",
+    "loading": "Načítání agentů…",
+    "noMatches": "Vašemu hledání nic neodpovídá.",
+    "noAgents": "Nejsou dostupní žádní agenti.",
+    "addToChat": "Přidat do tohoto chatu",
+    "removeFromChat": "Odebrat z tohoto chatu",
+    "newChat": "Nový chat",
+    "attached": "Připojeno",
+    "detach": "Odpojit",
+    "change": "Změnit",
+    "browse": "Procházet agenty…",
+    "noAgent": "Není připojen žádný agent",
+    "close": "Zavřít",
+    "kind": {
+      "rag": "Znalosti",
+      "prompt": "Osobnost",
+      "m365": "Znalosti (Microsoft 365)",
+      "org": "Znalosti",
+      "foundry": "Foundry agent",
+      "connector": "Konektor"
+    },
+    "semantics": {
+      "your-model": "používá váš model",
+      "pinned-model": "model nastavený správcem",
+      "own-model": "běží na vlastním modelu"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Návrhy z vaší organizace",
+    "searching": "Vyhledávání ve vaší organizaci…",
+    "noMatches": "Žádné shody v adresáři — můžete zadat adresu ručně"
+  },
+  "workflowsAdmin": {
+    "title": "Workflowy",
+    "description": "Aktivujte nebo deaktivujte každý workflow pro celou organizaci. Deaktivovaný workflow je skrytý v menu a server ho odmítá i pro osoby, které by k němu měly přístup.",
+    "layeredNote": "Flag LaunchDarkly conversationWorkflows stále řídí nasazení: workflow povolený zde je přístupný jen tam, kde je tento flag zapnutý. Tato stránka nemůže zviditelnit nic, co je tímto flagem skryto.",
+    "loading": "Načítání politiky workflowu…",
+    "loadError": "Politiku workflowu se nepodařilo načíst.",
+    "policyUnavailable": "Politiku workflowu se nepodařilo přečíst z úložiště. Přepínače jsou skryté, aby neukazovaly výchozí hodnoty, které nemusí odpovídat aktuálně platným pravidlům.",
+    "retry": "Zkusit znovu",
+    "enableAll": "Povolit vše",
+    "disableAll": "Zakázat vše",
+    "enabledLabel": "Povoleno",
+    "disabledLabel": "Zakázáno",
+    "defaultOnHint": "Výchozí stav, pokud není uložena politika: povoleno.",
+    "defaultOffHint": "Výchozí stav, pokud není uložena politika: zakázáno — aktivaci musí výslovně provést administrátor.",
+    "grantsNote": "Zpracování grantů je dále omezeno na uživatele MSF-USA v oddělení Program se \"grants\" v názvu pracovní pozice nebo v oddělení Systems s \"innovation\" v názvu pozice. Povolení zde toto pravidlo dále nerozšiřuje.",
+    "unsaved": "Máte neuložené změny.",
+    "save": "Uložit",
+    "saving": "Ukládání…",
+    "saveSuccess": "Politika workflowu byla uložena.",
+    "saveError": "Politiku workflowu se nepodařilo uložit.",
+    "conflictError": "Jiný administrátor mezitím změnil politiku. Nastavení bylo znovu načteno — prosím zkontrolujte a uložte znovu.",
+    "updatedByLine": "Naposledy uložil uživatel {by} dne {at}.",
+    "neverSaved": "Politika zatím nebyla uložena; použijí se výchozí hodnoty výše."
+  },
+  "viewAs": {
+    "title": "Zobrazit jako",
+    "description": "Otestujte aplikaci pouze ve svém sezení tak, jakoby splňujete nebo nesplňujete podmínku, kterou obvykle určuje adresář nebo správci. Vaše identita se nikdy nemění: vše, co vytvoříte, zůstává vaše a každý auditní záznam vás pořád uvádí jako autora.",
+    "activeTitle": "'Zobrazit jako' je aktivní",
+    "inactiveTitle": "'Zobrazit jako' není aktivní",
+    "sections": {
+      "role": "Role administrátora",
+      "region": "Datová oblast",
+      "attributes": "Atributy adresáře",
+      "groups": "Členství ve skupině",
+      "presets": "Předvolby"
+    },
+    "role": {
+      "global": "Globální administrátor (vaše skutečná role)",
+      "local": "Lokální administrátor",
+      "none": "Běžný uživatel",
+      "localKeysLabel": "Delegované klíče agentů",
+      "localKeysHint": "Kanonické klíče agentů, které může tento lokální administrátor upravovat. Oddělené čárkou. Nechte prázdné pro lokálního administrátora bez delegovaných agentů.",
+      "noneWarning": "Jako běžný uživatel máte všechny ostatní administrátorské sekce skryté. Tato stránka zůstává dostupná a banner v horní části aplikace vám vždy umožní návrat."
+    },
+    "region": {
+      "actual": "Aktuální ({region})",
+      "hint": "Přesměruje vaše požadavky — a vše, co během aktivace nahrajete — do úložiště druhého regionu. Má přednost před cookies ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Oddělení",
+      "companyName": "Společnost",
+      "jobTitle": "Pracovní pozice",
+      "officeId": "Pobočka",
+      "officeActual": "Skutečná pobočka",
+      "officeNone": "Žádná pobočka",
+      "actualValue": "Skutečné: {value}",
+      "actualEmpty": "Skutečné: (prázdné)",
+      "hint": "Nechte pole prázdné, abyste zachovali svou skutečnou hodnotu. Tyto údaje ovlivňují pravidla grantů, limity použití a přístupová pravidla závislá na atributech."
+    },
+    "groups": {
+      "label": "ID skupin",
+      "placeholder": "Každý Entra group object id na samostatný řádek",
+      "hint": "Nahrazuje — nerozšiřuje — vaše skutečné členství pro tuto relaci, takže můžete testovat příslušnost i nepříslušnost."
+    },
+    "presets": {
+      "grantsMember": "Člen týmu grantů",
+      "regularUser": "Běžný uživatel",
+      "localAdmin": "Místní administrátor, bez agentů",
+      "otherRegion": "Jiný region",
+      "hint": "Přednastavení vyplní formulář; nic se neprovede, dokud nestisknete Použít."
+    },
+    "apply": "Použít a znovu načíst",
+    "applying": "Probíhá použití…",
+    "clear": "Ukončit zobrazení jako",
+    "clearing": "Ukončování…",
+    "reset": "Obnovit formulář",
+    "nothingToApply": "Nastavte alespoň jednu změnu, kterou chcete použít.",
+    "applyError": "Zobrazení jako nebylo možné použít: {error}",
+    "clearError": "Zobrazení jako nebylo možné zrušit: {error}",
+    "loadError": "Stav zobrazení jako se nepodařilo načíst.",
+    "retry": "Zkusit znovu",
+    "expiresNote": "Zobrazení jako platí maximálně 8 hodin nebo do ukončení režimu.",
+    "banner": {
+      "label": "Zobrazení jako",
+      "adjust": "Upravit",
+      "exit": "Ukončit",
+      "role": {
+        "local": "místní administrátor",
+        "none": "běžný uživatel"
+      },
+      "region": "region {region}",
+      "department": "oddělení \"{value}\"",
+      "companyName": "společnost \"{value}\"",
+      "jobTitle": "pozice \"{value}\"",
+      "officeId": "pobočka {value}",
+      "groups": "{count, plural, one {# skupina} other {# skupin}}"
+    }
   }
 }

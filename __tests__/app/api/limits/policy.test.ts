@@ -13,10 +13,8 @@ import { GET, PUT } from '@/app/api/limits/policy/route';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockAuth = vi.hoisted(() => vi.fn());
-const serviceIsEnabled = vi.hoisted(() => vi.fn());
 const serviceInvalidate = vi.hoisted(() => vi.fn());
 const mockEnv = vi.hoisted(() => ({
-  LIMITS_ENABLED: true,
   AGENT_ACCESS_ADMINS: 'global@example.com',
 }));
 
@@ -25,7 +23,6 @@ vi.mock('@/config/environment', () => ({ env: mockEnv }));
 vi.mock('@/lib/services/limits/LimitsService', () => ({
   LimitsService: {
     getInstance: () => ({
-      isEnabled: serviceIsEnabled,
       invalidate: serviceInvalidate,
     }),
   },
@@ -73,29 +70,11 @@ const validBody = {
 describe('/api/limits/policy', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockEnv.LIMITS_ENABLED = true;
     mockEnv.AGENT_ACCESS_ADMINS = 'global@example.com';
-    serviceIsEnabled.mockReturnValue(true);
     mockAuth.mockResolvedValue(globalAdminSession);
     vi.mocked(createLimitsBlobStorage).mockReturnValue({} as never);
     vi.mocked(writePolicy).mockResolvedValue('"etag-new"');
     vi.mocked(writeHistoryEntry).mockResolvedValue(undefined);
-  });
-
-  describe('feature gate', () => {
-    it('404s BEFORE auth when disabled, like a route that does not exist', async () => {
-      serviceIsEnabled.mockReturnValue(false);
-      const response = await GET();
-      expect(response.status).toBe(404);
-      expect(mockAuth).not.toHaveBeenCalled();
-    });
-
-    it('404s on PUT when disabled', async () => {
-      serviceIsEnabled.mockReturnValue(false);
-      const response = await PUT(putRequest(validBody));
-      expect(response.status).toBe(404);
-      expect(mockAuth).not.toHaveBeenCalled();
-    });
   });
 
   describe('authorization', () => {

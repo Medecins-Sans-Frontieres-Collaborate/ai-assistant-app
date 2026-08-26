@@ -32,6 +32,11 @@ vi.mock('katex/dist/katex.min.css', () => ({}));
 const mockMessages: Record<string, unknown> = {
   // Root-namespace key (messages/en.json has a top-level "close").
   close: 'Close',
+  peopleSuggest: {
+    listLabel: 'Suggestions from your organization',
+    searching: 'Searching your organization…',
+    noMatches: 'No directory matches — you can enter the address manually',
+  },
   common: {
     cancel: 'Cancel',
     undo: 'Undo',
@@ -44,6 +49,7 @@ const mockMessages: Record<string, unknown> = {
     variables: 'Variables',
     search: 'Search',
     beta: 'Beta',
+    tryAgain: 'Try again',
   },
   admin: {
     title: 'Admin',
@@ -51,6 +57,13 @@ const mockMessages: Record<string, unknown> = {
     areaNavLabel: 'Admin areas',
   },
   chat: {
+    attachedFileExpired:
+      'An attached file is no longer available — uploaded files are stored for a limited time. It has been removed from this conversation. Try again without it, or upload the file again.',
+    repeatedFailureNotice:
+      'This keeps failing — the conversation may have become corrupted. Starting a fresh conversation usually fixes this.',
+    startNewConversation: 'Start a new conversation',
+    downloadDebugInfo: 'Download debug info',
+    includeMessageText: 'Include message text',
     toolSummary: {
       usedTools: 'Used {count} tools',
       failedCount: '{count} failed',
@@ -257,6 +270,49 @@ const mockMessages: Record<string, unknown> = {
     badgeTooltip:
       'Connector tools are active on every message — they add tokens and response time. Click to manage.',
   },
+  toolModes: {
+    webSearch: 'Web search',
+    codeInterpreter: 'Code interpreter',
+    off: 'Off',
+    auto: 'Auto',
+    always: 'Always',
+    routingPrivacy: 'Privacy',
+    routingAgent: 'Azure AI',
+    agentRoutingNote:
+      'Azure AI search sends queries through Azure AI Foundry, which may retain them.',
+    learnMore: 'Learn more',
+  },
+  agentAttach: {
+    browserTitle: 'Agents',
+    browserSubtitle:
+      "Add agents and connectors to this chat, or start a new chat with an agent. Most work with whatever model you've chosen.",
+    searchPlaceholder: 'Search agents and connectors…',
+    loading: 'Loading agents…',
+    noMatches: 'Nothing matches your search.',
+    noAgents: 'No agents available.',
+    addToChat: 'Add to this chat',
+    removeFromChat: 'Remove from this chat',
+    newChat: 'New chat',
+    attached: 'Attached',
+    detach: 'Detach',
+    change: 'Change',
+    browse: 'Browse agents…',
+    noAgent: 'No agent attached',
+    close: 'Close',
+    kind: {
+      rag: 'Knowledge',
+      prompt: 'Persona',
+      m365: 'Knowledge (Microsoft 365)',
+      org: 'Knowledge',
+      foundry: 'Foundry agent',
+      connector: 'Connector',
+    },
+    semantics: {
+      'your-model': 'uses your model',
+      'pinned-model': 'model set by admin',
+      'own-model': 'runs on its own model',
+    },
+  },
   m365: {
     tools: {
       alwaysConfirmNote:
@@ -381,6 +437,56 @@ const mockMessages: Record<string, unknown> = {
     retry: 'Retry',
     rulesTab: 'Agent rules',
     localAdminsTab: 'Local admins',
+    delegatedAgentsLabel: 'Delegated agents',
+    noDelegatedAgents: 'No agents available to delegate.',
+    unknownAgentKey: 'Unknown agent key',
+    canonicalKeyLabel: 'Key',
+    copyKey: 'Copy key',
+    agentKeySearchPlaceholder:
+      'Search agents, guides, connectors… or paste a key',
+    agentKeyAddCustom: 'Add "{key}" as typed',
+    agentKeyRemove: 'Remove {name}',
+    hideAgent: 'Hide',
+    unhideAgent: 'Unhide',
+    hideAgentHint: 'Hide this agent from your admin list.',
+    unhideAgentHint: 'Show this agent in your admin list again.',
+    hiddenBadge: 'Hidden',
+    // ICU plurals in the real keys; the mock t() only does {param}
+    hiddenAgentsCount: '{count} hidden agents',
+    hiddenAgentsShowing: 'Showing {count} hidden agents',
+    hiddenAgentsShow: 'Show',
+    hiddenAgentsHide: 'Hide again',
+    allAgentsHidden:
+      'All agents here are hidden from your view — use Show to reveal them.',
+    localAdminGroup: {
+      agents: 'Agents',
+      promptAgents: 'Prompt agents',
+      m365Agents: 'Microsoft 365 agents',
+      orgAgents: 'Knowledge agents',
+      guides: 'Guides',
+      connectors: 'Connectors',
+      datasets: 'Map datasets',
+      unknown: 'Delegated but not found',
+    },
+    localAdminGroupUnavailable:
+      'This list is temporarily unavailable — existing delegations are kept.',
+    localAdminBuiltIn: 'built-in',
+    // The real key is an ICU plural; the mock t() only does {param}
+    localAdminSummary: '{count} delegated: {names}',
+    localAdminSummaryMore: '{names} and {more} more',
+    localAdminNoDelegations:
+      'No delegations yet — a local admin with no agents can only see the admin area.',
+    localAdminSelectedCount: '{selected} of {total} selected',
+    localAdminCopyFrom: 'Copy from',
+    localAdminClearAll: 'Clear all',
+    localAdminSelectGroup: 'Select all',
+    localAdminClearGroup: 'Clear',
+    localAdminSearchPlaceholder: 'Search agents, guides, connectors…',
+    localAdminDuplicateEmail:
+      'This email is already listed — merge the two entries.',
+    localAdminExpand: 'Show delegations',
+    localAdminCollapse: 'Hide delegations',
+    localAdminDiscard: 'Discard changes',
     noAgents: 'No agents to manage.',
     sourceLabel: 'Source',
     notDiscoverable: 'Not discoverable by you',

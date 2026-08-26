@@ -15,6 +15,7 @@ import toast from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
 
 import { unwrapApiData } from '@/client/hooks/settings/useAgentAccessAdmin';
+import { useHiddenAdminAgents } from '@/client/hooks/useHiddenAdminAgents';
 
 import type { OrgRagAgent } from '@/lib/services/agentAccess/types';
 
@@ -22,14 +23,22 @@ import { isModelSelectableInRegion } from '@/lib/utils/shared/modelRegion';
 
 import { OpenAIModels } from '@/types/openai';
 
+import { CanonicalKeyChip } from './CanonicalKeyChip';
 import { ConflictDiff, ConflictDiffRow } from './ConflictDiff';
+import {
+  HiddenBadge,
+  HideAgentButton,
+  ShowHiddenToggle,
+} from './HiddenAgentsControls';
 import { RuleEditor } from './RuleEditor';
 import {
   AdminHistoryResponse,
   AdminOrgAgentsResponse,
+  AdminStaticOrgAgent,
   AdminStoredOrgAgent,
   AdminStoredRule,
   CLIENT_ORG_AGENT_SOURCE,
+  OrgAgentDraft,
   clientCanonicalAgentKey,
 } from './types';
 
@@ -54,12 +63,15 @@ interface OrgAgentEditorProps {
   /** Static config ids offered as override targets (create only). */
   staticAgentIds: string[];
   /**
-   * Historical record to prefill the form with (restore flow) — the admin
-   * reviews and Saves, which runs the normal validated CAS PUT against
-   * `existing`'s etag. Takes precedence over `existing.agent` for initial
+   * Values to prefill the form with — a historical record (restore flow:
+   * the admin reviews and Saves, which runs the normal validated CAS PUT
+   * against `existing`'s etag) or a built-in agent being overridden
+   * (create flow). Takes precedence over `existing.agent` for initial
    * values only.
    */
-  prefill?: OrgRagAgent | null;
+  prefill?: OrgAgentDraft | null;
+  /** Create flow: preselects the built-in agent this record overrides. */
+  initialOverrideId?: string;
   onSaved: () => void;
   onCancel: () => void;
   onConflictReload: () => void;
@@ -78,6 +90,7 @@ const OrgAgentEditor: FC<OrgAgentEditorProps> = ({
   indexesLoading,
   staticAgentIds,
   prefill,
+  initialOverrideId,
   onSaved,
   onCancel,
   onConflictReload,
@@ -110,7 +123,7 @@ const OrgAgentEditor: FC<OrgAgentEditorProps> = ({
     initial?.allowCodeInterpreter ?? false,
   );
   const [enabled, setEnabled] = useState(initial?.enabled ?? true);
-  const [overrideId, setOverrideId] = useState('');
+  const [overrideId, setOverrideId] = useState(initialOverrideId ?? '');
   const [sources, setSources] = useState<EditorSource[]>(
     initial?.sources ?? [],
   );
@@ -311,7 +324,13 @@ const OrgAgentEditor: FC<OrgAgentEditorProps> = ({
   return (
     <div className="mt-2 rounded-lg border border-gray-200 p-4 dark:border-gray-700">
       <h4 className="mb-3 text-sm font-semibold text-black dark:text-white">
-        {t(existing ? 'editOrgAgentTitle' : 'newOrgAgentTitle')}
+        {t(
+          existing
+            ? 'editOrgAgentTitle'
+            : overrideId
+              ? 'orgAgentOverrideTitle'
+              : 'newOrgAgentTitle',
+        )}
       </h4>
       <div className="space-y-3">
         {!existing && staticAgentIds.length > 0 && (
@@ -787,6 +806,9 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
   const t = useTranslations('agentAccess');
   const queryClient = useQueryClient();
   const [isCreating, setIsCreating] = useState(false);
+  /** Create flow seeded from a built-in agent (Override button). */
+  const [overridePrefill, setOverridePrefill] =
+    useState<AdminStaticOrgAgent | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingRuleKey, setEditingRuleKey] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
@@ -797,6 +819,7 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
     agent: OrgRagAgent;
   } | null>(null);
 
+  const hiddenAgents = useHiddenAdminAgents();
   const agentsQuery = useQuery<AdminOrgAgentsResponse>({
     queryKey: ['agent-access-org-agents'],
     queryFn: async () => {
@@ -887,7 +910,21 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
   };
 
   const agents = agentsQuery.data?.orgAgents ?? [];
+  // Built-in agents an admin record already overrides are shown as that
+  // record (the registry serves the record, not the file entry).
+  const staticAgents = (agentsQuery.data?.staticAgents ?? []).filter(
+    (entry) => !entry.overridden,
+  );
+  const hiddenStatic = hiddenAgents.partition(
+    staticAgents,
+    (entry) => entry.canonicalKey,
+  );
+  const hiddenStored = hiddenAgents.partition(
+    agents,
+    (entry) => entry.canonicalKey,
+  );
   const staticAgentIds = agentsQuery.data?.staticAgentIds ?? [];
+  const canCreate = agentsQuery.data?.canCreate !== false;
   const indexNames = indexesQuery.data?.indexes ?? [];
 
   return (
@@ -902,11 +939,14 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
         {t('orgAgentsDescription')}
       </p>
 
-      {agentsQuery.data?.canCreate !== false && (
+      {canCreate && (
         <button
           type="button"
           aria-expanded={isCreating}
-          onClick={() => setIsCreating((creating) => !creating)}
+          onClick={() => {
+            setOverridePrefill(null);
+            setIsCreating((creating) => !creating);
+          }}
           className="mb-3 flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
         >
           <IconPlus size={16} />
@@ -917,17 +957,25 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
       {isCreating && (
         <div className="mb-4">
           <OrgAgentEditor
+            key={overridePrefill?.agent.id ?? 'new'}
             existing={null}
             indexNames={indexNames}
             indexesLoading={indexesQuery.isLoading}
             staticAgentIds={staticAgentIds}
+            prefill={overridePrefill?.agent ?? null}
+            initialOverrideId={overridePrefill?.agent.id}
             onSaved={() => {
               setIsCreating(false);
+              setOverridePrefill(null);
               invalidate();
             }}
-            onCancel={() => setIsCreating(false)}
+            onCancel={() => {
+              setIsCreating(false);
+              setOverridePrefill(null);
+            }}
             onConflictReload={() => {
               setIsCreating(false);
+              setOverridePrefill(null);
               invalidate();
             }}
           />
@@ -940,13 +988,128 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
         </p>
       )}
 
-      {agents.length === 0 ? (
+      <ShowHiddenToggle
+        hiddenCount={hiddenStatic.hiddenCount + hiddenStored.hiddenCount}
+        showHidden={hiddenAgents.showHidden}
+        onToggle={hiddenAgents.setShowHidden}
+      />
+      {hiddenStored.visible.length === 0 &&
+      hiddenStatic.visible.length === 0 ? (
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          {t('noOrgAgents')}
+          {agents.length === 0 && staticAgents.length === 0
+            ? t('noOrgAgents')
+            : t('allAgentsHidden')}
         </p>
       ) : (
         <ul className="space-y-2">
-          {agents.map((entry) => {
+          {hiddenStatic.visible.map((entry) => {
+            // Built-in (deployment config) agent: read-only settings, but
+            // its access rule is editable under the same canonical key the
+            // invocation guard and discovery filter evaluate.
+            const stored = rulesByKey.get(entry.canonicalKey) ?? null;
+            const isRestricted = stored?.rule.access.type === 'restricted';
+            return (
+              <li
+                key={entry.canonicalKey}
+                data-testid={`static-org-agent-${entry.agent.id}`}
+                className="rounded-lg border border-gray-200 p-3 dark:border-gray-700"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="truncate text-sm font-medium text-black dark:text-white">
+                        {entry.agent.name}
+                      </span>
+                      <span className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-xs text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300">
+                        {t('orgAgentBadge')}
+                      </span>
+                      <span
+                        title={t('orgAgentBuiltinHint')}
+                        className="shrink-0 rounded-full bg-gray-200 px-2 py-0.5 text-xs text-gray-700 dark:bg-gray-700 dark:text-gray-300"
+                      >
+                        {t('orgAgentBuiltinBadge')}
+                      </span>
+                    </div>
+                    <CanonicalKeyChip canonicalKey={entry.canonicalKey} />
+                    <p className="truncate text-xs text-gray-500 dark:text-gray-400">
+                      {entry.agent.searchIndex || entry.agent.id}
+                    </p>
+                  </div>
+                  <span
+                    className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
+                      isRestricted
+                        ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                        : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                    }`}
+                  >
+                    {isRestricted ? t('accessRestricted') : t('accessEveryone')}
+                  </span>
+                  {hiddenAgents.isHidden(entry.canonicalKey) && <HiddenBadge />}
+                  <HideAgentButton
+                    hidden={hiddenAgents.isHidden(entry.canonicalKey)}
+                    onHide={() => hiddenAgents.hide(entry.canonicalKey)}
+                    onUnhide={() => hiddenAgents.unhide(entry.canonicalKey)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setEditingRuleKey(
+                        editingRuleKey === entry.canonicalKey
+                          ? null
+                          : entry.canonicalKey,
+                      )
+                    }
+                    className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                  >
+                    {t('editAccess')}
+                  </button>
+                  {canCreate && (
+                    <button
+                      type="button"
+                      title={t('orgAgentBuiltinHint')}
+                      onClick={() => {
+                        setOverridePrefill(entry);
+                        setIsCreating(true);
+                      }}
+                      className="shrink-0 rounded-md border border-gray-200 px-3 py-1 text-sm text-black hover:bg-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                    >
+                      {t('orgAgentOverrideAction')}
+                    </button>
+                  )}
+                </div>
+
+                {editingRuleKey === entry.canonicalKey && (
+                  <div className="mt-2">
+                    <RuleEditor
+                      key={`${entry.canonicalKey}:${stored?.etag ?? 'none'}`}
+                      row={{
+                        canonicalKey: clientCanonicalAgentKey(
+                          CLIENT_ORG_AGENT_SOURCE,
+                          entry.agent.id,
+                        ),
+                        source: CLIENT_ORG_AGENT_SOURCE,
+                        agentName: entry.agent.id,
+                        displayName: entry.agent.name,
+                        discoverable: true,
+                        stored,
+                        promptAgent: null,
+                      }}
+                      onSaved={() => {
+                        setEditingRuleKey(null);
+                        invalidate();
+                      }}
+                      onCancel={() => setEditingRuleKey(null)}
+                      onConflictReload={() => {
+                        setEditingRuleKey(null);
+                        invalidate();
+                      }}
+                    />
+                  </div>
+                )}
+              </li>
+            );
+          })}
+          {hiddenStored.visible.map((entry) => {
             const stored = rulesByKey.get(entry.canonicalKey) ?? null;
             const isRestricted = stored?.rule.access.type === 'restricted';
             const validation = entry.agent.validation;
@@ -970,6 +1133,7 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                         </span>
                       )}
                     </div>
+                    <CanonicalKeyChip canonicalKey={entry.canonicalKey} />
                     <p className="truncate text-xs text-gray-500 dark:text-gray-400">
                       {entry.agent.searchIndex}
                     </p>
@@ -1003,6 +1167,12 @@ export const OrgAgentsSection: FC<OrgAgentsSectionProps> = ({
                   >
                     {isRestricted ? t('accessRestricted') : t('accessEveryone')}
                   </span>
+                  {hiddenAgents.isHidden(entry.canonicalKey) && <HiddenBadge />}
+                  <HideAgentButton
+                    hidden={hiddenAgents.isHidden(entry.canonicalKey)}
+                    onHide={() => hiddenAgents.hide(entry.canonicalKey)}
+                    onUnhide={() => hiddenAgents.unhide(entry.canonicalKey)}
+                  />
                   <button
                     type="button"
                     onClick={() =>

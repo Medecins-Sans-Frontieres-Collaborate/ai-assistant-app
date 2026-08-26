@@ -176,12 +176,19 @@ function jsonResponse(status: number, body: unknown) {
 let groupSearchResponse: { id: string; name: string }[] = [];
 let connectorsResponse: AdminStoredConnector[] = [];
 let connectorsUnavailable = false;
+/** Whether an admin record already overrides the built-in static agent. */
+let staticOrgAgentOverridden = false;
 let secretSealingAvailable = true;
 const connectorWriteCalls: {
   method: string;
   headers: Record<string, string>;
   body: unknown;
   url: string;
+}[] = [];
+
+let configPutCalls: {
+  headers: Record<string, string>;
+  body: { localAdmins: { email: string; agentKeys: string[] }[] };
 }[] = [];
 
 const fetchMock = vi.fn(async (input: string | URL, init?: RequestInit) => {
@@ -288,6 +295,13 @@ const fetchMock = vi.fn(async (input: string | URL, init?: RequestInit) => {
     });
   }
   if (url.startsWith('/api/agent-access/config')) {
+    if (method === 'PUT') {
+      configPutCalls.push({
+        headers: (init?.headers ?? {}) as Record<string, string>,
+        body: JSON.parse(String(init?.body)),
+      });
+      return jsonResponse(200, { success: true, data: { etag: '"cfg-2"' } });
+    }
     return jsonResponse(200, { success: true, data: configResponse });
   }
   if (url.startsWith('/api/agent-access/connectors')) {
@@ -307,6 +321,81 @@ const fetchMock = vi.fn(async (input: string | URL, init?: RequestInit) => {
         connectorsUnavailable,
         secretSealingAvailable,
         fetchedAt: 1752700000000,
+      },
+    });
+  }
+  if (url.startsWith('/api/agent-access/m365-agents')) {
+    return jsonResponse(200, {
+      success: true,
+      data: {
+        m365Agents: [
+          {
+            canonicalKey: 'm365-agent::m365-0123456789ab',
+            etag: '"etag-m365-1"',
+            agent: {
+              version: 1,
+              id: 'm365-0123456789ab',
+              name: 'HR Handbook (M365)',
+              description: 'Answers from the HR SharePoint',
+              systemPrompt: '',
+              chatModelId: null,
+              embeddingModelId: 'text-embedding',
+              ragConfig: { topK: 10 },
+              sources: [],
+              createdBy: 'admin@example.org',
+              createdAt: '2026-07-29T00:00:00.000Z',
+              updatedBy: 'admin@example.org',
+              updatedAt: '2026-07-29T00:00:00.000Z',
+            },
+          },
+        ],
+        m365AgentsUnavailable: false,
+        fetchedAt: 1752700000000,
+        maxDocuments: 50,
+        maxBytes: 512 * 1024 * 1024,
+        jobs: {},
+      },
+    });
+  }
+  if (url.startsWith('/api/agent-access/org-agents/indexes')) {
+    return jsonResponse(200, {
+      success: true,
+      data: { indexes: ['live-aiassist-index'] },
+    });
+  }
+  if (url.startsWith('/api/agent-access/org-agents')) {
+    return jsonResponse(200, {
+      success: true,
+      data: {
+        orgAgents: [],
+        staticAgents: [
+          {
+            canonicalKey: 'org-agent::msf_communications',
+            overridden: staticOrgAgentOverridden,
+            agent: {
+              id: 'msf_communications',
+              name: 'MSF Communications',
+              description: 'Public MSF content',
+              icon: 'IconNews',
+              color: '#4190f2',
+              category: 'Knowledge Base',
+              maintainedBy: 'MSF USA',
+              systemPrompt: 'You are an information specialist.',
+              sources: [{ name: 'msf.org', url: 'https://www.msf.org' }],
+              searchIndex: 'live-aiassist-index',
+              semanticConfig: '',
+              topK: 10,
+              baseModelId: null,
+              allowWebSearch: true,
+              allowCodeInterpreter: false,
+              enabled: true,
+            },
+          },
+        ],
+        orgAgentsUnavailable: false,
+        fetchedAt: 1752700000000,
+        staticAgentIds: ['msf_communications'],
+        canCreate: true,
       },
     });
   }
@@ -372,9 +461,11 @@ describe('AgentAccessPanel', () => {
     groupSearchResponse = [];
     connectorsResponse = [];
     connectorsUnavailable = false;
+    staticOrgAgentOverridden = false;
     secretSealingAvailable = true;
     connectorWriteCalls.length = 0;
     fetchMock.mockClear();
+    configPutCalls = [];
     vi.mocked(toast.success).mockClear();
     vi.mocked(toast.error).mockClear();
     vi.stubGlobal('fetch', fetchMock);
@@ -908,6 +999,91 @@ describe('AgentAccessPanel', () => {
     ).not.toBeChecked();
   });
 
+  it('shows each agent’s canonical key with a copy action', async () => {
+    agentsResponse = [...discoveredAgents, promptAgentDiscoveryEntry];
+    promptAgentsResponse = [storedPromptAgent];
+    renderPanel('agents');
+    const row = (await screen.findByText('Travel Advisor')).closest('li');
+    expect(
+      within(row as HTMLElement).getByText(storedPromptAgent.canonicalKey),
+    ).toBeInTheDocument();
+    expect(
+      within(row as HTMLElement).getByRole('button', { name: 'Copy key' }),
+    ).toBeInTheDocument();
+  });
+
+  it('lets an admin hide an agent from their own list and reveal it again', async () => {
+    useSettingsStore.setState({ hiddenAdminAgentKeys: [] });
+    agentsResponse = [...discoveredAgents, promptAgentDiscoveryEntry];
+    promptAgentsResponse = [storedPromptAgent];
+    renderPanel('agents');
+    const row = (await screen.findByText('Travel Advisor')).closest('li');
+    expect(row).not.toBeNull();
+
+    fireEvent.click(
+      within(row as HTMLElement).getByRole('button', { name: 'Hide' }),
+    );
+    expect(screen.queryByText('Travel Advisor')).not.toBeInTheDocument();
+    expect(useSettingsStore.getState().hiddenAdminAgentKeys).toEqual([
+      storedPromptAgent.canonicalKey,
+    ]);
+    expect(screen.getByText('1 hidden agents')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Show' }));
+    const revealed = screen.getByText('Travel Advisor').closest('li');
+    expect(
+      within(revealed as HTMLElement).getByText('Hidden'),
+    ).toBeInTheDocument();
+    fireEvent.click(
+      within(revealed as HTMLElement).getByRole('button', { name: 'Unhide' }),
+    );
+    expect(useSettingsStore.getState().hiddenAdminAgentKeys).toEqual([]);
+    expect(screen.queryByText('Hidden')).not.toBeInTheDocument();
+  });
+
+  it('offers M365 agents and knowledge agents for delegation, grouped', async () => {
+    renderPanel('localAdmins');
+
+    expect(await screen.findByText('Microsoft 365 agents')).toBeInTheDocument();
+    expect(screen.getByText('Knowledge agents')).toBeInTheDocument();
+
+    const m365Label = screen.getByText('HR Handbook (M365)').closest('label');
+    expect(m365Label).not.toBeNull();
+    const m365Checkbox = within(m365Label as HTMLElement).getByRole('checkbox');
+    expect(m365Checkbox).not.toBeChecked();
+
+    const orgLabel = screen.getByText('MSF Communications').closest('label');
+    expect(orgLabel).not.toBeNull();
+    expect(
+      within(orgLabel as HTMLElement).getByRole('checkbox'),
+    ).not.toBeChecked();
+
+    // Ticking one updates the summary line and enables Save.
+    fireEvent.click(m365Checkbox);
+    expect(m365Checkbox).toBeChecked();
+    expect(
+      screen.getByText(/1 delegated: HR Handbook \(M365\)/),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled();
+  });
+
+  it('saves M365 and knowledge agent keys into the delegation config', async () => {
+    renderPanel('localAdmins');
+    const m365Label = (await screen.findByText('HR Handbook (M365)')).closest(
+      'label',
+    );
+    fireEvent.click(within(m365Label as HTMLElement).getByRole('checkbox'));
+    const orgLabel = screen.getByText('MSF Communications').closest('label');
+    fireEvent.click(within(orgLabel as HTMLElement).getByRole('checkbox'));
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() => expect(configPutCalls.length).toBe(1));
+    expect(configPutCalls[0].body.localAdmins[0].agentKeys).toEqual([
+      'm365-agent::m365-0123456789ab',
+      'org-agent::msf_communications',
+    ]);
+  });
+
   describe('connectors tab', () => {
     const netsuiteConnector: AdminStoredConnector = {
       canonicalKey: 'mcp-connector::connector-abc123def456',
@@ -1075,6 +1251,63 @@ describe('AgentAccessPanel', () => {
 
       expect(screen.getByText(/Replace the .* in the URL/)).toBeInTheDocument();
       expect(screen.getByText('Save')).toBeDisabled();
+    });
+  });
+  describe('built-in org agents', () => {
+    it('lists a static config agent with editable access and a prefilled override form', async () => {
+      renderPanel();
+
+      const row = await screen.findByTestId(
+        'static-org-agent-msf_communications',
+      );
+      expect(within(row).getByText('MSF Communications')).toBeInTheDocument();
+      // Missing mock keys fall back to the key name.
+      expect(within(row).getByText('orgAgentBuiltinBadge')).toBeInTheDocument();
+      // No rule stored under org-agent::msf_communications → implicit Everyone.
+      expect(within(row).getByText('Everyone')).toBeInTheDocument();
+      // Read-only settings: no edit/delete affordances on a built-in row.
+      expect(
+        within(row).queryByRole('button', { name: 'Delete agent' }),
+      ).not.toBeInTheDocument();
+
+      // Access is editable under the same canonical key the guard evaluates.
+      fireEvent.click(within(row).getByRole('button', { name: 'Edit access' }));
+      expect(
+        within(row).getByText('Who can use this agent'),
+      ).toBeInTheDocument();
+
+      // Override opens the create form prefilled from the static entry with
+      // the override target preselected — no re-keying the deployment config.
+      fireEvent.click(
+        within(row).getByRole('button', { name: 'orgAgentOverrideAction' }),
+      );
+      expect(screen.getByText('orgAgentOverrideTitle')).toBeInTheDocument();
+      expect(
+        (document.getElementById('org-agent-name') as HTMLInputElement).value,
+      ).toBe('MSF Communications');
+      expect(screen.getByDisplayValue('msf_communications')).toBeInstanceOf(
+        HTMLSelectElement,
+      );
+      expect(screen.getByDisplayValue('live-aiassist-index')).toBeInstanceOf(
+        HTMLSelectElement,
+      );
+    });
+
+    it('hides a static agent that an admin record already overrides', async () => {
+      staticOrgAgentOverridden = true;
+      renderPanel();
+
+      await screen.findByText('Helpdesk Agent');
+      await waitFor(() =>
+        expect(
+          fetchMock.mock.calls.some(([input]) =>
+            String(input).startsWith('/api/agent-access/org-agents'),
+          ),
+        ).toBe(true),
+      );
+      expect(
+        screen.queryByTestId('static-org-agent-msf_communications'),
+      ).not.toBeInTheDocument();
     });
   });
 });

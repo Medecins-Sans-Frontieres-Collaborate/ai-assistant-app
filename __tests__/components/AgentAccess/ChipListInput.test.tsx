@@ -1,10 +1,10 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
 import { ChipListInput } from '@/components/AgentAccess/ChipListInput';
 import { normalizeDomainEntry } from '@/components/AgentAccess/RuleEditor';
 
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 function renderInput(
   props: Partial<React.ComponentProps<typeof ChipListInput>> = {},
@@ -90,5 +90,191 @@ describe('ChipListInput', () => {
     fireEvent.blur(input);
 
     expect(onChange).toHaveBeenCalledWith(['solo.org']);
+  });
+});
+
+describe('ChipListInput suggestions', () => {
+  const PEOPLE = [
+    { label: 'Ada Lovelace', value: 'ada@example.org' },
+    { label: 'Alan Turing', value: 'alan@example.org' },
+  ];
+
+  async function typeAndSettle(input: HTMLElement, value: string) {
+    fireEvent.change(input, { target: { value } });
+    await act(async () => {
+      vi.advanceTimersByTime(400);
+      await Promise.resolve();
+    });
+  }
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('commits a picked suggestion as a chip and clears the draft', async () => {
+    const suggest = vi.fn(async () => PEOPLE);
+    const onChange = vi.fn();
+    render(
+      <ChipListInput
+        values={[]}
+        onChange={onChange}
+        placeholder="add"
+        addHint="more"
+        removeLabel="Remove"
+        suggest={suggest}
+        suggestionsLabel="People"
+      />,
+    );
+    const input = screen.getByPlaceholderText('add');
+
+    await typeAndSettle(input, 'ad');
+    fireEvent.mouseDown(screen.getByText('Ada Lovelace'));
+
+    expect(onChange).toHaveBeenCalledWith(['ada@example.org']);
+    expect(input).toHaveValue('');
+  });
+
+  it('excludes already-added values from the suggestion list', async () => {
+    const suggest = vi.fn(async () => PEOPLE);
+    render(
+      <ChipListInput
+        values={['ada@example.org']}
+        onChange={vi.fn()}
+        placeholder="add"
+        addHint="more"
+        removeLabel="Remove"
+        suggest={suggest}
+        suggestionsLabel="People"
+      />,
+    );
+
+    await typeAndSettle(screen.getByPlaceholderText('more'), 'a');
+    await typeAndSettle(screen.getByPlaceholderText('more'), 'al');
+
+    expect(screen.queryByText('Ada Lovelace')).not.toBeInTheDocument();
+    expect(screen.getByText('Alan Turing')).toBeInTheDocument();
+  });
+
+  it('Enter with suggestions selects the highlighted person instead of committing the raw draft', async () => {
+    const suggest = vi.fn(async () => PEOPLE);
+    const onChange = vi.fn();
+    render(
+      <ChipListInput
+        values={[]}
+        onChange={onChange}
+        placeholder="add"
+        addHint="more"
+        removeLabel="Remove"
+        suggest={suggest}
+        suggestionsLabel="People"
+      />,
+    );
+    const input = screen.getByPlaceholderText('add');
+
+    await typeAndSettle(input, 'ad');
+    fireEvent.keyDown(input, { key: 'Enter' });
+
+    expect(onChange).toHaveBeenCalledWith(['ada@example.org']);
+  });
+
+  it('Escape dismisses suggestions; Enter then commits the raw draft as before', async () => {
+    const suggest = vi.fn(async () => PEOPLE);
+    const onChange = vi.fn();
+    render(
+      <ChipListInput
+        values={[]}
+        onChange={onChange}
+        placeholder="add"
+        addHint="more"
+        removeLabel="Remove"
+        suggest={suggest}
+        suggestionsLabel="People"
+      />,
+    );
+    const input = screen.getByPlaceholderText('add');
+
+    await typeAndSettle(input, 'someone@x.org');
+    fireEvent.keyDown(input, { key: 'Escape' });
+    fireEvent.keyDown(input, { key: 'Enter' });
+
+    expect(onChange).toHaveBeenCalledWith(['someone@x.org']);
+  });
+});
+
+describe('ChipListInput suggestion loading states', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('shows the searching indicator while the fetch is pending, keeping typing unblocked', () => {
+    const suggest = vi.fn(async () => []);
+    render(
+      <ChipListInput
+        values={[]}
+        onChange={vi.fn()}
+        placeholder="add"
+        addHint="more"
+        removeLabel="Remove"
+        suggest={suggest}
+        suggestionsLabel="People"
+      />,
+    );
+    const input = screen.getByPlaceholderText('add');
+
+    fireEvent.change(input, { target: { value: 'ad' } });
+
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Searching your organization…',
+    );
+    // The input still accepts and shows the draft — search never blocks it.
+    expect(input).toHaveValue('ad');
+  });
+
+  it('shows a no-matches row after an empty result', async () => {
+    const suggest = vi.fn(async () => []);
+    render(
+      <ChipListInput
+        values={[]}
+        onChange={vi.fn()}
+        placeholder="add"
+        addHint="more"
+        removeLabel="Remove"
+        suggest={suggest}
+        suggestionsLabel="People"
+      />,
+    );
+    const input = screen.getByPlaceholderText('add');
+
+    fireEvent.change(input, { target: { value: 'zz' } });
+    await act(async () => {
+      vi.advanceTimersByTime(400);
+      await Promise.resolve();
+    });
+
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'No directory matches — you can enter the address manually',
+    );
+  });
+
+  it('never renders status rows without a suggest source', () => {
+    render(
+      <ChipListInput
+        values={[]}
+        onChange={vi.fn()}
+        placeholder="add"
+        addHint="more"
+        removeLabel="Remove"
+      />,
+    );
+    fireEvent.change(screen.getByPlaceholderText('add'), {
+      target: { value: 'ad' },
+    });
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
   });
 });

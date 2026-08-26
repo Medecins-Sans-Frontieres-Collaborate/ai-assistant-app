@@ -25,11 +25,19 @@ export const PASTE_ATTACHMENT_MIN_CHARS = 500;
 export const PASTE_ATTACHMENT_MAX_CHARS = 100_000;
 
 /**
- * Default threshold. Around 2000 characters a paste has stopped being
- * something you can read inside a two-row composer, which is the point at
- * which attaching starts to help rather than surprise.
+ * Threshold shipped before the default was raised (store version < 58).
+ * Kept only so the migration can tell "never changed it" from "chose 2000".
  */
-export const DEFAULT_PASTE_ATTACHMENT_CHARS = 2000;
+export const LEGACY_DEFAULT_PASTE_ATTACHMENT_CHARS = 2000;
+
+/**
+ * Default threshold: roughly 4,000 words of English prose (~6 characters
+ * per word including the space). A paste that long is a document, not a
+ * message — attaching it keeps the composer usable. Shorter pastes (a few
+ * paragraphs, a code block, a quoted email) stay inline where the user can
+ * edit them; the original 2,000-CHARACTER default attached far too eagerly.
+ */
+export const DEFAULT_PASTE_ATTACHMENT_CHARS = 24_000;
 
 /**
  * Normalizes the stored threshold. `0` is meaningful — it disables the

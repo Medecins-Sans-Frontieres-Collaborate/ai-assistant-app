@@ -55,6 +55,13 @@ interface UIStore {
   /** Active encrypted-backup modal, hosted by BackupModals in ChatShell. */
   backupModalView: BackupModalView | null;
 
+  /**
+   * Agent/connector browser modal, hosted by Sidebar. Opened from the
+   * sidebar and the capabilities tray; "Add to this chat" is always the
+   * primary action, so entry point carries no behavioral difference.
+   */
+  agentBrowserOpen: boolean;
+
   // Actions
   setIsSettingsOpen: (isOpen: boolean) => void;
   setIsBotModalOpen: (isOpen: boolean) => void;
@@ -65,6 +72,7 @@ interface UIStore {
   setIsCustomizationsOpen: (isOpen: boolean) => void;
   setCustomizationsInitialTab: (tab: CustomizationsTabKey | null) => void;
   setBackupModalView: (view: BackupModalView | null) => void;
+  setAgentBrowserOpen: (open: boolean) => void;
 }
 
 export const useUIStore = create<UIStore>((set) => ({
@@ -78,6 +86,7 @@ export const useUIStore = create<UIStore>((set) => ({
   isCustomizationsOpen: false,
   customizationsInitialTab: null,
   backupModalView: null,
+  agentBrowserOpen: false,
 
   // Actions
   setIsSettingsOpen: (isOpen) => set({ isSettingsOpen: isOpen }),
@@ -91,4 +100,5 @@ export const useUIStore = create<UIStore>((set) => ({
   setIsCustomizationsOpen: (isOpen) => set({ isCustomizationsOpen: isOpen }),
   setCustomizationsInitialTab: (tab) => set({ customizationsInitialTab: tab }),
   setBackupModalView: (view) => set({ backupModalView: view }),
+  setAgentBrowserOpen: (open) => set({ agentBrowserOpen: open }),
 }));

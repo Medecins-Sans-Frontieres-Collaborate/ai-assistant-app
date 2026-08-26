@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { canAccessGrants } from '@/lib/services/grants/access';
 import { revalidateRows } from '@/lib/services/grants/revalidate';
 import { grantRunDir, isValidRunId } from '@/lib/services/grants/runPaths';
+import { canUseGrants } from '@/lib/services/grants/serverAccess';
 
 import { auth } from '@/auth';
 import { constants } from 'fs';
@@ -67,7 +67,7 @@ export async function POST(
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    if (!canAccessGrants(session.user)) {
+    if (!(await canUseGrants(session.user))) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 

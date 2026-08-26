@@ -1,0 +1,14 @@
+{
+  "id": "structured-comparison",
+  "description": "Asks for a comparison; the base prompt says comparisons should be tables.",
+  "tags": ["single-turn", "formatting"],
+  "rubric": "Markdown table with sensible columns; concise; no hallucinated specs.",
+  "promptOptions": {
+    "userPrompt": "You help non-technical staff choose tools. Prefer plain language."
+  },
+  "turns": [
+    {
+      "user": "Compare SharePoint lists, Excel on OneDrive, and Microsoft Forms for collecting weekly stock counts from 12 field sites."
+    }
+  ]
+}

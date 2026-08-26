@@ -950,7 +950,12 @@
       "showFewer": "Lakisa moke"
     },
     "retryWithModel": "Meka na {model}",
-    "createTodoTasks": "Kokela ba misala To Do epai ya eyano oyo"
+    "createTodoTasks": "Kokela ba misala To Do epai ya eyano oyo",
+    "attachedFileExpired": "Fichier oyo batye elongo ezali lisusu te — bafichier oyo batindami na système ezali kaka na mwa tango mokuse. Fichier elongwe na lisolo oyo. Tala lisusu kozanga yango, to telemelaka fichier lisusu.",
+    "repeatedFailureNotice": "Ekoki kaka kobeba — boyokanisi ekoki kozala ebateli te. Kozwa boyokanisi ya sika ezalaka mbala mingi solution.",
+    "startNewConversation": "Kobanda boyokanisi ya sika",
+    "downloadDebugInfo": "Kozwa ba informasyo ya debug",
+    "includeMessageText": "Tia kati mobeko ya sango"
   },
   "transcript": {
     "originalTranscript": "Transkripsheni ya ebandeli",
@@ -981,7 +986,9 @@
     "quickActions": "Misala ya mbangu",
     "expandFolder": "Kofungola dossier {name}",
     "collapseFolder": "Kokanga dossier {name}",
-    "folderOptions": "Bapɔsɔ ya {name}"
+    "folderOptions": "Bapɔsɔ ya {name}",
+    "agentsEntry": "Ba agents",
+    "agentsTitle": "Luka ba agents mpe banda kosolola na moko"
   },
   "errors": {
     "somethingWentWrong": "Eloko moko ekende malamu te",
@@ -2651,6 +2658,10 @@
       "map": {
         "label": "Carte",
         "description": "Kobongola ba données nyonso ezali bisika na carte"
+      },
+      "grants": {
+        "label": "Kopesa misala ya ba grants",
+        "description": "Kobongisa mpe kobima ba données structurées uta na ba histoires ya grant"
       }
     },
     "chooser": {
@@ -2660,7 +2671,8 @@
       "newTranslation": "Kokokisa boyokani sika",
       "newDocument": "Document sika",
       "newDataAnalysis": "Analyse ya ba données sika",
-      "newMap": "Carte sika"
+      "newMap": "Carte sika",
+      "newGrants": "Misala ya ba grants ya sika"
     },
     "translation": {
       "chooseLanguage": "Lokota ya bokokani",
@@ -3277,7 +3289,8 @@
       "unknownType": "Dialogue oyo ezali na workflow oyo version oyo eyebi te. Lisolo mobimba ezali awa na se.",
       "untitled": "Dialogue ya sika",
       "toggleMenu": "Kokanga to kofungola menu",
-      "model": "Model ya workflow oyo"
+      "model": "Model ya workflow oyo",
+      "disabledByAdmin": "Administrateur aboyisi misala oyo. Lisolo ya kala ezali nse."
     },
     "tabs": {
       "label": "Mode ya masolo",
@@ -4031,7 +4044,153 @@
     "conflictTakeTheirs": "Zwa ya bango",
     "conflictNoFieldDiff": "Ba valeurs ekokani — version ya dossier nde ebonganaki.",
     "conflictRecordGone": "Dossier oyo elongwaki (to ekokaki te kozongisama). Kopia nionso olingi na formulaire, sima zongisa.",
-    "groupsFlagOff": "Group targeting etali te naino na environnement oyo. Bato ya groupe bazali naino kosalama."
+    "groupsFlagOff": "Group targeting etali te naino na environnement oyo. Bato ya groupe bazali naino kosalama.",
+    "catalogOauth": {
+      "title": "Ba-applications OAuth ya connector ya kati",
+      "description": "Ba-applications OAuth ya deployment mobimba mpo na ba connector ya kati (GitHub, Asana, ...). Soki ozali kokoma eloko awa, ekolongola ba MCP_OAUTH_* environment variables; soki o supprimaka, ezali kozwa ba variables yango lisusu. Ba client secrets ezalaka na encrypt na esika ya stockage mpe ekowumelama pamba, ekolakisamaka lisusu te.",
+      "badgeAdmin": "Epesami ebongiseli awa",
+      "badgeEnv": "Euti na environment",
+      "badgeNone": "Ebongisamaki te",
+      "badgeDcr": "Ezali komibongisa moko",
+      "badgeDcrHint": "Provider oyo ekoki kobongisa client OAuth moko na ndenge automatique, yango ezali kosala ata soki application ebongisamaki awa te.",
+      "clientIdLabel": "Client ID ya OAuth",
+      "clientSecretLabel": "Client secret ya OAuth",
+      "secretStoredPlaceholder": "Ebatelami — koma soki olingi kobongola, tika mpamba soki olingi ekoba",
+      "secretNewPlaceholder": "Kopier-pepaste client secret",
+      "save": "Kokanga",
+      "remove": "Kolongola",
+      "removeToEnv": "Kolongola (ezongi na environment)",
+      "saved": "{name} OAuth application ebongisami",
+      "removed": "{name} OAuth application elongwami",
+      "saveError": "Kobikisa OAuth application eleki te. Sala lisusu.",
+      "conflict": "Element oyo ebongwami bisika mosusu — ezozongisama, sala lisusu",
+      "storageUnavailable": "Stockage ya admin ekoki kokotama te; ba dossiers oyo ezali ekoki kolakisama te. Kobikisa ezali kokotama te ti ekomi lisusu normal.",
+      "sealingUnavailable": "Secret encryption ebongisami te na deployment oyo (AUTH_SECRET ezali te) — client secrets bakoki kobikisa yango te.",
+      "updatedBy": "Ebongisami na {by} na mokolo {at}"
+    },
+    "orgAgentOverrideTitle": "Kobongola agent ya ndakisa",
+    "orgAgentOverrideAction": "Bongola",
+    "orgAgentBuiltinBadge": "Ya kati",
+    "orgAgentBuiltinHint": "Ekotamaki na déploiement config. Règle ya accès na yango ekoki kobongama awa ; soki olingi kobongola yango, sala override ata mokolo moko te.",
+    "m365AgentIndexProgress": "Kosalisa index {done} na {total} {total, plural, one {mobeko} other {mabeko}}…",
+    "m365AgentIndexInterrupted": "Kosala index ekatamaki na {done} na {total} — songe soki olingi kotika.",
+    "m365AgentIndexStartedBy": "esalemaki na {name}",
+    "m365AgentIndexResume": "Kokoba",
+    "m365AgentIndexResumeHint": "Kokoba kosala index uta esilaki, na nzela ya Microsoft 365 na yo. Tikala na kartye oyo efungami.",
+    "m365AgentIndexCancel": "Kofuta",
+    "m365AgentIndexCancelled": "Kosala index eboyi — babuku oyo esalemaki ekoki kokitola.",
+    "m365AgentIndexJobFailed": "Kosala index ekiti: {error}",
+    "m365AgentIndexDone": "Kosala index esili: {indexed} esalemi, {failed} ebungi, {noText} ezangi ndambu ya maloba.",
+    "m365AgentDocCounts": "{indexed, plural, one {# mobeko esalemi} other {# mabeko esalemi}} · {failed} ebungi · {noText} ezangi ndambu ya maloba · {needsPreparation} esengeli kobongisa · {skipped} ebimi",
+    "m365CapDocuments": "Babuku: {count} / {max}",
+    "m365CapBytes": "{bytes} na {max}",
+    "m365CapOverDocuments": "Depasa {max} ya babuku. Longola ba subfolders, tanda ndenge ya fichier, to longola bisika — kaka ba fichiers oyo ekosalema na index nde ekotanga.",
+    "m365CapOverBytes": "Depasa limite ya {max}. Longola ba subfolders to ba fichiers minene.",
+    "m365PlanScanning": "Ezalaka kosolola…",
+    "m365PlanRefreshing": "kobongisa…",
+    "m365PlanFailed": "Nani kosolola na bisika na Microsoft 365 na yo.",
+    "m365PlanMissing": "Ezali te to okoki te kokota",
+    "m365PlanIndexable": "{count, plural, one {# fichier ekosalema na index} other {# ba fichiers ekosalema na index}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# esengeli kobongisa} other {# esengeli kobongisa}}",
+    "m365PlanSkipped": "{count} ebimi",
+    "m365PlanShowDetails": "Makambo",
+    "m365PlanHideDetails": "Kokanga makambo",
+    "m365PlanTruncated": "Folder oyo eleki monene mpo na kosolola nyonso — kaka biloko 1.000 ya liboso nde emonisami. Pona folder ya se.",
+    "m365PlanRecursive": "Kopesa ndambu ya folders ya se",
+    "m365PlanExtensionsLabel": "Kaka lolenge ya fichiers:",
+    "m365PlanExtensionsPlaceholder": "k. mp., pdf, docx",
+    "m365PlanSubfolders": "Ba subfolders",
+    "m365PlanFolderCount": "{count, plural, one {# fichier} other {# ba fichiers}}",
+    "m365PlanGroupIndexable": "Eko salama na index",
+    "m365PlanGroupNeedsPreparation": "Esengeli kobongisa",
+    "m365PlanGroupSkipped": "Ebimi",
+    "m365PlanPreparationHint": "image/audio/video — esalemi te",
+    "m365PlanMoreRows": "…pe {count} lisusu",
+    "m365ItemStatus": {
+      "pending": "ezelaki",
+      "indexed": "esalemi",
+      "failed": "ebungi",
+      "noText": "maloba elongwe",
+      "missing": "ezangi"
+    },
+    "m365SkipReason": {
+      "unsupported": "lolenge esungami te",
+      "tooLarge": "eleki 25 MB",
+      "disallowedType": "lolenge ebongi te (executable/archive)",
+      "malware": "esangisamaki na Microsoft lokola malware",
+      "zeroBytes": "fichier mpamba",
+      "excluded": "elongwe",
+      "typeFilter": "ezali na filtrage ya lolenge te"
+    },
+    "localAdminGroup": {
+      "agents": "Ba agent",
+      "promptAgents": "Ba agent ya prompt",
+      "m365Agents": "Ba agent ya Microsoft 365",
+      "orgAgents": "Ba agent ya boyebi",
+      "guides": "Ba guide",
+      "connectors": "Ba connecteur",
+      "datasets": "Ba dataset ya mape",
+      "unknown": "Delegue kasi ezwami te"
+    },
+    "localAdminGroupUnavailable": "Liste oyo ezali te mpo na ntango — ba delegation oyo ezali esalemaki.",
+    "localAdminBuiltIn": "ya kati",
+    "localAdminSummary": "{count, plural, one {# delegation} other {# ba delegation}}: {names}",
+    "localAdminSummaryMore": "{names} mpe {more} mosusu",
+    "localAdminNoDelegations": "Nanu ba delegation te — admin local oyo azali na agent te akoki komona kaka esika ya admin.",
+    "localAdminSelectedCount": "{selected} na {total} pɔni",
+    "localAdminCopyFrom": "Kopier epai ya",
+    "localAdminClearAll": "Kolongola nyonso",
+    "localAdminSelectGroup": "Pɔna nyonso",
+    "localAdminClearGroup": "Kolongola",
+    "localAdminSearchPlaceholder": "Sɛnga ba agent, ba guide, ba connecteur…",
+    "localAdminDuplicateEmail": "Email oyo ezali lisusu na liste — kokangisa ba entree mibale.",
+    "localAdminExpand": "Lakisa ba delegation",
+    "localAdminCollapse": "Kokaba ba delegation",
+    "localAdminDiscard": "Kolongola mabongwana",
+    "m365AgentRefresh": "Tombola",
+    "m365AgentRefreshHint": "Zwa ba fichier oyo ebakisami, ebongwani to elongwaki banda kobeta ntango eleki — ba fichier oyo ebongwani te ekotelema lisusu te. Tika ongenga oyo efungwami.",
+    "m365AgentReindexAll": "Re-index nyonso",
+    "m365AgentRefreshProgress": "Tombolami — {done} na {total} {total, plural, one {document ebongwani} other {ba document ebongwani}}…",
+    "m365AgentRefreshDone": "Tombolami esili: {added} ebakisami, {modified} ebongwisami, {removed} elongwaki, {failed} efandi.",
+    "m365ChangesChecking": "Ezali kotala na Microsoft 365 soki ba changement ezali banda index eleki…",
+    "m365ChangesFailed": "Ekoki te kotala soki ba changement ezali na compte na yo ya Microsoft 365.",
+    "m365ChangesNeverIndexed": "Nanu ba index te — salela Index sima na kobomba.",
+    "m365ChangesFound": "{count, plural, one {# changement} other {# ba changement}} banda index eleki: {added} ebakisami, {modified} ebongwisami, {removed} elongwaki.",
+    "m365ChangesNone": "Changement moko te banda index eleki ({date}).",
+    "m365PrepareButton": "Kobosana",
+    "m365PrepareOcrButton": "Kobosana (OCR)",
+    "m365PrepareSaveFirst": "bomba agent mpo na kobosana",
+    "m365PrepareHintImage": "image — appel moko ya vision",
+    "m365PrepareHintMedia": "~{minutes} min ya son ya kotanga",
+    "m365PrepareHintOcr": "texte ezali te — OCR na vision, tii na 30 pages",
+    "m365PreparePreparing": "Ekobosana…",
+    "m365PreparePending": "Ezali kotanga…",
+    "m365PreparedNote": "ebosanami · {kind}",
+    "m365PreparedKind": {
+      "image": "ndakisa ya elilingi",
+      "audio": "transcription",
+      "video": "transcription",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "{name} ebosanami ({chars} ba caractère). Salela Refresh mpo na ko-index yango.",
+    "m365PrepareStarted": "Tanga {name} ebandaki na background — tika ongenga efaungwami.",
+    "m365PrepareFailed": "Ekoki te kobosana {name}: {error}",
+    "m365PrepareFailedGeneric": "Kobosana elembaki.",
+    "canonicalKeyLabel": "Liso ya motuya",
+    "copyKey": "Kopɛsisa clé",
+    "agentKeySearchPlaceholder": "Sosola basalisani, batindami, bakɔnekte... to kopɛsa clé",
+    "agentKeyAddCustom": "Kobakisa \"{key}\" ndenge emonisami",
+    "agentKeyRemove": "Longola {name}",
+    "hideAgent": "Kobomba",
+    "unhideAgent": "Lakisa lisusu",
+    "hideAgentHint": "Bombá mosalisani oyo na liste ya ba-admin na yo. Ekozwama kaka na motuya na yo — bato mosusu mpe ba-admin mosusu bakomonanga te.",
+    "unhideAgentHint": "Lakisa lisusu mosalisani oyo na liste ya ba-admin na yo.",
+    "hiddenBadge": "Ebombami",
+    "hiddenAgentsCount": "{count, plural, one {# mosalisani ebombami} other {# basalisani ebombami}}",
+    "hiddenAgentsShowing": "Kolakisa {count, plural, one {# mosalisani ebombami} other {# basalisani ebombami}}",
+    "hiddenAgentsShow": "Lakisa",
+    "hiddenAgentsHide": "Bombá lisusu",
+    "allAgentsHidden": "Basalisani nyonso awa babombami na monɔkɔ na yo — salá Lakisa mpo olakisa bango."
   },
   "localModels": {
     "title": "Bamodelo ya esika",
@@ -4232,9 +4391,15 @@
       "connectors": "Basangisi ya organisation mpe nani akoki kosalela yango.",
       "guides": "Mitindo ya ekomeli, maloba ya mosala mpe mabongisi ya bosembo.",
       "mapDatasets": "Datasets oyo basalaki mpo ebengama na map workflow.",
-      "localAdmins": "Pesa batu mosusu mokumba ya kobongola mibeko ya kopesa nzela."
+      "localAdmins": "Pesa batu mosusu mokumba ya kobongola mibeko ya kopesa nzela.",
+      "workflows": "Fantisa to kotelemisa ba workflow ya masolo mpo na bato nyonso.",
+      "viewAs": "Tala application ndenge ndenge moko ya moto akoki kosala to te."
     },
-    "openSettings": "Fungola malamu misala ya malamu"
+    "openSettings": "Fungola malamu misala ya malamu",
+    "area": {
+      "workflows": "Ba workflows",
+      "viewAs": "Talela lokola"
+    }
   },
   "limits": {
     "title": "Mbongwana ya kosalela",
@@ -4436,7 +4601,8 @@
     "groupSearchNoResults": "Mokɛngɛli moko te esangani na kombo wana.",
     "groupSearchError": "Kofunda bangroup esalemaki te. Okoki kaka kokɔpya ID ya groupe awa na nse.",
     "groupSearchHint": "Koma mwa bilembo mibale to koleka mpo na koluka bangroup ya organisation na bino, to kɔpya ID ya groupe ndenge moko. Amasolo oyo ekosala na ba membres ya groupe na Microsoft Entra.",
-    "groupsFlagOff": "Kokotisa groupe ezali nanu na sima te mpo na environnement oyo. Ba groupe oyo esalaka sikawa ekotika kosala te."
+    "groupsFlagOff": "Kokotisa groupe ezali nanu na sima te mpo na environnement oyo. Ba groupe oyo esalaka sikawa ekotika kosala te.",
+    "featureDisabled": "Mokonzi ya misala akoki nanu te kotia bakangiseli ya bosaleli mpo na ebimiseli oyo."
   },
   "m365": {
     "connections": {
@@ -4797,5 +4963,149 @@
     "failed": "Ekokaki te kobabela — eloko moko esalemi te.",
     "copyFailed": "Link ekokaki te kopi — zwa yango likolo mpe kopia ye na maboko.",
     "lastMessagesCountLabel": "Motángo ya nsango ya suka ekosangana"
+  },
+  "toolModes": {
+    "webSearch": "Koyebisa na Web",
+    "codeInterpreter": "Motángi ya code",
+    "off": "Kipe",
+    "auto": "Auto",
+    "always": "Ntango nyonso",
+    "routingPrivacy": "Bipai",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Azure AI search etindaka mituna na nzela ya Azure AI Foundry, oyo ekoki kobomba yango.",
+    "learnMore": "Yekola lisusu"
+  },
+  "agentAttach": {
+    "browserTitle": "Ba agents",
+    "browserSubtitle": "Bakisa ba agents mpe ba connectors na masolo oyo, to banda sango ya sika na agent. Mingi basalaka na model nyonso yo poní.",
+    "searchPlaceholder": "Luka ba agents mpe ba connectors…",
+    "loading": "Kozwa ba agents…",
+    "noMatches": "Eloko moko te ebimeli na boluki na yo.",
+    "noAgents": "Ba agents ezali te.",
+    "addToChat": "Bakisa na masolo oyo",
+    "removeFromChat": "Longola na masolo oyo",
+    "newChat": "Sango ya sika",
+    "attached": "Ebakami",
+    "detach": "Kolongola",
+    "change": "Kobongola",
+    "browse": "Luka ba agents…",
+    "noAgent": "Motiki agent te",
+    "close": "Kolongela",
+    "kind": {
+      "rag": "Boyebi",
+      "prompt": "Moto",
+      "m365": "Boyebi (Microsoft 365)",
+      "org": "Boyebi",
+      "foundry": "Agent ya Foundry",
+      "connector": "Connector"
+    },
+    "semantics": {
+      "your-model": "asalelaka model na yo",
+      "pinned-model": "model esalemi na admin",
+      "own-model": "esalelaka model na ye moko"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Bato oyo organisation na bino epesi toli",
+    "searching": "Tosalaki recherche na organisation na bino…",
+    "noMatches": "Ezali eloko moko te na répertoire — okoki kotya adresse na maboko"
+  },
+  "workflowsAdmin": {
+    "title": "Ba workflows",
+    "description": "Ongoya to kotelemisa workflow moko na moko mpo na organisation mobimba. Workflow oyo ebotamaki ezali kokangama na menu mpe serveur etiki yango, ata soki moto asengeli kozwaka yango.",
+    "layeredNote": "Flag conversationWorkflows ya LaunchDarkly nde ezalaka na bokonzi ya kosala rollout : workflow oyo efungolami awa ekoki kokatama soki flag yango eza te. Page oyo ekoki komonisa eloko te soki flag ekutani na yango.",
+    "loading": "Kozwa politique ya workflow…",
+    "loadError": "Politique ya workflow ekokaki kozwama te.",
+    "policyUnavailable": "Politique ya workflow ekokaki kotangama te na esika ezali. Ba toggles ekangami esika ya komonisa na valeurs par défaut oyo ekoki te kozingama ndenge ekolekaka.",
+    "retry": "Yebisa lisusu",
+    "enableAll": "Fungola nyonso",
+    "disableAll": "Kanga nyonso",
+    "enabledLabel": "Efungolami",
+    "disabledLabel": "Ekangami",
+    "defaultOnHint": "Soki politique ebombami te : efungolami.",
+    "defaultOffHint": "Soki politique ebombami te : ekangami — administrateur asengeli kofungola yango na maboko.",
+    "grantsNote": "Kopesa misala ya ba grants ezali kaka mpo na ba utilisateur MSF-USA ya departement Program oyo na titre ya mosala ezali \"grants\", to Systems na \"innovation\" na titre. Ko fungola yango awa ekobongisa règlements yango te.",
+    "unsaved": "Ozalaki naino kobombela mabongisi.",
+    "save": "Bomba",
+    "saving": "Kobomba…",
+    "saveSuccess": "Politique ya workflow ebombami.",
+    "saveError": "Politique ya workflow ekokaki kobombama te.",
+    "conflictError": "Administrateur mosusu abongolaki politique liboso. Ebimisami lisusu – tala yango mpe bombela lisusu.",
+    "updatedByLine": "Ebombami mbala sima na {by} na {at}.",
+    "neverSaved": "Politique nanu ebombami te; ba defaults ya likoló nde esalemi."
+  },
+  "viewAs": {
+    "title": "Talela lokola",
+    "description": "Zwa application ndenge ndenge moko ya moto akoki kotonda to kokosa condition oyo mbala mingi directory to ba administrateur nde basalaka. Identité na yo ekobongwana te : nyonso osalaki ekotikala ya yo, mpe na audit, kombo na yo ekotikala na yango.",
+    "activeTitle": "View-as ezali",
+    "inactiveTitle": "View-as ezali te",
+    "sections": {
+      "role": "Role ya admin",
+      "region": "Region ya ba données",
+      "attributes": "Attributs ya directory",
+      "groups": "Kombo ya groupe",
+      "presets": "Presets"
+    },
+    "role": {
+      "global": "Administrateur global (role na yo ya solo)",
+      "local": "Administrateur ya esika",
+      "none": "Utilisateur normal",
+      "localKeysLabel": "Bakonzi ya ba agents délégué",
+      "localKeysHint": "Ba clés ya agent oyo local admin akoki kobongisa, séparés na virgule. Tiká mpamba soki local admin azali na ba agent te.",
+      "noneWarning": "Lokola utilisateur ya normal ba zones nyonso ya admin ekoboma. Page oyo ekotikala, mpe bannière ya likoló ya application ekopesa nzela ya kokima."
+    },
+    "region": {
+      "actual": "Ya solo ({region})",
+      "hint": "Epesi ndakisa ya kobongisa ba demandes na yo — mpe nyonso oyo otelemisaka ntango ezali na misala — na stockage ya region mosusu. Ekoya liboso ya cookie ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Departema",
+      "companyName": "Kompani",
+      "jobTitle": "Mosala",
+      "officeId": "Bureau",
+      "officeActual": "Bureau ya solo",
+      "officeNone": "Bureau te",
+      "actualValue": "Ya solo: {value}",
+      "actualEmpty": "Ya solo: (pamba)",
+      "hint": "Tika esika moko pamba mpo okoba kosalela motuya ya solo. Oyo ezali kosalisa mibeko ya grants, limite ya utilisation ya attribute mpe mibeko ya accès."
+    },
+    "groups": {
+      "label": "Group ids",
+      "placeholder": "Id ya groupe ya Entra moko na ligne",
+      "hint": "Ekokabela — ekotombola te — lisanga na yo oyo ezali solo mpo na session oyo, mpo olinga komeka soki ozali membre pe soki te."
+    },
+    "presets": {
+      "grantsMember": "Membre ya équipe grants",
+      "regularUser": "Utilisateur normal",
+      "localAdmin": "Local admin, ba agents te",
+      "otherRegion": "Region mosusu",
+      "hint": "Presets efandaka formulaire; eloko moko ekosalama kaka soki okanisi Apply."
+    },
+    "apply": "Appliquer pe recharger",
+    "applying": "Ezalaki kosala…",
+    "clear": "Kobima na view-as",
+    "clearing": "Obimi…",
+    "reset": "Réinitialiser formulaire",
+    "nothingToApply": "Tia option moko boye liboso ya kosala application.",
+    "applyError": "View-as ekokaki kosalema te: {error}",
+    "clearError": "View-as ekokaki kolongwa te: {error}",
+    "loadError": "Etat ya view-as ekokaki kotalisama te.",
+    "retry": "Komeka lisusu",
+    "expiresNote": "View-as ezalaka tii na 8 heures, to tii okei libanda.",
+    "banner": {
+      "label": "Ozali komona lokola",
+      "adjust": "Kobongola",
+      "exit": "Kobima",
+      "role": {
+        "local": "admin local",
+        "none": "utilisateur normal"
+      },
+      "region": "region {region}",
+      "department": "departema \"{value}\"",
+      "companyName": "compani \"{value}\"",
+      "jobTitle": "titre \"{value}\"",
+      "officeId": "bureau {value}",
+      "groups": "{count, plural, one {# groupe} other {# groupes}}"
+    }
   }
 }

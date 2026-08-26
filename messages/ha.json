@@ -950,7 +950,12 @@
       "showFewer": "Nuna kaɗan"
     },
     "retryWithModel": "Gwada da {model}",
-    "createTodoTasks": "Ƙirƙira ayyukan To Do daga wannan amsa"
+    "createTodoTasks": "Ƙirƙira ayyukan To Do daga wannan amsa",
+    "attachedFileExpired": "Anfanin da aka haɗa a cikin wannan hirar bai samuwa yanzu ba — ana adana fayilolin da aka loda na ɗan lokaci kawai. An cire shi daga wannan tattaunawar. Gwada sake aikawa ba tare da fayil ɗin ba, ko kuma sake loda fayil ɗin.",
+    "repeatedFailureNotice": "Ana ci gaba da samun matsala — yiwuwar tattaunawar ta samu matsala. Fara sabuwar tattaunawa yawanci yana gyara haka.",
+    "startNewConversation": "Fara sabuwar tattaunawa",
+    "downloadDebugInfo": "Sauke bayanan warware matsala",
+    "includeMessageText": "Hada da rubutun saƙo"
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",
@@ -981,7 +986,9 @@
     "quickActions": "Ayyuka masu sauri",
     "expandFolder": "Faɗaɗa babban fayil {name}",
     "collapseFolder": "Rufewa babban fayil {name}",
-    "folderOptions": "Zaɓuɓɓukan {name}"
+    "folderOptions": "Zaɓuɓɓukan {name}",
+    "agentsEntry": "Wakilai",
+    "agentsTitle": "Bincika wakilai kuma fara hira da ɗaya"
   },
   "errors": {
     "somethingWentWrong": "Wani abu ya samu matsala",
@@ -2651,6 +2658,10 @@
       "map": {
         "label": "Taswira",
         "description": "Juya kowanne bayanai zuwa wurare a cikin taswira"
+      },
+      "grants": {
+        "label": "Sarrafa Tallafi",
+        "description": "Daidaita da cire bayanai masu tsari daga labarin tallafi"
       }
     },
     "chooser": {
@@ -2660,7 +2671,8 @@
       "newTranslation": "Sabo fassara",
       "newDocument": "Sabuwar takarda",
       "newDataAnalysis": "Sabo nazarin bayanai",
-      "newMap": "Sabuwar taswira"
+      "newMap": "Sabuwar taswira",
+      "newGrants": "Sabon sarrafa tallafi"
     },
     "translation": {
       "chooseLanguage": "Harshe na fassara",
@@ -3277,7 +3289,8 @@
       "unknownType": "Wannan tattaunawar tana amfani da workflow da wannan sigar ba ta gane ba. Tarihin tattaunawa yana ƙasa.",
       "untitled": "Sabuwar Tattaunawa",
       "toggleMenu": "Buɗe/ruffa menu",
-      "model": "Samfuri don wannan workflow"
+      "model": "Samfuri don wannan workflow",
+      "disabledByAdmin": "Mai gudanarwa ya kashe wannan aikin. Tarihin hirar yana kasa."
     },
     "tabs": {
       "label": "Yanayin hira",
@@ -4031,7 +4044,153 @@
     "conflictTakeTheirs": "Karbi nasu",
     "conflictNoFieldDiff": "Ƙimar sun yi daidai — sigar bayanai kawai ta canza.",
     "conflictRecordGone": "An goge wannan bayanin (ko ba a iya sake lodawa ba). Kwafi duk abin da kake bukata daga fom, sannan kayi loda.",
-    "groupsFlagOff": "Ba a kunna nufin ƙungiyoyi ga wannan muhallin ba tukuna. Tsoffin nufin ƙungiyoyi suna aiki har yanzu."
+    "groupsFlagOff": "Ba a kunna nufin ƙungiyoyi ga wannan muhallin ba tukuna. Tsoffin nufin ƙungiyoyi suna aiki har yanzu.",
+    "catalogOauth": {
+      "title": "Manhajojin OAuth na mai haɗin gwiwa na ciki",
+      "description": "Manhajojin OAuth na gaba ɗaya don masu haɗin gwiwa na ciki (GitHub, Asana, ...). Duk bayanin da aka adana a nan zai wuce ƙimar MCP_OAUTH_* environment variables; gogewa zai maido da su. Ana ɓoye sirrin abokin ciniki a lokacin ajiyewa kuma ba za a sake nuna shi ba.",
+      "badgeAdmin": "An saita a nan",
+      "badgeEnv": "Daga environment",
+      "badgeNone": "Ba a saita ba",
+      "badgeDcr": "Yana yin rajista kansa",
+      "badgeDcrHint": "Wannan mai ba da sabis na iya rajistar abokin OAuth kai tsaye, don haka zai yi aiki koda ba a saita app a nan ba.",
+      "clientIdLabel": "OAuth client ID",
+      "clientSecretLabel": "OAuth client secret",
+      "secretStoredPlaceholder": "An ajiye — shiga don maye, bar babu komai don ci gaba",
+      "secretNewPlaceholder": "Liƙa sirrin abokin ciniki",
+      "save": "Ajiye",
+      "remove": "Cire",
+      "removeToEnv": "Cire (dawo da environment)",
+      "saved": "An ajiye manhajar OAuth {name}",
+      "removed": "An cire manhajar OAuth {name}",
+      "saveError": "Ajiye manhajar OAuth ya gaza. Tofa ƙoƙari.",
+      "conflict": "An canza wannan bayanin a wani wuri — an sake lodawa, don Allah ku sake gwadawa.",
+      "storageUnavailable": "Ba a iya samun ajiyar admin; ba a iya jera bayanan da suke akwai. Ajiya yana a kashe har sai an gyara.",
+      "sealingUnavailable": "Ba a saita ɓoye sirri ba a wannan warwarewa (AUTH_SECRET babu) — ba za a iya adana sirrin abokin ba.",
+      "updatedBy": "An sabunta ta {by} a {at}"
+    },
+    "orgAgentOverrideTitle": "Canja wakili na ciki",
+    "orgAgentOverrideAction": "Canjawa",
+    "orgAgentBuiltinBadge": "Na ciki",
+    "orgAgentBuiltinHint": "An bayyana a cikin saitin tura manhaja. Ana iya gyara dokar samunsa a nan; canja ta don sabunta saitinsa ba tare da sake tura app ba.",
+    "m365AgentIndexProgress": "Ana tsara abin daka {done} cikin {total} {total, plural, one {takarda} other {takardu}}…",
+    "m365AgentIndexInterrupted": "An katse tsarin a {done} cikin {total} — ci gaba don karasa.",
+    "m365AgentIndexStartedBy": "wanda {name} ya fara",
+    "m365AgentIndexResume": "Ci gaba",
+    "m365AgentIndexResumeHint": "Ci gaba da tsara daga inda aka tsaya, ta amfani da damar Microsoft 365 naka. Ka tabbata wannan shafin a bude yake.",
+    "m365AgentIndexCancel": "Soke",
+    "m365AgentIndexCancelled": "An soke tsarin — takardun da aka riga aka tsara za su ci gaba da kasancewa masu bincike.",
+    "m365AgentIndexJobFailed": "Tsara ya tsaya: {error}",
+    "m365AgentIndexDone": "An gama tsara: {indexed} an tsara, {failed} sun kasa, {noText} ba su da rubutu.",
+    "m365AgentDocCounts": "{indexed, plural, one {# takarda an tsara} other {# takardu an tsara}} · {failed} sun kasa · {noText} ba su da rubutu · {needsPreparation} suna bukatar shiri · {skipped} an tsallake",
+    "m365CapDocuments": "Takardu: {count} / {max}",
+    "m365CapBytes": "{bytes} cikin {max}",
+    "m365CapOverDocuments": "An wuce iyakar takardu {max}. Cire subfolders, tace nau’in fayil, ko cire tushe — kawai fayilolin da za a tsara ne ake lissafawa.",
+    "m365CapOverBytes": "An wuce iyakar girman {max}. Ka cire subfolders ko manyan fayiloli.",
+    "m365PlanScanning": "Ana dubawa…",
+    "m365PlanRefreshing": "ana sabuntawa…",
+    "m365PlanFailed": "Ba a iya duba tushe da asusun Microsoft 365 naka ba.",
+    "m365PlanMissing": "Ba a samu ba ko babu dama",
+    "m365PlanIndexable": "{count, plural, one {# fayil za a tsara} other {# fayiloli za a tsara}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# yana bukatar shiri} other {# suna bukatar shiri}}",
+    "m365PlanSkipped": "An tsallake {count}",
+    "m365PlanShowDetails": "Cikakkun bayani",
+    "m365PlanHideDetails": "Boye cikakkun bayani",
+    "m365PlanTruncated": "Wannan babban fayil din ya yi yawa don duba gaba daya — an lissafa samfurori 1,000 na farko kawai. Ka zaɓi wani subfolder.",
+    "m365PlanRecursive": "Hada subfolders",
+    "m365PlanExtensionsLabel": "Nau’in fayil kawai:",
+    "m365PlanExtensionsPlaceholder": "misali: pdf, docx",
+    "m365PlanSubfolders": "Subfolders",
+    "m365PlanFolderCount": "{count, plural, one {# fayil} other {# fayiloli}}",
+    "m365PlanGroupIndexable": "Za a tsara",
+    "m365PlanGroupNeedsPreparation": "Suna bukatar shiri",
+    "m365PlanGroupSkipped": "An tsallake",
+    "m365PlanPreparationHint": "hoto/sauti/bidi'o — ba a tsara ba tukuna",
+    "m365PlanMoreRows": "…da {count} kari",
+    "m365ItemStatus": {
+      "pending": "ana jira",
+      "indexed": "an tsara",
+      "failed": "ya kasa",
+      "noText": "ba a samo rubutu ba",
+      "missing": "babu"
+    },
+    "m365SkipReason": {
+      "unsupported": "irin nau’in da ba a goyi baya ba",
+      "tooLarge": "ya fi 25 MB",
+      "disallowedType": "nau’in da aka toshe (executable/archive)",
+      "malware": "Microsoft ya gano a matsayin malware",
+      "zeroBytes": "fayil din babu komai",
+      "excluded": "an cire",
+      "typeFilter": "ba a cikin tace nau’in ba"
+    },
+    "localAdminGroup": {
+      "agents": "Wakilai",
+      "promptAgents": "Wakilan tambaya",
+      "m365Agents": "Wakilan Microsoft 365",
+      "orgAgents": "Wakilan ilimi",
+      "guides": "Jagorori",
+      "connectors": "Masu haɗawa",
+      "datasets": "Kundin taswira",
+      "unknown": "An ba da izini amma ba a samu ba"
+    },
+    "localAdminGroupUnavailable": "Wannan jerin ba ya samuwa na ɗan lokaci — ana ci gaba da ajiyar izini da aka riga aka ba.",
+    "localAdminBuiltIn": "na ciki",
+    "localAdminSummary": "{count, plural, one {# izini} other {# izini}}: {names}",
+    "localAdminSummaryMore": "{names} da ƙari {more}",
+    "localAdminNoDelegations": "Babu izini tukuna — admin na cikin gida ba tare da wakilai ba zai iya ganin yankin admin kawai.",
+    "localAdminSelectedCount": "An zaɓi {selected} daga cikin {total}",
+    "localAdminCopyFrom": "Kwafi daga",
+    "localAdminClearAll": "Share duka",
+    "localAdminSelectGroup": "Zaɓi duka",
+    "localAdminClearGroup": "Share",
+    "localAdminSearchPlaceholder": "Nemo wakilai, jagorori, masu haɗawa…",
+    "localAdminDuplicateEmail": "Wannan imel ɗin yana cikin jerin — haɗa bayanan guda biyu.",
+    "localAdminExpand": "Nuna izini",
+    "localAdminCollapse": "Boye izini",
+    "localAdminDiscard": "Watsar da canje-canje",
+    "m365AgentRefresh": "Sabunta",
+    "m365AgentRefreshHint": "Karɓo fayilolin da aka ƙara, aka sauya ko aka cire tun zuwan ƙarshe — ba za a sake saukar da fayilolin da ba a sauya ba. Ka bar wannan shafin a buɗe.",
+    "m365AgentReindexAll": "Sake tsara duka",
+    "m365AgentRefreshProgress": "Ana sabuntawa — {done} daga cikin {total} sun canza {total, plural, one {takarda} other {takardu}}…",
+    "m365AgentRefreshDone": "Sabuntawa ta gama: {added} an ƙara, {modified} an sabunta, {removed} an cire, {failed} sun kasa.",
+    "m365ChangesChecking": "Ana bincika Microsoft 365 don canje-canje tun lokacin tsara ƙarshe…",
+    "m365ChangesFailed": "Ba a iya duba canje-canje da asusun Microsoft 365 ɗinka ba.",
+    "m365ChangesNeverIndexed": "Ba a tsara ba tukuna — danna Index bayan adanawa.",
+    "m365ChangesFound": "{count, plural, one {# sauyi} other {# sauye-sauye}} tun ziyarar ƙarshe: {added} an ƙara, {modified} an sabunta, {removed} an cire.",
+    "m365ChangesNone": "Babu canje-canje tun tsarin ƙarshe ({date}).",
+    "m365PrepareButton": "Shirya",
+    "m365PrepareOcrButton": "Shirya (OCR)",
+    "m365PrepareSaveFirst": "a adana wakili kafin a shirya",
+    "m365PrepareHintImage": "hoto — kiran hangen nesa 1",
+    "m365PrepareHintMedia": "~{minutes} minti na sauti don fassara",
+    "m365PrepareHintOcr": "babu layin rubutu — OCR ta hangen nesa, har zuwa shafuka 30",
+    "m365PreparePreparing": "Ana shiryawa…",
+    "m365PreparePending": "Ana fassara…",
+    "m365PreparedNote": "an shirya · {kind}",
+    "m365PreparedKind": {
+      "image": "bayanin hoto",
+      "audio": "fassara",
+      "video": "fassara",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "An shirya {name} ({chars} haruffa). Yi amfani da Sabunta don tsara shi.",
+    "m365PrepareStarted": "An fara fassara {name} a bango — ka bar wannan shafin a buɗe.",
+    "m365PrepareFailed": "Ba a iya shirya {name}: {error}",
+    "m365PrepareFailedGeneric": "Shiryawa ta gaza.",
+    "canonicalKeyLabel": "Maɓalli",
+    "copyKey": "Kwafi maɓalli",
+    "agentKeySearchPlaceholder": "Bincika wakilai, jagorori, haɗe-haɗe… ko liƙa maɓalli",
+    "agentKeyAddCustom": "Ƙara \"{key}\" kamar yadda aka rubuta",
+    "agentKeyRemove": "Cire {name}",
+    "hideAgent": "Boye",
+    "unhideAgent": "Bayyana",
+    "hideAgentHint": "Boye wannan wakili daga jerin masu gudanarwa naka. Wannan yana shafar kallonka kawai — masu amfani da sauran masu gudanarwa ba su da tasiri.",
+    "unhideAgentHint": "Bayyana wannan wakili a jerin masu gudanarwarka sake.",
+    "hiddenBadge": "An ɓoye",
+    "hiddenAgentsCount": "{count, plural, one {# wakili da aka ɓoye} other {# wakilan da aka ɓoye}}",
+    "hiddenAgentsShowing": "Ana nuna {count, plural, one {# wakili da aka ɓoye} other {# wakilan da aka ɓoye}}",
+    "hiddenAgentsShow": "Bayyana",
+    "hiddenAgentsHide": "Sake ɓoyewa",
+    "allAgentsHidden": "Dukkan wakilan nan an ɓoye su daga kallo naka — amfani da Bayyana don ganin su."
   },
   "localModels": {
     "title": "Samfuran cikin gida",
@@ -4232,9 +4391,15 @@
       "connectors": "Sadarwar kungiya da wanda zai iya amfani da su.",
       "guides": "Jagorar salo, sharuɗɗa, da bin doka.",
       "mapDatasets": "An zaɓi bayanan da ake da su don aikin taswira.",
-      "localAdmins": "Ba wa wasu damar gyara ƙa’idojin izini."
+      "localAdmins": "Ba wa wasu damar gyara ƙa’idojin izini.",
+      "workflows": "Kashe ko kunnawa aikin hira ga kowa.",
+      "viewAs": "Gwada app kamar wani da ya cika – ko bai cika ba – wani sharadi."
     },
-    "openSettings": "Buɗe saituna"
+    "openSettings": "Buɗe saituna",
+    "area": {
+      "workflows": "Ayyuka",
+      "viewAs": "Duba a matsayin"
+    }
   },
   "limits": {
     "title": "Iyakar amfani",
@@ -4436,7 +4601,8 @@
     "groupSearchNoResults": "Babu wata ƙungiya da ta dace da wannan suna.",
     "groupSearchError": "Binciken ƙungiya ya gaza. Har yanzu za ka iya liƙa ID na ƙungiya a ƙasa.",
     "groupSearchHint": "Rubuta aƙalla haruffa 2 don bincika ƙungiyoyin kungiyarku, ko liƙa ID na ƙungiya kai tsaye. Gyaran zai shafi membobin ƙungiyar a Microsoft Entra.",
-    "groupsFlagOff": "Ba a kunna zaɓin maƙasudin ƙungiya a wannan muhalli ba tukuna. Zaɓin ƙungiyoyi da aka riga aka sa suna aiki."
+    "groupsFlagOff": "Ba a kunna zaɓin maƙasudin ƙungiya a wannan muhalli ba tukuna. Zaɓin ƙungiyoyi da aka riga aka sa suna aiki.",
+    "featureDisabled": "Iyakar amfani bai kunna a wannan shigarwar ba."
   },
   "m365": {
     "connections": {
@@ -4797,5 +4963,149 @@
     "failed": "Ba a iya raba ba — ba a ƙirƙiri komai ba.",
     "copyFailed": "An kasa kwafa hanyar haɗi — a zaɓi ta a sama ku kwafa da hannu.",
     "lastMessagesCountLabel": "Yawan saƙonnin baya da za a lissafa"
+  },
+  "toolModes": {
+    "webSearch": "Binciken yanar gizo",
+    "codeInterpreter": "Mai fassara lambar kwamfuta",
+    "off": "A kashe",
+    "auto": "Ta atomatik",
+    "always": "Kullum",
+    "routingPrivacy": "Sirri",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Binciken Azure AI yana tura tambayoyi ta Azure AI Foundry, wanda zai iya adana su.",
+    "learnMore": "Kara sani"
+  },
+  "agentAttach": {
+    "browserTitle": "Wakilai",
+    "browserSubtitle": "Ƙara wakilai da connectors cikin wannan hira, ko fara hira da sabon wakili. Yawancinsu suna aiki da duk wani samfurin da ka zaba.",
+    "searchPlaceholder": "Nemo wakilai da connectors…",
+    "loading": "Ana loda wakilai…",
+    "noMatches": "Ba a samu daidaituwa da bincikanka ba.",
+    "noAgents": "Babu wakili a halin yanzu.",
+    "addToChat": "Ƙara zuwa wannan hira",
+    "removeFromChat": "Cire daga wannan hira",
+    "newChat": "Sabuwar hira",
+    "attached": "An haɗa",
+    "detach": "Cire haɗin",
+    "change": "Canja",
+    "browse": "Bincika wakilai…",
+    "noAgent": "Babu wakili da aka haɗa",
+    "close": "Rufe",
+    "kind": {
+      "rag": "Sanin ilimi",
+      "prompt": "Hali",
+      "m365": "Sanin ilimi (Microsoft 365)",
+      "org": "Sanin ilimi",
+      "foundry": "Wakilin Foundry",
+      "connector": "Mai haɗawa"
+    },
+    "semantics": {
+      "your-model": "yana amfani da samfurinka",
+      "pinned-model": "samfurin da mai gudanarwa ya saita",
+      "own-model": "yana aiki da samfurinsa kansa"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Shawarwari daga ƙungiyarku",
+    "searching": "Ana bincika ƙungiyarku…",
+    "noMatches": "Babu abin da ya dace a cikin kundin — za ka iya shigar da adireshin da hannu"
+  },
+  "workflowsAdmin": {
+    "title": "Ayyuka",
+    "description": "Kunna ko kashe kowanne aiki ga duka ƙungiyar. Idan an kashe wani aiki, ba za a nuna shi ba kuma sabar ba za ta amsa da shi ba, koda ga wadanda suke da cancanta.",
+    "layeredNote": "Alamar LaunchDarkly conversationWorkflows har yanzu ke kula da samuwa: aiki da aka kunna a nan zai samuwa ne kawai inda alamar take kunne. Wannan shafi ba zai iya bayyana abin da alamar ke ɓoye ba.",
+    "loading": "Ana loda dokar aiki…",
+    "loadError": "Ba a iya lodawa dokar aikin ba.",
+    "policyUnavailable": "Ba a samu dokar aikin daga ajiya ba. An ɓoye maballan mayarwa don kada a nuna su da ƙimar tsoho wanda zai saba da abin da ake aiwatarwa.",
+    "retry": "Sake gwadawa",
+    "enableAll": "Kunna dukkan",
+    "disableAll": "Kashe dukkan",
+    "enabledLabel": "An kunna",
+    "disabledLabel": "An kashe",
+    "defaultOnHint": "Tsohuwar ƙima idan ba a ajiye dokar ba: an kunna.",
+    "defaultOffHint": "Tsohuwar ƙima idan ba a ajiye dokar ba: an kashe — dole ne mai gudanarwa ya kunna shi kai tsaye.",
+    "grantsNote": "Ana takaita Sarrafa Tallafi ga masu amfani MSF-USA a bangaren Program da \"grants\" a matsayin aikin su, ko a Systems da \"innovation\" a matsayin su. Kunna shi a nan ba ya faɗaɗa wannan ƙa’ida.",
+    "unsaved": "Kana da canje-canje da ba a ajiye ba.",
+    "save": "Ajiye",
+    "saving": "Ana ajiye…",
+    "saveSuccess": "An ajiye dokar aikin.",
+    "saveError": "Ba a iya ajiye dokar aikin ba.",
+    "conflictError": "Wani mai gudanarwa ya canja dokar kafin ka. An sabunta — don Allah duba da ajiye kuma.",
+    "updatedByLine": "Na ƙarshe an ajiye ta {by} a {at}.",
+    "neverSaved": "Ba a taɓa ajiye dokar ba tukuna; ƙimar da ke sama su za a bi."
+  },
+  "viewAs": {
+    "title": "Duba a matsayin",
+    "description": "Gwada app ɗin, don zaman ku kaɗai, a matsayin wanda ya cika ko bai cika ba wani sharadi da galibi directory ko masu gudanarwa ke yanke. Ba a taɓa chanja asalin kai ba: duk abin da ka ƙirƙira naka ne, kuma layin audit zai ci gaba da nuna sunan ka.",
+    "activeTitle": "Duba-a-matsayin yana aiki",
+    "inactiveTitle": "Duba-a-matsayin baya aiki",
+    "sections": {
+      "role": "Matsayin Admin",
+      "region": "Yanki na bayanai",
+      "attributes": "Siffofin directory",
+      "groups": "Membobin rukuni",
+      "presets": "Tsaruka"
+    },
+    "role": {
+      "global": "Babban mai gudanarwa (wannan shi ne matsayin ka na gaskiya)",
+      "local": "Mai gudanarwa na yankin",
+      "none": "Mai amfani na yau da kullum",
+      "localKeysLabel": "Maballin wakilin da aka mika",
+      "localKeysHint": "Maballin wakilai (kanonical) da wannan local admin zai iya gyarawa, an raba su da alamar coma. Bar shi fanko idan ba za a mika wani wakili ba.",
+      "noneWarning": "A matsayin mai amfani na yau da kullum, sauran sassan admin za su bace. Wannan shafin zai ci gaba da kasancewa, kuma sandar sama a app ɗin kullum tana nuna hanyar fita."
+    },
+    "region": {
+      "actual": "Na Gaskiya ({region})",
+      "hint": "Zai tura buƙatunka — da duk abin da ka loda yayin aiki — zuwa ajiya na yankin ɗaya. Wannan zai fi ƙarfin kuki mai ?regionOverride=."
+    },
+    "attributes": {
+      "department": "Sashe",
+      "companyName": "Kamfani",
+      "jobTitle": "Sunan aiki",
+      "officeId": "Ofishi",
+      "officeActual": "Ofishi na gaskiya",
+      "officeNone": "Babu ofishi",
+      "actualValue": "Gaskiya: {value}",
+      "actualEmpty": "Gaskiya: (babu)",
+      "hint": "Bar filin babu komai don a ci gaba da amfani da gaskiyar darajar ka. Waɗannan na taimaka wa ƙa'idojin grant, iyakar amfani bisa sigogi da ƙa'idodin samun dama."
+    },
+    "groups": {
+      "label": "Id na rukuni",
+      "placeholder": "Harshen id na abu na rukuni ɗaya na Entra kowane layi",
+      "hint": "Wannan zai maye gurbin — ba ƙaruwa ba — membobin ka na gaskiya a wannan zamanin, domin ka gwada kasancewa memba ko ba memba."
+    },
+    "presets": {
+      "grantsMember": "Memba na ƙungiyar grants",
+      "regularUser": "Mai amfani na yau da kullum",
+      "localAdmin": "Admin na gida, babu wakilai",
+      "otherRegion": "Wani yanki",
+      "hint": "Yanayin da aka riga aka sa suna cika fam din; ba za a aiwatar da komai ba sai ka danna Aiwatar."
+    },
+    "apply": "Aiwatar da sabunta shafi",
+    "applying": "Ana aiwatarwa…",
+    "clear": "Fita daga view-as",
+    "clearing": "Ana fita…",
+    "reset": "Sake fam",
+    "nothingToApply": "Zaɓi akalla ɗaya daga cikin gyara kafin aiwatarwa.",
+    "applyError": "Ba a iya aiwatar da view-as ba: {error}",
+    "clearError": "Ba a iya fitowa daga view-as ba: {error}",
+    "loadError": "Ba a iya ɗora yanayin view-as ba.",
+    "retry": "Sake gwadawa",
+    "expiresNote": "View-as zai kai awanni 8, ko har sai ka fita.",
+    "banner": {
+      "label": "Ana duba a matsayin",
+      "adjust": "Daidaici",
+      "exit": "Fita",
+      "role": {
+        "local": "admin na gida",
+        "none": "mai amfani na yau da kullum"
+      },
+      "region": "yanki {region}",
+      "department": "sashe \"{value}\"",
+      "companyName": "kamfani \"{value}\"",
+      "jobTitle": "suna \"{value}\"",
+      "officeId": "ofishi {value}",
+      "groups": "{count, plural, one {# rukuni} other {# rukuni}}"
+    }
   }
 }

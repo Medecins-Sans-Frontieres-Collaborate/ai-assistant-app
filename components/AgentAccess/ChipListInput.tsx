@@ -1,7 +1,17 @@
 'use client';
 
 import { IconX } from '@tabler/icons-react';
-import { FC, KeyboardEvent, useState } from 'react';
+import { FC, KeyboardEvent, useId, useState } from 'react';
+
+import {
+  TypeaheadFetch,
+  useTypeaheadSuggestions,
+} from '@/client/hooks/useTypeaheadSuggestions';
+
+import {
+  TypeaheadDropdown,
+  typeaheadDropdownOpen,
+} from '@/components/UI/TypeaheadDropdown';
 
 interface ChipListInputProps {
   values: string[];
@@ -17,6 +27,14 @@ interface ChipListInputProps {
    */
   normalize?: (value: string) => string;
   disabled?: boolean;
+  /**
+   * Optional suggestion source for the draft (e.g. useM365PeopleSuggest()
+   * on email lists). Selecting a suggestion commits it as a chip directly.
+   * Undefined keeps the input exactly as before.
+   */
+  suggest?: TypeaheadFetch;
+  /** aria-label for the suggestion listbox (required when suggest is set). */
+  suggestionsLabel?: string;
 }
 
 /**
@@ -24,6 +42,9 @@ interface ChipListInputProps {
  * Enter, comma, or blur commits the current draft; a pasted comma-separated
  * list becomes one chip per entry. Empty parts and duplicates (compared
  * lowercased, matching the server's evaluation) are dropped silently.
+ * With `suggest`, a typeahead dropdown offers completions for the draft:
+ * ↑/↓ highlight, Enter/Tab commit the highlighted entry as a chip, Escape
+ * dismisses and leaves plain-text entry untouched.
  */
 export const ChipListInput: FC<ChipListInputProps> = ({
   values,
@@ -33,8 +54,14 @@ export const ChipListInput: FC<ChipListInputProps> = ({
   removeLabel,
   normalize,
   disabled = false,
+  suggest,
+  suggestionsLabel,
 }) => {
   const [draft, setDraft] = useState('');
+  const listId = useId();
+  const { suggestions, status, activeIndex, setActiveIndex, query, clear } =
+    useTypeaheadSuggestions(suggest);
+  const dropdownOpen = typeaheadDropdownOpen(status, suggestions.length);
 
   const commitDraft = () => {
     const parts = draft
@@ -56,7 +83,39 @@ export const ChipListInput: FC<ChipListInputProps> = ({
     }
   };
 
+  const commitSuggestion = (value: string) => {
+    const key = value.trim().toLowerCase();
+    if (!values.some((v) => v.trim().toLowerCase() === key)) {
+      onChange([...values, value]);
+    }
+    setDraft('');
+    clear();
+  };
+
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (suggestions.length > 0) {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setActiveIndex((activeIndex + 1) % suggestions.length);
+        return;
+      }
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setActiveIndex(
+          (activeIndex - 1 + suggestions.length) % suggestions.length,
+        );
+        return;
+      }
+      if (e.key === 'Enter' || e.key === 'Tab') {
+        e.preventDefault();
+        commitSuggestion(suggestions[activeIndex].value);
+        return;
+      }
+      if (e.key === 'Escape') {
+        clear();
+        return;
+      }
+    }
     if (e.key === 'Enter' || e.key === ',') {
       e.preventDefault();
       commitDraft();
@@ -67,7 +126,7 @@ export const ChipListInput: FC<ChipListInputProps> = ({
 
   return (
     <div
-      className={`flex flex-wrap items-center gap-1.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-2 py-1.5 ${
+      className={`relative flex flex-wrap items-center gap-1.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-2 py-1.5 ${
         disabled ? 'opacity-50' : ''
       }`}
     >
@@ -93,12 +152,36 @@ export const ChipListInput: FC<ChipListInputProps> = ({
         type="text"
         className="min-w-[140px] flex-1 border-none bg-transparent p-0.5 text-sm text-black outline-none placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-500"
         value={draft}
-        onChange={(e) => setDraft(e.target.value)}
+        onChange={(e) => {
+          setDraft(e.target.value);
+          query(e.target.value, values);
+        }}
         onKeyDown={handleKeyDown}
-        onBlur={commitDraft}
+        onBlur={() => {
+          clear();
+          commitDraft();
+        }}
         placeholder={values.length === 0 ? placeholder : addHint}
         disabled={disabled}
+        role={suggest ? 'combobox' : undefined}
+        aria-expanded={suggest ? dropdownOpen : undefined}
+        aria-autocomplete={suggest ? 'list' : undefined}
+        aria-controls={suggest ? listId : undefined}
+        aria-activedescendant={
+          suggestions.length > 0 ? `${listId}-option-${activeIndex}` : undefined
+        }
       />
+      {suggest && (
+        <TypeaheadDropdown
+          listId={listId}
+          suggestions={suggestions}
+          status={status}
+          activeIndex={activeIndex}
+          onSelect={commitSuggestion}
+          onHover={setActiveIndex}
+          listLabel={suggestionsLabel}
+        />
+      )}
     </div>
   );
 };

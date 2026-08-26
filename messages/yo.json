@@ -950,7 +950,12 @@
       "showFewer": "Fi díẹ̀ síi hàn"
     },
     "retryWithModel": "Ṣe ìgbìyànjú pẹ̀lú {model}",
-    "createTodoTasks": "Ṣẹda àṣẹṣe ‘To Do’ látinú ìdáhùn yìí"
+    "createTodoTasks": "Ṣẹda àṣẹṣe ‘To Do’ látinú ìdáhùn yìí",
+    "attachedFileExpired": "Fáìlì to so pọ̀ mọ́ ìfọ̀rọ̀wánilẹ́nuwo yìí kò sí mọ́ — àwọn fáìlì tí a gbé sórí ẹrọ̀ ní àkókò díẹ̀ péré ni a máa tọju wọn. A ti yọ fáìlì yìí kúrò látinú ìfọ̀rọ̀wánilẹ́nuwo yìí. Ẹ jọ̀wọ́, gbìyànjú lẹ́ẹ̀kàn síi láì fi fáìlì náà, tàbí gbé fáìlì náà sórí ẹrọ̀ lẹ́ẹ̀kàn míì.",
+    "repeatedFailureNotice": "Eyi ń tẹsiwaju láti kuna — àpérò náà lè ti bàjẹ́. Bibẹrẹ àpérò tuntun maa n yanjú iṣoro yii.",
+    "startNewConversation": "Bẹrẹ àpérò tuntun",
+    "downloadDebugInfo": "Ṣàgbàasilẹ ìtòlẹ́sẹẹsẹ àbáyọ",
+    "includeMessageText": "Fi ọrọ ìfiránṣọ̀ kun"
   },
   "transcript": {
     "originalTranscript": "Ìkọsílẹ̀ Àkọ́kọ́",
@@ -981,7 +986,9 @@
     "quickActions": "Àwọn Ìṣe Kíákíá",
     "expandFolder": "Fa folda {name}",
     "collapseFolder": "Dín folda {name} ku",
-    "folderOptions": "Aṣayan {name}"
+    "folderOptions": "Aṣayan {name}",
+    "agentsEntry": "Àgbẹ̀rẹ́ ayélujára",
+    "agentsTitle": "Ṣàyẹ̀wò àwọn àgbẹ̀rẹ́ ayélujára kí o sì bẹ̀rẹ̀ ìjíròrò pẹ̀lú ẹ̀kan"
   },
   "errors": {
     "somethingWentWrong": "Nǹkan kan ṣẹlẹ̀",
@@ -2651,6 +2658,10 @@
       "map": {
         "label": "Maapu",
         "description": "Ṣèyí data kankan di ibi lórí maapu"
+      },
+      "grants": {
+        "label": "Ilana Ifowopamosi àwọn ilẹ̀ amáyédẹrù",
+        "description": "Ṣàfikun àti yọ data tó ṣàtúnṣe jáde láti àlàyé ilẹ̀ amáyédẹrù"
       }
     },
     "chooser": {
@@ -2660,7 +2671,8 @@
       "newTranslation": "Ìtumọ̀ tuntun",
       "newDocument": "Àkọsílẹ̀ tuntun",
       "newDataAnalysis": "Ìtúpalẹ̀ data tuntun",
-      "newMap": "Maapu tuntun"
+      "newMap": "Maapu tuntun",
+      "newGrants": "Ilana ilẹ̀ amáyédẹrù tuntun"
     },
     "translation": {
       "chooseLanguage": "Èdè ibi-afẹ́",
@@ -3277,7 +3289,8 @@
       "unknownType": "Ibànísọ̀rọ̀ yìí n lò iṣẹ́ tí ẹ̀dá yìí kò mọ̀. Àkọsílẹ̀ ibànísọ̀rọ̀ wà lókè yìí.",
       "untitled": "Ibànísọ̀rọ̀ Tuntun",
       "toggleMenu": "Yi àkójọ aṣayan padà",
-      "model": "Àpẹẹrẹ fún iṣẹ́ yìí"
+      "model": "Àpẹẹrẹ fún iṣẹ́ yìí",
+      "disabledByAdmin": "Akọ́sẹmọsẹ yìí ti wa ní àìmọ́ṣẹ́ ní ọwọ́ adarí. Ìtàn ìbànilẹ́rọ̀ wà nísàlẹ̀."
     },
     "tabs": {
       "label": "Ipo ìbànísọ̀rọ̀",
@@ -4031,7 +4044,153 @@
     "conflictTakeTheirs": "Gba tiwọn",
     "conflictNoFieldDiff": "Iye mejeeji jọra — ẹya igbasilẹ nikan lo yipada.",
     "conflictRecordGone": "A ti pa igbasilẹ yii (tabi ko le tun gbasilẹ). Daakọ ohun tí o fẹ lati fọọmu, lẹhinna tun gbasilẹ.",
-    "groupsFlagOff": "A ko ti mu ìfojúkan ẹgbẹ ṣiṣẹ fun ayika yii. Àfojúkan ẹgbẹ to wa tẹlẹ ṣiwaju."
+    "groupsFlagOff": "A ko ti mu ìfojúkan ẹgbẹ ṣiṣẹ fun ayika yii. Àfojúkan ẹgbẹ to wa tẹlẹ ṣiwaju.",
+    "catalogOauth": {
+      "title": "Awọn ohun elo OAuth asopọ inu",
+      "description": "Awọn ohun elo OAuth fun gbogbo ibi-fifiranṣẹ fun awọn asopọ inu (GitHub, Asana, …). Fifi igbasilẹ pamọ nibi yoo kọja awọn oniyipada ayika MCP_OAUTH_* ; yọ kuro ki o lo awọn ayika wọnyi. A fi aṣiri awọn client secret pamọ nigba ipamọ, a ko si tun maa fi han lẹẹkansi.",
+      "badgeAdmin": "Ti ṣeto nibi",
+      "badgeEnv": "Lati ayika",
+      "badgeNone": "Kò tíì ṣeto",
+      "badgeDcr": "Ṣiṣeto ara rẹ",
+      "badgeDcrHint": "Atunṣe yi le forukọsilẹ OAuth client laifọwọyi, nitorinaa yoo ṣiṣẹ paapaa ti ko ba si ohun elo kan ti a ti ṣeto nibi.",
+      "clientIdLabel": "OAuth client ID",
+      "clientSecretLabel": "OAuth client secret",
+      "secretStoredPlaceholder": "Ti fipamọ — tẹ lati rọpo, fi silẹ silẹ lati pa mọ",
+      "secretNewPlaceholder": "Lẹẹmọ client secret",
+      "save": "Fipamọ",
+      "remove": "Yọ kuro",
+      "removeToEnv": "Yọ kuro (padà si ayika)",
+      "saved": "A ti fipamọ ohun elo OAuth {name}",
+      "removed": "A ti yọ ohun elo OAuth {name} kuro",
+      "saveError": "Fifipamọ ohun elo OAuth kuna. Gbiyanju lẹẹkansi.",
+      "conflict": "A ti yi igbasilẹ yi pada ni ibomiran — ti tun gbejade, jọwọ gbiyanju lẹẹkansi.",
+      "storageUnavailable": "Ko le wọle si ibi ipamọ admin; awọn igbasilẹ to wa ko le ṣe atokọ. A ti pa fifipamọ mọ titi ti o fi pada bọ.",
+      "sealingUnavailable": "A ko ti ṣeto amuṣeri aṣiri lori aṣàlẹ yii (AUTH_SECRET ti nsọnu) — a ko le fipamọ client secrets.",
+      "updatedBy": "A ti ṣagbeyẹwo nipasẹ {by} ni {at}"
+    },
+    "orgAgentOverrideTitle": "Ṣàṣàlàyé aṣojú tó wà nínú",
+    "orgAgentOverrideAction": "Ṣàṣàlàyé",
+    "orgAgentBuiltinBadge": "Tó wà nínú",
+    "orgAgentBuiltinHint": "A ṣe àtúnpinnu rẹ̀ nínú ìlànà deployment. Ìlànà ìforúkọsílẹ rẹ̀ le yípadà níbí; lo iṣàṣàlàyé láti yí àwọn ètò rẹ̀ padà láì déploy.",
+    "m365AgentIndexProgress": "N ṣakoso àkópọ {done} nínú {total} {total, plural, one {ìwé} other {àwọn ìwé}}…",
+    "m365AgentIndexInterrupted": "Ìṣàkóso àkópọ dá duro ní {done} nínú {total} — tẹ̀síwájú láti bá a lọ.",
+    "m365AgentIndexStartedBy": "bẹ̀rẹ̀ sí nípa {name}",
+    "m365AgentIndexResume": "Tẹ̀síwájú",
+    "m365AgentIndexResumeHint": "Tẹ̀síwájú àkópọ láti ibi tí ó dá duro, nípasẹ̀ ìwọle Microsoft 365 rẹ. Jọ̀wọ́ jẹ́ kí taabu yìí ṣí.",
+    "m365AgentIndexCancel": "Fagilé",
+    "m365AgentIndexCancelled": "Àkópọ ti fagilé — àwọn ìwé tí a ti ṣàkóso ní le tẹ̀síwájú láti wá.",
+    "m365AgentIndexJobFailed": "Ìṣàkóso àkópọ dá duro: {error}",
+    "m365AgentIndexDone": "Àkópọ parí: {indexed} ti ṣàkóso, {failed} ti kuna, {noText} kò ní ọ̀rọ̀.",
+    "m365AgentDocCounts": "{indexed, plural, one {# ìwé ti ṣàkóso} other {# àwọn ìwé ti ṣàkóso}} · {failed} ti kuna · {noText} kò ní ọ̀rọ̀ · {needsPreparation} nílò ṣètò · {skipped} fo kọjá",
+    "m365CapDocuments": "Ìwé: {count} / {max}",
+    "m365CapBytes": "{bytes} nínú {max}",
+    "m365CapOverDocuments": "Ti ju ààyè {max}-ìwé lọ. Yọ àwọn ẹ̀ka-kékèké, sàyẹ̀wò irú fáìlì tàbí yọ orísun — fáìlì tó máa wà nínú àkópọ nikan lẹ́kọ.",
+    "m365CapOverBytes": "Ti ju àkótán {max} lọ. Yọ ẹ̀ka-kékèké tàbí àgbà fáìlì kúrò.",
+    "m365PlanScanning": "N ṣàyẹ̀wò…",
+    "m365PlanRefreshing": "n bọ̀sí imúlò…",
+    "m365PlanFailed": "A kò le ṣàyẹ̀wò àwọn orísun pẹ̀lú àkọọ́lẹ̀ Microsoft 365 rẹ.",
+    "m365PlanMissing": "Ko rí tàbí kò ní ìwọle",
+    "m365PlanIndexable": "{count, plural, one {# fáìlì yóò wọ àkópọ} other {# àwọn fáìlì yóò wọ àkópọ}}",
+    "m365PlanNeedsPreparation": "{count, plural, one {# nílò ṣètò} other {# nílò ṣètò}}",
+    "m365PlanSkipped": "{count} fo kọjá",
+    "m365PlanShowDetails": "Àlàyé",
+    "m365PlanHideDetails": "Pa àlàyé",
+    "m365PlanTruncated": "Àpò fáìlì yìí ti tóbi ju kí a le ṣàyẹ̀wò rẹ́ tan — kíkàn àkọ́kọ́ 1,000 nìkan ni a fi hàn. Yan ẹ̀ka-kékèké dipo.",
+    "m365PlanRecursive": "Fi àwọn ẹ̀ka-kékèké kun",
+    "m365PlanExtensionsLabel": "Irú fáìlì nikan:",
+    "m365PlanExtensionsPlaceholder": "àpẹẹrẹ: pdf, docx",
+    "m365PlanSubfolders": "Àwọn ẹ̀ka-kékèké",
+    "m365PlanFolderCount": "{count, plural, one {# fáìlì} other {# àwọn fáìlì}}",
+    "m365PlanGroupIndexable": "Yóò wọ àkópọ",
+    "m365PlanGroupNeedsPreparation": "Nílò ṣètò",
+    "m365PlanGroupSkipped": "Fo kọjá",
+    "m365PlanPreparationHint": "àwòrán/orin/fídíò — kò tí ì wọ àkópọ",
+    "m365PlanMoreRows": "…àti {count} míì",
+    "m365ItemStatus": {
+      "pending": "níbẹ̀ lásán",
+      "indexed": "ti ṣàkóso",
+      "failed": "kuna",
+      "noText": "kò gba ọ̀rọ̀",
+      "missing": "kò sí"
+    },
+    "m365SkipReason": {
+      "unsupported": "irú tí a kò gbà",
+      "tooLarge": "ju 25 MB lọ",
+      "disallowedType": "irú tí a fi dena (executable/archive)",
+      "malware": "Microsoft fi sọ pé kó dáàbò bo",
+      "zeroBytes": "fáìlì òfo",
+      "excluded": "kò sí nínú àyẹ̀wọ̀",
+      "typeFilter": "kò sí nínu aṣàyẹ̀wò irú fáìlì"
+    },
+    "localAdminGroup": {
+      "agents": "Àjánilọ́rùn",
+      "promptAgents": "Àjánilọ́rùn àṣẹ",
+      "m365Agents": "Microsoft 365 àjánilọ́rùn",
+      "orgAgents": "Àjánilọ́rùn ìmọ̀",
+      "guides": "Ìtọ́sọ́nà",
+      "connectors": "Asopọ",
+      "datasets": "Àkọọlẹ̀ mápu",
+      "unknown": "Ti yàn sẹ̀yìn ṣùgbọ́n a kò rí"
+    },
+    "localAdminGroupUnavailable": "Àkójọ yìí kò sí láìpẹ́ — a fi àyípadà tó wà sílẹ̀.",
+    "localAdminBuiltIn": "tí wọ́n dá sínú rẹ̀",
+    "localAdminSummary": "{count, plural, one {# àyípadà} other {# àyípadà}}: {names}",
+    "localAdminSummaryMore": "{names} àti {more} míì",
+    "localAdminNoDelegations": "Kò sí àyípadà kankan títí di báyìí — alákóso abẹ́lẹ̀ tó kò ní àjánilọ́rùn lè rí àgbègbè alákóso nìkan.",
+    "localAdminSelectedCount": "{selected} nínú {total} ti yàn",
+    "localAdminCopyFrom": "Dá àtẹ̀jáde láti",
+    "localAdminClearAll": "Ko gbogbo rẹ̀ kúrò",
+    "localAdminSelectGroup": "Yàn gbogbo",
+    "localAdminClearGroup": "Ko kúrò",
+    "localAdminSearchPlaceholder": "Wá àjánilọ́rùn, ìtọ́sọ́nà, asopọ…",
+    "localAdminDuplicateEmail": "Ìmélì yìí wà lẹ́ẹ̀kan ṣáájú — darapọ̀ méjèèjì pọ̀.",
+    "localAdminExpand": "Fi àyípadà hàn",
+    "localAdminCollapse": "Pa àyípadà mọ́",
+    "localAdminDiscard": "Fagilé àwọn ayipada",
+    "m365AgentRefresh": "Túnṣe",
+    "m365AgentRefreshHint": "Gba àwọn fáìlì tí a fi kún, rọ́pò tàbí yọ láti ìgbà tó gbẹ̀yìn — a kì yíyọ fáìlì tó kò yípadà. Jọ̀wọ́, jẹ́ kó tab yii ṣí.",
+    "m365AgentReindexAll": "Ṣàtún-ìṣàkóso gbogbo",
+    "m365AgentRefreshProgress": "Ìtúnṣe — {done} nínú {total} {total, plural, one {ìwé aṣẹ} other {awọn ìwé aṣẹ}} ti yípadà…",
+    "m365AgentRefreshDone": "Ìtúnṣe parí: {added} fi kún, {modified} ṣe àtúnṣe, {removed} yọ, {failed} ṣe aṣìṣe.",
+    "m365ChangesChecking": "Ìyípadà sí Microsoft 365 láti ìgbà àkọ́kọ́ ti wò…",
+    "m365ChangesFailed": "A kò lè ṣàyẹ̀wò ìyípadà pẹ̀lú àkọọlẹ̀ Microsoft 365 rẹ.",
+    "m365ChangesNeverIndexed": "Àìṣàkóso rí — lọ sí Index lẹ́yìn fipamọ́.",
+    "m365ChangesFound": "{count, plural, one {# ìyípadà} other {# àwọn ìyípadà}} láti ìgbà ìṣàkóso gbẹ̀yìn: {added} fi kún, {modified} ṣe àtúnṣe, {removed} yọ.",
+    "m365ChangesNone": "Kò sí ìyípadà láti ìgbà ìṣàkóso gbẹ̀yìn ({date}).",
+    "m365PrepareButton": "Ṣètò",
+    "m365PrepareOcrButton": "Ṣètò (OCR)",
+    "m365PrepareSaveFirst": "fipamọ́ àjánilọ́rùn láti tẹ̀síwájú",
+    "m365PrepareHintImage": "àwòrán — ipe ìrántí 1",
+    "m365PrepareHintMedia": "~{minutes} ìsẹ́jú ohun lati túmọ̀ sí lẹ́tà",
+    "m365PrepareHintOcr": "kò sí àlẹ́yà ọrọ̀ — OCR pẹ̀lú àwòrán, tó pọ̀ jù 30 ojúewé",
+    "m365PreparePreparing": "Ṣiṣètò…",
+    "m365PreparePending": "N túmọ̀ sí lẹ́tà…",
+    "m365PreparedNote": "ti ṣètò · {kind}",
+    "m365PreparedKind": {
+      "image": "àpejuwe àwòrán",
+      "audio": "àtúnsọ ọrọ̀",
+      "video": "àtúnsọ ọrọ̀",
+      "pdfOcr": "OCR"
+    },
+    "m365PrepareDone": "{name} ti ṣètò ({chars} àmì-ọ̀rọ̀). Ṣiṣe Túnṣe láti ṣàkóso rẹ.",
+    "m365PrepareStarted": "Ìtúmọ̀ {name} ti bẹ̀rẹ̀ ní abẹ́lẹ̀ — jẹ́ kí tab yìí ṣí.",
+    "m365PrepareFailed": "A kò lè ṣètò {name}: {error}",
+    "m365PrepareFailedGeneric": "Ìṣètò ṣìṣe aṣìṣe.",
+    "canonicalKeyLabel": "Bọtini",
+    "copyKey": "Da bọtini pọ́",
+    "agentKeySearchPlaceholder": "Wa àwọn aṣojú, ìtòsọ́nà, aṣàpọ̀… tàbí lẹẹmu bọtini",
+    "agentKeyAddCustom": "Fi \"{key}\" kun gẹ́gẹ́ bí o ṣe kọ",
+    "agentKeyRemove": "Yọ {name} kúrò",
+    "hideAgent": "Pa aṣojú mọ́",
+    "unhideAgent": "Ṣí aṣojú",
+    "hideAgentHint": "Pa aṣojú yìí mọ́ nínú àkójọ alákóso rẹ. Kìí fara kàn àwọn oníṣe tàbí alákóso míì — ìwọ nìkan ni ó kan.",
+    "unhideAgentHint": "Ṣí aṣojú yìí láti fi hàn nínú àkójọ alákóso rẹ lẹ́ẹ̀kan síi.",
+    "hiddenBadge": "Ìfarapamọ́",
+    "hiddenAgentsCount": "{count, plural, one {# aṣojú tí a fi pamọ́} other {# àwọn aṣojú tí a fi pamọ́}}",
+    "hiddenAgentsShowing": "Nṣàfihàn {count, plural, one {# aṣojú tí a fi pamọ́} other {# àwọn aṣojú tí a fi pamọ́}}",
+    "hiddenAgentsShow": "Fi hàn",
+    "hiddenAgentsHide": "Pa mọ́ lẹ́ẹkan síi",
+    "allAgentsHidden": "Gbogbo àwọn aṣojú nibi ti wa ní ìfarapamọ́ fún ọ — lo Fi hàn láti ṣàfihàn wọn."
   },
   "localModels": {
     "title": "Àwòrán àgbéyẹ̀wò agbègbè",
@@ -4232,9 +4391,15 @@
       "connectors": "Àwọn asopọ agbari àti ẹni tó le lò wọn.",
       "guides": "Ìtọ́sọ́nà ara, itumọ̀ ọrọ̀ àti ìbámu.",
       "mapDatasets": "Àwọn àkójọpọ̀ data tí a ti yàn fún iṣẹ́ map.",
-      "localAdmins": "Fi ètò irọrun àṣẹ sí ọwọ́ àwọn mìíràn."
+      "localAdmins": "Fi ètò irọrun àṣẹ sí ọwọ́ àwọn mìíràn.",
+      "workflows": "Ṣí tabi pa àwọn akọ́sẹmọsẹ ìjíròrò fún gbogbo ènìyàn.",
+      "viewAs": "Ṣàyẹ̀wò àpẹẹrẹ bí ẹni tó bójú mu tàbí tó kọlùṣọ́n àìpẹ̀."
     },
-    "openSettings": "Ṣí eto"
+    "openSettings": "Ṣí eto",
+    "area": {
+      "workflows": "Àkọ́sẹmọsẹ",
+      "viewAs": "Wo gẹ́gẹ́ bí"
+    }
   },
   "limits": {
     "title": "Ìdìpọ̀ ìlò",
@@ -4436,7 +4601,8 @@
     "groupSearchNoResults": "Ko si ẹgbẹ kankan ti o ba orukọ yẹn mu.",
     "groupSearchError": "Ṣiṣawari ẹgbẹ kuna. O tun le lẹẹ mọ ID ẹgbẹ si isalẹ.",
     "groupSearchHint": "Tẹ o kere ju lẹta meji lati wa awọn ẹgbẹ ajọ rẹ, tabi lẹẹ mọ ID ẹgbẹ taara. Àtúnṣe yìí kan àwọn ọmọ ẹgbẹ rẹ̀ ní Microsoft Entra.",
-    "groupsFlagOff": "Iwulo lati lo ẹgbẹ ko ti ṣetan fun ayika yi sibẹ. Awọn ibi-afẹde ẹgbẹ to wa tẹlẹ ṣi n ṣiṣẹ."
+    "groupsFlagOff": "Iwulo lati lo ẹgbẹ ko ti ṣetan fun ayika yi sibẹ. Awọn ibi-afẹde ẹgbẹ to wa tẹlẹ ṣi n ṣiṣẹ.",
+    "featureDisabled": "A ko ti muu awọn aala lilo ṣiṣẹ fun ibi fifi sori ẹrọ yii."
   },
   "m365": {
     "connections": {
@@ -4797,5 +4963,149 @@
     "failed": "Kò le pín — kò sí ohun tó dà.",
     "copyFailed": "A kò lè da ìjápọ̀ náà — yan án lókè kí o sì kó o-pamọ́ lọ́wọ́.",
     "lastMessagesCountLabel": "Ìye àwọn ìfiranṣẹ́ tuntun láti kún"
+  },
+  "toolModes": {
+    "webSearch": "Ṣàwárí Ayélujára",
+    "codeInterpreter": "Onítejú kóòdù",
+    "off": "Pà",
+    "auto": "Aifọwọyi",
+    "always": "Nígbà gbogbo",
+    "routingPrivacy": "Ìpamọ̀",
+    "routingAgent": "Azure AI",
+    "agentRoutingNote": "Ìwádìí Azure AI n fi ibeere kọja Azure AI Foundry, ó ṣeé ṣe kí wọ́n pa wọ́n tán.",
+    "learnMore": "Káàkiri síi"
+  },
+  "agentAttach": {
+    "browserTitle": "Àgbẹ̀rẹ́ ayélujára",
+    "browserSubtitle": "Fi àwọn àgbẹ̀rẹ́ ati asopọ sí àjíròrò yìí, tàbí bẹ̀rẹ̀ àjíròrò tuntun pẹ̀lú àgbẹ̀rẹ́. Púpọ̀ nínú wọn ṣiṣẹ́ pẹ̀lú irú àmọ̀ràn tí o yàn.",
+    "searchPlaceholder": "Ṣàwárí àgbẹ̀rẹ́ àti asopọ…",
+    "loading": "N gbìyànjú àgbẹ̀rẹ́…",
+    "noMatches": "Kò sí ohun tó báwí pẹ̀lú àwárí rẹ.",
+    "noAgents": "Kò sí àgbẹ̀rẹ́ lọ́wọ́.",
+    "addToChat": "Fikun àjíròrò yìí",
+    "removeFromChat": "Yọ kuro ní àjíròrò yìí",
+    "newChat": "Àjíròrò tuntun",
+    "attached": "Asopọ̀",
+    "detach": "Yọ asopọ̀",
+    "change": "Ṣàtúnṣe",
+    "browse": "Ṣàwárí àgbẹ̀rẹ́…",
+    "noAgent": "Kò sí àgbẹ̀rẹ́ tó so mọ́",
+    "close": "Pa à",
+    "kind": {
+      "rag": "Ìmọ̀",
+      "prompt": "Ìwà",
+      "m365": "Ìmọ̀ (Microsoft 365)",
+      "org": "Ìmọ̀",
+      "foundry": "Àgbẹ̀rẹ́ Foundry",
+      "connector": "Asopọ"
+    },
+    "semantics": {
+      "your-model": "nlo àmọ̀ràn rẹ",
+      "pinned-model": "àmọ̀ràn tó ṣètò olùṣàkóso",
+      "own-model": "n ṣiṣẹ́ lórí àmọ̀ràn tirẹ"
+    }
+  },
+  "peopleSuggest": {
+    "listLabel": "Awọn imọran lati ọdọ agbari rẹ",
+    "searching": "N ṣe àwádi ilé-iṣẹ rẹ…",
+    "noMatches": "Kò sí ìbámu pẹ̀lú àkójọ orúkọ — o lè tẹ adirẹsi náà sílẹ̀ lọ́wọ́"
+  },
+  "workflowsAdmin": {
+    "title": "Àkọ́sẹmọsẹ",
+    "description": "Mú kó wà ní ṣiṣẹ́ tàbí pa akọ́sẹmọsẹ kọọkan fún gbogbo ẹgbẹ́. Àkọ́sẹmọsẹ tó wa ni àìmọ́ṣẹ́ kò ní farahàn lórí akojọ oúnjé, àti àwọn sẹ́ńfà kọ ló máa forúkọrẹ̀ wọ́lé, paapá jùlọ fún àwọn tó ni ìtọ́kasí sí.",
+    "layeredNote": "Àmọ̀ran LaunchDarkly conversationWorkflows ṣi ń bẹ lori ìpilẹ̀ṣẹ̀: akọ́sẹmọsẹ tí a ti mú ṣiṣẹ́ níbí kìí ṣe pé kó wọ̀lé ayafi ibi tí àmì yìí wa lórí. Kò sí nnkan tí ojú ewé yìí le fi hàn bí àmì náà bá fi pamọ́.",
+    "loading": "N gbìyànjú láti rù ìlànà akọ́sẹmọsẹ…",
+    "loadError": "A kò le rù ìlànà akọ́sẹmọsẹ.",
+    "policyUnavailable": "A kò le ka ìlànà akọ́sẹmọsẹ láti ipamọ. Awọn yíyí yipada ti pamọ dípò wọ́n fi àyọkúrò hàn tí kò le ba a mu ohun tí a gbìmọ̀.",
+    "retry": "Tun gbìyànjú",
+    "enableAll": "Mú gbogbo ṣiṣẹ́",
+    "disableAll": "Pa gbogbo",
+    "enabledLabel": "Ti ṣiṣẹ́",
+    "disabledLabel": "Aìmọ́ṣẹ́",
+    "defaultOnHint": "Àyípadà ti kò bá sí ìlànà fipamọ: ti ṣiṣẹ́.",
+    "defaultOffHint": "Àyípadà ti kò bá sí ìlànà fipamọ: aìmọ́ṣẹ́ — adarí gbọ́dọ̀ ṣiṣẹ́ rẹ ní kedere.",
+    "grantsNote": "Ilana Ifowopamosi àwọn ilẹ̀ amáyédẹrù ní ìdìkà tó pọ̀ fún àwọn oníṣe MSF-USA nínú Ẹ̀ka Ètò tó ní \"grants\" nínú àkọlé iṣẹ́ wọn, tàbí nínú Systems tí àkọlé wọn bá ní \"innovation\". Mímú ṣiṣẹ́ rẹ níbí kò tú ìlànà yìí kálẹ̀ síwájú.",
+    "unsaved": "Ẹ ni ayipada tí a kò tíì fipamọ.",
+    "save": "Fipamọ",
+    "saving": "N ṣiṣẹ́ fipamọ…",
+    "saveSuccess": "Ìlànà akọ́sẹmọsẹ ti fipamọ.",
+    "saveError": "A kò le fi ìlànà akọ́sẹmọsẹ pamọ́.",
+    "conflictError": "Adarí mìíràn ti yí ìlànà padà tele. A ti tun gbà wọlé — jọ̀wọ́ ṣàyẹ̀wò àti fipamọ lẹ́ẹ̀kansi.",
+    "updatedByLine": "Ìkẹhin fipamọ ní ọwọ́ {by} ní {at}.",
+    "neverSaved": "Kò sí ìlànà tí a ti fipamọ sibẹ̀; àwọn àyípadà t'ó wa l'ókè ló wulo."
+  },
+  "viewAs": {
+    "title": "Wo gẹ́gẹ́ bí",
+    "description": "Ṣàyẹ̀wò àpẹẹrẹ ìṣe app fún ipade tirẹ̀ nikan, gẹ́gẹ́ bí ẹni tí ó bójú mu tàbí kọlùṣọ́n àìpẹ̀ tí ìfilọ́lẹ̀ àkọlé onà йилẹ̀ tabi awọn adarí ṣe n pinnu. Idirẹ́ kọ kọ́ yí padà: gbogbo ohun tí o dá ṣi jẹ́ tirẹ̀, àti gbogbo akọmọ àyẹ̀wo orúkọ rẹ wà.",
+    "activeTitle": "Ìṣe 'wo gẹ́gẹ́ bí' n ṣiṣẹ́",
+    "inactiveTitle": "Ìṣe 'wo gẹ́gẹ́ bí' kò ṣiṣẹ́",
+    "sections": {
+      "role": "Iṣẹ́ adarí",
+      "region": "Agbègbè data",
+      "attributes": "Àmì ìwé itọ́kasí",
+      "groups": "Ìjọpọ̀ ẹgbẹ́",
+      "presets": "Tótúntò"
+    },
+    "role": {
+      "global": "Adarí àgbáyé (ìṣẹ́ rẹ gangan)",
+      "local": "Adarí agbègbè",
+      "none": "Olùmúlò àwọ̀n",
+      "localKeysLabel": "Bọtìnì aṣojú tí a fi fún agbègbè",
+      "localKeysHint": "Bọtìnì aṣojú tó tọ́sọ́tọ́ tí adarí agbègbè le ṣe àtúnṣe. Fi silẹ bí ó ṣófo fún adarí agbègbè láìní aṣojú tí a fi fún.",
+      "noneWarning": "Gẹ́gẹ́ bí olùmúlò àwọ̀n, gbogbo apá adarí míì máa sọnù. Ojú ewé yìí ṣi wa níwọ̀le, ati pé ampẹ at'óri app máa n fi abala àbáyọ hàn."
+    },
+    "region": {
+      "actual": "Gẹ́gẹ́ bí otito ({region})",
+      "hint": "Yoo gbe àwọn ìbéèrè rẹ — ati gbogbo ohun tí o kó sórí ẹrọ lakoko ti o n ṣiṣẹ — sí ipamọ agbègbè míì. Yóò ṣiṣẹ ju ?regionOverride= kuki lọ."
+    },
+    "attributes": {
+      "department": "Ẹ̀ka",
+      "companyName": "Ilé-iṣẹ́",
+      "jobTitle": "Ìtòlẹ́ṣẹ",
+      "officeId": "Ọ́fíìsì",
+      "officeActual": "Ọ́fíìsì gidi",
+      "officeNone": "Kò sí ọ́fíìsì",
+      "actualValue": "Gidi: {value}",
+      "actualEmpty": "Gidi: (ofò)",
+      "hint": "Fi aaye kọọkan sílẹ̀ láì kún un lati fi iye gidi rẹ pamọ. Wọ́n lo wọ̀n yìí fún ìlànà ìfọkànsin, iye mímu títọ si àfikún àti ìlànà wọlé."
+    },
+    "groups": {
+      "label": "ID ẹgbẹ́",
+      "placeholder": "ID nkan ẹgbẹ́ Entra kan ní ilà kọọkan",
+      "hint": "Yóò rọ́pò mímu ẹgbẹ́ gidi rẹ fún ìpẹ̀yà yìí — kì í fi kún un — kí o le dá àjoinsí àti àìjọinsí àdánwò."
+    },
+    "presets": {
+      "grantsMember": "Olùkópa ẹgbẹ́ grants",
+      "regularUser": "Olùlò àtìlẹ́yìn",
+      "localAdmin": "Alákóso abẹ́lẹ̀, kò sí aṣojú",
+      "otherRegion": "Agbègbè míì",
+      "hint": "Àwọn àtúnyẹ̀wò ni wọ́nú fọ́ọ̀mù; kò sí ohun tí yóò ṣiṣẹ́ títí tí o fi tẹ Apply."
+    },
+    "apply": "Lọ́wọ́ sí i àti túnṣe",
+    "applying": "Nlọ́wọ́ sí i…",
+    "clear": "Jade kúrò nínú view-as",
+    "clearing": "N jade…",
+    "reset": "Tún fọ́ọ̀mù ṣe",
+    "nothingToApply": "Yàn o kere tan àtúnṣe kan kí o tó lo.",
+    "applyError": "A kò le fi View-as ṣiṣẹ́: {error}",
+    "clearError": "A kò le yọ View-as kúrò: {error}",
+    "loadError": "A kò le gbé ipo view-as wọlé.",
+    "retry": "Tun gbìyànjú",
+    "expiresNote": "View-as máa wà títí di wákàtí mẹjọ tàbí títí o fi jáde.",
+    "banner": {
+      "label": "N wo bíi",
+      "adjust": "Ṣàtúnṣe",
+      "exit": "Jade",
+      "role": {
+        "local": "alákóso abẹ́lẹ̀",
+        "none": "olùlò àtìlẹ́yìn"
+      },
+      "region": "agbègbè {region}",
+      "department": "ẹ̀ka \"{value}\"",
+      "companyName": "ilé-iṣẹ́ \"{value}\"",
+      "jobTitle": "ítòlẹ́ṣẹ \"{value}\"",
+      "officeId": "ọ́fíìsì {value}",
+      "groups": "{count, plural, one {# ẹgbẹ́} other {# ẹgbẹ́}}"
+    }
   }
 }

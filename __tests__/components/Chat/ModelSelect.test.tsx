@@ -123,11 +123,10 @@ describe('ModelSelect', () => {
       expect(screen.getByText('Maverick 4')).toBeInTheDocument();
     });
 
-    it('displays search mode toggle for all models', () => {
+    it('renders no search-mode controls (they moved to the capabilities tray)', () => {
       render(<ModelSelect />);
 
-      // All models should have Search Mode toggle
-      expect(screen.getByText('Search Mode')).toBeInTheDocument();
+      expect(screen.queryByText('Search Mode')).toBeNull();
     });
 
     it('displays provider icons for each model', () => {
@@ -208,8 +207,8 @@ describe('ModelSelect', () => {
     });
   });
 
-  describe('Search Mode Toggle', () => {
-    it('displays Search Mode toggle for models with agent capabilities', () => {
+  describe('Search Mode Controls (moved to capabilities tray)', () => {
+    it('renders neither search-mode nor agent-routing controls in the picker', () => {
       mockUseConversations.selectedConversation = {
         id: 'conv-1',
         name: 'Test',
@@ -220,52 +219,15 @@ describe('ModelSelect', () => {
         prompt: '',
         temperature: 0.7,
         folderId: null,
-        defaultSearchMode: SearchMode.INTELLIGENT, // INTELLIGENT mode
+        defaultSearchMode: SearchMode.INTELLIGENT,
       };
 
       render(<ModelSelect />);
 
-      // Should show Search Mode by default
-      expect(screen.getByText('Search Mode')).toBeInTheDocument();
-      // Azure AI Agent Mode toggle should be nested inside Search Mode
-      expect(screen.getByText(/Azure AI Agent Mode/)).toBeInTheDocument();
-    });
-
-    it('displays Search Mode toggle for all models', () => {
-      mockUseConversations.selectedConversation = {
-        id: 'conv-1',
-        name: 'Test',
-        messages: [],
-        model: OpenAIModels[OpenAIModelID.DEEPSEEK_V3_1],
-        prompt: '',
-        temperature: 0.7,
-        folderId: null,
-      };
-
-      render(<ModelSelect />);
-
-      // All models should have Search Mode toggle
-      expect(screen.getByText('Search Mode')).toBeInTheDocument();
-    });
-
-    it('displays search mode descriptions correctly', () => {
-      mockUseConversations.selectedConversation = {
-        id: 'conv-1',
-        name: 'Test',
-        messages: [],
-        model: OpenAIModels[OpenAIModelID.LLAMA_4_MAVERICK],
-        prompt: '',
-        temperature: 0.7,
-        folderId: null,
-      };
-
-      render(<ModelSelect />);
-
-      // Should show Search Mode with description
-      expect(screen.getByText('Search Mode')).toBeInTheDocument();
-      expect(
-        screen.getByText(/Will use web search when needed/),
-      ).toBeInTheDocument();
+      // Phase 2 consolidation: the picker picks models; search and
+      // interpreter defaults live in ToolModeControls (composer tray).
+      expect(screen.queryByText('Search Mode')).toBeNull();
+      expect(screen.queryByText(/Azure AI Agent Mode/)).toBeNull();
     });
   });
 
@@ -784,7 +746,7 @@ describe('ModelSelect', () => {
       type: 'prompt',
     };
 
-    it('maps a prompt agent to an org- picker model and selecting it sets conversation.bot', async () => {
+    it('selecting a prompt agent ATTACHES it (bot only) and leaves the model alone', async () => {
       mockFoundryAgents.foundryAgents = [promptAgent];
 
       render(<ModelSelect />);
@@ -799,28 +761,18 @@ describe('ModelSelect', () => {
           expect.objectContaining({
             // botId is the only key the server uses to resolve the persona.
             bot: 'prompt-abc123def456',
-            model: expect.objectContaining({
-              id: 'org-prompt-abc123def456',
-              name: 'Policy Assistant',
-              description: 'Answers policy questions',
-              isOrganizationAgent: true,
-            }),
           }),
         );
       });
 
-      // The mapped model must NOT carry Foundry routing fields — an agentId
-      // would promote the request into the Foundry agent execution path —
-      // while the cosmetic base-model spread keeps real token limits.
+      // Attach semantics (agent/model decoupling): the conversation keeps
+      // its real model — no synthesized org- model is written, so nothing
+      // here can carry Foundry routing fields or become the default model.
       const updates = mockUseConversations.updateConversation.mock.calls.at(
         -1,
       )![1] as Partial<Conversation>;
-      expect(updates.model?.agentId).toBeUndefined();
-      expect(updates.model?.agentSource).toBeUndefined();
-      expect(updates.model?.foundryEndpoint).toBeUndefined();
-      expect(updates.model?.tokenLimit).toBe(
-        OpenAIModels[OpenAIModelID.GPT_4_1].tokenLimit,
-      );
+      expect(updates.model).toBeUndefined();
+      expect(mockUseSettings.setDefaultModelId).not.toHaveBeenCalled();
     });
 
     it('gates prompt agents behind exploreBots like other org-managed agents', () => {

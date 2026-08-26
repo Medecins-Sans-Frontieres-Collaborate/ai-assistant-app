@@ -19,9 +19,20 @@ export const AGENT_ACCESS_GENERATION_PATH = `${AGENT_ACCESS_PREFIX}generation.js
 export const AGENT_ACCESS_PROMPT_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}prompt-agents/`;
 export const AGENT_ACCESS_CONNECTORS_PREFIX = `${AGENT_ACCESS_PREFIX}connectors/`;
 export const AGENT_ACCESS_GUIDES_PREFIX = `${AGENT_ACCESS_PREFIX}guides/`;
+export const AGENT_ACCESS_CATALOG_OAUTH_PREFIX = `${AGENT_ACCESS_PREFIX}catalog-oauth/`;
 export const AGENT_ACCESS_MAP_DATASET_META_PREFIX = `${AGENT_ACCESS_PREFIX}map-datasets/meta/`;
 export const AGENT_ACCESS_MAP_DATASET_DATA_PREFIX = `${AGENT_ACCESS_PREFIX}map-datasets/data/`;
 export const AGENT_ACCESS_M365_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}m365-agents/`;
+/**
+ * Per-agent source manifests (docs/M365_SEVENTH_PASS_RECURSIVE_AGENT_SOURCES.md)
+ * live OUTSIDE the agents prefix: listAllM365Agents rejects (loudly) any blob
+ * under m365-agents/ whose name isn't `<id>.json`.
+ */
+export const AGENT_ACCESS_M365_MANIFESTS_PREFIX = `${AGENT_ACCESS_PREFIX}m365-agent-manifests/`;
+/** One resumable index job per agent (seventh pass, phase 2). */
+export const AGENT_ACCESS_M365_JOBS_PREFIX = `${AGENT_ACCESS_PREFIX}m365-agent-jobs/`;
+/** Per-file prepared (derived) text — phase 4: `<agentId>/index.json` + `<agentId>/<itemId>.json`. */
+export const AGENT_ACCESS_M365_DERIVED_PREFIX = `${AGENT_ACCESS_PREFIX}m365-agent-derived/`;
 export const AGENT_ACCESS_ORG_AGENTS_PREFIX = `${AGENT_ACCESS_PREFIX}org-agents/`;
 
 /**
@@ -46,6 +57,14 @@ export const MCP_CONNECTOR_SOURCE = 'mcp-connector';
  * local-admin delegation, and history machinery for free.
  */
 export const GUIDE_SOURCE = 'guide';
+
+/**
+ * Pseudo-source for admin-configured CATALOG OAuth apps in canonical keys
+ * (`catalog-oauth::<catalogKey>`). These records carry the deployment's
+ * OAuth client id/secret for a curated catalog connector (github, asana, …)
+ * so admins can configure them in Admin → Connectors instead of env vars.
+ */
+export const CATALOG_OAUTH_SOURCE = 'catalog-oauth';
 
 /**
  * Pseudo-source for admin-curated map datasets in canonical keys
@@ -164,6 +183,20 @@ export type PromptAgentHistoryEntry = z.infer<
   typeof PromptAgentHistoryEntrySchema
 >;
 
+/** Per-tier counts from the last plan/index run of a source. */
+export const M365SourceCountsSchema = z.object({
+  indexable: z.number().default(0),
+  needsPreparation: z.number().default(0),
+  skipped: z.number().default(0),
+  /** Bytes of the indexable files (early budget signal). */
+  bytes: z.number().default(0),
+  indexed: z.number().optional(),
+  failed: z.number().optional(),
+  noText: z.number().optional(),
+  missing: z.number().optional(),
+});
+export type M365SourceCounts = z.infer<typeof M365SourceCountsSchema>;
+
 /**
  * One OneDrive/SharePoint source backing an M365 agent. Read-side permissive
  * per the schema-evolution rule.
@@ -186,8 +219,260 @@ export const M365AgentSourceSchema = z.object({
   /** Chunks currently in the search index for this source. */
   indexedChunks: z.number().optional(),
   error: z.string().optional(),
+  /**
+   * Folder sources only: include the whole subtree (seventh pass). Records
+   * written before recursion existed default to the old immediate-children
+   * snapshot semantics until an admin re-saves them; the editor defaults
+   * NEW folders to true.
+   */
+  recursive: z.boolean().default(false),
+  /**
+   * Graph item ids (subfolders or files) the admin unchecked in the plan
+   * view. Excluding a folder excludes its subtree.
+   */
+  excludedItemIds: z.array(z.string()).default([]),
+  /**
+   * Lowercase extensions without the dot; when set, only matching files are
+   * indexed (others are reported as skipped by the type filter).
+   */
+  includeExtensions: z.array(z.string()).optional(),
+  /** Aggregate of the last plan/index run, for the admin list and editor. */
+  counts: M365SourceCountsSchema.optional(),
 });
 export type M365AgentSource = z.infer<typeof M365AgentSourceSchema>;
+
+/**
+ * Per-document classification made by the planner BEFORE any download
+ * (docs/M365_SEVENTH_PASS_RECURSIVE_AGENT_SOURCES.md §3). `indexable` files
+ * are processed by the index run; `needsPreparation` files (images,
+ * audio/video) wait for an explicit per-file preparation step; `skipped`
+ * files carry the reason and never count toward the cap.
+ */
+export const M365ManifestTierSchema = z.enum([
+  'indexable',
+  'needsPreparation',
+  'skipped',
+]);
+export type M365ManifestTier = z.infer<typeof M365ManifestTierSchema>;
+
+export const M365ManifestSkipReasonSchema = z.enum([
+  'unsupported',
+  'tooLarge',
+  'disallowedType',
+  'malware',
+  'zeroBytes',
+  'excluded',
+  'typeFilter',
+]);
+export type M365ManifestSkipReason = z.infer<
+  typeof M365ManifestSkipReasonSchema
+>;
+
+/**
+ * Outcome of the index run for one manifest item. `processing` only ever
+ * appears inside a job record (an item claimed by a step); the manifest
+ * written at the end maps any leftover back to `pending`.
+ */
+export const M365ManifestItemStatusSchema = z.enum([
+  'pending',
+  'processing',
+  'indexed',
+  'failed',
+  'noText',
+  'missing',
+]);
+export type M365ManifestItemStatus = z.infer<
+  typeof M365ManifestItemStatusSchema
+>;
+
+/** How a file that can't be extracted directly was turned into text. */
+export const M365PreparationKindSchema = z.enum([
+  'image',
+  'audio',
+  'video',
+  'pdfOcr',
+]);
+export type M365PreparationKind = z.infer<typeof M365PreparationKindSchema>;
+
+/** Stamped on a manifest item when its derived text matches its eTag. */
+export const M365PreparedInfoSchema = z.object({
+  eTag: z.string(),
+  kind: M365PreparationKindSchema,
+  preparedAt: z.string(),
+  model: z.string().optional(),
+  chars: z.number().optional(),
+});
+export type M365PreparedInfo = z.infer<typeof M365PreparedInfoSchema>;
+
+export const M365ManifestItemSchema = z.object({
+  itemId: z.string().min(1),
+  driveId: z.string().min(1),
+  name: z.string(),
+  /** Folder path relative to the source folder ("" at the source root). */
+  path: z.string().default(''),
+  /** Graph id of the containing folder (the source itself at its root). */
+  parentItemId: z.string().default(''),
+  size: z.number().default(0),
+  mimeType: z.string().optional(),
+  eTag: z.string().optional(),
+  webUrl: z.string().default(''),
+  lastModified: z.string().optional(),
+  tier: M365ManifestTierSchema,
+  reason: M365ManifestSkipReasonSchema.optional(),
+  /**
+   * Present when the index run should read this item's prepared text
+   * instead of extracting the file (phase 4). Such an item is `indexable`
+   * whatever the classifier said.
+   */
+  prepared: M365PreparedInfoSchema.optional(),
+  status: M365ManifestItemStatusSchema.optional(),
+  indexedChunks: z.number().optional(),
+  error: z.string().optional(),
+});
+export type M365ManifestItem = z.infer<typeof M365ManifestItemSchema>;
+
+/**
+ * The per-agent index of prepared files (phase 4). One small blob the
+ * planner reads to flip prepared files to `indexable`; the text itself
+ * lives beside it, one blob per item. A `pending` entry tracks a chunked
+ * transcription job the admin's browser is still polling.
+ */
+export const M365DerivedIndexEntrySchema = M365PreparedInfoSchema.extend({
+  name: z.string().default(''),
+});
+export type M365DerivedIndexEntry = z.infer<typeof M365DerivedIndexEntrySchema>;
+
+export const M365DerivedPendingSchema = z.object({
+  jobId: z.string(),
+  eTag: z.string(),
+  kind: M365PreparationKindSchema,
+  name: z.string().default(''),
+  startedAt: z.string(),
+  startedBy: z.string(),
+});
+export type M365DerivedPending = z.infer<typeof M365DerivedPendingSchema>;
+
+export const M365DerivedIndexSchema = z.object({
+  version: z.literal(1),
+  agentId: z.string().min(1),
+  updatedAt: z.string(),
+  items: z.record(z.string(), M365DerivedIndexEntrySchema).default({}),
+  pending: z.record(z.string(), M365DerivedPendingSchema).default({}),
+});
+export type M365DerivedIndex = z.infer<typeof M365DerivedIndexSchema>;
+
+export const M365DerivedTextSchema = z.object({
+  version: z.literal(1),
+  agentId: z.string().min(1),
+  itemId: z.string().min(1),
+  eTag: z.string(),
+  kind: M365PreparationKindSchema,
+  preparedAt: z.string(),
+  model: z.string().optional(),
+  text: z.string(),
+});
+export type M365DerivedText = z.infer<typeof M365DerivedTextSchema>;
+
+/** A folder discovered under a source — the plan view's tree nodes. */
+export const M365ManifestFolderSchema = z.object({
+  itemId: z.string().min(1),
+  name: z.string(),
+  path: z.string().default(''),
+  parentItemId: z.string().default(''),
+});
+export type M365ManifestFolder = z.infer<typeof M365ManifestFolderSchema>;
+
+export const M365ManifestSourceSchema = z.object({
+  sourceId: z.string().min(1),
+  /** Enumeration hit the ceiling — the listing is incomplete. */
+  truncated: z.boolean().default(false),
+  /** Graph delta link captured by the plan, for incremental refresh. */
+  deltaLink: z.string().optional(),
+  folders: z.array(M365ManifestFolderSchema).default([]),
+  items: z.array(M365ManifestItemSchema).default([]),
+});
+export type M365ManifestSource = z.infer<typeof M365ManifestSourceSchema>;
+
+/**
+ * The per-agent manifest: what the last index run saw under every source
+ * and what it did with each file. Written by the index route only; read by
+ * the editor (per-item outcomes) and by the layer-2 trim (which item ids
+ * are indexed under a folder source).
+ */
+export const M365AgentManifestSchema = z.object({
+  version: z.literal(1),
+  agentId: z.string().min(1),
+  updatedAt: z.string(),
+  sources: z.array(M365ManifestSourceSchema).default([]),
+});
+export type M365AgentManifest = z.infer<typeof M365AgentManifestSchema>;
+
+/**
+ * A resumable index job (docs/M365_SEVENTH_PASS_RECURSIVE_AGENT_SOURCES.md
+ * §4). One record per agent at `m365-agent-jobs/<agentId>.json`, mutated
+ * by compare-and-swap: steps claim `pending` items (→ `processing`),
+ * record outcomes, and the last step finalizes (diff-deletes stale
+ * chunks, writes the manifest, stamps the agent record). Because Graph
+ * tokens live only in admin sessions, the admin's browser drives the
+ * steps; a job whose `updatedAt` goes stale is "interrupted" and any
+ * admin holding the key can resume it.
+ */
+export const M365IndexJobStatusSchema = z.enum([
+  'running',
+  'succeeded',
+  'failed',
+  'cancelled',
+]);
+export type M365IndexJobStatus = z.infer<typeof M365IndexJobStatusSchema>;
+
+/** What an incremental refresh found under a source (indexable items). */
+export const M365SourceChangesSchema = z.object({
+  added: z.number().default(0),
+  modified: z.number().default(0),
+  removed: z.number().default(0),
+  unchanged: z.number().default(0),
+});
+export type M365SourceChanges = z.infer<typeof M365SourceChangesSchema>;
+
+export const M365IndexJobSourceSchema = z.object({
+  sourceId: z.string().min(1),
+  /** Refresh jobs: what changed since the last manifest. */
+  changes: M365SourceChangesSchema.optional(),
+  /** Refresh jobs: the listing came from the stored delta link. */
+  incremental: z.boolean().optional(),
+  /** Plan-level verdict; `pending` until finalize decides. */
+  status: z.enum(['pending', 'indexed', 'error', 'missing']).default('pending'),
+  error: z.string().optional(),
+  truncated: z.boolean().default(false),
+  deltaLink: z.string().optional(),
+  folders: z.array(M365ManifestFolderSchema).default([]),
+  items: z.array(M365ManifestItemSchema).default([]),
+});
+export type M365IndexJobSource = z.infer<typeof M365IndexJobSourceSchema>;
+
+export const M365IndexJobSchema = z.object({
+  version: z.literal(1),
+  jobId: z.string().min(1),
+  agentId: z.string().min(1),
+  status: M365IndexJobStatusSchema,
+  startedBy: z.string(),
+  startedAt: z.string(),
+  updatedAt: z.string(),
+  finishedAt: z.string().optional(),
+  /** Resolved at start; every chunk of the run embeds with it. */
+  embeddingDeployment: z.string(),
+  /**
+   * `refresh` (phase 3) re-lists sources incrementally against the last
+   * manifest and only re-processes what changed; `full` re-processes
+   * everything.
+   */
+  mode: z.enum(['full', 'refresh']).default('full'),
+  /** Refresh jobs: change totals across sources. */
+  changes: M365SourceChangesSchema.optional(),
+  sources: z.array(M365IndexJobSourceSchema).default([]),
+  error: z.string().optional(),
+});
+export type M365IndexJob = z.infer<typeof M365IndexJobSchema>;
 
 /**
  * An M365 file-backed RAG agent (docs/M365_SECOND_PASS_AGENTS_DESIGN.md):
@@ -398,6 +683,41 @@ export const McpConnectorHistoryEntrySchema = z.object({
 });
 export type McpConnectorHistoryEntry = z.infer<
   typeof McpConnectorHistoryEntrySchema
+>;
+
+/**
+ * Deployment-level OAuth app for one curated catalog connector, stored so
+ * admins can manage these credentials in Admin → Connectors instead of the
+ * MCP_OAUTH_* env vars (which remain the fallback when no record exists).
+ * The record id IS the MCP_CATALOG key (e.g. 'github'), which also binds the
+ * sealed secret's AAD — catalog keys can never collide with `connector-<hex>`
+ * ids, so the two sealed namespaces stay distinct.
+ */
+export const CatalogOauthAppSchema = z.object({
+  version: z.literal(1),
+  /** The MCP_CATALOG key this app belongs to; immutable. */
+  id: z.string().min(1),
+  clientId: z.string().min(1),
+  /** ALWAYS sealed; never echoed to clients (hasClientSecret only). */
+  clientSecret: SealedSecretSchema.optional(),
+  createdBy: z.string(),
+  createdAt: z.string(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type CatalogOauthApp = z.infer<typeof CatalogOauthAppSchema>;
+
+/** Immutable audit copy for catalog OAuth app writes (null = delete). */
+export const CatalogOauthAppHistoryEntrySchema = z.object({
+  version: z.literal(1),
+  canonicalKey: z.string().min(1),
+  action: z.enum(['upsert', 'delete']),
+  app: CatalogOauthAppSchema.nullable(),
+  updatedBy: z.string(),
+  updatedAt: z.string(),
+});
+export type CatalogOauthAppHistoryEntry = z.infer<
+  typeof CatalogOauthAppHistoryEntrySchema
 >;
 
 export const GuideKindSchema = z.enum([
@@ -749,6 +1069,15 @@ export function guideBlobPath(id: string): string {
 }
 
 /**
+ * `system/agent-access/catalog-oauth/<catalogKey>.json` — a SIBLING of
+ * rules/ for the same reason as the other entity prefixes: listAllRules is
+ * fail-closed, so an alien blob under rules/ would brick every invocation.
+ */
+export function catalogOauthBlobPath(id: string): string {
+  return `${AGENT_ACCESS_CATALOG_OAUTH_PREFIX}${id}.json`;
+}
+
+/**
  * `system/agent-access/map-datasets/meta/<id>.json` and
  * `.../map-datasets/data/<id>.json` — SIBLINGS of rules/ for the same
  * reason as the other entities (listAllRules is fail-closed). Split because
@@ -767,6 +1096,26 @@ export function mapDatasetDataBlobPath(id: string): string {
  * same reason as the other entities: listAllRules is fail-closed, so an
  * alien blob under rules/ would brick every Foundry invocation.
  */
+export function m365AgentDerivedIndexBlobPath(agentId: string): string {
+  return `${AGENT_ACCESS_M365_DERIVED_PREFIX}${agentId}/index.json`;
+}
+
+/** Item ids are sanitized to the drive-item alphabet before use in a path. */
+export function m365AgentDerivedTextBlobPath(
+  agentId: string,
+  itemId: string,
+): string {
+  return `${AGENT_ACCESS_M365_DERIVED_PREFIX}${agentId}/${itemId.replace(/[^A-Za-z0-9_=-]/g, '')}.json`;
+}
+
+export function m365AgentIndexJobBlobPath(agentId: string): string {
+  return `${AGENT_ACCESS_M365_JOBS_PREFIX}${agentId}.json`;
+}
+
+export function m365AgentManifestBlobPath(id: string): string {
+  return `${AGENT_ACCESS_M365_MANIFESTS_PREFIX}${id}.json`;
+}
+
 export function m365AgentBlobPath(id: string): string {
   return `${AGENT_ACCESS_M365_AGENTS_PREFIX}${id}.json`;
 }

@@ -285,6 +285,12 @@ export interface ChatBody {
   prompt: string;
   temperature: number;
   botId: string | undefined;
+  /**
+   * Explicit agent-attachment signal: botId was attached to the
+   * conversation via the capabilities tray, independent of the model.
+   * See InputValidator's ChatBodySchema for the server-side contract.
+   */
+  agentAttached?: boolean;
   stream?: boolean;
   threadId?: string; // Azure AI Agent thread ID
   reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high'; // For GPT-5 and o3 models
@@ -404,7 +410,20 @@ export interface Conversation {
   prompt: string;
   temperature: number;
   folderId: string | null;
+  /**
+   * Attached agent id (org/prompt/m365/orgr/static ids; sent as `botId`).
+   * Historically written only as a mirror of an agent-shaped `model.id`;
+   * since the capabilities tray it is independently settable, so a bot
+   * alongside a REAL model means "agent attached to this conversation"
+   * (the request then carries `agentAttached: true`).
+   */
   bot?: string;
+  /**
+   * Real model id remembered when attaching a Foundry agent swapped the
+   * conversation model onto the agent's synthesized entry; detach restores
+   * it. Absent for knowledge/persona attachments (model never changes).
+   */
+  agentPrevModelId?: string;
   createdAt?: string;
   updatedAt?: string;
   threadId?: string; // Azure AI Agent thread ID
