@@ -78,7 +78,14 @@ export function AgentBrowserModal() {
   const tPin = useTranslations('connectorPin');
   const open = useUIStore((s) => s.agentBrowserOpen);
   const setOpen = useUIStore((s) => s.setAgentBrowserOpen);
-  const { agents, isLoading, isError, retry } = useAvailableAgents();
+  const {
+    agents,
+    isLoading,
+    isError,
+    isDiscoveryLoading,
+    isDiscoveryError,
+    retry,
+  } = useAvailableAgents();
   const {
     conversations,
     selectedConversation,
@@ -539,6 +546,26 @@ export function AgentBrowserModal() {
                 );
               })}
             </ul>
+          )}
+          {!isError && isDiscoveryLoading && (
+            <p
+              className="px-3 py-2 text-center text-xs text-gray-500 dark:text-gray-400"
+              aria-live="polite"
+            >
+              {t('discoveryLoading')}
+            </p>
+          )}
+          {!isError && !isDiscoveryLoading && isDiscoveryError && (
+            <p className="flex items-center justify-center gap-2 px-3 py-2 text-xs text-amber-700 dark:text-amber-400">
+              <span>{t('discoveryError')}</span>
+              <button
+                type="button"
+                onClick={retry}
+                className="rounded border border-amber-300 px-2 py-0.5 text-amber-800 hover:bg-amber-100 dark:border-amber-700 dark:text-amber-300 dark:hover:bg-amber-900/40"
+              >
+                {t('retry')}
+              </button>
+            </p>
           )}
         </div>
       </div>
