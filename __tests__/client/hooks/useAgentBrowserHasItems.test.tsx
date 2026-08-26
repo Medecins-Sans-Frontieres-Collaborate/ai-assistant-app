@@ -14,6 +14,8 @@ let foundryAgents: Partial<DiscoveredAgent>[] = [];
 let toolsEnabled = false;
 let isLoadingFoundryAgents = false;
 let isFoundryAgentsError = false;
+let isDiscoveryLoading = false;
+let isDiscoveryError = false;
 
 vi.mock('launchdarkly-react-client-sdk', () => ({
   useFlags: () => ({ exploreBots: true }),
@@ -29,6 +31,8 @@ vi.mock('@/client/hooks/settings/useFoundryAgents', () => ({
     suppressedOrgAgentIds: [],
     isLoadingFoundryAgents,
     isFoundryAgentsError,
+    isDiscoveryLoading,
+    isDiscoveryError,
     retryFoundryAgents: () => Promise.resolve(),
   }),
 }));
@@ -45,6 +49,8 @@ describe('useAgentBrowserHasItems', () => {
     toolsEnabled = false;
     isLoadingFoundryAgents = false;
     isFoundryAgentsError = false;
+    isDiscoveryLoading = false;
+    isDiscoveryError = false;
     useSettingsStore.setState({
       mcpServers: [],
       m365Connected: false,
@@ -94,11 +100,32 @@ describe('useAgentBrowserAvailability', () => {
     toolsEnabled = false;
     isLoadingFoundryAgents = false;
     isFoundryAgentsError = false;
+    isDiscoveryLoading = false;
+    isDiscoveryError = false;
     useSettingsStore.setState({
       mcpServers: [],
       m365Connected: false,
       customAgentSources: [],
     } as Partial<SettingsState>);
+  });
+
+  it('stays "loading" while only Foundry discovery is still running', () => {
+    isDiscoveryLoading = true;
+    const { result } = renderHook(() => useAgentBrowserAvailability());
+    expect(result.current.status).toBe('loading');
+  });
+
+  it('is "ready" from the fast half alone while Foundry discovery still runs', () => {
+    isDiscoveryLoading = true;
+    foundryAgents = [{ id: 'prompt-1', type: 'prompt', name: 'Beta Persona' }];
+    const { result } = renderHook(() => useAgentBrowserAvailability());
+    expect(result.current.status).toBe('ready');
+  });
+
+  it('treats a Foundry-only failure as "empty" (the browser shows a retry line), not "error"', () => {
+    isDiscoveryError = true;
+    const { result } = renderHook(() => useAgentBrowserAvailability());
+    expect(result.current.status).toBe('empty');
   });
 
   it('is "loading" (never "empty") while discovery runs with nothing known', () => {

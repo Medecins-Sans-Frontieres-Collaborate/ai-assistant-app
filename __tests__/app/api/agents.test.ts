@@ -4,6 +4,7 @@ import { PROMPT_AGENT_SOURCE } from '@/lib/services/agentAccess/types';
 
 import { parseJsonResponse } from './helpers';
 
+import { GET as foundryGET } from '@/app/api/agents/foundry/route';
 import { GET } from '@/app/api/agents/route';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -66,8 +67,22 @@ const ENDPOINT_B = 'https://acct.services.ai.azure.com/api/projects/proj2';
 
 const USER_MAIL = 'user@example.com';
 
-function request(): NextRequest {
+/**
+ * The existing discovery-filter tests exercise the legacy COMBINED payload
+ * (`?include=foundry`), which the fast route still serves for one release.
+ */
+function request(extra = ''): NextRequest {
+  return new NextRequest(
+    `http://localhost:3000/api/agents?include=foundry${extra ? '&' + extra : ''}`,
+  );
+}
+function fastRequest(): NextRequest {
   return new NextRequest('http://localhost:3000/api/agents');
+}
+function foundryRequest(extra = ''): NextRequest {
+  return new NextRequest(
+    `http://localhost:3000/api/agents/foundry${extra ? '?' + extra : ''}`,
+  );
 }
 
 describe('GET /api/agents — access-control discovery filter', () => {
@@ -431,8 +446,81 @@ describe('GET /api/agents — access-control discovery filter', () => {
   });
 
   it('refresh clears only the caller’s cache, never the whole replica', async () => {
-    await GET(new NextRequest('http://localhost:3000/api/agents?refresh=1'));
+    await GET(request('refresh=1'));
     expect(clearCacheForUser).toHaveBeenCalledTimes(1);
     expect(clearCache).not.toHaveBeenCalled();
+  });
+
+  describe('split routes', () => {
+    it('fast route serves app-defined agents without touching OBO or Foundry', async () => {
+      accessIsEnabled.mockReturnValue(true);
+      accessGetPromptAgents.mockReturnValue([
+        { id: 'pa-1', name: 'Travel Advisor', description: 'd' },
+      ]);
+      const response = await GET(fastRequest());
+      const body = await response.json();
+      expect(response.status).toBe(200);
+      expect(body.agents.map((a: { id: string }) => a.id)).toEqual(['pa-1']);
+      expect(body.regionalPath).toBeNull();
+      expect(getAccessTokenForOBO).not.toHaveBeenCalled();
+      expect(listUserAgents).not.toHaveBeenCalled();
+      expect(response.headers.get('Server-Timing')).toMatch(/groups;dur=/);
+    });
+
+    it('foundry route discovers, filters, anchors endpoints and reports availability', async () => {
+      accessIsEnabled.mockReturnValue(true);
+      accessEvaluate.mockImplementation(
+        ({ agentName }: { agentName: string }) => ({
+          decision: agentName === 'agent-b' ? 'deny' : 'allow',
+          reason: 'rule',
+        }),
+      );
+      const response = await foundryGET(foundryRequest());
+      const body = await response.json();
+      expect(response.status).toBe(200);
+      expect(body.unavailable).toBe(false);
+      expect(
+        body.agents.map((a: { agentName: string }) => a.agentName),
+      ).toEqual(['agent-a']);
+      expect(body.regionalPath).toBe(REGIONAL_PATH);
+      expect(cacheUserAgentEndpoint).toHaveBeenCalledWith(
+        USER_MAIL,
+        'agent-a',
+        REGIONAL_PATH,
+        ENDPOINT_A,
+      );
+      expect(cacheUserAgentEndpoint).not.toHaveBeenCalledWith(
+        USER_MAIL,
+        'agent-b',
+        REGIONAL_PATH,
+        ENDPOINT_B,
+      );
+      expect(accessGetPromptAgents).not.toHaveBeenCalled();
+      expect(response.headers.get('Server-Timing')).toMatch(/discovery;dur=/);
+    });
+
+    it('foundry route reports unavailable (not empty) when OBO fails in production', async () => {
+      const previous = process.env.NODE_ENV;
+      (process.env as { NODE_ENV?: string }).NODE_ENV = 'production';
+      getAccessTokenForOBO.mockResolvedValue(null);
+      try {
+        const body = await (await foundryGET(foundryRequest())).json();
+        expect(body).toMatchObject({ agents: [], unavailable: true });
+        expect(listUserAgents).not.toHaveBeenCalled();
+      } finally {
+        (process.env as { NODE_ENV?: string }).NODE_ENV = previous;
+      }
+    });
+
+    it('foundry route refresh clears only the caller’s cache', async () => {
+      await foundryGET(foundryRequest('refresh=1'));
+      expect(clearCacheForUser).toHaveBeenCalledWith(USER_MAIL);
+      expect(clearCache).not.toHaveBeenCalled();
+    });
+
+    it('foundry route 401s without a session', async () => {
+      mockAuth.mockResolvedValue(null);
+      expect((await foundryGET(foundryRequest())).status).toBe(401);
+    });
   });
 });

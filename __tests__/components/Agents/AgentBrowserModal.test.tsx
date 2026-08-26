@@ -38,6 +38,8 @@ const AGENTS: AvailableAgent[] = [
 
 const availableState = vi.hoisted(() => ({
   isError: false,
+  isDiscoveryLoading: false,
+  isDiscoveryError: false,
   retry: vi.fn(),
   empty: false,
 }));
@@ -47,6 +49,8 @@ vi.mock('@/client/hooks/settings/useAvailableAgents', () => ({
     agents: availableState.empty ? [] : AGENTS,
     isLoading: false,
     isError: availableState.isError,
+    isDiscoveryLoading: availableState.isDiscoveryLoading,
+    isDiscoveryError: availableState.isDiscoveryError,
     retry: availableState.retry,
   }),
   findAttachedAgent: (
@@ -82,6 +86,8 @@ describe('AgentBrowserModal', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     availableState.isError = false;
+    availableState.isDiscoveryLoading = false;
+    availableState.isDiscoveryError = false;
     availableState.empty = false;
     selectedConversation = { id: 'conv-1', model: { id: 'gpt-5.2' } } as never;
     setServers([]);
@@ -97,6 +103,23 @@ describe('AgentBrowserModal', () => {
       screen.getByText(/Your agents couldn't be loaded just now/),
     ).toBeInTheDocument();
     expect(screen.queryByText('No agents available.')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
+    expect(availableState.retry).toHaveBeenCalledTimes(1);
+  });
+
+  it('shows the loaded rows with a footer while Foundry discovery is still running', () => {
+    availableState.isDiscoveryLoading = true;
+    render(<AgentBrowserModal />);
+    expect(screen.getByText('Looking for Foundry agents…')).toBeInTheDocument();
+    expect(screen.getAllByRole('option').length).toBeGreaterThan(0);
+  });
+
+  it('offers a retry line when only Foundry discovery failed', () => {
+    availableState.isDiscoveryError = true;
+    render(<AgentBrowserModal />);
+    expect(
+      screen.getByText("Foundry agents couldn't be loaded."),
+    ).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
     expect(availableState.retry).toHaveBeenCalledTimes(1);
   });
