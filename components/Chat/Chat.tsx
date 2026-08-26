@@ -36,6 +36,7 @@ import { ConfirmDialog } from '@/components/UI/ConfirmDialog';
 
 import { ChatError } from './ChatError';
 import { ChatInput } from './ChatInput';
+import { PasteOptionsMenu } from './ChatInput/PasteOptionsMenu';
 import { ChatMessages } from './ChatMessages';
 import { ChatTopbar } from './ChatTopbar';
 import { EmptyState } from './EmptyState/EmptyState';
@@ -438,7 +439,10 @@ export function Chat({
   });
 
   useAutoFocusChatInput({ textareaRef, enabled: !isStreaming });
-  usePasteChatInput({ textareaRef, enabled: !isStreaming });
+  const { pasteChooser } = usePasteChatInput({
+    textareaRef,
+    enabled: !isStreaming,
+  });
 
   const { clearConversation } = useClearConversation();
 
@@ -837,6 +841,14 @@ export function Chat({
             stopConversationRef={stopConversationRef}
           />
         )}
+
+        {/* Ctrl/Cmd+Shift+V "paste as…" chooser, anchored to the composer */}
+        <PasteOptionsMenu
+          options={pasteChooser?.options ?? null}
+          textareaRef={textareaRef}
+          onSelect={(id) => pasteChooser?.select(id)}
+          onDismiss={() => pasteChooser?.dismiss()}
+        />
 
         {/* Model Selection Modal */}
         {isModelSelectOpen && (
