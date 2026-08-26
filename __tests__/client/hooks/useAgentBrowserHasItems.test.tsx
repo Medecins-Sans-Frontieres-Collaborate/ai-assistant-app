@@ -1,6 +1,9 @@
 import { renderHook } from '@testing-library/react';
 
-import { useAgentBrowserHasItems } from '@/client/hooks/settings/useAvailableAgents';
+import {
+  useAgentBrowserAvailability,
+  useAgentBrowserHasItems,
+} from '@/client/hooks/settings/useAvailableAgents';
 
 import type { DiscoveredAgent } from '@/lib/services/agents/AgentDiscoveryService';
 
@@ -9,6 +12,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 let foundryAgents: Partial<DiscoveredAgent>[] = [];
 let toolsEnabled = false;
+let isLoadingFoundryAgents = false;
+let isFoundryAgentsError = false;
 
 vi.mock('launchdarkly-react-client-sdk', () => ({
   useFlags: () => ({ exploreBots: true }),
@@ -22,7 +27,9 @@ vi.mock('@/client/hooks/settings/useFoundryAgents', () => ({
   useFoundryAgents: () => ({
     foundryAgents,
     suppressedOrgAgentIds: [],
-    isLoadingFoundryAgents: false,
+    isLoadingFoundryAgents,
+    isFoundryAgentsError,
+    retryFoundryAgents: () => Promise.resolve(),
   }),
 }));
 
@@ -36,6 +43,8 @@ describe('useAgentBrowserHasItems', () => {
   beforeEach(() => {
     foundryAgents = [];
     toolsEnabled = false;
+    isLoadingFoundryAgents = false;
+    isFoundryAgentsError = false;
     useSettingsStore.setState({
       mcpServers: [],
       m365Connected: false,
@@ -76,5 +85,45 @@ describe('useAgentBrowserHasItems', () => {
     useSettingsStore.setState({ m365Connected: true });
     const { result } = renderHook(() => useAgentBrowserHasItems());
     expect(result.current).toBe(false);
+  });
+});
+
+describe('useAgentBrowserAvailability', () => {
+  beforeEach(() => {
+    foundryAgents = [];
+    toolsEnabled = false;
+    isLoadingFoundryAgents = false;
+    isFoundryAgentsError = false;
+    useSettingsStore.setState({
+      mcpServers: [],
+      m365Connected: false,
+      customAgentSources: [],
+    } as Partial<SettingsState>);
+  });
+
+  it('is "loading" (never "empty") while discovery runs with nothing known', () => {
+    isLoadingFoundryAgents = true;
+    const { result } = renderHook(() => useAgentBrowserAvailability());
+    expect(result.current).toEqual({ status: 'loading', hasItems: false });
+  });
+
+  it('is "ready" as soon as anything is known, even mid-load', () => {
+    isLoadingFoundryAgents = true;
+    useSettingsStore.setState({
+      mcpServers: [{ id: 'srv-1', name: 'Asana', enabled: true }],
+    } as Partial<SettingsState>);
+    const { result } = renderHook(() => useAgentBrowserAvailability());
+    expect(result.current.status).toBe('ready');
+  });
+
+  it('is "error" when discovery failed with nothing cached', () => {
+    isFoundryAgentsError = true;
+    const { result } = renderHook(() => useAgentBrowserAvailability());
+    expect(result.current).toEqual({ status: 'error', hasItems: false });
+  });
+
+  it('is "empty" only after discovery finished with nothing', () => {
+    const { result } = renderHook(() => useAgentBrowserAvailability());
+    expect(result.current).toEqual({ status: 'empty', hasItems: false });
   });
 });
