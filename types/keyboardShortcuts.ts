@@ -44,7 +44,8 @@ export type ShortcutAction =
   | 'searchConversations'
   | 'toggleTheme'
   | 'regenerateResponse'
-  | 'copyLastResponse';
+  | 'copyLastResponse'
+  | 'pasteOptions';
 
 /**
  * A keyboard shortcut definition.
