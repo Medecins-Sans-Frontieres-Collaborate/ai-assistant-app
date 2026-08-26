@@ -30,11 +30,7 @@ const DOCUMENT_TYPES: Record<string, string> = {
 export async function GET(request: NextRequest) {
   try {
     const token = request.nextUrl.searchParams.get('token');
-    if (!token) {
-      return NextResponse.json({ error: 'Missing token' }, { status: 400 });
-    }
-
-    const blobPath = verifyDocToken(token);
+    const blobPath = verifyDocToken(token ?? '');
     if (!blobPath) {
       return NextResponse.json(
         { error: 'Invalid or expired token' },
