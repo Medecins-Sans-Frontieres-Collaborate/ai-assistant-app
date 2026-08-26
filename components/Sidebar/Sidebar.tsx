@@ -32,7 +32,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
-import { useAgentBrowserHasItems } from '@/client/hooks/settings/useAvailableAgents';
+import { useAgentBrowserAvailability } from '@/client/hooks/settings/useAvailableAgents';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useFolderManagement } from '@/client/hooks/ui/useFolderManagement';
 import { useUI } from '@/client/hooks/ui/useUI';
@@ -143,9 +143,11 @@ export const Sidebar = memo(function Sidebar() {
   // Agent browser modal state also lives in uiStore — opened from here and
   // from the capabilities tray.
   const setAgentBrowserOpen = useUIStore((s) => s.setAgentBrowserOpen);
-  // Hide the Agents entry entirely when the browser would be empty (no
-  // agents, no connectors, no M365 toolset).
-  const agentBrowserHasItems = useAgentBrowserHasItems();
+  // Agents entry: greyed out while discovery runs, interactive once
+  // anything is known (or discovery failed — the browser offers Retry),
+  // hidden only when the list is KNOWN to be empty. Hiding during the slow
+  // first load read as "the feature is missing" and sent people reloading.
+  const { status: agentBrowserStatus } = useAgentBrowserAvailability();
   const [userPhotoUrl, setUserPhotoUrl] = useState<string | null>(null);
   const [isLoadingPhoto, setIsLoadingPhoto] = useState(true);
   const [showNewChatMenu, setShowNewChatMenu] = useState(false);
@@ -738,15 +740,41 @@ export const Sidebar = memo(function Sidebar() {
           </button>
 
           {/* Agents button - opens the agent browser in launch mode.
-              Hidden when the browser would be empty. */}
-          {agentBrowserHasItems && (
+              Disabled placeholder while loading; hidden only when the
+              browser is known to be empty. */}
+          {agentBrowserStatus !== 'empty' && (
             <button
-              className={`group relative flex items-center w-full rounded-lg text-sm text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-800 transition-all duration-300 ${showChatbar ? 'gap-2 px-3 py-2' : 'justify-center px-2 py-3'}`}
-              onClick={() => setAgentBrowserOpen(true)}
-              title={t('sidebar.agentsTitle')}
+              className={`group relative flex items-center w-full rounded-lg text-sm transition-all duration-300 ${showChatbar ? 'gap-2 px-3 py-2' : 'justify-center px-2 py-3'} ${
+                agentBrowserStatus === 'loading'
+                  ? 'cursor-progress text-gray-400 dark:text-gray-500'
+                  : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-800'
+              }`}
+              onClick={() => {
+                if (agentBrowserStatus !== 'loading') setAgentBrowserOpen(true);
+              }}
+              disabled={agentBrowserStatus === 'loading'}
+              aria-disabled={agentBrowserStatus === 'loading'}
+              aria-busy={agentBrowserStatus === 'loading'}
+              data-agent-browser-status={agentBrowserStatus}
+              title={
+                agentBrowserStatus === 'loading'
+                  ? t('sidebar.agentsLoading')
+                  : agentBrowserStatus === 'error'
+                    ? t('sidebar.agentsLoadError')
+                    : t('sidebar.agentsTitle')
+              }
               aria-label={t('sidebar.agentsEntry')}
             >
-              <IconRobot size={showChatbar ? 16 : 20} className="shrink-0" />
+              <IconRobot
+                size={showChatbar ? 16 : 20}
+                className={`shrink-0 ${agentBrowserStatus === 'loading' ? 'animate-pulse' : ''}`}
+              />
+              {agentBrowserStatus === 'error' && (
+                <span
+                  className="absolute right-2 top-1.5 h-2 w-2 rounded-full bg-amber-500"
+                  aria-hidden="true"
+                />
+              )}
               <span
                 className={`whitespace-nowrap transition-all duration-300 ${showChatbar ? 'opacity-100 w-auto' : 'opacity-0 w-0 overflow-hidden'}`}
               >
