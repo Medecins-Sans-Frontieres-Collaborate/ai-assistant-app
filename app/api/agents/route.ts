@@ -235,22 +235,29 @@ export async function GET(request: NextRequest) {
 
     // Computed up front so every response path — including the discovery
     // early-returns below — serves the (access-filtered) prompt agents.
-    const promptAgentEntries = await getVisiblePromptAgentEntries(
-      session.user.mail,
-    );
-    const m365AgentEntries = await getVisibleM365AgentEntries(
-      session.user.mail,
-    );
-    const orgAgentEntries = await getVisibleOrgAgentEntries(session.user.mail);
+    // These five lookups are independent (each reads the access snapshot /
+    // its own blob listing); running them together instead of one after
+    // another takes seconds off the first load, which is what gates the
+    // sidebar's Agents entry.
+    const [
+      promptAgentEntries,
+      m365AgentEntries,
+      orgAgentEntries,
+      suppressedStaticIds,
+      deniedStaticIds,
+    ] = await Promise.all([
+      getVisiblePromptAgentEntries(session.user.mail),
+      getVisibleM365AgentEntries(session.user.mail),
+      getVisibleOrgAgentEntries(session.user.mail),
+      getSuppressedStaticAgentIds(),
+      getDeniedStaticOrgAgentIds(session.user.mail),
+    ]);
     // Static config ids that admin records currently override or disable,
     // plus the ones an access rule denies THIS user — the client trims the
     // bundled list with this, so a file agent can be retired, replaced or
     // restricted without a deploy.
     const suppressedOrgAgentIds = Array.from(
-      new Set([
-        ...(await getSuppressedStaticAgentIds()),
-        ...(await getDeniedStaticOrgAgentIds(session.user.mail)),
-      ]),
+      new Set([...suppressedStaticIds, ...deniedStaticIds]),
     );
 
     if (allPaths.length === 0) {
