@@ -78,7 +78,7 @@ export function AgentBrowserModal() {
   const tPin = useTranslations('connectorPin');
   const open = useUIStore((s) => s.agentBrowserOpen);
   const setOpen = useUIStore((s) => s.setAgentBrowserOpen);
-  const { agents, isLoading } = useAvailableAgents();
+  const { agents, isLoading, isError, retry } = useAvailableAgents();
   const {
     conversations,
     selectedConversation,
@@ -429,6 +429,17 @@ export function AgentBrowserModal() {
             <p className="px-3 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
               {t('loading')}
             </p>
+          ) : isError && filtered.length === 0 && !query ? (
+            <div className="px-3 py-6 text-center text-sm text-gray-600 dark:text-gray-300">
+              <p>{t('loadError')}</p>
+              <button
+                type="button"
+                onClick={retry}
+                className="mt-3 rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:text-white dark:hover:bg-gray-800"
+              >
+                {t('retry')}
+              </button>
+            </div>
           ) : filtered.length === 0 ? (
             <p className="px-3 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
               {query ? t('noMatches') : t('noAgents')}
