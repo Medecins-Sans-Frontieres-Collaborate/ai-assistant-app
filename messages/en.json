@@ -3270,7 +3270,8 @@
     "searchConversations": "Search conversations",
     "toggleTheme": "Toggle theme",
     "regenerateResponse": "Regenerate response",
-    "copyLastResponse": "Copy last response"
+    "copyLastResponse": "Copy last response",
+    "pasteOptions": "Paste as… (choose text, Markdown, attachment, image or link)"
   },
   "emissions": {
     "tier": {
@@ -4598,6 +4599,18 @@
     "doc": {
       "heading": "Pasted text",
       "pastedLabel": "Pasted"
+    },
+    "options": {
+      "menuLabel": "Paste as…",
+      "insertHeading": "Insert into message",
+      "attachHeading": "Attach",
+      "text": "Plain text",
+      "markdown": "Formatted text (Markdown)",
+      "attachText": "Text file",
+      "attachMarkdown": "Formatted text file (Markdown)",
+      "image": "{count, plural, one {Image} other {# images}}",
+      "link": "Page content from link",
+      "hint": "↑↓ choose · Enter paste · Esc cancel · 1–9 pick"
     },
     "settingsTitle": "Large pastes",
     "settingsToggle": "Turn a large paste into an attachment",
