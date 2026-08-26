@@ -15,6 +15,7 @@ const getDiscoveryPathsForUser = vi.hoisted(() => vi.fn());
 const listUserAgents = vi.hoisted(() => vi.fn());
 const cacheUserAgentEndpoint = vi.hoisted(() => vi.fn());
 const clearCache = vi.hoisted(() => vi.fn());
+const clearCacheForUser = vi.hoisted(() => vi.fn());
 const accessIsEnabled = vi.hoisted(() => vi.fn());
 const accessEnsureFresh = vi.hoisted(() => vi.fn());
 const accessEvaluate = vi.hoisted(() => vi.fn());
@@ -36,6 +37,7 @@ vi.mock('@/lib/services/agents/AgentDiscoveryService', () => ({
       listUserAgents,
       cacheUserAgentEndpoint,
       clearCache,
+      clearCacheForUser,
     }),
   },
 }));
@@ -418,5 +420,19 @@ describe('GET /api/agents — access-control discovery filter', () => {
         .map((a: { id: string }) => a.id);
       expect(ids).toEqual(['m365-indexed0000', 'm365-legacy000000']);
     });
+  });
+
+  it('passes the user as the discovery cache owner', async () => {
+    await GET(request());
+    expect(listUserAgents).toHaveBeenCalled();
+    const [, , , owner] = listUserAgents.mock.calls[0];
+    expect(typeof owner).toBe('string');
+    expect(owner.length).toBeGreaterThan(0);
+  });
+
+  it('refresh clears only the caller’s cache, never the whole replica', async () => {
+    await GET(new NextRequest('http://localhost:3000/api/agents?refresh=1'));
+    expect(clearCacheForUser).toHaveBeenCalledTimes(1);
+    expect(clearCache).not.toHaveBeenCalled();
   });
 });
