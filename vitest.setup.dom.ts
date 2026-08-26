@@ -290,6 +290,8 @@ const mockMessages: Record<string, unknown> = {
     loading: 'Loading agents…',
     loadError:
       "Your agents couldn't be loaded just now. This is usually temporary.",
+    discoveryLoading: 'Looking for Foundry agents…',
+    discoveryError: "Foundry agents couldn't be loaded.",
     retry: 'Try again',
     noMatches: 'Nothing matches your search.',
     noAgents: 'No agents available.',
