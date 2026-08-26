@@ -27,12 +27,20 @@ import { getOrganizationAgents } from '@/lib/organizationAgents';
 export function useAvailableAgents(): {
   agents: AvailableAgent[];
   isLoading: boolean;
+  /** Discovery failed and nothing is cached: the list is unknown, not empty. */
+  isError: boolean;
+  retry: () => void;
 } {
   const { exploreBots } = useFlags();
   const isBotsEnabled = exploreBots !== false;
   const customAgentSources = useSettingsStore((s) => s.customAgentSources);
-  const { foundryAgents, suppressedOrgAgentIds, isLoadingFoundryAgents } =
-    useFoundryAgents();
+  const {
+    foundryAgents,
+    suppressedOrgAgentIds,
+    isLoadingFoundryAgents,
+    isFoundryAgentsError,
+    retryFoundryAgents,
+  } = useFoundryAgents();
 
   const agents = useMemo<AvailableAgent[]>(() => {
     const customSourcePaths = new Set(
@@ -129,7 +137,47 @@ export function useAvailableAgents(): {
     return deduped;
   }, [isBotsEnabled, foundryAgents, customAgentSources, suppressedOrgAgentIds]);
 
-  return { agents, isLoading: isLoadingFoundryAgents };
+  return {
+    agents,
+    isLoading: isLoadingFoundryAgents,
+    isError: isFoundryAgentsError === true,
+    retry: () => void retryFoundryAgents?.(),
+  };
+}
+
+export type AgentBrowserAvailability = 'loading' | 'ready' | 'empty' | 'error';
+
+/**
+ * What an entry point to the agent browser should do right now:
+ *
+ *   ready   — at least one row is known: show and enable
+ *   loading — discovery is still running and nothing is known yet: show a
+ *             disabled placeholder (the browser would be empty-for-now, not
+ *             empty), never hide
+ *   error   — discovery failed with nothing cached: show and enable; the
+ *             browser explains and offers Retry
+ *   empty   — discovery finished and there is genuinely nothing: hide
+ *
+ * Connectors and the M365 toolset are known synchronously, so they make
+ * the state `ready` regardless of discovery. Mirrors AgentBrowserModal's
+ * `allItems` sources exactly — keep the two in sync.
+ */
+export function useAgentBrowserAvailability(): {
+  status: AgentBrowserAvailability;
+  hasItems: boolean;
+} {
+  const { agents, isLoading, isError } = useAvailableAgents();
+  const mcpServers = useSettingsStore((s) => s.mcpServers);
+  const m365Connected = useSettingsStore((s) => s.m365Connected);
+  const { toolsEnabled } = useM365Enabled();
+  const hasItems =
+    agents.length > 0 ||
+    mcpServers.length > 0 ||
+    (toolsEnabled && m365Connected);
+  if (hasItems) return { status: 'ready', hasItems: true };
+  if (isLoading) return { status: 'loading', hasItems: false };
+  if (isError) return { status: 'error', hasItems: false };
+  return { status: 'empty', hasItems: false };
 }
 
 /**
@@ -141,15 +189,7 @@ export function useAvailableAgents(): {
  * sources exactly — keep the two in sync.
  */
 export function useAgentBrowserHasItems(): boolean {
-  const { agents } = useAvailableAgents();
-  const mcpServers = useSettingsStore((s) => s.mcpServers);
-  const m365Connected = useSettingsStore((s) => s.m365Connected);
-  const { toolsEnabled } = useM365Enabled();
-  return (
-    agents.length > 0 ||
-    mcpServers.length > 0 ||
-    (toolsEnabled && m365Connected)
-  );
+  return useAgentBrowserAvailability().hasItems;
 }
 
 /**
