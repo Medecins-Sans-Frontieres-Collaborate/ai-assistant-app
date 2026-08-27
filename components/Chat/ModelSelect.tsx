@@ -120,6 +120,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({
     regionalPath,
     officePaths,
     isLoadingFoundryAgents,
+    isDiscoveryLoading,
     refetchFoundryAgents,
   } = useFoundryAgents();
 
@@ -1473,7 +1474,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({
           regionalPath={regionalPath}
           officePaths={officePaths}
           selectedModelId={attachedAgentModelId ?? null}
-          isLoadingFoundryAgents={isLoadingFoundryAgents}
+          isLoadingFoundryAgents={isLoadingFoundryAgents || isDiscoveryLoading}
           onRefreshAgents={() => refetchFoundryAgents()}
           agentSources={customAgentSources}
           onAddSource={() => {

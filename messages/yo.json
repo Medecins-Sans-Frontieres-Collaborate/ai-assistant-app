@@ -988,7 +988,9 @@
     "collapseFolder": "Dín folda {name} ku",
     "folderOptions": "Aṣayan {name}",
     "agentsEntry": "Àgbẹ̀rẹ́ ayélujára",
-    "agentsTitle": "Ṣàyẹ̀wò àwọn àgbẹ̀rẹ́ ayélujára kí o sì bẹ̀rẹ̀ ìjíròrò pẹ̀lú ẹ̀kan"
+    "agentsTitle": "Ṣàyẹ̀wò àwọn àgbẹ̀rẹ́ ayélujára kí o sì bẹ̀rẹ̀ ìjíròrò pẹ̀lú ẹ̀kan",
+    "agentsLoading": "N ṣayẹwo awọn aṣoju ti o le lo…",
+    "agentsLoadError": "A ko le gbe awọn aṣoju rẹ— ṣii lati tun gbiyanju"
   },
   "errors": {
     "somethingWentWrong": "Nǹkan kan ṣẹlẹ̀",
@@ -2512,7 +2514,8 @@
     "searchConversations": "Wa ibanisọrọ",
     "toggleTheme": "Yi àkópọ́ àyẹyẹ pada",
     "regenerateResponse": "Tun idahun ṣẹda",
-    "copyLastResponse": "Da idahun to kẹhin mọ"
+    "copyLastResponse": "Da idahun to kẹhin mọ",
+    "pasteOptions": "Lẹẹmọ gẹgẹ bi… (yan ọrọ, Markdown, amugbooro, aworan tabi asopọ)"
   },
   "quarantine": {
     "title": "Ìbánisọ̀rọ̀ tí wọ́n wà nínú ìdàabobo",
@@ -4266,7 +4269,19 @@
     "settingsDescription": "Títẹ̀sí ọrọ tó ju àyè tó wa lókè lọ máa dà a fúnní gẹ́gẹ́ bí fáìlì dípò pípa apoti ifọrọranṣẹ. Ọrọ naa máa wulo gẹ́gẹ́ bó ṣe tẹ̀sé — kò si ohun tí a máa gba tàbí yí padà.",
     "settingsThresholdLabel": "Fi àfikún fún ìtẹ̀sí tó ju",
     "settingsThresholdUnit": "àmi",
-    "settingsThresholdHint": "Láàárin {min, number} àti {max, number} àmi."
+    "settingsThresholdHint": "Láàárin {min, number} àti {max, number} àmi.",
+    "options": {
+      "menuLabel": "Lẹẹmọ gẹgẹ bi…",
+      "insertHeading": "Fi kun ifiranṣẹ",
+      "attachHeading": "So pọ",
+      "text": "Òrọ àtàkò",
+      "markdown": "Òrọ to ni ún-rí (Markdown)",
+      "attachText": "Faili ọrọ",
+      "attachMarkdown": "Faili ọrọ to ni ún-rí (Markdown)",
+      "image": "{count, plural, one {Aworan} other {# awọn aworan}}",
+      "link": "Akọkọ oju-ìwé láti asopọ",
+      "hint": "↑↓ yan · Tẹ Enter lẹẹmọ · Esc fagilé · 1–9 yan"
+    }
   },
   "structures": {
     "section": "Ilana",
@@ -5003,7 +5018,11 @@
       "your-model": "nlo àmọ̀ràn rẹ",
       "pinned-model": "àmọ̀ràn tó ṣètò olùṣàkóso",
       "own-model": "n ṣiṣẹ́ lórí àmọ̀ràn tirẹ"
-    }
+    },
+    "loadError": "A ko le gbe awọn aṣoju rẹ sẹsẹ yii. Eleyi maa n jẹ iṣoro igba diẹ.",
+    "discoveryLoading": "N wa awọn aṣoju Foundry…",
+    "discoveryError": "A ko le gbe awọn aṣoju Foundry.",
+    "retry": "Tun gbiyanju"
   },
   "peopleSuggest": {
     "listLabel": "Awọn imọran lati ọdọ agbari rẹ",

@@ -988,7 +988,9 @@
     "collapseFolder": "Σύμπτυξη φακέλου {name}",
     "folderOptions": "Επιλογές {name}",
     "agentsEntry": "Agents",
-    "agentsTitle": "Περιηγηθείτε στους agents και ξεκινήστε συνομιλία με έναν"
+    "agentsTitle": "Περιηγηθείτε στους agents και ξεκινήστε συνομιλία με έναν",
+    "agentsLoading": "Έλεγχος ποιοι πράκτορες είναι διαθέσιμοι…",
+    "agentsLoadError": "Αδυναμία φόρτωσης των πρακτόρων σας — ανοίξτε για επανάληψη"
   },
   "errors": {
     "somethingWentWrong": "Κάτι πήγε στραβά",
@@ -2512,7 +2514,8 @@
     "searchConversations": "Αναζήτηση συνομιλιών",
     "toggleTheme": "Αλλαγή θέματος",
     "regenerateResponse": "Επαναδημιουργία απάντησης",
-    "copyLastResponse": "Αντιγραφή τελευταίας απάντησης"
+    "copyLastResponse": "Αντιγραφή τελευταίας απάντησης",
+    "pasteOptions": "Επικόλληση ως… (επιλέξτε κείμενο, Markdown, συνημμένο, εικόνα ή σύνδεσμο)"
   },
   "quarantine": {
     "title": "Συνομιλίες σε Καραντίνα",
@@ -4266,7 +4269,19 @@
     "settingsDescription": "Εάν επικολλήσετε περισσότερο κείμενο από το παρακάτω όριο, επισυνάπτεται ως αρχείο αντί να συμπληρώνει το πλαίσιο μηνύματος. Το κείμενο χρησιμοποιείται ακριβώς όπως επικολλήθηκε — δεν αναζητείται ή αλλάζει τίποτα.",
     "settingsThresholdLabel": "Επισύναψη επικολλήσεων μεγαλύτερων από",
     "settingsThresholdUnit": "χαρακτήρες",
-    "settingsThresholdHint": "Μεταξύ {min, number} και {max, number} χαρακτήρων."
+    "settingsThresholdHint": "Μεταξύ {min, number} και {max, number} χαρακτήρων.",
+    "options": {
+      "menuLabel": "Επικόλληση ως…",
+      "insertHeading": "Εισαγωγή στο μήνυμα",
+      "attachHeading": "Επισύναψη",
+      "text": "Απλό κείμενο",
+      "markdown": "Μορφοποιημένο κείμενο (Markdown)",
+      "attachText": "Αρχείο κειμένου",
+      "attachMarkdown": "Μορφοποιημένο αρχείο (Markdown)",
+      "image": "{count, plural, one {Εικόνα} other {# εικόνες}}",
+      "link": "Περιεχόμενο σελίδας από σύνδεσμο",
+      "hint": "↑↓ επιλογή · Enter επικόλληση · Esc ακύρωση · 1–9 επιλογή"
+    }
   },
   "structures": {
     "section": "Δομές",
@@ -5003,7 +5018,11 @@
       "your-model": "χρησιμοποιεί το δικό σας μοντέλο",
       "pinned-model": "μοντέλο που ορίστηκε από τον διαχειριστή",
       "own-model": "λειτουργεί με το δικό του μοντέλο"
-    }
+    },
+    "loadError": "Αδυναμία φόρτωσης των πρακτόρων σας αυτή τη στιγμή. Συνήθως είναι προσωρινό.",
+    "discoveryLoading": "Αναζήτηση πρακτόρων Foundry…",
+    "discoveryError": "Αδυναμία φόρτωσης των πρακτόρων Foundry.",
+    "retry": "Δοκιμάστε ξανά"
   },
   "peopleSuggest": {
     "listLabel": "Προτάσεις από τον οργανισμό σας",

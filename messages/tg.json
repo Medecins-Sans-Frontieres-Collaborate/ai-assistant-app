@@ -988,7 +988,9 @@
     "collapseFolder": "Папкаи {name}-ро печонед",
     "folderOptions": "Имконотҳои {name}",
     "agentsEntry": "Агентҳо",
-    "agentsTitle": "Агентҳоро бинед ва сӯҳбатро бо яке оғоз кунед"
+    "agentsTitle": "Агентҳоро бинед ва сӯҳбатро бо яке оғоз кунед",
+    "agentsLoading": "Тасдиқ карда истодаем, ки кадом агентҳоро истифода бурда метавонед…",
+    "agentsLoadError": "Агентҳои шумо бор нашуданд — барои такрор кардан кушоед"
   },
   "errors": {
     "somethingWentWrong": "Масъалае рӯй дод",
@@ -2512,7 +2514,8 @@
     "searchConversations": "Ҷустуҷӯи сӯҳбатҳо",
     "toggleTheme": "Ивази намуди зоҳирӣ",
     "regenerateResponse": "Тавзеҳи ҷавобро такрор кардан",
-    "copyLastResponse": "Нусха гирифтани ҷавоби охирин"
+    "copyLastResponse": "Нусха гирифтани ҷавоби охирин",
+    "pasteOptions": "Гузоштан ҳамчун… (матн, Markdown, замима, тасвир ё пайванд интихоб кунед)"
   },
   "quarantine": {
     "title": "Сӯҳбатҳои карантиншуда",
@@ -4266,7 +4269,19 @@
     "settingsDescription": "Вақте ки шумо текстро аз лимити поён зиёдтар часпонед, он ҳамчун файл замима мешавад, на баъди пур кардани қуттии паём. Матн аниқан ҳамон тавре ки часпонида шуд, истифода мешавад — чизе гирифта ё тағйир дода намешавад.",
     "settingsThresholdLabel": "Часпониҳоро бо дарозии бештар аз",
     "settingsThresholdUnit": "аломат",
-    "settingsThresholdHint": "Аз {min, number} то {max, number} аломат."
+    "settingsThresholdHint": "Аз {min, number} то {max, number} аломат.",
+    "options": {
+      "menuLabel": "Гузоштан ҳамчун…",
+      "insertHeading": "Ба паём ворид кунед",
+      "attachHeading": "Замима кардан",
+      "text": "Матни оддӣ",
+      "markdown": "Матни форматкунонидашуда (Markdown)",
+      "attachText": "Файли матнӣ",
+      "attachMarkdown": "Файли матнии форматкунонидашуда (Markdown)",
+      "image": "{count, plural, one {Тасвир} other {# тасвир}}",
+      "link": "Мундариҷаи саҳифа аз пайванд",
+      "hint": "↑↓ интихоб · Enter гузоштан · Esc бекор кардан · 1–9 интихоб"
+    }
   },
   "structures": {
     "section": "Структураҳо",
@@ -5003,7 +5018,11 @@
       "your-model": "модели шумо истифода мешавад",
       "pinned-model": "модельро маъмур муқаррар кардааст",
       "own-model": "бо модели худ кор мекунад"
-    }
+    },
+    "loadError": "Агентҳои шумо ҳоло бор нашуданд. Ин одатан муваққатист.",
+    "discoveryLoading": "Агентҳои Foundry ҷустуҷӯ шуда истодаанд…",
+    "discoveryError": "Агентҳои Foundry бор нашуданд.",
+    "retry": "Бор боз кӯшиш кунед"
   },
   "peopleSuggest": {
     "listLabel": "Пешниҳодҳо аз ташкилоти шумо",

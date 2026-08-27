@@ -231,6 +231,11 @@ export function useKeyboardShortcuts({
           }
           return false;
 
+        case 'pasteOptions':
+          // Handled by usePasteChatInput on the resulting paste event.
+          // Returning false keeps the browser's default (the paste itself).
+          return false;
+
         default:
           return false;
       }

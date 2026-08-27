@@ -883,7 +883,9 @@
     "collapseFolder": "Supista kansio {name}",
     "folderOptions": "{name} asetukset",
     "agentsEntry": "Agentit",
-    "agentsTitle": "Selaa agentteja ja aloita keskustelu jonkun kanssa"
+    "agentsTitle": "Selaa agentteja ja aloita keskustelu jonkun kanssa",
+    "agentsLoading": "Tarkistetaan, mitä agenteja voit käyttää…",
+    "agentsLoadError": "Agenntiesi lataaminen epäonnistui — avaa ja yritä uudelleen"
   },
   "prompts": {
     "buildReusablePrompts": "Rakenna uudelleenkäytettäviä kehotteita tekoälyn avulla",
@@ -2528,7 +2530,8 @@
     "searchConversations": "Etsi keskusteluja",
     "toggleTheme": "Vaihda teemaa",
     "regenerateResponse": "Luo vastaus uudelleen",
-    "copyLastResponse": "Kopioi viimeisin vastaus"
+    "copyLastResponse": "Kopioi viimeisin vastaus",
+    "pasteOptions": "Liitä muodossa… (valitse teksti, Markdown, liitetiedosto, kuva tai linkki)"
   },
   "quarantine": {
     "title": "Karanteenissa olevat keskustelut",
@@ -4282,7 +4285,19 @@
     "settingsDescription": "Jos liität enemmän tekstiä kuin alla oleva raja, se liitetään tiedostona viestikentän täyttämisen sijaan. Tekstiä käytetään sellaisenaan — mitään ei haeta tai muuteta.",
     "settingsThresholdLabel": "Liitä liitteeksi, jos pituus ylittää",
     "settingsThresholdUnit": "merkkiä",
-    "settingsThresholdHint": "Välillä {min, number}–{max, number} merkkiä."
+    "settingsThresholdHint": "Välillä {min, number}–{max, number} merkkiä.",
+    "options": {
+      "menuLabel": "Liitä muodossa…",
+      "insertHeading": "Lisää viestiin",
+      "attachHeading": "Liitä",
+      "text": "Pelkkä teksti",
+      "markdown": "Muotoiltu teksti (Markdown)",
+      "attachText": "Tekstitiedosto",
+      "attachMarkdown": "Muotoiltu tekstitiedosto (Markdown)",
+      "image": "{count, plural, one {Kuva} other {# kuvaa}}",
+      "link": "Sivun sisältö linkistä",
+      "hint": "↑↓ valitse · Enter liitä · Esc peruuta · 1–9 valitse"
+    }
   },
   "structures": {
     "section": "Rakennekuvaukset",
@@ -5019,7 +5034,11 @@
       "your-model": "käyttää omaa malliasti",
       "pinned-model": "ylläpitäjän määrittämä malli",
       "own-model": "käyttää omaa malliaan"
-    }
+    },
+    "loadError": "Agenntiesi lataaminen ei onnistunut juuri nyt. Tämä on yleensä väliaikaista.",
+    "discoveryLoading": "Etsitään Foundry-agentteja…",
+    "discoveryError": "Foundry-agenttien lataaminen epäonnistui.",
+    "retry": "Yritä uudelleen"
   },
   "peopleSuggest": {
     "listLabel": "Ehdotuksia organisaatioltasi",

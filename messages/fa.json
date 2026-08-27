@@ -833,7 +833,9 @@
     "collapseFolder": "بستن پوشه {name}",
     "folderOptions": "گزینه‌های {name}",
     "agentsEntry": "نمایندگان",
-    "agentsTitle": "نمایندگان را مرور کنید و با یکی گفتگو را آغاز کنید"
+    "agentsTitle": "نمایندگان را مرور کنید و با یکی گفتگو را آغاز کنید",
+    "agentsLoading": "در حال بررسی عوامل قابل استفاده شما…",
+    "agentsLoadError": "بارگذاری عوامل شما انجام نشد — برای تلاش مجدد باز کنید"
   },
   "prompts": {
     "buildReusablePrompts": "ساخت پرامپت‌های قابل استفاده مجدد با کمک هوش مصنوعی",
@@ -2528,7 +2530,8 @@
     "searchConversations": "جستجوی گفتگوها",
     "toggleTheme": "تغییر تم",
     "regenerateResponse": "تولید مجدد پاسخ",
-    "copyLastResponse": "کپی آخرین پاسخ"
+    "copyLastResponse": "کپی آخرین پاسخ",
+    "pasteOptions": "چسباندن به صورت... (انتخاب متن، Markdown، پیوست، تصویر یا لینک)"
   },
   "quarantine": {
     "title": "گفت‌وگوهای قرنطینه‌شده",
@@ -4282,7 +4285,19 @@
     "settingsDescription": "اگر متنی بیشتر از حد زیر چسبانده شود، به‌جای قرارگیری درون پیام به‌صورت فایل پیوست می‌شود. متن دقیقاً مطابق چسباندن استفاده می‌شود — چیزی دریافت یا تغییر داده نمی‌شود.",
     "settingsThresholdLabel": "پیوست کردن چسبانده‌ها بیش از",
     "settingsThresholdUnit": "کاراکتر",
-    "settingsThresholdHint": "بین {min, number} تا {max, number} کاراکتر."
+    "settingsThresholdHint": "بین {min, number} تا {max, number} کاراکتر.",
+    "options": {
+      "menuLabel": "چسباندن به صورت...",
+      "insertHeading": "درج در پیام",
+      "attachHeading": "پیوست",
+      "text": "متن ساده",
+      "markdown": "متن قالب‌بندی‌شده (Markdown)",
+      "attachText": "فایل متنی",
+      "attachMarkdown": "فایل متنی قالب‌بندی‌شده (Markdown)",
+      "image": "{count, plural, one {تصویر} other {# تصویر}}",
+      "link": "محتوای صفحه از لینک",
+      "hint": "↑↓ انتخاب · Enter چسباندن · Esc لغو · ۱–۹ انتخاب"
+    }
   },
   "structures": {
     "section": "ساختارها",
@@ -5019,7 +5034,11 @@
       "your-model": "از مدل شما استفاده می‌کند",
       "pinned-model": "مدل تعیین‌شده توسط ادمین",
       "own-model": "روی مدل اختصاصی خود اجرا می‌شود"
-    }
+    },
+    "loadError": "بارگذاری عوامل شما هم‌اکنون انجام نشد. این مشکل معمولاً موقت است.",
+    "discoveryLoading": "در حال جستجوی عوامل Foundry…",
+    "discoveryError": "عوامل Foundry بارگذاری نشدند.",
+    "retry": "دوباره تلاش کنید"
   },
   "peopleSuggest": {
     "listLabel": "پیشنهادها از سازمان شما",

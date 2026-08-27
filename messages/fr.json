@@ -854,7 +854,9 @@
     "collapseFolder": "Réduire le dossier {name}",
     "folderOptions": "Options {name}",
     "agentsEntry": "Agents",
-    "agentsTitle": "Parcourez les agents et démarrez une discussion avec l’un d’eux"
+    "agentsTitle": "Parcourez les agents et démarrez une discussion avec l’un d’eux",
+    "agentsLoading": "Vérification des agents disponibles…",
+    "agentsLoadError": "Vos agents n'ont pas pu être chargés — ouvrez pour réessayer"
   },
   "errors": {
     "somethingWentWrong": "Quelque chose s'est mal passé",
@@ -2528,7 +2530,8 @@
     "searchConversations": "Rechercher dans les conversations",
     "toggleTheme": "Changer de thème",
     "regenerateResponse": "Régénerer la réponse",
-    "copyLastResponse": "Copier la dernière réponse"
+    "copyLastResponse": "Copier la dernière réponse",
+    "pasteOptions": "Coller en tant que… (choisir texte, Markdown, pièce jointe, image ou lien)"
   },
   "quarantine": {
     "title": "Conversations mises en quarantaine",
@@ -4282,7 +4285,19 @@
     "settingsDescription": "Si vous collez plus de texte que la limite ci-dessous, il sera joint en tant que fichier au lieu de remplir la boîte de message. Le texte est utilisé tel quel — rien n'est récupéré ni modifié.",
     "settingsThresholdLabel": "Joindre les collages supérieurs à",
     "settingsThresholdUnit": "caractères",
-    "settingsThresholdHint": "Entre {min, number} et {max, number} caractères."
+    "settingsThresholdHint": "Entre {min, number} et {max, number} caractères.",
+    "options": {
+      "menuLabel": "Coller en tant que…",
+      "insertHeading": "Insérer dans le message",
+      "attachHeading": "Joindre",
+      "text": "Texte brut",
+      "markdown": "Texte formaté (Markdown)",
+      "attachText": "Fichier texte",
+      "attachMarkdown": "Fichier texte formaté (Markdown)",
+      "image": "{count, plural, one {Image} other {# images}}",
+      "link": "Contenu de la page à partir du lien",
+      "hint": "↑↓ choisir · Entrée coller · Échap annuler · 1–9 sélectionner"
+    }
   },
   "structures": {
     "section": "Structures",
@@ -5019,7 +5034,11 @@
       "your-model": "utilise votre modèle",
       "pinned-model": "modèle défini par l’administrateur",
       "own-model": "utilise son propre modèle"
-    }
+    },
+    "loadError": "Vos agents n'ont pas pu être chargés pour le moment. C'est généralement temporaire.",
+    "discoveryLoading": "Recherche des agents Foundry…",
+    "discoveryError": "Les agents Foundry n'ont pas pu être chargés.",
+    "retry": "Réessayer"
   },
   "peopleSuggest": {
     "listLabel": "Suggestions de votre organisation",

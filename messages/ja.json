@@ -908,7 +908,9 @@
     "collapseFolder": "フォルダー{name}を折りたたみ",
     "folderOptions": "{name}のオプション",
     "agentsEntry": "エージェント",
-    "agentsTitle": "エージェントを閲覧してチャットを開始する"
+    "agentsTitle": "エージェントを閲覧してチャットを開始する",
+    "agentsLoading": "利用可能なエージェントを確認しています…",
+    "agentsLoadError": "エージェントを読み込めませんでした — クリックして再試行してください"
   },
   "prompts": {
     "buildReusablePrompts": "AIの支援で再利用可能なプロンプトを構築",
@@ -2528,7 +2530,8 @@
     "searchConversations": "会話を検索する",
     "toggleTheme": "テーマを切り替える",
     "regenerateResponse": "回答を再生成する",
-    "copyLastResponse": "最後の回答をコピーする"
+    "copyLastResponse": "最後の回答をコピーする",
+    "pasteOptions": "貼り付け形式を選択…（テキスト、Markdown、添付ファイル、画像、リンクから選択）"
   },
   "quarantine": {
     "title": "隔離された会話",
@@ -4282,7 +4285,19 @@
     "settingsDescription": "下記の上限より多くテキストを貼り付けた場合、メッセージ欄に収めずファイルとして添付します。テキストは貼り付けられたまま利用され、取得や変更は行われません。",
     "settingsThresholdLabel": "これより長い貼り付けを添付",
     "settingsThresholdUnit": "文字",
-    "settingsThresholdHint": "{min, number}～{max, number}文字の間で設定できます。"
+    "settingsThresholdHint": "{min, number}～{max, number}文字の間で設定できます。",
+    "options": {
+      "menuLabel": "貼り付け形式を選択…",
+      "insertHeading": "メッセージに挿入",
+      "attachHeading": "添付",
+      "text": "プレーンテキスト",
+      "markdown": "書式付きテキスト（Markdown）",
+      "attachText": "テキストファイル",
+      "attachMarkdown": "書式付きテキストファイル（Markdown）",
+      "image": "{count, plural, one {画像} other {# 件の画像}}",
+      "link": "リンク先ページの内容",
+      "hint": "↑↓ 選択 · Enter 貼り付け · Esc キャンセル · 1–9 選択"
+    }
   },
   "structures": {
     "section": "構造体",
@@ -5019,7 +5034,11 @@
       "your-model": "ご自身のモデルを使用",
       "pinned-model": "管理者によるモデル指定",
       "own-model": "独自のモデルで動作"
-    }
+    },
+    "loadError": "エージェントをただいま読み込めませんでした。通常は一時的な問題です。",
+    "discoveryLoading": "Foundryエージェントを検索中…",
+    "discoveryError": "Foundryエージェントを読み込めませんでした。",
+    "retry": "再試行"
   },
   "peopleSuggest": {
     "listLabel": "あなたの組織からの提案",

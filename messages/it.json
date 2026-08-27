@@ -829,7 +829,9 @@
     "collapseFolder": "Comprimi cartella {name}",
     "folderOptions": "Opzioni {name}",
     "agentsEntry": "Agenti",
-    "agentsTitle": "Esplora gli agenti e avvia una chat con uno di loro"
+    "agentsTitle": "Esplora gli agenti e avvia una chat con uno di loro",
+    "agentsLoading": "Verifica degli agenti disponibili…",
+    "agentsLoadError": "Impossibile caricare i tuoi agenti — apri per riprovare"
   },
   "errors": {
     "somethingWentWrong": "Qualcosa è andato storto",
@@ -2528,7 +2530,8 @@
     "searchConversations": "Cerca conversazioni",
     "toggleTheme": "Cambia tema",
     "regenerateResponse": "Rigenera risposta",
-    "copyLastResponse": "Copia l'ultima risposta"
+    "copyLastResponse": "Copia l'ultima risposta",
+    "pasteOptions": "Incolla come… (scegli testo, Markdown, allegato, immagine o link)"
   },
   "quarantine": {
     "title": "Conversazioni in quarantena",
@@ -4282,7 +4285,19 @@
     "settingsDescription": "Se incolli più testo del limite sotto, sarà allegato come file invece di riempire la casella del messaggio. Il testo viene utilizzato esattamente come incollato: non viene recuperato o modificato nulla.",
     "settingsThresholdLabel": "Allega incolla superiore a",
     "settingsThresholdUnit": "caratteri",
-    "settingsThresholdHint": "Tra {min, number} e {max, number} caratteri."
+    "settingsThresholdHint": "Tra {min, number} e {max, number} caratteri.",
+    "options": {
+      "menuLabel": "Incolla come…",
+      "insertHeading": "Inserisci nel messaggio",
+      "attachHeading": "Allega",
+      "text": "Testo semplice",
+      "markdown": "Testo formattato (Markdown)",
+      "attachText": "File di testo",
+      "attachMarkdown": "File di testo formattato (Markdown)",
+      "image": "{count, plural, one {Immagine} other {# immagini}}",
+      "link": "Contenuto della pagina dal link",
+      "hint": "↑↓ scegli · Invio incolla · Esc annulla · 1–9 seleziona"
+    }
   },
   "structures": {
     "section": "Strutture",
@@ -5019,7 +5034,11 @@
       "your-model": "utilizza il tuo modello",
       "pinned-model": "modello impostato dall'amministratore",
       "own-model": "utilizza un proprio modello"
-    }
+    },
+    "loadError": "Impossibile caricare i tuoi agenti al momento. In genere è una situazione temporanea.",
+    "discoveryLoading": "Ricerca di agenti Foundry…",
+    "discoveryError": "Impossibile caricare gli agenti Foundry.",
+    "retry": "Riprova"
   },
   "peopleSuggest": {
     "listLabel": "Suggerimenti dalla tua organizzazione",

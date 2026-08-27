@@ -988,7 +988,9 @@
     "collapseFolder": "Luudu bolle {name}",
     "folderOptions": "Cuɓoraaɗi {name}",
     "agentsEntry": "Agentiɗe",
-    "agentsTitle": "Yiɗdi agentiɗe e fuɗɗi waawi haasagol e ɗuum"
+    "agentsTitle": "Yiɗdi agentiɗe e fuɗɗi waawi haasagol e ɗuum",
+    "agentsLoading": "Njanngo e mbaɗɓe ma waɗi...",
+    "agentsLoadError": "Mbaɗɓe maa waawi aniima njannde — uddit tee hurmit"
   },
   "errors": {
     "somethingWentWrong": "Huunde woorii",
@@ -2512,7 +2514,8 @@
     "searchConversations": "Yiyloo ngaddan e bisinooki",
     "toggleTheme": "Waylo jamɗi theme",
     "regenerateResponse": "Waɗtu e njaɓnirde",
-    "copyLastResponse": "Natto njaɓnirde so yidi"
+    "copyLastResponse": "Natto njaɓnirde so yidi",
+    "pasteOptions": "Toppita e… (suɓo binndi, Markdown, jaɓɗo, nataande walla jokku) "
   },
   "quarantine": {
     "title": "Kisennangol jawdiiji",
@@ -4266,7 +4269,19 @@
     "settingsDescription": "So a juuta banndu juutugol ko teddini ɗum faa waɗi gila leydi kuu waɗti, ko e suɓo ɓuri banngugol. Banndu ngal ko dow juutirde baɗi — ko faydaaki anndude walla yerude.",
     "settingsThresholdLabel": "Suɓi banndu juutugol ɓuri",
     "settingsThresholdUnit": "harfi",
-    "settingsThresholdHint": "Nder {min, number} e {max, number} harfi."
+    "settingsThresholdHint": "Nder {min, number} e {max, number} harfi.",
+    "options": {
+      "menuLabel": "Toppita e…",
+      "insertHeading": "Galto e jaɓɓorgo",
+      "attachHeading": "Dobo",
+      "text": "Binndi juulnde",
+      "markdown": "Binndi tektiteede (Markdown)",
+      "attachText": "Fiilde binndi",
+      "attachMarkdown": "Fiilde binndi tektiteede (Markdown)",
+      "image": "{count, plural, one {Nataande} other {# nataandeji}}",
+      "link": "Cuɓorgo jokku nde",
+      "hint": "↑↓ suɓo · Enter toppito · Esc bayyi · 1–9 suɓo"
+    }
   },
   "structures": {
     "section": "Laawol",
@@ -5003,7 +5018,11 @@
       "your-model": "naatnoy model maa",
       "pinned-model": "model toggoɗo e admin",
       "own-model": "taaƴi e model moƴƴi"
-    }
+    },
+    "loadError": "Mbaɗɓe maa waawi aniima njannde jooni. Ko fii gonga hiɗɗo waa.",
+    "discoveryLoading": "Njalngol mbaɗɓe Foundry...",
+    "discoveryError": "Waawi aniima njannde mbaɗɓe Foundry.",
+    "retry": "Hurmit baale"
   },
   "peopleSuggest": {
     "listLabel": "Golleji pilkil e organisation maa",

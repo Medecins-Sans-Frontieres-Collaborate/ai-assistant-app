@@ -854,7 +854,9 @@
     "collapseFolder": "Colapsar carpeta {name}",
     "folderOptions": "Opciones de {name}",
     "agentsEntry": "Agentes",
-    "agentsTitle": "Explora agentes y comienza un chat con uno"
+    "agentsTitle": "Explora agentes y comienza un chat con uno",
+    "agentsLoading": "Verificando qué agentes puede usar…",
+    "agentsLoadError": "No se pudieron cargar sus agentes; ábralo para reintentar"
   },
   "errors": {
     "somethingWentWrong": "Algo salió mal",
@@ -2528,7 +2530,8 @@
     "searchConversations": "Buscar conversaciones",
     "toggleTheme": "Cambiar tema",
     "regenerateResponse": "Regenerar respuesta",
-    "copyLastResponse": "Copiar última respuesta"
+    "copyLastResponse": "Copiar última respuesta",
+    "pasteOptions": "Pegar como… (elija texto, Markdown, archivo adjunto, imagen o enlace)"
   },
   "quarantine": {
     "title": "Conversaciones en cuarentena",
@@ -4282,7 +4285,19 @@
     "settingsDescription": "Si se pega más texto que el límite indicado abajo, se adjunta como archivo en lugar de llenar la caja de mensaje. El texto se usa exactamente como se pegó: no se recupera ni se modifica.",
     "settingsThresholdLabel": "Adjuntar pegados mayores que",
     "settingsThresholdUnit": "caracteres",
-    "settingsThresholdHint": "Entre {min, number} y {max, number} caracteres."
+    "settingsThresholdHint": "Entre {min, number} y {max, number} caracteres.",
+    "options": {
+      "menuLabel": "Pegar como…",
+      "insertHeading": "Insertar en el mensaje",
+      "attachHeading": "Adjuntar",
+      "text": "Texto sin formato",
+      "markdown": "Texto con formato (Markdown)",
+      "attachText": "Archivo de texto",
+      "attachMarkdown": "Archivo de texto con formato (Markdown)",
+      "image": "{count, plural, one {Imagen} other {# imágenes}}",
+      "link": "Contenido de la página desde el enlace",
+      "hint": "↑↓ elegir · Intro pegar · Esc cancelar · 1–9 seleccionar"
+    }
   },
   "structures": {
     "section": "Estructuras",
@@ -5019,7 +5034,11 @@
       "your-model": "usa su modelo",
       "pinned-model": "modelo definido por el administrador",
       "own-model": "funciona con su propio modelo"
-    }
+    },
+    "loadError": "No se pudieron cargar sus agentes en este momento. Esto suele ser temporal.",
+    "discoveryLoading": "Buscando agentes de Foundry…",
+    "discoveryError": "No se pudieron cargar los agentes de Foundry.",
+    "retry": "Intentar de nuevo"
   },
   "peopleSuggest": {
     "listLabel": "Sugerencias de su organización",

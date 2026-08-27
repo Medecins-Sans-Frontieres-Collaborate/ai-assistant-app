@@ -906,7 +906,9 @@
     "collapseFolder": "Restrânge folderul {name}",
     "folderOptions": "Opțiuni {name}",
     "agentsEntry": "Agenți",
-    "agentsTitle": "Răsfoiți agenții și începeți un chat cu unul"
+    "agentsTitle": "Răsfoiți agenții și începeți un chat cu unul",
+    "agentsLoading": "Se verifică ce agenți puteți folosi…",
+    "agentsLoadError": "Agenții nu au putut fi încărcați — deschideți pentru a reîncerca"
   },
   "prompts": {
     "buildReusablePrompts": "Construiește prompt-uri reutilizabile cu asistență AI",
@@ -2528,7 +2530,8 @@
     "searchConversations": "Caută în conversații",
     "toggleTheme": "Comută tema",
     "regenerateResponse": "Regenerează răspunsul",
-    "copyLastResponse": "Copiază ultimul răspuns"
+    "copyLastResponse": "Copiază ultimul răspuns",
+    "pasteOptions": "Lipește ca… (alege text, Markdown, atașament, imagine sau link)"
   },
   "quarantine": {
     "title": "Conversații în carantină",
@@ -4282,7 +4285,19 @@
     "settingsDescription": "Dacă lipiți mai mult text decât limita de mai jos, acesta va fi atașat ca fișier, nu introdus în câmpul mesajului. Textul se folosește exact așa cum a fost lipit — nu se preia și nu se modifică nimic.",
     "settingsThresholdLabel": "Atașează lipituri mai lungi de",
     "settingsThresholdUnit": "caractere",
-    "settingsThresholdHint": "Între {min, number} și {max, number} caractere."
+    "settingsThresholdHint": "Între {min, number} și {max, number} caractere.",
+    "options": {
+      "menuLabel": "Lipește ca…",
+      "insertHeading": "Inserează în mesaj",
+      "attachHeading": "Atașează",
+      "text": "Text simplu",
+      "markdown": "Text formatat (Markdown)",
+      "attachText": "Fișier text",
+      "attachMarkdown": "Fișier text formatat (Markdown)",
+      "image": "{count, plural, one {Imagine} other {# imagini}}",
+      "link": "Conținutul paginii din link",
+      "hint": "↑↓ alege · Enter lipește · Esc anulează · 1–9 selectează"
+    }
   },
   "structures": {
     "section": "Structuri",
@@ -5019,7 +5034,11 @@
       "your-model": "folosește modelul dvs.",
       "pinned-model": "model stabilit de administrator",
       "own-model": "rulează pe propriul său model"
-    }
+    },
+    "loadError": "Agenții nu au putut fi încărcați momentan. De obicei, aceasta este o situație temporară.",
+    "discoveryLoading": "Se caută agenți Foundry…",
+    "discoveryError": "Agenții Foundry nu au putut fi încărcați.",
+    "retry": "Reîncercați"
   },
   "peopleSuggest": {
     "listLabel": "Sugestii din organizația dumneavoastră",

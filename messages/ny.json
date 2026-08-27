@@ -988,7 +988,9 @@
     "collapseFolder": "Tsekani chikwatu {name}",
     "folderOptions": "Njira za {name}",
     "agentsEntry": "Othandizira",
-    "agentsTitle": "Onani othandizira ndipo yambitsani kucheza ndi m'modzi"
+    "agentsTitle": "Onani othandizira ndipo yambitsani kucheza ndi m'modzi",
+    "agentsLoading": "Kuyang'ana omwe mungagwiritse ntchito…",
+    "agentsLoadError": "Simungathe kutsitsa omwe mungagwiritse ntchito — dinani kuti muyese kachiwiri"
   },
   "errors": {
     "somethingWentWrong": "Chinachake chalakwika",
@@ -2512,7 +2514,8 @@
     "searchConversations": "Fufuzani zokambirana",
     "toggleTheme": "Sinthani mutu",
     "regenerateResponse": "Bwezeretsaninso yankho",
-    "copyLastResponse": "Koperani yankho lomaliza"
+    "copyLastResponse": "Koperani yankho lomaliza",
+    "pasteOptions": "Ikani monga... (sankhani zikalata, Markdown, chikalata, chithunzi kapena ulalo)"
   },
   "quarantine": {
     "title": "Zokambirana Zomwe Zili mu Quarantine",
@@ -4266,7 +4269,19 @@
     "settingsDescription": "Ngati mumalemba mawu ochulukirapo kuposa malire pansipa, zimasungidwa ngati fayilo m'malo modzaza bokosi la uthenga. Mawuwo amagwiritsidwa ntchito monga momwe adamatidwira — palibe chomwe chikuzengedwa kapena kusintha.",
     "settingsThresholdLabel": "Ikhani ngati attachment mawu omata oposa",
     "settingsThresholdUnit": "zilembo",
-    "settingsThresholdHint": "Pakati pa {min, number} ndi {max, number} zilembo."
+    "settingsThresholdHint": "Pakati pa {min, number} ndi {max, number} zilembo.",
+    "options": {
+      "menuLabel": "Ikani monga...",
+      "insertHeading": "Ikani mu uthenga",
+      "attachHeading": "Phatikizani",
+      "text": "Mawu wamba",
+      "markdown": "Mawu okonzedwa (Markdown)",
+      "attachText": "Fayilo ya mawu",
+      "attachMarkdown": "Fayilo ya mawu okonzedwa (Markdown)",
+      "image": "{count, plural, one {Chithunzi} other {# zithunzi}}",
+      "link": "Zam’malo kuchokera pa ulalo",
+      "hint": "↑↓ sankhani · Enter ikani · Esc lekani · 1–9 sankhani"
+    }
   },
   "structures": {
     "section": "Zomangamanga",
@@ -5003,7 +5018,11 @@
       "your-model": "amagwiritsa ntchito mtundu wanu",
       "pinned-model": "mtundu wakhazikitsidwa ndi admin",
       "own-model": "amagwiritsa ntchito mtundu wake"
-    }
+    },
+    "loadError": "Simungathe kutsitsa omwe mungagwiritse ntchito pano pano. Nthawi zambiri izi zimakhala zakanthawi.",
+    "discoveryLoading": "Kufunafuna ma Foundry agents…",
+    "discoveryError": "Simungathe kutsitsa ma Foundry agents.",
+    "retry": "Yesaninso"
   },
   "peopleSuggest": {
     "listLabel": "Malangizo ochokera ku gulu lanu",

@@ -988,7 +988,9 @@
     "collapseFolder": "پوښۍ ټولول {name}",
     "folderOptions": "{name} اختیارات",
     "agentsEntry": "استازي",
-    "agentsTitle": "استازي وګورئ او له یوه سره خبرې وکړئ"
+    "agentsTitle": "استازي وګورئ او له یوه سره خبرې وکړئ",
+    "agentsLoading": "درک کوو چې کوم ایجنټان تاسو کارولی شئ…",
+    "agentsLoadError": "ستاسو ایجنټان نه شول پورته کېدل — د بیا هڅې لپاره پرانیزئ"
   },
   "errors": {
     "somethingWentWrong": "یوه ستونزه پېښه شوه",
@@ -2512,7 +2514,8 @@
     "searchConversations": "خبرواترو لټون",
     "toggleTheme": "بڼه بدله کړئ",
     "regenerateResponse": "ځواب بیا تولید کړئ",
-    "copyLastResponse": "وروستی ځواب کاپي کړئ"
+    "copyLastResponse": "وروستی ځواب کاپي کړئ",
+    "pasteOptions": "په توګه پیسټ کړئ... (متن، Markdown، ضمیمه، انځور یا لینک وټاکئ)"
   },
   "quarantine": {
     "title": "قرنطین شوې خبرې اترې",
@@ -4266,7 +4269,19 @@
     "settingsDescription": "که له لاندې محدودیت څخه زیات متن پیس کړئ، دا د فایل په ډول ضمیمه کیږي نه چې پیغام بکس ته ځای شي. متن هماغسې کارول کېږي، بدلون یا تر لاسه کېدل نه پکې کیږي.",
     "settingsThresholdLabel": "پیچونه چې له دې څخه اوږده وي، ضمیمه کړئ",
     "settingsThresholdUnit": "توري",
-    "settingsThresholdHint": "د {min, number} او {max, number} تورو ترمنځ."
+    "settingsThresholdHint": "د {min, number} او {max, number} تورو ترمنځ.",
+    "options": {
+      "menuLabel": "په توګه پیسټ کړئ...",
+      "insertHeading": "پیغام ته داخل کړئ",
+      "attachHeading": "ضمیمه کړئ",
+      "text": "عادي متن",
+      "markdown": "فارمیټ شوی متن (Markdown)",
+      "attachText": "د متني فایل",
+      "attachMarkdown": "فارمیټ شوی متني فایل (Markdown)",
+      "image": "{count, plural, one {انځور} other {# انځورونه}}",
+      "link": "د لینک محتوا",
+      "hint": "↑↓ وټاکئ · Enter پيست کړئ · Esc لغوه کړئ · ۱–۹ غوره کړئ"
+    }
   },
   "structures": {
     "section": "جوړښتونه",
@@ -5003,7 +5018,11 @@
       "your-model": "ستاسې ماډل کاروي",
       "pinned-model": "ادارې لخوا ټاکل شوی ماډل",
       "own-model": "خپل ځانګړی ماډل کاروي"
-    }
+    },
+    "loadError": "ستاسو ایجنټان همدا اوس نه شول پورته کېدل. دا معمولا لنډمهاله وي.",
+    "discoveryLoading": "د Foundry ایجنټانو لټون کوو…",
+    "discoveryError": "Foundry ایجنټان پورته نه شول.",
+    "retry": "بیا هڅه وکړئ"
   },
   "peopleSuggest": {
     "listLabel": "ستاسې له ادارې څخه وړاندیزونه",

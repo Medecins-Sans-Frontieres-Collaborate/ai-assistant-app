@@ -988,7 +988,9 @@
     "collapseFolder": "Kûâ dosi {name}",
     "folderOptions": "Mbêtï ti {name}",
     "agentsEntry": "Bângbi",
-    "agentsTitle": "Zia bângbi kɛ pé ayeke zo jihâ na mo"
+    "agentsTitle": "Zia bângbi kɛ pé ayeke zo jihâ na mo",
+    "agentsLoading": "Bi na na sô lo agents mo yeke koui…",
+    "agentsLoadError": "Agents mo ape yeke koui — wilî lo na koke"
   },
   "errors": {
     "somethingWentWrong": "Ë a sara nzönî pepe",
@@ -2512,7 +2514,8 @@
     "searchConversations": "Sosa kozo",
     "toggleTheme": "Kutanga thème",
     "regenerateResponse": "Koko gara azîrî",
-    "copyLastResponse": "Kopi azîrî apekpe"
+    "copyLastResponse": "Kopi azîrî apekpe",
+    "pasteOptions": "Gbesen ti... (bêndê nzönî, Markdown, fichier attaché, sênê na image wala lien)"
   },
   "quarantine": {
     "title": "Yângö ti sôzi u kôndö",
@@ -4266,7 +4269,19 @@
     "settingsDescription": "Sô tèkë mbi ndokë na limiti, lo yeke na fichier oko tî yê ti massa na sanduku tî singa. Tèkë ayeke ka na mo tèkë — woko ti yeke na mo wala kugbagba.",
     "settingsThresholdLabel": "Kûê tèkë yeke mbi",
     "settingsThresholdUnit": "karakteri",
-    "settingsThresholdHint": "Tî {min, number} na {max, number} karakteri."
+    "settingsThresholdHint": "Tî {min, number} na {max, number} karakteri.",
+    "options": {
+      "menuLabel": "Gbesen ti...",
+      "insertHeading": "Gbesen na buku",
+      "attachHeading": "Yèkè fichier attaché",
+      "text": "Nzönî yângâ",
+      "markdown": "Nzönî yângâ na mingi (Markdown)",
+      "attachText": "Fichier nzönî",
+      "attachMarkdown": "Fichier nzönî na mingi (Markdown)",
+      "image": "{count, plural, one {Sênê} other {# sênê}}",
+      "link": "Lêgbi ti page na lien",
+      "hint": "↑↓ kosâ · Enter gbesen · Esc yèkè bânga · 1–9 tîngbi"
+    }
   },
   "structures": {
     "section": "Strukture",
@@ -5003,7 +5018,11 @@
       "your-model": "yeke na model wangä",
       "pinned-model": "model a admin a zia",
       "own-model": "yeke na model iye"
-    }
+    },
+    "loadError": "Agents mo ape yeke koui tî lo nzoni. Doko mbênî ape na ndatabarî.",
+    "discoveryLoading": "Bi na na sô lo agents tî Foundry…",
+    "discoveryError": "Agents tî Foundry ape yeke koui.",
+    "retry": "Koke"
   },
   "peopleSuggest": {
     "listLabel": "Mbênî ya organisation tî mo",

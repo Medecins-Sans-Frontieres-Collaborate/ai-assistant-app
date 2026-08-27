@@ -988,7 +988,9 @@
     "collapseFolder": "Akimpio antontan-taratasy {name}",
     "folderOptions": "Safidin'i {name}",
     "agentsEntry": "Mpanampy",
-    "agentsTitle": "Hijery mpanampy ary manomboka miresaka amin'ny iray"
+    "agentsTitle": "Hijery mpanampy ary manomboka miresaka amin'ny iray",
+    "agentsLoading": "Hamarina hoe iza amin'ireo agent no azonao ampiasaina…",
+    "agentsLoadError": "Tsy afaka novahana ny agents-nao — sokafy mba hamerina"
   },
   "errors": {
     "somethingWentWrong": "Nisy tsy nety",
@@ -2512,7 +2514,8 @@
     "searchConversations": "Mitady resaka",
     "toggleTheme": "Hanova lohahevitra",
     "regenerateResponse": "Averina mamorona valiny",
-    "copyLastResponse": "Adikao ny valiny farany"
+    "copyLastResponse": "Adikao ny valiny farany",
+    "pasteOptions": "Apetraho ho… (misafidiana soratra, Markdown, rakitra, sary, na rohy)"
   },
   "quarantine": {
     "title": "Resaka natao anaty karantina",
@@ -4266,7 +4269,19 @@
     "settingsDescription": "Raha mihoatra ny fetra eto ambany ny habetsahan'ny lahatsoratra dia ampidirina toy ny fisie izany fa tsy mameno ny boaty hafatra. Mampiasaina araka izay nampidirina ihany ny lahatsoratra — tsy misy azo na ovaina.",
     "settingsThresholdLabel": "Ampidiro toy ny fisie raha lava noho ny",
     "settingsThresholdUnit": "tarehintsoratra",
-    "settingsThresholdHint": "Manomboka amin'ny {min, number} ka hatramin'ny {max, number} tarehintsoratra."
+    "settingsThresholdHint": "Manomboka amin'ny {min, number} ka hatramin'ny {max, number} tarehintsoratra.",
+    "options": {
+      "menuLabel": "Apetraho ho…",
+      "insertHeading": "Ampidiro ao anaty hafatra",
+      "attachHeading": "Manampy",
+      "text": "Soratra tsotra",
+      "markdown": "Soratra voaravaka (Markdown)",
+      "attachText": "Rakitra soratra",
+      "attachMarkdown": "Rakitra soratra voaravaka (Markdown)",
+      "image": "{count, plural, one {Sary} other {Sary #}}",
+      "link": "Votoatin'ny pejy avy amin'ny rohy",
+      "hint": "↑↓ misafidy · Enter manisy · Esc hanafoana · 1–9 mifidy"
+    }
   },
   "structures": {
     "section": "Rafitra",
@@ -5003,7 +5018,11 @@
       "your-model": "mampiasa ny modelinao",
       "pinned-model": "modely napetraky ny admin",
       "own-model": "miasa amin'ny modeliny manokana"
-    }
+    },
+    "loadError": "Tsy afaka navahana izao ireo agents-nao. Matetika vetivety monja izany.",
+    "discoveryLoading": "Mitady agents Foundry…",
+    "discoveryError": "Tsy afaka navahana ireo agents Foundry.",
+    "retry": "Avereno andramana"
   },
   "peopleSuggest": {
     "listLabel": "Soso-kevitra avy amin’ny fikambananareo",

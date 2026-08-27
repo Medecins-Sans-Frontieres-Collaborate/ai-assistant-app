@@ -908,7 +908,9 @@
     "collapseFolder": "{name} फ़ोल्डर संक्षिप्त करें",
     "folderOptions": "{name} विकल्प",
     "agentsEntry": "एजेंट्स",
-    "agentsTitle": "एजेंट्स ब्राउज़ करें और किसी से चैट शुरू करें"
+    "agentsTitle": "एजेंट्स ब्राउज़ करें और किसी से चैट शुरू करें",
+    "agentsLoading": "जांच रहे हैं कि आप किन एजेंट्स का उपयोग कर सकते हैं…",
+    "agentsLoadError": "आपके एजेंट्स लोड नहीं हो पाए — पुनः प्रयास करने के लिए खोलें"
   },
   "prompts": {
     "buildReusablePrompts": "AI सहायता से पुन: प्रयोज्य प्रॉम्प्ट बनाएं",
@@ -2528,7 +2530,8 @@
     "searchConversations": "वार्तालाप खोजें",
     "toggleTheme": "थीम बदलें",
     "regenerateResponse": "उत्तर पुनः बनाएँ",
-    "copyLastResponse": "अंतिम उत्तर कॉपी करें"
+    "copyLastResponse": "अंतिम उत्तर कॉपी करें",
+    "pasteOptions": "इस रूप में पेस्ट करें… (टेक्स्ट, Markdown, अटैचमेंट, इमेज या लिंक चुनें)"
   },
   "quarantine": {
     "title": "क्वारंटीन की गई बातचीत",
@@ -4282,7 +4285,19 @@
     "settingsDescription": "नीचे दिए गए सीमा से अधिक पाठ चिपकाने पर यह फ़ाइल के रूप में संलग्न हो जाएगा, न कि संदेश बॉक्स में। पाठ जैसा चिपकाया गया है, वैसा ही प्रयोग किया जाएगा — कुछ भी प्राप्त या बदला नहीं जाएगा।",
     "settingsThresholdLabel": "इससे लम्बे पेस्ट को जोड़ें",
     "settingsThresholdUnit": "अक्षर",
-    "settingsThresholdHint": "{min, number} से {max, number} अक्षरों के बीच।"
+    "settingsThresholdHint": "{min, number} से {max, number} अक्षरों के बीच।",
+    "options": {
+      "menuLabel": "इस रूप में पेस्ट करें…",
+      "insertHeading": "संदेश में जोड़ें",
+      "attachHeading": "संलग्न करें",
+      "text": "सादा पाठ",
+      "markdown": "फ़ॉर्मेटेड टेक्स्ट (Markdown)",
+      "attachText": "टेक्स्ट फ़ाइल",
+      "attachMarkdown": "फ़ॉर्मेटेड टेक्स्ट फ़ाइल (Markdown)",
+      "image": "{count, plural, one {छवि} other {# छवियाँ}}",
+      "link": "लिंक से पृष्ठ सामग्री",
+      "hint": "↑↓ चुनें · Enter पेस्ट करें · Esc रद्द करें · 1–9 चुनें"
+    }
   },
   "structures": {
     "section": "संरचनाएँ",
@@ -5019,7 +5034,11 @@
       "your-model": "आपका मॉडल उपयोग करता है",
       "pinned-model": "मॉडल व्यवस्थापक द्वारा निर्धारित",
       "own-model": "अपने मॉडल पर चलता है"
-    }
+    },
+    "loadError": "फिलहाल आपके एजेंट्स लोड नहीं हो पाए। यह आमतौर पर अस्थायी होता है।",
+    "discoveryLoading": "Foundry एजेंट्स खोज रहे हैं…",
+    "discoveryError": "Foundry एजेंट्स लोड नहीं हो सके।",
+    "retry": "फिर से प्रयास करें"
   },
   "peopleSuggest": {
     "listLabel": "आपके संगठन से सुझाव",

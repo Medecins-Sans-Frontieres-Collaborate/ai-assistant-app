@@ -939,7 +939,9 @@
     "collapseFolder": "收起文件夹 {name}",
     "folderOptions": "{name} 选项",
     "agentsEntry": "代理",
-    "agentsTitle": "浏览代理并开始对话"
+    "agentsTitle": "浏览代理并开始对话",
+    "agentsLoading": "正在检查可用的智能体…",
+    "agentsLoadError": "无法加载您的智能体 — 点击重试"
   },
   "prompts": {
     "buildReusablePrompts": "使用 AI 辅助构建可重复使用的提示",
@@ -2559,7 +2561,8 @@
     "searchConversations": "搜索对话",
     "toggleTheme": "切换主题",
     "regenerateResponse": "重新生成回复",
-    "copyLastResponse": "复制上次回复"
+    "copyLastResponse": "复制上次回复",
+    "pasteOptions": "粘贴为…（请选择文本、Markdown、附件、图片或链接）"
   },
   "quarantine": {
     "title": "已隔离的会话",
@@ -4313,7 +4316,19 @@
     "settingsDescription": "如果粘贴的文本超过下方限制，将作为文件附件，而不是填充到消息框。文本内容将完全按原样使用——不会被抓取或更改。",
     "settingsThresholdLabel": "当粘贴内容超过",
     "settingsThresholdUnit": "字符时附加",
-    "settingsThresholdHint": "在 {min, number} 至 {max, number} 个字符之间。"
+    "settingsThresholdHint": "在 {min, number} 至 {max, number} 个字符之间。",
+    "options": {
+      "menuLabel": "粘贴为…",
+      "insertHeading": "插入到消息中",
+      "attachHeading": "作为附件",
+      "text": "纯文本",
+      "markdown": "格式化文本（Markdown）",
+      "attachText": "文本文件",
+      "attachMarkdown": "格式化文本文件（Markdown）",
+      "image": "{count, plural, one {图片} other {# 张图片}}",
+      "link": "链接页面内容",
+      "hint": "↑↓选择 · Enter粘贴 · Esc取消 · 1–9选择"
+    }
   },
   "structures": {
     "section": "结构",
@@ -5050,7 +5065,11 @@
       "your-model": "使用您的模型",
       "pinned-model": "管理员指定模型",
       "own-model": "使用自有模型"
-    }
+    },
+    "loadError": "刚才无法加载您的智能体，通常是暂时性问题。",
+    "discoveryLoading": "正在查找Foundry智能体…",
+    "discoveryError": "无法加载Foundry智能体。",
+    "retry": "重试"
   },
   "peopleSuggest": {
     "listLabel": "来自您组织的建议",

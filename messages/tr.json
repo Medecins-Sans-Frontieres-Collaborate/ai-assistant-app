@@ -908,7 +908,9 @@
     "collapseFolder": "Klasörü daralt {name}",
     "folderOptions": "{name} seçenekleri",
     "agentsEntry": "Agentlar",
-    "agentsTitle": "Agentlara göz atın ve biriyle sohbet başlatın"
+    "agentsTitle": "Agentlara göz atın ve biriyle sohbet başlatın",
+    "agentsLoading": "Kullanabileceğiniz ajanlar kontrol ediliyor…",
+    "agentsLoadError": "Ajanlarınız yüklenemedi — yeniden denemek için açın"
   },
   "prompts": {
     "buildReusablePrompts": "AI yardımıyla yeniden kullanılabilir istemler oluşturun",
@@ -2528,7 +2530,8 @@
     "searchConversations": "Konuşmaları ara",
     "toggleTheme": "Temayı değiştir",
     "regenerateResponse": "Yanıtı yeniden oluştur",
-    "copyLastResponse": "Son yanıtı kopyala"
+    "copyLastResponse": "Son yanıtı kopyala",
+    "pasteOptions": "Olarak yapıştır… (metin, Markdown, ek, görsel veya bağlantı seçin)"
   },
   "quarantine": {
     "title": "Karantinaya Alınan Konuşmalar",
@@ -4282,7 +4285,19 @@
     "settingsDescription": "Aşağıdaki sınırı aşan metin ek dosya olarak eklenir, mesaj kutusunu doldurmaz. Metin tam olarak yapıştırıldığı gibi kullanılır — hiçbir şey indirilmez veya değiştirilmez.",
     "settingsThresholdLabel": "Şundan daha uzun yapıştırmaları ekle:",
     "settingsThresholdUnit": "karakter",
-    "settingsThresholdHint": "{min, number} ile {max, number} karakter arasında olmalı."
+    "settingsThresholdHint": "{min, number} ile {max, number} karakter arasında olmalı.",
+    "options": {
+      "menuLabel": "Olarak yapıştır…",
+      "insertHeading": "Mesaja ekle",
+      "attachHeading": "Ekle",
+      "text": "Düz metin",
+      "markdown": "Biçimlendirilmiş metin (Markdown)",
+      "attachText": "Metin dosyası",
+      "attachMarkdown": "Biçimlendirilmiş metin dosyası (Markdown)",
+      "image": "{count, plural, one {Görsel} other {# görsel}}",
+      "link": "Bağlantıdan sayfa içeriği",
+      "hint": "↑↓ seç · Enter yapıştır · Esc iptal · 1–9 seç"
+    }
   },
   "structures": {
     "section": "Yapılar",
@@ -5019,7 +5034,11 @@
       "your-model": "kendi modelinizi kullanır",
       "pinned-model": "yönetici tarafından atanmış model",
       "own-model": "kendi modeli üzerinde çalışıyor"
-    }
+    },
+    "loadError": "Ajanlarınız şu anda yüklenemedi. Bu genellikle geçici bir durumdur.",
+    "discoveryLoading": "Foundry ajanları aranıyor…",
+    "discoveryError": "Foundry ajanları yüklenemedi.",
+    "retry": "Tekrar deneyin"
   },
   "peopleSuggest": {
     "listLabel": "Kuruluşunuzdan öneriler",

@@ -905,7 +905,9 @@
     "collapseFolder": "Zwiń folder {name}",
     "folderOptions": "Opcje {name}",
     "agentsEntry": "Agenci",
-    "agentsTitle": "Przeglądaj agentów i rozpocznij z jednym rozmowę"
+    "agentsTitle": "Przeglądaj agentów i rozpocznij z jednym rozmowę",
+    "agentsLoading": "Sprawdzanie, których agentów możesz użyć…",
+    "agentsLoadError": "Nie udało się załadować Twoich agentów — otwórz ponownie, aby spróbować jeszcze raz"
   },
   "prompts": {
     "buildReusablePrompts": "Twórz wielokrotnego użytku podpowiedzi z pomocą AI",
@@ -2528,7 +2530,8 @@
     "searchConversations": "Wyszukaj rozmowy",
     "toggleTheme": "Przełącz motyw",
     "regenerateResponse": "Wygeneruj ponownie odpowiedź",
-    "copyLastResponse": "Kopiuj ostatnią odpowiedź"
+    "copyLastResponse": "Kopiuj ostatnią odpowiedź",
+    "pasteOptions": "Wklej jako… (wybierz tekst, Markdown, załącznik, obraz lub link)"
   },
   "quarantine": {
     "title": "Rozmowy w kwarantannie",
@@ -4282,7 +4285,19 @@
     "settingsDescription": "Wklejenie większej liczby znaków niż poniżej powoduje dodanie ich jako plik zamiast wypełnienia pola wiadomości. Tekst jest używany dokładnie tak, jak został wklejony — nic nie jest pobierane ani zmieniane.",
     "settingsThresholdLabel": "Załącz wklejki dłuższe niż",
     "settingsThresholdUnit": "znaków",
-    "settingsThresholdHint": "Od {min, number} do {max, number} znaków."
+    "settingsThresholdHint": "Od {min, number} do {max, number} znaków.",
+    "options": {
+      "menuLabel": "Wklej jako…",
+      "insertHeading": "Wstaw do wiadomości",
+      "attachHeading": "Załącz",
+      "text": "Zwykły tekst",
+      "markdown": "Sformatowany tekst (Markdown)",
+      "attachText": "Plik tekstowy",
+      "attachMarkdown": "Sformatowany plik tekstowy (Markdown)",
+      "image": "{count, plural, one {Obraz} other {# obrazy}}",
+      "link": "Treść strony z linku",
+      "hint": "↑↓ wybierz · Enter wklej · Esc anuluj · 1–9 wybierz"
+    }
   },
   "structures": {
     "section": "Struktury",
@@ -5019,7 +5034,11 @@
       "your-model": "korzysta z Twojego modelu",
       "pinned-model": "model ustawiony przez administratora",
       "own-model": "korzysta z własnego modelu"
-    }
+    },
+    "loadError": "Nie udało się teraz załadować Twoich agentów. Zwykle to chwilowy problem.",
+    "discoveryLoading": "Wyszukiwanie agentów Foundry…",
+    "discoveryError": "Nie udało się załadować agentów Foundry.",
+    "retry": "Spróbuj ponownie"
   },
   "peopleSuggest": {
     "listLabel": "Sugestie z Twojej organizacji",

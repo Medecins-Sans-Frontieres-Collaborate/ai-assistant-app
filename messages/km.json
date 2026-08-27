@@ -988,7 +988,9 @@
     "collapseFolder": "បង្រួមថត {name}",
     "folderOptions": "ជម្រើស {name}",
     "agentsEntry": "ភ្នាក់ងារ",
-    "agentsTitle": "រកមើលភ្នាក់ងារ និងចាប់ផ្ដើមជជែកជាមួយភ្នាក់ងារម្នាក់"
+    "agentsTitle": "រកមើលភ្នាក់ងារ និងចាប់ផ្ដើមជជែកជាមួយភ្នាក់ងារម្នាក់",
+    "agentsLoading": "កំពុងពិនិត្យមើល​​ភ្នាក់ងារដែលអ្នកអាចប្រើបាន…",
+    "agentsLoadError": "មិនអាចផ្ទុកភ្នាក់ងាររបស់អ្នកបានទេ — ចុចបើកឡើងវិញដើម្បីព្យាយាមម្ដងទៀត"
   },
   "errors": {
     "somethingWentWrong": "មានអ្វីមួយខុសប្រក្រតី",
@@ -2512,7 +2514,8 @@
     "searchConversations": "ស្វែងរកសន្ទនា",
     "toggleTheme": "ប្ដូរពណ៌ផ្ទៃ",
     "regenerateResponse": "បង្កើតចម្លើយឡើងវិញ",
-    "copyLastResponse": "ចម្លងចម្លើយចុងក្រោយ"
+    "copyLastResponse": "ចម្លងចម្លើយចុងក្រោយ",
+    "pasteOptions": "បិទភ្ជាប់ជា… (ជ្រើសអត្ថបទ, Markdown, ឯកសារភ្ជាប់, រូបភាព ឬតំណភ្ជាប់)"
   },
   "quarantine": {
     "title": "ការសន្ទនា​ដែល​បានដាក់ឯង",
@@ -4266,7 +4269,19 @@
     "settingsDescription": "បើបិទភ្ជាប់អត្ថបទលើសកំនត់ខាងក្រោម វានឹងភ្ជាប់ជាឯកសារ ផ្ទេរពីព្រិលមកប្រអប់សារ។ អត្ថបទត្រូវបានប្រើដូចដែលបានបិទភ្ជាប់—មិនមានអ្វីត្រូវបានយក ឬផ្លាស់ប្តូរឡើយ។",
     "settingsThresholdLabel": "ភ្ជាប់បិទភ្ជាប់លើសពី",
     "settingsThresholdUnit": "តួអក្សរ",
-    "settingsThresholdHint": "ចន្លោះពី {min, number} ដល់ {max, number} តួអក្សរ។"
+    "settingsThresholdHint": "ចន្លោះពី {min, number} ដល់ {max, number} តួអក្សរ។",
+    "options": {
+      "menuLabel": "បិទភ្ជាប់ជា…",
+      "insertHeading": "បញ្ចូលទៅក្នុងសារ",
+      "attachHeading": "ភ្ជាប់",
+      "text": "អត្ថបទធម្មតា",
+      "markdown": "អត្ថបទមានទ្រង់ទ្រាយ (Markdown)",
+      "attachText": "ឯកសារអត្ថបទ",
+      "attachMarkdown": "ឯកសារអត្ថបទមានទ្រង់ទ្រាយ (Markdown)",
+      "image": "{count, plural, one {រូបភាព} other {រូបភាព #}}",
+      "link": "មាតិកាទំព័រពីតំណភ្ជាប់",
+      "hint": "↑↓ ជ្រើស · Enter បិទភ្ជាប់ · Esc បោះបង់ · 1–9 ជ្រើស"
+    }
   },
   "structures": {
     "section": "រចនាសម្ព័ន្ធ",
@@ -5003,7 +5018,11 @@
       "your-model": "ប្រើម៉ូដែលរបស់អ្នក",
       "pinned-model": "ម៉ូដែលកំណត់ដោយអ្នកគ្រប់គ្រង",
       "own-model": "ដំណើរការនៅលើម៉ូដែលផ្ទាល់ខ្លួន"
-    }
+    },
+    "loadError": "មិនអាចផ្ទុកភ្នាក់ងាររបស់អ្នកបានទេ។ ស្ថានភាពនេះជាទូទៅជាបណ្តោះអាសន្ន។",
+    "discoveryLoading": "កំពុងស្វែងរក Foundry agents…",
+    "discoveryError": "មិនអាចផ្ទុក Foundry agents បានទេ។",
+    "retry": "សាកល្បងម្តងទៀត"
   },
   "peopleSuggest": {
     "listLabel": "សំណើពីអង្គការរបស់អ្នក",

@@ -78,7 +78,14 @@ export function AgentBrowserModal() {
   const tPin = useTranslations('connectorPin');
   const open = useUIStore((s) => s.agentBrowserOpen);
   const setOpen = useUIStore((s) => s.setAgentBrowserOpen);
-  const { agents, isLoading } = useAvailableAgents();
+  const {
+    agents,
+    isLoading,
+    isError,
+    isDiscoveryLoading,
+    isDiscoveryError,
+    retry,
+  } = useAvailableAgents();
   const {
     conversations,
     selectedConversation,
@@ -429,6 +436,19 @@ export function AgentBrowserModal() {
             <p className="px-3 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
               {t('loading')}
             </p>
+          ) : isError && allItems.length === 0 ? (
+            // Keyed on the unfiltered list: typing a query must not turn a
+            // failed load into "No matches" and hide Retry.
+            <div className="px-3 py-6 text-center text-sm text-gray-600 dark:text-gray-300">
+              <p>{t('loadError')}</p>
+              <button
+                type="button"
+                onClick={retry}
+                className="mt-3 rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:text-white dark:hover:bg-gray-800"
+              >
+                {t('retry')}
+              </button>
+            </div>
           ) : filtered.length === 0 ? (
             <p className="px-3 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
               {query ? t('noMatches') : t('noAgents')}
@@ -528,6 +548,26 @@ export function AgentBrowserModal() {
                 );
               })}
             </ul>
+          )}
+          {!isError && isDiscoveryLoading && (
+            <p
+              className="px-3 py-2 text-center text-xs text-gray-500 dark:text-gray-400"
+              aria-live="polite"
+            >
+              {t('discoveryLoading')}
+            </p>
+          )}
+          {!isError && !isDiscoveryLoading && isDiscoveryError && (
+            <p className="flex items-center justify-center gap-2 px-3 py-2 text-xs text-amber-700 dark:text-amber-400">
+              <span>{t('discoveryError')}</span>
+              <button
+                type="button"
+                onClick={retry}
+                className="rounded border border-amber-300 px-2 py-0.5 text-amber-800 hover:bg-amber-100 dark:border-amber-700 dark:text-amber-300 dark:hover:bg-amber-900/40"
+              >
+                {t('retry')}
+              </button>
+            </p>
           )}
         </div>
       </div>

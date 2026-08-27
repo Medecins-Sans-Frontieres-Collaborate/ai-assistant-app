@@ -883,7 +883,9 @@
     "collapseFolder": "ဖိုလ်ဒါ {name} ကိုချုပ်မည်",
     "folderOptions": "{name} ရွေးစရာများ",
     "agentsEntry": "အေးဂျင့်များ",
-    "agentsTitle": "အေးဂျင့်များကိုရှာဖွေပြီး တစ်ဦးနှင့် စကားပြောရန် စတင်ပါ"
+    "agentsTitle": "အေးဂျင့်များကိုရှာဖွေပြီး တစ်ဦးနှင့် စကားပြောရန် စတင်ပါ",
+    "agentsLoading": "သင်အသုံးပြုနိုင်သော agent များကို စစ်ဆေးနေပါသည်...",
+    "agentsLoadError": "သင့် agent များကို ဖော်ပြ၍မရပါ — ပြန်လည်ကြိုးစားရန် ဖွင့်ပါ"
   },
   "prompts": {
     "buildReusablePrompts": "AI အကူအညီဖြင့် ပြန်လည်အသုံးပြုနိုင်သော အကြံပြုချက်များကို တည်ဆောက်ပါ",
@@ -2528,7 +2530,8 @@
     "searchConversations": "စကားပြောချက်များကို ရှာဖွေပါ",
     "toggleTheme": "အပြင်အဆင် ပြောင်းပါ",
     "regenerateResponse": "တုံပြန်ချက်အသစ် ပြန်ထုတ်ပါ",
-    "copyLastResponse": "နောက်ဆုံးတုံပြန်ချက် ကူးယူပါ"
+    "copyLastResponse": "နောက်ဆုံးတုံပြန်ချက် ကူးယူပါ",
+    "pasteOptions": "အဖြစ်... ဖြင့် ပွားထည့် (စာသား၊ Markdown၊ ဖိုင်တွဲ၊ ပုံသို့မဟုတ် လင့်ခ်ကို ရွေးပါ)"
   },
   "quarantine": {
     "title": "သီးသန့်ထားသော စကားပြောချက်များ",
@@ -4282,7 +4285,19 @@
     "settingsDescription": "အောက်ပါကန့်သတ်ချက်ထက်ပိုသောစာသားကူးထည့်ပါက၊ အကြောင်းအရာကို attachment အဖြစ်ထည့်သွင်းပေးမည်၊ message box တွင်အကြောင်းအရာပြစ်မထားတော့ပါ။ စာသားကိုတစ်ခြန်းတည်းအသုံးပြုသည်—တခြားဒေတာများ fetch လုပ်ခြင်း မရှိပါ။",
     "settingsThresholdLabel": "ဤအလျောက်စာလုံးအထက်ရှိ paste များကိုပူးတွဲပါ",
     "settingsThresholdUnit": "စာလုံးများ",
-    "settingsThresholdHint": "{min, number} မှ {max, number} စာလုံးအတွင်းဖြစ်ရမည်။"
+    "settingsThresholdHint": "{min, number} မှ {max, number} စာလုံးအတွင်းဖြစ်ရမည်။",
+    "options": {
+      "menuLabel": "အဖြစ်... ဖြင့် ပွားထည့်",
+      "insertHeading": "စာကို မက်ဆေ့ခ်ျထဲ ထည့်ပါ",
+      "attachHeading": "ဖိုင်တွဲမည်",
+      "text": "ပုံမှန်စာသား",
+      "markdown": "ဖော်မက်ထားသောစာသား (Markdown)",
+      "attachText": "စာသားဖိုင်",
+      "attachMarkdown": "ဖော်မက်ထားသောစာသားဖိုင် (Markdown)",
+      "image": "{count, plural, one {ပုံတစ်ပုံ} other {ပုံ # ပုံ}}",
+      "link": "လင့်ခ်မှ စာမျက်နှာအကြောင်းအရာ",
+      "hint": "↑↓ ရွေးပါ · Enter ပွားထည့်ပါ · Esc ဖျက်သိမ်းပါ · 1–9 ရွေးချယ်ပါ"
+    }
   },
   "structures": {
     "section": "ဖွဲ့စည်းပုံများ",
@@ -5019,7 +5034,11 @@
       "your-model": "သင့်မော်ဒယ်ကို အသုံးပြုသည်",
       "pinned-model": "အက်ဒမင် သတ်မှတ်ထားသော မော်ဒယ်",
       "own-model": "မိမိ မော်ဒယ်ကို အသုံးပြု၍ လည်ပတ်သည်"
-    }
+    },
+    "loadError": "သင့် agent များကို ယခုဖော်ပြ၍မရပါ။ ယင်းသည် ယာယီဖြစ်ခြင်းဖြစ်သည်။",
+    "discoveryLoading": "Foundry agent များကို ရှာဖွေနေပါသည်...",
+    "discoveryError": "Foundry agent များကို ဖော်ပြ၍မရပါ။",
+    "retry": "ပြန်လည်ကြိုးစားပါ"
   },
   "peopleSuggest": {
     "listLabel": "သင့်အဖွဲ့အစည်းမှ အကြံပြုချက်များ",

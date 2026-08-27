@@ -1,6 +1,9 @@
 import { renderHook } from '@testing-library/react';
 
-import { useAgentBrowserHasItems } from '@/client/hooks/settings/useAvailableAgents';
+import {
+  useAgentBrowserAvailability,
+  useAgentBrowserHasItems,
+} from '@/client/hooks/settings/useAvailableAgents';
 
 import type { DiscoveredAgent } from '@/lib/services/agents/AgentDiscoveryService';
 
@@ -9,6 +12,10 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 let foundryAgents: Partial<DiscoveredAgent>[] = [];
 let toolsEnabled = false;
+let isLoadingFoundryAgents = false;
+let isFoundryAgentsError = false;
+let isDiscoveryLoading = false;
+let isDiscoveryError = false;
 
 vi.mock('launchdarkly-react-client-sdk', () => ({
   useFlags: () => ({ exploreBots: true }),
@@ -22,7 +29,11 @@ vi.mock('@/client/hooks/settings/useFoundryAgents', () => ({
   useFoundryAgents: () => ({
     foundryAgents,
     suppressedOrgAgentIds: [],
-    isLoadingFoundryAgents: false,
+    isLoadingFoundryAgents,
+    isFoundryAgentsError,
+    isDiscoveryLoading,
+    isDiscoveryError,
+    retryFoundryAgents: () => Promise.resolve(),
   }),
 }));
 
@@ -36,6 +47,10 @@ describe('useAgentBrowserHasItems', () => {
   beforeEach(() => {
     foundryAgents = [];
     toolsEnabled = false;
+    isLoadingFoundryAgents = false;
+    isFoundryAgentsError = false;
+    isDiscoveryLoading = false;
+    isDiscoveryError = false;
     useSettingsStore.setState({
       mcpServers: [],
       m365Connected: false,
@@ -76,5 +91,85 @@ describe('useAgentBrowserHasItems', () => {
     useSettingsStore.setState({ m365Connected: true });
     const { result } = renderHook(() => useAgentBrowserHasItems());
     expect(result.current).toBe(false);
+  });
+});
+
+describe('useAgentBrowserAvailability', () => {
+  beforeEach(() => {
+    foundryAgents = [];
+    toolsEnabled = false;
+    isLoadingFoundryAgents = false;
+    isFoundryAgentsError = false;
+    isDiscoveryLoading = false;
+    isDiscoveryError = false;
+    useSettingsStore.setState({
+      mcpServers: [],
+      m365Connected: false,
+      customAgentSources: [],
+    } as Partial<SettingsState>);
+  });
+
+  it('stays "loading" while only Foundry discovery is still running', () => {
+    isDiscoveryLoading = true;
+    const { result } = renderHook(() => useAgentBrowserAvailability());
+    expect(result.current.status).toBe('loading');
+  });
+
+  it('is "ready" from the fast half alone while Foundry discovery still runs', () => {
+    isDiscoveryLoading = true;
+    foundryAgents = [{ id: 'prompt-1', type: 'prompt', name: 'Beta Persona' }];
+    const { result } = renderHook(() => useAgentBrowserAvailability());
+    expect(result.current.status).toBe('ready');
+  });
+
+  it('is "error" when Foundry discovery failed and nothing else is known', () => {
+    // Hiding the entry point here would leave no way to reach Retry.
+    isDiscoveryError = true;
+    const { result } = renderHook(() => useAgentBrowserAvailability());
+    expect(result.current).toEqual({ status: 'error', hasItems: false });
+  });
+
+  it('is "ready", not "error", when Foundry discovery failed but other rows exist', () => {
+    isDiscoveryError = true;
+    useSettingsStore.setState({
+      mcpServers: [
+        { id: 's1', name: 'GitHub', enabled: true, authMode: 'none' },
+      ],
+    } as Partial<SettingsState>);
+    const { result } = renderHook(() => useAgentBrowserAvailability());
+    expect(result.current.status).toBe('ready');
+  });
+
+  it('stays "loading" while discovery is still running even after a discovery error flag', () => {
+    isDiscoveryError = true;
+    isDiscoveryLoading = true;
+    const { result } = renderHook(() => useAgentBrowserAvailability());
+    expect(result.current.status).toBe('loading');
+  });
+
+  it('is "loading" (never "empty") while discovery runs with nothing known', () => {
+    isLoadingFoundryAgents = true;
+    const { result } = renderHook(() => useAgentBrowserAvailability());
+    expect(result.current).toEqual({ status: 'loading', hasItems: false });
+  });
+
+  it('is "ready" as soon as anything is known, even mid-load', () => {
+    isLoadingFoundryAgents = true;
+    useSettingsStore.setState({
+      mcpServers: [{ id: 'srv-1', name: 'Asana', enabled: true }],
+    } as Partial<SettingsState>);
+    const { result } = renderHook(() => useAgentBrowserAvailability());
+    expect(result.current.status).toBe('ready');
+  });
+
+  it('is "error" when discovery failed with nothing cached', () => {
+    isFoundryAgentsError = true;
+    const { result } = renderHook(() => useAgentBrowserAvailability());
+    expect(result.current).toEqual({ status: 'error', hasItems: false });
+  });
+
+  it('is "empty" only after discovery finished with nothing', () => {
+    const { result } = renderHook(() => useAgentBrowserAvailability());
+    expect(result.current).toEqual({ status: 'empty', hasItems: false });
   });
 });

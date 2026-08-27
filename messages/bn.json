@@ -854,7 +854,9 @@
     "collapseFolder": "ফোল্ডার {name} সংকুচিত করুন",
     "folderOptions": "{name} এর অপশনসমূহ",
     "agentsEntry": "এজেন্টসমূহ",
-    "agentsTitle": "এজেন্ট ব্রাউজ করুন এবং কারও সাথে চ্যাট শুরু করুন"
+    "agentsTitle": "এজেন্ট ব্রাউজ করুন এবং কারও সাথে চ্যাট শুরু করুন",
+    "agentsLoading": "আপনি কোন এজেন্ট ব্যবহার করতে পারেন তা যাচাই করা হচ্ছে…",
+    "agentsLoadError": "আপনার এজেন্ট লোড করা যায়নি — পুনরায় চেষ্টা করতে খুলুন"
   },
   "prompts": {
     "buildReusablePrompts": "AI সহায়তায় পুনর্ব্যবহারযোগ্য প্রম্পট তৈরি করুন",
@@ -2528,7 +2530,8 @@
     "searchConversations": "কথোপকথনগুলি অনুসন্ধান করুন",
     "toggleTheme": "থিম পরিবর্তন করুন",
     "regenerateResponse": "উত্তর পুনরায় তৈরি করুন",
-    "copyLastResponse": "শেষ উত্তর কপি করুন"
+    "copyLastResponse": "শেষ উত্তর কপি করুন",
+    "pasteOptions": "পেস্ট করুন… (টেক্সট, Markdown, অ্যাটাচমেন্ট, ছবি বা লিঙ্ক নির্বাচন করুন)"
   },
   "quarantine": {
     "title": "কোয়ারেন্টাইনকৃত আলাপ",
@@ -4282,7 +4285,19 @@
     "settingsDescription": "নিচের সীমার চেয়ে বেশি টেক্সট পেস্ট করলে তা ফাইল হিসেবে সংযুক্ত হবে, বার্তাবক্সে দেখাবে না। পেস্ট করা টেক্সট একদম সেভাবেই ব্যবহৃত হবে — কিছুই ফেচ বা পরিবর্তন হয় না।",
     "settingsThresholdLabel": "এত বড় পেস্ট সংযুক্ত করুন",
     "settingsThresholdUnit": "অক্ষর",
-    "settingsThresholdHint": "{min, number} থেকে {max, number} অক্ষরের মধ্যে।"
+    "settingsThresholdHint": "{min, number} থেকে {max, number} অক্ষরের মধ্যে।",
+    "options": {
+      "menuLabel": "পেস্ট করুন…",
+      "insertHeading": "বার্তায় যোগ করুন",
+      "attachHeading": "সংযুক্ত করুন",
+      "text": "সাধারণ টেক্সট",
+      "markdown": "ফরম্যাট করা টেক্সট (Markdown)",
+      "attachText": "টেক্সট ফাইল",
+      "attachMarkdown": "ফরম্যাট করা টেক্সট ফাইল (Markdown)",
+      "image": "{count, plural, one {ছবি} other {#টি ছবি}}",
+      "link": "লিঙ্ক থেকে পৃষ্ঠার বিষয়বস্তু",
+      "hint": "↑↓ নির্বাচন · Enter পেস্ট · Esc বাতিল · ১–৯ নির্বাচন করুন"
+    }
   },
   "structures": {
     "section": "স্ট্রাকচার",
@@ -5019,7 +5034,11 @@
       "your-model": "আপনার মডেল ব্যবহার করে",
       "pinned-model": "অ্যাডমিন দ্বারা নির্ধারিত মডেল",
       "own-model": "নিজস্ব মডেলে চলে"
-    }
+    },
+    "loadError": "এখনই আপনার এজেন্ট লোড করা যায়নি। এটি সাধারণত অস্থায়ী।",
+    "discoveryLoading": "Foundry এজেন্ট খোঁজা হচ্ছে…",
+    "discoveryError": "Foundry এজেন্ট লোড করা যায়নি।",
+    "retry": "পুনরায় চেষ্টা করুন"
   },
   "peopleSuggest": {
     "listLabel": "আপনার সংস্থার পক্ষ থেকে প্রস্তাবনা",

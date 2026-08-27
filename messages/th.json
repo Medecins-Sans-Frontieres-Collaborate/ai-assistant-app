@@ -825,7 +825,9 @@
     "collapseFolder": "ย่อโฟลเดอร์ {name}",
     "folderOptions": "ตัวเลือกของ {name}",
     "agentsEntry": "เอเจนต์",
-    "agentsTitle": "เรียกดูเอเจนต์และเริ่มแชทกับเอเจนต์"
+    "agentsTitle": "เรียกดูเอเจนต์และเริ่มแชทกับเอเจนต์",
+    "agentsLoading": "กำลังตรวจสอบว่าเอเจนต์ใดที่คุณสามารถใช้ได้…",
+    "agentsLoadError": "ไม่สามารถโหลดเอเจนต์ของคุณได้ — คลิกเพื่อลองอีกครั้ง"
   },
   "prompts": {
     "buildReusablePrompts": "สร้างพรอมต์ที่ใช้ซ้ำได้ด้วยความช่วยเหลือจาก AI",
@@ -2528,7 +2530,8 @@
     "searchConversations": "ค้นหาการสนทนา",
     "toggleTheme": "สลับธีม",
     "regenerateResponse": "สร้างคำตอบใหม่อีกครั้ง",
-    "copyLastResponse": "คัดลอกคำตอบล่าสุด"
+    "copyLastResponse": "คัดลอกคำตอบล่าสุด",
+    "pasteOptions": "วางเป็น... (เลือกข้อความ, Markdown, ไฟล์แนบ, รูปภาพ หรือ ลิงก์)"
   },
   "quarantine": {
     "title": "การสนทนาที่ถูกกักกัน",
@@ -4282,7 +4285,19 @@
     "settingsDescription": "หากวางข้อความเกินจำนวนด้านล่าง ระบบจะจัดเก็บเป็นไฟล์แนบแทนที่จะแสดงในกล่องข้อความ ข้อความจะถูกนำมาใช้ตามที่วางไว้ — ไม่ดึงหรือเปลี่ยนแปลงใด ๆ",
     "settingsThresholdLabel": "แนบไฟล์เมื่อวางข้อความยาวกว่า",
     "settingsThresholdUnit": "อักขระ",
-    "settingsThresholdHint": "ระหว่าง {min, number} ถึง {max, number} อักขระ"
+    "settingsThresholdHint": "ระหว่าง {min, number} ถึง {max, number} อักขระ",
+    "options": {
+      "menuLabel": "วางเป็น...",
+      "insertHeading": "แทรกลงในข้อความ",
+      "attachHeading": "แนบ",
+      "text": "ข้อความล้วน",
+      "markdown": "ข้อความจัดรูปแบบ (Markdown)",
+      "attachText": "ไฟล์ข้อความ",
+      "attachMarkdown": "ไฟล์ข้อความจัดรูปแบบ (Markdown)",
+      "image": "{count, plural, one {รูปภาพ} other {# รูปภาพ}}",
+      "link": "เนื้อหาหน้าจากลิงก์",
+      "hint": "↑↓ เลือก · Enter วาง · Esc ยกเลิก · 1–9 เลือก"
+    }
   },
   "structures": {
     "section": "โครงสร้าง",
@@ -5019,7 +5034,11 @@
       "your-model": "ใช้โมเดลของคุณ",
       "pinned-model": "โมเดลที่ผู้ดูแลระบบกำหนด",
       "own-model": "ทำงานบนโมเดลของตัวเอง"
-    }
+    },
+    "loadError": "ไม่สามารถโหลดเอเจนต์ของคุณได้ในขณะนี้ โดยปกติปัญหานี้จะเกิดขึ้นชั่วคราว",
+    "discoveryLoading": "กำลังค้นหา Foundry agents…",
+    "discoveryError": "ไม่สามารถโหลด Foundry agents ได้",
+    "retry": "ลองอีกครั้ง"
   },
   "peopleSuggest": {
     "listLabel": "คำแนะนำจากองค์กรของคุณ",

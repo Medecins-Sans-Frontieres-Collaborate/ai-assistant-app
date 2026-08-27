@@ -908,7 +908,9 @@
     "collapseFolder": "Komprimera mapp {name}",
     "folderOptions": "{name}-alternativ",
     "agentsEntry": "Agenter",
-    "agentsTitle": "Bläddra bland agenter och starta en chatt med en"
+    "agentsTitle": "Bläddra bland agenter och starta en chatt med en",
+    "agentsLoading": "Kontrollerar vilka agenter du kan använda…",
+    "agentsLoadError": "Dina agenter kunde inte laddas — öppna för att försöka igen"
   },
   "prompts": {
     "buildReusablePrompts": "Bygg återanvändbara prompter med AI-assistans",
@@ -2528,7 +2530,8 @@
     "searchConversations": "Sök konversationer",
     "toggleTheme": "Växla tema",
     "regenerateResponse": "Återskapa svar",
-    "copyLastResponse": "Kopiera senaste svaret"
+    "copyLastResponse": "Kopiera senaste svaret",
+    "pasteOptions": "Klistra in som… (välj text, Markdown, bilaga, bild eller länk)"
   },
   "quarantine": {
     "title": "Karantänsatta konversationer",
@@ -4282,7 +4285,19 @@
     "settingsDescription": "Om du klistrar in mer text än gränsen nedan, bifogas den som en fil istället för att fylla meddelanderutan. Texten används exakt som inklistrad — inget hämtas eller ändras.",
     "settingsThresholdLabel": "Bifoga inklistringar längre än",
     "settingsThresholdUnit": "tecken",
-    "settingsThresholdHint": "Mellan {min, number} och {max, number} tecken."
+    "settingsThresholdHint": "Mellan {min, number} och {max, number} tecken.",
+    "options": {
+      "menuLabel": "Klistra in som…",
+      "insertHeading": "Infoga i meddelande",
+      "attachHeading": "Bifoga",
+      "text": "Oformaterad text",
+      "markdown": "Formaterad text (Markdown)",
+      "attachText": "Textfil",
+      "attachMarkdown": "Formaterad textfil (Markdown)",
+      "image": "{count, plural, one {Bild} other {# bilder}}",
+      "link": "Sidinnehåll från länk",
+      "hint": "↑↓ välj · Enter klistra in · Esc avbryt · 1–9 välj"
+    }
   },
   "structures": {
     "section": "Strukturer",
@@ -5019,7 +5034,11 @@
       "your-model": "använder din modell",
       "pinned-model": "modell vald av admin",
       "own-model": "kör på egen modell"
-    }
+    },
+    "loadError": "Dina agenter kunde inte laddas just nu. Detta är vanligtvis tillfälligt.",
+    "discoveryLoading": "Letar efter Foundry-agenter…",
+    "discoveryError": "Det gick inte att ladda Foundry-agenter.",
+    "retry": "Försök igen"
   },
   "peopleSuggest": {
     "listLabel": "Förslag från din organisation",

@@ -988,7 +988,9 @@
     "collapseFolder": "ፎልደር {name} ሰንካል",
     "folderOptions": "ኣማራጮታት {name}",
     "agentsEntry": "ወኪላት",
-    "agentsTitle": "ወኪላት ይቐይሩን ከኣንዳንዱ ምዛር ቴክስት ጀምሩ"
+    "agentsTitle": "ወኪላት ይቐይሩን ከኣንዳንዱ ምዛር ቴክስት ጀምሩ",
+    "agentsLoading": "እዚ ትኽክልኩም ዘምጽኡን ዝኽእሉ ገለ ኣጄንት እዚ እዚ እተረዳኡ…",
+    "agentsLoadError": "ኣጄንታትኩም ምምጻዕ ኣይተኻአኑን — ምለላዕ ክትፈትኑ ክኽእሉ ኢኹም"
   },
   "errors": {
     "somethingWentWrong": "ገለ ጸገም ተፈጢሩ",
@@ -2512,7 +2514,8 @@
     "searchConversations": "ቓወዲ መገናኛታት ድልየት",
     "toggleTheme": "ምቕያር ገጽታ",
     "regenerateResponse": "መልሲ እንደገና ኣውጽኦ",
-    "copyLastResponse": "መጨረሻ መልሲ ኣቐዲሉ"
+    "copyLastResponse": "መጨረሻ መልሲ ኣቐዲሉ",
+    "pasteOptions": "እንደ... ቅንፃፅር ቅኣም (ጽሑፍ፣ Markdown፣ ውህብ፣ ምስሊ ወይ መስመር ይምረፁ)"
   },
   "quarantine": {
     "title": "ተሰወሩ ዝተይዉዎ ውይይታታት",
@@ -4266,7 +4269,19 @@
     "settingsDescription": "ንሓቁቶ ፍቑድ ካብ ትኽክለኛ ውሑድ ዝበለ ጽሑፍ፡ ተቐበሉ እንዳ ፋይል ይሰብር፡ ኣይወስድን ኣይተቐየረን።",
     "settingsThresholdLabel": "ሓቁቶ ዘይብሉ ኣብ ሰነድ ሓደገ",
     "settingsThresholdUnit": "ፊደላት",
-    "settingsThresholdHint": "ብዙሕት፡ {min, number} ን {max, number} ፊደል ውሑድ።"
+    "settingsThresholdHint": "ብዙሕት፡ {min, number} ን {max, number} ፊደል ውሑድ።",
+    "options": {
+      "menuLabel": "እንደ... ቅንፃፅር ቅኣም",
+      "insertHeading": "መልእኽቲ ውስጢ ኣእትዉ",
+      "attachHeading": "ውህብ",
+      "text": "ቀሊል ጽሑፍ",
+      "markdown": "ቅድመ-ተስተኻኽል ጽሑፍ (Markdown)",
+      "attachText": "ፋይል ጽሑፍ",
+      "attachMarkdown": "ቅድመ-ተስተኻኽል ፋይል (Markdown)",
+      "image": "{count, plural, one {ምስሊ} other {# ምስልታት}}",
+      "link": "ይኽእል ማዕረፍ ካብ መስመር",
+      "hint": "↑↓ ይምረፁ · Enter ቅኣም · Esc ሰርዝ · 1–9 ምረጽ"
+    }
   },
   "structures": {
     "section": "ኣቋራጭታት",
@@ -5003,7 +5018,11 @@
       "your-model": "ሞዴልካ ይጥቀም",
       "pinned-model": "አመሓዳሪ ዝመርጸ ሞዴል",
       "own-model": "ሓደ ሞዴል ይግዚኡ"
-    }
+    },
+    "loadError": "ኣጄንታትኩም ሕጂ ምምጻዕ ኣይተቻአኑን። ዚኣ ሓደ ግዜ ክብል ኢዩ።",
+    "discoveryLoading": "Foundry ኣጄንታት እዚ እተኣክቱ…",
+    "discoveryError": "Foundry ኣጄንታት ምምጻዕ ኣይተቻአኑን።",
+    "retry": "ብደገም ፈትኑ"
   },
   "peopleSuggest": {
     "listLabel": "ሓገዝታት ካብ ኣካዳሚኻ",

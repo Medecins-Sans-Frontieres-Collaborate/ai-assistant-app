@@ -988,7 +988,9 @@
     "collapseFolder": "Rufewa babban fayil {name}",
     "folderOptions": "Zaɓuɓɓukan {name}",
     "agentsEntry": "Wakilai",
-    "agentsTitle": "Bincika wakilai kuma fara hira da ɗaya"
+    "agentsTitle": "Bincika wakilai kuma fara hira da ɗaya",
+    "agentsLoading": "Ana duba waɗanne wakilai za ka iya amfani da su…",
+    "agentsLoadError": "An kasa ɗora wakilanka — buɗe don ƙoƙarin sake sawa"
   },
   "errors": {
     "somethingWentWrong": "Wani abu ya samu matsala",
@@ -2512,7 +2514,8 @@
     "searchConversations": "Bincika tattaunawa",
     "toggleTheme": "Canja jigo",
     "regenerateResponse": "Sake samar da amsa",
-    "copyLastResponse": "Kwafi amsa ta ƙarshe"
+    "copyLastResponse": "Kwafi amsa ta ƙarshe",
+    "pasteOptions": "Manna a matsayin… (zaɓi rubutu, Markdown, ɗaure, hoto ko mahada)"
   },
   "quarantine": {
     "title": "Hirar da aka killace",
@@ -4266,7 +4269,19 @@
     "settingsDescription": "Nadewa rubutu sama da iyaka da ke ƙasa yana ɗora shi a matsayin fayil maimakon cike akwatin saƙo. Rubutun ana amfani da shi daidai yadda aka nade shi — ba a samo komai ko canzawa.",
     "settingsThresholdLabel": "Ɗora nadewa fiye da",
     "settingsThresholdUnit": "haruffa",
-    "settingsThresholdHint": "Tsakanin {min, number} da {max, number} haruffa."
+    "settingsThresholdHint": "Tsakanin {min, number} da {max, number} haruffa.",
+    "options": {
+      "menuLabel": "Manna a matsayin…",
+      "insertHeading": "Saka cikin saƙo",
+      "attachHeading": "Haɗa",
+      "text": "Rubutu kai tsaye",
+      "markdown": "Rubutun da aka jera (Markdown)",
+      "attachText": "Fayil na rubutu",
+      "attachMarkdown": "Fayil na rubutun da aka jera (Markdown)",
+      "image": "{count, plural, one {Hoto} other {Hoto #}}",
+      "link": "Abubuwan shafi daga mahada",
+      "hint": "↑↓ zaɓi · Enter manna · Esc soke · 1–9 zaɓi"
+    }
   },
   "structures": {
     "section": "Tsaruka",
@@ -5003,7 +5018,11 @@
       "your-model": "yana amfani da samfurinka",
       "pinned-model": "samfurin da mai gudanarwa ya saita",
       "own-model": "yana aiki da samfurinsa kansa"
-    }
+    },
+    "loadError": "Ba a iya ɗora wakilanka a yanzu. Wannan yawanci na ɗan lokaci ne.",
+    "discoveryLoading": "Ana neman wakilan Foundry…",
+    "discoveryError": "An kasa ɗora wakilan Foundry.",
+    "retry": "Sake ƙoƙari"
   },
   "peopleSuggest": {
     "listLabel": "Shawarwari daga ƙungiyarku",

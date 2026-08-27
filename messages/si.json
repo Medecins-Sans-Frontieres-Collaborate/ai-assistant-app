@@ -875,7 +875,9 @@
     "collapseFolder": "ෆොල්ඩරය හකුලාගන්න {name}",
     "folderOptions": "{name} විකල්ප",
     "agentsEntry": "පැතිකඩ",
-    "agentsTitle": "පැතිකඩ පිරික්සා එක් එක් පසුඔරයෙක් සමඟ සංවාදයක් ආරම්භ කරන්න"
+    "agentsTitle": "පැතිකඩ පිරික්සා එක් එක් පසුඔරයෙක් සමඟ සංවාදයක් ආරම්භ කරන්න",
+    "agentsLoading": "ඔබට භාවිතා කළ හැකි නියෝජිතයන් පරීක්ෂා කරමින්…",
+    "agentsLoadError": "ඔබේ නියෝජිතයන් පූරණය කිරීමට නොහැකි විය — නැවත උත්සාහ කිරීමට විවෘත කරන්න"
   },
   "prompts": {
     "buildReusablePrompts": "AI සහාය ඇතිව නැවත භාවිතා කළ හැකි විමසීම් තනන්න",
@@ -2528,7 +2530,8 @@
     "searchConversations": "සාකච්ඡා සොයන්න",
     "toggleTheme": "තේමාව මාරු කරන්න",
     "regenerateResponse": "ප්‍රතිචාරය නැවත ජනනය කරන්න",
-    "copyLastResponse": "අවසන් ප්‍රතිචාරය පිටපත් කරන්න"
+    "copyLastResponse": "අවසන් ප්‍රතිචාරය පිටපත් කරන්න",
+    "pasteOptions": "අලවුම් කරන්න ලෙස... (පෙළ, Markdown, ඇමුණුම, පින්තූරයක් හෝ සබැඳියක් තෝරන්න)"
   },
   "quarantine": {
     "title": "නිරෝධායන කල සංවාද",
@@ -4282,7 +4285,19 @@
     "settingsDescription": "පහත සීමාවට වඩා වැඩි පෙළ ඇලවීමකදී එය ආයාචනාවක් ලෙස ඇමුණුම් කරයි, පණිවුඩ බොක්ස් හරහා පිරවීම වෙනුවට. ඇලවූ පෙළක් පමණක් භාවිතා වේ — කිසිවක් ලබාගනියි හෝ වෙනස් කරන්නේ නැත.",
     "settingsThresholdLabel": "මෙයට වඩා දිගු ඇලවීම් ඇමුණුම් කරන්න",
     "settingsThresholdUnit": "අක්ෂර",
-    "settingsThresholdHint": "අක්ෂර {min, number} න් {max, number} දක්වා අතර."
+    "settingsThresholdHint": "අක්ෂර {min, number} න් {max, number} දක්වා අතර.",
+    "options": {
+      "menuLabel": "අලවුම් කරන්න ලෙස...",
+      "insertHeading": "පණිවිඩයට ඇතුළත් කරන්න",
+      "attachHeading": "අමුණන්න",
+      "text": "සරල පෙළ",
+      "markdown": "පැවැති පෙළ (Markdown)",
+      "attachText": "පෙළ ගොනුව",
+      "attachMarkdown": "පැවැති පෙළ ගොනුව (Markdown)",
+      "image": "{count, plural, one {පින්තූරය} other {පින්තූර #}}",
+      "link": "සබැඳියේ පිටුවේ අන්තර්ගතය",
+      "hint": "↑↓ තෝරන්න · Enter අලවුම් කරන්න · Esc අහෝසි කරන්න · 1–9 තෝරන්න"
+    }
   },
   "structures": {
     "section": "ව්‍යුහ",
@@ -5019,7 +5034,11 @@
       "your-model": "ඔබේ ආදර්ශය භාවිතා කරයි",
       "pinned-model": "පරිපාලක අවිස්සපු ආදර්ශය",
       "own-model": "තම ආදර්ශය මත ක්‍රියා කරයි"
-    }
+    },
+    "loadError": "ඔබේ නියෝජිතයන් දැන් පූරණය කිරීමට නොහැකි විය. මෙය සාමාන්‍යයෙන් තාවකාලිකයකි.",
+    "discoveryLoading": "Foundry නියෝජිතයන් සෙවීම…",
+    "discoveryError": "Foundry නියෝජිතයන් පූරණය කිරීමට නොහැකි විය.",
+    "retry": "නැවත උත්සාහ කරන්න"
   },
   "peopleSuggest": {
     "listLabel": "ඔබගේ ආයතනයෙන් යෝජනා",

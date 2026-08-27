@@ -27,12 +27,26 @@ import { getOrganizationAgents } from '@/lib/organizationAgents';
 export function useAvailableAgents(): {
   agents: AvailableAgent[];
   isLoading: boolean;
+  /** The fast half failed and nothing is cached: the list is unknown, not empty. */
+  isError: boolean;
+  /** Foundry discovery still running — rows will be appended. */
+  isDiscoveryLoading: boolean;
+  /** Foundry discovery failed with nothing cached, or was unavailable. */
+  isDiscoveryError: boolean;
+  retry: () => void;
 } {
   const { exploreBots } = useFlags();
   const isBotsEnabled = exploreBots !== false;
   const customAgentSources = useSettingsStore((s) => s.customAgentSources);
-  const { foundryAgents, suppressedOrgAgentIds, isLoadingFoundryAgents } =
-    useFoundryAgents();
+  const {
+    foundryAgents,
+    suppressedOrgAgentIds,
+    isLoadingFoundryAgents,
+    isDiscoveryLoading,
+    isDiscoveryError,
+    isFoundryAgentsError,
+    retryFoundryAgents,
+  } = useFoundryAgents();
 
   const agents = useMemo<AvailableAgent[]>(() => {
     const customSourcePaths = new Set(
@@ -129,7 +143,57 @@ export function useAvailableAgents(): {
     return deduped;
   }, [isBotsEnabled, foundryAgents, customAgentSources, suppressedOrgAgentIds]);
 
-  return { agents, isLoading: isLoadingFoundryAgents };
+  return {
+    agents,
+    isLoading: isLoadingFoundryAgents,
+    isError: isFoundryAgentsError === true,
+    isDiscoveryLoading: isDiscoveryLoading === true,
+    isDiscoveryError: isDiscoveryError === true,
+    retry: () => void retryFoundryAgents?.(),
+  };
+}
+
+export type AgentBrowserAvailability = 'loading' | 'ready' | 'empty' | 'error';
+
+/**
+ * What an entry point to the agent browser should do right now:
+ *
+ *   ready   — at least one row is known: show and enable (the fast half
+ *             alone is enough; Foundry rows are appended later)
+ *   loading — nothing known yet and either half is still running: show a
+ *             disabled placeholder, never hide
+ *   error   — either half failed and nothing is known: show and enable
+ *             so the user can reach the browser's Retry. (A Foundry-only
+ *             failure with other rows known is `ready`; the browser shows
+ *             it as a footer line.)
+ *   empty   — both halves finished and there is genuinely nothing: hide
+ *
+ * Connectors and the M365 toolset are known synchronously, so they make
+ * the state `ready` regardless of discovery. Mirrors AgentBrowserModal's
+ * `allItems` sources exactly — keep the two in sync.
+ */
+export function useAgentBrowserAvailability(): {
+  status: AgentBrowserAvailability;
+  hasItems: boolean;
+} {
+  const { agents, isLoading, isError, isDiscoveryLoading, isDiscoveryError } =
+    useAvailableAgents();
+  const mcpServers = useSettingsStore((s) => s.mcpServers);
+  const m365Connected = useSettingsStore((s) => s.m365Connected);
+  const { toolsEnabled } = useM365Enabled();
+  const hasItems =
+    agents.length > 0 ||
+    mcpServers.length > 0 ||
+    (toolsEnabled && m365Connected);
+  if (hasItems) return { status: 'ready', hasItems: true };
+  if (isError) return { status: 'error', hasItems: false };
+  if (isLoading || isDiscoveryLoading) {
+    return { status: 'loading', hasItems: false };
+  }
+  // Discovery failed and it was the only possible source of rows: hiding
+  // the entry point here would strand the user with no way to retry.
+  if (isDiscoveryError) return { status: 'error', hasItems: false };
+  return { status: 'empty', hasItems: false };
 }
 
 /**
@@ -141,15 +205,7 @@ export function useAvailableAgents(): {
  * sources exactly — keep the two in sync.
  */
 export function useAgentBrowserHasItems(): boolean {
-  const { agents } = useAvailableAgents();
-  const mcpServers = useSettingsStore((s) => s.mcpServers);
-  const m365Connected = useSettingsStore((s) => s.m365Connected);
-  const { toolsEnabled } = useM365Enabled();
-  return (
-    agents.length > 0 ||
-    mcpServers.length > 0 ||
-    (toolsEnabled && m365Connected)
-  );
+  return useAgentBrowserAvailability().hasItems;
 }
 
 /**

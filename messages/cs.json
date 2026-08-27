@@ -908,7 +908,9 @@
     "collapseFolder": "Sbalit složku {name}",
     "folderOptions": "Možnosti složky {name}",
     "agentsEntry": "Agenti",
-    "agentsTitle": "Procházejte agenty a začněte s některým chatovat"
+    "agentsTitle": "Procházejte agenty a začněte s některým chatovat",
+    "agentsLoading": "Kontroluje se, které agenty můžete použít…",
+    "agentsLoadError": "Vaše agenty se nepodařilo načíst — otevřete pro opakování"
   },
   "prompts": {
     "buildReusablePrompts": "Vytvářejte opakovaně použitelné výzvy s pomocí AI",
@@ -2528,7 +2530,8 @@
     "searchConversations": "Hledat konverzace",
     "toggleTheme": "Přepnout motiv",
     "regenerateResponse": "Znovu vygenerovat odpověď",
-    "copyLastResponse": "Kopírovat poslední odpověď"
+    "copyLastResponse": "Kopírovat poslední odpověď",
+    "pasteOptions": "Vložit jako… (vyberte text, Markdown, přílohu, obrázek nebo odkaz)"
   },
   "quarantine": {
     "title": "Konverzace v karanténě",
@@ -4282,7 +4285,19 @@
     "settingsDescription": "Při vložení textu přesahujícího níže uvedený limit bude text připojen jako soubor místo vyplnění zprávy. Text se použije přesně tak, jak byl vložen — nic se nestahuje ani nemění.",
     "settingsThresholdLabel": "Připojit vložené texty delší než",
     "settingsThresholdUnit": "znaků",
-    "settingsThresholdHint": "Mezi {min, number} a {max, number} znaky."
+    "settingsThresholdHint": "Mezi {min, number} a {max, number} znaky.",
+    "options": {
+      "menuLabel": "Vložit jako…",
+      "insertHeading": "Vložit do zprávy",
+      "attachHeading": "Přiložit",
+      "text": "Prostý text",
+      "markdown": "Formátovaný text (Markdown)",
+      "attachText": "Textový soubor",
+      "attachMarkdown": "Formátovaný textový soubor (Markdown)",
+      "image": "{count, plural, one {Obrázek} other {# obrázků}}",
+      "link": "Obsah stránky z odkazu",
+      "hint": "↑↓ vyberte · Enter vložit · Esc zrušit · 1–9 volba"
+    }
   },
   "structures": {
     "section": "Struktury",
@@ -5019,7 +5034,11 @@
       "your-model": "používá váš model",
       "pinned-model": "model nastavený správcem",
       "own-model": "běží na vlastním modelu"
-    }
+    },
+    "loadError": "Vaše agenty se nyní nepodařilo načíst. Obvykle jde o dočasný problém.",
+    "discoveryLoading": "Vyhledávají se Foundry agenti…",
+    "discoveryError": "Foundry agenti se nepodařili načíst.",
+    "retry": "Zkusit znovu"
   },
   "peopleSuggest": {
     "listLabel": "Návrhy z vaší organizace",

@@ -988,7 +988,9 @@
     "collapseFolder": "Yaree galka {name}",
     "folderOptions": "Xulashooyinka {name}",
     "agentsEntry": "Wakiillo",
-    "agentsTitle": "Baadh wakiillo waxaadna wada sheekaysi la bilaabi kartaa midkood"
+    "agentsTitle": "Baadh wakiillo waxaadna wada sheekaysi la bilaabi kartaa midkood",
+    "agentsLoading": "Waxaa la hubinayaa wakiillada aad isticmaali karto…",
+    "agentsLoadError": "Wakiillada lama soo rogi karin — fur si aad markale u tijaabiso"
   },
   "errors": {
     "somethingWentWrong": "Wax baa qalday",
@@ -2512,7 +2514,8 @@
     "searchConversations": "Raadi wada hadallo",
     "toggleTheme": "Bedel mawduuca",
     "regenerateResponse": "Soo noolee jawaabta",
-    "copyLastResponse": "Nuqul jawaabtii ugu dambeysay"
+    "copyLastResponse": "Nuqul jawaabtii ugu dambeysay",
+    "pasteOptions": "Ku dheji sida... (dooran qoraal, Markdown, lifaaq, sawir ama xiriiriye)"
   },
   "quarantine": {
     "title": "Wadahadallada Karanteysan",
@@ -4266,7 +4269,19 @@
     "settingsDescription": "Haddii aad dhajiso qoraal ka badan xaddiga hoose, wuxuu noqon doonaa lifaaq halkii uu buuxin lahaa sanduuqa fariinta. Qoraalka waa sida la dhajiyay—lagama beddelin lagamana soo qaadin meel kale.",
     "settingsThresholdLabel": "Lifaaq qoraal ka dheer",
     "settingsThresholdUnit": "xaraf",
-    "settingsThresholdHint": "U dhaxeeya {min, number} iyo {max, number} xaraf."
+    "settingsThresholdHint": "U dhaxeeya {min, number} iyo {max, number} xaraf.",
+    "options": {
+      "menuLabel": "Ku dheji sida...",
+      "insertHeading": "Gali fariinta",
+      "attachHeading": "Ku lifaaq",
+      "text": "Qoraal caadi ah",
+      "markdown": "Qoraal la qaabeeyey (Markdown)",
+      "attachText": "Fayl qoraal ah",
+      "attachMarkdown": "Fayl qoraal la qaabeeyey (Markdown)",
+      "image": "{count, plural, one {Sawir} other {# sawirro}}",
+      "link": "Waxyaabaha bogga ee laga helay xiriiriye",
+      "hint": "↑↓ dooro · Enter dheji · Esc jooji · 1–9 xulo"
+    }
   },
   "structures": {
     "section": "Qaab-dhismeedyo",
@@ -5003,7 +5018,11 @@
       "your-model": "waxay adeegsataa moodelkaaga",
       "pinned-model": "moodel uu doortay maamulaha",
       "own-model": "waxay ku socotaa moodelkeeda gaarka ah"
-    }
+    },
+    "loadError": "Wakiillada lama soo rogi karin waqtigan. Badanaa tani waa arrin ku meel gaar ah.",
+    "discoveryLoading": "Waxaa la raadinayaa wakiillada Foundry…",
+    "discoveryError": "Wakiillada Foundry lama soo rogi karin.",
+    "retry": "Mar kale isku day"
   },
   "peopleSuggest": {
     "listLabel": "Talooyin ka socda ururkaaga",

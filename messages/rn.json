@@ -988,7 +988,9 @@
     "collapseFolder": "Gufunga dosiye {name}",
     "folderOptions": "Amahitamo ya {name}",
     "agentsEntry": "Abashinzwe",
-    "agentsTitle": "Rondera abashinzwe kandi utangure kuganira n’umwe"
+    "agentsTitle": "Rondera abashinzwe kandi utangure kuganira n’umwe",
+    "agentsLoading": "Turiko turarondera abashobora gukoreshwa…",
+    "agentsLoadError": "Ntivyashobotse gupakira abakozi bawe — fungura wongere ugerageze"
   },
   "errors": {
     "somethingWentWrong": "Hari ikintu kitajenda neza",
@@ -2512,7 +2514,8 @@
     "searchConversations": "Rondera ibiganiro",
     "toggleTheme": "Hindura insanganyamatsiko",
     "regenerateResponse": "Sazangura inyishu",
-    "copyLastResponse": "Koporora inyishu yanyuma"
+    "copyLastResponse": "Koporora inyishu yanyuma",
+    "pasteOptions": "Shira nka... (hitamwo inyandiko isanzwe, Markdown, ifu, ishusho canke ubuhuzamiryango)"
   },
   "quarantine": {
     "title": "Inyigisho Zashizwe mu Gitaro",
@@ -4266,7 +4269,19 @@
     "settingsDescription": "Nushirako inyandiko irenze urugero ruri hasi, bihita vyinjira nk'ifatabuguzi aho gushira mw'ikibanza c'ubutumwa. Inyandiko ikoreshwa uko yashizwemwo — nta nakimwe gihinduka canke gikurwamwo.",
     "settingsThresholdLabel": "Fata nk'ifatabuguzi inyandiko zirenze",
     "settingsThresholdUnit": "inyuguti",
-    "settingsThresholdHint": "Hagati ya {min, number} na {max, number} inyuguti."
+    "settingsThresholdHint": "Hagati ya {min, number} na {max, number} inyuguti.",
+    "options": {
+      "menuLabel": "Shira nka...",
+      "insertHeading": "Shiramwo mu butumwa",
+      "attachHeading": "Komekako",
+      "text": "Inyandiko isanzwe",
+      "markdown": "Inyandiko yateguwe (Markdown)",
+      "attachText": "Idosiye y’inyandiko",
+      "attachMarkdown": "Idosiye y’inyandiko yateguwe (Markdown)",
+      "image": "{count, plural, one {Ishusho} other {# amashusho}}",
+      "link": "Ibirimwo vy’urubuga vyururutse kuri link",
+      "hint": "↑↓ hitamwo · Enter shiramwo · Esc vavanura · 1–9 hitamwo"
+    }
   },
   "structures": {
     "section": "Imiterere",
@@ -5003,7 +5018,11 @@
       "your-model": "ikoreshwa na modele yawe",
       "pinned-model": "modele yashizweho n’umuyobozi",
       "own-model": "ikoresha modele yayo ubwayo"
-    }
+    },
+    "loadError": "Abakozi bawe ntibashoboye gupakirwa ubu nyene. Akenshi ni ikibazo c'igihe gito.",
+    "discoveryLoading": "Turiko turarondera abakozi ba Foundry…",
+    "discoveryError": "Abakozi ba Foundry ntibashoboye gupakirwa.",
+    "retry": "Gerageza kandi"
   },
   "peopleSuggest": {
     "listLabel": "Ivyo usabwe n'ishirahamwe ryawe",

@@ -988,7 +988,9 @@
     "collapseFolder": "Hina dosiye {name}",
     "folderOptions": "Amahitamo ya {name}",
     "agentsEntry": "Abakozi",
-    "agentsTitle": "Reba abakozi kandi utangire kuganira n’umwe"
+    "agentsTitle": "Reba abakozi kandi utangire kuganira n’umwe",
+    "agentsLoading": "Turagenzura abakozi ushobora gukoresha…",
+    "agentsLoadError": "Abakozi bawe ntibashoboye gupakirwa — fungura wongere ugerageze"
   },
   "errors": {
     "somethingWentWrong": "Hari ikintu kitagenze neza",
@@ -2512,7 +2514,8 @@
     "searchConversations": "Shakisha ibiganiro",
     "toggleTheme": "Hindura insanganyamatsiko",
     "regenerateResponse": "Sohora igisubizo bundi bushya",
-    "copyLastResponse": "Gukoporora igisubizo giheruka"
+    "copyLastResponse": "Gukoporora igisubizo giheruka",
+    "pasteOptions": "Shyiramo nka… (hitamo inyandiko, Markdown, ifishi, ishusho cyangwa ihuriro)"
   },
   "quarantine": {
     "title": "Ikiganiro cyashyizwe mu kato",
@@ -4266,7 +4269,19 @@
     "settingsDescription": "Iyo ukoporoye inyandiko irenze igipimo kiri hasi, ihuzwa nk'ifishi aho kuba yuzuye mu butumwa. Ibyanditswe bikoreshwa uko biri — ntacyongerwaho cyangwa ngo gihindurwe.",
     "settingsThresholdLabel": "Huzwa iyo bikoporowe birenze",
     "settingsThresholdUnit": "inyuguti",
-    "settingsThresholdHint": "Hagati ya {min, number} na {max, number} inyuguti."
+    "settingsThresholdHint": "Hagati ya {min, number} na {max, number} inyuguti.",
+    "options": {
+      "menuLabel": "Shyiramo nka…",
+      "insertHeading": "Shyira mu butumwa",
+      "attachHeading": "Bishyireho",
+      "text": "Inyandiko isanzwe",
+      "markdown": "Inyandiko ifite imiterere (Markdown)",
+      "attachText": "Ifishi y’inyandiko",
+      "attachMarkdown": "Ifishi y’inyandiko ifite imiterere (Markdown)",
+      "image": "{count, plural, one {Ishusho} other {# amashusho}}",
+      "link": "Ibirimo by’urubuga biturutse ku ihuriro",
+      "hint": "↑↓ hitamo · Enter shyiramo · Esc kanda ubireke · 1–9 hitamo"
+    }
   },
   "structures": {
     "section": "Imiterere",
@@ -5003,7 +5018,11 @@
       "your-model": "ikoresha imoderele yawe",
       "pinned-model": "imoderele yashyizweho n'umuyobozi",
       "own-model": "ikoresha imoderele yayo bwite"
-    }
+    },
+    "loadError": "Abakozi bawe ntibashoboye gupakirwa ubu. Akenshi biba ari iby'igihe gito.",
+    "discoveryLoading": "Turashakisha abakozi ba Foundry…",
+    "discoveryError": "Abakozi ba Foundry ntibashoboye gupakirwa.",
+    "retry": "Ongera ugerageze"
   },
   "peopleSuggest": {
     "listLabel": "Ibyifuzo bituruka muri sosiyete yawe",
