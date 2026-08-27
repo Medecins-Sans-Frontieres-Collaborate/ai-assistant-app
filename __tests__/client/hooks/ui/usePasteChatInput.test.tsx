@@ -1,7 +1,7 @@
 /**
  * @vitest-environment jsdom
  */
-import { act, renderHook } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 
 import { usePasteChatInput } from '@/client/hooks/ui/usePasteChatInput';
 
@@ -247,10 +247,10 @@ describe('usePasteChatInput', () => {
   describe('paste with options (Ctrl/Cmd+Shift+V)', () => {
     const image = new File(['x'], 'image.png', { type: 'image/png' });
 
-    it('opens a chooser listing only what the clipboard holds', () => {
+    it('opens a chooser listing only what the clipboard holds', async () => {
       const { hook } = setup();
 
-      act(() => {
+      await act(async () => {
         pressPasteOptionsChord();
         window.dispatchEvent(
           createPasteEvent({
@@ -268,10 +268,10 @@ describe('usePasteChatInput', () => {
       expect(useChatInputStore.getState().textFieldValue).toBe('');
     });
 
-    it('includes Markdown options when the HTML carries formatting', () => {
+    it('includes Markdown options when the HTML carries formatting', async () => {
       const { hook } = setup();
 
-      act(() => {
+      await act(async () => {
         pressPasteOptionsChord({ key: 'V', ctrlKey: false, metaKey: true });
         window.dispatchEvent(
           createPasteEvent({
@@ -282,15 +282,18 @@ describe('usePasteChatInput', () => {
         );
       });
 
-      expect(
-        hook.result.current.pasteChooser?.options.map((o) => o.id),
-      ).toEqual(['text', 'markdown', 'attachText', 'attachMarkdown']);
+      // First HTML paste in the file: the DOMPurify module loads lazily.
+      await waitFor(() =>
+        expect(
+          hook.result.current.pasteChooser?.options.map((o) => o.id),
+        ).toEqual(['text', 'markdown', 'attachText', 'attachMarkdown']),
+      );
     });
 
-    it('applies the chosen option and closes the chooser', () => {
+    it('applies the chosen option and closes the chooser', async () => {
       const { hook, focusSpy } = setup();
 
-      act(() => {
+      await act(async () => {
         pressPasteOptionsChord();
         window.dispatchEvent(
           createPasteEvent({
@@ -309,7 +312,7 @@ describe('usePasteChatInput', () => {
       expect(focusSpy).toHaveBeenCalled();
     });
 
-    it('inserts plain text at the caret when chosen, regardless of size', () => {
+    it('inserts plain text at the caret when chosen, regardless of size', async () => {
       const { hook, textarea } = setup();
       useSettingsStore.setState({ pasteAsAttachmentChars: 500 });
       useChatInputStore.setState({ textFieldValue: 'AB' });
@@ -317,7 +320,7 @@ describe('usePasteChatInput', () => {
       textarea.setSelectionRange(1, 1);
       const big = 'x'.repeat(1000);
 
-      act(() => {
+      await act(async () => {
         pressPasteOptionsChord();
         window.dispatchEvent(createPasteEvent({ text: big, target: textarea }));
       });
@@ -329,11 +332,11 @@ describe('usePasteChatInput', () => {
       expect(mockAttachPastedText).not.toHaveBeenCalled();
     });
 
-    it('inserts Markdown or attaches it when chosen', () => {
+    it('inserts Markdown or attaches it when chosen', async () => {
       const { hook } = setup();
       const html = '<p><b>bold</b> text</p>';
 
-      act(() => {
+      await act(async () => {
         pressPasteOptionsChord();
         window.dispatchEvent(
           createPasteEvent({ text: 'bold text', html, target: document.body }),
@@ -344,7 +347,7 @@ describe('usePasteChatInput', () => {
       });
       expect(useChatInputStore.getState().textFieldValue).toBe('**bold** text');
 
-      act(() => {
+      await act(async () => {
         pressPasteOptionsChord();
         window.dispatchEvent(
           createPasteEvent({ text: 'bold text', html, target: document.body }),
@@ -356,11 +359,11 @@ describe('usePasteChatInput', () => {
       expect(mockAttachPastedText).toHaveBeenCalledWith('**bold** text');
     });
 
-    it('attaches a link when chosen even with auto-fetch off', () => {
+    it('attaches a link when chosen even with auto-fetch off', async () => {
       const { hook } = setup();
       useSettingsStore.setState({ autoFetchPastedLinks: false });
 
-      act(() => {
+      await act(async () => {
         pressPasteOptionsChord();
         window.dispatchEvent(
           createPasteEvent({
@@ -379,10 +382,10 @@ describe('usePasteChatInput', () => {
       expect(mockAttachUrl).toHaveBeenCalledWith('https://example.org/page');
     });
 
-    it('skips the chooser when only one option is available', () => {
+    it('skips the chooser when only one option is available', async () => {
       const { hook } = setup();
 
-      act(() => {
+      await act(async () => {
         pressPasteOptionsChord();
         window.dispatchEvent(
           createPasteEvent({ imageFiles: [image], target: document.body }),
@@ -393,11 +396,11 @@ describe('usePasteChatInput', () => {
       expect(handleFileUpload).toHaveBeenCalledTimes(1);
     });
 
-    it('does nothing for an empty clipboard', () => {
+    it('does nothing for an empty clipboard', async () => {
       const { hook } = setup();
 
       let dispatchResult = false;
-      act(() => {
+      await act(async () => {
         pressPasteOptionsChord();
         dispatchResult = window.dispatchEvent(
           createPasteEvent({ target: document.body }),
@@ -408,10 +411,10 @@ describe('usePasteChatInput', () => {
       expect(hook.result.current.pasteChooser).toBeNull();
     });
 
-    it('dismisses the chooser and refocuses the composer', () => {
+    it('dismisses the chooser and refocuses the composer', async () => {
       const { hook, focusSpy } = setup();
 
-      act(() => {
+      await act(async () => {
         pressPasteOptionsChord();
         window.dispatchEvent(
           createPasteEvent({
@@ -430,10 +433,10 @@ describe('usePasteChatInput', () => {
       expect(handleFileUpload).not.toHaveBeenCalled();
     });
 
-    it('consumes the chord so the next paste is a normal paste again', () => {
+    it('consumes the chord so the next paste is a normal paste again', async () => {
       const { hook } = setup();
 
-      act(() => {
+      await act(async () => {
         pressPasteOptionsChord();
         window.dispatchEvent(
           createPasteEvent({
@@ -457,7 +460,7 @@ describe('usePasteChatInput', () => {
       expect(useChatInputStore.getState().textFieldValue).toBe('second');
     });
 
-    it('does not treat a plain Ctrl+V as a paste-with-options request', () => {
+    it('does not treat a plain Ctrl+V as a paste-with-options request', async () => {
       const { hook } = setup();
 
       act(() => {
