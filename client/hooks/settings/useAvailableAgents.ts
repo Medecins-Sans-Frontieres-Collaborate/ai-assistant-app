@@ -162,9 +162,10 @@ export type AgentBrowserAvailability = 'loading' | 'ready' | 'empty' | 'error';
  *             alone is enough; Foundry rows are appended later)
  *   loading — nothing known yet and either half is still running: show a
  *             disabled placeholder, never hide
- *   error   — the FAST half failed with nothing cached: show and enable;
- *             the browser explains and offers Retry (a Foundry-only
- *             failure is a footer line, not this state)
+ *   error   — either half failed and nothing is known: show and enable
+ *             so the user can reach the browser's Retry. (A Foundry-only
+ *             failure with other rows known is `ready`; the browser shows
+ *             it as a footer line.)
  *   empty   — both halves finished and there is genuinely nothing: hide
  *
  * Connectors and the M365 toolset are known synchronously, so they make
@@ -175,7 +176,7 @@ export function useAgentBrowserAvailability(): {
   status: AgentBrowserAvailability;
   hasItems: boolean;
 } {
-  const { agents, isLoading, isError, isDiscoveryLoading } =
+  const { agents, isLoading, isError, isDiscoveryLoading, isDiscoveryError } =
     useAvailableAgents();
   const mcpServers = useSettingsStore((s) => s.mcpServers);
   const m365Connected = useSettingsStore((s) => s.m365Connected);
@@ -189,6 +190,9 @@ export function useAgentBrowserAvailability(): {
   if (isLoading || isDiscoveryLoading) {
     return { status: 'loading', hasItems: false };
   }
+  // Discovery failed and it was the only possible source of rows: hiding
+  // the entry point here would strand the user with no way to retry.
+  if (isDiscoveryError) return { status: 'error', hasItems: false };
   return { status: 'empty', hasItems: false };
 }
 
