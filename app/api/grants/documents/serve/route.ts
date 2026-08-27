@@ -35,17 +35,14 @@ const INLINE_EXTS = new Set(['pdf', 'txt']);
 // Types the Microsoft Office Online viewer can render.
 const OFFICE_EXTS = new Set(['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx']);
 
-function publicOrigin(requestHost: string): string | null {
-  const url = process.env.NEXTAUTH_URL || process.env.AUTH_URL || '';
-  if (!url) return null;
-  try {
-    const u = new URL(url);
-    if (/localhost|127\.0\.0\.1/.test(u.hostname)) return null;
-    if (u.host !== requestHost) return null;
-    return u.origin;
-  } catch {
-    return null;
-  }
+function publicOrigin(request: NextRequest): string | null {
+  const host = request.headers.get('x-forwarded-host') ?? request.nextUrl.host;
+  if (!host || /localhost|127\.0\.0\.1/.test(host)) return null;
+  const proto =
+    request.headers.get('x-forwarded-proto') ??
+    request.nextUrl.protocol.replace(':', '');
+  if (proto !== 'https') return null;
+  return `https://${host}`;
 }
 
 export async function GET(request: NextRequest) {
@@ -76,7 +73,7 @@ export async function GET(request: NextRequest) {
     const ext = filename.split('.').pop()?.toLowerCase() || '';
     // Office documents: open in the Office Online viewer via viewer-fetch.
     if (OFFICE_EXTS.has(ext)) {
-      const origin = publicOrigin(request.nextUrl.host);
+      const origin = publicOrigin(request);
       if (origin) {
         const token = mintDocToken(blobPath);
         const fetchUrl = `${origin}/api/grants/documents/viewer-fetch?token=${encodeURIComponent(token)}`;
