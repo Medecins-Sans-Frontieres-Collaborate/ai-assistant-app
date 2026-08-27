@@ -107,6 +107,17 @@ describe('AgentBrowserModal', () => {
     expect(availableState.retry).toHaveBeenCalledTimes(1);
   });
 
+  it('flags a failed app-agent load with Retry even when static rows still render', () => {
+    availableState.isError = true;
+    render(<AgentBrowserModal />);
+    expect(screen.getAllByRole('option').length).toBeGreaterThan(0);
+    expect(
+      screen.getByText(/Your agents couldn't be loaded just now/),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
+    expect(availableState.retry).toHaveBeenCalledTimes(1);
+  });
+
   it('keeps the load error and Retry visible while the user types a query', () => {
     availableState.isError = true;
     availableState.empty = true;
