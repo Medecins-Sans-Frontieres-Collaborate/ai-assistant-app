@@ -436,7 +436,9 @@ export function AgentBrowserModal() {
             <p className="px-3 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
               {t('loading')}
             </p>
-          ) : isError && filtered.length === 0 && !query ? (
+          ) : isError && allItems.length === 0 ? (
+            // Keyed on the unfiltered list: typing a query must not turn a
+            // failed load into "No matches" and hide Retry.
             <div className="px-3 py-6 text-center text-sm text-gray-600 dark:text-gray-300">
               <p>{t('loadError')}</p>
               <button
