@@ -122,10 +122,29 @@ describe('useAgentBrowserAvailability', () => {
     expect(result.current.status).toBe('ready');
   });
 
-  it('treats a Foundry-only failure as "empty" (the browser shows a retry line), not "error"', () => {
+  it('is "error" when Foundry discovery failed and nothing else is known', () => {
+    // Hiding the entry point here would leave no way to reach Retry.
     isDiscoveryError = true;
     const { result } = renderHook(() => useAgentBrowserAvailability());
-    expect(result.current.status).toBe('empty');
+    expect(result.current).toEqual({ status: 'error', hasItems: false });
+  });
+
+  it('is "ready", not "error", when Foundry discovery failed but other rows exist', () => {
+    isDiscoveryError = true;
+    useSettingsStore.setState({
+      mcpServers: [
+        { id: 's1', name: 'GitHub', enabled: true, authMode: 'none' },
+      ],
+    } as Partial<SettingsState>);
+    const { result } = renderHook(() => useAgentBrowserAvailability());
+    expect(result.current.status).toBe('ready');
+  });
+
+  it('stays "loading" while discovery is still running even after a discovery error flag', () => {
+    isDiscoveryError = true;
+    isDiscoveryLoading = true;
+    const { result } = renderHook(() => useAgentBrowserAvailability());
+    expect(result.current.status).toBe('loading');
   });
 
   it('is "loading" (never "empty") while discovery runs with nothing known', () => {
