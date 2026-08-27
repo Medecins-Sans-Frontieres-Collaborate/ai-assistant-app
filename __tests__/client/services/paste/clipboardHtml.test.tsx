@@ -27,13 +27,13 @@ p.MsoNormal, li.MsoNormal {margin:0cm; font-size:12.0pt; font-family:"Aptos",san
 </html>`;
 
 describe('clipboardHtmlToMarkdown', () => {
-  it('returns an empty string for empty or blank HTML', () => {
-    expect(clipboardHtmlToMarkdown('')).toBe('');
-    expect(clipboardHtmlToMarkdown('   ')).toBe('');
+  it('returns an empty string for empty or blank HTML', async () => {
+    expect(await clipboardHtmlToMarkdown('')).toBe('');
+    expect(await clipboardHtmlToMarkdown('   ')).toBe('');
   });
 
-  it('converts Word HTML to Markdown without leaking styles or Office markup', () => {
-    const md = clipboardHtmlToMarkdown(WORD_HTML);
+  it('converts Word HTML to Markdown without leaking styles or Office markup', async () => {
+    const md = await clipboardHtmlToMarkdown(WORD_HTML);
 
     expect(md).toContain(
       '**US foreign health assistance is subject to expanded restrictions.**',
@@ -49,11 +49,21 @@ describe('clipboardHtmlToMarkdown', () => {
     expect(md).not.toContain('StartFragment');
   });
 
-  it('returns an empty string when only non-content elements remain', () => {
+  it('returns an empty string when only non-content elements remain', async () => {
     expect(
-      clipboardHtmlToMarkdown(
+      await clipboardHtmlToMarkdown(
         '<html><head><style>p{}</style></head><body></body></html>',
       ),
     ).toBe('');
+  });
+
+  it('strips active content from a hostile clipboard before converting', async () => {
+    const md = await clipboardHtmlToMarkdown(
+      '<p>safe <b>text</b></p><script>alert(1)</script><img src=x onerror="alert(1)"><a href="javascript:alert(1)">link</a><iframe src="https://evil.example"></iframe>',
+    );
+    expect(md).toContain('safe **text**');
+    expect(md).not.toContain('alert');
+    expect(md).not.toContain('javascript:');
+    expect(md).not.toContain('evil.example');
   });
 });
