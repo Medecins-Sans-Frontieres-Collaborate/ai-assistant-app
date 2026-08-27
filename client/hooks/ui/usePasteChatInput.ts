@@ -197,6 +197,9 @@ export function usePasteChatInput({
     // no modifier state, so the chord is observed on keydown and consumed by
     // the paste that immediately follows it.
     let pasteOptionsRequestedAt = 0;
+    // Sanitizing the HTML is async; a newer paste must win over a slower
+    // older one, so each capture is stamped and stale results are dropped.
+    let captureSeq = 0;
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (isPasteOptionsChord(event)) {
@@ -240,19 +243,26 @@ export function usePasteChatInput({
       const text = clipboardData.getData('text/plain');
 
       if (withOptions) {
-        const paste: CapturedPaste = {
-          text,
-          markdown: clipboardHtmlToMarkdown(clipboardData.getData('text/html')),
-          imageFiles: extractImageFiles(clipboardData),
-        };
-        const options = getPasteOptions(paste);
-        if (options.length === 0) return;
+        // Everything must be read from the DataTransfer now — it is dead
+        // once the event finishes — but the Markdown conversion sanitizes
+        // asynchronously, so the chooser opens a microtask later.
+        const html = clipboardData.getData('text/html');
+        const imageFiles = extractImageFiles(clipboardData);
+        if (!text && !html && imageFiles.length === 0) return;
         event.preventDefault();
-        if (options.length === 1) {
-          applyOption(paste, options[0].id);
-        } else {
-          setPending({ paste, options });
-        }
+
+        const seq = ++captureSeq;
+        void clipboardHtmlToMarkdown(html).then((markdown) => {
+          if (seq !== captureSeq) return;
+          const paste: CapturedPaste = { text, markdown, imageFiles };
+          const options = getPasteOptions(paste);
+          if (options.length === 0) return;
+          if (options.length === 1) {
+            applyOption(paste, options[0].id);
+          } else {
+            setPending({ paste, options });
+          }
+        });
         return;
       }
 
