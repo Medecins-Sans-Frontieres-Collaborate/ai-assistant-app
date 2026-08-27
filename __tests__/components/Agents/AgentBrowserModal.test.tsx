@@ -107,6 +107,22 @@ describe('AgentBrowserModal', () => {
     expect(availableState.retry).toHaveBeenCalledTimes(1);
   });
 
+  it('keeps the load error and Retry visible while the user types a query', () => {
+    availableState.isError = true;
+    availableState.empty = true;
+    render(<AgentBrowserModal />);
+    fireEvent.change(screen.getByRole('combobox'), {
+      target: { value: 'alpha' },
+    });
+    expect(
+      screen.getByText(/Your agents couldn't be loaded just now/),
+    ).toBeInTheDocument();
+    expect(screen.queryByText('No matches.')).toBeNull();
+    expect(
+      screen.getByRole('button', { name: 'Try again' }),
+    ).toBeInTheDocument();
+  });
+
   it('shows the loaded rows with a footer while Foundry discovery is still running', () => {
     availableState.isDiscoveryLoading = true;
     render(<AgentBrowserModal />);
