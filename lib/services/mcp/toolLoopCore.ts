@@ -1,4 +1,5 @@
 import type { M365BuiltinExecutor } from '@/lib/services/m365/tools/executor';
+import { ToolCallTelemetry } from '@/lib/services/observability/tokenUsageRecorder';
 
 import {
   StreamMetadata,
@@ -140,6 +141,8 @@ export interface ToolLoopCoreOptions<TMessage> {
     reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high';
     onUsage: (usage: TokenUsageMetadata) => void;
   };
+  /** Telemetry sink for each EXECUTED tool call (approved + dispatched). */
+  onToolCall?: (info: ToolCallTelemetry) => void;
   /**
    * Turn planner (first round only): given the user's request and the tool
    * catalog, returns 1-N steps or null (loop runs plan-less). Best-effort —
@@ -457,6 +460,14 @@ export async function runToolLoopCore<TMessage>(
                     Date.now() - startedAt,
                   ),
                 );
+                options.onToolCall?.({
+                  toolName: call.toolName,
+                  serverId: server.id,
+                  serverLabel: server.label,
+                  durationMs: Date.now() - startedAt,
+                  success: !result.isError,
+                  errorMessage: result.isError ? result.text : undefined,
+                });
                 let resultText = result.isError
                   ? `Tool failed: ${result.text}`
                   : result.text || '(empty result)';
@@ -498,6 +509,14 @@ export async function runToolLoopCore<TMessage>(
                   Date.now() - startedAt,
                 ),
               );
+              options.onToolCall?.({
+                toolName: call.toolName,
+                serverId: server.id,
+                serverLabel: server.label,
+                durationMs: Date.now() - startedAt,
+                success: false,
+                errorMessage,
+              });
               let failureText = `Tool failed: ${errorMessage}`;
               // Auth failures aren't retryable with different arguments —
               // the nudge would just burn a round.
