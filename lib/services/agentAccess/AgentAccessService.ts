@@ -1,3 +1,5 @@
+import { Session } from 'next-auth';
+
 /**
  * Per-process singleton evaluating app-layer agent access rules.
  *
@@ -43,6 +45,7 @@ import {
 } from '@/lib/services/agentAccess/types';
 import { canonicalAgentKey } from '@/lib/services/agentAccess/types';
 import { getCachedGroupIdsForMail } from '@/lib/services/m365/groupMembership';
+import { getAzureMonitorLogger } from '@/lib/services/observability/AzureMonitorLoggingService';
 import {
   Principal,
   domainOfMail,
@@ -52,6 +55,8 @@ import {
 
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+
+import { RequestTelemetry } from '@/lib/types/logging';
 
 import { env } from '@/config/environment';
 
@@ -126,6 +131,12 @@ export interface AccessAuditEntry {
   source: string | null | undefined;
   decision: AccessDecisionKind;
   reason: string;
+  /**
+   * When the session user is available the decision is ALSO emitted as a
+   * queryable `AgentAccess` event in Azure Monitor (console line always).
+   */
+  user?: Session['user'];
+  telemetry?: RequestTelemetry;
 }
 
 /**
@@ -139,6 +150,19 @@ export function emitAccessAudit(entry: AccessAuditEntry): void {
       `user=${sanitizeForLog(entry.userMail ?? '<none>')} agent=${sanitizeForLog(entry.agentName)} ` +
       `source=${sanitizeForLog(entry.source ?? '<unresolved>')}`,
   );
+  if (entry.user) {
+    // Fire-and-forget; a telemetry failure must never affect the decision.
+    void getAzureMonitorLogger()
+      .logAgentAccess({
+        user: entry.user,
+        agentName: entry.agentName,
+        agentSource: entry.source,
+        decision: entry.decision,
+        reason: entry.reason,
+        telemetry: entry.telemetry,
+      })
+      .catch(() => undefined);
+  }
 }
 
 interface LoadedState {
