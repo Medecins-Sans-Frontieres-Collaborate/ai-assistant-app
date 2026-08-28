@@ -284,6 +284,7 @@ export class RAGEnricher extends BasePipelineStage {
             searchType: 'semantic',
             indexName: agentSearchIndex,
             botId: context.botId,
+            telemetry: context.telemetry,
           });
 
           return result;
@@ -298,6 +299,7 @@ export class RAGEnricher extends BasePipelineStage {
             errorMessage:
               error instanceof Error ? error.message : 'Unknown error',
             botId: context.botId,
+            telemetry: context.telemetry,
           });
 
           span.recordException(error as Error);
