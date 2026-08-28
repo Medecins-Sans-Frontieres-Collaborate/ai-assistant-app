@@ -1,6 +1,5 @@
 import { Session } from 'next-auth';
 
-import { debitTokenUsage } from '@/lib/services/limits/tokenDebit';
 import type { M365BuiltinExecutor } from '@/lib/services/m365/tools/executor';
 import { runAnthropicMcpToolLoop } from '@/lib/services/mcp/AnthropicMcpToolLoopService';
 import { planMcpSteps } from '@/lib/services/mcp/McpPlannerService';
@@ -8,7 +7,11 @@ import { runMcpToolLoop } from '@/lib/services/mcp/McpToolLoopService';
 import { sanitizeMcpPlan } from '@/lib/services/mcp/mcpPlan';
 import { appendMcpSystemContext } from '@/lib/services/mcp/mcpSystemContext';
 import { getAzureMonitorLogger } from '@/lib/services/observability';
-import { MetricsService } from '@/lib/services/observability/MetricsService';
+import {
+  ToolCallTelemetry,
+  recordTokenUsage,
+  recordToolCall,
+} from '@/lib/services/observability/tokenUsageRecorder';
 
 import { OPENAI_API_VERSION } from '@/lib/utils/app/const';
 import {
@@ -29,14 +32,14 @@ import {
   sanitizeForLog,
 } from '@/lib/utils/server/log/logSanitization';
 import { getGlobalTiktoken } from '@/lib/utils/server/tiktoken/tiktokenCache';
-import { estimateCO2Grams } from '@/lib/utils/shared/emissions';
 import { resolveChatRegion } from '@/lib/utils/shared/modelRegion';
 import { UserRegion } from '@/lib/utils/shared/region';
 
+import { RequestTelemetry } from '@/lib/types/logging';
 import { ApprovalResponse, Message } from '@/types/chat';
 import { ExtractionResponseFormat } from '@/types/extractionRecipe';
 import { McpPendingToolCall, McpPlan } from '@/types/mcp';
-import { OpenAIModel, getModelSizeClass } from '@/types/openai';
+import { OpenAIModel } from '@/types/openai';
 import { Citation } from '@/types/rag';
 import { Tone } from '@/types/tone';
 
@@ -91,6 +94,8 @@ export interface StandardChatRequest {
   reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high';
   verbosity?: 'low' | 'medium' | 'high';
   botId?: string;
+  /** Per-request agent + correlation telemetry (see ChatContext.telemetry). */
+  telemetry?: RequestTelemetry;
   transcript?: TranscriptMetadata;
   citations?: Citation[]; // Web search citations to include in response
   tone?: Tone; // Full tone object from client
@@ -268,62 +273,18 @@ export class StandardChatService {
     servedConfig: OpenAIModel,
     user: Session['user'],
     streamed: boolean,
-    botId?: string,
+    telemetry?: RequestTelemetry,
   ): void {
-    try {
-      const sizeClass = getModelSizeClass(servedConfig);
-      const estimate = estimateCO2Grams({
-        promptTokens: usage.promptTokens,
-        completionTokens: usage.completionTokens,
-        sizeClass,
-        isDedicatedReasoner: servedConfig.modelType === 'reasoning',
-        reasoningEffort: usage.reasoningEffort,
-        region: usage.region,
-      });
-      void getAzureMonitorLogger().logTokenUsage({
-        user,
-        model: usage.modelId,
-        region: usage.region,
-        promptTokens: usage.promptTokens,
-        completionTokens: usage.completionTokens,
-        totalTokens: usage.totalTokens,
-        reasoningEffort: usage.reasoningEffort,
-        sizeClass,
-        estimatedCO2Grams: estimate.gCO2e,
-        estimatedEnergyWh: estimate.energyWh,
-        assumptionsVersion: estimate.assumptionsVersion,
-        streamed,
-        botId,
-      });
-      MetricsService.recordTokenUsage(
-        {
-          prompt: usage.promptTokens,
-          completion: usage.completionTokens,
-          total: usage.totalTokens,
-        },
-        { user, model: usage.modelId, operation: 'chat', botId },
-      );
-      // Token quota debit (`chat.tokensPerDay` / `chat.tokensPerMonth`,
-      // docs/LIMITS.md).
-      //
-      // ⚠ SOFT BY CONSTRUCTION, and the admin UI says so. A completion's
-      // length is unknowable before it is generated, so a token limit is a
-      // pre-flight READ-ONLY check plus this after-the-fact debit. A user at
-      // 99% of their budget can still start a request that generates 20k
-      // tokens: overshoot is bounded by the size of the completions already in
-      // flight — typically one response — but it is not zero. This is inherent
-      // to token accounting on any infrastructure, not a property of the blob
-      // counter.
-      //
-      // Fire-and-forget, like every other sink here: a counter write must
-      // never delay or break a response that has already been generated.
-      void debitTokenUsage(user, usage.totalTokens);
-    } catch (error) {
-      console.error(
-        '[StandardChatService] Failed to record token usage:',
-        error,
-      );
-    }
+    recordTokenUsage(usage, servedConfig, user, streamed, telemetry);
+  }
+
+  private recordToolCall(
+    info: ToolCallTelemetry,
+    modelConfig: OpenAIModel,
+    user: Session['user'],
+    telemetry?: RequestTelemetry,
+  ): void {
+    recordToolCall(info, modelConfig.id, user, telemetry);
   }
 
   /**
@@ -556,7 +517,7 @@ export class StandardChatService {
         request.citations,
         clients.anthropicFoundryClient,
         chatRegion,
-        request.botId,
+        request.telemetry,
         request.reasoningEffort,
       );
     }
@@ -611,6 +572,13 @@ export class StandardChatService {
         planner: mcpPlanner,
         existingPlan: mcpExistingPlan,
         userMessageText: mcpUserMessageText,
+        onToolCall: (info) =>
+          this.recordToolCall(
+            info,
+            modelConfig,
+            request.user,
+            request.telemetry,
+          ),
         usage: {
           modelId: modelConfig.id,
           region: chatRegion,
@@ -621,7 +589,7 @@ export class StandardChatService {
               modelConfig,
               request.user,
               true,
-              request.botId,
+              request.telemetry,
             ),
         },
       });
@@ -793,7 +761,7 @@ export class StandardChatService {
           servedConfig,
           request.user,
           true,
-          request.botId,
+          request.telemetry,
         ),
     };
 
@@ -832,7 +800,7 @@ export class StandardChatService {
           servedConfig,
           request.user,
           false,
-          request.botId,
+          request.telemetry,
         );
       }
 
@@ -942,7 +910,7 @@ export class StandardChatService {
               modelConfig,
               request.user,
               true,
-              request.botId,
+              request.telemetry,
             ),
         },
         nativeCI
@@ -992,7 +960,13 @@ export class StandardChatService {
         region: chatRegion,
         reasoningEffort: appliedEffort,
       };
-      this.recordUsage(usage, modelConfig, request.user, false, request.botId);
+      this.recordUsage(
+        usage,
+        modelConfig,
+        request.user,
+        false,
+        request.telemetry,
+      );
     }
 
     return new Response(
@@ -1071,6 +1045,8 @@ export class StandardChatService {
       planner: planning?.planner,
       existingPlan: planning?.existingPlan,
       userMessageText: planning?.userMessageText,
+      onToolCall: (info) =>
+        this.recordToolCall(info, modelConfig, request.user, request.telemetry),
       usage: {
         modelId: modelConfig.id,
         region: chatRegion,
@@ -1080,7 +1056,7 @@ export class StandardChatService {
             modelConfig,
             request.user,
             true,
-            request.botId,
+            request.telemetry,
           ),
       },
     });
@@ -1115,7 +1091,7 @@ export class StandardChatService {
     citations?: Citation[],
     anthropicClient?: AnthropicFoundry,
     chatRegion: UserRegion | null = null,
-    botId?: string,
+    telemetry?: RequestTelemetry,
     reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high',
   ): Promise<Response> {
     const client = anthropicClient ?? this.anthropicFoundryClient;
@@ -1175,7 +1151,7 @@ export class StandardChatService {
               ? reasoningEffort
               : undefined,
           onUsage: (usage) =>
-            this.recordUsage(usage, modelConfig, user, true, botId),
+            this.recordUsage(usage, modelConfig, user, true, telemetry),
         },
       );
 
@@ -1222,7 +1198,13 @@ export class StandardChatService {
           modelId: modelConfig.id,
           region: chatRegion,
         };
-        this.recordUsage(responseData.usage, modelConfig, user, false, botId);
+        this.recordUsage(
+          responseData.usage,
+          modelConfig,
+          user,
+          false,
+          telemetry,
+        );
       }
 
       return new Response(JSON.stringify(responseData), {
