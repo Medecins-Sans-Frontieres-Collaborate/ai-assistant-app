@@ -999,7 +999,34 @@
     "expandFolder": "Expand folder {name}",
     "collapseFolder": "Collapse folder {name}",
     "folderOptions": "{name} options",
-    "newChatInFolder": "New chat in this folder"
+    "newChatInFolder": "New chat in this folder",
+    "resizeHandle": "Resize sidebar",
+    "resizeHint": "Drag to resize the sidebar; double-click to reset",
+    "openFolder": "Open folder {name}",
+    "openFolderMenu": "Open folder"
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "New chat",
+    "rename": "Rename folder",
+    "renameLabel": "Folder name",
+    "deleteFolder": "Delete folder",
+    "close": "Close folder",
+    "selectAll": "Select all",
+    "selectedCount": "{count} selected",
+    "selectChat": "Select {name}",
+    "moveTo": "Move to…",
+    "deleteSelected": "Delete",
+    "confirmDeleteChats": "Delete {count} selected chat(s)? This cannot be undone.",
+    "emptyTitle": "No chats in this folder yet",
+    "emptyHint": "Start a new chat here, or drag chats onto this folder in the sidebar.",
+    "messageCount": "{count} message(s)"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Search folders…",
+    "ariaLabel": "Choose a folder",
+    "noResults": "No folders match",
+    "createFolder": "New folder “{name}”"
   },
   "errors": {
     "somethingWentWrong": "Something went wrong",
