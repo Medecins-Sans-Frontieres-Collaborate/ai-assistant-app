@@ -998,7 +998,8 @@
     "agentsLoadError": "Your agents couldn't be loaded — open to retry",
     "expandFolder": "Expand folder {name}",
     "collapseFolder": "Collapse folder {name}",
-    "folderOptions": "{name} options"
+    "folderOptions": "{name} options",
+    "newChatInFolder": "New chat in this folder"
   },
   "errors": {
     "somethingWentWrong": "Something went wrong",
