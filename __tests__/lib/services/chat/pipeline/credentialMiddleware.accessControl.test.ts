@@ -150,13 +150,15 @@ describe('createCredentialMiddleware — agent access invocation guard', () => {
         source: VALID_PATH,
         agentName: 'my-agent',
       });
-      expect(emitAccessAudit).toHaveBeenCalledWith({
-        userMail: 'u@msf.org',
-        agentName: 'my-agent',
-        source: VALID_PATH,
-        decision: 'allow',
-        reason: 'public',
-      });
+      expect(emitAccessAudit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userMail: 'u@msf.org',
+          agentName: 'my-agent',
+          source: VALID_PATH,
+          decision: 'allow',
+          reason: 'public',
+        }),
+      );
       expect(result.foundryEndpoint).toBe(ALLOWED_ENDPOINT);
       expect(result.userCredential).toBeDefined();
       expect(getFoundryToken).toHaveBeenCalled();
@@ -366,13 +368,15 @@ describe('createCredentialMiddleware — agent access invocation guard', () => {
         source: null,
         agentName: 'finance-bot',
       });
-      expect(emitAccessAudit).toHaveBeenCalledWith({
-        userMail: 'u@msf.org',
-        agentName: 'finance-bot',
-        source: null,
-        decision: 'deny',
-        reason: 'not-allowed',
-      });
+      expect(emitAccessAudit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userMail: 'u@msf.org',
+          agentName: 'finance-bot',
+          source: null,
+          decision: 'deny',
+          reason: 'not-allowed',
+        }),
+      );
       // No credential machinery was touched on this path.
       expect(getAccessTokenForOBO).not.toHaveBeenCalled();
       expect(getFoundryToken).not.toHaveBeenCalled();
@@ -526,13 +530,15 @@ describe('createCredentialMiddleware — agent access invocation guard', () => {
         source: 'prompt-agent',
         agentName: 'prompt-abc123def456',
       });
-      expect(emitAccessAudit).toHaveBeenCalledWith({
-        userMail: 'u@msf.org',
-        agentName: 'prompt-abc123def456',
-        source: 'prompt-agent',
-        decision: 'deny',
-        reason: 'not-allowed',
-      });
+      expect(emitAccessAudit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userMail: 'u@msf.org',
+          agentName: 'prompt-abc123def456',
+          source: 'prompt-agent',
+          decision: 'deny',
+          reason: 'not-allowed',
+        }),
+      );
       // No credential machinery was touched on this path.
       expect(getAccessTokenForOBO).not.toHaveBeenCalled();
       expect(getFoundryToken).not.toHaveBeenCalled();
@@ -667,13 +673,15 @@ describe('createCredentialMiddleware — agent access invocation guard', () => {
         code: ErrorCode.AGENT_UNAVAILABLE,
         metadata: { accessDecision: 'deny', accessReason: 'not-allowed' },
       });
-      expect(emitAccessAudit).toHaveBeenCalledWith({
-        userMail: 'u@msf.org',
-        agentName: 'msf_communications',
-        source: 'org-agent',
-        decision: 'deny',
-        reason: 'not-allowed',
-      });
+      expect(emitAccessAudit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userMail: 'u@msf.org',
+          agentName: 'msf_communications',
+          source: 'org-agent',
+          decision: 'deny',
+          reason: 'not-allowed',
+        }),
+      );
     });
 
     it('static rag botId + rules unavailable: serves rule-free (fail-open, audited)', async () => {
@@ -738,13 +746,15 @@ describe('createCredentialMiddleware — agent access invocation guard', () => {
         },
       });
 
-      expect(emitAccessAudit).toHaveBeenCalledWith({
-        userMail: 'u@msf.org',
-        agentName: 'prompt-abc123def456',
-        source: 'prompt-agent',
-        decision: 'unavailable',
-        reason: 'rules-unavailable',
-      });
+      expect(emitAccessAudit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userMail: 'u@msf.org',
+          agentName: 'prompt-abc123def456',
+          source: 'prompt-agent',
+          decision: 'unavailable',
+          reason: 'rules-unavailable',
+        }),
+      );
       expect(accessEvaluate).not.toHaveBeenCalled();
     });
 

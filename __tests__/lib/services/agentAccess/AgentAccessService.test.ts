@@ -30,6 +30,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // groupMembership (§5) pulls in graphApi → @/auth; keep it out of node tests.
 vi.mock('@/auth', () => ({ getGraphAccessToken: vi.fn() }));
+// emitAccessAudit also emits a queryable AgentAccess event when a session
+// user is attached; keep the ingestion client out of node tests.
+const logAgentAccessMock = vi.hoisted(() =>
+  vi.fn().mockResolvedValue(undefined),
+);
+vi.mock('@/lib/services/observability/AzureMonitorLoggingService', () => ({
+  getAzureMonitorLogger: () => ({ logAgentAccess: logAgentAccessMock }),
+}));
 
 // Group evaluation reads the membership cache synchronously; the mock lets
 // tests model warm and cold cache states without Graph.
@@ -974,6 +982,43 @@ describe('AgentAccessService', () => {
         reason: 'allow-group',
       });
       expect(cachedGroupsMock).toHaveBeenCalledWith('user@example.com');
+    });
+  });
+
+  describe('emitAccessAudit → Azure Monitor AgentAccess event', () => {
+    it('emits the event when a session user is attached', () => {
+      vi.spyOn(console, 'log').mockImplementation(() => {});
+      const user = { id: 'u1', mail: 'user@example.com' } as any;
+      emitAccessAudit({
+        user,
+        telemetry: { requestId: 'req-1', botId: 'finance-bot' },
+        userMail: 'user@example.com',
+        agentName: 'finance-bot',
+        source: SOURCE_A,
+        decision: 'deny',
+        reason: 'not-allowed',
+      });
+      expect(logAgentAccessMock).toHaveBeenCalledWith({
+        user,
+        agentName: 'finance-bot',
+        agentSource: SOURCE_A,
+        decision: 'deny',
+        reason: 'not-allowed',
+        telemetry: { requestId: 'req-1', botId: 'finance-bot' },
+      });
+    });
+
+    it('stays console-only without a session user', () => {
+      vi.spyOn(console, 'log').mockImplementation(() => {});
+      logAgentAccessMock.mockClear();
+      emitAccessAudit({
+        userMail: 'user@example.com',
+        agentName: 'finance-bot',
+        source: SOURCE_A,
+        decision: 'allow',
+        reason: 'rule',
+      });
+      expect(logAgentAccessMock).not.toHaveBeenCalled();
     });
   });
 
