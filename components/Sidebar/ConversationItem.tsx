@@ -86,6 +86,11 @@ function ConversationItemInner({
         !isEditing && !showMenu && handleSelectConversation(conversation.id)
       }
       onKeyDown={(e) => {
+        // Only treat Enter/Space as row activation when the ROW itself is
+        // focused. Descendants (the rename input, the Options button) bubble
+        // their keydowns here, and preventDefault() on a bubbled Space used to
+        // swallow the space character in the rename input.
+        if (e.target !== e.currentTarget) return;
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           if (!isEditing && !showMenu)
@@ -126,7 +131,11 @@ function ConversationItemInner({
                 />
               );
             })()}
-          <span className="truncate">
+          {/* title: the row truncates, so hovering reveals the full name */}
+          <span
+            className="truncate"
+            title={conversation.name || t('New Conversation')}
+          >
             {conversation.name || t('New Conversation')}
           </span>
         </span>
