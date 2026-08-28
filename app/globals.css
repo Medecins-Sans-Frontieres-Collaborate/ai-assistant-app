@@ -151,6 +151,18 @@ body {
   height: 100dvh;
 }
 
+/* Sidebar drag-resize. Elements that follow --sidebar-width animate their
+   width/margin for the collapse/expand toggle; during a drag that animation
+   would lag the pointer, so it is suspended for the duration. The attribute
+   is set on <html> by SidebarResizeHandle for the length of the drag. */
+html[data-sidebar-resizing] .sidebar-width-target {
+  transition: none !important;
+}
+html[data-sidebar-resizing] {
+  cursor: col-resize;
+  user-select: none;
+}
+
 /* Code block overflow handling for responsive layouts */
 pre {
   max-width: 100%;
