@@ -1,6 +1,4 @@
 import {
-  IconCheck,
-  IconChevronDown,
   IconChevronRight,
   IconDots,
   IconDownload,
@@ -16,6 +14,8 @@ import { useTranslations } from 'next-intl';
 import { FolderInterface } from '@/types/folder';
 import { Prompt } from '@/types/prompt';
 
+import { FolderPicker } from '@/components/Sidebar/FolderPicker';
+
 interface PromptItemProps {
   prompt: Prompt;
   folders: FolderInterface[];
@@ -25,6 +25,8 @@ interface PromptItemProps {
   onEdit: () => void;
   onDelete: (e: React.MouseEvent) => void;
   onMoveToFolder: (promptId: string, folderId: string | null) => void;
+  /** Creates a folder with `name` and moves the item into it. */
+  onCreateFolderAndMove?: (promptId: string, name: string) => void;
   onExport?: () => void;
 }
 
@@ -37,19 +39,20 @@ export const PromptItem: FC<PromptItemProps> = ({
   onEdit,
   onDelete,
   onMoveToFolder,
+  onCreateFolderAndMove,
   onExport,
 }) => {
   const t = useTranslations();
   const [showMenu, setShowMenu] = useState(false);
-  const [showFolderSubmenu, setShowFolderSubmenu] = useState(false);
+  const [showFolderPicker, setShowFolderPicker] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const optionsButtonRef = useRef<HTMLButtonElement>(null);
 
   // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setShowMenu(false);
-        setShowFolderSubmenu(false);
       }
     };
 
@@ -122,6 +125,7 @@ export const PromptItem: FC<PromptItemProps> = ({
 
         <div className="relative" ref={menuRef}>
           <button
+            ref={optionsButtonRef}
             className="rounded p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700"
             onClick={(e) => {
               e.stopPropagation();
@@ -137,71 +141,28 @@ export const PromptItem: FC<PromptItemProps> = ({
 
           {showMenu && (
             <div className="absolute right-0 mt-1 w-52 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-surface-dark-base shadow-lg z-50">
-              <div>
-                <button
-                  className="flex items-center w-full px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded flex items-center justify-between"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowFolderSubmenu(!showFolderSubmenu);
-                  }}
-                >
-                  <span className="flex items-center gap-2">
-                    <IconFolder
-                      size={16}
-                      className="text-gray-600 dark:text-gray-400"
-                    />
-                    {t('Move to folder')}
-                  </span>
-                  {showFolderSubmenu ? (
-                    <IconChevronDown
-                      size={16}
-                      className="text-gray-600 dark:text-gray-400"
-                    />
-                  ) : (
-                    <IconChevronRight
-                      size={16}
-                      className="text-gray-600 dark:text-gray-400"
-                    />
-                  )}
-                </button>
-
-                {/* Folder submenu - inline expansion */}
-                {showFolderSubmenu && (
-                  <div className="pl-4 mt-1">
-                    <button
-                      className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center justify-between"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onMoveToFolder(prompt.id, null);
-                        setShowMenu(false);
-                        setShowFolderSubmenu(false);
-                      }}
-                    >
-                      {t('No folder')}
-                      {!prompt.folderId && (
-                        <IconCheck size={14} className="shrink-0" />
-                      )}
-                    </button>
-                    {folders.map((folder) => (
-                      <button
-                        key={folder.id}
-                        className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center justify-between"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onMoveToFolder(prompt.id, folder.id);
-                          setShowMenu(false);
-                          setShowFolderSubmenu(false);
-                        }}
-                      >
-                        <span className="truncate">{folder.name}</span>
-                        {prompt.folderId === folder.id && (
-                          <IconCheck size={14} className="shrink-0" />
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+              {/* Move to folder — closes the menu and opens the searchable
+                  FolderPicker anchored to the Options button */}
+              <button
+                className="flex items-center w-full px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded justify-between"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowMenu(false);
+                  setShowFolderPicker(true);
+                }}
+              >
+                <span className="flex items-center gap-2">
+                  <IconFolder
+                    size={16}
+                    className="text-gray-600 dark:text-gray-400"
+                  />
+                  {t('Move to folder')}
+                </span>
+                <IconChevronRight
+                  size={16}
+                  className="text-gray-600 dark:text-gray-400"
+                />
+              </button>
 
               {onExport && (
                 <button
@@ -230,6 +191,20 @@ export const PromptItem: FC<PromptItemProps> = ({
               </button>
             </div>
           )}
+
+          <FolderPicker
+            triggerRef={optionsButtonRef}
+            isOpen={showFolderPicker}
+            onClose={() => setShowFolderPicker(false)}
+            folders={folders}
+            value={prompt.folderId ?? null}
+            onSelect={(folderId) => onMoveToFolder(prompt.id, folderId)}
+            onCreateFolder={
+              onCreateFolderAndMove
+                ? (name) => onCreateFolderAndMove(prompt.id, name)
+                : undefined
+            }
+          />
         </div>
       </div>
     </div>
