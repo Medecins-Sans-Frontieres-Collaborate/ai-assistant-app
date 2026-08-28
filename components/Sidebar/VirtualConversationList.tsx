@@ -14,6 +14,7 @@ interface VirtualConversationListProps {
   handleSelectConversation: (id: string) => void;
   handleDeleteConversation: (id: string, e: React.MouseEvent) => void;
   handleMoveToFolder: (conversationId: string, folderId: string | null) => void;
+  handleCreateFolderAndMove?: (conversationId: string, name: string) => void;
   handleRenameConversation: (id: string, currentName: string) => void;
   handleExportConversation: (conversation: Conversation) => void;
   handleShareConversation?: (conversation: Conversation) => void;
@@ -43,6 +44,7 @@ export const VirtualConversationList: FC<VirtualConversationListProps> = ({
   handleSelectConversation,
   handleDeleteConversation,
   handleMoveToFolder,
+  handleCreateFolderAndMove,
   handleRenameConversation,
   handleExportConversation,
   handleShareConversation,
@@ -62,6 +64,7 @@ export const VirtualConversationList: FC<VirtualConversationListProps> = ({
       handleSelectConversation={handleSelectConversation}
       handleDeleteConversation={handleDeleteConversation}
       handleMoveToFolder={handleMoveToFolder}
+      handleCreateFolderAndMove={handleCreateFolderAndMove}
       handleRenameConversation={handleRenameConversation}
       handleExportConversation={handleExportConversation}
       handleShareConversation={handleShareConversation}
@@ -135,6 +138,7 @@ export const VirtualConversationList: FC<VirtualConversationListProps> = ({
                 handleSelectConversation={handleSelectConversation}
                 handleDeleteConversation={handleDeleteConversation}
                 handleMoveToFolder={handleMoveToFolder}
+                handleCreateFolderAndMove={handleCreateFolderAndMove}
                 handleRenameConversation={handleRenameConversation}
                 handleExportConversation={handleExportConversation}
                 handleShareConversation={handleShareConversation}
