@@ -62,6 +62,13 @@ interface UIStore {
    */
   agentBrowserOpen: boolean;
 
+  /**
+   * Folder open in the main panel (FolderView) instead of a chat. Not
+   * persisted: a reload lands on the selected conversation as always. Any
+   * change of the selected conversation closes it (FolderView watches).
+   */
+  openFolderId: string | null;
+
   // Actions
   setIsSettingsOpen: (isOpen: boolean) => void;
   setIsBotModalOpen: (isOpen: boolean) => void;
@@ -73,6 +80,8 @@ interface UIStore {
   setCustomizationsInitialTab: (tab: CustomizationsTabKey | null) => void;
   setBackupModalView: (view: BackupModalView | null) => void;
   setAgentBrowserOpen: (open: boolean) => void;
+  openFolder: (folderId: string) => void;
+  closeFolder: () => void;
 }
 
 export const useUIStore = create<UIStore>((set) => ({
@@ -87,6 +96,7 @@ export const useUIStore = create<UIStore>((set) => ({
   customizationsInitialTab: null,
   backupModalView: null,
   agentBrowserOpen: false,
+  openFolderId: null,
 
   // Actions
   setIsSettingsOpen: (isOpen) => set({ isSettingsOpen: isOpen }),
@@ -101,4 +111,6 @@ export const useUIStore = create<UIStore>((set) => ({
   setCustomizationsInitialTab: (tab) => set({ customizationsInitialTab: tab }),
   setBackupModalView: (view) => set({ backupModalView: view }),
   setAgentBrowserOpen: (open) => set({ agentBrowserOpen: open }),
+  openFolder: (folderId) => set({ openFolderId: folderId }),
+  closeFolder: () => set({ openFolderId: null }),
 }));
