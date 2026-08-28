@@ -877,7 +877,12 @@
     "agentsEntry": "පැතිකඩ",
     "agentsTitle": "පැතිකඩ පිරික්සා එක් එක් පසුඔරයෙක් සමඟ සංවාදයක් ආරම්භ කරන්න",
     "agentsLoading": "ඔබට භාවිතා කළ හැකි නියෝජිතයන් පරීක්ෂා කරමින්…",
-    "agentsLoadError": "ඔබේ නියෝජිතයන් පූරණය කිරීමට නොහැකි විය — නැවත උත්සාහ කිරීමට විවෘත කරන්න"
+    "agentsLoadError": "ඔබේ නියෝජිතයන් පූරණය කිරීමට නොහැකි විය — නැවත උත්සාහ කිරීමට විවෘත කරන්න",
+    "newChatInFolder": "මෙම බහාලුමේ නව සංවාදයක්",
+    "resizeHandle": "ඉදිරි පැතිපත්තිය ප්‍රමාණාත්මක කරන්න",
+    "resizeHint": "ඉදිරි පැතිපත්තිය ප්‍රමාණය වෙනස් කිරීමට ඇදන්න; යලි සැකසීමට දෙවරක් ක්ලික් කරන්න",
+    "openFolder": "{name} බහාලුම විවෘත කරන්න",
+    "openFolderMenu": "බහාලුම විවෘත කරන්න"
   },
   "prompts": {
     "buildReusablePrompts": "AI සහාය ඇතිව නැවත භාවිතා කළ හැකි විමසීම් තනන්න",
@@ -5142,5 +5147,28 @@
       "officeId": "කාර්යාලය {value}",
       "groups": "{count, plural, one {කාණ්ඩයක් #ක්} other {කාණ්ඩ #ක්}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "නව සංවාදය",
+    "rename": "බහාලුම නම වෙනස් කරන්න",
+    "renameLabel": "බහාලුමේ නම",
+    "deleteFolder": "බහාලුම මකා දැමිය හැක",
+    "close": "බහාලුම වසන්න",
+    "selectAll": "සියල්ල තෝරන්න",
+    "selectedCount": "{count} තේරෙන ලදී",
+    "selectChat": "{name} තෝරන්න",
+    "moveTo": "— වෙත ගෙනයන්න…",
+    "deleteSelected": "මකන්න",
+    "confirmDeleteChats": "තේරූ සංවාද {count} මකාදමන්නද? මෙය ආපසු ලබාගත නොහැක.",
+    "emptyTitle": "මෙම බහාලුමේ සංවාද නොමැත",
+    "emptyHint": "මෙහි නව සංවාදයක් ආරම්භ කරන්න, හෝ සංවාද ඉදිරි පැතිපත්තියෙන් මෙම බහාලුම වෙත ඩ්‍රැග් කරන්න.",
+    "messageCount": "තත්ත්වය: {count} පණිවිඩ"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "බහාලුම් සෙවීම…",
+    "ariaLabel": "බහාලුමක් තෝරන්න",
+    "noResults": "ගැලපෙන බහාලුම් නොමැත",
+    "createFolder": "නව බහාලුම “{name}”"
   }
 }

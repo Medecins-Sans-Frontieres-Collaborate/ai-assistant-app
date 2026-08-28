@@ -941,7 +941,12 @@
     "agentsEntry": "代理",
     "agentsTitle": "浏览代理并开始对话",
     "agentsLoading": "正在检查可用的智能体…",
-    "agentsLoadError": "无法加载您的智能体 — 点击重试"
+    "agentsLoadError": "无法加载您的智能体 — 点击重试",
+    "newChatInFolder": "在此文件夹中创建新对话",
+    "resizeHandle": "调整侧边栏大小",
+    "resizeHint": "拖动以调整侧边栏大小；双击重置",
+    "openFolder": "打开文件夹 {name}",
+    "openFolderMenu": "打开文件夹"
   },
   "prompts": {
     "buildReusablePrompts": "使用 AI 辅助构建可重复使用的提示",
@@ -5173,5 +5178,28 @@
       "officeId": "办公室 {value}",
       "groups": "{count, plural, one {# 个组} other {# 个组}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "新建对话",
+    "rename": "重命名文件夹",
+    "renameLabel": "文件夹名称",
+    "deleteFolder": "删除文件夹",
+    "close": "关闭文件夹",
+    "selectAll": "全选",
+    "selectedCount": "已选中 {count} 项",
+    "selectChat": "选择 {name}",
+    "moveTo": "移动到…",
+    "deleteSelected": "删除",
+    "confirmDeleteChats": "要删除已选中的 {count} 个对话吗？此操作无法撤销。",
+    "emptyTitle": "此文件夹中暂时没有对话",
+    "emptyHint": "可在此新建对话，或将对话拖到侧边栏的该文件夹中。",
+    "messageCount": "{count} 条消息"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "搜索文件夹…",
+    "ariaLabel": "选择文件夹",
+    "noResults": "未找到匹配的文件夹",
+    "createFolder": "新建文件夹“{name}”"
   }
 }

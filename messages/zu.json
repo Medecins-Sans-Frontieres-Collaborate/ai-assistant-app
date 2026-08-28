@@ -990,7 +990,12 @@
     "agentsEntry": "Osebenzayo",
     "agentsTitle": "Hlola osebenzayo bese uqala ingxoxo nomunye",
     "agentsLoading": "Sihlola ukuthi imiphi imisebenzi ongayisebenzisa…",
-    "agentsLoadError": "Ayikwazanga ukulayisha imisebenzi yakho — vula ukuze uzame futhi"
+    "agentsLoadError": "Ayikwazanga ukulayisha imisebenzi yakho — vula ukuze uzame futhi",
+    "newChatInFolder": "Ingxoxo entsha kule folda",
+    "resizeHandle": "Lungisa usayizi webha eseceleni",
+    "resizeHint": "Hudula ukuze ulinganise usayizi webha eseceleni; chofoza kabili ukuze ubuyisele",
+    "openFolder": "Vula ifolda {name}",
+    "openFolderMenu": "Vula ifolda"
   },
   "errors": {
     "somethingWentWrong": "Kukhona okungahambanga kahle",
@@ -5126,5 +5131,28 @@
       "officeId": "ihhovisi {value}",
       "groups": "{count, plural, one {# iqembu} other {# amaqembu}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Ingxoxo entsha",
+    "rename": "Qamba kabusha ifolda",
+    "renameLabel": "Igama lefolda",
+    "deleteFolder": "Susa ifolda",
+    "close": "Vala ifolda",
+    "selectAll": "Khetha konke",
+    "selectedCount": "{count} okukhethiwe",
+    "selectChat": "Khetha u-{name}",
+    "moveTo": "Hambisa ku…",
+    "deleteSelected": "Susa",
+    "confirmDeleteChats": "Susa ingxoxo(okulandelayo) ezingu-{count}? Lokhu ngeke kubuyele emuva.",
+    "emptyTitle": "Azikho izingxoxo kule folda okwamanje",
+    "emptyHint": "Qala ingxoxo entsha lapha, noma hudula izingxoxo kule folda ebha eseceleni.",
+    "messageCount": "{count} umlayezo"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Sesha amafolda…",
+    "ariaLabel": "Khetha ifolda",
+    "noResults": "Azikho amafolda afanayo",
+    "createFolder": "Ifolda entsha “{name}”"
   }
 }

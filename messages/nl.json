@@ -875,7 +875,12 @@
     "agentsEntry": "Agenten",
     "agentsTitle": "Blader door agenten en begin een chat met een",
     "agentsLoading": "Controleren welke agents u kunt gebruiken…",
-    "agentsLoadError": "Uw agents konden niet worden geladen — klik om het opnieuw te proberen"
+    "agentsLoadError": "Uw agents konden niet worden geladen — klik om het opnieuw te proberen",
+    "newChatInFolder": "Nieuw gesprek in deze map",
+    "resizeHandle": "Zijbalk vergroten/verkleinen",
+    "resizeHint": "Versleep om de zijbalk te wijzigen; dubbelklik om te resetten",
+    "openFolder": "Map {name} openen",
+    "openFolderMenu": "Map openen"
   },
   "prompts": {
     "buildReusablePrompts": "Bouw herbruikbare prompts met AI-assistentie",
@@ -5142,5 +5147,28 @@
       "officeId": "kantoor {value}",
       "groups": "{count, plural, one {# groep} other {# groepen}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Nieuw gesprek",
+    "rename": "Map hernoemen",
+    "renameLabel": "Mapnaam",
+    "deleteFolder": "Map verwijderen",
+    "close": "Map sluiten",
+    "selectAll": "Alles selecteren",
+    "selectedCount": "{count} geselecteerd",
+    "selectChat": "{name} selecteren",
+    "moveTo": "Verplaatsen naar…",
+    "deleteSelected": "Verwijderen",
+    "confirmDeleteChats": "{count} geselecteerde gesprek(ken) verwijderen? Dit kan niet ongedaan worden gemaakt.",
+    "emptyTitle": "Nog geen gesprekken in deze map",
+    "emptyHint": "Begin hier een nieuw gesprek of sleep gesprekken naar deze map in de zijbalk.",
+    "messageCount": "{count} bericht(en)"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Zoek mappen…",
+    "ariaLabel": "Kies een map",
+    "noResults": "Geen overeenkomende mappen",
+    "createFolder": "Nieuwe map “{name}”"
   }
 }

@@ -853,7 +853,12 @@
     "agentsEntry": "ወኪሎች",
     "agentsTitle": "ወኪሎችን ያስሱ እና ከአንዱ ጋር ውይይት ይጀምሩ",
     "agentsLoading": "ምን ዓይነት agent መጠቀም እንደምትችሉ በመፈተሽ ላይ ነው…",
-    "agentsLoadError": "agent ዎት መጫን አልተቻለም — ለማደግ ይክፈቱ"
+    "agentsLoadError": "agent ዎት መጫን አልተቻለም — ለማደግ ይክፈቱ",
+    "newChatInFolder": "በዚህ ፎልደር ውስጥ አዲስ ውይይት",
+    "resizeHandle": "የጎን ቅጥ መስፋፋት",
+    "resizeHint": "የጎን ቅጥ መስፋፋት ለማድረግ ይጎትቱ፤ ወይም ሁለት ጊዜ ይጫኑ እንዲመለስ",
+    "openFolder": "ፎልደር {name} ክፈት",
+    "openFolderMenu": "ፎልደር ክፈት"
   },
   "prompts": {
     "buildReusablePrompts": "በAI እገዛ እንደገና ሊጠቀሙ የሚችሉ ጥያቄዎችን ይፍጠሩ",
@@ -5142,5 +5147,28 @@
       "officeId": "ቢሮ {value}",
       "groups": "{count, plural, one {# ቡድን} other {# ቡድኖች}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "አዲስ ውይይት",
+    "rename": "ፎልደር ስም ቀይር",
+    "renameLabel": "የፎልደሩ ስም",
+    "deleteFolder": "ፎልደሩን ሰርዝ",
+    "close": "ፎልደሩን ዝጋ",
+    "selectAll": "ሁሉንም ምረጥ",
+    "selectedCount": "{count} ተመርጧል",
+    "selectChat": "{name} ምረጥ",
+    "moveTo": "… ወደ ሌላ አውል",
+    "deleteSelected": "ሰርዝ",
+    "confirmDeleteChats": "{count} የተመረጡትን ውይይቶች ይሰርዙ? ይህ መመለስ አይችልም።",
+    "emptyTitle": "በዚህ ፎልደር ምንም ውይይት የለም",
+    "emptyHint": "አዲስ ውይይት ይጀምሩ፣ ወይም ውይይቶችን ወደዚህ ፎልደር ይጎትቱ።",
+    "messageCount": "{count} መልእክት(ዎች)"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "ፎልደሮችን ፍለጋ...",
+    "ariaLabel": "ፎልደር ይምረጡ",
+    "noResults": "ምንም ፎልደር አልተገኘም",
+    "createFolder": "አዲስ ፎልደር “{name}”"
   }
 }

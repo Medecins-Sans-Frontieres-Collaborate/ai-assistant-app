@@ -990,7 +990,12 @@
     "agentsEntry": "Agentiɗe",
     "agentsTitle": "Yiɗdi agentiɗe e fuɗɗi waawi haasagol e ɗuum",
     "agentsLoading": "Njanngo e mbaɗɓe ma waɗi...",
-    "agentsLoadError": "Mbaɗɓe maa waawi aniima njannde — uddit tee hurmit"
+    "agentsLoadError": "Mbaɗɓe maa waawi aniima njannde — uddit tee hurmit",
+    "newChatInFolder": "Chat kesɗo e kaɓirgal ngal",
+    "resizeHandle": "Waynu ummini kaɓirgal",
+    "resizeHint": "Faynu ummini kaɓirgal; ɗaɓɓit nayi moto gollu",
+    "openFolder": "Uddit kaɓirgal {name}",
+    "openFolderMenu": "Uddit kaɓirgal"
   },
   "errors": {
     "somethingWentWrong": "Huunde woorii",
@@ -5126,5 +5131,28 @@
       "officeId": "biiro {value}",
       "groups": "{count, plural, one {# group} other {# groupɗe}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Chat kesɗo",
+    "rename": "Sanngu innde kaɓirgal",
+    "renameLabel": "Innde kaɓirgal",
+    "deleteFolder": "Momtu kaɓirgal",
+    "close": "Uddu kaɓirgal",
+    "selectAll": "Suɓo fofu",
+    "selectedCount": "{count} suuɓi",
+    "selectChat": "Suɓo {name}",
+    "moveTo": "Natto e...",
+    "deleteSelected": "Momtu",
+    "confirmDeleteChats": "Aɗa waɗi momtude {count} chat suuɓi? Ngol waawi waawaa artirde.",
+    "emptyTitle": "Haa chat kanko si ɗum e kaɓirgal ngal",
+    "emptyHint": "Fuɗɗu chat kesɗo e jam, walla faynu chatɗi e kaɓirgal ngal e kaɓirgal baafal.",
+    "messageCount": "{count} jaɓɓorgo"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Yiy kaɓirgalɗi...",
+    "ariaLabel": "Suɓ kaɓirgal",
+    "noResults": "Haa kaɓirgal ko feewi",
+    "createFolder": "Kaɓirgal kesɗo “{name}”"
   }
 }

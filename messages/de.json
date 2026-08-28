@@ -856,7 +856,12 @@
     "agentsEntry": "Agenten",
     "agentsTitle": "Agenten durchsuchen und mit einem chatten",
     "agentsLoading": "Es wird geprüft, welche Agents Sie verwenden können…",
-    "agentsLoadError": "Ihre Agents konnten nicht geladen werden — zum Wiederholen öffnen"
+    "agentsLoadError": "Ihre Agents konnten nicht geladen werden — zum Wiederholen öffnen",
+    "newChatInFolder": "Neuer Chat in diesem Ordner",
+    "resizeHandle": "Seitenleiste größenändern",
+    "resizeHint": "Ziehen, um die Seitenleiste zu ändern; Doppelklick zum Zurücksetzen",
+    "openFolder": "Ordner {name} öffnen",
+    "openFolderMenu": "Ordner öffnen"
   },
   "errors": {
     "somethingWentWrong": "Etwas ist schief gelaufen",
@@ -5142,5 +5147,28 @@
       "officeId": "Büro {value}",
       "groups": "{count, plural, one {# Gruppe} other {# Gruppen}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Neuer Chat",
+    "rename": "Ordner umbenennen",
+    "renameLabel": "Ordnername",
+    "deleteFolder": "Ordner löschen",
+    "close": "Ordner schließen",
+    "selectAll": "Alle auswählen",
+    "selectedCount": "{count} ausgewählt",
+    "selectChat": "{name} auswählen",
+    "moveTo": "Verschieben nach…",
+    "deleteSelected": "Löschen",
+    "confirmDeleteChats": "{count} ausgewählte(n) Chat(s) löschen? Dies kann nicht rückgängig gemacht werden.",
+    "emptyTitle": "Noch keine Chats in diesem Ordner",
+    "emptyHint": "Starten Sie hier einen neuen Chat oder ziehen Sie Chats in diesen Ordner in der Seitenleiste.",
+    "messageCount": "{count} Nachricht(en)"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Ordner suchen…",
+    "ariaLabel": "Ordner auswählen",
+    "noResults": "Keine passenden Ordner",
+    "createFolder": "Neuer Ordner „{name}“"
   }
 }

@@ -990,7 +990,12 @@
     "agentsEntry": "Othandizira",
     "agentsTitle": "Onani othandizira ndipo yambitsani kucheza ndi m'modzi",
     "agentsLoading": "Kuyang'ana omwe mungagwiritse ntchito…",
-    "agentsLoadError": "Simungathe kutsitsa omwe mungagwiritse ntchito — dinani kuti muyese kachiwiri"
+    "agentsLoadError": "Simungathe kutsitsa omwe mungagwiritse ntchito — dinani kuti muyese kachiwiri",
+    "newChatInFolder": "Chat chatsopano mufoda muno",
+    "resizeHandle": "Sinthani kukula kwa sidebar",
+    "resizeHint": "Kokerani kuti musinthe kukula kwa sidebar; dinani kawiri kubwezeretsanso",
+    "openFolder": "Tsegulani foda {name}",
+    "openFolderMenu": "Tsegulani foda"
   },
   "errors": {
     "somethingWentWrong": "Chinachake chalakwika",
@@ -5126,5 +5131,28 @@
       "officeId": "ofesi {value}",
       "groups": "{count, plural, one {# gulu} other {# magulu}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Chat chatsopano",
+    "rename": "Sinthanani dzina la foda",
+    "renameLabel": "Dzina la foda",
+    "deleteFolder": "Chotsani foda",
+    "close": "Tsekani foda",
+    "selectAll": "Sankhani zonse",
+    "selectedCount": "Zasankhidwa {count}",
+    "selectChat": "Sankhani {name}",
+    "moveTo": "Sungani ku...",
+    "deleteSelected": "Chotsani",
+    "confirmDeleteChats": "Mukufuna kuchotsa {count} chat(s) yomwe yasankhidwa? Izi sizingabwezedwe.",
+    "emptyTitle": "Palibe ma chat mu foda muno pano",
+    "emptyHint": "Yambani chat chatsopano pano, kapena kokani ma chat mu foda iyi pa sidebar.",
+    "messageCount": "{count} uthenga(s)"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Fufuzani mafoda...",
+    "ariaLabel": "Sankhani foda",
+    "noResults": "Palibe mafoda ogwirizana",
+    "createFolder": "Foda yatsopano \"{name}\""
   }
 }

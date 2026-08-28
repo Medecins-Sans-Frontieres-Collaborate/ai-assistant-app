@@ -911,7 +911,12 @@
     "agentsEntry": "ایجنٹس",
     "agentsTitle": "ایجنٹس کو براؤز کریں اور چیٹ شروع کریں",
     "agentsLoading": "دیکھا جا رہا ہے کہ آپ کون سے ایجنٹس استعمال کر سکتے ہیں…",
-    "agentsLoadError": "آپ کے ایجنٹس لوڈ نہیں ہو سکے — دوبارہ کوشش کے لیے کھولیں"
+    "agentsLoadError": "آپ کے ایجنٹس لوڈ نہیں ہو سکے — دوبارہ کوشش کے لیے کھولیں",
+    "newChatInFolder": "اس فولڈر میں نیا چیٹ",
+    "resizeHandle": "سائیڈبار کا سائز تبدیل کریں",
+    "resizeHint": "سائیڈبار کا سائز تبدیل کرنے کے لیے ڈریگ کریں؛ دوبارہ سیٹ کرنے کے لیے ڈبل کلک کریں",
+    "openFolder": "فولڈر {name} کھولیں",
+    "openFolderMenu": "فولڈر کھولیں"
   },
   "prompts": {
     "buildReusablePrompts": "AI کی مدد سے دوبارہ قابل استعمال پرامپٹس بنائیں",
@@ -5172,5 +5177,28 @@
       "officeId": "دفتر {value}",
       "groups": "{count, plural, one {# گروپ} other {# گروپس}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "نیا چیٹ",
+    "rename": "فولڈر کا نام تبدیل کریں",
+    "renameLabel": "فولڈر کا نام",
+    "deleteFolder": "فولڈر حذف کریں",
+    "close": "فولڈر بند کریں",
+    "selectAll": "سب کو منتخب کریں",
+    "selectedCount": "{count} منتخب شدہ",
+    "selectChat": "{name} منتخب کریں",
+    "moveTo": "منتقل کریں…",
+    "deleteSelected": "حذف کریں",
+    "confirmDeleteChats": "{count} منتخب چیٹ کو حذف کریں؟ یہ عمل واپس نہیں ہو سکے گا۔",
+    "emptyTitle": "اس فولڈر میں ابھی تک کوئی چیٹ نہیں",
+    "emptyHint": "یہاں نیا چیٹ شروع کریں یا چیٹ کو سائیڈبار سے اس فولڈر میں ڈریگ کریں۔",
+    "messageCount": "{count} پیغام"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "فولڈرز تلاش کریں…",
+    "ariaLabel": "فولڈر منتخب کریں",
+    "noResults": "کوئی فولڈر نہیں ملا",
+    "createFolder": "نیا فولڈر “{name}”"
   }
 }

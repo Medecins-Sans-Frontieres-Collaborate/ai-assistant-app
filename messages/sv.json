@@ -910,7 +910,12 @@
     "agentsEntry": "Agenter",
     "agentsTitle": "Bläddra bland agenter och starta en chatt med en",
     "agentsLoading": "Kontrollerar vilka agenter du kan använda…",
-    "agentsLoadError": "Dina agenter kunde inte laddas — öppna för att försöka igen"
+    "agentsLoadError": "Dina agenter kunde inte laddas — öppna för att försöka igen",
+    "newChatInFolder": "Ny konversation i den här mappen",
+    "resizeHandle": "Ändra sidopanelens storlek",
+    "resizeHint": "Dra för att ändra sidopanelens storlek; dubbelklicka för att återställa",
+    "openFolder": "Öppna mapp {name}",
+    "openFolderMenu": "Öppna mapp"
   },
   "prompts": {
     "buildReusablePrompts": "Bygg återanvändbara prompter med AI-assistans",
@@ -5142,5 +5147,28 @@
       "officeId": "kontor {value}",
       "groups": "{count, plural, one {# grupp} other {# grupper}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Ny konversation",
+    "rename": "Byt namn på mapp",
+    "renameLabel": "Mappnamn",
+    "deleteFolder": "Ta bort mapp",
+    "close": "Stäng mapp",
+    "selectAll": "Markera alla",
+    "selectedCount": "{count} markerade",
+    "selectChat": "Markera {name}",
+    "moveTo": "Flytta till…",
+    "deleteSelected": "Ta bort",
+    "confirmDeleteChats": "Ta bort {count} markerad(e) konversation(er)? Detta kan inte ångras.",
+    "emptyTitle": "Inga konversationer i denna mapp än",
+    "emptyHint": "Starta en ny konversation här, eller dra konversationer till den här mappen i sidopanelen.",
+    "messageCount": "{count} meddelande(n)"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Sök i mappar…",
+    "ariaLabel": "Välj en mapp",
+    "noResults": "Inga mappar matchar",
+    "createFolder": "Ny mapp “{name}”"
   }
 }

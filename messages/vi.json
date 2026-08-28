@@ -911,7 +911,12 @@
     "agentsEntry": "Tác nhân",
     "agentsTitle": "Duyệt các tác nhân và bắt đầu trò chuyện với một tác nhân",
     "agentsLoading": "Đang kiểm tra các agent bạn có thể sử dụng…",
-    "agentsLoadError": "Không thể tải các agent của bạn — bấm để thử lại"
+    "agentsLoadError": "Không thể tải các agent của bạn — bấm để thử lại",
+    "newChatInFolder": "Trò chuyện mới trong thư mục này",
+    "resizeHandle": "Thay đổi kích thước thanh bên",
+    "resizeHint": "Kéo để thay đổi kích thước thanh bên; nhấp đúp để đặt lại",
+    "openFolder": "Mở thư mục {name}",
+    "openFolderMenu": "Mở thư mục"
   },
   "prompts": {
     "buildReusablePrompts": "Xây dựng lời nhắc có thể tái sử dụng với sự hỗ trợ của AI",
@@ -5173,5 +5178,28 @@
       "officeId": "văn phòng {value}",
       "groups": "{count, plural, one {# nhóm} other {# nhóm}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Trò chuyện mới",
+    "rename": "Đổi tên thư mục",
+    "renameLabel": "Tên thư mục",
+    "deleteFolder": "Xóa thư mục",
+    "close": "Đóng thư mục",
+    "selectAll": "Chọn tất cả",
+    "selectedCount": "Đã chọn {count}",
+    "selectChat": "Chọn {name}",
+    "moveTo": "Di chuyển tới…",
+    "deleteSelected": "Xóa",
+    "confirmDeleteChats": "Xóa {count} trò chuyện đã chọn? Hành động này không thể hoàn tác.",
+    "emptyTitle": "Chưa có trò chuyện nào trong thư mục này",
+    "emptyHint": "Bắt đầu một trò chuyện mới tại đây hoặc kéo các trò chuyện vào thư mục này ở thanh bên.",
+    "messageCount": "{count} tin nhắn"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Tìm kiếm thư mục…",
+    "ariaLabel": "Chọn thư mục",
+    "noResults": "Không có thư mục phù hợp",
+    "createFolder": "Thư mục mới “{name}”"
   }
 }

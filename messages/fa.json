@@ -835,7 +835,12 @@
     "agentsEntry": "نمایندگان",
     "agentsTitle": "نمایندگان را مرور کنید و با یکی گفتگو را آغاز کنید",
     "agentsLoading": "در حال بررسی عوامل قابل استفاده شما…",
-    "agentsLoadError": "بارگذاری عوامل شما انجام نشد — برای تلاش مجدد باز کنید"
+    "agentsLoadError": "بارگذاری عوامل شما انجام نشد — برای تلاش مجدد باز کنید",
+    "newChatInFolder": "گفتگو جدید در این پوشه",
+    "resizeHandle": "تغییر اندازه نوار کناری",
+    "resizeHint": "برای تغییر اندازه نوار کناری بکشید؛ برای بازنشانی دوبار کلیک کنید",
+    "openFolder": "باز کردن پوشه {name}",
+    "openFolderMenu": "باز کردن پوشه"
   },
   "prompts": {
     "buildReusablePrompts": "ساخت پرامپت‌های قابل استفاده مجدد با کمک هوش مصنوعی",
@@ -5142,5 +5147,28 @@
       "officeId": "دفتر {value}",
       "groups": "{count, plural, one {# گروه} other {# گروه}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "گفتگوی جدید",
+    "rename": "تغییر نام پوشه",
+    "renameLabel": "نام پوشه",
+    "deleteFolder": "حذف پوشه",
+    "close": "بستن پوشه",
+    "selectAll": "انتخاب همه",
+    "selectedCount": "{count} مورد انتخاب شده",
+    "selectChat": "انتخاب {name}",
+    "moveTo": "انتقال به...",
+    "deleteSelected": "حذف",
+    "confirmDeleteChats": "{count} گفتگوی انتخاب شده حذف شود؟ این عمل قابل بازگشت نیست.",
+    "emptyTitle": "هنوز گفتگویی در این پوشه نیست",
+    "emptyHint": "اینجا یک گفتگوی جدید شروع کنید یا گفتگوها را روی این پوشه در نوار کناری بکشید.",
+    "messageCount": "{count} پیام"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "جستجوی پوشه‌ها...",
+    "ariaLabel": "انتخاب پوشه",
+    "noResults": "پوشه‌ای یافت نشد",
+    "createFolder": "پوشه جدید «{name}»"
   }
 }

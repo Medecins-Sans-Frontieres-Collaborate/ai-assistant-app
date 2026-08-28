@@ -856,7 +856,12 @@
     "agentsEntry": "Agents",
     "agentsTitle": "Parcourez les agents et démarrez une discussion avec l’un d’eux",
     "agentsLoading": "Vérification des agents disponibles…",
-    "agentsLoadError": "Vos agents n'ont pas pu être chargés — ouvrez pour réessayer"
+    "agentsLoadError": "Vos agents n'ont pas pu être chargés — ouvrez pour réessayer",
+    "newChatInFolder": "Nouveau chat dans ce dossier",
+    "resizeHandle": "Redimensionner la barre latérale",
+    "resizeHint": "Faites glisser pour redimensionner la barre latérale ; double-cliquez pour réinitialiser",
+    "openFolder": "Ouvrir le dossier {name}",
+    "openFolderMenu": "Ouvrir le dossier"
   },
   "errors": {
     "somethingWentWrong": "Quelque chose s'est mal passé",
@@ -5142,5 +5147,28 @@
       "officeId": "bureau {value}",
       "groups": "{count, plural, one {# groupe} other {# groupes}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Nouveau chat",
+    "rename": "Renommer le dossier",
+    "renameLabel": "Nom du dossier",
+    "deleteFolder": "Supprimer le dossier",
+    "close": "Fermer le dossier",
+    "selectAll": "Tout sélectionner",
+    "selectedCount": "{count} sélectionné(s)",
+    "selectChat": "Sélectionner {name}",
+    "moveTo": "Déplacer vers…",
+    "deleteSelected": "Supprimer",
+    "confirmDeleteChats": "Supprimer {count} chat(s) sélectionné(s) ? Cette action est irréversible.",
+    "emptyTitle": "Aucun chat dans ce dossier pour le moment",
+    "emptyHint": "Commencez un nouveau chat ici, ou faites glisser des chats dans ce dossier depuis la barre latérale.",
+    "messageCount": "{count} message(s)"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Rechercher des dossiers…",
+    "ariaLabel": "Choisir un dossier",
+    "noResults": "Aucun dossier correspondant",
+    "createFolder": "Nouveau dossier « {name} »"
   }
 }

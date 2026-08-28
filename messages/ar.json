@@ -856,7 +856,12 @@
     "agentsEntry": "الوكلاء",
     "agentsTitle": "تصفح الوكلاء وابدأ محادثة مع أحدهم",
     "agentsLoading": "جارٍ التحقق من الوكلاء المتاحين لك…",
-    "agentsLoadError": "تعذر تحميل وكلائك — انقر لإعادة المحاولة"
+    "agentsLoadError": "تعذر تحميل وكلائك — انقر لإعادة المحاولة",
+    "newChatInFolder": "دردشة جديدة في هذا المجلد",
+    "resizeHandle": "تغيير حجم الشريط الجانبي",
+    "resizeHint": "اسحب لتغيير حجم الشريط الجانبي؛ انقر مرتين لإعادة التعيين",
+    "openFolder": "فتح المجلد {name}",
+    "openFolderMenu": "فتح المجلد"
   },
   "prompts": {
     "buildReusablePrompts": "بناء موجهات قابلة لإعادة الاستخدام بمساعدة الذكاء الاصطناعي",
@@ -5142,5 +5147,28 @@
       "officeId": "المكتب {value}",
       "groups": "{count, plural, one {مجموعة واحدة} other {# مجموعات}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "دردشة جديدة",
+    "rename": "إعادة تسمية المجلد",
+    "renameLabel": "اسم المجلد",
+    "deleteFolder": "حذف المجلد",
+    "close": "إغلاق المجلد",
+    "selectAll": "تحديد الكل",
+    "selectedCount": "{count} محدد",
+    "selectChat": "تحديد {name}",
+    "moveTo": "نقل إلى…",
+    "deleteSelected": "حذف",
+    "confirmDeleteChats": "حذف {count} من الدردشات المحددة؟ لا يمكن التراجع عن ذلك.",
+    "emptyTitle": "لا توجد دردشات في هذا المجلد بعد",
+    "emptyHint": "ابدأ دردشة جديدة هنا، أو اسحب الدردشات لهذا المجلد في الشريط الجانبي.",
+    "messageCount": "{count} رسالة"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "بحث في المجلدات…",
+    "ariaLabel": "اختر مجلدًا",
+    "noResults": "لا توجد مجلدات مطابقة",
+    "createFolder": "مجلد جديد “{name}”"
   }
 }

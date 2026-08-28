@@ -827,7 +827,12 @@
     "agentsEntry": "เอเจนต์",
     "agentsTitle": "เรียกดูเอเจนต์และเริ่มแชทกับเอเจนต์",
     "agentsLoading": "กำลังตรวจสอบว่าเอเจนต์ใดที่คุณสามารถใช้ได้…",
-    "agentsLoadError": "ไม่สามารถโหลดเอเจนต์ของคุณได้ — คลิกเพื่อลองอีกครั้ง"
+    "agentsLoadError": "ไม่สามารถโหลดเอเจนต์ของคุณได้ — คลิกเพื่อลองอีกครั้ง",
+    "newChatInFolder": "สร้างแชทใหม่ในโฟลเดอร์นี้",
+    "resizeHandle": "ปรับขนาดแถบด้านข้าง",
+    "resizeHint": "ลากเพื่อปรับขนาดแถบด้านข้าง ดับเบิลคลิกเพื่อรีเซ็ต",
+    "openFolder": "เปิดโฟลเดอร์ {name}",
+    "openFolderMenu": "เปิดโฟลเดอร์"
   },
   "prompts": {
     "buildReusablePrompts": "สร้างพรอมต์ที่ใช้ซ้ำได้ด้วยความช่วยเหลือจาก AI",
@@ -5142,5 +5147,28 @@
       "officeId": "สำนักงาน {value}",
       "groups": "{count, plural, one {# กลุ่ม} other {# กลุ่ม}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "สร้างแชทใหม่",
+    "rename": "เปลี่ยนชื่อโฟลเดอร์",
+    "renameLabel": "ชื่อโฟลเดอร์",
+    "deleteFolder": "ลบโฟลเดอร์",
+    "close": "ปิดโฟลเดอร์",
+    "selectAll": "เลือกทั้งหมด",
+    "selectedCount": "เลือก {count} รายการ",
+    "selectChat": "เลือก {name}",
+    "moveTo": "ย้ายไปยัง…",
+    "deleteSelected": "ลบ",
+    "confirmDeleteChats": "ลบ {count} แชทที่เลือกหรือไม่? ไม่สามารถกู้คืนได้",
+    "emptyTitle": "ยังไม่มีแชทในโฟลเดอร์นี้",
+    "emptyHint": "เริ่มแชทใหม่ที่นี่ หรือ ลากแชทมาใส่โฟลเดอร์นี้ในแถบด้านข้าง",
+    "messageCount": "{count} ข้อความ"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "ค้นหาโฟลเดอร์…",
+    "ariaLabel": "เลือกโฟลเดอร์",
+    "noResults": "ไม่พบโฟลเดอร์ที่ตรงกัน",
+    "createFolder": "สร้างโฟลเดอร์ใหม่ “{name}”"
   }
 }

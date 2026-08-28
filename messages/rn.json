@@ -990,7 +990,12 @@
     "agentsEntry": "Abashinzwe",
     "agentsTitle": "Rondera abashinzwe kandi utangure kuganira n’umwe",
     "agentsLoading": "Turiko turarondera abashobora gukoreshwa…",
-    "agentsLoadError": "Ntivyashobotse gupakira abakozi bawe — fungura wongere ugerageze"
+    "agentsLoadError": "Ntivyashobotse gupakira abakozi bawe — fungura wongere ugerageze",
+    "newChatInFolder": "Chat nshasha muri iri folder",
+    "resizeHandle": "Hindura ingene sidebar iboneka",
+    "resizeHint": "Kwega kugira uhindure sidebar; kanda kabiri kugira usubize uko vyari bisanzwe",
+    "openFolder": "Fungura folder {name}",
+    "openFolderMenu": "Fungura folder"
   },
   "errors": {
     "somethingWentWrong": "Hari ikintu kitajenda neza",
@@ -5126,5 +5131,28 @@
       "officeId": "ibiro {value}",
       "groups": "{count, plural, one {# tsinda} other {# matsinda}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Chat nshasha",
+    "rename": "Hinduza izina rya folder",
+    "renameLabel": "Izina rya folder",
+    "deleteFolder": "Siba folder",
+    "close": "Funga folder",
+    "selectAll": "Hitamwo vyose",
+    "selectedCount": "{count} vyatowe",
+    "selectChat": "Hitamwo {name}",
+    "moveTo": "Mushinge muri …",
+    "deleteSelected": "Siba",
+    "confirmDeleteChats": "Urashaka gusiba {count} chat vyatowe? Ibi ntibishobora gusubirwamwo.",
+    "emptyTitle": "Nta ma chat ari muri iri folder ubu",
+    "emptyHint": "Tangura chat nshasha hano, canke wumeze chats mugeze kuri uyu folder kuri sidebar.",
+    "messageCount": "{count} ubutumwa"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Rondera amafolder...",
+    "ariaLabel": "Hitamwo folder",
+    "noResults": "Nta folder bihuye",
+    "createFolder": "Folder nshasha “{name}”"
   }
 }

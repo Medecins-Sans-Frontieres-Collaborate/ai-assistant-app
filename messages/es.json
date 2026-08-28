@@ -856,7 +856,12 @@
     "agentsEntry": "Agentes",
     "agentsTitle": "Explora agentes y comienza un chat con uno",
     "agentsLoading": "Verificando qué agentes puede usar…",
-    "agentsLoadError": "No se pudieron cargar sus agentes; ábralo para reintentar"
+    "agentsLoadError": "No se pudieron cargar sus agentes; ábralo para reintentar",
+    "newChatInFolder": "Nuevo chat en esta carpeta",
+    "resizeHandle": "Redimensionar barra lateral",
+    "resizeHint": "Arrastre para cambiar el tamaño de la barra lateral; doble clic para restablecer",
+    "openFolder": "Abrir carpeta {name}",
+    "openFolderMenu": "Abrir carpeta"
   },
   "errors": {
     "somethingWentWrong": "Algo salió mal",
@@ -5142,5 +5147,28 @@
       "officeId": "oficina {value}",
       "groups": "{count, plural, one {# grupo} other {# grupos}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Nuevo chat",
+    "rename": "Renombrar carpeta",
+    "renameLabel": "Nombre de la carpeta",
+    "deleteFolder": "Eliminar carpeta",
+    "close": "Cerrar carpeta",
+    "selectAll": "Seleccionar todo",
+    "selectedCount": "{count} seleccionado(s)",
+    "selectChat": "Seleccionar {name}",
+    "moveTo": "Mover a…",
+    "deleteSelected": "Eliminar",
+    "confirmDeleteChats": "¿Eliminar {count} chat(s) seleccionados? Esto no se puede deshacer.",
+    "emptyTitle": "Aún no hay chats en esta carpeta",
+    "emptyHint": "Inicie un nuevo chat aquí, o arrastre chats a esta carpeta en la barra lateral.",
+    "messageCount": "{count} mensaje(s)"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Buscar carpetas…",
+    "ariaLabel": "Elija una carpeta",
+    "noResults": "Ninguna carpeta coincide",
+    "createFolder": "Nueva carpeta «{name}»"
   }
 }

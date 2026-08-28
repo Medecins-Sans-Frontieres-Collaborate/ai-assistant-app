@@ -856,7 +856,12 @@
     "agentsEntry": "Agentes",
     "agentsTitle": "Navegue pelos agentes e inicie um chat com um",
     "agentsLoading": "Verificando quais agentes você pode usar…",
-    "agentsLoadError": "Seus agentes não puderam ser carregados — abra para tentar novamente"
+    "agentsLoadError": "Seus agentes não puderam ser carregados — abra para tentar novamente",
+    "newChatInFolder": "Novo chat nesta pasta",
+    "resizeHandle": "Redimensionar barra lateral",
+    "resizeHint": "Arraste para redimensionar a barra lateral; clique duas vezes para redefinir",
+    "openFolder": "Abrir pasta {name}",
+    "openFolderMenu": "Abrir pasta"
   },
   "errors": {
     "somethingWentWrong": "Algo deu errado",
@@ -5142,5 +5147,28 @@
       "officeId": "escritório {value}",
       "groups": "{count, plural, one {# grupo} other {# grupos}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Novo chat",
+    "rename": "Renomear pasta",
+    "renameLabel": "Nome da pasta",
+    "deleteFolder": "Excluir pasta",
+    "close": "Fechar pasta",
+    "selectAll": "Selecionar tudo",
+    "selectedCount": "{count} selecionado(s)",
+    "selectChat": "Selecionar {name}",
+    "moveTo": "Mover para…",
+    "deleteSelected": "Excluir",
+    "confirmDeleteChats": "Excluir {count} chat(s) selecionado(s)? Isso não pode ser desfeito.",
+    "emptyTitle": "Ainda não há chats nesta pasta",
+    "emptyHint": "Comece um novo chat aqui ou arraste chats para esta pasta na barra lateral.",
+    "messageCount": "{count} mensagem(ns)"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Pesquisar pastas…",
+    "ariaLabel": "Escolha uma pasta",
+    "noResults": "Nenhuma pasta encontrada",
+    "createFolder": "Nova pasta “{name}”"
   }
 }

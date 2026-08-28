@@ -877,7 +877,12 @@
     "agentsEntry": "Agen",
     "agentsTitle": "Jelajahi agen dan mulai percakapan dengan salah satu",
     "agentsLoading": "Memeriksa agen yang dapat Anda gunakan…",
-    "agentsLoadError": "Agen Anda tidak dapat dimuat — buka untuk mencoba lagi"
+    "agentsLoadError": "Agen Anda tidak dapat dimuat — buka untuk mencoba lagi",
+    "newChatInFolder": "Percakapan baru di folder ini",
+    "resizeHandle": "Ubah ukuran sidebar",
+    "resizeHint": "Seret untuk mengubah ukuran sidebar; klik dua kali untuk mengatur ulang",
+    "openFolder": "Buka folder {name}",
+    "openFolderMenu": "Buka folder"
   },
   "prompts": {
     "buildReusablePrompts": "Bangun prompt yang dapat digunakan kembali dengan bantuan AI",
@@ -5142,5 +5147,28 @@
       "officeId": "kantor {value}",
       "groups": "{count, plural, one {# grup} other {# grup}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Percakapan baru",
+    "rename": "Ganti nama folder",
+    "renameLabel": "Nama folder",
+    "deleteFolder": "Hapus folder",
+    "close": "Tutup folder",
+    "selectAll": "Pilih semua",
+    "selectedCount": "{count} dipilih",
+    "selectChat": "Pilih {name}",
+    "moveTo": "Pindahkan ke…",
+    "deleteSelected": "Hapus",
+    "confirmDeleteChats": "Hapus {count} percakapan yang dipilih? Tindakan ini tidak dapat dibatalkan.",
+    "emptyTitle": "Belum ada percakapan di folder ini",
+    "emptyHint": "Mulai percakapan baru di sini, atau seret percakapan ke folder ini di sidebar.",
+    "messageCount": "{count} pesan"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Cari folder…",
+    "ariaLabel": "Pilih folder",
+    "noResults": "Tidak ada folder yang cocok",
+    "createFolder": "Folder baru “{name}”"
   }
 }

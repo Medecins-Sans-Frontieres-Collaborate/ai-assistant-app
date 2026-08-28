@@ -990,7 +990,12 @@
     "agentsEntry": "Agenti",
     "agentsTitle": "Pregledajte agente i započnite razgovor sa nekim",
     "agentsLoading": "Proveravamo koje agente možete da koristite…",
-    "agentsLoadError": "Vaši agenti nisu mogli da se učitaju — otvorite ponovo da pokušate"
+    "agentsLoadError": "Vaši agenti nisu mogli da se učitaju — otvorite ponovo da pokušate",
+    "newChatInFolder": "Novi razgovor u ovoj fascikli",
+    "resizeHandle": "Promeni veličinu bočne trake",
+    "resizeHint": "Prevucite za promenu veličine bočne trake; dvokliknite za resetovanje",
+    "openFolder": "Otvori fasciklu {name}",
+    "openFolderMenu": "Otvori fasciklu"
   },
   "errors": {
     "somethingWentWrong": "Нешто је пошло наопако",
@@ -5126,5 +5131,28 @@
       "officeId": "kancelarija {value}",
       "groups": "{count, plural, one {# grupa} other {# grupa}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Novi razgovor",
+    "rename": "Preimenuj fasciklu",
+    "renameLabel": "Naziv fascikle",
+    "deleteFolder": "Obriši fasciklu",
+    "close": "Zatvori fasciklu",
+    "selectAll": "Izaberi sve",
+    "selectedCount": "{count} izabrano",
+    "selectChat": "Izaberi {name}",
+    "moveTo": "Premesti u…",
+    "deleteSelected": "Obriši",
+    "confirmDeleteChats": "Obrisati {count} izabranih razgovora? Ovo se ne može opozvati.",
+    "emptyTitle": "Još nema razgovora u ovoj fascikli",
+    "emptyHint": "Započnite novi razgovor ovde ili prevucite razgovore u ovu fasciklu u bočnoj traci.",
+    "messageCount": "{count} poruka"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Pretraga fascikli…",
+    "ariaLabel": "Izaberite fasciklu",
+    "noResults": "Nema fascikli koje odgovaraju",
+    "createFolder": "Nova fascikla “{name}”"
   }
 }

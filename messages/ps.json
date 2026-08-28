@@ -990,7 +990,12 @@
     "agentsEntry": "استازي",
     "agentsTitle": "استازي وګورئ او له یوه سره خبرې وکړئ",
     "agentsLoading": "درک کوو چې کوم ایجنټان تاسو کارولی شئ…",
-    "agentsLoadError": "ستاسو ایجنټان نه شول پورته کېدل — د بیا هڅې لپاره پرانیزئ"
+    "agentsLoadError": "ستاسو ایجنټان نه شول پورته کېدل — د بیا هڅې لپاره پرانیزئ",
+    "newChatInFolder": "په دې فولډر کې نوی چټ",
+    "resizeHandle": "سايډبار اندازه بدل کړئ",
+    "resizeHint": "د سايډبار د اندازې بدلولو لپاره يې کش کړئ؛ د ريسټ لپاره دوه ځله پرې کليک وکړئ",
+    "openFolder": "فولډر خلاص کړئ {name}",
+    "openFolderMenu": "فولډر خلاص کړئ"
   },
   "errors": {
     "somethingWentWrong": "یوه ستونزه پېښه شوه",
@@ -5126,5 +5131,28 @@
       "officeId": "دفتر {value}",
       "groups": "{count, plural, one {# ډله} other {# ډلې}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "نوی چټ",
+    "rename": "فولډر ته نوی نوم ورکړئ",
+    "renameLabel": "د فولډر نوم",
+    "deleteFolder": "فولډر ړنګ کړئ",
+    "close": "فولډر وتړئ",
+    "selectAll": "ټول انتخاب کړئ",
+    "selectedCount": "{count} انتخاب شوي",
+    "selectChat": "{name} انتخاب کړئ",
+    "moveTo": "انتقال کړئ…",
+    "deleteSelected": "ړنګ کړئ",
+    "confirmDeleteChats": "ایا غواړئ {count} انتخاب شوي چټ(ونه) ړنګ کړئ؟ دا به بېرته راستون نه شي.",
+    "emptyTitle": "په دې فولډر کې لا چټ نشته",
+    "emptyHint": "دلته نوی چټ پیل کړئ، یا له سايډبار څخه چټونه دې فولډر ته راکش کړئ.",
+    "messageCount": "{count} پيغام(ونه)"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "فولډرونه ولټوئ…",
+    "ariaLabel": "یو فولډر انتخاب کړئ",
+    "noResults": "هیڅ فولډر ونه موندل شو",
+    "createFolder": "نوی فولډر “{name}”"
   }
 }

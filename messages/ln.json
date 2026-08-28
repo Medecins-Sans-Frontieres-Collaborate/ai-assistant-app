@@ -990,7 +990,12 @@
     "agentsEntry": "Ba agents",
     "agentsTitle": "Luka ba agents mpe banda kosolola na moko",
     "agentsLoading": "Tosili kotalisa ba agents okoki kosalela…",
-    "agentsLoadError": "Ba agents na yo esimbaki te — fungola mpo na komeka lisusu"
+    "agentsLoadError": "Ba agents na yo esimbaki te — fungola mpo na komeka lisusu",
+    "newChatInFolder": "Sambisa ya sika na dosiye oyo",
+    "resizeHandle": "Bongisa etando ya sidebar",
+    "resizeHint": "Simbá mpe kunza mpo na kobongisa sidebar; dua mbala mibale mpo na kobongisa lisusu",
+    "openFolder": "Fungola dosiye {name}",
+    "openFolderMenu": "Fungola dosiye"
   },
   "errors": {
     "somethingWentWrong": "Eloko moko ekende malamu te",
@@ -5126,5 +5131,28 @@
       "officeId": "bureau {value}",
       "groups": "{count, plural, one {# groupe} other {# groupes}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Sambisa ya sika",
+    "rename": "Tya kombo ya sika na dosiye",
+    "renameLabel": "Kombo ya dosiye",
+    "deleteFolder": "Bolisa dosiye",
+    "close": "Kanga dosiye",
+    "selectAll": "Pona nyonso",
+    "selectedCount": "{count} epɔni",
+    "selectChat": "Pona {name}",
+    "moveTo": "Longola pona...",
+    "deleteSelected": "Bolisa",
+    "confirmDeleteChats": "Bolisa {count} sambisa(epɔni)? Ekozala lisusu te.",
+    "emptyTitle": "Sambisa ezalaka nanu te na dosiye oyo",
+    "emptyHint": "Bandá sambisa ya sika awa, to kumisa ba sambisa na dosiye oyo na sidebar.",
+    "messageCount": "{count} nsango"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Sosola ba dosiye...",
+    "ariaLabel": "Pona dosiye",
+    "noResults": "Ba dosiye ezalaka te",
+    "createFolder": "Dosiye ya sika “{name}”"
   }
 }

@@ -990,7 +990,12 @@
     "agentsEntry": "Àgbẹ̀rẹ́ ayélujára",
     "agentsTitle": "Ṣàyẹ̀wò àwọn àgbẹ̀rẹ́ ayélujára kí o sì bẹ̀rẹ̀ ìjíròrò pẹ̀lú ẹ̀kan",
     "agentsLoading": "N ṣayẹwo awọn aṣoju ti o le lo…",
-    "agentsLoadError": "A ko le gbe awọn aṣoju rẹ— ṣii lati tun gbiyanju"
+    "agentsLoadError": "A ko le gbe awọn aṣoju rẹ— ṣii lati tun gbiyanju",
+    "newChatInFolder": "Ìjíròrò tuntun nínú àpò tó yìí",
+    "resizeHandle": "Ṣètò ìwòkànsí sidebar",
+    "resizeHint": "Fa láti ṣètò ìwòkànsí sidebar; tẹ lẹẹmeji láti tún un ṣe",
+    "openFolder": "Ṣí àpò {name}",
+    "openFolderMenu": "Ṣí àpò"
   },
   "errors": {
     "somethingWentWrong": "Nǹkan kan ṣẹlẹ̀",
@@ -5126,5 +5131,28 @@
       "officeId": "ọ́fíìsì {value}",
       "groups": "{count, plural, one {# ẹgbẹ́} other {# ẹgbẹ́}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Ìjíròrò tuntun",
+    "rename": "Tun orúkọ àpò ṣe",
+    "renameLabel": "Orúkọ àpò",
+    "deleteFolder": "Pa àpò rẹ́",
+    "close": "Pa àpò",
+    "selectAll": "Yan gbogbo",
+    "selectedCount": "{count} ti yàn",
+    "selectChat": "Yan {name}",
+    "moveTo": "Gbé lọ sí…",
+    "deleteSelected": "Pa rẹ́",
+    "confirmDeleteChats": "Ṣe ẹ fẹ́ pa ìjíròrò {count} tí a yàn? Kò le tún ṣe.",
+    "emptyTitle": "Kò sí ìjíròrò kankan nínú àpò yìí sibẹ̀",
+    "emptyHint": "Bẹrẹ ìjíròrò tuntun nibi, tàbí fa àwọn ìjíròrò sínú àpò yìí lórí sidebar.",
+    "messageCount": "{count} ìfiranṣé"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Wá àwọn àpò…",
+    "ariaLabel": "Yan àpò kan",
+    "noResults": "Kò sí àpò tó bàa mu",
+    "createFolder": "Àpò tuntun “{name}”"
   }
 }

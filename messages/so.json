@@ -990,7 +990,12 @@
     "agentsEntry": "Wakiillo",
     "agentsTitle": "Baadh wakiillo waxaadna wada sheekaysi la bilaabi kartaa midkood",
     "agentsLoading": "Waxaa la hubinayaa wakiillada aad isticmaali karto…",
-    "agentsLoadError": "Wakiillada lama soo rogi karin — fur si aad markale u tijaabiso"
+    "agentsLoadError": "Wakiillada lama soo rogi karin — fur si aad markale u tijaabiso",
+    "newChatInFolder": "Wada hadal cusub oo ku jira galkaan",
+    "resizeHandle": "Ballaadhi dhinaca",
+    "resizeHint": "Jiid si aad u ballaadho dhinaca; laba-guji si aad dib ugu celiso",
+    "openFolder": "Fur galka {name}",
+    "openFolderMenu": "Fur galka"
   },
   "errors": {
     "somethingWentWrong": "Wax baa qalday",
@@ -5126,5 +5131,28 @@
       "officeId": "xafiis {value}",
       "groups": "{count, plural, one {# koox} other {# kooxood}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Wada hadal cusub",
+    "rename": "Magac bixi galka",
+    "renameLabel": "Magaca galka",
+    "deleteFolder": "Tirtir galka",
+    "close": "Xir galka",
+    "selectAll": "Xulo dhammaan",
+    "selectedCount": "{count} la doortay",
+    "selectChat": "Xulo {name}",
+    "moveTo": "U rar…",
+    "deleteSelected": "Tirtir",
+    "confirmDeleteChats": "Ma tirtirtaa {count} wada hadal la doortay? Tani lama soo celin karo.",
+    "emptyTitle": "Wali wada hadal kuma jiro galkaan",
+    "emptyHint": "Halkaan ka bilaaw wada hadal cusub, ama jiid wada hadalada dhinaca galkaan ku yaal.",
+    "messageCount": "{count} fariimood"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Raadi galalka…",
+    "ariaLabel": "Dooro galka",
+    "noResults": "Galku ma jiro oo la mid ah",
+    "createFolder": "Gal cusub “{name}”"
   }
 }

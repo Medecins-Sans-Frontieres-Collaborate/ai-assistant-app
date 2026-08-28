@@ -990,7 +990,12 @@
     "agentsEntry": "ភ្នាក់ងារ",
     "agentsTitle": "រកមើលភ្នាក់ងារ និងចាប់ផ្ដើមជជែកជាមួយភ្នាក់ងារម្នាក់",
     "agentsLoading": "កំពុងពិនិត្យមើល​​ភ្នាក់ងារដែលអ្នកអាចប្រើបាន…",
-    "agentsLoadError": "មិនអាចផ្ទុកភ្នាក់ងាររបស់អ្នកបានទេ — ចុចបើកឡើងវិញដើម្បីព្យាយាមម្ដងទៀត"
+    "agentsLoadError": "មិនអាចផ្ទុកភ្នាក់ងាររបស់អ្នកបានទេ — ចុចបើកឡើងវិញដើម្បីព្យាយាមម្ដងទៀត",
+    "newChatInFolder": "ជជែក​ថ្មី​នៅ​ក្នុង​ថត​នេះ",
+    "resizeHandle": "ប្ដូរទំហំរបារ​ចំហៀង",
+    "resizeHint": "អូស​ដើម្បី​ប្ដូរទំហំរបារ​ចំហៀង; ចុចពីរដងដើម្បីកំណត់វិញ",
+    "openFolder": "បើកថត {name}",
+    "openFolderMenu": "បើកថត"
   },
   "errors": {
     "somethingWentWrong": "មានអ្វីមួយខុសប្រក្រតី",
@@ -5126,5 +5131,28 @@
       "officeId": "ការិយាល័យ {value}",
       "groups": "{count, plural, one {# ក្រុម} other {# ក្រុម}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "ជជែក​ថ្មី",
+    "rename": "ប្ដូរឈ្មោះថត",
+    "renameLabel": "ឈ្មោះថត",
+    "deleteFolder": "លុបថត",
+    "close": "បិទថត",
+    "selectAll": "ជ្រើសទាំងអស់",
+    "selectedCount": "ជ្រើស {count}",
+    "selectChat": "ជ្រើស {name}",
+    "moveTo": "ផ្លាស់ទី​ទៅ…",
+    "deleteSelected": "លុប",
+    "confirmDeleteChats": "លុប {count} ជជែកដែលបានជ្រើស? មិនអាចត្រឡប់មកវិញបានទេ។",
+    "emptyTitle": "មិនទាន់មានជជែកនៅក្នុងថតនេះ",
+    "emptyHint": "ចាប់ផ្តើមជជែកថ្មីនៅទីនេះ ឬអូសជជែកទៅថតនេះក្នុងរបារចំហៀង។",
+    "messageCount": "{count} សារ"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "ស្វែង​រក​ថត…",
+    "ariaLabel": "ជ្រើសរើសថត",
+    "noResults": "មិនមានថតដែលផ្គូផ្គងទេ",
+    "createFolder": "ថតថ្មី “{name}”"
   }
 }

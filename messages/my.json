@@ -885,7 +885,12 @@
     "agentsEntry": "အေးဂျင့်များ",
     "agentsTitle": "အေးဂျင့်များကိုရှာဖွေပြီး တစ်ဦးနှင့် စကားပြောရန် စတင်ပါ",
     "agentsLoading": "သင်အသုံးပြုနိုင်သော agent များကို စစ်ဆေးနေပါသည်...",
-    "agentsLoadError": "သင့် agent များကို ဖော်ပြ၍မရပါ — ပြန်လည်ကြိုးစားရန် ဖွင့်ပါ"
+    "agentsLoadError": "သင့် agent များကို ဖော်ပြ၍မရပါ — ပြန်လည်ကြိုးစားရန် ဖွင့်ပါ",
+    "newChatInFolder": "ဤဖိုလ်ဒါတွင် စကားပြောခန်း အသစ်ဖွင့်ရန်",
+    "resizeHandle": "Sidebar အရွယ်အစားပြောင်းရန်",
+    "resizeHint": "Sidebar အရွယ်အစားပြောင်းရန် ဆွဲပါ၊ double-click နှိပ်၍ ပြန်စီပါ",
+    "openFolder": "{name} ဖိုလ်ဒါဖြင့်ဖွင့်ရန်",
+    "openFolderMenu": "ဖိုလ်ဒါဖွင့်ရန်"
   },
   "prompts": {
     "buildReusablePrompts": "AI အကူအညီဖြင့် ပြန်လည်အသုံးပြုနိုင်သော အကြံပြုချက်များကို တည်ဆောက်ပါ",
@@ -5142,5 +5147,28 @@
       "officeId": "ရုံး {value}",
       "groups": "{count, plural, one {# ဦးအဖွဲ့} other {# ဦးအဖွဲ့များ}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "စကားပြောခန်းအသစ်",
+    "rename": "ဖိုလ်ဒါအမည်ပြောင်းရန်",
+    "renameLabel": "ဖိုလ်ဒါအမည်",
+    "deleteFolder": "ဖိုလ်ဒါဖျက်ရန်",
+    "close": "ဖိုလ်ဒါပိတ်ရန်",
+    "selectAll": "အားလုံးရွေးချယ်ရန်",
+    "selectedCount": "{count} ခု ရွေးထားသည်",
+    "selectChat": "{name} ကိုရွေးချယ်ရန်",
+    "moveTo": "ရွှေ့ရန်…",
+    "deleteSelected": "ဖျက်ရန်",
+    "confirmDeleteChats": "ရွေးချယ်ထားသောစကားပြောခန်း {count} ခု ဖျက်ရန်? ပြန်မရနိုင်ပါ။",
+    "emptyTitle": "ဤဖိုလ်ဒါတွင် စကားပြောခန်း မရှိသေးပါ",
+    "emptyHint": "ဤနေရာတွင် စကားပြောခန်းအသစ်စတင်ခြင်း သို့မဟုတ် sidebar တွင် ဖိုလ်ဒါသို့ ဆွဲထည့်ပါ။",
+    "messageCount": "ข้อความ{count}ခု"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "ဖိုလ်ဒါများ ရှာဖွေရန်...",
+    "ariaLabel": "ဖိုလ်ဒါရွေးပါ",
+    "noResults": "သင့်တဲ့ဖိုလ်ဒါမရှိပါ",
+    "createFolder": "ဖိုလ်ဒါအသစ် “{name}”"
   }
 }

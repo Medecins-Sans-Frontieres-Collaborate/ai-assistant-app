@@ -908,7 +908,12 @@
     "agentsEntry": "Agenți",
     "agentsTitle": "Răsfoiți agenții și începeți un chat cu unul",
     "agentsLoading": "Se verifică ce agenți puteți folosi…",
-    "agentsLoadError": "Agenții nu au putut fi încărcați — deschideți pentru a reîncerca"
+    "agentsLoadError": "Agenții nu au putut fi încărcați — deschideți pentru a reîncerca",
+    "newChatInFolder": "Chat nou în acest dosar",
+    "resizeHandle": "Redimensionare bară laterală",
+    "resizeHint": "Trageți pentru a redimensiona bara laterală; dublu click pentru resetare",
+    "openFolder": "Deschide dosarul {name}",
+    "openFolderMenu": "Deschide dosarul"
   },
   "prompts": {
     "buildReusablePrompts": "Construiește prompt-uri reutilizabile cu asistență AI",
@@ -5142,5 +5147,28 @@
       "officeId": "biroul {value}",
       "groups": "{count, plural, one {# grup} other {# grupuri}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Chat nou",
+    "rename": "Redenumește dosarul",
+    "renameLabel": "Numele dosarului",
+    "deleteFolder": "Șterge dosarul",
+    "close": "Închide dosarul",
+    "selectAll": "Selectează tot",
+    "selectedCount": "{count} selectate",
+    "selectChat": "Selectează {name}",
+    "moveTo": "Mută în…",
+    "deleteSelected": "Șterge",
+    "confirmDeleteChats": "Ștergeți {count} chat-uri selectate? Această acțiune nu poate fi anulată.",
+    "emptyTitle": "Nu există chat-uri în acest dosar încă",
+    "emptyHint": "Începeți un chat nou aici sau trageți chat-uri în acest dosar din bara laterală.",
+    "messageCount": "{count} mesaj(e)"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Caută dosare…",
+    "ariaLabel": "Alegeți un dosar",
+    "noResults": "Nu există dosare potrivite",
+    "createFolder": "Dosar nou „{name}”"
   }
 }

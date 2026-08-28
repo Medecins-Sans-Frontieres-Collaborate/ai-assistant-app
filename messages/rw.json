@@ -990,7 +990,12 @@
     "agentsEntry": "Abakozi",
     "agentsTitle": "Reba abakozi kandi utangire kuganira n’umwe",
     "agentsLoading": "Turagenzura abakozi ushobora gukoresha…",
-    "agentsLoadError": "Abakozi bawe ntibashoboye gupakirwa — fungura wongere ugerageze"
+    "agentsLoadError": "Abakozi bawe ntibashoboye gupakirwa — fungura wongere ugerageze",
+    "newChatInFolder": "Ikiganiro gishya muri iri shingiro",
+    "resizeHandle": "Hindura ubunini bwa sidebar",
+    "resizeHint": "Kanda ukoresheje mouse ugendagenda kugirango ugire sidebar nini cyangwa nto; kanda kabiri usubize uko byari biri",
+    "openFolder": "Fungura dosiye {name}",
+    "openFolderMenu": "Fungura dosiye"
   },
   "errors": {
     "somethingWentWrong": "Hari ikintu kitagenze neza",
@@ -5126,5 +5131,28 @@
       "officeId": "ibiro {value}",
       "groups": "{count, plural, one {# itsinda} other {# amatsinda}}"
     }
+  },
+  "folderView": {
+    "chatCount": "({count})",
+    "newChat": "Ikiganiro gishya",
+    "rename": "Hindura izina rya dosiye",
+    "renameLabel": "Izina rya dosiye",
+    "deleteFolder": "Siba dosiye",
+    "close": "Funga dosiye",
+    "selectAll": "Hitamo byose",
+    "selectedCount": "{count} byatoranijwe",
+    "selectChat": "Hitamo {name}",
+    "moveTo": "Jya ahandi…",
+    "deleteSelected": "Siba",
+    "confirmDeleteChats": "Siba ibiganiro {count} byatoranijwe? Ibi ntibishobora gusubirwaho.",
+    "emptyTitle": "Nta biganiro birimo muri iyi dosiye",
+    "emptyHint": "Tangira ikiganiro gishya hano, cyangwa ujyane ibiganiro muri iyi dosiye ukoresheje sidebar.",
+    "messageCount": "Ubutumwa {count}"
+  },
+  "folderPicker": {
+    "searchPlaceholder": "Shakisha amadosiye…",
+    "ariaLabel": "Hitamo dosiye",
+    "noResults": "Nta dosiye bijyanye",
+    "createFolder": "Dosiye nshya “{name}”"
   }
 }
