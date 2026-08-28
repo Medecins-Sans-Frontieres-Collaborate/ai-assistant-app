@@ -246,7 +246,11 @@ export const Sidebar = memo(function Sidebar() {
     [],
   );
 
-  const handleNewConversation = () => {
+  /**
+   * Start a new chat. `folderId` places it directly in a folder (from the
+   * folder's context menu); the default creates it at the top level.
+   */
+  const handleNewConversation = (folderId: string | null = null) => {
     setShowNewChatMenu(false); // Close menu when creating new conversation
 
     // Check if the latest conversation is already empty (workflow
@@ -258,10 +262,17 @@ export const Sidebar = memo(function Sidebar() {
       latestConversation.messages.length === 0 &&
       !latestConversation.conversationType
     ) {
+      const alreadyInFolder =
+        (latestConversation.folderId ?? null) === folderId;
+      if (!alreadyInFolder) {
+        // Reuse the empty conversation rather than leaving an orphan behind;
+        // just move it to where the user asked for the new chat.
+        updateConversation(latestConversation.id, { folderId });
+      }
       if (latestConversation.id !== selectedConversation?.id) {
         // Switch to the existing empty conversation
         selectConversation(latestConversation.id);
-      } else {
+      } else if (alreadyInFolder) {
         // Already on the empty conversation - show toast
         toast(t('This conversation is already empty'));
       }
@@ -311,7 +322,7 @@ export const Sidebar = memo(function Sidebar() {
       model: modelWithDefaults,
       prompt: systemPrompt || '',
       temperature: temperature || 0.5,
-      folderId: null,
+      folderId,
       defaultSearchMode: searchMode, // Use model-appropriate search mode
       defaultInterpreterMode, // Settings default (INTELLIGENT unless the user turned it off)
       bot: botId || undefined, // Set bot ID for RAG-enabled organization agents
@@ -610,7 +621,7 @@ export const Sidebar = memo(function Sidebar() {
             >
               <button
                 className={`flex items-center ${showChatbar ? 'gap-2 flex-1' : ''}`}
-                onClick={handleNewConversation}
+                onClick={() => handleNewConversation()}
                 title={t('New chat')}
                 aria-label={t('New chat')}
               >
@@ -931,7 +942,10 @@ export const Sidebar = memo(function Sidebar() {
                           className="flex-1 rounded border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 focus:border-gray-500 focus:outline-none dark:border-gray-600 dark:bg-surface-dark dark:text-gray-100"
                         />
                       ) : (
-                        <span className="flex-1 truncate text-sm font-medium text-gray-900 dark:text-gray-100">
+                        <span
+                          className="flex-1 truncate text-sm font-medium text-gray-900 dark:text-gray-100"
+                          title={folder.name}
+                        >
                           {folder.name} ({folderConversations.length})
                         </span>
                       )}
@@ -981,6 +995,30 @@ export const Sidebar = memo(function Sidebar() {
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 <div className="p-1">
+                                  {/* New chat directly inside this folder */}
+                                  <button
+                                    className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setShowFolderMenuId(null);
+                                      // Make sure the new chat is visible
+                                      if (
+                                        folderManager.collapsedFolders.has(
+                                          folder.id,
+                                        )
+                                      ) {
+                                        folderManager.toggleFolder(folder.id);
+                                      }
+                                      handleNewConversation(folder.id);
+                                    }}
+                                  >
+                                    <IconPlus
+                                      size={14}
+                                      className="text-gray-600 dark:text-gray-400"
+                                    />
+                                    {t('sidebar.newChatInFolder')}
+                                  </button>
+
                                   {/* Rename option */}
                                   <button
                                     className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
