@@ -3,6 +3,7 @@ import { Session } from 'next-auth';
 import { M365Agent, PromptAgent } from '@/lib/services/agentAccess/types';
 import { ModelSelector } from '@/lib/services/shared';
 
+import { RequestTelemetry } from '@/lib/types/logging';
 import { ActiveFile, ApprovalResponse, Message } from '@/types/chat';
 import {
   ExtractionRequest,
@@ -201,6 +202,24 @@ export interface ChatContext {
   // ========================================
   /** Bot/knowledge base ID for RAG */
   botId?: string;
+
+  /**
+   * Client conversation id (conversation.id). Telemetry only — never used
+   * for routing or authorization. Lets log rows from the tool-loop rounds of
+   * one user turn be collapsed, and enables per-conversation analytics.
+   */
+  conversationId?: string;
+
+  /** Server-generated id for this HTTP request (telemetry correlation). */
+  requestId?: string;
+
+  /**
+   * Resolved per-request telemetry (agent kind/name/source/applied +
+   * correlation ids), built by createTelemetryMiddleware AFTER model
+   * selection and the credential/access guards so it reflects what the
+   * pipeline actually did. Threaded into every Azure Monitor log event.
+   */
+  telemetry?: RequestTelemetry;
 
   /**
    * Explicit signal that `botId` was ATTACHED to the conversation via the
