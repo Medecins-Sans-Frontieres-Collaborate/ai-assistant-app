@@ -1297,6 +1297,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       temperature: settings.temperature,
       stream: modelSupportsStreaming,
       botId: conversation.bot,
+      conversationId: conversation.id,
       // Decoupled attachment (capabilities tray): a bot riding a REAL model
       // is an explicit attach; legacy `org-`-shaped models keep the
       // historical scoped resolution instead.
