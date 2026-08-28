@@ -55,6 +55,8 @@ export interface AnthropicMcpToolLoopOptions {
     region: 'US' | 'EU' | null;
     onUsage: (usage: TokenUsageMetadata) => void;
   };
+  /** Telemetry sink for each executed tool call (see ToolLoopCoreOptions). */
+  onToolCall?: ToolLoopCoreOptions<unknown>['onToolCall'];
   /** Turn planning (see ToolLoopCoreOptions). */
   planner?: ToolLoopCoreOptions<Anthropic.MessageParam>['planner'];
   existingPlan?: McpPlan;
@@ -154,6 +156,7 @@ export async function runAnthropicMcpToolLoop(
     userId: options.userId,
     citations: options.citations,
     usage: options.usage,
+    onToolCall: options.onToolCall,
     planner: options.planner,
     existingPlan: options.existingPlan,
     userMessageText: options.userMessageText,
