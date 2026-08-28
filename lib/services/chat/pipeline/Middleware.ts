@@ -38,6 +38,7 @@ import { checkAgentSourceAccess } from '@/lib/services/m365/agentSourceAccess';
 import { M365Error } from '@/lib/services/m365/graphApi';
 import { resolveUserGroupIds } from '@/lib/services/m365/groupMembership';
 import { resolveCustomSourceModel } from '@/lib/services/models/customModelSources';
+import { resolveOrgAgentById } from '@/lib/services/orgAgents/orgAgentRegistry';
 import { ModelSelector, RateLimiter } from '@/lib/services/shared';
 
 import {
@@ -53,6 +54,7 @@ import {
 } from '@/lib/utils/shared/armPath';
 import { isAllowedFoundryHost } from '@/lib/utils/shared/foundryHostAllowlist';
 
+import { RequestTelemetry } from '@/lib/types/logging';
 import { ChatBody } from '@/types/chat';
 import { ErrorCode, PipelineError } from '@/types/errors';
 import { InterpreterMode } from '@/types/interpreterMode';
@@ -67,6 +69,7 @@ import { getLimitDefinition } from '@/config/limits';
 import { getDefaultModel, getFallbackChain } from '@/config/models';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
 import { TokenCredential } from '@azure/identity';
+import { randomUUID } from 'crypto';
 
 /**
  * Middleware function that processes a request and returns partial ChatContext.
@@ -196,6 +199,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       reasoningEffort,
       verbosity,
       botId,
+      conversationId,
       agentAttached,
       searchMode,
       webSearchOptions,
@@ -251,6 +255,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
     // Store raw user prompt - system prompt will be built in buildChatContext
     // after auth middleware has provided user info
     return {
+      requestId: randomUUID(),
       model,
       messages,
       rawUserPrompt: prompt,
@@ -275,6 +280,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       reasoningEffort,
       verbosity,
       botId,
+      conversationId,
       agentAttached,
       searchMode,
       webSearchOptions,
@@ -623,6 +629,8 @@ export const createCredentialMiddleware = async (
       // unknown/deleted `prompt-` botId falls through silently below — same
       // silent-degrade as removed static agents.
       emitAccessAudit({
+        user: context.user,
+        telemetry: auditTelemetry(context),
         userMail: context.user?.mail,
         agentName: context.botId!,
         source: PROMPT_AGENT_SOURCE,
@@ -641,6 +649,8 @@ export const createCredentialMiddleware = async (
         agentName: promptAgent.id,
       });
       emitAccessAudit({
+        user: context.user,
+        telemetry: auditTelemetry(context),
         userMail: context.user?.mail,
         agentName: promptAgent.id,
         source: PROMPT_AGENT_SOURCE,
@@ -674,6 +684,8 @@ export const createCredentialMiddleware = async (
       (context.botId ? accessService.getM365AgentById(context.botId) : null);
     if (!m365Agent && accessService.getSnapshot().rulesUnavailable) {
       emitAccessAudit({
+        user: context.user,
+        telemetry: auditTelemetry(context),
         userMail: context.user?.mail,
         agentName: context.botId!,
         source: M365_AGENT_SOURCE,
@@ -692,6 +704,8 @@ export const createCredentialMiddleware = async (
         agentName: m365Agent.id,
       });
       emitAccessAudit({
+        user: context.user,
+        telemetry: auditTelemetry(context),
         userMail: context.user?.mail,
         agentName: m365Agent.id,
         source: M365_AGENT_SOURCE,
@@ -754,6 +768,8 @@ export const createCredentialMiddleware = async (
       accessService.getSnapshot().rulesUnavailable
     ) {
       emitAccessAudit({
+        user: context.user,
+        telemetry: auditTelemetry(context),
         userMail: context.user?.mail,
         agentName: context.botId,
         source: ORG_AGENT_SOURCE,
@@ -771,6 +787,8 @@ export const createCredentialMiddleware = async (
     if (staticAgent && accessService.getSnapshot().rulesUnavailable) {
       // Static fail-open (see above): audited so the degradation is visible.
       emitAccessAudit({
+        user: context.user,
+        telemetry: auditTelemetry(context),
         userMail: context.user?.mail,
         agentName: staticAgent.id,
         source: ORG_AGENT_SOURCE,
@@ -788,6 +806,8 @@ export const createCredentialMiddleware = async (
         agentName,
       });
       emitAccessAudit({
+        user: context.user,
+        telemetry: auditTelemetry(context),
         userMail: context.user?.mail,
         agentName,
         source: ORG_AGENT_SOURCE,
@@ -847,6 +867,8 @@ export const createCredentialMiddleware = async (
           agentName: nonFoundryAgentName,
         });
         emitAccessAudit({
+          user: context.user,
+          telemetry: auditTelemetry(context),
           userMail: context.user?.mail,
           agentName: nonFoundryAgentName,
           source: null,
@@ -984,6 +1006,8 @@ export const createCredentialMiddleware = async (
         agentName,
       });
       emitAccessAudit({
+        user: context.user,
+        telemetry: auditTelemetry(context),
         userMail,
         agentName,
         source: accessSource,
@@ -1251,6 +1275,103 @@ export const createModelSelectionMiddleware = async (
   }
 
   return selection;
+};
+
+/**
+ * Correlation-only telemetry for access-guard audit rows. The guards run
+ * BEFORE createTelemetryMiddleware (they can reject the request), so the
+ * agent kind/name are not resolved yet — the guard supplies its own agent
+ * identity; this just carries the ids that tie the row to the request.
+ */
+function auditTelemetry(context: Partial<ChatContext>): RequestTelemetry {
+  return {
+    botId: context.botId,
+    conversationId: context.conversationId,
+    requestId: context.requestId,
+    loopRound: context.mcpLoopRound,
+  };
+}
+
+/**
+ * Builds `context.telemetry` — the per-request agent + correlation context
+ * that every Azure Monitor event for this request carries.
+ *
+ * ⚠ MUST run AFTER createModelSelectionMiddleware and
+ * createCredentialMiddleware: it reports what the pipeline ACTUALLY resolved
+ * (promptAgent / m365Agent / Foundry agentMode / org RAG agent), not what the
+ * client asked for. `agentApplied: false` with a botId means the client sent
+ * a bot the server ignored (stale/unattached, deleted, failed validation) —
+ * the case that previously logged an indistinguishable BotId.
+ *
+ * Never throws: telemetry must not be able to fail a chat request.
+ */
+export const createTelemetryMiddleware = async (
+  context: Partial<ChatContext>,
+): Promise<Partial<ChatContext>> => {
+  const requestId = context.requestId ?? randomUUID();
+  const telemetry: RequestTelemetry = {
+    botId: context.botId,
+    conversationId: context.conversationId,
+    requestId,
+    loopRound: context.mcpLoopRound,
+  };
+
+  try {
+    const botId = context.botId;
+    if (context.promptAgent) {
+      Object.assign(telemetry, {
+        agentKind: 'prompt',
+        agentName: context.promptAgent.name,
+        agentSource: 'admin',
+        agentApplied: true,
+      } satisfies Partial<RequestTelemetry>);
+    } else if (context.m365Agent) {
+      Object.assign(telemetry, {
+        agentKind: 'm365',
+        agentName: context.m365Agent.name,
+        agentSource: 'admin',
+        agentApplied: true,
+      } satisfies Partial<RequestTelemetry>);
+    } else if (context.agentMode && context.model?.agentId) {
+      // Foundry agent execution path (AgentEnricher → AgentChatHandler).
+      Object.assign(telemetry, {
+        agentKind: 'foundry',
+        agentName: context.model.name || context.model.agentId,
+        agentSource: context.agentSourcePath ?? 'catalog',
+        agentApplied: true,
+      } satisfies Partial<RequestTelemetry>);
+    } else if (botId?.startsWith('prompt-')) {
+      Object.assign(telemetry, { agentKind: 'prompt', agentApplied: false });
+    } else if (botId?.startsWith('m365-')) {
+      Object.assign(telemetry, { agentKind: 'm365', agentApplied: false });
+    } else if (botId) {
+      // Static / admin org RAG agent. RAGEnricher runs for ANY remaining
+      // botId and resolves through the same registry (cached), so this
+      // mirrors exactly whether retrieval will happen.
+      const resolved = await resolveOrgAgentById(botId);
+      if (resolved) {
+        const accessService = AgentAccessService.getInstance();
+        const adminRecord = accessService.isEnabled()
+          ? accessService.getOrgAgentById(botId)
+          : null;
+        Object.assign(telemetry, {
+          agentKind: 'rag',
+          agentName: resolved.name,
+          agentSource: adminRecord ? 'admin' : 'static',
+          agentApplied: true,
+        } satisfies Partial<RequestTelemetry>);
+      } else {
+        Object.assign(telemetry, { agentKind: 'rag', agentApplied: false });
+      }
+    }
+  } catch (error) {
+    console.warn(
+      '[TelemetryMiddleware] Agent resolution for telemetry failed; logging correlation ids only:',
+      error instanceof Error ? error.message : error,
+    );
+  }
+
+  return { requestId, telemetry };
 };
 
 /**
@@ -1534,6 +1655,11 @@ export async function buildChatContext(req: NextRequest): Promise<ChatContext> {
   context = {
     ...context,
     ...(await createCredentialMiddleware(context, req)),
+  };
+
+  context = {
+    ...context,
+    ...(await createTelemetryMiddleware(context)),
   };
 
   // Usage limits LAST: the model is final, the feature flags are populated,
