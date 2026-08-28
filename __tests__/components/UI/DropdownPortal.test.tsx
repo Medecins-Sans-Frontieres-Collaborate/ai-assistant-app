@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import React, { useRef } from 'react';
 
 import { DropdownPortal } from '@/components/UI/DropdownPortal';
@@ -263,6 +263,73 @@ describe('DropdownPortal placement', () => {
     // anchorX adjusted to menuWidth + inset = 160 + 8 = 168
     // right css = 1024 - 168 = 856
     expect(getPortalElement().style.right).toBe('856px');
+  });
+
+  it('re-runs placement when the menu itself grows after opening', () => {
+    // jsdom has no ResizeObserver; install a controllable stub so the test
+    // can fire the callback the way a real browser would after the menu's
+    // content changes size.
+    let resizeCallback: (() => void) | null = null;
+    class StubResizeObserver {
+      constructor(cb: () => void) {
+        resizeCallback = cb;
+      }
+      observe() {}
+      disconnect() {
+        resizeCallback = null;
+      }
+    }
+    vi.stubGlobal('ResizeObserver', StubResizeObserver);
+
+    let menuHeight = MENU_HEIGHT;
+    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(
+      function (this: Element) {
+        if (
+          this instanceof HTMLElement &&
+          this.hasAttribute('data-dropdown-portal')
+        ) {
+          return makeRect({
+            top: 0,
+            bottom: menuHeight,
+            left: 0,
+            right: MENU_WIDTH,
+            width: MENU_WIDTH,
+            height: menuHeight,
+          });
+        }
+        return makeRect({});
+      },
+    );
+
+    try {
+      render(
+        <Harness
+          triggerRect={makeRect({
+            top: 500,
+            bottom: 520,
+            left: 100,
+            right: 120,
+            width: 20,
+            height: 20,
+          })}
+        />,
+      );
+
+      // spaceBelow = 800 - 520 = 280 ≥ 204 → placed below at 524
+      expect(getPortalElement().style.top).toBe('524px');
+      expect(resizeCallback).not.toBeNull();
+
+      // The menu grows (e.g. an inline submenu expands). Before the fix the
+      // top stayed at 524 and the box ran to 1024px — past the viewport.
+      menuHeight = 500;
+      act(() => resizeCallback?.());
+
+      // spaceBelow 280 < 504, spaceAbove 500 > 280 → flip above; rawTop = -4
+      // → clamped to the 8px inset. Bottom edge = 508 ≤ 800: fully reachable.
+      expect(getPortalElement().style.top).toBe('8px');
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 
   it('calls onClose when the window is resized', () => {
