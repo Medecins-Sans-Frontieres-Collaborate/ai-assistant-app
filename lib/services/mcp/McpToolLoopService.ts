@@ -57,6 +57,8 @@ export interface McpToolLoopOptions {
     reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high';
     onUsage: (usage: TokenUsageMetadata) => void;
   };
+  /** Telemetry sink for each executed tool call (see ToolLoopCoreOptions). */
+  onToolCall?: ToolLoopCoreOptions<unknown>['onToolCall'];
   /** Turn planning (see ToolLoopCoreOptions). */
   planner?: ToolLoopCoreOptions<OpenAIMessage>['planner'];
   existingPlan?: McpPlan;
@@ -165,6 +167,7 @@ export async function runMcpToolLoop(
     userId: options.userId,
     citations: options.citations,
     usage: options.usage,
+    onToolCall: options.onToolCall,
     planner: options.planner,
     existingPlan: options.existingPlan,
     userMessageText: options.userMessageText,
