@@ -9,6 +9,7 @@ import { extractPendingApprovalIds } from '@/lib/utils/server/foundryErrors';
 import { getGlobalTiktoken } from '@/lib/utils/server/tiktoken/tiktokenCache';
 import { isAllowedFoundryHost } from '@/lib/utils/shared/foundryHostAllowlist';
 
+import { RequestTelemetry } from '@/lib/types/logging';
 import {
   ApprovalResponse,
   FileMessageContent,
@@ -20,6 +21,7 @@ import { ErrorCode, PipelineError } from '@/types/errors';
 import { OpenAIModel } from '@/types/openai';
 
 import { MetricsService } from '../observability/MetricsService';
+import { recordTokenUsage } from '../observability/tokenUsageRecorder';
 import { CitationRegistry } from './citationRegistry';
 import {
   activityKeyForEvent,
@@ -83,7 +85,7 @@ export class AIFoundryAgentHandler {
     credential?: TokenCredential,
     endpoint?: string,
     approvalResponses?: ApprovalResponse[],
-    options?: { ephemeral?: boolean },
+    options?: { ephemeral?: boolean; telemetry?: RequestTelemetry },
   ): Promise<Response> {
     const startTime = Date.now();
 
@@ -622,6 +624,39 @@ export class AIFoundryAgentHandler {
                       );
                     }
                   } else if (event.type === 'response.completed') {
+                    // Foundry agents historically recorded no token usage at
+                    // all; the Responses API reports it on the terminal event.
+                    const completedUsage = (
+                      event as {
+                        response?: {
+                          usage?: {
+                            input_tokens?: number;
+                            output_tokens?: number;
+                            total_tokens?: number;
+                          };
+                        };
+                      }
+                    ).response?.usage;
+                    if (completedUsage) {
+                      const promptTokens = completedUsage.input_tokens ?? 0;
+                      const completionTokens =
+                        completedUsage.output_tokens ?? 0;
+                      recordTokenUsage(
+                        {
+                          promptTokens,
+                          completionTokens,
+                          totalTokens:
+                            completedUsage.total_tokens ??
+                            promptTokens + completionTokens,
+                          modelId,
+                          region: user.region ?? null,
+                        },
+                        modelConfig,
+                        user,
+                        true,
+                        options?.telemetry,
+                      );
+                    }
                     if (markerBuffer) {
                       controller.enqueue(encoder.encode(markerBuffer));
                       markerBuffer = '';
